@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basprov.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2003-09-23 15:06:47 $
+ *  last change: $Author: npower $ $Date: 2003-10-15 08:35:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,8 @@
 #include <sfx2/objsh.hxx>
 #endif
 
+#include <com/sun/star/util/XMacroExpander.hpp>
+#include <com/sun/star/script/XLibraryContainer2.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -158,10 +160,13 @@ namespace basprov
     // =============================================================================
 
     BasicProviderImpl::BasicProviderImpl( const Reference< XComponentContext >& xContext )
-        :m_pBasicManager( 0 )
-        ,m_xLibContainer( 0 )
+        :m_pAppBasicManager( 0 )
+        ,m_pDocBasicManager( 0 )
+        ,m_xLibContainerApp( 0 )
+        ,m_xLibContainerDoc( 0 )
         ,m_xContext( xContext )
         ,m_xScriptingContext( 0 )
+    ,m_bIsAppScriptCtx( true )
     {
     }
 
@@ -210,8 +215,29 @@ namespace basprov
 
         ::osl::MutexGuard aGuard( StarBASIC::GetGlobalMutex() );
 
-        if ( aArguments.getLength() == 1 )
+        if ( aArguments.getLength() == 1 && aArguments[0].getValueType() ==  ::getCppuType(  (const ::rtl::OUString* ) NULL ))
         {
+            // Provider has been created with application context for user
+            // or share
+            ::rtl::OUString sTmp;
+            aArguments[0] >>= sTmp;
+            Any aAny = m_xContext->getValueByName( ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.util.theMacroExpander" ) );
+            Reference< util::XMacroExpander > xME;
+            aAny >>= xME;
+            ::rtl::OUString base = ::rtl::OUString::createFromAscii(
+                 SAL_CONFIGFILE( "${$SYSBINDIR/bootstrap" ) );
+            ::rtl::OUString user = ::rtl::OUString::createFromAscii( "::UserInstallation}/user"  );
+            ::rtl::OUString share = ::rtl::OUString::createFromAscii( "::BaseInstallation}/share" );
+            ::rtl::OUString userDirString = xME->expandMacros( base.concat( user ) );
+            if ( !sTmp.equals( userDirString ) )
+            {
+                m_bIsUserCtx = false;
+            }
+        }
+
+        else if ( aArguments.getLength() == 1 && aArguments[0].getValueType() ==  ::getCppuType(  ( const Reference< beans::XPropertySet >* ) NULL ))
+        {
+            // Provider has been created with document context
             aArguments[0] >>= m_xScriptingContext;
 
             if ( m_xScriptingContext.is() )
@@ -226,11 +252,12 @@ namespace basprov
                     {
                         if ( xModel == pObjShell->GetModel() )
                         {
-                            m_pBasicManager = pObjShell->GetBasicManager();
-                            m_xLibContainer = Reference< script::XLibraryContainer >( pObjShell->GetBasicContainer(), UNO_QUERY );
+                            m_pDocBasicManager = pObjShell->GetBasicManager();
+                            m_xLibContainerDoc = Reference< script::XLibraryContainer >( pObjShell->GetBasicContainer(), UNO_QUERY );
                             break;
                         }
                     }
+            m_bIsAppScriptCtx = sal_False;
                 }
             }
             else
@@ -252,14 +279,49 @@ namespace basprov
         }
 
         // TODO
-        if ( !m_pBasicManager )
-            m_pBasicManager = SFX_APP()->GetBasicManager();
+        if ( !m_pAppBasicManager )
+            m_pAppBasicManager = SFX_APP()->GetBasicManager();
 
-        if ( !m_xLibContainer.is() )
-            m_xLibContainer = Reference< script::XLibraryContainer >( SFX_APP()->GetBasicContainer(), UNO_QUERY );
+        if ( !m_xLibContainerApp.is() )
+            m_xLibContainerApp = Reference< script::XLibraryContainer >( SFX_APP()->GetBasicContainer(), UNO_QUERY );
     }
 
     // -----------------------------------------------------------------------------
+    // TO DO, this code needs removal after integration of URI parsing service
+    ::rtl::OUString BasicProviderImpl::getLocationFromURI( const ::rtl::OUString& scriptURI )
+    {
+        ::rtl::OUString language;
+        ::rtl::OUString attr;
+        sal_Int32 len = scriptURI.indexOf( '?' );
+        if( ( len < 0 ) || ( scriptURI.getLength() == 0 ) )
+        {
+            return language;
+        }
+        // if we have a match, then start the search after the ?
+
+        len++;
+        do
+        {
+            attr = scriptURI.getToken( 0, '&', len );
+            //OSL_TRACE( "chunk is %s, len is %d",
+            //    ::rtl::OUStringToOString( attr,
+            //        RTL_TEXTENCODING_ASCII_US ).pData->buffer, len  );
+            if( attr.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "location" ) )
+                == sal_True )
+            {
+                sal_Int32 len2 = attr.indexOf('=');
+                language = attr.copy( len2 + 1 );
+                //OSL_TRACE( "Language name is %s",
+                //    ::rtl::OUStringToOString( language,
+                //        RTL_TEXTENCODING_ASCII_US ).pData->buffer  );
+                break;
+            }
+        }
+        while ( len >= 0 );
+        return language;
+
+    }
+
     // XScriptProvider
     // -----------------------------------------------------------------------------
 
@@ -278,8 +340,11 @@ namespace basprov
         sal_Int32 nSchemaLen = aSchema.getLength();
         sal_Int32 nLen = scriptURI.indexOf( '?' );
         ::rtl::OUString aDescription;
+        ::rtl::OUString aLocation;
         if ( nLen - nSchemaLen > 0 )
+        {
             aDescription = scriptURI.copy( nSchemaLen, nLen - nSchemaLen );
+        }
         sal_Int32 nIndex = 0;
         ::rtl::OUString aLibrary = aDescription.getToken( 0, (sal_Unicode)'.', nIndex );
         ::rtl::OUString aModule;
@@ -289,16 +354,28 @@ namespace basprov
         if ( nIndex != -1 )
             aMethod = aDescription.getToken( 0, (sal_Unicode)'.', nIndex );
 
-        if ( aLibrary.getLength() != 0 && aModule.getLength() != 0 && aMethod.getLength() != 0 )
+        aLocation = getLocationFromURI( scriptURI );
+
+        if ( aLibrary.getLength() != 0 && aModule.getLength() != 0 && aMethod.getLength() != 0 && aLocation.getLength() != 0 )
         {
-            if ( m_pBasicManager )
+            BasicManager* pBasicMgr =  NULL;
+            if ( aLocation.equals( ::rtl::OUString::createFromAscii("document") ) )
             {
-                StarBASIC* pBasic = m_pBasicManager->GetLib( aLibrary );
+                pBasicMgr = m_pDocBasicManager;
+            }
+            else if ( aLocation.equals( ::rtl::OUString::createFromAscii("application") ) )
+            {
+                pBasicMgr = m_pAppBasicManager;
+            }
+
+            if ( pBasicMgr )
+            {
+                StarBASIC* pBasic = pBasicMgr->GetLib( aLibrary );
                 if ( !pBasic )
                 {
-                    USHORT nId = m_pBasicManager->GetLibId( aLibrary );
-                    m_pBasicManager->LoadLib( nId );
-                    pBasic = m_pBasicManager->GetLib( aLibrary );
+                    USHORT nId = pBasicMgr->GetLibId( aLibrary );
+                    pBasicMgr->LoadLib( nId );
+                    pBasic = pBasicMgr->GetLib( aLibrary );
                 }
                 if ( pBasic )
                 {
@@ -346,22 +423,81 @@ namespace basprov
     {
         ::osl::MutexGuard aGuard( StarBASIC::GetGlobalMutex() );
 
+         Reference< script::XLibraryContainer > xLibContainer;
+         Reference< script::XLibraryContainer2 > xLibContainer2;
+         BasicManager* pBasicManager = NULL;
+
+         if ( m_bIsAppScriptCtx )
+         {
+             xLibContainer = m_xLibContainerApp;
+             pBasicManager = m_pAppBasicManager;
+         }
+         else
+         {
+             xLibContainer = m_xLibContainerDoc;
+             pBasicManager = m_pDocBasicManager;
+         }
+         xLibContainer2 = Reference< script::XLibraryContainer2 >( xLibContainer, UNO_QUERY );
+
         Sequence< Reference< browse::XBrowseNode > > aChildNodes;
 
-        if ( m_pBasicManager && m_xLibContainer.is() )
+        if ( pBasicManager && xLibContainer.is() && xLibContainer2.is() )
         {
-            Sequence< ::rtl::OUString > aLibNames = m_xLibContainer->getElementNames();
+            Sequence< ::rtl::OUString > aLibNames = xLibContainer->getElementNames();
             sal_Int32 nLibCount = aLibNames.getLength();
             const ::rtl::OUString* pLibNames = aLibNames.getConstArray();
             aChildNodes.realloc( nLibCount );
             Reference< browse::XBrowseNode >* pChildNodes = aChildNodes.getArray();
-
+            sal_Int32 childsFound = 0;
             for ( sal_Int32 i = 0 ; i < nLibCount ; ++i )
             {
-                pChildNodes[i] = static_cast< browse::XBrowseNode* >( new BasicLibraryNodeImpl( m_pBasicManager, m_xLibContainer, pLibNames[i] ) );
+                if ( m_bIsAppScriptCtx  )
+                {
+                    sal_Bool isLibLink = false;
+                    try
+                    {
+                        isLibLink = xLibContainer2->isLibraryLink( pLibNames[i] );
+
+                    }
+                    catch( container::NoSuchElementException e )
+                    {
+                        // TO DO can we do anything here???
+                        continue;
+                    }
+                    // TO DO need to look at this
+                    // np - if this Provider has been created with an application
+                    // context then we need to display scripts for the user or
+                    // share area ( this depends on the directory the Provider was
+                    // initialised with ). In basic however it seems that scripts in
+                    // the user area means more or less that the libraries that
+                    // contain the scripts are not links. The share area is
+                    // nothing more than an arbitrary directory contains libraries
+                    // and is referenced by a link. So effectively there is no
+                    // concept of a "share" directory with basic. For this reason
+                    // the script framework will represent any script not in
+                    // user area under the share node ( needs revisiting )
+
+                    if ( m_bIsUserCtx && ( isLibLink == sal_False ) )
+                    {
+                        pChildNodes[childsFound++] = static_cast< browse::XBrowseNode* >( new BasicLibraryNodeImpl( pBasicManager, xLibContainer, pLibNames[i],m_bIsAppScriptCtx ) );
+                        continue;
+                    }
+                    if ( !m_bIsUserCtx && ( isLibLink == sal_True ) )
+                    {
+                        pChildNodes[childsFound++] = static_cast< browse::XBrowseNode* >( new BasicLibraryNodeImpl( pBasicManager, xLibContainer, pLibNames[i],m_bIsAppScriptCtx ) );
+                        continue;
+                    }
+                }
+                else
+                {
+                    pChildNodes[childsFound++] = static_cast< browse::XBrowseNode* >( new BasicLibraryNodeImpl( pBasicManager, xLibContainer, pLibNames[i],m_bIsAppScriptCtx ) );
+                }
+            }
+            if ( i != childsFound )
+            {
+                aChildNodes.realloc( childsFound );
             }
         }
-
         return aChildNodes;
     }
 
@@ -372,8 +508,17 @@ namespace basprov
         ::osl::MutexGuard aGuard( StarBASIC::GetGlobalMutex() );
 
         sal_Bool bReturn = sal_False;
-        if ( m_xLibContainer.is() )
-            bReturn = m_xLibContainer->hasElements();
+        Reference< script::XLibraryContainer > xLibContainer;
+        if ( m_bIsAppScriptCtx )
+        {
+            xLibContainer = m_xLibContainerApp;
+        }
+        else
+        {
+             xLibContainer = m_xLibContainerDoc;
+        }
+        if ( xLibContainer.is() )
+            bReturn = xLibContainer->hasElements();
 
         return bReturn;
     }

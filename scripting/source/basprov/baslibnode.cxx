@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baslibnode.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2003-09-23 10:08:44 $
+ *  last change: $Author: npower $ $Date: 2003-10-15 08:35:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,10 +95,10 @@ namespace basprov
     // =============================================================================
 
     BasicLibraryNodeImpl::BasicLibraryNodeImpl( BasicManager* pBasicManager,
-        const Reference< script::XLibraryContainer >& xLibContainer, const ::rtl::OUString& sLibName )
+        const Reference< script::XLibraryContainer >& xLibContainer, const ::rtl::OUString& sLibName, bool isAppScript )
         :m_pBasicManager( pBasicManager )
         ,m_xLibContainer( xLibContainer )
-        ,m_sLibName( sLibName )
+        ,m_sLibName( sLibName ),m_bIsAppScript( isAppScript )
     {
         if ( m_xLibContainer.is() )
         {
@@ -150,7 +150,7 @@ namespace basprov
                 {
                     SbModule* pModule = pBasic->FindModule( pNames[i] );
                     if ( pModule )
-                        pChildNodes[i] = static_cast< browse::XBrowseNode* >( new BasicModuleNodeImpl( pModule ) );
+                        pChildNodes[i] = static_cast< browse::XBrowseNode* >( new BasicModuleNodeImpl( pModule, m_bIsAppScript ) );
                 }
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basprov.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2003-09-23 10:07:04 $
+ *  last change: $Author: npower $ $Date: 2003-10-15 08:35:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,10 +110,17 @@ namespace basprov
     class BasicProviderImpl : public BasicProviderImpl_BASE
     {
     private:
-        BasicManager*   m_pBasicManager;
-        ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer > m_xLibContainer;
+        BasicManager*   m_pAppBasicManager;
+        BasicManager*   m_pDocBasicManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer > m_xLibContainerApp;
+        ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer > m_xLibContainerDoc;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xScriptingContext;
+        bool m_bIsAppScriptCtx;
+        bool m_bIsUserCtx;
+        ::rtl::OUString m_sCtxLocation;
+
+        ::rtl::OUString getLocationFromURI( const ::rtl::OUString& scriptURI );
 
     public:
         BasicProviderImpl(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmodnode.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2003-09-23 10:08:51 $
+ *  last change: $Author: npower $ $Date: 2003-10-15 08:35:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,9 +90,9 @@ namespace basprov
     {
     private:
         SbModule* m_pModule;
-
+        bool m_bIsAppScript;
     public:
-        BasicModuleNodeImpl( SbModule* pModule );
+        BasicModuleNodeImpl( SbModule* pModule, bool isAppScript = true );
         virtual ~BasicModuleNodeImpl();
 
         // XBrowseNode

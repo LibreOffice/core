@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baslibnode.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2003-09-23 10:08:38 $
+ *  last change: $Author: npower $ $Date: 2003-10-15 08:35:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,11 +96,11 @@ namespace basprov
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer > m_xLibContainer;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xLibrary;
         ::rtl::OUString m_sLibName;
-
+        bool m_bIsAppScript;
     public:
         BasicLibraryNodeImpl( BasicManager* pBasicManager,
             const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >& xLibContainer,
-            const ::rtl::OUString& sLibName );
+            const ::rtl::OUString& sLibName, bool isAppScript=true );
         virtual ~BasicLibraryNodeImpl();
 
         // XBrowseNode

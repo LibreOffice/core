@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmethnode.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2003-09-23 10:09:14 $
+ *  last change: $Author: npower $ $Date: 2003-10-15 08:35:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,9 @@
 #ifndef _SB_SBMETH_HXX
 #include <basic/sbmeth.hxx>
 #endif
-
+#ifndef _SB_SBMOD_HXX
+#include <basic/sbmod.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -90,9 +92,40 @@ namespace basprov
     // BasicMethodNodeImpl
     // =============================================================================
 
-    BasicMethodNodeImpl::BasicMethodNodeImpl( SbMethod* pMethod )
-        :m_pMethod( pMethod )
+    BasicMethodNodeImpl::BasicMethodNodeImpl( SbMethod* pMethod, bool isAppScript )
+        :m_pMethod( pMethod ), m_bIsAppScript( isAppScript )
     {
+        // TO DO ( needs changing to vnd...script::// syntax )
+        String sModName = m_pMethod->GetModule()->GetName();
+        String sLibName = m_pMethod->GetModule()->GetParent()->GetName();
+        String sMethName = m_pMethod->GetName();
+        String sTmp = String::CreateFromAscii("script://");
+        sTmp += sLibName;
+        sTmp += '.';
+        sTmp += sModName;
+        sTmp += '.';
+        sTmp += sMethName;
+        sTmp += String::CreateFromAscii("?language=Basic&location=");
+        if ( m_bIsAppScript )
+        {
+            sTmp += String::CreateFromAscii("application");
+        }
+        else
+        {
+            sTmp += String::CreateFromAscii("document");
+        }
+        rtl::OUString sUrl( sTmp );
+        try
+        {
+            Any aURIVal;
+            aURIVal <<= sUrl;
+            setPropertyValue( ::rtl::OUString::createFromAscii("URI"), aURIVal);
+        }
+        catch ( RuntimeException& re )
+        {
+            OSL_TRACE("caught exception trying to set property %s",
+               ::rtl::OUStringToOString( re.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        }
     }
 
     // -----------------------------------------------------------------------------
@@ -144,6 +177,85 @@ namespace basprov
     }
 
     // -----------------------------------------------------------------------------
+
+
+//*************************************************************************
+// XPropertySet implementation
+//*************************************************************************
+Reference< beans::XPropertySetInfo > SAL_CALL BasicMethodNodeImpl::getPropertySetInfo( )
+    throw ( RuntimeException )
+{
+    return Reference< beans::XPropertySetInfo > (); // Not supported
+}
+
+//*************************************************************************
+void SAL_CALL BasicMethodNodeImpl::setPropertyValue( const ::rtl::OUString& aPropertyName,
+    const Any& aValue )
+    throw ( beans::UnknownPropertyException, beans::PropertyVetoException,
+            lang::IllegalArgumentException, lang::WrappedTargetException,
+            RuntimeException )
+{
+    m_hProps[ aPropertyName ] = aValue;
+}
+
+//*************************************************************************
+Any SAL_CALL BasicMethodNodeImpl::getPropertyValue( const ::rtl::OUString& PropertyName )
+    throw ( beans::UnknownPropertyException,
+            lang::WrappedTargetException, RuntimeException )
+{
+    Any returnValue = m_hProps[ PropertyName ];
+
+    return returnValue;
+}
+
+//*************************************************************************
+void SAL_CALL BasicMethodNodeImpl::addPropertyChangeListener(
+    const ::rtl::OUString& aPropertyName,
+    const Reference< beans::XPropertyChangeListener >& xListener )
+    throw ( beans::UnknownPropertyException, lang::WrappedTargetException,
+            RuntimeException )
+{
+    throw RuntimeException(
+        ::rtl::OUString::createFromAscii( "BasicMethodNodeImpl::addPropertyChangeListener: method not supported" ),
+        Reference< XInterface >() );
+}
+
+//*************************************************************************
+void SAL_CALL BasicMethodNodeImpl::removePropertyChangeListener(
+    const ::rtl::OUString& aPropertyName,
+    const Reference< beans::XPropertyChangeListener >& aListener )
+    throw ( beans::UnknownPropertyException, lang::WrappedTargetException,
+            RuntimeException )
+{
+    throw RuntimeException(
+        ::rtl::OUString::createFromAscii( "BasicMethodNodeImpl::removePropertyChangeListener: method not supported" ),
+        Reference< XInterface >() );
+}
+
+//*************************************************************************
+void SAL_CALL BasicMethodNodeImpl::addVetoableChangeListener(
+    const ::rtl::OUString& PropertyName,
+    const Reference< beans::XVetoableChangeListener >& aListener )
+    throw ( beans::UnknownPropertyException, lang::WrappedTargetException,
+            RuntimeException )
+{
+    throw RuntimeException(
+        ::rtl::OUString::createFromAscii( "BasicMethodNodeImpl::addVetoableChangeListener: method not supported" ),
+        Reference< XInterface >() );
+}
+
+//*************************************************************************
+void SAL_CALL BasicMethodNodeImpl::removeVetoableChangeListener(
+    const ::rtl::OUString& PropertyName,
+    const Reference< beans::XVetoableChangeListener >& aListener )
+    throw ( beans::UnknownPropertyException, lang::WrappedTargetException,
+            RuntimeException )
+{
+    throw RuntimeException(
+        ::rtl::OUString::createFromAscii( "BasicMethodNodeImpl::removeVetoableChangeListener: method not supported" ),
+        Reference< XInterface >() );
+}
+
 
 //.........................................................................
 }   // namespace basprov

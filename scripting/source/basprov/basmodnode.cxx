@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmodnode.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2003-09-23 10:08:59 $
+ *  last change: $Author: npower $ $Date: 2003-10-15 08:35:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,8 +100,8 @@ namespace basprov
     // BasicModuleNodeImpl
     // =============================================================================
 
-    BasicModuleNodeImpl::BasicModuleNodeImpl( SbModule* pModule )
-        :m_pModule( pModule )
+    BasicModuleNodeImpl::BasicModuleNodeImpl( SbModule* pModule, bool isAppScript )
+        :m_pModule( pModule ), m_bIsAppScript( isAppScript )
     {
     }
 
@@ -147,7 +147,7 @@ namespace basprov
                 {
                     SbMethod* pMethod = static_cast< SbMethod* >( pMethods->Get( static_cast< USHORT >( i ) ) );
                     if ( pMethod )
-                        pChildNodes[i] = static_cast< browse::XBrowseNode* >( new BasicMethodNodeImpl( pMethod ) );
+                        pChildNodes[i] = static_cast< browse::XBrowseNode* >( new BasicMethodNodeImpl( pMethod, m_bIsAppScript ) );
                 }
             }
         }

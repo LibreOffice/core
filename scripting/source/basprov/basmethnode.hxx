@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmethnode.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2003-09-23 10:09:05 $
+ *  last change: $Author: npower $ $Date: 2003-10-15 08:35:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
+#include <cppuhelper/implbase2.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
+
+#include <hash_map>
 
 class SbMethod;
 
@@ -82,17 +86,21 @@ namespace basprov
     //  class BasicMethodNodeImpl
     //  ----------------------------------------------------
 
-    typedef ::cppu::WeakImplHelper1<
-        ::drafts::com::sun::star::script::framework::browse::XBrowseNode > BasicMethodNodeImpl_BASE;
+    typedef ::cppu::WeakImplHelper2<
+        ::drafts::com::sun::star::script::framework::browse::XBrowseNode,
+        com::sun::star::beans::XPropertySet > BasicMethodNodeImpl_BASE;
 
+    typedef ::std::hash_map < ::rtl::OUString, com::sun::star::uno::Any, ::rtl::OUStringHash,
+        ::std::equal_to< ::rtl::OUString > > Props_hash;
 
     class BasicMethodNodeImpl : public BasicMethodNodeImpl_BASE
     {
     private:
         SbMethod* m_pMethod;
-
+        Props_hash m_hProps;
+    bool m_bIsAppScript;
     public:
-        BasicMethodNodeImpl( SbMethod* pMethod );
+        BasicMethodNodeImpl( SbMethod* pMethod, bool isAppScript = true );
         virtual ~BasicMethodNodeImpl();
 
         // XBrowseNode
@@ -104,6 +112,45 @@ namespace basprov
             throw (::com::sun::star::uno::RuntimeException);
         virtual sal_Int16 SAL_CALL getType(  )
             throw (::com::sun::star::uno::RuntimeException);
+    // XPropertySet implementation
+    virtual com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL
+        getPropertySetInfo( )
+        throw ( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName,
+        const com::sun::star::uno::Any& aValue )
+        throw ( com::sun::star::beans::UnknownPropertyException,
+            com::sun::star::beans::PropertyVetoException,
+            com::sun::star::lang::IllegalArgumentException,
+            com::sun::star::lang::WrappedTargetException,
+            com::sun::star::uno::RuntimeException );
+    virtual com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName )
+        throw ( com::sun::star::beans::UnknownPropertyException,
+            com::sun::star::lang::WrappedTargetException,
+            com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
+        const com::sun::star::uno::Reference< com::sun::star::beans::XPropertyChangeListener >& xListener )
+        throw ( com::sun::star::beans::UnknownPropertyException,
+            com::sun::star::lang::WrappedTargetException,
+            com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL removePropertyChangeListener(
+        const ::rtl::OUString& aPropertyName,
+        const com::sun::star::uno::Reference< com::sun::star::beans::XPropertyChangeListener >& aListener )
+        throw ( com::sun::star::beans::UnknownPropertyException,
+            com::sun::star::lang::WrappedTargetException,
+            com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL addVetoableChangeListener(
+        const ::rtl::OUString& PropertyName,
+        const com::sun::star::uno::Reference< com::sun::star::beans::XVetoableChangeListener >& aListener )
+        throw ( com::sun::star::beans::UnknownPropertyException,
+            com::sun::star::lang::WrappedTargetException,
+            com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL removeVetoableChangeListener(
+        const ::rtl::OUString& PropertyName,
+        const com::sun::star::uno::Reference< com::sun::star::beans::XVetoableChangeListener >& aListener )
+        throw ( com::sun::star::beans::UnknownPropertyException,
+            com::sun::star::lang::WrappedTargetException,
+            com::sun::star::uno::RuntimeException );
+
     };
 
 //.........................................................................
