@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringconstants.hrc,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-08 08:38:21 $
+ *  last change: $Author: fs $ $Date: 2001-06-15 08:36:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,9 @@
 #define PROPERTY_ID_ISHIDDEN                91
 #define PROPERTY_ID_SUPPRESSVERSIONCL       92
 #define PROPERTY_ID_LAYOUTINFORMATION       93
+#define PROPERTY_ID_TEXTLINECOLOR           94
+#define PROPERTY_ID_TEXTEMPHASIS            95
+#define PROPERTY_ID_TEXTRELIEF              96
 
 //============================================================
 //= property names
@@ -279,6 +282,9 @@ DECLARE_CONSTASCII_USTRING(PROPERTY_CONTROLUSER);
 DECLARE_CONSTASCII_USTRING(PROPERTY_CONTROLPASSWORD);
 DECLARE_CONSTASCII_USTRING(PROPERTY_CACHESIZE);
 DECLARE_CONSTASCII_USTRING(PROPERTY_CREATEVIEW);
+DECLARE_CONSTASCII_USTRING(PROPERTY_TEXTLINECOLOR);
+DECLARE_CONSTASCII_USTRING(PROPERTY_TEXTEMPHASIS);
+DECLARE_CONSTASCII_USTRING(PROPERTY_TEXTRELIEF);
 
 //============================================================
 //= service names

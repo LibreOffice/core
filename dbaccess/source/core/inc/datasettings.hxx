@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasettings.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-16 16:05:22 $
+ *  last change: $Author: fs $ $Date: 2001-06-15 08:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,14 +101,17 @@ class OConfigurationNode;
 class ODataSettings_Base
 {
 protected:
-// <properties>
     static ::com::sun::star::awt::FontDescriptor m_aAppFont;
+// <properties>
     ::rtl::OUString                             m_sFilter;
     ::rtl::OUString                             m_sOrder;
     sal_Bool                                    m_bApplyFilter;     // no BitField ! the base class needs a pointer to this member !
     ::com::sun::star::awt::FontDescriptor       m_aFont;
     ::com::sun::star::uno::Any                  m_aRowHeight;
     ::com::sun::star::uno::Any                  m_aTextColor;
+    ::com::sun::star::uno::Any                  m_aTextLineColor;
+    sal_Int16                                   m_nFontEmphasis;
+    sal_Int16                                   m_nFontRelief;
 // </properties>
 
 protected:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDeco.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-12 13:39:12 $
+ *  last change: $Author: fs $ $Date: 2001-06-15 08:38:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,6 +231,9 @@ sal_Bool SAL_CALL ODBTableDecorator::convertFastPropertyValue(
         case PROPERTY_ID_FONT:
         case PROPERTY_ID_ROW_HEIGHT:
         case PROPERTY_ID_TEXTCOLOR:
+        case PROPERTY_ID_TEXTLINECOLOR:
+        case PROPERTY_ID_TEXTEMPHASIS:
+        case PROPERTY_ID_TEXTRELIEF:
             bRet = ODataSettings::convertFastPropertyValue(rConvertedValue, rOldValue,nHandle,rValue);
             break;
 
@@ -257,6 +260,9 @@ void ODBTableDecorator::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, con
         case PROPERTY_ID_FONT:
         case PROPERTY_ID_ROW_HEIGHT:
         case PROPERTY_ID_TEXTCOLOR:
+        case PROPERTY_ID_TEXTLINECOLOR:
+        case PROPERTY_ID_TEXTEMPHASIS:
+        case PROPERTY_ID_TEXTRELIEF:
             ODataSettings::setFastPropertyValue_NoBroadcast(_nHandle, _rValue);
             break;
         case PROPERTY_ID_CATALOGNAME:
@@ -306,6 +312,9 @@ void ODBTableDecorator::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) c
         case PROPERTY_ID_FONT:
         case PROPERTY_ID_ROW_HEIGHT:
         case PROPERTY_ID_TEXTCOLOR:
+        case PROPERTY_ID_TEXTLINECOLOR:
+        case PROPERTY_ID_TEXTEMPHASIS:
+        case PROPERTY_ID_TEXTRELIEF:
             ODataSettings::getFastPropertyValue(_rValue, _nHandle);
             break;
         case PROPERTY_ID_CATALOGNAME:

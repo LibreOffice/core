@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasettings.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-21 09:20:13 $
+ *  last change: $Author: fs $ $Date: 2001-06-15 08:38:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,12 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_FONTWEIGHT_HPP_
 #include <com/sun/star/awt/FontWeight.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_FONTEMPHASISMARK_HPP_
+#include <com/sun/star/awt/FontEmphasisMark.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_FONTRELIEF_HPP_
+#include <com/sun/star/awt/FontRelief.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_AWT_FONTWIDTH_HPP_
@@ -215,12 +221,22 @@ void ODataSettings::registerProperties()
 
     registerMayBeVoidProperty(PROPERTY_TEXTCOLOR, PROPERTY_ID_TEXTCOLOR, PropertyAttribute::BOUND | PropertyAttribute::MAYBEVOID,
                     &m_aTextColor, ::getCppuType(static_cast<sal_Int32*>(NULL)));
+
+    registerMayBeVoidProperty(PROPERTY_TEXTLINECOLOR, PROPERTY_ID_TEXTLINECOLOR, PropertyAttribute::BOUND | PropertyAttribute::MAYBEVOID,
+                    &m_aTextLineColor, ::getCppuType(static_cast<sal_Int32*>(NULL)));
+
+    registerProperty(PROPERTY_TEXTEMPHASIS, PROPERTY_ID_TEXTEMPHASIS, PropertyAttribute::BOUND,
+        &m_nFontEmphasis, ::getCppuType(&m_nFontEmphasis));
+
+    registerProperty(PROPERTY_TEXTRELIEF, PROPERTY_ID_TEXTRELIEF, PropertyAttribute::BOUND,
+        &m_nFontRelief, ::getCppuType(&m_nFontRelief));
 }
+
 //--------------------------------------------------------------------------
 ODataSettings::ODataSettings(OBroadcastHelper& _rBHelper)
     :OPropertyContainer(_rBHelper)
+    ,ODataSettings_Base()
 {
-    m_aAppFont = ImplCreateFontDescriptor(Application::GetSettings().GetStyleSettings().GetAppFont());
     registerProperties();
 }
 
@@ -229,23 +245,25 @@ ODataSettings::ODataSettings(const ODataSettings& _rSource, ::cppu::OBroadcastHe
     :OPropertyContainer(_rBHelper)
     ,ODataSettings_Base(_rSource)
 {
-    m_aAppFont = ImplCreateFontDescriptor(Application::GetSettings().GetStyleSettings().GetAppFont());
     registerProperties();
 }
 
 //--------------------------------------------------------------------------
 ODataSettings_Base::ODataSettings_Base()
-    : m_bApplyFilter(sal_False)
-    ,m_aFont(::comphelper::getDefaultFont())
+    :m_aFont(::comphelper::getDefaultFont())
+    ,m_bApplyFilter(sal_False)
+    ,m_nFontEmphasis(::com::sun::star::awt::FontEmphasisMark::NONE)
+    ,m_nFontRelief(::com::sun::star::awt::FontRelief::NONE)
 {
-    m_aAppFont = ImplCreateFontDescriptor(Application::GetSettings().GetStyleSettings().GetAppFont());
-    //  registerProperties();
+    if (0 == m_aAppFont.Name.getLength())
+        m_aAppFont = ImplCreateFontDescriptor(Application::GetSettings().GetStyleSettings().GetAppFont());
 }
 
 //--------------------------------------------------------------------------
 ODataSettings_Base::ODataSettings_Base(const ODataSettings_Base& _rSource)
 {
-    //  registerProperties();
+    if (0 == m_aAppFont.Name.getLength())
+        m_aAppFont = ImplCreateFontDescriptor(Application::GetSettings().GetStyleSettings().GetAppFont());
 
     m_sFilter       = _rSource.m_sFilter;
     m_sOrder        = _rSource.m_sOrder;
@@ -253,6 +271,9 @@ ODataSettings_Base::ODataSettings_Base(const ODataSettings_Base& _rSource)
     m_aFont         = _rSource.m_aFont;
     m_aRowHeight    = _rSource.m_aRowHeight;
     m_aTextColor    = _rSource.m_aTextColor;
+    m_aTextLineColor= _rSource.m_aTextLineColor;
+    m_nFontEmphasis = _rSource.m_nFontEmphasis;
+    m_nFontRelief   = _rSource.m_nFontRelief;
 }
 
 //--------------------------------------------------------------------------
@@ -269,41 +290,29 @@ void ODataSettings_Base::storeTo(const OConfigurationNode& _rConfigLocation) con
     _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_APPLYFILTER, ::cppu::bool2any(m_bApplyFilter));
     _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_ROW_HEIGHT, m_aRowHeight);
 
-    if(m_aAppFont.Name != m_aFont.Name)
-        _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_NAME, makeAny(m_aFont.Name));
+    Any aNullAny;
+    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_NAME, makeAny(m_aFont.Name));
+    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_HEIGHT, makeAny(m_aFont.Height));
+    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_WIDTH, makeAny(m_aFont.Width));
+    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_STYLENAME, makeAny(m_aFont.StyleName));
+    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_FAMILY, makeAny(m_aFont.Family));
+    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_CHARSET, makeAny(m_aFont.CharSet));
+    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_PITCH, makeAny(m_aFont.Pitch));
+    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_CHARACTERWIDTH, makeAny(m_aFont.CharacterWidth));
+    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_WEIGHT, makeAny(m_aFont.Weight));
+    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_SLANT, makeAny((sal_Int16)m_aFont.Slant));
+    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_UNDERLINE, makeAny(m_aFont.Underline));
+    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_STRIKEOUT, makeAny(m_aFont.Strikeout));
+    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_ORIENTATION, makeAny(m_aFont.Orientation));
+    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_KERNING, makeAny(m_aFont.Kerning));
+    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_WORDLINEMODE, makeAny(m_aFont.WordLineMode));
+    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_TYPE, makeAny(m_aFont.Type));
 
-    if(m_aAppFont.Height != m_aFont.Height)
-        _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_HEIGHT, makeAny(m_aFont.Height));
-    if(m_aAppFont.Width != m_aFont.Width)
-        _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_WIDTH, makeAny(m_aFont.Width));
-    if(m_aAppFont.StyleName != m_aFont.StyleName)
-        _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_STYLENAME, makeAny(m_aFont.StyleName));
-    if(m_aAppFont.Family != m_aFont.Family)
-        _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_FAMILY, makeAny(m_aFont.Family));
-    if(m_aAppFont.CharSet != m_aFont.CharSet)
-        _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_CHARSET, makeAny(m_aFont.CharSet));
-    if(m_aAppFont.Pitch != m_aFont.Pitch)
-        _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_PITCH, makeAny(m_aFont.Pitch));
-    if(m_aAppFont.CharacterWidth != m_aFont.CharacterWidth)
-        _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_CHARACTERWIDTH, makeAny(m_aFont.CharacterWidth));
-    if(m_aAppFont.Weight != m_aFont.Weight)
-        _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_WEIGHT, makeAny(m_aFont.Weight));
-    if(m_aAppFont.Slant != m_aFont.Slant)
-        _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_SLANT, makeAny((sal_Int16)m_aFont.Slant));
-    if(m_aAppFont.Underline != m_aFont.Underline)
-        _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_UNDERLINE, makeAny(m_aFont.Underline));
-    if(m_aAppFont.Strikeout != m_aFont.Strikeout)
-        _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_STRIKEOUT, makeAny(m_aFont.Strikeout));
-    if(m_aAppFont.Orientation != m_aFont.Orientation)
-        _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_ORIENTATION, makeAny(m_aFont.Orientation));
-    if(m_aAppFont.Kerning != m_aFont.Kerning)
-        _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_KERNING, makeAny(m_aFont.Kerning));
-    if(m_aAppFont.WordLineMode != m_aFont.WordLineMode)
-        _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_WORDLINEMODE, makeAny(m_aFont.WordLineMode));
-    if(m_aAppFont.Type != m_aFont.Type)
-        _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_TYPE, makeAny(m_aFont.Type));
 
     _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_TEXTCOLOR, m_aTextColor);
+    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_UNDERLINECOLOR, m_aTextLineColor);
+    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_CHARACTEREMPHASIS, makeAny(m_nFontEmphasis));
+    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_CHARACTERRELIEF, makeAny(m_nFontRelief));
 }
 
 //--------------------------------------------------------------------------
@@ -356,9 +365,12 @@ void ODataSettings_Base::loadFrom(const OConfigurationNode& _rConfigLocation)
         m_aFont.Slant = (FontSlant)nTemp;
 
 
-
     m_aRowHeight = _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_ROW_HEIGHT);
     m_aTextColor = _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_TEXTCOLOR);
+
+    m_aTextLineColor = _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_UNDERLINECOLOR);
+    _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_CHARACTEREMPHASIS) >>= m_nFontEmphasis;
+    _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_CHARACTERRELIEF) >>= m_nFontRelief;
 }
 
 //........................................................................

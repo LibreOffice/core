@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringconstants.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-08 08:40:35 $
+ *  last change: $Author: fs $ $Date: 2001-06-15 08:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,9 @@ IMPLEMENT_CONSTASCII_USTRING(PROPERTY_CONTROLUSER, "ControlUser");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_CONTROLPASSWORD, "ControlPassword");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_CACHESIZE, "CacheSize");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_CREATEVIEW, "CreateView");
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_TEXTLINECOLOR, "TextLineColor");
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_TEXTEMPHASIS, "FontEmphasisMark");
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_TEXTRELIEF, "FontRelief");
 
 
 //============================================================

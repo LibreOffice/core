@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-13 17:00:37 $
+ *  last change: $Author: fs $ $Date: 2001-06-15 08:39:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,19 +585,25 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
         // set the formats from the table
         if(m_pCurrentlyDisplayed)
         {
-            Sequence< ::rtl::OUString> aProperties(3);
-            Sequence< Any> aValues(3);
+            Sequence< ::rtl::OUString> aProperties(6);
+            Sequence< Any> aValues(6);
 
             DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(m_pCurrentlyDisplayed->GetUserData());
             Reference<XPropertySet> xTableProp(pData->xObject,UNO_QUERY);
-            OSL_ENSURE(xTableProp.is(),"No table available!");
+            OSL_ENSURE(xTableProp.is(),"SbaTableQueryBrowser::InitializeGridModel: No table available!");
 
             aProperties.getArray()[0]   = PROPERTY_FONT;
             aValues.getArray()[0]       = xTableProp->getPropertyValue(PROPERTY_FONT);
-            aProperties.getArray()[1]   = PROPERTY_ROW_HEIGHT;
-            aValues.getArray()[1]       = xTableProp->getPropertyValue(PROPERTY_ROW_HEIGHT);
-            aProperties.getArray()[2]   = PROPERTY_TEXTCOLOR;
-            aValues.getArray()[2]       = xTableProp->getPropertyValue(PROPERTY_TEXTCOLOR);
+            aProperties.getArray()[1]   = PROPERTY_TEXTEMPHASIS;
+            aValues.getArray()[1]       = xTableProp->getPropertyValue(PROPERTY_TEXTEMPHASIS);
+            aProperties.getArray()[2]   = PROPERTY_TEXTRELIEF;
+            aValues.getArray()[2]       = xTableProp->getPropertyValue(PROPERTY_TEXTRELIEF);
+            aProperties.getArray()[3]   = PROPERTY_ROW_HEIGHT;
+            aValues.getArray()[3]       = xTableProp->getPropertyValue(PROPERTY_ROW_HEIGHT);
+            aProperties.getArray()[4]   = PROPERTY_TEXTCOLOR;
+            aValues.getArray()[4]       = xTableProp->getPropertyValue(PROPERTY_TEXTCOLOR);
+            aProperties.getArray()[5]   = PROPERTY_TEXTLINECOLOR;
+            aValues.getArray()[5]       = xTableProp->getPropertyValue(PROPERTY_TEXTLINECOLOR);
 
             Reference< XMultiPropertySet >  xFormMultiSet(xGrid, UNO_QUERY);
             xFormMultiSet->setPropertyValues(aProperties, aValues);
@@ -754,6 +760,20 @@ Reference<XPropertySet> getColumnHelper(SvLBoxEntry* _pCurrentlyDisplayed,const 
     }
     return xRet;
 }
+
+// -----------------------------------------------------------------------
+void SbaTableQueryBrowser::transferChangedControlProperty(const ::rtl::OUString& _rProperty, const Any& _rNewValue)
+{
+    if(m_pCurrentlyDisplayed)
+    {
+        DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(m_pCurrentlyDisplayed->GetUserData());
+        Reference< XPropertySet > xProp(pData->xObject, UNO_QUERY);
+        OSL_ENSURE(xProp.is(),"SbaTableQueryBrowser::transferChangedControlProperty: no table/query object!");
+        if (xProp.is())
+            xProp->setPropertyValue(_rProperty, _rNewValue);
+    }
+}
+
 // -----------------------------------------------------------------------
 void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt)
 {
@@ -843,63 +863,17 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt)
             }
         }
 
-    //  // the font of the grid ?
-        else if (evt.PropertyName.equals(PROPERTY_FONT))
+        else if (   evt.PropertyName.equals(PROPERTY_FONT)          // the font ?
+                ||  evt.PropertyName.equals(PROPERTY_TEXTCOLOR)     // the text color ?
+                ||  evt.PropertyName.equals(PROPERTY_FILTER)        // the filter ?
+                ||  evt.PropertyName.equals(PROPERTY_ORDER)         // the sort ?
+                ||  evt.PropertyName.equals(PROPERTY_APPLYFILTER)   // the appliance of the filter ?
+                ||  evt.PropertyName.equals(PROPERTY_TEXTLINECOLOR) // the text line color ?
+                ||  evt.PropertyName.equals(PROPERTY_TEXTEMPHASIS)  // the text emphasis ?
+                ||  evt.PropertyName.equals(PROPERTY_TEXTRELIEF)    // the text relief ?
+                )
         {
-            if(m_pCurrentlyDisplayed)
-            {
-                DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(m_pCurrentlyDisplayed->GetUserData());
-                Reference<XPropertySet> xProp(pData->xObject,UNO_QUERY);
-                OSL_ENSURE(xProp.is(),"No table available!");
-                xProp->setPropertyValue(PROPERTY_FONT,evt.NewValue);
-            }
-        }
-
-    //  // the text color of the grid ?
-        else if (evt.PropertyName.equals(PROPERTY_TEXTCOLOR))
-        {
-            if(m_pCurrentlyDisplayed)
-            {
-                DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(m_pCurrentlyDisplayed->GetUserData());
-                Reference<XPropertySet> xProp(pData->xObject,UNO_QUERY);
-                OSL_ENSURE(xProp.is(),"No table available!");
-                xProp->setPropertyValue(PROPERTY_TEXTCOLOR,evt.NewValue);
-            }
-        }
-
-    //  // the filter ?
-        else if (evt.PropertyName.equals(PROPERTY_FILTER))
-        {
-            if(m_pCurrentlyDisplayed)
-            {
-                DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(m_pCurrentlyDisplayed->GetUserData());
-                Reference<XPropertySet> xProp(pData->xObject,UNO_QUERY);
-                OSL_ENSURE(xProp.is(),"No table available!");
-                xProp->setPropertyValue(PROPERTY_FILTER,evt.NewValue);
-            }
-        }
-
-        // the sort ?
-        else if (evt.PropertyName.equals(PROPERTY_ORDER))
-        {
-            if(m_pCurrentlyDisplayed)
-            {
-                DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(m_pCurrentlyDisplayed->GetUserData());
-                Reference<XPropertySet> xProp(pData->xObject,UNO_QUERY);
-                OSL_ENSURE(xProp.is(),"No table available!");
-                xProp->setPropertyValue(PROPERTY_ORDER,evt.NewValue);
-            }
-        }
-        // the appliance of the filter ?
-        else if (evt.PropertyName.equals(PROPERTY_APPLYFILTER))
-        {
-            if(m_pCurrentlyDisplayed)
-            {
-                DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(m_pCurrentlyDisplayed->GetUserData());
-                Reference<XPropertySet> xProp(pData->xObject,UNO_QUERY);
-                OSL_ENSURE(xProp.is(),"No table available!");
-                xProp->setPropertyValue(PROPERTY_APPLYFILTER,evt.NewValue);
-            }
+            transferChangedControlProperty(evt.PropertyName, evt.NewValue);
         }
     }
     catch(Exception&)
@@ -1106,12 +1080,15 @@ void SbaTableQueryBrowser::attachFrame(const Reference< ::com::sun::star::frame:
 void SbaTableQueryBrowser::addModelListeners(const Reference< ::com::sun::star::awt::XControlModel > & _xGridControlModel)
 {
     SbaXDataBrowserController::addModelListeners(_xGridControlModel);
-    Reference< XPropertySet >  xCols(_xGridControlModel, UNO_QUERY);
-    if (xCols.is())
+    Reference< XPropertySet >  xSourceSet(_xGridControlModel, UNO_QUERY);
+    if (xSourceSet.is())
     {
-        xCols->addPropertyChangeListener(PROPERTY_ROW_HEIGHT, (XPropertyChangeListener*)this);
-        xCols->addPropertyChangeListener(PROPERTY_FONT, (XPropertyChangeListener*)this);
-        xCols->addPropertyChangeListener(PROPERTY_TEXTCOLOR, (XPropertyChangeListener*)this);
+        xSourceSet->addPropertyChangeListener(PROPERTY_ROW_HEIGHT, (XPropertyChangeListener*)this);
+        xSourceSet->addPropertyChangeListener(PROPERTY_FONT, (XPropertyChangeListener*)this);
+        xSourceSet->addPropertyChangeListener(PROPERTY_TEXTCOLOR, (XPropertyChangeListener*)this);
+        xSourceSet->addPropertyChangeListener(PROPERTY_TEXTLINECOLOR, (XPropertyChangeListener*)this);
+        xSourceSet->addPropertyChangeListener(PROPERTY_TEXTEMPHASIS, (XPropertyChangeListener*)this);
+        xSourceSet->addPropertyChangeListener(PROPERTY_TEXTRELIEF, (XPropertyChangeListener*)this);
     }
 
 }
@@ -1126,6 +1103,9 @@ void SbaTableQueryBrowser::removeModelListeners(const Reference< ::com::sun::sta
         xSourceSet->removePropertyChangeListener(PROPERTY_ROW_HEIGHT, (XPropertyChangeListener*)this);
         xSourceSet->removePropertyChangeListener(PROPERTY_FONT, (XPropertyChangeListener*)this);
         xSourceSet->removePropertyChangeListener(PROPERTY_TEXTCOLOR, (XPropertyChangeListener*)this);
+        xSourceSet->removePropertyChangeListener(PROPERTY_TEXTLINECOLOR, (XPropertyChangeListener*)this);
+        xSourceSet->removePropertyChangeListener(PROPERTY_TEXTEMPHASIS, (XPropertyChangeListener*)this);
+        xSourceSet->removePropertyChangeListener(PROPERTY_TEXTRELIEF, (XPropertyChangeListener*)this);
     }
 }
 // -------------------------------------------------------------------------
