@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xformsexport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:16:20 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 13:00:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,7 +330,7 @@ void exportXFormsBinding( SvXMLExport& rExport,
                 xBinding->getPropertyValue( OUSTRING("Model") ),
                 UNO_QUERY );
             Reference<XDataTypeRepository> xRepository(
-                xModel.is() ? xModel->getDataTypeRepository() : NULL );
+                xModel.is() ? xModel->getDataTypeRepository() : Reference<XDataTypeRepository>() );
             if( xRepository.is() )
             {
                 Reference<XPropertySet> xDataType(
