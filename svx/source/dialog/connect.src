@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connect.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-30 19:49:36 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:22:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,7 +291,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ danish ] = "Linjeafstand" ;
         Text [ italian ] = "Distanza tra le linee" ;
         Text [ spanish ] = "Distancia entre líneas" ;
-        Text [ french ] = "Interligne" ;
+        Text [ french ] = "Écart entre les lignes" ;
         Text [ dutch ] = "Lijnafstand" ;
         Text [ portuguese ] = "Intervalo entre linhas" ;
         Text[ chinese_simplified ] = "Ïß¼ä¸ô";
@@ -494,10 +494,10 @@ TabPage RID_SVXPAGE_CONNECTION
         QuickHelpText [ ENGLISH ] = "Preview" ;
         QuickHelpText[ english_us ] = "Preview!";
         QuickHelpText[ portuguese ] = "Preview";
-        QuickHelpText[ russian ] = "Preview";
+        QuickHelpText[ russian ] = "Ïðîñìîòð!";
         QuickHelpText[ greek ] = "Preview";
         QuickHelpText[ dutch ] = "Preview";
-        QuickHelpText[ french ] = "Preview";
+        QuickHelpText[ french ] = "Aperçu!";
         QuickHelpText[ spanish ] = "Previsualización!";
         QuickHelpText[ finnish ] = "Preview";
         QuickHelpText[ italian ] = "Preview";
@@ -505,7 +505,7 @@ TabPage RID_SVXPAGE_CONNECTION
         QuickHelpText[ swedish ] = "Förhandsvisning!";
         QuickHelpText[ polish ] = "Podgl¹d!";
         QuickHelpText[ portuguese_brazilian ] = "Preview";
-        QuickHelpText[ japanese ] = "Preview";
+        QuickHelpText[ japanese ] = "ÌßÚËÞ­°!";
         QuickHelpText[ korean ] = "Preview";
         QuickHelpText[ chinese_simplified ] = "Ô¤ÊÓ!";
         QuickHelpText[ chinese_traditional ] = "¹wÄý!";
@@ -527,4 +527,5 @@ TabPage RID_SVXPAGE_CONNECTION
     Text[ finnish ] = "Liitin";
 };
  // ******************************************************************* EOF
+
 
