@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: cp $ $Date: 2001-08-14 12:09:54 $
+ *  last change: $Author: pl $ $Date: 2001-08-14 17:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,8 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
     nStyle_     = nSalFrameStyle;
 
     XWMHints Hints;
-    Hints.flags = 0;
+    Hints.flags = InputHint;
+    Hints.input = True;
     hStackingWindow_ = None;
 
     if( nSalFrameStyle & SAL_FRAME_STYLE_DEFAULT )
@@ -486,7 +487,7 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
     if( hComposite_ )
         XSetWindowBackgroundPixmap( pDisplay_->GetDisplay(), XtWindow( hComposite_ ), None );
 
-    if( ! ( nSalFrameStyle & SAL_FRAME_STYLE_CHILD  && pParentData ) )
+    if( ! ( (nSalFrameStyle & SAL_FRAME_STYLE_CHILD)  && pParentData ) )
     {
         XSetWMHints( GetXDisplay(), XtWindow( hShell_ ), &Hints );
 
@@ -853,48 +854,6 @@ void SalFrame::Show( BOOL bVisible )
             XtPopdown( maFrameData.hShell_ );
         else
             XtUnmapWidget( maFrameData.hShell_ );
-
-        #ifdef __notdef__
-
-        if( !maFrameData.nStyle_  )
-        {
-            SalFrameData *pTemp = &GetSalData()->pFirstFrame_->maFrameData;
-            while( pTemp )
-            {
-                if( &maFrameData != pTemp
-                    && _GetDisplay() == pTemp->pDisplay_
-                    && SHOWSTATE_NORMAL == pTemp->nShowState_
-                    && pTemp->bMapped_ )
-                {
-                    /* #62634# */
-                    XWindowAttributes window_attributes;
-                    XGetWindowAttributes( _GetXDisplay(),
-                        XtWindow( pTemp->hShell_ ), &window_attributes);
-                    /* racing condition, we called ::Show(1), but the
-                     * window may not be ready (i.e. bMapped_ != map_state) */
-                    if ( window_attributes.map_state != IsViewable )
-                    {
-                        XtMapWidget( pTemp->hShell_ );
-                        XSync( _GetXDisplay(), False );
-                    }
-
-                    /* #69412# double check whether the window is successfully mapped,
-                       since fvwm2 prohibits the mapping of the initial frame, depending
-                       on its window positioning policy for new windows */
-                    XGetWindowAttributes( _GetXDisplay(), XtWindow( pTemp->hShell_ ), &window_attributes);
-                    if ( window_attributes.map_state == IsViewable )
-                    {
-                        XSetInputFocus( _GetXDisplay(), XtWindow( pTemp->hShell_ ) ,
-                            RevertToNone, CurrentTime );
-                    }
-                    break;
-                }
-                pTemp = &pTemp->pNextFrame_->maFrameData;
-            }
-        }
-
-        #endif
-
     }
 }
 
@@ -909,7 +868,6 @@ void SalFrame::ToTop( USHORT nFlags )
     XRaiseWindow( _GetXDisplay(), maFrameData.GetShellWindow() );
     for( i=0; i < maFrameData.maChildren.Count(); i++ )
         maFrameData.maChildren.GetObject( i )->ToTop( nFlags );
-    //XSetInputFocus( _GetXDisplay(), _GetShellWindow(), RevertToNone, CurrentTime );
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1138,16 +1096,16 @@ void SalFrameData::SetSize( const Size &rSize )
     values.height   = rSize.Height();
     if (values.width > 0 && values.height > 0)
     {
-        if( ! ( nStyle_ & SAL_FRAME_STYLE_SIZEABLE ) )
-        {
-            Arg args[10];
-            int n = 0;
-            XtSetArg( args[n], XtNminWidth, rSize.Width() );    n++;
-            XtSetArg( args[n], XtNminHeight, rSize.Height() );  n++;
-            XtSetArg( args[n], XtNmaxWidth, rSize.Width() );    n++;
-            XtSetArg( args[n], XtNmaxHeight, rSize.Height() );  n++;
-            XtSetValues( hShell_, args, n );
-        }
+         if( ! ( nStyle_ & SAL_FRAME_STYLE_SIZEABLE ) )
+         {
+             Arg args[10];
+             int n = 0;
+             XtSetArg( args[n], XtNminWidth, rSize.Width() );   n++;
+             XtSetArg( args[n], XtNminHeight, rSize.Height() ); n++;
+             XtSetArg( args[n], XtNmaxWidth, rSize.Width() );   n++;
+             XtSetArg( args[n], XtNmaxHeight, rSize.Height() ); n++;
+             XtSetValues( hShell_, args, n );
+         }
         XResizeWindow( GetXDisplay(), GetShellWindow(), rSize.Width(), rSize.Height() );
         XMoveResizeWindow( GetXDisplay(), GetWindow(), 0, 0, rSize.Width(), rSize.Height() );
 
@@ -1200,15 +1158,15 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
      }
 
     if( ! ( nStyle_ & SAL_FRAME_STYLE_SIZEABLE ) )
-    {
-        Arg args[10];
-        int n = 0;
-        XtSetArg( args[n], XtNminWidth, values.width );     n++;
-        XtSetArg( args[n], XtNminHeight, values.height );   n++;
-        XtSetArg( args[n], XtNmaxWidth, values.width );     n++;
-        XtSetArg( args[n], XtNmaxHeight, values.height );   n++;
-        XtSetValues( hShell_, args, n );
-    }
+     {
+         Arg args[10];
+         int n = 0;
+         XtSetArg( args[n], XtNminWidth, values.width );        n++;
+         XtSetArg( args[n], XtNminHeight, values.height );  n++;
+         XtSetArg( args[n], XtNmaxWidth, values.width );        n++;
+         XtSetArg( args[n], XtNmaxHeight, values.height );  n++;
+         XtSetValues( hShell_, args, n );
+     }
     XMoveResizeWindow( GetXDisplay(), GetShellWindow(), values.x, values.y, values.width, values.height );
     XMoveResizeWindow( GetXDisplay(), GetWindow(), 0, 0, values.width, values.height );
 
@@ -2191,7 +2149,7 @@ long SalFrameData::HandleExposeEvent( XEvent *pEvent )
         nCount          = pEvent->xgraphicsexpose.count;
     }
 
-    if( ! aRestoreFullScreen_.IsEmpty() )
+    if( IsOverrideRedirect() && ! aRestoreFullScreen_.IsEmpty() )
         // we are in fullscreen mode -> override redirect
          // focus is probably lost, so reget it
          XSetInputFocus( GetXDisplay(), XtWindow( hShell_ ), RevertToNone, CurrentTime );
@@ -2663,7 +2621,7 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                 // #74406# if we loose the focus in presentation mode
                 // there are good chances that we never get it back
                 // since the WM ignores us
-                 if( !aRestoreFullScreen_.IsEmpty() )
+                 if( IsOverrideRedirect() )
                  {
                      XSetInputFocus( GetXDisplay(), GetShellWindow(),
                              RevertToNone, CurrentTime );
@@ -2687,8 +2645,8 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                 break;
 
             case MapNotify:
-                if( pEvent->xmap.window == XtWindow( hShell_ ) ||
-                    pEvent->xmap.window == XtWindow( hComposite_ ) )
+                if( pEvent->xmap.window == GetShellWindow() ||
+                    pEvent->xmap.window == GetWindow() )
                 {
                     bMapped_   = TRUE;
                     bViewable_ = TRUE;
