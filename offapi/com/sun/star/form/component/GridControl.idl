@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GridControl.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:08 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 10:40:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 #ifndef __com_sun_star_form_component_GridControl_idl__
 #define __com_sun_star_form_component_GridControl_idl__
+
+#ifndef __com_sun_star_util_Color_idl__
+#include <com/sun/star/util/Color.idl>
+#endif
 
 #ifndef __com_sun_star_form_FormControlModel_idl__
 #include <com/sun/star/form/FormControlModel.idl>
@@ -218,7 +222,7 @@ service GridControl
 
     /** specifies the text color (RGB) of the control.
      */
-    [property] long TextColor;
+    [property] com::sun::star::util::Color TextColor;
 
 };
 
