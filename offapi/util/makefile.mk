@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.86 $
+#   $Revision: 1.87 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-16 11:15:49 $
+#   last change: $Author: rt $ $Date: 2004-11-26 18:04:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -120,6 +120,7 @@ UNOIDLDBFILES= \
     $(UCR)$/csszippackage.db \
     $(UCR)$/cssplugin.db \
     $(UCR)$/csspresentation.db \
+    $(UCR)$/cssanimations.db \
     $(UCR)$/cssresource.db \
     $(UCR)$/csssax.db \
     $(UCR)$/cssdom.db \
