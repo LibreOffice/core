@@ -2,9 +2,9 @@
  *
  *  $RCSfile: standardcontrol.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-06 13:46:58 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,11 @@
 #ifndef _CALENDAR_HXX
 #include <svtools/calendar.hxx>
 #endif
+#ifndef _FMTFIELD_HXX_
+#include <svtools/fmtfield.hxx>
+#endif
+
+#include <memory>
 
 class PushButton;
 class MultiLineEdit;
@@ -90,6 +95,8 @@ class MultiLineEdit;
 namespace pcr
 {
 //............................................................................
+
+    class StringRepresentation;
 
     //========================================================================
     //= OTimeControl
@@ -156,6 +163,21 @@ namespace pcr
 
             virtual void                    SetProperty(const ::rtl::OUString &rString,sal_Bool bIsUnknown=sal_False);
             virtual ::rtl::OUString         GetProperty()const;
+    };
+
+    //========================================================================
+    //= ODateTimeControl
+    //========================================================================
+    class ODateTimeControl : public OCommonBehaviourControl, FormattedField
+    {
+    private:
+        ::std::auto_ptr< StringRepresentation > m_pConverter;
+
+    public:
+                                            ODateTimeControl( Window* pParent,sal_uInt16 nDigits, WinBits nWinStyle = WB_TABSTOP );
+
+            virtual void                    SetProperty( const ::rtl::OUString& _rString,sal_Bool _bIsUnknown = sal_False );
+            virtual ::rtl::OUString         GetProperty() const;
     };
 
     //========================================================================
@@ -300,7 +322,6 @@ namespace pcr
             virtual void                    SetProperty(const ::rtl::OUString &rString,sal_Bool bIsUnknown=sal_False);
             virtual ::rtl::OUString         GetProperty()const;
 
-            virtual void                    SetLocked(sal_Bool bLocked=sal_True);
     protected:
             virtual void modified(Window* _pSource);
     };
