@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2002-08-02 11:31:09 $
+ *  last change: $Author: hr $ $Date: 2002-08-23 16:06:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 
 
 #include <ctype.h>
-#ifdef MAC
+#if defined(MAC) || defined(MACOSX)
 #include <stdlib.h>
 #else
 #include <search.h>
