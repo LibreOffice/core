@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:24:53 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1826,8 +1826,8 @@ sal_uInt16  SwView::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
     SfxViewFrame* pVFrame = GetViewFrame();
     SfxApplication* pSfxApp = SFX_APP();
     pVFrame->SetChildWindow( SwInputChild::GetChildWindowId(), sal_False );
-    if(pSfxApp->IsDispatcherLocked())
-        pSfxApp->LockDispatcher(sal_False);
+    if( pVFrame->GetDispatcher()->IsLocked() )
+        pVFrame->GetDispatcher()->Lock(sal_False);
     pVFrame->SetChildWindow( SwInsertChartChild::GetChildWindowId(), sal_False );
 
     sal_uInt16 nRet;
