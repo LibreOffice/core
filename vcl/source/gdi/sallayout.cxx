@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:22:42 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:02:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1377,25 +1377,39 @@ bool MultiSalLayout::LayoutText( ImplLayoutArgs& rArgs )
 
 void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
-    ImplLayoutArgs aMultiArgs = rArgs;
     SalLayout::AdjustLayout( rArgs );
+    ImplLayoutArgs aMultiArgs = rArgs;
 
     if( !rArgs.mpDXArray && rArgs.mnLayoutWidth )
     {
-        // for MultiSalLayout justification needs to be converted
-        // to individual adjustments of virtual character widths.
-        // First prepare character measurements in unadjusted layouts
+        // for stretched text in a MultiSalLayout the target width needs to be
+        // distributed by individually adjusting its virtual character widths
+        long nTargetWidth = aMultiArgs.mnLayoutWidth;
         aMultiArgs.mnLayoutWidth = 0;
+
+        // we need to get the original unmodified layouts ready
         for( int n = 0; n < mnLevel; ++n )
-            mpLayouts[n]->AdjustLayout( aMultiArgs );
+            mpLayouts[n]->SalLayout::AdjustLayout( aMultiArgs );
+        // then we can measure the unmodified metrics
         int nCharCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
         long* pJustificationArray = (long*)alloca( nCharCount * sizeof(long) );
-        long nOrigWidth = FillDXArray( pJustificationArray );
-        if( nOrigWidth && (rArgs.mnLayoutWidth != nOrigWidth) )
+        FillDXArray( pJustificationArray );
+        // #i17359# multilayout is not simplified yet, so origwidth needs handholding
+        long nOrigWidth = 0;
+        for( int i = 0; i < nCharCount; ++i )
         {
-            const float fStretch = rArgs.mnLayoutWidth / (float)nOrigWidth;
+            // convert array from widths to sum of widths
+            nOrigWidth += pJustificationArray[i];
+            pJustificationArray[i] = nOrigWidth;
+        }
+
+        // now we are able to distribute the width over the virtual char widths
+        if( nOrigWidth && (nTargetWidth != nOrigWidth) )
+        {
+            const float fStretch = (float)nTargetWidth / nOrigWidth;
+            long nWidthSum = 0.0;
             for( int i = 0; i < nCharCount; ++i )
-                pJustificationArray[i] += (long)(pJustificationArray[i] * fStretch);
+                pJustificationArray[i] = (long)(pJustificationArray[i] * fStretch + 0.5);
             // temporarily change the pDXArray
             aMultiArgs.mpDXArray = pJustificationArray;
         }
@@ -1588,28 +1602,44 @@ int MultiSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor )
 
 long MultiSalLayout::FillDXArray( long* pCharWidths ) const
 {
-    long nMaxWidth = mpLayouts[0]->FillDXArray( pCharWidths );
+    long nMaxWidth = 0;
 
-    if( mnLevel > 1 )
+    // prepare merging of fallback levels
+    long* pTempWidths = NULL;
+    const int nCharCount = mnEndCharPos - mnMinCharPos;
+    if( pCharWidths )
     {
-        const int nCharCount = mnEndCharPos - mnMinCharPos;
-        long* pTempWidths = NULL;
-        if( pCharWidths )
-            pTempWidths = (long*)alloca( nCharCount * sizeof(long) );
-        for( int n = 1; n < mnLevel; ++n )
+        for( int i = 0; i < nCharCount; ++i )
+            pCharWidths[i] = 0;
+        pTempWidths = (long*)alloca( nCharCount * sizeof(long) );
+    }
+
+    for( int n = mnLevel; --n >= 0; )
+    {
+        // query every fallback level
+        long nWidth = mpLayouts[n]->FillDXArray( pTempWidths );
+        if( !nWidth )
+            continue;
+        // merge results from current level
+        nWidth *= mnUnitsPerPixel;
+        nWidth /= mpLayouts[n]->GetUnitsPerPixel();
+        if( nMaxWidth < nWidth )
+            nMaxWidth = nWidth;
+        if( !pCharWidths )
+            continue;
+        // calculate virtual char widths using most probable fallback layout
+        for( int i = 0; i < nCharCount; ++i )
         {
-            long nWidth = mpLayouts[n]->FillDXArray( pTempWidths );
-            nWidth *= mnUnitsPerPixel;
-            nWidth /= mpLayouts[n]->GetUnitsPerPixel();
-            if( nMaxWidth < nWidth )
-                nMaxWidth = nWidth;
-            if( pCharWidths )
-                for( int i = 0; i < nCharCount; ++i )
-                {
-                    pTempWidths[ i ] *= mnUnitsPerPixel;
-                    pTempWidths[ i ] /= mpLayouts[n]->GetUnitsPerPixel();
-                    pCharWidths[ i ] += pTempWidths[ i ];
-                }
+            // #i17359# restriction:
+            // one char cannot be resolved from different fallbacks
+            if( pCharWidths[i] != 0 )
+                continue;
+            long nCharWidth = pTempWidths[i];
+            if( !nCharWidth )
+                continue;
+            nCharWidth *= mnUnitsPerPixel;
+            nCharWidth /= mpLayouts[n]->GetUnitsPerPixel();
+            pCharWidths[i] = nCharWidth;
         }
     }
 
