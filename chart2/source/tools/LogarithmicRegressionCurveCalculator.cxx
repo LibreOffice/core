@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LogarithmicRegressionCurveCalculator.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-17 14:38:29 $
+ *  last change: $Author: bm $ $Date: 2003-12-19 15:06:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,10 +169,13 @@ OUString SAL_CALL LogarithmicRegressionCurveCalculator::getRepresentation()
 
     if( m_fSlope != 0.0 )
     {
-        aBuf.append( NUMBER_TO_STR( m_fSlope ));
-        aBuf.append( sal_Unicode( ' ' ));
-        aBuf.append( sal_Unicode( 0x00b7 ));
-        aBuf.append( sal_Unicode( ' ' ));
+        if( ! ::rtl::math::approxEqual( m_fSlope, 1.0 ))
+        {
+            aBuf.append( NUMBER_TO_STR( m_fSlope ));
+            aBuf.append( sal_Unicode( ' ' ));
+            aBuf.append( sal_Unicode( 0x00b7 ));
+            aBuf.append( sal_Unicode( ' ' ));
+        }
         aBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "log(x)" ));
         bHaveSlope = true;
     }
