@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.27 $
- *  last change: $Author: avy $ $Date: 2001-04-09 16:52:34 $
+ *  $Revision: 1.28 $
+ *  last change: $Author: cp $ $Date: 2001-04-10 10:19:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,6 @@ void FreetypeManager::AddFontFile( const String& rNormalizedName,
     // using unicode emulation for non-symbol fonts
     if( rData.meCharSet != RTL_TEXTENCODING_SYMBOL )
         rData.meCharSet = RTL_TEXTENCODING_UNICODE;
-    // rData.meScript       = SCRIPT_DONTKNOW;
 
     maFontList.insert( pFontInfo );
 }
@@ -223,7 +222,6 @@ long FreetypeManager::AddFontDir( const String& rNormalizedName )
                     rData.meCharSet = RTL_TEXTENCODING_SYMBOL;
             }
 
-            // rData.meScript       = SCRIPT_DONTKNOW;
             rData.mePitch       = FT_IS_FIXED_WIDTH( aFaceFT ) ? PITCH_FIXED : PITCH_VARIABLE;
             rData.meWidthType   = WIDTH_DONTKNOW;
             rData.meWeight      = FT_STYLE_FLAG_BOLD & aFaceFT->style_flags ? WEIGHT_BOLD : WEIGHT_NORMAL;
@@ -489,7 +487,7 @@ int FreetypeServerFont::GetGlyphIndex( sal_Unicode aChar ) const
     }
 
     // CJK vertical writing needs special treatment
-    if( GetFontSelData().mbVertical )
+    if( nGlyphIndex!=0 && GetFontSelData().mbVertical )
     {
         int nVertFlags = SetVerticalFlags( aChar );
         SetGlyphFlags( nGlyphIndex, nVertFlags );
