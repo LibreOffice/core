@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsc.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 20:26:55 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 15:54:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,15 +287,15 @@ RscCmdLine::RscCmdLine( short argc, char ** argv, RscError * pEH )
                     aPath += ByteString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US );
                 aPath += (*ppStr) + 2;
             }
-            else if( !rsc_strnicmp( (*ppStr) + 1, "fs", 2 ) )
+            else if( !rsc_strnicmp( (*ppStr) + 1, "fs=", 3 ) )
             { // anderer Name fuer .rc-file
                 if( m_aOutputFiles.back().aOutputRc.Len() )
                     m_aOutputFiles.push_back( OutputFile() );
-                m_aOutputFiles.back().aOutputRc = (*ppStr) + 3;
+                m_aOutputFiles.back().aOutputRc = (*ppStr) + 4;
             }
-            else if( !rsc_strnicmp( (*ppStr) + 1, "lip", 3 ) )
+            else if( !rsc_strnicmp( (*ppStr) + 1, "lip=", 4 ) )
             {  // additional language specific include for system dependent files
-                const ByteString    aSysSearchDir( (*ppStr)+4 );
+                const ByteString    aSysSearchDir( (*ppStr)+5 );
                 DirEntry            aSysDir( String( aSysSearchDir, RTL_TEXTENCODING_ASCII_US ) );
 
                 m_aOutputFiles.back().aSysSearchDirs.push_back( ByteString( aSysDir.GetFull(), RTL_TEXTENCODING_ASCII_US ) );
@@ -305,38 +305,38 @@ RscCmdLine::RscCmdLine( short argc, char ** argv, RscError * pEH )
 
                 m_aOutputFiles.back().aLangSearchPath.Append( aSysSearchDir );
             }
-            else if( !rsc_strnicmp( (*ppStr) + 1, "fp", 2 ) )
+            else if( !rsc_strnicmp( (*ppStr) + 1, "fp=", 3 ) )
             { // anderer Name fuer .srs-file
-                aOutputSrs = (*ppStr) + 3;
+                aOutputSrs = (*ppStr) + 4;
                 bOutputSrsIsSet = TRUE;
             }
-            else if( !rsc_strnicmp( (*ppStr) + 1, "fl", 2 ) )
+            else if( !rsc_strnicmp( (*ppStr) + 1, "fl=", 3 ) )
             { // Name fuer listing-file
-                aOutputLst = (*ppStr) + 3;
+                aOutputLst = (*ppStr) + 4;
             }
-            else if( !rsc_strnicmp( (*ppStr) + 1, "fh", 2 ) )
+            else if( !rsc_strnicmp( (*ppStr) + 1, "fh=", 3 ) )
             { // Name fuer .hxx-file
-                aOutputHxx = (*ppStr) + 3;
+                aOutputHxx = (*ppStr) + 4;
             }
-            else if( !rsc_strnicmp( (*ppStr) + 1, "fc", 2 ) )
+            else if( !rsc_strnicmp( (*ppStr) + 1, "fc=", 3 ) )
             { // Name fuer .cxx-file
-                aOutputCxx = (*ppStr) + 3;
+                aOutputCxx = (*ppStr) + 4;
             }
-            else if( !rsc_strnicmp( (*ppStr) + 1, "fr", 2 ) )
+            else if( !rsc_strnicmp( (*ppStr) + 1, "fr=", 3 ) )
             { // Name fuer .cxx-file der Ressource Konstruktoren
-                aOutputRcCtor = (*ppStr) + 3;
+                aOutputRcCtor = (*ppStr) + 4;
             }
-            else if( !rsc_strnicmp( (*ppStr) + 1, "fx", 2 ) )
+            else if( !rsc_strnicmp( (*ppStr) + 1, "fx=", 3 ) )
             { // Name fuer .src-file
-                aOutputSrc = (*ppStr) + 3;
+                aOutputSrc = (*ppStr) + 4;
             }
-            else if( !rsc_strnicmp( (*ppStr) + 1, "ft", 2 ) )
+            else if( !rsc_strnicmp( (*ppStr) + 1, "ft=", 3 ) )
             { // touch file
-                aTouchFile = (*ppStr) + 3;
+                aTouchFile = (*ppStr) + 4;
             }
-            else if( !rsc_strnicmp( (*ppStr) + 1, "oil", 3 ) )
+            else if( !rsc_strnicmp( (*ppStr) + 1, "oil=", 4 ) )
             {
-                aILDir = (*ppStr) + 4;
+                aILDir = (*ppStr) + 5;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "NoSysResTest" ) )
             { // Bitmap, Pointers, Icons nicht ueberpruefen
