@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.179 $
+ *  $Revision: 1.180 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:51:15 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:11:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,9 +209,6 @@
 #ifndef _SCH_MEMCHRT_HXX
 #include <sch/memchrt.hxx>
 #endif
-#ifndef _EMBOBJ_HXX
-#include <so3/embobj.hxx>
-#endif
 #ifndef _EEITEM_HXX
 #include <svx/eeitem.hxx>
 #endif
@@ -306,6 +303,8 @@
 #ifndef _COM_SUN_STAR_FORM_XFORMSUPPLIER_HPP_
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #endif
+
+#include <sfx2/objsh.hxx>
 
 //! not found in unonames.hxx
 #define SC_STANDARDFORMAT "StandardFormat"
@@ -3549,7 +3548,7 @@ void ScXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
             ScModelObj* pDocObj = ScModelObj::getImplementation( GetModel() );
             if (pDocObj)
             {
-                SvEmbeddedObject* pEmbeddedObj = pDocObj->GetEmbeddedObject();
+                SfxObjectShell* pEmbeddedObj = pDocObj->GetEmbeddedObject();
                 if (pEmbeddedObj)
                 {
                     Rectangle aRect(pEmbeddedObj->GetVisArea());
