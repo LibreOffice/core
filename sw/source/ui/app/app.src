@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-10 17:58:26 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 13:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,32 +335,11 @@ String STR_LAB_TITLE
  // ShortName!!!
 String STR_HUMAN_SWDOC_NAME
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Text : Dokument */
     Text [ de ] = "Text" ;
     Text [ en-US ] = "Text" ;
     Text [ x-comment ] = " ";
 };
 
-String STR_WRITER_DOCUMENT_FULLTYPE_31
-{
-    Text [ de ] = "%PRODUCTNAME 3.0 Text" ;
-    Text [ en-US ] = "Text (%PRODUCTNAME 3.0)" ;
-    Text [ x-comment ] = " ";
-};
-
-String STR_WRITER_DOCUMENT_FULLTYPE_40
-{
-    Text [ de ] = "%PRODUCTNAME 4.0 Text" ;
-    Text [ en-US ] = "Text (%PRODUCTNAME 4.0)" ;
-    Text [ x-comment ] = " ";
-};
-
-String STR_WRITER_DOCUMENT_FULLTYPE_50
-{
-    Text [ de ] = "%PRODUCTNAME 5.0 Text" ;
-    Text [ en-US ] = "Text (%PRODUCTNAME 5.0)" ;
-    Text [ x-comment ] = " ";
-};
 String STR_WRITER_DOCUMENT_FULLTYPE
 {
     Text [ de ] = "%PRODUCTNAME %PRODUCTVERSION Textdokument" ;
