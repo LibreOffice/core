@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-19 13:23:44 $
+ *  last change: $Author: os $ $Date: 2002-06-03 12:18:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1553,7 +1553,9 @@ void AutoFmtPreview::DoPaint( const Rectangle& rRect )
 
     aVD.SetFont          ( aFont );
     aVD.SetLineColor     ( Color(COL_TRANSPARENT));
-    aVD.SetFillColor     ( Color( COL_WHITE ) );
+    const Color& rWinColor = GetSettings().GetStyleSettings().GetWindowColor();
+    aVD.SetBackground    ( Wallpaper(rWinColor) );
+    aVD.SetFillColor     ( rWinColor );
     aVD.SetOutputSizePixel  ( aPrvSize );
 
     //--------------------------------
@@ -1753,201 +1755,5 @@ void lcl_SwLinkLine(const SwLineStruct& dLine,
         }
     }
 }
-
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.7  2001/09/27 17:22:30  jp
-    Task #91873#: remove usage of GetSystemLanguage and other system realted methods
-
-    Revision 1.6  2001/06/14 17:21:51  fme
-    Fix: #86988#: Redesign of dialogs
-
-    Revision 1.5  2001/06/01 11:14:10  fme
-    Fix #86988#: Redesign of dialogs
-
-    Revision 1.4  2001/01/26 15:15:40  os
-    #83247# CreateFromInt32
-
-    Revision 1.3  2000/10/20 14:18:06  os
-    use comphelper methods
-
-    Revision 1.2  2000/10/20 09:51:34  os
-    change: use SvNumberFormatter ctor using XMultiServiceFactory
-
-    Revision 1.1.1.1  2000/09/18 17:14:48  hr
-    initial import
-
-    Revision 1.46  2000/09/18 16:06:09  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.45  2000/06/08 09:48:50  os
-    using UCB
-
-    Revision 1.44  2000/05/16 17:31:14  jp
-    Changes for Unicode
-
-    Revision 1.43  2000/05/16 14:32:29  jp
-    Changes for Unicode
-
-    Revision 1.42  2000/04/19 11:22:12  os
-    UNICODE
-
-    Revision 1.41  2000/03/03 15:17:03  os
-    StarView remainders removed
-
-    Revision 1.40  2000/02/11 14:59:03  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.39  1998/09/29 08:15:38  NN
-    #53381# wenn noetig, Zahlformat in Sprache konvertieren
-
-
-      Rev 1.38   29 Sep 1998 10:15:38   NN
-   #53381# wenn noetig, Zahlformat in Sprache konvertieren
-
-      Rev 1.37   07 Jul 1998 13:20:36   JP
-   Bug #52273#: Anzeige des Nummernformates berichtigt
-
-      Rev 1.36   02 Jun 1998 10:37:40   JP
-   TabellenAutoFormat: Load/Save ohne Stream - erzeugen diesen selbst
-
-      Rev 1.35   29 May 1998 19:07:08   JP
-   aufgeraeumnt
-
-      Rev 1.34   14 May 1998 15:15:44   JP
-   neu: Numberformat vom Boxen unterstuetzen
-
-      Rev 1.33   12 May 1998 23:42:46   JP
-   neu: InserTable/TextToTable mit optionalen AutoFormat
-
-      Rev 1.32   29 Apr 1998 07:59:08   OS
-   sAutoTblFmtName allg. verfuegbar
-
-      Rev 1.31   24 Nov 1997 15:52:20   MA
-   includes
-
-      Rev 1.30   12 Sep 1997 10:40:16   OS
-   ITEMID_* definiert
-
-      Rev 1.29   05 Sep 1997 12:20:02   MH
-   chg: header
-
-      Rev 1.28   01 Sep 1997 13:17:26   OS
-   DLL-Umstellung
-
-      Rev 1.27   23 May 1997 10:10:02   OS
-   Ableitung von SfxModalDialog
-
-      Rev 1.26   02 May 1997 20:28:36   NF
-   includes...
-
-      Rev 1.25   23 Apr 1997 14:29:18   OS
-   ResId const
-
-      Rev 1.24   17 Apr 1997 23:22:06   JP
-   Umbenennen von AutoFormaten
-
-      Rev 1.23   14 Feb 1997 11:54:58   JP
-   Bug #35729#: sortiert einfuegen
-
-      Rev 1.22   09 Feb 1997 19:00:52   JP
-   Bug #35729#, #35740#: Formate sortiert, Ueberschreibmeldung
-
-      Rev 1.21   11 Nov 1996 11:20:40   MA
-   ResMgr
-
-      Rev 1.20   02 Oct 1996 19:06:06   MA
-   Umstellung Enable/Disable
-
-      Rev 1.19   23 Sep 1996 18:44:50   mk
-   includes fuer Unix raus
-
-      Rev 1.18   21 Mar 1996 14:08:18   OM
-   Umstellung 311
-
-      Rev 1.17   06 Feb 1996 15:21:28   JP
-   Link Umstellung 305
-
-      Rev 1.16   01 Dec 1995 12:30:02   sv
-   SwTableAutoFmt* -> SwTableAutoFmtPtr
-
-      Rev 1.15   24 Nov 1995 16:59:00   OM
-   PCH->PRECOMPILED
-
-      Rev 1.14   13 Nov 1995 10:59:22   OM
-   static entfernt
-
-      Rev 1.13   08 Nov 1995 13:34:36   OS
-   Change => Set
-
-      Rev 1.12   31 Oct 1995 18:41:20   OM
-   GetActive... entfernt
-
-      Rev 1.11   21 Aug 1995 08:56:16   mk
-   hintids.hxx und svxitems.hxx fuer UNX wieder included (MDA)
-
-      Rev 1.10   09 Aug 1995 21:57:10   ER
-   ! static data _vor_ seg_eofglobals
-
-      Rev 1.9   24 Jul 1995 11:21:00   JP
-   aufgeraeumt, CTOR/DTOR: Autoformattabelle ist nicht mehr static, sondern wird geladen und ggfs. gespeichert
-
-      Rev 1.8   20 Jul 1995 19:40:36   JP
-   Autoformatdatei umbenannt und wird jetzt im Config-Verzeichnis erwartet
-
-      Rev 1.7   27 Apr 1995 10:07:54   OS
-   Reihenfolge im Ctor
-
-      Rev 1.6   20 Apr 1995 17:02:22   OS
-   Delete-Message
-
-      Rev 1.5   19 Apr 1995 18:07:38   OS
-   BugFix Delete-Box
-
-      Rev 1.4   06 Mar 1995 06:05:28   JP
-   neu: mit Laden und Speichern
-
-      Rev 1.3   06 Mar 1995 05:00:18   JP
-   jetzt auch mit Umrandung
-
-      Rev 1.2   06 Mar 1995 04:08:30   JP
-   Optimierung
-
-      Rev 1.1   06 Mar 1995 00:54:48   OS
-   funktioniert fast
-
-      Rev 1.0   05 Mar 1995 19:34:02   OS
-   Initial revision.
-
-      Rev 1.2   04 Mar 1995 23:29:36   ER
-   add: hintids, svxitems
-
-      Rev 1.1   04 Mar 1995 20:52:58   OS
-   ein wenig weniger Kommentar
-
-      Rev 1.0   04 Mar 1995 15:00:08   OS
-   Initial revision.
-
-------------------------------------------------------------------------*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
