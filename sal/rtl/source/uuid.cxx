@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uuid.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:10:27 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,14 +179,14 @@ public:
     UuidRandomPoolHolder() : pool( rtl_random_createPool() ) {}
     ~UuidRandomPoolHolder();
 
-    rtlRandomError addBytes( const void    *Buffer,sal_uInt32 Bytes )
+    rtlRandomError addBytes( const void *Buffer, sal_Size Bytes )
     {
         return rtl_random_addBytes( pool, Buffer, Bytes );
     }
 
-    rtlRandomError getBytes( void *Buffer, sal_uInt32     Bytes )
+    rtlRandomError getBytes( void *Buffer, sal_Size Bytes )
     {
-        return rtl_random_getBytes( pool, Buffer , Bytes );
+        return rtl_random_getBytes( pool, Buffer, Bytes );
     }
 };
 
