@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formresid.hrc,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:42:49 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:07:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@
 #define RID_STR_HELPTEXT                    ( RID_FORMBROWSER_START + 117 )
 #define RID_STR_HELPURL                     ( RID_FORMBROWSER_START + 118 )
 #define RID_STR_BORDER_TYPE                 ( RID_FORMBROWSER_START + 119 )
-    // FREE
+#define RID_STR_UNCHECKEDREFVALUE           ( RID_FORMBROWSER_START + 120 )
 #define RID_STR_CURSOR_TYPE                 ( RID_FORMBROWSER_START + 121 )
 #define RID_STR_LISTSOURCE_TYPE             ( RID_FORMBROWSER_START + 122 )
 #define RID_STR_ALIGNMENT                   ( RID_FORMBROWSER_START + 123 )
@@ -280,6 +280,33 @@
 #define RID_STR_VISUALEFFECT                ( RID_FORMBROWSER_START + 218 )
 #define RID_STR_BORDERCOLOR                 ( RID_FORMBROWSER_START + 219 )
 #define RID_STR_SHOW_HIDE                   ( RID_FORMBROWSER_START + 220 )
+#define RID_STR_XML_DATA_MODEL              ( RID_FORMBROWSER_START + 221 )
+#define RID_STR_BIND_EXPRESSION             ( RID_FORMBROWSER_START + 222 )
+#define RID_STR_XSD_REQUIRED                ( RID_FORMBROWSER_START + 223 )
+#define RID_STR_XSD_RELEVANT                ( RID_FORMBROWSER_START + 224 )
+#define RID_STR_XSD_READONLY                ( RID_FORMBROWSER_START + 225 )
+#define RID_STR_XSD_CONSTRAINT              ( RID_FORMBROWSER_START + 226 )
+#define RID_STR_XSD_CALCULATION             ( RID_FORMBROWSER_START + 227 )
+#define RID_STR_XSD_DATA_TYPE               ( RID_FORMBROWSER_START + 228 )
+#define RID_STR_XSD_WHITESPACES             ( RID_FORMBROWSER_START + 229 )
+#define RID_STR_XSD_PATTERN                 ( RID_FORMBROWSER_START + 230 )
+#define RID_STR_XSD_LENGTH                  ( RID_FORMBROWSER_START + 231 )
+#define RID_STR_XSD_MIN_LENGTH              ( RID_FORMBROWSER_START + 232 )
+#define RID_STR_XSD_MAX_LENGTH              ( RID_FORMBROWSER_START + 233 )
+#define RID_STR_XSD_TOTAL_DIGITS            ( RID_FORMBROWSER_START + 234 )
+#define RID_STR_XSD_FRACTION_DIGITS         ( RID_FORMBROWSER_START + 235 )
+#define RID_STR_XSD_MAX_INCLUSIVE           ( RID_FORMBROWSER_START + 236 )
+#define RID_STR_XSD_MAX_EXCLUSIVE           ( RID_FORMBROWSER_START + 237 )
+#define RID_STR_XSD_MIN_INCLUSIVE           ( RID_FORMBROWSER_START + 238 )
+#define RID_STR_XSD_MIN_EXCLUSIVE           ( RID_FORMBROWSER_START + 239 )
+#define RID_STR_SUBMISSION_ID               ( RID_FORMBROWSER_START + 240 )
+#define RID_STR_LIST_BINDING                ( RID_FORMBROWSER_START + 241 )
+#define RID_STR_BINDING_UI_NAME             ( RID_FORMBROWSER_START + 242 )
+
+// -----------------------------------------------------------------------
+// - message strings
+
+#define RID_STR_CONFIRM_DELETE_DATA_TYPE    ( RID_FORMBROWSER_START + 500 )
 
 // -----------------------------------------------------------------------
 // - dialogs
@@ -288,6 +315,7 @@
 #define RID_DLG_TABORDER                    ( RID_PROPCONTROLLER_START +  1 )
 #define RID_DLG_FORMLINKS                   ( RID_PROPCONTROLLER_START +  2 )
 #define RID_DLG_SELECTION                   ( RID_PROPCONTROLLER_START +  3 )
+#define RID_DLG_NEW_DATA_TYPE               ( RID_PROPCONTROLLER_START +  4 )
 
 // -----------------------------------------------------------------------
 // - tab dialogs
@@ -309,6 +337,8 @@
 #define RID_RSC_ENUM_TEXTTYPE               ( RID_PROPCONTROLLER_START +  3 )
 #define RID_RSC_ENUM_VISUALEFFECT           ( RID_PROPCONTROLLER_START +  4 )
 #define RID_RSC_ENUM_IMAGE_POSITION         ( RID_PROPCONTROLLER_START +  5 )
+#define RID_RSC_BUTTON_IMAGES               ( RID_PROPCONTROLLER_START +  6 )
+#define RID_RSC_ENUM_WHITESPACE_HANDLING    ( RID_PROPCONTROLLER_START +  7 )
 
 // -----------------------------------------------------------------------
 // - ImageList - local ids
