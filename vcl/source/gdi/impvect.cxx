@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impvect.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:05:30 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,15 +59,13 @@
  *
  ************************************************************************/
 
-#define _SV_IMPVECT_CXX
-
 #include <stdlib.h>
 #include <tools/new.hxx>
 #ifndef _SV_BMPACC_HXX
 #include <bmpacc.hxx>
 #endif
-#ifndef _SV_POLY_HXX
-#include <poly.hxx>
+#ifndef _TL_POLY_HXX
+#include <tools/poly.hxx>
 #endif
 #ifndef _SV_GDIMTF_HXX
 #include <gdimtf.hxx>
@@ -86,19 +84,6 @@
 #endif
 #ifndef _SV_VECTORIZ_HXX
 #include <impvect.hxx>
-#endif
-
-// !!! ggf. einkommentieren, um Bitmaps zu erzeugen (nur, wenn File mit Debug uebersetzt wurde)
-// #define DEBUG_BMPOUTPUT
-
-#if (OSL_DEBUG_LEVEL > 1) && defined DEBUG_BMPOUTPUT
-#define DBG_BMP 1
-#else
-#undef  DBG_BMP
-#endif
-
-#ifdef DBG_BMP
-#include <tools/stream.hxx>
 #endif
 
 // -----------
@@ -221,15 +206,9 @@ extern "C" int __LOADONCALLAPI ImplColorSetCmpFnc( const void* p1, const void* p
 // - ImplPointArray -
 // ------------------
 
-#ifdef WIN
-typedef Point* huge HPPoint;
-#else
-typedef Point*      HPPoint;
-#endif
-
 class ImplPointArray
 {
-    HPPoint             mpArray;
+    Point*              mpArray;
     ULONG               mnSize;
     ULONG               mnRealSize;
 
@@ -252,9 +231,9 @@ public:
 // -----------------------------------------------------------------------------
 
 ImplPointArray::ImplPointArray() :
+    mpArray     ( NULL ),
     mnSize      ( 0UL ),
-    mnRealSize  ( 0UL ),
-    mpArray     ( NULL )
+    mnRealSize  ( 0UL )
 
 {
 }
@@ -279,8 +258,8 @@ void ImplPointArray::ImplSetSize( ULONG nSize )
     if( mpArray )
         SvMemFree( mpArray );
 
-    mpArray = (HPPoint) SvMemAlloc( nTotal );
-    HMEMSET( (HPBYTE) mpArray, 0, nTotal );
+    mpArray = (Point*) SvMemAlloc( nTotal );
+    memset( (HPBYTE) mpArray, 0, nTotal );
 }
 
 // -----------------------------------------------------------------------------
@@ -336,9 +315,6 @@ public:
     inline BOOL     IsCont( long nY, long nX ) const;
     inline BOOL     IsDone( long nY, long nX ) const;
 
-#ifdef DBG_BMP
-    Bitmap          GetBitmap() const;
-#endif // DBG_BMP
 };
 
 // -----------------------------------------------------------------------------
@@ -351,7 +327,7 @@ ImplVectMap::ImplVectMap( long nWidth, long nHeight ) :
     const long  nSize = nWidthAl * nHeight;
     Scanline    pTmp = mpBuf = (Scanline) SvMemAlloc( nSize );
 
-    HMEMSET( mpBuf, 0, nSize );
+    memset( mpBuf, 0, nSize );
     mpScan = (Scanline*) SvMemAlloc( nHeight * sizeof( Scanline ) );
 
     for( long nY = 0L; nY < nHeight; pTmp += nWidthAl )
@@ -403,36 +379,6 @@ inline BOOL ImplVectMap::IsDone( long nY, long nX ) const
     return( VECT_DONE_INDEX == Get( nY, nX ) );
 }
 
-// -----------------------------------------------------------------------------
-
-#ifdef DBG_BMP
-Bitmap ImplVectMap::GetBitmap() const
-{
-    Bitmap              aBmp( Size( mnWidth, mnHeight ), 4 );
-    BitmapWriteAccess*  pAcc = aBmp.AcquireWriteAccess();
-
-    if( pAcc )
-    {
-        for( long nY = 0L; nY < mnHeight; nY++ )
-        {
-            for( long nX = 0L; nX < mnWidth; nX++ )
-            {
-                switch( Get( nY, nX ) )
-                {
-                    case( VECT_FREE_INDEX ): pAcc->SetPixel( nY, nX, 15 ); break;
-                    case( VECT_CONT_INDEX ): pAcc->SetPixel( nY, nX, 0 ); break;
-                    case( VECT_DONE_INDEX ): pAcc->SetPixel( nY, nX, 2); break;
-                }
-            }
-        }
-
-        aBmp.ReleaseAccess( pAcc );
-    }
-
-    return aBmp;
-}
-#endif // DBG_BMP
-
 // -------------
 // - ImplChain -
 // -------------
@@ -470,8 +416,8 @@ public:
 // -----------------------------------------------------------------------------
 
 ImplChain::ImplChain( ULONG nInitCount, long nResize ) :
-    mnCount     ( 0UL ),
     mnArraySize ( nInitCount ),
+    mnCount     ( 0UL ),
     mnResize    ( nResize )
 {
     DBG_ASSERT( nInitCount && nResize, "ImplChain::ImplChain(): invalid parameters!" );
@@ -494,7 +440,7 @@ void ImplChain::ImplGetSpace()
 
     mnArraySize = ( mnResize < 0L ) ? ( mnArraySize << 1UL ) : ( mnArraySize + (ULONG) mnResize );
     pNewCodes = new BYTE[ mnArraySize ];
-    HMEMCPY( pNewCodes, mpCodes, nOldArraySize );
+    memcpy( pNewCodes, mpCodes, nOldArraySize );
     delete[] mpCodes;
     mpCodes = pNewCodes;
 }
@@ -542,7 +488,7 @@ void ImplChain::ImplEndAdd( ULONG nFlag )
                 const BYTE              cNextMove = mpCodes[ i + 1 ];
                 const ChainMove&        rMove = aImplMove[ cMove ];
                 const ChainMove&        rMoveInner = aImplMoveInner[ cMove ];
-                Point&                  rPt = aArr[ nPolyPos ];
+//              Point&                  rPt = aArr[ nPolyPos ];
                 BOOL                    bDone = TRUE;
 
                 nLastX += rMove.nDX;
@@ -649,7 +595,7 @@ void ImplChain::ImplEndAdd( ULONG nFlag )
                 const BYTE              cNextMove = mpCodes[ i + 1 ];
                 const ChainMove&        rMove = aImplMove[ cMove ];
                 const ChainMove&        rMoveOuter = aImplMoveOuter[ cMove ];
-                Point&                  rPt = aArr[ nPolyPos ];
+//              Point&                  rPt = aArr[ nPolyPos ];
                 BOOL                    bDone = TRUE;
 
                 nLastX += rMove.nDX;
@@ -889,7 +835,7 @@ BOOL ImplVectorizer::ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
         {
             const BitmapColor   aBmpCol( pRAcc->GetPaletteColor( pColorSet[ i ].mnIndex ) );
             const Color         aFindColor( aBmpCol.GetRed(), aBmpCol.GetGreen(), aBmpCol.GetBlue() );
-            const BYTE          cLum = aFindColor.GetLuminance();
+//          const BYTE          cLum = aFindColor.GetLuminance();
             ImplVectMap*        pMap = ImplExpand( pRAcc, aFindColor );
 
             VECT_PROGRESS( pProgress, FRound( fPercent += fPercentStep_2 ) );
@@ -1118,14 +1064,6 @@ void ImplVectorizer::ImplCalculate( ImplVectMap* pMap, PolyPolygon& rPolyPoly, B
 {
     const long nWidth = pMap->Width(), nHeight= pMap->Height();
 
-#ifdef DBG_BMP
-    if( pMap )
-    {
-        SvFileStream aOStm( "d:\\cont.bmp", STREAM_WRITE | STREAM_TRUNC );
-        aOStm << pMap->GetBitmap();
-    }
-#endif // DBG_BMP
-
     for( long nY = 0L; nY < nHeight; nY++ )
     {
         long    nX = 0L;
@@ -1187,14 +1125,6 @@ void ImplVectorizer::ImplCalculate( ImplVectMap* pMap, PolyPolygon& rPolyPoly, B
             }
         }
     }
-
-#ifdef DBG_BMP
-    if( pMap )
-    {
-        SvFileStream aOStm( "d:\\vect.bmp", STREAM_WRITE | STREAM_TRUNC );
-        aOStm << pMap->GetBitmap();
-    }
-#endif // DBG_BMP
 }
 
 // -----------------------------------------------------------------------------
