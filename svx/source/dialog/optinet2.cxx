@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:45:24 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:23:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,9 @@
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_SECURITIYOPTIONS_HXX
+#include <svtools/securityoptions.hxx>
+#endif
 #ifndef _SVTOOLS_JAVAPTIONS_HXX
 #include <svtools/javaoptions.hxx>
 #endif
@@ -138,7 +141,9 @@
 #ifndef INCLUDED_SVTOOLS_EXTENDEDSECURITYOPTIONS_HXX
 #include <svtools/extendedsecurityoptions.hxx>
 #endif
-
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
 #define _SVX_OPTINET2_CXX
 
 #ifndef _SVX_DIALMGR_HXX
@@ -160,6 +165,9 @@
 #ifndef _SVX_HELPID_HRC
 #include "helpid.hrc"
 #endif
+
+using namespace ::com::sun::star::uno;
+using namespace ::rtl;
 //CHINA001 copy from multipat.hxx begin
 // define ----------------------------------------------------------------
 
@@ -288,37 +296,21 @@ SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aFtpPortFT        (this, ResId( FT_FTP_PORT       )),
     aFtpPortED        (this, ResId( ED_FTP_PORT       ), TRUE),
 
-//  aSocksProxyFT     (this, ResId( FT_SOCKS_PROXY    )),
-//  aSocksProxyED     (this, ResId( ED_SOCKS_PROXY    )),
-//  aSocksPortFT      (this, ResId( FT_SOCKS_PORT     )),
-//  aSocksPortED      (this, ResId( ED_SOCKS_PORT     ), TRUE),
-
     aNoProxyForFT     (this, ResId( FT_NOPROXYFOR     )),
     aNoProxyForED     (this, ResId( ED_NOPROXYFOR     )),
     aNoProxyDescFT    (this, ResId( ED_NOPROXYDESC    )),
-//     aDNSGB              ( this, ResId( GB_DNS ) ),
-//  aDNSAutoRB          ( this, ResId( RB_DNS_AUTO ) ),
-//  aDNSManualRB        ( this, ResId( RB_DNS_MANUAL ) ),
-//  aDNSED              ( this, ResId( ED_DNS ) ),
-    sMsg255_0           (       ResId( ST_MSG_255_0 ) ),
-    sMsg255_1           (       ResId( ST_MSG_255_1 ) ),
-    sFromBrowser        (       ResId( ST_PROXY_FROM_BROWSER ) )
+    sFromBrowser        (       ResId( ST_PROXY_FROM_BROWSER ) ),
+    pInetOptions( new SvtInetOptions)
 {
     FreeResource();
 
     aHttpPortED.SetMaxTextLen(5);
     aFtpPortED.SetMaxTextLen(5);
-//  aSocksPortED.SetMaxTextLen(5);
     Link aLink = LINK( this, SvxProxyTabPage, LoseFocusHdl_Impl );
     aHttpPortED.SetLoseFocusHdl( aLink );
     aFtpPortED.SetLoseFocusHdl( aLink );
-//  aSocksPortED.SetLoseFocusHdl( aLink );
 
     aProxyModeLB.SetSelectHdl(LINK( this, SvxProxyTabPage, ProxyHdl_Impl ));
-//     aDNSED.SelectFixedFont();
-//  aDNSED.SetFormatFlags(PATTERN_FORMAT_EMPTYLITERALS);
-//     aDNSAutoRB.SetClickHdl( LINK(this, SvxProxyTabPage, AutoDNSHdl_Impl) );
-//     aDNSManualRB.SetClickHdl( LINK(this, SvxProxyTabPage, AutoDNSHdl_Impl) );
 
     if(SfxApplication::IsPlugin())
     {
@@ -328,21 +320,10 @@ SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet ) :
         aFtpPortFT.Show(FALSE);
         aFtpPortED.Show(FALSE);
 
-//#105461# obsolet entries
-//         aSocksProxyFT.Show(FALSE);
-//         aSocksProxyED.Show(FALSE);
-//         aSocksPortFT.Show(FALSE);
-//         aSocksPortED.Show(FALSE);
-
         aNoProxyForFT.Show(FALSE);
         aNoProxyForED.Show(FALSE);
         aNoProxyDescFT.Show(FALSE);
 
-//#105461# obsolet entries
-//         aDNSGB.Show(FALSE);
-//         aDNSAutoRB.Show(FALSE);
-//         aDNSManualRB.Show(FALSE);
-//         aDNSED.Show(FALSE);
     }
 }
 
@@ -352,6 +333,7 @@ SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet ) :
 
 SvxProxyTabPage::~SvxProxyTabPage()
 {
+    delete pInetOptions;
 }
 
 /*-----------------12.08.96 14.55-------------------
@@ -369,128 +351,38 @@ SfxTabPage* SvxProxyTabPage::Create(Window* pParent, const SfxItemSet& rAttrSet 
 
 void SvxProxyTabPage::Reset(const SfxItemSet&)
 {
-    SfxItemState      eItemState = SFX_ITEM_UNKNOWN;
-    const SfxItemSet&       rSet = GetItemSet();
-    const SfxPoolItem*      pAttr = NULL;
-    for ( USHORT i = SID_INET_PROXY_TYPE; i <= SID_INET_SECURITY_PROXY_PORT; ++i  )
+    //none == 0, manual == 2 , automatic only in PluginMode
+    USHORT nPos = 0;
+    BOOL bEnableProxyControls = FALSE;
+    switch(pInetOptions->GetProxyType())
     {
-        USHORT nWhich = GetWhich(i);
-        eItemState = rSet.GetItemState( nWhich, FALSE, (const SfxPoolItem**)&pAttr );
-
-        if ( eItemState != SFX_ITEM_SET )
-            pAttr = NULL;
-
-        switch ( i )
-        {
-            case SID_INET_PROXY_TYPE:
-            {
-                DBG_ASSERT( !pAttr || pAttr->ISA(SfxUInt16Item), "UInt16Item erwartet" );
-                //none == 0, manual == 2 , automatic only in PluginMode
-                USHORT nProxy = pAttr ? ( (const SfxUInt16Item*)pAttr )->GetValue() : 0;
-                USHORT nPos = 0;
-                switch(nProxy)
-                {
-                    case SvtInetOptions::NONE:      nPos = 0; break;
-                    case SvtInetOptions::MANUAL:    nPos = 1; break;
-                    case SvtInetOptions::AUTOMATIC:
-                        nPos = aProxyModeLB.GetEntryCount() == 3 ? 2 : 0;
-                    break;
-                }
-                aProxyModeLB.SelectEntryPos( nPos );
-                BOOL bEnableProxyControls = nProxy == SvtInetOptions::MANUAL;
-                aProxyModeLB.SaveValue();
-                EnableControls_Impl( bEnableProxyControls );
-            }
-            break;
-
-            case SID_INET_HTTP_PROXY_NAME:
-                DBG_ASSERT( !pAttr || pAttr->ISA(SfxStringItem), "StringItem erwartet" );
-                if ( pAttr )
-                    aHttpProxyED.SetText( ( (const SfxStringItem*)pAttr )->GetValue() );
-                aHttpProxyED.SaveValue();
-            break;
-
-            case SID_INET_HTTP_PROXY_PORT:
-                DBG_ASSERT( !pAttr || pAttr->ISA(SfxInt32Item), "Int32Item erwartet" );
-                if ( pAttr )
-                    aHttpPortED.SetText(
-                        String::CreateFromInt32( ( (const SfxInt32Item*)pAttr )->GetValue() ) );
-                aHttpPortED.SaveValue();
-            break;
-
-            case SID_INET_FTP_PROXY_NAME:
-                DBG_ASSERT( !pAttr || pAttr->ISA(SfxStringItem), "StringItem erwartet" );
-                if ( pAttr )
-                    aFtpProxyED.SetText( ( (const SfxStringItem*)pAttr )->GetValue() );
-                aFtpProxyED.SaveValue();
-            break;
-
-            case SID_INET_FTP_PROXY_PORT:
-                DBG_ASSERT( !pAttr || pAttr->ISA(SfxInt32Item), "Int32Item erwartet" );
-                if ( pAttr )
-                    aFtpPortED.SetText(
-                        String::CreateFromInt32( ( (const SfxInt32Item*)pAttr )->GetValue() ) );
-                aFtpPortED.SaveValue();
-            break;
-
-//#105461# obsolet entries
-//          case SID_INET_SOCKS_PROXY_NAME:
-//              DBG_ASSERT( !pAttr || pAttr->ISA(SfxStringItem), "StringItem erwartet" );
-//              if ( pAttr )
-//                  aSocksProxyED.SetText( ( (const SfxStringItem*)pAttr )->GetValue() );
-//              aSocksProxyED.SaveValue();
-//          break;
-
-//          case SID_INET_SOCKS_PROXY_PORT:
-//              DBG_ASSERT( !pAttr || pAttr->ISA(SfxInt32Item), "Int32Item erwartet" );
-//              if ( pAttr )
-//                  aSocksPortED.SetText(
-//                      String::CreateFromInt32( ( (const SfxInt32Item*)pAttr )->GetValue() ) );
-//              aSocksPortED.SaveValue();
-//          break;
-
-            case SID_INET_NOPROXY:
-                DBG_ASSERT( !pAttr || pAttr->ISA(SfxStringItem), "StringItem erwartet" );
-                if ( pAttr )
-                    aNoProxyForED.SetText( ( (const SfxStringItem*)pAttr )->GetValue() );
-                aNoProxyForED.SaveValue();
-            break;
-        }
-        pAttr = NULL;
+        case SvtInetOptions::NONE:      nPos = 0; break;
+        case SvtInetOptions::MANUAL:
+            nPos = 1;
+            bEnableProxyControls = TRUE;
+        break;
+        case SvtInetOptions::AUTOMATIC:
+            nPos = aProxyModeLB.GetEntryCount() == 3 ? 2 : 0;
+        break;
     }
-    // DNS Server
-//#105461# obsolet entries
-//     if( SFX_ITEM_SET == rSet.GetItemState(SID_INET_DNS_AUTO, FALSE, &pAttr) )
-//  {
-//         DBG_ASSERT(pAttr->ISA(SfxBoolItem), "SfxBoolItem erwartet");
-//         aDNSAutoRB.Check(((const SfxBoolItem*)pAttr)->GetValue());
-//  }
-//  aDNSAutoRB.SaveValue();
-//  if( aDNSAutoRB.IsChecked() )
-//  {
-//      aDNSManualRB.Check( FALSE );
-//      aDNSED.Enable( FALSE );
-//  }
-//  else
-//      aDNSManualRB.Check(TRUE);
-//     if( SFX_ITEM_SET == rSet.GetItemState(SID_INET_DNS_SERVER, FALSE, &pAttr) )
-//  {
-//         DBG_ASSERT(pAttr->ISA(SfxStringItem), "SfxStringItem erwartet");
-//         String sValue(((const SfxStringItem*)pAttr)->GetValue());
-//      USHORT nCount = sValue.GetTokenCount('.');
-//      // Format soll wieder an das PatternField angepasst werden
-//      for( USHORT i = 0; i < nCount; i++ )
-//      {
-//          String sPart(sValue.GetToken(i, '.'));
-//          while(sPart.Len() < 3)
-//              sPart.Insert(' ', 0);
-//          sValue.SetToken(i ,'.', sPart);
-//      }
-//      aDNSED.SetText(sValue);
-//  }
-//  if(!aDNSED.GetText().Len())
-//      aDNSED.SetText(aDNSED.GetLiteralMask());
-//  aDNSED.SaveValue();
+    aProxyModeLB.SelectEntryPos( nPos );
+    aProxyModeLB.SaveValue();
+    EnableControls_Impl( bEnableProxyControls );
+
+    aHttpProxyED.SetText( pInetOptions->GetProxyHttpName() );
+    aHttpProxyED.SaveValue();
+    aHttpPortED.SetText(
+        String::CreateFromInt32( pInetOptions->GetProxyHttpPort() ));
+    aHttpPortED.SaveValue();
+
+    aFtpProxyED.SetText( pInetOptions->GetProxyFtpName() );
+    aFtpProxyED.SaveValue();
+    aFtpPortED.SetText(
+        String::CreateFromInt32( pInetOptions->GetProxyFtpPort() ));
+    aFtpPortED.SaveValue();
+
+    aNoProxyForED.SetText( pInetOptions->GetProxyNoProxy() );
+    aNoProxyForED.SaveValue();
 }
 
 /*-----------------12.08.96 16.34-------------------
@@ -503,148 +395,45 @@ BOOL SvxProxyTabPage::FillItemSet(SfxItemSet& rSet)
     USHORT nSelPos = aProxyModeLB.GetSelectEntryPos();
     if(aProxyModeLB.GetSavedValue() != nSelPos)
     {
-        USHORT nPut = 0;
+        SvtInetOptions::ProxyType eSet = SvtInetOptions::NONE;
         switch(nSelPos)
         {
-            case  0: nPut = SvtInetOptions::NONE;     break;
-            case  1: nPut = SvtInetOptions::MANUAL;   break;
-            case  2: nPut = SvtInetOptions::AUTOMATIC;break;
+//            case  0: eSet  = SvtInetOptions::NONE;     break;
+            case  1: eSet  = SvtInetOptions::MANUAL;   break;
+            case  2: eSet  = SvtInetOptions::AUTOMATIC;break;
         }
-        rSet.Put(SfxUInt16Item( SID_INET_PROXY_TYPE, nPut));
+        pInetOptions->SetProxyType(eSet);
         bModified = TRUE;
     }
     if(aHttpProxyED.GetSavedValue() != aHttpProxyED.GetText())
     {
-        rSet.Put(SfxStringItem( SID_INET_HTTP_PROXY_NAME, aHttpProxyED.GetText()));
+        pInetOptions->SetProxyHttpName(aHttpProxyED.GetText());
         bModified = TRUE;
     }
 
     if ( aHttpPortED.GetSavedValue() != aHttpPortED.GetText() )
     {
-        rSet.Put(SfxInt32Item(SID_INET_HTTP_PROXY_PORT, aHttpPortED.GetText().ToInt32()));
+        pInetOptions->SetProxyHttpPort(aHttpPortED.GetText().ToInt32());
         bModified = TRUE;
     }
     if(aFtpProxyED.GetSavedValue() != aFtpProxyED.GetText())
     {
-        rSet.Put(SfxStringItem( SID_INET_FTP_PROXY_NAME, aFtpProxyED.GetText()));
+        pInetOptions->SetProxyFtpName(aFtpProxyED.GetText());
         bModified = TRUE;
     }
 
     if ( aFtpPortED.GetSavedValue() != aFtpPortED.GetText() )
     {
-        rSet.Put(SfxInt32Item(SID_INET_FTP_PROXY_PORT, aFtpPortED.GetText().ToInt32()));
+        pInetOptions->SetProxyFtpPort(aFtpPortED.GetText().ToInt32());
         bModified = TRUE;
     }
-//#105461# obsolet entries
-//  if(aSocksProxyED.GetSavedValue() != aSocksProxyED.GetText())
-//  {
-//      rSet.Put(SfxStringItem( SID_INET_SOCKS_PROXY_NAME, aSocksProxyED.GetText()));
-//      bModified = TRUE;
-//  }
-
-//  if ( aSocksPortED.GetSavedValue() != aSocksPortED.GetText() )
-//  {
-//      rSet.Put(SfxInt32Item(SID_INET_SOCKS_PROXY_PORT, aSocksPortED.GetText().ToInt32()));
-//      bModified = TRUE;
-//  }
     if ( aNoProxyForED.GetSavedValue() != aNoProxyForED.GetText() )
     {
-        rSet.Put(SfxStringItem(SID_INET_NOPROXY, aNoProxyForED.GetText()));
+        pInetOptions->SetProxyNoProxy(aNoProxyForED.GetText());
         bModified = TRUE;
     }
-//#105461# obsolet entries
-//     if ( aDNSManualRB.IsChecked() && aDNSED.IsModified() )
-//  {
-//      ErrorBox aErrBox( this, WB_OK, String() );
-//      String sEntry( aDNSED.GetText() );
-//      String sPart( sEntry.GetToken( 0, '.' ) );
-//      USHORT i, nPart( (USHORT)sPart.EraseLeadingChars().ToInt32() );
-//      BOOL bSet = FALSE;
-//      if ( sPart.Len() && ( !nPart || nPart > 255 ) )
-//      {
-//          // der erste Part darf nicht 0 und nicht gr"osser 255 sein
-//          XubString sMsg( sPart );
-//          sMsg += ' ';
-//          sMsg += sMsg255_1;
-//          aErrBox.SetMessText( sMsg );
-//          aErrBox.Execute();
 
-//          if ( nPart == 0 )
-//              sPart = String::CreateFromAscii("  1");
-//          else
-//              sPart = String::CreateFromAscii("255");
-//          sEntry.SetToken( 0, '.', sPart );
-//          bSet = TRUE;
-//      };
-
-//      for ( i = 1; i < 4; i++ )
-//      {
-//          // die anderen Parts d"urfen nicht gr"osser 255 sein
-//          sPart = sEntry.GetToken( i, '.' );
-//          nPart = (USHORT)sPart.EraseLeadingChars().ToInt32();
-
-//          if ( nPart > 255 )
-//          {
-//              String sMsg( sPart );
-//              sMsg += ' ';
-//              sMsg += sMsg255_0;
-//              aErrBox.SetMessText( sMsg );
-//              aErrBox.Execute();
-
-//              if ( nPart == 0 )
-//                  sPart = String::CreateFromAscii("  1");
-//              else
-//                  sPart = String::CreateFromAscii("255");
-//              sEntry.SetToken( i, '.', sPart );
-//              bSet = TRUE;
-//          };
-//      }
-
-//      if ( bSet )
-//      {
-//          aDNSED.GrabFocus();
-//          aDNSED.SetText( sEntry );
-//      }
-//  }
-
-    // DNS Server
-    // Flag muss auch geputtet werden, wenn sich nur der Wert im
-    // Edit geaendert hat
-//  BOOL bDNSModified = aDNSED.GetSavedValue() != aDNSED.GetText();
-//  if( bDNSModified || aDNSAutoRB.GetSavedValue() != aDNSAutoRB.IsChecked() )
-//  {
-//      rSet.Put( SfxBoolItem(SID_INET_DNS_AUTO, aDNSAutoRB.IsChecked()) );
-//      bModified = TRUE;
-//  }
-//  if( bDNSModified )
-//  {
-//      String sValue(aDNSED.GetText());
-//      sValue.EraseAllChars(' ');
-//      rSet.Put( SfxStringItem(SID_INET_DNS_SERVER, sValue) );
-//      bModified = TRUE;
-//  }
     return bModified;
-}
-
-/*-----------------21.06.97 13.47-------------------
-
---------------------------------------------------*/
-
-IMPL_LINK( SvxProxyTabPage, AutoDNSHdl_Impl, RadioButton*,  pBtn )
-{
-//#105461# obsolet entries
-//  if( pBtn == &aDNSAutoRB )
-//  {
-//      aDNSED.Enable( FALSE );
-//      aDNSManualRB.Check( FALSE );
-//  }
-//  else if( pBtn == &aDNSManualRB )
-//  {
-//      aDNSED.Enable( TRUE );
-//      aDNSED.GrabFocus();
-//      aDNSAutoRB.Check( FALSE );
-//  }
-    return 1;
 }
 /*-----------------12.08.96 13.38-------------------
 
@@ -660,12 +449,6 @@ void SvxProxyTabPage::EnableControls_Impl(BOOL bEnable)
     aFtpProxyED.Enable(bEnable);
     aFtpPortFT.Enable(bEnable);
     aFtpPortED.Enable(bEnable);
-
-//#105461# obsolet entries
-//  aSocksProxyFT.Enable(bEnable);
-//  aSocksProxyED.Enable(bEnable);
-//  aSocksPortFT.Enable(bEnable);
-//  aSocksPortED.Enable(bEnable);
 
     aNoProxyForFT.Enable(bEnable);
     aNoProxyForED.Enable(bEnable);
@@ -1271,13 +1054,30 @@ SvxScriptingTabPage::SvxScriptingTabPage( Window* pParent, const SfxItemSet& rSe
     aExePlugCB              ( this, ResId( CB_EXECUTE_PLUGINS ) ),
     aExecAppletsCB          ( this, ResId( CB_EXECUTE_APPLETS ) ),
 
+    aExecMacroFI(       this, ResId( FI_EXECMACRO    )),
+    aConfirmFI(         this, ResId( FI_CONFIRM      )),
+    aWarningFI(         this, ResId( FI_WARNING      )),
+    aScriptExecFI(      this, ResId( FI_SCRIPTEXEC   )),
+    aHyperlinksFI(      this, ResId( FI_HYPERLINKS   )),
+    aJavaEnableFI(      this, ResId( FI_JAVAENABLE   )),
+    aJavaSecurityFI(    this, ResId( FI_JAVASECURITY )),
+    aNetAccessFI(       this, ResId( FI_NETACCESS    )),
+    aClassPathFI(       this, ResId( FI_CLASSPATH    )),
+    aExePlugFI(         this, ResId( FI_EXECPLUG     )),
+    aExecAppletsFI(     this, ResId( FI_EXEAPPLETS  )),
+
     pJavaOptions            ( new SvtJavaOptions ),
+    pSecurityOptions        ( new SvtSecurityOptions ),
 
     bROConfirm              ( CFG_READONLY_DEFAULT),
     bROWarning              ( CFG_READONLY_DEFAULT),
-    bROScriptExec           ( CFG_READONLY_DEFAULT),
     bROExecMacro            ( CFG_READONLY_DEFAULT),
-    bROExePlug              ( CFG_READONLY_DEFAULT)
+    bROExePlug              ( CFG_READONLY_DEFAULT),
+    bROJavaEnabled          ( CFG_READONLY_DEFAULT),
+    bROJavaSecurity         ( CFG_READONLY_DEFAULT),
+    bROJavaNetAccess        ( CFG_READONLY_DEFAULT),
+    bROJavaUserClassPath    ( CFG_READONLY_DEFAULT),
+    bROJavaExecuteApplets   ( CFG_READONLY_DEFAULT)
 {
     FreeResource();
 
@@ -1305,20 +1105,21 @@ SvxScriptingTabPage::SvxScriptingTabPage( Window* pParent, const SfxItemSet& rSe
 SvxScriptingTabPage::~SvxScriptingTabPage()
 {
     delete pJavaOptions;
+    delete pSecurityOptions;
 }
 // -----------------------------------------------------------------------
 void SvxScriptingTabPage::EnableJava_Impl( BOOL bEnable, BOOL bOnlySecurity )
 {
     if ( !bOnlySecurity )
     {
-        aJavaSecurityCB.Enable( bEnable );
-        aClassPathFT.Enable( bEnable );
-        aClassPathED.Enable( bEnable );
-        aClassPathPB.Enable( bEnable );
-        aExecAppletsCB.Enable( bEnable );
+        aJavaSecurityCB.Enable( bEnable && bROJavaSecurity);
+        aClassPathFT.Enable( bEnable && !bROJavaUserClassPath);
+        aClassPathED.Enable( bEnable && !bROJavaUserClassPath);
+        aClassPathPB.Enable( bEnable && !bROJavaExecuteApplets);
+        aExecAppletsCB.Enable( bEnable && !bROJavaExecuteApplets);
     }
 
-    bEnable = ( bEnable && aJavaSecurityCB.IsChecked() );
+    bEnable = ( bEnable && aJavaSecurityCB.IsChecked() && !bROJavaNetAccess);
     aNetAccessFT.Enable( bEnable );
     aNetAccessLB.Enable( bEnable );
 }
@@ -1403,9 +1204,6 @@ IMPL_LINK( SvxScriptingTabPage, EditHdl_Impl, Edit*, EMPTYARG )
 */
 
 {
-    if (bROScriptExec)
-        return 1L;
-
     String aTxt = aEdtScriptExec.GetText();
     aTxt.EraseLeadingChars().EraseTrailingChars();
     aBtnScriptExecInsert.Enable( aTxt.Len() > 0 );
@@ -1416,9 +1214,6 @@ IMPL_LINK( SvxScriptingTabPage, EditHdl_Impl, Edit*, EMPTYARG )
 
 IMPL_LINK( SvxScriptingTabPage, LBHdl_Impl, ListBox*, EMPTYARG )
 {
-    if (bROScriptExec)
-        return 1L;
-
     USHORT nPos = aLbScriptExec.GetSelectEntryPos();
     aBtnScriptExecDelete.Enable( nPos != LISTBOX_ENTRY_NOTFOUND );
     return 1L;
@@ -1428,9 +1223,6 @@ IMPL_LINK( SvxScriptingTabPage, LBHdl_Impl, ListBox*, EMPTYARG )
 
 IMPL_LINK( SvxScriptingTabPage, BtnHdl_Impl, PushButton*, pBtn )
 {
-    if (bROScriptExec)
-        return 1L;
-
     if( pBtn == &aBtnScriptExecInsert )
     {
         // Insert new entry if not found in listbox
@@ -1537,7 +1329,7 @@ IMPL_LINK( SvxScriptingTabPage, RunHdl_Impl, ListBox*, pListBox )
 
 /*--------------------------------------------------------------------*/
 
-BOOL SvxScriptingTabPage::FillItemSet(SfxItemSet& rSet)
+BOOL SvxScriptingTabPage::FillItemSet(SfxItemSet&)
 {
     // ggf. neuen Eintrag einf"ugen
     BtnHdl_Impl( &aBtnScriptExecInsert );
@@ -1547,52 +1339,31 @@ BOOL SvxScriptingTabPage::FillItemSet(SfxItemSet& rSet)
     // Liste fuer Scripting (Execute)
     if (!bROScriptExec)
     {
-        List aList;
+        Sequence< OUString > aURLs(aLbScriptExec.GetEntryCount());
+        OUString* pURLs = aURLs.getArray();
         USHORT nCount = aLbScriptExec.GetEntryCount();
         for( USHORT i = 0; i < nCount; i++ )
         {
             String sURL(URIHelper::SmartRelToAbs(aLbScriptExec.GetEntry( i )));
-            aList.Insert( new String( sURL ), LIST_APPEND );
+            pURLs[i] = sURL;
         }
 
-        // Vergleichen mit alter Liste
-        const SfxItemSet&  rOldSet = GetItemSet();
-        const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == rOldSet.GetItemState( SID_SECURE_URL, FALSE, &pItem ) )
-        {
-            DBG_ASSERT( pItem->ISA(SfxStringListItem), "SfxStringListItem erwartet" );
-            List* pList = ( (SfxStringListItem*)pItem )->GetList();
-
-            if( pList )
-            {
-                ULONG nOldCount = pList->Count();
-                if( nCount != nOldCount )
-                    bModified = TRUE;
-
-                for ( ULONG i = 0; i < nOldCount && !bModified; i++ )
-                {
-                    if ( *(String*)aList.GetObject(i) != *(String*)pList->GetObject(i) )
-                        bModified = TRUE;
-                }
-            }
-        }
+        if(aURLs != pSecurityOptions->GetSecureURLs())
+            bModified = TRUE;
 
         if ( bModified )
         {
-            rSet.Put( SfxStringListItem( SID_SECURE_URL, &aList ) );
+            pSecurityOptions->SetSecureURLs( aURLs );
         }
-        // Liste (Inhalte) wieder loeschen
-        for( String* pStr = (String*)aList.First(); pStr; pStr = (String*)aList.Next() )
-            delete pStr;
     }
     if( !bROConfirm && aConfirmCB.GetSavedValue() != aConfirmCB.IsChecked() )
     {
-        rSet.Put( SfxBoolItem(SID_MACRO_CONFIRMATION, aConfirmCB.IsChecked()) );
+        pSecurityOptions->SetConfirmationEnabled(aConfirmCB.IsChecked());
         bModified = TRUE;
     }
     if( !bROWarning && aWarningCB.GetSavedValue() != aWarningCB.IsChecked() )
     {
-        rSet.Put( SfxBoolItem(SID_MACRO_WARNING, aWarningCB.IsChecked()) );
+        pSecurityOptions->SetWarningEnabled(aWarningCB.IsChecked());
         bModified = TRUE;
     }
 
@@ -1600,14 +1371,14 @@ BOOL SvxScriptingTabPage::FillItemSet(SfxItemSet& rSet)
     if( !bROExecMacro && aExecMacroLB.GetSelectEntryPos() != aExecMacroLB.GetSavedValue())
     {
         USHORT nSB = aExecMacroLB.GetSelectEntryPos();
-        rSet.Put( SfxUInt16Item( SID_BASIC_ENABLED, nSB ) );
+        pSecurityOptions->SetBasicMode((EBasicSecurityMode) nSB );
         bModified = TRUE;
     }
 
     //  Execute
     if( !bROExePlug && aExePlugCB.GetSavedValue() != aExePlugCB.IsChecked() )
     {
-        rSet.Put( SfxBoolItem(SID_INET_EXE_PLUGIN, aExePlugCB.IsChecked()) );
+        pSecurityOptions->SetExecutePlugins( aExePlugCB.IsChecked());
         bModified = TRUE;
     }
     // Java
@@ -1661,32 +1432,28 @@ BOOL SvxScriptingTabPage::FillItemSet(SfxItemSet& rSet)
 
 /*--------------------------------------------------------------------*/
 
-void SvxScriptingTabPage::Reset( const SfxItemSet& rSet )
+void SvxScriptingTabPage::Reset( const SfxItemSet& )
 {
-    const SfxPoolItem* pItem;
+    bROConfirm =    pSecurityOptions->IsReadOnly(SvtSecurityOptions::E_CONFIRMATION);
+    bROWarning =    pSecurityOptions->IsReadOnly(SvtSecurityOptions::E_WARNING);
+    bROScriptExec = pSecurityOptions->IsReadOnly(SvtSecurityOptions::E_SECUREURLS);
+    bROExePlug =    pSecurityOptions->IsReadOnly(SvtSecurityOptions::E_EXECUTEPLUGINS);
+    bROExecMacro =  pSecurityOptions->IsReadOnly(SvtSecurityOptions::E_BASICMODE);
 
     // Execute
     aLbScriptExec.Clear();
-    bROScriptExec = TRUE;
-    if ( SFX_ITEM_SET == rSet.GetItemState(SID_SECURE_URL, FALSE, &pItem) )
+    Sequence< OUString > aURLs = pSecurityOptions->GetSecureURLs( );
+    const OUString* pURLs = aURLs.getConstArray();
+    sal_Int32 nCount = aURLs.getLength();
+
+    for ( sal_Int32 i = 0; i < nCount; i++ )
     {
-        DBG_ASSERT( pItem->ISA(SfxStringListItem), "StringListItem erwartet" );
-        List* pList = ( (SfxStringListItem*)pItem )->GetList();
-
-        if ( pList )
-        {
-            ULONG nCount = pList->Count();
-
-            for ( ULONG i = 0; i < nCount; i++ )
-            {
-                INetURLObject aURL(*(String*)pList->GetObject(i));
-                aLbScriptExec.InsertEntry(
-                    INET_PROT_FILE == aURL.GetProtocol() ?
-                        aURL.GetFull() : aURL.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
-            }
-            bROScriptExec = FALSE;
-        }
+        INetURLObject aURL(pURLs[i]);
+        aLbScriptExec.InsertEntry(
+            INET_PROT_FILE == aURL.GetProtocol() ?
+                aURL.GetFull() : aURL.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
     }
+    aScriptExecFI.Show(bROScriptExec);
     aLbScriptExec.Enable(!bROScriptExec);
     aEdtScriptExec.Enable(!bROScriptExec);
     aBtnScriptExecDelete.Enable(!bROScriptExec);
@@ -1695,111 +1462,83 @@ void SvxScriptingTabPage::Reset( const SfxItemSet& rSet )
     aPathListFT.Enable(!bROScriptExec);
     aNewPathFT.Enable(!bROScriptExec);
 
-    bROWarning = TRUE;
-    if( SFX_ITEM_SET == rSet.GetItemState(SID_MACRO_WARNING, FALSE, &pItem) )
-    {
-        DBG_ASSERT(pItem->ISA(SfxBoolItem), "SfxBoolItem erwartet");
-        aWarningCB.Check(((const SfxBoolItem*)pItem)->GetValue());
-        bROWarning = FALSE;
-    }
+    aWarningCB.Check(pSecurityOptions->IsWarningEnabled());
     aWarningCB.SaveValue();
     aWarningCB.Enable(!bROWarning);
+    aWarningFI.Show(bROWarning);
 
-    bROConfirm = TRUE;
-    if( SFX_ITEM_SET == rSet.GetItemState(SID_MACRO_CONFIRMATION, FALSE, &pItem) )
-    {
-        DBG_ASSERT(pItem->ISA(SfxBoolItem), "SfxBoolItem erwartet");
-        aConfirmCB.Check(((const SfxBoolItem*)pItem)->GetValue());
-        bROConfirm = FALSE;
-    }
+    aConfirmCB.Check(pSecurityOptions->IsConfirmationEnabled());
+    aConfirmFI.Show(bROConfirm);
     aConfirmCB.SaveValue();
     aConfirmCB.Enable(!bROConfirm);
 
-    aExecMacroLB.SelectEntryPos(0);
-    bROExecMacro = TRUE;
-    if ( SFX_ITEM_SET == rSet.GetItemState( SID_BASIC_ENABLED, FALSE, &pItem ) )
-    {
-        DBG_ASSERT( pItem->ISA(SfxUInt16Item), "SfxUInt16Item erwartet" );
-        USHORT nSB = ( (const SfxUInt16Item*)pItem )->GetValue();
-        aExecMacroLB.SelectEntryPos(nSB);
-        bROExecMacro = FALSE;
-    }
-    if (bROExecMacro)
-        aExecMacroLB.Clear();
+    aExecMacroLB.SelectEntryPos(pSecurityOptions->GetBasicMode());
+    aExecMacroFI.Show(bROExecMacro);
     aExecMacroLB.Enable(!bROExecMacro);
     aExecMacroFT.Enable(!bROExecMacro);
     aExecMacroLB.SaveValue();
 
     // Execute
-    bROExePlug = TRUE;
-    if( SFX_ITEM_SET == rSet.GetItemState(SID_INET_EXE_PLUGIN, FALSE, &pItem) )
-    {
-        DBG_ASSERT(pItem->ISA(SfxBoolItem), "SfxBoolItem erwartet");
-        aExePlugCB.Check(((const SfxBoolItem*)pItem)->GetValue());
-        bROExePlug = FALSE;
-    }
+    aExePlugCB.Check(pSecurityOptions->IsExecutePlugins());
     aExePlugCB.SaveValue();
     aExePlugCB.Enable(!bROExePlug);
+    aExePlugFI.Show(bROExePlug);
 
     EditHdl_Impl( NULL );
     RunHdl_Impl(&aExecMacroLB);
     LBHdl_Impl( NULL );
 
     // Java
-    sal_Bool bROJavaEnabled = pJavaOptions->IsReadOnly(SvtJavaOptions::E_ENABLED);
-    sal_Bool bROJavaSecurity = pJavaOptions->IsReadOnly(SvtJavaOptions::E_SECURITY);
-    sal_Bool bROJavaNetAccess = pJavaOptions->IsReadOnly(SvtJavaOptions::E_NETACCESS);
-    sal_Bool bROJavaUserClassPath = pJavaOptions->IsReadOnly(SvtJavaOptions::E_USERCLASSPATH);
-    sal_Bool bROJavaExecuteApplets = pJavaOptions->IsReadOnly(SvtJavaOptions::E_EXECUTEAPPLETS);
+    bROJavaEnabled = pJavaOptions->IsReadOnly(SvtJavaOptions::E_ENABLED);
+    bROJavaSecurity = pJavaOptions->IsReadOnly(SvtJavaOptions::E_SECURITY);
+    bROJavaNetAccess = pJavaOptions->IsReadOnly(SvtJavaOptions::E_NETACCESS);
+    bROJavaUserClassPath = pJavaOptions->IsReadOnly(SvtJavaOptions::E_USERCLASSPATH);
+    bROJavaExecuteApplets = pJavaOptions->IsReadOnly(SvtJavaOptions::E_EXECUTEAPPLETS);
 
+    aJavaEnableCB.Check(pJavaOptions->IsEnabled());
+#ifndef SOLAR_JAVA
     aJavaEnableCB.Check(FALSE);
-    if (!bROJavaEnabled)
-    {
-        aJavaEnableCB.Check(pJavaOptions->IsEnabled());
-        #ifndef SOLAR_JAVA
-        aJavaEnableCB.Check(FALSE);
-        #endif
-        aJavaEnableCB.SaveValue();
-    }
+    aJavaEnableCB.Enable(FALSE);
+#else
+    aJavaEnableCB.SaveValue();
+    aJavaEnableFI.Show(bROJavaEnabled);
     aJavaEnableCB.Enable(!bROJavaEnabled);
+#endif
     EnableJava_Impl( aJavaEnableCB.IsChecked(), FALSE );
 
-    if (!bROJavaNetAccess)
-    {
-        aNetAccessLB.SelectEntryPos((USHORT)pJavaOptions->GetNetAccess());
-        aNetAccessLB.SaveValue();
-    }
+    aNetAccessLB.SelectEntryPos((USHORT)pJavaOptions->GetNetAccess());
+    aNetAccessLB.SaveValue();
+    aNetAccessFI.Show(bROJavaNetAccess);
     aNetAccessLB.Enable(!bROJavaNetAccess);
 
-    aJavaSecurityCB.Check(FALSE);
-    if (!bROJavaSecurity)
-    {
-        aJavaSecurityCB.Check(pJavaOptions->IsSecurity());
-        aJavaSecurityCB.SaveValue();
-    }
+
+    aJavaSecurityCB.Check(pJavaOptions->IsSecurity());
+    aJavaSecurityCB.SaveValue();
+    aJavaSecurityFI.Show(bROJavaSecurity);
     aJavaSecurityCB.Enable(!bROJavaSecurity);
     EnableJava_Impl( ( aJavaEnableCB.IsChecked() && aJavaSecurityCB.IsChecked() ), TRUE );
 
-    aClassPathED.SetText(String());
-    if (!bROJavaUserClassPath)
-    {
-        aClassPathED.SetText(pJavaOptions->GetUserClassPath());
-        aClassPathED.SaveValue();
-    }
+    aClassPathED.SetText(pJavaOptions->GetUserClassPath());
+    aClassPathED.SaveValue();
+    aClassPathFI.Show(bROJavaUserClassPath);
     aClassPathED.Enable(!bROJavaUserClassPath);
+    aClassPathPB.Enable(!bROJavaUserClassPath);
 
     // Execute Applets
-    aExecAppletsCB.Check(FALSE);
-    if (!bROJavaExecuteApplets)
-    {
-        aExecAppletsCB.Check( pJavaOptions->IsExecuteApplets() );
-        aExecAppletsCB.SaveValue();
-    }
+    aExecAppletsCB.Check( pJavaOptions->IsExecuteApplets() );
+    aExecAppletsCB.SaveValue();
+    aExecAppletsFI.Show(bROJavaExecuteApplets);
     aExecAppletsCB.Enable(!bROJavaExecuteApplets);
 
     // hyperlinks
-    SvtExtendedSecurityOptions::OpenHyperlinkMode eMode = SvtExtendedSecurityOptions().GetOpenHyperlinkMode();
+    SvtExtendedSecurityOptions aExtSecurityOptions;
+    SvtExtendedSecurityOptions::OpenHyperlinkMode eMode = aExtSecurityOptions.GetOpenHyperlinkMode();
     aHyperlinksLB.SelectEntryPos( (USHORT)eMode );
+    aHyperlinksLB.SelectEntryPos( (USHORT)eMode );
+    sal_Bool bROExecuteHyperlinks = aExtSecurityOptions.IsOpenHyperlinkModeReadOnly();
+    aHyperlinksFT.Enable(!bROExecuteHyperlinks);
+    aHyperlinksLB.Enable(!bROExecuteHyperlinks);
+    aHyperlinksFI.Show(bROExecuteHyperlinks);
     aHyperlinksLB.SaveValue();
 
     // disable groups if all controls of it are disabled
@@ -1825,25 +1564,11 @@ void SvxScriptingTabPage::Reset( const SfxItemSet& rSet )
         aGrpScriptingStarBasic.Enable(TRUE);
     }
 
-    if (!aExePlugCB.IsEnabled() &&
-        !aExecAppletsCB.IsEnabled())
-    {
-        aExecuteGB.Enable(FALSE);
-    }
-    else
-    {
-        aExecuteGB.Enable(TRUE);
-    }
+    aExecuteGB.Enable(aExePlugCB.IsEnabled() ||
+                            aExecAppletsCB.IsEnabled());
 
-    if (!aJavaEnableCB.IsEnabled() &&
-        !aNetAccessLB.IsEnabled() &&
-        !aJavaSecurityCB.IsEnabled() &&
-        !aClassPathED.IsEnabled())
-    {
-        aJavaFL.Enable(FALSE);
-    }
-    else
-    {
-        aJavaFL.Enable(TRUE);
-    }
+    aJavaFL.Enable(aJavaEnableCB.IsEnabled() ||
+                    aNetAccessLB.IsEnabled() ||
+                    aJavaSecurityCB.IsEnabled() ||
+                    aClassPathED.IsEnabled());
 }
