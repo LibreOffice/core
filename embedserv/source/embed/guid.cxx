@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guid.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2003-04-02 15:44:52 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,17 +73,32 @@
     if ( *guid == OID_WriterTextServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "soffice.StarWriterDocument.6" ) );
 
+    if ( *guid == OID_WriterOASISTextServer )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "opendocument.WriterDocument.1" ) );
+
     if ( *guid == OID_CalcServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "soffice.StarCalcDocument.6" ) );
+
+    if ( *guid == OID_CalcOASISServer )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "opendocument.CalcDocument.1" ) );
 
     if ( *guid == OID_DrawingServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "soffice.StarDrawDocument.6" ) );
 
+    if ( *guid == OID_DrawingOASISServer )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "opendocument.DrawDocument.1" ) );
+
     if ( *guid == OID_PresentationServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "soffice.StarImpressDocument.6" ) );
 
+    if ( *guid == OID_PresentationOASISServer )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "opendocument.ImpressDocument.1" ) );
+
     if ( *guid == OID_MathServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "soffice.StarMathDocument.6" ) );
+
+    if ( *guid == OID_MathOASISServer )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "opendocument.MathDocument.1" ) );
 
     return ::rtl::OUString();
 }
@@ -92,23 +107,32 @@
 {
     if ( *guid == OID_WriterTextServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.TextDocument" ) );
-/*
-    if ( *guid == OID_WriterWebServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.WebDocument" ) );
 
-    if ( *guid == OID_WriterGlobalServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.GlobalDocument" ) );
-*/
+    if ( *guid == OID_WriterOASISTextServer )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.TextDocument" ) );
+
     if ( *guid == OID_CalcServer )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Calc.SpreadsheetDocument" ) );
+
+    if ( *guid == OID_CalcOASISServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Calc.SpreadsheetDocument" ) );
 
     if ( *guid == OID_DrawingServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Draw.DrawingDocument" ) );
 
+    if ( *guid == OID_DrawingOASISServer )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Draw.DrawingDocument" ) );
+
     if ( *guid == OID_PresentationServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Draw.PresentationDocument" ) );
 
+    if ( *guid == OID_PresentationOASISServer )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Draw.PresentationDocument" ) );
+
     if ( *guid == OID_MathServer )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Math.FormulaDocument" ) );
+
+    if ( *guid == OID_MathOASISServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Math.FormulaDocument" ) );
 
     return ::rtl::OUString();
@@ -118,24 +142,33 @@
 {
     if ( *guid == OID_WriterTextServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "StarOffice XML (Writer)" ) );
-/*
-    if ( *guid == OID_WriterWebServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "HTML" ) );
 
-    if ( *guid == OID_WriterGlobalServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "writer_globaldocument_StarOffice_XML_Writer_GlobalDocument" ) );
-*/
+    if ( *guid == OID_WriterOASISTextServer )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "writer8" ) );
+
     if ( *guid == OID_CalcServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "StarOffice XML (Calc)" ) );
+
+    if ( *guid == OID_CalcOASISServer )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "calc8" ) );
 
     if ( *guid == OID_DrawingServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "StarOffice XML (Draw)" ) );
 
+    if ( *guid == OID_DrawingOASISServer )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "draw8" ) );
+
     if ( *guid == OID_PresentationServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "StarOffice XML (Impress)" ) );
 
+    if ( *guid == OID_PresentationOASISServer )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "impress8" ) );
+
     if ( *guid == OID_MathServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "StarOffice XML (Math)" ) );
+
+    if ( *guid == OID_MathOASISServer )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "math8" ) );
 
     return ::rtl::OUString();
 }
@@ -145,17 +178,32 @@
     if ( *guid == OID_WriterTextServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "file:///d:/OLE_TEST/test.sxw" ) );
 
+    if ( *guid == OID_WriterOASISTextServer )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "file:///d:/OLE_TEST/test.odt" ) );
+
     if ( *guid == OID_CalcServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "file:///d:/OLE_TEST/test.sxc" ) );
+
+    if ( *guid == OID_CalcOASISServer )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "file:///d:/OLE_TEST/test.ods" ) );
 
     if ( *guid == OID_DrawingServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "file:///d:/OLE_TEST/test.sxd" ) );
 
+    if ( *guid == OID_DrawingOASISServer )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "file:///d:/OLE_TEST/test.odg" ) );
+
     if ( *guid == OID_PresentationServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "file:///d:/OLE_TEST/test.sxi" ) );
 
+    if ( *guid == OID_PresentationOASISServer )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "file:///d:/OLE_TEST/test.odp" ) );
+
     if ( *guid == OID_MathServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "file:///d:/OLE_TEST/test.sxm" ) );
+
+    if ( *guid == OID_MathOASISServer )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "file:///d:/OLE_TEST/test.odf" ) );
 
     return ::rtl::OUString();
 }
