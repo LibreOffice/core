@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:10:32 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:10:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,12 +388,15 @@ namespace xmloff
         ::rtl::OUString implGetPropertyXMLType(const ::com::sun::star::uno::Type& _rType);
 
 #ifdef DBG_UTIL
-                void AddAttribute(sal_uInt16 _nPrefix, const sal_Char* _pName, const ::rtl::OUString& _rValue);
+                void AddAttribute( sal_uInt16 _nPrefix, const sal_Char* _pName, const ::rtl::OUString& _rValue );
+                void AddAttribute( sal_uInt16 _nPrefix, const ::rtl::OUString& _rName, const ::rtl::OUString& _rValue );
                 void AddAttributeASCII( sal_uInt16 nPrefix, const sal_Char *pName, const sal_Char *pValue );
 #else
         //  in the product version, inline this, so it does not cost us extra time calling into our method
         inline  void AddAttribute(sal_uInt16 _nPrefix, const sal_Char* _pName, const ::rtl::OUString& _rValue)
             { m_rContext.getGlobalContext().AddAttribute(_nPrefix, _pName, _rValue); }
+        inline void AddAttribute( sal_uInt16 _nPrefix, const ::rtl::OUString& _rName, const ::rtl::OUString& _rValue )
+            { m_rContext.getGlobalContext().AddAttribute( _nPrefix, _rName, _rValue ); }
         inline  void AddAttributeASCII( sal_uInt16 _nPrefix, const sal_Char* _pName, const sal_Char *pValue )
             { m_rContext.getGlobalContext().AddAttributeASCII(_nPrefix, _pName, pValue); }
 #endif
