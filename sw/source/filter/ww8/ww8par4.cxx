@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:14:59 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:49:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 #endif
 #ifndef __SGI_STL_FUNCTIONAL
 #include <functional>
+#endif
+
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
 #endif
 
 #ifndef _SOLAR_H
@@ -252,11 +256,11 @@ static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
     if (nRead != sizeof(*pMfp))
         return false;
 
-#if defined  __BIGENDIAN
+#if defined  OSL_BIGENDIAN
     pMfp->mm = SWAPSHORT( pMfp->mm );
     pMfp->xExt = SWAPSHORT( pMfp->xExt );
     pMfp->yExt = SWAPSHORT( pMfp->yExt );
-#endif // __BIGENDIAN
+#endif // OSL_BIGENDIAN
 
     if( pMfp->mm == 94 || pMfp->mm == 99 )
     {
