@@ -2,9 +2,9 @@
  *
  *  $RCSfile: register.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 13:11:45 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,15 +146,15 @@ void SAL_CALL component_getImplementationEnvironment(
 sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
                                         void*   pRegistryKey    )
 {
-    Reference< ::registry::XRegistryKey >
-            xKey( reinterpret_cast< ::registry::XRegistryKey* >( pRegistryKey ) ) ;
+    Reference< registry::XRegistryKey >
+            xKey( reinterpret_cast< registry::XRegistryKey* >( pRegistryKey ) ) ;
 
     OUString aDelimiter( RTL_CONSTASCII_USTRINGPARAM("/") );
     OUString aUnoServices( RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") );
 
     // Eigentliche Implementierung und ihre Services registrieren
     sal_Int32 i;
-    Reference< ::registry::XRegistryKey >  xNewKey;
+    Reference< registry::XRegistryKey >  xNewKey;
 
     xNewKey = xKey->createKey( aDelimiter + SmXMLImport_getImplementationName() +
                                aUnoServices );
