@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbcomp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:41:28 $
+ *  last change: $Author: rt $ $Date: 2004-11-15 16:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,73 @@
 #include "image.hxx"
 
 
-#ifndef PRODUCT
 // For debugging only
-void dbg_SaveDisassembly( SbModule* pModule );
+// #define DBG_SAVE_DISASSEMBLY
+
+#ifdef DBG_SAVE_DISASSEMBLY
+static bool dbg_bDisassemble = true;
+
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
+#include <com/sun/star/io/XTextOutputStream.hpp>
+#include <com/sun/star/io/XActiveDataSource.hpp>
+
+using namespace comphelper;
+using namespace rtl;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::ucb;
+using namespace com::sun::star::io;
+
+void dbg_SaveDisassembly( SbModule* pModule )
+{
+    bool bDisassemble = dbg_bDisassemble;
+    if( bDisassemble )
+    {
+        Reference< XSimpleFileAccess3 > xSFI;
+        Reference< XTextOutputStream > xTextOut;
+        Reference< XOutputStream > xOut;
+        Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
+        if( xSMgr.is() )
+        {
+            Reference< XSimpleFileAccess3 > xSFI = Reference< XSimpleFileAccess3 >( xSMgr->createInstance
+                ( OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
+            if( xSFI.is() )
+            {
+                String aFile( RTL_CONSTASCII_USTRINGPARAM("file:///d:/BasicAsm_") );
+                StarBASIC* pBasic = (StarBASIC*)pModule->GetParent();
+                if( pBasic )
+                {
+                    aFile += pBasic->GetName();
+                    aFile.AppendAscii( "_" );
+                }
+                aFile += pModule->GetName();
+                aFile.AppendAscii( ".txt" );
+
+                // String aFile( RTL_CONSTASCII_USTRINGPARAM("file:///d:/BasicAsm.txt") );
+                if( xSFI->exists( aFile ) )
+                    xSFI->kill( aFile );
+                xOut = xSFI->openFileWrite( aFile );
+                Reference< XInterface > x = xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.io.TextOutputStream" ) );
+                Reference< XActiveDataSource > xADS( x, UNO_QUERY );
+                xADS->setOutputStream( xOut );
+                xTextOut = Reference< XTextOutputStream >( x, UNO_QUERY );
+            }
+        }
+
+        if( xTextOut.is() )
+        {
+            String aDisassemblyStr;
+            pModule->Disassemble( aDisassemblyStr );
+            xTextOut->writeString( aDisassemblyStr );
+        }
+        xOut->closeOutput();
+    }
+}
 #endif
 
 // Diese Routine ist hier definiert, damit der Compiler als eigenes Segment
@@ -113,11 +177,8 @@ BOOL SbModule::Compile()
             pBasic->ClearAllModuleVars();
     }
 
-#ifndef PRODUCT
-    // Disassembly functionality for debugging
-    bool bDisassemble = false;
-    if( bDisassemble )
-        dbg_SaveDisassembly( this );
+#ifdef DBG_SAVE_DISASSEMBLY
+    dbg_SaveDisassembly( this );
 #endif
 
     return bRet;
