@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 15:45:31 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 15:46:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6508,12 +6508,9 @@ SvxMSDffImportRec::SvxMSDffImportRec()
       bReplaceByFly   = FALSE;
       bLastBoxInChain = TRUE;
       bHasUDefProp    = FALSE; // was the DFF_msofbtUDefProp record set?
-<<<<<<< msdffimp.cxx
       bVFlip = FALSE;
       bHFlip = FALSE;
-=======
       bAutoWidth      = FALSE;
->>>>>>> 1.90.48.3
 }
 
 SvxMSDffImportRec::SvxMSDffImportRec(const SvxMSDffImportRec& rCopy)
