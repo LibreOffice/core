@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonFilePickerElementIds.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-30 10:19:58 $
+ *  last change: $Author: fs $ $Date: 2001-10-26 08:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@ module com { module sun { module star { module ui { module dialogs {
 
 //=============================================================================
 /** These constants are used to specify common controls of a FilePicker dialog.
-    Prefix BTN means button.
 
  */
 
@@ -87,6 +86,18 @@ constants CommonFilePickerElementIds
     /** The filter listbox of a FilePicker dialog.
     */
     const short LISTBOX_FILTER = 3;
+
+    //---------------------------------------------------------------------
+    /** is used to refer to the file view of the file picker. This view shows the list of
+        all files/folders in the currently selected folder.
+    */
+    const short CONTROL_FILEVIEW = 4;
+
+
+    //---------------------------------------------------------------------
+    /** is used to refer to the edit line where a file or path can be entered by the user.
+    */
+    const short EDIT_FILEURL = 5;
 };
 
 //=============================================================================
