@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access_control.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-12-14 14:52:32 $
+ *  last change: $Author: dbo $ $Date: 2002-01-11 10:06:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,21 +65,25 @@
 
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/access_control.hxx>
 
 #include <com/sun/star/uno/XCurrentContext.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/security/XAccessController.hpp>
+
+#include <com/sun/star/security/RuntimePermission.hpp>
+#include <com/sun/star/io/FilePermission.hpp>
+#include <com/sun/star/connection/SocketPermission.hpp>
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
 #define AC_RESTRICTION "access-control.restriction"
-#define AC_SERVICE "com.sun.star.security.AccessController"
 
 
 using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-
 
 namespace cppu
 {
@@ -104,12 +108,12 @@ public:
 
     // XAccessControlContext impl
     virtual void SAL_CALL checkPermission(
-        security::Permission const & perm )
+        Any const & perm )
         throw (RuntimeException);
 };
 //__________________________________________________________________________________________________
 void acc_Combiner::checkPermission(
-    security::Permission const & perm )
+    Any const & perm )
     throw (RuntimeException)
 {
     m_x1->checkPermission( perm );
@@ -184,7 +188,7 @@ Any acc_CurrentContext::getValueByName( OUString const & name )
 }
 
 //--------------------------------------------------------------------------------------------------
-Reference< security::XAccessControlContext > ac_defimpl_getRestriction(
+Reference< security::XAccessControlContext > SAL_CALL ac_defimpl_getRestriction(
     Reference< XCurrentContext > const & xContext )
     SAL_THROW( (RuntimeException) )
 {
@@ -270,7 +274,7 @@ Any SAL_CALL ac_defimpl_doPrivileged(
 
 
 //##################################################################################################
-//### default service impl #########################################################################
+//### default service impl: does not check for static permissions! #################################
 //##################################################################################################
 
 //==================================================================================================
@@ -280,7 +284,7 @@ class DefaultAccessController
 public:
     // XAccessController impl
     virtual void SAL_CALL checkPermission(
-        security::Permission const & perm )
+        Any const & perm )
         throw (RuntimeException);
     virtual Any SAL_CALL doRestricted(
         Reference< security::XAction > const & xAction,
@@ -295,7 +299,7 @@ public:
 };
 //__________________________________________________________________________________________________
 void DefaultAccessController::checkPermission(
-    security::Permission const & perm )
+    Any const & perm )
     throw (RuntimeException)
 {
     // only dynamic checks of ac contexts, no static checks concerning credentials
@@ -336,22 +340,110 @@ Reference< security::XAccessControlContext > DefaultAccessController::getContext
     return ac_defimpl_getRestriction( xContext );
 }
 
-//--------------------------------------------------------------------------------------------------
-static Reference< XInterface > SAL_CALL create_default_ac(
-    Reference< XComponentContext > const & )
-    SAL_THROW( (Exception) )
-{
-    return (OWeakObject *)new DefaultAccessController();
-}
 //=== run on bootstrapping =========================================================================
-Reference< lang::XSingleComponentFactory > createDefaultAccessController()
+Reference< security::XAccessController > createDefaultAccessController()
     SAL_THROW( () )
 {
-    OUString serviceName( RTL_CONSTASCII_USTRINGPARAM(AC_SERVICE) );
-    return createSingleComponentFactory(
-        create_default_ac,
-        OUSTR("com.sun.star.comp.security.DummyAccessController"),
-        Sequence< OUString >( &serviceName, 1 ) );
+    return new DefaultAccessController();
+}
+
+//##################################################################################################
+//### helper class #################################################################################
+//##################################################################################################
+
+static OUString str_ac_singleton = OUSTR(AC_SINGLETON);
+
+//__________________________________________________________________________________________________
+AccessControl::AccessControl( Reference< XComponentContext > const & xContext )
+    SAL_THROW( (RuntimeException) )
+{
+    if (! (xContext->getValueByName( str_ac_singleton ) >>= m_xController))
+    {
+        throw SecurityException(
+            OUSTR("no access controller!"), Reference< XInterface >() );
+    }
+}
+//__________________________________________________________________________________________________
+AccessControl::AccessControl(
+    Reference< security::XAccessController > const & xController )
+    SAL_THROW( (RuntimeException) )
+    : m_xController( xController )
+{
+    if (! m_xController.is())
+    {
+        throw SecurityException(
+            OUSTR("no access controller!"), Reference< XInterface >() );
+    }
+}
+//__________________________________________________________________________________________________
+AccessControl::AccessControl( AccessControl const & ac )
+    SAL_THROW( (RuntimeException) )
+    : m_xController( ac.m_xController )
+{
+    if (! m_xController.is())
+    {
+        throw SecurityException(
+            OUSTR("no access controller!"), Reference< XInterface >() );
+    }
+}
+
+#ifdef SAL_W32
+#pragma pack(push, 8)
+#endif
+    // binary comp. to all Permission structs
+    struct __permission
+    {
+        rtl_uString * m_str1;
+        rtl_uString * m_str2;
+    };
+#ifdef SAL_W32
+#pragma pack(pop)
+#endif
+
+//--------------------------------------------------------------------------------------------------
+inline __checkPermission(
+    Reference< security::XAccessController > const & xController,
+    Type const & type, rtl_uString * str1, rtl_uString * str2 )
+    SAL_THROW( (RuntimeException) )
+{
+    __permission perm;
+    perm.m_str1 = str1;
+    perm.m_str2 = str2;
+
+    uno_Any a;
+    a.pType = type.getTypeLibType();
+    a.pData = &perm;
+
+    xController->checkPermission( * reinterpret_cast< Any const * >( &a ) );
+}
+//__________________________________________________________________________________________________
+void AccessControl::checkRuntimePermission(
+    OUString const & name )
+    SAL_THROW( (RuntimeException) )
+{
+    __checkPermission(
+        m_xController,
+        ::getCppuType( (security::RuntimePermission *)0 ), name.pData, 0 );
+}
+//__________________________________________________________________________________________________
+void AccessControl::checkFilePermission(
+    OUString const & url,
+    OUString const & actions )
+    SAL_THROW( (RuntimeException) )
+{
+    __checkPermission(
+        m_xController,
+        ::getCppuType( (io::FilePermission *)0 ), url.pData, actions.pData );
+}
+//__________________________________________________________________________________________________
+void AccessControl::checkSocketPermission(
+    OUString const & host,
+    OUString const & actions )
+    SAL_THROW( (RuntimeException) )
+{
+    __checkPermission(
+        m_xController,
+        ::getCppuType( (connection::SocketPermission *)0 ), host.pData, actions.pData );
 }
 
 }

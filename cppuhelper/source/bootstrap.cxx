@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2001-12-03 16:24:48 $
+ *  last change: $Author: dbo $ $Date: 2002-01-11 10:06:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,6 @@
 #include <vector>
 //  #include <string.h>
 
-#include <osl/diagnose.h>
-#include <osl/file.hxx>
-#include <osl/module.h>
-#include <osl/module.hxx>
-#include <osl/security.hxx>
-
 #include <rtl/process.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/string.hxx>
@@ -76,11 +70,21 @@
 #include <rtl/strbuf.hxx>
 #endif
 
+#include <osl/diagnose.h>
+#include <osl/file.hxx>
+#include <osl/module.hxx>
+#include <osl/security.hxx>
+#include <osl/thread.h>
+
+#include <uno/current_context.h>
+
 #include <cppuhelper/shlib.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/component_context.hxx>
+#include <cppuhelper/access_control.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/XCurrentContext.hpp>
 
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
@@ -101,6 +105,28 @@ using namespace ::com::sun::star::uno;
 
 namespace cppu
 {
+
+static OUString str_envType = OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
+
+//==================================================================================================
+void * SAL_CALL parentThreadCallback(void) SAL_THROW_EXTERN_C()
+{
+    OSL_TRACE( "+> thread creation..." );
+    XCurrentContext * xContext = 0;
+    ::uno_getCurrentContext( (void **)&xContext, str_envType.pData, 0 );
+    return xContext; // return acquired context
+}
+//==================================================================================================
+void SAL_CALL childThreadCallback( void * pParentData ) SAL_THROW_EXTERN_C()
+{
+    OSL_TRACE( "++> child thread running." );
+    XCurrentContext * xContext = (XCurrentContext *)pParentData;
+    if (xContext)
+    {
+        ::uno_setCurrentContext( xContext, str_envType.pData, 0 );
+        xContext->release();
+    }
+}
 
 //==================================================================================================
 void addFactories(
@@ -168,7 +194,7 @@ Reference< XComponentContext > bootstrapInitialContext(
     Reference< lang::XMultiComponentFactory > const & xSF,
     Reference< registry::XSimpleRegistry > const & types_xRegistry,
     Reference< registry::XSimpleRegistry > const & services_xRegistry,
-    OUString const & rBootstrapPath )
+    OUString const & rBootstrapPath, Bootstrap const & bootstrap )
     SAL_THROW( (Exception) );
 
 //--------------------------------------------------------------------------------------------------
@@ -345,6 +371,8 @@ Reference< XComponentContext > SAL_CALL defaultBootstrap_InitialComponentContext
     OUString const & iniFile )
     SAL_THROW( (Exception) )
 {
+//      osl_registerThreadCallbacks( parentThreadCallback, childThreadCallback );
+
     OUString bootstrapPath;
     OUString iniDir;
     Bootstrap bootstrap( iniFile );
@@ -386,7 +414,7 @@ Reference< XComponentContext > SAL_CALL defaultBootstrap_InitialComponentContext
     // xxx todo: when moving down cfgmgr+interfaces to udk, code from cfg_registry_wrapper
     // is used.  Now not supported...
     OUString cfg_url;
-    if (bootstrap.getFrom( OUString( RTL_CONSTASCII_USTRINGPARAM("UNO_CFG_URL") ), cfg_url ))
+    if (bootstrap.getFrom( OUSTR("UNO_CFG_URL"), cfg_url ))
     {
         // ==== bootstrap from configuration ====
 
@@ -469,7 +497,8 @@ Reference< XComponentContext > SAL_CALL defaultBootstrap_InitialComponentContext
         // layer into two contexts
         Reference< XComponentContext > xContext( bootstrapInitialContext(
             smgr_XMultiComponentFactory, types_xRegistry,
-            Reference< registry::XSimpleRegistry >(), bootstrapPath ) );
+            Reference< registry::XSimpleRegistry >(),
+            bootstrapPath, bootstrap ) );
         xContext = createInitialCfgComponentContext(
             &context_values[ 0 ], context_values.size(), xContext );
 
@@ -503,7 +532,8 @@ Reference< XComponentContext > SAL_CALL defaultBootstrap_InitialComponentContext
             !fallenBackWriteRegistry, bFallenback_services );
 
         Reference< XComponentContext > xContext( bootstrapInitialContext(
-            smgr_XMultiComponentFactory, types_xRegistry, services_xRegistry, bootstrapPath ) );
+            smgr_XMultiComponentFactory, types_xRegistry, services_xRegistry,
+            bootstrapPath, bootstrap ) );
 
         // initialize sf
         Reference< lang::XInitialization > xInit( smgr_XMultiComponentFactory, UNO_QUERY );
@@ -516,12 +546,12 @@ Reference< XComponentContext > SAL_CALL defaultBootstrap_InitialComponentContext
         return xContext;
     }
 }
+
 static void MyDummySymbolWithinLibrary(){}
 //==================================================================================================
 Reference< XComponentContext > SAL_CALL defaultBootstrap_InitialComponentContext()
     SAL_THROW( (Exception) )
 {
-    OSL_TRACE("vcl/source/app/unohelp.cxx: trying rc file...");
     OUString libraryFileUrl;
     Module::getUrlFromAddress((void*)MyDummySymbolWithinLibrary, libraryFileUrl);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: dbo $ $Date: 2001-12-14 13:19:51 $
+ *  last change: $Author: dbo $ $Date: 2002-01-11 10:06:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,30 +61,22 @@
 
 #include <vector>
 
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
-#endif
-#ifndef _OSL_FILE_HXX_
-#include <osl/file.hxx>
-#endif
-#ifndef _OSL_MODULE_H_
-#include <osl/module.h>
-#endif
-#ifndef _RTL_PROCESS_H
 #include <rtl/process.h>
-#endif
-#ifndef _RTL_STRING_HXX_
 #include <rtl/string.hxx>
-#endif
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
+#include <rtl/bootstrap.hxx>
+
+#include <osl/diagnose.h>
+#include <osl/file.hxx>
+#include <osl/module.h>
+#include <osl/thread.h>
 
 #include <cppuhelper/shlib.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
+#include <cppuhelper/access_control.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -94,6 +86,7 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
+#include <com/sun/star/security/XAccessController.hpp>
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
@@ -118,8 +111,11 @@ void addFactories(
     Reference< registry::XRegistryKey > const & xKey )
     SAL_THROW( (Exception) );
 //--------------------------------------------------------------------------------------------------
-Reference< lang::XSingleComponentFactory > createDefaultAccessController()
-    SAL_THROW( () );
+Reference< security::XAccessController > createDefaultAccessController() SAL_THROW( () );
+//--------------------------------------------------------------------------------------------------
+void * SAL_CALL parentThreadCallback(void) SAL_THROW_EXTERN_C();
+//--------------------------------------------------------------------------------------------------
+void SAL_CALL childThreadCallback( void * xParentContext ) SAL_THROW_EXTERN_C();
 
 //==================================================================================================
 static Reference< XInterface > SAL_CALL createInstance(
@@ -216,7 +212,8 @@ Reference< XComponentContext > bootstrapInitialContext(
     Reference< lang::XMultiComponentFactory > const & xSF,
     Reference< registry::XSimpleRegistry > const & types_xRegistry,
     Reference< registry::XSimpleRegistry > const & services_xRegistry,
-    OUString const & rBootstrapPath )
+    OUString const & rBootstrapPath,
+    Bootstrap const & bootstrap )
     SAL_THROW( (Exception) )
 {
     Reference< lang::XInitialization > xSFInit( xSF, UNO_QUERY );
@@ -280,8 +277,8 @@ Reference< XComponentContext > bootstrapInitialContext(
     context_values.push_back( entry );
 
     // ac
-    entry.bLateInitService = true;
-    entry.name = OUSTR("/singletons/com.sun.star.security.theAccessController");
+    entry.bLateInitService = false;
+    entry.name = OUSTR(AC_SINGLETON);
     entry.value <<= createDefaultAccessController();
     context_values.push_back( entry );
 
@@ -352,6 +349,18 @@ Reference< XComponentContext > bootstrapInitialContext(
         installTypeDescriptionManager( xTDMgr );
     }
 
+    // wrap ac for subsequent services
+    OUString ac_service;
+    if (bootstrap.getFrom( OUSTR("UNO_AC"), ac_service ) && ac_service.getLength())
+    {
+        // wrap ac
+        ContextEntry_Init entry;
+        entry.bLateInitService = true;
+        entry.name = OUSTR(AC_SINGLETON);
+        entry.value <<= ac_service;
+        xContext = createComponentContext( &entry, 1, xContext );
+    }
+
     return xContext;
 }
 
@@ -363,6 +372,8 @@ static Reference< lang::XMultiComponentFactory > createImplServiceFactory(
     const OUString & rBootstrapPath )
     SAL_THROW( (Exception) )
 {
+//      osl_registerThreadCallbacks( parentThreadCallback, childThreadCallback );
+
     Reference< lang::XMultiComponentFactory > xSF( bootstrapInitialSF( rBootstrapPath ) );
 
     Reference< registry::XSimpleRegistry > xRegistry;
@@ -436,8 +447,9 @@ static Reference< lang::XMultiComponentFactory > createImplServiceFactory(
             Reference< XInterface >() );
     }
 
+    Bootstrap bootstrap;
     Reference< XComponentContext > xContext(
-        bootstrapInitialContext( xSF, xRegistry, xRegistry, rBootstrapPath ) );
+        bootstrapInitialContext( xSF, xRegistry, xRegistry, rBootstrapPath, bootstrap ) );
 
     // initialize sf
     Reference< lang::XInitialization > xInit( xSF, UNO_QUERY );
@@ -456,7 +468,7 @@ Reference< lang::XMultiServiceFactory > SAL_CALL createRegistryServiceFactory(
     const OUString & rReadRegistry,
     sal_Bool bReadOnly,
     const OUString & rBootstrapPath )
-    SAL_THROW( (::com::sun::star::uno::Exception) )
+    SAL_THROW( (Exception) )
 {
     return Reference< lang::XMultiServiceFactory >( createImplServiceFactory(
         rWriteRegistry, rReadRegistry, bReadOnly, rBootstrapPath ), UNO_QUERY );
@@ -468,10 +480,14 @@ Reference< XComponentContext > SAL_CALL bootstrap_InitialComponentContext(
     OUString const & rBootstrapPath )
     SAL_THROW( (Exception) )
 {
+    Bootstrap bootstrap;
+
+//      osl_registerThreadCallbacks( parentThreadCallback, childThreadCallback );
+
     Reference< lang::XMultiComponentFactory > xSF(
         bootstrapInitialSF( rBootstrapPath ) );
     Reference< XComponentContext > xContext(
-        bootstrapInitialContext( xSF, xRegistry, xRegistry, rBootstrapPath ) );
+        bootstrapInitialContext( xSF, xRegistry, xRegistry, rBootstrapPath, bootstrap ) );
 
     // initialize sf
     Reference< lang::XInitialization > xInit( xSF, UNO_QUERY );

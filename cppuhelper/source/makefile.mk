@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: dbo $ $Date: 2001-12-14 13:19:51 $
+#   last change: $Author: dbo $ $Date: 2002-01-11 10:06:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -121,7 +121,10 @@ UNOTYPES= \
         com.sun.star.registry.XRegistryKey		\
         com.sun.star.loader.XImplementationLoader	\
         com.sun.star.lang.XTypeProvider			\
-        com.sun.star.lang.XComponent
+        com.sun.star.lang.XComponent			\
+        com.sun.star.security.RuntimePermission		\
+        com.sun.star.io.FilePermission			\
+        com.sun.star.connection.SocketPermission
 
 .IF "$(debug)" != ""
 # msvc++: no inlining for debugging

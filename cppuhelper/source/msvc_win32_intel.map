@@ -197,6 +197,13 @@ component_getDescriptionFunc;
 ?ac_defimpl_doRestricted@cppu@@YA?AVAny@uno@star@sun@com@@ABV?$Reference@VXAction@security@star@sun@com@@@3456@ABV?$Reference@VXAccessControlContext@security@star@sun@com@@@3456@ABV?$Reference@VXCurrentContext@uno@star@sun@com@@@3456@@Z;
 ?ac_defimpl_doPrivileged@cppu@@YA?AVAny@uno@star@sun@com@@ABV?$Reference@VXAction@security@star@sun@com@@@3456@ABV?$Reference@VXAccessControlContext@security@star@sun@com@@@3456@ABV?$Reference@VXCurrentContext@uno@star@sun@com@@@3456@@Z;
 
+??0AccessControl@cppu@@QAE@ABV?$Reference@VXComponentContext@uno@star@sun@com@@@uno@star@sun@com@@@Z;
+??0AccessControl@cppu@@QAE@ABV?$Reference@VXAccessController@security@star@sun@com@@@uno@star@sun@com@@@Z;
+??0AccessControl@cppu@@QAE@ABV01@@Z;
+?checkRuntimePermission@AccessControl@cppu@@QAAXABVOUString@rtl@@@Z;
+?checkFilePermission@AccessControl@cppu@@QAAXABVOUString@rtl@@0@Z;
+?checkSocketPermission@AccessControl@cppu@@QAAXABVOUString@rtl@@0@Z;
+
     local:
         *;
 };
