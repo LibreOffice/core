@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrib.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:06:55 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:19:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ ScMergeAttr::ScMergeAttr():
 
 //------------------------------------------------------------------------
 
-ScMergeAttr::ScMergeAttr( INT16 nCol, INT16 nRow):
+ScMergeAttr::ScMergeAttr( SCsCOL nCol, SCsROW nRow):
     SfxPoolItem(ATTR_MERGE),
     nColMerge(nCol),
     nRowMerge(nRow)
@@ -221,15 +221,18 @@ SfxPoolItem* ScMergeAttr::Create( SvStream& rStream, USHORT nVer ) const
     INT16   nRow;
     rStream >> nCol;
     rStream >> nRow;
-    return new ScMergeAttr(nCol,nRow);
+    return new ScMergeAttr(static_cast<SCCOL>(nCol),static_cast<SCROW>(nRow));
 }
 
 //------------------------------------------------------------------------
 
 SvStream& ScMergeAttr::Store( SvStream& rStream, USHORT nVer ) const
 {
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     rStream << nColMerge;
     rStream << nRowMerge;
+#endif
     return rStream;
 }
 
@@ -516,11 +519,11 @@ void ScRangeItem::Record( SfxArguments& rArgs ) const
     const ScAddress& rEnd   = aRange.aEnd;
 
     rArgs.AppendInteger( rStart.Col() );
-    rArgs.AppendInteger( rStart.Row() );
+    rArgs.AppendLong(    rStart.Row() );
     rArgs.AppendInteger( rStart.Tab() );
     rArgs.AppendInteger( rEnd  .Col() );
-    rArgs.AppendInteger( rEnd  .Row() );
-    rArgs.AppendInteger( rEnd.Tab() );
+    rArgs.AppendLong(    rEnd  .Row() );
+    rArgs.AppendInteger( rEnd  .Tab() );
     rArgs.AppendInteger( nFlags );
 }
 
@@ -538,10 +541,10 @@ SfxArgumentError ScRangeItem::Construct( USHORT nId, const SfxArguments& rArgs )
 
     SetWhich( nId );
     rStart.SetCol( rArgs.Get( 0 ).GetInteger() );
-    rStart.SetRow( rArgs.Get( 1 ).GetInteger() );
+    rStart.SetRow( rArgs.Get( 1 ).GetLong() );
     rStart.SetTab( rArgs.Get( 2 ).GetInteger() );
     rEnd  .SetCol( rArgs.Get( 3 ).GetInteger() );
-    rEnd  .SetRow( rArgs.Get( 4 ).GetInteger() );
+    rEnd  .SetRow( rArgs.Get( 4 ).GetLong() );
     rEnd  .SetTab( rArgs.Get( 5 ).GetInteger() );
     nFlags = (USHORT)rArgs.Get( 6 ).GetInteger();
 
@@ -607,9 +610,12 @@ USHORT ScRangeItem::GetVersion( USHORT nFileVersion ) const
 
 SvStream& ScRangeItem::Store( SvStream& rStrm, USHORT nVer ) const
 {
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     rStrm << aRange;
     rStrm << nFlags;
 
+#endif // SC_ROWLIMIT_STREAM_ACCESS
     return rStrm;
 }
 
@@ -619,6 +625,8 @@ SfxPoolItem* ScRangeItem::Create( SvStream& rStream, USHORT nVersion ) const
 {
     ScRange aNewRange;
     BOOL    nNewFlags = FALSE;
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
 
     switch ( nVersion )
     {
@@ -641,7 +649,7 @@ SfxPoolItem* ScRangeItem::Create( SvStream& rStream, USHORT nVersion ) const
 
                 rStream >> n;
 
-                if ( n > MAXTAB )
+                if ( n > static_cast<sal_uInt16>(MAXTAB) )
                 {
                     nNewFlags = SCR_ALLTABS;
                     rStart.SetTab( 0 ); rEnd.SetTab( 0 );
@@ -649,13 +657,13 @@ SfxPoolItem* ScRangeItem::Create( SvStream& rStream, USHORT nVersion ) const
                 else
                 {
                     nNewFlags = 0;
-                    rStart.SetTab( n ); rEnd.SetTab( n );
+                    rStart.SetTab( static_cast<SCTAB>(n) ); rEnd.SetTab( static_cast<SCTAB>(n) );
                 }
 
-                rStream >> n; rStart.SetCol( n );
-                rStream >> n; rStart.SetRow( n );
-                rStream >> n; rEnd  .SetCol( n );
-                rStream >> n; rEnd  .SetRow( n );
+                rStream >> n; rStart.SetCol( static_cast<SCCOL>(n) );
+                rStream >> n; rStart.SetRow( static_cast<SCROW>(n) );
+                rStream >> n; rEnd  .SetCol( static_cast<SCCOL>(n) );
+                rStream >> n; rEnd  .SetRow( static_cast<SCROW>(n) );
             }
             break;
 
@@ -663,6 +671,7 @@ SfxPoolItem* ScRangeItem::Create( SvStream& rStream, USHORT nVersion ) const
             DBG_ERROR( "ScRangeItem::Create: Unknown Version!" );
     }
 
+#endif // SC_ROWLIMIT_STREAM_ACCESS
     return ( new ScRangeItem( Which(), aNewRange, nNewFlags ) );
 }
 
@@ -677,7 +686,7 @@ ScTableListItem::ScTableListItem( const ScTableListItem& rCpy )
 {
     if ( nCount > 0 )
     {
-        pTabArr = new USHORT [nCount];
+        pTabArr = new SCTAB [nCount];
 
         for ( USHORT i=0; i<nCount; i++ )
             pTabArr[i] = rCpy.pTabArr[i];
@@ -731,7 +740,7 @@ SfxArgumentError ScTableListItem::Construct( USHORT nId, const SfxArguments& rAr
             return SFX_ARGUMENT_ERROR( rArgs.Count()-1, SFX_ERR_TOO_MANY_ARGUMENTS );
 
         SetWhich( nId );
-        pTabArr = new USHORT [nCount];
+        pTabArr = new SCTAB [nCount];
 
         for ( USHORT i=0; i<nCount; i++ )
             pTabArr[i] = rArgs.Get( i+1 ).GetInteger();
@@ -748,7 +757,7 @@ ScTableListItem& ScTableListItem::operator=( const ScTableListItem& rCpy )
 
     if ( rCpy.nCount > 0 )
     {
-        pTabArr = new USHORT [rCpy.nCount];
+        pTabArr = new SCTAB [rCpy.nCount];
         for ( USHORT i=0; i<rCpy.nCount; i++ )
             pTabArr[i] = rCpy.pTabArr[i];
     }
@@ -836,12 +845,15 @@ SfxItemPresentation ScTableListItem::GetPresentation
 
 SvStream& ScTableListItem::Store( SvStream& rStrm, USHORT nVer ) const
 {
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     rStrm << nCount;
 
     if ( nCount>0 && pTabArr )
         for ( USHORT i=0; i<nCount; i++ )
-                rStrm << pTabArr[i];
+                rStrm << (USHORT) pTabArr[i];
 
+#endif // SC_ROWLIMIT_STREAM_ACCESS
     return rStrm;
 }
 
@@ -851,10 +863,12 @@ SfxPoolItem* ScTableListItem::Create( SvStream& rStrm, USHORT ) const
 {
     ScTableListItem* pNewItem;
     List             aList;
-    USHORT*          p;
+    SCTAB*           p;
     USHORT           nTabCount;
     USHORT           nTabNo;
 
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     rStrm >> nTabCount;
 
     if ( nTabCount > 0 )
@@ -862,14 +876,15 @@ SfxPoolItem* ScTableListItem::Create( SvStream& rStrm, USHORT ) const
         for ( USHORT i=0; i<nTabCount; i++ )
         {
             rStrm >> nTabNo;
-            aList.Insert( new USHORT(nTabNo) );
+            aList.Insert( new SCTAB(nTabNo) );
         }
     }
+#endif // SC_ROWLIMIT_STREAM_ACCESS
 
     pNewItem = new ScTableListItem( Which(), aList );
 
     aList.First();
-    while ( p = (USHORT*)aList.Remove() )
+    while ( p = (SCTAB*)aList.Remove() )
         delete p;
 
     return pNewItem;
@@ -880,7 +895,7 @@ SfxPoolItem* ScTableListItem::Create( SvStream& rStrm, USHORT ) const
 BOOL ScTableListItem::GetTableList( List& aList ) const
 {
     for ( USHORT i=0; i<nCount; i++ )
-        aList.Insert( new USHORT( pTabArr[i] ) );
+        aList.Insert( new SCTAB( pTabArr[i] ) );
 
     return ( nCount > 0 );
 }
@@ -895,10 +910,10 @@ void ScTableListItem::SetTableList( const List& rList )
 
     if ( nCount > 0 )
     {
-        pTabArr = new USHORT [nCount];
+        pTabArr = new SCTAB [nCount];
 
         for ( USHORT i=0; i<nCount; i++ )
-            pTabArr[i] = *( (USHORT*)rList.GetObject( i ) );
+            pTabArr[i] = *( (SCTAB*)rList.GetObject( i ) );
     }
     else
         pTabArr = NULL;
