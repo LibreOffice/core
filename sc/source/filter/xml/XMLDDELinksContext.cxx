@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLDDELinksContext.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:09:05 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 07:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,7 +279,7 @@ ScXMLDDESourceContext::ScXMLDDESourceContext( ScXMLImport& rImport,
         else if ((nPrefix == XML_NAMESPACE_TABLE) && IsXMLToken(aLocalName, XML_CONVERSION_MODE))
             if (IsXMLToken(sValue, XML_INTO_ENGLISH_NUMBER))
                 pDDELink->SetMode(SC_DDE_ENGLISH);
-            else if (IsXMLToken(sValue, XML_LET_TEXT))
+            else if (IsXMLToken(sValue, XML_KEEP_TEXT))
                 pDDELink->SetMode(SC_DDE_TEXT);
             else
                 pDDELink->SetMode(SC_DDE_DEFAULT);
@@ -470,7 +470,8 @@ ScXMLDDECellContext::ScXMLDDECellContext( ScXMLImport& rImport,
         OUString aLocalName;
         USHORT nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
-        if (nPrefix == XML_NAMESPACE_TABLE)
+        if (nPrefix == XML_NAMESPACE_OFFICE)
+        {
             if (IsXMLToken(aLocalName, XML_VALUE_TYPE))
             {
                 if (IsXMLToken(sTempValue, XML_STRING))
@@ -490,8 +491,12 @@ ScXMLDDECellContext::ScXMLDDECellContext( ScXMLImport& rImport,
                 bEmpty = sal_False;
                 bString2 = sal_False;
             }
-            else if (IsXMLToken(aLocalName, XML_NUMBER_COLUMNS_REPEATED))
+        }
+        else if (nPrefix == XML_NAMESPACE_TABLE)
+        {
+            if (IsXMLToken(aLocalName, XML_NUMBER_COLUMNS_REPEATED))
                 GetScImport().GetMM100UnitConverter().convertNumber(nCells, sTempValue);
+        }
     }
 }
 
