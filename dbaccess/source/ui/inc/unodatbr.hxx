@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-28 11:16:33 $
+ *  last change: $Author: oj $ $Date: 2002-02-08 08:48:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,10 +355,10 @@ namespace dbaui
                 implCopyObject( SvLBoxEntry* _pApplyTo, sal_Int32 _nCommandType, sal_Bool _bAllowConnection = sal_True );
 
         EntryType   getEntryType( SvLBoxEntry* _pEntry ) const;
-        EntryType   getChildType( SvLBoxEntry* _pEntry );
-        sal_Bool    isObject( EntryType _eType ) { return (etTable == _eType) || (etView == _eType) || (etQuery == _eType) || (etBookmark == _eType); }
-        sal_Bool    isContainer( EntryType _eType ) { return (etTableContainer == _eType) || (etQueryContainer == _eType) || (etBookmarkContainer == _eType); }
-        sal_Bool    isContainer( SvLBoxEntry* _pEntry ) { return isContainer( getEntryType( _pEntry ) ); }
+        EntryType   getChildType( SvLBoxEntry* _pEntry ) const;
+        sal_Bool    isObject( EntryType _eType ) const { return (etTable == _eType) || (etView == _eType) || (etQuery == _eType) || (etBookmark == _eType); }
+        sal_Bool    isContainer( EntryType _eType ) const { return (etTableContainer == _eType) || (etQueryContainer == _eType) || (etBookmarkContainer == _eType); }
+        sal_Bool    isContainer( SvLBoxEntry* _pEntry ) const { return isContainer( getEntryType( _pEntry ) ); }
 
         // ensure that the xObject for the given entry is set on the user data
         sal_Bool    ensureEntryObject( SvLBoxEntry* _pEntry );
