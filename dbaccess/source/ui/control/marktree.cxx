@@ -2,9 +2,9 @@
  *
  *  $RCSfile: marktree.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-30 08:30:11 $
+ *  last change: $Author: fs $ $Date: 2001-04-27 08:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,8 +152,66 @@ void OMarkableTreeListBox::KeyInput( const KeyEvent& rKEvt )
 
 }
 //------------------------------------------------------------------------
+SvButtonState OMarkableTreeListBox::implDetermineState(SvLBoxEntry* _pEntry)
+{
+    SvButtonState eState = GetCheckButtonState(_pEntry);
+    if (!GetModel()->HasChilds(_pEntry))
+        // nothing to do in this bottom-up routine if there are no children ...
+        return eState;
+
+    // loop through the children and check their states
+    sal_uInt16 nCheckedChildren = 0;
+    sal_uInt16 nChildrenOverall = 0;
+
+    SvLBoxEntry* pChildLoop = GetModel()->FirstChild(_pEntry);
+    while (pChildLoop)
+    {
+        SvButtonState eChildState = implDetermineState(pChildLoop);
+        if (SV_BUTTON_TRISTATE == eChildState)
+            break;
+
+        if (SV_BUTTON_CHECKED == eChildState)
+            ++nCheckedChildren;
+        ++nChildrenOverall;
+
+        pChildLoop = GetModel()->NextSibling(pChildLoop);
+    }
+
+    if (pChildLoop)
+        // we did not finish the loop because at least one of the children is in tristate
+        eState = SV_BUTTON_TRISTATE;
+    else
+        // none if the children is in tristate
+        if (nCheckedChildren)
+            // we have at least one chil checked
+            if (nCheckedChildren != nChildrenOverall)
+                // not all children are checked
+                eState = SV_BUTTON_TRISTATE;
+            else
+                // all children are checked
+                eState = SV_BUTTON_CHECKED;
+        else
+            // no children are checked
+            eState = SV_BUTTON_UNCHECKED;
+
+    // finally set the entry to the state we just determined
+    SetCheckButtonState(_pEntry, eState);
+
+    // outta here
+    return eState;
+}
+
+//------------------------------------------------------------------------
 void OMarkableTreeListBox::CheckButtons()
 {
+    SvLBoxEntry* pEntry = GetModel()->First();
+    while (pEntry)
+    {
+        implDetermineState(pEntry);
+        pEntry = GetModel()->NextSibling(pEntry);
+    }
+
+#if 0
     // Plausibilit"atspr"ufung
     SvButtonState eState;
     SvLBoxEntry* pEntry = GetModel()->First();
@@ -221,6 +279,7 @@ void OMarkableTreeListBox::CheckButtons()
         }
         SetCheckButtonState( pCatalog,eState);
     }
+#endif
 }
 //------------------------------------------------------------------------
 void OMarkableTreeListBox::CheckButtonHdl()
@@ -281,6 +340,9 @@ SvLBoxEntry* OMarkableTreeListBox::GetEntryPosByName(const String& aName,SvLBoxE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/01/30 08:30:11  fs
+ *  +checkedButton_noBroadcast
+ *
  *  Revision 1.2  2000/10/09 12:34:33  fs
  *  use a different font when painting a disabled control
  *

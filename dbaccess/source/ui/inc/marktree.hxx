@@ -2,9 +2,9 @@
  *
  *  $RCSfile: marktree.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-30 08:28:00 $
+ *  last change: $Author: fs $ $Date: 2001-04-27 08:09:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ public:
 
     virtual void    KeyInput( const KeyEvent& rKEvt );
     virtual void    CheckButtonHdl();
-    void            CheckButtons();
+    void            CheckButtons();     // make the button states consistent (bottom-up)
     SvLBoxEntry*    GetEntryPosByName(const String& aName,SvLBoxEntry* pStart=NULL) const;
 
     /// the handler given is called whenever the check state of one or more items changed
@@ -99,6 +99,9 @@ public:
 protected:
     virtual void Paint(const Rectangle& _rRect);
     virtual void checkedButton_noBroadcast(SvLBoxEntry* _pEntry);
+
+    SvButtonState   implDetermineState(SvLBoxEntry* _pEntry);
+        // determines the check state of the given entry, by analyzing the states of all descendants
 
 private:
     void InitButtonData();
@@ -113,6 +116,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/01/30 08:28:00  fs
+ *  +checkedButton_noBroadcast
+ *
  *  Revision 1.2  2000/10/09 12:41:31  fs
  *  use a different font when painting a disabled control
  *
