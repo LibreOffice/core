@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-19 12:05:13 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 21:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1472,7 +1472,7 @@ TabPage TP_TABLE_TEXTFLOW
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text = "~Oben" ;
         Text [ ENGLISH ] = "Top" ;
-        Text [ english_us ] = "Top" ;
+        Text [ english_us ] = "T~op" ;
         Text [ swedish ] = "~Uppe" ;
         Text [ danish ] = "Top" ;
         Text [ italian ] = "Alto" ;
@@ -1498,7 +1498,7 @@ TabPage TP_TABLE_TEXTFLOW
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text = "~Mitte" ;
         Text [ ENGLISH ] = "Middle" ;
-        Text [ english_us ] = "~Centered" ;
+        Text [ english_us ] = "Cente~red" ;
         Text [ swedish ] = "~Mitten" ;
         Text [ danish ] = "Centreret" ;
         Text [ italian ] = "Centro" ;
