@@ -3,9 +3,9 @@
  *
  *  $RCSfile: TypeDetection.xcu,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-08 15:55:49 $
+ *  last change: $Author: sj $ $Date: 2002-07-11 13:41:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@
         <value xml:lang="en-US">HTML</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,text/html,,,htm,0,</value>
+        <value>0,text/html,,,html;htm,0,</value>
       </prop>
     </node>
     <node oor:name="bmp_MS_Windows" oor:op="replace">
