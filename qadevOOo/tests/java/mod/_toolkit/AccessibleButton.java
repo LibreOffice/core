@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleButton.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2003-03-31 10:03:58 $
+ *  last change: $Date: 2003-04-28 11:21:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,12 +72,12 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
-import drafts.com.sun.star.accessibility.AccessibleRole;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleAction;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
-import drafts.com.sun.star.accessibility.XAccessibleText;
-import drafts.com.sun.star.awt.XExtendedToolkit;
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleAction;
+import com.sun.star.accessibility.XAccessibleComponent;
+import com.sun.star.accessibility.XAccessibleText;
+import com.sun.star.awt.XExtendedToolkit;
 import java.io.PrintWriter;
 import lib.StatusException;
 import lib.TestEnvironment;
@@ -98,13 +98,13 @@ import util.utils;
  *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleText</code></li>
  * </ul> <p>
  *
- * @see drafts.com.sun.star.accessibility.XAccessibleExtendedComponent
- * @see drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster
- * @see drafts.com.sun.star.accessibility.XAccessibleComponent
- * @see drafts.com.sun.star.accessibility.XAccessibleValue
- * @see drafts.com.sun.star.accessibility.XAccessibleAction
- * @see drafts.com.sun.star.accessibility.XAccessibleContext
- * @see drafts.com.sun.star.accessibility.XAccessibleText
+ * @see com.sun.star.accessibility.XAccessibleExtendedComponent
+ * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
+ * @see com.sun.star.accessibility.XAccessibleComponent
+ * @see com.sun.star.accessibility.XAccessibleValue
+ * @see com.sun.star.accessibility.XAccessibleAction
+ * @see com.sun.star.accessibility.XAccessibleContext
+ * @see com.sun.star.accessibility.XAccessibleText
  * @see ifc.accessibility._XAccessibleExtendedComponent
  * @see ifc.accessibility._XAccessibleEventBroadcaster
  * @see ifc.accessibility._XAccessibleComponent
@@ -168,7 +168,7 @@ public class AccessibleButton extends lib.TestCase {
 //        at.printAccessibleTree(log, xRoot);
 
         oObj = at.getAccessibleObjectForRole
-            (xRoot, AccessibleRole.PUSHBUTTON,"Cancel");
+            (xRoot, AccessibleRole.PUSH_BUTTON,"Cancel");
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
@@ -261,7 +261,7 @@ public class AccessibleButton extends lib.TestCase {
 
         //Opening PrinterSetupDialog
         try {
-            String aSlotID = "slot:5302";
+            String aSlotID = ".uno:Zoom";
             XDispatchProvider xDispProv = (XDispatchProvider)
                 UnoRuntime.queryInterface(XDispatchProvider.class, xController);
             XURLTransformer xParser = (com.sun.star.util.XURLTransformer)

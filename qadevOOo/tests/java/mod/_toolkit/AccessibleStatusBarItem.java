@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStatusBarItem.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-03-31 13:35:11 $
+ *  last change:$Date: 2003-04-28 11:22:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,10 @@ import com.sun.star.frame.XModel;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import drafts.com.sun.star.accessibility.AccessibleRole;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleComponent;
+import com.sun.star.accessibility.XAccessibleContext;
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -101,12 +101,12 @@ import util.SOfficeFactory;
  *  drafts::com::sun::star::accessibility::XAccessibleAction</code></li>
  * </ul> <p>
  *
- * @see drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster
- * @see drafts.com.sun.star.accessibility.XAccessibleContext
- * @see drafts.com.sun.star.accessibility.XAccessibleComponent
- * @see drafts.com.sun.star.accessibility.XAccessibleExtendedComponent
- * @see drafts.com.sun.star.accessibility.XAccessibleValue
- * @see drafts.com.sun.star.accessibility.XAccessibleAction
+ * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
+ * @see com.sun.star.accessibility.XAccessibleContext
+ * @see com.sun.star.accessibility.XAccessibleComponent
+ * @see com.sun.star.accessibility.XAccessibleExtendedComponent
+ * @see com.sun.star.accessibility.XAccessibleValue
+ * @see com.sun.star.accessibility.XAccessibleAction
  * @see ifc.accessibility._XAccessibleEventBroadcaster
  * @see ifc.accessibility._XAccessibleContext
  * @see ifc.accessibility._XAccessibleComponent
@@ -154,9 +154,9 @@ public class AccessibleStatusBarItem extends TestCase {
      * @param log writer to log information while testing
      *
      * @see com.sun.star.awt.Toolkit
-     * @see drafts.com.sun.star.accessibility.AccessibleRole
+     * @see com.sun.star.accessibility.AccessibleRole
      * @see ifc.accessibility._XAccessibleEventBroadcaster
-     * @see drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster
+     * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
      */
     protected TestEnvironment createTestEnvironment(
         TestParameters tParam, PrintWriter log) {
@@ -191,8 +191,10 @@ public class AccessibleStatusBarItem extends TestCase {
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
+        //at.printAccessibleTree(log,xRoot);
+
         XAccessibleContext statusbar = at.getAccessibleObjectForRole(xRoot,
-            AccessibleRole.STATUSBAR);
+            AccessibleRole.STATUS_BAR);
 
         try {
             oObj = statusbar.getAccessibleChild(6);

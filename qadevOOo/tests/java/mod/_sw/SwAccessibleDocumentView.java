@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwAccessibleDocumentView.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sw $
+ *  last change: $Author: vg $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,16 +68,19 @@ import com.sun.star.uno.XInterface;
 import util.SOfficeFactory;
 import lib.StatusException;
 import com.sun.star.text.XTextDocument;
+import com.sun.star.text.XText;
+import com.sun.star.text.XTextCursor;
+import com.sun.star.text.ControlCharacter;
 import util.WriterTools;
 import com.sun.star.frame.XController;
 import util.AccessibilityTools;
-import drafts.com.sun.star.accessibility.AccessibleRole;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
-import drafts.com.sun.star.accessibility.XAccessibleValue;
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleValue;
 import com.sun.star.frame.XModel;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.awt.XWindow;
-import drafts.com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessible;
 import util.utils;
 import com.sun.star.drawing.XDrawPageSupplier;
 import com.sun.star.drawing.XDrawPage;
@@ -88,7 +91,7 @@ import com.sun.star.drawing.XDrawPage;
 * <ul>
 *  <li> <code>drafts::com::sun::star::accessibility::XAccessible</code></li>
 * </ul>
-* @see drafts.com.sun.star.accessibility.XAccessible
+* @see com.sun.star.accessibility.XAccessible
 */
 public class SwAccessibleDocumentView extends TestCase {
 
@@ -111,6 +114,31 @@ public class SwAccessibleDocumentView extends TestCase {
 
         XInterface oObj = null;
 
+        XText oText = xTextDoc.getText();
+        XTextCursor oCursor = oText.createTextCursor();
+
+        log.println( "inserting some lines" );
+        try {
+            for (int i=0; i<5; i++){
+                oText.insertString( oCursor,"Paragraph Number: " + i, false);
+                oText.insertString( oCursor,
+                    " The quick brown fox jumps over the lazy Dog: SwXParagraph",
+                    false);
+                oText.insertControlCharacter(
+                    oCursor, ControlCharacter.PARAGRAPH_BREAK, false );
+                oText.insertString( oCursor,
+                    "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG: SwXParagraph",
+                    false);
+                oText.insertControlCharacter(oCursor,
+                    ControlCharacter.PARAGRAPH_BREAK, false );
+                oText.insertControlCharacter(
+                    oCursor, ControlCharacter.LINE_BREAK, false );
+            }
+        } catch ( com.sun.star.lang.IllegalArgumentException e ){
+            e.printStackTrace(log);
+            throw new StatusException( "Couldn't insert lines", e );
+        }
+
         XModel aModel = (XModel)
             UnoRuntime.queryInterface(XModel.class, xTextDoc);
 
@@ -124,11 +152,11 @@ public class SwAccessibleDocumentView extends TestCase {
         oObj = at.SearchedContext;
 
         log.println("ImplementationName " + utils.getImplName(oObj));
-        at.printAccessibleTree(log, xRoot);
+        //at.printAccessibleTree(log, xRoot);
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        getAccessibleObjectForRole(xRoot, AccessibleRole.SCROLLBAR);
+        getAccessibleObjectForRole(xRoot, AccessibleRole.SCROLL_BAR);
         final XAccessibleValue xAccVal = (XAccessibleValue) UnoRuntime.queryInterface
                                 (XAccessibleValue.class, SearchedContext) ;
 

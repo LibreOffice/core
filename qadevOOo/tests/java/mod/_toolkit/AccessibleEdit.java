@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEdit.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Date: 2003-01-27 18:19:31 $
+ *  last change: $Date: 2003-04-28 11:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,13 +72,13 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
-import drafts.com.sun.star.accessibility.AccessibleRole;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleAction;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
-import drafts.com.sun.star.accessibility.XAccessibleEditableText;
-import drafts.com.sun.star.accessibility.XAccessibleText;
-import drafts.com.sun.star.awt.XExtendedToolkit;
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleAction;
+import com.sun.star.accessibility.XAccessibleComponent;
+import com.sun.star.accessibility.XAccessibleEditableText;
+import com.sun.star.accessibility.XAccessibleText;
+import com.sun.star.awt.XExtendedToolkit;
 import java.io.PrintWriter;
 import lib.StatusException;
 import lib.TestCase;
@@ -102,12 +102,12 @@ import util.utils;
  *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleText</code></li>
  * </ul> <p>
  *
- * @see drafts.com.sun.star.accessibility.XAccessibleExtendedComponent
- * @see drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster
- * @see drafts.com.sun.star.accessibility.XAccessibleEditableText
- * @see drafts.com.sun.star.accessibility.XAccessibleComponent
- * @see drafts.com.sun.star.accessibility.XAccessibleContext
- * @see drafts.com.sun.star.accessibility.XAccessibleText
+ * @see com.sun.star.accessibility.XAccessibleExtendedComponent
+ * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
+ * @see com.sun.star.accessibility.XAccessibleEditableText
+ * @see com.sun.star.accessibility.XAccessibleComponent
+ * @see com.sun.star.accessibility.XAccessibleContext
+ * @see com.sun.star.accessibility.XAccessibleText
  * @see ifc.accessibility._XAccessibleExtendedComponent
  * @see ifc.accessibility._XAccessibleEventBroadcaster
  * @see ifc.accessibility._XAccessibleEditableText
@@ -187,7 +187,7 @@ public class AccessibleEdit extends TestCase {
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         oObj = at.getAccessibleObjectForRole(xRoot,
-            AccessibleRole.PUSHBUTTON, "Close");
+            AccessibleRole.PUSH_BUTTON, "Close");
         action = (XAccessibleAction)
             UnoRuntime.queryInterface(XAccessibleAction.class, oObj);
         final XAccessibleComponent buttonAccComp = (XAccessibleComponent)
@@ -209,10 +209,11 @@ public class AccessibleEdit extends TestCase {
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
                 public void fireEvent() {
-                    buttonAccComp.grabFocus();
-                    acomp.grabFocus();
-//                    edText.setText("firing event ...");
-//                    edText.setText("firing event ... 2");
+//                    buttonAccComp.grabFocus();
+//                    acomp.grabFocus();
+                    edText.setText("firing event ...");
+                    edText.setText("firing event ... 2");
+                    edText.setText("AccessibleEdit");
                 }
             });
 

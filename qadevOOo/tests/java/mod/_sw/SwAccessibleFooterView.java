@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwAccessibleFooterView.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2003-02-06 10:55:02 $
+ *  last change: $Date: 2003-04-28 11:27:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,9 @@ import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.view.XViewSettingsSupplier;
-import drafts.com.sun.star.accessibility.AccessibleRole;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleComponent;
 import java.io.PrintWriter;
 import lib.StatusException;
 import lib.TestCase;
@@ -92,7 +92,7 @@ import com.sun.star.uno.Type;
 * <ul>
 *  <li> <code>drafts::com::sun::star::accessibility::XAccessible</code></li>
 * </ul>
-* @see drafts.com.sun.star.accessibility.XAccessible
+* @see com.sun.star.accessibility.XAccessible
 */
 public class SwAccessibleFooterView extends TestCase {
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwAccessiblePageView.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sw $
+ *  last change: $Author: vg $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,13 +71,13 @@ import com.sun.star.text.XTextDocument;
 import util.WriterTools;
 import com.sun.star.frame.XController;
 import util.AccessibilityTools;
-import drafts.com.sun.star.accessibility.AccessibleRole;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
-import drafts.com.sun.star.accessibility.XAccessibleValue;
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleValue;
 import com.sun.star.frame.XModel;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.awt.XWindow;
-import drafts.com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessible;
 import util.utils;
 import com.sun.star.drawing.XDrawPageSupplier;
 import com.sun.star.drawing.XDrawPage;
@@ -173,14 +173,17 @@ public class SwAccessiblePageView extends TestCase {
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         at.printAccessibleTree(log, xRoot);
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL);
+
+        System.out.println("Panel: "+AccessibleRole.PANEL);
+        System.out.println("ScrollPane: "+AccessibleRole.SCROLL_PANE);
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL,"Page");
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        getAccessibleObjectForRole(xRoot, AccessibleRole.SCROLLBAR);
+        getAccessibleObjectForRole(xRoot, AccessibleRole.SCROLL_BAR);
         final XAccessibleValue xAccVal = (XAccessibleValue) UnoRuntime.queryInterface
                                 (XAccessibleValue.class, SearchedContext) ;
 

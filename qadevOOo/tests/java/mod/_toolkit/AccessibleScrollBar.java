@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleScrollBar.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-03-26 14:55:03 $
+ *  last change:$Date: 2003-04-28 11:21:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,12 +67,13 @@ import com.sun.star.awt.XWindow;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XModel;
-import com.sun.star.text.XTextDocument;
+import com.sun.star.lang.XComponent;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import drafts.com.sun.star.accessibility.AccessibleRole;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleAction;
+import com.sun.star.accessibility.XAccessibleComponent;
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -100,12 +101,12 @@ import util.SOfficeFactory;
  *  drafts::com::sun::star::accessibility::XAccessibleAction</code></li>
  * </ul> <p>
  *
- * @see drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster
- * @see drafts.com.sun.star.accessibility.XAccessibleContext
- * @see drafts.com.sun.star.accessibility.XAccessibleComponent
- * @see drafts.com.sun.star.accessibility.XAccessibleExtendedComponent
- * @see drafts.com.sun.star.accessibility.XAccessibleValue
- * @see drafts.com.sun.star.accessibility.XAccessibleAction
+ * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
+ * @see com.sun.star.accessibility.XAccessibleContext
+ * @see com.sun.star.accessibility.XAccessibleComponent
+ * @see com.sun.star.accessibility.XAccessibleExtendedComponent
+ * @see com.sun.star.accessibility.XAccessibleValue
+ * @see com.sun.star.accessibility.XAccessibleAction
  * @see ifc.accessibility._XAccessibleEventBroadcaster
  * @see ifc.accessibility._XAccessibleContext
  * @see ifc.accessibility._XAccessibleComponent
@@ -116,7 +117,7 @@ import util.SOfficeFactory;
 public class AccessibleScrollBar extends TestCase {
 
     XDesktop the_Desk;
-    XTextDocument xTextDoc;
+    XComponent xDoc;
 
     /**
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
@@ -133,8 +134,8 @@ public class AccessibleScrollBar extends TestCase {
     protected void cleanup( TestParameters Param, PrintWriter log) {
         log.println("disposing xTextDoc");
 
-        if (xTextDoc != null) {
-            xTextDoc.dispose();
+        if (xDoc != null) {
+            xDoc.dispose();
         }
     }
 
@@ -153,23 +154,23 @@ public class AccessibleScrollBar extends TestCase {
      * @param log writer to log information while testing
      *
      * @see com.sun.star.awt.Toolkit
-     * @see drafts.com.sun.star.accessibility.AccessibleRole
+     * @see com.sun.star.accessibility.AccessibleRole
      * @see ifc.accessibility._XAccessibleEventBroadcaster
-     * @see drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster
+     * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
      */
     protected TestEnvironment createTestEnvironment(
         TestParameters tParam, PrintWriter log) {
 
         log.println( "creating a test environment" );
 
-        if (xTextDoc != null) xTextDoc.dispose();
+        if (xDoc != null) xDoc.dispose();
 
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
 
         try {
             log.println( "creating a text document" );
-            xTextDoc = SOF.createTextDoc(null);
+            xDoc = SOF.createDrawDoc(null);
         } catch ( com.sun.star.uno.Exception e ) {
             // Some exception occures.FAILED
             e.printStackTrace( log );
@@ -177,7 +178,7 @@ public class AccessibleScrollBar extends TestCase {
         }
 
         XModel aModel = (XModel)
-                    UnoRuntime.queryInterface(XModel.class, xTextDoc);
+                    UnoRuntime.queryInterface(XModel.class, xDoc);
 
         XController xController = aModel.getCurrentController();
 
@@ -190,10 +191,10 @@ public class AccessibleScrollBar extends TestCase {
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         oObj = at.getAccessibleObjectForRole(xRoot,
-            AccessibleRole.SCROLLBAR);
+            AccessibleRole.SCROLL_BAR);
 
-        final XAccessibleComponent acomp = (XAccessibleComponent)
-                    UnoRuntime.queryInterface(XAccessibleComponent.class,oObj);
+        final XAccessibleAction act = (XAccessibleAction)
+                    UnoRuntime.queryInterface(XAccessibleAction.class,oObj);
 
         log.println("ImplementationName: "+ util.utils.getImplName(oObj));
 
@@ -202,7 +203,9 @@ public class AccessibleScrollBar extends TestCase {
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
                 public void fireEvent() {
-                    acomp.grabFocus();
+                    try {
+                        act.doAccessibleAction(1);
+                    } catch (Exception e) {}
                 }
             });
 

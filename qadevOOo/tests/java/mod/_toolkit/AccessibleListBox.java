@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleListBox.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Date: 2003-02-28 14:41:00 $
+ *  last change: $Date: 2003-04-28 11:21:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,12 +72,12 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
-import drafts.com.sun.star.accessibility.AccessibleRole;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleAction;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
-import drafts.com.sun.star.accessibility.XAccessibleSelection;
-import drafts.com.sun.star.awt.XExtendedToolkit;
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleAction;
+import com.sun.star.accessibility.XAccessibleComponent;
+import com.sun.star.accessibility.XAccessibleSelection;
+import com.sun.star.awt.XExtendedToolkit;
 import java.io.PrintWriter;
 import lib.StatusException;
 import lib.TestCase;
@@ -101,11 +101,11 @@ import util.utils;
  *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleContext</code></li>
  * </ul> <p>
  *
- * @see drafts.com.sun.star.accessibility.XAccessibleExtendedComponent
- * @see drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster
- * @see drafts.com.sun.star.accessibility.XAccessibleComponent
- * @see drafts.com.sun.star.accessibility.XAccessibleSelection
- * @see drafts.com.sun.star.accessibility.XAccessibleContext
+ * @see com.sun.star.accessibility.XAccessibleExtendedComponent
+ * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
+ * @see com.sun.star.accessibility.XAccessibleComponent
+ * @see com.sun.star.accessibility.XAccessibleSelection
+ * @see com.sun.star.accessibility.XAccessibleContext
  * @see ifc.accessibility._XAccessibleExtendedComponent
  * @see ifc.accessibility._XAccessibleEventBroadcaster
  * @see ifc.accessibility._XAccessibleComponent
@@ -183,11 +183,11 @@ public class AccessibleListBox extends TestCase {
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        //at.printAccessibleTree(log, xRoot);
+        at.printAccessibleTree(log, xRoot);
 
         // obtaining 'Close' button
         oObj = at.getAccessibleObjectForRole
-            (xRoot, AccessibleRole.PUSHBUTTON,"Close");
+            (xRoot, AccessibleRole.PUSH_BUTTON,"Close");
         action = (XAccessibleAction)
                     UnoRuntime.queryInterface(XAccessibleAction.class, oObj);
 
@@ -203,7 +203,7 @@ public class AccessibleListBox extends TestCase {
         }
 
         oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL,
-            "", "com.sun.star.comp.toolkit.AccessibleList");
+            "", "com.sun.star.comp.toolkit.AccessibleListBox");
         Object list = at.getAccessibleObjectForRole(at.SearchedAccessible,
             AccessibleRole.LIST);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleMenuItem.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Date: 2003-03-26 14:55:03 $
+ *  last change: $Date: 2003-04-28 11:21:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,12 +65,13 @@ import com.sun.star.awt.XWindow;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import drafts.com.sun.star.accessibility.AccessibleRole;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleAction;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
-import drafts.com.sun.star.accessibility.XAccessibleText;
-import drafts.com.sun.star.awt.XExtendedToolkit;
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleAction;
+import com.sun.star.accessibility.XAccessibleComponent;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleText;
+import com.sun.star.awt.XExtendedToolkit;
 import java.io.PrintWriter;
 import lib.StatusException;
 import lib.TestCase;
@@ -95,13 +96,13 @@ import util.utils;
  *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleText</code></li>
  * </ul> <p>
  *
- * @see drafts.com.sun.star.accessibility.XAccessibleExtendedComponent
- * @see drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster
- * @see drafts.com.sun.star.accessibility.XAccessibleComponent
- * @see drafts.com.sun.star.accessibility.XAccessibleValue
- * @see drafts.com.sun.star.accessibility.XAccessibleAction
- * @see drafts.com.sun.star.accessibility.XAccessibleContext
- * @see drafts.com.sun.star.accessibility.XAccessibleText
+ * @see com.sun.star.accessibility.XAccessibleExtendedComponent
+ * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
+ * @see com.sun.star.accessibility.XAccessibleComponent
+ * @see com.sun.star.accessibility.XAccessibleValue
+ * @see com.sun.star.accessibility.XAccessibleAction
+ * @see com.sun.star.accessibility.XAccessibleContext
+ * @see com.sun.star.accessibility.XAccessibleText
  * @see ifc.accessibility._XAccessibleExtendedComponent
  * @see ifc.accessibility._XAccessibleEventBroadcaster
  * @see ifc.accessibility._XAccessibleComponent
@@ -148,20 +149,39 @@ public class AccessibleMenuItem extends TestCase {
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 //        at.printAccessibleTree(log, xRoot);
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.MENUITEM);
+        XAccessibleContext MenuBar = at.getAccessibleObjectForRole(xRoot, AccessibleRole.MENU_BAR);
+
+        try {
+            //activate Edit-Menu
+            XAccessible Menu = MenuBar.getAccessibleChild(1);
+            XAccessibleAction act = (XAccessibleAction) UnoRuntime.queryInterface(XAccessibleAction.class, Menu);
+            act.doAccessibleAction(0);
+
+            shortWait();
+
+            //get a menue-item
+            oObj = Menu.getAccessibleContext().getAccessibleChild(9);
+        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+
+        }
+
+        //oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.MENUITEM);
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        final XAccessibleComponent acomp = (XAccessibleComponent)
-                    UnoRuntime.queryInterface(XAccessibleComponent.class,oObj) ;
+        final XAccessibleAction action = (XAccessibleAction)
+                    UnoRuntime.queryInterface(XAccessibleAction.class,oObj) ;
 
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
                 public void fireEvent() {
-                    System.out.println("Grabbing focus ... ");
-                    acomp.grabFocus();
+                    try {
+                        action.doAccessibleAction(0);
+                    } catch (com.sun.star.lang.IndexOutOfBoundsException e){
+                    }
+
                 }
             });
 
@@ -169,6 +189,10 @@ public class AccessibleMenuItem extends TestCase {
                     UnoRuntime.queryInterface(XAccessibleText.class,oObj) ;
 
         tEnv.addObjRelation("XAccessibleText.Text", text.getText());
+
+        tEnv.addObjRelation("EditOnly","Can't change or select Text in MenuBarItem");
+
+        tEnv.addObjRelation("Destroy", new Boolean(true));
 
         return tEnv;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwAccessibleDocumentPageView.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sw $
+ *  last change: $Author: vg $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,11 +72,11 @@ import com.sun.star.text.XTextDocument;
 import util.WriterTools;
 import com.sun.star.frame.XController;
 import util.AccessibilityTools;
-import drafts.com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.frame.XModel;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.awt.XWindow;
-import drafts.com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessible;
 import util.utils;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.util.XURLTransformer;
@@ -86,8 +86,8 @@ import com.sun.star.frame.XDispatch;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.ControlCharacter;
-import drafts.com.sun.star.accessibility.XAccessibleValue;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleValue;
+import com.sun.star.accessibility.XAccessibleContext;
 
 public class SwAccessibleDocumentPageView extends TestCase {
 
@@ -178,7 +178,7 @@ public class SwAccessibleDocumentPageView extends TestCase {
         util.dbg.printInterfaces(xController);
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
-        getAccessibleObjectForRole(xRoot, AccessibleRole.SCROLLBAR);
+        getAccessibleObjectForRole(xRoot, AccessibleRole.SCROLL_BAR);
         final XAccessibleValue xAccVal = (XAccessibleValue) UnoRuntime.queryInterface
                                 (XAccessibleValue.class, SearchedContext) ;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleMenu.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Date: 2003-03-26 14:55:02 $
+ *  last change: $Date: 2003-04-28 11:21:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,12 @@ import com.sun.star.awt.XWindow;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import drafts.com.sun.star.accessibility.AccessibleRole;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleAction;
-import drafts.com.sun.star.accessibility.XAccessibleText;
-import drafts.com.sun.star.awt.XExtendedToolkit;
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleAction;
+import com.sun.star.accessibility.XAccessibleText;
+import com.sun.star.awt.XExtendedToolkit;
 import java.io.PrintWriter;
 import lib.StatusException;
 import lib.TestCase;
@@ -95,14 +96,14 @@ import util.utils;
  *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleContext</code></li>
  * </ul> <p>
  *
- * @see drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster
- * @see drafts.com.sun.star.accessibility.XAccessibleAction
- * @see drafts.com.sun.star.accessibility.XAccessibleSelection
- * @see drafts.com.sun.star.accessibility.XAccessibleValue
- * @see drafts.com.sun.star.accessibility.XAccessibleExtendedComponent
- * @see drafts.com.sun.star.accessibility.XAccessibleComponent
- * @see drafts.com.sun.star.accessibility.XAccessibleText
- * @see drafts.com.sun.star.accessibility.XAccessibleContext
+ * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
+ * @see com.sun.star.accessibility.XAccessibleAction
+ * @see com.sun.star.accessibility.XAccessibleSelection
+ * @see com.sun.star.accessibility.XAccessibleValue
+ * @see com.sun.star.accessibility.XAccessibleExtendedComponent
+ * @see com.sun.star.accessibility.XAccessibleComponent
+ * @see com.sun.star.accessibility.XAccessibleText
+ * @see com.sun.star.accessibility.XAccessibleContext
  * @see ifc.accessibility._XAccessibleEventBroadcaster
  * @see ifc.accessibility._XAccessibleAction
  * @see ifc.accessibility._XAccessibleSelection
@@ -157,9 +158,15 @@ public class AccessibleMenu extends TestCase {
 
 //        at.printAccessibleTree(log, xRoot);
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.MENU, "File");
-        Object menu2 = at.getAccessibleObjectForRole
-            (xRoot, AccessibleRole.MENU, "Edit");
+        XAccessibleContext menubar = at.getAccessibleObjectForRole(xRoot, AccessibleRole.MENU_BAR);
+        Object menu2 = null;
+
+        try {
+            oObj = menubar.getAccessibleChild(2);
+            menu2 = menubar.getAccessibleChild(1);
+        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+
+        }
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
@@ -175,6 +182,10 @@ public class AccessibleMenu extends TestCase {
                 public void fireEvent() {
                     try {
                         act2.doAccessibleAction(0);
+                        try {
+                            Thread.sleep(500) ;
+                        } catch (InterruptedException e) {
+                        }
                         act1.doAccessibleAction(0);
                     } catch(com.sun.star.lang.IndexOutOfBoundsException e){}
                 }
@@ -185,12 +196,18 @@ public class AccessibleMenu extends TestCase {
 
         tEnv.addObjRelation("XAccessibleText.Text", text.getText());
 
+        tEnv.addObjRelation("EditOnly","Can't change or select Text in Menu");
+
         return tEnv;
 
     }
 
     protected void cleanup( TestParameters Param, PrintWriter log) {
-        xTextDoc.dispose();
+        try {
+            xTextDoc.dispose();
+        } catch (com.sun.star.lang.DisposedException e) {
+            log.println("Object already disposed");
+        }
     }
 
     /**

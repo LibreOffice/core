@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleWindow.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-02-28 16:28:28 $
+ *  last change:$Date: 2003-04-28 11:22:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,10 +72,10 @@ import com.sun.star.frame.XModel;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import drafts.com.sun.star.accessibility.AccessibleRole;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
-import drafts.com.sun.star.awt.XExtendedToolkit;
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleComponent;
+import com.sun.star.awt.XExtendedToolkit;
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -105,13 +105,13 @@ import util.SOfficeFactory;
  *  drafts::com::sun::star::accessibility::XAccessibleValue</code></li>
  * </ul> <p>
  *
- * @see drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster
- * @see drafts.com.sun.star.accessibility.XAccessibleContext
- * @see drafts.com.sun.star.accessibility.XAccessibleComponent
- * @see drafts.com.sun.star.accessibility.XAccessibleExtendedComponent
- * @see drafts.com.sun.star.accessibility.XAccessibleAction
- * @see drafts.com.sun.star.accessibility.XAccessibleText
- * @see drafts.com.sun.star.accessibility.XAccessibleValue
+ * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
+ * @see com.sun.star.accessibility.XAccessibleContext
+ * @see com.sun.star.accessibility.XAccessibleComponent
+ * @see com.sun.star.accessibility.XAccessibleExtendedComponent
+ * @see com.sun.star.accessibility.XAccessibleAction
+ * @see com.sun.star.accessibility.XAccessibleText
+ * @see com.sun.star.accessibility.XAccessibleValue
  * @see ifc.accessibility._XAccessibleEventBroadcaster
  * @see ifc.accessibility._XAccessibleContext
  * @see ifc.accessibility._XAccessibleComponent
@@ -162,11 +162,11 @@ public class AccessibleWindow extends TestCase {
      * @param log writer to log information while testing
      *
      * @see com.sun.star.awt.Toolkit
-     * @see drafts.com.sun.star.accessibility.AccessibleRole
+     * @see com.sun.star.accessibility.AccessibleRole
      * @see ifc.accessibility._XAccessibleEventBroadcaster
      * @see ifc.accessibility._XAccessibleText
-     * @see drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster
-     * @see drafts.com.sun.star.accessibility.XAccessibleText
+     * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
+     * @see com.sun.star.accessibility.XAccessibleText
      */
     protected TestEnvironment createTestEnvironment(
         TestParameters tParam, PrintWriter log) {
@@ -204,10 +204,10 @@ public class AccessibleWindow extends TestCase {
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        //at.printAccessibleTree(log,xRoot);
+        at.printAccessibleTree(log,xRoot);
 
         oObj = at.getAccessibleObjectForRole(xRoot,
-            AccessibleRole.LAYEREDPANE);
+            AccessibleRole.PANEL);
 
         log.println("ImplementationName: "+ util.utils.getImplName(oObj));
 

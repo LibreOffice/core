@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwAccessibleTextFrameView.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sw $
+ *  last change: $Author: vg $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,11 +71,11 @@ import com.sun.star.text.XTextDocument;
 import util.WriterTools;
 import com.sun.star.frame.XController;
 import util.AccessibilityTools;
-import drafts.com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.frame.XModel;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.awt.XWindow;
-import drafts.com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessible;
 import util.utils;
 import com.sun.star.drawing.XDrawPageSupplier;
 import com.sun.star.drawing.XDrawPage;
@@ -95,7 +95,7 @@ import com.sun.star.view.XViewSettingsSupplier;
 * <ul>
 *  <li> <code>drafts::com::sun::star::accessibility::XAccessible</code></li>
 * </ul>
-* @see drafts.com.sun.star.accessibility.XAccessible
+* @see com.sun.star.accessibility.XAccessible
 */
 public class SwAccessibleTextFrameView extends TestCase {
 
