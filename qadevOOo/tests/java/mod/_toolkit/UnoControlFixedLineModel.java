@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlFixedLineModel.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 14:04:22 $
+ *  last change:$Date: 2003-09-08 13:06:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,17 +58,19 @@
  *
  *
  ************************************************************************/
-
 package mod._toolkit;
 
-import com.sun.star.uno.XInterface;
-import com.sun.star.lang.XMultiServiceFactory;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.utils;
+
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.XInterface;
+
 
 /**
 * Test for object which is represented by service
@@ -95,7 +97,6 @@ import util.utils;
 * @see ifc.beans._XMultiPropertySet
 */
 public class UnoControlFixedLineModel extends TestCase {
-
     /**
     * Creating a Testenvironment for the interfaces to be tested.
     * Creates an instance of the service
@@ -106,29 +107,24 @@ public class UnoControlFixedLineModel extends TestCase {
     *      {@link ifc.io._XPersistObject} </li>
     * </ul>
     */
-    public synchronized TestEnvironment createTestEnvironment( TestParameters Param,
-                                                  PrintWriter log )
-                                                    throws StatusException {
-
+    public synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+                                                              PrintWriter log)
+        throws StatusException {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface) ((XMultiServiceFactory)Param.getMSF()).createInstance(
-                                    "com.sun.star.awt.UnoControlFixedLineModel");
+            oObj = (XInterface) ( (XMultiServiceFactory) Param.getMSF())
+                                     .createInstance("com.sun.star.awt.UnoControlFixedLineModel");
         } catch (Exception e) {
-
         }
 
+        log.println("creating a new environment for object");
 
-        log.println( "creating a new environment for object" );
-        TestEnvironment tEnv = new TestEnvironment( oObj );
+        TestEnvironment tEnv = new TestEnvironment(oObj);
 
         tEnv.addObjRelation("OBJNAME", "stardiv.vcl.controlmodel.FixedLine");
-        System.out.println("ImplementationName: "+utils.getImplName(oObj));
+        System.out.println("ImplementationName: " + utils.getImplName(oObj));
 
         return tEnv;
-
     } // finish method getTestEnvironment
-
 }
-
