@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XLocalizable.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:45:12 $
+ *  last change:$Date: 2003-12-11 11:41:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,11 @@ import lib.MultiMethodTest;
 
 import com.sun.star.lang.Locale;
 import com.sun.star.lang.XLocalizable;
+import lib.Status;
 
 
 public class _XLocalizable extends MultiMethodTest {
+
     public XLocalizable oObj;
     protected Locale initialLocale;
 
@@ -78,6 +80,12 @@ public class _XLocalizable extends MultiMethodTest {
     public void _setLocale() {
         requiredMethod("getLocale()");
 
+        String ro = (String) tEnv.getObjRelation("XLocalizable.ReadOnly");
+        if (ro != null) {
+            log.println(ro);
+            tRes.tested("setLocale()", Status.skipped(true));
+            return;
+        }
         Locale newLocale = new Locale("de", "DE", "");
         oObj.setLocale(newLocale);
 
