@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfwriter1.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: thb $ $Date: 2003-07-10 09:32:38 $
+ *  last change: $Author: vg $ $Date: 2003-07-11 10:22:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -961,7 +961,9 @@ void Writer::Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Si
         if (!rClipRect.IsEmpty())
         {
             // AS: Christian, I also don't understand why bNeedToMapClipRect is necessary, but it
-            //  works like a charm.  Sometimes the map event is missing from the metafile, but why?
+            //  works like a charm.  Usually, the map event in the meta file does not cause the
+            //  clipping rectangle to get mapped.  However, sometimes there are multiple layers
+            //  of mapping which eventually do cause the clipping rect to be mapped.
             Size clipSize( bNeedToMapClipRect ? map(rClipRect.GetSize()) : rClipRect.GetSize() );
             Rectangle clipRect = Rectangle(Point(), clipSize);
             destRect.Intersection( clipRect );
@@ -1061,57 +1063,84 @@ void Writer::Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal
     //  good SWF files.
     sal_uInt8 cType = 0x01;
     const sal_uInt8* pJpgSearch = pJpgData;
-    const sal_uInt8* pLastMark = pJpgData;
+
+    int nLength = 0;
 
     SvMemoryStream EncodingTableStream;
     SvMemoryStream ImageBitsStream;
-    for (;pJpgSearch < pJpgData + nJpgDataLength; pJpgSearch++)
+    for (;pJpgSearch < pJpgData + nJpgDataLength; pJpgSearch += nLength)
     {
-        if (0xFF == *pJpgSearch)
+        if (0xFF != *pJpgSearch)
+            DBG_ERROR( "Expected JPEG marker." );
+
+        cType = *(pJpgSearch + 1);
+
+        if (0xD8 == cType || 0xD9 == cType)
         {
-        sal_uInt32 nLength = pJpgSearch - pLastMark;
+            nLength = 2;
+        }
+        else if (0xDA == cType)
+        {
+            //AS: This is the actual image data, and runs to the
+            // end of the file (as best I know), minus 2 bytes
+            // for the closing 0xFFD9.
+            nLength = nJpgDataLength - (pJpgSearch - pJpgData) - 2;
+        }
+        else
+        {
+            // AS: Lengths are big endian.
 
-            if (nLength > 0)
-            {
-                switch(cType)
-                {
-                case 0xD8:
-                    EncodingTableStream.Write( pLastMark, nLength );
-                    ImageBitsStream.Write( pLastMark, nLength );
-                    break;
+            // Beware. pJpgSearch is not necessarily word-aligned,
+            // so we access it byte-wise.
 
-                case 0x01:
-                case 0x02:
-                case 0xDB:
-                case 0xC4:
-                    EncodingTableStream.Write( pLastMark, nLength );
-                    break;
+            // AS: Add 2 to the length to include the 0xFFXX itself.
+            nLength = 2 + (pJpgSearch[2]<<8) + pJpgSearch[3];
+        }
 
-                case 0xC1:
-                case 0xE0:
-                case 0xC0:
-                case 0xDA:
-                case 0x03:
-                case 0x00:
-                    ImageBitsStream.Write( pLastMark, nLength );
-                    break;
+        // AS: I'm refering to libjpeg for a list of what these
+        //  markers are.  See jdmarker.c for a list.
+        // AS: I'm ignoring application specific markers 0xE1...0xEF
+        //  and comments 0xFE.  I don't know what
+        //  0xF0 or 0xFD are for, and they don't come up.
+        //  Additionally, 0xDE and 0xDF aren't clear to me.
+        switch(cType)
+        {
+        case 0xD8:
+        case 0xD9:
+            EncodingTableStream.Write( pJpgSearch, nLength );
+            ImageBitsStream.Write( pJpgSearch, nLength );
+            break;
 
-                default:
-                    DBG_ERROR( "JPEG marker I didn't handle!" );
+        case 0x01:
+        case 0xDB:
+        case 0xDC:
+        case 0xDD:
+        case 0xC4:
+            EncodingTableStream.Write( pJpgSearch, nLength );
+            break;
 
-                }
-            }
+        case 0xC0:
+        case 0xC1:
+        case 0xC2:
+        case 0xC3:
+        case 0xC5:
+        case 0xC6:
+        case 0xC7:
+//      case 0xC8: Apparently reserved for JPEG extensions?
+        case 0xC9:
+        case 0xCA:
+        case 0xCB:
+        case 0xCD:
+        case 0xCE:
+        case 0xCF:
+        case 0xDA:
+        case 0xE0:
+            ImageBitsStream.Write( pJpgSearch, nLength );
+            break;
 
-            cType = *(pJpgSearch + 1);
-            pLastMark = pJpgSearch;
+        default:
+            DBG_ERROR( "JPEG marker I didn't handle!" );
 
-            // AS: The way that I'm checking for markers, we'll miss the
-            //  one at the end, so I special case it :(
-            if (0xD9 == cType)
-            {
-                EncodingTableStream.Write( pLastMark, 2 );
-                ImageBitsStream.Write( pLastMark, 2 );
-            }
         }
     }
 
@@ -1338,6 +1367,8 @@ bool Writer::Impl_writeFilling( SvtGraphicFill& rFilling )
    work out since the formating is always wrong when text follows the
    page number field since pages greater one may require more space than
    page 1
+*/
+#if 0
 bool Writer::Impl_writePageField( Rectangle& rTextBounds )
 {
     startTag( TAG_DEFINEEDITTEXT );
@@ -1376,14 +1407,14 @@ bool Writer::Impl_writePageField( Rectangle& rTextBounds )
 
     return true;
 }
-*/
+#endif
 
 // -----------------------------------------------------------------------------
 
 void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
 {
     Rectangle clipRect;
-    bool bMap = false;
+    int bMap = 0;
     for( ULONG i = 0, nCount = rMtf.GetActionCount(); i < nCount; i++ )
     {
         const MetaAction*   pAction = rMtf.GetAction( i );
@@ -1594,7 +1625,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                         const MetaBmpScaleAction* pBmpScaleAction = (const MetaBmpScaleAction*) pSubstAct;
                         Impl_writeImage( pBmpScaleAction->GetBitmap(),
                                       pA->GetPoint(), pA->GetSize(),
-                                      Point(), pBmpScaleAction->GetBitmap().GetSizePixel(), clipRect, !bMap  );
+                                      Point(), pBmpScaleAction->GetBitmap().GetSizePixel(), clipRect, 1 == bMap  );
                     }
                 }
             }
@@ -1689,10 +1720,9 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                         }
                     }
                 }
-/*
+#if 0
                 else if( pA->GetComment().CompareIgnoreCaseToAscii( "FIELD_SEQ_BEGIN;PageField" ) == COMPARE_EQUAL )
                 {
-
                     bool bDone = sal_False;
 
                     while( !bDone && ( ++i < nCount ) )
@@ -1713,7 +1743,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                         }
                     }
                 }
-*/
+#endif
             }
             break;
 
@@ -1723,7 +1753,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
 
                 Impl_writeImage( pA->GetBitmap(),
                           pA->GetPoint(), pA->GetSize(),
-                          Point(), pA->GetBitmap().GetSizePixel(), clipRect, !bMap );
+                          Point(), pA->GetBitmap().GetSizePixel(), clipRect, 1 == bMap );
             }
             break;
 
@@ -1732,7 +1762,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                 const MetaBmpAction* pA = (const MetaBmpAction*) pAction;
                 Impl_writeImage( pA->GetBitmap(),
                           pA->GetPoint(), mpVDev->PixelToLogic( pA->GetBitmap().GetSizePixel()),
-                          Point(), pA->GetBitmap().GetSizePixel(), clipRect, !bMap );
+                          Point(), pA->GetBitmap().GetSizePixel(), clipRect, 1 ==bMap );
             }
             break;
 
@@ -1741,7 +1771,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                 const MetaBmpScalePartAction* pA = (const MetaBmpScalePartAction*) pAction;
                 Impl_writeImage( pA->GetBitmap(),
                           pA->GetDestPoint(), pA->GetDestSize(),
-                          pA->GetSrcPoint(), pA->GetSrcSize(), clipRect, !bMap );
+                          pA->GetSrcPoint(), pA->GetSrcSize(), clipRect, 1 == bMap );
             }
             break;
 
@@ -1750,7 +1780,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                 const MetaBmpExAction*  pA = (const MetaBmpExAction*) pAction;
                 Impl_writeImage( pA->GetBitmapEx(),
                           pA->GetPoint(), mpVDev->PixelToLogic( pA->GetBitmapEx().GetSizePixel() ),
-                          Point(), pA->GetBitmapEx().GetSizePixel(), clipRect, !bMap );
+                          Point(), pA->GetBitmapEx().GetSizePixel(), clipRect, 1 == bMap );
             }
             break;
 
@@ -1759,7 +1789,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                 const MetaBmpExScaleAction* pA = (const MetaBmpExScaleAction*) pAction;
                 Impl_writeImage( pA->GetBitmapEx(),
                           pA->GetPoint(), pA->GetSize(),
-                          Point(), pA->GetBitmapEx().GetSizePixel(), clipRect, !bMap );
+                          Point(), pA->GetBitmapEx().GetSizePixel(), clipRect, 1 == bMap );
             }
             break;
 
@@ -1768,7 +1798,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                 const MetaBmpExScalePartAction* pA = (const MetaBmpExScalePartAction*) pAction;
                 Impl_writeImage( pA->GetBitmapEx(),
                           pA->GetDestPoint(), pA->GetDestSize(),
-                          pA->GetSrcPoint(), pA->GetSrcSize(), clipRect, !bMap );
+                          pA->GetSrcPoint(), pA->GetSrcSize(), clipRect, 1 == bMap );
             }
             break;
 
@@ -1814,7 +1844,18 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( META_MAPMODE_ACTION ):  bMap = true;
+            case( META_MAPMODE_ACTION ):
+            {
+                const MetaMapModeAction *pA = (const MetaMapModeAction*) pAction;
+//              MapMode mm = pA->GetMapMode();
+//              MapUnit mu = mm.GetMapUnit();
+//
+//              Point pt = mm.GetOrigin();
+//              Fraction fx = mm.GetScaleX();
+//              Fraction fy = mm.GetScaleY();
+
+                bMap++;
+            }
             case( META_REFPOINT_ACTION ):
             case( META_LINECOLOR_ACTION ):
             case( META_FILLCOLOR_ACTION ):
