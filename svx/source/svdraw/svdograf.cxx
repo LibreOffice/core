@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: ka $ $Date: 2002-09-01 15:36:37 $
+ *  last change: $Author: thb $ $Date: 2002-10-23 11:29:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,29 +321,163 @@ Graphic SdrGrafObj::GetTransformedGraphic( ULONG nTransformFlags ) const
 {
     Graphic         aTransGraphic( GetGraphic() );
     GraphicType     eType = GetGraphicType();
-    const MapMode   aDstMap( pModel->GetScaleUnit(), Point(), pModel->GetScaleFraction(), pModel->GetScaleFraction() );
+    MapMode         aDstMap( pModel->GetScaleUnit(), Point(), pModel->GetScaleFraction(), pModel->GetScaleFraction() );
     const Size      aSrcSize( aTransGraphic.GetPrefSize() );
     const Size      aDstSize( GetLogicRect().GetSize() );
     const BOOL      bMirror = ( nTransformFlags & SDRGRAFOBJ_TRANSFORMATTR_MIRROR ) != 0;
     const BOOL      bRotate = ( ( ( nTransformFlags & SDRGRAFOBJ_TRANSFORMATTR_ROTATE ) != 0 ) &&
                                 ( aGeo.nDrehWink && aGeo.nDrehWink != 18000 ) && ( GRAPHIC_NONE != eType ) && !IsAnimated() );
 
+    // #104115# Need cropping info earlier
+    ( (SdrGrafObj*) this )->ImpSetAttrToGrafInfo();
+    GraphicAttr aActAttr( aGrafInfo );
+
+    // #104115# Convert the crop margins to graphic object mapmode
+    const MapMode aMapGraph( aTransGraphic.GetPrefMapMode() );
+    const MapMode aMap100( MAP_100TH_MM );
+
+    Size aCropLeftTop;
+    Size aCropRightBottom;
+
     if( GRAPHIC_GDIMETAFILE == eType )
     {
         GDIMetaFile aMtf( aTransGraphic.GetGDIMetaFile() );
 
-        aMtf.Scale( Fraction( aDstSize.Width(), aSrcSize.Width() ), Fraction( aDstSize.Height(), aSrcSize.Height() ) );
-        aMtf.SetPrefMapMode( aDstMap );
+        if( aMapGraph == MAP_PIXEL )
+        {
+            aCropLeftTop = Application::GetDefaultDevice()->LogicToPixel( Size( aActAttr.GetLeftCrop(),
+                                                                                aActAttr.GetTopCrop() ),
+                                                                          aMap100 );
+            aCropRightBottom = Application::GetDefaultDevice()->LogicToPixel( Size( aActAttr.GetRightCrop(),
+                                                                                    aActAttr.GetBottomCrop() ),
+                                                                              aMap100 );
+        }
+        else
+        {
+            aCropLeftTop = OutputDevice::LogicToLogic( Size( aActAttr.GetLeftCrop(),
+                                                             aActAttr.GetTopCrop() ),
+                                                       aMap100,
+                                                       aMapGraph );
+            aCropRightBottom = OutputDevice::LogicToLogic( Size( aActAttr.GetRightCrop(),
+                                                                 aActAttr.GetBottomCrop() ),
+                                                           aMap100,
+                                                           aMapGraph );
+        }
+
+        // #104115# If the metafile is cropped, give it a special
+        // treatment: clip against the remaining area, scale up such
+        // that this area later fills the desired size, and move the
+        // origin to the upper left edge of that area.
+        if( aActAttr.IsCropped() )
+        {
+            const MapMode aMtfMapMode( aMtf.GetPrefMapMode() );
+
+            Rectangle aClipRect( aMtfMapMode.GetOrigin().X() + aCropLeftTop.Width(),
+                                 aMtfMapMode.GetOrigin().Y() + aCropLeftTop.Height(),
+                                 aMtfMapMode.GetOrigin().X() + aSrcSize.Width() - aCropRightBottom.Width(),
+                                 aMtfMapMode.GetOrigin().Y() + aSrcSize.Height() - aCropRightBottom.Height() );
+
+            // #104115# To correctly crop rotated metafiles, clip by view rectangle
+            aMtf.AddAction( new MetaISectRectClipRegionAction( aClipRect ), 0 );
+
+            // #104115# To crop the metafile, scale larger than the output rectangle
+            aMtf.Scale( (double)aDstSize.Width() / (aSrcSize.Width() - aCropLeftTop.Width() - aCropRightBottom.Width()),
+                        (double)aDstSize.Height() / (aSrcSize.Height() - aCropLeftTop.Height() - aCropRightBottom.Height()) );
+
+            // #104115# Adapt the pref size by hand (scale changes it
+            // proportionally, but we want it to be smaller than the
+            // former size, to crop the excess out)
+            aMtf.SetPrefSize( Size( (long)((double)aDstSize.Width() *  (1.0 + (aCropLeftTop.Width() + aCropRightBottom.Width()) / aSrcSize.Width())  + .5),
+                                    (long)((double)aDstSize.Height() * (1.0 + (aCropLeftTop.Height() + aCropRightBottom.Height()) / aSrcSize.Height()) + .5) ) );
+
+            // #104115# Adapt the origin of the new mapmode, such that it
+            // is shifted to the place where the cropped output starts
+            Point aNewOrigin( (long)((double)aMtfMapMode.GetOrigin().X() + aDstSize.Width() * aCropLeftTop.Width() / (aSrcSize.Width() - aCropLeftTop.Width() - aCropRightBottom.Width()) + .5),
+                              (long)((double)aMtfMapMode.GetOrigin().Y() + aDstSize.Height() * aCropLeftTop.Height() / (aSrcSize.Height() - aCropLeftTop.Height() - aCropRightBottom.Height()) + .5) );
+            aDstMap.SetOrigin( OutputDevice::LogicToLogic(aNewOrigin, aMtfMapMode, aDstMap) );
+            aMtf.SetPrefMapMode( aDstMap );
+        }
+        else
+        {
+            aMtf.Scale( Fraction( aDstSize.Width(), aSrcSize.Width() ), Fraction( aDstSize.Height(), aSrcSize.Height() ) );
+            aMtf.SetPrefMapMode( aDstMap );
+        }
 
         aTransGraphic = aMtf;
     }
     else if( GRAPHIC_BITMAP == eType )
     {
+        BitmapEx    aBmpEx( aTransGraphic.GetBitmapEx() );
+
+        // convert crops to pixel
+        aCropLeftTop = Application::GetDefaultDevice()->LogicToPixel( Size( aActAttr.GetLeftCrop(),
+                                                                            aActAttr.GetTopCrop() ),
+                                                                      aMap100 );
+        aCropRightBottom = Application::GetDefaultDevice()->LogicToPixel( Size( aActAttr.GetRightCrop(),
+                                                                                aActAttr.GetBottomCrop() ),
+                                                                          aMap100 );
+
+        // #104115# Crop the bitmap
+        if( aActAttr.IsCropped() )
+        {
+            Size aSrcSize( aTransGraphic.GetPrefSize() );
+
+            // setup crop rectangle in prefmapmode system
+            Rectangle aCropRect( aCropLeftTop.Width(), aCropLeftTop.Height(),
+                                 aSrcSize.Width() - aCropRightBottom.Width(),
+                                 aSrcSize.Height() - aCropRightBottom.Height() );
+
+            // convert from prefmapmode to pixel
+            aCropRect = Application::GetDefaultDevice()->LogicToPixel( aCropRect,
+                                                                       aMapGraph );
+
+            aBmpEx.Crop( aCropRect );
+
+            // #104115# Negative crop sizes mean: enlarge bitmap and pad
+            if( aCropLeftTop.Width() < 0 ||
+                aCropLeftTop.Height() < 0 ||
+                aCropRightBottom.Width() < 0 ||
+                aCropRightBottom.Height() < 0 )
+            {
+                Size aBmpSize( aBmpEx.GetSizePixel() );
+                sal_Int32 nPadLeft( aCropLeftTop.Width() < 0 ? -aCropLeftTop.Width() : 0 );
+                sal_Int32 nPadTop( aCropLeftTop.Height() < 0 ? -aCropLeftTop.Height() : 0 );
+                sal_Int32 nPadTotalWidth( aBmpSize.Width() + nPadLeft + (aCropRightBottom.Width() < 0 ? -aCropRightBottom.Width() : 0) );
+                sal_Int32 nPadTotalHeight( aBmpSize.Height() + nPadTop + (aCropRightBottom.Height() < 0 ? -aCropRightBottom.Height() : 0) );
+
+                BitmapEx aBmpEx2;
+
+                if( aBmpEx.IsTransparent() )
+                {
+                    if( aBmpEx.IsAlpha() )
+                        aBmpEx2 = BitmapEx( aBmpEx.GetBitmap(), aBmpEx.GetAlpha() );
+                    else
+                        aBmpEx2 = BitmapEx( aBmpEx.GetBitmap(), aBmpEx.GetMask() );
+                }
+                else
+                {
+                    // #104115# Generate mask bitmap and init to zero
+                    Bitmap aMask( aBmpSize, 1 );
+                    aMask.Erase( Color(0,0,0) );
+
+                    // #104115# Always generate transparent bitmap, we need the border transparent
+                    aBmpEx2 = BitmapEx( aBmpEx.GetBitmap(), aMask );
+
+                    // #104115# Add opaque mask to source bitmap, otherwise the destination remains transparent
+                    aBmpEx = aBmpEx2;
+                }
+
+                aBmpEx2.SetSizePixel( Size(nPadTotalWidth, nPadTotalHeight) );
+                aBmpEx2.Erase( Color(0xFF,0,0,0) );
+                aBmpEx2.CopyPixel( Rectangle( Point(nPadLeft, nPadTop), aBmpSize ), Rectangle( Point(0, 0), aBmpSize ), &aBmpEx );
+                aBmpEx = aBmpEx2;
+            }
+        }
+
+        const Size  aSizePixel( aBmpEx.GetSizePixel() );
+
         if( bRotate && !IsAnimated() )
         {
-            BitmapEx    aBmpEx( aTransGraphic.GetBitmapEx() );
-            const Size  aSizePixel( aBmpEx.GetSizePixel() );
-
             if( aSizePixel.Width() && aSizePixel.Height() && aDstSize.Width() && aDstSize.Height() )
             {
                 double fSrcWH = (double) aSizePixel.Width() / aSizePixel.Height();
@@ -357,9 +491,10 @@ Graphic SdrGrafObj::GetTransformedGraphic( ULONG nTransformFlags ) const
                     fScaleX = fDstWH * aSizePixel.Height() / aSizePixel.Width();
 
                 aBmpEx.Scale( fScaleX, fScaleY );
-                aTransGraphic = aBmpEx;
             }
         }
+
+        aTransGraphic = aBmpEx;
 
         aTransGraphic.SetPrefSize( aDstSize );
         aTransGraphic.SetPrefMapMode( aDstMap );
@@ -367,9 +502,6 @@ Graphic SdrGrafObj::GetTransformedGraphic( ULONG nTransformFlags ) const
 
     if( ( SDRGRAFOBJ_TRANSFORMATTR_NONE != nTransformFlags ) && ( GRAPHIC_NONE != eType ) )
     {
-        ( (SdrGrafObj*) this )->ImpSetAttrToGrafInfo();
-        GraphicAttr aActAttr( aGrafInfo );
-
         if( bMirror )
         {
             USHORT      nMirrorCase = ( aGeo.nDrehWink == 18000 ) ? ( bMirrored ? 3 : 4 ) : ( bMirrored ? 2 : 1 );
