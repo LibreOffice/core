@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-15 21:00:22 $
+ *  last change: $Author: kz $ $Date: 2000-11-24 16:48:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ String RID_GALLERYSTR_THEME_BULLETS
     Text[ spanish ] = "Viñetas";
     Text[ italian ] = "Bullets";
     Text[ danish ] = "Punkttegn";
-    Text[ swedish ] = "Bullets";
+    Text[ swedish ] = "Punkter";
     Text[ polish ] = "Znaki wypunktowania";
     Text[ portuguese_brazilian ] = "Bullets";
     Text[ japanese ] = "‰Óğ‘‚«¼İÎŞÙ";
@@ -216,7 +216,7 @@ String RID_GALLERYSTR_THEME_FLOWCHARTS
     Text[ japanese ] = "ÌÛ°Á¬°Ä";
     Text[ chinese_simplified ] = "¸÷Ê½Í¼±í";
     Text[ chinese_traditional ] = "¦U¦¡¹Ïªí";
-    Text[ arabic ] = "ÑÓæã ÈíÇäíÉ ÇäÓíÇÈíÉ";
+    Text[ arabic ] = "ÊÎØíØÇÊ ÇäÓíÇÈíÉ";
     Text[ greek ] = "ÄéáãñÜììáôá ñïŞò";
     Text[ korean ] = "¼ø¼­µµ";
     Text[ turkish ] = "Akış şemaları";
@@ -351,7 +351,7 @@ String RID_GALLERYSTR_THEME_INTERACTION
     Text[ japanese ] = "²İÀ×¸¼®İ";
     Text[ chinese_simplified ] = "½»»¥Ê½";
     Text[ chinese_traditional ] = "¤¬°Ê¦¡";
-    Text[ arabic ] = "ÃÒÑÇÑ ÊÍßã";
+    Text[ arabic ] = "ãİÇÊíÍ ÊÍßã";
     Text[ greek ] = "Áëëçëåğßäñáóç";
     Text[ korean ] = "»óÈ£ÀÛ¿ë";
     Text[ turkish ] = "Etkileşim";
@@ -463,7 +463,7 @@ String RID_GALLERYSTR_THEME_RULERS
     Text[ENGLISH] = "Rulers";
     Text[english_us] = "Rulers";
     Text[ portuguese ] = "Limites";
-    Text[ russian ] = "Îãğàíè÷åíèÿ";
+    Text[ russian ] = "Ãğàíèöû";
     Text[ dutch ] = "Begrenzingen";
     Text[ french ] = "Règles";
     Text[ spanish ] = "Límites";
