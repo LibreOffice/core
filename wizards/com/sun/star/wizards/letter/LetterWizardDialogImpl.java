@@ -1,15 +1,23 @@
 package com.sun.star.wizards.letter;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Vector;
-
+import com.sun.star.i18n.NumberFormatIndex;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.NoValidPathException;
+import com.sun.star.wizards.common.SystemDialog;
+import com.sun.star.awt.VclWindowPeerAttribute;
+import com.sun.star.awt.XTextComponent;
 import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.NoSuchElementException;
+import com.sun.star.container.XNameAccess;
 import com.sun.star.document.XDocumentInfo;
 import com.sun.star.document.XDocumentInfoSupplier;
 import com.sun.star.uno.AnyConverter;
@@ -20,11 +28,13 @@ import com.sun.star.text.XTextFrame;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.CloseVetoException;
+import com.sun.star.util.DateTime;
 import com.sun.star.util.XCloseable;
 import com.sun.star.wizards.document.*;
 import com.sun.star.wizards.ui.*;
 import com.sun.star.wizards.ui.event.*;
 import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.Helper.DateUtils;
 
 
 
@@ -56,6 +66,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
     String sPath;
     boolean bEditTemplate;
     boolean bSaveSuccess = false;
+    private boolean filenameChanged = false;
 
     LetterDocument.BusinessPaperObject BusCompanyLogo = null;
     LetterDocument.BusinessPaperObject BusCompanyAddress = null;
@@ -76,7 +87,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
     public static void main(String args[]) {
         //only being called when starting wizard remotely
         try {
-            String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";
+            String ConnectStr = "uno:socket,host=127.0.0.1,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";
             XMultiServiceFactory xLocMSF = Desktop.connect(ConnectStr);
             LetterWizardDialogImpl lw = new LetterWizardDialogImpl(xLocMSF);
             lw.startWizard(xLocMSF, null);
@@ -154,19 +165,37 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
     }
 
     public void finishWizard() {
+        switchToStep(getCurrentStep(),getMaxStep());
+        myLetterDoc.setWizardTemplateDocInfo(resources.resLetterWizardDialog_title, resources.resTemplateDescription);
         try {
-            myLetterDoc.xTextDocument.lockControllers();
+            //myLetterDoc.xTextDocument.lockControllers();
             FileAccess fileAccess = new FileAccess(xMSF);
             sPath = myPathSelection.getSelectedPath();
+            if (sPath.equals("")) {
+                myPathSelection.triggerPathPicker();
+                sPath = myPathSelection.getSelectedPath();
+            }
             sPath = fileAccess.getURL(sPath);
             myLetterDoc.killEmptyUserFields();
+
+            //first, if the filename was not changed, thus
+            //it is coming from a saved session, check if the
+            // file exists and warn the user.
+            if (!filenameChanged)
+                if (fileAccess.exists(sPath, true)) {
+
+                    int answer = SystemDialog.showMessageBox(xMSF, xControl.getPeer(), "MessBox", VclWindowPeerAttribute.YES_NO + VclWindowPeerAttribute.DEF_NO, resources.resOverwriteWarning);
+                    if (answer == 3) // user said: no, do not overwrite....
+                        return;
+                }
+
 
             bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath, "writer_StarOffice_XML_Writer_Template", false, "Template could not be saved!");
             if (bSaveSuccess) {
                 saveConfiguration();
                 xWindow.setVisible(false);
                 closeDocument();
-                myLetterDoc.xTextDocument.unlockControllers();
+                //myLetterDoc.xTextDocument.unlockControllers();
                 PropertyValue loadValues[] = new PropertyValue[1];
                 loadValues[0] = new PropertyValue();
                 loadValues[0].Name = "AsTemplate";
@@ -175,7 +204,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
                 } else {
                     loadValues[0].Value = Boolean.TRUE;
                 }
-                Object oDoc = OfficeDocument.load(Desktop.getDesktop(xMSF), sPath, "_blank", new PropertyValue[0]);
+                Object oDoc = OfficeDocument.load(Desktop.getDesktop(xMSF), sPath, "_blank", loadValues);
                 XTextDocument xTextDocument = (com.sun.star.text.XTextDocument) oDoc;
                 XMultiServiceFactory xDocMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
                 ViewHandler myViewHandler = new ViewHandler(xDocMSF, xTextDocument);
@@ -291,7 +320,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
     }
 
     public void lstBusinessStyleItemChanged() {
-        xTextDocument = myLetterDoc.loadTemplate(BusinessFiles[1][lstBusinessStyle.getSelectedItemPos()]);
+        xTextDocument = myLetterDoc.loadAsPreview(BusinessFiles[1][lstBusinessStyle.getSelectedItemPos()], false );
         myLetterDoc.xTextDocument.lockControllers();
         initializeElements();
         chkBusinessPaperItemChanged();
@@ -300,13 +329,13 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
     }
 
     public void lstPrivOfficialStyleItemChanged() {
-        xTextDocument = myLetterDoc.loadTemplate(OfficialFiles[1][lstPrivOfficialStyle.getSelectedItemPos()]);
+        xTextDocument = myLetterDoc.loadAsPreview(OfficialFiles[1][lstPrivOfficialStyle.getSelectedItemPos()] , false );
         initializeElements();
         setElements();
     }
 
     public void lstPrivateStyleItemChanged() {
-        xTextDocument = myLetterDoc.loadTemplate(PrivateFiles[1][lstPrivateStyle.getSelectedItemPos()]);
+        xTextDocument = myLetterDoc.loadAsPreview(PrivateFiles[1][lstPrivateStyle.getSelectedItemPos()] , false );
         initializeElements();
         setElements();
     }
@@ -622,22 +651,34 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
         Helper.setUnoPropertyValue(xDocInfo, "Title", TitleName);
     }
 
+
+
     public void chkUseSalutationItemChanged() {
-        myLetterDoc.switchUserField("Salutation", lstSalutation.getSelectedItem(), (chkUseSalutation.getState() != 0));
+        XTextComponent xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstSalutation);
+        myLetterDoc.switchUserField("Salutation", xTextComponent.getText(), (chkUseSalutation.getState() != 0));
         setControlProperty("lstSalutation", "Enabled", new Boolean(chkUseSalutation.getState() != 0));
     }
 
     public void lstSalutationItemChanged() {
-        myLetterDoc.switchUserField("Salutation", lstSalutation.getSelectedItem(), (chkUseSalutation.getState() != 0));
+        XTextComponent xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstSalutation);
+        myLetterDoc.switchUserField("Salutation", xTextComponent.getText(), (chkUseSalutation.getState() != 0));
+    }
+
+    public void lstSalutationTextChanged() {
     }
 
     public void chkUseGreetingItemChanged() {
-        myLetterDoc.switchUserField("Greeting", lstGreeting.getSelectedItem(), (chkUseGreeting.getState() != 0));
+        XTextComponent xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstGreeting);
+        myLetterDoc.switchUserField("Greeting", xTextComponent.getText(), (chkUseGreeting.getState() != 0));
         setControlProperty("lstGreeting", "Enabled", new Boolean(chkUseGreeting.getState() != 0));
     }
 
     public void lstGreetingItemChanged() {
-        myLetterDoc.switchUserField("Greeting", lstGreeting.getSelectedItem(), (chkUseGreeting.getState() != 0));
+        XTextComponent xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstGreeting);
+        myLetterDoc.switchUserField("Greeting", xTextComponent.getText(), (chkUseGreeting.getState() != 0));
+    }
+
+    public void lstGreetingTextChanged() {
     }
 
     //  ----------------------------------------------------------------------------
@@ -738,8 +779,8 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
         //To add new Languages please modify this method and LetterWizardDialogResources.java
         Norms = new String[2];
 
-        Norms[0] = "english_us";
-        Norms[1] = "german";
+        Norms[0] = "en-US";
+        Norms[1] = "de";
 
         setControlProperty("lstLetterNorm", "StringItemList", resources.LanguageLabels);
 
@@ -786,9 +827,6 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
             return true;
         } catch (NoValidPathException nopathexception) {
             nopathexception.printStackTrace();
-            return false;
-        } catch (Exception exception) {
-            exception.printStackTrace();
             return false;
         }
     }
@@ -847,12 +885,22 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
         setCurrentRoadmapItemID((short) 1);
     }
 
+    private class myPathSelectionListener implements XPathSelectionListener {
+        public void validatePath() {
+            if (myPathSelection.usedPathPicker) {
+                filenameChanged = true;
+            }
+            myPathSelection.usedPathPicker = false;
+        }
+    }
+
     public void insertPathSelectionControl() {
         myPathSelection = new PathSelection(xMSF, this, PathSelection.TransferMode.SAVE, PathSelection.DialogTypes.FILE);
-        myPathSelection.insert(6, 97, 70, 205, (short) 45, "Path", true, "HID:" + ( HID + 47 ), "HID:" + ( HID + 48 ));
+        myPathSelection.insert(6, 97, 70, 205, (short) 45, resources.reslblTemplatePath_value, true, "HID:" + ( HID + 47 ), "HID:" + ( HID + 48 ));
         myPathSelection.sDefaultDirectory = sUserTemplatePath;
         myPathSelection.sDefaultName = "myLetterTemplate.stw";
         myPathSelection.sDefaultFilter = "writer_StarOffice_XML_Writer_Template";
+        myPathSelection.addSelectionListener(new myPathSelectionListener());
     }
 
 
@@ -896,8 +944,8 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
             letterDA.add(UnoDataAware.attachCheckBox(cgl, "cp_PrintBendMarks", chkUseBendMarks, null, true));
             letterDA.add(UnoDataAware.attachCheckBox(cgl, "cp_PrintGreeting", chkUseGreeting, null, true));
             letterDA.add(UnoDataAware.attachCheckBox(cgl, "cp_PrintFooter", chkUseFooter, null, true));
-            letterDA.add(UnoDataAware.attachListBox(cgl, "cp_Salutation", lstSalutation, null, true));
-            letterDA.add(UnoDataAware.attachListBox(cgl, "cp_Greeting", lstGreeting, null, true));
+            letterDA.add(UnoDataAware.attachEditControl(cgl, "cp_Salutation", lstSalutation, null, true));
+            letterDA.add(UnoDataAware.attachEditControl(cgl, "cp_Greeting", lstGreeting, null, true));
             letterDA.add(RadioDataAware.attachRadioButtons(cgl, "cp_SenderAddressType", new Object[] { optSenderDefine, optSenderPlaceholder }, null, true));
             letterDA.add(UnoDataAware.attachEditControl(cgl, "cp_SenderCompanyName", txtSenderName, null, true));
             letterDA.add(UnoDataAware.attachEditControl(cgl, "cp_SenderStreet", txtSenderStreet, null, true));
