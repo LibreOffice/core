@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen5.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-16 16:11:05 $
+ *  last change: $Author: er $ $Date: 2001-02-26 13:56:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -680,7 +680,9 @@ void ScDocument::UpdateChartListenerCollection()
                             if ( aIPObj.Is() && SchModuleDummy::HasID( *aIPObj->GetSvFactory() ) )
                             {
                                 SchMemChart* pChartData = SchDLL::GetChartData(aIPObj);
-                                if ( pChartData )
+                                // #84359# No SomeData1 => manually inserted
+                                // OLE object => no listener at ScAddress(0,0,0)
+                                if ( pChartData && pChartData->SomeData1().Len() )
                                 {
                                     bIsChart = TRUE;
 
