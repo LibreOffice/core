@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlaccelcfg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:52:51 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,9 @@
 
 #include <vector>
 #if OSL_DEBUG_LEVEL == 0
-#define NDEBUG
+#  ifndef NDEBUG
+#    define NDEBUG
+#  endif
 #endif
 #include <assert.h>
 
