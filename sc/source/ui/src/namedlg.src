@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namedlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:05 $
+ *  last change: $Author: rt $ $Date: 2000-11-15 21:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
  // (C) 1994-96 StarDivision GmbH, Hamburg, Germany
  //
  // $Workfile:   namedlg.src  $
- //   $Author: hr $
- //     $Date: 2000-09-18 16:45:05 $
- // $Revision: 1.1.1.1 $
+ //   $Author: rt $
+ //     $Date: 2000-11-15 21:33:01 $
+ // $Revision: 1.2 $
  //  $Logfile:   T:/sc/source/ui/src/namedlg.srv  $
  //---------------------------------------------------------------------------
 
@@ -268,6 +268,7 @@ ModelessDialog RID_SCDLG_NAMES
         QuickHelpText[ greek ] = "”мяксхнуз";
         QuickHelpText[ korean ] = "Min/Max";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Verkleinern";
     };
     MoreButton BTN_MORE
     {
