@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlinfo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2001-03-20 16:49:27 $
+ *  last change: $Author: aw $ $Date: 2001-05-29 09:03:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ const Rectangle& OutlinerInfo::GetParaRect( const ULONG nPara ) const
 BOOL OutlinerInfo::GetParaCharCount( const ULONG nPara ) const
 {
     DBG_ASSERT( nPara < nParaCount, "Para out of range!" );
-    return pParagraphs[ nPara ].nCharCount;
+    return (0 != pParagraphs[ nPara ].nCharCount);
 }
 
 // -----------------------------------------------------------------------------
@@ -175,7 +175,7 @@ IMPL_LINK( OutlinerInfo, DrawPortionHdl, DrawPortionInfo*, pDInfo )
 
     if(IsVertical())
     {
-        aStart.X() = pDInfo->rStartPos.X() + aTextOffset.X();
+        aStart.X() = pDInfo->rStartPos.X() + aTextOffset.X() - pOut->GetFontMetric().GetDescent();
         aStart.Y() = pDInfo->rStartPos.Y() + aTextOffset.Y();
 
         if( bInit )
@@ -185,23 +185,29 @@ IMPL_LINK( OutlinerInfo, DrawPortionHdl, DrawPortionInfo*, pDInfo )
         }
         else if( pDInfo->nPara != nCurPara )
         {
-            pParagraphs[ nCurPara = pDInfo->nPara ].aRect = Rectangle( aStart.X(), aStart.Y(), aParaBound.Right(), aParaBound.Bottom() );
+            pParagraphs[ nCurPara = pDInfo->nPara ].aRect = Rectangle( aParaBound.Left(), aStart.Y(),
+                aTextOffset.X() + pDInfo->rStartPos.X() + pOut->GetFontMetric().GetAscent(),
+                aParaBound.Bottom() );
 
             Point aPt1Pix( pOut->LogicToPixel( pParagraphs[ nCurPara - 1 ].aRect.TopRight() ) );
             Point aPt2Pix( pOut->LogicToPixel( pParagraphs[ nCurPara ].aRect.TopRight() ) );
-            Size aSizePix( pOut->PixelToLogic( Size( aPt2Pix.X() - aPt1Pix.X() + 1 , 0 ) ) );
-            pParagraphs[ nCurPara - 1 ].aRect.SetSize( Size( aSizePix.Width() , pParagraphs[ nCurPara - 1 ].aRect.GetWidth() ) );
+            Size aSizePix( pOut->PixelToLogic( Size( aPt1Pix.X() - aPt2Pix.X() + 1 , 0 ) ) );
+            pParagraphs[ nCurPara - 1 ].aRect = Rectangle(
+                Point(pParagraphs[ nCurPara - 1 ].aRect.TopRight().X() - aSizePix.Width() , pParagraphs[ nCurPara - 1 ].aRect.TopRight().Y()),
+                Size(aSizePix.Width(), pParagraphs[ nCurPara - 1 ].aRect.GetHeight()));
         }
-        else if( pDInfo->nPara != nCurPara )
+        else if( aStart.X() >= pParagraphs[ nCurPara ].aRect.Right() )
         {
-            pParagraphs[ nCurPara ].aRect.Top() = aStart.Y();
+            pParagraphs[ nCurPara ].aRect.Right() = aStart.X();
 
             if( nCurPara )
             {
                 Point aPt1Pix( pOut->LogicToPixel( pParagraphs[ nCurPara - 1 ].aRect.TopRight() ) );
                 Point aPt2Pix( pOut->LogicToPixel( pParagraphs[ nCurPara ].aRect.TopRight() ) );
-                Size aSizePix( pOut->PixelToLogic( Size( 0, aPt2Pix.Y() - aPt1Pix.Y() + 1 ) ) );
-                pParagraphs[ nCurPara - 1 ].aRect.SetSize( Size( pParagraphs[ nCurPara - 1 ].aRect.GetWidth(), aSizePix.Height() ) );
+                Size aSizePix( pOut->PixelToLogic( Size( aPt1Pix.X() - aPt2Pix.X() + 1, 0 ) ) );
+                pParagraphs[ nCurPara - 1 ].aRect = Rectangle(
+                    Point(pParagraphs[ nCurPara - 1 ].aRect.TopRight().X() - aSizePix.Width() , pParagraphs[ nCurPara - 1 ].aRect.TopRight().Y()),
+                    Size(aSizePix.Width(), pParagraphs[ nCurPara - 1 ].aRect.GetHeight()));
             }
         }
 
@@ -211,7 +217,9 @@ IMPL_LINK( OutlinerInfo, DrawPortionHdl, DrawPortionInfo*, pDInfo )
 
             for( USHORT nCharIndex = 0; nCharIndex < nCharCount; nCharIndex++ )
             {
-                const Rectangle aRect( aStart, pDInfo->rFont.GetPhysTxtSize( pOut, pDInfo->rText, nCharIndex, 1 ) );
+                Size aCharSize(pDInfo->rFont.GetPhysTxtSize( pOut, pDInfo->rText, nCharIndex, 1 ));
+                Size aMirroredCharSize(aCharSize.Height(), aCharSize.Width());
+                const Rectangle aRect( aStart, aMirroredCharSize );
 
                 aCharacterList.Insert( new OutlinerCharacter( aRect, pDInfo->nPara,
                                                               pDInfo->rFont.GetColor(),
@@ -225,7 +233,7 @@ IMPL_LINK( OutlinerInfo, DrawPortionHdl, DrawPortionInfo*, pDInfo )
     else
     {
         aStart.X() = pDInfo->rStartPos.X() + aTextOffset.X();
-        aStart.Y() = pDInfo->rStartPos.Y() + aTextOffset.Y() - pOut->GetFontMetric().GetAscent() ;
+        aStart.Y() = pDInfo->rStartPos.Y() + aTextOffset.Y() - pOut->GetFontMetric().GetAscent();
 
         if( bInit )
         {
