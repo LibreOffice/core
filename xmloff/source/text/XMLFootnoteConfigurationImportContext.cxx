@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteConfigurationImportContext.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:31:25 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,8 +434,10 @@ SvXMLImportContext *XMLFootnoteConfigurationImportContext::CreateChildContext(
 }
 
 
-void XMLFootnoteConfigurationImportContext::CreateAndInsertLate(
-    sal_Bool bOverwrite )
+// --> OD 2005-01-31 #i40597# - rename method <CreateAndInsertLate(..)> to
+// <Finish(..)>
+void XMLFootnoteConfigurationImportContext::Finish( sal_Bool bOverwrite )
+// <--
 {
 
     if (bOverwrite)
@@ -537,5 +539,3 @@ void XMLFootnoteConfigurationImportContext::SetEndNotice(
 {
     sEndNotice = sText;
 }
-
-
