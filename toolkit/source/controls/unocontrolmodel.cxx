@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-08 12:32:43 $
+ *  last change: $Author: fs $ $Date: 2002-12-02 10:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,14 +426,21 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 nPropId )
 
                 // extract the bank symbol
                 sal_Int32 nSepPos = sDefaultCurrency.indexOf( '-' );
-                ::rtl::OUString sBankSymbol = sDefaultCurrency.copy( 0, nSepPos );
-                sDefaultCurrency = sDefaultCurrency.copy( nSepPos + 1 );
+                ::rtl::OUString sBankSymbol;
+                if ( nSepPos >= 0 )
+                {
+                    sBankSymbol = sDefaultCurrency.copy( 0, nSepPos );
+                    sDefaultCurrency = sDefaultCurrency.copy( nSepPos + 1 );
+                }
 
                 // the remaming is the locale
                 Locale aLocale;
                 nSepPos = sDefaultCurrency.indexOf( '-' );
-                aLocale.Language = sDefaultCurrency.copy( 0, nSepPos );
-                aLocale.Country = sDefaultCurrency.copy( nSepPos + 1 );
+                if ( nSepPos >= 0 )
+                {
+                    aLocale.Language = sDefaultCurrency.copy( 0, nSepPos );
+                    aLocale.Country = sDefaultCurrency.copy( nSepPos + 1 );
+                }
 
                 LocaleDataWrapper aLocaleInfo( ::comphelper::getProcessServiceFactory(), aLocale );
                 if ( !sBankSymbol.getLength() )
