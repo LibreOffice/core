@@ -8,12 +8,10 @@ mkdir: %COMMON_DEST%\bin%_EXT%\hid
 ..\%__SRC%\bin\basctl*.res %_DEST%\bin%_EXT%\basctl*.res
 ..\%__SRC%\misc\basctl*.map %_DEST%\bin%_EXT%\basctl*.map
 ..\%__SRC%\misc\basctl.csv %_DEST%\inc%_EXT%\basctl.csv
-..\%__SRC%\slb\ybctl.lib %_DEST%\lib%_EXT%\ybctl.lib
 
 del %_DEST%\inc%_EXT%\basslots.hxx
 
 mkdir: %_DEST%\inc%_EXT%\basctl
-hedabu: ..\inc\iderdll.hxx %_DEST%\inc%_EXT%\basctl\iderdll.hxx
 
 ..\util\basctl.xml %_DEST%\xml%_EXT%\basctl.xml
 
