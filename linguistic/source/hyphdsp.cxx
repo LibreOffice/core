@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphdsp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-24 13:59:39 $
+ *  last change: $Author: vg $ $Date: 2003-06-24 07:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #endif
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
 #endif
 #ifndef _TOOLS_DEBUG_HXX //autogen wg. DBG_ASSERT
 #include <tools/debug.hxx>
@@ -322,6 +325,13 @@ Reference< XHyphenatedWord > SAL_CALL
     else
     {
         OUString aChkWord( rWord );
+
+        // replace typographical apostroph by ascii apostroph
+        String aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
+        DBG_ASSERT( 1 == aSingleQuote.Len(), "unexpectend length of quotation mark" );
+        if (aSingleQuote.Len())
+            aChkWord = aChkWord.replace( aSingleQuote.GetChar(0), '\'' );
+
         bWordModified |= RemoveHyphens( aChkWord );
         if (IsIgnoreControlChars( rProperties, GetPropSet() ))
             bWordModified |= RemoveControlChars( aChkWord );
@@ -442,6 +452,13 @@ Reference< XHyphenatedWord > SAL_CALL
     else
     {
         OUString aChkWord( rWord );
+
+        // replace typographical apostroph by ascii apostroph
+        String aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
+        DBG_ASSERT( 1 == aSingleQuote.Len(), "unexpectend length of quotation mark" );
+        if (aSingleQuote.Len())
+            aChkWord = aChkWord.replace( aSingleQuote.GetChar(0), '\'' );
+
         bWordModified |= RemoveHyphens( aChkWord );
         if (IsIgnoreControlChars( rProperties, GetPropSet() ))
             bWordModified |= RemoveControlChars( aChkWord );
@@ -558,6 +575,13 @@ Reference< XPossibleHyphens > SAL_CALL
     else
     {
         OUString aChkWord( rWord );
+
+        // replace typographical apostroph by ascii apostroph
+        String aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
+        DBG_ASSERT( 1 == aSingleQuote.Len(), "unexpectend length of quotation mark" );
+        if (aSingleQuote.Len())
+            aChkWord = aChkWord.replace( aSingleQuote.GetChar(0), '\'' );
+
         RemoveHyphens( aChkWord );
         if (IsIgnoreControlChars( rProperties, GetPropSet() ))
             RemoveControlChars( aChkWord );
