@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-04 11:38:34 $
+ *  last change: $Author: kz $ $Date: 2002-02-05 22:07:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,7 +395,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ danish ] = "Nummerering" ;
         Text [ italian ] = "Numerazione" ;
         Text [ spanish ] = "Nu~meraciÛn" ;
-        Text [ french ] = "~NumÈrotation" ;
+        Text [ french ] = "NumÈrotation" ;
         Text [ dutch ] = "~Nummering" ;
         Text [ portuguese_brazilian ] = "~Numerierung" ;
         Text [ portuguese ] = "~NumeraÁ„o" ;
@@ -754,7 +754,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ portuguese ] = "¿ fr~ente" ;
         Text [ finnish ] = "Ennen" ;
         Text [ danish ] = "F¯r" ;
-        Text [ french ] = "De~vant" ;
+        Text [ french ] = "Devant" ;
         Text [ swedish ] = "Fra~mfˆr" ;
         Text [ dutch ] = "~Ervoor" ;
         Text [ spanish ] = "~Delante" ;
@@ -1068,7 +1068,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ portuguese_brazilian ] = "~Alignment";
         Text[ portuguese ] = "~Alinhamento";
         Text[ danish ] = "Justering";
-        Text[ french ] = "~Alignement";
+        Text[ french ] = "Alignement";
         Text[ swedish ] = "~Justering";
         Text[ dutch ] = "~Uitlijnen";
         Text[ spanish ] = "~AlineaciÛn";
@@ -1241,7 +1241,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ portuguese ] = "~Car·cter" ;
         Text [ finnish ] = "Merkki" ;
         Text [ danish ] = "Tegn" ;
-        Text [ french ] = "~CaractËre" ;
+        Text [ french ] = "CaractËres" ;
         Text [ swedish ] = "Te~cken" ;
         Text [ dutch ] = "~Teken" ;
         Text [ spanish ] = "C~ar·cter" ;
@@ -1369,7 +1369,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ danish ] = "VÊlg..." ;
         Text [ italian ] = "Scelta..." ;
         Text [ spanish ] = "Selec~ciÛn..." ;
-        Text [ french ] = "~SÈlection..." ;
+        Text [ french ] = "SÈlection..." ;
         Text [ dutch ] = "Sele~ctie..." ;
         Text [ portuguese ] = "~Seleccionar..." ;
         Text[ chinese_simplified ] = "ÈÄâÊã©...";
@@ -1523,7 +1523,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ danish ] = "Justering" ;
         Text [ italian ] = "Allineamento" ;
         Text [ spanish ] = "~OrientaciÛn" ;
-        Text [ french ] = "~Alignement" ;
+        Text [ french ] = "Alignement" ;
         Text [ dutch ] = "~Uitlijning" ;
         Text [ portuguese ] = "A~linhamento" ;
         Text[ chinese_simplified ] = "ÂØπÈΩê";
@@ -2032,7 +2032,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text [ danish ] = "Relativ" ;
         Text [ italian ] = "Relativo" ;
         Text [ spanish ] = "Relati~vo" ;
-        Text [ french ] = "~Relatif" ;
+        Text [ french ] = "Relatif" ;
         Text [ dutch ] = "Relati~ef" ;
         Text[ chinese_simplified ] = "Áõ∏ÂØπÁöÑ(~V)";
         Text[ russian ] = "ŒÚÌÓÒËÚÂÎ¸ÌÓ";
