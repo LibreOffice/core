@@ -42,11 +42,9 @@ public class AccessibilityTree
     */
     public AccessibilityTree (
         MessageInterface aMessageDisplay,
-        Canvas aCanvas,
         Print aPrinter)
     {
         maMessageDisplay = aMessageDisplay;
-        maCanvas = aCanvas;
         maPrinter = aPrinter;
 
         AccessibilityTreeModel aModel =
@@ -54,7 +52,6 @@ public class AccessibilityTree
                 new StringNode ("Please press Update button", null),
                 aMessageDisplay,
                 aPrinter);
-        aModel.setCanvas (maCanvas);
         setModel (aModel);
 
         maCellRenderer = new AccessibleTreeCellRenderer();
@@ -68,7 +65,11 @@ public class AccessibilityTree
     }
 
 
-
+    public void SetCanvas (Canvas aCanvas)
+    {
+        maCanvas = aCanvas;
+        ((AccessibilityTreeModel)getModel()).setCanvas (maCanvas);
+    }
 
     /** Predicate class to determine whether a node should be expanded
      * For use with expandTree method */

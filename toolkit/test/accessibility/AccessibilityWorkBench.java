@@ -126,48 +126,15 @@ public class AccessibilityWorkBench
     */
     public void Layout  ()
     {
-        setSize (new Dimension (1024,768));
-        maMainPanel = new JPanel();
-        this.getContentPane().add (maMainPanel);
-        GridBagLayout aLayout = new GridBagLayout ();
         JScrollPane aScrollPane;
+        GridBagConstraints constraints;
 
-        //  Text output area.
-        maOutputArea = new JTextArea (5,50);
-        maScrollPane = new JScrollPane(maOutputArea,
-            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-            JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        GridBagConstraints constraints = new GridBagConstraints ();
-        constraints.gridx = 1;
-        constraints.gridy = 1;
-        constraints.gridwidth = 1;
-        constraints.gridheight = 1;
-        constraints.weightx = 3;
-        constraints.weighty = 1;
-        constraints.fill = GridBagConstraints.BOTH;
-        aLayout.addLayoutComponent (maScrollPane, constraints);
-        maMainPanel.add (maScrollPane);
-
-        //  Canvas.
-        maCanvas = new Canvas (this);
-        maCanvas.setPreferredSize (new Dimension (1050,1050));
-        aScrollPane = new JScrollPane(maCanvas,
-            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS/*AS_NEEDED*/,
-            JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS/*AS_NEEDED*/);
-        constraints = new GridBagConstraints ();
-        constraints.gridx = 1;
-        constraints.gridy = 0;
-        constraints.gridwidth = 1;
-        constraints.gridheight = 1;
-        constraints.weightx = 3;
-        constraints.weighty = 3;
-        constraints.fill = GridBagConstraints.BOTH;
-        aLayout.addLayoutComponent (aScrollPane, constraints);
-        maMainPanel.add (aScrollPane);
+        // Create new layout.
+        GridBagLayout aLayout = new GridBagLayout ();
+        getContentPane().setLayout (aLayout);
 
         //  Accessible Tree.
-        maTree = new AccessibilityTree (this, maCanvas, this);
-        maCanvas.setTree (maTree);
+        maTree = new AccessibilityTree ((MessageInterface)this, (Print)this);
         aScrollPane = new JScrollPane(maTree,
             JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
             JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -179,8 +146,40 @@ public class AccessibilityWorkBench
         constraints.weightx = 2;
         constraints.weighty = 1;
         constraints.fill = GridBagConstraints.BOTH;
-        aLayout.addLayoutComponent (aScrollPane, constraints);
-        maMainPanel.add (aScrollPane);
+        getContentPane().add (aScrollPane, constraints);
+
+        //  Canvas.
+        maCanvas = new Canvas (this);
+        maCanvas.setTree (maTree);
+        maTree.SetCanvas (maCanvas);
+        maCanvas.setPreferredSize (new Dimension (1000,800));
+        aScrollPane = new JScrollPane(maCanvas,
+            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS/*AS_NEEDED*/,
+            JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS/*AS_NEEDED*/);
+        constraints = new GridBagConstraints ();
+        constraints.gridx = 1;
+        constraints.gridy = 0;
+        constraints.gridwidth = 1;
+        constraints.gridheight = 1;
+        constraints.weightx = 3;
+        constraints.weighty = 3;
+        constraints.fill = GridBagConstraints.BOTH;
+        getContentPane().add (aScrollPane, constraints);
+
+        //  Text output area.
+        maOutputArea = new JTextArea (5,50);
+        maScrollPane = new JScrollPane(maOutputArea,
+            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+            JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        constraints = new GridBagConstraints ();
+        constraints.gridx = 1;
+        constraints.gridy = 1;
+        constraints.gridwidth = 1;
+        constraints.gridheight = 1;
+        constraints.weightx = 3;
+        constraints.weighty = 1;
+        constraints.fill = GridBagConstraints.BOTH;
+        getContentPane().add (maScrollPane, constraints);
 
         //  Message output area.
         maMessageArea = new JTextArea (5,20);
@@ -192,13 +191,12 @@ public class AccessibilityWorkBench
         constraints.weightx = 3;
         constraints.weighty = 0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        aLayout.addLayoutComponent (maMessageArea, constraints);
-        maMainPanel.add (maMessageArea);
+        getContentPane().add (maMessageArea, constraints);
 
         // Button bar.
         maButtonBar = new JPanel();
         GridBagLayout aButtonLayout = new GridBagLayout ();
-        maButtonBar.setLayout (aLayout);
+        maButtonBar.setLayout (new FlowLayout());
         constraints = new GridBagConstraints ();
         constraints.gridx = 0;
         constraints.gridy = 3;
@@ -206,8 +204,7 @@ public class AccessibilityWorkBench
         constraints.weightx = 1;
         constraints.anchor = GridBagConstraints.WEST;
         constraints.fill = GridBagConstraints.BOTH;
-        aLayout.setConstraints (maButtonBar, constraints);
-        maMainPanel.add (maButtonBar);
+        getContentPane().add (maButtonBar, constraints);
 
         //  Buttons.
         aConnectButton = createButton ("Connect", "connect");
@@ -248,11 +245,26 @@ public class AccessibilityWorkBench
         aOptionsMenu.add (aCBItem);
         aCBItem.addActionListener (this);
 
-        maMainPanel.setLayout (aLayout);
-        getContentPane().add ("Center", maMainPanel);
-        maMainPanel.setVisible (true);
-        setVisible (true);
         setTitle("Accessibility Workbench " + msVersion);
+
+        pack ();
+        setVisible (true);
+        repaint();
+    }
+
+
+    /** Create a new button and place at the right most position into the
+        button bar.
+    */
+    public JButton createButton (String title, String command)
+    {
+        JButton aButton = new JButton (title);
+        aButton.setEnabled (false);
+        aButton.setActionCommand (command);
+        aButton.addActionListener (this);
+
+        maButtonBar.add (aButton);
+        return aButton;
     }
 
 
@@ -346,26 +358,6 @@ public class AccessibilityWorkBench
         {
             System.out.println ("caught exception while writing options file : " + e);
         }
-    }
-
-
-    /** Create a new button and place at the right most position into the
-        button bar.
-    */
-    public JButton createButton (String title, String command)
-    {
-        JButton aButton = new JButton (title);
-        aButton.setEnabled (false);
-        aButton.setActionCommand (command);
-        aButton.addActionListener (this);
-        GridBagConstraints constraints = new GridBagConstraints ();
-        constraints.gridx = maButtonBar.getComponentCount();
-        constraints.gridy = 0;
-        GridBagLayout aLayout = (GridBagLayout)maButtonBar.getLayout();
-
-        aLayout.setConstraints (aButton, constraints);
-        maButtonBar.add (aButton);
-        return aButton;
     }
 
 
