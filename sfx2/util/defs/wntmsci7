@@ -8294,3 +8294,4 @@ _TI3?AVWrappedTargetRuntimeException@lang@star@sun@com@@
 ?s_pType_com_sun_star_task_XInteractionRequest@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXInteractionRequest@task@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
 ?GetDialogParent@SfxObjectShell@@QAEPAVWindow@@PAVSfxMedium@@@Z
 ?lcl_translateBasic2Uno@?%O:\SRC641\src\sfx2\source\doc\objmisc.cxx1715724085@@YAXABVSbxVariableRef@@PAX@Z
+?lcl_translateBasic2Uno@?%O:\SRC641\src\sfx2\source\doc\objmisc.cxx236053869@@YAXABVSbxVariableRef@@PAX@Z
