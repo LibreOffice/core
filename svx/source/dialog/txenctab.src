@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txenctab.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:45:49 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:45:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1457,6 +1457,70 @@ ItemList [ language_user1 ] =
         < "ÔÑÞ ÃæÑæÈÇ (ISO-8859-13)"                            ; RTL_TEXTENCODING_ISO_8859_13      ; > ;
         < "ÇáßæÑíÉ (EUC-KR)"                                ; RTL_TEXTENCODING_EUC_KR           ; > ;
         < "ÇáßæÑíÉ (Windows-Johab-1361)"                    ; RTL_TEXTENCODING_MS_1361          ; > ;
+        < "Unicode"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
+    };
+    ItemList [ catalan ] =
+    {
+            < "Europa occidental (Windows-1252/WinLatin 1)"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Europa occidental (Apple Macintosh)"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Europa occidental (DOS/OS2-850/Internacional)"                                           ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Europa occidental (DOS/OS2-437/US)"                                          ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Europa occidental (DOS/OS2-860/Portugués)"                                           ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Europa occidental (DOS/OS2-861/Islandés)"                                            ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Europa occidental (DOS/OS2-863/Francés(Cand.))"                                          ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Europa occidental (DOS/OS2-865/Nórdico)"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Europa occidental (ASCII/US)"                                            ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Europa occidental (ISO-8859-1)"                                          ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Europa oriental (ISO-8859-2)"                                            ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Latín 3 (ISO-8859-3)"                                            ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Báltico (ISO-8859-4)"                                            ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Cirílico (ISO-8859-5)"                                           ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Griego (ISO-8859-7)"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Turco (ISO-8859-9)"                                          ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Europa occidental (ISO-8859-14)"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Europa occidental (ISO-8859-15/EURO)"                                            ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Griego (DOS/OS2-737)"                                            ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Báltico (DOS/OS2-775)"                                           ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Europa oriental (DOS/OS2-852)"                                           ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Cirílico (DOS/OS2-855)"                                          ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Turco (DOS/OS2-857)"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Cirílico (DOS/OS2-866/Ruso)"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Griego (DOS/OS2-869/Moderno)"                                            ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Europa oriental (Windows-1250/WinLatin 2)"                                           ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Cirílico (Windows-1251)"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Griego (Windows-1253)"                                           ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Turco (Windows-1254)"                                            ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Báltico (Windows-1257)"                                          ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Europa oriental (Apple Macintosh)"                                           ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Europa oriental (Apple Macintosh/Croata)"                                            ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Cirílico (Apple Macintosh)"                                          ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Griego (Apple Macintosh)"                                            ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Europa occidental (Apple Macintosh/Islandés)"                                            ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Europa oriental (Apple Macintosh/Rumano)"                                            ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Turco (Apple Macintosh)"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Cirílico (Apple Macintosh/Ucraniano)"                                            ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Chino simplificado (Apple Macintosh)"                                            ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Chino tradicional (Apple Macintosh)"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Japonés (Apple Macintosh)"                                           ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Coreano (Apple Macintosh)"                                           ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Japonés (Windows-932)"                                           ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Chino simplificado (Windows-936)"                                            ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Coreano (Windows-949)"                                           ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Chino tradicional (Windows-950)"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Japonés (Shift-JIS)"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Chino simplificado (GB-2312)"                                            ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Chino tradicional (GBT-12345)"                                           ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Chino simplificado (GBK/GB-2312-80)"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Chino tradicional (BIG5)"                                            ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Japonés (EUC-JP)"                                            ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Chino simplificado (EUC-CN)"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Cirílico (KOI8-R)"                                           ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Unicode (UTF-7)"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Unicode (UTF-8)"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Europa oriental (ISO-8859-10)"                                           ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Europa oriental (ISO-8859-13)"                                           ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Coreano (EUC-KR)"                                            ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "Coreano (Windows-Johab-1361)"                                            ; RTL_TEXTENCODING_UCS2             ; > ;
         < "Unicode"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
     };
     };
