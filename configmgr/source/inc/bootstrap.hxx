@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:53 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:28:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,12 +96,10 @@
 // ---------------------------------------------------------------------------------------
 #define A_DefaultProviderSingletonName "com.sun.star.configuration.theDefaultProvider"
 #define K_DefaultBackendSingletonName       "com.sun.star.configuration.backend.theDefaultBackend"
-#define K_DefaultSingleBackendSingletonName "com.sun.star.configuration.backend.theDefaultSingleBackend"
 #define A_BootstrapContextSingletonName     "com.sun.star.configuration.bootstrap.theBootstrapContext"
 // -------------------------------------------------------------------------
 #define A_DefaultProviderServiceAndImplName     "com.sun.star.configuration.DefaultProvider"
 #define K_DefaultBackendServiceAndImplName         "com.sun.star.configuration.backend.DefaultBackend"
-#define K_DefaultSingleBackendServiceAndImplName   "com.sun.star.configuration.backend.DefaultSingleBackend"
 // ---------------------------------------------------------------------------------------
 namespace configmgr
 {
