@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-14 11:06:48 $
+ *  last change: $Author: tl $ $Date: 2002-09-12 13:17:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -705,9 +705,13 @@ OUString SwXTextPortion::getPresentation(sal_Bool bShowCommand) throw( uno::Runt
 /*-- 11.12.98 09:56:59---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextPortion::attach(const uno::Reference< XTextRange > & xTextRange) throw( lang::IllegalArgumentException, uno::RuntimeException )
+void SwXTextPortion::attach(const uno::Reference< XTextRange > & xTextRange)
+    throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
-
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    // SwXTextPortion cannot be created at the factory therefore
+    // they cannot be attached
+    throw uno::RuntimeException();
 }
 /*-- 11.12.98 09:57:00---------------------------------------------------
 
