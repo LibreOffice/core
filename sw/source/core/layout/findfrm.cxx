@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 08:44:20 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,7 +300,7 @@ BOOL SwLayoutFrm::IsAnLower( const SwFrm *pAssumed ) const
         if ( pUp == this )
             return TRUE;
         if ( pUp->IsFlyFrm() )
-            pUp = ((SwFlyFrm*)pUp)->GetAnchor();
+            pUp = ((SwFlyFrm*)pUp)->GetAnchorFrm();
         else
             pUp = pUp->GetUpper();
     }
@@ -555,7 +555,7 @@ SwPageFrm* SwFrm::FindPageFrm()
                  ((SwFlyFreeFrm*)pRet)->GetPage() )
                 pRet = ((SwFlyFreeFrm*)pRet)->GetPage();
             else
-                pRet = ((SwFlyFrm*)pRet)->GetAnchor();
+                pRet = ((SwFlyFrm*)pRet)->AnchorFrm();
         }
         else
             return 0;
@@ -579,7 +579,7 @@ SwFtnBossFrm* SwFrm::FindFtnBossFrm( BOOL bFootnotes )
             if ( ((SwFlyFrm*)pRet)->IsFlyFreeFrm() )
                 pRet = ((SwFlyFreeFrm*)pRet)->GetPage();
             else
-                pRet = ((SwFlyFrm*)pRet)->GetAnchor();
+                pRet = ((SwFlyFrm*)pRet)->AnchorFrm();
         }
         else
             return 0;
@@ -674,7 +674,7 @@ SwFrm* SwFrm::FindFooterOrHeader()
         else if ( pRet->GetUpper() )
             pRet = pRet->GetUpper();
         else if ( pRet->IsFlyFrm() )
-            pRet = ((SwFlyFrm*)pRet)->GetAnchor();
+            pRet = ((SwFlyFrm*)pRet)->AnchorFrm();
         else
             return 0;
     } while ( pRet );
@@ -1284,11 +1284,7 @@ void SwFrm::SetInfFlags()
         else if ( pFrm->IsFtnFrm() )
             bInfFtn = TRUE;
 
-//MA: 06. Apr. 94, oberhalb eines Fly geht es nicht weiter!
-//      if ( pFrm->IsFlyFrm() )
-//          pFrm = ((SwFlyFrm*)pFrm)->GetAnchor();
-//      else
-            pFrm = pFrm->GetUpper();
+        pFrm = pFrm->GetUpper();
 
     } while ( pFrm && !pFrm->IsPageFrm() ); //Oberhalb der Seite kommt nix
 }
@@ -1308,8 +1304,8 @@ void SwFrm::SetDirFlags( BOOL bVert )
         // vertical flag of upper/anchor is valid.
         if( bDerivedVert )
         {
-            SwFrm* pAsk = IsFlyFrm() ?
-                          ((SwFlyFrm*)this)->GetAnchor() : GetUpper();
+            const SwFrm* pAsk = IsFlyFrm() ?
+                          ((SwFlyFrm*)this)->GetAnchorFrm() : GetUpper();
 
             ASSERT( pAsk != this, "Autsch! Stack overflow is about to happen" )
 
@@ -1331,8 +1327,8 @@ void SwFrm::SetDirFlags( BOOL bVert )
             CheckDirection( bVert );
         if( bDerivedR2L )
         {
-            SwFrm* pAsk = IsFlyFrm() ?
-                          ((SwFlyFrm*)this)->GetAnchor() : GetUpper();
+            const SwFrm* pAsk = IsFlyFrm() ?
+                          ((SwFlyFrm*)this)->GetAnchorFrm() : GetUpper();
 
             ASSERT( pAsk != this, "Autsch! Stack overflow is about to happen" )
 
