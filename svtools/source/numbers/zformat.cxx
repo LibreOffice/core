@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: er $ $Date: 2001-10-19 12:55:37 $
+ *  last change: $Author: er $ $Date: 2002-05-31 16:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,6 +222,295 @@ void ImpSvNumberformatInfo::Load(SvStream& rStream, USHORT nAnz)
             >> nCntPre >> nCntPost >> nCntExp;
 }
 
+
+//============================================================================
+
+// static
+BYTE SvNumberNatNum::MapDBNumToNatNum( BYTE nDBNum, LanguageType eLang )
+{
+    BYTE nNatNum = 0;
+    eLang &= 0x03FF;    // 10 bit primary language
+    switch ( nDBNum )
+    {
+        case 1:
+            switch ( eLang )
+            {
+                case (LANGUAGE_CHINESE  & 0x03FF) : nNatNum = 4; break;
+                case (LANGUAGE_JAPANESE & 0x03FF) : nNatNum = 1; break;
+                case (LANGUAGE_KOREAN   & 0x03FF) : nNatNum = 1; break;
+            }
+            break;
+        case 2:
+            switch ( eLang )
+            {
+                case (LANGUAGE_CHINESE  & 0x03FF) : nNatNum = 5; break;
+                case (LANGUAGE_JAPANESE & 0x03FF) : nNatNum = 4; break;
+                case (LANGUAGE_KOREAN   & 0x03FF) : nNatNum = 2; break;
+            }
+            break;
+        case 3:
+            switch ( eLang )
+            {
+                case (LANGUAGE_CHINESE  & 0x03FF) : nNatNum = 3; break;
+                case (LANGUAGE_JAPANESE & 0x03FF) : nNatNum = 5; break;
+                case (LANGUAGE_KOREAN   & 0x03FF) : nNatNum = 3; break;
+            }
+            break;
+        case 4:
+            switch ( eLang )
+            {
+                case (LANGUAGE_JAPANESE & 0x03FF) : nNatNum = 6; break;
+                case (LANGUAGE_KOREAN   & 0x03FF) : nNatNum = 8; break;
+            }
+            break;
+    }
+    return nNatNum;
+}
+
+
+// static
+BYTE SvNumberNatNum::MapNatNumToDBNum( BYTE nNatNum, LanguageType eLang )
+{
+    BYTE nDBNum = 0;
+    eLang &= 0x03FF;    // 10 bit primary language
+    switch ( nNatNum )
+    {
+        case 1:
+            switch ( eLang )
+            {
+                case (LANGUAGE_JAPANESE & 0x03FF) : nDBNum = 1; break;
+                case (LANGUAGE_KOREAN   & 0x03FF) : nDBNum = 1; break;
+            }
+            break;
+        case 2:
+            switch ( eLang )
+            {
+                case (LANGUAGE_KOREAN   & 0x03FF) : nDBNum = 2; break;
+            }
+            break;
+        case 3:
+            switch ( eLang )
+            {
+                case (LANGUAGE_CHINESE  & 0x03FF) : nDBNum = 3; break;
+                case (LANGUAGE_KOREAN   & 0x03FF) : nDBNum = 3; break;
+            }
+            break;
+        case 4:
+            switch ( eLang )
+            {
+                case (LANGUAGE_CHINESE  & 0x03FF) : nDBNum = 1; break;
+                case (LANGUAGE_JAPANESE & 0x03FF) : nDBNum = 2; break;
+            }
+            break;
+        case 5:
+            switch ( eLang )
+            {
+                case (LANGUAGE_CHINESE  & 0x03FF) : nDBNum = 2; break;
+                case (LANGUAGE_JAPANESE & 0x03FF) : nDBNum = 3; break;
+            }
+            break;
+        case 6:
+            switch ( eLang )
+            {
+                case (LANGUAGE_JAPANESE & 0x03FF) : nDBNum = 4; break;
+            }
+            break;
+        case 7:
+            break;
+        case 8:
+            switch ( eLang )
+            {
+                case (LANGUAGE_KOREAN   & 0x03FF) : nDBNum = 4; break;
+            }
+            break;
+    }
+    return nDBNum;
+}
+
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//! TODO: move this temporary table to i18n framework transliteration. There is
+// the only reasonable place for this map.
+
+// static
+String SvNumberNatNum::MapNatNumToModule( BYTE nNatNum, LanguageType eLang )
+{
+    String aRet;
+    switch ( nNatNum )
+    {
+        case 1:
+            switch ( eLang )
+            {
+                case LANGUAGE_CHINESE_SIMPLIFIED :
+                    aRet = String( RTL_CONSTASCII_USTRINGPARAM(
+                                "NumToCharLower_zh_CN" ) );
+                    break;
+                case LANGUAGE_CHINESE_TRADITIONAL :
+                    aRet = String( RTL_CONSTASCII_USTRINGPARAM(
+                                "NumToCharLower_zh_TW" ) );
+                    break;
+                default:
+                    switch ( eLang & 0x03FF )
+                    {
+                        case (LANGUAGE_JAPANESE & 0x03FF) :
+                            aRet = String( RTL_CONSTASCII_USTRINGPARAM(
+                                        "NumToCharKanjiShort_ja_JP" ) );
+                            break;
+                        case (LANGUAGE_KOREAN   & 0x03FF) :
+                            aRet = String( RTL_CONSTASCII_USTRINGPARAM(
+                                        "NumToCharLower_ko" ) );
+                            break;
+                        case (LANGUAGE_THAI     & 0x03FF) :
+                            aRet = String( RTL_CONSTASCII_USTRINGPARAM(
+                                        "NumToChar_th" ) );
+                            break;
+                        case (LANGUAGE_ARABIC   & 0x03FF) :
+                            aRet = String( RTL_CONSTASCII_USTRINGPARAM(
+                                        "NumToCharIndic_ar" ) );
+                            break;
+                        case (LANGUAGE_HINDI    & 0x03FF) :
+                            aRet = String( RTL_CONSTASCII_USTRINGPARAM(
+                                        "NumToCharIndic_hi" ) );
+                            break;
+                    }
+            }
+            break;
+        case 2:
+            switch ( eLang )
+            {
+                case LANGUAGE_CHINESE_SIMPLIFIED :
+                    aRet = String( RTL_CONSTASCII_USTRINGPARAM(
+                                "NumToCharUpper_zh_CN" ) );
+                    break;
+                case LANGUAGE_CHINESE_TRADITIONAL :
+                    aRet = String( RTL_CONSTASCII_USTRINGPARAM(
+                                "NumToCharUpper_zh_TW" ) );
+                    break;
+                default:
+                    switch ( eLang & 0x03FF )
+                    {
+                        case (LANGUAGE_JAPANESE & 0x03FF) :
+                            aRet = String( RTL_CONSTASCII_USTRINGPARAM(
+                                        "NumToCharKanjiTraditional_ja_JP" ) );
+                            break;
+                        case (LANGUAGE_KOREAN   & 0x03FF) :
+                            aRet = String( RTL_CONSTASCII_USTRINGPARAM(
+                                        "NumToCharUpper_ko" ) );
+                            break;
+                    }
+            }
+            break;
+        case 3:
+            aRet = String( RTL_CONSTASCII_USTRINGPARAM(
+                        "NumToCharFullwidth" ) );
+            break;
+        case 4:
+            switch ( eLang )
+            {
+                case LANGUAGE_CHINESE_SIMPLIFIED :
+                    aRet = String( RTL_CONSTASCII_USTRINGPARAM(
+                                "NumToTextLower_zh_CN" ) );
+                    break;
+                case LANGUAGE_CHINESE_TRADITIONAL :
+                    aRet = String( RTL_CONSTASCII_USTRINGPARAM(
+                                "NumToTextLower_zh_TW" ) );
+                    break;
+                default:
+                    switch ( eLang & 0x03FF )
+                    {
+                        case (LANGUAGE_JAPANESE & 0x03FF) :
+                            aRet = String( RTL_CONSTASCII_USTRINGPARAM(
+                                        "NumToTextKanjiLongModern_ja_JP" ) );
+                            break;
+                        case (LANGUAGE_KOREAN   & 0x03FF) :
+                            aRet = String( RTL_CONSTASCII_USTRINGPARAM(
+                                        "NumToTextFormalLower_ko" ) );
+                            break;
+                    }
+            }
+            break;
+        case 5:
+            switch ( eLang )
+            {
+                case LANGUAGE_CHINESE_SIMPLIFIED :
+                    aRet = String( RTL_CONSTASCII_USTRINGPARAM(
+                                "NumToTextUpper_zh_CN" ) );
+                    break;
+                case LANGUAGE_CHINESE_TRADITIONAL :
+                    aRet = String( RTL_CONSTASCII_USTRINGPARAM(
+                                "NumToTextUpper_zh_TW" ) );
+                    break;
+                default:
+                    switch ( eLang & 0x03FF )
+                    {
+                        case (LANGUAGE_JAPANESE & 0x03FF) :
+                            aRet = String( RTL_CONSTASCII_USTRINGPARAM(
+                                        "NumToTextKanjiLongTraditional_ja_JP" ) );
+                            break;
+                        case (LANGUAGE_KOREAN   & 0x03FF) :
+                            aRet = String( RTL_CONSTASCII_USTRINGPARAM(
+                                        "NumToTextFormalUpper_ko" ) );
+                            break;
+                    }
+            }
+            break;
+        case 6:
+                    switch ( eLang & 0x03FF )
+                    {
+                        case (LANGUAGE_JAPANESE & 0x03FF) :
+                            aRet = String( RTL_CONSTASCII_USTRINGPARAM(
+                                        "NumToTextKanjiShortModern_ja_JP" ) );
+                            break;
+                        case (LANGUAGE_KOREAN   & 0x03FF) :
+                            aRet = String( RTL_CONSTASCII_USTRINGPARAM(
+                                        "NumToTextInformalLower_ko" ) );
+                            break;
+                    }
+            break;
+        case 7:
+                    switch ( eLang & 0x03FF )
+                    {
+                        case (LANGUAGE_JAPANESE & 0x03FF) :
+                            aRet = String( RTL_CONSTASCII_USTRINGPARAM(
+                                        "NumToTextKanjiShortTraditional_ja_JP" ) );
+                            break;
+                        case (LANGUAGE_KOREAN   & 0x03FF) :
+                            aRet = String( RTL_CONSTASCII_USTRINGPARAM(
+                                        "NumToTextInformalUpper_ko" ) );
+                            break;
+                    }
+            break;
+        case 8:
+                    switch ( eLang & 0x03FF )
+                    {
+                        case (LANGUAGE_KOREAN   & 0x03FF) :
+                            aRet = String( RTL_CONSTASCII_USTRINGPARAM(
+                                        "NumToCharHangul_ko" ) );
+                            break;
+                    }
+            break;
+        case 9:
+                    switch ( eLang & 0x03FF )
+                    {
+                        case (LANGUAGE_KOREAN   & 0x03FF) :
+                            aRet = String( RTL_CONSTASCII_USTRINGPARAM(
+                                        "NumToTextFormalHangul_ko" ) );
+                            break;
+                    }
+            break;
+        case 10:
+                    switch ( eLang & 0x03FF )
+                    {
+                        case (LANGUAGE_KOREAN   & 0x03FF) :
+                            aRet = String( RTL_CONSTASCII_USTRINGPARAM(
+                                        "NumToTextInformalHangul_ko" ) );
+                            break;
+                    }
+            break;
+    }
+    return aRet;
+}
+
+
 /***********************Funktionen SvNumFor******************************/
 
 ImpSvNumFor::ImpSvNumFor()
@@ -274,7 +563,7 @@ void ImpSvNumFor::Copy( const ImpSvNumFor& rNumFor )
     aI.Copy( rNumFor.aI, nAnzStrings );
     pColor = rNumFor.pColor;
     sColorName = rNumFor.sColorName;
-    aDBNum = rNumFor.aDBNum;
+    aNatNum = rNumFor.aNatNum;
 }
 
 void ImpSvNumFor::Save(SvStream& rStream) const
@@ -381,7 +670,7 @@ enum Sc_FormatSymbolType
     SYMBOLTYPE_COLOR    = -2,       // color
     SYMBOLTYPE_ERROR    = -3,       // error
     SYMBOLTYPE_DBNUM1   = -4,       // DoubleByteNumber, represent numbers
-    SYMBOLTYPE_DBNUM2   = -5,       // using Chinese or other digits
+    SYMBOLTYPE_DBNUM2   = -5,       // using CJK characters, Excel compatible.
     SYMBOLTYPE_DBNUM3   = -6,
     SYMBOLTYPE_DBNUM4   = -7,
     SYMBOLTYPE_DBNUM5   = -8,
@@ -389,7 +678,26 @@ enum Sc_FormatSymbolType
     SYMBOLTYPE_DBNUM7   = -10,
     SYMBOLTYPE_DBNUM8   = -11,
     SYMBOLTYPE_DBNUM9   = -12,
-    SYMBOLTYPE_LOCALE   = -13
+    SYMBOLTYPE_LOCALE   = -13,
+    SYMBOLTYPE_NATNUM1  = -14,      // Our NativeNumber support, represent
+    SYMBOLTYPE_NATNUM2  = -15,      // numbers using CJK, CTL, ...
+    SYMBOLTYPE_NATNUM3  = -16,
+    SYMBOLTYPE_NATNUM4  = -17,
+    SYMBOLTYPE_NATNUM5  = -18,
+    SYMBOLTYPE_NATNUM6  = -19,
+    SYMBOLTYPE_NATNUM7  = -20,
+    SYMBOLTYPE_NATNUM8  = -21,
+    SYMBOLTYPE_NATNUM9  = -22,
+    SYMBOLTYPE_NATNUM10 = -23,
+    SYMBOLTYPE_NATNUM11 = -24,
+    SYMBOLTYPE_NATNUM12 = -25,
+    SYMBOLTYPE_NATNUM13 = -26,
+    SYMBOLTYPE_NATNUM14 = -27,
+    SYMBOLTYPE_NATNUM15 = -28,
+    SYMBOLTYPE_NATNUM16 = -29,
+    SYMBOLTYPE_NATNUM17 = -30,
+    SYMBOLTYPE_NATNUM18 = -31,
+    SYMBOLTYPE_NATNUM19 = -32
 };
 
 SvNumberformat::SvNumberformat( ImpSvNumberformatScan& rSc, LanguageType eLge )
@@ -448,6 +756,25 @@ BOOL lcl_SvNumberformat_IsBracketedPrefix( short nSymbolType )
         case SYMBOLTYPE_DBNUM8 :
         case SYMBOLTYPE_DBNUM9 :
         case SYMBOLTYPE_LOCALE :
+        case SYMBOLTYPE_NATNUM1 :
+        case SYMBOLTYPE_NATNUM2 :
+        case SYMBOLTYPE_NATNUM3 :
+        case SYMBOLTYPE_NATNUM4 :
+        case SYMBOLTYPE_NATNUM5 :
+        case SYMBOLTYPE_NATNUM6 :
+        case SYMBOLTYPE_NATNUM7 :
+        case SYMBOLTYPE_NATNUM8 :
+        case SYMBOLTYPE_NATNUM9 :
+        case SYMBOLTYPE_NATNUM10 :
+        case SYMBOLTYPE_NATNUM11 :
+        case SYMBOLTYPE_NATNUM12 :
+        case SYMBOLTYPE_NATNUM13 :
+        case SYMBOLTYPE_NATNUM14 :
+        case SYMBOLTYPE_NATNUM15 :
+        case SYMBOLTYPE_NATNUM16 :
+        case SYMBOLTYPE_NATNUM17 :
+        case SYMBOLTYPE_NATNUM18 :
+        case SYMBOLTYPE_NATNUM19 :
             return TRUE;
     }
     return FALSE;
@@ -588,6 +915,41 @@ SvNumberformat::SvNumberformat(String& rString,
                         }
                     }
                     break;
+                    case SYMBOLTYPE_NATNUM1 :
+                    case SYMBOLTYPE_NATNUM2 :
+                    case SYMBOLTYPE_NATNUM3 :
+                    case SYMBOLTYPE_NATNUM4 :
+                    case SYMBOLTYPE_NATNUM5 :
+                    case SYMBOLTYPE_NATNUM6 :
+                    case SYMBOLTYPE_NATNUM7 :
+                    case SYMBOLTYPE_NATNUM8 :
+                    case SYMBOLTYPE_NATNUM9 :
+                    case SYMBOLTYPE_NATNUM10 :
+                    case SYMBOLTYPE_NATNUM11 :
+                    case SYMBOLTYPE_NATNUM12 :
+                    case SYMBOLTYPE_NATNUM13 :
+                    case SYMBOLTYPE_NATNUM14 :
+                    case SYMBOLTYPE_NATNUM15 :
+                    case SYMBOLTYPE_NATNUM16 :
+                    case SYMBOLTYPE_NATNUM17 :
+                    case SYMBOLTYPE_NATNUM18 :
+                    case SYMBOLTYPE_NATNUM19 :
+                    {
+                        if ( NumFor[nIndex].GetNatNum().GetRawNum() != 0 )
+                        {
+                            bCancel = TRUE;         // break for
+                            nCheckPos = nPosOld;
+                        }
+                        else
+                        {
+                            sStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "NatNum" ) );
+                            //! eSymbolType is negative
+                            BYTE nNum = 1 - (eSymbolType - SYMBOLTYPE_NATNUM1);
+                            sStr += String::CreateFromInt32( nNum );
+                            NumFor[nIndex].SetNatNumNum( nNum, FALSE );
+                        }
+                    }
+                    break;
                     case SYMBOLTYPE_DBNUM1 :
                     case SYMBOLTYPE_DBNUM2 :
                     case SYMBOLTYPE_DBNUM3 :
@@ -598,7 +960,7 @@ SvNumberformat::SvNumberformat(String& rString,
                     case SYMBOLTYPE_DBNUM8 :
                     case SYMBOLTYPE_DBNUM9 :
                     {
-                        if ( NumFor[nIndex].GetDBNum().nNum != 0 )
+                        if ( NumFor[nIndex].GetNatNum().GetRawNum() != 0 )
                         {
                             bCancel = TRUE;         // break for
                             nCheckPos = nPosOld;
@@ -609,13 +971,13 @@ SvNumberformat::SvNumberformat(String& rString,
                             //! eSymbolType is negative
                             BYTE nNum = 1 - (eSymbolType - SYMBOLTYPE_DBNUM1);
                             sStr += '0' + nNum;
-                            NumFor[nIndex].SetDBNumNum( nNum );
+                            NumFor[nIndex].SetNatNumNum( nNum, TRUE );
                         }
                     }
                     break;
                     case SYMBOLTYPE_LOCALE :
                     {
-                        if ( NumFor[nIndex].GetDBNum().eLang != LANGUAGE_DONTKNOW )
+                        if ( NumFor[nIndex].GetNatNum().GetLang() != LANGUAGE_DONTKNOW )
                         {
                             bCancel = TRUE;         // break for
                             nCheckPos = nPosOld;
@@ -633,7 +995,7 @@ SvNumberformat::SvNumberformat(String& rString,
                             {
                                 sStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "$-" ) );
                                 sStr += String::CreateFromInt32( sal_Int32( eLang ), 16 ).ToUpperAscii();
-                                NumFor[nIndex].SetDBNumLang( eLang );
+                                NumFor[nIndex].SetNatNumLang( eLang );
                             }
                         }
                     }
@@ -713,6 +1075,12 @@ SvNumberformat::SvNumberformat(String& rString,
         }
         if ( bCancel && !nCheckPos )
             nCheckPos = 1;      // nCheckPos is used as an error condition
+        if ( !bCancel )
+        {
+            if ( NumFor[nIndex].GetNatNum().GetRawNum() != 0 &&
+                    NumFor[nIndex].GetNatNum().GetLang() == LANGUAGE_DONTKNOW )
+                 NumFor[nIndex].SetNatNumLang( eLan );
+        }
         if (rString.Len() == nPos)
         {
             if ( nIndex == 2 && eSymbolType == SYMBOLTYPE_FORMAT &&
@@ -844,7 +1212,7 @@ enum ScanState
     SsStart,
     SsGetCon,           // condition
     SsGetString,        // format string
-    SsGetPrefix,        // color or DBNumN
+    SsGetPrefix,        // color or NatNumN
     SsGetTime,          // [HH] for time
     SsGetBracketed      // any [...] not decided yet
 };
@@ -1012,17 +1380,29 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                     break;
                     default:
                     {
+                        static const String aNatNum( RTL_CONSTASCII_USTRINGPARAM( "NATNUM" ) );
                         static const String aDBNum( RTL_CONSTASCII_USTRINGPARAM( "DBNUM" ) );
-                        String aUpper( rChrCls().toUpper( rString, nPos-1, aDBNum.Len() ) );
-                        sal_Unicode cUpper = aUpper.GetChar(0);
-                        sal_Unicode cNum = rString.GetChar( nPos-1+aDBNum.Len() );
-                        if ( aUpper == aDBNum && '1' <= cNum && cNum <= '9' )
+                        String aUpperNatNum( rChrCls().toUpper( rString, nPos-1, aNatNum.Len() ) );
+                        String aUpperDBNum( rChrCls().toUpper( rString, nPos-1, aDBNum.Len() ) );
+                        sal_Unicode cUpper = aUpperNatNum.GetChar(0);
+                        sal_Int32 nNatNumNum = rString.Copy( nPos-1+aNatNum.Len() ).ToInt32();
+                        sal_Unicode cDBNum = rString.GetChar( nPos-1+aDBNum.Len() );
+                        if ( aUpperNatNum == aNatNum && 1 <= nNatNumNum && nNatNumNum <= 19 )
+                        {
+                            sSymbol.EraseAllChars('[');
+                            sSymbol += rString.Copy( --nPos, aNatNum.Len()+1 );
+                            nPos += aNatNum.Len()+1;
+                            //! SymbolType is negative
+                            eType = SYMBOLTYPE_NATNUM1 - (nNatNumNum - 1);
+                            eState = SsGetPrefix;
+                        }
+                        else if ( aUpperDBNum == aDBNum && '1' <= cDBNum && cDBNum <= '9' )
                         {
                             sSymbol.EraseAllChars('[');
                             sSymbol += rString.Copy( --nPos, aDBNum.Len()+1 );
                             nPos += aDBNum.Len()+1;
                             //! SymbolType is negative
-                            eType = SYMBOLTYPE_DBNUM1 - (cNum - '1');
+                            eType = SYMBOLTYPE_DBNUM1 - (cDBNum - '1');
                             eState = SsGetPrefix;
                         }
                         else if (cUpper == pKeywords[NF_KEY_H].GetChar(0)   ||  // H
@@ -2011,10 +2391,10 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
                     sStr.Erase();
                 else
                 {
-//! TODO: DoubleToString with DBNumN
                     char aBuf[100];
                     sprintf( aBuf, "%.f", fNum );   // simple rounded integer
                     sStr.AssignAscii( aBuf );
+                    Transliterate( sStr, NumFor[nIx].GetNatNum() );
                 }
                 if (rInfo.nCntPre > 0 && nFrac == 0)
                 {
@@ -2218,7 +2598,6 @@ BOOL SvNumberformat::ImpGetTimeOutput(double fNumber,
     ULONG nSeconds = (ULONG)floor( fTime );
 
     String sSecStr;
-//! TODO: DoubleToString with DBNumN
     SolarMath::DoubleToString(sSecStr, fTime-nSeconds, 'F', int(nCntPost));
     sSecStr.EraseLeadingChars('0');
     sSecStr.EraseLeadingChars('.');
@@ -2227,8 +2606,12 @@ BOOL SvNumberformat::ImpGetTimeOutput(double fNumber,
         sSecStr.EraseTrailingChars('0');
         if ( sSecStr.Len() < xub_StrLen(rInfo.nCntPost) )
             sSecStr.Expand( xub_StrLen(rInfo.nCntPost), '0' );
+        Transliterate( sSecStr, NumFor[nIx].GetNatNum() );
         nCntPost = sSecStr.Len();
     }
+    else
+        Transliterate( sSecStr, NumFor[nIx].GetNatNum() );
+
     xub_StrLen nSecPos = 0;                 // Zum Ziffernweisen
                                             // abarbeiten
     ULONG nHour, nMin, nSec;
@@ -2750,7 +3133,6 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     ULONG nSeconds = (ULONG)floor( fTime );
 
     String sSecStr;
-//! TODO: DoubleToString with DBNumN
     SolarMath::DoubleToString(sSecStr, fTime-nSeconds, 'F', int(nCntPost));
     sSecStr.EraseLeadingChars('0');
     sSecStr.EraseLeadingChars('.');
@@ -2759,8 +3141,12 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
         sSecStr.EraseTrailingChars('0');
         if ( sSecStr.Len() < xub_StrLen(rInfo.nCntPost) )
             sSecStr.Expand( xub_StrLen(rInfo.nCntPost), '0' );
+        Transliterate( sSecStr, NumFor[nIx].GetNatNum() );
         nCntPost = sSecStr.Len();
     }
+    else
+        Transliterate( sSecStr, NumFor[nIx].GetNatNum() );
+
     xub_StrLen nSecPos = 0;                     // Zum Ziffernweisen
                                             // abarbeiten
     ULONG nHour, nMin, nSec;
@@ -3254,6 +3640,7 @@ BOOL SvNumberformat::ImpGetNumberOutput(double fNumber,
     }
     if (bSign)
         sStr.Insert('-',0);
+    Transliterate( sStr, NumFor[nIx].GetNatNum() );
     OutString = sStr;
     return bRes;
 }
@@ -3847,41 +4234,57 @@ String SvNumberformat::GetMappedFormatstring(
 }
 
 
-String SvNumberformat::GetDBNumString( const SvNumberDBNum& rNum,
+String SvNumberformat::GetNatNumString( const SvNumberNatNum& rNum,
         sal_Int32 nVal, USHORT nMinDigits ) const
 {
-    if ( rNum.IsComplete() )
-    {
-//! TODO: DoubleByte Chinese and other digits
-        SvNumberDBNum aNum;
-        return GetDBNumString( aNum, nVal, nMinDigits );    // yes, one recursion for now
-    }
+    String aStr;
     if ( nMinDigits )
     {
         if ( nMinDigits == 2 )
         {   // speed up the most common case
             if ( 0 <= nVal && nVal < 10 )
             {
-                String aStr;
                 sal_Unicode* p = aStr.AllocBuffer( 2 );
                 *p++ = '0';
                 *p = sal_Unicode( '0' + nVal );
-                return aStr;
             }
-            return String::CreateFromInt32( nVal );
+            else
+                aStr = String::CreateFromInt32( nVal );
         }
         else
         {
             String aValStr( String::CreateFromInt32( nVal ) );
             if ( aValStr.Len() >= nMinDigits )
-                return aValStr;
-            String aStr;
-            aStr.Fill( nMinDigits - aValStr.Len(), '0' );
-            aStr += aValStr;
-            return aStr;
+                aStr = aValStr;
+            else
+            {
+                aStr.Fill( nMinDigits - aValStr.Len(), '0' );
+                aStr += aValStr;
+            }
         }
     }
-    return String::CreateFromInt32( nVal );
+    else
+        aStr = String::CreateFromInt32( nVal );
+    Transliterate( aStr, rNum );
+    return aStr;
+}
+
+
+void SvNumberformat::Transliterate( String& rStr,
+        const SvNumberNatNum& rNum ) const
+{
+    if ( rNum.IsComplete() )
+    {
+        String aModule( rNum.MapNatNumToModule( rNum.GetNatNum(),
+                    rNum.GetLang() ) );
+        if ( aModule.Len() )
+        {
+            const ::utl::TransliterationWrapper* pTrans =
+                GetFormatter().GetTransliterationForModule( aModule,
+                        rNum.GetLang() );
+            rStr = pTrans->transliterate( rStr, 0, rStr.Len(), NULL );
+        }
+    }
 }
 
 
