@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2000-09-27 15:58:45 $
+ *  last change: $Author: dvo $ $Date: 2000-10-26 09:18:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,6 +371,10 @@ XMLStartReferenceContext_Impl::XMLStartReferenceContext_Impl(
     {
         XMLHint_Impl* pHint = new XMLReferenceHint_Impl(
             sName, rImport.GetTextImport()->GetCursor()->getStart() );
+
+        // degenerates to point reference, if no end is found!
+        pHint->SetEnd(rImport.GetTextImport()->GetCursor()->getStart() );
+
         rHints.Insert(pHint, rHints.Count());
     }
 }
