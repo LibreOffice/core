@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-02 10:54:17 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 09:58:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,12 +129,9 @@
 #ifdef TF_STARONE
 #include "unomodel.hxx"
 #endif
-#ifndef _OFF_APP_HXX
-#include <offmgr/app.hxx>
-#endif
-#ifndef _OFA_FLTRCFG_HXX
-#include <offmgr/fltrcfg.hxx>
-#endif
+
+#include <svtools/fltrcfg.hxx>
+
 #ifndef _SVXMSBAS_HXX
 #include <svx/svxmsbas.hxx>
 #endif
@@ -728,15 +725,10 @@ BOOL DrawDocShell::SaveAs( SvStorage* pStore )
         }
         else
         {
-            OfficeApplication*  pApplication = OFF_APP();
+            SvtFilterOptions* pBasOpt = SvtFilterOptions::Get();
 
-            if( pApplication )
-            {
-                OfaFilterOptions* pBasOpt = pApplication->GetFilterOptions();
-
-                if( pBasOpt && pBasOpt->IsLoadPPointBasicStorage() )
-                    nVBWarning = SvxImportMSVBasic::GetSaveWarningOfMSVBAStorage( *this );
-            }
+            if( pBasOpt && pBasOpt->IsLoadPPointBasicStorage() )
+                nVBWarning = SvxImportMSVBasic::GetSaveWarningOfMSVBAStorage( *this );
 
             SfxMedium aMedium( pStore );
             pFilter = new SdBINFilter( aMedium, *this, sal_True );
