@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-02 15:31:20 $
+ *  last change: $Author: hr $ $Date: 2003-06-16 11:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,6 +242,7 @@ struct SfxViewFrame_Impl
     sal_uInt16          nDocViewNo;
     sal_uInt16          nCurViewId;
     sal_Bool            bResizeInToOut:1;
+    sal_Bool            bDontOverwriteResizeInToOut:1;
     sal_Bool            bObjLocked:1;
     sal_Bool            bRestoreView:1;
     sal_Bool            bSetViewFrameLocked:1;
@@ -1708,6 +1709,7 @@ void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
     pImp->bInCtor = sal_True;
     pImp->pParentViewFrame = 0;
     pImp->bResizeInToOut = sal_True;
+    pImp->bDontOverwriteResizeInToOut = sal_False;
     pImp->pImportShell = 0;
     pImp->bObjLocked = sal_False;
     pImp->pFocusWin = 0;
@@ -2103,7 +2105,13 @@ SfxViewFrame* SfxViewFrame::GetParentViewFrame_Impl() const
 //--------------------------------------------------------------------
 void SfxViewFrame::ForceOuterResize_Impl(sal_Bool bOn)
 {
-    pImp->bResizeInToOut = !bOn;
+    if ( !pImp->bDontOverwriteResizeInToOut )
+        pImp->bResizeInToOut = !bOn;
+}
+
+void SfxViewFrame::ForceInnerResize_Impl(sal_Bool bOn)
+{
+    pImp->bDontOverwriteResizeInToOut = bOn;
 }
 
 //--------------------------------------------------------------------
@@ -3118,10 +3126,10 @@ BOOL SfxViewFrame::IsInModalMode() const
     return pImp->bModal || GetFrame()->GetWindow().IsInModalMode();
 }
 
-void SfxViewFrame::Resize()
+void SfxViewFrame::Resize( BOOL bForce )
 {
     Size aSize = GetWindow().GetOutputSizePixel();
-    if ( aSize != pImp->aSize )
+    if ( bForce || aSize != pImp->aSize )
     {
         pImp->aSize = aSize;
         SfxViewShell *pShell = GetViewShell();
