@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:33:51 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,8 +145,14 @@
 #include <tools/debug.hxx>
 #endif
 
+#ifndef _DATE_HXX
 #include <tools/date.hxx>
+#endif
+#ifndef _TOOLS_TIME_HXX
 #include <tools/time.hxx>
+#endif
+
+#include <algorithm>
 
 using namespace ::com::sun::star;
 using namespace ::toolkit;
@@ -242,40 +248,74 @@ uno::Reference< beans::XPropertySetInfo > UnoControlEditModel::getPropertySetInf
 //  class UnoEditControl
 //  ----------------------------------------------------
 UnoEditControl::UnoEditControl()
-    : maTextListeners( *this )
+    :maTextListeners( *this )
+    ,mbSetMaxTextLenInPeer( sal_False )
+    ,mbSetTextInPeer( sal_False )
+    ,mbHasTextProperty( sal_False )
+    ,mnMaxTextLen( 0 )
 {
     maComponentInfos.nWidth = 100;
     maComponentInfos.nHeight = 12;
-
-    mnMaxTextLen = 0;
-    mbSetMaxTextLenInPeer = FALSE;
-
-    mbSetTextInPeer = FALSE;
-
 }
+
+uno::Any SAL_CALL UnoEditControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
+{
+    uno::Any aReturn = UnoControlBase::queryAggregation( rType );
+    if ( !aReturn.hasValue() )
+        aReturn = UnoEditControl_Base::queryInterface( rType );
+    return aReturn;
+}
+
+uno::Any SAL_CALL UnoEditControl::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException)
+{
+    return UnoControlBase::queryInterface( rType );
+}
+
+void SAL_CALL UnoEditControl::acquire(  ) throw ()
+{
+    UnoControlBase::acquire();
+}
+
+void SAL_CALL UnoEditControl::release(  ) throw ()
+{
+    UnoControlBase::release();
+}
+
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( UnoEditControl, UnoControlBase, UnoEditControl_Base )
 
 ::rtl::OUString UnoEditControl::GetComponentServiceName()
 {
-    ::rtl::OUString aName( ::rtl::OUString::createFromAscii( "Edit" ) );
+    // by default, we want a simple edit field
+    ::rtl::OUString sName( ::rtl::OUString::createFromAscii( "Edit" ) );
+
+    // but maybe we are to display multi-line text?
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_MULTILINE ) );
     sal_Bool b;
     if ( ( aVal >>= b ) && b )
-        aName= ::rtl::OUString::createFromAscii( "MultiLineEdit" );
-    return aName;
+        sName= ::rtl::OUString::createFromAscii( "MultiLineEdit" );
+
+    return sName;
+}
+
+sal_Bool SAL_CALL UnoEditControl::setModel(const uno::Reference< awt::XControlModel >& _rModel) throw ( uno::RuntimeException )
+{
+    sal_Bool bReturn = UnoControlBase::setModel( _rModel );
+    mbHasTextProperty = ImplHasProperty( BASEPROPERTY_TEXT );
+    return bReturn;
 }
 
 void UnoEditControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const uno::Any& rVal )
 {
     sal_Bool bDone = sal_False;
-    if ( getPeer().is() && ( GetPropertyId( rPropName ) == BASEPROPERTY_TEXT ) )
+    if ( GetPropertyId( rPropName ) == BASEPROPERTY_TEXT )
     {
         // #96986# use setText(), or text listener will not be called.
         uno::Reference < awt::XTextComponent > xTextComponent( getPeer(), uno::UNO_QUERY );
         if ( xTextComponent.is() )
         {
-            ::rtl::OUString aText;
-            rVal >>= aText;
-            xTextComponent->setText( aText );
+            ::rtl::OUString sText;
+            rVal >>= sText;
+            xTextComponent->setText( sText );
             bDone = sal_True;
         }
     }
@@ -284,32 +324,9 @@ void UnoEditControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, cons
         UnoControlBase::ImplSetPeerProperty( rPropName, rVal );
 }
 
-// uno::XInterface
-uno::Any UnoEditControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
-{
-    uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( awt::XTextComponent*, this ),
-                                        SAL_STATIC_CAST( awt::XTextListener*, this ),
-                                        SAL_STATIC_CAST( lang::XEventListener*, SAL_STATIC_CAST( awt::XTextListener*, this ) ),
-                                        SAL_STATIC_CAST( awt::XLayoutConstrains*, this ),
-                                        SAL_STATIC_CAST( awt::XTextLayoutConstrains*, this ) );
-    return (aRet.hasValue() ? aRet : UnoControlBase::queryAggregation( rType ));
-}
-
-// lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( UnoEditControl )
-getCppuType( ( uno::Reference< awt::XTextComponent>* ) NULL ),
-getCppuType( ( uno::Reference< awt::XTextListener>* ) NULL ),
-getCppuType( ( uno::Reference< awt::XLayoutConstrains>* ) NULL ),
-getCppuType( ( uno::Reference< awt::XTextLayoutConstrains>* ) NULL ),
-UnoControlBase::getTypes()
-IMPL_XTYPEPROVIDER_END
-
-
 void UnoEditControl::dispose() throw(uno::RuntimeException)
 {
-    lang::EventObject aEvt;
-    aEvt.Source = (::cppu::OWeakObject*)this;
+    lang::EventObject aEvt( *this );
     maTextListeners.disposeAndClear( aEvt );
     UnoControl::dispose();
 }
@@ -319,19 +336,22 @@ void UnoEditControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolk
     UnoControl::createPeer( rxToolkit, rParentPeer );
 
     uno::Reference< awt::XTextComponent > xText( getPeer(), uno::UNO_QUERY );
+    if ( xText.is() )
+    {
     xText->addTextListener( this );
 
     if ( mbSetMaxTextLenInPeer )
         xText->setMaxTextLen( mnMaxTextLen );
     if ( mbSetTextInPeer )
         xText->setText( maText );
+    }
 }
 
 void UnoEditControl::textChanged(const awt::TextEvent& e) throw(uno::RuntimeException)
 {
     uno::Reference< awt::XTextComponent > xText( getPeer(), uno::UNO_QUERY );
 
-    if ( ImplHasProperty( BASEPROPERTY_TEXT ) )
+    if ( mbHasTextProperty )
     {
         uno::Any aAny;
         aAny <<= xText->getText();
@@ -358,7 +378,7 @@ void UnoEditControl::removeTextListener(const uno::Reference< awt::XTextListener
 
 void UnoEditControl::setText( const ::rtl::OUString& aText ) throw(uno::RuntimeException)
 {
-    if ( ImplHasProperty( BASEPROPERTY_TEXT ) )
+    if ( mbHasTextProperty )
     {
         uno::Any aAny;
         aAny <<= aText;
@@ -367,69 +387,103 @@ void UnoEditControl::setText( const ::rtl::OUString& aText ) throw(uno::RuntimeE
     else
     {
         maText = aText;
-        mbSetTextInPeer = TRUE;
-        if ( getPeer().is() )
-        {
+        mbSetTextInPeer = sal_True;
             uno::Reference < awt::XTextComponent > xText( getPeer(), uno::UNO_QUERY );
+        if ( xText.is() )
             xText->setText( maText );
         }
-    }
 
     // Setting the property to the VCLXWindow doesn't call textChanged
     if ( maTextListeners.getLength() )
     {
-        ::com::sun::star::awt::TextEvent aEvent;
-        aEvent.Source = (::cppu::OWeakObject*)this;
-
+        awt::TextEvent aEvent;
+        aEvent.Source = *this;
         maTextListeners.textChanged( aEvent );
+    }
+}
+
+namespace
+{
+    static void lcl_normalize( awt::Selection& _rSel )
+    {
+        if ( _rSel.Min > _rSel.Max )
+            ::std::swap( _rSel.Min, _rSel.Max );
+    }
+
+    static bool lcl_intersect( const awt::Selection& _rLHS, const awt::Selection& _rRHS )
+    {
+        OSL_PRECOND( _rLHS.Min <= _rLHS.Max, "lcl_intersect: LHS to be normalized!" );
+        OSL_PRECOND( _rRHS.Min <= _rRHS.Max, "lcl_intersect: RHS to be normalized!" );
+        return !( ( _rLHS.Max < _rRHS.Min ) || ( _rLHS.Min > _rRHS.Max ) );
     }
 }
 
 void UnoEditControl::insertText( const awt::Selection& rSel, const ::rtl::OUString& rNewText ) throw(uno::RuntimeException)
 {
+    // normalize the selection - OUString::replaceAt has a strange behaviour if the min is greater than the max
+    awt::Selection aSelection( rSel );
+    lcl_normalize( aSelection );
+
+    // preserve the selection resp. cursor position
+    awt::Selection aNewSelection( getSelection() );
+#ifdef ALSO_PRESERVE_COMPLETE_SELECTION
+        // (not sure - looks uglier ...)
+    sal_Int32 nDeletedCharacters = ( aSelection.Max - aSelection.Min ) - rNewText.getLength();
+    if ( aNewSelection.Min > aSelection.Min )
+        aNewSelection.Min -= nDeletedCharacters;
+    if ( aNewSelection.Max > aSelection.Max )
+        aNewSelection.Max -= nDeletedCharacters;
+#else
+    aNewSelection.Max = ::std::min( aNewSelection.Min, aNewSelection.Max ) + rNewText.getLength();
+    aNewSelection.Min = aNewSelection.Max;
+#endif
+
     ::rtl::OUString aOldText = getText();
-    ::rtl::OUString  aNewText = aOldText.replaceAt( rSel.Min, rSel.Max - rSel.Min, rNewText );
+    ::rtl::OUString  aNewText = aOldText.replaceAt( aSelection.Min, aSelection.Max - aSelection.Min, rNewText );
     setText( aNewText );
+
+    setSelection( aNewSelection );
 }
 
 ::rtl::OUString UnoEditControl::getText() throw(uno::RuntimeException)
 {
     ::rtl::OUString aText = maText;
 
-    if ( ImplHasProperty( BASEPROPERTY_TEXT ) )
+    if ( mbHasTextProperty )
         aText = ImplGetPropertyValue_UString( BASEPROPERTY_TEXT );
+    else
+    {
+        uno::Reference< awt::XTextComponent > xText( getPeer(), uno::UNO_QUERY );
+        if ( xText.is() )
+            aText = xText->getText();
+    }
 
     return aText;
 }
 
 ::rtl::OUString UnoEditControl::getSelectedText( void ) throw(uno::RuntimeException)
 {
-    ::rtl::OUString aSelected;
-    if ( getPeer().is() )
-    {
+    ::rtl::OUString sSelected;
         uno::Reference< awt::XTextComponent > xText( getPeer(), uno::UNO_QUERY );
-        aSelected = xText->getSelectedText();
-    }
-    return aSelected;
+    if ( xText.is() )
+        sSelected = xText->getSelectedText();
+
+    return sSelected;
 }
 
 void UnoEditControl::setSelection( const awt::Selection& aSelection ) throw(uno::RuntimeException)
 {
-    if ( getPeer().is() )
-    {
         uno::Reference< awt::XTextComponent > xText( getPeer(), uno::UNO_QUERY );
+    if ( xText.is() )
         xText->setSelection( aSelection );
-    }
 }
 
 awt::Selection UnoEditControl::getSelection( void ) throw(uno::RuntimeException)
 {
     awt::Selection aSel;
-    if ( getPeer().is() )
-    {
         uno::Reference< awt::XTextComponent > xText( getPeer(), uno::UNO_QUERY );
+    if ( xText.is() )
         aSel = xText->getSelection();
-    }
     return aSel;
 }
 
@@ -449,7 +503,7 @@ sal_Int16 UnoEditControl::getMaxTextLen() throw(uno::RuntimeException)
 {
     sal_Int16 nMaxLen = mnMaxTextLen;
 
-    if ( ImplHasProperty( BASEPROPERTY_MAXTEXTLEN) )
+    if ( ImplHasProperty( BASEPROPERTY_MAXTEXTLEN ) )
         nMaxLen = ImplGetPropertyValue_INT16( BASEPROPERTY_MAXTEXTLEN );
 
     return nMaxLen;
@@ -466,12 +520,10 @@ void UnoEditControl::setMaxTextLen( sal_Int16 nLen ) throw(uno::RuntimeException
     else
     {
         mnMaxTextLen = nLen;
-        mbSetMaxTextLenInPeer = TRUE;
-        if ( getPeer().is() )
-        {
+        mbSetMaxTextLenInPeer = sal_True;
             uno::Reference < awt::XTextComponent > xText( getPeer(), uno::UNO_QUERY );
+        if ( xText.is() )
             xText->setMaxTextLen( mnMaxTextLen );
-        }
     }
 }
 
