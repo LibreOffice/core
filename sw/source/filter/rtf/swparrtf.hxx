@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:50:33 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:51:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,7 +407,6 @@ class SwRTFParser : public SvxRTFParser
     void MakeStyleTab();
 
     int MakeFieldInst( String& rFieldStr );
-    SwPageDesc* _MakeNewPageDesc( int bFirst );
 
     // einlesen/einfuegen von Bitmaps
     void InsPicture( const String& rNm,
