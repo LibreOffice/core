@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-22 17:27:38 $
+ *  last change: $Author: mtg $ $Date: 2001-02-09 18:00:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,15 +126,40 @@
 #include <helpid.hrc>
 #endif
 
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_XML_SAX_INPUTSOURCE_HPP_
+#include <com/sun/star/xml/sax/InputSource.hpp>
+#endif
+#ifndef _COM_SUN_STAR_XML_SAX_XPARSER_HPP_
+#include <com/sun/star/xml/sax/XParser.hpp>
+#endif
+#ifndef _UTL_STREAM_WRAPPER_HXX_
+#include <unotools/streamwrap.hxx>
+#endif
+#ifndef _SV_XMLAUTOCORRECTIMPORT_HXX
+#include "SvXMLAutoCorrectImport.hxx"
+#endif
+#ifndef _SV_XMLAUTOCORRECTEXPORT_HXX
+#include "SvXMLAutoCorrectExport.hxx"
+#endif
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star;
+using namespace ::rtl;
 
 const int C_NONE                = 0x00;
 const int C_FULL_STOP           = 0x01;
 const int C_EXCLAMATION_MARK    = 0x02;
 const int C_QUESTION_MARK       = 0x04;
 
-static const sal_Char pImplWrdStt_ExcptLstStr[] = "WordExceptList";
-static const sal_Char pImplCplStt_ExcptLstStr[] = "SentenceExceptList";
-static const sal_Char pImplAutocorr_ListStr[] = "DocumentList";
+static const sal_Char pImplWrdStt_ExcptLstStr[]    = "WordExceptList";
+static const sal_Char pImplCplStt_ExcptLstStr[]    = "SentenceExceptList";
+static const sal_Char pImplAutocorr_ListStr[]      = "DocumentList";
+static const sal_Char pXMLImplWrdStt_ExcptLstStr[] = "WordExceptList.xml";
+static const sal_Char pXMLImplCplStt_ExcptLstStr[] = "SentenceExceptList.xml";
+static const sal_Char pXMLImplAutocorr_ListStr[]   = "DocumentList.xml";
 
 static const sal_Char
     /* auch bei diesen Anfaengen - Klammern auf und alle Arten von Anf.Zei. */
@@ -1858,7 +1883,8 @@ BOOL SvxAutoCorrectLanguageLists::IsFileChanged_Imp()
  * --------------------------------------------------*/
 void SvxAutoCorrectLanguageLists::LoadExceptList_Imp(
                                         SvStringsISortDtor*& rpLst,
-                                        const sal_Char* pStrmName )
+                                        const sal_Char* pStrmName,
+                                        SvStorageRef &rStg)
 {
     if( rpLst )
         rpLst->DeleteAndDestroy( 0, rpLst->Count() );
@@ -1866,24 +1892,21 @@ void SvxAutoCorrectLanguageLists::LoadExceptList_Imp(
         rpLst = new SvStringsISortDtor( 16, 16 );
 
     {
-        SfxMedium aMedium( sShareAutoCorrFile,
-                            STREAM_READ | STREAM_SHARE_DENYNONE, TRUE );
-        SvStorageRef xStg = aMedium.GetStorage();
 
         String sStrmName( pStrmName, RTL_TEXTENCODING_MS_1252 );
         String sTmp( sStrmName );
 
-        if( xStg.Is() && ( xStg->IsStream( sStrmName ) ||
+        if( rStg.Is() && ( rStg->IsStream( sStrmName ) ||
             // "alte" Listen konvertieren!
             ( pCplStt_ExcptLst == rpLst &&
-                xStg->IsStream( sTmp.AssignAscii( "ExceptionList" ))) ))
+                rStg->IsStream( sTmp.AssignAscii( "ExceptionList" ))) ))
         {
-            SvStorageStreamRef xStrm = xStg->OpenStream( sTmp,
+            SvStorageStreamRef xStrm = rStg->OpenStream( sTmp,
                 ( STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE ) );
             if( SVSTREAM_OK != xStrm->GetError())
             {
                 xStrm.Clear();
-                xStg.Clear();
+                rStg.Clear();
                 RemoveStream_Imp( sStrmName );
             }
             else
@@ -1915,7 +1938,7 @@ void SvxAutoCorrectLanguageLists::LoadExceptList_Imp(
                 if( sTmp != sStrmName )
                 {
                     xStrm.Clear();
-                    xStg.Clear();
+                    rStg.Clear();
                     RemoveStream_Imp( sTmp );
                 }
             }
@@ -1926,6 +1949,92 @@ void SvxAutoCorrectLanguageLists::LoadExceptList_Imp(
                                         &aModifiedDate, &aModifiedTime );
         aLastCheckTime = Time();
     }
+}
+void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
+                                        SvStringsISortDtor*& rpLst,
+                                        const sal_Char* pStrmName,
+                                        SvStorageRef &rStg)
+{
+    if( rpLst )
+        rpLst->DeleteAndDestroy( 0, rpLst->Count() );
+    else
+        rpLst = new SvStringsISortDtor( 16, 16 );
+
+    {
+        String sStrmName( pStrmName, RTL_TEXTENCODING_MS_1252 );
+        String sTmp( sStrmName );
+
+        if( rStg.Is() && rStg->IsStream( sStrmName ) )
+        {
+            SvStorageStreamRef xStrm = rStg->OpenStream( sTmp,
+                ( STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE ) );
+            if( SVSTREAM_OK != xStrm->GetError())
+            {
+                xStrm.Clear();
+                rStg.Clear();
+                RemoveStream_Imp( sStrmName );
+            }
+            else
+            {
+                Reference< lang::XMultiServiceFactory > xServiceFactory =
+                    comphelper::getProcessServiceFactory();
+                DBG_ASSERT( xServiceFactory.is(),
+                    "XMLReader::Read: got no service manager" );
+                if( !xServiceFactory.is() )
+                {
+                    // Throw an exception ?
+                }
+
+                xml::sax::InputSource aParserInput;
+                aParserInput.sSystemId = sStrmName;
+
+                xStrm->Seek( 0L );
+                xStrm->SetBufferSize( 8 * 1024 );
+                aParserInput.aInputStream = new utl::OInputStreamWrapper( *xStrm );
+
+                // get parser
+                Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
+                    OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
+                DBG_ASSERT( xXMLParser.is(),
+                    "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
+                if( !xXMLParser.is() )
+                {
+                    // Maybe throw an exception?
+                }
+
+                // get filter
+                Reference< xml::sax::XDocumentHandler > xFilter = new SvXMLExceptionListImport ( *rpLst );
+
+                // connect parser and filter
+                Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
+                xParser->setDocumentHandler( xFilter );
+
+                // parse
+                try
+                {
+                    xParser->parseStream( aParserInput );
+                }
+                catch( xml::sax::SAXParseException&  )
+                {
+                    // re throw ?
+                }
+                catch( xml::sax::SAXException&  )
+                {
+                    // re throw ?
+                }
+                catch( io::IOException& )
+                {
+                    // re throw ?
+                }
+            }
+        }
+
+        // Zeitstempel noch setzen
+        FStatHelper::GetModifiedDateTimeOfFile( sShareAutoCorrFile,
+                                        &aModifiedDate, &aModifiedTime );
+        aLastCheckTime = Time();
+    }
+
 }
 /* -----------------18.11.98 11:26-------------------
  *
@@ -1955,16 +2064,26 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
             {
                 xStrm->SetSize( 0 );
                 xStrm->SetBufferSize( 8192 );
-                rtl_TextEncoding eEncoding = gsl_getSystemTextEncoding();
+                Reference< lang::XMultiServiceFactory > xServiceFactory =
+                    comphelper::getProcessServiceFactory();
+                DBG_ASSERT( xServiceFactory.is(),
+                            "XMLReader::Read: got no service manager" );
+                if( !xServiceFactory.is() )
+                {
+                    // Throw an exception ?
+                }
 
-                *xStrm << (BYTE)4                       // Laenge des Headers (ohne den Leerstring)
-                       << (USHORT)EXEPTLIST_VERSION_358 // Version des Streams
-                       << (BYTE)eEncoding               // der Zeichensatz
-                       << (USHORT)rLst.Count();         // Anzahl der Elemente
+                    Reference < XInterface > xWriter (xServiceFactory->createInstance(
+                        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer"))));
+                    DBG_ASSERT(xWriter.is(),"com.sun.star.xml.sax.Writer service missing");
+                Reference < io::XOutputStream> xOut = new utl::OOutputStreamWrapper( *xStrm );
+                    uno::Reference<io::XActiveDataSource> xSrc(xWriter, uno::UNO_QUERY);
+                    xSrc->setOutputStream(xOut);
 
-                for( USHORT i = 0;
-                    ( i < rLst.Count() ) && ( SVSTREAM_OK == xStrm->GetError() ); i++ )
-                    xStrm->WriteByteString( *rLst[ i ], eEncoding );
+                    uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter, uno::UNO_QUERY);
+
+                    SvXMLExceptionListExport aExp(rLst, sStrmName, xHandler);
+                aExp.exportDoc( sXML_block_list );
 
                 xStrm->Commit();
                 if( xStrm->GetError() == SVSTREAM_OK )
@@ -2005,6 +2124,7 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
 
     SvStringsDtor aRemoveArr;
     String aWordListName( pImplAutocorr_ListStr, RTL_TEXTENCODING_MS_1252 );
+    String aXMLWordListName( pXMLImplAutocorr_ListStr, RTL_TEXTENCODING_MS_1252 );
     if( xStg.Is() && xStg->IsStream( aWordListName ) )
     {
         SvStorageStreamRef xStrm = xStg->OpenStream( aWordListName,
@@ -2123,6 +2243,96 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
                                         &aModifiedDate, &aModifiedTime );
         aLastCheckTime = Time();
     }
+    else if( xStg.Is() && xStg->IsStream( aXMLWordListName ) )
+    {
+        SvStorageStreamRef xStrm = xStg->OpenStream( aXMLWordListName,
+            ( STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE ) );
+        if( SVSTREAM_OK != xStrm->GetError())
+        {
+            xStrm.Clear();
+            xStg.Clear();
+            RemoveStream_Imp( aWordListName );
+        }
+        else
+        {
+            Reference< lang::XMultiServiceFactory > xServiceFactory =
+                comphelper::getProcessServiceFactory();
+            DBG_ASSERT( xServiceFactory.is(),
+                "XMLReader::Read: got no service manager" );
+            if( !xServiceFactory.is() )
+            {
+                // Throw an exception ?
+            }
+
+            xml::sax::InputSource aParserInput;
+            aParserInput.sSystemId = aXMLWordListName;
+
+            xStrm->Seek( 0L );
+            xStrm->SetBufferSize( 8 * 1024 );
+            aParserInput.aInputStream = new utl::OInputStreamWrapper( *xStrm );
+
+            // get parser
+            Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
+                OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
+            DBG_ASSERT( xXMLParser.is(),
+                "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
+            if( !xXMLParser.is() )
+            {
+                // Maybe throw an exception?
+            }
+
+            // get filter
+            Reference< xml::sax::XDocumentHandler > xFilter = new SvXMLAutoCorrectImport( pAutocorr_List, rAutoCorrect );
+
+            // connect parser and filter
+            Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
+            xParser->setDocumentHandler( xFilter );
+
+            // parse
+            try
+            {
+                xParser->parseStream( aParserInput );
+            }
+            catch( xml::sax::SAXParseException&  )
+            {
+                // re throw ?
+            }
+            catch( xml::sax::SAXException&  )
+            {
+                // re throw ?
+            }
+            catch( io::IOException& )
+            {
+                // re throw ?
+            }
+        }
+
+
+        if( aRemoveArr.Count() && sShareAutoCorrFile == sUserAutoCorrFile )
+        {
+            xStrm.Clear();
+            xStg.Clear();
+            xStg = new SvStorage( sShareAutoCorrFile,
+                                STREAM_STD_READWRITE, STORAGE_TRANSACTED );
+
+            if( xStg.Is() && SVSTREAM_OK == xStg->GetError() )
+            {
+                String* pStr;
+                for( USHORT n = aRemoveArr.Count(); n; )
+                    if( xStg->IsContained( *( pStr = aRemoveArr[ --n ] ) ) )
+                        xStg->Remove( *pStr  );
+
+                // die neue Liste mit der neuen Versionsnummer speichern
+                MakeBlocklist_Imp( *xStg );
+                xStg->Commit();
+            }
+        }
+
+        // Zeitstempel noch setzen
+        FStatHelper::GetModifiedDateTimeOfFile( sShareAutoCorrFile,
+                                        &aModifiedDate, &aModifiedTime );
+        aLastCheckTime = Time();
+    }
     return pAutocorr_List;
 }
 
@@ -2168,7 +2378,7 @@ BOOL SvxAutoCorrectLanguageLists::AddToCplSttExceptList(const String& rNew)
 {
     String* pNew = new String( rNew );
     if( rNew.Len() && LoadCplSttExceptList()->Insert( pNew ) )
-        SaveExceptList_Imp( *pCplStt_ExcptLst, pImplCplStt_ExcptLstStr );
+        SaveExceptList_Imp( *pCplStt_ExcptLst, pXMLImplCplStt_ExcptLstStr );
     else
         delete pNew, pNew = 0;
     return 0 != pNew;
@@ -2180,7 +2390,7 @@ BOOL SvxAutoCorrectLanguageLists::AddToWrdSttExceptList(const String& rNew)
 {
     String* pNew = new String( rNew );
     if( rNew.Len() && LoadWrdSttExceptList()->Insert( pNew ) )
-        SaveExceptList_Imp( *pWrdStt_ExcptLst, pImplWrdStt_ExcptLstStr );
+        SaveExceptList_Imp( *pWrdStt_ExcptLst, pXMLImplWrdStt_ExcptLstStr );
     else
         delete pNew, pNew = 0;
     return 0 != pNew;
@@ -2191,7 +2401,15 @@ BOOL SvxAutoCorrectLanguageLists::AddToWrdSttExceptList(const String& rNew)
  * --------------------------------------------------*/
 SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadCplSttExceptList()
 {
-    LoadExceptList_Imp( pCplStt_ExcptLst, pImplCplStt_ExcptLstStr );
+    SfxMedium aMedium( sShareAutoCorrFile,
+                            STREAM_READ | STREAM_SHARE_DENYNONE, TRUE );
+    SvStorageRef xStg = aMedium.GetStorage();
+    String sTemp ( RTL_CONSTASCII_USTRINGPARAM ( pXMLImplCplStt_ExcptLstStr ) );
+    if( xStg.Is() && xStg->IsContained( sTemp ) )
+        LoadXMLExceptList_Imp( pCplStt_ExcptLst, pXMLImplCplStt_ExcptLstStr, xStg );
+    else
+        LoadExceptList_Imp( pCplStt_ExcptLst, pImplCplStt_ExcptLstStr, xStg );
+
     return pCplStt_ExcptLst;
 }
 
@@ -2200,7 +2418,7 @@ SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadCplSttExceptList()
  * --------------------------------------------------*/
 void SvxAutoCorrectLanguageLists::SaveCplSttExceptList()
 {
-    SaveExceptList_Imp( *pCplStt_ExcptLst, pImplCplStt_ExcptLstStr );
+    SaveExceptList_Imp( *pCplStt_ExcptLst, pXMLImplCplStt_ExcptLstStr );
 }
 
 /* -----------------18.11.98 11:26-------------------
@@ -2224,7 +2442,14 @@ void SvxAutoCorrectLanguageLists::SetCplSttExceptList( SvStringsISortDtor* pList
  * --------------------------------------------------*/
 SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadWrdSttExceptList()
 {
-    LoadExceptList_Imp( pWrdStt_ExcptLst, pImplWrdStt_ExcptLstStr );
+    SfxMedium aMedium( sShareAutoCorrFile,
+                            STREAM_READ | STREAM_SHARE_DENYNONE, TRUE );
+    SvStorageRef xStg = aMedium.GetStorage();
+    String sTemp ( RTL_CONSTASCII_USTRINGPARAM ( pXMLImplWrdStt_ExcptLstStr ) );
+    if( xStg.Is() && xStg->IsContained( sTemp ) )
+        LoadXMLExceptList_Imp( pWrdStt_ExcptLst, pXMLImplWrdStt_ExcptLstStr, xStg );
+    else
+        LoadExceptList_Imp( pWrdStt_ExcptLst, pImplWrdStt_ExcptLstStr, xStg );
     return pWrdStt_ExcptLst;
 }
 /* -----------------18.11.98 11:26-------------------
@@ -2232,7 +2457,7 @@ SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadWrdSttExceptList()
  * --------------------------------------------------*/
 void SvxAutoCorrectLanguageLists::SaveWrdSttExceptList()
 {
-    SaveExceptList_Imp( *pWrdStt_ExcptLst, pImplWrdStt_ExcptLstStr );
+    SaveExceptList_Imp( *pWrdStt_ExcptLst, pXMLImplWrdStt_ExcptLstStr );
 }
 /* -----------------18.11.98 11:26-------------------
  *
@@ -2306,14 +2531,56 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
  * --------------------------------------------------*/
 BOOL SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SvStorage& rStg )
 {
-    String sStrmName( pImplAutocorr_ListStr, RTL_TEXTENCODING_MS_1252 );
+    String sStrmName( pXMLImplAutocorr_ListStr, RTL_TEXTENCODING_MS_1252 );
     BOOL bRet = TRUE, bRemove = !pAutocorr_List || !pAutocorr_List->Count();
     if( !bRemove )
     {
+        if ( rStg.IsContained( sStrmName) )
+        {
+            rStg.Remove ( sStrmName );
+            rStg.Commit();
+        }
         SvStorageStreamRef refList = rStg.OpenStream( sStrmName,
                     ( STREAM_READ | STREAM_WRITE | STREAM_SHARE_DENYWRITE ) );
         if( refList.Is() )
         {
+            refList->SetSize( 0 );
+            refList->SetBufferSize( 8192 );
+            Reference< lang::XMultiServiceFactory > xServiceFactory =
+                comphelper::getProcessServiceFactory();
+            DBG_ASSERT( xServiceFactory.is(),
+                        "XMLReader::Read: got no service manager" );
+            if( !xServiceFactory.is() )
+            {
+                // Throw an exception ?
+            }
+
+                Reference < XInterface > xWriter (xServiceFactory->createInstance(
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer"))));
+                DBG_ASSERT(xWriter.is(),"com.sun.star.xml.sax.Writer service missing");
+            Reference < io::XOutputStream> xOut = new utl::OOutputStreamWrapper( *refList );
+                uno::Reference<io::XActiveDataSource> xSrc(xWriter, uno::UNO_QUERY);
+                xSrc->setOutputStream(xOut);
+
+                uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter, uno::UNO_QUERY);
+
+                SvXMLAutoCorrectExport aExp(pAutocorr_List, sStrmName, xHandler);
+            aExp.exportDoc( sXML_block_list );
+
+            refList->Commit();
+            bRet = SVSTREAM_OK == refList->GetError();
+            if( bRet )
+            {
+                refList.Clear();
+                rStg.Commit();
+                if( SVSTREAM_OK != rStg.GetError() )
+                {
+                    bRemove = TRUE;
+                    bRet = FALSE;
+                }
+            }
+
+            /*
             refList->SetSize( 0 );
             refList->SetBufferSize( 8192 );
             rtl_TextEncoding eEncoding = gsl_getSystemTextEncoding();
@@ -2345,6 +2612,7 @@ BOOL SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SvStorage& rStg )
                     bRet = FALSE;
                 }
             }
+            */
         }
         else
             bRet = FALSE;
