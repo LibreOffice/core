@@ -5380,3 +5380,5 @@ WIN_Rectangle@20
 ??_C@_0CB@CLKCKGPP@com?4sun?4star?4beans?4PropertyState@
 ?getCppuType@@YAABVType@uno@star@sun@com@@PBW4PropertyState@beans@345@@Z
 ?s_pType_com_sun_star_beans_PropertyState@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBW4PropertyState@beans@456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?GetAntialiasingMinPixelHeight@StyleSettings@@QBEKXZ
+?GetDisplayOptions@StyleSettings@@QBEKXZ
