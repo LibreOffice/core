@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ppdparser.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 15:14:16 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:08:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,19 +61,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#ifndef __SGI_STL_HASH_MAP
 #include <hash_map>
-#endif
-// define a hash for PPDKey
-namespace psp { class PPDKey; }
-
-namespace  _STL {
-template<> struct hash< const psp::PPDKey* >
-{
-    size_t operator()( const psp::PPDKey * pKey) const
-    { return (size_t)pKey; }
-};
-}
 
 #include <psprint/ppdparser.hxx>
 #include <tools/debug.hxx>
@@ -1306,7 +1294,7 @@ PPDContext::~PPDContext()
 
 const PPDKey* PPDContext::getModifiedKey( int n ) const
 {
-    ::std::hash_map< const PPDKey*, const PPDValue* >::const_iterator it;
+    hash_type::const_iterator it;
     for( it = m_aCurrentValues.begin(); it != m_aCurrentValues.end() && n--; ++it )
         ;
     return it != m_aCurrentValues.end() ? it->first : NULL;
@@ -1330,7 +1318,7 @@ const PPDValue* PPDContext::getValue( const PPDKey* pKey ) const
     if( ! m_pParser )
         return NULL;
 
-    ::std::hash_map< const PPDKey*, const PPDValue* >::const_iterator it;
+    hash_type::const_iterator it;
     it = m_aCurrentValues.find( pKey );
     if( it != m_aCurrentValues.end() )
         return it->second;
@@ -1369,7 +1357,7 @@ const PPDValue* PPDContext::setValue( const PPDKey* pKey, const PPDValue* pValue
             m_aCurrentValues[ pKey ] = pValue;
 
             // after setting this value, check all constraints !
-            ::std::hash_map< const PPDKey*, const PPDValue* >::iterator it = m_aCurrentValues.begin();
+            hash_type::iterator it = m_aCurrentValues.begin();
             while(  it != m_aCurrentValues.end() )
             {
                 if( it->first != pKey &&
@@ -1561,7 +1549,7 @@ void* PPDContext::getStreamableBuffer( ULONG& rBytes ) const
     rBytes = 0;
     if( ! m_aCurrentValues.size() )
         return NULL;
-    ::std::hash_map< const PPDKey*, const PPDValue* >::const_iterator it;
+    hash_type::const_iterator it;
     for( it = m_aCurrentValues.begin(); it != m_aCurrentValues.end(); ++it )
     {
         ByteString aCopy( it->first->getKey(), RTL_TEXTENCODING_MS_1252 );
