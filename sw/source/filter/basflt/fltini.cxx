@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-14 16:26:04 $
+ *  last change: $Author: jp $ $Date: 2001-11-19 18:02:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1002,6 +1002,11 @@ static BOOL lcl_FindCharSet( BOOL bSearchId, String& rChrSetStr,
         sToken076[] = "ISO_8859_13",
         sToken077[] = "EUC_KR",
         sToken078[] = "ISO_2022_KR",
+        sToken079[] = "JIS_X_201",
+        sToken080[] = "JIS_X_208",
+        sToken081[] = "JIS_X_212",
+        sToken082[] = "MS_1361",
+        sToken083[] = "GB_18030",
         sToken079[] = "UNICODE_2"
             ;
     struct _Dummy_MAP
@@ -1089,7 +1094,12 @@ static BOOL lcl_FindCharSet( BOOL bSearchId, String& rChrSetStr,
         RTL_TEXTENCODING_ISO_8859_13,           sToken076,
         RTL_TEXTENCODING_EUC_KR,                sToken077,
         RTL_TEXTENCODING_ISO_2022_KR,           sToken078,
-        RTL_TEXTENCODING_UCS2,                  sToken079
+        RTL_TEXTENCODING_JIS_X_0201             sToken079,
+        RTL_TEXTENCODING_JIS_X_0208             sToken080,
+        RTL_TEXTENCODING_JIS_X_0212             sToken081,
+        RTL_TEXTENCODING_MS_1361                sToken082,
+        RTL_TEXTENCODING_GB_18030               sToken083,
+        RTL_TEXTENCODING_UCS2,                  sToken084
     };
 
     BOOL bFnd = FALSE;
