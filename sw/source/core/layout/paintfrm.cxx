@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 09:51:58 $
+ *  last change: $Author: vg $ $Date: 2003-05-16 14:20:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,8 +323,6 @@ static SwFlyFrm *pRetoucheFly2 = 0;
 static long nPixelSzW = 0, nPixelSzH = 0;
 static long nHalfPixelSzW = 0, nHalfPixelSzH = 0;
 static long nMinDistPixelW = 0, nMinDistPixelH = 0;
-static FASTBOOL  bPixelHeightOdd;
-static FASTBOOL  bPixelWidthOdd;
 
 //Aktueller Zoomfaktor
 static double aScaleX = 1.0;
@@ -358,20 +356,56 @@ static FASTBOOL bTableHack = FALSE;
 Color aGlobalRetoucheColor;
 
 //Statics fuer Umrandungsalignment setzen.
+// OD 05.05.2003 #107169# - adjustment for 'small' twip-to-pixel relations:
+// For 'small' twip-to-pixel relations (less then 2:1)
+// values of <nHalfPixelSzW> and <nHalfPixelSzH> are set to ZERO.
 void SwCalcPixStatics( OutputDevice *pOut )
 {
+    // OD 30.04.2003 #107169# - determine 'small' twip-to-pixel relation
+    sal_Bool bSmallTwipToPxRelW = sal_False;
+    sal_Bool bSmallTwipToPxRelH = sal_False;
+    {
+        Size aCheckTwipToPxRelSz( pOut->PixelToLogic( Size( 100, 100 )) );
+        if ( (aCheckTwipToPxRelSz.Width()/100.0) < 2.0 )
+        {
+            bSmallTwipToPxRelW = sal_True;
+        }
+        if ( (aCheckTwipToPxRelSz.Height()/100.0) < 2.0 )
+        {
+            bSmallTwipToPxRelH = sal_True;
+        }
+    }
+
     Size aSz( pOut->PixelToLogic( Size( 1,1 )) );
-    nPixelSzW = aSz.Width(), nPixelSzH = aSz.Height();
+
+    nPixelSzW = aSz.Width();
     if( !nPixelSzW )
         nPixelSzW = 1;
+    nPixelSzH = aSz.Height();
     if( !nPixelSzH )
         nPixelSzH = 1;
-    nHalfPixelSzW = nPixelSzW / 2 + 1;
-    nHalfPixelSzH = nPixelSzH / 2 + 1;
+
+    // OD 06.05.2003 #107169# - consider 'small' twip-to-pixel relations
+    if ( !bSmallTwipToPxRelW )
+    {
+        nHalfPixelSzW = nPixelSzW / 2 + 1;
+    }
+    else
+    {
+        nHalfPixelSzW = 0;
+    }
+    // OD 06.05.2003 #107169# - consider 'small' twip-to-pixel relations
+    if ( !bSmallTwipToPxRelH )
+    {
+        nHalfPixelSzH = nPixelSzH / 2 + 1;
+    }
+    else
+    {
+        nHalfPixelSzH = 0;
+    }
+
     nMinDistPixelW = nPixelSzW * 2 + 1;
     nMinDistPixelH = nPixelSzH * 2 + 1;
-    bPixelHeightOdd = nPixelSzH % 2 ? TRUE : FALSE;
-    bPixelWidthOdd  = nPixelSzW % 2 ? TRUE : FALSE;
 
     const MapMode &rMap = pOut->GetMapMode();
     aScaleX = rMap.GetScaleX();
@@ -381,10 +415,7 @@ void SwCalcPixStatics( OutputDevice *pOut )
 //Zum Sichern der statics, damit das Paint (quasi) reentrant wird.
 class SwSavePaintStatics
 {
-//  FASTBOOL            bSLockFlyBackground,
     FASTBOOL            bSFlyMetafile,
-                        bSPixelHeightOdd,
-                        bSPixelWidthOdd,
                         bSOneBeepOnly,
                         bSPageOnly;
     ViewShell          *pSGlobalShell;
@@ -411,8 +442,6 @@ public:
 
 SwSavePaintStatics::SwSavePaintStatics() :
     bSFlyMetafile       ( bFlyMetafile      ),
-    bSPixelHeightOdd    ( bPixelHeightOdd   ),
-    bSPixelWidthOdd     ( bPixelWidthOdd    ),
     bSOneBeepOnly       ( bOneBeepOnly      ),
     pSGlobalShell       ( pGlobalShell      ),
     pSFlyMetafileOut    ( pFlyMetafileOut   ),
@@ -452,8 +481,6 @@ SwSavePaintStatics::~SwSavePaintStatics()
 {
     pGlobalShell       = pSGlobalShell;
     bFlyMetafile       = bSFlyMetafile;
-    bPixelHeightOdd    = bSPixelHeightOdd;
-    bPixelWidthOdd     = bSPixelWidthOdd;
     bOneBeepOnly       = bSOneBeepOnly;
     pFlyMetafileOut    = pSFlyMetafileOut;
     pRetoucheFly       = pSRetoucheFly;
@@ -1046,15 +1073,18 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
 //Diverse Functions die in diesem File so verwendet werden.
 
 // OD 20.02.2003 - Note: function <SwAlignRect(..)> also used outside this file.
+// OD 29.04.2003 #107169# - correction: adjust rectangle on pixel level in order
+//          to assure, that the border 'leaves its original pixel', if it has to.
+//          No prior adjustments for odd relation between pixel and twip.
 void MA_FASTCALL SwAlignRect( SwRect &rRect, ViewShell *pSh )
 {
     if( !rRect.HasArea() )
         return;
 
-    /// OD 03.09.2002 #102450#
-    /// Assure that view shell (parameter <pSh>) exists, if the output device
-    /// is taken from this view shell --> no output device, no alignment.
-    /// Output device taken from view shell <pSh>, if <bFlyMetafile> not set.
+    // OD 03.09.2002 #102450#
+    // Assure that view shell (parameter <pSh>) exists, if the output device
+    // is taken from this view shell --> no output device, no alignment.
+    // Output device taken from view shell <pSh>, if <bFlyMetafile> not set.
     if ( !bFlyMetafile && !pSh )
     {
         return;
@@ -1062,56 +1092,85 @@ void MA_FASTCALL SwAlignRect( SwRect &rRect, ViewShell *pSh )
 
     const OutputDevice *pOut = bFlyMetafile ?
                         pFlyMetafileOut : pSh->GetOut();
-    Rectangle aTmp( rRect.SVRect() );
-    //Bei ungeraden Pixelwerten korrigieren.
-    if ( bPixelHeightOdd )
+
+    // OD 28.04.2003 #107169# - hold original rectangle in pixel
+    const Rectangle aOrgPxRect = pOut->LogicToPixel( rRect.SVRect() );
+    // OD 29.04.2003 #107169# - determine pixel-center rectangle in twip
+    const SwRect aPxCenterRect( pOut->PixelToLogic( aOrgPxRect ) );
+
+    // OD 06.05.2003 #107169# - perform adjustments on pixel level.
+    SwRect aAlignedPxRect( aOrgPxRect );
+    if ( rRect.Top() > aPxCenterRect.Top() )
     {
-        aTmp.Top()    += 1;
-        aTmp.Bottom() -= 1;
+        // 'leave pixel overlapping on top'
+        aAlignedPxRect.Top( aAlignedPxRect.Top() + 1 );
     }
-    if ( bPixelWidthOdd )
+
+    if ( rRect.Bottom() < aPxCenterRect.Bottom() )
     {
-        aTmp.Left()  += 1;
-        aTmp.Right() -= 1;
+        // 'leave pixel overlapping on bottom'
+        aAlignedPxRect.Bottom( aAlignedPxRect.Bottom() - 1 );
     }
-    aTmp = pOut->PixelToLogic( pOut->LogicToPixel( aTmp ) );
 
-    SwRect aRect( aTmp );
-
-    if ( rRect.Top() > aRect.Top() )
-        rRect.Top( aRect.Top() + nHalfPixelSzH );
-    else
-        rRect.Top( aRect.Top() );
-
-    if ( rRect.Bottom() < aRect.Bottom() )
-        rRect.Bottom( aRect.Bottom() - nHalfPixelSzH );
-    else
-        rRect.Bottom( aRect.Bottom() );
-
-    if ( rRect.Left() > aRect.Left() )
-        rRect.Left( aRect.Left() + nHalfPixelSzW );
-    else
-        rRect.Left( aRect.Left() );
-
-    if ( rRect.Right() < aRect.Right() )
-        rRect.Right( aRect.Right() - nHalfPixelSzW );
-    else
-        rRect.Right( aRect.Right() );
-
-    /// OD 11.10.2002 #103636# - consider negative width/height
-    /// check, if aligned SwRect has negative width/height.
-    /// If Yes, adjust it to width/height = 0 twip.
-    /// NOTE: A SwRect with negative width/height can occur, if the width/height
-    ///     of the given SwRect in twip was less than a pixel in twip and that
-    ///     the alignment calculates that the aligned SwRect should not contain
-    ///     the pixels the width/height is on.
-    if ( rRect.Width() < 0 )
+    if ( rRect.Left() > aPxCenterRect.Left() )
     {
-        rRect.Width(0);
+        // 'leave pixel overlapping on left'
+        aAlignedPxRect.Left( aAlignedPxRect.Left() + 1 );
     }
-    if ( rRect.Height() < 0 )
+
+    if ( rRect.Right() < aPxCenterRect.Right() )
     {
-        rRect.Height(0);
+        // 'leave pixel overlapping on right'
+        aAlignedPxRect.Right( aAlignedPxRect.Right() - 1 );
+    }
+
+    // OD 11.10.2002 #103636# - consider negative width/height
+    // check, if aligned SwRect has negative width/height.
+    // If Yes, adjust it to width/height = 0 twip.
+    // NOTE: A SwRect with negative width/height can occur, if the width/height
+    //     of the given SwRect in twip was less than a pixel in twip and that
+    //     the alignment calculates that the aligned SwRect should not contain
+    //     the pixels the width/height is on.
+    sal_Bool bNegWidth = sal_False;
+    if ( aAlignedPxRect.Width() < 0 )
+    {
+        aAlignedPxRect.Width(0);
+        bNegWidth = sal_True;
+    }
+    sal_Bool bNegHeight = sal_False;
+    if ( aAlignedPxRect.Height() < 0 )
+    {
+        aAlignedPxRect.Height(0);
+        bNegHeight = sal_True;
+    }
+    // OD 30.04.2003 #107169# - consider zero width/height
+    // For converting a rectangle from pixel to logic it needs a width/height.
+    // Thus, set width/height to one, if it's zero and correct this on the twip
+    // level after the conversion.
+    sal_Bool bZeroWidth = sal_False;
+    if ( aAlignedPxRect.Width() == 0 )
+    {
+        aAlignedPxRect.Width(1);
+        bZeroWidth = sal_True;
+    }
+    sal_Bool bZeroHeight = sal_False;
+    if ( aAlignedPxRect.Height() == 0 )
+    {
+        aAlignedPxRect.Height(1);
+        bZeroHeight = sal_True;
+    }
+
+    rRect = pOut->PixelToLogic( aAlignedPxRect.SVRect() );
+
+    // OD 30.04.2003 #107169# - consider zero width/height and adjust calculated
+    // aligned twip rectangle.
+    if ( bZeroWidth )
+    {
+        rRect.Right( rRect.Left() + ( bNegWidth ? 0 : 1 ) );
+    }
+    if ( bZeroHeight )
+    {
+        rRect.Bottom( rRect.Top() + ( bNegHeight ? 0 : 1 ) );
     }
 }
 
@@ -1255,8 +1314,10 @@ void MA_FASTCALL lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
     ::SwAlignRect( rRect, pGlobalShell );
 }
 
-void MA_FASTCALL lcl_ExtendLeftAndRight( SwRect &rRect, const SwFrm *pFrm,
-                          const SwBorderAttrs &rAttrs, SwRectFn& rRectFn )
+void MA_FASTCALL lcl_ExtendLeftAndRight( SwRect&              rRect,
+                                         const SwFrm*         pFrm,
+                                         const SwBorderAttrs& rAttrs,
+                                         const SwRectFn&      rRectFn )
 {
     //In der Hoehe aufbohren wenn TopLine bzw. BottomLine entfallen.
     if ( rAttrs.GetBox().GetTop() && !rAttrs.GetTopLine( pFrm ) )
@@ -1957,25 +2018,25 @@ void lcl_AdjustRectToPixelSize( SwRect& io_aSwRect, const OutputDevice &aOut )
     /// check Left()
     --aSizedRect.Left();
     aTestNewPxRect = aOut.LogicToPixel( aSizedRect );
-    ASSERT( aTestOrgPxRect.Left() == (aTestNewPxRect.Left()+1),
+    ASSERT( aTestOrgPxRect.Left() >= (aTestNewPxRect.Left()+1),
             "Error in lcl_AlignRectToPixelSize(..): Left() not correct adjusted");
     ++aSizedRect.Left();
     /// check Right()
     ++aSizedRect.Right();
     aTestNewPxRect = aOut.LogicToPixel( aSizedRect );
-    ASSERT( aTestOrgPxRect.Right() == (aTestNewPxRect.Right()-1),
+    ASSERT( aTestOrgPxRect.Right() <= (aTestNewPxRect.Right()-1),
             "Error in lcl_AlignRectToPixelSize(..): Right() not correct adjusted");
     --aSizedRect.Right();
     /// check Top()
     --aSizedRect.Top();
     aTestNewPxRect = aOut.LogicToPixel( aSizedRect );
-    ASSERT( aTestOrgPxRect.Top() == (aTestNewPxRect.Top()+1),
+    ASSERT( aTestOrgPxRect.Top() >= (aTestNewPxRect.Top()+1),
             "Error in lcl_AlignRectToPixelSize(..): Top() not correct adjusted");
     ++aSizedRect.Top();
     /// check Bottom()
     ++aSizedRect.Bottom();
     aTestNewPxRect = aOut.LogicToPixel( aSizedRect );
-    ASSERT( aTestOrgPxRect.Bottom() == (aTestNewPxRect.Bottom()-1),
+    ASSERT( aTestOrgPxRect.Bottom() <= (aTestNewPxRect.Bottom()-1),
             "Error in lcl_AlignRectToPixelSize(..): Bottom() not correct adjusted");
     --aSizedRect.Bottom();
 #endif
@@ -3059,29 +3120,67 @@ void SwFrm::PaintBorderLine( const SwRect& rRect,
 |*
 |*************************************************************************/
 
-void MA_FASTCALL lcl_SubTopBottom( SwRect &rRect, const SvxBoxItem &rBox,
-            const SwBorderAttrs &rAttrs, const SwFrm *pFrm, SwRectFn& rRectFn )
+// OD 29.04.2003 #107169# - method called for left and right border rectangles.
+// For a printer output device perform adjustment for non-overlapping top and
+// bottom border rectangles. Thus, add parameter <_bPrtOutputDev> to indicate
+// printer output device.
+// NOTE: For printer output device left/right border rectangle <_iorRect>
+//       has to be already non-overlapping the outer top/bottom border rectangle.
+void MA_FASTCALL lcl_SubTopBottom( SwRect&              _iorRect,
+                                   const SvxBoxItem&    _rBox,
+                                   const SwBorderAttrs& _rAttrs,
+                                   const SwFrm*         _pFrm,
+                                   const SwRectFn&      _rRectFn,
+                                   const sal_Bool       _bPrtOutputDev )
 {
-    const BOOL bCnt = pFrm->IsCntntFrm();
-    if ( rBox.GetTop() && rBox.GetTop()->GetInWidth() &&
-         (!bCnt || rAttrs.GetTopLine( pFrm )) )
+    const BOOL bCnt = _pFrm->IsCntntFrm();
+    if ( _rBox.GetTop() && _rBox.GetTop()->GetInWidth() &&
+         ( !bCnt || _rAttrs.GetTopLine( _pFrm ) )
+       )
     {
-        const long nDist = ::lcl_MinHeightDist( rBox.GetTop()->GetDistance() ) +
-                           ::lcl_AlignHeight( rBox.GetTop()->GetOutWidth() );
-        (rRect.*rRectFn->fnSubTop)( -nDist );
+        // substract distance between outer and inner line.
+        SwTwips nDist = ::lcl_MinHeightDist( _rBox.GetTop()->GetDistance() );
+        if ( !_bPrtOutputDev )
+        {
+            // additionally substract width of top outer line
+            // --> left/right inner/outer line doesn't overlap top outer line.
+            nDist += ::lcl_AlignHeight( _rBox.GetTop()->GetOutWidth() );
+        }
+        else
+        {
+            // OD 29.04.2003 #107169# - additionally substract width of top inner line
+            // --> left/right inner/outer line doesn't overlap top inner line.
+            nDist += ::lcl_AlignHeight( _rBox.GetTop()->GetInWidth() );
+        }
+        (_iorRect.*_rRectFn->fnSubTop)( -nDist );
     }
 
-    if ( rBox.GetBottom() && rBox.GetBottom()->GetInWidth() &&
-         (!bCnt || rAttrs.GetBottomLine( pFrm)))
+    if ( _rBox.GetBottom() && _rBox.GetBottom()->GetInWidth() &&
+         ( !bCnt || _rAttrs.GetBottomLine( _pFrm ) )
+       )
     {
-        const long nDist = ::lcl_MinHeightDist( rBox.GetBottom()->GetDistance())
-                           +::lcl_AlignHeight( rBox.GetBottom()->GetOutWidth());
-        (rRect.*rRectFn->fnAddBottom)( -nDist );
+        // substract distance between outer and inner line.
+        SwTwips nDist = ::lcl_MinHeightDist( _rBox.GetBottom()->GetDistance() );
+        if ( !_bPrtOutputDev )
+        {
+            // additionally substract width of bottom outer line
+            // --> left/right inner/outer line doesn't overlap bottom outer line.
+            nDist += ::lcl_AlignHeight( _rBox.GetBottom()->GetOutWidth() );
+        }
+        else
+        {
+            // OD 29.04.2003 #107169# - additionally substract width of bottom inner line
+            // --> left/right inner/outer line doesn't overlap bottom inner line.
+            nDist += ::lcl_AlignHeight( _rBox.GetBottom()->GetInWidth() );
+        }
+        (_iorRect.*_rRectFn->fnAddBottom)( -nDist );
     }
 }
 
-void MA_FASTCALL lcl_SubLeftRight( SwRect &rRect, const SvxBoxItem &rBox,
-                                   SwRectFn& rRectFn )
+// method called for top and bottom border rectangles.
+void MA_FASTCALL lcl_SubLeftRight( SwRect&           rRect,
+                                   const SvxBoxItem& rBox,
+                                   const SwRectFn&   rRectFn )
 {
     if ( rBox.GetLeft() && rBox.GetLeft()->GetInWidth() )
     {
@@ -3098,13 +3197,21 @@ void MA_FASTCALL lcl_SubLeftRight( SwRect &rRect, const SvxBoxItem &rBox,
     }
 }
 
-void MA_FASTCALL lcl_PaintLeftLine( const SwFrm *pFrm, const SwPageFrm *pPage,
-                           const SwRect &rOutRect, const SwRect &rRect,
-                           const SwBorderAttrs &rAttrs, SwRectFn& rRectFn )
+// OD 29.04.2003 #107169# - For a printer output device perform adjustment
+// for non-overlapping top and bottom border rectangles.
+void MA_FASTCALL lcl_PaintLeftLine( const SwFrm*         pFrm,
+                                    const SwPageFrm*     pPage,
+                                    const SwRect&        rOutRect,
+                                    const SwRect&        rRect,
+                                    const SwBorderAttrs& rAttrs,
+                                    const SwRectFn&      rRectFn )
 {
-    const SvxBoxItem &rBox = rAttrs.GetBox();
+    const SvxBoxItem& rBox = rAttrs.GetBox();
     const sal_Bool bR2L = pFrm->IsCellFrm() && pFrm->IsRightToLeft();
-    const SvxBorderLine *pLeft = bR2L ? rBox.GetRight() : rBox.GetLeft();
+    const SvxBorderLine* pLeft = bR2L ? rBox.GetRight() : rBox.GetLeft();
+    // OD 06.05.2003 #107169# - init boolean indicating printer output device.
+    const sal_Bool bPrtOutputDev =
+            ( OUTDEV_PRINTER == pGlobalShell->GetOut()->GetOutDevType() );
 
     if ( !pLeft )
         return;
@@ -3118,10 +3225,43 @@ void MA_FASTCALL lcl_PaintLeftLine( const SwFrm *pFrm, const SwPageFrm *pPage,
     if ( bCnt )
         ::lcl_ExtendLeftAndRight( aRect, pFrm, rAttrs, rRectFn );
 
-    if ( !pLeft->GetInWidth() )
-        ::lcl_SubTopBottom( aRect, rBox, rAttrs, pFrm, rRectFn );
+    // OD 06.05.2003 #107169# - adjustments for printer output device
+    if ( bPrtOutputDev )
+    {
+        // substract width of outer top line.
+        if ( rBox.GetTop() && (!bCnt || rAttrs.GetTopLine( pFrm )) )
+        {
+            long nDist = ::lcl_AlignHeight( rBox.GetTop()->GetOutWidth() );
+            (aRect.*rRectFn->fnSubTop)( -nDist );
+        }
+        // substract width of outer bottom line.
+        if ( rBox.GetBottom() && (!bCnt || rAttrs.GetBottomLine( pFrm )) )
+        {
+            long nDist = ::lcl_AlignHeight( rBox.GetBottom()->GetOutWidth());
+            (aRect.*rRectFn->fnAddBottom)( -nDist );
+        }
+    }
 
-    pFrm->PaintBorderLine( rRect, aRect, pPage, &pLeft->GetColor() );
+    if ( !pLeft->GetInWidth() )
+    {
+        // OD 06.05.2003 #107169# - add 6th parameter
+        ::lcl_SubTopBottom( aRect, rBox, rAttrs, pFrm, rRectFn, bPrtOutputDev );
+    }
+
+    // OD 29.04.2003 #107169# - paint SwAligned-rectangle
+    {
+        SwRect aPaintRect( aRect );
+        ::SwAlignRect( aPaintRect, pFrm->GetShell() );
+        // if <SwAlignRect> reveals rectangle with no width, adjust rectangle
+        // to the prior left postion with width of one twip.
+        if ( (aPaintRect.*rRectFn->fnGetWidth)() == 0 )
+        {
+            (aPaintRect.*rRectFn->fnSetLeft)( (aRect.*rRectFn->fnGetLeft)() );
+            (aPaintRect.*rRectFn->fnSetRight)( (aRect.*rRectFn->fnGetLeft)() );
+            (aPaintRect.*rRectFn->fnAddRight)( 1 );
+        }
+        pFrm->PaintBorderLine( rRect, aPaintRect, pPage, &pLeft->GetColor() );
+    }
 
     if ( pLeft->GetInWidth() )
     {
@@ -3129,18 +3269,40 @@ void MA_FASTCALL lcl_PaintLeftLine( const SwFrm *pFrm, const SwPageFrm *pPage,
         long nWidth = ::lcl_AlignWidth( pLeft->GetInWidth() );
         (aRect.*rRectFn->fnAddRight)( nDist + nWidth );
         (aRect.*rRectFn->fnSubLeft)( nWidth - (aRect.*rRectFn->fnGetWidth)() );
-        ::lcl_SubTopBottom( aRect, rBox, rAttrs, pFrm, rRectFn );
-        pFrm->PaintBorderLine( rRect, aRect, pPage, &pLeft->GetColor() );
+        // OD 06.05.2003 #107169# - add 6th parameter
+        ::lcl_SubTopBottom( aRect, rBox, rAttrs, pFrm, rRectFn, bPrtOutputDev );
+        // OD 29.04.2003 #107169# - paint SwAligned-rectangle
+        {
+            SwRect aPaintRect( aRect );
+            ::SwAlignRect( aPaintRect, pFrm->GetShell() );
+            // if <SwAlignRect> reveals rectangle with no width, adjust
+            // rectangle to the prior left postion with width of one twip.
+            if ( (aPaintRect.*rRectFn->fnGetWidth)() == 0 )
+            {
+                (aPaintRect.*rRectFn->fnSetLeft)( (aRect.*rRectFn->fnGetLeft)() );
+                (aPaintRect.*rRectFn->fnSetRight)( (aRect.*rRectFn->fnGetLeft)() );
+                (aPaintRect.*rRectFn->fnAddRight)( 1 );
+            }
+            pFrm->PaintBorderLine( rRect, aPaintRect, pPage, &pLeft->GetColor() );
+        }
     }
 }
 
-void MA_FASTCALL lcl_PaintRightLine( const SwFrm *pFrm, const SwPageFrm *pPage,
-                            const SwRect &rOutRect, const SwRect &rRect,
-                            const SwBorderAttrs &rAttrs, SwRectFn& rRectFn )
+// OD 29.04.2003 #107169# - For a printer output device perform adjustment
+// for non-overlapping top and bottom border rectangles.
+void MA_FASTCALL lcl_PaintRightLine( const SwFrm*           pFrm,
+                                     const SwPageFrm*       pPage,
+                                     const SwRect&          rOutRect,
+                                     const SwRect&          rRect,
+                                     const SwBorderAttrs&   rAttrs,
+                                     const SwRectFn&        rRectFn )
 {
     const SvxBoxItem &rBox = rAttrs.GetBox();
     const sal_Bool bR2L = pFrm->IsCellFrm() && pFrm->IsRightToLeft();
     const SvxBorderLine *pRight = bR2L ? rBox.GetLeft() : rBox.GetRight();
+    // OD 06.05.2003 #107169# - init boolean indicating printer output device.
+    const sal_Bool bPrtOutputDev =
+            ( OUTDEV_PRINTER == pGlobalShell->GetOut()->GetOutDevType() );
 
     if ( !pRight )
         return;
@@ -3154,10 +3316,43 @@ void MA_FASTCALL lcl_PaintRightLine( const SwFrm *pFrm, const SwPageFrm *pPage,
     if ( bCnt )
         ::lcl_ExtendLeftAndRight( aRect, pFrm, rAttrs, rRectFn );
 
-    if ( !pRight->GetInWidth() )
-        ::lcl_SubTopBottom( aRect, rBox, rAttrs, pFrm, rRectFn );
+    // OD 06.05.2003 #107169# - adjustments for printer output device
+    if ( bPrtOutputDev )
+    {
+        // substract width of outer top line.
+        if ( rBox.GetTop() && (!bCnt || rAttrs.GetTopLine( pFrm )) )
+        {
+            long nDist = ::lcl_AlignHeight( rBox.GetTop()->GetOutWidth() );
+            (aRect.*rRectFn->fnSubTop)( -nDist );
+        }
+        // substract width of outer bottom line.
+        if ( rBox.GetBottom() && (!bCnt || rAttrs.GetBottomLine( pFrm )) )
+        {
+            long nDist = ::lcl_AlignHeight( rBox.GetBottom()->GetOutWidth());
+            (aRect.*rRectFn->fnAddBottom)( -nDist );
+        }
+    }
 
-    pFrm->PaintBorderLine( rRect, aRect, pPage, &pRight->GetColor() );
+    if ( !pRight->GetInWidth() )
+    {
+        // OD 06.05.2003 #107169# - add 6th parameter
+        ::lcl_SubTopBottom( aRect, rBox, rAttrs, pFrm, rRectFn, bPrtOutputDev );
+    }
+
+    // OD 29.04.2003 #107169# - paint SwAligned-rectangle
+    {
+        SwRect aPaintRect( aRect );
+        ::SwAlignRect( aPaintRect, pFrm->GetShell() );
+        // if <SwAlignRect> reveals rectangle with no width, adjust rectangle
+        // to the prior right postion minus one twip with width of one twip.
+        if ( (aPaintRect.*rRectFn->fnGetWidth)() == 0 )
+        {
+            (aPaintRect.*rRectFn->fnSetLeft)( (aRect.*rRectFn->fnGetRight)() - 1 );
+            (aPaintRect.*rRectFn->fnSetRight)( (aRect.*rRectFn->fnGetRight)() - 1 );
+            (aPaintRect.*rRectFn->fnAddRight)( 1 );
+        }
+        pFrm->PaintBorderLine( rRect, aPaintRect, pPage, &pRight->GetColor() );
+    }
 
     if ( pRight->GetInWidth() )
     {
@@ -3165,11 +3360,26 @@ void MA_FASTCALL lcl_PaintRightLine( const SwFrm *pFrm, const SwPageFrm *pPage,
         long nWidth = ::lcl_AlignWidth( pRight->GetInWidth() );
         (aRect.*rRectFn->fnSubLeft)( nDist + nWidth );
         (aRect.*rRectFn->fnAddRight)( nWidth - (aRect.*rRectFn->fnGetWidth)() );
-        ::lcl_SubTopBottom( aRect, rBox, rAttrs, pFrm, rRectFn );
-        pFrm->PaintBorderLine( rRect, aRect, pPage, &pRight->GetColor() );
+        // OD 06.05.2003 #107169# - add 6th parameter
+        ::lcl_SubTopBottom( aRect, rBox, rAttrs, pFrm, rRectFn, bPrtOutputDev );
+        // OD 29.04.2003 #107169# - paint SwAligned-rectangle
+        {
+            SwRect aPaintRect( aRect );
+            ::SwAlignRect( aPaintRect, pFrm->GetShell() );
+            // if <SwAlignRect> reveals rectangle with no width, adjust rectangle
+            // to the prior right postion minus one twip with width of one twip.
+            if ( (aPaintRect.*rRectFn->fnGetWidth)() == 0 )
+            {
+                (aPaintRect.*rRectFn->fnSetLeft)( (aRect.*rRectFn->fnGetRight)() - 1 );
+                (aPaintRect.*rRectFn->fnSetRight)( (aRect.*rRectFn->fnGetRight)() - 1 );
+                (aPaintRect.*rRectFn->fnAddRight)( 1 );
+            }
+            pFrm->PaintBorderLine( rRect, aPaintRect, pPage, &pRight->GetColor() );
+        }
     }
 }
 
+// OD 06.05.2003 #107169# - paint SwAligned-rectangles.
 void MA_FASTCALL lcl_PaintTopLine( const SwFrm *pFrm, const SwPageFrm *pPage,
                           const SwRect &rOutRect, const SwRect &rRect,
                           const SwBorderAttrs &rAttrs, SwRectFn& rRectFn )
@@ -3183,7 +3393,21 @@ void MA_FASTCALL lcl_PaintTopLine( const SwFrm *pFrm, const SwPageFrm *pPage,
     SwRect aRect( rOutRect );
     (aRect.*rRectFn->fnAddBottom)( ::lcl_AlignHeight( pTop->GetOutWidth() ) -
                                    (aRect.*rRectFn->fnGetHeight)() );
-    pFrm->PaintBorderLine( rRect, aRect, pPage, &pTop->GetColor() );
+
+    // OD 29.04.2003 #107169# - paint SwAligned-rectangle
+    {
+        SwRect aPaintRect( aRect );
+        ::SwAlignRect( aPaintRect, pFrm->GetShell() );
+        // if <SwAlignRect> reveals rectangle with no width, adjust rectangle
+        // to the prior top postion with width of one twip.
+        if ( (aPaintRect.*rRectFn->fnGetHeight)() == 0 )
+        {
+            (aPaintRect.*rRectFn->fnSetTop)( (aRect.*rRectFn->fnGetTop)() );
+            (aPaintRect.*rRectFn->fnSetBottom)( (aRect.*rRectFn->fnGetTop)() );
+            (aPaintRect.*rRectFn->fnAddBottom)( 1 );
+        }
+        pFrm->PaintBorderLine( rRect, aPaintRect, pPage, &pTop->GetColor() );
+    }
 
     if ( pTop->GetInWidth() )
     {
@@ -3192,10 +3416,24 @@ void MA_FASTCALL lcl_PaintTopLine( const SwFrm *pFrm, const SwPageFrm *pPage,
         (aRect.*rRectFn->fnAddBottom)( nDist + nHeight );
         (aRect.*rRectFn->fnSubTop)( nHeight - (aRect.*rRectFn->fnGetHeight)() );
         ::lcl_SubLeftRight( aRect, rBox, rRectFn );
-        pFrm->PaintBorderLine( rRect, aRect, pPage, &pTop->GetColor() );
+        // OD 29.04.2003 #107169# - paint SwAligned-rectangle
+        {
+            SwRect aPaintRect( aRect );
+            ::SwAlignRect( aPaintRect, pFrm->GetShell() );
+            // if <SwAlignRect> reveals rectangle with no width, adjust
+            // rectangle to the prior top postion with width of one twip.
+            if ( (aPaintRect.*rRectFn->fnGetHeight)() == 0 )
+            {
+                (aPaintRect.*rRectFn->fnSetTop)( (aRect.*rRectFn->fnGetTop)() );
+                (aPaintRect.*rRectFn->fnSetBottom)( (aRect.*rRectFn->fnGetTop)() );
+                (aPaintRect.*rRectFn->fnAddBottom)( 1 );
+            }
+            pFrm->PaintBorderLine( rRect, aPaintRect, pPage, &pTop->GetColor() );
+        }
     }
 }
 
+// OD 06.05.2003 #107169# - paint SwAligned-rectangles.
 void MA_FASTCALL lcl_PaintBottomLine( const SwFrm *pFrm, const SwPageFrm *pPage,
                              const SwRect &rOutRect, const SwRect &rRect,
                              const SwBorderAttrs &rAttrs, SwRectFn& rRectFn )
@@ -3209,7 +3447,21 @@ void MA_FASTCALL lcl_PaintBottomLine( const SwFrm *pFrm, const SwPageFrm *pPage,
     SwRect aRect( rOutRect );
     (aRect.*rRectFn->fnSubTop)( ::lcl_AlignHeight( pBottom->GetOutWidth() ) -
                                 (aRect.*rRectFn->fnGetHeight)() );
-    pFrm->PaintBorderLine( rRect, aRect, pPage, &pBottom->GetColor() );
+
+    // OD 29.04.2003 #107169# - paint SwAligned-rectangle
+    {
+        SwRect aPaintRect( aRect );
+        ::SwAlignRect( aPaintRect, pFrm->GetShell() );
+        // if <SwAlignRect> reveals rectangle with no width, adjust rectangle
+        // to the prior bottom postion minus one twip with width of one twip.
+        if ( (aPaintRect.*rRectFn->fnGetHeight)() == 0 )
+        {
+            (aPaintRect.*rRectFn->fnSetTop)( (aRect.*rRectFn->fnGetBottom)() - 1 );
+            (aPaintRect.*rRectFn->fnSetBottom)( (aRect.*rRectFn->fnGetBottom)() - 1 );
+            (aPaintRect.*rRectFn->fnAddBottom)( 1 );
+        }
+        pFrm->PaintBorderLine( rRect, aPaintRect, pPage, &pBottom->GetColor() );
+    }
 
     if ( pBottom->GetInWidth() )
     {
@@ -3218,7 +3470,20 @@ void MA_FASTCALL lcl_PaintBottomLine( const SwFrm *pFrm, const SwPageFrm *pPage,
         (aRect.*rRectFn->fnSubTop)( nDist + nHeight );
         (aRect.*rRectFn->fnAddBottom)( nHeight -(aRect.*rRectFn->fnGetHeight)() );
         ::lcl_SubLeftRight( aRect, rBox, rRectFn );
-        pFrm->PaintBorderLine( rRect, aRect, pPage, &pBottom->GetColor() );
+        // OD 29.04.2003 #107169# - paint SwAligned-rectangle
+        {
+            SwRect aPaintRect( aRect );
+            ::SwAlignRect( aPaintRect, pFrm->GetShell() );
+            // if <SwAlignRect> reveals rectangle with no width, adjust rectangle
+            // to the prior bottom postion minus one twip with width of one twip.
+            if ( (aPaintRect.*rRectFn->fnGetHeight)() == 0 )
+            {
+                (aPaintRect.*rRectFn->fnSetTop)( (aRect.*rRectFn->fnGetBottom)() - 1 );
+                (aPaintRect.*rRectFn->fnSetBottom)( (aRect.*rRectFn->fnGetBottom)() - 1 );
+                (aPaintRect.*rRectFn->fnAddBottom)( 1 );
+            }
+            pFrm->PaintBorderLine( rRect, aPaintRect, pPage, &pBottom->GetColor() );
+        }
     }
 }
 
