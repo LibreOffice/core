@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-06 13:48:34 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 14:36:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,15 +316,12 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun
     ,m_sStateUndoRecord(ModuleRes(RID_STR_UNDO_MODIFY_RECORD))
     ,m_aAsynClose(LINK(this, SbaXDataBrowserController, OnAsyncClose))
     ,m_aAsyncGetCellFocus(LINK(this, SbaXDataBrowserController, OnAsyncGetCellFocus))
-    ,m_aSystemClipboard( TransferableDataHelper::CreateFromSystemClipboard() )
 {
     DBG_ASSERT(m_xUrlTransformer.is(), "SbaXDataBrowserController::SbaXDataBrowserController: no URLTransformer!");
     static ::rtl::OUString s_sHelpFileName(::rtl::OUString::createFromAscii("database.hlp"));
     sal_Int32 nAttrib = PropertyAttribute::READONLY | PropertyAttribute::TRANSIENT;
     registerProperty(PROPERTY_HELPFILENAME, PROPERTY_ID_HELPFILENAME,nAttrib,&s_sHelpFileName,  ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     DBG_ASSERT(m_xUrlTransformer.is(), "SbaXDataBrowserController::SbaXDataBrowserController : could not create the url transformer !");
-
-    m_aSystemClipboard.StartClipboardListening( );
 }
 
 //------------------------------------------------------------------------------
@@ -1087,9 +1084,9 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId)
                     sal_Bool bIsReadOnly = rEdit.IsReadOnly();
                     switch (nId)
                     {
-                        case ID_BROWSER_CUT : aReturn.bEnabled = m_bFrameUiActive && bHasLen && !bIsReadOnly; break;
-                        case SID_COPY   : aReturn.bEnabled = m_bFrameUiActive && bHasLen; break;
-                        case ID_BROWSER_PASTE   : aReturn.bEnabled = m_bFrameUiActive && !bIsReadOnly && m_aSystemClipboard.HasFormat(FORMAT_STRING); break;
+                        case ID_BROWSER_CUT:    aReturn.bEnabled = m_bFrameUiActive && bHasLen && !bIsReadOnly; break;
+                        case SID_COPY   :       aReturn.bEnabled = m_bFrameUiActive && bHasLen; break;
+                        case ID_BROWSER_PASTE:  aReturn.bEnabled = m_bFrameUiActive && !bIsReadOnly && Clipboard::HasFormat(FORMAT_STRING); break;
                     }
                 }
             }
@@ -1855,7 +1852,7 @@ IMPL_LINK(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext*, p
         if (!IsSearchableControl(xCurrentColumn))
             continue;
 
-        sal_uInt16 nModelPos = getBrowserView()->View2ModelPos(nViewPos);
+        sal_uInt16 nModelPos = getBrowserView()->View2ModelPos((sal_uInt16)nViewPos);
         Reference< XPropertySet >  xCurrentColModel = *(Reference< XPropertySet > *)xModelColumns->getByIndex(nModelPos).getValue();
         ::rtl::OUString aName = ::comphelper::getString(xCurrentColModel->getPropertyValue(PROPERTY_CONTROLSOURCE));
 
@@ -2333,7 +2330,7 @@ void LoadFormThread::run()
 
     // check if we were canceled
     ::osl::ClearableMutexGuard aTestGuard(m_aAccessSafety);
-    bool bReallyCanceled = (bool)m_bCanceled;
+    bool bReallyCanceled = m_bCanceled ? true : false;;
     aTestGuard.clear();
 
     bReallyCanceled |= bErrorOccured;

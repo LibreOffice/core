@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-23 09:29:33 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 14:36:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,11 +106,20 @@
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XTASK_HPP_
+#include <com/sun/star/frame/XTask.hpp>
+#endif
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
 #ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
+#endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
+#ifndef SVTOOLS_URIHELPER_HXX
+#include <svtools/urihelper.hxx>
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -217,6 +226,7 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
                     xFrame->setComponent(getComponentWindow(), this);
                     attachFrame(xFrame);
                     pParentComponent->setVisible(sal_True);
+                    loadMenu(xFrame);
                 }
                 break; // no more needed here
             }
@@ -582,29 +592,28 @@ void OGenericUnoController::dispatch(const ::com::sun::star::util::URL& aURL, co
 }
 
 // -----------------------------------------------------------------------
-void OGenericUnoController::addStatusListener(const Reference< ::com::sun::star::frame::XStatusListener > & aListener, const ::com::sun::star::util::URL& aURL)
+void OGenericUnoController::addStatusListener(const Reference< ::com::sun::star::frame::XStatusListener > & aListener, const ::com::sun::star::util::URL& _rURL)
 {
     // remeber the listener together with the ::com::sun::star::util::URL
-    m_arrStatusListener.insert(m_arrStatusListener.end(), DispatchTarget(aURL, aListener));
-
+    m_arrStatusListener.insert(m_arrStatusListener.end(), DispatchTarget(_rURL, aListener));
     // initially broadcast the state
-    InvalidateFeature(aURL.Complete, aListener, sal_True);
+    InvalidateFeature(_rURL.Complete, aListener, sal_True);
         // force the new state to be broadcasted to the new listener
 }
 
 // -----------------------------------------------------------------------
-void OGenericUnoController::removeStatusListener(const Reference< ::com::sun::star::frame::XStatusListener > & aListener, const ::com::sun::star::util::URL& aURL)
+void OGenericUnoController::removeStatusListener(const Reference< ::com::sun::star::frame::XStatusListener > & aListener, const ::com::sun::star::util::URL& _rURL)
 {
     DispatchIterator iterSearch = m_arrStatusListener.begin();
     DispatchIterator iterEnd    = m_arrStatusListener.end();
 
-    sal_Bool bRemoveForAll = (aURL.Complete.getLength() == 0);
+    sal_Bool bRemoveForAll = (_rURL.Complete.getLength() == 0);
     while (iterSearch != iterEnd)
     {
         DispatchTarget& rCurrent = *iterSearch;
         if  (   (rCurrent.xListener == aListener)
             &&  (   bRemoveForAll
-                ||  (rCurrent.aURL.Complete.equals(aURL.Complete))
+                ||  (rCurrent.aURL.Complete.equals(_rURL.Complete))
                 )
             )
         {
@@ -625,7 +634,7 @@ void OGenericUnoController::removeStatusListener(const Reference< ::com::sun::st
             ++iterSearch;
     }
 
-    SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find(aURL.Complete);
+    SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find(_rURL.Complete);
     if (aIter != m_aSupportedFeatures.end())
     {   // clear the cache for that feature
         StateCacheIterator aCachePos = m_aStateCache.find(aIter->second);
@@ -662,7 +671,7 @@ void OGenericUnoController::disposing()
         sal_Int32 nSize = m_arrStatusListener.size();
 #endif
         rCurrent.xListener->disposing(aDisposeEvent);
-        DBG_ASSERT(nSize > m_arrStatusListener.size(), "OGenericUnoController::dispose : the listener did not call removeStatusListener !");
+        DBG_ASSERT(nSize > (sal_Int32)m_arrStatusListener.size(), "OGenericUnoController::dispose : the listener did not call removeStatusListener !");
             // in disposing the status listener should remove itself via removeStatusListener, therein we remove it from
             // m_arrStatusListener, so the size should have decreased.
     }
@@ -694,6 +703,8 @@ void OGenericUnoController::removeEventListener(const Reference< XEventListener 
 //------------------------------------------------------------------------------
 void OGenericUnoController::frameAction(const ::com::sun::star::frame::FrameActionEvent& aEvent) throw( RuntimeException )
 {
+    if ((::com::sun::star::frame::XFrame*)aEvent.Frame.get() == (::com::sun::star::frame::XFrame*)m_xCurrentFrame.get())
+        m_bFrameUiActive = (aEvent.Action == FrameAction_FRAME_UI_ACTIVATED);
 }
 // -----------------------------------------------------------------------------
 Any SAL_CALL OGenericUnoController::queryInterface(const Type& _rType) throw (RuntimeException)
@@ -735,10 +746,6 @@ void OGenericUnoController::AddSupportedFeatures()
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBSlots/cutContent")] = ID_BROWSER_CUT;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBSlots/pasteContent")] = ID_BROWSER_PASTE;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBSlots/EditDoc")] = ID_BROWSER_EDITDOC;
-
-//  m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBSlots/Redo")] = ID_BROWSER_REDO;
-//  m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBSlots/Save")] = ID_BROWSER_SAVEDOC;
-//  m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBSlots/Undo")] = ID_BROWSER_UNDO;
 }
 
 //------------------------------------------------------------------------------
@@ -811,7 +818,7 @@ URL OGenericUnoController::getURLForId(sal_Int32 _nId) const
             break;
         }
 
-    if (m_xUrlTransformer.is())
+    if (m_xUrlTransformer.is() && aReturn.Complete.getLength())
         m_xUrlTransformer->parseStrict(aReturn);
 
     return aReturn;
@@ -915,6 +922,48 @@ void OGenericUnoController::showError(const SQLExceptionInfo& _rInfo)
     ::dbaui::showError(_rInfo,getView(),getORB());
 }
 // -----------------------------------------------------------------------------
+void OGenericUnoController::loadMenu(const Reference< ::com::sun::star::frame::XFrame >& _xFrame)
+{
+    String sMenuName = getMenu();
+    if(sMenuName.Len())
+    {
+        INetURLObject aEntry( URIHelper::SmartRelToAbs(OModule::getResManager()->GetFileName()) );
+        String aMenuRes( RTL_CONSTASCII_USTRINGPARAM( "private:resource/" ));
+        aMenuRes += ( aEntry.GetName() += '/' );
+        aMenuRes += sMenuName;
 
+        URL aURL;
+        aURL.Complete = aMenuRes;
+
+        Reference< XMultiServiceFactory >  xMgr = getORB();
+        Reference< XURLTransformer >  xTrans ( xMgr->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer") ), UNO_QUERY );
+        if( xTrans.is() )
+        {
+            // Datei laden
+            xTrans->parseStrict( aURL );
+
+            Reference< XDispatchProvider >  xProv( _xFrame, UNO_QUERY );
+            if ( xProv.is() )
+            {
+                Reference< XDispatch >  aDisp = xProv->queryDispatch( aURL,  ::rtl::OUString::createFromAscii("_menubar"), 12 );
+                if ( aDisp.is() )
+                    aDisp->dispatch( aURL, Sequence<PropertyValue>() );
+            }
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+String OGenericUnoController::getMenu() const
+{
+    return String();
+}
+// -----------------------------------------------------------------------------
+void OGenericUnoController::closeTask()
+{
+    Reference<XTask> xTask(m_xCurrentFrame,UNO_QUERY);
+    if(xTask.is())
+        xTask->close();
+}
+// -----------------------------------------------------------------------------
 
 

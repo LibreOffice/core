@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-19 16:16:25 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 14:36:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2588,13 +2588,16 @@ void SbaTableQueryBrowser::implCreateObject( SvLBoxEntry* _pApplyTo, sal_uInt16 
             case ID_TREE_QUERY_CREATE_TEXT:
                 pDispatcher = new OQueryDesignAccess(m_xMultiServiceFacatory) ;
                 break;
+            case ID_TREE_VIEW_CREATE_DESIGN:
+                pDispatcher = new OQueryDesignAccess(m_xMultiServiceFacatory,sal_True) ;
+                break;
         }
         ::rtl::OUString aDSName = getEntryText( m_pTreeView->getListBox()->GetRootLevelParent( _pApplyTo ) );
 
         if (bEdit)
             pDispatcher->edit(aDSName, sCurrentObject, xConnection);
         else
-            pDispatcher->create(aDSName, xConnection, ID_TREE_QUERY_CREATE_DESIGN == _nAction);
+            pDispatcher->create(aDSName, xConnection, (ID_TREE_QUERY_CREATE_DESIGN == _nAction) || (ID_TREE_VIEW_CREATE_DESIGN == _nAction));
         delete pDispatcher;
     }
     catch(SQLException& e)
@@ -2763,6 +2766,7 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
 
         // 1.1 new table / edit relations - available if a table or a table container is selected
         aContextMenu.EnableItem(ID_TREE_TABLE_CREATE_DESIGN, bTablesOrTable);
+        aContextMenu.EnableItem(ID_TREE_VIEW_CREATE_DESIGN,  bTablesOrTable);
         aContextMenu.EnableItem(ID_TREE_RELATION_DESIGN,     bTablesOrTable);
 
         // 1.2 pasting tables
@@ -2790,6 +2794,7 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
     {
         // 1.1 new table / edit relations - available if a table or a table container is selected
         aContextMenu.EnableItem(ID_TREE_TABLE_CREATE_DESIGN, FALSE);
+        aContextMenu.EnableItem(ID_TREE_VIEW_CREATE_DESIGN,  FALSE);
         aContextMenu.EnableItem(ID_TREE_RELATION_DESIGN,     FALSE);
 
         // 1.2 pasting tables
@@ -2848,6 +2853,7 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
 
         case ID_TREE_RELATION_DESIGN:
         case ID_TREE_TABLE_CREATE_DESIGN:
+        case ID_TREE_VIEW_CREATE_DESIGN:
         case ID_TREE_QUERY_CREATE_DESIGN:
         case ID_TREE_QUERY_CREATE_TEXT:
         case ID_TREE_QUERY_EDIT:
