@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ssa $ $Date: 2001-04-06 06:49:24 $
+ *  last change: $Author: obr $ $Date: 2001-04-24 09:14:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -714,7 +714,8 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
                                 sal_False );
 
                             // the X dnd implementation uses a second display connection
-                            if( ! pMouseDownWin->IsMouseCaptured() )
+                            // FIXME: to be moved to UNX MouseButtonDown ??
+                            if( ! pSVData->maWinData.mpCaptureWin )
                                 pMouseDownWin->mpFrame->CaptureMouse( sal_False );
 
                             ULONG nCount = Application::ReleaseSolarMutex();
