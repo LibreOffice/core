@@ -3,9 +3,9 @@
  *
  *  $RCSfile: VCL.xcu,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 08:18:58 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 07:57:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -652,6 +652,68 @@
       <prop oor:name="FIXED" oor:type="xs:string" oor:op="replace">
         <value>썬굴림;SunGulim;Cumberland;Courier New;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
+    </node>
+    <node oor:name="dz" oor:op="replace">
+      <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
+        <value>Joyig;Tsuyig;Tashi</value>
+      </prop>
+      <prop oor:name="CTL_DISPLAY" oor:op="replace" oor:type="xs:string">
+        <value>Joyig;Tsuyig;Tashi</value>
+      </prop>
+      <prop oor:name="CTL_HEADING" oor:op="replace" oor:type="xs:string">
+        <value>Joyig;Tsuyig;Tashi</value>
+      </prop>
+      <prop oor:name="CTL_PRESENTATION" oor:op="replace" oor:type="xs:string">
+        <value>Joyig;Tsuyig;Tashi</value>
+      </prop>
+      <prop oor:name="CTL_SPREADSHEET" oor:op="replace" oor:type="xs:string">
+        <value>Joyig;Tsuyig;Tashi</value>
+      </prop>
+      <prop oor:name="CTL_TEXT" oor:op="replace" oor:type="xs:string">
+        <value>Joyig;Tsuyig;Tashi</value>
+      </prop>
+    </node>
+    <node oor:name="km" oor:op="replace">
+      <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
+        <value>Khmer OS System;Khmer OS SystemC;Khmer OS;Khmer Kampot;UniKhm;.Mondulkiri U OT;Srok Khleang;XenoType Khmer</value>
+      </prop>
+      <prop oor:name="CTL_DISPLAY" oor:op="replace" oor:type="xs:string">
+        <value>Khmer OS System;Khmer OS SystemC;Khmer OS;Khmer Kampot;UniKhm;.Mondulkiri U OT;Srok Khleang;XenoType Khmer</value>
+      </prop>
+      <prop oor:name="CTL_HEADING" oor:op="replace" oor:type="xs:string">
+        <value>Khmer OS System;Khmer OS SystemC;Khmer OS;Khmer Kampot;UniKhm;.Mondulkiri U OT;Srok Khleang;XenoType Khmer</value>
+      </prop>
+      <prop oor:name="CTL_PRESENTATION" oor:op="replace" oor:type="xs:string">
+        <value>Khmer OS System;Khmer OS SystemC;Khmer OS;Khmer Kampot;UniKhm;.Mondulkiri U OT;Srok Khleang;XenoType Khmer</value>
+      </prop>
+      <prop oor:name="CTL_SPREADSHEET" oor:op="replace" oor:type="xs:string">
+        <value>Khmer OS System;Khmer OS SystemC;Khmer OS;Khmer Kampot;UniKhm;.Mondulkiri U OT;Srok Khleang;XenoType Khmer</value>
+      </prop>
+      <prop oor:name="CTL_TEXT" oor:op="replace" oor:type="xs:string">
+        <value>Khmer OS System;Khmer OS SystemC;Khmer OS;Khmer Kampot;UniKhm;.Mondulkiri U OT;Srok Khleang;XenoType Khmer</value>
+      </prop>
+    </node>
+    <node oor:name="lo" oor:op="replace">
+      <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
+        <value>Arial Unicode MS;Saysettha OT;Saysettha Unicode;JG Basic Lao;JG Chantabouli Lao</value>
+      </prop>
+      <prop oor:name="CTL_DISPLAY" oor:op="replace" oor:type="xs:string">
+        <value>Arial Unicode MS;Saysettha OT;Saysettha Unicode;JG Basic Lao;JG Chantabouli Lao</value>
+      </prop>
+      <prop oor:name="CTL_HEADING" oor:op="replace" oor:type="xs:string">
+        <value>Arial Unicode MS;Saysettha OT;Saysettha Unicode;JG Basic Lao;JG Chantabouli Laog</value>
+      </prop>
+      <prop oor:name="CTL_PRESENTATION" oor:op="replace" oor:type="xs:string">
+        <value>Arial Unicode MS;Saysettha OT;Saysettha Unicode;JG Basic Lao;JG Chantabouli Lao</value>
+      </prop>
+      <prop oor:name="CTL_SPREADSHEET" oor:op="replace" oor:type="xs:string">
+        <value>Arial Unicode MS;Saysettha OT;Saysettha Unicode;JG Basic Lao;JG Chantabouli Lao</value>
+      </prop>
+      <prop oor:name="CTL_TEXT" oor:op="replace" oor:type="xs:string">
+        <value>Arial Unicode MS;Saysettha OT;Saysettha Unicode;JG Basic Lao;JG Chantabouli Lao</value>
+      </prop>
+    </node>
+    <node oor:name="sw" oor:op="replace">
     </node>
   </node>
   <node oor:name="FontSubstitutions">
