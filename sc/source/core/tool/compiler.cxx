@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-03-01 19:58:13 $
+ *  last change: $Author: er $ $Date: 2001-03-01 21:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2376,6 +2376,15 @@ void ScCompiler::Factor()
             // time to generate ocMissing in between subsequent ocSep.
             // Xcl import should map missings to values if possible.
             SetError( errParameterExpected );
+        }
+        else if ( eOp == ocSep )
+        {   // Subsequent ocSep
+            SetError( errParameterExpected );
+            if ( bAutoCorrect && !pStack )
+            {
+                aCorrectedSymbol.Erase();
+                bCorrected = TRUE;
+            }
         }
         else
         {
