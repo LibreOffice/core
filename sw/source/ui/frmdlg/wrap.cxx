@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-05-08 12:43:14 $
+ *  last change: $Author: fs $ $Date: 2002-07-19 15:07:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -767,14 +767,14 @@ void SwWrapTabPage::DataChanged( const DataChangedEvent& rDCEvt )
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
             ApplyImageList();
 
-    Window::DataChanged( rDCEvt );
+    SfxTabPage::DataChanged( rDCEvt );
 }
 /* -----------------------------08.05.2002 14:28------------------------------
 
  ---------------------------------------------------------------------------*/
 void SwWrapTabPage::ApplyImageList()
 {
-    ImageList& rImgLst = GetSettings().GetStyleSettings().GetHighContrastMode() ?
+    ImageList& rImgLst = GetDisplayBackground().GetColor().IsDark() ?
         aWrapILH : aWrapIL;
 
     aWrapThroughRB.SetImage(rImgLst.GetImage(IMG_THROUGH));
