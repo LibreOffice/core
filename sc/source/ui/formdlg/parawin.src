@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parawin.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:57:05 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,39 +88,12 @@
         TabStop = TRUE;
 
 #define RB_ARGBLOCK( y )                \
-    QuickHelpText = "Verkleinern" ; \
-    QuickHelpText [ ENGLISH ] = "Shrink" ; \
+    QuickHelpText [ de ] = "Verkleinern" ; \
     Pos = MAP_APPFONT ( 166 , y ) ; \
     Size = MAP_APPFONT ( 12 , 12 ) ; \
     TabStop = FALSE ;   \
-    QuickHelpText[ english_us ] = "Shrink"; \
-    QuickHelpText[ portuguese ] = "Shrink"; \
-    QuickHelpText[ russian ] = "Óìåíüøèòü"; \
-    QuickHelpText[ dutch ] = "Verkleinen";  \
-    QuickHelpText[ french ] = "Réduire";    \
-    QuickHelpText[ spanish ] = "Reducir";   \
-    QuickHelpText[ italian ] = "Zoom indietro"; \
-    QuickHelpText[ danish ] = "Formindsk";  \
-    QuickHelpText[ swedish ] = "Förminska"; \
-    QuickHelpText[ polish ] = "Pomniejsz";  \
-    QuickHelpText[ portuguese_brazilian ] = "Reduzir";  \
-    QuickHelpText[ japanese ] = "ç¸®å°";   \
-    QuickHelpText[ chinese_simplified ] = "ç¼©å°"; \
-    QuickHelpText[ chinese_traditional ] = "ç¸®å°";    \
-    QuickHelpText[ arabic ] = "ÊÕÛíÑ";  \
-    QuickHelpText[ greek ] = "Óìßêñõíóç";   \
-    QuickHelpText[ korean ] = "ì¶•ì†Œ"; \
-    QuickHelpText[ language_user1 ] = " ";  \
-    QuickHelpText[ turkish ] = "Verkleinern";   \
-    QuickHelpText[ catalan ] = "Redueix";   \
-    QuickHelpText[ finnish ] = "Kutista";   \
-    QuickHelpText[ thai ] = "Shrink";   \
-    QuickHelpText[ czech ] = "ZmenÅ¡it";    \
-    QuickHelpText[ hebrew ] = "Verkleinern";    \
-    QuickHelpText[ hindi ] = "à¤¸à¤¿à¤•à¥à¤¡à¤¨à¤¾";   \
-    QuickHelpText[ slovak ] = "ZmenÅ¡iÅ¥"; \
-    QuickHelpText[ hungarian ] = "ZsugorÃ­tÃ¡s"; \
-    QuickHelpText[ slovenian ] = "SkrÄi";
+    QuickHelpText [ en-US ] = "Shrink"; \
+    QuickHelpText [ x-comment ] = " ";
 
  //---------------------------------------------------------------------------
 
@@ -138,35 +111,8 @@ TabPage RID_SCTAB_PARAMETER
         Pos = MAP_APPFONT (3 , 6 ) ;
         Size = MAP_APPFONT ( 198 , 20 ) ;
         WordBreak = TRUE ;
-        Text = "Unbekannte Funktion" ;
-        Text [ ENGLISH ] = "Unknown function." ;
-        Text[ english_us ] = "Function not known";
-        Text[ portuguese ] = "Função desconhecida";
-        Text[ russian ] = "Íåèçâåñòíàÿ ôóíêöèÿ";
-        Text[ greek ] = "¢ãíùóôç óõíÜñôçóç";
-        Text[ dutch ] = "Onbekende functie";
-        Text[ french ] = "Fonction inconnue";
-        Text[ spanish ] = "Función desconocida";
-        Text[ italian ] = "Funzione sconosciuta";
-        Text[ danish ] = "Ukendt funktion";
-        Text[ swedish ] = "Okänd funktion";
-        Text[ polish ] = "Nieznana funkcja";
-        Text[ portuguese_brazilian ] = "Função desconhecida";
-        Text[ japanese ] = "ä¸æ˜ãªé–¢æ•°";
-        Text[ korean ] = "ì•Œìˆ˜ ì—†ëŠ” í•¨ìˆ˜";
-        Text[ chinese_simplified ] = "ä¸æ˜çš„å‡½æ•°";
-        Text[ chinese_traditional ] = "ä¸æ˜çš„å‡½æ•¸";
-        Text[ arabic ] = "ÏÇáÉ ÛíÑ ãÚÑæİÉ";
-        Text[ turkish ] = "Bilinmeyen fonksiyon";
-        Text[ catalan ] = "Funció desconeguda";
-        Text[ finnish ] = "Tuntematon funktio";
-        Text[ thai ] = "à¹„à¸¡à¹ˆà¸£à¸¹à¹‰à¸ˆà¸±à¸à¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™";
-        Text[ czech ] = "NeznÃ¡mÃ¡ funkce";
-        Text[ hebrew ] = "â€®×¤×•× ×§×¦×™×” ×œ× ××•×›×¨×ªâ€¬";
-        Text[ hindi ] = "à¤…à¤œà¥à¤à¤¾à¤¤ à¤«à¤‚à¤•à¥à¤¶à¤¨à¥";
-        Text[ slovak ] = "NeznÃ¡ma funkcia";
-        Text[ hungarian ] = "Ismeretlen fÃ¼ggvÃ©ny";
-        Text[ slovenian ] = "Neznana funkcija";
+        Text [ de ] = "Unbekannte Funktion" ;
+        Text [ en-US ] = "Function not known";
     };
 
     FixedText FT_PARNAME
