@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-04 13:36:00 $
+ *  last change: $Author: fs $ $Date: 2002-07-19 13:26:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -744,6 +744,16 @@ void SvTreeListBox::SetCheckButtonData( SvLBoxButtonData* pData )
     DBG_CHKTHIS(SvTreeListBox,0);
     if ( pData )
         pCheckButtonData = pData;
+}
+
+const Image& SvTreeListBox::GetDefaultExpandedNodeImage( BmpColorMode _eMode )
+{
+    return SvImpLBox::GetDefaultExpandedNodeImage( _eMode );
+}
+
+const Image& SvTreeListBox::GetDefaultCollapsedNodeImage( BmpColorMode _eMode )
+{
+    return SvImpLBox::GetDefaultCollapsedNodeImage( _eMode );
 }
 
 void SvTreeListBox::SetNodeBitmaps( const Image& rCollapsedNodeBmp, const Image& rExpandedNodeBmp, BmpColorMode _eMode )
