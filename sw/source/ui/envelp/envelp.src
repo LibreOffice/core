@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envelp.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:11 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:16:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ String STR_DATABASE_NOT_OPENED
     Text [ English ] = "Could not open database." ;
     Text [ norwegian ] = "Could not open database." ;
     Text [ italian ] = "Impossibile aprire il database." ;
-    Text [ portuguese_brazilian ] = "N?o pude abrir base de dados." ;
+    Text [ portuguese_brazilian ] = "N�o foi poss�vel abrir o banco de dados." ;
     Text [ portuguese ] = "Foi imposs�vel abrir base de dados." ;
     Text [ finnish ] = "Tietokantaa ei voitu avata." ;
     Text [ danish ] = "Det var ikke muligt at �bne databasen." ;
@@ -81,7 +81,7 @@ String STR_DATABASE_NOT_OPENED
     Text [ english_us ] = "Database could not be opened." ;
     Text[ chinese_simplified ] = "无法打开数据库。";
     Text[ russian ] = "���������� ������� ���� ������.";
-    Text[ polish ] = "Baza danych nie mog�a by� otworzona.";
+    Text[ polish ] = "Nie mo�na otworzy� bazy danych.";
     Text[ japanese ] = "データベースを開くことができませんでした";
     Text[ chinese_traditional ] = "無法開啟資料庫。";
     Text[ arabic ] = "���� ��� ����� ��������.";
@@ -93,6 +93,9 @@ String STR_DATABASE_NOT_OPENED
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No es pot obrir la base de dades.";
     Text[ thai ] = "ไม่สามารถเปิดฐานข้อมูลได้";
+    Text[ czech ] = "Databázi není možné otevřít.";
+    Text[ hebrew ] = "Datenbank konnte nicht geöffnet werden.";
+    Text[ hindi ] = "लेखासंचय को नहीं खोल सकते है ।";
 };
 String STR_NO_DRIVERS
 {
@@ -100,7 +103,7 @@ String STR_NO_DRIVERS
     Text [ English ] = "No database drivers installed." ;
     Text [ norwegian ] = "No database drivers installed." ;
     Text [ italian ] = "Non sono installati driver di controllo database." ;
-    Text [ portuguese_brazilian ] = "Nenhum driver de base de dados instalado." ;
+    Text [ portuguese_brazilian ] = "Nenhum driver de banco de dados foi instalado." ;
     Text [ portuguese ] = "Controlador da base de dados n�o instalado." ;
     Text [ finnish ] = "Tietokanta-ohjaimia ei ole asennettu." ;
     Text [ danish ] = "Ingen databasedriverere installeret." ;
@@ -111,7 +114,7 @@ String STR_NO_DRIVERS
     Text [ english_us ] = "No database drivers installed." ;
     Text[ chinese_simplified ] = "没有安装数据库驱动程序。";
     Text[ russian ] = "�� ���������� ������� ���� ������.";
-    Text[ polish ] = "Nie zainstalowany sterownik bazy danych.";
+    Text[ polish ] = "Nie s� zainstalowane �adne sterowniki bazy danych.";
     Text[ japanese ] = "データベースドラバがインストールされていません。";
     Text[ chinese_traditional ] = "沒有安裝資料庫驅動程式。";
     Text[ arabic ] = "�� ���� ����� ����� ����� ������ �����.";
@@ -123,6 +126,9 @@ String STR_NO_DRIVERS
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No s'han instal.lat els controladors de la base de dades.";
     Text[ thai ] = "ไม่ได้ติดตั้งไดร้ฟ์เวอร์ฐานข้อมูล";
+    Text[ czech ] = "Nejsou instalovány ovladače databáze.";
+    Text[ hebrew ] = "Keine Datenbanktreiber installiert.";
+    Text[ hindi ] = "कोई लेखासंचय ड्इवरों को प्रतिष्ठापित नहीं किया ।";
 };
 String STR_BTN_NEW_DOC
 {
@@ -130,7 +136,7 @@ String STR_BTN_NEW_DOC
     Text [ English ] = "~New document" ;
     Text [ norwegian ] = "~New doc." ;
     Text [ italian ] = "Nuovo documento" ;
-    Text [ portuguese_brazilian ] = "~Novo doc." ;
+    Text [ portuguese_brazilian ] = "~Novo Documento" ;
     Text [ portuguese ] = "~Novo documento" ;
     Text [ finnish ] = "Uusi asiakirja" ;
     Text [ danish ] = "Nyt dokument" ;
@@ -141,7 +147,7 @@ String STR_BTN_NEW_DOC
     Text [ english_us ] = "~New Document" ;
     Text[ chinese_simplified ] = "新建文档(~N)";
     Text[ russian ] = "������� ��������";
-    Text[ polish ] = "Nowy dok.";
+    Text[ polish ] = "~Nowy dokument";
     Text[ japanese ] = "新ドキュメント(~N)";
     Text[ chinese_traditional ] = "開啟新檔(~N)";
     Text[ arabic ] = "����� ����";
@@ -153,6 +159,9 @@ String STR_BTN_NEW_DOC
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Document ~nou";
     Text[ thai ] = "เอกสารใ~หม่";
+    Text[ czech ] = "Nový dokument";
+    Text[ hebrew ] = "‮מסמך חדש‬";
+    Text[ hindi ] = "~नया लेखपत्र";
 };
 
 String STR_BTN_NEWDOC
@@ -168,8 +177,8 @@ String STR_BTN_NEWDOC
     Text[ italian ] = "Nuovo doc.";
     Text[ danish ] = "Nyt dok.";
     Text[ swedish ] = "~Nytt dok.";
-    Text[ polish ] = "Nowy dok.";
-    Text[ portuguese_brazilian ] = "~New doc.";
+    Text[ polish ] = "~Nowy dokument";
+    Text[ portuguese_brazilian ] = "~Novo Doc.";
     Text[ japanese ] = "新ドキュメント(~N)";
     Text[ chinese_simplified ] = "新建文档(~N)";
     Text[ chinese_traditional ] = "開啟新檔(~N)";
@@ -183,6 +192,9 @@ String STR_BTN_NEWDOC
     Text[ catalan ] = "Doc. ~nou";
     Text[ finnish ] = "Uusi as.";
     Text[ thai ] = "เอกสารใ~หม่";
+    Text[ czech ] = "Nový dok.";
+    Text[ hebrew ] = "~Neues Dok.";
+    Text[ hindi ] = "~नया लेखपत्र";
 };
 
 String STR_SENDER_TOKENS
@@ -210,7 +222,19 @@ String STR_SENDER_TOKENS
     Text[ catalan ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;CITY; ;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
     Text[ finnish ] = "YRITYS;CR;ETUNIMI; ;SUKUNIMI;CR;OSOITE;CR;POSTITOIMIPAIKKA; ;OSAVALTIO; ;POSTINUMERO;CR;MAA;CR;";
     Text[ thai ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;CITY; ;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
+    Text[ czech ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;CITY; ;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
+    Text[ hebrew ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;COUNTRY; ;POSTALCODE; ;CITY;CR;";
+    Text[ hindi ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;CITY; ;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
 };
+
+
+
+
+
+
+
+
+
 
 
 
