@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_path_helper.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2002-11-29 10:38:20 $
+ *  last change: $Author: tra $ $Date: 2002-12-14 13:21:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,6 +286,35 @@
 
  sal_Bool SAL_CALL osl_systemPathIsLocalOrParentDirectoryEntry(
      const rtl_uString* pustrPath);
+
+
+ /************************************************
+      osl_searchPath
+    Searches for a file name or path name in all
+    directories specified by a given path list.
+    Symbolic links in the resulting path will not be
+    resolved, it's up to the caller to do this.
+
+    @param pustrFilePath [in] a file name or
+    directory name to search for, the name must
+    be provided as system path not as a file URL
+
+    @param pustrSearchPathList [in] a ':'
+    separated list of paths in which to search for
+    the file or directory name
+
+    @ppustrPathFound [out] on success receives the
+    complete path of the file or directory found
+    as a system path
+
+    @returns sal_True if the specified file or
+    directory was found else sal_False
+  ***********************************************/
+
+ sal_Bool SAL_CALL osl_searchPath(
+     const rtl_uString* pustrFilePath,
+    const rtl_uString* pustrSearchPathList,
+    rtl_uString**      ppustrPathFound);
 
 
  #ifdef __cplusplus

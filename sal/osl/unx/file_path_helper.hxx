@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_path_helper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2002-12-05 11:30:02 $
+ *  last change: $Author: tra $ $Date: 2002-12-14 13:21:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,6 +307,21 @@ namespace osl
      const rtl::OUString& Path)
  {
     return osl_systemPathIsLocalOrParentDirectoryEntry(Path.pData);
+ }
+
+ /************************************************
+  searchPath
+  ***********************************************/
+
+ inline bool searchPath(
+     const rtl::OUString& ustrFilePath,
+    const rtl::OUString& ustrSearchPathList,
+    rtl::OUString& ustrPathFound)
+ {
+     return osl_searchPath(
+        ustrFilePath.pData,
+        ustrSearchPathList.pData,
+        &ustrPathFound.pData);
  }
 
 
