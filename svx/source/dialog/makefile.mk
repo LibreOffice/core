@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: kz $ $Date: 2004-10-04 17:47:53 $
+#   last change: $Author: rt $ $Date: 2004-11-26 14:20:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -153,7 +153,9 @@ SRC1FILES =  \
         macropg.src \
         eventdlg.src \
         cfg.src \
-        optjava.src
+        optjava.src \
+        docrecovery.src
+
 
 SRS2NAME=drawdlgs
 SRC2FILES =  \
@@ -225,7 +227,21 @@ EXCEPTIONSFILES=\
     $(SLO)$/svxbmpnumvalueset.obj \
     $(SLO)$/macropg.obj \
     $(SLO)$/cfg.obj \
-    $(SLO)$/optjava.obj
+    $(SLO)$/optjava.obj \
+    $(SLO)$/docrecovery.obj
+
+#	$(SLO)$/docrecoveryservice.obj	\
+
+
+.IF "$(GUI)"=="UNX"
+EXCEPTIONSFILES +=	$(SLO)$/sendreportunx.obj
+.ELSE
+.IF "$(GUI)"=="WNT"
+EXCEPTIONSFILES +=	$(SLO)$/sendreportw32.obj
+.ELSE
+EXCEPTIONSFILES +=	$(SLO)$/sendreportgen.obj
+.ENDIF
+.ENDIF
 
 SLOFILES=\
         $(SLO)$/SpellDialogChildWindow.obj \
@@ -383,6 +399,7 @@ LIB1OBJFILES= \
     $(SLO)$/dlgctrl.obj \
     $(SLO)$/dlgctl3d.obj \
     $(SLO)$/dlgutil.obj  \
+    $(SLO)$/docrecovery.obj  \
     $(SLO)$/fntctrl.obj  \
     $(SLO)$/fontwork.obj \
     $(SLO)$/hdft.obj     \
@@ -423,6 +440,16 @@ LIB1OBJFILES= \
     $(SLO)$/cfg.obj	\
     $(SLO)$/framelink.obj	\
     $(SLO)$/framelinkarray.obj
+    
+.IF "$(GUI)"=="UNX"
+LIB1OBJFILES +=	$(SLO)$/sendreportunx.obj
+.ELSE
+.IF "$(GUI)"=="WNT"
+LIB1OBJFILES +=	$(SLO)$/sendreportw32.obj
+.ELSE
+LIB1OBJFILES +=	$(SLO)$/sendreportgen.obj
+.ENDIF
+.ENDIF
 
 LIB2TARGET= $(SLB)$/cui.lib
 
@@ -479,11 +506,11 @@ LIB2OBJFILES= \
     $(SLO)$/cuigrfflt.obj \
     $(SLO)$/readonlyimage.obj \
     $(SLO)$/optaccessibility.obj    \
-    $(SLO)$/optsave.obj \
-    $(SLO)$/optasian.obj		\
-    $(SLO)$/optpath.obj	\
-    $(SLO)$/optcolor.obj    \
-    $(SLO)$/optjsearch.obj  \
+    $(SLO)$/optsave.obj		\
+    $(SLO)$/optasian.obj	\
+    $(SLO)$/optpath.obj		\
+    $(SLO)$/optcolor.obj	\
+    $(SLO)$/optjsearch.obj	\
     $(SLO)$/optinet2.obj	\
     $(SLO)$/optctl.obj	\
     $(SLO)$/optjava.obj	\
