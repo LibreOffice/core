@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saxparser.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-28 16:28:34 $
+ *  last change: $Author: rt $ $Date: 2004-11-10 09:12:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,10 +173,10 @@ class TestDocumentHandler :
 {
 public:
     TestDocumentHandler(const char* locale, const char* outFile ) :
-      of(outFile, locale), nbOfCurrencies(0), nbOfCalendars(0), nbOfCollations(0),
+      of(outFile, locale), nError(0), nbOfCurrencies(0), nbOfCalendars(0), nbOfCollations(0),
       nbOfFormatElements(0), nbOfDays(50), nbOfMonths(50), nbOfEras(10),
       nbOfTransliterations(0), isStartDayOfWeek(false), foundDefaultName(false),
-      flag(-1), foundVarient(false), openElement(false), rootNode(0)
+      flag(-1), foundVariant(false), openElement(false), rootNode(0)
     {
         strncpy( theLocale, locale, sizeof(theLocale) );
         theLocale[sizeof(theLocale)-1] = 0;
@@ -191,6 +191,7 @@ public:
 public: // Error handler
     virtual void SAL_CALL error(const Any& aSAXParseException) throw (SAXException, RuntimeException)
     {
+        ++nError;
         printf( "Error !\n" );
         throw  SAXException(
             OUString( RTL_CONSTASCII_USTRINGPARAM("error from error handler")) ,
@@ -199,6 +200,7 @@ public: // Error handler
     }
     virtual void SAL_CALL fatalError(const Any& aSAXParseException) throw (SAXException, RuntimeException)
     {
+        ++nError;
         printf( "Fatal Error !\n" );
     }
     virtual void SAL_CALL warning(const Any& aSAXParseException) throw (SAXException, RuntimeException)
@@ -219,16 +221,27 @@ public: // ExtendedDocumentHandler
     {
     printf( "parsing document %s started\n", theLocale);
     of.writeAsciiString("#include <sal/types.h>\n\n\n");
-#if SUPD > 618
     of.writeAsciiString("#include <stdio.h> // debug printfs\n\n");
-#endif // SUPD > 618
     of.writeAsciiString("extern \"C\" {\n\n");
     }
 
     virtual void SAL_CALL endDocument(void) throw (SAXException, RuntimeException)
     {
         if (rootNode)
+        {
             rootNode->generateCode(of);
+            int err = rootNode->getError();
+            if (err)
+            {
+                printf( "Error: in data for %s: %d\n", theLocale, err);
+                nError += err;
+            }
+        }
+        else
+        {
+            ++nError;
+            printf( "Error: no data for %s\n", theLocale);
+        }
         printf( "parsing document %s finished\n", theLocale);
 
         of.writeAsciiString("} // extern \"C\"\n\n");
@@ -316,6 +329,7 @@ public: // ExtendedDocumentHandler
     }
 
 public:
+    int nError;
     ::rtl::OUString currentElement;
     sal_Int16 nbOfCurrencies;
     sal_Int16 nbOfCalendars;
@@ -331,7 +345,7 @@ public:
     OFileWriter of;
     sal_Bool isStartDayOfWeek;
     sal_Bool foundDefaultName;
-    sal_Bool foundVarient;
+    sal_Bool foundVariant;
         sal_Bool openElement;
 };
 
@@ -400,6 +414,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     //--------------------------------
     Reference< XInterface > x = xSMgr->createInstance(
         OUString::createFromAscii( "com.sun.star.xml.sax.Parser" ) );
+    int nError = 0;
     if( x.is() )
     {
         Reference< XParser > rParser( x , UNO_QUERY );
@@ -430,6 +445,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             printf( "Exception during parsing : %s\n" ,  o1.getStr() );
             exit(1);
         }
+        nError = pDocHandler->nError;
     }
     else
     {
@@ -437,5 +453,5 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         exit(1);
     }
 
-    return 0;
+    return nError;
 }
