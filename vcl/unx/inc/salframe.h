@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:31 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:31:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,9 +240,12 @@ class SalFrameData
 
     DECL_LINK( HandleResizeTimer, void* );
     DECL_LINK( HandleAlwaysOnTopRaise, void* );
+
+    void            passOnSaveYourSelf();
 public:
     long            Dispatch( XEvent *pEvent );
     void            Init( ULONG nSalFrameStyle, SystemParentData* pParentData = NULL );
+    bool            SetPluginParent( SystemParentData* pNewParent );
 
     SalDisplay     *GetDisplay() const { return pDisplay_; }
     inline  Display        *GetXDisplay() const;
