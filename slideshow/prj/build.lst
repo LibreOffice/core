@@ -1,5 +1,6 @@
-pe	slideshow	:	comphelper cppuhelper offuh cppcanvas canvas basegfx NULL
+pe	slideshow	:	tools sal cppu vcl comphelper cppuhelper offuh cppcanvas basegfx goodies unotools toolkit animations NULL
 pe	slideshow							usr1	-	all	pe_mkout NULL
-pe	slideshow\source\engine				nmake	-	all	pe_engine NULL
 pe	slideshow\source\api				nmake	-	all	pe_api NULL
-pe	slideshow\util						nmake	-	all	pe_util pe_engine pe_api NULL
+pe	slideshow\source\engine				nmake	-	all	pe_engine pe_api NULL
+pe	slideshow\source\engine\transitions	nmake	-	all	pe_transitions pe_api NULL
+pe	slideshow\util						nmake	-	all	pe_util pe_transitions pe_engine pe_api NULL
