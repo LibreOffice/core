@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:35:11 $
+ *  last change: $Author: nf $ $Date: 2003-07-17 15:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -12431,7 +12431,7 @@ String RID_ERR_LGROUPEXPECTED
     Text [ french ] = "'{' requis" ;
     Text [ swedish ] = "'{' förväntad" ;
     Text [ danish ] = "'{' forventes" ;
-    Text [ portuguese_brazilian ] = "É necessário \"{\"" ;
+    Text [ portuguese_brazilian ] = "É necessário '{'" ;
     Text [ portuguese ] = "Necessário '{'" ;
     Text[ chinese_simplified ] = "æœŸå¾… '{'";
     Text[ russian ] = "'{' îæèäàåòñÿ";
@@ -12457,48 +12457,29 @@ String RID_ERR_RGROUPEXPECTED
     Text = "'}' erwartet" ;
     Text [ ENGLISH ] = "'}' expected" ;
     Text [ english_us ] = "'}' expected" ;
-    Text [ italian ] = "'}' atteso" ;
-    Text [ spanish ] = "Se requiere '}'" ;
-    Text [ french ] = "'}' requis" ;
-    Text [ dutch ] = "'}' verwacht" ;
-    Text [ swedish ] = "'}' förväntad" ;
-    Text [ danish ] = "'}' forventes" ;
-    Text [ portuguese_brazilian ] = "É necessário \"}\"";   Text[ portuguese ] = "'}' necessária";
+    Text[ portuguese ] = "'}' necessária";
     Text[ russian ] = "'}' îæèäàåòñÿ";
-    Text[ slovak ] = "OÄakÃ¡vanÃ¡ '}'";
-    Text[ polish ] = "Oczekiwano znaku '}'";
-    Text[ japanese ] = "'}'ãŒå¿…è¦ã§ã™";
-    Text[ korean ] = "'}' ê°€ í•„ìš”í•¨";
-    Text[ turkish ] = "'}' gerekli";
-    Text[ thai ] = "'}' à¸„à¸²à¸”à¸„à¸´à¸”";
-
-    Text[ finnish ] = "Tähän tarvitaan '}'";
-    Text[ czech ] = "OÄekÃ¡vÃ¡na '}'";
-    Text[ chinese_simplified ] = "æœŸå¾… '}'";
-    Text[ chinese_traditional ] = "æœŸå¾…<}>";
-    Text[ arabic ] = "ãÊæŞÚ '}'";
-    Text[ hebrew ] = "â€®×¦×¤×•×™×” '}'â€¬";
-    Text[ catalan ] = "Es necessita '}'";
-    Text[ hindi ] = "'}' à¤•à¥€ à¤ªà¥à¤°à¤¤à¥€à¤•à¥à¤·à¤¾";
-
-    Text [ portuguese ] = "'}' necessária" ;
-    Text[ russian ] = "'}' îæèäàåòñÿ";
-    Text[ polish ] = "Oczekiwano znaku '}'";
-    Text[ japanese ] = "'}'ãŒå¿…è¦ã§ã™";
-    Text[ chinese_simplified ] = "æœŸå¾… '}'";
-    Text[ chinese_traditional ] = "æœŸå¾…<}>";
-    Text[ arabic ] = "ãÊæŞÚ '}'";
     Text[ greek ] = "'}' áíáìİíåôáé";
-    Text[ korean ] = "'}' ê°€ í•„ìš”í•¨";
-    Text[ turkish ] = "'}' gerekli";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Es necessita '}'";
+    Text[ dutch ] = "'}' verwacht";
+    Text[ french ] = "'}' requis";
+    Text[ spanish ] = "Se requiere '}'";
     Text[ finnish ] = "Tähän tarvitaan '}'";
-    Text[ thai ] = "'}' à¸„à¸²à¸”à¸„à¸´à¸”";
+    Text[ italian ] = "'}' atteso";
     Text[ czech ] = "OÄekÃ¡vÃ¡na '}'";
-    Text[ hebrew ] = "â€®×¦×¤×•×™×” '}'â€¬";
-    Text[ hindi ] = "'}' à¤•à¥€ à¤ªà¥à¤°à¤¤à¥€à¤•à¥à¤·à¤¾";
     Text[ slovak ] = "OÄakÃ¡vanÃ¡ '}'";
+    Text[ danish ] = "'}' forventes";
+    Text[ swedish ] = "'}' förväntad";
+    Text[ polish ] = "Oczekiwano znaku '}'";
+    Text[ portuguese_brazilian ] = "É necessário '}'";
+    Text[ japanese ] = "'}'ãŒå¿…è¦ã§ã™";
+    Text[ korean ] = "'}' ê°€ í•„ìš”í•¨";
+    Text[ chinese_simplified ] = "æœŸå¾… '}'";
+    Text[ chinese_traditional ] = "æœŸå¾…<}>";
+    Text[ turkish ] = "'}' gerekli";
+    Text[ arabic ] = "ãÊæŞÚ '}'";
+    Text[ hebrew ] = "â€®×¦×¤×•×™×” '}'â€¬";
+    Text[ catalan ] = "Es necessita '}'";
+    Text[ thai ] = "'}' à¸„à¸²à¸”à¸„à¸´à¸”";
 };
 
 String RID_ERR_LBRACEEXPECTED
