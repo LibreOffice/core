@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2000-12-06 10:25:32 $
+ *  last change: $Author: dbo $ $Date: 2000-12-20 09:35:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,14 @@ void OComponentHelper::dispose()
 void OComponentHelper::addEventListener(const Reference<XEventListener > & rxListener)
     throw(::com::sun::star::uno::RuntimeException)
 {
-    rBHelper.addListener( ::getCppuType( &rxListener ) , rxListener );
+    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    {
+        rxListener->disposing( EventObject( Reference<XInterface >::query( (XComponent *)this ) ) );
+    }
+    else
+    {
+        rBHelper.addListener( ::getCppuType( &rxListener ) , rxListener );
+    }
 }
 
 // XComponent
