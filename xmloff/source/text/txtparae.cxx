@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-06 15:01:35 $
+ *  last change: $Author: mib $ $Date: 2000-12-07 18:18:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1596,7 +1596,7 @@ void XMLTextParagraphExport::_exportTextFrame(
 
     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
                               sXML_text_box, sal_False, sal_True );
-    exportText( xTxt, sal_False, bProgress );
+    exportText( xTxt, sal_False, bProgress, sal_True );
 }
 
 void XMLTextParagraphExport::exportTextFrame(
@@ -1611,7 +1611,7 @@ void XMLTextParagraphExport::exportTextFrame(
         Reference < XTextFrame > xTxtFrame( rTxtCntnt, UNO_QUERY );
         Reference < XText > xTxt = xTxtFrame->getText();
         Add( XML_STYLE_FAMILY_TEXT_FRAME, xPropSet );
-        exportText( xTxt, bAutoStyles, bProgress );
+        exportText( xTxt, bAutoStyles, bProgress, sal_True );
     }
     else
     {
