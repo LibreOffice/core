@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:11:47 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:44:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2515,47 +2515,26 @@ void SwDoc::UpdateNumRule( const String& rName, ULONG nUpdatePos )
     UpdateNumRule(*pRule, nUpdatePos);
 }
 
-// #115901#: bOutline removed
 /**
-   Update numbering for all nodes that have a certain numbering rule.
+   Helper function for SwDoc::UpdateNumRule. Update the num rule
+   rRule, using the nodes from rNumRuleInfo.GetList() with indices
+   [nUpdatePos..nLast].
 
-   @param rRule           numbering rule to search for
-   @param nUpdatePos      document position to start at
- */
-void SwDoc::UpdateNumRule( SwNumRule & rRule, ULONG nUpdatePos)
+   @param rRule         the num rule to update
+   @param rNumRuleInfo  a suitable SwNumRuleInfo with an up-to-date node list
+   @param nUpdatePos    start index into rNumRuleInfo.GetList()
+   @param nLast         end index into rNumRuleInfo.GetList()
+   @param bInit         TRUE: restart numbering, FALSE: continue numbering
+*/
+void lcl_UpdateNumRuleRange( SwNumRule & rRule,
+                             SwNumRuleInfo& rNumRuleInfo,
+                             ULONG nUpdatePos,
+                             ULONG nLast,
+                             BOOL bInit )
 {
-    if (IsInReading())
+    // early out, if there is nothing to do.
+    if( nUpdatePos >= nLast )
         return;
-
-    /* If old numbering is activated use the old algorithm. */
-    if (IsOldNumbering())
-    {
-        UpdateNumRuleOld(rRule, nUpdatePos);
-
-        return;
-    }
-
-    /* Get all paragraphs with the given numbering rule from the
-       document. */
-    SwNumRuleInfo aNumRuleInfo(rRule.GetName());
-    aNumRuleInfo.MakeList(*this);  // #115901#
-
-    /* If there are no matching paragraphs we are done. */
-    if (aNumRuleInfo.GetList().Count() == 0)
-        return;
-
-    /* ULONG_MAX -> process all paragraphs found */
-    if (nUpdatePos == ULONG_MAX)
-        nUpdatePos = 0;
-    else /* nUpdatePos is still the position in the document. Convert
-            to position in the list of found paragraphs. */
-        aNumRuleInfo.GetList().SearchKey(nUpdatePos, &nUpdatePos);
-
-    // #115901#
-    if (nUpdatePos >= aNumRuleInfo.GetList().Count())
-    {
-        nUpdatePos = 0;
-    }
 
     /* Temporal numbering holding the values to be changed in the
        current node*/
@@ -2571,7 +2550,7 @@ void SwDoc::UpdateNumRule( SwNumRule & rRule, ULONG nUpdatePos)
 
     /* If all paragraphs found are to be processed initialize all
        levels with their start values.*/
-    if (nUpdatePos == 0)
+    if ( bInit )
     {
         for (int i = 0; i < MAXLEVEL; i++)
             bInitializedLevels[i] = false;
@@ -2588,7 +2567,7 @@ void SwDoc::UpdateNumRule( SwNumRule & rRule, ULONG nUpdatePos)
         for (int i = 0; i < MAXLEVEL; i++)
             bInitializedLevels[i] = true;
 
-        aNum = *aNumRuleInfo.GetList().GetObject(nUpdatePos)->
+        aNum = *rNumRuleInfo.GetList().GetObject(nUpdatePos)->
             GetNum(); // #115901#
 
         nCount = aNum.GetLevelVal()[aNum.GetRealLevel()];
@@ -2596,15 +2575,16 @@ void SwDoc::UpdateNumRule( SwNumRule & rRule, ULONG nUpdatePos)
     }
 
     /* The old level is the level of the first node to process. */
-    const SwNodeNum * pNum = aNumRuleInfo.GetList().GetObject(nUpdatePos)->
+    ASSERT( nUpdatePos < rNumRuleInfo.GetList().Count(), "wrong index" );
+    const SwNodeNum * pNum = rNumRuleInfo.GetList().GetObject(nUpdatePos)->
         GetNum();
     BYTE nOldLevel = pNum ? pNum->GetLevel() : 0;
 
     /* Iterate over all nodes to process. */
-    while(nUpdatePos < aNumRuleInfo.GetList().Count())
+    while(nUpdatePos < nLast)
     {
         /* Get the current node. */
-        SwTxtNode * pTxtNode = aNumRuleInfo.GetList().GetObject(nUpdatePos);
+        SwTxtNode * pTxtNode = rNumRuleInfo.GetList().GetObject(nUpdatePos);
 
         if (pTxtNode->MayBeNumbered())
         {
@@ -2741,6 +2721,126 @@ void SwDoc::UpdateNumRule( SwNumRule & rRule, ULONG nUpdatePos)
 
         nUpdatePos++;
     }
+}
+
+/** helper function for SwDoc::UpdateNumRule: update rule rRule within
+    the node section given by rNode using the nodes in
+    rNumRuleInfo.GetList(), starting from nUpdatePos.
+
+    @param rRule        the SwNumRule we wish to update
+    @param rNumRuleInfo contains the list of nodes using rRule to be updated
+    @param rNode        SwNode whose section will be updated
+                        Note: the entire section from rNode.FindStartNode()
+                        will be updated (see also nUpdatePos)
+    @param nUpdatePos   update nodes >= rNumRuleInfo.GetList()[nUpdatePos]
+*/
+void lcl_UpdateNumRuleSection( SwNumRule& rRule,
+                               SwNumRuleInfo& rNumRuleInfo,
+                               SwNode& rNode,
+                               ULONG& nUpdatePos )
+{
+    // determine start/end positions
+    SwEndNode*   pEndNode   = rNode.EndOfSectionNode();
+    SwStartNode* pStartNode = pEndNode->StartOfSectionNode();
+
+    // determine start/end positions in node list
+    ULONG nStartPos = 0;
+    rNumRuleInfo.GetList().SearchKey( pStartNode->GetIndex(), &nStartPos );
+    ULONG nEndPos = 0;
+    rNumRuleInfo.GetList().SearchKey( pEndNode->GetIndex(), &nEndPos );
+
+    // update nodes (unless our section is before nUpdatePos)
+    if( nUpdatePos <= nEndPos )
+    {
+        // restart numbering unless nUpdatePos forces an update into the
+        // middle of a section
+        BOOL bInit = ( nUpdatePos <= nStartPos );
+        lcl_UpdateNumRuleRange( rRule, rNumRuleInfo,
+                                nStartPos, nEndPos, bInit );
+    }
+}
+
+
+/** helper function for SwDoc::UpdateNumRule: update num rule
+    seperately for each node section contained within the section
+    given by rNode. (Typically used to e.g. seperately update each
+    footnote or text box.)
+
+    Except for rNode, parameters are passed through to lcl_UpdateNumRuleSection
+    @see lcl_UpdateNumRuleSection for parameters
+ */
+void lcl_UpdateNumRuleSectionOfSections( SwNumRule & rRule,
+                                         SwNumRuleInfo& rNumRuleInfo,
+                                         SwNode& rNode,
+                                         ULONG& nUpdatePos )
+{
+    ULONG nEndIndex = rNode.StartOfSectionNode()->EndOfSectionNode()->GetIndex();
+    SwNodeIndex aNodeIndex( *rNode.StartOfSectionNode() );
+    aNodeIndex++;
+    while( aNodeIndex < nEndIndex )
+    {
+        lcl_UpdateNumRuleSection( rRule, rNumRuleInfo, aNodeIndex.GetNode(),
+                                  nUpdatePos );
+        aNodeIndex = *aNodeIndex.GetNode().EndOfSectionNode();
+        aNodeIndex++;
+    }
+}
+
+// #115901#: bOutline removed
+/**
+   Update numbering for all nodes that have a certain numbering rule.
+
+   @param rRule           numbering rule to search for
+   @param nUpdatePos      document position to start at
+ */
+void SwDoc::UpdateNumRule( SwNumRule & rRule, ULONG nUpdatePos)
+{
+    if (IsInReading())
+        return;
+
+    /* If old numbering is activated use the old algorithm. */
+    if (IsOldNumbering())
+    {
+        UpdateNumRuleOld(rRule, nUpdatePos);
+
+        return;
+    }
+
+    /* Get all paragraphs with the given numbering rule from the
+       document. */
+    SwNumRuleInfo aNumRuleInfo(rRule.GetName());
+    aNumRuleInfo.MakeList(*this);  // #115901#
+
+    /* If there are no matching paragraphs we are done. */
+    if (aNumRuleInfo.GetList().Count() == 0)
+        return;
+
+    /* ULONG_MAX -> process all paragraphs found */
+    if (nUpdatePos == ULONG_MAX)
+        nUpdatePos = 0;
+    else /* nUpdatePos is still the position in the document. Convert
+            to position in the list of found paragraphs. */
+        aNumRuleInfo.GetList().SearchKey(nUpdatePos, &nUpdatePos);
+
+    // #115901#
+    if (nUpdatePos >= aNumRuleInfo.GetList().Count())
+    {
+        nUpdatePos = 0;
+    }
+
+    /* number each range (frames, redlines, footnotes, etc.) seperately */
+    lcl_UpdateNumRuleSectionOfSections(
+        rRule, aNumRuleInfo, aNodes.GetEndOfPostIts(), nUpdatePos );
+    lcl_UpdateNumRuleSectionOfSections(
+        rRule, aNumRuleInfo, aNodes.GetEndOfInserts(), nUpdatePos );
+    lcl_UpdateNumRuleSectionOfSections(
+        rRule, aNumRuleInfo, aNodes.GetEndOfAutotext(), nUpdatePos );
+    lcl_UpdateNumRuleSectionOfSections(
+        rRule, aNumRuleInfo, aNodes.GetEndOfRedlines(), nUpdatePos );
+    lcl_UpdateNumRuleSectionOfSections(
+        rRule, aNumRuleInfo, aNodes.GetEndOfExtras(), nUpdatePos );
+    lcl_UpdateNumRuleSection(
+        rRule, aNumRuleInfo, aNodes.GetEndOfContent(), nUpdatePos );
 }
 
 // pre-SRC680-numbering
