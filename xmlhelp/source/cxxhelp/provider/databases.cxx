@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: abi $ $Date: 2001-07-17 08:21:06 $
+ *  last change: $Author: abi $ $Date: 2001-07-19 14:03:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,9 +613,9 @@ void Databases::setFromURL( const rtl::OUString& url,const Reference< XInputStre
 Reference< XHierarchicalNameAccess > Databases::jarFile( const rtl::OUString& jar,
                                                          const rtl::OUString& Language )
 {
-    if( ! jar.getLength() ||
-        ! Language.getLength() )
-        return Reference< XHierarchicalNameAccess >( 0 );
+   if( ! jar.getLength() ||
+      ! Language.getLength() )
+    return Reference< XHierarchicalNameAccess >( 0 );
 
     rtl::OUString key = lang(Language) + rtl::OUString::createFromAscii( "/" ) + jar;
 
@@ -633,10 +633,10 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const rtl::OUString& ja
             aArguments[ 0 ] <<= zipFile;
 
             Reference< XInterface > xIfc
-                = m_xSMgr->createInstanceWithArguments(
-                    rtl::OUString::createFromAscii(
-                        "com.sun.star.packages.comp.ZipPackage" ),
-                    aArguments );
+              = m_xSMgr->createInstanceWithArguments(
+                                 rtl::OUString::createFromAscii(
+                                                "com.sun.star.packages.comp.ZipPackage" ),
+                                 aArguments );
 
             if ( xIfc.is() )
             {
