@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueset.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2002-06-06 07:42:13 $
+ *  last change: $Author: os $ $Date: 2002-06-20 10:15:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1566,8 +1566,13 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
         }
         break;
         case KEY_RETURN:
-            Select();
-        break;
+            //enable default handling of KEY_RETURN in dialogs
+            if(0 != (GetStyle()&WB_NO_DIRECTSELECT))
+            {
+                Select();
+                break;
+            }
+            //no break;
         default:
             Control::KeyInput( rKEvt );
             bDefault = TRUE;
