@@ -2,9 +2,9 @@
  *
  *  $RCSfile: langselect.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:24:45 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #include <com/sun/star/lang/XLocalizable.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <rtl/locale.hxx>
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 #include <osl/process.h>
 
 using namespace rtl;
@@ -107,7 +110,7 @@ LanguageSelectionDialog::LanguageSelectionDialog(ResMgr *pResMgr) :
     FreeResource();
 }
 
-IsoList LanguageSelection::m_lLanguages;
+namespace { struct lLanguages : public rtl::Static<IsoList, lLanguages> {}; }
 
 // execute the language selection
 // display a dialog if more than one language is installed
@@ -165,17 +168,18 @@ OUString LanguageSelection::getLanguageString()
     }
 
     // fill list
-    if (m_lLanguages.size() < 1)
-        m_lLanguages = getInstalledIsoLanguages();
+    IsoList &rLanguages = lLanguages::get();
+    if (rLanguages.size() < 1)
+        rLanguages = getInstalledIsoLanguages();
 
-    if (m_lLanguages.size() > 1) {
+    if (rLanguages.size() > 1) {
         // are there multiple languages installed?
         // get resource
         rtl::OString aMgrName = OString("langselect") + OString::valueOf((sal_Int32)SUPD, 10);
         ::com::sun::star::lang::Locale aLocale;
         ResMgr* pResMgr = ResMgr::SearchCreateResMgr( aMgrName, aLocale );
         LanguageSelectionDialog lsd(pResMgr);
-        StrList languages(getLanguageStrings(m_lLanguages));
+        StrList languages(getLanguageStrings(rLanguages));
         for (StrList::iterator str_iter = languages.begin(); str_iter != languages.end(); str_iter++)
         {
             lsd.m_aListBox.InsertEntry(*str_iter);
@@ -183,16 +187,16 @@ OUString LanguageSelection::getLanguageString()
 
         lsd.Execute();
         short nSelected = lsd.m_aListBox.GetSelectEntryPos();
-        IsoList::const_iterator i = m_lLanguages.begin();
+        IsoList::const_iterator i = rLanguages.begin();
         for (sal_Int32 n=0; n<nSelected; n++) i++;
         bFoundLanguage = sal_True;
         aFoundLanguage = *i;
         return aFoundLanguage;
     } else {
         // if there is only one language, use it
-        if (m_lLanguages.size() == 1) {
+        if (rLanguages.size() == 1) {
             bFoundLanguage = sal_True;
-            aFoundLanguage = *(m_lLanguages.begin());
+            aFoundLanguage = *(rLanguages.begin());
             return aFoundLanguage;
         } else {
             // last resort
