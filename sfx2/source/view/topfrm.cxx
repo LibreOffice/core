@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mba $ $Date: 2001-10-12 12:00:30 $
+ *  last change: $Author: mba $ $Date: 2001-11-01 09:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,9 +192,9 @@ long SfxTopWindow_Impl::Notify( NotifyEvent& rNEvt )
     if ( pFrame->IsClosing_Impl() )
         return sal_False;
 
+    SfxViewFrame* pView = pFrame->GetCurrentViewFrame();
     if ( rNEvt.GetType() == EVENT_GETFOCUS )
     {
-        SfxViewFrame* pView = pFrame->GetCurrentViewFrame();
         SfxViewFrame* pCurrent = SfxViewFrame::Current();
         SfxViewFrame* pContainer = pCurrent ? pCurrent->GetParentViewFrame_Impl() : NULL;
         if ( !pContainer )
@@ -213,8 +213,11 @@ long SfxTopWindow_Impl::Notify( NotifyEvent& rNEvt )
             SfxHelp::OpenHelpAgent( pFrame, nHelpId );
         return sal_True;
     }
-
-    if ( rNEvt.GetType() == EVENT_EXECUTEDIALOG )
+    else if( rNEvt.GetType() == EVENT_KEYINPUT )
+    {
+        return pView->GetViewShell()->GlobalKeyInput_Impl( *rNEvt.GetKeyEvent() );
+    }
+    else if ( rNEvt.GetType() == EVENT_EXECUTEDIALOG )
     {
         pModalDialog = (Dialog*) rNEvt.GetWindow();
         pFrame->GetCurrentViewFrame()->SetModalMode( sal_True );
@@ -1043,6 +1046,9 @@ void SfxTopViewFrame::Exec_Impl(SfxRequest &rReq )
             aReq.AppendItem( SfxFrameItem( SID_DOCFRAME, GetFrame() ) );
             aReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii( "_blank" ) ) );
             SFX_APP()->ExecuteSlot( aReq );
+            const SfxViewFrameItem* pItem = PTR_CAST( SfxViewFrameItem, aReq.GetReturnValue() );
+            if ( pItem )
+                rReq.SetReturnValue( SfxFrameItem( 0, pItem->GetFrame() ) );
             break;
         }
 
