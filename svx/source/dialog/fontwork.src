@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontwork.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 20:48:15 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 22:28:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,7 +338,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text [ italian ] = "Allineato a sinistra" ;
                 Text [ spanish ] = "Alineado a la izquierda" ;
                 Text [ french ] = "Alignι ΰ gauche" ;
-                Text [ swedish ] = "Vδnsterjusterad" ;
+                Text [ swedish ] = "Vδnsterjusterat" ;
                 Text [ danish ] = "Venstrejusteret" ;
                 Text [ portuguese ] = "ΐ esquerda" ;
                 Text [ portuguese_brazilian ] = "Linksbόndig" ;
@@ -452,7 +452,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ chinese_traditional ] = "¦Ϋ°Κ¤ε¦r¤j¤p";
                 Text[ arabic ] = "ΝΜγ δΥ ΚαήΗΖν";
                 Text[ greek ] = "Αυτόματο μέγεθος κειμένου";
-                Text[ korean ] = "ΐΪµΏ Ε©±βΑ¶ΐύ  ΕΨ½ΊΖ®";
+                Text[ korean ] = "ΐΪµΏΕΨ½ΊΖ®΅΅Ε©±β  ";
                 Text[ turkish ] = "Otomatik metin boyu";
                 Text[ language_user1 ] = " ";
             };
@@ -503,7 +503,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText[ chinese_traditional ] = "¶΅Ήj";
         QuickHelpText[ arabic ] = "ΗαγΣΗέΙ";
         QuickHelpText[ greek ] = "Απόσταση";
-        QuickHelpText[ korean ] = "Distance";
+        QuickHelpText[ korean ] = "°£°έ!";
         CustomUnitText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Abstand";
     };
@@ -549,7 +549,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText[ chinese_traditional ] = "ΑY±Ζ";
         QuickHelpText[ arabic ] = "ΗαΕÒΗΝΙ";
         QuickHelpText[ greek ] = "Εσοχή";
-        QuickHelpText[ korean ] = "Indent";
+        QuickHelpText[ korean ] = "µιΏ©Ύ²±β!";
         CustomUnitText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Einzug";
     };
@@ -588,7 +588,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ chinese_traditional ] = "½όΉψ";
                 Text[ arabic ] = "ΗαΞΨ ΗαίέΗέν";
                 Text[ greek ] = "Περίγραμμα";
-                Text[ korean ] = "ΏάΗόΌ±";
+                Text[ korean ] = "ΐ±°ϋ";
                 Text[ turkish ] = "Kontur";
                 Text[ language_user1 ] = " ";
             };
@@ -621,7 +621,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ chinese_traditional ] = "¦r¥ΐ½όΉψ";
                 Text[ arabic ] = "ΗαΞΨ ΗαγΝνΨ ααίΚΗΘΙ";
                 Text[ greek ] = "Περίγραμμα χαρακτήρων";
-                Text[ korean ] = "ΕΨ½ΊΖ® ΏάΗόΌ±";
+                Text[ korean ] = "ΕΨ½ΊΖ®  ΕΧµΞΈ®£΅";
                 Text[ turkish ] = "Metin konturu";
                 Text[ language_user1 ] = " ";
             };
@@ -658,7 +658,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ chinese_traditional ] = "¤£¨Ο¥Ξ";
                 Text[ arabic ] = "ΕνήΗέ";
                 Text[ greek ] = "Απενεργοποίηση";
-                Text[ korean ] = "±ΧΈ²ΐΪ ΎψΎΦ±β";
+                Text[ korean ] = "ΗΨΑ¦";
                 Text[ turkish ] = "Kapalύ";
                 Text[ language_user1 ] = " ";
             };
@@ -724,7 +724,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ chinese_traditional ] = "¶Ι±Χ";
                 Text[ arabic ] = "Κγννα";
                 Text[ greek ] = "Ανατροπή";
-                Text[ korean ] = "±βΏμΈ®±β";
+                Text[ korean ] = "±βΏοΐΜ±β";
                 Text[ turkish ] = "Eπim";
                 Text[ language_user1 ] = " ";
             };
@@ -788,9 +788,9 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText[ chinese_traditional ] = "¶΅Ήj X";
         QuickHelpText[ arabic ] = "ΗαγΣΗέΙ Σ";
         CustomUnitText[ greek ] = "μοίρες";
-        CustomUnitText[ korean ] = "µξ±ή";
+        CustomUnitText[ korean ] = "µµ";
         QuickHelpText[ greek ] = "Distance X";
-        QuickHelpText[ korean ] = "Distance X";
+        QuickHelpText[ korean ] = "°£°έ X!";
         CustomUnitText[ turkish ] = "Derece";
         CustomUnitText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Abstand X";
@@ -850,7 +850,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         CustomUnitText[ greek ] = "%";
         CustomUnitText[ korean ] = "%";
         QuickHelpText[ greek ] = "Απόσταση Y";
-        QuickHelpText[ korean ] = "Distance Y";
+        QuickHelpText[ korean ] = "°£°έ Y!";
         CustomUnitText[ turkish ] = "%";
         CustomUnitText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Abstand Y";
@@ -932,7 +932,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText[ chinese_traditional ] = "³±ΌvΓC¦β";
         QuickHelpText[ arabic ] = "αζδ ΗαΩα";
         QuickHelpText[ greek ] = "Shadow Color";
-        QuickHelpText[ korean ] = "Shadow Color";
+        QuickHelpText[ korean ] = "ΐ½Ώµ»φ!";
         Text[ greek ] = "Χρώμα σκιάς";
         Text[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Schattenfarbe";
