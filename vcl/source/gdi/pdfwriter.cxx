@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-29 12:47:11 $
+ *  last change: $Author: ka $ $Date: 2002-08-13 11:29:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,4 +387,9 @@ void PDFWriter::SetTextLineColor()
 void PDFWriter::SetTextLineColor( const Color& rColor )
 {
     ((PDFWriterImpl*)pImplementation)->setTextLineColor( rColor );
+}
+
+void PDFWriter::SetTextAlign( TextAlign eAlign )
+{
+    ((PDFWriterImpl*)pImplementation)->setTextAlign( eAlign );
 }

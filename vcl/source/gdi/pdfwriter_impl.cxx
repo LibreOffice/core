@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-29 16:26:34 $
+ *  last change: $Author: ka $ $Date: 2002-08-13 11:29:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,8 @@ static void appendHex( sal_Int8 nInt, OStringBuffer& rBuffer )
 // appends a double. PDF does not accept exponential format, only fixed point
 static void appendDouble( double fValue, OStringBuffer& rBuffer, int nPrecision = 5 )
 {
+    rBuffer.append( ByteString::CreateFromDouble( fValue ) );
+/*
     if( fValue < 0 )
     {
         rBuffer.append( '-' );
@@ -139,6 +141,7 @@ static void appendDouble( double fValue, OStringBuffer& rBuffer, int nPrecision 
             rBuffer.append( nInt );
         }
     }
+*/
 }
 
 
@@ -2162,6 +2165,7 @@ void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText )
     int nMinCharIndex = 0, nMaxCharIndex = rText.Len()-1;
     double fXScale = 1.0;
     sal_Int32 nFontHeight = m_pReferenceDevice->mpFontEntry->maFontSelData.mnHeight;
+    TextAlign eAlign = m_pReferenceDevice->GetTextAlign();
     // transform font height back to current units
     nFontHeight = m_pReferenceDevice->ImplDevicePixelToLogicWidth( nFontHeight );
     if( m_aCurrentPDFState.m_aFont.GetWidth() )
@@ -2181,13 +2185,17 @@ void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText )
     double fAngle = (double)m_aCurrentPDFState.m_aFont.GetOrientation() * M_PI / 1800.0;
     double fSin = sin( fAngle );
     double fCos = cos( fAngle );
+
     while( (nGlyphs = rLayout.GetNextGlyphs( nMaxGlyphs, pGlyphs, aPos, nIndex, NULL, pCharIndices )) )
     {
-        // add ascent since PDF calculates relative to baseline, VCL to upper left corner
-        aPos.Y() += m_pReferenceDevice->mpFontEntry->maMetric.mnAscent;
-
         // back transformation to current coordinate system
         aPos = m_pReferenceDevice->PixelToLogic( aPos );
+
+        if ( eAlign == ALIGN_BOTTOM )
+            aPos.Y() -= m_pReferenceDevice->GetFontMetric().GetDescent();
+        else if ( eAlign == ALIGN_TOP )
+            aPos.Y() += m_pReferenceDevice->GetFontMetric().GetAscent();
+
         // optimize use of Td vs. Tm
         if( bFirst && fXScale == 1.0 && fCos == 1.0 && fSin == 0.0 )
         {
@@ -2379,8 +2387,8 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, US
 
             // font alignment
             if ( eAlign == ALIGN_BOTTOM )
-                aPos.Y() += nTextHeight;
-            else if ( eAlign == ALIGN_BASELINE )
+                aPos.Y() -= m_pReferenceDevice->GetFontMetric().GetDescent();
+            else if ( eAlign == ALIGN_TOP )
                 aPos.Y() += m_pReferenceDevice->GetFontMetric().GetAscent();
 
             // draw all lines excluding the last
@@ -2430,8 +2438,8 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, US
 
         // font alignment
         if ( eAlign == ALIGN_BOTTOM )
-            aPos.Y() += nTextHeight;
-        else if ( eAlign == ALIGN_BASELINE )
+            aPos.Y() -= m_pReferenceDevice->GetFontMetric().GetDescent();
+        else if ( eAlign == ALIGN_TOP )
             aPos.Y() += m_pReferenceDevice->GetFontMetric().GetAscent();
 
         if ( nStyle & TEXT_DRAW_BOTTOM )
@@ -3562,7 +3570,6 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         case 8:
             bTrueColor = false;
             nBitsPerComponent = aBitmap.GetBitCount();
-            DBG_ASSERT( pAccess->GetScanlineSize() == pAccess->GetBitCount()*pAccess->Width()/8U, "wrong scanline size" );
             break;
         default:
             bTrueColor = true;
@@ -3682,9 +3689,11 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
     beginCompression();
     if( ! bTrueColor || pAccess->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_RGB )
     {
+        const int nScanLineBytes = 1 + ( pAccess->GetBitCount() * ( pAccess->Width() - 1 ) / 8U );
+
         for( int i = 0; i < pAccess->Height(); i++ )
         {
-            CHECK_RETURN( writeBuffer( pAccess->GetScanline( i ), pAccess->GetScanlineSize() ) );
+            CHECK_RETURN( writeBuffer( pAccess->GetScanline( i ), nScanLineBytes ) );
         }
     }
     else
