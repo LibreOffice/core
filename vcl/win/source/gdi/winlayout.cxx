@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hdu $ $Date: 2002-09-17 17:31:07 $
+ *  last change: $Author: hdu $ $Date: 2002-09-18 15:08:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@ private:
     HDC             mhDC;
 
     int             mnGlyphCount;
+    int             mnCharCount;
     WCHAR*          mpOutGlyphs;
     int*            mpGlyphAdvances;
     int*            mpGlyphOrigAdvs;
@@ -137,6 +138,7 @@ SimpleWinLayout::SimpleWinLayout( HDC hDC, const ImplLayoutArgs& rArgs )
 :   WinLayout( rArgs ),
     mhDC( hDC ),
     mnGlyphCount( 0 ),
+    mnCharCount( 0 ),
     mpOutGlyphs( NULL ),
     mpGlyphAdvances( NULL ),
     mpGlyphOrigAdvs( NULL ),
@@ -200,7 +202,6 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
 {
     // layout text
     int nMaxGlyphCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
-    int nMaxCharCount  = nMaxGlyphCount;
     DWORD nGcpOption = 0;
 
     mpOutGlyphs     = new WCHAR[ nMaxGlyphCount ];
@@ -273,62 +274,66 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
         // TODO: emulate full GetCharacterPlacementW on crappy OS
         // TODO: move into uwinapi.dll
         // convert into ANSI code page
-        static UINT nACP = GetACP();
-        int nMBLen = ::WideCharToMultiByte( nACP,
+        int nMBLen = ::WideCharToMultiByte( CP_ACP,
             WC_COMPOSITECHECK | WC_DISCARDNS | WC_DEFAULTCHAR,
             rArgs.mpStr + rArgs.mnMinCharPos, nMaxGlyphCount,
             NULL, 0, NULL, NULL );
         if( (nMBLen <= 0) || (nMBLen >= 8 * nMaxGlyphCount) )
             return false;
         char* const pMBStr = (char*)alloca( nMBLen+1 );
-        ::WideCharToMultiByte( nACP,
+        ::WideCharToMultiByte( CP_ACP,
             WC_COMPOSITECHECK | WC_DISCARDNS | WC_DEFAULTCHAR,
             rArgs.mpStr + rArgs.mnMinCharPos, nMaxGlyphCount,
             pMBStr, nMBLen, NULL, NULL );
-        pMBStr[ nMBLen ] = '\0';
+
+        // resize arrays if needed
+        int nArraySize = nMaxGlyphCount;
+        if( nArraySize < nMBLen )
+            nArraySize = nMBLen;
+
+        if( nArraySize > nMaxGlyphCount )
+        {
+            delete[] mpGlyphAdvances;
+            delete[] mpOutGlyphs;
+            mpGlyphAdvances = new int[ nArraySize ];
+            mpOutGlyphs = new WCHAR[ nArraySize ];
+            if( mpGlyphOrigAdvs )
+            {
+                delete[] mpGlyphOrigAdvs;
+                mpGlyphOrigAdvs = new int[ nArraySize ];
+            }
+        }
 
         // get glyphs/outstring and placement
         GCP_RESULTSA aGCPA;
-        aGCPA.lStructSize    = sizeof(aGCPA);
-        aGCPA.lpOutString    = NULL;
-        aGCPA.lpGlyphs       = NULL;
-        aGCPA.lpCaretPos     = NULL;
-        aGCPA.lpClass        = pGcpClass;
-        aGCPA.nMaxFit        = 0;
+        aGCPA.lStructSize   = sizeof(aGCPA);
+        aGCPA.lpOutString   = NULL;
+        aGCPA.lpGlyphs      = NULL;
+        aGCPA.lpCaretPos    = NULL;
+        aGCPA.lpClass       = pGcpClass;
+        aGCPA.nMaxFit       = 0;
+        aGCPA.nGlyphs       = nArraySize;
 
+        // resize arrays if needed
         if( mnLayoutFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING )
-        {
-            nMaxCharCount *= 2; // size(outglyph)==2*size(char)
-            if( nMaxCharCount < nMBLen )
-            {
-                nMaxCharCount = (nMBLen | 15) + 1;
-                delete[] mpGlyphAdvances;
-                delete[] mpOutGlyphs;
-                mpGlyphAdvances = new int[ nMaxCharCount ];
-                mpOutGlyphs = (WCHAR*)new char[ nMaxCharCount ];
-                if( mpGlyphOrigAdvs )
-                {
-                    delete[] mpGlyphOrigAdvs;
-                    mpGlyphOrigAdvs = new int[ nMaxCharCount ];
-                }
-            }
             aGCPA.lpOutString = reinterpret_cast<char*>(mpOutGlyphs);
-            aGCPA.nGlyphs = nMaxCharCount;
-        }
         else
-        {
             aGCPA.lpGlyphs = mpOutGlyphs;
-            aGCPA.nGlyphs = nMaxGlyphCount;
-        }
 
         aGCPA.lpOrder = mpGlyphs2Chars;
         aGCPA.lpDx = mpGlyphAdvances;
         nRC = ::GetCharacterPlacementA( mhDC, pMBStr, nMBLen,
             0, &aGCPA, nGcpOption );
-        mnGlyphCount = aGCPA.lpOutString ? aGCPA.nMaxFit : aGCPA.nGlyphs;
+        if( aGCPA.lpGlyphs )
+            mnGlyphCount = aGCPA.nGlyphs;
+        else
+        {
+            mnCharCount = aGCPA.nMaxFit;
+            mnGlyphCount = nMaxGlyphCount;
+        }
 
         // TODO: map lpOrderA to lpOrderW
-        // TODO: map lpDxA to lpDxW
+        // CHECK: lpDxA->lpDxW mapping
 
         if( rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS )
         {
@@ -515,8 +520,24 @@ void SimpleWinLayout::DrawText( SalGraphics& ) const
     }
     else
     {
+        const char* pAnsiStr = (char*)mpOutGlyphs;
+        int* pAnsiAdv = mpGlyphAdvances;
+
+        // adjust advance widths when DBCS present
+        if( mnGlyphCount != mnCharCount )
+        {
+            pAnsiAdv = (int*)alloca( mnCharCount * sizeof(int) );
+            for( int i = 0, j = 0; i < mnCharCount; ++j, ++i )
+            {
+                pAnsiAdv[i] = mpGlyphAdvances[j];
+                if( (pAnsiStr[i] & 0x80) && ::IsDBCSLeadByte( pAnsiStr[i] ) )
+                    pAnsiAdv[ ++i ] = 0;    // trailing byte advance width
+            }
+            DBG_ASSERT( (j==mnGlyphCount), "SimpleWinLayout::DrawTextA DBCS mismatch" );
+        }
+
         ::ExtTextOutA( mhDC, aPos.X(), aPos.Y(), mnDrawOptions, NULL,
-            (char*)mpOutGlyphs, mnGlyphCount, mpGlyphAdvances );
+            pAnsiStr, mnCharCount, pAnsiAdv );
     }
 #else // DEBUG_GETNEXTGLYPHS
     #define MAXGLYPHCOUNT 8
