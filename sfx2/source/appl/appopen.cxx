@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 13:24:08 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 09:13:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1392,7 +1392,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     if ( pHidItem )
         bHidden = pHidItem->GetValue();
 
-    // This request is n UI call. We have to set the right values inside the MediaDescriptor
+    // This request is a UI call. We have to set the right values inside the MediaDescriptor
     // for: InteractionHandler, StatusIndicator, MacroExecutionMode and DocTemplate.
     // But we have to look for already existing values or for real hidden requests.
     SFX_REQUEST_ARG(rReq, pPreviewItem, SfxBoolItem, SID_PREVIEW, FALSE);
@@ -1433,6 +1433,109 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     if ( bHidden )
         aTarget = String::CreateFromAscii("_blank");
 
+    BOOL bIsBlankTarget = ( aTarget.compareToAscii( "_blank" ) == COMPARE_EQUAL || aTarget.compareToAscii( "_default" ) == COMPARE_EQUAL );
+    Reference < XController > xController;
+    if ( ( !bIsBlankTarget && pFrame ) || pLinkItem || !rReq.IsSynchronCall() )
+    {
+        // if a frame is given, it must be used for the starting point of the targetting mechanism
+        // this code is also used if asynchron loading is possible, because loadComponent always is synchron
+        Reference < XFrame > xFrame;
+        if ( pFrame )
+            xFrame = pFrame->GetFrameInterface();
+        else
+            xFrame = Reference < XFrame >( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY );
+
+        // make URL ready
+        URL aURL;
+        SFX_REQUEST_ARG( rReq, pFileNameItem, SfxStringItem, SID_FILE_NAME, FALSE );
+        String aFileName = pFileNameItem->GetValue();
+
+        INetURLObject aObj;
+        SfxObjectShell* pCur = pFrame ? pFrame->GetCurrentDocument() : 0;
+        if ( !pCur )
+            pCur = SfxObjectShell::Current();
+        if( aFileName.Len() && aFileName.GetChar(0) == '#' ) // Mark without URL
+        {
+            SfxViewFrame *pView = pFrame ? pFrame->GetCurrentViewFrame() : 0;
+            if ( !pView )
+                pView = SfxViewFrame::Current();
+            pView->GetViewShell()->JumpToMark( aFileName.Copy(1) );
+            rReq.SetReturnValue( SfxViewFrameItem( 0, pView ) );
+            return;
+        }
+
+        aURL.Complete = aFileName;
+        Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+        xTrans->parseStrict( aURL );
+
+        // load document using dispatch framework
+        if( pLinkItem || rReq.IsSynchronCall() )
+        {
+            // if loading must be done synchron, we must wait for completion to get a return value
+            // find frame by myself; I must konw the exact frame to get the controller for the return value from it
+            if( aTarget.getLength() )
+                xFrame = xFrame->findFrame( aTarget, FrameSearchFlag::ALL );
+
+            // targeting has been resolved, so target name must not be used in queryDispatch
+            Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
+            Reference < XDispatch > xDisp = xProv.is() ? xProv->queryDispatch( aURL, ::rtl::OUString(), 0 ) : Reference < XDispatch >();
+            if ( xDisp.is() )
+            {
+                Reference < XNotifyingDispatch > xNot( xDisp, UNO_QUERY );
+                if ( xNot.is() )
+                {
+                    // create listener for notification of load success or fail
+                    SfxOpenDocStatusListener_Impl* pListener = new SfxOpenDocStatusListener_Impl();
+                    pListener->acquire();
+                    xNot->dispatchWithNotification( aURL, aArgs, pListener );
+
+                    // stay on the stack until result has been notified
+                    while ( !pListener->bFinished )
+                        Application::Yield();
+
+                    if ( pListener->bSuccess )
+                        // successful loading, get loaded controller
+                        xController = xFrame->getController();
+
+                    pListener->release();
+                }
+            }
+
+            if ( !xController.is() && bIsBlankTarget )
+            {
+                // a blank frame would have been created in findFrame; in this case I am the owner and I must delete it
+                Reference < XCloseable > xClose( xFrame, UNO_QUERY );
+                if ( xClose.is() )
+                    xClose->close(sal_True);
+                else
+                    xFrame->dispose();
+            }
+        }
+        else
+        {
+            // otherwise we just dispatch and that's it
+            Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
+            Reference < XDispatch > xDisp = xProv.is() ? xProv->queryDispatch( aURL, aTarget, FrameSearchFlag::ALL ) : Reference < XDispatch >();;
+            if ( xDisp.is() )
+                xDisp->dispatch( aURL, aArgs );
+        }
+    }
+    else
+    {
+        // synchron loading without a given frame or as blank frame
+        SFX_REQUEST_ARG( rReq, pFileNameItem, SfxStringItem, SID_FILE_NAME, FALSE );
+        Reference < XComponentLoader > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY );
+        Reference < XComponent > xComp = xDesktop->loadComponentFromURL( pFileNameItem->GetValue(), aTarget, 0, aArgs );
+        Reference < XModel > xModel( xComp, UNO_QUERY );
+        if ( xModel.is() )
+            xController = xModel->getCurrentController();
+        else
+            xController = Reference < XController >( xComp, UNO_QUERY );
+    }
+/*
+    if ( bHidden )
+        aTarget = String::CreateFromAscii("_blank");
+
     // if a frame is given, it must be used for the starting point of the targeting mechanism
     Reference < XFrame > xFrame;
     if ( pFrame )
@@ -1459,40 +1562,41 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             Reference < XController > xController;
             if ( xModel.is() )
                 xController = xModel->getCurrentController();
-
-            if ( xController.is() )
+    */
+    if ( xController.is() )
+    {
+        // try to find the SfxFrame for the controller
+        SfxFrame* pFrame = NULL;
+        for ( SfxViewShell* pShell = SfxViewShell::GetFirst( 0, FALSE ); pShell; pShell = SfxViewShell::GetNext( *pShell, 0, FALSE ) )
+        {
+            if ( pShell->GetController() == xController )
             {
-                // try to find the SfxFrame for the controller
-                SfxFrame* pFrame = NULL;
-                for ( SfxViewShell* pShell = SfxViewShell::GetFirst( 0, FALSE ); pShell; pShell = SfxViewShell::GetNext( *pShell, 0, FALSE ) )
-                {
-                    if ( pShell->GetController() == xController )
-                    {
-                        pFrame = pShell->GetViewFrame()->GetFrame();
-                        break;
-                    }
-                }
-
-                if ( pFrame )
-                {
-                    SfxObjectShell* pSh = pFrame->GetCurrentDocument();
-                    DBG_ASSERT( pSh, "Controller without ObjectShell ?!" );
-
-                    if ( bCreateView )
-                        rReq.SetReturnValue( SfxViewFrameItem( 0, pFrame->GetCurrentViewFrame() ) );
-                    else
-                        rReq.SetReturnValue( SfxObjectItem( 0, pSh ) );
-
-                    if( ( bHidden || !bCreateView ) )
-                        pSh->RestoreNoDelete();
-                }
+                pFrame = pShell->GetViewFrame()->GetFrame();
+                break;
             }
+        }
+
+        if ( pFrame )
+        {
+            SfxObjectShell* pSh = pFrame->GetCurrentDocument();
+            DBG_ASSERT( pSh, "Controller without ObjectShell ?!" );
+
+            if ( bCreateView )
+                rReq.SetReturnValue( SfxViewFrameItem( 0, pFrame->GetCurrentViewFrame() ) );
+            else
+                rReq.SetReturnValue( SfxObjectItem( 0, pSh ) );
+
+            if( ( bHidden || !bCreateView ) )
+                pSh->RestoreNoDelete();
+        }
+    }
+/*
         }
         catch (com::sun::star::uno::Exception&)
         {
         }
     }
-
+*/
     if ( pLinkItem )
     {
         SfxPoolItem* pRet = rReq.GetReturnValue()->Clone();
