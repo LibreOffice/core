@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-13 16:09:33 $
+ *  last change: $Author: pl $ $Date: 2002-03-18 14:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1978,6 +1978,12 @@ BOOL Printer::EndPage()
 }
 
 #ifdef REMOTE_APPSERVER
+void Printer::GetRemotePageSetup( ULONG nPage, RmJobSetup& rSetup )
+{
+    if( nPage < mpRemotePages->size() )
+        (*mpRemotePages)[nPage]->GetJobSetup().SetRmJobSetup( rSetup );
+}
+
 void Printer::PrintRemotePage( ULONG nPage )
 {
 #ifdef DEBUG
@@ -2011,10 +2017,6 @@ void Printer::PrintRemotePage( ULONG nPage )
         }
 
         PrinterPage* pPage = (*mpRemotePages)[nPage];
-
-        RmJobSetup aSetup;
-        pPage->GetJobSetup().SetRmJobSetup( aSetup );
-        mpPrinter->SetJobSetup( aSetup );
 
         CHECK_FOR_RVPSYNC_NORMAL();
         try
