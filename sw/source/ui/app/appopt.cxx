@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-05-11 10:37:23 $
+ *  last change: $Author: rt $ $Date: 2001-08-09 16:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,6 @@
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
-
-#include <sot/dtrans.hxx>
 
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
@@ -628,6 +626,9 @@ SfxTabPage*  SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.13  2001/05/11 10:37:23  os
+    #86883# basic fonts asian added
+
     Revision 1.12  2001/05/10 08:46:10  os
     store print options at the document
 
