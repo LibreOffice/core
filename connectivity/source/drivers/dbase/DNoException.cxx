@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DNoException.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-27 09:16:48 $
+ *  last change: $Author: hr $ $Date: 2001-10-12 15:09:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+
+#include <algorithm>
 
 using namespace connectivity;
 using namespace connectivity::dbase;
@@ -504,7 +506,7 @@ void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
         {
             ::rtl::OUString sValue = aKey.getValue();
             ByteString aText(sValue.getStr(), rIndex.m_pTable->getConnection()->getTextEncoding());
-            strncpy(aNodeData.aData,aText.GetBuffer(),min(rIndex.getHeader().db_keylen, aText.Len()));
+            strncpy(aNodeData.aData,aText.GetBuffer(),std::min(rIndex.getHeader().db_keylen, aText.Len()));
         }
         rStream.Write((BYTE*)aNodeData.aData,rIndex.getHeader().db_keylen);
     }
