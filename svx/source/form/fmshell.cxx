@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-06 07:52:12 $
+ *  last change: $Author: oj $ $Date: 2001-08-10 14:16:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,6 +330,7 @@ sal_uInt16 ControllerSlotMap[] =    // slots des Controllers
     SID_FM_TAB_DIALOG,
     SID_FM_ADD_FIELD,
     SID_FM_DESIGN_MODE,
+    SID_FM_SHOW_FMEXPLORER,
     SID_FM_SHOW_PROPERTIES,
     SID_FM_FMEXPLORER_CONTROL,
     SID_FM_DATEFIELD,
