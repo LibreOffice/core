@@ -2,9 +2,9 @@
  *
  *  $RCSfile: new.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-16 15:55:40 $
+ *  last change: $Author: dv $ $Date: 2001-03-23 15:10:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -572,7 +572,6 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
     short nExpandSize= *(short *)pAntiImplP->GetClassRes();
     pAntiImplP->IncrementRes(sizeof(short));
     pAntiImplP->FreeResource();
-    aTemplates.Construct();
 
     if (!nFlags)
         MORE_BTN(Hide());

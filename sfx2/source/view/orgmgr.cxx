@@ -2,9 +2,9 @@
  *
  *  $RCSfile: orgmgr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dv $ $Date: 2000-12-12 07:13:42 $
+ *  last change: $Author: dv $ $Date: 2001-03-23 15:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,8 +254,6 @@ SfxOrganizeMgr::SfxOrganizeMgr( SfxOrganizeListBox_Impl *pLeft,
 
 */
 {
-    if ( bDeleteTemplates )
-        pTemplates->Construct();
     const International aInter( GetpApp()->GetAppInternational() );
     for ( SfxObjectShell* pTmp = SfxObjectShell::GetFirst(); pTmp; pTmp = SfxObjectShell::GetNext(*pTmp) )
     {
