@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2001-07-04 07:31:58 $
+ *  last change: $Author: os $ $Date: 2001-09-07 12:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2333,28 +2333,31 @@ SwXParaFrameEnumeration::SwXParaFrameEnumeration(const SwUnoCrsr& rUnoCrsr,
     else if((PARAFRAME_PORTION_CHAR == nParaFrameMode) ||
             (PARAFRAME_PORTION_TEXTRANGE == nParaFrameMode))
     {
-        SwPosFlyFrms aFlyFrms;
-        //get all frames that are bound at paragraph or at character
-        pDoc->GetAllFlyFmts(aFlyFrms, pUnoCrsr);//, bDraw);
-        for(USHORT i = 0; i < aFlyFrms.Count(); i++)
+        if(PARAFRAME_PORTION_TEXTRANGE == nParaFrameMode)
         {
-            SwPosFlyFrm* pPosFly = aFlyFrms[i];
-            SwFrmFmt* pFrmFmt = (SwFrmFmt*)&pPosFly->GetFmt();
-            //jetzt einen SwDepend anlegen und in das Array einfuegen
-            SwDepend* pNewDepend = new SwDepend(this, pFrmFmt);
-            aFrameArr.C40_INSERT(SwDepend, pNewDepend, aFrameArr.Count());
-        }
-        //created from any text range
-        if(PARAFRAME_PORTION_CHAR != nParaFrameMode && pUnoCrsr->HasMark())
-        {
-            if(pUnoCrsr->Start() != pUnoCrsr->GetPoint())
-                pUnoCrsr->Exchange();
-            do
+            SwPosFlyFrms aFlyFrms;
+            //get all frames that are bound at paragraph or at character
+            pDoc->GetAllFlyFmts(aFlyFrms, pUnoCrsr);//, bDraw);
+            for(USHORT i = 0; i < aFlyFrms.Count(); i++)
             {
-                FillFrame(*pUnoCrsr);
-                pUnoCrsr->Right();
+                SwPosFlyFrm* pPosFly = aFlyFrms[i];
+                SwFrmFmt* pFrmFmt = (SwFrmFmt*)&pPosFly->GetFmt();
+                //jetzt einen SwDepend anlegen und in das Array einfuegen
+                SwDepend* pNewDepend = new SwDepend(this, pFrmFmt);
+                aFrameArr.C40_INSERT(SwDepend, pNewDepend, aFrameArr.Count());
             }
-            while(*pUnoCrsr->Start() < *pUnoCrsr->End());
+            //created from any text range
+            if(pUnoCrsr->HasMark())
+            {
+                if(pUnoCrsr->Start() != pUnoCrsr->GetPoint())
+                    pUnoCrsr->Exchange();
+                do
+                {
+                    FillFrame(*pUnoCrsr);
+                    pUnoCrsr->Right();
+                }
+                while(*pUnoCrsr->Start() < *pUnoCrsr->End());
+            }
         }
         FillFrame(*pUnoCrsr);
     }
