@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xstorage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:16:42 $
+ *  last change: $Author: rt $ $Date: 2003-10-30 09:48:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 
 #ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
 #include <com/sun/star/embed/XTransactedObject.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_EMBED_XTRANSACTIONBROADCASTER_HPP_
+#include <com/sun/star/embed/XTransactionBroadcaster.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_EMBED_XCLASSIFIEDOBJECT_HPP_
@@ -222,6 +226,7 @@ struct OStorage_Impl
     // must be empty in case of root storage
     OStorage_Impl* m_pParent;
 
+    sal_Bool        m_bControlMediaType;
     ::rtl::OUString m_aMediaType;
 
     //////////////////////////////////////////
@@ -253,6 +258,10 @@ struct OStorage_Impl
     SotElementList_Impl& GetChildrenList();
     void GetStorageProperties();
 
+    void InsertIntoPackageFolder(
+            const ::rtl::OUString& aName,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xParentPackageFolder );
+
     void Commit();
     void Revert();
 
@@ -280,6 +289,7 @@ struct OStorage_Impl
     ::com::sun::star::uno::Sequence< ::rtl::OUString > GetElementNames();
 
     void RemoveElement( SotElement_Impl* pElement );
+    void ClearElement( SotElement_Impl* pElement );
     void DisposeChildren();
 };
 
@@ -287,6 +297,7 @@ struct OStorage_Impl
 class OStorage  : public ::com::sun::star::lang::XTypeProvider
                 , public ::com::sun::star::embed::XStorage
                 , public ::com::sun::star::embed::XTransactedObject
+                , public ::com::sun::star::embed::XTransactionBroadcaster
                 , public ::com::sun::star::util::XModifiable
                 , public ::com::sun::star::container::XNameAccess
                 , public ::com::sun::star::lang::XComponent
@@ -303,6 +314,10 @@ protected:
 
     SotElement_Impl* OpenStreamElement_Impl( const ::rtl::OUString& aStreamName, sal_Int32 nOpenMode, sal_Bool bEncr );
 
+    void BroadcastModified();
+
+    void BroadcastTransaction( sal_Int8 nMessage );
+
 public:
 
     OStorage(   ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInputStream,
@@ -318,9 +333,6 @@ public:
     OStorage(   OStorage_Impl* pImpl );
 
     virtual ~OStorage();
-
-
-    void BroadcastModified();
 
     //____________________________________________________________________________________________________
     //  XInterface
@@ -455,6 +467,18 @@ public:
         throw ( ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWTException,
                 ::com::sun::star::uno::RuntimeException );
+
+    //____________________________________________________________________________________________________
+    // XTransactionBroadcaster
+    //____________________________________________________________________________________________________
+
+    virtual void SAL_CALL addTransactionListener(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XTransactionListener >& aListener )
+        throw ( ::com::sun::star::uno::RuntimeException );
+
+    virtual void SAL_CALL removeTransactionListener(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XTransactionListener >& aListener )
+        throw ( ::com::sun::star::uno::RuntimeException );
 
     //____________________________________________________________________________________________________
     //  XModifiable
