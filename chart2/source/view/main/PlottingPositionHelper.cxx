@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PlottingPositionHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-04 15:56:46 $
+ *  last change: $Author: iha $ $Date: 2003-12-15 19:30:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,46 @@ void PlottingPositionHelper::getLogicMaximum( ::com::sun::star::uno::Sequence< d
     rSeq[0] = this->getLogicMaxX();
     rSeq[1] = this->getLogicMaxY();
     rSeq[2] = this->getLogicMaxZ();
+}
+
+Rectangle PlottingPositionHelper::getTransformedClipRect() const
+{
+    DoubleRectangle aDoubleRect( this->getTransformedClipDoubleRect() );
+
+    Rectangle aRet( static_cast<long>(aDoubleRect.Left)
+                  , static_cast<long>(aDoubleRect.Top)
+                  , static_cast<long>(aDoubleRect.Right)
+                  , static_cast<long>(aDoubleRect.Bottom) );
+    return aRet;
+}
+DoubleRectangle PlottingPositionHelper::getTransformedClipDoubleRect() const
+{
+    //get logic clip values:
+    double MinX = getLogicMinX();
+    double MinY = getLogicMinY();
+    double MinZ = getLogicMinZ();
+    double MaxX = getLogicMaxX();
+    double MaxY = getLogicMaxY();
+    double MaxZ = getLogicMaxZ();
+
+    //apply scaling
+    doLogicScaling( &MinX, &MinY, &MinZ );
+    doLogicScaling( &MaxX, &MaxY, &MaxZ);
+
+    drawing::Position3D aMimimum( MinX, MinY, MinZ);
+    drawing::Position3D aMaximum( MaxX, MaxY, MaxZ);
+
+    //transform to screen coordinates
+    aMimimum = SequenceToPosition3D( getTransformationLogicToScene()
+                    ->transform( Position3DToSequence(aMimimum) ) );
+    aMaximum = SequenceToPosition3D( getTransformationLogicToScene()
+                    ->transform( Position3DToSequence(aMaximum) ) );
+
+    DoubleRectangle aRet( aMimimum.PositionX
+                  , aMaximum.PositionY
+                  , aMaximum.PositionX
+                  , aMimimum.PositionY );
+    return aRet;
 }
 
 //.............................................................................

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PlottingPositionHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-19 13:13:28 $
+ *  last change: $Author: iha $ $Date: 2003-12-15 19:30:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
  ************************************************************************/
 #ifndef _CHART2_PLOTTINGPOSITIONHELPER_HXX
 #define _CHART2_PLOTTINGPOSITIONHELPER_HXX
+
+#include "Clipping.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_EXPLICITSCALEDATA_HPP_
 #include <drafts/com/sun/star/chart2/ExplicitScaleData.hpp>
@@ -119,6 +121,9 @@ public:
 
     void getScreenValuesForMinimum( ::com::sun::star::uno::Sequence< double >& rSeq ) const;
     void getScreenValuesForMaximum( ::com::sun::star::uno::Sequence< double >& rSeq ) const;
+
+    Rectangle           getTransformedClipRect() const;
+    DoubleRectangle     getTransformedClipDoubleRect() const;
 
 protected: //member
     ::com::sun::star::uno::Sequence<
