@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInplaceObject.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:26:20 $
+ *  last change: $Author: rt $ $Date: 2004-01-06 08:54:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ interface XInplaceObject: com::sun::star::uno::XInterface
         <p> Both rectangles are provided in object's parent window
         coordinates in pixels. The intersection of rectangles specifies the
         visible part of the object.
-        In case the position window has a size that is bigger than
+        In case the position window has a size that is different from
         object's size, the object should either scale or deactivate.
         </p>
 
