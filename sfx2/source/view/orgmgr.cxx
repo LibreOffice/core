@@ -2,9 +2,9 @@
  *
  *  $RCSfile: orgmgr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:03:49 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 19:15:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,7 @@ BOOL _FileListEntry::DeleteObjectShell()
             String aTitle = aObj.getName( INetURLObject::LAST_SEGMENT, true,
                                           INetURLObject::DECODE_WITH_CHARSET );
             bRet = aDocShell->PreDoSaveAs_Impl(
-                        aTitle, aDocShell->GetFactory().GetFilter(0)->GetFilterName(), 0 );
+                        aTitle, aDocShell->GetFactory().GetFilterContainer()->GetAnyFilter( SFX_FILTER_IMPORT | SFX_FILTER_EXPORT )->GetFilterName(), 0 );
         }
     }
     if( bOwner)
