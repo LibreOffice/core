@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textuno.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-18 19:29:18 $
+ *  last change: $Author: nn $ $Date: 2001-01-18 15:55:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,9 +89,12 @@
 
 class EditEngine;
 class EditTextObject;
+class SvxEditEngineForwarder;
 class ScDocShell;
 class ScAddress;
 class ScCellObj;
+class ScSimpleEditSource;
+class ScEditEngineDefaulter;
 
 struct ScHeaderFieldData;
 
@@ -309,8 +312,36 @@ public:
                                     com::sun::star::uno::XInterface> xObj );
 };
 
+// ScAnnotationTextCursor isn't needed anymore - SvxUnoTextCursor is used instead
 
-// ScAnnotationTextCursor nicht mehr - stattdessen wird einfach SvxUnoTextCursor benutzt
+
+//  ScEditEngineTextObj for formatted cell content that is not inserted in a cell or header/footer
+//  (used for XML export of change tracking contents)
+
+class ScSimpleEditSourceHelper
+{
+    ScEditEngineDefaulter*  pEditEngine;
+    SvxEditEngineForwarder* pForwarder;
+    ScSimpleEditSource*     pOriginalSource;
+
+public:
+            ScSimpleEditSourceHelper();
+            ~ScSimpleEditSourceHelper();
+
+    ScSimpleEditSource* GetOriginalSource() const   { return pOriginalSource; }
+    ScEditEngineDefaulter* GetEditEngine() const    { return pEditEngine; }
+};
+
+class ScEditEngineTextObj : public ScSimpleEditSourceHelper, public SvxUnoText
+{
+public:
+                        ScEditEngineTextObj();
+    virtual             ~ScEditEngineTextObj();
+
+    void                SetText( const String& rStr );
+    void                SetText( const EditTextObject& rTextObject );
+    EditTextObject*     CreateTextObject();
+};
 
 
 #endif

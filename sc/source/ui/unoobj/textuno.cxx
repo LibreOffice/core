@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textuno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-18 19:30:26 $
+ *  last change: $Author: nn $ $Date: 2001-01-18 15:58:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include <svx/flditem.hxx>
 #include <svx/unomid.hxx>
 #include <svx/unoprnms.hxx>
+#include <svx/unofored.hxx>
 #include <rtl/uuid.h>
 
 #ifndef _COM_SUN_STAR_AWT_FONTSLANT_HPP_
@@ -713,5 +714,57 @@ ScHeaderFooterTextCursor* ScHeaderFooterTextCursor::getImplementation(
 
 //------------------------------------------------------------------------
 
+ScSimpleEditSourceHelper::ScSimpleEditSourceHelper()
+{
+    SfxItemPool* pEnginePool = EditEngine::CreatePool();
+    pEnginePool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );
+    pEnginePool->FreezeIdRanges();
 
+    pEditEngine = new ScFieldEditEngine( pEnginePool, NULL, TRUE );     // TRUE: become owner of pool
+    pForwarder = new SvxEditEngineForwarder( *pEditEngine );
+    pOriginalSource = new ScSimpleEditSource( pForwarder );
+}
+
+ScSimpleEditSourceHelper::~ScSimpleEditSourceHelper()
+{
+    ScUnoGuard aGuard;      //  needed for EditEngine dtor
+
+    delete pOriginalSource;
+    delete pForwarder;
+    delete pEditEngine;
+}
+
+ScEditEngineTextObj::ScEditEngineTextObj() :
+    SvxUnoText( GetOriginalSource(), ScCellObj::GetEditPropertyMap(), uno::Reference<text::XText>() )
+{
+}
+
+ScEditEngineTextObj::~ScEditEngineTextObj()
+{
+}
+
+void ScEditEngineTextObj::SetText( const String& rStr )
+{
+    GetEditEngine()->SetText( rStr );
+
+    ESelection aSel;
+    ::GetSelection( aSel, GetEditSource()->GetTextForwarder() );
+    SetSelection( aSel );
+}
+
+void ScEditEngineTextObj::SetText( const EditTextObject& rTextObject )
+{
+    GetEditEngine()->SetText( rTextObject );
+
+    ESelection aSel;
+    ::GetSelection( aSel, GetEditSource()->GetTextForwarder() );
+    SetSelection( aSel );
+}
+
+EditTextObject* ScEditEngineTextObj::CreateTextObject()
+{
+    return GetEditEngine()->CreateTextObject();
+}
+
+//------------------------------------------------------------------------
 
