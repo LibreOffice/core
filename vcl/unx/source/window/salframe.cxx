@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: pl $ $Date: 2001-03-02 14:23:28 $
+ *  last change: $Author: cp $ $Date: 2001-03-05 16:38:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1581,41 +1581,42 @@ void SalFrame::Sync()
 
 void SalFrame::SetInputContext( SalInputContext* pContext )
 {
-  if (pContext == NULL) return;
+      if (pContext == NULL)
+        return;
 
-  // 1. We should create an input context for this frame
-  //    only when SAL_INPUTCONTEXT_TEXT is set.
+      // 1. We should create an input context for this frame
+      //    only when SAL_INPUTCONTEXT_TEXT is set.
 
-  if (!(pContext->mnOptions & SAL_INPUTCONTEXT_TEXT)) {
-    return;
-  }
-  // 2. We should use on-the-spot inputstyle
-  //    only when SAL_INPUTCONTEXT_EXTTEXTINPUT is set.
+      if (!(pContext->mnOptions & SAL_INPUTCONTEXT_TEXT))
+        return;
 
-  if (maFrameData.mpInputContext == NULL) {
-    Bool isOnTheSpot =
-      (pContext->mnOptions & SAL_INPUTCONTEXT_EXTTEXTINPUT);
-    Bool preeditState =
-      (pContext->mnOptions & SAL_INPUTCONTEXT_EXTTEXTINPUT_ON);
+    // 2. We should use on-the-spot inputstyle
+      //    only when SAL_INPUTCONTEXT_EXTTEXTINPUT is set.
 
-    maFrameData.mpInputContext = new SalI18N_InputContext(maFrameData.pFrame_,
-                                                          isOnTheSpot);
-    if (maFrameData.mpInputContext->UseContext()) {
-      //maFrameData.mpInputContext->SetPreeditState(preeditState);
-      maFrameData.mpInputContext->ExtendEventMask(XtWindow(maFrameData.hShell_));
-      if (pContext->mnOptions & SAL_INPUTCONTEXT_CHANGELANGUAGE) {
-        maFrameData.mpInputContext->SetLanguage(pContext->meLanguage);
+      if (maFrameData.mpInputContext == NULL)
+    {
+        Bool isOnTheSpot  = (pContext->mnOptions & SAL_INPUTCONTEXT_EXTTEXTINPUT);
+        Bool preeditState = (pContext->mnOptions & SAL_INPUTCONTEXT_EXTTEXTINPUT_ON);
+
+        maFrameData.mpInputContext = new SalI18N_InputContext(maFrameData.pFrame_,
+                                                              isOnTheSpot);
+        if (maFrameData.mpInputContext->UseContext())
+        {
+              //maFrameData.mpInputContext->SetPreeditState(preeditState);
+              maFrameData.mpInputContext->ExtendEventMask(XtWindow(maFrameData.hShell_));
+              if (pContext->mnOptions & SAL_INPUTCONTEXT_CHANGELANGUAGE)
+                maFrameData.mpInputContext->SetLanguage(pContext->meLanguage);
+            maFrameData.mpInputContext->SetICFocus();
+        }
       }
-    }
-  }
-  return;
+      return;
 }
 
 // -----------------------------------------------------------------------
 
 void SalFrame::EndExtTextInput( USHORT nFlags )
 {
-  maFrameData.mpInputContext->EndExtTextInput( nFlags );
+      maFrameData.mpInputContext->EndExtTextInput( nFlags );
 }
 
 // -----------------------------------------------------------------------
