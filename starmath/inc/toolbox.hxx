@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:46:46 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 13:11:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,6 @@ protected:
     ImageList  *aImageLists [NUM_TBX_CATEGORIES + 1];   /* regular */
     ImageList  *aImageListsH[NUM_TBX_CATEGORIES + 1];   /* high contrast */
     USHORT      nActiveCategory;
-    BOOL        bAdjustPosition;
 
     virtual BOOL    Close();
     virtual void    GetFocus();
@@ -113,7 +112,7 @@ public:
     virtual void    StateChanged( StateChangedType nStateChange );
     virtual void    DataChanged( const DataChangedEvent &rEvt );
 
-    void        AdjustPosition(const Point &rPoint);
+    void        AdjustPosSize( BOOL bSetPos );
     void        SetCategory(USHORT nCategory);
 };
 
