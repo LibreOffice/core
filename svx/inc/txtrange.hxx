@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtrange.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-16 16:06:31 $
+ *  last change: $Author: ama $ $Date: 2000-11-17 09:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@ public:
         { return pBound ? *pBound : _GetBoundRect(); }
     void SetUpper( USHORT nNew ){ nUpper = nNew; }
     void SetLower( USHORT nNew ){ nLower = nNew; }
+    void SetVertical( BOOL bNew );
     BOOL IsFlag3() const { return bFlag3; }
     void SetFlag3( BOOL bNew ) { bFlag3 = bNew; }
     BOOL IsFlag4() const { return bFlag4; }
