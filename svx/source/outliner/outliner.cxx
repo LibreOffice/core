@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-17 07:04:31 $
+ *  last change: $Author: mt $ $Date: 2001-07-31 13:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1031,10 +1031,6 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
         BOOL bVertical = IsVertical();
 
         Rectangle aBulletArea( ImpCalcBulletArea( nPara, TRUE ) );
-        if ( !bVertical )
-            aBulletArea.Move( rStartPos.X(), rStartPos.Y() );
-        else
-            aBulletArea.Move( rStartPos.Y(), rStartPos.X()-2*aBulletArea.Top() );
 
         Paragraph* pPara = pParaList->GetParagraph( nPara );
         const SvxNumBulletItem& rNumBullet = (const SvxNumBulletItem&) pEditEngine->GetParaAttrib( nPara, EE_PARA_NUMBULLET );
@@ -1049,11 +1045,14 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
 
                 Point aTextPos;
                 if ( !bVertical )
-                    aTextPos = aBulletArea.BottomLeft();
+                {
+                    aTextPos.X() = rStartPos.X() + aBulletArea.Left();
+                    aTextPos.Y() = rStartPos.Y() + aBulletArea.Bottom();
+                }
                 else
                 {
-                    aTextPos.X() = aBulletArea.Bottom();
-                    aTextPos.Y() = aBulletArea.Left();
+                    aTextPos.X() = rStartPos.X() - aBulletArea.Bottom();
+                    aTextPos.Y() = rStartPos.Y() + aBulletArea.Left();
                 }
 
                 if ( !bStrippingPortions )
@@ -1141,9 +1140,17 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
             {
                 if ( !bStrippingPortions )
                 {
-                    // MT: Remove CAST when KA made the Draw-Method const
                     if ( pFmt->GetBrush()->GetGraphicObject() )
-                        ((GraphicObject*)pFmt->GetBrush()->GetGraphicObject())->Draw( pOutDev, aBulletArea.TopLeft(), pPara->aBulSize );
+                    {
+                        Point aBulletPos( aBulletArea.TopLeft() );
+                        if ( !bVertical )
+                            aBulletPos.Move( rStartPos.X(), rStartPos.Y() );
+                        else
+                            aBulletPos.Move( rStartPos.X(), rStartPos.Y() );
+
+                        // MT: Remove CAST when KA made the Draw-Method const
+                        ((GraphicObject*)pFmt->GetBrush()->GetGraphicObject())->Draw( pOutDev, aBulletPos, pPara->aBulSize );
+                    }
                 }
             }
         }
