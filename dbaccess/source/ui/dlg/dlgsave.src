@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-02 11:43:45 $
+ *  last change: $Author: avy $ $Date: 2001-03-09 20:41:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,24 @@ ModalDialog DLG_SAVE_AS
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "~Catalog" ;
         Text[ENGLISH] = "~Catalog" ;
+        Text[ english_us ] = "~Catalog";
+        Text[ portuguese ] = "~Catálogo";
+        Text[ russian ] = "~Êàòàëîã";
+        Text[ greek ] = "ÊáôÜëïãïò";
+        Text[ dutch ] = "~Catalog";
+        Text[ french ] = "~Catalogue";
+        Text[ spanish ] = "~Catálogo";
+        Text[ italian ] = "~Catalogo";
+        Text[ danish ] = "~Catalog";
+        Text[ swedish ] = "~Katalog";
+        Text[ polish ] = "Katalog";
+        Text[ portuguese_brazilian ] = "~Catalog";
+        Text[ japanese ] = "¶ÀÛ¸Ş(~C)";
+        Text[ korean ] = "~Catalog";
+        Text[ chinese_simplified ] = "~Catalog";
+        Text[ chinese_traditional ] = "¤ÀÃş";
+        Text[ turkish ] = "~Catalog";
+        Text[ arabic ] = "ßÊÇáæÌ";
     };
     Edit ET_CATALOG
     {
@@ -102,6 +120,24 @@ ModalDialog DLG_SAVE_AS
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "~Schema" ;
         Text[ENGLISH] = "~Schema" ;
+        Text[ english_us ] = "~Schema";
+        Text[ portuguese ] = "~Esquema";
+        Text[ russian ] = "~Ñõåìà";
+        Text[ greek ] = "~Ó÷Şìá";
+        Text[ dutch ] = "~Schema";
+        Text[ french ] = "~Schéma";
+        Text[ spanish ] = "~Esquema";
+        Text[ italian ] = "~Schema";
+        Text[ danish ] = "~Schema";
+        Text[ swedish ] = "~Schema";
+        Text[ polish ] = "~Schemat";
+        Text[ portuguese_brazilian ] = "~Schema";
+        Text[ japanese ] = "‚Ğ‚ÈŒ^(~S)";
+        Text[ korean ] = "~Schema";
+        Text[ chinese_simplified ] = "~Schema";
+        Text[ chinese_traditional ] = "²¤¹Ï";
+        Text[ turkish ] = "~Schema";
+        Text[ arabic ] = "äãæĞÌ";
     };
     Edit ET_SCHEMA
     {
@@ -149,14 +185,14 @@ ModalDialog DLG_SAVE_AS
     {
         Text = "~Name der Tabelle" ;
         Text [ ENGLISH ] = "Table name" ;
-        Text [ english_us ] = "Table name" ;
+        Text [ english_us ] = "~Table name" ;
         Text [ portuguese ] = "~Nome da tabela" ;
         Text [ portuguese_brazilian ] = "Name der Tabelle" ;
         Text [ swedish ] = "~Namn på tabell" ;
         Text [ danish ] = "Tabellens navn" ;
         Text [ italian ] = "~Nome della tabella" ;
         Text [ spanish ] = "~Nombre de la tabla" ;
-        Text [ french ] = "Nom de la table" ;
+        Text [ french ] = "~Nom de la table" ;
         Text [ dutch ] = "~Naam van de tabel" ;
         Text[ chinese_simplified ] = "±í¸ñÃû³Æ";
         Text[ russian ] = "Èìÿ òàáëèöû";
@@ -164,7 +200,7 @@ ModalDialog DLG_SAVE_AS
         Text[ japanese ] = "Ã°ÌŞÙ–¼";
         Text[ chinese_traditional ] = "ªí®æ¦WºÙ";
         Text[ arabic ] = "ÇÓã ÇáÌÏæá";
-        Text[ greek ] = "¼íïìá ğßíáêá";
+        Text[ greek ] = "¼íï~ìá ğßíáêá";
         Text[ korean ] = "Å×ÀÌºí ÀÌ¸§";
         Text[ turkish ] = "Tablo adı";
     };
@@ -172,8 +208,8 @@ ModalDialog DLG_SAVE_AS
     {
         Text = "~Name der Tabellensicht" ;
         Text [ ENGLISH ] = "View name" ;
-        Text [ english_us ] = "Name of table view" ;
-        Text [ portuguese ] = "Nome da ~vista da tabela" ;
+        Text [ english_us ] = "~Name of table view" ;
+        Text [ portuguese ] = "Nome da ~vista de tabela" ;
         Text [ portuguese_brazilian ] = "Name der Tabellensicht" ;
         Text [ swedish ] = "~Namn på tabellvisning" ;
         Text [ danish ] = "Tabelvisningens navn" ;
@@ -187,7 +223,7 @@ ModalDialog DLG_SAVE_AS
         Text[ japanese ] = "Ã°ÌŞÙËŞ­°‚Ì–¼‘O";
         Text[ chinese_traditional ] = "ªí®æÀËµø¦WºÙ";
         Text[ arabic ] = "ÇÓã ÚÑÖ ÇáÌÏæá";
-        Text[ greek ] = "¼íïìá ğñïâïëŞò ğßíáêá";
+        Text[ greek ] = "¼íï~ìá ğñïâïëŞò ğßíáêá";
         Text[ korean ] = "Å×ÀÌºí º¸±âÀÇ ÀÌ¸§";
         Text[ turkish ] = "Tablo görünümü adı";
     };
@@ -195,14 +231,14 @@ ModalDialog DLG_SAVE_AS
     {
         Text = "~Name der Abfrage" ;
         Text [ ENGLISH ] = "Query name" ;
-        Text [ english_us ] = "Query name" ;
+        Text [ english_us ] = "~Query name" ;
         Text [ portuguese ] = "Nome da ~consulta" ;
         Text [ portuguese_brazilian ] = "Name der Abfrage" ;
         Text [ swedish ] = "~Namn på sökning" ;
         Text [ danish ] = "Forespørgslens navn" ;
         Text [ italian ] = "Nome della ~ricerca" ;
         Text [ spanish ] = "Nombre de la ~consulta" ;
-        Text [ french ] = "Nom de la requête" ;
+        Text [ french ] = "~Nom de la requête" ;
         Text [ dutch ] = "~Naam van de query" ;
         Text[ chinese_simplified ] = "²éÑ¯Ãû³Æ";
         Text[ russian ] = "Èìÿ çàïğîñà";
@@ -210,7 +246,7 @@ ModalDialog DLG_SAVE_AS
         Text[ japanese ] = "¸´Ø°–¼";
         Text[ chinese_traditional ] = "¬d¸ß¦WºÙ";
         Text[ arabic ] = "ÇÓã ÇáÇÓÊİÓÇÑ";
-        Text[ greek ] = "¼íïìá åñùôŞìáôïò";
+        Text[ greek ] = "¼íï~ìá åñùôŞìáôïò";
         Text[ korean ] = "ÁúÀÇ ÀÌ¸§";
         Text[ turkish ] = "Sorgu adı";
     };
@@ -218,14 +254,14 @@ ModalDialog DLG_SAVE_AS
     {
         Text = "~Name des Formulars" ;
         Text [ ENGLISH ] = "Form name" ;
-        Text [ english_us ] = "Form name" ;
+        Text [ english_us ] = "F~orm name" ;
         Text [ portuguese ] = "Nome do ~formulário" ;
         Text [ portuguese_brazilian ] = "Name des Formulars" ;
         Text [ swedish ] = "~Namn på formulär" ;
         Text [ danish ] = "Formularens navn" ;
         Text [ italian ] = "Nome del ~formulario" ;
         Text [ spanish ] = "Nombre del form~ulario" ;
-        Text [ french ] = "Nom du formulaire" ;
+        Text [ french ] = "~Nom du formulaire" ;
         Text [ dutch ] = "~Naam van het formulier" ;
         Text[ chinese_simplified ] = "±íµ¥Ãû³Æ";
         Text[ russian ] = "Èìÿ ôîğìóëÿğà";
@@ -233,7 +269,7 @@ ModalDialog DLG_SAVE_AS
         Text[ japanese ] = "Ì«°Ñ–¼";
         Text[ chinese_traditional ] = "ªí³æ¦WºÙ";
         Text[ arabic ] = "ÇÓã ÇáÇÓÊãÇÑÉ";
-        Text[ greek ] = "¼íïìá öüñìáò";
+        Text[ greek ] = "¼íï~ìá öüñìáò";
         Text[ korean ] = "¾ç½Ä ÀÌ¸§";
         Text[ turkish ] = "Form adı";
     };
@@ -241,14 +277,14 @@ ModalDialog DLG_SAVE_AS
     {
         Text = "~Name des Berichts" ;
         Text [ ENGLISH ] = "Report name" ;
-        Text [ english_us ] = "Report name" ;
+        Text [ english_us ] = "~Report name" ;
         Text [ portuguese ] = "Nome do ~relatório" ;
         Text [ portuguese_brazilian ] = "Name des Berichts" ;
         Text [ swedish ] = "~Namn på rapport" ;
         Text [ danish ] = "Rapportens navn" ;
         Text [ italian ] = "Nome del ra~pporto" ;
         Text [ spanish ] = "Nombre del inform~e" ;
-        Text [ french ] = "Nom de l'état" ;
+        Text [ french ] = "~Nom de l'état" ;
         Text [ dutch ] = "~Naam van het bericht" ;
         Text[ chinese_simplified ] = "±¨¸æÃû³Æ";
         Text[ russian ] = "Èìÿ îò÷åòà";
@@ -256,7 +292,7 @@ ModalDialog DLG_SAVE_AS
         Text[ japanese ] = "ÚÎß°Ä–¼";
         Text[ chinese_traditional ] = "³øªí¦WºÙ";
         Text[ arabic ] = "ÇÓã ÇáÊŞÑíÑ";
-        Text[ greek ] = "¼íïìá áíáöïñÜò";
+        Text[ greek ] = "¼ío~ìá áíáöïñÜò";
         Text[ korean ] = "º¸°í¼­ ÀÌ¸§";
         Text[ turkish ] = "Rapor adı";
     };
@@ -264,8 +300,25 @@ ModalDialog DLG_SAVE_AS
     {
         Text = "Der Name '$Name: not supported by cvs2svn $' existiert bereits.\nBitte geben Sie einen neuen Namen an." ;
         Text [ ENGLISH ] = "The name '$Name: not supported by cvs2svn $' does already exist.\nPlease enter a new name." ;
-        Text [ english_us ] = "The name '$Name: not supported by cvs2svn $' already exists.\nPlease enter a new name." ;
+        Text [ english_us ] = "The name '$Name: not supported by cvs2svn $' already exists.\nPlease enter another name." ;
         Text[ language_user1 ] = " ";
+        Text[ portuguese ] = "O nome '$Name: not supported by cvs2svn $' já existe.\nIndique outro.";
+        Text[ russian ] = "Èìÿ '$Name: not supported by cvs2svn $' óæå ñóùåñòâóåò.\nÂâåäèòå, ïîæàëóéñòà, äğóãîå èìÿ.";
+        Text[ greek ] = "Ôï üíïìá '$Name: not supported by cvs2svn $' õğÜñ÷åé Şäç.\nĞáñáêáëş åéóÜãåôå İíá íİï üíïìá.";
+        Text[ dutch ] = "The name '$Name: not supported by cvs2svn $' already exists.\nPlease enter a new name.";
+        Text[ french ] = "Le nom '$Name: not supported by cvs2svn $' existe déjà.\nIndiquez-en un autre !";
+        Text[ spanish ] = "Ya existe el nombre '$Name: not supported by cvs2svn $'.\nIntroduzca otro.";
+        Text[ italian ] = "Il nome '$Name: not supported by cvs2svn $' esiste già.\nSceglietene un altro.";
+        Text[ danish ] = "The name '$Name: not supported by cvs2svn $' already exists.\nPlease enter a new name.";
+        Text[ swedish ] = "Namnet '$Name: not supported by cvs2svn $' finns redan.\nAnge ett annat namn.";
+        Text[ polish ] = "Nazwa '$Name: not supported by cvs2svn $' ju¿ istnieje.\nWpisz inn¹ nazwê.";
+        Text[ portuguese_brazilian ] = "The name '$Name: not supported by cvs2svn $' already exists.\nPlease enter a new name.";
+        Text[ japanese ] = "'$Name: not supported by cvs2svn $' ‚Ì–¼‘O‚Í‚·‚Å‚É‚ ‚è‚Ü‚·B\nV‚µ‚¢–¼‘O‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
+        Text[ korean ] = "The name '$Name: not supported by cvs2svn $' already exists.\nPlease enter a new name.";
+        Text[ chinese_simplified ] = "The name '$Name: not supported by cvs2svn $' already exists.\nPlease enter a new name.";
+        Text[ chinese_traditional ] = "³o­Ó¦WºÙ'$Name: not supported by cvs2svn $' ¤w¸g¦s¦b¡C½Ğ±z¿é¤J¤@­Ó¦³®Ä¦WºÙ¡C";
+        Text[ turkish ] = "The name '$Name: not supported by cvs2svn $' already exists.\nPlease enter a new name.";
+        Text[ arabic ] = "ÇáÇÓã'$Name: not supported by cvs2svn $' ãæÌæÏ ÈÇáİÚá.\nÇáÑÌÇÁ ÅÏÎÇá ÇÓã ÌÏíÏ.";
     };
     String STR_OBJECT_EXISTS_ALREADY_OVERWRITE
     {
@@ -273,6 +326,23 @@ ModalDialog DLG_SAVE_AS
         Text [ ENGLISH ] = "The name '$Name: not supported by cvs2svn $' does already exist.\nDo you want to overwrite it?" ;
         Text [ english_us ] = "The name '$Name: not supported by cvs2svn $' already exists.\nDo you want to overwrite it?" ;
         Text[ language_user1 ] = " ";
+        Text[ portuguese ] = "The name '$Name: not supported by cvs2svn $' already exists.\nDo you want to overwrite it?";
+        Text[ russian ] = "The name '$Name: not supported by cvs2svn $' already exists.\nDo you want to overwrite it?";
+        Text[ greek ] = "The name '$Name: not supported by cvs2svn $' already exists.\nDo you want to overwrite it?";
+        Text[ dutch ] = "The name '$Name: not supported by cvs2svn $' already exists.\nDo you want to overwrite it?";
+        Text[ french ] = "The name '$Name: not supported by cvs2svn $' already exists.\nDo you want to overwrite it?";
+        Text[ spanish ] = "El nombre '$Name: not supported by cvs2svn $' existe ya.\n¿Desea sobrescribirlo?";
+        Text[ italian ] = "The name '$Name: not supported by cvs2svn $' already exists.\nDo you want to overwrite it?";
+        Text[ danish ] = "The name '$Name: not supported by cvs2svn $' already exists.\nDo you want to overwrite it?";
+        Text[ swedish ] = "Namnet '$Name: not supported by cvs2svn $' finns redan.\nVill du skriva över det?";
+        Text[ polish ] = "Nazwa '$Name: not supported by cvs2svn $' ju¿ istnieje.\nSkasowaæ j¹ przez zapisanie?";
+        Text[ portuguese_brazilian ] = "The name '$Name: not supported by cvs2svn $' already exists.\nDo you want to overwrite it?";
+        Text[ japanese ] = "The name '$Name: not supported by cvs2svn $' already exists.\nDo you want to overwrite it?";
+        Text[ korean ] = "The name '$Name: not supported by cvs2svn $' already exists.\nDo you want to overwrite it?";
+        Text[ chinese_simplified ] = "The name '$Name: not supported by cvs2svn $' already exists.\nDo you want to overwrite it?";
+        Text[ chinese_traditional ] = "The name '$Name: not supported by cvs2svn $' already exists.\nDo you want to overwrite it?";
+        Text[ turkish ] = "The name '$Name: not supported by cvs2svn $' already exists.\nDo you want to overwrite it?";
+        Text[ arabic ] = "ÇáÇÓã '$Name: not supported by cvs2svn $' ãæÌæÏ ÈÇáİÚá.\nåá ÊÑíÏ ÇáßÊÇÈÉ İæŞå¿";
     };
     Text [ portuguese_brazilian ] = "Speichern unter" ;
     Text [ swedish ] = "Spara som" ;
