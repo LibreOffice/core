@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:54:17 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:32:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,12 +335,13 @@ inline LanguageType GetDocAppScriptLang( SwDoc& rDoc )
 |******************************************************************************/
 
 SwCalc::SwCalc( SwDoc& rD )
-    : rDoc( rD ),
-    eError( CALC_NOERR ),
-    nListPor( 0 ),
+    :
     aErrExpr( aEmptyStr, SwSbxValue(), 0 ),
+    rDoc( rD ),
     pLclData( &GetAppLocaleData() ),
-    pCharClass( &GetAppCharClass() )
+    pCharClass( &GetAppCharClass() ),
+    nListPor( 0 ),
+    eError( CALC_NOERR )
 {
     aErrExpr.aStr.AssignAscii( "~C_ERR~" );
     memset( VarTable, 0, sizeof(VarTable) );
@@ -865,10 +866,18 @@ if( !nUseOld )
             {
                 switch( ( eCurrOper = ((_CalcOp*)pFnd)->eOp ) )
                 {
-                    case CALC_SUM  :
-                    case CALC_MEAN : eCurrListOper = CALC_PLUS;     break;
-                    case CALC_MIN  : eCurrListOper = CALC_MIN_IN;   break;
-                    case CALC_MAX  : eCurrListOper = CALC_MAX_IN;   break;
+                    case CALC_SUM:
+                    case CALC_MEAN:
+                        eCurrListOper = CALC_PLUS;
+                        break;
+                    case CALC_MIN:
+                        eCurrListOper = CALC_MIN_IN;
+                        break;
+                    case CALC_MAX:
+                        eCurrListOper = CALC_MAX_IN;
+                        break;
+                    default:
+                        break;
                 }
                 nCommandPos = (xub_StrLen)aRes.EndPos;
                 return eCurrOper;
@@ -977,18 +986,16 @@ if( !nUseOld )
             String aName( sCommand.Copy( nRealStt, aRes.EndPos - nRealStt ));
             if( aName.Len() )
             {
-                bSetError = FALSE;
                 sal_Unicode ch = aName.GetChar(0);
-                SwCalcOper eTmp2;
-                if( '<' == ch )
-                    eCurrOper = CALC_LES, eTmp2 = CALC_LEQ;
-                else if( '>' == ch )
-                    eCurrOper = CALC_GRE, eTmp2 = CALC_GEQ;
-                else
-                    bSetError = TRUE;
 
-                if( !bSetError )
+                bSetError = TRUE;
+                if ('<' == ch || '>' == ch)
                 {
+                    bSetError = FALSE;
+
+                    SwCalcOper eTmp2 = ('<' == ch) ? CALC_LEQ : CALC_GEQ;
+                    eCurrOper = ('<' == ch) ? CALC_LES : CALC_GRE;
+
                     if( 2 == aName.Len() && '=' == aName.GetChar(1) )
                         eCurrOper = eTmp2;
                     else if( 1 != aName.Len() )
