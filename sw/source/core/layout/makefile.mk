@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-28 13:40:32 $
+#   last change: $Author: kz $ $Date: 2004-08-02 14:10:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,18 +100,24 @@ SLOFILES =  \
         $(SLO)$/layact.obj \
                 $(SLO)$/laycache.obj \
         $(SLO)$/layouter.obj \
+                $(SLO)$/movedfwdfrmsbyobjpos.obj \
         $(SLO)$/newfrm.obj \
-        $(SLO)$/pagechg.obj \
+                $(SLO)$/objectformatter.obj \
+                $(SLO)$/objectformattertxtfrm.obj \
+                $(SLO)$/objectformatterlayfrm.obj \
+                $(SLO)$/pagechg.obj \
         $(SLO)$/pagedesc.obj \
         $(SLO)$/pageiter.obj \
         $(SLO)$/paintfrm.obj \
         $(SLO)$/sectfrm.obj \
+                $(SLO)$/sortedobjs.obj \
+                $(SLO)$/sortedobjsimpl.obj \
         $(SLO)$/ssfrm.obj \
         $(SLO)$/tabfrm.obj \
         $(SLO)$/trvlfrm.obj \
         $(SLO)$/unusedf.obj \
         $(SLO)$/virtoutp.obj \
-        $(SLO)$/wsfrm.obj
+                $(SLO)$/wsfrm.obj
 
 .IF "$(product)"==""
 .IF "$(cap)"==""
