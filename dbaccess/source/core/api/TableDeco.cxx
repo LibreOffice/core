@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDeco.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 10:09:55 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:01:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,9 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
+#ifndef DBA_CONTAINERMEDIATOR_HXX
+#include "ContainerMediator.hxx"
+#endif
 
 using namespace dbaccess;
 using namespace ::com::sun::star::uno;
@@ -136,64 +139,35 @@ using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::dbtools;
 using namespace ::cppu;
-using namespace ::utl;
 
 //==========================================================================
 //= ODBTableDecorator
 //==========================================================================
 DBG_NAME(ODBTableDecorator)
-//--------------------------------------------------------------------------
-ODBTableDecorator::ODBTableDecorator(
-        const OConfigurationNode& _rTableConfig, const Reference< XDatabaseMetaData >& _rxMetaData,
-        const Reference< XColumnsSupplier >& _rxTable, const Reference< XNumberFormatsSupplier >& _rxNumberFormats ) throw(SQLException)
-    :OTableDescriptor_BASE(m_aMutex)
-    ,ODataSettings(OTableDescriptor_BASE::rBHelper)
-    ,OConfigurationFlushable(m_aMutex,_rTableConfig.cloneAsRoot())
-    ,m_nPrivileges(0)
-    ,m_xTable(_rxTable)
-    ,m_xMetaData(_rxMetaData)
-    ,m_xNumberFormats( _rxNumberFormats )
-    ,m_pColumns(NULL)
-{
-    DBG_CTOR(ODBTableDecorator, NULL);
-    osl_incrementInterlockedCount( &m_refCount );
-
-    DBG_ASSERT(_rxMetaData.is(), "ODBTableDecorator::ODBTableDecorator : invalid conn !");
-    // register our properties
-    construct();
-
-    // load the settings from the configuration
-    if(m_aConfigurationNode.isValid())
-        loadFrom(m_aConfigurationNode.openNode(CONFIGKEY_SETTINGS));
-
-    // we don't collect the privileges here, this is potentially expensive. Instead we determine them on request.
-    // (see getFastPropertyValue)
-    m_nPrivileges = -1;
-    osl_decrementInterlockedCount( &m_refCount );
-
-}
 // -----------------------------------------------------------------------------
 ODBTableDecorator::ODBTableDecorator(
-                                     const Reference< XDatabaseMetaData >& _rxMetaData,
-        const Reference< XColumnsSupplier >& _rxNewTable,
-        const Reference< XNumberFormatsSupplier >& _rxNumberFormats ) throw(SQLException)
+         const Reference< XDatabaseMetaData >& _rxMetaData
+        ,const Reference< XColumnsSupplier >& _rxNewTable
+        ,const Reference< XNumberFormatsSupplier >& _rxNumberFormats
+        ,const Reference< XNameAccess >& _xColumnDefinitions
+        ) throw(SQLException)
     :OTableDescriptor_BASE(m_aMutex)
     ,ODataSettings(OTableDescriptor_BASE::rBHelper)
-    ,OConfigurationFlushable(m_aMutex)
     ,m_nPrivileges(-1)
     ,m_xMetaData(_rxMetaData)
     ,m_xTable(_rxNewTable)
     ,m_xNumberFormats( _rxNumberFormats )
+    ,m_xColumnDefinitions(_xColumnDefinitions)
     ,m_pColumns(NULL)
 {
     DBG_CTOR(ODBTableDecorator, NULL);
-    construct();
+    ODataSettings::registerProperties(this);
 }
 // -------------------------------------------------------------------------
 ODBTableDecorator::~ODBTableDecorator()
 {
     DBG_DTOR(ODBTableDecorator, NULL);
-    if(m_pColumns)
+    if ( m_pColumns )
         delete m_pColumns;
 }
 
@@ -217,13 +191,20 @@ Sequence< sal_Int8 > ODBTableDecorator::getImplementationId() throw (RuntimeExce
 //------------------------------------------------------------------------------
 void SAL_CALL ODBTableDecorator::disposing()
 {
+    OPropertySetHelper::disposing();
     OTableDescriptor_BASE::disposing();
-    OConfigurationFlushable::disposing();
 
     MutexGuard aGuard(m_aMutex);
     m_xTable        = NULL;
     m_xMetaData     = NULL;
     m_pTables       = NULL;
+    m_xColumnDefinitions = NULL;
+    m_xNumberFormats = NULL;
+    m_xColumnMediator = NULL;
+    if ( m_pColumns )
+    {
+        m_pColumns->disposing();
+    }
 }
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL ODBTableDecorator::convertFastPropertyValue(
@@ -246,6 +227,22 @@ sal_Bool SAL_CALL ODBTableDecorator::convertFastPropertyValue(
         case PROPERTY_ID_TEXTLINECOLOR:
         case PROPERTY_ID_TEXTEMPHASIS:
         case PROPERTY_ID_TEXTRELIEF:
+        case PROPERTY_ID_FONTCHARWIDTH:
+        case PROPERTY_ID_FONTCHARSET:
+        case PROPERTY_ID_FONTFAMILY:
+        case PROPERTY_ID_FONTHEIGHT:
+        case PROPERTY_ID_FONTKERNING:
+        case PROPERTY_ID_FONTNAME:
+        case PROPERTY_ID_FONTORIENTATION:
+        case PROPERTY_ID_FONTPITCH:
+        case PROPERTY_ID_FONTSLANT:
+        case PROPERTY_ID_FONTSTRIKEOUT:
+        case PROPERTY_ID_FONTSTYLENAME:
+        case PROPERTY_ID_FONTUNDERLINE:
+        case PROPERTY_ID_FONTWEIGHT:
+        case PROPERTY_ID_FONTWIDTH:
+        case PROPERTY_ID_FONTWORDLINEMODE:
+        case PROPERTY_ID_FONTTYPE:
             bRet = ODataSettings::convertFastPropertyValue(rConvertedValue, rOldValue,nHandle,rValue);
             break;
 
@@ -275,6 +272,23 @@ void ODBTableDecorator::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, con
         case PROPERTY_ID_TEXTLINECOLOR:
         case PROPERTY_ID_TEXTEMPHASIS:
         case PROPERTY_ID_TEXTRELIEF:
+        case PROPERTY_ID_FONTCHARWIDTH:
+        case PROPERTY_ID_FONTCHARSET:
+        case PROPERTY_ID_FONTFAMILY:
+        case PROPERTY_ID_FONTHEIGHT:
+        case PROPERTY_ID_FONTKERNING:
+        case PROPERTY_ID_FONTNAME:
+        case PROPERTY_ID_FONTORIENTATION:
+        case PROPERTY_ID_FONTPITCH:
+        case PROPERTY_ID_FONTSLANT:
+        case PROPERTY_ID_FONTSTRIKEOUT:
+        case PROPERTY_ID_FONTSTYLENAME:
+        case PROPERTY_ID_FONTUNDERLINE:
+        case PROPERTY_ID_FONTWEIGHT:
+        case PROPERTY_ID_FONTWIDTH:
+        case PROPERTY_ID_FONTWORDLINEMODE:
+        case PROPERTY_ID_FONTTYPE:
+
             ODataSettings::setFastPropertyValue_NoBroadcast(_nHandle, _rValue);
             break;
         case PROPERTY_ID_CATALOGNAME:
@@ -337,6 +351,22 @@ void ODBTableDecorator::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) c
         case PROPERTY_ID_TEXTLINECOLOR:
         case PROPERTY_ID_TEXTEMPHASIS:
         case PROPERTY_ID_TEXTRELIEF:
+        case PROPERTY_ID_FONTCHARWIDTH:
+        case PROPERTY_ID_FONTCHARSET:
+        case PROPERTY_ID_FONTFAMILY:
+        case PROPERTY_ID_FONTHEIGHT:
+        case PROPERTY_ID_FONTKERNING:
+        case PROPERTY_ID_FONTNAME:
+        case PROPERTY_ID_FONTORIENTATION:
+        case PROPERTY_ID_FONTPITCH:
+        case PROPERTY_ID_FONTSLANT:
+        case PROPERTY_ID_FONTSTRIKEOUT:
+        case PROPERTY_ID_FONTSTYLENAME:
+        case PROPERTY_ID_FONTUNDERLINE:
+        case PROPERTY_ID_FONTWEIGHT:
+        case PROPERTY_ID_FONTWIDTH:
+        case PROPERTY_ID_FONTWORDLINEMODE:
+        case PROPERTY_ID_FONTTYPE:
             ODataSettings::getFastPropertyValue(_rValue, _nHandle);
             break;
         case PROPERTY_ID_CATALOGNAME:
@@ -448,8 +478,6 @@ Any SAL_CALL ODBTableDecorator::queryInterface( const Type & rType ) throw(Runti
                 aRet = ODataSettings::queryInterface(rType);
         }
     }
-    if(!aRet.hasValue())
-        aRet = OConfigurationFlushable::queryInterface( rType);
 
     return aRet;
 }
@@ -458,21 +486,10 @@ Sequence< Type > SAL_CALL ODBTableDecorator::getTypes(  ) throw(RuntimeException
 {
     Reference<XTypeProvider> xTypes(m_xTable,UNO_QUERY);
     OSL_ENSURE(xTypes.is(),"Table must be a TypePropvider!");
-    return ::comphelper::concatSequences(xTypes->getTypes(),OConfigurationFlushable::getTypes());
+    return xTypes->getTypes();
 }
 
 // -----------------------------------------------------------------------------
-void ODBTableDecorator::flush_NoBroadcast_NoCommit()
-{
-    if(m_aConfigurationNode.isValid())
-    {
-        storeTo(m_aConfigurationNode.openNode(CONFIGKEY_SETTINGS));
-
-        OColumns* pColumns = static_cast<OColumns*>(m_pColumns);
-        if(pColumns)
-            pColumns->storeSettings( m_aConfigurationNode.openNode( CONFIGKEY_QRYDESCR_COLUMNS ), m_xNumberFormats );
-    }
-}
 // XRename,
 //------------------------------------------------------------------------------
 void SAL_CALL ODBTableDecorator::rename( const ::rtl::OUString& _rNewName ) throw(SQLException, ElementExistException, RuntimeException)
@@ -486,7 +503,6 @@ void SAL_CALL ODBTableDecorator::rename( const ::rtl::OUString& _rNewName ) thro
 //      Reference<XPropertySet> xProp(m_xTable,UNO_QUERY);
 //      xProp->getPropertyValue(PROPERTY_NAME) >>= sOldName;
         xRename->rename(_rNewName);
-        //  m_pTables->renameObject(_rNewName);
     }
     else // not supported
         throw SQLException(DBACORE_RESSTRING(RID_STR_NO_TABLE_RENAME),*this,SQLSTATE_GENERAL,1000,Any() );
@@ -568,8 +584,6 @@ sal_Int64 SAL_CALL ODBTableDecorator::getSomething( const Sequence< sal_Int8 >& 
     Reference<XUnoTunnel> xTunnel(m_xTable,UNO_QUERY);
     if(xTunnel.is())
         nRet = xTunnel->getSomething(rId);
-    if(!nRet)
-        nRet = OConfigurationFlushable::getSomething(rId);
     return nRet;
 }
 // -----------------------------------------------------------------------------
@@ -630,10 +644,10 @@ Reference< XPropertySet > SAL_CALL ODBTableDecorator::createDataDescriptor(  ) t
         xColsSupp = xColsSupp.query( xFactory->createDataDescriptor() );
 
     return new ODBTableDecorator(
-        m_aConfigurationNode.cloneAsRoot(),
         m_xMetaData,
         xColsSupp,
-        m_xNumberFormats
+        m_xNumberFormats,
+        NULL
     );
 }
 // -----------------------------------------------------------------------------
@@ -668,12 +682,11 @@ void ODBTableDecorator::refreshColumns()
                                     this,this,
                                     m_xMetaData.is() && m_xMetaData->supportsAlterTableWithAddColumn(),
                                     m_xMetaData.is() && m_xMetaData->supportsAlterTableWithDropColumn());
-        //  pCol->setParent(this);
-        m_pColumns  = pCol;
 
-        // load the UI settings of the columns
-        if (m_aConfigurationNode.isValid())
-            pCol->loadSettings( m_aConfigurationNode.openNode( CONFIGKEY_QRYDESCR_COLUMNS ), m_xNumberFormats );
+        OContainerMediator* pMediator = new OContainerMediator(pCol,m_xColumnDefinitions,sal_False);
+        m_xColumnMediator = pMediator;
+        pCol->setMediator(pMediator);
+        m_pColumns  = pCol;
     }
     else
         m_pColumns->reFill(aVector);
@@ -683,25 +696,39 @@ OColumn* ODBTableDecorator::createColumn(const ::rtl::OUString& _rName) const
 {
     OColumn* pReturn = NULL;
 
-    Reference< XNamed > xRet = NULL;
     Reference<XNameAccess> xNames;
-    if(m_xTable.is())
-        xNames = m_xTable->getColumns();
-    if(xNames.is() && xNames->hasByName(_rName))
+    if ( m_xTable.is() )
     {
-        Reference<XPropertySet> xProp;
-        xNames->getByName(_rName) >>= xProp;
+        xNames = m_xTable->getColumns();
 
-        pReturn = new OTableColumnWrapper(xProp);
+        if ( xNames.is() && xNames->hasByName(_rName) )
+        {
+            Reference<XPropertySet> xProp(xNames->getByName(_rName),UNO_QUERY);
+
+            Reference<XPropertySet> xColumnDefintion;
+            if ( m_xColumnDefinitions.is() && m_xColumnDefinitions->hasByName(_rName))
+                xColumnDefintion.set(m_xColumnDefinitions->getByName(_rName),UNO_QUERY);
+
+            pReturn = new OTableColumnWrapper(xProp,xColumnDefintion);
+        }
     }
     return pReturn;
+}
+// -----------------------------------------------------------------------------
+void ODBTableDecorator::columnDropped(const ::rtl::OUString& _sName)
+{
+    Reference<XDrop> xDrop(m_xColumnDefinitions,UNO_QUERY);
+    if ( xDrop.is() && m_xColumnDefinitions->hasByName(_sName) )
+    {
+        xDrop->dropByName(_sName);
+    }
 }
 // -----------------------------------------------------------------------------
 Reference< XPropertySet > ODBTableDecorator::createEmptyObject()
 {
     Reference<XDataDescriptorFactory> xNames;
     if(m_xTable.is())
-        xNames = Reference<XDataDescriptorFactory>(m_xTable->getColumns(),UNO_QUERY);
+        xNames.set(m_xTable->getColumns(),UNO_QUERY);
     Reference< XPropertySet > xRet;
     if(xNames.is())
         xRet = new OTableColumnDescriptorWrapper(xNames->createDataDescriptor());
@@ -723,12 +750,6 @@ void SAL_CALL ODBTableDecorator::setName( const ::rtl::OUString& aName ) throw (
 {
 }
 
-// -----------------------------------------------------------------------------
-void ODBTableDecorator::setContext( const ::utl::OConfigurationTreeRoot& _rNode, const Reference< XNumberFormatsSupplier >& _rxNumberFormats )
-{
-    OConfigurationFlushable::setConfigurationNode( _rNode );
-    m_xNumberFormats = _rxNumberFormats;
-}
 // -----------------------------------------------------------------------------
 
 
