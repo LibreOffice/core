@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-19 14:34:36 $
+ *  last change: $Author: fs $ $Date: 2001-03-15 08:44:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,8 +218,8 @@
 #ifndef _INETTYPE_HXX
 #include <svtools/inettype.hxx>
 #endif
-#ifndef _CPPUHELPER_EXTRACT_HXX_
-#include <cppuhelper/extract.hxx>
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
 #endif
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-12 12:07:00 $
+ *  last change: $Author: fs $ $Date: 2001-03-15 08:44:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,8 +118,8 @@
 #ifndef _UNOTOOLS_STREAMHELPER_HXX_
 #include <unotools/streamhelper.hxx>
 #endif
-#ifndef _CPPUHELPER_EXTRACT_HXX_
-#include <cppuhelper/extract.hxx>
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
 #endif
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
