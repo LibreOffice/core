@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BorderRemover.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-11-02 11:07:46 $
+ *  last change: $Date: 2004-12-10 16:55:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,10 @@ package convwatch;
 
 import convwatch.ImageHelper;
 import java.io.File;
-import javax.imageio.ImageIO;
 import java.awt.image.RenderedImage;
 import java.awt.image.BufferedImage;
 import java.awt.Image;
+import java.lang.reflect.Method;
 
 // -----------------------------------------------------------------------------
 class Rect
@@ -193,7 +193,34 @@ class BorderRemover
             RenderedImage aImage = createImage(m_aImage, aInnerRect);
 
             File aWriteFile = new File(_sFilenameTo);
-            ImageIO.write(aImage, "jpg", aWriteFile);
+
+            Exception ex = null;
+            try {
+                Class imageIOClass = Class.forName("javax.imageio.ImageIO");
+                Method writeMethod = imageIOClass.getDeclaredMethod("write", new Class[]{java.awt.Image.class, java.lang.String.class, java.io.File.class});
+                writeMethod.invoke(imageIOClass, new Object[]{aImage, "jpg", aWriteFile});
+            }
+            catch(java.lang.ClassNotFoundException e) {
+                ex = e;
+            }
+            catch(java.lang.NoSuchMethodException e) {
+                ex = e;
+            }
+            catch(java.lang.IllegalAccessException e) {
+                ex = e;
+            }
+            catch(java.lang.reflect.InvocationTargetException e) {
+                ex = e;
+            }
+
+            if (ex != null) {
+                // get Java version:
+                String javaVersion = System.getProperty("java.version");
+                throw new java.io.IOException(
+                    "Cannot construct object with current Java version " +
+                    javaVersion + ": " + ex.getMessage());
+            }
+//            ImageIO.write(aImage, "jpg", aWriteFile);
 
             return true;
         }
