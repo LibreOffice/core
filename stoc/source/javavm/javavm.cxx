@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 14:10:05 $
+ *  last change: $Author: rt $ $Date: 2003-04-29 08:25:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -852,10 +852,6 @@ void initVMConfiguration(stoc_javavm::JVM * pjvm,
     {
         //no java.ini. This can be the case when the setup runs and java was used for accessibility etc.
         bPropsFail= sal_True;
-    }
-    catch(css::java::JavaNotConfiguredException& e)
-    {
-        throw;
     }
     catch(css::java::JavaNotConfiguredException& e)
     {
