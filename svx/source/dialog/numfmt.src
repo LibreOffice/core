@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: os $ $Date: 2002-11-19 07:24:58 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:45:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     Text [ italian ] = "Formato numero" ;
     Text [ portuguese_brazilian ] = "Numberformat" ;
     Text [ portuguese ] = "Formato numйrico" ;
-    Text [ finnish ] = "Numeromuoto" ;
+    Text [ finnish ] = "Lukumuoto" ;
     Text [ danish ] = "Talformat" ;
     Text [ french ] = "Format numйrique" ;
     Text [ swedish ] = "Talformat" ;
@@ -263,7 +263,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         StringList [ dutch ] =
         {
             < "Alle" ; Default ; > ;
-            < "Gebruikergedefinieerd" ; Default ; > ;
+            < "Door gebruiker gedefinieerd" ; Default ; > ;
             < "Getal" ; Default ; > ;
             < "Procent" ; Default ; > ;
             < "Valuta" ; Default ; > ;
@@ -319,15 +319,15 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         StringList [ russian ] =
         {
                 < "Все" ; Default ; > ;
-            < "Определяемый пользователем" ; Default ; > ;
+            < "Пользовательский" ; Default ; > ;
             < "Число" ; Default ; > ;
             < "Процент" ; Default ; > ;
-            < "Валюта" ; Default ; > ;
+            < "Деньги" ; Default ; > ;
             < "Дата" ; Default ; > ;
             < "Время" ; Default ; > ;
             < "Наука" ; Default ; > ;
-            < "Простая дробь" ; Default ; > ;
-            < "Значение истинности" ; Default ; > ;
+            < "Дробь" ; Default ; > ;
+            < "Логические значения" ; Default ; > ;
             < "Текст" ; Default ; > ;
         };
         StringList [ polish ] =
@@ -481,7 +481,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ italian ] = "Codice del formato" ;
         Text [ portuguese_brazilian ] = "Formato-~Descri??o" ;
         Text [ portuguese ] = "Cуdigo do formato" ;
-        Text [ finnish ] = "~Muotoile koodi" ;
+        Text [ finnish ] = "~Muotoilukoodi" ;
         Text [ danish ] = "Format-kode" ;
         Text [ french ] = "Description de format" ;
         Text [ swedish ] = "Format~beskrivning" ;
@@ -531,7 +531,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ italian ] = "Formato" ;
         Text [ portuguese_brazilian ] = "~Formato" ;
         Text [ portuguese ] = "Fo~rmatar" ;
-        Text [ finnish ] = "~Muotoile" ;
+        Text [ finnish ] = "M~uotoilu" ;
         Text [ danish ] = "~Format" ;
         Text [ french ] = "Forma~t" ;
         Text [ swedish ] = "~Format" ;
@@ -724,7 +724,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ danish ] = "Indledende nuller" ;
         Text [ french ] = "~Zйro(s) non significatif(s)" ;
         Text [ swedish ] = "Inledande ~nollor" ;
-        Text [ dutch ] = "~Voorloopnullen" ;
+        Text [ dutch ] = "Voo~rloopnullen" ;
         Text [ spanish ] = "Ceros a la i~zquierda" ;
         Text [ english_us ] = "Leading ~zeroes" ;
         Text[ chinese_simplified ] = "е‰ЌзЅ®й›¶(~Z)";
@@ -763,7 +763,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ italian ] = "Valori negativi in rosso" ;
         Text [ portuguese_brazilian ] = "~Marca vermelho negativo" ;
         Text [ portuguese ] = "Negativos em ~vermelho" ;
-        Text [ finnish ] = "~Negatiiviset luvut punaisina" ;
+        Text [ finnish ] = "Negatiiviset luvut ~punaisina" ;
         Text [ danish ] = "Rшde negative tal" ;
         Text [ french ] = "~Nbres nйg. en rouge" ;
         Text [ swedish ] = "Negativa vдrden i ~rцtt" ;
@@ -771,7 +771,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ spanish ] = "~Negativo en rojo" ;
         Text [ english_us ] = "~Negative numbers red" ;
         Text[ chinese_simplified ] = "з”Ёзєўи‰Іжѕз¤єиґџеЂј(~N)";
-        Text[ russian ] = "Выдел. отриц. чисел";
+        Text[ russian ] = "Отрицательные числа красным";
         Text[ polish ] = "Licz~by ujemne w kolorze czerwonym";
         Text[ japanese ] = "гѓћг‚¤гѓЉг‚№еЂ¤гЃЇиµ¤гЃ§(~N)";
         Text[ chinese_traditional ] = "з”Ёзґ…и‰ІйЎЇз¤єиІ еЂј(~N)";
