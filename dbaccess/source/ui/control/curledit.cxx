@@ -2,9 +2,9 @@
  *
  *  $RCSfile: curledit.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2001-08-16 13:35:33 $
+ *  last change: $Author: fs $ $Date: 2001-09-28 14:53:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,11 @@ void OConnectionURLEdit::SetText(const String& _rStr, const Selection& _rNewSele
     GetSubEdit()->Show();
 
     // do the real SetTex
-    Edit::SetText(bIsEmpty ? _rStr : m_aTypeCollection.cutPrefix(_rStr), _rNewSelection);
+//  Edit::SetText(bIsEmpty ? _rStr : m_aTypeCollection.cutPrefix(_rStr), _rNewSelection);
+    String sNewText( _rStr );
+    if ( !bIsEmpty )
+        sNewText = m_aTypeCollection.cutPrefix( _rStr );
+    Edit::SetText( sNewText );
 }
 
 //-------------------------------------------------------------------------
@@ -187,6 +191,9 @@ String OConnectionURLEdit::GetText() const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/08/16 13:35:33  hr
+ *  #65293#: syntax
+ *
  *  Revision 1.4  2001/08/15 13:17:57  oj
  *  #88644# insert some DBG's
  *
