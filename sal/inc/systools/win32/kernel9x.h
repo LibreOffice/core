@@ -2,9 +2,9 @@
  *
  *  $RCSfile: kernel9x.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hro $ $Date: 2000-09-27 09:07:22 $
+ *  last change: $Author: hjs $ $Date: 2000-11-02 15:35:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,8 +204,8 @@ extern BOOL (WINAPI *lpfnRemoveDirectoryW) (
 #define CreateFileW                 lpfnCreateFileW
 #define RemoveDirectoryW            lpfnRemoveDirectoryW
 
-extern void Kernel9xInit(LPOSVERSIONINFO lpVersionInfo);
-extern void Kernel9xDeInit();
+extern void WINAPI Kernel9xInit(LPOSVERSIONINFO lpVersionInfo);
+extern void WINAPI Kernel9xDeInit();
 
 #ifdef __cplusplus
 }
