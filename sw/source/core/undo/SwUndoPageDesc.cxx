@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwUndoPageDesc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:05:48 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:57:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,18 +59,22 @@
  *
  ************************************************************************/
 
+#include <tools/resid.hxx>
 #include <doc.hxx>
 #include <swundo.hxx>
 #include <pagedesc.hxx>
 #include <SwUndoPageDesc.hxx>
 #include <SwRewriter.hxx>
 #include <undobj.hxx>
+#include <comcore.hrc>
 
 SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
                                const SwPageDesc & _aNew,
                                SwDoc * _pDoc)
-    : SwUndo(UNDO_CHANGE_PAGEDESC), aOld(_aOld, _pDoc), aNew(_aNew, _pDoc),
-      pDoc(_pDoc)
+    : SwUndo(_aOld.GetName() != _aNew.GetName() ?
+             UNDO_RENAME_PAGEDESC
+             :UNDO_CHANGE_PAGEDESC),
+      aOld(_aOld, _pDoc), aNew(_aNew, _pDoc), pDoc(_pDoc)
 {
     ASSERT(0 != pDoc, "no document?");
 }
@@ -106,14 +110,18 @@ SwRewriter SwUndoPageDesc::GetRewriter() const
 {
     SwRewriter aResult;
 
-    aResult.AddRule(UNDO_ARG1, aNew.GetName());
+    aResult.AddRule(UNDO_ARG1, aOld.GetName());
+    aResult.AddRule(UNDO_ARG2, SW_RES(STR_YIELDS));
+    aResult.AddRule(UNDO_ARG3, aNew.GetName());
 
     return aResult;
 }
 
-SwUndoPageDescCreate::SwUndoPageDescCreate(const SwPageDesc & _aNew,
+// #116530#
+SwUndoPageDescCreate::SwUndoPageDescCreate(const SwPageDesc * pNew,
                                            SwDoc * _pDoc)
-    : SwUndo(UNDO_CREATE_PAGEDESC), aNew(_aNew, _pDoc), pDoc(_pDoc)
+    : SwUndo(UNDO_CREATE_PAGEDESC), pDesc(pNew), aNew(*pNew, _pDoc),
+      pDoc(_pDoc)
 {
     ASSERT(0 != pDoc, "no document?");
 }
@@ -127,7 +135,16 @@ void SwUndoPageDescCreate::Undo(SwUndoIter & rIt)
     BOOL bUndo = pDoc->DoesUndo();
 
     pDoc->DoUndo(FALSE);
-    pDoc->DelPageDesc(aNew.GetName());
+
+    // -> #116530#
+    if (pDesc)
+    {
+        aNew = *pDesc;
+        pDesc = NULL;
+    }
+    // <- #116530#
+
+    pDoc->DelPageDesc(aNew.GetName(), TRUE);
     pDoc->DoUndo(bUndo);
 }
 
@@ -139,7 +156,7 @@ void SwUndoPageDescCreate::Redo(SwUndoIter & rIt)
     pDoc->DoUndo(FALSE);
 
     SwPageDesc aPageDesc = aNew;
-    pDoc->MakePageDesc(aNew.GetName(), &aPageDesc);
+    pDoc->MakePageDesc(aNew.GetName(), &aPageDesc, FALSE, TRUE); // #116530#
 
     pDoc->DoUndo(bUndo);
 }
@@ -153,7 +170,11 @@ SwRewriter SwUndoPageDescCreate::GetRewriter() const
 {
     SwRewriter aResult;
 
-    aResult.AddRule(UNDO_ARG1, aNew.GetName());
+    if (pDesc)
+        aResult.AddRule(UNDO_ARG1, pDesc->GetName());
+    else
+        aResult.AddRule(UNDO_ARG1, aNew.GetName());
+
 
     return aResult;
 }
@@ -176,7 +197,7 @@ void SwUndoPageDescDelete::Undo(SwUndoIter & rIt)
     pDoc->DoUndo(FALSE);
 
     SwPageDesc aPageDesc = aOld;
-    pDoc->MakePageDesc(aOld.GetName(), &aPageDesc);
+    pDoc->MakePageDesc(aOld.GetName(), &aPageDesc, FALSE, TRUE); // #116530#
     pDoc->DoUndo(bUndo);
 }
 
@@ -185,7 +206,7 @@ void SwUndoPageDescDelete::Redo(SwUndoIter & rIt)
     BOOL bUndo = pDoc->DoesUndo();
 
     pDoc->DoUndo(FALSE);
-    pDoc->DelPageDesc(aOld.GetName());
+    pDoc->DelPageDesc(aOld.GetName(), TRUE); // #116530#
     pDoc->DoUndo(bUndo);
 }
 
