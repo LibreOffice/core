@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: mba $ $Date: 2001-06-11 09:22:40 $
+#   last change: $Author: pb $ $Date: 2001-07-09 11:56:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -139,10 +139,11 @@ LIB3OBJFILES=\
     $(SLO)$/stringtransfer.obj
 
 EXCEPTIONSFILES=\
-    $(SLO)$/strmadpt.obj	\
-    $(SLO)$/transfer.obj	\
-    $(SLO)$/transfer2.obj	\
-    $(SLO)$/stringtransfer.obj
+    $(SLO)$/strmadpt.obj	   \
+    $(SLO)$/transfer.obj	   \
+    $(SLO)$/transfer2.obj	   \
+    $(SLO)$/stringtransfer.obj \
+    $(SLO)$/imagemgr.obj
 
 UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
 UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
