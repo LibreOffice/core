@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 09:51:35 $
+ *  last change: $Author: pb $ $Date: 2001-06-29 08:49:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -673,6 +673,18 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         }
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        case SID_HELP_PI:
+        {
+            SvtHelpOptions aHelpOpt;
+            SFX_REQUEST_ARG(rReq, pOnItem, SfxBoolItem, SID_HELP_PI, FALSE);
+            sal_Bool bOn = pOnItem
+                            ? ((SfxBoolItem*)pOnItem)->GetValue()
+                            : !aHelpOpt.IsHelpAgentAutoStartMode();
+            aHelpOpt.SetHelpAgentAutoStartMode( bOn );
+            break;
+        }
+
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_ABOUT:
         {
             ModalDialog *pDlg = CreateAboutDialog();
@@ -807,6 +819,11 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                 case SID_HELPBALLOONS:
                 {
                     rSet.Put( SfxBoolItem( SID_HELPBALLOONS, Help::IsBalloonHelpEnabled() ) );
+                }
+                break;
+                case SID_HELP_PI:
+                {
+                    rSet.Put( SfxBoolItem( SID_HELP_PI, SvtHelpOptions().IsHelpAgentAutoStartMode() ) );
                 }
                 break;
                 case SID_EXTENDEDHELP:
