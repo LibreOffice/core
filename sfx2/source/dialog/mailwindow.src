@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailwindow.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:55:13 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ Window RID_MAIL_WINDOW
         Text[ czech ] = "Odeslat";
         Text[ hebrew ] = "‮שליחה‬";
         Text[ hindi ] = "भेजो";
+        Text[ slovak ] = "Odoslať";
     };
     PushButton PB_MAILWIN_CLOSE
     {
@@ -134,6 +135,7 @@ Window RID_MAIL_WINDOW
         Text[ czech ] = "Zavřít";
         Text[ hebrew ] = "‮סגירה‬";
         Text[ hindi ] = "बन्द करो";
+        Text[ slovak ] = "Zavrieť";
     };
     ListBox LB_MAILWIN_ROLE
     {
@@ -304,6 +306,12 @@ Window RID_MAIL_WINDOW
         < "प्रतिलिपि" ; 2 ; > ;
             < "ब्लइन्ड प्रतिलिपि" ; 3 ; > ;
         };
+    StringList [ slovak ] =
+    {
+         < "Komu" ; 1 ; > ;
+        < "Kópia" ; 2 ; > ;
+        < "Slepá kópia" ; 3 ; > ;
+    };
     };
     Edit ED_MAILWIN_ROLE
     {
@@ -350,6 +358,7 @@ Window RID_MAIL_WINDOW
         Text[ czech ] = "Předmět:";
         Text[ hebrew ] = ":‮נושא‬";
         Text[ hindi ] = "विषय:";
+        Text[ slovak ] = "Predmet:";
     };
     Edit ED_MAILWIN_SUBJECT
     {
@@ -388,6 +397,7 @@ Window RID_MAIL_WINDOW
         Text[ czech ] = "Od:";
         Text[ hebrew ] = "‮מאת: ‬";
         Text[ hindi ] = "से:";
+        Text[ slovak ] = "Od:";
     };
     Edit ED_MAILWIN_FROM
     {
@@ -427,6 +437,7 @@ Window RID_MAIL_WINDOW
         Text[ czech ] = "Priorita:";
         Text[ hebrew ] = "‮עדיפות:‬";
         Text[ hindi ] = "प्रधान्य:";
+        Text[ slovak ] = "Priorita:";
     };
     ListBox LB_MAILWIN_PRIO
     {
@@ -651,6 +662,14 @@ Window RID_MAIL_WINDOW
         < "कम" ; 4 ; > ;
         < "सबसे कम" ; 5 ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Urgentné" ; 1 ; > ;
+        < "Dôležité" ; 2 ; > ;
+        < "Normálne" ; 3 ; > ;
+        < "Nízka" ; 4 ; > ;
+        < "Najnižšia" ; 5 ; > ;
+    };
     };
     Image IMG_MAILWIN_SEND
     {
@@ -698,9 +717,12 @@ InfoBox MSG_ERROR_SEND_MAIL
     MESSAGE[ czech ] = "Během posílání zprávy nastala chyba. Možnou příčinou této chyby by mohlo být chybějící uživatelské konto nebo chyba v nastavení.\nProsím zkontrolujte nastavení %PRODUCTNAME nebo nastavení svého programu pro posílání e-mailů.";
     MESSAGE[ hebrew ] = "‮ארעה שגיאה בשילוח ההודעה. יתכן שחסר הגדרת חשבון המשתמש או שההתקנה פגומה.\nנא לבדוק את הקביעות של %PRODUCTNAME ושל תוכנית הדואר.‬";
     MESSAGE[ hindi ] = "An error occurred in sending the message. Possible errors could be a missing user account or a defective setup.\nPlease check the %PRODUCTNAME settings or your e-mail program settings.";
+    MESSAGE[ slovak ] = "Behom posielania správy sa vyskytla chyba. Možnou príčinou tejto chyby by mohlo byť chýbajúce užívateľské konto alebo chyba v nastavení.\nProsím skontrolujte nastavenia %PRODUCTNAME alebo nastavenia svojho programu na posielanie e-mailov.";
 };
 
 // ------------------------------------------------------------------- EOF
+
+
 
 
 
