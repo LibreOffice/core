@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ab $ $Date: 2001-11-02 11:56:32 $
+ *  last change: $Author: ab $ $Date: 2001-11-26 16:36:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1352,7 +1352,6 @@ RTLFUNC(Str)
 
 RTLFUNC(StrComp)
 {
-
     if ( rPar.Count() < 3 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -1361,21 +1360,38 @@ RTLFUNC(StrComp)
     }
     const String& rStr1 = rPar.Get(1)->GetString();
     const String& rStr2 = rPar.Get(2)->GetString();
-    INT16 nNotCaseSensitive = TRUE;
+    INT16 nIgnoreCase = TRUE;
     if ( rPar.Count() == 4 )
-        nNotCaseSensitive = rPar.Get(3)->GetInteger();
+        nIgnoreCase = rPar.Get(3)->GetInteger();
 
-    const International& aInternational = GetpApp()->GetAppInternational();
     StringCompare aResult;
-    if ( !nNotCaseSensitive )
-        aResult = aInternational.Compare( rStr1, rStr2 );
-    else
-        aResult = rStr1.CompareTo( rStr2 );
     int nRetValue = 0;
-    if ( aResult == COMPARE_LESS )
-        nRetValue = -1;
-    else if ( aResult == COMPARE_GREATER )
-        nRetValue = 1;
+    if ( !nIgnoreCase )
+    {
+        ::utl::TransliterationWrapper* pTransliterationWrapper = GetSbData()->pTransliterationWrapper;
+        if( !pTransliterationWrapper )
+        {
+            Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
+            pTransliterationWrapper = GetSbData()->pTransliterationWrapper =
+                new ::utl::TransliterationWrapper( xSMgr,
+                    ::com::sun::star::i18n::TransliterationModules_IGNORE_CASE |
+                    ::com::sun::star::i18n::TransliterationModules_IGNORE_KANA |
+                    ::com::sun::star::i18n::TransliterationModules_IGNORE_WIDTH );
+        }
+
+        LanguageType eLangType = GetpApp()->GetSettings().GetLanguage();
+        pTransliterationWrapper->loadModuleIfNeeded( eLangType );
+        nRetValue = pTransliterationWrapper->compareString( rStr1, rStr2 );
+    }
+    else
+    {
+        aResult = rStr1.CompareTo( rStr2 );
+        if ( aResult == COMPARE_LESS )
+            nRetValue = -1;
+        else if ( aResult == COMPARE_GREATER )
+            nRetValue = 1;
+    }
+
     rPar.Get(0)->PutInteger( nRetValue );
 }
 
