@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animationaudionode.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:01:39 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:11:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ namespace presentation
             start/stop behaviour is affected by the referenced audio
             file.
         */
-        class AnimationAudioNode : public BaseNode
+        class AnimationAudioNode : public BaseNode, public AnimationEventHandler
         {
         public:
             AnimationAudioNode( const ::com::sun::star::uno::Reference<
@@ -106,6 +106,9 @@ namespace presentation
             virtual void notifyDeactivating( const AnimationNodeSharedPtr& rNotifier );
 
             virtual bool hasPendingAnimation() const;
+
+            /// overriden, because we need to deal with STOPAUDIO commands
+            virtual bool handleAnimationEvent( const AnimationNodeSharedPtr& rNode );
 
         private:
             ::com::sun::star::uno::Reference<
