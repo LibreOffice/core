@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-07 10:15:24 $
+ *  last change: $Author: pb $ $Date: 2001-09-17 15:30:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,11 +599,9 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         Broadcast( SfxSimpleHint(SFX_HINT_NAMECHANGED) );
     }
 
-    if( bOk )
-        FinishedLoading( SFX_LOADED_ALL );
-
     if ( SFX_CREATE_MODE_EMBEDDED != eCreateMode )
         GetpApp()->HideStatusText();
+
     return bOk;
 }
 
