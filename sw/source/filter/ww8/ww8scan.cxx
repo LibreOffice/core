@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-28 08:27:53 $
+ *  last change: $Author: cmc $ $Date: 2002-06-28 14:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1773,40 +1773,6 @@ WW8ScannerBase::~WW8ScannerBase()
     delete pHdFtTxbx;
     delete pHdFtTxbxBkd;
     delete pMagicTables;
-}
-
-//-----------------------------------------
-//      Stack fuer shorts
-//-----------------------------------------
-
-class UShortStk: private SvShorts
-{
-private:
-    //No copying
-    UShortStk(const UShortStk&);
-    UShortStk& operator=(const UShortStk&);
-public:
-    UShortStk() : SvShorts( 10, 10 ) {}
-    ~UShortStk() {}
-    void Push( USHORT s ) { Insert( s, SvShorts::Count() ); }
-    inline USHORT Top();
-    inline USHORT Pop();
-    USHORT Count() { return SvShorts::Count(); }
-};
-
-inline USHORT UShortStk::Top()
-{
-    USHORT nPos = SvShorts::Count() - 1;
-    USHORT s = (*this)[ nPos ];
-    return s;
-}
-
-inline USHORT UShortStk::Pop()
-{
-    USHORT nPos = SvShorts::Count() - 1;
-    USHORT s = (*this)[ nPos ];
-    Remove( nPos );
-    return s;
 }
 
 //-----------------------------------------
@@ -4211,7 +4177,8 @@ WW8PLCFMan::WW8PLCFMan( WW8ScannerBase* pBase, short nType, long nStartCp )
 
         if( p->pPLCFx->IsSprm() )
         {
-            p->pIdStk = new UShortStk;  // Vorsicht: nEndPos muss bereits
+            // Vorsicht: nEndPos muss bereits
+            p->pIdStk = new ::std::stack<USHORT>;
             if ((p == pChp) || (p == pPap))
             {
                 WW8_CP nTemp = p->nEndPos+p->nCpOfs;
@@ -4360,8 +4327,8 @@ void WW8PLCFMan::GetSprmEnd( short nIdx, WW8PLCFManResult* pRes ) const
 
     register const WW8PLCFxDesc* p = &aD[nIdx];
 
-    if( p->pIdStk->Count() )
-        pRes->nSprmId = p->pIdStk->Top();       // get end position
+    if (!(p->pIdStk->empty()))
+        pRes->nSprmId = p->pIdStk->top();       // get end position
     else
     {
         ASSERT( !this, "No Id on the Stack" );
@@ -4421,7 +4388,7 @@ void WW8PLCFMan::AdvSprm( short nIdx, BOOL bStart )
     if( bStart )
     {
         USHORT nLastId = GetId(p);
-        p->pIdStk->Push( nLastId ); // merke Id fuer Attribut-Ende
+        p->pIdStk->push(nLastId);   // merke Id fuer Attribut-Ende
 
         if( p->nSprmsLen )
         {   /*
@@ -4453,9 +4420,9 @@ void WW8PLCFMan::AdvSprm( short nIdx, BOOL bStart )
     }
     else
     {
-        if( p->pIdStk->Count() )
-            p->pIdStk->Pop();
-        if( !p->pIdStk->Count() )
+        if (!(p->pIdStk->empty()))
+            p->pIdStk->pop();
+        if (p->pIdStk->empty())
         {
             if ( (p == pChp) || (p == pPap) )
             {
@@ -4541,7 +4508,7 @@ void WW8PLCFMan::AdvNoSprm( short nIdx, BOOL bStart )
             p->nStartPos = aD[nIdx+1].nStartPos;
         else
         {
-            if( !aD[nIdx+1].pIdStk->Count() )
+            if (aD[nIdx+1].pIdStk->empty())
             {
                 WW8PLCFx_PCD *pTemp = (WW8PLCFx_PCD*)(pPcd->pPLCFx);
                 /*

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-28 08:27:53 $
+ *  last change: $Author: cmc $ $Date: 2002-06-28 14:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 
 #ifndef LONG_MAX
 #include <limits.h>
+#endif
+#ifndef __SGI_STLSTACK
+#include <stack>
 #endif
 
 #ifndef _SOLAR_H
@@ -149,7 +152,6 @@ public:
 
 //--Line abovewhich the code has meaningful comments
 
-class  UShortStk;
 class  WW8Fib;
 class  WW8ScannerBase;
 class  WW8PLCFspecial;
@@ -757,7 +759,7 @@ struct WW8PLCFxSaveAll
 struct WW8PLCFxDesc
 {
     WW8PLCFx* pPLCFx;
-    UShortStk* pIdStk;  // Speicher fuer Attr-Id fuer Attr-Ende(n)
+    ::std::stack<USHORT>* pIdStk;  // Speicher fuer Attr-Id fuer Attr-Ende(n)
     const BYTE* pMemPos;// wo liegen die Sprm(s)
     long nOrigSprmsLen;
 
@@ -786,7 +788,7 @@ struct WW8PLCFxDesc
     //With nStartPos set to LONG_MAX then in the case of a pap or chp
     //GetSprms will not search for the sprms, but instead take the
     //existing ones.
-    WW8PLCFxDesc() : nStartPos(LONG_MAX) {}
+    WW8PLCFxDesc() : pIdStk(0), nStartPos(LONG_MAX) {}
     void ReduceByOffset();
 };
 
