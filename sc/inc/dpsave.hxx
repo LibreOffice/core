@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpsave.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 12:33:42 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:24:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,10 @@
 
 #ifndef _COM_SUN_STAR_SHEET_XDIMENSIONSSUPPLIER_HPP_
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
+#endif
+
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
 #endif
 
 namespace com { namespace sun { namespace star { namespace sheet {
@@ -234,7 +238,7 @@ public:
     ScDPSaveDimension*      DuplicateDimension(const String& rName);
     ScDPSaveDimension&      DuplicateDimension(const ScDPSaveDimension& rDim);
 
-    ScDPSaveDimension*      GetExistingDimensionByName(const String& rName);
+    SC_DLLPUBLIC ScDPSaveDimension*     GetExistingDimensionByName(const String& rName);
     ScDPSaveDimension*      GetNewDimensionByName(const String& rName);
 
     void                    RemoveDimensionByName(const String& rName);
