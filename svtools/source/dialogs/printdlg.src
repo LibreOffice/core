@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-10 15:07:15 $
+ *  last change: $Author: kz $ $Date: 2002-08-01 20:18:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Impresora";
         Text[ finnish ] = "Tulostin";
+        Text[ thai ] = "เครื่องพิมพ์";
     };
     FixedText FT_NAME
     {
@@ -138,6 +139,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nombre";
         Text[ finnish ] = "~Nimi";
+        Text[ thai ] = "~ชื่อ";
     };
     ListBox LB_NAMES
     {
@@ -174,6 +176,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Propiedades...";
         Text[ finnish ] = "Ominai~suudet";
+        Text[ thai ] = "คุณสม~บัติ...";
     };
     FixedText FT_STATUS
     {
@@ -202,6 +205,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Estado";
         Text[ finnish ] = "Tila";
+        Text[ thai ] = "สถานะ";
     };
     FixedText FI_STATUS
     {
@@ -235,6 +239,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipo";
         Text[ finnish ] = "Tyyppi";
+        Text[ thai ] = "ชนิด";
     };
     FixedText FI_TYPE
     {
@@ -268,6 +273,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ubicaci�n";
         Text[ finnish ] = "Sijainti";
+        Text[ thai ] = "ที่ตั้ง";
     };
     FixedText FI_LOCATION
     {
@@ -301,6 +307,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Comentario";
         Text[ finnish ] = "Huomautus";
+        Text[ thai ] = "ข้อคิดเห็น";
     };
     FixedText FI_COMMENT
     {
@@ -333,6 +340,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ arabic ] = "��� ������";
         Text[ catalan ] = "N�mero de fax";
         Text[ finnish ] = "Faksinumero";
+        Text[ thai ] = "หมายเลขโทรสาร";
     };
     Edit EDT_FAXNO
     {
@@ -367,6 +375,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Imprimir ~en archivo";
         Text[ finnish ] = "Tulosta tiedostoon";
+        Text[ thai ] = "พิมพ์ถึงแฟ้ม";
     };
     FixedText FI_PRINTFILE
     {
@@ -406,6 +415,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "�rea de impresi�n";
         Text[ finnish ] = "Tulostusalue";
+        Text[ thai ] = "ช่วงการพิมพ์";
     };
     RadioButton RBT_ALL
     {
@@ -434,6 +444,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Todo";
         Text[ finnish ] = "Kaikki";
+        Text[ thai ] = "ทั้งหมด";
     };
     RadioButton RBT_PAGES
     {
@@ -462,6 +473,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~P�ginas";
         Text[ finnish ] = "Sivut";
+        Text[ thai ] = "หน้า";
     };
     RadioButton RBT_SELECTION
     {
@@ -490,6 +502,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Selecci�n";
         Text[ finnish ] = "Valinta";
+        Text[ thai ] = "เลือก";
     };
     Edit EDT_PAGES
     {
@@ -535,6 +548,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Copias";
         Text[ finnish ] = "Kopioita";
+        Text[ thai ] = "สำเนา";
     };
     FixedText FT_COPIES
     {
@@ -563,6 +577,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Ejemplares";
         Text[ finnish ] = "Kopioiden m��r�";
+        Text[ thai ] = "จำนวนสำเนา";
     };
     NumericField NUM_COPIES
     {
@@ -604,6 +619,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Ordenar";
         Text[ finnish ] = "~Yhdist�";
+        Text[ thai ] = "ตรวจเ~ทียบ";
     };
     FixedImage IMG_COLLATE
     {
@@ -647,6 +663,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Opciones...";
         Text[ finnish ] = "~Asetukset";
+        Text[ thai ] = "~ตัวเลือก...";
     };
     OKButton BTN_OK
     {
@@ -677,7 +694,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ spanish ] = "<Todos>";
         Text[ finnish ] = "<All>";
         Text[ italian ] = "<All>";
-        Text[ danish ] = "<All>";
+        Text[ danish ] = "<Alle>";
         Text[ swedish ] = "<Alla>";
         Text[ polish ] = "<Wszystko>";
         Text[ portuguese_brazilian ] = "<All>";
@@ -688,6 +705,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ turkish ] = "<All>";
         Text[ arabic ] = "<All>";
         Text[ catalan ] = "<All>";
+        Text[ thai ] = "<ทั้งหมด>";
     };
     Text[ chinese_simplified ] = "打印";
     Text[ russian ] = "������";
@@ -701,6 +719,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Imprimir";
     Text[ finnish ] = "Tulosta";
+    Text[ thai ] = "พิมพ์";
 };
 
 Image RID_IMG_PRNDLG_COLLATE
