@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: mi $ $Date: 2001-10-22 16:13:23 $
+#   last change: $Author: os $ $Date: 2001-10-25 13:32:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,8 +73,8 @@ TARGET=offapi_db
 
 # ------------------------------------------------------------------
 
-#regcheck .PHONY: 
-#	$(COMSPEC) /c checkrdb.btm o:\comptest\swt614.rdb $(PRJ)$/$(OUTPATH)$/bin$/$(PRJNAME).rdb 
+#regcheck .PHONY:
+#	$(COMSPEC) /c checkrdb.btm o:\comptest\swt614.rdb $(PRJ)$/$(OUTPATH)$/bin$/$(PRJNAME).rdb
 
 # ------------------------------------------------------------------
 
@@ -128,8 +128,9 @@ UNOIDLDBFILES= \
     $(UCR)$/cssxml.db \
     $(UCR)$/csssetup.db \
     $(UCR)$/cssimage.db\
+    $(UCR)$/cssuidialogs.db \
+    $(UCR)$/dcssui.db \
     $(UCR)$/csssync.db\
-    $(UCR)$/cssuidialogs.db
 
 # --- Targets ------------------------------------------------------
 
