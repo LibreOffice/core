@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 18:00:00 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:28:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,10 +449,21 @@ void __EXPORT ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
         SvtCJKOptions aCJKOptions;
         if (!aCJKOptions.IsChangeCaseMapEnabled())
         {
+            pViewFrm->GetBindings().SetVisibleState( SID_TRANSLITERATE_HALFWIDTH, sal_False );
+            pViewFrm->GetBindings().SetVisibleState( SID_TRANSLITERATE_FULLWIDTH, sal_False );
+            pViewFrm->GetBindings().SetVisibleState( SID_TRANSLITERATE_HIRAGANA, sal_False );
+            pViewFrm->GetBindings().SetVisibleState( SID_TRANSLITERATE_KATAGANA, sal_False );
             rSet.DisableItem( SID_TRANSLITERATE_HALFWIDTH );
             rSet.DisableItem( SID_TRANSLITERATE_FULLWIDTH );
             rSet.DisableItem( SID_TRANSLITERATE_HIRAGANA );
             rSet.DisableItem( SID_TRANSLITERATE_KATAGANA );
+        }
+        else
+        {
+            pViewFrm->GetBindings().SetVisibleState( SID_TRANSLITERATE_HALFWIDTH, sal_True );
+            pViewFrm->GetBindings().SetVisibleState( SID_TRANSLITERATE_FULLWIDTH, sal_True );
+            pViewFrm->GetBindings().SetVisibleState( SID_TRANSLITERATE_HIRAGANA, sal_True );
+            pViewFrm->GetBindings().SetVisibleState( SID_TRANSLITERATE_KATAGANA, sal_True );
         }
     }
 
