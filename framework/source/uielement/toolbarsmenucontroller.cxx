@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarsmenucontroller.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:56:32 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:13:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,12 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
-
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/unohlp.hxx>
+#endif
+#ifndef _SV_WINDOW_HXX
+#include <vcl/window.hxx>
+#endif
 //#include <tools/solar.hrc>
 
 //_________________________________________________________________________________________________________________
@@ -200,6 +205,12 @@ sal_Bool CompareToolBarEntry( const ToolBarEntry& aOne, const ToolBarEntry& aTwo
         return sal_False;
 }
 
+struct ToolBarInfo
+{
+    rtl::OUString aToolBarResName;
+    rtl::OUString aToolBarUIName;
+};
+
 DEFINE_XSERVICEINFO_MULTISERVICE        (   ToolbarsMenuController                  ,
                                             OWeakObject                             ,
                                             SERVICENAME_POPUPMENUCONTROLLER         ,
@@ -212,6 +223,8 @@ ToolbarsMenuController::ToolbarsMenuController( const ::com::sun::star::uno::Ref
     PopupMenuControllerBase( xServiceManager ),
     m_bModuleIdentified( sal_False ),
     m_aIntlWrapper( xServiceManager, Application::GetSettings().GetLocale() )
+    m_aPropUIName( RTL_CONSTASCII_USTRINGPARAM( "UIName" )),
+    m_aPropResourceURL( RTL_CONSTASCII_USTRINGPARAM( "ResourceURL" ))
 {
 }
 
@@ -341,6 +354,60 @@ static void fillHashMap( const Sequence< Sequence< ::com::sun::star::beans::Prop
 }
 
 // private function
+Sequence< Sequence< com::sun::star::beans::PropertyValue > > ToolbarsMenuController::getLayoutManagerToolbars( const Reference< ::drafts::com::sun::star::frame::XLayoutManager >& rLayoutManager )
+{
+    std::vector< ToolBarInfo > aToolBarArray;
+    Sequence< Reference< XUIElement > > aUIElements = rLayoutManager->getElements();
+    for ( sal_Int32 i = 0; i < aUIElements.getLength(); i++ )
+    {
+        Reference< XUIElement > xUIElement( aUIElements[i] );
+        Reference< XPropertySet > xPropSet( aUIElements[i], UNO_QUERY );
+        if ( xPropSet.is() && xUIElement.is() )
+        {
+            try
+            {
+                rtl::OUString   aResName;
+                sal_Int16       nType( -1 );
+                xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Type" ))) >>= nType;
+                xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceURL" ))) >>= aResName;
+
+                if (( nType == ::drafts::com::sun::star::ui::UIElementType::TOOLBAR ) &&
+                    ( aResName.getLength() > 0 ))
+                {
+                    ToolBarInfo aToolBarInfo;
+
+                    aToolBarInfo.aToolBarResName = aResName;
+
+                    vos::OGuard aGuard( Application::GetSolarMutex() );
+                    Reference< css::awt::XWindow > xWindow( xUIElement->getRealInterface(), UNO_QUERY );
+                    Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+                    if ( pWindow )
+                        aToolBarInfo.aToolBarUIName = pWindow->GetText();
+
+                    aToolBarArray.push_back( aToolBarInfo );
+                }
+            }
+            catch ( Exception& )
+            {
+            }
+        }
+    }
+
+    Sequence< com::sun::star::beans::PropertyValue > aTbSeq( 2 );
+    aTbSeq[0].Name = m_aPropUIName;
+    aTbSeq[1].Name = m_aPropResourceURL;
+
+    Sequence< Sequence< com::sun::star::beans::PropertyValue > > aSeq( aToolBarArray.size() );
+    for ( sal_Int32 i = 0; i < aToolBarArray.size(); i++ )
+    {
+        aTbSeq[0].Value <<= aToolBarArray[i].aToolBarUIName;
+        aTbSeq[1].Value <<= aToolBarArray[i].aToolBarResName;
+        aSeq[i] = aTbSeq;
+    }
+
+    return aSeq;
+}
+
 void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
     vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
@@ -375,6 +442,9 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
 
         std::vector< ToolBarEntry > aSortedTbs;
         rtl::OUString               aStaticCmdPart( RTL_CONSTASCII_USTRINGPARAM( STATIC_CMD_PART ));
+
+        Sequence< Sequence< com::sun::star::beans::PropertyValue > > aSeqFrameToolBars = getLayoutManagerToolbars( xLayoutManager );
+        fillHashMap( aSeqFrameToolBars, aToolbarHashMap );
 
         ToolbarHashMap::const_iterator pIter = aToolbarHashMap.begin();
         while ( pIter != aToolbarHashMap.end() )
