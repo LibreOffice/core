@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwscreate.pl,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2004-10-22 13:47:15 $
+#   last change: $Author: hjs $ $Date: 2004-11-17 16:40:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,7 +102,7 @@ $SIG{'INT'} = 'INT_handler' if defined($log);
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.9 $ ';
+my $id_str = ' $Revision: 1.10 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -185,12 +185,16 @@ sub parse_options
         print_error("Invalid child workspace name '$childws'.\nCws names should contain lowercase letters and digits, starting with a letter.", 3);
     }
 
-    # check if environment matches masterws and milestone
-    if ($masterws ne $ENV{WORK_STAMP})
-    {
-        if (defined $ENV{UPDMINOR} && $milestone ne $ENV{UPDMINOR}) {
+    if ( defined($log) ) {
+        # check if environment matches masterws and milestone
+        if ($masterws ne $ENV{WORK_STAMP} ||
+            !defined $ENV{UPDMINOR} ||
+            $milestone ne $ENV{UPDMINOR} ||
+            defined $ENV{CWS_WORK_STAMP}
+        )
+        {
             print_error("Please set an environment matching your targeted milestone", 2);
-        };
+        }
     }
 
     # check if master is known
