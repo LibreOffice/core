@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-25 15:48:10 $
+ *  last change: $Author: dv $ $Date: 2001-07-27 10:55:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,6 +381,9 @@ void FileDialogHelper_Impl::dispose()
 // ------------------------------------------------------------------------
 void FileDialogHelper_Impl::enablePasswordBox()
 {
+    if ( ! mbHasPassword )
+        return;
+
     Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
     OUString aFilterName = xFltMgr->getCurrentFilter();
 
@@ -631,7 +634,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( const short nDialogType,
     mnError         = ERRCODE_NONE;
     mbHasAutoExt    = sal_False;
     mbHasPassword   = sal_False;
-    mbIsPwdEnabled  = sal_False;
+    mbIsPwdEnabled  = sal_True;
     mbHasVersions   = sal_False;
     mbHasPreview    = sal_False;
     mbShowPreview   = sal_False;
@@ -767,8 +770,8 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
         return ERRCODE_ABORT;
 
     loadConfig();
-
     setDefaultValues();
+    enablePasswordBox();
 
     // show the dialog
     sal_Int16 nRet = mxFileDlg->execute();
@@ -889,6 +892,7 @@ ErrCode FileDialogHelper_Impl::execute()
 
     loadConfig();
     setDefaultValues();
+    enablePasswordBox();
 
     // show the dialog
     sal_Int16 nRet = mxFileDlg->execute();
