@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:00:47 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 08:44:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -567,6 +567,52 @@ bool SwWW8FltRefStack::IsFtnEdnBkmField(const SwFmtFld& rFmtFld, USHORT& rBkmNo)
                 ((SwGetRefField*)pFld)->GetSetRefName() ))));
 }
 
+#ifdef DEBUG
+String lcl_GetSelTxt(const SwPaM &rPaM);
+#endif
+
+Position::Position(const SwPaM &rPaM)
+    : maMkNode(rPaM.GetMark()->nNode),
+    maPtNode(rPaM.GetPoint()->nNode),
+    mnMkCntnt(rPaM.GetMark()->nContent.GetIndex()),
+    mnPtCntnt(rPaM.GetPoint()->nContent.GetIndex())
+{
+}
+
+Position::Position(const Position &rEntry)
+    : maMkNode(rEntry.maMkNode), maPtNode(rEntry.maPtNode),
+    mnMkCntnt(rEntry.mnMkCntnt), mnPtCntnt(rEntry.mnPtCntnt)
+{
+}
+
+class DeletePaM
+{
+private:
+    SwDoc &mrDoc;
+public:
+    explicit DeletePaM(SwDoc &rDoc) : mrDoc(rDoc) {}
+    void operator()(const Position &rPaM);
+private:
+    //No assignment
+    DeletePaM& operator=(const DeletePaM&);
+};
+
+SwWW8FltRefStack::~SwWW8FltRefStack()
+{
+    std::for_each(maScheduledForDelete.begin(), maScheduledForDelete.end(),
+        DeletePaM(*pDoc));
+}
+
+void DeletePaM::operator()(const Position &rPaM)
+{
+    SwPaM aPaM(rPaM.maMkNode, rPaM.mnMkCntnt, rPaM.maPtNode, rPaM.mnPtCntnt);
+#ifdef DEBUG
+    String aStr(lcl_GetSelTxt(aPaM));
+    aStr = aStr;
+#endif
+    mrDoc.Delete(aPaM);
+}
+
 void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
         SwFltStackEntry* pEntry)
 {
@@ -579,10 +625,14 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
         */
         case RES_TXTATR_FIELD:
         {
-            const SwFmtFld& rFmtFld   = *(const SwFmtFld*)pEntry->pAttr;
-            const SwField* pFld = rFmtFld.GetFld();
+            SwNodeIndex aIdx( pEntry->nMkNode, +1 );
+            SwPaM aPaM( aIdx, pEntry->nMkCntnt );
 
-            if (!RefToVar(pFld,pEntry))
+            SwFmtFld& rFmtFld   = *(SwFmtFld*)pEntry->pAttr;
+            SwField* pFld = rFmtFld.GetFld();
+
+            bool bIsHidden = RangeToHidden(pFld, pEntry, aPaM);
+            if ((!bIsHidden) && (!RefToVar(pFld,pEntry)))
             {
                 USHORT nBkmNo;
                 if( IsFtnEdnBkmField(rFmtFld, nBkmNo) )
@@ -609,10 +659,28 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 }
             }
 
-            SwNodeIndex aIdx( pEntry->nMkNode, +1 );
-            SwPaM aPaM( aIdx, pEntry->nMkCntnt );
-            pDoc->Insert(aPaM, *pEntry->pAttr);
-            MoveAttrs(*aPaM.GetPoint());
+            bool bEmpty = false;
+            if (bIsHidden)
+            {
+                //if empty
+                if (pEntry->nMkNode.GetIndex() == pEntry->nPtNode.GetIndex()
+                 && pEntry->nMkCntnt == pEntry->nPtCntnt && pEntry->nPtCntnt)
+                {
+                    bEmpty = true;
+                }
+            }
+
+            if (!bEmpty)
+            {
+                if (bIsHidden)
+                {
+                    maScheduledForDelete.push_front(Position(aPaM));
+                    aPaM.DeleteMark();
+                }
+
+                pDoc->Insert(aPaM, *pEntry->pAttr);
+                MoveAttrs(*aPaM.GetPoint());
+            }
         }
         break;
         case RES_FLTR_TOX:
@@ -1057,43 +1125,6 @@ void SwWW8ImplReader::Read_HdFtText(long nStart, long nLen, SwFrmFmt* pHdFtFmt)
     *pPaM->GetPoint() = aTmpPos;
 }
 
-BYTE SwWW8ImplReader::HdFtCorrectPara( BYTE nPara )
-{
-    WW8_CP start;
-    long nLen;
-    BYTE nNewPara = nPara;
-
-    for (BYTE nI = 0x20; nI; nI >>= 1)
-    {
-        if(     ( nI & nPara )
-            &&  pHdFt
-            &&  ( !pHdFt->GetTextPos( nPara, nI, start, nLen ) || nLen <= 2 ) )
-
-        {
-            nNewPara &= ~nI;        // leere KF-Texte nicht anlegen
-        }
-    }
-
-// Wenn im Doc keine Facing Pages vorhanden sind, sollen
-// die geraden Header/Footer ignoriert werden.
-// Die Facing Pages lassen sich nur Doc-weit,
-// nicht aber abschnittsweise umschalten !
-    if( pWDop->fFacingPages )
-    {
-        // Wenn pDoc->FacingPages
-//      if( nNewPara & WW8_HEADER_ODD )     // und ungerader Header vorhanden
-//          nNewPara |= WW8_HEADER_EVEN;        // ... dann muss auch ein gerader
-                                            // Header erzeugt werden
-//      if( nNewPara & WW8_FOOTER_ODD )     // Footer ebenso.
-//          nNewPara |= WW8_FOOTER_EVEN;
-    }
-    else
-    {
-        nNewPara &= ~( WW8_HEADER_EVEN |  WW8_FOOTER_EVEN ); // ergibt bEven = 0
-    }
-    return nNewPara;
-}
-
 void SwWW8ImplReader::Read_HdFt(BYTE nWhichItems, int nSect, SwPageDesc* pPD,
     const SwPageDesc *pPrev)
 {
@@ -1172,6 +1203,12 @@ void wwSectionManager::SetHdFt(wwSection &rSection, int nSect,
             rSection.maSep.grpfIhdt & (WW8_HEADER_FIRST | WW8_FOOTER_FIRST),
             nSect, rSection.mpTitlePage, pPrevious ? pPrevious->mpTitlePage : 0);
     }
+
+    // Kopf / Fuss - Index Updaten
+    // Damit der Index auch spaeter noch stimmt
+    if (mrReader.pHdFt)
+        mrReader.pHdFt->UpdateIndex(rSection.maSep.grpfIhdt);
+
 }
 
 class AttribHere : public std::unary_function<const xub_StrLen*, bool>
@@ -1373,7 +1410,7 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
     bWasTabRowEnd = false;  // must be deactivated right here to prevent next
                             // WW8TabDesc::TableCellEnd() from making nonsense
 
-    if (nInTable && !bStopTab && (nInTable == nCellLevel && (bStartApo || bStopApo)))
+    if (nInTable && !bTableRowEnd && !bStopTab && (nInTable == nCellLevel && (bStartApo || bStopApo)))
         bStopTab = bStartTab = true;    // Required to stop and start table
 
 //  Dann auf Anl (Nummerierung) testen
@@ -1508,10 +1545,16 @@ bool SwWW8ImplReader::ReadPlainChars(long& rPos, long nEnd, long nCpOfs)
     //        ob die korrekte FilePos nicht schon erreicht ist.
     WW8_FC nStreamPos = pSBase->WW8Cp2Fc(nCpOfs+rPos, &bIsUnicode);
     pStrm->Seek( nStreamPos );
-
+#if 0
     // amount of characters to read == length to next attribute
-    ASSERT(nEnd - rPos <= STRING_MAXLEN, "String too long for stringclass!");
-    xub_StrLen nLen = static_cast<xub_StrLen>(nEnd - rPos);
+    DBG_ASSERT(nEnd - rPos <= (STRING_MAXLEN-1),
+        "String too long for stringclass!");
+#endif
+    xub_StrLen nLen;
+    if (nEnd - rPos <= (STRING_MAXLEN-1))
+        nLen = static_cast<xub_StrLen>(nEnd - rPos);
+    else
+        nLen = STRING_MAXLEN-1;
     ASSERT(nLen, "String is 0");
     if (!nLen)
         return true;
@@ -1572,14 +1615,19 @@ bool SwWW8ImplReader::ReadPlainChars(long& rPos, long nEnd, long nCpOfs)
         else
             *pWork = Custom8BitToUnicode(hConverter, nBCode);
     }
-    AddTextToParagraph(sPlainCharsBuf);
-    rPos += nL2;
+
+    if (nL2)
+    {
+        AddTextToParagraph(sPlainCharsBuf);
+        rPos += nL2;
+        if (!maApos.back()) //a para end in apo doesn't count
+            bWasParaEnd = false;            //kein CR
+    }
 
     if (hConverter)
         rtl_destroyTextToUnicodeConverter(hConverter);
     return nL2 >= nLen;
 }
-
 
 bool SwWW8ImplReader::AddTextToParagraph(String& sAddString)
 {
@@ -1635,11 +1683,7 @@ bool SwWW8ImplReader::ReadChars(long& rPos, long nNextAttr, long nTextEnd,
     while (true)
     {
         if (ReadPlainChars(rPos, nEnd, nCpOfs))
-        {
-            if (!maApos.back()) //a para end in apo doesn't count
-                bWasParaEnd = false;            //kein CR
-            return false;                   // Fertig
-        }
+             return false;                  // Fertig
 
         bool bStartLine = ReadChar(rPos, nCpOfs);
         rPos++;
@@ -2162,7 +2206,7 @@ SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
     nProgress = 0;
     nSwNumLevel = nWwNumType = 0xff;
     pTableDesc = 0;
-    pNumRule = 0;
+    mpNumRule = 0;
     pNumOlst = 0;
     pNode_FLY_AT_CNTNT = 0;
     pDrawModel = 0;
@@ -3003,7 +3047,7 @@ void SwWW8ImplReader::SetOutLineStyles()
             }
         }
         nIa = 1;
-        nIz = 10;
+        nIz = nColls >= 10 ? 10 : nColls;
     }
     if (nOldFlags != nFlagsStyleOutlLevel)
         rDoc.SetOutlineNumRule(aOutlineRule);
@@ -3256,23 +3300,19 @@ BOOL SwMSDffManager::GetOLEStorageName(long nOLEId, String& rStorageName,
             nStartCp += rReader.nDrawCpO;
             nEndCp   += rReader.nDrawCpO;
             WW8PLCFx_Cp_FKP* pChp = rReader.pPlcxMan->GetChpPLCF();
-            pChp->SeekPos( nStartCp );
-
-            WW8_CP nStart = pChp->Where();
             wwSprmParser aSprmParser(rReader.pWwFib->nVersion);
-            while( nStart <= nEndCp && !nPictureId )
+            while (nStartCp <= nEndCp && !nPictureId)
             {
                 WW8PLCFxDesc aDesc;
+                pChp->SeekPos( nStartCp );
                 pChp->GetSprms( &aDesc );
-                (*pChp)++;
-                WW8_CP nNextEnd = pChp->Where();
 
-                if( aDesc.nSprmsLen && aDesc.pMemPos )  // Attribut(e) vorhanden
+                if (aDesc.nSprmsLen && aDesc.pMemPos)   // Attribut(e) vorhanden
                 {
                     long nLen = aDesc.nSprmsLen;
                     const BYTE* pSprm = aDesc.pMemPos;
 
-                    while( nLen >= 2 && !nPictureId )
+                    while (nLen >= 2 && !nPictureId)
                     {
                         USHORT nId = aSprmParser.GetSprmId(pSprm);
                         USHORT nSL = aSprmParser.GetSprmSize(nId, pSprm);
@@ -3290,7 +3330,7 @@ BOOL SwMSDffManager::GetOLEStorageName(long nOLEId, String& rStorageName,
                         nLen -= nSL;
                     }
                 }
-                nStart = nNextEnd;
+                nStartCp = aDesc.nEndPos;
             }
 
             rReader.pPlcxMan->RestoreAllPLCFx( aSave );
