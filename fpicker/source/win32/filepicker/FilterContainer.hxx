@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterContainer.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-06-28 11:13:03 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 15:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
