@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-22 18:30:03 $
+ *  last change: $Author: cl $ $Date: 2000-11-22 20:46:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,8 +573,9 @@ void SAL_CALL SvxShapeConnector::disconnectEnd( const uno::Reference< drawing::X
 uno::Sequence< OUString > SAL_CALL SvxShapeConnector::getSupportedServiceNames() throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    addToSequence( aSeq, 5, "com.sun.star.drawing.ConnectorShapeDescriptor",
+    addToSequence( aSeq, 6, "com.sun.star.drawing.ConnectorShapeDescriptor",
                             "com.sun.star.drawing.ConnectorShape",
+                            "com.sun.star.drawing.LineShapeDescriptor",
                             "com.sun.star.drawing.Text",
                             "com.sun.star.drawing.RotationDescriptor",
                             "com.sun.star.drawing.ShadowDescriptor");
