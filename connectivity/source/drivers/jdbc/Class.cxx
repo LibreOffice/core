@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Class.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kr $ $Date: 2001-08-06 13:28:47 $
+ *  last change: $Author: oj $ $Date: 2001-08-14 07:21:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,28 +104,12 @@ java_lang_Class * java_lang_Class::forName( const ::rtl::OUString& _par0 )
 {
     jobject out(NULL);
     SDBThreadAttach t;
-    if( t.pEnv ){
-        jvalue args[1];
-        // Parameter konvertieren
-        args[0].l = convertwchar_tToJavaString(t.pEnv,_par0);
-        // temporaere Variable initialisieren
-        char * cSignature = "(Ljava/lang/String;)Ljava/lang/Class;";
-        char * cMethodName = "forName";
-        // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetStaticMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID ){
-            out = t.pEnv->CallStaticObjectMethod( getMyClass(), mID, args[0].l );
-
-            if(!out)
-            {
-                t.pEnv->ExceptionClear();
-                out = t.pEnv->FindClass(::rtl::OUStringToOString(_par0, RTL_TEXTENCODING_ASCII_US));
-            }
-
-            ThrowSQLException(t.pEnv,0);
-            // und aufraeumen
-        } //mID
-        t.pEnv->DeleteLocalRef((jstring)args[0].l);
+    if( t.pEnv )
+    {
+        ::rtl::OString sClassName = ::rtl::OUStringToOString(_par0, RTL_TEXTENCODING_ASCII_US);
+        sClassName = sClassName.replace('.','/');
+        out = t.pEnv->FindClass(sClassName);
+        ThrowSQLException(t.pEnv,0);
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
     return out==0 ? NULL : new java_lang_Class( t.pEnv, out );
@@ -136,15 +120,16 @@ sal_Bool java_lang_Class::isAssignableFrom( java_lang_Class * _par0 )
     jboolean out;
     SDBThreadAttach t;
     if( t.pEnv ){
-        jvalue args[1];
-        // Parameter konvertieren
-        args[0].l = _par0 != NULL ? ((java_lang_Object *)_par0)->getJavaObject() : NULL;
+
         // temporaere Variable initialisieren
         char * cSignature = "(Ljava/lang/Class;)Z";
         char * cMethodName = "isAssignableFrom";
         // Java-Call absetzen
         jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
+            jvalue args[1];
+            // Parameter konvertieren
+            args[0].l = _par0 != NULL ? ((java_lang_Object *)_par0)->getJavaObject() : NULL;
             out = t.pEnv->CallBooleanMethod( object, mID, args[0].l );
             ThrowSQLException(t.pEnv,0);
             // und aufraeumen
@@ -206,7 +191,8 @@ jobject java_lang_Class::newInstanceObject()
         if( mID ){
             out = (jstring)t.pEnv->CallObjectMethod( object, mID);
             ThrowSQLException(t.pEnv,0);
-            aStr = JavaString2String(t.pEnv, (jstring)out );
+            if(out)
+                aStr = JavaString2String(t.pEnv, (jstring)out );
         } //mID
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!

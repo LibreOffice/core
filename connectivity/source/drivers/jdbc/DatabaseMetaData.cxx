@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-04 10:54:30 $
+ *  last change: $Author: oj $ $Date: 2001-08-14 07:21:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,7 +236,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getColumnPrivileges(
             args[3].l = convertwchar_tToJavaString(t.pEnv,columnNamePattern);
 
             out = t.pEnv->CallObjectMethod( object, mID, args[0].l, args[1].l,args[2].l,args[3].l);
-            ThrowSQLException(t.pEnv,*this);
+
             if(catalog.hasValue())
                 t.pEnv->DeleteLocalRef((jstring)args[0].l);
             if(args[1].l)
@@ -245,6 +245,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getColumnPrivileges(
                 t.pEnv->DeleteLocalRef((jstring)args[2].l);
             if(columnNamePattern.getLength())
                 t.pEnv->DeleteLocalRef((jstring)args[3].l);
+            ThrowSQLException(t.pEnv,*this);
         } //mID
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
@@ -300,6 +301,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
         char * cMethodName = "getTables";
         // Java-Call absetzen
         jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
+        OSL_ENSURE(!t.pEnv->ExceptionOccurred(),"Exception occured!");
         if( mID )
         {
             jvalue args[4];
@@ -307,12 +309,14 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
             if(len)
             {
                 jobjectArray pObjArray = t.pEnv->NewObjectArray((jsize) len, java_lang_String::getMyClass(), 0);
+                OSL_ENSURE(!t.pEnv->ExceptionOccurred(),"Exception occured!");
                 const ::rtl::OUString* pBegin = types.getConstArray();
                 for(sal_Int32 i=0;i<len;i++,++pBegin)
                 {
                     jstring aT = convertwchar_tToJavaString(t.pEnv,*pBegin);
                     //jstring aT = t.pEnv->NewStringUTF(_par3.GetToken(i));
                     t.pEnv->SetObjectArrayElement(pObjArray,(jsize)i,aT);
+                    OSL_ENSURE(!t.pEnv->ExceptionOccurred(),"Exception occured!");
                 }
                 args[3].l = pObjArray;
             }else
@@ -322,14 +326,25 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
             args[1].l = schemaPattern.toChar() == '%' ? NULL : convertwchar_tToJavaString(t.pEnv,schemaPattern);
             args[2].l = convertwchar_tToJavaString(t.pEnv,tableNamePattern);
             out = t.pEnv->CallObjectMethod( object, mID, args[0].l, args[1].l,args[2].l,args[3].l);
+            OSL_ENSURE(!t.pEnv->ExceptionOccurred(),"Exception occured!");
             if(catalog.hasValue())
+            {
                 t.pEnv->DeleteLocalRef((jstring)args[0].l);
+                OSL_ENSURE(!t.pEnv->ExceptionOccurred(),"Exception occured!");
+            }
             if(args[1].l)
+            {
                 t.pEnv->DeleteLocalRef((jstring)args[1].l);
+                OSL_ENSURE(!t.pEnv->ExceptionOccurred(),"Exception occured!");
+            }
             if(tableNamePattern.getLength())
+            {
                 t.pEnv->DeleteLocalRef((jstring)args[2].l);
+                OSL_ENSURE(!t.pEnv->ExceptionOccurred(),"Exception occured!");
+            }
             //for(INT16 i=0;i<len;i++)
             t.pEnv->DeleteLocalRef((jobjectArray)args[3].l);
+            OSL_ENSURE(!t.pEnv->ExceptionOccurred(),"Exception occured!");
             ThrowSQLException(t.pEnv,*this);
 
         } //mID

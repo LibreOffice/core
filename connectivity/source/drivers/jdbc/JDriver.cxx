@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JDriver.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-03 14:19:08 $
+ *  last change: $Author: oj $ $Date: 2001-08-14 07:21:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,15 @@ Reference< XConnection > SAL_CALL java_sql_Driver::connect( const ::rtl::OUStrin
                 }
             }
         }
+    }
+    catch(SQLException& e)
+    {
+        if( object )
+        {
+            t.pEnv->DeleteGlobalRef( object );
+            object = NULL;
+        }
+        throw SQLException(::rtl::OUString::createFromAscii("The specified driver could not be loaded!"),*this,::rtl::OUString(),1000,makeAny(e));
     }
     catch(Exception&)
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Object.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-06 08:37:18 $
+ *  last change: $Author: oj $ $Date: 2001-08-14 07:21:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,15 +194,25 @@ int SDB_JRE_InitJava(const Reference<XMultiServiceFactory >& _rxFactory)
 SDBThreadAttach::SDBThreadAttach() : bDetach(sal_False), pEnv(NULL)
 {
     attachThread(pEnv);
+    if(pEnv && pEnv->ExceptionOccurred())
+        pEnv->ExceptionClear();
 }
 
 SDBThreadAttach::SDBThreadAttach(const Reference<XMultiServiceFactory >& _rxFactory) : bDetach(sal_False), pEnv(NULL)
 {
     attachThread(pEnv,_rxFactory);
+    if(pEnv && pEnv->ExceptionOccurred())
+        pEnv->ExceptionClear();
 }
 
 SDBThreadAttach::~SDBThreadAttach()
 {
+    if(pEnv && pEnv->ExceptionOccurred())
+    {
+        OSL_ENSURE(0,"Exception occured in JNI!");
+        pEnv->ExceptionClear();
+    }
+
     detachThread();
 }
 

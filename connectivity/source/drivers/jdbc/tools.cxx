@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tools.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-31 08:29:15 $
+ *  last change: $Author: oj $ $Date: 2001-08-14 07:21:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,9 +161,13 @@ java_util_Properties::java_util_Properties( ): java_lang_Object( NULL, (jobject)
 // --------------------------------------------------------------------------------
 jstring connectivity::convertwchar_tToJavaString(JNIEnv *pEnv,const ::rtl::OUString& _rTemp)
 {
+    jstring pStr = NULL;
     if (pEnv)
-        return pEnv->NewString(_rTemp.getStr(), _rTemp.getLength());
-    return NULL;
+    {
+        pStr = pEnv->NewString(_rTemp.getStr(), _rTemp.getLength());
+        OSL_ENSURE(pStr,"Could not create a jsstring object!");
+    }
+    return pStr;
 }
 
 // --------------------------------------------------------------------------------

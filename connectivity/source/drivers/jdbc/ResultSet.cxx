@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResultSet.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-04 10:54:30 $
+ *  last change: $Author: oj $ $Date: 2001-08-14 07:21:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -583,8 +583,8 @@ Any SAL_CALL java_sql_ResultSet::getObject( sal_Int32 columnIndex, const Referen
         jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallObjectMethodA( object, mID, args);
-            ThrowSQLException(t.pEnv,*this);
             t.pEnv->DeleteLocalRef((jstring)args[1].l);
+            ThrowSQLException(t.pEnv,*this);
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -1448,19 +1448,21 @@ void SAL_CALL java_sql_ResultSet::updateBinaryStream( sal_Int32 columnIndex, con
     SDBThreadAttach t;
     if( t.pEnv )
     {
-        // TODO
-        jvalue args[1];
-        // Parameter konvertieren
-        args[0].l = 0;
         // temporaere Variable initialisieren
         char * cSignature = "(ILjava/io/InputStream;I)V";
         char * cMethodName = "updateBinaryStream";
         // Java-Call absetzen
         jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
+            // TODO
+            jvalue args[1];
+            // Parameter konvertieren
+            args[0].l = 0;
+
             t.pEnv->CallVoidMethod( object, mID,columnIndex,args[0].l,length);
-            ThrowSQLException(t.pEnv,*this);
+
             t.pEnv->DeleteLocalRef((jobject)args[0].l);
+            ThrowSQLException(t.pEnv,*this);
         }
     }
 }
@@ -1470,18 +1472,19 @@ void SAL_CALL java_sql_ResultSet::updateCharacterStream( sal_Int32 columnIndex, 
     SDBThreadAttach t;
     if( t.pEnv )
     {
-        jvalue args[1];
-        // Parameter konvertieren
-        args[0].l = 0;
+
         // temporaere Variable initialisieren
         char * cSignature = "(ILjava/io/InputStream;I)V";
         char * cMethodName = "updateCharacterStream";
         // Java-Call absetzen
         jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
+            jvalue args[1];
+            // Parameter konvertieren
+            args[0].l = 0;
             t.pEnv->CallVoidMethod( object, mID,columnIndex,args[0].l,length);
-            ThrowSQLException(t.pEnv,*this);
             t.pEnv->DeleteLocalRef((jobject)args[0].l);
+            ThrowSQLException(t.pEnv,*this);
         }
     }
 }
