@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport4.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:05:57 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:10:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,14 +138,8 @@
 #ifndef _COM_SUN_STAR_DRAWING_SHADEMODE_HPP_
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEEQUATION_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeEquation.hpp>
-#endif
 #ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERTYPE_HPP_
 #include <drafts/com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
-#endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEOPERATION_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeOperation.hpp>
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERPARI_HPP_
 #include <drafts/com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
@@ -203,14 +197,15 @@ void ExportParameter( rtl::OUStringBuffer& rStrBuffer, const drafts::com::sun::s
         {
             case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::EQUATION :
             {
-                rStrBuffer.append( (sal_Unicode)'@' );
+                rStrBuffer.append( (sal_Unicode)'?' );
+                rStrBuffer.append( (sal_Unicode)'f' );
                 rStrBuffer.append( rtl::OUString::valueOf( nValue ) );
             }
             break;
 
             case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::ADJUSTMENT :
             {
-                rStrBuffer.append( (sal_Unicode)'#' );
+                rStrBuffer.append( (sal_Unicode)'$' );
                 rStrBuffer.append( rtl::OUString::valueOf( nValue ) );
             }
             break;
@@ -223,72 +218,52 @@ void ExportParameter( rtl::OUStringBuffer& rStrBuffer, const drafts::com::sun::s
                 rStrBuffer.append( GetXMLToken( XML_TOP ) ); break;
             case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::LEFT :
                 rStrBuffer.append( GetXMLToken( XML_LEFT ) ); break;
-            case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::CENTER :
-                rStrBuffer.append( GetXMLToken( XML_CENTER ) ); break;
+            case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::XSTRETCH :
+                rStrBuffer.append( GetXMLToken( XML_XSTRETCH ) ); break;
+            case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::YSTRETCH :
+                rStrBuffer.append( GetXMLToken( XML_YSTRETCH ) ); break;
+            case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::HASSTROKE :
+                rStrBuffer.append( GetXMLToken( XML_HASSTROKE ) ); break;
+            case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::HASFILL :
+                rStrBuffer.append( GetXMLToken( XML_HASFILL ) ); break;
+            case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::WIDTH :
+                rStrBuffer.append( GetXMLToken( XML_WIDTH ) ); break;
+            case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::HEIGHT :
+                rStrBuffer.append( GetXMLToken( XML_HEIGHT ) ); break;
+            case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::LOGWIDTH :
+                rStrBuffer.append( GetXMLToken( XML_LOGWIDTH ) ); break;
+            case drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::LOGHEIGHT :
+                rStrBuffer.append( GetXMLToken( XML_LOGHEIGHT ) ); break;
             default :
                 rStrBuffer.append( rtl::OUString::valueOf( nValue ) );
         }
     }
 }
 
-void ImpExportEquations( SvXMLExport& rExport, const uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeEquation >& rEquations )
+void ImpExportEquations( SvXMLExport& rExport, const uno::Sequence< rtl::OUString >& rEquations )
 {
-    sal_Int32 i, j;
-    sal_uInt16 nElements = (sal_uInt16)rEquations.getLength();
-    if ( nElements )
+    sal_Int32 i;
+    for ( i = 0; i < rEquations.getLength(); i++ )
     {
-        rtl::OUString       aStr;
-        rtl::OUStringBuffer aStrBuffer;
+        rtl::OUString aStr( (sal_Unicode)'f' );
+        aStr += rtl::OUString::valueOf( i );
+        rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aStr );
 
-        for ( i = 0; i < nElements; i++ )
+        aStr = rEquations[ i ];
+        sal_Int32 nIndex = 0;
+        do
         {
-            switch( rEquations[ i ].Operation )
+            nIndex = aStr.indexOf( (sal_Unicode)'?', nIndex );
+            if ( nIndex != -1 )
             {
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::SUM :
-                    aStrBuffer.append( GetXMLToken( XML_SUM ) ); break;
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::PROD :
-                    aStrBuffer.append( GetXMLToken( XML_PRODUCT ) ); break;
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::MID :
-                    aStrBuffer.append( GetXMLToken( XML_MID ) ); break;
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::ABS :
-                    aStrBuffer.append( GetXMLToken( XML_ABS ) ); break;
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::MIN :
-                    aStrBuffer.append( GetXMLToken( XML_MIN ) ); break;
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::MAX :
-                    aStrBuffer.append( GetXMLToken( XML_MAX ) ); break;
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::IF :
-                    aStrBuffer.append( GetXMLToken( XML_IF ) ); break;
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::MOD :
-                    aStrBuffer.append( GetXMLToken( XML_MOD ) ); break;
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::ATAN2 :
-                    aStrBuffer.append( GetXMLToken( XML_ATAN2 ) ); break;
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::SIN :
-                    aStrBuffer.append( GetXMLToken( XML_SIN ) ); break;
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::COS :
-                    aStrBuffer.append( GetXMLToken( XML_COS ) ); break;
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::COSATAN2 :
-                    aStrBuffer.append( GetXMLToken( XML_COSATAN2 ) ); break;
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::SINATAN2 :
-                    aStrBuffer.append( GetXMLToken( XML_SINATAN2 ) ); break;
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::SQRT :
-                    aStrBuffer.append( GetXMLToken( XML_SQRT ) ); break;
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::SUMANGLE :
-                    aStrBuffer.append( GetXMLToken( XML_SUMANGLE ) ); break;
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::ELLIPSE :
-                    aStrBuffer.append( GetXMLToken( XML_ELLIPSE ) ); break;
-                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::TAN :
-                    aStrBuffer.append( GetXMLToken( XML_TAN ) ); break;
+                rtl::OUString aNew( aStr.copy( 0, nIndex + 1 ) );
+                aNew += rtl::OUString( (sal_Unicode)'f' );
+                aNew += aStr.copy( nIndex + 1, ( aStr.getLength() - nIndex ) - 1 );
+                aStr = aNew;
+                nIndex++;
             }
-            sal_Int32 nParameters = rEquations[ i ].Parameters.getLength();
-            for ( j = 0; j < nParameters; j++ )
-                ExportParameter( aStrBuffer, rEquations[ i ].Parameters[ j ] );
-            aStr = aStrBuffer.makeStringAndClear();
-            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_FORMULA, aStr );
-            SvXMLElementExport aOBJ( rExport, XML_NAMESPACE_DRAW, XML_EQUATION, sal_True, sal_True );
-        }
-    }
-    else
-    {
+        } while( nIndex != -1 );
+        rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_FORMULA, aStr );
         SvXMLElementExport aOBJ( rExport, XML_NAMESPACE_DRAW, XML_EQUATION, sal_True, sal_True );
     }
 }
@@ -448,32 +423,39 @@ void ImpExportEnhancedPath( SvXMLExport& rExport,
     sal_Int32 nSegments = rSegments.getLength();
     sal_Bool bSimpleSegments = nSegments == 0;
     if ( bSimpleSegments )
-        nSegments = nCoords + 2;
+        nSegments = 4;
     for ( j = i = 0; j < nSegments; j++ )
     {
         drafts::com::sun::star::drawing::EnhancedCustomShapeSegment aSegment;
         if ( bSimpleSegments )
         {
             // if there are not enough segments we will default them
-            if ( !j )
+            switch( j )
             {
-                aSegment.Count = 1;
-                aSegment.Command = drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::MOVETO;
-            }
-            else if ( j == ( nSegments - 2 ) )
-            {
-                aSegment.Count = 1;
-                aSegment.Command = drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CLOSESUBPATH;
-            }
-            else if ( j == ( nSegments - 1 ) )
-            {
-                aSegment.Count = 1;
-                aSegment.Command = drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH;
-            }
-            else
-            {
-                aSegment.Count = (sal_Int16)Min( nCoords - i, (sal_Int32)32767 );
-                aSegment.Command = drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::LINETO;
+                case 0 :
+                {
+                    aSegment.Count = 1;
+                    aSegment.Command = drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::MOVETO;
+                }
+                break;
+                case 1 :
+                {
+                    aSegment.Count = (sal_Int16)Min( nCoords - 1, (sal_Int32)32767 );
+                    aSegment.Command = drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::LINETO;
+                }
+                break;
+                case 2 :
+                {
+                    aSegment.Count = 1;
+                    aSegment.Command = drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CLOSESUBPATH;
+                }
+                break;
+                case 3 :
+                {
+                    aSegment.Count = 1;
+                    aSegment.Command = drafts::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH;
+                }
+                break;
             }
         }
         else
@@ -553,7 +535,7 @@ void ImpExportEnhancedPath( SvXMLExport& rExport,
 void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< beans::XPropertySet >& xPropSet )
 {
     sal_Bool bEquations = sal_False;
-    uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeEquation > aEquations;
+    uno::Sequence< rtl::OUString > aEquations;
 
     sal_Bool bHandles = sal_False;
     uno::Sequence< beans::PropertyValues > aHandles;
@@ -588,7 +570,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                 const beans::PropertyValue& rProp = aGeoPropSeq[ i ];
                 switch( EASGet( rProp.Name ) )
                 {
-                    case EAS_PredefinedType :
+                    case EAS_Type :
                     {
                         rProp.Value >>= aCustomShapeType;
                     }
@@ -1043,14 +1025,19 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                     {
                                         rProp.Value >>= aSegments;
                                     }
-                                    case EAS_StretchPoint :
+                                    break;
+                                    case EAS_StretchX :
                                     {
-                                        awt::Point aPathStretchPoint;
-                                        if ( rProp.Value >>= aPathStretchPoint )
-                                        {
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_PATH_STRETCHPOINT_X, rtl::OUString::valueOf( aPathStretchPoint.X ) );
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_PATH_STRETCHPOINT_Y, rtl::OUString::valueOf( aPathStretchPoint.Y ) );
-                                        }
+                                        sal_Int32 nStretchPoint;
+                                        if ( rProp.Value >>= nStretchPoint )
+                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_PATH_STRETCHPOINT_X, rtl::OUString::valueOf( nStretchPoint ) );
+                                    }
+                                    break;
+                                    case EAS_StretchY :
+                                    {
+                                        sal_Int32 nStretchPoint;
+                                        if ( rProp.Value >>= nStretchPoint )
+                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_PATH_STRETCHPOINT_Y, rtl::OUString::valueOf( nStretchPoint ) );
                                     }
                                     break;
                                     case EAS_TextFrames :
@@ -1070,7 +1057,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                                 }
                                                 aStr = aStrBuffer.makeStringAndClear();
                                             }
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_TEXT_FRAMES, aStr );
+                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_TEXT_AREAS, aStr );
                                         }
                                     }
                                     break;
@@ -1096,7 +1083,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                     break;
                 }
             }   // for
-            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_PREDEFINED_TYPE, aCustomShapeType );
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_TYPE, aCustomShapeType );
 
             // adjustments
             sal_Int32 nAdjustmentValues = aAdjustmentValues.getLength();
@@ -1106,7 +1093,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                 for ( i = 0; i < nAdjustmentValues; i++ )
                 {
                     if ( i )
-                        aStrBuffer.append( (sal_Unicode)',' );
+                        aStrBuffer.append( (sal_Unicode)' ' );
 
                     const drafts::com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue& rAdj = aAdjustmentValues[ i ];
                     if ( rAdj.State == beans::PropertyState_DIRECT_VALUE )
@@ -1123,9 +1110,11 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                             rUnitConverter.convertNumber( aStrBuffer, nValue );
                         }
                     }
+                    else
+                        rUnitConverter.convertNumber( aStrBuffer, 0 );          // this should not be, but better than setting nothing
                 }
                 aStr = aStrBuffer.makeStringAndClear();
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_ADJUSTMENTS, aStr );
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MODIFIERS, aStr );
             }
             if ( bCoordinates )
                 ImpExportEnhancedPath( rExport, aCoordinates, aSegments );
