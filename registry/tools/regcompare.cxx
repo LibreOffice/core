@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regcompare.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jsc $ $Date: 2002-09-25 13:42:34 $
+ *  last change: $Author: jsc $ $Date: 2002-11-27 13:47:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1644,7 +1644,7 @@ static sal_uInt32 checkBlob(const OUString& keyName, RegistryTypeReader& reader1
         }
         nError++;
     }
-
+/*
     if ( nError &&
          (!keyName.compareTo(OUString::createFromAscii("/UCR/drafts"), 11) ||
           !keyName.compareTo(OUString::createFromAscii("/drafts"), 7)) )
@@ -1660,7 +1660,7 @@ static sal_uInt32 checkBlob(const OUString& keyName, RegistryTypeReader& reader1
         }
         return 0;
     }
-
+*/
     return nError;
 }
 
