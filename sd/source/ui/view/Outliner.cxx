@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Outliner.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:49:06 $
+ *  last change: $Author: af $ $Date: 2004-09-23 13:43:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,6 @@
 #undef ITEMID_SEARCH
 #endif
 #define ITEMID_SEARCH           SID_SEARCH_ITEM
-#ifndef _SVXIDS_HRC
-#include <svx/svxids.hrc>
-#endif
 #ifndef _SRCHITEM_HXX
 #include <svx/srchitem.hxx>
 #endif
@@ -1120,7 +1117,7 @@ void Outliner::ShowEndOfSearchDialog (void)
     }
     else
     {
-        if (mpView->HasMarkedObj())
+        if (mpView->AreObjectsMarked())
             aString = String(SdResId(STR_END_SPELLING_OBJ));
         else
             aString = String(SdResId(STR_END_SPELLING));
@@ -1703,7 +1700,7 @@ USHORT Outliner::ShowModalMessageBox (Dialog& rMessageBox)
                 SpellDialogChildWindow::GetChildWindowId());
             break;
 
-        case HANGUL_HANJA_CONVERSION:
+        case TEXT_CONVERSION:
             // There should no messages boxes be displayed while doing the
             // hangul hanja conversion.
             break;
