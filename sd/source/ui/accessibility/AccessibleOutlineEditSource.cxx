@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOutlineEditSource.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-26 11:35:10 $
+ *  last change: $Author: thb $ $Date: 2002-08-02 11:37:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,7 @@ namespace accessibility
     {
         if( aNotify )
         {
-            ::std::auto_ptr< SfxHint > aHint( SvxEditSourceHintTranslator::EENotification2Hint( aNotify) );
+            ::std::auto_ptr< SfxHint > aHint( SvxEditSourceHelper::EENotification2Hint( aNotify) );
 
             if( aHint.get() )
                 Broadcast( *aHint.get() );
