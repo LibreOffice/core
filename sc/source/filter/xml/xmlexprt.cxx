@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.189 $
+ *  $Revision: 1.190 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 15:58:53 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:43:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2519,14 +2519,11 @@ void ScXMLExport::WriteCell (ScMyCell& aCell)
                     rtl::OUString sOUFormula(sFormula.makeStringAndClear());
                     if (!bIsMatrix)
                     {
-                        rtl::OUString sQValue = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OOOC, sOUFormula );
-                        AddAttribute(sAttrFormula, sQValue);
+                        AddAttribute(sAttrFormula, GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OOOC, sOUFormula, sal_False ));
                     }
                     else
                     {
-                        rtl::OUString sMatrixFormula = sOUFormula.copy(1, sOUFormula.getLength() - 2);
-                        rtl::OUString sQValue = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OOOC, sMatrixFormula );
-                        AddAttribute(sAttrFormula, sQValue);
+                        AddAttribute(sAttrFormula, GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OOOC, sOUFormula.copy(1, sOUFormula.getLength() - 2), sal_False ));
                     }
                 }
                 if (pFormulaCell->IsValue())
