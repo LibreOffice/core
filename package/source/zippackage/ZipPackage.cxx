@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-15 15:18:49 $
+ *  last change: $Author: mtg $ $Date: 2001-05-16 16:23:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -755,11 +755,13 @@ Reference< XPropertySetInfo > SAL_CALL ZipPackage::getPropertySetInfo(  )
 void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
         throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
-    if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EncryptionKey") ) )
+    if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HasEncryptedEntries") ) )
+        throw IllegalArgumentException (); // This property is read-only
+    else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EncryptionKey") ) )
+    {
         if (!( aValue >>= aEncryptionKey ) )
             throw IllegalArgumentException();
-    else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HasEncryptedEntries") ) )
-        throw IllegalArgumentException (); // This property is read-only
+    }
     else
         throw UnknownPropertyException();
 }
@@ -777,8 +779,7 @@ Any SAL_CALL ZipPackage::getPropertyValue( const OUString& PropertyName )
         aAny <<= bHasEncryptedEntries;
         return aAny;
     }
-    else
-        throw UnknownPropertyException();
+    throw UnknownPropertyException();
 }
 void SAL_CALL ZipPackage::addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
