@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: sj $ $Date: 2002-08-21 09:46:47 $
+ *  last change: $Author: sj $ $Date: 2002-09-06 11:50:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4058,12 +4058,26 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
 
                         *mpExEmbed  << (sal_uInt16)0xf
                                     << (sal_uInt16)EPP_ExHyperlink
-                                    << (sal_uInt32)12
-                                    << (sal_uInt16)0
+                                    << (sal_uInt32)0;
+                        sal_uInt32 nHyperSize, nHyperStart = mpExEmbed->Tell();
+                        *mpExEmbed  << (sal_uInt16)0
                                     << (sal_uInt16)EPP_ExHyperlinkAtom
                                     << (sal_uInt32)4
                                     << nHyperLinkID;
-                        break;
+
+                        sal_uInt16 i, nBookmarkLen = aBookmark.Len();
+                        *mpExEmbed << (sal_uInt32)( EPP_CString << 16 ) << (sal_uInt32)( nBookmarkLen * 2 );
+                        for ( i = 0; i < nBookmarkLen; i++ )
+                            *mpExEmbed << aBookmark.GetChar( i );
+
+                        *mpExEmbed << (sal_uInt32)( ( EPP_CString << 16 ) | 0x30 ) << (sal_uInt32)( aHyperString.Len() * 2 );
+                        for ( i = 0; i < aHyperString.Len(); i++ )
+                            *mpExEmbed << aHyperString.GetChar( i );
+
+                        nHyperSize = mpExEmbed->Tell() - nHyperStart;
+                        mpExEmbed->SeekRel( - ( (sal_Int32)nHyperSize + 4 ) );
+                        *mpExEmbed  << nHyperSize;
+                        mpExEmbed->SeekRel( nHyperSize );
                     }
                 }
             }
@@ -4423,6 +4437,10 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 nEffectCount = *(sal_uInt16*)mAny.getValue();
 
             sal_Bool bEffect = ImplGetEffect( mXPropSet, eAe, eTe, bIsSound );
+            ::com::sun::star::presentation::ClickAction eCa = ::com::sun::star::presentation::ClickAction_NONE;
+            if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "OnClick" ) ) ) )
+                mAny >>= eCa;
+
             sal_Bool bIsAutoShape = sal_False;
             sal_Bool bGroup = mType == "drawing.Group";
             sal_Bool bOpenBezier   = mType == "drawing.OpenBezier";
@@ -4470,6 +4488,12 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         {
                             pTmp = new SvMemoryStream( 0x200, 0x200 );
                             ImplWriteObjectEffect( *pTmp, eAe, eTe, ++nEffectCount );
+                        }
+                        if ( eCa != ::com::sun::star::presentation::ClickAction_NONE )
+                        {
+                            if ( !pTmp )
+                                pTmp = new SvMemoryStream( 0x200, 0x200 );
+                            ImplWriteClickAction( *pTmp, eCa );
                         }
                         mpPptEscherEx->EnterGroup( &maRect, pTmp );
                         delete pTmp;
@@ -5164,10 +5188,6 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
 
             aPropOpt.Commit( *mpStrm );
             mpPptEscherEx->AddClientAnchor( maRect );
-
-            ::com::sun::star::presentation::ClickAction eCa = ::com::sun::star::presentation::ClickAction_NONE;
-            if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "OnClick" ) ) ) )
-                mAny >>= eCa;
 
             sal_Int32 nPlacementID = -1;
 
