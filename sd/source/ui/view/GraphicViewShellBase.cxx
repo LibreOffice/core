@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphicViewShellBase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:50:17 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:29:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,11 @@
 #include "GraphicDocShell.hxx"
 #endif
 #include "strings.hrc"
+#include "app.hrc"
+
+#ifndef _SFXREQUEST_HXX
+#include <sfx2/request.hxx>
+#endif
 
 namespace sd {
 
@@ -134,6 +139,29 @@ void GraphicViewShellBase::LateInit (void)
 GraphicViewShellBase::~GraphicViewShellBase (void)
 {
 }
+
+
+
+
+void GraphicViewShellBase::Execute (SfxRequest& rRequest)
+{
+    USHORT nSlotId = rRequest.GetSlot();
+
+    switch (nSlotId)
+    {
+        case SID_TASK_PANE:
+            // Since there is no tool panel in Draw we ignore this call.
+            rRequest.Cancel();
+            break;
+
+        default:
+            // The remaining requests are forwarded to out base class.
+            ViewShellBase::Execute (rRequest);
+            break;
+    }
+
+}
+
 
 } // end of namespace sd
 
