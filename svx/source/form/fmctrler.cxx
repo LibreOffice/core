@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-29 14:15:08 $
+ *  last change: $Author: fs $ $Date: 2001-06-15 11:11:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,6 +242,7 @@ using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::comphelper;
 using namespace ::dbtools;
@@ -3159,7 +3160,7 @@ FmXFormController::interceptedQueryDispatch(sal_uInt16 _nId, const ::com::sun::s
     Reference< ::com::sun::star::frame::XDispatch >  xReturn;
     // dispatches handled by ourself
     if (aURL.Complete == FMURL_CONFIRM_DELETION)
-        xReturn = (::com::sun::star::frame::XDispatch*)this;
+        xReturn = static_cast<XDispatch*>(this);
 
     // dispatches of FormSlot-URLs we have to translate
     if (!xReturn.is() && aURL.Complete.indexOf(FMURL_FORMSLOTS_PREFIX) == 0)
@@ -3244,6 +3245,38 @@ FmXFormController::interceptedQueryDispatch(sal_uInt16 _nId, const ::com::sun::s
 
     // no more to offer
     return xReturn;
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL FmXFormController::dispatch( const URL& _rURL, const Sequence< PropertyValue >& _rArgs ) throw (RuntimeException)
+{
+    OSL_ENSURE(sal_False, "FmXFormController::dispatch: never to be called!");
+    // we use the dispatch mechanism only for exposing the XConfirmDeleteListener interface
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL FmXFormController::addStatusListener( const Reference< XStatusListener >& _rxListener, const URL& _rURL ) throw (RuntimeException)
+{
+    if (_rURL.Complete == FMURL_CONFIRM_DELETION)
+    {
+        if (_rxListener.is())
+        {   // send an initial statusChanged event
+            FeatureStateEvent aEvent;
+            aEvent.FeatureURL = _rURL;
+            aEvent.IsEnabled = sal_True;
+            _rxListener->statusChanged(aEvent);
+            // and don't add the listener at all (the status will never change)
+        }
+    }
+    else
+        OSL_ENSURE(sal_False, "FmXFormController::addStatusListener: invalid (unsupported) URL!");
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL FmXFormController::removeStatusListener( const Reference< XStatusListener >& _rxListener, const URL& _rURL ) throw (RuntimeException)
+{
+    OSL_ENSURE(_rURL.Complete == FMURL_CONFIRM_DELETION, "FmXFormController::removeStatusListener: invalid (unsupported) URL!");
+    // we never really added the listener, so we don't need to remove it
 }
 
 //------------------------------------------------------------------------------

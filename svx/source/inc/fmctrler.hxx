@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-29 14:00:30 $
+ *  last change: $Author: fs $ $Date: 2001-06-15 11:11:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,7 @@
 #endif
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE12_HXX_
 #include <cppuhelper/implbase12.hxx>
@@ -295,7 +295,9 @@ typedef ::cppu::ImplHelper12<               ::com::sun::star::util::XModeSelecto
                                             ,::com::sun::star::form::XDatabaseParameterBroadcaster
                                             ,::com::sun::star::lang::XServiceInfo
                                             ,::com::sun::star::form::XResetListener> FmXFormController_BASE2;
-typedef ::cppu::ImplHelper1<                ::com::sun::star::lang::XUnoTunnel> FmXFormController_BASE3;
+typedef ::cppu::ImplHelper2                 <   ::com::sun::star::lang::XUnoTunnel
+                                            ,   ::com::sun::star::frame::XDispatch
+                                            >   FmXFormController_BASE3;
 
 //==================================================================
 // FmXFormController
@@ -391,6 +393,10 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
     static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
+// XDispatch
+    virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& _rURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArgs ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& _rxListener, const ::com::sun::star::util::URL& _rURL ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& _rxListener, const ::com::sun::star::util::URL& _rURL ) throw (::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::container::XChild
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> SAL_CALL getParent(void) throw( ::com::sun::star::uno::RuntimeException ) {return m_xParent;}
