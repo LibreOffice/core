@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlconst.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:42:39 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:27:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,30 +68,58 @@
 #include <sal/types.h>
 #endif
 
+// global.hxx can be removed if SC*** typedefs are there
+#ifndef SC_SCGLOB_HXX
+#include "global.hxx"
+#endif
+
 
 // Common =====================================================================
 
+typedef USHORT SCCOL;
+const SCCOL SCMAXCOL = MAXCOL;
+const SCCOL SCCOLCOUNT = SCMAXCOL + 1;
+
+typedef USHORT SCROW;
+const SCROW SCMAXROW = MAXROW;
+const SCROW SCROWCOUNT = SCMAXROW + 1;
+
+typedef USHORT SCTAB;
+const SCTAB SCMAXTAB = MAXTAB;
+const SCTAB SCTABCOUNT = SCMAXTAB + 1;
+
+// remember to remove the #include "global.hxx" above
+
+
 // Excel sheet dimensions -----------------------------------------------------
 
-const sal_uInt16 EXC_MAXCOL_BIFF2           = 255;
-const sal_uInt16 EXC_MAXROW_BIFF2           = 16383;
-const sal_uInt16 EXC_MAXTAB_BIFF2           = 0;
+const sal_uInt16 EXC_MAXCOL2                = 255;
+const sal_uInt16 EXC_MAXROW2                = 16383;
+const sal_uInt16 EXC_MAXTAB2                = 0;
 
-const sal_uInt16 EXC_MAXCOL_BIFF4           = EXC_MAXCOL_BIFF2;
-const sal_uInt16 EXC_MAXROW_BIFF4           = EXC_MAXROW_BIFF2;
-const sal_uInt16 EXC_MAXTAB_BIFF4           = 32767;
+const sal_uInt16 EXC_MAXCOL3                = EXC_MAXCOL2;
+const sal_uInt16 EXC_MAXROW3                = EXC_MAXROW2;
+const sal_uInt16 EXC_MAXTAB3                = EXC_MAXTAB2;
 
-const sal_uInt16 EXC_MAXCOL_BIFF8           = EXC_MAXCOL_BIFF4;
-const sal_uInt16 EXC_MAXROW_BIFF8           = 65535;
-const sal_uInt16 EXC_MAXTAB_BIFF8           = EXC_MAXTAB_BIFF4;
+const sal_uInt16 EXC_MAXCOL4                = EXC_MAXCOL3;
+const sal_uInt16 EXC_MAXROW4                = EXC_MAXROW3;
+const sal_uInt16 EXC_MAXTAB4                = 32767;
+
+const sal_uInt16 EXC_MAXCOL5                = EXC_MAXCOL4;
+const sal_uInt16 EXC_MAXROW5                = EXC_MAXROW4;
+const sal_uInt16 EXC_MAXTAB5                = EXC_MAXTAB4;
+
+const sal_uInt16 EXC_MAXCOL8                = EXC_MAXCOL5;
+const sal_uInt16 EXC_MAXROW8                = 65535;
+const sal_uInt16 EXC_MAXTAB8                = EXC_MAXTAB5;
 
 const sal_uInt16 EXC_NOTAB                  = 0xFFFF;   /// An invalid sheet index, for common use.
 
 
 // In/out stream --------------------------------------------------------------
 
-const sal_uInt32 RECORD_SEEK_TO_BEGIN       = 0UL;
-const sal_uInt32 RECORD_SEEK_TO_END         = ~0UL;
+const sal_uInt32 RECORD_SEEK_TO_BEGIN       = 0;
+const sal_uInt32 RECORD_SEEK_TO_END         = ~RECORD_SEEK_TO_BEGIN;
 
 const sal_uInt16 EXC_MAXRECSIZE_BIFF5       = 2080;
 const sal_uInt16 EXC_MAXRECSIZE_BIFF8       = 8224;
@@ -150,27 +178,6 @@ const sal_uInt8 EXC_CACHEDVAL_ERROR         = 0x10;
 
 const sal_Int32 EXC_POINTS_PER_INCH         = 72;
 const sal_Int32 EXC_TWIPS_PER_INCH          = EXC_POINTS_PER_INCH * 20;
-
-
-// Line styles ----------------------------------------------------------------
-
-const sal_uInt8 EXC_LINE_NONE               = 0x00;
-const sal_uInt8 EXC_LINE_THIN               = 0x01;
-const sal_uInt8 EXC_LINE_MEDIUM             = 0x02;
-const sal_uInt8 EXC_LINE_THICK              = 0x05;
-const sal_uInt8 EXC_LINE_DOUBLE             = 0x06;
-const sal_uInt8 EXC_LINE_HAIR               = 0x07;
-
-
-// Background patterns --------------------------------------------------------
-
-const sal_uInt8 EXC_PATT_NONE               = 0x00;
-const sal_uInt8 EXC_PATT_SOLID              = 0x01;
-const sal_uInt8 EXC_PATT_50_PERC            = 0x02;
-const sal_uInt8 EXC_PATT_75_PERC            = 0x03;
-const sal_uInt8 EXC_PATT_25_PERC            = 0x04;
-const sal_uInt8 EXC_PATT_12_5_PERC          = 0x11;
-const sal_uInt8 EXC_PATT_6_25_PERC          = 0x12;
 
 
 // Records (ordered by lowest record ID) ======================================
