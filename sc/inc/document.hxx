@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-19 13:28:26 $
+ *  last change: $Author: sab $ $Date: 2001-11-26 09:20:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,6 +383,8 @@ private:
     ScRefreshTimerControl* pRefreshTimerControl;
     vos::ORef<SvxForbiddenCharactersTable> xForbiddenCharacters;
 
+    ScFieldEditEngine*  pCacheFieldEditEngine;
+
     com::sun::star::uno::Sequence<sal_Int8> aProtectPass;
     String              aDocName;                       // opt: Dokumentname
     ScRangePairListRef  xColNameRanges;
@@ -517,6 +519,9 @@ public:
     const ScConsolidateParam*   GetConsolidateDlgData() const { return pConsolidateDlgData; }
 
     void            Clear();
+
+    ScFieldEditEngine*  CreateFieldEditEngine();
+    void                DisposeFieldEditEngine(ScFieldEditEngine*& rpEditEngine);
 
     ScRangeName*    GetRangeName();
     void            SetRangeName( ScRangeName* pNewRangeName );

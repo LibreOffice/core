@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textuno.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2001-09-13 09:38:55 $
+ *  last change: $Author: sab $ $Date: 2001-11-26 09:21:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ class ScCellObj;
 class ScSimpleEditSource;
 class ScSharedCellEditSource;
 class ScEditEngineDefaulter;
+class ScFieldEditEngine;
 
 struct ScHeaderFieldData;
 
@@ -395,7 +396,7 @@ class ScCellTextData : public SfxListener
 {
     ScDocShell*             pDocShell;
     ScAddress               aCellPos;
-    ScEditEngineDefaulter*  pEditEngine;
+    ScFieldEditEngine*      pEditEngine;
     SvxEditEngineForwarder* pForwarder;
     ScSharedCellEditSource* pOriginalSource;
     BOOL                    bDataValid;
@@ -412,7 +413,7 @@ public:
                             // helper functions for ScSharedCellEditSource:
     SvxTextForwarder*       GetTextForwarder();
     void                    UpdateData();
-    ScEditEngineDefaulter*  GetEditEngine() { GetTextForwarder(); return pEditEngine; }
+    ScFieldEditEngine*      GetEditEngine() { GetTextForwarder(); return pEditEngine; }
 
     ScSharedCellEditSource* GetOriginalSource();        // used as argument for SvxUnoText ctor
 
