@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-09 13:25:11 $
+ *  last change: $Author: aw $ $Date: 2002-05-03 16:16:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,7 +407,8 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
         // #97016# II
         case KEY_TAB:
         {
-            if(rKEvt.GetKeyCode().IsMod1())
+            // #98994# handle Mod1 and Mod2 to get travelling running on different systems
+            if(rKEvt.GetKeyCode().IsMod1() || rKEvt.GetKeyCode().IsMod2())
             {
                 // #97016# II do something with a selected handle?
                 const SdrHdlList& rHdlList = pView->GetHdlList();
