@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: np $Date: 2002/08/08 16:08:20 $
+ *  last change: $Author: hr $Date$
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,23 +383,27 @@ X2CParser::GetTextTill( Simstr & o_rText,
 
     if (i_bReverseName)
     {
-        char * sBreak = strrchr(pResult,'.');
-        if (sBreak != 0)
+        const nMaxLen = 1000;
+        if (strlen(pResult) < nMaxLen)
         {
-            static char sScope[1000];
-            static char sName[1000];
+            char * sBreak = strrchr(pResult,'.');
+            if (sBreak != 0)
+            {
+                static char sScope[nMaxLen+10];
+                static char sName[nMaxLen+10];
 
-            unsigned nScopeLen = sBreak - pResult;
-            strncpy ( sScope, pResult, nScopeLen );
-            sScope[nScopeLen] = '\0';
-            strcpy( sName, sBreak + 1 );
-            strcat( sName, " in " );
-            strcat( sName, sScope );
+                unsigned nScopeLen = sBreak - pResult;
+                strncpy ( sScope, pResult, nScopeLen ); // STRNCPY SAFE HERE
+                sScope[nScopeLen] = '\0';
+                strcpy( sName, sBreak + 1 );            // STRCPY SAFE HERE
+                strcat( sName, " in " );                // STRCAT SAFE HERE
+                strcat( sName, sScope );                // STRCAT SAFE HERE
 
-            o_rText = sName;
-            return;
+                o_rText = sName;
+                return;
+            }
         }
-    }
+    }   // endif (i_bReverseName)
 
     o_rText = &sWord[0];
 }
