@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:40:45 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 11:28:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,9 +348,23 @@ void ViewShellBase::SFX_NOTIFY(SfxBroadcaster& rBC,
 
 void ViewShellBase::InnerResizePixel(const Point &rPos, const Size &rSize)
 {
+    SfxViewShell::InnerResizePixel (rPos, rSize);
     ViewShell* pMainViewShell = GetSubShellManager().GetMainSubShell();
     if (pMainViewShell != NULL)
         pMainViewShell->InnerResizePixel (rPos, rSize);
+}
+
+
+
+
+void ViewShellBase::OuterResizePixel(const Point &rPos, const Size &rSize)
+{
+    /*af
+    SfxViewShell::OuterResizePixel (rPos, rSize);
+    ViewShell* pMainViewShell = GetSubShellManager().GetMainSubShell();
+    if (pMainViewShell != NULL)
+        pMainViewShell->OuterResizePixel (rPos, rSize);
+    */
 }
 
 
