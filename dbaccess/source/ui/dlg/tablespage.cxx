@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablespage.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:50:58 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:42:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,19 +229,6 @@ namespace dbaui
             // Check if we need to get new images for normal/high contrast mode
             m_aTablesList.notifyHiContrastChanged();
         }
-    }
-    //------------------------------------------------------------------
-    sal_Int16 OTableSubscriptionPage::getImageListId(sal_Int16 _eBitmapSet,sal_Bool _bHiContast) const
-    {
-        sal_Int16 nN = IMG_TABLESUBCRIPTION_SC;
-        sal_Int16 nH = IMG_TABLESUBCRIPTION_SCH;
-        if ( _eBitmapSet == SFX_SYMBOLS_LARGE )
-        {
-            nN = IMG_TABLESUBCRIPTION_LC;
-            nH = IMG_TABLESUBCRIPTION_LCH;
-        }
-
-        return _bHiContast ? nH : nN;
     }
     //------------------------------------------------------------------
     void OTableSubscriptionPage::resizeControls(const Size& _rDiff)
