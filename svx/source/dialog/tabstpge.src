@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 13:26:40 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ korean ] = "À§Ä¡";
         Text[ turkish ] = "Konum";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Posición";
     };
     RadioButton BTN_TABTYPE_LEFT
     {
@@ -148,6 +149,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ korean ] = "¿ÞÂÊ(~L)";
         Text[ turkish ] = "~Sol";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Izquierda";
     };
     Window WIN_TABLEFT
     {
@@ -181,6 +183,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ korean ] = "¿À¸¥ÂÊ(~T)";
         Text[ turkish ] = "Sað~";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Derecha";
     };
     Window WIN_TABRIGHT
     {
@@ -214,6 +217,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ korean ] = "°¡¿îµ¥(~E)";
         Text[ turkish ] = "~Ortala";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Cen~trado";
     };
     Window WIN_TABCENTER
     {
@@ -247,6 +251,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ korean ] = "¼Ò¼öÁ¡(~M)";
         Text[ turkish ] = "O~ndalýk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Deci~mal";
     };
     Window WIN_TABDECIMAL
     {
@@ -280,6 +285,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ korean ] = "¹®ÀÚ(~C)";
         Text[ turkish ] = "Ka~rakter";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Carácter";
     };
     Edit ED_TABTYPE_DECCHAR
     {
@@ -315,6 +321,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ korean ] = "À¯Çü";
         Text[ turkish ] = "Tip";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tipo";
     };
     RadioButton BTN_FILLCHAR_NO
     {
@@ -344,6 +351,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ korean ] = "¾øÀ½(~O)";
         Text[ turkish ] = "~Yok";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nin~guno";
     };
     RadioButton BTN_FILLCHAR_POINTS
     {
@@ -372,7 +380,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ norwegian ] = "Te~gn" ;
         Text [ italian ] = "C~arattere" ;
         Text [ portuguese_brazilian ] = "Ca~racter" ;
-        Text [ portuguese ] = "Carac~ter" ;
+        Text [ portuguese ] = "Ca~racteres" ;
         Text [ finnish ] = "Me~rkki" ;
         Text [ danish ] = "Tegn" ;
         Text [ french ] = "C~aractères" ;
@@ -390,6 +398,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ korean ] = "¹®ÀÚ";
         Text[ turkish ] = "Kara~kter";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "C~arácter";
     };
     Edit ED_FILLCHAR_OTHER
     {
@@ -425,6 +434,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ korean ] = "Ã¤¿ò±âÈ£";
         Text[ turkish ] = "Öncü";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Carácter de relleno";
     };
     PushButton BTN_NEW
     {
@@ -453,6 +463,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ korean ] = "»õ·Î(~N)";
         Text[ turkish ] = "~Yeni";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Nuevo";
     };
     PushButton BTN_DELALL
     {
@@ -481,6 +492,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ korean ] = "¸ðµÎ »èÁ¦(~A)";
         Text[ turkish ] = "~Tümünü sil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "E~liminar todas";
     };
     PushButton BTN_DEL
     {
@@ -509,6 +521,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ korean ] = "»èÁ¦(~D)";
         Text[ turkish ] = "~Sil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Eliminar";
     };
     Text[ chinese_simplified ] = "ÖÆ±í·û";
     Text[ russian ] = "Òàáóëÿòîðû";
@@ -520,5 +533,6 @@ TabPage RID_SVXPAGE_TABULATOR
     Text[ korean ] = "ÅÇ";
     Text[ turkish ] = "Sekmeler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tabulaciones";
 };
  // ********************************************************************** EOF
