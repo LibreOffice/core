@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:14:26 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 16:17:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4903,6 +4903,7 @@ String RID_INVALID_URL_TITLE
     Text[ hindi ] = "इशारा";
     Text[ slovak ] = "%PRODUCTNAME %PRODUCTVERSION";
 };
+
 
 
 
