@@ -2,9 +2,9 @@
  *
  *  $RCSfile: store.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 15:29:46 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:33:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#define _STORE_STORE_CXX_ "$Revision: 1.3 $"
+#define _STORE_STORE_CXX_ "$Revision: 1.4 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -246,9 +246,9 @@ storeError SAL_CALL store_closeFile (
     if (!pManager)
         return store_E_InvalidHandle;
 
-    pManager->close();
+    storeError eErrCode = pManager->close();
     pManager->release();
-    return store_E_None;
+    return eErrCode;
 }
 
 /*
