@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlsect.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 15:08:14 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:16:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@
 #include <svtools/htmlkywd.hxx>
 #endif
 #ifndef _LINKMGR_HXX //autogen
-#include <so3/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #endif
 #ifndef _RTL_URI_HXX_
 #include <rtl/uri.hxx>
@@ -364,7 +364,7 @@ void SwHTMLParser::NewDivision( int nToken )
             else
             {
                 aURL = INetURLObject::RelToAbs( aHRef.Copy( 0, nPos ) );
-                aURL += so3::cTokenSeperator;
+                aURL += sfx2::cTokenSeperator;
                 if( STRING_NOTFOUND == nPos2 )
                 {
                     aURL += aHRef.Copy( nPos+1 );
@@ -372,7 +372,7 @@ void SwHTMLParser::NewDivision( int nToken )
                 else
                 {
                     aURL += aHRef.Copy( nPos+1, nPos2 - (nPos+1) );
-                    aURL += so3::cTokenSeperator;
+                    aURL += sfx2::cTokenSeperator;
                     aURL += String(rtl::Uri::decode( aHRef.Copy( nPos2+1 ),
                                               rtl_UriDecodeWithCharset,
                                               RTL_TEXTENCODING_ISO_8859_1 ));
