@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: os $ $Date: 2002-08-16 12:18:18 $
+ *  last change: $Author: os $ $Date: 2002-08-16 12:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1762,14 +1762,20 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     break;
                     case KEY_RETURN:
                     {
-                        SfxItemSet aSet(rSh.GetAttrPool(), RES_TXTATR_INETFMT, RES_TXTATR_INETFMT);
-                        rSh.GetAttr(aSet);
-                        if(SFX_ITEM_SET == aSet.GetItemState(RES_TXTATR_INETFMT, FALSE))
+                        const int nSelectionType = rSh.GetSelectionType();
+                        if(nSelectionType & SwWrtShell::SEL_FRM)
+                            eKeyState = KS_GoIntoFly;
+                        else
                         {
-                            const SfxPoolItem& rItem = aSet.Get(RES_TXTATR_INETFMT, TRUE);
-                            bNormalChar = FALSE;
-                            eKeyState = KS_Ende;
-                            rSh.ClickToINetAttr((const SwFmtINetFmt&)rItem, URLLOAD_NOFILTER);
+                            SfxItemSet aSet(rSh.GetAttrPool(), RES_TXTATR_INETFMT, RES_TXTATR_INETFMT);
+                            rSh.GetAttr(aSet);
+                            if(SFX_ITEM_SET == aSet.GetItemState(RES_TXTATR_INETFMT, FALSE))
+                            {
+                                const SfxPoolItem& rItem = aSet.Get(RES_TXTATR_INETFMT, TRUE);
+                                bNormalChar = FALSE;
+                                eKeyState = KS_Ende;
+                                rSh.ClickToINetAttr((const SwFmtINetFmt&)rItem, URLLOAD_NOFILTER);
+                            }
                         }
                     }
                     break;
