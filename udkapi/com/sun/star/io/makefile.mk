@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 17:35:25 $
+#   last change: $Author: rt $ $Date: 2004-09-20 13:41:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,7 @@ IDLFILES=\
     DataTransferEvent.idl\
     IOException.idl\
     NotConnectedException.idl\
+    AlreadyConnectedException.idl\
     ObjectInputStream.idl\
     ObjectOutputStream.idl\
     Pipe.idl\
@@ -114,7 +115,11 @@ IDLFILES=\
     XTextOutputStream.idl\
     XTruncate.idl\
     XXMLExtractor.idl\
-    XInputStreamProvider.idl
+    XInputStreamProvider.idl\
+    UnknownHostException.idl\
+    SocketException.idl\
+    NoRouteToHostException.idl\
+    ConnectException.idl
 
 # ------------------------------------------------------------------
 
