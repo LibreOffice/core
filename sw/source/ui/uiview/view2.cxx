@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 09:44:47 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:06:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -893,6 +893,21 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             GenerateFormLetter(bUseCurrentDocument);
         }
         break;
+        case SID_SPELL_DIALOG:
+        {
+            SfxViewFrame* pViewFrame = GetViewFrame();
+            if (rReq.GetArgs() != NULL)
+                pViewFrame->SetChildWindow (SID_SPELL_DIALOG,
+                    ((const SfxBoolItem&) (rReq.GetArgs()->
+                        Get(SID_SPELL_DIALOG))).GetValue());
+            else
+                pViewFrame->ToggleChildWindow(SID_SPELL_DIALOG);
+
+            pViewFrame->GetBindings().Invalidate(SID_SPELL_DIALOG);
+            rReq.Ignore ();
+        }
+        break;
+
         case SID_ALIGN_ANY_LEFT :
         case SID_ALIGN_ANY_HCENTER  :
         case SID_ALIGN_ANY_RIGHT    :
