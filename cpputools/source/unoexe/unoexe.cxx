@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoexe.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:43 $
+ *  last change: $Author: jbu $ $Date: 2000-10-13 10:47:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,7 +372,7 @@ void createInstance( Reference< T > & rxOut,
                         xMgr, Reference< XRegistryKey >() ) ) );
                     // iiop bridge
                     xSet->insert( makeAny( loadLibComponentFactory(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("iiopbrdg") ),
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("remotebridge") ),
                         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.remotebridges.Bridge.various") ),
                         xMgr, Reference< XRegistryKey >() ) ) );
                     // bridge factory
