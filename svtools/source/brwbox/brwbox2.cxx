@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:28:17 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 17:03:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -663,7 +663,7 @@ void BrowseBox::Resize()
 
     // did we need a horiz. scroll bar oder gibt es eine Control Area?
     if ( !getDataWindow()->bNoHScroll &&
-         ( ( pCols->Count() - FrozenColCount() ) > 1 || nControlAreaWidth > 0 ) )
+         ( ( pCols->Count() - FrozenColCount() ) > 1 ) )
         aHScroll.Show();
     else
         aHScroll.Hide();
@@ -1282,10 +1282,10 @@ void BrowseBox::UpdateScrollbars()
         if ( aHScroll.IsVisible() )
         {
             aHScroll.Hide();
-            aDataWinSize.Height() = GetOutputSizePixel().Height() - GetTitleHeight();
-            if ( nControlAreaWidth != USHRT_MAX )
-                aDataWinSize.Height() -= nCornerSize;
         }
+        aDataWinSize.Height() = GetOutputSizePixel().Height() - GetTitleHeight();
+        if ( nControlAreaWidth != USHRT_MAX )
+            aDataWinSize.Height() -= nCornerSize;
     }
     else if ( !aHScroll.IsVisible() )
     {
@@ -1296,7 +1296,7 @@ void BrowseBox::UpdateScrollbars()
 
     // adjust position and Width of horizontal scrollbar
     ULONG nHScrX = nControlAreaWidth == USHRT_MAX
-        ? GetFrozenWidth() - 1
+        ? 0
         : nControlAreaWidth;
 
     aHScroll.SetPosSizePixel(
@@ -1341,7 +1341,7 @@ void BrowseBox::UpdateScrollbars()
     pVScroll->SetRange( Range( 0, nRowCount ) );
     pVScroll->SetPosSizePixel(
         Point( aDataWinSize.Width(), GetTitleHeight() ),
-        Size( nCornerSize, aDataWinSize.Height() ) );
+        Size( nCornerSize, aDataWinSize.Height()) );
     if ( nRowCount <
          long( aDataWinSize.Height() / GetDataRowHeight() ) )
         ScrollRows( -nTopRow );
