@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-21 18:50:53 $
+#   last change: $Author: cl $ $Date: 2002-04-25 09:41:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,7 @@ SRC1FILES =  \
         svxitems.src
 
 SLOFILES=	\
+        $(SLO)$/writingmodeitem.obj \
         $(SLO)$/frmitems.obj \
         $(SLO)$/paraitem.obj \
         $(SLO)$/textitem.obj \
@@ -116,36 +117,6 @@ EXCEPTIONSFILES= \
         $(SLO)$/paraitem.obj \
         $(SLO)$/numitem.obj\
         $(SLO)$/xmlcnitm.obj
-
-.IF "$(SVXLIGHT)"!=""
-EXCEPTIONSFILES+= \
-        $(OBJ)$/sxl_paraitem.obj\
-        $(OBJ)$/sxl_numitem.obj
-.ENDIF          # "$(SVXLIGHT)"!=""
-
-SVXLIGHTOBJFILES=	\
-        $(OBJ)$/frmitems.obj \
-        $(OBJ)$/paraitem.obj \
-        $(OBJ)$/textitem.obj \
-        $(OBJ)$/postattr.obj	\
-        $(OBJ)$/flditem.obj \
-        $(OBJ)$/svxfont.obj \
-        $(OBJ)$/pageitem.obj	\
-        $(OBJ)$/paperinf.obj	\
-        $(OBJ)$/drawitem.obj	\
-        $(OBJ)$/algitem.obj \
-        $(OBJ)$/itemtype.obj	\
-        $(OBJ)$/rotmodit.obj \
-        $(OBJ)$/numinf.obj	\
-        $(OBJ)$/svxerr.obj	\
-        $(OBJ)$/numfmtsh.obj	\
-        $(OBJ)$/zoomitem.obj \
-        $(OBJ)$/chrtitem.obj	\
-        $(OBJ)$/bulitem.obj \
-        $(OBJ)$/e3ditem.obj \
-        $(OBJ)$/numitem.obj \
-        $(OBJ)$/grfitem.obj \
-        $(OBJ)$/clipfmtitem.obj
 
 .INCLUDE :	target.mk
 
