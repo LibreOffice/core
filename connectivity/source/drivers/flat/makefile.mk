@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: oj $ $Date: 2001-03-19 09:35:32 $
+#   last change: $Author: oj $ $Date: 2001-05-14 13:36:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -114,10 +114,11 @@ SHL1STDLIBS=\
     $(UCBHELPERLIB)				\
     $(SALLIB)					\
     $(DBTOOLSLIB)				\
+    $(DBFILELIB)				\
     $(COMPHELPERLIB)
 
-.IF "$(COMPHELPERLIB)" == ""
-SHL1STDLIBS+= icomphelp2.lib
+.IF "$(DBFILELIB)" == ""
+SHL1STDLIBS+= ifile$(UPD).lib
 .ENDIF
 
 SHL1DEPN=
