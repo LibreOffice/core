@@ -2,9 +2,9 @@
  *
  *  $RCSfile: odata.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2001-09-21 15:37:08 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:58:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,6 @@
 
 #include <osl/mutex.hxx>
 
-#include <assert.h>
 #include <string.h>
 
 
