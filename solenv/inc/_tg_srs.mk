@@ -52,7 +52,7 @@ $(SRS)$/$(SRS1NAME).srs: $(foreach,i,$(SRC1FILES) $(subst,$(OUTPATH),$(COMMON_OU
     +$(RSC) -presponse @$(mktmp \
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
-        -fp$@.$(INPATH) \
+        -fp=$@.$(INPATH) \
         $(foreach,i,$(SRC1FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) \
     )
     +-$(RM) $@
@@ -126,7 +126,7 @@ $(SRS)$/$(SRS2NAME).srs: $(foreach,i,$(SRC2FILES) $(subst,$(OUTPATH),$(COMMON_OU
     +$(RSC) -presponse @$(mktmp \
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
-        -fp$@.$(INPATH) \
+        -fp=$@.$(INPATH) \
         $(foreach,i,$(SRC2FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) \
     )
     +-$(RM) $@
@@ -200,7 +200,7 @@ $(SRS)$/$(SRS3NAME).srs: $(foreach,i,$(SRC3FILES) $(subst,$(OUTPATH),$(COMMON_OU
     +$(RSC) -presponse @$(mktmp \
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
-        -fp$@.$(INPATH) \
+        -fp=$@.$(INPATH) \
         $(foreach,i,$(SRC3FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) \
     )
     +-$(RM) $@
@@ -274,7 +274,7 @@ $(SRS)$/$(SRS4NAME).srs: $(foreach,i,$(SRC4FILES) $(subst,$(OUTPATH),$(COMMON_OU
     +$(RSC) -presponse @$(mktmp \
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
-        -fp$@.$(INPATH) \
+        -fp=$@.$(INPATH) \
         $(foreach,i,$(SRC4FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) \
     )
     +-$(RM) $@
@@ -348,7 +348,7 @@ $(SRS)$/$(SRS5NAME).srs: $(foreach,i,$(SRC5FILES) $(subst,$(OUTPATH),$(COMMON_OU
     +$(RSC) -presponse @$(mktmp \
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
-        -fp$@.$(INPATH) \
+        -fp=$@.$(INPATH) \
         $(foreach,i,$(SRC5FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) \
     )
     +-$(RM) $@
@@ -422,7 +422,7 @@ $(SRS)$/$(SRS6NAME).srs: $(foreach,i,$(SRC6FILES) $(subst,$(OUTPATH),$(COMMON_OU
     +$(RSC) -presponse @$(mktmp \
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
-        -fp$@.$(INPATH) \
+        -fp=$@.$(INPATH) \
         $(foreach,i,$(SRC6FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) \
     )
     +-$(RM) $@
@@ -496,7 +496,7 @@ $(SRS)$/$(SRS7NAME).srs: $(foreach,i,$(SRC7FILES) $(subst,$(OUTPATH),$(COMMON_OU
     +$(RSC) -presponse @$(mktmp \
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
-        -fp$@.$(INPATH) \
+        -fp=$@.$(INPATH) \
         $(foreach,i,$(SRC7FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) \
     )
     +-$(RM) $@
@@ -570,7 +570,7 @@ $(SRS)$/$(SRS8NAME).srs: $(foreach,i,$(SRC8FILES) $(subst,$(OUTPATH),$(COMMON_OU
     +$(RSC) -presponse @$(mktmp \
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
-        -fp$@.$(INPATH) \
+        -fp=$@.$(INPATH) \
         $(foreach,i,$(SRC8FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) \
     )
     +-$(RM) $@
@@ -644,7 +644,7 @@ $(SRS)$/$(SRS9NAME).srs: $(foreach,i,$(SRC9FILES) $(subst,$(OUTPATH),$(COMMON_OU
     +$(RSC) -presponse @$(mktmp \
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
-        -fp$@.$(INPATH) \
+        -fp=$@.$(INPATH) \
         $(foreach,i,$(SRC9FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) \
     )
     +-$(RM) $@
@@ -718,7 +718,7 @@ $(SRS)$/$(SRS10NAME).srs: $(foreach,i,$(SRC10FILES) $(subst,$(OUTPATH),$(COMMON_
     +$(RSC) -presponse @$(mktmp \
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
-        -fp$@.$(INPATH) \
+        -fp=$@.$(INPATH) \
         $(foreach,i,$(SRC10FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) \
     )
     +-$(RM) $@
