@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-15 08:22:02 $
+ *  last change: $Author: pb $ $Date: 2001-08-16 11:28:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,7 @@ TabPage TP_HELP_INDEX
 {
     HelpId = HID_HELP_TABPAGE_INDEX;
     Hide = TRUE ;
+    DialogControl = TRUE;
     Size = MAP_APPFONT ( 120 , 200 ) ;
     FixedText FT_EXPRESSION
     {
@@ -265,6 +266,7 @@ TabPage TP_HELP_SEARCH
 {
     HelpId = HID_HELP_TABPAGE_SEARCH;
     Hide = TRUE ;
+    DialogControl = TRUE;
     Size = MAP_APPFONT ( 120 , 122 ) ;
     FixedText FT_SEARCH
     {
@@ -351,7 +353,6 @@ TabPage TP_HELP_SEARCH
         Text[ catalan ] = "~Search headings only";
         Text[ finnish ] = "~Nur Titel suchen";
     };
-
     ListBox LB_RESULT
     {
         Border = TRUE ;
@@ -390,6 +391,7 @@ TabPage TP_HELP_BOOKMARKS
 {
     HelpId = HID_HELP_TABPAGE_BOOKMARKS;
     Hide = TRUE ;
+    DialogControl = TRUE;
     Size = MAP_APPFONT ( 120 , 200 ) ;
     FixedText FT_BOOKMARKS
     {
@@ -449,6 +451,21 @@ TabPage TP_HELP_BOOKMARKS
         Text[ arabic ] = "ÚÑÖ";
         Text[ catalan ] = "~Visualizar";
         Text[ finnish ] = "~Näytä";
+    };
+};
+
+TabPage TP_HELP_CONTENT
+{
+    HelpId = HID_HELP_TABPAGE_CONTENTS;
+    Hide = TRUE ;
+    DialogControl = TRUE;
+    Size = MAP_APPFONT ( 120 , 200 ) ;
+    Control LB_CONTENTS
+    {
+        Border = TRUE ;
+        TabStop = TRUE;
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 108 , 188 ) ;
     };
 };
 

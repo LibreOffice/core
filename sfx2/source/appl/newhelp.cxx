@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-14 06:28:48 $
+ *  last change: $Author: pb $ $Date: 2001-08-16 11:28:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,8 @@ extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // s
 #define TBI_START           1004
 #define TBI_PRINT           1005
 #define TBI_BOOKMARKS       1006
-#define TBI_SOURCEVIEW      1007
+#define TBI_SEARCHDIALOG    1007
+#define TBI_SOURCEVIEW      1008
 
 #define CONFIGNAME_HELPWIN      DEFINE_CONST_UNICODE("OfficeHelp")
 #define CONFIGNAME_INDEXWIN     DEFINE_CONST_UNICODE("OfficeHelpIndex")
@@ -246,9 +247,9 @@ struct ContentEntry_Impl
 
 // ContentListBox_Impl ---------------------------------------------------
 
-ContentListBox_Impl::ContentListBox_Impl( Window* pParent, WinBits nBits ) :
+ContentListBox_Impl::ContentListBox_Impl( Window* pParent, const ResId& rResId ) :
 
-    SvTreeListBox( pParent, nBits ),
+    SvTreeListBox( pParent, rResId ),
 
     aOpenBookImage      ( SfxResId( IMG_HELP_CONTENT_BOOK_OPEN ) ),
     aClosedBookImage    ( SfxResId( IMG_HELP_CONTENT_BOOK_CLOSED ) ),
@@ -363,12 +364,17 @@ void ContentListBox_Impl::RequestingChilds( SvLBoxEntry* pParent )
 
 // -----------------------------------------------------------------------
 
-void ContentListBox_Impl::SelectHdl()
+long ContentListBox_Impl::Notify( NotifyEvent& rNEvt )
 {
-    SvLBoxEntry* pEntry = FirstSelected();
-    if ( pEntry && pEntry->GetUserData() &&
-         !( (ContentEntry_Impl*)pEntry->GetUserData()  )->bIsFolder )
-        aOpenLink.Call( NULL );
+    sal_Bool bHandled = sal_False;
+    if ( rNEvt.GetType() == EVENT_KEYINPUT &&
+         KEY_RETURN == rNEvt.GetKeyEvent()->GetKeyCode().GetCode() )
+    {
+        GetDoubleClickHdl().Call( NULL );
+        bHandled = sal_True;
+    }
+
+    return bHandled ? 1 : SvTreeListBox::Notify( rNEvt );
 }
 
 // -----------------------------------------------------------------------
@@ -377,8 +383,8 @@ String ContentListBox_Impl::GetSelectEntry() const
 {
     String aRet;
     SvLBoxEntry* pEntry = FirstSelected();
-    if ( pEntry )
-        aRet = ( (ContentEntry_Impl*)pEntry->GetUserData()  )->aURL;
+    if ( pEntry && !( (ContentEntry_Impl*)pEntry->GetUserData()  )->bIsFolder )
+        aRet = ( (ContentEntry_Impl*)pEntry->GetUserData() )->aURL;
     return aRet;
 }
 
@@ -386,11 +392,13 @@ String ContentListBox_Impl::GetSelectEntry() const
 
 ContentTabPage_Impl::ContentTabPage_Impl( Window* pParent ) :
 
-    TabPage( pParent ),
+    TabPage( pParent, SfxResId( TP_HELP_CONTENT ) ),
 
-    aContentBox( this, WB_BORDER )
+    aContentBox( this, ResId( LB_CONTENTS ) )
 
 {
+    FreeResource();
+
     aContentBox.Show();
 }
 
@@ -434,6 +442,41 @@ void IndexBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
         DrawEntry( rUDEvt, FALSE, TRUE, TRUE );
 }
 
+// -----------------------------------------------------------------------
+
+long IndexBox_Impl::Notify( NotifyEvent& rNEvt )
+{
+    sal_Bool bHandled = sal_False;
+    if ( rNEvt.GetType() == EVENT_KEYINPUT &&
+         KEY_RETURN == rNEvt.GetKeyEvent()->GetKeyCode().GetCode() )
+    {
+        SelectExecutableEntry();
+        GetDoubleClickHdl().Call( NULL );
+        bHandled = sal_True;
+    }
+
+    return bHandled ? 1 : ComboBox::Notify( rNEvt );
+}
+
+// -----------------------------------------------------------------------
+
+void IndexBox_Impl::SelectExecutableEntry()
+{
+    sal_Bool bSelectNew = sal_False;
+    USHORT nPos = GetEntryPos( GetText() );
+    USHORT nOldPos = nPos;
+    String aEntryText;
+    IndexEntry_Impl* pEntry = (IndexEntry_Impl*)(ULONG)GetEntryData( nPos );
+    while ( !pEntry || pEntry->m_aURL.Len() == 0 )
+    {
+        pEntry = (IndexEntry_Impl*)(ULONG)GetEntryData( ++nPos );
+        aEntryText = GetEntry( nPos );
+    }
+
+    if ( nOldPos != nPos )
+        SetText( aEntryText );
+}
+
 // class IndexTabPage_Impl -----------------------------------------------
 
 IndexTabPage_Impl::IndexTabPage_Impl( Window* pParent ) :
@@ -451,7 +494,7 @@ IndexTabPage_Impl::IndexTabPage_Impl( Window* pParent ) :
 
     aOpenBtn.SetClickHdl( LINK( this, IndexTabPage_Impl, OpenHdl ) );
     aFactoryTimer.SetTimeoutHdl( LINK( this, IndexTabPage_Impl, FactoryHdl ) );
-    aFactoryTimer.SetTimeout( 200 );
+    aFactoryTimer.SetTimeout( 1000 );
 
     nMinWidth = aOpenBtn.GetSizePixel().Width();
 }
@@ -610,6 +653,7 @@ void IndexTabPage_Impl::ClearIndex()
 
 IMPL_LINK( IndexTabPage_Impl, OpenHdl, PushButton*, EMPTYARG )
 {
+    aIndexCB.SelectExecutableEntry();
     aIndexCB.GetDoubleClickHdl().Call( &aIndexCB );
     return 0;
 }
@@ -719,6 +763,21 @@ void SearchBox_Impl::Select()
         aSearchLink.Call( NULL );
 }
 
+// class SearchResultsBox_Impl -------------------------------------------
+
+long SearchResultsBox_Impl::Notify( NotifyEvent& rNEvt )
+{
+    sal_Bool bHandled = sal_False;
+    if ( rNEvt.GetType() == EVENT_KEYINPUT &&
+         KEY_RETURN == rNEvt.GetKeyEvent()->GetKeyCode().GetCode() )
+    {
+        GetDoubleClickHdl().Call( NULL );
+        bHandled = sal_True;
+    }
+
+    return bHandled ? 1 : ListBox::Notify( rNEvt );
+}
+
 // class SearchTabPage_Impl ----------------------------------------------
 
 SearchTabPage_Impl::SearchTabPage_Impl( Window* pParent ) :
@@ -728,9 +787,9 @@ SearchTabPage_Impl::SearchTabPage_Impl( Window* pParent ) :
     aSearchFT   ( this, ResId( FT_SEARCH ) ),
     aSearchED   ( this, ResId( ED_SEARCH ) ),
     aSearchBtn  ( this, ResId( PB_SEARCH ) ),
+    aScopeCB    ( this, ResId( CB_SCOPE ) ),
     aResultsLB  ( this, ResId( LB_RESULT ) ),
-    aOpenBtn    ( this, ResId( PB_OPEN_SEARCH ) ),
-    aScopeCB    ( this, ResId( CB_SCOPE ) )
+    aOpenBtn    ( this, ResId( PB_OPEN_SEARCH ) )
 
 {
     FreeResource();
@@ -1038,10 +1097,17 @@ long BookmarksBox_Impl::Notify( NotifyEvent& rNEvt )
     USHORT nType = rNEvt.GetType();
     if ( EVENT_KEYINPUT == nType )
     {
-        const KeyCode& rKey = rNEvt.GetKeyEvent()->GetKeyCode();
-
-        if ( rKey.GetCode() == KEY_DELETE && GetEntryCount() > 0 )
+        USHORT nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
+        if ( KEY_DELETE == nCode && GetEntryCount() > 0 )
+        {
             DoAction( MID_DELETE );
+            nRet = 1;
+        }
+        else if ( KEY_RETURN == nCode )
+        {
+            GetDoubleClickHdl().Call( NULL );
+            nRet = 1;
+        }
     }
     else if ( EVENT_COMMAND == nType )
     {
@@ -1052,8 +1118,10 @@ long BookmarksBox_Impl::Notify( NotifyEvent& rNEvt )
             sal_uInt16 nId = aMenu.Execute( this, pCEvt->GetMousePosPixel() );
             if ( nId != MENU_ITEM_NOTFOUND )
                 DoAction( nId );
+            nRet = 1;
         }
     }
+
     return nRet ? nRet : ListBox::Notify( rNEvt );
 }
 
@@ -1171,7 +1239,7 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl( Window* pParent ) :
     pCPage      ( NULL ),
     pIPage      ( NULL ),
     pSPage      ( NULL ),
-    pFPage      ( NULL )
+    pBPage      ( NULL )
 
 {
     FreeResource();
@@ -1200,7 +1268,7 @@ SfxHelpIndexWindow_Impl::~SfxHelpIndexWindow_Impl()
     delete pCPage;
     delete pIPage;
     delete pSPage;
-    delete pFPage;
+    delete pBPage;
 
     for ( USHORT i = 0; i < aActiveLB.GetEntryCount(); ++i )
         delete (String*)(ULONG)aActiveLB.GetEntryData(i);
@@ -1293,9 +1361,9 @@ IMPL_LINK( SfxHelpIndexWindow_Impl, ActivatePageHdl, TabControl *, pTabCtrl )
 
         case HELP_INDEX_PAGE_BOOKMARKS:
         {
-            if ( !pFPage )
-                pFPage = new BookmarksTabPage_Impl( &aTabCtrl );
-            pPage = pFPage;
+            if ( !pBPage )
+                pBPage = new BookmarksTabPage_Impl( &aTabCtrl );
+            pPage = pBPage;
             break;
         }
     }
@@ -1365,9 +1433,9 @@ void SfxHelpIndexWindow_Impl::SetDoubleClickHdl( const Link& rLink )
     if ( !pSPage )
         pSPage = new SearchTabPage_Impl( &aTabCtrl );
     pSPage->SetDoubleClickHdl( rLink );
-    if ( !pFPage )
-        pFPage = new BookmarksTabPage_Impl( &aTabCtrl );
-    pFPage->SetDoubleClickHdl( rLink );
+    if ( !pBPage )
+        pBPage = new BookmarksTabPage_Impl( &aTabCtrl );
+    pBPage->SetDoubleClickHdl( rLink );
 }
 
 // -----------------------------------------------------------------------
@@ -1406,7 +1474,7 @@ String SfxHelpIndexWindow_Impl::GetSelectEntry() const
             break;
 
         case HELP_INDEX_PAGE_BOOKMARKS:
-            aRet = pFPage->GetSelectEntry();
+            aRet = pBPage->GetSelectEntry();
             break;
     }
 
@@ -1417,9 +1485,9 @@ String SfxHelpIndexWindow_Impl::GetSelectEntry() const
 
 void SfxHelpIndexWindow_Impl::AddBookmarks( const String& rTitle, const String& rURL )
 {
-    if ( !pFPage )
-        pFPage = new BookmarksTabPage_Impl( &aTabCtrl );
-    pFPage->AddBookmarks( rTitle, rURL );
+    if ( !pBPage )
+        pBPage = new BookmarksTabPage_Impl( &aTabCtrl );
+    pBPage->AddBookmarks( rTitle, rURL );
 }
 
 // -----------------------------------------------------------------------
@@ -1428,6 +1496,32 @@ void SfxHelpIndexWindow_Impl::ClearSearchPage()
 {
     if ( pSPage )
         pSPage->ClearPage();
+}
+
+// -----------------------------------------------------------------------
+
+void SfxHelpIndexWindow_Impl::GrabFocusBack()
+{
+    if ( aTabCtrl.GetCurPageId() == HELP_INDEX_PAGE_CONTENTS && pCPage )
+        pCPage->SetFocusOnBox();
+    else if ( aTabCtrl.GetCurPageId() == HELP_INDEX_PAGE_INDEX && pIPage )
+        pIPage->SetFocusOnBox();
+    else if ( aTabCtrl.GetCurPageId() == HELP_INDEX_PAGE_SEARCH && pSPage )
+        pSPage->SetFocusOnBox();
+    else if ( aTabCtrl.GetCurPageId() == HELP_INDEX_PAGE_BOOKMARKS && pBPage )
+        pBPage->SetFocusOnBox();
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool SfxHelpIndexWindow_Impl::HasFocusOnEdit() const
+{
+    sal_Bool bRet = sal_False;
+    if ( aTabCtrl.GetCurPageId() == HELP_INDEX_PAGE_INDEX && pIPage )
+        bRet = pIPage->HasFocusOnEdit();
+    else if ( aTabCtrl.GetCurPageId() == HELP_INDEX_PAGE_SEARCH && pSPage )
+        bRet = pSPage->HasFocusOnEdit();
+    return bRet;
 }
 
 // class SfxHelpTextWindow_Impl ------------------------------------------
@@ -1830,6 +1924,7 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenDoneHdl, OpenStatusListener_Impl*, pListener 
     SetFactory( aModuleName, sal_False );
     if ( IsWait() )
         LeaveWait();
+    pIndexWin->GrabFocusBack();
     return 0;
 }
 
@@ -1885,6 +1980,27 @@ SfxHelpWindow_Impl::~SfxHelpWindow_Impl()
     delete pTextWin;
 }
 
+// -----------------------------------------------------------------------
+
+long SfxHelpWindow_Impl::PreNotify( NotifyEvent& rNEvt )
+{
+    sal_Bool bHandled = sal_False;
+    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    {
+        // Backward == <ALT><LEFT> or <BACKSPACE> Forward == <ALT><RIGHT>
+         const KeyCode& rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
+        if ( ( rKeyCode.IsMod2() &&
+               ( rKeyCode.GetCode() == KEY_LEFT || rKeyCode.GetCode() == KEY_RIGHT ) ) ||
+             ( !rKeyCode.GetModifier() &&
+               rKeyCode.GetCode() == KEY_BACKSPACE && !pIndexWin->HasFocusOnEdit() ) )
+        {
+            DoAction( rKeyCode.GetCode() == KEY_RIGHT ? TBI_FORWARD : TBI_BACKWARD );
+            bHandled = sal_True;
+        }
+    }
+
+    return bHandled ? 1 : Window::PreNotify( rNEvt );
+}
 // -----------------------------------------------------------------------
 
 void SfxHelpWindow_Impl::setContainerWindow( Reference < ::com::sun::star::awt::XWindow > xWin )
@@ -1944,6 +2060,7 @@ void SfxHelpWindow_Impl::DoAction( USHORT nActionId )
 
         case TBI_PRINT :
         case TBI_SOURCEVIEW :
+        case TBI_SEARCHDIALOG :
         {
             Reference < XDispatchProvider > xProv( pTextWin->getFrame(), UNO_QUERY );
             if ( xProv.is() )
@@ -1951,8 +2068,10 @@ void SfxHelpWindow_Impl::DoAction( USHORT nActionId )
                 URL aURL;
                 if ( TBI_PRINT == nActionId )
                     aURL.Complete = DEFINE_CONST_UNICODE(".uno:Print");
-                else
+                else if ( TBI_SOURCEVIEW == nActionId )
                     aURL.Complete = DEFINE_CONST_UNICODE(".uno:SourceView");
+                else
+                    aURL.Complete = DEFINE_CONST_UNICODE(".uno:SearchDialog");
                 PARSE_URL( aURL );
                 Reference < XDispatch > xDisp = xProv->queryDispatch( aURL, String(), 0 );
                 if ( xDisp.is() )

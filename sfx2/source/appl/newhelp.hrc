@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-27 13:38:25 $
+ *  last change: $Author: pb $ $Date: 2001-08-16 11:28:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,14 +78,17 @@
 #define ED_SEARCH                               11
 #define PB_SEARCH                               12
 #define FT_RESULT                               13
-#define LB_RESULT                               14
-#define PB_OPEN_SEARCH                          15
-#define CB_SCOPE                                16
+#define CB_SCOPE                                14
+#define LB_RESULT                               15
+#define PB_OPEN_SEARCH                          16
 
 // Bookmarks TabPage
 #define FT_BOOKMARKS                            10
 #define LB_BOOKMARKS                            11
 #define PB_BOOKMARKS                            12
+
+// Content TabPage
+#define LB_CONTENTS                             10
 
 // Add to bookmarks dialog
 #define FT_BOOKMARK_TITLE                       10

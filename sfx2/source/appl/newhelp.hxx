@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-08 08:44:39 $
+ *  last change: $Author: pb $ $Date: 2001-08-16 11:28:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,20 +129,18 @@ private:
     Image           aClosedChapterImage;
     Image           aDocumentImage;
 
-    Link            aOpenLink;
-
     void            InitRoot();
     void            ClearChildren( SvLBoxEntry* pParent );
 
 public:
-    ContentListBox_Impl( Window* pParent, WinBits nBits );
+    ContentListBox_Impl( Window* pParent, const ResId& rResId );
     ~ContentListBox_Impl();
 
 
     virtual void    RequestingChilds( SvLBoxEntry* pParent );
-    virtual void    SelectHdl();
+    virtual long    Notify( NotifyEvent& rNEvt );
 
-    void            SetOpenHdl( const Link& rLink ) { aOpenLink = rLink; }
+    void            SetOpenHdl( const Link& rLink ) { SetDoubleClickHdl( rLink ); }
     String          GetSelectEntry() const;
 };
 
@@ -160,6 +158,7 @@ public:
 
     void            SetOpenHdl( const Link& rLink ) { aContentBox.SetOpenHdl( rLink ); }
     String          GetSelectEntry() const { return aContentBox.GetSelectEntry(); }
+    void            SetFocusOnBox() { aContentBox.GrabFocus(); }
 };
 
 // class IndexTabPage_Impl -----------------------------------------------
@@ -170,6 +169,9 @@ public:
     IndexBox_Impl( Window* pParent, const ResId& rResId );
 
     virtual void        UserDraw( const UserDrawEvent& rUDEvt );
+    virtual long        Notify( NotifyEvent& rNEvt );
+
+    void                SelectExecutableEntry();
 };
 
 class IndexTabPage_Impl : public TabPage
@@ -201,6 +203,8 @@ public:
     void                SetFactory( const String& rFactory );
     String              GetFactory() const { return aFactory; }
     String              GetSelectEntry() const;
+    void                SetFocusOnBox() { aIndexCB.GrabFocus(); }
+    sal_Bool            HasFocusOnEdit() const { return aIndexCB.HasChildPathFocus(); }
 };
 
 // class SearchTabPage_Impl ----------------------------------------------
@@ -220,18 +224,26 @@ public:
     void                SetSearchLink( const Link& rLink ) { aSearchLink = rLink; }
 };
 
+class SearchResultsBox_Impl : public ListBox
+{
+public:
+    SearchResultsBox_Impl( Window* pParent, const ResId& rResId ) : ListBox( pParent, rResId ) {}
+
+    virtual long    Notify( NotifyEvent& rNEvt );
+};
+
 class SearchTabPage_Impl : public TabPage
 {
 private:
-    FixedText           aSearchFT;
-    SearchBox_Impl      aSearchED;
-    PushButton          aSearchBtn;
-    ListBox             aResultsLB;
-    PushButton          aOpenBtn;
-    CheckBox            aScopeCB;
+    FixedText               aSearchFT;
+    SearchBox_Impl          aSearchED;
+    PushButton              aSearchBtn;
+    CheckBox                aScopeCB;
+    SearchResultsBox_Impl   aResultsLB;
+    PushButton              aOpenBtn;
 
-    Size                aMinSize;
-    String              aFactory;
+    Size                    aMinSize;
+    String                  aFactory;
 
     void                ClearSearchResults();
     void                RememberSearchText( const String& rSearchText );
@@ -249,6 +261,8 @@ public:
     void                SetFactory( const String& rFactory ) { aFactory = rFactory; }
     String              GetSelectEntry() const;
     void                ClearPage();
+    void                SetFocusOnBox() { aResultsLB.GrabFocus(); }
+    sal_Bool            HasFocusOnEdit() const { return aSearchED.HasChildPathFocus(); }
 };
 
 // class BookmarksTabPage_Impl -------------------------------------------
@@ -284,6 +298,7 @@ public:
     void                SetDoubleClickHdl( const Link& rLink );
     String              GetSelectEntry() const;
     void                AddBookmarks( const String& rTitle, const String& rURL );
+    void                SetFocusOnBox() { aBookmarksBox.GrabFocus(); }
 };
 
 // class SfxHelpIndexWindow_Impl -----------------------------------------
@@ -302,7 +317,7 @@ private:
     ContentTabPage_Impl*    pCPage;
     IndexTabPage_Impl*      pIPage;
     SearchTabPage_Impl*     pSPage;
-    BookmarksTabPage_Impl*  pFPage;
+    BookmarksTabPage_Impl*  pBPage;
 
     long                nMinWidth;
 
@@ -328,6 +343,8 @@ public:
     String              GetActiveFactoryTitle() const { return aActiveLB.GetSelectEntry(); }
     void                UpdateTabControl() { aTabCtrl.Invalidate(); }
     void                ClearSearchPage();
+    void                GrabFocusBack();
+    sal_Bool            HasFocusOnEdit() const;
 };
 
 // class SfxHelpTextWindow_Impl ------------------------------------------
@@ -408,6 +425,8 @@ public:
     SfxHelpWindow_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >& rFrame,
                         Window* pParent, WinBits nBits );
     ~SfxHelpWindow_Impl();
+
+    virtual long        PreNotify( NotifyEvent& rNEvt );
 
     void                setContainerWindow(
                             ::com::sun::star::uno::Reference < ::com::sun::star::awt::XWindow > xWin );
