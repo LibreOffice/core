@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftools.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:38:36 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:28:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,15 +385,20 @@ typedef ::std::stack< sal_uInt32, ScfUInt32Vec >    ScfUInt32Stack;
 /** Template for a list that owns the contained objects.
     @descr  This list stores pointers to objects and deletes the objects itself
     on destruction. The Clear() method deletes all objects too. */
-template< typename Type > class ScfDelList : ScfNoCopy
+template< typename Type > class ScfDelList
 {
 private:
     mutable List                maList;     /// The base container object.
 
 public:
-    inline                      ScfDelList( sal_uInt16 nInitSize = 16, sal_uInt16 nResize = 16 ) :
+    inline explicit             ScfDelList( sal_uInt16 nInitSize = 16, sal_uInt16 nResize = 16 ) :
                                     maList( nInitSize, nResize ) {}
+    /** Creates a deep copy of the passed list (copy-constructs all contained objects). */
+    inline explicit             ScfDelList( const ScfDelList& rSrc ) { *this = rSrc; }
     virtual                     ~ScfDelList();
+
+    /** Creates a deep copy of the passed list (copy-constructs all contained objects). */
+    ScfDelList&                 operator=( const ScfDelList& rSrc );
 
     inline void                 Insert( Type* pObj, sal_uInt32 nIndex ) { if( pObj ) maList.Insert( pObj, nIndex ); }
     inline void                 Append( Type* pObj )                    { if( pObj ) maList.Insert( pObj, LIST_APPEND ); }
@@ -406,7 +411,7 @@ public:
     /** Replaces (deletes) the contained object. */
     inline void                 Replace( Type* pObj, sal_uInt32 nIndex ){ delete Exchange( pObj, nIndex ); }
 
-    inline void                 Clear();
+    void                        Clear();
     inline sal_uInt32           Count() const                           { return maList.Count(); }
     inline bool                 Empty() const                           { return maList.Count() == 0; }
 
@@ -420,12 +425,20 @@ public:
     inline Type*                Prev() const                            { return static_cast< Type* >( maList.Prev() ); }
 };
 
+template< typename Type > ScfDelList< Type >& ScfDelList< Type >::operator=( const ScfDelList& rSrc )
+{
+    Clear();
+    for( const Type* pObj = rSrc.First(); pObj; pObj = rSrc.Next() )
+        Append( new Type( *pObj ) );
+    return *this;
+}
+
 template< typename Type > ScfDelList< Type >::~ScfDelList()
 {
     Clear();
 }
 
-template< typename Type > inline void ScfDelList< Type >::Clear()
+template< typename Type > void ScfDelList< Type >::Clear()
 {
     for( Type* pObj = First(); pObj; pObj = Next() )
         delete pObj;
