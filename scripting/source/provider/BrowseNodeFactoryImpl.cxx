@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BrowseNodeFactoryImpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:27:46 $
+ *  last change: $Author: rt $ $Date: 2004-05-24 13:08:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,7 +499,8 @@ public:
             vXBrowseNodes m_vNodes;
             Sequence < Reference< browse::XBrowseNode > > nodes =
                 m_xNode->getChildNodes();
-            for ( sal_Int32 i=0; i<nodes.getLength(); i++ )
+            sal_Int32 i;
+            for ( i=0; i<nodes.getLength(); i++ )
             {
                 m_vNodes.push_back( new DefaultBrowseNode( nodes[ i ] ) );
             }
@@ -507,7 +508,7 @@ public:
             ::std::sort( m_vNodes.begin(), m_vNodes.end(), alphaSortForBNodes() );
             Sequence < Reference< browse::XBrowseNode > > children( m_vNodes.size() );
             vXBrowseNodes::const_iterator it = m_vNodes.begin();
-            for ( sal_Int32 i=0; it != m_vNodes.end() && i<children.getLength(); i++, ++it )
+            for ( i=0; it != m_vNodes.end() && i<children.getLength(); i++, ++it )
             {
                 children[ i ].set( *it );
             }
