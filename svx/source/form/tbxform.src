@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:18 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 19:16:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,7 +549,7 @@ ModalDialog RID_SVX_DLG_INPUTRECORDNO
     Text = "Datensatznummer" ;
     Text [ english ] =  "Absolute Record";
     Text [ english_us ] = "Record Number";
-    Text [ portuguese ] = "Número de registos";
+    Text [ portuguese ] = "Número do registo";
     Text [ russian ] = "Íîìåð çàïèñè";
     Text [ dutch ] = "Recordnummer";
     Text [ french ] = "Numéro d'enregistrement";
