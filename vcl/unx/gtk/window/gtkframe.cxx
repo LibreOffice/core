@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 09:20:06 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:50:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -968,13 +968,16 @@ GtkSalDisplay *GtkSalFrame::getDisplay()
     return static_cast<GtkSalDisplay*>(GetSalData()->GetDisplay());
 }
 
-ULONG GtkSalFrame::GetCurrentModButtons()
+SalFrame::SalPointerState GtkSalFrame::GetPointerState()
 {
+    SalPointerState aState;
     GdkScreen* pScreen;
     gint x, y;
     GdkModifierType aMask;
     gdk_display_get_pointer( getGdkDisplay(), &pScreen, &x, &y, &aMask );
-    return GetModCode( aMask );
+    aState.maPos = Point( x - maGeometry.nX, y - maGeometry.nY );
+    aState.mnState = GetModCode( aMask );
+    return aState;
 }
 
 void GtkSalFrame::SetInputContext( SalInputContext* pContext )
