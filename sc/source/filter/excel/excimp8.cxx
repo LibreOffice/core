@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-23 15:01:39 $
+ *  last change: $Author: dr $ $Date: 2001-10-29 14:52:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1056,7 +1056,7 @@ void ImportExcel8::Tabid( void )
 {
     DBG_ASSERT( pExcRoot->pImpTabIdBuffer, "ImportExcel8::Tabid - missing tab id buffer" );
     if( pExcRoot->pImpTabIdBuffer )
-        pExcRoot->pImpTabIdBuffer->Fill( aIn, (UINT16)(aIn.GetRecLen() >> 1) );
+        pExcRoot->pImpTabIdBuffer->ReadTabid8( aIn );
 }
 
 
@@ -1742,7 +1742,7 @@ void ImportExcel8::Externname( void )
 
 void ImportExcel8::Externsheet( void )
 {
-    pExcRoot->pExtsheetBuffer->Read( aIn );
+    pExcRoot->pExtsheetBuffer->ReadExternsheet8( aIn );
     pExcRoot->pExtsheetBuffer->CreateTables( *pExcRoot );
 }
 
