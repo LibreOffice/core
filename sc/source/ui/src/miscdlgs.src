@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2001-03-06 09:01:38 $
+ *  last change: $Author: rt $ $Date: 2001-03-21 21:03:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text [ english_us ] = "Delete entire ~column(s)" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "…Њ≥э’ыЅ–(~C)";
-        Text[ russian ] = "”далить весь столбец";
+        Text[ russian ] = "”далить всю колонку";
         Text[ polish ] = "Usuс ca≥e kolumny";
         Text[ japanese ] = "СSЧсВрНнПЬ(~C)";
         Text[ chinese_traditional ] = "ІR∞£Њгƒж(~C)";
@@ -321,7 +321,7 @@ ModalDialog RID_SCDLG_INSCELL
         Text [ english_us ] = "Entire ~column" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "≤е»л’ыЅ–(~C)";
-        Text[ russian ] = "¬ставить весь столбец";
+        Text[ russian ] = "¬ставить всю колонку";
         Text[ polish ] = "Wstaw ca≥e kolumny";
         Text[ japanese ] = "ЧсВћС}Уь(~C)";
         Text[ chinese_traditional ] = "і°§JЊгƒж(~C)";
@@ -554,7 +554,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text [ english_us ] = "~Strings" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "„÷іЃ(~S)";
-        Text[ russian ] = "—трока символов";
+        Text[ russian ] = "—троки символов";
         Text[ polish ] = "Ciєgi znakуw";
         Text[ japanese ] = "ХґОЪЧс(~S)";
         Text[ chinese_traditional ] = "¶r¶к(~S)";
@@ -867,7 +867,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text [ english_us ] = "~Strings" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "„÷іЃ(~R)";
-        Text[ russian ] = "—троки";
+        Text[ russian ] = "—троки символов";
         Text[ polish ] = "Ciєgi znakуw";
         Text[ japanese ] = "ХґОЪЧс(~R)";
         Text[ chinese_traditional ] = "¶r¶к(~R)";
@@ -1597,7 +1597,7 @@ ModalDialog RID_SCDLG_MOVETAB
     Text[ chinese_simplified ] = "“∆ґѓїтЄі÷∆є§„ч±н";
     Text[ russian ] = "ѕереместить/скопировать лист";
     Text[ polish ] = "PrzenieЬ/Kopiuj arkusz";
-    Text[ japanese ] = "Х\\ВћИЏУЃ/ЇЋя∞";
+    Text[ japanese ] = "Х\\ВћИЏУЃВ№ВљВЌЇЋя∞";
     Text[ chinese_traditional ] = "≤Њ∞ ©ќљ∆їs§uІ@™н";
     Text[ arabic ] = " Ќ—ня\\д”ќ «бћѕжб";
     Text[ greek ] = "ћефбкянзуз/Ѕнфйгсбцё рянбкб";
@@ -2332,7 +2332,7 @@ ModalDialog RID_SCDLG_SHOW_TAB
         Text[ chinese_simplified ] = "“ю»лµƒє§„ч±н";
         Text[ russian ] = "—пр€танные листы";
         Text[ polish ] = "Ukryte arkusze";
-        Text[ japanese ] = "Х\\О¶ВЈВйХ\\";
+        Text[ japanese ] = "Х\\О¶В≥ВкВƒВҐВ»ВҐХ\\";
         Text[ chinese_traditional ] = "Ѕф§J™Ї§uІ@™н";
         Text[ arabic ] = "«бћѕ«жб «бгќЁн…";
         Text[ greek ] = " схцпя рянбкет";
@@ -2772,7 +2772,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ chinese_simplified ] = "„‘ґѓ≥дћо(~A)";
         Text[ russian ] = "јвтозаполнение";
         Text[ polish ] = "Autowype≥nianie";
-        Text[ japanese ] = "О©УЃУьЧЌ(~A)";
+        Text[ japanese ] = "µ∞ƒЇЁћяЎ∞ƒ(~A)";
         Text[ chinese_traditional ] = "¶џ∞ ґс§J(~A)";
         Text[ arabic ] = " Џ»∆…  бё«∆н…";
         Text[ greek ] = "Ѕхфп√Ёмйумб";
@@ -3140,7 +3140,7 @@ ModalDialog RID_SCDLG_GROUP
     Text [ english_us ] = "Group" ;
     Text[ chinese_simplified ] = "Ј÷„й";
     Text[ russian ] = "√руппировать";
-    Text[ polish ] = "Grupowanie";
+    Text[ polish ] = "Grupuj";
     Text[ japanese ] = "Єёў∞ћяЙї";
     Text[ chinese_traditional ] = "Єs≤’";
     Text[ arabic ] = " ћгнЏ";
