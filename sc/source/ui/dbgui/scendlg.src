@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scendlg.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-31 22:01:47 $
+ *  last change: $Author: rt $ $Date: 2001-08-07 15:23:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,10 +135,10 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ swedish ] = "Visa ~ram";
         Text[ polish ] = "Poka¿ ramkê";
         Text[ portuguese_brazilian ] = "Rahmen anzeigen in";
-        Text[ japanese ] = "˜g‚ğ•\\¦";
-        Text[ korean ] = "Å×µÎ¸® Ç¥½Ã";
-        Text[ chinese_simplified ] = "ÏÔÊ¾±ß¿ò";
-        Text[ chinese_traditional ] = "Åã¥ÜÃä®Ø";
+        Text[ japanese ] = "æ ã‚’è¡¨ç¤º";
+        Text[ korean ] = "í…Œë‘ë¦¬ í‘œì‹œ";
+        Text[ chinese_simplified ] = "æ˜¾ç¤ºè¾¹æ¡†";
+        Text[ chinese_traditional ] = "é¡¯ç¤ºé‚Šæ¡†";
         Text[ turkish ] = "Çerçeve rengi";
         Text[ arabic ] = "ÅÙåÇÑ ÇáßÇÏÑ ÈÇááæä";
         Text[ catalan ] = "Mostrar borde en";
@@ -168,15 +168,15 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text [ french ] = "Imprimer le cadre" ;
         Text [ dutch ] = "Kader afdrukken" ;
         Text [ portuguese ] = "Imprimir moldura" ;
-        Text[ chinese_simplified ] = "´òÓ¡±ß¿ò";
+        Text[ chinese_simplified ] = "æ‰“å°è¾¹æ¡†";
         Text[ russian ] = "Ïå÷àòü ğàìîê";
         Text[ polish ] = "Drukuj ramkê";
-        Text[ japanese ] = "˜g‚Ìˆóü";
+        Text[ japanese ] = "æ ã®å°åˆ·";
         Text[ language_user1 ] = " ";
-        Text[ chinese_traditional ] = "¦C¦LÃä®Ø";
+        Text[ chinese_traditional ] = "åˆ—å°é‚Šæ¡†";
         Text[ arabic ] = "ØÈÇÚÉ ßÇÏÑ";
         Text[ greek ] = "Åêôığùóç ğëáéóßïõ";
-        Text[ korean ] = "Å×µÎ¸® ÀÎ¼â";
+        Text[ korean ] = "í…Œë‘ë¦¬ ì¸ì‡„";
         Text[ turkish ] = "Çerçeveyi yazdır";
         Text[ catalan ] = "Imprimir borde";
         Text[ finnish ] = "Tulosta reunus";
@@ -197,14 +197,14 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text [ french ] = "~Recopier" ;
         Text [ dutch ] = "~Terugkopiëren" ;
         Text [ portuguese ] = "~Recopiar" ;
-        Text[ chinese_simplified ] = "¸´ÖÆ»ØÀ´";
+        Text[ chinese_simplified ] = "å¤åˆ¶å›æ¥";
         Text[ russian ] = "Îáğàòíîå êîïèğîâàíèå";
         Text[ polish ] = "Kopiuj z powrotem";
-        Text[ japanese ] = "Œ³‚Ì’l‚É–ß‚·";
-        Text[ chinese_traditional ] = "½Æ»s¦^¨Ó";
+        Text[ japanese ] = "å…ƒã®å€¤ã«æˆ»ã™";
+        Text[ chinese_traditional ] = "è¤‡è£½å›ä¾†";
         Text[ arabic ] = "ÅÚÇÏÉ ÇáäÓÎ";
         Text[ greek ] = "ÁíôéãñáöŞ ğßó~ù";
-        Text[ korean ] = "¿ªÀ¸·Î º¹»ç";
+        Text[ korean ] = "ì—­ìœ¼ë¡œ ë³µì‚¬";
         Text[ turkish ] = "Geri kopyala";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Actualizar escenario con valores modificados";
@@ -226,14 +226,14 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text [ french ] = "Attributs" ;
         Text [ dutch ] = "Attributen" ;
         Text [ portuguese ] = "Atributos" ;
-        Text[ chinese_simplified ] = "ÊôĞÔ";
+        Text[ chinese_simplified ] = "å±æ€§";
         Text[ russian ] = "Àòğèáóòû";
         Text[ polish ] = "Atrybuty";
-        Text[ japanese ] = "‘®«";
-        Text[ chinese_traditional ] = "Äİ©Ê";
+        Text[ japanese ] = "å±æ€§";
+        Text[ chinese_traditional ] = "å±¬æ€§";
         Text[ arabic ] = "ÇáÓãÇÊ";
         Text[ greek ] = "Éäéüôçôåò";
-        Text[ korean ] = "¼Ó¼º";
+        Text[ korean ] = "ì†ì„±";
         Text[ turkish ] = "Öznitelik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Atributos";
@@ -251,18 +251,18 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text [ swedish ] = "Kopiera endast värden" ;
         Text [ danish ] = "Kopier kun værdier" ;
         Text [ italian ] = "Copia solo i valori" ;
-        Text [ spanish ] = "Copiar solo valores" ;
+        Text [ spanish ] = "Copiar sólo valores" ;
         Text [ french ] = "Ne copier que les valeurs" ;
         Text [ dutch ] = "Alleen waarden kopiëren" ;
         Text [ portuguese ] = "Copiar só valores" ;
-        Text[ chinese_simplified ] = "Ö»¸´ÖÆÊıÖµ";
+        Text[ chinese_simplified ] = "åªå¤åˆ¶æ•°å€¼";
         Text[ russian ] = "Êîïèğîâàòü òîëüêî çíà÷åíèÿ";
         Text[ polish ] = "Kopiuj tylko wartoœci";
-        Text[ japanese ] = "”’l‚Ì‚İºËß°";
-        Text[ chinese_traditional ] = "¥u½Æ»s¼Æ­È";
+        Text[ japanese ] = "æ•°å€¤ã®ã¿ï½ºï¾‹ï¾Ÿï½°";
+        Text[ chinese_traditional ] = "åªè¤‡è£½æ•¸å€¼";
         Text[ arabic ] = "äÓÎ ÇáŞíã İŞØ";
         Text[ greek ] = "ÁíôéãñáöŞ ìüíï ôùí ôéìşí";
-        Text[ korean ] = "°ª¸¸ º¹»ç";
+        Text[ korean ] = "ê°’ë§Œ ë³µì‚¬";
         Text[ turkish ] = "Yalnızca değerleri kopyala";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Copiar solo valores";
@@ -283,14 +283,14 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text [ french ] = "~Copier la feuille entière" ;
         Text [ dutch ] = "Hele ~tabel kopiëren" ;
         Text [ portuguese ] = "Copiar ~tabela inteira" ;
-        Text[ chinese_simplified ] = "¸´ÖÆÕû¸ö¹¤×÷±í";
+        Text[ chinese_simplified ] = "å¤åˆ¶æ•´ä¸ªå·¥ä½œè¡¨";
         Text[ russian ] = "Êîïèğîâàòü âåñü ëèñò";
         Text[ polish ] = "Kopiuj ca³y arkusz";
-        Text[ japanese ] = "•\\‘S‘Ì‚ğºËß°";
-        Text[ chinese_traditional ] = "½Æ»s¾ã­Ó¤u§@ªí";
+        Text[ japanese ] = "è¡¨å…¨ä½“ã‚’ï½ºï¾‹ï¾Ÿï½°";
+        Text[ chinese_traditional ] = "è¤‡è£½æ•´å€‹å·¥ä½œè¡¨";
         Text[ arabic ] = "äÓÎ ßá ÇáÌÏæá";
         Text[ greek ] = "Áí~ôéãñáöŞ ïëüêëçñïõ ğßíáêá";
-        Text[ korean ] = "¸ğµç Å×ÀÌºí º¹»ç";
+        Text[ korean ] = "ëª¨ë“  í…Œì´ë¸” ë³µì‚¬";
         Text[ turkish ] = "Tablonun tümünü kopyala";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Copiar toda la hoja";
@@ -309,14 +309,14 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text [ spanish ] = "Editar escenario" ;
         Text [ french ] = "Éditer le scénario" ;
         Text [ dutch ] = "Scenario bewerken" ;
-        Text[ chinese_simplified ] = "±à¼­·½°¸";
+        Text[ chinese_simplified ] = "ç¼–è¾‘æ–¹æ¡ˆ";
         Text[ russian ] = "Ïğàâêà ñöåíàğèÿ";
         Text[ polish ] = "Edytuj scenariusz";
-        Text[ japanese ] = "¼ÅØµ‚Ì•ÒW";
-        Text[ chinese_traditional ] = "½s¿è¤ÀªRÂÅ¥»";
+        Text[ japanese ] = "ï½¼ï¾…ï¾˜ï½µã®ç·¨é›†";
+        Text[ chinese_traditional ] = "ç·¨è¼¯åˆ†æè—æœ¬";
         Text[ arabic ] = "ÊÍÑíÑ ÇáÓíäÇÑíæ";
         Text[ greek ] = "Åğåîåñãáóßá óåíáñßïõ";
-        Text[ korean ] = "½Ã³ª¸®¿À ÆíÁı";
+        Text[ korean ] = "ì‹œë‚˜ë¦¬ì˜¤ í¸ì§‘";
         Text[ turkish ] = "Senaryoyu düzenle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Editar escenario";
@@ -337,14 +337,14 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text [ PORTUGUESE_BRAZILIAN ] = "Criado por" ;
         Text [ SWEDISH ] = "Skapat av" ;
         Text [ PORTUGUESE ] = "Criado por" ;
-        Text[ chinese_simplified ] = "×÷Õß";
+        Text[ chinese_simplified ] = "ä½œè€…";
         Text[ russian ] = "Ñîçäàíî";
         Text[ polish ] = "Utworzony przez";
-        Text[ japanese ] = "ì¬Ò";
-        Text[ chinese_traditional ] = "§@ªÌ";
+        Text[ japanese ] = "ä½œæˆè€…";
+        Text[ chinese_traditional ] = "ä½œè€…";
         Text[ arabic ] = "ÃäÔÃ ÇáÓíäÇÑíæ";
         Text[ greek ] = "ÄçìéïõñãŞèçêå áğü";
-        Text[ korean ] = "·Î ¸¸µé±â";
+        Text[ korean ] = "ë¡œ ë§Œë“¤ê¸°";
         Text[ turkish ] = "Yazan";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Creado por";
@@ -364,14 +364,14 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text [ PORTUGUESE_BRAZILIAN ] = "em" ;
         Text [ SWEDISH ] = "den" ;
         Text [ PORTUGUESE ] = "em" ;
-        Text[ chinese_simplified ] = "ÈÕÆÚ£º";
+        Text[ chinese_simplified ] = "æ—¥æœŸï¼š";
         Text[ russian ] = "â";
         Text[ polish ] = "dnia";
-        Text[ japanese ] = "“ú•t";
-        Text[ chinese_traditional ] = "¤é´Á¡G";
+        Text[ japanese ] = "æ—¥ä»˜";
+        Text[ chinese_traditional ] = "æ—¥æœŸï¼š";
         Text[ arabic ] = "ÈÊÇÑíÎ";
         Text[ greek ] = "ôéò";
-        Text[ korean ] = "À§Ä¡";
+        Text[ korean ] = "ìœ„ì¹˜";
         Text[ turkish ] = "tarih:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "en";
@@ -391,14 +391,14 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ swedish ] = "~Namn på scenariot";
         Text[ dutch ] = "~Naam van het scenario";
         Text[ spanish ] = "Nombre del escenario";
-        Text[ chinese_simplified ] = "·½°¸Ãû³Æ";
+        Text[ chinese_simplified ] = "æ–¹æ¡ˆåç§°";
         Text[ russian ] = "Íàçâàíèå ñöåíàğèÿ";
         Text[ polish ] = "Nazwa scenariusza";
-        Text[ japanese ] = "¼ÅØµ–¼";
-        Text[ chinese_traditional ] = "¤ÀªRÂÅ¥»ªº¦WºÙ";
+        Text[ japanese ] = "ï½¼ï¾…ï¾˜ï½µå";
+        Text[ chinese_traditional ] = "åˆ†æè—æœ¬çš„åç¨±";
         Text[ arabic ] = "ÇÓã ÇáÓíäÇÑíæ";
         Text[ greek ] = "¼~íïìá óåíáñßïõ";
-        Text[ korean ] = "½Ã³ª¸®¿À ÀÌ¸§";
+        Text[ korean ] = "ì‹œë‚˜ë¦¬ì˜¤ ì´ë¦„";
         Text[ turkish ] = "Senaryonun adı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nombre del escenario";
@@ -419,14 +419,14 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ swedish ] = "~Kommentar";
         Text[ dutch ] = "~Commentaar";
         Text[ spanish ] = "Comentario";
-        Text[ chinese_simplified ] = "×¢½â";
+        Text[ chinese_simplified ] = "æ³¨è§£";
         Text[ russian ] = "Êîììåíòàğèè";
         Text[ polish ] = "Komentarz";
-        Text[ japanese ] = "ºÒİÄ";
-        Text[ chinese_traditional ] = "µù¸Ñ";
+        Text[ japanese ] = "ï½ºï¾’ï¾ï¾„";
+        Text[ chinese_traditional ] = "è¨»è§£";
         Text[ arabic ] = "ÇáÊÚáíŞ";
         Text[ greek ] = "Ó÷üëéï";
-        Text[ korean ] = "ÁÖ¼®";
+        Text[ korean ] = "ì£¼ì„";
         Text[ turkish ] = "Açıklama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Comentario";
@@ -447,31 +447,32 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ swedish ] = "Inställningar";
         Text[ dutch ] = "Instellingen";
         Text[ spanish ] = "Configuración";
-        Text[ chinese_simplified ] = "Éè¶¨";
+        Text[ chinese_simplified ] = "è®¾å®š";
         Text[ russian ] = "Íàñòğîéêè";
         Text[ polish ] = "Ustawienia";
-        Text[ japanese ] = "İ’è";
-        Text[ chinese_traditional ] = "³]©w";
+        Text[ japanese ] = "è¨­å®š";
+        Text[ chinese_traditional ] = "è¨­å®š";
         Text[ arabic ] = "ÅÚÏÇÏÇÊ";
         Text[ greek ] = "Ñõèìßóåéò";
-        Text[ korean ] = "¼³Á¤";
+        Text[ korean ] = "ì„¤ì •";
         Text[ turkish ] = "Ayarlar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Configuración";
         Text[ finnish ] = "Asetukset";
     };
-    Text[ chinese_simplified ] = "½¨Á¢·½°¸";
+    Text[ chinese_simplified ] = "å»ºç«‹æ–¹æ¡ˆ";
     Text[ russian ] = "Ñîçäàòü ñöåíàğèé";
     Text[ polish ] = "Utwórz scenariusz";
-    Text[ japanese ] = "¼ÅØµ‚Ìì¬";
-    Text[ chinese_traditional ] = "«Ø¥ß¤ÀªRÂÅ¥»";
+    Text[ japanese ] = "ï½¼ï¾…ï¾˜ï½µã®ä½œæˆ";
+    Text[ chinese_traditional ] = "å»ºç«‹åˆ†æè—æœ¬";
     Text[ arabic ] = "ÅäÔÇÁ ÓíäÇÑíæ";
     Text[ greek ] = "Äçìéïõñãßá óåíáñßïõ";
-    Text[ korean ] = "½Ã³ª¸®¿À ¸¸µé±â";
+    Text[ korean ] = "ì‹œë‚˜ë¦¬ì˜¤ ë§Œë“¤ê¸°";
     Text[ turkish ] = "Senaryo oluştur";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Crear escenario";
 };
+
 
 
 
