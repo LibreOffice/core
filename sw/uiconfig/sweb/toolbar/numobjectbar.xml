@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+ <toolbar:toolbaritem xlink:href=".uno:DefaultNumbering" toolbar:helpid="helpid:20144" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:DefaultBullet" toolbar:helpid="helpid:20138" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:RemoveBullets" toolbar:helpid="helpid:20137" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:IncrementLevel" toolbar:helpid="helpid:20131" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:DecrementLevel" toolbar:helpid="helpid:20130" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:IncrementSubLevels" toolbar:helpid="helpid:20140" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:DecrementSubLevels" toolbar:helpid="helpid:20139" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertNeutralParagraph" toolbar:helpid="helpid:20136" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:MoveUp" toolbar:helpid="helpid:20134" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:MoveDown" toolbar:helpid="helpid:20135" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:MoveUpSubItems" toolbar:helpid="helpid:20141" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:MoveDownSubItems" toolbar:helpid="helpid:20142" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:NumberingStart" toolbar:helpid="helpid:21738" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:BulletsAndNumberingDialog" toolbar:helpid="helpid:20121" toolbar:text="" />
+</toolbar:toolbar>
