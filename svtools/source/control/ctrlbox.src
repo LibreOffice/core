@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-11 20:05:03 $
+ *  last change: $Author: kz $ $Date: 2001-09-21 20:12:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ String STR_SVT_COLLATE_ALPHANUMERIC
     Text[ portuguese ] = "AlfanumÈrico";
     Text[ russian ] = "¿ÎÙ‡‚ËÚÌÓ-ˆËÙÓ‚ÓÈ";
     Text[ greek ] = "Alphanumeric";
-    Text[ dutch ] = "Alphanumeric";
+    Text[ dutch ] = "Alfanumeriek";
     Text[ french ] = "AlphanumÈrique";
     Text[ spanish ] = "AlfanumÈrico";
     Text[ finnish ] = "Alphanumeric";
@@ -307,6 +307,26 @@ String STR_SVT_COLLATE_UNICODE
     /* sorting according to the unicode code point of the character */
     Text = "Unicode" ;
     Text [ ENGLISH ] = "Unicode" ;
+    Text[ english_us ] = "Unicode";
+    Text[ portuguese ] = "Unicode";
+    Text[ russian ] = "ﬁÌËÍÓ‰";
+    Text[ greek ] = "Unicode";
+    Text[ dutch ] = "Unicode";
+    Text[ french ] = "Unicode";
+    Text[ spanish ] = "Unicode";
+    Text[ finnish ] = "Unicode";
+    Text[ italian ] = "Unicode";
+    Text[ danish ] = "Unicode";
+    Text[ swedish ] = "Unicode";
+    Text[ polish ] = "Unicode";
+    Text[ portuguese_brazilian ] = "Unicode";
+    Text[ japanese ] = "ÔæïÔæÜÔΩ∫ÔΩ∞ÔæÑÔæû";
+    Text[ korean ] = "Unicode";
+    Text[ chinese_simplified ] = "Áªü‰∏ÄÁ†Å";
+    Text[ chinese_traditional ] = "Unicode";
+    Text[ turkish ] = "Unicode";
+    Text[ arabic ] = "Unicode";
+    Text[ catalan ] = "Unicode";
 };
 
 String STR_SVT_COLLATE_ZHUYIN
@@ -335,6 +355,7 @@ String STR_SVT_COLLATE_ZHUYIN
     Text[ catalan ] = "Zhuyin";
     Text[ finnish ] = "Zhuyin";
 };
+
 
 
 
