@@ -355,7 +355,7 @@ hedabu: ..\inc\AccessibleBrowseBoxTableBase.hxx %_DEST%\inc%_EXT%\svtools\Access
 hedabu: ..\inc\AccessibleBrowseBoxTable.hxx %_DEST%\inc%_EXT%\svtools\AccessibleBrowseBoxTable.hxx
 hedabu: ..\inc\AccessibleBrowseBoxHeaderBar.hxx %_DEST%\inc%_EXT%\svtools\AccessibleBrowseBoxHeaderBar.hxx
 hedabu: ..\inc\AccessibleBrowseBoxHeaderCell.hxx %_DEST%\inc%_EXT%\svtools\AccessibleBrowseBoxHeaderCell.hxx
-hedabu: ..\inc\AccessibleBrowseBoxTableCell.hxx %_DEST%\inc%_EXT%\svtools\AccessibleBrowseBoxTableCell.hxx
+hedabu: ..\inc\AccessibleBrowseBoxTableCell.hxx %_DEST%\inc%_EXT%\svtools\accessiblebrowseboxcell.hxx
 
 hedabu: ..\inc\helpid.hrc %_DEST%\inc%_EXT%\svtools\helpid.hrc
 hedabu: ..\inc\wizardheader.hxx %_DEST%\inc%_EXT%\svtools\wizardheader.hxx
