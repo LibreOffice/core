@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgutil.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-04 11:09:57 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:21:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,10 @@
 #include <svtools/intitem.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 // macro -----------------------------------------------------------------
 
 #if SUPD<609
@@ -98,40 +102,40 @@ typedef long (*FUNC_CONVERT)(long);
 // Functions -------------------------------------------------------------
 
 // HM- und LanguageStrings aus der Resource laden
-String  GetLanguageString( LanguageType eType );
-String  GetDicInfoStr( const String& rName, const USHORT nLang,
+SVX_DLLPUBLIC String    GetLanguageString( LanguageType eType );
+SVX_DLLPUBLIC String    GetDicInfoStr( const String& rName, const USHORT nLang,
                        const BOOL bNeg );
 
 // FieldUnit im MetricField oder -Box umsetzen
-void SetFieldUnit( MetricField& rCtrl,
+SVX_DLLPUBLIC void SetFieldUnit( MetricField& rCtrl,
                    FieldUnit eUnit, BOOL bAll = FALSE );
-void SetFieldUnit( MetricBox& rCtrl,
+SVX_DLLPUBLIC void SetFieldUnit( MetricBox& rCtrl,
                    FieldUnit eUnit, BOOL bAll = FALSE );
 
-FieldUnit GetModuleFieldUnit( const SfxItemSet* pSet = NULL );
+SVX_DLLPUBLIC FieldUnit GetModuleFieldUnit( const SfxItemSet* pSet = NULL );
 
 // Metriken umrechnen
-long        CalcToUnit( float nIn, SfxMapUnit eUnit );
-long        CalcToPoint( long nIn, SfxMapUnit eUnit, USHORT nFaktor );
+SVX_DLLPUBLIC long      CalcToUnit( float nIn, SfxMapUnit eUnit );
+SVX_DLLPUBLIC long      CalcToPoint( long nIn, SfxMapUnit eUnit, USHORT nFaktor );
 
-long        ItemToControl( long nIn, SfxMapUnit eItem, SfxFieldUnit eCtrl );
+SVX_DLLPUBLIC long      ItemToControl( long nIn, SfxMapUnit eItem, SfxFieldUnit eCtrl );
 long        ControlToItem( long nIn, SfxFieldUnit eCtrl, SfxMapUnit eItem );
 
-FieldUnit   MapToFieldUnit( const SfxMapUnit eUnit );
+SVX_DLLPUBLIC FieldUnit MapToFieldUnit( const SfxMapUnit eUnit );
 MapUnit     FieldToMapUnit( const SfxFieldUnit eUnit );
 
 long        ConvertValueToMap( long nVal, SfxMapUnit eUnit );
 long        ConvertValueToUnit( long nVal, SfxMapUnit eUnit );
 
-void        SetMetricValue( MetricField& rField,
+SVX_DLLPUBLIC void      SetMetricValue( MetricField& rField,
                             long lCoreValue, SfxMapUnit eUnit );
-long        GetCoreValue( const MetricField& rField, SfxMapUnit eUnit );
+SVX_DLLPUBLIC long      GetCoreValue( const MetricField& rField, SfxMapUnit eUnit );
 
 // to Twips
 long    CMToTwips( long nIn );
 long    MMToTwips( long nIn );
 long    InchToTwips( long nIn );
-long    PointToTwips( long nIn );
+SVX_DLLPUBLIC long  PointToTwips( long nIn );
 long    PicaToTwips( long nIn );
 
 // to CM
