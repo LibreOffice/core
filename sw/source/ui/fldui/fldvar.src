@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldvar.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:02:54 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:30:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,44 +69,15 @@ TabPage TP_FLD_VAR
     SVLook = TRUE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    Text = "Variablen" ;
-    Text [ ENGLISH ] = "Variables" ;
+    Text [ de ] = "Variablen" ;
     FixedText FT_VARTYPE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text = "~Feldtyp" ;
-        Text [ ENGLISH ] = "Type" ;
-        Text [ norwegian ] = "Type" ;
-        Text [ italian ] = "~Tipo di campo" ;
-        Text [ portuguese_brazilian ] = "~Tipo" ;
-        Text [ portuguese ] = "Tipo de ~campo" ;
-        Text [ finnish ] = "~Tyyppi" ;
-        Text [ danish ] = "~Type" ;
-        Text [ french ] = "~Type de champ" ;
-        Text [ swedish ] = "~Fälttyp" ;
-        Text [ dutch ] = "~Veldtype" ;
-        Text [ spanish ] = "~Tipo de campo" ;
-        Text [ english_us ] = "~Type" ;
+        Text [ de ] = "~Feldtyp" ;
+        Text [ en-US ] = "~Type" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "å­—æ®µç±»å‹(~T)";
-        Text[ russian ] = "Òèï ïîëÿ";
-        Text[ polish ] = "~Typ pola";
-        Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚¿ã‚¤ãƒ—(~T)";
-        Text[ chinese_traditional ] = "æ¬„ä½é¡å‹(~T)";
-        Text[ arabic ] = "äæÚ ÇáÍŞá";
-        Text[ greek ] = "~Ôığïò ğåäßïõ";
-        Text[ korean ] = "ìœ í˜•(~T)";
-        Text[ turkish ] = "A~lan tipi";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Tipus";
-        Text[ thai ] = "~à¸Šà¸™à¸´à¸”";
-        Text[ czech ] = "Typ";
-        Text[ hebrew ] = "â€®×¡×•×’â€¬";
-        Text[ hindi ] = "~à¤µà¤°à¥à¤—";
-        Text[ slovak ] = "~Typ";
-        Text[ hungarian ] = "~TÃ­pus";
-        Text[ slovenian ] = "~Vrsta";
+        Text [ x-comment ] = " ";
     };
     ListBox LB_VARTYPE
     {
@@ -121,37 +92,10 @@ TabPage TP_FLD_VAR
     {
         Pos = MAP_APPFONT ( 88 , 3 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text = "~Auswahl" ;
-        Text [ ENGLISH ] = "S~election" ;
+        Text [ de ] = "~Auswahl" ;
         Left = TRUE ;
-        Text [ english_us ] = "S~election" ;
-        Text [ portuguese_brazilian ] = "~Seleção" ;
-        Text [ swedish ] = "Urv~al" ;
-        Text [ danish ] = "Udvalg" ;
-        Text [ italian ] = "~Selezione" ;
-        Text [ spanish ] = "~Selección" ;
-        Text [ french ] = "~Sélection" ;
-        Text [ dutch ] = "~Selectie" ;
-        Text [ portuguese ] = "~Selecção" ;
-        Text[ chinese_simplified ] = "é€‰æ‹©(~E)";
-        Text[ russian ] = "Âûáîğ";
-        Text[ polish ] = "Wy~bór";
-        Text[ japanese ] = "é¸æŠ(~E)";
-        Text[ chinese_traditional ] = "é¸å–(~E)";
-        Text[ arabic ] = "ÇáÊÍÏíÏ";
-        Text[ greek ] = "~ÅğéëïãŞ";
-        Text[ korean ] = "ì„ íƒ(~E)";
-        Text[ turkish ] = "~Seçim";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Selecció";
-        Text[ finnish ] = "~Valinta";
-        Text[ thai ] = "à¹€à¸¥à¸·~à¸­à¸";
-        Text[ czech ] = "VÃ½bÄ›r";
-        Text[ hebrew ] = "â€®×‘×—×™×¨×”â€¬";
-        Text[ hindi ] = "à¤šà¥~à¤¨à¤¾à¤µ";
-        Text[ slovak ] = "VÃ½b~er";
-        Text[ hungarian ] = "K~ijelÃ¶lÃ©s";
-        Text[ slovenian ] = "~Izbor";
+        Text [ en-US ] = "S~election" ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_VARSELECTION
     {
@@ -165,37 +109,10 @@ TabPage TP_FLD_VAR
     {
         Pos = MAP_APPFONT ( 170 , 3 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
-        TEXT = "F~ormat" ;
-        TEXT [ English ] = "Format" ;
+        Text [ de ] = "F~ormat" ;
         Left = TRUE ;
-        Text [ english_us ] = "Format" ;
-        Text [ portuguese_brazilian ] = "Formato" ;
-        Text [ swedish ] = "F~ormat" ;
-        Text [ danish ] = "Format" ;
-        Text [ italian ] = "F~ormato" ;
-        Text [ spanish ] = "F~ormato" ;
-        Text [ french ] = "F~ormat" ;
-        Text [ dutch ] = "~Formaat" ;
-        Text [ portuguese ] = "F~ormato" ;
-        Text[ chinese_simplified ] = "æ ¼å¼";
-        Text[ russian ] = "Ôîğìàò";
-        Text[ polish ] = "Format";
-        Text[ japanese ] = "æ›¸å¼";
-        Text[ chinese_traditional ] = "æ ¼å¼";
-        Text[ arabic ] = "ÇáÊäÓíŞ";
-        Text[ greek ] = "Ì~ïñöŞ";
-        Text[ korean ] = "ì„œì‹";
-        Text[ turkish ] = "F~ormat";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Formata";
-        Text[ finnish ] = "Muotoilu";
-        Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸š";
-        Text[ czech ] = "FormÃ¡t";
-        Text[ hebrew ] = "â€®×¢×™×¦×•×‘â€¬";
-        Text[ hindi ] = "à¤°à¤šà¤¨à¤¾";
-        Text[ slovak ] = "FormÃ¡t";
-        Text[ hungarian ] = "FormÃ¡tum";
-        Text[ slovenian ] = "Oblika";
+        Text [ en-US ] = "Format" ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_VARFORMAT
     {
@@ -217,110 +134,28 @@ TabPage TP_FLD_VAR
     {
         Pos = MAP_APPFONT ( 170 , 141 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
-        TEXT = "~Unsichtbar" ;
-        TEXT [ English ] = "Invisible" ;
-        TEXT [ norwegian ] = "Usynlig" ;
-        TEXT [ italian ] = "Nascosto" ;
-        TEXT [ portuguese_brazilian ] = "In~visível" ;
-        TEXT [ portuguese ] = "~Invisível" ;
-        TEXT [ finnish ] = "~Näkymätön" ;
-        TEXT [ danish ] = "Usynlig" ;
-        TEXT [ french ] = "Invisible" ;
-        TEXT [ swedish ] = "Os~ynligt" ;
-        TEXT [ dutch ] = "~Onzichtbaar" ;
-        TEXT [ spanish ] = "Invisi~ble" ;
-        TEXT [ english_us ] = "Invisi~ble" ;
+        Text [ de ] = "~Unsichtbar" ;
+        Text [ en-US ] = "Invisi~ble" ;
         TabStop = TRUE ;
-        TEXT[ chinese_simplified ] = "éšå…¥çš„(~B)";
-        TEXT[ russian ] = "Íåâèäèìûé";
-        TEXT[ polish ] = "Niewid~oczny";
-        TEXT[ japanese ] = "éè¡¨ç¤º(~B)";
-        TEXT[ chinese_traditional ] = "éš±å…¥çš„(~B)";
-        TEXT[ arabic ] = "ÛíÑ ãÑÆí";
-        TEXT[ greek ] = "Ìç ïñáôÜ";
-        TEXT[ korean ] = "ìˆ¨ê¹€(~B)";
-        TEXT[ turkish ] = "Görünmez";
-        TEXT[ language_user1 ] = " ";
-        TEXT[ catalan ] = "invisi~ble";
-        TEXT[ thai ] = "à¸¡à¸­à¸‡à¹„à¸¡à¹ˆà¹€~à¸«à¹‡à¸™";
-        TEXT[ czech ] = "NeviditelnÃ½";
-        TEXT[ hebrew ] = "~Unsichtbar";
-        TEXT[ hindi ] = "à¤…~à¤—à¥‹à¤šà¤°";
-        TEXT[ slovak ] = "Nevi~diteÄ¾nÃ½";
-        TEXT[ hungarian ] = "~LÃ¡thatatlan";
-        TEXT[ slovenian ] = "~Nevidno";
+        Text [ x-comment ] = " ";
     };
     FixedText FT_VARCHAPTERHEADER
     {
         Pos = MAP_APPFONT ( 170 , 112 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
         Hide = TRUE ;
-        TEXT = "Kapitelweise Nummerierung" ;
-        TEXT [ English ] = "Chapter numbering" ;
-        Text [ english_us ] = "Numbering by chapter" ;
-        Text [ portuguese_brazilian ] = "Numeração por capítulo" ;
-        Text [ swedish ] = "Numrering kapitelvis" ;
-        Text [ danish ] = "Kapitelvis nummerering" ;
-        Text [ italian ] = "Numerazione a capitoli" ;
-        Text [ spanish ] = "Numeración por capítulos" ;
-        Text [ french ] = "Numérotation par chapitre" ;
-        Text [ dutch ] = "Hoofdstuksgewijs nummeren" ;
-        Text [ portuguese ] = "Numeração por capítulos" ;
-        Text[ chinese_simplified ] = "æŒ‰ç« èŠ‚ç¼–å·";
-        Text[ russian ] = "Íóìåğàöèÿ ïî ãëàâàì";
-        Text[ polish ] = "Numeracja wed³ug rozdzia³ów ";
-        Text[ japanese ] = "ç« ã”ã¨ã®ç•ªå·ä»˜ã‘";
-        Text[ chinese_traditional ] = "æŒ‰ç« ç¯€ç·¨è™Ÿ";
-        Text[ arabic ] = "ÊÑŞíã İÕæá";
-        Text[ greek ] = "Áñßèìçóç êáôÜ êåöÜëáéá";
-        Text[ korean ] = "ì¥ë³„ë¡œ ë²ˆí˜¸ ë§¤ê¸°ê¸°";
-        Text[ turkish ] = "Bölüme göre numaralama";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Numeració de capítols";
-        Text[ finnish ] = "Numerointi luvuittain";
-        Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚à¹‚à¸”à¸¢à¸šà¸—";
-        Text[ czech ] = "ÄŒÃ­slovÃ¡nÃ­ podle kapitol";
-        Text[ hebrew ] = "Kapitelweise Nummerierung";
-        Text[ hindi ] = "à¤…à¤§à¥à¤¯à¤¾à¤¯ à¤•à¥‡ à¤…à¤¨à¥à¤¸à¤¾à¤° à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾ ";
-        Text[ slovak ] = "ÄŒÃ­slovanie podÄ¾a kapitol";
-        Text[ hungarian ] = "Fejezet szerinti szÃ¡mozÃ¡s";
-        Text[ slovenian ] = "OÅ¡tevilÄevanje po poglavjih";
+        Text [ de ] = "Kapitelweise Nummerierung" ;
+        Text [ en-US ] = "Numbering by chapter" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_VARCHAPTERLEVEL
     {
         Pos = MAP_APPFONT ( 175 , 125 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
         Hide = TRUE ;
-        TEXT = "E~bene" ;
-        TEXT [ English ] = "Level" ;
-        Text [ english_us ] = "~Level" ;
-        Text [ portuguese_brazilian ] = "~Nível" ;
-        Text [ swedish ] = "~Nivå" ;
-        Text [ danish ] = "~Niveau" ;
-        Text [ italian ] = "Li~vello" ;
-        Text [ spanish ] = "~Nivel" ;
-        Text [ french ] = "Ni~veau" ;
-        Text [ dutch ] = "N~iveau" ;
-        Text [ portuguese ] = "~Nível" ;
-        Text[ chinese_simplified ] = "çº§(~L)";
-        Text[ russian ] = "Óğîâåíü";
-        Text[ polish ] = "P~oziom";
-        Text[ japanese ] = "ãƒ¬ãƒ™ãƒ«(~L)";
-        Text[ chinese_traditional ] = "ç´š(~L)";
-        Text[ arabic ] = "ÇáãÓÊæì";
-        Text[ greek ] = "Åğßğåäï";
-        Text[ korean ] = "ìˆ˜ì¤€(~L)";
-        Text[ turkish ] = "D~üzey";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Nivell";
-        Text[ finnish ] = "~Taso";
-        Text[ thai ] = "~à¸£à¸°à¸”à¸±à¸š";
-        Text[ czech ] = "ÃšroveÅˆ";
-        Text[ hebrew ] = "E~bene";
-        Text[ hindi ] = "~à¤¸à¥à¤¤à¤°";
-        Text[ slovak ] = "Ãšro~veÅˆ";
-        Text[ hungarian ] = "~Szint";
-        Text[ slovenian ] = "~Raven";
+        Text [ de ] = "E~bene" ;
+        Text [ en-US ] = "~Level" ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_VARCHAPTERLEVEL
     {
@@ -330,125 +165,17 @@ TabPage TP_FLD_VAR
         Size = MAP_APPFONT ( 46 , 76 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList =
+        StringList [ de ] =
         {
             < "Keine" ; > ;
         };
-        stringlist [ english ] =
-        {
-            < "Keine" ; > ;
-        };
-        stringlist [ english_us ] =
+        StringList [ en-US ] =
         {
             < "None" ; > ;
         };
-        stringlist [ portuguese_brazilian ] =
-        {
-            < "Nenhum" ; > ;
-        };
-        stringlist [ swedish ] =
-        {
-            < "Ingen" ; > ;
-        };
-        stringlist [ danish ] =
-        {
-            < "Ingen" ; > ;
-        };
-        stringlist [ italian ] =
-        {
-            < "Senza" ; > ;
-        };
-        stringlist [ spanish ] =
-        {
-            < "Ninguno" ; > ;
-        };
-        stringlist [ french ] =
-        {
-            < "Aucun(e)" ; > ;
-        };
-        stringlist [ dutch ] =
-        {
-            < "Geen" ; > ;
-        };
-        stringlist [ portuguese ] =
-        {
-            < "Nenhum" ; > ;
-        };
-    StringList [ chinese_simplified ] =
-    {
-             < "æ— " ; > ;
-    };
-    StringList [ russian ] =
-    {
-             < "Íåò" ; > ;
-    };
-    StringList [ polish ] =
-    {
-             < "Brak" ; > ;
-    };
-    StringList [ japanese ] =
-    {
-             < "ãªã—" ; > ;
-    };
-    StringList [ language_user1 ] =
+    StringList [ x-comment ] =
     {
              < " " ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-             < "ç„¡" ; > ;
-    };
-    StringList [ arabic ] =
-    {
-             < "ÈÏæä" ; > ;
-    };
-    StringList [ greek ] =
-    {
-             < "Êáíİíá" ; > ;
-    };
-    StringList [ korean ] =
-    {
-             < "ì—†ìŒ" ; > ;
-    };
-    StringList [ turkish ] =
-    {
-             < "Yok" ; > ;
-    };
-    StringList [ catalan ] =
-    {
-             < "Cap" ; > ;
-    };
-    StringList [ finnish ] =
-    {
-             < "Ei mitään" ; > ;
-    };
-    StringList [ thai ] =
-    {
-         < "à¹„à¸¡à¹ˆà¸¡à¸µ" ; > ;
-    };
-    StringList [ czech ] =
-    {
-         < "Nic" ; > ;
-    };
-    StringList [ hebrew ] =
-    {
-         < "â€®×œ×œ×â€¬" ; > ;
-    };
-    StringList [ hindi ] =
-    {
-         < "à¤•à¥‹à¤ˆ à¤¨à¤¹à¥€à¤‚" ; > ;
-    };
-    StringList [ slovak ] =
-    {
-         < "Å½iadne" ; > ;
-    };
-    StringList [ hungarian ] =
-    {
-         < "Semmi" ; > ;
-    };
-    StringList [ slovenian ] =
-    {
-         < "Brez" ; > ;
     };
     };
     FixedText FT_VARSEPARATOR
@@ -456,36 +183,9 @@ TabPage TP_FLD_VAR
         Pos = MAP_APPFONT ( 175 , 140 ) ;
         Size = MAP_APPFONT ( 30 , 10 ) ;
         Hide = TRUE ;
-        TEXT = "~Trenner" ;
-        TEXT [ English ] = "Separator" ;
-        Text [ english_us ] = "~Separator" ;
-        Text [ portuguese_brazilian ] = "~Separador" ;
-        Text [ swedish ] = "Skilje~tecken" ;
-        Text [ danish ] = "~Separator" ;
-        Text [ italian ] = "~Separatore" ;
-        Text [ spanish ] = "~Separador" ;
-        Text [ french ] = "~Séparateur" ;
-        Text [ dutch ] = "~Scheidingsteken" ;
-        Text [ portuguese ] = "~Separador" ;
-        Text[ chinese_simplified ] = "åˆ†éš”ç¬¦(~S)";
-        Text[ russian ] = "Ğàçäåëèò.";
-        Text[ polish ] = "S~eparator";
-        Text[ japanese ] = "åŒºåˆ‡ã‚Šè¨˜å·(~S)";
-        Text[ chinese_traditional ] = "é€£æ¥ç¬¦(~S)";
-        Text[ arabic ] = "İÇÕá";
-        Text[ greek ] = "Äéá÷ùñéóôéêü";
-        Text[ korean ] = "êµ¬ë¶„ ê¸°í˜¸(~S)";
-        Text[ turkish ] = "A~yırma işareti";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Separador";
-        Text[ finnish ] = "~Erotin";
-        Text[ thai ] = "~à¸•à¸±à¸§à¹à¸¢à¸";
-        Text[ czech ] = "OddÄ›lovaÄ";
-        Text[ hebrew ] = "~Trenner";
-        Text[ hindi ] = "~à¤…à¤²à¤—à¤¾à¤¨à¥‡à¤µà¤¾à¤²à¤¾";
-        Text[ slovak ] = "O~ddeÄ¾ovaÄ";
-        Text[ hungarian ] = "~ElvÃ¡lasztÃ³";
-        Text[ slovenian ] = "~LoÄilo";
+        Text [ de ] = "~Trenner" ;
+        Text [ en-US ] = "~Separator" ;
+        Text [ x-comment ] = " ";
     };
     Edit ED_VARSEPARATOR
     {
@@ -500,37 +200,10 @@ TabPage TP_FLD_VAR
     {
         Pos = MAP_APPFONT ( 6 , 155 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text = "Na~me" ;
-        TEXT [ English ] = "Na~me" ;
+        Text [ de ] = "Na~me" ;
         Left = TRUE ;
-        Text [ english_us ] = "Na~me" ;
-        Text [ portuguese_brazilian ] = "~Nome" ;
-        Text [ swedish ] = "Na~mn" ;
-        Text [ danish ] = "Na~vn" ;
-        Text [ italian ] = "No~me" ;
-        Text [ spanish ] = "~Nombre" ;
-        Text [ french ] = "Nom" ;
-        Text [ dutch ] = "N~aam" ;
-        Text [ portuguese ] = "No~me" ;
-        Text[ chinese_simplified ] = "åç§°(~M)";
-        Text[ russian ] = "Èìÿ";
-        Text[ polish ] = "~Nazwa";
-        Text[ japanese ] = "åå‰(~M)";
-        Text[ chinese_traditional ] = "åç¨±(~M)";
-        Text[ arabic ] = "ÇáÇÓã";
-        Text[ greek ] = "¼íïìá";
-        Text[ korean ] = "ì´ë¦„(~M)";
-        Text[ turkish ] = "~Ad";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "No~m";
-        Text[ finnish ] = "~Nimi";
-        Text[ thai ] = "à¸Šà¸·à¹ˆ~à¸­";
-        Text[ czech ] = "NÃ¡zev";
-        Text[ hebrew ] = "Na~me";
-        Text[ hindi ] = "à¤¨à¤¾~à¤®";
-        Text[ slovak ] = "~NÃ¡zov";
-        Text[ hungarian ] = "~NÃ©v";
-        Text[ slovenian ] = "I~me";
+        Text [ en-US ] = "Na~me" ;
+        Text [ x-comment ] = " ";
     };
     Edit ED_VARNAME
     {
@@ -544,38 +217,10 @@ TabPage TP_FLD_VAR
     {
         Pos = MAP_APPFONT ( 88 , 155 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text = "~Wert" ;
-        Text [ ENGLISH ] = "Value" ;
-        Text [ norwegian ] = "Verdi" ;
-        Text [ italian ] = "~Valore" ;
-        Text [ portuguese_brazilian ] = "~Valor" ;
-        Text [ portuguese ] = "~Valor" ;
-        Text [ finnish ] = "~Arvo" ;
-        Text [ danish ] = "~Værdi" ;
-        Text [ french ] = "~Valeur" ;
-        Text [ swedish ] = "~Värde" ;
-        Text [ dutch ] = "~Waarde" ;
-        Text [ spanish ] = "~Valor" ;
-        Text [ english_us ] = "~Value" ;
+        Text [ de ] = "~Wert" ;
+        Text [ en-US ] = "~Value" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "æ•°å€¼(~V)";
-        Text[ russian ] = "Çíà÷åíèå";
-        Text[ polish ] = "W~artoœæ";
-        Text[ japanese ] = "å€¤(~V)";
-        Text[ chinese_traditional ] = "æ•¸å€¼(~V)";
-        Text[ arabic ] = "ŞíãÉ";
-        Text[ greek ] = "ÔéìŞ";
-        Text[ korean ] = "ê°’(~V)";
-        Text[ turkish ] = "De~ğer";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Valor";
-        Text[ thai ] = "~à¸„à¹ˆà¸²";
-        Text[ czech ] = "Hodnota";
-        Text[ hebrew ] = "~Wert";
-        Text[ hindi ] = "~à¤®à¥‚à¤²à¥à¤¯";
-        Text[ slovak ] = "Ho~dnota";
-        Text[ hungarian ] = "Ã‰~rtÃ©k";
-        Text[ slovenian ] = "~Vrednost";
+        Text [ x-comment ] = " ";
     };
     Edit ED_VARVALUE
     {
@@ -601,37 +246,9 @@ TabPage TP_FLD_VAR
                     ImageBitmap = Bitmap{ File = "sc20558.bmp" ;};
                     MaskColor = IMAGE_MASK_COLOR ;
                 };
-                Text = "Übernehmen" ;
-                Text [ English ] = "Apply" ;
-                Text [ norwegian ] = "Benytt" ;
-                Text [ italian ] = "Applica" ;
-                Text [ portuguese_brazilian ] = "Aplicar" ;
-                Text [ portuguese ] = "Aplicar" ;
-                Text [ finnish ] = "Käytä" ;
-                Text [ danish ] = "Anvend" ;
-                Text [ french ] = "Appliquer" ;
-                Text [ swedish ] = "Överta" ;
-                Text [ dutch ] = "Overnemen" ;
-                Text [ spanish ] = "Aplicar" ;
-                Text [ english_us ] = "Apply" ;
-                Text[ chinese_simplified ] = "é‡‡ç”¨";
-                Text[ russian ] = "Ïğèìåíèòü";
-                Text[ polish ] = "Zastosuj";
-                Text[ japanese ] = "é©ç”¨";
-                Text[ chinese_traditional ] = "æ¡ç”¨";
-                Text[ arabic ] = "ÊØÈíŞ";
-                Text[ greek ] = "ÅöáñìïãŞ";
-                Text[ korean ] = "ì ìš©";
-                Text[ turkish ] = "Kullan";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Aplica";
-                Text[ thai ] = "à¹ƒà¸Šà¹‰";
-                Text[ czech ] = "PouÅ¾Ã­t";
-                Text[ hebrew ] = "â€®×™×™×©×•×â€¬";
-                Text[ hindi ] = "à¤²à¤¾à¤—à¥‚ à¤•à¤°à¥‹";
-                Text[ slovak ] = "PouÅ¾iÅ¥";
-                Text[ hungarian ] = "Alkalmaz";
-                Text[ slovenian ] = "Uporabi";
+                Text [ de ] = "Übernehmen" ;
+                Text [ en-US ] = "Apply" ;
+                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
@@ -642,68 +259,14 @@ TabPage TP_FLD_VAR
                     ImageBitmap = Bitmap{ File = "sc20557.bmp" ;};
                     MaskColor = IMAGE_MASK_COLOR ;
                 };
-                Text = "Löschen" ;
-                Text [ ENGLISH ] = "Delete" ;
-                Text [ norwegian ] = "Slett" ;
-                Text [ italian ] = "Elimina" ;
-                Text [ portuguese_brazilian ] = "Excluir" ;
-                Text [ portuguese ] = "Eliminar" ;
-                Text [ finnish ] = "Poista" ;
-                Text [ danish ] = "Slet" ;
-                Text [ french ] = "Supprimer" ;
-                Text [ swedish ] = "Radera" ;
-                Text [ dutch ] = "Wissen" ;
-                Text [ spanish ] = "Borrar" ;
-                Text [ english_us ] = "Delete" ;
-                Text[ chinese_simplified ] = "åˆ é™¤";
-                Text[ russian ] = "Óäàëèòü";
-                Text[ polish ] = "Usuñ";
-                Text[ japanese ] = "å‰Šé™¤";
-                Text[ chinese_traditional ] = "åˆªé™¤";
-                Text[ arabic ] = "ÍĞİ";
-                Text[ greek ] = "ÄéáãñáöŞ";
-                Text[ korean ] = "ì‚­ì œ";
-                Text[ turkish ] = "Sil";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Suprimeix";
-                Text[ thai ] = "à¸¥à¸š";
-                Text[ czech ] = "Smazat";
-                Text[ hebrew ] = "â€®××—×™×§×”â€¬";
-                Text[ hindi ] = "à¤®à¤¿à¤Ÿà¤¾à¤“";
-                Text[ slovak ] = "ZmazaÅ¥";
-                Text[ hungarian ] = "TÃ¶rlÃ©s";
-                Text[ slovenian ] = "IzbriÅ¡i";
+                Text [ de ] = "Löschen" ;
+                Text [ en-US ] = "Delete" ;
+                Text [ x-comment ] = " ";
             };
         };
     };
-    Text [ english_us ] = "Variables" ;
-    Text [ portuguese_brazilian ] = "Variáveis" ;
-    Text [ swedish ] = "Variabler" ;
-    Text [ danish ] = "Variabler" ;
-    Text [ italian ] = "Variabili" ;
-    Text [ spanish ] = "Variables" ;
-    Text [ french ] = "Variables" ;
-    Text [ dutch ] = "Variabelen" ;
-    Text [ portuguese ] = "Variáveis" ;
-    Text[ chinese_simplified ] = "å˜é‡";
-    Text[ russian ] = "Ïåğåìåííûå";
-    Text[ polish ] = "Zmienne";
-    Text[ japanese ] = "å¤‰æ•°";
-    Text[ chinese_traditional ] = "è®Šæ•¸";
-    Text[ arabic ] = "ãÊÛíÑÇÊ";
-    Text[ greek ] = "Ìåôáâëçôİò";
-    Text[ korean ] = "ë³€ìˆ˜";
-    Text[ turkish ] = "Değişkenler";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Variables";
-    Text[ finnish ] = "Muuttujat";
-    Text[ thai ] = "à¸•à¸±à¸§à¹à¸›à¸£";
-    Text[ czech ] = "PromÄ›nnÃ©";
-    Text[ hebrew ] = "Variablen";
-    Text[ hindi ] = "à¤µà¥‡à¤°à¤¿à¤à¤¬à¤²";
-    Text[ slovak ] = "PremennÃ©";
-    Text[ hungarian ] = "VÃ¡ltozÃ³k";
-    Text[ slovenian ] = "Spremenljivke";
+    Text [ en-US ] = "Variables" ;
+    Text [ x-comment ] = " ";
 };
 
 
