@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationDlg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-21 14:19:01 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:10:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ ORelationDialog::ORelationDialog( OJoinTableView* pParent,
     m_pConnData->CopyFrom( *pConnectionData );
 
     Init(m_pConnData);
-    m_pTableControl = new OTableListBoxControl(this,ModuleRes(LB_CONTROL),m_pTableMap,this);
+    m_pTableControl = new OTableListBoxControl(this,ModuleRes(WND_CONTROL),m_pTableMap,this);
 
     aPB_OK.SetClickHdl( LINK(this, ORelationDialog, OKClickHdl) );
 
