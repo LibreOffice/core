@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-26 15:51:52 $
+#   last change: $Author: hjs $ $Date: 2002-03-28 17:40:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -238,19 +238,7 @@ DEF1EXPORT1=SignalHandlerFunction
 $(SHL1TARGETN) : $(OUT)$/inc$/udkversion.h
 .ENDIF			# "$(SHL1TARGETN)" != ""
 
-.IF "$(GUI)"=="WNT" || "$(USE_SHALL)"!="4nt"
-
-$(OUT)$/inc$/udkversion.h: 
-    echo #ifndef _SAL_UDKVERSION_H_           >  $@
-    echo #define _SAL_UDKVERSION_H_           >> $@
-    echo.                                     >> $@
-    echo #define SAL_UDK_MAJOR "$(UDK_MAJOR)" >> $@
-    echo #define SAL_UDK_MINOR "$(UDK_MINOR)" >> $@
-    echo #define SAL_UDK_MICRO "$(UDK_MICRO)" >> $@
-    echo.                                     >> $@
-    echo #endif                               >> $@
-
-.ELSE
+.IF "$(GUI)"=="UNX" || "$(USE_SHALL)"!="4nt"
 
 $(OUT)$/inc$/udkversion.h: 
     echo '#ifndef _SAL_UDKVERSION_H_'           >  $@
@@ -261,6 +249,18 @@ $(OUT)$/inc$/udkversion.h:
     echo '#define SAL_UDK_MICRO "$(UDK_MICRO)"' >> $@
     echo ''                                     >> $@
     echo '#endif'                               >> $@
+
+.ELSE
+
+$(OUT)$/inc$/udkversion.h: 
+    echo #ifndef _SAL_UDKVERSION_H_           >  $@
+    echo #define _SAL_UDKVERSION_H_           >> $@
+    echo.                                     >> $@
+    echo #define SAL_UDK_MAJOR "$(UDK_MAJOR)" >> $@
+    echo #define SAL_UDK_MINOR "$(UDK_MINOR)" >> $@
+    echo #define SAL_UDK_MICRO "$(UDK_MICRO)" >> $@
+    echo.                                     >> $@
+    echo #endif                               >> $@
 
 .ENDIF
 
