@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formstrings.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:07:38 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:26:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_DEFAULT_SELECT_SEQ,     "DefaultSelection");
     PCR_CONSTASCII_STRING( PROPERTY_MULTISELECTION,         "MultiSelection");
     PCR_CONSTASCII_STRING( PROPERTY_ALIGN,                  "Align");
+    PCR_CONSTASCII_STRING( PROPERTY_VERTICAL_ALIGN,         "VerticalAlign");
     PCR_CONSTASCII_STRING( PROPERTY_DEFAULT_DATE,           "DefaultDate");
     PCR_CONSTASCII_STRING( PROPERTY_DEFAULT_TIME,           "DefaultTime");
     PCR_CONSTASCII_STRING( PROPERTY_DEFAULT_VALUE,          "DefaultValue");
