@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basedlgs.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-23 10:09:51 $
+ *  last change: $Author: mba $ $Date: 2001-11-15 15:05:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,7 @@ void SfxModelessDialog::Initialize(SfxChildWinInfo *pInfo)
 */
 
 {
-    Point aPos;
+/*
     if ( pInfo->aSize.Width() != 0 && pInfo->aSize.Height() != 0 )
     {
         aPos = pInfo->aPos;
@@ -302,34 +302,45 @@ void SfxModelessDialog::Initialize(SfxChildWinInfo *pInfo)
         if ( pInfo->nFlags & SFX_CHILDWIN_ZOOMIN )
             RollUp();
     }
+ */
+    if ( pInfo->aWinState.Len() )
+    {
+        SetWindowState( pInfo->aWinState );
+        if ( pInfo->nFlags & SFX_CHILDWIN_ZOOMIN )
+            RollUp();
+    }
     else
     {
-        // Initiale Gr"o\se aus Resource oder ctor merken
+        // trick: use VCL method SetWindowState to adjust position and size
+        SetWindowState( GetWindowState() );
+/*
+        // adjust position and size as set in resource or ctor
+        Point aPos;
         aSize = GetSizePixel();
 
         Size aParentSize = GetParent()->GetOutputSizePixel();
         Size aSize = GetSizePixel();
         aPos.X() += ( aParentSize.Width() - aSize.Width() ) / 2;
         aPos.Y() += ( aParentSize.Height() - aSize.Height() ) / 2;
+
+        Point aPoint;
+        Rectangle aRect = GetDesktopRectPixel();
+        aPoint.X() = aRect.Right() - aSize.Width();
+        aPoint.Y() = aRect.Bottom() - aSize.Height();
+
+        aPoint = OutputToScreenPixel( aPoint );
+
+        if ( aPos.X() > aPoint.X() )
+            aPos.X() = aPoint.X() ;
+        if ( aPos.Y() > aPoint.Y() )
+            aPos.Y() = aPoint.Y();
+
+        if ( aPos.X() < 0 ) aPos.X() = 0;
+        if ( aPos.Y() < 0 ) aPos.Y() = 0;
+
+        SetPosPixel( aPos );
+ */
     }
-
-    Point aPoint;
-    Rectangle aRect = GetDesktopRectPixel();
-    Size aSize( GetSizePixel() );
-    aPoint.X() = aRect.Right() - aSize.Width();
-    aPoint.Y() = aRect.Bottom() - aSize.Height();
-
-    aPoint = OutputToScreenPixel( aPoint );
-
-    if ( aPos.X() > aPoint.X() )
-        aPos.X() = aPoint.X() ;
-    if ( aPos.Y() > aPoint.Y() )
-        aPos.Y() = aPoint.Y();
-
-    if ( aPos.X() < 0 ) aPos.X() = 0;
-    if ( aPos.Y() < 0 ) aPos.Y() = 0;
-
-    SetPosPixel( aPos );
 }
 
 void SfxModelessDialog::Resize()
@@ -664,9 +675,11 @@ void SfxFloatingWindow::Initialize(SfxChildWinInfo *pInfo)
 */
 
 {
-    Point aPos;
-    if ( pInfo->aSize.Width() != 0 && pInfo->aSize.Height() != 0 )
+    if ( pInfo->aWinState.Len() )
+//    if ( pInfo->aSize.Width() != 0 && pInfo->aSize.Height() != 0 )
     {
+        SetWindowState( pInfo->aWinState );
+/*
         aPos = pInfo->aPos;
         if ( GetStyle() & WB_SIZEABLE )
         {
@@ -678,39 +691,43 @@ void SfxFloatingWindow::Initialize(SfxChildWinInfo *pInfo)
             SetSizePixel( pInfo->aSize );
         }
 
-        // Initiale Gr"o\se aus pInfo merken
         aSize = GetSizePixel();
-
-        // Soll das FloatingWindow eingezoomt werden ?
+        aPos = pInfo->aPos;
+*/
         if ( pInfo->nFlags & SFX_CHILDWIN_ZOOMIN )
             RollUp();
     }
     else
     {
-        // Initiale Gr"o\se aus Resource oder ctor merken
+        // trick: use VCL method SetWindowState to adjust position and size
+        SetWindowState( GetWindowState() );
+/*
+        // adjust position and size as set in resource or ctor
+        Point aPos;
         aSize = GetSizePixel();
         Size aParentSize = GetParent()->GetOutputSizePixel();
         aPos.X() += (aParentSize.Width() - aSize.Width()) / 2;
         aPos.Y() += (aParentSize.Height() - aSize.Height()) / 2;
+
+        Point aPoint;
+        Rectangle aRect = GetDesktopRectPixel();
+        Size aSize( GetSizePixel() );
+        aPoint.X() = aRect.Right() - aSize.Width();
+        aPoint.Y() = aRect.Bottom() - aSize.Height();
+
+        aPoint = OutputToScreenPixel( aPoint );
+
+        if ( aPos.X() > aPoint.X() )
+            aPos.X() = aPoint.X() ;
+        if ( aPos.Y() > aPoint.Y() )
+            aPos.Y() = aPoint.Y();
+
+        if ( aPos.X() < 0 ) aPos.X() = 0;
+        if ( aPos.Y() < 0 ) aPos.Y() = 0;
+
+        SetPosPixel( aPos );
+*/
     }
-
-    Point aPoint;
-    Rectangle aRect = GetDesktopRectPixel();
-    Size aSize( GetSizePixel() );
-    aPoint.X() = aRect.Right() - aSize.Width();
-    aPoint.Y() = aRect.Bottom() - aSize.Height();
-
-    aPoint = OutputToScreenPixel( aPoint );
-
-    if ( aPos.X() > aPoint.X() )
-        aPos.X() = aPoint.X() ;
-    if ( aPos.Y() > aPoint.Y() )
-        aPos.Y() = aPoint.Y();
-
-    if ( aPos.X() < 0 ) aPos.X() = 0;
-    if ( aPos.Y() < 0 ) aPos.Y() = 0;
-
-    SetPosPixel( aPos );
 }
 
 //-------------------------------------------------------------------------
