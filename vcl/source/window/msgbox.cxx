@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgbox.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-05 09:20:36 $
+ *  last change: $Author: ssa $ $Date: 2002-03-22 17:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,6 +487,7 @@ void InfoBox::ImplInitData()
         SetText( Application::GetDisplayName() );
 
     SetImage( InfoBox::GetStandardImage() );
+    mnSoundType = ((USHORT)SOUND_INFO)+1;
 }
 
 // -----------------------------------------------------------------------
