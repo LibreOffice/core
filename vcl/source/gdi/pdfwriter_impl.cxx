@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-19 10:56:29 $
+ *  last change: $Author: pl $ $Date: 2002-09-19 11:47:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4408,6 +4408,9 @@ void PDFWriterImpl::updateGraphicsState()
         }
         if( ! rNewClip.IsEmpty() && ! rNewClip.IsNull() )
         {
+            // clip region is always stored in private PDF mapmode
+            MapMode aNewMapMode = rNewState.m_aMapMode;
+            rNewState.m_aMapMode = m_aMapMode;
             getReferenceDevice()->SetMapMode( rNewState.m_aMapMode );
             m_aCurrentPDFState.m_aMapMode = rNewState.m_aMapMode;
 
@@ -4437,6 +4440,10 @@ void PDFWriterImpl::updateGraphicsState()
                 rNewClip.EndEnumRects( aHandle );
                 aLine.append( "W* n\r\n" );
             }
+
+            rNewState.m_aMapMode = aNewMapMode;
+            getReferenceDevice()->SetMapMode( rNewState.m_aMapMode );
+            m_aCurrentPDFState.m_aMapMode = rNewState.m_aMapMode;
         }
     }
 
@@ -4483,14 +4490,35 @@ void PDFWriterImpl::updateGraphicsState()
 
 void PDFWriterImpl::setMapMode( const MapMode& rMapMode )
 {
-    // there are state parameters dependent on the map mode
-    // (clip region and font) so flush them before setting the
-    // new mode
-
-    // flush clip region and font
-    updateGraphicsState();
-
     m_aGraphicsStack.front().m_aMapMode = rMapMode;
     getReferenceDevice()->SetMapMode( rMapMode );
     m_aCurrentPDFState.m_aMapMode = rMapMode;
+}
+
+void PDFWriterImpl::setClipRegion( const Region& rRegion )
+{
+    Region aRegion = getReferenceDevice()->LogicToPixel( rRegion, m_aGraphicsStack.front().m_aMapMode );
+    aRegion = getReferenceDevice()->PixelToLogic( aRegion, m_aMapMode );
+    m_aGraphicsStack.front().m_aClipRegion = aRegion;
+}
+
+void PDFWriterImpl::moveClipRegion( sal_Int32 nX, sal_Int32 nY )
+{
+    Point aPoint = OutputDevice::LogicToLogic( Point( nX, nY ), m_aGraphicsStack.front().m_aMapMode, m_aMapMode );
+    aPoint -= OutputDevice::LogicToLogic( Point(), m_aGraphicsStack.front().m_aMapMode, m_aMapMode );
+    m_aGraphicsStack.front().m_aClipRegion.Move( nX, nY );
+}
+
+bool PDFWriterImpl::intersectClipRegion( const Rectangle& rRect )
+{
+    Rectangle aRect = OutputDevice::LogicToLogic( rRect, m_aGraphicsStack.front().m_aMapMode, m_aMapMode );
+    return m_aGraphicsStack.front().m_aClipRegion.Intersect( aRect );
+}
+
+
+bool PDFWriterImpl::intersectClipRegion( const Region& rRegion )
+{
+    Region aRegion = getReferenceDevice()->LogicToPixel( rRegion, m_aGraphicsStack.front().m_aMapMode );
+    aRegion = getReferenceDevice()->PixelToLogic( aRegion, m_aMapMode );
+    return m_aGraphicsStack.front().m_aClipRegion.Intersect( aRegion );
 }

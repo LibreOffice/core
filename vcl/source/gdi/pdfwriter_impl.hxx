@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-17 13:17:03 $
+ *  last change: $Author: pl $ $Date: 2002-09-19 11:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,6 +209,7 @@ public:
     {
         Hatch       m_aHatch;
         sal_Int32   m_nObject;
+        MapMode     m_aMapMode;
     };
 
     // for bitmap tilings (drawWallpaper)
@@ -494,17 +495,13 @@ public:
     void clearClipRegion()
     { m_aGraphicsStack.front().m_aClipRegion.SetEmpty(); }
 
-    void setClipRegion( const Region& rRegion )
-    { m_aGraphicsStack.front().m_aClipRegion = rRegion; }
+    void setClipRegion( const Region& rRegion );
 
-    void moveClipRegion( sal_Int32 nX, sal_Int32 nY )
-    { m_aGraphicsStack.front().m_aClipRegion.Move( nX, nY ); }
+    void moveClipRegion( sal_Int32 nX, sal_Int32 nY );
 
-    bool intersectClipRegion( const Rectangle& rRect )
-    { return m_aGraphicsStack.front().m_aClipRegion.Intersect( rRect ); }
+    bool intersectClipRegion( const Rectangle& rRect );
 
-    bool intersectClipRegion( const Region& rRegion )
-    { return m_aGraphicsStack.front().m_aClipRegion.Intersect( rRegion ); }
+    bool intersectClipRegion( const Region& rRegion );
 
     void setLayoutMode( sal_Int32 nLayoutMode )
     { m_aGraphicsStack.front().m_nLayoutMode = nLayoutMode; }
