@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-14 15:33:43 $
+ *  last change: $Author: kz $ $Date: 2001-08-16 20:12:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ ModalDialog DLG_MACROQUERY
     Text = "Makro ausführen" ;
     Text [ english ] = "Execute Macro" ;
     Text [ english_us ] = "Execute Macro" ;
-    Text [ french ] = "Exécuter la macro" ;
+    Text [ french ] = "Exécuter une macro" ;
     TEXT[ italian ] = "Esegui macro";
     TEXT[ portuguese_brazilian ] = "Makro ausf?ren";
     TEXT[ portuguese ] = "Executar macro";
@@ -275,6 +275,7 @@ ModalDialog DLG_MACROQUERY
     TEXT[ catalan ] = "Ejecutar macro";
     TEXT[ finnish ] = "Suorita makro";
 };
+
 
 
 
