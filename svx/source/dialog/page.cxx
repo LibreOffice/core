@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-10 12:33:37 $
+ *  last change: $Author: os $ $Date: 2002-05-27 10:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,17 +288,20 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     SetExchangeSupport();
 
     SvtCJKOptions aCJKOptions;
-    if(!aCJKOptions.IsAsianTypographyEnabled())
+    if(aCJKOptions.IsAsianTypographyEnabled())
     {
-        aTextFlowLbl.Show(FALSE);
-        aTextFlowBox.Show(FALSE);
-    }
-    else
-    {
+        aTextFlowLbl.Show();
+        aTextFlowBox.Show();
+
         //remove non-implemented entries
         sal_uInt32 nVal = FRMDIR_VERT_TOP_LEFT;
         USHORT nPos = aTextFlowBox.GetEntryPos( (void*) nVal );
         aTextFlowBox.RemoveEntry( nPos );
+#ifndef BIDI
+        nVal = FRMDIR_HORI_RIGHT_TOP;
+        nPos = aTextFlowBox.GetEntryPos( (void*) nVal );
+        aTextFlowBox.RemoveEntry( nPos );
+#endif
 
     }
     Init_Impl();
@@ -661,20 +664,12 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
                                                 TRUE, &pItem );
     if( SFX_ITEM_UNKNOWN != eState )
     {
-        aTextFlowLbl.Show();
-        aTextFlowBox.Show();
-
         sal_uInt32 nVal  = SFX_ITEM_SET == eState
                                 ? ((SvxFrameDirectionItem*)pItem)->GetValue()
                                 : 0;
         USHORT nPos = aTextFlowBox.GetEntryPos( (void*) nVal );
         aTextFlowBox.SelectEntryPos( nPos );
         aTextFlowBox.SaveValue();
-    }
-    else
-    {
-        aTextFlowLbl.Hide();
-        aTextFlowBox.Hide();
     }
 }
 
