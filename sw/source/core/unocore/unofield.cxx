@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-10 08:49:24 $
+ *  last change: $Author: dvo $ $Date: 2000-10-17 12:36:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,9 @@
 #endif
 #ifndef _COM_SUN_STAR_TEXT_TEXTCONTENTANCHORTYPE_HPP_
 #include <com/sun/star/text/TextContentAnchorType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_PAGENUMBERTYPE_HPP_
+#include <com/sun/star/text/PageNumberType.hpp>
 #endif
 #ifndef _UNOFIELD_HXX
 #include <unofield.hxx>
@@ -355,8 +358,7 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
             {
                 {SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE),     FIELD_PROP_FORMAT,  &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, 0},
                 {SW_PROP_NAME(UNO_NAME_OFFSET),             FIELD_PROP_USHORT1, &::getCppuType((const sal_Int16*)0),  PROPERTY_NONE,    0},
-            // das ist mit dem Offset schon erledigt
-            //  {UNO_NAME_SUB_TYPE,             FIELD_PROP_SUBTYPE, &::getCppuType((const PageNumberType*)0), PROPERTY_NONE,    0},
+                {SW_PROP_NAME(UNO_NAME_SUB_TYPE),           FIELD_PROP_SUBTYPE, &::getCppuType((const PageNumberType*)0), PROPERTY_NONE,    0},
                 {SW_PROP_NAME(UNO_NAME_USERTEXT),           FIELD_PROP_PAR1,    &::getCppuType((const OUString*)0), PROPERTY_NONE, 0},
                 {0,0,0,0}
             };
