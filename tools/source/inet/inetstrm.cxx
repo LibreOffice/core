@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetstrm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 12:00:40 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 16:36:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,6 @@
 #endif
 #ifndef _TOOLS_INETSTRM_HXX
 #include <inetstrm.hxx>
-#endif
-#ifndef _ZCODEC_HXX
-#include <zcodec.hxx>
 #endif
 
 #include <ctype.h> // toupper
@@ -1880,182 +1877,5 @@ int INetMIMEMessageStream::PutMsgLine (
     }
 }
 
-/*=========================================================================
- *
- * INetMessageDecodeGZStream_Impl Implementation.
- * (GZIP Decoding).
- *
- *=======================================================================*/
-class INetMessageDecodeGZStream_Impl : public INetMessageOStream
-{
-    SvMemoryStream m_aStrm;
-    GZCodec        m_aCodec;
-    sal_uInt8      m_pBuffer[1024];
 
-    virtual int PutMsgLine (
-        const sal_Char *pData, ULONG nSize, void *pCtx = NULL);
-
-public:
-    INetMessageDecodeGZStream_Impl (void);
-};
-
-/*
- * INetMessageDecodeGZStream_Impl.
- */
-INetMessageDecodeGZStream_Impl::INetMessageDecodeGZStream_Impl (void)
-    : INetMessageOStream()
-{
-    ParseHeader (FALSE);
-    m_aCodec.BeginCompression();
-}
-
-/*
- * PutMsgLine.
- */
-int INetMessageDecodeGZStream_Impl::PutMsgLine (
-    const sal_Char *pData, ULONG nSize, void *pCtx)
-{
-    INetMessage *pMsg = GetTargetMessage();
-    if (pMsg == NULL)
-        return INETSTREAM_STATUS_ERROR;
-
-    SvOpenLockBytes * pLB = PTR_CAST(SvOpenLockBytes, pMsg->GetDocumentLB());
-    if (pLB == NULL)
-        return INETSTREAM_STATUS_WOULDBLOCK;
-
-    m_aStrm.Seek (STREAM_SEEK_TO_BEGIN);
-    m_aStrm.Write (pData, nSize);
-
-    m_aStrm.Seek (STREAM_SEEK_TO_BEGIN);
-    long nRead = 0;
-
-    // Decode into buffer.
-    m_aCodec.SetBreak (nSize);
-    while ((nRead = m_aCodec.Read (m_aStrm, m_pBuffer, sizeof(m_pBuffer))) > 0)
-    {
-        // Emit Buffer.
-        ULONG nDocSize = pMsg->GetDocumentSize();
-        ULONG nWrite   = 0;
-
-        pLB->FillAppend (m_pBuffer, nRead, &nWrite);
-        pMsg->SetDocumentSize (nDocSize + nWrite);
-
-        if ((long)nWrite < nRead)
-            return INETSTREAM_STATUS_ERROR;
-    }
-
-    if (m_aCodec.IsFinished())
-        return INETSTREAM_STATUS_LOADED;
-    else if (nRead < 0)
-        return INETSTREAM_STATUS_ERROR;
-    else
-        return INETSTREAM_STATUS_OK;
-}
-
-/*=========================================================================
- *
- * INetHTTPMessageStream Implementation.
- *
- *=======================================================================*/
-/*
- * INetHTTPMessageStream.
- */
-INetHTTPMessageStream::INetHTTPMessageStream (ULONG nBufferSize)
-    : INetMIMEMessageStream (nBufferSize),
-      m_eState              (INETMSG_EOL_BEGIN),
-      m_pDecodeStrm         (NULL)
-{
-}
-
-/*
- * ~INetHTTPMessageStream.
- */
-INetHTTPMessageStream::~INetHTTPMessageStream (void)
-{
-    delete m_pDecodeStrm;
-}
-
-/*
- * GetMsgLine.
- * (Message Generator).
- */
-int INetHTTPMessageStream::GetMsgLine (
-    sal_Char *pData, ULONG nSize, void *pCtx)
-{
-    // Check for header generation.
-    if (!IsHeaderGenerated())
-    {
-        if (m_eState == INETMSG_EOL_BEGIN)
-        {
-            // Check for message container.
-            INetHTTPMessage *pMsg = GetSourceMessage();
-            if (pMsg == NULL)
-                return INETSTREAM_STATUS_ERROR;
-
-            // Set Accept-Encoding header.
-            pMsg->SetAcceptEncoding (
-                String ("gzip", RTL_TEXTENCODING_ASCII_US));
-
-            // Mark done.
-            m_eState = INETMSG_EOL_DONE;
-        }
-    }
-
-    // Initial approximation: Generate as plain message (w/o encoding).
-    return INetMessageIOStream::GetMsgLine (pData, nSize, pCtx);
-}
-
-/*
- * PutMsgLine.
- * (Message Parser).
- */
-int INetHTTPMessageStream::PutMsgLine (
-    const sal_Char *pData, ULONG nSize, void *pCtx)
-{
-    // Check for header or body.
-    if (!IsHeaderParsed())
-    {
-        // Parse the message header.
-        return INetMessageIOStream::PutMsgLine (pData, nSize, pCtx);
-    }
-    else
-    {
-        // Parse the message body.
-        if (m_eState == INETMSG_EOL_BEGIN)
-        {
-            // Check for message container.
-            INetHTTPMessage *pMsg = GetTargetMessage();
-            if (pMsg == NULL)
-                return INETSTREAM_STATUS_ERROR;
-
-            // Obtain ContentEncoding.
-            String aEncoding (pMsg->GetContentEncoding());
-            aEncoding.EraseLeadingChars (' ');
-
-            // Check for supported encoding.
-            if ((aEncoding.CompareIgnoreCaseToAscii ("gzip")   == 0) ||
-                (aEncoding.CompareIgnoreCaseToAscii ("x-gzip") == 0)   )
-            {
-                // Initialize decode stream.
-                m_pDecodeStrm = new INetMessageDecodeGZStream_Impl;
-                m_pDecodeStrm->SetTargetMessage (pMsg);
-            }
-
-            // Mark done.
-            m_eState = INETMSG_EOL_DONE;
-        }
-
-        // Check for Decode stream.
-        if (m_pDecodeStrm)
-        {
-            // Decode.
-            return m_pDecodeStrm->Write (pData, nSize, pCtx);
-        }
-        else
-        {
-            // No decoding necessary.
-            return INetMessageIOStream::PutMsgLine (pData, nSize, pCtx);
-        }
-    }
-}
 
