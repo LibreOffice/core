@@ -92,4 +92,31 @@
         <status value="final"/>
         <supported-service>drafts.com.sun.star.accessibility.AccessibleIconChoiceControlEntry</supported-service>
     </component-description>
+    <component-description>
+        <author>Thomas Benisch</author>
+        <name>com.sun.star.comp.svtools.AccessibleTabBar</name>
+        <description>specifies accessibility support for a tabbar.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleTabBar</supported-service>
+    </component-description>
+    <component-description>
+        <author>Thomas Benisch</author>
+        <name>com.sun.star.comp.svtools.AccessibleTabBarPage</name>
+        <description>specifies accessibility support for a tabbar page.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleTabBarPage</supported-service>
+    </component-description>
+    <component-description>
+        <author>Thomas Benisch</author>
+        <name>com.sun.star.comp.svtools.AccessibleTabBarPageList</name>
+        <description>specifies accessibility support for a tabbar page list.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>drafts.com.sun.star.accessibility.AccessibleTabBarPageList</supported-service>
+    </component-description>
 </module-description>
