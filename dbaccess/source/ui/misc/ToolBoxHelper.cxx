@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ToolBoxHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:26:48 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:55:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,14 +79,16 @@
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
 #endif
+#include <vcl/event.hxx>
 
 namespace dbaui
 {
     OToolBoxHelper::OToolBoxHelper()
         : m_bIsHiContrast(sal_False)
         ,m_pToolBox(NULL)
-        ,m_nBitmapSet( getCurrentSymbolSet() )
+        ,m_nBitmapSet(-1 )
     {
+        OSL_ENSURE(m_nBitmapSet != getCurrentSymbolSet(),"BitmapSet should not be identical");
         SvtMiscOptions().AddListener( LINK( this, OToolBoxHelper, ConfigOptionsChanged ) );
         Application::AddEventListener( LINK( this, OToolBoxHelper, SettingsChanged ) );
     }
@@ -153,12 +155,16 @@ namespace dbaui
         return 0L;
     }
     // -----------------------------------------------------------------------------
-    IMPL_LINK(OToolBoxHelper, SettingsChanged, void*, _pVoid)
+    IMPL_LINK(OToolBoxHelper, SettingsChanged, VclWindowEvent*, _pEvt)
     {
-        if ( m_pToolBox )
+        if ( m_pToolBox && _pEvt && _pEvt->GetId() == VCLEVENT_APPLICATION_DATACHANGED )
         {
-            // check if imagelist changed
-            checkImageList();
+            DataChangedEvent* pData = reinterpret_cast<DataChangedEvent*>(_pEvt->GetData());
+            if ( pData && ((( pData->GetType() == DATACHANGED_SETTINGS  )   ||
+            ( pData->GetType() == DATACHANGED_DISPLAY   ))  &&
+            ( pData->GetFlags() & SETTINGS_STYLE        )))
+                // check if imagelist changed
+                checkImageList();
         }
 
         return 0L;
