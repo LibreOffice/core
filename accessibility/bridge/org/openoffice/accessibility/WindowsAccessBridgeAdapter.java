@@ -59,19 +59,28 @@ package org.openoffice.accessibility;
 
 import org.openoffice.java.accessibility.*;
 
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.AccessibleRole;
+
+import com.sun.star.uno.*;
+import com.sun.star.java.XJavaVM;
+
 import javax.accessibility.*;
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 
 
-public class WindowsAccessBridgeAdapter implements java.awt.event.AWTEventListener, java.beans.PropertyChangeListener {
+public class WindowsAccessBridgeAdapter {
 
-    Method registerVirtualFrame;
-    Method revokeVirtualFrame;
-    Method removePropertyChangeListener;
+    private static Method registerVirtualFrame;
+    private static Method revokeVirtualFrame;
 
-    protected class PopupMenuProxy extends AccessibleContext implements Accessible, AccessibleComponent {
+    private static java.util.Hashtable frameMap;
+
+    protected static class PopupMenuProxy extends AccessibleContext implements Accessible, AccessibleComponent {
         AccessibleContext menu;
+        AccessibleComponent menuComponent;
 
         PopupMenuProxy(AccessibleContext ac) {
             menu = ac;
@@ -87,13 +96,19 @@ public class WindowsAccessBridgeAdapter implements java.awt.event.AWTEventListen
             return this;
         }
 
+        /** Returns the AccessibleText associated with this object */
+        public javax.accessibility.AccessibleText getAccessibleText() {
+            return menu.getAccessibleText();
+        }
+
+
         /** Returns the AccessibleContext associated with this object */
         public javax.accessibility.AccessibleStateSet getAccessibleStateSet() {
-             return null;
+             return menu.getAccessibleStateSet();
         }
 
         public java.util.Locale getLocale() {
-            return java.util.Locale.getDefault();
+            return menu.getLocale();
         }
 
         public int getAccessibleIndexInParent() {
@@ -117,14 +132,16 @@ public class WindowsAccessBridgeAdapter implements java.awt.event.AWTEventListen
         */
 
         public void addFocusListener(java.awt.event.FocusListener fl) {
+            menuComponent.addFocusListener(fl);
         }
 
         public void removeFocusListener(java.awt.event.FocusListener fl) {
+            menuComponent.removeFocusListener(fl);
         }
 
         /** Returns the background color of the object */
         public java.awt.Color getBackground() {
-            return null;
+            return menuComponent.getBackground();
         }
 
         public void setBackground(java.awt.Color c) {
@@ -133,54 +150,51 @@ public class WindowsAccessBridgeAdapter implements java.awt.event.AWTEventListen
 
         /** Returns the foreground color of the object */
         public java.awt.Color getForeground() {
-            return null;
+            return menuComponent.getForeground();
         }
 
         public void setForeground(java.awt.Color c) {
-            // Not supported by UNO accessibility API
+            menuComponent.setForeground(c);
         }
 
         public java.awt.Cursor getCursor() {
-            // Not supported by UNO accessibility API
-            return null;
+            return menuComponent.getCursor();
         }
 
         public void setCursor(java.awt.Cursor cursor) {
-            // Not supported by UNO accessibility API
+            menuComponent.setCursor(cursor);
         }
 
         public java.awt.Font getFont() {
-            // FIXME
-            return null;
+            return menuComponent.getFont();
         }
 
         public void setFont(java.awt.Font f) {
-            // Not supported by UNO accessibility API
+            menuComponent.setFont(f);
         }
 
         public java.awt.FontMetrics getFontMetrics(java.awt.Font f) {
-            // FIXME
-            return null;
+            return menuComponent.getFontMetrics(f);
         }
 
         public boolean isEnabled() {
-            return true;
+            return menuComponent.isEnabled();
         }
 
         public void setEnabled(boolean b) {
-            // Not supported by UNO accessibility API
+            menuComponent.setEnabled(b);
         }
 
         public boolean isVisible() {
-            return true;
+            return menuComponent.isVisible();
         }
 
         public void setVisible(boolean b) {
-            // Not supported by UNO accessibility API
+            menuComponent.setVisible(b);
         }
 
         public boolean isShowing() {
-            return true;
+            return menuComponent.isShowing();
         }
 
         public boolean contains(java.awt.Point p) {
@@ -199,13 +213,11 @@ public class WindowsAccessBridgeAdapter implements java.awt.event.AWTEventListen
 
         /** Returns the location of the object on the screen. */
         public java.awt.Point getLocationOnScreen() {
-            if (menu != null) {
-                Accessible a = menu.getAccessibleChild(0);
-                if (a != null) {
-                    AccessibleContext ac = a.getAccessibleContext();
-                    if (ac != null) {
-                        return ac.getAccessibleComponent().getLocationOnScreen();
-                    }
+            Accessible a = menu.getAccessibleChild(0);
+            if (a != null) {
+                AccessibleContext ac = a.getAccessibleContext();
+                if (ac != null) {
+                    return ac.getAccessibleComponent().getLocationOnScreen();
                 }
             }
             return null;
@@ -236,23 +248,20 @@ public class WindowsAccessBridgeAdapter implements java.awt.event.AWTEventListen
 
         /** Returns the size of this component in the form of a Dimension object */
         public java.awt.Dimension getSize() {
-            if (menu != null) {
-                int count = menu.getAccessibleChildrenCount();
-                int width = 0; int height = 0;
-                for (int i = 0; i < count; i++) {
-                    Accessible a = menu.getAccessibleChild(i);
-                    if (a != null) {
-                        AccessibleContext ac = a.getAccessibleContext();
-                        if (ac != null) {
-                            java.awt.Dimension d = ac.getAccessibleComponent().getSize();
-                            width += d.width;
-                            height += d.height;
-                        }
+            int count = menu.getAccessibleChildrenCount();
+            int width = 0; int height = 0;
+            for (int i = 0; i < count; i++) {
+                Accessible a = menu.getAccessibleChild(i);
+                if (a != null) {
+                    AccessibleContext ac = a.getAccessibleContext();
+                    if (ac != null) {
+                        java.awt.Dimension d = ac.getAccessibleComponent().getSize();
+                        width += d.width;
+                        height += d.height;
                     }
                 }
-                return new java.awt.Dimension(width, height);
             }
-            return null;
+            return new java.awt.Dimension(width, height);
         }
 
         /** Resizes this component so that it has width d.width and height d.height */
@@ -262,19 +271,17 @@ public class WindowsAccessBridgeAdapter implements java.awt.event.AWTEventListen
 
         /** Returns the Accessible child, if one exists, contained at the local coordinate Point */
         public javax.accessibility.Accessible getAccessibleAt(java.awt.Point p) {
-            if (menu != null) {
-                int count = menu.getAccessibleChildrenCount();
-                for (int i = 0; i < count; i++) {
-                    Accessible a = menu.getAccessibleChild(i);
-                    if (a != null) {
-                        AccessibleContext ac = a.getAccessibleContext();
-                        AccessibleComponent comp = ac.getAccessibleComponent();
-                        java.awt.Point loc = comp.getLocationOnScreen();
-                        if ((p.x >= loc.x) && (p.y >= loc.y)) {
-                            java.awt.Dimension d = comp.getSize();
-                            if ((p.x < loc.x + d.width) && (p.y < loc.y + d.height)) {
-                                return a;
-                            }
+            int count = menu.getAccessibleChildrenCount();
+            for (int i = 0; i < count; i++) {
+                Accessible a = menu.getAccessibleChild(i);
+                if (a != null) {
+                    AccessibleContext ac = a.getAccessibleContext();
+                    AccessibleComponent comp = ac.getAccessibleComponent();
+                    java.awt.Point loc = comp.getLocationOnScreen();
+                    if ((p.x >= loc.x) && (p.y >= loc.y)) {
+                        java.awt.Dimension d = comp.getSize();
+                        if ((p.x < loc.x + d.width) && (p.y < loc.y + d.height)) {
+                            return a;
                         }
                     }
                 }
@@ -283,16 +290,20 @@ public class WindowsAccessBridgeAdapter implements java.awt.event.AWTEventListen
         }
 
         public boolean isFocusTraversable() {
-            return true;
+            return menuComponent.isFocusTraversable();
         }
 
         public void requestFocus() {
+            menuComponent.requestFocus();
         }
     }
 
+    protected static native byte[] getProcessID();
+    protected static native boolean createMapping(long jvmaccess);
+
     // On Windows all native frames must be registered to the access bridge. Therefor
     // the bridge exports two methods that we try to find here.
-    public WindowsAccessBridgeAdapter() {
+    protected static void attach(XComponentContext xComponentContext) {
         try {
             Class bridge = Class.forName("com.sun.java.accessibility.AccessBridge");
             Class[] parameterTypes = { javax.accessibility.Accessible.class, Integer.class };
@@ -300,20 +311,25 @@ public class WindowsAccessBridgeAdapter implements java.awt.event.AWTEventListen
             if (bridge != null) {
                 registerVirtualFrame = bridge.getMethod("registerVirtualFrame", parameterTypes);
                 revokeVirtualFrame = bridge.getMethod("revokeVirtualFrame", parameterTypes);
+
+                // load the native dll
+                System.loadLibrary("java_uno_accessbridge");
+
+
+                Object any = xComponentContext.getValueByName("/singletons/com.sun.star.java.theJavaVirtualMachine");
+                if (AnyConverter.isObject(any)) {
+                    XJavaVM xJavaVM = (XJavaVM) UnoRuntime.queryInterface(XJavaVM.class,
+                        AnyConverter.toObject(new Type(XJavaVM.class), any));
+
+                    if (xJavaVM != null) {
+                        any = xJavaVM.getJavaVM(getProcessID());
+                        if (AnyConverter.isLong(any)) {
+                            createMapping(AnyConverter.toLong(any));
+                            frameMap = new java.util.Hashtable();
+                        }
+                    }
+                }
             }
-
-            // Register PropertyChangeListener to track popup windows
-            Class monitor = Class.forName("com.sun.java.accessibility.util.AccessibilityEventMonitor");
-             Class[] monitorParams = { java.beans.PropertyChangeListener.class };
-
-            Method addPropertyChangeListener = monitor.getMethod("addPropertyChangeListener", monitorParams);
-            removePropertyChangeListener = monitor.getMethod("removePropertyChangeListener", monitorParams);
-
-            Object[] params = { this };
-            addPropertyChangeListener.invoke(null, params);
-
-            System.loadLibrary("java_uno_accessbridge");
-
         } catch (NoSuchMethodException e) {
             System.err.println("ERROR: incompatible AccessBridge found: " + e.getMessage());
 
@@ -328,178 +344,107 @@ public class WindowsAccessBridgeAdapter implements java.awt.event.AWTEventListen
 
             // Forward this exception to UNO to indicate that the service will not work correctly.
             throw new com.sun.star.uno.RuntimeException("ClassNotFound exception caught: " + e.getMessage());
-        } catch(IllegalAccessException e) {
-            System.err.println("IllegalAccessException caught: " + e.getMessage());
-
-            // Forward this exception to UNO to indicate that the service will not work correctly.
-            throw new com.sun.star.uno.RuntimeException("IllegalAccessException caught: " + e.getMessage());
         } catch(IllegalArgumentException e) {
             System.err.println("IllegalArgumentException caught: " + e.getMessage());
 
             // Forward this exception to UNO to indicate that the service will not work correctly.
             throw new com.sun.star.uno.RuntimeException("IllegalArgumentException caught: " + e.getMessage());
-        } catch(InvocationTargetException e) {
-            System.err.println("InvokationTargetException caught: " + e.getMessage());
+        } catch(com.sun.star.lang.IllegalArgumentException e) {
+            System.err.println("UNO IllegalArgumentException caught: " + e.getMessage());
 
             // Forward this exception to UNO to indicate that the service will not work correctly.
-            throw new com.sun.star.uno.RuntimeException("InvokationTargetException caught: " + e.getMessage());
+            throw new com.sun.star.uno.RuntimeException("UNO IllegalArgumentException caught: " + e.getMessage());
         }
+    }
+
+    protected static boolean isAttached() {
+        return frameMap != null;
+    }
+
+    protected static Accessible getAccessibleWrapper(XAccessible xAccessible) {
+        Accessible a = null;
+
+        try {
+            XAccessibleContext xAccessibleContext = xAccessible.getAccessibleContext();
+            if (xAccessibleContext != null) {
+                switch (xAccessibleContext.getAccessibleRole()) {
+                    case AccessibleRole.POPUP_MENU:
+                    case AccessibleRole.LIST:
+                        a = (Accessible) AccessibleObjectFactory.getAccessibleComponent(xAccessible);
+                        break;
+                    case AccessibleRole.MENU:
+                        Accessible tmp = (Accessible) AccessibleObjectFactory.getAccessibleComponent(xAccessible);
+                        if (tmp != null) {
+                            AccessibleContext ac = tmp.getAccessibleContext();
+                            if (ac != null) {
+                                a = new PopupMenuProxy(ac);
+                            }
+                        }
+                        break;
+                    default:
+                        a = (Accessible) AccessBridge.getTopWindow(xAccessible);
+                        break;
+                }
+            }
+        } catch (com.sun.star.uno.RuntimeException e) {
+        }
+
+        return a;
     }
 
     /** Registers a native frame at the Java AccessBridge for Windows */
-    protected void registerFrame(Integer handle, Accessible a) {
-        Object[] args = { a, handle };
+    public static void registerTopWindow(int handle, XAccessible xAccessible) {
+        Integer hwnd = new Integer(handle);
 
-        if (Build.DEBUG) {
-            System.err.println("Native frame " + handle + " has been opened");
-        }
-
-        try {
-            registerVirtualFrame.invoke(null, args);
-        } catch(IllegalAccessException e) {
-            System.err.println("IllegalAccessException caught: " + e.getMessage());
-        } catch(IllegalArgumentException e) {
-            System.err.println("IllegalArgumentException caught: " + e.getMessage());
-        } catch(InvocationTargetException e) {
-            System.err.println("InvokationTargetException caught: " + e.getMessage());
-        }
-    }
-
-    /** Registers a popup window at the Java AccessBridge for Windows */
-    protected void registerPopup(Integer handle, Accessible a) {
-        Object[] args = { a, handle };
-
-        if (Build.DEBUG) {
-            System.err.println("Popup menu " + handle + " has been opened");
-        }
-
-        try {
-            registerVirtualFrame.invoke(null, args);
-        } catch(IllegalAccessException e) {
-            System.err.println("IllegalAccessException caught: " + e.getMessage());
-        } catch(IllegalArgumentException e) {
-            System.err.println("IllegalArgumentException caught: " + e.getMessage());
-        } catch(InvocationTargetException e) {
-            System.err.println("InvokationTargetException caught: " + e.getMessage());
-        }
-    }
-
-    protected void handleWindowOpened(Accessible a) {
-        if (a != null) {
-            AccessibleContext ac = a.getAccessibleContext();
-            if (ac != null) {
-                int hwnd = getHWNDFromComponent(ac.getAccessibleComponent());
-                if (hwnd > 0) {
-                    registerFrame(new Integer(hwnd), a);
-                }
+        if (! frameMap.contains(hwnd) ) {
+            if (Build.DEBUG) {
+                System.err.println("Native frame " + hwnd + " has been opened");
             }
-        }
-    }
 
-    public void eventDispatched(java.awt.AWTEvent evt) {
-        switch (evt.getID()) {
-            case java.awt.event.WindowEvent.WINDOW_OPENED:
-                handleWindowOpened((Accessible) evt.getSource());
-                break;
-            case java.awt.event.WindowEvent.WINDOW_CLOSED:
+            Accessible a = getAccessibleWrapper(xAccessible);
+            if (a != null) {
+                Object[] args = { a, hwnd };
+
+                frameMap.put(hwnd, a);
+
                 if (Build.DEBUG) {
-                    System.err.println("retrieved WINDOW_CLOSED");
+                    System.err.println("registering native frame " + hwnd);
                 }
-                break;
-            default:
-                break;
-        }
-    }
 
-    protected void handlePopupMenuOpened(AccessibleContext menu) {
-        try {
-            PopupMenuProxy pmp = new PopupMenuProxy(menu);
-            int hwnd = getHWNDFromComponent(pmp.getAccessibleComponent());
-            if (hwnd != 0) {
-                registerPopup(new Integer(hwnd), pmp);
-            }
-        } catch (NullPointerException e) {
-        } catch (IndexOutOfBoundsException e) {
-        }
-    }
-
-    /** This method gets called when a bound property is changed. */
-    public void propertyChange(java.beans.PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(AccessibleContext.ACCESSIBLE_STATE_PROPERTY)) {
-            AccessibleContext ac = null;
-
-            if (evt.getSource() instanceof AccessibleContext) {
-                ac = (AccessibleContext) evt.getSource();
-            } else if (evt.getSource() instanceof Accessible) {
-                ac = ((Accessible) evt.getSource()).getAccessibleContext();
-            } else {
-                // This should never happen
-                return;
-            }
-
-            // Track ComboBox popups by VISIBLE state of their lists ..
-            if (ac.getAccessibleRole().equals(AccessibleRole.LIST)) {
-                Accessible pa = ac.getAccessibleParent();
-                if (pa != null) {
-                    AccessibleContext pac = pa.getAccessibleContext();
-                    if (pac != null && pac.getAccessibleRole().equals(AccessibleRole.COMBO_BOX)) {
-                        if (evt.getOldValue() instanceof AccessibleState) {
-                            AccessibleState as = (AccessibleState) evt.getOldValue();
-                            if (as.equals(AccessibleState.VISIBLE)) {
-                                if (Build.DEBUG) {
-                                    System.err.println("ComboBox popup closed");
-                                }
-                            }
-                        }
-                        if (evt.getNewValue() instanceof AccessibleState) {
-                            AccessibleState as = (AccessibleState) evt.getNewValue();
-                            if (as.equals(AccessibleState.VISIBLE)) {
-                                if (Build.DEBUG) {
-                                    System.err.println("ComboBox popup opened");
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            // Track Menu popups by SELECTED state changes ..
-            if (ac.getAccessibleRole().equals(AccessibleRole.MENU)) {
-                if (evt.getOldValue() instanceof AccessibleState) {
-                    AccessibleState as = (AccessibleState) evt.getOldValue();
-                    if (as.equals(AccessibleState.SELECTED)) {
-                        if (Build.DEBUG) {
-                            System.err.println("Popup menu closed");
-                        }
-                    }
-                }
-                if (evt.getNewValue() instanceof AccessibleState) {
-                    AccessibleState as = (AccessibleState) evt.getNewValue();
-                    if (as.equals(AccessibleState.SELECTED)) {
-                        handlePopupMenuOpened(ac);
-                    }
+                try {
+                    registerVirtualFrame.invoke(null, args);
+                } catch(IllegalAccessException e) {
+                    System.err.println("IllegalAccessException caught: " + e.getMessage());
+                } catch(IllegalArgumentException e) {
+                    System.err.println("IllegalArgumentException caught: " + e.getMessage());
+                } catch(InvocationTargetException e) {
+                    System.err.println("InvokationTargetException caught: " + e.getMessage());
                 }
             }
         }
     }
 
-    protected static int getHWNDFromComponent(AccessibleComponent ac) {
-        if (ac != null) {
-            java.awt.Point p = ac.getLocationOnScreen();
-            if (p != null) {
-                java.awt.Dimension d = ac.getSize();
-                if (d != null) {
-                    return getHWNDFromPoint(p.x + (d.width % 2), p.y + (d.height % 2));
-                }
+    /** Revokes a native frame at the Java AccessBridge for Windows */
+    public static void revokeTopWindow(int handle, XAccessible xAccessible) {
+        Integer hwnd = new Integer(handle);
+
+        Accessible a = (Accessible) frameMap.remove(hwnd);
+        if (a != null) {
+            Object[] args = { a, hwnd };
+
+            if (Build.DEBUG) {
+                System.err.println("revoking native frame " + hwnd);
+            }
+
+            try {
+                revokeVirtualFrame.invoke(null, args);
+            } catch(IllegalAccessException e) {
+                System.err.println("IllegalAccessException caught: " + e.getMessage());
+            } catch(IllegalArgumentException e) {
+                System.err.println("IllegalArgumentException caught: " + e.getMessage());
+            } catch(InvocationTargetException e) {
+                System.err.println("InvokationTargetException caught: " + e.getMessage());
             }
         }
-        return -1;
-    }
-
-    protected static native int getHWNDFromPoint(int x, int y);
-
-    protected void finalize() throws Throwable {
-        Object[] params = { this };
-        removePropertyChangeListener.invoke(null, params);
     }
 }
