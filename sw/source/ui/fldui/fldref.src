@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldref.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:01:55 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,44 +68,15 @@ TabPage TP_FLD_REF
     SVLook = TRUE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    Text = "Referenzen" ;
-    Text [ ENGLISH ] = "References" ;
+    Text [ de ] = "Referenzen" ;
     FixedText FT_REFTYPE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text = "~Feldtyp" ;
-        Text [ ENGLISH ] = "Type" ;
-        Text [ norwegian ] = "Type" ;
-        Text [ italian ] = "~Tipo di campo" ;
-        Text [ portuguese_brazilian ] = "~Tipo" ;
-        Text [ portuguese ] = "Tipo de ~campo" ;
-        Text [ finnish ] = "~Tyyppi" ;
-        Text [ danish ] = "~Type" ;
-        Text [ french ] = "~Type de champ" ;
-        Text [ swedish ] = "~Fälttyp" ;
-        Text [ dutch ] = "~Veldtype" ;
-        Text [ spanish ] = "~Tipo de campo" ;
-        Text [ english_us ] = "~Type" ;
+        Text [ de ] = "~Feldtyp" ;
+        Text [ en-US ] = "~Type" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "å­—æ®µç±»å‹(~T)";
-        Text[ russian ] = "Òèï ïîëÿ";
-        Text[ polish ] = "~Typ pola";
-        Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚¿ã‚¤ãƒ—(~T)";
-        Text[ chinese_traditional ] = "æ¬„ä½é¡å‹(~T)";
-        Text[ arabic ] = "äæÚ ÇáÍŞá";
-        Text[ greek ] = "~Ôığïò ğåäßïõ";
-        Text[ korean ] = "ìœ í˜•(~T)";
-        Text[ turkish ] = "~Alan tipi";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Tipus";
-        Text[ thai ] = "~à¸Šà¸™à¸´à¸”";
-        Text[ czech ] = "Typ";
-        Text[ hebrew ] = "â€®×¡×•×’â€¬";
-        Text[ hindi ] = "~à¤µà¤°à¥à¤—";
-        Text[ slovak ] = "~Typ";
-        Text[ hungarian ] = "~TÃ­pus";
-        Text[ slovenian ] = "~Vrsta";
+        Text [ x-comment ] = " ";
     };
     ListBox LB_REFTYPE
     {
@@ -119,38 +90,10 @@ TabPage TP_FLD_REF
     {
         Pos = MAP_APPFONT ( 88 , 3 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text = "~Auswahl" ;
-        Text [ ENGLISH ] = "Selection" ;
-        Text [ norwegian ] = "Selection" ;
-        Text [ italian ] = "~Selezione" ;
-        Text [ portuguese_brazilian ] = "~Seleção" ;
-        Text [ portuguese ] = "~Selecção" ;
-        Text [ finnish ] = "~Valinta" ;
-        Text [ danish ] = "Udvalg" ;
-        Text [ french ] = "~Sélection" ;
-        Text [ swedish ] = "~Urval" ;
-        Text [ dutch ] = "~Selectie" ;
-        Text [ spanish ] = "Se~lección" ;
-        Text [ english_us ] = "S~election" ;
+        Text [ de ] = "~Auswahl" ;
+        Text [ en-US ] = "S~election" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "é€‰æ‹©(~E)";
-        Text[ russian ] = "Âûáîğ";
-        Text[ polish ] = "~Wybór";
-        Text[ japanese ] = "é¸æŠ(~E)";
-        Text[ chinese_traditional ] = "é¸å–(~E)";
-        Text[ arabic ] = "ÇáÊÍÏíÏ";
-        Text[ greek ] = "~ÅğéëïãŞ";
-        Text[ korean ] = "ì„ íƒ(~E)";
-        Text[ turkish ] = "S~eçim";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Se~lecció";
-        Text[ thai ] = "à¹€à¸¥à¸·~à¸­à¸";
-        Text[ czech ] = "VÃ½bÄ›r";
-        Text[ hebrew ] = "~Auswahl";
-        Text[ hindi ] = "à¤šà¥à¤¨à¤¾~à¤µ";
-        Text[ slovak ] = "VÃ½b~er";
-        Text[ hungarian ] = "~KijelÃ¶lÃ©s";
-        Text[ slovenian ] = "~Izbor";
+        Text [ x-comment ] = " ";
     };
     ListBox LB_REFSELECTION
     {
@@ -164,37 +107,10 @@ TabPage TP_FLD_REF
     {
         Pos = MAP_APPFONT ( 170 , 3 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
-        TEXT = "F~ormat" ;
-        TEXT [ English ] = "Format" ;
+        Text [ de ] = "F~ormat" ;
         Left = TRUE ;
-        Text [ english_us ] = "F~ormat" ;
-        Text [ portuguese_brazilian ] = "F~ormato" ;
-        Text [ swedish ] = "F~ormat" ;
-        Text [ danish ] = "~Format" ;
-        Text [ italian ] = "F~ormato" ;
-        Text [ spanish ] = "F~ormato" ;
-        Text [ french ] = "F~ormat" ;
-        Text [ dutch ] = "F~ormaat" ;
-        Text [ portuguese ] = "F~ormato" ;
-        Text[ chinese_simplified ] = "æ ¼å¼(~O)";
-        Text[ russian ] = "Ôîğìàò";
-        Text[ polish ] = "~Format";
-        Text[ japanese ] = "æ›¸å¼(~O)";
-        Text[ chinese_traditional ] = "æ ¼å¼(~O)";
-        Text[ arabic ] = "ÇáÊäÓíŞ";
-        Text[ greek ] = "Ì~ïñöŞ";
-        Text[ korean ] = "ì„œì‹(~O)";
-        Text[ turkish ] = "F~ormat";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "F~ormata";
-        Text[ finnish ] = "M~uotoilu";
-        Text[ thai ] = "à¸£à¸¹~à¸›à¹à¸šà¸š";
-        Text[ czech ] = "FormÃ¡t";
-        Text[ hebrew ] = "F~ormat";
-        Text[ hindi ] = "à¤°~à¤šà¤¨à¤¾";
-        Text[ slovak ] = "F~ormÃ¡t";
-        Text[ hungarian ] = "~FormÃ¡tum";
-        Text[ slovenian ] = "O~blika";
+        Text [ en-US ] = "F~ormat" ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_REFFORMAT
     {
@@ -209,37 +125,10 @@ TabPage TP_FLD_REF
     {
         Pos = MAP_APPFONT ( 170 , 128 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
-        Text = "Na~me" ;
-        TEXT [ English ] = "Na~me" ;
+        Text [ de ] = "Na~me" ;
         Left = TRUE ;
-        Text [ english_us ] = "Na~me" ;
-        Text [ portuguese_brazilian ] = "No~me" ;
-        Text [ swedish ] = "Na~mn" ;
-        Text [ danish ] = "Na~vn" ;
-        Text [ italian ] = "No~me" ;
-        Text [ spanish ] = "No~mbre" ;
-        Text [ french ] = "Nom" ;
-        Text [ dutch ] = "Naa~m" ;
-        Text [ portuguese ] = "No~me" ;
-        Text[ chinese_simplified ] = "åç§°(~M)";
-        Text[ russian ] = "Èìÿ";
-        Text[ polish ] = "~Nazwa";
-        Text[ japanese ] = "åå‰(~M)";
-        Text[ chinese_traditional ] = "åç¨±(~M)";
-        Text[ arabic ] = "ÇáÇÓã";
-        Text[ greek ] = "¼íïìá";
-        Text[ korean ] = "ì´ë¦„(~M)";
-        Text[ turkish ] = "~Ad";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "No~m";
-        Text[ finnish ] = "~Nimi";
-        Text[ thai ] = "à¸Šà¸·à¹ˆ~à¸­";
-        Text[ czech ] = "NÃ¡zev";
-        Text[ hebrew ] = "Na~me";
-        Text[ hindi ] = "à¤¨à¤¾~à¤®";
-        Text[ slovak ] = "NÃ¡~zov";
-        Text[ hungarian ] = "~NÃ©v";
-        Text[ slovenian ] = "I~me";
+        Text [ en-US ] = "Na~me" ;
+        Text [ x-comment ] = " ";
     };
     Edit ED_REFNAME
     {
@@ -253,39 +142,11 @@ TabPage TP_FLD_REF
     {
         Pos = MAP_APPFONT ( 170 , 156 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
-        Text = "~Wert" ;
-        Text [ ENGLISH ] = "Value" ;
-        Text [ norwegian ] = "Verdi" ;
-        Text [ italian ] = "~Valore" ;
-        Text [ portuguese_brazilian ] = "~Valor" ;
-        Text [ portuguese ] = "Valor" ;
-        Text [ finnish ] = "~Arvo" ;
-        Text [ danish ] = "~Værdi" ;
-        Text [ french ] = "~Valeur" ;
-        Text [ swedish ] = "~Värde" ;
-        Text [ dutch ] = "~Waarde" ;
-        Text [ spanish ] = "~Valor" ;
-        Text [ english_us ] = "~Value" ;
+        Text [ de ] = "~Wert" ;
+        Text [ en-US ] = "~Value" ;
         Disable = TRUE ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "æ•°å€¼(~V)";
-        Text[ russian ] = "Çíà÷åíèå";
-        Text[ polish ] = "W~artoœæ";
-        Text[ japanese ] = "å€¤(~V)";
-        Text[ chinese_traditional ] = "æ•¸å€¼(~V)";
-        Text[ arabic ] = "ÇáŞíãÉ";
-        Text[ greek ] = "ÔéìŞ";
-        Text[ korean ] = "ê°’(~V)";
-        Text[ turkish ] = "~Değer";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Valor";
-        Text[ thai ] = "~à¸„à¹ˆà¸²";
-        Text[ czech ] = "Hodnota";
-        Text[ hebrew ] = "~Wert";
-        Text[ hindi ] = "~à¤®à¥‚à¤²à¥à¤¯";
-        Text[ slovak ] = "Ho~dnota";
-        Text[ hungarian ] = "Ã‰~rtÃ©k";
-        Text[ slovenian ] = "~Vrednost";
+        Text [ x-comment ] = " ";
     };
     Edit ED_REFVALUE
     {
@@ -298,130 +159,22 @@ TabPage TP_FLD_REF
     };
     String STR_REFBOOKMARK
     {
-        TEXT = "Textmarken" ;
-        TEXT [ English ] = "Bookmarks" ;
-        Text [ dutch ] = "Tekstmarkeringen" ;
-        Text [ english_us ] = "Bookmarks" ;
-        Text [ italian ] = "Segnalibri" ;
-        Text [ spanish ] = "Marcas de texto" ;
-        Text [ french ] = "Repères de texte" ;
-        Text [ swedish ] = "Bokmärken" ;
-        Text [ danish ] = "Bogmærker" ;
-        Text [ portuguese ] = "Marcadores de texto" ;
-        Text [ portuguese_brazilian ] = "Marcadores" ;
-        Text[ chinese_simplified ] = "ä¹¦ç­¾";
-        Text[ russian ] = "Çàêëàäêè";
-        Text[ polish ] = "Zak³adki";
-        Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆãƒãƒ¼ã‚¯";
-        Text[ chinese_traditional ] = "å…§æ–‡æ¨™ç±¤";
-        Text[ arabic ] = "ÅÔÇÑÇÊ ãÑÌÚíÉ";
-        Text[ greek ] = "ÓçìÜäéá êåéìİíïõ";
-        Text[ korean ] = "ì±…ê°ˆí”¼";
-        Text[ turkish ] = "Metin işareti";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Marques de text";
-        Text[ finnish ] = "Kirjanmerkit";
-        Text[ thai ] = "à¸—à¸µà¹ˆà¸„à¸±à¹ˆà¸™";
-        Text[ czech ] = "ZÃ¡loÅ¾ky";
-        Text[ hebrew ] = "Textmarken";
-        Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤ à¤¸à¤‚à¤•à¥‡à¤¤";
-        Text[ slovak ] = "ZÃ¡loÅ¾ky";
-        Text[ hungarian ] = "KÃ¶nyvjelzÅ‘k";
-        Text[ slovenian ] = "Zaznamki";
+        Text [ de ] = "Textmarken" ;
+        Text [ en-US ] = "Bookmarks" ;
+        Text [ x-comment ] = " ";
     };
     String STR_REFFOOTNOTE
     {
-        Text = "Fußnoten" ;
-        Text [ English ] = "Footnotes" ;
-        Text [ norwegian ] = "Fotnoter" ;
-        Text [ italian ] = "Note a piè pagina" ;
-        Text [ portuguese_brazilian ] = "Notas de Rodapé" ;
-        Text [ portuguese ] = "Notas de rodapé" ;
-        Text [ finnish ] = "Alaviitteet" ;
-        Text [ danish ] = "Fodnoter" ;
-        Text [ french ] = "Notes de bas de page" ;
-        Text [ swedish ] = "Fotnoter" ;
-        Text [ dutch ] = "Voetnoten" ;
-        Text [ spanish ] = "Notas al pie" ;
-        Text [ english_us ] = "Footnotes" ;
-        Text[ chinese_simplified ] = "æ³¨è„š";
-        Text[ russian ] = "Ñíîñêè";
-        Text[ polish ] = "Przypisy dolne";
-        Text[ japanese ] = "è„šæ³¨";
-        Text[ chinese_traditional ] = "è¨»è…³";
-        Text[ arabic ] = "ÍæÇÔí ÓİáíÉ";
-        Text[ greek ] = "Õğïóçìåéşóåéò";
-        Text[ korean ] = "ê°ì£¼";
-        Text[ turkish ] = "Dipnotlar";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Notes al peu";
-        Text[ thai ] = "à¹€à¸Šà¸´à¸‡à¸­à¸£à¸£à¸–";
-        Text[ czech ] = "PoznÃ¡mky pod Äarou";
-        Text[ hebrew ] = "â€®×”×¢×¨×•×ª ×©×•×œ×™×™×â€¬";
-        Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤¨à¥€à¤šà¥‡ à¤•à¥€ à¤Ÿà¥€à¤•à¤¾";
-        Text[ slovak ] = "PoznÃ¡mky pod Äiarou";
-        Text[ hungarian ] = "LÃ¡bjegyzetek";
-        Text[ slovenian ] = "Sprotne opombe";
+        Text [ de ] = "Fußnoten" ;
+        Text [ en-US ] = "Footnotes" ;
+        Text [ x-comment ] = " ";
     };
     String STR_REFENDNOTE
     {
-        Text = "Endnoten" ;
-        Text [ ENGLISH ] = "endnotes" ;
-        Text [ english_us ] = "Endnotes" ;
-        Text [ portuguese_brazilian ] = "Notas de Fim" ;
-        Text [ swedish ] = "Slutnoter" ;
-        Text [ danish ] = "Slutnoter" ;
-        Text [ italian ] = "Note di chiusura" ;
-        Text [ spanish ] = "Notas finales" ;
-        Text [ french ] = "Notes de fin" ;
-        Text [ dutch ] = "Eindnoten" ;
-        Text [ portuguese ] = "Notas finais" ;
-        Text[ chinese_simplified ] = "å°¾æ³¨";
-        Text[ russian ] = "Êîíöåâàÿ ñíîñêà";
-        Text[ polish ] = "Przypisy koñcowe";
-        Text[ japanese ] = "æ–‡æœ«è„šæ³¨";
-        Text[ chinese_traditional ] = "å°¾è¨»";
-        Text[ arabic ] = "ÊÚáíŞÇÊ ÎÊÇãíÉ";
-        Text[ greek ] = "Óçìåéşóåéò ôİëïõò";
-        Text[ korean ] = "ë¯¸ì£¼";
-        Text[ turkish ] = "Son notlar";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Notes finals";
-        Text[ finnish ] = "Loppuviitteet";
-        Text[ thai ] = "à¸­à¹‰à¸²à¸‡à¸­à¸´à¸‡à¸—à¹‰à¸²à¸¢à¹€à¸£à¸·à¹ˆà¸­à¸‡";
-        Text[ czech ] = "VysvÄ›tlivky";
-        Text[ hebrew ] = "Endnoten";
-        Text[ hindi ] = "à¤…à¤‚à¤¤à¤¿à¤® à¤Ÿà¥€à¤•à¤¾";
-        Text[ slovak ] = "Vysvetlivky";
-        Text[ hungarian ] = "VÃ©gjegyzetek";
-        Text[ slovenian ] = "KonÄne opombe";
+        Text [ de ] = "Endnoten" ;
+        Text [ en-US ] = "Endnotes" ;
+        Text [ x-comment ] = " ";
     };
-    Text [ english_us ] = "References" ;
-    Text [ portuguese_brazilian ] = "Referências" ;
-    Text [ swedish ] = "Referenser" ;
-    Text [ danish ] = "Henvisninger" ;
-    Text [ italian ] = "Riferimenti" ;
-    Text [ spanish ] = "Referencias" ;
-    Text [ french ] = "Références" ;
-    Text [ dutch ] = "Verwijzingen" ;
-    Text [ portuguese ] = "Referências" ;
-    Text[ chinese_simplified ] = "è¯´æ˜æ–‡";
-    Text[ russian ] = "Ññûëêè";
-    Text[ polish ] = "Odwo³ania";
-    Text[ japanese ] = "å‚ç…§";
-    Text[ chinese_traditional ] = "åƒç…§";
-    Text[ arabic ] = "ÇáãÑÇÌÚ";
-    Text[ greek ] = "Ğáñáğïìğİò";
-    Text[ korean ] = "ì°¸ì¡°";
-    Text[ turkish ] = "Referanslar";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Referències";
-    Text[ finnish ] = "Viitteet";
-    Text[ thai ] = "à¸­à¹‰à¸²à¸‡à¸­à¸´à¸‡";
-    Text[ czech ] = "Odkazy";
-    Text[ hebrew ] = "Referenzen";
-    Text[ hindi ] = "à¤°à¥‡à¤«à¤°à¥‡à¤¨à¥à¤¸";
-    Text[ slovak ] = "Odkazy";
-    Text[ hungarian ] = "HivatkozÃ¡sok";
-    Text[ slovenian ] = "Sklici";
+    Text [ en-US ] = "References" ;
+    Text [ x-comment ] = " ";
 };
