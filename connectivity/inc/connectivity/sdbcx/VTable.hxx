@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VTable.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 10:48:21 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 08:35:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,12 +153,7 @@ namespace connectivity
                     const ::rtl::OUString& _SchemaName  = ::rtl::OUString(),
                     const ::rtl::OUString& _CatalogName = ::rtl::OUString());
 
-            virtual ~OTable()
-            {
-                delete m_pIndexes;
-                delete m_pKeys;
-                delete m_pColumns;
-            }
+            virtual ~OTable();
 
             DECLARE_SERVICE_INFO();
             //XInterface
@@ -195,9 +190,12 @@ namespace connectivity
             virtual void SAL_CALL alterColumnByIndex( sal_Int32 index, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
             // XNamed
-            virtual ::rtl::OUString SAL_CALL getName(  ) throw(::com::sun::star::uno::RuntimeException)
+            virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException)
             {
-                return m_SchemaName + ::rtl::OUString::createFromAscii(".") + m_Name;
+                // this is only correct for tables who haven't a schema or catalog name
+                OSL_ENSHURE(!m_CatalogName.getLength(),"getName(): forgot to overload getName()!");
+                OSL_ENSHURE(!m_SchemaName.getLength(),"getName(): forgot to overload getName()!");
+                return m_Name;
             }
             virtual void SAL_CALL setName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException)
             {}

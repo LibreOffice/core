@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 10:48:21 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 08:33:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,20 +161,10 @@ namespace connectivity
             // the returned object is empty will be filled outside and added to the collection
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject() = 0;
 
-            OCollection(::cppu::OWeakObject& _rParent,sal_Bool _bCase, ::osl::Mutex& _rMutex,const ::std::vector< ::rtl::OUString> &_rVector)
-                     : m_rParent(_rParent)
-                     ,m_rMutex(_rMutex)
-                     ,m_aRefreshListeners(_rMutex)
-                     ,m_aNameMap(_bCase)
-            {
-                for(::std::vector< ::rtl::OUString>::const_iterator i=_rVector.begin(); i != _rVector.end();++i)
-                    m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectMap::value_type(*i,::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNamed >())));
-            }
+            OCollection(::cppu::OWeakObject& _rParent,sal_Bool _bCase, ::osl::Mutex& _rMutex,const ::std::vector< ::rtl::OUString> &_rVector);
 
         public:
-            virtual ~OCollection()
-            {
-            }
+            virtual ~OCollection();
 
             DECLARE_SERVICE_INFO();
 

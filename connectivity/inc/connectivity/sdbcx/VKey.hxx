@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VKey.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 10:48:21 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 08:35:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,10 +123,7 @@ namespace connectivity
                     sal_Int32       _DeleteRule,
                     sal_Bool _bCase);
 
-            virtual ~OKey( )
-            {
-                delete m_pColumns;
-            }
+            virtual ~OKey( );
 
             DECLARE_SERVICE_INFO();
             //XInterface
