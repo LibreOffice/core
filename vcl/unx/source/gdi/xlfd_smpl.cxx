@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_smpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 14:52:06 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 13:49:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,12 +282,12 @@ Xlfd::ToString( ByteString &rString ) const
     AppendAttribute( mpFactory->RetrieveSetwidth(mnSetwidth), rString );
     AppendAttribute( mpFactory->RetrieveAddstyle(mnAddstyle), rString );
 
-    rString += '-'; rString += ByteString::CreateFromInt32( mnPixelSize );
-    rString += '-'; rString += ByteString::CreateFromInt32( mnPointSize );
-    rString += '-'; rString += ByteString::CreateFromInt32( mnResolutionX );
-    rString += '-'; rString += ByteString::CreateFromInt32( mnResolutionY );
-    rString += '-'; rString += static_cast< char >(mcSpacing);
-    rString += '-'; rString += ByteString::CreateFromInt32( mnAverageWidth );
+    rString.Append("-"); rString.Append( ByteString::CreateFromInt32( mnPixelSize ) );
+    rString.Append("-"); rString.Append( ByteString::CreateFromInt32( mnPointSize ) );
+    rString.Append("-"); rString.Append( ByteString::CreateFromInt32( mnResolutionX ) );
+    rString.Append("-"); rString.Append( ByteString::CreateFromInt32( mnResolutionY ) );
+    rString.Append("-"); rString.Append( (char)mcSpacing );
+    rString.Append("-"); rString.Append( ByteString::CreateFromInt32( mnAverageWidth ) );
 
     AppendAttribute( mpFactory->RetrieveCharset(mnCharset), rString );
 
