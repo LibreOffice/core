@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 10:00:18 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:37:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,7 +379,16 @@ void SwRTFParser::Continue( int nToken )
             *pSttNdIdx = pPos->nNode.GetIndex()-1;
             pDoc->SplitNode( *pPos );
 
+            SwPaM aInsertionRangePam( *pPos );
+
             pPam->Move( fnMoveBackward );
+
+            // #106634# split any redline over the insertion point
+            aInsertionRangePam.SetMark();
+            *aInsertionRangePam.GetPoint() = *pPam->GetPoint();
+            aInsertionRangePam.Move( fnMoveBackward );
+            pDoc->SplitRedline( aInsertionRangePam );
+
             pDoc->SetTxtFmtColl( *pPam, pDoc->GetTxtCollFromPoolSimple
                                  ( RES_POOLCOLL_STANDARD, FALSE ));
 
