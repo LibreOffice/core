@@ -13,8 +13,14 @@
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
+#ifndef _UCBHELPER_MACROS_HXX
+#include <ucbhelper/macros.hxx>
+#endif
 #ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
 #include <com/sun/star/uno/XInterface.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
+#include <com/sun/star/lang/XTypeProvider.hpp>
 #endif
 #ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
@@ -45,6 +51,7 @@ namespace fileaccess {
 
     class XStream_impl
         : public cppu::OWeakObject,
+          public com::sun::star::lang::XTypeProvider,
           public com::sun::star::io::XStream,
           public com::sun::star::io::XSeekable,
           public com::sun::star::io::XInputStream,
@@ -84,6 +91,11 @@ namespace fileaccess {
         release(
             void )
             throw( com::sun::star::uno::RuntimeException );
+
+
+        // XTypeProvider
+
+        XTYPEPROVIDER_DECL()
 
 
         // XStream

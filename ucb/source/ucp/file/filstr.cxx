@@ -28,7 +28,10 @@ XStream_impl::queryInterface(
     throw( uno::RuntimeException)
 {
     uno::Any aRet = cppu::queryInterface( rType,
+                                          SAL_STATIC_CAST( lang::XTypeProvider*,this ),
                                           SAL_STATIC_CAST( io::XStream*,this ),
+                                          SAL_STATIC_CAST( io::XInputStream*,this ),
+                                          SAL_STATIC_CAST( io::XOutputStream*,this ),
                                           SAL_STATIC_CAST( io::XSeekable*,this ),
                                           SAL_STATIC_CAST( io::XTruncate*,this ) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
@@ -51,6 +54,20 @@ XStream_impl::release(
 {
     OWeakObject::release();
 }
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//  XTypeProvider
+//////////////////////////////////////////////////////////////////////////////////////////
+
+
+XTYPEPROVIDER_IMPL_6( XStream_impl,
+                      lang::XTypeProvider,
+                      io::XStream,
+                      io::XSeekable,
+                      io::XInputStream,
+                      io::XOutputStream,
+                      io::XTruncate )
 
 
 
