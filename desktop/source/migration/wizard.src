@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizard.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 15:50:22 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:50:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,7 @@ TabPage TP_WELCOME
     // bold fixedtext for header
     FixedText FT_WELCOME_HEADER
     {
+        NoLabel = TRUE;
         Pos = MAP_APPFONT(MARGINRIGHT, MARGINTOP);
         Size = MAP_APPFONT( BODYWIDTH, ROWHEIGHT );
         Text [ de ]    = "Willkommen zu %PRODUCTNAME %PRODUCTVERSION";
@@ -181,6 +182,7 @@ TabPage TP_WELCOME
     };
     FixedText FT_WELCOME_BODY
     {
+        NoLabel = TRUE;
         Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP + 2*ROWHEIGHT);
         Size = MAP_APPFONT( BODYWIDTH, BODYHEIGHT-MARGINTOP - 2*ROWHEIGHT );
         WordBreak = TRUE;
@@ -199,13 +201,15 @@ TabPage TP_LICENSE
     {
         Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP);
         Size = MAP_APPFONT( BODYWIDTH, ROWHEIGHT );
+        NoLabel = TRUE;
         Text [ en-US ] = "Please follow these steps to accept the license";
-        Text [ de ]    = "Bitte folgen Sie diesen Schritten, um die Lizenz zu akzeptieren.";
+        Text [ de ]    = "Bitte folgen Sie diesen Schritten, um die Lizenz zu akzeptieren";
     };
     FixedText FT_LICENSE_BODY_1
     {
         Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP + 2*ROWHEIGHT);
         Size = MAP_APPFONT( INDENT, ROWHEIGHT );
+        NoLabel = TRUE;
         Text [ en-US ] = "1.";
         Text [ de ]    = "1.";
     };
@@ -214,13 +218,15 @@ TabPage TP_LICENSE
         Pos = MAP_APPFONT(MARGINLEFT+INDENT, MARGINTOP +2*ROWHEIGHT);
         Size = MAP_APPFONT( BODYWIDTH-INDENT, 3*ROWHEIGHT);
         WordBreak = TRUE;
+        NoLabel = TRUE;
         Text [ en-US ] = "View the complete License Agreement. Please use the scrollbar or the '%PAGEDOWN' button in this dialog to view the entire license text.";
-        Text [ de ]    = "Lesen Sie den gesamten Lizenzvertrag. Verwenden Sie die Bildlaufleiste oder die %PAGEDOWN Schaltfläche in diesem Dialog um den gesamten Text sichtbar zu machen.";
+        Text [ de ]    = "Lesen Sie den gesamten Lizenzvertrag. Verwenden Sie die Bildlaufleiste oder die '%PAGEDOWN' Schaltfläche in diesem Dialog, um den gesamten Text sichtbar zu machen.";
     };
     FixedText FT_LICENSE_BODY_2
     {
         Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP + 5*ROWHEIGHT);
         Size = MAP_APPFONT(INDENT, ROWHEIGHT );
+        NoLabel = TRUE;
         Text [ en-US ] = "2.";
         Text [ de ]    = "2.";
     };
@@ -229,8 +235,9 @@ TabPage TP_LICENSE
         Pos = MAP_APPFONT(MARGINLEFT+INDENT, MARGINTOP + 5*ROWHEIGHT);
         Size = MAP_APPFONT( BODYWIDTH-INDENT, 2*ROWHEIGHT);
         WordBreak = TRUE;
-        Text [ en-US ] = "Click 'Accept' to accept the terms of the Agreement. ";
-        Text [ de ]    = "Klicken Sie auf 'Akzeptieren' um die Bedingungen des Vertrages zu akzeptieren";
+        NoLabel = TRUE;
+        Text [ en-US ] = "Click 'Accept' to accept the terms of the Agreement.";
+        Text [ de ]    = "Klicken Sie auf 'Akzeptieren', um die Bedingungen des Vertrages zu akzeptieren.";
     };
     MultiLineEdit ML_LICENSE
     {
@@ -245,7 +252,7 @@ TabPage TP_LICENSE
         Pos = MAP_APPFONT ( TP_WIDTH-MARGINRIGHT-50 , TP_HEIGHT-MARGINBOTTOM-15 ) ;
         Size = MAP_APPFONT ( 50, 15 ) ;
         Text [ de ] = "Blätt~ern";
-        Text [ en-US ] = "Scroll ~Down";
+        Text [ en-US ] = "Scroll Do~wn";
     };
 };
 
@@ -270,6 +277,7 @@ TabPage TP_MIGRATION
 
     FixedText FT_MIGRATION_HEADER
     {
+        NoLabel = TRUE;
         Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP);
         Size = MAP_APPFONT( BODYWIDTH, ROWHEIGHT );
         Text [ en-US ] = "Transfer personal data";
@@ -279,11 +287,12 @@ TabPage TP_MIGRATION
 
     FixedText FT_MIGRATION_BODY
     {
+        NoLabel = TRUE;
         Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP+ROWHEIGHT*2);
         Size = MAP_APPFONT(BODYWIDTH, ROWHEIGHT*8);
         WordBreak = TRUE;
         Text [ en-US ] = "Personal data from %OLDPRODUCT installation can be used in %PRODUCTNAME %PRODUCTVERSION.\n\nUnmark the check box below if you do not want data such as templates, dictionaries and Gallery themes to be copied to %PRODUCTNAME %PRODUCTVERSION. To migrate all your personal data from the previous version of  %PRODUCTNAME, follow the guidelines in the Readme file.";
-        Text [ de ]    = "Sie können persönliche Daten aus %OLDPRODUCT nach %PRODUCTNAME %PRODUCTVERSION kopieren.\n\nDeaktivieren Sie das  Markierfeld weiter unten, um Benutzerdaten wie Dokumentvorlagen, Wörterbücher und Gallery-Themen nicht nach %PRODUCTNAME %PRODUCTVERSION zu übernhmen. Zur vollständigen Migration Ihrer Daten beachten Sie bitte auch weitere Hinweise in der Readme-Datei.";
+        Text [ de ]    = "Sie können persönliche Daten aus %OLDPRODUCT nach %PRODUCTNAME %PRODUCTVERSION kopieren.\n\nDeaktivieren Sie das  Markierfeld weiter unten, um Benutzerdaten wie Dokumentvorlagen, Wörterbücher und Gallery-Themen nicht nach %PRODUCTNAME %PRODUCTVERSION zu übernehmen. Zur vollständigen Migration Ihrer Daten beachten Sie bitte auch weitere Hinweise in der Readme-Datei.";
     };
 
     CheckBox CB_MIGRATION
@@ -310,15 +319,17 @@ TabPage TP_USER
 
     FixedText FT_USER_HEADER
     {
+        NoLabel = TRUE;
         Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP);
         Size = MAP_APPFONT( BODYWIDTH, ROWHEIGHT );
         Text [ en-US ] = "Provide your full name and initials below";
-        Text [ de ]    = "Bitte geben Sie ihren Vor- und Nachnamen sowie Ihre Kürzel an.";
+        Text [ de ]    = "Bitte geben Sie ihren Vor- und Nachnamen sowie Ihr Kürzel an";
 
     };
 
     FixedText FT_USER_BODY
     {
+        NoLabel = TRUE;
         Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP+ROWHEIGHT*2);
         Size = MAP_APPFONT(BODYWIDTH, ROWHEIGHT*3);
         WordBreak = TRUE;
@@ -326,12 +337,13 @@ TabPage TP_USER
         Text [ de ]    = "Der Benutzername wird in den Dokumenteigenschaften sowie Dokumentvorlagen verwendet und wenn Sie Änderungen an Dokumenten aufzeichnen.";
     };
 
+
     FixedText FT_USER_FIRST
     {
         Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP+ROWHEIGHT*7+FTADD);
         Size = MAP_APPFONT(USERINDENT, ROWHEIGHT);
-        Text [ en-US ] = "First name";
-        Text [ de ]    = "Vorname";
+        Text [ en-US ] = "~First name";
+        Text [ de ]    = "~Vorname";
     };
     Edit ED_USER_FIRST
     {
@@ -339,13 +351,12 @@ TabPage TP_USER
         Pos = MAP_APPFONT(MARGINLEFT+USERINDENT, MARGINTOP+ROWHEIGHT*7);
         Size = MAP_APPFONT(BODYWIDTH-USERINDENT, EDHEIGHT);
     };
-
     FixedText FT_USER_LAST
     {
         Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP+ROWHEIGHT*9+FTADD);
         Size = MAP_APPFONT(USERINDENT, ROWHEIGHT);
-        Text [ en-US ] = "Last name";
-        Text [ de ]    = "Nachname";
+        Text [ en-US ] = "~Last name";
+        Text [ de ]    = "~Nachname";
     };
     Edit ED_USER_LAST
     {
@@ -353,13 +364,12 @@ TabPage TP_USER
         Pos = MAP_APPFONT(MARGINLEFT+USERINDENT, MARGINTOP+ROWHEIGHT*9);
         Size = MAP_APPFONT(BODYWIDTH-USERINDENT, EDHEIGHT);
     };
-
     FixedText FT_USER_INITIALS
     {
         Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP+ROWHEIGHT*11+FTADD);
         Size = MAP_APPFONT(USERINDENT, ROWHEIGHT);
-        Text [ en-US ] = "Initials";
-        Text [ de ]    = "Kürzel";
+        Text [ en-US ] = "~Initials";
+        Text [ de ]    = "~Kürzel";
     };
     Edit ED_USER_INITIALS
     {
@@ -373,8 +383,8 @@ TabPage TP_USER
         Hide = TRUE;
         Pos = MAP_APPFONT(MARGINLEFT+USERINDENT+INITIALSWIDTH+10, MARGINTOP+ROWHEIGHT*11+FTADD);
         Size = MAP_APPFONT(USERINDENT, ROWHEIGHT);
-        Text [ en-US ] = "Father's name";
-        Text [ de ]    = "Vatername";
+        Text [ en-US ] = "~Father's name";
+        Text [ de ]    = "~Vatername";
     };
     Edit ED_USER_FATHER
     {
@@ -393,6 +403,7 @@ TabPage TP_REGISTRATION
     HelpID          = HID_FIRSTSTART_REGISTRATION;
     FixedText FT_REGISTRATION_HEADER
     {
+        NoLabel = TRUE;
         Text [ en-US ] = "%PRODUCTNAME Registration";
         Text [ de ]    = "%PRODUCTNAME Registrierung";
         Pos = MAP_APPFONT(MARGINLEFT, MARGINRIGHT);
@@ -414,17 +425,18 @@ TabPage TP_REGISTRATION
     };
     FixedText FT_REGISTRATION_BODY
     {
+        NoLabel = TRUE;
         Text [ en-US ] = "You now have the opportunity to register as a %PRODUCTNAME user. Registration is voluntary and is without obligation.\n\nIf you register, we can inform you about new developments concerning this product.";
         Text [ de ]    = "Sie haben jetzt die Möglichkeit, sich als %PRODUCTNAME Anwender registrieren zu lassen.  Die Registrierung ist freiwillig und für Sie unverbindlich.\n\nWenn Sie sich registrieren, können wir Sie über Produktneuheiten informieren.";
         WordBreak = TRUE;
         Pos = MAP_APPFONT(MARGINLEFT+INDENT2, MARGINTOP+ROWHEIGHT*2);
-        Size = MAP_APPFONT(BODYWIDTH-INDENT2, ROWHEIGHT*9);
+        Size = MAP_APPFONT(BODYWIDTH-INDENT2, ROWHEIGHT*7);
     };
 
     RadioButton RB_REGISTRATION_NOW
     {
         Text [ en-US ] = "I want to register ~now";
-        Text [ de ]    = "Ich möchte mich ~jetzt registrieren";
+        Text [ de ]    = "Ich möchte mich jetzt ~registrieren";
         Pos = MAP_APPFONT(MARGINLEFT+INDENT2, ROWHEIGHT*11);
         Size = MAP_APPFONT(BODYWIDTH-INDENT2, ROWHEIGHT*2);
         Check = TRUE;
@@ -459,6 +471,7 @@ TabPage TP_REGISTRATION
 
     FixedText FT_REGISTRATION_END
     {
+        NoLabel = TRUE;
         Text [ en-US ] = "We hope you enjoy working with %PRODUCTNAME.\n\nTo exit the wizard, click 'Finish'.";
         Text [ de ]    = "Wir wünschen Ihnen viel Spaß und Erfolg mit %PRODUCTNAME.\n\nKlicken Sie auf 'Fertig', um den Assistenten zu beenden.";
         Pos = MAP_APPFONT(MARGINLEFT, TP_HEIGHT-MARGINBOTTOM-ROWHEIGHT*4);
