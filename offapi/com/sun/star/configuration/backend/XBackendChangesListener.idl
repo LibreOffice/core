@@ -1,0 +1,43 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XBackendChangesListener.idl,v $
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_configuration_backend_XBackendChangesListener_idl__
+#define __com_sun_star_configuration_backend_XBackendChangesListener_idl__
+
+#ifndef __com_sun_star_configuration_backend_ComponentChangeEvent_idl__
+#include <com/sun/star/configuration/backend/ComponentChangeEvent.idl>
+#endif
+
+#ifndef __com_sun_star_lang_XEventListener_idl__
+#include <com/sun/star/lang/XEventListener.idl>
+#endif
+//=============================================================================
+
+module com {  module sun {  module star {  module configuration {  module backend {
+
+//=============================================================================
+
+/** receives notification from backend broadcaster objects.
+
+    @see XBackendChangesNotifier
+
+ */
+    interface XBackendChangesListener: ::com::sun::star::lang::XEventListener
+{
+    //-------------------------------------------------------------------------
+    /** is invoked when component data in backend source changes
+
+        @param Event
+             Event indicating the component data change
+     */
+    void componentDataChanged( [in] com::sun::star::configuration::backend::ComponentChangeEvent Event );
+
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif
