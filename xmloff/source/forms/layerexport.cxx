@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:33:18 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,9 +100,12 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
+
+// #110680#
+//#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+//#include <comphelper/processfactory.hxx>
+//#endif
+
 #ifndef _XMLOFF_FORMS_CONTROLPROPERTYMAP_HXX_
 #include "controlpropertymap.hxx"
 #endif
@@ -763,8 +766,14 @@ namespace xmloff
                                                 ::rtl::OUString::createFromAscii("US"),
                                                 ::rtl::OUString()
                                             );
+                // #110680#
+                //Reference< XInterface > xFormatsSupplierUntyped =
+                //  ::comphelper::getProcessServiceFactory()->createInstanceWithArguments(
+                //      SERVICE_NUMBERFORMATSSUPPLIER,
+                //      aSupplierArgs
+                //  );
                 Reference< XInterface > xFormatsSupplierUntyped =
-                    ::comphelper::getProcessServiceFactory()->createInstanceWithArguments(
+                    m_rContext.getServiceFactory()->createInstanceWithArguments(
                         SERVICE_NUMBERFORMATSSUPPLIER,
                         aSupplierArgs
                     );
