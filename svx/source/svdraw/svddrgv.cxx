@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svddrgv.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:44:25 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:54:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ SdrDragView::SdrDragView(SdrModel* pModel1, OutputDevice* pOut):
     ImpMakeDragAttr();
 }
 
-SdrDragView::SdrDragView(SdrModel* pModel1, ExtOutputDevice* pXOut):
+SdrDragView::SdrDragView(SdrModel* pModel1, XOutputDevice* pXOut):
     SdrExchangeView(pModel1,pXOut)
 {
     ImpClearVars();
@@ -204,7 +204,8 @@ void SdrDragView::TakeActionRect(Rectangle& rRect) const
             for (USHORT nv=0; nv<GetPageViewCount(); nv++) {
                 SdrPageView* pPV=GetPageViewPvNum(nv);
                 if (pPV->HasMarkedObjPageView()) {
-                    Rectangle aR(pPV->DragPoly().GetBoundRect(GetWin(0)));
+//BFS09                 Rectangle aR(pPV->DragPoly().GetBoundRect(GetWin(0)));
+                    Rectangle aR(pPV->DragPoly().GetBoundRect());
                     aR+=pPV->GetOffset();
                     if (b1st) {
                         b1st=FALSE;
@@ -967,7 +968,7 @@ BOOL SdrDragView::IsMoveOnlyDragObj(BOOL bAskRTTI) const
     return bRet;
 }
 
-void SdrDragView::ImpDrawEdgeXor(ExtOutputDevice& rXOut, BOOL bFull) const
+void SdrDragView::ImpDrawEdgeXor(XOutputDevice& rXOut, BOOL bFull) const
 {
     ULONG nEdgeAnz = GetEdgesOfMarkedNodes().GetMarkCount();
     BOOL bNo=(!IsRubberEdgeDragging() && !IsDetailedEdgeDragging()) || nEdgeAnz==0 ||
@@ -1144,48 +1145,49 @@ void SdrDragView::SetDetailedEdgeDraggingLimit(USHORT nEdgeObjAnz)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrDragView::WriteRecords(SvStream& rOut) const
-{
-    SdrExchangeView::WriteRecords(rOut);
-    {
-        SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWDRAGSTRIPES);
-        rOut<<(BOOL)bDragStripes;
-    } {
-        SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWDRAGHIDEHDL);
-        rOut<<(BOOL)bNoDragHdl;
-    } {
-        SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWOBJHITMOVES);
-        rOut<<(BOOL)bMarkedHitMovesAlways;
-    } {
-        SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWMIRRDRAGOBJ);
-        rOut<<(BOOL)bMirrRefDragObj;
-    }
-}
+//BFS01void SdrDragView::WriteRecords(SvStream& rOut) const
+//BFS01{
+//BFS01 SdrExchangeView::WriteRecords(rOut);
+//BFS01 {
+//BFS01     SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWDRAGSTRIPES);
+//BFS01     rOut<<(BOOL)bDragStripes;
+//BFS01 } {
+//BFS01     SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWDRAGHIDEHDL);
+//BFS01     rOut<<(BOOL)bNoDragHdl;
+//BFS01 } {
+//BFS01     SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWOBJHITMOVES);
+//BFS01     rOut<<(BOOL)bMarkedHitMovesAlways;
+//BFS01 } {
+//BFS01     SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWMIRRDRAGOBJ);
+//BFS01     rOut<<(BOOL)bMirrRefDragObj;
+//BFS01 }
+//BFS01}
 
-BOOL SdrDragView::ReadRecord(const SdrIOHeader& rViewHead,
-    const SdrNamedSubRecord& rSubHead,
-    SvStream& rIn)
-{
-    BOOL bRet=FALSE;
-    if (rSubHead.GetInventor()==SdrInventor) {
-        bRet=TRUE;
-        switch (rSubHead.GetIdentifier()) {
-            case SDRIORECNAME_VIEWDRAGSTRIPES: {
-                BOOL bZwi; rIn >> bZwi; bDragStripes = bZwi;
-            } break;
-            case SDRIORECNAME_VIEWDRAGHIDEHDL: {
-                BOOL bZwi; rIn >> bZwi; bNoDragHdl = bZwi;
-            } break;
-            case SDRIORECNAME_VIEWOBJHITMOVES: {
-                BOOL bZwi; rIn >> bZwi; bMarkedHitMovesAlways = bZwi;
-            } break;
-            case SDRIORECNAME_VIEWMIRRDRAGOBJ: {
-                BOOL bZwi; rIn >> bZwi; bMirrRefDragObj = bZwi;
-            } break;
-            default: bRet=FALSE;
-        }
-    }
-    if (!bRet) bRet=SdrExchangeView::ReadRecord(rViewHead,rSubHead,rIn);
-    return bRet;
-}
+//BFS01BOOL SdrDragView::ReadRecord(const SdrIOHeader& rViewHead,
+//BFS01 const SdrNamedSubRecord& rSubHead,
+//BFS01 SvStream& rIn)
+//BFS01{
+//BFS01 BOOL bRet=FALSE;
+//BFS01 if (rSubHead.GetInventor()==SdrInventor) {
+//BFS01     bRet=TRUE;
+//BFS01     switch (rSubHead.GetIdentifier()) {
+//BFS01         case SDRIORECNAME_VIEWDRAGSTRIPES: {
+//BFS01             BOOL bZwi; rIn >> bZwi; bDragStripes = bZwi;
+//BFS01         } break;
+//BFS01         case SDRIORECNAME_VIEWDRAGHIDEHDL: {
+//BFS01             BOOL bZwi; rIn >> bZwi; bNoDragHdl = bZwi;
+//BFS01         } break;
+//BFS01         case SDRIORECNAME_VIEWOBJHITMOVES: {
+//BFS01             BOOL bZwi; rIn >> bZwi; bMarkedHitMovesAlways = bZwi;
+//BFS01         } break;
+//BFS01         case SDRIORECNAME_VIEWMIRRDRAGOBJ: {
+//BFS01             BOOL bZwi; rIn >> bZwi; bMirrRefDragObj = bZwi;
+//BFS01         } break;
+//BFS01         default: bRet=FALSE;
+//BFS01     }
+//BFS01 }
+//BFS01 if (!bRet) bRet=SdrExchangeView::ReadRecord(rViewHead,rSubHead,rIn);
+//BFS01 return bRet;
+//BFS01}
 
+// eof
