@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 13:53:09 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:29:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1888,10 +1888,10 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
                     {
                         pTxtNode->SwCntntNode::SetAttr(
                             SwNumRuleItem(mpChosenOutlineNumRule->GetName()));
-                        pTxtNode->UpdateNum(SwNodeNum(NO_NUM));
+                        pTxtNode->UpdateNum(SwNodeNum());
                     }
                     else
-                        pTxtNode->UpdateNum(SwNodeNum(NO_NUM));
+                        pTxtNode->UpdateNum(SwNodeNum());
                 }
 
                 //#94672#
