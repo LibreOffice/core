@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-24 10:41:04 $
+ *  last change: $Author: nn $ $Date: 2000-11-01 18:26:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -769,7 +769,9 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
     OUString sType;
     switch ( nFmtType )
     {
-//!     case 0:                         // may occur in imported documents (?)
+        // type is 0 if a format contains no recognized elements
+        // (like text only) - this is handled as a number-style.
+        case 0:
         case NUMBERFORMAT_NUMBER:
         case NUMBERFORMAT_SCIENTIFIC:
         case NUMBERFORMAT_FRACTION:
