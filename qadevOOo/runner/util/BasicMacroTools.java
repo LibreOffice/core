@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BasicMacroTools.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-11-18 16:17:22 $
+ *  last change:$Date: 2004-12-10 17:01:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,9 +106,8 @@ public class BasicMacroTools {
                                                  XPropertySet.class, xDoc);
                 DocLibCont = xDocProps.getPropertyValue("BasicLibraries");
             } catch (com.sun.star.uno.Exception e) {
-                e.printStackTrace();
                 throw new Exception(
-                        "Couldn't get BasicLibraries-Container from document: ", e);
+                        "Couldn't get BasicLibraries-Container from document: " + e.toString());
             }
 
             mLCxNA = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class,
@@ -139,9 +138,8 @@ public class BasicMacroTools {
                 ASLC = mMSF.createInstance(
                                "com.sun.star.script.ApplicationScriptLibraryContainer");
             } catch (com.sun.star.uno.Exception e) {
-                e.printStackTrace();
                 throw new Exception(
-                        "Couldn't create ApplicationScriptLibraryContainer", e);
+                        "Couldn't create ApplicationScriptLibraryContainer" + e.toString());
             }
 
             mLCxNA = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class,
@@ -189,7 +187,7 @@ public class BasicMacroTools {
         } catch (java.lang.Exception e) {
             e.printStackTrace();
             throw new Exception("ERROR: Could not append Library " +
-                                LibraryName, e);
+                                LibraryName + e.toString());
         }
 
         try {
@@ -197,11 +195,11 @@ public class BasicMacroTools {
         } catch (com.sun.star.container.NoSuchElementException e) {
             e.printStackTrace();
             throw new Exception("ERROR: Could not load Library " +
-                                LibraryName, e);
+                                LibraryName + e.toString());
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace();
             throw new Exception("ERROR: Could not load Library " +
-                                LibraryName, e);
+                                LibraryName + e.toString());
         }
     }
 
@@ -217,11 +215,11 @@ public class BasicMacroTools {
         } catch (com.sun.star.container.ElementExistException e) {
             e.printStackTrace();
             throw new Exception("ERROR: Library " + LibraryName +
-                                "already exist.", e);
+                                "already exist." + e.toString());
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace();
             throw new Exception("Could not link Basic library:" +
-                                LibraryName, e);
+                                LibraryName + e.toString());
         }
     }
 
@@ -232,11 +230,11 @@ public class BasicMacroTools {
             } catch (com.sun.star.container.NoSuchElementException e) {
                 e.printStackTrace();
                 throw new Exception("Could not remove Basic library:" +
-                                    LibraryName + ": Library does not exist", e);
+                                    LibraryName + ": Library does not exist" + e.toString());
             } catch (com.sun.star.lang.WrappedTargetException e) {
                 e.printStackTrace();
                 throw new Exception("Could not remove Basic library:" +
-                                    LibraryName, e);
+                                    LibraryName + e.toString());
             }
         }
     }
