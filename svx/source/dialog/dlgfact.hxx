@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfact.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:57:27 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 14:03:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,8 @@ class FmSearchDialog;
 class Graphic;
 class GraphicFilterDialog;
 class SvxAreaTabDialog;
+class SvxTransformTabDialog;
+class SvxCaptionTabDialog;
 
 namespace svx{
 class HangulHanjaConversionDialog;
@@ -357,6 +359,29 @@ class AbstractSvxJSearchOptionsDialog_Impl :public AbstractSvxJSearchOptionsDial
 };
 //for SvxJSearchOptionsDialog end
 
+class AbstractSvxTransformTabDialog_Impl : public AbstractSvxTransformTabDialog
+{
+    DECL_ABSTDLG_BASE(AbstractSvxTransformTabDialog_Impl,SvxTransformTabDialog);
+    virtual void SetValidateFramePosLink( const Link& rLink );
+    virtual void                SetCurPageId( USHORT nId );
+    virtual const SfxItemSet*   GetOutputItemSet() const;
+    virtual const USHORT*       GetInputRanges( const SfxItemPool& pItem );
+    virtual void                SetInputSet( const SfxItemSet* pInSet );
+    virtual void        SetText( const XubString& rStr );
+    virtual String      GetText() const;
+};
+class AbstractSvxCaptionDialog_Impl : public AbstractSvxCaptionDialog
+{
+    DECL_ABSTDLG_BASE(AbstractSvxCaptionDialog_Impl,SvxCaptionTabDialog);
+    virtual void SetValidateFramePosLink( const Link& rLink );
+    virtual void                SetCurPageId( USHORT nId );
+    virtual const SfxItemSet*   GetOutputItemSet() const;
+    virtual const USHORT*       GetInputRanges( const SfxItemPool& pItem );
+    virtual void                SetInputSet( const SfxItemSet* pInSet );
+    virtual void        SetText( const XubString& rStr );
+    virtual String      GetText() const;
+};
+
 //for FmInputRecordNoDialog end
 class FmInputRecordNoDialog;
 class AbstractFmInputRecordNoDialog_Impl :public AbstractFmInputRecordNoDialog
@@ -533,7 +558,7 @@ public:
     virtual SfxAbstractTabDialog*       CreateTabItemDialog( Window* pParent,
                                             const SfxItemSet& rSet,
                                             const ResId& rResId); //add by CHINA001
-    virtual SfxAbstractTabDialog*       CreateCaptionDialog( Window* pParent,
+    virtual AbstractSvxCaptionDialog*   CreateCaptionDialog( Window* pParent,
                                             const SdrView* pView,
                                             const ResId& rResId,
                                             USHORT nAnchorTypes = 0 );      //add for SvxCaptionTabDialog CHINA001
@@ -556,7 +581,7 @@ public:
                                             const SfxItemSet& rCoreSet,
                                             const ResId& rResId,
                                             BOOL bEnableSelector = FALSE) ;
-   virtual SfxAbstractTabDialog* CreateSvxTransformTabDialog( Window* pParent, //add for SvxTransformTabDialog
+   virtual AbstractSvxTransformTabDialog* CreateSvxTransformTabDialog( Window* pParent, //add for SvxTransformTabDialog
                                                                 const SfxItemSet* pAttr,
                                                                 const SdrView* pView,
                                                                 const ResId& rResId,
