@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragr.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dl $ $Date: 2001-05-08 13:38:30 $
+ *  last change: $Author: rt $ $Date: 2001-05-11 05:19:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ TabDialog TAB_PARAGRAPH
                 Text [ italian ] = "Rientro e spaziatura" ;
                 Text [ portuguese_brazilian ] = "Indentar e Espaçar" ;
                 Text [ portuguese ] = "Avanços e espaçamento" ;
-                Text [ finnish ] = "Sisennys ja välit" ;
+                Text [ finnish ] = "Sisennykset ja välit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
                 Text [ french ] = "Retraits et écarts" ;
                 Text [ swedish ] = "Indrag och avstånd" ;
@@ -143,6 +143,7 @@ TabDialog TAB_PARAGRAPH
                 Text[ turkish ] = "Asian typography";
                 Text[ arabic ] = "ÃÓáæÈ ÇáØÈÇÚÉ ÇáÂÓíæíÉ";
                 Text[ catalan ] = "Tipografía asiática";
+                Text[ finnish ] = "Aasialaiset merkit";
             };
             PageItem
             {
@@ -170,6 +171,7 @@ TabDialog TAB_PARAGRAPH
                 Text[ turkish ] = "Hizalama";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Alineación";
+                Text[ finnish ] = "Tasaus";
             };
             /*
             PageItem  {
@@ -199,7 +201,7 @@ TabDialog TAB_PARAGRAPH
                 Text [ italian ] = "Tabulazione" ;
                 Text [ portuguese_brazilian ] = "Parágrafo (Tabs)" ;
                 Text [ portuguese ] = "Tabulação" ;
-                Text [ finnish ] = "Kappale (sarkaimet)" ;
+                Text [ finnish ] = "Sarkaimet" ;
                 Text [ danish ] = "Tabulator" ;
                 Text [ french ] = "Tabulation" ;
                 Text [ swedish ] = "Tabulator" ;
@@ -250,7 +252,7 @@ TabDialog TAB_PARAGRAPH
         Text [ italian ] = "Indietro" ;
         Text [ portuguese_brazilian ] = "Devolver" ;
         Text [ portuguese ] = "Anterior" ;
-        Text [ finnish ] = "Palaa" ;
+        Text [ finnish ] = "Takaisin" ;
         Text [ danish ] = "Tilbage" ;
         Text [ french ] = "Précédent" ;
         Text [ swedish ] = "Tillbaka" ;
