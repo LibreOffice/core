@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 18:13:05 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:13:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -735,6 +735,8 @@ const SwPropNameTab aPropNameTab = {
 /* 0653 UNO_NAME_CHAR_STYLE_NAMES */  {MAP_CHAR_LEN("CharStyleNames")},
 /* 0654 UNO_NAME_DAD_COMMAND */  {MAP_CHAR_LEN("Command")},
 /* 0655 UNO_NAME_DAD_COMMAND_TYPE */  {MAP_CHAR_LEN("CommandType")}
+/* 0655 UNO_NAME_CLSID*/              {MAP_CHAR_LEN("CLSID")},
+/* 0656 UNO_NAME_COMPONENT*/              {MAP_CHAR_LEN("Component")}
 };
 
 #ifndef PRODUCT
