@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2004-08-02 14:31:17 $
+#   last change: $Author: rt $ $Date: 2004-09-09 09:13:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,11 +70,9 @@ TARGET=databasegeneral
 
 .INCLUDE : $(PRJ)$/util$/target.pmk
 
-
-
 ZIP1TARGET      = $(DATABASE_USER_TARGET)
 
-ZIP1LIST        = *.odb
+ZIP1LIST        = biblio.odb
 
 ZIP2TARGET      = $(DATABASE_USER_BIBLIO_TARGET)
 
