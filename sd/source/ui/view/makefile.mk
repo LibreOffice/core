@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-03 11:59:11 $
+#   last change: $Author: rt $ $Date: 2004-07-13 14:59:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -129,7 +129,6 @@ SLOFILES =	\
         $(SLO)$/prvwshll.obj \
         $(SLO)$/outlview.obj \
         $(SLO)$/tabcontr.obj \
-        $(SLO)$/layertab.obj \
         $(SLO)$/showview.obj \
         $(SLO)$/showwin.obj	\
         $(SLO)$/bmcache.obj	\
@@ -151,11 +150,16 @@ SLOFILES =	\
         $(SLO)$/Outliner.obj					\
         $(SLO)$/OutlinerIterator.obj			\
         $(SLO)$/OutlineViewShellBase.obj		\
+        $(SLO)$/PaneManager.obj					\
         $(SLO)$/SlideSorterViewShellBase.obj	\
         $(SLO)$/PresentationViewShellBase.obj	\
         $(SLO)$/PrintManager.obj				\
-        $(SLO)$/SubShellManager.obj				\
+        $(SLO)$/ViewClipboard.obj				\
         $(SLO)$/ViewShellBase.obj				\
+        $(SLO)$/ViewShellImplementation.obj		\
+        $(SLO)$/ViewShellManager.obj			\
+        $(SLO)$/ViewShellCache.obj				\
+        $(SLO)$/ViewTabBar.obj					\
         $(SLO)$/WindowUpdater.obj
 
 
