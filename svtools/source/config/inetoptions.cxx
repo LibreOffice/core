@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetoptions.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 17:20:32 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:27:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef _SVTOOLS_INETOPTIONS_HXX_
 #include <inetoptions.hxx>
+#endif
+
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include "rtl/instance.hxx"
 #endif
 
 #ifndef _URLOBJ_HXX
@@ -469,13 +473,20 @@ SvtInetOptions::Impl::removePropertiesChangeListener(
 //
 //============================================================================
 
+namespace
+{
+    class LocalSingleton : public rtl::Static< osl::Mutex, LocalSingleton >
+    {
+    };
+}
+
 // static
 SvtInetOptions::Impl * SvtInetOptions::m_pImpl = 0;
 
 //============================================================================
 SvtInetOptions::SvtInetOptions()
 {
-    osl::MutexGuard aGuard(osl::Mutex::getGlobalMutex());
+    osl::MutexGuard aGuard(LocalSingleton::get());
     if (!m_pImpl)
     {
         RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtInetOptions_Impl::ctor()");
@@ -490,7 +501,7 @@ SvtInetOptions::SvtInetOptions()
 //============================================================================
 SvtInetOptions::~SvtInetOptions()
 {
-    osl::MutexGuard aGuard(osl::Mutex::getGlobalMutex());
+    osl::MutexGuard aGuard(LocalSingleton::get());
     if (m_pImpl->release() == 0)
         m_pImpl = 0;
 }
