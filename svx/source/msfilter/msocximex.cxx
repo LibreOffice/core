@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msocximex.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:30:07 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 09:39:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,12 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
+#ifndef _COM_SUN_STAR_AWT_XCONTROLMODEL_HPP_
+#include <com/sun/star/awt/XControlModel.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XINPUTSTREAMPROVIDER_HPP_
+#include <com/sun/star/io/XInputStreamProvider.hpp>
+#endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
@@ -136,6 +142,7 @@
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
 #endif
+#include <xmlscript/xmldlg_imexp.hxx>
 #ifndef _MSOCXIMEX_HXX
 #include "msocximex.hxx"
 #endif
@@ -167,22 +174,75 @@ static char sWW8_form[] = "WW-Standard";
 sal_uInt8 __READONLY_DATA OCX_Control::aObjInfo[4] = { 0x00, 0x12, 0x03, 0x00 };
 
 
-void Align(SvStorageStream *pS,int nAmount,BOOL bFill=FALSE)
+long ReadAlign(SvStorageStream *pS, long nPos, int nAmount)
 {
-    if (pS->Tell()%nAmount)
+    if (long nAlign = nPos % nAmount)
     {
-        if (bFill == FALSE)
-            pS->SeekRel(nAmount-(pS->Tell()%nAmount));
-        else
-        {
-        int nLen = nAmount-(pS->Tell()%nAmount);
-        for(int i=0;i<nLen;i++)
-            *pS << sal_uInt8(0x00);
-        }
+        long nLen = nAmount - nAlign;
+        pS->SeekRel(nLen);
+        return nLen;
     }
+    return 0;
 }
 
+long WriteAlign(SvStorageStream *pS, int nAmount)
+{
+    if (long nAlign = pS->Tell() % nAmount)
+    {
+        long nLen = nAmount - nAlign;
+        for (long i=0; i< nLen; ++i)
+            *pS << sal_uInt8(0x00);
+        return nLen;
+    }
+    return 0;
+}
 // string import/export =======================================================
+/** #117832#  import of form control names
+* control name is located in stream ("\3OCXNAME")
+* a strings in "\3OCXNAME" stream seem to be terminated by 4 trailing bytes of 0's.
+*                              ====
+* Note: If the string in the stream is overwritten by a shorter string
+* some characters from the original string may remain, the new string however
+* will still be terminated in the same way e.g. by 4 bytes with value 0.
+*/
+
+bool writeOCXNAME( const OUString& sOCXName, SvStorageStream* pStream )
+{
+    const sal_Unicode* buffer = sOCXName.getStr();
+    for ( sal_Int32 index=0; index < sOCXName.getLength(); index++ )
+    {
+        sal_uInt16 ch = static_cast< sal_uInt16 >( buffer[ index ] );
+        *pStream << ch;
+    }
+    // write
+    *pStream << sal_uInt32(0);
+    return ( SVSTREAM_OK == pStream->GetError() );
+
+}
+
+bool readOCXNAME( OUString& sCName, SvStorageStream* pStream )
+{
+    /*
+    * Read uniCode until no data or 0 encountered
+    */
+    OUStringBuffer buf(40);
+    do
+    {
+        sal_uInt16 ch;
+        *pStream >> ch;
+        sal_Unicode uni = static_cast< sal_Unicode >( ch );
+        if ( uni == 0 )
+        {
+            break;
+        }
+        buf.append( &uni, 1 );
+
+    } while ( !pStream->IsEof() );
+
+    sCName = buf.makeStringAndClear();
+    return ( SVSTREAM_OK == pStream->GetError() );
+}
+
 
 /*  #110435# (DR, 2003-11-12) ** Import of Unicode strings in form controls **
 
@@ -249,14 +309,14 @@ inline sal_uInt32 lclGetBufferSize( sal_uInt32 nLenFld )
     @param nLenFld
         The corresponding string length field read somewhere before.
  */
-void lclReadCharArray( SvStorageStream& rStrm, char*& rpcCharArr, sal_uInt32 nLenFld )
+void lclReadCharArray( SvStorageStream& rStrm, char*& rpcCharArr, sal_uInt32 nLenFld, long nPos )
 {
     delete[] rpcCharArr;
     sal_uInt32 nBufSize = lclGetBufferSize( nLenFld );
     if( nBufSize )
     {
         rpcCharArr = new char[ nBufSize ];
-        Align( &rStrm, 4 );
+        ReadAlign( &rStrm, nPos, 4 );
         rStrm.Read( rpcCharArr, nBufSize );
     }
     else
@@ -383,7 +443,7 @@ void SvxOcxString::WriteLenField( SvStorageStream& rStrm ) const
 {
     if( HasData() )
     {
-        Align( &rStrm, 4, TRUE );
+        WriteAlign( &rStrm, 4);
         rStrm << mnLenFld;
     }
 }
@@ -396,7 +456,7 @@ void SvxOcxString::WriteCharArray( SvStorageStream& rStrm ) const
         const sal_Unicode* pEnd = pChar + maString.getLength();
         bool bCompr = lclIsCompressed( mnLenFld );
 
-        Align( &rStrm, 4, TRUE );
+        WriteAlign( &rStrm, 4);
         for( ; pChar < pEnd; ++pChar )
         {
             // write compressed Unicode (not encoded bytestring), or Little-Endian Unicode
@@ -538,6 +598,67 @@ sal_uInt32 OCX_Control::ExportColor(sal_uInt32 nColor) const
     return nColor;
 }
 
+sal_Bool OCX_Control::Import(
+    const uno::Reference< lang::XMultiServiceFactory > &rServiceFactory,
+    uno::Reference< form::XFormComponent >  &rFComp, awt::Size &rSz)
+{
+
+    if(msFormType.getLength() == 0)
+        return sal_False;
+
+    rSz.Width = nWidth;
+    rSz.Height = nHeight;
+
+    uno::Reference<uno::XInterface> xCreate =
+        rServiceFactory->createInstance(msFormType);
+    if (!xCreate.is())
+        return sal_False;
+
+    rFComp = uno::Reference<form::XFormComponent>(xCreate,uno::UNO_QUERY);
+    if (!rFComp.is())
+        return sal_False;
+    uno::Reference<beans::XPropertySet> xPropSet(xCreate,uno::UNO_QUERY);
+    if (!xPropSet.is())
+        return sal_False;
+    return Import(xPropSet);
+}
+
+sal_Bool OCX_Control::Import(uno::Reference<container::XNameContainer> &rDialog,
+    const TypeName& rItem)
+{
+    uno::Reference<lang::XMultiServiceFactory>
+        xFactory(rDialog, uno::UNO_QUERY);
+
+    uno::Reference<uno::XInterface> xCreate =
+        xFactory->createInstance(msDialogType);
+    if (!xCreate.is())
+        return sal_False;
+
+    uno::Reference<awt::XControlModel> xModel(xCreate, uno::UNO_QUERY);
+    if (!xModel.is())
+        return sal_False;
+
+    rDialog->insertByName(rItem.msName, uno::makeAny(xModel));
+
+    uno::Reference<beans::XPropertySet> xPropSet(xCreate, uno::UNO_QUERY);
+    if (!xPropSet.is())
+        return sal_False;
+
+    if (!Import(xPropSet))
+        return sal_False;
+
+    uno::Any aTmp;
+    aTmp <<= sal_Int32((rItem.mnLeft * 2) / 100);
+    xPropSet->setPropertyValue(WW8_ASCII2STR("PositionX"), aTmp);
+    aTmp <<= sal_Int32((rItem.mnTop * 2) / 100);
+    xPropSet->setPropertyValue(WW8_ASCII2STR("PositionY"), aTmp);
+    aTmp <<= sal_Int32((nWidth * 2) / 100);
+    xPropSet->setPropertyValue(WW8_ASCII2STR("Width"), aTmp);
+    aTmp <<= sal_Int32((nHeight * 2) / 100);
+    xPropSet->setPropertyValue(WW8_ASCII2STR("Height"), aTmp);
+
+    return sal_True;
+}
 
 sal_Int16 OCX_Control::ImportBorder(sal_uInt16 nSpecialEffect,
     sal_uInt16 nBorderStyle) const
@@ -696,38 +817,20 @@ const uno::Reference< container::XIndexContainer >&
     return xFormComps;
 }
 
-sal_Bool OCX_CommandButton::Import(
-    const uno::Reference< lang::XMultiServiceFactory > &rServiceFactory,
-    uno::Reference< form::XFormComponent >  &rFComp,
-    awt::Size &rSz)
+sal_Bool OCX_CommandButton::Import( com::sun::star::uno::Reference<
+    com::sun::star::beans::XPropertySet> &rPropSet)
 {
-    OUString sServiceName =
-        WW8_ASCII2STR("com.sun.star.form.component.CommandButton");
-    uno::Reference< uno::XInterface > xCreate =
-        rServiceFactory->createInstance( sServiceName );
-    if( !xCreate.is() )
-        return sal_False;
-
-    rFComp = uno::Reference< form::XFormComponent > (xCreate,uno::UNO_QUERY);
-    if( !rFComp.is() )
-        return sal_False;
-
-    uno::Reference< beans::XPropertySet >  xPropSet( xCreate, uno::UNO_QUERY );
-
-    rSz.Width = nWidth;
-    rSz.Height = nHeight;
-
     uno::Any aTmp(&sName,getCppuType((OUString *)0));
-    xPropSet->setPropertyValue( WW8_ASCII2STR("Name"), aTmp );
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Name"), aTmp );
 
     aTmp <<= ImportColor(nForeColor);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
 
     // fake transparent push button by setting window background color
     if( !fBackStyle )
         nBackColor = 0x80000005;
     aTmp <<= ImportColor(nBackColor);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
 
     sal_Bool bTemp;
     if ((!(fEnabled)) || (fLocked))
@@ -736,22 +839,22 @@ sal_Bool OCX_CommandButton::Import(
         bTemp = sal_True;
     aTmp = bool2any(bTemp);
 
-    xPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
 
     bTemp = fWordWrap != 0;
     aTmp = bool2any(bTemp);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("MultiLine"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("MultiLine"), aTmp);
 
     if (pCaption)
     {
         aTmp <<= lclCreateOUString( pCaption, nCaptionLen );
-        xPropSet->setPropertyValue( WW8_ASCII2STR("Label"), aTmp);
+        rPropSet->setPropertyValue( WW8_ASCII2STR("Label"), aTmp);
     }
 
     aTmp = bool2any( mbTakeFocus );
-    xPropSet->setPropertyValue( WW8_ASCII2STR( "FocusOnClick" ), aTmp );
+    rPropSet->setPropertyValue( WW8_ASCII2STR( "FocusOnClick" ), aTmp );
 
-    aFontData.Import(xPropSet);
+    aFontData.Import(rPropSet);
     return sal_True;
 }
 
@@ -812,7 +915,7 @@ sal_Bool OCX_CommandButton::WriteContents(SvStorageStreamRef &rContents,
     aCaption.WriteLenField( *rContents );
     aCaption.WriteCharArray( *rContents );
 
-    Align(rContents,4,TRUE);
+    WriteAlign(rContents,4);
 
     *rContents << rSize.Width;
     *rContents << rSize.Height;
@@ -922,7 +1025,7 @@ sal_Bool OCX_ImageButton::WriteContents(SvStorageStreamRef &rContents,
     *rContents << sal_uInt8(0x00);
     *rContents << sal_uInt8(0x00);
 
-    Align(rContents,4,TRUE);
+    WriteAlign(rContents,4);
 
     *rContents << rSize.Width;
     *rContents << rSize.Height;
@@ -1000,35 +1103,18 @@ sal_Bool OCX_ImageButton::Export(SvStorageRef &rObj,
 }
 
 
-sal_Bool OCX_OptionButton::Import(
-    const uno::Reference< lang::XMultiServiceFactory > &rServiceFactory,
-    uno::Reference< form::XFormComponent > &rFComp, awt::Size &rSz)
+sal_Bool OCX_OptionButton::Import(com::sun::star::uno::Reference<
+        com::sun::star::beans::XPropertySet> &rPropSet)
 {
-    OUString sServiceName =
-        WW8_ASCII2STR("com.sun.star.form.component.RadioButton");
-    uno::Reference< uno::XInterface >  xCreate =
-        rServiceFactory->createInstance( sServiceName );
-    if( !xCreate.is() )
-        return sal_False;
-
-    rFComp = uno::Reference< form::XFormComponent > (xCreate,uno::UNO_QUERY);
-    if( !rFComp.is() )
-        return sal_False;
-
-    uno::Reference< beans::XPropertySet >  xPropSet(xCreate,uno::UNO_QUERY);
-
-    rSz.Width = nWidth;
-    rSz.Height = nHeight;
-
     uno::Any aTmp(&sName,getCppuType((OUString *)0));
-    xPropSet->setPropertyValue( WW8_ASCII2STR("Name"), aTmp );
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Name"), aTmp );
 
     // background color: fBackStyle==0 -> transparent
     if( fBackStyle )
         aTmp <<= ImportColor(nBackColor);
     else
         aTmp = uno::Any();
-    xPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
 
     sal_Bool bTemp;
     if ((!(fEnabled)) || (fLocked))
@@ -1036,32 +1122,32 @@ sal_Bool OCX_OptionButton::Import(
     else
         bTemp = sal_True;
     aTmp = bool2any(bTemp);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
 
     bTemp = fWordWrap != 0;
     aTmp = bool2any(bTemp);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("MultiLine"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("MultiLine"), aTmp);
 
     aTmp <<= ImportColor(nForeColor);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
 
     aTmp <<= ImportSpecEffect( nSpecialEffect );
-    xPropSet->setPropertyValue( WW8_ASCII2STR("VisualEffect"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("VisualEffect"), aTmp);
 
-    if (pValue)
+    if (pValue && !bSetInDialog)
     {
         INT16 nTmp = pValue[0]-0x30;
         aTmp <<= nTmp;
-        xPropSet->setPropertyValue( WW8_ASCII2STR("DefaultState"), aTmp);
+        rPropSet->setPropertyValue( WW8_ASCII2STR("DefaultState"), aTmp);
     }
 
     if (pCaption)
     {
         aTmp <<= lclCreateOUString( pCaption, nCaptionLen );
-        xPropSet->setPropertyValue( WW8_ASCII2STR("Label"), aTmp);
+        rPropSet->setPropertyValue( WW8_ASCII2STR("Label"), aTmp);
     }
 
-    aFontData.Import(xPropSet);
+    aFontData.Import(rPropSet);
     return sal_True;
 }
 
@@ -1121,7 +1207,7 @@ sal_Bool OCX_OptionButton::WriteContents(SvStorageStreamRef &rContents,
     *rContents << nStyle;
     pBlockFlags[0] |= 0x40;
 
-    Align(rContents,4,TRUE);
+    WriteAlign(rContents,4);
     nValueLen = 1|SVX_MSOCX_COMPRESSED;
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("DefaultState"));
     INT16 nDefault;
@@ -1145,7 +1231,7 @@ sal_Bool OCX_OptionButton::WriteContents(SvStorageStreamRef &rContents,
     *rContents << nSpecialEffect;
     pBlockFlags[3] |= 0x04;
 
-    Align(rContents,4,TRUE);
+    WriteAlign(rContents,4);
     *rContents << rSize.Width;
     *rContents << rSize.Height;
 
@@ -1155,7 +1241,7 @@ sal_Bool OCX_OptionButton::WriteContents(SvStorageStreamRef &rContents,
 
     aCaption.WriteCharArray( *rContents );
 
-    Align(rContents,4,TRUE);
+    WriteAlign(rContents,4);
     nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell()-nOldPos-4);
     bRet = aFontData.Export(rContents,rPropSet);
 
@@ -1232,56 +1318,39 @@ sal_Bool OCX_OptionButton::Export(SvStorageRef &rObj,
 }
 
 
-sal_Bool OCX_TextBox::Import(
-    const uno::Reference< lang::XMultiServiceFactory > &rServiceFactory,
-    uno::Reference< form::XFormComponent >  &rFComp, awt::Size &rSz)
+sal_Bool OCX_TextBox::Import(com::sun::star::uno::Reference<
+    com::sun::star::beans::XPropertySet> &rPropSet)
 {
-    OUString sServiceName =
-        WW8_ASCII2STR("com.sun.star.form.component.TextField");
-    uno::Reference< uno::XInterface >  xCreate =
-        rServiceFactory->createInstance( sServiceName );
-    if( !xCreate.is() )
-        return sal_False;
-
-    rFComp = uno::Reference< form::XFormComponent > (xCreate,uno::UNO_QUERY);
-    if( !rFComp.is() )
-        return sal_False;
-
-    uno::Reference< beans::XPropertySet >  xPropSet( xCreate, uno::UNO_QUERY );
-
-    rSz.Width = nWidth;
-    rSz.Height = nHeight;
-
     uno::Any aTmp(&sName,getCppuType((OUString *)0));
-    xPropSet->setPropertyValue( WW8_ASCII2STR("Name"), aTmp );
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Name"), aTmp );
 
     aTmp = bool2any( fEnabled != 0 );
-    xPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
 
     aTmp = bool2any( fLocked != 0 );
-    xPropSet->setPropertyValue( WW8_ASCII2STR("ReadOnly"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("ReadOnly"), aTmp);
 
     aTmp = bool2any( fHideSelection != 0 );
-    xPropSet->setPropertyValue( WW8_ASCII2STR( "HideInactiveSelection" ), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR( "HideInactiveSelection" ), aTmp);
 
     aTmp <<= ImportColor(nForeColor);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
 
     aTmp <<= ImportColor(nBackColor);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
 
     aTmp <<= ImportBorder(nSpecialEffect,nBorderStyle);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("Border"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Border"), aTmp);
 
     aTmp <<= ImportColor( nBorderColor );
-    xPropSet->setPropertyValue( WW8_ASCII2STR("BorderColor"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("BorderColor"), aTmp);
 
     aTmp = bool2any( fMultiLine != 0 );
-    xPropSet->setPropertyValue( WW8_ASCII2STR("MultiLine"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("MultiLine"), aTmp);
 
     sal_uInt16 nTmp = static_cast<sal_uInt16>(nMaxLength);
     aTmp <<= nTmp;
-    xPropSet->setPropertyValue( WW8_ASCII2STR("MaxTextLen"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("MaxTextLen"), aTmp);
 
 
     sal_Bool bTemp1,bTemp2;
@@ -1309,20 +1378,28 @@ sal_Bool OCX_TextBox::Import(
 
     aBarsH = bool2any(bTemp1);
     aBarsV = bool2any(bTemp2);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("HScroll"), aBarsH);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("VScroll"), aBarsV);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("HScroll"), aBarsH);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("VScroll"), aBarsV);
 
     nTmp = nPasswordChar;
     aTmp <<= nTmp;
-    xPropSet->setPropertyValue( WW8_ASCII2STR("EchoChar"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("EchoChar"), aTmp);
 
     if (pValue)
     {
         aTmp <<= lclCreateOUString( pValue, nValueLen );
-        xPropSet->setPropertyValue( WW8_ASCII2STR("DefaultText"), aTmp);
+        // DefaultText seems to no longer be in UnoEditControlModel
+        if ( bSetInDialog )
+        {
+            rPropSet->setPropertyValue( WW8_ASCII2STR("Text"), aTmp);
+        }
+        else
+        {
+            rPropSet->setPropertyValue( WW8_ASCII2STR("DefaultText"), aTmp);
+        }
     }
 
-    aFontData.Import(xPropSet);
+    aFontData.Import(rPropSet);
     return sal_True;
 }
 
@@ -1420,7 +1497,7 @@ sal_Bool OCX_TextBox::WriteContents(SvStorageStreamRef &rContents,
     if (aValue.HasData())
         pBlockFlags[2] |= 0x40;
 
-    Align(rContents,4,TRUE);
+    WriteAlign(rContents,4);
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BorderColor"));
     if (aTmp.hasValue())
         aTmp >>= nBorderColor;
@@ -1430,13 +1507,13 @@ sal_Bool OCX_TextBox::WriteContents(SvStorageStreamRef &rContents,
     *rContents << nSpecialEffect;
     pBlockFlags[3] |= 0x04;
 
-    Align(rContents,4,TRUE);
+    WriteAlign(rContents,4);
     *rContents << rSize.Width;
     *rContents << rSize.Height;
 
     aValue.WriteCharArray( *rContents );
 
-    Align(rContents,4,TRUE);
+    WriteAlign(rContents,4);
 
     nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell()-nOldPos-4);
 
@@ -1577,7 +1654,7 @@ sal_Bool OCX_FieldControl::WriteContents(SvStorageStreamRef &rContents,
     *rContents << nSpecialEffect;
     pBlockFlags[3] |= 0x04;
 
-    Align(rContents,4,TRUE);
+    WriteAlign(rContents,4);
     *rContents << rSize.Width;
     *rContents << rSize.Height;
 
@@ -1585,7 +1662,7 @@ sal_Bool OCX_FieldControl::WriteContents(SvStorageStreamRef &rContents,
     aValue.WriteCharArray( *rContents );
 #endif
 
-    Align(rContents,4,TRUE);
+    WriteAlign(rContents,4);
 
     nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell()-nOldPos-4);
 
@@ -1661,31 +1738,14 @@ sal_Bool OCX_FieldControl::Export(SvStorageRef &rObj,
 
 
 
-sal_Bool OCX_ToggleButton::Import(
-    const uno::Reference< lang::XMultiServiceFactory > &rServiceFactory,
-    uno::Reference< form::XFormComponent > &rFComp, awt::Size &rSz)
+sal_Bool OCX_ToggleButton::Import(com::sun::star::uno::Reference<
+    com::sun::star::beans::XPropertySet> &rPropSet)
 {
-    OUString sServiceName =
-        WW8_ASCII2STR("com.sun.star.form.component.CommandButton");
-    uno::Reference< uno::XInterface >  xCreate =
-        rServiceFactory->createInstance( sServiceName );
-    if( !xCreate.is() )
-        return sal_False;
-
-    rFComp = uno::Reference< form::XFormComponent > (xCreate,uno::UNO_QUERY);
-    if( !rFComp.is() )
-        return sal_False;
-
-    uno::Reference< beans::XPropertySet >  xPropSet(xCreate,uno::UNO_QUERY);
-
-    rSz.Width = nWidth;
-    rSz.Height = nHeight;
-
     uno::Any aTmp(&sName,getCppuType((OUString *)0));
-    xPropSet->setPropertyValue( WW8_ASCII2STR("Name"), aTmp );
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Name"), aTmp );
 
     aTmp = bool2any(true);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("Toggle"), aTmp );
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Toggle"), aTmp );
 
     sal_Bool bTemp;
     if ((!(fEnabled)) || (fLocked))
@@ -1693,35 +1753,35 @@ sal_Bool OCX_ToggleButton::Import(
     else
         bTemp = sal_True;
     aTmp = bool2any(bTemp);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
 
     bTemp = fWordWrap != 0;
     aTmp = bool2any(bTemp);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("MultiLine"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("MultiLine"), aTmp);
 
     aTmp <<= ImportColor(nForeColor);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
 
     // fake transparent toggle button by setting window background color
     if( !fBackStyle )
         nBackColor = 0x80000005;
     aTmp <<= ImportColor(nBackColor);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
 
     if (pValue)
     {
         INT16 nTmp=pValue[0]-0x30;
         aTmp <<= nTmp;
-        xPropSet->setPropertyValue( WW8_ASCII2STR("State"), aTmp);
+        rPropSet->setPropertyValue( WW8_ASCII2STR("State"), aTmp);
     }
 
     if (pCaption)
     {
         aTmp <<= lclCreateOUString( pCaption, nCaptionLen );
-        xPropSet->setPropertyValue( WW8_ASCII2STR("Label"), aTmp);
+        rPropSet->setPropertyValue( WW8_ASCII2STR("Label"), aTmp);
     }
 
-    aFontData.Import(xPropSet);
+    aFontData.Import(rPropSet);
     return sal_True;
 }
 
@@ -1830,7 +1890,7 @@ sal_Bool OCX_ToggleButton::WriteContents(SvStorageStreamRef &rContents,
     *rContents << nStyle;
     pBlockFlags[0] |= 0x40;
 
-    Align(rContents,4,TRUE);
+    WriteAlign(rContents,4);
     nValueLen = 1|SVX_MSOCX_COMPRESSED;
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("State"));
     INT16 nDefault;
@@ -1843,7 +1903,7 @@ sal_Bool OCX_ToggleButton::WriteContents(SvStorageStreamRef &rContents,
     if (aCaption.HasData())
         pBlockFlags[2] |= 0x80;
 
-    Align(rContents,4,TRUE);
+    WriteAlign(rContents,4);
     *rContents << rSize.Width;
     *rContents << rSize.Height;
 
@@ -1853,7 +1913,7 @@ sal_Bool OCX_ToggleButton::WriteContents(SvStorageStreamRef &rContents,
 
     aCaption.WriteCharArray( *rContents );
 
-    Align(rContents,4,TRUE);
+    WriteAlign(rContents,4);
     nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell()-nOldPos-4);
     bRet = aFontData.Export(rContents,rPropSet);
     rContents->Seek(nOldPos);
@@ -1874,28 +1934,10 @@ sal_Bool OCX_ToggleButton::WriteContents(SvStorageStreamRef &rContents,
     return bRet;
 }
 
-sal_Bool OCX_Label::Import(
-    const uno::Reference< lang::XMultiServiceFactory > &rServiceFactory,
-    uno::Reference< form::XFormComponent >  &rFComp,awt::Size &rSz)
+sal_Bool OCX_Label::Import(uno::Reference< beans::XPropertySet > &rPropSet)
 {
-    OUString sServiceName = WW8_ASCII2STR(
-        "com.sun.star.form.component.FixedText");
-    uno::Reference< uno::XInterface >  xCreate =
-        rServiceFactory->createInstance( sServiceName );
-    if( !xCreate.is() )
-        return sal_False;
-
-    rFComp = uno::Reference< form::XFormComponent > (xCreate,uno::UNO_QUERY);
-    if( !rFComp.is() )
-        return sal_False;
-
-    uno::Reference< beans::XPropertySet >  xPropSet(xCreate,uno::UNO_QUERY);
-
-    rSz.Width = nWidth;
-    rSz.Height = nHeight;
-
     uno::Any aTmp(&sName,getCppuType((OUString *)0));
-    xPropSet->setPropertyValue( WW8_ASCII2STR("Name"), aTmp );
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Name"), aTmp );
 
     sal_Bool bTemp;
     if ((!(fEnabled)) || (fLocked))
@@ -1903,93 +1945,83 @@ sal_Bool OCX_Label::Import(
     else
         bTemp = sal_True;
     aTmp = bool2any(bTemp);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
 
     aTmp <<= ImportColor(nForeColor);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
 
     aTmp <<= ImportColor(nBackColor);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
 
     aTmp <<= ImportBorder(nSpecialEffect,nBorderStyle);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("Border"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Border"), aTmp);
 
     aTmp <<= ImportColor( nBorderColor );
-    xPropSet->setPropertyValue( WW8_ASCII2STR("BorderColor"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("BorderColor"), aTmp);
 
     bTemp=fWordWrap;
     aTmp = bool2any(bTemp);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("MultiLine"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("MultiLine"), aTmp);
 
     if (pCaption)
     {
         aTmp <<= lclCreateOUString( pCaption, nCaptionLen );
-        xPropSet->setPropertyValue( WW8_ASCII2STR("Label"), aTmp);
+        rPropSet->setPropertyValue( WW8_ASCII2STR("Label"), aTmp);
     }
 
-    aFontData.Import(xPropSet);
+    aFontData.Import(rPropSet);
     return sal_True;
 }
 
-sal_Bool OCX_ComboBox::Import(
-    const uno::Reference< lang::XMultiServiceFactory >  &rServiceFactory,
-    uno::Reference< form::XFormComponent > &rFComp, awt::Size &rSz)
+sal_Bool OCX_ComboBox::Import(com::sun::star::uno::Reference<
+    com::sun::star::beans::XPropertySet> &rPropSet)
 {
 
-    OUString sServiceName = WW8_ASCII2STR(
-        "com.sun.star.form.component.ComboBox");
-    uno::Reference< uno::XInterface > xCreate =
-        rServiceFactory->createInstance( sServiceName );
-    if( !xCreate.is() )
-        return sal_False;
-
-    rFComp = uno::Reference< form::XFormComponent > (xCreate,uno::UNO_QUERY);
-    if( !rFComp.is() )
-        return sal_False;
-
-    uno::Reference< beans::XPropertySet >  xPropSet( xCreate, uno::UNO_QUERY );
-
-    rSz.Width = nWidth;
-    rSz.Height = nHeight;
-
     uno::Any aTmp(&sName,getCppuType((OUString *)0));
-    xPropSet->setPropertyValue( WW8_ASCII2STR("Name"), aTmp );
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Name"), aTmp );
 
     aTmp = bool2any(fEnabled != 0);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
 
     aTmp = bool2any(fLocked != 0);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("ReadOnly"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("ReadOnly"), aTmp);
 
     aTmp = bool2any( nDropButtonStyle != 0 );
-    xPropSet->setPropertyValue( WW8_ASCII2STR("Dropdown"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Dropdown"), aTmp);
 
     aTmp = bool2any( fHideSelection != 0 );
-    xPropSet->setPropertyValue( WW8_ASCII2STR( "HideInactiveSelection" ), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR( "HideInactiveSelection" ), aTmp);
 
     aTmp <<= ImportColor(nForeColor);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
 
     if (pValue)
     {
         aTmp <<= lclCreateOUString( pValue, nValueLen );
-        xPropSet->setPropertyValue( WW8_ASCII2STR("DefaultText"), aTmp);
+        if ( bSetInDialog )
+        {
+            rPropSet->setPropertyValue( WW8_ASCII2STR("Text"), aTmp);
+        }
+        else
+        {
+            rPropSet->setPropertyValue( WW8_ASCII2STR("DefaultText"), aTmp);
+        }
     }
 
     aTmp <<= ImportColor(nBackColor);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
 
     aTmp <<= ImportBorder(nSpecialEffect,nBorderStyle);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("Border"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Border"), aTmp);
 
     aTmp <<= ImportColor( nBorderColor );
-    xPropSet->setPropertyValue( WW8_ASCII2STR("BorderColor"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("BorderColor"), aTmp);
 
     sal_Int16 nTmp=static_cast<sal_Int16>(nMaxLength);
     aTmp <<= nTmp;
-    xPropSet->setPropertyValue( WW8_ASCII2STR("MaxTextLen"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("MaxTextLen"), aTmp);
 
-    aFontData.Import(xPropSet);
+    aFontData.Import(rPropSet);
     return sal_True;
 }
 
@@ -2056,7 +2088,7 @@ sal_Bool OCX_ComboBox::WriteContents(SvStorageStreamRef &rContents,
     *rContents << nStyle;
     pBlockFlags[0] |= 0x40;
 
-    Align(rContents,2,TRUE);
+    WriteAlign(rContents,2);
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("LineCount"));
     aTmp >>= nListRows;
@@ -2078,7 +2110,7 @@ sal_Bool OCX_ComboBox::WriteContents(SvStorageStreamRef &rContents,
     if (aValue.HasData())
         pBlockFlags[2] |= 0x40;
 
-    Align(rContents,4,TRUE);
+    WriteAlign(rContents,4);
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BorderColor"));
     if (aTmp.hasValue())
         aTmp >>= nBorderColor;
@@ -2088,13 +2120,13 @@ sal_Bool OCX_ComboBox::WriteContents(SvStorageStreamRef &rContents,
     *rContents << nSpecialEffect;
     pBlockFlags[3] |= 0x04;
 
-    Align(rContents,4,TRUE);
+    WriteAlign(rContents,4);
     *rContents << rSize.Width;
     *rContents << rSize.Height;
 
     aValue.WriteCharArray( *rContents );
 
-    Align(rContents,4,TRUE);
+    WriteAlign(rContents,4);
 
     nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell()-nOldPos-4);
 
@@ -2171,42 +2203,27 @@ sal_Bool OCX_ComboBox::Export(SvStorageRef &rObj,
 
 
 
-sal_Bool OCX_ListBox::Import(
-    const uno::Reference< lang::XMultiServiceFactory > &rServiceFactory,
-    uno::Reference< form::XFormComponent > &rFComp, awt::Size &rSz)
+sal_Bool OCX_ListBox::Import(com::sun::star::uno::Reference<
+    com::sun::star::beans::XPropertySet> &rPropSet)
 {
-    OUString sServiceName = WW8_ASCII2STR("com.sun.star.form.component.ListBox");
-    uno::Reference< uno::XInterface > xCreate =
-        rServiceFactory->createInstance( sServiceName );
-    if( !xCreate.is() )
-        return sal_False;
-
-    rFComp = uno::Reference< form::XFormComponent > (xCreate,uno::UNO_QUERY);
-    if( !rFComp.is() )
-        return sal_False;
-
-    uno::Reference< beans::XPropertySet >  xPropSet(xCreate,uno::UNO_QUERY);
-
-    rSz.Width = nWidth;
-    rSz.Height = nHeight;
 
     uno::Any aTmp(&sName,getCppuType((OUString *)0));
-    xPropSet->setPropertyValue( WW8_ASCII2STR("Name"), aTmp );
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Name"), aTmp );
 
     sal_Bool bTmp=fEnabled;
     aTmp = bool2any(bTmp);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
 
     bTmp=fLocked;
     aTmp = bool2any(bTmp);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("ReadOnly"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("ReadOnly"), aTmp);
 
     aTmp <<= ImportColor(nForeColor);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
 
     sal_Bool bTemp = nMultiState;
     aTmp = bool2any(bTemp);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("MultiSelection"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("MultiSelection"), aTmp);
 
 #if 0       //Don't delete this for now until I figure out if I can make this
     if (pValue)
@@ -2217,15 +2234,15 @@ sal_Bool OCX_ListBox::Import(
 #endif
 
     aTmp <<= ImportColor(nBackColor);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
 
     aTmp <<= ImportBorder(nSpecialEffect,nBorderStyle);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("Border"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Border"), aTmp);
 
     aTmp <<= ImportColor( nBorderColor );
-    xPropSet->setPropertyValue( WW8_ASCII2STR("BorderColor"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("BorderColor"), aTmp);
 
-    aFontData.Import(xPropSet);
+    aFontData.Import(rPropSet);
     return sal_True;
 }
 
@@ -2279,7 +2296,7 @@ sal_Bool OCX_ListBox::WriteContents(SvStorageStreamRef &rContents,
     sal_Int16 nBorder;
     aTmp >>= nBorder;
     nSpecialEffect = ExportBorder(nBorder,nBorderStyle);
-    Align(rContents,2,TRUE);
+    WriteAlign(rContents,2);
     *rContents << nBorderStyle;
     pBlockFlags[0] |= 0x10;
 
@@ -2296,7 +2313,8 @@ sal_Bool OCX_ListBox::WriteContents(SvStorageStreamRef &rContents,
     *rContents << nStyle;
     pBlockFlags[0] |= 0x40;
 
-    Align(rContents,4,TRUE);
+
+    WriteAlign(rContents,4);
 
 #if 0
     SvxOcxString aValue( rPropSet->getPropertyValue(WW8_ASCII2STR("DefaultText")) );
@@ -2304,10 +2322,10 @@ sal_Bool OCX_ListBox::WriteContents(SvStorageStreamRef &rContents,
     if (aValue.HasData())
         pBlockFlags[2] |= 0x40;
 
-    Align(rContents,4,TRUE);
+    WriteAlign(rContents,4);
 #endif
 
-    Align(rContents,4,TRUE);
+    WriteAlign(rContents,4);
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BorderColor"));
     if (aTmp.hasValue())
         aTmp >>= nBorderColor;
@@ -2317,7 +2335,7 @@ sal_Bool OCX_ListBox::WriteContents(SvStorageStreamRef &rContents,
     *rContents << nSpecialEffect;
     pBlockFlags[3] |= 0x04;
 
-    Align(rContents,4,TRUE);
+    WriteAlign(rContents,4);
     *rContents << rSize.Width;
     *rContents << rSize.Height;
 
@@ -2325,7 +2343,7 @@ sal_Bool OCX_ListBox::WriteContents(SvStorageStreamRef &rContents,
     aValue.WriteCharArray( *rContents );
 #endif
 
-    Align(rContents,4,TRUE);
+    WriteAlign(rContents,4);
 
     nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell()-nOldPos-4);
 
@@ -2399,8 +2417,20 @@ sal_Bool OCX_ListBox::Export(SvStorageRef &rObj,
     return WriteContents(xContents, rPropSet, rSize);
 }
 
+sal_Bool OCX_Control::Read(SvStorageStream *pS)
+{
+    sal_uInt16 nIdentifier, nFixedAreaLen;
+    *pS >> nIdentifier;
+    DBG_ASSERT(nStandardId==nIdentifier,
+        "A control that has a different identifier");
+    *pS >> nFixedAreaLen;
+    pS->SeekRel(nFixedAreaLen);
+    return true;
+}
+
 sal_Bool OCX_ModernControl::Read(SvStorageStream *pS)
 {
+    long nStart = pS->Tell();
     *pS >> nIdentifier;
     DBG_ASSERT(nIdentifier==nStandardId,
             "A control that has a different identifier");
@@ -2467,33 +2497,33 @@ sal_Bool OCX_ModernControl::Read(SvStorageStream *pS)
 
     if (pBlockFlags[1] & 0x04)
     {
-        Align(pS,4);
+        ReadAlign(pS, pS->Tell() - nStart, 4);
         *pS >> nListWidth;
     }
 
     if (pBlockFlags[1] & 0x08)
     {
-        Align(pS,2);
+        ReadAlign(pS, pS->Tell() - nStart, 2);
         *pS >> nBoundColumn;
     }
     if (pBlockFlags[1] & 0x10)
     {
-        Align(pS,2);
+        ReadAlign(pS, pS->Tell() - nStart, 2);
         *pS >> nTextColumn;
     }
     if (pBlockFlags[1] & 0x20)
     {
-        Align(pS,2);
+        ReadAlign(pS, pS->Tell() - nStart, 2);
         *pS >> nColumnCount;
     }
     if (pBlockFlags[1] & 0x40)
     {
-        Align(pS,2);
+        ReadAlign(pS, pS->Tell() - nStart, 2);
         *pS >> nListRows;
     }
     if (pBlockFlags[1] & 0x80)
     {
-        Align(pS,2);
+        ReadAlign(pS, pS->Tell() - nStart, 2);
         *pS >> nUnknown8; //something to do with ColumnWidths
     }
     if (pBlockFlags[2] & 0x01)
@@ -2510,40 +2540,40 @@ sal_Bool OCX_ModernControl::Read(SvStorageStream *pS)
     bool bValue = (pBlockFlags[2] & 0x40) != 0;
     if (bValue)
     {
-        Align(pS,4);
+        ReadAlign(pS, pS->Tell() - nStart, 4);
         *pS >> nValueLen;
     }
     bool bCaption = (pBlockFlags[2] & 0x80) != 0;
     if (bCaption)
     {
-        Align(pS,4);
+        ReadAlign(pS, pS->Tell() - nStart, 4);
         *pS >> nCaptionLen;
     }
     if (pBlockFlags[3] & 0x01)
     {
-        Align(pS,4);
+        ReadAlign(pS, pS->Tell() - nStart, 4);
         *pS >> nHorzPos;
         *pS >> nVertPos;
     }
     if (pBlockFlags[3] & 0x02)
     {
-        Align(pS,4);
+        ReadAlign(pS, pS->Tell() - nStart, 4);
         *pS >> nBorderColor;
     }
     if (pBlockFlags[3] & 0x04)
     {
-        Align(pS,4); // NEW
+        ReadAlign(pS, pS->Tell() - nStart, 4); // NEW
         *pS >> nSpecialEffect;
     }
     if (pBlockFlags[3] & 0x08)
     {
-        Align(pS,2);
+        ReadAlign(pS, pS->Tell() - nStart, 2);
         *pS >> nIcon;
         DBG_ASSERT(nIcon == 0xFFFF, "Unexpected nIcon");
     }
     if (pBlockFlags[3] & 0x10)
     {
-        Align(pS,2);
+        ReadAlign(pS, pS->Tell() - nStart, 2);
         *pS >> nPicture;
         DBG_ASSERT(nPicture == 0xFFFF, "Unexpected nIcon");
     }
@@ -2556,26 +2586,26 @@ sal_Bool OCX_ModernControl::Read(SvStorageStream *pS)
     bool bGroupName = (pBlockFlags[4] & 0x01) != 0;
     if (bGroupName)
     {
-        Align(pS,4);
+        ReadAlign(pS, pS->Tell() - nStart, 4);
         *pS >> nGroupNameLen;
     }
 
     //End
 
-    Align(pS,4);
+    ReadAlign(pS, pS->Tell() - nStart, 4);
     *pS >> nWidth;
     *pS >> nHeight;
 
     if (bValue)
-        lclReadCharArray( *pS, pValue, nValueLen );
+        lclReadCharArray( *pS, pValue, nValueLen, pS->Tell() - nStart);
 
     if (bCaption)
-        lclReadCharArray( *pS, pCaption, nCaptionLen );
+        lclReadCharArray( *pS, pCaption, nCaptionLen, pS->Tell() - nStart);
 
     if (bGroupName)
-        lclReadCharArray( *pS, pGroupName, nGroupNameLen );
+        lclReadCharArray( *pS, pGroupName, nGroupNameLen, pS->Tell() - nStart);
 
-    Align(pS,4);
+    ReadAlign(pS, pS->Tell() - nStart, 4);
     if (nIcon)
     {
         pS->Read(pIconHeader,20);
@@ -2598,6 +2628,7 @@ sal_Bool OCX_ModernControl::Read(SvStorageStream *pS)
 
 sal_Bool OCX_CommandButton::Read(SvStorageStream *pS)
 {
+    long nStart = pS->Tell();
     *pS >> nIdentifier;
     DBG_ASSERT(nStandardId==nIdentifier,
         "A control that has a different identifier");
@@ -2626,8 +2657,9 @@ sal_Bool OCX_CommandButton::Read(SvStorageStream *pS)
 
     bool bCaption = (pBlockFlags[0] & 0x08) != 0;
     if (bCaption)
+    {
         *pS >> nCaptionLen;
-
+    }
     if (pBlockFlags[0] & 0x10) /*Picture Position, a strange mechanism here*/
     {
         *pS >> nVertPos;
@@ -2639,13 +2671,13 @@ sal_Bool OCX_CommandButton::Read(SvStorageStream *pS)
 
     if (pBlockFlags[0] & 0x80)
     {
-        Align(pS,2);
+        ReadAlign(pS, pS->Tell() - nStart, 2);
         *pS >> nPicture;
     }
 
     if (pBlockFlags[1] & 0x01)
     {
-        Align(pS,2);
+        ReadAlign(pS, pS->Tell() - nStart, 2);
         *pS >> nAccelerator;
     }
 
@@ -2654,14 +2686,14 @@ sal_Bool OCX_CommandButton::Read(SvStorageStream *pS)
 
     if (pBlockFlags[1] & 0x04)
     {
-        Align(pS,2);
+        ReadAlign(pS, pS->Tell() - nStart, 2);
         *pS >> nIcon;
     }
 
     if (bCaption)
-        lclReadCharArray( *pS, pCaption, nCaptionLen );
+        lclReadCharArray( *pS, pCaption, nCaptionLen, pS->Tell() - nStart);
 
-    Align(pS,4);
+    ReadAlign(pS, pS->Tell() - nStart, 4);
     *pS >> nWidth;
     *pS >> nHeight;
 
@@ -2686,6 +2718,7 @@ sal_Bool OCX_CommandButton::Read(SvStorageStream *pS)
 
 sal_Bool OCX_Label::Read(SvStorageStream *pS)
 {
+    long nStart = pS->Tell();
     *pS >> nIdentifier;
     DBG_ASSERT(nStandardId==nIdentifier,
             "A control that has a different identifier");
@@ -2727,44 +2760,44 @@ sal_Bool OCX_Label::Read(SvStorageStream *pS)
 
     if (pBlockFlags[0] & 0x80)
     {
-        Align(pS,4);
+        ReadAlign(pS,pS->Tell() - nStart, 4);
         *pS >> nBorderColor;
     }
 
     if (pBlockFlags[1] & 0x01)
     {
-        Align(pS,2);
+        ReadAlign(pS, pS->Tell() - nStart, 2);
         *pS >> nBorderStyle;
     }
 
     if (pBlockFlags[1] & 0x02)
     {
-        Align(pS,2);
+        ReadAlign(pS, pS->Tell() - nStart, 2);
         *pS >> nSpecialEffect;
     }
 
     if (pBlockFlags[1] & 0x04)
     {
-        Align(pS,2);
+        ReadAlign(pS, pS->Tell() - nStart, 2);
         *pS >> nPicture;
     }
 
     if (pBlockFlags[1] & 0x08)
     {
-        Align(pS,2);
+        ReadAlign(pS, pS->Tell() - nStart, 2);
         *pS >> nAccelerator;
     }
 
     if (pBlockFlags[1] & 0x10)
     {
-        Align(pS,2);
+        ReadAlign(pS, pS->Tell() - nStart, 2);
         *pS >> nIcon;
     }
 
     if (bCaption)
-        lclReadCharArray( *pS, pCaption, nCaptionLen );
+        lclReadCharArray( *pS, pCaption, nCaptionLen, pS->Tell() - nStart);
 
-    Align(pS,4);
+    ReadAlign(pS, pS->Tell() - nStart, 4);
     *pS >> nWidth;
     *pS >> nHeight;
 
@@ -2783,6 +2816,334 @@ sal_Bool OCX_Label::Read(SvStorageStream *pS)
         pPicture = new sal_uInt8[nPictureLen];
         pS->Read(pPicture,nPictureLen);
     }
+
+    return sal_True;
+}
+
+TypeName::TypeName(sal_Char *pName, sal_uInt32 nLen, sal_uInt16 nType, sal_Int32 nLeft,
+    sal_Int32 nTop)
+    : msName(lclCreateOUString(pName, nLen)), mnType(nType), mnLeft(nLeft),
+    mnTop(nTop)
+{
+}
+
+sal_Bool OCX_UserForm::Read(SvStorageStream *pS)
+{
+    long nStart = pS->Tell();
+    *pS >> nIdentifier;
+    DBG_ASSERT(0x400==nIdentifier,
+            "A control that has a different identifier");
+    *pS >> nFixedAreaLen;
+    pS->Read(pBlockFlags,4);
+
+    if (pBlockFlags[0] & 0x01)
+        DBG_ASSERT(!this, "ARSE");
+//      *pS >> nForeColor;
+    if (pBlockFlags[0] & 0x02)
+        *pS >> nBackColor;
+    if (pBlockFlags[0] & 0x04)
+        *pS >> nForeColor;
+    if (pBlockFlags[0] & 0x08)
+        *pS >> nChildrenA;
+    if (pBlockFlags[0] & 0x40)
+    {
+        sal_uInt8 nTemp;
+        *pS >> nTemp;
+        fEnabled = (nTemp&0x04)>>2;
+        fBackStyle = (nTemp&0x08)>>3;
+        *pS >> nTemp;
+        *pS >> nTemp;
+        fWordWrap = (nTemp&0x80)>>7;
+        *pS >> nTemp;
+        fAutoSize = (nTemp&0x10)>>4;
+    }
+    if (pBlockFlags[0] & 0x80)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        *pS >> nBorderStyle;
+    }
+#if 0
+        sal_uInt16 nFixedOrAlign;
+        *pS >> nFixedOrAlign;
+#endif
+    if (pBlockFlags[1] & 0x01)
+        *pS >> nMousePointer;
+    if (pBlockFlags[1] & 0x02)
+        *pS >> nKeepScrollBarsVisible;
+    if (pBlockFlags[1] & 0x80)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 2);
+        *pS >> nIcon;
+        DBG_ASSERT(nIcon == 0xFFFF, "Unexpected nIcon");
+    }
+    if (pBlockFlags[2] & 0x01)
+        *pS >> nCycle;
+    if (pBlockFlags[2] & 0x02)
+        *pS >> nSpecialEffect;
+
+    if (pBlockFlags[2] & 0x04)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        *pS >> nBorderColor;
+    }
+
+    if (pBlockFlags[2] & 0x10)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 2);
+        sal_uInt16 nNoIdea;
+        *pS >> nNoIdea;
+        DBG_ASSERT(nNoIdea == 0xFFFF, "Expected 0xFFFF, (related to font ?)");
+    }
+
+    if (pBlockFlags[2] & 0x20)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 2);
+        *pS >> nPicture;
+        DBG_ASSERT(nPicture == 0xFFFF, "Unexpected nIcon");
+    }
+
+    if (pBlockFlags[2] & 0x80)
+        *pS >> nPictureAlignment;
+
+    if (pBlockFlags[3] & 0x01)
+        bPictureTiling = true;
+
+    if (pBlockFlags[3] & 0x02)
+        *pS >> nPictureSizeMode;
+
+    if (pBlockFlags[3] & 0x04)
+    {
+        ReadAlign(pS, pS->Tell() - nStart, 4);
+        *pS >> nChildrenB;
+    }
+
+    ReadAlign(pS, pS->Tell() - nStart, 4);
+    *pS >> nDrawBuffer;
+
+    ReadAlign(pS, pS->Tell() - nStart, 4);
+    *pS >> nWidth;
+    *pS >> nHeight;
+    *pS >> nScrollWidth;
+    *pS >> nScrollHeight;
+
+    if (nIcon)
+    {
+        pS->Read(pIconHeader,20);
+        *pS >> nIconLen;
+        pIcon = new sal_uInt8[nIconLen];
+        pS->Read(pIcon,nIconLen);
+    }
+
+    if (nPicture)
+    {
+        pS->Read(pPictureHeader,20);
+        *pS >> nPictureLen;
+        pPicture = new sal_uInt8[nPictureLen];
+        pS->Read(pPicture,nPictureLen);
+    }
+
+    //Font Stuff..
+    if (pBlockFlags[2] & 0x10)
+    {
+        pS->SeekRel(26);
+        sal_uInt8 nFontLen;
+        *pS >> nFontLen;
+        pS->SeekRel(nFontLen);
+    }
+
+    sal_uInt16 nUnknown;
+    *pS >> nUnknown;
+    *pS >> nNoRecords;
+    *pS >> nTotalLen;
+
+    sal_uInt8 aUnknown11[4];
+    pS->Read(aUnknown11, sizeof(aUnknown11));
+
+    bool bOk = true;
+    for (sal_uInt32 nRecord = 0; nRecord < nNoRecords; ++nRecord)
+    {
+        sal_uInt16 nUnknown12;
+        *pS >> nUnknown12;
+        sal_uInt16 nRecordLen;
+        *pS >> nRecordLen;
+        sal_uInt32 nUnknown13;
+        *pS >> nUnknown13;
+        sal_uInt32 nNameLen;
+        *pS >> nNameLen;
+        sal_uInt32 nSubStorageId;
+        /*
+         i.e.  the "i"nSubStorage directory contains the contents if its a
+         frame
+        */
+        *pS >> nSubStorageId;
+        long nCount = 12;
+
+        sal_uInt32 nSkipLen = 0;
+        bool bHasControlTip = false;
+        switch (nUnknown13)
+        {
+            default:
+                bOk = false;
+                break;
+            case 0x9e5:
+                nSkipLen = 6;
+                bHasControlTip = true;
+                break;
+            case 0x1D5:
+            case 0x1E5:
+                nSkipLen = 6;
+                break;
+            case 0x9f5:
+                nSkipLen = 10;
+                bHasControlTip = true;
+                break;
+            case 0x1F5:
+                nSkipLen = 10;
+                break;
+        }
+
+        if (!bOk)
+            break;
+
+        pS->SeekRel(nSkipLen);
+        nCount += nSkipLen;
+
+        sal_uInt16 nTypeIdent;
+        *pS >> nTypeIdent;
+        nCount += 2;
+
+        sal_uInt32 nControlTipLen = 0;
+        if (bHasControlTip)
+        {
+            *pS >> nControlTipLen;
+            nCount += 4;
+        }
+
+        sal_Char *pName = 0;
+        sal_uInt32 nBufSize = lclGetBufferSize(nNameLen);
+        if (nBufSize)
+        {
+            pName = new char[ nBufSize ];
+            pS->Read( pName, nBufSize );
+            nCount += nBufSize;
+        }
+
+        nCount += ReadAlign(pS, nCount, 4);
+
+        sal_uInt32 nLeft;
+        *pS >> nLeft;
+        sal_uInt32 nTop;
+        *pS >> nTop;
+        nCount += 8;
+        pS->SeekRel(nRecordLen - nCount);
+        maEntries.push_back(TypeName(pName, nNameLen, nTypeIdent, nLeft, nTop));
+        delete pName;
+    }
+
+    return bOk;
+}
+
+sal_Bool OCX_UserForm::Import(SvStorageStream *pS,
+    const uno::Reference<lang::XMultiServiceFactory> &rSF,
+    uno::Reference<uno::XComponentContext> &rContext,
+    uno::Reference<container::XNameContainer> &rLib)
+{
+    uno::Reference<container::XNameContainer> xDialogModel(rSF->createInstance(
+        OUString(RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.awt.UnoControlDialogModel"))), uno::UNO_QUERY);
+
+    uno::Reference<beans::XPropertySet>
+        xDialogPropSet(xDialogModel, uno::UNO_QUERY);
+    uno::Any aTmp(&msModName,getCppuType((OUString *)0));
+    xDialogPropSet->setPropertyValue(
+        OUString(RTL_CONSTASCII_USTRINGPARAM("Name")), aTmp);
+    xDialogPropSet->setPropertyValue(
+        OUString(RTL_CONSTASCII_USTRINGPARAM("Title")), aTmp);
+    aTmp <<= ImportColor(nBackColor);
+    xDialogPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
+
+    aTmp <<= sal_Int32((nWidth * 2) / 100);
+    xDialogPropSet->setPropertyValue(WW8_ASCII2STR("Width"), aTmp);
+    aTmp <<= sal_Int32((nHeight * 2) / 100);
+    xDialogPropSet->setPropertyValue(WW8_ASCII2STR("Height"), aTmp);
+
+    typedef std::vector<TypeName>::iterator myEntryIter;
+    myEntryIter aEnd = maEntries.end();
+    for (myEntryIter aEIter = maEntries.begin(); aEIter != aEnd;
+        ++aEIter)
+    {
+        OCX_Control *pControl = 0;
+        switch (aEIter->mnType)
+        {
+        case 0x11:
+            pControl = new OCX_CommandButton;
+            break;
+        case 0x15:
+            pControl = new OCX_Label;
+            break;
+        case 0x17:
+            pControl = new OCX_TextBox;
+            break;
+        case 0x18:
+            pControl = new OCX_ListBox;
+            break;
+        case 0x19:
+            pControl = new OCX_ComboBox;
+            break;
+        case 0x1A:
+            pControl =  new OCX_CheckBox;
+            break;
+        case 0x1B:
+            pControl = new OCX_OptionButton;
+            break;
+        case 0x1C:
+            pControl = new OCX_ToggleButton;
+            break;
+        // np 01-11-04, I've disabled processing of all
+        // unknown/unsupported controls, skipping in these
+        // cases does not seem to work properly. Needs to
+        // be investigated. After a unknown or unsupported
+        // control is encountered code will no longer try
+        // to read and further controls
+        case 0x0C: //Image
+        case 0xe:  //Frame
+        case 0x10: //SpinButton
+        case 0x12: //TabStrip
+        case 0x2F: //ScrollBar
+            {
+                DBG_ASSERT(false, "Unsupported Control");
+            }
+            break;
+        default:
+            break;
+        }
+
+        if (pControl)
+        {
+            pControl->sName = aEIter->msName;
+            if (pControl->FullRead(pS))
+            {
+                pControl->SetInDialog(true);
+                pControl->Import(xDialogModel, *aEIter);
+            }
+            delete pControl;
+        }
+        else
+        {
+            // if unsupported or unknown controls encountered then
+            // stop processing any more controls in the UserForm
+            break;
+        }
+
+    }
+
+    uno::Reference<io::XInputStreamProvider> xSource =
+        xmlscript::exportDialogModel(xDialogModel, rContext);
+    uno::Any aSourceAny(uno::makeAny(xSource));
+    if (rLib->hasByName(msModName))
+        rLib->replaceByName(msModName, aSourceAny);
+    else
+        rLib->insertByName(msModName, aSourceAny);
 
     return sal_True;
 }
@@ -2832,7 +3193,7 @@ sal_Bool OCX_Label::WriteContents(SvStorageStreamRef &rContents,
     if (aCaption.HasData())
         pBlockFlags[0] |= 0x08;
 
-    Align(rContents,4,TRUE);
+    WriteAlign(rContents,4);
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BorderColor"));
     if (aTmp.hasValue())
         aTmp >>= nBorderColor;
@@ -2852,7 +3213,7 @@ sal_Bool OCX_Label::WriteContents(SvStorageStreamRef &rContents,
 
     aCaption.WriteCharArray( *rContents );
 
-    Align(rContents,4,TRUE);
+    WriteAlign(rContents,4);
     *rContents << rSize.Width;
     *rContents << rSize.Height;
     nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell()-nOldPos-4);
@@ -3099,6 +3460,11 @@ sal_Bool SvxMSConvertOCXControls::ReadOCXStream( SvStorageRef& rSrc1,
     SvStorageStreamRef xSrc2 = rSrc1->OpenSotStream( WW8_ASCII2STR("\3OCXNAME") );
     SvStorageStream* pSt = xSrc2;
     pSt->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+
+    /* #117832# import control name */
+    OUString controlName;
+    bool hasCName = readOCXNAME( controlName, pSt );
+
     xSrc2 = rSrc1->OpenSotStream( WW8_ASCII2STR("contents") );
     pSt = xSrc2;
     pSt->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
@@ -3113,6 +3479,11 @@ sal_Bool SvxMSConvertOCXControls::ReadOCXStream( SvStorageRef& rSrc1,
     if (pObj = OCX_Factory(aTest.GetHexName()))
     {
 
+        /* #117832# set imported control name */
+        if ( hasCName )
+        {
+            pObj->sName = controlName;
+        }
         com::sun::star::awt::Size aSz;
         uno::Reference< form::XFormComponent >  xFComp;
         const uno::Reference< lang::XMultiServiceFactory > & rServiceFactory =
@@ -3188,6 +3559,11 @@ sal_Bool SvxMSConvertOCXControls::WriteOCXStream( SvStorageRef& rSrc1,
         uno::Reference<beans::XPropertySet> xPropSet(rControlModel,
             uno::UNO_QUERY);
 
+        /* #117832# - also enable export of control name  */
+        OUString sCName;
+        xPropSet->getPropertyValue(C2S("Name")) >>= sCName;
+        pObj->sName = sCName;
+
         SvGlobalName aName;
         aName.MakeId(sId);
         String sFullName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(
@@ -3200,6 +3576,9 @@ sal_Bool SvxMSConvertOCXControls::WriteOCXStream( SvStorageRef& rSrc1,
         // cmc
 
         bRet = pObj->Export(rSrc1,xPropSet,rSize);
+        SvStorageStreamRef xStor2( rSrc1->OpenSotStream( WW8_ASCII2STR("\3OCXNAME")));
+        /* #117832# - also enable export of control name  */
+        writeOCXNAME( sCName, xStor2 );
         delete pObj;
     }
     return bRet;
@@ -3248,34 +3627,18 @@ sal_Bool SvxMSConvertOCXControls::WriteOCXExcelKludgeStream(
 
 
 
-sal_Bool OCX_CheckBox::Import(
-    const uno::Reference< lang::XMultiServiceFactory >  &rServiceFactory,
-    uno::Reference< form::XFormComponent > &rFComp, awt::Size &rSz)
+sal_Bool OCX_CheckBox::Import(com::sun::star::uno::Reference<
+    com::sun::star::beans::XPropertySet> &rPropSet)
 {
-    OUString sServiceName = WW8_ASCII2STR("com.sun.star.form.component.CheckBox");
-    uno::Reference< uno::XInterface > xCreate =
-        rServiceFactory->createInstance( sServiceName );
-    if( !xCreate.is() )
-        return(sal_False);
-
-    rFComp = uno::Reference< form::XFormComponent > (xCreate,uno::UNO_QUERY);
-    if( !rFComp.is() )
-        return(sal_False);
-
-    uno::Reference< beans::XPropertySet >  xPropSet( xCreate,uno::UNO_QUERY );
-
-    rSz.Width = nWidth;
-    rSz.Height = nHeight;
-
     uno::Any aTmp(&sName,getCppuType((OUString *)0));
-    xPropSet->setPropertyValue( WW8_ASCII2STR("Name"), aTmp );
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Name"), aTmp );
 
     // background color: fBackStyle==0 -> transparent
     if( fBackStyle )
         aTmp <<= ImportColor(nBackColor);
     else
         aTmp = uno::Any();
-    xPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
 
     sal_Bool bTemp;
     if ((!(fEnabled)) || (fLocked))
@@ -3283,36 +3646,36 @@ sal_Bool OCX_CheckBox::Import(
     else
         bTemp = sal_True;
     aTmp = bool2any(bTemp);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
 
     bTemp = fWordWrap != 0;
     aTmp = bool2any(bTemp);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("MultiLine"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("MultiLine"), aTmp);
 
     aTmp <<= ImportColor(nForeColor);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
 
     bTemp = nMultiState;
     aTmp = bool2any(bTemp);
-    xPropSet->setPropertyValue( WW8_ASCII2STR("TriState"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("TriState"), aTmp);
 
     aTmp <<= ImportSpecEffect( nSpecialEffect );
-    xPropSet->setPropertyValue( WW8_ASCII2STR("VisualEffect"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("VisualEffect"), aTmp);
 
-    if (pValue)
+    if (pValue && !bSetInDialog)
     {
         INT16 nTmp=pValue[0]-0x30;
         aTmp <<= nTmp;
-        xPropSet->setPropertyValue( WW8_ASCII2STR("DefaultState"), aTmp);
+        rPropSet->setPropertyValue( WW8_ASCII2STR("DefaultState"), aTmp);
     }
 
     if (pCaption)
     {
         aTmp <<= lclCreateOUString( pCaption, nCaptionLen );
-        xPropSet->setPropertyValue( WW8_ASCII2STR("Label"), aTmp);
+        rPropSet->setPropertyValue( WW8_ASCII2STR("Label"), aTmp);
     }
 
-    aFontData.Import(xPropSet);
+    aFontData.Import(rPropSet);
     return(sal_True);
 }
 
@@ -3376,7 +3739,7 @@ sal_Bool OCX_CheckBox::WriteContents(SvStorageStreamRef &rContents,
     *rContents << nMultiState;
     pBlockFlags[2] |= 0x20;
 
-    Align(rContents,4,TRUE);
+    WriteAlign(rContents,4);
     nValueLen = 1|SVX_MSOCX_COMPRESSED;
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("DefaultState"));
     INT16 nDefault;
@@ -3396,11 +3759,11 @@ sal_Bool OCX_CheckBox::WriteContents(SvStorageStreamRef &rContents,
         aTmp >>= nApiSpecEffect;
         nSpecialEffect = ExportSpecEffect( nApiSpecEffect );
     }
-    Align(rContents,4,TRUE);
+    WriteAlign(rContents,4);
     *rContents << nSpecialEffect;
     pBlockFlags[3] |= 0x04;
 
-    Align(rContents,4,TRUE);
+    WriteAlign(rContents,4);
     *rContents << rSize.Width;
     *rContents << rSize.Height;
 
@@ -3410,7 +3773,7 @@ sal_Bool OCX_CheckBox::WriteContents(SvStorageStreamRef &rContents,
 
     aCaption.WriteCharArray( *rContents );
 
-    Align(rContents,4,TRUE);
+    WriteAlign(rContents,4);
     nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell()-nOldPos-4);
     bRet = aFontData.Export(rContents,rPropSet);
     rContents->Seek(nOldPos);
@@ -3499,6 +3862,7 @@ sal_Bool OCX_CheckBox::Export(SvStorageRef &rObj,
 
 sal_Bool OCX_FontData::Read(SvStorageStream *pS)
 {
+    long nStart = pS->Tell();
     *pS >> nIdentifier;
     *pS >> nFixedAreaLen;
     pS->Read(pBlockFlags,4);
@@ -3521,12 +3885,12 @@ sal_Bool OCX_FontData::Read(SvStorageStream *pS)
     }
     if (pBlockFlags[0] & 0x04)
     {
-        Align(pS,4);
+        ReadAlign(pS, pS->Tell() - nStart, 4);
         *pS >> nFontSize;
     }
     if (pBlockFlags[0] & 0x10)
     {
-        Align(pS,2);
+        ReadAlign(pS, pS->Tell() - nStart, 2);
         *pS >> nLanguageID;
     }
     if (pBlockFlags[0] & 0x40)
@@ -3535,14 +3899,14 @@ sal_Bool OCX_FontData::Read(SvStorageStream *pS)
     }
     if (pBlockFlags[0] & 0x80)  // font weight before font name
     {
-        Align(pS,2);
+        ReadAlign(pS, pS->Tell() - nStart, 2);
         *pS >> nFontWeight;
     }
 
     if (bFontName)
-        lclReadCharArray( *pS, pFontName, nFontNameLen );
+        lclReadCharArray( *pS, pFontName, nFontNameLen, pS->Tell() - nStart);
 
-    Align(pS,4);
+    ReadAlign(pS, pS->Tell() - nStart, 4);
     return(TRUE);
 }
 
@@ -3657,7 +4021,7 @@ sal_Bool OCX_FontData::Export(SvStorageStreamRef &rContent,
     }
 
     aFontName.WriteCharArray( *rContent );
-    Align(rContent,4,TRUE);
+    WriteAlign(rContent,4);
 
     sal_uInt16 nFixedAreaLen = static_cast<sal_uInt16>(rContent->Tell()-nOldPos-4);
     rContent->Seek(nOldPos);
@@ -3668,7 +4032,7 @@ sal_Bool OCX_FontData::Export(SvStorageStreamRef &rContent,
     *rContent << sal_uInt8(0x00);
     *rContent << sal_uInt8(0x00);
 
-    Align(rContent,4,TRUE);
+    WriteAlign(rContent,4);
     return sal_True;
 }
 
@@ -3703,7 +4067,7 @@ sal_Bool OCX_Image::WriteContents(SvStorageStreamRef &rContents,
     *rContents << nSpecialEffect;
     pBlockFlags[1] |= 0x01;
 
-    Align(rContents,4,TRUE);
+    WriteAlign(rContents,4);
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Enabled"));
     fEnabled = any2bool(aTmp);
@@ -3723,11 +4087,11 @@ sal_Bool OCX_Image::WriteContents(SvStorageStreamRef &rContents,
      *we can store in ms controls, wmf,png,jpg are almost certainly
      *the options we have for export...*/
 
-    Align(rContents,4,TRUE);
+    WriteAlign(rContents,4);
     *rContents << rSize.Width;
     *rContents << rSize.Height;
 
-    Align(rContents,4,TRUE);
+    WriteAlign(rContents,4);
     nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell()-nOldPos-4);
 
     rContents->Seek(nOldPos);
@@ -3803,8 +4167,6 @@ OCX_SpinButton::OCX_SpinButton() :
     mnSmallStep( 1 ),
     mnPageStep( 1 ),
     mnOrient( -1 ),
-    mnWidth( 0 ),
-    mnHeight( 0 ),
     mnBackColor( 0x8000000F ),
     mnForeColor( 0x80000012 ),
     mnDelay( 50 ),
@@ -3812,6 +4174,8 @@ OCX_SpinButton::OCX_SpinButton() :
     mbLocked( false ),
     mbPropThumb( true )
 {
+    msFormType = C2U("com.sun.star.form.component.SpinButton");
+    //msDialogType = C2U("whats the proper type for a dialog or is there one?");
 }
 
 OCX_Control* OCX_SpinButton::Create()
@@ -3858,7 +4222,7 @@ sal_Bool OCX_SpinButton::Read( SvStorageStream *pS )
     }
     if( mnBlockFlags & 0x00008000 )     rStrm >> mnDelay;
     if( mnBlockFlags & 0x00010000 )     rStrm >> nIcon;
-    if( mnBlockFlags & 0x00000008 )     rStrm >> mnWidth >> mnHeight;
+    if( mnBlockFlags & 0x00000008 )     rStrm >> nWidth >> nHeight;
 
     if( nIcon )
     {
@@ -3877,69 +4241,53 @@ sal_Bool OCX_SpinButton::ReadFontData( SvStorageStream *pS )
     return sal_True;
 }
 
-sal_Bool OCX_SpinButton::Import(
-        const uno::Reference< lang::XMultiServiceFactory >& rServiceFactory,
-        uno::Reference< form::XFormComponent >& rFComp,
-        awt::Size &rSz )
+sal_Bool OCX_SpinButton::Import(com::sun::star::uno::Reference<
+    com::sun::star::beans::XPropertySet> &rPropSet)
 {
-    if( (mnWidth < 1) || (mnHeight < 1) )
+    if( (nWidth < 1) || (nHeight < 1) )
         return sal_False;
-
-    OUString sServiceName = WW8_ASCII2STR( "com.sun.star.form.component.SpinButton" );
-    uno::Reference< uno::XInterface > xCreate = rServiceFactory->createInstance( sServiceName );
-    if( !xCreate.is() )
-        return sal_False;
-
-    rFComp = uno::Reference< form::XFormComponent >( xCreate, uno::UNO_QUERY );
-    if( !rFComp.is() )
-        return sal_False;
-
-    uno::Reference< beans::XPropertySet > xPropSet( xCreate, uno::UNO_QUERY );
-
-    rSz.Width = mnWidth;
-    rSz.Height = mnHeight;
 
     uno::Any aTmp( &sName, getCppuType((OUString *)0) );
-    xPropSet->setPropertyValue( WW8_ASCII2STR( "Name" ), aTmp );
+    rPropSet->setPropertyValue( WW8_ASCII2STR( "Name" ), aTmp );
 
     aTmp <<= ImportColor( mnForeColor );
-    xPropSet->setPropertyValue( WW8_ASCII2STR("SymbolColor"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("SymbolColor"), aTmp);
 
     aTmp <<= ImportColor( mnBackColor );
-    xPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
 
     aTmp = bool2any( mbEnabled && !mbLocked );
-    xPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
 
     aTmp <<= mnValue;
-    xPropSet->setPropertyValue( WW8_ASCII2STR("DefaultSpinValue"), aTmp );
+    rPropSet->setPropertyValue( WW8_ASCII2STR("DefaultSpinValue"), aTmp );
 
     aTmp <<= mnMin;
-    xPropSet->setPropertyValue( WW8_ASCII2STR("SpinValueMin"), aTmp );
+    rPropSet->setPropertyValue( WW8_ASCII2STR("SpinValueMin"), aTmp );
 
     aTmp <<= mnMax;
-    xPropSet->setPropertyValue( WW8_ASCII2STR("SpinValueMax"), aTmp );
+    rPropSet->setPropertyValue( WW8_ASCII2STR("SpinValueMax"), aTmp );
 
     aTmp <<= mnSmallStep;
-    xPropSet->setPropertyValue( WW8_ASCII2STR("SpinIncrement"), aTmp );
+    rPropSet->setPropertyValue( WW8_ASCII2STR("SpinIncrement"), aTmp );
 
     namespace AwtScrollOrient = ::com::sun::star::awt::ScrollBarOrientation;
     switch( mnOrient )
     {
         case 0:     aTmp <<= AwtScrollOrient::VERTICAL;     break;
         case 1:     aTmp <<= AwtScrollOrient::HORIZONTAL;   break;
-        default:    aTmp <<= (mnWidth < mnHeight) ? AwtScrollOrient::VERTICAL : AwtScrollOrient::HORIZONTAL;
+        default:    aTmp <<= (nWidth < nHeight) ? AwtScrollOrient::VERTICAL : AwtScrollOrient::HORIZONTAL;
     }
-    xPropSet->setPropertyValue( WW8_ASCII2STR("Orientation"), aTmp );
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Orientation"), aTmp );
 
     aTmp = bool2any( true );
-    xPropSet->setPropertyValue( WW8_ASCII2STR("Repeat"), aTmp );
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Repeat"), aTmp );
 
     aTmp <<= mnDelay;
-    xPropSet->setPropertyValue( WW8_ASCII2STR("RepeatDelay"), aTmp );
+    rPropSet->setPropertyValue( WW8_ASCII2STR("RepeatDelay"), aTmp );
 
     aTmp <<= sal_Int16( 0 );
-    xPropSet->setPropertyValue( WW8_ASCII2STR("Border"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Border"), aTmp);
 
     return sal_True;
 }
@@ -4007,8 +4355,8 @@ sal_Bool OCX_SpinButton::WriteContents(
         return sal_False;
 
     mnBlockFlags = 0x00000008;
-    mnWidth = rSize.Width;
-    mnHeight = rSize.Height;
+    nWidth = rSize.Width;
+    nHeight = rSize.Height;
 
     GetInt32Property( mnForeColor, rPropSet, WW8_ASCII2STR( "SymbolColor" ),     0x00000001 );
     GetInt32Property( mnBackColor, rPropSet, WW8_ASCII2STR( "BackgroundColor" ), 0x00000002 );
@@ -4091,7 +4439,7 @@ sal_Bool OCX_SpinButton::WriteData( SvStream& rStrm ) const
     if( mnBlockFlags & 0x00002000 )     rStrm << mnOrient;
     if( mnBlockFlags & 0x00004000 )     rStrm << sal_Int32( mbPropThumb ? 1 : 0 );
     if( mnBlockFlags & 0x00008000 )     rStrm << mnDelay;
-    if( mnBlockFlags & 0x00000008 )     rStrm << mnWidth << mnHeight;
+    if( mnBlockFlags & 0x00000008 )     rStrm << nWidth << nHeight;
 
     sal_uInt16 nSize = static_cast< sal_uInt16 >( rStrm.Tell() - nStartPos - 4 );
     rStrm.Seek( nStartPos );
@@ -4107,6 +4455,9 @@ OCX_ScrollBar::OCX_ScrollBar()
 {
     sName = OUString( RTL_CONSTASCII_USTRINGPARAM( "ScrollBar" ) );
     mnMax = 32767;
+    msFormType = C2U("com.sun.star.form.component.ScrollBar");
+    msDialogType = C2U("com.sun.star.awt.UnoControlScrollBarModel");
+
 }
 
 OCX_Control* OCX_ScrollBar::Create()
@@ -4114,71 +4465,55 @@ OCX_Control* OCX_ScrollBar::Create()
     return new OCX_ScrollBar;
 }
 
-sal_Bool OCX_ScrollBar::Import(
-        const uno::Reference< lang::XMultiServiceFactory >& rServiceFactory,
-        uno::Reference< form::XFormComponent >& rFComp,
-        awt::Size &rSz )
+sal_Bool OCX_ScrollBar::Import(com::sun::star::uno::Reference<
+    com::sun::star::beans::XPropertySet> &rPropSet)
 {
-    if( (mnWidth < 1) || (mnHeight < 1) )
+    if( (nWidth < 1) || (nHeight < 1) )
         return sal_False;
-
-    OUString sServiceName = WW8_ASCII2STR( "com.sun.star.form.component.ScrollBar" );
-    uno::Reference< uno::XInterface > xCreate = rServiceFactory->createInstance( sServiceName );
-    if( !xCreate.is() )
-        return sal_False;
-
-    rFComp = uno::Reference< form::XFormComponent >( xCreate, uno::UNO_QUERY );
-    if( !rFComp.is() )
-        return sal_False;
-
-    uno::Reference< beans::XPropertySet > xPropSet( xCreate, uno::UNO_QUERY );
-
-    rSz.Width = mnWidth;
-    rSz.Height = mnHeight;
 
     uno::Any aTmp( &sName, getCppuType((OUString *)0) );
-    xPropSet->setPropertyValue( WW8_ASCII2STR( "Name" ), aTmp );
+    rPropSet->setPropertyValue( WW8_ASCII2STR( "Name" ), aTmp );
 
     aTmp <<= ImportColor( mnForeColor );
-    xPropSet->setPropertyValue( WW8_ASCII2STR("SymbolColor"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("SymbolColor"), aTmp);
 
     aTmp <<= ImportColor( mnBackColor );
-    xPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
 
     aTmp = bool2any( mbEnabled && !mbLocked );
-    xPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
 
     aTmp <<= mnValue;
-    xPropSet->setPropertyValue( WW8_ASCII2STR("DefaultScrollValue"), aTmp );
+    rPropSet->setPropertyValue( WW8_ASCII2STR("DefaultScrollValue"), aTmp );
 
     aTmp <<= mnMin;
-    xPropSet->setPropertyValue( WW8_ASCII2STR("ScrollValueMin"), aTmp );
+    rPropSet->setPropertyValue( WW8_ASCII2STR("ScrollValueMin"), aTmp );
 
     aTmp <<= mnMax;
-    xPropSet->setPropertyValue( WW8_ASCII2STR("ScrollValueMax"), aTmp );
+    rPropSet->setPropertyValue( WW8_ASCII2STR("ScrollValueMax"), aTmp );
 
     aTmp <<= mnSmallStep;
-    xPropSet->setPropertyValue( WW8_ASCII2STR("LineIncrement"), aTmp );
+    rPropSet->setPropertyValue( WW8_ASCII2STR("LineIncrement"), aTmp );
 
     aTmp <<= mnPageStep;
-    xPropSet->setPropertyValue( WW8_ASCII2STR("BlockIncrement"), aTmp );
+    rPropSet->setPropertyValue( WW8_ASCII2STR("BlockIncrement"), aTmp );
     if( mbPropThumb && (mnPageStep > 0) )
-        xPropSet->setPropertyValue( WW8_ASCII2STR("VisibleSize"), aTmp );
+        rPropSet->setPropertyValue( WW8_ASCII2STR("VisibleSize"), aTmp );
 
     namespace AwtScrollOrient = ::com::sun::star::awt::ScrollBarOrientation;
     switch( mnOrient )
     {
         case 0:     aTmp <<= AwtScrollOrient::VERTICAL;     break;
         case 1:     aTmp <<= AwtScrollOrient::HORIZONTAL;   break;
-        default:    aTmp <<= (mnWidth < mnHeight) ? AwtScrollOrient::VERTICAL : AwtScrollOrient::HORIZONTAL;
+        default:    aTmp <<= (nWidth < nHeight) ? AwtScrollOrient::VERTICAL : AwtScrollOrient::HORIZONTAL;
     }
-    xPropSet->setPropertyValue( WW8_ASCII2STR("Orientation"), aTmp );
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Orientation"), aTmp );
 
     aTmp <<= mnDelay;
-    xPropSet->setPropertyValue( WW8_ASCII2STR("RepeatDelay"), aTmp );
+    rPropSet->setPropertyValue( WW8_ASCII2STR("RepeatDelay"), aTmp );
 
     aTmp <<= sal_Int16( 0 );
-    xPropSet->setPropertyValue( WW8_ASCII2STR("Border"), aTmp);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Border"), aTmp);
 
     return sal_True;
 }
@@ -4245,8 +4580,8 @@ sal_Bool OCX_ScrollBar::WriteContents(
         return sal_False;
 
     mnBlockFlags = 0x00000008;
-    mnWidth = rSize.Width;
-    mnHeight = rSize.Height;
+    nWidth = rSize.Width;
+    nHeight = rSize.Height;
 
     GetInt32Property( mnForeColor, rPropSet, WW8_ASCII2STR( "SymbolColor" ),     0x00000001 );
     GetInt32Property( mnBackColor, rPropSet, WW8_ASCII2STR( "BackgroundColor" ), 0x00000002 );
