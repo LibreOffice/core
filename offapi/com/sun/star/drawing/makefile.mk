@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: cl $ $Date: 2000-11-20 14:22:33 $
+#   last change: $Author: cl $ $Date: 2000-11-22 11:45:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -172,6 +172,7 @@ IDLFILES=\
     TextShape.idl\
     TextShapeDescriptor.idl\
     TextureKind.idl\
+    TextureKind2.idl\
     TextureMode.idl\
     TextureProjectionMode.idl\
     VerticalDimensioning.idl\
