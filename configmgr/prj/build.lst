@@ -13,6 +13,6 @@ cg	configmgr\source\api					nmake	-	all	cg_api cg_cppugen NULL
 cg	configmgr\source\api2					nmake	-	all	cg_api2 cg_cppugen NULL
 cg	configmgr\source\treemgr				nmake	-	all	cg_treemgr cg_cppugen NULL
 cg	configmgr\source\registry				nmake	-	all	cg_reg cg_cppugen NULL
-cg	configmgr\util							nmake	-	all	cg_util cg_api cg_api2 cg_cmdtools cg_misc cg_reg cg_session cg_trcache cg_data cg_tree cg_treemgr cg_xml cg_backend NULL
+cg	configmgr\util							nmake	-	all	cg_util cg_api cg_api2 cg_cmdtools cg_misc cg_reg cg_session cg_trcache cg_data cg_tree cg_treemgr cg_xml cg_backend cg_localbe NULL
 cg	configmgr\source\localbe				nmake	-	all	cg_localbe cg_cppugen NULL
 
