@@ -145,8 +145,8 @@ End Function
 Function LoadDialog(Libname as String, DialogName as String)
 Dim oLib as Object
 Dim oDialog as Object
-	dialogs.loadLibrary(Libname)
-	oLib = dialogs.GetByName(Libname)
+        DialogLibraries.loadLibrary(Libname)
+	oLib = DialogLibraries.GetByName(Libname)
 	oDialog = CreateUnoDialog(oLib, DialogName)
 	LoadDialog() = oDialog
 End Function
