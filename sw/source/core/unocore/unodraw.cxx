@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:43:55 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:25:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -631,10 +631,12 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
 
     pSvxShape->setPosition(aMM100Pos);
     SdrObject* pObj = pSvxShape->GetSdrObject();
+    // OD 25.06.2003 #108784# - set layer of new drawing object to corresponding
+    // invisible layer.
     if(FmFormInventor != pObj->GetObjInventor())
-        pObj->SetLayer( bOpaque ? pDoc->GetHeavenId() : pDoc->GetHellId() );
+        pObj->SetLayer( bOpaque ? pDoc->GetInvisibleHeavenId() : pDoc->GetInvisibleHellId() );
     else
-        pObj->SetLayer(pDoc->GetControlsId());
+        pObj->SetLayer(pDoc->GetInvisibleControlsId());
 
     SwPaM* pPam = new SwPaM(pDoc->GetNodes().GetEndOfContent());
     SwUnoInternalPaM* pInternalPam = 0;
@@ -1052,11 +1054,19 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     if(pSvxShape)
                     {
                         SdrObject* pObj = pSvxShape->GetSdrObject();
+                        // OD 25.06.2003 #108784# - set layer of new drawing
+                        // object to corresponding invisible layer.
+                        bool bIsVisible = pDoc->IsVisibleLayerId( pObj->GetLayer() );
                         if(FmFormInventor != pObj->GetObjInventor())
-                            pObj->SetLayer( *(sal_Bool*)aValue.getValue() ?
-                                        pDoc->GetHeavenId() : pDoc->GetHellId() );
+                        {
+                            pObj->SetLayer( *(sal_Bool*)aValue.getValue()
+                                            ? ( bIsVisible ? pDoc->GetHeavenId() : pDoc->GetInvisibleHeavenId() )
+                                            : ( bIsVisible ? pDoc->GetHellId() : pDoc->GetInvisibleHellId() ));
+                        }
                         else
-                            pObj->SetLayer(pDoc->GetControlsId());
+                        {
+                            pObj->SetLayer( bIsVisible ? pDoc->GetControlsId() : pDoc->GetInvisibleControlsId());
+                        }
 
                     }
 
@@ -1170,7 +1180,10 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                     if(pSvxShape)
                     {
                         SdrObject* pObj = pSvxShape->GetSdrObject();
-                        sal_Bool bOpaque = pObj->GetLayer() != pFmt->GetDoc()->GetHellId();
+                        // OD 02.07.2003 #108784# - consider invisible layers
+                        sal_Bool bOpaque =
+                            ( pObj->GetLayer() != pFmt->GetDoc()->GetHellId() &&
+                              pObj->GetLayer() != pFmt->GetDoc()->GetInvisibleHellId() );
                         aRet.setValue(&bOpaque, ::getBooleanCppuType());
                     }
                 }
@@ -1767,13 +1780,18 @@ void SwXGroupShape::add( const Reference< XShape >& xShape ) throw (RuntimeExcep
                 if(pObj)
                 {
                     SwDoc* pDoc = pFmt->GetDoc();
+                    // OD 25.06.2003 #108784# - set layer of new drawing
+                    // object to corresponding invisible layer.
                     if( FmFormInventor != pObj->GetObjInventor())
                     {
-                        pObj->SetLayer( pSwShape->pImpl->GetOpaque() ?
-                                            pDoc->GetHeavenId() : pDoc->GetHellId() );
+                        pObj->SetLayer( pSwShape->pImpl->GetOpaque()
+                                        ? pDoc->GetInvisibleHeavenId()
+                                        : pDoc->GetInvisibleHellId() );
                     }
                     else
-                        pObj->SetLayer(pDoc->GetControlsId());
+                    {
+                        pObj->SetLayer(pDoc->GetInvisibleControlsId());
+                    }
                 }
             }
             pSwShape->m_bDescriptor = sal_False;
