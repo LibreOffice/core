@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 12:52:47 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:52:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1640,8 +1640,6 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
     xub_StrLen nNewStart = nStart + pCurr->GetLen();
 
     // adjust text if kana compression is enabled
-    const SwScriptInfo& rSI = GetInfo().GetParaPortion()->GetScriptInfo();
-
     if ( GetInfo().CompressLine() )
     {
         USHORT nRepaintOfst = CalcKanaAdj( pCurr );
@@ -1923,75 +1921,15 @@ SwTwips SwTxtFormatter::CalcBottomLine() const
  *                SwTxtFormatter::_CalcFitToContent()
  *
  * FME: This routine does a limited text formatting under the assumption,
- * that the line length is USHORT twips. I'm not sure why we do not do
- * a full text formatting using "FormatLine" or "BuildPortion" here,
- * similar to SwTxtFormatter::Hyphenate(). If we compare this function
- * to BuildPortions(), it looks like they used to be very similar
- * (back in 1995), but BuildPortions() changed and _CalcFitToContent()
- * did not. So _CalcFitToContent() does not give you exact results,
- * although the results should be good enought for most situations.
+ * that the line length is USHORT twips.
  *************************************************************************/
 
-extern void SetParaPortion( SwTxtInfo *pInf, SwParaPortion *pRoot );
-
-KSHORT SwTxtFormatter::_CalcFitToContent()
+USHORT SwTxtFormatter::_CalcFitToContent()
 {
-    // Save old line and build a new temporary line.
-    // Note: I this really necessary? Most likely the current SwParaPortion
-    // can be misused for the following operations, because it will be
-    // deleted in the calling function.
-    ASSERT( pCurr->IsParaPortion(), "_CalcFitToContent expected a ParaPortion" )
-    SwLineLayout* pOldCurr = pCurr;
-    SwParaPortion aTmpPara;
-    pCurr = &aTmpPara;
-    GetInfo().SetRoot( &aTmpPara );
-    SetParaPortion( &GetInfo(), &aTmpPara );
-
-    GetInfo().First( KSHORT(FirstLeft()) );
-    GetInfo().Left( KSHORT(Left()) );
-
-    CalcAscent( GetInfo(), pCurr );
-    SeekAndChg( GetInfo() );
-    GetInfo().SetLast( GetInfo().GetRoot() );
-
-    SwLinePortion *pPor = NewPortion( GetInfo() );
-
-    long nMaxWidth = 0;
-    long nWidth = 0;
-    long nMargin = FirstLeft();
-    sal_Bool bFull = sal_False;
-    while( pPor && !IsStop() && !bFull)
-    {
-        if( pPor->IsMultiPortion() && ( !pMulti || pMulti->IsBidi() ) )
-            bFull = BuildMultiPortion( GetInfo(), *((SwMultiPortion*)pPor) );
-        else
-            bFull = pPor->Format( GetInfo() );
-
-        InsertPortion( GetInfo(), pPor );
-
-        while( pPor )
-        {
-            nWidth += pPor->Width();
-            pPor = pPor->GetPortion();
-        }
-
-        if( bFull && 0 != ( pPor = GetInfo().GetLast() ) && pPor->IsBreakPortion() )
-        {
-            if ( nWidth && (nMaxWidth < nWidth+nMargin ) )
-                nMaxWidth = nWidth + nMargin;
-            nWidth = 0;
-            nMargin = Left();
-            bFull = sal_False;
-            GetInfo().X( KSHORT(nMargin) );
-        }
-        pPor = NewPortion( GetInfo() );
-    }
-    if ( nWidth && ( nMaxWidth < nWidth + nMargin ) )
-        nMaxWidth = nWidth + nMargin;
-
-    pCurr = pOldCurr;
-    SetParaPortion( &GetInfo(), (SwParaPortion*)pCurr );
-    return KSHORT(nMaxWidth);
+    FormatReset( GetInfo() );
+    BuildPortions( GetInfo() );
+    pCurr->CalcLine( *this, GetInfo() );
+    return pCurr->Width();
 }
 
 /*************************************************************************
