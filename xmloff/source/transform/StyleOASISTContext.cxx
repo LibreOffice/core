@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StyleOASISTContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:18:18 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:25:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,7 @@ class XMLPropertiesTContext_Impl : public XMLPersElemContentTContext
         ::com::sun::star::xml::sax::XAttributeList > m_xAttrList;
 
     XMLPropType m_ePropType;
+    sal_Bool    m_bControlStyle;
 
 public:
 
@@ -163,7 +164,8 @@ public:
 
     XMLPropertiesTContext_Impl( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName,
-                           XMLPropType eP );
+                           XMLPropType eP,
+                           sal_Bool _bControlStyle = sal_False );
 
     virtual ~XMLPropertiesTContext_Impl();
 
@@ -183,10 +185,11 @@ public:
 TYPEINIT1( XMLPropertiesTContext_Impl, XMLPersElemContentTContext );
 
 XMLPropertiesTContext_Impl::XMLPropertiesTContext_Impl(
-    XMLTransformerBase& rImp, const OUString& rQName, XMLPropType eP ) :
+    XMLTransformerBase& rImp, const OUString& rQName, XMLPropType eP, sal_Bool _bControlStyle ) :
     XMLPersElemContentTContext( rImp, rQName, XML_NAMESPACE_STYLE,
                                 XML_PROPERTIES),
-    m_ePropType( eP )
+    m_ePropType( eP ),
+    m_bControlStyle( _bControlStyle )
 {
 }
 
@@ -250,6 +253,8 @@ void XMLPropertiesTContext_Impl::StartElement(
             {
                 switch( (*aIter).second.m_nActionType )
                 {
+                case XML_ATACTION_REMOVE:
+                    break;
                 case XML_ATACTION_COPY:
                     pAttrList->AddAttribute( rAttrName, rAttrValue );
                     break;
@@ -470,6 +475,18 @@ void XMLPropertiesTContext_Impl::StartElement(
                     GetTransformer().NegPercent(aImageOpacityValueRemember);
                     break;
 
+                case XML_OPTACTION_CONTROL_TEXT_ALIGN:
+                    if ( m_bControlStyle )
+                    {
+                        OUString aNewAttrQName(
+                            GetTransformer().GetNamespaceMap().GetQNameByKey(
+                                XML_NAMESPACE_STYLE,
+                                ::xmloff::token::GetXMLToken(
+                                XML_TEXT_ALIGN ) ) );
+                        pAttrList->AddAttribute( aNewAttrQName, rAttrValue );
+                    }
+                    break;
+
                 default:
                     OSL_ENSURE( !this, "unknown action" );
                     break;
@@ -640,7 +657,7 @@ OUString XMLPropertiesTContext_Impl::MergeLineThrough(
                sal_Unicode c )
 {
     if( c )
-        eLineThrough = c=='/' ? XML_SLASH : XML_X;
+        eLineThrough = c=='/' ? XML_SLASH : XML_uX;
     else if( bDouble )
         eLineThrough = XML_DOUBLE_LINE;
     else if( bBold )
@@ -659,7 +676,8 @@ XMLStyleOASISTContext::XMLStyleOASISTContext( XMLTransformerBase& rImp,
                                                 const OUString& rQName,
                                                  sal_Bool bPersistent ) :
     XMLPersElemContentTContext ( rImp, rQName ),
-    m_bPersistent( bPersistent )
+    m_bPersistent( bPersistent ),
+    m_bControlStyle( false )
 {
 }
 
@@ -695,7 +713,7 @@ XMLTransformerContext *XMLStyleOASISTContext::CreateChildContext(
             // if no properties context exist start a new one.
             if( !m_xPropContext.is() )
                 m_xPropContext = new XMLPropertiesTContext_Impl(
-                                    GetTransformer(), rQName, ePropType );
+                                    GetTransformer(), rQName, ePropType, m_bControlStyle );
             else
                 m_xPropContext->SetQNameAndPropType( rQName, ePropType );
             pContext = m_xPropContext.get();
@@ -731,7 +749,7 @@ void XMLStyleOASISTContext::StartElement(
     XMLMutableAttributeList *pMutableAttrList = 0;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     sal_Int16 nFamilyAttr = -1;
-    sal_Bool bControlStyle = sal_False;
+    m_bControlStyle = sal_False;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
@@ -770,7 +788,7 @@ void XMLStyleOASISTContext::StartElement(
                 --nAttrCount;
                 break;
             case XML_ATACTION_DECODE_STYLE_NAME:
-                bControlStyle = 0 == rAttrValue.compareToAscii( "ctrl", 4 );
+                m_bControlStyle = 0 == rAttrValue.compareToAscii( "ctrl", 4 );
             case XML_ATACTION_DECODE_STYLE_NAME_REF:
                 {
                     OUString aAttrValue( rAttrValue );
@@ -808,7 +826,7 @@ void XMLStyleOASISTContext::StartElement(
         }
     }
 
-    if( bControlStyle && nFamilyAttr != -1 )
+    if( m_bControlStyle && nFamilyAttr != -1 )
         pMutableAttrList->SetValueByIndex( nFamilyAttr, GetXMLToken( XML_CONTROL ) );
 
 
