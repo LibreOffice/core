@@ -1,63 +1,63 @@
 /*************************************************************************
-*
-*  $RCSfile: datefunc.cxx,v $
-*
-*  $Revision: 1.5 $
-*
-*  last change: $Author: dr $ $Date: 2001-10-02 08:07:33 $
-*
-*  The Contents of this file are made available subject to the terms of
-*  either of the following licenses
-*
-*         - GNU Lesser General Public License Version 2.1
-*         - Sun Industry Standards Source License Version 1.1
-*
-*  Sun Microsystems Inc., October, 2000
-*
-*  GNU Lesser General Public License Version 2.1
-*  =============================================
-*  Copyright 2000 by Sun Microsystems, Inc.
-*  901 San Antonio Road, Palo Alto, CA 94303, USA
-*
-*  This library is free software; you can redistribute it and/or
-*  modify it under the terms of the GNU Lesser General Public
-*  License version 2.1, as published by the Free Software Foundation.
-*
-*  This library is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-*  Lesser General Public License for more details.
-*
-*  You should have received a copy of the GNU Lesser General Public
-*  License along with this library; if not, write to the Free Software
-*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
-*  MA  02111-1307  USA
-*
-*
-*  Sun Industry Standards Source License Version 1.1
-*  =================================================
-*  The contents of this file are subject to the Sun Industry Standards
-*  Source License Version 1.1 (the "License"); You may not use this file
-*  except in compliance with the License. You may obtain a copy of the
-*  License at http://www.openoffice.org/license.html.
-*
-*  Software provided under this License is provided on an "AS IS" basis,
-*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
-*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
-*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
-*  See the License for the specific provisions governing your rights and
-*  obligations concerning the Software.
-*
-*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
-*
-*  Copyright: 2000 by Sun Microsystems, Inc.
-*
-*  All Rights Reserved.
-*
-*  Contributor(s): _______________________________________
-*
-*
-************************************************************************/
+ *
+ *  $RCSfile: datefunc.cxx,v $
+ *
+ *  $Revision: 1.6 $
+ *
+ *  last change: $Author: dr $ $Date: 2001-10-02 13:38:09 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
 
 //------------------------------------------------------------------
 //
@@ -190,19 +190,19 @@ ScaResId::ScaResId( sal_uInt16 nResId, ResMgr& rResMgr ) :
 #define STDPAR              sal_False   // all parameters are described
 #define INTPAR              sal_True    // first parameter is internal
 
-#define FUNCDATA( MethodName, FuncName, ParamCount, Category, Double, IntPar )  \
-    { MethodName, DATE_FUNCNAME_##FuncName, DATE_FUNCDESC_##FuncName, DATE_DEFFUNCNAME_##FuncName, ParamCount, Category, Double, IntPar }
+#define FUNCDATA( FuncName, ParamCount, Category, Double, IntPar )  \
+    { "get" #FuncName, DATE_FUNCNAME_##FuncName, DATE_FUNCDESC_##FuncName, DATE_DEFFUNCNAME_##FuncName, ParamCount, Category, Double, IntPar }
 
 const ScaFuncDataBase pFuncDataArr[] =
 {
-    FUNCDATA( "getDiffWeeks",   DiffWeeks,    3, ScaCat_DateTime, UNIQUE, INTPAR ),
-    FUNCDATA( "getDiffMonths",  DiffMonths,   3, ScaCat_DateTime, UNIQUE, INTPAR ),
-    FUNCDATA( "getDiffYears",   DiffYears,    3, ScaCat_DateTime, UNIQUE, INTPAR ),
-    FUNCDATA( "isLeapYear",     IsLeapYear,   1, ScaCat_DateTime, UNIQUE, INTPAR ),
-    FUNCDATA( "getDaysInMonth", DaysInMonth,  1, ScaCat_DateTime, UNIQUE, INTPAR ),
-    FUNCDATA( "getDaysInYear",  DaysInYear,   1, ScaCat_DateTime, UNIQUE, INTPAR ),
-    FUNCDATA( "getWeeksInYear", WeeksInYear,  1, ScaCat_DateTime, UNIQUE, INTPAR ),
-    FUNCDATA( "getRot13",       Rot13,        1, ScaCat_Text,     UNIQUE, STDPAR )
+    FUNCDATA( DiffWeeks,    3, ScaCat_DateTime, UNIQUE, INTPAR ),
+    FUNCDATA( DiffMonths,   3, ScaCat_DateTime, UNIQUE, INTPAR ),
+    FUNCDATA( DiffYears,    3, ScaCat_DateTime, UNIQUE, INTPAR ),
+    FUNCDATA( IsLeapYear,   1, ScaCat_DateTime, UNIQUE, INTPAR ),
+    FUNCDATA( DaysInMonth,  1, ScaCat_DateTime, UNIQUE, INTPAR ),
+    FUNCDATA( DaysInYear,   1, ScaCat_DateTime, UNIQUE, INTPAR ),
+    FUNCDATA( WeeksInYear,  1, ScaCat_DateTime, UNIQUE, INTPAR ),
+    FUNCDATA( Rot13,        1, ScaCat_Text,     UNIQUE, STDPAR )
 };
 
 #undef FUNCDATA
@@ -684,14 +684,13 @@ sal_uInt16 DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear )
 }
 
 /**
-* Convert a date to a count of days starting from 01/01/0001
-*
-* The internal representation of a Date used in this Addin
-* is the number of days between 01/01/0001 and the date
-* this function converts a Day , Month, Year representation
-* to this internal Date value.
-*
-*/
+ * Convert a date to a count of days starting from 01/01/0001
+ *
+ * The internal representation of a Date used in this Addin
+ * is the number of days between 01/01/0001 and the date
+ * this function converts a Day , Month, Year representation
+ * to this internal Date value.
+ */
 
 sal_Int32 DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear )
 {
@@ -706,14 +705,13 @@ sal_Int32 DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear )
 }
 
 /**
-* Convert a count of days starting from 01/01/0001 to a date
-*
-* The internal representation of a Date used in this Addin
-* is the number of days between 01/01/0001 and the date
-* this function converts this internal Date value
-* to a Day , Month, Year representation of a Date.
-*
-*/
+ * Convert a count of days starting from 01/01/0001 to a date
+ *
+ * The internal representation of a Date used in this Addin
+ * is the number of days between 01/01/0001 and the date
+ * this function converts this internal Date value
+ * to a Day , Month, Year representation of a Date.
+ */
 
 void DaysToDate( sal_Int32 nDays,
                 sal_uInt16& rDay, sal_uInt16& rMonth, sal_uInt16& rYear )
@@ -758,13 +756,13 @@ void DaysToDate( sal_Int32 nDays,
 }
 
 /**
-* Get the null date used by the spreadsheet document
-*
-* The internal representation of a Date used in this Addin
-* is the number of days between 01/01/0001 and the date
-* this function returns this internal Date value for the document null date
-*
-*/
+ * Get the null date used by the spreadsheet document
+ *
+ * The internal representation of a Date used in this Addin
+ * is the number of days between 01/01/0001 and the date
+ * this function returns this internal Date value for the document null date
+ *
+ */
 
 sal_Int32 GetNullDate( const uno::Reference<beans::XPropertySet>& xOptions )
                         throw(uno::RuntimeException)
@@ -791,56 +789,56 @@ sal_Int32 GetNullDate( const uno::Reference<beans::XPropertySet>& xOptions )
 // XDateFunctions
 
 /**
-* Get week difference between 2 dates
-*
-* new Weeks(date1,date2,mode) function for StarCalc
-*
-* Two modes of operation are provided.
-* The first is just a simple division by 7 calculation.
-*
-* The second calculates the diffence by week of year.
-*
-* The International Standard IS-8601 has decreed that Monday
-* shall be the first day of the week.
-*
-* A week that lies partly in one year and partly in annother
-* is assigned a number in the the year in which most of its days lie.
-*
-* That means that week 1 of any year is the week that contains the 4. January
-*
-* The internal representation of a Date used in the Addin is the number of days based on 01/01/0001
-*
-* A WeekDay can be then calculated by substracting 1 and calculating the rest of
-* a division by 7, which gives a 0 - 6 value for Monday - Sunday
-*
-* Using the 4. January rule explained above the formula
-*
-*  nWeek1= ( nDays1 - nJan4 + ( (nJan4-1) % 7 ) ) / 7 + 1;
-*
-* calculates a number between 0-53 for each day which is in the same year as nJan4
-* where 0 means that this week belonged to the year before.
-*
-* If a day in the same or annother year is used in this formula this calculates
-* an calendar week offset from a given 4. January
-*
-*  nWeek2 = ( nDays2 - nJan4 + ( (nJan4-1) % 7 ) ) / 7 + 1;
-*
-* The 4.January of first Date Argument can thus be used to calculate
-* the week difference by calendar weeks which is then nWeek = nWeek2 - nWeek1
-*
-* which can be optimized to
-*
-* nWeek = ( (nDays2-nJan4+((nJan4-1)%7))/7 ) - ( (nDays1-nJan4+((nJan4-1)%7))/7 )
-*
-* Note: All calculations are operating on the long integer data type
-* % is the modulo operator in C which calculates the rest of an Integer division
-*
-*
-* mode 0 is the interval between the dates in month, that is days / 7
-*
-* mode 1 is the difference by week of year
-*
-*/
+ * Get week difference between 2 dates
+ *
+ * new Weeks(date1,date2,mode) function for StarCalc
+ *
+ * Two modes of operation are provided.
+ * The first is just a simple division by 7 calculation.
+ *
+ * The second calculates the diffence by week of year.
+ *
+ * The International Standard IS-8601 has decreed that Monday
+ * shall be the first day of the week.
+ *
+ * A week that lies partly in one year and partly in annother
+ * is assigned a number in the the year in which most of its days lie.
+ *
+ * That means that week 1 of any year is the week that contains the 4. January
+ *
+ * The internal representation of a Date used in the Addin is the number of days based on 01/01/0001
+ *
+ * A WeekDay can be then calculated by substracting 1 and calculating the rest of
+ * a division by 7, which gives a 0 - 6 value for Monday - Sunday
+ *
+ * Using the 4. January rule explained above the formula
+ *
+ *  nWeek1= ( nDays1 - nJan4 + ( (nJan4-1) % 7 ) ) / 7 + 1;
+ *
+ * calculates a number between 0-53 for each day which is in the same year as nJan4
+ * where 0 means that this week belonged to the year before.
+ *
+ * If a day in the same or annother year is used in this formula this calculates
+ * an calendar week offset from a given 4. January
+ *
+ *  nWeek2 = ( nDays2 - nJan4 + ( (nJan4-1) % 7 ) ) / 7 + 1;
+ *
+ * The 4.January of first Date Argument can thus be used to calculate
+ * the week difference by calendar weeks which is then nWeek = nWeek2 - nWeek1
+ *
+ * which can be optimized to
+ *
+ * nWeek = ( (nDays2-nJan4+((nJan4-1)%7))/7 ) - ( (nDays1-nJan4+((nJan4-1)%7))/7 )
+ *
+ * Note: All calculations are operating on the long integer data type
+ * % is the modulo operator in C which calculates the rest of an Integer division
+ *
+ *
+ * mode 0 is the interval between the dates in month, that is days / 7
+ *
+ * mode 1 is the difference by week of year
+ *
+ */
 
 sal_Int32 SAL_CALL ScaDateAddIn::getDiffWeeks(
                         const uno::Reference<beans::XPropertySet>& xOptions,
@@ -870,16 +868,15 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDiffWeeks(
 }
 
 /**
-* Get month difference between 2 dates
-* =Month(start, end, mode) Function for StarCalc
-*
-* two modes are provided
-*
-* mode 0 is the interval between the dates in month
-*
-* mode 1 is the difference in calendar month
-*
-*/
+ * Get month difference between 2 dates
+ * =Month(start, end, mode) Function for StarCalc
+ *
+ * two modes are provided
+ *
+ * mode 0 is the interval between the dates in month
+ *
+ * mode 1 is the difference in calendar month
+ */
 
 sal_Int32 SAL_CALL ScaDateAddIn::getDiffMonths(
                         const uno::Reference<beans::XPropertySet>& xOptions,
@@ -918,15 +915,14 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDiffMonths(
 }
 
 /**
-* Get Year difference between 2 dates
-*
-* two modes are provided
-*
-* mode 0 is the interval between the dates in years
-*
-* mode 1 is the difference in calendar years
-*
-*/
+ * Get Year difference between 2 dates
+ *
+ * two modes are provided
+ *
+ * mode 0 is the interval between the dates in years
+ *
+ * mode 1 is the difference in calendar years
+ */
 
 sal_Int32 SAL_CALL ScaDateAddIn::getDiffYears(
                         const uno::Reference<beans::XPropertySet>& xOptions,
@@ -950,11 +946,10 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDiffYears(
 }
 
 /**
-* Check if a Date is in a leap year in the Gregorian calendar
-*
-*/
+ * Check if a Date is in a leap year in the Gregorian calendar
+ */
 
-sal_Int32 SAL_CALL ScaDateAddIn::isLeapYear(
+sal_Int32 SAL_CALL ScaDateAddIn::getIsLeapYear(
                         const uno::Reference<beans::XPropertySet>& xOptions,
                         sal_Int32 nDate )
                     throw(uno::RuntimeException)
@@ -969,9 +964,8 @@ sal_Int32 SAL_CALL ScaDateAddIn::isLeapYear(
 }
 
 /**
-* Get the Number of Days in the month for a date
-*
-*/
+ * Get the Number of Days in the month for a date
+ */
 
 sal_Int32 SAL_CALL ScaDateAddIn::getDaysInMonth(
                         const uno::Reference<beans::XPropertySet>& xOptions,
@@ -988,9 +982,8 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDaysInMonth(
 }
 
 /**
-* Get number of days in the year of a date specified
-*
-*/
+ * Get number of days in the year of a date specified
+ */
 
 sal_Int32 SAL_CALL ScaDateAddIn::getDaysInYear(
                         const uno::Reference<beans::XPropertySet>& xOptions,
@@ -1007,21 +1000,20 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDaysInYear(
 }
 
 /**
-* Get number of weeks in the year for a date
-*
-* Most years have 52 weeks, but years that start on a Thursday
-* and leep years that start on a Wednesday have 53 weeks
-*
-* The International Standard IS-8601 has decreed that Monday
-* shall be the first day of the week.
-*
-* A WeekDay can be calculated by substracting 1 and calculating the rest of
-* a division by 7 from the internal date represention
-* which gives a 0 - 6 value for Monday - Sunday
-*
-* @see #IsLeapYear #WeekNumber
-*
-*/
+ * Get number of weeks in the year for a date
+ *
+ * Most years have 52 weeks, but years that start on a Thursday
+ * and leep years that start on a Wednesday have 53 weeks
+ *
+ * The International Standard IS-8601 has decreed that Monday
+ * shall be the first day of the week.
+ *
+ * A WeekDay can be calculated by substracting 1 and calculating the rest of
+ * a division by 7 from the internal date represention
+ * which gives a 0 - 6 value for Monday - Sunday
+ *
+ * @see #IsLeapYear #WeekNumber
+ */
 
 sal_Int32 SAL_CALL ScaDateAddIn::getWeeksInYear(
                         const uno::Reference<beans::XPropertySet>& xOptions,
@@ -1048,12 +1040,11 @@ sal_Int32 SAL_CALL ScaDateAddIn::getWeeksInYear(
 }
 
 /**
-* Encrypt or decrypt a string using ROT13 algorithm
-*
-* This function rotates each character by 13 in the alphabet.
-* Only the characters 'a' ... 'z' and 'A' ... 'Z' are modified.
-*
-*/
+ * Encrypt or decrypt a string using ROT13 algorithm
+ *
+ * This function rotates each character by 13 in the alphabet.
+ * Only the characters 'a' ... 'z' and 'A' ... 'Z' are modified.
+ */
 
 OUString SAL_CALL ScaDateAddIn::getRot13( const OUString& aSrcString ) throw( uno::RuntimeException )
 {

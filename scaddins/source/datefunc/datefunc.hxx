@@ -2,9 +2,9 @@
 *
 *  $RCSfile: datefunc.hxx,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: dr $ $Date: 2001-10-02 07:52:33 $
+*  last change: $Author: dr $ $Date: 2001-10-02 13:38:09 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -453,7 +453,7 @@ public:
                                     sal_Int32 nMode )
                                 throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 
-    virtual sal_Int32 SAL_CALL  isLeapYear(
+    virtual sal_Int32 SAL_CALL  getIsLeapYear(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xOptions,
                                     sal_Int32 nDate )
                                 throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
