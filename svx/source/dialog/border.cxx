@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 09:34:55 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 11:50:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,9 +534,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
                                 nDefDist != nTopDist   ||
                                 nDefDist != nBottomDist);
                     if((pBoxItem->GetDistance() ||
-                            (nSWMode & (SW_BORDER_MODE_FRAME|SW_BORDER_MODE_TABLE))&&
-                                aFrameSel.IsAnyLineSet()) &&
-                                bDiffDist )
+                                aFrameSel.IsAnyLineSet()) && bDiffDist )
                     {
                         aLeftMF.SetModifyFlag();
                         aRightMF.SetModifyFlag();
