@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saltimer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-03-02 14:23:27 $
+ *  last change: $Author: mhu $ $Date: 2003-02-10 20:40:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,15 +99,16 @@ inline void SalXLib::StopTimer()
 
 inline void SalXLib::StartTimer( ULONG nMS )
 {
-    gettimeofday( &Timeout_, NULL );
+    timeval Timeout (Timeout_); // previous timeout.
+    gettimeofday (&Timeout_, 0);
 
-    nTimeoutMS_         = nMS;
-    Timeout_.tv_sec    += nTimeoutMS_ / 1000;
-    Timeout_.tv_usec   += nTimeoutMS_ ? (nTimeoutMS_ % 1000) * 1000 : 500;
-    if( Timeout_.tv_usec > 1000000 )
+    nTimeoutMS_  = nMS;
+    Timeout_    += nTimeoutMS_;
+
+    if ((Timeout > Timeout_) || (Timeout.tv_sec == 0))
     {
-        Timeout_.tv_sec++;
-        Timeout_.tv_usec -= 1000000;
+        // Wakeup from previous timeout (or stopped timer).
+        Wakeup();
     }
 }
 
