@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2002-09-11 12:40:19 $
+ *  last change: $Author: gt $ $Date: 2002-10-18 13:33:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,6 +398,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     case  SID_INSERT_VIDEO:
     {
         SvxPluginFileDlg aDlg( &GetView().GetViewFrame()->GetWindow(), nSlot );
+        aDlg.SetContext( nSlot == SID_INSERT_SOUND? sfx2::FileDialogHelper::SW_INSERT_SOUND : sfx2::FileDialogHelper::SW_INSERT_VIDEO );
 
         if ( ERRCODE_NONE == aDlg.Execute() )
         {
@@ -1218,6 +1219,9 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.20  2002/09/11 12:40:19  os
+    #101516# set correct default border distance
+
     Revision 1.19  2002/08/08 14:20:54  os
     #98614# insert default frame via Ctrl+Return
 
