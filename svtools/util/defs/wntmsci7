@@ -10254,3 +10254,10 @@ lpfnDrawStateW
 ?SetFsysExtension_Impl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx72329842@@YAXAAVString@@ABV2@@Z
 ?lcl_MoveControl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx72329842@@YAXPAVControl@@JJAAJ@Z
 ?lcl_getHomeDirectory@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx72329842@@YAEABVString@@AAV2@@Z
+??RFilterTitleMatch@?%O:\SRC641\src\svtools\source\filepicker\filepicker.cxx364119192@@QAE_NABUFilterEntry@@@Z
+?GetFsysExtension_Impl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx3130824784@@YA?AVString@@ABV2@@Z
+?IsFileURL@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx3130824784@@YAEABVString@@@Z
+?SetFsysExtension_Impl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx3130824784@@YAXAAVString@@ABV2@@Z
+?lcl_MoveControl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx3130824784@@YAXPAVControl@@JJAAJ@Z
+?lcl_getHomeDirectory@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx3130824784@@YAEABVString@@AAV2@@Z
+?lcl_DecoratedFilter@?%O:\SRC641\src\svtools\source\filepicker\iodlgimp.cxx292426444@@YA?AVString@@ABV2@@Z
