@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-22 08:22:41 $
+ *  last change: $Author: oj $ $Date: 2001-01-29 09:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,12 +368,19 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
     ::rtl::OUString aErrorMsg;
     m_pSqlParseNode = m_aSqlParser.parseTree(aErrorMsg,m_aQuery);
     if(!m_pSqlParseNode)
-        throw SQLException(aErrorMsg,*this,::rtl::OUString::createFromAscii("HY000"),1000,Any());
+    {
+        SQLException aError2(aErrorMsg,*this,::rtl::OUString::createFromAscii("HY000"),1000,Any());
+        SQLException aError1(command,*this,::rtl::OUString::createFromAscii("HY000"),1000,makeAny(aError2));
+        throw SQLException(m_aSqlParser.getContext().getErrorMessage(OParseContext::ERROR_GENERAL),*this,::rtl::OUString::createFromAscii("HY000"),1000,makeAny(aError1));
+    }
 
     m_aSqlIterator.setParseTree(m_pSqlParseNode);
     m_aSqlIterator.traverseAll();
     if( m_aSqlIterator.getStatementType() != SQL_STATEMENT_SELECT && m_aSqlIterator.getStatementType() != SQL_STATEMENT_SELECT_COUNT)
-        throw SQLException(::rtl::OUString::createFromAscii("No select statement!"),*this,::rtl::OUString::createFromAscii("HY000"),1000,Any());
+    {
+        SQLException aError1(command,*this,::rtl::OUString::createFromAscii("HY000"),1000,Any());
+        throw SQLException(::rtl::OUString::createFromAscii("No select statement!"),*this,::rtl::OUString::createFromAscii("HY000"),1000,makeAny(aError1));
+    }
 
     m_aWorkSql = STR_SELECT;
     m_pSqlParseNode->getChild(1)->parseNodeToStr(m_aWorkSql,m_xConnection->getMetaData());
@@ -523,7 +530,7 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
         throw DisposedException();
 
     if(!column.is() || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_VALUE))
-        throw SQLException();
+        throw SQLException(::rtl::OUString::createFromAscii("Column doesn't support the property 'Value'!"),*this,::rtl::OUString::createFromAscii("HY000"),1000,Any());
 
     sal_Int32 nType = 0;
     column->getPropertyValue(PROPERTY_TYPE) >>= nType;
@@ -577,7 +584,7 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
                         aSql += ::rtl::OUString::createFromAscii("\'");
                 }
                 else
-                    throw SQLException();
+                    throw SQLException(::rtl::OUString::createFromAscii("Column value isn't from type Sequence<sal_Int8>!"),*this,::rtl::OUString::createFromAscii("HY000"),1000,Any());
             }
             break;
         default:
@@ -616,7 +623,7 @@ void SAL_CALL OQueryComposer::appendOrderByColumn( const Reference< XPropertySet
         throw DisposedException();
 
     if(!column.is() || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_VALUE))
-        throw SQLException();
+        throw SQLException(::rtl::OUString::createFromAscii("Column doesn't support the property 'Value'!"),*this,::rtl::OUString::createFromAscii("HY000"),1000,Any());
 
     ::osl::MutexGuard aGuard( m_aMutex );
 
