@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-12 15:24:40 $
+ *  last change: $Author: cl $ $Date: 2002-10-01 13:15:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1391,31 +1391,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
         break;
 
         case HID_PSEUDOSHEET_TITLE:
-        {
-            // Titel-Vorlage
-
-            SfxItemPool* pIP = rSet.GetPool()->GetSecondaryPool();
-            SvxNumBulletItem* pI = (SvxNumBulletItem*) pIP->GetPoolDefaultItem(EE_PARA_NUMBULLET);
-
-            SvxNumRule aNumRule(*((SvxNumBulletItem*) rSet.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET))->GetNumRule());
-            for(USHORT i=0; i < aNumRule.GetLevelCount(); i++)
-            {
-                SvxNumberFormat aFrmt( aNumRule.GetLevel(i));
-                aFrmt.SetBulletRelSize(45);
-                aFrmt.SetBulletChar( 0xE011 );  // StarBats: 0xF000 + 114
-                aFrmt.SetBulletFont(&rBulletFont);
-                aFrmt.SetLSpace( i * 1000 );
-                aFrmt.SetAbsLSpace( i * 1000 );
-                aFrmt.SetFirstLineOffset(0);
-
-                aNumRule.SetLevel(i, aFrmt);
-            }
-
-            rSet.Put( SvxNumBulletItem( aNumRule, EE_PARA_NUMBULLET ) );
-            ((SfxStyleSheet*)pSheet)->Broadcast(SfxSimpleHint( SFX_HINT_DATACHANGED ) );
-        }
-        break;
-
+            /* #84013# title gets same bullet as subtitle and not that page symbol anymore */
         case HID_PSEUDOSHEET_SUBTITLE :
         {
             // Untertitel-Vorlage
