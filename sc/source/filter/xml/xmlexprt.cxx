@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-18 12:32:13 $
+ *  last change: $Author: sab $ $Date: 2000-10-18 17:38:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -954,7 +954,8 @@ sal_Bool ScMyValidations::AddValidation(const uno::Any& aTempAny,
             while (i < nCount && !bEqualFound)
             {
                 bEqualFound = aValidations[i].IsEqual(aValidation);
-                i++;
+                if (!bEqualFound)
+                    i++;
             }
             if (bEqualFound)
                 aValidationRange.nIndex = i;
@@ -1618,7 +1619,8 @@ SvXMLExport( rFileName, rHandler, xTempModel, GetFieldUnit() ),
     aTableStyles(),
     pCellsItr(NULL),
     pValidations(NULL),
-    bHasRowHeader(sal_False)
+    bHasRowHeader(sal_False),
+    bRowHeaderOpen(sal_False)
 {
     pDoc = GetDocument();
     pValidations = new ScMyValidations();
@@ -2012,12 +2014,13 @@ void ScXMLExport::OpenHeaderRows()
     GetDocHandler()->ignorableWhitespace(sWS);
     GetDocHandler()->startElement( aName, GetXAttrList());
     ClearAttrList();
+    bRowHeaderOpen = sal_True;
 }
 
 void ScXMLExport::OpenNewRow(const sal_Int32 nIndex, const sal_Int8 nFlag, const sal_Int32 nStartRow, const sal_Int32 nEqualRows)
 {
     nOpenRow = nStartRow;
-    if (bHasRowHeader && nStartRow >= aRowHeaderRange.StartRow && nStartRow <= aRowHeaderRange.EndRow)
+    if (bHasRowHeader && !bRowHeaderOpen && nStartRow >= aRowHeaderRange.StartRow && nStartRow <= aRowHeaderRange.EndRow)
     {
         if (nStartRow == aRowHeaderRange.StartRow)
             OpenHeaderRows();
@@ -2106,6 +2109,7 @@ void ScXMLExport::CloseRow(const sal_Int32 nRow)
             sName = GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_table_header_rows)));
             GetDocHandler()->ignorableWhitespace(sWS);
             GetDocHandler()->endElement(sName);
+            bRowHeaderOpen = sal_False;
         }
     }
     nOpenRow = -1;
@@ -2129,7 +2133,7 @@ void ScXMLExport::ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 
         {
             aCellStyles.GetFormatRanges(nStartCol, GetLastColumn(nSheet), nStartRow, nSheet, aRowFormatRanges);
             WriteRowContent();
-            CloseRow(nStartRow - 1);
+            CloseRow(nStartRow);
             sal_Int32 nRows = 1;
             sal_Int32 nTotalRows = nEndRow - nStartRow + 1 - 1;
             while (nRows < nTotalRows)
@@ -2270,6 +2274,7 @@ void ScXMLExport::_ExportContent()
                             SetLastColumn(nTable, aColumnHeaderRange.EndColumn);
                         ExportColumns(nTable, aColumnHeaderRange, bHasColumnHeader);
                         bHasRowHeader = GetRowHeader(aRowHeaderRange);
+                        bRowHeaderOpen = sal_False;
                         if (bHasRowHeader)
                             SetLastRow(nTable, aRowHeaderRange.EndRow);
                         sal_Bool bIsFirst(sal_True);
@@ -3126,7 +3131,11 @@ void ScXMLExport::WriteAnnotation(const uno::Reference<table::XCell>& xCell)
                         GetMM100UnitConverter().convertDateTime(sBuf, fDate);
                         AddAttribute(XML_NAMESPACE_OFFICE, sXML_create_date, sBuf.makeStringAndClear());
                     }
+                    else
+                        AddAttribute(XML_NAMESPACE_OFFICE, sXML_create_date_string, rtl::OUString(aDate));
                 }
+                else
+                    AddAttribute(XML_NAMESPACE_OFFICE, sXML_create_date_string, rtl::OUString(aDate));
                 if (!xSheetAnnotation->getIsVisible())
                     AddAttributeASCII(XML_NAMESPACE_OFFICE, sXML_display, sXML_false);
                 SvXMLElementExport aElemA(*this, XML_NAMESPACE_OFFICE, sXML_annotation, sal_True, sal_False);

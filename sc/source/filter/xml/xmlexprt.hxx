@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-18 12:12:43 $
+ *  last change: $Author: sab $ $Date: 2000-10-18 17:38:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,6 +375,7 @@ class ScXMLExport : public SvXMLExport
     com::sun::star::table::CellRangeAddress aRowHeaderRange;
 
     sal_Bool                    bHasRowHeader;
+    sal_Bool                    bRowHeaderOpen;
     sal_Bool                    mbShowProgress : 1;
     sal_Int32                   nOpenRow;
     sal_Int16                   nCurrentTable;
