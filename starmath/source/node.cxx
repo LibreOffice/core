@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-08 11:22:18 $
+ *  last change: $Author: tl $ $Date: 2001-09-13 11:21:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2721,7 +2721,7 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
     SmModule  *pp = SM_MOD1();
 
     Size  aOldSize = GetFont().GetSize();
-    if (pSym = rDocShell.GetSymSetManager().GetSymbol(GetToken().aText))
+    if (pSym = rDocShell.GetSymSetManager().GetSymbolByName(GetToken().aText))
     {
         SetText( pSym->GetCharacter() );
         GetFont() = pSym->GetFace();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-28 07:47:20 $
+ *  last change: $Author: tl $ $Date: 2001-09-13 11:21:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,7 +560,7 @@ USHORT SmSymSetManager::GetSymbolSetPos(const String& rSymbolSetName) const
     return SYMBOLSET_NONE;
 }
 
-SmSym *SmSymSetManager::GetSymbol(const String& rSymbolName)
+SmSym *SmSymSetManager::GetSymbolByName(const String& rSymbolName)
 {
     SmSym *pSym = pImpl->HashEntries[GetHashIndex(rSymbolName)];
     while (pSym)
@@ -576,7 +576,7 @@ SmSym *SmSymSetManager::GetSymbol(const String& rSymbolName)
 
 void SmSymSetManager::AddReplaceSymbol( const SmSym &rSymbol )
 {
-    SmSym *pSym = GetSymbol( rSymbol.GetName() );
+    SmSym *pSym = GetSymbolByName( rSymbol.GetName() );
     if (pSym)
     {
         *pSym = rSymbol;
@@ -608,7 +608,7 @@ USHORT SmSymSetManager::GetSymbolCount() const
 }
 
 
-const SmSym * SmSymSetManager::GetSymbol( USHORT nPos ) const
+const SmSym * SmSymSetManager::GetSymbolByPos( USHORT nPos ) const
 {
     const SmSym *pRes = 0;
 

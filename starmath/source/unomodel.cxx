@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-29 07:56:26 $
+ *  last change: $Author: tl $ $Date: 2001-09-13 11:21:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,7 @@ SmModel::SmModel( SfxObjectShell *pObjSh )
 {
 }
 //-----------------------------------------------------------------------
-SmModel::~SmModel()
+SmModel::~SmModel() throw ()
 {
 }
 /*-- 28.03.00 14:18:17---------------------------------------------------
@@ -805,13 +805,13 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_SYMBOLS:
             {
                 // this is get
-                SmSymSetManager &rManager = pDocSh->GetSymSetManager();
+                const SmSymSetManager &rManager = pDocSh->GetSymSetManager();
                 vector < const SmSym * > aVector;
 
                 USHORT nCount = 0;
                 for (USHORT i = 0, nEnd = rManager.GetSymbolCount(); i < nEnd; i++)
                 {
-                    const SmSym * pSymbol = rManager.GetSymbol ( i );
+                    const SmSym * pSymbol = rManager.GetSymbolByPos( i );
                     if (pSymbol && !pSymbol->IsPredefined () )
                     {
                         aVector.push_back ( pSymbol );
