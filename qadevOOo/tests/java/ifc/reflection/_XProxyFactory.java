@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XProxyFactory.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:11:20 $
+ *  last change:$Date: 2003-09-08 10:49:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,12 @@
 
 package ifc.reflection;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.lang.XInitialization;
 import com.sun.star.reflection.XProxyFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XAggregation;
-import lib.MultiMethodTest;
 
 /**
 /**
