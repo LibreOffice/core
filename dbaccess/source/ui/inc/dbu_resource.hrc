@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:12:01 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:58:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,11 @@
 #define RID_STR_UNO_END                 RID_STR_UNO_START       +  5    // 350 - 354
 
 #define RID_STR_GEN_START               RID_STR_UNO_END
-#define RID_STR_GEN_END                 RID_STR_GEN_START       + 35    // 355 - 389
+#define RID_STR_GEN_END                 RID_STR_GEN_START       + 55    // 355 - 409
+
+#define RID_STR_APP_START               RID_STR_GEN_END
+#define RID_STR_APP_END                 RID_STR_APP_START       + 40    //   409 - 449
+
 
 #if RID_STR_GEN_END > RID_DBACCESS_END
 #error Resource-Id Ueberlauf in #file, #line
@@ -136,22 +140,25 @@
 #define DLG_REL_PROPERTIES              RID_DIALOG_START + 17
 #define DLG_ADABASSTAT                  RID_DIALOG_START + 18
 #define DLG_INDEXDESIGN                 RID_DIALOG_START + 19
-#define DLG_DOCUMENTLINK                RID_DIALOG_START + 20
-#define DLG_DEADDOCUMENTLINK            RID_DIALOG_START + 21
+#define DLG_DATABASE_ADABASADMIN        RID_DIALOG_START + 20
+#define DLG_DATABASE_USERADMIN          RID_DIALOG_START + 21
 #define DLG_DIRECTSQL                   RID_DIALOG_START + 22
 #define DLG_PASSWORD                    RID_DIALOG_START + 23
 #define DLG_DOMAINPASSWORD              RID_DIALOG_START + 24
+#define DLG_RENAME                      RID_DIALOG_START + 25
+#define DLG_DATABASE_ADVANCED           RID_DIALOG_START + 26
+#define DLG_COLLECTION_VIEW             RID_DIALOG_START + 27
+#define DLG_DATABASE_TYPE_CHANGE        RID_DIALOG_START + 28
 
 //========================================================================
 // tab pages
 
 #define PAGE_GENERAL                    RID_PAGE_START +  0
 #define PAGE_DBASE                      RID_PAGE_START +  1
-#define PAGE_JDBC                       RID_PAGE_START +  2
 #define PAGE_ODBC                       RID_PAGE_START +  3
 #define PAGE_TEXT                       RID_PAGE_START +  4
 #define PAGE_ADABAS                     RID_PAGE_START +  5
-#define PAGE_TABLESUBSCRIPTION          RID_PAGE_START +  6
+#define PAGE_CONNECTION                 RID_PAGE_START +  6
 #define PAGE_ADO                        RID_PAGE_START +  7
 #define PAGE_QUERYADMINISTRATION        RID_PAGE_START +  8
 #define TAB_WIZ_COLUMN_SELECT           RID_PAGE_START +  9
@@ -159,18 +166,29 @@
 #define TAB_WIZ_NAME_MATCHING           RID_PAGE_START + 11
 #define TAB_WIZ_COPYTABLE               RID_PAGE_START + 12
 #define TAB_PAG_ADABAS_SETTINGS         RID_PAGE_START + 13
-#define PAGE_DOCUMENTLINKS              RID_PAGE_START + 14
+// free
 #define PAGE_LDAP                       RID_PAGE_START + 15
 #define TAB_PAGE_USERADMIN              RID_PAGE_START + 16
-#define PAGE_MYSQL                      RID_PAGE_START + 17
+#define PAGE_MYSQL_ODBC                 RID_PAGE_START + 17
 #define TAB_PAGE_TABLEPRIVILEGES        RID_PAGE_START + 18
 #define PAGE_USERDRIVER                 RID_PAGE_START + 19
+#define PAGE_MYSQL_JDBC                 RID_PAGE_START + 20
+#define PAGE_GENERATED_VALUES           RID_PAGE_START + 22
+#define PAGE_DS_PROPERTIES_1            RID_PAGE_START + 23
+#define PAGE_DS_PROPERTIES_2            RID_PAGE_START + 24
+#define PAGE_DS_PROPERTIES_4            RID_PAGE_START + 25
+#define PAGE_DS_PROPERTIES_FILE         RID_PAGE_START + 26
+#define PAGE_ORACLE_JDBC                RID_PAGE_START + 27
+#define PAGE_TABLESUBSCRIPTION          RID_PAGE_START + 28
+#define PAGE_DS_PROPERTIES_3            RID_PAGE_START + 29
+#define PAGE_DS_PROPERTIES_ACCESS       RID_PAGE_START + 30
+#define PAGE_DS_PROPERTIES_ENABLEOJ     RID_PAGE_START + 31
 
 //========================================================================
 // error boxes
 
 #define ERR_NOREGISTEREDDATASOURCES     RID_ERRORBOX_START +  0
-#define ERR_COULDNOTRESTOREDS           RID_ERRORBOX_START +  1
+#define ERROR_INVALID_TABLE_NAME_LENGTH RID_ERRORBOX_START +  1
 #define ERR_QRY_CRITERIA_ON_ASTERISK    RID_ERRORBOX_START +  2
 #define ERR_QRY_ORDERBY_ON_ASTERISK     RID_ERRORBOX_START +  3
 #define ERR_QRY_AMB_FIELD               RID_ERRORBOX_START +  4
@@ -181,7 +199,7 @@
 #define ERR_QRY_NOSTATEMENT             RID_ERRORBOX_START +  9
 #define ERR_QRY_NOCRITERIA              RID_ERRORBOX_START + 10
 #define ERR_CANTDOTABLEACTION           RID_ERRORBOX_START + 11
-#define ERROR_INVALID_TABLE_NAME_LENGTH RID_ERRORBOX_START + 12
+
 
 
 //========================================================================
@@ -191,16 +209,19 @@
 #define QUERY_BRW_SAVEMODIFIED          RID_QUERYBOX_START +  1
 #define QUERY_CONNECTION_LOST           RID_QUERYBOX_START +  2
 #define QUERY_BRW_DELETE_QUERY_CONFIRM  RID_QUERYBOX_START +  3
-    // FREE
+#define APP_SAVEMODIFIED                RID_QUERYBOX_START +  4
 #define TABLE_DESIGN_SAVEMODIFIED       RID_QUERYBOX_START +  5
 #define TABLE_QUERY_CONNECTION_LOST     RID_QUERYBOX_START +  6
 #define QUERY_SAVE_CURRENT_INDEX        RID_QUERYBOX_START +  7
 #define QUERY_SAVE_TABLE_EDIT_INDEXES   RID_QUERYBOX_START +  8
 #define RELATION_DESIGN_SAVEMODIFIED    RID_QUERYBOX_START +  9
 #define QUERY_NEED_TO_SAVE_FILTER       RID_QUERYBOX_START + 10
-    // FREE
+#define APP_CLOSEDOCUMENTS              RID_QUERYBOX_START + 11
 #define QUERY_USERADMIN_DELETE_USER     RID_QUERYBOX_START + 12
 #define TABLE_DESIGN_ALL_ROWS_DELETED   RID_QUERYBOX_START + 13
+
+
+
 
 //========================================================================
 // warning boxes
@@ -215,6 +236,7 @@
 #define RID_QRY_TOOLBOX_SQL             RID_TOOLBOX_START +  2
 #define RID_BRW_QUERYDESIGN_TOOLBOX     RID_TOOLBOX_START +  3
 #define RID_BRW_REALTIONDESIGN_TOOLBOX  RID_TOOLBOX_START +  4
+#define RID_BRW_APPLICATION_TOOLBOX     RID_TOOLBOX_START +  5
 
 //========================================================================
 // bitmaps
@@ -233,26 +255,25 @@
 #define QUERYFOLDER_TREE_ICON           RID_IMAGE_START +  6
 #define QUERY_TREE_ICON                 RID_IMAGE_START +  7
 #define IMG_DATABASE                    RID_IMAGE_START +  8
-#define IMG_DATABASE_MODIFIED           RID_IMAGE_START +  9
-#define IMG_DATABASE_NEW                RID_IMAGE_START + 10
-#define IMG_DATABASE_DELETED            RID_IMAGE_START + 11
+// free
+// free
+// free
 #define IMG_PKEYICON                    RID_IMAGE_START + 12
-#define BOOKMARK_TREE_ICON              RID_IMAGE_START + 13
-#define BOOKMARKFOLDER_TREE_ICON        RID_IMAGE_START + 14
+#define IMG_REPORTFOLDER_TREE_SCH       RID_IMAGE_START + 13
+#define IMG_FORMFOLDER_TREE_SCH         RID_IMAGE_START + 14
 #define IMG_DATABASE_CONNECTED          RID_IMAGE_START + 15
-// hi contrast iamges
 #define QUERYFOLDER_TREE_ICON_SCH       RID_IMAGE_START + 16
 #define TABLEFOLDER_TREE_ICON_SCH       RID_IMAGE_START + 17
-#define BOOKMARKFOLDER_TREE_ICON_SCH    RID_IMAGE_START + 18
+// free
 #define IMG_DATABASE_SCH                RID_IMAGE_START + 19
 #define IMG_DATABASE_CONNECTED_SCH      RID_IMAGE_START + 20
 #define TABLE_TREE_ICON_SCH             RID_IMAGE_START + 21
 #define VIEW_TREE_ICON_SCH              RID_IMAGE_START + 22
 #define QUERY_TREE_ICON_SCH             RID_IMAGE_START + 23
-#define BOOKMARK_TREE_ICON_SCH          RID_IMAGE_START + 24
-#define IMG_DATABASE_MODIFIED_SCH       RID_IMAGE_START + 25
-#define IMG_DATABASE_NEW_SCH            RID_IMAGE_START + 26
-#define IMG_DATABASE_DELETED_SCH        RID_IMAGE_START + 27
+#define IMG_REPORTFOLDER_TREE_S         RID_IMAGE_START + 24
+// free
+// free
+// free
 #define BMP_EXCEPTION_ERROR_SCH         RID_IMAGE_START + 28
 #define BMP_EXCEPTION_WARNING_SCH       RID_IMAGE_START + 29
 #define BMP_EXCEPTION_INFO_SCH          RID_IMAGE_START + 30
@@ -264,6 +285,24 @@
 #define IMG_ALL_RIGHT_H                 RID_IMAGE_START + 36
 #define IMG_SORTUP_H                    RID_IMAGE_START + 37
 #define IMG_SORTDOWN_H                  RID_IMAGE_START + 38
+#define IMG_FORMFOLDER_TREE_L           RID_IMAGE_START + 39
+#define IMG_REPORTFOLDER_TREE_L         RID_IMAGE_START + 40
+#define IMG_QUERYFOLDER_TREE_L          RID_IMAGE_START + 41
+#define IMG_TABLEFOLDER_TREE_L          RID_IMAGE_START + 42
+#define IMG_FORMFOLDER_TREE_LHC         RID_IMAGE_START + 43
+#define IMG_REPORTFOLDER_TREE_LHC       RID_IMAGE_START + 44
+#define IMG_QUERYFOLDER_TREE_LHC        RID_IMAGE_START + 45
+#define IMG_TABLEFOLDER_TREE_LHC        RID_IMAGE_START + 46
+#define IMG_NAVIGATION_BTN_UP_SC        RID_IMAGE_START + 47
+#define IMG_NAVIGATION_BTN_UP_SCH       RID_IMAGE_START + 48
+#define IMG_NAVIGATION_CREATEFOLDER_SC  RID_IMAGE_START + 49
+#define IMG_NAVIGATION_CREATEFOLDER_SCH RID_IMAGE_START + 50
+#define FORM_TREE_ICON                  RID_IMAGE_START + 51
+#define REPORT_TREE_ICON                RID_IMAGE_START + 52
+#define FORM_TREE_ICON_SCH              RID_IMAGE_START + 53
+#define REPORT_TREE_ICON_SCH            RID_IMAGE_START + 54
+#define IMG_FORMFOLDER_TREE_S           RID_IMAGE_START + 55
+
 
 //========================================================================
 // image lists
@@ -284,6 +323,14 @@
 #define IMG_DOCUMENTLINKS_SCH           RID_IMAGELIST_START + 14
 #define IMG_DOCUMENTLINKS_LC            RID_IMAGELIST_START + 15
 #define IMG_DOCUMENTLINKS_LCH           RID_IMAGELIST_START + 16
+#define IMP_FORM_SC                     RID_IMAGELIST_START + 17
+#define IMP_FORM_SCH                    RID_IMAGELIST_START + 18
+#define IMP_FORM_LC                     RID_IMAGELIST_START + 19
+#define IMP_FORM_LCH                    RID_IMAGELIST_START + 20
+#define IMP_REPORT_SC                   RID_IMAGELIST_START + 21
+#define IMP_REPORT_SCH                  RID_IMAGELIST_START + 22
+#define IMP_REPORT_LC                   RID_IMAGELIST_START + 23
+#define IMP_REPORT_LCH                  RID_IMAGELIST_START + 24
 
 //========================================================================
 // menues
@@ -298,18 +345,15 @@
 #define RID_TABLEDESIGNROWPOPUPMENU     RID_MENU_START +  7
 #define RID_BRW_TABLEDESIGN_TOOLBOX     RID_MENU_START +  8
 #define RID_SBA_RTF_PKEYPOPUP           RID_MENU_START +  9
-#define RID_TABLE_DESIGN_MAIN_MENU      RID_MENU_START + 10
-#define RID_QUERY_DESIGN_MAIN_MENU      RID_MENU_START + 11
-#define RID_RELATION_DESIGN_MAIN_MENU   RID_MENU_START + 12
+#define RID_MENU_APP_EDIT               RID_MENU_START + 10
+#define RID_MENU_APP_NEW                RID_MENU_START + 11
+#define RID_MENU_APP_PREVIEW            RID_MENU_START + 12
 #define RID_NEW_FORM                    RID_MENU_START + 13
-#define MENU_BROWSER_TABLECONTEXT       RID_MENU_START + 14
-#define MENU_BROWSER_QUERYCONTEXT       RID_MENU_START + 15
-#define MENU_BROWSER_BOOKMARKCONTEXT    RID_MENU_START + 16
-#define MENU_BROWSER_DEFAULTCONTEXT     RID_MENU_START + 17
-#define MENU_BROWSER_VIEWCONTEXT        RID_MENU_START + 18
-#define RID_MENU_REFRESH_DATA           RID_MENU_START + 19
-#define RID_MENU_JOINVIEW_CONNECTION    RID_MENU_START + 20
-#define RID_MENU_JOINVIEW_TABLE         RID_MENU_START + 21
+#define MENU_BROWSER_DEFAULTCONTEXT     RID_MENU_START + 14
+#define RID_MENU_REFRESH_DATA           RID_MENU_START + 15
+#define RID_MENU_JOINVIEW_CONNECTION    RID_MENU_START + 16
+#define RID_MENU_JOINVIEW_TABLE         RID_MENU_START + 17
+
 
 
 //========================================================================
@@ -323,7 +367,7 @@
 #define STR_OBJECT_ALREADY_EXSISTS          RID_STR_GEN_START + 1
 #define RID_STR_CONNECTION_LOST             RID_STR_GEN_START + 2
 #define STR_OBJECT_ALREADY_EXISTS           RID_STR_GEN_START + 3
-#define STR_QUERY_DROP_DOCUMENT_LINK        RID_STR_GEN_START + 4
+// free
 #define STR_TITLE_CONFIRM_DELETION          RID_STR_GEN_START + 5
 #define STR_STAT_WARNING                    RID_STR_GEN_START + 6
 #define STR_TABLEDESIGN_DATASOURCE_DELETED  RID_STR_GEN_START + 7
@@ -346,18 +390,38 @@
 #define STR_VIEW_TITLE                      RID_STR_GEN_START + 24
 #define STR_GENERAL_SDB_ERROR               RID_STR_GEN_START + 25
 #define STR_TABLEDESIGN_DUPLICATE_NAME      RID_STR_GEN_START + 26
+#define STR_COULDNOTCONNECT_DATASOURCE      RID_STR_GEN_START + 27
+#define STR_NO_TABLE_FORMAT_INSIDE          RID_STR_GEN_START + 28
+#define RID_STR_QUERIES_CONTAINER           RID_STR_GEN_START + 29
+#define RID_STR_TABLES_CONTAINER            RID_STR_GEN_START + 30
+#define STR_NEW_FOLDER                      RID_STR_GEN_START + 31
+#define RID_STR_FORM                        RID_STR_GEN_START + 32
+#define RID_STR_REPORT                      RID_STR_GEN_START + 33
+#define STR_FRM_LABEL                       RID_STR_GEN_START + 34
+#define STR_RPT_LABEL                       RID_STR_GEN_START + 35
+#define STR_FOLDER_LABEL                    RID_STR_GEN_START + 36
+#define STR_QUERY_DELETE_FORM               RID_STR_GEN_START + 37
+#define STR_QUERY_DELETE_REPORT             RID_STR_GEN_START + 38
+
 
 //========================================================================
 // untyped resources
 
 #define RSC_DATASOURCE_TYPES            RID_UNTYPED_START +  1
 #define RSC_CHARSETS                    RID_UNTYPED_START +  2
+#define RSC_DATASOURCE_TYPE_UINAMES     RID_UNTYPED_START +  3
 #define RSC_QUERY_OBJECT_TYPE           RID_UNTYPED_START +  4
 
 //========================================================================
 // various
 
 #define PB_FORMAT                       RID_MISC_START +  0
+#define FIXED_NO_CONNECTION             RID_MISC_START +  1
+#define LB_LEFT_TABLE                   RID_MISC_START +  2
+#define LB_RIGHT_TABLE                  RID_MISC_START +  3
+#define LB_CONTROL                      RID_MISC_START +  4
+#define FL_INVOLVED_TABLES              RID_MISC_START +  5
+#define FL_INVOLVED_FIELDS              RID_MISC_START +  6
 
 #endif // _DBU_RESOURCE_HRC_
 
