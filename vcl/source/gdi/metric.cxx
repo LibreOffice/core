@@ -2,9 +2,9 @@
  *
  *  $RCSfile: metric.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:17:38 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:29:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,44 +59,77 @@
  *
  ************************************************************************/
 
+#include <impfont.hxx>
 #include <metric.hxx>
 
 // =======================================================================
 
-FontInfo::FontInfo()
+ImplFontMetric::ImplFontMetric()
+:   mnRefCount( 1 ),
+    mnMiscFlags( 0 ),
+    mnAscent( 0 ),
+    mnDescent( 0 ),
+    mnIntLeading( 0 ),
+    mnExtLeading( 0 ),
+    mnLineHeight( 0 ),
+    mnSlant( 0 )
+{}
+
+// -----------------------------------------------------------------------
+
+inline void ImplFontMetric::AddReference()
 {
-    mpImplMetric                = new ImplFontMetric;
-    mpImplMetric->mnRefCount    = 1;
-    mpImplMetric->meType        = TYPE_DONTKNOW;
-    mpImplMetric->mbDevice      = FALSE;
-    mpImplMetric->mnAscent      = 0;
-    mpImplMetric->mnDescent     = 0;
-    mpImplMetric->mnIntLeading  = 0;
-    mpImplMetric->mnExtLeading  = 0;
-    mpImplMetric->mnLineHeight  = 0;
-    mpImplMetric->mnSlant       = 0;
-    mpImplMetric->mnFirstChar   = 0;
-    mpImplMetric->mnLastChar    = 0;
+    ++mnRefCount;
 }
 
 // -----------------------------------------------------------------------
 
-FontInfo::FontInfo( const FontInfo& rInfo ) :
-    Font( rInfo )
+inline void ImplFontMetric::DeReference()
+{
+    if( --mnRefCount <= 0 )
+        delete this;
+}
+
+// -----------------------------------------------------------------------
+
+bool ImplFontMetric::operator==( const ImplFontMetric& r ) const
+{
+    if( mnMiscFlags  != r.mnMiscFlags )
+        return false;
+    if( mnAscent     != r.mnAscent )
+        return false;
+    if( mnDescent    != r.mnDescent )
+        return false;
+    if( mnIntLeading != r.mnIntLeading )
+        return false;
+    if( mnExtLeading != r.mnExtLeading )
+        return false;
+    if( mnSlant      != r.mnSlant )
+        return false;
+
+    return true;
+}
+
+// =======================================================================
+
+FontInfo::FontInfo()
+:   mpImplMetric( new ImplFontMetric )
+{}
+
+// -----------------------------------------------------------------------
+
+FontInfo::FontInfo( const FontInfo& rInfo )
+:  Font( rInfo )
 {
     mpImplMetric = rInfo.mpImplMetric;
-    mpImplMetric->mnRefCount++;
+    mpImplMetric->AddReference();
 }
 
 // -----------------------------------------------------------------------
 
 FontInfo::~FontInfo()
 {
-    // Eventuell Metric loeschen
-    if ( mpImplMetric->mnRefCount > 1 )
-        mpImplMetric->mnRefCount--;
-    else
-        delete mpImplMetric;
+    mpImplMetric->DeReference();
 }
 
 // -----------------------------------------------------------------------
@@ -105,131 +138,197 @@ FontInfo& FontInfo::operator=( const FontInfo& rInfo )
 {
     Font::operator=( rInfo );
 
-    // Zuerst Referenzcounter erhoehen, damit man sich selbst zuweisen kann
-    rInfo.mpImplMetric->mnRefCount++;
-
-    // Sind wir nicht die letzten ?
-    if ( mpImplMetric->mnRefCount > 1 )
-        mpImplMetric->mnRefCount--;
-    else
-        delete mpImplMetric;
-
-    mpImplMetric = rInfo.mpImplMetric;
+    if( mpImplMetric != rInfo.mpImplMetric )
+    {
+        mpImplMetric->DeReference();
+        mpImplMetric = rInfo.mpImplMetric;
+        mpImplMetric->AddReference();
+    }
 
     return *this;
-
 }
 
 // -----------------------------------------------------------------------
 
 BOOL FontInfo::operator==( const FontInfo& rInfo ) const
 {
-    if ( !Font::operator==( rInfo ) )
+    if( !Font::operator==( rInfo ) )
         return FALSE;
-
-    if ( mpImplMetric == rInfo.mpImplMetric )
+    if( mpImplMetric == rInfo.mpImplMetric )
         return TRUE;
-
-    if ( (mpImplMetric->meType      == rInfo.mpImplMetric->meType       ) &&
-         (mpImplMetric->mbDevice    == rInfo.mpImplMetric->mbDevice     ) &&
-         (mpImplMetric->mnAscent    == rInfo.mpImplMetric->mnAscent     ) &&
-         (mpImplMetric->mnDescent   == rInfo.mpImplMetric->mnDescent    ) &&
-         (mpImplMetric->mnIntLeading== rInfo.mpImplMetric->mnIntLeading ) &&
-         (mpImplMetric->mnExtLeading== rInfo.mpImplMetric->mnExtLeading ) &&
-         (mpImplMetric->mnSlant     == rInfo.mpImplMetric->mnSlant      ) &&
-         (mpImplMetric->mnFirstChar == rInfo.mpImplMetric->mnFirstChar  ) &&
-         (mpImplMetric->mnLastChar  == rInfo.mpImplMetric->mnLastChar   ) )
+    if( *mpImplMetric == *rInfo.mpImplMetric  )
         return TRUE;
-    else
-        return FALSE;
+    return FALSE;
+}
+
+// -----------------------------------------------------------------------
+
+FontType FontInfo::GetType() const
+{
+    return (mpImplMetric->IsScalable() ? TYPE_SCALABLE : TYPE_RASTER);
+}
+
+// -----------------------------------------------------------------------
+
+BOOL FontInfo::IsDeviceFont() const
+{
+    return mpImplMetric->IsDeviceFont();
+}
+
+// -----------------------------------------------------------------------
+
+BOOL FontInfo::SupportsLatin() const
+{
+    return mpImplMetric->SupportsLatin();
+}
+
+// -----------------------------------------------------------------------
+
+BOOL FontInfo::SupportsCJK() const
+{
+    return mpImplMetric->SupportsCJK();
+}
+
+// -----------------------------------------------------------------------
+
+BOOL FontInfo::SupportsCTL() const
+{
+    return mpImplMetric->SupportsCTL();
 }
 
 // =======================================================================
 
-static const sal_UCS4 pDefaultRangeCodes[] = {0x0020,0xD800, 0xE000,0xFFF0};
+FontMetric::FontMetric( const FontMetric& rMetric )
+:    FontInfo( rMetric )
+{}
 
-FontCharMap::FontCharMap()
-:   mpRangeCodes( NULL )
+// -----------------------------------------------------------------------
+
+long FontMetric::GetAscent() const
 {
-    ImplSetDefaultRanges();
+    return mpImplMetric->GetAscent();
 }
 
 // -----------------------------------------------------------------------
 
-FontCharMap::~FontCharMap()
+long FontMetric::GetDescent() const
 {
-    ImplSetRanges( 0, NULL );
+    return mpImplMetric->GetDescent();
 }
 
 // -----------------------------------------------------------------------
 
-FontCharMap& FontCharMap::operator=( const FontCharMap& rMap )
+long FontMetric::GetIntLeading() const
 {
-    if( rMap.mpRangeCodes == pDefaultRangeCodes )
-    {
-        ImplSetDefaultRanges();
-    }
-    else
-    {
-        ULONG nPairs = rMap.mnRangeCount;
-        sal_UCS4* pCodes = new sal_UCS4[ 2 * nPairs ];
-        for( ULONG i = 0; i < 2*nPairs; ++i )
-            pCodes[ i ] = rMap.mpRangeCodes[ i ];
-        ImplSetRanges( nPairs, pCodes );
-    }
+    return mpImplMetric->GetIntLeading();
+}
 
+// -----------------------------------------------------------------------
+
+long FontMetric::GetExtLeading() const
+{
+    return mpImplMetric->GetExtLeading();
+}
+
+// -----------------------------------------------------------------------
+
+long FontMetric::GetLineHeight() const
+{
+    return mpImplMetric->GetLineHeight();
+}
+
+// -----------------------------------------------------------------------
+
+long FontMetric::GetSlant() const
+{
+    return mpImplMetric->GetSlant();
+}
+
+// -----------------------------------------------------------------------
+
+FontMetric& FontMetric::operator =( const FontMetric& rMetric )
+{
+    FontInfo::operator=( rMetric );
     return *this;
 }
 
 // -----------------------------------------------------------------------
 
-void FontCharMap::ImplSetRanges( ULONG nPairs, const sal_UCS4* pCodes )
+BOOL FontMetric::operator==( const FontMetric& rMetric ) const
 {
-    if( mpRangeCodes && mpRangeCodes != pDefaultRangeCodes )
-        delete[] const_cast<sal_UCS4*>( mpRangeCodes );
+    return FontInfo::operator==( rMetric );
+}
 
-    mnRangeCount = nPairs;
-    mpRangeCodes = pCodes;
+// =======================================================================
 
-    mnCharCount = 0;
-    for( int i = 0; i < nPairs; ++i )
-        mnCharCount += mpRangeCodes[ 2*i+1 ] - mpRangeCodes[ 2*i ];
+ImplFontCharMap::ImplFontCharMap( int nRangePairs, const sal_uInt32* pRangeCodes )
+:   mpRangeCodes( pRangeCodes ),
+    mnRangeCount( nRangePairs ),
+    mnCharCount( 0 ),
+    mnRefCount( 1 )
+{
+    while( --nRangePairs >= 0 )
+    {
+        sal_uInt32 cFirst = *(pRangeCodes++);
+        sal_uInt32 cLast  = *(pRangeCodes++);
+        mnCharCount += cLast - cFirst;
+    }
+}
+
+static ImplFontCharMap* pDefaultImplFontCharMap = NULL;
+static const sal_uInt32 pDefaultRangeCodes[] = {0x0020,0xD800, 0xE000,0xFFF0};
+
+// -----------------------------------------------------------------------
+
+ImplFontCharMap::~ImplFontCharMap()
+{
+    if( mpRangeCodes != pDefaultRangeCodes )
+        delete[] mpRangeCodes;
 }
 
 // -----------------------------------------------------------------------
 
-void FontCharMap::ImplSetDefaultRanges()
+ImplFontCharMap* ImplFontCharMap::GetDefaultMap()
 {
-    int nCodes = sizeof(pDefaultRangeCodes) / sizeof(*pDefaultRangeCodes);
-    ImplSetRanges( nCodes/2, pDefaultRangeCodes );
+    if( !pDefaultImplFontCharMap )
+        pDefaultImplFontCharMap = new ImplFontCharMap( 2, pDefaultRangeCodes );
+    pDefaultImplFontCharMap->AddReference();
+    return pDefaultImplFontCharMap;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL FontCharMap::IsDefaultMap() const
+bool ImplFontCharMap::IsDefaultMap() const
 {
     return (mpRangeCodes == pDefaultRangeCodes);
 }
 
 // -----------------------------------------------------------------------
 
-void FontCharMap::GetRange( ULONG i, sal_UCS4& cBegin, sal_UCS4& cEnd ) const
+void ImplFontCharMap::AddReference()
 {
-    if( i < 0 || i >= mnRangeCount )
-    {
-        cBegin = pDefaultRangeCodes[ 0 ];
-        cEnd   = pDefaultRangeCodes[ 1 ];
-    }
-    else
-    {
-        cBegin = mpRangeCodes[ 2*i ];
-        cEnd   = mpRangeCodes[ 2*i+1 ];
-    }
+    ++mnRefCount;
 }
 
 // -----------------------------------------------------------------------
 
-int FontCharMap::ImplFindRange( sal_UCS4 cChar ) const
+void ImplFontCharMap::DeReference()
+{
+    if( --mnRefCount <= 0 )
+        if( this != pDefaultImplFontCharMap )
+            delete this;
+}
+
+// -----------------------------------------------------------------------
+
+int ImplFontCharMap::GetCharCount() const
+{
+    return mnCharCount;
+}
+
+// -----------------------------------------------------------------------
+
+int ImplFontCharMap::ImplFindRangeIndex( sal_uInt32 cChar ) const
 {
     int nLower = 0;
     int nMid   = mnRangeCount;
@@ -242,63 +341,233 @@ int FontCharMap::ImplFindRange( sal_UCS4 cChar ) const
             nUpper = nMid - 1;
         nMid = (nLower + nUpper + 1) / 2;
     }
+
     return nMid;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL FontCharMap::HasChar( sal_UCS4 cChar ) const
+bool ImplFontCharMap::HasChar( sal_uInt32 cChar ) const
 {
-    int nRange = ImplFindRange( cChar );
+    int nRange = ImplFindRangeIndex( cChar );
     if( nRange==0 && cChar<mpRangeCodes[0] )
-        return FALSE;
-    return (nRange & 1) ? FALSE: TRUE;
+        return false;
+    return ((nRange & 1) == 0);
 }
 
 // -----------------------------------------------------------------------
 
-sal_UCS4 FontCharMap::GetFirstChar() const
+// returns the number of chars supported by the font, which
+// are inside the unicode range from cMin to cMax (inclusive)
+int ImplFontCharMap::CountCharsInRange( sal_uInt32 cMin, sal_uInt32 cMax ) const
+{
+    int nCount = 0;
+
+    // find and adjust range and char count for cMin
+    int nRangeMin = ImplFindRangeIndex( cMin );
+    if( (nRangeMin & 1) != 0 )
+        ++nRangeMin;
+    else if( cMin > mpRangeCodes[ nRangeMin ] )
+        nCount -= cMin - mpRangeCodes[ nRangeMin ];
+
+    // find and adjust range and char count for cMax
+    int nRangeMax = ImplFindRangeIndex( cMax );
+    if( (nRangeMin & 1) != 0 )
+        --nRangeMax;
+    else
+        nCount -= mpRangeCodes[ nRangeMax+1 ] - cMax - 1;
+
+    // count chars in complete ranges between cMin and cMax
+    for( int i = nRangeMin; i <= nRangeMax; i+=2 )
+        nCount += mpRangeCodes[i+1] - mpRangeCodes[i];
+
+    return nCount;
+}
+
+// -----------------------------------------------------------------------
+
+sal_uInt32 ImplFontCharMap::GetFirstChar() const
 {
     return mpRangeCodes[0];
 }
 
 // -----------------------------------------------------------------------
 
-sal_UCS4 FontCharMap::GetLastChar() const
+sal_uInt32 ImplFontCharMap::GetLastChar() const
 {
     return (mpRangeCodes[ 2*mnRangeCount-1 ] - 1);
 }
 
 // -----------------------------------------------------------------------
 
-sal_UCS4 FontCharMap::GetNextChar( sal_UCS4 cChar ) const
+sal_uInt32 ImplFontCharMap::GetNextChar( sal_uInt32 cChar ) const
 {
     if( cChar < GetFirstChar() )
         return GetFirstChar();
     if( cChar >= GetLastChar() )
         return GetLastChar();
 
-    int nRange = ImplFindRange( cChar );
-    if( nRange & 1 )                        // inbetween ranges?
-        return mpRangeCodes[ nRange + 1 ];  // first in next range
+    int nRange = ImplFindRangeIndex( cChar );
+    if( nRange & 1 )                        // outside a range?
+        return mpRangeCodes[ nRange + 1 ];  // => first in next range
     return (cChar + 1);
 }
 
 // -----------------------------------------------------------------------
 
-sal_UCS4 FontCharMap::GetPrevChar( sal_UCS4 cChar ) const
+sal_uInt32 ImplFontCharMap::GetPrevChar( sal_uInt32 cChar ) const
 {
     if( cChar <= GetFirstChar() )
         return GetFirstChar();
     if( cChar > GetLastChar() )
         return GetLastChar();
 
-    int nRange = ImplFindRange( cChar );
-    if( nRange & 1 )                            // inbetween ranges?
-        return (mpRangeCodes[ nRange ] - 1);
+    int nRange = ImplFindRangeIndex( cChar );
+    if( nRange & 1 )                            // outside a range?
+        return (mpRangeCodes[ nRange ] - 1);    // => last in prev range
     else if( cChar == mpRangeCodes[ nRange ] )  // first in prev range?
-        return (mpRangeCodes[ nRange-1 ] - 1);
+        return (mpRangeCodes[ nRange-1 ] - 1);  // => last in prev range
     return (cChar - 1);
+}
+
+// -----------------------------------------------------------------------
+
+int ImplFontCharMap::GetIndexFromChar( sal_uInt32 cChar ) const
+{
+    // TODO: improve linear walk?
+    int nCharIndex = 0;
+    const sal_uInt32* pRange = &mpRangeCodes[0];
+    for( int i = 0; i < mnRangeCount; ++i )
+    {
+        sal_uInt32 cFirst = *(pRange++);
+        sal_uInt32 cLast  = *(pRange++);
+        if( cChar >= cLast )
+            break;
+        if( cChar >= cFirst )
+            return nCharIndex + (cChar - cFirst);
+        nCharIndex += cLast - cFirst;
+    }
+
+    return -1;
+}
+
+// -----------------------------------------------------------------------
+
+sal_uInt32 ImplFontCharMap::GetCharFromIndex( int nCharIndex ) const
+{
+    // TODO: improve linear walk?
+    const sal_uInt32* pRange = &mpRangeCodes[0];
+    for( int i = 0; i < mnRangeCount; ++i )
+    {
+        sal_uInt32 cFirst = *(pRange++);
+        sal_uInt32 cLast  = *(pRange++);
+        nCharIndex -= cLast - cFirst;
+        if( nCharIndex < 0 )
+            return (cLast + nCharIndex);
+    }
+
+    // we can only get here with an out-of-bounds charindex
+    return mpRangeCodes[0];
+}
+
+// =======================================================================
+
+FontCharMap::FontCharMap()
+:   mpImpl( ImplFontCharMap::GetDefaultMap() )
+{}
+
+// -----------------------------------------------------------------------
+
+FontCharMap::~FontCharMap()
+{
+    mpImpl->DeReference();
+}
+
+// -----------------------------------------------------------------------
+
+int FontCharMap::GetCharCount() const
+{
+    return mpImpl->GetCharCount();
+}
+
+// -----------------------------------------------------------------------
+
+int FontCharMap::CountCharsInRange( sal_uInt32 cMin, sal_uInt32 cMax ) const
+{
+    return mpImpl->CountCharsInRange( cMin, cMax );
+}
+
+// -----------------------------------------------------------------------
+
+void FontCharMap::Reset( ImplFontCharMap* pNewMap )
+{
+    if( pNewMap == NULL )
+    {
+        mpImpl->DeReference();
+        mpImpl = ImplFontCharMap::GetDefaultMap();
+    }
+    else if( pNewMap != mpImpl )
+    {
+        mpImpl->DeReference();
+        mpImpl = pNewMap;
+        mpImpl->AddReference();
+    }
+}
+
+// -----------------------------------------------------------------------
+
+BOOL FontCharMap::IsDefaultMap() const
+{
+    return mpImpl->IsDefaultMap();
+}
+
+// -----------------------------------------------------------------------
+
+BOOL FontCharMap::HasChar( sal_uInt32 cChar ) const
+{
+    return mpImpl->HasChar( cChar );
+}
+
+// -----------------------------------------------------------------------
+
+sal_uInt32 FontCharMap::GetFirstChar() const
+{
+    return mpImpl->GetFirstChar();
+}
+
+// -----------------------------------------------------------------------
+
+sal_uInt32 FontCharMap::GetLastChar() const
+{
+    return mpImpl->GetLastChar();
+}
+
+// -----------------------------------------------------------------------
+
+sal_uInt32 FontCharMap::GetNextChar( sal_uInt32 cChar ) const
+{
+    return mpImpl->GetNextChar( cChar );
+}
+
+// -----------------------------------------------------------------------
+
+sal_uInt32 FontCharMap::GetPrevChar( sal_uInt32 cChar ) const
+{
+    return mpImpl->GetPrevChar( cChar );
+}
+
+// -----------------------------------------------------------------------
+
+int FontCharMap::GetIndexFromChar( sal_uInt32 cChar ) const
+{
+    return mpImpl->GetIndexFromChar( cChar );
+}
+
+// -----------------------------------------------------------------------
+
+sal_uInt32 FontCharMap::GetCharFromIndex( int nIndex ) const
+{
+    return mpImpl->GetCharFromIndex( nIndex );
 }
 
 // =======================================================================
