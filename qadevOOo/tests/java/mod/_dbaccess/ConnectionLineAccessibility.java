@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionLineAccessibility.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change:$Date: 2005-03-01 20:22:25 $
+ *  last change:$Date: 2005-03-29 11:57:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,13 +68,9 @@ import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.AccessibilityTools;
-import util.DBTools;
 
 import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
-import com.sun.star.accessibility.XAccessibleAction;
-import com.sun.star.accessibility.XAccessibleContext;
-import com.sun.star.accessibility.XAccessibleSelection;
 import com.sun.star.awt.PosSize;
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.XExtendedToolkit;
@@ -86,17 +82,15 @@ import com.sun.star.container.XNameContainer;
 import com.sun.star.frame.XStorable;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sdb.XDocumentDataSource;
 import com.sun.star.sdb.XQueryDefinitionsSupplier;
 import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbc.XIsolatedConnection;
 import com.sun.star.sdbc.XStatement;
 import com.sun.star.ucb.XSimpleFileAccess;
-import com.sun.star.ui.dialogs.XExecutableDialog;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import com.sun.star.uno.XNamingService;
 import util.DesktopTools;
-import util.dbg;
 import util.utils;
 
 
@@ -141,8 +135,8 @@ public class ConnectionLineAccessibility extends TestCase
      * @throws StatusException
      * @see TestEnvironment
      */
-    protected TestEnvironment createTestEnvironment (TestParameters Param,
-    PrintWriter log)
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
+            PrintWriter log)
     {
         XInterface oObj = null;
 
@@ -154,92 +148,102 @@ public class ConnectionLineAccessibility extends TestCase
 
         try
         {
-            oDBContext = ((XMultiServiceFactory) Param.getMSF ())
-            .createInstance ("com.sun.star.sdb.DatabaseContext");
-            oDBSource = ((XMultiServiceFactory) Param.getMSF ())
-            .createInstance ("com.sun.star.sdb.DataSource");
-            newQuery = ((XMultiServiceFactory) Param.getMSF ())
-            .createInstance ("com.sun.star.sdb.QueryDefinition");
-            toolkit = ((XMultiServiceFactory) Param.getMSF ())
-            .createInstance ("com.sun.star.awt.Toolkit");
-        } catch (com.sun.star.uno.Exception e)
+            oDBContext = ((XMultiServiceFactory) Param.getMSF())
+            .createInstance("com.sun.star.sdb.DatabaseContext");
+            oDBSource = ((XMultiServiceFactory) Param.getMSF())
+            .createInstance("com.sun.star.sdb.DataSource");
+            newQuery = ((XMultiServiceFactory) Param.getMSF())
+            .createInstance("com.sun.star.sdb.QueryDefinition");
+            toolkit = ((XMultiServiceFactory) Param.getMSF())
+            .createInstance("com.sun.star.awt.Toolkit");
+        }
+        catch (com.sun.star.uno.Exception e)
         {
-            e.printStackTrace (log);
-            throw new StatusException (Status.failed ("Couldn't create instance"));
+            e.printStackTrace(log);
+            throw new StatusException(Status.failed("Couldn't create instance"));
         }
 
-        String mysqlURL = (String) Param.get ("mysql.url");
+        String mysqlURL = (String) Param.get("mysql.url");
 
         if (mysqlURL == null)
         {
-            throw new StatusException (Status.failed (
-            "Couldn't get 'mysql.url' from ini-file"));
+            throw new StatusException(Status.failed(
+                    "Couldn't get 'mysql.url' from ini-file"));
         }
 
-        user = (String) Param.get ("jdbc.user");
-        password = (String) Param.get ("jdbc.password");
+        user = (String) Param.get("jdbc.user");
+        password = (String) Param.get("jdbc.password");
 
         if ((user == null) || (password == null))
         {
-            throw new StatusException (Status.failed (
-            "Couldn't get 'jdbc.user' or 'jdbc.password' from ini-file"));
+            throw new StatusException(Status.failed(
+                    "Couldn't get 'jdbc.user' or 'jdbc.password' from ini-file"));
         }
 
         PropertyValue[] info = new PropertyValue[2];
-        info[0] = new PropertyValue ();
+        info[0] = new PropertyValue();
         info[0].Name = "user";
         info[0].Value = user;
-        info[1] = new PropertyValue ();
+        info[1] = new PropertyValue();
         info[1].Name = "password";
         info[1].Value = password;
 
-        XPropertySet propSetDBSource = (XPropertySet) UnoRuntime.queryInterface (
-        XPropertySet.class, oDBSource);
+        XPropertySet propSetDBSource = (XPropertySet) UnoRuntime.queryInterface(
+                XPropertySet.class, oDBSource);
 
         try
         {
-            propSetDBSource.setPropertyValue ("URL", mysqlURL);
-            propSetDBSource.setPropertyValue ("Info", info);
-        } catch (com.sun.star.lang.WrappedTargetException e)
+            propSetDBSource.setPropertyValue("URL", mysqlURL);
+            propSetDBSource.setPropertyValue("Info", info);
+        }
+        catch (com.sun.star.lang.WrappedTargetException e)
         {
-            e.printStackTrace (log);
-            throw new StatusException (Status.failed (
-            "Couldn't set property value"));
-        } catch (com.sun.star.lang.IllegalArgumentException e)
+            e.printStackTrace(log);
+            throw new StatusException(Status.failed(
+                    "Couldn't set property value"));
+        }
+        catch (com.sun.star.lang.IllegalArgumentException e)
         {
-            e.printStackTrace (log);
-            throw new StatusException (Status.failed (
-            "Couldn't set property value"));
-        } catch (com.sun.star.beans.PropertyVetoException e)
+            e.printStackTrace(log);
+            throw new StatusException(Status.failed(
+                    "Couldn't set property value"));
+        }
+        catch (com.sun.star.beans.PropertyVetoException e)
         {
-            e.printStackTrace (log);
-            throw new StatusException (Status.failed (
-            "Couldn't set property value"));
-        } catch (com.sun.star.beans.UnknownPropertyException e)
+            e.printStackTrace(log);
+            throw new StatusException(Status.failed(
+                    "Couldn't set property value"));
+        }
+        catch (com.sun.star.beans.UnknownPropertyException e)
         {
-            e.printStackTrace (log);
-            throw new StatusException (Status.failed (
-            "Couldn't set property value"));
+            e.printStackTrace(log);
+            throw new StatusException(Status.failed(
+                    "Couldn't set property value"));
         }
 
         try
         {
-            log.println ("writing database file ...");
-            store = (XStorable) UnoRuntime.queryInterface (XStorable.class, oDBSource);
-            aFile = utils.getOfficeTemp ((XMultiServiceFactory) Param.getMSF ())+"ConnectionLine.odb";
-            log.println ("... filename will be "+aFile);
-            store.storeAsURL (aFile,new PropertyValue[]
+            log.println("writing database file ...");
+            XDocumentDataSource xDDS = (XDocumentDataSource)
+            UnoRuntime.queryInterface(XDocumentDataSource.class, oDBSource);
+            store = (XStorable) UnoRuntime.queryInterface(XStorable.class,
+                    xDDS.getDatabaseDocument());
+
+            aFile = utils.getOfficeTemp((XMultiServiceFactory) Param.getMSF())+"ConnectionLine.odb";
+            log.println("... filename will be "+aFile);
+            store.storeAsURL(aFile,new PropertyValue[]
             {});
-            log.println ("... done");
-        } catch (com.sun.star.uno.Exception e)
+            log.println("... done");
+        }
+        catch (com.sun.star.uno.Exception e)
         {
-            e.printStackTrace (log);
-            throw new StatusException (Status.failed ("Couldn't register object"));
+            e.printStackTrace(log);
+            throw new StatusException(Status.failed("Couldn't register object"));
         }
 
-        isolConnection = (XIsolatedConnection) UnoRuntime.queryInterface (
-        XIsolatedConnection.class,
-        oDBSource);
+        isolConnection = (XIsolatedConnection) UnoRuntime.queryInterface(
+                XIsolatedConnection.class,
+                oDBSource);
 
         XConnection connection = null;
         XStatement statement = null;
@@ -251,149 +255,162 @@ public class ConnectionLineAccessibility extends TestCase
 
         try
         {
-            connection = isolConnection.getIsolatedConnection (user, password);
-            statement = connection.createStatement ();
-            statement.executeUpdate ("drop table if exists " + tbl_name1);
-            statement.executeUpdate ("drop table if exists " + tbl_name2);
-            statement.executeUpdate ("create table " + tbl_name1 + " (" +
-            col_name1 + " int)");
-            statement.executeUpdate ("create table " + tbl_name2 + " (" +
-            col_name2 + " int)");
-        } catch (com.sun.star.sdbc.SQLException e)
+            connection = isolConnection.getIsolatedConnection(user, password);
+            statement = connection.createStatement();
+            statement.executeUpdate("drop table if exists " + tbl_name1);
+            statement.executeUpdate("drop table if exists " + tbl_name2);
+            statement.executeUpdate("create table " + tbl_name1 + " (" +
+                    col_name1 + " int)");
+            statement.executeUpdate("create table " + tbl_name2 + " (" +
+                    col_name2 + " int)");
+        }
+        catch (com.sun.star.sdbc.SQLException e)
         {
             try
             {
-                shortWait ();
-                connection = isolConnection.getIsolatedConnection (user,
-                password);
-                statement = connection.createStatement ();
-                statement.executeUpdate ("drop table if exists " + tbl_name1);
-                statement.executeUpdate ("drop table if exists " + tbl_name2);
-                statement.executeUpdate ("create table " + tbl_name1 + " (" +
-                col_name1 + " int)");
-                statement.executeUpdate ("create table " + tbl_name2 + " (" +
-                col_name2 + " int)");
-            } catch (com.sun.star.sdbc.SQLException e2)
+                shortWait();
+                connection = isolConnection.getIsolatedConnection(user,
+                        password);
+                statement = connection.createStatement();
+                statement.executeUpdate("drop table if exists " + tbl_name1);
+                statement.executeUpdate("drop table if exists " + tbl_name2);
+                statement.executeUpdate("create table " + tbl_name1 + " (" +
+                        col_name1 + " int)");
+                statement.executeUpdate("create table " + tbl_name2 + " (" +
+                        col_name2 + " int)");
+            }
+            catch (com.sun.star.sdbc.SQLException e2)
             {
-                e2.printStackTrace (log);
-                throw new StatusException (Status.failed ("SQLException"));
+                e2.printStackTrace(log);
+                throw new StatusException(Status.failed("SQLException"));
             }
         }
 
-        XQueryDefinitionsSupplier querySuppl = (XQueryDefinitionsSupplier) UnoRuntime.queryInterface (
-        XQueryDefinitionsSupplier.class,
-        oDBSource);
+        XQueryDefinitionsSupplier querySuppl = (XQueryDefinitionsSupplier) UnoRuntime.queryInterface(
+                XQueryDefinitionsSupplier.class,
+                oDBSource);
 
-        XNameAccess defContainer = querySuppl.getQueryDefinitions ();
+        XNameAccess defContainer = querySuppl.getQueryDefinitions();
 
-        XPropertySet queryProp = (XPropertySet) UnoRuntime.queryInterface (
-        XPropertySet.class, newQuery);
+        XPropertySet queryProp = (XPropertySet) UnoRuntime.queryInterface(
+                XPropertySet.class, newQuery);
 
         try
         {
             final String query = "select * from " + tbl_name1 + ", " +
-            tbl_name2 + " where " + tbl_name1 + "." +
-            col_name1 + "=" + tbl_name2 + "." +
-            col_name2;
-            queryProp.setPropertyValue ("Command", query);
-        } catch (com.sun.star.lang.WrappedTargetException e)
+                    tbl_name2 + " where " + tbl_name1 + "." +
+                    col_name1 + "=" + tbl_name2 + "." +
+                    col_name2;
+            queryProp.setPropertyValue("Command", query);
+        }
+        catch (com.sun.star.lang.WrappedTargetException e)
         {
-            e.printStackTrace (log);
-            throw new StatusException (Status.failed (
-            "Couldn't set property value"));
-        } catch (com.sun.star.lang.IllegalArgumentException e)
+            e.printStackTrace(log);
+            throw new StatusException(Status.failed(
+                    "Couldn't set property value"));
+        }
+        catch (com.sun.star.lang.IllegalArgumentException e)
         {
-            e.printStackTrace (log);
-            throw new StatusException (Status.failed (
-            "Couldn't set property value"));
-        } catch (com.sun.star.beans.PropertyVetoException e)
+            e.printStackTrace(log);
+            throw new StatusException(Status.failed(
+                    "Couldn't set property value"));
+        }
+        catch (com.sun.star.beans.PropertyVetoException e)
         {
-            e.printStackTrace (log);
-            throw new StatusException (Status.failed (
-            "Couldn't set property value"));
-        } catch (com.sun.star.beans.UnknownPropertyException e)
+            e.printStackTrace(log);
+            throw new StatusException(Status.failed(
+                    "Couldn't set property value"));
+        }
+        catch (com.sun.star.beans.UnknownPropertyException e)
         {
-            e.printStackTrace (log);
-            throw new StatusException (Status.failed (
-            "Couldn't set property value"));
+            e.printStackTrace(log);
+            throw new StatusException(Status.failed(
+                    "Couldn't set property value"));
         }
 
-        XNameContainer queryContainer = (XNameContainer) UnoRuntime.queryInterface (
-        XNameContainer.class,
-        defContainer);
+        XNameContainer queryContainer = (XNameContainer) UnoRuntime.queryInterface(
+                XNameContainer.class,
+                defContainer);
 
         try
         {
-            queryContainer.insertByName ("Query1", newQuery);
-            store.store ();
-            connection.close ();
-        } catch (com.sun.star.lang.WrappedTargetException e)
+            queryContainer.insertByName("Query1", newQuery);
+            store.store();
+            connection.close();
+        }
+        catch (com.sun.star.lang.WrappedTargetException e)
         {
-            e.printStackTrace (log);
-            throw new StatusException (Status.failed ("Couldn't insert query"));
-        } catch (com.sun.star.container.ElementExistException e)
+            e.printStackTrace(log);
+            throw new StatusException(Status.failed("Couldn't insert query"));
+        }
+        catch (com.sun.star.container.ElementExistException e)
         {
-            e.printStackTrace (log);
-            throw new StatusException (Status.failed ("Couldn't insert query"));
-        } catch (com.sun.star.lang.IllegalArgumentException e)
+            e.printStackTrace(log);
+            throw new StatusException(Status.failed("Couldn't insert query"));
+        }
+        catch (com.sun.star.lang.IllegalArgumentException e)
         {
-            e.printStackTrace (log);
-            throw new StatusException (Status.failed ("Couldn't insert query"));
-        } catch (com.sun.star.io.IOException e)
+            e.printStackTrace(log);
+            throw new StatusException(Status.failed("Couldn't insert query"));
+        }
+        catch (com.sun.star.io.IOException e)
         {
-            e.printStackTrace (log);
-            throw new StatusException (Status.failed ("Couldn't insert query"));
-        } catch (com.sun.star.sdbc.SQLException e)
+            e.printStackTrace(log);
+            throw new StatusException(Status.failed("Couldn't insert query"));
+        }
+        catch (com.sun.star.sdbc.SQLException e)
         {
-            e.printStackTrace (log);
-            throw new StatusException (Status.failed ("Couldn't insert query"));
+            e.printStackTrace(log);
+            throw new StatusException(Status.failed("Couldn't insert query"));
         }
 
         PropertyValue[] loadProps = new PropertyValue[3];
-        loadProps[0] = new PropertyValue ();
+        loadProps[0] = new PropertyValue();
         loadProps[0].Name = "QueryDesignView";
         loadProps[0].Value = Boolean.TRUE;
 
-        loadProps[1] = new PropertyValue ();
+        loadProps[1] = new PropertyValue();
         loadProps[1].Name = "CurrentQuery";
         loadProps[1].Value = "Query1";
 
-        loadProps[2] = new PropertyValue ();
+        loadProps[2] = new PropertyValue();
         loadProps[2].Name = "DataSource";
         loadProps[2].Value = oDBSource;
 
-        QueryComponent = DesktopTools.loadDoc ((XMultiServiceFactory) Param.getMSF (),".component:DB/QueryDesign",loadProps);
+        QueryComponent = DesktopTools.loadDoc((XMultiServiceFactory) Param.getMSF(),".component:DB/QueryDesign",loadProps);
 
-        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface (
-        XExtendedToolkit.class, toolkit);
+        util.utils.shortWait(1000);
 
-        Object atw = tk.getActiveTopWindow ();
+        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
+                XExtendedToolkit.class, toolkit);
 
-        xWindow = (XWindow) UnoRuntime.queryInterface (XWindow.class, atw);
+        Object atw = tk.getActiveTopWindow();
 
-        XAccessible xRoot = AccessibilityTools.getAccessibleObject (xWindow);
+        xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, atw);
 
-        //AccessibilityTools.printAccessibleTree (log,xRoot);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        oObj = AccessibilityTools.getAccessibleObjectForRoleIgnoreShowing (xRoot, AccessibleRole.UNKNOWN, "", "ConnectionLine");
+        AccessibilityTools.printAccessibleTree (log,xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
-        log.println ("ImplementationName " + util.utils.getImplName (oObj));
+        oObj = AccessibilityTools.getAccessibleObjectForRoleIgnoreShowing(xRoot, AccessibleRole.UNKNOWN, "", "ConnectionLine");
 
-        log.println ("creating TestEnvironment");
+        log.println("ImplementationName " + util.utils.getImplName(oObj));
 
-        TestEnvironment tEnv = new TestEnvironment (oObj);
+        log.println("creating TestEnvironment");
 
-        shortWait ();
+        TestEnvironment tEnv = new TestEnvironment(oObj);
+
+        shortWait();
 
         final XWindow queryWin = xWindow;
 
-        tEnv.addObjRelation ("EventProducer",
-        new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer ()
+        tEnv.addObjRelation("EventProducer",
+                new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer()
         {
-            public void fireEvent ()
+            public void fireEvent()
             {
-                Rectangle rect = queryWin.getPosSize ();
-                queryWin.setPosSize (rect.X, rect.Y, rect.Height-5, rect.Width-5, PosSize.POSSIZE);
+                Rectangle rect = queryWin.getPosSize();
+                queryWin.setPosSize(rect.X, rect.Y, rect.Height-5, rect.Width-5, PosSize.POSSIZE);
             }
         });
 
@@ -403,23 +420,24 @@ public class ConnectionLineAccessibility extends TestCase
     /**
      * Closes the DatasourceAdministration dialog and Query Dialog.
      */
-    protected void cleanup (TestParameters Param, PrintWriter log)
+    protected void cleanup(TestParameters Param, PrintWriter log)
     {
         try
         {
 
-            log.println ("closing QueryComponent ...");
-            DesktopTools.closeDoc (QueryComponent);
-            log.println ("... done");
-            XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF ();
-            Object sfa = xMSF.createInstance ("com.sun.star.comp.ucb.SimpleFileAccess");
-            XSimpleFileAccess xSFA = (XSimpleFileAccess) UnoRuntime.queryInterface (XSimpleFileAccess.class, sfa);
-            log.println ("deleting database file");
-            xSFA.kill (aFile);
-            log.println ("Could delete file "+aFile+": "+!xSFA.exists (aFile));
-        } catch (Exception e)
+            log.println("closing QueryComponent ...");
+            DesktopTools.closeDoc(QueryComponent);
+            log.println("... done");
+            XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
+            Object sfa = xMSF.createInstance("com.sun.star.comp.ucb.SimpleFileAccess");
+            XSimpleFileAccess xSFA = (XSimpleFileAccess) UnoRuntime.queryInterface(XSimpleFileAccess.class, sfa);
+            log.println("deleting database file");
+            xSFA.kill(aFile);
+            log.println("Could delete file "+aFile+": "+!xSFA.exists(aFile));
+        }
+        catch (Exception e)
         {
-            e.printStackTrace ();
+            e.printStackTrace();
         }
     }
 
@@ -427,14 +445,15 @@ public class ConnectionLineAccessibility extends TestCase
      * Sleeps for 1.5 sec. to allow StarOffice to react on <code>
      * reset</code> call.
      */
-    private void shortWait ()
+    private void shortWait()
     {
         try
         {
-            Thread.sleep (1500);
-        } catch (InterruptedException e)
+            Thread.sleep(1500);
+        }
+        catch (InterruptedException e)
         {
-            log.println ("While waiting :" + e);
+            log.println("While waiting :" + e);
         }
     }
 }
