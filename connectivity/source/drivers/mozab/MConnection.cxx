@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MConnection.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:37:44 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:41:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,12 +242,15 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     // * for windows system address book
     //      "sdbc:address:outlookexp:"     -> aboutlookdirectory://oe/
     //
+        m_sBindDN   = rtl::OUString::createFromAscii("");
+        m_sPassword = rtl::OUString::createFromAscii("");
+        m_bUseSSL   = sal_False;
+
     if ( aAddrbookScheme.compareToAscii( getSDBC_SCHEME_MOZILLA() ) == 0 ) {
         m_sMozillaURI = rtl::OUString::createFromAscii( MOZ_SCHEME_MOZILLA );
         m_eSDBCAddressType = SDBCAddress::Mozilla;
     }
     else if ( aAddrbookScheme.compareToAscii( getSDBC_SCHEME_LDAP() ) == 0 ) {
-        rtl::OUString sHostName;
         rtl::OUString sBaseDN;
         sal_Int32     nPortNumber = -1;
 
@@ -263,11 +266,23 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
 
             if ( 0 == pInfo->Name.compareToAscii("HostName") )
             {
-                pInfo->Value >>= sHostName;
+                pInfo->Value >>= m_sHostName;
             }
             else if ( 0 == pInfo->Name.compareToAscii("BaseDN") )
             {
                 pInfo->Value >>= sBaseDN;
+            }
+            else if ( 0 == pInfo->Name.compareToAscii("user") )
+            {
+                pInfo->Value >>= m_sBindDN;
+            }
+            else if ( 0 == pInfo->Name.compareToAscii("password") )
+            {
+                pInfo->Value >>= m_sPassword;
+            }
+            else if ( 0 == pInfo->Name.compareToAscii("UseSSL") )
+            {
+                pInfo->Value >>= m_bUseSSL;
             }
             else if ( 0 == pInfo->Name.compareToAscii("PortNumber") )
             {
@@ -278,8 +293,9 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
                 pInfo->Value >>= m_nMaxResultRecords;
             }
         }
-        if ( sHostName.getLength() != 0 ) {
-            m_sMozillaURI += sHostName;
+
+        if ( m_sHostName.getLength() != 0 ) {
+            m_sMozillaURI += m_sHostName;
         }
         else {
             ::dbtools::throwGenericSQLException(
@@ -338,7 +354,8 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
 
     // Test connection by getting to get the Table Names
     ::std::vector< ::rtl::OUString > tables;
-    if ( !_aDbHelper.getTableStrings( this, tables, sal_True ) ) {
+    ::std::vector< ::rtl::OUString > types;
+    if ( !_aDbHelper.getTableStrings( this, tables, types,sal_True ) ) {
         ::dbtools::throwGenericSQLException( _aDbHelper.getErrorString(), NULL);
     }
 
