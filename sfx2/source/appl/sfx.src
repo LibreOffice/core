@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfx.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:25:11 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:19:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,11 +440,11 @@ String STR_REDO
     Text[ chinese_simplified ] = "»Ö¸´³·ÏûÃüÁî (~D)";
     Text[ russian ] = "Âîññòàíîâèòü: ";
     Text[ polish ] = "Przywróæ: ";
-    Text[ japanese ] = "‚â‚è’¼‚µ(~D): ";
-    Text[ chinese_traditional ] = "«ì´_ºM®ø«ü¥O:";
+    Text[ japanese ] = "‚â‚è’¼‚µ(~D):";
+    Text[ chinese_traditional ] = "«ì´_ºM®ø«ü¥O(~D):";
     Text[ arabic ] = "ÅÚÇÏÉ: ";
     Text[ greek ] = "ÅğáíáöïñÜ: ";
-    Text[ korean ] = "´Ù½Ã ½ÇÇà: (~D)";
+    Text[ korean ] = "´Ù½Ã ½ÇÇà(~D):";
     Text[ turkish ] = "~Yinele: ";
 };
 
@@ -464,11 +464,11 @@ String STR_REPEAT
     Text[ chinese_simplified ] = "ÉÏÒ»¸öÃüÁî(~R)";
     Text[ russian ] = "Ïîâòîğèòü:  ";
     Text[ polish ] = "Ostatnie polecenie:  ";
-    Text[ japanese ] = "ŒJ‚è•Ô‚µ(~R): ";
+    Text[ japanese ] = "ŒJ‚è•Ô‚µ(~R):";
     Text[ chinese_traditional ] = "¤W¤@­Ó«ü¥O(~R)";
     Text[ arabic ] = "ÇáÃãÑ ÇáÃÎíÑ: ";
     Text[ greek ] = "ÅğáíÜëçøç: ";
-    Text[ korean ] = "¸¶Áö¸·¡¡¸í·É: (~R)";
+    Text[ korean ] = "¸¶Áö¸·¡¡¸í·É(~R):";
     Text[ turkish ] = "Son ~komutu yinele: ";
 };
 
