@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-12 18:10:47 $
+ *  last change: $Author: hr $ $Date: 2001-10-12 15:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,8 @@
 #ifndef _COMPHELPER_NUMBERS_HXX_
 #include <comphelper/numbers.hxx>
 #endif
+
+#include <algorithm>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -1171,7 +1173,7 @@ void FmXFormView::createControlLabelPair(OutputDevice* _pOutDev, sal_Int32 _nYOf
     ::Size aDelta(500, 0);
 
     ::Size aRealSize = _pOutDev->LogicToLogic(aTextSize, eTargetMode, eSourceMode);
-    aRealSize.Width() = max(aRealSize.Width(), aDefTxtSize.Width()) + aDelta.Width();
+    aRealSize.Width() = std::max(aRealSize.Width(), aDefTxtSize.Width()) + aDelta.Width();
     aRealSize.Height()= aDefSize.Height();
 
     // je nach Skalierung des Zieldevices muss die Groesse noch normiert werden (#53523#)
