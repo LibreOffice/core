@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: kz $ $Date: 2004-03-24 11:08:09 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 18:31:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,13 +59,11 @@
 #
 #
 #*************************************************************************
-
 PRJ=..$/..$/..
 PRJINC=..$/..
 PRJNAME=connectivity
 TARGET=$(MOZAB_TARGET)
 TARGET2=$(MOZAB_TARGET)drv
-
 .IF "$(OS)"=="MACOSX" || "$(WITH_MOZILLA)" == "NO"
 all: 
     @echo "		Not building the mozabsrc stuff in OpenOffice.org build"
@@ -165,7 +163,10 @@ MOZSLOFILES=\
     $(SLO)$/MDatabaseMetaDataHelper.obj		\
     $(SLO)$/MQuery.obj			            \
     $(SLO)$/MTypeConverter.obj              \
-    $(SLO)$/MNameMapper.obj
+    $(SLO)$/MNameMapper.obj					\
+    $(SLO)$/MNSMozabProxy.obj	\
+    $(SLO)$/MNSTerminateListener.obj
+
 
 SLO2FILES=\
         $(SLO)$/MConfigAccess.obj				\
