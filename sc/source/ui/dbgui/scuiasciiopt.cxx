@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scuiasciiopt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 18:00:45 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:31:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#undef SC_DLLIMPLEMENTATION
+
 #ifdef PCH
 #include "ui_pch.hxx"
 #endif
@@ -80,6 +82,8 @@
 #ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
 #include <unotools/transliterationwrapper.hxx>
 #endif
+// ause
+#include "editutil.hxx"
 
 //! TODO make dynamic
 #ifdef WIN
@@ -119,7 +123,7 @@ sal_Unicode lcl_CharFromCombo( ComboBox& rCombo, const String& rList )
         xub_StrLen nCount = rList.GetTokenCount('\t');
         for ( xub_StrLen i=0; i<nCount; i+=2 )
         {
-            if ( GetScGlobalpTransliteration()->isEqual( aStr, rList.GetToken(i,'\t') ) )//CHINA001 if ( ScGlobal::pTransliteration->isEqual( aStr, rList.GetToken(i,'\t') ) )
+            if ( ScGlobal::GetpTransliteration()->isEqual( aStr, rList.GetToken(i,'\t') ) )//CHINA001 if ( ScGlobal::pTransliteration->isEqual( aStr, rList.GetToken(i,'\t') ) )
                 c = (sal_Unicode)rList.GetToken(i+1,'\t').ToInt32();
         }
         if (!c && aStr.Len())
