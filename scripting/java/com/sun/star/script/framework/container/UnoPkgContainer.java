@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoPkgContainer.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 15:27:53 $
+ *  last change: $Author: hr $ $Date: 2005-02-11 16:34:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,6 @@ public class UnoPkgContainer extends ParcelContainer
                 DeployedUnoPackagesDB db = getUnoPackagesDB();
                 if ( db != null )
                 {
-
                     if ( db.removePackage( language, url ) )
                     {
                         writeUnoPackageDB( db );
@@ -215,11 +214,11 @@ public class UnoPkgContainer extends ParcelContainer
         DeployedUnoPackagesDB db =  null;
         try
         {
-            db =  getUnoPackagesDB();
-
+            db = getUnoPackagesDB();
             if ( db != null )
             {
                 String[] packages = db.getDeployedPackages( language );
+
                 for ( int i=0; i<packages.length;i++)
                 {
                     try
@@ -284,8 +283,6 @@ public class UnoPkgContainer extends ParcelContainer
         DeployedUnoPackagesDB dp = null;
         try
         {
-            LogUtils.DEBUG("getUnoPackagesDB()" );
-
             String path = containerUrl.substring( 0, containerUrl.lastIndexOf("/") );
             String packagesUrl = PathUtils.make_url( path, "Scripts/unopkg-desc.xml" );
             LogUtils.DEBUG("getUnoPackagesDB() looking for existing db in " + packagesUrl );
@@ -310,8 +307,7 @@ public class UnoPkgContainer extends ParcelContainer
             }
             else
             {
-                LogUtils.DEBUG("getUnoPackagesDB() " + packagesUrl + " does not exist ");
-                dp = new DeployedUnoPackagesDB();
+                LogUtils.DEBUG("getUnoPackagesDB() " + packagesUrl + " does not exist");
             }
         }
         catch( Exception e )
@@ -408,7 +404,19 @@ public class UnoPkgContainer extends ParcelContainer
         LogUtils.DEBUG("** processUnoPackage getMediaType() -> " + dPackage.getPackageType().getMediaType() );
         LogUtils.DEBUG("** processUnoPackage getDisplayName() -> " + dPackage.getDisplayName() );
         processUnoPackage( uri, language );
+
         db = getUnoPackagesDB();
+        if ( db == null )
+        {
+            try
+            {
+                db = new DeployedUnoPackagesDB();
+            }
+            catch ( java.io.IOException ioe )
+            {
+                throw new com.sun.star.lang.WrappedTargetException( ioe.toString());
+            }
+        }
         db.addPackage( language, uri );
         writeUnoPackageDB( db );
     }
