@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2000-10-18 09:00:15 $
+ *  last change: $Author: ab $ $Date: 2000-11-23 17:11:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,10 @@
 #include "image.hxx"
 #include "ddectrl.hxx"
 #include "dllmgr.hxx"
+
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 
 // Makro MEMBER()
 #include <macfix.hxx>
@@ -320,7 +324,13 @@ void SbiInstance::PrepareNumberFormatter( SvNumberFormatter*& rpNumberFormatter,
 {
     const International& rInter = GetpApp()->GetAppInternational();
     LanguageType eLangType = rInter.GetLanguage();
-    rpNumberFormatter = new SvNumberFormatter( eLangType );
+
+    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
+        xFactory = comphelper::getProcessServiceFactory();
+    if ( xFactory.is() )
+        rpNumberFormatter = new SvNumberFormatter( xFactory, eLangType );
+    else
+        rpNumberFormatter = new SvNumberFormatter( eLangType );
     xub_StrLen nCheckPos = 0; short nType;
     rnStdTimeIdx = rpNumberFormatter->GetStandardFormat( NUMBERFORMAT_TIME, eLangType );
 
