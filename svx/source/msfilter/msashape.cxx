@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-10 07:54:59 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4682,26 +4682,87 @@ static const mso_AutoShape msoFlowChartDisplay =
 
 static const SvxMSDffVertPair mso_sptWedgeRectCalloutVert[] =
 {
-    { 0, 0 }, { 21600, 0 }, { 21600, 21600 }, { 8900, 21600 }, { 1300, 25930 }, { 3500, 21600 }, { 0, 21600 }
+    { 0, 0 },
+    { 0, 3590 }, { 2 MSO_I, 3 MSO_I }, { 0, 8970 },
+    { 0, 12630 },{ 4 MSO_I, 5 MSO_I }, { 0, 18010 },
+    { 0, 21600 },
+    { 3590, 21600 }, { 6 MSO_I, 7 MSO_I }, { 8970, 21600 },
+    { 12630, 21600 }, { 8 MSO_I, 9 MSO_I }, { 18010, 21600 },
+    { 21600, 21600 },
+    { 21600, 18010 }, { 10 MSO_I, 11 MSO_I }, { 21600, 12630 },
+    { 21600, 8970 }, { 12 MSO_I, 13 MSO_I }, { 21600, 3590 },
+    { 21600, 0 },
+    { 18010, 0 }, { 14 MSO_I, 15 MSO_I }, { 12630, 0 },
+    { 8970, 0 }, { 16 MSO_I, 17 MSO_I }, { 3590, 0 },
+    { 0, 0 }
+};
+static const SvxMSDffCalculationData mso_sptWedgeRectCalloutCalc[] =
+{
+    { 0x2000, DFF_Prop_adjustValue, 0, 10800 },     //0x400
+    { 0x2000, DFF_Prop_adjust2Value, 0,10800 },
+    { 0x6006, 0x412, DFF_Prop_adjustValue, 0 },     //0x402
+    { 0x6006, 0x412, DFF_Prop_adjust2Value, 6280 },
+    { 0x6006, 0x417, DFF_Prop_adjustValue, 0 },     //0x404
+    { 0x6006, 0x417, DFF_Prop_adjust2Value, 15320 },
+    { 0x6006, 0x41a, DFF_Prop_adjustValue, 6280 },  //0x406
+    { 0x6006, 0x41a, DFF_Prop_adjust2Value, 21600 },
+    { 0x6006, 0x41d, DFF_Prop_adjustValue, 15320 }, //0x408
+    { 0x6006, 0x41d, DFF_Prop_adjust2Value, 21600 },
+    { 0x6006, 0x420, DFF_Prop_adjustValue, 21600 }, //0x40a
+    { 0x6006, 0x420, DFF_Prop_adjust2Value, 15320 },
+    { 0x6006, 0x422, DFF_Prop_adjustValue, 21600 }, //0x40c
+    { 0x6006, 0x422, DFF_Prop_adjust2Value, 6280 },
+    { 0x6006, 0x424, DFF_Prop_adjustValue, 15320 }, //0x40e
+    { 0x6006, 0x424, DFF_Prop_adjust2Value, 0 },
+    { 0x6006, 0x426, DFF_Prop_adjustValue, 6280 },  //0x410
+    { 0x6006, 0x426, DFF_Prop_adjust2Value, 0 },
+    { 0xa006, DFF_Prop_adjustValue, -1, 0x413 },    //0x412
+    { 0xa006, 0x401, -1, 0x416 },
+    { 0x2003, 0x400, 0, 0 },                        //0x414
+    { 0x2003, 0x401, 0, 0 },
+    { 0xa000, 0x414, 0, 0x415 },                    //0x416
+    { 0xa006, DFF_Prop_adjustValue, -1, 0x418 },
+    { 0x6006, 0x401, 0x416, -1 },                   //0x418
+    { 0x2000, DFF_Prop_adjust2Value, 0, 21600 },
+    { 0x6006, 0x419, 0x41b, -1 },                   //0x41a
+    { 0xa006, 0x400, -1, 0x41c },
+    { 0xa000, 0x415, 0, 0x414 },                    //0x41c
+    { 0x6006, 0x419, 0x41e, -1 },
+    { 0x6006, 0x400, 0x41c, -1 },                   //0x41e
+    { 0x2000, DFF_Prop_adjustValue, 0, 21600 },
+    { 0x6006, 0x41f, 0x421, -1 },                   //0x420
+    { 0x6006, 0x401, 0x416, -1 },
+    { 0x6006, 0x41f, 0x423, -1 },                   //0x422
+    { 0xa006, 0x401, -1, 0x416 },
+    { 0xa006, DFF_Prop_adjust2Value, -1, 0x425 },   //0x424
+    { 0x6006, 0x400, 0x41c, -1 },
+    { 0xa006, DFF_Prop_adjust2Value, -1, 0x427 },   //0x426
+    { 0xa006, 0x400, -1, 0x41c },
+    { 0x2000, DFF_Prop_adjustValue, 0, 0 },         //0x428
+    { 0x2000, DFF_Prop_adjust2Value, 0, 0 }
 };
 static const sal_Int32 mso_sptWedgeRectCalloutDefault[] =
 {
-    2, 1350, 25920
+    2, 1400, 25920
 };
 static const SvxMSDffTextRectangles mso_sptWedgeRectCalloutTextRect[] =
 {
     { { 0, 0 }, { 21600, 21600 } }
 };
+static const SvxMSDffVertPair mso_sptWedgeRectCalloutGluePoints[] =
+{
+    { 10800, 0 }, { 0, 10800 },  { 10800, 21600 }, { 21600, 10800 }, { 40 MSO_I, 41 MSO_I }
+};
 static const mso_AutoShape msoWedgeRectCallout =
 {
     (SvxMSDffVertPair*)mso_sptWedgeRectCalloutVert, sizeof( mso_sptWedgeRectCalloutVert ) / sizeof( SvxMSDffVertPair ),
     NULL, 0,
-    NULL, 0,
+    (SvxMSDffCalculationData*)mso_sptWedgeRectCalloutCalc, sizeof( mso_sptWedgeRectCalloutCalc ) / sizeof( SvxMSDffCalculationData ),
     (sal_Int32*)mso_sptWedgeRectCalloutDefault,
     (SvxMSDffTextRectangles*)mso_sptWedgeRectCalloutTextRect, sizeof( mso_sptWedgeRectCalloutTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
     0x80000000, 0x80000000,
-    NULL, 0
+    (SvxMSDffVertPair*)mso_sptWedgeRectCalloutGluePoints, sizeof( mso_sptWedgeRectCalloutGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptWedgeRRectCalloutVert[] =
@@ -6231,21 +6292,22 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
             for ( i = 0; i < nGluePoints; i++ )
             {
                 SdrGluePoint aGluePoint;
+                Rectangle aNewSnapRect( pRet->GetSnapRect() );
+                sal_Int32 nXMove = aSnapRect.Left() - aNewSnapRect.Left();
+                sal_Int32 nYMove = aSnapRect.Top() - aNewSnapRect.Top();
+
                 const Point& rPoint = GetPoint( *pTmp++, sal_True );
-                double fXRel = rPoint.X();
-                double fYRel = rPoint.Y();
-                fXRel = fXRel / aSnapRect.GetWidth() * 10000;
-                fYRel = fYRel / aSnapRect.GetHeight() * 10000;
+                double fXRel = rPoint.X() + nXMove;
+                double fYRel = rPoint.Y() + nYMove;
+                fXRel = fXRel / aNewSnapRect.GetWidth() * 10000;
+                fYRel = fYRel / aNewSnapRect.GetHeight() * 10000;
                 aGluePoint.SetPos( Point( (sal_Int32)fXRel, (sal_Int32)fYRel ) );
                 aGluePoint.SetPercent( sal_True );
                 aGluePoint.SetAlign( SDRVERTALIGN_TOP | SDRHORZALIGN_LEFT );
                 aGluePoint.SetEscDir( SDRESC_SMART );
                 SdrGluePointList* pList = pRet->ForceGluePointList();
                 if( pList )
-                {
                     sal_uInt16 nId = pList->Insert( aGluePoint );
-//                  sal_uInt16 nNewId = (sal_Int32)((*pList)[nId].GetId() + 4 );
-                }
             }
         }
         if ( bSetAutoShapeAdjustItem )
