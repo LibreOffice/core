@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:09:12 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:43:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,9 @@
 #include "unoguard.hxx"
 #include "drwlayer.hxx"
 #include "listenercalls.hxx"
+#ifndef SC_EDITUTIL_HXX
+#include "editutil.hxx"    // ScPostIt EditTextObject
+#endif
 
 using namespace com::sun::star;
 
@@ -1840,8 +1843,10 @@ void ScDocument::DoMergeContents( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
     String aCellStr;
     SCCOL nCol;
     SCROW nRow;
-    ScPostIt aCellNote;
-    String aNoteStr;
+    ScPostIt aCellNote(this);
+    ::std::auto_ptr <EditTextObject> pObj;
+    // assign the resulting merged note the ItemSet properties of first note occurring text object.
+    ScPostIt aFirstNote(this);
     BOOL bDoNote = FALSE;
 
     for (nRow=nStartRow; nRow<=nEndRow; nRow++)
@@ -1859,24 +1864,44 @@ void ScDocument::DoMergeContents( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
 
             if (GetNote(nCol,nRow,nTab,aCellNote))
             {
-                if (aNoteStr.Len())
-                    aNoteStr += '\n';
-                aNoteStr += aCellNote.GetText();
+                // Create the first occurrence of a Note text object.
+                if(!pObj.get())
+                {
+                     if(const EditTextObject* pEditObj = aCellNote.GetEditTextObject())
+                         pObj.reset(pEditObj->Clone());
+                     // Hide this note if visible during merge as it will be shown
+                     // in a new location following the merge.
+                     if (aCellNote.IsShown())
+                     {
+                        ScDetectiveFunc( this, nTab ).HideComment( nCol, nRow );
+                        aCellNote.SetShown(FALSE);
+                        SetNote(nCol,nRow,nTab,aCellNote);
+                     }
+                     aFirstNote = aCellNote;
+                }
+                else
+                {
+                    const EditTextObject* pAddText = aCellNote.GetEditTextObject();
+                    pObj->Insert(*pAddText, pObj->GetParagraphCount());
+                }
 
                 if (nCol != nStartCol || nRow != nStartRow)
                 {
                     if (aCellNote.IsShown())
                         ScDetectiveFunc( this, nTab ).HideComment( nCol, nRow );
-                    SetNote(nCol,nRow,nTab,ScPostIt());
+                    SetNote(nCol,nRow,nTab,ScPostIt(this));
                     bDoNote = TRUE;
                 }
-                //! Autor/Datum beibehalten, wenn's nur eine Notiz war??
             }
         }
 
     SetString(nStartCol,nStartRow,nTab,aTotal);
     if (bDoNote)
-        SetNote(nStartCol,nStartRow,nTab,ScPostIt(aNoteStr));
+    {
+        ScPostIt aNewNote(pObj.get(),this);
+        aNewNote.SetItemSet(aFirstNote.GetItemSet());
+        SetNote(nStartCol,nStartRow,nTab,aNewNote);
+    }
 }
 
 void ScDocument::DoMerge( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
@@ -1891,6 +1916,29 @@ void ScDocument::DoMerge( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
         ApplyFlagsTab( nStartCol, nStartRow+1, nStartCol, nEndRow, nTab, SC_MF_VER );
     if ( nEndCol > nStartCol && nEndRow > nStartRow )
         ApplyFlagsTab( nStartCol+1, nStartRow+1, nEndCol, nEndRow, nTab, SC_MF_HOR | SC_MF_VER );
+
+    ScPostIt aCellNote(this);
+    Rectangle aRect;
+
+    // Set all cell note rectangle dimensions to default position following the merge.
+    for (SCROW nRow=nStartRow; nRow<=nEndRow; nRow++)
+    {
+        for (SCCOL nCol=nStartCol; nCol<=nEndCol; nCol++)
+        {
+            if (GetNote(nCol,nRow,nTab,aCellNote))
+            {
+                // Hide this note if visible during merge.
+                if(aCellNote.IsShown())
+                {
+                    ScDetectiveFunc( this, nTab ).HideComment( nCol, nRow );
+                    aCellNote.SetShown(FALSE);
+                }
+                aRect = aCellNote.DefaultRectangle(ScAddress(nCol,nRow,nTab));
+                aCellNote.SetRectangle(aRect);
+                SetNote(nCol,nRow,nTab,aCellNote);
+            }
+        }
+    }
 }
 
 void ScDocument::RemoveMerge( SCCOL nCol, SCROW nRow, SCTAB nTab )
