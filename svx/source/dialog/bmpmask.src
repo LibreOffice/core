@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpmask.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:14:59 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 13:57:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,8 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ hebrew ] = "‮צבעים‬";
         Text[ hindi ] = "रंग";
         Text[ slovak ] = "Farby";
+        Text[ hungarian ] = "Színek";
+        Text[ slovenian ] = "Barve";
     };
     FixedText FT_1
     {
@@ -150,6 +152,8 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ hebrew ] = "‮צבע מקור‬";
         Text[ hindi ] = "मूल रंग";
         Text[ slovak ] = "Pôvodná farba";
+        Text[ hungarian ] = "Forrásszín";
+        Text[ slovenian ] = "Izvorna barva";
     };
     FixedText FT_2
     {
@@ -183,6 +187,8 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ hebrew ] = "‮טולרנסים‬";
         Text[ hindi ] = "सहनशीलता";
         Text[ slovak ] = "Tolerancia";
+        Text[ hungarian ] = "Tolerancia";
+        Text[ slovenian ] = "Toleranca";
     };
     FixedText FT_3
     {
@@ -216,6 +222,8 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ hebrew ] = "‮ולהחליף ב...‬";
         Text[ hindi ] = "से प्रतिस्थापित करो...";
         Text[ slovak ] = "Nahradiť za...";
+        Text[ hungarian ] = "Csere erre...";
+        Text[ slovenian ] = "Zamenjaj z...";
     };
 
     // line 1
@@ -391,7 +399,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text [ french ] = "Transparence" ;
         Text [ dutch ] = "~Transparantie" ;
         Text [ swedish ] = "~Transparens" ;
-        Text [ danish ] = "Tra~nsparens" ;
+        Text [ danish ] = "Tr~ansparens" ;
         Text [ portuguese_brazilian ] = "Tr~anspar�ncia" ;
         Text [ portuguese ] = "~Transpar�ncia" ;
         Text[ chinese_simplified ] = "透明(~A)";
@@ -411,6 +419,8 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ hebrew ] = "‮שקף‬";
         Text[ hindi ] = "पार~दर्शकता";
         Text[ slovak ] = "~Priehľadnosť";
+        Text[ hungarian ] = "Átlátszó~ság";
+        Text[ slovenian ] = "Pr~osojnost";
     };
 
     PushButton BTN_EXEC
@@ -445,6 +455,8 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ hebrew ] = "‮החלפה‬";
         Text[ hindi ] = "~प्रतिस्थापित करो";
         Text[ slovak ] = "Nah~radiť";
+        Text[ hungarian ] = "~Csere";
+        Text[ slovenian ] = "~Zamenjaj";
     };
 
     ListBox LB_TRANS
@@ -500,6 +512,8 @@ DockingWindow RID_SVXDLG_BMPMASK
                 Text[ hebrew ] = "‮טפטפת‬";
                 Text[ hindi ] = "अइड्राप्पर";
                 Text[ slovak ] = "Kvapkadlo";
+                Text[ hungarian ] = "Szemcseppentő";
+                Text[ slovenian ] = "Kapalka";
             };
         };
     };
@@ -548,6 +562,8 @@ DockingWindow RID_SVXDLG_BMPMASK
     Text[ hebrew ] = "‮טפטפת‬";
     Text[ hindi ] = "अइड्राप्पर";
     Text[ slovak ] = "Kvapkadlo";
+    Text[ hungarian ] = "Szemcseppentő";
+    Text[ slovenian ] = "Kapalka";
 };
 
 String RID_SVXDLG_BMPMASK_STR_TRANSP
@@ -579,6 +595,8 @@ String RID_SVXDLG_BMPMASK_STR_TRANSP
     Text[ hebrew ] = "‮שקוף‬";
     Text[ hindi ] = "पारदर्शक";
     Text[ slovak ] = "Priehľadné";
+    Text[ hungarian ] = "Átlátszó";
+    Text[ slovenian ] = "Prosojno";
 };
 
 String RID_SVXDLG_BMPMASK_STR_SOURCECOLOR
@@ -612,9 +630,14 @@ String RID_SVXDLG_BMPMASK_STR_SOURCECOLOR
     Text[ thai ] = "แหล่งสี";
     Text[ hindi ] = "मूल रंग";
     Text[ slovak ] = "Pôvodná farba";
+    Text[ hungarian ] = "Forrásszín";
+    Text[ slovenian ] = "Izvorna barva";
 };
 
  // ********************************************************************** EOF
+
+
+
 
 
 
