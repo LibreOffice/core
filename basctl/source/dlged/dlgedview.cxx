@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2002-05-02 12:11:22 $
+ *  last change: $Author: vg $ $Date: 2002-05-10 09:29:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,8 @@ void DlgEdView::MakeVisible( const Rectangle& rRect, Window& rWin )
     MapMode aMap( rWin.GetMapMode() );
     Point aOrg( aMap.GetOrigin() );
     Size aVisSize( rWin.GetOutputSize() );
-    Rectangle aVisRect( Rectangle( Point(-aOrg.X(),-aOrg.Y()), aVisSize ) );
+    Rectangle RectTmp( Point(-aOrg.X(),-aOrg.Y()), aVisSize );
+    Rectangle aVisRect( RectTmp );
 
     // check, if rectangle is inside visible area
     if ( !aVisRect.IsInside( rRect ) )
