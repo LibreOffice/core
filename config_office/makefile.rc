@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: svesik $ $Date: 2000-10-25 16:37:00 $
+#   last change: $Author: svesik $ $Date: 2000-10-26 12:36:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,7 +118,6 @@ RC_SUBDIRS =  \
 	i18n \
 	idl \
 	inet \
-	instsetoo \
 	io \
 	javaunohelper \
 	jtools \
@@ -133,7 +132,6 @@ RC_SUBDIRS =  \
 	readlicence \
 	registry \
 	remotebridges \
-	res \
 	rsc \
 	sal \
 	sandbox \
@@ -190,6 +188,9 @@ bootstrap .PHONY :
 
 configure .PHONY SETDIR=config_office :
 	@configure
+
+install: instsetoo
+	cd $?; dmake subdmake=true  product="full"
 
 # 
 # single directory targets for
@@ -252,7 +253,7 @@ starmath : svx
 stoc : bridges rdbmaker xml2cmp
 store : vos
 svtools : toolkit ucbhelper unotools
-svx : sfx2 xmloff lingu
+svx : lingu sfx2 xmloff
 sw : offmgr sd
 toolkit : vcl
 tools : external vos
@@ -265,6 +266,8 @@ uui : svtools
 vcl : rsc sot ucbhelper unotools xprinter
 vos : sal
 wizards : offmgr
+xmloff : lingu
+xmlhelp : jut
 
 # 
 # central target makefile
