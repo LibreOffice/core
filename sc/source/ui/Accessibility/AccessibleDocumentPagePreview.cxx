@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-01 08:38:25 $
+ *  last change: $Author: hr $ $Date: 2002-03-05 17:36:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,8 @@ long SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleChildCount(void) thr
         Window* pWindow = mpViewShell->GetWindow();
         if ( pWindow )
             aOutputSize = pWindow->GetOutputSizePixel();
-        Rectangle aVisRect( Point(), aOutputSize );
+        Point aPoint;
+        Rectangle aVisRect( aPoint, aOutputSize );
 
         //! order is background shapes, header, table, footer, foreground shapes, controls
 
@@ -234,7 +235,8 @@ uno::Reference<XAccessible> SAL_CALL ScAccessibleDocumentPagePreview::getAccessi
         Window* pWindow = mpViewShell->GetWindow();
         if ( pWindow )
             aOutputSize = pWindow->GetOutputSizePixel();
-        Rectangle aVisRect( Point(), aOutputSize );
+        Point aPoint;
+        Rectangle aVisRect( aPoint, aOutputSize );
 
         //! order is background shapes, header, table, footer, foreground shapes, controls
 

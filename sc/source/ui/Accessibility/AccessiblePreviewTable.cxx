@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewTable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2002-02-28 19:34:29 $
+ *  last change: $Author: hr $ $Date: 2002-03-05 17:36:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -676,7 +676,8 @@ void ScAccessiblePreviewTable::FillTableInfo()
         Window* pWindow = mpViewShell->GetWindow();
         if ( pWindow )
             aOutputSize = pWindow->GetOutputSizePixel();
-        Rectangle aVisRect( Point(), aOutputSize );
+        Point aPoint;
+        Rectangle aVisRect( aPoint, aOutputSize );
 
         mpTableInfo = new ScPreviewTableInfo;
         mpViewShell->GetLocationData().GetTableInfo( aVisRect, *mpTableInfo );
