@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleToolBoxItem.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-28 16:18:32 $
+ *  last change:$Date: 2003-03-19 12:47:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,9 @@ public class AccessibleToolBoxItem extends TestCase {
         log.println("ImplementationName: "+ util.utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
+
+        tEnv.addObjRelation("EditOnly",
+                    "This method isn't supported in this dialog");
 
         final XAccessibleComponent acomp = (XAccessibleComponent)
             UnoRuntime.queryInterface(XAccessibleComponent.class, oObj);
