@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:31:03 $
+ *  last change: $Author: fs $ $Date: 2000-10-12 16:20:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,6 @@ class OGenericAdministrationPage : public SfxTabPage
 {
 protected:
     Link        m_aModifiedHandler;     /// to be called if something on the page has been modified
-    sal_Bool    m_bInReset;             /// sal_True if and only if we're within Reset
 
 public:
     OGenericAdministrationPage(Window* _pParent, const ResId& _rId, const SfxItemSet& _rAttrSet);
@@ -167,7 +166,7 @@ private:
     FixedText           m_aConnectionLabel;
     OConnectionURLEdit  m_aConnection;
     PushButton          m_aBrowseConnection;
-    FixedText           m_aNameInvalidMessage;
+    FixedText           m_aSpecialMessage;
 
     ODsnTypeCollection* m_pCollection;  /// the DSN type collection instance
     DECLARE_STL_MAP(DATASOURCE_TYPE, String, ::std::less< DATASOURCE_TYPE >, SelectionHistory);
@@ -387,6 +386,7 @@ private:
     FixedText               m_aTablesListLabel;
     sal_Bool                m_bCheckedAll : 1;
     sal_Bool                m_bCatalogAtStart : 1;
+    sal_Bool                m_bInitializingControls : 1;
     ::rtl::OUString         m_sCatalogSeparator;
     ODbAdminDialog*         m_pAdminDialog;     /** needed for translating an SfxItemSet into Sequence< PropertyValue >
                                                     (for building an XConnection)
@@ -437,6 +437,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/10/11 11:31:03  fs
+ *  new implementations - still under construction
+ *
  *  Revision 1.2  2000/10/09 12:39:29  fs
  *  some (a lot of) new imlpementations - still under development
  *

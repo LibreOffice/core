@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:31:03 $
+ *  last change: $Author: fs $ $Date: 2000-10-12 16:20:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 #define FT_THOUSANDSSEPARATOR   12
 #define FT_EXTENSION            13
 #define FT_TABLESUBSCRIPTION    14
-#define FT_NAMEINVALID          15
+#define FT_SPECIAL_MESSAGE      15
 
 #define LB_DATATYPE             1
 #define LB_DATASOURCES          2
@@ -124,7 +124,7 @@
 #define RB_INCLUDESPECIFIC      3
 
 //========================================================================
-// string ids (relative to other resources, that's why not necessarily unique)
+// string ids (usually relative to other resources, that's why not necessarily unique)
 
 #define STR_PAGETITLE_GENERAL               1
 #define STR_PAGETITLE_DBASE                 2
@@ -139,12 +139,22 @@
 #define STR_DELIMITER_MUST_DIFFER           11
 #define STR_NO_WILDCARDS                    12
 #define STR_NAMEINVALID                     13
+#define STR_DATASOURCEDELETED               14
+
+//========================================================================
+// menu item ids
+#define MID_NEW_DATASOURCE                  1
+#define MID_DELETE_DATASOURCE               2
+#define MID_RESTORE_DATASOURCE              3
 
 #endif // _DBAUI_DBADMIN_HRC_
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/10/11 11:31:03  fs
+ *  new implementations - still under construction
+ *
  *  Revision 1.2  2000/10/09 12:39:29  fs
  *  some (a lot of) new imlpementations - still under development
  *

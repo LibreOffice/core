@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:31:03 $
+ *  last change: $Author: fs $ $Date: 2000-10-12 16:20:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         {
             Border = TRUE;
             SVLook = TRUE;
+            AutoHScroll = TRUE;
             Pos = MAP_APPFONT ( 2, 22 ) ;
             Size = MAP_APPFONT ( 56, 196 ) ;
         };
@@ -309,6 +310,11 @@ Image BMP_DATABASE_NEW
     ImageBitmap = Bitmap { File = "db_new.bmp"; };
     MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
 };
+Image BMP_DATABASE_DELETED
+{
+    ImageBitmap = Bitmap { File = "db_deleted.bmp"; };
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+};
 
 //-------------------------------------------------------------------------
 TabPage PAGE_GENERAL
@@ -419,7 +425,7 @@ TabPage PAGE_GENERAL
         Text [ turkish ] = "Tara...";
         Text [ language_user1 ] = " ";
     };
-    FixedText FT_NAMEINVALID
+    FixedText FT_SPECIAL_MESSAGE
     {
         Pos = MAP_APPFONT ( 6, 112 );
         Size = MAP_APPFONT ( 248, 20 );
@@ -433,6 +439,12 @@ TabPage PAGE_GENERAL
                 "globally unique, you have to choose another one.";
         Text [ english_us ] = "There already is another data source with this name. Since data source names have to be "
                 "globally unique, you have to choose another one.";
+    };
+    String STR_DATASOURCEDELETED
+    {
+        Text =  "Diese Datenquelle haben Sie gelöscht.";
+        Text [ english ] = "This data source is scheduled to be deleted.";
+        Text [ english_us ] = "This data source is scheduled to be deleted.";
     };
 };
 
@@ -1395,6 +1407,12 @@ WarningBox ERR_NOREGISTEREDDATASOURCES
     Message [ english ] = "Currently, there are no registered data sources.";
     Message [ english_us ] = "Currently, there are no registered data sources.";
 };
+ErrorBox ERR_COULDNOTRESTOREDS
+{
+    Message = "Sie haben schon einer anderen Datenquellen den Namen der gelöschten gegeben! Sie müssen erstere umbenennen, um die aktuelle wiederherstellen zu können.";
+    Message [ english ] = "You already gave another data source the name of the deleted one. You have to rename the first to restore the current one.";
+    Message [ english_us ] = "You already gave another data source the name of the deleted one. You have to rename the first to restore the current one.";
+};
 
 String STR_ENTER_CONNECTION_PASSWORD
 {
@@ -1409,9 +1427,40 @@ String STR_DATASOURCE_DEFAULTNAME
     Text [ english_us ] = "datas source";
 };
 
+Menu MENU_DATASOURCELIST_POPUP
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = MID_NEW_DATASOURCE;
+            Text = "neue Datenquelle" ;
+            Text [ english ] = "new data source" ;
+            Text [ english_us ] = "new data source" ;
+        };
+        MenuItem
+        {
+            Identifier = MID_DELETE_DATASOURCE;
+            Text = "Datenquelle löschen" ;
+            Text [ english ] = "delete data source" ;
+            Text [ english_us ] = "delete data source" ;
+        };
+        MenuItem
+        {
+            Identifier = MID_RESTORE_DATASOURCE;
+            Text = "Datenquelle wiederherstellen" ;
+            Text [ english ] = "restore data source" ;
+            Text [ english_us ] = "restore data source" ;
+        };
+    };
+};
+
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/10/11 11:31:03  fs
+ *  new implementations - still under construction
+ *
  *  Revision 1.2  2000/10/09 12:39:29  fs
  *  some (a lot of) new imlpementations - still under development
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsitems.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:31:03 $
+ *  last change: $Author: fs $ $Date: 2000-10-12 16:20:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,19 +86,23 @@
 #define DSID_THOUSANDSDELIMITER     19          // thousands delimiter, SfxUInt16Item
 #define DSID_TEXTFILEEXTENSION      20          // extension for text files, SfxStringItem
 #define DSID_TEXTFILEHEADER         21          // the text file contains a header?, SfxBoolItem
-#define DSID_NEWDATASOURCE          22          // sal_True if the data source described by the set is new
+#define DSID_NEWDATASOURCE          22          // meta data: sal_True if the data source described by the set is new
+#define DSID_DELETEDDATASOURCE      23          // meta data: sal_True if the data source described by the set is to-be-deleted
 
 //========================================================================
 //= item range. Adjust this if you introduce new items above
 
 #define DSID_FIRST_ITEM_ID  DSID_NAME
-#define DSID_LAST_ITEM_ID   DSID_NEWDATASOURCE
+#define DSID_LAST_ITEM_ID   DSID_DELETEDDATASOURCE
 
 #endif // _DBAUI_DATASOURCEITEMS_HXX_
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/10/11 11:31:03  fs
+ *  new implementations - still under construction
+ *
  *  Revision 1.2  2000/10/09 12:39:29  fs
  *  some (a lot of) new imlpementations - still under development
  *

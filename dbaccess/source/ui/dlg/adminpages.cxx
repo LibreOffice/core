@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:31:02 $
+ *  last change: $Author: fs $ $Date: 2000-10-12 16:20:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,6 @@ namespace dbaui
 //-------------------------------------------------------------------------
 OGenericAdministrationPage::OGenericAdministrationPage(Window* _pParent, const ResId& _rId, const SfxItemSet& _rAttrSet)
     :SfxTabPage(_pParent, _rId, _rAttrSet)
-    ,m_bInReset(sal_False)
 {
     SetExchangeSupport(sal_True);
 }
@@ -161,9 +160,7 @@ int OGenericAdministrationPage::DeactivatePage(SfxItemSet* _pSet)
 //-------------------------------------------------------------------------
 void OGenericAdministrationPage::Reset(const SfxItemSet& _rCoreAttrs)
 {
-    m_bInReset = sal_True;
     implInitControls(_rCoreAttrs, sal_False);
-    m_bInReset = sal_False;
 }
 
 //-------------------------------------------------------------------------
@@ -202,7 +199,7 @@ OGeneralPage::OGeneralPage(Window* pParent, const SfxItemSet& _rItems)
     ,m_aConnectionLabel     (this, ResId(FT_CONNECTURL))
     ,m_aConnection          (this, ResId(ET_CONNECTURL))
     ,m_aBrowseConnection    (this, ResId(PB_BROWSECONNECTION))
-    ,m_aNameInvalidMessage  (this, ResId(FT_NAMEINVALID))
+    ,m_aSpecialMessage      (this, ResId(FT_SPECIAL_MESSAGE))
     ,m_pCollection(NULL)
     ,m_eCurrentSelection(DST_UNKNOWN)
 {
@@ -311,6 +308,7 @@ void OGeneralPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValu
     m_aBrowseConnection.Enable(bValid);
 
     String sConnectURL, sName;
+    String sMessage;
     if (bValid)
     {
         // collect some items and some values
@@ -321,6 +319,16 @@ void OGeneralPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValu
         sConnectURL = pUrlItem->GetValue();
         sName = pNameItem->GetValue();
     }
+    else
+    {
+        SFX_ITEMSET_GET(_rSet, pDeleted, SfxBoolItem, DSID_DELETEDDATASOURCE, sal_True);
+        if (pDeleted && pDeleted->GetValue())
+        {
+            OLocalResourceAccess aStringResAccess(PAGE_GENERAL, RSC_TABPAGE);
+            sMessage = String(ResId(STR_DATASOURCEDELETED));
+        }
+    }
+    m_aSpecialMessage.SetText(sMessage);
 
     // compare the DSN prefix with the registered ones
     String sDisplayName;
@@ -396,14 +404,17 @@ IMPL_LINK(OGeneralPage, OnNameModified, Edit*, _pBox)
     if (m_aNameModifiedHandler.IsSet())
         bNewNameValid = (0L != m_aNameModifiedHandler.Call(this));
 
-    // show a text if the name is invalid
-    String sNameMessage;
-    if (!bNewNameValid)
-    {
-        OLocalResourceAccess aStringResAccess(PAGE_GENERAL, RSC_TABPAGE);
-        sNameMessage = String(ResId(STR_NAMEINVALID));
+    if (m_aName.IsEnabled())
+    {   // (this way we prevent overwriting a "this datasource is deleted" message)
+        // show a text if the name is invalid
+        String sNameMessage;
+        if (!bNewNameValid)
+        {
+            OLocalResourceAccess aStringResAccess(PAGE_GENERAL, RSC_TABPAGE);
+            sNameMessage = String(ResId(STR_NAMEINVALID));
+        }
+        m_aSpecialMessage.SetText(sNameMessage);
     }
-    m_aNameInvalidMessage.SetText(sNameMessage);
 
     return 0L;
 }
@@ -1156,6 +1167,8 @@ OTableSubscriptionPage::OTableSubscriptionPage( Window* pParent, const SfxItemSe
     ,m_aTablesListLabel     (this, ResId(FT_TABLESUBSCRIPTION))
     ,m_aTablesList          (this, ResId(CTL_TABLESUBSCRIPTION))
     ,m_bCheckedAll          (sal_True)
+    ,m_bCatalogAtStart      (sal_True)
+    ,m_bInitializingControls(sal_False)
     ,m_pLastCheckedButton   (NULL)
     ,m_pAdminDialog         (NULL)
 {
@@ -1259,6 +1272,7 @@ void OTableSubscriptionPage::implInitControls(const SfxItemSet& _rSet, sal_Bool 
     if (pTableFilter)
         aTableFilter = pTableFilter->getList();
 
+    m_bInitializingControls = sal_True;
     if (!aTableFilter.getLength())
     {   // no tables visible
         CheckAll(sal_False);
@@ -1280,6 +1294,7 @@ void OTableSubscriptionPage::implInitControls(const SfxItemSet& _rSet, sal_Bool 
             LINK(this, OTableSubscriptionPage, OnRadioButtonClicked).Call(&m_aIncludeSelected);
         }
     }
+    m_bInitializingControls = sal_False;
 
     if (!bValid)
     {
@@ -1326,61 +1341,62 @@ void OTableSubscriptionPage::ActivatePage(const SfxItemSet& _rSet)
     sal_Bool bValid, bReadonly;
     getFlags(_rSet, bValid, bReadonly);
 
-    // get the current table list from the connection for the current settings
-
-    // the PropertyValues for the current dialog settings
-    Sequence< PropertyValue > aConnectionParams;
-    DBG_ASSERT(m_pAdminDialog, "OTableSubscriptionPage::ActivatePage : need a parent dialog doing the translation!");
-    if (m_pAdminDialog)
-        if (!m_pAdminDialog->getCurrentSettings(aConnectionParams))
-        {
-            OGenericAdministrationPage::ActivatePage(_rSet);
-            return;
-        }
-
-    // the current DSN
-    String sURL;
-    SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
     if (bValid)
+    {   // get the current table list from the connection for the current settings
+
+        // the PropertyValues for the current dialog settings
+        Sequence< PropertyValue > aConnectionParams;
+        DBG_ASSERT(m_pAdminDialog, "OTableSubscriptionPage::ActivatePage : need a parent dialog doing the translation!");
+        if (m_pAdminDialog)
+            if (!m_pAdminDialog->getCurrentSettings(aConnectionParams))
+            {
+                OGenericAdministrationPage::ActivatePage(_rSet);
+                return;
+            }
+
+        // the current DSN
+        String sURL;
+        SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
         sURL = pUrlItem->GetValue();
 
-    // fill the table list with this connection information
-    SQLExceptionInfo aErrorInfo;
-    try
-    {
-        m_xCurrentConnection = m_aTablesList.UpdateTableList(sURL, aConnectionParams);
-    }
-    catch (SQLContext& e) { aErrorInfo = SQLExceptionInfo(e); }
-    catch (SQLWarning& e) { aErrorInfo = SQLExceptionInfo(e); }
-    catch (SQLException& e) { aErrorInfo = SQLExceptionInfo(e); }
-
-    if (aErrorInfo.isValid())
-    {
-        // establishing the connection failed. Show an error window and exit.
-        OSQLMessageBox(GetParent(), aErrorInfo, WB_OK | WB_DEF_OK, OSQLMessageBox::Error).Execute();
-        m_aTablesList.Enable(sal_False);
-        m_aTablesListLabel.Enable(sal_False);
-        m_aTablesList.Clear();
-    }
-    else
-    {
-        // in addition, we need some infos about the connection used
-        m_sCatalogSeparator = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));    // (default)
-        m_bCatalogAtStart = sal_True;   // (default)
+        // fill the table list with this connection information
+        SQLExceptionInfo aErrorInfo;
         try
         {
-            Reference< XDatabaseMetaData > xMeta;
-            if (m_xCurrentConnection.is())
-                xMeta = m_xCurrentConnection->getMetaData();
-            if (xMeta.is())
-            {
-                m_sCatalogSeparator = xMeta->getCatalogSeparator();
-                m_bCatalogAtStart = xMeta->isCatalogAtStart();
-            }
+            m_xCurrentConnection = m_aTablesList.UpdateTableList(sURL, aConnectionParams);
         }
-        catch(SQLException&)
+        catch (SQLContext& e) { aErrorInfo = SQLExceptionInfo(e); }
+        catch (SQLWarning& e) { aErrorInfo = SQLExceptionInfo(e); }
+        catch (SQLException& e) { aErrorInfo = SQLExceptionInfo(e); }
+
+        if (aErrorInfo.isValid())
         {
-            DBG_ERROR("OTableSubscriptionPage::ActivatePage : could not retrieve the qualifier separator for the used connection !");
+            // establishing the connection failed. Show an error window and exit.
+            OSQLMessageBox(GetParent(), aErrorInfo, WB_OK | WB_DEF_OK, OSQLMessageBox::Error).Execute();
+            m_aTablesList.Enable(sal_False);
+            m_aTablesListLabel.Enable(sal_False);
+            m_aTablesList.Clear();
+        }
+        else
+        {
+            // in addition, we need some infos about the connection used
+            m_sCatalogSeparator = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));    // (default)
+            m_bCatalogAtStart = sal_True;   // (default)
+            try
+            {
+                Reference< XDatabaseMetaData > xMeta;
+                if (m_xCurrentConnection.is())
+                    xMeta = m_xCurrentConnection->getMetaData();
+                if (xMeta.is())
+                {
+                    m_sCatalogSeparator = xMeta->getCatalogSeparator();
+                    m_bCatalogAtStart = xMeta->isCatalogAtStart();
+                }
+            }
+            catch(SQLException&)
+            {
+                DBG_ERROR("OTableSubscriptionPage::ActivatePage : could not retrieve the qualifier separator for the used connection !");
+            }
         }
     }
 
@@ -1486,7 +1502,7 @@ IMPL_LINK( OTableSubscriptionPage, OnRadioButtonClicked, Button*, pButton )
     // as the enable state has been changed, invalidate the control
     m_aTablesList.Invalidate();
 
-    if (!m_bInReset)
+    if (!m_bInitializingControls)
         callModifiedHdl();
     return 0L;
 }
@@ -1498,6 +1514,9 @@ IMPL_LINK( OTableSubscriptionPage, OnRadioButtonClicked, Button*, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/10/11 11:31:02  fs
+ *  new implementations - still under construction
+ *
  *  Revision 1.2  2000/10/09 12:39:28  fs
  *  some (a lot of) new imlpementations - still under development
  *
