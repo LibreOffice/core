@@ -109,5 +109,15 @@ public class SxwDocument extends OfficeDocument {
     protected String getOfficeClassAttribute() {
         return OfficeConstants.SXW_TYPE;
     }
+
+    /**
+     * Method to return the MIME type of the document.
+     *
+     * @return  String  The document's MIME type.
+     */
+    protected final String getDocumentMimeType() {
+        return OfficeConstants.SXW_MIME_TYPE;
+    }
+
 }
 

@@ -107,5 +107,15 @@ public class SxcDocument extends OfficeDocument {
     protected String getOfficeClassAttribute() {
         return OfficeConstants.SXC_TYPE;
     }
+
+    /**
+     * Method to return the MIME type of the document.
+     *
+     * @return  String  The document's MIME type.
+     */
+    protected final String getDocumentMimeType() {
+        return OfficeConstants.SXC_MIME_TYPE;
+    }
+
 }
 
