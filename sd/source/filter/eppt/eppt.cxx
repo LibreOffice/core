@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:19:05 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:48:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,8 @@ PPTWriter::PPTWriter( SvStorageRef& rSvStorage,
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rXModel,
             ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > & rXStatInd,
             SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags ) :
-    mbStatus                ( FALSE ),
+    mbStatus                ( sal_False ),
+    mbUseNewAnimations      ( sal_True ),
     mXModel                 ( rXModel ),
     mXStatusIndicator       ( rXStatInd ),
     mnLatestStatValue       ( 0 ),
@@ -293,9 +294,6 @@ PPTWriter::PPTWriter( SvStorageRef& rSvStorage,
             mnLatestStatValue = nValue;
         }
     }
-
-//  mpPptEscherEx->Flush();         // interne _Escher Daten jetzt einfuegen, damit die PersistTable rausgeschrieben werden kann
-
 
     ImplWriteOLE( nCnvrtFlags );
 
@@ -1036,9 +1034,6 @@ sal_Bool PPTWriter::ImplCreateDocument()
                     if ( !bBool )
                         nFlags |= 0x11;
                 }
-//              if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsLivePresentation" ) ) ) )
-//              {
-//              }
 //              if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsMouseVisible" ) ) ) )
 //              {
 //              }
@@ -1372,9 +1367,23 @@ sal_Bool PPTWriter::ImplCreateMaster( sal_uInt32 nPageNum )
     mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 1 );
     *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0x99cc00 << (sal_uInt32)0xcc3333 << (sal_uInt32)0xffcccc << (sal_uInt32)0xb2b2b2;
 
+
     if ( aBuExMasterStream.Tell() )
     {
-        ImplProgTagContainer( mpStrm, &aBuExMasterStream );
+        ppt::ExContainer aProgTags( *mpStrm, EPP_ProgTags );
+        // v10
+
+        // v9
+        if ( aBuExMasterStream.Tell() )
+        {
+            ppt::ExContainer aProgBinaryTag( *mpStrm, EPP_ProgBinaryTag );
+            {
+                ppt::ExAtom( *mpStrm, EPP_CString );
+               *mpStrm << (sal_uInt32)0x5f005f << (sal_uInt32)0x50005f
+                       << (sal_uInt32)0x540050 << (sal_uInt16)0x39;
+            }
+            ImplProgBinaryTag( &aBuExMasterStream );
+        }
     }
 
     mpPptEscherEx->CloseContainer();    // EPP_MainMaster
@@ -1428,14 +1437,14 @@ sal_Bool PPTWriter::ImplCreateMainNotes()
     mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
     mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xc00 );
     EscherPropertyContainer aPropOpt;
-    aPropOpt.AddOpt( ESCHER_Prop_fillColor, 0xffffff );                 // stock valued fill color
+    aPropOpt.AddOpt( ESCHER_Prop_fillColor, 0xffffff );                             // stock valued fill color
     aPropOpt.AddOpt( ESCHER_Prop_fillBackColor, 0 );
     aPropOpt.AddOpt( ESCHER_Prop_fillRectRight, 0x68bdde );
     aPropOpt.AddOpt( ESCHER_Prop_fillRectBottom, 0x8b9f8e );
     aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x120012 );
     aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0 );
     aPropOpt.AddOpt( ESCHER_Prop_bWMode, ESCHER_wDontShow );
-    aPropOpt.AddOpt( ESCHER_Prop_fBackground, 0x10001 );                // if true, this is the background shape
+    aPropOpt.AddOpt( ESCHER_Prop_fBackground, 0x10001 );                            // if true, this is the background shape
     aPropOpt.Commit( *mpStrm );
     mpPptEscherEx->CloseContainer();    // ESCHER_SpContainer
 
@@ -1711,6 +1720,45 @@ sal_Bool PPTWriter::ImplCreateSlide( sal_uInt32 nPageNum )
     mpPptEscherEx->CloseContainer();    // EPP_Drawing
     mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 1 );
     *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0x99cc00 << (sal_uInt32)0xcc3333 << (sal_uInt32)0xffcccc << (sal_uInt32)0xb2b2b2;
+
+    if ( mbUseNewAnimations )
+    {
+        SvMemoryStream amsofbtAnimGroup;
+        ppt::AnimationExporter aExporter( aSolverContainer );
+        aExporter.doexport( mXDrawPage, amsofbtAnimGroup );
+        sal_uInt32 nmsofbtAnimGroupSize = amsofbtAnimGroup.Tell();
+        if ( nmsofbtAnimGroupSize )
+        {
+            ppt::ExContainer aProgTags      ( *mpStrm, EPP_ProgTags );
+            ppt::ExContainer aProgBinaryTag ( *mpStrm, EPP_ProgBinaryTag );
+            {
+                ppt::ExAtom aCString( *mpStrm, EPP_CString );
+                *mpStrm << (sal_uInt32)0x5f005f
+                        << (sal_uInt32)0x50005f
+                        << (sal_uInt32)0x540050
+                        << (sal_uInt16)0x31
+                        << (sal_uInt16)0x30;
+            }
+            {
+                ppt::ExAtom aBinaryTagData( *mpStrm, EPP_BinaryTagData );
+                {
+                    {
+                        ppt::ExAtom aMagic2( *mpStrm, 0x2eeb );
+                        *mpStrm << (sal_uInt32)0x01c45df9
+                                << (sal_uInt32)0xe1471b30;
+                    }
+                    {
+                        ppt::ExAtom aMagic( *mpStrm, 0x2b00 );
+                        *mpStrm << (sal_uInt32)0;
+                    }
+                }
+                mpStrm->Write( amsofbtAnimGroup.GetData(), amsofbtAnimGroup.Tell() );
+                {
+                    ppt::ExContainer aMagic2( *mpStrm, 0x2b02 );
+                }
+            }
+        }
+    }
     mpPptEscherEx->CloseContainer();    // EPP_Slide
     return TRUE;
 };
