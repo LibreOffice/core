@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mav $ $Date: 2003-12-17 11:32:21 $
+#   last change: $Author: kz $ $Date: 2004-10-04 19:58:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,9 +82,13 @@ SHL1IMPLIB= i$(TARGET)
 
 SLOFILES = \
         $(SLO)$/mainthreadexecutor.obj\
+        $(SLO)$/bitmapcreator.obj\
         $(SLO)$/mteregister.obj
 
-EXCEPTIONSFILES = $(SLO)$/mainthreadexecutor.obj
+EXCEPTIONSFILES = \
+        $(SLO)$/mainthreadexecutor.obj\
+        $(SLO)$/bitmapcreator.obj\
+        $(SLO)$/mteregister.obj
 
 SHL1OBJS= $(SLOFILES)
 
@@ -92,7 +96,9 @@ SHL1STDLIBS=\
     $(SALLIB)\
     $(CPPULIB)\
     $(CPPUHELPERLIB)\
-    $(VCLLIB)
+    $(TOOLSLIB)\
+    $(VCLLIB)\
+    itk.lib
 
 DEF1EXPORTFILE=	exports.dxp
 
