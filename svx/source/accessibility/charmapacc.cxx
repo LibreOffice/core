@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmapacc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:34 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,11 +71,11 @@
 #include "charmap.hxx"
 #include "charmapacc.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 #ifndef _TOOLKIT_HELPER_EXTERNALLOCK_HXX_
 #include <toolkit/helper/externallock.hxx>
@@ -100,8 +100,7 @@ namespace svx
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
-    using namespace ::drafts::com::sun::star;
-    using namespace ::drafts::com::sun::star::accessibility;
+    using namespace ::com::sun::star::accessibility;
 
 // ----------------
 // - SvxShowCharSetVirtualAcc -
@@ -143,7 +142,7 @@ sal_Int32 SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleChildCount(  ) throw (
     return ( mpParent->getScrollBar()->IsVisible() ) ? 2 : 1;
 }
 // -----------------------------------------------------------------------------
-uno::Reference< accessibility::XAccessible > SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleAt( const awt::Point& aPoint )
+uno::Reference< accessibility::XAccessible > SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleAtPoint( const awt::Point& aPoint )
     throw (uno::RuntimeException)
 {
     OExternalLockGuard aGuard( this );
@@ -241,7 +240,7 @@ Reference< XAccessible > SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleParent(
 // -----------------------------------------------------------------------------
 sal_Int16 SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleRole(  ) throw (RuntimeException)
 {
-    return accessibility::AccessibleRole::SCROLLPANE;
+    return accessibility::AccessibleRole::SCROLL_PANE;
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleDescription(  ) throw (RuntimeException)
@@ -510,14 +509,14 @@ uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL SvxShowCharSetAcc:
         if ( m_pParent->getCharSetControl()->IsReallyVisible() )
             pStateSet->AddState( AccessibleStateType::VISIBLE );
 
-        pStateSet->AddState( AccessibleStateType::MANAGES_DESCENDANT );
+        pStateSet->AddState( AccessibleStateType::MANAGES_DESCENDANTS );
     }
 
     return pStateSet;
 }
 // -----------------------------------------------------------------------------
 
-uno::Reference< accessibility::XAccessible > SAL_CALL SvxShowCharSetAcc::getAccessibleAt( const awt::Point& aPoint )
+uno::Reference< accessibility::XAccessible > SAL_CALL SvxShowCharSetAcc::getAccessibleAtPoint( const awt::Point& aPoint )
     throw (uno::RuntimeException)
 {
     OExternalLockGuard aGuard( this );
@@ -858,7 +857,7 @@ awt::Rectangle SAL_CALL SvxShowCharSetItemAcc::implGetBounds(  ) throw (RuntimeE
     return aRet;
 }
 // -----------------------------------------------------------------------------
-uno::Reference< accessibility::XAccessible > SAL_CALL SvxShowCharSetItemAcc::getAccessibleAt( const awt::Point& aPoint )
+uno::Reference< accessibility::XAccessible > SAL_CALL SvxShowCharSetItemAcc::getAccessibleAtPoint( const awt::Point& aPoint )
     throw (uno::RuntimeException)
 {
     return uno::Reference< accessibility::XAccessible >();
