@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fucopy.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:50 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:00:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #pragma hdrstop
 
+#include "fucopy.hxx"
+
 #ifndef _SFX_PROGRESS_HXX
 #include <sfx2/progress.hxx>
 #endif
@@ -69,12 +71,17 @@
 #include "sdresid.hxx"
 #include "sdattr.hxx"
 #include "strings.hrc"
-#include "viewshel.hxx"
-#include "sdview.hxx"
-#include "fucopy.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_COPY_DLG_HXX
 #include "copydlg.hxx"
+#endif
 #include "drawdoc.hxx"
-#include "docshell.hxx"
+#include "DrawDocShell.hxx"
 
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
@@ -104,6 +111,8 @@
 #include <sfx2/request.hxx>
 #endif
 
+namespace sd {
+
 TYPEINIT1( FuCopy, FuPoor );
 
 /*************************************************************************
@@ -112,8 +121,12 @@ TYPEINIT1( FuCopy, FuPoor );
 |*
 \************************************************************************/
 
-FuCopy::FuCopy(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                         SdDrawDocument* pDoc, SfxRequest& rReq)
+FuCopy::FuCopy (
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
     if( pView->HasMarkedObj() )
@@ -151,7 +164,7 @@ FuCopy::FuCopy(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                 }
             }
 
-            SdCopyDlg*  pDlg = new SdCopyDlg( NULL, aSet, pDoc->GetColorTable(), pView );
+            CopyDlg*  pDlg = new CopyDlg( NULL, aSet, pDoc->GetColorTable(), pView );
             USHORT      nResult = pDlg->Execute();
 
             switch( nResult )
@@ -375,3 +388,4 @@ void FuCopy::Deactivate()
 }
 
 
+} // end of namespace
