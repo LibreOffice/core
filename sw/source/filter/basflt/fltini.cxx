@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:24:06 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:29:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -657,7 +657,7 @@ void SwRelNumRuleSpaces::SetNumRelSpaces( SwDoc& rDoc )
         // damit nur die neuen angepasst werden
         SwNumRuleTbl aNumRuleTbl;
         aNumRuleTbl.Insert( pNumRuleTbl, 0 );
-        pNumRuleTbl->Remove( 0, pRuleTbl->Count() );
+        pNumRuleTbl->Remove( 0, pNumRuleTbl->Count() );
         const SwNumRuleTbl& rRuleTbl = rDoc.GetNumRuleTbl();
         SwNumRule* pRule;
 
