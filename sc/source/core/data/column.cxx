@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-23 20:29:33 $
+ *  last change: $Author: nn $ $Date: 2001-01-09 17:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -975,6 +975,15 @@ void ScColumn::SwapRow(USHORT nRow1, USHORT nRow2)
             if (bEqual)             // gleiche Formeln nicht vertauschen
                 return;
         }
+    }
+
+    if ( ( eType1 == CELLTYPE_FORMULA && ((ScFormulaCell*)pCell1)->GetMatrixFlag() != 0 ) ||
+         ( eType2 == CELLTYPE_FORMULA && ((ScFormulaCell*)pCell2)->GetMatrixFlag() != 0 ) )
+    {
+        //  never move any array formulas
+        //  (disabling sort if parts of array formulas are contained is done at ui)
+
+        return;
     }
 
     ScBaseCell *pNew1, *pNew2;
