@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-06 13:41:43 $
+ *  last change: $Author: pb $ $Date: 2002-01-15 09:25:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1064,7 +1064,13 @@ sal_Int8 SfxOrganizeListBox_Impl::ExecuteDrop( const ExecuteDropEvent& rEvt )
         }
     }
     bDropMoveOk = TRUE;
-    return bSuccess ? rEvt.mnAction : SvTreeListBox::ExecuteDrop( rEvt );
+    sal_Int8 nRet = rEvt.mnAction;
+    if ( !bSuccess )
+        // asynchronous, because of MessBoxes
+        PostUserEvent( LINK( this, SfxOrganizeListBox_Impl, OnAsyncExecuteDrop ),
+                       new ExecuteDropEvent( rEvt ) );
+
+    return nRet;
 }
 
 //-------------------------------------------------------------------------
@@ -1290,6 +1296,19 @@ SfxOrganizeListBox_Impl::SfxOrganizeListBox_Impl(
     SetSelectionMode(SINGLE_SELECTION);
 
     GetModel()->SetSortMode(SortNone);      // Bug in SvTools 303
+}
+
+//-------------------------------------------------------------------------
+
+IMPL_LINK( SfxOrganizeListBox_Impl, OnAsyncExecuteDrop, ExecuteDropEvent*, pEvent )
+{
+    DBG_ASSERT( pEvent, "invalid DropEvent" );
+    if ( pEvent )
+    {
+        SvTreeListBox::ExecuteDrop( *pEvent );
+        delete pEvent;
+    }
+    return 0;
 }
 
 //-------------------------------------------------------------------------
