@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:16:00 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:54:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,10 @@
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
+#ifndef SD_LAYER_DIALOG_CHILD_WINDOW_HXX
+#include "LayerDialogChildWindow.hxx"
+#endif
+#include "LayerTabBar.hxx"
 
 #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
 #define SO2_DECL_SVINPLACEOBJECT_DEFINED
@@ -204,16 +208,10 @@ namespace sd {
 void DrawViewShell::Activate(BOOL bIsMDIActivate)
 {
     ViewShell::Activate(bIsMDIActivate);
-    ObjectBarManager &rObjectBarManager (GetObjectBarManager());
 
-    if (rObjectBarManager.GetTopObjectBarId() == 0)
-    {
-    /*
-        // There is not yet an active object bar.
-        rObjectBarManager.PushObjectBar (RID_FORMLAYER_TOOLBOX);
-        rObjectBarManager.PushObjectBar (RID_DRAW_OBJ_TOOLBOX);
-    */
-    }
+    // When no object bars are active then activate some.
+    if (GetObjectBarManager().GetTopObjectBarId() == snInvalidShellId)
+        GetObjectBarManager().SwitchObjectBar (RID_DRAW_OBJ_TOOLBOX);
 
     if (bIsMDIActivate)
     {
@@ -236,38 +234,16 @@ void DrawViewShell::UIActivate( SvInPlaceObject *pIPObj )
 
     // #94252# Disable own controls
     aTabControl.Disable();
-    aLayerTab.Disable();
-    aPageBtn.Disable();
-    aMasterPageBtn.Disable();
-    aLayerBtn.Disable();
+    if (GetLayerTabControl() != NULL)
+        GetLayerTabControl()->Disable();
 }
 
 void DrawViewShell::UIDeactivate( SvInPlaceObject *pIPObj )
 {
     // #94252# Enable own controls
     aTabControl.Enable();
-    aLayerTab.Enable();
-
-    // #94951# handout and notes are no separate views,
-    // handle difference in enabled functionality
-    if (ePageKind == PK_NOTES)
-    {
-        aPageBtn.Enable();
-        aMasterPageBtn.Enable();
-        aLayerBtn.Disable();
-    }
-    else if (ePageKind == PK_HANDOUT)
-    {
-        aPageBtn.Disable();
-        aMasterPageBtn.Enable();
-        aLayerBtn.Disable();
-    }
-    else
-    {
-        aPageBtn.Enable();
-        aMasterPageBtn.Enable();
-        aLayerBtn.Enable();
-    }
+    if (GetLayerTabControl() != NULL)
+        GetLayerTabControl()->Enable();
 
     ViewShell::UIDeactivate(pIPObj);
 }
@@ -289,7 +265,7 @@ void DrawViewShell::Deactivate(BOOL bIsMDIActivate)
 |*
 \************************************************************************/
 
-void DrawViewShell::SelectionHasChanged()
+void DrawViewShell::SelectionHasChanged (void)
 {
     // Um die Performance zu steigern wird jetzt die komplette
     // Shell invalidiert statt alle Slots einzeln
@@ -403,11 +379,11 @@ void DrawViewShell::SelectionHasChanged()
     {
         USHORT nObjBarId;
 
-        if (pView->GetContext() == SDRCONTEXT_POINTEDIT)
+        if (GetView()->GetContext() == SDRCONTEXT_POINTEDIT)
             nObjBarId = RID_BEZIER_TOOLBOX;
-        else if (pView->GetContext() == SDRCONTEXT_GRAPHIC)
+        else if (GetView()->GetContext() == SDRCONTEXT_GRAPHIC)
             nObjBarId = RID_DRAW_GRAF_TOOLBOX;
-        else if (pView->GetContext() == SDRCONTEXT_TEXTEDIT)
+        else if (GetView()->GetContext() == SDRCONTEXT_TEXTEDIT)
             nObjBarId = RID_DRAW_TEXT_TOOLBOX;  // #96124# Keep text bar when in textedit
         else
             nObjBarId = RID_DRAW_OBJ_TOOLBOX;
@@ -415,10 +391,8 @@ void DrawViewShell::SelectionHasChanged()
         GetObjectBarManager().SwitchObjectBar (nObjBarId);
     }
 
-    // #96124# Invalidate the currently active object bar.
-    SfxShell* pShell = GetObjectBarManager().GetTopObjectBar();
-    if (pShell != NULL)
-        pShell->Invalidate();
+    // #96124# Invalidate for every subshell
+    GetObjectBarManager().InvalidateAllObjectBars();
 
     if( SFX_APP()->GetHelpPI() )
         SetHelpIdBySelection();
@@ -457,34 +431,6 @@ void DrawViewShell::SetZoomRect( const Rectangle& rZoomRect )
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
 }
 
-/*************************************************************************
-|*
-|* Modus-Umschaltung (Draw, Slide, Outline)
-|*
-\************************************************************************/
-
-IMPL_LINK( DrawViewShell, TabModeBtnHdl, Button *, pButton )
-{
-    if ( !((ImageButton*) pButton)->IsChecked() ||
-         pButton == &aLayerBtn)
-    {
-        USHORT nSlotId;
-
-        if ( pButton == &aPageBtn )
-            nSlotId = SID_PAGEMODE;
-        else if ( pButton == &aMasterPageBtn )
-            nSlotId = SID_MASTERPAGE;
-        else if ( pButton == &aLayerBtn )
-            nSlotId = SID_LAYERMODE;
-
-        GetViewFrame()->GetDispatcher()->Execute(nSlotId,
-                    SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
-    }
-
-    pWindow->GrabFocus();         // SdWindow soll den Focus erhalten
-
-    return 0;
-}
 
 /*************************************************************************
 |*
@@ -546,9 +492,10 @@ USHORT DrawViewShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
 |*
 \************************************************************************/
 
-void DrawViewShell::ChangeEditMode(EditMode eEMode, BOOL bLMode)
+void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
 {
-    if (eEditMode != eEMode || bLayerMode != bLMode)
+    if (eEditMode != eEMode
+        || mbIsLayerModeActive != bIsLayerModeActive)
     {
         USHORT nActualPageNum = 0;
 
@@ -557,7 +504,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, BOOL bLMode)
         if (pController != NULL)
         {
             pController->FireChangeEditMode (eEMode == EM_MASTERPAGE);
-            pController->FireChangeLayerMode (bLMode);
+            pController->FireChangeLayerMode (bIsLayerModeActive);
         }
 
         if ( pDrView->IsTextEdit() )
@@ -565,7 +512,9 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, BOOL bLMode)
             pDrView->EndTextEdit();
         }
 
-        aLayerTab.EndEditMode();
+        LayerTabBar* pLayerBar = GetLayerTabControl();
+        if (pLayerBar != NULL)
+            pLayerBar->EndEditMode();
         aTabControl.EndEditMode();
 
         if (ePageKind == PK_HANDOUT)
@@ -575,17 +524,13 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, BOOL bLMode)
         }
 
         eEditMode = eEMode;
-        bLayerMode = bLMode;
+        mbIsLayerModeActive = bIsLayerModeActive;
 
         if (eEditMode == EM_PAGE)
         {
             /******************************************************************
             * PAGEMODE
             ******************************************************************/
-            // Emulate radio button behaviour.  Order of checking buttons on
-            // or off is important for accessibility.
-            aMasterPageBtn.Check(FALSE);
-            aPageBtn.Check(TRUE);
 
             aTabControl.Clear();
 
@@ -621,11 +566,6 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, BOOL bLMode)
             GetViewFrame()->SetChildWindow(
                 AnimationChildWindow::GetChildWindowId(), FALSE );
 
-            // Emulate radio button behaviour.  Order of checking buttons on
-            // or off is important for accessibility.
-            aPageBtn.Check(FALSE);
-            aMasterPageBtn.Check(TRUE);
-
             if (!pActualPage)
             {
                 // Sofern es keine pActualPage gibt, wird die erste genommen
@@ -660,27 +600,20 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, BOOL bLMode)
                 SID_PREVIEW_WIN, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
         }
 
-        if (bLayerMode)
+        if ( ! mbIsLayerModeActive)
         {
-            /******************************************************************
-            * LAYER ein
-            ******************************************************************/
-            aTabControl.Hide();
-            aLayerTab.Show();
-            aLayerBtn.Check(TRUE);
-        }
-        else
-        {
-            /******************************************************************
-            * LAYER aus
-            ******************************************************************/
             aTabControl.Show();
-            aLayerTab.Hide();
-            aLayerBtn.Check(FALSE);
             // Set the tab control only for draw pages.  For master page
             // this has been done already above.
             if (eEditMode == EM_PAGE)
                 aTabControl.SetCurPageId (nActualPageNum + 1);
+        }
+        if (GetViewFrame()->KnowsChildWindow(
+            LayerDialogChildWindow::GetChildWindowId()))
+        {
+            GetViewFrame()->SetChildWindow(
+                LayerDialogChildWindow::GetChildWindowId(),
+                IsLayerModeActive());
         }
 
         ResetActualLayer();
@@ -696,6 +629,17 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, BOOL bLMode)
     }
 }
 
+
+
+
+bool DrawViewShell::IsLayerModeActive (void) const
+{
+    return mbIsLayerModeActive;
+}
+
+
+
+
 /*************************************************************************
 |*
 |* Groesse des TabControls und der ModeButtons zurueckgeben
@@ -704,8 +648,8 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, BOOL bLMode)
 
 long DrawViewShell::GetHCtrlWidth()
 {
-    return ( aTabControl.GetSizePixel().Width() +
-             aPageBtn.GetSizePixel().Width() * 3 );
+    //  return aTabControl.GetSizePixel().Width();
+    return 0;
 }
 
 
@@ -731,7 +675,7 @@ SvxRuler* DrawViewShell::CreateHRuler (::sd::Window* pWin, BOOL bIsFirst)
     else
         aWBits = WB_HSCROLL | WB_3DLOOK | WB_BORDER;
 
-    pRuler = new Ruler (*this, &GetViewFrame()->GetWindow(), pWin, nFlags,
+    pRuler = new Ruler (*this, GetParentWindow(), pWin, nFlags,
         GetViewFrame()->GetBindings(), aWBits);
     pRuler->SetSourceUnit(pWin->GetMapMode().GetMapUnit());
 
@@ -765,7 +709,7 @@ SvxRuler* DrawViewShell::CreateVRuler(::sd::Window* pWin)
     WinBits  aWBits = WB_VSCROLL | WB_3DLOOK | WB_BORDER;
     USHORT   nFlags = SVXRULER_SUPPORT_OBJECT;
 
-    pRuler = new Ruler(*this, &GetViewFrame()->GetWindow(), pWin, nFlags,
+    pRuler = new Ruler(*this, GetParentWindow(), pWin, nFlags,
         GetViewFrame()->GetBindings(), aWBits);
     pRuler->SetSourceUnit(pWin->GetMapMode().GetMapUnit());
 
@@ -797,13 +741,8 @@ void DrawViewShell::UpdateHRuler()
     Invalidate( SID_RULER_OBJECT );
     Invalidate( SID_RULER_TEXT_RIGHT_TO_LEFT );
 
-    for (USHORT nIndex=0; nIndex<MAX_HSPLIT_CNT; nIndex++)
-    {
-        if (pHRulerArray[nIndex])
-        {
-            pHRulerArray[nIndex]->ForceUpdate();
-        }
-    }
+    if (mpHorizontalRuler.get() != NULL)
+        mpHorizontalRuler->ForceUpdate();
 }
 
 /*************************************************************************
@@ -818,13 +757,8 @@ void DrawViewShell::UpdateVRuler()
     Invalidate( SID_RULER_PAGE_POS );
     Invalidate( SID_RULER_OBJECT );
 
-    for (USHORT nIndex=0; nIndex<MAX_VSPLIT_CNT; nIndex++)
-    {
-        if (pVRulerArray[nIndex])
-        {
-            pVRulerArray[nIndex]->ForceUpdate();
-        }
-    }
+    if (mpVerticalRuler.get() != NULL)
+        mpVerticalRuler->ForceUpdate();
 }
 
 /*************************************************************************
@@ -846,19 +780,20 @@ void DrawViewShell::SetUIUnit(FieldUnit eUnit)
 
 IMPL_LINK( DrawViewShell, TabSplitHdl, TabBar *, pTab )
 {
-    long nMax = aHSplit.GetPosPixel().X() - aTabControl.GetPosPixel().X();
+    const long int nMax = aViewSize.Width() - aScrBarWH.Width()
+        - aTabControl.GetPosPixel().X() ;
 
     Size aTabSize = aTabControl.GetSizePixel();
     aTabSize.Width() = Min(pTab->GetSplitSize(), (long)(nMax-1));
 
     aTabControl.SetSizePixel(aTabSize);
-    aLayerTab.SetSizePixel(aTabSize);
+    GetLayerTabControl()->SetSizePixel(aTabSize);
 
     Point aPos = aTabControl.GetPosPixel();
     aPos.X() += aTabSize.Width();
 
     Size aScrSize(nMax - aTabSize.Width(), aScrBarWH.Height());
-    pHScrlArray[0]->SetPosSizePixel(aPos, aScrSize);
+    mpHorizontalScrollBar->SetPosSizePixel(aPos, aScrSize);
 
     return 0;
 }
@@ -1328,10 +1263,10 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
             }
         }
 
-        Size aVisSizePixel = pWindow->GetOutputSizePixel();
-        Rectangle aVisAreaWin = pWindow->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
+        Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
+        Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
         VisAreaChanged(aVisAreaWin);
-        pDrView->VisAreaChanged(pWindow);
+        pDrView->VisAreaChanged(GetActiveWindow());
 
         // Damit der Navigator (und das Effekte-Window) das mitbekommt (/-men)
         SfxBindings& rBindings = GetViewFrame()->GetBindings();
@@ -1363,7 +1298,8 @@ BOOL DrawViewShell::IsSwitchPageAllowed() const
 {
     bool bOK = true;
 
-    FmFormShell* pFormShell = GetObjectBarManager().GetFormShell();
+    FmFormShell* pFormShell = static_cast<FmFormShell*>(
+        GetObjectBarManager().GetObjectBar(RID_FORMLAYER_TOOLBOX));
     if (pFormShell!=NULL && !pFormShell->PrepareClose (FALSE))
         bOK = false;
 
@@ -1379,98 +1315,102 @@ BOOL DrawViewShell::IsSwitchPageAllowed() const
 
 void DrawViewShell::ResetActualLayer()
 {
-    // remember old layer cound and current layer id
-    // this is needed when one layer is renamed to
-    // restore current layer
-    USHORT nOldLayerCnt = aLayerTab.GetPageCount();
-    USHORT nOldLayerId = aLayerTab.GetCurPageId();
-
-    /*************************************************************
-    * Update fuer LayerTab
-    *************************************************************/
-    aLayerTab.Clear();
-
-    String aName;
-    String aActiveLayer = pDrView->GetActiveLayer();
-    String aBackgroundLayer( SdResId(STR_LAYER_BCKGRND) );
-    String aBackgroundObjLayer( SdResId(STR_LAYER_BCKGRNDOBJ) );
-    String aLayoutLayer( SdResId(STR_LAYER_LAYOUT) );
-    String aControlsLayer( SdResId(STR_LAYER_CONTROLS) );
-    String aMeasureLinesLayer( SdResId(STR_LAYER_MEASURELINES) );
-    USHORT nNewLayer = 0;
-    USHORT nActiveLayer = SDRLAYER_NOTFOUND;
-    SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
-    USHORT nLayerCnt = rLayerAdmin.GetLayerCount();
-
-    for ( USHORT nLayer = 0; nLayer < nLayerCnt; nLayer++ )
+    LayerTabBar* pLayerBar = GetLayerTabControl();
+    if (pLayerBar != NULL)
     {
-        aName = rLayerAdmin.GetLayer(nLayer)->GetName();
+        // remember old layer cound and current layer id
+        // this is needed when one layer is renamed to
+        // restore current layer
+        USHORT nOldLayerCnt = pLayerBar->GetPageCount();
+        USHORT nOldLayerId = pLayerBar->GetCurPageId();
 
-        if ( aName == aActiveLayer )
+        /*************************************************************
+            * Update fuer LayerTab
+            *************************************************************/
+        pLayerBar->Clear();
+
+        String aName;
+        String aActiveLayer = pDrView->GetActiveLayer();
+        String aBackgroundLayer( SdResId(STR_LAYER_BCKGRND) );
+        String aBackgroundObjLayer( SdResId(STR_LAYER_BCKGRNDOBJ) );
+        String aLayoutLayer( SdResId(STR_LAYER_LAYOUT) );
+        String aControlsLayer( SdResId(STR_LAYER_CONTROLS) );
+        String aMeasureLinesLayer( SdResId(STR_LAYER_MEASURELINES) );
+        USHORT nNewLayer = 0;
+        USHORT nActiveLayer = SDRLAYER_NOTFOUND;
+        SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
+        USHORT nLayerCnt = rLayerAdmin.GetLayerCount();
+
+        for ( USHORT nLayer = 0; nLayer < nLayerCnt; nLayer++ )
         {
-            nActiveLayer = nLayer;
+            aName = rLayerAdmin.GetLayer(nLayer)->GetName();
+
+            if ( aName == aActiveLayer )
+            {
+                nActiveLayer = nLayer;
+            }
+
+            if ( aName != aBackgroundLayer )
+            {
+                if (eEditMode == EM_MASTERPAGE)
+                {
+                    // Layer der Page nicht auf MasterPage anzeigen
+                    if (aName != aLayoutLayer   &&
+                        aName != aControlsLayer &&
+                        aName != aMeasureLinesLayer)
+                    {
+                        pLayerBar->InsertPage(nLayer+1, aName);
+
+                        TabBarPageBits nBits = 0;
+                        SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
+
+                        if (pPV && !pPV->IsLayerVisible(aName))
+                        {
+                            // Unsichtbare Layer werden anders dargestellt
+                            nBits = TPB_SPECIAL;
+                        }
+
+                        pLayerBar->SetPageBits(nLayer+1, nBits);
+                    }
+                }
+                else
+                {
+                    // Layer der MasterPage nicht auf Page anzeigen
+                    if ( aName != aBackgroundObjLayer )
+                    {
+                        pLayerBar->InsertPage(nLayer+1, aName);
+
+                        TabBarPageBits nBits = 0;
+
+                        if (!pDrView->GetPageViewPvNum(0)->IsLayerVisible(aName))
+                        {
+                            // Unsichtbare Layer werden anders dargestellt
+                            nBits = TPB_SPECIAL;
+                        }
+
+                        pLayerBar->SetPageBits(nLayer+1, nBits);
+                    }
+                }
+            }
         }
 
-        if ( aName != aBackgroundLayer )
+        if ( nActiveLayer == SDRLAYER_NOTFOUND )
         {
-            if (eEditMode == EM_MASTERPAGE)
+            if( nOldLayerCnt == pLayerBar->GetPageCount() )
             {
-                // Layer der Page nicht auf MasterPage anzeigen
-                if (aName != aLayoutLayer   &&
-                    aName != aControlsLayer &&
-                    aName != aMeasureLinesLayer)
-                {
-                    aLayerTab.InsertPage(nLayer+1, aName);
-
-                    TabBarPageBits nBits = 0;
-                    SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
-
-                    if (pPV && !pPV->IsLayerVisible(aName))
-                    {
-                        // Unsichtbare Layer werden anders dargestellt
-                        nBits = TPB_SPECIAL;
-                    }
-
-                    aLayerTab.SetPageBits(nLayer+1, nBits);
-                }
+                nActiveLayer = nOldLayerId - 1;
             }
             else
             {
-                // Layer der MasterPage nicht auf Page anzeigen
-                if ( aName != aBackgroundObjLayer )
-                {
-                    aLayerTab.InsertPage(nLayer+1, aName);
-
-                    TabBarPageBits nBits = 0;
-
-                    if (!pDrView->GetPageViewPvNum(0)->IsLayerVisible(aName))
-                    {
-                        // Unsichtbare Layer werden anders dargestellt
-                        nBits = TPB_SPECIAL;
-                    }
-
-                    aLayerTab.SetPageBits(nLayer+1, nBits);
-                }
+                nActiveLayer = ( eEditMode == EM_MASTERPAGE ) ? 2 : 0;
             }
+
+            pDrView->SetActiveLayer( pLayerBar->GetPageText(nActiveLayer + 1) );
         }
+
+        pLayerBar->SetCurPageId(nActiveLayer + 1);
+        GetViewFrame()->GetBindings().Invalidate( SID_MODIFYLAYER );
     }
-
-    if ( nActiveLayer == SDRLAYER_NOTFOUND )
-    {
-        if( nOldLayerCnt == aLayerTab.GetPageCount() )
-        {
-            nActiveLayer = nOldLayerId - 1;
-        }
-        else
-        {
-            nActiveLayer = ( eEditMode == EM_MASTERPAGE ) ? 2 : 0;
-        }
-
-        pDrView->SetActiveLayer( aLayerTab.GetPageText(nActiveLayer + 1) );
-    }
-
-    aLayerTab.SetCurPageId(nActiveLayer + 1);
-    GetViewFrame()->GetBindings().Invalidate( SID_MODIFYLAYER );
 }
 
 /*************************************************************************
