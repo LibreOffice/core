@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:22:41 $
+ *  last change: $Author: rt $ $Date: 2000-12-06 14:50:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3744,7 +3744,7 @@ String RID_SVXSTR_BMP7
     Text[ polish ] = "Krople";
     Text[ portuguese_brazilian ] = "Marble";
     Text[ japanese ] = "‚µ‚Έ‚­";
-    Text[ korean ] = "Ή°ΉζΏο";
+    Text[ korean ] = "ΘπΎξ»ΡΈ®±β";
     Text[ chinese_simplified ] = "Λ®µΞ";
     Text[ chinese_traditional ] = "¤τΊw";
     Text[ arabic ] = "ήΨΡΗΚ";
@@ -4118,7 +4118,7 @@ String RID_SVXSTR_DASH0
     Text [ english_us ] = "Ultrafine dashed";
     Text[ portuguese ] = "Tracejado ultrafino";
     Text[ russian ] = "Ρβεπυςξνκΰÿ οσνκςθπνΰÿ";
-    Text[ greek ] = "Παύλες (πολύ λεπτές)";
+    Text[ greek ] = "Διακεκομμένο (Πολύ λεπτά)";
     Text[ dutch ] = "Ultrafijne streepjes";
     Text[ french ] = "Ultrafine discontinue";
     Text[ spanish ] = "Trazos ultrafinos";
@@ -4141,7 +4141,7 @@ String RID_SVXSTR_DASH1
     Text [ english_us ] = "Fine dashed";
     Text[ portuguese ] = "Tracejado fino";
     Text[ russian ] = "Òξνκΰÿ οσνκςθπνΰÿ";
-    Text[ greek ] = "Παύλες (λεπτές)";
+    Text[ greek ] = "Διακεκομμένο (Λεπτά)";
     Text[ dutch ] = "Fijne streepjes";
     Text[ french ] = "Fine discontinue";
     Text[ spanish ] = "Trazos finos";
@@ -4187,7 +4187,7 @@ String RID_SVXSTR_DASH3
     Text [ english_us ] = "Fine dotted";
     Text[ portuguese ] = "Pontilhado fino";
     Text[ russian ] = "Μελκθε ςξχκθ";
-    Text[ greek ] = "Τελείες (λεπτές)";
+    Text[ greek ] = "Λεπτό διάστικτο";
     Text[ dutch ] = "Fijn gestippeld";
     Text[ french ] = "Fine pointillιe";
     Text[ spanish ] = "Punteado fino";
@@ -4217,7 +4217,7 @@ String RID_SVXSTR_DASH4
     Text[ italian ] = "Linea con punti fini";
     Text[ danish ] = "Streg med fine prikker";
     Text[ swedish ] = "Streck med fina prickar";
-    Text[ polish ] = "Kreska z delikatnymi kropkami";
+    Text[ polish ] = "Kreski z delikatnymi kropkami";
     Text[ portuguese_brazilian ] = "Line with Fine Dots";
     Text[ japanese ] = "Χ‚©‚Ά“_‚ΜW‚ά‚Α‚½ό";
     Text[ korean ] = "°΅΄Β Α΅ΐΈ·Ξ µΘ Ό±";
@@ -4233,7 +4233,7 @@ String RID_SVXSTR_DASH5
     Text [ english_us ] = "Fine dashed (variable)";
     Text[ portuguese ] = "Tracejado fino (variαvel)";
     Text[ russian ] = "Òξνκΰÿ οσνκςθπνΰÿ (θημ.)";
-    Text[ greek ] = "Λεπτές παύλες (μεταβλητά)";
+    Text[ greek ] = "Διακεκομμένο λεπτά (μεταβλητά)";
     Text[ dutch ] = "Fijne streepjes (variabel)";
     Text[ french ] = "Fine discontinue (variable)";
     Text[ spanish ] = "Trazos finos (variable)";
@@ -4279,7 +4279,7 @@ String RID_SVXSTR_DASH7
     Text [ english_us ] = "Ultrafine dotted (variable)";
     Text[ portuguese ] = "Pontilhado ultrafino (variαvel)";
     Text[ russian ] = "Μελκθε ςξχκθ (θημ.)";
-    Text[ greek ] = "Τελείες (πολύ λεπτές) (μεταβλητά)";
+    Text[ greek ] = "Πολύ λεπτό διάστικτο (Μεταβλητά)";
     Text[ dutch ] = "Ultrafijn gestippeld (variabel)";
     Text[ french ] = "Ultrafine pointillιe (variable)";
     Text[ spanish ] = "Punteado ultrafino (variable)";
@@ -4348,7 +4348,7 @@ String RID_SVXSTR_DASH10
     Text [ english_us ] = "Dashed (variable)";
     Text[ portuguese ] = "Pontilhado (variαvel)";
     Text[ russian ] = "Οσνκςθπνΰÿ (θημ.)";
-    Text[ greek ] = "Παύλες (μεταβλητά)";
+    Text[ greek ] = "Διακεκομμένο (μεταβλητά)";
     Text[ dutch ] = "Streepjes (variabel)";
     Text[ french ] = "Discontinue (variable)";
     Text[ spanish ] = "Trazos (variable)";
