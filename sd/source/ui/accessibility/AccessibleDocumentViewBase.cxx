@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: af $ $Date: 2002-06-12 12:37:09 $
+ *  last change: $Author: af $ $Date: 2002-06-13 13:52:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,7 @@ void AccessibleDocumentViewBase::Init (void)
     {
         pWindow->AddChildEventListener (LINK(
             this, AccessibleDocumentViewBase, WindowChildEventListener));
+
         USHORT nCount = pWindow->GetChildCount();
         for (sal_uInt16 i=0; i<nCount; i++)
         {
@@ -256,6 +257,21 @@ IMPL_LINK(AccessibleDocumentViewBase, WindowChildEventListener,
         //      DBG_ASSERT( pVclEvent->GetWindow(), "Window???" );
         switch (pWindowEvent->GetId())
         {
+            case VCLEVENT_OBJECT_DYING:
+            {
+                // Window is dying.  Unregister from VCL Window.
+                // This is also attempted in the disposing() method.
+                Window* pWindow = maShapeTreeInfo.GetWindow();
+                if (pWindow != NULL)
+                {
+                    pWindow->RemoveChildEventListener (LINK(
+                        this,
+                        AccessibleDocumentViewBase,
+                        WindowChildEventListener));
+                }
+            }
+            break;
+
             case VCLEVENT_WINDOW_SHOW:
             {
                 // A new window has been created.  Is it an OLE object?
@@ -691,6 +707,8 @@ void SAL_CALL AccessibleDocumentViewBase::disposing (void)
         pWindow->RemoveChildEventListener (LINK(
             this, AccessibleDocumentViewBase, WindowChildEventListener));
     }
+    else
+        DBG_ASSERT (pWindow, "AccessibleDocumentViewBase::disposing");
 
     // Unregister from window.
     if (mxWindow.is())
