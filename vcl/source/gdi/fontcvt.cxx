@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcvt.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: th $ $Date: 2001-06-21 21:13:28 $
+ *  last change: $Author: hdu $ $Date: 2001-06-28 14:02:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ static const sal_Unicode aStarBatsTab[224] =
              0,         0,         0,         0,
              0,         0,         0,         0,
              0,         0,         0,         0,
-             0,         0,         0,         0
+             0,         0,         0,    0x20ac
 };
 
 // -----------------------------------------------------------------------
@@ -171,7 +171,7 @@ static const sal_Unicode aStarMathTab[224] =
     0x2261, 0x221d,/**/0x2202, 0x2282,
     // F060
     0x2283, 0x2286, 0x2287, 0x2284,
-    0x2285, 0x2288, 0x2289, 0x220b,
+    0x2285, 0x2288, 0x2289, 0x2208,
     0x2209,/**/0x2208, 0x2203, 0x220d,
     0x2135, 0x2111, 0x211c, 0x2118,
     // F070
@@ -478,7 +478,23 @@ void ImplRecodeString( const ImplCvtChar* pConversion, String& rStr,
 const ImplCvtChar* ImplGetRecodeData( const String& rOrgFontName,
                                       const String& rMapFontName )
 {
-    return NULL;
+    const ImplCvtChar* pCvt = NULL;
+    String aOrgName( rOrgFontName );
+    ImplGetEnglishSearchFontName( aOrgName );
+    String aMapName( rMapFontName );
+    ImplGetEnglishSearchFontName( aMapName );
+
+    if( aMapName.EqualsAscii( "starsymbol" ) )
+    {
+        if( aOrgName.EqualsAscii( "starbats" ) )       pCvt = &aStarBatsCvt;
+        else if( aOrgName.EqualsAscii( "starmath" ) )  pCvt = &aStarMathCvt;
+    }
+    else if( aMapName.EqualsAscii( "starbats" ) )
+    {
+        if( aOrgName.EqualsAscii( "starsymbol" ) )     pCvt = &aStarSymbolCvt;
+    }
+
+    return pCvt;
 }
 
 //=======================================================================
