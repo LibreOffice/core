@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:33:54 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:01:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1008,13 +1008,13 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                     if( pSect->ContainsAny() == this )
                         pSect->InvalidatePrt();
                 }
-                SwFrm* pNxt;
-                if ( 0 != ( pNxt = GetIndNext() ) )
-                {
-                    pNxt->_InvalidatePrt();
-                    if ( pNxt->IsLayoutFrm() )
-                        pNxt->InvalidatePage();
-                }
+
+                // OD 09.01.2004 #i11859# - correction:
+                //  (1) Also invalidate next frame on next page/column.
+                //  (2) Skip empty sections and hidden paragraphs
+                //  Thus, use method <InvalidateNextPrtArea()>
+                InvalidateNextPrtArea();
+
                 SetCompletePaint();
             }
             break;
@@ -1094,24 +1094,12 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                 CalcLineSpace();
                 InvalidateSize();
                 _InvalidatePrt();
-                SwFrm* pNxt;
-                if ( 0 == ( pNxt = GetIndNext() ) &&
-                     bLineSpace && IsInFtn() )
-                    pNxt = FindNext();
-                if( pNxt )
-                {
-                    pNxt->_InvalidatePrt();
-                    if ( pNxt->IsLayoutFrm() )
-                    {
-                        if( pNxt->IsSctFrm() )
-                        {
-                            SwFrm* pCnt = ((SwSectionFrm*)pNxt)->ContainsAny();
-                            if( pCnt )
-                                pCnt->_InvalidatePrt();
-                        }
-                        pNxt->InvalidatePage();
-                    }
-                }
+
+                // OD 09.01.2004 #i11859# - correction:
+                //  (1) Also invalidate next frame on next page/column.
+                //  (2) Skip empty sections and hidden paragraphs
+                //  Thus, use method <InvalidateNextPrtArea()>
+                InvalidateNextPrtArea();
 
                 SetCompletePaint();
                 nClear |= 0x04;
@@ -1153,16 +1141,16 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                         {
                             const SvxBrushItem &rBack =
                                 pFly->GetAttrSet()->GetBackground();
-                            /// OD 20.08.2002 #99657# #GetTransChg#
-                            ///     following condition determines, if the fly frame
-                            ///     "inherites" the background color of text frame.
-                            ///     This is the case, if fly frame background
-                            ///     color is "no fill"/"auto fill" and if the fly frame
-                            ///     has no background graphic.
-                            ///     Thus, check complete fly frame background
-                            ///     color and *not* only its transparency value
+                            // OD 20.08.2002 #99657# #GetTransChg#
+                            //     following condition determines, if the fly frame
+                            //     "inherites" the background color of text frame.
+                            //     This is the case, if fly frame background
+                            //     color is "no fill"/"auto fill" and if the fly frame
+                            //     has no background graphic.
+                            //     Thus, check complete fly frame background
+                            //     color and *not* only its transparency value
                             if ( (rBack.GetColor() == COL_TRANSPARENT)  &&
-                            ///if( rBack.GetColor().GetTransparency() &&
+                            //if( rBack.GetColor().GetTransparency() &&
                                 rBack.GetGraphicPos() == GPOS_NONE )
                             {
                                 pFly->SetCompletePaint();
@@ -2019,18 +2007,16 @@ KSHORT SwTxtFrm::GetParHeight() const
         return nRet;
     }
 
-    SWAP_IF_NOT_SWAPPED( this )
-
-    SwTxtFrm *pThis = (SwTxtFrm*)this;
-    SwTxtSizeInfo aInf( pThis );
-    SwTxtIter aLine( pThis, &aInf );
-    KSHORT nHeight = aLine.GetLineHeight();
-    if( GetOfst() && !IsFollow() )          // Ist dieser Absatz gescrollt? Dann ist unsere
-        nHeight += aLine.GetLineHeight();   // bisherige Hoehe mind. eine Zeilenhoehe zu gering
-    while( aLine.Next() )
-        nHeight += aLine.GetLineHeight();
-
-    UNDO_SWAP( this )
+    // FME, OD 08.01.2004 #i11859# - refactoring and improve code
+    const SwLineLayout* pLineLayout = GetPara();
+    KSHORT nHeight = pLineLayout->GetRealHeight();
+    if( GetOfst() && !IsFollow() )  // Ist dieser Absatz gescrollt? Dann ist unsere
+        nHeight *= 2;               // bisherige Hoehe mind. eine Zeilenhoehe zu gering
+    do
+    {
+        pLineLayout = pLineLayout->GetNext();
+        nHeight += pLineLayout->GetRealHeight();
+    } while ( pLineLayout->GetNext() );
 
     return nHeight;
 }
@@ -2101,14 +2087,117 @@ KSHORT SwTxtFrm::CalcFitToContent( )
     return nMax;
 }
 
+/** determine height of last line for the calculation of the proportional line
+    spacing
+
+    OD 08.01.2004 #i11859#
+
+    @author OD
+*/
+long SwTxtFrm::GetHeightOfLastLineForPropLineSpacing() const
+{
+    long nHeightOfLastLine = 0L;
+
+    // determine output device
+    ViewShell* pVsh = (ViewShell*)GetShell();
+    ASSERT( pVsh, "<SwTxtFrm::_GetHeightOfLastLineForPropLineSpacing()> - no ViewShell -> crash" );
+    OutputDevice* pOut = pVsh->GetOut();
+    if ( !pVsh->GetDoc()->IsBrowseMode() ||
+         pVsh->GetViewOptions()->IsPrtFormat() )
+    {
+        pOut = &GetTxtNode()->GetDoc()->GetRefDev();
+    }
+    ASSERT( pOut, "<SwTxtFrm::_GetHeightOfLastLineForPropLineSpacing()> - no OutputDevice -> crash" );
+
+    // determine height of last line
+    if ( GetTxtNode()->GetDoc()->IsFormerLineSpacing() )
+    {
+        // former determination of last line height for proprotional line
+        // spacing - take height of font set at the paragraph
+
+        SwFont aFont( GetAttrSet(), GetTxtNode()->GetDoc() );
+        // Wir muessen dafuer sorgen, dass am OutputDevice der Font
+        // korrekt restauriert wird, sonst droht ein Last!=Owner.
+        if ( pLastFont )
+        {
+            SwFntObj *pOldFont = pLastFont;
+            pLastFont = NULL;
+            aFont.SetFntChg( sal_True );
+            aFont.ChgPhysFnt( pVsh, *pOut );
+            nHeightOfLastLine = aFont.GetHeight( pVsh, *pOut );
+            pLastFont->Unlock();
+            pLastFont = pOldFont;
+            pLastFont->SetDevFont( pVsh, *pOut );
+        }
+        else
+        {
+            Font aOldFont = pOut->GetFont();
+            aFont.SetFntChg( sal_True );
+            aFont.ChgPhysFnt( pVsh, *pOut );
+            nHeightOfLastLine = aFont.GetHeight( pVsh, *pOut );
+            pLastFont->Unlock();
+            pLastFont = NULL;
+            pOut->SetFont( aOldFont );
+        }
+    }
+    else
+    {
+        // new determination of last line height - take actually height of last line
+        bool bCalcHeightOfLastLine = true;
+        if ( !HasPara() )
+        {
+            if ( IsUndersized() )
+            {
+                nHeightOfLastLine = 0L;
+                bCalcHeightOfLastLine = false;
+            }
+            else if ( IsEmpty() )
+            {
+                nHeightOfLastLine = EmptyHeight();
+                bCalcHeightOfLastLine = false;
+            }
+            else
+            {
+                const_cast<SwTxtFrm*>(this)->GetFormatted();
+            }
+        }
+
+        if ( bCalcHeightOfLastLine )
+        {
+
+            const SwLineLayout* pLineLayout = GetPara();
+            while ( pLineLayout && pLineLayout->GetNext() )
+            {
+                // iteration to last line
+                pLineLayout = pLineLayout->GetNext();
+            }
+            if ( pLineLayout )
+            {
+                SwTwips nAscent, nDescent, nDummy1, nDummy2;
+                pLineLayout->MaxAscentDescent( nAscent, nDescent, nDummy1, nDummy2 );
+                nHeightOfLastLine = nAscent + nDescent;
+            }
+        }
+    }
+
+    return nHeightOfLastLine;
+}
+
 /*************************************************************************
  *                      SwTxtFrm::GetLineSpace()
  *************************************************************************/
-
-KSHORT SwTxtFrm::GetLineSpace() const
+// OD 07.01.2004 #i11859# - change return data type
+//      add default parameter <_bNoPropLineSpacing> to control, if the
+//      value of a proportional line spacing is returned or not
+// OD 07.01.2004 - trying to describe purpose of method:
+//      Method returns the value of the inter line spacing for a text frame.
+//      Such a value exists for proportional line spacings ("1,5 Lines",
+//      "Double", "Proportional" and for leading line spacing ("Leading").
+//      By parameter <_bNoPropLineSpace> (default value false) it can be
+//      controlled, if the value of a proportional line spacing is returned.
+long SwTxtFrm::GetLineSpace( const bool _bNoPropLineSpace ) const
 {
-    KSHORT nRet = 0;
-    long nTmp;
+    long nRet = 0;
 
     const SwAttrSet* pSet = GetAttrSet();
     const SvxLineSpacingItem &rSpace = pSet->GetLineSpacing();
@@ -2117,55 +2206,31 @@ KSHORT SwTxtFrm::GetLineSpace() const
     {
         case SVX_INTER_LINE_SPACE_PROP:
         {
-            ViewShell* pVsh = (ViewShell*)GetShell();
-            if ( !pVsh )
+            // OD 07.01.2004 #i11859#
+            if ( _bNoPropLineSpace )
+            {
                 break;
-            OutputDevice* pOut = pVsh->GetOut();
-            if( !pVsh->GetDoc()->IsBrowseMode() ||
-                pVsh->GetViewOptions()->IsPrtFormat() )
-            {
-                pOut = &GetTxtNode()->GetDoc()->GetRefDev();
             }
 
-            ASSERT( pOut, "SwTxtFrm::GetLineSpace() without pOut" )
+            // OD 08.01.2004 #i11859# - use method <_GetHeightOfLastLineForPropLineSpacing()>
+            nRet = GetHeightOfLastLineForPropLineSpacing();
 
-            SwFont aFont( pSet, GetTxtNode()->GetDoc() );
-            // Wir muessen dafuer sorgen, dass am OutputDevice der Font
-            // korrekt restauriert wird, sonst droht ein Last!=Owner.
-            if ( pLastFont )
-            {
-                SwFntObj *pOldFont = pLastFont;
-                pLastFont = NULL;
-                aFont.SetFntChg( sal_True );
-                aFont.ChgPhysFnt( pVsh, *pOut );
-                nRet = aFont.GetHeight( pVsh, *pOut );
-                pLastFont->Unlock();
-                pLastFont = pOldFont;
-                pLastFont->SetDevFont( pVsh, *pOut );
-            }
-            else
-            {
-                Font aOldFont = pOut->GetFont();
-                aFont.SetFntChg( sal_True );
-                aFont.ChgPhysFnt( pVsh, *pOut );
-                nRet = aFont.GetHeight( pVsh, *pOut );
-                pLastFont->Unlock();
-                pLastFont = NULL;
-                pOut->SetFont( aOldFont );
-            }
-            nTmp = nRet;
+            long nTmp = nRet;
             nTmp *= rSpace.GetPropLineSpace();
             nTmp /= 100;
             nTmp -= nRet;
             if ( nTmp > 0 )
-                nRet = (KSHORT)nTmp;
+                nRet = nTmp;
             else
                 nRet = 0;
         }
             break;
         case SVX_INTER_LINE_SPACE_FIX:
+        {
             if ( rSpace.GetInterLineSpace() > 0 )
-                nRet = (KSHORT)rSpace.GetInterLineSpace();
+                nRet = rSpace.GetInterLineSpace();
+        }
+            break;
     }
     return nRet;
 }
