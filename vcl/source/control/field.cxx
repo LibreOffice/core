@@ -2,9 +2,9 @@
  *
  *  $RCSfile: field.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-29 10:35:50 $
+ *  last change: $Author: mt $ $Date: 2001-06-29 10:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,14 +78,16 @@
 #include <event.hxx>
 #include <svapp.hxx>
 #include <svdata.hxx>
-
-
-
-// INTERIM-Checkin
 #include <unohelp.hxx>
-#include <unotools/localedatawrapper.hxx>
 
 #pragma hdrstop
+
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+
+using namespace ::com::sun::star;
+
 
 // -----------------------------------------------------------------------
 
@@ -109,8 +111,8 @@ static long ImplPower10( USHORT n )
 // -----------------------------------------------------------------------
 
 static BOOL ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
-                                        BOOL bStrictFormat,
-                                        const International& rInter )
+                                        BOOL bStrictFormat, BOOL bThousandSep,
+                                        const LocaleDataWrapper& rLocaleDataWrappper )
 {
     if ( !bStrictFormat )
         return FALSE;
@@ -122,8 +124,8 @@ static BOOL ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
         if ( (nGroup == KEYGROUP_FKEYS) || (nGroup == KEYGROUP_CURSOR) ||
              (nGroup == KEYGROUP_MISC) ||
              ((cChar >= '0') && (cChar <= '9')) ||
-             (rInter.IsNumThousandSep() && (cChar == rInter.GetNumThousandSep())) ||
-             (cChar == rInter.GetNumDecimalSep()) ||
+             (cChar == rLocaleDataWrappper.getNumDecimalSep() ) ||
+             (bThousandSep && (cChar == rLocaleDataWrappper.getNumThousandSep())) ||
              (cChar == '-') )
             return FALSE;
         else
@@ -134,7 +136,7 @@ static BOOL ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
 // -----------------------------------------------------------------------
 
 static BOOL ImplNumericGetValue( const XubString& rStr, double& rValue,
-                                 USHORT nDecDigits, const International& rInter,
+                                 USHORT nDecDigits, const LocaleDataWrapper& rLocaleDataWrappper,
                                  BOOL bCurrency = FALSE )
 {
     XubString   aStr = rStr;
@@ -152,7 +154,7 @@ static BOOL ImplNumericGetValue( const XubString& rStr, double& rValue,
     aStr.EraseLeadingAndTrailingChars( ' ' );
 
     // Position des Dezimalpunktes suchen
-    nDecPos = aStr.Search( rInter.GetNumDecimalSep() );
+    nDecPos = aStr.Search( rLocaleDataWrappper.getNumDecimalSep() );
     if ( nDecPos != STRING_NOTFOUND )
     {
         aStr1 = aStr.Copy( 0, nDecPos );
@@ -181,7 +183,7 @@ static BOOL ImplNumericGetValue( const XubString& rStr, double& rValue,
         }
         if ( !bNegative && bCurrency && aStr.Len() )
         {
-            USHORT nFormat = rInter.GetCurrNegativeFormat();
+            USHORT nFormat = rLocaleDataWrappper.getCurrNegativeFormat();
             if ( (nFormat == 3) || (nFormat == 6)  ||
                  (nFormat == 7) || (nFormat == 10) )
             {
@@ -262,18 +264,45 @@ static BOOL ImplNumericGetValue( const XubString& rStr, double& rValue,
 FormatterBase::FormatterBase( Edit* pField )
 {
     mpField                     = pField;
-// INTERIM-Checkin  mpInternational             = NULL;
+    mpLocaleDataWrapper         = NULL;
     mbReformat                  = FALSE;
     mbStrictFormat              = FALSE;
     mbEmptyFieldValue           = FALSE;
     mbEmptyFieldValueEnabled    = FALSE;
+    mbDefaultLocale             = TRUE;
 }
 
 // -----------------------------------------------------------------------
 
 FormatterBase::~FormatterBase()
 {
-// INTERIM-Checkin  delete mpInternational;
+    delete mpLocaleDataWrapper;
+}
+
+
+// Here again, only for the next update!
+void FormatterBase::SetInternational( const International& )
+{
+}
+
+const International& FormatterBase::GetInternational() const
+{
+    static International* pInt = NULL;
+    if ( !pInt )
+        pInt = new International;
+    return *pInt;
+}
+
+
+// -----------------------------------------------------------------------
+
+LocaleDataWrapper& FormatterBase::GetLocaleDataWrapper() const
+{
+    if ( !mpLocaleDataWrapper )
+    {
+        ((FormatterBase*)this)->mpLocaleDataWrapper = new LocaleDataWrapper( vcl::unohelper::GetMultiServiceFactory(), GetLocale() );
+    }
+    return *mpLocaleDataWrapper;
 }
 
 // -----------------------------------------------------------------------
@@ -303,26 +332,26 @@ void FormatterBase::SetStrictFormat( BOOL bStrict )
 
 // -----------------------------------------------------------------------
 
-void FormatterBase::SetInternational( const International& rInternational )
+void FormatterBase::SetLocale( const lang::Locale& rLocale )
 {
-// INTERIM-Checkin  delete mpInternational;
-// INTERIM-Checkin  mpInternational = new International( rInternational );
-// INTERIM-Checkin  ReformatAll();
+    GetLocaleDataWrapper().setLocale( rLocale );
+    mbDefaultLocale = FALSE;
+    ReformatAll();
 }
 
 // -----------------------------------------------------------------------
 
-const International& FormatterBase::GetInternational() const
+const lang::Locale& FormatterBase::GetLocale() const
 {
-// INTERIM-Checkin  if ( !mpInternational )
+    if ( !mpLocaleDataWrapper || mbDefaultLocale )
     {
         if ( mpField )
-            return mpField->GetSettings().GetInternational();
+            return mpField->GetSettings().GetLocale();
         else
-            return Application::GetSettings().GetInternational();
+            return Application::GetSettings().GetLocale();
     }
 
-// INTERIM-Checkin  return *mpInternational;
+    return mpLocaleDataWrapper->getLocale();
 }
 
 // -----------------------------------------------------------------------
@@ -405,7 +434,7 @@ BOOL FormatterBase::IsEmptyFieldValue() const
 BOOL NumericFormatter::ImplNumericReformat( const XubString& rStr, double& rValue,
                                             XubString& rOutStr )
 {
-    if ( !ImplNumericGetValue( rStr, rValue, GetDecimalDigits(), GetInternational() ) )
+    if ( !ImplNumericGetValue( rStr, rValue, GetDecimalDigits(), GetLocaleDataWrapper() ) )
         return TRUE;
     else
     {
@@ -441,7 +470,9 @@ void NumericFormatter::ImplInit()
     mnMin               = 0;
     mnMax               = 0x7FFFFFFF;
     mnCorrectedValue    = 0;
+    mnDecimalDigits     = 2;
     mnType              = FORMAT_NUMERIC;
+    mbThousandSep       = TRUE;
 
     // Fuer Felder...
     mnSpinSize          = 1;
@@ -478,7 +509,8 @@ void NumericFormatter::ImplLoadRes( const ResId& rResId )
 
     if ( NUMERICFORMATTER_I12 & nMask )
     {
-        SetInternational( International( ResId( (RSHEADER_TYPE *)pMgr->GetClass() ) ) );
+        DBG_ERROR( "MT: Removed class International - missing ResCTOR!" );
+        International( ResId( (RSHEADER_TYPE *)pMgr->GetClass() ) );
         pMgr->Increment( pMgr->GetObjSize( (RSHEADER_TYPE *)pMgr->GetClass() ) );
     }
     if ( NUMERICFORMATTER_DECIMALDIGITS & nMask )
@@ -521,18 +553,25 @@ void NumericFormatter::SetMax( long nNewMax )
 
 // -----------------------------------------------------------------------
 
+void NumericFormatter::SetUseThousandSep( BOOL b )
+{
+    mbThousandSep = b;
+    ReformatAll();
+}
+
+// -----------------------------------------------------------------------
+
 void NumericFormatter::SetDecimalDigits( USHORT nDigits )
 {
-    International aInter( GetInternational() );
-    aInter.SetCurrDigits( nDigits );
-    SetInternational( aInter );
+    mnDecimalDigits = nDigits;
+    ReformatAll();
 }
 
 // -----------------------------------------------------------------------
 
 USHORT NumericFormatter::GetDecimalDigits() const
 {
-    return GetInternational().GetCurrDigits();
+    return mnDecimalDigits;
 }
 
 // -----------------------------------------------------------------------
@@ -548,7 +587,7 @@ void NumericFormatter::SetValue( long nNewValue )
 
 XubString NumericFormatter::CreateFieldText( long nValue ) const
 {
-    return GetInternational().GetNum( nValue, GetDecimalDigits() );
+    return GetLocaleDataWrapper().getNum( nValue, GetDecimalDigits(), IsUseThousandSep() );
 }
 
 // -----------------------------------------------------------------------
@@ -582,7 +621,7 @@ long NumericFormatter::GetValue() const
     double nTempValue;
 
     if ( ImplNumericGetValue( GetField()->GetText(), nTempValue,
-                              GetDecimalDigits(), GetInternational() ) )
+                              GetDecimalDigits(), GetLocaleDataWrapper() ) )
     {
         if ( nTempValue > mnMax )
             nTempValue = mnMax;
@@ -797,7 +836,7 @@ long NumericField::PreNotify( NotifyEvent& rNEvt )
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) &&
          !rNEvt.GetKeyEvent()->GetKeyCode().IsControlMod() )
     {
-        if ( ImplNumericProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), GetInternational() ) )
+        if ( ImplNumericProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), GetLocaleDataWrapper() ) )
             return 1;
     }
 
@@ -825,9 +864,12 @@ void NumericField::DataChanged( const DataChangedEvent& rDCEvt )
 {
     SpinField::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_INTERNATIONAL) )
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
+    {
+        if ( IsDefaultLocale() )
+            GetLocaleDataWrapper().setLocale( GetSettings().GetLocale() );
         ReformatAll();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -909,7 +951,7 @@ long NumericBox::PreNotify( NotifyEvent& rNEvt )
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) &&
          !rNEvt.GetKeyEvent()->GetKeyCode().IsControlMod() )
     {
-        if ( ImplNumericProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), GetInternational() ) )
+        if ( ImplNumericProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), GetLocaleDataWrapper() ) )
             return 1;
     }
 
@@ -937,9 +979,12 @@ void NumericBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
     ComboBox::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_INTERNATIONAL) )
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
+    {
+        if ( IsDefaultLocale() )
+            GetLocaleDataWrapper().setLocale( GetSettings().GetLocale() );
         ReformatAll();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -987,8 +1032,7 @@ void NumericBox::RemoveValue( long nValue )
 long NumericBox::GetValue( USHORT nPos ) const
 {
     double nValue = 0;
-    ImplNumericGetValue( ComboBox::GetEntry( nPos ), nValue,
-                        GetDecimalDigits(), GetInternational() );
+    ImplNumericGetValue( ComboBox::GetEntry( nPos ), nValue, GetDecimalDigits(), GetLocaleDataWrapper() );
     return (long)nValue;
 }
 
@@ -1010,11 +1054,11 @@ long NumericBox::GetValue() const
 // -----------------------------------------------------------------------
 
 static BOOL ImplMetricProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
-                                       BOOL, const International& rInter )
+                                       BOOL, BOOL bUseThousandSep, const LocaleDataWrapper& rWrapper )
 {
     // Es gibt hier kein sinnvolles StrictFormat, also alle
     // Zeichen erlauben
-    return ImplNumericProcessKeyInput( pEdit, rKEvt, FALSE, rInter );
+    return ImplNumericProcessKeyInput( pEdit, rKEvt, FALSE, bUseThousandSep, rWrapper );
 }
 
 // -----------------------------------------------------------------------
@@ -1340,11 +1384,10 @@ double MetricField::ConvertDoubleValue( double nValue, USHORT nDigits,
 // -----------------------------------------------------------------------
 
 static BOOL ImplMetricGetValue( const XubString& rStr, double& rValue, long nBaseValue,
-                                USHORT nDecDigits,
-                                const International& rInter, FieldUnit eUnit )
+                                USHORT nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper, FieldUnit eUnit )
 {
     // Zahlenwert holen
-    if ( !ImplNumericGetValue( rStr, rValue, nDecDigits, rInter ) )
+    if ( !ImplNumericGetValue( rStr, rValue, nDecDigits, rLocaleDataWrapper ) )
         return FALSE;
 
     // Einheit rausfinden
@@ -1360,7 +1403,7 @@ static BOOL ImplMetricGetValue( const XubString& rStr, double& rValue, long nBas
 
 BOOL MetricFormatter::ImplMetricReformat( const XubString& rStr, double& rValue, XubString& rOutStr )
 {
-    if ( !ImplMetricGetValue( rStr, rValue, mnBaseValue, GetDecimalDigits(), GetInternational(), meUnit ) )
+    if ( !ImplMetricGetValue( rStr, rValue, mnBaseValue, GetDecimalDigits(), GetLocaleDataWrapper(), meUnit ) )
         return TRUE;
     else
     {
@@ -1521,8 +1564,7 @@ long MetricFormatter::GetValue( FieldUnit eOutUnit ) const
         return 0;
 
     double nTempValue;
-    if ( !ImplMetricGetValue( GetField()->GetText(), nTempValue, mnBaseValue, GetDecimalDigits(),
-                              GetInternational(), meUnit ) )
+    if ( !ImplMetricGetValue( GetField()->GetText(), nTempValue, mnBaseValue, GetDecimalDigits(), GetLocaleDataWrapper(), meUnit ) )
         nTempValue = mnLastValue;
 
     if ( nTempValue > mnMax )
@@ -1738,7 +1780,7 @@ long MetricField::PreNotify( NotifyEvent& rNEvt )
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) &&
          !rNEvt.GetKeyEvent()->GetKeyCode().IsControlMod() )
     {
-        if ( ImplMetricProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), GetInternational() ) )
+        if ( ImplMetricProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), GetLocaleDataWrapper() ) )
             return 1;
     }
 
@@ -1766,9 +1808,12 @@ void MetricField::DataChanged( const DataChangedEvent& rDCEvt )
 {
     SpinField::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_INTERNATIONAL) )
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
+    {
+        if ( IsDefaultLocale() )
+            GetLocaleDataWrapper().setLocale( GetSettings().GetLocale() );
         ReformatAll();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1857,7 +1902,7 @@ long MetricBox::PreNotify( NotifyEvent& rNEvt )
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) &&
          !rNEvt.GetKeyEvent()->GetKeyCode().IsControlMod() )
     {
-        if ( ImplMetricProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), GetInternational() ) )
+        if ( ImplMetricProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), GetLocaleDataWrapper() ) )
             return 1;
     }
 
@@ -1885,9 +1930,12 @@ void MetricBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
     ComboBox::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_INTERNATIONAL) )
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
+    {
+        if ( IsDefaultLocale() )
+            GetLocaleDataWrapper().setLocale( GetSettings().GetLocale() );
         ReformatAll();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1949,7 +1997,7 @@ long MetricBox::GetValue( USHORT nPos, FieldUnit eOutUnit ) const
 {
     double nValue = 0;
     ImplMetricGetValue( ComboBox::GetEntry( nPos ), nValue, mnBaseValue,
-                        GetDecimalDigits(), GetInternational(), meUnit );
+                        GetDecimalDigits(), GetLocaleDataWrapper(), meUnit );
 
     // Umrechnen auf eingestellte Einheiten
     long nRetValue = MetricField::ConvertValue( (long)nValue, mnBaseValue, GetDecimalDigits(),
@@ -1987,20 +2035,20 @@ long MetricBox::GetValue() const
 // -----------------------------------------------------------------------
 
 static BOOL ImplCurrencyProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
-                                         BOOL, const International& rInter )
+                                         BOOL, BOOL bUseThousandSep, const LocaleDataWrapper& rWrapper )
 {
     // Es gibt hier kein sinnvolles StrictFormat, also alle
     // Zeichen erlauben
-    return ImplNumericProcessKeyInput( pEdit, rKEvt, FALSE, rInter );
+    return ImplNumericProcessKeyInput( pEdit, rKEvt, FALSE, bUseThousandSep, rWrapper );
 }
 
 // -----------------------------------------------------------------------
 
 inline BOOL ImplCurrencyGetValue( const XubString& rStr, double& rValue,
-                                  USHORT nDecDigits, const International& rInter )
+                                  USHORT nDecDigits, const LocaleDataWrapper& rWrapper )
 {
     // Zahlenwert holen
-    return ImplNumericGetValue( rStr, rValue, nDecDigits, rInter, TRUE );
+    return ImplNumericGetValue( rStr, rValue, nDecDigits, rWrapper, TRUE );
 }
 
 // -----------------------------------------------------------------------
@@ -2009,7 +2057,7 @@ BOOL CurrencyFormatter::ImplCurrencyReformat( const XubString& rStr,
                                               XubString& rOutStr )
 {
     double nValue;
-    if ( !ImplNumericGetValue( rStr, nValue, GetDecimalDigits(), GetInternational(), TRUE ) )
+    if ( !ImplNumericGetValue( rStr, nValue, GetDecimalDigits(), GetLocaleDataWrapper(), TRUE ) )
         return TRUE;
     else
     {
@@ -2031,7 +2079,7 @@ BOOL CurrencyFormatter::ImplCurrencyReformat( const XubString& rStr,
                 mnCorrectedValue = 0;
         }
 
-        rOutStr = GetInternational().GetCurr( (long)nTempVal );
+        rOutStr = CreateFieldText( (long)nTempVal );
         return TRUE;
     }
 }
@@ -2058,6 +2106,21 @@ CurrencyFormatter::~CurrencyFormatter()
 
 // -----------------------------------------------------------------------
 
+void CurrencyFormatter::SetCurrencySymbol( const String& rStr )
+{
+    maCurrencySymbol= rStr;
+    ReformatAll();
+}
+
+// -----------------------------------------------------------------------
+
+String CurrencyFormatter::GetCurrencySymbol() const
+{
+    return maCurrencySymbol.Len() ? maCurrencySymbol : GetLocaleDataWrapper().getCurrSymbol();
+}
+
+// -----------------------------------------------------------------------
+
 void CurrencyFormatter::SetValue( long nNewValue )
 {
     SetUserValue( nNewValue );
@@ -2069,7 +2132,7 @@ void CurrencyFormatter::SetValue( long nNewValue )
 
 XubString CurrencyFormatter::CreateFieldText( long nValue ) const
 {
-    return GetInternational().GetCurr( nValue, GetDecimalDigits() );
+    return GetLocaleDataWrapper().getCurr( nValue, GetDecimalDigits(), GetCurrencySymbol(), IsUseThousandSep() );
 }
 
 // -----------------------------------------------------------------------
@@ -2080,8 +2143,7 @@ long CurrencyFormatter::GetValue() const
         return 0;
 
     double nTempValue;
-    if ( ImplCurrencyGetValue( GetField()->GetText(), nTempValue, GetDecimalDigits(),
-                               GetInternational() ) )
+    if ( ImplCurrencyGetValue( GetField()->GetText(), nTempValue, GetDecimalDigits(), GetLocaleDataWrapper() ) )
     {
         if ( nTempValue > mnMax )
             nTempValue = mnMax;
@@ -2109,7 +2171,7 @@ void CurrencyFormatter::Reformat()
     {
         ImplSetText( aStr  );
         double nTemp = mnLastValue;
-        ImplCurrencyGetValue( aStr, nTemp, GetDecimalDigits(), GetInternational() );
+        ImplCurrencyGetValue( aStr, nTemp, GetDecimalDigits(), GetLocaleDataWrapper() );
         mnLastValue = (long)nTemp;
     }
     else
@@ -2174,7 +2236,7 @@ long CurrencyField::PreNotify( NotifyEvent& rNEvt )
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) &&
          !rNEvt.GetKeyEvent()->GetKeyCode().IsControlMod() )
     {
-        if ( ImplCurrencyProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), GetInternational() ) )
+        if ( ImplCurrencyProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), GetLocaleDataWrapper() ) )
             return 1;
     }
 
@@ -2202,9 +2264,12 @@ void CurrencyField::DataChanged( const DataChangedEvent& rDCEvt )
 {
     SpinField::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_INTERNATIONAL) )
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
+    {
+        if ( IsDefaultLocale() )
+            GetLocaleDataWrapper().setLocale( GetSettings().GetLocale() );
         ReformatAll();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -2286,7 +2351,7 @@ long CurrencyBox::PreNotify( NotifyEvent& rNEvt )
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) &&
          !rNEvt.GetKeyEvent()->GetKeyCode().IsControlMod() )
     {
-        if ( ImplCurrencyProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), GetInternational() ) )
+        if ( ImplCurrencyProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), GetLocaleDataWrapper() ) )
             return 1;
     }
 
@@ -2314,9 +2379,12 @@ void CurrencyBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
     ComboBox::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_INTERNATIONAL) )
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
+    {
+        if ( IsDefaultLocale() )
+            GetLocaleDataWrapper().setLocale( GetSettings().GetLocale() );
         ReformatAll();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -2363,8 +2431,7 @@ void CurrencyBox::RemoveValue( long nValue )
 long CurrencyBox::GetValue( USHORT nPos ) const
 {
     double nValue = 0;
-    ImplCurrencyGetValue( ComboBox::GetEntry( nPos ), nValue,
-                          GetDecimalDigits(), GetInternational() );
+    ImplCurrencyGetValue( ComboBox::GetEntry( nPos ), nValue, GetDecimalDigits(), GetLocaleDataWrapper() );
     return (long)nValue;
 }
 
@@ -2382,32 +2449,3 @@ long CurrencyBox::GetValue() const
     // Implementation not inline, because it is a virtual Function
     return CurrencyFormatter::GetValue();
 }
-
-
-// MT 06/30/2001
-// INTERIM-Checkin => use new header, but old cxx, in case there are problems
-// without the International class, and I'm on vacation the next 2 weeks.
-LocaleDataWrapper& FormatterBase::GetLocaleDataWrapper() const
-{
-    static LocaleDataWrapper* pWrapper = NULL;
-    if ( !pWrapper )
-        pWrapper = new LocaleDataWrapper( vcl::unohelper::GetMultiServiceFactory(), GetLocale() );
-    return *pWrapper;
-}
-const ::com::sun::star::lang::Locale& FormatterBase::GetLocale() const
-{
-        if ( mpField )
-            return mpField->GetSettings().GetLocale();
-        else
-            return Application::GetSettings().GetLocale();
-}
-void FormatterBase::SetLocale( const ::com::sun::star::lang::Locale& rLocale ){;}
-void NumericFormatter::SetUseThousandSep( BOOL b ){;}
-void CurrencyFormatter::SetCurrencySymbol( const String& rStr ){;}
-String CurrencyFormatter::GetCurrencySymbol() const{ return String();}
-void DateFormatter::SetDateFormat( DateFormat eFormat ){;}
-DateFormat DateFormatter::GetDateFormat() const{return DateFormat();}
-void DateFormatter::SetShowDateCentury( BOOL bShowCentury ){;}
-void TimeFormatter::SetTimeFormat( TimeFormat eNewFormat ){;}
-TimeFormat TimeFormatter::GetTimeFormat() const{return TimeFormat();}
-

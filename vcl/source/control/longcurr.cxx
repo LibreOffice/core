@@ -2,9 +2,9 @@
  *
  *  $RCSfile: longcurr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-29 10:35:50 $
+ *  last change: $Author: mt $ $Date: 2001-06-29 10:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,11 @@
 
 #pragma hdrstop
 
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+
+
 // =======================================================================
 
 #define FORMAT_LONGCURRENCY      4
@@ -102,9 +107,57 @@ static BigInt ImplPower10( USHORT n )
 
 // -----------------------------------------------------------------------
 
+static XubString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const BigInt &rNumber, USHORT nDigits, const String& rCurrSymbol, BOOL bShowThousandSep )
+{
+    DBG_ASSERT( nDigits < 10, "LongCurrency duerfen nur maximal 9 Nachkommastellen haben" );
+
+    if ( rNumber.IsZero() || (long)rNumber )
+        return rLocaleDataWrapper.getCurr( (long)rNumber, nDigits, rCurrSymbol, bShowThousandSep );
+
+    BigInt aTmp( ImplPower10( nDigits ) );
+    BigInt aInteger( rNumber );
+    aInteger.Abs();
+    aInteger  /= aTmp;
+    BigInt aFraction( rNumber );
+    aFraction.Abs();
+    aFraction %= aTmp;
+    if ( !aInteger.IsZero() )
+    {
+        aFraction += aTmp;
+        aTmp       = 1000000000L;
+    }
+    if ( rNumber.IsNeg() )
+        aFraction *= -1;
+
+    XubString aTemplate = rLocaleDataWrapper.getCurr( (long)aFraction, nDigits, rCurrSymbol, bShowThousandSep );
+    while( !aInteger.IsZero() )
+    {
+        aFraction  = aInteger;
+        aFraction %= aTmp;
+        aInteger  /= aTmp;
+        if( !aInteger.IsZero() )
+            aFraction += aTmp;
+
+        XubString aFractionStr = rLocaleDataWrapper.getNum( (long)aFraction, 0 );
+
+        xub_StrLen nSPos = aTemplate.Search( '1' );
+        if ( aFractionStr.Len() == 1 )
+            aTemplate.SetChar( nSPos, aFractionStr.GetChar( 0 ) );
+        else
+        {
+            aTemplate.Erase( nSPos, 1 );
+            aTemplate.Insert( aFractionStr, nSPos );
+        }
+    }
+
+    return aTemplate;
+}
+
+// -----------------------------------------------------------------------
+
 static BOOL ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
-                                        BOOL bStrictFormat,
-                                        const International& rInter )
+                                        BOOL bStrictFormat, BOOL bThousandSep,
+                                        const LocaleDataWrapper& rLocaleDataWrapper )
 {
     if ( !bStrictFormat )
         return FALSE;
@@ -116,8 +169,8 @@ static BOOL ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
         if ( (nGroup == KEYGROUP_FKEYS) || (nGroup == KEYGROUP_CURSOR) ||
              (nGroup == KEYGROUP_MISC) ||
              ((cChar >= '0') && (cChar <= '9')) ||
-             (rInter.IsNumThousandSep() && (cChar == rInter.GetNumThousandSep())) ||
-             (cChar == rInter.GetNumDecimalSep()) ||
+             (bThousandSep && (cChar == rLocaleDataWrapper.getNumThousandSep())) ||
+             (cChar == rLocaleDataWrapper.getNumDecimalSep() ) ||
              (cChar == '-') )
             return FALSE;
         else
@@ -128,7 +181,7 @@ static BOOL ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
 // -----------------------------------------------------------------------
 
 static BOOL ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
-                                 USHORT nDecDigits, const International& rInter,
+                                 USHORT nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper,
                                  BOOL bCurrency = FALSE )
 {
     XubString   aStr = rStr;
@@ -146,7 +199,7 @@ static BOOL ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
     aStr.EraseLeadingAndTrailingChars( ' ' );
 
     // Position des Dezimalpunktes suchen
-    nDecPos = aStr.Search( rInter.GetNumDecimalSep() );
+    nDecPos = aStr.Search( rLocaleDataWrapper.getNumDecimalSep() );
 
     if ( nDecPos != STRING_NOTFOUND )
     {
@@ -176,7 +229,7 @@ static BOOL ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
         }
         if ( !bNegative && bCurrency && aStr.Len() )
         {
-            USHORT nFormat = rInter.GetCurrNegativeFormat();
+            USHORT nFormat = rLocaleDataWrapper.getCurrNegativeFormat();
             if ( (nFormat == 3) || (nFormat == 6)  ||
                  (nFormat == 7) || (nFormat == 10) )
             {
@@ -255,40 +308,31 @@ static BOOL ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
 // =======================================================================
 
 static BOOL ImplLongCurrencyProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
-                                             BOOL, const International& rInter )
+                                             BOOL, BOOL bUseThousandSep, const LocaleDataWrapper& rLocaleDataWrapper )
 {
     // Es gibt hier kein sinnvolles StrictFormat, also alle
     // Zeichen erlauben
-    return ImplNumericProcessKeyInput( pEdit, rKEvt, FALSE, rInter );
-}
-
-// -----------------------------------------------------------------------
-
-inline XubString ImplLongCurrencySetValue( BigInt nValue, USHORT nDecDigits,
-                                           const International& rInter )
-{
-    // Umwandeln in einen Waehrungsstring
-    return rInter.GetCurr( nValue, nDecDigits ); // ???
+    return ImplNumericProcessKeyInput( pEdit, rKEvt, FALSE, bUseThousandSep, rLocaleDataWrapper  );
 }
 
 // -----------------------------------------------------------------------
 
 inline BOOL ImplLongCurrencyGetValue( const XubString& rStr, BigInt& rValue,
-                                      USHORT nDecDigits, const International& rInter )
+                                      USHORT nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper )
 {
     // Zahlenwert holen
-    return ImplNumericGetValue( rStr, rValue, nDecDigits, rInter, TRUE );
+    return ImplNumericGetValue( rStr, rValue, nDecDigits, rLocaleDataWrapper, TRUE );
 }
 
 // -----------------------------------------------------------------------
 
 BOOL ImplLongCurrencyReformat( const XubString& rStr, BigInt nMin, BigInt nMax,
                                USHORT nDecDigits,
-                               const International& rInter, String& rOutStr,
+                               const LocaleDataWrapper& rLocaleDataWrapper, String& rOutStr,
                                LongCurrencyFormatter& rFormatter )
 {
     BigInt nValue;
-    if ( !ImplNumericGetValue( rStr, nValue, nDecDigits, rInter, TRUE ) )
+    if ( !ImplNumericGetValue( rStr, nValue, nDecDigits, rLocaleDataWrapper, TRUE ) )
         return TRUE;
     else
     {
@@ -300,22 +344,23 @@ BOOL ImplLongCurrencyReformat( const XubString& rStr, BigInt nMin, BigInt nMax,
 
         if ( rFormatter.GetErrorHdl().IsSet() && (nValue != nTempVal) )
         {
-// INTERIM-Checkin          rFormatter.mnCorrectedValue = nTempVal;
+            rFormatter.mnCorrectedValue = nTempVal;
             if ( !rFormatter.GetErrorHdl().Call( &rFormatter ) )
             {
-// INTERIM-Checkin              rFormatter.mnCorrectedValue = 0;
+                rFormatter.mnCorrectedValue = 0;
                 return FALSE;
             }
             else
             {
-// INTERIM-Checkin              rFormatter.mnCorrectedValue = 0;
+                rFormatter.mnCorrectedValue = 0;
             }
         }
 
-        rOutStr = rInter.GetCurr( nTempVal, nDecDigits );
+        rOutStr = ImplGetCurr( rLocaleDataWrapper, nTempVal, nDecDigits, rFormatter.GetCurrencySymbol(), rFormatter.IsUseThousandSep() );
         return TRUE;
     }
 }
+
 
 // =======================================================================
 
@@ -327,7 +372,9 @@ void LongCurrencyFormatter::ImpInit()
     mnMax               = 0x7FFFFFFF;
     mnMax              *= 0x7FFFFFFF;
     mnCorrectedValue    = 0;
+    mnDecimalDigits     = 0;
     mnType              = FORMAT_LONGCURRENCY;
+    mbThousandSep       = TRUE;
     SetDecimalDigits( 0 );
 }
 
@@ -358,7 +405,8 @@ void LongCurrencyFormatter::ImplLoadRes( const ResId& rResId )
 
     if ( NUMERICFORMATTER_I12 & nMask )
     {
-        SetInternational( International( ResId( (RSHEADER_TYPE *)pMgr->GetClass() ) ) );
+        DBG_ERROR( "MT: Removed class International - missing ResCTOR!" );
+        International( ResId( (RSHEADER_TYPE *)pMgr->GetClass() ) );
         pMgr->Increment( pMgr->GetObjSize( (RSHEADER_TYPE *)pMgr->GetClass() ) );
     }
     if ( NUMERICFORMATTER_DECIMALDIGITS & nMask )
@@ -383,6 +431,21 @@ LongCurrencyFormatter::~LongCurrencyFormatter()
 
 // -----------------------------------------------------------------------
 
+void LongCurrencyFormatter::SetCurrencySymbol( const String& rStr )
+{
+    maCurrencySymbol= rStr;
+    ReformatAll();
+}
+
+// -----------------------------------------------------------------------
+
+String LongCurrencyFormatter::GetCurrencySymbol() const
+{
+    return maCurrencySymbol.Len() ? maCurrencySymbol : GetLocaleDataWrapper().getCurrSymbol();
+}
+
+// -----------------------------------------------------------------------
+
 void LongCurrencyFormatter::SetValue( BigInt nNewValue )
 {
     SetUserValue( nNewValue );
@@ -403,7 +466,7 @@ void LongCurrencyFormatter::SetUserValue( BigInt nNewValue )
     if ( !GetField() )
         return;
 
-    XubString aStr = ImplLongCurrencySetValue( nNewValue, GetDecimalDigits(), GetInternational() );
+    XubString aStr = ImplGetCurr( GetLocaleDataWrapper(), nNewValue, GetDecimalDigits(), GetCurrencySymbol(), IsUseThousandSep() );
     if ( GetField()->HasFocus() )
     {
         Selection aSelection = GetField()->GetSelection();
@@ -423,8 +486,7 @@ BigInt LongCurrencyFormatter::GetValue() const
         return 0;
 
     BigInt nTempValue;
-    if ( ImplLongCurrencyGetValue( GetField()->GetText(), nTempValue, GetDecimalDigits(),
-                                   GetInternational() ) )
+    if ( ImplLongCurrencyGetValue( GetField()->GetText(), nTempValue, GetDecimalDigits(), GetLocaleDataWrapper() ) )
     {
         if ( nTempValue > mnMax )
             nTempValue = mnMax;
@@ -448,7 +510,7 @@ void LongCurrencyFormatter::Reformat()
 
     XubString aStr;
     BOOL bOK = ImplLongCurrencyReformat( GetField()->GetText(), mnMin, mnMax,
-                                         GetDecimalDigits(), GetInternational(), aStr, *this );
+                                         GetDecimalDigits(), GetLocaleDataWrapper(), aStr, *this );
     if ( !bOK )
         return;
 
@@ -456,7 +518,7 @@ void LongCurrencyFormatter::Reformat()
     {
         GetField()->SetText( aStr );
         MarkToBeReformatted( FALSE );
-        ImplLongCurrencyGetValue( aStr, mnLastValue, GetDecimalDigits(), GetInternational() );
+        ImplLongCurrencyGetValue( aStr, mnLastValue, GetDecimalDigits(), GetLocaleDataWrapper() );
     }
     else
         SetValue( mnLastValue );
@@ -487,6 +549,15 @@ void LongCurrencyFormatter::SetMax( BigInt nNewMax )
 
 // -----------------------------------------------------------------------
 
+void LongCurrencyFormatter::SetUseThousandSep( BOOL b )
+{
+    mbThousandSep = b;
+    ReformatAll();
+}
+
+
+// -----------------------------------------------------------------------
+
 void LongCurrencyFormatter::SetDecimalDigits( USHORT nDigits )
 {
 //  DBG_ASSERT( nDigits < 10, "LongCurrency duerfen nur maximal 9 Nachkommastellen haben" );
@@ -494,18 +565,15 @@ void LongCurrencyFormatter::SetDecimalDigits( USHORT nDigits )
     if ( nDigits > 9 )
         nDigits = 9;
 
-    International aInter( GetInternational() );
-    aInter.SetCurrDigits( nDigits );
-    SetInternational( aInter );
-
-//  ReformatAll(); // macht SetInternational()
+    mnDecimalDigits = nDigits;
+    ReformatAll();
 }
 
 // -----------------------------------------------------------------------
 
 USHORT LongCurrencyFormatter::GetDecimalDigits() const
 {
-    return GetInternational().GetCurrDigits();
+    return mnDecimalDigits;
 }
 
 // -----------------------------------------------------------------------
@@ -634,7 +702,7 @@ long LongCurrencyField::PreNotify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetType() == EVENT_KEYINPUT )
     {
-        if ( ImplLongCurrencyProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), GetInternational() ) )
+        if ( ImplLongCurrencyProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), GetLocaleDataWrapper() ) )
             return 1;
     }
     return SpinField::PreNotify( rNEvt );
@@ -745,7 +813,7 @@ long LongCurrencyBox::PreNotify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetType() == EVENT_KEYINPUT )
     {
-        if ( ImplLongCurrencyProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), GetInternational() ) )
+        if ( ImplLongCurrencyProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), GetLocaleDataWrapper() ) )
             return 1;
     }
     return ComboBox::PreNotify( rNEvt );
@@ -788,7 +856,7 @@ void LongCurrencyBox::ReformatAll()
     for ( USHORT i=0; i < nEntryCount; i++ )
     {
         ImplLongCurrencyReformat( GetEntry( i ), mnMin, mnMax,
-                                  GetDecimalDigits(), GetInternational(),
+                                  GetDecimalDigits(), GetLocaleDataWrapper(),
                                   aStr, *this );
         RemoveEntry( i );
         InsertEntry( aStr, i );
@@ -801,7 +869,7 @@ void LongCurrencyBox::ReformatAll()
 
 void LongCurrencyBox::InsertValue( BigInt nValue, USHORT nPos )
 {
-    XubString aStr = ImplLongCurrencySetValue( nValue, GetDecimalDigits(), GetInternational() );
+    XubString aStr = ImplGetCurr( GetLocaleDataWrapper(), nValue, GetDecimalDigits(), GetCurrencySymbol(), IsUseThousandSep() );
     ComboBox::InsertEntry( aStr, nPos );
 }
 
@@ -809,7 +877,7 @@ void LongCurrencyBox::InsertValue( BigInt nValue, USHORT nPos )
 
 void LongCurrencyBox::RemoveValue( BigInt nValue )
 {
-    XubString aStr = ImplLongCurrencySetValue( nValue, GetDecimalDigits(), GetInternational() );
+    XubString aStr = ImplGetCurr( GetLocaleDataWrapper(), nValue, GetDecimalDigits(), GetCurrencySymbol(), IsUseThousandSep() );
     ComboBox::RemoveEntry( aStr );
 }
 
@@ -819,7 +887,7 @@ BigInt LongCurrencyBox::GetValue( USHORT nPos ) const
 {
     BigInt nValue = 0;
     ImplLongCurrencyGetValue( ComboBox::GetEntry( nPos ), nValue,
-                              GetDecimalDigits(), GetInternational() );
+                              GetDecimalDigits(), GetLocaleDataWrapper() );
     return nValue;
 }
 
@@ -827,7 +895,7 @@ BigInt LongCurrencyBox::GetValue( USHORT nPos ) const
 
 USHORT LongCurrencyBox::GetValuePos( BigInt nValue ) const
 {
-    XubString aStr = ImplLongCurrencySetValue( nValue, GetDecimalDigits(), GetInternational() );
+    XubString aStr = ImplGetCurr( GetLocaleDataWrapper(), nValue, GetDecimalDigits(), GetCurrencySymbol(), IsUseThousandSep() );
     return ComboBox::GetEntryPos( aStr );
 }
 
@@ -878,13 +946,3 @@ XubString International::GetCurr( const BigInt &rNumber, USHORT nDigits ) const
 
     return aTemplate;
 }
-
-
-
-
-// MT 06/30/2001
-// INTERIM-Checkin => use new header, but old cxx, in case there are problems
-// without the International class, and I'm on vacation the next 2 weeks.
-void LongCurrencyFormatter::SetUseThousandSep( BOOL b ){;}
-void LongCurrencyFormatter::SetCurrencySymbol( const String& rStr ){;}
-String LongCurrencyFormatter::GetCurrencySymbol() const{return String();}

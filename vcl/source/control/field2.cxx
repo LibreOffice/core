@@ -2,9 +2,9 @@
  *
  *  $RCSfile: field2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2001-03-09 14:57:42 $
+ *  last change: $Author: mt $ $Date: 2001-06-29 10:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,14 @@
 
 #pragma hdrstop
 
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+
+#ifndef _UNOTOOLS_CALENDARWRAPPER_HXX
+#include <unotools/calendarwrapper.hxx>
+#endif
+
 using namespace ::com::sun::star;
 
 // =======================================================================
@@ -132,17 +140,6 @@ const sal_Int32 nCharClassAlphaTypeMask =
 inline sal_Bool isAlphaType( sal_Int32 nType )
 {
     return ((nType & nCharClassAlphaType) != 0) && ((nType & ~(nCharClassAlphaTypeMask)) == 0);
-}
-
-lang::Locale CreateLocale( const International& rInt )
-{
-    String aLanguage, aCountry;
-    ConvertLanguageToIsoNames( rInt.GetLanguage(), aLanguage, aCountry );
-    lang::Locale aLocale;
-    aLocale.Language = aLanguage;
-    aLocale.Country = aCountry;
-
-    return aLocale;
 }
 
 uno::Reference< i18n::XCharacterClassification > ImplGetCharClass()
@@ -1120,7 +1117,7 @@ static BOOL ImplNeed4DigitYear( USHORT nYear, const AllSettings& rSettings )
 
 // -----------------------------------------------------------------------
 
-static USHORT ImplCutDayFromString( XubString& rStr, const International& )
+static USHORT ImplCutDayFromString( XubString& rStr )
 {
     // Nach Zahl suchen
     while ( rStr.Len() && !(rStr.GetChar( 0 ) >= '0' && rStr.GetChar( 0 ) <= '9') )
@@ -1138,27 +1135,27 @@ static USHORT ImplCutDayFromString( XubString& rStr, const International& )
 
 // -----------------------------------------------------------------------
 
-static USHORT ImplCutMonthFromString( XubString& rStr, const International& rInter )
+static USHORT ImplCutMonthFromString( XubString& rStr, const CalendarWrapper& rCalendarWrapper )
 {
     USHORT nPos;
 
     //Nach Monatsnamen suchen
     for ( USHORT i=1; i <= 12; i++ )
     {
-        const XubString& rMonthName = rInter.GetMonthText( i );
+        String aMonthName = rCalendarWrapper.getMonths()[i].FullName;
         // Voller Monatsname ?
-        nPos = rStr.Search( rMonthName );
+        nPos = rStr.Search( aMonthName );
         if ( nPos != STRING_NOTFOUND )
         {
-            rStr.Erase( 0, nPos + rMonthName.Len() );
+            rStr.Erase( 0, nPos + aMonthName.Len() );
             return i;
         }
         // Kurzer Monatsname ?
-        const XubString& rAbbrevMonthName = rInter.GetAbbrevMonthText( i );
-        nPos = rStr.Search( rAbbrevMonthName );
+        String aAbbrevMonthName = rCalendarWrapper.getMonths()[i].AbbrevName;
+        nPos = rStr.Search( aAbbrevMonthName );
         if ( nPos != STRING_NOTFOUND )
         {
-            rStr.Erase( 0, nPos + rAbbrevMonthName.Len() );
+            rStr.Erase( 0, nPos + aAbbrevMonthName.Len() );
             return i;
         }
     }
@@ -1179,7 +1176,7 @@ static USHORT ImplCutMonthFromString( XubString& rStr, const International& rInt
 
 // -----------------------------------------------------------------------
 
-static USHORT ImplCutYearFromString( XubString& rStr, const International& )
+static USHORT ImplCutYearFromString( XubString& rStr )
 {
     // Nach Zahl suchen
     while ( rStr.Len() && !(rStr.GetChar( 0 ) >= '0' && rStr.GetChar( 0 ) <= '9') )
@@ -1199,7 +1196,7 @@ static USHORT ImplCutYearFromString( XubString& rStr, const International& )
 
 static BOOL ImplDateProcessKeyInput( Edit*, const KeyEvent& rKEvt,
                                      BOOL bStrictFormat, BOOL bLongFormat,
-                                     const International& rInter  )
+                                     const LocaleDataWrapper& rLocaleDataWrapper  )
 {
     xub_Unicode cChar = rKEvt.GetCharCode();
 
@@ -1211,7 +1208,7 @@ static BOOL ImplDateProcessKeyInput( Edit*, const KeyEvent& rKEvt,
         if ( (nGroup == KEYGROUP_FKEYS) || (nGroup == KEYGROUP_CURSOR) ||
              (nGroup == KEYGROUP_MISC)||
              ((cChar >= '0') && (cChar <= '9')) ||
-             (cChar == rInter.GetDateSep()) )
+             (cChar == rLocaleDataWrapper.getDateSep()) )
             return FALSE;
         else
             return TRUE;
@@ -1220,8 +1217,8 @@ static BOOL ImplDateProcessKeyInput( Edit*, const KeyEvent& rKEvt,
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplDateGetValue( const XubString& rStr, Date& rDate,
-                              BOOL bLongFormat, const International& rInter,
+static BOOL ImplDateGetValue( const XubString& rStr, Date& rDate, BOOL bLongFormat,
+                              const LocaleDataWrapper& rLocaleDataWrapper, const CalendarWrapper& rCalendarWrapper,
                               const AllSettings& rSettings )
 {
     XubString   aStr = rStr;
@@ -1238,13 +1235,13 @@ static BOOL ImplDateGetValue( const XubString& rStr, Date& rDate,
         return FALSE;
 
     if ( bLongFormat )
-        eDateFormat = rInter.GetLongDateFormat();
+        eDateFormat = rLocaleDataWrapper.getLongDateFormat();
     else
-        eDateFormat = rInter.GetDateFormat();
+        eDateFormat = rLocaleDataWrapper.getDateFormat();
 
     // Sind da Buchstaben drin ?
 
-    bStrLongFormat = isAlphaType( ImplGetCharClass()->getStringType( aStr, 0, aStr.Len(), CreateLocale(rInter) ) );
+    bStrLongFormat = isAlphaType( ImplGetCharClass()->getStringType( aStr, 0, aStr.Len(), rLocaleDataWrapper.getLocale() ) );
 
     // Bei enthaltenen Buchstaben gehen wir davon aus, das ein langes
     // Datumsformat eingegeben wurde
@@ -1253,44 +1250,47 @@ static BOOL ImplDateGetValue( const XubString& rStr, Date& rDate,
         switch( eDateFormat )
         {
             case MDY:
-                mnFirst = ImplCutMonthFromString( aStr, rInter );
-                nSecond = ImplCutDayFromString( aStr, rInter );
-                nThird  = ImplCutYearFromString( aStr, rInter );
+                mnFirst = ImplCutMonthFromString( aStr, rCalendarWrapper );
+                nSecond = ImplCutDayFromString( aStr );
+                nThird  = ImplCutYearFromString( aStr );
                 break;
             case DMY:
-                mnFirst = ImplCutDayFromString( aStr, rInter );
-                nSecond = ImplCutMonthFromString( aStr, rInter );
-                nThird  = ImplCutYearFromString( aStr, rInter );
+                mnFirst = ImplCutDayFromString( aStr );
+                nSecond = ImplCutMonthFromString( aStr, rCalendarWrapper );
+                nThird  = ImplCutYearFromString( aStr );
                 break;
             case YMD:
             default:
-                mnFirst = ImplCutYearFromString( aStr, rInter );
-                nSecond = ImplCutMonthFromString( aStr, rInter );
-                nThird  = ImplCutDayFromString( aStr, rInter );
+                mnFirst = ImplCutYearFromString( aStr );
+                nSecond = ImplCutMonthFromString( aStr, rCalendarWrapper );
+                nThird  = ImplCutDayFromString( aStr );
                 break;
         }
     }
     else
     {
         // Nach Separatoren suchen
-        XubString aSepStr( RTL_CONSTASCII_USTRINGPARAM( ",.;:-/" ) );
-
-        // Die obigen Zeichen durch das Separatorzeichen ersetzen
-        for ( xub_StrLen i = 0; i < aSepStr.Len(); i++ )
+        if ( rLocaleDataWrapper.getDateSep().Len() )
         {
-            if ( aSepStr.GetChar( i ) == rInter.GetDateSep() )
-                continue;
-            for ( xub_StrLen j = 0; j < aStr.Len(); j++ )
+            XubString aSepStr( RTL_CONSTASCII_USTRINGPARAM( ",.;:-/" ) );
+
+            // Die obigen Zeichen durch das Separatorzeichen ersetzen
+            for ( xub_StrLen i = 0; i < aSepStr.Len(); i++ )
             {
-                if ( aStr.GetChar( j ) == aSepStr.GetChar( i ) )
-                    aStr.SetChar( j, rInter.GetDateSep() );
+                if ( aSepStr.GetChar( i ) == rLocaleDataWrapper.getDateSep() )
+                    continue;
+                for ( xub_StrLen j = 0; j < aStr.Len(); j++ )
+                {
+                    if ( aStr.GetChar( j ) == aSepStr.GetChar( i ) )
+                        aStr.SetChar( j, rLocaleDataWrapper.getDateSep().GetChar(0) );
+                }
             }
         }
 
-        nSep1Pos = aStr.Search( rInter.GetDateSep() );
+        nSep1Pos = aStr.Search( rLocaleDataWrapper.getDateSep() );
         if ( nSep1Pos == STRING_NOTFOUND )
             return FALSE;
-        nSep2Pos = aStr.Search( rInter.GetDateSep(), nSep1Pos+1 );
+        nSep2Pos = aStr.Search( rLocaleDataWrapper.getDateSep(), nSep1Pos+1 );
 
         // Kein Jahr eingegeben ?
         if ( nSep2Pos == STRING_NOTFOUND )
@@ -1300,7 +1300,7 @@ static BOOL ImplDateGetValue( const XubString& rStr, Date& rDate,
                 case DMY:
                 case MDY:
                     nSep2Pos = aStr.Len();
-                    aStr += rInter.GetDateSep();
+                    aStr += rLocaleDataWrapper.getDateSep();
                     aStr += aDate.GetYear();
                     break;
                 default:
@@ -1309,7 +1309,7 @@ static BOOL ImplDateGetValue( const XubString& rStr, Date& rDate,
                     nSep2Pos = nSep1Pos;
                     XubString aYearStr( aDate.GetYear() );
                     nSep2Pos = aYearStr.Len();
-                    aStr.Insert( rInter.GetDateSep(), 0 );
+                    aStr.Insert( rLocaleDataWrapper.getDateSep(), 0 );
                     aStr.Insert( aYearStr, 0 );
                 }
                 break;
@@ -1355,11 +1355,10 @@ static BOOL ImplDateGetValue( const XubString& rStr, Date& rDate,
 
 // -----------------------------------------------------------------------
 
-BOOL DateFormatter::ImplDateReformat( const XubString& rStr, XubString& rOutStr,
-                                      const AllSettings& rSettings )
+BOOL DateFormatter::ImplDateReformat( const XubString& rStr, XubString& rOutStr, const AllSettings& rSettings )
 {
     Date aDate( 0, 0, 0 );
-    if ( !ImplDateGetValue( rStr, aDate, mbLongFormat, GetInternational(), GetFieldSettings() ) )
+    if ( !ImplDateGetValue( rStr, aDate, mbLongFormat, GetLocaleDataWrapper(), GetCalendarWrapper(), GetFieldSettings() ) )
         return TRUE;
 
     Date aTempDate = aDate;
@@ -1392,19 +1391,17 @@ XubString DateFormatter::ImplGetDateAsText( const Date& rDate,
 {
     XubString aDateAsText;
 
-    International aIntn = GetInternational();
-    BOOL b4DigitYear = ImplNeed4DigitYear( rDate.GetYear(), rSettings );
+    BOOL bShowDateCentury = IsShowDateCentury();
+    if ( ImplNeed4DigitYear( rDate.GetYear(), rSettings ) )
+        bShowDateCentury = TRUE;
+
     if ( mbLongFormat )
     {
-        if ( b4DigitYear && !aIntn.IsLongDateCentury() )
-            aIntn.SetLongDateCentury( TRUE );
-        aDateAsText = aIntn.GetLongDate( rDate );
+        aDateAsText = GetLocaleDataWrapper().getLongDate( rDate, GetCalendarWrapper(), 1, FALSE, 1, !bShowDateCentury );
     }
     else
     {
-        if ( b4DigitYear && !aIntn.IsDateCentury() )
-            aIntn.SetDateCentury( TRUE );
-        aDateAsText = aIntn.GetDate( rDate );
+        aDateAsText = GetLocaleDataWrapper().getDate( rDate );
     }
 
     return aDateAsText;
@@ -1506,9 +1503,9 @@ void DateField::ImplDateSpinArea( BOOL bUp )
 
             DateFormat eFormat;
             if ( IsLongFormat() )
-                eFormat = GetInternational().GetLongDateFormat();
+                eFormat = GetLocaleDataWrapper().getLongDateFormat();
             else
-                eFormat = GetInternational().GetDateFormat();
+                eFormat = GetLocaleDataWrapper().getDateFormat();
 
             if ( !IsLongFormat() )
             {
@@ -1516,7 +1513,7 @@ void DateField::ImplDateSpinArea( BOOL bUp )
                 xub_StrLen nPos = 0;
                 for ( xub_StrLen i = 1; i <= 3; i++ )
                 {
-                    nPos = aText.Search( GetInternational().GetDateSep(), nPos );
+                    nPos = aText.Search( GetLocaleDataWrapper().getDateSep(), nPos );
                     if ( nPos >= (USHORT)aSelection.Max() )
                     {
                         nDateArea = i;
@@ -1575,7 +1572,10 @@ void DateField::ImplDateSpinArea( BOOL bUp )
 
 void DateFormatter::ImplInit()
 {
-    mbLongFormat    = FALSE;
+    mbLongFormat        = FALSE;
+    mbShowDateCentury   = TRUE;
+    mpCalendarWrapper   = NULL;
+    mnDateFormat        = 0xFFFF;
 }
 
 // -----------------------------------------------------------------------
@@ -1614,7 +1614,8 @@ void DateFormatter::ImplLoadRes( const ResId& )
 
     if ( DATEFORMATTER_I12 & nMask )
     {
-        SetInternational( International( ResId( (RSHEADER_TYPE *)pMgr->GetClass() ) ) );
+        DBG_ERROR( "MT: Removed class International - missing ResCTOR!" );
+        International( ResId( (RSHEADER_TYPE *)pMgr->GetClass() ) );
         pMgr->Increment( pMgr->GetObjSize( (RSHEADER_TYPE*)pMgr->GetClass() ) );
     }
     if ( DATEFORMATTER_VALUE & nMask )
@@ -1633,6 +1634,45 @@ void DateFormatter::ImplLoadRes( const ResId& )
 
 DateFormatter::~DateFormatter()
 {
+    delete mpCalendarWrapper;
+    mpCalendarWrapper = NULL;
+}
+
+// -----------------------------------------------------------------------
+
+void DateFormatter::SetLocale( const ::com::sun::star::lang::Locale& rLocale )
+{
+    delete mpCalendarWrapper;
+    mpCalendarWrapper = NULL;
+    FormatterBase::SetLocale( rLocale );
+}
+
+
+// -----------------------------------------------------------------------
+
+CalendarWrapper& DateFormatter::GetCalendarWrapper() const
+{
+    if ( !mpCalendarWrapper )
+    {
+        ((DateFormatter*)this)->mpCalendarWrapper = new CalendarWrapper( vcl::unohelper::GetMultiServiceFactory() );
+        mpCalendarWrapper->loadDefaultCalendar( GetLocale() );
+    }
+
+    return *mpCalendarWrapper;
+}
+
+// -----------------------------------------------------------------------
+
+void DateFormatter::SetDateFormat( DateFormat eFormat )
+{
+    mnDateFormat = eFormat;
+}
+
+// -----------------------------------------------------------------------
+
+DateFormat DateFormatter::GetDateFormat() const
+{
+    return ( mnDateFormat != 0xFFFF ) ? (DateFormat)mnDateFormat : GetLocaleDataWrapper().getDateFormat();
 }
 
 // -----------------------------------------------------------------------
@@ -1665,6 +1705,14 @@ void DateFormatter::SetMax( const Date& rNewMax )
 void DateFormatter::SetLongFormat( BOOL bLong )
 {
     mbLongFormat = bLong;
+    ReformatAll();
+}
+
+// -----------------------------------------------------------------------
+
+void DateFormatter::SetShowDateCentury( BOOL bLong )
+{
+    mbShowDateCentury = bLong;
     ReformatAll();
 }
 
@@ -1737,9 +1785,7 @@ Date DateFormatter::GetDate() const
 
     if ( GetField() )
     {
-        if ( ImplDateGetValue( GetField()->GetText(), aDate,
-                               mbLongFormat, GetInternational(),
-                               GetFieldSettings() ) )
+        if ( ImplDateGetValue( GetField()->GetText(), aDate, mbLongFormat, GetLocaleDataWrapper(), GetCalendarWrapper(), GetFieldSettings() ) )
         {
             if ( aDate > maMax )
                 aDate = maMax;
@@ -1774,9 +1820,7 @@ Date DateFormatter::GetRealDate() const
 
     if ( GetField() )
     {
-        ImplDateGetValue( GetField()->GetText(), aDate,
-                          mbLongFormat, GetInternational(),
-                          GetFieldSettings() );
+        ImplDateGetValue( GetField()->GetText(), aDate, mbLongFormat, GetLocaleDataWrapper(), GetCalendarWrapper(), GetFieldSettings() );
     }
 
     return aDate;
@@ -1804,9 +1848,7 @@ BOOL DateFormatter::IsEmptyDate() const
         else if ( !maLastDate.GetDate() )
         {
             Date aDate;
-            bEmpty = !ImplDateGetValue( GetField()->GetText(), aDate,
-                                       mbLongFormat, GetInternational(),
-                                       GetFieldSettings() );
+            bEmpty = !ImplDateGetValue( GetField()->GetText(), aDate, mbLongFormat, GetLocaleDataWrapper(), GetCalendarWrapper(), GetFieldSettings() );
         }
     }
     return bEmpty;
@@ -1842,8 +1884,7 @@ void DateFormatter::Reformat()
     if ( aStr.Len() )
     {
         ImplSetText( aStr );
-        ImplDateGetValue( aStr, maLastDate, mbLongFormat,
-                          GetInternational(), GetFieldSettings() );
+        ImplDateGetValue( aStr, maLastDate, mbLongFormat, GetLocaleDataWrapper(), GetCalendarWrapper(), GetFieldSettings() );
     }
     else
     {
@@ -1888,7 +1929,7 @@ DateField::DateField( Window* pParent, WinBits nWinStyle ) :
     maLast( GetMax() )
 {
     SetField( this );
-    SetText( GetInternational().GetDate( ImplGetFieldDate() ) );
+    SetText( GetLocaleDataWrapper().getDate( ImplGetFieldDate() ) );
     Reformat();
     ResetLastDate();
 }
@@ -1904,7 +1945,7 @@ DateField::DateField( Window* pParent, const ResId& rResId ) :
     WinBits nStyle = ImplInitRes( rResId );
     SpinField::ImplInit( pParent, nStyle );
     SetField( this );
-    SetText( GetInternational().GetDate( ImplGetFieldDate() ) );
+    SetText( GetLocaleDataWrapper().getDate( ImplGetFieldDate() ) );
     ImplLoadRes( rResId );
 
     if ( !(nStyle & WB_HIDE ) )
@@ -1949,7 +1990,7 @@ long DateField::PreNotify( NotifyEvent& rNEvt )
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) &&
          !rNEvt.GetKeyEvent()->GetKeyCode().IsControlMod() )
     {
-        if ( ImplDateProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsLongFormat(), GetInternational() ) )
+        if ( ImplDateProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsLongFormat(), GetLocaleDataWrapper() ) )
             return 1;
     }
 
@@ -1991,9 +2032,12 @@ void DateField::DataChanged( const DataChangedEvent& rDCEvt )
 {
     SpinField::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
-         (rDCEvt.GetFlags() & (SETTINGS_INTERNATIONAL | SETTINGS_MISC)) )
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & (SETTINGS_LOCALE|SETTINGS_MISC)) )
+    {
+        if ( IsDefaultLocale() && ( rDCEvt.GetFlags() & SETTINGS_LOCALE ) )
+            GetLocaleDataWrapper().setLocale( GetSettings().GetLocale() );
         ReformatAll();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -2040,9 +2084,6 @@ void DateField::Last()
 
 void DateField::SetExtFormat( ExtDateFieldFormat eFormat )
 {
-    Date aDate = GetDate();
-    International aInt( Application::GetAppInternational() );
-
     BOOL bLongFormat = FALSE;   // immer bis auf XTDATEF_SYSTEM_LONG
 
     switch ( eFormat )
@@ -2053,12 +2094,12 @@ void DateField::SetExtFormat( ExtDateFieldFormat eFormat )
         break;
         case XTDATEF_SYSTEM_SHORT_YY:
         {
-            aInt.SetDateCentury( FALSE );
+            SetShowDateCentury( FALSE );
         }
         break;
         case XTDATEF_SYSTEM_SHORT_YYYY:
         {
-            aInt.SetDateCentury( TRUE );
+            SetShowDateCentury( TRUE );
         }
         break;
         case XTDATEF_SYSTEM_LONG:
@@ -2068,61 +2109,63 @@ void DateField::SetExtFormat( ExtDateFieldFormat eFormat )
         break;
         case XTDATEF_SHORT_DDMMYY:
         {
-            aInt.SetDateCentury( FALSE );
-            aInt.SetDateFormat( DMY );
+            SetShowDateCentury( FALSE );
+//          GetLocaleDataWrapper().setDateFormat( DMY );
         }
         break;
         case XTDATEF_SHORT_MMDDYY:
         {
-            aInt.SetDateCentury( FALSE );
-            aInt.SetDateFormat( MDY );
+            SetShowDateCentury( FALSE );
+//INTN      GetLocaleDataWrapper().setDateFormat( MDY );
         }
         break;
         case XTDATEF_SHORT_YYMMDD:
         {
-            aInt.SetDateCentury( FALSE );
-            aInt.SetDateFormat( YMD );
+            SetShowDateCentury( FALSE );
+//INTN      GetLocaleDataWrapper().setDateFormat( YMD );
         }
         break;
         case XTDATEF_SHORT_DDMMYYYY:
         {
-            aInt.SetDateCentury( TRUE );
-            aInt.SetDateFormat( DMY );
+            SetShowDateCentury( TRUE );
+//INTN      GetLocaleDataWrapper().setDateFormat( DMY );
         }
         break;
         case XTDATEF_SHORT_MMDDYYYY:
         {
-            aInt.SetDateCentury( TRUE );
-            aInt.SetDateFormat( MDY );
+            SetShowDateCentury( TRUE );
+//INTN      GetLocaleDataWrapper().setDateFormat( MDY );
         }
         break;
         case XTDATEF_SHORT_YYYYMMDD:
         {
-            aInt.SetDateCentury( TRUE );
-            aInt.SetDateFormat( YMD );
+            SetShowDateCentury( TRUE );
+//INTN      GetLocaleDataWrapper().setDateFormat( YMD );
         }
         break;
         case XTDATEF_SHORT_YYMMDD_DIN5008:
         {
-            aInt.SetDateCentury( FALSE );
-            aInt.SetDateSep( '-' );
-            aInt.SetDateFormat( YMD );
+            SetShowDateCentury( FALSE );
+//INTN      GetLocaleDataWrapper().setDateSep( '-' );
+//INTN      GetLocaleDataWrapper().setDateFormat( YMD );
         }
         break;
         case XTDATEF_SHORT_YYYYMMDD_DIN5008:
         {
-            aInt.SetDateCentury( TRUE );
-            aInt.SetDateSep( '-' );
-            aInt.SetDateFormat( YMD );
+            SetShowDateCentury( TRUE );
+//INTN      GetLocaleDataWrapper().setDateSep( '-' );
+//INTN      GetLocaleDataWrapper().setDateFormat( YMD );
         }
         break;
         default:    DBG_ERROR( "ExtDateFieldFormat unknown!" );
     }
 
-    SetInternational( aInt );
     SetLongFormat( bLongFormat );
     if ( GetField() && GetField()->GetText().Len() )
-        SetUserDate( aDate );
+    {
+        SetUserDate( GetDate() );
+    }
+    ReformatAll();
 }
 
 // -----------------------------------------------------------------------
@@ -2131,7 +2174,7 @@ DateBox::DateBox( Window* pParent, WinBits nWinStyle ) :
     ComboBox( pParent, nWinStyle )
 {
     SetField( this );
-    SetText( GetInternational().GetDate( ImplGetFieldDate() ) );
+    SetText( GetLocaleDataWrapper().getDate( ImplGetFieldDate() ) );
     Reformat();
 }
 
@@ -2144,7 +2187,7 @@ DateBox::DateBox( Window* pParent, const ResId& rResId ) :
     WinBits nStyle = ImplInitRes( rResId );
     ComboBox::ImplInit( pParent, nStyle );
     SetField( this );
-    SetText( GetInternational().GetDate( ImplGetFieldDate() ) );
+    SetText( GetLocaleDataWrapper().getDate( ImplGetFieldDate() ) );
     ComboBox::ImplLoadRes( rResId );
     DateFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
     Reformat();
@@ -2166,7 +2209,7 @@ long DateBox::PreNotify( NotifyEvent& rNEvt )
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) &&
          !rNEvt.GetKeyEvent()->GetKeyCode().IsControlMod() )
     {
-        if ( ImplDateProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsLongFormat(), GetInternational() ) )
+        if ( ImplDateProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsLongFormat(), GetLocaleDataWrapper() ) )
             return 1;
     }
 
@@ -2179,9 +2222,12 @@ void DateBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
     ComboBox::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_INTERNATIONAL) )
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
+    {
+        if ( IsDefaultLocale() )
+            GetLocaleDataWrapper().setLocale( GetSettings().GetLocale() );
         ReformatAll();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -2258,8 +2304,7 @@ void DateBox::RemoveDate( const Date& rDate )
 Date DateBox::GetDate( USHORT nPos ) const
 {
     Date aDate( 0, 0, 0 );
-    ImplDateGetValue( ComboBox::GetEntry( nPos ), aDate, IsLongFormat(),
-                      GetInternational(), GetSettings() );
+    ImplDateGetValue( ComboBox::GetEntry( nPos ), aDate, IsLongFormat(), GetLocaleDataWrapper(), GetCalendarWrapper(), GetSettings() );
     return aDate;
 }
 
@@ -2269,9 +2314,9 @@ USHORT DateBox::GetDatePos( const Date& rDate ) const
 {
     XubString aStr;
     if ( IsLongFormat() )
-        aStr = GetInternational().GetLongDate( rDate );
+        aStr = GetLocaleDataWrapper().getLongDate( rDate, GetCalendarWrapper(), 1, FALSE, 1, !IsShowDateCentury() );
     else
-        aStr = GetInternational().GetDate( rDate );
+        aStr = GetLocaleDataWrapper().getDate( rDate );
     return ComboBox::GetEntryPos( aStr );
 }
 
@@ -2280,7 +2325,7 @@ USHORT DateBox::GetDatePos( const Date& rDate ) const
 static BOOL ImplTimeProcessKeyInput( Edit*, const KeyEvent& rKEvt,
                                      BOOL bStrictFormat, BOOL bDuration,
                                      TimeFieldFormat eFormat,
-                                     const International& rInter  )
+                                     const LocaleDataWrapper& rLocaleDataWrapper  )
 {
     xub_Unicode cChar = rKEvt.GetCharCode();
 
@@ -2292,9 +2337,9 @@ static BOOL ImplTimeProcessKeyInput( Edit*, const KeyEvent& rKEvt,
         if ( (nGroup == KEYGROUP_FKEYS) || (nGroup == KEYGROUP_CURSOR) ||
              (nGroup == KEYGROUP_MISC)   ||
              ((cChar >= '0') && (cChar <= '9')) ||
-             (cChar == rInter.GetTimeSep()) ||
-             ((eFormat == TIMEF_100TH_SEC) && (cChar == rInter.GetTime100SecSep())) ||
-             ((eFormat == TIMEF_SEC_CS) && (cChar == rInter.GetTime100SecSep())) ||
+             (cChar == rLocaleDataWrapper.getTimeSep()) ||
+             ((eFormat == TIMEF_100TH_SEC) && (cChar == rLocaleDataWrapper.getTime100SecSep())) ||
+             ((eFormat == TIMEF_SEC_CS) && (cChar == rLocaleDataWrapper.getTime100SecSep())) ||
              (bDuration && (cChar == '-')) )
             return FALSE;
         else
@@ -2306,7 +2351,7 @@ static BOOL ImplTimeProcessKeyInput( Edit*, const KeyEvent& rKEvt,
 
 static BOOL ImplTimeGetValue( const XubString& rStr, Time& rTime,
                               TimeFieldFormat eTimeFormat, BOOL bDuration,
-                              const International& rInter )
+                              const LocaleDataWrapper& rLocaleDataWrapper )
 {
     XubString   aStr    = rStr;
     short       nHour   = 0;
@@ -2319,24 +2364,27 @@ static BOOL ImplTimeGetValue( const XubString& rStr, Time& rTime,
         return FALSE;
 
     // Nach Separatoren suchen
-    XubString aSepStr( RTL_CONSTASCII_USTRINGPARAM( ",.;:/" ) );
-    if ( !bDuration )
-        aSepStr.Append( '-' );
-
-    // Die obigen Zeichen durch das Separatorzeichen ersetzen
-    for ( xub_StrLen i = 0; i < aSepStr.Len(); i++ )
+    if ( rLocaleDataWrapper.getTimeSep().Len() )
     {
-        if ( aSepStr.GetChar( i ) == rInter.GetTimeSep() )
-            continue;
-        for ( xub_StrLen j = 0; j < aStr.Len(); j++ )
+        XubString aSepStr( RTL_CONSTASCII_USTRINGPARAM( ",.;:/" ) );
+        if ( !bDuration )
+            aSepStr.Append( '-' );
+
+        // Die obigen Zeichen durch das Separatorzeichen ersetzen
+        for ( xub_StrLen i = 0; i < aSepStr.Len(); i++ )
         {
-            if ( aStr.GetChar( j ) == aSepStr.GetChar( i ) )
-                aStr.SetChar( j, rInter.GetTimeSep() );
+            if ( aSepStr.GetChar( i ) == rLocaleDataWrapper.getTimeSep() )
+                continue;
+            for ( xub_StrLen j = 0; j < aStr.Len(); j++ )
+            {
+                if ( aStr.GetChar( j ) == aSepStr.GetChar( i ) )
+                    aStr.SetChar( j, rLocaleDataWrapper.getTimeSep().GetChar(0) );
+            }
         }
     }
 
     BOOL bNegative = FALSE;
-    xub_StrLen nSepPos = aStr.Search( rInter.GetTimeSep() );
+    xub_StrLen nSepPos = aStr.Search( rLocaleDataWrapper.getTimeSep() );
     if ( aStr.GetChar( 0 ) == '-' )
         bNegative = TRUE;
     if ( eTimeFormat != TIMEF_SEC_CS )
@@ -2346,7 +2394,7 @@ static BOOL ImplTimeGetValue( const XubString& rStr, Time& rTime,
         nHour = (short)aStr.Copy( 0, nSepPos ).ToInt32();
         aStr.Erase( 0, nSepPos+1 );
 
-        nSepPos = aStr.Search( rInter.GetTimeSep() );
+        nSepPos = aStr.Search( rLocaleDataWrapper.getTimeSep() );
         if ( aStr.GetChar( 0 ) == '-' )
             bNegative = TRUE;
         if ( nSepPos != STRING_NOTFOUND )
@@ -2354,7 +2402,7 @@ static BOOL ImplTimeGetValue( const XubString& rStr, Time& rTime,
             nMinute = (short)aStr.Copy( 0, nSepPos ).ToInt32();
             aStr.Erase( 0, nSepPos+1 );
 
-            nSepPos = aStr.Search( rInter.GetTimeSep() );
+            nSepPos = aStr.Search( rLocaleDataWrapper.getTimeSep() );
             if ( aStr.GetChar( 0 ) == '-' )
                 bNegative = TRUE;
             if ( nSepPos != STRING_NOTFOUND )
@@ -2384,7 +2432,7 @@ static BOOL ImplTimeGetValue( const XubString& rStr, Time& rTime,
         nSecond = (short)aStr.Copy( 0, nSepPos ).ToInt32();
         aStr.Erase( 0, nSepPos+1 );
 
-        nSepPos = aStr.Search( rInter.GetTimeSep() );
+        nSepPos = aStr.Search( rLocaleDataWrapper.getTimeSep() );
         if ( aStr.GetChar( 0 ) == '-' )
             bNegative = TRUE;
         if ( nSepPos != STRING_NOTFOUND )
@@ -2393,7 +2441,7 @@ static BOOL ImplTimeGetValue( const XubString& rStr, Time& rTime,
             nSecond = (short)aStr.Copy( 0, nSepPos ).ToInt32();
             aStr.Erase( 0, nSepPos+1 );
 
-            nSepPos = aStr.Search( rInter.GetTimeSep() );
+            nSepPos = aStr.Search( rLocaleDataWrapper.getTimeSep() );
             if ( aStr.GetChar( 0 ) == '-' )
                 bNegative = TRUE;
             if ( nSepPos != STRING_NOTFOUND )
@@ -2461,8 +2509,8 @@ static BOOL ImplTimeGetValue( const XubString& rStr, Time& rTime,
             return FALSE;
 
         aStr.ToUpperAscii();
-        XubString aAM( rInter.GetTimeAM() );
-        XubString aPM( rInter.GetTimePM() );
+        XubString aAM( rLocaleDataWrapper.getTimeAM() );
+        XubString aPM( rLocaleDataWrapper.getTimePM() );
         aAM.ToUpperAscii();
         aPM.ToUpperAscii();
 
@@ -2502,7 +2550,7 @@ static BOOL ImplTimeGetValue( const XubString& rStr, Time& rTime,
 BOOL TimeFormatter::ImplTimeReformat( const XubString& rStr, XubString& rOutStr )
 {
     Time aTime( 0, 0, 0 );
-    if ( !ImplTimeGetValue( rStr, aTime, meFormat, mbDuration, GetInternational() ) )
+    if ( !ImplTimeGetValue( rStr, aTime, meFormat, mbDuration, GetLocaleDataWrapper() ) )
         return TRUE;
 
     Time aTempTime = aTime;
@@ -2536,15 +2584,15 @@ BOOL TimeFormatter::ImplTimeReformat( const XubString& rStr, XubString& rOutStr 
         n       += aTempTime.GetMin()  * 60L;
         n       += aTempTime.GetSec();
         rOutStr  = String::CreateFromInt32( n );
-        rOutStr += GetInternational().GetTime100SecSep();
+        rOutStr += GetLocaleDataWrapper().getTime100SecSep();
         if ( aTempTime.Get100Sec() < 10 )
             rOutStr += '0';
         rOutStr += String::CreateFromInt32( aTempTime.Get100Sec() );
     }
     else if ( mbDuration )
-        rOutStr = GetInternational().GetDuration( aTempTime, bSecond, b100Sec );
+        rOutStr = GetLocaleDataWrapper().getDuration( aTempTime, bSecond, b100Sec );
     else
-        rOutStr = GetInternational().GetTime( aTempTime, bSecond, b100Sec );
+        rOutStr = GetLocaleDataWrapper().getTime( aTempTime, bSecond, b100Sec );
 
     return TRUE;
 }
@@ -2567,8 +2615,8 @@ void TimeField::ImplTimeSpinArea( BOOL bUp )
         {
             for ( xub_StrLen i = 1, nPos = 0; i <= 4; i++ )
             {
-                xub_StrLen nPos1 = aText.Search( GetInternational().GetTimeSep(), nPos );
-                xub_StrLen nPos2 = aText.Search( GetInternational().GetTime100SecSep(), nPos );
+                xub_StrLen nPos1 = aText.Search( GetLocaleDataWrapper().getTimeSep(), nPos );
+                xub_StrLen nPos2 = aText.Search( GetLocaleDataWrapper().getTime100SecSep(), nPos );
                 nPos = nPos1 < nPos2 ? nPos1 : nPos2;
                 if ( nPos >= (xub_StrLen)aSelection.Max() )
                 {
@@ -2581,7 +2629,7 @@ void TimeField::ImplTimeSpinArea( BOOL bUp )
         }
         else
         {
-            nPos = aText.Search( GetInternational().GetTime100SecSep() );
+            nPos = aText.Search( GetLocaleDataWrapper().getTime100SecSep() );
             if ( nPos == STRING_NOTFOUND || nPos >= (xub_StrLen)aSelection.Max() )
                 nTimeArea = 3;
             else
@@ -2625,6 +2673,7 @@ void TimeFormatter::ImplInit()
 {
     meFormat        = TIMEF_NONE;
     mbDuration      = FALSE;
+    mnTimeFormat    = 0xFFFF;
 }
 
 // -----------------------------------------------------------------------
@@ -2668,7 +2717,8 @@ void TimeFormatter::ImplLoadRes( const ResId& )
 
     if ( TIMEFORMATTER_I12 & nMask )
     {
-        SetInternational( International( ResId( (RSHEADER_TYPE *)pMgr->GetClass() ) ) );
+        DBG_ERROR( "MT: Removed class International - missing ResCTOR!" );
+        International( ResId( (RSHEADER_TYPE *)pMgr->GetClass() ) );
         pMgr->Increment( pMgr->GetObjSize( (RSHEADER_TYPE *)pMgr->GetClass() ) );
     }
 
@@ -2714,6 +2764,20 @@ void TimeFormatter::SetMax( const Time& rNewMax )
     maMax = rNewMax;
     if ( !IsEmptyFieldValue() )
         ReformatAll();
+}
+
+// -----------------------------------------------------------------------
+
+void TimeFormatter::SetTimeFormat( TimeFormat eNewFormat )
+{
+    mnTimeFormat = eNewFormat;
+}
+
+// -----------------------------------------------------------------------
+
+TimeFormat TimeFormatter::GetTimeFormat() const
+{
+    return ( mnTimeFormat != 0xFFFF ) ? (TimeFormat)mnTimeFormat : HOUR_24;
 }
 
 // -----------------------------------------------------------------------
@@ -2797,15 +2861,15 @@ void TimeFormatter::ImplSetUserTime( const Time& rNewTime, Selection* pNewSelect
             n       += aNewTime.GetMin()  * 60L;
             n       += aNewTime.GetSec();
             aStr     = String::CreateFromInt32( n );
-            aStr    += GetInternational().GetTime100SecSep();
+            aStr    += GetLocaleDataWrapper().getTime100SecSep();
             if ( aNewTime.Get100Sec() < 10 )
                 aStr += '0';
             aStr += String::CreateFromInt32( aNewTime.Get100Sec() );
         }
         else if ( mbDuration )
-            aStr = GetInternational().GetDuration( aNewTime, bSec, b100Sec );
+            aStr = GetLocaleDataWrapper().getDuration( aNewTime, bSec, b100Sec );
         else
-            aStr = GetInternational().GetTime( aNewTime, bSec, b100Sec );
+            aStr = GetLocaleDataWrapper().getTime( aNewTime, bSec, b100Sec );
 
         ImplSetText( aStr, pNewSelection );
     }
@@ -2826,8 +2890,7 @@ Time TimeFormatter::GetTime() const
 
     if ( GetField() )
     {
-        if ( ImplTimeGetValue( GetField()->GetText(), aTime,
-                               meFormat, mbDuration, GetInternational() ) )
+        if ( ImplTimeGetValue( GetField()->GetText(), aTime, meFormat, mbDuration, GetLocaleDataWrapper() ) )
         {
             if ( aTime > GetMax() )
                 aTime = GetMax();
@@ -2849,8 +2912,7 @@ Time TimeFormatter::GetRealTime() const
 
     if ( GetField() )
     {
-        ImplTimeGetValue( GetField()->GetText(), aTime,
-                          meFormat, mbDuration, GetInternational() );
+        ImplTimeGetValue( GetField()->GetText(), aTime, meFormat, mbDuration, GetLocaleDataWrapper() );
     }
 
     return aTime;
@@ -2886,7 +2948,7 @@ void TimeFormatter::Reformat()
     if ( aStr.Len() )
     {
         ImplSetText( aStr );
-        ImplTimeGetValue( aStr, maLastTime, meFormat, mbDuration, GetInternational() );
+        ImplTimeGetValue( aStr, maLastTime, meFormat, mbDuration, GetLocaleDataWrapper() );
     }
     else
         SetTime( maLastTime );
@@ -2900,7 +2962,7 @@ TimeField::TimeField( Window* pParent, WinBits nWinStyle ) :
     maLast( GetMax() )
 {
     SetField( this );
-    SetText( GetInternational().GetTime( maFieldTime, FALSE, FALSE ) );
+    SetText( GetLocaleDataWrapper().getTime( maFieldTime, FALSE, FALSE ) );
     Reformat();
 }
 
@@ -2915,7 +2977,7 @@ TimeField::TimeField( Window* pParent, const ResId& rResId ) :
     WinBits nStyle = ImplInitRes( rResId );
     SpinField::ImplInit( pParent, nStyle );
     SetField( this );
-    SetText( GetInternational().GetTime( maFieldTime, FALSE, FALSE ) );
+    SetText( GetLocaleDataWrapper().getTime( maFieldTime, FALSE, FALSE ) );
     ImplLoadRes( rResId );
 
     if ( !(nStyle & WB_HIDE ) )
@@ -2958,7 +3020,7 @@ long TimeField::PreNotify( NotifyEvent& rNEvt )
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) &&
          !rNEvt.GetKeyEvent()->GetKeyCode().IsControlMod() )
     {
-        if ( ImplTimeProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsDuration(), GetFormat(), GetInternational() ) )
+        if ( ImplTimeProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsDuration(), GetFormat(), GetLocaleDataWrapper() ) )
             return 1;
     }
 
@@ -2986,9 +3048,12 @@ void TimeField::DataChanged( const DataChangedEvent& rDCEvt )
 {
     SpinField::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_INTERNATIONAL) )
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
+    {
+        if ( IsDefaultLocale() )
+            GetLocaleDataWrapper().setLocale( GetSettings().GetLocale() );
         ReformatAll();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -3035,35 +3100,32 @@ void TimeField::Last()
 
 void TimeField::SetExtFormat( ExtTimeFieldFormat eFormat )
 {
-    Time aTime = GetTime();
-    International aInt( Application::GetAppInternational() );
-
     switch ( eFormat )
     {
         case EXTTIMEF_24H_SHORT:
         {
-            aInt.SetTimeFormat( HOUR_24 );
+            SetTimeFormat( HOUR_24 );
             SetDuration( FALSE );
             SetFormat( TIMEF_NONE );
         }
         break;
         case EXTTIMEF_24H_LONG:
         {
-            aInt.SetTimeFormat( HOUR_24 );
+            SetTimeFormat( HOUR_24 );
             SetDuration( FALSE );
             SetFormat( TIMEF_SEC );
         }
         break;
         case EXTTIMEF_12H_SHORT:
         {
-            aInt.SetTimeFormat( HOUR_12 );
+            SetTimeFormat( HOUR_12 );
             SetDuration( FALSE );
             SetFormat( TIMEF_NONE );
         }
         break;
         case EXTTIMEF_12H_LONG:
         {
-            aInt.SetTimeFormat( HOUR_12 );
+            SetTimeFormat( HOUR_12 );
             SetDuration( FALSE );
             SetFormat( TIMEF_SEC );
         }
@@ -3083,9 +3145,9 @@ void TimeField::SetExtFormat( ExtTimeFieldFormat eFormat )
         default:    DBG_ERROR( "ExtTimeFieldFormat unknown!" );
     }
 
-    SetInternational( aInt );
     if ( GetField() && GetField()->GetText().Len() )
-        SetUserTime( aTime );
+        SetUserTime( GetTime() );
+    ReformatAll();
 }
 
 // -----------------------------------------------------------------------
@@ -3094,7 +3156,7 @@ TimeBox::TimeBox( Window* pParent, WinBits nWinStyle ) :
     ComboBox( pParent, nWinStyle )
 {
     SetField( this );
-    SetText( GetInternational().GetTime( maFieldTime, FALSE, FALSE ) );
+    SetText( GetLocaleDataWrapper().getTime( maFieldTime, FALSE, FALSE ) );
     Reformat();
 }
 
@@ -3107,7 +3169,7 @@ TimeBox::TimeBox( Window* pParent, const ResId& rResId ) :
     WinBits nStyle = ImplInitRes( rResId );
     ComboBox::ImplInit( pParent, nStyle );
     SetField( this );
-    SetText( GetInternational().GetTime( maFieldTime, FALSE, FALSE ) );
+    SetText( GetLocaleDataWrapper().getTime( maFieldTime, FALSE, FALSE ) );
     ComboBox::ImplLoadRes( rResId );
     TimeFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
     Reformat();
@@ -3129,7 +3191,7 @@ long TimeBox::PreNotify( NotifyEvent& rNEvt )
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) &&
          !rNEvt.GetKeyEvent()->GetKeyCode().IsControlMod() )
     {
-        if ( ImplTimeProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsDuration(), GetFormat(), GetInternational() ) )
+        if ( ImplTimeProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsDuration(), GetFormat(), GetLocaleDataWrapper() ) )
             return 1;
     }
 
@@ -3157,9 +3219,12 @@ void TimeBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
     ComboBox::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_INTERNATIONAL) )
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
+    {
+        if ( IsDefaultLocale() )
+            GetLocaleDataWrapper().setLocale( GetSettings().GetLocale() );
         ReformatAll();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -3203,7 +3268,7 @@ void TimeBox::InsertTime( const Time& rTime, USHORT nPos )
         bSec = TRUE;
     if ( GetFormat() == TIMEF_100TH_SEC || GetFormat() == TIMEF_SEC_CS )
         bSec = b100Sec = TRUE;
-    ComboBox::InsertEntry( GetInternational().GetTime( aTime, bSec, b100Sec ), nPos );
+    ComboBox::InsertEntry( GetLocaleDataWrapper().getTime( aTime, bSec, b100Sec ), nPos );
 }
 
 // -----------------------------------------------------------------------
@@ -3216,7 +3281,7 @@ void TimeBox::RemoveTime( const Time& rTime )
         bSec = TRUE;
     if ( GetFormat() == TIMEF_100TH_SEC || TIMEF_SEC_CS )
         bSec = b100Sec = TRUE;
-    ComboBox::RemoveEntry( GetInternational().GetTime( rTime, bSec, b100Sec ) );
+    ComboBox::RemoveEntry( GetLocaleDataWrapper().getTime( rTime, bSec, b100Sec ) );
 }
 
 // -----------------------------------------------------------------------
@@ -3224,8 +3289,7 @@ void TimeBox::RemoveTime( const Time& rTime )
 Time TimeBox::GetTime( USHORT nPos ) const
 {
     Time aTime( 0, 0, 0 );
-    ImplTimeGetValue( ComboBox::GetEntry( nPos ), aTime,
-                      GetFormat(), IsDuration(), GetInternational() );
+    ImplTimeGetValue( ComboBox::GetEntry( nPos ), aTime, GetFormat(), IsDuration(), GetLocaleDataWrapper() );
     return aTime;
 }
 
@@ -3239,5 +3303,5 @@ USHORT TimeBox::GetTimePos( const Time& rTime ) const
         bSec = TRUE;
     if ( GetFormat() == TIMEF_100TH_SEC || TIMEF_SEC_CS )
         bSec = b100Sec = TRUE;
-    return ComboBox::GetEntryPos( GetInternational().GetTime( rTime, bSec, b100Sec ) );
+    return ComboBox::GetEntryPos( GetLocaleDataWrapper().getTime( rTime, bSec, b100Sec ) );
 }
