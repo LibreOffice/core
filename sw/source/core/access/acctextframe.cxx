@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctextframe.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-24 15:27:21 $
+ *  last change: $Author: vg $ $Date: 2002-04-29 12:16:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@
 #include <accmap.hxx>
 #endif
 #ifndef _UTL_ACCESSIBLERELATIONSETHELPER_HXX_
-#include <unotools/AccessibleRelationSetHelper.hxx>
+#include <unotools/accessiblerelationsethelper.hxx>
 #endif
 
 #ifndef _ACCTEXTFRAME_HXX
