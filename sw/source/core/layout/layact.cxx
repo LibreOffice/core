@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ama $ $Date: 2002-07-08 08:24:47 $
+ *  last change: $Author: od $ $Date: 2002-08-28 13:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,13 +298,28 @@ BOOL SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwCntntFrm *pCnt,
             }
         }
 
-        if ( !pFly->Lower() ||
-             (pFly->Lower()->IsNoTxtFrm() &&
-              (((SwNoTxtFrm*)pFly->Lower())->IsTransparent() ||
-               pFly->GetFmt()->GetSurround().IsContour())) )
+        /// OD 19.08.2002 #99657#
+        ///     Fly frame without a lower have to be subtracted from paint region.
+        ///     For checking, if fly frame contains transparent graphic or
+        ///     has surrounded contour, assure that fly frame has a lower
+        if ( pFly->Lower() &&
+             pFly->Lower()->IsNoTxtFrm() &&
+             ( ((SwNoTxtFrm*)pFly->Lower())->IsTransparent() ||
+               pFly->GetFmt()->GetSurround().IsContour() )
+           )
         {
             continue;
         }
+
+        /// OD 19.08.2002 #99657#
+        ///     Region of a fly frame with transparent background or a transparent
+        ///     shadow have not to be subtracted from paint region
+        if ( pFly->IsBackgroundTransparent() ||
+             pFly->IsShadowTransparent() )
+        {
+            continue;
+        }
+
         aTmp -= pFly->Frm();
     }
 
