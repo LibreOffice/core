@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDatabaseMetaData.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-02 12:47:42 $
+ *  last change: $Author: jsc $ $Date: 2001-11-28 15:32:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -455,7 +455,6 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** @returns
             <TRUE/>, if the database supports ODBC Core SQL grammar,
             otherwise <FALSE/>.
-     */
      */
     boolean supportsCoreSQLGrammar() raises (SQLException);
     //-------------------------------------------------------------------------
@@ -2064,6 +2063,9 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.8  2001/11/02 12:47:42  mi
+    needs <TRUE/> instead of <TRUE> etc.
+
     Revision 1.7  2001/11/02 12:42:13  mi
     needs <TRUE/> instead of <TRUE> etc.
 
