@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnuitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 11:37:17 $
+ *  last change: $Author: mba $ $Date: 2001-07-03 17:34:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,44 +490,8 @@ SfxAppMenuControl_Impl::SfxAppMenuControl_Impl(
     if ( pView )
     {
         rMenu.SetPopupMenu( nPos, pView );
-        pView->SetSelectHdl( LINK( this, SfxAppMenuControl_Impl, Select) );
+//        pView->SetSelectHdl( LINK( this, SfxAppMenuControl_Impl, Select) );
     }
-}
-
-IMPL_LINK( SfxAppMenuControl_Impl, Select, Menu*, pMenu )
-{
-    String aURL( pMenu->GetItemCommand( pMenu->GetCurItemId() ) );
-    if( !aURL.Len() )
-        return 0;
-
-    Reference < XFramesSupplier > xDesktop = Reference < XFramesSupplier >( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
-    Reference < XFrame > xFrame( xDesktop->getActiveFrame() );
-    if ( !xFrame.is() )
-        xFrame = Reference < XFrame >( xDesktop, UNO_QUERY );
-
-    URL aTargetURL;
-    aTargetURL.Complete = aURL;
-    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
-    xTrans->parseStrict( aTargetURL );
-
-    Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
-    Reference < XDispatch > xDisp;
-    if ( xProv.is() )
-        if ( aTargetURL.Protocol.compareToAscii("slot:") == COMPARE_EQUAL )
-            xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
-        else
-            xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString::createFromAscii("_blank"), 0 );
-    if ( xDisp.is() )
-    {
-        Sequence<PropertyValue> aArgs(1);
-        PropertyValue* pArg = aArgs.getArray();
-        pArg[0].Name = rtl::OUString::createFromAscii("Referer");
-        pArg[0].Value <<= ::rtl::OUString::createFromAscii("private:user");
-        xDisp->dispatch( aTargetURL, aArgs );
-    }
-
-
-    return TRUE;
 }
 
 SfxAppMenuControl_Impl::~SfxAppMenuControl_Impl()

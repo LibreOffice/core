@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-27 12:32:26 $
+ *  last change: $Author: mba $ $Date: 2001-07-03 17:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -663,8 +663,6 @@ SfxAppToolBoxControl_Impl::SfxAppToolBoxControl_Impl
 {
     aTimer.SetTimeout( 250 );
     aTimer.SetTimeoutHdl( LINK( this, SfxAppToolBoxControl_Impl, Timeout ) );
-    if( nId == SID_NEWDOCDIRECT )
-        SetImage( SFX_APP()->Get_Impl()->aLastNewURL );
 }
 
 void SfxAppToolBoxControl_Impl::SetImage( const String &rURL )
@@ -676,7 +674,7 @@ void SfxAppToolBoxControl_Impl::SetImage( const String &rURL )
         aURL += String::CreateFromAscii(SfxObjectFactory::GetDefaultFactory().GetShortName());
     }
 
-    GetToolBox().SetItemImage( SID_NEWDOCDIRECT, SvFileInformationManager::GetImage( INetURLObject( aURL ), FALSE ) );
+    GetToolBox().SetItemImage( GetId(), SvFileInformationManager::GetImage( INetURLObject( aURL ), FALSE ) );
 }
 
 void SfxAppToolBoxControl_Impl::StateChanged
@@ -699,18 +697,26 @@ void SfxAppToolBoxControl_Impl::Select( BOOL bMod1 )
     aTimer.Stop();
     if( aLastURL.Len() )
     {
-        SfxStringItem aName( SID_FILE_NAME, aLastURL );
-        SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE(SFX_REFERER_NEWMENU) );
-        SfxBoolItem aTemplate( SID_TEMPLATE, TRUE );
-        SfxStringItem aTarget( SID_TARGETNAME, String::CreateFromAscii("_blank") );
+        if ( aLastURL.CompareToAscii( "slot:", 5 ) == COMPARE_EQUAL )
+        {
+            USHORT nId = (USHORT) aLastURL.Copy( 5 ).ToInt32();
+            GetBindings().Execute( nId );
+        }
+        else
+        {
+            SfxStringItem aName( SID_FILE_NAME, aLastURL );
+            SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE(SFX_REFERER_NEWMENU) );
+            SfxBoolItem aTemplate( SID_TEMPLATE, TRUE );
+            SfxStringItem aTarget( SID_TARGETNAME, String::CreateFromAscii("_blank") );
 
-        const SfxPoolItem* aItems[5];
-        aItems[4] = 0;
-        aItems[0] = &aName;
-        aItems[1] = &aReferer;
-        aItems[2] = &aTemplate;
-        aItems[3] = &aTarget;
-        GetBindings().Execute( SID_OPENDOC, aItems, 0, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
+            const SfxPoolItem* aItems[5];
+            aItems[4] = 0;
+            aItems[0] = &aName;
+            aItems[1] = &aReferer;
+            aItems[2] = &aTemplate;
+            aItems[3] = &aTarget;
+            GetBindings().Execute( SID_OPENDOC, aItems, 0, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
+        }
     }
     else
         SfxToolBoxControl::Select( bMod1 );
@@ -732,7 +738,7 @@ IMPL_LINK( SfxAppToolBoxControl_Impl, Timeout, Timer *, pTimer )
     {
         rBox.SetItemDown( GetId(), TRUE );
         USHORT nSelected = pMenu->Execute( &rBox, aRect, POPUPMENU_EXECUTE_UP );
-        if( nId == SID_NEWDOCDIRECT )
+        if ( nSelected )
         {
             aLastURL = pMenu->GetItemCommand( nSelected );
             SetImage( pMenu->GetItemCommand( nSelected ) );
