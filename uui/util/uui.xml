@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <module-name>
+    uui
+    </module-name>
+
+    <component-description>
+        <supported-service>
+            com.sun.star.uui.InteractionHandler
+        </supported-service>
+        <description>
+        This component implements an Interaction Handler for the UCB.
+        It uses VCL to visualize and handle interaction requests.
+        </description>
+        <author>
+        Stephan Bergmann
+        </author>
+        <name>
+            UUIInteractionHandler
+        </name>
+        <loader-name>
+            com.sun.star.loader.SharedLibrary
+        </loader-name>
+        <language>
+            c++
+        </language>
+        <status value="final"/>
+
+        <type> com.sun.star.connection.XConnection                     </type>
+        <type> com.sun.star.lang.Locale                                </type>
+        <type> com.sun.star.lang.XMultiServiceFactory                  </type>
+        <type> com.sun.star.lang.XServiceInfo                          </type>
+        <type> com.sun.star.lang.XSingleServiceFactory                 </type>
+        <type> com.sun.star.lang.XTypeProvider                         </type>
+        <type> com.sun.star.registry.XRegistryKey                      </type>
+        <type> com.sun.star.task.ClassifiedInteractionRequest          </type>
+        <type> com.sun.star.task.XInteractionAbort                     </type>
+        <type> com.sun.star.task.XInteractionApprove                   </type>
+        <type> com.sun.star.task.XInteractionDisapprove                </type>
+        <type> com.sun.star.task.XInteractionHandler                   </type>
+        <type> com.sun.star.task.XInteractionRetry                     </type>
+        <type> com.sun.star.ucb.AuthenticationRequest                  </type>
+        <type> com.sun.star.ucb.HandleCookiesRequest                   </type>
+        <type> com.sun.star.ucb.InteractiveBadTransferURLException     </type>
+        <type> com.sun.star.ucb.InteractiveCHAOSException              </type>
+        <type> com.sun.star.ucb.InteractiveFileIOException             </type>
+        <type> com.sun.star.ucb.InteractiveNetworkConnectException     </type>
+        <type> com.sun.star.ucb.InteractiveNetworkGeneralException     </type>
+        <type> com.sun.star.ucb.InteractiveNetworkOffLineException     </type>
+        <type> com.sun.star.ucb.InteractiveNetworkReadException        </type>
+        <type> com.sun.star.ucb.InteractiveNetworkResolveNameException </type>
+        <type> com.sun.star.ucb.InteractiveNetworkWriteException       </type>
+        <type> com.sun.star.ucb.InteractiveWrongMediumException        </type>
+        <type> com.sun.star.ucb.XInteractionCookieHandling             </type>
+        <type> com.sun.star.ucb.XInteractionSupplyAuthentication       </type>
+    </component-description>
+
+    <project-build-dependency> sal                </project-build-dependency>
+    <project-build-dependency> cppu               </project-build-dependency>
+    <project-build-dependency> cppuhelper         </project-build-dependency>
+    <project-build-dependency> tools              </project-build-dependency>
+    <project-build-dependency> svtools            </project-build-dependency>
+    <project-build-dependency> vcl                </project-build-dependency>
+
+    <runtime-module-dependency> sal2          </runtime-module-dependency>
+    <runtime-module-dependency> cppu2         </runtime-module-dependency>
+    <runtime-module-dependency> cppuhelper2$(COM) </runtime-module-dependency>
+    <runtime-module-dependency> tl                </runtime-module-dependency>
+    <runtime-module-dependency> svt               </runtime-module-dependency>
+    <runtime-module-dependency> vcl               </runtime-module-dependency>
+</module-description>
