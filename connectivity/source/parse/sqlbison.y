@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.35 2002-02-21 14:51:56 hr Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.36 2002-03-06 13:02:44 hjs Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: hr $ $Date: 2002-02-21 14:51:56 $ $Revision: 1.35 $
+//	$Author: hjs $ $Date: 2002-03-06 13:02:44 $ $Revision: 1.36 $
 //
 // Description:
 //
@@ -77,6 +77,33 @@
 #endif
 #ifndef _DBHELPER_DBCONVERSION_HXX_
 #include "connectivity/dbconversion.hxx"
+#endif
+
+#ifdef WNT
+#include "stdarg.h"
+namespace std {
+int fprintf(FILE* stream, const char* format, ...)
+{
+    va_list va_param;
+
+    va_start(va_param, format);
+	int res = ::vfprintf(stream, format, va_param);
+    va_end(va_param);
+
+    return res;
+}
+
+void* malloc( size_t size )
+{
+    return ::malloc(size);
+}
+
+void free( void *memblock )
+{
+    ::free(memblock);
+}
+    
+};
 #endif
 
 static ::rtl::OUString aEmptyString;
