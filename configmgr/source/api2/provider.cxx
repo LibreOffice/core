@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-22 19:22:15 $
+ *  last change: $Author: dg $ $Date: 2000-11-23 13:40:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ namespace configmgr
         for (sal_Int32 i=0; i<_rArguments.getLength(); ++i, ++pArguments)
         {
             if (!((*pArguments) >>= aCurrentArg))
-                throw lang::IllegalArgumentException(::rtl::OUString::createFromAscii("Arguments have to be com.sun.star.beans.PropertyValue's."), THISREF(), i);
+                throw uno::Exception(rtl::OUString::createFromAscii("Arguments have to be com.sun.star.beans.PropertyValue's."), THISREF());
 
             // no check if the argument is known and valid. This would require to much testing
             m_aSecurityOverride[aCurrentArg.Name] = aCurrentArg.Value;
