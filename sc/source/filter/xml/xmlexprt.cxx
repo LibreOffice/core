@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-21 17:37:20 $
+ *  last change: $Author: sab $ $Date: 2001-01-11 06:57:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,18 @@
 #endif
 #ifndef _SC_XMLEXPORTDDELINKS_HXX
 #include "XMLExportDDELinks.hxx"
+#endif
+#ifndef _SC_XMLEXPORTITERATOR_HXX
+#include "XMLExportIterator.hxx"
+#endif
+#ifndef _SC_XMLCOLUMNROWGROUPEXPORT_HXX
+#include "XMLColumnRowGroupExport.hxx"
+#endif
+#ifndef _SC_XMLSTYLESEXPORTHELPER_HXX
+#include "XMLStylesExportHelper.hxx"
+#endif
+#ifndef _SC_XMLCHANGETRACKINGEXPORTHELPER_HXX
+#include "XMLChangeTrackingExportHelper.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLKYWD_HXX
@@ -290,29 +302,41 @@ SvXMLExport( rFileName, rHandler, xTempModel, rGrfContainer,
     mbShowProgress( bShowProgr ),
     nLastColumns(SC_DEFAULT_TABLE_COUNT, 0),
     nLastRows(SC_DEFAULT_TABLE_COUNT, 0),
-    aColumnStyles(),
-    aRowStyles(),
-    aCellStyles(),
-    aShapesContainer(),
-    aMergedRangesContainer(),
-    aValidationsContainer(),
+    pColumnStyles(NULL),
+    pRowStyles(NULL),
+    pCellStyles(NULL),
+    pShapesContainer(NULL),
+    pMergedRangesContainer(NULL),
+    pValidationsContainer(NULL),
     xChartExportMapper(new ScExportMapper()),
     nOpenRow(-1),
-    aRowFormatRanges(),
+    pRowFormatRanges(NULL),
     nCurrentTable(0),
     aTableStyles(),
     pCellsItr(NULL),
     bHasRowHeader(sal_False),
     bRowHeaderOpen(sal_False),
-    aGroupColumns(*this, sXML_table_column_group),
-    aGroupRows(*this, sXML_table_row_group),
     nProgressReference(0),
     nProgressValue(0),
     nProgressObjects(0),
     nOldProgressValue(0),
-    bShapeStyles (sal_False)
+    bShapeStyles (sal_False),
+    pDetectiveObjContainer(NULL),
+    pChangeTrackingExportHelper(NULL)
 {
     pDoc = ScXMLConverter::GetScDocument( xTempModel );
+    pGroupColumns = new ScMyOpenCloseColumnRowGroup(*this, sXML_table_column_group);
+    pGroupRows = new ScMyOpenCloseColumnRowGroup(*this, sXML_table_row_group);
+    pColumnStyles = new ScColumnRowStyles();
+    pRowStyles = new ScColumnRowStyles();
+    pCellStyles = new ScFormatRangeStyles();
+    pRowFormatRanges = new ScRowFormatRanges();
+    pShapesContainer = new ScMyShapesContainer();
+    pMergedRangesContainer = new ScMyMergedRangesContainer();
+    pValidationsContainer = new ScMyValidationsContainer();
+    pDetectiveObjContainer = new ScMyDetectiveObjContainer();
+    pCellsItr = new ScMyNotEmptyCellsIterator(*this);
+    pChangeTrackingExportHelper = new ScChangeTrackingExportHelper();
     DBG_ASSERT( pDoc, "ScXMLImport::ScXMLImport - no ScDocument!" );
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xModel, uno::UNO_QUERY );
     if ( xSpreadDoc.is() )
@@ -354,6 +378,30 @@ SvXMLExport( rFileName, rHandler, xTempModel, rGrfContainer,
 
 ScXMLExport::~ScXMLExport()
 {
+    if (pGroupColumns)
+        delete pGroupColumns;
+    if (pGroupRows)
+        delete pGroupRows;
+    if (pColumnStyles)
+        delete pColumnStyles;
+    if (pRowStyles)
+        delete pRowStyles;
+    if (pCellStyles)
+        delete pCellStyles;
+    if (pRowFormatRanges)
+        delete pRowFormatRanges;
+    if (pShapesContainer)
+        delete pShapesContainer;
+    if (pMergedRangesContainer)
+        delete pMergedRangesContainer;
+    if (pValidationsContainer)
+        delete pValidationsContainer;
+    if (pDetectiveObjContainer)
+        delete pDetectiveObjContainer;
+    if (pCellsItr)
+        delete pCellsItr;
+    if (pChangeTrackingExportHelper)
+        delete pChangeTrackingExportHelper;
 }
 
 void ScXMLExport::_ExportMeta()
@@ -371,7 +419,7 @@ void ScXMLExport::_ExportMeta()
         if ( xIndex.is() )
         {
             nTableCount = xIndex->getCount();
-            aCellStyles.AddNewTable(nTableCount - 1);
+            pCellStyles->AddNewTable(nTableCount - 1);
             aTableShapes.resize(nTableCount);
             for (sal_Int32 nTable = 0; nTable < nTableCount; nTable++)
             {
@@ -426,7 +474,7 @@ void ScXMLExport::_ExportMeta()
                                                                 aMyShape.aAddress = aRange.aStart;
                                                                 aMyShape.aEndAddress = aRange.aEnd;
                                                                 aMyShape.nIndex = nShape;
-                                                                aShapesContainer.AddNewShape(aMyShape);
+                                                                pShapesContainer->AddNewShape(aMyShape);
                                                                 SetLastColumn(nTable, aRange.aStart.Col());
                                                                 SetLastRow(nTable, aRange.aStart.Row());
                                                             }
@@ -481,7 +529,7 @@ void ScXMLExport::_ExportFontDecls()
 
 void ScXMLExport::_ExportChangeTracking()
 {
-    aChangeTrackingExportHelper.CollectAndWriteChanges(GetDocument());
+    pChangeTrackingExportHelper->CollectAndWriteChanges(GetDocument());
 }
 
 table::CellRangeAddress ScXMLExport::GetEndAddress(uno::Reference<sheet::XSpreadsheet>& xTable,const sal_Int16 nTable)
@@ -582,7 +630,7 @@ sal_Bool ScXMLExport::GetxCurrentShapes(uno::Reference<container::XIndexAccess>&
 void ScXMLExport::WriteColumn(const sal_Int32 nRepeatColumns, const sal_Int32 nStyleIndex, const sal_Bool bIsVisible)
 {
     CheckAttrList();
-    AddAttribute(XML_NAMESPACE_TABLE, sXML_style_name, *aColumnStyles.GetStyleNameByIndex(nStyleIndex));
+    AddAttribute(XML_NAMESPACE_TABLE, sXML_style_name, *pColumnStyles->GetStyleNameByIndex(nStyleIndex));
     if (!bIsVisible)
         AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_visibility, sXML_collapse);
     if (nRepeatColumns > 1)
@@ -635,7 +683,7 @@ void ScXMLExport::ExportColumns(const sal_Int16 nTable, const table::CellRangeAd
                     uno::Reference <beans::XPropertySet> xColumnProperties(xTableColumn, uno::UNO_QUERY);
                     if (xColumnProperties.is())
                     {
-                        nIndex = aColumnStyles.GetStyleNameIndex(nTable, nColumn);
+                        nIndex = pColumnStyles->GetStyleNameIndex(nTable, nColumn);
 
                         uno::Any aAny = xColumnProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLVIS)));
                         sal_Bool bIsVisible(sal_True);
@@ -649,15 +697,15 @@ void ScXMLExport::ExportColumns(const sal_Int16 nTable, const table::CellRangeAd
                                 if (nColumn > 0)
                                 {
                                     WriteColumn(nColsRepeated, nPrevIndex, bPrevIsVisible);
-                                    if (aGroupColumns.IsGroupEnd(nColumn - 1))
-                                        aGroupColumns.CloseGroups(nColumn - 1);
+                                    if (pGroupColumns->IsGroupEnd(nColumn - 1))
+                                        pGroupColumns->CloseGroups(nColumn - 1);
                                 }
                                 bPrevIsVisible = bIsVisible;
                                 nPrevIndex = nIndex;
                                 nColsRepeated = 1;
                                 bIsFirst = sal_True;
-                                if(aGroupColumns.IsGroupStart(nColumn))
-                                    aGroupColumns.OpenGroups(nColumn);
+                                if(pGroupColumns->IsGroupStart(nColumn))
+                                    pGroupColumns->OpenGroups(nColumn);
                                 OpenHeaderColumn();
                                 bWasHeader = sal_True;
                                 bIsClosed = sal_False;
@@ -666,8 +714,8 @@ void ScXMLExport::ExportColumns(const sal_Int16 nTable, const table::CellRangeAd
                             {
                                 WriteColumn(nColsRepeated, nPrevIndex, bPrevIsVisible);
                                 CloseHeaderColumn();
-                                if (aGroupColumns.IsGroupEnd(nColumn - 1))
-                                    aGroupColumns.CloseGroups(nColumn - 1);
+                                if (pGroupColumns->IsGroupEnd(nColumn - 1))
+                                    pGroupColumns->CloseGroups(nColumn - 1);
                                 bPrevIsVisible = bIsVisible;
                                 nPrevIndex = nIndex;
                                 nColsRepeated = 1;
@@ -677,26 +725,26 @@ void ScXMLExport::ExportColumns(const sal_Int16 nTable, const table::CellRangeAd
                         }
                         else if (nColumn == 0)
                         {
-                            if (aGroupColumns.IsGroupStart(nColumn))
-                                aGroupColumns.OpenGroups(nColumn);
+                            if (pGroupColumns->IsGroupStart(nColumn))
+                                pGroupColumns->OpenGroups(nColumn);
                             bPrevIsVisible = bIsVisible;
                             nPrevIndex = nIndex;
                             bIsFirst = sal_True;
                         }
                         else if ((bIsVisible == bPrevIsVisible) && (nIndex == nPrevIndex) &&
-                            !aGroupColumns.IsGroupStart(nColumn) && !aGroupColumns.IsGroupEnd(nColumn - 1))
+                            !pGroupColumns->IsGroupStart(nColumn) && !pGroupColumns->IsGroupEnd(nColumn - 1))
                             nColsRepeated++;
                         else
                         {
                             bIsFirst = sal_False;
                             WriteColumn(nColsRepeated, nPrevIndex, bPrevIsVisible);
-                            if (aGroupColumns.IsGroupEnd(nColumn - 1))
-                                aGroupColumns.CloseGroups(nColumn - 1);
-                            if (aGroupColumns.IsGroupStart(nColumn))
+                            if (pGroupColumns->IsGroupEnd(nColumn - 1))
+                                pGroupColumns->CloseGroups(nColumn - 1);
+                            if (pGroupColumns->IsGroupStart(nColumn))
                             {
                                 if (bIsHeader)
                                     CloseHeaderColumn();
-                                aGroupColumns.OpenGroups(nColumn);
+                                pGroupColumns->OpenGroups(nColumn);
                                 if (bIsHeader)
                                     OpenHeaderColumn();
                             }
@@ -711,8 +759,8 @@ void ScXMLExport::ExportColumns(const sal_Int16 nTable, const table::CellRangeAd
                 WriteColumn(nColsRepeated, nPrevIndex, bPrevIsVisible);
             if (!bIsClosed)
                 CloseHeaderColumn();
-            if (aGroupColumns.IsGroupEnd(nColumn - 1))
-                aGroupColumns.CloseGroups(nColumn - 1);
+            if (pGroupColumns->IsGroupEnd(nColumn - 1))
+                pGroupColumns->CloseGroups(nColumn - 1);
         }
     }
 }
@@ -725,7 +773,7 @@ void ScXMLExport::WriteRowContent()
     sal_Int32 nPrevValidationIndex = -1;
     sal_Bool bIsAutoStyle(sal_True);
     sal_Bool bIsFirst(sal_True);
-    while (aRowFormatRanges.GetNext(aRange))
+    while (pRowFormatRanges->GetNext(aRange))
     {
         if (bIsFirst)
         {
@@ -742,9 +790,9 @@ void ScXMLExport::WriteRowContent()
                 nCols += aRange.nRepeatColumns;
             else
             {
-                AddAttribute(XML_NAMESPACE_TABLE, sXML_style_name, *aCellStyles.GetStyleNameByIndex(nIndex, bIsAutoStyle));
+                AddAttribute(XML_NAMESPACE_TABLE, sXML_style_name, *pCellStyles->GetStyleNameByIndex(nIndex, bIsAutoStyle));
                 if (nPrevValidationIndex > -1)
-                    AddAttribute(XML_NAMESPACE_TABLE, sXML_content_validation_name, aValidationsContainer.GetValidationName(nPrevValidationIndex));
+                    AddAttribute(XML_NAMESPACE_TABLE, sXML_content_validation_name, pValidationsContainer->GetValidationName(nPrevValidationIndex));
                 if (nCols > 1)
                 {
                     rtl::OUStringBuffer aBuf;
@@ -762,9 +810,9 @@ void ScXMLExport::WriteRowContent()
     if (!bIsFirst)
     {
         table::CellAddress aCellAddress;
-        AddAttribute(XML_NAMESPACE_TABLE, sXML_style_name, *aCellStyles.GetStyleNameByIndex(nIndex, bIsAutoStyle));
+        AddAttribute(XML_NAMESPACE_TABLE, sXML_style_name, *pCellStyles->GetStyleNameByIndex(nIndex, bIsAutoStyle));
         if (nPrevValidationIndex > -1)
-            AddAttribute(XML_NAMESPACE_TABLE, sXML_content_validation_name, aValidationsContainer.GetValidationName(nPrevValidationIndex));
+            AddAttribute(XML_NAMESPACE_TABLE, sXML_content_validation_name, pValidationsContainer->GetValidationName(nPrevValidationIndex));
         if (nCols > 1)
         {
             rtl::OUStringBuffer aBuf;
@@ -777,7 +825,7 @@ void ScXMLExport::WriteRowContent()
 
 void ScXMLExport::WriteRowStartTag(const sal_Int32 nIndex, const sal_Int8 nFlag, const sal_Int32 nEqualRows)
 {
-    AddAttribute(XML_NAMESPACE_TABLE, sXML_style_name, *aRowStyles.GetStyleNameByIndex(nIndex));
+    AddAttribute(XML_NAMESPACE_TABLE, sXML_style_name, *pRowStyles->GetStyleNameByIndex(nIndex));
     if (nFlag)
         if (nFlag & CR_HIDDEN)
             AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_visibility, sXML_collapse);
@@ -814,11 +862,11 @@ void ScXMLExport::CloseHeaderRows()
 void ScXMLExport::OpenNewRow(const sal_Int32 nIndex, const sal_Int8 nFlag, const sal_Int32 nStartRow, const sal_Int32 nEqualRows)
 {
     nOpenRow = nStartRow;
-    if (aGroupRows.IsGroupStart(nStartRow))
+    if (pGroupRows->IsGroupStart(nStartRow))
     {
         if (bHasRowHeader && bRowHeaderOpen)
             CloseHeaderRows();
-        aGroupRows.OpenGroups(nStartRow);
+        pGroupRows->OpenGroups(nStartRow);
         if (bHasRowHeader && bRowHeaderOpen)
             OpenHeaderRows();
     }
@@ -849,7 +897,7 @@ void ScXMLExport::OpenAndCloseRow(const sal_Int32 nIndex, const sal_Int8 nFlag, 
     OpenNewRow(nIndex, nFlag, nStartRow, nEqualRows);
     WriteRowContent();
     CloseRow(nStartRow + nEqualRows - 1);
-    aRowFormatRanges.Clear();
+    pRowFormatRanges->Clear();
 }
 
 void ScXMLExport::OpenRow(const sal_Int16 nTable, const sal_Int32 nStartRow, const sal_Int32 nRepeatRow)
@@ -863,17 +911,17 @@ void ScXMLExport::OpenRow(const sal_Int16 nTable, const sal_Int32 nStartRow, con
         {
             if (nRow == nStartRow)
             {
-                nPrevIndex = aRowStyles.GetStyleNameIndex(nTable, nRow);
+                nPrevIndex = pRowStyles->GetStyleNameIndex(nTable, nRow);
                 nPrevFlag = (pDoc->GetRowFlags(static_cast<USHORT>(nRow), nTable)) & (CR_HIDDEN | CR_FILTERED);
             }
             else
             {
-                nIndex = aRowStyles.GetStyleNameIndex(nTable, nRow);
+                nIndex = pRowStyles->GetStyleNameIndex(nTable, nRow);
                 nFlag = (pDoc->GetRowFlags(static_cast<USHORT>(nRow), nTable)) & (CR_HIDDEN | CR_FILTERED);
                 if (nIndex == nPrevIndex && nFlag == nPrevFlag &&
                     !(bHasRowHeader && nRow == aRowHeaderRange.StartRow) &&
-                    !(aGroupRows.IsGroupStart(nRow)) &&
-                    !(aGroupRows.IsGroupEnd(nRow - 1)))
+                    !(pGroupRows->IsGroupStart(nRow)) &&
+                    !(pGroupRows->IsGroupEnd(nRow - 1)))
                     nEqualRows++;
                 else
                 {
@@ -888,7 +936,7 @@ void ScXMLExport::OpenRow(const sal_Int16 nTable, const sal_Int32 nStartRow, con
     }
     else
     {
-        sal_Int32 nIndex = aRowStyles.GetStyleNameIndex(nTable, nStartRow);
+        sal_Int32 nIndex = pRowStyles->GetStyleNameIndex(nTable, nStartRow);
         sal_Int8 nFlag = (pDoc->GetRowFlags(static_cast<USHORT>(nStartRow), nTable)) & (CR_HIDDEN | CR_FILTERED);
         OpenNewRow(nIndex, nFlag, nStartRow, 1);
     }
@@ -907,11 +955,11 @@ void ScXMLExport::CloseRow(const sal_Int32 nRow)
             CloseHeaderRows();
             bRowHeaderOpen = sal_False;
         }
-        if (aGroupRows.IsGroupEnd(nRow))
+        if (pGroupRows->IsGroupEnd(nRow))
         {
             if (bHasRowHeader && bRowHeaderOpen)
                 CloseHeaderRows();
-            aGroupRows.CloseGroups(nRow);
+            pGroupRows->CloseGroups(nRow);
             if (bHasRowHeader && bRowHeaderOpen)
                 OpenHeaderRows();
         }
@@ -922,29 +970,29 @@ void ScXMLExport::CloseRow(const sal_Int32 nRow)
 void ScXMLExport::ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 nStartRow,
     const sal_Int32 nEndCol, const sal_Int32 nEndRow, const sal_Int16 nSheet)
 {
-    aRowFormatRanges.Clear();
+    pRowFormatRanges->Clear();
     if (nStartRow == nEndRow)
     {
-        aCellStyles.GetFormatRanges(nStartCol, nEndCol, nStartRow, nSheet, aRowFormatRanges);
+        pCellStyles->GetFormatRanges(nStartCol, nEndCol, nStartRow, nSheet, pRowFormatRanges);
         if (nOpenRow == - 1)
             OpenRow(nSheet, nStartRow, 1);
         WriteRowContent();
-        aRowFormatRanges.Clear();
+        pRowFormatRanges->Clear();
     }
     else
     {
         if (nOpenRow > -1)
         {
-            aCellStyles.GetFormatRanges(nStartCol, GetLastColumn(nSheet), nStartRow, nSheet, aRowFormatRanges);
+            pCellStyles->GetFormatRanges(nStartCol, GetLastColumn(nSheet), nStartRow, nSheet, pRowFormatRanges);
             WriteRowContent();
             CloseRow(nStartRow);
             sal_Int32 nRows = 1;
             sal_Int32 nTotalRows = nEndRow - nStartRow + 1 - 1;
             while (nRows < nTotalRows)
             {
-                aRowFormatRanges.Clear();
-                aCellStyles.GetFormatRanges(0, GetLastColumn(nSheet), nStartRow + nRows, nSheet, aRowFormatRanges);
-                sal_Int32 nMaxRows = aRowFormatRanges.GetMaxRows();
+                pRowFormatRanges->Clear();
+                pCellStyles->GetFormatRanges(0, GetLastColumn(nSheet), nStartRow + nRows, nSheet, pRowFormatRanges);
+                sal_Int32 nMaxRows = pRowFormatRanges->GetMaxRows();
                 if (nMaxRows >= nTotalRows - nRows)
                 {
                     OpenRow(nSheet, nStartRow + nRows, nTotalRows - nRows);
@@ -955,16 +1003,16 @@ void ScXMLExport::ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 
                     OpenRow(nSheet, nStartRow + nRows, nMaxRows);
                     nRows += nMaxRows;
                 }
-                if (!aRowFormatRanges.GetSize())
-                    aCellStyles.GetFormatRanges(0, GetLastColumn(nSheet), nStartRow + nRows, nSheet, aRowFormatRanges);
+                if (!pRowFormatRanges->GetSize())
+                    pCellStyles->GetFormatRanges(0, GetLastColumn(nSheet), nStartRow + nRows, nSheet, pRowFormatRanges);
                 WriteRowContent();
                 CloseRow(nStartRow + nRows - 1);
             }
             if (nTotalRows == 1)
                 CloseRow(nStartRow);
             OpenRow(nSheet, nEndRow, 1);
-            aRowFormatRanges.Clear();
-            aCellStyles.GetFormatRanges(0, nEndCol, nEndRow, nSheet, aRowFormatRanges);
+            pRowFormatRanges->Clear();
+            pCellStyles->GetFormatRanges(0, nEndCol, nEndRow, nSheet, pRowFormatRanges);
             WriteRowContent();
         }
         else
@@ -973,8 +1021,8 @@ void ScXMLExport::ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 
             sal_Int32 nTotalRows = nEndRow - nStartRow + 1 - 1;
             while (nRows < nTotalRows)
             {
-                aCellStyles.GetFormatRanges(0, GetLastColumn(nSheet), nStartRow + nRows, nSheet, aRowFormatRanges);
-                sal_Int32 nMaxRows = aRowFormatRanges.GetMaxRows();
+                pCellStyles->GetFormatRanges(0, GetLastColumn(nSheet), nStartRow + nRows, nSheet, pRowFormatRanges);
+                sal_Int32 nMaxRows = pRowFormatRanges->GetMaxRows();
                 if (nMaxRows >= nTotalRows - nRows)
                 {
                     OpenRow(nSheet, nStartRow + nRows, nTotalRows - nRows);
@@ -985,14 +1033,14 @@ void ScXMLExport::ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 
                     OpenRow(nSheet, nStartRow + nRows, nMaxRows);
                     nRows += nMaxRows;
                 }
-                if (!aRowFormatRanges.GetSize())
-                    aCellStyles.GetFormatRanges(0, GetLastColumn(nSheet), nStartRow + nRows, nSheet, aRowFormatRanges);
+                if (!pRowFormatRanges->GetSize())
+                    pCellStyles->GetFormatRanges(0, GetLastColumn(nSheet), nStartRow + nRows, nSheet, pRowFormatRanges);
                 WriteRowContent();
                 CloseRow(nStartRow + nRows - 1);
             }
             OpenRow(nSheet, nEndRow, 1);
-            aRowFormatRanges.Clear();
-            aCellStyles.GetFormatRanges(0, nEndCol, nEndRow, nSheet, aRowFormatRanges);
+            pRowFormatRanges->Clear();
+            pCellStyles->GetFormatRanges(0, nEndCol, nEndRow, nSheet, pRowFormatRanges);
             WriteRowContent();
         }
     }
@@ -1022,7 +1070,7 @@ sal_Bool ScXMLExport::GetRowHeader(com::sun::star::table::CellRangeAddress& aRow
     return bResult;
 }
 
-void ScXMLExport::FillFieldGroup(ScOutlineArray* pFields, ScMyOpenCloseColumnRowGroup& rGroups)
+void ScXMLExport::FillFieldGroup(ScOutlineArray* pFields, ScMyOpenCloseColumnRowGroup* pGroups)
 {
     sal_Int32 nDepth = pFields->GetDepth();
     for(sal_Int32 i = 0; i < nDepth; i++)
@@ -1035,11 +1083,11 @@ void ScXMLExport::FillFieldGroup(ScOutlineArray* pFields, ScMyOpenCloseColumnRow
             aGroup.nField = pEntry->GetStart();
             aGroup.nLevel = static_cast<sal_Int16>(i);
             aGroup.bDisplay = !(pEntry->IsHidden());
-            rGroups.AddGroup(aGroup, pEntry->GetEnd());
+            pGroups->AddGroup(aGroup, pEntry->GetEnd());
         }
     }
     if (nDepth)
-        rGroups.Sort();
+        pGroups->Sort();
 }
 
 void ScXMLExport::FillColumnRowGroups()
@@ -1050,11 +1098,11 @@ void ScXMLExport::FillColumnRowGroups()
         ScOutlineArray* pCols = pOutlineTable->GetColArray();
         ScOutlineArray* pRows = pOutlineTable->GetRowArray();
         if (pCols)
-            FillFieldGroup(pCols, aGroupColumns);
+            FillFieldGroup(pCols, pGroupColumns);
         if (pRows)
-            FillFieldGroup(pRows, aGroupRows);
-        SetLastColumn(nCurrentTable, aGroupColumns.GetLast());
-        SetLastRow(nCurrentTable, aGroupRows.GetLast());
+            FillFieldGroup(pRows, pGroupRows);
+        SetLastColumn(nCurrentTable, pGroupColumns->GetLast());
+        SetLastRow(nCurrentTable, pGroupRows->GetLast());
     }
 }
 
@@ -1077,22 +1125,22 @@ void ScXMLExport::_ExportContent()
             ScMyDetectiveOpContainer aDetectiveOpContainer;
             GetDetectiveOpList( aDetectiveOpContainer );
 
-            aCellStyles.Sort();
-            aShapesContainer.Sort();
-            aMergedRangesContainer.Sort();
-            aDetectiveObjContainer.Sort();
+            pCellStyles->Sort();
+            pShapesContainer->Sort();
+            pMergedRangesContainer->Sort();
+            pDetectiveObjContainer->Sort();
 
             ScMyNotEmptyCellsIterator aCellsItr(*this);
             pCellsItr = &aCellsItr;
-            aCellsItr.SetShapes( &aShapesContainer );
-            aCellsItr.SetMergedRanges( &aMergedRangesContainer );
+            aCellsItr.SetShapes( pShapesContainer );
+            aCellsItr.SetMergedRanges( pMergedRangesContainer );
             aCellsItr.SetAreaLinks( &aAreaLinks );
             aCellsItr.SetEmptyDatabaseRanges( &aEmptyRanges );
-            aCellsItr.SetDetectiveObj( &aDetectiveObjContainer );
+            aCellsItr.SetDetectiveObj( pDetectiveObjContainer );
             aCellsItr.SetDetectiveOp( &aDetectiveOpContainer );
 
             if (nTableCount > 0)
-                aValidationsContainer.WriteValidations(*this);
+                pValidationsContainer->WriteValidations(*this);
             WriteTheLabelRanges( xSpreadDoc );
             for (sal_uInt16 nTable = 0; nTable < nTableCount; nTable++)
             {
@@ -1126,8 +1174,8 @@ void ScXMLExport::_ExportContent()
                         SetLastColumn(nTable, aRange.EndColumn);
                         SetLastRow(nTable, aRange.EndRow);
                         aCellsItr.SetCurrentTable(nTable);
-                        aGroupColumns.NewTable();
-                        aGroupRows.NewTable();
+                        pGroupColumns->NewTable();
+                        pGroupRows->NewTable();
                         FillColumnRowGroups();
                         table::CellRangeAddress aColumnHeaderRange;
                         sal_Bool bHasColumnHeader(GetColumnHeader(aColumnHeaderRange));
@@ -1257,7 +1305,7 @@ void ScXMLExport::_ExportAutoStyles()
         if ( xIndex.is() )
         {
             sal_Int32 nTableCount = xIndex->getCount();
-            aCellStyles.AddNewTable(nTableCount - 1);
+            pCellStyles->AddNewTable(nTableCount - 1);
             aTableShapes.resize(nTableCount);
             for (sal_uInt16 nTable = 0; nTable < nTableCount; nTable++)
             {
@@ -1302,7 +1350,7 @@ void ScXMLExport::_ExportAutoStyles()
                                             table::CellRangeAddress aRangeAddress = xCellRangeAddressable->getRangeAddress();
                                             uno::Any aValidation = xProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_VALIXML)));
                                             sal_Int32 nValidationIndex(-1);
-                                            if (aValidationsContainer.AddValidation(aValidation, aRangeAddress, nValidationIndex))
+                                            if (pValidationsContainer->AddValidation(aValidation, aRangeAddress, nValidationIndex))
                                             {
                                                 SetLastColumn(nTable, aRangeAddress.EndColumn);
                                                 SetLastRow(nTable, aRangeAddress.EndRow);
@@ -1327,21 +1375,21 @@ void ScXMLExport::_ExportAutoStyles()
                                                     {
                                                         sName = GetAutoStylePool()->Add(XML_STYLE_FAMILY_TABLE_CELL, sStyleName, xPropStates);
                                                         rtl::OUString* pTemp = new rtl::OUString(sName);
-                                                        nIndex = aCellStyles.AddStyleName(pTemp);
+                                                        nIndex = pCellStyles->AddStyleName(pTemp);
                                                     }
                                                     else
-                                                        nIndex = aCellStyles.GetIndexOfStyleName(sName, SC_SCELLPREFIX, bIsAutoStyle);
+                                                        nIndex = pCellStyles->GetIndexOfStyleName(sName, SC_SCELLPREFIX, bIsAutoStyle);
                                                     SetLastColumn(nTable, aRangeAddress.EndColumn);
                                                     SetLastRow(nTable, aRangeAddress.EndRow);
-                                                    aCellStyles.AddRangeStyleName(aRangeAddress, nIndex, bIsAutoStyle, nValidationIndex);
+                                                    pCellStyles->AddRangeStyleName(aRangeAddress, nIndex, bIsAutoStyle, nValidationIndex);
                                                     GetMerged(xCellRange, xTable);
                                                 }
                                                 else
                                                 {
                                                     GetMerged(xCellRange, xTable);
                                                     rtl::OUString* pTemp = new rtl::OUString(sStyleName);
-                                                    sal_Int32 nIndex = aCellStyles.AddStyleName(pTemp, sal_False);
-                                                    aCellStyles.AddRangeStyleName(aRangeAddress, nIndex, sal_False, nValidationIndex);
+                                                    sal_Int32 nIndex = pCellStyles->AddStyleName(pTemp, sal_False);
+                                                    pCellStyles->AddRangeStyleName(aRangeAddress, nIndex, sal_False, nValidationIndex);
                                                     if (sStyleName.compareToAscii("Default") != 0)
                                                     {
                                                         SetLastColumn(nTable, aRangeAddress.EndColumn);
@@ -1372,12 +1420,12 @@ void ScXMLExport::_ExportAutoStyles()
                                 if (aCellAddress.EndColumn > nColumns)
                                 {
                                     nColumns++;
-                                    aColumnStyles.AddNewTable(nTable, aCellAddress.EndColumn);
+                                    pColumnStyles->AddNewTable(nTable, aCellAddress.EndColumn);
                                 }
 //                              else if (nColumns < MAXCOL)
-//                                  aColumnStyles.AddNewTable(nTable, ++nColumns);
+//                                  pColumnStyles->AddNewTable(nTable, ++nColumns);
                                 else
-                                    aColumnStyles.AddNewTable(nTable, nColumns);
+                                    pColumnStyles->AddNewTable(nTable, nColumns);
                                 sal_Int32 nColumn = 0;
                                 while (/*nColumn <= nColumns && */nColumn <= MAXCOL)
                                 {
@@ -1398,11 +1446,11 @@ void ScXMLExport::_ExportAutoStyles()
                                                 {
                                                     sName = GetAutoStylePool()->Add(XML_STYLE_FAMILY_TABLE_COLUMN, sParent, xPropStates);
                                                     rtl::OUString* pTemp = new rtl::OUString(sName);
-                                                    nIndex = aColumnStyles.AddStyleName(pTemp);
+                                                    nIndex = pColumnStyles->AddStyleName(pTemp);
                                                 }
                                                 else
-                                                    nIndex = aColumnStyles.GetIndexOfStyleName(sName, SC_SCOLUMNPREFIX);
-                                                aColumnStyles.AddFieldStyleName(nTable, nColumn, nIndex);
+                                                    nIndex = pColumnStyles->GetIndexOfStyleName(sName, SC_SCOLUMNPREFIX);
+                                                pColumnStyles->AddFieldStyleName(nTable, nColumn, nIndex);
                                             }
                                         }
                                     }
@@ -1411,13 +1459,13 @@ void ScXMLExport::_ExportAutoStyles()
                                     if (nColumn == MAXCOL)
                                         nColumn++;
                                     for (sal_Int32 i = nOld + 1; i < nColumn; i++)
-                                        aColumnStyles.AddFieldStyleName(nTable, i, nIndex);
+                                        pColumnStyles->AddFieldStyleName(nTable, i, nIndex);
                                 }
                                 if (aCellAddress.EndColumn > nColumns)
                                 {
-                                    sal_Int32 nIndex = aColumnStyles.GetStyleNameIndex(nTable, nColumns);
+                                    sal_Int32 nIndex = pColumnStyles->GetStyleNameIndex(nTable, nColumns);
                                     for (sal_Int32 i = nColumns + 1; i <= aCellAddress.EndColumn; i++)
-                                        aColumnStyles.AddFieldStyleName(nTable, i, nIndex);
+                                        pColumnStyles->AddFieldStyleName(nTable, i, nIndex);
                                 }
                             }
                             uno::Reference<table::XTableRows> xTableRows = xColumnRowRange->getRows();
@@ -1429,12 +1477,12 @@ void ScXMLExport::_ExportAutoStyles()
                                 if (aCellAddress.EndRow > nRows)
                                 {
                                     nRows++;
-                                    aRowStyles.AddNewTable(nTable, aCellAddress.EndRow);
+                                    pRowStyles->AddNewTable(nTable, aCellAddress.EndRow);
                                 }
 //                              else if (nRows < MAXROW)
-//                                  aRowStyles.AddNewTable(nTable, ++nRows);
+//                                  pRowStyles->AddNewTable(nTable, ++nRows);
                                 else
-                                    aRowStyles.AddNewTable(nTable, nRows);
+                                    pRowStyles->AddNewTable(nTable, nRows);
                                 sal_Int32 nRow = 0;
                                 while ( /*nRow <= nRows && */nRow <= MAXROW)
                                 {
@@ -1455,11 +1503,11 @@ void ScXMLExport::_ExportAutoStyles()
                                                 {
                                                     sName = GetAutoStylePool()->Add(XML_STYLE_FAMILY_TABLE_ROW, sParent, xPropStates);
                                                     rtl::OUString* pTemp = new rtl::OUString(sName);
-                                                    nIndex = aRowStyles.AddStyleName(pTemp);
+                                                    nIndex = pRowStyles->AddStyleName(pTemp);
                                                 }
                                                 else
-                                                    nIndex = aRowStyles.GetIndexOfStyleName(sName, SC_SROWPREFIX);
-                                                aRowStyles.AddFieldStyleName(nTable, nRow, nIndex);
+                                                    nIndex = pRowStyles->GetIndexOfStyleName(sName, SC_SROWPREFIX);
+                                                pRowStyles->AddFieldStyleName(nTable, nRow, nIndex);
                                             }
                                         }
                                     }
@@ -1468,13 +1516,13 @@ void ScXMLExport::_ExportAutoStyles()
                                     if (nRow == MAXROW)
                                         nRow++;
                                     for (sal_Int32 i = nOld + 1; i < nRow; i++)
-                                        aRowStyles.AddFieldStyleName(nTable, i, nIndex);
+                                        pRowStyles->AddFieldStyleName(nTable, i, nIndex);
                                 }
                                 if (aCellAddress.EndRow > nRows)
                                 {
-                                    sal_Int32 nIndex = aRowStyles.GetStyleNameIndex(nTable, nRows);
+                                    sal_Int32 nIndex = pRowStyles->GetStyleNameIndex(nTable, nRows);
                                     for (sal_Int32 i = nRows + 1; i <= aCellAddress.EndRow; i++)
-                                        aRowStyles.AddFieldStyleName(nTable, i, nIndex);
+                                        pRowStyles->AddFieldStyleName(nTable, i, nIndex);
                                 }
                             }
                         }
@@ -1561,7 +1609,7 @@ void ScXMLExport::CollectInternalShape( uno::Reference< drawing::XShape > xShape
             sal_Bool        bRedLine;
             ScDetectiveObjType eObjType = aDetFunc.GetDetectiveObjectType(
                 pObject, aPosition, aSourceRange, bRedLine );
-            aDetectiveObjContainer.AddObject( eObjType, aPosition, aSourceRange, bRedLine );
+            pDetectiveObjContainer->AddObject( eObjType, aPosition, aSourceRange, bRedLine );
         }
     }
 }
@@ -1617,7 +1665,7 @@ void ScXMLExport::GetMerged (const uno::Reference <table::XCellRange>& xCellRang
                         if (GetMerge(xTable, i, j, aCellAddress3) &&
                             (aCellAddress3.EndColumn > i || aCellAddress3.EndRow > j))
                         {
-                            aMergedRangesContainer.AddRange(aCellAddress3);
+                            pMergedRangesContainer->AddRange(aCellAddress3);
                             i = aCellAddress3.EndColumn;
                             if (aCellAddress3.EndRow < nNextRow)
                                 nNextRow = aCellAddress3.EndRow;
@@ -1736,7 +1784,7 @@ sal_Int32 ScXMLExport::GetCellNumberFormat(const com::sun::star::uno::Reference 
 
 sal_Bool ScXMLExport::GetCellStyleNameIndex(const ScMyCell& aCell, sal_Int32& nStyleNameIndex, sal_Bool& bIsAutoStyle, sal_Int32& nValidationIndex)
 {
-    sal_Int32 nIndex = aCellStyles.GetStyleNameIndex(aCell.aCellAddress.Sheet, aCell.aCellAddress.Column, aCell.aCellAddress.Row, bIsAutoStyle, nValidationIndex);
+    sal_Int32 nIndex = pCellStyles->GetStyleNameIndex(aCell.aCellAddress.Sheet, aCell.aCellAddress.Column, aCell.aCellAddress.Row, bIsAutoStyle, nValidationIndex);
     if (nIndex > -1)
     {
         nStyleNameIndex = nIndex;
@@ -1763,9 +1811,9 @@ void ScXMLExport::WriteCell (const ScMyCell& aCell)
     sal_Bool bIsAutoStyle;
     sal_Int32 nValidationIndex;
     if (GetCellStyleNameIndex(aCell, nIndex, bIsAutoStyle, nValidationIndex))
-        AddAttribute(XML_NAMESPACE_TABLE, sXML_style_name, *aCellStyles.GetStyleNameByIndex(nIndex, bIsAutoStyle));
+        AddAttribute(XML_NAMESPACE_TABLE, sXML_style_name, *pCellStyles->GetStyleNameByIndex(nIndex, bIsAutoStyle));
     if (nValidationIndex > -1)
-        AddAttribute(XML_NAMESPACE_TABLE, sXML_content_validation_name, aValidationsContainer.GetValidationName(nValidationIndex));
+        AddAttribute(XML_NAMESPACE_TABLE, sXML_content_validation_name, pValidationsContainer->GetValidationName(nValidationIndex));
     sal_Bool bIsMatrix(aCell.bIsMatrixBase || aCell.bIsMatrixCovered);
     sal_Bool bIsFirstMatrixCell(aCell.bIsMatrixBase);
     if (bIsFirstMatrixCell)

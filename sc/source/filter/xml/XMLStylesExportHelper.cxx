@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-05 11:05:07 $
+ *  last change: $Author: sab $ $Date: 2001-01-11 06:57:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -686,7 +686,7 @@ sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int16 nTable, const s
     return -1;
 }
 void ScFormatRangeStyles::GetFormatRanges(const sal_Int32 nStartColumn, const sal_Int32 nEndColumn, const sal_Int32 nRow,
-                    const sal_Int16 nTable, ScRowFormatRanges& aFormatRanges)
+                    const sal_Int16 nTable, ScRowFormatRanges* pRowFormatRanges)
 {
     sal_Int32 nTotalColumns = nEndColumn - nStartColumn + 1;
     DBG_ASSERT(static_cast<sal_uInt32>(nTable) < aTables.size(), "wrong table");
@@ -733,7 +733,7 @@ void ScFormatRangeStyles::GetFormatRanges(const sal_Int32 nStartColumn, const sa
                     aRange.nStartColumn = aItr->aRangeAddress.StartColumn;
                 }
                 aRange.nRepeatRows = aItr->aRangeAddress.EndRow - nRow + 1;
-                aFormatRanges.AddRange(aRange);
+                pRowFormatRanges->AddRange(aRange);
                 nColumns += aRange.nRepeatColumns;
             }
             aItr++;
@@ -744,7 +744,7 @@ void ScFormatRangeStyles::GetFormatRanges(const sal_Int32 nStartColumn, const sa
             else
                 aItr++;
     }
-    aFormatRanges.Sort();
+    pRowFormatRanges->Sort();
 }
 
 void ScFormatRangeStyles::AddRangeStyleName(const table::CellRangeAddress aCellRangeAddress, const sal_Int32 nStringIndex, const sal_Bool bIsAutoStyle, const sal_Int32 nValidationIndex)

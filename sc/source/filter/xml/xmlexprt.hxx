@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-21 17:37:20 $
+ *  last change: $Author: sab $ $Date: 2001-01-11 06:57:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,22 +72,26 @@
 #ifndef _COM_SUN_STAR_SHEET_XSPREADSHEETDOCUMENT_HPP_
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #endif
-
-#ifndef _SC_XMLEXPORTITERATOR_HXX
-#include "XMLExportIterator.hxx"
-#endif
-#ifndef _SC_XMLCOLUMNROWGROUPEXPORT_HXX
-#include "XMLColumnRowGroupExport.hxx"
-#endif
-#ifndef _SC_XMLSTYLESEXPORTHELPER_HXX
-#include "XMLStylesExportHelper.hxx"
-#endif
-#ifndef _SC_XMLCHANGETRACKINGEXPORTHELPER_HXX
-#include "XMLChangeTrackingExportHelper.hxx"
+#ifndef _COM_SUN_STAR_TABLE_CELLRANGEADDRESS_HPP_
+#include <com/sun/star/table/CellRangeAddress.hpp>
 #endif
 
 class ScOutlineArray;
 class SvXMLExportPropertyMapper;
+class ScMyShapesContainer;
+class ScMyMergedRangesContainer;
+class ScMyValidationsContainer;
+class ScMyDetectiveObjContainer;
+class ScMyNotEmptyCellsIterator;
+class ScChangeTrackingExportHelper;
+class ScColumnRowStyles;
+class ScFormatRangeStyles;
+class ScRowFormatRanges;
+class ScMyOpenCloseColumnRowGroup;
+class ScMyAreaLinksContainer;
+class ScMyDetectiveOpContainer;
+struct ScMyCell;
+class ScDocument;
 
 typedef std::vector<sal_Int32> ScMyTableShapeIndexes;
 typedef std::vector<ScMyTableShapeIndexes> ScMyTableShapes;
@@ -109,14 +113,14 @@ class ScXMLExport : public SvXMLExport
     UniReference < SvXMLExportPropertyMapper >  xColumnStylesExportPropertySetMapper;
     UniReference < SvXMLExportPropertyMapper >  xRowStylesExportPropertySetMapper;
     UniReference < SvXMLExportPropertyMapper >  xTableStylesExportPropertySetMapper;
-    ScColumnRowStyles                   aColumnStyles;
-    ScColumnRowStyles                   aRowStyles;
-    ScFormatRangeStyles                 aCellStyles;
-    ScRowFormatRanges                   aRowFormatRanges;
+    ScColumnRowStyles*                  pColumnStyles;
+    ScColumnRowStyles*                  pRowStyles;
+    ScFormatRangeStyles*                pCellStyles;
+    ScRowFormatRanges*                  pRowFormatRanges;
     std::vector<rtl::OUString>          aTableStyles;
     com::sun::star::table::CellRangeAddress aRowHeaderRange;
-    ScMyOpenCloseColumnRowGroup         aGroupColumns;
-    ScMyOpenCloseColumnRowGroup         aGroupRows;
+    ScMyOpenCloseColumnRowGroup*        pGroupColumns;
+    ScMyOpenCloseColumnRowGroup*        pGroupRows;
     ScMyTableShapes                     aTableShapes;
 
     sal_Bool                    bHasRowHeader;
@@ -132,12 +136,12 @@ class ScXMLExport : public SvXMLExport
     std::vector<sal_Int32>      nLastColumns;
     std::vector<sal_Int32>      nLastRows;
 
-    ScMyShapesContainer         aShapesContainer;
-    ScMyMergedRangesContainer   aMergedRangesContainer;
-    ScMyValidationsContainer    aValidationsContainer;
-    ScMyDetectiveObjContainer   aDetectiveObjContainer;
+    ScMyShapesContainer*        pShapesContainer;
+    ScMyMergedRangesContainer*  pMergedRangesContainer;
+    ScMyValidationsContainer*   pValidationsContainer;
+    ScMyDetectiveObjContainer*  pDetectiveObjContainer;
     ScMyNotEmptyCellsIterator*  pCellsItr;
-    ScChangeTrackingExportHelper    aChangeTrackingExportHelper;
+    ScChangeTrackingExportHelper*   pChangeTrackingExportHelper;
 
     virtual void _ExportFontDecls();
     virtual void _ExportStyles( sal_Bool bUsed );
@@ -174,7 +178,7 @@ class ScXMLExport : public SvXMLExport
     void CloseRow(const sal_Int32 nRow);
     sal_Bool GetColumnHeader(com::sun::star::table::CellRangeAddress& aColumnHeaderRange) const;
     sal_Bool GetRowHeader(com::sun::star::table::CellRangeAddress& aRowHeaderRange) const;
-    void FillFieldGroup(ScOutlineArray* pFields, ScMyOpenCloseColumnRowGroup& rGroups);
+    void FillFieldGroup(ScOutlineArray* pFields, ScMyOpenCloseColumnRowGroup* pGroups);
     void FillColumnRowGroups();
 
     sal_Bool GetMerge (const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheet>& xTable,
