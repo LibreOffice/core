@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-14 10:55:42 $
+ *  last change: $Author: aw $ $Date: 2001-05-29 17:24:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1473,8 +1473,18 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
             }
         }
 
-        if(!bActivate)
+        if(bActivate)
+        {
+            // #87229# Set the necessary string like in
+            // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1072 ff.
+            String aTmp(ResId(STR_UNDO, SFX_APP()->GetSfxResManager()));
+            aTmp += pUndoManager->GetUndoActionComment(0);
+            rSet.Put(SfxStringItem(SID_UNDO, aTmp));
+        }
+        else
+        {
             rSet.DisableItem(SID_UNDO);
+        }
     }
     if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_GETUNDOSTRINGS))
     {
@@ -1520,8 +1530,18 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
             }
         }
 
-        if(!bActivate)
+        if(bActivate)
+        {
+            // #87229# Set the necessary string like in
+            // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1081 ff.
+            String aTmp(ResId(STR_REDO, SFX_APP()->GetSfxResManager()));
+            aTmp += pUndoManager->GetRedoActionComment(0);
+            rSet.Put(SfxStringItem(SID_REDO, aTmp));
+        }
+        else
+        {
             rSet.DisableItem(SID_REDO);
+        }
     }
     if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_GETREDOSTRINGS))
     {
