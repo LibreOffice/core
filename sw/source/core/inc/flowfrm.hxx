@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 13:06:27 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,26 +127,6 @@ class SwFlowFrm
         @author OD
     */
     const SwFrm* _GetPrevFrmForUpperSpaceCalc( const SwFrm* _pProposedPrevFrm = 0L ) const;
-
-    /** method to determine the spacing values of previous frame
-
-        OD 2004-03-10 #i11860#
-        Note: line spacing value is only determined for text frames
-
-        @param _rFrm
-        input parameter - frame, for which the spacing values are determined.
-
-        @param _roPrevLowerSpacing
-        output parameter - lower spacing of previous frame in SwTwips
-
-        @param _roPrevLineSpacing
-        output parameter - line spacing of previous frame in SwTwips
-
-        @author OD
-    */
-    void _GetSpacingValuesOfFrm( const SwFrm& _rFrm,
-                                 SwTwips& _roLowerSpacing,
-                                 SwTwips& _roLineSpacing ) const;
 
     /** method to detemine the upper space amount, which is considered for
         the previous frame
