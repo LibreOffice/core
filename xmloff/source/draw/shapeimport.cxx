@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-24 09:49:08 $
+ *  last change: $Author: aw $ $Date: 2001-08-01 11:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,9 @@ struct XMLShapeImportHelperImpl
     IdShapeMap                  maShapeIds;
 
     std::vector<ConnectionHint> maConnections;
+
+    // #88546# possibility to swich progress bar handling on/off
+    sal_Bool                    mbHandleProgressBar;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -220,6 +223,8 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     mpImpl = new XMLShapeImportHelperImpl();
     mpImpl->mpSortContext = 0;
 
+    // #88546# init to FALSE
+    mpImpl->mbHandleProgressBar = sal_False;
 
     mpSdPropHdlFactory = new XMLSdPropHdlFactory( rModel );
 
@@ -1222,4 +1227,16 @@ void XMLShapeImportHelper::endPage( com::sun::star::uno::Reference< com::sun::st
     XMLShapeImportPageContextImpl* pNextContext = mpPageContext->mpNext;
     delete mpPageContext;
     mpPageContext = pNextContext;
+}
+
+// #88546#
+/** defines if the import should increment the progress bar or not */
+void XMLShapeImportHelper::enableHandleProgressBar( sal_Bool bEnable )
+{
+    mpImpl->mbHandleProgressBar = bEnable;
+}
+
+sal_Bool XMLShapeImportHelper::IsHandleProgressBarEnabled() const
+{
+    return mpImpl->mbHandleProgressBar;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-10 17:05:23 $
+ *  last change: $Author: aw $ $Date: 2001-08-01 11:43:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -698,6 +698,9 @@ void SAL_CALL SdXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
         XML_NAMESPACE_PRESENTATION);
 
     GetShapeExport()->enableLayerExport();
+
+    // #88546# enable progress bar increments
+    GetShapeExport()->enableHandleProgressBar();
 }
 
 //////////////////////////////////////////////////////////////////////////////

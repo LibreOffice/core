@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-31 10:47:14 $
+ *  last change: $Author: aw $ $Date: 2001-08-01 11:43:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,8 @@ using namespace ::xmloff::token;
 XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
                                 SvXMLExportPropertyMapper *pExtMapper )
 :   rExport( rExp ),
+    // #88546# init to FALSE
+    mbHandleProgressBar( sal_False ),
     mnNextUniqueShapeId(1),
     mbExportLayer( sal_False ),
     msZIndex( RTL_CONSTASCII_USTRINGPARAM("ZOrder") ),
@@ -531,7 +533,10 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     // #82003# test export count
     if(rExport.getExportFlags() & EXPORT_CONTENT)
     {
-        rExport.GetProgressBarHelper()->Increment();
+        if(rExport.GetShapeExport()->IsHandleProgressBarEnabled())
+        {
+            rExport.GetProgressBarHelper()->Increment();
+        }
     }
 
     // --------------------
