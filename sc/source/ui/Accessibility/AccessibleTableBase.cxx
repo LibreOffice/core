@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-22 08:52:35 $
+ *  last change: $Author: sab $ $Date: 2002-01-22 16:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,6 +329,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumn( sal_Int32 nChildI
 
 long SAL_CALL
     ScAccessibleTableBase::getAccessibleChildCount (void)
+                    throw (uno::RuntimeException)
 {
     DBG_ERROR("not implemented yet");
     return 0;
@@ -336,8 +337,8 @@ long SAL_CALL
 
 uno::Reference< XAccessible > SAL_CALL
     ScAccessibleTableBase::getAccessibleChild (long nIndex)
-        throw (uno::RuntimeException,
-        lang::IndexOutOfBoundsException)
+        throw (uno::RuntimeException/*,
+        lang::IndexOutOfBoundsException*/)
 {
     DBG_ERROR("not implemented yet");
     return SvAccessibleContextBase::getAccessibleChild(nIndex);
@@ -437,7 +438,6 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessibleTableBase::getImplementationId (voi
 ::rtl::OUString SAL_CALL ScAccessibleTableBase::getServiceName (void)
         throw (uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM (
-        "drafts.com.sun.star.accessibility.AccessibleTable"));
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("drafts.com.sun.star.accessibility.AccessibleTable"));
 }
 

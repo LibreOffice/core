@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-22 14:19:45 $
+ *  last change: $Author: sab $ $Date: 2002-01-22 16:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ ScAccessibleDocument::~ScAccessibleDocument(void)
     /// Return the number of currently visible children.
 long SAL_CALL
     ScAccessibleDocument::getAccessibleChildCount (void)
+    throw (uno::RuntimeException)
 {
     sal_Int32 nTab(getVisibleTable());
     sal_Int32 nShapes (0);
@@ -149,8 +150,8 @@ long SAL_CALL
     /// Return the specified child or NULL if index is invalid.
 uno::Reference<XAccessible> SAL_CALL
     ScAccessibleDocument::getAccessibleChild (long nIndex)
-    throw (uno::RuntimeException,
-        lang::IndexOutOfBoundsException)
+    throw (uno::RuntimeException/*,
+        lang::IndexOutOfBoundsException*/)
 {
     uno::Reference<XAccessible> xAccessible = GetChild(nIndex);
     if (!xAccessible.is())
