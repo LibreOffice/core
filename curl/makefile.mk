@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2003-07-16 17:24:06 $
+#   last change: $Author: rt $ $Date: 2004-09-08 17:07:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,6 +68,12 @@ TARGET=so_curl
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
+
+.IF "$(SYSTEM_CURL)" == "YES"
+all:
+    @echo "An already available installation of curl should exist on your system."
+    @echo "Therefore the version provided here does not need to be built in addition."
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
