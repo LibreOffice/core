@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BrowseNodeFactoryImpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 14:06:01 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 15:31:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,10 +101,6 @@ public:
 
     BrowseNodeAggregator( const Reference< browse::XBrowseNode >& node )
     {
-        OSL_TRACE ("GETCHILDNODES(): Creating aggregator: %s",
-            ::rtl::OUStringToOString( node->getName(),
-                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-
         m_Name = node->getName();
         m_Nodes.realloc( 1 );
         m_Nodes[ 0 ] = node;
@@ -112,9 +108,6 @@ public:
 
     ~BrowseNodeAggregator()
     {
-        OSL_TRACE ("~BrowseNodeAggregator(): Destroying aggregator: %s ",
-            ::rtl::OUStringToOString( m_Name,
-                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
     }
 
     void addBrowseNode( const Reference< browse::XBrowseNode>& node )
@@ -143,9 +136,18 @@ public:
 
         for ( sal_Int32 i = 0; i < m_Nodes.getLength(); i++ )
         {
-            Sequence< Reference < browse::XBrowseNode > > childs = m_Nodes[ i ]->getChildNodes();
-            seqs.push_back( childs );
-            numChildren += childs.getLength();
+            Sequence< Reference < browse::XBrowseNode > > childs;
+            try
+            {
+                childs = m_Nodes[ i ]->getChildNodes();
+                seqs.push_back( childs );
+                numChildren += childs.getLength();
+            }
+            catch ( Exception& e )
+            {
+                // some form of exception getting child nodes so they
+                // won't be displayed
+            }
         }
 
         std::vector<  Sequence< Reference < browse::XBrowseNode > > >::const_iterator it = seqs.begin();
@@ -171,9 +173,17 @@ public:
         {
             for ( sal_Int32 i = 0 ; i < m_Nodes.getLength(); i++ )
             {
-                if ( m_Nodes[ i ]->hasChildNodes() )
+                try
                 {
-                    return sal_True;
+                    if ( m_Nodes[ i ]->hasChildNodes() )
+                    {
+                        return sal_True;
+                    }
+                }
+                catch ( Exception& e )
+                {
+                    // some form of exception getting child nodes so move
+                    // on to the next one
                 }
             }
         }
@@ -219,20 +229,14 @@ public:
         m_sNodeName = node->getName();
         m_hBNA = NULL;
         m_origNode.set( node );
-
-        OSL_TRACE ("LocationBrowseNode(): Creating LocationBrowseNode: %s",
-            ::rtl::OUStringToOString( m_sNodeName,
-                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
     }
 
     ~LocationBrowseNode()
     {
-        OSL_TRACE ("~LocationBrowseNode(): Destroying LocationBrowseNode: %s",
-            ::rtl::OUStringToOString( m_sNodeName,
-                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-        // TODO missing delete
-
-        delete m_hBNA;
+        if (m_hBNA)
+        {
+            delete m_hBNA;
+        }
     }
 
     // -------------------------------------------------------------------------
@@ -249,16 +253,11 @@ public:
     getChildNodes()
         throw ( RuntimeException )
     {
-        OSL_TRACE ("LocationBrowseNode():getChildNodes() for : %s",
-            ::rtl::OUStringToOString( m_sNodeName,
-                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-
         if ( m_hBNA == NULL )
         {
             loadChildNodes();
         }
 
-        OSL_TRACE ("GETCHILDNODES(): Creating new sequence");
         Sequence<  Reference< browse::XBrowseNode > > children( m_hBNA->size() );
         sal_Int32 index = 0;
 
@@ -269,7 +268,6 @@ public:
             children[ index ].set( m_hBNA->find( *it )->second );
         }
 
-        OSL_TRACE ("GETCHILDNODES(): Returning new sequence");
         return children;
     }
 
@@ -289,16 +287,10 @@ private:
 
     void loadChildNodes()
     {
-        OSL_TRACE ("LOADCHILDNODES(): %s",
-            ::rtl::OUStringToOString( m_sNodeName,
-                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-
         m_hBNA = new BrowseNodeAggregatorHash();
 
         Sequence< Reference< browse::XBrowseNode > > langNodes =
             m_origNode->getChildNodes();
-
-        OSL_TRACE ("LOADCHILDNODES(): Got providers");
 
         for ( sal_Int32 i = 0; i < langNodes.getLength(); i++ )
         {
@@ -315,30 +307,20 @@ private:
             Sequence< Reference< browse::XBrowseNode > > grandchildren =
                 xbn->getChildNodes();
 
-            OSL_TRACE ("LOADCHILDNODES(): Got grandchildren");
-
             for ( sal_Int32 j = 0; j < grandchildren.getLength(); j++ )
             {
-                Reference< browse::XBrowseNode > grandchild( grandchildren[ j ] );
-
-                OSL_TRACE ("LOADCHILDNODES(): Got grandchild: %s",
-                    ::rtl::OUStringToOString( grandchild->getName(),
-                        RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                Reference< browse::XBrowseNode > grandchild(grandchildren[j]);
 
                 BrowseNodeAggregatorHash::iterator h_it =
                     m_hBNA->find( grandchild->getName() );
 
                 if ( h_it != m_hBNA->end() )
                 {
-                    OSL_TRACE ("LOADCHILDNODES(): Already got an aggregator");
-
                     BrowseNodeAggregator* bna = static_cast< BrowseNodeAggregator* >( h_it->second.get() );
                     bna->addBrowseNode( grandchild );
                 }
                 else
                 {
-                    OSL_TRACE ("LOADCHILDNODES(): Need a new aggregator");
-
                     Reference< browse::XBrowseNode > bna(
                         new BrowseNodeAggregator( grandchild ) );
                     (*m_hBNA)[ grandchild->getName() ].set( bna );
@@ -354,7 +336,6 @@ private:
 Sequence < ::rtl::OUString >
 tdocBugWorkAround( const Reference< XComponentContext >& xCtx )
 {
-    OSL_TRACE("In tdocBugWorkAround()");
     Sequence < ::rtl::OUString > result;
     Reference< lang::XMultiComponentFactory > mcf =
             xCtx->getServiceManager();
@@ -381,7 +362,6 @@ tdocBugWorkAround( const Reference< XComponentContext >& xCtx )
             {
                 result.realloc( result.getLength() + 1 );
                 result[ docIndex++ ] = sTdocUrl;
-                OSL_TRACE("In tdocBugWorkAround() add doc title");
             }
         }
     }
@@ -390,7 +370,6 @@ tdocBugWorkAround( const Reference< XComponentContext >& xCtx )
 
 Sequence< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference< XComponentContext >& xCtx )
 {
-        OSL_TRACE("getAllBrowseNodes");
         Reference< lang::XMultiComponentFactory > mcf =
             xCtx->getServiceManager();
 
@@ -506,10 +485,6 @@ public:
 
     ~DefaultBrowseNode()
     {
-        OSL_TRACE("DESTROYING DefaultBrowseNode: %s",
-            ::rtl::OUStringToOString( m_xWrappedBrowseNode->getName(),
-                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-
         if ( m_xAggProxy.is() )
         {
             m_xAggProxy->setDelegator( uno::Reference< uno::XInterface >() );
@@ -628,7 +603,6 @@ private:
 public:
     DefaultRootBrowseNode( const Reference< XComponentContext >& xCtx )
     {
-        OSL_TRACE("CREATING DefaultRootBrowseNode");
         Sequence < Reference< browse::XBrowseNode > > nodes =
             getAllBrowseNodes( xCtx );
 
@@ -641,7 +615,6 @@ public:
 
     ~DefaultRootBrowseNode()
     {
-        OSL_TRACE("DESTROYING DefaultRootBrowseNode");
     }
 
     virtual Sequence< Reference< browse::XBrowseNode > > SAL_CALL
@@ -696,12 +669,10 @@ public:
     SelectorBrowseNode( const Reference< XComponentContext >& xContext )
       : m_xComponentContext( xContext )
     {
-        OSL_TRACE("CREATING SelectorBrowseNode");
     }
 
     ~SelectorBrowseNode()
     {
-        OSL_TRACE("DESTROYING SelectorBrowseNode");
     }
 
     virtual ::rtl::OUString SAL_CALL getName()
@@ -722,7 +693,6 @@ public:
 
         for ( sal_Int32 j = 0; j < locnBNs.getLength(); j++ )
         {
-            OSL_TRACE("SelectorNode::getChildNodes() Processing %d of %d", j, locnBNs.getLength() );
             children[j] = new LocationBrowseNode( locnBNs[j] );
         }
 
@@ -746,12 +716,10 @@ BrowseNodeFactoryImpl::BrowseNodeFactoryImpl(
     Reference< XComponentContext > const & xComponentContext )
     : m_xComponentContext( xComponentContext )
 {
-    OSL_TRACE("BrowseNodeFactoryImpl is being created!");
 }
 
 BrowseNodeFactoryImpl::~BrowseNodeFactoryImpl()
 {
-    OSL_TRACE("BrowseNodeFactoryImpl is being destructed!");
 }
 
 
@@ -782,7 +750,6 @@ Reference< browse::XBrowseNode >
 BrowseNodeFactoryImpl::getSelectorHierarchy()
     throw (RuntimeException)
 {
-    OSL_TRACE("Getting selector hierarchy from BrowseNodeFactoryImpl");
     /*if ( !m_xSelectorBrowseNode.is() )
     {
         m_xSelectorBrowseNode = new SelectorBrowseNode( m_xComponentContext );
