@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 07:40:10 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:33:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -649,7 +649,6 @@ SwFrm* lcl_IsInHeaderFooter( const SwNodeIndex& rIdx, Point& rPt )
 
 FASTBOOL SwCrsrShell::IsInHeaderFooter( FASTBOOL* pbInHeader ) const
 {
-    SwShellCrsr* pCrsr = IsTableMode() ? pTblCrsr : pCurCrsr;
     Point aPt;
     SwFrm* pFrm = ::lcl_IsInHeaderFooter( pCurCrsr->GetPoint()->nNode, aPt );
     if( pFrm && pbInHeader )
@@ -673,7 +672,6 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, BOOL bOnlyText )
 {
     SET_CURR_SHELL( this );
 
-    SwNodes& rNds = GetDoc()->GetNodes();
     SwShellCrsr* pCrsr = IsTableMode() ? pTblCrsr : pCurCrsr;
     SwPosition aPos( *pCrsr->GetPoint() );
     Point aPt( rLPt );
@@ -2239,10 +2237,9 @@ FASTBOOL SwCrsrShell::SetVisCrsr( const Point &rPt )
 
 FASTBOOL SwCrsrShell::IsOverReadOnlyPos( const Point& rPt ) const
 {
-//  SET_CURR_SHELL( this );
     Point aPt( rPt );
     SwPaM aPam( *pCurCrsr->GetPoint() );
-    FASTBOOL bRet = GetLayout()->GetCrsrOfst( aPam.GetPoint(), aPt );
+    GetLayout()->GetCrsrOfst( aPam.GetPoint(), aPt );
     return aPam.HasReadonlySel();
 }
 
@@ -3044,7 +3041,6 @@ ULONG SwCrsrShell::Find( const SfxItemSet& rSet, FASTBOOL bNoCollections,
 void SwCrsrShell::SetSelection( const SwPaM& rCrsr )
 {
     StartAction();
-    BOOL bFirst = TRUE;
     SwPaM* pCrsr = GetCrsr();
     *pCrsr->GetPoint() = *rCrsr.GetPoint();
     if(rCrsr.HasMark())
@@ -3054,7 +3050,7 @@ void SwCrsrShell::SetSelection( const SwPaM& rCrsr )
     }
     if((SwPaM*)rCrsr.GetNext() != &rCrsr)
     {
-        const SwPaM *_pStartCrsr = (SwPaM*)rCrsr.GetNext(), *__pStartCrsr = _pStartCrsr;
+        const SwPaM *_pStartCrsr = (SwPaM*)rCrsr.GetNext();
         do
         {
             SwPaM* pCurCrsr = CreateCrsr();
