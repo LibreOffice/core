@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 13:17:54 $
+ *  last change: $Author: oj $ $Date: 2001-08-01 11:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,8 +155,11 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
     m_pRowStatusArray = new SQLUSMALLINT[1]; // the default value
     N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_STATUS_PTR,m_pRowStatusArray,SQL_IS_POINTER);
 
-    SQLSMALLINT nValueLen = 0;
-    N3SQLGetInfo(m_aConnectionHandle,SQL_GETDATA_EXTENSIONS,&nValueLen,sizeof nValueLen,&nValueLen);
+    sal_Int32 nValueLen = 0;
+    OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_GETDATA_EXTENSIONS,nValueLen,*(Reference< XInterface >*)this);
+    void* pFunction = getOdbcFunction(ODBC3SQLGetInfo);
+
+//  N3SQLGetInfo(m_aConnectionHandle,SQL_GETDATA_EXTENSIONS,&nValueLen,sizeof nValueLen,&nValueLen);
     SQLINTEGER nCurType = 0;
     N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_TYPE,&nCurType,SQL_IS_UINTEGER,0);
 
