@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlEnums.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:35:27 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,9 @@ namespace dbaxml
         XML_TOK_COLUMN_NAME,
         XML_TOK_COLUMN_STYLE_NAME,
         XML_TOK_COLUMN_HELP_MESSAGE,
-        XML_TOK_COLUMN_VISIBILITY
+        XML_TOK_COLUMN_VISIBILITY,
+        XML_TOK_COLUMN_DEFAULT_VALUE,
+        XML_TOK_COLUMN_TYPE_NAME
     };
 // -----------------------------------------------------------------------------
 } // namespace dbaxml
