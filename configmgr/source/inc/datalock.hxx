@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datalock.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 14:29:07 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,8 @@ namespace configmgr
 
             virtual void acquireWriteAccess() = 0;
             virtual void releaseWriteAccess() = 0;
+        protected:
+            virtual ~DataLock() {}
         };
     // -------------------------------------------------------------------------
     }
