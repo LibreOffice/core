@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:05:39 $
+ *  last change: $Author: rt $ $Date: 2005-01-05 16:00:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,12 +378,13 @@ void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
                                     &aPtPos )->GetUpper(),
                           *pEnd   = rCrsr.GetCntntNode(FALSE)->GetFrm(
                                     &aMkPos )->GetUpper();
-        GetTblSel( pStart, pEnd, rBoxes, eSearchType );
+        GetTblSel( pStart, pEnd, rBoxes, 0, eSearchType );
     }
 }
 
 void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
-                SwSelBoxes& rBoxes, const SwTblSearchType eSearchType )
+                SwSelBoxes& rBoxes, SwCellFrms* pCells,
+                const SwTblSearchType eSearchType )
 {
     // #112697# Robust:
     const SwTabFrm* pStartTab = pStart->FindTabFrm();
@@ -405,6 +406,15 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
         //Zuerst lassen wir uns die Tabellen und die Rechtecke heraussuchen.
         SwSelUnions aUnions;
         ::MakeSelUnions( aUnions, pStart, pEnd, eSearchType );
+
+        Point aCurrentTopLeft( LONG_MAX, LONG_MAX );
+        Point aCurrentTopRight( 0, LONG_MAX );
+        Point aCurrentBottomLeft( LONG_MAX, 0 );
+        Point aCurrentBottomRight( 0, 0 );
+        const SwCellFrm* pCurrentTopLeftFrm     = 0;
+        const SwCellFrm* pCurrentTopRightFrm    = 0;
+        const SwCellFrm* pCurrentBottomLeftFrm  = 0;
+        const SwCellFrm* pCurrentBottomRightFrm  = 0;
 
         //Jetzt zu jedem Eintrag die Boxen herausfischen und uebertragen.
         for( i = 0; i < aUnions.Count() && bTblIsValid; ++i )
@@ -451,6 +461,47 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
                             if( !bChkProtected ||
                                 !pBox->GetFrmFmt()->GetProtect().IsCntntProtected() )
                                 rBoxes.Insert( pBox );
+
+                            if ( pCells )
+                            {
+                                const Point aTopLeft( pCell->Frm().TopLeft() );
+                                const Point aTopRight( pCell->Frm().TopRight() );
+                                const Point aBottomLeft( pCell->Frm().BottomLeft() );
+                                const Point aBottomRight( pCell->Frm().BottomRight() );
+
+                                if ( aTopLeft.Y() < aCurrentTopLeft.Y() ||
+                                     ( aTopLeft.Y() == aCurrentTopLeft.Y() &&
+                                       aTopLeft.X() <  aCurrentTopLeft.X() ) )
+                                {
+                                    aCurrentTopLeft = aTopLeft;
+                                    pCurrentTopLeftFrm = static_cast<const SwCellFrm*>( pCell );
+                                }
+
+                                if ( aTopRight.Y() < aCurrentTopRight.Y() ||
+                                     ( aTopRight.Y() == aCurrentTopRight.Y() &&
+                                       aTopRight.X() >  aCurrentTopRight.X() ) )
+                                {
+                                    aCurrentTopRight = aTopRight;
+                                    pCurrentTopRightFrm = static_cast<const SwCellFrm*>( pCell );
+                                }
+
+                                if ( aBottomLeft.Y() > aCurrentBottomLeft.Y() ||
+                                     ( aBottomLeft.Y() == aCurrentBottomLeft.Y() &&
+                                       aBottomLeft.X() <  aCurrentBottomLeft.X() ) )
+                                {
+                                    aCurrentBottomLeft = aBottomLeft;
+                                    pCurrentBottomLeftFrm = static_cast<const SwCellFrm*>( pCell );
+                                }
+
+                                if ( aBottomRight.Y() > aCurrentBottomRight.Y() ||
+                                     ( aBottomRight.Y() == aCurrentBottomRight.Y() &&
+                                       aBottomRight.X() >  aCurrentBottomRight.X() ) )
+                                {
+                                    aCurrentBottomRight = aBottomRight;
+                                    pCurrentBottomRightFrm = static_cast<const SwCellFrm*>( pCell );
+                                }
+
+                            }
                         }
                         if ( pCell->GetNext() )
                         {
@@ -464,6 +515,15 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
                 }
                 pRow = (const SwLayoutFrm*)pRow->GetNext();
             }
+        }
+
+        if ( pCells )
+        {
+            pCells->Remove( 0, pCells->Count() );
+            pCells->Insert( pCurrentTopLeftFrm, 0 );
+            pCells->Insert( pCurrentTopRightFrm, 1 );
+            pCells->Insert( pCurrentBottomLeftFrm, 2 );
+            pCells->Insert( pCurrentBottomRightFrm, 3 );
         }
 
         if( bTblIsValid )
@@ -1568,7 +1628,7 @@ USHORT CheckMergeSel( const SwPaM& rPam )
                                                     &aPt )->GetUpper(),
                         *pEnd = rPam.GetCntntNode(FALSE)->GetFrm(
                                                     &aPt )->GetUpper();
-    GetTblSel( pStart, pEnd, aBoxes );
+    GetTblSel( pStart, pEnd, aBoxes, 0 );
     return CheckMergeSel( aBoxes );
 }
 
