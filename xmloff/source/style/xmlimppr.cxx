@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimppr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-29 14:58:16 $
+ *  last change: $Author: dvo $ $Date: 2001-04-20 15:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 #include <com/sun/star/xml/AttributeData.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
+#include <com/sun/star/beans/XMultiPropertySet.hpp>
+#endif
+
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
@@ -84,6 +88,12 @@
 #include "xmlkywd.hxx"
 #include "unoatrcn.hxx"
 #include "xmlnmspe.hxx"
+
+// STL includes
+#include <algorithm>
+#include <functional>
+#include <utility>
+#include <vector>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -315,37 +325,114 @@ BOOL SvXMLImportPropertyMapper::handleSpecialItem(
         return FALSE;
 }
 
+typedef pair<const OUString*, const Any* > PropertyPair;
+typedef vector<PropertyPair> PropertyPairs;
+
+struct PropertyPairLessFunctor :
+    public binary_function<PropertyPair, PropertyPair, bool>
+{
+    bool operator()( const PropertyPair& a, const PropertyPair& b ) const
+    {
+        return (*a.first < *b.first ? true : false);
+    }
+};
+
 sal_Bool SvXMLImportPropertyMapper::FillPropertySet(
             const vector< XMLPropertyState >& aProperties,
             const Reference<
                     XPropertySet > rPropSet ) const
 {
+    // preliminaries
     sal_Bool bSet = sal_False;
     Reference< XPropertySetInfo > xInfo = rPropSet->getPropertySetInfo();
-
     sal_Int32 nCount = aProperties.size();
+
+    // check for support of XMultiPropertySet. If we have an
+    // XMultiProperySet, build up the sequences for names and values,
+    // leaving out all those property map entries that the current
+    // implementation does not support. If we do not have an
+    // XMultiPropertySet, set the properties manually.
+
+    Reference<XMultiPropertySet> xMultiPropSet( rPropSet, UNO_QUERY );
+    PropertyPairs* pPropertyPairs = NULL;
+    if ( xMultiPropSet.is() )
+    {
+        // reserve enough room to avoid reallocation
+        pPropertyPairs = new PropertyPairs();
+        pPropertyPairs->reserve( nCount );
+    }
+
+    // iterate over property states that we want to set
     for( sal_Int32 i=0; i < nCount; i++ )
     {
         const XMLPropertyState& rProp = aProperties[i];
         sal_Int32 nIdx = rProp.mnIndex;
+
+        // disregard property state if it has an invalid index
         if( -1 == nIdx )
             continue;
+
         const OUString& rPropName = maPropMapper->GetEntryAPIName( nIdx );
-        if( xInfo->hasPropertyByName( rPropName ) )
+        const sal_Int32 nPropFlags = maPropMapper->GetEntryFlags( nIdx );
+
+        if ( ( ( 0 != ( nPropFlags & MID_FLAG_MUST_EXIST ) ) &&
+               ( 0 == ( nPropFlags & ~MID_FLAG_NO_PROPERTY ) )   ) ||
+             xInfo->hasPropertyByName( rPropName ) )
         {
-            try
+            // save property for XMultiPropertySet or set directly
+            if ( xMultiPropSet.is() )
             {
-                rPropSet->setPropertyValue( rPropName, rProp.maValue );
-                bSet = sal_True;
+                PropertyPair aPair( &rPropName, &rProp.maValue );
+                pPropertyPairs->push_back( aPair );
             }
-            catch(...)
+            else
             {
+                try
+                {
+                    rPropSet->setPropertyValue( rPropName, rProp.maValue );
+                    bSet = sal_True;
+                }
+                catch(...)
+                {
+                }
             }
         }
     }
 
+    // For the XMultiPropertySet, we now need to construct the sequences
+    // and actually set the values. If we don't have an XMultiPropertySet,
+    // all the work has already been done above.
+    if ( xMultiPropSet.is() )
+    {
+        // sort the property pairs
+        sort( pPropertyPairs->begin(), pPropertyPairs->end(),
+              PropertyPairLessFunctor());
+
+        // create sequences
+        Sequence<OUString> aNames( pPropertyPairs->size() );
+        OUString* pNamesArray = aNames.getArray();
+        Sequence<Any> aValues(pPropertyPairs->size() );
+        Any* pValuesArray = aValues.getArray();
+
+        // copy values into sequences
+        sal_Int32 i = 0;
+        for( PropertyPairs::iterator aIter = pPropertyPairs->begin();
+             aIter != pPropertyPairs->end();
+             aIter++)
+        {
+            pNamesArray[i] = *(aIter->first);
+            pValuesArray[i++] = *(aIter->second);
+        }
+
+        // and, finally, set the values
+        xMultiPropSet->setPropertyValues( aNames, aValues );
+
+        delete pPropertyPairs;
+    }
+
     return bSet;
 }
+
 void SvXMLImportPropertyMapper::finished(
         vector< XMLPropertyState >& rProperties,
         sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const

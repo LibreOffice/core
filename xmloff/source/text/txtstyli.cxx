@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyli.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-23 09:56:06 $
+ *  last change: $Author: dvo $ $Date: 2001-04-20 15:17:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
+#include <com/sun/star/beans/XMultiPropertySet.hpp>
+#endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
@@ -118,7 +121,14 @@
 #include <tools/debug.hxx>
 #endif
 
+// STL includes
+#include <algorithm>
+#include <functional>
+#include <utility>
+#include <vector>
+
 using namespace ::rtl;
+using namespace ::std;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
@@ -292,6 +302,7 @@ void XMLTextStyleContext::SetDefaults( )
         }
     }
 }
+
 void XMLTextStyleContext::Finish( sal_Bool bOverwrite )
 {
     XMLPropStyleContext::Finish( bOverwrite );
@@ -352,6 +363,20 @@ void XMLTextStyleContext::Finish( sal_Bool bOverwrite )
     }
 }
 
+
+typedef pair<const OUString*, const Any* > PropertyPair;
+typedef vector<PropertyPair> PropertyPairs;
+
+struct PropertyPairLessFunctor :
+    public binary_function<PropertyPair, PropertyPair, bool>
+{
+    bool operator()( const PropertyPair& a, const PropertyPair& b ) const
+    {
+        return (*a.first < *b.first ? true : false);
+    }
+};
+
+
 void XMLTextStyleContext::FillPropertySet(
     const Reference<XPropertySet > & rPropSet )
 {
@@ -366,46 +391,114 @@ void XMLTextStyleContext::FillPropertySet(
     {
 
         // imitate SvXMLImportPropertyMapper::FillPropertySet(...)
+        // The following code is largely copied from the aforementioned
+        // SvXMLImportPropertyMapper::FillPropertySet(...)
 
+        // The reason for this is that we have no other way to
+        // efficiently intercept the value of combined characters. To
+        // get that value, we could iterate through the map once more,
+        // but instead we chose to insert the code into this
+        // iteration. I haven't been able to come up with a much more
+        // intelligent solution.
+
+        // get property set mapper
+        UniReference<XMLPropertySetMapper> rPropMapper =
+            xImpPrMap->getPropertySetMapper();
+
+        // preliminaries
         sal_Bool bSet = sal_False;
         Reference< XPropertySetInfo > xInfo = rPropSet->getPropertySetInfo();
-
         sal_Int32 nCount = GetProperties().size();
+
+        Reference<XMultiPropertySet> xMultiPropSet( rPropSet, UNO_QUERY );
+        sal_Bool bHasMultiPropSet = xMultiPropSet.is();
+        PropertyPairs* pPropertyPairs = NULL;
+        if ( xMultiPropSet.is() )
+        {
+            // reserve enough room to avoid reallocation
+            pPropertyPairs = new PropertyPairs();
+            pPropertyPairs->reserve( nCount );
+        }
+
+        // iterate over property states that we want to set
         for( sal_Int32 i=0; i < nCount; i++ )
         {
             const XMLPropertyState& rProp = GetProperties()[i];
             sal_Int32 nIdx = rProp.mnIndex;
+
+            // disregard property state if it has an invalid index
             if( -1 == nIdx )
                 continue;
 
-            UniReference<XMLPropertySetMapper> rPropMapper =
-                xImpPrMap->getPropertySetMapper();
-
-
-            // catch combined characters
-            if ( CTF_COMBINED_CHARACTERS_FIELD ==
-                 rPropMapper->GetEntryContextId(nIdx) )
-            {
-                Any aAny = rProp.maValue;
-                sal_Bool bVal = *(sal_Bool*)aAny.getValue();
-                bHasCombinedCharactersLetter = bVal;
-            }
-
-            // now proceed normally
             const OUString& rPropName = rPropMapper->GetEntryAPIName( nIdx );
-            if( xInfo->hasPropertyByName( rPropName ) )
+            const sal_Int32 nPropFlags = rPropMapper->GetEntryFlags( nIdx );
+
+            if ( ( ( 0 != ( nPropFlags & MID_FLAG_MUST_EXIST ) ) &&
+                   ( 0 == ( nPropFlags & ~MID_FLAG_NO_PROPERTY ) )   ) ||
+                 xInfo->hasPropertyByName( rPropName ) )
             {
-                try
+                // save property for XMultiPropertySet or set directly
+                if ( xMultiPropSet.is() )
                 {
-                    rPropSet->setPropertyValue( rPropName, rProp.maValue );
-                    bSet = sal_True;
+                    PropertyPair aPair( &rPropName, &rProp.maValue );
+                    pPropertyPairs->push_back( aPair );
                 }
-                catch(...)
+                else
                 {
+                    try
+                    {
+                        rPropSet->setPropertyValue( rPropName, rProp.maValue );
+                        bSet = sal_True;
+                    }
+                    catch(...)
+                    {
+                    }
+                }
+            }
+            else
+            {
+                // catch combined characters (The combined characters
+                // map entry does not contain a valid property name.)
+                if ( CTF_COMBINED_CHARACTERS_FIELD ==
+                     rPropMapper->GetEntryContextId(nIdx) )
+                {
+                    Any aAny = rProp.maValue;
+                    sal_Bool bVal = *(sal_Bool*)aAny.getValue();
+                    bHasCombinedCharactersLetter = bVal;
                 }
             }
         }
+
+        // For the XMultiPropertySet, we now need to construct the sequences
+        // and actually set the values. If we don't have a XMultiPropertySet,
+        // all the work has already been done above.
+        if ( xMultiPropSet.is() )
+        {
+            // sort the property pairs
+            sort( pPropertyPairs->begin(), pPropertyPairs->end(),
+                  PropertyPairLessFunctor());
+
+            // create sequences
+            Sequence<OUString> aNames( pPropertyPairs->size() );
+            OUString* pNamesArray = aNames.getArray();
+            Sequence<Any> aValues(pPropertyPairs->size() );
+            Any* pValuesArray = aValues.getArray();
+
+            // copy values into sequences
+            sal_Int32 i = 0;
+            for( PropertyPairs::iterator aIter = pPropertyPairs->begin();
+                 aIter != pPropertyPairs->end();
+                 aIter++)
+            {
+                pNamesArray[i] = *(aIter->first);
+                pValuesArray[i++] = *(aIter->second);
+            }
+
+            // and, finally, set the values
+            xMultiPropSet->setPropertyValues( aNames, aValues );
+
+            delete pPropertyPairs;
+        }
+
     }
 }
-
-
