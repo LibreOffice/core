@@ -326,13 +326,13 @@
 <Eras>
 <Era>
 <EraID>bc</EraID>
-<DefaultAbbrvName>BC</DefaultAbbrvName>
-<DefaultFullName>BC</DefaultFullName>
+<DefaultAbbrvName>eaa.</DefaultAbbrvName>
+<DefaultFullName>ennen ajanlaskumme alkua</DefaultFullName>
 </Era>
 <Era>
 <EraID>ad</EraID>
-<DefaultAbbrvName>AD</DefaultAbbrvName>
-<DefaultFullName>AD</DefaultFullName>
+<DefaultAbbrvName>jaa.</DefaultAbbrvName>
+<DefaultFullName>jälkeen ajanlaskumme alun</DefaultFullName>
 </Era>
 </Eras>
 <StartDayOfWeek>
