@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hro $ $Date: 2003-06-11 19:24:53 $
+#   last change: $Author: vg $ $Date: 2003-12-16 11:20:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,10 @@ APP1NOSAL=TRUE
                         
 APP1TARGET=$(TARGET)
 
+#SHL1STDLIBS=$(SALLIB)
+
 STDLIB1=\
+    $(SALLIB)\
     gdi32.lib\
     comctl32.lib\
     comdlg32.lib\
