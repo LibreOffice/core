@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filelckb.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mhu $ $Date: 2001-03-15 15:34:05 $
+ *  last change: $Author: mhu $ $Date: 2001-03-19 11:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#define _STORE_FILELCKB_CXX_ "$Revision: 1.4 $"
+#define _STORE_FILELCKB_CXX_ "$Revision: 1.5 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -506,6 +506,8 @@ inline storeError OFileLockBytes_Impl::create (
 inline storeError OFileLockBytes_Impl::create (
     rtl_uString *pFilename, storeAccessMode eAccessMode)
 {
+#if 0  /* NEW */
+
     oslFileError result;
 
     rtl::OUString aNormPath;
@@ -535,6 +537,16 @@ inline storeError OFileLockBytes_Impl::create (
         aSystemPath.pData->buffer,
         aSystemPath.pData->length,
         osl_getThreadTextEncoding());
+
+#endif /* NEW */
+#if 1  /* OLD */
+
+    rtl::OString aFilename (
+        pFilename->buffer,
+        pFilename->length,
+        osl_getThreadTextEncoding());
+
+#endif /* OLD */
 
     return create (aFilename.pData->buffer, eAccessMode);
 }
