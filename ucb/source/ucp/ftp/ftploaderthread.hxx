@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftploaderthread.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: abi $ $Date: 2002-08-28 07:23:14 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 14:32:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,7 @@
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
 #endif
-#ifndef __CURL_TYPES_H
-#include <curl/types.h>
-#endif
+#include <curl/curl.h>
 
 
 namespace ftp {
