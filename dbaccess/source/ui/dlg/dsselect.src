@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:26:18 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:11:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,14 +87,14 @@ ModalDialog DLG_DATASOURCE_SELECTION
     Text [ dutch ] = "Gegevensbron" ;
     Text [ spanish ] = "Fuente de datos" ;
     Text [ english_us ] = "Data Source" ;
-    Text[ chinese_simplified ] = "Êı¾İÔ´";
+    Text[ chinese_simplified ] = "æ•°æ®æº";
     Text[ russian ] = "Èñòî÷íèê äàííûõ";
     Text[ polish ] = "ród³o danych";
-    Text[ japanese ] = "ÃŞ°À¿°½";
-    Text[ chinese_traditional ] = "¸ê®Æ·½";
+    Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½";
+    Text[ chinese_traditional ] = "è³‡æ–™æº";
     Text[ arabic ] = "ãÕÏÑ ÇáÈíÇäÇÊ";
     Text[ greek ] = "Ğñïİëåõóç äåäïìİíùí";
-    Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º";
+    Text[ korean ] = "ë°ì´í„° ì†ŒìŠ¤";
     Text[ turkish ] = "Veri kaynağı";
     Text[ language_user1 ] = " ";
 
@@ -116,10 +116,10 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ swedish ] = "Välj en datakälla:";
         Text[ polish ] = "Wybierz Ÿród³o danych:";
         Text[ portuguese_brazilian ] = "Choose a data source:";
-        Text[ japanese ] = "ÃŞ°À¿°½‚ğ‘I‘ğ‚µ‚Ü‚·:";
-        Text[ korean ] = "µ¥ÀÌÅÍ¼Ò½º¸¦ ¼±ÅÃÇÏ½Ê½Ã¿À:";
-        Text[ chinese_simplified ] = "ÇëÄúÑ¡ÔñÒ»¸öÊı¾İÔ´£º";
-        Text[ chinese_traditional ] = "¿ï¾Ü¸ê®Æ·½¡G";
+        Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½ã‚’é¸æŠã—ã¾ã™:";
+        Text[ korean ] = "ë°ì´í„°ì†ŒìŠ¤ë¥¼ ì„ íƒí•˜ì‹­ì‹œì˜¤:";
+        Text[ chinese_simplified ] = "è¯·æ‚¨é€‰æ‹©ä¸€ä¸ªæ•°æ®æºï¼š";
+        Text[ chinese_traditional ] = "é¸æ“‡è³‡æ–™æºï¼š";
         Text[ turkish ] = "Choose a data source:";
         Text[ arabic ] = "ÇÎÊÑ ãÕÏÑ ÈíÇäÇÊ:";
         Text[ catalan ] = "Seleccione una fuente de datos:";
@@ -171,14 +171,14 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text [ spanish ] = "Administrar..." ;
         Text [ french ] = "Gérer..." ;
         Text [ dutch ] = "Beheren..." ;
-        Text[ chinese_simplified ] = "¹ÜÀí...";
+        Text[ chinese_simplified ] = "ç®¡ç†...";
         Text[ russian ] = "Îğãàíèçîâàòü...";
         Text[ polish ] = "Zarz¹dzaj...";
-        Text[ japanese ] = "ŠÇ—...";
-        Text[ chinese_traditional ] = "ºŞ²z...";
+        Text[ japanese ] = "ç®¡ç†...";
+        Text[ chinese_traditional ] = "ç®¡ç†...";
         Text[ arabic ] = "ÅÏÇÑÉ...";
         Text[ greek ] = "Äéá÷åßñéóç...";
-        Text[ korean ] = "°ü¸®...";
+        Text[ korean ] = "ê´€ë¦¬...";
         Text[ turkish ] = "Yönet...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Administrar...";
@@ -199,14 +199,14 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text [ dutch ] = "lokale gegevensbronnen" ;
         Text [ spanish ] = "fuentes de datos locales" ;
         Text [ english_us ] = "local data sources" ;
-        Text[ chinese_simplified ] = "¾Ö²¿µÄÊı¾İÔ´";
+        Text[ chinese_simplified ] = "å±€éƒ¨çš„æ•°æ®æº";
         Text[ russian ] = "ëîêàëüíûé èñòî÷íèê äàííûõ";
         Text[ polish ] = "lokalne Ÿród³a danych";
-        Text[ japanese ] = "Û°¶ÙÃŞ°À¿°½";
-        Text[ chinese_traditional ] = "§½³¡ªº¸ê®Æ·½";
+        Text[ japanese ] = "ï¾›ï½°ï½¶ï¾™ï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½";
+        Text[ chinese_traditional ] = "å±€éƒ¨çš„è³‡æ–™æº";
         Text[ arabic ] = "ãÕÇÏÑ ÈíÇäÇÊ ãÍáíÉ";
         Text[ greek ] = "ôïğéêİò ğñïåëåıóåéò äåäïìİíùí";
-        Text[ korean ] = "·ÎÄÃ µ¥ÀÌÅÍ ¼Ò½º";
+        Text[ korean ] = "ë¡œì»¬ ë°ì´í„° ì†ŒìŠ¤";
         Text[ turkish ] = "Yerel veri kaynakları";
         Text[ catalan ] = "fuentes de datos locales";
     };
@@ -226,10 +226,10 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ swedish ] = "Det gick inte att ladda programbiblioteket #lib# eller så är det defekt. Konfigurationen av ODBC-datakällor är inte tillgänglig.";
         Text[ polish ] = "Za³adowanie biblioteki programu #lib# nie by³o mo¿liwe. Jest ona byæ mo¿e uszkodzona. Wybór Ÿród³a danych ODBC nie jest mo¿liwy.";
         Text[ portuguese_brazilian ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
-        Text[ japanese ] = "#lib# ÌßÛ¸Ş×Ñ×²ÌŞ×Ø‚ğ“Ç‚İ‚ß‚È‚©‚Á‚½‚©A‚Ü‚½‚Í‚»‚ê©‘Ì‚ÉÄ×ÌŞÙ‚ª‚ ‚è‚Ü‚·BODBC ÃŞ°À¿°½‚Ìİ’è‚Í‚Å‚«‚Ü‚¹‚ñB";
-        Text[ korean ] = "ÇÁ·Î±×·¥ ¶óÀÌºê·¯¸® #lib#¸¦ ·ÎµåÇÒ ¼ö ¾ø¾ú°Å³ª ¶Ç´Â °íÀåÀÔ´Ï´Ù.  ODBCµ¥ÀÌÅÍ ¼Ò½º ÄÁÇÇ±Ô·¹ÀÌ¼ÇÀ» »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.";
-        Text[ chinese_simplified ] = "ÎŞ·¨×°Èë³ÌĞò¿â #lib# »òÒÑ¾­Ëğ»µ¡£ÎŞ·¨ÅäÖÃ ODBC Êı¾İÔ´¡£";
-        Text[ chinese_traditional ] = "µLªk¸ü¤Jµ{¦¡®w #lib# ©Î¤w¸g·l§¥¡CµLªk³]©w ODBC ¸ê®Æ·½¡C";
+        Text[ japanese ] = "#lib# ï¾Œï¾Ÿï¾›ï½¸ï¾ï¾—ï¾‘ï¾—ï½²ï¾Œï¾ï¾—ï¾˜ã‚’èª­ã¿è¾¼ã‚ãªã‹ã£ãŸã‹ã€ã¾ãŸã¯ãã‚Œè‡ªä½“ã«ï¾„ï¾—ï¾Œï¾ï¾™ãŒã‚ã‚Šã¾ã™ã€‚ODBC ï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½ã®è¨­å®šã¯ã§ãã¾ã›ã‚“ã€‚";
+        Text[ korean ] = "í”„ë¡œê·¸ë¨ ë¼ì´ë¸ŒëŸ¬ë¦¬ #lib#ë¥¼ ë¡œë“œí•  ìˆ˜ ì—†ì—ˆê±°ë‚˜ ë˜ëŠ” ê³ ì¥ì…ë‹ˆë‹¤.  ODBCë°ì´í„° ì†ŒìŠ¤ ì»¨í”¼ê·œë ˆì´ì…˜ì„ ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
+        Text[ chinese_simplified ] = "æ— æ³•è£…å…¥ç¨‹åºåº“ #lib# æˆ–å·²ç»æŸåã€‚æ— æ³•é…ç½® ODBC æ•°æ®æºã€‚";
+        Text[ chinese_traditional ] = "ç„¡æ³•è¼‰å…¥ç¨‹å¼åº« #lib# æˆ–å·²ç¶“æåã€‚ç„¡æ³•è¨­å®š ODBC è³‡æ–™æºã€‚";
         Text[ turkish ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
         Text[ arabic ] = "ÅãÇ Ãäå ÊÚĞÑ ÊÍãíá ãßÊÈÉ ÇáÈÑäÇãÌ #lib#¡ Ãæ ÃäåÇ ãÚØæÈÉ. Êßæíä ãÕÇÏÑ ÈíÇäÇÊ ODBC ÛíÑ ãÊæİÑ.";
         Text[ catalan ] = "No se pudo cargar la biblioteca de programa #lib#, quizás esté dañada. La configuración de fuente de datos ODBC no está disponible.";
@@ -241,6 +241,9 @@ ModalDialog DLG_DATASOURCE_SELECTION
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.19  2001/07/13 21:26:18  kz
+ *  Merge SRC638: 13.07.01 - 23:25:59
+ *
  *  Revision 1.18  2001/07/04 14:28:17  kz
  *  Merge SRC633: 04.07.01 - 16:26:58
  *
@@ -298,6 +301,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
  *
  *  Revision 1.0 24.10.00 09:42:47  fs
  ************************************************************************/
+
 
 
 
