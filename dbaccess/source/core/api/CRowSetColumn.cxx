@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRowSetColumn.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-03 13:36:06 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,14 +120,14 @@ Any SAL_CALL ORowSetColumn::queryInterface( const Type & _rType ) throw (Runtime
 ::cppu::IPropertyArrayHelper* ORowSetColumn::createArrayHelper( ) const
 {
     BEGIN_PROPERTY_HELPER(29)
-        DECL_PROP1(ALIGN,                   sal_Int32,          MAYBEVOID);
+        DECL_PROP2(ALIGN,                   sal_Int32,          BOUND,MAYBEVOID);
         DECL_PROP1(CATALOGNAME,             ::rtl::OUString,    READONLY);
-        DECL_PROP1(CONTROLDEFAULT,          ::rtl::OUString,    MAYBEVOID);
-        DECL_PROP0_IFACE(CONTROLMODEL,      XPropertySet                );
+        DECL_PROP2(CONTROLDEFAULT,          ::rtl::OUString,    BOUND,MAYBEVOID);
+        DECL_PROP1_IFACE(CONTROLMODEL,      XPropertySet,       BOUND       );
         DECL_PROP1(DISPLAYSIZE,             sal_Int32,          READONLY);
-        DECL_PROP1(NUMBERFORMAT,            sal_Int32,          MAYBEVOID);
-        DECL_PROP1(HELPTEXT,                ::rtl::OUString,    MAYBEVOID);
-        DECL_PROP0_BOOL(HIDDEN                                          );
+        DECL_PROP2(NUMBERFORMAT,            sal_Int32,          BOUND,MAYBEVOID);
+        DECL_PROP2(HELPTEXT,            ::rtl::OUString,    BOUND,MAYBEVOID);
+        DECL_PROP1_BOOL(HIDDEN,                             BOUND);
         DECL_PROP1_BOOL(ISAUTOINCREMENT,                        READONLY);
         DECL_PROP1_BOOL(ISCASESENSITIVE,                        READONLY);
         DECL_PROP1_BOOL(ISCURRENCY,                             READONLY);
@@ -140,7 +140,7 @@ Any SAL_CALL ORowSetColumn::queryInterface( const Type & _rType ) throw (Runtime
         DECL_PROP1(LABEL,                   ::rtl::OUString,    READONLY);
         DECL_PROP1(NAME,                    ::rtl::OUString,    READONLY);
         DECL_PROP1(PRECISION,               sal_Int32,          READONLY);
-        DECL_PROP1(RELATIVEPOSITION,        sal_Int32,          MAYBEVOID);
+        DECL_PROP2(RELATIVEPOSITION,    sal_Int32,          BOUND, MAYBEVOID);
         DECL_PROP1(SCALE,                   sal_Int32,          READONLY);
         DECL_PROP1(SCHEMANAME,              ::rtl::OUString,    READONLY);
         DECL_PROP1(SERVICENAME,             ::rtl::OUString,    READONLY);
