@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:01:13 $
+ *  last change: $Author: af $ $Date: 2001-02-06 15:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ TabPage TP_DOCINFODESC
 {
     HelpId = HID_DOCINFODESC ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedText FT_TITLE
     {
         Pos = MAP_APPFONT ( 6 , 7 ) ;
@@ -219,7 +219,7 @@ TabPage TP_DOCINFODESC
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 70 , 51 ) ;
-        Size = MAP_APPFONT ( 184 , 78 ) ;
+        Size = MAP_APPFONT ( 184 , 128 ) ;
         IgnoreTab = TRUE ;
         Left = TRUE ;
         MaxTextLength = 255 ;
@@ -233,26 +233,26 @@ TabPage TP_DOCINFODOC
 {
     HelpId = HID_DOCINFODOC ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedImage BMP_FILE_1
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Pos = MAP_APPFONT ( 6 , 7 ) ;
         Size = MAP_APPFONT ( 20 , 20 ) ;
     };
     Edit ED_FILE_NAME
     {
-        Pos = MAP_APPFONT ( 54 , 8 ) ;
+        Pos = MAP_APPFONT ( 54 , 12 ) ;
         Size = MAP_APPFONT ( 200 , 12 ) ;
         Border = TRUE ;
     };
     FixedLine FL_FILE_1
     {
-        Pos = MAP_APPFONT ( 6 , 25 ) ;
+        Pos = MAP_APPFONT ( 6 , 35 ) ;
         Size = MAP_APPFONT ( 248 , 1 ) ;
     };
     FixedText FT_FILE_TYP
     {
-        Pos = MAP_APPFONT ( 6 , 29 ) ;
+        Pos = MAP_APPFONT ( 6 , 39 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
         Text = "Typ:" ;
         Text [ ENGLISH ] = "Type:" ;
@@ -278,12 +278,12 @@ TabPage TP_DOCINFODOC
     };
     FixedText FT_FILE_SHOW_TYP
     {
-        Pos = MAP_APPFONT ( 54 , 29 ) ;
+        Pos = MAP_APPFONT ( 54 , 39 ) ;
         Size = MAP_APPFONT ( 106 , 10 ) ;
     };
     CheckBox CB_FILE_READONLY
     {
-        Pos = MAP_APPFONT ( 163 , 29 ) ;
+        Pos = MAP_APPFONT ( 163 , 39 ) ;
         Size = MAP_APPFONT ( 91 , 10 ) ;
         Text = "~Schreibgeschützt" ;
         Text [ ENGLISH ] = "~Readonly" ;
@@ -309,7 +309,7 @@ TabPage TP_DOCINFODOC
     };
     FixedText FT_FILE
     {
-        Pos = MAP_APPFONT ( 6 , 41 ) ;
+        Pos = MAP_APPFONT ( 6 , 51 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
         Text = "Ort:" ;
         Text [ ENGLISH ] = "Location:" ;
@@ -335,12 +335,12 @@ TabPage TP_DOCINFODOC
     };
     FixedText FT_FILE_VAL
     {
-        Pos = MAP_APPFONT ( 54 , 41 ) ;
+        Pos = MAP_APPFONT ( 54 , 51 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
     };
     FixedText FT_FILE_SIZE
     {
-        Pos = MAP_APPFONT ( 6 , 53 ) ;
+        Pos = MAP_APPFONT ( 6 , 63 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
         Text = "Größe:" ;
         Text [ ENGLISH ] = "Size:" ;
@@ -366,17 +366,17 @@ TabPage TP_DOCINFODOC
     };
     FixedText FT_FILE_SHOW_SIZE
     {
-        Pos = MAP_APPFONT ( 54 , 53 ) ;
+        Pos = MAP_APPFONT ( 54 , 63 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
     };
     FixedLine FL_FILE_2
     {
-        Pos = MAP_APPFONT ( 6 , 66 ) ;
+        Pos = MAP_APPFONT ( 6 , 86 ) ;
         Size = MAP_APPFONT ( 248 , 1 ) ;
     };
     FixedText FT_CREATE
     {
-        Pos = MAP_APPFONT ( 6 , 70 ) ;
+        Pos = MAP_APPFONT ( 6 , 90 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
         Text = "Erstellt am:" ;
         Text [ ENGLISH ] = "Created:" ;
@@ -402,12 +402,12 @@ TabPage TP_DOCINFODOC
     };
     FixedText FT_CREATE_VAL
     {
-        Pos = MAP_APPFONT ( 54 , 70 ) ;
+        Pos = MAP_APPFONT ( 54 , 90 ) ;
         Size = MAP_APPFONT ( 126 , 10 ) ;
     };
     FixedText FT_TIMELOG
     {
-        Pos = MAP_APPFONT ( 183 , 70 ) ;
+        Pos = MAP_APPFONT ( 183 , 90 ) ;
         Size = MAP_APPFONT ( 38 , 10 ) ;
         Text = "Bearbeitet:" ;
         Text [ ENGLISH ] = "Edit time:" ;
@@ -435,12 +435,12 @@ TabPage TP_DOCINFODOC
     };
     FixedText FT_TIMELOG_VAL
     {
-        Pos = MAP_APPFONT ( 224 , 70 ) ;
+        Pos = MAP_APPFONT ( 224 , 90 ) ;
         Size = MAP_APPFONT ( 30 , 10 ) ;
     };
     FixedText FT_CHANGE
     {
-        Pos = MAP_APPFONT ( 6 , 82 ) ;
+        Pos = MAP_APPFONT ( 6 , 102 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
         Text = "Geändert am:" ;
         Text [ ENGLISH ] = "Changed:" ;
@@ -466,12 +466,12 @@ TabPage TP_DOCINFODOC
     };
     FixedText FT_CHANGE_VAL
     {
-        Pos = MAP_APPFONT ( 54 , 82 ) ;
+        Pos = MAP_APPFONT ( 54 , 102 ) ;
         Size = MAP_APPFONT ( 126 , 10 ) ;
     };
     FixedText FT_DOCNO
     {
-        Pos = MAP_APPFONT ( 183 , 82 ) ;
+        Pos = MAP_APPFONT ( 183 , 102 ) ;
         Size = MAP_APPFONT ( 38 , 10 ) ;
         Text = "Version:" ;
         Text [ ENGLISH ] = "Version:" ;
@@ -497,12 +497,12 @@ TabPage TP_DOCINFODOC
     };
     FixedText FT_DOCNO_VAL
     {
-        Pos = MAP_APPFONT ( 224 , 82 ) ;
+        Pos = MAP_APPFONT ( 224 , 102 ) ;
         Size = MAP_APPFONT ( 30 , 10 ) ;
     };
     FixedText FT_PRINT
     {
-        Pos = MAP_APPFONT ( 6 , 94 ) ;
+        Pos = MAP_APPFONT ( 6 , 114 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
         Text = "Gedruckt am:" ;
         Text [ ENGLISH ] = "Last printed:" ;
@@ -528,12 +528,12 @@ TabPage TP_DOCINFODOC
     };
     FixedText FT_PRINT_VAL
     {
-        Pos = MAP_APPFONT ( 54 , 94 ) ;
+        Pos = MAP_APPFONT ( 54 , 114 ) ;
         Size = MAP_APPFONT ( 126 , 10 ) ;
     };
     PushButton BTN_DELETE
     {
-        Pos = MAP_APPFONT ( 204 , 102 ) ;
+        Pos = MAP_APPFONT ( 204 , 122 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Hide = TRUE;
         Text = "~Löschen";
@@ -559,7 +559,7 @@ TabPage TP_DOCINFODOC
     };
     CheckBox CB_USE_USERDATA
     {
-        Pos = MAP_APPFONT ( 6 , 106 ) ;
+        Pos = MAP_APPFONT ( 6 , 126 ) ;
         Size = MAP_APPFONT ( 174 , 10 ) ;
         Hide = TRUE;
         Text = "~Benutzerdaten verwenden" ;
@@ -586,12 +586,12 @@ TabPage TP_DOCINFODOC
     };
     FixedLine FL_FILE_3
     {
-        Pos = MAP_APPFONT ( 6 , 119 ) ;
+        Pos = MAP_APPFONT ( 5 , 148 ) ;
         Size = MAP_APPFONT ( 248 , 1 ) ;
     };
     FixedText FT_TEMPL
     {
-        Pos = MAP_APPFONT ( 6 , 123 ) ;
+        Pos = MAP_APPFONT ( 5 , 152 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
         Text = "Vorlage:" ;
         Text [ ENGLISH ] = "Template:" ;
@@ -619,7 +619,7 @@ TabPage TP_DOCINFODOC
     };
     FixedText FT_TEMPL_VAL
     {
-        Pos = MAP_APPFONT ( 54 , 123 ) ;
+        Pos = MAP_APPFONT ( 54 , 152 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
     };
     String STR_UNKNOWNSIZE
@@ -654,7 +654,7 @@ TabPage TP_DOCINFOUSER
 {
     HelpId = HID_DOCINFOUSER ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedText FT_INFO1
     {
         Pos = MAP_APPFONT ( 6 , 7 ) ;
@@ -717,7 +717,7 @@ TabPage TP_DOCINFOUSER
     };
     PushButton BTN_EDITLABEL
     {
-        Pos = MAP_APPFONT ( 194 , 115 ) ;
+        Pos = MAP_APPFONT ( 194 , 165 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text = "~Infofelder..." ;
         Text [ English ] = "~Info fields..." ;
@@ -752,7 +752,7 @@ TabPage TP_DOCINFORELOAD
 {
     HelpId = HID_DOCINFORELOAD ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     CheckBox CB_AUTORELOAD
     {
         Pos = MAP_APPFONT ( 72 , 7 ) ;
@@ -1024,3 +1024,8 @@ TabDialog SID_DOCINFO
 };
 
  // ********************************************************************** EOF
+
+
+
+
+
