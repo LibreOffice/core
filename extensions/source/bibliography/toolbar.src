@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:23:39 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:44:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,5 +489,6 @@ ToolBox RID_BIB_TOOLBAR
     };
     Scroll = TRUE ;
 };
+
 
 
