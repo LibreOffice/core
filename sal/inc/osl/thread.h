@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:13 $
+ *  last change: $Author: hro $ $Date: 2000-09-29 10:54:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,8 +223,12 @@ sal_Bool SAL_CALL osl_scheduleThread(oslThread Thread);
 */
 void SAL_CALL osl_yieldThread(void);
 
+/* Callback when data stored in a thread key is no longer needed */
+
+typedef void (SAL_CALL *oslThreadKeyCallbackFunction)(void *);
+
 /** Create a key to an associated thread local storage pointer. */
-oslThreadKey SAL_CALL osl_createThreadKey(void);
+oslThreadKey SAL_CALL osl_createThreadKey(oslThreadKeyCallbackFunction pCallback);
 
 /** Destroy a key to an associated thread local storage pointer. */
 void SAL_CALL osl_destroyThreadKey(oslThreadKey Key);
@@ -252,6 +256,9 @@ rtl_TextEncoding SAL_CALL osl_setThreadTextEncoding(rtl_TextEncoding Encoding);
 /*************************************************************************
 *
 *    $Log: not supported by cvs2svn $
+*    Revision 1.1.1.1  2000/09/18 15:17:13  hr
+*    initial import
+*
 *    Revision 1.9  2000/09/18 14:28:49  willem.vandorp
 *    OpenOffice header added.
 *
