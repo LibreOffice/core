@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 12:11:35 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:50:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -946,6 +946,7 @@ void SlideshowImpl::stopShow()
     This actually starts the slideshow. */
 void SlideshowImpl::onFirstPaint()
 {
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     maUpdateTimer.SetTimeout( (ULONG)100 );
     maUpdateTimer.Start();
 }
@@ -1289,6 +1290,8 @@ bool SlideshowImpl::pause( bool bPause )
 // XShapeEventListener
 void SAL_CALL SlideshowImpl::click( const Reference< XShape >& xShape, sal_Int32 nSlideIndex, const ::com::sun::star::awt::MouseEvent& aOriginalEvent ) throw (RuntimeException)
 {
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
     WrappedShapeEventImplPtr pEvent = maShapeEventMap[xShape];
     if( !pEvent.get() )
         return;
@@ -1449,12 +1452,16 @@ sal_Int32 SlideshowImpl::getPageNumberForBookmark( const OUString& rStrBookmark 
 
 void SAL_CALL SlideshowImpl::slideChange( sal_Int32 nOldSlideIndex, sal_Int32 nNewSlideIndex ) throw (RuntimeException)
 {
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
     mpAnimationPageList->slideChange( nNewSlideIndex );
     slideChange();
 }
 
 void SAL_CALL SlideshowImpl::showEnded( ) throw (RuntimeException)
 {
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
     mpAnimationPageList->slideChange(-1);
     slideChange();
 }
@@ -1554,12 +1561,14 @@ bool SlideshowImpl::isDrawingPossible()
 
 double SlideshowImpl::update()
 {
+    /*
     double fUpdate = -1.0;
+
     const Reference<XSlideShow> xShow(mxShow);
     if (xShow.is())
     {
         const bool bUpdate = xShow->update(fUpdate);
-        if (bUpdate)
+        if( bUpdate )
         {
             maUpdateTimer.SetTimeout( static_cast<ULONG>(fUpdate * 1000.0) );
             maUpdateTimer.Start();
@@ -1567,10 +1576,19 @@ double SlideshowImpl::update()
         else
         {
             maUpdateTimer.Stop();
-            fUpdate = -1.0;
         }
     }
     return fUpdate;
+    */
+    startUpdateTimer();
+    return -1;
+}
+
+void SlideshowImpl::startUpdateTimer()
+{
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    maUpdateTimer.SetTimeout( 0 );
+    maUpdateTimer.Start();
 }
 
 /** this timer is called 20ms after a new slide was displayed.
@@ -1608,11 +1626,20 @@ IMPL_LINK( SlideshowImpl, updateHdl, Timer*, EMPTYARG )
 //         // Boost our prio, as long as we're in the render loop
 //         ::canvas::tools::PriorityBooster aBooster(2);
 
-        double fUpdate = update();
-        while(mxShow.is() && fUpdate <= 0.0) {
-            sal_uInt32 nCurrentTime = osl_getGlobalTimer();
+        double fUpdate = -1.0;
+        while(mxShow.is() && ( fUpdate < 1.0 ))
+        {
+             if( !mxShow->update(fUpdate) )
+             {
+                 fUpdate = -1.0;
+                 break;
+             }
             Application::Reschedule();
-            fUpdate = update();
+        }
+        if( mxShow.is() && ( fUpdate > 0.0 ) )
+        {
+            maUpdateTimer.SetTimeout( static_cast<ULONG>(fUpdate * 1000.0) );
+            maUpdateTimer.Start();
         }
     }
     catch( Exception& e )
@@ -2066,6 +2093,19 @@ void SlideshowImpl::receiveRequest(SfxRequest& rReq)
         }
         break;
     }
+}
+
+SlideShowImplGuard::SlideShowImplGuard( SlideshowImpl* pImpl )
+{
+    mpImpl = pImpl;
+    if( mpImpl )
+        mpImpl->acquire();
+}
+
+SlideShowImplGuard::~SlideShowImplGuard()
+{
+    if( mpImpl )
+        mpImpl->release();
 }
 
 } // namespace ::sd
