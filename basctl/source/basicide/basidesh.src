@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:29:40 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:25:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,7 +438,7 @@ String RID_STR_ERRORCHOOSEMACRO
     Text[ english_us ] = "Macros from other documents are not accessible.";
     Text[ portuguese ] = "O acesso a macros de outros documentos ι impossνvel.";
     Text[ russian ] = "Μΰκπξρϋ θη δπσγθυ δξκσμενςξβ νεδξρςσονϋ.";
-    Text[ greek ] = "Macros from other documents are not accessible.";
+    Text[ greek ] = "Οι μακροεντολές από άλλα έγγραφα δεν είναι προσπελάσιμες.";
     Text[ dutch ] = "Geen toegang tot macro's van andere documenten.";
     Text[ french ] = "Impossible d'accιder aux macros des autres documents !";
     Text[ spanish ] = "No se puede acceder a las macros de otros documentos.";
@@ -468,7 +468,7 @@ String RID_STR_LIBISREADONLY
     Text[ english_us ] = "This library is read-only.";
     Text[ portuguese ] = "This library is readonly.";
     Text[ russian ] = "Αθαλθξςεκΰ ςξλόκξ δλÿ χςενθÿ.";
-    Text[ greek ] = "This library is readonly.";
+    Text[ greek ] = "Αυτή η βιβλιοθήκη είναι μόνο για ανάγνωση.";
     Text[ dutch ] = "Deze bibliotheek is alleen-lezen.";
     Text[ french ] = "Cette bibliothθque est en lecture seule.";
     Text[ spanish ] = "Esta biblioteca es de sσlo lectura.";
@@ -498,7 +498,7 @@ String RID_STR_REPLACELIB
     Text[ english_us ] = "'XX' cannot be replaced.";
     Text[ portuguese ] = "'XX' can't be replaced.";
     Text[ russian ] = "XX' νε μξζες αϋςό ηΰμενεν.";
-    Text[ greek ] = "'XX' can't be replaced.";
+    Text[ greek ] = "Δεν είναι δυνατή η αντικατάσταση του 'XX'.";
     Text[ dutch ] = "'XX' kan niet worden vervangen.";
     Text[ french ] = "Impossible de remplacer 'XX' !";
     Text[ spanish ] = "'XX' no se puede sustituir.";
@@ -528,7 +528,7 @@ String RID_STR_IMPORTNOTPOSSIBLE
     Text[ english_us ] = "'XX' cannot be added.";
     Text[ portuguese ] = "Import of 'XX' not possible.";
     Text[ russian ] = "Θμοξπς 'XX' νεβξημξζεν.";
-    Text[ greek ] = "Import of 'XX' not possible.";
+    Text[ greek ] = "Δεν είναι δυνατή η προσθήκη του 'XX'.";
     Text[ dutch ] = "Het is niet mogelijk 'XX' toe te voegen.";
     Text[ french ] = "Impossible d'ajouter 'XX' !";
     Text[ spanish ] = "No se puede aρadir 'XX'.";
@@ -558,7 +558,7 @@ String RID_STR_NOIMPORT
     Text[ english_us ] = "'XX' was not added.";
     Text[ portuguese ] = "'XX' was not imported.";
     Text[ russian ] = "XX' νε αϋλ δξαΰβλεν.";
-    Text[ greek ] = "'XX' was not imported.";
+    Text[ greek ] = "Το 'XX' δεν προστέθηκε.";
     Text[ dutch ] = "'XX' is niet toegevoegd.";
     Text[ french ] = "'XX' n'a pas ιtι ajoutι.";
     Text[ spanish ] = "'XX' no se aρadiσ.";
@@ -588,7 +588,7 @@ String RID_STR_ENTERPASSWORD
     Text[ english_us ] = "Enter password for 'XX'";
     Text[ portuguese ] = "Enter password for 'XX'";
     Text[ russian ] = "Ββεδθςε οΰπξλό δλÿ 'XX'";
-    Text[ greek ] = "Enter password for 'XX'";
+    Text[ greek ] = "Εισαγάγετε κωδικό πρόσβασης για το 'XX'";
     Text[ dutch ] = "Wachtwoord opgeven voor 'XX'";
     Text[ french ] = "Saisie du mot de passe pour 'XX'";
     Text[ spanish ] = "Introducir una contraseρa para 'XX'";
@@ -832,7 +832,7 @@ String RID_STR_SEARCHFROMSTART
     Text[ arabic ] = "Κγ ΗαΘΝΛ ΝΚμ ΗαζΝΟΙ ΗαδγΨνΙ ΗαΓΞνΡΙ. εα ΚΡνΟ γζΗΥαΙ ΗαΘΝΛ ΪδΟ ΗαζΝΟΙ ΗαδγΨνΙ ΗαΓζαμΏ";
     Text[ dutch ] = "Er is tot aan de laatste module gezocht. Wilt u het zoeken voortzetten vanaf de eerste module?";
     Text[ chinese_simplified ] = "ε·²η»ζε―»θ‡³ζ€εδΈ€δΈªζ¨΅ε—γ€‚θ¦δ»η¬¬δΈ€δΈªζ¨΅ε—εΌ€ε§‹ζε―»οΌ";
-    Text[ greek ] = "Εκτελέστηκε η αναζήτηση έως τη τελευταία λειτουργική μονάδα. Θέλετε να συνεχιστεί η αναζήτηση από τη πρώτη λειτουργική μονάδα;";
+    Text[ greek ] = "Η αναζήτηση έως την τελευταία λειτουργική μονάδα ολοκληρώθηκε. Θέλετε να συνεχιστεί η αναζήτηση από τη πρώτη λειτουργική μονάδα;";
     Text[ korean ] = "λ§μ§€λ§‰ λª¨λ“κΉμ§€ κ²€μƒ‰μ„ μ™„λ£ν–μµλ‹λ‹¤. μ²μ λª¨λ“μ—μ„ κ²€μƒ‰μ„ κ³„μ†ν•μ‹κ² μµλ‹κΉ?";
     Text[ turkish ] = "Aranan son modόl tamamlandύ. έlk modόle devam et?";
     Text[ catalan ] = "S'ha completat la cerca fins a l'ϊltim mςdul. Voleu continuar des del primer?";
@@ -962,7 +962,7 @@ String RID_STR_CANNOTCHANGENAMESTDLIB
     Text[ arabic ] = "αΗ νγίδ ΚΫννΡ ΗΣγ ΗαγίΚΘΙ ΗαΗέΚΡΗΦνΙ";
     Text[ dutch ] = "De naam van de standaardbibliotheek kan niet worden gewijzigd.";
     Text[ chinese_simplified ] = "ζ— ζ³•ζ›΄ζ”Ήζ ‡ε‡†η¨‹εΊεΊ“η„εη§°γ€‚";
-    Text[ greek ] = "Δεν είναι δυνατόν να αλλάξει το όνομα της βασικής βιβλιοθήκης.";
+    Text[ greek ] = "Δεν είναι δυνατόν να αλλάξει το όνομα της προεπιλεγμένης βιβλιοθήκης.";
     Text[ korean ] = "κΈ°λ³Έ λΌμ΄λΈλ¬λ¦¬μ μ΄λ¦„μ€ λ³€κ²½ν•  μ μ—†μµλ‹λ‹¤.";
     Text[ turkish ] = "Φntanύmlύ kitaplύπύn adύ deπiώtirilemez.";
     Text[ catalan ] = "El nom de la biblioteca per defecte no es pot canviar.";
@@ -995,7 +995,7 @@ String RID_STR_CANNOTCHANGENAMEREFLIB
     Text[ arabic ] = ".αΗ νγίδ ΚΫννΡ ΗΣγ γίΚΘΙ γΡΜΪνΙ";
     Text[ dutch ] = "De naam van een bibliotheek met een verwijzing kan niet worden gewijzigd.";
     Text[ chinese_simplified ] = "ζ— ζ³•ζ›΄ζ”ΉεΌ•η”¨η¨‹εΊεΊ“η„εη§°γ€‚";
-    Text[ greek ] = "Δεν είναι δυνατόν να αλλάξει το όνομα μιας βιβλιοθήκης η οποία είναι προορισμός κάποιας αναφοράς";
+    Text[ greek ] = "Δεν είναι δυνατόν να αλλάξει το όνομα μιας βιβλιοθήκης η οποία είναι προορισμός κάποιας παραπομπής";
     Text[ korean ] = "μ°Έμ΅°λ λΌμ΄λΈλ¬λ¦¬μ μ΄λ¦„μ€ λ³€κ²½ν•  μ μ—†μµλ‹λ‹¤.";
     Text[ turkish ] = "Verilen kόtόphanenin ismi deπiώtirilemedi.";
     Text[ catalan ] = "El nom de una biblioteca referenciada no es pot canviar.";
@@ -1059,7 +1059,7 @@ String RID_STR_GENERATESOURCE
     Text[ arabic ] = "ΕδΤΗΑ δΥ γΥΟΡ";
     Text[ dutch ] = "Brontekst maken";
     Text[ chinese_simplified ] = "η”ζζΊζ–‡ζ¬";
-    Text[ greek ] = "Δημιουργία κειμένου προέλευσης";
+    Text[ greek ] = "Δημιουργία πηγαίου κώδικα";
     Text[ korean ] = "μ›λ³Έ ν…μ¤νΈ μƒμ„±";
     Text[ turkish ] = "Kaynak kodu oluώtur";
     Text[ catalan ] = "S'estΰ generant la font";
@@ -1256,7 +1256,7 @@ String RID_STR_QUERYDELLIBREF
     Text[ arabic ] = "Ώ XX εα ΚΡνΟ ΝΠέ ΗαγΡΜΪ Εαμ ΗαγίΚΘΙ";
     Text[ dutch ] = "Wilt u de verwijzing naar de bibliotheek XX wissen?";
     Text[ chinese_simplified ] = "ζ‚¨θ¦ε ι™¤η¨‹εΊεΊ“ XX η„εΌ•η”¨οΌ";
-    Text[ greek ] = "Θέλετε να διαγραφεί η αναφορά προς τη βιβλιοθήκη ΧΧ;";
+    Text[ greek ] = "Θέλετε να διαγραφεί η παραπομπή προς τη βιβλιοθήκη ΧΧ;";
     Text[ korean ] = "λΌμ΄λΈλ¬λ¦¬ XXλ΅μ μ°Έμ΅°λ¥Ό μ‚­μ ν•μ‹κ² μµλ‹κΉ?";
     Text[ turkish ] = "XX kόtόphanesi referansύnύ silmek istermisiniz?";
     Text[ catalan ] = "Voleu suprimir la referθncia a la biblioteca XX?";
@@ -1355,7 +1355,7 @@ String RID_STR_BASIC
     Text[ chinese_simplified ] = "BASIC";
     Text[ greek ] = "BASIC";
     Text[ korean ] = "BASIC";
-    Text[ turkish ] = "BASIC";
+    Text[ turkish ] = "TEMEL";
     Text[ catalan ] = "BASIC";
     Text[ finnish ] = "BASIC";
     Text[ thai ] = "BASIC";
@@ -1389,7 +1389,7 @@ String RID_STR_LINE
     Text[ greek ] = "Γρ";
     Text[ korean ] = "ν–‰";
     Text[ turkish ] = "Ln";
-    Text[ language_user1 ] = "TSM:; TSM: 11/9/00 This entry denotes Zeile - Zl";
+    Text[ language_user1 ] = "; TSM:; TSM: 11/9/00 This entry denotes Zeile - Zl";
     Text[ catalan ] = "Ln";
     Text[ finnish ] = "Rv";
     Text[ thai ] = "ΰΈΰΈ£ΰΈ£ΰΈ—ΰΈ±ΰΈ”";
@@ -1486,7 +1486,7 @@ String RID_BASICIDE_OBJECTBAR
     Text[ arabic ] = "ΤΡνΨ γΗίΡζ";
     Text[ dutch ] = "Macrobalk";
     Text[ chinese_simplified ] = "ε®ζ ";
-    Text[ greek ] = "Γραμμή μακροεντολής";
+    Text[ greek ] = " Γραμμή μακροεντολής";
     Text[ korean ] = "λ§¤ν¬λ΅ λª¨μ";
     Text[ turkish ] = "Macro Ηubuπu";
     Text[ catalan ] = "Barra de macros";
@@ -1585,7 +1585,7 @@ String RID_STR_REFNOTPOSSIBLE
     Text[ arabic ] = ".ΫνΡ γγίδ 'XX' ΗαγΡΜΪ Εαμ";
     Text[ dutch ] = "Verwijzing naar ' XX' niet mogelijk.";
     Text[ chinese_simplified ] = "ζ— ζ³•εΌ•η”¨ 'XX' γ€‚";
-    Text[ greek ] = "Δεν είναι δυνατή η αναφορά στο 'XX' .";
+    Text[ greek ] = "Δεν είναι δυνατή η παραπομπή στο 'XX' .";
     Text[ korean ] = "'XX'λ΅μ μ°Έμ΅°κ°€ λ¶κ°€λ¥ν•©λ‹λ‹¤.";
     Text[ turkish ] = "'XX' e referans alύnamaz.";
     Text[ catalan ] = "La referθncia a 'XX' no ιs possible.";
@@ -2043,7 +2043,7 @@ String RID_STR_SEARCHALLMODULES
     Text[ arabic ] = "εα ΚΡνΟ ΗΣΚΘΟΗα ΗαδΥ έν ία ΗαζΝΟΗΚ ΗαδγΨνΙ ΗαδΤΨΙΏ";
     Text[ dutch ] = "Wilt u de tekst in alle actieve modules vervangen?";
     Text[ chinese_simplified ] = "θ¦ζ›ΏζΆδ½Ώη”¨δΈ­η„ζ¨΅ε—η„ε…¨ιƒ¨ζ–‡ε­—οΌ";
-    Text[ greek ] = "Να αντικατασταθεί το κείμενο σε όλες τις τρέχουσες λειτουργικές μονάδες;";
+    Text[ greek ] = "Να αντικατασταθεί το κείμενο σε όλες τις ενεργές λειτουργικές μονάδες;";
     Text[ korean ] = "ν…μ¤νΈλ¥Ό ν™μ„±ν™”λ λª¨λ“  λª¨λ“μ—μ„ λ€μ²΄ν•μ‹κ² μµλ‹κΉ? ";
     Text[ turkish ] = "Metni tόm aktif modόllerde deπiώtirmek istermisiniz?";
     Text[ catalan ] = "Voleu reemplaηar el text de tots els mςduls actius?";
@@ -2280,7 +2280,7 @@ ImageList RID_DEFAULTIMAGELIST_LC
         SID_BASICSTEPOUT ;
         SID_BASICSTOP ;
         SID_BASICIDE_TOGGLEBRKPNT ;
-        SID_BASICIDE_MANAGEBRKPNTS ;        
+        SID_BASICIDE_MANAGEBRKPNTS ;
         SID_BASICIDE_ADDWATCH ;
         SID_BASICIDE_MODULEDLG ;
         SID_BASICIDE_OBJCAT ;
@@ -2650,14 +2650,14 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ czech ] = "Manage Breakpoints";
             Text[ danish ] = "Manage Breakpoints";
             Text[ polish ] = "Manage Breakpoints";
-            Text[ portuguese_brazilian ] = "Manage Breakpoints";
+            Text[ portuguese_brazilian ] = "Gerenciar pontos de interrupηγo";
             Text[ turkish ] = "Manage Breakpoints";
             Text[ arabic ] = "Manage Breakpoints";
             Text[ hebrew ] = "Manage Breakpoints";
             Text[ catalan ] = "Manage Breakpoints";
             Text[ thai ] = "Manage Breakpoints";
             Text[ slovak ] = "Body preruΕ΅enia";
-        };                  
+        };
         ToolBoxItem
         {
             Identifier = SID_BASICIDE_ADDWATCH ;
@@ -2887,7 +2887,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text [ swedish ] = "Infoga kδlltext" ;
             Text [ danish ] = "Indsζt kildetekst" ;
             Text [ portuguese ] = "Inserir texto fonte" ;
-            Text [ portuguese_brazilian ] = "Inserir Cσdigo Fonte" ;
+            Text [ portuguese_brazilian ] = "Inserir cσdigo-fonte" ;
             Text[ chinese_simplified ] = "ζ’ε…¥ζΊζ–‡ζ¬";
             Text[ russian ] = "Βρςΰβθςό θρυξδνϋι ςεκρς";
             Text[ polish ] = "Wstaw tekst rσd³owy";
@@ -2914,7 +2914,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text [ ENGLISH ] = "Save source as..." ;
             Text [ norwegian ] = "Save source as..." ;
             Text [ italian ] = "Salva sorgente con nome..." ;
-            Text [ portuguese_brazilian ] = "Salvar Cσdigo Fonte como..." ;
+            Text [ portuguese_brazilian ] = "Salvar cσdigo-fonte como..." ;
             Text [ portuguese ] = "Guardar texto fonte como..." ;
             Text [ finnish ] = "Tallenna lδhde nimellδ..." ;
             Text [ danish ] = "Gem kildetekst under..." ;
@@ -3177,7 +3177,7 @@ Menu RID_POPUP_TABBAR
                         Text = "BASIC-Modul" ;
                         Text [ ENGLISH ] = "BASIC module" ;
                         Text [ english_us ] = "BASIC Module" ;
-                        Text [ portuguese_brazilian ] = "M?ulo" ;
+                        Text [ portuguese_brazilian ] = "Mσdulo" ;
                         Text [ swedish ] = "BASIC-modul" ;
                         Text [ danish ] = "BASIC-modul" ;
                         Text [ italian ] = "Modulo BASIC" ;
@@ -3211,7 +3211,7 @@ Menu RID_POPUP_TABBAR
                         Text = "BASIC-Dialog" ;
                         Text [ ENGLISH ] = "BASIC dialog" ;
                         Text [ english_us ] = "BASIC Dialog" ;
-                        Text [ portuguese_brazilian ] = "Di?logo" ;
+                        Text [ portuguese_brazilian ] = "Diαlogo" ;
                         Text [ swedish ] = "BASIC-dialogruta" ;
                         Text [ danish ] = "BASIC-dialog" ;
                         Text [ italian ] = "Dialogo BASIC" ;
@@ -3286,7 +3286,7 @@ Menu RID_POPUP_TABBAR
             Text[ arabic ] = "ΝΠέ";
             Text[ dutch ] = "Verwijderen";
             Text[ chinese_simplified ] = "ε ι™¤";
-            Text[ greek ] = "Διαγραφή";
+            Text[ greek ] = " Διαγραφή";
             Text[ korean ] = "μ‚­μ ";
             Text[ turkish ] = "Sil";
             Text[ catalan ] = "Suprimeix";
@@ -3530,7 +3530,7 @@ String RID_STR_QUERYREPLACEMACRO
     Text[ danish ] = "Do you want to overwrite the macro XX ?";
     Text[ swedish ] = "Vill du skriva φver makrot XX ?";
     Text[ polish ] = "Do you want to overwrite the macro XX ?";
-    Text[ portuguese_brazilian ] = "Do you want to overwrite the XX macro?";
+    Text[ portuguese_brazilian ] = "Deseja sobrescrever a macro XX ?";
     Text[ japanese ] = "γƒγ‚―γƒ­ XX γ«δΈζ›Έγγ—γΎγ™γ‹γ€‚";
     Text[ korean ] = "macro XX μ„(λ¥Ό) λ®μ–΄μ“°μ‹κ² μµλ‹κΉ?";
     Text[ chinese_simplified ] = "ζ‚¨θ¦ζ”Ήε†™ε® XX οΌ";
@@ -3733,7 +3733,7 @@ Menu RID_BASICMENU
                         Text [ french ] = "Barres d'~outils" ;
                         Text [ dutch ] = "~Werkbalken" ;
                         Text [ portuguese ] = "Barras de ~ferramentas" ;
-                        Text [ portuguese_brazilian ] = "Symbolleisten" ;
+                        Text [ portuguese_brazilian ] = "Barra de ferramentas" ;
                         SubMenu = Menu
                         {
                             ItemList =
@@ -3923,14 +3923,14 @@ Menu RID_BASICMENU
             Text[ hebrew ] = "β€®Χ›ΧΧ™Χβ€¬";
             Text[ hindi ] = "~ΰ¤”ΰ¤ΰ¤Όΰ¤Ύΰ¤°";
             Text[ slovak ] = "NΓ΅s~troje";
-        };          
+        };
         GLOBLMN_WINMN
         {
             ITEM_WINDOW_MDIWINDOWLIST
             SubMenu = Menu
             {
                 ItemList =
-                {           
+                {
                     MenuItem
                     {
                         ITEM_WINDOW_CLOSEWIN
@@ -3938,10 +3938,10 @@ Menu RID_BASICMENU
                     MenuItem
                     {
                         Separator = TRUE ;
-                    };                                      
+                    };
                 };
             };
-        };                      
+        };
         ITEM_HELP_MENU
     };
 };
@@ -4141,7 +4141,7 @@ Menu RID_BASICPLUGINMENU
                         Text [ french ] = "Barres d'~outils" ;
                         Text [ dutch ] = "~Werkbalken" ;
                         Text [ portuguese ] = "Barras de ~ferramentas" ;
-                        Text [ portuguese_brazilian ] = "Symbolleisten" ;
+                        Text [ portuguese_brazilian ] = "Barra de ferramentas" ;
                         SubMenu = Menu
                         {
                             ItemList =
@@ -4338,7 +4338,7 @@ Menu RID_BASICPLUGINMENU
             SubMenu = Menu
             {
                 ItemList =
-                {           
+                {
                     MenuItem
                     {
                         ITEM_WINDOW_CLOSEWIN
@@ -4346,13 +4346,14 @@ Menu RID_BASICPLUGINMENU
                     MenuItem
                     {
                         Separator = TRUE ;
-                    };                                      
+                    };
                 };
             };
-        };              
+        };
         ITEM_HELP_MENU
     };
 };
+
 
 
 
