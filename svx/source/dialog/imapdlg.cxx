@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-05 14:55:35 $
+ *  last change: $Author: cl $ $Date: 2002-07-11 10:48:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,9 +255,13 @@ SvxIMapDlg::SvxIMapDlg( SfxBindings *pBindings, SfxChildWindow *pCW,
         aFtText             ( this, SVX_RES( FT_TEXT ) ),
         aEdtText            ( this, SVX_RES( EDT_TEXT ) ),
         maFtTarget          ( this, SVX_RES( RID_SVXCTL_FT_TARGET ) ),
-        maCbbTarget         ( this, SVX_RES( RID_SVXCTL_CBB_TARGET ) )
+        maCbbTarget         ( this, SVX_RES( RID_SVXCTL_CBB_TARGET ) ),
+        maImageList         ( SVX_RES( IL_IMAPDLG ) ),
+        maImageListH        ( SVX_RES( ILH_IMAPDLG ) )
 {
     pIMapWnd = new IMapWindow( this, SVX_RES( RID_SVXCTL_IMAP ) );
+
+    ApplyImageList();
 
     FreeResource();
 
@@ -1077,4 +1081,21 @@ IMPL_LINK( SvxIMapDlg, MiscHdl, void*, p )
     aTbxIMapDlg1.SetOutStyle( aMiscOptions.GetToolboxStyle() );
 
     return 0L;
+}
+
+void SvxIMapDlg::ApplyImageList()
+{
+    bool bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
+
+    ImageList& rImgLst = bHighContrast ? maImageListH : maImageList;
+
+    aTbxIMapDlg1.SetImageList( rImgLst );
+}
+
+void SvxIMapDlg::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    SfxModelessDialog::DataChanged( rDCEvt );
+
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+            ApplyImageList();
 }

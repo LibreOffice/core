@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2002-06-10 15:33:52 $
+ *  last change: $Author: cl $ $Date: 2002-07-11 10:48:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,11 +90,6 @@ ModelessDialog RID_SVXDLG_IMAP
                 HelpId = HID_IMAPDLG_APPLY ;
                 Text = "Zuweisen" ;
                 Text [ ENGLISH ] = "Apply" ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "apply.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ english_us ] = "Apply" ;
                 Text [ italian ] = "Assegna" ;
                 Text [ spanish ] = "Asignar" ;
@@ -122,15 +117,8 @@ ModelessDialog RID_SVXDLG_IMAP
             {
                 Identifier = TBI_OPEN ;
                 HelpId = HID_IMAPDLG_OPEN ;
-                /* ### ACHTUNG: Neuer Text in Resource? ÷ffnen... : Õffnen... */
-                /* ### ACHTUNG: Neuer Text in Resource? ÷ffnen... : Õffnen... */
                 Text = "÷ffnen..." ;
                 Text [ ENGLISH ] = "Open..." ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "sc05501.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ dutch ] = "Openen..." ;
                 Text [ english_us ] = "Open..." ;
                 Text [ italian ] = "Apri..." ;
@@ -174,12 +162,6 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ chinese_simplified ] = "Â≠òÁõò...";
                 Text[ chinese_traditional ] = "ÂÑ≤Â≠ò...";
                 Text[ japanese ] = "‰øùÂ≠ò...";
-
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "sc05502.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text[ russian ] = "—Óı‡ÌËÚ¸...";
                 Text[ greek ] = "¡ÔËﬁÍÂıÛÁ...";
                 Text[ polish ] = "Zapisz...";
@@ -202,11 +184,6 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text [ ENGLISH ] = "Selection" ;
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "sc10128.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ dutch ] = "Selectie" ;
                 Text [ english_us ] = "Select" ;
                 Text [ italian ] = "Selezione" ;
@@ -216,7 +193,6 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text [ danish ] = "Marker" ;
                 Text [ portuguese ] = "Seleccionar" ;
                 Text [ portuguese_brazilian ] = "Auswahl" ;
-                /* ### ACHTUNG: Neuer Text in Resource? Objekte ausw‰hlen : Objekte auswıhlen */
                 Text[ chinese_simplified ] = "ÈÄâÊã©";
                 Text[ russian ] = "¬˚·Ó";
                 Text[ polish ] = "WybÛr";
@@ -239,11 +215,6 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text [ ENGLISH ] = "Rectangle" ;
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "sc10104.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ dutch ] = "Rechthoek" ;
                 Text [ english_us ] = "Rectangle" ;
                 Text [ italian ] = "Rettangolo" ;
@@ -275,11 +246,6 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text [ ENGLISH ] = "Ellipse" ;
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "sc10110.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ dutch ] = "Ellips" ;
                 Text [ english_us ] = "Ellipse" ;
                 Text [ italian ] = "Ellisse" ;
@@ -311,11 +277,6 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text [ ENGLISH ] = "Polygon" ;
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "sc10117.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ english_us ] = "Polygon" ;
                 Text [ italian ] = "Poligono" ;
                 Text [ spanish ] = "PolÌgono" ;
@@ -348,11 +309,6 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text [ english_us ] = "Freeform Polygon" ;
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "sc10463.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ portuguese ] = "PolÌgono, forma livre" ;
                 Text [ portuguese_brazilian ] = "Freihandpolygon" ;
                 Text [ swedish ] = "Frihandspolygon" ;
@@ -396,11 +352,6 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text [ spanish ] = "Modificar puntos" ;
                 Text [ english_us ] = "Edit Points" ;
                 AutoCheck = TRUE ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "sc10126.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text[ chinese_simplified ] = "ÁºñËæëÊé•ÁÇπ";
                 Text[ russian ] = "œ‡‚Í‡ ÚÓ˜ÂÍ";
                 Text[ polish ] = "Edytuj punkty";
@@ -433,11 +384,6 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text [ english_us ] = "Move Points" ;
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "sc10121.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text[ chinese_simplified ] = "ÁßªÂä®ÁÇπ";
                 Text[ russian ] = "œÂÂÏÂÒÚËÚ¸ ÚÓ˜ÍË";
                 Text[ polish ] = "Przenieú punkty";
@@ -472,12 +418,6 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text [ english_us ] = "Insert Points" ;
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "sc10119.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
-                /* ### ACHTUNG: Neuer Text in Resource? Neue Punkte einf¸gen oder anh‰ngen : Neue Punkte einf≥gen oder anhıngen */
                 Text[ chinese_simplified ] = "ÊèíÂÖ•Êé•ÁÇπ";
                 Text[ russian ] = "¬ÒÚ‡‚ËÚ¸ ÚÓ˜ÍË";
                 Text[ polish ] = "Wstaw punkty";
@@ -510,12 +450,6 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text [ dutch ] = "Punten verwijderen" ;
                 Text [ spanish ] = "Eliminar puntos" ;
                 Text [ english_us ] = "Delete Points" ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "sc10120.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
-                /* ### ACHTUNG: Neuer Text in Resource? Markierte Punkte lˆschen : Markierte Punkte l˜schen */
                 Text[ chinese_simplified ] = "Âà†Èô§ÁÇπ";
                 Text[ russian ] = "”‰‡ÎËÚ¸ ÚÓ˜ÍË";
                 Text[ polish ] = "UsuÒ punkty";
@@ -537,13 +471,6 @@ ModelessDialog RID_SVXDLG_IMAP
             {
                 Identifier = TBI_UNDO ;
                 HelpId = HID_IMAPDLG_UNDO ;
-
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "sc05701.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
-
                 Text = "R¸ckg‰ngig " ;
                 Text [ English ] = "Undo " ;
                 Text [ norwegian ] = "Angre " ;
@@ -574,13 +501,6 @@ ModelessDialog RID_SVXDLG_IMAP
             {
                 Identifier = TBI_REDO ;
                 HelpId = HID_IMAPDLG_REDO ;
-
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "sc05700.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
-
                 Text = "Wiederherstellen " ;
                 Text [ English ] = "Redo " ;
                 Text [ english_us ] = "Redo" ;
@@ -616,11 +536,6 @@ ModelessDialog RID_SVXDLG_IMAP
                 HelpId = HID_IMAPDLG_ACTIVE ;
                 Text = "Aktiv" ;
                 Text [ ENGLISH ] = "Active" ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "active.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ english_us ] = "Active" ;
                 Text [ italian ] = "Attivo" ;
                 Text [ spanish ] = "Activo" ;
@@ -650,11 +565,6 @@ ModelessDialog RID_SVXDLG_IMAP
                 HelpId = HID_IMAPDLG_MACRO ;
                 Text = "Makro..." ;
                 Text [ ENGLISH ] = "Macro..." ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "scmakrod.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ english_us ] = "Macro..." ;
                 Text [ dutch ] = "Macro..." ;
                 Text [ swedish ] = "Makro..." ;
@@ -685,11 +595,6 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text = "Eigenschaften..." ;
                 Text [ ENGLISH ] = "Properties..." ;
                 Text [ english_us ] = "Properties..." ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "sc06350.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ portuguese ] = "Propriedades..." ;
                 Text [ portuguese_brazilian ] = "Eigenschaften..." ;
                 Text [ swedish ] = "Egenskaper..." ;
@@ -714,19 +619,21 @@ ModelessDialog RID_SVXDLG_IMAP
             };
         };
         Text[ english_us ] = "Image Map Editor";
-    Text[ portuguese ] = "Mapa de imagens Editor";
-    Text[ russian ] = "–Â‰‡ÍÚÓ Image Map";
-    Text[ dutch ] = "ImageMap-editor";
-    Text[ french ] = "Editeur ImageMap";
-    Text[ spanish ] = "Editor Image Map";
-    Text[ italian ] = "Editor ImageMap";
-    Text[ danish ] = "ImageMap-Editor";
-    Text[ swedish ] = "ImageMap-Editor";
-    Text[ polish ] = "Edytor mapy obrazkowej";
-    Text[ portuguese_brazilian ] = "ImageMap-Editor";
-    Text[ japanese ] = "ImageMap-¥√ﬁ®¿";
-    Text[ chinese_simplified ] = "ÕºœÒ”≥…‰±‡º≠∆˜";
-};
+        Text[ portuguese ] = "Mapa de imagens Editor";
+        Text[ russian ] = "–Â‰‡ÍÚÓ Image Map";
+        Text[ dutch ] = "ImageMap-editor";
+        Text[ french ] = "Editeur ImageMap";
+        Text[ spanish ] = "Editor Image Map";
+        Text[ italian ] = "Editor ImageMap";
+        Text[ danish ] = "ImageMap-Editor";
+        Text[ swedish ] = "ImageMap-Editor";
+        Text[ polish ] = "Edytor mapy obrazkowej";
+        Text[ portuguese_brazilian ] = "ImageMap-Editor";
+        Text[ japanese ] = "ImageMap-¥√ﬁ®¿";
+        Text[ chinese_simplified ] = "ÕºœÒ”≥…‰±‡º≠∆˜";
+
+    };
+
     FixedText FT_URL
     {
         Pos = MAP_APPFONT ( 6 , 25 ) ;
@@ -843,6 +750,43 @@ ModelessDialog RID_SVXDLG_IMAP
         HScroll = TRUE ;
     };
     Text[ thai ] = "‡∏ï‡∏±‡∏ß‡πÅ‡∏Å‡πâ‡πÑ‡∏Ç‡πÅ‡∏ú‡∏ô‡∏ó‡∏µ‡πà‡∏†‡∏≤‡∏û";
+
+
+#define IMAPDLG_IDLIST \
+        IdList =            \
+        {                   \
+            TBI_APPLY ; \
+            TBI_OPEN ;  \
+            TBI_SAVEAS ;    \
+            TBI_SELECT ;    \
+            TBI_RECT ;  \
+            TBI_CIRCLE ;    \
+            TBI_POLY ;  \
+            TBI_FREEPOLY ;  \
+            TBI_POLYEDIT ;  \
+            TBI_POLYMOVE ; \
+            TBI_POLYINSERT ;    \
+            TBI_POLYDELETE ;    \
+            TBI_UNDO ;  \
+            TBI_REDO ;  \
+            TBI_ACTIVE ; \
+            TBI_MACRO ; \
+            TBI_PROPERTY ; \
+        };                 \
+        IdCount = { 17 ; };
+
+    ImageList IL_IMAPDLG
+    {
+        ImageBitmap = Bitmap { File = "im_imagelist.bmp" ; };
+        MaskColor = Color { Red = 0xc000; Green = 0xc000; Blue = 0xc000; } ;
+        IMAPDLG_IDLIST
+    };
+    ImageList ILH_IMAPDLG
+    {
+        ImageBitmap = Bitmap { File = "imh_imagelist.bmp" ; };
+        MaskColor = Color { Red = 0xff00; Green = 0x0000; Blue = 0xff00; } ;
+        IMAPDLG_IDLIST
+    };
 };
 Control RID_SVXCTL_IMAP
 {
