@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-20 19:04:42 $
+ *  last change: $Author: mba $ $Date: 2001-11-27 11:05:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 #endif
 #ifndef _COM_SUN_STAR_PACKAGES_MANIFEST_XMANIFESTREADER_HPP_
 #include <com/sun/star/packages/manifest/XManifestReader.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_INTERACTIVEIODEXCEPTION_HPP_
+#include <com/sun/star/ucb/InteractiveIOException.hpp>
 #endif
 
 #include <rtl/digest.h>
@@ -1267,6 +1270,11 @@ void UCBStorage_Impl::ReadContent()
             }
         }
     }
+    catch ( InteractiveIOException& r )
+    {
+        if ( r.Code != IOErrorCode_NOT_EXISTING )
+            SetError( ERRCODE_IO_GENERAL );
+    }
     catch ( CommandAbortedException& )
     {
         // any command wasn't executed successfully - not specified
@@ -2232,6 +2240,24 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const String& rEleName, StreamMode nM
     else if ( !pElement->m_xStream.Is() )
     {
         // storage is opened the first time
+        BOOL bIsWritable = ( pImp->m_nMode & STREAM_WRITE );
+        if ( pImp->m_bIsLinked && pImp->m_bIsRoot && bIsWritable )
+        {
+            // make sure that the root storage object has been created before substorages will be created
+            INetURLObject aFolderObj( pImp->m_aURL );
+            String aName = aFolderObj.GetName();
+            aFolderObj.removeSegment();
+
+            Content aFolder( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), Reference < XCommandEnvironment >() );
+            pImp->m_pContent = new Content;
+            BOOL bRet = ::utl::UCBContentHelper::MakeFolder( aFolder, pImp->m_aName, *pImp->m_pContent );
+            if ( !bRet )
+            {
+                SetError( SVSTREAM_CANNOT_MAKE );
+                return NULL;
+            }
+        }
+
         UCBStorage_Impl* pStor = pImp->OpenStorage( pElement, nMode, bDirect );
         if ( pStor )
             return new UCBStorage( pStor );
