@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: gt $ $Date: 2001-06-18 13:00:32 $
+ *  last change: $Author: gt $ $Date: 2001-06-18 13:48:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,10 @@ STRING AnalysisAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex )
 
 AnalysisAddIn::AnalysisAddIn()
 {
-    pResMgr = ResMgr::CreateResMgr( "analysis633", ConvertIsoNamesToLanguage( aFuncLoc.Language, aFuncLoc.Country ) );
+    OString             aModName( "analysis" );
+    aModName += OString::valueOf( sal_Int32( SUPD ) );
+    pResMgr = ResMgr::CreateResMgr( ( const sal_Char* ) aModName,
+                                        ConvertIsoNamesToLanguage( aFuncLoc.Language, aFuncLoc.Country ) );
 
     if( pResMgr )
         pFD = new FuncDataList( *pResMgr );
