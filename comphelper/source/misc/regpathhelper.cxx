@@ -2,9 +2,8 @@
  *
  *  $RCSfile: regpathhelper.cxx,v $
  *
- *  $Revision: 1.7 $
- *
- *  last change: $Author: pl $ $Date: 2001-05-11 16:35:05 $
+ *  $Revision: 1.8 $
+ *  last change: $Author: tlx $ $Date: 2001-06-01 18:51:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,10 +172,14 @@ static OUString getDefaultLocalRegistry()
                 sPath += uBuffer.getToken(0, '/', nIndex);
                 if( nIndex == -1 )
                     break;
-                retRC = Directory::create(sPath);
-                if ( retRC != FileBase::E_None && retRC != FileBase::E_EXIST)
+                Directory aDir( sPath );
+                if( aDir.open() == FileBase::E_NOENT )
                 {
-                    return OUString();
+                    retRC = Directory::create(sPath);
+                    if ( retRC != FileBase::E_None && retRC != FileBase::E_EXIST)
+                    {
+                        return OUString();
+                    }
                 }
             }
         }
