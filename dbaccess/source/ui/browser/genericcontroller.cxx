@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 13:25:32 $
+ *  last change: $Author: fs $ $Date: 2001-03-30 13:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,9 +106,11 @@
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
+#ifndef _SV_WAITOBJ_HXX
+#include <vcl/waitobj.hxx>
+#endif
 
 using namespace ::com::sun::star::uno;
-//  using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::util;
@@ -823,6 +825,8 @@ sal_Bool SAL_CALL OGenericUnoController::supportsService(const ::rtl::OUString& 
 // -----------------------------------------------------------------------------
 Reference<XConnection> OGenericUnoController::connect(const ::rtl::OUString& _rsDataSourceName)
 {
+    WaitObject aWaitCursor(getView());
+
     Reference<XConnection> xConnection;
 
     Any aValue;
