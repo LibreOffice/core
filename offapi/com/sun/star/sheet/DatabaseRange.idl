@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseRange.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 10:09:54 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:20:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 #include <com/sun/star/container/XNamed.idl>
 #endif
 
+#ifndef __com_sun_star_util_XRefreshable_idl__
+#include <com/sun/star/util/XRefreshable.idl>
+#endif
+
 #ifndef __com_sun_star_table_CellRangeAddress_idl__
 #include <com/sun/star/table/CellRangeAddress.idl>
 #endif
@@ -108,6 +112,8 @@ service DatabaseRange
 
     // DocMerge: empty anyway
     interface com::sun::star::container::XNamed;
+
+    [optional] interface com::sun::star::util::XRefreshable;
 
     //-------------------------------------------------------------------------
 
@@ -158,6 +164,22 @@ service DatabaseRange
      */
     [optional, property] com::sun::star::table::CellRangeAddress FilterCriteriaSource;
 
+    //-------------------------------------------------------------------------
+
+    /** specifies the time between two refresh actions in seconds.
+
+        @since #76694#
+     */
+    [optional, property] long RefreshPeriod;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the imported data is only a selection of the database.
+
+        @since #76694#
+
+     */
+    [optional, property] boolean FromSelection;
 };
 
 //=============================================================================
