@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:48:43 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:25:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,11 +243,17 @@
 #ifndef _SFX_DOCFILT_HACK_HXX
 #include <sfx2/docfilt.hxx>
 #endif
+#ifndef SFX_QUERYSAVEDOCUMENT_HXX
+#include <sfx2/QuerySaveDocument.hxx>
+#endif
 #ifndef INCLUDED_SVTOOLS_HISTORYOPTIONS_HXX
 #include <svtools/historyoptions.hxx>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
+#endif
+#ifndef SVTOOLS_FILENOTATION_HXX_
+#include <svtools/filenotation.hxx>
 #endif
 #ifndef _DBACCESS_SLOTID_HRC_
 #include "dbaccess_slotid.hrc"
@@ -340,6 +346,7 @@ OApplicationController::OApplicationController(const Reference< XMultiServiceFac
     ,m_bPreviewEnabled(sal_True)
     ,m_eOldType(E_NONE)
 {
+    m_aTypeCollection.initUserDriverTypes(_rxORB);
 }
 //------------------------------------------------------------------------------
 OApplicationController::~OApplicationController()
@@ -427,6 +434,8 @@ void SAL_CALL OApplicationController::disposing()
                             ::rtl::OUString() );
                 }
                 xModel->disconnectController( this );
+                // forces the data source to reload
+                xModel->attachResource(xModel->getURL(),xModel->getArgs());
             }
             Reference < XFrame > xFrame;
             attachFrame( xFrame );
@@ -482,8 +491,8 @@ sal_Bool OApplicationController::Construct(Window* _pParent)
     if ( getContainer() && m_ePreviewMode != getContainer()->getPreviewMode() )
         getContainer()->switchPreview(m_ePreviewMode);
 
-    if ( getContainer() && m_xDataSource.is() )
-        getContainer()->setStatusInformations(m_xDataSource);
+//  if ( getContainer() && m_xDataSource.is() )
+//      getContainer()->setStatusInformations(m_xDataSource);
 
     // now that we have a view we can create the clipboard listener
     m_aSystemClipboard = TransferableDataHelper::CreateFromSystemClipboard( getView() );
@@ -546,8 +555,7 @@ sal_Bool SAL_CALL OApplicationController::suspend(sal_Bool bSuspend) throw( Runt
     Reference<XModifiable> xModi(m_xDataSource,UNO_QUERY);
     if ( m_bCurrentlyModified || (xModi.is() && xModi->isModified()) )
     {
-        QueryBox aQry(getView(), ModuleRes(APP_SAVEMODIFIED));
-        switch (aQry.Execute())
+        switch (ExecuteQuerySaveDocument(getView(),getStrippedDatabaseName()))
         {
             case RET_YES:
                 Execute(ID_BROWSER_SAVEDOC,Sequence<PropertyValue>());
@@ -646,12 +654,12 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
             case ID_NEW_QUERY_DESIGN:
             case ID_NEW_QUERY_SQL:
             case ID_APP_NEW_QUERY_AUTO_PILOT:
-            case ID_FORM_NEW_PILOT:
+            case SID_DB_FORM_NEW_PILOT:
                 aReturn.bEnabled = !isDataSourceReadOnly();
                 break;
             case ID_NEW_TABLE_DESIGN:
             case ID_NEW_VIEW_DESIGN:
-            case ID_NEW_VIEW_SQL:
+            case SID_DB_NEW_VIEW_SQL:
             case ID_NEW_TABLE_DESIGN_AUTO_PILOT:
             case ID_NEW_VIEW_DESIGN_AUTO_PILOT:
                 aReturn.bEnabled = !isDataSourceReadOnly() && !isConnectionReadOnly();
@@ -752,8 +760,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
             case SID_DB_APP_DSADVANCED_SETTINGS:
                 if ( m_xDataSource.is() )
                 {
-                    static ODsnTypeCollection aTypeCollection;
-                    DATASOURCE_TYPE eType = aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
+                    DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
                     aReturn.bEnabled = DST_EMBEDDED != eType && DST_LDAP != eType && DST_CALC != eType && DST_MOZILLA != eType && DST_EVOLUTION != eType && DST_OUTLOOK != eType && DST_OUTLOOKEXP != eType;
                 }
                 break;
@@ -788,6 +795,78 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 break;
             case ID_BROWSER_UNDO:
                 aReturn.bEnabled = sal_False;
+                break;
+            case SID_DB_APP_SENDREPORTASMAIL:
+            case SID_DB_APP_SENDREPORTTOWRITER:
+            case SID_DB_APP_DBADMIN:
+                aReturn.bEnabled = sal_False;
+                break;
+            case SID_DB_APP_STATUS_TYPE:
+                if ( aReturn.bEnabled = m_xDataSource.is() )
+                {
+                    DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
+                    ::rtl::OUString sDSTypeName = m_aTypeCollection.getTypeDisplayName(eType);
+                    aReturn.aState <<= sDSTypeName;
+                }
+                break;
+            case SID_DB_APP_STATUS_DBNAME:
+                if ( aReturn.bEnabled = m_xDataSource.is() )
+                {
+                    ::rtl::OUString sTemp;
+                    m_xDataSource->getPropertyValue(PROPERTY_URL) >>= sTemp;
+                    DATASOURCE_TYPE eType = m_aTypeCollection.getType(sTemp);
+                    String sDatabaseName;
+                    if ( eType != DST_EMBEDDED )
+                    {
+                        String sUser,sHostName;
+                        sal_Int32 nPortNumber = -1;
+
+                        m_aTypeCollection.extractHostNamePort(sTemp
+                                                            ,getORB()
+                                                            ,sDatabaseName
+                                                            ,sHostName
+                                                            ,nPortNumber);
+                        if ( !sDatabaseName.Len() )
+                            sDatabaseName = m_aTypeCollection.cutPrefix(sTemp);
+
+                        if ( m_aTypeCollection.isFileSystemBased(eType) )
+                        {
+                            sDatabaseName = SvtPathOptions().SubstituteVariable( sDatabaseName );
+                            if ( sDatabaseName.Len() )
+                            {
+                                ::svt::OFileNotation aFileNotation(sDatabaseName);
+                                // set this decoded URL as text
+                                sDatabaseName = aFileNotation.get(::svt::OFileNotation::N_SYSTEM);
+                            }
+                        }
+                    }
+                    else
+                        sDatabaseName = m_aTypeCollection.getEmbeddedDatabaseUIName(getORB());
+                    aReturn.aState <<= ::rtl::OUString(sDatabaseName);
+                }
+                break;
+            case SID_DB_APP_STATUS_USERNAME:
+                if ( aReturn.bEnabled = m_xDataSource.is() )
+                    aReturn.aState = m_xDataSource->getPropertyValue(PROPERTY_USER);
+                break;
+            case SID_DB_APP_STATUS_HOSTNAME:
+                if ( aReturn.bEnabled = m_xDataSource.is() )
+                {
+                    ::rtl::OUString sTemp;
+                    m_xDataSource->getPropertyValue(PROPERTY_URL) >>= sTemp;
+                    DATASOURCE_TYPE eType = m_aTypeCollection.getType(sTemp);
+                    if ( eType != DST_EMBEDDED )
+                    {
+                        String sUser,sHostName,sDatabaseName;
+                        sal_Int32 nPortNumber = -1;
+                        m_aTypeCollection.extractHostNamePort(sTemp
+                                                            ,getORB()
+                                                            ,sDatabaseName
+                                                            ,sHostName
+                                                            ,nPortNumber);
+                        aReturn.aState <<= ::rtl::OUString(sHostName);
+                    }
+                }
                 break;
             default:
                 aReturn = OApplicationController_CBASE::GetState(_nId);
@@ -976,7 +1055,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
             case ID_NEW_TABLE_DESIGN_AUTO_PILOT:
             case ID_NEW_VIEW_DESIGN_AUTO_PILOT:
             case ID_APP_NEW_QUERY_AUTO_PILOT:
-            case ID_FORM_NEW_PILOT:
+            case SID_DB_FORM_NEW_PILOT:
             case SID_REPORT_CREATE_REPWIZ_PRE_SEL:
             case SID_FORM_CREATE_REPWIZ_PRE_SEL:
             case ID_DOCUMENT_CREATE_REPWIZ:
@@ -991,7 +1070,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
 
                     switch( _nId )
                     {
-                        case ID_FORM_NEW_PILOT:
+                        case SID_DB_FORM_NEW_PILOT:
                         case SID_FORM_CREATE_REPWIZ_PRE_SEL:
                             bAutoPilot = sal_True;
                             // run through
@@ -1032,13 +1111,13 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 }
                 break;
             case ID_NEW_VIEW_DESIGN:
-            case ID_NEW_VIEW_SQL:
+            case SID_DB_NEW_VIEW_SQL:
                 {
                     Reference<XConnection> xConnection;
                     ensureConnection(xConnection);
                     if ( xConnection.is() )
                     {
-                        OQueryDesignAccess aHelper(getORB(),sal_True,ID_NEW_VIEW_SQL == _nId );
+                        OQueryDesignAccess aHelper(getORB(),sal_True,SID_DB_NEW_VIEW_SQL == _nId );
                         Reference< XComponent > xComponent(aHelper.create(Reference<XDataSource>(m_xDataSource,UNO_QUERY),xConnection),UNO_QUERY);
                         addDocumentListener(xComponent,NULL);
                     }
@@ -1162,12 +1241,17 @@ void OApplicationController::describeSupportedFeatures()
 
     implDescribeSupportedFeature( ".uno:Save",               ID_BROWSER_SAVEDOC,        CommandGroup::DOCUMENT );
     implDescribeSupportedFeature( ".uno:SaveAs",             ID_BROWSER_SAVEASDOC,      CommandGroup::DOCUMENT );
+    implDescribeSupportedFeature( ".uno:DBSendReportAsMail",SID_DB_APP_SENDREPORTASMAIL,
+                                                                                        CommandGroup::DOCUMENT );
+    implDescribeSupportedFeature( ".uno:DBSendReportToWriter",SID_DB_APP_SENDREPORTTOWRITER,
+                                                                                        CommandGroup::DOCUMENT );
     implDescribeSupportedFeature( ".uno:DBNewForm",          SID_APP_NEW_FORM,          CommandGroup::INSERT );
     implDescribeSupportedFeature( ".uno:DBNewFolder",        SID_APP_NEW_FOLDER,        CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:DBNewFormAutoPilot", ID_FORM_NEW_PILOT,         CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:DBNewFormAutoPilot", SID_DB_FORM_NEW_PILOT,     CommandGroup::INSERT );
     implDescribeSupportedFeature( ".uno:DBNewFormAutoPilotWithPreSelection",
                                                              SID_FORM_CREATE_REPWIZ_PRE_SEL,
                                                                                         CommandGroup::APPLICATION );
+
     implDescribeSupportedFeature( ".uno:DBNewReportAutoPilot",
                                                              ID_DOCUMENT_CREATE_REPWIZ, CommandGroup::INSERT );
     implDescribeSupportedFeature( ".uno:DBNewReportAutoPilotWithPreSelection",
@@ -1181,7 +1265,7 @@ void OApplicationController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:DBNewTableAutoPilot",ID_NEW_TABLE_DESIGN_AUTO_PILOT,
                                                                                         CommandGroup::INSERT );
     implDescribeSupportedFeature( ".uno:DBNewView",          ID_NEW_VIEW_DESIGN,        CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:DBNewViewSQL",       ID_NEW_VIEW_SQL,           CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:DBNewViewSQL",       SID_DB_NEW_VIEW_SQL,       CommandGroup::INSERT );
     implDescribeSupportedFeature( ".uno:DBNewViewAutoPilot", ID_NEW_VIEW_DESIGN_AUTO_PILOT,
                                                                                         CommandGroup::INSERT );
 
@@ -1238,6 +1322,17 @@ void OApplicationController::describeSupportedFeatures()
                                                                                         CommandGroup::VIEW );
     implDescribeSupportedFeature( ".uno:DBShowDocPreview",   SID_DB_APP_VIEW_DOC_PREVIEW,
                                                                                         CommandGroup::VIEW );
+
+    implDescribeSupportedFeature( ".uno:DBDSImport",        SID_DB_APP_DSIMPORT);
+    implDescribeSupportedFeature( ".uno:DBDSExport",        SID_DB_APP_DSEXPORT)
+
+    implDescribeSupportedFeature( ".uno:DBDBAdmin",         SID_DB_APP_DBADMIN);
+
+    // status info
+    implDescribeSupportedFeature( ".uno:DBStatusType",      SID_DB_APP_STATUS_TYPE);
+    implDescribeSupportedFeature( ".uno:DBStatusDBName",    SID_DB_APP_STATUS_DBNAME);
+    implDescribeSupportedFeature( ".uno:DBStatusUserName",  SID_DB_APP_STATUS_USERNAME);
+    implDescribeSupportedFeature( ".uno:DBStatusHostName",  SID_DB_APP_STATUS_HOSTNAME);
 }
 // -----------------------------------------------------------------------------
 OApplicationView*   OApplicationController::getContainer() const
