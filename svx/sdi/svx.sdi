@@ -1,57 +1,3 @@
-SfxVoidItem GrabControlFocus SID_FM_GRABCONTROLFOCUS
-()
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* status: */
-    SlotType = SfxVoidItem
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_CONTROLS;
-]
-
-SfxVoidItem CreateFieldControl SID_FM_CREATE_FIELDCONTROL
-()
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* status: */
-    SlotType = SfxVoidItem
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_CONTROLS;
-]
-
 //--------------------------------------------------------------------------
 SvxAddressItem _Address SID_ATTR_ADDRESS
 
@@ -1237,6 +1183,7 @@ SfxBoolItem CenterPara SID_ATTR_PARA_ADJUST_CENTER
     RecordPerSet;
     Synchron;
 
+    ImageRotation = TRUE;
     Readonly = FALSE,
 
     /* config: */
@@ -2716,6 +2663,7 @@ SfxVoidItem DefaultBullet FN_NUM_BULLET_ON
     RecordPerSet;
     Synchron;
 
+    ImageRotation = TRUE;
     /* status: */
     SlotType = SfxBoolItem
 
@@ -4262,11 +4210,11 @@ SfxBoolItem Gallery SID_GALLERY
     HasCoreId = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
+    Toggle = TRUE,
     Container = TRUE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Synchron;
+    Asynchron;
 
     Readonly = FALSE,
 
@@ -5709,6 +5657,7 @@ SfxVoidItem InsertNumbering FN_NUM_NUMBERING_ON
     RecordPerSet;
     Synchron;
 
+    ImageRotation = TRUE;
     /* status: */
     SlotType = SfxBoolItem
 
@@ -6014,6 +5963,7 @@ SfxBoolItem JustifyPara FN_SET_JUSTIFY_PARA
     RecordPerSet;
     Synchron;
 
+    ImageRotation = TRUE;
     Readonly = FALSE,
 
     /* config: */
@@ -6041,6 +5991,7 @@ SfxBoolItem JustifyPara SID_ATTR_PARA_ADJUST_BLOCK
     RecordPerSet;
     Synchron;
 
+    ImageRotation = TRUE;
     Readonly = FALSE,
 
     /* config: */
@@ -6252,6 +6203,7 @@ SfxBoolItem LeftPara SID_ATTR_PARA_ADJUST_LEFT
     RecordPerSet;
     Synchron;
 
+    ImageRotation = TRUE;
     Readonly = FALSE,
 
     /* config: */
@@ -6945,6 +6897,7 @@ SfxVoidItem OutlineBullet SID_OUTLINE_BULLET
     RecordPerSet;
     Synchron;
 
+    ImageRotation = TRUE;
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7262,7 +7215,7 @@ SvxPaperBinItem PagePaperBin SID_ATTR_PAGE_PAPERBIN
 ]
 
 //--------------------------------------------------------------------------
-SwPageSizeItem AttributePageSize SID_ATTR_PAGE_SIZE
+SvxSizeItem AttributePageSize SID_ATTR_PAGE_SIZE
 
 [
     /* flags: */
@@ -8332,6 +8285,7 @@ SfxBoolItem RightPara SID_ATTR_PARA_ADJUST_RIGHT
     RecordPerSet;
     Synchron;
 
+    ImageRotation = TRUE;
     Readonly = FALSE,
 
     /* config: */
@@ -9009,7 +8963,7 @@ SfxVoidItem SetPageMaxSize SID_ATTR_PAGE_MAXSIZE
 ]
 
 //--------------------------------------------------------------------------
-SwShadowItem BorderShadow SID_ATTR_BORDER_SHADOW
+SvxShadowItem BorderShadow SID_ATTR_BORDER_SHADOW
 
 [
     /* flags: */
@@ -9475,6 +9429,7 @@ SfxBoolItem SpacePara1 SID_ATTR_PARA_LINESPACE_10
     RecordPerSet;
     Synchron;
 
+    ImageRotation = TRUE;
     Readonly = FALSE,
 
     /* config: */
@@ -9502,6 +9457,7 @@ SfxBoolItem SpacePara15 SID_ATTR_PARA_LINESPACE_15
     RecordPerSet;
     Synchron;
 
+    ImageRotation = TRUE;
     Readonly = FALSE,
 
     /* config: */
@@ -9529,6 +9485,7 @@ SfxBoolItem SpacePara2 SID_ATTR_PARA_LINESPACE_20
     RecordPerSet;
     Synchron;
 
+    ImageRotation = TRUE;
     Readonly = FALSE,
 
     /* config: */
@@ -10376,33 +10333,6 @@ SfxBoolItem SelectObject SID_OBJECT_SELECT
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem SelectMode SID_INSERT_SELECT
-
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_CONTROLS;
-]
-
-//--------------------------------------------------------------------------
 SvxULSpaceItem TopBottomMargin SID_ATTR_ULSPACE
 
 [
@@ -11085,5 +11015,88 @@ SfxVoidItem ZoomVisArea SID_SIZE_VISAREA
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = GID_DOCUMENT;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem GrabControlFocus SID_FM_GRABCONTROLFOCUS
+()
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* status: */
+    SlotType = SfxVoidItem
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_CONTROLS;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem CreateFieldControl SID_FM_CREATE_FIELDCONTROL
+()
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* status: */
+    SlotType = SfxVoidItem
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_CONTROLS;
+]
+
+//--------------------------------------------------------------------------
+SfxBoolItem SelectMode SID_INSERT_SELECT
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_CONTROLS;
 ]
 

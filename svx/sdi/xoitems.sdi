@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xoitems.sdi,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 12:44:53 $
+ *  last change: $Author: mba $ $Date: 2002-05-27 14:26:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,33 +58,140 @@
  *
  *
  ************************************************************************/
-item String XFillAttrSetItem;
-item String XFillBitmapItem;
-item String XFillColorItem;
-item String XFillGradientItem;
-item String XFillHatchItem;
-item String XFillStyleItem;
-item String XLineAttrSetItem;
-item String XLineColorItem;
-item String XLineDashItem;
-item String XLineEndItem;
-item String XLineEndWidthItem;
-item String XLineEndCenterItem;
-item String XLineStartItem;
-item String XLineStartWidthItem;
-item String XLineStartCenterItem;
-item String XLineStyleItem;
-item String XLineWidthItem;
-item String XFormTextStyleItem;
-item String XFormTextAdjustItem;
-item String XFormTextDistanceItem;
-item String XFormTextStartItem;
-item String XFormTextMirrorItem;
-item String XFormTextStdFormItem;
-item String XFormTextHideFormItem;
-item String XFormTextOutlineItem;
-item String XFormTextShadowItem;
-item String XFormTextShadowColorItem;
-item String XFormTextShadowXValItem;
-item String XFormTextShadowYValItem;
 
+//item String XFillAttrSetItem; SfxSetItem!
+struct XFillBitmap
+{
+    String  Name        MID_NAME;
+    String  GraphicsURL MID_GRAFURL;
+//  com::sun::star::awt::XBitmap
+};
+item XFillBitmap XFillBitmapItem;
+
+item INT32  XFillColorItem;             // XColorItem
+
+enum SvxGradientStyle
+{
+    SVX_GRADIENTSTYLE_LINEAR,
+    SVX_GRADIENTSTYLE_AXIAL,
+    SVX_GRADIENTSTYLE_RADIAL,
+    SVX_GRADIENTSTYLE_ELLIPTICAL,
+    SVX_GRADIENTSTYLE_SQUARE,
+    SVX_GRADIENTSTYLE_RECT
+};
+
+struct XFillGradient
+{
+    String              Name            MID_NAME;
+    //  com::sun::star::awt::Gradient
+    SvxGradientStyle    Style           MID_GRADIENT_STYLE;
+    INT32               StartColor      MID_GRADIENT_STARTCOLOR;
+    INT32               EndColor        MID_GRADIENT_ENDCOLOR;
+    INT16               Angle           MID_GRADIENT_ANGLE;
+    INT16               Border          MID_GRADIENT_BORDER;
+    INT16               XOffset         MID_GRADIENT_XOFFSET;
+    INT16               YOffset         MID_GRADIENT_YOFFSET;
+    INT16               StartIntensity  MID_GRADIENT_STARTINTENSITY;
+    INT16               EndIntensity    MID_GRADIENT_ENDINTENSITY;
+    INT16               StepCount       MID_GRADIENT_STEPCOUNT;
+};
+item XFillGradient XFillGradientItem;
+
+enum SvxHatchStyle
+{
+    SVX_HATCHSTYLE_SINGLE,
+    SVX_HATCHSTYLE_DOUBLE,
+    SVX_HATCHSTYLE_TRIPLE
+};
+
+struct XFillHatch
+{
+    String              Name            MID_NAME;
+    //  com::sun::star::drawing::Hatch
+    SvxHatchStyle       Style           MID_HATCH_STYLE;
+    INT32               Color           MID_HATCH_COLOR;
+    INT32               Distance        MID_HATCH_DISTANCE;
+    INT32               Angle           MID_HATCH_ANGLE;
+};
+item XFillHatch XFillHatchItem;
+
+enum SvxFillStyle
+{
+    SVX_FILLSTYLE_NONE,
+    SVX_FILLSTYLE_SOLID,
+    SVX_FILLSTYLE_GRADIENT,
+    SVX_FILLSTYLE_HATCH,
+    SVX_FILLSTYLE_BITMAP
+};
+
+item SvxFillStyle XFillStyleItem;
+
+//item String XLineAttrSetItem; SfxSetItem!
+
+item INT32  XLineColorItem;
+
+enum SvxDashStyle
+{
+    SVX_DASHSTYLE_RECT,
+    SVX_DASHSTYLE_ROUND,
+    SVX_DASHSTYLE_RECTRELATIVE,
+    SVX_DASHSTYLE_ROUNDRELATIVE
+};
+
+struct XLineDash
+{
+    String          Name        MID_NAME;
+    //  com::sun::star::drawing::LineDash
+    SvxDashStyle    Style       MID_LINEDASH_STYLE;
+    INT16           Dots        MID_LINEDASH_DOTS;
+    INT32           DotLen      MID_LINEDASH_DOTLEN;
+    INT16           Dashes      MID_LINEDASH_DASHES;
+    INT32           DashLen     MID_LINEDASH_DASHLEN;
+    INT32           Distance    MID_LINEDASH_DISTANCE;
+};
+item XLineDash XLineDashItem;
+
+struct XLineEnd
+{
+    String  Name        MID_NAME;
+//  com::sun::star::drawing::PolyPolygonBezierCoords
+};
+item XLineEnd XLineEndItem;
+
+item INT32  XLineEndWidthItem;
+item BOOL   XLineEndCenterItem;
+
+struct XLineStart
+{
+    String  Name        MID_NAME;
+//  com::sun::star::drawing::PolyPolygonBezierCoords
+};
+item XLineStart XLineStartItem;
+
+item INT32  XLineStartWidthItem;
+item BOOL   XLineStartCenterItem;
+
+enum SvxLineStyle
+{
+    SVX_LINESTYLE_NONE,
+    SVX_LINESTYLE_SOLID,
+    SVX_LINESTYLE_DASH
+};
+
+item SvxLineStyle XLineStyleItem;
+
+item INT32  XLineWidthItem;
+item INT32  XFormTextStyleItem;
+item INT32  XFormTextAdjustItem;
+
+item INT32  XFormTextDistanceItem;      // SfxInt32Item
+item INT32  XFormTextStartItem;         // SfxInt32Item
+item BOOL   XFormTextMirrorItem;        // SfxBoolItem
+
+item INT32  XFormTextStdFormItem;       // SfxEnumItem
+item BOOL   XFormTextHideFormItem;      // SfxBoolItem
+item BOOL   XFormTextOutlineItem;       // SfxBoolItem
+item INT32  XFormTextShadowItem;        // SfxEnumItem
+item INT32  XFormTextShadowColorItem;   // XColorItem
+item INT32  XFormTextShadowXValItem;    // SfxMetricItem/SfxInt32Item
+item INT32  XFormTextShadowYValItem;    // SfxMetricItem/SfxInt32Item
