@@ -1,0 +1,639 @@
+/*************************************************************************
+ *
+ *  $RCSfile: AccessibleDocumentViewBase.cxx,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: af $ $Date: 2002-04-18 17:54:21 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _SD_ACCESSIBILITY_ACCESSIBLE_DOCUMENT_VIEW_BASE_HXX
+#include "AccessibleDocumentViewBase.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWVIEW_HPP_
+#include <com/sun/star/drawing/XDrawView.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
+#include <com/sun/star/drawing/XShapes.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
+#include <com/sun/star/frame/XController.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
+#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTBROADCASTER_HPP_
+#include <com/sun/star/document/XEventBroadcaster.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBLE_ACCESSIBLEEVENTID_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_INDEXOUTOFBOUNDSEXCEPTION_HPP_
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULSTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _RTL_USTRING_H_
+#include <rtl/ustring.h>
+#endif
+#ifndef _SFXFRAME_HXX
+#include<sfx2/viewfrm.hxx>
+#endif
+
+#include <svx/AccessibleShape.hxx>
+
+#include <svx/svdobj.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/unoapi.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+#include "sdwindow.hxx"
+#include <vcl/svapp.hxx>
+
+
+#ifndef _SD_VIEWSHEL_HXX
+#include "viewshel.hxx"
+#endif
+#ifndef _SD_SDVIEW_HXX
+#include "sdview.hxx"
+#endif
+#include <memory>
+
+using namespace ::rtl;
+using namespace ::com::sun::star;
+using namespace ::drafts::com::sun::star::accessibility;
+
+class SfxViewFrame;
+
+namespace accessibility {
+
+static SfxViewFrame* mpViewFrame = NULL;
+
+//=====  internal  ============================================================
+AccessibleDocumentViewBase::AccessibleDocumentViewBase (
+    SdWindow* pSdWindow,
+    SdViewShell* pViewShell,
+    const uno::Reference<frame::XController>& rxController,
+    const uno::Reference<XAccessible>& rxParent)
+    : AccessibleContextBase (rxParent, AccessibleRole::DOCUMENT),
+      mpWindow (pSdWindow),
+      mxController (rxController),
+      mxModel (NULL),
+      maViewForwarder (
+        static_cast<SdrPaintView*>(pViewShell->GetView()),
+        *static_cast<OutputDevice*>(pSdWindow))
+{
+    OSL_TRACE ("new view is %xd", pViewShell->GetView());
+    if (rxController.is())
+        mxModel = rxController->getModel();
+
+    // Fill the shape tree info.
+    maShapeTreeInfo.SetControllerBroadcaster (
+        uno::Reference<document::XEventBroadcaster>(
+            rxController->getModel(), uno::UNO_QUERY));
+    maShapeTreeInfo.SetSdrView (pViewShell->GetView());
+    maShapeTreeInfo.SetWindow (pSdWindow);
+    maShapeTreeInfo.SetViewForwarder (&maViewForwarder);
+
+    mxWindow = ::VCLUnoHelper::GetInterface (pSdWindow);
+
+    mpViewFrame = pViewShell->GetViewFrame();
+}
+
+
+
+
+AccessibleDocumentViewBase::~AccessibleDocumentViewBase (void)
+{
+    OSL_TRACE ("~AccessibleDocumentViewBase");
+
+    // Unregister from the various event broadcasters.
+    if (mxModel.is())
+        mxModel->removeEventListener (
+            static_cast<frame::XFrameActionListener*>(this));
+    if (mxController.is())
+    {
+        uno::Reference<frame::XFrame> xFrame (mxController->getFrame());
+        if (xFrame.is())
+            xFrame->removeFrameActionListener (static_cast<frame::XFrameActionListener*>(this));
+        uno::Reference<beans::XPropertySet> xSet (mxController, uno::UNO_QUERY);
+        if (xSet.is())
+            xSet->removePropertyChangeListener (
+                OUString (RTL_CONSTASCII_USTRINGPARAM("")),
+                static_cast<beans::XPropertyChangeListener*>(this));
+    }
+}
+
+
+
+
+void AccessibleDocumentViewBase::Init (void)
+{
+    // Finish the initialization of the shape tree info container.
+    maShapeTreeInfo.SetDocumentWindow (this);
+
+    // Register as window listener to stay up to date with its size and
+    // position.
+    mxWindow->addWindowListener (this);
+
+    // Determine the list of shapes on the current page.
+    uno::Reference<drawing::XShapes> xShapeList;
+    uno::Reference<drawing::XDrawView> xView (mxController, uno::UNO_QUERY);
+    if (xView.is())
+        xShapeList = uno::Reference<drawing::XShapes> (
+            xView->getCurrentPage(), uno::UNO_QUERY);
+
+    // Register this object as dispose event and document::XEventListener
+    // listener at the model.
+    if (mxModel.is())
+        mxModel->addEventListener (static_cast<frame::XFrameActionListener*>(this));
+
+    // Register as frame action listener at the frame of the controller.
+    uno::Reference<frame::XFrame> xFrame (mxController->getFrame());
+    if (xFrame.is())
+        xFrame->addFrameActionListener (static_cast<frame::XFrameActionListener*>(this));
+
+    // Register as property change listener at the controller.
+    uno::Reference<beans::XPropertySet> xSet (mxController, uno::UNO_QUERY);
+    if (xSet.is())
+        xSet->addPropertyChangeListener (
+            OUString (RTL_CONSTASCII_USTRINGPARAM("")),
+            static_cast<beans::XPropertyChangeListener*>(this));
+}
+
+
+
+
+//=====  IAccessibleViewForwarderListener  ====================================
+
+void AccessibleDocumentViewBase::ViewForwarderChanged (ChangeType aChangeType,
+    const IAccessibleViewForwarder* pViewForwarder)
+{
+    // Empty
+}
+
+
+
+
+//=====  XAccessibleContext  ==================================================
+
+uno::Reference<XAccessible> SAL_CALL
+       AccessibleDocumentViewBase::getAccessibleParent (void)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    return AccessibleContextBase::getAccessibleParent();
+}
+
+
+
+
+//=====  XAccessibleComponent  ================================================
+
+awt::Rectangle SAL_CALL
+    AccessibleDocumentViewBase::getBounds (void)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    ::Rectangle aVisibleArea (maShapeTreeInfo.GetViewForwarder()->GetVisibleArea());
+    ::Point aPixelTopLeft (
+        maShapeTreeInfo.GetViewForwarder()->LogicToPixel (aVisibleArea.TopLeft()));
+    ::Point aPixelSize (
+        maShapeTreeInfo.GetViewForwarder()->LogicToPixel (aVisibleArea.BottomRight())
+        - aPixelTopLeft);
+    return awt::Rectangle (aPixelTopLeft.X(), aPixelTopLeft.Y(),
+        aPixelSize.X(), aPixelSize.Y());
+}
+
+
+
+
+awt::Point SAL_CALL
+    AccessibleDocumentViewBase::getLocation (void)
+    throw (uno::RuntimeException)
+{
+    awt::Point aLocation (getLocationOnScreen ());
+
+    // Subtract absolute parent position.
+    uno::Reference<XAccessibleComponent> xParentComponent (
+        getAccessibleParent(), uno::UNO_QUERY);
+    if (xParentComponent.is())
+    {
+        awt::Point aParentLocation (xParentComponent->getLocationOnScreen());
+        aLocation.X -= aParentLocation.X;
+        aLocation.Y -= aParentLocation.Y;
+    }
+
+    return aLocation;
+}
+
+
+
+
+awt::Point SAL_CALL
+    AccessibleDocumentViewBase::getLocationOnScreen (void)
+    throw (uno::RuntimeException)
+{
+    ::Point aLogicalPoint (maShapeTreeInfo.GetViewForwarder()->GetVisibleArea().TopLeft());
+    ::Point aPixelPoint (maShapeTreeInfo.GetViewForwarder()->LogicToPixel (aLogicalPoint));
+    return awt::Point (aPixelPoint.X(), aPixelPoint.Y());
+}
+
+
+
+
+awt::Size SAL_CALL
+    AccessibleDocumentViewBase::getSize (void)
+    throw (uno::RuntimeException)
+{
+    awt::Rectangle aBBox (mxWindow->getPosSize());
+    return awt::Size (aBBox.Width, aBBox.Height);
+}
+
+
+
+
+//=====  XInterface  ==========================================================
+
+uno::Any SAL_CALL
+    AccessibleDocumentViewBase::queryInterface (const uno::Type & rType)
+    throw (uno::RuntimeException)
+{
+    uno::Any aReturn = AccessibleContextBase::queryInterface (rType);
+    if ( ! aReturn.hasValue())
+        aReturn = ::cppu::queryInterface (rType,
+            static_cast<XAccessibleComponent*>(this),
+            static_cast<lang::XEventListener*>(
+                static_cast<frame::XFrameActionListener*>(this)),
+            static_cast<frame::XFrameActionListener*>(this),
+            static_cast<beans::XPropertyChangeListener*>(this),
+            static_cast<awt::XWindowListener*>(this));
+    return aReturn;
+}
+
+
+
+
+void SAL_CALL
+    AccessibleDocumentViewBase::acquire (void)
+    throw ()
+{
+    AccessibleContextBase::acquire ();
+}
+
+
+
+
+void SAL_CALL
+    AccessibleDocumentViewBase::release (void)
+    throw ()
+{
+    AccessibleContextBase::release ();
+}
+
+
+
+
+//=====  XServiceInfo  ========================================================
+
+::rtl::OUString SAL_CALL
+    AccessibleDocumentViewBase::getImplementationName (void)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleDocumentViewBase"));
+}
+
+
+
+
+::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
+    AccessibleDocumentViewBase::getSupportedServiceNames (void)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    return AccessibleContextBase::getSupportedServiceNames ();
+}
+
+
+
+
+
+//=====  XTypeProvider  =======================================================
+
+::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL
+    AccessibleDocumentViewBase::getTypes (void)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    // Get list of types from the context base implementation...
+    uno::Sequence<uno::Type> aTypeList (AccessibleContextBase::getTypes());
+    sal_Int32 nTypeCount (aTypeList.getLength());
+
+    // ...and add the additional type for the component.
+    const uno::Type aLangEventListenerType =
+         ::getCppuType((const uno::Reference<lang::XEventListener>*)0);
+    const uno::Type aFrameActionListenerType =
+         ::getCppuType((const uno::Reference<frame::XFrameActionListener>*)0);
+    const uno::Type aPropertyChangeListenerType =
+         ::getCppuType((const uno::Reference<beans::XPropertyChangeListener>*)0);
+    const uno::Type aWindowListenerType =
+         ::getCppuType((const uno::Reference<awt::XWindowListener>*)0);
+    const uno::Type aEventBroadcaster =
+         ::getCppuType((const uno::Reference<XAccessibleEventBroadcaster>*)0);
+    aTypeList.realloc (nTypeCount + 5);
+    aTypeList[nTypeCount+0] = aLangEventListenerType;
+    aTypeList[nTypeCount+2] = aFrameActionListenerType;
+    aTypeList[nTypeCount+3] = aPropertyChangeListenerType;
+    aTypeList[nTypeCount+3] = aWindowListenerType;
+    aTypeList[nTypeCount+4] = aEventBroadcaster;
+
+    return aTypeList;
+}
+
+
+
+
+//=====  XEventListener  ======================================================
+
+void SAL_CALL
+    AccessibleDocumentViewBase::disposing (const lang::EventObject& rEventObject)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    // Register this object as dispose event and document::XEventListener
+    // listener at the model.
+
+    OSL_TRACE ("disposing event called");
+    if ( ! rEventObject.Source.is())
+    {
+        // Paranoia. Can this really happen?
+    }
+    else if (rEventObject.Source == mxModel)
+    {
+        OSL_TRACE ("  disposing model");
+
+        ::osl::Guard< ::osl::Mutex> aGuard (::osl::Mutex::getGlobalMutex());
+
+        mxModel->removeEventListener (static_cast<frame::XFrameActionListener*>(this));
+
+        // Reset the model reference.
+        mxModel = NULL;
+
+        // Propagate change of controller down the shape tree.
+        maShapeTreeInfo.SetControllerBroadcaster (NULL);
+    }
+    else if (rEventObject.Source == mxController)
+    {
+        OSL_TRACE ("  disposing component");
+
+        ::osl::Guard< ::osl::Mutex> aGuard (::osl::Mutex::getGlobalMutex());
+
+        // Unregister as property change listener at the controller.
+        uno::Reference<beans::XPropertySet> xSet (mxController, uno::UNO_QUERY);
+        if (xSet.is())
+            xSet->removePropertyChangeListener (
+                OUString (RTL_CONSTASCII_USTRINGPARAM("")),
+                static_cast<beans::XPropertyChangeListener*>(this));
+
+        // Reset the model reference.
+        mxController = NULL;
+    }
+    else
+    {
+        uno::Reference<frame::XFrame> xFrame (rEventObject.Source, uno::UNO_QUERY);
+        if (xFrame.is())
+        {
+            OSL_TRACE ("  disposing frame");
+
+            // Unregister as frame action listener at the frame of the controller.
+            uno::Reference<frame::XFrame> xFrame (mxController->getFrame());
+            if (xFrame.is())
+                xFrame->removeFrameActionListener (static_cast<frame::XFrameActionListener*>(this));
+        }
+    }
+}
+
+
+
+
+//=====  XFrameActionListener  ================================================
+
+void SAL_CALL
+    AccessibleDocumentViewBase::frameAction (const frame::FrameActionEvent& rEventObject)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    OSL_TRACE ("FrameAction (%d)", rEventObject.Action);
+    if (rEventObject.Action == frame::FrameAction_COMPONENT_REATTACHED)
+    {
+        if ( ! (mxController.is() && rEventObject.Frame != mxController->getFrame()))
+            OSL_TRACE ("Controller invalid or event is not for us");
+        // The type of the view has (been) changed.
+        // Unregister from old controller.
+        if (mxController.is())
+        {
+            uno::Reference<frame::XFrame> xFrame (mxController->getFrame());
+            if (xFrame.is())
+                xFrame->removeFrameActionListener (static_cast<frame::XFrameActionListener*>(this));
+            OSL_TRACE ("Removing shape list");
+        }
+
+        // Get new controller, set the shape tree info accordingly, and
+        // register as frame listener.
+        mxController = rEventObject.Frame->getController();
+        maShapeTreeInfo.SetControllerBroadcaster (
+            uno::Reference<document::XEventBroadcaster>(mxController->getModel(), uno::UNO_QUERY));
+        if (rEventObject.Frame.is())
+            rEventObject.Frame->addFrameActionListener (static_cast<frame::XFrameActionListener*>(this));
+
+        // Set new view to view forwarder.
+        SfxViewShell* pViewShell = mpViewFrame->GetViewShell ();
+        if (pViewShell->ISA(SdViewShell))
+        {
+            maViewForwarder.SetView (PTR_CAST(SdViewShell, pViewShell)->GetView());
+        }
+
+        OSL_TRACE ("  done handling frame event");
+    }
+    else
+    {
+        OSL_TRACE ("  unhandled frame action");
+    }
+}
+
+
+
+
+//=====  XPropertyChangeListener  =============================================
+
+void SAL_CALL
+    AccessibleDocumentViewBase::propertyChange (const beans::PropertyChangeEvent& rEventObject)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    OSL_TRACE ("AccessibleDocumentViewBase::propertyChange");
+}
+
+
+
+
+//=====  XWindowListener  =====================================================
+
+void SAL_CALL
+    AccessibleDocumentViewBase::windowResized (const ::com::sun::star::awt::WindowEvent& e)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    ViewForwarderChanged (
+        IAccessibleViewForwarderListener::VISIBLE_AREA,
+        &maViewForwarder);
+}
+
+
+
+
+void SAL_CALL
+    AccessibleDocumentViewBase::windowMoved (const ::com::sun::star::awt::WindowEvent& e)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    OSL_TRACE ("window moved");
+    ViewForwarderChanged (
+        IAccessibleViewForwarderListener::VISIBLE_AREA,
+        &maViewForwarder);
+}
+
+
+
+
+void SAL_CALL
+    AccessibleDocumentViewBase::windowShown (const ::com::sun::star::lang::EventObject& e)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    ViewForwarderChanged (
+        IAccessibleViewForwarderListener::VISIBLE_AREA,
+        &maViewForwarder);
+}
+
+
+
+
+void SAL_CALL
+    AccessibleDocumentViewBase::windowHidden (const ::com::sun::star::lang::EventObject& e)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    ViewForwarderChanged (
+        IAccessibleViewForwarderListener::VISIBLE_AREA,
+        &maViewForwarder);
+}
+
+
+
+
+//=====  protected internal  ==================================================
+
+// This method is called from the component helper base class while disposing.
+void SAL_CALL AccessibleDocumentViewBase::disposing (void)
+{
+    AccessibleContextBase::disposing ();
+}
+
+
+
+
+/// Create a name for this view.
+::rtl::OUString
+    AccessibleDocumentViewBase::CreateAccessibleName (void)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    return ::rtl::OUString (
+        RTL_CONSTASCII_USTRINGPARAM("AccessibleDocumentViewBase"));
+}
+
+
+
+
+/** Create a description for this view.  Use the model's description or URL
+    if a description is not available.
+*/
+::rtl::OUString
+    AccessibleDocumentViewBase::CreateAccessibleDescription (void)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    rtl::OUString sDescription;
+
+    uno::Reference<lang::XServiceInfo> xInfo (mxController, uno::UNO_QUERY);
+    if (xInfo.is())
+    {
+        OUString sFirstService = xInfo->getSupportedServiceNames()[0];
+        if (sFirstService == OUString (
+                RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocumentDrawView")))
+        {
+            sDescription = OUString (RTL_CONSTASCII_USTRINGPARAM("Draw Document"));
+        }
+        else
+            sDescription = sFirstService;
+    }
+    else
+        sDescription = OUString (
+            RTL_CONSTASCII_USTRINGPARAM("Accessible Draw Document"));
+    return sDescription;
+}
+
+} // end of namespace accessibility
