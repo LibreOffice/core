@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: sb $ $Date: 2001-10-08 14:13:28 $
+#   last change: $Author: vg $ $Date: 2001-10-11 11:17:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,13 +67,10 @@ TARGET=fsys
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
-UNOUCRRDB = applicat.rdb #$(SOLARBINDIR)$/applicat.rdb
 UNOUCROUT = $(OUT)$/inc
 UNOTYPES = com.sun.star.util.XStringWidth
 
@@ -100,3 +97,4 @@ OBJFILES=   $(OBJ)$/wldcrd.obj   \
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+
