@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:20:29 $
+#   last change: $Author: kso $ $Date: 2001-05-28 10:55:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,7 +91,10 @@ SLOFILES=\
         $(SLO)$/resultset.obj          \
         $(SLO)$/resultsethelper.obj    \
         $(SLO)$/provconf.obj	       \
-        $(SLO)$/commandenvironmentproxy.obj
+                $(SLO)$/commandenvironmentproxy.obj     \
+                $(SLO)$/interactionrequest.obj          \
+                $(SLO)$/simpleinteractionrequest.obj    \
+                $(SLO)$/simpleauthenticationrequest.obj
 
 .ENDIF
 
