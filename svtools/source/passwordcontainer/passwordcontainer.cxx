@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwordcontainer.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2001-05-14 14:30:46 $
+ *  last change: $Author: mav $ $Date: 2001-05-15 10:12:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,7 +390,7 @@ void SAL_CALL PasswordContainer::addPersistent( const OUString& Url, const OUStr
 
 //-------------------------------------------------------------------------
 
-void SAL_CALL PasswordContainer::privateAdd( const OUString& Url, const OUString& UserName, const Sequence< OUString >& Passwords, char Mode ) throw(RuntimeException)
+void SAL_CALL PasswordContainer::privateAdd( const OUString& Url, const OUString& UserName, const Sequence< OUString >& Passwords, char Mode )
 {
     vector< OUString > storePass = copySequenceToVector( Passwords );
 
