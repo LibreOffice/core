@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testhelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-01 11:47:11 $
+ *  last change: $Author: dbo $ $Date: 2001-08-31 09:12:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,10 +131,10 @@ int __cdecl main( int argc, char * argv[] )
             Reference< XSimpleRegistry >() );
 
         Reference< XMultiServiceFactory > x( xMgr, UNO_QUERY );
+        test_ImplHelper( x );
         testPropertyTypeHelper();
         testidlclass( x );
         test_PropertySetHelper();
-        test_ImplHelper( x );
         test_interfacecontainer();
     }
     catch (Exception & rExc)

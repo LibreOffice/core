@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testimplhelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-08 15:55:51 $
+ *  last change: $Author: dbo $ $Date: 2001-08-31 09:12:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,32 @@
  *
  ************************************************************************/
 
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase8.hxx>
+#include <cppuhelper/implbase9.hxx>
+#include <cppuhelper/implbase10.hxx>
+#include <cppuhelper/implbase11.hxx>
+#include <cppuhelper/implbase12.hxx>
+
+#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/compbase6.hxx>
+#include <cppuhelper/compbase7.hxx>
+#include <cppuhelper/compbase8.hxx>
+#include <cppuhelper/compbase9.hxx>
+#include <cppuhelper/compbase10.hxx>
+#include <cppuhelper/compbase11.hxx>
+#include <cppuhelper/compbase12.hxx>
+
 #include <osl/diagnose.h>
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/implbase4.hxx>
@@ -72,6 +98,8 @@
 #include <test/E.hpp>
 #include <test/FE.hpp>
 #include <test/G.hpp>
+#include <test/H.hpp>
+#include <test/I.hpp>
 
 #include <com/sun/star/lang/IllegalAccessException.hpp>
 
@@ -251,6 +279,47 @@ struct TestWeakAggComponentImpl : public WeakAggComponentImplHelper4< CA, DBA, F
 };
 
 //==================================================================================================
+struct TestImplInh : public ImplInheritanceHelper2< TestWeakImpl, H, I >
+{
+    virtual ~TestImplInh()
+        { OSL_TRACE( "> TestWeakImplInh dtor called... <\n" ); }
+
+    // H
+    virtual OUString SAL_CALL h() throw(RuntimeException)
+        { return OUString( RTL_CONSTASCII_USTRINGPARAM("h") ); }
+    // I
+    virtual OUString SAL_CALL i() throw(RuntimeException)
+        { return OUString( RTL_CONSTASCII_USTRINGPARAM("i") ); }
+};
+
+//==================================================================================================
+struct TestAggImplInh : public AggImplInheritanceHelper2< TestWeakAggImpl, H, I >
+{
+    virtual ~TestAggImplInh()
+        { OSL_TRACE( "> TestAggImplInh dtor called... <\n" ); }
+
+    // H
+    virtual OUString SAL_CALL h() throw(RuntimeException)
+        { return OUString( RTL_CONSTASCII_USTRINGPARAM("h2") ); }
+    // I
+    virtual OUString SAL_CALL i() throw(RuntimeException)
+        { return OUString( RTL_CONSTASCII_USTRINGPARAM("i2") ); }
+};
+
+
+static bool isIn( Sequence< Type > const & rTypes, char const * name )
+{
+    OUString str( OUString::createFromAscii( name ) );
+    Type const * pTypes = rTypes.getConstArray();
+    for ( sal_Int32 nPos = rTypes.getLength(); nPos--; )
+    {
+        if (pTypes[ nPos ].getTypeName().equals( str ))
+            return true;
+    }
+    return false;
+}
+
+//==================================================================================================
 static void dotest( const Reference< XInterface > & xOriginal )
 {
     Reference< A > xa( xOriginal, UNO_QUERY );
@@ -278,54 +347,40 @@ static void dotest( const Reference< XInterface > & xOriginal )
     Sequence< Type > aTypes( xProv->getTypes() );
 
     // CA, DBA, FE, G, XTypeProvider
-    OSL_ASSERT( aTypes[0].getTypeName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("test.CA") ) );
-    OSL_ASSERT( aTypes[1].getTypeName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("test.DBA") ) );
-    OSL_ASSERT( aTypes[2].getTypeName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("test.FE") ) );
-    OSL_ASSERT( aTypes[3].getTypeName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("test.G") ) );
-    OSL_ASSERT( aTypes[4].getTypeName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.lang.XTypeProvider") ) );
+    OSL_ASSERT( isIn( aTypes, "test.CA" ) );
+    OSL_ASSERT( isIn( aTypes, "test.DBA" ) );
+    OSL_ASSERT( isIn( aTypes, "test.FE") );
+    OSL_ASSERT( isIn( aTypes, "test.G") );
+    OSL_ASSERT( isIn( aTypes, "com.sun.star.lang.XTypeProvider") );
 
+    Reference< XWeak > xWeak( xg, UNO_QUERY );
+    if (xWeak.is())
+    {
+        OSL_ASSERT( isIn( aTypes, "com.sun.star.uno.XWeak") );
+    }
     Reference< XComponent > xComp( xg, UNO_QUERY );
-    Reference< XAggregation > xAgg( xg, UNO_QUERY );
     if (xComp.is())
     {
-        if (xAgg.is())
-        {
-            OSL_ASSERT( aTypes[5].getTypeName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.uno.XWeak") ) );
-            OSL_ASSERT( aTypes[6].getTypeName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.uno.XAggregation") ) );
-            OSL_ASSERT( aTypes[7].getTypeName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.lang.XComponent") ) );
-            OSL_ASSERT( aTypes.getLength() == 8 );
-        }
-        else
-        {
-            OSL_ASSERT( aTypes[5].getTypeName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.uno.XWeak") ) );
-            OSL_ASSERT( aTypes[6].getTypeName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.lang.XComponent") ) );
-            OSL_ASSERT( aTypes.getLength() == 7 );
-        }
-    }
-    else
-    {
-        if (xAgg.is())
-        {
-            OSL_ASSERT( aTypes[5].getTypeName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.uno.XWeak") ) );
-            OSL_ASSERT( aTypes[6].getTypeName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.uno.XAggregation") ) );
-            OSL_ASSERT( aTypes.getLength() == 7 );
-        }
-        else
-        {
-            Reference< XWeak > xWeak( xg, UNO_QUERY );
-            if (xWeak.is())
-            {
-                OSL_ASSERT( aTypes[5].getTypeName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.uno.XWeak") ) );
-                OSL_ASSERT( aTypes.getLength() == 6 );
-            }
-            else
-            {
-                OSL_ASSERT( aTypes.getLength() == 5 );
-            }
-        }
+        OSL_ASSERT( isIn( aTypes, "com.sun.star.lang.XComponent") );
     }
 
-    OSL_ENSURE( Reference< XInterface >::query( xg ) == xOriginal, "### root!" );
+    Reference< XAggregation > xAgg( xg, UNO_QUERY );
+    if (xAgg.is())
+    {
+        OSL_ASSERT( isIn( aTypes, "com.sun.star.uno.XAggregation") );
+    }
+    Reference< H > xH( xg, UNO_QUERY );
+    if (xH.is())
+    {
+        OSL_ASSERT( isIn( aTypes, "test.H") );
+    }
+    Reference< I > xI( xg, UNO_QUERY );
+    if (xI.is())
+    {
+        OSL_ASSERT( isIn( aTypes, "test.I") );
+    }
+
+    OSL_ENSURE( xg == xOriginal, "### root!" );
 }
 
 //==================================================================================================
@@ -342,6 +397,19 @@ void test_ImplHelper( const Reference< XMultiServiceFactory > & xSF )
     dotest( xWeakComponentImpl );
     dotest( xWeakAggComponentImpl );
     //
+    xWeakImpl = (OWeakObject *)new TestImplInh();
+    dotest( xWeakImpl );
+    Reference< H > xH( xWeakImpl, UNO_QUERY );
+    Reference< I > xI( xH, UNO_QUERY );
+    OSL_ASSERT( xH->h().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("h") ) );
+    OSL_ASSERT( xI->i().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("i") ) );
+
+    xWeakAggImpl = (OWeakObject *)new TestAggImplInh();
+    dotest( xWeakAggImpl );
+    xH.set( xWeakAggImpl, UNO_QUERY );
+    xI.set( xH, UNO_QUERY );
+    OSL_ASSERT( xH->h().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("h2") ) );
+    OSL_ASSERT( xI->i().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("i2") ) );
 
     // exception helper test
     try
