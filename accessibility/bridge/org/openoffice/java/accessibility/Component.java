@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Component.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:59:28 $
+ *  last change: $Author: vg $ $Date: 2003-07-01 14:59:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,12 @@ public abstract class Component extends java.awt.Component {
     public void removeNotify() {
     }
 
+    /*
+     * Fake the java focus handling. This is necessary to keep OOo focus
+     * in sync with the java focus. See java.awt.DefaultKeyboardFocusManager
+     * for implementation details.
+     **/
+
     /** Requests focus for this object */
     public void requestFocus() {
     }
@@ -143,10 +149,12 @@ public abstract class Component extends java.awt.Component {
         return true;
     }
 
+    /** Requests the focus for this object in the containing window */
     public boolean requestFocusInWindow() {
         return requestFocusInWindow(false);
     }
 
+    /** Requests the focus for this object in the containing window */
     protected boolean requestFocusInWindow(boolean temporary) {
         if (isFocusable() && isVisible()) {
             getEventQueue().postEvent(new java.awt.event.FocusEvent(this, java.awt.event.FocusEvent.FOCUS_GAINED, temporary));
