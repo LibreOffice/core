@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jl $ $Date: 2001-04-23 09:11:08 $
+#   last change: $Author: jl $ $Date: 2001-04-24 07:34:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -132,7 +132,13 @@ APP1STDLIBS= \
     $(CPPUHELPERLIB) \
     $(CPPULIB)
 
-APP1LIBS=	$(LB)$/isalhelper.lib
+#APP1LIBS=	$(LB)$/isalhelper.lib
+
+.IF "$(OS)" == "WNT"
+APP1STDLIBS+=   $(LB)$/isalhelper.lib
+.ELSE
+APP1STDLIBS+=   -lsalhelper2C52
+.ENDIF
 
 
 
