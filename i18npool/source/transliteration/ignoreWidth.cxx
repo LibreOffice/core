@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ignoreWidth.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:53:09 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 09:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ OUString SAL_CALL
 ignoreWidth::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
   throw(RuntimeException)
 {
-    fullwidthToHalfwidth t1;
+    halfwidthToFullwidth t1;
     return t1.transliterate(inStr, startPos, nCount, offset);
 }
 
@@ -96,7 +96,7 @@ ignoreWidth::transliterateRange( const OUString& str1, const OUString& str2 )
 sal_Unicode SAL_CALL
 ignoreWidth::transliterateChar2Char( sal_Unicode inChar) throw(RuntimeException, MultipleCharsOutputException)
 {
-    fullwidthToHalfwidth t1;
+    halfwidthToFullwidth t1;
     return t1.transliterateChar2Char(inChar);
 }
 
