@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pages.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 15:49:08 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:49:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 #include "wizard.hrc"
 #include "wizard.hxx"
 #include "migration.hxx"
-#include "../app/desktopresid.hxx"
 #include <vcl/msgbox.hxx>
+#include <vcl/mnemonic.hxx>
 #include <app.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
@@ -98,8 +98,9 @@ static void _setBold(FixedText& ft)
 
 WelcomePage::WelcomePage( svt::OWizardMachine* parent, const ResId& resid)
     : OWizardPage(parent, resid)
-    , m_ftHead(this, DesktopResId(FT_WELCOME_HEADER))
-    , m_ftBody(this, DesktopResId(FT_WELCOME_BODY))
+    , m_ftHead(this, WizardResId(FT_WELCOME_HEADER))
+    , m_ftBody(this, WizardResId(FT_WELCOME_BODY))
+    , m_pParent(parent)
 {
     FreeResource();
 
@@ -114,17 +115,17 @@ WelcomePage::WelcomePage( svt::OWizardMachine* parent, const ResId& resid)
         // check for migration
         if (Migration::checkMigration())
         {
-            String aText(DesktopResId(STR_WELCOME_MIGRATION));
+            String aText(WizardResId(STR_WELCOME_MIGRATION));
             // replace %OLDPRODUCT with found version name
             aText.SearchAndReplaceAll( UniString::CreateFromAscii("%OLD_VERSION"), Migration::getOldVersionName());
             m_ftBody.SetText( aText );
         }
         break;
     case OEM_NORMAL:
-        m_ftBody.SetText(String(DesktopResId(STR_WELCOME_OEM)));
+        m_ftBody.SetText(String(WizardResId(STR_WELCOME_OEM)));
         break;
     case OEM_EXTENDED:
-        m_ftBody.SetText(String(DesktopResId(STR_WELCOME_OEM_EXT)));
+        m_ftBody.SetText(String(WizardResId(STR_WELCOME_OEM_EXT)));
         break;
     }
 
@@ -136,17 +137,23 @@ WelcomePage::OEMType WelcomePage::checkOEM()
 }
 
 
-
+void WelcomePage::ActivatePage()
+{
+    OWizardPage::ActivatePage();
+    // this page has no controls, so forwarding to default
+    // button (next) won't work if we grap focus
+    // GrabFocus();
+}
 
 LicensePage::LicensePage( svt::OWizardMachine* parent, const ResId& resid)
     : OWizardPage(parent, resid)
-    , m_ftHead(this, DesktopResId(FT_LICENSE_HEADER))
-    , m_ftBody1(this, DesktopResId(FT_LICENSE_BODY_1))
-    , m_ftBody1Txt(this, DesktopResId(FT_LICENSE_BODY_1_TXT))
-    , m_ftBody2(this, DesktopResId(FT_LICENSE_BODY_2))
-    , m_ftBody2Txt(this, DesktopResId(FT_LICENSE_BODY_2_TXT))
-    , m_mlLicense(this, DesktopResId(ML_LICENSE))
-    , m_pbDown(this, DesktopResId(PB_LICENSE_DOWN))
+    , m_pbDown(this, WizardResId(PB_LICENSE_DOWN))
+    , m_ftHead(this, WizardResId(FT_LICENSE_HEADER))
+    , m_ftBody1(this, WizardResId(FT_LICENSE_BODY_1))
+    , m_ftBody1Txt(this, WizardResId(FT_LICENSE_BODY_1_TXT))
+    , m_ftBody2(this, WizardResId(FT_LICENSE_BODY_2))
+    , m_ftBody2Txt(this, WizardResId(FT_LICENSE_BODY_2_TXT))
+    , m_mlLicense(this, WizardResId(ML_LICENSE))
     , m_bLicenseRead(sal_False)
     , m_pParent(parent)
 {
@@ -165,7 +172,9 @@ LicensePage::LicensePage( svt::OWizardMachine* parent, const ResId& resid)
 
     // replace %PAGEDOWN in text2 with button text
     String aText = m_ftBody1Txt.GetText();
-    aText.SearchAndReplaceAll( UniString::CreateFromAscii("%PAGEDOWN"), m_pbDown.GetText());
+    aText.SearchAndReplaceAll( UniString::CreateFromAscii("%PAGEDOWN"),
+        MnemonicGenerator::EraseAllMnemonicChars(m_pbDown.GetText()));
+
     m_ftBody1Txt.SetText( aText );
 
     OUString aLicensePath = FirstStartWizard::getLicensePath();
@@ -191,11 +200,25 @@ LicensePage::LicensePage( svt::OWizardMachine* parent, const ResId& resid)
                 OSTRING_TO_OUSTRING_CVTFLAGS | RTL_TEXTTOUNICODE_FLAGS_GLOBAL_SIGNATURE);
         delete[] pBuffer;
         m_mlLicense.SetText(aLicenseString);
+
     }
+}
+
+void LicensePage::ActivatePage()
+{
+    OWizardPage::ActivatePage();
+    m_bLicenseRead = m_mlLicense.IsEndReached();
+    m_pbDown.GrabFocus();
+    implCheckNextButton();
 }
 
 sal_Bool LicensePage::determineNextButtonState()
 {
+    if (m_mlLicense.IsEndReached())
+        m_pbDown.Disable();
+    else
+        m_pbDown.Enable();
+
     return m_bLicenseRead;
 }
 
@@ -291,9 +314,9 @@ void LicenseView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 MigrationPage::MigrationPage( svt::OWizardMachine* parent, const ResId& resid)
     : OWizardPage(parent, resid)
-    , m_ftHead(this, DesktopResId(FT_MIGRATION_HEADER))
-    , m_ftBody(this, DesktopResId(FT_MIGRATION_BODY))
-    , m_cbMigration(this, DesktopResId(CB_MIGRATION))
+    , m_ftHead(this, WizardResId(FT_MIGRATION_HEADER))
+    , m_ftBody(this, WizardResId(FT_MIGRATION_BODY))
+    , m_cbMigration(this, WizardResId(CB_MIGRATION))
     , m_bMigrationDone(sal_False)
 {
     FreeResource();
@@ -317,18 +340,25 @@ sal_Bool MigrationPage::commitPage(COMMIT_REASON _eReason)
     return sal_True;
 }
 
+void MigrationPage::ActivatePage()
+{
+    OWizardPage::ActivatePage();
+    GrabFocus();
+}
+
+
 UserPage::UserPage( svt::OWizardMachine* parent, const ResId& resid)
     : OWizardPage(parent, resid)
-    , m_ftHead(this, DesktopResId(FT_USER_HEADER))
-    , m_ftBody(this, DesktopResId(FT_USER_BODY))
-    , m_ftFirst(this, DesktopResId(FT_USER_FIRST))
-    , m_ftLast(this, DesktopResId(FT_USER_LAST))
-    , m_ftInitials(this, DesktopResId(FT_USER_INITIALS))
-    , m_ftFather(this, DesktopResId(FT_USER_FATHER))
-    , m_edFirst(this, DesktopResId(ED_USER_FIRST))
-    , m_edLast(this, DesktopResId(ED_USER_LAST))
-    , m_edInitials(this, DesktopResId(ED_USER_INITIALS))
-    , m_edFather(this, DesktopResId(ED_USER_FATHER))
+    , m_ftHead(this, WizardResId(FT_USER_HEADER))
+    , m_ftBody(this, WizardResId(FT_USER_BODY))
+    , m_ftFirst(this, WizardResId(FT_USER_FIRST))
+    , m_edFirst(this, WizardResId(ED_USER_FIRST))
+    , m_ftLast(this, WizardResId(FT_USER_LAST))
+    , m_edLast(this, WizardResId(ED_USER_LAST))
+    , m_ftInitials(this, WizardResId(FT_USER_INITIALS))
+    , m_edInitials(this, WizardResId(ED_USER_INITIALS))
+    , m_ftFather(this, WizardResId(FT_USER_FATHER))
+    , m_edFather(this, WizardResId(ED_USER_FATHER))
     , m_lang(Application::GetSettings().GetUILanguage())
 {
     FreeResource();
@@ -360,18 +390,23 @@ sal_Bool UserPage::commitPage(COMMIT_REASON _eReason)
     return sal_True;
 }
 
+void UserPage::ActivatePage()
+{
+    OWizardPage::ActivatePage();
+    GrabFocus();
+}
 
 RegistrationPage::RegistrationPage( svt::OWizardMachine* parent, const ResId& resid)
     : OWizardPage(parent, resid)
-    , m_ftHeader(this, DesktopResId(FT_REGISTRATION_HEADER))
-    , m_fiImage(this, DesktopResId(IMG_REGISTRATION))
-    , m_ftBody(this, DesktopResId(FT_REGISTRATION_BODY))
-    , m_rbNow(this, DesktopResId(RB_REGISTRATION_NOW))
-    , m_rbLater(this, DesktopResId(RB_REGISTRATION_LATER))
-    , m_rbNever(this, DesktopResId(RB_REGISTRATION_NEVER))
-    , m_rbReg(this, DesktopResId(RB_REGISTRATION_REG))
-    , m_flSeparator(this, DesktopResId(FL_REGISTRATION))
-    , m_ftEnd(this, DesktopResId(FT_REGISTRATION_END))
+    , m_ftHeader(this, WizardResId(FT_REGISTRATION_HEADER))
+    , m_fiImage(this, WizardResId(IMG_REGISTRATION))
+    , m_ftBody(this, WizardResId(FT_REGISTRATION_BODY))
+    , m_rbNow(this, WizardResId(RB_REGISTRATION_NOW))
+    , m_rbLater(this, WizardResId(RB_REGISTRATION_LATER))
+    , m_rbNever(this, WizardResId(RB_REGISTRATION_NEVER))
+    , m_rbReg(this, WizardResId(RB_REGISTRATION_REG))
+    , m_flSeparator(this, WizardResId(FL_REGISTRATION))
+    , m_ftEnd(this, WizardResId(FT_REGISTRATION_END))
 {
     FreeResource();
     _setBold(m_ftHeader);
@@ -380,6 +415,12 @@ RegistrationPage::RegistrationPage( svt::OWizardMachine* parent, const ResId& re
 sal_Bool RegistrationPage::determineNextButtonState()
 {
     return sal_False;
+}
+
+void RegistrationPage::ActivatePage()
+{
+    OWizardPage::ActivatePage();
+    GrabFocus();
 }
 
 sal_Bool RegistrationPage::commitPage(COMMIT_REASON _eReason)
@@ -413,7 +454,7 @@ sal_Bool RegistrationPage::commitPage(COMMIT_REASON _eReason)
             }
             if ( !bSuccess )
             {
-                ErrorBox aRegistrationError( this, DesktopResId( ERRBOX_REG_NOSYSBROWSER ) );
+                ErrorBox aRegistrationError( this, WizardResId( ERRBOX_REG_NOSYSBROWSER ) );
                 aRegistrationError.Execute();
             }
         }
