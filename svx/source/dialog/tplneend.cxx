@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tplneend.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:57:55 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:36:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,9 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
     rXLSet.Put( XLineEndWidthItem( aCtlPreview.GetOutputSize().Height() / 2 ) );
     XOut.SetLineAttr( aXLineAttr.GetItemSet() );
 
+    // #i34740#
+    aCtlPreview.SetLineAttributes(aXLineAttr.GetItemSet());
+
     aBtnAdd.SetClickHdl(
         LINK( this, SvxLineEndDefTabPage, ClickAddHdl_Impl ) );
     aBtnModify.SetClickHdl(
@@ -311,6 +314,9 @@ void SvxLineEndDefTabPage::Reset( const SfxItemSet& rOutAttrs )
         rXLSet.Put( XLineEndItem( String(), pEntry->GetLineEnd() ) );
         XOut.SetLineAttr( aXLineAttr.GetItemSet() );
 
+        // #i34740#
+        aCtlPreview.SetLineAttributes(aXLineAttr.GetItemSet());
+
         aCtlPreview.Invalidate();
     }
 
@@ -352,6 +358,9 @@ IMPL_LINK( SvxLineEndDefTabPage, SelectLineEndHdl_Impl, void *, EMPTYARG )
         rXLSet.Put( XLineStartItem( String(), pEntry->GetLineEnd() ) );
         rXLSet.Put( XLineEndItem( String(), pEntry->GetLineEnd() ) );
         XOut.SetLineAttr( aXLineAttr.GetItemSet() );
+
+        // #i34740#
+        aCtlPreview.SetLineAttributes(aXLineAttr.GetItemSet());
 
         aCtlPreview.Invalidate();
 
