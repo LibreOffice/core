@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdmgr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:35:39 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 16:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef MACOSX
-#include <malloc.h>
-#endif
-#ifdef SOLARIS
-#include <alloca.h>
+#ifndef INCLUDED_SAL_ALLOCA_H
+#include <sal/alloca.h>
 #endif
 
 #include <osl/diagnose.h>
