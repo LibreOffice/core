@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpmerge.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 19:17:16 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:12:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,7 +386,7 @@ bool HelpParser::Merge(
             MakeDir( testpath );
             // Test
 
-            XMLFile* pFile = new XMLFile( *xmlfile );// copy new(ß)
+            XMLFile* pFile = new XMLFile( *xmlfile );// copy new()
             std::auto_ptr <XMLFile> file ( pFile );
             file->Extract();
             //Dump( file->GetStrings() );
