@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcorefl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-11 09:30:07 $
+ *  last change: $Author: hr $ $Date: 2001-10-31 16:02:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,12 +108,12 @@ class OInterfaceA : public WeakImplHelper1< XInterfaceA >
 {
 public:
 
-    virtual void SAL_CALL methodA(void)
+    virtual void SAL_CALL methodA(void) throw (RuntimeException)
         {}
 
-    virtual void SAL_CALL methodB(sal_Int16 aShort)
+    virtual void SAL_CALL methodB(sal_Int16 aShort) throw (RuntimeException)
         {}
-    virtual Sequence< StructB > SAL_CALL methodC(const StructC& aStructC, StructA& aStructA)
+    virtual Sequence< StructB > SAL_CALL methodC(const StructC& aStructC, StructA& aStructA) throw (RuntimeException)
         { return Sequence< StructB >(); }
 };
 
