@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: af $ $Date: 2002-06-13 13:52:56 $
+ *  last change: $Author: af $ $Date: 2002-06-17 16:33:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,9 @@ IMPL_LINK(AccessibleDocumentViewBase, WindowChildEventListener,
                 // Window is dying.  Unregister from VCL Window.
                 // This is also attempted in the disposing() method.
                 Window* pWindow = maShapeTreeInfo.GetWindow();
-                if (pWindow != NULL)
+                Window* pDyingWindow = static_cast<Window*>(
+                    pWindowEvent->GetWindow());
+                if (pWindow==pDyingWindow && pWindow!=NULL)
                 {
                     pWindow->RemoveChildEventListener (LINK(
                         this,
