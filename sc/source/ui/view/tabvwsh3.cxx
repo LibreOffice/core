@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-04-24 18:20:53 $
+ *  last change: $Author: er $ $Date: 2001-07-04 17:17:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -959,6 +959,13 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 TabChanged();
                 UpdateInputHandler(TRUE);   // damit sofort wieder eingegeben werden kann
                 SelectionChanged();
+            }
+            break;
+
+        case SID_OPT_LOCALE_CHANGED :
+            {   // locale changed, SYSTEM number formats changed => repaint cell contents
+                PaintGrid();
+                rReq.Done();
             }
             break;
 
