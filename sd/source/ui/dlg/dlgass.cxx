@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: af $ $Date: 2002-06-28 08:22:44 $
+ *  last change: $Author: cl $ $Date: 2002-07-01 15:10:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1520,7 +1520,7 @@ void AssistentDlgImpl::UpdatePreview( BOOL bDocPreview )
             RestorePassword( pSet, aLayoutFile );
             if( lErr = pSfxApp->LoadTemplate( xLayoutDocShell, aLayoutFile, aEmptyStr, TRUE, pSet ) )
                 ErrorHandler::HandleError(lErr);
-            SavePassword( xDocShell, aLayoutFile );
+            SavePassword( xLayoutDocShell, aLayoutFile );
         }
 
         Application::SetDefDialogParent( pParent );
