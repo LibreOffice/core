@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-10 06:12:06 $
+ *  last change: $Author: fme $ $Date: 2002-04-10 06:43:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,9 +120,9 @@ using namespace ::com::sun::star::i18n::ScriptType;
 
 sal_Bool lcl_IsLigature( xub_Unicode cCh, xub_Unicode cNextCh )
 {
-    // Lam + Alef
-    // Beh + Reh
+            // Lam + Alef
     return ( 0x644 == cCh && 0x627 == cNextCh ) ||
+            // Beh + Reh
            ( 0x628 == cCh && 0x631 == cNextCh );
 }
 
