@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:29 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:24:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,11 +284,25 @@ public:
     */
     void SetInfo (const AccessibleShapeTreeInfo& rShapeTreeInfo);
 
-    /** Update the SELECTED state of all visible children according to the
-        given selection.  This includes setting <em>and</em> resetting the
-        state.
+    /** Update the SELECTED and FOCUSED states of all visible children
+        according to the given selection.  This includes setting
+        <em>and</em> resetting the states.
     */
     void UpdateSelection (void);
+
+    /** Return whether one of the shapes managed by this object has
+        currently the focus.
+        @return
+            Returns <true/> when there is a shape that has the focus and
+            <false/> when there is no such shape.
+    */
+    bool HasFocus (void);
+
+    /** When there is a shape that currently has the focus,
+        i.e. <member>HasFocus()</member> returns <true/> then remove the
+        focus from that shape.  Otherwise nothing changes.
+    */
+    void RemoveFocus (void);
 
     //=====  lang::XEventListener  ============================================
 
@@ -423,6 +437,11 @@ private:
     // not implemented (and are not intended to be).
     ChildrenManagerImpl (const ChildrenManagerImpl&);
     ChildrenManagerImpl& operator= (const ChildrenManagerImpl&);
+
+    /** This member points to the currently focused shape.  It is NULL when
+        there is no focused shape.
+    */
+    AccessibleShape* mpFocusedShape;
 
     /** Three helper functions for the <member>Update</member> method.
     */
