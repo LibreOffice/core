@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:27 $
+ *  last change: $Author: cl $ $Date: 2000-12-01 16:50:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@
 #ifndef _SVX_UNOFOROU_HXX
 #include <unoforou.hxx>
 #endif
+#include "svdotext.hxx"
 
 #include "unotext.hxx"
 
@@ -126,8 +127,12 @@ SvxTextForwarder* SvxTextEditSource::GetTextForwarder()
     {
         if( pOutliner == NULL )
         {
+            SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, pObj );
+            USHORT nOutlMode = OUTLINERMODE_TEXTOBJECT;
+            if( pTextObj && pTextObj->IsTextFrame() && pTextObj->GetTextKind() == OBJ_OUTLINETEXT )
+                nOutlMode = OUTLINERMODE_OUTLINEOBJECT;
             SdrModel* pModel = pObj->GetModel();
-            pOutliner = SdrMakeOutliner( OUTLINERMODE_OUTLINEOBJECT, pModel );
+            pOutliner = SdrMakeOutliner( nOutlMode, pModel );
             Outliner& aDrawOutliner = pModel->GetDrawOutliner();
             pOutliner->SetCalcFieldValueHdl( aDrawOutliner.GetCalcFieldValueHdl() );
         }
