@@ -9,7 +9,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.awt.AccessibleWindow</supported-service>
+        <supported-service>com.sun.star.awt.AccessibleWindow</supported-service>
     </component-description>
     <component-description>
         <author>Thomas Benisch</author>
@@ -18,6 +18,6 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="beta"/>
-        <supported-service>drafts.com.sun.star.drawing.AccessibleShape</supported-service>
+        <supported-service>com.sun.star.drawing.AccessibleShape</supported-service>
     </component-description>
 </module-description>
