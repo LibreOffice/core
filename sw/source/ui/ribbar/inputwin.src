@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:51:00 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:52:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ ToolBox RID_TBX_FORMULA
             Text[ greek ] = "Τύπος";
             Text[ korean ] = "Όφ½Δ";
             Text[ turkish ] = "Formόl";
+            Text[ catalan ] = "Fσrmula";
         };
         ToolBoxItem
         {
@@ -135,6 +136,7 @@ ToolBox RID_TBX_FORMULA
             Text[ greek ] = "Ακύρωση";
             Text[ korean ] = "ΓλΌÒ";
             Text[ turkish ] = "έptal";
+            Text[ catalan ] = "Cancelar";
         };
         ToolBoxItem
         {
@@ -158,7 +160,7 @@ ToolBox RID_TBX_FORMULA
             Text[ chinese_simplified ] = "ΚΉΣΓ";
             Text[ russian ] = "Οπθμενθςό";
             Text[ polish ] = "Zastosuj";
-            Text[ japanese ] = "“K—p‚·‚ι";
+            Text[ japanese ] = "“K—p";
             Text[ chinese_traditional ] = "¨Ο¥Ξ";
             Text[ arabic ] = "ΕΟΞΗα";
             Text[ dutch ] = "Overnemen";
@@ -166,6 +168,7 @@ ToolBox RID_TBX_FORMULA
             Text[ greek ] = "Εφαρμογή";
             Text[ korean ] = "ΐϋΏλ";
             Text[ turkish ] = "Uygula";
+            Text[ catalan ] = "Aplicar";
         };
     };
     Edit ED_POS
@@ -216,6 +219,7 @@ Menu MN_CALC_POPUP
             Text[ greek ] = "Άθροι~σμα";
             Text[ korean ] = "ΗΥ°θ";
             Text[ turkish ] = "Toplam";
+            Text[ catalan ] = "~Suma";
         };
         MenuItem
         {
@@ -235,7 +239,7 @@ Menu MN_CALC_POPUP
             Text[ chinese_simplified ] = "Χª»»³ΙΥϋΚύ";
             Text[ russian ] = "Ξκπσγλθςό";
             Text[ polish ] = "ZaokrΉglaj";
-            Text[ japanese ] = "’[”‚πΨ‚θγ‚°‚ι";
+            Text[ japanese ] = "lΜά“ό";
             Text[ chinese_traditional ] = "Βΰ΄«¦¨ΎγΌΖ";
             Text[ arabic ] = "ΚήΡνΘ";
             Text[ dutch ] = "~Afronden";
@@ -243,6 +247,7 @@ Menu MN_CALC_POPUP
             Text[ greek ] = "Σ~τρογγυλοποίηση";
             Text[ korean ] = "ΉέΏΓΈ²";
             Text[ turkish ] = "Yuvarla";
+            Text[ catalan ] = "R~edondear";
         };
         MenuItem
         {
@@ -272,6 +277,7 @@ Menu MN_CALC_POPUP
             Text[ greek ] = "~Ποσοστό (%)";
             Text[ korean ] = "ΉιΊΠΐ²";
             Text[ turkish ] = "Yόzde";
+            Text[ catalan ] = "~Porcentaje";
         };
         MenuItem
         {
@@ -302,6 +308,7 @@ Menu MN_CALC_POPUP
             Text[ greek ] = "Τετραγ~ωνική ρίζα";
             Text[ korean ] = "±Ω";
             Text[ turkish ] = "Karekφk";
+            Text[ catalan ] = "~Raνz";
         };
         MenuItem
         {
@@ -331,6 +338,7 @@ Menu MN_CALC_POPUP
             Text[ greek ] = "Ύψ~ωση σε δύναμη";
             Text[ korean ] = "Α¦°φ";
             Text[ turkish ] = "Kuvvet ηύkar";
+            Text[ catalan ] = "Po~tenciando";
         };
         MenuItem
         {
@@ -381,6 +389,7 @@ Menu MN_CALC_POPUP
                         Text[ greek ] = "Διαχωριστικά ~λίστας";
                         Text[ korean ] = "Έρ·Ο ±ΈΊΠΐΪ";
                         Text[ turkish ] = "~Liste φπeleri ayύrύcύsύ";
+                        Text[ catalan ] = "~Separador de lista";
                     };
                     MenuItem
                     {
@@ -410,6 +419,7 @@ Menu MN_CALC_POPUP
                         Text[ greek ] = "Ί~σο";
                         Text[ korean ] = "µΏΐΟ";
                         Text[ turkish ] = "Eώittir";
+                        Text[ catalan ] = "~Igual";
                     };
                     MenuItem
                     {
@@ -439,6 +449,7 @@ Menu MN_CALC_POPUP
                         Text[ greek ] = "~Διάφορο";
                         Text[ korean ] = "µΏΐΟΗΟΑφ ΎΚΐ½";
                         Text[ turkish ] = "Eώit deπil";
+                        Text[ catalan ] = "~No igual";
                     };
                     MenuItem
                     {
@@ -468,6 +479,7 @@ Menu MN_CALC_POPUP
                         Text[ greek ] = "Μι~κρότερο ή ίσο";
                         Text[ korean ] = "ΐΜΗΟ";
                         Text[ turkish ] = "Kόηόk ya da eώittir";
+                        Text[ catalan ] = "Me~nor o igual";
                     };
                     MenuItem
                     {
@@ -498,6 +510,7 @@ Menu MN_CALC_POPUP
                         Text[ greek ] = "Με~γαλύτερο ή ίσο";
                         Text[ korean ] = "ΐΜ»σ";
                         Text[ turkish ] = "Bόyόk ya da eώittir";
+                        Text[ catalan ] = "M~ayor o igual";
                     };
                     MenuItem
                     {
@@ -527,6 +540,7 @@ Menu MN_CALC_POPUP
                         Text[ greek ] = "Μ~ικρότερο";
                         Text[ korean ] = "ΉΜΈΈ";
                         Text[ turkish ] = "Kόηόktόr";
+                        Text[ catalan ] = "M~enor";
                     };
                     MenuItem
                     {
@@ -557,6 +571,7 @@ Menu MN_CALC_POPUP
                         Text[ greek ] = "Μεγαλύτε~ρο";
                         Text[ korean ] = "ΓΚ°ϊ";
                         Text[ turkish ] = "Bόyόktόr";
+                        Text[ catalan ] = "~Mayor";
                     };
                     MenuItem
                     {
@@ -590,6 +605,7 @@ Menu MN_CALC_POPUP
                         Text[ greek ] = "Τελεστής ~Or του Boole";
                         Text[ korean ] = "ΊÒΈ®Ύπ Or";
                         Text[ turkish ] = "Mantύksal Veya";
+                        Text[ catalan ] = "~O lσgico";
                     };
                     MenuItem
                     {
@@ -619,6 +635,7 @@ Menu MN_CALC_POPUP
                         Text[ greek ] = "Τελεστής ~Xor του Boole";
                         Text[ korean ] = "ΊÒΈ®Ύπ Xor";
                         Text[ turkish ] = "Mantύksal ~tek Veya";
+                        Text[ catalan ] = "O lσgico e~xclusivo";
                     };
                     MenuItem
                     {
@@ -648,6 +665,7 @@ Menu MN_CALC_POPUP
                         Text[ greek ] = "Τελεστής ~And του Boole";
                         Text[ korean ] = "ΊÒΈ®Ύπ And";
                         Text[ turkish ] = "Mantύksal ~Ve";
+                        Text[ catalan ] = "~Y lσgico";
                     };
                     MenuItem
                     {
@@ -677,6 +695,7 @@ Menu MN_CALC_POPUP
                         Text[ greek ] = "Τελε~στής Not του Boole";
                         Text[ korean ] = "ΊÒΈ®Ύπ Not";
                         Text[ turkish ] = "Matύk~al Deπil";
+                        Text[ catalan ] = "~No lσgico";
                     };
                 };
             };
@@ -691,6 +710,7 @@ Menu MN_CALC_POPUP
             Text[ greek ] = "~Τελεστές";
             Text[ korean ] = "Ώ¬»κΐΪ";
             Text[ turkish ] = "έώleηler";
+            Text[ catalan ] = "~Operadores";
         };
         MenuItem
         {
@@ -741,6 +761,7 @@ Menu MN_CALC_POPUP
                         Text[ greek ] = "~Μέση τιμή";
                         Text[ korean ] = "Ζς±Υ";
                         Text[ turkish ] = "Ortalama deπer";
+                        Text[ catalan ] = "Pro~medio";
                     };
                     MenuItem
                     {
@@ -770,6 +791,7 @@ Menu MN_CALC_POPUP
                         Text[ greek ] = "Ελάχιστη τι~μή";
                         Text[ korean ] = "ΓΦΌÒ";
                         Text[ turkish ] = "Asgari deπer";
+                        Text[ catalan ] = "Valor mν~nimo";
                     };
                     MenuItem
                     {
@@ -799,6 +821,7 @@ Menu MN_CALC_POPUP
                         Text[ greek ] = "Μέ~γιστη τιμή";
                         Text[ korean ] = "ΓΦ΄λ";
                         Text[ turkish ] = "Azami deπer";
+                        Text[ catalan ] = "Valor mα~ximo";
                     };
                 };
             };
@@ -813,6 +836,7 @@ Menu MN_CALC_POPUP
             Text[ greek ] = "Σ~τατιστικές συναρτήσεις";
             Text[ korean ] = "Ελ°θ ΗΤΌφ";
             Text[ turkish ] = "έstatistik iώlevleri";
+            Text[ catalan ] = "F~unciones estadνsticas";
         };
         MenuItem
         {
@@ -861,6 +885,7 @@ Menu MN_CALC_POPUP
                         Text[ greek ] = "~Ημίτονο";
                         Text[ korean ] = "»ηΐΞ";
                         Text[ turkish ] = "Sinόs";
+                        Text[ catalan ] = "~Seno";
                     };
                     MenuItem
                     {
@@ -888,6 +913,7 @@ Menu MN_CALC_POPUP
                         Text[ greek ] = "~Συνημίτονο";
                         Text[ korean ] = "ΔΪ»ηΐΞ";
                         Text[ turkish ] = "Kosinόs";
+                        Text[ catalan ] = "~Coseno";
                     };
                     MenuItem
                     {
@@ -915,6 +941,7 @@ Menu MN_CALC_POPUP
                         Text[ greek ] = "Εφαπ~τομένη";
                         Text[ korean ] = "ΕΊΑ¨Ζ®";
                         Text[ turkish ] = "Tanjant";
+                        Text[ catalan ] = "~Tangente";
                     };
                     MenuItem
                     {
@@ -942,6 +969,7 @@ Menu MN_CALC_POPUP
                         Text[ greek ] = "~Τόξο ημιτόνου";
                         Text[ korean ] = "ΎΖΕ©»ηΐΞ";
                         Text[ turkish ] = "Arksinόs";
+                        Text[ catalan ] = "Seno de ~arco";
                     };
                     MenuItem
                     {
@@ -969,6 +997,7 @@ Menu MN_CALC_POPUP
                         Text[ greek ] = "Τό~ξο συνημιτόνου";
                         Text[ korean ] = "ΎΖΕ© ΔΪ»ηΐΞ";
                         Text[ turkish ] = "Arkkosinόs";
+                        Text[ catalan ] = "Coseno de a~rco";
                     };
                     MenuItem
                     {
@@ -996,6 +1025,7 @@ Menu MN_CALC_POPUP
                         Text[ greek ] = "Τόξο ε~φαπτομένης";
                         Text[ korean ] = "ΎΖΕ© ΕΊΑ¨Ζ®";
                         Text[ turkish ] = "Arktanjant";
+                        Text[ catalan ] = "~Arcotangente";
                     };
                 };
             };
@@ -1011,6 +1041,7 @@ Menu MN_CALC_POPUP
             Text[ greek ] = "~Συναρτήσεις";
             Text[ korean ] = "ΗΤΌφ";
             Text[ turkish ] = "έώlevler";
+            Text[ catalan ] = "~Funciones";
         };
     };
 };
@@ -1041,6 +1072,7 @@ String STR_FORMULA
     Text[ greek ] = "Τύπος κειμένου";
     Text[ korean ] = "ΕΨ½ΊΖ® Όφ½Δ";
     Text[ turkish ] = "Metin formulό";
+    Text[ catalan ] = "Fσrmula de texto";
 };
 #define TB_INPUT  \
     ToolBoxItem\
@@ -1072,6 +1104,7 @@ String STR_FORMULA
         Text[ greek ] = "Τύπος";\
         Text[ korean ] = "Όφ½Δ";\
         Text[ turkish ] = "Formόl";\
+        Text[ catalan ] = "Fσrmula";\
     };\
     ToolBoxItem\
     {\
@@ -1102,6 +1135,7 @@ String STR_FORMULA
         Text[ greek ] = "Ακύρωση";\
         Text[ korean ] = "ΓλΌÒ";\
         Text[ turkish ] = "έptal";\
+        Text[ catalan ] = "Cancelar";\
     };\
     ToolBoxItem\
     {\
@@ -1133,5 +1167,6 @@ String STR_FORMULA
         Text[ greek ] = "Εφαρμογή";\
         Text[ korean ] = "ΐϋΏλ";\
         Text[ turkish ] = "Uygula";\
+        Text[ catalan ] = "Aplicar";\
     };
 
