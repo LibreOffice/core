@@ -2,9 +2,9 @@
  *
  *  $RCSfile: solvrdlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2002-03-13 11:43:13 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:40:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
+#endif
+
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
 #endif
 
 #ifndef SC_ANYREFDG_HXX
@@ -127,7 +131,7 @@ private:
     String          theTargetValStr;
 
     ScDocument*     pDoc;
-    const USHORT    nCurTab;
+    const SCTAB     nCurTab;
     ScRefEdit*      pEdActive;
     BOOL            bDlgLostFocus;
     const String    errMsgInvalidVar;
