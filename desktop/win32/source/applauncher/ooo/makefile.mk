@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.1 $
 #
-#   last change: $Author: hro $ $Date: 2004-09-16 10:33:50 $
+#   last change: $Author: hro $ $Date: 2004-09-16 10:34:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,7 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..
+PRJ=..$/..$/..$/..
 
 PRJNAME=desktop
 TARGET=applauncher
@@ -73,54 +73,54 @@ TARGETTYPE=GUI
 
 # --- Files --------------------------------------------------------
 
-APP1TARGET=so$/swriter
+APP1TARGET=swriter
 APP1NOSAL=TRUE
 APP1LINKRES=$(MISC)$/$(TARGET).res
-APP1ICON=$(SOLARRESDIR)$/icons/002_text_document.ico
+APP1ICON=$(SOLARRESDIR)$/icons/ooo_writer.ico
 APP1OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/swriter.obj
 
 
-APP2TARGET=so$/scalc
+APP2TARGET=scalc
 APP2NOSAL=TRUE
 APP2LINKRES=$(MISC)$/$(TARGET).res
-APP2ICON=$(SOLARRESDIR)$/icons/004_spreadsheet_document.ico
+APP2ICON=$(SOLARRESDIR)$/icons/ooo_calc.ico
 APP2OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/scalc.obj
 
-APP3TARGET=so$/sdraw
+APP3TARGET=sdraw
 APP3NOSAL=TRUE
 APP3LINKRES=$(MISC)$/$(TARGET).res
-APP3ICON=$(SOLARRESDIR)$/icons/006_drawing_document.ico
+APP3ICON=$(SOLARRESDIR)$/icons/ooo_draw.ico
 APP3OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/sdraw.obj
 
-APP4TARGET=so$/simpress
+APP4TARGET=simpress
 APP4NOSAL=TRUE
 APP4LINKRES=$(MISC)$/$(TARGET).res
-APP4ICON=$(SOLARRESDIR)$/icons/008_presentation_document.ico
+APP4ICON=$(SOLARRESDIR)$/icons/ooo_impress.ico
 APP4OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/simpress.obj
 
-APP5TARGET=so$/sbase
+APP5TARGET=smath
 APP5NOSAL=TRUE
 APP5LINKRES=$(MISC)$/$(TARGET).res
-APP5ICON=$(SOLARRESDIR)$/icons/014_database_document.ico
+APP5ICON=$(SOLARRESDIR)$/icons/ooo_math.ico
 APP5OBJS = \
         $(OBJ)$/launcher.obj\
-        $(OBJ)$/sbase.obj
-
-APP6TARGET=so$/smath
-APP6NOSAL=TRUE
-APP6LINKRES=$(MISC)$/$(TARGET).res
-APP6ICON=$(SOLARRESDIR)$/icons/015_math_document.ico
-APP6OBJS = \
-        $(OBJ)$/launcher.obj\
         $(OBJ)$/smath.obj
+
+#APP6TARGET=sbase
+#APP6NOSAL=TRUE
+#APP6LINKRES=$(MISC)$/$(TARGET).res
+#APP6ICON=$(SOLARRESDIR)$/icons/ooo_base.ico
+#APP6OBJS = \
+#		$(OBJ)$/launcher.obj\
+#       $(OBJ)$/sbase.obj
 
 # --- Targets ------------------------------------------------------
 
