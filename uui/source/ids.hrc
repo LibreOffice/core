@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.hrc,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:44:58 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 12:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,10 @@
 #define ERRCODE_UUI_IO_UNSUPPORTEDOVERWRITE (ERRCODE_AREA_UUI + 50)
 #define ERRCODE_UUI_IO_BROKENPACKAGE (ERRCODE_AREA_UUI + 51)
 #define ERRCODE_UUI_IO_BROKENPACKAGE_CANTREPAIR (ERRCODE_AREA_UUI + 52)
+#define ERRCODE_UUI_CONFIGURATION_BROKENDATA_NOREMOVE (ERRCODE_AREA_UUI + 53)
+#define ERRCODE_UUI_CONFIGURATION_BROKENDATA_WITHREMOVE (ERRCODE_AREA_UUI + 54)
+#define ERRCODE_UUI_CONFIGURATION_BACKENDMISSING (ERRCODE_AREA_UUI + 55)
+#define ERRCODE_UUI_CONFIGURATION_BACKENDMISSING_WITHRECOVER (ERRCODE_AREA_UUI + 56)
 
 #define HID_DLG_LOGIN (HID_UUI_START + 0)
 #define HID_DLG_COOKIES (HID_UUI_START + 1)
