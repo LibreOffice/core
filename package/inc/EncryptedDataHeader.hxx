@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EncryptedDataHeader.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-15 20:04:25 $
+ *  last change: $Author: kz $ $Date: 2003-09-11 10:13:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,12 +74,14 @@
    Salt length      2 bytes
    IV length        2 bytes
    Digest length    2 bytes
+   MediaType length 2 bytes
    Salt content     X bytes
    IV content       X bytes
    digest content   X bytes
+   MediaType        X bytes
 
 */
 const sal_uInt32 n_ConstHeader = 0x0502474dL; // "MG\002\005"
-const sal_Int32 n_ConstHeaderSize = 20; // + salt length + iv length + digest length
+const sal_Int32 n_ConstHeaderSize = 22; // + salt length + iv length + digest length + mediatype length
 const sal_Int16 n_ConstCurrentVersion = 1;
 #endif
