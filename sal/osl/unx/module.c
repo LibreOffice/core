@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-29 08:32:35 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:20:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@
 #include <osl/thread.h>
 #endif
 
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
+#endif
+
 #ifndef _OSL_FILE_H_
 #include <osl/file.h>
 #endif
@@ -112,9 +116,6 @@ int dladdr(void *address, Dl_info *dl)
 #endif
 
 #ifdef MACOSX
-#ifndef _OSL_PROCESS_H_
-#include <osl/process.h>
-#endif
 #include <mach-o/dyld.h>
 extern oslProcessError SAL_CALL osl_searchPath(const sal_Char* pszName, const sal_Char* pszPath, sal_Char Separator, sal_Char *pszBuffer, sal_uInt32 Max);
 #else /* MACOSX */
@@ -163,7 +164,7 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
 oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 nRtldMode)
 {
 #ifdef MACOSX
-        // GrP use dyld APIs so dylibs don't have to be in framework bundles
+        /* GrP use dyld APIs so dylibs don't have to be in framework bundles */
 
         int                     len;
         const struct mach_header      *pLib = NULL;
@@ -193,9 +194,9 @@ oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 n
         }
 
         if (!pLib  &&  pszModuleName[0] != '/') {
-                // Didn't find module in DYLD_LIBRARY_PATH. Try looking
-                // in application's bundle.
-                // But don't bother if the name is an absolute path.
+                /* Didn't find module in DYLD_LIBRARY_PATH. Try looking
+                   in application's bundle.
+                   But don't bother if the name is an absolute path.*/
                 strncpy(buf, "@executable_path/", sizeof(buf));
                 strncat(buf, pszModuleName, sizeof(buf) - strlen(buf));
                 buf[sizeof(buf)-1] = '\0';
@@ -204,9 +205,9 @@ oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 n
         }
 
         if (!pLib) {
-                // Still couldn't find it - give up
+                /* Still couldn't find it - give up */
 #if OSL_DEBUG_LEVEL > 1
-                // fixme use NSLinkEditError() to get a better error message
+                /* fixme use NSLinkEditError() to get a better error message */
                 fprintf( stderr,
                          "osl_loadModule: cannot load module %s for reason: %s\n",
                          pszModuleName, "file does not exist or is not a library (tried DYLD_LIBRARY_PATH and @executable_path)" );
@@ -430,6 +431,17 @@ void* SAL_CALL osl_psz_getSymbol(oslModule hModule, const sal_Char* pszSymbolNam
 #endif /* MACOSX */
 }
 
+/*****************************************************************************/
+/* osl_getFunctionSymbol */
+/*****************************************************************************/
+oslGenericFunction SAL_CALL osl_getFunctionSymbol( oslModule Module, rtl_uString *ustrFunctionSymbolName )
+{
+    return ( oslGenericFunction )osl_getSymbol( Module, ustrFunctionSymbolName );
+}
+
+/*****************************************************************************/
+/* osl_getModuleURLFromAddress */
+/*****************************************************************************/
 sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibraryUrl)
 {
     sal_Bool result = sal_False;
@@ -528,3 +540,10 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
     return result;
 }
 
+/*****************************************************************************/
+/* osl_getModuleURLFromFunctionAddress */
+/*****************************************************************************/
+sal_Bool SAL_CALL osl_getModuleURLFromFunctionAddress( oslGenericFunction addr, rtl_uString ** ppLibraryUrl )
+{
+    return osl_getModuleURLFromAddress( ( void * )addr, ppLibraryUrl );
+}
