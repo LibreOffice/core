@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-06 11:17:41 $
+ *  last change: $Author: ka $ $Date: 2002-03-21 15:31:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1425,7 +1425,7 @@ void SdrPageView::DrawPaper(OutputDevice& rOut)
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
-    rOut.SetLineColor( rSettings.GetWindowTextColor() );
+    rOut.SetLineColor( COL_GRAY );
     rOut.SetFillColor( rSettings.GetWindowColor() );
 
     Rectangle aRect(GetPageRect());
