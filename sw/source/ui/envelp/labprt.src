@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labprt.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:58:24 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,7 +244,7 @@ TabPage TP_LAB_PRT
         Text = "Verteilen" ;
         Text[ ENGLISH ] = "Divide" ;
         Text[ english_us ] = "Divide";
-        Text[ portuguese ] = "Divide";
+        Text[ portuguese ] = "Distribuir";
         Text[ russian ] = "Ðàñïðåäåëèòü";
         Text[ greek ] = "Divide";
         Text[ dutch ] = "Divide";
@@ -254,7 +254,7 @@ TabPage TP_LAB_PRT
         Text[ italian ] = "Divide";
         Text[ danish ] = "Divide";
         Text[ swedish ] = "Fördela";
-        Text[ polish ] = "Divide";
+        Text[ polish ] = "Dystrybuj";
         Text[ portuguese_brazilian ] = "Divide";
         Text[ japanese ] = "Š„‚è“–‚Ä";
         Text[ korean ] = "Divide";
@@ -349,6 +349,7 @@ TabPage TP_LAB_PRT
     };
 };
  // **************************************************************************
+
 
 
 
