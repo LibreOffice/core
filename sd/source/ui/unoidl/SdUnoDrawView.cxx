@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoDrawView.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2002-03-21 14:19:59 $
+ *  last change: $Author: ka $ $Date: 2002-05-08 09:52:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,11 +446,12 @@ sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
                         if(pObj && pObj->GetPage() == pPV->GetPage())
                         {
                             mpView->MarkObj( pObj, pPV );
-                            return sal_True;
                         }
                     }
                 }
             }
+
+            return sal_True;
         }
     }
 
