@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoSlideView.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:43:23 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 11:54:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef SD_UNO_SLIDE_VIEW_HXX
 #define SD_UNO_SLIDE_VIEW_HXX
 
-#ifndef SD_DRAW_SUB_CONTROLLER_HXX
-#include "DrawSubController.hxx"
+#ifndef SD_DRAW_CONTROLLER_HXX
+#include "DrawController.hxx"
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWVIEW_HPP_
 #include <com/sun/star/drawing/XDrawView.hpp>
@@ -98,18 +98,22 @@
 
 namespace sd {
 
-class View;
+class ViewShellBase;
 class SlideViewShell;
+class View;
 
 
 /**
  * This class implements the view component for a SdOutlineViewShell
  */
 class SdUnoSlideView
-    : public DrawSubController
+    : public DrawController
 {
 public:
-    SdUnoSlideView(View& rView, ViewShell& rViewShell) throw();
+    SdUnoSlideView (
+        ViewShellBase& rBase,
+        ViewShell& rViewShell,
+        View& rView) throw();
     virtual ~SdUnoSlideView() throw();
 
     // XTypeProvider
