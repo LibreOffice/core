@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: np $ $Date: 2002-03-08 14:45:30 $
+#   last change: $Author: obo $ $Date: 2005-01-27 11:22:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -110,8 +110,7 @@ OBJFILES= \
     $(OBJ)$/pe_vari.obj		\
     $(OBJ)$/preproc.obj		\
     $(OBJ)$/prs_cpp.obj		\
-    $(OBJ)$/tkp_cpp.obj		\
-    $(OBJ)$/tokintpr.obj
+    $(OBJ)$/tkp_cpp.obj
 
 
 
