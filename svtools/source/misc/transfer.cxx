@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-06 16:07:54 $
+ *  last change: $Author: ka $ $Date: 2001-02-14 14:26:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,8 @@ SvStream& operator<<( SvStream& rOStm, const TransferableObjectDescriptor& rObjD
 // - TransferableHelper -
 // ----------------------
 
-TransferableHelper::TransferableHelper()
+TransferableHelper::TransferableHelper() :
+    mpxClipboard( NULL )
 {
 }
 
@@ -171,6 +172,7 @@ TransferableHelper::TransferableHelper()
 
 TransferableHelper::~TransferableHelper()
 {
+    delete mpxClipboard;
 }
 
 // -----------------------------------------------------------------------------
@@ -588,12 +590,15 @@ void TransferableHelper::ObjectReleased()
 
 void TransferableHelper::CopyToClipboard() const
 {
-    Reference< XClipboard > xClipboard( GetSystemClipboard() );
+    if( !mpxClipboard )
+        ( (TransferableHelper*) this )->mpxClipboard = new Reference< XClipboard >;
 
-    if( xClipboard.is() )
+    *mpxClipboard = GetSystemClipboard();
+
+    if( mpxClipboard->is() )
     {
         const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-        xClipboard->setContents( (TransferableHelper*) this, (TransferableHelper*) this );
+        (*mpxClipboard)->setContents( (TransferableHelper*) this, (TransferableHelper*) this );
         Application::AcquireSolarMutex( nRef );
     }
 }
