@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:32:54 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 13:03:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -663,7 +663,7 @@ sal_Bool SdXMLFilter::Export()
 
         uno::Reference< lang::XServiceInfo > xServiceInfo( mxModel, uno::UNO_QUERY );
 
-        if( !xServiceInfo.is() || !xServiceInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) ) )
+        if( !xServiceInfo.is() || !xServiceInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GenericDrawingDocument" ) ) ) )
         {
             DBG_ERROR( "Model is no DrawingDocument in XMLExport" );
             return FALSE;
