@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlout.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-10 10:21:36 $
+ *  last change: $Author: er $ $Date: 2001-07-20 18:32:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -696,7 +696,7 @@ SvStream& HTMLOutFuncs::Out_Events( SvStream& rStrm,
 ByteString& HTMLOutFuncs::CreateTableDataOptionsValNum( ByteString& aStrTD,
             BOOL bValue,
             double fVal, ULONG nFormat, SvNumberFormatter& rFormatter,
-            rtl_TextEncoding eDestEnc )
+            rtl_TextEncoding eDestEnc, String* pNonConvertableChars )
 {
     if ( bValue )
     {
@@ -719,8 +719,8 @@ ByteString& HTMLOutFuncs::CreateTableDataOptionsValNum( ByteString& aStrTD,
             const SvNumberformat* pFormatEntry = rFormatter.GetEntry( nFormat );
             if ( pFormatEntry )
             {
-                ByteString sTmp( pFormatEntry->GetFormatstring(), eDestEnc );
-                aNumStr = sTmp;
+                ConvertStringToHTML( pFormatEntry->GetFormatstring(), aNumStr,
+                    eDestEnc, pNonConvertableChars );
                 nLang = pFormatEntry->GetLanguage();
             }
             else
