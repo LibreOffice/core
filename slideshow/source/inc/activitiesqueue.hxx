@@ -2,9 +2,9 @@
  *
  *  $RCSfile: activitiesqueue.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:53:27 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:09:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,7 @@
 #ifndef _SLIDESHOW_ACTIVITIESQUEUE_HXX
 #define _SLIDESHOW_ACTIVITIESQUEUE_HXX
 
-#include <list>
-#include <vector>
+#include <deque>
 
 #include <activity.hxx>
 #include <unoviewcontainer.hxx>
@@ -107,7 +106,7 @@ namespace presentation
 
             /** Add the given activity to the queue.
              */
-            bool addActivity( const ActivitySharedPtr& );
+            bool addActivity( const ActivitySharedPtr& pActivity );
 
             /** Process the activities queue.
 
@@ -135,7 +134,7 @@ namespace presentation
         private:
             ::boost::shared_ptr< ::canvas::tools::ElapsedTime > mpTimer;
 
-            typedef ::std::list< ActivitySharedPtr >        ActivityQueue;
+            typedef ::std::deque< ActivitySharedPtr > ActivityQueue;
 
             ActivityQueue           maCurrentActivitiesWaiting;  // currently running
                                                                  // activities, that still
