@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupboxwiz.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-06 09:50:06 $
+ *  last change: $Author: fs $ $Date: 2001-03-06 15:09:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,7 +321,8 @@ namespace dbp
     //---------------------------------------------------------------------
     IMPL_LINK( ORadioSelectionPage, OnMoveEntry, PushButton*, _pButton )
     {
-        if (&m_aMoveLeft == _pButton)
+        sal_Bool bMoveLeft = (&m_aMoveLeft == _pButton);
+        if (bMoveLeft)
         {
             while (m_aExistingRadios.GetSelectEntryCount())
                 m_aExistingRadios.RemoveEntry(m_aExistingRadios.GetSelectEntryPos(0));
@@ -331,7 +332,14 @@ namespace dbp
             m_aExistingRadios.InsertEntry(m_aRadioName.GetText());
             m_aRadioName.SetText(String());
         }
+
         implCheckMoveButtons();
+
+        //adjust the focus
+        if (bMoveLeft)
+            m_aExistingRadios.GrabFocus();
+        else
+            m_aRadioName.GrabFocus();
         return 0L;
     }
 
@@ -589,6 +597,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/03/06 09:50:06  fs
+ *  #84643# clear aValues
+ *
  *  Revision 1.5  2001/03/05 14:53:13  fs
  *  finished the grid control wizard
  *
