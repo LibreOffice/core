@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartlis.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2002-01-22 08:26:43 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ ScChartListener::ScChartListener( const ScChartListener& r ) :
 
 ScChartListener::~ScChartListener()
 {
-    if ( GetBroadcasterCount() )
+    if ( HasBroadcaster() )
         EndListeningTo();
     delete pUnoData;
 }
@@ -171,7 +171,7 @@ uno::Reference< chart::XChartData > ScChartListener::GetUnoSource() const
     return uno::Reference< chart::XChartData >();
 }
 
-void __EXPORT ScChartListener::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void __EXPORT ScChartListener::Notify( SvtBroadcaster& rBC, const SfxHint& rHint )
 {
     const ScHint* p = PTR_CAST( ScHint, &rHint );
     if( p && (p->GetId() & (SC_HINT_DATACHANGED | SC_HINT_DYING)) )
@@ -491,7 +491,7 @@ void ScChartListenerCollection::UpdateScheduledSeriesRanges()
 }
 
 
-void ScChartListenerCollection::UpdateSeriesRangesContainingTab( USHORT nTab )
+void ScChartListenerCollection::UpdateSeriesRangesContainingTab( SCTAB nTab )
 {
     ScRange aRange( 0, 0, nTab, MAXCOL, MAXROW, nTab );
     for ( USHORT nIndex = 0; nIndex < nCount; nIndex++ )
