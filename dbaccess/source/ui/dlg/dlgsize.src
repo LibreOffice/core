@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsize.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:36:27 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 19:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
  // JN
  //
  // Letzte Aenderung:
- // $Author: kz $ $Date: 2001-05-16 15:36:27 $ $Revision: 1.8 $
+ // $Author: kz $ $Date: 2001-05-30 19:49:56 $ $Revision: 1.9 $
  //
  //---------------------------------------------------------------------------
 
@@ -107,7 +107,7 @@ ModalDialog DLG_ROWHEIGHT
         Text [ portuguese ] = "~Altura" ;
         Text[ chinese_simplified ] = "¸ß¶È(~H)";
         Text[ russian ] = "Âûñîòà";
-        Text[ polish ] = "Wysoko?æ";
+        Text[ polish ] = "Wysokoœæ";
         Text[ japanese ] = "‚‚³(~H)";
         Text[ chinese_traditional ] = "°ª«×(~H)";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ";
@@ -188,7 +188,7 @@ ModalDialog DLG_ROWHEIGHT
     Text [ portuguese_brazilian ] = "Zeilenh?e" ;
     Text[ chinese_simplified ] = "ĞĞ¸ß";
     Text[ russian ] = "Âûñîòà ñòğîê";
-    Text[ polish ] = "Wysoko?æ wierszy";
+    Text[ polish ] = "Wysokoœæ wierszy";
     Text[ japanese ] = "s‚Ì‚‚³";
     Text[ chinese_traditional ] = "¦C°ª";
     Text[ arabic ] = "ÇÑÊİÇÚ ÇáÕİ";
@@ -225,7 +225,7 @@ ModalDialog DLG_COLWIDTH
         Text [ portuguese ] = "~Largura" ;
         Text[ chinese_simplified ] = "¿í¶È(~W)";
         Text[ russian ] = "Øèğèíà";
-        Text[ polish ] = "Szeroko?æ";
+        Text[ polish ] = "Szerokoœæ";
         Text[ japanese ] = "•(~W)";
         Text[ chinese_traditional ] = "¼e«×(~W)";
         Text[ arabic ] = "ÇáÚÑÖ";
@@ -306,7 +306,7 @@ ModalDialog DLG_COLWIDTH
     Text [ portuguese ] = "Largura da coluna" ;
     Text[ chinese_simplified ] = "ÁĞ¿í";
     Text[ russian ] = "Øèğèíà êîëîíîê";
-    Text[ polish ] = "Szeoko?æ kolumn";
+    Text[ polish ] = "Szeokoœæ kolumn";
     Text[ japanese ] = "—ñ•";
     Text[ chinese_traditional ] = "Äæ¼e";
     Text[ arabic ] = "ÚÑÖ ÇáÚãæÏ";
