@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-15 13:29:50 $
+ *  last change: $Author: fme $ $Date: 2002-08-29 14:33:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1825,12 +1825,6 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     SetPropFont( 0 );
 }
 
-/*-----------------13.10.00 16:46-------------------
- * SwTxtFormatter::BuildMultiPortion manages the formatting of a SwMultiPortion.
- * External, for the calling function, it seems to be a normal Format-function,
- * internal it is like a SwTxtFrm::_Format with multiple BuildPortions
- * --------------------------------------------------*/
-
 sal_Bool lcl_ExtractFieldFollow( SwLineLayout* pLine, SwLinePortion* &rpFld )
 {
     SwLinePortion* pLast = pLine;
@@ -1854,6 +1848,38 @@ sal_Bool lcl_ExtractFieldFollow( SwLineLayout* pLine, SwLinePortion* &rpFld )
     pLine->Truncate();
     return bRet;
 }
+
+/*----------------------------------------------------
+ *              lcl_TruncateMultiPortion
+ * If a multi portion completely has to go to the
+ * next line, this function is called to trunctate
+ * the rest of the remaining multi portion
+ * --------------------------------------------------*/
+
+void lcl_TruncateMultiPortion( SwMultiPortion& rMulti, SwTxtFormatInfo& rInf,
+                               xub_StrLen nStartIdx )
+{
+    rMulti.GetRoot().Truncate();
+    rMulti.GetRoot().SetLen(0);
+    rMulti.GetRoot().Width(0);
+//  rMulti.CalcSize( *this, aInf );
+    if ( rMulti.GetRoot().GetNext() )
+    {
+        rMulti.GetRoot().GetNext()->Truncate();
+        rMulti.GetRoot().GetNext()->SetLen( 0 );
+        rMulti.GetRoot().GetNext()->Width( 0 );
+    }
+    rMulti.Width( 0 );
+    rMulti.SetLen(0);
+    rInf.SetIdx( nStartIdx );
+}
+
+/*-----------------------------------------------------------------------------
+ *              SwTxtFormatter::BuildMultiPortion
+ * manages the formatting of a SwMultiPortion. External, for the calling
+ * function, it seems to be a normal Format-function, internal it is like a
+ * SwTxtFrm::_Format with multiple BuildPortions
+ *---------------------------------------------------------------------------*/
 
 BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     SwMultiPortion& rMulti )
@@ -1926,7 +1952,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     xub_StrLen nOldStart = GetStart();
     SwTwips nMinWidth = nTmpX + 1;
     SwTwips nActWidth = nMaxWidth;
-    xub_StrLen nStartIdx = rInf.GetIdx();
+    const xub_StrLen nStartIdx = rInf.GetIdx();
     xub_StrLen nMultiLen = rMulti.GetLen();
 
     SwLinePortion *pFirstRest;
@@ -2127,8 +2153,11 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
 
     pCurr = pOldCurr;
     nStart = nOldStart;
+      SetPropFont( 0 );
+
     rMulti.SetLen( rMulti.GetRoot().GetLen() + ( rMulti.GetRoot().GetNext() ?
         rMulti.GetRoot().GetNext()->GetLen() : 0 ) );
+
     if( rMulti.IsDouble() )
     {
         ((SwDoubleLinePortion&)rMulti).CalcBlanks( rInf );
@@ -2202,6 +2231,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     }
 #endif
 
+
     // line break has to be performed!
     if( bRet )
     {
@@ -2237,26 +2267,15 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             }
             else
             {
-                // we try to keep our multi portion together
-                rMulti.GetRoot().Truncate();
-                rMulti.GetRoot().SetLen( 0 );
-                rMulti.GetRoot().Width( 0 );
-                rMulti.GetRoot().GetNext()->Truncate();
-                rMulti.GetRoot().GetNext()->SetLen( 0 );
-                rMulti.GetRoot().GetNext()->Width( 0 );
-                rMulti.Width( 0 );
-                rMulti.SetLen( 0 );
+                // we try to keep our ruby portion together
+                lcl_TruncateMultiPortion( rMulti, rInf, nStartIdx );
                 pTmp = 0;
             }
         }
         else if( rMulti.HasRotation() )
         {
-            rMulti.GetRoot().Truncate();
-            rMulti.GetRoot().SetLen(0);
-            rMulti.GetRoot().Width(0);
-            rMulti.CalcSize( *this, aInf );
-            rMulti.SetLen(0);
-            rInf.SetIdx( nStartIdx );
+            // we try to keep our rotated portion together
+            lcl_TruncateMultiPortion( rMulti, rInf, nStartIdx );
             pTmp = new SwRotatedPortion( nMultiLen + rInf.GetIdx(),
                                          rMulti.GetDirection() );
         }
@@ -2264,11 +2283,23 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         // during a recursion of BuildMultiPortions we may not build
         // a new SwBidiPortion, this would cause a memory leak
         else if( rMulti.IsBidi() && ! pMulti )
+        {
+            if ( ! rMulti.GetLen() )
+                lcl_TruncateMultiPortion( rMulti, rInf, nStartIdx );
+
             pTmp = new SwBidiPortion( nMultiLen + rInf.GetIdx(),
-                                      ((SwBidiPortion&)rMulti).GetLevel() );
+                                    ((SwBidiPortion&)rMulti).GetLevel() );
+        }
 #endif
         else
             pTmp = NULL;
+
+        if ( ! rMulti.GetLen() && rInf.GetLast() )
+        {
+            SeekAndChgBefore( rInf );
+            rInf.GetLast()->FormatEOL( rInf );
+        }
+
         if( pNextFirst && pTmp )
         {
             pTmp->SetFollowFld();
@@ -2294,7 +2325,6 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     delete pFirstRest;
     delete pSecondRest;
     delete pFontSave;
-    SetPropFont( 0 );
     return bRet;
 }
 

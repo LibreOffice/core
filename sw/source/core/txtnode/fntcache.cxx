@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: od $ $Date: 2002-08-28 13:05:48 $
+ *  last change: $Author: fme $ $Date: 2002-08-29 14:34:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1260,7 +1260,7 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                 RTL_TEXTENCODING_MS_1252 ), pKernArray, 0, 2 );
             if( bBullet )
                 rInf.GetOut().DrawTextArray( aPos, *pStr, pKernArray,
-                                              0, 1 );
+                                             rInf.GetIdx() ? 1 : 0, 1 );
         }
         else
         {
