@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlvw.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-24 13:18:20 $
+ *  last change: $Author: mt $ $Date: 2002-08-05 11:37:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,6 +329,9 @@ ULONG OutlinerView::ImpCheckMousePos(const Point& rPosPix, MouseTarget& reTarget
         BOOL bBullet;
         if ( pOwner->IsTextPos( aPaperPos, 0, &bBullet ) )
         {
+            Point aDocPos = pOwner->GetDocPos( aPaperPos );
+            nPara = pOwner->pEditEngine->FindParagraph( aDocPos.Y() );
+
             if ( bBullet )
             {
                 reTarget = MouseBullet;
