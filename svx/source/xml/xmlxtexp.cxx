@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlxtexp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:58:04 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:38:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,8 +262,10 @@ SvxXMLXTableExportComponent::SvxXMLXTableExportComponent(
     mxTable( xTable )
 {
 
-    _GetNamespaceMap().Add( GetXMLToken(XML_NP_OFFICE), GetXMLToken(XML_N_OFFICE_OOO), XML_NAMESPACE_OFFICE );
-    _GetNamespaceMap().Add( GetXMLToken(XML_NP_DRAW), GetXMLToken(XML_N_DRAW_OOO), XML_NAMESPACE_DRAW );
+    _GetNamespaceMap().Add( GetXMLToken(XML_NP_OOO), GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO );
+    _GetNamespaceMap().Add( GetXMLToken(XML_NP_OFFICE), GetXMLToken(XML_N_OFFICE), XML_NAMESPACE_OFFICE );
+    _GetNamespaceMap().Add( GetXMLToken(XML_NP_DRAW), GetXMLToken(XML_N_DRAW), XML_NAMESPACE_DRAW );
+    _GetNamespaceMap().Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
     SetGraphicResolver( xGrfResolver );
     setExportFlags( 0 );
 }
@@ -432,7 +434,7 @@ sal_Bool SvxXMLXTableExportComponent::exportTable() throw()
                 break;
             }
 
-            SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, pEleName, sal_True, sal_True );
+            SvXMLElementExport aElem( *this, XML_NAMESPACE_OOO, pEleName, sal_True, sal_True );
 
             Sequence< OUString > aNames = mxTable->getElementNames();
             const sal_Int32 nCount = aNames.getLength();
