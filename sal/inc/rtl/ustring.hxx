@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: th $ $Date: 2001-07-27 13:26:20 $
+ *  last change: $Author: hr $ $Date: 2001-09-11 13:07:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ namespace rtl
 
 class OUString
 {
-    friend class String;
+    friend class ::String;
 
 public:
     rtl_uString * pData;
