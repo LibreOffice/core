@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-27 16:50:30 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:01:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,6 +573,18 @@ BOOL EditEngine::IsVertical() const
 {
     DBG_CHKTHIS( EditEngine, 0 );
     return pImpEditEngine->IsVertical();
+}
+
+void EditEngine::SetFixedCellHeight( BOOL bUseFixedCellHeight )
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    pImpEditEngine->SetFixedCellHeight( bUseFixedCellHeight );
+}
+
+BOOL EditEngine::IsFixedCellHeight() const
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    return pImpEditEngine->IsFixedCellHeight();
 }
 
 void EditEngine::SetDefaultHorizontalTextDirection( EEHorizontalTextDirection eHTextDir )
