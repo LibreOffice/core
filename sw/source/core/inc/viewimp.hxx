@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-05 12:16:20 $
+ *  last change: $Author: dvo $ $Date: 2002-04-26 13:22:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,9 +276,12 @@ public:
     // Invalidate opaque state for all accessible frames
     void InvalidateAccessibleOpaqueState();
 
+    // Invalidate frame's relation set (for chained frames)
+    void InvalidateAccessibleRelationSet( const SwFlyFrm *pMaster,
+                                          const SwFlyFrm *pFollow );
+
     // Fire all accessible events that have been collected so far
     void FireAccessibleEvents();
-
 #endif
 };
 
