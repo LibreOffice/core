@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:37 $
+ *  last change: $Author: tbe $ $Date: 2001-05-14 08:44:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,10 @@ void TbxControls::StateChanged( USHORT nSID, SfxItemState eState,
                 case SVX_SNAP_VSCROLLBAR:   nTemp = SID_INSERT_VSCROLLBAR; break;
                 case SVX_SNAP_PREVIEW:      nTemp = SID_INSERT_PREVIEW; break;
                 case SVX_SNAP_URLBUTTON:    nTemp = SID_INSERT_URLBUTTON; break;
+                case SVX_SNAP_IMAGECONTROL: nTemp = SID_INSERT_IMAGECONTROL; break;
+                case SVX_SNAP_PROGRESSBAR:  nTemp = SID_INSERT_PROGRESSBAR; break;
+                case SVX_SNAP_HFIXEDLINE:   nTemp = SID_INSERT_HFIXEDLINE; break;
+                case SVX_SNAP_VFIXEDLINE:   nTemp = SID_INSERT_VFIXEDLINE; break;
             }
             if( nTemp )
             {

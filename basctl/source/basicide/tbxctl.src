@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-12 07:40:26 $
+ *  last change: $Author: tbe $ $Date: 2001-05-14 08:48:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,6 +330,22 @@ ToolBox RID_TOOLBOX
             Text[ catalan ] = "Botón URL";
             Text[ finnish ] = "URL-painike";
         };
+        ToolBoxItem
+        {
+            HelpId = SID_INSERT_IMAGECONTROL ;
+            Identifier = SID_INSERT_IMAGECONTROL ;
+            RadioCheck = TRUE ;
+            Text = "ImageControl" ;
+            Text [ english_us ] = "Image Control" ;
+        };
+        ToolBoxItem
+        {
+            HelpId = SID_INSERT_HFIXEDLINE ;
+            Identifier = SID_INSERT_HFIXEDLINE ;
+            RadioCheck = TRUE ;
+            Text = "HFixedLine" ;
+            Text [ english_us ] = "Horiz. Fixed Line" ;
+        };
         ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
         ToolBoxItem
         {
@@ -593,6 +609,22 @@ ToolBox RID_TOOLBOX
             Text[ turkish ] = "Seçim";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Selección";
+        };
+        ToolBoxItem
+        {
+            HelpId = SID_INSERT_PROGRESSBAR ;
+            Identifier = SID_INSERT_PROGRESSBAR ;
+            RadioCheck = TRUE ;
+            Text = "ProgressBar" ;
+            Text [ english_us ] = "Progress Bar" ;
+        };
+        ToolBoxItem
+        {
+            HelpId = SID_INSERT_VFIXEDLINE ;
+            Identifier = SID_INSERT_VFIXEDLINE ;
+            RadioCheck = TRUE ;
+            Text = "VFixedLine" ;
+            Text [ english_us ] = "Vert. Fixed Line" ;
         };
         ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
         ToolBoxItem

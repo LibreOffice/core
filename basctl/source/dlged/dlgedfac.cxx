@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedfac.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-04 11:09:09 $
+ *  last change: $Author: tbe $ $Date: 2001-05-14 08:48:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
 
     if( (pObjFactory->nInventor == VCSbxInventor) &&
         (pObjFactory->nIdentifier >= OBJ_DLG_CHECKBOX) &&
-        (pObjFactory->nIdentifier <= OBJ_DLG_URLBUTTON)    )
+        (pObjFactory->nIdentifier <= OBJ_DLG_VFIXEDLINE)    )
     {
         switch( pObjFactory->nIdentifier )
         {
@@ -204,6 +204,34 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
             case OBJ_DLG_URLBUTTON:
                  pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlFixedLineModel"), xDialogSFact);
                  break;
+            case OBJ_DLG_IMAGECONTROL:
+                 pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlImageControlModel"), xDialogSFact);
+                 break;
+            case OBJ_DLG_PROGRESSBAR:
+                 pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlProgressBarModel"), xDialogSFact);
+                 break;
+            case OBJ_DLG_HFIXEDLINE:
+                 pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlFixedLineModel"), xDialogSFact);
+                 break;
+            case OBJ_DLG_VFIXEDLINE:
+            {
+                 DlgEdObj* pNew = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlFixedLineModel"), xDialogSFact);
+                 pObjFactory->pNewObj = pNew;
+                 // set vertical orientation
+                 try
+                 {
+                    uno::Reference< beans::XPropertySet >  xPSet(pNew->GetUnoControlModel(), uno::UNO_QUERY);
+                    if (xPSet.is())
+                    {
+                        uno::Any aValue;
+                        aValue <<= (sal_Int32) 1;
+                        xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Orientation" ) ), aValue );
+                    }
+                 }
+                 catch(...)
+                 {
+                 }
+            }    break;
         }
 
         DlgEdObj* pDlgEdObj = PTR_CAST(DlgEdObj, pObjFactory->pNewObj);

@@ -28,7 +28,11 @@ SlotIdFile( "basidesh.hrc" )
         SVX_SNAP_VSCROLLBAR,
         SVX_SNAP_PREVIEW,
         SVX_SNAP_SELECT,
-        SVX_SNAP_NOTHING
+        SVX_SNAP_NOTHING,
+        SVX_SNAP_IMAGECONTROL,
+        SVX_SNAP_PROGRESSBAR,
+        SVX_SNAP_HFIXEDLINE,
+        SVX_SNAP_VFIXEDLINE
     }
     item SvxChooseControlEnum   SvxChooseControlItem;
 */

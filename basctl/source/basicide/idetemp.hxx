@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idetemp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:37 $
+ *  last change: $Author: tbe $ $Date: 2001-05-14 08:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,11 @@ enum SvxChooseControlEnum
     SVX_SNAP_PREVIEW,
     SVX_SNAP_SELECT,
     SVX_SNAP_URLBUTTON,
-    SVX_SNAP_NOTHING
+    SVX_SNAP_NOTHING,
+    SVX_SNAP_IMAGECONTROL,
+    SVX_SNAP_PROGRESSBAR,
+    SVX_SNAP_HFIXEDLINE,
+    SVX_SNAP_VFIXEDLINE
 };
 
 #define SvxChooseControlItem SfxAllEnumItem

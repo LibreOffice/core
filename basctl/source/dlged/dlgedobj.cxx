@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-04 15:20:18 $
+ *  last change: $Author: tbe $ $Date: 2001-05-14 08:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -898,7 +898,7 @@ sal_uInt16 DlgEdObj::GetObjIdentifier() const
     {
         return OBJ_DLG_URLBUTTON;  // ???change this!
     }
-    else
+    else        // missing: imagecontrol, progressbar, fixedline (2x)
     {
         return 0;
     }

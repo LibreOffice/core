@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tbe $ $Date: 2001-04-10 15:13:43 $
+ *  last change: $Author: tbe $ $Date: 2001-05-14 08:43:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,6 +456,10 @@ void __EXPORT DialogWindow::GetState( SfxItemSet& rSet )
                         case OBJ_DLG_VSCROLLBAR:    nObj = SVX_SNAP_VSCROLLBAR; break;
                         case OBJ_DLG_PREVIEW:       nObj = SVX_SNAP_PREVIEW; break;
                         case OBJ_DLG_URLBUTTON:     nObj = SVX_SNAP_URLBUTTON; break;
+                        case OBJ_DLG_IMAGECONTROL:  nObj = SVX_SNAP_IMAGECONTROL; break;
+                        case OBJ_DLG_PROGRESSBAR:   nObj = SVX_SNAP_PROGRESSBAR; break;
+                        case OBJ_DLG_HFIXEDLINE:    nObj = SVX_SNAP_HFIXEDLINE; break;
+                        case OBJ_DLG_VFIXEDLINE:    nObj = SVX_SNAP_VFIXEDLINE; break;
                         default:                    nObj = 0;
                     }
 #ifdef DBG_UTIL
@@ -587,6 +591,30 @@ void __EXPORT DialogWindow::ExecuteCommand( SfxRequest& rReq )
                 case SVX_SNAP_SELECT:
                 {
                     GetEditor()->SetMode( VCDLGED_SELECT );
+                }
+                break;
+                case SVX_SNAP_IMAGECONTROL:
+                {
+                    GetEditor()->SetMode( VCDLGED_INSERT );
+                    GetEditor()->SetInsertObj( OBJ_DLG_IMAGECONTROL );
+                }
+                break;
+                case SVX_SNAP_PROGRESSBAR:
+                {
+                    GetEditor()->SetMode( VCDLGED_INSERT );
+                    GetEditor()->SetInsertObj( OBJ_DLG_PROGRESSBAR );
+                }
+                break;
+                case SVX_SNAP_HFIXEDLINE:
+                {
+                    GetEditor()->SetMode( VCDLGED_INSERT );
+                    GetEditor()->SetInsertObj( OBJ_DLG_HFIXEDLINE );
+                }
+                break;
+                case SVX_SNAP_VFIXEDLINE:
+                {
+                    GetEditor()->SetMode( VCDLGED_INSERT );
+                    GetEditor()->SetInsertObj( OBJ_DLG_VFIXEDLINE );
                 }
                 break;
             }
