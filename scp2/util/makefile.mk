@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: pjunck $ $Date: 2004-11-03 08:08:41 $
+#   last change: $Author: hr $ $Date: 2004-11-09 18:41:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -160,10 +160,6 @@ SCP1FILES +=                           \
 
 .IF "$(GUI)"=="UNX"
 SCP1FILES += \
-             module_cde.par         \
-             directory_cde.par      \
-             file_cde.par           \
-             procedure_cde.par      \
              module_gnome.par       \
              directory_gnome.par    \
              file_gnome.par         \
