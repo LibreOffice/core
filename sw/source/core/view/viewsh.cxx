@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:44:47 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:02:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2390,3 +2390,7 @@ void ViewShell::SetCareWin( Window* pNew )
     pCareWindow = pNew;
 }
 
+String ViewShell::GetMarkListDescription() const
+{
+    return Imp()->GetMarkListDescription();
+}
