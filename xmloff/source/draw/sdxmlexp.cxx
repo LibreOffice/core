@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:02 $
+ *  last change: $Author: cl $ $Date: 2001-11-27 14:14:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -894,6 +894,7 @@ void SAL_CALL ImpDefaultMapper::removeVetoableChangeListener( const OUString& Pr
 
 //////////////////////////////////////////////////////////////////////////////
 
+/* moved to shapeexport.cxx
 void SdXMLExport::ImpWriteObjGraphicStyleInfos()
 {
     XMLStyleExport aStEx(*this, OUString(), GetAutoStylePool().get());
@@ -919,7 +920,7 @@ void SdXMLExport::ImpWriteObjGraphicStyleInfos()
         }
     }
 }
-
+*/
 //////////////////////////////////////////////////////////////////////////////
 
 void SdXMLExport::ImpPrepAutoLayoutInfos()
@@ -2025,7 +2026,7 @@ void SdXMLExport::_ExportStyles(BOOL bUsed)
     SvXMLExport::_ExportStyles( bUsed );
 
     // write draw:style-name for object graphic-styles
-    ImpWriteObjGraphicStyleInfos();
+    GetShapeExport()->ExportGraphicDefaults();
 
     // write presentation styles
     ImpWritePresentationStyles();

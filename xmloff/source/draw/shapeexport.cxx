@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-27 13:30:16 $
+ *  last change: $Author: cl $ $Date: 2001-11-27 14:13:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HPP_
+#include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
@@ -1022,6 +1026,37 @@ void XMLShapeExport::ImpExportGluePoints( const uno::Reference< drawing::XShape 
             }
 
             SvXMLElementExport aEventsElemt(rExport, XML_NAMESPACE_DRAW, XML_GLUE_POINT, sal_True, sal_True);
+        }
+    }
+}
+
+void XMLShapeExport::ExportGraphicDefaults()
+{
+    XMLStyleExport aStEx(rExport, OUString(), rExport.GetAutoStylePool().get());
+
+    // construct PropertySetMapper
+    UniReference< SvXMLExportPropertyMapper > xPropertySetMapper( CreateShapePropMapper( rExport ) );
+
+    // chain text attributes
+    xPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(rExport));
+
+    // write graphic family default style
+    uno::Reference< lang::XMultiServiceFactory > xFact( rExport.GetModel(), uno::UNO_QUERY );
+    if( xFact.is() )
+    {
+        try
+        {
+            uno::Reference< beans::XPropertySet > xDefaults( xFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Defaults") ) ), uno::UNO_QUERY );
+            if( xDefaults.is() )
+            {
+                aStEx.exportDefaultStyle( xDefaults, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)), xPropertySetMapper );
+
+                // write graphic family styles
+                aStEx.exportStyleFamily(XML_STYLE_FAMILY_SD_GRAPHICS_NAME, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)), xPropertySetMapper, FALSE, XML_STYLE_FAMILY_SD_GRAPHICS_ID);
+            }
+        }
+        catch( lang::ServiceNotRegisteredException& )
+        {
         }
     }
 }
