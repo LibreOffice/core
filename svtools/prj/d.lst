@@ -145,6 +145,7 @@ hedabu: ..\inc\svlbitm.hxx %_DEST%\inc%_EXT%\svtools\svlbitm.hxx
 hedabu: ..\inc\svlbox.hxx %_DEST%\inc%_EXT%\svtools\svlbox.hxx
 hedabu: ..\inc\svtabbx.hxx %_DEST%\inc%_EXT%\svtools\svtabbx.hxx
 hedabu: ..\inc\svtreebx.hxx %_DEST%\inc%_EXT%\svtools\svtreebx.hxx
+hedabu: ..\inc\tooltiplbox.hxx %_DEST%\inc%_EXT%\svtools\tooltiplbox.hxx
 hedabu: ..\inc\treelist.hxx %_DEST%\inc%_EXT%\svtools\treelist.hxx
 hedabu: ..\inc\xtextedt.hxx %_DEST%\inc%_EXT%\svtools\xtextedt.hxx
 hedabu: ..\inc\texteng.hxx %_DEST%\inc%_EXT%\svtools\texteng.hxx
