@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:43:18 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:39:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ arabic ] = "ÇáÈÍË Úä";
         Text[ turkish ] = "Ara:";
         Text[ catalan ] = "Buscar por";
+        Text[ finnish ] = "Etsi:";
     };
     RadioButton RB_SEARCHFORTEXT
     {
@@ -127,6 +128,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ korean ] = "ÅØ½ºÆ®(~T):";
         Text[ turkish ] = "Metin:";
         Text[ catalan ] = "~Texto :";
+        Text[ finnish ] = "~Teksti:";
     };
     RadioButton RB_SEARCHFORNULL
     {
@@ -154,6 +156,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ turkish ] = "Alan içeriði NULL";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Contenido del campo es ~NULL";
+        Text[ finnish ] = "Kentän sisältö ~NULL (tyhjä)";
     };
     RadioButton RB_SEARCHFORNOTNULL
     {
@@ -180,6 +183,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ arabic ] = "ãÍÊæíÇÊ ÇáÍÞá áÇ ÊÓÇæí ÞíãÉ ÎÇáíÉ (NULL)";
         Text[ turkish ] = "Alan içeriði NULL deðil";
         Text[ catalan ] = "Contenido del campo no es N~ULL";
+        Text[ finnish ] = "Kentän sisältö ei ole ~NULL (tyhjä)";
     };
     ComboBox CMB_SEARCHTEXT
     {
@@ -217,6 +221,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ turkish ] = "Aranacak bölüm";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Área";
+        Text[ finnish ] = "Hakukohde";
     };
     FixedText FT_FORM
     {
@@ -244,6 +249,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ turkish ] = "Form:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Formulario :";
+        Text[ finnish ] = "Lomake:";
     };
     ListBox LB_FORM
     {
@@ -281,6 +287,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ turkish ] = "Tüm alanlar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Todos los campos";
+        Text[ finnish ] = "Kaikki kentät";
     };
     RadioButton RB_SINGLEFIELD
     {
@@ -310,6 +317,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ turkish ] = "Tek alan:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Campo individual :";
+        Text[ finnish ] = "Yksittäinen kenttä:";
     };
     ListBox LB_FIELD
     {
@@ -346,6 +354,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ turkish ] = "Ayarlar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Configuración";
+        Text[ finnish ] = "Asetukset";
     };
     FixedText FT_POSITION
     {
@@ -373,6 +382,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ turkish ] = "Konum:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Posición :";
+        Text[ finnish ] = "Sijainti:";
     };
     ListBox LB_POSITION
     {
@@ -411,6 +421,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ turkish ] = "Alan formatýný uygula";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Usar formato de ~campo";
+        Text[ finnish ] = "Käytä kentän muotoa";
     };
     CheckBox CB_CASE
     {
@@ -440,6 +451,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ turkish ] = "BÜYÜK/küçük harf duyarlý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Coincidencia ~exacta";
+        Text[ finnish ] = "Sama kirjainkoko";
     };
     CheckBox CB_BACKWARD
     {
@@ -469,6 +481,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ turkish ] = "Geriye doðru ara";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Buscar hacia ~atrás";
+        Text[ finnish ] = "Etsi taaksepäin";
     };
     CheckBox CB_STARTOVER
     {
@@ -498,6 +511,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ turkish ] = "Baþtan itibaren";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Desde el principio";
+        Text[ finnish ] = "Alusta";
     };
     CheckBox CB_WILDCARD
     {
@@ -527,6 +541,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ turkish ] = "Genel arama terimi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Expresión comodín";
+        Text[ finnish ] = "Paikkamerkkilauseke";
     };
     CheckBox CB_REGULAR
     {
@@ -556,6 +571,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ turkish ] = "Genel arama terimi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Expresión ~regular";
+        Text[ finnish ] = "Säännöllinen lauseke";
     };
     CheckBox CB_APPROX
     {
@@ -585,6 +601,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ turkish ] = "Benzerini ara";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Búsqueda por semejanza";
+        Text[ finnish ] = "Vastaavuushaku";
     };
     PushButton PB_APPROXSETTINGS
     {
@@ -614,6 +631,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ turkish ] = "~...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~...";
+        Text[ finnish ] = "...";
     };
     CheckBox CB_HALFFULLFORMS
     {
@@ -632,7 +650,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ italian ] = "Larghezza intera/ridotta";
         Text[ danish ] = "Match half/full width forms";
         Text[ swedish ] = "Halv-/normalbreda former";
-        Text[ polish ] = "Formy o zwyk³ej/o po³owie szerokoœci";
+        Text[ polish ] = "Zwyk³a/po³owa szerokoœci";
         Text[ portuguese_brazilian ] = "Match half/full width forms";
         Text[ japanese ] = "”¼Šp‚Æ‘SŠp‚ð‹æ•Ê";
         Text[ korean ] = "Match half/full width forms";
@@ -641,6 +659,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ turkish ] = "Match half/full width forms";
         Text[ arabic ] = "äãÇÐÌ äÕÝ ÇáÚÑÖ/ÚÑÖ ÚÇÏí";
         Text[ catalan ] = "Match half/full-width forms";
+        Text[ finnish ] = "Halb-/normalbreite Formen";
     };
     CheckBox CB_SOUNDSLIKECJK
     {
@@ -668,6 +687,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ turkish ] = "Sounds like (Japanese)";
         Text[ arabic ] = "ßÊÇÈÉ ãÔÇÈåÉ(íÇÈÇäíÉ)";
         Text[ catalan ] = "Sounds like (Japanese)";
+        Text[ finnish ] = "Ähnl. Schreibweise (Jap.)";
     };
     PushButton PB_SOUNDSLIKESETTINGS
     {
@@ -695,6 +715,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ turkish ] = "...";
         Text[ arabic ] = "...";
         Text[ catalan ] = "...";
+        Text[ finnish ] = "...";
     };
     GroupBox GB_STATE
     {
@@ -722,6 +743,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ turkish ] = "Durum";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Estado";
+        Text[ finnish ] = "Osavaltio";
     };
     FixedText FT_RECORDLABEL
     {
@@ -749,6 +771,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ turkish ] = "Veri kümesi:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Registro :";
+        Text[ finnish ] = "Tietue :";
     };
     FixedText FT_RECORD
     {
@@ -791,6 +814,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ turkish ] = "Ara";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Buscar";
+        Text[ finnish ] = "Etsi";
     };
     CancelButton 1
     {
@@ -820,6 +844,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ turkish ] = "Kapat";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Cerrar";
+        Text[ finnish ] = "~Sulje";
     };
     HelpButton 1
     {
@@ -848,6 +873,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ turkish ] = "Yardým";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Ayuda";
+        Text[ finnish ] = "~Ohje";
     };
     Text[ portuguese ] = "Localizar registo de dados";
     Text[ russian ] = "Ïîèñê çàïèñè äàííûõ";
@@ -868,6 +894,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     Text[ turkish ] = "Veri kümesi aramasý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Búsqueda de registro de datos";
+    Text[ finnish ] = "Tietuehaku";
 };
 
 String RID_STR_RECORDSEARCH_METHODS
@@ -894,6 +921,7 @@ String RID_STR_RECORDSEARCH_METHODS
     Text[ korean ] = "ÇÊµå¿¡¼­ ÀÓÀÇ·Î;ÇÊµå ½ÃÀÛ¿¡;ÇÊµå ³¡¿¡;ÀüÃ¼ ÇÊµå";
     Text[ turkish ] = "Alanda rasgele;Alan baþýnda;Alan sonunda;Tüm alanda";
     Text[ catalan ] = "cualquier parte en campo;al principio del campo;al final del campo;todo el campo";
+    Text[ finnish ] = "kentässä missä tahansa;kentän alussa;kentän lopussa;koko kenttä";
 };
 
 String RID_STR_RECORDSEARCH_BUTTONS
@@ -921,6 +949,7 @@ String RID_STR_RECORDSEARCH_BUTTONS
     Text[ turkish ] = "Baþtan;Sondan;Ara;Ýptal";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Desde el principio;~Desde el final;~Buscar;~Cancelar";
+    Text[ finnish ] = "Ylhäältä;Alhaalta;Etsi;Peruuta";
 };
 
 ErrorBox RID_SVXERR_SEARCH_NORECORD
@@ -948,6 +977,7 @@ ErrorBox RID_SVXERR_SEARCH_NORECORD
     Message[ turkish ] = "Girdiðiniz verilere uygun veri kümeleri bulunamadý!";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "¡No se encontró ningún registro de datos adecuado a su información!";
+    Message[ finnish ] = "Tietoja vastaavia tietueita ei löytynyt.";
 };
 
 ErrorBox RID_SVXERR_SEARCH_GENERAL_ERROR
@@ -975,6 +1005,7 @@ ErrorBox RID_SVXERR_SEARCH_GENERAL_ERROR
     Message[ turkish ] = "Ayrýntýlarý bilinmeyen bir hata oluþtu. Arama iþlemi tamamlanamadý!";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "Ha ocurrido un error desconocido. La búsqueda no se pudo completar.";
+    Message[ finnish ] = "Ilmeni tuntematon virhe. Hakua ei voitu suorittaa loppuun.";
 };
 
 String RID_STR_SEARCH_OVERFLOW
@@ -1001,6 +1032,7 @@ String RID_STR_SEARCH_OVERFLOW
     Text[ korean ] = "¿À¹öÇÃ·Î- Ã£±â´Â ½ÃÀÛºÎºÐºÎÅÍ ÁøÇàµÇ¾úÀ½;¿À¹öÇÃ·Î-Ã£±â´Â ³¡¿¡¼­ ºÎÅÍ ÁøÇàµÇ¾úÀ½";
     Text[ turkish ] = "Taþma, Arama iþlemine baþtan devam edildi;Taþma, Arama iþlemine sondan devam edildi";
     Text[ catalan ] = "Desbordamiento; la búsqueda continúa por el principio;Desbordamiento; la búsqueda continúa por el final";
+    Text[ finnish ] = "Ylivuoto, hakua jatkettiin alusta;Ylivuoto, hakua jatkettiin lopusta";
 };
 
 String RID_STR_SEARCH_COUNTING
@@ -1027,5 +1059,6 @@ String RID_STR_SEARCH_COUNTING
     Text[ turkish ] = "Veri kümeleri sayýlýyor";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "contando registros de datos";
+    Text[ finnish ] = "lasketaan tietueet";
 };
 
