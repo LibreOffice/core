@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_unicode.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-07 15:13:30 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 16:31:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,12 @@ protected:
 };
 
 class BreakIterator_ca : public BreakIterator_Unicode
+{
+    icu::BreakIterator* SAL_CALL loadICUWordBreakIterator(const com::sun::star::lang::Locale& rLocale,
+    sal_Int16 rWordType) throw( com::sun::star::uno::RuntimeException);
+};
+
+class BreakIterator_hu : public BreakIterator_Unicode
 {
     icu::BreakIterator* SAL_CALL loadICUWordBreakIterator(const com::sun::star::lang::Locale& rLocale,
     sal_Int16 rWordType) throw( com::sun::star::uno::RuntimeException);
