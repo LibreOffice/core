@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pubdlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:06:09 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:39:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2396,6 +2396,8 @@ ModalDialog DLG_DESIGNNAME
     Text[ hindi ] = "Name HTML Design";
     Text[ slovak ] = "Názov HTML návrhu";
 };
+
+
 
 
 
