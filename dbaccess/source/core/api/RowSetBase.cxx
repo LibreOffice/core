@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-04 13:34:40 $
+ *  last change: $Author: oj $ $Date: 2000-10-04 14:11:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,13 +464,17 @@ sal_Bool SAL_CALL ORowSetBase::moveToBookmark( const Any& bookmark ) throw(SQLEx
 
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
     // check if we are inserting a row
+    sal_Bool bWasNew = m_pCache->m_bInserted;
     checkInsert();
 
     notifyAllListenersCursorBeforeMove();
 
     if(m_aBookmark.hasValue())
         m_pCache->moveToBookmark(m_aBookmark);
-    ORowSetMatrix::iterator aOldValues = m_pCache->m_aMatrixIter;    // remember the old values
+
+    ORowSetMatrix::iterator aOldValues = m_pCache->m_pMatrix->end();
+    if(!bWasNew)
+        aOldValues = m_pCache->m_aMatrixIter;    // remember the old values
 
     sal_Bool bRet = m_pCache->moveToBookmark(bookmark);
     if(bRet)
@@ -494,6 +498,7 @@ sal_Bool SAL_CALL ORowSetBase::moveRelativeToBookmark( const Any& bookmark, sal_
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
     // check if we are inserting a row
+    sal_Bool bWasNew = m_pCache->m_bInserted;
     checkInsert();
 
     if(m_bBeforeFirst)
@@ -503,7 +508,9 @@ sal_Bool SAL_CALL ORowSetBase::moveRelativeToBookmark( const Any& bookmark, sal_
 
     notifyAllListenersCursorBeforeMove();
 
-    ORowSetMatrix::iterator aOldValues = m_pCache->m_aMatrixIter;    // remember the old values
+    ORowSetMatrix::iterator aOldValues = m_pCache->m_pMatrix->end();
+    if(!bWasNew)
+        aOldValues = m_pCache->m_aMatrixIter;    // remember the old values
 
     sal_Bool bRet = m_pCache->moveRelativeToBookmark(bookmark,rows);
     if(bRet)
@@ -600,6 +607,7 @@ sal_Bool SAL_CALL ORowSetBase::next(  ) throw(SQLException, RuntimeException)
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
     // check if we are inserting a row
+    sal_Bool bWasNew = m_pCache->m_bInserted;
     checkInsert();
 
     if(m_bBeforeFirst)
@@ -609,7 +617,9 @@ sal_Bool SAL_CALL ORowSetBase::next(  ) throw(SQLException, RuntimeException)
 
     notifyAllListenersCursorBeforeMove();
 
-    ORowSetMatrix::iterator aOldValues = m_pCache->m_aMatrixIter;    // remember the old values
+    ORowSetMatrix::iterator aOldValues = m_pCache->m_pMatrix->end();
+    if(!bWasNew)
+        aOldValues = m_pCache->m_aMatrixIter;    // remember the old values
 
     sal_Bool bRet = m_pCache->next();
     if(bRet)
@@ -746,12 +756,15 @@ sal_Bool SAL_CALL ORowSetBase::first(  ) throw(SQLException, RuntimeException)
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
     // check if we are inserting a row
+    sal_Bool bWasNew = m_pCache->m_bInserted;
     checkInsert();
 
     if(!(m_bAfterLast || m_bBeforeFirst) && m_aBookmark.hasValue()) // set the cache to the right position
         m_pCache->moveToBookmark(m_aBookmark);
 
-    ORowSetMatrix::iterator aOldValues = m_pCache->m_aMatrixIter;    // remember the old values
+    ORowSetMatrix::iterator aOldValues = m_pCache->m_pMatrix->end();
+    if(!bWasNew)
+        aOldValues = m_pCache->m_aMatrixIter;    // remember the old values
 
     m_bAfterLast = m_bBeforeFirst = sal_False; // all false
 
@@ -783,12 +796,15 @@ sal_Bool SAL_CALL ORowSetBase::last(  ) throw(SQLException, RuntimeException)
 
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
     // check if we are inserting a row
+    sal_Bool bWasNew = m_pCache->m_bInserted;
     checkInsert();
 
     if(!(m_bAfterLast || m_bBeforeFirst) && m_aBookmark.hasValue())
         m_pCache->moveToBookmark(m_aBookmark);
 
-    ORowSetMatrix::iterator aOldValues = m_pCache->m_aMatrixIter;    // remember the old values
+    ORowSetMatrix::iterator aOldValues = m_pCache->m_pMatrix->end();
+    if(!bWasNew)
+        aOldValues = m_pCache->m_aMatrixIter;    // remember the old values
 
     m_bAfterLast = m_bBeforeFirst = sal_False; // all false
 
@@ -846,6 +862,7 @@ sal_Bool SAL_CALL ORowSetBase::absolute( sal_Int32 row ) throw(SQLException, Run
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
     // check if we are inserting a row
+    sal_Bool bWasNew = m_pCache->m_bInserted;
     checkInsert();
 
     if(m_bBeforeFirst)
@@ -853,7 +870,9 @@ sal_Bool SAL_CALL ORowSetBase::absolute( sal_Int32 row ) throw(SQLException, Run
     else if(m_aBookmark.hasValue())
         m_pCache->moveToBookmark(m_aBookmark);
 
-    ORowSetMatrix::iterator aOldValues = m_pCache->m_aMatrixIter;    // remember the old values
+    ORowSetMatrix::iterator aOldValues = m_pCache->m_pMatrix->end();
+    if(!bWasNew)
+        aOldValues = m_pCache->m_aMatrixIter;    // remember the old values
 
     notifyAllListenersCursorBeforeMove();
     sal_Bool bRet = m_pCache->absolute(row);
@@ -889,6 +908,7 @@ sal_Bool SAL_CALL ORowSetBase::relative( sal_Int32 rows ) throw(SQLException, Ru
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
     // check if we are inserting a row
+    sal_Bool bWasNew = m_pCache->m_bInserted;
     checkInsert();
 
     if(m_bBeforeFirst)
@@ -896,7 +916,9 @@ sal_Bool SAL_CALL ORowSetBase::relative( sal_Int32 rows ) throw(SQLException, Ru
     else if(m_aBookmark.hasValue())
         m_pCache->moveToBookmark(m_aBookmark);
 
-    ORowSetMatrix::iterator aOldValues = m_pCache->m_aMatrixIter;    // remember the old values
+    ORowSetMatrix::iterator aOldValues = m_pCache->m_pMatrix->end();
+    if(!bWasNew)
+        aOldValues = m_pCache->m_aMatrixIter;    // remember the old values
 
     notifyAllListenersCursorBeforeMove();
     sal_Bool bRet = m_pCache->relative(rows);
@@ -930,6 +952,7 @@ sal_Bool SAL_CALL ORowSetBase::previous(  ) throw(SQLException, RuntimeException
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
     // check if we are inserting a row
+    sal_Bool bWasNew = m_pCache->m_bInserted;
     checkInsert();
 
     // move the cache back to right position
@@ -938,7 +961,9 @@ sal_Bool SAL_CALL ORowSetBase::previous(  ) throw(SQLException, RuntimeException
     else if(m_aBookmark.hasValue())
         m_pCache->moveToBookmark(m_aBookmark);
 
-    ORowSetMatrix::iterator aOldValues = m_pCache->m_aMatrixIter;    // remember the old values
+    ORowSetMatrix::iterator aOldValues = m_pCache->m_pMatrix->end();
+    if(!bWasNew)
+        aOldValues = m_pCache->m_aMatrixIter;    // remember the old values
 
     notifyAllListenersCursorBeforeMove();
     sal_Bool bRet = m_pCache->previous();
