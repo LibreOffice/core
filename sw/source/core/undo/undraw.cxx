@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undraw.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:10:37 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:09:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,7 +308,7 @@ SwUndoDrawGroup::~SwUndoDrawGroup()
     else
         delete pObjArr->pFmt;       // das GroupObject-Format
 
-    __DELETE ( nSize ) pObjArr;
+    delete [] pObjArr;
 }
 
 void SwUndoDrawGroup::Undo( SwUndoIter& )
@@ -471,7 +471,7 @@ SwUndoDrawUnGroup::~SwUndoDrawUnGroup()
     else
         delete pObjArr->pFmt;       // das GroupObject-Format
 
-    __DELETE ( nSize ) pObjArr;
+    delete [] pObjArr;
 }
 
 void SwUndoDrawUnGroup::Undo( SwUndoIter& rIter )
@@ -584,7 +584,7 @@ SwUndoDrawDelete::~SwUndoDrawDelete()
         for( USHORT n = 0; n < pMarkLst->GetMarkCount(); ++n, ++pTmp )
             delete pTmp->pFmt;
     }
-    __DELETE ( nSize ) pObjArr;
+    delete [] pObjArr;
     delete pMarkLst;
 }
 
