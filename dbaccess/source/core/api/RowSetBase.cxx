@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:22:32 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 13:42:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1194,7 +1194,10 @@ void ORowSetBase::firePropertyChange(const ORowSetMatrix::iterator& _rOldRow)
             {
                 OColumn* pColumn = (OColumn*)xTunnel->getSomething(OColumn::getUnoTunnelImplementationId());
                 if(pColumn)
+                {
+                    OSL_ENSURE(!aRow.isValid() || (i+1) < sal_Int32(aRow->size()),"Index is greater than vector size!");
                     pColumn->fireValueChange(aRow.isValid() ? (*aRow)[i+1].makeAny() : Any());
+                }
             }
         }
     }
