@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTreeListBox.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 08:44:10 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 10:31:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,8 +127,6 @@ service AccessibleTreeListBox
                if the object is displayed on the screen.</li>
            <li><const scope="com::sun::star::accessibility"
                >AccessibleStateType::VISIBLE</const> is always set.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::MANAGES_DESCENDANTS</const> is always set. Children are transient.</li>
            <li><const scope="com::sun::star::accessibility"
                >AccessibleStateType::MULTI_SELECTABLE</const> is set when mutli selection is enabled.</li>
            </ul>
