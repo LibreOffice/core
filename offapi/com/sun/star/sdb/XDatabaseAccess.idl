@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDatabaseAccess.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:07 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 10:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ interface XDatabaseAccess: com::sun::star::sdbc::XDataSource
             if a database access error occurs.
         @see com::sun::star::sdbc::XConnection
      */
-    XConnection getIsolatedConnection([in]string user, [in]string password)
+    com::sun::star::sdbc::XConnection getIsolatedConnection([in]string user, [in]string password)
       raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
