@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAutoFormattable.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:28:39 $
+ *  last change:$Date: 2003-09-08 11:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,11 @@
  *
  *
  ************************************************************************/
-
 package ifc.table;
+
+import java.util.Random;
+
+import lib.MultiMethodTest;
 
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
@@ -69,8 +72,7 @@ import com.sun.star.table.XCell;
 import com.sun.star.table.XCellRange;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import java.util.Random;
-import lib.MultiMethodTest;
+
 
 /**
 * Testing <code>com.sun.star.table.XAutoFormattable</code>
@@ -95,49 +97,60 @@ public class _XAutoFormattable extends MultiMethodTest {
     */
     public void _autoFormat() {
         boolean bResult = true;
-        XMultiServiceFactory oMSF = (XMultiServiceFactory)tParam.getMSF();
+        XMultiServiceFactory oMSF = (XMultiServiceFactory) tParam.getMSF();
         String name = "Default";
 
         try {
             oObj.autoFormat(name); // applying default format
 
             // getting current background of the cell
-            XCellRange cellRange = (XCellRange)UnoRuntime.
-                                    queryInterface(XCellRange.class, oObj);
+            XCellRange cellRange = (XCellRange) UnoRuntime.queryInterface(
+                                           XCellRange.class, oObj);
             XCell oCell = cellRange.getCellByPosition(0, 0);
-            XPropertySet PS = (XPropertySet)UnoRuntime.
-                                    queryInterface(XPropertySet.class, oCell);
+            XPropertySet PS = (XPropertySet) UnoRuntime.queryInterface(
+                                      XPropertySet.class, oCell);
 
-            Integer bkgrnd1 = (Integer)PS.getPropertyValue("BackColor");
+            Integer bkgrnd1;
+            try {
+                bkgrnd1 = (Integer) PS.getPropertyValue("CellBackColor");
+            } catch (com.sun.star.beans.UnknownPropertyException e) {
+                bkgrnd1 = (Integer) PS.getPropertyValue("BackColor");
+            }
 
             // getting formats names.
-            XInterface iFormats = (XInterface)oMSF.
-                        createInstance("com.sun.star.sheet.TableAutoFormats");
-            XNameAccess formats = (XNameAccess)UnoRuntime.
-                                    queryInterface(XNameAccess.class, iFormats);
+            XInterface iFormats = (XInterface) oMSF.createInstance(
+                                          "com.sun.star.sheet.TableAutoFormats");
+            XNameAccess formats = (XNameAccess) UnoRuntime.queryInterface(
+                                          XNameAccess.class, iFormats);
             String[] names = formats.getElementNames();
 
             // getting one random not default style name
             Random rnd = new Random();
+
             if (names.length > 1) {
                 while (name.equals("Default")) {
                     name = names[rnd.nextInt(names.length)];
                 }
-            }
-            else {
+            } else {
                 name = names[0];
             }
 
             log.println("Applying style " + name);
+
+
             // applying style
             oObj.autoFormat(name);
 
             // getting new cell's backround.
-            Integer bkgrnd2 = (Integer)PS.getPropertyValue("BackColor");
+            Integer bkgrnd2;
+            try {
+                bkgrnd2 = (Integer) PS.getPropertyValue("CellBackColor");
+            } catch (com.sun.star.beans.UnknownPropertyException e) {
+                bkgrnd2 = (Integer) PS.getPropertyValue("BackColor");
+            }
 
             bResult &= !bkgrnd1.equals(bkgrnd2);
-
-        } catch(com.sun.star.uno.Exception e) {
+        } catch (com.sun.star.uno.Exception e) {
             log.println("Exception occured :");
             e.printStackTrace(log);
             bResult = false;
@@ -145,5 +158,11 @@ public class _XAutoFormattable extends MultiMethodTest {
 
         tRes.tested("autoFormat()", bResult);
     }
-}
 
+    /**
+    * Forces environment recreation.
+    */
+    protected void after() {
+        disposeEnvironment();
+    }
+}
