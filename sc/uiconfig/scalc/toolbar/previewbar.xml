@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+ <toolbar:toolbaritem xlink:href=".uno:PreviousPage" toolbar:helpid="helpid:26497" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:NextPage" toolbar:helpid="helpid:26496" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:FirstPage" toolbar:helpid="helpid:26498" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:LastPage" toolbar:helpid="helpid:26499" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ZoomIn" toolbar:helpid="helpid:26501" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:ZoomOut" toolbar:helpid="helpid:26502" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:FullScreen" toolbar:helpid="helpid:5627" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:PageFormatDialog" toolbar:helpid="helpid:26295" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:EditHeaderAndFooter" toolbar:helpid="helpid:26235" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ClosePreview" toolbar:helpid="helpid:5325" toolbar:text="" />
+</toolbar:toolbar>
