@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffld.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:37:19 $
+ *  last change: $Author: rt $ $Date: 2003-09-25 07:39:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,7 @@ enum RTF_FLD_TYPES {
     RTFFLD_MERGEFLD,
     RTFFLD_HYPERLINK,
     RTFFLD_REF,
+    RTFFLD_PAGEREF,
     RTFFLD_EQ
 };
 
@@ -192,6 +193,7 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
     sal_Char __READONLY_DATA sIMPORT2[]=    "\x0E""includepicture";
     sal_Char __READONLY_DATA sHYPERLINK[]=  "\x09""hyperlink";
     sal_Char __READONLY_DATA sREF[]=        "\x03""ref";
+    sal_Char __READONLY_DATA sPAGEREF[]=    "\x07""pageref";
     sal_Char __READONLY_DATA sEQ[]=         "\x02""eq";
 
 
@@ -214,6 +216,7 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
             {RTFFLD_IMPORT,      sIMPORT2},
             {RTFFLD_HYPERLINK,   sHYPERLINK},
             {RTFFLD_REF,         sREF},
+            {RTFFLD_PAGEREF,     sPAGEREF},
             {RTFFLD_EQ,          sEQ}
 
     };
@@ -911,6 +914,31 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
 
             }
             SkipGroup();        // ueberlese den Rest
+        }
+        break;
+
+    case RTFFLD_PAGEREF:
+        {
+            String sOrigBkmName;
+            RtfFieldSwitch aRFS( aSaveStr );
+            while( !aRFS.IsAtEnd() )
+            {
+                String sParam;
+                sal_Unicode cKey = aRFS.GetSwitch( sParam );
+                switch( cKey )
+                {
+                    // In the case of pageref the only parameter we are
+                    // interested in, is the name of the bookmark
+                    case 0:
+                        if( !sOrigBkmName.Len() ) // get name of bookmark
+                            sOrigBkmName = sParam;
+                        break;
+                }
+            }
+            SwGetRefField aFld(
+                (SwGetRefFieldType*)pDoc->GetSysFldType( RES_GETREFFLD ),
+                sOrigBkmName,REF_BOOKMARK,0,REF_PAGE);
+            pDoc->Insert( *pPam, SwFmtFld( aFld ) );
         }
         break;
 
