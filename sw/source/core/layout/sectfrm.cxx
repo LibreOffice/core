@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-06-13 11:02:14 $
+ *  last change: $Author: ama $ $Date: 2001-06-22 11:40:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1080,7 +1080,7 @@ void SwSectionFrm::_CheckClipping( BOOL bGrow, BOOL bMaximize )
     BOOL bCalc = ( IsUndersized() || bMaximize ) &&
         ( Frm().Top() + Frm().Height() != nDeadLine ||
           Prt().Top() > Frm().Height() );
-    if( !bCalc && !bGrow && IsAnyNoteAtEnd() )
+    if( !bCalc && !bGrow && IsAnyNoteAtEnd() && !IsInFtn() )
     {
         SwSectionFrm *pSect = this;
         BOOL bEmpty = FALSE;
