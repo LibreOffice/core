@@ -142,7 +142,7 @@ hedabu: ..\inc\frmsel.hxx %_DEST%\inc%_EXT%\svx\frmsel.hxx
 hedabu: ..\inc\fwdtitem.hxx %_DEST%\inc%_EXT%\svx\fwdtitem.hxx
 hedabu: ..\inc\gallery.hxx %_DEST%\inc%_EXT%\svx\gallery.hxx
 hedabu: ..\inc\galbrws.hxx %_DEST%\inc%_EXT%\svx\galbrws.hxx
-hedabu: ..\inc\globlmn.hrc %_DEST%\inc%_EXT%\svx\globlmn.hrc
+hedabu: ..\%__SRC%\inc\globlmn.hrc %_DEST%\inc%_EXT%\svx\globlmn.hrc
 hedabu: ..\inc\globlac.hrc %_DEST%\inc%_EXT%\svx\globlac.hrc
 hedabu: ..\inc\globl3d.hxx %_DEST%\inc%_EXT%\svx\globl3d.hxx
 hedabu: ..\inc\grafctrl.hxx %_DEST%\inc%_EXT%\svx\grafctrl.hxx
