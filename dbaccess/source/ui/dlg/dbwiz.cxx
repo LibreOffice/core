@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwiz.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:45:10 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:02:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,9 +136,18 @@ using namespace com::sun::star::util;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 
-#define START_PAGE          0
-#define CONNECTION_PAGE     1
-#define ADDITIONAL_PAGE     2
+#define START_PAGE                      0
+#define CONNECTION_PAGE                 1
+#define ADDITIONAL_PAGE_DBASE           2
+#define ADDITIONAL_PAGE_FLAT            3
+#define ADDITIONAL_PAGE_LDAP            4
+#define ADDITIONAL_PAGE_ADABAS          5
+#define ADDITIONAL_PAGE_MYSQL_JDBC      6
+#define ADDITIONAL_PAGE_MYSQL_ODBC      7
+#define ADDITIONAL_PAGE_ORACLE_JDBC     8
+#define ADDITIONAL_PAGE_ADO             9
+#define ADDITIONAL_PAGE_ODBC           10
+#define ADDITIONAL_USERDEFINED         11
 
 
 DBG_NAME(ODbTypeWizDialog)
@@ -214,8 +223,35 @@ WizardTypes::WizardState ODbTypeWizDialog::determineNextState(WizardState _nCurr
                 case DST_CALC:
                     nNextState = WZS_INVALID_STATE;
                     break;
+                case DST_DBASE:
+                    nNextState = ADDITIONAL_PAGE_DBASE;
+                    break;
+                case DST_FLAT:
+                    nNextState = ADDITIONAL_PAGE_FLAT;
+                    break;
+                case DST_LDAP:
+                    nNextState = ADDITIONAL_PAGE_LDAP;
+                    break;
+                case DST_ADABAS:
+                    nNextState = ADDITIONAL_PAGE_ADABAS;
+                    break;
+                case DST_MYSQL_JDBC:
+                    nNextState = ADDITIONAL_PAGE_MYSQL_JDBC;
+                    break;
+                case DST_MYSQL_ODBC:
+                    nNextState = ADDITIONAL_PAGE_MYSQL_ODBC;
+                    break;
+                case DST_ORACLE_JDBC:
+                    nNextState = ADDITIONAL_PAGE_ORACLE_JDBC;
+                    break;
+                case DST_ADO:
+                    nNextState = ADDITIONAL_PAGE_ADO;
+                    break;
+                case DST_ODBC:
+                    nNextState = ADDITIONAL_PAGE_ODBC;
+                    break;
                 default:
-                    nNextState = ADDITIONAL_PAGE;
+                    nNextState = WZS_INVALID_STATE;
                     break;
             }
             break;
@@ -286,10 +322,10 @@ void ODbTypeWizDialog::clearPassword()
 {
     m_pImpl->clearPassword();
 }
+
 // -----------------------------------------------------------------------------
 TabPage* ODbTypeWizDialog::createPage(WizardState _nState)
 {
-    sal_Bool bResetPasswordRequired = sal_False;
     USHORT nStringId = STR_PAGETITLE_ADVANCED;
     TabPage* pPage = NULL;
     switch(_nState)
@@ -303,72 +339,41 @@ TabPage* ODbTypeWizDialog::createPage(WizardState _nState)
             pPage = OConnectionTabPage::Create(this,*m_pOutSet);
             nStringId = STR_PAGETITLE_CONNECTION;
             break;
-        case ADDITIONAL_PAGE:
-            switch ( m_eType )
-            {
-                case DST_DBASE:
-                    pPage = ODriversSettings::CreateDbase(this,*m_pOutSet);
-                    break;
 
-                case DST_ADO:
-                    pPage = ODriversSettings::CreateAdo(this,*m_pOutSet);
-                    break;
-
-                case DST_FLAT:
-                    pPage = ODriversSettings::CreateText(this,*m_pOutSet);
-                    break;
-
-                case DST_ODBC:
-                    pPage = ODriversSettings::CreateODBC(this,*m_pOutSet);
-                    break;
-
-                case DST_MYSQL_ODBC:
-                    pPage = ODriversSettings::CreateMySQLODBC(this,*m_pOutSet);
-                    break;
-                case DST_MYSQL_JDBC:
-                    pPage = ODriversSettings::CreateMySQLJDBC(this,*m_pOutSet);
-                    break;
-                case DST_ORACLE_JDBC:
-                    pPage = ODriversSettings::CreateOracleJDBC(this,*m_pOutSet);
-                    break;
-
-                case DST_ADABAS:
-                    pPage = ODriversSettings::CreateAdabas(this,*m_pOutSet);
-                    break;
-
-                case DST_LDAP       :
-                    pPage = ODriversSettings::CreateLDAP(this,*m_pOutSet);
-                    break;
-                case DST_MOZILLA:
-                case DST_OUTLOOK:
-                case DST_OUTLOOKEXP:
-                case DST_EVOLUTION:
-                    bResetPasswordRequired = sal_True;
-                    break;
-                case DST_USERDEFINE1:   /// first user defined driver
-                case DST_USERDEFINE2:
-                case DST_USERDEFINE3:
-                case DST_USERDEFINE4:
-                case DST_USERDEFINE5:
-                case DST_USERDEFINE6:
-                case DST_USERDEFINE7:
-                case DST_USERDEFINE8:
-                case DST_USERDEFINE9:
-                case DST_USERDEFINE10:
-                    pPage = ODriversSettings::CreateUser(this,*m_pOutSet);
-                    break;
-            }
+        case ADDITIONAL_PAGE_DBASE:
+            pPage = ODriversSettings::CreateDbase(this,*m_pOutSet);
+            break;
+        case ADDITIONAL_PAGE_FLAT:
+            pPage = ODriversSettings::CreateText(this,*m_pOutSet);
+            break;
+        case ADDITIONAL_PAGE_LDAP:
+            pPage = ODriversSettings::CreateLDAP(this,*m_pOutSet);
+            break;
+        case ADDITIONAL_PAGE_ADABAS:
+            pPage = ODriversSettings::CreateAdabas(this,*m_pOutSet);
+            break;
+        case ADDITIONAL_PAGE_MYSQL_JDBC:
+            pPage = ODriversSettings::CreateMySQLJDBC(this,*m_pOutSet);
+            break;
+        case ADDITIONAL_PAGE_MYSQL_ODBC:
+            pPage = ODriversSettings::CreateMySQLODBC(this,*m_pOutSet);
+            break;
+        case ADDITIONAL_PAGE_ORACLE_JDBC:
+            pPage = ODriversSettings::CreateOracleJDBC(this,*m_pOutSet);
+            break;
+        case ADDITIONAL_PAGE_ADO:
+            pPage = ODriversSettings::CreateAdo(this,*m_pOutSet);
+            break;
+        case ADDITIONAL_PAGE_ODBC:
+            pPage = ODriversSettings::CreateODBC(this,*m_pOutSet);
+            break;
+        case ADDITIONAL_USERDEFINED:
+            pPage = ODriversSettings::CreateUser(this,*m_pOutSet);
             break;
         default:
             OSL_ENSURE(0,"Wrong state!");
             break;
     }
-    //  if (bResetPasswordRequired)
-//  {
-//      getWriteOutputSet()->Put(SfxBoolItem(DSID_PASSWORDREQUIRED, sal_False));
-//      if (pExampleSet)
-//          pExampleSet->Put(SfxBoolItem(DSID_PASSWORDREQUIRED, sal_False));
-//  }
 
     // register ourself as modified listener
     if ( pPage )
