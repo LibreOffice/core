@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_di.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-18 12:28:19 $
+ *  last change: $Author: dbo $ $Date: 2001-10-19 13:04:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -540,6 +540,29 @@ void Test_Impl::setRuntimeException( sal_Int32 _runtimeexception ) throw(::com::
     aExc.Context          = getInterface();
     throw aExc;
 }
+
+static void raising1( const Reference< XLanguageBindingTest > & xLBT )
+{
+    test::TestData aRet, aRet2;
+    xLBT->raiseException(
+        aRet.Bool, aRet.Char, aRet.Byte, aRet.Short, aRet.UShort,
+        aRet.Long, aRet.ULong, aRet.Hyper, aRet.UHyper, aRet.Float, aRet.Double,
+        aRet.Enum, aRet.String, aRet.Interface, aRet.Any, aRet.Sequence, aRet2 );
+}
+static void raising2( const Reference< XLanguageBindingTest > & xLBT )
+{
+    try
+    {
+        raising1( xLBT );
+    }
+    catch (RuntimeException &)
+    {
+    }
+    catch (...)
+    {
+        throw;
+    }
+}
 //==================================================================================================
 sal_Bool raiseException( const Reference< XLanguageBindingTest > & xLBT )
 {
@@ -548,13 +571,12 @@ sal_Bool raiseException( const Reference< XLanguageBindingTest > & xLBT )
     {
         try
         {
-            test::TestData aRet, aRet2;
             try
             {
-                xLBT->raiseException(
-                    aRet.Bool, aRet.Char, aRet.Byte, aRet.Short, aRet.UShort,
-                    aRet.Long, aRet.ULong, aRet.Hyper, aRet.UHyper, aRet.Float, aRet.Double,
-                    aRet.Enum, aRet.String, aRet.Interface, aRet.Any, aRet.Sequence, aRet2 );
+                raising2( xLBT );
+            }
+            catch (RuntimeException &)
+            {
             }
             catch (IllegalArgumentException aExc)
             {
@@ -577,6 +599,9 @@ sal_Bool raiseException( const Reference< XLanguageBindingTest > & xLBT )
 
             /** it is certain, that the RuntimeException testing will fail, if no */
             xLBT->setRuntimeException( 0xcafebabe );
+        }
+        catch (IllegalArgumentException &)
+        {
         }
     }
     catch (Exception & rExc)
@@ -608,9 +633,10 @@ static bool perform_test(
 
     if (performTest( xObj, xDummy ))
     {
+        ::fprintf( stderr, "> invocation test succeeded!\n" );
         if (raiseException( xObj ))
         {
-            ::fprintf( stderr, "> dynamic invocation test succeeded!\n" );
+            ::fprintf( stderr, "> exception test succeeded!\n" );
             return true;
         }
         else
@@ -618,8 +644,10 @@ static bool perform_test(
             ::fprintf( stderr, "> exception test failed!\n" );
         }
     }
-
-    ::fprintf( stderr, "> dynamic invocation test failed!\n" );
+    else
+    {
+        ::fprintf( stderr, "> dynamic invocation test failed!\n" );
+    }
     return false;
 }
 

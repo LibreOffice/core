@@ -2,9 +2,9 @@
  *
  *  $RCSfile: data.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-17 13:24:04 $
+ *  last change: $Author: dbo $ $Date: 2001-10-19 13:04:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,7 +327,7 @@ struct C1
 };
 struct C2 : public C1
 {
-    sal_Int32 n2 CPPU_GNU3_ALIGN( C1 );
+    sal_Int32 n2 CPPU_GCC3_ALIGN( C1 );
 };
 struct C3 : public C2
 {
@@ -336,7 +336,7 @@ struct C3 : public C2
 };
 struct C4 : public C3
 {
-    sal_Int32 n4 CPPU_GNU3_ALIGN( C3 );
+    sal_Int32 n4 CPPU_GCC3_ALIGN( C3 );
     double d4;
 };
 struct C5 : public C4
@@ -346,7 +346,7 @@ struct C5 : public C4
 };
 struct C6 : public C1
 {
-    C5 c6 CPPU_GNU3_ALIGN( C1 );
+    C5 c6 CPPU_GCC3_ALIGN( C1 );
     sal_Bool b6;
 };
 
@@ -372,7 +372,7 @@ struct M
 
 struct N : public M
 {
-    sal_Int16   p CPPU_GNU3_ALIGN( M );
+    sal_Int16   p CPPU_GCC3_ALIGN( M );
 };
 struct N2
 {
@@ -414,11 +414,11 @@ struct Char1
 };
 struct Char2 : public Char1
 {
-    char c2 CPPU_GNU3_ALIGN( Char1 );
+    char c2 CPPU_GCC3_ALIGN( Char1 );
 };
 struct Char3 : public Char2
 {
-    char c3 CPPU_GNU3_ALIGN( Char2 );
+    char c3 CPPU_GCC3_ALIGN( Char2 );
 };
 struct Char4
 {

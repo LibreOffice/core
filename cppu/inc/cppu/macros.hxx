@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macros.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-16 11:11:16 $
+ *  last change: $Author: dbo $ $Date: 2001-10-19 13:04:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,9 +156,9 @@
 
 // patching the GNU3 incomatible alignment change for linux intel
 #if defined(__GNUC__) && defined(LINUX) && defined(INTEL) && (__GNUC__ == 3)
-#define CPPU_GNU3_ALIGN( base_struct ) __attribute__ ((aligned (__alignof__ (base_struct))))
+#define CPPU_GCC3_ALIGN( base_struct ) __attribute__ ((aligned (__alignof__ (base_struct))))
 #else
-#define CPPU_GNU3_ALIGN( base_struct )
+#define CPPU_GCC3_ALIGN( base_struct )
 #endif
 
 /**
