@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:27:22 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1559,7 +1559,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
                 static const sal_Char* aName21 // German
                     = "ERSTELLDATUM";
                 static const sal_Char* aName22 // French
-                    = "CR……";
+                    = "CR\xC9\xC9";
                 static const sal_Char* aName23 // English
                     = "CREATED";
                 static const sal_Char* aName24 // Spanish
@@ -1577,16 +1577,16 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
                 static const sal_Char* aName41 // German
                     = "ZULETZTGEDRUCKT";
                 static const sal_Char* aName42 // French
-                    = "DERNI»REIMPRESSION";
+                    = "DERNI\xC8" "REIMPRESSION";
                 static const sal_Char* aName43 // English
                     = "LASTPRINTED";
                 static const sal_Char* aName44 // Spanish
                     = "HUPS PUPS";
                 static const sal_Char* aName50 = "\x18"; // SW filed code
                 static const sal_Char* aName51 // German
-                    = "‹BERARBEITUNGSNUMMER";
+                    = "\xDC" "BERARBEITUNGSNUMMER";
                 static const sal_Char* aName52 // French
-                    = "NUM…RODEREVISION";
+                    = "NUM\xC9" "RODEREVISION";
                 static const sal_Char* aName53 // English
                     = "REVISIONNUMBER";
                 static const sal_Char* aName54 // Spanish
