@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.138 $
+ *  $Revision: 1.139 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:38:07 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 08:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -902,7 +902,7 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool bMustHaveBreak)
     elements like frames. Word itself ignores them in this case. The bug is
     more likely that this filter created such documents in the past!
     */
-    if (mrReader.nInTable || mrReader.bTxbxFlySection)
+    if (mrReader.nInTable || mrReader.bTxbxFlySection || mrReader.InLocalApo())
         return;
 
     WW8PLCFx_SEPX* pSep = mrReader.pPlcxMan->GetSepPLCF();
@@ -2757,7 +2757,7 @@ void SwWW8ImplReader::Read_BoldUsw( USHORT nId, const BYTE* pData, short nLen )
     }
     // Wert: 0 = Aus, 1 = An, 128 = Wie Style, 129 entgegen Style
     bool bOn = *pData & 1;
-    SwWW8StyInf* pSI = &pCollA[nAktColl];
+    SwWW8StyInf* pSI = nAktColl < nColls ? &pCollA[nAktColl] : 0;
     if (pPlcxMan)
     {
         const BYTE *pCharIstd =
@@ -2784,7 +2784,7 @@ void SwWW8ImplReader::Read_BoldUsw( USHORT nId, const BYTE* pData, short nLen )
         // im Text -> Flags abfragen
         if( *pData & 0x80 )                 // Bit 7 gesetzt ?
         {
-            if( pSI->n81Flags & nMask )     // und in StyleDef an ?
+            if (pSI && pSI->n81Flags & nMask)       // und in StyleDef an ?
                 bOn = !bOn;                 // dann invertieren
             // am Stack vermerken, das dieses ein Toggle-Attribut ist
             pCtrlStck->SetToggleAttr(nI, true);
