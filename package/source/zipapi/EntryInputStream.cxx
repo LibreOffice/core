@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EntryInputStream.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:06 $
+ *  last change: $Author: mtg $ $Date: 2001-04-30 18:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ using namespace com::sun::star::packages::ZipConstants;
 EntryInputStream::EntryInputStream( Reference < io::XInputStream > xNewInput,
                                     const packages::ZipEntry & rNewEntry,
                                     const vos::ORef < EncryptionData > &xEncryptData,
-                                    sal_Bool bIsDeflated)
+                                    sal_Bool bGetRawStream)
 : xStream( xNewInput )
 , xSeek( xNewInput, UNO_QUERY )
 , rEntry (rNewEntry )
@@ -97,17 +97,31 @@ EntryInputStream::EntryInputStream( Reference < io::XInputStream > xNewInput,
 , bHaveInMemory ( sal_False )
 , aInflater( sal_True )
 , aBuffer( 0 )
-, bDeflated ( bIsDeflated )
 , xEncryptionData (xEncryptData)
+, bRawStream (bGetRawStream)
 {
-    nEnd = rEntry.nMethod == DEFLATED ? rEntry.nOffset + rEntry.nCompressedSize : rEntry.nOffset + rEntry.nSize;
+    if (bGetRawStream)
+    {
+        nUncompressedSize = rEntry.nMethod == DEFLATED ? rEntry.nCompressedSize : rEntry.nSize;
+        nEnd = rEntry.nOffset + nUncompressedSize;
+    }
+    else
+    {
+        nEnd = rEntry.nMethod == DEFLATED ? rEntry.nOffset + rEntry.nCompressedSize : rEntry.nOffset + rEntry.nSize;
+        nUncompressedSize = rEntry.nSize;
+    }
 }
 void EntryInputStream::readIntoMemory()
 {
     if (!bHaveInMemory)
     {
-        aBuffer.realloc ( static_cast < sal_Int32 > ( rEntry.nSize ) );
-        if (bDeflated)
+        aBuffer.realloc ( static_cast < sal_Int32 > ( nUncompressedSize ) );
+        if (bRawStream)
+        {
+            xSeek->seek(rEntry.nOffset);
+            xStream->readBytes( aBuffer, static_cast < sal_Int32 > (nUncompressedSize) );
+        }
+        else
         {
             sal_Int32 nSize = static_cast < sal_Int32 > (nEnd - rEntry.nOffset );
             aSequence.realloc( nSize );
@@ -117,11 +131,6 @@ void EntryInputStream::readIntoMemory()
             aInflater.doInflate(aBuffer);
             aInflater.end();
             aSequence.realloc( 0 );
-        }
-        else
-        {
-            xSeek->seek(rEntry.nOffset);
-            xStream->readBytes(aBuffer, static_cast < sal_Int32 > (rEntry.nSize));
         }
         bHaveInMemory = sal_True;
 
@@ -158,8 +167,8 @@ sal_Int32 SAL_CALL EntryInputStream::readBytes( Sequence< sal_Int8 >& aData,
         throw io::BufferSizeExceededException(::rtl::OUString(), *this);
     if (!bHaveInMemory)
         readIntoMemory();
-    if (nBytesToRead + nCurrent > rEntry.nSize)
-        nBytesToRead = static_cast < sal_Int32> (rEntry.nSize - nCurrent);
+    if (nBytesToRead + nCurrent > nUncompressedSize)
+        nBytesToRead = static_cast < sal_Int32> ( nUncompressedSize - nCurrent );
 
     aData.realloc( nBytesToRead );
     memcpy(aData.getArray(), aBuffer.getConstArray() + nCurrent, nBytesToRead);
@@ -179,15 +188,15 @@ void SAL_CALL EntryInputStream::skipBytes( sal_Int32 nBytesToSkip )
     if (nBytesToSkip < 0)
         throw io::BufferSizeExceededException(::rtl::OUString(), *this);
 
-    if (nBytesToSkip + nCurrent > rEntry.nSize )
-        nBytesToSkip = static_cast < sal_Int32 > (rEntry.nSize - nCurrent);
+    if (nBytesToSkip + nCurrent > nUncompressedSize)
+        nBytesToSkip = static_cast < sal_Int32 > (nUncompressedSize- nCurrent);
 
     nCurrent+=nBytesToSkip;
 }
 sal_Int32 SAL_CALL EntryInputStream::available(  )
     throw(io::NotConnectedException, io::IOException, RuntimeException)
 {
-    return static_cast < sal_Int32 > (rEntry.nSize - nCurrent);
+    return static_cast < sal_Int32 > (nUncompressedSize - nCurrent);
 }
 void SAL_CALL EntryInputStream::closeInput(  )
     throw(io::NotConnectedException, io::IOException, RuntimeException)
@@ -197,8 +206,8 @@ void SAL_CALL EntryInputStream::closeInput(  )
 void SAL_CALL EntryInputStream::seek( sal_Int64 location )
     throw(lang::IllegalArgumentException, io::IOException, RuntimeException)
 {
-    if (location > rEntry.nSize)
-        location = rEntry.nSize;
+    if (location > nUncompressedSize)
+        location = nUncompressedSize;
     if (location <0)
         location = 0;
     nCurrent = location;
@@ -211,5 +220,5 @@ sal_Int64 SAL_CALL EntryInputStream::getPosition(  )
 sal_Int64 SAL_CALL EntryInputStream::getLength(  )
         throw(io::IOException, RuntimeException)
 {
-    return rEntry.nSize;
+    return nUncompressedSize;
 }
