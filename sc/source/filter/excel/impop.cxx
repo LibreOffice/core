@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-23 17:28:59 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1039,10 +1039,13 @@ void ImportExcel::Colinfo( void )
     if( nColLast > MAXCOL )
         nColLast = MAXCOL;
 
-    pColOutlineBuff->SetLevelRange( nColFirst, nColLast, EXC_COL_GETLEVEL( nOpt ),
-        TRUEBOOL( nOpt & EXC_COL_COLLAPSED ), TRUEBOOL( nOpt & EXC_COL_HIDDEN ) );
+    bool bHidden = ::get_flag( nOpt, EXC_COLINFO_HIDDEN );
+    bool bCollapsed = ::get_flag( nOpt, EXC_COLINFO_COLLAPSED );
+    sal_uInt8 nLevel;
+    ::extract_value( nLevel, nOpt, 8, 3 );
+    pColOutlineBuff->SetLevelRange( nColFirst, nColLast, nLevel, bCollapsed, bHidden );
 
-    if( nOpt & EXC_COL_HIDDEN ) // Cols hidden?
+    if( bHidden )
         pColRowBuff->HideColRange( nColFirst, nColLast );
 
     sal_uInt16 nScWidth = XclTools::GetScColumnWidth( nColWidth, GetCharWidth() );
