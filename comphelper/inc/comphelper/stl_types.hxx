@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stl_types.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-10 12:21:01 $
+ *  last change: $Author: fs $ $Date: 2001-05-25 10:48:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,28 @@ public:
         return m_bCaseSensitive ? rStr.hashCode() : rStr.toAsciiUpperCase().hashCode();
     }
     sal_Bool isCaseSensitive() const {return m_bCaseSensitive;}
+};
+
+//=====================================================================
+//= OInterfaceCompare
+//=====================================================================
+/** is stl-compliant structure for comparing Reference&lt; &lt;iface&gt; &gt; instances
+*/
+template < class IAFCE >
+struct OInterfaceCompare
+    :public ::std::binary_function  <   ::com::sun::star::uno::Reference< IAFCE >
+                                    ,   ::com::sun::star::uno::Reference< IAFCE >
+                                    ,   bool
+                                    >
+{
+    bool operator() (const ::com::sun::star::uno::Reference< IAFCE >& lhs, const ::com::sun::star::uno::Reference< IAFCE >& rhs) const
+    {
+        return lhs.get() < rhs.get();
+            // this does not make any sense if you see the semantics of the pointer returned by get:
+            // It's a pointer to a point in memory where an interface implementation lies.
+            // But for our purpose (provide a reliable less-operator which can be used with the STL), this is
+            // sufficient ....
+    }
 };
 
 //.........................................................................
