@@ -476,10 +476,11 @@ $(DESTDIRDLL)$/$(MY_DLLPREFIX)officebean$(MY_DLLPOSTFIX) : $(MY_DLLOUT)$/$(MY_DL
 
 $(DESTDIR)$/settings$/dk.mk : $(PRJ)$/util$/dk.mk
     +-rm -f $@ >& $(NULLDEV)
-    echo #$(ODKNAME) dependent settings > $@
 .IF "$(BUILD_SOSL)"==""
+    echo #$(ODKNAME) dependent settings > $@
     echo DKNAME=${ODKNAME} >> $@
 .ELSE
+    echo #$(PRODUCT_NAME) dependent settings > $@
     echo DKNAME=${PRODUCT_NAME} >> $@    
 .ENDIF
 .IF "$(GUI)"=="UNX"
