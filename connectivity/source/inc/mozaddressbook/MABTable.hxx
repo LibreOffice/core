@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABTable.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: wvd $ $Date: 2001-07-19 14:20:14 $
+ *  last change: $Author: dkenny $ $Date: 2001-08-08 08:04:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,14 @@ namespace connectivity
             BOOL WriteBuffer();
             BOOL UpdateBuffer(connectivity::OValueVector& rRow, connectivity::OValueRow pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> isUniqueByColumnName(const ::rtl::OUString& _rColName);
+            OValueRow                               m_aParameterRow;
+
+            sal_Int32   sParamIndex;
+
+            inline void resetParameters()
+                          { sParamIndex = 0; }
+
+            void parseParameter( const OSQLParseNode* pNode, rtl::OUString& rMatchString );
 
         protected:
             virtual void FileClose();
@@ -159,10 +167,19 @@ namespace connectivity
 
             void fillRowData( connectivity::OSQLParseTreeIterator& _aSQLIterator );
 
+            void analyseWhereClause( const OSQLParseNode*          parseTree,
+                            ::std::vector< ::rtl::OUString >       &matchItems,
+                            ::std::vector< OMozabQuery::eSqlOppr > &matchOper,
+                            ::std::vector< ::rtl::OUString >       &matchValues,
+                            connectivity::OSQLParseTreeIterator&   aSQLIterator);
+
             // returns a copy of this object
             OMozabTable* clone() const;
-        const OMozabColumnAlias & getColumnAlias() const
+            const OMozabColumnAlias & getColumnAlias() const
                           { return (m_aColumnAlias); }
+
+            void setParameterRow(const OValueRow& _rParaRow)
+                          { m_aParameterRow = _rParaRow; }
 
         };
     }
