@@ -8511,3 +8511,8 @@ component_writeInfo
 ?pointSequenceFromPolygon@?A0xf614a391@unotools@vcl@@YA?AV?$Sequence@URealPoint2D@geometry@star@sun@com@drafts@@@uno@star@sun@com@@ABVPolygon@@@Z
 ?bezierSequenceFromPolygon@?A0x1949b091@unotools@vcl@@YA?AV?$Sequence@URealBezierSegment2D@geometry@star@sun@com@drafts@@@uno@star@sun@com@@ABVPolygon@@@Z
 ?pointSequenceFromPolygon@?A0x1949b091@unotools@vcl@@YA?AV?$Sequence@URealPoint2D@geometry@star@sun@com@drafts@@@uno@star@sun@com@@ABVPolygon@@@Z
+??_C@_0CG@BJLPEOCG@o?3?2SRC680?2wntmsci8?2inc?2rtl?1strin@
+?GetInvalidDate@DateFormatter@@SA?AVDate@@XZ
+?GetInvalidTime@TimeFormatter@@SA?AVTime@@XZ
+?bezierSequenceFromPolygon@?A0xbbca3827@unotools@vcl@@YA?AV?$Sequence@URealBezierSegment2D@geometry@star@sun@com@drafts@@@uno@star@sun@com@@ABVPolygon@@@Z
+?pointSequenceFromPolygon@?A0xbbca3827@unotools@vcl@@YA?AV?$Sequence@URealPoint2D@geometry@star@sun@com@drafts@@@uno@star@sun@com@@ABVPolygon@@@Z
