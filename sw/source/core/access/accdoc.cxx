@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accdoc.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:34:53 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,17 +69,17 @@
 
 #pragma hdrstop
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
@@ -126,13 +126,13 @@
 #include <pagefrm.hxx>
 #endif
 
-const sal_Char sServiceName[] = "drafts.com.sun.star.text.AccessibleTextDocumentView";
+const sal_Char sServiceName[] = "com.sun.star.text.AccessibleTextDocumentView";
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleDocumentView";
 
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 using namespace ::rtl;
 
 using ::com::sun::star::lang::IndexOutOfBoundsException;
@@ -181,7 +181,7 @@ void SwAccessibleDocumentBase::AddChild( Window *pWin, sal_Bool bFireEvent )
         if( bFireEvent )
         {
             AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::ACCESSIBLE_CHILD_EVENT;
+            aEvent.EventId = AccessibleEventId::CHILD;
             aEvent.NewValue <<= pChildWin->GetAccessible();
             FireAccessibleEvent( aEvent );
         }
@@ -196,7 +196,7 @@ void SwAccessibleDocumentBase::RemoveChild( Window *pWin )
     if( pChildWin && pWin == pChildWin )
     {
         AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::ACCESSIBLE_CHILD_EVENT;
+        aEvent.EventId = AccessibleEventId::CHILD;
         aEvent.OldValue <<= pChildWin->GetAccessible();
         FireAccessibleEvent( aEvent );
 
@@ -328,7 +328,7 @@ awt::Point SAL_CALL SwAccessibleDocumentBase::getLocation()
     return aSize;
 }
 
-sal_Bool SAL_CALL SwAccessibleDocumentBase::contains(
+sal_Bool SAL_CALL SwAccessibleDocumentBase::containsPoint(
             const ::com::sun::star::awt::Point& aPoint )
         throw (RuntimeException)
 {
@@ -345,7 +345,7 @@ sal_Bool SAL_CALL SwAccessibleDocumentBase::contains(
     return aPixBounds.IsInside( aPixPoint );
 }
 
-Reference< XAccessible > SAL_CALL SwAccessibleDocumentBase::getAccessibleAt(
+Reference< XAccessible > SAL_CALL SwAccessibleDocumentBase::getAccessibleAtPoint(
                 const awt::Point& aPoint )
         throw (RuntimeException)
 {
@@ -363,7 +363,7 @@ Reference< XAccessible > SAL_CALL SwAccessibleDocumentBase::getAccessibleAt(
             return pChildWin->GetAccessible();
     }
 
-    return SwAccessibleContext::getAccessibleAt( aPoint );
+    return SwAccessibleContext::getAccessibleAtPoint( aPoint );
 }
 
 //
@@ -376,7 +376,7 @@ void SwAccessibleDocument::GetStates(
     SwAccessibleContext::GetStates( rStateSet );
 
     // MULTISELECTABLE
-    rStateSet.AddState( AccessibleStateType::MULTISELECTABLE );
+    rStateSet.AddState( AccessibleStateType::MULTI_SELECTABLE );
 }
 
 
@@ -566,10 +566,10 @@ Reference<XAccessible> SwAccessibleDocument::getSelectedAccessibleChild(
     return aSelectionHelper.getSelectedAccessibleChild(nSelectedChildIndex);
 }
 
-void SwAccessibleDocument::deselectSelectedAccessibleChild(
+void SwAccessibleDocument::deselectAccessibleChild(
     sal_Int32 nSelectedChildIndex )
     throw ( IndexOutOfBoundsException,
             RuntimeException )
 {
-    aSelectionHelper.deselectSelectedAccessibleChild(nSelectedChildIndex);
+    aSelectionHelper.deselectAccessibleChild(nSelectedChildIndex);
 }
