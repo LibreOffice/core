@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 17:51:08 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:41:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,7 @@ using namespace ::com::sun::star::lang;
 #include "macro.hxx"
 #include "tbxcust.hxx"
 #include "minfitem.hxx"
-
+#include "../appl/app.hrc"
 //-------------------------------------------------------------------------
 DBG_NAME(SfxViewFrame);
 
@@ -221,6 +221,14 @@ SFX_IMPL_INTERFACE(SfxViewFrame,SfxShell,SfxResId(0))
 {
     SFX_CHILDWINDOW_REGISTRATION( SID_BROWSER );
     SFX_CHILDWINDOW_REGISTRATION( SID_RECORDING_FLOATWINDOW );
+    SFX_CHILDWINDOW_REGISTRATION( SID_CUSTOMIZETOOLBOX );
+
+    SFX_OBJECTBAR_REGISTRATION(
+            SFX_OBJECTBAR_FULLSCREEN | SFX_VISIBILITY_FULLSCREEN,
+            SfxResId(RID_FULLSCREENTOOLBOX) );
+    SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_APPLICATION |
+            SFX_VISIBILITY_DESKTOP | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_CLIENT,
+            SfxResId(RID_ENVTOOLBOX) );
 }
 
 TYPEINIT2(SfxViewFrame,SfxShell,SfxListener);
