@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-14 13:51:50 $
+ *  last change: $Author: tl $ $Date: 2001-07-05 07:04:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1602,10 +1602,7 @@ void SmViewShell::Activate( BOOL bIsMDIActivate )
     SmEditWindow *pEdit = GetEditWindow();
     if ( pEdit )
     {
-        //! Hier beim (synchronen) Aufruf zum Taskwechsel werden beim SmEditWindow
-        //! auch implizit dessen Timer neu gestartet.
-        //! siehe auch Kommentar zu  SmEditWindow::CursorMoveTimerHdl
-        pEdit->SetText( GetDoc()->GetText() );
+//        pEdit->SetText( GetDoc()->GetEditEngine().GetText( LINEEND_LF ) );
 
         if ( bIsMDIActivate )
             pEdit->GrabFocus();
