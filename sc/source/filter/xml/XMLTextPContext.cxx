@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextPContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-18 08:52:34 $
+ *  last change: $Author: sab $ $Date: 2001-10-24 10:15:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@ ScXMLTextTContext::ScXMLTextTContext( ScXMLImport& rImport,
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
         rtl::OUString aLocalName;
         rtl::OUString sValue;
+        sal_Int32 nCount(1);
         for( sal_Int16 i=0; i < nAttrCount; i++ )
         {
             sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
@@ -132,8 +133,9 @@ ScXMLTextTContext::ScXMLTextTContext( ScXMLImport& rImport,
             sValue = xAttrList->getValueByIndex( i );
 
             if ((nPrefix == XML_NAMESPACE_TEXT) && IsXMLToken(aLocalName, XML_C))
-                pTextPContext->AddSpaces(sValue.toInt32());
+                nCount = sValue.toInt32();
         }
+        pTextPContext->AddSpaces(nCount);
     }
 }
 
