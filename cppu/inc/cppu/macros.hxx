@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macros.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-29 15:25:29 $
+ *  last change: $Author: mh $ $Date: 2002-10-02 13:17:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
     the struct inherits from a base struct the first member is no double or [unsigned] long long.
     @internal
 */
-#if defined(__GNUC__) && defined(LINUX) && defined(INTEL) && (__GNUC__ == 3)
+#if defined(__GNUC__) && defined(LINUX) && (defined(INTEL) || defined(POWERPC)) && (__GNUC__ == 3)
 #define CPPU_GCC3_ALIGN( base_struct ) __attribute__ ((aligned (__alignof__ (base_struct))))
 #else
 #define CPPU_GCC3_ALIGN( base_struct )
