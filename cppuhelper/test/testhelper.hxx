@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testhelper.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:26:10 $
+ *  last change: $Author: jbu $ $Date: 2001-02-05 13:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,3 +62,4 @@ void testidlclass( const ::com::sun::star::uno::Reference < ::com::sun::star::la
 void testPropertyTypeHelper();
 void test_PropertySetHelper();
 void test_ImplHelper( const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > & xSF );
+void test_interfacecontainer();

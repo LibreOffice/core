@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testhelper.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:26:10 $
+ *  last change: $Author: jbu $ $Date: 2001-02-05 13:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ int __cdecl main( int argc, char * argv[] )
         testidlclass( xMgr );
         test_PropertySetHelper();
         test_ImplHelper( xMgr );
+        test_interfacecontainer();
     }
     catch (Exception & rExc)
     {

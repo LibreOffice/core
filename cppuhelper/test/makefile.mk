@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dbo $ $Date: 2000-12-21 16:28:13 $
+#   last change: $Author: jbu $ $Date: 2001-02-05 13:23:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,8 @@ OBJFILES=	\
         $(OBJ)$/testpropshlp.obj 	\
         $(OBJ)$/testidlclass.obj 	\
         $(OBJ)$/testproptyphlp.obj	\
-        $(OBJ)$/testimplhelper.obj
+        $(OBJ)$/testimplhelper.obj \
+        $(OBJ)$/testcontainer.obj
 
 APP1TARGET=	$(TARGET)
 APP1OBJS=	$(OBJFILES) 
