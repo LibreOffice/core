@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-06 17:35:17 $
+ *  last change: $Author: mfe $ $Date: 2001-02-23 12:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,6 @@
 
 #ifdef _USE_NAMESPACE
 using namespace vos;
-#endif
-
-#ifdef MAC
-#define strdup(str) strcpy((sal_Char*)malloc(strlen(str)+1),str)
 #endif
 
 
