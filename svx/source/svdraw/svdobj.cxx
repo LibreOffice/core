@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
+ *  last change: $Author: aw $ $Date: 2000-11-01 12:48:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3264,9 +3264,10 @@ void SdrObject::SetGeoData(const SdrObjGeoData& rGeo)
 
 SfxItemSet* SdrObject::CreateNewItemSet(SfxItemPool& rPool)
 {
-//-/    return new SfxItemSet(rPool, SDRATTR_START, SDRATTR_END);
+    DBG_ASSERT(FALSE,"SdrObject::CreateNewItemSet() should never be called, SdrObject has no Items");
+    return new SfxItemSet(rPool, SDRATTR_START, SDRATTR_END);
     // Basic implementation; Basic object has NO attributes
-    return NULL;
+//-/    return NULL;
 }
 
 SfxItemSet* SdrObject::mpEmptyItemSet = 0L;
