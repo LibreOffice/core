@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:44:51 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 12:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,13 +248,12 @@
 #include <node.hxx>
 #include <ndtxt.hxx>
 
-#ifndef __SGI_STL_MAP
 #include <map>
-#endif
-#ifndef __SGI_STL_ALGORITHM
 #include <algorithm>
-#endif
 
+// #i17764# delete table redlines when modifying the table structure?
+// os: 2004-11-19 redlining in tables temporary removed because of lots of exceptions
+#define DEL_TABLE_REDLINES 1
 
 const sal_Unicode T2T_PARA = 0x0a;
 
@@ -263,6 +262,7 @@ extern void ClearFEShellTabCols();
 // steht im gctable.cxx
 extern BOOL lcl_GC_Line_Border( const SwTableLine*& , void* pPara );
 
+#ifdef DEL_TABLE_REDLINES
 class lcl_DelRedlines
 {
     SwDoc* pDoc;
@@ -279,6 +279,7 @@ lcl_DelRedlines::lcl_DelRedlines( SwPaM & rPam) : pDoc( rPam.GetDoc() )
     if( !pDoc->IsIgnoreRedline() && pDoc->GetRedlineTbl().Count() )
         pDoc->AcceptRedline( rPam );
 }
+#endif
 
 void lcl_SetDfltBoxAttr( SwFrmFmt& rFmt, BYTE nId )
 {
@@ -810,7 +811,9 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
     pStt = aOriginal.GetMark();
     pEnd = aOriginal.GetPoint();
 
+#ifdef DEL_TABLE_REDLINES
     lcl_DelRedlines aDelRedl( aOriginal );
+#endif
 
     SwUndoTxtToTbl* pUndo = 0;
     if( DoesUndo() )
@@ -1259,7 +1262,9 @@ BOOL SwDoc::TableToText( const SwTableNode* pTblNd, sal_Unicode cCh )
         pESh->ClearMark();
     // <--
 
+#ifdef DEL_TABLE_REDLINES
     lcl_DelRedlines aDelRedl( *pTblNd, FALSE );
+#endif
 
     SwNodeRange aRg( *pTblNd, 0, *pTblNd->EndOfSectionNode() );
     SwUndoTblToTxt* pUndo = 0;
@@ -1524,7 +1529,9 @@ BOOL SwDoc::InsertCol( const SwSelBoxes& rBoxes, USHORT nCnt, BOOL bBehind )
     if( rTbl.ISA( SwDDETable ))
         return FALSE;
 
+#ifdef DEL_TABLE_REDLINES
     lcl_DelRedlines aDelRedl( *pTblNd, TRUE );
+#endif
 
     SwTableSortBoxes aTmpLst( 0, 5 );
     SwUndoTblNdsChg* pUndo = 0;
@@ -1586,7 +1593,9 @@ BOOL SwDoc::InsertRow( const SwSelBoxes& rBoxes, USHORT nCnt, BOOL bBehind )
     if( rTbl.ISA( SwDDETable ))
         return FALSE;
 
+#ifdef DEL_TABLE_REDLINES
     lcl_DelRedlines aDelRedl( *pTblNd, TRUE );
+#endif
 
     SwTableSortBoxes aTmpLst( 0, 5 );
     SwUndoTblNdsChg* pUndo = 0;
@@ -1776,7 +1785,9 @@ BOOL SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes )
 
     ::ClearFEShellTabCols();
 
+#ifdef DEL_TABLE_REDLINES
     lcl_DelRedlines aDelRedl( *pTblNd, TRUE );
+#endif
 
     // soll die gesamte Tabelle geloescht werden ??
     const ULONG nTmpIdx1 = pTblNd->GetIndex();
@@ -1967,7 +1978,9 @@ BOOL SwDoc::SplitTbl( const SwSelBoxes& rBoxes, sal_Bool bVert, USHORT nCnt,
     if( rTbl.ISA( SwDDETable ))
         return FALSE;
 
+#ifdef DEL_TABLE_REDLINES
     lcl_DelRedlines aDelRedl( *pTblNd, TRUE );
+#endif
 
     SvULongs aNdsCnts;
     SwTableSortBoxes aTmpLst( 0, 5 );
@@ -2041,9 +2054,10 @@ USHORT SwDoc::MergeTbl( SwPaM& rPam )
     // --> FME 2004-10-08 #i33394#
     StartUndo( UNDO_TABLE_MERGE );
     // <--
-
+#ifdef DEL_TABLE_REDLINES
     if( !IsIgnoreRedline() && GetRedlineTbl().Count() )
         DeleteRedline( *pTblNd );
+#endif
     SwRedlineMode eOld = GetRedlineMode();
     SetRedlineMode_intern( eOld | REDLINE_IGNORE );
 
@@ -4210,6 +4224,7 @@ BOOL SwDoc::HasTblAnyProtection( const SwPosition* pPos,
     return bHasProtection;
 }
 
+#ifdef DEL_TABLE_REDLINES
 lcl_DelRedlines::lcl_DelRedlines( const SwTableNode& rNd,
                                     BOOL bCheckForOwnRedline )
     : pDoc( (SwDoc*)rNd.GetNodes().GetDoc() )
@@ -4252,5 +4267,6 @@ lcl_DelRedlines::lcl_DelRedlines( const SwTableNode& rNd,
         }
     }
 }
+#endif
 
 
