@@ -1,0 +1,6 @@
+"AdministrationProvider";"com::sun::star::lang::XComponent";"dispose()"
+"AdministrationProvider";"com::sun::star::lang::XComponent";"addEventListener()"
+"AdministrationProvider";"com::sun::star::lang::XComponent";"removeEventListener()"
+"AdministrationProvider";"com::sun::star::lang::XMultiServiceFactory";"createInstance()"
+"AdministrationProvider";"com::sun::star::lang::XMultiServiceFactory";"createInstanceWithArguments()"
+"AdministrationProvider";"com::sun::star::lang::XMultiServiceFactory";"getAvailableServiceNames()"
