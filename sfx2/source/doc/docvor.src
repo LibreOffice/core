@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 12:16:32 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 05:29:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ ModalDialog DLG_ORGANIZE
         Text [ finnish ] = "~Tiedostot..." ;
         Text [ danish ] = "~Fil..." ;
         Text [ french ] = "~Fichier..." ;
-        Text [ swedish ] = "~Arkiv..." ;
+        Text [ swedish ] = "~Fil..." ;
         Text [ dutch ] = "~Bestand..." ;
         Text [ spanish ] = "~Archivo..." ;
         Text [ english_us ] = "~File..." ;
