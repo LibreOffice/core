@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:47:54 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 13:05:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -972,9 +972,11 @@ void SfxObjectShell::PostActivateEvent_Impl( SfxViewFrame* pFrame )
     {
         if (pImp->nEventId)
         {
+        /*TODO_AS
             if ( pFrame && !pFrame->GetFrame()->GetWindow().IsReallyShown() && !pImp->bHidden )
                 // not event before the document has become visible!
                 return;
+                */
 
             sal_uInt16 nId = pImp->nEventId;
             pImp->nEventId = 0;
