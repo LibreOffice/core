@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-22 15:19:13 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 11:12:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -455,6 +455,47 @@ Storage::Storage( SvStream& r, BOOL bDirect )
     }
 }
 
+
+Storage::Storage( UCBStorageStream& rStrm, BOOL bDirect )
+       : OLEStorageBase( new StgIo, NULL, nMode ), bIsRoot( FALSE )
+{
+    nMode = STREAM_READ;
+
+    if ( rStrm.GetError() != SVSTREAM_OK )
+    {
+        SetError( rStrm.GetError() );
+        pEntry = NULL;
+        return;
+    }
+
+    SvStream* pStream = rStrm.GetModifySvStream();
+    if ( !pStream )
+    {
+        OSL_ENSURE( FALSE, "UCBStorageStream can not provide SvStream implementation!\n" );
+        SetError( SVSTREAM_GENERALERROR );
+        pEntry = NULL;
+        return;
+    }
+
+    if( pStream->IsWritable() )
+        nMode = STREAM_READ | STREAM_WRITE;
+
+    pIo->SetStrm( &rStrm );
+
+    ULONG nSize = pStream->Seek( STREAM_SEEK_TO_END );
+    pStream->Seek( 0L );
+    // Initializing is OK if the stream is empty
+    Init( BOOL( nSize == 0 ) );
+    if( pEntry )
+    {
+        pEntry->bDirect = bDirect;
+        pEntry->nMode = nMode;
+    }
+
+    pIo->MoveError( *this );
+}
+
+
 // Perform common code for both ctors above.
 
 void Storage::Init( BOOL bCreate )
@@ -730,13 +771,23 @@ BOOL Storage::CopyTo( const String& rElem, BaseStorage* pDest, const String& rNe
             // copy the entire storage
             BaseStorage* p1 = OpenStorage( rElem, INTERNAL_MODE );
             BaseStorage* p2 = pDest->OpenOLEStorage( rNew, STREAM_WRITE | STREAM_SHARE_DENYALL, pEntry->bDirect );
-            p2->SetClassId( p1->GetClassId() );
-            p1->CopyTo( p2 );
-            SetError( p1->GetError() );
-            if( p2->GetError() )
-                pDest->SetError( p2->GetError() );
+
+            ULONG nTmpErr = p2->GetError();
+            if( !nTmpErr )
+            {
+                p2->SetClassId( p1->GetClassId() );
+                p1->CopyTo( p2 );
+                SetError( p1->GetError() );
+
+                nTmpErr = p2->GetError();
+                if( !nTmpErr )
+                    p2->Commit();
+                else
+                    pDest->SetError( nTmpErr );
+            }
             else
-                p2->Commit();
+                pDest->SetError( nTmpErr );
+
             delete p1;
             delete p2;
             return BOOL( Good() && pDest->Good() );
@@ -746,12 +797,22 @@ BOOL Storage::CopyTo( const String& rElem, BaseStorage* pDest, const String& rNe
             // stream copy
             BaseStorageStream* p1 = OpenStream( rElem, INTERNAL_MODE );
             BaseStorageStream* p2 = pDest->OpenStream( rNew, STREAM_WRITE | STREAM_SHARE_DENYALL, pEntry->bDirect );
-            p1->CopyTo( p2 );
-            SetError( p1->GetError() );
-            if( p2->GetError() )
-                pDest->SetError( p2->GetError() );
+
+            ULONG nTmpErr = p2->GetError();
+            if( !nTmpErr )
+            {
+                p1->CopyTo( p2 );
+                SetError( p1->GetError() );
+
+                nTmpErr = p2->GetError();
+                if( !nTmpErr )
+                    p2->Commit();
+                else
+                    pDest->SetError( nTmpErr );
+            }
             else
-                p2->Commit();
+                pDest->SetError( nTmpErr );
+
             delete p1;
             delete p2;
             return BOOL( Good() && pDest->Good() );
