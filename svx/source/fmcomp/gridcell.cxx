@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-01 14:15:00 $
+ *  last change: $Author: fs $ $Date: 2001-03-15 07:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,6 @@
 #endif
 #ifndef _SVX_FMPROP_HXX
 #include "fmprop.hxx"
-#endif
-#ifndef _SVX_FMSTL_HXX
-#include "fmstl.hxx"
 #endif
 
 #ifndef _SVX_FMPROP_HRC
