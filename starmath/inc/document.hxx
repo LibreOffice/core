@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-09 17:14:48 $
+ *  last change: $Author: tl $ $Date: 2001-03-19 10:24:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,9 @@ SO2_DECL_REF(SvStorageStream)
 
 #define FRMIDENT    ((ULONG)0x03031963L)
 #define FRMVERSION  ((ULONG)0x00010001L)
+
+#define STAROFFICE_XML  "StarOffice XML (Math)"
+#define MATHML_XML      "MathML XML (Math)"
 
 /* Zugriff auf den Drucker sollte ausschliesslich ueber diese Klasse erfolgen
  * ==========================================================================
