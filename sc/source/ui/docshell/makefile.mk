@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: nn $ $Date: 2000-10-26 19:02:44 $
+#   last change: $Author: nn $ $Date: 2001-05-11 17:07:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,7 +102,8 @@ CXXFILES = \
         autostyl.cxx	\
         pagedata.cxx \
         hiranges.cxx \
-        pntlock.cxx
+        pntlock.cxx \
+        sizedev.cxx
 
 
 SLOFILES =  \
@@ -126,7 +127,8 @@ SLOFILES =  \
         $(SLO)$/autostyl.obj	\
         $(SLO)$/pagedata.obj \
         $(SLO)$/hiranges.obj \
-        $(SLO)$/pntlock.obj
+        $(SLO)$/pntlock.obj \
+        $(SLO)$/sizedev.obj
 
 
 EXCEPTIONSFILES= \
