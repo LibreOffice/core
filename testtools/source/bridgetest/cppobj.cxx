@@ -1,7 +1,7 @@
 /**************************************************************************
 #*
-#*    last change   $Author: obo $ $Date: 2004-06-03 15:00:42 $
-#*    $Revision: 1.5 $
+#*    last change   $Author: rt $ $Date: 2004-08-20 09:15:56 $
+#*    $Revision: 1.6 $
 #*
 #*    $Logfile: $
 #*
@@ -274,9 +274,8 @@ public:
         TestPolyStruct< sal_Bool > const & arg) throw (RuntimeException)
     { return arg; }
 
-    virtual void SAL_CALL transportPolyUnsignedHyper(
-        TestPolyStruct< sal_uInt64 > & arg) throw (RuntimeException)
-    {}
+    virtual void SAL_CALL transportPolyHyper(TestPolyStruct< sal_Int64 > & arg)
+        throw (RuntimeException) {}
 
     virtual void SAL_CALL transportPolySequence(
         TestPolyStruct< Sequence< Any > > const & arg1,
@@ -308,6 +307,12 @@ public:
     { return TestPolyStruct< TestEnum >(
         test::testtools::bridgetest::TestEnum_TEST);
           /* work around MS compiler bug */ }
+
+    virtual TestPolyStruct< TestBadEnum > SAL_CALL getNullPolyBadEnum()
+        throw (RuntimeException)
+    { return TestPolyStruct< TestBadEnum >(
+        test::testtools::bridgetest::TestBadEnum_M);
+          /* explicitly instantiate with default enumerator */ }
 
     virtual TestPolyStruct< TestStruct > SAL_CALL getNullPolyStruct()
         throw (RuntimeException)
