@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.160 $
+ *  $Revision: 1.161 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:04:15 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 09:29:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1545,7 +1545,18 @@ void SbaTableQueryBrowser::attachFrame(const Reference< ::com::sun::star::frame:
 
         if ( xLayouter.is() )
         {
-            Reference< XUIElement > xUI = xLayouter->getElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/toolbar" ) ) );
+            Reference< XUIElement > xUI;
+            try
+            {
+                xUI = xLayouter->getElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/toolbar" ) ) );
+                if ( !xUI.is() )
+                    xUI = xLayouter->getElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/browserobjectbar" ) ) );
+            }
+            catch( const Exception& )
+            { // nii
+                if ( !xUI.is() )
+                    xUI = xLayouter->getElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/browserobjectbar" ) ) );
+            }
             if ( xUI.is() )
             {
                 m_xMainToolbar = m_xMainToolbar.query( xUI->getRealInterface() );
