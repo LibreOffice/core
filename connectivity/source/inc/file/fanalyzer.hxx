@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fanalyzer.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 08:07:51 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:28:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,20 @@ namespace connectivity
 {
     namespace file
     {
+
         class OSQLAnalyzer
         {
-            OPredicateCompiler      m_aCompiler;
-            OPredicateInterpreter   m_aInterpreter;
+            typedef ::std::list<OEvaluateSet*>      OEvaluateSetList;
+            typedef ::std::pair< ::vos::ORef<OPredicateCompiler>,::vos::ORef<OPredicateInterpreter> > TPredicates;
+
+            ::std::vector< TPredicates >        m_aSelectionEvaluations;
+            ::vos::ORef<OPredicateCompiler>     m_aCompiler;
+            ::vos::ORef<OPredicateInterpreter>  m_aInterpreter;
+
+            mutable sal_Bool                    m_bHasSelectionCode;
+            mutable sal_Bool                    m_bSelectionFirstTime;
+
+            void bindRow(OCodeList& rCodeList,const OValueRefRow& _pRow,OEvaluateSetList& _rEvaluateSetList);
 
         public:
             OSQLAnalyzer();
@@ -88,20 +98,27 @@ namespace connectivity
                 {  }
 
             void describeParam(::vos::ORef<OSQLColumns> rParameterColumns); // genauere Beschreibung der Parameter
-            ::std::vector<sal_Int32>* bindResultRow(OValueRow _pRow);                   // Anbinden einer Ergebniszeile an die Restrictions
-            void bindParameterRow(OValueRow _pRow);             // Anbinden einer Parameterzeile an die Restrictions
+            ::std::vector<sal_Int32>* bindEvaluationRow(OValueRefRow& _pRow);                   // Anbinden einer Ergebniszeile an die Restrictions
+            /** bind the select columns if they contain a function which needs a row value
+                @param  _pRow   the result row
+            */
+            void bindSelectRow(const OValueRefRow& _pRow);
+
+            /** binds the row to parameter for the restrictions
+                @param  _pRow   the parameter row
+            */
+            void bindParameterRow(OValueRefRow& _pRow);
 
             void setIndexes(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xIndexes);
 
-            void dispose()
-            {
-                m_aCompiler.dispose();
-            }
+            void dispose();
             void start(OSQLParseNode* pSQLParseNode);
             void clean();
             virtual BOOL hasRestriction() const;
-            BOOL evaluateRestriction() {return m_aInterpreter.start();}
-            void setOrigColumns(const OFileColumns& rCols) { m_aCompiler.setOrigColumns(rCols); }
+            virtual BOOL hasFunctions() const;
+            inline BOOL evaluateRestriction()   { return m_aInterpreter->start(); }
+            void setSelectionEvaluationResult(OValueRefRow& _pRow,const ::std::vector<sal_Int32>& _rColumnMapping);
+            void setOrigColumns(const OFileColumns& rCols);
             virtual OOperandAttr* createOperandAttr(sal_Int32 _nPos,
                                                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xCol,
                                                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xIndexes=NULL);
