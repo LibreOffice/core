@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoApp.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kr $ $Date: 2000-11-24 13:16:38 $
+ *  last change: $Author: kr $ $Date: 2000-11-24 16:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ import com.sun.star.uno.Type;
  * <p>
  */
 public class UnoApp {
-    static public final boolean DEBUG = true;
+    static public final boolean DEBUG = false;
 
     /**
      * Bootstraps a servicemanager with some base components registered.
