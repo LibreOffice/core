@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2000-09-29 12:57:20 $
+ *  last change: $Author: sab $ $Date: 2000-10-10 06:27:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,9 +130,9 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
 //  { "HoriJustify", XML_NAMESPACE_FO, sXML_text_align, XML_SC_TYPE_HORIJUSTIFY|MID_FLAG_MULTI_PROPERTY, CTF_HORIJUSTIFY },
 //  { "HoriJustify", XML_NAMESPACE_STYLE, sXML_text_align_source, XML_SC_TYPE_HORIJUSTIFYSOURCE|MID_FLAG_MULTI_PROPERTY, CTF_HORIJUSTIFY_SOURCE },
     { "IsCellBackgroundTransparent", XML_NAMESPACE_FO, sXML_background_color, XML_SC_TYPE_ISCELLBACKGROUNDTRANSPARENT|MID_FLAG_MULTI_PROPERTY, CTF_ISCELLBACKGROUNDTRANSPARENT },
-    { "IsTextWrapped", XML_NAMESPACE_STYLE, sXML_wrap_option, XML_SC_ISTEXTWRAPPED, 0 },
+    { "IsTextWrapped", XML_NAMESPACE_FO, sXML_wrap_option, XML_SC_ISTEXTWRAPPED, 0 },
     { "Orientation", XML_NAMESPACE_FO, sXML_direction, XML_SC_TYPE_ORIENTATION, 0 },
-    { "ParaIndent", XML_NAMESPACE_FO, sXML_margin_left, XML_TYPE_MEASURE, CTF_PARAINDENT },
+    { "ParaIndent", XML_NAMESPACE_FO, sXML_margin_left, XML_TYPE_MEASURE16, 0 },
     { "ParaBottomMargin", XML_NAMESPACE_FO, sXML_padding, XML_TYPE_MEASURE, CTF_ALLPADDING },
     { "ParaBottomMargin", XML_NAMESPACE_FO, sXML_padding_bottom, XML_TYPE_MEASURE, CTF_BOTTOMPADDING },
     { "ParaLeftMargin", XML_NAMESPACE_FO, sXML_padding_left, XML_TYPE_MEASURE, CTF_LEFTPADDING },
