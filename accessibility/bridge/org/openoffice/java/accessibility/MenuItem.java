@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MenuItem.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 15:48:20 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 18:16:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 
 package org.openoffice.java.accessibility;
 
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleContext;
 
 class MenuItem extends ToggleButton {
 
