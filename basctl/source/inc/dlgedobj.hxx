@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-13 17:22:43 $
+ *  last change: $Author: tbe $ $Date: 2001-03-16 13:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,9 @@ public:
     virtual void        SetStep( sal_Int32 nStep );
     virtual void        UpdateStep();
 
-    String  GetUniqueName();
+    ::rtl::OUString GetServiceName();
+    ::rtl::OUString GetDefaultName();
+    ::rtl::OUString GetUniqueName();
 
     virtual sal_uInt32 GetObjInventor() const;
     virtual sal_uInt16 GetObjIdentifier() const;
@@ -140,8 +142,6 @@ protected:
     virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
 
     DECL_LINK(OnCreate, void* );
-
-    String  GetDefaultName();
 
 public:
     // PropertyChangeListener

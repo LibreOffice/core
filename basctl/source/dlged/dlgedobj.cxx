@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-13 17:24:59 $
+ *  last change: $Author: tbe $ $Date: 2001-03-16 13:43:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,36 +63,16 @@
 #include "dlgedobj.hxx"
 #endif
 
-#ifndef _SVX_FMPROP_HXX
-//#include "fmprop.hxx"
-#endif
-
 #ifndef _TOOLS_RESMGR_HXX
 #include <tools/resmgr.hxx>
-#endif
-
-#ifndef _SVX_FMPROP_HRC
-//#include "fmprop.hrc"
 #endif
 
 #ifndef _SVDIO_HXX //autogen
 #include <svx/svdio.hxx>
 #endif
 
-#ifndef _SVX_FMTOOLS_HXX
-//#include "fmtools.hxx"
-#endif
-
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
-#endif
-
-#ifndef _STRING_HXX
-//#include <tools/string.hxx>
-#endif
-
-#ifndef _SVX_FMRESIDS_HRC
-//#include <svx/fmresids.hrc>
 #endif
 
 #ifndef _SVX_FMGLOB_HXX
@@ -133,6 +113,16 @@
 
 #ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
 #include <com/sun/star/container/XContainer.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+
+#include <iderid.hxx>
+
+#ifndef _BASCTL_DLGRESID_HRC
+#include <dlgresid.hrc>
 #endif
 
 #include "vcsbxdef.hxx"
@@ -614,9 +604,80 @@ void DlgEdObj::UpdateStep()
 
 //----------------------------------------------------------------------------
 
-String DlgEdObj::GetDefaultName()
+::rtl::OUString DlgEdObj::GetServiceName()
 {
-    String aStr = GetUnoControlTypeName();
+    ::rtl::OUString aServiceName;
+    Reference< lang::XServiceInfo > xServiceInfo( GetUnoControlModel() , UNO_QUERY );
+
+    if (xServiceInfo.is())
+    {
+        Sequence< ::rtl::OUString > aServiceNames( xServiceInfo->getSupportedServiceNames() );
+        DBG_ASSERT( aServiceNames.getLength() == 1 , "DlgEdObj: aServiceNames.getLength() != 1" );
+        aServiceName = aServiceNames.getArray()[ 0 ];
+    }
+
+    return aServiceName;
+}
+
+//----------------------------------------------------------------------------
+
+::rtl::OUString DlgEdObj::GetDefaultName()
+{
+    sal_uInt16 nResId = 0;
+    ::rtl::OUString aDefaultName;
+    ::rtl::OUString aServiceName = GetServiceName();
+
+    if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlDialogModel") ))
+    {
+        nResId = RID_STR_CLASS_DIALOG;
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlButtonModel") ))
+    {
+        nResId = RID_STR_CLASS_BUTTON;
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlRadioButtonModel") ))
+    {
+        nResId = RID_STR_CLASS_RADIOBUTTON;
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlCheckBoxModel") ))
+    {
+        nResId = RID_STR_CLASS_CHECKBOX;
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlListBoxModel") ))
+    {
+        nResId = RID_STR_CLASS_LISTBOX;
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlComboBoxModel") ))
+    {
+        nResId = RID_STR_CLASS_COMBOBOX;
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlGroupBoxModel") ))
+    {
+        nResId = RID_STR_CLASS_GROUPBOX;
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlEditModel") ))
+    {
+        nResId = RID_STR_CLASS_EDIT;
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFixedTextModel") ))
+    {
+        nResId = RID_STR_CLASS_FIXEDTEXT;
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlImageControlModel") ))
+    {
+        nResId = RID_STR_CLASS_IMAGECONTROL;
+    }
+
+    if (nResId)
+    {
+        aDefaultName = ::rtl::OUString( IDEResId(nResId) );
+    }
+
+    return aDefaultName;
+
+    /* old version
+
+    String aStr(aServiceName);
 
     sal_Unicode pDelims[] = { '.' , 0 };
     xub_StrLen nPos = aStr.SearchCharBackward( pDelims );
@@ -625,28 +686,32 @@ String DlgEdObj::GetDefaultName()
         aStr.Erase( 0, ++nPos );
     }
 
+    aStr.SearchAndReplaceAscii("UnoControl", UniString() );
+    aStr.SearchAndReplaceAscii("Model", UniString() );
+
     return aStr;
+    */
 }
 
 //----------------------------------------------------------------------------
 
-String DlgEdObj::GetUniqueName()
+::rtl::OUString DlgEdObj::GetUniqueName()
 {
-    String sUniqueName;
+    ::rtl::OUString aUniqueName;
     uno::Reference< container::XNameAccess > xNameAcc((GetDlgEdForm()->GetUnoControlModel()), uno::UNO_QUERY);
 
     if ( xNameAcc.is() )
     {
         sal_Int32 n = 0;
-        String sDefaultName = GetDefaultName();
+        ::rtl::OUString aDefaultName = GetDefaultName();
 
         do
         {
-            sUniqueName = sDefaultName + String::CreateFromInt32(++n);
-        }   while (xNameAcc->hasByName(sUniqueName));
+            aUniqueName = aDefaultName + ::rtl::OUString::valueOf(++n);
+        }   while (xNameAcc->hasByName(aUniqueName));
     }
 
-    return sUniqueName;
+    return aUniqueName;
 }
 
 //----------------------------------------------------------------------------
@@ -775,12 +840,12 @@ FASTBOOL DlgEdObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     SetPropsFromRect();
 
     // set labels
-    String sDefaultName = GetDefaultName();
-    if (sDefaultName.EqualsAscii("Button") ||
-        sDefaultName.EqualsAscii("RadioButton") ||
-        sDefaultName.EqualsAscii("CheckBox") ||
-        sDefaultName.EqualsAscii("GroupBox") ||
-        sDefaultName.EqualsAscii("FixedText") )
+    ::rtl::OUString aServiceName = GetServiceName();
+    if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlButtonModel") ) ||
+        aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlRadioButtonModel") ) ||
+        aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlCheckBoxModel") ) ||
+        aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlGroupBoxModel") ) ||
+        aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFixedTextModel") ) )
     {
         xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Label" ) ), aUniqueName );
     }
