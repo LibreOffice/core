@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-22 17:56:54 $
+ *  last change: $Author: sab $ $Date: 2001-03-29 05:41:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #endif
 #ifndef _XMLOFF_DOCUMENTSETTINGSCONTEXT_HXX
 #include <xmloff/DocumentSettingsContext.hxx>
+#endif
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include <xmloff/xmluconv.hxx>
 #endif
 
 #include "xmlimprt.hxx"
@@ -1809,5 +1812,13 @@ void ScXMLImport::SetViewSettings(const uno::Sequence<beans::PropertyValue>& aVi
 
 void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyValue>& aConfigProps)
 {
+    uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
+    if (xMultiServiceFactory.is())
+    {
+        uno::Reference <uno::XInterface> xInterface = xMultiServiceFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.DocumentConfiguration")));
+        uno::Reference <beans::XPropertySet> xProperties(xInterface, uno::UNO_QUERY);
+        if (xProperties.is())
+            SvXMLUnitConverter::convertPropertySet(xProperties, aConfigProps);
+    }
 }
 

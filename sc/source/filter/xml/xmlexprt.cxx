@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-22 17:56:54 $
+ *  last change: $Author: sab $ $Date: 2001-03-29 05:41:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2989,11 +2989,14 @@ void ScXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
 
 void ScXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& rProps)
 {
-/*  rProps.realloc(SC_CONFIGURATION_COUNT);
-    beans::PropertyValue* pProps = rProps.getArray();
-    if(pProps)
+    uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
+    if (xMultiServiceFactory.is())
     {
-    }*/
+        uno::Reference <uno::XInterface> xInterface = xMultiServiceFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.DocumentConfiguration")));
+        uno::Reference <beans::XPropertySet> xProperties(xInterface, uno::UNO_QUERY);
+        if (xProperties.is())
+            SvXMLUnitConverter::convertPropertySet(rProps, xProperties);
+    }
 }
 
 XMLShapeExport* ScXMLExport::CreateShapeExport()
