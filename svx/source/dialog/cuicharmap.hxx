@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cuicharmap.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:50:37 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:09:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,4 +124,4 @@ public:
 };
 
 #endif
- 
+
