@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: kz $ $Date: 2004-10-04 19:36:45 $
+#   last change: $Author: hr $ $Date: 2004-11-09 16:37:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,7 +102,6 @@ sw_res_files= \
     $(SRS)$/undo.srs        \
     $(SRS)$/utlui.srs        \
     $(SRS)$/web.srs          \
-    $(SRS)$/wizard.srs       \
     $(SRS)$/wrtsh.srs        \
     $(SOLARCOMMONRESDIR)$/sfx.srs
 
