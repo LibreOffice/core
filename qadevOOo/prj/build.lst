@@ -1,4 +1,4 @@
-qa  qadevOOo    :   OOoRunner NULL
+qa  qadevOOo    :   unoil jut NULL
 qa  qadevOOo                                             usr1    -   all qa_mkout NULL
 qa  qadevOOo\runner\util                                 nmake   -   all util NULL
 qa  qadevOOo\runner\share                                nmake   -   all share util NULL
