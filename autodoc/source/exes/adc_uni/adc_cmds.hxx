@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adc_cmds.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:34:55 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:06:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,9 @@ extern const String C_opt_DevmanRoot;
 //extern const String C_opt_CreateXml;
 //extern const String C_opt_Load;
 //extern const String C_opt_Save;
+
+extern const String C_opt_ExternNamespace;
+extern const String C_opt_ExternRoot;
 
 
 inline void
