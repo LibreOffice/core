@@ -12,11 +12,12 @@ mkdir: %_DEST%\inc%_EXT%\external\unicode
 
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 
-..\%__SRC%\lib\libicudt*.*      %_DEST%\lib%_EXT%\libicudt*.*
+..\%__SRC%\lib\libicudata.*     %_DEST%\lib%_EXT%\libicudata.*
 ..\%__SRC%\lib\libicui18n.*     %_DEST%\lib%_EXT%\libicui18n.*
 ..\%__SRC%\lib\libicule.*       %_DEST%\lib%_EXT%\libicule.*
 ..\%__SRC%\lib\libicuuc.*       %_DEST%\lib%_EXT%\libicuuc.*
 
+linklib: libicudata.so.*.*
 linklib: libicui18n.so.*.*
 linklib: libicule.so.*.*
 linklib: libicuuc.so.*.*
