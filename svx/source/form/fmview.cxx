@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-02 16:40:01 $
+ *  last change: $Author: fs $ $Date: 2002-05-22 17:16:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,6 +400,13 @@ void FmFormView::ChangeDesignMode(sal_Bool bDesign)
     // und mein Undo-Environment wieder an
     if (pModel)
         pModel->GetUndoEnv().UnLock();
+}
+
+//------------------------------------------------------------------------
+void FmFormView::GrabFirstControlFocus( sal_Bool _bForceSync )
+{
+    if ( !IsDesignMode() )
+        pImpl->AutoFocus( _bForceSync );
 }
 
 //------------------------------------------------------------------------
