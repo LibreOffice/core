@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _drvwsh.sdi,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:08:22 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:24:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2455,6 +2455,27 @@ interface DrawView : Object
     SID_INSERT_AVMEDIA // ole : yes, status : ?
     [
         ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+
+    SID_INSERT_MASTER_PAGE
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_DELETE_MASTER_PAGE
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_RENAME_MASTER_PAGE
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_CLOSE_MASTER_VIEW
+    [
+        ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
     ]
 }
