@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animatedsprite.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:40:45 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 07:51:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,6 @@
 #endif
 
 
-using namespace ::com::sun::star;
 using namespace ::com::sun::star;
 
 namespace presentation
