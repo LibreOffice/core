@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-21 18:18:24 $
+ *  last change: $Author: hr $ $Date: 2001-10-19 09:40:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,8 +120,10 @@ void lcl_InvalidateAttribs( SfxBindings& rBindings )
 void lcl_UpdateHyphenator( Outliner& rOutliner, SdrObject* pObj )
 {
     // use hyphenator only if hyphenation attribute is set
-    if ( pObj && ((const SfxBoolItem&)pObj->GetItemSet().Get(EE_PARA_HYPHENATE)).GetValue() )
-        rOutliner.SetHyphenator( LinguMgr::GetHyphenator() );
+    if ( pObj && ((const SfxBoolItem&)pObj->GetItemSet().Get(EE_PARA_HYPHENATE)).GetValue() ) {
+            com::sun::star::uno::Reference<com::sun::star::linguistic2::XHyphenator> xHyphenator( LinguMgr::GetHyphenator() );
+            rOutliner.SetHyphenator( xHyphenator );
+    }
 }
 
 /*************************************************************************
