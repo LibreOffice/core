@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cr_html.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: np $ $Date: 2001-10-02 08:49:26 $
+ *  last change: $Author: np $ $Date: 2002-08-08 16:08:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

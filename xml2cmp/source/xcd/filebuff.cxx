@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filebuff.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: np $ $Date: 2001-10-02 08:49:26 $
+ *  last change: $Author: np $ $Date: 2002-08-08 16:08:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,20 +66,15 @@
 #include <ctype.h>
 
 
-using std::ifstream;
-using std::ios;
-
-
-
 bool
 LoadXmlFile( Buffer &           o_rBuffer,
              const char *       i_sXmlFilePath )
 {
-    ifstream aXmlFile;
+    std::ifstream aXmlFile;
 
-    aXmlFile.open(i_sXmlFilePath, ios::in
+    aXmlFile.open(i_sXmlFilePath, std::ios::in
 #ifdef WNT
-                                          | ios::binary
+                                          | std::ios::binary
 #endif // WNT
     );
 
@@ -87,7 +82,7 @@ LoadXmlFile( Buffer &           o_rBuffer,
         return false;
 
     // Prepare buffer:
-    aXmlFile.seekg(0, ios::end);
+    aXmlFile.seekg(0, std::ios::end);
     unsigned long nBufferSize = aXmlFile.tellg();
     o_rBuffer.SetSize(nBufferSize + 1);
     o_rBuffer.Data()[nBufferSize] = '\0';

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hjs $ $Date: 2001-07-18 17:52:27 $
+ *  last change: $Author: np $ $Date: 2002-08-08 16:08:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 #include <iostream>
+#include <fstream>
 #include <stdio.h>
 
 
@@ -74,10 +75,6 @@
 #include "../support/syshelp.hxx"
 #include "../support/heap.hxx"
 
-
-
-
-using namespace std;
 
 
 int                     Do_IndexCommandLine(
@@ -125,7 +122,7 @@ Do_SingleFileCommandLine(const CommandLine & i_rCommandLine)
     bool bLoadResult = aParser.LoadFile(i_rCommandLine.XmlSrcFile());
     if (! bLoadResult)
     {
-        cerr << "Error: File %s could not be loaded." << i_rCommandLine.XmlSrcFile() << endl;
+        std::cerr << "Error: File %s could not be loaded." << i_rCommandLine.XmlSrcFile() << std::endl;
         return 1;
     }
 
@@ -134,10 +131,10 @@ Do_SingleFileCommandLine(const CommandLine & i_rCommandLine)
         Create_AccessMethod( i_rCommandLine.FuncFile(),
                              aParser.PureText() );
 
-        cout << "File "
+        std::cout << "File "
              << i_rCommandLine.FuncFile()
              << " with component_getDescriptionFunc() is created now."
-             << endl;
+             << std::endl;
     }
 
     // Parse
@@ -170,14 +167,14 @@ Do_IndexCommandLine(const CommandLine & i_rCommandLine)
                             i_rCommandLine.IdlRootPath(),
                             i_rCommandLine.IndexedTags() );
 
-    std::cout << "Gather xml-files ..." << endl;
+    std::cout << "Gather xml-files ..." << std::endl;
     GatherFileNames( aFiles, i_rCommandLine.XmlSrcDirectory() );
 
-    std::cout << "Create output ..." << endl;
+    std::cout << "Create output ..." << std::endl;
     aIndex.GatherData(aFiles);
     aIndex.WriteOutput( i_rCommandLine.IndexOutputFile() );
 
-    std::cout << "... done." << endl;
+    std::cout << "... done." << std::endl;
 
     return 0;
 };
@@ -193,7 +190,7 @@ void                    Put2File_TypeInfo(
                             const char *            i_sOutputFile,
                             ModuleDescription &     i_rData );
 void                    StreamOut_TypeInfo(
-                            ostream &               o_rOut,
+                            std::ostream &               o_rOut,
                             ModuleDescription &     i_rData,
                             const char *            i_sSeparator );
 
@@ -210,14 +207,14 @@ Create_TypeInfo( const char *           o_sOutputFile,
         Put2File_TypeInfo(o_sOutputFile,i_rData);
 
 #if 0
-    ofstream aOut(o_sOutputFile, ios::out
+    std::ofstream aOut(o_sOutputFile, std::ios::out
 #ifdef WNT
-                                               | ios::binary
+                                               | std::ios::binary
 #endif
     );
     if ( !aOut )
     {
-        cerr << "Error: " << o_sOutputFile << " could not be created." << endl;
+        std::cerr << "Error: " << o_sOutputFile << " could not be created." << std::endl;
         return;
     }
 
@@ -280,21 +277,21 @@ Create_TypeInfo( const char *           o_sOutputFile,
 void
 Put2StdOut_TypeInfo( ModuleDescription &    i_rData )
 {
-    StreamOut_TypeInfo(cout, i_rData, " ");
+    StreamOut_TypeInfo(std::cout, i_rData, " ");
 }
 
 void
 Put2File_TypeInfo( const char *            i_sOutputFile,
                    ModuleDescription &     i_rData )
 {
-    ofstream aOut(i_sOutputFile, ios::out
+    std::ofstream aOut(i_sOutputFile, std::ios::out
 #ifdef WNT
-                                               | ios::binary
+                                               | std::ios::binary
 #endif
     );
     if ( !aOut )
     {
-        cerr << "Error: " << i_sOutputFile << " could not be created." << endl;
+        std::cerr << "Error: " << i_sOutputFile << " could not be created." << std::endl;
         return;
     }
 
@@ -308,7 +305,7 @@ Put2File_TypeInfo( const char *            i_sOutputFile,
 }
 
 void
-StreamOut_TypeInfo( ostream &               o_rOut,
+StreamOut_TypeInfo( std::ostream &               o_rOut,
                     ModuleDescription &     i_rData,
                     const char *            i_sSeparator )
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: np $Date:  $
+ *  last change: $Author: np $Date: 2001/03/23 13:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,15 +71,13 @@
 #endif
 
 
-using namespace std;
-
 
 // NOT FULLY DEFINED SERVICES
 
 
 
 #define AssertionOf(x)  \
-    {if (!(x)) {cerr << "Assertion failed: " << #x << __FILE__ << __LINE__ << std::endl; exit(3); }}
+    {if (!(x)) {std::cerr << "Assertion failed: " << #x << __FILE__ << __LINE__ << std::endl; exit(3); }}
 
 
 
@@ -425,14 +423,15 @@ X2CParser::CheckAndPassEndTag( const char * i_sElementName )
 void
 X2CParser::SyntaxError( const char * i_sText )
 {
-    cerr << "Syntax error "
+    std::cerr
+         << "Syntax error "
          << i_sText
          << " in file: "
          << sFileName.str()
          << " in line "
          << nFileLine
          << "."
-         << endl;
+         << std::endl;
 
      exit(3);
 }

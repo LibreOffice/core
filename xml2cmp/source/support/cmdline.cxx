@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdline.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mh $ $Date: 2001-09-28 14:37:09 $
+ *  last change: $Author: np $ $Date: 2002-08-08 16:07:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 
 char C_sUseText[] = "Use: xml2cmp.exe \n"
                     "        [-func funcFile] \n"
-                    "        [-html] \n"
+                    "        [-html htmlFile] \n"
                     "        [-types typeFile] \n"
                     "        [-idlpath idlPath] \n"
                     "        Xml_FileName\n"

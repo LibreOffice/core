@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dep_main.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2001-03-23 13:32:07 $
+ *  last change: $Author: np $ $Date: 2002-08-08 16:07:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,10 +64,6 @@
 #include "dependy.hxx"
 
 
-using namespace std;
-
-
-
 int
 #ifdef WNT
 _cdecl
@@ -77,9 +73,9 @@ main( int       argc,
 {
     if (argc < 2 || *argv[1] == '?')
     {
-        cout << "\nUse:" << endl
-             << "srvdepy.exe  <xml-component-descriptions-root-directory>"
-             << endl << endl;
+        std::cout << "\nUse:\n"
+             << "srvdepy.exe  <xml-component-descriptions-root-directory>\n"
+             << std::endl;
         return 0;
     }
 
@@ -92,17 +88,19 @@ main( int       argc,
     std::vector<Simstr>  aServs;
 
 
-    cout << "\nNow you can start to put in Service names." << endl
-         << "Please use correct case, but don't use namespaces." << endl
-         << "Just the Service's own name." << endl << endl
-         << "To stop the program, put in a hashmark \"#\" + ENTER." << endl << endl;
+    std::cout
+         << "\nNow you can start to put in Service names.\n"
+         << "Please use correct case, but don't use namespaces.\n"
+         << "Just the Service's own name.\n\n"
+         << "To stop the program, put in a hashmark \"#\" + ENTER.\n"
+         << std::endl;
 
 
 
     do {
 
         sInput[0] = 0;
-        cin >> sInput;
+        std::cin >> sInput;
         Simstr sImplService(sInput);
         if (*sInput != '#')
         {
@@ -111,17 +109,17 @@ main( int       argc,
 
             aDependencies.FindNeededServices( aLibs, aServs, sImplService );
 
-            cout << "\n\n\nNeeded libraries: " << endl;
+            std::cout << "\n\n\nNeeded libraries: " << std::endl;
             for ( unsigned i = 0; i < aLibs.size(); ++i )
             {
-                cout << "    " << aLibs[i].str() << endl;
+                std::cout << "    " << aLibs[i].str() << std::endl;
             }
-            cout << "\nNeeded services: " << endl;
+            std::cout << "\nNeeded services: " << std::endl;
             for ( unsigned s= 0; s < aServs.size(); ++s )
             {
-                cout << "    " << aServs[s].str() << endl;
+                std::cout << "    " << aServs[s].str() << std::endl;
             }
-            cout << endl << endl << endl;
+            std::cout << "\n\n" << std::endl;
         }
     }   while (*sInput != '#');
 

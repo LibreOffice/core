@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cr_metho.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: np $ $Date: 2001-03-23 13:39:36 $
+ *  last change: $Author: np $ $Date: 2002-08-08 16:08:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,10 +66,6 @@
 #include <iostream>
 
 
-using std::cerr;
-using std::ofstream;
-using std::ios;
-
 
 char C_sFileHeader1[] = "/* ";
 char C_sFileHeader2[] = " */\r\n/* Implementation of component_getDescriptionFunc() */\r\n\r\n"
@@ -79,7 +75,7 @@ char C_sFuncBegin[]   = "#ifdef __cplusplus\r\n"
                         "#endif\r\n\r\n"
                         "const sal_Char * SAL_CALL\r\ncomponent_getDescriptionFunc()\r\n"
                         "{\r\n"
-                        "    return (sal_Char*) \r\n"
+                        "    return (const sal_Char*) \r\n"
                         "    \"";
 char C_sFuncEnd[]    =  "\";\r\n"
                         "}\r\n\r\n"
@@ -97,16 +93,16 @@ Create_AccessMethod( const char *           i_pOutputFileName,
     char   sDescrLineChange[] = "\"\r\n    \"";
     int    sDescrLen = strlen(sDescrLineChange);
 
-    ofstream aFile(i_pOutputFileName, ios::out
+    std::ofstream aFile(i_pOutputFileName, std::ios::out
 #ifdef WNT
-                                               | ios::binary
+                                               | std::ios::binary
 #endif
     );
 
 
     if ( !aFile )
     {
-        cerr << "Error: " << i_pOutputFileName << " could not be created." << std::endl;
+        std::cerr << "Error: " << i_pOutputFileName << " could not be created." << std::endl;
         return;
     }
 

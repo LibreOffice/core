@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dependy.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2001-03-23 13:32:07 $
+ *  last change: $Author: np $ $Date: 2002-08-08 16:07:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,6 @@
 #include "../xcd/xmltree.hxx"
 #include "../xcd/parse.hxx"
 
-
-
-using namespace std;
 
 
 Simstr              ShortName(const Simstr & i_rService);
@@ -166,7 +163,7 @@ DependencyFinder::ReadFile(  const char * i_sFilename )
 
     if ( !aParser.Parse(i_sFilename) )
     {
-        cerr << "Error: File \""
+        std::cerr << "Error: File \""
              << i_sFilename
              << "\" could not be parsed."
              << std::endl;

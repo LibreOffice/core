@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syshelp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: np $ $Date: 2001-10-02 08:49:24 $
+ *  last change: $Author: np $ $Date: 2002-08-08 16:07:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,14 +80,10 @@
 #endif
 
 
-using namespace std;
-using std::ostream;
-
-
 char C_sSpaceInName[] = "&nbsp;&nbsp;&nbsp;";
 
 void
-WriteName( ostream &        o_rFile,
+WriteName( std::ostream &       o_rFile,
            const Simstr &   i_rIdlDocuBaseDir,
            const Simstr &   i_rName,
            E_LinkType       i_eLinkType )
@@ -224,7 +220,7 @@ GatherFileNames( List<Simstr> &     o_sFiles,
 
     // Stayingalive sign
     if (++nAliveCounter % 100 == 1)
-        cout << "." << flush;
+        std::cout << "." << std::flush;
 
     strcpy(sFilter, i_sSrcDirectory);
     strcat(sFilter,C_sXML_END);
@@ -249,7 +245,7 @@ GatherFileNames( List<Simstr> &     o_sFiles,
 
     // Stayingalive sign
     if (++nAliveCounter % 100 == 1)
-        cout << "." << flush;
+        std::cout << "." << std::flush;
 
     while ( (pEntry = readdir(pDir)) != 0 )
     {

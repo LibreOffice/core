@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cr_index.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: np $ $Date: 2001-10-02 08:49:26 $
+ *  last change: $Author: np $ $Date: 2002-08-08 16:08:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,10 +69,6 @@
 #include "parse.hxx"
 #include "cr_html.hxx"
 
-using std::cerr;
-using std::ofstream;
-using std::ios;
-using std::ostream;
 
 extern unsigned C_nSupportedServicesIndex;
 
@@ -119,10 +115,10 @@ Index::GatherData(  const List<Simstr> & i_rInputFileList )
 void
 Index::WriteOutput( const char * i_sOuputFile )
 {
-    ofstream aOut( i_sOuputFile, ios::out );
+    std::ofstream aOut( i_sOuputFile, std::ios::out );
     if (! aOut)
     {
-        cerr << "Error: Indexfile \""
+        std::cerr << "Error: Indexfile \""
              << i_sOuputFile
              << "\" could not be created."
              << std::endl;
@@ -161,7 +157,7 @@ Index::ReadFile(  const char * i_sFilename )
     bool bResult = aParser.Parse(i_sFilename);
     if (! bResult)
     {
-        cerr << "Error: File \""
+        std::cerr << "Error: File \""
              << i_sFilename
              << "\" could not be parsed."
              << std::endl;
@@ -203,9 +199,9 @@ Index::CreateHtmlFileName(  char *                      o_sOutputHtml,
 
 
 void
-Index::WriteTableFromHeap( ostream &    o_rOut,
+Index::WriteTableFromHeap( std::ostream &   o_rOut,
                            Heap &       i_rHeap,
-                            const char *    i_sIndexValue,
+                           const char * i_sIndexValue,
                            const char * i_sIndexReference,
                            E_LinkType       i_eLinkType )
 {
@@ -222,7 +218,7 @@ Index::WriteTableFromHeap( ostream &    o_rOut,
 
 
 void
-Index::WriteHeap( ostream &     o_rOut,
+Index::WriteHeap( std::ostream &    o_rOut,
                   Heap &        i_rHeap,
                   E_LinkType    i_eLinkType )
 {

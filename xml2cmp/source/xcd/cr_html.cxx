@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cr_html.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: np $ $Date: 2001-10-02 08:49:26 $
+ *  last change: $Author: np $ $Date: 2002-08-08 16:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,6 @@
 #include "xmltree.hxx"
 #include "../support/syshelp.hxx"
 
-using std::cerr;
-using std::ofstream;
-using std::ios;
 
 
 
@@ -89,9 +86,9 @@ char C_sHtmlFileFoot[] = "</BODY>\n</HTML>\n";
 HtmlCreator::HtmlCreator( const char *              i_pOutputFileName,
                           const XmlElement &        i_rDocument,
                           const Simstr &            i_sIDL_BaseDirectory )
-    :   aFile(i_pOutputFileName, ios::out
+    :   aFile(i_pOutputFileName, std::ios::out
 #ifdef WNT
-                                               | ios::binary
+                                               | std::ios::binary
 #endif
                                                              ),
         rDocument(i_rDocument),
@@ -99,7 +96,7 @@ HtmlCreator::HtmlCreator( const char *              i_pOutputFileName,
 {
     if ( !aFile )
     {
-        cerr << "Error: " << i_pOutputFileName << " could not be created." << std::endl;
+        std::cerr << "Error: " << i_pOutputFileName << " could not be created." << std::endl;
         exit(0);
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syshelp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: np $ $Date: 2001-07-10 11:02:30 $
+ *  last change: $Author: np $ $Date: 2002-08-08 16:08:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
     // BASE CLASSES
     // COMPONENTS
     // PARAMETERS
-#include <iostream>
+#include <iosfwd>
 
 class Simstr;
 template <class XY> class List;
