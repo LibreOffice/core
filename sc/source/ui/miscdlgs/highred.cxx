@@ -2,9 +2,9 @@
  *
  *  $RCSfile: highred.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:02 $
+ *  last change: $Author: hr $ $Date: 2000-11-14 16:35:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
+#include <sfx2/app.hxx>
 
 // defines -------------------------------------------------------------------
 

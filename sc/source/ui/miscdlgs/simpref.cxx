@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpref.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-09 19:56:06 $
+ *  last change: $Author: hr $ $Date: 2000-11-14 16:35:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 // INCLUDE -------------------------------------------------------------------
 
 #include <vcl/msgbox.hxx>
+#include <sfx2/app.hxx>
 
 #include "reffact.hxx"
 #include "document.hxx"
@@ -137,7 +138,7 @@ __EXPORT ScSimpleRefDlg::~ScSimpleRefDlg()
 {
     aPrivLastRefString=aEdAssign.GetText();
 
-    SFX_APP()->LockDispatcher( FALSE); // Modal-Modus einschalten
+    SFX_APP()->LockDispatcher( FALSE ); // Modal-Modus einschalten
 }
 
 //----------------------------------------------------------------------------
