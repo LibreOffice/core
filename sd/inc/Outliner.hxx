@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Outliner.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:10:56 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 12:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,11 +192,13 @@ public:
     */
     void EndSpelling (void);
 
-    /** callback for hangul hanja textconversion */
+    /** callback for textconversion */
     sal_Bool ConvertNextDocument (void);
 
-    /** Starts the hangul hanja text conversion for the current viewshell */
-    void StartTextConversion ( INT16 nLanguage );
+    /** Starts the text conversion (hangul/hanja or Chinese simplified/traditional)
+    for the current viewshell */
+    void StartConversion( INT16 nSourceLanguage,  INT16 nTargetLanguage,
+                const Font *pTargetFont, INT32 nOptions, BOOL bIsInteractive );
 
     /** This is called internaly when text conversion is started.
         The position of current view mode/page/object/caret position
@@ -220,8 +222,8 @@ public:
 
 private:
     /// Specifies whether to search and replace, to spell check or to do a
-    /// hangul hanja conversion.
-    enum {SEARCH, SPELL, HANGUL_HANJA_CONVERSION} meMode;
+    /// text conversion.
+    enum {SEARCH, SPELL, TEXT_CONVERSION} meMode;
 
     /// The view which displays the searched objects.
     ::sd::View* mpView;
@@ -233,7 +235,7 @@ private:
     SdDrawDocument* mpDrawDocument;
 
     /** this is the language that is used for current text conversion.
-        Only valid if meMode is HANGUL_HANJA_CONVERSION.
+        Only valid if meMode is TEXT_CONVERSION.
     */
     INT16 mnConversionLanguage;
 
@@ -314,7 +316,7 @@ private:
     */
     SdrObject* mpObj;
 
-    /** this stores the first object that is used for hangul/hanja conversion.
+    /** this stores the first object that is used for text conversion.
         Conversion automaticly wraps around the document and stops when it
         finds this object again.
     */
@@ -495,10 +497,10 @@ private:
     */
     void PrepareSearchAndReplace (void);
 
-    /** Prepare to do a hangul hanja conversion on the current text
+    /** Prepare to do a text conversion on the current text
         object. This includes putting it into edit mode.
     */
-    void PrepareHangulHanjaConversion (void);
+    void PrepareConversion (void);
 
     /** Switch to a new view mode.  Try to restore the original edit mode
         before doing so.
