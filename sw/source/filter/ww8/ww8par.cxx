@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:30:11 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 12:06:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,51 +660,89 @@ const SfxPoolItem* SwWW8FltControlStack::GetStackAttr(const SwPosition& rPos,
     return 0;
 }
 
-void SwWW8FltControlStack::Delete(const SwPaM &rPam)
+void SwFltControlStack::Delete(const SwPaM &rPam)
 {
     const SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
 
     if( !rPam.HasMark() || *pStt >= *pEnd )
         return;
 
-    SwNodeIndex aStartNode( pStt->nNode, -1 );
+    SwNodeIndex aStartNode(pStt->nNode, -1);
     USHORT nStartIdx = pStt->nContent.GetIndex();
-    SwNodeIndex aEndNode( pEnd->nNode, -1 );
+    SwNodeIndex aEndNode(pEnd->nNode, -1);
     USHORT nEndIdx = pEnd->nContent.GetIndex();
 
+    //We don't support deleting content that is over one node, or removing a node.
+    ASSERT(aEndNode == aStartNode, "nodes must be the same, or this method extended");
+    if (aEndNode != aStartNode)
+        return;
 
     for (USHORT nSize = Count(); nSize > 0;)
     {
         SwFltStackEntry* pEntry = (*this)[--nSize];
 
-        //to be adjusted
-        if (pEntry->nMkNode > aStartNode ||
-            (pEntry->nMkNode == aStartNode && pEntry->nMkCntnt >= nStartIdx) )
+        bool bEntryStartAfterSelStart =
+            (pEntry->nMkNode == aStartNode && pEntry->nMkCntnt >= nStartIdx);
+
+        bool bEntryStartBeforeSelEnd =
+            (pEntry->nMkNode == aEndNode && pEntry->nMkCntnt <= nEndIdx);
+
+        bool bEntryEndAfterSelStart = false;
+        bool bEntryEndBeforeSelEnd = false;
+        if (!pEntry->bLocked)
+        {
+            bEntryEndAfterSelStart =
+                (pEntry->nPtNode == aStartNode && pEntry->nPtCntnt >= nStartIdx);
+
+            bEntryEndBeforeSelEnd =
+                (pEntry->nPtNode == aEndNode && pEntry->nPtCntnt <= nEndIdx);
+        }
+
+        bool bTotallyContained = false;
+        if (
+             bEntryStartAfterSelStart && bEntryStartBeforeSelEnd &&
+             bEntryEndAfterSelStart && bEntryEndBeforeSelEnd
+           )
+        {
+           bTotallyContained = true;
+        }
+
+        if (bTotallyContained)
         {
             //after start, before end, delete
-            if (!pEntry->bLocked && (
-                    pEntry->nPtNode < aEndNode ||
-                    (pEntry->nPtNode == aEndNode && pEntry->nPtCntnt < nEndIdx))
-                    )
+            DeleteAndDestroy(nSize);
+            continue;
+        }
+
+        xub_StrLen nCntntDiff = nEndIdx - nStartIdx;
+
+        //to be adjusted
+        if (bEntryStartAfterSelStart)
+        {
+            if (bEntryStartBeforeSelEnd)
             {
-                DeleteAndDestroy(nSize);
-            }
-            else
-            {
-                //move everything backwards
+                //move start to new start
                 pEntry->nMkNode = aStartNode;
                 pEntry->nMkCntnt = nStartIdx;
-                pEntry->nPtNode -= (aEndNode.GetIndex()-aStartNode.GetIndex());
-                if (!pEntry->bLocked)
-                    pEntry->nPtCntnt -= nEndIdx - nStartIdx;
             }
+            else
+                pEntry->nMkCntnt -= nCntntDiff;
         }
-        else if ((!pEntry->bLocked) && ((pEntry->nPtNode > aStartNode) || (
-            pEntry->nPtNode == aStartNode && pEntry->nPtCntnt > nStartIdx)))
+
+        if (bEntryEndAfterSelStart)
         {
-            pEntry->nPtNode -= (aEndNode.GetIndex()-aStartNode.GetIndex());
-            pEntry->nPtCntnt -= nEndIdx - nStartIdx;
+            if (bEntryEndBeforeSelEnd)
+            {
+                pEntry->nPtNode = aStartNode;
+                pEntry->nPtCntnt = nStartIdx;
+            }
+            else
+                pEntry->nPtCntnt -= nCntntDiff;
         }
+
+        //That's what locked is, end equal to start, and nPtCntnt is invalid
+        if (pEntry->bLocked)
+            pEntry->nPtNode = pEntry->nMkNode;
     }
 }
 
@@ -804,8 +842,8 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
         */
         case RES_TXTATR_FIELD:
         {
-            SwNodeIndex aIdx( pEntry->nMkNode, +1 );
-            SwPaM aPaM( aIdx, pEntry->nMkCntnt );
+            SwNodeIndex aIdx(pEntry->nMkNode, 1);
+            SwPaM aPaM(aIdx, pEntry->nMkCntnt);
 
             SwFmtFld& rFmtFld   = *(SwFmtFld*)pEntry->pAttr;
             SwField* pFld = rFmtFld.GetFld();
@@ -1026,7 +1064,7 @@ void SwWW8ImplReader::ImportDop()
             {
                 // create "invalid" value for SfxStamp
                 // (as seen in sfx2/DOSINF.HXX)
-                aPrinted.SetTime(DateTime(Date( 1, 1, 1601 ), Time( 0, 0, 0 )));
+                aPrinted.SetTime(DateTime(Date(1, 1, 1601), Time(0, 0, 0)));
             }
             else
                 aPrinted.SetTime( aLastPrinted );
@@ -1344,6 +1382,33 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
     return 0;
 }
 
+void SwWW8ImplReader::Read_HdFtTextAsHackedFrame(long nStart, long nLen,
+    SwFrmFmt &rHdFtFmt, sal_uInt16 nPageWidth)
+{
+    const SwNodeIndex* pSttIdx = rHdFtFmt.GetCntnt().GetCntntIdx();
+    ASSERT(pSttIdx, "impossible");
+    if (!pSttIdx)
+        return;
+
+    SwPosition aTmpPos(*pPaM->GetPoint());
+
+    pPaM->GetPoint()->nNode = pSttIdx->GetIndex() + 1;
+    pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), 0);
+
+    SwFlyFrmFmt *pFrame = rDoc.MakeFlySection(FLY_AT_CNTNT, pPaM->GetPoint());
+
+    pFrame->SetAttr(SwFmtFrmSize(ATT_MIN_SIZE, nPageWidth, MINLAY));
+    pFrame->SetAttr(SwFmtSurround(SURROUND_THROUGHT));
+    pFrame->SetAttr(SwFmtHoriOrient(0, HORI_RIGHT)); //iFOO
+    MoveInsideFly(pFrame);
+
+    const SwNodeIndex* pHackIdx = pFrame->GetCntnt().GetCntntIdx();
+
+    Read_HdFtFtnText(pHackIdx, nStart, nLen - 1, MAN_HDFT);
+
+    MoveOutsideFly(pFrame, aTmpPos);
+}
+
 void SwWW8ImplReader::Read_HdFtText(long nStart, long nLen, SwFrmFmt* pHdFtFmt)
 {
     const SwNodeIndex* pSttIdx = pHdFtFmt->GetCntnt().GetCntntIdx();
@@ -1387,9 +1452,27 @@ bool SwWW8ImplReader::HasOwnHeaderFooter(BYTE nWhichItems, BYTE grpfIhdt,
     return false;
 }
 
-void SwWW8ImplReader::Read_HdFt(BYTE nWhichItems, BYTE grpfIhdt, int nSect, SwPageDesc* pPD,
-    const SwPageDesc *pPrev)
+void SwWW8ImplReader::Read_HdFt(bool bIsTitle, int nSect,
+    const SwPageDesc *pPrev, const wwSection &rSection)
 {
+    BYTE nWhichItems = 0;
+    SwPageDesc *pPD = 0;
+    if (!bIsTitle)
+    {
+        nWhichItems =
+            rSection.maSep.grpfIhdt & ~(WW8_HEADER_FIRST | WW8_FOOTER_FIRST);
+        pPD = rSection.mpPage;
+    }
+    else
+    {
+        nWhichItems =
+            rSection.maSep.grpfIhdt & (WW8_HEADER_FIRST | WW8_FOOTER_FIRST),
+        pPD = rSection.mpTitlePage;
+    }
+
+    BYTE grpfIhdt = rSection.maSep.grpfIhdt;
+
+
     if( pHdFt )
     {
         WW8_CP start;
@@ -1439,7 +1522,21 @@ void SwWW8ImplReader::Read_HdFt(BYTE nWhichItems, BYTE grpfIhdt, int nSect, SwPa
                 }
 
                 if (bOk)
-                    Read_HdFtText(start, nLen, pHdFtFmt);
+                {
+                    bool bHackRequired = false;
+                    if (bIsHeader && rSection.IsFixedHeightHeader())
+                        bHackRequired = true;
+                    else if (bIsFooter && rSection.IsFixedHeightFooter())
+                        bHackRequired = true;
+
+                    if (bHackRequired)
+                    {
+                        Read_HdFtTextAsHackedFrame(start, nLen, *pHdFtFmt,
+                            rSection.GetTextAreaWidth());
+                    }
+                    else
+                        Read_HdFtText(start, nLen, pHdFtFmt);
+                }
                 else if (!bOk && pPrev)
                     CopyPageDescHdFt(pPrev, pPD, nI);
 
@@ -1464,22 +1561,16 @@ void wwSectionManager::SetHdFt(wwSection &rSection, int nSect,
     ASSERT(rSection.mpPage, "makes no sense to call with a main page");
     if (rSection.mpPage)
     {
-        // 1 Pagedesc reicht
-        mrReader.Read_HdFt(
-            rSection.maSep.grpfIhdt & ~(WW8_HEADER_FIRST | WW8_FOOTER_FIRST),
-            rSection.maSep.grpfIhdt,
-            nSect, rSection.mpPage, pPrevious ? pPrevious->mpPage : 0);
-
+        mrReader.Read_HdFt(false, nSect, pPrevious ? pPrevious->mpPage : 0,
+                rSection);
     }
 
     if (rSection.mpTitlePage)
     {
         // 2 Pagedescs noetig: 1.Seite und folgende
         // 1. Seite einlesen
-        mrReader.Read_HdFt(
-            rSection.maSep.grpfIhdt & (WW8_HEADER_FIRST | WW8_FOOTER_FIRST),
-            rSection.maSep.grpfIhdt,
-            nSect, rSection.mpTitlePage, pPrevious ? pPrevious->mpTitlePage : 0);
+        mrReader.Read_HdFt(true, nSect, pPrevious ? pPrevious->mpTitlePage : 0,
+            rSection);
     }
 
     // Kopf / Fuss - Index Updaten
@@ -1673,7 +1764,7 @@ void SwWW8ImplReader::EndSpecial()
 {
     // Frame / Table / Anl
     if (bAnl)
-        StopAnl();                  // -> bAnl = false
+        StopAllAnl();                  // -> bAnl = false
 
     while(maApos.size() > 1)
     {
@@ -1793,7 +1884,7 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
                 || aApo.HasStartStop()                  // erzwungenes Anl-Ende
                 || bStopTab || bStartTab )
             {
-                StopAnl();          // Anl-Restart ( = Wechsel ) ueber sprms
+                StopAnlToRestart(nT);  // Anl-Restart ( = Wechsel ) ueber sprms
             }
             else
             {
@@ -1802,7 +1893,7 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
         }
         else
         {                                           // Anl normal zuende
-            StopAnl();                                  // Wirkliches Ende
+            StopAllAnl();                                  // Wirkliches Ende
         }
     }
     if (bStopTab)
@@ -1827,7 +1918,7 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
     if (bStartTab)
     {
         if (bAnl)                           // Nummerierung ueber Zellengrenzen
-            StopAnl();                      // fuehrt zu Absturz -> keine Anls
+            StopAllAnl();                   // fuehrt zu Absturz -> keine Anls
                                             // in Tabellen
         while (nInTable < nCellLevel)
         {
@@ -2360,12 +2451,12 @@ long SwWW8ImplReader::ReadTextAttr(long& rTxtPos, bool& rbStartLine)
         }
         else if( aRes.nSprmId < 0x800 ) // eigene Hilfs-Attribute
         {
-            if( bStartAttr )
+            if (bStartAttr)
             {
                 nSkipChars = ImportExtSprm(&aRes);
                 if (
                     (aRes.nSprmId == eFTN) || (aRes.nSprmId == eEDN) ||
-                    (aRes.nSprmId == eFLD)
+                    (aRes.nSprmId == eFLD) || (aRes.nSprmId == eAND)
                    )
                 {
                     // Felder/Ftn-/End-Note hier ueberlesen
@@ -2603,10 +2694,12 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, short nType)
 SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
     SvStream* pSt, SwDoc& rD, bool bNewDoc)
     : maTracer(*(rD.GetDocShell()->GetMedium())), pStg(pStorage), pStrm(pSt),
-    pTableStream(0), pDataStream(0), rDoc(rD), maSectionManager(*this),
-    maSectionNameGenerator(rD,CREATE_CONST_ASC("WW")),
-    maGrfNameGenerator(bNewDoc,String('G')), pMSDffManager(0), mpAtnNames(0),
-    pAuthorInfos(0), mbNewDoc(bNewDoc)
+    pTableStream(0), pDataStream(0),
+    mxDstStg(new SvStorage(new SvMemoryStream(), true)), rDoc(rD),
+    maSectionManager(*this), maSectionNameGenerator(rD,CREATE_CONST_ASC("WW")),
+    maGrfNameGenerator(bNewDoc,String('G')), maParaStyleMapper(rD),
+    maCharStyleMapper(rD), pMSDffManager(0), mpAtnNames(0), pAuthorInfos(0),
+    mbNewDoc(bNewDoc)
 {
     pStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     nWantedVersion = nVersionPara;
@@ -2652,7 +2745,6 @@ SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
     nProgress = 0;
     nSwNumLevel = nWwNumType = 0xff;
     pTableDesc = 0;
-    mpNumRule = 0;
     pNumOlst = 0;
     pNode_FLY_AT_CNTNT = 0;
     pDrawModel = 0;
@@ -2711,7 +2803,7 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
     }
     wwULSpaceData aULData;
     GetPageULData(rSection, bTitlePage, aULData);
-    SetPageULSpaceItems(rFmt, aULData);
+    SetPageULSpaceItems(rFmt, aULData, rSection);
 
     SetPage(rPage, rFmt, rSection, bIgnoreCols);
 
@@ -2832,12 +2924,14 @@ SwFmtPageDesc wwSectionManager::SetSwFmtPageDesc(mySegIter &rIter,
     if (!rIter->mpPage)
         return aEmpty;
 
+    //Set page before hd/ft
     const wwSection *pPrevious = 0;
     if (rIter != rStart)
         pPrevious = &(*(rIter-1));
     SetHdFt(*rIter, std::distance(rStart, rIter), pPrevious);
     SetUseOn(*rIter);
 
+    //Set hd/ft after set page
     if (rIter->mpTitlePage)
         SetSegmentToPageDesc(*rIter, true, bIgnoreCols);
     SetSegmentToPageDesc(*rIter, false, bIgnoreCols);
@@ -3582,28 +3676,12 @@ ULONG SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
         nIniFlyDy = aVal[ 4 ];
 
         nFieldFlags = aVal[ 5 ];
-        if ( SwFltGetFlag( nFieldFlags, SwFltControlStack::HYPO ) )
-        {
-            SwFltSetFlag( nFieldFlags, SwFltControlStack::BOOK_TO_VAR_REF );
-            SwFltSetFlag( nFieldFlags, SwFltControlStack::TAGS_DO_ID );
-            SwFltSetFlag( nFieldFlags, SwFltControlStack::TAGS_IN_TEXT );
-            SwFltSetFlag( nFieldFlags, SwFltControlStack::ALLOW_FLD_CR );
-            for( USHORT i = 0; i < 3; i++ )
-                nFieldTagAlways[i] = 0;         // Hypo-Default: bekannte Felder
-                                                // nicht taggen
-            nFieldTagBad[0] = 0xffffffff;       // unbekannte Felder taggen
-            nFieldTagBad[1] = 0xffffffff;       //
-            nFieldTagBad[2] = 0xffffffef;       // "EinfuegenText" nicht taggen
-        }
-        else
-        {
-            nFieldTagAlways[0] = aVal[ 6 ];
-            nFieldTagAlways[1] = aVal[ 7 ];
-            nFieldTagAlways[2] = aVal[ 8 ];
-            nFieldTagBad[0] = aVal[ 9 ];
-            nFieldTagBad[1] = aVal[ 10 ];
-            nFieldTagBad[2] = aVal[ 11 ];
-        }
+        nFieldTagAlways[0] = aVal[ 6 ];
+        nFieldTagAlways[1] = aVal[ 7 ];
+        nFieldTagAlways[2] = aVal[ 8 ];
+        nFieldTagBad[0] = aVal[ 9 ];
+        nFieldTagBad[1] = aVal[ 10 ];
+        nFieldTagBad[2] = aVal[ 11 ];
     }
 
     UINT16 nMagic;
@@ -3749,7 +3827,7 @@ BOOL SwMSDffManager::GetOLEStorageName(long nOLEId, String& rStorageName,
     bool bRet = false;
 
     long nPictureId = 0;
-    if( !( rReader.nIniFlags & WW8FL_NO_OLE ) && rReader.pStg )
+    if (rReader.pStg)
     {
         // dann holen wir uns mal ueber den TextBox-PLCF die richtigen
         // Char Start-/End-Positionen. In dem Bereich sollte dann
@@ -3810,14 +3888,10 @@ BOOL SwMSDffManager::GetOLEStorageName(long nOLEId, String& rStorageName,
     if( bRet )
     {
         rStorageName = '_';
-        rStorageName += String::CreateFromInt32( nPictureId );
+        rStorageName += String::CreateFromInt32(nPictureId);
         rSrcStorage = rReader.pStg->OpenStorage(CREATE_CONST_ASC(
             SL::aObjectPool));
-        SwDocShell *pDocShell = rReader.rDoc.GetDocShell();
-        if (pDocShell == 0)
-            bRet=false;
-        else
-            rDestStorage = pDocShell->GetStorage();
+        rDestStorage = rReader.mxDstStg;
     }
     return bRet;
 }
