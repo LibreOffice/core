@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-06 13:16:59 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:23:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,35 +103,35 @@ namespace xmloff { namespace token {
 
         // namespace prefixes and names
         TOKEN( "office" ),           // XML_np_office
-        TOKEN( "http://openoffice.org/2000/office" ), // XML_n_office
+        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:office:1.0" ), // XML_n_office
         TOKEN( "http://sun.com/xmlns/staroffice/office" ), // XML_n_office_old
         TOKEN( "meta" ),             // XML_np_meta
-        TOKEN( "http://openoffice.org/2000/meta" ), // XML_n_meta
+        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:meta:1.0" ), // XML_n_meta
         TOKEN( "http://sun.com/xmlns/staroffice/meta" ), // XML_n_meta_old
         TOKEN( "style" ),            // XML_np_style
-        TOKEN( "http://openoffice.org/2000/style" ), // XML_n_style
+        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:style:1.0" ), // XML_n_style
         TOKEN( "http://sun.com/xmlns/staroffice/style" ), // XML_n_style_old
         TOKEN( "number" ),           // XML_np_number
-        TOKEN( "http://openoffice.org/2000/datastyle" ), // XML_n_number
+        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:datastyle:1.0" ), // XML_n_number
         TOKEN( "http://sun.com/xmlns/staroffice/number" ), // XML_n_number_old
         TOKEN( "text" ),             // XML_np_text
-        TOKEN( "http://openoffice.org/2000/text" ), // XML_n_text
+        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:text:1.0" ), // XML_n_text
         TOKEN( "http://sun.com/xmlns/staroffice/text" ), // XML_n_text_old
         TOKEN( "table" ),            // XML_np_table
-        TOKEN( "http://openoffice.org/2000/table" ), // XML_n_table
+        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:table:1.0" ), // XML_n_table
         TOKEN( "http://sun.com/xmlns/staroffice/table" ), // XML_n_table_old
         TOKEN( "draw" ),             // XML_np_draw
-        TOKEN( "http://openoffice.org/2000/drawing" ), // XML_n_draw
+        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:drawing:1.0" ), // XML_n_draw
         TOKEN( "dr3d" ),             // XML_np_dr3d
-        TOKEN( "http://openoffice.org/2000/dr3d" ), // XML_n_dr3d
+        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:dr3d:1.0" ), // XML_n_dr3d
         TOKEN( "http://sun.com/xmlns/staroffice/draw" ), // XML_n_draw_old
         TOKEN( "presentation" ),        // XML_np_presentation
-        TOKEN( "http://openoffice.org/2000/presentation" ), // XML_n_presentation
+        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:presentation:1.0" ), // XML_n_presentation
         TOKEN( "http://sun.com/xmlns/staroffice/presentation" ), // XML_n_presentation_old
         TOKEN( "chart" ),                // XML_np_chart
-        TOKEN( "http://openoffice.org/2000/chart" ), // XML_n_chart
+        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:chart:1.0" ), // XML_n_chart
         TOKEN( "config" ),               // XML_np_config
-        TOKEN( "http://openoffice.org/2001/config" ), // XML_n_config
+        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:config:1.0" ), // XML_n_config
         TOKEN( "http://sun.com/xmlns/staroffice/chart" ), // XML_n_chart_old
         TOKEN( "fo" ),                   // XML_np_fo
         TOKEN( "http://www.w3.org/1999/XSL/Format/" ), // XML_n_fo_old
@@ -144,9 +144,9 @@ namespace xmloff { namespace token {
         TOKEN( "svg" ),                  // XML_np_svg
         TOKEN( "http://www.w3.org/2000/svg" ), // XML_n_svg
         TOKEN( "form" ),                 // XML_NP_form
-        TOKEN( "http://openoffice.org/2000/form" ), // XML_N_form
+        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:form:1.0" ), // XML_N_form
         TOKEN( "script" ),               // XML_NP_script
-        TOKEN( "http://openoffice.org/2000/script" ), // XML_N_script
+        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:script:1.0" ), // XML_N_script
 
 
         TOKEN( "block-list" ),           // XML_np_block_list
@@ -167,7 +167,7 @@ namespace xmloff { namespace token {
         TOKEN( "pc" ),                         // XML_unit_pc
         TOKEN( "ft" ),                         // XML_unit_foot
         TOKEN( "mi" ),                         // XML_unit_miles
-        TOKEN( "inch" ),                       // XML_unit_inch
+        TOKEN( "in" ),                       // XML_unit_inch
 
         // any other
         TOKEN( "1" ),                          // XML_1
@@ -498,12 +498,6 @@ namespace xmloff { namespace token {
         TOKEN( "creation-date" ),              // XML_CREATION_DATE
         TOKEN( "creation-time" ),              // XML_CREATION_TIME
         TOKEN( "creator" ),                    // XML_CREATOR
-        TOKEN( "X" ),                          // XML_CROSSEDOUT_CROSS
-        TOKEN( "double-line" ),                // XML_CROSSEDOUT_DOUBLE
-        TOKEN( "none" ),                       // XML_CROSSEDOUT_NONE
-        TOKEN( "single-line" ),                // XML_CROSSEDOUT_SINGLE
-        TOKEN( "slash" ),                      // XML_CROSSEDOUT_SLASH
-        TOKEN( "thick-line" ),                 // XML_CROSSEDOUT_THICK
         TOKEN( "csc" ),                        // XML_CSC
         TOKEN( "csch" ),                       // XML_CSCH
         TOKEN( "cube" ),                       // XML_CUBE
@@ -590,6 +584,7 @@ namespace xmloff { namespace token {
         TOKEN( "deletions" ),                  // XML_DELETIONS
         TOKEN( "dependence" ),                 // XML_DEPENDENCE
         TOKEN( "dependences" ),                // XML_DEPENDENCES
+        TOKEN( "dependencies" ),               // XML_DEPENDENCIES
         TOKEN( "depth" ),                      // XML_DEPTH
         TOKEN( "desc" ),                       // XML_DESC
         TOKEN( "descending" ),                 // XML_DESCENDING
@@ -1050,6 +1045,7 @@ namespace xmloff { namespace token {
         TOKEN( "length" ),                     // XML_LENGTH
         TOKEN( "leq" ),                        // XML_LEQ
         TOKEN( "let-text" ),                   // XML_LET_TEXT
+        TOKEN( "keep-text" ),                  // XML_KEEP_TEXT
         TOKEN( "letter-kerning" ),             // XML_LETTER_KERNING
         TOKEN( "letter-spacing" ),             // XML_LETTER_SPACING
         TOKEN( "letters" ),                    // XML_LETTERS
@@ -1836,24 +1832,12 @@ namespace xmloff { namespace token {
         TOKEN( "truncate-on-overflow" ),       // XML_TRUNCATE_ON_OVERFLOW
         TOKEN( "ttb" ),                        // XML_TTB
         TOKEN( "type" ),                       // XML_TYPE
-        TOKEN( "bold" ),                       // XML_UNDERLINE_BOLD
-        TOKEN( "bold-dash" ),                  // XML_UNDERLINE_BOLD_DASH
-        TOKEN( "bold-dot-dash" ),              // XML_UNDERLINE_BOLD_DOT_DASH
-        TOKEN( "bold-dot-dot-dash" ),          // XML_UNDERLINE_BOLD_DOT_DOT_DASH
-        TOKEN( "bold-dotted" ),                // XML_UNDERLINE_BOLD_DOTTED
-        TOKEN( "bold-long-dash" ),             // XML_UNDERLINE_BOLD_LONG_DASH
-        TOKEN( "bold-wave" ),                  // XML_UNDERLINE_BOLD_WAVE
-        TOKEN( "dash" ),                       // XML_UNDERLINE_DASH
-        TOKEN( "dot-dash" ),                   // XML_UNDERLINE_DOT_DASH
-        TOKEN( "dot-dot-dash" ),               // XML_UNDERLINE_DOT_DOT_DASH
-        TOKEN( "dotted" ),                     // XML_UNDERLINE_DOTTED
-        TOKEN( "double" ),                     // XML_UNDERLINE_DOUBLE
-        TOKEN( "double-wave" ),                // XML_UNDERLINE_DOUBLE_WAVE
-        TOKEN( "long-dash" ),                  // XML_UNDERLINE_LONG_DASH
-        TOKEN( "none" ),                       // XML_UNDERLINE_NONE
-        TOKEN( "single" ),                     // XML_UNDERLINE_SINGLE
-        TOKEN( "small-wave" ),                 // XML_UNDERLINE_SMALL_WAVE
-        TOKEN( "wave" ),                       // XML_UNDERLINE_WAVE
+        TOKEN( "dot-dash" ),                   // XML_DOT_DASH
+        TOKEN( "dot-dot-dash" ),               // XML_DOT_DOT_DASH
+        TOKEN( "long-dash" ),                  // XML_LONG_DASH
+        TOKEN( "single" ),                     // XML_SINGLE
+        TOKEN( "small-wave" ),                 // XML_SMALL_WAVE
+        TOKEN( "wave" ),                       // XML_WAVE
         TOKEN( "unformatted-text" ),           // XML_UNFORMATTED_TEXT
         TOKEN( "union" ),                      // XML_UNION
         TOKEN( "unit" ),                       // XML_UNIT
@@ -2317,7 +2301,146 @@ namespace xmloff { namespace token {
         TOKEN( "image-position" ),              // XML_IMAGE_POSITION
         TOKEN( "image-align" ),                 // XML_IMAGE_ALIGN
 
-        { 0, NULL, NULL }                       // XML_TOKEN_END
+        // Names for OOo format only
+        TOKEN( "http://openoffice.org/2000/office" ), // XML_n_office
+        TOKEN( "http://openoffice.org/2000/meta" ), // XML_n_meta
+        TOKEN( "http://openoffice.org/2000/style" ), // XML_n_style
+        TOKEN( "http://openoffice.org/2000/datastyle" ), // XML_n_number
+        TOKEN( "http://openoffice.org/2000/text" ), // XML_n_text
+        TOKEN( "http://openoffice.org/2000/table" ), // XML_n_table
+        TOKEN( "http://openoffice.org/2000/drawing" ), // XML_n_draw
+        TOKEN( "http://openoffice.org/2000/dr3d" ), // XML_n_dr3d
+        TOKEN( "http://openoffice.org/2000/presentation" ), // XML_n_presentation
+        TOKEN( "http://openoffice.org/2000/chart" ), // XML_n_chart
+        TOKEN( "http://openoffice.org/2001/config" ), // XML_n_config
+        TOKEN( "http://openoffice.org/2000/form" ), // XML_N_form
+        TOKEN( "http://openoffice.org/2000/script" ), // XML_N_script
+
+        TOKEN( "global" ),                // XML_GLOBAL
+
+        TOKEN( "note-class" ),                   // XML_NOTE_CLASS
+        TOKEN( "note-citation" ),                   // XML_NOTE_CITATION
+        TOKEN( "note-body" ),                   // XML_NOTE_BODY
+        TOKEN( "notes-configuration" ),          // XML_NOTES_CONFIGURATION
+        TOKEN( "note-ref" ),                   // XML_NOTE_REF
+        TOKEN( "is-sub-table" ),                   // XML_IS_SUB_TABLE
+        TOKEN( "page-layout" ),                   // XML_PAGE_LAYOUT
+        TOKEN( "page-layout-name" ),                  // XML_PAGE_LAYOUT_NAME
+        TOKEN( "graphic-properties" ),         // XML_GRAPHIC_PROPERTIES,
+        TOKEN( "drawing-page-properties" ),    // XML_DRAWING_PAGE_PROPERTIES,
+        TOKEN( "page-layout-properties" ),     // XML_PAGE_LAYOUT_PROPERTIES,
+        TOKEN( "header-footer-properties" ),   // XML_HEADER_FOOTER_PROPERTIES
+        TOKEN( "text-properties" ),            // XML_TEXT_PROPERTIES,
+        TOKEN( "paragraph-properties" ),       // XML_PARAGRAPH_PROPERTIES,
+        TOKEN( "ruby-properties" ),            // XML_RUBY_PROPERTIES,
+        TOKEN( "section-properties" ),         // XML_SECTION_PROPERTIES,
+        TOKEN( "table-properties" ),           // XML_TABLE_PROPERTIES,
+        TOKEN( "table-column-properties" ),    // XML_TABLE_COLUMN_PROPERTIES,
+        TOKEN( "table-row-properties" ),       // XML_TABLE_ROW_PROPERTIES,
+        TOKEN( "table-cell-properties" ),      // XML_TABLE_CELL_PROPERTIES
+        TOKEN( "list-level-properties" ),      // XML_LIST_LEVEL_PROPERTIES
+        TOKEN( "chart-properties" ),           // XML_CHART_PROPERTIES
+        TOKEN( "drawing-page" ),               // XML_DRAWING_PAGE
+        TOKEN( "graphics" ),                   // XML_GRAPHICS
+        TOKEN( "tab" ),                         // XML_TAB
+        TOKEN( "text-underline-mode" ),         // XML_TEXT_UNDERLINE_MODE
+        TOKEN( "text-line-though-mode" ),       // XML_TEXT_LINE_THROUGH_MODE
+        TOKEN( "continuous" ),                  // XML_CONTINUOUS
+        TOKEN( "skip-white-space" ),            // XML_SKIP_WHITE_SPACE
+        TOKEN( "scripts" ),                     // XML_SCRIPT
+        TOKEN( "font-face-decls" ),            // XML_FONT_FACE_DECLS
+        TOKEN( "font-face" ),                   // XML_FONT_FACE
+        TOKEN( "font-adornments" ),            // XML_FONT_ADORNMENTS
+        TOKEN( "inch" ),                        // XML_INCH
+        TOKEN( "space-after" ),                 // XML_SPACE_AFTER
+        TOKEN( "start-indent" ),                // XML_START_INDENT
+        TOKEN( "end-indent" ),                  // XML_END_INDENT
+
+        // chart Oasis format additions
+        TOKEN( "interval-minor-divisor" ),      // XML_INTERVAL_MINOR_DIVISOR
+        TOKEN( "date-string" ),                 // XML_DATE_STRING
+
+        TOKEN( "text-underline-style" ),        // XML_TEXT_UNDERLINE_STYLE
+        TOKEN( "text-underline-type" ),         // XML_TEXT_UNDERLINE_TYPE
+        TOKEN( "text-underline-width" ),        // XML_TEXT_UNDERLINE_WIDTH
+
+        TOKEN( "text-line-through-style" ),     // XML_TEXT_LINE_THROUGH_STYLE
+        TOKEN( "text-line-through-type" ),      // XML_TEXT_LINE_THROUGH_TYPE
+        TOKEN( "text-line-through-width" ),     // XML_TEXT_LINE_THROUGH_WIDTH
+        TOKEN( "text-line-through-text" ),      // XML_TEXT_LINE_THROUGH_TEXT
+
+        TOKEN( "leader-style" ),                // XML_LEADER_STYLE
+        TOKEN( "leader-text" ),                 // XML_LEADER_TEXT
+
+        TOKEN( "bold-dotted" ),                 // XML_BOLD_DOTTED,
+        TOKEN( "bold-dash" ),                   // XML_BOLD_DASH,
+        TOKEN( "bold-long-dash" ),              // XML_BOLD_LONG_DASH,
+        TOKEN( "bold-dot-dash" ),               // XML_BOLD_DOT_DASH,
+        TOKEN( "bold-dot-dot-dash" ),           // XML_BOLD_DOT_DOT_DASH,
+        TOKEN( "bold-wave" ),                   // XML_BOLD_WAVE,
+        TOKEN( "double-wave" ),                 // XML_DOUBLE_WAVE,
+        TOKEN( "double-line" ),                 // XML_DOUBLE_LINE,
+        TOKEN( "thick-line" ),                  // XML_THICK_LINE,
+        TOKEN( "single-line" ),                 // XML_SINGLE_LINE,
+        TOKEN( "slash" ),                       // XML_SLASH,
+        TOKEN( "text-line-through-color" ),     // XML_TEXT_LINE_THROUGH_COLOR,
+        TOKEN( "text-line-through-text-style" ),// XML TEXT_LINE_THROUGH_TEXT_STYLE
+        TOKEN( "leader-color" ),                // XML_LEADER_COLOR
+        TOKEN( "leader-type" ),                 // XML_LEADER_TYPE
+        TOKEN( "leader-width" ),                // XML_LEADER_WIDTH
+        TOKEN( "leader-text-style" ),           // XML_LEADER_TEXT_STYLE
+
+        TOKEN( "opacity" ),                     // XML_OPACITY
+        TOKEN( "opacity-name" ),                // XML_OPACITY_NAME
+        TOKEN( "shadow-opacity" ),              // XML_SHADOW_OPACITY
+        TOKEN( "always" ),                      // XML_ALWAYS
+        TOKEN( "count-in-text-boxes" ),         // XML_COUNT_IN_TEXT_BOXES
+
+        TOKEN( "ooo" ),                         // XML_NP_OOO
+        TOKEN( "http://openoffice.org/2004/office" ), // XML_N_OOO
+        TOKEN( "ooow" ),                        // XML_NP_OOOW
+        TOKEN( "http://openoffice.org/2004/writer" ), // XML_N_OOOW
+        TOKEN( "oooc" ),                        // XML_NP_OOOC
+        TOKEN( "http://openoffice.org/2004/calc" ), // XML_N_OOOC
+        TOKEN( "dom" ),                         // XML_NP_DOM
+        TOKEN( "http://www.w3.org/2001/xml-events" ), // XML_N_DOM
+
+        TOKEN( "event-listeners" ), // XML_EVENT_LISTENERS
+        TOKEN( "event-listener" ), // XML_EVENT_LISTENER
+
+        TOKEN( "form" ),            // XML_FORM
+        TOKEN( "void" ),            // XML_VOID
+        TOKEN( "property" ),            // XML_PROPERTY
+        TOKEN( "property-name" ),           // XML_PROPERTY_NAME
+        TOKEN( "list-property" ),           // XML_LIST_PROPERTY
+        TOKEN( "list-value" ),          // XML_LIST_VALUE
+        TOKEN( "column-style-name" ),       // XML_COLUMN_STYLE_NAME
+        TOKEN( "textarea" ),                // XML_TEXTAREA,
+        TOKEN( "fixed-text" ),              // XML_FIXED_TEXT,
+        TOKEN( "file" ),                    // XML_FILE,
+        TOKEN( "formatted-text" ),          // XML_FORMATTED_TEXT,
+        TOKEN( "button" ),                  // XML_BUTTON,
+        TOKEN( "checkbox" ),                // XML_CHECKBOX,
+        TOKEN( "radio" ),                   // XML_RADIO,
+        TOKEN( "listbox" ),                 // XML_LISTBOX,
+        TOKEN( "combobox" ),                // XML_COMBOBOX,
+        TOKEN( "image-frame" ),             // XML_IMAGE_FRAME,
+        TOKEN( "value-range" ),             // XML_VALUE_RANGE,
+        TOKEN( "generic-control" ),         // XML_GENERIC_CONTROL,
+        TOKEN( "service-name" ),            // XML_SERVICE_NAME,
+        TOKEN( "property-type" ),           // XML_PROPERTY_TYPE,
+        TOKEN( "integer" ),                 // XML_INTEGER,
+        TOKEN( "property-is-void" ),        // XML_PROPERTY_IS_VOID,
+        TOKEN( "property-is-list" ),        // XML_PROPERTY_IS_LIST,
+        TOKEN( "property-value" ),          // XML_PROPERTY_VALUE,
+        TOKEN( "mimetype" ),                // XML_MIMETYPE
+        TOKEN( "database-row-select" ),     // XML_DATABASE_ROW_SELECT
+        TOKEN( "control-implementation" ),  // XML_CONTROL_IMPLEMENTATION
+        TOKEN( "interpolation" ),           // XML_INTERPOLATION
+        TOKEN( "cubic-spline" ),            // XML_CUBIC_SPLINE
+        TOKEN( "b-spline" ),                // XML_B_SPLINE
+
+        { 0, NULL, NULL }                      // XML_TOKEN_END
     };
 
 
