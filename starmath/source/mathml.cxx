@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-10 11:19:44 $
+ *  last change: $Author: cmc $ $Date: 2001-07-10 12:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,13 +302,14 @@ sal_Bool SmXMLWrapper::Import(SfxMedium &rMedium)
             rMedium.GetStorage(), xModelComp, "meta.xml", "Meta.xml", xServiceFactory,
             "com.sun.star.comp.Math.XMLMetaImporter" );
 
+        ReadThroughComponent(
+            rMedium.GetStorage(), xModelComp, "settings.xml", 0, xServiceFactory,
+            "com.sun.star.comp.Math.XMLSettingsImporter" );
+
         bRet = ReadThroughComponent(
            rMedium.GetStorage(), xModelComp, "content.xml", "Content.xml", xServiceFactory,
            "com.sun.star.comp.Math.XMLImporter" );
 
-        ReadThroughComponent(
-            rMedium.GetStorage(), xModelComp, "settings.xml", 0, xServiceFactory,
-            "com.sun.star.comp.Math.XMLSettingsImporter" );
 
     }
     else
@@ -548,6 +549,8 @@ void SmXMLImport::endDocument(void)
                     aText.Erase(aText.Len()-1,1);
                 }
             }
+            String aDummy;
+            pDocShell->SetText(aDummy);
             pDocShell->SetText(aText);
         }
         DBG_ASSERT(pModel,"So there *was* a uno problem after all");
