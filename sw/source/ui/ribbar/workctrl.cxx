@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2002-04-30 17:44:00 $
+ *  last change: $Author: os $ $Date: 2002-05-03 11:22:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,9 @@
 #ifndef _WRTSH_HXX //autogen
 #include <wrtsh.hxx>
 #endif
-
+#ifndef _SVT_IMAGEITM_HXX
+#include <svtools/imageitm.hxx>
+#endif
 
 //JP 14.01.99: Size Abpruefung
 #define NAVI_ENTRIES 20
@@ -135,7 +137,7 @@
 #endif
 
 
-SFX_IMPL_TOOLBOX_CONTROL( SwTbxInsertCtrl, SfxUInt16Item);
+SFX_IMPL_TOOLBOX_CONTROL( SwTbxInsertCtrl, SfxImageItem);
 SFX_IMPL_TOOLBOX_CONTROL( SwTbxAutoTextCtrl, SfxBoolItem );
 
 /**********************************************************************
@@ -172,7 +174,7 @@ void SwTbxInsertCtrl::StateChanged( USHORT nSID,
 
     if( eState == SFX_ITEM_AVAILABLE )
     {
-        const SfxUInt16Item* pItem = PTR_CAST( SfxUInt16Item, pState );
+        const SfxImageItem* pItem = PTR_CAST( SfxImageItem, pState );
         if(pItem)
         {
             nLastSlotId = pItem->GetValue();
@@ -181,7 +183,11 @@ void SwTbxInsertCtrl::StateChanged( USHORT nSID,
 
             BOOL bHiContrast = GetToolBox().GetBackground().GetColor().IsDark();
             Image aImage = GetBindings().GetImageManager()->GetImage( nId, bHiContrast, SW_MOD() );
-            GetToolBox().SetItemImage(GetId(), aImage);
+            ToolBox& rBox = GetToolBox();
+            rBox.SetItemImage(GetId(), aImage);
+            rBox.SetItemImageMirrorMode( GetId(), FALSE );
+            rBox.SetItemImageAngle( GetId(), pItem->GetRotation() );
+            rBox.SetItemImageMirrorMode( GetId(), pItem->IsMirrored() );
         }
     }
 
