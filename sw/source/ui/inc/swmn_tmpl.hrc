@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmn_tmpl.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 13:58:42 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:05:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2246,7 +2246,6 @@ MenuItem _MN_EXTRA
             {
                 ITEM_EDIT_BIBLIOGRAPHY
             };
-            ITEM_DATASOURCE_ADMINISTRATION
             SEPARATOR ;
 #ifndef MN_SW_WEB
             MenuItem
