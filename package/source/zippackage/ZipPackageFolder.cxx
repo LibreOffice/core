@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-14 15:14:12 $
+ *  last change: $Author: mtg $ $Date: 2001-09-24 18:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,7 +307,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
             pValue[1].Name = sFullPathProperty;
             pValue[1].Value <<= sTempName;
 
-            rInfo.pFolder->saveContents( sTempName, rManList, rZipOut, rEncryptionKey, rRandomPool);
+            pFolder->saveContents( sTempName, rManList, rZipOut, rEncryptionKey, rRandomPool);
         }
         else
         {
@@ -317,7 +317,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
             ZipPackageFolder::copyZipEntry ( *pTempEntry, pStream->aEntry );
             pTempEntry->sName = rPath + rShortName;
 
-            sal_Bool bToBeEncrypted = pStream->IsToBeEncrypted() && bHaveEncryptionKey;
+            sal_Bool bToBeEncrypted = pStream->IsToBeEncrypted() && (bHaveEncryptionKey || pStream->HasOwnKey());
             sal_Bool bToBeCompressed = bToBeEncrypted ? sal_True : pStream->IsToBeCompressed();
 
             pValue[0].Name = sMediaTypeProperty;
@@ -333,10 +333,16 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                 rtl_random_getBytes ( rRandomPool, aVector.getArray(), 8 );
                 sal_Int32 nIterationCount = 1024;
 
-                rtl_digest_PBKDF2 ( reinterpret_cast < sal_uInt8 * > (aKey.getArray()), 16,
-                                    reinterpret_cast < sal_uInt8 * > (rEncryptionKey.getArray()), rEncryptionKey.getLength(),
-                                    aSalt.getConstArray(), 16,
-                                    nIterationCount );
+                if ( pStream->HasOwnKey() )
+                    rtl_digest_PBKDF2 ( reinterpret_cast < sal_uInt8 * > (aKey.getArray()), 16,
+                                        reinterpret_cast < const sal_uInt8 * > (pStream->getKey().getConstArray()), pStream->getKey().getLength(),
+                                        aSalt.getConstArray(), 16,
+                                        nIterationCount );
+                else
+                    rtl_digest_PBKDF2 ( reinterpret_cast < sal_uInt8 * > (aKey.getArray()), 16,
+                                        reinterpret_cast < const sal_uInt8 * > (rEncryptionKey.getConstArray()), rEncryptionKey.getLength(),
+                                        aSalt.getConstArray(), 16,
+                                        nIterationCount );
                 pStream->setInitialisationVector ( aVector );
                 pStream->setSalt ( aSalt );
                 pStream->setIterationCount ( nIterationCount );
