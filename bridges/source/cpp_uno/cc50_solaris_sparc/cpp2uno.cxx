@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:48 $
+ *  last change: $Author: svesik $ $Date: 2000-11-22 20:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 #define TRACE(x)
 
 #include <alloca.h>
-#include <stl/list>
-#include <stl/map>
+#include <list>
+#include <map>
 
 #ifndef _RTL_ALLOC_H_
 #include <rtl/alloc.h>
