@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:05:21 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:14:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,11 +319,18 @@ public:
     SwRect  GetObjRect() const;
     //Zum Verschieben von Flys mit der Tastatur
     SwRect  GetFlyRect() const;
-    void CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
-                        SwRelationOrient eRelOrient = FRAME,
-                        BOOL bMirror = FALSE,
-                        Point* pRef = NULL,
-                        Size* pPercent = NULL ) const;
+    // OD 18.09.2003 #i17567#, #108749#, #110354# - adjustments to allow
+    //          negative vertical positions for fly frames anchored
+    //          to paragraph or to character.
+    // OD 02.10.2003 #i18732# - adjustments for new option 'FollowTextFlow'
+    void CalcBoundRect( SwRect& _orRect,
+                        const RndStdIds _nAnchorId,
+                        const SwRelationOrient _eHoriRelOrient = FRAME,
+                        const SwRelationOrient _eVertRelOrient = FRAME,
+                        const bool _bFollowTextFlow = false,
+                        bool _bMirror = false,
+                        Point* _opRef = NULL,
+                        Size* _opPercent = NULL ) const;
 
     // Groesse von Drawobjekten setzen
     void SetObjRect( const SwRect& rRect );
