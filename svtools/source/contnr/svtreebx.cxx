@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-29 14:31:52 $
+ *  last change: $Author: pl $ $Date: 2001-11-19 18:36:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2356,6 +2356,8 @@ void SvTreeListBox::InitSettings(BOOL bFont,BOOL bForeground,BOOL bBackground)
         Font aFont;
         aFont = rStyleSettings.GetFieldFont();
         SetPointFont( aFont );
+        AdjustEntryHeight( aFont );
+        RecalcViewData();
     }
 
     if( bForeground || bFont )
