@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBatchExecution.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:27 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:57:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,13 +71,13 @@
 
  module com {  module sun {  module star {  module sdbc {
 
-interface XResultSet;
+ published interface XResultSet;
 
 
 // DocMerge from xml: interface com::sun::star::sdbc::XBatchExecution
 /** is used for collecting and executing a set of SQL statements.
  */
-interface XBatchExecution: com::sun::star::uno::XInterface
+published interface XBatchExecution: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::sdbc::XBatchExecution::addBatch

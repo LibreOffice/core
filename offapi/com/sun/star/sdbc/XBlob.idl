@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBlob.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:27 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:57:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #endif
 
  module com {  module sun {  module star {  module io {
-interface XInputStream;
+ published interface XInputStream;
 };};};};
 
 #ifndef __com_sun_star_sdbc_SQLException_idl__
@@ -143,7 +143,7 @@ interface XInputStream;
     value.
     </p>
  */
-interface XBlob: com::sun::star::uno::XInterface
+published interface XBlob: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
