@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-21 13:44:24 $
+ *  last change: $Author: cl $ $Date: 2001-08-30 15:30:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1197,7 +1197,6 @@ sal_Bool SdXShape::IsEmptyPresObj() const throw()
 */
 void SdXShape::SetEmptyPresObj( sal_Bool bEmpty ) throw()
 {
-#ifndef SVX_LIGHT
     // only possible if this actually *is* a presentation object
     if( !IsPresObj() )
         return;
@@ -1235,6 +1234,7 @@ void SdXShape::SetEmptyPresObj( sal_Bool bEmpty ) throw()
         }
         else
         {
+#ifndef SVX_LIGHT
             // now set an empty OutlinerParaObject at pObj without
             // any content but with the style of the old OutlinerParaObjects
             // first paragraph
@@ -1269,11 +1269,11 @@ void SdXShape::SetEmptyPresObj( sal_Bool bEmpty ) throw()
                 pOutliner->Clear();
             }
             while(0);
+#endif
         }
 
         pObj->SetEmptyPresObj(bEmpty);
     }
-#endif
 }
 
 sal_Bool SdXShape::IsMasterDepend() const throw()
