@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-18 10:51:34 $
+ *  last change: $Author: mba $ $Date: 2001-06-20 16:45:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1255,7 +1255,10 @@ FASTBOOL SfxViewShell::KeyInput( const KeyEvent &rKeyEvent )
 FASTBOOL SfxViewShell::GlobalKeyInput_Impl( const KeyEvent &rKeyEvent )
 {
     SfxAcceleratorManager* pAccMgr = GetAccMgr_Impl();
-    return ( pAccMgr && pAccMgr->Call( rKeyEvent, pFrame->GetBindings(), TRUE ) );
+    BOOL bRet = ( pAccMgr && pAccMgr->Call( rKeyEvent, GetViewFrame()->GetBindings(), TRUE ) );
+    if ( !bRet )
+        bRet = SFX_APP()->GetAppAccel_Impl()->Call( rKeyEvent, GetViewFrame()->GetBindings(), TRUE );
+    return bRet;
 }
 
 //--------------------------------------------------------------------
