@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLocaleData.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bustamam $ $Date: 2000-12-09 00:30:16 $
+ *  last change: $Author: bustamam $ $Date: 2001-02-08 21:14:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,8 @@ interface XLocaleData: com::sun::star::uno::XInterface
     sequence<FormatElement> getAllFormats ([in] com::sun::star::lang::Locale rLocale);
 
     sequence<Implementation> getCollatorImplementations ([in] com::sun::star::lang::Locale rLocale);
+    sequence<string> getSearchOptions([in] com::sun::star::lang::Locale rLocale);
+    sequence<string> getCollationOptions([in] com::sun::star::lang::Locale rLocale);
 
     sequence<string> getTransliterations([in] com::sun::star::lang::Locale rLocale);
     ForbiddenCharacters getForbiddenCharacters ([in] com::sun::star::lang::Locale rLocale);
