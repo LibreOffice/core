@@ -21,6 +21,7 @@
  <accel:item accel:code="KEY_3" accel:shift="true" accel:mod1="true" xlink:href="slot:26053"/>
  <accel:item accel:code="KEY_2" accel:shift="true" accel:mod1="true" xlink:href="slot:26055"/>
  <accel:item accel:code="KEY_1" accel:shift="true" accel:mod1="true" xlink:href="slot:26054"/>
+ <accel:item accel:code="KEY_DIVIDE" accel:mod1="true" xlink:href="slot:26560"/>
  <accel:item accel:code="KEY_MULTIPLY" accel:mod1="true" xlink:href="slot:26551"/>
  <accel:item accel:code="KEY_BACKSPACE" accel:mod1="true" xlink:href="slot:26550"/>
  <accel:item accel:code="KEY_SPACE" accel:mod1="true" xlink:href="slot:26547"/>
@@ -87,4 +88,7 @@
  <accel:item accel:code="KEY_F5" xlink:href="slot:10366"/>
  <accel:item accel:code="KEY_F4" xlink:href="slot:6660"/>
  <accel:item accel:code="KEY_F2" xlink:href="slot:26552"/>
+ <accel:item accel:code="KEY_BACKSPACE" accel:mod2="true" xlink:href="slot:5701"/>
+ <accel:item accel:code="KEY_TAB" xlink:href="slot:26545"/>
+ <accel:item accel:code="KEY_TAB" accel:shift="true" xlink:href="slot:26546"/>
 </accel:acceleratorlist>

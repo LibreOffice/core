@@ -15,6 +15,7 @@
    <menu:menuitem menu:id="slot:6583" menu:helpid="6583" menu:label="Versions..."/>
    <menu:menuseparator/>
    <menu:menuitem menu:id="slot:5829" menu:helpid="5829" menu:label="~Export..."/>
+   <menu:menuitem menu:id="slot:6673" menu:helpid="6673" menu:label="Export as PDF..."/>
    <menu:menu menu:id="slot:98" menu:label="Sen~d">
     <menu:menupopup>
      <menu:menuitem menu:id="slot:5331" menu:helpid="5331" menu:label="Document as ~E-mail..."/>
@@ -59,13 +60,7 @@
    <menu:menuseparator/>
    <menu:menuitem menu:id="slot:27319" menu:helpid="27319" menu:label="Cross-fading..."/>
    <menu:menuitem menu:id="slot:27362" menu:helpid="27362" menu:label="F~ields..."/>
-   <menu:menuseparator/>
-   <menu:menu menu:id="slot:341" menu:label="S~lide">
-    <menu:menupopup>
-     <menu:menuitem menu:id="slot:27268" menu:helpid="27268" menu:label="~Rename Slide..."/>
-     <menu:menuitem menu:id="slot:27080" menu:helpid="27080" menu:label="D~elete Slide..."/>
-    </menu:menupopup>
-   </menu:menu>
+   <menu:menuitem menu:id="slot:27080" menu:helpid="27080" menu:label="D~elete Slide..."/>
    <menu:menuseparator/>
    <menu:menu menu:id="slot:340" menu:label="La~yer">
     <menu:menupopup>
@@ -77,6 +72,7 @@
    </menu:menu>
    <menu:menuseparator/>
    <menu:menuitem menu:id="slot:27005" menu:helpid="27005" menu:label="Lin~ks..."/>
+   <menu:menuitem menu:id="slot:6314" menu:helpid="6314" menu:label="P~lug-in"/>
    <menu:menuitem menu:id="slot:10371" menu:helpid="10371" menu:label="ImageMap"/>
    <menu:menuitem menu:id="slot:5575" menu:helpid="5575" menu:label="~Object"/>
    <menu:menuitem menu:id="slot:27382" menu:helpid="27382" menu:label="H~yperlink..."/>
@@ -100,6 +96,7 @@
    </menu:menu>
    <menu:menuitem menu:id="slot:27040" menu:helpid="27040" menu:label="~Rulers"/>
    <menu:menuitem menu:id="slot:5920" menu:helpid="5920" menu:label="~Status Bar"/>
+   <menu:menuitem menu:id="slot:6680" menu:helpid="6680" menu:label="~Input Method Status"/>
    <menu:menuseparator/>
    <menu:menu menu:id="slot:100" menu:label="~Display Quality">
     <menu:menupopup>
@@ -155,7 +152,7 @@
      <menu:menuitem menu:id="slot:27359" menu:helpid="27359" menu:label="T~ime (variable)"/>
      <menu:menuseparator/>
      <menu:menuitem menu:id="slot:27364" menu:helpid="27364" menu:label="~Author"/>
-     <menu:menuitem menu:id="slot:27361" menu:helpid="27361" menu:label="~Page Numbers"/>
+     <menu:menuitem menu:id="slot:27361" menu:helpid="27361" menu:label="~Page Number"/>
      <menu:menuitem menu:id="slot:27363" menu:helpid="27363" menu:label="~File Name"/>
     </menu:menupopup>
    </menu:menu>
@@ -225,11 +222,11 @@
    </menu:menu>
    <menu:menuitem menu:id="slot:5539" menu:helpid="5539" menu:label="St~ylist"/>
    <menu:menuseparator/>
-   <menu:menuitem menu:id="slot:10256" menu:helpid="10256" menu:label="F~ontWork"/>
+   <menu:menuitem menu:id="slot:10256" menu:helpid="10256" menu:label="F~ontwork"/>
    <menu:menuitem menu:id="slot:10644" menu:helpid="10644" menu:label="~3D Effects"/>
   </menu:menupopup>
  </menu:menu>
- <menu:menu menu:id="slot:25" menu:label="~Tools">
+ <menu:menu menu:id="slot:6677" menu:label="~Tools">
   <menu:menupopup>
    <menu:menu menu:id="slot:94" menu:label="~Spellcheck">
     <menu:menupopup>
@@ -251,8 +248,9 @@
      <menu:menuitem menu:id="slot:5959" menu:helpid="5959" menu:label="~Macro..."/>
     </menu:menupopup>
    </menu:menu>
+   <menu:menuitem menu:id="slot:10958" menu:helpid="10958" menu:label="~XML Filter Settings..."/>
    <menu:menuitem menu:id="slot:5904" menu:helpid="5904" menu:label="~Configure..."/>
-   <menu:menu menu:id="slot:4" menu:label="Scripting Add-on's">
+   <menu:menu menu:id="slot:4" menu:label="Scripting Add-ons">
     <menu:menupopup>
      <menu:menuitem menu:id="macro:///ScriptBindingLibrary.ScriptBinding.ExecuteMenuBinding()" menu:label="Assign Script to ~Menu..."/>
      <menu:menuitem menu:id="macro:///ScriptBindingLibrary.ScriptBinding.ExecuteKeyBinding" menu:label="Assign Script to ~Key..."/>
@@ -335,7 +333,7 @@
  <menu:menu menu:id="slot:5610" menu:label="~Window">
   <menu:menupopup>
    <menu:menuitem menu:id="slot:5620" menu:helpid="5620" menu:label="~New Window"/>
-   <menu:menuitem menu:id="slot:5621" menu:helpid="5621" menu:label="Close"/>
+   <menu:menuitem menu:id="slot:5621" menu:helpid="5621" menu:label="Close Window"/>
    <menu:menuseparator/>
   </menu:menupopup>
  </menu:menu>
@@ -347,6 +345,7 @@
    <menu:menuitem menu:id="slot:5404" menu:helpid="5404" menu:label="~Tips"/>
    <menu:menuitem menu:id="slot:5403" menu:helpid="5403" menu:label="~Extended Tips"/>
    <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:6683" menu:helpid="6683" menu:label="~Support"/>
    <menu:menuitem menu:id="slot:6537" menu:helpid="6537" menu:label="~Registration..."/>
    <menu:menuseparator/>
    <menu:menuitem menu:id="slot:5301" menu:helpid="5301" menu:label="A~bout OpenOffice.org..."/>

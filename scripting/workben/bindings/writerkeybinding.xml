@@ -20,7 +20,9 @@
  <accel:item accel:code="KEY_P" accel:shift="true" accel:mod1="true" xlink:href="slot:20411"/>
  <accel:item accel:code="KEY_I" accel:shift="true" accel:mod1="true" xlink:href="slot:20989"/>
  <accel:item accel:code="KEY_F" accel:shift="true" accel:mod1="true" xlink:href="slot:20150"/>
+ <accel:item accel:code="KEY_D" accel:shift="true" accel:mod1="true" xlink:href="slot:10951"/>
  <accel:item accel:code="KEY_B" accel:shift="true" accel:mod1="true" xlink:href="slot:20412"/>
+ <accel:item accel:code="KEY_A" accel:shift="true" accel:mod1="true" xlink:href="slot:10950"/>
  <accel:item accel:code="KEY_MULTIPLY" accel:mod1="true" xlink:href="slot:20127"/>
  <accel:item accel:code="KEY_SUBTRACT" accel:mod1="true" xlink:href="slot:20343"/>
  <accel:item accel:code="KEY_ADD" accel:mod1="true" xlink:href="slot:20615"/>
@@ -92,4 +94,8 @@
  <accel:item accel:code="KEY_F5" xlink:href="slot:10366"/>
  <accel:item accel:code="KEY_F3" xlink:href="slot:20628"/>
  <accel:item accel:code="KEY_F2" xlink:href="slot:20128"/>
+ <accel:item accel:code="KEY_BACKSPACE" accel:mod2="true" xlink:href="slot:5701"/>
+ <accel:item accel:code="KEY_UP" accel:mod1="true" accel:mod2="true" xlink:href="slot:20134"/>
+ <accel:item accel:code="KEY_DOWN" accel:mod1="true" accel:mod2="true" xlink:href="slot:20135"/>
+ <accel:item accel:code="KEY_SUBTRACT" accel:shift="true" accel:mod1="true" xlink:href="slot:20385"/>
 </accel:acceleratorlist>

@@ -14,6 +14,7 @@
    <menu:menuitem menu:id="slot:5508" menu:helpid="5508" menu:label="Reload"/>
    <menu:menuitem menu:id="slot:6583" menu:helpid="6583" menu:label="Versions..."/>
    <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:5829" menu:helpid="5829" menu:label="Expor~t..."/>
    <menu:menuitem menu:id="slot:6673" menu:helpid="6673" menu:label="Expor~t as PDF..."/>
    <menu:menu menu:id="slot:36" menu:label="Sen~d">
     <menu:menupopup>
@@ -80,7 +81,7 @@
    </menu:menu>
    <menu:menuitem menu:id="slot:5713" menu:helpid="5713" menu:label="Delete C~ontents..."/>
    <menu:menuitem menu:id="slot:26222" menu:helpid="26222" menu:label="Delete C~ells..."/>
-   <menu:menu menu:id="slot:38" menu:label="Sheet">
+   <menu:menu menu:id="slot:38" menu:label="Shee~t">
     <menu:menupopup>
      <menu:menuitem menu:id="slot:26348" menu:helpid="26348" menu:label="~Move/Copy..."/>
      <menu:menuitem menu:id="slot:26090" menu:helpid="26090" menu:label="~Select..."/>
@@ -118,6 +119,7 @@
     </menu:menupopup>
    </menu:menu>
    <menu:menuitem menu:id="slot:5920" menu:helpid="5920" menu:label="~Status Bar"/>
+   <menu:menuitem menu:id="slot:6680" menu:helpid="6680" menu:label="~Input Method Status"/>
    <menu:menuseparator/>
    <menu:menuitem menu:id="slot:26242" menu:helpid="26242" menu:label="C~olumn &amp; Row Headers"/>
    <menu:menuitem menu:id="slot:26245" menu:helpid="26245" menu:label="~Value Highlighting"/>
@@ -177,7 +179,7 @@
  <menu:menu menu:id="slot:5780" menu:label="F~ormat">
   <menu:menupopup/>
  </menu:menu>
- <menu:menu menu:id="slot:14" menu:label="~Tools">
+ <menu:menu menu:id="slot:6677" menu:label="~Tools">
   <menu:menupopup>
    <menu:menu menu:id="slot:31" menu:label="~Spellcheck">
     <menu:menupopup>
@@ -198,7 +200,7 @@
      <menu:menuitem menu:id="slot:26460" menu:helpid="26460" menu:label="Trace ~Error"/>
      <menu:menuitem menu:id="slot:26469" menu:helpid="26469" menu:label="~Mark Invalid Data"/>
      <menu:menuitem menu:id="slot:26470" menu:helpid="26470" menu:label="Refresh Tra~ces"/>
-     <menu:menuitem menu:id="slot:26471" menu:helpid="26471" menu:label="A~utoUpdate"/>
+     <menu:menuitem menu:id="slot:26471" menu:helpid="26471" menu:label="A~utoRefresh"/>
      <menu:menuitem menu:id="slot:26462" menu:helpid="26462" menu:label="~Fill Mode"/>
     </menu:menupopup>
    </menu:menu>
@@ -230,12 +232,13 @@
    <menu:menuseparator/>
    <menu:menu menu:id="slot:1" menu:label="~Macros">
     <menu:menupopup>
-     <menu:menuitem menu:id="slot:6669" menu:helpid="6669" menu:label="~Record Macro"/>
+     <menu:menuitem menu:id="slot:6669" menu:helpid="6669" menu:label="Record Macro"/>
      <menu:menuitem menu:id="slot:5959" menu:helpid="5959" menu:label="~Macro..."/>
     </menu:menupopup>
    </menu:menu>
+   <menu:menuitem menu:id="slot:10958" menu:helpid="10958" menu:label="~XML Filter Settings..."/>
    <menu:menuitem menu:id="slot:5904" menu:helpid="5904" menu:label="~Configure..."/>
-   <menu:menu menu:id="slot:4" menu:label="Scripting Add-on's">
+   <menu:menu menu:id="slot:4" menu:label="Scripting Add-ons">
     <menu:menupopup>
      <menu:menuitem menu:id="macro:///ScriptBindingLibrary.ScriptBinding.ExecuteMenuBinding()" menu:label="Assign Script to ~Menu..."/>
      <menu:menuitem menu:id="macro:///ScriptBindingLibrary.ScriptBinding.ExecuteKeyBinding" menu:label="Assign Script to ~Key..."/>
@@ -293,7 +296,7 @@
  <menu:menu menu:id="slot:5610" menu:label="~Window">
   <menu:menupopup>
    <menu:menuitem menu:id="slot:5620" menu:helpid="5620" menu:label="~New Window"/>
-   <menu:menuitem menu:id="slot:5621" menu:helpid="5621" menu:label="Close"/>
+   <menu:menuitem menu:id="slot:5621" menu:helpid="5621" menu:label="Close Window"/>
    <menu:menuseparator/>
    <menu:menuitem menu:id="slot:26069" menu:helpid="26069" menu:label="~Split"/>
    <menu:menuitem menu:id="slot:26070" menu:helpid="26070" menu:label="~Freeze"/>
@@ -307,6 +310,7 @@
    <menu:menuitem menu:id="slot:5404" menu:helpid="5404" menu:label="~Tips"/>
    <menu:menuitem menu:id="slot:5403" menu:helpid="5403" menu:label="~Extended Tips"/>
    <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:6683" menu:helpid="6683" menu:label="~Support"/>
    <menu:menuitem menu:id="slot:6537" menu:helpid="6537" menu:label="~Registration..."/>
    <menu:menuseparator/>
    <menu:menuitem menu:id="slot:5301" menu:helpid="5301" menu:label="A~bout OpenOffice.org..."/>

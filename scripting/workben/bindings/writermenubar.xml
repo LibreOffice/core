@@ -11,10 +11,11 @@
    <menu:menuitem menu:id="slot:5505" menu:helpid="5505" menu:label="~Save"/>
    <menu:menuitem menu:id="slot:5502" menu:helpid="5502" menu:label="Save ~As..."/>
    <menu:menuitem menu:id="slot:5309" menu:helpid="5309" menu:label="Sa~ve All"/>
-   <menu:menuitem menu:id="slot:5508" menu:helpid="5508" menu:label="Reload"/>
+   <menu:menuitem menu:id="slot:5508" menu:helpid="5508" menu:label="Re~load"/>
    <menu:menuseparator/>
-   <menu:menuitem menu:id="slot:6583" menu:helpid="6583" menu:label="Versions..."/>
+   <menu:menuitem menu:id="slot:6583" menu:helpid="6583" menu:label="V~ersions..."/>
    <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:5829" menu:helpid="5829" menu:label="Expor~t..."/>
    <menu:menuitem menu:id="slot:6673" menu:helpid="6673" menu:label="Expor~t as PDF..."/>
    <menu:menu menu:id="slot:1" menu:label="Sen~d">
     <menu:menupopup>
@@ -46,22 +47,20 @@
    <menu:menuitem menu:id="slot:5504" menu:helpid="5504" menu:label="~Print..."/>
    <menu:menuitem menu:id="slot:5302" menu:helpid="5302" menu:label="P~rinter Settings..."/>
    <menu:menuseparator/>
-   <menu:menuitem menu:id="slot:20364" menu:helpid="20364" menu:label="For~m Letter..."/>
-   <menu:menuseparator/>
    <menu:menuitem menu:id="slot:5300" menu:helpid="5300" menu:label="E~xit"/>
   </menu:menupopup>
  </menu:menu>
  <menu:menu menu:id="slot:1" menu:label="~Edit">
   <menu:menupopup>
-   <menu:menuitem menu:id="slot:5701" menu:helpid="5701" menu:label="Can&apos;t Undo"/>
-   <menu:menuitem menu:id="slot:5700" menu:helpid="5700" menu:label="Can&apos;t Restore"/>
+   <menu:menuitem menu:id="slot:5701" menu:helpid="5701" menu:label="Can&apos;t ~Undo"/>
+   <menu:menuitem menu:id="slot:5700" menu:helpid="5700" menu:label="~Can&apos;t Restore"/>
    <menu:menuitem menu:id="slot:5702" menu:helpid="5702" menu:label="~Repeat"/>
    <menu:menuseparator/>
    <menu:menuitem menu:id="slot:5710" menu:helpid="5710" menu:label="Cu~t"/>
    <menu:menuitem menu:id="slot:5711" menu:helpid="5711" menu:label="~Copy"/>
    <menu:menuitem menu:id="slot:5712" menu:helpid="5712" menu:label="~Paste"/>
    <menu:menuitem menu:id="slot:20114" menu:helpid="20114" menu:label="Paste ~Special..."/>
-   <menu:menuitem menu:id="slot:20989" menu:helpid="20989" menu:label="Select Text"/>
+   <menu:menuitem menu:id="slot:20989" menu:helpid="20989" menu:label="~Select Text"/>
    <menu:menuitem menu:id="slot:5723" menu:helpid="5723" menu:label="Select ~All"/>
    <menu:menuseparator/>
    <menu:menu menu:id="slot:1" menu:label="Chan~ges">
@@ -90,7 +89,7 @@
    <menu:menuseparator/>
    <menu:menuitem menu:id="slot:20109" menu:helpid="20109" menu:label="Lin~ks..."/>
    <menu:menuitem menu:id="slot:6314" menu:helpid="6314" menu:label="P~lug-in"/>
-   <menu:menuitem menu:id="slot:10371" menu:helpid="10371" menu:label="ImageMap"/>
+   <menu:menuitem menu:id="slot:10371" menu:helpid="10371" menu:label="I~mageMap"/>
    <menu:menuitem menu:id="slot:5575" menu:helpid="5575" menu:label="~Object"/>
   </menu:menupopup>
  </menu:menu>
@@ -113,6 +112,7 @@
    </menu:menu>
    <menu:menuitem menu:id="slot:20211" menu:helpid="20211" menu:label="~Ruler"/>
    <menu:menuitem menu:id="slot:5920" menu:helpid="5920" menu:label="~Status Bar"/>
+   <menu:menuitem menu:id="slot:6680" menu:helpid="6680" menu:label="~Input Method Status"/>
    <menu:menuseparator/>
    <menu:menuitem menu:id="slot:20214" menu:helpid="20214" menu:label="Te~xt Boundaries"/>
    <menu:menuitem menu:id="slot:20225" menu:helpid="20225" menu:label="Fie~ld Shadings"/>
@@ -131,7 +131,7 @@
     <menu:menupopup>
      <menu:menuitem menu:id="slot:20392" menu:helpid="20392" menu:label="~Date"/>
      <menu:menuitem menu:id="slot:20393" menu:helpid="20393" menu:label="~Time"/>
-     <menu:menuitem menu:id="slot:20394" menu:helpid="20394" menu:label="~Page Numbers"/>
+     <menu:menuitem menu:id="slot:20394" menu:helpid="20394" menu:label="~Page Number"/>
      <menu:menuitem menu:id="slot:20395" menu:helpid="20395" menu:label="Page ~Count"/>
      <menu:menuitem menu:id="slot:20396" menu:helpid="20396" menu:label="~Subject"/>
      <menu:menuitem menu:id="slot:20397" menu:helpid="20397" menu:label="~Title"/>
@@ -148,9 +148,9 @@
    <menu:menuitem menu:id="slot:21413" menu:helpid="21413" menu:label="He~ader"/>
    <menu:menuitem menu:id="slot:21414" menu:helpid="21414" menu:label="Foote~r"/>
    <menu:menuitem menu:id="slot:20312" menu:helpid="20312" menu:label="Footnote~..."/>
-   <menu:menuitem menu:id="slot:20310" menu:helpid="20310" menu:label="Caption..."/>
+   <menu:menuitem menu:id="slot:20310" menu:helpid="20310" menu:label="Captio~n..."/>
    <menu:menuitem menu:id="slot:20302" menu:helpid="20302" menu:label="Bookmar~k..."/>
-   <menu:menuitem menu:id="slot:20313" menu:helpid="20313" menu:label="Cross-reference..."/>
+   <menu:menuitem menu:id="slot:20313" menu:helpid="20313" menu:label="~Cross-reference..."/>
    <menu:menuitem menu:id="slot:20329" menu:helpid="20329" menu:label="Not~e..."/>
    <menu:menuitem menu:id="slot:21410" menu:helpid="21410" menu:label="S~cript..."/>
    <menu:menu menu:id="slot:2" menu:label="Inde~xes and Tables">
@@ -165,7 +165,7 @@
    <menu:menuseparator/>
    <menu:menuitem menu:id="slot:20334" menu:helpid="20334" menu:label="Fra~me..."/>
    <menu:menuitem menu:id="slot:20330" menu:helpid="20330" menu:label="~Table..."/>
-   <menu:menuitem menu:id="slot:21411" menu:helpid="21411" menu:label="Hori~zontal Line..."/>
+   <menu:menuitem menu:id="slot:21411" menu:helpid="21411" menu:label="Hori~zontal Ruler..."/>
    <menu:menu menu:id="slot:3" menu:label="~Graphics">
     <menu:menupopup>
      <menu:menuitem menu:id="slot:10241" menu:helpid="10241" menu:label="From ~File..."/>
@@ -196,7 +196,7 @@
  <menu:menu menu:id="slot:5780" menu:label="F~ormat">
   <menu:menupopup/>
  </menu:menu>
- <menu:menu menu:id="slot:4" menu:label="~Tools">
+ <menu:menu menu:id="slot:6677" menu:label="~Tools">
   <menu:menupopup>
    <menu:menu menu:id="slot:1" menu:label="~Spellcheck">
     <menu:menupopup>
@@ -204,6 +204,7 @@
      <menu:menuitem menu:id="slot:12021" menu:helpid="12021" menu:label="~AutoSpellcheck"/>
     </menu:menupopup>
    </menu:menu>
+   <menu:menuitem menu:id="slot:10959" menu:helpid="10959" menu:label="Hangul/Han~ja Conversion"/>
    <menu:menuitem menu:id="slot:20603" menu:helpid="20603" menu:label="~Thesaurus..."/>
    <menu:menuitem menu:id="slot:20605" menu:helpid="20605" menu:label="~Hyphenation..."/>
    <menu:menuseparator/>
@@ -217,6 +218,8 @@
    <menu:menuseparator/>
    <menu:menuitem menu:id="slot:10880" menu:helpid="10880" menu:label="~Bibliography Database"/>
    <menu:menuitem menu:id="slot:10882" menu:helpid="10882" menu:label="~Data Sources..."/>
+   <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:20364" menu:helpid="20364" menu:label="~Mail Merge..."/>
    <menu:menuseparator/>
    <menu:menuitem menu:id="slot:20500" menu:helpid="20500" menu:label="Te~xt &lt;-&gt; Table..."/>
    <menu:menuitem menu:id="slot:20614" menu:helpid="20614" menu:label="So~rt..."/>
@@ -236,12 +239,13 @@
    <menu:menuseparator/>
    <menu:menu menu:id="slot:3" menu:label="~Macros">
     <menu:menupopup>
-     <menu:menuitem menu:id="slot:6669" menu:helpid="6669" menu:label="~Record Macro"/>
+     <menu:menuitem menu:id="slot:6669" menu:helpid="6669" menu:label="Record Macro"/>
      <menu:menuitem menu:id="slot:5959" menu:helpid="5959" menu:label="~Macro..."/>
     </menu:menupopup>
    </menu:menu>
+   <menu:menuitem menu:id="slot:10958" menu:helpid="10958" menu:label="~XML Filter Settings..."/>
    <menu:menuitem menu:id="slot:5904" menu:helpid="5904" menu:label="~Configure..."/>
-   <menu:menu menu:id="slot:4" menu:label="Scripting Add-on's">
+   <menu:menu menu:id="slot:4" menu:label="Scripting Add-ons">
     <menu:menupopup>
      <menu:menuitem menu:id="macro:///ScriptBindingLibrary.ScriptBinding.ExecuteMenuBinding()" menu:label="Assign Script to ~Menu..."/>
      <menu:menuitem menu:id="macro:///ScriptBindingLibrary.ScriptBinding.ExecuteKeyBinding" menu:label="Assign Script to ~Key..."/>
@@ -256,7 +260,7 @@
  <menu:menu menu:id="slot:5610" menu:label="~Window">
   <menu:menupopup>
    <menu:menuitem menu:id="slot:5620" menu:helpid="5620" menu:label="~New Window"/>
-   <menu:menuitem menu:id="slot:5621" menu:helpid="5621" menu:label="Close"/>
+   <menu:menuitem menu:id="slot:5621" menu:helpid="5621" menu:label="~Close Window"/>
    <menu:menuseparator/>
   </menu:menupopup>
  </menu:menu>
@@ -268,6 +272,7 @@
    <menu:menuitem menu:id="slot:5404" menu:helpid="5404" menu:label="~Tips"/>
    <menu:menuitem menu:id="slot:5403" menu:helpid="5403" menu:label="~Extended Tips"/>
    <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:6683" menu:helpid="6683" menu:label="~Support"/>
    <menu:menuitem menu:id="slot:6537" menu:helpid="6537" menu:label="~Registration..."/>
    <menu:menuseparator/>
    <menu:menuitem menu:id="slot:5301" menu:helpid="5301" menu:label="A~bout OpenOffice.org..."/>
