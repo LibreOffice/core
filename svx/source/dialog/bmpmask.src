@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpmask.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 22:37:54 $
+ *  last change: $Author: ka $ $Date: 2002-01-10 15:50:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ DockingWindow RID_SVXDLG_BMPMASK
     FixedText FT_1
     {
         Pos = MAP_APPFONT ( 12 , 37 ) ;
-        Size = MAP_APPFONT ( 38 , 8 ) ;
+        Size = MAP_APPFONT ( 44 , 8 ) ;
         Text = "Quellfarbe" ;
         Text [ ENGLISH ] = "Source color" ;
         Text [ dutch ] = "Uitgangskleur" ;
@@ -140,8 +140,8 @@ DockingWindow RID_SVXDLG_BMPMASK
     };
     FixedText FT_2
     {
-        Pos = MAP_APPFONT ( 51 , 37 ) ;
-        Size = MAP_APPFONT ( 35 , 8 ) ;
+        Pos = MAP_APPFONT ( 58 , 37 ) ;
+        Size = MAP_APPFONT ( 34 , 8 ) ;
         Text = "Toleranz" ;
         Text [ ENGLISH ] = "Tolerance" ;
         Text [ english_us ] = "Tolerance" ;
@@ -168,7 +168,7 @@ DockingWindow RID_SVXDLG_BMPMASK
     };
     FixedText FT_3
     {
-        Pos = MAP_APPFONT ( 87 , 37 ) ;
+        Pos = MAP_APPFONT ( 93 , 37 ) ;
         Size = MAP_APPFONT ( 64 , 8 ) ;
         Text = "Ersetzen durch..." ;
         Text [ ENGLISH ] = "Replace with..." ;
@@ -257,8 +257,8 @@ DockingWindow RID_SVXDLG_BMPMASK
     MetricField SP_1
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 51 , 48 ) ;
-        Size = MAP_APPFONT ( 30 , 12 ) ;
+        Pos = MAP_APPFONT ( 58 , 48 ) ;
+        Size = MAP_APPFONT ( 29 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -271,8 +271,8 @@ DockingWindow RID_SVXDLG_BMPMASK
     MetricField SP_2
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 51 , 63 ) ;
-        Size = MAP_APPFONT ( 30 , 12 ) ;
+        Pos = MAP_APPFONT ( 58 , 63 ) ;
+        Size = MAP_APPFONT ( 29 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -285,8 +285,8 @@ DockingWindow RID_SVXDLG_BMPMASK
     MetricField SP_3
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 51 , 78 ) ;
-        Size = MAP_APPFONT ( 30 , 12 ) ;
+        Pos = MAP_APPFONT ( 58, 78 ) ;
+        Size = MAP_APPFONT ( 29 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -299,8 +299,8 @@ DockingWindow RID_SVXDLG_BMPMASK
     MetricField SP_4
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 51 , 93 ) ;
-        Size = MAP_APPFONT ( 30 , 12 ) ;
+        Pos = MAP_APPFONT ( 58 , 93 ) ;
+        Size = MAP_APPFONT ( 29 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -341,7 +341,7 @@ DockingWindow RID_SVXDLG_BMPMASK
     ListBox LB_1
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 87 , 48 ) ;
+        Pos = MAP_APPFONT ( 93 , 48 ) ;
         Size = MAP_APPFONT ( 64 , 75 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -350,7 +350,7 @@ DockingWindow RID_SVXDLG_BMPMASK
     ListBox LB_2
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 87 , 63 ) ;
+        Pos = MAP_APPFONT ( 93 , 63 ) ;
         Size = MAP_APPFONT ( 64 , 75 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -359,7 +359,7 @@ DockingWindow RID_SVXDLG_BMPMASK
     ListBox LB_3
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 87 , 78 ) ;
+        Pos = MAP_APPFONT ( 93 , 78 ) ;
         Size = MAP_APPFONT ( 64 , 75 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -368,7 +368,7 @@ DockingWindow RID_SVXDLG_BMPMASK
     ListBox LB_4
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 87 , 93 ) ;
+        Pos = MAP_APPFONT ( 93 , 93 ) ;
         Size = MAP_APPFONT ( 64 , 75 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -377,7 +377,7 @@ DockingWindow RID_SVXDLG_BMPMASK
     ListBox LB_TRANS
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 87 , 108 ) ;
+        Pos = MAP_APPFONT ( 93 , 108 ) ;
         Size = MAP_APPFONT ( 64 , 75 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;

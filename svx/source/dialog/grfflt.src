@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfflt.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 23:09:43 $
+ *  last change: $Author: ka $ $Date: 2002-01-10 15:50:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,7 +235,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
     CheckBox DLG_FILTERMOSAIC_CBX_EDGES
     {
         Pos = MAP_APPFONT ( 12, MA_Y4 ) ;
-        Size = MAP_APPFONT ( 77, 12 ) ;
+        Size = MAP_APPFONT ( 91, 12 ) ;
         TabStop = TRUE ;
         Text = "~Kanten hervorheben" ;
         Text[ ENGLISH ] = "~Enhance edges" ;
