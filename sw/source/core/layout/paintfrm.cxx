@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:07:20 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:45:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,9 +348,6 @@ static SwSubsRects *pSpecSubsLines = 0;
 
 static SfxProgress *pProgress = 0;
 
-//Nicht mehr als ein Beep pro Paint, wird auch im Textbereich benutzt!
-FASTBOOL bOneBeepOnly = TRUE;
-
 static SwFlyFrm *pFlyOnlyDraw = 0;
 
 //Damit die Flys auch fuer den Hack richtig gepaintet werden koennen.
@@ -420,7 +417,6 @@ void SwCalcPixStatics( OutputDevice *pOut )
 class SwSavePaintStatics
 {
     FASTBOOL            bSFlyMetafile,
-                        bSOneBeepOnly,
                         bSPageOnly;
     ViewShell          *pSGlobalShell;
     OutputDevice       *pSFlyMetafileOut;
@@ -446,7 +442,6 @@ public:
 
 SwSavePaintStatics::SwSavePaintStatics() :
     bSFlyMetafile       ( bFlyMetafile      ),
-    bSOneBeepOnly       ( bOneBeepOnly      ),
     pSGlobalShell       ( pGlobalShell      ),
     pSFlyMetafileOut    ( pFlyMetafileOut   ),
     pSRetoucheFly       ( pRetoucheFly      ),
@@ -478,14 +473,12 @@ SwSavePaintStatics::SwSavePaintStatics() :
     pLines = 0;
     pSubsLines = 0;
     pProgress = 0;
-    bOneBeepOnly = TRUE;
 }
 
 SwSavePaintStatics::~SwSavePaintStatics()
 {
     pGlobalShell       = pSGlobalShell;
     bFlyMetafile       = bSFlyMetafile;
-    bOneBeepOnly       = bSOneBeepOnly;
     pFlyMetafileOut    = pSFlyMetafileOut;
     pRetoucheFly       = pSRetoucheFly;
     pRetoucheFly2      = pSRetoucheFly2;
@@ -2129,7 +2122,6 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
         pStatics = new SwSavePaintStatics();
     pGlobalShell = pSh;
 
-    bOneBeepOnly = pSh->GetWin() != 0 && pSh->GetDoc()->IsFrmBeepEnabled();
     if( !pSh->GetWin() )
         pProgress = SfxProgress::GetActiveProgress( (SfxObjectShell*) pSh->GetDoc()->GetDocShell() );
 
@@ -2494,23 +2486,6 @@ void SwLayoutFrm::Paint( const SwRect& rRect ) const
                     if ( !pPage )
                         pPage = pFrm->FindPageFrm();
                     PaintColLines( aPaintRect, rCol, pPage );
-                }
-            }
-
-            //Nur: Body, Column, Tab, Header, Footer, FtnCont, Ftn
-            if ( bOneBeepOnly && (pFrm->GetType() & 0x08FC))
-            {
-                //Wenn der Frm ueber seinen Upper hinausragt gibts die gelbe Karte.
-                const long nDeadline = Frm().Top() + Prt().Top() +
-                                       Prt().Height() - 1;
-                if ( pFrm->Frm().Bottom() > nDeadline )
-                {
-                    if ( pGlobalShell->VisArea().Bottom() > nDeadline &&
-                         pGlobalShell->VisArea().Top() < nDeadline )
-                    {
-                        bOneBeepOnly = FALSE;
-                        Sound::Beep();
-                    }
                 }
             }
         }
