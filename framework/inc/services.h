@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.h,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 17:06:10 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 10:03:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,15 @@ namespace framework{
 #define SERVICENAME_WINDOWSTATECONFIGURATION                    DECLARE_ASCII("drafts.com.sun.star.ui.WindowStateConfiguration"     )
 #define SERVICENAME_STARTMODULE                                 DECLARE_ASCII("com.sun.star.frame.StartModule"                      )
 #define SERVICENAME_FRAMECONTROLLER                             DECLARE_ASCII("com.sun.star.frame.Controller"                       )
+#define SERVICENAME_GLOBALACCELERATORCONFIGURATION              DECLARE_ASCII("drafts.com.sun.star.ui.GlobalAcceleratorConfiguration")
+#define SERVICENAME_MODULEACCELERATORCONFIGURATION              DECLARE_ASCII("drafts.com.sun.star.ui.ModuleAcceleratorConfiguration")
+#define SERVICENAME_DOCUMENTACCELERATORCONFIGURATION            DECLARE_ASCII("drafts.com.sun.star.ui.DocumentAcceleratorConfiguration")
+#define SERVICENAME_SAXPARSER                                   DECLARE_ASCII("com.sun.star.xml.sax.Parser"                         )
+#define SERVICENAME_SAXWRITER                                   DECLARE_ASCII("com.sun.star.xml.sax.Writer"                         )
+#define SERVICENAME_SIMPLEFILEACCESS                            DECLARE_ASCII("com.sun.star.ucb.SimpleFileAccess"                   )
+#define SERVICENAME_STORAGEFACTORY                              DECLARE_ASCII("com.sun.star.embed.StorageFactory"                   )
+#define SERVICENAME_TEMPFILE                                    DECLARE_ASCII("com.sun.star.io.TempFile"                            )
+#define SERVICENAME_PACKAGESTRUCTURECREATOR                     DECLARE_ASCII("com.sun.star.embed.PackageStructureCreator"          )
 #define SERVICENAME_TOOLBARFACTORY                              DECLARE_ASCII("drafts.com.sun.star.ui.ToolBarFactory"               )
 #define SERVICENAME_TOOLBARCONTROLLERFACTORY                    DECLARE_ASCII("com.sun.star.frame.ToolBarControllerFactory"         )
 #define SERVICENAME_LICENSE                                     DECLARE_ASCII("com.sun.star.task.Job"                               )
@@ -186,6 +195,9 @@ namespace framework{
 #define IMPLEMENTATIONNAME_MODULEUICONFIGURATIONMANAGER         DECLARE_ASCII("com.sun.star.comp.framework.ModuleUIConfigurationManager" )
 #define IMPLEMENTATIONNAME_MENUBARFACTORY                       DECLARE_ASCII("com.sun.star.comp.framework.MenuBarFactory"          )
 #define IMPLEMENTATIONNAME_STARTMODULE                          DECLARE_ASCII("com.sun.star.comp.framework.BackingComp"             )
+#define IMPLEMENTATIONNAME_GLOBALACCELERATORCONFIGURATION       DECLARE_ASCII("com.sun.star.comp.framework.GlobalAcceleratorConfiguration")
+#define IMPLEMENTATIONNAME_MODULEACCELERATORCONFIGURATION       DECLARE_ASCII("com.sun.star.comp.framework.ModuleAcceleratorConfiguration")
+#define IMPLEMENTATIONNAME_DOCUMENTACCELERATORCONFIGURATION     DECLARE_ASCII("com.sun.star.comp.framework.DocumentAcceleratorConfiguration")
 #define IMPLEMENTATIONNAME_WINDOWSTATECONFIGURATION             DECLARE_ASCII("com.sun.star.comp.framework.WindowStateConfiguration" )
 #define IMPLEMENTATIONNAME_TOOLBARFACTORY                       DECLARE_ASCII("com.sun.star.comp.framework.ToolBarFactory"          )
 #define IMPLEMENTATIONNAME_ADDONSTOOLBARFACTORY                 DECLARE_ASCII("com.sun.star.comp.framework.AddonsToolBarFactory"    )
