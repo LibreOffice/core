@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVSession.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:36:47 $
+ *  last change: $Author: vg $ $Date: 2003-07-02 15:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,7 +246,12 @@ private:
     oslInterlockedCount m_nRefCount;
 
     friend class DAVSessionFactory;
+#if defined WNT
+    friend struct std::auto_ptr< DAVSession >;
+    // work around compiler bug...
+#else // WNT
     friend class std::auto_ptr< DAVSession >;
+#endif // WNT
 };
 
 }; // namespace webdav_ucp
