@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-25 15:58:03 $
+ *  last change: $Author: mib $ $Date: 2002-08-06 12:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2169,7 +2169,7 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
         sal_Int16 nRelWidth =  0;
         aAny = rPropSet->getPropertyValue( sRelativeWidth );
         aAny >>= nRelWidth;
-        DBG_ASSERT( nRelWidth >= 0 && nRelWidth <= 100,
+        DBG_ASSERT( nRelWidth >= 0 && nRelWidth <= 254,
                     "Got illegal relative width from API" );
         if( nRelWidth > 0 )
         {
