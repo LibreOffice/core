@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.9 $
+#  $Revision: 1.10 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 17:07:54 $
+#  last change: $Author: rt $ $Date: 2005-03-29 12:15:43 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -129,7 +129,7 @@ CppOfficeClientExample : $(COMPONENT_IMPL) $(COMPONENT_ENV_FLAG)
 	@echo the follwong command to start the example. The run target starts a remote 
 	@echo server and connect with the client to this server.
 	@echo - 
-	@echo make remoteclient.run
+	@echo $(MAKE) remoteclient.run
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(COMPONENT_IMPL) $(COMPONENT_ENV_FLAG)
