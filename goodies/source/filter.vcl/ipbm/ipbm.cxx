@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ipbm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-08 15:46:25 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:33:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,10 +96,10 @@ public:
 //=================== Methoden von PBMReader ==============================
 
 PBMReader::PBMReader() :
-    mpAcc       ( NULL ),
     mbStatus    ( TRUE ),
     mbRemark    ( FALSE ),
-    mbRaw       ( TRUE )
+    mbRaw       ( TRUE ),
+    mpAcc       ( NULL )
 {
 }
 
@@ -578,8 +578,9 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
 }
 
 //================== ein bischen Muell fuer Windows ==========================
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #ifdef WIN
 
