@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-18 20:26:04 $
+ *  last change: $Author: nn $ $Date: 2001-10-23 18:24:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -698,29 +698,32 @@ void ScColumn::CopyFromClip(USHORT nRow1, USHORT nRow2, short nDy,
     BOOL bAtEnd = FALSE;
     for (USHORT i = 0; i < nColCount && !bAtEnd; i++)
     {
-        USHORT nDestRow = rColumn.pItems[i].nRow + nDy;
-        if ( nDestRow > nRow2 )
+        short nDestRow = rColumn.pItems[i].nRow + nDy;
+        if ( nDestRow > (short) nRow2 )
             bAtEnd = TRUE;
-        else if ( nDestRow >= nRow1 )   // rows at the beginning may be skipped if filtered rows are left out
+        else if ( nDestRow >= (short) nRow1 )
         {
+            //  rows at the beginning may be skipped if filtered rows are left out,
+            //  nDestRow may be negative then
+
             ScBaseCell* pOld = rColumn.pItems[i].pCell;
             ScBaseCell* pNew;
 
             if ( bAsLink )
             {
                 pNew = rColumn.CreateRefCell( pDocument,
-                        ScAddress( nCol, nDestRow, nTab ), i, nInsFlag );
+                        ScAddress( nCol, (USHORT)nDestRow, nTab ), i, nInsFlag );
             }
             else
             {
-                pNew = rColumn.CloneCell( i, nInsFlag, pDocument, ScAddress(nCol,nDestRow,nTab) );
+                pNew = rColumn.CloneCell( i, nInsFlag, pDocument, ScAddress(nCol,(USHORT)nDestRow,nTab) );
 
                 if ( pNew && pNew->GetNotePtr() && (nInsFlag & IDF_NOTE) == 0 )
                     pNew->DeleteNote();
             }
 
             if (pNew)
-                Insert(nDestRow, pNew);
+                Insert((USHORT)nDestRow, pNew);
         }
     }
 }
