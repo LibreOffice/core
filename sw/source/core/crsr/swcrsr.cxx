@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:46:40 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:43:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #endif
 #ifndef _SVTOOLS_CTLOPTIONS_HXX
 #include <svtools/ctloptions.hxx>
+#endif
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
 #endif
 #ifndef _FMTCNTNT_HXX //autogen
 #include <fmtcntnt.hxx>
@@ -1412,10 +1415,10 @@ FASTBOOL SwCursor::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
             SwIndex& rIdx = GetPoint()->nContent;
             xub_StrLen nPos = rIdx.GetIndex();
 
-            SvtCTLOptions aCTLOptions;
-            if ( bVisualAllowed && aCTLOptions.IsCTLFontEnabled() &&
+            SvtCTLOptions& rCTLOptions = SW_MOD()->GetCTLOptions();
+            if ( bVisualAllowed && rCTLOptions.IsCTLFontEnabled() &&
                  SvtCTLOptions::MOVEMENT_VISUAL ==
-                 aCTLOptions.GetCTLCursorMovement() )
+                 rCTLOptions.GetCTLCursorMovement() )
             {
                 // for visual cursor travelling (used in bidi layout)
                 // we first have to convert the logic to a visual position
