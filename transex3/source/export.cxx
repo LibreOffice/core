@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: nf $ $Date: 2001-07-31 13:12:26 $
+ *  last change: $Author: nf $ $Date: 2001-08-01 09:08:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2324,7 +2324,9 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                         pResData->sId = ByteString::CreateFromInt32( nIdx );
                         PFormEntrys *pEntrys;
                         ULONG nLIndex = 0;
-                        ULONG nMaxIndex = pList->GetGermanEntryCount();
+                        ULONG nMaxIndex = 0;
+                        if ( pList )
+                            nMaxIndex = pList->GetGermanEntryCount();
                         while(( pEntrys = pMergeDataFile->GetPFormEntrys( pResData )) && ( nLIndex < nMaxIndex )) {
                             ByteString sText;
                             BOOL bText = pEntrys->GetText( sText, STRING_TYP_TEXT, nLang, TRUE );
@@ -2428,7 +2430,9 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
             }
 
             nListIndex++;
-            ULONG nMaxIndex = pList->GetGermanEntryCount();
+            ULONG nMaxIndex = 0;
+            if ( pList )
+                nMaxIndex = pList->GetGermanEntryCount();
             ByteString sLine;
             if ( pList && pList->GetObject( nListIndex ))
                 sLine = ( *pList->GetObject( nListIndex ))[ GERMAN_LIST_LINE_INDEX ];
