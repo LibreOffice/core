@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MiscUtils.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-04 09:16:21 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 09:47:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,29 +124,33 @@ public:
         ::rtl::OUString tempName;
         try
         {
-            css::uno::Reference< css::beans::XPropertySet > propSet( xModel->getCurrentController()->getFrame(), css::uno::UNO_QUERY );
-            if ( propSet.is() )
+            css::uno::Reference< css::frame::XController > xCurrentController = xModel->getCurrentController();
+            if( xCurrentController.is() )
             {
-                if ( sal_True == ( propSet->getPropertyValue(::rtl::OUString::createFromAscii( "Title" ) ) >>= tempName ) )
+                css::uno::Reference< css::beans::XPropertySet > propSet( xCurrentController->getFrame(), css::uno::UNO_QUERY );
+                if ( propSet.is() )
                 {
-                    docNameOrURL = tempName;
-                    if ( xModel->getURL().getLength() == 0 )
+                    if ( sal_True == ( propSet->getPropertyValue(::rtl::OUString::createFromAscii( "Title" ) ) >>= tempName ) )
                     {
-                        // process "UntitledX - YYYYYYYY"
-                        // to get UntitledX
-                        sal_Int32 pos = 0;
-                        docNameOrURL = tempName.getToken(0,' ',pos);
-                    }
-                    else
-                    {
-                        css::uno::Reference< css::document::XDocumentInfoSupplier >  xDIS( xModel, css::uno::UNO_QUERY_THROW );
-                        css::uno::Reference< css::beans::XPropertySet > xProp (xDIS->getDocumentInfo(),  css::uno::UNO_QUERY_THROW );
-                        css::uno::Any aTitle = xProp->getPropertyValue(::rtl::OUString::createFromAscii( "Title" ) );
-
-                        aTitle >>= docNameOrURL;
-                        if ( docNameOrURL.getLength() == 0 )
+                        docNameOrURL = tempName;
+                        if ( xModel->getURL().getLength() == 0 )
                         {
-                            docNameOrURL =  parseLocationName( xModel->getURL() );
+                            // process "UntitledX - YYYYYYYY"
+                            // to get UntitledX
+                            sal_Int32 pos = 0;
+                            docNameOrURL = tempName.getToken(0,' ',pos);
+                        }
+                        else
+                        {
+                            css::uno::Reference< css::document::XDocumentInfoSupplier >  xDIS( xModel, css::uno::UNO_QUERY_THROW );
+                            css::uno::Reference< css::beans::XPropertySet > xProp (xDIS->getDocumentInfo(),  css::uno::UNO_QUERY_THROW );
+                            css::uno::Any aTitle = xProp->getPropertyValue(::rtl::OUString::createFromAscii( "Title" ) );
+
+                            aTitle >>= docNameOrURL;
+                            if ( docNameOrURL.getLength() == 0 )
+                            {
+                                docNameOrURL =  parseLocationName( xModel->getURL() );
+                            }
                         }
                     }
                 }
