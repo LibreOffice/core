@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 18:03:50 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:27:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -699,7 +699,8 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         SfxCallMode nCall = SFX_CALLMODE_SYNCHRON;
         sal_Int32   nMarkArg = -1;
 
-        sal_Bool bTemp;
+        sal_Bool    bTemp;
+        sal_uInt16  nModifier(0);
         for( sal_Int32 n=0; n<nCount; n++ )
         {
             const ::com::sun::star::beans::PropertyValue& rProp = lNewArgs[n];
@@ -710,6 +711,8 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
             }
             else if( rProp.Name.compareToAscii("Bookmark")== 0 )
                 nMarkArg = n;
+            else if( rProp.Name.compareToAscii("KeyModifier")== 0 )
+                rProp.Value >>= nModifier;
         }
 
         // Overwrite possible detected sychron argument, if real listener exist!
@@ -753,13 +756,14 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                     if ( aSet.Count() )
                     {
                         // execute with arguments - call directly
-                        pItem = pDispatcher->Execute( GetId(), nCall, aSet );
+                        pItem = pDispatcher->Execute( GetId(), nCall, nModifier, aSet );
                         bSuccess = (pItem != NULL);
                     }
                     else
                     {
                         // execute using bindings, enables support for toggle/enum etc.
                         SfxRequest aReq( GetId(), nCall, pShell->GetPool() );
+                        aReq.SetModifier( nModifier );
                         pDispatcher->GetBindings()->Execute_Impl( aReq, pSlot, pShell );
                         pItem = aReq.GetReturnValue();
                         bSuccess = aReq.IsDone() || pItem != NULL;
@@ -778,10 +782,10 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
             SfxAllItemSet aSet( SFX_APP()->GetPool() );
             TransformParameters( GetId(), lNewArgs, aSet );
             if ( aSet.Count() )
-                pItem = pDispatcher->Execute( GetId(), nCall, aSet );
+                pItem = pDispatcher->Execute( GetId(), nCall, nModifier, aSet );
             else
                 // SfxRequests take empty sets as argument sets, GetArgs() returning non-zero!
-                pItem = pDispatcher->Execute( GetId(), nCall );
+                pItem = pDispatcher->Execute( GetId(), nCall, 0, nModifier );
 
             // no bindings, no invalidate ( usually done in SfxDispatcher::Call_Impl()! )
             if ( SfxApplication::Is_Impl() )
