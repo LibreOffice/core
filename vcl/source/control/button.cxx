@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ssa $ $Date: 2002-06-28 08:40:55 $
+ *  last change: $Author: pl $ $Date: 2002-07-04 18:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,6 +198,38 @@ XubString Button::GetStandardHelpText( StandardButtonType /* eButton */ )
     XubString aHelpText;
     return aHelpText;
 }
+
+
+// -----------------------------------------------------------------------
+
+#define IMPLEMENT_BUTTON_ENABLE_TEXT_AND_IMAGE( x )         \
+void x::EnableImageDisplay( BOOL bEnable )                      \
+{                                                                   \
+    if( bEnable )                                                   \
+        mnButtonState &= ~BUTTON_DRAW_NOIMAGE;                      \
+    else                                                            \
+        mnButtonState |= BUTTON_DRAW_NOIMAGE;                       \
+}                                                                   \
+BOOL x::IsImageDisplayEnabled()                                 \
+{                                                                   \
+    return (mnButtonState & BUTTON_DRAW_NOIMAGE) == 0;              \
+}                                                                   \
+void x::EnableTextDisplay( BOOL bEnable )                       \
+{                                                                   \
+    if( bEnable )                                                   \
+        mnButtonState &= ~BUTTON_DRAW_NOTEXT;                       \
+    else                                                            \
+        mnButtonState |= BUTTON_DRAW_NOTEXT;                        \
+}                                                                   \
+BOOL x::IsTextDisplayEnabled()                                  \
+{                                                                   \
+    return (mnButtonState & BUTTON_DRAW_NOTEXT) == 0;               \
+}
+
+IMPLEMENT_BUTTON_ENABLE_TEXT_AND_IMAGE( PushButton )
+IMPLEMENT_BUTTON_ENABLE_TEXT_AND_IMAGE( RadioButton )
+IMPLEMENT_BUTTON_ENABLE_TEXT_AND_IMAGE( CheckBox )
+
 
 // =======================================================================
 
@@ -528,7 +560,7 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
     rTextRect = aInRect;
     if ( mnDDStyle == PUSHBUTTON_DROPDOWN_MENUBUTTON )
     {
-        if ( aText.Len() )
+        if ( aText.Len() && ! (mnButtonState & BUTTON_DRAW_NOTEXT) )
         {
             // calc Symbol- and Textrect
             long nSymbolSize    = pDev->GetTextHeight();
@@ -578,7 +610,7 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
         Rectangle aInRectText  = aInRect;
         Point aImagePos;
 
-        if ( IsImage() && !pMetricVector )
+        if ( IsImage() && !pMetricVector && ! (mnButtonState & BUTTON_DRAW_NOIMAGE) )
         {
             nStyle = 0;
 
@@ -614,7 +646,7 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
             aImagePos.X() = rRect.Left()+((aInRect.GetWidth() -aImageSize.Width()) /2);
             aImagePos.Y() = rRect.Top() +((aInRect.GetHeight()-aImageSize.Height())/2);
 
-            if( aText.Len() || IsSymbol() )
+            if( ( aText.Len() && ! (mnButtonState & BUTTON_DRAW_NOTEXT) ) || IsSymbol() )
             {
                 switch( meImageAlign )
                 {
@@ -664,7 +696,7 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
         long nHeight = pDev->GetTextHeight();
         long nSymbolSpace = 2 * nHeight;
 
-        if ( aText.Len() )
+        if ( aText.Len() && ! (mnButtonState & BUTTON_DRAW_NOTEXT) )
         {
             nTextStyle |= ImplGetTextStyle();
             if ( nDrawFlags & WINDOW_DRAW_NOMNEMONIC )
@@ -700,7 +732,7 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
         {
             Rectangle aInRectSymbol( aInRectText );
 
-            if ( aText.Len() )
+            if ( aText.Len() && ! (mnButtonState & BUTTON_DRAW_NOTEXT) )
             {
                 // put symbol before text
                 aInRectSymbol = rTextRect;
@@ -721,7 +753,7 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
             Rectangle aSymbolClipRect( aInRectSymbol );
             BOOL bClipSymbol = FALSE;
 
-            if( IsImage() )
+            if( IsImage() && ! (mnButtonState & BUTTON_DRAW_NOIMAGE) )
             {
                 switch( meImageAlign )
                 {
@@ -761,7 +793,7 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
         if( bInvalidTextRect )
             rTextRect.SetEmpty();
 
-        if ( aText.Len() )
+        if ( aText.Len() && ! (mnButtonState & BUTTON_DRAW_NOTEXT) )
         {
             pDev->SetTextColor( aColor );
             pDev->DrawText( rTextRect, aText, nTextStyle, pMetricVector, pDisplayText );
@@ -1341,9 +1373,9 @@ Size PushButton::CalcMinimumSize( long nMaxWidth ) const
 
     if ( IsSymbol() )
         aSize = Size( 12, 12 );
-    else if ( IsImage() )
+    else if ( IsImage() && ! (mnButtonState & BUTTON_DRAW_NOIMAGE) )
         aSize = maImage.GetSizePixel();
-    else if ( PushButton::GetText().Len() )
+    else if ( PushButton::GetText().Len() && ! (mnButtonState & BUTTON_DRAW_NOTEXT) )
     {
         aSize = GetTextRect( Rectangle( Point(), Size( nMaxWidth ? nMaxWidth : 0x7fffffff, 0x7fffffff ) ),
                              PushButton::GetText(), ImplGetTextStyle() ).GetSize();
@@ -1739,7 +1771,7 @@ void RadioButton::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
     // kein Image-RadioButton
     if ( !maImage )
     {
-        if ( aText.Len() )
+        if ( aText.Len() && ! (mnButtonState & BUTTON_DRAW_NOTEXT) )
         {
             USHORT nTextStyle = FixedText::ImplGetTextStyle( nWinStyle );
             if ( nDrawFlags & WINDOW_DRAW_NOMNEMONIC )
@@ -1817,7 +1849,7 @@ da im Writer ansonsten die Images noch weiter oben haengen
         long        nTextWidth  = pDev->GetCtrlTextWidth( aText );
 
         // Positionen und Groessen berechnen
-        if ( aText.Len() )
+        if ( aText.Len() && ! (mnButtonState & BUTTON_DRAW_NOTEXT) )
         {
             Size aTmpSize( (aImageSize.Width()+8), (aImageSize.Height()+8) );
             if ( bTopImage )
@@ -1830,11 +1862,8 @@ da im Writer ansonsten die Images noch weiter oben haengen
 
             aImageRect.Right()  = aImageRect.Left()+aTmpSize.Width();
             aImageRect.Bottom() = aImageRect.Top()+aTmpSize.Height();
-        }
 
-        // Text ausgeben
-        if ( aText.Len() )
-        {
+            // Text ausgeben
             Point aTxtPos = rPos;
             if ( bTopImage )
             {
@@ -2484,7 +2513,7 @@ Size RadioButton::CalcMinimumSize( long nMaxWidth ) const
     nMaxWidth -= aSize.Width();
 
     XubString aText = GetText();
-    if ( aText.Len() )
+    if ( aText.Len() && ! (mnButtonState & BUTTON_DRAW_NOTEXT) )
     {
         // subtract what will be added later
         nMaxWidth-=2;
@@ -2641,7 +2670,7 @@ void CheckBox::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
     MetricVector*           pVector = bLayout ? &mpLayoutData->m_aUnicodeBoundRects : NULL;
     String*                 pDisplayText = bLayout ? &mpLayoutData->m_aDisplayText : NULL;
 
-    if ( aText.Len() )
+    if ( aText.Len() && ! (mnButtonState & BUTTON_DRAW_NOTEXT) )
     {
         USHORT nTextStyle = FixedText::ImplGetTextStyle( nWinStyle );
         if ( nDrawFlags & WINDOW_DRAW_NOMNEMONIC )
@@ -3208,7 +3237,7 @@ Size CheckBox::CalcMinimumSize( long nMaxWidth ) const
     nMaxWidth -= aSize.Width();
 
     XubString aText = GetText();
-    if ( aText.Len() )
+    if ( aText.Len() && ! (mnButtonState & BUTTON_DRAW_NOTEXT) )
     {
         // subtract what will be added later
         nMaxWidth-=2;
