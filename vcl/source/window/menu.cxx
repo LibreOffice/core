@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-25 12:16:59 $
+ *  last change: $Author: mba $ $Date: 2002-05-03 17:13:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2560,6 +2560,8 @@ void MenuFloatingWindow::ImplHighlightItem( const MouseEvent& rMEvt, BOOL bMBDow
 
 IMPL_LINK( MenuFloatingWindow, PopupEnd, FloatingWindow*, pPopup )
 {
+    // "this" will be deleted before the end of this method!
+    Menu* pM = pMenu;
     if ( bInExecute )
     {
         if ( pActivePopup )
@@ -2595,6 +2597,10 @@ IMPL_LINK( MenuFloatingWindow, PopupEnd, FloatingWindow*, pPopup )
             }
         }
     }
+
+    if ( pM )
+        pM->pStartedFrom = 0;
+
     return 0;
 }
 
