@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: gh $ $Date: 2001-04-04 13:18:57 $
+ *  last change: $Author: gh $ $Date: 2001-07-06 13:52:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,14 +380,22 @@ IMPL_LINK( BasicApp, LateInit, void *, pDummy )
     BOOL bFileLoaded = FALSE;
     for ( int i = 0 ; i < Application::GetCommandLineParamCount() ; i++ )
     {
-        if ( Application::GetCommandLineParam( i ).Copy(0,1).CompareToAscii("-") != COMPARE_EQUAL )
+        if ( Application::GetCommandLineParam( i ).Copy(0,1).CompareToAscii("-") != COMPARE_EQUAL
+#ifndef UNX
+          && Application::GetCommandLineParam( i ).Copy(0,1).CompareToAscii("/") != COMPARE_EQUAL
+#endif
+          )
         {
             pFrame->LoadFile( Application::GetCommandLineParam( i ) );
             bFileLoaded = TRUE;
         }
         else
         {
-            if ( Application::GetCommandLineParam( i ).Copy(0,4).CompareIgnoreCaseToAscii("-run") == COMPARE_EQUAL )
+            if ( Application::GetCommandLineParam( i ).Copy(0,4).CompareIgnoreCaseToAscii("-run") == COMPARE_EQUAL
+#ifndef UNX
+              || Application::GetCommandLineParam( i ).Copy(0,4).CompareIgnoreCaseToAscii("/run") == COMPARE_EQUAL
+#endif
+              )
                 pFrame->SetAutoRun( TRUE );
         }
     }
