@@ -23444,3 +23444,6 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?Release@AccessibleParaManager@accessibility@@QAEXK@Z
 ?Release@AccessibleParaManager@accessibility@@QAEXKK@Z
 ?SetNum@AccessibleParaManager@accessibility@@QAEXK@Z
+?CreateIconTextAutoMnemonics@IconChoiceDialog@@QAEXXZ
+?PreNotify@IconChoiceDialog@@MAEJAAVNotifyEvent@@@Z
+??1NumLocalExtMenuButton@@UAE@XZ
