@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlImageControlModel.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 17:25:01 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:02:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,17 @@ published service UnoControlImageControlModel
         </pre>
      */
     [property] short Border;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the color of the border, if present
+
+        <p>Not every border style (see <member>Border</member>) may support coloring.
+        For instance, usually a border with 3D effect will ignore the BorderColor setting.</p>
+
+        @since #i24694#
+     */
+    [optional, property] long BorderColor;
 
     //-------------------------------------------------------------------------
 
