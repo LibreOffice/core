@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.142 $
+ *  $Revision: 1.143 $
  *
- *  last change: $Author: aw $ $Date: 2001-04-25 16:24:30 $
+ *  last change: $Author: bm $ $Date: 2001-04-25 16:26:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1371,6 +1371,7 @@ XML_CONSTASCII_ACTION( sXML_region_right, "region-right" );
 XML_CONSTASCII_ACTION( sXML_register_true, "register-true" );
 XML_CONSTASCII_ACTION( sXML_register_truth_ref_style_name, "register-truth-ref-style-name" );
 XML_CONSTASCII_ACTION( sXML_regression_type, "regression-type" );
+XML_CONSTASCII_ACTION( sXML_reinterpret_data_in_rows, "reinterpret-data-in-rows");
 XML_CONSTASCII_ACTION( sXML_rejected, "rejected" );
 XML_CONSTASCII_ACTION( sXML_rejecting_change_id, "rejecting-change-id" );
 XML_CONSTASCII_ACTION( sXML_rejection, "rejection" );
