@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTDataObject.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-05 06:36:35 $
+ *  last change: $Author: tra $ $Date: 2001-03-05 12:26:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,11 +200,11 @@ STDMETHODIMP CXTDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium
 
         // handle locale request, because locale is a artificial format for us
         if ( CF_LOCALE == pFormatetc->cfFormat )
-            transferLocaleToClipbAndSetupStgMedium( *pFormatetc, *pmedium );
+            renderLocaleAndSetupStgMedium( *pFormatetc, *pmedium );
         else if ( CF_UNICODETEXT == pFormatetc->cfFormat )
-            transferUnicodeToClipbAndSetupStgMedium( *pFormatetc, *pmedium );
+            renderUnicodeAndSetupStgMedium( *pFormatetc, *pmedium );
         else
-            transferAnyDataToClipbAndSetupStgMedium( *pFormatetc, *pmedium );
+            renderAnyDataAndSetupStgMedium( *pFormatetc, *pmedium );
     }
     catch(UnsupportedFlavorException&)
     {
@@ -267,7 +267,7 @@ STDMETHODIMP CXTDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium
 //------------------------------------------------------------------------
 
 // inline
-void SAL_CALL CXTDataObject::transferDataToStorageAndSetupStgMedium(
+void SAL_CALL CXTDataObject::renderDataAndSetupStgMedium(
     const sal_Int8* lpStorage, const FORMATETC& fetc, sal_uInt32 nInitStgSize,
     sal_uInt32 nBytesToTransfer, STGMEDIUM& stgmedium )
 {
@@ -303,13 +303,13 @@ void SAL_CALL CXTDataObject::transferDataToStorageAndSetupStgMedium(
 //------------------------------------------------------------------------
 
 //inline
-void SAL_CALL CXTDataObject::transferLocaleToClipbAndSetupStgMedium(
+void SAL_CALL CXTDataObject::renderLocaleAndSetupStgMedium(
     FORMATETC& fetc, STGMEDIUM& stgmedium )
 {
     if ( m_FormatRegistrar.hasSynthesizedLocale( ) )
     {
         LCID lcid = m_FormatRegistrar.getSynthesizedLocale( );
-        transferDataToStorageAndSetupStgMedium(
+        renderDataAndSetupStgMedium(
             reinterpret_cast< sal_Int8* >( &lcid ),
             fetc,
             0,
@@ -325,7 +325,7 @@ void SAL_CALL CXTDataObject::transferLocaleToClipbAndSetupStgMedium(
 //------------------------------------------------------------------------
 
 //inline
-void SAL_CALL CXTDataObject::transferUnicodeToClipbAndSetupStgMedium(
+void SAL_CALL CXTDataObject::renderUnicodeAndSetupStgMedium(
     FORMATETC& fetc, STGMEDIUM& stgmedium )
 {
     DataFlavor aFlavor = formatEtcToDataFlavor( fetc );
@@ -338,7 +338,7 @@ void SAL_CALL CXTDataObject::transferUnicodeToClipbAndSetupStgMedium(
     // to be sure there is an ending 0
     sal_uInt32 nRequiredMemSize = nBytesToTransfer + sizeof( sal_Unicode );
 
-    transferDataToStorageAndSetupStgMedium(
+    renderDataAndSetupStgMedium(
         reinterpret_cast< const sal_Int8* >( aText.getStr( ) ),
         fetc,
         nRequiredMemSize,
@@ -351,7 +351,7 @@ void SAL_CALL CXTDataObject::transferUnicodeToClipbAndSetupStgMedium(
 //------------------------------------------------------------------------
 
 //inline
-void SAL_CALL CXTDataObject::transferAnyDataToClipbAndSetupStgMedium(
+void SAL_CALL CXTDataObject::renderAnyDataAndSetupStgMedium(
     FORMATETC& fetc, STGMEDIUM& stgmedium )
 {
     DataFlavor aFlavor = formatEtcToDataFlavor( fetc );
@@ -371,7 +371,7 @@ void SAL_CALL CXTDataObject::transferAnyDataToClipbAndSetupStgMedium(
     if ( CF_METAFILEPICT == fetc.cfFormat )
     {
         HMETAFILE hMfPict = OOMFPictToWinMFPict( clipDataStream );
-        transferDataToStorageAndSetupStgMedium(
+        renderDataAndSetupStgMedium(
             reinterpret_cast< sal_Int8* >( &hMfPict ),
             fetc,
             0,
@@ -379,7 +379,7 @@ void SAL_CALL CXTDataObject::transferAnyDataToClipbAndSetupStgMedium(
             stgmedium );
     }
     else
-        transferDataToStorageAndSetupStgMedium(
+        renderDataAndSetupStgMedium(
             clipDataStream.getArray( ),
             fetc,
             nRequiredMemSize,

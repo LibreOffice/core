@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTDataObject.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-05 06:36:35 $
+ *  last change: $Author: tra $ $Date: 2001-03-05 12:26:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,15 +149,15 @@ private:
     void validateFormatEtc( LPFORMATETC lpFormatEtc ) const;
     com::sun::star::datatransfer::DataFlavor SAL_CALL formatEtcToDataFlavor( const FORMATETC& aFormatEtc ) const;
     sal_Bool SAL_CALL isSynthesizeableFormat( LPFORMATETC lpFormatEtc ) const;
-    void SAL_CALL transferDataToStorageAndSetupStgMedium( const sal_Int8* lpStorage,
-                                                          const FORMATETC& fetc,
-                                                          sal_uInt32 nInitStgSize,
-                                                          sal_uInt32 nBytesToTransfer,
-                                                          STGMEDIUM& stgmedium );
+    void SAL_CALL renderDataAndSetupStgMedium( const sal_Int8* lpStorage,
+                                               const FORMATETC& fetc,
+                                               sal_uInt32 nInitStgSize,
+                                               sal_uInt32 nBytesToTransfer,
+                                               STGMEDIUM& stgmedium );
 
-    void SAL_CALL transferLocaleToClipbAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium );
-    void SAL_CALL transferUnicodeToClipbAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium );
-    void SAL_CALL transferAnyDataToClipbAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium );
+    void SAL_CALL renderLocaleAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium );
+    void SAL_CALL renderUnicodeAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium );
+    void SAL_CALL renderAnyDataAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium );
 
     void SAL_CALL setupStgMedium( const FORMATETC& fetc,
                                   CStgTransferHelper& stgTransHlp,
