@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 14:23:20 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,10 @@
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/field.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/lstbox.hxx>
+#include <vcl/combobox.hxx>
 #include <svtools/FilterConfigItem.hxx>
 
 // ----------------
@@ -85,23 +88,40 @@ private:
     RadioButton                         maRbSelection;
     Edit                                maEdPages;
     FixedLine                           maFlCompression;
-    RadioButton                         maRbScreen;
-    RadioButton                         maRbPrint;
-    RadioButton                         maRbPress;
-      OKButton                          maBtnOK;
+    RadioButton                         maRbLosslessCompression;
+    RadioButton                         maRbJPEGCompression;
+    FixedText                           maFtQuality;
+    NumericField                        maNfQuality;
+    CheckBox                            maCbReduceImageResolution;
+    FixedText                           maFtReduceImageResolution;
+    ComboBox                            maCoReduceImageResolution;
+    FixedLine                           maFlGeneral;
+    CheckBox                            maCbTaggedPDF;
+    FixedText                           maFtTaggedPDF;
+    CheckBox                            maCbExportNotes;
+    FixedText                           maFtExportNotes;
+    CheckBox                            maCbTransitionEffects;
+    FixedText                           maFtTransitionEffects;
+    FixedText                           maFtFormsFormat;
+    ListBox                             maLbFormsFormat;
+
+    OKButton                            maBtnOK;
     CancelButton                        maBtnCancel;
     HelpButton                          maBtnHelp;
 
     FilterConfigItem                    maConfigItem;
     Any                                 maSelection;
+    sal_Bool                            mbIsPresentation;
 
                                         DECL_LINK( TogglePagesHdl, void* );
+                                        DECL_LINK( ToggleCompressionHdl, void* );
+                                        DECL_LINK( ToggleReduceImageResolutionHdl, void* );
 
 public:
 
                                         ImpPDFDialog( Window* pParent, ResMgr& rResMgr,
                                                       Sequence< PropertyValue >& rFilterData,
-                                                      const Any& rSelection );
+                                                      const Reference< XComponent >& rDoc );
                                         ~ImpPDFDialog();
 
     Sequence< PropertyValue >           GetFilterData();
