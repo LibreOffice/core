@@ -15,6 +15,7 @@ mkdir: %_DEST%\inc%_EXT%\external\sane
 mkdir: %_DEST%\inc%_EXT%\external\twain
 mkdir: %_DEST%\inc%_EXT%\external\zlib
 mkdir: %_DEST%\inc%_EXT%\audio
+mkdir: %_DEST%\inc%_EXT%\external\neon
 
 ..\audio\rtufiles\lib\audio\libaudio.a %_DEST%\lib%_EXT%\libaudio.a
 ..\audio\rtufiles\usr.include\audio\* %_DEST%\inc%_EXT%\audio\*
@@ -59,4 +60,22 @@ mkdir: %_DEST%\inc%_EXT%\audio
 ..\pgp\pgp651\win32_65\lib\*.lib %_DEST%\lib%_EXT%\*.lib
 
 ..\%__SRC%\obj\autorec.o %_DEST%\lib%_EXT%\autorec.o
+
+..\neon\rtufiles\dates.h %_DEST%\inc%_EXT%\external\neon\dates.h
+..\neon\rtufiles\dav_207.h %_DEST%\inc%_EXT%\external\neon\dav_207.h
+..\neon\rtufiles\dav_basic.h %_DEST%\inc%_EXT%\external\neon\dav_basic.h
+..\neon\rtufiles\dav_locks.h %_DEST%\inc%_EXT%\external\neon\dav_locks.h
+..\neon\rtufiles\dav_props.h %_DEST%\inc%_EXT%\external\neon\dav_props.h
+..\neon\rtufiles\hip_xml.h %_DEST%\inc%_EXT%\external\neon\hip_xml.h
+..\neon\rtufiles\http_basic.h %_DEST%\inc%_EXT%\external\neon\http_basic.h
+..\neon\rtufiles\http_cookies.h %_DEST%\inc%_EXT%\external\neon\http_cookies.h
+..\neon\rtufiles\http_request.h %_DEST%\inc%_EXT%\external\neon\http_request.h
+..\neon\rtufiles\http_utils.h %_DEST%\inc%_EXT%\external\neon\http_utils.h
+..\neon\rtufiles\neon_config.h %_DEST%\inc%_EXT%\external\neon\neon_config.h
+..\neon\rtufiles\neon_defs.h %_DEST%\inc%_EXT%\external\neon\neon_defs.h
+..\neon\rtufiles\socket.h %_DEST%\inc%_EXT%\external\neon\socket.h
+..\neon\rtufiles\string_utils.h %_DEST%\inc%_EXT%\external\neon\string_utils.h
+..\neon\rtufiles\uri.h %_DEST%\inc%_EXT%\external\neon\uri.h
+..\%__SRC%\slb\neon.lib %_DEST%\lib%_EXT%\neon.lib
+..\%__SRC%\lib\libneon.a %_DEST%\lib%_EXT%\libneon.a
 
