@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvastools.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2004-02-24 21:42:27 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:36:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@ namespace drafts { namespace com { namespace sun { namespace star { namespace ge
     struct IntegerPoint2D;
     struct IntegerSize2D;
     struct IntegerRectangle2D;
+    struct RealBezierSegment2D;
 } } } } }
 
 namespace drafts { namespace com { namespace sun { namespace star { namespace rendering
@@ -87,6 +88,12 @@ namespace drafts { namespace com { namespace sun { namespace star { namespace re
     class  XPolyPolygon2D;
 } } } } }
 
+namespace com { namespace sun { namespace star { namespace awt
+{
+    struct Point;
+    struct Size;
+    struct Rectangle;
+} } } }
 
 namespace basegfx
 {
@@ -114,6 +121,23 @@ namespace basegfx
             xPolyPolygonFromB2DPolyPolygon( const ::com::sun::star::uno::Reference<
                                                  ::drafts::com::sun::star::rendering::XGraphicDevice >&     xGraphicDevice,
                                             const ::basegfx::B2DPolyPolygon&                            rPolyPoly    );
+
+
+        ::basegfx::B2DPolygon polygonFromPoint2DSequence(
+            const ::com::sun::star::uno::Sequence<
+                ::drafts::com::sun::star::geometry::RealPoint2D >& rPoints );
+
+        ::basegfx::B2DPolyPolygon polyPolygonFromPoint2DSequenceSequence(
+            const ::com::sun::star::uno::Sequence<
+                ::com::sun::star::uno::Sequence< ::drafts::com::sun::star::geometry::RealPoint2D > >& rPoints );
+
+        ::basegfx::B2DPolygon polygonFromBezier2DSequence(
+            const ::com::sun::star::uno::Sequence<
+                ::drafts::com::sun::star::geometry::RealBezierSegment2D >& rPoints );
+
+        ::basegfx::B2DPolyPolygon polyPolygonFromBezier2DSequenceSequence(
+            const ::com::sun::star::uno::Sequence<
+                ::com::sun::star::uno::Sequence< ::drafts::com::sun::star::geometry::RealBezierSegment2D > >& rPoints );
 
 
         // Matrix conversions
@@ -147,6 +171,13 @@ namespace basegfx
         ::basegfx::B2IPoint     b2IPointFromIntegerPoint2D( const ::drafts::com::sun::star::geometry::IntegerPoint2D& );
         ::basegfx::B2IRange     b2IRectangleFromIntegerRectangle2D( const ::drafts::com::sun::star::geometry::IntegerRectangle2D& );
 
+        ::com::sun::star::awt::Size         awtSizeFromB2ISize( const ::basegfx::B2IVector& );
+        ::com::sun::star::awt::Point        awtPointFromB2IPoint( const ::basegfx::B2IPoint& );
+        ::com::sun::star::awt::Rectangle    awtRectangleFromB2IRectangle( const ::basegfx::B2IRange& );
+
+        ::basegfx::B2IVector    b2ISizeFromAwtSize( const ::com::sun::star::awt::Size& );
+        ::basegfx::B2IPoint     b2IPointFromAwtPoint( const ::com::sun::star::awt::Point& );
+        ::basegfx::B2IRange     b2IRectangleFromAwtRectangle( const ::com::sun::star::awt::Rectangle& );
     }
 }
 
