@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-26 16:17:06 $
+ *  last change: $Author: pl $ $Date: 2002-03-27 10:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,12 @@
 #endif
 #ifndef _SV_POLY_HXX
 #include <poly.hxx>
+#endif
+#ifndef _SV_SVSYS_HXX
+#include <svsys.h>
+#endif
+#ifndef _SV_SALFRAME_HXX
+#include <salframe.hxx>
 #endif
 // =======================================================================
 
@@ -1489,6 +1495,7 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
     mnLastFocusItemId          = 0;
 
 
+    maTimer.SetTimeout( 50 );
     maTimer.SetTimeoutHdl( LINK( this, ToolBox, ImplUpdateHdl ) );
 
     DockingWindow::ImplInit( pParent, nStyle & ~(WB_BORDER) );
@@ -2477,7 +2484,6 @@ void ToolBox::ImplFormat( BOOL bResize )
     }
 
     // Es wurde die Leiste neu durchformatiert
-    maTimer.Stop();
     mbFormat = FALSE;
 }
 
@@ -2487,7 +2493,15 @@ IMPL_LINK( ToolBox, ImplUpdateHdl, void*, EMPTYARG )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
-    if ( mbFormat )
+#ifndef REMOTE_APPSERVER
+    if( ImplGetFrame()->GetCurrentModButtons() & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) )
+    {
+        ImplFormat( TRUE );
+        mbFormat = TRUE;
+        maTimer.Start();
+    }
+    else
+#endif
         ImplFormat();
 
     return 0;
@@ -3942,7 +3956,11 @@ void ToolBox::Resize()
         {
             mbFormat = TRUE;
             if ( IsReallyVisible() )
+            {
                 ImplFormat( TRUE );
+                mbFormat = TRUE;
+            }
+            maTimer.Start();
         }
     }
 
