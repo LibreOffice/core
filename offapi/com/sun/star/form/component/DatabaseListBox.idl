@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseListBox.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:06 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:49:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@
     Let's call this result set the list is filled from the <em>list result set</em> here ...</p>
 
  */
-service DatabaseListBox
+published service DatabaseListBox
 {
     service com::sun::star::form::component::ListBox;
 
