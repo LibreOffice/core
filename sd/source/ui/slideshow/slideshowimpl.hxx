@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowimpl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 12:11:48 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:50:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,6 +277,8 @@ public:
     void stopShow();
 
     double update();
+    /** forces an async call to update in the main thread */
+    void startUpdateTimer();
     void paint( const Rectangle& rRect );
     bool keyInput(const KeyEvent& rKEvt);
     void mouseButtonUp(const MouseEvent& rMEvt);
@@ -414,6 +416,16 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > mxPlayer;
     ::com::sun::star::uno::Reference< ::com::sun::star::media::XManager > mxManager;
+};
+
+class SlideShowImplGuard
+{
+public:
+    SlideShowImplGuard( SlideshowImpl* pImpl );
+    ~SlideShowImplGuard();
+
+private:
+    SlideshowImpl* mpImpl;
 };
 
 bool SlideshowImpl::isInputFreezed() const
