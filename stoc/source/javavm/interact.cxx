@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interact.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2002-09-16 12:30:42 $
+ *  last change: $Author: jl $ $Date: 2002-09-25 15:37:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 
 #ifndef _COM_SUN_STAR_JAVA_JAVADISABLEDEXCEPTION_HPP_
 #include <com/sun/star/java/JavaDisabledException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_JAVA_JAVAVMCREATIONFAILUREEXCEPTION_HPP_
+#include <com/sun/star/java/JavaVMCreationFailureException.hpp>
 #endif
 
 
@@ -144,12 +147,24 @@ SAL_CALL InteractionRequest::getContinuations(  ) throw (RuntimeException)
                 m_seqContinuations= Sequence< Reference< XInteractionContinuation> >( arObjs, 1);
             }
 #else
-            Reference<XInteractionContinuation> arObjs[2];
-            arObjs[0]= Reference< XInteractionContinuation >(
-                static_cast<XWeak*> (new InteractionRetry(m_xJVM, m_pJVM)), UNO_QUERY);
-            arObjs[1]= Reference< XInteractionContinuation> (
-                static_cast<XWeak*> (new InteractionAbort(m_xJVM, m_pJVM)), UNO_QUERY);
-            m_seqContinuations= Sequence< Reference< XInteractionContinuation> >( arObjs, 2);
+            // If the creation of JVM failed then don't offer retry, because java might crash
+            // next time
+            if( m_anyRequest.getValueType() == getCppuType( (JavaVMCreationFailureException*)0))
+            {
+                Reference<XInteractionContinuation> arObjs[1];
+                arObjs[0]= Reference< XInteractionContinuation> (
+                    static_cast<XWeak*> (new InteractionAbort(m_xJVM, m_pJVM)), UNO_QUERY);
+                m_seqContinuations= Sequence< Reference< XInteractionContinuation> >( arObjs, 1);
+            }
+            else
+            {
+                Reference<XInteractionContinuation> arObjs[2];
+                arObjs[0]= Reference< XInteractionContinuation >(
+                    static_cast<XWeak*> (new InteractionRetry(m_xJVM, m_pJVM)), UNO_QUERY);
+                arObjs[1]= Reference< XInteractionContinuation> (
+                    static_cast<XWeak*> (new InteractionAbort(m_xJVM, m_pJVM)), UNO_QUERY);
+                m_seqContinuations= Sequence< Reference< XInteractionContinuation> >( arObjs, 2);
+            }
 #endif
         }
     }

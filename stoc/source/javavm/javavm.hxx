@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2002-07-23 14:07:21 $
+ *  last change: $Author: jl $ $Date: 2002-09-25 15:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,10 @@ class JavaVirtualMachine_Impl : public WeakImplHelper4< XJavaVM, XJavaThreadRegi
     sal_Bool m_bInteractionAbort;
     sal_Bool m_bInteractionRetry;
 
+    // If the first creation of java failed an this flag is set then the next call
+    // to getJavaVM throws an RuntimException. This is useful when the second attempt
+    // to create Java might cause a crash.
+    sal_Bool m_bDontCreateJVM;
 public:
     JavaVirtualMachine_Impl(const Reference<XComponentContext> & xCtx) throw();
     ~JavaVirtualMachine_Impl() throw();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: jl $ $Date: 2002-09-16 14:19:51 $
+ *  last change: $Author: jl $ $Date: 2002-09-25 15:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1405,6 +1405,7 @@ JavaVirtualMachine_Impl::JavaVirtualMachine_Impl(const Reference< XComponentCont
       , _xCtx( xCtx )
       ,m_bInteractionAbort(sal_False)
       ,m_bInteractionRetry(sal_False)
+      ,m_bDontCreateJVM(sal_False)
 
 {
     pCreatorThread= new OCreatorThread(this);
@@ -1677,7 +1678,7 @@ Any JavaVirtualMachine_Impl::getJavaVM(const Sequence<sal_Int8> & processId) thr
                 }
             }
 
-            if (pJvm->isEnabled())
+            if (pJvm->isEnabled() && !m_bDontCreateJVM)
             {
                 // create the java vm
                 try {
@@ -1689,6 +1690,28 @@ Any JavaVirtualMachine_Impl::getJavaVM(const Sequence<sal_Int8> & processId) thr
                 }
                 catch(WrappedTargetRuntimeException& e)
                 {
+                    //Dependent on platform and kind of error it is best
+                    //not to create Java again because it might crash the application
+                    const Type& valueType= e.TargetException.getValueType();
+                    if(valueType == getCppuType((JavaNotConfiguredException*)0))
+                    {
+#ifdef LINUX
+                        //because of LD_LIBRARY_PATH, even javaldx --use-links does not work sometimes
+                        m_bDontCreateJVM= sal_True;
+#endif
+                    }
+                    else if(valueType == getCppuType((MissingJavaRuntimeException*)0))
+                    {
+#ifdef LINUX
+                        //because of LD_LIBRARY_PATH, even javaldx --use-links does not work sometimes
+                        m_bDontCreateJVM= sal_True;
+#endif
+                    }
+                    else if(valueType == getCppuType((JavaVMCreationFailureException*)0))
+                    {
+                        m_bDontCreateJVM= sal_True;
+                    }
+
                     delete pCreatorThread;
                     pCreatorThread= new OCreatorThread(this);
                     if( pJvm)
@@ -1702,7 +1725,7 @@ Any JavaVirtualMachine_Impl::getJavaVM(const Sequence<sal_Int8> & processId) thr
                     {
                     case action_abort:
                     {
-                        const Type& valueType= e.TargetException.getValueType();
+
                         if( valueType == getCppuType((JavaNotConfiguredException*)0))
                         {
                             JavaNotConfiguredException exc;
@@ -1745,7 +1768,7 @@ Any JavaVirtualMachine_Impl::getJavaVM(const Sequence<sal_Int8> & processId) thr
                 // listen for changes in the configuration, e.g. proxy settings.
                 registerConfigChangesListener();
             }
-            else
+            else if( ! m_bDontCreateJVM)
             {
                 // Java is not enabled. Notify the user via the XInteractionHandler.
                 // If the client selects retry then we jump back to the retry label,otherwise we
@@ -1765,6 +1788,13 @@ Any JavaVirtualMachine_Impl::getJavaVM(const Sequence<sal_Int8> & processId) thr
                 case action_retry: goto retry;
                 default: goto retry;
                 }
+            }
+            else
+            {// This is the second + attempt to create Java. m_bDontCreateJVM is set
+                // which means instantiation of JVM might cause a crash.
+                if( pJvm)
+                    delete pJvm;
+                throw RuntimeException();
             }
             if( pJvm)
                 delete pJvm;
