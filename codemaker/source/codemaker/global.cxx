@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-22 11:04:37 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,16 +273,6 @@ sal_Bool removeTypeFile(const OString& fileName)
         return sal_True;
 
     return sal_False;
-}
-
-const OString inGlobalSet(const OUString & rValue)
-{
-    OString sValue( OUStringToOString(rValue, RTL_TEXTENCODING_UTF8) );
-    static StringSet aGlobalMap;
-    StringSet::iterator iter = aGlobalMap.find( sValue );
-    if( iter != aGlobalMap.end() )
-        return *iter;
-    return *(aGlobalMap.insert( sValue ).first);
 }
 
 static sal_Bool isFileUrl(const OString& fileName)
