@@ -1,0 +1,14 @@
+# KDE Config File
+[KDE Desktop Entry]
+SwallowExec=
+SwallowTitle=
+BinaryPattern=
+MimeType=
+Name=Setup
+Exec=<progpath>/program/setup
+Icon=set.xpm
+TerminalOptions=
+Path=
+Type=Application
+Comment=OpenOffice Setup
+Terminal=0

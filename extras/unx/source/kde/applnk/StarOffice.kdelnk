@@ -1,0 +1,14 @@
+# KDE Config File
+[KDE Desktop Entry]
+SwallowTitle=
+SwallowExec=
+BinaryPattern=soffice;
+Name=OpenOffice
+Protocols=file;ftp;http;
+MimeType=application/x-scalc;application/x-smf;application/x-sdraw;application/x-sds;application/x-swriter;application/x-sgl;application/x-sda;audio/x-wav;image/gif;image/jpeg;image/tiff;image/x-xbm;image/x-xpm;text/html;text/plain;
+Comment=OpenOffice
+Exec=<progpath>/program/soffice %f
+Icon=so.xpm
+Path=$HOME
+Type=Application
+Terminal=0

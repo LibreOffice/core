@@ -1,0 +1,10 @@
+# KDE Config File
+[KDE Desktop Entry]
+MimeType=text/html
+Comment=mime type
+DefaultApp=OpenOffice
+Comment[pl]=Typ mime
+Icon=htm.xpm
+Type=MimeType
+Patterns=*.html;*.htm;
+Comment[de]=Mime Type

@@ -1,0 +1,21 @@
+# KDE Config File
+[KDE Desktop Entry]
+Comment[fi]=
+Comment[pt]=
+Comment[fr]=
+Comment[sk]=
+Comment[es]=
+Comment[es]=
+MiniIcon=sdw.xpm
+MimeType=application/x-swriter
+Comment=OpenOffice file
+DefaultApp=OpenOffice
+Comment[pt_BR]=
+Comment[nl]=
+Comment[pl]=
+Icon=sdw.xpm
+Comment[no]=
+Comment[it]=
+Type=MimeType
+Comment[de]=OpenOffice Datei
+Patterns=*.sdw;
