@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:27:00 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:23:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,11 @@
 #ifndef _FMTROWSPLT_HXX
 #include <fmtrowsplt.hxx>
 #endif
+// --> OD 2005-01-27 #i33818#
+#ifndef _FMTFOLLOWTEXTFLOW_HXX
+#include <fmtfollowtextflow.hxx>
+#endif
+// <--
 
 #ifndef WW_WWSTYLES_HXX
 #   include "../inc/wwstyles.hxx"
@@ -679,8 +684,15 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
                 }
                 else
                 {
-                    bTestAllowed = pTableDesc->GetAktCol() == 0  &&
-                        pTableDesc->InFirstParaInCell();
+                    // --> OD 2005-02-01 #i39468#
+                    // If current cell isn't valid, the test is allowed.
+                    // The cell isn't valid, if e.g. there is a new row
+                    // <pTableDesc->nAktRow> >= <pTableDesc->pTabLines->Count()>
+                    bTestAllowed =
+                        pTableDesc->GetAktCol() == 0 &&
+                        ( !pTableDesc->IsValidCell( pTableDesc->GetAktCol() ) ||
+                          pTableDesc->InFirstParaInCell() );
+                    // <--
                 }
             }
         }
@@ -2188,7 +2200,7 @@ void WW8TabDesc::CalcDefaults()
     {
         pR->nSwCols = pR->nWwCols;
         pR->bLEmptyCol = pR->nCenter[0] - nMinLeft >= MINLAY;
-        pR->bREmptyCol = nMaxRight - pR->nCenter[pR->nWwCols] >= MINLAY;
+        pR->bREmptyCol = (nMaxRight - pR->nCenter[pR->nWwCols] - nRightMaxThickness) >= MINLAY;
 
         short nAddCols = pR->bLEmptyCol + pR->bREmptyCol;
         USHORT i;
@@ -2502,7 +2514,7 @@ void WW8TabDesc::MergeCells()
                     pTabBoxes = &pTabLine->GetTabBoxes();
 
                     USHORT nCol = pActBand->nTransCell[ i ];
-                    if (!pActBand->bExist[nCol])    //#113434#
+                    if (!pActBand->bExist[i])    //#113434#
                         continue;
                     ASSERT(nCol < pTabBoxes->Count(),
                         "Too few columns, table ended early");
@@ -2555,18 +2567,39 @@ void WW8TabDesc::MergeCells()
                         // anlegen
                         if( !pMergeGroups )
                             pMergeGroups = new WW8MergeGroups;
-                        else
-                        {
-                            // 1. ggfs. alte Mergegruppe(n) schliessen, die
-                            // den von unserer neuen Gruppe betroffenen
-                            // X-Bereich ueberdecken
-                            short nMGrIdx;
-                            while(FindMergeGroup( nX1, nWidth, false, nMGrIdx))
-                                (*pMergeGroups)[ nMGrIdx ]->bGroupLocked = true;
-                        }
 
                         // 2. aktuelle Merge-Gruppe anlegen
                         pActMGroup = new WW8SelBoxInfo( nX1, nWidth );
+
+                        // --> OD 2005-02-04 #118544# - determine size of new
+                        // merge group before inserted the new merge group.
+                        // Needed to correctly locked previously created merge groups.
+                        // Gesamtbreite ermitteln und zuweisen
+                        short nSizCell = pActBand->nWidth[ i ];
+                        for (USHORT i2 = i+1; i2 < pActBand->nWwCols; i2++ )
+                            if (pActBand->pTCs[ i2 ].bMerged &&
+                                !pActBand->pTCs[ i2 ].bFirstMerged  )
+                            {
+                                nSizCell += pActBand->nWidth[ i2 ];
+                            }
+                            else
+                                break;
+                        pActMGroup->nGroupWidth = nSizCell;
+                        // <--
+
+                        // --> OD 2005-02-03 #118544# - locked previously
+                        // created merge groups, after determining the size
+                        // for the new merge group.
+                        // 1. ggfs. alte Mergegruppe(n) schliessen, die
+                        // den von unserer neuen Gruppe betroffenen
+                        // X-Bereich ueberdecken
+                        short nMGrIdx;
+                        while ( FindMergeGroup( nX1, pActMGroup->nGroupWidth,
+                                                false, nMGrIdx ) )
+                        {
+                            (*pMergeGroups)[ nMGrIdx ]->bGroupLocked = true;
+                        }
+                        // <--
 
                         // 3. und in Gruppen-Array eintragen
                         pMergeGroups->Insert(pActMGroup, pMergeGroups->Count());
@@ -2597,17 +2630,7 @@ void WW8TabDesc::MergeCells()
                         // Border der O-L-Box der Gruppe wird Border der
                         // Targetbox
                         pNewFrmFmt->SetAttr( pTabBox->GetFrmFmt()->GetBox() );
-                        // Gesamtbreite ermitteln und zuweisen
-                        short nSizCell = pActBand->nWidth[ i ];
-                        for (USHORT i2 = i+1; i2 < pActBand->nWwCols; i2++ )
-                            if (pActBand->pTCs[ i2 ].bMerged &&
-                                !pActBand->pTCs[ i2 ].bFirstMerged  )
-                            {
-                                nSizCell += pActBand->nWidth[ i2 ];
-                            }
-                            else
-                                break;
-                        pActMGroup->nGroupWidth = nSizCell;
+
                         pNewFrmFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE,
                             pActMGroup->nGroupWidth ));
                     }
@@ -2877,7 +2900,9 @@ bool WW8TabDesc::FindMergeGroup(short nX1, short nWidth, bool bExact,
         short nGrX1;
         short nGrX2;
 
-        for( USHORT iGr = 0; iGr < pMergeGroups->Count(); iGr++ )
+        // --> OD 2005-02-04 #118544# - improvement: search backwards
+        //for ( USHORT iGr = 0; iGr < pMergeGroups->Count(); iGr++ )
+        for ( short iGr = pMergeGroups->Count() - 1; iGr >= 0; --iGr )
         {
             // die aktuell untersuchte Gruppe
             pActGroup = (*pMergeGroups)[ iGr ];
@@ -3392,11 +3417,17 @@ SwTableBox* WW8TabDesc::UpdateTableMergeGroup(  WW8_TCell&     rCell,
     SwTableBox* pResult = 0;
 
     // pruefen, ob die Box zu mergen ist
-    if( pActBand->bExist[ nCol ] &&
-        (rCell.bFirstMerged
-        || rCell.bMerged
-        || rCell.bVertMerge
-        || rCell.bVertRestart) )
+    // --> OD 2005-02-04 #118544# - If cell is the first one to be merged,
+    // a new merge group has to be provided.
+    // E.g., it could be that a cell is the first one to be merged, but no
+    // new merge group is provided, because the potential other cell to be merged
+    // doesn't exist - see method <WW8TabDesc::MergeCells>.
+    if ( pActBand->bExist[ nCol ] &&
+         ( ( rCell.bFirstMerged && pActGroup ) ||
+           rCell.bMerged ||
+           rCell.bVertMerge ||
+           rCell.bVertRestart ) )
+    // <--
     {
         // passende Merge-Gruppe ermitteln
         WW8SelBoxInfo* pTheMergeGroup = 0;
@@ -3468,6 +3499,38 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
     if (pTableDesc)
         maTableStack.push(pTableDesc);
 
+    // --> OD 2005-01-27 #i33818# - determine absolute position object attributes,
+    // if possible. It's needed for nested tables.
+    WW8FlyPara* pTableWFlyPara( 0L );
+    WW8SwFlyPara* pTableSFlyPara( 0L );
+    if ( nInTable )
+    {
+        WW8_TablePos* pNestedTabPos( 0L );
+        WW8_TablePos aNestedTabPos;
+        WW8PLCFxSave1 aSave;
+        pPlcxMan->GetPap()->Save( aSave );
+        WW8PLCFx_Cp_FKP* pPap = pPlcxMan->GetPapPLCF();
+        WW8_CP nMyStartCp = nStartCp;
+        if ( SearchRowEnd( pPap, nMyStartCp, nInTable ) &&
+             ParseTabPos( &aNestedTabPos, pPap ) )
+        {
+            pNestedTabPos = &aNestedTabPos;
+        }
+        pPlcxMan->GetPap()->Restore( aSave );
+        if ( pNestedTabPos )
+        {
+            ApoTestResults aApo = TestApo( nInTable + 1, false, pNestedTabPos );
+            pTableWFlyPara = ConstructApo( aApo, pNestedTabPos );
+            if ( pTableWFlyPara )
+            {
+                pTableSFlyPara = new WW8SwFlyPara(*pPaM, *this, *pTableWFlyPara,
+                    maSectionManager.GetPageLeft(), maSectionManager.GetTextAreaWidth(),
+                    nIniFlyDx, nIniFlyDy);
+            }
+        }
+    }
+    // <--
+
     pTableDesc = new WW8TabDesc( this, nStartCp );
 
     if( pTableDesc->Ok() )
@@ -3479,28 +3542,50 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
                 "how could we be in a local apo and have no apo");
         }
 
-        if (!maTableStack.empty() && !InEqualApo(nNewInTable))
+        if ( !maTableStack.empty() && !InEqualApo(nNewInTable) )
         {
             pTableDesc->pParentPos = new SwPosition(*pPaM->GetPoint());
             SfxItemSet aItemSet(rDoc.GetAttrPool(),
                 RES_FRMATR_BEGIN, RES_FRMATR_END-1);
-            SwFmtAnchor aAnchor(FLY_IN_CNTNT);
+            // --> OD 2005-01-26 #i33818# - anchor the Writer fly frame for
+            // the nested table at-character.
+            SwFmtAnchor aAnchor(FLY_AUTO_CNTNT);
             aAnchor.SetAnchor(pTableDesc->pParentPos);
             aItemSet.Put(aAnchor);
-            pTableDesc->pFlyFmt = rDoc.MakeFlySection(FLY_IN_CNTNT,
+            pTableDesc->pFlyFmt = rDoc.MakeFlySection(FLY_AUTO_CNTNT,
                 pTableDesc->pParentPos, &aItemSet);
-            ASSERT(pTableDesc->pFlyFmt->GetAnchor().GetAnchorId()
-                == FLY_IN_CNTNT, "Not the anchor type requested!");
+            ASSERT( pTableDesc->pFlyFmt->GetAnchor().GetAnchorId() == FLY_AUTO_CNTNT,
+                    "Not the anchor type requested!" );
+            // <--
             MoveInsideFly(pTableDesc->pFlyFmt);
         }
         pTableDesc->CreateSwTable();
         if (pTableDesc->pFlyFmt)
         {
-            SwFmtHoriOrient aHori = pTableDesc->pTable->GetFrmFmt()->
-                GetHoriOrient();
             pTableDesc->SetSizePosition(pTableDesc->pFlyFmt);
-            pTableDesc->pFlyFmt->SetAttr(SwFmtSurround(SURROUND_NONE));
-            pTableDesc->pFlyFmt->SetAttr(aHori);
+            // --> OD 2005-01-26 #i33818# - Use absolute position object
+            // attributes, if existing, and apply them to the created Writer fly
+            // frame.
+            if ( pTableWFlyPara && pTableSFlyPara )
+            {
+                WW8FlySet aFlySet( *this, pTableWFlyPara, pTableSFlyPara, false );
+                SwFmtAnchor aAnchor( FLY_AUTO_CNTNT );
+                aAnchor.SetAnchor( pTableDesc->pParentPos );
+                aFlySet.Put( aAnchor );
+                pTableDesc->pFlyFmt->SetAttr( aFlySet );
+            }
+            else
+            {
+                SwFmtHoriOrient aHori =
+                            pTableDesc->pTable->GetFrmFmt()->GetHoriOrient();
+                pTableDesc->pFlyFmt->SetAttr(aHori);
+                pTableDesc->pFlyFmt->SetAttr( SwFmtSurround( SURROUND_NONE ) );
+            }
+            // <--
+            // --> OD 2005-01-27 #i33818# - The nested table doesn't have to leave
+            // the table cell. Thus, the Writer fly frame has to follow the text flow.
+            pTableDesc->pFlyFmt->SetAttr( SwFmtFollowTextFlow( TRUE ) );
+            // <--
         }
         else
             pTableDesc->SetSizePosition(0);
@@ -3508,6 +3593,11 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
     }
     else
         PopTableDesc();
+
+    // --> OD 2005-01-28 #i33818#
+    delete pTableWFlyPara;
+    delete pTableSFlyPara;
+    // <--
 
     bool bSuccess = (0 != pTableDesc);
     if (bSuccess)
@@ -3534,7 +3624,9 @@ void SwWW8ImplReader::Read_TabRowEnd( USHORT, const BYTE* pData, short nLen )   
 void SwWW8ImplReader::PopTableDesc()
 {
     if (pTableDesc && pTableDesc->pFlyFmt)
+    {
         MoveOutsideFly(pTableDesc->pFlyFmt,*pTableDesc->pParentPos);
+    }
 
     delete pTableDesc;
     if (maTableStack.empty())
