@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-24 07:33:10 $
+ *  last change: $Author: tl $ $Date: 2002-05-24 12:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1414,9 +1414,13 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ catalan ] = "~Espacio:";
             Text[ thai ] = "~ระยะห่าง";
         };
-        Bitmap 2
+        Bitmap 20
         {
             File = "dist11.bmp" ;
+        };
+        Bitmap 21
+        {
+            File = "dist11_h.bmp" ;
         };
         String 3
         {
@@ -1444,9 +1448,13 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ catalan ] = "~Interlineado:";
             Text[ thai ] = "ระยะห่าง~บรรทัด";
         };
-        Bitmap 3
+        Bitmap 30
         {
             File = "dist12.bmp" ;
+        };
+        Bitmap 31
+        {
+            File = "dist12_h.bmp" ;
         };
         String 4
         {
@@ -1474,9 +1482,13 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ catalan ] = "Intervalo de ~ra�z:";
             Text[ thai ] = "ระยะห่าง~ราก";
         };
-        Bitmap 4
+        Bitmap 40
         {
             File = "dist13.bmp" ;
+        };
+        Bitmap 41
+        {
+            File = "dist13_h.bmp" ;
         };
     };
     Resource 2
@@ -1533,9 +1545,13 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ catalan ] = "~Super�ndice:";
             Text[ thai ] = "~ตัวยก";
         };
-        Bitmap 2
+        Bitmap 20
         {
             File = "dist21.bmp" ;
+        };
+        Bitmap 21
+        {
+            File = "dist21_h.bmp" ;
         };
         String 3
         {
@@ -1563,9 +1579,13 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ catalan ] = "S~ub�ndice:";
             Text[ thai ] = "ตั~วห้อย";
         };
-        Bitmap 3
+        Bitmap 30
         {
             File = "dist22.bmp" ;
+        };
+        Bitmap 31
+        {
+            File = "dist22_h.bmp" ;
         };
     };
     Resource 3
@@ -1626,9 +1646,13 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ catalan ] = "Altura del ~numerador:";
             Text[ thai ] = "เ~ศษ";
         };
-        Bitmap 2
+        Bitmap 20
         {
             File = "dist31.bmp" ;
+        };
+        Bitmap 21
+        {
+            File = "dist31_h.bmp" ;
         };
         String 3
         {
@@ -1656,9 +1680,13 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ catalan ] = "~Altura del denominador:";
             Text[ thai ] = "~ส่วน";
         };
-        Bitmap 3
+        Bitmap 30
         {
             File = "dist32.bmp" ;
+        };
+        Bitmap 31
+        {
+            File = "dist32_h.bmp" ;
         };
     };
     Resource 4
@@ -1718,9 +1746,13 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ catalan ] = "Longitud ~excesiva:";
             Text[ thai ] = "ความยาวเ~กิน";
         };
-        Bitmap 2
+        Bitmap 20
         {
             File = "dist41.bmp" ;
+        };
+        Bitmap 21
+        {
+            File = "dist41_h.bmp" ;
         };
         String 3
         {
@@ -1749,9 +1781,13 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ catalan ] = "Espesor del ~trazo:";
             Text[ thai ] = "~น้ำหนัก";
         };
-        Bitmap 3
+        Bitmap 30
         {
             File = "dist42.bmp" ;
+        };
+        Bitmap 31
+        {
+            File = "dist42_h.bmp" ;
         };
     };
     Resource 5
@@ -1811,9 +1847,13 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ catalan ] = "~Altura m�xima:";
             Text[ thai ] = "ขีดจำกัด~บน";
         };
-        Bitmap 2
+        Bitmap 20
         {
             File = "dist51.bmp" ;
+        };
+        Bitmap 21
+        {
+            File = "dist51_h.bmp" ;
         };
         String 3
         {
@@ -1841,9 +1881,13 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ catalan ] = "Altura ~m�nima:";
             Text[ thai ] = "ขีดจำกัด~ล่าง";
         };
-        Bitmap 3
+        Bitmap 30
         {
             File = "dist52.bmp" ;
+        };
+        Bitmap 31
+        {
+            File = "dist52_h.bmp" ;
         };
     };
     Resource 6
@@ -1902,9 +1946,13 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ catalan ] = "~Sobredimensi�n izq./der.:";
             Text[ thai ] = "ขนาดเ~กิน (ซ้าย/ขวา)";
         };
-        Bitmap 2
+        Bitmap 20
         {
             File = "dist61.bmp" ;
+        };
+        Bitmap 21
+        {
+            File = "dist61_h.bmp" ;
         };
         String 3
         {
@@ -1932,9 +1980,13 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ catalan ] = "~Espacio:";
             Text[ thai ] = "~ระยะห่าง";
         };
-        Bitmap 3
+        Bitmap 30
         {
             File = "dist62.bmp" ;
+        };
+        Bitmap 31
+        {
+            File = "dist62_h.bmp" ;
         };
         String 5
         {
@@ -1962,9 +2014,13 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ catalan ] = "~Sobredimensi�n:";
             Text[ thai ] = "ขนาดเ~กิน";
         };
-        Bitmap 5
+        Bitmap 50
         {
             File = "dist61.bmp" ;
+        };
+        Bitmap 51
+        {
+            File = "dist61_h.bmp" ;
         };
     };
     Resource 7
@@ -2023,9 +2079,13 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ catalan ] = "~Interlineado:";
             Text[ thai ] = "ระยะห่าง~บรรทัด";
         };
-        Bitmap 2
+        Bitmap 20
         {
             File = "dist71.bmp" ;
+        };
+        Bitmap 21
+        {
+            File = "dist71_h.bmp" ;
         };
         String 3
         {
@@ -2053,9 +2113,13 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ catalan ] = "Distancia entre ~columnas:";
             Text[ thai ] = "ระยะห่าง~คอลัมน์";
         };
-        Bitmap 3
+        Bitmap 30
         {
             File = "dist72.bmp" ;
+        };
+        Bitmap 31
+        {
+            File = "dist72_h.bmp" ;
         };
     };
     Resource 8
@@ -2115,9 +2179,13 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ catalan ] = "Altura ~primaria:";
             Text[ thai ] = "ความสูง~ปฐมภูมิ";
         };
-        Bitmap 2
+        Bitmap 20
         {
             File = "dist81.bmp" ;
+        };
+        Bitmap 21
+        {
+            File = "dist81_h.bmp" ;
         };
         String 3
         {
@@ -2145,9 +2213,13 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ catalan ] = "Distancia ~m�nima:";
             Text[ thai ] = "ระยะห่าง~น้อยที่สุด";
         };
-        Bitmap 3
+        Bitmap 30
         {
             File = "dist82.bmp" ;
+        };
+        Bitmap 31
+        {
+            File = "dist82_h.bmp" ;
         };
     };
     Resource 9
@@ -2207,9 +2279,13 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ catalan ] = "~Sobredimensi�n:";
             Text[ thai ] = "ขนาดเ~กิน";
         };
-        Bitmap 2
+        Bitmap 20
         {
             File = "dist91.bmp" ;
+        };
+        Bitmap 21
+        {
+            File = "dist91_h.bmp" ;
         };
         String 3
         {
@@ -2237,9 +2313,13 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ catalan ] = "~Espacio:";
             Text[ thai ] = "~ระยะห่าง";
         };
-        Bitmap 3
+        Bitmap 30
         {
             File = "dist92.bmp" ;
+        };
+        Bitmap 31
+        {
+            File = "dist92_h.bmp" ;
         };
     };
     Resource 10
@@ -2297,9 +2377,13 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ catalan ] = "~Izquierda:";
             Text[ thai ] = "~ซ้าย";
         };
-        Bitmap 2
+        Bitmap 20
         {
             File = "dist101.bmp" ;
+        };
+        Bitmap 21
+        {
+            File = "dist101_h.bmp" ;
         };
         String 3
         {
@@ -2327,9 +2411,13 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ catalan ] = "~Derecha:";
             Text[ thai ] = "~ขวา";
         };
-        Bitmap 3
+        Bitmap 30
         {
             File = "dist102.bmp" ;
+        };
+        Bitmap 31
+        {
+            File = "dist102_h.bmp" ;
         };
         String 4
         {
@@ -2357,9 +2445,13 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ catalan ] = "~Arriba:";
             Text[ thai ] = "~บน";
         };
-        Bitmap 4
+        Bitmap 40
         {
             File = "dist103.bmp" ;
+        };
+        Bitmap 41
+        {
+            File = "dist103_h.bmp" ;
         };
         String 5
         {
@@ -2387,9 +2479,13 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ catalan ] = "~Abajo:";
             Text[ thai ] = "~ล่าง";
         };
-        Bitmap 5
+        Bitmap 50
         {
             File = "dist104.bmp" ;
+        };
+        Bitmap 51
+        {
+            File = "dist104_h.bmp" ;
         };
     };
     Text[ chinese_simplified ] = "间隔";

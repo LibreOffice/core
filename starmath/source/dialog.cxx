@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2002-05-03 14:35:00 $
+ *  last change: $Author: tl $ $Date: 2002-05-24 12:12:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -750,7 +750,8 @@ static const FieldMinMax pMinMaxData[10][4] =
 };
 
 SmCategoryDesc::SmCategoryDesc(const ResId& rResId, USHORT nCategoryIdx) :
-    Resource(rResId)
+    Resource(rResId),
+    bIsHighContrast(FALSE)
 {
     if (IsAvailableRes(ResId(1).SetRT(RSC_STRING)))
     {
@@ -763,13 +764,15 @@ SmCategoryDesc::SmCategoryDesc(const ResId& rResId, USHORT nCategoryIdx) :
 
             if (IsAvailableRes(ResId(nI2).SetRT(RSC_STRING)))
             {
-                Strings[i]  = new XubString(ResId(nI2));
-                Graphics[i] = new Bitmap(ResId(nI2));
+                Strings  [i] = new XubString(ResId(nI2));
+                Graphics [i] = new Bitmap(ResId(10*nI2));
+                GraphicsH[i] = new Bitmap(ResId(10*nI2+1));
             }
             else
             {
-                Strings[i]  = 0;
-                Graphics[i] = 0;
+                Strings  [i] = 0;
+                Graphics [i] = 0;
+                GraphicsH[i] = 0;
             }
         }
 
@@ -1023,6 +1026,8 @@ SmDistanceDialog::SmDistanceDialog(Window *pParent, BOOL bFreeRes)
     if (bFreeRes)
         FreeResource();
 
+    ApplyImages();
+
     // preview like controls should have a 2D look
     aBitmap.SetBorderStyle( WINDOW_BORDER_MONO );
 
@@ -1035,7 +1040,7 @@ SmDistanceDialog::SmDistanceDialog(Window *pParent, BOOL bFreeRes)
     aMenuButton.GetPopupMenu()->SetSelectHdl(LINK(this, SmDistanceDialog, MenuSelectHdl));
 
     aDefaultButton.SetClickHdl(LINK(this, SmDistanceDialog, DefaultButtonClickHdl));
-                       }
+}
 
 
 SmDistanceDialog::~SmDistanceDialog()
@@ -1044,6 +1049,24 @@ SmDistanceDialog::~SmDistanceDialog()
         DELETEZ(Categories[i]);
 }
 
+void SmDistanceDialog::ApplyImages()
+{
+    BOOL bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
+    for (int i = 0;  i < NOCATEGORIES;  ++i)
+    {
+        SmCategoryDesc *pCat = Categories[i];
+        if (pCat)
+            pCat->SetHighContrast( bHighContrast );
+    }
+}
+
+void SmDistanceDialog::DataChanged( const DataChangedEvent &rEvt )
+{
+    if ( (rEvt.GetType() == DATACHANGED_SETTINGS) && (rEvt.GetFlags() & SETTINGS_STYLE) )
+            ApplyImages();
+
+    ModalDialog::DataChanged( rEvt );
+}
 
 void SmDistanceDialog::ReadFrom(const SmFormat &rFormat)
 {
