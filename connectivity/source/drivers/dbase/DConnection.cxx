@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DConnection.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-14 13:30:02 $
+ *  last change: $Author: oj $ $Date: 2001-04-27 10:08:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@
 using namespace connectivity::dbase;
 using namespace connectivity::file;
 
-typedef connectivity::file::OConnection  OConnection_B;
+typedef connectivity::file::OConnection  OConnection_BASE;
 
 //------------------------------------------------------------------------------
 using namespace ::com::sun::star::uno;

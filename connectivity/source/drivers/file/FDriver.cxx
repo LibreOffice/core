@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDriver.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:21 $
+ *  last change: $Author: oj $ $Date: 2001-04-27 10:08:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,19 +186,24 @@ Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByConnection
     if (ODriver_BASE::rBHelper.bDisposed)
                 throw DisposedException();
 
-    OConnection* pConnection = NULL;
-    for (OWeakRefArray::iterator i = m_xConnections.begin(); m_xConnections.end() != i; ++i)
+    Reference< XTablesSupplier > xTab = NULL;
+    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(connection,UNO_QUERY);
+    if(xTunnel.is())
     {
-                if ((OConnection*) Reference< XConnection >::query(i->get().get()).get() == (OConnection*)connection.get())
+        OConnection* pSearchConnection = (OConnection*)xTunnel->getSomething(OConnection::getUnoTunnelImplementationId());
+        OConnection* pConnection = NULL;
+        for (OWeakRefArray::iterator i = m_xConnections.begin(); m_xConnections.end() != i; ++i)
         {
-            pConnection = (OConnection*)connection.get();
-            break;
+            if ((OConnection*) Reference< XConnection >::query(i->get().get()).get() == pSearchConnection)
+            {
+                pConnection = pSearchConnection;
+                break;
+            }
         }
-    }
 
-        Reference< XTablesSupplier > xTab = NULL;
-    if(pConnection)
-        xTab = pConnection->createCatalog();
+        if(pConnection)
+            xTab = pConnection->createCatalog();
+    }
     return xTab;
 }
 

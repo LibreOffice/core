@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZPooledConnection.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-26 09:11:50 $
+ *  last change: $Author: oj $ $Date: 2001-04-27 10:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ void SAL_CALL OPooledConnection::disposing( const EventObject& Source ) throw (:
 //XPooledConnection
 Reference< XConnection > OPooledConnection::getConnection()  throw(SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    if(!m_xConnection.is())
+    if(!m_xConnection.is() && m_xRealConnection.is())
     {
         m_xConnection = new OConnectionWrapper(m_xRealConnection);
         // register as event listener for the new connection

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AConnection.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-18 14:06:30 $
+ *  last change: $Author: oj $ $Date: 2001-04-27 10:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
+#include <cppuhelper/typeprovider.hxx>
+#endif
 
 using namespace connectivity::ado;
 using namespace connectivity::dbtools;
@@ -109,8 +112,7 @@ IMPLEMENT_SERVICE_INFO(OConnection,"com.sun.star.sdbcx.AConnection","com.sun.sta
 // --------------------------------------------------------------------------------
 OConnection::OConnection(const ::rtl::OUString& url, const Sequence< PropertyValue >& info,
                          ODriver*   _pDriver) throw(SQLException, RuntimeException)
-                         : OConnection_BASE(m_aMutex),
-                         OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
+                         : OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
                          m_bClosed(sal_False),
                          m_xMetaData(NULL),
                          m_xCatalog(NULL),
@@ -552,5 +554,30 @@ void OConnection::disposing()
     dispose_ChildImpl();
     OConnection_BASE::disposing();
 }
+// -----------------------------------------------------------------------------
+sal_Int64 SAL_CALL OConnection::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw (::com::sun::star::uno::RuntimeException)
+{
+    if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+        return (sal_Int64)this;
+
+    return OConnection_BASE::getSomething(rId);
+}
+// -----------------------------------------------------------------------------
+Sequence< sal_Int8 > OConnection::getUnoTunnelImplementationId()
+{
+    static ::cppu::OImplementationId * pId = 0;
+    if (! pId)
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if (! pId)
+        {
+            static ::cppu::OImplementationId aId;
+            pId = &aId;
+        }
+    }
+    return pId->getImplementationId();
+}
+// -----------------------------------------------------------------------------
+
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-26 13:31:47 $
+ *  last change: $Author: oj $ $Date: 2001-04-27 10:08:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
+#include <cppuhelper/typeprovider.hxx>
+#endif
 #ifndef _CONNECTIVITY_FILE_OCONNECTION_HXX_
 #include "file/FConnection.hxx"
 #endif
@@ -130,10 +133,10 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::ucb;
 using namespace ::ucb;
 using namespace rtl;
+typedef connectivity::OMetaConnection OConnection_BASE;
 // --------------------------------------------------------------------------------
 OConnection::OConnection(OFileDriver*   _pDriver)
-                         : OConnection_BASE(m_aMutex)
-                         ,OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this)
+                         : OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this)
                          ,m_pDriver(_pDriver)
                          ,m_bClosed(sal_False)
                          ,m_xMetaData(NULL)
@@ -523,5 +526,30 @@ void OConnection::disposing()
     }
     return xContent;
 }
+// -----------------------------------------------------------------------------
+sal_Int64 SAL_CALL OConnection::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw (::com::sun::star::uno::RuntimeException)
+{
+    if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+        return (sal_Int64)this;
+
+    return 0;
+}
+// -----------------------------------------------------------------------------
+Sequence< sal_Int8 > OConnection::getUnoTunnelImplementationId()
+{
+    static ::cppu::OImplementationId * pId = 0;
+    if (! pId)
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if (! pId)
+        {
+            static ::cppu::OImplementationId aId;
+            pId = &aId;
+        }
+    }
+    return pId->getImplementationId();
+}
+// -----------------------------------------------------------------------------
+
 
 

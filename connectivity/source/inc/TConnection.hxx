@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TConnection.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 14:58:22 $
+ *  last change: $Author: oj $ $Date: 2001-04-27 10:08:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,17 +64,44 @@
 #ifndef _RTL_TEXTENC_H
 #include <rtl/textenc.h>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XWARNINGSSUPPLIER_HPP_
+#include <com/sun/star/sdbc/XWarningsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
+#include <com/sun/star/sdbc/XConnection.hpp>
+#endif
+#ifndef _CPPUHELPER_COMPBASE4_HXX_
+#include <cppuhelper/compbase4.hxx>
+#endif
+
 
 namespace connectivity
 {
-    class OMetaConnection
+    typedef ::cppu::WeakComponentImplHelper4<   ::com::sun::star::sdbc::XConnection,
+                                                ::com::sun::star::sdbc::XWarningsSupplier,
+                                                ::com::sun::star::lang::XServiceInfo,
+                                                ::com::sun::star::lang::XUnoTunnel
+                                            > OMetaConnection_BASE;
+
+    class OMetaConnection : public OMetaConnection_BASE
     {
     protected:
-        rtl_TextEncoding m_nTextEncoding; // the encoding which is used for all text conversions
+        ::osl::Mutex        m_aMutex;
+        rtl_TextEncoding    m_nTextEncoding; // the encoding which is used for all text conversions
     public:
-        OMetaConnection() : m_nTextEncoding(RTL_TEXTENCODING_MS_1252){}
+        OMetaConnection() : OMetaConnection_BASE(m_aMutex) ,m_nTextEncoding(RTL_TEXTENCODING_MS_1252){}
 
         rtl_TextEncoding getTextEncoding() const { return m_nTextEncoding; }
+
+        //XUnoTunnel
+        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw (::com::sun::star::uno::RuntimeException);
+        static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
     };
 }
 #endif // CONNECTIVITY_CONNECTION_HXX

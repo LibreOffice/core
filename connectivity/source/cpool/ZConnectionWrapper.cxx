@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZConnectionWrapper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-26 09:11:43 $
+ *  last change: $Author: oj $ $Date: 2001-04-27 10:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
+#include <cppuhelper/typeprovider.hxx>
+#endif
 
 using namespace connectivity;
 //------------------------------------------------------------------------------
@@ -85,6 +88,7 @@ OConnectionWrapper::OConnectionWrapper(const ::com::sun::star::uno::Reference< :
     : OConnection_BASE(m_aMutex)
     ,m_xConnection(_xConnection)
 {
+    OSL_ENSURE(m_xConnection.is(),"OConnectionWrapper: Connection must be valid!");
 }
 //-----------------------------------------------------------------------------
 OConnectionWrapper::~OConnectionWrapper()
@@ -295,6 +299,33 @@ void OConnectionWrapper::disposing()
     OConnection_BASE::disposing();
 }
 // -----------------------------------------------------------------------------
+// com::sun::star::lang::XUnoTunnel
+sal_Int64 SAL_CALL OConnectionWrapper::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException)
+{
+    if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+        return (sal_Int64)this;
 
+    Reference<XUnoTunnel> xTunnel(m_xConnection,UNO_QUERY);
+    if(xTunnel.is())
+        return xTunnel->getSomething(rId);
+    return 0;
+}
+
+// -----------------------------------------------------------------------------
+Sequence< sal_Int8 > OConnectionWrapper::getUnoTunnelImplementationId()
+{
+    static ::cppu::OImplementationId * pId = 0;
+    if (! pId)
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if (! pId)
+        {
+            static ::cppu::OImplementationId aId;
+            pId = &aId;
+        }
+    }
+    return pId->getImplementationId();
+}
+// -----------------------------------------------------------------------------
 
 

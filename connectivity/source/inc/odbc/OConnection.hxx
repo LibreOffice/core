@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-20 13:31:58 $
+ *  last change: $Author: oj $ $Date: 2001-04-27 10:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,23 +61,11 @@
 #ifndef _CONNECTIVITY_ODBC_OCONNECTION_HXX_
 #define _CONNECTIVITY_ODBC_OCONNECTION_HXX_
 
-#ifndef _CPPUHELPER_COMPBASE3_HXX_
-#include <cppuhelper/compbase3.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
-#include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XWARNINGSSUPPLIER_HPP_
-#include <com/sun/star/sdbc/XWarningsSupplier.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDBC_SQLWARNING_HPP_
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 #ifndef _CONNECTIVITY_OFUNCTIONDEFS_HXX_
 #include "odbc/OFunctiondefs.hxx"
@@ -109,20 +97,14 @@ namespace connectivity
         class OStatement_Base;
         class ODBCDriver;
         class ODatabaseMetaData;
-
-        typedef ::cppu::WeakComponentImplHelper3<       ::com::sun::star::sdbc::XConnection,
-                                                        ::com::sun::star::sdbc::XWarningsSupplier,
-                                                        ::com::sun::star::lang::XServiceInfo
-                                            > OConnection_BASE;
+        typedef connectivity::OMetaConnection OConnection_BASE;
 
         class OConnection : public OConnection_BASE,
-                            public connectivity::OMetaConnection,
                             public connectivity::OSubComponent<OConnection, OConnection_BASE>
         {
             friend class connectivity::OSubComponent<OConnection, OConnection_BASE>;
 
         protected:
-            ::osl::Mutex    m_aMutex;
             //====================================================================
             // Data attributes
             //====================================================================
@@ -166,7 +148,6 @@ namespace connectivity
 
             // XServiceInfo
             DECLARE_SERVICE_INFO();
-
             // XConnection
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement > SAL_CALL createStatement(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

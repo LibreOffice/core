@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AConnection.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 15:10:17 $
+ *  last change: $Author: oj $ $Date: 2001-04-27 10:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,15 +61,6 @@
 #ifndef _CONNECTIVITY_ADO_ACONNECTION_HXX_
 #define _CONNECTIVITY_ADO_ACONNECTION_HXX_
 
-#ifndef _CPPUHELPER_COMPBASE3_HXX_
-#include <cppuhelper/compbase3.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
-#include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XWARNINGSSUPPLIER_HPP_
-#include <com/sun/star/sdbc/XWarningsSupplier.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDBC_SQLWARNING_HPP_
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #endif
@@ -91,27 +82,24 @@
 #ifndef _CONNECTIVITY_OTYPEINFO_HXX_
 #include "OTypeInfo.hxx"
 #endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
+#ifndef CONNECTIVITY_CONNECTION_HXX
+#include "TConnection.hxx"
 #endif
 
 namespace connectivity
 {
     namespace ado
     {
-        typedef ::cppu::WeakComponentImplHelper3<       ::com::sun::star::sdbc::XConnection,
-                                                        ::com::sun::star::sdbc::XWarningsSupplier,
-                                                        ::com::sun::star::lang::XServiceInfo> OConnection_BASE;
         class WpADOConnection;
         class ODriver;
-        typedef ::std::multimap<sal_Int32, ::connectivity::OTypeInfo> OTypeInfoMap;
+        typedef ::std::multimap<sal_Int32, ::connectivity::OTypeInfo>   OTypeInfoMap;
+        typedef connectivity::OMetaConnection                           OConnection_BASE;
 
 
         class OConnection : public OConnection_BASE,
                             public connectivity::OSubComponent<OConnection, OConnection_BASE>
         {
             friend class connectivity::OSubComponent<OConnection, OConnection_BASE>;
-            ::osl::Mutex                m_aMutex;
 
         protected:
             //====================================================================
@@ -142,10 +130,13 @@ namespace connectivity
             ~OConnection();
             void construct(const ::rtl::OUString& url,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info);
 
-            DECLARE_SERVICE_INFO();
-
             void closeAllStatements () throw( ::com::sun::star::sdbc::SQLException);
 
+            //XUnoTunnel
+            virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw (::com::sun::star::uno::RuntimeException);
+            static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+            // XServiceInfo
+            DECLARE_SERVICE_INFO();
             // OComponentHelper
             virtual void SAL_CALL disposing(void);
             // XInterface

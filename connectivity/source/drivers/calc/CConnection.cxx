@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CConnection.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-06 17:56:55 $
+ *  last change: $Author: oj $ $Date: 2001-04-27 10:08:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@
 using namespace connectivity::calc;
 using namespace connectivity::file;
 
-typedef connectivity::file::OConnection OConnection_B;
+typedef connectivity::file::OConnection OConnection_BASE;
 
 //------------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADriver.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
+ *  last change: $Author: oj $ $Date: 2001-04-27 10:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,13 +205,20 @@ Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByConnection( co
         throw DisposedException();
 
     OConnection* pConnection = NULL;
-    for (OWeakRefArray::iterator i = m_xConnections.begin(); m_xConnections.end() != i; ++i)
+    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(connection,UNO_QUERY);
+    if(xTunnel.is())
     {
-        if ((OConnection*) Reference< XConnection >::query(i->get().get()).get() == (OConnection*)connection.get())
+        OConnection* pSearchConnection = (OConnection*)xTunnel->getSomething(OConnection::getUnoTunnelImplementationId());
+
+        for (OWeakRefArray::iterator i = m_xConnections.begin(); m_xConnections.end() != i; ++i)
         {
-            pConnection = (OConnection*)connection.get();
-            break;
+            if ((OConnection*) Reference< XConnection >::query(i->get().get()).get() == pSearchConnection)
+            {
+                pConnection = pSearchConnection;
+                break;
+            }
         }
+
     }
     Reference< XTablesSupplier > xTab = NULL;
     if(pConnection)

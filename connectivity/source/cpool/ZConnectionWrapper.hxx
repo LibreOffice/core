@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZConnectionWrapper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-26 09:12:29 $
+ *  last change: $Author: oj $ $Date: 2001-04-27 10:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _CONNECTIVITY_ZCONNECTIONWRAPPER_HXX_
 #define _CONNECTIVITY_ZCONNECTIONWRAPPER_HXX_
 
-#ifndef _CPPUHELPER_COMPBASE3_HXX_
-#include <cppuhelper/compbase3.hxx>
+#ifndef _CPPUHELPER_COMPBASE4_HXX_
+#include <cppuhelper/compbase4.hxx>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -80,6 +80,9 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#endif
 #ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
 #endif
@@ -94,9 +97,10 @@ namespace connectivity
     //= OConnectionWrapper - wraps all methods to the real connection from the driver
     //= but when disposed it doesn't dispose the real connection
     //==========================================================================
-    typedef ::cppu::WeakComponentImplHelper3<       ::com::sun::star::sdbc::XConnection,
+    typedef ::cppu::WeakComponentImplHelper4<       ::com::sun::star::sdbc::XConnection,
                                                     ::com::sun::star::sdbc::XWarningsSupplier,
-                                                    ::com::sun::star::lang::XServiceInfo
+                                                    ::com::sun::star::lang::XServiceInfo,
+                                                    ::com::sun::star::lang::XUnoTunnel
                                             > OConnection_BASE;
 
     class OConnectionWrapper :   public ::comphelper::OBaseMutex
@@ -137,6 +141,10 @@ namespace connectivity
         // XWarningsSupplier
         virtual ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+        // com::sun::star::lang::XUnoTunnel
+        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+        static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
     };
 }
 #endif // _CONNECTIVITY_ZCONNECTIONWRAPPER_HXX_

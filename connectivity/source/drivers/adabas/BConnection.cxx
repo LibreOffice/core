@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BConnection.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 12:26:39 $
+ *  last change: $Author: oj $ $Date: 2001-04-27 10:08:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
+#include <cppuhelper/typeprovider.hxx>
+#endif
 #ifndef _CONNECTIVITY_ADABAS_BCONNECTION_HXX_
 #include "adabas/BConnection.hxx"
 #endif
@@ -279,6 +283,29 @@ Reference< XPreparedStatement > SAL_CALL OAdabasConnection::prepareStatement( co
     Reference< XPreparedStatement > xReturn = new OAdabasPreparedStatement(this,m_aTypeInfo,sql);
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
     return xReturn;
+}
+// -----------------------------------------------------------------------------
+sal_Int64 SAL_CALL OAdabasConnection::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw (::com::sun::star::uno::RuntimeException)
+{
+    if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+        return (sal_Int64)this;
+
+    return OConnection_BASE2::getSomething(rId);
+}
+// -----------------------------------------------------------------------------
+Sequence< sal_Int8 > OAdabasConnection::getUnoTunnelImplementationId()
+{
+    static ::cppu::OImplementationId * pId = 0;
+    if (! pId)
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if (! pId)
+        {
+            static ::cppu::OImplementationId aId;
+            pId = &aId;
+        }
+    }
+    return pId->getImplementationId();
 }
 // -----------------------------------------------------------------------------
 

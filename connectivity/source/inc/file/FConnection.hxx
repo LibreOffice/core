@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 15:10:59 $
+ *  last change: $Author: oj $ $Date: 2001-04-27 10:08:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,26 +61,14 @@
 #ifndef _CONNECTIVITY_FILE_OCONNECTION_HXX_
 #define _CONNECTIVITY_FILE_OCONNECTION_HXX_
 
-#ifndef _CPPUHELPER_COMPBASE3_HXX_
-#include <cppuhelper/compbase3.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
-#include <com/sun/star/sdbc/XConnection.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UCB_XCONTENT_HPP_
 #include <com/sun/star/ucb/XContent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XWARNINGSSUPPLIER_HPP_
-#include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_SQLWARNING_HPP_
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 #ifndef _CONNECTIVITY_OSUBCOMPONENT_HXX_
 #include "OSubComponent.hxx"
@@ -123,19 +111,12 @@ namespace connectivity
         class ODatabaseMetaData;
         class OFileDriver;
 
-        typedef ::cppu::WeakComponentImplHelper3<   ::com::sun::star::sdbc::XConnection,
-                                                    ::com::sun::star::sdbc::XWarningsSupplier,
-                                                    ::com::sun::star::lang::XServiceInfo
-                                                    > OConnection_BASE;
-
-        class OConnection : public OConnection_BASE,
-                            public connectivity::OMetaConnection,
-                            public connectivity::OSubComponent<OConnection, OConnection_BASE>
+        class OConnection : public connectivity::OMetaConnection,
+                            public connectivity::OSubComponent<OConnection, connectivity::OMetaConnection>
         {
-            friend class connectivity::OSubComponent<OConnection, OConnection_BASE>;
+            friend class connectivity::OSubComponent<OConnection, connectivity::OMetaConnection>;
 
         protected:
-            ::osl::Mutex    m_aMutex;
             //====================================================================
             // Data attributes
             //====================================================================
@@ -204,6 +185,9 @@ namespace connectivity
             // XWarningsSupplier
             virtual ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            //XUnoTunnel
+            virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw (::com::sun::star::uno::RuntimeException);
+            static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
             // no interface methods
             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XDynamicResultSet > getDir() const;
