@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mba $ $Date: 2002-02-05 09:40:47 $
+ *  last change: $Author: ssa $ $Date: 2002-02-28 18:00:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #include "msgpool.hxx"
 #include "stbmgr.hxx"
 #include "sfxresid.hxx"
+#include <vcl/taskpanelist.hxx>
 
 DBG_NAME(SfxWorkWindow);
 
@@ -1215,6 +1216,9 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
                     nChilds++;
                 }
 
+                // make toolbar keyboard accessible
+                pWorkWin->GetSystemWindow()->GetTaskPaneList()->AddWindow( &rpTbx->GetToolBox() );
+
                 ToolBox& rTbx = rpTbx->GetToolBox();
                 rTbx.SetText(aObjBars[n].aName);
                 if ( rTbx.IsFloatingMode() )
@@ -1258,6 +1262,7 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
             if (rpTbx)
             {
                 rpTbx->StoreConfig();
+                pWorkWin->GetSystemWindow()->GetTaskPaneList()->RemoveWindow( rpCli->pWin );
                 rpCli->pWin = 0;
                 SfxToolBoxManager *p = rpTbx;
                 rpTbx = 0;
@@ -1273,6 +1278,7 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
             if ( !rpTbx->GetToolBox().IsFloatingMode() )
             {
                 // keine angedockten Toolboxen
+                pWorkWin->GetSystemWindow()->GetTaskPaneList()->RemoveWindow( rpCli->pWin );
                 rpCli->pWin = 0;
                 SfxToolBoxManager *p = rpTbx;
                 rpTbx = 0;
@@ -1428,6 +1434,9 @@ void SfxWorkWindow::CreateChildWin_Impl( SfxChildWin_Impl *pCW )
             }
         }
 
+        // make childwin keyboard accessible
+        pWorkWin->GetSystemWindow()->GetTaskPaneList()->AddWindow( pChildWin->GetWindow() );
+
         pCW->pWin = pChildWin;
 
         if ( pChildWin->GetAlignment() == SFX_ALIGN_NOALIGNMENT ||
@@ -1501,6 +1510,7 @@ void SfxWorkWindow::RemoveChildWin_Impl( SfxChildWin_Impl *pCW )
         // selbst im dtor dort ab
     }
 
+    pWorkWin->GetSystemWindow()->GetTaskPaneList()->RemoveWindow( pChildWin->GetWindow() );
     pCW->pWin = 0;
     delete pChildWin;
 
