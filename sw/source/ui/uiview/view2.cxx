@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mba $ $Date: 2002-11-26 09:12:50 $
+ *  last change: $Author: os $ $Date: 2002-12-12 16:37:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,6 +332,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
     USHORT nSlot = rReq.GetSlot();
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem;
+    BOOL bIgnore = FALSE;
     switch( nSlot )
     {
         case SID_CREATE_SW_DRAWVIEW:
@@ -377,7 +378,6 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                 USHORT nOn = ((const SfxBoolItem*)pItem)->GetValue() ? REDLINE_ON : 0;
                 USHORT nMode = pWrtShell->GetRedlineMode();
                 pWrtShell->SetRedlineMode( (nMode & ~REDLINE_ON) | nOn);
-                rReq.Done();
             }
         }
         break;
@@ -410,10 +410,9 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                 USHORT nMode = pWrtShell->GetRedlineMode();
                 pWrtShell->SetRedlineMode( (nMode & ~REDLINE_ON) | nOn);
                 rReq.AppendItem( SfxBoolItem( FN_REDLINE_PROTECT, ((nMode&REDLINE_ON)==0) ) );
-                rReq.Done();
             }
             else
-                rReq.Ignore();
+                bIgnore = TRUE;
         }
         break;
         case FN_REDLINE_SHOW:
@@ -427,7 +426,6 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                     nMode |= REDLINE_SHOW_DELETE;
 
                 pWrtShell->SetRedlineMode( nMode );
-                rReq.Done();
             }
             break;
         case FN_REDLINE_ACCEPT:
@@ -474,18 +472,15 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             break;
         case FN_ESCAPE:
         {
-            BOOL bDone = FALSE;
             if ( pWrtShell->HasDrawView() && pWrtShell->GetDrawView()->IsDragObj() )
             {
                 pWrtShell->BreakDrag();
                 pWrtShell->EnterSelFrmMode();
-                bDone = TRUE;
             }
             else if ( pWrtShell->IsDrawCreate() )
             {
                 GetDrawFuncPtr()->BreakCreate();
                 AttrChangedNotify(pWrtShell); // ggf Shellwechsel...
-                bDone = TRUE;
             }
             else if ( pWrtShell->HasSelection() || IsDrawMode() )
             {
@@ -507,13 +502,10 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                     pWrtShell->EnterStdMode();
                     AttrChangedNotify(pWrtShell); // ggf Shellwechsel...
                 }
-
-                bDone = TRUE;
             }
             else if ( GetEditWin().GetApplyTemplate() )
             {
                 GetEditWin().SetApplyTemplate(SwApplyTemplate());
-                bDone = TRUE;
             }
             else if( ((SfxObjectShell*)GetDocShell())->GetInPlaceObject() &&
                         ((SfxObjectShell*)GetDocShell())->GetInPlaceObject()->GetIPClient() )
@@ -521,12 +513,10 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                 ErrCode nErr = GetDocShell()->DoInPlaceActivate( FALSE );
                 if ( nErr )
                     ErrorHandler::HandleError( nErr );
-                bDone = TRUE;
             }
             else if ( GetEditWin().IsChainMode() )
             {
                 GetEditWin().SetChainMode( FALSE );
-                bDone = TRUE;
             }
             else if( pWrtShell->GetFlyFrmFmt() )
             {
@@ -536,19 +526,13 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                     pWrtShell->HideCrsr();
                     pWrtShell->EnterSelFrmMode();
                 }
-
-                bDone = TRUE;
             }
             else
             {
                 SfxBoolItem aItem( SID_WIN_FULLSCREEN, FALSE );
                 GetViewFrame()->GetDispatcher()->Execute( SID_WIN_FULLSCREEN, SFX_CALLMODE_RECORD, &aItem, 0L );
+                bIgnore = TRUE;
             }
-
-            if ( bDone )
-                rReq.Done();
-            else
-                rReq.Ignore();
         }
         break;
         case SID_ATTR_BORDER_INNER:
@@ -767,13 +751,14 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                 const SwDBData& rData = GetWrtShell().GetDBDesc();
                 SW_MOD()->ShowDBObj(*this, rData, FALSE);
             }
-            rReq.Done();
         }
         break;
         default:
             ASSERT(!this, falscher Dispatcher);
             return;
     }
+    if(!bIgnore)
+        rReq.Done();
 }
 
 /*--------------------------------------------------------------------

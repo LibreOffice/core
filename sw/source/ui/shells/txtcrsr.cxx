@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtcrsr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-02 10:29:56 $
+ *  last change: $Author: os $ $Date: 2002-12-12 16:36:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,6 +227,7 @@ void SwTextShell::ExecMovePage(SfxRequest &rReq)
         case FN_END_OF_PAGE:        rSh.EndPg   ( FN_END_OF_PAGE_SEL == nSlot ); break;
         default:                    ASSERT(FALSE, falscher Dispatcher); return;
     }
+    rReq.Done();
 }
 
 
@@ -243,6 +244,7 @@ void SwTextShell::ExecMoveCol(SfxRequest &rReq)
         case FN_END_OF_PREV_COLUMN:   rSh.EndOfPrevColumn  ( FALSE ); break;
         default:                      ASSERT(FALSE, falscher Dispatcher); return;
     }
+    rReq.Done();
 }
 
 void SwTextShell::ExecMoveLingu(SfxRequest &rReq)
@@ -285,6 +287,7 @@ void SwTextShell::ExecMoveLingu(SfxRequest &rReq)
         break;
         default:                ASSERT(FALSE, falscher Dispatcher); return;
     }
+    rReq.Done();
 }
 
 void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
@@ -376,6 +379,7 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
 
     if( bSetRetVal )
         rReq.SetReturnValue(SfxBoolItem( nSlot, bRet ));
+    rReq.Done();
 
 }
 

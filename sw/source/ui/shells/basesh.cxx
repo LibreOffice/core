@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: os $ $Date: 2002-10-09 11:31:40 $
+ *  last change: $Author: os $ $Date: 2002-12-12 16:37:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,6 +449,7 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
             DBG_ERROR("falscher Dispatcher");
             return;
     }
+    rReq.Done();
 }
 
 /*--------------------------------------------------------------------
