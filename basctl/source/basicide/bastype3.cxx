@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype3.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-23 12:04:12 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,7 @@ void BasicTreeListBox::ScanAllEntries()
     while ( pDocShell )
     {
         // only if there's a corresponding window (not for remote documents)
-        if ( SfxViewFrame::GetFirst( pDocShell ) && !pDocShell->ISA( BasicDocShell ) )
+        if ( SfxViewFrame::GetFirst( pDocShell ) && !pDocShell->ISA( BasicDocShell ) && !pDocShell->IsInPrepareClose() )
             ScanEntry( pDocShell, LIBRARY_LOCATION_DOCUMENT );
 
         pDocShell = SfxObjectShell::GetNext( *pDocShell );
@@ -446,6 +446,7 @@ bool BasicTreeListBox::IsValidEntry( SvLBoxEntry* pEntry )
 
     BasicEntryDescriptor aDesc( GetEntryDescriptor( pEntry ) );
     SfxObjectShell* pShell( aDesc.GetShell() );
+    LibraryLocation eLocation( aDesc.GetLocation() );
     String aLibName( aDesc.GetLibName() );
     String aName( aDesc.GetName() );
     String aMethodName( aDesc.GetMethodName() );
@@ -455,7 +456,9 @@ bool BasicTreeListBox::IsValidEntry( SvLBoxEntry* pEntry )
     {
         case OBJ_TYPE_SHELL:
         {
-            bIsValid = BasicIDE::HasShell( pShell );
+            bIsValid = ( !pShell || ( BasicIDE::HasShell( pShell ) &&
+                                      GetRootEntryName( pShell, eLocation ) == GetEntryText( pEntry ) &&
+                                      !pShell->IsInPrepareClose() ) );
         }
         break;
         case OBJ_TYPE_LIBRARY:
