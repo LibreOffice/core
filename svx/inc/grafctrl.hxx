@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-18 11:26:23 $
+ *  last change: $Author: ka $ $Date: 2000-11-24 17:49:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,26 @@
 #ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
 #endif
+#ifndef _SFXINTITEM_HXX
+#include <svtools/intitem.hxx>
+#endif
 #ifndef _SFXTBXCTRL_HXX //autogen
 #include <sfx2/tbxctrl.hxx>
 #endif
+
+// ----------------
+// - TbxImageItem -
+// ----------------
+
+class TbxImageItem : public SfxUInt16Item
+{
+public:
+                            TYPEINFO();
+                            TbxImageItem( USHORT nWhich = 0, UINT16 nImage = 0 );
+
+    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    virtual int             operator==( const SfxPoolItem& ) const;
+};
 
 // -------------------------------
 // - SvxGrafFilterToolBoxControl -
