@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsrc.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:23:11 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
