@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.57 $
+#   $Revision: 1.58 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-08 14:52:36 $
+#   last change: $Author: obo $ $Date: 2004-10-18 13:55:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -709,6 +709,19 @@ $(COMMONMISC)$/$(TARGET)$/%.xrm : %.xrm
     $(WRAPCMD) $(XRMEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
     +$(RENAME) $@.$(INPATH) $@
     +-$(RM) $@.$(INPATH)
+
+$(COMMONMISC)$/$(TARGET)$/%.jlf : $$(@:db).ulf
+    +-$(RM) $@
+    $(WRAPCMD) $(ULFCONV) -o $@.$(INPATH) $<
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+
+$(COMMONMISC)$/$(TARGET)$/%.mlf : $$(@:db).ulf
+    +-$(RM) $@
+    @$(WRAPCMD) $(ULFCONV) -o $@.$(INPATH) -t $(SOLARBINDIR)$/msi-encodinglist.txt $<
+    @+$(RENAME) $@.$(INPATH) $@
+    @+-$(RM) $@.$(INPATH)
+
 
 # dirty hack
 # if local *.sdf file is missing
