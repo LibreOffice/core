@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:12:42 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -678,7 +678,9 @@ sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject
 
                 // write document storage
                 pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT );
-                bRet = pEmbObj->DoSaveAs( xWorkStore );
+                // mba: no relative ULRs for clipboard!
+                SfxMedium aMedium( xWorkStore, String() );
+                bRet = pEmbObj->DoSaveObjectAs( aMedium, FALSE );
                 pEmbObj->DoSaveCompleted();
 
                 uno::Reference< embed::XTransactedObject > xTransact( xWorkStore, uno::UNO_QUERY );
@@ -695,9 +697,6 @@ sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject
 
                 bRet = TRUE;
                 rxOStm->Commit();
-
-                xWorkStore->dispose();
-                xWorkStore = uno::Reference < embed::XStorage >();
             }
             catch ( Exception& )
             {}
