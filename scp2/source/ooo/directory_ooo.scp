@@ -2,9 +2,9 @@
 *
 *  $RCSfile: directory_ooo.scp,v $
 *
-*  $Revision: 1.12 $
+*  $Revision: 1.13 $
 *
-*  last change: $Author: rt $ $Date: 2004-07-23 11:32:33 $
+*  last change: $Author: hr $ $Date: 2004-08-02 17:49:03 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -487,6 +487,26 @@ End
 
 Directory gid_Dir_Share_Config_Sofficecfg_Dbquery_Menubar
     ParentID = gid_Dir_Share_Config_Sofficecfg_Dbquery;
+    DosName = "menubar";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Dbbrowser
+    ParentID = gid_Dir_Share_Config_Sofficecfg;
+    DosName = "dbbrowser";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Dbbrowser_Menubar
+    ParentID = gid_Dir_Share_Config_Sofficecfg_Dbbrowser;
+    DosName = "menubar";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Dbapp
+    ParentID = gid_Dir_Share_Config_Sofficecfg;
+    DosName = "dbapp";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Dbapp_Menubar
+    ParentID = gid_Dir_Share_Config_Sofficecfg_Dbapp;
     DosName = "menubar";
 End
 
