@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:05:42 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:35:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,9 +147,9 @@ GraphicObject::GraphicObject( const Graphic& rGraphic, const String& rLink, cons
 
 GraphicObject::GraphicObject( const GraphicObject& rGraphicObj, const GraphicManager* pMgr ) :
     maGraphic   ( rGraphicObj.GetGraphic() ),
+    maAttr      ( rGraphicObj.maAttr ),
     mpLink      ( rGraphicObj.mpLink ? ( new String( *rGraphicObj.mpLink ) ) : NULL ),
-    mpUserData  ( rGraphicObj.mpUserData ? ( new String( *rGraphicObj.mpUserData ) ) : NULL ),
-    maAttr      ( rGraphicObj.maAttr )
+    mpUserData  ( rGraphicObj.mpUserData ? ( new String( *rGraphicObj.mpUserData ) ) : NULL )
 {
     ImplConstruct();
     ImplAssignGraphicData();
