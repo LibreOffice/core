@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.3 $
+#*  $Revision: 1.4 $
 #*
-#*  last change: $Author: khong $ $Date: 2002-05-24 22:31:36 $
+#*  last change: $Author: rt $ $Date: 2004-01-20 13:29:26 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -78,9 +78,6 @@ SLOFILES=   \
         $(SLO)$/collatorImpl.obj \
         $(SLO)$/chaptercollator.obj \
         $(SLO)$/collator_unicode.obj \
-        $(SLO)$/collator_icu.obj \
-        $(SLO)$/collator_simple.obj \
-        $(SLO)$/collator_cjk.obj \
         $(SLO)$/collator_zh_pinyin.obj \
         $(SLO)$/collator_zh_radical.obj \
         $(SLO)$/collator_zh_stroke.obj \
@@ -92,11 +89,28 @@ SLOFILES=   \
         $(SLO)$/collator_ko_dict.obj \
         $(SLO)$/collator_ko_charset.obj \
         $(SLO)$/collator_ja_charset.obj \
-        $(SLO)$/collator_ja_phonetic.obj
+        $(SLO)$/collator_ja_phonetic_alphanumeric_first.obj \
+        $(SLO)$/collator_ja_phonetic_alphanumeric_last.obj
+
+
+APP1TARGET = gencoll_rule
+
+APP1OBJS   = $(OBJ)$/gencoll_rule.obj
+
+APP1STDLIBS = $(SALLIB) \
+        $(TOOLSLIB) \
+        $(ICUINLIB) \
+        $(ICUUCLIB)
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+
+
+data/%.txt : $(APP1TARGETN)
+    +@echo dummy
+$(MISC)$/collator_%.cxx : data/%.txt
+    $(APP1TARGETN)$ $< $@ $*
 
 
 
