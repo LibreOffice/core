@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAcceptor.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-11 16:09:44 $
+ *  last change: $Author: jbu $ $Date: 2000-12-12 10:13:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,23 @@ module com {  module sun {  module star {  module connection {
 interface XAcceptor: com::sun::star::uno::XInterface
 {
     // DocMerge from xml: method com::sun::star::connection::XAcceptor::accept
-    /** blocking call. Waits until someone connects.
+    /** accepts an interprocess connection. Waits until someone connects to the resource.
+        <p>
+           After a successful return, the method may be called again to accept
+           further connections, but the parameter string MUST be left unchanged.
 
-        <p>After the method has been left, it can be reentered. </p>
+       @param sConnectionDescription contains the kind of the connection plus a
+              comma seperated list of attributes.
+              e.g. <em>socket,host=locahost,port=2345</em> for a tcpip connection.
+
+       @return empty XConnection-reference, when stopAccepting was called
+
+       @throws AlreadyAcceptingException Only one acceptor-thread per instance allowed.
+       @throws ConnectionSetupException  Problems during setting up the acceptor.
+                                         (e.g. Security-reasons, socket already busy .. )
+       @throws com::sun::star::lang::IllegalArgumentException
+                  sConnectionDescription could not be interpreted
+
      */
     XConnection accept( [in] string sConnectionDescription )
         raises( AlreadyAcceptingException,

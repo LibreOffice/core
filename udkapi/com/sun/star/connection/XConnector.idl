@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConnector.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-11 16:09:44 $
+ *  last change: $Author: jbu $ $Date: 2000-12-12 10:13:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,20 @@ interface XConnector: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::connection::XConnector::connect
-    /** creates a new connection. Tries to connect to an <type>XAcceptor</member>.
+    /** creates a new connection interprocess connection.
+        <p>
+        Tries to connect to an <type>XAcceptor</member>.
+
+        @param sConnectionDescription contains the kind of the connection plus a
+               comma seperated list of attributes.
+               e.g. <em>socket,host=locahost,port=2345</em> for a tcpip connection.
+
+        @throws ConnectionSetupException  Problems during setting up the connector
+                on client side(e.g. Security-reasons, socket already busy .. ), or the
+                string could not be interpreted correctly.
+
+        @throws NoConnectException     Couldn't reach a server (e.g. network failure), no server
+                                       is listening
      */
     XConnection connect( [in] string sConnectionDescription )
         raises( NoConnectException,ConnectionSetupException );
