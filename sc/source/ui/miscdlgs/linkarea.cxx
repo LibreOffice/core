@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkarea.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 13:29:53 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#undef SC_DLLIMPLEMENTATION
 
 #ifdef PCH
 #include "ui_pch.hxx"
