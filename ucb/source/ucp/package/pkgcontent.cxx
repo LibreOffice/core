@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kso $ $Date: 2001-12-03 17:34:22 $
+ *  last change: $Author: mav $ $Date: 2002-05-13 07:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -702,7 +702,26 @@ uno::Any SAL_CALL Content::execute(
         //  ( Not available at stream objects )
         //////////////////////////////////////////////////////////////////
 
-        flushData();
+        if( !flushData() )
+        {
+            uno::Any aProps
+                = uno::makeAny(
+                         beans::PropertyValue(
+                             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                               "Uri")),
+                             -1,
+                             uno::makeAny(m_xIdentifier->
+                                              getContentIdentifier()),
+                             beans::PropertyState_DIRECT_VALUE));
+            ucbhelper::cancelCommandExecution(
+                star::ucb::IOErrorCode_CANT_WRITE,
+                uno::Sequence< uno::Any >(&aProps, 1),
+                Environment,
+                rtl::OUString::createFromAscii(
+                    "Cannot write file to disk!" ),
+                this );
+            // Unreachable
+        }
     }
     else
     {
