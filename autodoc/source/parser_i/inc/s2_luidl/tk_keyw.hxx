@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tk_keyw.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:07:56 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:46:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,8 @@ class TokBuiltInType : public TokKeyword
         bty_long = 7,
         bty_short = 8,
         bty_string = 9,
-        bty_void = 10
+        bty_void = 10,
+        bty_ellipse = 11
     };
     typedef lux::Enum<E_TokenId> EV_TokenId;
 
@@ -108,6 +109,8 @@ class TokBuiltInType : public TokKeyword
                             TokenInterpreter &  io_rInterpreter ) const;
     virtual const char *
                         Text() const;
+    E_TokenId           Id() const              { return eTag; }
+
   private:
     // DATA
     EV_TokenId          eTag;
