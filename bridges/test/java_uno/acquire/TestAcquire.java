@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestAcquire.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-09 09:20:40 $
+ *  last change: $Author: hr $ $Date: 2003-08-13 17:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,172 +59,287 @@
  *
  ************************************************************************/
 
-package test.java_uno.acquire;
+package test.javauno.acquire;
 
+import com.sun.star.bridge.XBridgeFactory;
+import com.sun.star.bridge.XInstanceProvider;
 import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.comp.helper.Bootstrap;
-import com.sun.star.uno.Any;
+import com.sun.star.connection.XAcceptor;
+import com.sun.star.connection.XConnection;
+import com.sun.star.lib.uno.helper.UnoUrl;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.XInterface;
+import util.WaitUnreachable;
 
 public final class TestAcquire {
-    // args[0] must be the UNO URL to connect to
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] arguments) throws Exception {
+        // - arguments[0] must be "client" or "server"
+        // - arguments[1] must be the UNO URL to connect to (client) or accept
+        //   on (server)
         XComponentContext context
             = Bootstrap.createInitialComponentContext(null);
+        if (arguments[0].equals("client")) {
+            execClient(context, arguments[1]);
+        } else {
+            execServer(context, arguments[1]);
+        }
+    }
+
+    private static void assertNotNull(Object obj) {
+        if (obj == null) {
+            throw new RuntimeException("assertNotNull failed");
+        }
+    }
+
+    private static void receive(Object obj) {
+        assertNotNull(obj);
+        WaitUnreachable.ensureFinalization(obj);
+    }
+
+    private static void execClient(XComponentContext context, String url)
+        throws Exception
+    {
         XUnoUrlResolver resolver = (XUnoUrlResolver) UnoRuntime.queryInterface(
             XUnoUrlResolver.class,
             context.getServiceManager().createInstanceWithContext(
                 "com.sun.star.bridge.UnoUrlResolver", context));
         XTest test = (XTest) UnoRuntime.queryInterface(
-            XTest.class, resolver.resolve(args[0]));
+            XTest.class, resolver.resolve(url));
 
-        // A minimal test for #110444#:
-        test.setDerivedToDerived(new XDerived() {});
-        test.getDerivedFromDerived();
+        WaitUnreachable u;
 
-/*
-        // A test that crashes the server, because roundTripDerivedToInterface
-        // sends back a "release" for the tuple (someDerived,XInterface) from
-        // the client to the server, altough the server did not acquire this
-        // tuple when sending it, since earlier the server received the tuple
-        // (someDerived,XDerived) from the client (and XDerived is a subtype of
-        // XInterface):
-        XBase someBase = new XBase() {};
-        XDerived someDerived = new XDerived() {};
-        test.setAnyToBase(new Any(XBase.class, someBase));
-        test.setAnyToBase(new Any(XBase.class, someDerived));
-        test.getInterfaceFromBase();
-        test.roundTripDerivedToInterface(someDerived);
-*/
+        u = new WaitUnreachable(new XInterface() {});
+        test.setInterfaceToInterface((XInterface) u.get());
+        receive(test.getInterfaceFromInterface());
+        test.clearInterface();
+        u.waitUnreachable();
+        u = new WaitUnreachable(new XBase() {});
+        test.setInterfaceToInterface((XBase) u.get());
+        receive(test.getInterfaceFromInterface());
+        test.clearInterface();
+        u.waitUnreachable();
+        u = new WaitUnreachable(new XDerived() {});
+        test.setInterfaceToInterface((XDerived) u.get());
+        receive(test.getInterfaceFromInterface());
+        test.clearInterface();
+        u.waitUnreachable();
 
-/*
-        // The complete test suite:
+        u = new WaitUnreachable(new XBase() {});
+        test.setBaseToInterface((XBase) u.get());
+        receive(test.getInterfaceFromInterface());
+        test.clearInterface();
+        u.waitUnreachable();
+        u = new WaitUnreachable(new XDerived() {});
+        test.setBaseToInterface((XDerived) u.get());
+        receive(test.getInterfaceFromInterface());
+        test.clearInterface();
+        u.waitUnreachable();
 
-        test.setInterfaceToInterface(new XInterface() {});
-        test.getInterfaceFromInterface();
-        test.setInterfaceToInterface(new XBase() {});
-        test.getInterfaceFromInterface();
-        test.setInterfaceToInterface(new XDerived() {});
-        test.getInterfaceFromInterface();
+        u = new WaitUnreachable(new XDerived() {});
+        test.setDerivedToInterface((XDerived) u.get());
+        receive(test.getInterfaceFromInterface());
+        test.clearInterface();
+        u.waitUnreachable();
 
-        test.setBaseToInterface(new XBase() {});
-        test.getInterfaceFromInterface();
-        test.setBaseToInterface(new XDerived() {});
-        test.getInterfaceFromInterface();
+        u = new WaitUnreachable(new XBase() {});
+        test.setBaseToBase((XBase) u.get());
+        receive(test.getInterfaceFromBase());
+        receive(test.getBaseFromBase());
+        test.clearBase();
+        u.waitUnreachable();
+        u = new WaitUnreachable(new XDerived() {});
+        test.setBaseToBase((XDerived) u.get());
+        receive(test.getInterfaceFromBase());
+        receive(test.getBaseFromBase());
+        test.clearBase();
+        u.waitUnreachable();
 
-        test.setDerivedToInterface(new XDerived() {});
-        test.getInterfaceFromInterface();
+        u = new WaitUnreachable(new XDerived() {});
+        test.setDerivedToBase((XDerived) u.get());
+        receive(test.getInterfaceFromBase());
+        receive(test.getBaseFromBase());
+        test.clearBase();
+        u.waitUnreachable();
 
-        test.setAnyToInterface(new XInterface() {});
-        test.getInterfaceFromInterface();
-        test.setAnyToInterface(new XBase() {});
-        test.getInterfaceFromInterface();
-        test.setAnyToInterface(new XDerived() {});
-        test.getInterfaceFromInterface();
-        test.setAnyToInterface(new Any(XBase.class, new XBase() {}));
-        test.getInterfaceFromInterface();
-        test.setAnyToInterface(new Any(XBase.class, new XDerived() {}));
-        test.getInterfaceFromInterface();
-        test.setAnyToInterface(new Any(XDerived.class, new XDerived() {}));
-        test.getInterfaceFromInterface();
+        u = new WaitUnreachable(new XDerived() {});
+        test.setDerivedToDerived((XDerived) u.get());
+        receive(test.getInterfaceFromDerived());
+        receive(test.getBaseFromDerived());
+        receive(test.getDerivedFromDerived());
+        test.clearDerived();
+        u.waitUnreachable();
 
-        test.setBaseToBase(new XBase() {});
-        test.getInterfaceFromBase();
-        test.getBaseFromBase();
-        test.setBaseToBase(new XDerived() {});
-        test.getInterfaceFromBase();
-        test.getBaseFromBase();
+        u = new WaitUnreachable(new XInterface() {});
+        receive(test.roundTripInterfaceToInterface((XInterface) u.get()));
+        u.waitUnreachable();
+        u = new WaitUnreachable(new XBase() {});
+        receive(test.roundTripInterfaceToInterface((XBase) u.get()));
+        u.waitUnreachable();
+        u = new WaitUnreachable(new XDerived() {});
+        receive(test.roundTripInterfaceToInterface((XDerived) u.get()));
+        u.waitUnreachable();
 
-        test.setDerivedToBase(new XDerived() {});
-        test.getInterfaceFromBase();
-        test.getBaseFromBase();
+        u = new WaitUnreachable(new XBase() {});
+        receive(test.roundTripBaseToInterface((XBase) u.get()));
+        u.waitUnreachable();
+        u = new WaitUnreachable(new XDerived() {});
+        receive(test.roundTripBaseToInterface((XDerived) u.get()));
+        u.waitUnreachable();
 
-        test.setAnyToBase(new XBase() {});
-        test.getInterfaceFromBase();
-        test.getBaseFromBase();
-        test.setAnyToBase(new XDerived() {});
-        test.getInterfaceFromBase();
-        test.getBaseFromBase();
-        test.setAnyToBase(new Any(XBase.class, new XBase() {}));
-        test.getInterfaceFromBase();
-        test.getBaseFromBase();
-        test.setAnyToBase(new Any(XBase.class, new XDerived() {}));
-        test.getInterfaceFromBase();
-        test.getBaseFromBase();
-        test.setAnyToBase(new Any(XBase.class, new XDerived() {}));
-        test.getInterfaceFromBase();
-        test.getBaseFromBase();
+        u = new WaitUnreachable(new XDerived() {});
+        receive(test.roundTripDerivedToInterface((XDerived) u.get()));
+        u.waitUnreachable();
 
-        test.setDerivedToDerived(new XDerived() {});
-        test.getInterfaceFromDerived();
-        test.getBaseFromDerived();
-        test.getDerivedFromDerived();
+        u = new WaitUnreachable(new XBase() {});
+        receive(test.roundTripBaseToBase((XBase) u.get()));
+        u.waitUnreachable();
+        u = new WaitUnreachable(new XDerived() {});
+        receive(test.roundTripBaseToBase((XDerived) u.get()));
+        u.waitUnreachable();
 
-        test.setAnyToDerived(new XDerived() {});
-        test.getInterfaceFromDerived();
-        test.getBaseFromDerived();
-        test.getDerivedFromDerived();
-        test.setAnyToDerived(new Any(XDerived.class, new XDerived() {}));
-        test.getInterfaceFromDerived();
-        test.getBaseFromDerived();
-        test.getDerivedFromDerived();
+        u = new WaitUnreachable(new XDerived() {});
+        receive(test.roundTripDerivedToBase((XDerived) u.get()));
+        u.waitUnreachable();
 
-        test.setAnyToAny(new XInterface() {});
-        test.getAnyFromAny();
-        test.setAnyToAny(new XBase() {});
-        test.getAnyFromAny();
-        test.setAnyToAny(new XDerived() {});
-        test.getAnyFromAny();
-        test.setAnyToAny(new Any(XBase.class, new XBase() {}));
-        test.getAnyFromAny();
-        test.setAnyToAny(new Any(XBase.class, new XDerived() {}));
-        test.getAnyFromAny();
-        test.setAnyToAny(new Any(XDerived.class, new XDerived() {}));
-        test.getAnyFromAny();
+        u = new WaitUnreachable(new XDerived() {});
+        receive(test.roundTripDerivedToDerived((XDerived) u.get()));
+        u.waitUnreachable();
 
-        test.roundTripInterfaceToInterface(new XInterface() {});
-        test.roundTripInterfaceToInterface(new XBase() {});
-        test.roundTripInterfaceToInterface(new XDerived() {});
+        u = new WaitUnreachable(test);
+        test = null;
+        u.waitUnreachable();
+        System.out.println(
+            "Client and server both cleanly terminate now: Success");
+    }
 
-        test.roundTripBaseToInterface(new XBase() {});
-        test.roundTripBaseToInterface(new XDerived() {});
+    private static void execServer(XComponentContext context, String url)
+        throws Exception
+    {
+        XBridgeFactory bridgeFactory
+            = (XBridgeFactory) UnoRuntime.queryInterface(
+                XBridgeFactory.class,
+                context.getServiceManager().createInstanceWithContext(
+                    "com.sun.star.bridge.BridgeFactory", context));
+        XAcceptor acceptor = (XAcceptor) UnoRuntime.queryInterface(
+            XAcceptor.class,
+            context.getServiceManager().createInstanceWithContext(
+                "com.sun.star.connection.Acceptor", context));
+        UnoUrl unoUrl = UnoUrl.parseUnoUrl(url);
+        System.out.println("Server: Accepting...");
+        XConnection connection = acceptor.accept(
+            unoUrl.getConnectionAndParametersAsString());
+        System.out.println("Server: ...connected...");
+        bridgeFactory.createBridge(
+            "", unoUrl.getProtocolAndParametersAsString(), connection,
+            new Provider());
+        System.out.println("Server: ...bridged.");
+    }
 
-        test.roundTripDerivedToInterface(new XDerived() {});
+    private static final class Provider implements XInstanceProvider {
+        public Object getInstance(String instanceName) {
+            return new XTest() {
+                    public void setInterfaceToInterface(Object obj) {
+                        iface = obj;
+                    }
 
-        test.roundTripAnyToInterface(new XInterface() {});
-        test.roundTripAnyToInterface(new XBase() {});
-        test.roundTripAnyToInterface(new XDerived() {});
-        test.roundTripAnyToInterface(new Any(XBase.class, new XBase() {}));
-        test.roundTripAnyToInterface(new Any(XBase.class, new XDerived() {}));
-        test.roundTripAnyToInterface(new Any(XDerived.class,
-                                             new XDerived() {}));
+                    public void setBaseToInterface(XBase obj) {
+                        iface = obj;
+                    }
 
-        test.roundTripBaseToBase(new XBase() {});
-        test.roundTripBaseToBase(new XDerived() {});
+                    public void setDerivedToInterface(XDerived obj) {
+                        iface = obj;
+                    }
 
-        test.roundTripDerivedToBase(new XDerived() {});
+                    public Object getInterfaceFromInterface() {
+                        return iface;
+                    }
 
-        test.roundTripAnyToBase(new XBase() {});
-        test.roundTripAnyToBase(new XDerived() {});
-        test.roundTripAnyToBase(new Any(XBase.class, new XBase() {}));
-        test.roundTripAnyToBase(new Any(XBase.class, new XDerived() {}));
-        test.roundTripAnyToBase(new Any(XDerived.class, new XDerived() {}));
+                    public void clearInterface() {
+                        WaitUnreachable u = new WaitUnreachable(iface);
+                        iface = null;
+                        u.waitUnreachable();
+                    }
 
-        test.roundTripDerivedToDerived(new XDerived() {});
+                    public void setBaseToBase(XBase obj) {
+                        base = obj;
+                    }
 
-        test.roundTripAnyToDerived(new XDerived() {});
-        test.roundTripAnyToDerived(new Any(XDerived.class, new XDerived() {}));
+                    public void setDerivedToBase(XDerived obj) {
+                        base = obj;
+                    }
 
-        test.roundTripAnyToAny(new XInterface() {});
-        test.roundTripAnyToAny(new XBase() {});
-        test.roundTripAnyToAny(new XDerived() {});
-        test.roundTripAnyToAny(new Any(XBase.class, new XBase() {}));
-        test.roundTripAnyToAny(new Any(XBase.class, new XDerived() {}));
-        test.roundTripAnyToAny(new Any(XDerived.class, new XDerived() {}));
-*/
+                    public Object getInterfaceFromBase() {
+                        return base;
+                    }
 
-        System.exit(0);
+                    public XBase getBaseFromBase() {
+                        return base;
+                    }
+
+                    public void clearBase() {
+                        WaitUnreachable u = new WaitUnreachable(base);
+                        base = null;
+                        u.waitUnreachable();
+                    }
+
+                    public void setDerivedToDerived(XDerived obj) {
+                        derived = obj;
+                    }
+
+                    public Object getInterfaceFromDerived() {
+                        return derived;
+                    }
+
+                    public XBase getBaseFromDerived() {
+                        return derived;
+                    }
+
+                    public XDerived getDerivedFromDerived() {
+                        return derived;
+                    }
+
+                    public void clearDerived() {
+                        WaitUnreachable u = new WaitUnreachable(derived);
+                        derived = null;
+                        u.waitUnreachable();
+                    }
+
+                    public Object roundTripInterfaceToInterface(Object obj) {
+                        WaitUnreachable.ensureFinalization(obj);
+                        return obj;
+                    }
+
+                    public Object roundTripBaseToInterface(XBase obj) {
+                        WaitUnreachable.ensureFinalization(obj);
+                        return obj;
+                    }
+
+                    public Object roundTripDerivedToInterface(XDerived obj) {
+                        WaitUnreachable.ensureFinalization(obj);
+                        return obj;
+                    }
+
+                    public XBase roundTripBaseToBase(XBase obj) {
+                        WaitUnreachable.ensureFinalization(obj);
+                        return obj;
+                    }
+
+                    public XBase roundTripDerivedToBase(XDerived obj) {
+                        WaitUnreachable.ensureFinalization(obj);
+                        return obj;
+                    }
+
+                    public XDerived roundTripDerivedToDerived(XDerived obj) {
+                        WaitUnreachable.ensureFinalization(obj);
+                        return obj;
+                    }
+
+                    private Object iface;
+                    private XBase base;
+                    private XDerived derived;
+                };
+        }
     }
 }
