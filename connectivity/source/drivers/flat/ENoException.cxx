@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ENoException.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-31 14:14:19 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:26:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,8 @@ void OFlatString::GetTokenSpecial( String& _rStr,xub_StrLen& nStartPos, sal_Unic
         if (bInString )
             ++nStartPos;            // dieses Zeichen ueberlesen!
         // Suche bis Stringende nach dem ersten nicht uebereinstimmenden Zeichen
-        for( xub_StrLen i = nStartPos; i < nLen; ++i )
+        xub_StrLen i = nStartPos;
+        for( ; i < nLen; ++i )
         {
             if (bInString)
             {
@@ -175,11 +176,9 @@ void OFlatString::GetTokenSpecial( String& _rStr,xub_StrLen& nStartPos, sal_Unic
                 }
             }
         }
+        if ( i == nLen && nStartPos < i )
+            nStartPos = nLen;
     }
-}
-// -----------------------------------------------------------------------------
-void OFlatTable::refreshIndexes()
-{
 }
 // -----------------------------------------------------------------------------
 sal_Bool OFlatTable::checkHeaderLine()
