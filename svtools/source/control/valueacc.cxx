@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueacc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:37:51 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 15:49:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,15 +67,14 @@
 #include "valueset.hxx"
 #include "valueimp.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 // ----------------
 // - ValueSetItem -
@@ -345,7 +344,7 @@ uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ValueSetAcc::getAc
     pStateSet->AddState (accessibility::AccessibleStateType::ENABLED);
     pStateSet->AddState (accessibility::AccessibleStateType::SHOWING);
     pStateSet->AddState (accessibility::AccessibleStateType::VISIBLE);
-    pStateSet->AddState (accessibility::AccessibleStateType::MANAGES_DESCENDANT);
+    pStateSet->AddState (accessibility::AccessibleStateType::MANAGES_DESCENDANTS);
 
     return pStateSet;
 }
@@ -426,7 +425,7 @@ void SAL_CALL ValueSetAcc::removeEventListener( const uno::Reference< accessibil
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SAL_CALL ValueSetAcc::contains( const awt::Point& aPoint )
+sal_Bool SAL_CALL ValueSetAcc::containsPoint( const awt::Point& aPoint )
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -439,7 +438,7 @@ sal_Bool SAL_CALL ValueSetAcc::contains( const awt::Point& aPoint )
 
 // -----------------------------------------------------------------------------
 
-uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessibleAt( const awt::Point& aPoint )
+uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessibleAtPoint( const awt::Point& aPoint )
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -664,7 +663,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getSelectedAc
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL ValueSetAcc::deselectSelectedAccessibleChild( sal_Int32 nChildIndex )
+void SAL_CALL ValueSetAcc::deselectAccessibleChild( sal_Int32 nChildIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -936,7 +935,7 @@ sal_Int32 SAL_CALL ValueItemAcc::getAccessibleIndexInParent()
 sal_Int16 SAL_CALL ValueItemAcc::getAccessibleRole()
     throw (uno::RuntimeException)
 {
-    return accessibility::AccessibleRole::LISTITEM;
+    return accessibility::AccessibleRole::LIST_ITEM;
 }
 
 // -----------------------------------------------------------------------------
@@ -1083,7 +1082,7 @@ void SAL_CALL ValueItemAcc::removeEventListener( const uno::Reference< accessibi
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SAL_CALL ValueItemAcc::contains( const awt::Point& aPoint )
+sal_Bool SAL_CALL ValueItemAcc::containsPoint( const awt::Point& aPoint )
     throw (uno::RuntimeException)
 {
     const awt::Rectangle    aRect( getBounds() );
@@ -1095,7 +1094,7 @@ sal_Bool SAL_CALL ValueItemAcc::contains( const awt::Point& aPoint )
 
 // -----------------------------------------------------------------------------
 
-uno::Reference< accessibility::XAccessible > SAL_CALL ValueItemAcc::getAccessibleAt( const awt::Point& aPoint )
+uno::Reference< accessibility::XAccessible > SAL_CALL ValueItemAcc::getAccessibleAtPoint( const awt::Point& aPoint )
     throw (uno::RuntimeException)
 {
     uno::Reference< accessibility::XAccessible > xRet;
