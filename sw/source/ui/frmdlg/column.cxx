@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-22 16:14:15 $
+ *  last change: $Author: os $ $Date: 2001-07-12 09:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,7 +513,7 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     aFLLayout(this,         ResId(FL_LAYOUT)),
 
     aPgeExampleWN(this,     ResId(WN_BSP)),
-    aFrmExampleWN(this,     ResId(WN_BSP_BORDER)),
+    aFrmExampleWN(this,     ResId(WN_BSP)),
 
     nFirstVis(0),
     bFrm(FALSE),
@@ -1210,12 +1210,6 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
         const SvxBoxItem& rBox = (const SvxBoxItem&) rSet.Get(RES_BOX);
 
         long nDistance = rBox.GetDistance();
-        if(bFormat)
-            aFrmExampleWN.SetFrameSize(Size(FRAME_FORMAT_WIDTH, FRAME_FORMAT_WIDTH), 0);
-        else
-            aFrmExampleWN.SetFrameSize(rSize.GetSize(), nDistance);
-
-
         const USHORT nTotalWish = bFormat ? FRAME_FORMAT_WIDTH : USHORT(rSize.GetWidth() - 2 * nDistance);
 
         // Maximalwerte der Spaltenbreiten setzen

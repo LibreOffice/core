@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colex.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-22 16:14:15 $
+ *  last change: $Author: os $ $Date: 2001-07-12 09:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,8 +353,7 @@ SwColExample::SwColExample(Window* pPar, const ResId& rResId ) :
 
 SwColumnOnlyExample::SwColumnOnlyExample( Window* pParent, const ResId& rResId) :
     Window(pParent, rResId),
-    aFrmSize(1,1),
-    nDistance(0)
+    aFrmSize(1,1)
 {
     SetMapMode( MapMode( MAP_TWIP ) );
     aWinSize = GetOutputSizePixel();
@@ -364,6 +363,17 @@ SwColumnOnlyExample::SwColumnOnlyExample( Window* pParent, const ResId& rResId) 
     aWinSize = PixelToLogic( aWinSize );
 
     SetBorderStyle( WINDOW_BORDER_MONO );
+
+    aFrmSize  = Size(11907, 16433);// DIN A4
+    ::FitToActualSize(aCols, (USHORT)aFrmSize.Width());
+
+    long nWidth = aFrmSize.Width();
+    long nHeight = aFrmSize.Height();
+    Fraction aScale( aWinSize.Height(), nHeight );
+    MapMode aMapMode( GetMapMode() );
+    aMapMode.SetScaleX( aScale );
+    aMapMode.SetScaleY( aScale );
+    SetMapMode( aMapMode );
 }
 
 /*-----------------25.10.96 09.16-------------------
@@ -373,30 +383,19 @@ SwColumnOnlyExample::SwColumnOnlyExample( Window* pParent, const ResId& rResId) 
 
 void SwColumnOnlyExample::Paint( const Rectangle& rRect )
 {
-    long nWidth = aFrmSize.Width();
-    long nHeight = aFrmSize.Height();
-    Fraction aXScale( aWinSize.Width(), std::max( (long)(nWidth + nWidth / 8), (long) 1 ) );
-    Fraction aYScale( aWinSize.Height(), std::max( nHeight, (long) 1 ) );
-    MapMode aMapMode( GetMapMode() );
-    aMapMode.SetScaleX( aXScale );
-    aMapMode.SetScaleY( aYScale );
-    SetMapMode( aMapMode );
-
     Size aLogSize(PixelToLogic(GetOutputSizePixel()));
     Point aTL(  (aLogSize.Width() - aFrmSize.Width()) / 2,
                 (aLogSize.Height() - aFrmSize.Height()) / 2);
     Rectangle aRect(aTL, aFrmSize);
 
-    SetFillColor( Color( COL_WHITE ) );
-//      SetPen(aSolidPen);
-    DrawRect(aRect);
+    //draw a shado rectangle
+    SetFillColor( Color( COL_GRAY ) );
+    Rectangle aShadowRect(aRect);
+    aShadowRect.Move(aTL.Y(), aTL.Y());
+    DrawRect(aShadowRect);
 
-    Size aInside(aFrmSize.Width() - nDistance, aFrmSize.Height() - nDistance);
-    long nDist2 = nDistance / 2;
-    aTL.X() += nDist2;
-    aTL.Y() += nDist2;
-    Rectangle aInsRect(aTL, aInside);
-    DrawRect(aInsRect);
+    SetFillColor( Color( COL_WHITE ) );
+    DrawRect(aRect);
 
     SetFillColor(Color( COL_LIGHTGRAY ) );
 
@@ -425,14 +424,13 @@ void SwColumnOnlyExample::Paint( const Rectangle& rRect )
         }
 
     }
-
     const SwColumns& rCols = aCols.GetColumns();
     USHORT nColCount = rCols.Count();
     if( nColCount )
     {
         DrawRect(aRect);
         SetFillColor( Color( COL_WHITE ) );
-        Rectangle aFrmRect(aTL, aInside);
+        Rectangle aFrmRect(aTL, aFrmSize);
         long nSum = aTL.X();
         for(USHORT i = 0; i < nColCount; i++)
         {
@@ -461,10 +459,28 @@ void SwColumnOnlyExample::Paint( const Rectangle& rRect )
 --------------------------------------------------*/
 
 
-void SwColumnOnlyExample::SetFrameSize(const Size& rS, long nDist)
+void  SwColumnOnlyExample::SetColumns(const SwFmtCol& rCol)
 {
-    aFrmSize  = rS;
-    nDistance = 2 * nDist;
-    ::FitToActualSize(aCols, (USHORT)aFrmSize.Width());
+    aCols = rCol;
+    USHORT nWishSum = aCols.GetWishWidth();
+    long nFrmWidth = aFrmSize.Width();
+    SwColumns& rCols = aCols.GetColumns();
+    USHORT nColCount = rCols.Count();
+    for(USHORT i = 0; i < nColCount; i++)
+    {
+        SwColumn* pCol = rCols[i];
+        long nWish = pCol->GetWishWidth();
+        nWish *= nFrmWidth;
+        nWish /= nWishSum;
+        pCol->SetWishWidth((USHORT)nWish);
+        long nLeft = pCol->GetLeft();
+        nLeft *= nFrmWidth;
+        nLeft /= nWishSum;
+        pCol->SetLeft((USHORT)nLeft);
+        long nRight = pCol->GetRight();
+        nRight *= nFrmWidth;
+        nRight /= nWishSum;
+        pCol->SetRight((USHORT)nRight);
+    }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colex.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:39 $
+ *  last change: $Author: os $ $Date: 2001-07-12 09:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,6 @@ private:
 
     Size        aFrmSize;
     SwFmtCol    aCols;
-    long        nDistance;
 
 protected:
     virtual void Paint( const Rectangle& rRect );
@@ -111,8 +110,7 @@ protected:
 public:
     SwColumnOnlyExample( Window* , const ResId& );
 
-    void        SetColumns(const SwFmtCol& rCol)  { aCols = rCol; }
-    void        SetFrameSize(const Size& rS, long nDist);
+    void        SetColumns(const SwFmtCol& rCol);
 
 };
 
