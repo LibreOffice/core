@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11DragSource.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-09 10:55:21 $
+ *  last change: $Author: arellano $ $Date: 2001-07-27 19:52:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,8 @@ module com { module sun { module star { module datatransfer { module dnd {
 interface XDragSource;
 
 //=============================================================================
-/** This service connects the java like UNO drag and drop protocol to the XDND
-    protocol used on X servers to transfer data between application via drag and
+/** This service connects the Java-like UNO drag and drop protocol to the XDND
+    protocol used on Xservers to transfer data between applications via drag and
     drop operations.
 
     @see XDragSource
