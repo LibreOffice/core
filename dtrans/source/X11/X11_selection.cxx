@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-11 11:23:56 $
+ *  last change: $Author: pl $ $Date: 2001-11-26 14:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,15 @@
 #include <stdio.h>
 #include <X11/Xatom.h>
 #include <X11/keysym.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
 #ifdef LINUX
 #include <sys/poll.h>
 #else
 #include <poll.h>
+#endif
+#if !(defined FREEBSD || defined NETBSD)
+#include <alloca.h>
 #endif
 
 #include <X11_selection.hxx>
@@ -173,7 +178,9 @@ static NativeTypeEntry aNativeConversionTab[] =
     // eastern european encodings
     { 0, "text/plain;charset=koi8-r", "KOI8-R", 8 },
     // String (== iso8859-1)
-    { XA_STRING, "text/plain;charset=iso8859-1", "STRING", 8 }
+    { XA_STRING, "text/plain;charset=iso8859-1", "STRING", 8 },
+    // special for compound text
+    { 0, "text/plain;charset=compound_text", "COMPOUND_TEXT", 8 }
 };
 
 rtl_TextEncoding x11::getTextPlainEncoding( const OUString& rMimeType )
@@ -370,6 +377,9 @@ void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::c
             m_nTARGETSAtom      = getAtom( OUString::createFromAscii( "TARGETS" ) );
             m_nTEXTAtom         = getAtom( OUString::createFromAscii( "TEXT" ) );
             m_nINCRAtom         = getAtom( OUString::createFromAscii( "INCR" ) );
+            m_nCOMPOUNDAtom     = getAtom( OUString::createFromAscii( "COMPOUND_TEXT" ) );
+            m_nUTF16Atom        = getAtom( OUString::createFromAscii( "ISO10646-1" ) );
+            m_nUTF8Atom         = getAtom( OUString::createFromAscii( "UTF8_STRING" ) );
 
             // Atoms for Xdnd protocol
             m_nXdndAware        = getAtom( OUString::createFromAscii( "XdndAware" ) );
@@ -512,9 +522,68 @@ SelectionAdaptor* SelectionManager::getAdaptor( Atom selection )
 
 // ------------------------------------------------------------------------
 
+OUString SelectionManager::convertFromCompound( const char* pText, int nLen )
+{
+    MutexGuard aGuard( m_aMutex );
+    OUString aRet;
+    if( nLen < 0 )
+        nLen = strlen( pText );
+
+    char** pTextList = NULL;
+    int nTexts = 0;
+
+    XTextProperty aProp;
+    aProp.value     = (unsigned char*)pText;
+    aProp.encoding  = m_nCOMPOUNDAtom;
+    aProp.format    = 8;
+    aProp.nitems    = nLen;
+    XmbTextPropertyToTextList( m_pDisplay,
+                               &aProp,
+                               &pTextList,
+                               &nTexts );
+    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
+    for( int i = 0; i < nTexts; i++ )
+        aRet += OStringToOUString( pTextList[i], aEncoding );
+
+    if( pTextList )
+        XFreeStringList( pTextList );
+
+    return aRet;
+}
+
+// ------------------------------------------------------------------------
+
+OString SelectionManager::convertToCompound( const OUString& rText )
+{
+    MutexGuard aGuard( m_aMutex );
+    XTextProperty aProp;
+
+    OString aRet( rText.getStr(), rText.getLength(), osl_getThreadTextEncoding() );
+    char* pT = const_cast<char*>(aRet.getStr());
+
+    XmbTextListToTextProperty( m_pDisplay,
+                               &pT,
+                               1,
+                               XCompoundTextStyle,
+                               &aProp );
+    if( aProp.value )
+    {
+        aRet = (char*)aProp.value;
+        XFree( aProp.value );
+    }
+    else
+        aRet = OString();
+
+    return aRet;
+ }
+
+// ------------------------------------------------------------------------
+
 bool SelectionManager::convertData(
     const Reference< XTransferable >& xTransferable,
-    const OUString& rType,
+    Atom nType,
+    Atom nSelection,
+    int& rFormat,
     Sequence< sal_Int8 >& rData )
 {
     bool bSuccess = false;
@@ -523,11 +592,12 @@ bool SelectionManager::convertData(
         return bSuccess;
 
     DataFlavor aFlavor;
-    aFlavor.MimeType = rType;
+    aFlavor.MimeType = convertTypeFromNative( nType, nSelection, rFormat );
+
     sal_Int32 nIndex = 0;
-    if( rType.getToken( 0, ';', nIndex ).compareToAscii( "text/plain" ) == 0 )
+    if( aFlavor.MimeType.getToken( 0, ';', nIndex ).compareToAscii( "text/plain" ) == 0 )
     {
-        if( rType.getToken( 0, ';', nIndex ).compareToAscii( "charset=utf-16" ) == 0 )
+        if( aFlavor.MimeType.getToken( 0, ';', nIndex ).compareToAscii( "charset=utf-16" ) == 0 )
             aFlavor.DataType = getCppuType( (OUString *) 0 );
         else
             aFlavor.DataType = getCppuType( (Sequence< sal_Int8 >*)0 );
@@ -551,10 +621,15 @@ bool SelectionManager::convertData(
             bSuccess = true;
         }
     }
-    else if( rType.compareToAscii( "text/plain", 10 ) == 0 )
+    else if( aFlavor.MimeType.compareToAscii( "text/plain", 10 ) == 0 )
     {
-        rtl_TextEncoding aEncoding = getTextPlainEncoding( rType );
-        if( aEncoding != RTL_TEXTENCODING_DONTKNOW )
+        rtl_TextEncoding aEncoding = RTL_TEXTENCODING_DONTKNOW;
+        bool bCompoundText = false;
+        if( nType == m_nCOMPOUNDAtom )
+            bCompoundText = true;
+        else
+            aEncoding = getTextPlainEncoding( aFlavor.MimeType );
+        if( aEncoding != RTL_TEXTENCODING_DONTKNOW || bCompoundText )
         {
             aFlavor.MimeType = OUString::createFromAscii( "text/plain;charset=utf-16" );
             aFlavor.DataType = getCppuType( (OUString *) 0 );
@@ -563,7 +638,7 @@ bool SelectionManager::convertData(
                 Any aValue( xTransferable->getTransferData( aFlavor ) );
                 OUString aString;
                 aValue >>= aString;
-                OString aByteString( OUStringToOString( aString, aEncoding ) );
+                OString aByteString( bCompoundText ? convertToCompound( aString ) : OUStringToOString( aString, aEncoding ) );
                 rData = Sequence< sal_Int8 >( (sal_Int8*)aByteString.getStr(), aByteString.getLength() * sizeof( sal_Char ) );
                 bSuccess = true;
             }
@@ -685,7 +760,7 @@ Atom SelectionManager::convertTypeToNative( const OUString& rType, Atom selectio
 
 // ------------------------------------------------------------------------
 
-OUString SelectionManager::convertTypeFromNative( Atom nType, Atom selection )
+OUString SelectionManager::convertTypeFromNative( Atom nType, Atom selection, int& rFormat )
 {
     NativeTypeEntry* pTab = selection == m_nXdndSelection ? aXdndConversionTab : aNativeConversionTab;
     int nTabEntries = selection == m_nXdndSelection
@@ -697,8 +772,12 @@ OUString SelectionManager::convertTypeFromNative( Atom nType, Atom selection )
         if( ! pTab[i].nAtom )
             pTab[i].nAtom = getAtom( OStringToOUString( pTab[i].pNativeType, RTL_TEXTENCODING_ISO_8859_1 ) );
         if( nType == pTab[i].nAtom )
+        {
+            rFormat = pTab[i].nFormat;
             return OStringToOUString( pTab[i].pType, RTL_TEXTENCODING_ISO_8859_1 );
+        }
     }
+    rFormat = 8;
     return getString( nType );
 }
 
@@ -777,35 +856,47 @@ bool SelectionManager::getPasteData( Atom selection, const ::rtl::OUString& rTyp
         {
             const Sequence< DataFlavor >& rTypes( it->second->m_aTypes );
             Sequence< sal_Int8 > aData;
-            for( int i = 0; i < rTypes.getLength(); i++ )
+            if( it->second->m_bHaveCompound &&
+                getPasteData( selection,
+                              m_nCOMPOUNDAtom,
+                              aData )
+                )
             {
-                rtl_TextEncoding aEncoding = getTextPlainEncoding( rTypes.getConstArray()[i].MimeType );
-                if( aEncoding != RTL_TEXTENCODING_DONTKNOW  &&
-                    aEncoding != RTL_TEXTENCODING_UNICODE   &&
-                    getPasteData(
-                        selection,
-                        convertTypeToNative(
-                            rTypes.getConstArray()[i].MimeType,
-                            selection, nFormat ),
-                        aData )
-                    )
+                OUString aRet( convertFromCompound( (const char*)aData.getConstArray(), aData.getLength() ) );
+                rData = Sequence< sal_Int8 >( (sal_Int8*)aRet.getStr(), (aRet.getLength()+1)*sizeof( sal_Unicode ) );
+                bSuccess = true;
+            }
+            else
+            {
+                for( int i = 0; i < rTypes.getLength(); i++ )
                 {
+                    rtl_TextEncoding aEncoding = getTextPlainEncoding( rTypes.getConstArray()[i].MimeType );
+                    if( aEncoding != RTL_TEXTENCODING_DONTKNOW  &&
+                        aEncoding != RTL_TEXTENCODING_UNICODE   &&
+                        getPasteData(
+                                     selection,
+                                     convertTypeToNative(
+                                                         rTypes.getConstArray()[i].MimeType,
+                                                         selection, nFormat ),
+                                     aData )
+                        )
+                    {
 #ifdef DEBUG
-                    fprintf( stderr, "using \"%s\" instead of \"%s\"\n",
-                             OUStringToOString( rTypes.getConstArray()[i].MimeType, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
-                             OUStringToOString( rType, RTL_TEXTENCODING_ISO_8859_1 ).getStr()
-                             );
+                        fprintf( stderr, "using \"%s\" instead of \"%s\"\n",
+                                 OUStringToOString( rTypes.getConstArray()[i].MimeType, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
+                                 OUStringToOString( rType, RTL_TEXTENCODING_ISO_8859_1 ).getStr()
+                                 );
 #endif
-                    OString aConvert( (sal_Char*)aData.getConstArray(), aData.getLength() );
-                    OUString aUTF( OStringToOUString( aConvert, aEncoding ) );
-                    rData = Sequence< sal_Int8 >( (sal_Int8*)aUTF.getStr(), (aUTF.getLength()+1)*sizeof( sal_Unicode ) );
-                    bSuccess = true;
-                    break;
+                        OString aConvert( (sal_Char*)aData.getConstArray(), aData.getLength() );
+                        OUString aUTF( OStringToOUString( aConvert, aEncoding ) );
+                        rData = Sequence< sal_Int8 >( (sal_Int8*)aUTF.getStr(), (aUTF.getLength()+1)*sizeof( sal_Unicode ) );
+                        bSuccess = true;
+                        break;
+                    }
                 }
             }
         }
     }
-
     if( ! bSuccess )
         bSuccess = getPasteData( selection, convertTypeToNative( rType, selection, nFormat ), rData );
 #ifdef DEBUG
@@ -840,6 +931,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
 
     bool bSuccess = false;
     bool bHaveUTF16 = false;
+    bool bHaveCompound = false;
     bool bHaveText = false;
     Sequence< sal_Int8 > aAtoms;
 
@@ -920,9 +1012,12 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
         DataFlavor* pFlavors = rTypes.getArray();
         while( nAtoms-- )
         {
-            if( *pAtoms && *pAtoms < 0x01000000 )
+            if( *pAtoms == m_nCOMPOUNDAtom )
+                bHaveText = bHaveCompound = true;
+            else if( *pAtoms && *pAtoms < 0x01000000 )
             {
-                pFlavors->MimeType = convertTypeFromNative( *pAtoms, selection );
+                int nFormat;
+                pFlavors->MimeType = convertTypeFromNative( *pAtoms, selection, nFormat );
                 pFlavors->DataType = getCppuType( (Sequence< sal_Int8 >*)0 );
                 sal_Int32 nIndex = 0;
                 if( pFlavors->MimeType.getToken( 0, ';', nIndex ).equalsAsciiL( "text/plain", 10 ) )
@@ -934,9 +1029,9 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
                         pFlavors->DataType = getCppuType( (OUString*)0 );
                     }
                 }
+                pFlavors++;
             }
             pAtoms++;
-            pFlavors++;
         }
         bSuccess = rTypes.getLength() ? true : false;
         if( bHaveText && ! bHaveUTF16 )
@@ -962,12 +1057,14 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
                 it->second->m_aTypes            = rTypes;
                 it->second->m_nLastTimestamp    = time( NULL );
                 it->second->m_bHaveUTF16        = bHaveUTF16;
+                it->second->m_bHaveCompound     = bHaveCompound;
             }
             else
             {
                 it->second->m_aTypes            = Sequence< DataFlavor >();
                 it->second->m_nLastTimestamp    = 0;
                 it->second->m_bHaveUTF16        = false;
+                it->second->m_bHaveCompound     = false;
             }
         }
     }
@@ -1021,35 +1118,45 @@ void SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
                 aGuard.clear();
                 Sequence< DataFlavor > aFlavors = xTrans->getTransferDataFlavors();
                 aGuard.reset();
-                Atom* pTypes = new Atom[ aFlavors.getLength() ];
+                Atom* pTypes = (Atom*)alloca( aFlavors.getLength()+2 * sizeof( Atom ) );
                 int nFormat;
-                for( int i = 0; i < aFlavors.getLength(); i++ )
+                bool bHaveUTF16 = false;
+                int nTypes = aFlavors.getLength();
+                for( int i = 0; i < nTypes; i++ )
+                {
                     pTypes[i] = convertTypeToNative( aFlavors.getConstArray()[i].MimeType, rRequest.selection, nFormat );
+                    if( pTypes[i] == m_nUTF16Atom )
+                        bHaveUTF16 = true;
+                }
+                if( bHaveUTF16 )
+                {
+                    pTypes[ nTypes++ ] = m_nUTF8Atom;
+                    pTypes[ nTypes++ ] = m_nCOMPOUNDAtom;
+                }
                 XChangeProperty( m_pDisplay, rRequest.requestor, rRequest.property,
-                                 XA_ATOM, 32, PropModeReplace, (const unsigned char*)pTypes, aFlavors.getLength() );
+                                 XA_ATOM, 32, PropModeReplace, (const unsigned char*)pTypes, nTypes );
                 aNotify.xselection.property = rRequest.property;
-                delete pTypes;
             }
         }
         else
         {
-            // special target TEXT allows us to transfer
-            // the data in an encoding of our choice
-            // it is debatable wether ISO10646-1 is a good choice
-            // UTF-8 or Compound would be understood by more applications
+            /*
+             *  special target TEXT allows us to transfer
+             *  the data in an encoding of our choice
+             *  COMPOUND_TEXT will work with most applications
+             */
             if( rRequest.target == m_nTEXTAtom )
-                rRequest.target = getAtom( OUString::createFromAscii( "ISO10646-1" ) );
+                rRequest.target = m_nCOMPOUNDAtom;
 
             Sequence< sal_Int8 > aData;
-            OUString aType( convertTypeFromNative( rRequest.target, rRequest.selection ) );
+            int nFormat;
             aGuard.clear();
-            bool bConverted = convertData( pAdaptor->getTransferable(), aType, aData );
+            bool bConverted = convertData( pAdaptor->getTransferable(), rRequest.target, rRequest.selection, nFormat, aData );
             aGuard.reset();
             if( bConverted )
             {
                 // conversion succeeded
-                int nFormat;
-                aNotify.xselection.target = convertTypeToNative( aType, rRequest.selection, nFormat );
+                aNotify.xselection.target = rRequest.target;
                 aNotify.xselection.property = rRequest.property;
                 if( aData.getLength() > INCR_MIN_SIZE )
                 {
@@ -1083,7 +1190,7 @@ void SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
 #ifdef DEBUG
             else
                 fprintf( stderr, "convertData failed for type: %s \n",
-                     OUStringToOString( aType, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+                     OUStringToOString( convertTypeFromNative( rRequest.target, rRequest.selection, nFormat ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
 #endif
         }
     }

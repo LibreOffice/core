@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-11 11:23:56 $
+ *  last change: $Author: pl $ $Date: 2001-11-26 14:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,6 +259,7 @@ namespace x11 {
             // m_aTypes is invalid after 2 seconds
             int                         m_nLastTimestamp;
             bool                        m_bHaveUTF16;
+            bool                        m_bHaveCompound;
             bool                        m_bOwner;
             Window                      m_aLastOwner;
 
@@ -373,6 +374,9 @@ namespace x11 {
         Atom                        m_nTARGETSAtom;
         Atom                        m_nTEXTAtom;
         Atom                        m_nINCRAtom;
+        Atom                        m_nCOMPOUNDAtom;
+        Atom                        m_nUTF16Atom;
+        Atom                        m_nUTF8Atom;
         Atom                        m_nXdndAware;
         Atom                        m_nXdndEnter;
         Atom                        m_nXdndLeave;
@@ -432,7 +436,9 @@ namespace x11 {
         bool getPasteData( Atom selection, Atom type, Sequence< sal_Int8 >& rData );
         // returns true if conversion was successful
         bool convertData( const Reference< ::com::sun::star::datatransfer::XTransferable >& xTransferable,
-                          const ::rtl::OUString& rType,
+                          Atom nType,
+                          Atom nSelection,
+                          int & rFormat,
                           Sequence< sal_Int8 >& rData );
 
         // thread dispatch loop
@@ -442,6 +448,10 @@ namespace x11 {
         static void runDragExecute( void* );
         void dragDoDispatch();
         void handleXEvent( XEvent& rEvent );
+
+        // compound text conversion
+        ::rtl::OString convertToCompound( const ::rtl::OUString& rText );
+        ::rtl::OUString convertFromCompound( const char* pText, int nLen = -1 );
     public:
         static SelectionManager& get( const ::rtl::OUString& rDisplayName = ::rtl::OUString() );
 
@@ -459,7 +469,7 @@ namespace x11 {
 
         // type conversion
         Atom convertTypeToNative( const ::rtl::OUString& rType, Atom selection, int& rFormat );
-        ::rtl::OUString convertTypeFromNative( Atom nType, Atom selection );
+        ::rtl::OUString convertTypeFromNative( Atom nType, Atom selection, int& rFormat );
 
         // methods for transferable
         bool getPasteDataTypes( Atom selection, Sequence< ::com::sun::star::datatransfer::DataFlavor >& rTypes );
