@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:08:16 $
+ *  last change: $Author: hr $ $Date: 2004-05-13 10:50:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1159,7 +1159,7 @@ void SwWrtShell::NumOn()
 {
     // #115901#
     const SwNumRule * pNumRule =
-        GetDoc()->SearchNumRule(*GetCrsr()->GetPoint(), FALSE, TRUE, FALSE, 0);
+        GetDoc()->SearchNumRule(*GetCrsr()->GetPoint(), FALSE, TRUE, 0);
 
     if (pNumRule)
         SetCurNumRule(*pNumRule);
@@ -1200,7 +1200,7 @@ void SwWrtShell::BulletOn()
     // #115901#
     const SwNumRule * pNumRule =
         GetDoc()->SearchNumRule(*GetCrsr()->GetPoint(),
-                                FALSE, FALSE, FALSE, 0);
+                                FALSE, FALSE, 0);
 
     if (pNumRule)
         SetCurNumRule(*pNumRule);
