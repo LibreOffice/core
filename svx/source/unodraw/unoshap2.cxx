@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-07 14:25:20 $
+ *  last change: $Author: cl $ $Date: 2001-05-14 14:32:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1613,10 +1613,7 @@ void SAL_CALL SvxGraphicObject::setPropertyValue( const OUString& aPropertyName,
         if(!(aValue >>= aURL))
             throw lang::IllegalArgumentException();
 
-        String aGrafURL( aURL );
-
-        if( ( aGrafURL.GetTokenCount( ':' ) == 2 ) &&
-            ( aGrafURL.GetToken( 0, ':' ) == String( RTL_CONSTASCII_STRINGPARAM( UNO_NAME_GRAPHOBJ_URLPREFIX ) ).GetToken( 0, ':' ) ) )
+        if( aURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPREFIX ) ) == 0 )
         {
             // graphic manager url
             aURL = aURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 );
@@ -1626,8 +1623,7 @@ void SAL_CALL SvxGraphicObject::setPropertyValue( const OUString& aPropertyName,
             ((SdrGrafObj*)pObj)->ReleaseGraphicLink();
             ((SdrGrafObj*)pObj)->SetGraphicObject( aGrafObj );
         }
-        else if( ( aGrafURL.GetTokenCount( ':' ) != 2 ) ||
-                 ( aGrafURL.GetToken( 0, ':' ) != String( RTL_CONSTASCII_STRINGPARAM( UNO_NAME_GRAPHOBJ_URLPKGPREFIX ) ).GetToken( 0, ':' ) ) )
+        else if( aURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPKGPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPKGPREFIX ) ) != 0 )
         {
             // normal link
             String              aFilterName;
@@ -1663,6 +1659,9 @@ void SAL_CALL SvxGraphicObject::setPropertyValue( const OUString& aPropertyName,
 
             ((SdrGrafObj*)pObj)->SetGraphicLink( aURL, aFilterName );
         }
+        else
+        {
+        }
 
     }
     else if( pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_GRAFSTREAMURL)))
@@ -1672,8 +1671,8 @@ void SAL_CALL SvxGraphicObject::setPropertyValue( const OUString& aPropertyName,
         if( !( aValue >>= aStreamURL ) )
             throw lang::IllegalArgumentException();
 
-        if( ( aStreamURL.getTokenCount( ':' ) != 2 ) ||
-            ( aStreamURL.getToken( 0, ':' ) != OUString::createFromAscii( UNO_NAME_GRAPHOBJ_URLPKGPREFIX ).getToken( 0, ':' ) ) )
+
+        if( aStreamURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPKGPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPKGPREFIX ) ) != 0 )
         {
             aStreamURL = OUString();
         }
