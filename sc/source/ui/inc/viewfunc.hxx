@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-24 18:06:46 $
+ *  last change: $Author: nn $ $Date: 2001-02-14 19:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,8 @@ class Exchange;
 class ScRangeList;
 class SvxHyperlinkItem;
 
+namespace com { namespace sun { namespace star { namespace datatransfer { class XTransferable; } } } }
+
 // ---------------------------------------------------------------------------
 
 class ScViewFunc : public ScTabView
@@ -141,7 +143,7 @@ public:
 
     void            CutToClip( ScDocument* pClipDoc=NULL );
     void            CopyToClip( ScDocument* pClipDoc=NULL, BOOL bCut = FALSE );
-    BOOL            PasteFromClip( USHORT nFlags, ScDocument* pClipDoc = NULL,
+    BOOL            PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
                                     USHORT nFunction = PASTE_NOFUNC, BOOL bSkipEmpty = FALSE,
                                     BOOL bTranspose = FALSE, BOOL bAsLink = FALSE,
                                     InsCellCmd eMoveMode = INS_NONE,
@@ -166,17 +168,26 @@ public:
                                         Window* pWin = NULL, Point* pLogicPos = NULL );
     BOOL            LinkDataObject( SvDataObject* pObject, USHORT nPosX, USHORT nPosY,
                                         Window* pWin = NULL, Point* pLogicPos = NULL );
+
     BOOL            PasteDataFormat( ULONG nFormatId, SvDataObject* pObject,
                                         USHORT nPosX, USHORT nPosY,
                                         Window* pWin = NULL, Point* pLogicPos = NULL );
+
+    BOOL            PasteDataFormat( ULONG nFormatId,
+                                        const ::com::sun::star::uno::Reference<
+                                            ::com::sun::star::datatransfer::XTransferable >& rxTransferable,
+                                        USHORT nPosX, USHORT nPosY, Point* pLogicPos = NULL );
+
     BOOL            PasteFile( const Point&, const String&, BOOL bLink=FALSE );
-    BOOL            PasteObject( const Point&, SvInPlaceObject*, SvDataObject* = NULL );
+    BOOL            PasteObject( const Point&, SvInPlaceObject*, const Size* = NULL );
     BOOL            PasteBitmap( const Point&, const Bitmap& );
     BOOL            PasteMetaFile( const Point&, const GDIMetaFile& );
     BOOL            PasteGraphic( const Point& rPos, const Graphic& rGraphic,
                                     const String& rFile, const String& rFilter );
     BOOL            PasteBookmark( SvDataObject* pObject, USHORT nPosX, USHORT nPosY );
     BOOL            PasteDDE( SvDataObject* pObject );
+    BOOL            PasteDDE( const ::com::sun::star::uno::Reference<
+                                ::com::sun::star::datatransfer::XTransferable >& rxTransferable );
 
     BOOL            ApplyGraphicToObject( SdrObject* pObject, const Graphic& rGraphic );
 
