@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:32:31 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:57:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -852,7 +852,7 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
 SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
 {
     SwRect aRect;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     static BOOL bStop = FALSE;
     if ( bStop )
         return aRect;
@@ -1288,7 +1288,7 @@ BOOL SwTxtNode::Hyphenate( SwInterHyphInfo &rHyphInf )
         // 4935: Seit der Trennung ueber Sonderbereiche sind Faelle
         // moeglich, in denen kein Frame zum Node vorliegt.
         // Also kein ASSERT!
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         ASSERT( pFrm, "!SwTxtNode::Hyphenate: can't find any frame" );
 #endif
         return FALSE;
