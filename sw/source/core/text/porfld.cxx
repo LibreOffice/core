@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 11:48:02 $
+ *  last change: $Author: hjs $ $Date: 2003-09-25 10:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,21 +358,18 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
         const xub_StrLen nOldFullLen = rInf.GetLen();
         const MSHORT nFollow = IsFollow() ? 0 : 1;
         xub_StrLen nFullLen;
-        // In Numerierungen kennen wir keine Platzhalter, sondern
-        // nur "normale" Zeichen.
-        if( InNumberGrp() )
-            nFullLen = nOldFullLen;
-        else
-        {
-            nFullLen = rInf.ScanPortionEnd( rInf.GetIdx(),
-                    rInf.GetIdx() + nOldFullLen ) - rInf.GetIdx();
-            if( nFullLen && CH_BREAK == aExpand.GetChar( nFullLen - 1 ) )
-                --nFullLen;
 
-            if ( STRING_LEN != rInf.GetUnderScorePos() &&
-                 rInf.GetUnderScorePos() > rInf.GetIdx() )
-                rInf.SetUnderScorePos( rInf.GetIdx() );
-        }
+        // Look for portion breaks (special characters like tab, break...)
+        nFullLen = rInf.ScanPortionEnd( rInf.GetIdx(),
+                   rInf.GetIdx() + nOldFullLen ) - rInf.GetIdx();
+        if( nFullLen && CH_BREAK == aExpand.GetChar( nFullLen - 1 ) )
+            --nFullLen;
+
+        if ( STRING_LEN != rInf.GetUnderScorePos() &&
+             rInf.GetUnderScorePos() > rInf.GetIdx() )
+             rInf.SetUnderScorePos( rInf.GetIdx() );
+
+        // field portion has to break if script changes
         BYTE nScriptChg = ScriptChange( rInf, nFullLen );
         rInf.SetLen( nFullLen );
         if( pFnt )
@@ -431,7 +428,8 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
             XubString aNew( aExpand, nNextOfst, STRING_LEN );
             aExpand.Erase( nNextOfst, STRING_LEN );
 
-            // Trailingspace et al. !
+            // These characters should not be contained in the follow
+            // field portion. They are handled via the HookChar mechanism.
             switch( aNew.GetChar( 0 ))
             {
                 case CH_BREAK  : bFull = sal_True;
@@ -449,26 +447,24 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
                 default: ;
             }
 
-            if( aNew.Len() || IsQuoVadisPortion() )
+            // Even if there is no more text left for a follow field,
+            // we have to build a follow field portion (without font),
+            // otherwise the HookChar mechanism would not work.
+            SwFldPortion *pFld = Clone( aNew );
+            if( aNew.Len() && !pFld->GetFont() )
             {
-                // sal_True, weil es ein FollowFeld ist
-                // SwFont *pFont = new SwFont( rInf.GetFont()->GetFnt() );
-                SwFldPortion *pFld = Clone( aNew );
-                if( !pFld->GetFont() )
-                {
-                    SwFont *pNewFnt = new SwFont( *rInf.GetFont() );
-                    pFld->SetFont( pNewFnt );
-                }
-                pFld->SetFollow( sal_True );
-                SetHasFollow( sal_True );
-                // In nNextOffset steht bei einem neuangelegten Feld zunaechst
-                // der Offset, an dem es selbst im Originalstring beginnt.
-                // Wenn beim Formatieren ein FollowFeld angelegt wird, wird
-                // der Offset dieses FollowFelds in nNextOffset festgehalten.
-                nNextOffset += nNextOfst;
-                pFld->SetNextOffset( nNextOffset );
-                rInf.SetRest( pFld );
+                SwFont *pNewFnt = new SwFont( *rInf.GetFont() );
+                pFld->SetFont( pNewFnt );
             }
+            pFld->SetFollow( sal_True );
+            SetHasFollow( sal_True );
+            // In nNextOffset steht bei einem neuangelegten Feld zunaechst
+            // der Offset, an dem es selbst im Originalstring beginnt.
+            // Wenn beim Formatieren ein FollowFeld angelegt wird, wird
+            // der Offset dieses FollowFelds in nNextOffset festgehalten.
+            nNextOffset += nNextOfst;
+            pFld->SetNextOffset( nNextOffset );
+            rInf.SetRest( pFld );
         }
     }
 
