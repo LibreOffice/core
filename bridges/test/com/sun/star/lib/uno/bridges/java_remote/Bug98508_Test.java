@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Bug98508_Test.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:39:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:04:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,11 @@
  *
  ************************************************************************/
 
-package com.sun.star.lib.uno.bridges.java_remote;
+package com.sun.star.lib.uno.bridges.javaremote;
 
 import com.sun.star.bridge.XBridge;
 import com.sun.star.bridge.XInstanceProvider;
 import com.sun.star.lang.DisposedException;
-import com.sun.star.lang.XServiceName;
 import com.sun.star.lib.TestBed;
 import com.sun.star.uno.UnoRuntime;
 import complexlib.ComplexTestCase;
@@ -78,6 +77,10 @@ import complexlib.ComplexTestCase;
  * causes an exception when sending the reply, but this exception did not cause
  * the bridge to be disposed, it rather caused both client and server to
  * hang.</p>
+ *
+ * <p>Since null instead of a <code>String</code> no longer causes an exception
+ * in the bridge, this test has been redesigned to send a value of a wrong
+ * instantiated polymorphic struct type instead.</p>
  *
  * <p>This test has to detect whether the spawned client process indeed hangs,
  * which can not be done reliably.  As an approximation, it waits for 10 sec and
@@ -103,11 +106,11 @@ public final class Bug98508_Test extends ComplexTestCase {
         }
 
         protected boolean run(XBridge bridge) throws Throwable {
-            XServiceName serviceName
-                = (XServiceName) UnoRuntime.queryInterface(
-                    XServiceName.class, bridge.getInstance("ServiceName"));
+            Test98508Interface ifc
+                = (Test98508Interface) UnoRuntime.queryInterface(
+                    Test98508Interface.class, bridge.getInstance(""));
             try {
-                serviceName.getServiceName();
+                ifc.get();
             } catch (DisposedException e) {
                 return true;
             }
@@ -121,10 +124,10 @@ public final class Bug98508_Test extends ComplexTestCase {
         }
 
         public Object getInstance(String instanceName) {
-            return new XServiceName() {
-                    public String getServiceName() {
+            return new Test98508Interface() {
+                    public Test98508Struct get() {
                         testBed.serverDone(true);
-                        return null;
+                        return new Test98508Struct(Boolean.FALSE);
                     }
                 };
         }

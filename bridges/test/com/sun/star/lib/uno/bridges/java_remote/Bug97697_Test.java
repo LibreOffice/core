@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Bug97697_Test.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:39:06 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:03:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-package com.sun.star.lib.uno.bridges.java_remote;
+package com.sun.star.lib.uno.bridges.javaremote;
 
 import com.sun.star.bridge.XBridge;
 import com.sun.star.bridge.XInstanceProvider;
