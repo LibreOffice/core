@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-27 16:41:55 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:20:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ using namespace com::sun::star::xml::dom::events;
 
 namespace DOM
 {
-    
+
     typedef std::list< Reference< XNode >* > nodereflist_t;
 
     class CDocument : public cppu::ImplInheritanceHelper2< CNode, XDocument, XDocumentEvent >
@@ -108,7 +108,7 @@ namespace DOM
     public:
 
         virtual ~CDocument();
-        
+
         /**
         Creates an Attr of the given name.
         */
@@ -158,7 +158,7 @@ namespace DOM
             throw (DOMException);
 
         /**
-        Creates a ProcessingInstruction node given the specified name and 
+        Creates a ProcessingInstruction node given the specified name and
         data strings.
         */
         virtual Reference< XProcessingInstruction > SAL_CALL createProcessingInstruction(
@@ -184,7 +184,7 @@ namespace DOM
         */
         virtual Reference< XElement > SAL_CALL getDocumentElement()
             throw (RuntimeException);
-        
+
         /**
         Returns the Element whose ID is given by elementId.
         */
@@ -192,7 +192,7 @@ namespace DOM
             throw (RuntimeException);
 
         /**
-        Returns a NodeList of all the Elements with a given tag name in the 
+        Returns a NodeList of all the Elements with a given tag name in the
         order in which they are encountered in a preorder traversal of the
         Document tree.
         */
@@ -200,8 +200,8 @@ namespace DOM
             throw (RuntimeException);
 
         /**
-        Returns a NodeList of all the Elements with a given local name and 
-        namespace URI in the order in which they are encountered in a preorder 
+        Returns a NodeList of all the Elements with a given local name and
+        namespace URI in the order in which they are encountered in a preorder
         traversal of the Document tree.
         */
         virtual Reference< XNodeList > SAL_CALL getElementsByTagNameNS(const OUString& namespaceURI, const OUString& localName)
@@ -224,7 +224,7 @@ namespace DOM
         virtual OUString SAL_CALL getNodeName()
             throw (RuntimeException);
         virtual OUString SAL_CALL getNodeValue()
-            throw (RuntimeException);        
+            throw (RuntimeException);
     // --- delegation for XNde base.
     virtual Reference< XNode > SAL_CALL appendChild(const Reference< XNode >& newChild)
         throw (DOMException)
@@ -289,7 +289,7 @@ namespace DOM
     virtual OUString SAL_CALL getPrefix()
         throw (RuntimeException)
     {
-        return CNode::getPrefix();
+       return CNode::getPrefix();
     }
     virtual Reference< XNode > SAL_CALL getPreviousSibling()
         throw (RuntimeException)
