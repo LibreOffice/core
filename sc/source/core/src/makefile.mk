@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:20:04 $
+#   last change: $Author: hr $ $Date: 2004-12-10 18:08:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,10 +71,6 @@ TARGET=core
 .INCLUDE :  scpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  sc.mk
-
-# --- Rsc-Flags ----------------------------------------------------
-
-#RSCFLAGS=$(RSCFLAGS) -DUPDVER="$(UPD)$(UPDMINOR)"
 
 # --- Files --------------------------------------------------------
 
