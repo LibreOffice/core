@@ -44,7 +44,7 @@ public class Welcome extends javax.swing.JPanel implements ActionListener {
         //area.setText("\n \t Please ensure that you have exited from Office");
     
     String message = "\n \t Please ensure that you have exited from Office";
-    String userDir = (String) System.getProperty( "user.dir" );
+    /* String userDir = (String) System.getProperty( "user.dir" );
     boolean isValid = validateCurrentUserDir(userDir);
     if( !isValid ) {
         nextButtonEnable = false;
@@ -57,7 +57,7 @@ public class Welcome extends javax.swing.JPanel implements ActionListener {
     String offInstallPth = null;
     offInstallPth = userDir.substring( 0, programPosition );
     
-        wizard.storeLocation(offInstallPth);
+        wizard.storeLocation(offInstallPth); */
     setUpWelcomePanel(message);
         
     }//GEN-END:initComponents
@@ -66,7 +66,7 @@ public class Welcome extends javax.swing.JPanel implements ActionListener {
     area.setText( message );
         welcomePanel.add(area, java.awt.BorderLayout.CENTER);
         add(welcomePanel, java.awt.BorderLayout.CENTER);
-    NavPanel nav = new NavPanel(wizard, false, nextButtonEnable, true, "", InstallWizard.FINAL);
+    NavPanel nav = new NavPanel(wizard, false, nextButtonEnable, true, "", InstallWizard.VERSIONS);
     nav.setNextListener(this);
     add(nav, java.awt.BorderLayout.SOUTH);
         

@@ -37,6 +37,9 @@ public class IdeUpdater extends Thread {
 
     public IdeUpdater(String installPath, JLabel statusLabel, JProgressBar pBar) {
 
+        if (installPath.endsWith(File.separator) == false)
+            installPath += File.separator;
+
     File jeditLauncher = new File( installPath + "jedit.jar" );
     File netbeansLauncher = new File( installPath + "bin" );
 
@@ -48,7 +51,6 @@ public class IdeUpdater extends Thread {
         isNetbeansPath =  false;
         installPath = installPath + "jars" + File.separator;
     }
-
 
     System.out.println( "IdeUpdater installPath is " + installPath + " isNetbeansPath is " + isNetbeansPath );
         this.installPath = installPath;

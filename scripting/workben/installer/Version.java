@@ -39,6 +39,7 @@ public class Version extends javax.swing.JPanel implements ActionListener, Table
         JPanel versionPanel = new JPanel();
         setLayout(new BorderLayout());
 
+        System.out.println("Initialising versions");
 
         File fileVersions = null;
     try

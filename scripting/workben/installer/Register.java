@@ -6,30 +6,23 @@ import javax.swing.*;
 
 public class Register{
     
-    private static JProgressBar progressBar;
-
-    
-    private static boolean runCommands(String url,String path, javax.swing.JLabel statusLabel){
+    public static boolean register(String path, JLabel statusLabel) {
     try {
         String s=null;
-        String classpath="";
         int exitcode=0;
-        boolean passed=true;
         String env[] = new String[1]; 
-        Runtime rt= Runtime.getRuntime();
-        //String progpath=path.concat(File.separator+"program"+File.separator);
-        String progpath=path.concat("program"+File.separator);
-        BufferedReader stdInput;
+        Runtime rt = Runtime.getRuntime();
+
+        String progpath = path.concat("program" + File.separator);
         Process p;
             
             statusLabel.setText("Registering Scripting Framework...");
-            progressBar.setString("Registering Scripting Framework");
-            progressBar.setValue(7);
-        String opSys =System.getProperty("os.name");
+        String opSys = System.getProperty("os.name");
 
             // pkgchk Scripting Framework Components
             statusLabel.setText("Registering Scripting Framework Components...");
         System.out.println("Registering Scripting Framework Components...");
+
         if (opSys.indexOf("Windows") == -1){
                 //System.out.println( "Not Windows");
         env[0]="LD_LIBRARY_PATH="+progpath;
@@ -59,7 +52,6 @@ public class Register{
             System.out.println("\nPkgChk Failed \nCommand: \""+progpath+"pkgchk.exe\" \""+progpath+"ooscriptframe.zip\"");
         }
         statusLabel.setText("PkgChk Failed, please view SFrameworkInstall.log");
-        passed=false;   
         return false;
         }
 
@@ -93,7 +85,6 @@ public class Register{
             System.out.println("\nRegsingleton ScriptRuntimeForJava Failed.\nCommand: \""+progpath+"regsingleton.exe\" \""+path+"user"+File.separator+"uno_packages"+File.separator+"cache"+File.separator+"services.rdb\" \"drafts.com.sun.star.script.framework.theScriptRuntimeForJava=drafts.com.sun.star.script.framework.ScriptRuntimeForJava\"");
         }
         statusLabel.setText("Regsingleton ScriptRuntimeForJava Failed. please view SFrameworkInstall.log");
-        passed=false;
         return false;
         }            
 
@@ -125,7 +116,6 @@ public class Register{
             System.out.println("\nRegsingleton ScriptRuntimeForJava Failed.\nCommand: \""+progpath+"regsingleton.exe\" \""+path+"user"+File.separator+"uno_packages"+File.separator+"cache"+File.separator+"services.rdb\" \"drafts.com.sun.star.script.framework.storage.theScriptStorageManager=drafts.com.sun.star.script.framework.storage.ScriptStorageManager\"");
         }
         statusLabel.setText("Regsingleton ScriptRuntimeForJava Failed, please view SFrameworkInstall.log");
-        passed=false;
         return false;
         }               
         
@@ -161,43 +151,6 @@ public class Register{
         return false;   
     }
     return true;
-    }// windows
-    
- 
-
-    public static boolean register(String path, javax.swing.JLabel statusLabel,JProgressBar pBar){
-        progressBar=pBar;
-    boolean win =false;
-    String newString= "file://";
-    if (path.indexOf(":")==1){
-            newString=newString.concat("/");
-        win=true;
-    }
-    String tmpStr1="";
-    String tmpStr2="";
-    newString=newString.concat(path.replace('\\','/'));
-    int i=0;
-    if (newString.indexOf(" ")>0){
-            tmpStr1=tmpStr1.concat(newString.substring(i,newString.indexOf(" ")));
-            tmpStr1=tmpStr1.concat("\\ ");
-        newString=newString.substring(newString.indexOf(" ")+1,newString.length()); 
-    }
-    tmpStr1=tmpStr1.concat(newString);
-    //System.out.println(""+tmpStr1);
-    char url[]=path.toCharArray();
-    char test[]=new char[path.length()*2];
-    int j=0;
-    
-    path = path.substring (0,path.length()-1);
-    
-    //runCommands(tmpStr1,path, statusLabel);
-    
-    if( !runCommands(tmpStr1, path, statusLabel) ){
-        return false;
-    }
-    
-    return true;
-
     }// register
 
 }//Register

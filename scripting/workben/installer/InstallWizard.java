@@ -48,7 +48,7 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
                     //InstUtil.copy(backup, destination); //Restore typedetection.xml
         }
                  
-                //System.out.println( "ShutdownHook" );
+                System.out.println( "ShutdownHook" );
             }
 
             InstUtil.removeTmpDir();
@@ -64,24 +64,22 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
     public InstallWizard() {
         super("Office Scripting Framework Installer - Early Developer Release");
     
-    
-    try {
-        System.out.print("All diagnostic output is being redirected to SFrameworkInstall.log\n");
-        System.out.print("Location: "+  System.getProperty( "user.dir" ) + 
-            File.separator + "SFrameworkInstall.log\n");
+     try {
+         System.out.print("All diagnostic output is being redirected to SFrameworkInstall.log\n");
+         System.out.print("Location: "+  System.getProperty( "user.dir" ) + 
+             File.separator + "SFrameworkInstall.log\n");
+ 
+         LogStream log = new LogStream( "SFrameworkInstall.log" );
+                 System.setErr(log);
+         
+                 System.setOut(log);
+     }
+     catch( FileNotFoundException fnfe ) {
+         System.err.println("Office Scripting Framework Installer - Error: ");
+         System.err.println("Unable to create log file for installation.");
+         exitForm(null);
+     }
 
-        LogStream log = new LogStream( "SFrameworkInstall.log" );
-                System.setErr(log);
-        
-                System.setOut(log);
-    }
-    catch( FileNotFoundException fnfe ) {
-        System.err.println("Office Scripting Framework Installer - Error: ");
-        System.err.println("Unable to create log file for installation.");
-        exitForm(null);
-    }
-    
-    
     //setBackground(Color.WHITE);
     setBackground(new Color(0,0,0));
     locations = new ArrayList();
@@ -221,7 +219,67 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
     * @param args the command line arguments
     */
     public static void main(String args[]) {
-        new InstallWizard().show();
+        String officePath = null;
+        String netbeansPath = null;
+        String jeditPath = null;
+        int i = 0;
+
+        while (i < args.length) {
+            if (args[i].equals("-help")) {
+                printUsage();
+                System.exit(0);
+            }
+            if (args[i].equals("-office"))
+                officePath = args[++i];
+            if (args[i].equals("-netbeans"))
+                netbeansPath = args[++i];
+            if (args[i].equals("-jedit"))
+                jeditPath = args[++i];
+            i++;
+        }
+
+        if (officePath == null && netbeansPath == null && jeditPath == null)
+            new InstallWizard().show();
+
+        JLabel label = new JLabel();
+        JProgressBar progressbar = new JProgressBar();
+
+        try {
+            System.out.println("Log file is: " +
+                System.getProperty("user.dir") +
+                File.separator + "SFrameworkInstall.log");
+ 
+            LogStream log = new LogStream( "SFrameworkInstall.log" );
+            System.setErr(log);
+            System.setOut(log);
+        }
+        catch( FileNotFoundException fnfe ) {
+            System.err.println("Error: Unable to create log file: "
+                + fnfe.getMessage());
+            System.exit(-1);
+        }
+
+        if (officePath != null) {
+            XmlUpdater xud = new XmlUpdater(officePath, label, progressbar);
+            xud.run();
+        }
+
+        if (netbeansPath != null) {
+            IdeUpdater ideup = new IdeUpdater(netbeansPath, label, progressbar);
+            ideup.run();
+        }
+
+        if (jeditPath != null) {
+            IdeUpdater ideup = new IdeUpdater(jeditPath, label, progressbar);
+            ideup.run();
+        }
+    }
+
+    private static void printUsage() {
+        System.err.println("java -jar SFrameworkInstall.jar");
+        System.err.println("\t[-office <path_to_office_installation]");
+        System.err.println("\t[-netbeans <path_to_netbeans_installation]");
+        System.err.println("\t[-jedit <path_to_jedit_installation]");
     }
 
     public static synchronized boolean isPatchedTypes()

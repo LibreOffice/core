@@ -330,8 +330,9 @@ public class XmlUpdater extends Thread {
 
 //--------------------------------
 
-        //System.out.println("About to call register");
-    if(!Register.register(installPath+File.separator, statusLabel, progressBar) )
+        progressBar.setString("Registering Scripting Framework");
+        progressBar.setValue(7);
+    if(!Register.register(installPath+File.separator, statusLabel) )
         {
            onInstallComplete();
            return;
