@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: er $ $Date: 2002-08-05 18:34:42 $
+ *  last change: $Author: nn $ $Date: 2002-10-01 13:34:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1389,6 +1389,16 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         }
                         else
                             AddToTextElement_Impl( *pElemStr );
+                    }
+                    break;
+                case XMLNUM_SYMBOLTYPE_BLANK:
+                    if (pElemStr)
+                    {
+                        //  turn "_x" into the number of spaces used for x in InsertBlanks in the NumberFormat
+
+                        String aBlanks;
+                        SvNumberformat::InsertBlanks( aBlanks, 0, pElemStr->GetChar(1) );
+                        AddToTextElement_Impl( aBlanks );
                     }
                     break;
                 case NF_KEY_GENERAL :
