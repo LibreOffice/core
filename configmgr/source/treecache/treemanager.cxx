@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treemanager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-12 11:42:50 $
+ *  last change: $Author: jb $ $Date: 2002-10-10 09:30:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,12 +151,14 @@ void TreeManager::dispose()
 
     RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::TreeManager", "jb99855", "dispose().");
 
-    m_xCacheLoader->getNotifier().removeListener(this);
+    BackendCacheRef xBackendCache = maybeGetBackendCache();
+
+    if (xBackendCache.is()) xBackendCache->getNotifier().removeListener(this);
 
     // cleaning the cache
     disposeAll();
 
-    m_xCacheLoader->dispose();
+    disposeBackendCache();
 }
 
 // -------------------------------------------------------------------------
@@ -259,16 +261,52 @@ ConfigChangeBroadcastHelper* TreeManager::getBroadcastHelper(vos::ORef<OOptions>
 
 // -------------------------------------------------------------------------
 TreeManager::TreeManager(BackendCacheRef const & _xBackend, memory::HeapManager & _rCacheHeapManager)
-: m_xCacheLoader(_xBackend)
+: m_xCacheController(_xBackend)
 , m_aCacheList()
 , m_aTemplates(new CacheData(_rCacheHeapManager))
 {
-    m_xCacheLoader->getNotifier().addListener(this);
+    OSL_PRECOND(_xBackend.is(),"Trying to create a TreeManager without a backend");
+
+    if (m_xCacheController.is()) m_xCacheController->getNotifier().addListener(this);
 }
 
 // -------------------------------------------------------------------------
 TreeManager::~TreeManager()
 {
+}
+
+// -------------------------------------------------------------------------
+TreeManager::BackendCacheRef TreeManager::maybeGetBackendCache() CFG_NOTHROW( )
+{
+    osl::MutexGuard aGuard(m_aCacheControllerMutex);
+    BackendCacheRef xResult(m_xCacheController);
+    return xResult;
+}
+
+// -------------------------------------------------------------------------
+TreeManager::BackendCacheRef TreeManager::getCacheLoader() CFG_UNO_THROW_RTE( )
+{
+    osl::MutexGuard aGuard(m_aCacheControllerMutex);
+    if (!m_xCacheController.is())
+    {
+        OUString sMsg = OUString::createFromAscii("TreeManager: No backend available - tree manager was already disposed.");
+        throw com::sun::star::lang::DisposedException(sMsg,NULL);
+    }
+    BackendCacheRef xResult(m_xCacheController);
+    return xResult;
+}
+
+// -------------------------------------------------------------------------
+void TreeManager::disposeBackendCache() CFG_NOTHROW( )
+{
+    osl::ClearableMutexGuard aGuard(m_aCacheControllerMutex);
+    if (m_xCacheController.is())
+    {
+        BackendCacheRef xBackendCache(m_xCacheController);
+        m_xCacheController.clear();
+        aGuard.clear();
+        xBackendCache->dispose();
+    }
 }
 
 // -------------------------------------------------------------------------
@@ -323,7 +361,7 @@ data::NodeAccess TreeManager::requestSubtree(AbsolutePath const& aSubtreePath,
         CFG_TRACE_INFO_NI("TreeManager: cache miss. going to load the node");
         backend::ComponentRequest aQuery( aSubtreePath.getModuleName(), _xOptions->getRequestOptions() );
 
-        backend::CacheLocation aLoadedLocation = m_xCacheLoader->loadComponent(aQuery);
+        backend::CacheLocation aLoadedLocation = getCacheLoader()->loadComponent(aQuery);
         if (aLoadedLocation.isNull())
         {
             CFG_TRACE_WARNING_NI("TreeManager: requested component not found");
@@ -382,7 +420,7 @@ sal_Bool TreeManager::fetchDefaultData( memory::UpdateAccessor& _aAccessToken,
 
     backend::NodeRequest aRequest(aRequestPath,_xOptions->getRequestOptions());
 
-    backend::NodeResult aDefaults = m_xCacheLoader->getDirectDataProvider().getDefaultData( aRequest );
+    backend::NodeResult aDefaults = getCacheLoader()->getDirectDataProvider().getDefaultData( aRequest );
 
     if (!aDefaults.is())
     {
@@ -406,7 +444,7 @@ std::auto_ptr<ISubtree> TreeManager::requestDefaultData(AbsolutePath const& aSub
 
     backend::NodeRequest aRequest(aSubtreePath,_xOptions->getRequestOptions());
 
-    backend::NodeResult aDefaults = m_xCacheLoader->getDirectDataProvider().getDefaultData( aRequest );
+    backend::NodeResult aDefaults = getCacheLoader()->getDirectDataProvider().getDefaultData( aRequest );
 
     return aDefaults.extractDataAndClear();
 }
@@ -452,7 +490,7 @@ data::TreeAccessor TreeManager::requestTemplate(data::Accessor const& /*_aSource
         CFG_TRACE_INFO_NI("TreeManager: cache miss. going to load the template");
         backend::TemplateRequest aQuery( _rName, _rModule );
 
-        backend::CacheLocation aLoadedLocation = m_xCacheLoader->loadTemplate(aQuery);
+        backend::CacheLocation aLoadedLocation = getCacheLoader()->loadTemplate(aQuery);
         if (aLoadedLocation.isNull())
         {
             CFG_TRACE_ERROR_NI("TreeManager: requested template module not found");
@@ -494,7 +532,7 @@ void TreeManager::saveAndNotifyUpdate(data::Accessor const& _aChangedDataAccesso
                                 aChangeTree.getRootNodePath(),
                                 aChangeTree.getOptions()->getRequestOptions());
 
-        m_xCacheLoader->saveAndNotify(anUpdate);
+        getCacheLoader()->saveAndNotify(anUpdate);
         CFG_TRACE_INFO_NI("TreeManager: committing done");
     }
 
@@ -574,7 +612,8 @@ void TreeManager::releaseSubtree( AbsolutePath const& aSubtreePath, const vos::O
         if (aCache->releaseNode(aSubtreePath) == 0)
         {
             backend::ComponentRequest aComponentDesc(aSubtreePath.getModuleName(),_xOptions->getRequestOptions());
-            m_xCacheLoader->freeComponent(aComponentDesc);
+            BackendCacheRef xBackendCache = maybeGetBackendCache();
+            if (xBackendCache.is()) xBackendCache->freeComponent(aComponentDesc);
         }
     }
 }

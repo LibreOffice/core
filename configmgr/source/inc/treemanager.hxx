@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treemanager.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 09:05:09 $
+ *  last change: $Author: jb $ $Date: 2002-10-10 09:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,8 @@ namespace configmgr
     class CacheData;
     //==========================================================================
     class TreeManager   : public IConfigTreeManager
+                        , public IConfigDefaultProvider
                         , public IDefaultableTreeManager
-                        , public IDefaultProvider
                         , private backend::ICachedDataListener
                         , private ConfigChangeBroadcaster
     {
@@ -111,7 +111,12 @@ namespace configmgr
         typedef backend::ICachedDataProvider BackendCache;
         typedef rtl::Reference< BackendCache > BackendCacheRef;
 
-        BackendCacheRef     m_xCacheLoader;
+        osl::Mutex          m_aCacheControllerMutex;
+        BackendCacheRef     m_xCacheController;
+
+        BackendCacheRef maybeGetBackendCache() CFG_NOTHROW( );
+        BackendCacheRef getCacheLoader() CFG_UNO_THROW_RTE( );
+        void disposeBackendCache() CFG_NOTHROW( );
 
         CacheList           m_aCacheList; // Map
         TemplateCache       m_aTemplates;
