@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 12:34:52 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,6 +269,8 @@ SchXMLExportHelper::SchXMLExportHelper(
         mxExpPropMapper.get(),
         rtl::OUString( sal_Unicode( 'T' )));
 }
+
+SchXMLExportHelper::~SchXMLExportHelper() {}
 
 const rtl::OUString& SchXMLExportHelper::getChartCLSID()
 {
