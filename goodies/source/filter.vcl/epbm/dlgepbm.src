@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgepbm.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:23:06 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:31:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,8 @@ ModalDialog DLG_EXPORT_EPBM
     Size = MAP_APPFONT ( 133 , 63 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    Text = "PBM Optionen" ;
-    Text [ ENGLISH ] = "PBM options" ;
-    Text [ english_us ] = "PBM Options" ;
+    Text [ de ] = "PBM Optionen" ;
+    Text [ en-US ] = "PBM Options" ;
     OKButton BTN_OK
     {
         Pos = MAP_APPFONT ( 73 , 6 ) ;
@@ -93,144 +92,29 @@ ModalDialog DLG_EXPORT_EPBM
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text = "Datei Format" ;
-        Text [ ENGLISH ] = "file format" ;
-        Text[ italian ] = "Formato file";
-        Text[ portuguese_brazilian ] = "Formato do arquivo";
-        Text[ portuguese ] = "Formato do ficheiro";
-        Text[ danish ] = "Filformat";
-        Text[ french ] = "Format de fichier";
-        Text[ swedish ] = "Filformat";
-        Text[ dutch ] = "Bestandsindeling";
-        Text[ spanish ] = "Formato de archivo";
-        Text[ english_us ] = "File format";
-        Text[ chinese_simplified ] = "æ–‡ä»¶æ ¼å¼";
-        Text[ russian ] = "Ôîğìàò ôàéëà";
-        Text[ polish ] = "Format pliku";
-        Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã®æ›¸å¼";
-        Text[ chinese_traditional ] = "æª”æ¡ˆæ ¼å¼";
-        Text[ arabic ] = "ÊäÓíŞ Çáãáİ";
-        Text[ dutch ] = "Bestandsindeling";
-        Text[ chinese_simplified ] = "æ–‡ä»¶æ ¼å¼";
-        Text[ greek ] = "ÌïñöŞ áñ÷åßïõ";
-        Text[ korean ] = "íŒŒì¼ í˜•ì‹";
-        Text[ turkish ] = "Dosya biçemi";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Format del fitxer";
-        Text[ finnish ] = "Tiedostomuoto";
-        Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸šà¹à¸Ÿà¹‰à¸¡";
-        Text[ czech ] = "FormÃ¡t souboru";
-        Text[ hebrew ] = "â€®×¦×•×¨×ª ×ª×•×›×Ÿ ×§×•×‘×¥â€¬";
-        Text[ hindi ] = "à¤«à¤¾à¤‡à¤² à¤°à¤šà¤¨à¤¾";
-        Text[ slovak ] = "FormÃ¡t sÃºboru";
-        Text[ hungarian ] = "FÃ¡jlformÃ¡tum";
-        Text[ slovenian ] = "Oblika zapisa datoteke";
+        Text [ de ] = "Datei Format" ;
+        Text [ en-US ] = "File format";
+        Text [ x-comment ] = " ";
     };
     RadioButton RB_RAW
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text = "~Binär" ;
-        Text [ ENGLISH ] = "~raw" ;
+        Text [ de ] = "~Binär" ;
         TabStop = TRUE ;
-        Text[ italian ] = "~Binario";
-        Text[ portuguese_brazilian ] = "~Binário";
-        Text[ portuguese ] = "~Binário";
-        Text[ danish ] = "~Binær";
-        Text[ french ] = "~Binaire";
-        Text[ swedish ] = "~Binär";
-        Text[ dutch ] = "~Binair";
-        Text[ spanish ] = "~Binario";
-        Text[ english_us ] = "~Binary";
-        Text[ chinese_simplified ] = "äºŒå…ƒ(~B)";
-        Text[ russian ] = "Áèíàğíûé";
-        Text[ polish ] = "~Binarny";
-        Text[ japanese ] = "ãƒã‚¤ãƒŠãƒª(~B)";
-        Text[ language_user1 ] = " ";
-        Text[ chinese_traditional ] = "äºŒå…ƒ(~B)";
-        Text[ arabic ] = "ËäÇÆí";
-        Text[ dutch ] = "~Binair";
-        Text[ chinese_simplified ] = "äºŒå…ƒ(~B)";
-        Text[ greek ] = "Äõáäéêü";
-        Text[ korean ] = "ë°”ì´ë„ˆë¦¬(~B)";
-        Text[ turkish ] = "~İkili";
-        Text[ catalan ] = "~Binari";
-        Text[ finnish ] = "~Binaari";
-        Text[ thai ] = "à¹€~à¸¥à¸‚à¸à¸²à¸™à¸ªà¸­à¸‡";
-        Text[ czech ] = "BinÃ¡rnÃ­";
-        Text[ hebrew ] = "â€®×‘×™× ×¨×™â€¬";
-        Text[ hindi ] = "~à¤¬à¥ˆà¤¨à¤°à¥€";
-        Text[ slovak ] = "~BinÃ¡rny";
-        Text[ hungarian ] = "~BinÃ¡ris";
-        Text[ slovenian ] = "~DvojiÅ¡ko";
+        Text [ en-US ] = "~Binary";
+        Text [ x-comment ] = " ";
     };
     RadioButton RB_ASCII
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text = "~Text" ;
-        Text [ ENGLISH ] = "~text" ;
+        Text [ de ] = "~Text" ;
         TabStop = TRUE ;
-        Text[ italian ] = "~Testo";
-        Text[ portuguese_brazilian ] = "~Texto";
-        Text[ portuguese ] = "~Texto";
-        Text[ danish ] = "~Tekst";
-        Text[ french ] = "Texte";
-        Text[ swedish ] = "~Text";
-        Text[ dutch ] = "~Tekst";
-        Text[ spanish ] = "~Texto";
-        Text[ english_us ] = "~Text";
-        Text[ chinese_simplified ] = "æ–‡å­—(~T)";
-        Text[ russian ] = "Òåêñò";
-        Text[ polish ] = "~Tekstowy";
-        Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆ(~T)";
-        Text[ chinese_traditional ] = "æ–‡å­—(~T)";
-        Text[ arabic ] = "ÇáäÕ";
-        Text[ dutch ] = "~Tekst";
-        Text[ chinese_simplified ] = "æ–‡å­—(~T)";
-        Text[ greek ] = "Êåßìåíï";
-        Text[ korean ] = "í…ìŠ¤íŠ¸(~T)";
-        Text[ turkish ] = "~Metin";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Text";
-        Text[ finnish ] = "~Teksti";
-        Text[ thai ] = "~à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
-        Text[ czech ] = "TextovÃ½";
-        Text[ hebrew ] = "â€®×˜×§×¡×˜â€¬";
-        Text[ hindi ] = "~à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥";
-        Text[ slovak ] = "~TextovÃ½";
-        Text[ hungarian ] = "~SzÃ¶veg";
-        Text[ slovenian ] = "~Besedilo";
+        Text [ en-US ] = "~Text";
+        Text [ x-comment ] = " ";
     };
-    Text[ italian ] = "Opzioni PBM";
-    Text[ portuguese_brazilian ] = "Opções PBM";
-    Text[ portuguese ] = "Opções PBM";
-    Text[ danish ] = "PBM indstillinger";
-    Text[ french ] = "Options PBM";
-    Text[ swedish ] = "PBM-alternativ";
-    Text[ dutch ] = "PBM-opties";
-    Text[ spanish ] = "Opciones PBM ";
-    Text[ chinese_simplified ] = "PBM é€‰é¡¹";
-    Text[ russian ] = "Ïàğàìåòğû PBM";
-    Text[ polish ] = "Opcje PBM ";
-    Text[ japanese ] = "PBM ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
-    Text[ chinese_traditional ] = "PBMé¸é …";
-    Text[ arabic ] = "PBM ÎíÇÑÇÊ";
-    Text[ dutch ] = "PBM-opties";
-    Text[ chinese_simplified ] = "PBM é€‰é¡¹";
-    Text[ greek ] = "Åğéëïãİò PBM";
-    Text[ korean ] = "PBM ì˜µì…˜";
-    Text[ turkish ] = "PBM seçenekleri";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Opcions PBM";
-    Text[ finnish ] = "PBM-vientiasetukset";
-    Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸ PBM ";
-    Text[ czech ] = "Volby pro formÃ¡t PBM";
-    Text[ hebrew ] = "â€®××¤×©×¨×•×™×•×ª PBMâ€¬";
-    Text[ hindi ] = "PBM à¤µà¤¿à¤•à¤²à¥à¤ª";
-    Text[ slovak ] = "MoÅ¾nosti pre PBM formÃ¡t";
-    Text[ hungarian ] = "PBM-beÃ¡llÃ­tÃ¡sok";
-    Text[ slovenian ] = "MoÅ¾nosti za PBM";
+    Text [ x-comment ] = " ";
 };
 
 
