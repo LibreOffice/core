@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-16 14:30:04 $
+ *  last change: $Author: mt $ $Date: 2002-01-16 10:40:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2731,6 +2731,9 @@ uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable(
 
     WriteBin( pDataObj->GetStream(), aSelection, TRUE );
     pDataObj->GetStream().Seek( 0 );
+
+    ((ImpEditEngine*)this)->WriteRTF( pDataObj->GetRTFStream(), aSelection );
+    pDataObj->GetRTFStream().Seek( 0 );
 
     if ( ( aSelection.Min().GetNode() == aSelection.Max().GetNode() )
             && ( aSelection.Max().GetIndex() == (aSelection.Min().GetIndex()+1) ) )

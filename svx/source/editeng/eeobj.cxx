@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eeobj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-20 07:49:27 $
+ *  last change: $Author: mt $ $Date: 2002-01-16 10:40:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,37 +99,20 @@ uno::Any EditDataObject::getTransferData( const datatransfer::DataFlavor& rFlavo
     {
         aAny <<= (::rtl::OUString)GetString();
     }
-    else if ( nT == SOT_FORMATSTR_ID_EDITENGINE )
+    else if ( ( nT == SOT_FORMATSTR_ID_EDITENGINE ) || ( nT == SOT_FORMAT_RTF ) )
     {
-        GetStream().Seek( STREAM_SEEK_TO_END );
-        ULONG nLen = GetStream().Tell();
-        GetStream().Seek(0);
+        // MT 01/2002: No RTF on demand any more:
+        // 1) Was not working, because I had to flush() the clipboard immediately anyway
+        // 2) Don't have the old pool defaults and the StyleSheetPool here.
+
+        SvMemoryStream* pStream = ( nT == SOT_FORMATSTR_ID_EDITENGINE ) ? &GetStream() : &GetRTFStream();
+        pStream->Seek( STREAM_SEEK_TO_END );
+        ULONG nLen = pStream->Tell();
+        pStream->Seek(0);
 
         uno::Sequence< sal_Int8 > aSeq( nLen );
-        memcpy( aSeq.getArray(), GetStream().GetData(), nLen );
+        memcpy( aSeq.getArray(), pStream->GetData(), nLen );
         aAny <<= aSeq;
-    }
-    else if ( ( nT == SOT_FORMAT_RTF ) /* || ( nT == SOT_FORMAT_XML ) */ )
-    {
-        vos::OGuard aVclGuard( Application::GetSolarMutex() );
-
-        SfxItemPool* pTmpPool = EditEngine::CreatePool( FALSE );
-        EditEngine* pEditEngine = new EditEngine( pTmpPool );
-
-        GetStream().Seek(0);
-        pEditEngine->Read( GetStream(), EE_FORMAT_BIN );
-        GetStream().Seek(0);
-
-        SvMemoryStream aRTFOrXMLStream;
-        pEditEngine->Write( aRTFOrXMLStream, ( nT == SOT_FORMAT_RTF ) ? EE_FORMAT_RTF : EE_FORMAT_XML );
-        ULONG nLen = aRTFOrXMLStream.Tell();
-
-        uno::Sequence< sal_Int8 > aSeq( nLen );
-        memcpy( aSeq.getArray(), aRTFOrXMLStream.GetData(), nLen );
-        aAny <<= aSeq;
-
-        delete pEditEngine;
-        delete pTmpPool;
     }
     else
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eeobj.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 12:35:38 $
+ *  last change: $Author: mt $ $Date: 2002-01-16 10:40:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@ class EditDataObject :  public ::com::sun::star::datatransfer::XTransferable,
 {
 private:
     SvMemoryStream  maBinData;
+    SvMemoryStream  maRTFData;
     String          maText;
 
     String          maOfficeBookmark;
@@ -90,6 +91,7 @@ public:
                     ~EditDataObject();
 
     SvMemoryStream& GetStream() { return maBinData; }
+    SvMemoryStream& GetRTFStream() { return maRTFData; }
     String&         GetString() { return maText; }
     String&         GetURL()    { return maOfficeBookmark; }
 
