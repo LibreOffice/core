@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 07:57:45 $
+ *  last change: $Author: oj $ $Date: 2002-07-26 09:09:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1685,12 +1685,15 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
     const ::rtl::OUString sRealName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME);
     const ::rtl::OUString sType     = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE);
 
+    typedef ::std::map<OSQLColumns::iterator,sal_Bool> IterMap;
+    IterMap aSelectIters;
     OValueVector::iterator aRowIter = _rRow->begin()+1;
     for (sal_Int32 i=0; // the first column is the bookmark column
             aRowIter != _rRow->end();
             ++i, ++aRowIter
         )
     {
+        aRowIter->setBound(sal_False);
         try
         {
             // get the table column and it's name
@@ -1713,8 +1716,9 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
                 else
                     (*aIter)->getPropertyValue(sName) >>= sSelectColumnRealName;
 
-                if (aCase(sTableColumnName, sSelectColumnRealName))
+                if ( aCase(sTableColumnName, sSelectColumnRealName) && !aRowIter->isBound() && aSelectIters.end() == aSelectIters.find(aIter) )
                 {
+                    aSelectIters.insert(IterMap::value_type(aIter,sal_True));
                     if(_bSetColumnMapping)
                     {
                         sal_Int32 nSelectColumnPos = aIter - _rxColumns->begin() + 1;
@@ -1729,6 +1733,8 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
                     if (xTableColumn.is())
                         xTableColumn->getPropertyValue(sType) >>= nType;
                     aRowIter->setTypeKind(nType);
+
+                    break;
                 }
             }
         }
