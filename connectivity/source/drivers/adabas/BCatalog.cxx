@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BCatalog.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 09:07:16 $
+ *  last change: $Author: oj $ $Date: 2002-11-20 15:44:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ void OAdabasCatalog::refreshViews()
 
     Reference< XStatement > xStmt = m_pConnection->createStatement(  );
     Reference< XResultSet > xResult = xStmt->executeQuery(
-        ::rtl::OUString::createFromAscii("SELECT DISTINCT DOMAIN.VIEWDEFS.OWNER, DOMAIN.VIEWDEFS.VIEWNAME FROM DOMAIN.VIEWDEFS"));
+        ::rtl::OUString::createFromAscii("SELECT DISTINCT NULL,DOMAIN.VIEWDEFS.OWNER, DOMAIN.VIEWDEFS.VIEWNAME FROM DOMAIN.VIEWDEFS"));
 
     fillNames(xResult,aVector);
     ::comphelper::disposeComponent(xStmt);
