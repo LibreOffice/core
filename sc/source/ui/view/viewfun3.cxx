@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:06:01 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:39:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,6 @@
 #include <svx/svdetc.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
-#include <offmgr/app.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/ptitem.hxx>
 #include <svtools/urlbmk.hxx>
