@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ControlContainer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:23:14 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:53:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,8 @@ namespace sd { namespace toolpanel {
 
 
 ControlContainer::ControlContainer (TreeNode* pNode)
-    : mpNode (pNode),
-      mnActiveControlIndex (0),
+    : mpNode(pNode),
+      mnActiveControlIndex(-1),
       mbMultiSelection(false)
 {
 }
@@ -93,12 +93,10 @@ ControlContainer::~ControlContainer (void)
 
 void ControlContainer::DeleteChildren (void)
 {
-    while (maControlList.size() > 0)
-    {
-        TreeNode* mpControl (maControlList.front());
-        maControlList.erase (maControlList.begin());
-        delete mpControl;
-    }
+    ControlList::iterator I;
+    ControlList::iterator Iend (maControlList.end());
+    for (I=maControlList.begin(); I!=Iend; ++I)
+        delete *I;
     maControlList.clear();
 }
 
@@ -113,8 +111,6 @@ sal_uInt32 ControlContainer::AddControl (::std::auto_ptr<TreeNode> pControl)
     sal_uInt32 nIndex = maControlList.size();
     maControlList.push_back (pControl.get());
     pControl.release();
-
-    SetExpansionState (maControlList.size()-1, ES_EXPAND);
 
     ListHasChanged ();
 
@@ -186,7 +182,7 @@ void ControlContainer::SetExpansionState (
                 if (nIndex == mnActiveControlIndex)
                 {
                     // We have to determine a new active control since the
-                    // current is about to be collapsed.  Choose the
+                    // current one is about to be collapsed.  Choose the
                     // previous one for the last and the next one for all
                     // other.
                     if (mnActiveControlIndex+1 == GetControlCount())
@@ -472,41 +468,44 @@ void ControlContainer::SetVisibilityState (
         }
 
         bool bControlWasExpanded = pControl->IsExpanded();
-        pControl->Show (bShow);
+        if (bShow != pControl->IsShowing())
+        {
+            pControl->Show (bShow);
 
-        if (bShow)
-        {
-            // If we just turned on the first control then expand it, too.
-            // If we turned on another control collapse it.
-            if (GetVisibleControlCount() == 1)
-                SetExpansionState (nControlIndex, ES_EXPAND);
-            else
-                SetExpansionState (nControlIndex, ES_COLLAPSE);
-        }
-        else
-        {
-            if (GetVisibleControlCount() > 0)
+            if (bShow)
             {
-                if (bControlWasExpanded)
+                // If we just turned on the first control then expand it, too.
+                // If we turned on another control collapse it.
+                if (GetVisibleControlCount() == 1)
+                    SetExpansionState (nControlIndex, ES_EXPAND);
+                else
+                    SetExpansionState (nControlIndex, ES_COLLAPSE);
+            }
+            else
+            {
+                if (GetVisibleControlCount() > 0)
                 {
-                    // We turned off an expanded control.  Make sure that
-                    // one of the still visible ones is expanded.
-                    sal_uInt32 nIndex = GetNextIndex(
-                        nControlIndex,
-                        false,
-                        false);
-                    if (nIndex == GetControlCount())
-                        nIndex = GetPreviousIndex(
+                    if (bControlWasExpanded)
+                    {
+                        // We turned off an expanded control.  Make sure that
+                        // one of the still visible ones is expanded.
+                        sal_uInt32 nIndex = GetNextIndex(
                             nControlIndex,
                             false,
                             false);
-                    SetExpansionState (nIndex, ES_EXPAND);
+                        if (nIndex == GetControlCount())
+                            nIndex = GetPreviousIndex(
+                                nControlIndex,
+                                false,
+                                false);
+                        SetExpansionState (nIndex, ES_EXPAND);
+                    }
                 }
             }
-        }
 
-        if (mpNode != NULL)
-            mpNode->RequestResize();
+            if (mpNode != NULL)
+                mpNode->RequestResize();
+        }
     }
 }
 
