@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multmrk.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2001-06-08 22:55:33 $
+ *  last change: $Author: vg $ $Date: 2001-07-14 20:17:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ ModalDialog DLG_MULTMRK
         Text = "Auswahl" ;
         Text [ English ] = "Choice" ;
         Text [ norwegian ] = "Choice" ;
-        Text [ italian ] = "Scelta" ;
+        Text [ italian ] = "Selezione" ;
         Text [ portuguese_brazilian ] = "Escolha" ;
         Text [ portuguese ] = "Opções" ;
         Text [ finnish ] = "Määritykset" ;
@@ -104,7 +104,7 @@ ModalDialog DLG_MULTMRK
         Text[ russian ] = "Âûáîð";
         Text[ polish ] = "Wybór";
         Text[ japanese ] = "‘I‘ð";
-        Text[ chinese_traditional ] = "¿ï¾Ü";
+        Text[ chinese_traditional ] = "¿ï¨ú";
         Text[ arabic ] = "ÊÍÏíÏ";
         Text[ dutch ] = "Selectie";
         Text[ chinese_simplified ] = "Ñ¡Ôñ";
@@ -219,4 +219,5 @@ ModalDialog DLG_MULTMRK
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marcas del índice";
 };
+
 
