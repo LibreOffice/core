@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartModelHelper.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:32 $
+ *  last change: $Author: bm $ $Date: 2003-10-09 15:51:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ uno::Reference< XDataSeries > ChartModelHelper::getSeriesByIdentifier(
             continue;
         uno::Any aAIdentifier = xProp->getPropertyValue( C2U( "Identifier" ) );
         aAIdentifier >>= aIdentifier;
-        if(aIdentifier.getLength() && rIdentifier.match(aIdentifier))
+        if(aIdentifier.getLength() && rIdentifier.equals(aIdentifier))
         {
             xRet = *aIt;
             break;
