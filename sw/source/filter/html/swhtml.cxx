@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:28:43 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:22:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,19 +341,24 @@ String HTMLReader::GetTemplateName() const
     sTemplate.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM("html") );
     String sTemplateWithoutExt( sTemplate );
 #ifndef MAC_WITHOUT_EXT
-    sTemplate.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(".stw") );
+    // --> OD 2005-01-26 - first search for OpenDocument Writer/Web template
+    sTemplate.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(".oth") );
+    // <--
 #endif
 
     SvtPathOptions aOpt;
-    // 6.0 (extension .stw)
+    // OpenDocument Writer/Web template (extension .oth)
     BOOL bSet = aOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
 
 #ifndef MAC_WITHOUT_EXT
     if( !bSet )
     {
-        // 5.0 (extension .vor)
+        // 6.0 (extension .stw)
         sTemplate = sTemplateWithoutExt;
-        sTemplate.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(".vor") );
+        // --> OD 2005-01-26 - no OpenDocument Writer/Web template found.
+        // search for OpenOffice.org Writer/Web template
+        sTemplate.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(".stw") );
+        // <--
         bSet = aOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
     }
 #endif
