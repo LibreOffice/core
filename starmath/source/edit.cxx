@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:21:55 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:07:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -701,8 +701,6 @@ void SmEditWindow::GetFocus()
     if (!pEditView)
          CreateEditView();
     EditEngine *pEditEngine = GetEditEngine();
-    if (pEditView)
-        pEditView->SetSelection( aActiveSelection );
     if (pEditEngine)
         pEditEngine->SetStatusEventHdl( LINK(this, SmEditWindow, EditStatusHdl) );
 }
@@ -711,8 +709,6 @@ void SmEditWindow::GetFocus()
 void SmEditWindow::LoseFocus()
 {
     EditEngine *pEditEngine = GetEditEngine();
-    if (pEditView)
-        aActiveSelection = pEditView->GetSelection();
     if (pEditEngine)
         pEditEngine->SetStatusEventHdl( Link() );
 
