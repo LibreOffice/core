@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javatype.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:27 $
+ *  last change: $Author: kr $ $Date: 2000-11-08 10:33:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -848,12 +848,13 @@ sal_Bool InterfaceType::dumpFile(FileStream& o)
     sal_Char buffer[67];
     sprintf(buffer, "0x%.8x, (short)0x%.4x, (short)0x%.4x, 0x%.8x, 0x%.8x",
             uik.m_Data1, uik.m_Data2, uik.m_Data3, uik.m_Data4, uik.m_Data5);
-    o << buffer << " );\n";
+    o << buffer << " );\n\n";
+
+    o << indent() << "public static final com.sun.star.lib.uno.typeinfo.TypeInfo UNOTYPEINFO[] = ";
 
     if (!aUnoTypeInfos.empty())
     {
-        o << "\n" << indent() << "public static final com.sun.star.lib.uno.typeinfo.TypeInfo UNOTYPEINFO[] = { \n";
-
+        o << "{ \n";
         inc();
 
         sal_Int32 index = 0;
@@ -872,6 +873,8 @@ sal_Bool InterfaceType::dumpFile(FileStream& o)
         dec();
         o << indent() << " };\n";
     }
+    else
+        o << "null;\n";
 
     o << "\n" << indent() << "public static Object UNORUNTIMEDATA = null;\n";
 
