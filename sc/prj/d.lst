@@ -1,9 +1,12 @@
 mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %_DEST%\xml%_EXT%\uiconfig
-mkdir: %_DEST%\xml%_EXT%\uiconfig\scalc
-mkdir: %_DEST%\xml%_EXT%\uiconfig\scalc\menubar
-mkdir: %_DEST%\xml%_EXT%\uiconfig\scalc\toolbar
-mkdir: %_DEST%\xml%_EXT%\uiconfig\scalc\statusbar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\scalc
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\scalc\menubar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\scalc\toolbar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\scalc\accelerator
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\scalc\accelerator\en-US
+mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\scalc\statusbar
 
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\inc\sc.lst %_DEST%\inc%_EXT%\sc.lst
@@ -26,8 +29,9 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\scalc\statusbar
 mkdir: %_DEST%\inc\%_EXT%\sc
 ..\xml\*.xml %_DEST%\xml%_EXT%\*.xml
 
-..\uiconfig\scalc\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\scalc\menubar\*.xml
-..\uiconfig\scalc\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\scalc\toolbar\*.xml
-..\uiconfig\scalc\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\scalc\statusbar\*.xml
+..\uiconfig\scalc\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\scalc\menubar\*.xml
+..\uiconfig\scalc\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\scalc\toolbar\*.xml
+..\uiconfig\scalc\accelerator\en-US\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\scalc\accelerator\en-US\*.xml
+..\uiconfig\scalc\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\scalc\statusbar\*.xml
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
