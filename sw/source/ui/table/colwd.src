@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colwd.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:02:50 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:14:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ ModalDialog DLG_COL_WIDTH
         Text [ portuguese_brazilian ] = "~Largura" ;
         Text [ portuguese ] = "~Largura" ;
         Text [ finnish ] = "~Leveys" ;
-        Text [ danish ] = "Bredde" ;
+        Text [ danish ] = "~Bredde" ;
         Text [ french ] = "Largeur" ;
         Text [ swedish ] = "~Bredd" ;
         Text [ dutch ] = "B~reedte" ;
@@ -137,6 +137,8 @@ ModalDialog DLG_COL_WIDTH
         Text[ hebrew ] = "‮רוחב‬";
         Text[ hindi ] = "~चौडाई";
         Text[ slovak ] = "Ší~rka";
+        Text[ hungarian ] = "~Szélesség";
+        Text[ slovenian ] = "~Širina";
     };
     MetricField ED_WIDTH
     {
@@ -189,6 +191,8 @@ ModalDialog DLG_COL_WIDTH
         Text[ hebrew ] = "‮רוחב‬";
         Text[ hindi ] = "चौड़ाई";
         Text[ slovak ] = "Šírka";
+        Text[ hungarian ] = "Szélesség";
+        Text[ slovenian ] = "Širina";
     };
     FixedText FT_COL
     {
@@ -201,7 +205,7 @@ ModalDialog DLG_COL_WIDTH
         Text [ portuguese_brazilian ] = "~Coluna" ;
         Text [ portuguese ] = "~Coluna" ;
         Text [ finnish ] = "~Sarake" ;
-        Text [ danish ] = "Kolonne" ;
+        Text [ danish ] = "~Kolonne" ;
         Text [ french ] = "Colonne" ;
         Text [ swedish ] = "~Kolumn" ;
         Text [ dutch ] = "~Kolom" ;
@@ -224,6 +228,8 @@ ModalDialog DLG_COL_WIDTH
         Text[ hebrew ] = "~Spalte";
         Text[ hindi ] = "~स्तंभ";
         Text[ slovak ] = "~Stĺpec";
+        Text[ hungarian ] = "~Oszlop";
+        Text[ slovenian ] = "~Stolpec";
     };
     NumericField ED_COL
     {
@@ -253,7 +259,11 @@ ModalDialog DLG_COL_WIDTH
     Text[ hebrew ] = "Spaltenbreite";
     Text[ hindi ] = "स्तंभ चौड़ाई";
     Text[ slovak ] = "Šírka stĺpca";
+    Text[ hungarian ] = "Oszlopszélesség";
+    Text[ slovenian ] = "Širina stolpca";
 };
+
+
 
 
 
