@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-24 10:31:05 $
+ *  last change: $Author: hr $ $Date: 2001-10-26 16:36:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,10 @@
 #ifndef DBAUI_USERADMIN_HXX
 #include "UserAdmin.hxx"
 #endif
+
+#include <algorithm>
+#include <functional>
+
 //.........................................................................
 namespace dbaui
 {
@@ -2122,6 +2126,9 @@ IMPL_LINK(ODbAdminDialog, OnApplyChanges, PushButton*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.76  2001/10/24 10:31:05  fs
+ *  #93684# in implTranslateProperty, check for the correct SfxItem types (in case a data source has invalid indirect property types)
+ *
  *  Revision 1.75  2001/09/18 15:07:35  fs
  *  #65293# syntax for SOLS
  *
