@@ -1,5 +1,5 @@
 package com.sun.star.uno;
-
+import com.sun.star.lang.XEventListener;
 import com.sun.star.lang.XTypeProvider;
 import java.util.Vector;
 
@@ -18,6 +18,7 @@ public class AnyConverter_Test
     Any anyType; //
     Any anyArByte; //
     Any anyVoid;   //
+    Any anyXTypeProvider;
 
     Boolean aBool= new Boolean(true);
     Character aChar= new Character('A');
@@ -46,6 +47,7 @@ public class AnyConverter_Test
         anyStr= new Any(new Type(String.class), aStr);
         anyType= new Any(new Type(Type.class), aType);
         anyArByte= new Any(new Type(byte[].class), arByte);
+        anyXTypeProvider= new Any(new Type(XTypeProvider.class), aObj);
     }
     /*Allowed arguments: Boolean object or an Any object containing a Boolean object.*/
     public boolean test_toBoolean() {
@@ -545,6 +547,8 @@ public class AnyConverter_Test
             r[i++]= UnoRuntime.areSame(val, aObj);
             val= AnyConverter.toObject(_type, anyObj);
             r[i++]= UnoRuntime.areSame(val, anyObj.getObject());
+            val= AnyConverter.toObject(_type, new Any( new Type(XTypeProvider.class), null));
+            r[i++]= val == null;
             // must fail
             try { AnyConverter.toObject(_type, aType); i++;} catch (com.sun.star.lang.IllegalArgumentException ie) {r[i++]=true;}
             try { AnyConverter.toObject(_type, anyType); i++;} catch (com.sun.star.lang.IllegalArgumentException ie) {r[i++]=true;}
@@ -1005,6 +1009,7 @@ public class AnyConverter_Test
             // must work
             r[i++]= AnyConverter.isObject(aObj);
             r[i++]= AnyConverter.isObject(anyObj);
+            r[i++]= AnyConverter.isObject( new Any( XInterface.class, null));
             // must fail
             r[i++]= AnyConverter.isObject(new Object()) ? false : true;
         } catch (java.lang.Exception e) {
