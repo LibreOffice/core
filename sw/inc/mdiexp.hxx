@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mdiexp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-30 20:31:41 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,6 @@ void RepaintPagePreview( ViewShell* pVwSh, const SwRect& rRect );
 // ndgrf.cxx
 // alle QuickDraw-Bitmaps des speziellen Docs loeschen
 void DelAllGrfCacheEntries( SwDoc* pDoc );
-
-extern void JavaScriptScrollMDI( SfxFrame* pFrame, INT32 nX, INT32 nY );
 
 // ChgMode fuer Tabellen aus der Konfiguration lesen
 USHORT GetTblChgDefaultMode();
