@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfld.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:40:23 $
+ *  last change: $Author: os $ $Date: 2001-03-12 06:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,10 +130,13 @@ SwDBFieldType::SwDBFieldType(SwDoc* pDocPtr, const String& rNam, const SwDBData&
     nRefCnt(0),
     sColumn(rNam)
 {
-    sName =  aDBData.sDataSource;
-    sName += DB_DELIM;
-    sName += (String)aDBData.sCommand;
-    sName += DB_DELIM;
+    if(aDBData.sDataSource.getLength() || aDBData.sCommand.getLength())
+    {
+        sName =  aDBData.sDataSource;
+        sName += DB_DELIM;
+        sName += (String)aDBData.sCommand;
+        sName += DB_DELIM;
+    }
     sName += GetColumnName();
 }
 //------------------------------------------------------------------------------
