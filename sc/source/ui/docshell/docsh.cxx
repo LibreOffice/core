@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-30 16:52:33 $
+ *  last change: $Author: nn $ $Date: 2001-02-09 18:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,15 @@ void __EXPORT ScDocShell::FillClass( SvGlobalName* pClassName,
         *pFullTypeName  = String( ScResId( SCSTR_40_LONG_DOCNAME ) );
         *pShortTypeName = String( ScResId( SCSTR_SHORT_SCDOC_NAME ) );
     }
-    else if ( nFileFormat == SOFFICE_FILEFORMAT_NOW )
+    else if ( nFileFormat == SOFFICE_FILEFORMAT_50 )
+    {
+        *pClassName     = SvGlobalName( SO3_SC_CLASSID_50 );
+        *pFormat        = SOT_FORMATSTR_ID_STARCALC_50;
+        *pAppName       = String( ScResId( SCSTR_50_APPLICATION ) );
+        *pFullTypeName  = String( ScResId( SCSTR_50_LONG_DOCNAME ) );
+        *pShortTypeName = String( ScResId( SCSTR_SHORT_SCDOC_NAME ) );
+    }
+    else if ( nFileFormat == SOFFICE_FILEFORMAT_60 )
     {
         *pFullTypeName  = String( ScResId( SCSTR_LONG_SCDOC_NAME ) );
         *pShortTypeName = String( ScResId( SCSTR_SHORT_SCDOC_NAME ) );
@@ -231,7 +239,7 @@ void __EXPORT ScDocShell::FillRegInfo( SvEmbeddedRegistryInfo* pInfo )
     SfxInPlaceObject::FillRegInfo( pInfo );
 
     pInfo->aObjName             = String::CreateFromAscii(pStarCalcDoc);
-    pInfo->nMajorVers           = 5;
+    pInfo->nMajorVers           = 6;
     pInfo->nMinorVers           = 0;
     pInfo->aHumanShortTypeName  = String( ScResId( SCSTR_HUMAN_SCDOC_NAME ) );
 
@@ -270,7 +278,7 @@ USHORT ScDocShell::GetSaveTab()
 
 //------------------------------------------------------------------
 
-BOOL ScDocShell::LoadCalc( SvStorage* pStor )       // StarCalc 3 oder 4 Datei
+BOOL ScDocShell::LoadCalc( SvStorage* pStor )       // StarCalc 3, 4 or 5 file
 {
     SfxEventConfiguration* pConf = SFX_APP()->GetEventConfig();
     BOOL bWarningEnabled = pConf && pConf->IsWarningForced();
@@ -448,7 +456,7 @@ BOOL ScDocShell::LoadCalc( SvStorage* pStor )       // StarCalc 3 oder 4 Datei
 }
 
 
-BOOL ScDocShell::SaveCalc( SvStorage* pStor )           // Calc 3 oder 4 Datei
+BOOL ScDocShell::SaveCalc( SvStorage* pStor )           // Calc 3, 4 or 5 file
 {
     BOOL bRet = TRUE;
 
@@ -514,7 +522,6 @@ BOOL ScDocShell::SaveCalc( SvStorage* pStor )           // Calc 3 oder 4 Datei
 
     return bRet;
 }
-
 
 BOOL __EXPORT ScDocShell::Load( SvStorage* pStor )
 {
