@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preview.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-02 14:34:29 $
+ *  last change: $Author: sab $ $Date: 2002-09-24 09:29:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -800,17 +800,20 @@ void ScPreview::DataChanged( const DataChangedEvent& rDCEvt )
 void ScPreview::InvalidateLocationData(ULONG nId)
 {
     bLocationValid = FALSE;
-    pViewShell->BroadcastAccessibility( SfxSimpleHint( nId ) );
+    if (pViewShell->HasAccessibilityObjects())
+        pViewShell->BroadcastAccessibility( SfxSimpleHint( nId ) );
 }
 
 void ScPreview::GetFocus()
 {
-    pViewShell->BroadcastAccessibility( ScAccWinFocusGotHint(GetAccessible()) );
+    if (pViewShell->HasAccessibilityObjects())
+        pViewShell->BroadcastAccessibility( ScAccWinFocusGotHint(GetAccessible()) );
 }
 
 void ScPreview::LoseFocus()
 {
-    pViewShell->BroadcastAccessibility( ScAccWinFocusLostHint(GetAccessible()) );
+    if (pViewShell->HasAccessibilityObjects())
+        pViewShell->BroadcastAccessibility( ScAccWinFocusLostHint(GetAccessible()) );
 }
 
 com::sun::star::uno::Reference<drafts::com::sun::star::accessibility::XAccessible> ScPreview::CreateAccessible()
