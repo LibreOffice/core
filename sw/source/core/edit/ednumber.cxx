@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ednumber.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 15:21:56 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:23:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,7 +553,7 @@ BOOL SwEditShell::IsProtectedOutlinePara() const
         SwNodePtr pNd = (SwNodePtr)&rNd;
         BOOL bFirst = TRUE;
         USHORT nPos;
-        BYTE nLvl;
+        BYTE nLvl(0);
         if( !rOutlNd.Seek_Entry( pNd, &nPos ) && nPos )
             --nPos;
 
@@ -736,16 +736,6 @@ BYTE SwEditShell::GetNumLevel( BOOL* pHasChilds ) const
 const SwNumRule* SwEditShell::GetCurNumRule() const
 {
     return GetDoc()->GetCurrNumRule( *GetCrsr()->GetPoint() );
-}
-
-BOOL SwEditShell::IsUsed( const SwNumRule& rRule ) const
-{
-    return GetDoc()->IsUsed( rRule );
-}
-
-SwNumRule* SwEditShell::GetNumRuleFromPool( USHORT nId )
-{
-    return GetDoc()->GetNumRuleFromPool( nId );
 }
 
 void SwEditShell::SetCurNumRule( const SwNumRule& rRule )
