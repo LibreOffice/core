@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TConnection.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-27 13:48:37 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 07:01:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,6 @@ namespace connectivity
     {
     protected:
         ::osl::Mutex        m_aMutex;
-        static ::dbtools::OPropertyMap s_aPropertyNameMap;
         rtl_TextEncoding    m_nTextEncoding; // the encoding which is used for all text conversions
     public:
 
