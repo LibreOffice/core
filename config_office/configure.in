@@ -12,16 +12,26 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.54 $ )
+AC_REVISION( $Revision: 1.55 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
+AC_ARG_WITH(gnu-patch,
+[  --with-gnu-patch        Specify location of GNU patch on Solaris
+],,)
+AC_ARG_WITH(gnu-cp,
+[  --with-gnu-cp           Specify location of GNU cp on Solaris 
+],,)
 AC_ARG_WITH(gpc,
 [  --without-gpc           *NOT RECOMMENDED*  Removes GPC code from
                           openoffice.org Reduces some graphics capability
                           slightly.
                           This is required to allow some strict packagers to
                           comply with their distrubution policy.
+],,)
+AC_ARG_ENABLE(libart,
+[  --enable-libart          Enables the use of libart, instead of GPC for
+			  polygon clipping.
 ],,)
 AC_ARG_ENABLE(gcc3,
 [  --enable-gcc3          Deprecated: Now has no effect, checks compiler version.
@@ -36,6 +46,9 @@ AC_ARG_ENABLE(debug,
 [  --enable-debug:         Include debugging symbols from --enable-symbols
                           plus extra debugging code.  Extra large build!
                           (enables -g compiler flag and dmake debug=true)
+],,)
+AC_ARG_ENABLE(crashdump,
+[  --enable-crashdump:     Enable the crashdump feature code.
 ],,)
 AC_ARG_ENABLE(static-gtk,
 [  --enable-static-gtk:    Modules that are linked against gtk libraries use
@@ -290,6 +303,23 @@ if test "$enable_symbols" = "yes"; then
 else
    ENVCFLAGSCXX=""
    ENVCFLAGS=""
+fi
+
+dnl ===================================================================
+dnl Set the ENABLE_CRASHDUMP variable.
+dnl ===================================================================
+if test "$enable_crashdump" = "yes" -o "$enable_crashdump" = "TRUE"; then
+   ENABLE_CRASHDUMP="TRUE"
+else
+   if test "$enable_crashdump" = "STATIC"; then
+      ENABLE_CRASHDUMP="STATIC"
+   else
+      if test "$enable_crashdump" = "" -o "$enable_crashdump" = "no"; then
+         ENABLE_CRASHDUMP=""
+      else
+         AC_MSG_ERROR([--enable-crashdump only accepts yes, TRUE or STATIC as parameter.])
+      fi
+   fi
 fi
 
 dnl ===================================================================
@@ -1151,6 +1181,32 @@ AC_PATH_PROG(PATCH, patch)
 if test -z "$PATCH"; then
    AC_MSG_ERROR([\"patch\" not found in \$PATH, install the development tool named\"patch"\])
 fi
+
+dnl On Solaris, check if --with-gnu-patch was used
+if test "$_os" = "SunOS"; then
+   if test -z "$with_gnu_patch"; then
+      GNUPATCH=$PATCH
+   else
+      if test -x "$with_gnu_patch"; then
+	GNUPATCH=$with_gnu_patch
+      else
+        AC_MSG_ERROR([--with-gnu-patch did not point to an executable])
+      fi
+   fi
+
+dnl We also need to check for --with-gnu-cp
+
+  if test -z "$with_gnu_cp"; then
+    GNUCP=gnucp
+  else
+    if test -x "$with_gnu_cp"; then
+      GNUCP=$with_gnu_cp
+    else
+      AC_MSG_ERROR([--with-gnu-cp did not point to an executable])
+    fi
+  fi
+fi
+
 dnl ***************************************
 dnl testing bash tools path on Windows
 dnl ***************************************
@@ -1202,10 +1258,19 @@ else
 fi
 
 dnl ===================================================================
-dnl Test for the presence of the required gpc.{c,h} files
+dnl Test for the presence of the right polgyon clipping code
 dnl ===================================================================
 
-if test "$with_gpc" != "no" ; then
+WITH_GPC=NO
+WITH_LIBART=NO
+
+if test -n "$enable_libart"; then
+  PKG_CHECK_MODULES( LIBART, libart-2.0 >= 2.3.13 )
+  AC_SUBST(LIBART_CFLAGS)
+  AC_SUBST(LIBART_LIBS)
+  WITH_LIBART=YES
+	
+elif test "$with_gpc" != "no" ; then
   WITH_GPC=YES
 
   AC_MSG_CHECKING([GPC files])
@@ -1226,8 +1291,6 @@ if test "$with_gpc" != "no" ; then
 	AC_MSG_ERROR([GPC files not found
 ftp://ftp.cs.man.ac.uk/pub/toby/gpc/gpc231.tar.Z and untar in external/gpc])
   fi
-else
-  WITH_GPC=NO
 fi
 
 dnl ===================================================================
@@ -1402,7 +1465,13 @@ AC_SUBST(PTHREAD_LIBS)
 AC_SUBST(ENABLE_DEBUG)
 AC_SUBST(ENABLE_STATIC_GTK)
 AC_SUBST(ENVCFLAGSCXX)
+AC_SUBST(ENABLE_CRASHDUMP)
 AC_SUBST(WITH_GPC)
+AC_SUBST(WITH_LIBART)
+AC_SUBST(LIBART_CFLAGS)
+AC_SUBST(LIBART_LIBS)
+AC_SUBST(GNUPATCH)
+AC_SUBST(GNUCP)
 
 AC_OUTPUT([set_soenv])
 
