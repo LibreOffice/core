@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:49:45 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:43:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,10 +190,16 @@ public:
     static sal_uInt16           GetTwipsFromInch( double fInches );
     /** Returns the length in twips calculated from a length in 1/100 mm. */
     static sal_uInt16           GetTwipsFromHmm( sal_Int32 nHmm );
+
     /** Returns the length in inches calculated from a length in twips. */
-    static double               GetInchFromTwips( sal_uInt16 nTwips );
+    static double               GetInchFromTwips( sal_Int32 nTwips );
+    /** Returns the length in inches calculated from a length in 1/100 mm. */
+    static double               GetInchFromHmm( sal_Int32 nHmm );
+
+    /** Returns the length in 1/100 mm calculated from a length in inches. */
+    static sal_Int32            GetHmmFromInch( double fInches );
     /** Returns the length in 1/100 mm calculated from a length in twips. */
-    static sal_Int32            GetHmmFromTwips( sal_uInt16 nTwips );
+    static sal_Int32            GetHmmFromTwips( sal_Int32 nTwips );
 
     /** Returns the Calc column width (twips) for the passed Excel width.
         @param nScCharWidth  Width of the '0' character in Calc (twips). */
@@ -215,21 +221,26 @@ public:
     /** Returns the matching Excel font name for a passed Calc font name. */
     static String               GetXclFontName( const String& rFontName );
 
-// built-in names -------------------------------------------------------------
+// built-in defined names -----------------------------------------------------
 
-    /** Returns an Excel built-in defined name used in NAME records.
-        @param nIndex  Excel index of the built-in name. */
-    static String               GetBuiltInName( sal_Unicode nIndex );
-    /** Returns an Excel built-in defined name and appends a sheet index.
-        @param nIndex  Excel index of the built-in name.
-        @param nSheet  This number will be appended to the string. */
-    static String               GetBuiltInName( sal_Unicode nIndex, sal_uInt16 nSheet );
+    /** Returns the raw English UI representation of a built-in defined name used in NAME records.
+        @param nBuiltInIndex  Excel index of the built-in name. */
+    static String               GetXclBuiltInDefName( sal_Unicode nBuiltInIndex );
+    /** Returns the Calc UI representation of a built-in defined name used in NAME records.
+        @descr  Adds a prefix to the representation returned by GetXclBuiltInDefName().
+        @param nBuiltInIndex  Excel index of the built-in name. */
+    static String               GetBuiltInDefName( sal_Unicode nBuiltInIndex );
     /** Tests on valid built-in name with sheet index.
         @param rnSheet  Here the parsed sheet index is returned.
         @param rString  The string to be determined.
         @param nIndex  Index to built-in name to be compared with the string.
         @return  true = The string is valid. */
-    static bool                 IsBuiltInName( sal_uInt16& rnSheet, const String& rName, sal_Unicode nIndex );
+    static bool                 IsBuiltInDefName( sal_uInt16& rnSheet, const String& rName, sal_Unicode nIndex );
+    /** Returns the Excel built-in name index of the passed defined name from Calc.
+        @descr  Ignores any characters following a valid representation of a built-in name.
+        @param pnBuiltInIndex  0, the index of the built-in name will be returned here.
+        @return  true = passed string is a built-in name, false = user-defined name. */
+    static bool                 IsBuiltInDefName( const String& rDefName, sal_Unicode* pnBuiltInIndex = NULL );
 
 // built-in style names -------------------------------------------------------
 
@@ -304,12 +315,18 @@ struct XclFormatRun
                                     mnChar( nChar ), mnFontIx( nFontIx ) {}
 };
 
-/** Reads a single formatting run from the stream. */
-XclImpStream& operator>>( XclImpStream& rStrm, XclFormatRun& rRun );
+inline bool operator==( const XclFormatRun& rLeft, const XclFormatRun& rRight )
+{
+    return (rLeft.mnChar == rRight.mnChar) && (rLeft.mnFontIx == rRight.mnFontIx);
+}
 
-/** Writes a single formatting run to the stream. */
-XclExpStream& operator<<( XclExpStream& rStrm, const XclFormatRun& rRun );
+inline bool operator<( const XclFormatRun& rLeft, const XclFormatRun& rRight )
+{
+    return (rLeft.mnChar < rRight.mnChar) || ((rLeft.mnChar == rRight.mnChar) && (rLeft.mnFontIx < rRight.mnFontIx));
+}
 
+
+// ----------------------------------------------------------------------------
 
 /** A vector with all formatting runs for a rich-string. */
 typedef ::std::vector< XclFormatRun > XclFormatRunVec;
