@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_doc.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:26 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:24:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,14 +82,46 @@ class HF_IdlDocu : public HtmlFactory_Idl
                             HF_DocEntryList &   o_rOut );
     virtual             ~HF_IdlDocu();
 
+
+    /** @Deprecated
+        Use on of:
+            ->Produce_byCesOwnDocu()
+            ->Produce_byDocu4Reference()
+    */
     void                Produce_byData(
                             const client &      i_ce,
                             const ce_info *     i_doc = 0 ) const;
+
+    /** Produces documentation by the CodeInfo accompanying
+        ->i_ce.
+    */
+    void                Produce_byCesOwnDocu(
+                            const client &      i_ce ) const;
+    /** Produces documentation by the CodeInfo accompanying
+        a link or reference to a CodeEntity.
+
+        @param i_rScopeGivingCe
+        Gives the scope from which links are to be calculated.
+    */
+    void                Produce_byDocu4Reference(
+                            const ce_info &     i_rDocuForReference,
+                            const client &      i_rScopeGivingCe ) const;
+
   private:
+    // Locals
+    /** Produces documentation.
+
+        @param i_rScopeGivingCe
+        Gives the scope from which links are to be calculated.
+    */
+    void                Produce_byDocuAndScope(
+                            const ce_info &     i_rDocu,
+                            const client *      i_pClient,      /// May be 0.
+                            const client &      i_rScopeGivingCe ) const;
+
+    // DATA
     HF_DocEntryList &   rOut;
 };
 
 
-
 #endif
-
