@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsb.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:18:40 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:47:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,20 +126,33 @@
 #include "res_bmp.hrc"
 #include "glob.hrc"
 
-#include "sdoutl.hxx"
-#include "sdwindow.hxx"
+#ifndef SD_OUTLINER_HXX
+#include "Outliner.hxx"
+#endif
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
 #include "app.hxx"
 #include "sdattr.hxx"
 #include "ins_page.hxx"
 #include "drawdoc.hxx"
-#include "docshell.hxx"
+#include "DrawDocShell.hxx"
 #include "sdresid.hxx"
 #include "sdpage.hxx"
-#include "drviewsh.hxx"
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
 #include "dlgfield.hxx"
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
+#endif
 #include "unmodpg.hxx"
 #include "undolayer.hxx"
+#ifndef SD_OBJECT_BAR_MANAGER_HXX
+#include "ObjectBarManager.hxx"
+#endif
+
+namespace sd {
 
 /*************************************************************************
 |*
@@ -147,7 +160,7 @@
 |*
 \************************************************************************/
 
-void SdDrawViewShell::FuTemp02(SfxRequest& rReq)
+void DrawViewShell::FuTemp02(SfxRequest& rReq)
 {
     USHORT nSId = rReq.GetSlot();
     switch( nSId )
@@ -159,7 +172,7 @@ void SdDrawViewShell::FuTemp02(SfxRequest& rReq)
                 pDrView->EndTextEdit();
             }
 
-            SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
+            SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
             USHORT nLayerCnt = rLayerAdmin.GetLayerCount();
             USHORT nLayer = nLayerCnt - 2 + 1;
             String aLayerName ( SdResId(STR_LAYER) );
@@ -172,7 +185,7 @@ void SdDrawViewShell::FuTemp02(SfxRequest& rReq)
 
             if (! pArgs)
             {
-                SfxItemSet aNewAttr( pDoc->GetPool(), ATTR_LAYER_START, ATTR_LAYER_END );
+                SfxItemSet aNewAttr( GetDoc()->GetPool(), ATTR_LAYER_START, ATTR_LAYER_END );
 
                 aNewAttr.Put( SdAttrLayerName( aLayerName ) );
                 aNewAttr.Put( SdAttrLayerVisible() );
@@ -270,7 +283,7 @@ void SdDrawViewShell::FuTemp02(SfxRequest& rReq)
 
             ResetActualLayer();
 
-            pDoc->SetChanged(TRUE);
+            GetDoc()->SetChanged(TRUE);
 
             GetViewFrame()->GetDispatcher()->Execute(SID_SWITCHLAYER,
                     SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
@@ -287,7 +300,7 @@ void SdDrawViewShell::FuTemp02(SfxRequest& rReq)
                 pDrView->EndTextEdit();
             }
 
-            SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
+            SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
             USHORT nCurPage = aLayerTab.GetCurPageId();
             String aLayerName = aLayerTab.GetPageText(nCurPage);
             String aOldLayerName( aLayerName );
@@ -318,7 +331,7 @@ void SdDrawViewShell::FuTemp02(SfxRequest& rReq)
 
             if (! pArgs)
             {
-                SfxItemSet aNewAttr( pDoc->GetPool(), ATTR_LAYER_START, ATTR_LAYER_END );
+                SfxItemSet aNewAttr( GetDoc()->GetPool(), ATTR_LAYER_START, ATTR_LAYER_END );
 
                 aNewAttr.Put( SdAttrLayerName( aLayerName ) );
                 aNewAttr.Put( SdAttrLayerVisible( pDrView->IsLayerVisible(aLayerName) ) );
@@ -395,9 +408,9 @@ void SdDrawViewShell::FuTemp02(SfxRequest& rReq)
                 break;
             }
 
-            SfxUndoManager* pManager = pDoc->GetDocSh()->GetUndoManager();
+            SfxUndoManager* pManager = GetDoc()->GetDocSh()->GetUndoManager();
             SdLayerModifyUndoAction* pAction = new SdLayerModifyUndoAction(
-                pDoc,
+                GetDoc(),
                 pLayer,
                 // old values
                 aOldLayerName,
@@ -575,10 +588,10 @@ void SdDrawViewShell::FuTemp02(SfxRequest& rReq)
                 case SID_INSERT_FLD_FILE:
                 {
                     String aName;
-                    if( pDocSh->HasName() )
-                        aName = pDocSh->GetMedium()->GetName();
+                    if( GetDocSh()->HasName() )
+                        aName = GetDocSh()->GetMedium()->GetName();
                     //else
-                    //  aName = pDocSh->GetName();
+                    //  aName = GetDocSh()->GetName();
                     pFieldItem = new SvxFieldItem( SvxExtFileField( aName ) );
                 }
                 break;
@@ -609,7 +622,7 @@ void SdDrawViewShell::FuTemp02(SfxRequest& rReq)
             }
             else
             {
-                Outliner* pOutl = pDoc->GetInternalOutliner();
+                Outliner* pOutl = GetDoc()->GetInternalOutliner();
                 pOutl->Init( OUTLINERMODE_TEXTOBJECT );
                 USHORT nOutlMode = pOutl->GetMode();
                 USHORT nMinDepth = pOutl->GetMinDepth();
@@ -696,7 +709,7 @@ void SdDrawViewShell::FuTemp02(SfxRequest& rReq)
                         {
                             pOLV->SetAttribs( aSet );
 
-                            Outliner* pOutliner = pOLV->GetOutliner();
+                            ::Outliner* pOutliner = pOLV->GetOutliner();
                             if( pOutliner )
                                 pOutliner->UpdateFields();
                         }
@@ -751,10 +764,10 @@ void SdDrawViewShell::FuTemp02(SfxRequest& rReq)
     };
 };
 
-bool SdDrawViewShell::RenameSlide( USHORT nPageId, const String & rName  )
+bool DrawViewShell::RenameSlide( USHORT nPageId, const String & rName  )
 {
     BOOL   bOutDummy;
-    if( pDoc->GetPageByName( rName, bOutDummy ) != SDRPAGE_NOTFOUND )
+    if( GetDoc()->GetPageByName( rName, bOutDummy ) != SDRPAGE_NOTFOUND )
         return false;
 
     SdPage* pPageToRename = NULL;
@@ -762,19 +775,19 @@ bool SdDrawViewShell::RenameSlide( USHORT nPageId, const String & rName  )
 
     if( GetEditMode() == EM_PAGE )
     {
-        pPageToRename = pDoc->GetSdPage( nPageId - 1, ePageKind );
+        pPageToRename = GetDoc()->GetSdPage( nPageId - 1, ePageKind );
 
         // Undo
         SdPage* pUndoPage = pPageToRename;
-        SdrLayerAdmin &  rLayerAdmin = pDoc->GetLayerAdmin();
+        SdrLayerAdmin &  rLayerAdmin = GetDoc()->GetLayerAdmin();
         BYTE nBackground = rLayerAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRND )), FALSE );
         BYTE nBgObj = rLayerAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRNDOBJ )), FALSE );
         SetOfByte aVisibleLayers = pActualPage->GetMasterPageVisibleLayers( 0 );
 
         // (#67720#)
-        SfxUndoManager* pManager = pDoc->GetDocSh()->GetUndoManager();
+        SfxUndoManager* pManager = GetDoc()->GetDocSh()->GetUndoManager();
         ModifyPageUndoAction* pAction = new ModifyPageUndoAction(
-            pManager, pDoc, pUndoPage, rName, pUndoPage->GetAutoLayout(),
+            pManager, GetDoc(), pUndoPage, rName, pUndoPage->GetAutoLayout(),
             aVisibleLayers.IsSet( nBackground ),
             aVisibleLayers.IsSet( nBgObj ));
         pManager->AddUndoAction( pAction );
@@ -785,15 +798,15 @@ bool SdDrawViewShell::RenameSlide( USHORT nPageId, const String & rName  )
         if( ePageKind == PK_STANDARD )
         {
             // also rename notes-page
-            SdPage* pNotesPage = pDoc->GetSdPage( nPageId - 1, PK_NOTES );
+            SdPage* pNotesPage = GetDoc()->GetSdPage( nPageId - 1, PK_NOTES );
             pNotesPage->SetName( rName );
         }
     }
     else
     {
         // rename MasterPage -> rename LayoutTemplate
-        pPageToRename = pDoc->GetMasterSdPage( nPageId - 1, ePageKind );
-        pDoc->RenameLayoutTemplate( pPageToRename->GetLayoutName(), rName );
+        pPageToRename = GetDoc()->GetMasterSdPage( nPageId - 1, ePageKind );
+        GetDoc()->RenameLayoutTemplate( pPageToRename->GetLayoutName(), rName );
     }
 
     bool bSuccess = ( FALSE != rName.Equals( pPageToRename->GetName()));
@@ -804,7 +817,7 @@ bool SdDrawViewShell::RenameSlide( USHORT nPageId, const String & rName  )
         aTabControl.SetPageText( nPageId, rName );
 
         // set document to modified state
-        pDoc->SetChanged( TRUE );
+        GetDoc()->SetChanged( TRUE );
 
         // inform navigator about change
         SfxBoolItem aItem( SID_NAVIGATOR_INIT, TRUE );
@@ -815,7 +828,7 @@ bool SdDrawViewShell::RenameSlide( USHORT nPageId, const String & rName  )
     return bSuccess;
 }
 
-IMPL_LINK( SdDrawViewShell, RenameSlideHdl, SvxNameDialog*, pDialog )
+IMPL_LINK( DrawViewShell, RenameSlideHdl, SvxNameDialog*, pDialog )
 {
     if( ! pDialog )
         return 0;
@@ -823,13 +836,13 @@ IMPL_LINK( SdDrawViewShell, RenameSlideHdl, SvxNameDialog*, pDialog )
     String aNewName;
     pDialog->GetName( aNewName );
 
-    SdPage* pCurrentPage = pDoc->GetSdPage( aTabControl.GetCurPageId() - 1, GetPageKind() );
+    SdPage* pCurrentPage = GetDoc()->GetSdPage( aTabControl.GetCurPageId() - 1, GetPageKind() );
 
     return ( aNewName.Equals( pCurrentPage->GetName() )
              || GetDocSh()->IsNewPageNameValid( aNewName ) );
 }
 
-void SdDrawViewShell::ModifyLayer( SdrLayer* pLayer, String& rLayerName, bool bIsVisible, bool bIsLocked, bool bIsPrintable )
+void DrawViewShell::ModifyLayer( SdrLayer* pLayer, String& rLayerName, bool bIsVisible, bool bIsLocked, bool bIsPrintable )
 {
     if( pLayer )
     {
@@ -852,7 +865,7 @@ void SdDrawViewShell::ModifyLayer( SdrLayer* pLayer, String& rLayerName, bool bI
         pDrView->SetLayerLocked( rLayerName, bIsLocked);
         pDrView->SetLayerPrintable(rLayerName, bIsPrintable);
 
-        pDoc->SetChanged(TRUE);
+        GetDoc()->SetChanged(TRUE);
 
         aLayerTab.SetPageText(nCurPage, rLayerName);
 
@@ -869,8 +882,11 @@ void SdDrawViewShell::ModifyLayer( SdrLayer* pLayer, String& rLayerName, bool bI
         GetViewFrame()->GetDispatcher()->Execute(SID_SWITCHLAYER,
                         SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
 
-        FmFormShell* pFmShell = (FmFormShell*) aShellTable.Get(RID_FORMLAYER_TOOLBOX);
-        if (pFmShell)
-            pFmShell->Invalidate();
+        // Call Invalidate at the form shell.
+        FmFormShell* pFormShell = GetObjectBarManager().GetFormShell();
+        if (pFormShell != NULL)
+            pFormShell->Invalidate();
     }
 }
+
+} // end of namespace sd
