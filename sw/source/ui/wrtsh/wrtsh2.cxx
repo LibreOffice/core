@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-04 13:14:17 $
+ *  last change: $Author: jp $ $Date: 2001-05-07 08:51:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,19 +502,10 @@ void LoadURL( const String& rURL, ViewShell* pVSh, USHORT nFilter,
             SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD );
 }
 
-void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk, const DropEvent* pEvt )
+void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
+                                    const USHORT nAction )
 {
-    USHORT nRegionMode;
-    if(pEvt->IsDefaultAction())
-        nRegionMode = rBkmk.GetDefaultDragType();
-    else
-        switch(pEvt->GetAction())
-        {
-            case DROP_COPY: nRegionMode = REGION_MODE_NONE; break;
-            case DROP_MOVE: nRegionMode = REGION_MODE_EMBEDDED; break;
-            default: nRegionMode = REGION_MODE_LINK;
-        }
-    if(nRegionMode == REGION_MODE_NONE)
+    if( EXCHG_IN_ACTION_COPY == nAction )
     {
         // Einfuegen
         String sURL = rBkmk.GetURL();
@@ -542,7 +533,7 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk, const DropEve
         aSection.SetLinkFileName( aLinkFile );
         aSection.SetProtect( TRUE );
         const SwSection* pIns = InsertSection( aSection );
-        if( REGION_MODE_EMBEDDED == nRegionMode && pIns )
+        if( EXCHG_IN_ACTION_MOVE == nAction && pIns )
         {
             aSection = *pIns;
             aSection.SetLinkFileName( aEmptyStr );

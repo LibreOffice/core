@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-09 07:25:03 $
+ *  last change: $Author: jp $ $Date: 2001-05-07 08:51:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,7 +421,8 @@ typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
     BOOL GetURLFromButton( String& rURL, String& rDescr ) const;
     BOOL SetURLToButton( const String& rURL, const String& rDescr );
 
-    void NavigatorPaste( const NaviContentBookmark& rBkmk, const DropEvent* pEvt );
+    void NavigatorPaste( const NaviContentBookmark& rBkmk,
+                         const USHORT nAction );
 
     // die Core erzeugt eine Selektion, das SttSelect muss gerufen werden
     virtual void NewCoreSelection();
