@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2001-03-20 10:44:20 $
+ *  last change: $Author: ssa $ $Date: 2002-04-05 13:41:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ public:
 
 SalFrame* ImplSalCreateFrame( SalInstance* pInst, HWND hWndParent, ULONG nSalFrameStyle );
 SalObject* ImplSalCreateObject( SalInstance* pInst, SalFrame* pParent );
+HWND ImplSalReCreateHWND( HWND hWndParent, HWND oldhWnd );
 void ImplSalStartTimer( ULONG nMS, BOOL bMutex = FALSE );
 void ImplSalPrinterAbortJobAsync( HDC hPrnDC );
 

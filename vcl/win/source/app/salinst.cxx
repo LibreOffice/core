@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-06 10:07:23 $
+ *  last change: $Author: ssa $ $Date: 2002-04-05 13:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -738,6 +738,10 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
             break;
         case SAL_MSG_CREATEFRAME:
             nRet = (LRESULT)ImplSalCreateFrame( GetSalData()->mpFirstInstance, (HWND)lParam, (ULONG)wParam );
+            rDef = FALSE;
+            break;
+        case SAL_MSG_RECREATEHWND:
+            nRet = (LRESULT)ImplSalReCreateHWND( (HWND)wParam, (HWND)lParam );
             rDef = FALSE;
             break;
         case SAL_MSG_DESTROYFRAME:

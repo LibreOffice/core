@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-21 18:35:44 $
+ *  last change: $Author: ssa $ $Date: 2002-04-05 13:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,6 +370,32 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
     }
 
     return pFrame;
+}
+
+// helper that only creates the HWND
+// to allow for easy reparenting of system windows, (i.e. destroy and create new)
+HWND ImplSalReCreateHWND( HWND hWndParent, HWND oldhWnd )
+{
+    HINSTANCE hInstance = GetSalData()->mhInst;
+    ULONG nSysStyle     = GetWindowLong( oldhWnd, GWL_STYLE );
+    ULONG nExSysStyle   = GetWindowLong( oldhWnd, GWL_EXSTYLE );
+
+    HWND hWnd = NULL;
+    if ( aSalShlData.mbWNT )
+    {
+        LPCWSTR pClassName = SAL_SUBFRAME_CLASSNAMEW;
+        hWnd = CreateWindowExW( nExSysStyle, pClassName, L"", nSysStyle,
+                                CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
+                                hWndParent, 0, hInstance, (void*)GetWindowPtr( oldhWnd ) );
+    }
+    else
+    {
+        LPCSTR pClassName = SAL_SUBFRAME_CLASSNAMEA;
+        hWnd = CreateWindowExA( nExSysStyle, pClassName, "", nSysStyle,
+                                CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
+                                hWndParent, 0, hInstance, (void*)GetWindowPtr( oldhWnd ) );
+    }
+    return hWnd;
 }
 
 // =======================================================================
@@ -1190,45 +1216,24 @@ void SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
 void SalFrame::SetParent( SalFrame* pNewParent )
 {
     mbInReparent = TRUE;
-    /*
-    BOOL bSameParent = FALSE;
-    if( pNewParent ) //&& ImplGetParentHwnd( maFrameData.mhWnd ) != pNewParent->maFrameData.mhWnd )
-    {
-        if( ImplGetParentHwnd( maFrameData.mhWnd ) == pNewParent->maFrameData.mhWnd )
-            bSameParent = TRUE;
-        if( maFrameData.mhWnd != pNewParent->maFrameData.mhWnd )
-        {
-            ULONG parentStyle = GetWindowLong(pNewParent->maFrameData.mhWnd, GWL_STYLE );
-            ULONG style = GetWindowLong( maFrameData.mhWnd, GWL_STYLE );
-            SetWindowLong( maFrameData.mhWnd, GWL_STYLE, (style|WS_CHILD)&~WS_POPUP );
-
-            //ULONG exstyle = GetWindowLong( maFrameData.mhWnd, GWL_EXSTYLE );
-            DWORD err=0;
-            HWND hOldParent = ::GetParent( maFrameData.mhWnd );
-            hOldParent = ImplGetParentHwnd( maFrameData.mhWnd );
-            hOldParent = ::SetParent( maFrameData.mhWnd, pNewParent->maFrameData.mhWnd );
-            if( !hOldParent )
-                err = GetLastError();
-            BOOL bOk = IsChild( pNewParent->maFrameData.mhWnd, maFrameData.mhWnd);
-            HWND hNewParent = ::GetParent( maFrameData.mhWnd );
-            HWND hImplParent = ImplGetParentHwnd( maFrameData.mhWnd );
-            SetWindowLong( maFrameData.mhWnd, GWL_STYLE, style );
-            //SetWindowLong( maFrameData.mhWnd, GWL_EXSTYLE, exstyle );
-        }
-    }
-    else
-        if( !pNewParent )
-            ::SetParent( maFrameData.mhWnd, NULL );
-            */
 
     // save hwnd, will be overwritten in WM_CREATE during createwindow
     HWND hWndOld = maFrameData.mhWnd;
     BOOL bNeedGraphics = maFrameData.mbGraphics;
+    HFONT   hFont   = NULL;
+    HPEN    hPen    = NULL;
+    HBRUSH  hBrush  = NULL;
 
     // Release Cache DC
     if ( maFrameData.mpGraphics2 &&
          maFrameData.mpGraphics2->maGraphicsData.mhDC )
+    {
+        // save current gdi objects before hdc is gone
+        hFont   = (HFONT)   GetCurrentObject( maFrameData.mpGraphics2->maGraphicsData.mhDC, OBJ_FONT);
+        hPen    = (HPEN)    GetCurrentObject( maFrameData.mpGraphics2->maGraphicsData.mhDC, OBJ_PEN);
+        hBrush  = (HBRUSH)  GetCurrentObject( maFrameData.mpGraphics2->maGraphicsData.mhDC, OBJ_BRUSH);
         ReleaseGraphics( maFrameData.mpGraphics2 );
+    }
 
     // destroy saved DC
     if ( maFrameData.mpGraphics )
@@ -1237,44 +1242,68 @@ void SalFrame::SetParent( SalFrame* pNewParent )
             SelectPalette( maFrameData.mpGraphics->maGraphicsData.mhDC, maFrameData.mpGraphics->maGraphicsData.mhDefPal, TRUE );
         ImplSalDeInitGraphics( &(maFrameData.mpGraphics->maGraphicsData) );
         ReleaseDC( maFrameData.mhWnd, maFrameData.mpGraphics->maGraphicsData.mhDC );
-        //delete maFrameData.mpGraphics;
     }
 
     // create a new hwnd with the same styles
-    HWND hWnd = NULL;
     HWND hWndParent = pNewParent->maFrameData.mhWnd;
-    ULONG nSysStyle = GetWindowLong( maFrameData.mhWnd, GWL_STYLE );
-    ULONG nExSysStyle = GetWindowLong( maFrameData.mhWnd, GWL_EXSTYLE );
-    HINSTANCE hInstance = GetSalData()->mhInst;
-    if ( aSalShlData.mbWNT )
-    {
-        LPCWSTR pClassName = SAL_SUBFRAME_CLASSNAMEW;
-        hWnd = CreateWindowExW( nExSysStyle, pClassName, L"", nSysStyle,
-                                CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
-                                hWndParent, 0, hInstance, (void*)this );
-    }
-    else
-    {
-        LPCSTR pClassName = SAL_SUBFRAME_CLASSNAMEA;
-        hWnd = CreateWindowExA( nExSysStyle, pClassName, "", nSysStyle,
-                                CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
-                                hWndParent, 0, hInstance, (void*)this );
-    }
+    // forward to main thread
+    HWND hWnd = (HWND) ImplSendMessage( GetSalData()->mpFirstInstance->maInstData.mhComWnd,
+                                        SAL_MSG_RECREATEHWND,
+                                        (WPARAM) hWndParent, (LPARAM)maFrameData.mhWnd );
 
     // succeeded ?
     hWndParent = ::GetParent( hWnd );
     DBG_ASSERT( hWndParent == pNewParent->maFrameData.mhWnd, "SalFrame::SetParent not successful");
 
+
+    // make sure we're pointing to the right VCL parent
+    ((Window*)maFrameData.mpInst)->mpRealParent = (Window*)pNewParent->maFrameData.mpInst;
+
+
     // recreate DCs
     if( bNeedGraphics )
     {
-        maFrameData.mpGraphics->maGraphicsData.mhDC = GetDC( hWnd );
-        if ( GetSalData()->mhDitherPal )
+        if( maFrameData.mpGraphics2 )
         {
-            maFrameData.mpGraphics->maGraphicsData.mhDefPal = SelectPalette( maFrameData.mpGraphics->maGraphicsData.mhDC, GetSalData()->mhDitherPal, TRUE );
-            RealizePalette( maFrameData.mpGraphics->maGraphicsData.mhDC );
+            // re-create cached DC
+            HDC hDC = (HDC)ImplSendMessage( GetSalData()->mpFirstInstance->maInstData.mhComWnd,
+                                            SAL_MSG_GETDC,
+                                            (WPARAM) hWnd, 0 );
+            if ( hDC )
+            {
+                maFrameData.mpGraphics2->maGraphicsData.mhDC = hDC;
+                if ( GetSalData()->mhDitherPal )
+                {
+                    maFrameData.mpGraphics2->maGraphicsData.mhDefPal = SelectPalette( hDC, GetSalData()->mhDitherPal, TRUE );
+                    RealizePalette( hDC );
+                }
+                ImplSalInitGraphics( &(maFrameData.mpGraphics2->maGraphicsData) );
+
+                // re-select saved gdi objects
+                if( hFont )
+                    SelectObject( hDC, hFont );
+                if( hPen )
+                    SelectObject( hDC, hPen );
+                if( hBrush )
+                    SelectObject( hDC, hBrush );
+
+                maFrameData.mbGraphics = TRUE;
+                GetSalData()->mnCacheDCInUse++;
+            }
         }
-        ImplSalInitGraphics( &(maFrameData.mpGraphics->maGraphicsData) );
+
+        if( maFrameData.mpGraphics )
+        {
+            // re-create DC
+            maFrameData.mpGraphics->maGraphicsData.mhDC = GetDC( hWnd );
+            if ( GetSalData()->mhDitherPal )
+            {
+                maFrameData.mpGraphics->maGraphicsData.mhDefPal = SelectPalette( maFrameData.mpGraphics->maGraphicsData.mhDC, GetSalData()->mhDitherPal, TRUE );
+                RealizePalette( maFrameData.mpGraphics->maGraphicsData.mhDC );
+            }
+            ImplSalInitGraphics( &(maFrameData.mpGraphics->maGraphicsData) );
+            maFrameData.mbGraphics = TRUE;
+        }
     }
 
     // now destroy original hwnd
