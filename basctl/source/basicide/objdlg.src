@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 07:50:45 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:46:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,19 +69,8 @@ FloatingWindow RID_BASICIDE_OBJCAT
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 191 , 179 ) ;
-    Text = "Objekte" ;
-    Text [ English ] = "Objets" ;
-    Text [ norwegian ] = "Objets" ;
-    Text [ italian ] = "Oggetti" ;
-    Text [ portuguese_brazilian ] = "Objetos" ;
-    Text [ portuguese ] = "Objectos" ;
-    Text [ finnish ] = "Objektit" ;
-    Text [ danish ] = "Objekter" ;
-    Text [ french ] = "Objets" ;
-    Text [ swedish ] = "Objekt" ;
-    Text [ dutch ] = "Objecten" ;
-    Text [ spanish ] = "Objetos" ;
-    Text [ english_us ] = "Objects" ;
+    Text [ de ] = "Objekte" ;
+    Text [ en-US ] = "Objects" ;
     Closeable = TRUE ;
     Moveable = TRUE ;
     Sizeable = TRUE ;
@@ -101,19 +90,8 @@ FloatingWindow RID_BASICIDE_OBJCAT
     {
         Pos = MAP_APPFONT ( 3, 6 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
-        Text = "Zeigen" ;
-        Text [ English ] = "Show" ;
-        Text [ norwegian ] = "Show" ;
-        Text [ italian ] = "Mostra" ;
-        Text [ portuguese_brazilian ] = "Mostrar" ;
-        Text [ portuguese ] = "Apresentar" ;
-        Text [ finnish ] = "N‰yt‰" ;
-        Text [ danish ] = "Vis" ;
-        Text [ french ] = "Afficher" ;
-        Text [ swedish ] = "Visa" ;
-        Text [ dutch ] = "Beel~d" ;
-        Text [ spanish ] = "Mostrar" ;
-        Text [ english_us ] = "Show" ;
+        Text [ de ] = "Zeigen" ;
+        Text [ en-US ] = "Show" ;
         TabStop = TRUE ;
     };
     PushButton RID_PB_OPTIONS
@@ -121,26 +99,14 @@ FloatingWindow RID_BASICIDE_OBJCAT
         Pos = MAP_APPFONT ( 56, 6 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
         Text = "Beschreibung..." ;
-        Text [ English ] = "Description..." ;
         TabStop = TRUE ;
     };
     PushButton RID_PB_LITTLEHELP
     {
         Pos = MAP_APPFONT ( 109 , 6 ) ;
         Size = MAP_APPFONT ( 14 , 12 ) ;
-        Text = "?" ;
-        Text [ English ] = "?" ;
-        Text [ norwegian ] = "?" ;
-        Text [ italian ] = "?" ;
-        Text [ portuguese_brazilian ] = "?" ;
-        Text [ portuguese ] = "?" ;
-        Text [ finnish ] = "?" ;
-        Text [ danish ] = "?" ;
-        Text [ french ] = "?" ;
-        Text [ swedish ] = "?" ;
-        Text [ dutch ] = "?" ;
-        Text [ spanish ] = "?" ;
-        Text [ english_us ] = "?" ;
+        Text [ de ] = "?" ;
+        Text [ en-US ] = "?" ;
         TabStop = TRUE ;
     };
 */
@@ -167,91 +133,23 @@ FloatingWindow RID_BASICIDE_OBJCAT
             {
                 Identifier = TBITEM_SHOW ;
                 HelpId = HID_BASICIDE_OBJCAT_SHOW ;
-                Text = "Zeigen" ;
-                Text [ English ] = "Show" ;
-                Text [ norwegian ] = "Show" ;
-                Text [ italian ] = "Mostra" ;
-                Text [ portuguese_brazilian ] = "Mostrar" ;
-                Text [ portuguese ] = "Mostrar" ;
-                Text [ finnish ] = "N‰yt‰" ;
-                Text [ danish ] = "Vis" ;
-                Text [ french ] = "Afficher" ;
-                Text [ swedish ] = "Visa" ;
-                Text [ dutch ] = "Weergeven" ;
-                Text [ spanish ] = "Mostrar" ;
-                Text [ english_us ] = "Show" ;
-                Text[ chinese_simplified ] = "ÊòæÁ§∫";
-                Text[ russian ] = "œÓÍ‡Á‡Ú¸";
-                Text[ polish ] = "Pokaø";
-                Text[ japanese ] = "Ë°®Á§∫";
-                Text[ chinese_traditional ] = "È°ØÁ§∫";
-                Text[ arabic ] = "⁄—÷";
-                Text[ greek ] = "≈Ïˆ‹ÌÈÛÁ";
-                Text[ korean ] = "ÌëúÏãú";
-                Text[ turkish ] = "Gˆster";
-                Text[ catalan ] = "Mostra";
-                Text[ thai ] = "‡πÅ‡∏™‡∏î‡∏á";
-                Text[ czech ] = "Zobrazit";
-                Text[ hebrew ] = "‚ÄÆ◊î◊¶◊í◊î‚Ä¨";
-                Text[ hindi ] = "‡§¶‡§ø‡§ñ‡§æ‡§ì";
-                Text[ slovak ] = "Zobrazi≈•";
-                Text[ hungarian ] = "Megjelen√≠t√©s";
-                Text[ slovenian ] = "Poka≈æi";
+                Text [ de ]= "Zeigen" ;
+                Text [ en-US ] = "Show" ;
             };
             /*
             ToolBoxItem
             {
                 Identifier = TBITEM_PROPS ;
                 HelpId = HID_BASICIDE_OBJCAT_PROPS ;
-                Text = "Beschreibung" ;
-                Text [ English ] = "Description" ;
-                Text [ portuguese ] = "DescriÁ„o" ;
-                Text [ english_us ] = "Description" ;
-                Text [ portuguese_brazilian ] = "Beschreibung" ;
-                Text [ swedish ] = "Beskrivning" ;
-                Text [ danish ] = "Beskrivelse" ;
-                Text [ italian ] = "Descrizione" ;
-                Text [ spanish ] = "DescripciÛn" ;
-                Text [ french ] = "Description" ;
-                Text [ dutch ] = "Beschrijving" ;
-                Text[ chinese_simplified ] = "Àµ√˜";
-                Text[ russian ] = "ŒÔËÒ‡ÌËÂ";
-                Text[ polish ] = "Opis";
-                Text[ japanese ] = "ê‡ñæ";
-                Text[ chinese_traditional ] = "¥y≠z";
-                Text[ arabic ] = "«·Ê’›";
-                Text[ greek ] = "–ÂÒÈ„Ò·ˆﬁ";
-                Text[ korean ] = "º≥∏Ì";
-                Text[ turkish ] = "AÁ˝klama";
-                Text[ catalan ] = "DescripciÛn";
-                Text[ finnish ] = "Kuvaus";
+                Text [ de ] = "Beschreibung" ;
+                Text [ en-US ] = "Description" ;
             };
             ToolBoxItem
             {
                 Identifier = TBITEM_HELP ;
                 HelpId = HID_BASICIDE_OBJCAT_HELP ;
-                Text = "Hilfe" ;
-                Text [ English ] = "Help" ;
-                Text [ portuguese ] = "Ajuda" ;
-                Text [ english_us ] = "Help" ;
-                Text [ portuguese_brazilian ] = "Hilfe" ;
-                Text [ swedish ] = "Hj‰lp" ;
-                Text [ danish ] = "HjÊlp" ;
-                Text [ italian ] = "Guida" ;
-                Text [ spanish ] = "Ayuda" ;
-                Text [ french ] = "Aide" ;
-                Text [ dutch ] = "Help" ;
-                Text[ chinese_simplified ] = "∞Ô÷˙";
-                Text[ russian ] = "—Ô‡‚Í‡";
-                Text[ polish ] = "Pomoc";
-                Text[ japanese ] = "ÕŸÃﬂ";
-                Text[ chinese_traditional ] = "ª°©˙";
-                Text[ arabic ] = "„”«⁄œ…";
-                Text[ greek ] = "¬ÔﬁËÂÈ·";
-                Text[ korean ] = "µµøÚ∏ª";
-                Text[ turkish ] = "Yard˝m";
-                Text[ catalan ] = "Ayuda";
-                Text[ finnish ] = "Ohje";
+                Text [ de ] = "Hilfe" ;
+                Text [ en-US ] = "Help" ;
             };
             */
         };
@@ -271,23 +169,6 @@ FloatingWindow RID_BASICIDE_OBJCAT
         Pos = MAP_APPFONT ( 3 , 156 ) ;
         Size = MAP_APPFONT ( 185 , 18 ) ;
     };
-    Text[ chinese_simplified ] = "ÂØπË±°";
-    Text[ russian ] = "Œ·˙ÂÍÚ˚";
-    Text[ polish ] = "Obiekty";
-    Text[ japanese ] = "„Ç™„Éñ„Ç∏„Çß„ÇØ„Éà";
-    Text[ chinese_traditional ] = "Áâ©‰ª∂";
-    Text[ arabic ] = "ﬂ«∆‰« ";
-    Text[ greek ] = "¡ÌÙÈÍÂﬂÏÂÌ·";
-    Text[ korean ] = "Í∞úÏ≤¥";
-    Text[ turkish ] = "Nesneler";
-    Text[ catalan ] = "Objectes";
-    Text[ thai ] = "‡∏ß‡∏±‡∏ï‡∏ñ‡∏∏";
-    Text[ czech ] = "Objekty";
-    Text[ hebrew ] = "Objekte";
-    Text[ hindi ] = "‡§µ‡§∏‡•ç‡§§‡•Å";
-    Text[ slovak ] = "Objekty";
-    Text[ hungarian ] = "Objektumok";
-    Text[ slovenian ] = "Predmeti";
 };
 
 
