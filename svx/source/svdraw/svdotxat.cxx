@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxat.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
+ *  last change: $Author: aw $ $Date: 2000-12-01 18:11:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,41 +457,161 @@ void SdrTextObj::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, FASTBOOL bDontR
 
 void SdrTextObj::SetItem( const SfxPoolItem& rItem )
 {
-    const SfxItemSet& rSet = GetItemSet();
-
-    if(rSet.Get(rItem.Which()) != rItem)
+    // handle outliner attributes
+    if(pOutlinerParaObject)
     {
-        SfxItemSet aNewSet(rSet);
-        aNewSet.Put(rItem);
-        SdrTextObj::SetItemSet(aNewSet);
+        if(rItem.Which() >= EE_CHAR_START && rItem.Which() <= EE_CHAR_END)
+        {
+            Outliner* pOutliner;
+
+            if(!pEdtOutl)
+            {
+                pOutliner = &ImpGetDrawOutliner();
+                pOutliner->SetText(*pOutlinerParaObject);
+            }
+            else
+            {
+                pOutliner = pEdtOutl;
+            }
+
+            sal_uInt16 nParaCount((sal_uInt16)pOutliner->GetParagraphCount());
+            for(sal_uInt16 nPara(0); nPara < nParaCount; nPara++)
+            {
+                SfxItemSet aSet(pOutliner->GetParaAttribs(nPara));
+                aSet.Put(rItem);
+                pOutliner->SetParaAttribs(nPara, aSet);
+            }
+
+            if(!pEdtOutl)
+            {
+                if(nParaCount)
+                {
+                    SfxItemSet aNewSet(pOutliner->GetParaAttribs(0));
+                    ImpForceItemSet();
+                    mpObjectItemSet->Put(aNewSet);
+                }
+
+                OutlinerParaObject* pTemp = pOutliner->CreateParaObject(0, nParaCount);
+                pOutliner->Clear();
+                NbcSetOutlinerParaObject(pTemp);
+            }
+        }
     }
-    else
-        SdrAttrObj::SetItem(rItem);
+
+    // Extra-Repaint wenn das Layout so radikal geaendert wird (#43139#)
+    if(rItem.Which() == SDRATTR_TEXT_CONTOURFRAME)
+        SendRepaintBroadcast();
+
+    // call parent
+    SdrAttrObj::SetItem(rItem);
 }
 
 void SdrTextObj::ClearItem( USHORT nWhich )
 {
-    const SfxItemSet& rSet = GetItemSet();
-
-    if(SFX_ITEM_UNKNOWN != rSet.GetItemState(nWhich))
+    // handle outliner attributes
+    if(pOutlinerParaObject)
     {
-        SfxItemSet aNewSet(rSet);
-        aNewSet.ClearItem(nWhich);
-        SdrTextObj::SetItemSet(aNewSet);
+        if(!nWhich || (nWhich >= EE_CHAR_START && nWhich <= EE_CHAR_END))
+        {
+            Outliner* pOutliner;
+
+            if(!pEdtOutl)
+            {
+                pOutliner = &ImpGetDrawOutliner();
+                pOutliner->SetText(*pOutlinerParaObject);
+            }
+            else
+            {
+                pOutliner = pEdtOutl;
+            }
+
+            sal_uInt16 nParaCount((sal_uInt16)pOutliner->GetParagraphCount());
+            for(sal_uInt16 nPara(0); nPara < nParaCount; nPara++)
+            {
+                if(nWhich)
+                {
+                    SfxItemSet aSet(pOutliner->GetParaAttribs(nPara));
+                    aSet.ClearItem(nWhich);
+                    pOutliner->SetParaAttribs(nPara, aSet);
+                }
+                else
+                {
+                    pOutliner->SetParaAttribs(nPara, pOutliner->GetEmptyItemSet());
+                    pOutliner->QuickRemoveCharAttribs(nPara, 0);
+                }
+            }
+
+            if(!pEdtOutl)
+            {
+                if(nParaCount)
+                {
+                    SfxItemSet aNewSet(pOutliner->GetParaAttribs(0));
+                    ImpForceItemSet();
+                    mpObjectItemSet->Put(aNewSet);
+                }
+
+                OutlinerParaObject* pTemp = pOutliner->CreateParaObject(0, nParaCount);
+                pOutliner->Clear();
+                NbcSetOutlinerParaObject(pTemp);
+            }
+        }
     }
-    else
-        SdrAttrObj::ClearItem(nWhich);
+
+    // call parent
+    SdrAttrObj::ClearItem(nWhich);
 }
 
-void SdrTextObj::SetItemSet( const SfxItemSet& rSet )
+void SdrTextObj::SetItemSet(const SfxItemSet& rSet)
 {
-    ImpCheckItemSetChanges(rSet);
+    // handle outliner attributes
+    if(pOutlinerParaObject)
+    {
+        Outliner* pOutliner;
+
+        if(!pEdtOutl)
+        {
+            pOutliner = &ImpGetDrawOutliner();
+            pOutliner->SetText(*pOutlinerParaObject);
+        }
+        else
+        {
+            pOutliner = pEdtOutl;
+        }
+
+        sal_uInt16 nParaCount((sal_uInt16)pOutliner->GetParagraphCount());
+        for(sal_uInt16 nPara(0); nPara < nParaCount; nPara++)
+        {
+            SfxItemSet aSet(pOutliner->GetParaAttribs(nPara));
+            aSet.Put(rSet);
+            pOutliner->SetParaAttribs(nPara, aSet);
+        }
+
+        if(!pEdtOutl)
+        {
+            if(nParaCount)
+            {
+                SfxItemSet aNewSet(pOutliner->GetParaAttribs(0));
+                ImpForceItemSet();
+                mpObjectItemSet->Put(aNewSet);
+            }
+
+            OutlinerParaObject* pTemp = pOutliner->CreateParaObject(0, nParaCount);
+            pOutliner->Clear();
+            NbcSetOutlinerParaObject(pTemp);
+        }
+    }
+
+    // Extra-Repaint wenn das Layout so radikal geaendert wird (#43139#)
+    if(SFX_ITEM_SET == rSet.GetItemState(SDRATTR_TEXT_CONTOURFRAME))
+        SendRepaintBroadcast();
+
+    // call parent
     SdrAttrObj::SetItemSet(rSet);
 }
 
 void SdrTextObj::ImpCheckItemSetChanges(const SfxItemSet& rAttr)
 {
-    BOOL bReplaceAll = TRUE;
+/*  BOOL bReplaceAll = TRUE;
     BOOL bCreateLRSpaceItems(FALSE);
     const SfxItemSet& rSet = GetItemSet();
 
@@ -704,7 +824,7 @@ void SdrTextObj::ImpCheckItemSetChanges(const SfxItemSet& rAttr)
             NbcAdjustTextFrameWidthAndHeight();
             bGrowChecked = TRUE;
         }
-    }
+    }*/
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
