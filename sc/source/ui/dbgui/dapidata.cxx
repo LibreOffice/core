@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapidata.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-20 09:15:16 $
+ *  last change: $Author: hr $ $Date: 2000-11-14 16:20:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,12 @@
 #include <vcl/waitobj.hxx>
 #include <comphelper/processfactory.hxx>
 
+#if SUPD<613
 #include <com/sun/star/data/XDatabaseFavorites.hpp>
 #include <com/sun/star/data/XDatabaseEngine.hpp>
 #include <com/sun/star/data/XDatabaseWorkspace.hpp>
 #include <com/sun/star/data/XDatabase.hpp>
+#endif
 #include <com/sun/star/sheet/DataImportMode.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -117,6 +119,7 @@ ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( Window* pParent ) :
 
     WaitObject aWait( this );       // initializing the database service the first time takes a while
 
+#if SUPD<613
     try
     {
         //  get database names
@@ -141,6 +144,7 @@ ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( Window* pParent ) :
     {
         DBG_ERROR("exception in database");
     }
+#endif
 
     aLbDatabase.SelectEntryPos( 0 );
     aLbType.SelectEntryPos( 0 );
@@ -192,6 +196,7 @@ void ScDataPilotDatabaseDlg::FillObjects()
     if ( nSelect > DP_TYPELIST_QUERY )
         return;                                 // only tables and queries
 
+#if SUPD<613
     try
     {
         uno::Reference<data::XDatabaseEngine> xEngine(
@@ -240,6 +245,7 @@ void ScDataPilotDatabaseDlg::FillObjects()
         //  #71604# this may happen if an invalid database is selected -> no DBG_ERROR
         DBG_WARNING("exception in database");
     }
+#endif
 }
 
 
