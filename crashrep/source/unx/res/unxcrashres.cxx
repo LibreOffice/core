@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unxcrashres.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:29:00 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:10:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -44,7 +44,6 @@
  ************************************************************************/#include <tools/config.hxx>
 #include <rtl/string.hxx>
 #include <osl/thread.h>
-#include <tools/l2txtenc.hxx>
 
 #include <hash_map>
 #include <string>
@@ -79,7 +78,7 @@ int main( int argc, char** argv )
 
     ByteString tmp_argv1( argv[1] );
     Config aConfig( String( tmp_argv1, osl_getThreadTextEncoding() ) );
-    hash_map< int, hash_map< OString, OString, OStringHash > > aFiles;
+    hash_map< ByteString, hash_map< OString, OString, OStringHash >, OStringHash > aFiles;
 
     for( USHORT i = 0; i < aConfig.GetGroupCount(); i++ )
     {
@@ -90,21 +89,18 @@ int main( int argc, char** argv )
         {
             ByteString aKey = aConfig.GetKeyName( n );
             ByteString aValue = aConfig.ReadKey( aKey );
-            int nRes = aKey.ToInt32();
             // tailor key
             filterValue( aValue, aGroup, aKey );
 
-            aFiles[nRes][aGroup] = ByteString( String( aValue, Langcode2TextEncoding( (USHORT)nRes ) ), RTL_TEXTENCODING_UTF8 );
+            aFiles[aKey][aGroup] = ByteString( aValue );
         }
     }
 
-    for( hash_map< int, hash_map< OString, OString, OStringHash > >::const_iterator lang_it = aFiles.begin(); lang_it != aFiles.end(); ++lang_it )
+    for( hash_map< ByteString, hash_map< OString, OString, OStringHash >, OStringHash >::const_iterator lang_it = aFiles.begin(); lang_it != aFiles.end(); ++lang_it )
     {
         ByteString aFile( argv[2] );
         aFile.Append( '.' );
-        if( lang_it->first < 10 )
-            aFile.Append( '0' );
-        aFile.Append( ByteString::CreateFromInt32( lang_it->first ) );
+        aFile.Append( lang_it->first );
         FILE* fp = fopen( aFile.GetBuffer(), "w" );
         if( ! fp )
         {
