@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyBag.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:43:38 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:17:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@
     property sets, giving direct access to the properties.  In this case,
     use the methods like <member>XPropertySet:getPropertyValue</member>.
  */
-service PropertyBag
+published service PropertyBag
 {
     interface com::sun::star::beans::XPropertySet;
 
