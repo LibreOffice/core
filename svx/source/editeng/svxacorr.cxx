@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-11 18:20:34 $
+ *  last change: $Author: mtg $ $Date: 2001-05-16 15:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2850,7 +2850,7 @@ BOOL SvxAutoCorrectLanguageLists::PutText( const String& rShort,
     MakeUserStorage_Impl();
 
     SfxMedium aMedium( sUserAutoCorrFile, STREAM_STD_READWRITE, TRUE );
-    SvStorageRef xStg = aMedium.GetOutputStorage();
+    SvStorageRef xStg = aMedium.GetOutputStorage( TRUE );
     BOOL bRet = xStg.Is() && SVSTREAM_OK == xStg->GetError();
 
 /*  if( bRet )
@@ -2908,7 +2908,7 @@ BOOL SvxAutoCorrectLanguageLists::PutText( const String& rShort,
 
     String sLong;
     SfxMedium aMedium( sUserAutoCorrFile, STREAM_STD_READWRITE, TRUE );
-    SvStorageRef xStg = aMedium.GetOutputStorage();
+    SvStorageRef xStg = aMedium.GetOutputStorage( TRUE );
     BOOL bRet = xStg.Is() && SVSTREAM_OK == xStg->GetError();
 
     if( bRet )
