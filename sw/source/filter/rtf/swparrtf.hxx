@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:23:35 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 13:05:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,6 +405,8 @@ class SwRTFParser : public SvxRTFParser
 
     virtual void ReadInfo( const sal_Char* pChkForVerNo = 0 );
 
+    void ReadUserProperties();
+
     void ReadListLevel( SwNumRule& rRule, BYTE nLvl );
     void SetBorderLine(SvxBoxItem& rBox, sal_uInt16 nLine);
     void ReadListTable();
@@ -471,6 +473,7 @@ protected:
 
     void ReadPrtData();
     void ReadField();
+    void ReadXEField();
     void ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc = 0 );
     void ReadDocControls( int nToken );
     void SetPageInformationAsDefault(const DocPageInformation &rInfo);
