@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:48:23 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:55:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "svdpage.hxx"
+
 // HACK
 #ifdef SVX_LIGHT
 #define _IPOBJ_HXX
@@ -71,24 +73,17 @@
 #include <sot/clsids.hxx>
 #endif
 #ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
-#ifndef _PERSIST_HXX
-#include <so3/persist.hxx>
+#include <sot/storage.hxx>
 #endif
 #ifndef _SVDVIEW_HXX
 #include "svdview.hxx"
 #endif
-#include "svdpage.hxx"
 #include <string.h>
 #ifndef _STRING_H
 #define _STRING_H
 #endif
 #ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _IPOBJ_HXX //autogen
-#include <so3/ipobj.hxx>
 #endif
 
 #include "svdetc.hxx"
@@ -113,6 +108,8 @@
 #else
 #include "unopage.hxx"
 #endif
+
+#include <sfx2/objsh.hxx>
 
 #ifndef _SV_SALBTYPE_HXX
 #include <vcl/salbtype.hxx>     // FRound
@@ -705,18 +702,16 @@ void SdrObjList::NbcReformatAllTextObjects()
     while (nNum<nAnz)
     {
         SdrObject* pObj = GetObj(nNum);
-#ifndef SVX_LIGHT
         if (pPrinter &&
             pObj->GetObjInventor() == SdrInventor &&
             pObj->GetObjIdentifier() == OBJ_OLE2  &&
             !( (SdrOle2Obj*) pObj )->IsEmpty() )
         {
-            const SvInPlaceObjectRef& xObjRef = ((SdrOle2Obj*) pObj)->GetObjRef();
-
-            if( xObjRef.Is() && ( xObjRef->GetMiscStatus() & SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE ) )
-                xObjRef->OnDocumentPrinterChanged(pPrinter);
+            //const SvInPlaceObjectRef& xObjRef = ((SdrOle2Obj*) pObj)->GetObjRef();
+            //TODO/LATER: PrinterChangeNotification needed
+            //if( xObjRef.Is() && ( xObjRef->GetMiscStatus() & SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE ) )
+            //  xObjRef->OnDocumentPrinterChanged(pPrinter);
         }
-#endif
 
         pObj->NbcReformatText();
         nAnz=GetObjCount();             // ReformatText may delete an object
@@ -727,41 +722,7 @@ void SdrObjList::NbcReformatAllTextObjects()
 
 void SdrObjList::ReformatAllTextObjects()
 {
-    ULONG nAnz=GetObjCount();
-    ULONG nNum=0;
-
-    Printer* pPrinter = NULL;
-
-    if (pModel)
-    {
-        if (pModel->GetRefDevice() && pModel->GetRefDevice()->GetOutDevType() == OUTDEV_PRINTER)
-        {
-            // Kein RefDevice oder RefDevice kein Printer
-            pPrinter = (Printer*) pModel->GetRefDevice();
-        }
-    }
-
-    while (nNum<nAnz)
-    {
-        SdrObject* pObj = GetObj(nNum);
-
-#ifndef SVX_LIGHT
-        if (pPrinter &&
-            pObj->GetObjInventor() == SdrInventor &&
-            pObj->GetObjIdentifier() == OBJ_OLE2  &&
-            !( (SdrOle2Obj*) pObj )->IsEmpty() )
-        {
-            const SvInPlaceObjectRef& xObjRef = ((SdrOle2Obj*) pObj)->GetObjRef();
-
-            if( xObjRef.Is() && ( xObjRef->GetMiscStatus() & SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE ) )
-                xObjRef->OnDocumentPrinterChanged(pPrinter);
-        }
-#endif
-
-        pObj->ReformatText();
-        nAnz=GetObjCount();             // ReformatText may delete an object
-        nNum++;
-    }
+    NbcReformatAllTextObjects();
 }
 
 /** steps over all available objects and reformats all
@@ -952,17 +913,23 @@ void SdrObjList::Load(SvStream& rIn, SdrPage& rPage)
                         bImageOLE = TRUE;
                     else if( pModel->GetPersist() )
                     {
-                        SvInfoObjectRef     xInfo( pModel->GetPersist()->Find( pOLEObj->GetPersistName() ) );
-                        const SvGlobalName  aSim30Name( SO3_SIM_CLASSID_30 );
-                        const SvGlobalName  aSim40Name( SO3_SIM_CLASSID_40 );
-                        const SvGlobalName  aSim50Name( SO3_SIM_CLASSID_50 );
-
-                        if( xInfo.Is() &&
-                            ( xInfo->GetClassName() == aSim30Name ||
-                              xInfo->GetClassName() == aSim40Name ||
-                              xInfo->GetClassName() == aSim50Name ) )
+                        if ( pModel->GetPersist()->GetEmbeddedObjectContainer().HasEmbeddedObject( pOLEObj->GetPersistName() ) )
                         {
-                            bImageOLE = TRUE;
+                            uno::Reference < embed::XEmbeddedObject > xObject =
+                                    pModel->GetPersist()->GetEmbeddedObjectContainer().GetEmbeddedObject( pOLEObj->GetPersistName() );
+                            if ( xObject.is() )
+                            {
+                                SvGlobalName aObjClsId( xObject->getClassID() );
+
+                                const SvGlobalName  aSim30Name( SO3_SIM_CLASSID_30 );
+                                const SvGlobalName  aSim40Name( SO3_SIM_CLASSID_40 );
+                                const SvGlobalName  aSim50Name( SO3_SIM_CLASSID_50 );
+
+                                if( aObjClsId == aSim30Name || aObjClsId == aSim40Name || aObjClsId == aSim50Name )
+                                {
+                                    bImageOLE = TRUE;
+                                }
+                            }
                         }
                     }
 
