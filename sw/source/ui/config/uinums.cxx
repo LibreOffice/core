@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uinums.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:59:08 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ SwBaseNumRules::~SwBaseNumRules()
     if( bModified )
     {
         SvtPathOptions aPathOpt;
-        String sNm( URIHelper::SmartRelToAbs( aPathOpt.GetUserConfigPath() ));
+        String sNm( aPathOpt.GetUserConfigPath() );
         sNm += INET_PATH_TOKEN;
         sNm += sFileName;
         INetURLObject aTempObj(sNm);
