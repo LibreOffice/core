@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-14 19:32:26 $
+ *  last change: $Author: mba $ $Date: 2001-11-21 15:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@
 #endif
 
 // =======================================================================
+static void UpdateFrameGeometry( HWND hWnd, SalFrame* pFrame );
 
 static void ImplSaveFrameState( SalFrame* pFrame )
 {
@@ -344,9 +345,7 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
     ImplSaveFrameState( pFrame );
     pFrame->maFrameData.mbDefPos = TRUE;
 
-    RECT aWindowRect;
-    GetWindowRect( hWnd, &aWindowRect );   // x,y in screen coordinates, width and height with border
-
+    UpdateFrameGeometry( hWnd, pFrame );
     return pFrame;
 }
 
