@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblctrl.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2001-07-14 02:59:24 $
+ *  last change: $Author: os $ $Date: 2002-08-29 07:14:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 #include "tblctrl.hrc"
 #include "helpid.h"
 #include "cmdid.h"
-#define IMAGE_STDBTN_COLOR Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; }
 FloatingWindow RID_TBL_OPT_CTRL
 {
     Moveable = TRUE ;
@@ -110,18 +109,18 @@ FloatingWindow RID_TBL_OPT_CTRL
     Text [ danish ] = "Optimer" ;
     Text [ portuguese_brazilian ] = "Optimieren" ;
     Text [ portuguese ] = "Optimizar" ;
-    Text[ chinese_simplified ] = "×î¼Ñ»¯";
+    Text[ chinese_simplified ] = "æœ€ä½³åŒ–";
     Text[ russian ] = "Îïòèìèçèğîâàòü";
     Text[ polish ] = "Optymalizuj";
-    Text[ japanese ] = "Å“K‰»";
-    Text[ chinese_traditional ] = "³ÌÓì¤Æ";
+    Text[ japanese ] = "æœ€é©åŒ–";
+    Text[ chinese_traditional ] = "æœ€é©åŒ–";
     Text[ arabic ] = "ÇáÔßá ÇáÃãËá";
     Text[ greek ] = "Âåëôéóôïğïßçóç";
-    Text[ korean ] = "ÃÖÀûÈ­";
+    Text[ korean ] = "ìµœì í™”";
     Text[ turkish ] = "Optimize et";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Optimar";
+    Text[ catalan ] = "Optimitza";
     Text[ finnish ] = "Optimoi";
+    Text[ thai ] = "à¸—à¸³à¹ƒà¸«à¹‰à¹€à¸«à¸¡à¸²à¸°à¸—à¸µà¹ˆà¸ªà¸¸à¸”";
 };
-
 

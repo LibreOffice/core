@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2002-05-27 10:05:11 $
+ *  last change: $Author: os $ $Date: 2002-08-29 07:08:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ TabPage TP_FRM_WRAP
         Text[ spanish ] = "Predeterminaciones";
         Text[ finnish ] = "Presets";
         Text[ italian ] = "Predefiniti";
-        Text[ danish ] = "Presets";
+        Text[ danish ] = "Forudindstillinger";
         Text[ swedish ] = "Förinställningar";
         Text[ polish ] = "Ustawienia domyœlne";
         Text[ portuguese_brazilian ] = "Presets";
@@ -95,7 +95,7 @@ TabPage TP_FRM_WRAP
         Text[ chinese_traditional ] = "é è¨­";
         Text[ turkish ] = "Presets";
         Text[ arabic ] = "Presets";
-        Text[ catalan ] = "Presets";
+        Text[ catalan ] = "Predefinits";
         Text[ thai ] = "à¸à¸³à¸«à¸™à¸”";
     };
     ImageRadioButton RB_NO_WRAP
@@ -125,7 +125,7 @@ TabPage TP_FRM_WRAP
         Text[ greek ] = "Êáíİíá";
         Text[ korean ] = "ì—†ìŒ(~N)";
         Text[ turkish ] = "~Yok";
-        Text[ catalan ] = "~Ninguno";
+        Text[ catalan ] = "C~ap";
         Text[ finnish ] = "~Ei mitään";
         Text[ thai ] = "à¹„~à¸¡à¹ˆà¸¡à¸µ";
     };
@@ -136,7 +136,27 @@ TabPage TP_FRM_WRAP
         WordBreak = TRUE;
         TopImage = True ;
         Text = "Vor" ;
-        Text [ english_us ] = "B~efore" ;
+        Text [ english_us ] = "Before" ;
+        Text[ portuguese ] = "~Esquerda";
+        Text[ russian ] = "Ñëåâà";
+        Text[ greek ] = "ÁñéóôåñÜ";
+        Text[ dutch ] = "~Links";
+        Text[ french ] = "Avant";
+        Text[ spanish ] = "Antes";
+        Text[ finnish ] = "~Vasen:";
+        Text[ italian ] = "Prima";
+        Text[ danish ] = "Venstre";
+        Text[ swedish ] = "Före";
+        Text[ polish ] = "Z le~wej";
+        Text[ portuguese_brazilian ] = "~Links";
+        Text[ japanese ] = "å‰";
+        Text[ korean ] = "ì•";
+        Text[ chinese_simplified ] = "å‰";
+        Text[ chinese_traditional ] = "å‰";
+        Text[ turkish ] = "So~l";
+        Text[ arabic ] = "Åáì ÇáíÓÇÑ";
+        Text[ thai ] = "~à¸‹à¹‰à¸²à¸¢";
+        Text[ catalan ] = "~Esquerra";
     };
     ImageRadioButton RB_WRAP_RIGHT
     {
@@ -145,7 +165,27 @@ TabPage TP_FRM_WRAP
         WordBreak = TRUE;
         TopImage = True ;
         Text = "Hinter" ;
-        Text [ english_us ] = "~After" ;
+        Text [ english_us ] = "After" ;
+        Text[ portuguese ] = "~Direita";
+        Text[ russian ] = "Ñïğàâà";
+        Text[ greek ] = "ÄåîéÜ";
+        Text[ dutch ] = "~Rechts";
+        Text[ french ] = "Après";
+        Text[ spanish ] = "Después";
+        Text[ finnish ] = "~Oikea";
+        Text[ italian ] = "Dopo";
+        Text[ danish ] = "Højre";
+        Text[ swedish ] = "Efter";
+        Text[ polish ] = "Z prawej";
+        Text[ portuguese_brazilian ] = "~Rechts";
+        Text[ japanese ] = "å¾Œ";
+        Text[ korean ] = "ë’¤";
+        Text[ chinese_simplified ] = "å";
+        Text[ chinese_traditional ] = "å¾Œ";
+        Text[ turkish ] = "Sa~ğ";
+        Text[ arabic ] = "Åáì Çáíãíä";
+        Text[ thai ] = "à¸‚~à¸§à¸²";
+        Text[ catalan ] = "~Dreta";
     };
     ImageRadioButton RB_WRAP_PARALLEL
     {
@@ -173,7 +213,7 @@ TabPage TP_FRM_WRAP
         Text[ greek ] = "ĞáñÜëëçëá";
         Text[ korean ] = "í‰í–‰(~P)";
         Text[ turkish ] = "~Paralel";
-        Text[ catalan ] = "~Paralelo";
+        Text[ catalan ] = "~Paral.lel";
         Text[ finnish ] = "~Samansuuntainen";
         Text[ thai ] = "~à¸‚à¸™à¸²à¸™";
     };
@@ -205,7 +245,7 @@ TabPage TP_FRM_WRAP
         Text[ greek ] = "Äéá ìİóïõ";
         Text[ korean ] = "ë¬¸ì¥ íë¥´ê¸°(~U)";
         Text[ turkish ] = "~Metin arkasına gönder";
-        Text[ catalan ] = "~Continuo";
+        Text[ catalan ] = "~Continu";
         Text[ thai ] = "~à¸œà¹ˆà¸²à¸™";
     };
     ImageRadioButton RB_WRAP_IDEAL
@@ -234,7 +274,7 @@ TabPage TP_FRM_WRAP
         Text[ greek ] = "ÄõíáìéêÜ";
         Text[ korean ] = "ìµœì ì˜(~O)";
         Text[ turkish ] = "D~inamik";
-        Text[ catalan ] = "Diná~mico";
+        Text[ catalan ] = "Dinà~mic";
         Text[ finnish ] = "~Optimaalinen";
         Text[ thai ] = "à¹€~à¸«à¸¡à¸²à¸°à¸—à¸µà¹ˆà¸ªà¸¸à¸”";
     };
@@ -263,7 +303,7 @@ TabPage TP_FRM_WRAP
         Text[ greek ] = "Ğñşôç ğáñÜãñáöï~ò";
         Text[ korean ] = "ì²« ë‹¨ë½(~F)";
         Text[ turkish ] = "İlk paragraf";
-        Text[ catalan ] = "Primer párra~fo";
+        Text[ catalan ] = "Primer paràgra~f";
         Text[ finnish ] = "~Ensimmäinen kappale";
         Text[ thai ] = "à¸¢à¹ˆà¸­à¸«à¸™à¹‰à¸²à¹~à¸£à¸";
     };
@@ -291,7 +331,7 @@ TabPage TP_FRM_WRAP
         Text[ greek ] = "Óå öüíôï";
         Text[ korean ] = "ë°°ê²½ì—(~K)";
         Text[ turkish ] = "Arta~landa";
-        Text[ catalan ] = "En el f~ondo";
+        Text[ catalan ] = "En el ~fons";
         Text[ finnish ] = "~Taustalla";
         Text[ thai ] = "à¹ƒà¸™à¸à¸·à¹‰à¸™~à¸«à¸¥à¸±à¸‡";
     };
@@ -320,7 +360,7 @@ TabPage TP_FRM_WRAP
         Text[ greek ] = "Ğåñßãñáììá";
         Text[ korean ] = "ìœ¤ê³½(~C)";
         Text[ turkish ] = "Kontu~r";
-        Text[ catalan ] = "Conto~rno";
+        Text[ catalan ] = "~Contorn";
         Text[ finnish ] = "~Ääriviiva";
         Text[ thai ] = "à¹€~à¸ªà¹‰à¸™à¹à¸ªà¸”à¸‡à¸£à¸¹à¸›à¸£à¹ˆà¸²à¸‡";
     };
@@ -349,7 +389,7 @@ TabPage TP_FRM_WRAP
         Text[ greek ] = "Ìü~íï åîùôåñéêÜ";
         Text[ korean ] = "ë°”ê¹¥ìª½ë§Œ";
         Text[ turkish ] = "Yalnızca dışarıda";
-        Text[ catalan ] = "Solo en el exterior";
+        Text[ catalan ] = "Només a l'exterior";
         Text[ finnish ] = "Vain ulkopuoli";
         Text[ thai ] = "à¸”à¹‰à¸²à¸™à¸™à¸­à¸à¹€à¸—à¹ˆà¸²à¸™à¸±à¹‰à¸™";
     };
@@ -377,7 +417,7 @@ TabPage TP_FRM_WRAP
         Text[ greek ] = "Åğéëïãİò";
         Text[ korean ] = "ì˜µì…˜";
         Text[ turkish ] = "Seçenekler";
-        Text[ catalan ] = "Opciones";
+        Text[ catalan ] = "Opcions";
         Text[ finnish ] = "Asetukset";
         Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
     };
@@ -414,7 +454,7 @@ TabPage TP_FRM_WRAP
         Text[ greek ] = "ÁñéóôåñÜ";
         Text[ korean ] = "ì™¼ìª½(~E)";
         Text[ turkish ] = "S~ol";
-        Text[ catalan ] = "I~zquierda";
+        Text[ catalan ] = "E~squerra";
         Text[ thai ] = "à¸‹à¹‰à¸²~à¸¢";
     };
     MetricField ED_LEFT_MARGIN
@@ -459,7 +499,7 @@ TabPage TP_FRM_WRAP
         Text[ greek ] = "ÄåîéÜ";
         Text[ korean ] = "ì˜¤ë¥¸ìª½(~R)";
         Text[ turkish ] = "S~ağ";
-        Text[ catalan ] = "D~erecha";
+        Text[ catalan ] = "Dre~ta";
         Text[ thai ] = "~à¸‚à¸§à¸²";
     };
     MetricField ED_RIGHT_MARGIN
@@ -488,7 +528,7 @@ TabPage TP_FRM_WRAP
         Text [ portuguese_brazilian ] = "~Topo" ;
         Text [ portuguese ] = "~Topo" ;
         Text [ finnish ] = "~Yläosa" ;
-        Text [ danish ] = "Øverst" ;
+        Text [ danish ] = "~Øverst" ;
         Text [ french ] = "En haut" ;
         Text [ swedish ] = "~Uppe" ;
         Text [ dutch ] = "~Boven" ;
@@ -504,7 +544,7 @@ TabPage TP_FRM_WRAP
         Text[ greek ] = "ĞÜíù";
         Text[ korean ] = "ìœ„(~T)";
         Text[ turkish ] = "Üs~t";
-        Text[ catalan ] = "~Arriba";
+        Text[ catalan ] = "Part s~uperior";
         Text[ thai ] = "~à¸šà¸™";
     };
     MetricField ED_TOP_MARGIN
@@ -549,7 +589,7 @@ TabPage TP_FRM_WRAP
         Text[ greek ] = "ÊÜôù";
         Text[ korean ] = "ì•„ë˜(~B)";
         Text[ turkish ] = "A~lt";
-        Text[ catalan ] = "~Abajo";
+        Text[ catalan ] = "Part ~inferior";
         Text[ thai ] = "~à¸¥à¹ˆà¸²à¸‡";
     };
     MetricField ED_BOTTOM_MARGIN
@@ -593,7 +633,7 @@ TabPage TP_FRM_WRAP
         Text[ greek ] = "AğïóôÜóåéò";
         Text[ korean ] = "ê°„ê²©";
         Text[ turkish ] = "Aralık";
-        Text[ catalan ] = "Distancias";
+        Text[ catalan ] = "Distàncies";
         Text[ thai ] = "à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡";
     };
 #define WRAP_IDLIST \
@@ -612,7 +652,6 @@ TabPage TP_FRM_WRAP
             IMG_KON_IDEAL ;\
         };                 \
         IdCount = { 11 ; };
-                                                                                                                                                        #define IMAGE_STDBTN_COLOR Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; }
     ImageList IL_WRAP
     {
         ImageBitmap = Bitmap { File = "wr_aplist.bmp" ; };
@@ -622,11 +661,9 @@ TabPage TP_FRM_WRAP
     ImageList ILH_WRAP
     {
         ImageBitmap = Bitmap { File = "wrh_aplist.bmp" ; };
-        MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; };
+        MaskColor = IMAGE_STDBTN_COLOR ;
         WRAP_IDLIST
     };
 
 };
-
-
 

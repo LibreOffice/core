@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2002-05-31 07:29:20 $
+ *  last change: $Author: os $ $Date: 2002-08-29 07:06:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 #include "changedb.hrc"
 #include "fldui.hrc"
 
-#define IMAGE_STDBTN_COLOR Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; }
 
 ModalDialog DLG_CHANGE_DB
 {
@@ -110,7 +109,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ korean ] = "데이터베이스 교환";
         Text[ turkish ] = "Veritaban�n�n de�i�tirilmesi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Cambiar Bases de Datos";
+        Text[ catalan ] = "Intercanvi amb base de dades";
         Text[ finnish ] = "Vaihda tietokannat";
         Text[ thai ] = "แลกเปลี่ยนฐานข้อมูล";
     };
@@ -142,7 +141,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ korean ] = "데이터베이스가 사용중 입니다.";
         Text[ turkish ] = "Kullan�lan veritabanlar�";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Bases de datos utilizadas";
+        Text[ catalan ] = "Bases de dades utilitzades";
         Text[ finnish ] = "K�yt�ss� olevat tietokannat";
         Text[ thai ] = "ฐานข้อมูลที่ถูกใช้";
     };
@@ -175,7 +174,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ korean ] = "데이터베이스 사용가능";
         Text[ turkish ] = "Mevcut veritabanlar�";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Bases de datos diponibles";
+        Text[ catalan ] = "Bases de dades disponibles";
         Text[ finnish ] = "K�ytett�viss� olevat tietokannat";
         Text[ thai ] = "ฐานข้อมูลที่ใช้ได้";
     };
@@ -208,7 +207,7 @@ ModalDialog DLG_CHANGE_DB
         Text [ french ] = "Utilisez cette bo�te de dialogue pour �changer les bases de donn�es auxquelles vous acc�dez dans vos documents via des champs de formulaire. Vous ne pouvez ex�cuter qu'une seule modification � la fois. La liste de gauche permet une s�lection multiple." ;
         Text [ dutch ] = "In deze dialoog kunt u een database waarop de databasevelden in uw document betrekking hebben vervangen door een andere database. U kunt slechts ��n wijziging tegelijk aanbrengen. In de linker lijst is ook een meervoudige keuze mogelijk." ;
         Text [ swedish ] = "I den h�r dialogrutan kan du byta ut databaser, som du kan n� via databasf�lt i ditt dokument, mot andra databaser. Du kan bara g�ra en �ndring �t g�ngen. I den v�nstra listan g�r det att g�ra multimarkering." ;
-        Text [ danish ] = "I denne dialog kan du udskifte databaser, som du har adgang til via databasefelter. Du kan kun udf�re en �ndring ad gangen. I listen til venstre er der mulighed for multimarkering." ;
+        Text [ danish ] = "I denne dialog kan du udskifte databaser, som du har adgang til i et dokument via databasefelter, med andre databaser. Du kan kun foretage �n �ndring pr. arbejdsdag. P� venstre liste er det muligt at foretage multimarkeringer." ;
         Text [ portuguese_brazilian ] = "In diesem Dialog k?nen Sie Datenbanken, auf die Sie in Ihrem Dokument ?er Datenbankfelder zugreifen, durch andere Datenbanken austauschen. Sie k?nen nur eine ?nderung pro Arbeitsgang durchf?ren. In der linken Liste ist Mehrfachselektion m?lich." ;
         Text [ portuguese ] = "Nesta caixa de di�logo poder� substituir bases de dados por outras, tendo acesso a elas no seu documento atrav�s dos campos da base de dados. � apenas poss�vel uma altera��o por cada opera��o. Na lista da esquerda poder� seleccionar v�rias op��es." ;
         Text[ chinese_simplified ] = "在这个对话框内您能够使用另一个数据库来代替当前编辑的文档读取的数据库。每次编辑文档时只能一次替换数据库。在左方的列单内可以执行多重选择的功能。";
@@ -223,7 +222,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ korean ] = "이 대화상자에서는 문서에서 데이터베이스 필드를 통해 데이터베이스를 액세스하거나 교환하는 데이터베이스 필드를 사용할 수 있습니다.하나의 작업 과정에서 변경 작업이 한 번 수행됩니다. 왼쪽의 목록에서는 여러 항목을 선택할 수 있습니다.";
         Text[ turkish ] = "Bu pencerede, belgenizdeki veritaban� alanlar� yoluyla eri�ti�iniz veritabanlar�n� ba�kalar� ile de�i�tirebilirsiniz. Her i�lemde yaln�zca tek bir de�i�iklik yap�labilir. Soldaki listede birden fazla se�im yap�labilir.";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "En este di�logo puede intercambiar por otras las bases de datos a las que acceda a trav�s de los campos. Se puede realizar solo un cambio por fase de trabajo. En la lista izquierda es posible hacer una selecci�n m�ltiple.";
+        Text[ catalan ] = "En aquest quadre de di�leg podeu intercanviar per altres bases de dades a les que accediu a trav�s de camps. Es pot realitzar nom�s un canvi per fase de treball. A la llista de l'esquerra �s possible fer una selecci� m�ltiple.";
         Text[ finnish ] = "T�m�n valintaikkunan avulla voit korvata ne tietokannat, joita k�yt�t asiakirjassasi tietokantakenttien avulla, toisilla tietokannoilla. Voit tehd� vain yhden muutoksen kerrallaan. Voit tehd� useita valintoja vasemmalla olevan luettelon avulla.";
         Text[ thai ] = "ใช้ไดอะล็อกนี้เพื่อแทนที่ฐานข้อมูลที่คุณเข้าถึงในเอกสารของคุณผ่านเขตข้อมูลของฐานข้อมูลด้วยฐานข้อมูลอื่น คุณสามารถทำการเปลี่ยนแปลงได้ครั้งเดียวเท่านั้น  การเลือกหลายส่วนสามารถทำได้ในรายการด้านซ้ายมือ";
     };
@@ -270,7 +269,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ korean ] = "문서에 데이터베이스 적용:";
         Text[ turkish ] = "Belge ile kullan�lan veritaban�:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Base de datos aplicada al doc.:";
+        Text[ catalan ] = "Base de dades aplicada al document:";
         Text[ finnish ] = "Asiakirjassa k�ytetty tietokanta:";
         Text[ thai ] = "ฐานข้อมูลประยุกต์กับเอกสาร:";
     };
@@ -302,7 +301,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ korean ] = "주소.주소";
         Text[ turkish ] = "Adresler.Adresler";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Direcciones.Direcciones";
+        Text[ catalan ] = "Adreces. Adreces";
         Text[ finnish ] = "Osoitteet.Osoitteet";
         Text[ thai ] = "ที่อยู่.ที่อยู่";
     };
@@ -363,7 +362,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ greek ] = "����������";
         Text[ korean ] = "정의";
         Text[ turkish ] = "Tan�mla";
-        Text[ catalan ] = "Definir";
+        Text[ catalan ] = "Defineix";
         Text[ finnish ] = "M��rit�";
         Text[ thai ] = "กำหนด";
     };
@@ -394,7 +393,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ greek ] = "����~����";
         Text[ korean ] = "닫기(~C)";
         Text[ turkish ] = "~��k��";
-        Text[ catalan ] = "~Cerrar";
+        Text[ catalan ] = "~Tanca";
         Text[ thai ] = "~ปิด";
     };
     HelpButton BT_HELP
@@ -415,7 +414,7 @@ ModalDialog DLG_CHANGE_DB
     Text[ korean ] = "데이터베이스 교환";
     Text[ turkish ] = "Veritaban�n�n de�i�tirilmesi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Cambiar Bases de Datos";
+    Text[ catalan ] = "Intercanvi amb base de dades";
     Text[ finnish ] = "Vaihda tietokannat";
     Text[ thai ] = "แลกเปลี่ยนฐานข้อมูล";
 };

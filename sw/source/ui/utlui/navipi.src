@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2002-06-17 09:28:29 $
+ *  last change: $Author: os $ $Date: 2002-08-29 07:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,6 @@
 #include "utlui.hrc"
 #include "navipi.hrc"
 #include "helpid.h"
-#define IMAGE_STDBTN_COLOR Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; }
 Window DLG_NAVIGATION_PI
 {
     HelpID = HID_NAVIGATION_PI ;
@@ -140,7 +139,7 @@ Window DLG_NAVIGATION_PI
     ImageList ILH_CONTENT
     {
         ImageBitmap = Bitmap { File = "sch_nacon.bmp" ; };
-        MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; };
+        MaskColor = IMAGE_STDBTN_COLOR ;
         NAVI_IDLIST
     };
     Toolbox TB_CONTENT
@@ -174,7 +173,7 @@ Window DLG_NAVIGATION_PI
                 Text[ greek ] = "Εναλλαγή";
                 Text[ korean ] = "ν† κΈ€";
                 Text[ turkish ] = "Deπiώtir";
-                Text[ catalan ] = "Conmutar";
+                Text[ catalan ] = "Commuta";
                 Text[ finnish ] = "Vaihda";
                 Text[ thai ] = "ΰΈªΰΈ¥ΰΈ±ΰΈ";
             };
@@ -202,7 +201,7 @@ Window DLG_NAVIGATION_PI
                 Text[ greek ] = "Μετακίνηση";
                 Text[ korean ] = "λ„¤λΉ„κ²μ΄μ…";
                 Text[ turkish ] = "Dolaώma";
-                Text[ catalan ] = "Navegaciσn";
+                Text[ catalan ] = "Navegaciσ";
                 Text[ finnish ] = "Siirtyminen";
                 Text[ thai ] = "ΰΈ™ΰΈ³ΰΈ—ΰΈ²ΰΈ‡";
             };
@@ -251,7 +250,7 @@ Window DLG_NAVIGATION_PI
                 Text[ greek ] = "Πίσω";
                 Text[ korean ] = "λ’¤λ΅";
                 Text[ turkish ] = "Geri";
-                Text[ catalan ] = "Retroceder";
+                Text[ catalan ] = "Enrere";
                 Text[ thai ] = "ΰΈΰΈ¥ΰΈ±ΰΈΰΉ„ΰΈ›";
             };
             ToolBoxItem
@@ -282,7 +281,7 @@ Window DLG_NAVIGATION_PI
                 Text[ greek ] = "Εμπρός";
                 Text[ korean ] = "μ•μΌλ΅";
                 Text[ turkish ] = "έleri";
-                Text[ catalan ] = "Avanzar";
+                Text[ catalan ] = "Endavant";
                 Text[ thai ] = "ΰΈªΰΉΰΈ‡ΰΈ•ΰΉΰΈ­";
             };
             ToolBoxItem
@@ -319,7 +318,7 @@ Window DLG_NAVIGATION_PI
                 Text[ greek ] = "Κατάσταση συρμού";
                 Text[ korean ] = "λκΈ° λª¨λ“";
                 Text[ turkish ] = "Sόrόkleme kipi";
-                Text[ catalan ] = "Modo Arrastrar";
+                Text[ catalan ] = "Mode d'arrossegament";
                 Text[ finnish ] = "Vetotila";
                 Text[ thai ] = "ΰΈ¥ΰΈ²ΰΈΰΉ‚ΰΈ«ΰΈ΅ΰΈ”";
             };
@@ -355,7 +354,7 @@ Window DLG_NAVIGATION_PI
                 Text[ greek ] = "Προβιβασμός κεφαλαίου";
                 Text[ korean ] = "μ¥ μΉκ²©";
                 Text[ turkish ] = "Bφlόmό yukarύ al";
-                Text[ catalan ] = "Un capνtulo hacia arriba";
+                Text[ catalan ] = "Un capνtol cap amunt";
                 Text[ thai ] = "ΰΉ€ΰΈ¥ΰΈ·ΰΉΰΈ­ΰΈ™ΰΈΰΈ—";
             };
             ToolBoxItem
@@ -385,7 +384,7 @@ Window DLG_NAVIGATION_PI
                 Text[ greek ] = "Υποβιβασμός κεφαλαίου";
                 Text[ korean ] = "μ¥ λ‚®μ¶”κΈ°";
                 Text[ turkish ] = "Bφlόmό aώaπύ ηek";
-                Text[ catalan ] = "Un capνtulo hacia abajo";
+                Text[ catalan ] = "Un capνtol cap avall";
                 Text[ thai ] = "ΰΈ¥ΰΈ”ΰΈΰΈ—";
             };
             ToolBoxItem
@@ -416,7 +415,7 @@ Window DLG_NAVIGATION_PI
                 Text[ greek ] = "Πλαίσιο επιλογής Ναι/Όχι";
                 Text[ korean ] = "λª©λ΅μƒμ ν‘μ‹/μ¨κΈ°κΈ°";
                 Text[ turkish ] = "Liste kutusu aηύk/kapalύ";
-                Text[ catalan ] = "Mostrar/ocultar cuadro de selecciσn";
+                Text[ catalan ] = "Quadre de llista activat/desactivat";
                 Text[ finnish ] = "Luetteloruutu on/off";
                 Text[ thai ] = "ΰΈΰΈ¥ΰΉΰΈ­ΰΈ‡ΰΈ£ΰΈ²ΰΈΆΰΈΰΈ²ΰΈ£ ΰΉ€ΰΈ›ΰΈ΄ΰΈ”/ΰΈ›ΰΈ΄ΰΈ”";
             };
@@ -444,7 +443,7 @@ Window DLG_NAVIGATION_PI
                 Text[ greek ] = "Προβολή περιεχομένων Ναι/Όχι";
                 Text[ korean ] = "λ‚΄μ©λ³΄κΈ° μ „ν™";
                 Text[ turkish ] = "έηerik gφrόnόmόnό deπiώtir";
-                Text[ catalan ] = "Conmutar visualizaciσn del contenido";
+                Text[ catalan ] = "Commuta visualitzaciσ del contingut";
                 Text[ finnish ] = "Sisδltφnδkymδ";
                 Text[ thai ] = "ΰΈ΅ΰΈΈΰΈ΅ΰΈ΅ΰΈ­ΰΈ‡ΰΉ€ΰΈ™ΰΈ·ΰΉ‰ΰΈ­ΰΈ«ΰΈ²";
             };
@@ -479,7 +478,7 @@ Window DLG_NAVIGATION_PI
                 Text[ greek ] = "Ορισμός υπενθύμισης";
                 Text[ korean ] = "ν‘μ‹μ μ„¤μ •";
                 Text[ turkish ] = "Anύmsatύcύ yerleώtir";
-                Text[ catalan ] = "Insertar marca";
+                Text[ catalan ] = "Defineix un recordatori";
                 Text[ thai ] = "ΰΈ•ΰΈ±ΰΉ‰ΰΈ‡ΰΈ„ΰΉΰΈ²ΰΈ•ΰΈ±ΰΈ§ΰΉ€ΰΈ•ΰΈ·ΰΈ­ΰΈ™";
             };
             ToolBoxItem
@@ -513,7 +512,7 @@ Window DLG_NAVIGATION_PI
                 Text[ greek ] = "Κεφαλίδα";
                 Text[ korean ] = "λ¨Έλ¦¬κΈ€";
                 Text[ turkish ] = "άstbilgi";
-                Text[ catalan ] = "Encabezamiento";
+                Text[ catalan ] = "Encapηalament";
                 Text[ thai ] = "ΰΈªΰΉΰΈ§ΰΈ™ΰΈ«ΰΈ±ΰΈ§";
             };
             ToolBoxItem
@@ -545,7 +544,7 @@ Window DLG_NAVIGATION_PI
                 Text[ greek ] = "Υποσέλιδο";
                 Text[ korean ] = "λ°”λ‹¥κΈ€";
                 Text[ turkish ] = "Altbilgi";
-                Text[ catalan ] = "Pie de pαgina";
+                Text[ catalan ] = "Peu de pΰgina";
                 Text[ thai ] = "ΰΈªΰΉΰΈ§ΰΈ™ΰΈ—ΰΉ‰ΰΈ²ΰΈΆ";
             };
             ToolBoxItem
@@ -576,7 +575,7 @@ Window DLG_NAVIGATION_PI
                 Text[ greek ] = "Αγκύρωση<->Κείμενο";
                 Text[ korean ] = "κ³ μ •<->ν…μ¤νΈ";
                 Text[ turkish ] = "Sabitleyici<->Metin";
-                Text[ catalan ] = "Ancla <->Texto";
+                Text[ catalan ] = "Ancora<->Text";
                 Text[ thai ] = "ΰΈªΰΈ΅ΰΈ­<->ΰΈ‚ΰΉ‰ΰΈ­ΰΈ„ΰΈ§ΰΈ²ΰΈ΅";
             };
             ToolBoxItem
@@ -609,7 +608,7 @@ Window DLG_NAVIGATION_PI
                 Text[ greek ] = "Εμφανιζόμενα επίπεδα επικεφαλίδων";
                 Text[ korean ] = "λ‚νƒ€λ‚λ” ν‘μ  μμ¤€";
                 Text[ turkish ] = "Gφrόntόlenen baώlύk dόzeyleri";
-                Text[ catalan ] = "Niveles de encabezados mostrados";
+                Text[ catalan ] = "Nivells d'encapηalament mostrats";
                 Text[ finnish ] = "Otsikkotasojen nδyttφ";
                 Text[ thai ] = "ΰΉΰΈªΰΈ”ΰΈ‡ΰΈ£ΰΈ°ΰΈ”ΰΈ±ΰΈΰΈªΰΉΰΈ§ΰΈ™ΰΈ«ΰΈ±ΰΈ§";
             };
@@ -644,7 +643,7 @@ Window DLG_NAVIGATION_PI
                 Text[ greek ] = "Προβιβασμός επιπέδου";
                 Text[ korean ] = "μμ¤€ λ†’μ΄κΈ°";
                 Text[ turkish ] = "Dόzeyi yukarύ al";
-                Text[ catalan ] = "Subir un nivel";
+                Text[ catalan ] = "Promou el nivell";
                 Text[ thai ] = "ΰΉ€ΰΈ¥ΰΈ·ΰΉΰΈ­ΰΈ™ΰΈ£ΰΈ°ΰΈ”ΰΈ±ΰΈ";
             };
             ToolBoxItem
@@ -674,7 +673,7 @@ Window DLG_NAVIGATION_PI
                 Text[ greek ] = "Υποβιβασμός επιπέδου";
                 Text[ korean ] = "μμ¤€ λ‚®μ¶”κΈ°";
                 Text[ turkish ] = "Dόzeyi aώaπύ ηek";
-                Text[ catalan ] = "Bajar un nivel";
+                Text[ catalan ] = "Baixa un nivell";
                 Text[ thai ] = "ΰΈ¥ΰΈ”ΰΈ£ΰΈ°ΰΈ”ΰΈ±ΰΈ";
             };
         };
@@ -711,7 +710,7 @@ Window DLG_NAVIGATION_PI
                 Text[ greek ] = "Εναλλαγή";
                 Text[ korean ] = "ν† κΈ€";
                 Text[ turkish ] = "Toggle";
-                Text[ catalan ] = "Conmutar";
+                Text[ catalan ] = "Commuta";
                 Text[ finnish ] = "Vaihda";
                 Text[ thai ] = "ΰΈªΰΈ¥ΰΈ±ΰΈ";
             };
@@ -743,7 +742,7 @@ Window DLG_NAVIGATION_PI
                 Text[ greek ] = "Επεξεργασία";
                 Text[ korean ] = "νΈμ§‘";
                 Text[ turkish ] = "Dόzenle";
-                Text[ catalan ] = "Editar";
+                Text[ catalan ] = "Edita";
                 Text[ finnish ] = "Muokkaa";
                 Text[ thai ] = "ΰΉΰΈΰΉ‰ΰΉ„ΰΈ‚";
             };
@@ -771,7 +770,7 @@ Window DLG_NAVIGATION_PI
                 Text[ greek ] = "Ενημέρωση";
                 Text[ korean ] = "μ—…λ°μ΄νΈ";
                 Text[ turkish ] = "Gόncelle";
-                Text[ catalan ] = "Actualizar";
+                Text[ catalan ] = "Actualitza";
                 Text[ finnish ] = "Pδivitδ";
                 Text[ thai ] = "ΰΈ›ΰΈ£ΰΈ±ΰΈΰΈ›ΰΈ£ΰΈΈΰΈ‡";
             };
@@ -800,7 +799,7 @@ Window DLG_NAVIGATION_PI
                 Text[ greek ] = "Εισαγωγή";
                 Text[ korean ] = "μ‚½μ…";
                 Text[ turkish ] = "Ekle";
-                Text[ catalan ] = "Insertar";
+                Text[ catalan ] = "Insereix";
                 Text[ finnish ] = "Lisδδ";
                 Text[ thai ] = "ΰΉΰΈ—ΰΈ£ΰΈ";
             };
@@ -832,7 +831,7 @@ Window DLG_NAVIGATION_PI
                 Text[ greek ] = "Αποθήκευση και των περιεχομένων";
                 Text[ korean ] = "λ‚΄μ© μ €μ¥";
                 Text[ turkish ] = "έηeriπi de kaydet";
-                Text[ catalan ] = "Guardar contenidos";
+                Text[ catalan ] = "Desa continguts";
                 Text[ finnish ] = "Tallenna myφs sisδltφ";
                 Text[ thai ] = "ΰΈΰΈ±ΰΈ™ΰΈ—ΰΈ¶ΰΈΰΉ€ΰΈ™ΰΈ·ΰΉ‰ΰΈ­ΰΈ«ΰΈ²ΰΉ€ΰΈ›ΰΉ‡ΰΈ™ΰΈ­ΰΈΆΰΉΰΈ²ΰΈ‡ΰΈ”ΰΈµ";
             };
@@ -865,7 +864,7 @@ Window DLG_NAVIGATION_PI
                 Text[ greek ] = "Μεταφορά προς τα πάνω";
                 Text[ korean ] = "μ„λ΅ μ΄λ™";
                 Text[ turkish ] = "Yukarύ taώύ";
-                Text[ catalan ] = "Desplazar hacia arriba";
+                Text[ catalan ] = "Mou cap amunt";
                 Text[ finnish ] = "Siirrδ ylφs";
                 Text[ thai ] = "ΰΈΆΰΉ‰ΰΈ²ΰΈΆΰΈ‚ΰΈ¶ΰΉ‰ΰΈ™";
             };
@@ -894,7 +893,7 @@ Window DLG_NAVIGATION_PI
                 Text[ greek ] = "Μεταφορά προς τα κάτω";
                 Text[ korean ] = "μ•„λλ΅ μ΄λ™";
                 Text[ turkish ] = "Aώaπύ taώύ";
-                Text[ catalan ] = "Desplazar hacia abajo";
+                Text[ catalan ] = "Mou cap avall";
                 Text[ finnish ] = "Siirrδ alas";
                 Text[ thai ] = "ΰΈΆΰΉ‰ΰΈ²ΰΈΆΰΈ¥ΰΈ‡";
             };
@@ -966,7 +965,7 @@ Window DLG_NAVIGATION_PI
         Text[ greek ] = "Επίπεδα διάρθρωσης";
         Text[ korean ] = "μ•„μ›ƒνΈλΌμΈ";
         Text[ turkish ] = "Anahat dόzeyleri";
-        Text[ catalan ] = "Niveles del esquema";
+        Text[ catalan ] = "Nivell de contorn";
         Text[ finnish ] = "Jδsennystaso";
         Text[ thai ] = "ΰΈ£ΰΈ°ΰΈ”ΰΈ±ΰΈΰΉ€ΰΈ„ΰΉ‰ΰΈ²ΰΈ£ΰΉΰΈ²ΰΈ‡";
     };
@@ -992,7 +991,7 @@ Window DLG_NAVIGATION_PI
         Text[ greek ] = "Κατάσταση συρμού";
         Text[ korean ] = "λκΈ° λª¨λ“";
         Text[ turkish ] = "Sόrόkleme kipi";
-        Text[ catalan ] = "Modo Arrastrar";
+        Text[ catalan ] = "Mode d'arrossegament";
         Text[ finnish ] = "Vetotila";
         Text[ thai ] = "ΰΈ¥ΰΈ²ΰΈΰΉ‚ΰΈ«ΰΈ΅ΰΈ”";
     };
@@ -1019,7 +1018,7 @@ Window DLG_NAVIGATION_PI
         Text[ greek ] = "Εισαγωγή ως υπερ-σύνδεση";
         Text[ korean ] = "ν•μ΄νΌλ§ν¬λ΅ μ‚½μ…";
         Text[ turkish ] = "Hyperlink olarak ekle";
-        Text[ catalan ] = "Insertar como hiperenlace";
+        Text[ catalan ] = "Insereix com a hiperenllaη";
         Text[ finnish ] = "Lisδδ hyperlinkkinδ";
         Text[ thai ] = "ΰΉΰΈ—ΰΈ£ΰΈΰΉ€ΰΈ›ΰΉ‡ΰΈ™ΰΈΰΈ²ΰΈ£ΰΉ€ΰΈΰΈ·ΰΉΰΈ­ΰΈ΅ΰΉ‚ΰΈΆΰΈ‡ΰΈ«ΰΈ¥ΰΈ²ΰΈΆΰΈ΅ΰΈ΄ΰΈ•ΰΈ΄";
     };
@@ -1046,7 +1045,7 @@ Window DLG_NAVIGATION_PI
         Text[ greek ] = "Εισαγωγή ως σύνδεση";
         Text[ korean ] = "μ—°κ²°λ΅ μ‚½μ…";
         Text[ turkish ] = "Baπlantύ olarak ekle";
-        Text[ catalan ] = "Insertar como vνnculo";
+        Text[ catalan ] = "Insereix com a enllaη";
         Text[ finnish ] = "Lisδδ linkkinδ";
         Text[ thai ] = "ΰΉΰΈ—ΰΈ£ΰΈΰΉ€ΰΈ›ΰΉ‡ΰΈ™ΰΈΰΈ²ΰΈ£ΰΉ€ΰΈΰΈ·ΰΉΰΈ­ΰΈ΅ΰΉ‚ΰΈΆΰΈ‡";
     };
@@ -1073,7 +1072,7 @@ Window DLG_NAVIGATION_PI
         Text[ greek ] = "Εισαγωγή ως αντίγραφο";
         Text[ korean ] = "λ³µμ‚¬λ΅ μ‚½μ…";
         Text[ turkish ] = "Kopya olarak ekle";
-        Text[ catalan ] = "Insertar como copia";
+        Text[ catalan ] = "Insereix com a cςpia";
         Text[ finnish ] = "Lisδδ kopiona";
         Text[ thai ] = "ΰΉΰΈ—ΰΈ£ΰΈΰΉ€ΰΈ›ΰΉ‡ΰΈ™ΰΈªΰΈ³ΰΉ€ΰΈ™ΰΈ²";
     };
@@ -1099,7 +1098,7 @@ Window DLG_NAVIGATION_PI
         Text[ greek ] = "Εμφάνιση";
         Text[ korean ] = "ν‘μ‹";
         Text[ turkish ] = "Gφrόntό";
-        Text[ catalan ] = "Visualizaciσn";
+        Text[ catalan ] = "Visualitza";
         Text[ finnish ] = "Nδytδ";
         Text[ thai ] = "ΰΉΰΈªΰΈ”ΰΈ‡ΰΈΰΈ¥";
     };
@@ -1126,7 +1125,7 @@ Window DLG_NAVIGATION_PI
         Text[ greek ] = "Ενεργό παράθυρο";
         Text[ korean ] = "ν™μ„± μ°½";
         Text[ turkish ] = "Etkin pencere";
-        Text[ catalan ] = "Ventana activa";
+        Text[ catalan ] = "Finestra activa";
         Text[ finnish ] = "Aktiivinen ikkuna";
         Text[ thai ] = "ΰΈ«ΰΈ™ΰΉ‰ΰΈ²ΰΈ•ΰΉΰΈ²ΰΈ‡ΰΈ—ΰΈµΰΉΰΉƒΰΈΰΉ‰ΰΈ‡ΰΈ²ΰΈ™ΰΈ­ΰΈΆΰΈΉΰΉ";
     };
@@ -1152,7 +1151,7 @@ Window DLG_NAVIGATION_PI
         Text[ greek ] = "κρυφό";
         Text[ korean ] = "μ¨κΈ°κΈ°";
         Text[ turkish ] = "gizli";
-        Text[ catalan ] = "oculto";
+        Text[ catalan ] = "ocult";
         Text[ finnish ] = "piilotettu";
         Text[ thai ] = "ΰΈ‹ΰΉΰΈ­ΰΈ™";
     };
@@ -1178,7 +1177,7 @@ Window DLG_NAVIGATION_PI
         Text[ greek ] = "ενεργό";
         Text[ korean ] = "ν™μ„±";
         Text[ turkish ] = "etkin";
-        Text[ catalan ] = "activo";
+        Text[ catalan ] = "actiu";
         Text[ finnish ] = "aktiivinen";
         Text[ thai ] = "ΰΉƒΰΈΰΉ‰ΰΈ‡ΰΈ²ΰΈ™ΰΈ­ΰΈΆΰΈΉΰΉ";
     };
@@ -1204,7 +1203,7 @@ Window DLG_NAVIGATION_PI
         Text[ greek ] = "μη ενεργό";
         Text[ korean ] = "λΉ„ν™μ„±";
         Text[ turkish ] = "etkin deπil";
-        Text[ catalan ] = "inactivo";
+        Text[ catalan ] = "inactiu";
         Text[ finnish ] = "ei kδytφssδ";
         Text[ thai ] = "ΰΉ„ΰΈ΅ΰΉΰΉ„ΰΈ”ΰΉ‰ΰΉƒΰΈΰΉ‰";
     };
@@ -1230,7 +1229,7 @@ Window DLG_NAVIGATION_PI
         Text[ greek ] = "Επεξεργασία...";
         Text[ korean ] = "νΈμ§‘...";
         Text[ turkish ] = "~Dόzenle...";
-        Text[ catalan ] = "Edi~tar...";
+        Text[ catalan ] = "Edita...";
         Text[ finnish ] = "Muokkaa";
         Text[ thai ] = "ΰΉΰΈΰΉ‰ΰΉ„ΰΈ‚...";
     };
@@ -1256,7 +1255,7 @@ Window DLG_NAVIGATION_PI
         Text[ greek ] = "~Ενημέρωση";
         Text[ korean ] = "μ—…λ°μ΄νΈ(~U)";
         Text[ turkish ] = "~Gόncelle";
-        Text[ catalan ] = "Actuali~zar";
+        Text[ catalan ] = "~Actualitza";
         Text[ finnish ] = "~Pδivitδ";
         Text[ thai ] = "~ΰΈ›ΰΈ£ΰΈ±ΰΈΰΈ›ΰΈ£ΰΈΈΰΈ‡";
     };
@@ -1282,7 +1281,7 @@ Window DLG_NAVIGATION_PI
         Text[ greek ] = "Επεξεργασία";
         Text[ korean ] = "νΈμ§‘";
         Text[ turkish ] = "Dόzenle";
-        Text[ catalan ] = "Editar";
+        Text[ catalan ] = "Edita";
         Text[ finnish ] = "Muokkaa";
         Text[ thai ] = "ΰΉΰΈΰΉ‰ΰΉ„ΰΈ‚";
     };
@@ -1299,7 +1298,7 @@ Window DLG_NAVIGATION_PI
         Text[ spanish ] = "Editar vνnculo";
         Text[ finnish ] = "Edit link";
         Text[ italian ] = "Modifica collegamento";
-        Text[ danish ] = "Edit link";
+        Text[ danish ] = "Rediger kζde";
         Text[ swedish ] = "Redigera lδnk";
         Text[ polish ] = "Edytuj ³Ήcze";
         Text[ portuguese_brazilian ] = "Edit link";
@@ -1309,7 +1308,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_traditional ] = "η·¨θΌ―ζ·εΎ‘";
         Text[ turkish ] = "Edit link";
         Text[ arabic ] = "Edit link";
-        Text[ catalan ] = "Edit link";
+        Text[ catalan ] = "Edita enllaη";
         Text[ thai ] = "ΰΉΰΈΰΉ‰ΰΉ„ΰΈ‚ΰΈ•ΰΈ±ΰΈ§ΰΉ€ΰΈΰΈ·ΰΉΰΈ­ΰΈ΅ΰΉ‚ΰΈΆΰΈ‡";
     };
     String ST_INSERT
@@ -1337,7 +1336,7 @@ Window DLG_NAVIGATION_PI
         Text[ greek ] = "Εισαγωγή";
         Text[ korean ] = "μ‚½μ…";
         Text[ turkish ] = "Ekle";
-        Text[ catalan ] = "Insertar";
+        Text[ catalan ] = "Insereix";
         Text[ thai ] = "ΰΉΰΈ—ΰΈ£ΰΈ";
     };
     String ST_INDEX
@@ -1362,7 +1361,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_traditional ] = "η΄ΆεΌ•(~I)";
         Text[ arabic ] = "έεΡΣ";
         Text[ turkish ] = "~Dizin";
-        Text[ catalan ] = "Ν~ndice";
+        Text[ catalan ] = "Ν~ndex";
         Text[ finnish ] = "~Hakemisto";
         Text[ thai ] = "~ΰΈ”ΰΈ±ΰΈΰΈ™ΰΈµ";
     };
@@ -1388,7 +1387,7 @@ Window DLG_NAVIGATION_PI
         Text[ greek ] = "Αρχείο";
         Text[ korean ] = "νμΌ";
         Text[ turkish ] = "Dosya";
-        Text[ catalan ] = "Archivo";
+        Text[ catalan ] = "Fitxer";
         Text[ finnish ] = "Tiedosto";
         Text[ thai ] = "ΰΉΰΈΰΉ‰ΰΈ΅";
     };
@@ -1414,7 +1413,7 @@ Window DLG_NAVIGATION_PI
         Text[ greek ] = "Δημιουργία εγγράφου";
         Text[ korean ] = "μƒ λ¬Έμ„";
         Text[ turkish ] = "Yeni belge";
-        Text[ catalan ] = "Nuevo documento";
+        Text[ catalan ] = "Document nou";
         Text[ finnish ] = "Uusi asiakirja";
         Text[ thai ] = "ΰΉ€ΰΈ­ΰΈΰΈªΰΈ²ΰΈ£ΰΉƒΰΈ«ΰΈ΅ΰΉ";
     };
@@ -1440,7 +1439,7 @@ Window DLG_NAVIGATION_PI
         Text[ greek ] = "Κείμενο";
         Text[ korean ] = "ν…μ¤νΈ";
         Text[ turkish ] = "Metin";
-        Text[ catalan ] = "Texto";
+        Text[ catalan ] = "Text";
         Text[ finnish ] = "Teksti";
         Text[ thai ] = "ΰΈ‚ΰΉ‰ΰΈ­ΰΈ„ΰΈ§ΰΈ²ΰΈ΅";
     };
@@ -1469,7 +1468,7 @@ Window DLG_NAVIGATION_PI
         Text[ greek ] = "Διαγραφή";
         Text[ korean ] = "μ‚­μ ";
         Text[ turkish ] = "Sil";
-        Text[ catalan ] = "Eliminar";
+        Text[ catalan ] = "Suprimeix";
         Text[ thai ] = "ΰΈ¥ΰΈ";
     };
     String ST_DELETE_ENTRY
@@ -1496,7 +1495,7 @@ Window DLG_NAVIGATION_PI
         Text[ greek ] = "Διαγραφή";
         Text[ korean ] = "μ‚­μ (~D)";
         Text[ turkish ] = "~Sil";
-        Text[ catalan ] = "~Eliminar";
+        Text[ catalan ] = "~Suprimeix";
         Text[ thai ] = "~ΰΈ¥ΰΈ";
     };
     String ST_UPDATE_SEL
@@ -1521,7 +1520,7 @@ Window DLG_NAVIGATION_PI
         Text[ greek ] = "Επιλογή";
         Text[ korean ] = "μ„ νƒ";
         Text[ turkish ] = "Seηim";
-        Text[ catalan ] = "Selecciσn";
+        Text[ catalan ] = "Selecciσ";
         Text[ finnish ] = "Valinta";
         Text[ thai ] = "ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈ";
     };
@@ -1547,7 +1546,7 @@ Window DLG_NAVIGATION_PI
         Text[ greek ] = "Ευρετήρια";
         Text[ korean ] = "μƒ‰μΈ";
         Text[ turkish ] = "Dizin";
-        Text[ catalan ] = "Νndices";
+        Text[ catalan ] = "Νndex";
         Text[ finnish ] = "Hakemistot";
         Text[ thai ] = "ΰΈ”ΰΈ±ΰΈΰΈ™ΰΈµ";
     };
@@ -1574,7 +1573,7 @@ Window DLG_NAVIGATION_PI
         Text[ greek ] = "Συνδέσεις";
         Text[ korean ] = "μ—°κ²°";
         Text[ turkish ] = "Baπlantύ";
-        Text[ catalan ] = "Vνnculos";
+        Text[ catalan ] = "Enllaηos";
         Text[ finnish ] = "Linkit";
         Text[ thai ] = "ΰΉ€ΰΈΰΈ·ΰΉΰΈ­ΰΈ΅ΰΉ‚ΰΈΆΰΈ‡";
     };
@@ -1600,7 +1599,7 @@ Window DLG_NAVIGATION_PI
         Text[ greek ] = "Όλα";
         Text[ korean ] = "μ „μ²΄";
         Text[ turkish ] = "Tόmό";
-        Text[ catalan ] = "Todo";
+        Text[ catalan ] = "Tot";
         Text[ finnish ] = "Kaikki";
         Text[ thai ] = "ΰΈ—ΰΈ±ΰΉ‰ΰΈ‡ΰΈ«ΰΈ΅ΰΈ”";
     };
@@ -1626,7 +1625,7 @@ Window DLG_NAVIGATION_PI
         Text[ greek ] = "Κατάργηση ευρετηρίου";
         Text[ korean ] = "μƒ‰μΈ ν•΄μ (~R)";
         Text[ turkish ] = "D~izini kaldύr";
-        Text[ catalan ] = "Eliminar dire~ctorio";
+        Text[ catalan ] = "Elimina el dire~ctori";
         Text[ finnish ] = "~Poista hakemisto";
         Text[ thai ] = "ΰΉ€~ΰΈ­ΰΈ²ΰΈ”ΰΈ±ΰΈΰΈ™ΰΈµΰΈ­ΰΈ­ΰΈ";
     };
@@ -1654,7 +1653,7 @@ Window DLG_NAVIGATION_PI
         Text[ greek ] = "Άρση προστασίας";
         Text[ korean ] = "λ³΄νΈ ν•΄μ (~U)";
         Text[ turkish ] = "Korumayύ ~kaldύr";
-        Text[ catalan ] = "~Desproteger";
+        Text[ catalan ] = "~Desprotegeix";
         Text[ thai ] = "ΰΉ„~ΰΈ΅ΰΉΰΈ›ΰΉ‰ΰΈ­ΰΈ‡ΰΈΰΈ±ΰΈ™";
     };
     String ST_INVISIBLE
@@ -1679,7 +1678,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_traditional ] = "ι±ε…¥";
         Text[ arabic ] = "γΞέν";
         Text[ turkish ] = "gizli";
-        Text[ catalan ] = "oculto";
+        Text[ catalan ] = "ocult";
         Text[ finnish ] = "piilotettu";
         Text[ thai ] = "ΰΈ‹ΰΉΰΈ­ΰΈ™";
     };
@@ -1705,7 +1704,7 @@ Window DLG_NAVIGATION_PI
         Text[ greek ] = "Δεν βρέθηκε το αρχείο: ";
         Text[ korean ] = "νμΌμ„ μ°Ύμ§€ λª»ν–μµλ‹λ‹¤: ";
         Text[ turkish ] = "Dosya bulunamadύ: ";
-        Text[ catalan ] = "Archivo no encontrado: ";
+        Text[ catalan ] = "No es troba el fitxer: ";
         Text[ finnish ] = "Tiedostoa ei lφytynyt: ";
         Text[ thai ] = "ΰΉ„ΰΈ΅ΰΉΰΈΰΈΰΉΰΈΰΉ‰ΰΈ΅: ";
     };
@@ -1731,7 +1730,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_traditional ] = "ι‡ζ–°ε‘½ε(~R)";
         Text[ arabic ] = "ΕΪΗΟΙ ΚΣγνΙ";
         Text[ turkish ] = "~Yeniden adlandύr";
-        Text[ catalan ] = "Ca~mbiar nombre";
+        Text[ catalan ] = "~Reanomena";
         Text[ finnish ] = "~Nimeδ uudelleen";
         Text[ thai ] = "ΰΉ€~ΰΈ›ΰΈ¥ΰΈµΰΉΰΈΆΰΈ™ΰΈΰΈ·ΰΉΰΈ­";
     };
@@ -1757,7 +1756,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_traditional ] = "ε”―θ®€(~O)";
         Text[ arabic ] = "ααήΡΗΑΙ έήΨ";
         Text[ turkish ] = "Sa~lt okunur";
-        Text[ catalan ] = "Solo le~ctura";
+        Text[ catalan ] = "Nomιs le~ctura";
         Text[ finnish ] = "Vain ~luku";
         Text[ thai ] = "ΰΈ­ΰΉΰΈ²ΰΈ™~ΰΈ­ΰΈΆΰΉΰΈ²ΰΈ‡ΰΉ€ΰΈ”ΰΈµΰΈΆΰΈ§";
     };
@@ -1803,7 +1802,7 @@ ImageList IMG_NAVI_ENTRYBMP
 ImageList IMG_NAVI_ENTRYBMPH
 {
     ImageBitmap = Bitmap { File = "nch_cntnt.bmp" ; };
-    MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; };
+    MaskColor = IMAGE_STDBTN_COLOR ;
     NAVI_ENTRY_IDS
 };
 

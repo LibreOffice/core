@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: os $ $Date: 2002-07-05 07:58:56 $
+ *  last change: $Author: os $ $Date: 2002-08-29 07:11:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,6 @@
 #include "workctrl.hrc"
 #include "helpid.h"
 #include "cmdid.h"
-#define IMAGE_STDBTN_COLOR Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; }
 FloatingWindow RID_INSERT_CTRL
 {
     Moveable = TRUE ;
@@ -167,7 +166,7 @@ FloatingWindow RID_INSERT_CTRL
     Text[ korean ] = "삽입";
     Text[ turkish ] = "Ekle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insertar";
+    Text[ catalan ] = "Insereix";
     Text[ finnish ] = "Lis��";
     Text[ thai ] = "แทรก";
 };
@@ -241,7 +240,7 @@ FloatingWindow RID_INSERT_OBJ_CTRL
     Text[ korean ] = "개체 삽입";
     Text[ turkish ] = "Nesne ekle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insertar objeto";
+    Text[ catalan ] = "Insereix un objecte";
     Text[ finnish ] = "Lis�� objekti";
     Text[ thai ] = "แทรกวัตถุ";
 };
@@ -274,7 +273,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ korean ] = "날짜";
             Text[ turkish ] = "Tarih";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Fecha";
+            Text[ catalan ] = "Data";
             Text[ finnish ] = "P�iv�m��r�";
             Text[ thai ] = "วันที่";
         };
@@ -333,7 +332,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ korean ] = "페이지 번호";
             Text[ turkish ] = "Sayfa numaras�";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "N�mero de p�gina";
+            Text[ catalan ] = "N�meros de p�gina";
             Text[ finnish ] = "Sivunumerot";
             Text[ thai ] = "เลขหน้า";
         };
@@ -362,7 +361,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ korean ] = "페이지 수";
             Text[ turkish ] = "Sayfa say�s�";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Contar p�ginas";
+            Text[ catalan ] = "Recompte de p�gines";
             Text[ finnish ] = "Sivum��r�";
             Text[ thai ] = "นับหน้า";
         };
@@ -391,7 +390,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ korean ] = "주제";
             Text[ turkish ] = "Konu";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Tema";
+            Text[ catalan ] = "Assumpte";
             Text[ finnish ] = "Aihe";
             Text[ thai ] = "ชื่อเรื่อง";
         };
@@ -420,7 +419,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ korean ] = "제목";
             Text[ turkish ] = "Ba�l�k";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "T�tulo";
+            Text[ catalan ] = "T�tol";
             Text[ finnish ] = "Otsikko";
             Text[ thai ] = "ชื่อ";
         };
@@ -450,7 +449,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ korean ] = "작성자";
             Text[ turkish ] = "Yazan";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Remitent";
+            Text[ catalan ] = "Autor";
             Text[ finnish ] = "Laatija";
             Text[ thai ] = "ผู้เขียน";
         };
@@ -483,7 +482,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ korean ] = "기타...";
             Text[ turkish ] = "Di�er...";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Otros...";
+            Text[ catalan ] = "Altres...";
             Text[ finnish ] = "Muu...";
             Text[ thai ] = "อื่น ๆ...";
         };
@@ -533,7 +532,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
     ImageList ILH_VALUES
     {
         ImageBitmap = Bitmap { File = "srh_navi.bmp" ; };
-        MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; };
+        MaskColor = IMAGE_STDBTN_COLOR ;
         SCROLL_IMAGE_IDLIST
     };
     FixedLine FL_SEP
@@ -570,7 +569,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "시트";
         Text[ turkish ] = "Tablo";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tabla";
+        Text[ catalan ] = "Taula";
         Text[ finnish ] = "Taulukko";
         Text[ thai ] = "ตาราง";
     };
@@ -597,7 +596,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "텍스트 프레임";
         Text[ turkish ] = "Metin �er�evesi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Marco de texto";
+        Text[ catalan ] = "Marc de text";
         Text[ finnish ] = "Tekstikehys";
         Text[ thai ] = "กรอบข้อความ";
     };
@@ -624,7 +623,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "페이지";
         Text[ turkish ] = "Sayfa";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "P�gina";
+        Text[ catalan ] = "P�gina";
         Text[ finnish ] = "Sivu ";
         Text[ thai ] = "หน้า";
     };
@@ -664,7 +663,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "그리기 개체";
         Text[ turkish ] = "�izim nesnesi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Objeto de dibujo";
+        Text[ catalan ] = "Dibuix";
         Text[ finnish ] = "Piirros";
         Text[ thai ] = "วาดรูป";
     };
@@ -691,7 +690,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "컨트롤";
         Text[ turkish ] = "Komut alan�";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Campo de control";
+        Text[ catalan ] = "Control";
         Text[ finnish ] = "Ohjain";
         Text[ thai ] = "ควบคุม";
     };
@@ -718,7 +717,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "영역";
         Text[ turkish ] = "B�l�m";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Area";
+        Text[ catalan ] = "Secci�";
         Text[ finnish ] = "Osio";
         Text[ thai ] = "ส่วน";
     };
@@ -745,7 +744,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "책갈피";
         Text[ turkish ] = "Metin i�areti";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Marca de texto";
+        Text[ catalan ] = "Adre�a d'inter�s";
         Text[ finnish ] = "Kirjanmerkit";
         Text[ thai ] = "ที่คั่น";
     };
@@ -772,7 +771,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "그래픽";
         Text[ turkish ] = "Grafik";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Imagen";
+        Text[ catalan ] = "Gr�fics";
         Text[ finnish ] = "Kuvat";
         Text[ thai ] = "กราฟิค";
     };
@@ -799,7 +798,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "OLE 개체";
         Text[ turkish ] = "OLE nesnesi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Objeto OLE";
+        Text[ catalan ] = "Objecte OLE";
         Text[ finnish ] = "OLE-objekti";
         Text[ thai ] = "วัตถุ OLE ";
     };
@@ -827,7 +826,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "제목";
         Text[ turkish ] = "Ba�l�k";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Encabezado";
+        Text[ catalan ] = "Encap�alaments";
         Text[ finnish ] = "Otsikot";
         Text[ thai ] = "หัวข้อ";
     };
@@ -854,7 +853,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "선택 표시";
         Text[ turkish ] = "Se�im";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Selecci�n";
+        Text[ catalan ] = "Selecci�";
         Text[ finnish ] = "Valinta";
         Text[ thai ] = "เลือก";
     };
@@ -882,7 +881,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "각주";
         Text[ turkish ] = "Dipnot";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nota al pie";
+        Text[ catalan ] = "Nota al peu";
         Text[ finnish ] = "Alaviite";
         Text[ thai ] = "เชิงอรรถ";
     };
@@ -909,7 +908,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "표시자";
         Text[ turkish ] = "An�msat�c�";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Marca";
+        Text[ catalan ] = "Recordatori";
         Text[ finnish ] = "Muistutus";
         Text[ thai ] = "ตัวเตือน";
     };
@@ -963,7 +962,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "찾기 반복";
         Text[ turkish ] = "Aramay� yinele";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Repetir b�squeda";
+        Text[ catalan ] = "Repeteix la cerca";
         Text[ finnish ] = "Toista haku";
         Text[ thai ] = "ค้นหาซ้ำ";
     };
@@ -990,7 +989,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "색인 항목";
         Text[ turkish ] = "Dizin giri�i";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Entrada del �ndice";
+        Text[ catalan ] = "Entrada de l'�ndex";
         Text[ finnish ] = "Hakemistomerkint�";
         Text[ thai ] = "รายการดัชนี";
     };
@@ -1017,7 +1016,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "표 수식";
         Text[ turkish ] = "Tablo form�l�";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "F�rmula de tabla";
+        Text[ catalan ] = "F�rmula de taula";
         Text[ finnish ] = "Taulukkokaava";
         Text[ thai ] = "ตารางสูตรคำนวณ";
     };
@@ -1044,7 +1043,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ korean ] = "잘못된 표 수식";
         Text[ turkish ] = "Hatal� tablo form�l�";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "F�rmula err�nea de tabla";
+        Text[ catalan ] = "F�rmula incorrecta de taula";
         Text[ finnish ] = "V��r� taulukkokaava";
         Text[ thai ] = "ตารางสูตรคำนวณผิด";
     };
@@ -1067,7 +1066,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
     Text[ korean ] = "탐색";
     Text[ turkish ] = "Dola�ma";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Navegaci�n";
+    Text[ catalan ] = "Navegaci�";
     Text[ finnish ] = "Siirtyminen";
     Text[ thai ] = "นำทาง";
 };
@@ -1133,7 +1132,7 @@ String STR_IMGBTN_TBL_DOWN
     Text[ korean ] = "다음 표";
     Text[ turkish ] = "Sonraki tablo";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Tabla siguiente";
+    Text[ catalan ] = "Taula seg�ent";
     Text[ finnish ] = "Seuraava taulukko";
     Text[ thai ] = "ตารางถัดไป";
 };
@@ -1161,7 +1160,7 @@ String STR_IMGBTN_FRM_DOWN
     Text[ korean ] = "다음 텍스트 프레임";
     Text[ turkish ] = "Sonraki metin �er�evesi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Marco de texto siguiente";
+    Text[ catalan ] = "Marc de text seg�ent";
     Text[ finnish ] = "Seuraava tekstikehys";
     Text[ thai ] = "กรอบข้อความถัดไป";
 };
@@ -1189,7 +1188,7 @@ String STR_IMGBTN_PGE_DOWN
     Text[ korean ] = "다음 페이지";
     Text[ turkish ] = "Sonraki sayfa";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "P�gina siguiente";
+    Text[ catalan ] = "P�gina seg�ent";
     Text[ finnish ] = "Seuraava sivu";
     Text[ thai ] = "หน้าถัดไป";
 };
@@ -1217,7 +1216,7 @@ String STR_IMGBTN_DRW_DOWN
     Text[ korean ] = "다음 그리기 개체";
     Text[ turkish ] = "Sonraki �izim nesnesi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Objeto de dibujo siguiente";
+    Text[ catalan ] = "Dibuix seg�ent";
     Text[ finnish ] = "Seuraava piirros";
     Text[ thai ] = "การวาดรูปถัดไป";
 };
@@ -1245,7 +1244,7 @@ String STR_IMGBTN_CTRL_DOWN
     Text[ korean ] = "다음 컨트롤";
     Text[ turkish ] = "Sonraki komut alan�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Campo de control siguiente";
+    Text[ catalan ] = "Control seg�ent";
     Text[ finnish ] = "Seuraava ohjain";
     Text[ thai ] = "ตัวควบคุมถัดไป";
 };
@@ -1273,7 +1272,7 @@ String STR_IMGBTN_REG_DOWN
     Text[ korean ] = "다음 영역";
     Text[ turkish ] = "Sonraki b�l�m";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Area siguiente";
+    Text[ catalan ] = "Secci� seg�ent";
     Text[ finnish ] = "Seuraava osio";
     Text[ thai ] = "ส่วนถัดไป";
 };
@@ -1301,7 +1300,7 @@ String STR_IMGBTN_BKM_DOWN
     Text[ korean ] = "다음 책갈피";
     Text[ turkish ] = "Sonraki metin i�areti";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Marca de texto siguiente";
+    Text[ catalan ] = "Adre�a d'inter�s seg�ent";
     Text[ finnish ] = "Seuraava kirjanmerkki";
     Text[ thai ] = "ที่คั่นถัดไป";
 };
@@ -1329,7 +1328,7 @@ String STR_IMGBTN_GRF_DOWN
     Text[ korean ] = "다음 그래픽";
     Text[ turkish ] = "Sonraki grafik";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Imagen siguiente";
+    Text[ catalan ] = "Imatge seg�ent";
     Text[ finnish ] = "Seuraava kuva";
     Text[ thai ] = "รูปภาพถัดไป";
 };
@@ -1358,7 +1357,7 @@ String STR_IMGBTN_OLE_DOWN
     Text[ korean ] = "다음 OLE개체";
     Text[ turkish ] = "Sonraki OLE nesnesi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Objeto OLE siguiente";
+    Text[ catalan ] = "Objecte OLE seg�ent";
     Text[ finnish ] = "Seuraava OLE-objekti";
     Text[ thai ] = "วัตถุ OLE ถัดไป";
 };
@@ -1386,7 +1385,7 @@ String STR_IMGBTN_OUTL_DOWN
     Text[ korean ] = "다음 제목";
     Text[ turkish ] = "Sonraki ba�l�k";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Encabezado siguiente";
+    Text[ catalan ] = "Encap�alament seg�ent";
     Text[ finnish ] = "Seuraava otsikko";
     Text[ thai ] = "หัวข้อถัดไป";
 };
@@ -1414,7 +1413,7 @@ String STR_IMGBTN_SEL_DOWN
     Text[ korean ] = "다음 선택 표시";
     Text[ turkish ] = "�nceki se�im";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Selecci�n siguiente";
+    Text[ catalan ] = "Selecci� seg�ent";
     Text[ finnish ] = "Seuraava valinta";
     Text[ thai ] = "การเลือกถัดไป";
 };
@@ -1442,7 +1441,7 @@ String STR_IMGBTN_FTN_DOWN
     Text[ korean ] = "다음 각주";
     Text[ turkish ] = "Sonraki dipnot";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Nota al pie siguiente";
+    Text[ catalan ] = "Nota al peu seg�ent";
     Text[ finnish ] = "Seuraava alaviite";
     Text[ thai ] = "เชิงอรรถถัดไป";
 };
@@ -1470,7 +1469,7 @@ String STR_IMGBTN_MARK_DOWN
     Text[ korean ] = "다음 표시자";
     Text[ turkish ] = "Sonraki an�msat�c�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Marca siguiente";
+    Text[ catalan ] = "Recordatori seg�ent";
     Text[ finnish ] = "Seuraava muistutus";
     Text[ thai ] = "ตัวเตือนถัดไป";
 };
@@ -1498,7 +1497,7 @@ String STR_IMGBTN_POSTIT_DOWN
     Text[ korean ] = "다음 메모";
     Text[ turkish ] = "Sonraki not";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Nota siguiente";
+    Text[ catalan ] = "Nota seg�ent";
     Text[ finnish ] = "Seuraava huomautus";
     Text[ thai ] = "บันทึกย่อถัดไป";
 };
@@ -1525,7 +1524,7 @@ String STR_IMGBTN_SRCH_REP_DOWN
     Text[ korean ] = "계속 앞으로 검색";
     Text[ turkish ] = "�leri dogru ara";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Continuar b�squeda hacia delante";
+    Text[ catalan ] = "Continua la cerca cap endavant";
     Text[ finnish ] = "Jatka hakua eteenp�in";
     Text[ thai ] = "ทำการค้นหาไปข้างหน้าต่อ";
 };
@@ -1552,7 +1551,7 @@ String STR_IMGBTN_INDEX_ENTRY_DOWN
     Text[ korean ] = "다음 색인 항목";
     Text[ turkish ] = "Sonraki dizin giri�i";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Entrada de �ndice siguiente";
+    Text[ catalan ] = "Entrada d'�ndex seg�ent";
     Text[ finnish ] = "Seuraava hakemistomerkint�";
     Text[ thai ] = "รายการดัชนีถัดไป";
 };
@@ -1587,7 +1586,7 @@ String STR_IMGBTN_TBL_UP
     Text[ korean ] = "이전 시트";
     Text[ turkish ] = "�nceki tablo";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Tabla anterior";
+    Text[ catalan ] = "Taula anterior";
     Text[ finnish ] = "Edellinen taulukko";
     Text[ thai ] = "ตารางก่อน";
 };
@@ -1614,7 +1613,7 @@ String STR_IMGBTN_FRM_UP
     Text[ korean ] = "이전 텍스트 프레임";
     Text[ turkish ] = "�nceki metin �er�evesi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Marco de texto anterior";
+    Text[ catalan ] = "Marc de text anterior";
     Text[ finnish ] = "Edellinen tekstikehys";
     Text[ thai ] = "กรอบข้อความก่อน";
 };
@@ -1641,7 +1640,7 @@ String STR_IMGBTN_PGE_UP
     Text[ korean ] = "이전 페이지";
     Text[ turkish ] = "�nceki sayfa";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "P�gina anterior";
+    Text[ catalan ] = "P�gina anterior";
     Text[ finnish ] = "Edellinen sivu";
     Text[ thai ] = "หน้าก่อน";
 };
@@ -1668,7 +1667,7 @@ String STR_IMGBTN_DRW_UP
     Text[ korean ] = "이전 그리기 개체";
     Text[ turkish ] = "�nceki �izim nesnesi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Objeto de dibujo anterior";
+    Text[ catalan ] = "Dibuix anterior";
     Text[ finnish ] = "Edellinen piirros";
     Text[ thai ] = "การวาดอันก่อน";
 };
@@ -1695,7 +1694,7 @@ String STR_IMGBTN_CTRL_UP
     Text[ korean ] = "이전 컨트롤";
     Text[ turkish ] = "�nceki komut alan�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Campo de control anterior";
+    Text[ catalan ] = "Control anterior";
     Text[ finnish ] = "Edellinen ohjain";
     Text[ thai ] = "ตัวควบคุมอันก่อน";
 };
@@ -1722,7 +1721,7 @@ String STR_IMGBTN_REG_UP
     Text[ korean ] = "이전 영역";
     Text[ turkish ] = "�nceki B�l�m";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Area anterior";
+    Text[ catalan ] = "Secci� anterior";
     Text[ finnish ] = "Edellinen osio";
     Text[ thai ] = "ส่วนก่อน";
 };
@@ -1749,7 +1748,7 @@ String STR_IMGBTN_BKM_UP
     Text[ korean ] = "이전 책갈피";
     Text[ turkish ] = "�nceki metin i�areti";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Marca de texto anterior";
+    Text[ catalan ] = "Adre�a d'inter�s anterior";
     Text[ finnish ] = "Edellinen kirjanmerkki";
     Text[ thai ] = "ที่คั่นอันก่อน";
 };
@@ -1776,7 +1775,7 @@ String STR_IMGBTN_GRF_UP
     Text[ korean ] = "이전 그림";
     Text[ turkish ] = "�nceki grafik";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Imagen anterior";
+    Text[ catalan ] = "Imatge anterior";
     Text[ finnish ] = "Edellinen kuva";
     Text[ thai ] = "รูปภาพอันก่อน";
 };
@@ -1804,7 +1803,7 @@ String STR_IMGBTN_OLE_UP
     Text[ korean ] = "이전 OLE개체";
     Text[ turkish ] = "�nceki OLE nesnesi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Objeto OLE anterior";
+    Text[ catalan ] = "Objecte OLE anterior";
     Text[ finnish ] = "Edellinen OLE-objekti";
     Text[ thai ] = "วัตถุ OLE อันก่อน";
 };
@@ -1832,7 +1831,7 @@ String STR_IMGBTN_OUTL_UP
     Text[ korean ] = "이전 제목";
     Text[ turkish ] = "�nceki ba�l�k";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Encabezado anterior";
+    Text[ catalan ] = "Encap�alament anterior";
     Text[ finnish ] = "Edellinen otsikko";
     Text[ thai ] = "หัวข้อก่อน";
 };
@@ -1859,7 +1858,7 @@ String STR_IMGBTN_SEL_UP
     Text[ korean ] = "이전 선택 표시";
     Text[ turkish ] = "Sonraki se�im";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Selecci�n anterior";
+    Text[ catalan ] = "Selecci� anterior";
     Text[ finnish ] = "Edellinen valinta";
     Text[ thai ] = "การเลือกอันก่อน";
 };
@@ -1887,7 +1886,7 @@ String STR_IMGBTN_FTN_UP
     Text[ korean ] = "이전 각주";
     Text[ turkish ] = "�nceki dipnot";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Nota al pie anterior";
+    Text[ catalan ] = "Nota al peu anterior";
     Text[ finnish ] = "Edellinen alaviite";
     Text[ thai ] = "เชิงอรรถอันก่อน";
 };
@@ -1914,7 +1913,7 @@ String STR_IMGBTN_MARK_UP
     Text[ korean ] = "이전 표시자";
     Text[ turkish ] = "�nceki an�msat�c�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Marca anterior";
+    Text[ catalan ] = "Recordatori anterior";
     Text[ finnish ] = "Edellinen muistutus";
     Text[ thai ] = "ตัวเตือนอันก่อน";
 };
@@ -1968,7 +1967,7 @@ String STR_IMGBTN_SRCH_REP_UP
     Text[ korean ] = "계속 뒤로 검색";
     Text[ turkish ] = "Geriye do�ru ara";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Continuar b�squeda en sentido inverso";
+    Text[ catalan ] = "Continua la cerca cap enrere";
     Text[ finnish ] = "Jatka hakua taaksep�in";
     Text[ thai ] = "ทำการค้นหาย้อนกลับต่อไป";
 };
@@ -1995,7 +1994,7 @@ String STR_IMGBTN_INDEX_ENTRY_UP
     Text[ korean ] = "이전 색인 항목";
     Text[ turkish ] = "�nceki dizin giri�i";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Entrada de �ndice anterior";
+    Text[ catalan ] = "Entrada d'�ndex anterior";
     Text[ finnish ] = "Edellinen hakemistomerkint�";
     Text[ thai ] = "รายการดัชนีก่อน";
 };
@@ -2022,7 +2021,7 @@ String STR_IMGBTN_TBLFML_UP
     Text[ korean ] = "이전 표 수식";
     Text[ turkish ] = "�nceki tablo form�l�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "F�rmula de tabla anterior";
+    Text[ catalan ] = "F�rmula de taula anterior";
     Text[ finnish ] = "Edellinen taulukon kaava";
     Text[ thai ] = "ตารางสูตรคำนวณก่อน";
 };
@@ -2049,7 +2048,7 @@ String STR_IMGBTN_TBLFML_DOWN
     Text[ korean ] = "다음 표 수식";
     Text[ turkish ] = "Sonraki tablo form�l�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Siguiente f�rmula de tabla";
+    Text[ catalan ] = "F�rmula de taula seg�ent";
     Text[ finnish ] = "Seuraava taulukon kaava";
     Text[ thai ] = "ตารางสูตรคำนวณถัดไป";
 };
@@ -2076,7 +2075,7 @@ String STR_IMGBTN_TBLFML_ERR_UP
     Text[ korean ] = "틀린 이전 표 수식";
     Text[ turkish ] = "�nceki hatal� tablo form�l�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "F�rmula de tabla anterior err�nea";
+    Text[ catalan ] = "F�rmula de taula defectuosa anterior";
     Text[ finnish ] = "Edellinen virheellinen taulukon kaava";
     Text[ thai ] = "ตารางสูตรคำนวณที่ผิดอันก่อน";
 };
@@ -2103,7 +2102,7 @@ String STR_IMGBTN_TBLFML_ERR_DOWN
     Text[ korean ] = "틀린 다음 표 수식";
     Text[ turkish ] = "Sonraki hatal� tablo form�l�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Siguiente f�rmula err�nea de tabla";
+    Text[ catalan ] = "F�rmula de taula defectuosa seg�ent";
     Text[ finnish ] = "Seuraava virheellinen taulukon kaava";
     Text[ thai ] = "ตารางสูตรคำนวณที่ผิดถัดไป";
 };
@@ -2122,7 +2121,7 @@ ImageButton BTN_NAVI
     Image IMG_BTN_H
     {
         ImageBitmap = Bitmap { File = "punkt_h.bmp" ; };
-        MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; };
+        MaskColor = IMAGE_STDBTN_COLOR ;
     };
     String ST_QUICK
     {
@@ -2146,7 +2145,7 @@ ImageButton BTN_NAVI
         Text[ korean ] = "네비게이션";
         Text[ turkish ] = "Dola�ma";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Navegaci�n";
+        Text[ catalan ] = "Navegaci�";
         Text[ finnish ] = "Siirtyminen";
         Text[ thai ] = "นำทาง";
     };
