@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemanager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-07 13:58:42 $
+ *  last change: $Author: jsc $ $Date: 2001-04-11 07:27:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ sal_Bool RegistryTypeManager::init(sal_Bool bMerged, const StringVector& regFile
             freeRegistries();
             return sal_False;
         }
-        iter++;
+        ++iter;
     }
 
     if (m_pImpl->m_isMerged)
@@ -321,8 +321,7 @@ void RegistryTypeManager::freeRegistries()
     while (iter != m_pImpl->m_registries.end())
     {
         delete *iter;
-
-        iter++;
+        ++iter;
     }
 
 }
@@ -348,8 +347,7 @@ RegistryKey RegistryTypeManager::searchTypeKey(const OString& name)
                 if (!rootKey.openKey(OStringToOUString(m_pImpl->m_base + name, RTL_TEXTENCODING_UTF8), key))
                     break;
             }
-
-            iter++;
+            ++iter;
         }
     }
 

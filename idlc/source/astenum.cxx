@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astenum.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:30:43 $
+ *  last change: $Author: jsc $ $Date: 2001-04-11 07:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ AstConstant* AstEnum::checkValue(AstExpression* pExpr)
         if (pConst->getConstValue()->compare(pExpr))
             return pConst;
 
-        iter++;
+        ++iter;
     }
 
     if ( pExpr->getExprValue()->u.lval > m_enumValueCount )
@@ -131,7 +131,7 @@ sal_Bool AstEnum::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
             if ( pDecl->getNodeType() == NT_enum_val )
                 ((AstConstant*)pDecl)->dumpBlob(aBlob, index++);
 
-            iter++;
+            ++iter;
         }
 
         const sal_uInt8* pBlob = aBlob.getBlop();

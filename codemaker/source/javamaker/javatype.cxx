@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javatype.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-14 12:03:58 $
+ *  last change: $Author: jsc $ $Date: 2001-04-11 07:29:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ sal_Bool JavaType::dumpDependedTypes(JavaOptions* pOptions)
                 exit(99);
             }
         }
-        iter++;
+        ++iter;
     }
 
     return ret;
@@ -195,8 +195,7 @@ void JavaType::dumpDepImports(FileStream& o, const OString& typeName)
         {
             /// dump import;
         }
-
-        iter++;
+        ++iter;
     }
 }
 

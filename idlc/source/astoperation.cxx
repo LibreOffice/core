@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astoperation.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:30:43 $
+ *  last change: $Author: jsc $ $Date: 2001-04-11 07:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ void AstOperation::addExceptions(StringList* pExceptions)
         {
             idlc()->error()->error1(EIDL_ILLEGAL_RAISES, this);
         }
-        iter++;
+        ++iter;
     }
 }
 
@@ -160,7 +160,7 @@ sal_Bool AstOperation::dumpBlob(RegistryTypeWriter& rBlob, sal_uInt16 index)
                            OStringToOUString(pDecl->getLocalName(), RTL_TEXTENCODING_UTF8),
                            paramMode);
             }
-            iter++;
+            ++iter;
         }
     }
 
@@ -173,7 +173,7 @@ sal_Bool AstOperation::dumpBlob(RegistryTypeWriter& rBlob, sal_uInt16 index)
         {
             rBlob.setExcData(index, exceptIndex++,
                              OStringToOUString((*iter)->getRelativName(), RTL_TEXTENCODING_UTF8) );
-            iter++;
+            ++iter;
         }
     }
 

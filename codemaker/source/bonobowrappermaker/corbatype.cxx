@@ -2,9 +2,9 @@
  *
  *  $RCSfile: corbatype.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ts $ $Date: 2000-12-13 12:29:36 $
+ *  last change: $Author: jsc $ $Date: 2001-04-11 07:27:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ sal_Bool CorbaType::dumpDependedTypes(CorbaOptions* pOptions, FileStream& o, Typ
     exit(99);
             }
         }
-        iter++;
+        ++iter;
     }
 
     return ret;
@@ -411,8 +411,7 @@ void CorbaType::dumpDepIncludes(FileStream& o, TypeSet* allreadyDumped, const OS
                 }
             }
         }
-
-        iter++;
+        ++iter;
     }
 }
 

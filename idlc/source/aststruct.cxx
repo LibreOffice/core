@@ -2,9 +2,9 @@
  *
  *  $RCSfile: aststruct.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:30:43 $
+ *  last change: $Author: jsc $ $Date: 2001-04-11 07:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ sal_Bool AstStruct::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
                     OStringToOUString(pMember->getType()->getRelativName(), RTL_TEXTENCODING_UTF8),
                     pMember->getDocumentation(), OUString(), RT_ACCESS_READWRITE);
             }
-            iter++;
+            ++iter;
         }
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astunion.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:30:43 $
+ *  last change: $Author: jsc $ $Date: 2001-04-11 07:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ AstUnionBranch* AstUnion::lookupDefault(sal_Bool bReportError)
             pBranch = (AstUnionBranch*)pDecl;
             if (pBranch == NULL)
             {
-                iter++;
+                ++iter;
                 continue;
             }
             if ( pBranch->getLabel() != NULL &&
@@ -192,7 +192,7 @@ AstUnionBranch* AstUnion::lookupDefault(sal_Bool bReportError)
                 return pBranch;
             }
         }
-        iter++;
+        ++iter;
     }
     return NULL;
 }
@@ -227,7 +227,7 @@ AstUnionBranch* AstUnion::lookupLabel(AstUnionBranch* pBranch)
             pB = (AstUnionBranch*)pDecl;
             if ( !pB )
             {
-                iter++;
+                ++iter;
                 continue;
             }
             if ( pB->getLabel() != NULL &&
@@ -238,7 +238,7 @@ AstUnionBranch* AstUnion::lookupLabel(AstUnionBranch* pBranch)
                 return pBranch;
             }
         }
-        iter++;
+        ++iter;
     }
     return NULL;
 }
@@ -288,7 +288,7 @@ AstUnionBranch* AstUnion::lookupEnum(AstUnionBranch* pBranch)
             pB = (AstUnionBranch*)pDecl;
             if ( !pB )
             {
-                iter++;
+                ++iter;
                 continue;
             }
             if ( pB->getLabel() != NULL &&
@@ -299,7 +299,7 @@ AstUnionBranch* AstUnion::lookupEnum(AstUnionBranch* pBranch)
                 return pBranch;
             }
         }
-        iter++;
+        ++iter;
     }
     return NULL;
 }
@@ -350,7 +350,7 @@ sal_Bool AstUnion::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
                 pBranch = (AstUnionBranch*)pDecl;
                 if (pBranch == pDefault)
                 {
-                    iter++;
+                    ++iter;
                     continue;
                 }
 
@@ -366,7 +366,7 @@ sal_Bool AstUnion::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
                         OStringToOUString(pBranch->getType()->getRelativName(), RTL_TEXTENCODING_UTF8),
                         pBranch->getDocumentation(), OUString(), RT_ACCESS_READWRITE, aConst);
             }
-            iter++;
+            ++iter;
         }
 
         if ( pDefault )

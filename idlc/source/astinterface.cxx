@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astinterface.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:30:43 $
+ *  last change: $Author: jsc $ $Date: 2001-04-11 07:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,8 +141,7 @@ sal_Bool AstInterface::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader
         {
             ((AstOperation*)pDecl)->dumpBlob(aBlob, methodIndex++);
         }
-
-        iter++;
+        ++iter;
     }
 
     const sal_uInt8*    pBlob = aBlob.getBlop();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astdump.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:30:43 $
+ *  last change: $Author: jsc $ $Date: 2001-04-11 07:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ sal_Bool AstModule::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
             {
                 ((AstConstant*)pDecl)->dumpBlob(aBlob, index++);
             }
-            iter++;
+            ++iter;
         }
 
         pBlob = aBlob.getBlop();
@@ -261,7 +261,7 @@ sal_Bool AstService::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
                     nNeeds++;
                     break;
             }
-            iter++;
+            ++iter;
         }
     }
     sal_uInt16 nReferences = nIfaceMember + nServMember + nObserves + nNeeds;
@@ -322,7 +322,7 @@ sal_Bool AstService::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
             }
                 break;
             }
-            iter++;
+            ++iter;
         }
 
         const sal_uInt8* pBlob = aBlob.getBlop();

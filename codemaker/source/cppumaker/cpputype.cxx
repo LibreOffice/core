@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-06 14:01:15 $
+ *  last change: $Author: jsc $ $Date: 2001-04-11 07:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,7 +283,7 @@ sal_Bool CppuType::dumpDependedTypes(CppuOptions* pOptions)
                 exit(99);
             }
         }
-        iter++;
+        ++iter;
     }
 
     return ret;
@@ -526,8 +526,7 @@ void CppuType::dumpDepIncludes(FileStream& o, const OString& typeName, sal_Char*
                   << "#endif\n";
             }
         }
-
-        iter++;
+        ++iter;
     }
     if (m_typeName.equals(typeName) && (getNestedTypeNames().getLength() > 0))
     {

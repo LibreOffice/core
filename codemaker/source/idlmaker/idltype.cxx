@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idltype.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mm $ $Date: 2000-09-21 07:43:11 $
+ *  last change: $Author: jsc $ $Date: 2001-04-11 07:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ sal_Bool IdlType::dumpDependedTypes(IdlOptions* pOptions)
                 exit(99);
             }
         }
-        iter++;
+        ++iter;
     }
 
     return ret;
@@ -313,8 +313,7 @@ void IdlType::dumpDepIncludes(FileStream& o, const OString& typeName, sal_Char* 
             }
             dumpNameSpace( o, sal_False, sal_False, relType );
         }
-
-        iter++;
+        ++iter;
     }
 }
 

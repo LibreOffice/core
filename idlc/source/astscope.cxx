@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astscope.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-10 09:20:03 $
+ *  last change: $Author: jsc $ $Date: 2001-04-11 07:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ sal_uInt16 AstScope::getNodeCount(NodeType nodeType)
         pDecl = *iter;
         if ( pDecl->getNodeType() == nodeType )
             count++;
-        iter++;
+        ++iter;
     }
     return count;
 }
@@ -242,7 +242,7 @@ AstDeclaration* AstScope::lookupByNameLocal(const OString& name)
         pDecl = *iter;
         if ( pDecl->getLocalName() == name )
             return pDecl;
-        iter++;
+        ++iter;
     }
     return NULL;
 }
@@ -272,7 +272,7 @@ AstDeclaration* AstScope::lookupInInherited(const OString& scopedName)
             pDecl = ((AstInterface*)(*iter))->lookupByName(scopedName);
             if ( pDecl )
                 return pDecl;
-            iter++;
+            ++iter;
         }
     }
     // Not found
@@ -298,7 +298,7 @@ AstDeclaration* AstScope::lookupInForwarded(const OString& scopedName)
             }
             break;
         }
-        iter++;
+        ++iter;
     }
     return NULL;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astarray.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:30:43 $
+ *  last change: $Author: jsc $ $Date: 2001-04-11 07:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ OString AstArray::makeName()
             name += openBracket;
             name += (*iter)->toString();
             name += closeBracket;
-            iter++;
+            ++iter;
         }
         return name;
     }
