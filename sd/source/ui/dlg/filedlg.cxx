@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-27 17:48:47 $
+ *  last change: $Author: thb $ $Date: 2001-07-02 16:11:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,11 +155,12 @@ class SdFileDialogHelper : public WeakImplHelper1< XFilePickerListener >
     Sound                       maSound;
     OUString                    maPath;
     OUString                    maCurFilter;
-    BOOL                        mbHaveCheckbox;
+    BOOL                        mbUsableSelection;
     BOOL                        mbSoundPlaying;
     ErrCode                     mnError;
 
 private:
+    void                        checkSelectionState();
     void                        dispose();
 
     DECL_LINK( StopMusicHdl, void * );
@@ -188,7 +189,8 @@ public:
 
     void                        addFilter( const String& rFilter,
                                            const String& rType );
-    BOOL                        checkBoxState() const;
+    sal_Bool                    selectionBoxState() const;
+    sal_Bool                    extensionBoxState() const;
 };
 
 // ------------------------------------------------------------------------
@@ -214,16 +216,7 @@ void SAL_CALL SdFileDialogHelper::controlStateChanged( const FilePickerEvent& aE
     switch( aEvent.ElementId )
     {
         case CommonFilePickerElementIds::LISTBOX_FILTER:
-            // check whether to disable the "selection" checkbox
-            if( mbHaveCheckbox && mxFilterMgr.is() && mxControlAccess.is() )
-            {
-                String  aCurrFilter(mxFilterMgr->getCurrentFilter());
-
-                if( !aCurrFilter.Len() || ( aCurrFilter == String( SdResId( STR_EXPORT_HTML_NAME ) ) ) )
-                    mxControlAccess->enableControl( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, FALSE );
-                else
-                    mxControlAccess->enableControl( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, TRUE );
-            }
+            checkSelectionState();
             break;
 
         case ExtendedFilePickerElementIds::PUSHBUTTON_PLAY:
@@ -277,7 +270,18 @@ IMPL_LINK( SdFileDialogHelper, StopMusicHdl, void *, EMPTYARG )
     maSound.SetSoundName( String() );
 
     if( mxControlAccess.is() )
-        mxControlAccess->setLabel( ExtendedFilePickerElementIds::PUSHBUTTON_PLAY, String( SdResId( STR_PLAY ) ) );
+    {
+        try
+        {
+            mxControlAccess->setLabel( ExtendedFilePickerElementIds::PUSHBUTTON_PLAY, String( SdResId( STR_PLAY ) ) );
+        }
+        catch(IllegalArgumentException)
+        {
+#ifdef DBG_UTIL
+            DBG_ERROR( "Cannot access play button" );
+#endif
+        }
+    }
 
     return( 0L );
 }
@@ -311,13 +315,36 @@ void SdFileDialogHelper::dispose()
     }
 }
 
+// check whether to disable the "selection" checkbox
+void SdFileDialogHelper::checkSelectionState()
+{
+    if( mbUsableSelection && mxFilterMgr.is() && mxControlAccess.is() )
+    {
+        String  aCurrFilter(mxFilterMgr->getCurrentFilter());
+
+        try
+        {
+            if( !aCurrFilter.Len() || ( aCurrFilter == String( SdResId( STR_EXPORT_HTML_NAME ) ) ) )
+                mxControlAccess->enableControl( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, FALSE );
+            else
+                mxControlAccess->enableControl( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, TRUE );
+        }
+        catch(IllegalArgumentException)
+        {
+#ifdef DBG_UTIL
+            DBG_ERROR( "Cannot access \"selection\" checkbox" );
+#endif
+        }
+    }
+}
+
 // ------------------------------------------------------------------------
 // -----------      FileDialogHelper_Impl       ---------------------------
 // ------------------------------------------------------------------------
 
 SdFileDialogHelper::SdFileDialogHelper( const short  nDialogType ) :
     mnError(ERRCODE_NONE),
-    mbHaveCheckbox(FALSE),
+    mbUsableSelection(FALSE),
     mbSoundPlaying(FALSE)
 {
     // create the file open dialog
@@ -340,11 +367,11 @@ SdFileDialogHelper::SdFileDialogHelper( const short  nDialogType ) :
     switch ( nDialogType )
     {
         case SDFILEDIALOG_EXPORT:
-            aServiceType[0] <<= TemplateDescription::FILESAVE_SIMPLE;
+            aServiceType[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION_SELECTION;
             break;
         case SDFILEDIALOG_EXPORT_SELECTION:
             aServiceType[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION_SELECTION;
-            mbHaveCheckbox = TRUE;
+            mbUsableSelection = TRUE;
             break;
         case SDFILEDIALOG_OPEN_SOUND:
             aServiceType[0] <<= TemplateDescription::FILEOPEN_PLAY;
@@ -366,17 +393,35 @@ SdFileDialogHelper::SdFileDialogHelper( const short  nDialogType ) :
     // get the control access
     mxControlAccess = Reference< XFilePickerControlAccess > ( mxFileDlg, UNO_QUERY );
 
-    if( mxControlAccess.is() && nDialogType == SDFILEDIALOG_OPEN_SOUND )
+    if( mxControlAccess.is() )
     {
-        try
+        switch( nDialogType )
         {
-            mxControlAccess->setLabel( ExtendedFilePickerElementIds::PUSHBUTTON_PLAY, String( SdResId( STR_PLAY ) ) );
-        }
-        catch(IllegalArgumentException)
-        {
+            case SDFILEDIALOG_OPEN_SOUND:
+                try
+                {
+                    mxControlAccess->setLabel( ExtendedFilePickerElementIds::PUSHBUTTON_PLAY, String( SdResId( STR_PLAY ) ) );
+                }
+                catch(IllegalArgumentException)
+                {
 #ifdef DBG_UTIL
-            DBG_ERROR( "Cannot set play button label" );
+                    DBG_ERROR( "Cannot set play button label" );
 #endif
+                }
+                break;
+
+            case SDFILEDIALOG_EXPORT:
+                try
+                {
+                    mxControlAccess->enableControl( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, FALSE );
+                }
+                catch(IllegalArgumentException)
+                {
+#ifdef DBG_UTIL
+                    DBG_ERROR( "Cannot disable selection checkbox" );
+#endif
+                }
+                break;
         }
     }
 }
@@ -440,6 +485,8 @@ ErrCode SdFileDialogHelper::execute()
         }
     }
 
+    checkSelectionState();
+
     // show the dialog
     sal_Int16 nRet = mxFileDlg->execute();
 
@@ -474,12 +521,12 @@ void SdFileDialogHelper::addFilter( const String& rFilter,
     }
 }
 
-BOOL SdFileDialogHelper::checkBoxState() const
+sal_Bool SdFileDialogHelper::selectionBoxState() const
 {
-    if ( !mbHaveCheckbox || !mxFileDlg.is() || !mxFilterMgr.is() )
-        return FALSE;
+    if ( !mbUsableSelection || !mxFileDlg.is() || !mxFilterMgr.is() )
+        return sal_False;
 
-    BOOL bState = 0;
+    sal_Bool bState(0);
     try
     {
         mxControlAccess->getValue(ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0) >>= bState;
@@ -494,6 +541,25 @@ BOOL SdFileDialogHelper::checkBoxState() const
     return bState;
 }
 
+sal_Bool SdFileDialogHelper::extensionBoxState() const
+{
+    if ( !mxFileDlg.is() || !mxFilterMgr.is() )
+        return sal_False;
+
+    sal_Bool bState(0);
+    try
+    {
+        mxControlAccess->getValue(ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0) >>= bState;
+    }
+    catch(IllegalArgumentException)
+    {
+#ifdef DBG_UTIL
+        DBG_ERROR( "Cannot access \"auto extension\" checkbox" );
+#endif
+    }
+
+    return bState;
+}
 
 
 // ------------------------------------------------------------------------
@@ -576,7 +642,16 @@ String SdExportFileDialog::ReqCurrFilter() const
 BOOL SdExportFileDialog::IsSelectedBoxChecked() const
 {
     if( mpImp )
-        return mpImp->checkBoxState();
+        return mpImp->selectionBoxState();
+
+    return FALSE;
+}
+
+// ------------------------------------------------------------------------
+BOOL SdExportFileDialog::IsExtensionBoxChecked() const
+{
+    if( mpImp )
+        return mpImp->extensionBoxState();
 
     return FALSE;
 }
@@ -611,10 +686,6 @@ SdOpenSoundFileDialog::SdOpenSoundFileDialog()
     aDescr = String(SdResId(STR_MIDI_FILE));
     mpImp->addFilter( aDescr, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.mid" ) ) );
 #endif
-
-    // set dialog title
-    if ( mpImp->mxFileDlg.is() )
-        mpImp->mxFileDlg->setTitle( String( SdResId( STR_EXPORT_DIALOG_TITLE ) ) );
 }
 
 // ------------------------------------------------------------------------

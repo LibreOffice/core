@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-19 12:42:14 $
+ *  last change: $Author: thb $ $Date: 2001-07-02 16:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,7 @@ public:
 
     String                  ReqCurrFilter() const;
     BOOL                    IsSelectedBoxChecked() const;
+    BOOL                    IsExtensionBoxChecked() const;
 };
 
 
