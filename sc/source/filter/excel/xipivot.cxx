@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xipivot.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:07:56 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:33:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,8 +111,6 @@
 #ifndef SC_XIESCHER_HXX
 #include "xiescher.hxx"
 #endif
-
-#include "root.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::sheet::DataPilotFieldOrientation;
@@ -607,9 +605,8 @@ void XclImpPivotCache::ReadDconref( XclImpStream& rStrm )
     if( maTabName.Len() )
         return;
 
-    sal_uInt16 nStartRow, nEndRow;
-    sal_uInt8 nStartCol, nEndCol;
-    rStrm >> nStartRow >> nEndRow >> nStartCol >> nEndCol;
+    XclRange aXclRange( ScAddress::UNINITIALIZED );
+    aXclRange.Read( rStrm, false );
     String aEncUrl( rStrm.ReadUniString() );
 
     XclImpUrlHelper::DecodeUrl( maUrl, maTabName, mbSelf, GetRoot(), aEncUrl );
@@ -618,11 +615,10 @@ void XclImpPivotCache::ReadDconref( XclImpStream& rStrm )
         maTabName = maUrl;
         maUrl.Erase();
     }
+    // Do not convert maTabName to Calc sheet name -> original name is used to find the sheet.
 
     // Sheet index will be found later in XclImpPivotTable::Apply() (sheet may not exist yet).
-    // Do not convert maTabName to Calc sheet name -> original name is used to find the sheet.
-    maSrcRange = XclTools::MakeScRange( nStartCol, nStartRow, 0, nEndCol, nEndRow, 0 );
-    CheckCellRange( maSrcRange );
+    GetAddressConverter().ConvertRange( maSrcRange, aXclRange, 0, 0, true );
 }
 
 void XclImpPivotCache::ReadSxvs( XclImpStream& rStrm )
@@ -1072,10 +1068,8 @@ void XclImpPivotTable::ReadSxview( XclImpStream& rStrm )
 {
     rStrm >> maPTInfo;
 
-    maOutputRange = XclTools::MakeScRange(
-        maPTInfo.mnFirstCol, maPTInfo.mnFirstRow, GetCurrScTab(),
-        maPTInfo.mnLastCol, maPTInfo.mnLastRow, GetCurrScTab() );
-    CheckCellRange( maOutputRange );
+    GetAddressConverter().ConvertRange(
+        maOutScRange, maPTInfo.maOutXclRange, GetCurrScTab(), GetCurrScTab(), true );
 
     mpPCache = GetPivotTableManager().GetPivotCache( maPTInfo.mnCacheIdx );
     mpCurrField = 0;
@@ -1242,10 +1236,10 @@ void XclImpPivotTable::Apply() const
     aDesc.aSourceRange = aSrcRange;
 
     // adjust output range to include the page fields
-    ScRange aOutRange( maOutputRange );
+    ScRange aOutRange( maOutScRange );
     if( !maPageFields.empty() )
     {
-        SCsROW nDecRows = ::std::min< SCsROW >( maOutputRange.aStart.Row(), maPageFields.size() + 1 );
+        SCsROW nDecRows = ::std::min< SCsROW >( aOutRange.aStart.Row(), maPageFields.size() + 1 );
         aOutRange.aStart.IncRow( -nDecRows );
     }
 
