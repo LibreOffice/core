@@ -1,0 +1,121 @@
+/*************************************************************************
+ *
+ *  $RCSfile: AnimationNodeType.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-11-26 17:37:46 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_animations_AnimationNodeType_idl__
+#define __com_sun_star_animations_AnimationNodeType_idl__
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module animations {
+
+//=============================================================================
+
+/** This constants defines a type for an animation node.
+    <br>
+    It can be used to quickly identify semantic blocks inside an animation hierachy.
+
+    @see AnimationNode
+*/
+constants AnimationNodeType
+{
+    /** Defines a custom time node. */
+    const short CUSTOM = 0;
+
+    /** Defines a parallel time container. */
+    const short PAR = 1;
+
+    /** Defines a sequence time container. */
+    const short SEQ = 2;
+
+    /** Defines an iterate time container. */
+    const short ITERATE = 3;
+
+    /** Defines a generic attribute animation. */
+    const short ANIMATE = 4;
+
+    /** Defines a simple mean of just setting the value of
+        an attribute for a specified duration. */
+    const short SET = 5;
+
+    /** Defines a move animation along a path. */
+    const short ANIMATEMOTION = 6;
+
+    /** Defines an animation of a color attribute. */
+    const short ANIMATECOLOR = 7;
+
+    /** Defines an animation of a transformation attribute. */
+    const short ANIMATETRANSFORM = 8;
+
+    /** Defines an animation of a filter behavior. */
+    const short TRANSITIONFILTER = 9;
+
+    /** Defines an audio effect. */
+    const short AUDIO = 10;
+
+    /** Defines a command effect. */
+    const short COMMAND = 11;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
