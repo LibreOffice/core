@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2002-04-30 15:50:16 $
+ *  last change: $Author: af $ $Date: 2002-05-03 16:45:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -631,7 +631,7 @@ void AccessibleContextBase::CommitChange (
     const uno::Any& rOldValue)
 {
     AccessibleEventObject aEvent (
-        static_cast<uno::XWeak*>(this),
+        static_cast<XAccessibleContext*>(this),
         nEventId,
         rNewValue,
         rOldValue);
