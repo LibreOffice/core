@@ -51,12 +51,12 @@
    Contributor(s): _______________________________________
    
  -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:table="http://openoffice.org/2000/table" xmlns:style="http://openoffice.org/2000/style" xmlns:text="http://openoffice.org/2000/text" exclude-result-prefixes="fo table style text">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core"  xmlns:w10="urn:schemas-microsoft-com:office:word"  xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:openoffice:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:openoffice:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:openoffice:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:openoffice:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:openoffice:xmlns:drawing:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:openoffice:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:openoffice:xmlns:datastyle:1.0" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="urn:oasis:names:tc:openoffice:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:openoffice:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:openoffice:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:openoffice:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:openoffice:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" exclude-result-prefixes="office table style text draw svg   dc config xlink meta oooc dom ooo chart math dr3d form script ooow draw">
     <xsl:key name="table-style" match="style:style[@style:family='table']" use="@style:name"/>
     <xsl:key name="table-column-style" match="style:style[@style:family='table-column']" use="@style:name"/>
     <xsl:key name="table-row-style" match="style:style[@style:family='table-row']" use="@style:name"/>
     <xsl:key name="table-cell-style" match="style:style[@style:family='table-cell']" use="@style:name"/>
-    <xsl:template match="style:properties" mode="table">
+    <xsl:template match="style:table-properties" mode="table">
         <xsl:param name="within-body"/>
         <xsl:if test="$within-body = 'yes'">
             <w:tblW>
@@ -66,7 +66,7 @@
                         <xsl:attribute name="w:type">pct</xsl:attribute>
                     </xsl:when>
                     <xsl:when test="@style:width">
-                        <xsl:attribute name="w:w"><xsl:call-template name="convert2dxa"><xsl:with-param name="value" select="@style:width"/></xsl:call-template></xsl:attribute>
+                        <xsl:attribute name="w:w"><xsl:call-template name="convert2twip"><xsl:with-param name="value" select="@style:width"/></xsl:call-template></xsl:attribute>
                         <xsl:attribute name="w:type">dxa</xsl:attribute>
                     </xsl:when>
                     <xsl:otherwise>
@@ -79,7 +79,7 @@
         <w:tblInd>
             <xsl:choose>
                 <xsl:when test="@fo:margin-left">
-                    <xsl:attribute name="w:w"><xsl:call-template name="convert2dxa"><xsl:with-param name="value" select="@fo:margin-left"/></xsl:call-template></xsl:attribute>
+                    <xsl:attribute name="w:w"><xsl:call-template name="convert2twip"><xsl:with-param name="value" select="@fo:margin-left"/></xsl:call-template></xsl:attribute>
                     <xsl:attribute name="w:type">dxa</xsl:attribute>
                 </xsl:when>
                 <xsl:otherwise>
@@ -102,10 +102,30 @@
         </xsl:if>
     </xsl:template>
     <xsl:template match="table:table">
+        <!--fix for issue i32030 pagebreak before-->
+        <xsl:if test="key('table-style', @table:style-name)/style:table-properties/@fo:break-before">
+            <xsl:variable name="table-break-before" select="key('table-style', @table:style-name)/style:table-properties/@fo:break-before"/>
+            <xsl:choose>
+                <xsl:when test="$table-break-before = 'page' ">
+                    <w:p>
+                        <w:r>
+                            <w:br w:type="page"/>
+                        </w:r>
+                    </w:p>
+                </xsl:when>
+                <xsl:when test="$table-break-before = 'column' ">
+                    <w:p>
+                        <w:r>
+                            <w:br w:type="column"/>
+                        </w:r>
+                    </w:p>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:if>
         <w:tbl>
             <w:tblPr>
                 <w:tblStyle w:val="{@table:style-name}"/>
-                <xsl:apply-templates select="key('table-style', @table:style-name)/style:properties" mode="table">
+                <xsl:apply-templates select="key('table-style', @table:style-name)/style:table-properties" mode="table">
                     <xsl:with-param name="within-body" select="'yes'"/>
                 </xsl:apply-templates>
             </w:tblPr>
@@ -114,11 +134,32 @@
             </w:tblGrid>
             <xsl:apply-templates select=".//table:table-row"/>
         </w:tbl>
+        <!--fix for issue i32030 pagebreak after-->
+        <xsl:if test="key('table-style', @table:style-name)/style:table-properties/@fo:break-after">
+            <xsl:variable name="table-break-after" select="   key('table-style', @table:style-name)/style:table-properties/@fo:break-after"/>
+            
+            <xsl:choose>
+                <xsl:when test="$table-break-after = 'page' ">
+                    <w:p>
+                        <w:r>
+                            <w:br w:type="page"/>
+                        </w:r>
+                    </w:p>
+                </xsl:when>
+                <xsl:when test="$table-break-after = 'column' ">
+                    <w:p>
+                        <w:r>
+                            <w:br w:type="column"/>
+                        </w:r>
+                    </w:p>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:if>
     </xsl:template>
     <xsl:template match="table:table-column">
-        <xsl:variable name="column-width" select="key('table-column-style', @table:style-name)/style:properties/@style:column-width"/>
+        <xsl:variable name="column-width" select="key('table-column-style', @table:style-name)/style:table-column-properties/@style:column-width"/>
         <xsl:variable name="column-width-in-twip">
-            <xsl:call-template name="convert2dxa">
+            <xsl:call-template name="convert2twip">
                 <xsl:with-param name="value" select="$column-width"/>
             </xsl:call-template>
         </xsl:variable>
@@ -154,15 +195,15 @@
                 <xsl:if test="parent::table:table-header-rows">
                     <!-- fix for  Issue 32034-->
                     <w:tblHeader>on</w:tblHeader>
-                  </xsl:if>
-              
-            <xsl:variable name="row-height" select="key('table-row-style', @table:style-name)/style:properties/@style:row-height"/>
-            <xsl:if test="$row-height">
-                <w:trHeight>
-                    <xsl:attribute name="w:val"><xsl:call-template name="convert2dxa"><xsl:with-param name="value" select="$row-height"/></xsl:call-template></xsl:attribute>
-                </w:trHeight>
-            </xsl:if>
-            </xsl:element> <!--end of w:trPr-->
+                </xsl:if>
+                <xsl:variable name="row-height" select="key('table-row-style', @table:style-name)/style:table-row-properties/@style:row-height"/>
+                <xsl:if test="$row-height">
+                    <w:trHeight>
+                        <xsl:attribute name="w:val"><xsl:call-template name="convert2twip"><xsl:with-param name="value" select="$row-height"/></xsl:call-template></xsl:attribute>
+                    </w:trHeight>
+                </xsl:if>
+            </xsl:element>
+            <!--end of w:trPr-->
             <xsl:apply-templates select="table:table-cell "/>
         </xsl:element>
     </xsl:template>
@@ -174,7 +215,7 @@
                 <xsl:if test="@table:number-columns-spanned">
                     <w:gridSpan w:val="{@table:number-columns-spanned}"/>
                 </xsl:if>
-                <xsl:variable name="cell-style-properties" select="key('table-cell-style', @table:style-name)/style:properties"/>
+                <xsl:variable name="cell-style-properties" select="key('table-cell-style', @table:style-name)/style:table-cell-properties"/>
                 <xsl:if test="$cell-style-properties/@fo:background-color">
                     <w:shd w:val="solid" w:color="{substring-after($cell-style-properties/@fo:background-color,'#')}"/>
                 </xsl:if>
@@ -194,22 +235,22 @@
                 <w:tcMar>
                     <xsl:if test="$cell-style-properties/@fo:padding-top">
                         <w:top w:type="dxa">
-                            <xsl:attribute name="w:w"><xsl:call-template name="convert2dxa"><xsl:with-param name="value" select="$cell-style-properties/@fo:padding-top"/></xsl:call-template></xsl:attribute>
+                            <xsl:attribute name="w:w"><xsl:call-template name="convert2twip"><xsl:with-param name="value" select="$cell-style-properties/@fo:padding-top"/></xsl:call-template></xsl:attribute>
                         </w:top>
                     </xsl:if>
                     <xsl:if test="$cell-style-properties/@fo:padding-bottom">
                         <w:bottom w:type="dxa">
-                            <xsl:attribute name="w:w"><xsl:call-template name="convert2dxa"><xsl:with-param name="value" select="$cell-style-properties/@fo:padding-bottom"/></xsl:call-template></xsl:attribute>
+                            <xsl:attribute name="w:w"><xsl:call-template name="convert2twip"><xsl:with-param name="value" select="$cell-style-properties/@fo:padding-bottom"/></xsl:call-template></xsl:attribute>
                         </w:bottom>
                     </xsl:if>
                     <xsl:if test="$cell-style-properties/@fo:padding-left">
                         <w:left w:type="dxa">
-                            <xsl:attribute name="w:w"><xsl:call-template name="convert2dxa"><xsl:with-param name="value" select="$cell-style-properties/@fo:padding-left"/></xsl:call-template></xsl:attribute>
+                            <xsl:attribute name="w:w"><xsl:call-template name="convert2twip"><xsl:with-param name="value" select="$cell-style-properties/@fo:padding-left"/></xsl:call-template></xsl:attribute>
                         </w:left>
                     </xsl:if>
                     <xsl:if test="$cell-style-properties/@fo:padding-right">
                         <w:right w:type="dxa">
-                            <xsl:attribute name="w:w"><xsl:call-template name="convert2dxa"><xsl:with-param name="value" select="$cell-style-properties/@fo:padding-right"/></xsl:call-template></xsl:attribute>
+                            <xsl:attribute name="w:w"><xsl:call-template name="convert2twip"><xsl:with-param name="value" select="$cell-style-properties/@fo:padding-right"/></xsl:call-template></xsl:attribute>
                         </w:right>
                     </xsl:if>
                 </w:tcMar>
@@ -262,7 +303,7 @@
                 </xsl:element>
             </xsl:element>
             <xsl:if test="not (*)">
-                <w:p></w:p>
+                <w:p/>
             </xsl:if>
             <xsl:apply-templates select=".//text:p"/>
         </xsl:element>
