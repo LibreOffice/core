@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: os $ $Date: 2002-03-20 10:54:43 $
+ *  last change: $Author: os $ $Date: 2002-04-18 10:18:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -956,31 +956,8 @@ SfxSlotInfo FN_EDIT_FOOTNOTE
 };
 SfxSlotInfo FN_EDIT_FORMULA
 {
-    SlotName = "Formel einfügen";
-    SlotName [ english ] =  "Formel einfügen";
-    SlotName[ english_us ] = "Insert Formula";
-    SlotName[ portuguese ] = "Inserir fórmula";
-    SlotName[ russian ] = "Âñòàâèòü ôîğìóëó";
-    SlotName[ dutch ] = "Formule invoegen";
-    SlotName[ french ] = "Insérer une formule";
-    SlotName[ spanish ] = "Insertar fórmula";
-    SlotName[ italian ] = "Inserisci formula";
-    SlotName[ danish ] = "Indsæt formel";
-    SlotName[ swedish ] = "Infoga formel";
-    SlotName[ polish ] = "Wstaw formu³ê";
-    SlotName[ portuguese_brazilian ] = "InsertFormula";
-    SlotName[ japanese ] = "æ•°å¼ã®æŒ¿å…¥";
-    SlotName[ chinese_simplified ] = "æ’å…¥å…¬å¼";
-    SlotName[ chinese_traditional ] = "æ’å…¥å…¬å¼";
-    SlotName[ arabic ] = "ÅÏÑÇÌ ÕíÛÉ";
-    SlotName[ dutch ] = "Formule invoegen";
-    SlotName[ chinese_simplified ] = "æ’å…¥å…¬å¼";
-    SlotName[ greek ] = "ÅéóáãùãŞ ôığïõ";
-    SlotName[ korean ] = "ìˆ˜ì‹ ì‚½ì…";
-    SlotName[ turkish ] = "Formül ekle";
-    SlotName[ language_user1 ] = " ";
-    SlotName[ catalan ] = "Insertar fórmula";
-    SlotName[ finnish ] = "Lisää kaava";
+    SlotName = "Rechenleiste";
+    SlotName[ english_us ] = "Formularbar";
 };
 SfxSlotInfo FN_EDIT_IDX_ENTRY_DLG
 {
