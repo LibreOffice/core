@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-22 18:39:51 $
+#   last change: $Author: hjs $ $Date: 2001-08-31 17:28:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -587,7 +587,7 @@ $(MISC)$/%.dpz :
     @+-$(RM) $(MISC)$/$(TARGET).$(PWD:f).*.dpzz >& $(NULLDEV)
     @+-$(RM) $@ >& $(NULLDEV)
     +dmake $(MFLAGS) $(CALLMACROS) make_zip_deps=true ZIPALLTARGET -u
-    $(TYPE) $(MISC)$/$(TARGET).$(PWD:f).*.dpzz >> $@
+    $(TYPE) $(MISC)$/$(TARGET).$(PWD:f).*.dpzz | grep -v "CVS" >> $@
     @+-$(RM) $(MISC)$/$(TARGET).$(PWD:f).*.dpzz >& $(NULLDEV)
 .ELSE
     @+echo "#" > $@
