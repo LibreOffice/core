@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-31 16:56:32 $
+ *  last change: $Author: ka $ $Date: 2001-07-03 14:18:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -678,38 +678,34 @@ void SdView::DoConnect(SdrOle2Obj* pObj)
     if (pViewSh)
     {
         const SvInPlaceObjectRef& rIPObjRef = pObj->GetObjRef();
+        SfxInPlaceClientRef pSdClient = (SdClient*) rIPObjRef->GetIPClient();
 
-        if (!rIPObjRef->IsLink())
+        if ( !pSdClient.Is() )
         {
-            SfxInPlaceClientRef pSdClient = (SdClient*) rIPObjRef->GetIPClient();
+            SdWindow* pWindow = pViewSh->GetActiveWindow();
+            pSdClient = new SdClient(pObj, pViewSh, pWindow);
 
-            if ( !pSdClient.Is() )
+            rIPObjRef->DoConnect(pSdClient);
+            Rectangle aRect = pObj->GetLogicRect();
+            SvClientData* pClientData = pSdClient->GetEnv();
+
+            if (pClientData)
             {
-                SdWindow* pWindow = pViewSh->GetActiveWindow();
-                pSdClient = new SdClient(pObj, pViewSh, pWindow);
+                Size aDrawSize = aRect.GetSize();
+                Size aObjAreaSize = rIPObjRef->GetVisArea().GetSize();
+                aObjAreaSize = OutputDevice::LogicToLogic( aObjAreaSize,
+                                                       rIPObjRef->GetMapUnit(),
+                                                       pDoc->GetScaleUnit() );
 
-                rIPObjRef->DoConnect(pSdClient);
-                Rectangle aRect = pObj->GetLogicRect();
-                SvClientData* pClientData = pSdClient->GetEnv();
+                // sichtbarer Ausschnitt wird nur inplace veraendert!
+                aRect.SetSize(aObjAreaSize);
+                pClientData->SetObjArea(aRect);
 
-                if (pClientData)
-                {
-                    Size aDrawSize = aRect.GetSize();
-                    Size aObjAreaSize = rIPObjRef->GetVisArea().GetSize();
-                    aObjAreaSize = OutputDevice::LogicToLogic( aObjAreaSize,
-                                                           rIPObjRef->GetMapUnit(),
-                                                           pDoc->GetScaleUnit() );
-
-                    // sichtbarer Ausschnitt wird nur inplace veraendert!
-                    aRect.SetSize(aObjAreaSize);
-                    pClientData->SetObjArea(aRect);
-
-                    Fraction aScaleWidth (aDrawSize.Width(),  aObjAreaSize.Width() );
-                    Fraction aScaleHeight(aDrawSize.Height(), aObjAreaSize.Height() );
-                    aScaleWidth.ReduceInaccurate(10);       // kompatibel zum SdrOle2Obj
-                    aScaleHeight.ReduceInaccurate(10);
-                    pClientData->SetSizeScale(aScaleWidth, aScaleHeight);
-                }
+                Fraction aScaleWidth (aDrawSize.Width(),  aObjAreaSize.Width() );
+                Fraction aScaleHeight(aDrawSize.Height(), aObjAreaSize.Height() );
+                aScaleWidth.ReduceInaccurate(10);       // kompatibel zum SdrOle2Obj
+                aScaleHeight.ReduceInaccurate(10);
+                pClientData->SetSizeScale(aScaleWidth, aScaleHeight);
             }
         }
     }

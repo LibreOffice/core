@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-22 15:13:41 $
+ *  last change: $Author: ka $ $Date: 2001-07-03 14:18:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1156,51 +1156,42 @@ BOOL SdViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
         }
 
         const SvInPlaceObjectRef& rIPObjRef = pObj->GetObjRef();
+        SfxInPlaceClientRef pSdClient = (SdClient*) FindIPClient(rIPObjRef, pWindow);
 
-        if (!rIPObjRef->IsLink())
+        if ( !pSdClient.Is() )
         {
-            SfxInPlaceClientRef pSdClient = (SdClient*) FindIPClient(rIPObjRef, pWindow);
+            pSdClient = new SdClient(pObj, this, pWindow);
+        }
 
-            if ( !pSdClient.Is() )
-            {
-                pSdClient = new SdClient(pObj, this, pWindow);
-            }
+        rIPObjRef->DoConnect(pSdClient);
+        Rectangle aRect = pObj->GetLogicRect();
+        SvClientData* pClientData = pSdClient->GetEnv();
 
-            rIPObjRef->DoConnect(pSdClient);
-            Rectangle aRect = pObj->GetLogicRect();
-            SvClientData* pClientData = pSdClient->GetEnv();
+        if (pClientData)
+        {
+            Size aDrawSize = aRect.GetSize();
+            Size aObjAreaSize = rIPObjRef->GetVisArea().GetSize();
+            aObjAreaSize = OutputDevice::LogicToLogic( aObjAreaSize,
+                                                   rIPObjRef->GetMapUnit(),
+                                                   pDoc->GetScaleUnit() );
 
-            if (pClientData)
-            {
-                Size aDrawSize = aRect.GetSize();
-                Size aObjAreaSize = rIPObjRef->GetVisArea().GetSize();
-                aObjAreaSize = OutputDevice::LogicToLogic( aObjAreaSize,
-                                                       rIPObjRef->GetMapUnit(),
-                                                       pDoc->GetScaleUnit() );
+            // sichtbarer Ausschnitt wird nur inplace veraendert!
+            aRect.SetSize(aObjAreaSize);
+            pClientData->SetObjArea(aRect);
 
-                // sichtbarer Ausschnitt wird nur inplace veraendert!
-                aRect.SetSize(aObjAreaSize);
-                pClientData->SetObjArea(aRect);
+            Fraction aScaleWidth (aDrawSize.Width(),  aObjAreaSize.Width() );
+            Fraction aScaleHeight(aDrawSize.Height(), aObjAreaSize.Height() );
+            aScaleWidth.ReduceInaccurate(10);       // kompatibel zum SdrOle2Obj
+            aScaleHeight.ReduceInaccurate(10);
+            pClientData->SetSizeScale(aScaleWidth, aScaleHeight);
+        }
 
-                Fraction aScaleWidth (aDrawSize.Width(),  aObjAreaSize.Width() );
-                Fraction aScaleHeight(aDrawSize.Height(), aObjAreaSize.Height() );
-                aScaleWidth.ReduceInaccurate(10);       // kompatibel zum SdrOle2Obj
-                aScaleHeight.ReduceInaccurate(10);
-                pClientData->SetSizeScale(aScaleWidth, aScaleHeight);
-            }
-
-            // switching to edit mode for OLEs was disabled when OLE
-            // is member of a group all the time. I dont know why it
-            // was possible in previous versions. But I see no
-            // reason not to allow it. (src539)
+        // switching to edit mode for OLEs was disabled when OLE
+        // is member of a group all the time. I dont know why it
+        // was possible in previous versions. But I see no
+        // reason not to allow it. (src539)
 //          if( !pView->IsGroupEntered() )
-            DoVerb(pSdClient, nVerb);   // ErrCode wird ggf. vom Sfx ausgegeben
-        }
-        else
-        {
-            aErrCode = rIPObjRef->DoVerb(nVerb);
-        }
-
+        DoVerb(pSdClient, nVerb);   // ErrCode wird ggf. vom Sfx ausgegeben
         GetViewFrame()->GetBindings().Invalidate( SID_NAVIGATOR_STATE, TRUE, FALSE );
     }
 
