@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxat.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:02:34 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:59:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,337 +151,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void __EXPORT SdrTextObj::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType)
-{
-    SdrAttrObj::SFX_NOTIFY(rBC,rBCType,rHint,rHintType);
-    if (pOutlinerParaObject!=NULL)
-    {
-        if (HAS_BASE(SfxStyleSheet, &rBC))
-        {
-            SfxSimpleHint* pSimple=PTR_CAST(SfxSimpleHint,&rHint);
-            ULONG nId=pSimple==NULL ? 0 : pSimple->GetId();
-            if (nId==SFX_HINT_DATACHANGED)
-            {
-                bPortionInfoChecked=FALSE;
-                pOutlinerParaObject->ClearPortionInfo();
-                SetTextSizeDirty();
-                if (bTextFrame && NbcAdjustTextFrameWidthAndHeight())
-                {
-                    SendRepaintBroadcast();
-                }
-            }
-            if (nId==SFX_HINT_DYING)
-            {
-                bPortionInfoChecked=FALSE;
-                pOutlinerParaObject->ClearPortionInfo();
-            }
-        }
-        else if (HAS_BASE(SfxStyleSheetBasePool, &rBC))
-        {
-            SfxStyleSheetHintExtended* pExtendedHint = PTR_CAST(SfxStyleSheetHintExtended, &rHint);
-
-            if (pExtendedHint && pExtendedHint->GetHint() == SFX_STYLESHEET_MODIFIED)
-            {
-                String aOldName(pExtendedHint->GetOldName());
-                String aNewName(pExtendedHint->GetStyleSheet()->GetName());
-                SfxStyleFamily eFamily = pExtendedHint->GetStyleSheet()->GetFamily();
-
-                if(!aOldName.Equals(aNewName))
-                    pOutlinerParaObject->ChangeStyleSheetName(eFamily, aOldName, aNewName);
-            }
-        }
-    }
-}
-
-void SdrTextObj::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, FASTBOOL bDontRemoveHardAttr)
-{
-    SdrAttrObj::NbcSetStyleSheet(pNewStyleSheet,bDontRemoveHardAttr);
-
-    if ( pOutlinerParaObject && !pEdtOutl && !IsLinkedText() )
-    {
-        // StyleSheet auf alle Absaetze anwenden
-        SdrOutliner& rOutliner=ImpGetDrawOutliner();
-        rOutliner.SetText(*pOutlinerParaObject);
-        USHORT nParaCount=(USHORT)rOutliner.GetParagraphCount();
-        if (nParaCount!=0)
-        {
-            SfxItemSet* pTempSet;
-            for (USHORT nPara=0; nPara<nParaCount; nPara++)
-            {
-                // since setting the stylesheet removes all para attributes
-                if( bDontRemoveHardAttr )
-                {
-                    // we need to remember them if we want to keep them
-                    pTempSet = new SfxItemSet( rOutliner.GetParaAttribs( nPara ) );
-                }
-
-                if ( GetStyleSheet() )
-                {
-                    if( eTextKind == OBJ_OUTLINETEXT && GetObjInventor() == SdrInventor )
-                    {
-                        String aNewStyleSheetName( GetStyleSheet()->GetName() );
-                        aNewStyleSheetName.Erase( aNewStyleSheetName.Len()-1, 1 );
-                        aNewStyleSheetName += String::CreateFromInt32( rOutliner.GetDepth( nPara ) );
-
-                        SfxStyleSheetBasePool* pStylePool = pModel!=NULL ? pModel->GetStyleSheetPool() : NULL;
-                        SfxStyleSheet* pNewStyle = (SfxStyleSheet*) pStylePool->Find( aNewStyleSheetName, GetStyleSheet()->GetFamily() );
-                        DBG_ASSERT( pNewStyle, "AutoStyleSheetName - Style not found!" );
-                        if ( pNewStyle )
-                            rOutliner.SetStyleSheet( nPara, pNewStyle );
-                    }
-                    else
-                        rOutliner.SetStyleSheet( nPara, GetStyleSheet() );
-                }
-                else
-                    rOutliner.SetStyleSheet( nPara, NULL ); // StyleSheet entfernen
-
-                if( bDontRemoveHardAttr )
-                {
-                    // restore para attributes
-                    rOutliner.SetParaAttribs( nPara, *pTempSet );
-                    delete pTempSet;
-                }
-                else
-                {
-                    if(pNewStyleSheet!=NULL)
-                    {
-                        // Harte Absatz-Attributierung aller im
-                        // StyleSheet vorhandenen Items entfernen
-                        // -> Parents beruecksichtigen !!!
-                        SfxItemIter aIter(pNewStyleSheet->GetItemSet());
-                        const SfxPoolItem* pItem=aIter.FirstItem();
-                        while (pItem!=NULL) {
-                            if (!IsInvalidItem(pItem)) {
-                                USHORT nW=pItem->Which();
-                                if (nW>=EE_ITEMS_START && nW<=EE_ITEMS_END) {
-                                    // gibts noch nicht, baut Malte aber ein:
-                                    rOutliner.QuickRemoveCharAttribs(nPara,nW);
-                                }
-                            }
-                            pItem=aIter.NextItem();
-                        }
-                    }
-                }
-            }
-            OutlinerParaObject* pTemp=rOutliner.CreateParaObject( 0, nParaCount );
-            rOutliner.Clear();
-            NbcSetOutlinerParaObject(pTemp);
-        }
-    }
-    if (bTextFrame) {
-        NbcAdjustTextFrameWidthAndHeight();
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// private support routines for ItemSet access
-
-void SdrTextObj::ItemSetChanged(const SfxItemSet& rSet)
-{
-    // handle outliner attributes
-    ImpForceItemSet();
-
-    if(pOutlinerParaObject)
-    {
-        Outliner* pOutliner;
-
-        if(!pEdtOutl)
-        {
-            pOutliner = &ImpGetDrawOutliner();
-            pOutliner->SetText(*pOutlinerParaObject);
-        }
-        else
-        {
-            pOutliner = pEdtOutl;
-        }
-
-        sal_uInt16 nParaCount((sal_uInt16)pOutliner->GetParagraphCount());
-        for(sal_uInt16 nPara(0); nPara < nParaCount; nPara++)
-        {
-            SfxItemSet aSet( pOutliner->GetParaAttribs(nPara) );
-            aSet.Put( rSet );
-            pOutliner->SetParaAttribs(nPara, aSet);
-        }
-
-        if(!pEdtOutl)
-        {
-            if(nParaCount)
-            {
-                SfxItemSet aNewSet(pOutliner->GetParaAttribs(0));
-                mpObjectItemSet->Put(aNewSet);
-            }
-
-            OutlinerParaObject* pTemp = pOutliner->CreateParaObject(0, nParaCount);
-            pOutliner->Clear();
-            NbcSetOutlinerParaObject(pTemp);
-        }
-    }
-
-    // Extra-Repaint wenn das Layout so radikal geaendert wird (#43139#)
-    if(SFX_ITEM_SET == mpObjectItemSet->GetItemState(SDRATTR_TEXT_CONTOURFRAME))
-        SendRepaintBroadcast();
-
-    // call parent
-    SdrAttrObj::ItemSetChanged(rSet);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void SdrTextObj::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)
-{
-    if( pNewItem && nWhich == SDRATTR_TEXTDIRECTION )
-    {
-        bool bVertical = ( (SvxWritingModeItem*) pNewItem )->GetValue() == com::sun::star::text::WritingMode_TB_RL;
-
-        if( bVertical || pOutlinerParaObject )
-        {
-            SetVerticalWriting( bVertical );
-        }
-    }
-
-    // #95501# reset to default
-    if(!pNewItem && !nWhich && pOutlinerParaObject)
-    {
-        SdrOutliner& rOutliner = ImpGetDrawOutliner();
-        rOutliner.SetText(*pOutlinerParaObject);
-        sal_uInt16 nParaCount(sal_uInt16(rOutliner.GetParagraphCount()));
-
-        if(nParaCount)
-        {
-            ESelection aSelection( 0, 0, EE_PARA_ALL, EE_PARA_ALL);
-            rOutliner.RemoveAttribs(aSelection, TRUE, 0);
-
-            OutlinerParaObject* pTemp = rOutliner.CreateParaObject(0, nParaCount);
-            rOutliner.Clear();
-            NbcSetOutlinerParaObject(pTemp);
-        }
-    }
-
-    SdrAttrObj::ItemChange( nWhich, pNewItem );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void SdrTextObj::BurnInStyleSheetAttributes( BOOL bPseudoSheetsOnly )
-{
-    SdrAttrObj::BurnInStyleSheetAttributes();
-
-    if ( pModel && pOutlinerParaObject && !pEdtOutl && !IsLinkedText() )
-    {
-        Outliner* pOutliner = SdrMakeOutliner( OUTLINERMODE_OUTLINEOBJECT, pModel );
-        pOutliner->SetText( *pOutlinerParaObject );
-
-        USHORT nParaCount = (USHORT) pOutliner->GetParagraphCount();
-        if ( nParaCount > 0 )
-        {
-            BOOL bBurnIn = FALSE;
-
-            for ( USHORT nPara = 0; nPara < nParaCount; nPara++ )
-            {
-                SfxStyleSheet* pSheet = pOutliner->GetStyleSheet( nPara );
-                if( pSheet && ( !bPseudoSheetsOnly || pSheet->GetFamily() == SFX_STYLE_FAMILY_PSEUDO ) )
-                {
-                    SfxItemSet aParaSet( pOutliner->GetParaAttribs( nPara ) );
-
-                    SfxItemSet aSet( *aParaSet.GetPool() );
-                    aSet.Put( pSheet->GetItemSet() );
-
-                    /** the next code handles a special case for paragraphs that contain a
-                        url field. The color for URL fields is either the system color for
-                        urls or the char color attribute that formats the portion in which the
-                        url field is contained.
-                        When we set a char color attribute to the paragraphs item set from the
-                        styles item set, we would have this char color attribute as an attribute
-                        that is spanned over the complete paragraph after xml import due to some
-                        problems in the xml import (using a XCursor on import so it does not know
-                        the paragraphs and can't set char attributes to paragraphs ).
-
-                        To avoid this, as soon as we try to set a char color attribute from the style
-                        we
-                        1. check if we have at least one url field in this paragraph
-                        2. if we found at least one url field, we span the char color attribute over
-                           all portions that are not url fields and remove the char color attribute
-                           from the paragraphs item set
-                    */
-
-                    bool bHasURL = false;
-                    if( SFX_ITEM_SET == aSet.GetItemState(EE_CHAR_COLOR) )
-                    {
-
-                        EditEngine* pEditEngine = const_cast<EditEngine*>( &(pOutliner->GetEditEngine()) );
-
-                        EECharAttribArray aAttribs;
-                        pEditEngine->GetCharAttribs( nPara, aAttribs );
-                        USHORT nAttrib;
-
-                        for( nAttrib = 0; nAttrib < aAttribs.Count(); nAttrib++ )
-                        {
-                            struct EECharAttrib aAttrib(aAttribs.GetObject( nAttrib ));
-                            if( aAttrib.pAttr->Which() == EE_FEATURE_FIELD )
-                            {
-                                if( aAttrib.pAttr )
-                                {
-                                    SvxFieldItem* pFieldItem = (SvxFieldItem*)aAttrib.pAttr;
-                                    if( pFieldItem )
-                                    {
-                                        const SvxFieldData* pData = pFieldItem->GetField();
-                                        if( pData && pData->ISA( SvxURLField ) )
-                                        {
-                                            bHasURL = true;
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-
-                        if( bHasURL )
-                        {
-                            SfxItemSet aColorSet( *aSet.GetPool(), EE_CHAR_COLOR, EE_CHAR_COLOR );
-                            aColorSet.Put( aSet, FALSE );
-
-                            ESelection aSel( nPara, 0 );
-                            for( nAttrib = 0; nAttrib < aAttribs.Count(); nAttrib++ )
-                            {
-                                struct EECharAttrib aAttrib(aAttribs.GetObject( nAttrib ));
-                                if( aAttrib.pAttr->Which() == EE_FEATURE_FIELD )
-                                {
-                                    aSel.nEndPos = aAttrib.nStart;
-                                    if( aSel.nStartPos != aSel.nEndPos )
-                                        pEditEngine->QuickSetAttribs( aColorSet, aSel );
-
-                                    aSel.nStartPos = aAttrib.nEnd;
-                                }
-                            }
-                            aSel.nEndPos = pEditEngine->GetTextLen( nPara );
-                            if( aSel.nStartPos != aSel.nEndPos )
-                                pEditEngine->QuickSetAttribs( aColorSet, aSel );
-                        }
-
-                    }
-
-                    aSet.Put( aParaSet, FALSE );
-
-                    if( bHasURL )
-                        aSet.ClearItem( EE_CHAR_COLOR );
-
-                    pOutliner->SetParaAttribs( nPara, aSet );
-                    bBurnIn = TRUE;
-                }
-            }
-
-            if( bBurnIn )
-            {
-                OutlinerParaObject* pTemp = pOutliner->CreateParaObject( 0, nParaCount );
-                NbcSetOutlinerParaObject( pTemp );
-            }
-        }
-
-        delete pOutliner;
-    }
-}
-
 FASTBOOL SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt, FASTBOOL bWdt) const
 {
     if (bTextFrame && pModel!=NULL && !rR.IsEmpty()) {
@@ -552,7 +221,7 @@ FASTBOOL SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt,
                 if ( pOutlinerParaObject != NULL )
                 {
                     rOutliner.SetText(*pOutlinerParaObject);
-                    rOutliner.SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)GetItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
+                    rOutliner.SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
                 }
                 if (bWdtGrow) {
                     Size aSiz(rOutliner.CalcTextSize());
@@ -631,8 +300,8 @@ FASTBOOL SdrTextObj::AdjustTextFrameWidthAndHeight(FASTBOOL bHgt, FASTBOOL bWdt)
     Rectangle aNeuRect(aRect);
     FASTBOOL bRet=AdjustTextFrameWidthAndHeight(aNeuRect,bHgt,bWdt);
     if (bRet) {
-        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetBoundRect();
-        SendRepaintBroadcast();
+        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+        // #110094#-14 SendRepaintBroadcast();
         aRect=aNeuRect;
         SetRectsDirty();
         if (HAS_BASE(SdrRectObj,this)) { // mal wieder 'nen Hack
@@ -642,7 +311,7 @@ FASTBOOL SdrTextObj::AdjustTextFrameWidthAndHeight(FASTBOOL bHgt, FASTBOOL bWdt)
             ((SdrCaptionObj*)this)->ImpRecalcTail();
         }
         SetChanged();
-        SendRepaintBroadcast();
+        BroadcastObjectChange();
         SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
     }
     return bRet;
@@ -755,7 +424,7 @@ void SdrTextObj::NbcResizeTextAttributes(const Fraction& xFact, const Fraction& 
         if (nX!=100 || nY!=100)
         {
             // Rahmenattribute
-            const SfxItemSet& rSet = GetItemSet();
+            const SfxItemSet& rSet = GetObjectItemSet();
             const SvxCharScaleWidthItem& rOldWdt=(SvxCharScaleWidthItem&)rSet.Get(EE_CHAR_FONTWIDTH);
             const SvxFontHeightItem& rOldHgt=(SvxFontHeightItem&)rSet.Get(EE_CHAR_FONTHEIGHT);
 
@@ -779,8 +448,8 @@ void SdrTextObj::NbcResizeTextAttributes(const Fraction& xFact, const Fraction& 
             if (nAbsHgt>0xFFFF) nAbsHgt=0xFFFF;
 
             // und nun attributieren
-            SetItem(SvxCharScaleWidthItem( (USHORT) nRelWdt));
-            SetItem(SvxFontHeightItem(nAbsHgt,(USHORT)nRelHgt));
+            SetObjectItem(SvxCharScaleWidthItem( (USHORT) nRelWdt));
+            SetObjectItem(SvxFontHeightItem(nAbsHgt,(USHORT)nRelHgt));
             // Zeichen- und Absatzattribute innerhalb des OutlinerParaObjects
             Outliner& rOutliner=ImpGetDrawOutliner();
             rOutliner.SetPaperSize(Size(LONG_MAX,LONG_MAX));
@@ -818,8 +487,8 @@ void SdrTextObj::RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& 
 
         if(!pEdtOutl)
         {
-            const sal_uInt16 nParaCount = pOutliner->GetParagraphCount();
-            OutlinerParaObject* pTemp = pOutliner->CreateParaObject(0, nParaCount);
+            const sal_uInt32 nParaCount = pOutliner->GetParagraphCount();
+            OutlinerParaObject* pTemp = pOutliner->CreateParaObject(0, (sal_uInt16)nParaCount);
             pOutliner->Clear();
             NbcSetOutlinerParaObject(pTemp);
         }
