@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-23 12:37:15 $
+ *  last change: $Author: ssa $ $Date: 2001-11-30 17:31:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1141,17 +1141,7 @@ void SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
         nY = nScreenY;
 
     SetWindowPos( maFrameData.mhWnd, 0, nX, nY, (int)nWidth, (int)nHeight, SWP_NOZORDER | SWP_NOACTIVATE | nPosSize );
-
-    if( !(nPosSize & SWP_NOMOVE) )
-    {
-        maGeometry.nX = nX;
-        maGeometry.nY = nY;
-    }
-    if( !(nPosSize & SWP_NOSIZE) )
-    {
-        maGeometry.nWidth  = nWidth;
-        maGeometry.nHeight = nHeight;
-    }
+    UpdateFrameGeometry( maFrameData.mhWnd, this );
 
     // Notification -- really ???
     if( nEvent )
