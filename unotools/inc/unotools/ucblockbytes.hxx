@@ -152,7 +152,8 @@ public:
     NS_UNO::Reference < NS_IO::XInputStream > getInputStream();
 
 #if _SOLAR__PRIVATE
-    sal_Bool                setInputStream_Impl( const NS_UNO::Reference < NS_IO::XInputStream > &rxInputStream );
+    sal_Bool                setInputStream_Impl( const NS_UNO::Reference < NS_IO::XInputStream > &rxInputStream,
+                                                 sal_Bool bSetXSeekable = sal_True );
     sal_Bool                setStream_Impl( const NS_UNO::Reference < NS_IO::XStream > &rxStream );
     void                    terminate_Impl (void);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-07 18:04:49 $
+ *  last change: $Author: mav $ $Date: 2002-04-08 10:27:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
+
 
 namespace utl
 {
@@ -490,6 +491,28 @@ void CommandThread_Impl::Cancel()
 }
 
 //----------------------------------------------------------------------------
+static void copyInputToOutput( const Reference< XInputStream >& aIn, const Reference< XOutputStream >& aOut )
+{
+    const sal_Int32 nConstBufferSize = 32000;
+
+    sal_Int32 nRead;
+    Sequence < sal_Int8 > aSequence ( nConstBufferSize );
+
+    do
+    {
+        nRead = aIn->readBytes ( aSequence, nConstBufferSize );
+        if ( nRead < nConstBufferSize )
+        {
+            Sequence < sal_Int8 > aTempBuf ( aSequence.getConstArray(), nRead );
+            aOut->writeBytes ( aTempBuf );
+        }
+        else
+            aOut->writeBytes ( aSequence );
+    }
+    while ( nRead == nConstBufferSize );
+}
+
+//----------------------------------------------------------------------------
 UcbLockBytes::UcbLockBytes( UcbLockBytesHandler* pHandler )
     : m_xInputStream (NULL)
     , m_pCommandThread( NULL )
@@ -547,7 +570,7 @@ sal_Bool UcbLockBytes::setStream_Impl( const Reference<XStream>& aStream )
     if ( aStream.is() )
     {
         m_xOutputStream = aStream->getOutputStream();
-        setInputStream_Impl( aStream->getInputStream() );
+        setInputStream_Impl( aStream->getInputStream(), sal_False );
         m_xSeekable = Reference < XSeekable > ( aStream, UNO_QUERY );
     }
     else
@@ -559,7 +582,7 @@ sal_Bool UcbLockBytes::setStream_Impl( const Reference<XStream>& aStream )
     return m_xInputStream.is();
 }
 
-sal_Bool UcbLockBytes::setInputStream_Impl( const Reference<XInputStream> &rxInputStream )
+sal_Bool UcbLockBytes::setInputStream_Impl( const Reference<XInputStream> &rxInputStream, sal_Bool bSetXSeekable )
 {
     BOOL bRet;
 
@@ -568,7 +591,26 @@ sal_Bool UcbLockBytes::setInputStream_Impl( const Reference<XInputStream> &rxInp
         m_xInputStream->closeInput();
 
     m_xInputStream = rxInputStream;
-    m_xSeekable = Reference < XSeekable > ( rxInputStream, UNO_QUERY );
+
+    if( bSetXSeekable )
+    {
+        m_xSeekable = Reference < XSeekable > ( rxInputStream, UNO_QUERY );
+        if( !m_xSeekable.is() && rxInputStream.is() )
+        {
+            Reference < XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+            Reference< XOutputStream > rxTempOut = Reference < XOutputStream > (
+                                xFactory->createInstance ( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
+                                UNO_QUERY );
+
+            if( rxTempOut.is() )
+            {
+                copyInputToOutput( rxInputStream, rxTempOut );
+                m_xInputStream = Reference< XInputStream >( rxTempOut, UNO_QUERY );
+                m_xSeekable = Reference < XSeekable > ( rxTempOut, UNO_QUERY );
+            }
+        }
+    }
+
     bRet = m_xInputStream.is();
     aGuard.clear();
 
