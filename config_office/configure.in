@@ -689,11 +689,13 @@ if test "$JAVA"; then
    fi
    if test "$_os" = "Linux" -a "$_machine_type" = "i686"; then
       _jdk_middle=`echo $_jdk | $AWK -F. '{ if ($2 != 2) print "false"; else print "true" }'`
+      _jdk_middle3=`echo $_jdk | $AWK -F. '{ if ($2 != 3) print "false"; else print "true" }'`
+
+      if test "$_jdk_middle" = "false" -a "$_jdk_middle3" = "true"; then
+         _jdk_minor="true"
+      fi
    fi
-   if test "$_os" = "FreeBSD"; then
-      _jdk_middle=`echo $_jdk | $AWK -F. '{ if ($2 != 2) print "false"; else print "true" }'`
-   fi
-   if test "$_os" = "NetBSD"; then
+   if test "$_os" = "FreeBSD" -o "$_os" = "NetBSD"; then
       _jdk_middle=`echo $_jdk | $AWK -F. '{ if ($2 != 2) print "false"; else print "true" }'`
    fi
    if test "$_os" = "Linux" -a "$_machine_type" = "sparc"; then
