@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ssa $ $Date: 2001-09-06 12:58:13 $
+ *  last change: $Author: pl $ $Date: 2001-09-07 13:47:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,7 @@
 #endif
 
 #include <osl/module.h>
+#include <osl/file.hxx>
 
 using namespace ::com::sun::star::uno;
 
@@ -407,7 +408,26 @@ const XubString& Application::GetAppFileName()
     DBG_ASSERT( pSVData->maAppData.mpAppFileName, "AppFileName vor SVMain ?!" );
     if ( pSVData->maAppData.mpAppFileName )
         return *pSVData->maAppData.mpAppFileName;
-    return ImplGetSVEmptyStr();
+
+    /*
+     *  #91147# provide a fallback for people without initialized
+     *  vcl here (like setup in responsefile mode)
+     */
+    static String aAppFileName;
+    if( !aAppFileName.Len() )
+    {
+        vos::OStartupInfo   aStartInfo;
+        ::rtl::OUString     aExeFileName;
+
+        aStartInfo.getExecutableFile( aExeFileName );
+
+        // convert path to native file format
+        rtl::OUString aNativeFileName;
+        osl::FileBase::getSystemPathFromFileURL( aExeFileName, aNativeFileName );
+        aAppFileName = aNativeFileName;
+    }
+
+    return aAppFileName;
 }
 
 // -----------------------------------------------------------------------
