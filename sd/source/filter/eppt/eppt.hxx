@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-07 13:59:30 $
+ *  last change: $Author: sj $ $Date: 2001-08-13 16:32:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #endif
 #ifndef _SV_GRAPH_HXX
 #include <vcl/graph.hxx>
+#endif
+#ifndef _SV_FONTCVT_HXX
+#include <vcl/fontcvt.hxx>
 #endif
 #include <tools/string.hxx>
 
@@ -420,14 +423,31 @@ struct FontCollectionEntry
         sal_Int16               Pitch;
         sal_Int16               CharSet;
 
+        String                  Original;
+        sal_Bool                bIsConverted;
+
         FontCollectionEntry( const String& rName, sal_Int16 nFamily, sal_Int16 nPitch, sal_Int16 nCharSet ) :
-                            Name    ( rName ),
                             Family  ( nFamily ),
                             Pitch   ( nPitch ),
                             CharSet ( nCharSet ),
-                            Scaling ( 1.0 ) {};
+                            Scaling ( 1.0 ),
+                            Original( rName )
+                            {
+                                ImplInit( rName );
+                            };
+
         FontCollectionEntry( const String& rName ) :
-                            Name    ( rName ) {};
+                            Original( rName )
+                            {
+                                ImplInit( rName );
+                            };
+        ~FontCollectionEntry();
+
+    private :
+
+        FontCollectionEntry() {};
+
+        void ImplInit( const String& rName );
 };
 
 class VirtualDevice;

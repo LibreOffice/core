@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-19 09:22:39 $
+ *  last change: $Author: sj $ $Date: 2001-08-13 16:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -586,6 +586,27 @@ void SoundCollection::Write( SvStream& rSt )
 
 // ---------------------------------------------------------------------------------------------
 
+FontCollectionEntry::~FontCollectionEntry()
+{
+}
+
+// ---------------------------------------------------------------------------------------------
+
+void FontCollectionEntry::ImplInit( const String& rName )
+{
+    String aSubstName( GetSubsFontName( rName, SUBSFONT_ONLYONE | SUBSFONT_MS ) );
+    if ( aSubstName.Len() )
+    {
+        Name = aSubstName;
+        bIsConverted = sal_True;
+    }
+    else
+    {
+        Name = rName;
+        bIsConverted = sal_False;
+    }
+}
+
 FontCollection::~FontCollection()
 {
     for( void* pStr = List::First(); pStr; pStr = List::Next() )
@@ -605,18 +626,21 @@ sal_uInt32 FontCollection::GetId( FontCollectionEntry& rEntry )
         const sal_uInt32 nCount = GetCount();
 
         for( sal_uInt32 i = 0; i < nCount; i++ )
-            if( GetById( i )->Name == rEntry.Name )
+        {
+            const FontCollectionEntry* pEntry = GetById( i );
+            if( pEntry->Name == rEntry.Name )
                 return i;
-
+        }
         Font aFont;
         aFont.SetCharSet( rEntry.CharSet );
-        aFont.SetName( rEntry.Name );
+        aFont.SetName( rEntry.Original );
 //      aFont.SetFamily( rEntry.Family );
 //      aFont.SetPitch( rEntry.Pitch );
         aFont.SetHeight( 100 );
 
         if ( !pVDev )
             pVDev = new VirtualDevice;
+
         pVDev->SetFont( aFont );
         FontMetric aMetric( pVDev->GetFontMetric() );
 
@@ -1657,22 +1681,9 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
             nPropertyFlags |= 1;            // turn off bullet explicit
             nBulletFlags = 0;
         }
-/*
-        PortionObj* pPortion = (PortionObj*)pPara->First();
-        if ( pPortion ) // in SO the bulletrealsize does not depend to the following portion charactersize
-        {
-            if ( pPortion->mnCharHeight )
-            {
-                if ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, CharAttr_FontHeight, pPortion->mnCharHeight ) )
-                {   // the fontsize is unequal to the StyleSheetFontSize, so the BulletRealSize has to be set again
-                    nPropertyFlags |= 0x44;
-                    nBulletFlags |= 8;
-                    nBuRealSize *= mpStyleSheet->GetCharSheet( nInstance ).maCharLevel[ pPara->nDepth ].mnFontHeight;
-                    nBuRealSize /= pPortion->mnCharHeight;
-                }
-            }
-        }
-*/
+        FontCollectionEntry aFontDescEntry( pPara->aFontDesc.Name, pPara->aFontDesc.Family, pPara->aFontDesc.Pitch, pPara->aFontDesc.CharSet );
+        sal_uInt16  nFontId = (sal_uInt16)maFontCollection.GetId( aFontDescEntry );
+
         rOut << nCharCount
              << nDepth                          // Level
              << (sal_uInt32)nPropertyFlags;     // Paragraph Attribut Set
@@ -1682,10 +1693,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
         if ( nPropertyFlags & 0x80 )
             rOut << (sal_uInt16)( pPara->cBulletId );
         if ( nPropertyFlags & 0x10 )
-        {
-            FontCollectionEntry aFontDescEntry( pPara->aFontDesc.Name, pPara->aFontDesc.Family, pPara->aFontDesc.Pitch, pPara->aFontDesc.CharSet );
-            rOut << (sal_uInt16)( maFontCollection.GetId( aFontDescEntry ) );
-        }
+            rOut << nFontId;
         if ( nPropertyFlags & 0x40 )
             rOut << (sal_Int16)nBuRealSize;
         if ( nPropertyFlags & 0x20 )
@@ -2540,6 +2548,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                     {
                         if ( aFontDesc.Name.getLength() )
                         {
+/*
                             if ( aFontDesc.CharSet != ::com::sun::star::awt::CharSet::SYMBOL )
                             {
                                 switch ( cBulletId )
@@ -2581,6 +2590,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
 //                                  case 222:   cBulletId = 0x00B6; break;// PILCROW SIGN / PARAGRAPH SIGN
                                 }
                             }
+*/
                             nParaFlags |= 0x90; // wir geben den Font und den Charset vor
                         }
                     }
