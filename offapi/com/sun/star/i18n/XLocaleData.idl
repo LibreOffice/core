@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLocaleData.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:17 $
+ *  last change: $Author: er $ $Date: 2000-11-08 17:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include <com/sun/star/lang/Locale.idl>
 #include <com/sun/star/i18n/LanguageCountryInfo.idl>
 #include <com/sun/star/i18n/Currency.idl>
+#include <com/sun/star/i18n/Calendar.idl>
 
 //=============================================================================
 
@@ -72,12 +73,6 @@ module com { module sun { module star { module i18n {
 
 //=============================================================================
 
-
-struct CalendarItem {
-    string ID;
-    string abbrevName;
-    string fullName;
-};
 
 struct FormatElement {
     string formatCode;
@@ -90,16 +85,6 @@ struct FormatElement {
 };
 
 
-
-struct Calendar {
-    sequence<CalendarItem>  days;
-    sequence<CalendarItem>  months;
-    sequence<CalendarItem>  eras;
-    string  startOfWeek;
-    short   minNoOfDaysForFirstWeek;
-    boolean isDefault;
-    string  implName;
-};
 
 struct LocaleDataItem {
     string unoID;
