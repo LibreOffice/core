@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedmod.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-23 16:11:20 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,11 +90,11 @@ private:
 public:
     TYPEINFO();
 
-    DlgEdModel(SfxItemPool* pPool=NULL, SvPersist* pPers=NULL );
+    DlgEdModel(SfxItemPool* pPool=NULL, SfxObjectShell* pPers=NULL );
     DlgEdModel(const String& rPath, SfxItemPool* pPool=NULL,
-                SvPersist* pPers=NULL );
-    DlgEdModel(SfxItemPool* pPool, SvPersist* pPers, FASTBOOL bUseExtColorTable );
-    DlgEdModel(const String& rPath, SfxItemPool* pPool, SvPersist* pPers,
+                SfxObjectShell* pPers=NULL );
+    DlgEdModel(SfxItemPool* pPool, SfxObjectShell* pPers, FASTBOOL bUseExtColorTable );
+    DlgEdModel(const String& rPath, SfxItemPool* pPool, SfxObjectShell* pPers,
                 FASTBOOL bUseExtColorTable );
     virtual ~DlgEdModel();
 
