@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabdlg.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:57:12 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:13:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1413,11 +1413,11 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
             sUserData = String( aTemp );
         pTabPage->SetUserData( sUserData );
         Size aSiz = pTabPage->GetSizePixel();
-        Size aCtrlSiz = pTabCtrl->GetOutputSizePixel();
+        Size aCtrlSiz = pTabCtrl->GetTabPageSizePixel();
         // Gr"o/se am TabControl nur dann setzen, wenn < als TabPage
         if ( aCtrlSiz.Width() < aSiz.Width() ||
              aCtrlSiz.Height() < aSiz.Height() )
-            pTabCtrl->SetOutputSizePixel( aSiz );
+            pTabCtrl->SetTabPageSizePixel( aSiz );
         PageCreated( nId, *pTabPage );
 
         if ( pDataObject->bOnDemand )
