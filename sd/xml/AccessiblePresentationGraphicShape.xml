@@ -20,16 +20,16 @@ title="Link to a general description of UNO accessibility"/>
 <language>c++</language>
 <status value="alpha"/>
 
-<supported-service>drafts.com.sun.star.drawing.AccessibleShape</supported-service>
-<supported-service>drafts.com.sun.star.accessibility.Accessible</supported-service>
-<supported-service>drafts.com.sun.star.accessibility.AccessibleContext</supported-service>
+<supported-service>com.sun.star.drawing.AccessibleShape</supported-service>
+<supported-service>com.sun.star.accessibility.Accessible</supported-service>
+<supported-service>com.sun.star.accessibility.AccessibleContext</supported-service>
 
-<type>drafts.com.sun.star.accessibility.XAccessible</type>
-<type>drafts.com.sun.star.accessibility.XAccessibleContext</type>
-<type>drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster</type>
-<type>drafts.com.sun.star.accessibility.XAccessibleComponent</type>
-<type>drafts.com.sun.star.accessibility.XAccessibleExtendedComponent</type>
-<type>drafts.com.sun.star.accessibility.XAccessibleImage</type>
+<type>com.sun.star.accessibility.XAccessible</type>
+<type>com.sun.star.accessibility.XAccessibleContext</type>
+<type>com.sun.star.accessibility.XAccessibleEventBroadcaster</type>
+<type>com.sun.star.accessibility.XAccessibleComponent</type>
+<type>com.sun.star.accessibility.XAccessibleExtendedComponent</type>
+<type>com.sun.star.accessibility.XAccessibleImage</type>
 <type>com.sun.star.lang.XTypeProvider</type>
 <type>com.sun.star.lang.XServiceInfo</type>
 <type>com.sun.star.lang.XComponent</type>
