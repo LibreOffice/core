@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paradlg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:49:38 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:01:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ TabDialog DLG_PARA
                 Text [ ENGLISH ] = "Paragraph" ;
                 Text [ norwegian ] = "Avsnitt" ;
                 Text [ italian ] = "Paragrafo" ;
-                Text [ portuguese_brazilian ] = "Recuos & Afastamento" ;
+                Text [ portuguese_brazilian ] = "Recuo & Afastamento" ;
                 Text [ portuguese ] = "AvanÁos e espaÁamento" ;
                 Text [ finnish ] = "Sisennykset ja v‰lit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
@@ -439,7 +439,7 @@ TabDialog DLG_DRAWPARA
                 Text [ ENGLISH ] = "Paragraph" ;
                 Text [ norwegian ] = "Avsnitt" ;
                 Text [ italian ] = "Rientri e spaziature" ;
-                Text [ portuguese_brazilian ] = "Recuos & Afastamento" ;
+                Text [ portuguese_brazilian ] = "Recuo & Afastamento" ;
                 Text [ portuguese ] = "AvanÁos e espaÁamento" ;
                 Text [ finnish ] = "Sisennykset ja v‰lit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
@@ -585,6 +585,7 @@ TabDialog DLG_DRAWPARA
     Text[ hindi ] = "‡§™‡§∞‡§ø‡§ö‡•ç‡§õ‡•á‡§¶";
     Text[ slovak ] = "Odstavec";
 };
+
 
 
 
