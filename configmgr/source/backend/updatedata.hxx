@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatedata.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:18:49 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:36:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,6 +247,8 @@ namespace configmgr
             bool setValue(ValueUpdate const & _aValueUpdate)    { return setValueFor(primarySlot(), _aValueUpdate); }
             bool resetValue()                                   { return resetValueFor(primarySlot()); }
             void removeValue()                                  { removeValueFor(primarySlot()); }
+
+            void finishValue();
 
             void clear();
 
