@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ios2met.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-29 13:11:36 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,16 +62,13 @@
 
 #include <math.h>
 #include <vcl/graph.hxx>
-#include <vcl/poly.hxx>
+#include <tools/poly.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/lineinfo.hxx>
 #include <svtools/fltcall.hxx>
 
-#ifndef NOOLDSV
-#include <vcl/gdiobj.hxx>
-#else // NOOLDSV
+// MT: NOOLDSV, someone should change the code...
 enum PenStyle { PEN_NULL, PEN_SOLID, PEN_DOT, PEN_DASH, PEN_DASHDOT };
-#endif // NOOLDSV
 
 
 //============================== defines ===================================
