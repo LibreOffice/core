@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDeco.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-28 10:30:59 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:34:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,10 +660,10 @@ void ODBTableDecorator::refreshColumns()
     }
     if(!m_pColumns)
     {
-        OColumns* pCol = new OColumns(*this,m_aMutex,xNames,m_xMetaData->storesMixedCaseQuotedIdentifiers(),aVector,
+        OColumns* pCol = new OColumns(*this,m_aMutex,xNames,m_xMetaData.is() && m_xMetaData->storesMixedCaseQuotedIdentifiers(),aVector,
                                     this,this,
-                                    m_xMetaData->supportsAlterTableWithAddColumn(),
-                                    m_xMetaData->supportsAlterTableWithDropColumn());
+                                    m_xMetaData.is() && m_xMetaData->supportsAlterTableWithAddColumn(),
+                                    m_xMetaData.is() && m_xMetaData->supportsAlterTableWithDropColumn());
         //  pCol->setParent(this);
         m_pColumns  = pCol;
 
