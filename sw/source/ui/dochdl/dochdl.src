@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dochdl.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:36:42 $
+ *  last change: $Author: kz $ $Date: 2001-03-02 20:33:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,7 +245,7 @@ QueryBox MSG_UPDATE_NEW_GLOS_FMT
     Message[ arabic ] = "ΚδΣνή ΗαδΨΗή ήΟνγ.\nνΜΘ ΚΝζναε΅ ΝΚμ νγίδ \nΝέΩ ΗαΚΫννΡΗΚ.\nεα ΚΡνΟ ΚΝζναεΏ";
     Message[ dutch ] = "Het bereik heeft een verouderd formaat.\nHet moet worden geconverteerd om de wijzigingen\nte kunnen opslaan.\nWilt u de conversie nu uitvoeren?";
     Message[ chinese_simplified ] = "ΥβΈφΗψΣςΎίΣΠµΔΈρΚ½ΚΗΎΙµΔ΅£\nÒª΄ζΕΜΈόΈΔΎΝ±ΨΠλ½ψΠΠΈρΚ½Χª»»΅£\nÒªΧª»»ΈρΚ½Βπ£Ώ";
-    Message[ greek ] = "Η περιοχή υπάρχει σε παλιά μορφή.\nΠρέπει να γίνει μετατροπή της για να είναι δυνατή\nη αποθήκευση των αλλαγών.\nΘέλετε να γίνει η μετατροπή;";
+    Message[ greek ] = "Η περιοχή υπάρχει σε κάποια προγενέστερη μορφή.\nΠρέπει να μετατραπεί για να είναι δυνατή\nη αποθήκευση των αλλαγών.\nΘέλετε να γίνει η μετατροπή;";
     Message[ korean ] = "±ΈΏª Ό­½ΔΐΊ Ώΐ·΅µΘ °ΝΐΤ΄Ο΄Ω.\n ΐΜ°Νΐ» Ί―Θ―ΗΟΏ©Ύί Ί―°ζ»ηΗΧΐ»\nΐϊΐεΗÒ Όφ ΐΦ½ΐ΄Ο΄Ω.\n Αφ±έ Ί―Θ― ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Message[ turkish ] = "Bφlόmόn formatύ eski.\nDeπiώikliklerin kaydedilebilmesi n\niηin deπiώtirilmesi gerekiyor.\nFormat deπiώtirilsin mi?";
     Message[ language_user1 ] = " ";
