@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:37:36 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:49:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #ifndef _IPENV_HXX //autogen
 #include <so3/ipenv.hxx>
 #endif
+#include <so3/pseudo.hxx>
 #ifndef _SPLITWIN_HXX //autogen
 #include <vcl/splitwin.hxx>
 #endif
@@ -213,6 +214,7 @@ SFX_IMPL_INTERFACE(SfxViewFrame,SfxShell,SfxResId(0))
 
 TYPEINIT2(SfxViewFrame,SfxShell,SfxListener);
 TYPEINIT1(SfxViewFrameItem, SfxPoolItem);
+TYPEINIT1(SfxVerbListItem, SfxPoolItem);
 
 //=========================================================================
 
@@ -2036,6 +2038,43 @@ SfxPoolItem* SfxViewFrameItem::Clone( SfxItemPool *) const
 }
 
 //--------------------------------------------------------------------
+SfxVerbListItem::SfxVerbListItem( USHORT nWhich, const SvVerbList* pVerbLst ) :
+    SfxPoolItem( nWhich ),
+    pVerbList( pVerbLst )
+{
+    if ( pVerbList )
+    {
+        aVerbSeq.realloc( pVerbList->Count() );
+        for ( sal_Int32 n = 0; n < (sal_Int32)pVerbList->Count(); n++ )
+        {
+            const SvVerb& rVerb = (*pVerbList)[n];
+            aVerbSeq[n].VerbId          = rVerb.GetId();
+            aVerbSeq[n].VerbName        = rVerb.GetName();
+            aVerbSeq[n].VerbIsOnMenu    = rVerb.IsOnMenu();
+            aVerbSeq[n].VerbIsConst     = rVerb.IsConst();
+        }
+    }
+}
+
+int SfxVerbListItem::operator==( const SfxPoolItem& rItem ) const
+{
+    return PTR_CAST(SfxVerbListItem, &rItem)->pVerbList == pVerbList;
+}
+
+//--------------------------------------------------------------------
+SfxPoolItem* SfxVerbListItem::Clone( SfxItemPool *pPool ) const
+{
+    return new SfxVerbListItem(*this);
+}
+
+//--------------------------------------------------------------------
+sal_Bool SfxVerbListItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+{
+    rVal <<= aVerbSeq;
+    return sal_True;
+}
+
+//--------------------------------------------------------------------
 void SfxViewFrame::SetViewShell_Impl( SfxViewShell *pVSh )
 
 /*  [Beschreibung]
@@ -2853,6 +2892,19 @@ void SfxViewFrame::ExecView_Impl
             rReq.Done();
             break;
         }
+
+        case SID_OBJECT:
+        {
+            SFX_REQUEST_ARG( rReq, pItem, SfxUInt16Item, SID_OBJECT, sal_False );
+
+            SfxViewShell *pViewShell = GetViewShell();
+            if ( pViewShell && pItem )
+            {
+                pViewShell->DoVerb( pItem->GetValue() );
+                rReq.Done();
+                break;;
+            }
+        }
     }
 }
 
@@ -2944,7 +2996,7 @@ void SfxViewFrame::StateView_Impl
 void SfxViewFrame::GetState_Impl( SfxItemSet &rSet )
 {
     if ( GetViewShell() && GetViewShell()->GetVerbs() && !ISA( SfxInPlaceFrame ) )
-        rSet.Put(SfxStringListItem(SID_OBJECT));
+        rSet.Put(SfxVerbListItem(USHORT( SID_OBJECT ), GetViewShell()->GetVerbs() ));
     else
         rSet.DisableItem( SID_OBJECT );
 }
@@ -3596,6 +3648,55 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                     break;
                 }
 
+                case SID_FORMATMENUSTATE :
+                {
+                    ResId           aResId(0, NULL);
+                    SfxShell*       pShell=0;
+                    SfxBindings*    pBindings=&GetBindings();
+
+                    for ( USHORT nIdx=0; (pShell=pBindings->GetDispatcher_Impl()->GetShell(nIdx)); nIdx++)
+                    {
+                        const SfxInterface *pIFace = pShell->GetInterface();
+
+                        // update Object-Menus
+                        if ( pIFace->GetObjectMenuCount() > 0 )
+                        {
+                            aResId = pIFace->GetObjectMenuResId(0);
+                            break;
+                        }
+                    }
+
+                    if ( aResId.GetId() > 0 && aResId.GetResMgr() )
+                    {
+                        String aObjMenuResString( String::CreateFromAscii( "private:resource/objectmenu?lib=" ));
+
+                        String aTmp;
+                        String aResourceStr = aResId.GetResMgr()->GetFileName();
+                        utl::LocalFileHelper::ConvertPhysicalNameToURL( aResourceStr, aTmp );
+
+                        sal_Int32 nIndex = aTmp.SearchBackward( sal_Unicode( '/' ));
+                        if (( nIndex != STRING_NOTFOUND ) && (( nIndex+1 ) < aResourceStr.Len() ))
+                        {
+                            aTmp.Erase( 0, nIndex+1 );
+                            nIndex = aTmp.SearchBackward( sal_Unicode( '.' ));
+                            if ( nIndex != STRING_NOTFOUND )
+                                aTmp.Erase( nIndex );
+
+                            // remove last two digits (language specific number)
+                            aTmp.Erase( aTmp.Len() - 2 );
+                        }
+
+                        aObjMenuResString += aTmp;
+                        aObjMenuResString += String::CreateFromAscii( "&id=" );
+                        aObjMenuResString += String::CreateFromInt32( aResId.GetId() );
+                        rSet.Put( SfxStringItem( nWhich, aObjMenuResString ) );
+                    }
+                    else
+                        rSet.DisableItem( nWhich );
+
+                    break;
+                }
+
                 default:
                     //! DBG_ASSERT(FALSE, "Falscher Server fuer GetState");
                     break;
@@ -3767,7 +3868,7 @@ void SfxViewFrame::ToolboxExec_Impl( SfxRequest &rReq )
         SfxTopFrame *pTop = pTopView ? pTopView->GetTopFrame_Impl() : NULL;
         if ( pTop )
         {
-            bShow = pShowItem ? pShowItem->GetValue() : ( pTop->GetMenuBar_Impl() == 0 );
+            bShow = pShowItem ? pShowItem->GetValue() : ( pTop->IsMenuBarOn_Impl() == FALSE ); //( pTop->GetMenuBar_Impl() == 0 );
             pTop->SetMenuBarOn_Impl( bShow );
             GetDispatcher()->Update_Impl(sal_True);
         }
@@ -3948,6 +4049,11 @@ SfxChildWindow* SfxViewFrame::GetChildWindow(USHORT nId)
 {
     SfxWorkWindow* pWork = GetWorkWindow_Impl( nId );
     return pWork ? pWork->GetChildWindow_Impl(nId) : NULL;
+}
+
+SfxAcceleratorManager* SfxViewFrame::GetAcceleratorManager()
+{
+    return GetObjectShell()->GetAccMgr_Impl();
 }
 
 SfxImageManager* SfxViewFrame::GetImageManager()
