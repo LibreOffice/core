@@ -2,13 +2,12 @@ wz      wizards     :   rsc javaunohelper jut unoil qadevOOo NULL
 wz      wizards\util                                            nmake           -       all     wz_util NULL
 wz      wizards\source\config                                   nmake           -       all     wz_config NULL
 wz      wizards\source\euro                                     nmake           -       all     wz_eurowiz NULL
-wz      wizards\source\formwizard                               nmake           -       all     wz_formwizres NULL
+wz      wizards\source\formwizard                               nmake           -       all     wz_reswiz NULL
 wz      wizards\source\gimmicks                                 nmake           -       all     wz_gimmickswz NULL
 wz      wizards\source\importwizard                             nmake           -       all     wz_importwiz NULL
 wz      wizards\source\schedule                                 nmake           -       all     wz_schedulewiz NULL
 wz      wizards\source\template                                 nmake           -       all     wz_templatewiz NULL
 wz      wizards\source\tools                                    nmake           -       all     wz_toolswiz NULL
-wz      wizards\source\webwizard                                nmake           -       all     wz_webwizard NULL
 wz      wizards\source\depot                                    nmake           -       all     wz_depot NULL
 wz      wizards\source\tutorials                                nmake           -       all     wz_tutorials NULL
 wz      wizards\source\standard                                 nmake           -       all     wz_standard NULL
@@ -16,15 +15,14 @@ wz      wizards\source\launcher                                 nmake           
 wz      wizards\com\sun\star\wizards                            nmake           -       all     wz_commonwiz NULL
 wz      wizards\com\sun\star\wizards\query                      nmake           -       all     wz_querywiz wz_commonwiz NULL
 wz      wizards\com\sun\star\wizards\report                     nmake           -       all     wz_reportwiz wz_commonwiz wz_querywiz NULL
-wz      wizards\com\sun\star\wizards\letter                     nmake           -       all     wz_letterwiz wz_commonwiz wz_reportwiz NULL
+wz      wizards\com\sun\star\wizards\table                      nmake           -       all     wz_tablewiz wz_commonwiz wz_reportwiz NULL
+wz      wizards\com\sun\star\wizards\form                       nmake           -       all     wz_formwiz wz_commonwiz wz_tablewiz NULL
+wz      wizards\com\sun\star\wizards\letter                     nmake           -       all     wz_letterwiz wz_commonwiz wz_formwiz NULL
 wz      wizards\com\sun\star\wizards\fax                        nmake           -       all     wz_faxwiz wz_commonwiz wz_letterwiz NULL
 wz      wizards\com\sun\star\wizards\agenda                     nmake           -       all     wz_agendawiz wz_commonwiz wz_faxwiz NULL
-wz      wizards\com\sun\star\wizards\table                      nmake           -       all     wz_tablewiz wz_commonwiz wz_agendawiz NULL
-wz      wizards\com\sun\star\wizards\form                       nmake           -       all     wz_formwiz wz_commonwiz wz_tablewiz NULL
-wz      wizards\com\sun\star\wizards\web                        nmake           -       all     wz_webwiz wz_webexport wz_formwiz NULL
-wz      wizards\com\sun\star\wizards\tutorial                   nmake           -       all     wz_tut wz_tutcre wz_tutexe wz_webwiz NULL
 wz      wizards\com\sun\star\wizards\web\data                   nmake           -       all     wz_webdata wz_commonwiz wz_agendawiz NULL
 wz      wizards\com\sun\star\wizards\web\export                 nmake           -       all     wz_webexport wz_webdata wz_commonwiz wz_agendawiz NULL
+wz      wizards\com\sun\star\wizards\web                        nmake           -       all     wz_webwiz wz_webexport wz_agendawiz NULL
 wz      wizards\com\sun\star\wizards\tutorial\executer\util     nmake           -       all     wz_tutexeutil wz_webwiz NULL
 wz      wizards\com\sun\star\wizards\tutorial\executer\officeHelper      nmake -        all     wz_tutexehelper wz_tutexeutil wz_webwiz NULL
 wz      wizards\com\sun\star\wizards\tutorial\creator\frame\objectFinder  nmake -       all     wz_tutcrefrafinder wz_tutexehelper wz_webwiz NULL
