@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-14 08:41:16 $
+ *  last change: $Author: nn $ $Date: 2001-05-31 19:08:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1288,7 +1288,7 @@ void ScTable::FindMaxRotCol( RowInfo* pRowInfo, USHORT nArrCount, USHORT nX1, US
                     ULONG nIndex = ((const SfxUInt32Item*)pCondItem)->GetValue();
                     ScConditionalFormatList* pList = pDocument->GetCondFormList();
                     ScStyleSheetPool* pStylePool = pDocument->GetStyleSheetPool();
-                    if (pList && pStylePool)
+                    if (pList && pStylePool && nIndex)
                     {
                         const ScConditionalFormat* pFormat = pList->GetFormat(nIndex);
                         if ( pFormat )
