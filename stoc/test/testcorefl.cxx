@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcorefl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-07 11:12:32 $
+ *  last change: $Author: hr $ $Date: 2001-11-14 13:14:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ public:
 };
 
 //==================================================================================================
-static inline uik_equals( const Uik & rUik1, const Uik & rUik2 )
+static inline bool uik_equals( const Uik & rUik1, const Uik & rUik2 )
 {
     return (rUik1.m_Data1 == rUik2.m_Data1 &&
             rUik1.m_Data2 == rUik2.m_Data2 &&
