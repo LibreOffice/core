@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.189 $
+ *  $Revision: 1.190 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:51:32 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:24:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5552,7 +5552,7 @@ Font Window::GetPointFont() const
 
 // -----------------------------------------------------------------------
 
-void Window::GetFontResolution( long& nDPIX, long& nDPIY ) const
+void Window::GetFontResolution( sal_Int32& nDPIX, sal_Int32& nDPIY ) const
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
@@ -6126,8 +6126,8 @@ Size Window::GetSizePixel() const
                  mnOutHeight+mnTopBorder+mnBottomBorder );
 }
 
-void Window::GetBorder( long& rLeftBorder, long& rTopBorder,
-                               long& rRightBorder, long& rBottomBorder ) const
+void Window::GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
+                               sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const
 {
     rLeftBorder     = mnLeftBorder;
     rTopBorder      = mnTopBorder;
@@ -7783,7 +7783,7 @@ Reference< XDragSource > Window::GetDragSource()
                         aDragSourceAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
                         aDragSourceAL[ 2 ] = makeAny( vcl::createBmpConverter() );
                         aDropTargetAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
-                        aDropTargetAL[ 1 ] = makeAny( pEnvData->aShellWindow );
+                        aDropTargetAL[ 1 ] = makeAny( (sal_Size)(pEnvData->aShellWindow) );
                         aDropTargetAL[ 2 ] = makeAny( vcl::createBmpConverter() );
 #endif
                         if( aDragSourceSN.getLength() )
