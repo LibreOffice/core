@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:35:56 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:13:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1669,31 +1669,38 @@ void XMLPageExportPropertyMapper::ContextFilter(
                 pTransType = property;
                 break;
             case CTF_PAGE_TRANS_STYLE:
-                (*property).mnIndex = -1;
+                if( mrExport.getExportFlags() & EXPORT_OASIS )
+                    (*property).mnIndex = -1;
                 break;
             case CTF_PAGE_TRANSITION_TYPE:
                 {
-                    if( ((*property).maValue >>= nTransitionType) && (nTransitionType == 0) )
-                        (*property).mnIndex = -1;
+                    if( ((mrExport.getExportFlags() & EXPORT_OASIS) == 0) ||
+                        ((*property).maValue >>= nTransitionType) && (nTransitionType == 0) )
+                            (*property).mnIndex = -1;
                 }
                 break;
             case CTF_PAGE_TRANSITION_SUBTYPE:
                 {
                     sal_Int16 nTransitionSubtype;
-                    if( ((*property).maValue >>= nTransitionSubtype) && (nTransitionSubtype == 0) )
-                        (*property).mnIndex = -1;
+                    if( ((mrExport.getExportFlags() & EXPORT_OASIS) == 0) ||
+                        ((*property).maValue >>= nTransitionSubtype) && (nTransitionSubtype == 0) )
+                            (*property).mnIndex = -1;
 
                 }
                 break;
             case CTF_PAGE_TRANSITION_DIRECTION:
                 {
                     sal_Bool bDirection;
-                    if( ((*property).maValue >>= bDirection) && bDirection )
-                        (*property).mnIndex = -1;
+                    if( ((mrExport.getExportFlags() & EXPORT_OASIS) == 0) ||
+                        ((*property).maValue >>= bDirection) && bDirection )
+                            (*property).mnIndex = -1;
                 }
                 break;
             case CTF_PAGE_TRANSITION_FADECOLOR:
-                pTransitionFadeColor = property;
+                if( ((mrExport.getExportFlags() & EXPORT_OASIS) == 0) )
+                    (*property).mnIndex = -1;
+                else
+                    pTransitionFadeColor = property;
                 break;
             case CTF_PAGE_TRANS_SPEED:
                 {
