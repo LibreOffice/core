@@ -1,4 +1,4 @@
-tc	scripting	:	bridges rdbmaker NULL
+tc	scripting	:	bridges rdbmaker vcl NULL
 tc	scripting									usr1	-	all	tc_mkout NULL
 tc	scripting\source\storage				nmake	-	all	tc_scriptingstorage NULL
 tc	scripting\source\runtimemgr				nmake	-	all	tc_scriptingruntimemgr NULL
