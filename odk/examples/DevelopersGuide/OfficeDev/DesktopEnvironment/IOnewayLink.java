@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IOnewayLink.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:34:19 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:38:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,8 +38,6 @@
  *
  *************************************************************************/
 
-package OfficeDev.samples.DesktopEnvironment;
-
 import java.util.Vector;
 
 // __________ Implementation __________
@@ -49,9 +47,9 @@ import java.util.Vector;
  * by using threads to the original object. Reason:
  * It's not allowed to call synchronoues back to the office if a java object
  * was called in a oneway declared interface method. Then it must be
- * executed asynchronoues. To do so - a thread can be created which use this interface.
- * It get the object, which whis to be called back and the type and parameter
- * of the original request.
+ * executed asynchronoues. To do so - a thread can be created which use this
+ * interface. It get the object, which whis to be called back and the type and
+ * parameter of the original request.
  *
  * @author     Andreas Schl&uuml;ns
  * @created    17.07.2002 08:09
@@ -63,14 +61,16 @@ public interface IOnewayLink
     /**
      * @param nRequest
      *          The two user of this callback can define an unique number,
-     *          which identify the type of original interface method.
-     *          So the called interface object can decide, which action will be neccessary.
+     *          which identify the type of original interface method. So the called
+     *          interface object can decide, which action will be neccessary.
      *
      * @param lParams
-     *          If the original method used parameters, they will be coded here
-     *          in a generic way. Only the called interface object know (it depends from
-     *          the original request - see nRequest too), how this list must be interpreted.
-     *          Note: Atomic types (e.g. int, long) will be transported as objects too (Integer, Long)!
+     *          If the original method used parameters, they will be coded here in
+     *          a generic way. Only the called interface object know (it depends
+     *          from the original request - see nRequest too), how this list must
+     *          be interpreted.
+     *          Note: Atomic types (e.g. int, long) will be transported as objects
+     *          too (Integer, Long)!
      */
     public abstract void execOneway( int nRequest, Vector lParams );
 }

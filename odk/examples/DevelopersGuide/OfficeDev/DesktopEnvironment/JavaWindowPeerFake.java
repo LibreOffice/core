@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JavaWindowPeerFake.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:34:52 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,16 +38,8 @@
  *
  *************************************************************************/
 
-package OfficeDev.samples.DesktopEnvironment;
-
 import java.awt.*;
 
-import com.sun.star.uno.*;
-import com.sun.star.lang.*;
-import com.sun.star.awt.*;
-import com.sun.star.util.*;
-import com.sun.star.beans.*;
-import com.sun.star.container.*;
 
 /** <p>Class to pass the system window handle to the OpenOffice.org toolkit.</p>
  */

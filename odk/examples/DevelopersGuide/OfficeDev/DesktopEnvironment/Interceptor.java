@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Interceptor.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:34:40 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:38:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,28 +38,10 @@
  *
  *************************************************************************/
 
-package OfficeDev.samples.DesktopEnvironment;
-
 // __________ Imports __________
 
-// interfaces
-import com.sun.star.frame.XDispatchProviderInterception;
-import com.sun.star.frame.XDispatchProviderInterceptor;
-import com.sun.star.frame.XDispatchProvider;
-import com.sun.star.frame.XDispatch;
-import com.sun.star.frame.XInterceptorInfo;
-import com.sun.star.frame.XFrame;
-
-// structs, const, ...
-import com.sun.star.util.URL;
-import com.sun.star.frame.DispatchDescriptor;
-
-// helper
 import com.sun.star.uno.UnoRuntime;
 
-// events
-
-// base classes
 import java.lang.*;
 import javax.swing.*;
 import java.util.Vector;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IShutdownListener.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:34:30 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:38:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -37,8 +37,6 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
-
-package OfficeDev.samples.DesktopEnvironment;
 
 // __________ Implementation __________
 
