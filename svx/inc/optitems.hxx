@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optitems.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:58 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 09:30:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,18 +67,6 @@
 #include <svtools/poolitem.hxx>
 #endif
 
-//#ifndef _COM_SUN_STAR_LINGUISTIC_XSPELLALTERNATIVES_HPP_
-//#include <com/sun/star/linguistic/XSpellAlternatives.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_LINGUISTIC_SPELLFAILURE_HPP_
-//#include <com/sun/star/linguistic/SpellFailure.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_LINGUISTIC_XSPELLCHECKER_HPP_
-//#include <com/sun/star/linguistic/XSpellChecker.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_LINGUISTIC_XSPELLCHECKER1_HPP_
-//#include <com/sun/star/linguistic/XSpellChecker1.hpp>
-//#endif
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
 #endif
@@ -88,11 +76,9 @@ namespace com{namespace sun{namespace star{
 namespace beans{
 //  class XPropertySet;
 }
-namespace linguistic{
-//  class XDictionary;
+namespace linguistic2{
     class XSpellChecker1;
-//  class XOtherLingu;
-    }}}}
+}}}}
 
 
 // class SfxSpellCheckItem -----------------------------------------------
@@ -104,7 +90,8 @@ class SfxSpellCheckItem: public SfxPoolItem
 public:
     TYPEINFO();
 
-    SfxSpellCheckItem( ::com::sun::star::uno::Reference< ::com::sun::star::linguistic::XSpellChecker1 >  &xChecker,
+    SfxSpellCheckItem( ::com::sun::star::uno::Reference<
+                            ::com::sun::star::linguistic2::XSpellChecker1 >  &xChecker,
                        sal_uInt16 nWhich = ITEMID_SPELLCHECK );
     SfxSpellCheckItem( const SfxSpellCheckItem& rItem );
 
@@ -116,10 +103,13 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::linguistic::XSpellChecker1 >        GetXSpellChecker() const { return xSpellCheck; }
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::linguistic2::XSpellChecker1 >
+            GetXSpellChecker() const { return xSpellCheck; }
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::linguistic::XSpellChecker1 >        xSpellCheck;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::linguistic2::XSpellChecker1 >         xSpellCheck;
 };
 #endif
 

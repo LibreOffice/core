@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtspell.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:55 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 09:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
-namespace com { namespace sun { namespace star { namespace linguistic {
+namespace com { namespace sun { namespace star { namespace linguistic2 {
     class XSpellChecker1;
 }}}}
 
@@ -113,7 +113,7 @@ protected:
 public:
     EditSpellWrapper( Window* pWin,
             ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic::XSpellChecker1 > &xChecker,
+                ::com::sun::star::linguistic2::XSpellChecker1 > &xChecker,
             BOOL bIsStart,
             BOOL bIsAllRight, EditView* pView );
 
