@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtl_OUStringBuffer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:34:54 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:31:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -811,6 +811,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_csuc(
 
     rtl_string2UString( &tmpUstring, tmpStr,  tmpLen,
         osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
+    OSL_ASSERT(tmpUstring != NULL);
 
 
     typedef struct TestCase
@@ -865,6 +866,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_getStr(
 
     rtl_string2UString( &tmpUstring, tmpStr,  tmpLen,
         osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
+    OSL_ASSERT(tmpUstring != NULL);
 
 
     typedef struct TestCase

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtl_OUString.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 14:57:22 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:31:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -917,6 +917,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_csuc(
 
     rtl_string2UString( &tmpUstring, tmpStr,  tmpLen,
                         osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
+    OSL_ASSERT(tmpUstring != NULL);
 
 
     typedef struct TestCase
@@ -973,6 +974,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_getStr(
 
     rtl_string2UString( &tmpUstring, tmpStr,  tmpLen,
                         osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
+    OSL_ASSERT(tmpUstring != NULL);
 
 
     typedef struct TestCase
