@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: aw $ $Date: 2001-04-24 11:33:35 $
+ *  last change: $Author: cl $ $Date: 2001-04-30 09:57:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,6 +299,7 @@ void SAL_CALL SvxShapeGroup::add( const uno::Reference< drawing::XShape >& xShap
             pSdrShape->GetObjList()->RemoveObject( pSdrShape->GetOrdNum() );
 
         pObj->GetSubList()->NbcInsertObject( pSdrShape );
+        pSdrShape->SetLayer(pObj->GetLayer());
 
         if(pShape)
             pShape->Create( pSdrShape, pPage );
