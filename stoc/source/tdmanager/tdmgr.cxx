@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdmgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-11-30 14:44:48 $
+ *  last change: $Author: dbo $ $Date: 2001-03-07 14:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,9 +86,6 @@
 #endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
-#ifndef _CPPUHELPER_EXTRACT_HXX_
-#include <cppuhelper/extract.hxx>
 #endif
 
 #include "lrucache.hxx"
@@ -222,7 +219,7 @@ class EnumerationImpl
     : public WeakImplHelper1< XEnumeration >
 {
     ManagerImpl *       _pMgr;
-    sal_Int32           _nPos;
+    size_t              _nPos;
 
 public:
     EnumerationImpl( ManagerImpl * pManager );
@@ -330,8 +327,8 @@ static void SAL_CALL tdmgr_typelib_callback( void * pContext, typelib_TypeDescri
             try
             {
                 Reference< XTypeDescription > xTD;
-                if (extractInterface(
-                    xTD, reinterpret_cast< ManagerImpl * >( pContext )->getByHierarchicalName( pTypeName ) ))
+                if (reinterpret_cast< ManagerImpl * >( pContext )->getByHierarchicalName( pTypeName )
+                    >>= xTD)
                 {
                     *ppRet = createCTD( xTD );
                 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdiface.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:35 $
+ *  last change: $Author: dbo $ $Date: 2001-03-07 14:48:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ Reference<XTypeDescription > MethodParameterImpl::getType()
         {
             try
             {
-                if (extractInterface( _xType, _xTDMgr->getByHierarchicalName( _aTypeName ) ))
+                if (_xTDMgr->getByHierarchicalName( _aTypeName ) >>= _xType)
                     return _xType;
             }
             catch (NoSuchElementException &)
@@ -271,7 +271,7 @@ Reference<XTypeDescription > InterfaceMethodImpl::getReturnType()
         {
             try
             {
-                if (extractInterface( _xReturnTD, _xTDMgr->getByHierarchicalName( _aReturnType ) ))
+                if (_xTDMgr->getByHierarchicalName( _aReturnType ) >>= _xReturnTD)
                     return _xReturnTD;
             }
             catch (NoSuchElementException &)
@@ -348,9 +348,8 @@ Sequence<Reference<XTypeDescription > > InterfaceMethodImpl::getExceptions()
                 try
                 {
                     OUString aMethodExcName( aReader.getMethodExcType( _nMethodIndex, nExc ) );
-
-                    extractInterface(
-                        pExc[nExc], _xTDMgr->getByHierarchicalName( aMethodExcName.replace( '/', '.' ) ) );
+                    _xTDMgr->getByHierarchicalName( aMethodExcName.replace( '/', '.' ) )
+                        >>= pExc[ nExc ];
                 }
                 catch (NoSuchElementException &)
                 {
@@ -459,7 +458,7 @@ Reference<XTypeDescription > InterfaceAttributeImpl::getType()
         {
             try
             {
-                if (extractInterface( _xMemberTD, _xTDMgr->getByHierarchicalName( _aMemberTypeName ) ))
+                if (_xTDMgr->getByHierarchicalName( _aMemberTypeName ) >>= _xMemberTD)
                     return _xMemberTD;
             }
             catch (NoSuchElementException &)
@@ -530,7 +529,7 @@ Reference< XTypeDescription > InterfaceTypeDescriptionImpl::getBaseType()
         {
             try
             {
-                if (extractInterface( _xBaseTD, _xTDMgr->getByHierarchicalName( _aBaseType ) ))
+                if (_xTDMgr->getByHierarchicalName( _aBaseType ) >>= _xBaseTD)
                     return _xBaseTD;
             }
             catch (NoSuchElementException &)

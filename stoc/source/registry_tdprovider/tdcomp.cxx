@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdcomp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:35 $
+ *  last change: $Author: dbo $ $Date: 2001-03-07 14:48:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ Reference< XTypeDescription > CompoundTypeDescriptionImpl::getBaseType()
         {
             try
             {
-                if (extractInterface( _xBaseTD, _xTDMgr->getByHierarchicalName( _aBaseType ) ))
+                if (_xTDMgr->getByHierarchicalName( _aBaseType ) >>= _xBaseTD)
                     return _xBaseTD;
             }
             catch (NoSuchElementException &)
@@ -131,10 +131,9 @@ Sequence< Reference< XTypeDescription > > CompoundTypeDescriptionImpl::getMember
             {
                 try
                 {
-                    extractInterface(
-                        pMembers[nFields],
-                        _xTDMgr->getByHierarchicalName(
-                            aReader.getFieldType( nFields ).replace( '/', '.' ) ) );
+                    _xTDMgr->getByHierarchicalName(
+                        aReader.getFieldType( nFields ).replace( '/', '.' ) )
+                            >>= pMembers[nFields];
                 }
                 catch (NoSuchElementException &)
                 {

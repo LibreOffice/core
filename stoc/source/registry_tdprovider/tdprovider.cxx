@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdprovider.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2000-11-23 01:40:47 $
+ *  last change: $Author: dbo $ $Date: 2001-03-07 14:48:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,7 +419,7 @@ Any SAL_CALL ProviderImpl::getByHierarchicalName( const OUString & rName )
                                         break;
                                 }
                                 if (nPos >= 0)
-                                    aRet = getRTValue( aReader.getFieldConstValue( nPos ) );
+                                    aRet = getRTValue( aReader.getFieldConstValue( (sal_uInt16)nPos ) );
                             }
                         }
                         xKey->closeKey();
