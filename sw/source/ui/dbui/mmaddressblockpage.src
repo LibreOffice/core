@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmaddressblockpage.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:14:52 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:26:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
         Pos = MAP_APPFONT ( 6 , 72 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ de ] = "2. Wählen Sie den Adressblock, der in das Dokument eingefügt werden soll." ;
-        Text[ en-US ] = "2. Select the address block you want to inserted in the document";
+        Text[ en-US ] = "2. Select the address block you want inserted in the document";
     };
     CheckBox        CB_ADDRESS
     {
