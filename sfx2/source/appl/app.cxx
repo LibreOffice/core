@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-19 11:30:11 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:36:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,7 +478,6 @@ SfxApplication::SfxApplication()
     pImp->pStbCtrlFac = 0;
     pImp->pViewFrames = 0;
     pImp->pObjShells = 0;
-    pImp->bAutoSaveNow = sal_False;
     pImp->pTemplateDlg = 0;
     pImp->pBasicLibContainer = 0;
     pImp->pDialogLibContainer = 0;
@@ -487,7 +486,6 @@ SfxApplication::SfxApplication()
     pImp->pOfaResMgr = 0;
     pImp->pSimpleResManager = 0;
     pImp->nWarnLevel = 0;
-    pImp->pAutoSaveTimer = 0;
 
     pAppData_Impl = new SfxAppData_Impl( this );
     pAppData_Impl->UpdateApplicationSettings( SvtMenuOptions().IsEntryHidingEnabled() );
@@ -815,12 +813,8 @@ short SfxApplication::QuerySave_Impl( SfxObjectShell& rDoc, sal_Bool bAutoSave )
     SfxFrame *pFrame = SfxViewFrame::GetFirst(&rDoc)->GetFrame();
     pFrame->Appear();
 
-    WinBits nBits = WB_YES_NO_CANCEL;
-    nBits |= bAutoSave ? WB_DEF_YES : WB_DEF_NO;
+    WinBits nBits = WB_YES_NO_CANCEL | WB_DEF_NO;
     QueryBox aBox( &pFrame->GetWindow(), nBits, aMsg );
-
-    if ( bAutoSave )
-        aBox.SetText( String( SfxResId( STR_AUTOSAVE ) ) );
 
     return aBox.Execute();
 }
