@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_yxx.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-28 16:46:02 $
+#   last change: $Author: vg $ $Date: 2003-12-16 11:39:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,7 +70,7 @@ $(MISC)$/%.cxx : %.y
 .ELSE
     +cat $< > $(MISC)$/stripped_$<
 .ENDIF
-    $(BISON) $(YACCFLAGS) $(YACCTARGET) $(MISC)$/stripped_$<
+    $(BISON) $(YACCFLAGS) -o $(YACCTARGET) $(MISC)$/stripped_$<
 # removing -f switch - avoid getting nothing when copying a file to itself
     @+-$(COPY:s/-f//) $@.h $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
     @+-$(COPY:s/-f//) $(@:d)$/$(@:b).hxx $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
@@ -84,7 +84,7 @@ $(INCCOM)$/yy%.cxx : %.y
 .ELSE
     +cat $< > $(MISC)$/stripped_$<
 .ENDIF
-    $(BISON) $(YACCFLAGS) $(YACCTARGET) $(MISC)$/stripped_$<
+    $(BISON) $(YACCFLAGS) -o $(YACCTARGET) $(MISC)$/stripped_$<
 # removing -f switch - avoid getting nothing when copying a file to itself
     @+-$(COPY:s/-f//) $@.h $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
     @+-$(COPY:s/-f//) $(@:d)$/$(@:b).hxx $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
