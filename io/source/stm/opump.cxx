@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opump.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:51:38 $
+ *  last change: $Author: jbu $ $Date: 2001-03-20 09:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,15 +69,17 @@
 #include <com/sun/star/io/XConnectable.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
 #include <uno/dispatcher.h>
 #include <uno/mapping.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/factory.hxx>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <list>
+
 
 using namespace osl;
 using namespace std;
@@ -88,10 +90,12 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::io;
 
+#include "factreg.hxx"
+
 namespace io_stm {
 
-    class Pump : public WeakImplHelper4<
-          XActiveDataSource, XActiveDataSink, XActiveDataControl, XConnectable >
+    class Pump : public WeakImplHelper5<
+          XActiveDataSource, XActiveDataSink, XActiveDataControl, XConnectable, XServiceInfo >
     {
         Mutex                                   m_aMutex;
         oslThread                               m_aThread;
@@ -132,6 +136,10 @@ namespace io_stm {
         virtual void SAL_CALL setSuccessor( const Reference< ::com::sun::star::io::XConnectable >& xSucc ) throw();
         virtual Reference< ::com::sun::star::io::XConnectable > SAL_CALL getSuccessor() throw();
 
+    public: // XServiceInfo
+        virtual OUString    SAL_CALL getImplementationName() throw(  );
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw(  );
+        virtual sal_Bool     SAL_CALL supportsService(const OUString& ServiceName) throw(  );
     };
 
 Pump::Pump()
@@ -438,6 +446,32 @@ Reference< XOutputStream > Pump::getOutputStream() throw()
     Guard< Mutex > aGuard( m_aMutex );
 
     return m_xOutput;
+}
+
+
+// XServiceInfo
+OUString Pump::getImplementationName() throw(  )
+{
+    return OPumpImpl_getImplementationName();
+}
+
+// XServiceInfo
+sal_Bool Pump::supportsService(const OUString& ServiceName) throw(  )
+{
+    Sequence< OUString > aSNL = getSupportedServiceNames();
+    const OUString * pArray = aSNL.getConstArray();
+
+    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
+        if( pArray[i] == ServiceName )
+            return sal_True;
+
+    return sal_False;
+}
+
+// XServiceInfo
+Sequence< OUString > Pump::getSupportedServiceNames(void) throw(  )
+{
+    return OPumpImpl_getSupportedServiceNames();
 }
 
 
