@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listeneriter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-14 18:52:28 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:27:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,9 @@
  *
  *
  ************************************************************************/
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
