@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pliao $ $Date: 2001-02-05 00:44:08 $
+ *  last change: $Author: pliao $ $Date: 2001-02-07 03:40:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,9 +268,12 @@ oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 n
 
             if ( pModule )
             {
+                // ignore ".dylib.framework"
+                int len = strlen( pszModuleName ) - 16;
                 pModule->pModule = pLib;
-                pModule->pModuleName = (sal_Char *)malloc( strlen( pszModuleName ) );
-                strcpy( pModule->pModuleName, pszModuleName );
+                pModule->pModuleName = (sal_Char *)malloc( len );
+                strncpy( pModule->pModuleName, pszModuleName, len );
+                pModule->pModuleName[len] = '\0';
             }
 
             return pModule;

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: dbo $ $Date: 2001-01-09 12:48:18 $
+#   last change: $Author: pliao $ $Date: 2001-02-07 03:40:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,8 +83,8 @@ INCPRE+=	$(OUT)$/inc$/test
 
 OBJFILES=	\
         $(OBJ)$/testcppu.obj	\
-        $(OBJ)$/test_di.obj		\
-        $(OBJ)$/test_Cincludes.obj
+        $(OBJ)$/test_di.obj
+#		$(OBJ)$/test_Cincludes.obj
 #		$(OBJ)$/test_sec.obj	\
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbenv.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-01 09:12:44 $
+ *  last change: $Author: pliao $ $Date: 2001-02-07 03:40:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -943,12 +943,7 @@ static uno_Environment * initDefaultEnvironment(
         oslModule hMod = ::osl_loadModule( aStr.pData, SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY );
         if (hMod)
         {
-#ifdef MACOSX
-            OUString aSymbolName(
-                rEnvTypeName + OUString( RTL_CONSTASCII_USTRINGPARAM("_uno" UNO_INIT_ENVIRONMENT) ) );
-#else
             OUString aSymbolName( RTL_CONSTASCII_USTRINGPARAM(UNO_INIT_ENVIRONMENT) );
-#endif
             uno_initEnvironmentFunc fpInit =
                 (uno_initEnvironmentFunc)::osl_getSymbol( hMod, aSymbolName.pData );
             if (fpInit)

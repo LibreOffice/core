@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbmap.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 09:36:30 $
+ *  last change: $Author: pliao $ $Date: 2001-02-07 03:40:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,12 +398,7 @@ static Mapping loadExternalMapping(
 
         if (hModule)
         {
-#ifdef MACOSX
-            OUString aSymbolName(
-                aName + OUString( RTL_CONSTASCII_USTRINGPARAM(UNO_EXT_GETMAPPING) ) );
-#else
             OUString aSymbolName( RTL_CONSTASCII_USTRINGPARAM(UNO_EXT_GETMAPPING) );
-#endif
             uno_ext_getMappingFunc fpGetMapFunc =
                 (uno_ext_getMappingFunc)::osl_getSymbol( hModule, aSymbolName.pData );
 
