@@ -3,9 +3,9 @@
  *
  *  $RCSfile: ProtocolHandler.xcs,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-24 13:12:13 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 17:55:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 				<desc xml:lang="th">Specifies the UNO service to use for URL dispatches that handle special URL protocols.</desc>
 				<desc xml:lang="hi-IN">Specifies the UNO service to use for URL dispatches that handle special URL protocols.</desc>
 				<desc xml:lang="x-comment">Specifies the UNO service to use for URL dispatches that handle special URL protocols.</desc>
+				<desc xml:lang="hu">Specifies the UNO service to use for URL dispatches that handle special URL protocols.</desc>
+				<desc xml:lang="sk">Specifies the UNO service to use for URL dispatches that handle special URL protocols.</desc>
+				<desc xml:lang="sl">Specifies the UNO service to use for URL dispatches that handle special URL protocols.</desc>
 			</info>
 			<prop oor:name="Protocols" oor:type="oor:string-list">
 				<info>
@@ -120,6 +123,9 @@
 					<desc xml:lang="th">Lists the URL pattern that can recognized by this service.</desc>
 					<desc xml:lang="hi-IN">Lists the URL pattern that can recognized by this service.</desc>
 					<desc xml:lang="x-comment">Lists the URL pattern that can recognized by this service.</desc>
+					<desc xml:lang="hu">Lists the URL pattern that can recognized by this service.</desc>
+					<desc xml:lang="sk">Lists the URL pattern that can recognized by this service.</desc>
+					<desc xml:lang="sl">Lists the URL pattern that can recognized by this service.</desc>
 				</info>
 			</prop>
 		</group>
@@ -152,10 +158,14 @@
 				<desc xml:lang="th">Lists the registered protocol handler services.</desc>
 				<desc xml:lang="hi-IN">Lists the registered protocol handler services.</desc>
 				<desc xml:lang="x-comment">Lists the registered protocol handler services.</desc>
+				<desc xml:lang="hu">Lists the registered protocol handler services.</desc>
+				<desc xml:lang="sk">Lists the registered protocol handler services.</desc>
+				<desc xml:lang="sl">Lists the registered protocol handler services.</desc>
 			</info>
 		</set>
 	</component>
 </oor:component-schema>
+
 
 
 
