@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:34 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:30:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: hr $ $Date: 2003-03-26 18:06:34 $ $Revision: 1.48 $
+ // $Author: hr $ $Date: 2003-04-04 17:30:14 $ $Revision: 1.49 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -2009,10 +2009,10 @@ ImageList RID_OFFICEIMAGELIST_LCH
 
 String RID_OBJECTBAR_APP
 {
-    TEXT = "Funktionsleiste" ;
-    TEXT [ english ] = "Function bar" ;
+    TEXT = "Funktionsleiste (Lesemodus)" ;
+    TEXT [ english ] = "Function Bar (viewing mode)" ;
     Text [ dutch ] = "Werkbalk" ;
-    Text [ english_us ] = "Function Bar" ;
+    Text [ english_us ] = "Function Bar (viewing mode)" ;
     Text [ italian ] = "Barra delle funzioni" ;
     Text [ spanish ] = "Barra de funciones" ;
     Text [ french ] = "Barre de fonctions" ;
