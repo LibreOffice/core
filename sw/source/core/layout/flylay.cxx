@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ama $ $Date: 2002-07-02 14:33:56 $
+ *  last change: $Author: ama $ $Date: 2002-07-05 06:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,6 +405,16 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
                     aFrmRect.Width( aFrmRect.Height() * aOldSize.Width() /
                                     aOldSize.Height() );
                     bWidthClipped = TRUE;
+                }
+                if( bWidthClipped || bHeightClipped )
+                {
+                    SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
+                    pFmt->LockModify();
+                    SwFmtFrmSize aFrmSize( rSz );
+                    aFrmSize.SetWidth( aFrmRect.Width() );
+                    aFrmSize.SetHeight( aFrmRect.Height() );
+                    pFmt->SetAttr( aFrmSize );
+                    pFmt->UnlockModify();
                 }
             }
 
