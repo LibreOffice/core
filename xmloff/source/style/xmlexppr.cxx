@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:16:04 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,12 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XTOLERANTMULTIPROPERTYSET_HPP_
+#include <com/sun/star/beans/XTolerantMultiPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_TOLERANTPROPERTYSETRESULTTYPE_HPP_
+#include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
@@ -427,154 +433,220 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
 
     const uno::Sequence<OUString>& rApiNames = GetApiNames();
 
-    Sequence < PropertyState > aStates;
-    const PropertyState *pStates = 0;
-    Reference< XPropertyState > xPropState( rPropSet, UNO_QUERY );
-       if( xPropState.is() )
+    Reference < XTolerantMultiPropertySet > xTolPropSet( rPropSet, UNO_QUERY );
+    if (xTolPropSet.is())
     {
-        aStates = xPropState->getPropertyStates( rApiNames );
-        pStates = aStates.getConstArray();
-    }
-
-    Reference < XMultiPropertySet > xMultiPropSet( rPropSet, UNO_QUERY );
-    if( xMultiPropSet.is() && !bDefault )
-    {
-        Sequence < Any > aValues;
-        if( pStates )
+        if (!bDefault)
         {
-            // step 1: get value count
-            sal_uInt32 nValueCount = 0;
-            sal_uInt32 i;
-
-            for( i = 0; i < nCount; i++, pStates++ )
+            Sequence < beans::GetDirectPropertyTolerantResult > aResults(xTolPropSet->getDirectPropertyValuesTolerant(rApiNames));
+            sal_Int32 nResultCount(aResults.getLength());
+            if (nResultCount > 0)
             {
-                if( *pStates == PropertyState_DIRECT_VALUE )
-                    nValueCount++;
-            }
-
-            if( nValueCount )
-            {
-                // step 2: collect property names
-                Sequence < OUString > aAPINames( nValueCount );
-                OUString *pAPINames = aAPINames.getArray();
-
-                FilterPropertyInfoList_Impl::iterator *aPropIters =
-                    new FilterPropertyInfoList_Impl::iterator[nValueCount];
-                FilterPropertyInfoList_Impl::iterator *pPropIter = aPropIters;
-
-                FilterPropertyInfoList_Impl::iterator aItr = aPropInfos.begin();
-                OSL_ENSURE(aItr != aPropInfos.end(),"Invalid iterator!");
-
-                pStates = aStates.getConstArray();
-                i = 0;
-                while( i < nValueCount )
-                {
-                    if( *pStates == PropertyState_DIRECT_VALUE )
-                    {
-                        const OUString& rApiName = aItr->GetApiName();
-                        *pAPINames++ = rApiName;
-                        *pPropIter++ = aItr;
-                        i++;
-                    }
-                    aItr++;
-                    pStates++;
-                }
-
-                aValues = xMultiPropSet->getPropertyValues( aAPINames );
-                const Any *pValues = aValues.getConstArray();
-                pPropIter = aPropIters;
+                const beans::GetDirectPropertyTolerantResult *pResults = aResults.getConstArray();
+                FilterPropertyInfoList_Impl::iterator aPropIter(aPropInfos.begin());
                 XMLPropertyState aNewProperty( -1 );
-                for( i = 0; i < nValueCount; i++ )
+                sal_uInt32 i = 0;
+                while (nResultCount > 0 && i < nCount)
                 {
-                    aNewProperty.mnIndex = -1;
-                    aNewProperty.maValue = *pValues;
-
-                    for( std::list<sal_uInt32>::iterator aIndexItr =
-                                (*pPropIter)->GetIndexes().begin();
-                        aIndexItr != (*pPropIter)->GetIndexes().end();
-                        aIndexItr++ )
+                    if (pResults->Name == aPropIter->GetApiName())
                     {
-                        aNewProperty.mnIndex = *aIndexItr;
-                        aPropStates.AddPropertyState( aNewProperty );
-                    }
+                        aNewProperty.mnIndex = -1;
+                        aNewProperty.maValue = pResults->Value;
 
-                    pPropIter++;
-                    pValues++;
+                        for( std::list<sal_uInt32>::iterator aIndexItr(aPropIter->GetIndexes().begin());
+                            aIndexItr != aPropIter->GetIndexes().end();
+                            ++aIndexItr )
+                        {
+                            aNewProperty.mnIndex = *aIndexItr;
+                            aPropStates.AddPropertyState( aNewProperty );
+                        }
+                        ++pResults;
+                        --nResultCount;
+                    }
+                    ++aPropIter;
+                    ++i;
                 }
-                delete[] aPropIters;
             }
         }
         else
         {
-            aValues = xMultiPropSet->getPropertyValues( rApiNames );
-            const Any *pValues = aValues.getConstArray();
-
-            FilterPropertyInfoList_Impl::iterator aItr = aPropInfos.begin();
-            for(sal_uInt32 i = 0; i < nCount; i++ )
+            Sequence < beans::GetPropertyTolerantResult > aResults(xTolPropSet->getPropertyValuesTolerant(rApiNames));
+            OSL_ENSURE( rApiNames.getLength() == aResults.getLength(), "wrong implemented XTolerantMultiPropertySet" );
+            const beans::GetPropertyTolerantResult *pResults = aResults.getConstArray();
+            FilterPropertyInfoList_Impl::iterator aPropIter(aPropInfos.begin());
+            XMLPropertyState aNewProperty( -1 );
+            sal_uInt32 nResultCount(aResults.getLength());
+            OSL_ENSURE( nCount == nResultCount, "wrong implemented XTolerantMultiPropertySet??" );
+            for( sal_uInt32 i = 0; i < nResultCount; ++i )
             {
-                // The value is stored in the PropertySet itself, add to list.
-                sal_Bool bGotValue = sal_False;
-                XMLPropertyState aNewProperty( -1 );
-                aNewProperty.maValue = *pValues;
-                ++pValues;
-                for( std::list<sal_uInt32>::iterator aIndexItr =
-                        aItr->GetIndexes().begin();
-                    aIndexItr != aItr->GetIndexes().end();
-                    aIndexItr++ )
+                if ((pResults->Result == beans::TolerantPropertySetResultType::SUCCESS) &&
+                    ((pResults->State == PropertyState_DIRECT_VALUE) || (pResults->State == PropertyState_DEFAULT_VALUE)))
                 {
-                    aNewProperty.mnIndex = *aIndexItr;
-                    aPropStates.AddPropertyState( aNewProperty );
+                    aNewProperty.mnIndex = -1;
+                    aNewProperty.maValue = pResults->Value;
+
+                    for( std::list<sal_uInt32>::iterator aIndexItr(aPropIter->GetIndexes().begin());
+                        aIndexItr != aPropIter->GetIndexes().end();
+                        ++aIndexItr )
+                    {
+                        aNewProperty.mnIndex = *aIndexItr;
+                        aPropStates.AddPropertyState( aNewProperty );
+                    }
                 }
-                aItr++;
+                ++pResults;
+                ++aPropIter;
             }
         }
     }
     else
     {
-        FilterPropertyInfoList_Impl::iterator aItr = aPropInfos.begin();
-        for(sal_uInt32 i = 0; i < nCount; i++ )
+        Sequence < PropertyState > aStates;
+        const PropertyState *pStates = 0;
+        Reference< XPropertyState > xPropState( rPropSet, UNO_QUERY );
+           if( xPropState.is() )
         {
-            sal_Bool bDirectValue =
-                !pStates || *pStates == PropertyState_DIRECT_VALUE;
-            if( bDirectValue || bDefault )
+            aStates = xPropState->getPropertyStates( rApiNames );
+            pStates = aStates.getConstArray();
+        }
+
+        Reference < XMultiPropertySet > xMultiPropSet( rPropSet, UNO_QUERY );
+        if( xMultiPropSet.is() && !bDefault )
+        {
+            Sequence < Any > aValues;
+            if( pStates )
             {
-                // The value is stored in the PropertySet itself, add to list.
-                sal_Bool bGotValue = sal_False;
-                XMLPropertyState aNewProperty( -1 );
-                for( std::list<sal_uInt32>::iterator aIndexItr =
-                        aItr->GetIndexes().begin();
-                    aIndexItr != aItr->GetIndexes().end();
-                    aIndexItr++ )
+                // step 1: get value count
+                sal_uInt32 nValueCount = 0;
+                sal_uInt32 i;
+
+                for( i = 0; i < nCount; i++, pStates++ )
                 {
-                    if( bDirectValue ||
-                        (rPropMapper->GetEntryFlags( *aIndexItr ) &
-                                        MID_FLAG_DEFAULT_ITEM_EXPORT) != 0 )
+                    if( (*pStates == PropertyState_DIRECT_VALUE)/* || (bDefault && (*pStates == PropertyState_DEFAULT_VALUE))*/ )
+                        nValueCount++;
+                }
+
+                if( nValueCount )
+                {
+                    // step 2: collect property names
+                    Sequence < OUString > aAPINames( nValueCount );
+                    OUString *pAPINames = aAPINames.getArray();
+
+                    FilterPropertyInfoList_Impl::iterator *aPropIters =
+                        new FilterPropertyInfoList_Impl::iterator[nValueCount];
+                    FilterPropertyInfoList_Impl::iterator *pPropIter = aPropIters;
+
+                    FilterPropertyInfoList_Impl::iterator aItr = aPropInfos.begin();
+                    OSL_ENSURE(aItr != aPropInfos.end(),"Invalid iterator!");
+
+                    pStates = aStates.getConstArray();
+                    i = 0;
+                    while( i < nValueCount )
                     {
-                        try
+                        if( (*pStates == PropertyState_DIRECT_VALUE)/* || (bDefault && (*pStates == PropertyState_DEFAULT_VALUE))*/ )
                         {
-                            if( !bGotValue )
-                            {
-                                const OUString& rApiName = aItr->GetApiName();
-                                aNewProperty.maValue =
-                                    rPropSet->getPropertyValue( rApiName );
-                                bGotValue = sal_True;
-                            }
+                            *pAPINames++ = aItr->GetApiName();
+                            *pPropIter++ = aItr;
+                            i++;
+                        }
+                        aItr++;
+                        pStates++;
+                    }
+
+                    aValues = xMultiPropSet->getPropertyValues( aAPINames );
+                    const Any *pValues = aValues.getConstArray();
+                    pPropIter = aPropIters;
+                    XMLPropertyState aNewProperty( -1 );
+                    for( i = 0; i < nValueCount; i++ )
+                    {
+                        aNewProperty.mnIndex = -1;
+                        aNewProperty.maValue = *pValues;
+
+                        for( std::list<sal_uInt32>::iterator aIndexItr =
+                                    (*pPropIter)->GetIndexes().begin();
+                            aIndexItr != (*pPropIter)->GetIndexes().end();
+                            aIndexItr++ )
+                        {
                             aNewProperty.mnIndex = *aIndexItr;
                             aPropStates.AddPropertyState( aNewProperty );
                         }
-                        catch( UnknownPropertyException& )
-                        {
-                            // might be a problem of getImplemenetationId
-                            OSL_ENSURE( !this, "unknown property in getPropertyValue" );
-                        }
 
+                        pPropIter++;
+                        pValues++;
                     }
+                    delete[] aPropIters;
                 }
             }
+            else
+            {
+                aValues = xMultiPropSet->getPropertyValues( rApiNames );
+                const Any *pValues = aValues.getConstArray();
 
-            aItr++;
-            if( pStates )
-                pStates++;
+                FilterPropertyInfoList_Impl::iterator aItr = aPropInfos.begin();
+                for(sal_uInt32 i = 0; i < nCount; i++ )
+                {
+                    // The value is stored in the PropertySet itself, add to list.
+                    sal_Bool bGotValue = sal_False;
+                    XMLPropertyState aNewProperty( -1 );
+                    aNewProperty.maValue = *pValues;
+                    ++pValues;
+                    for( std::list<sal_uInt32>::iterator aIndexItr =
+                            aItr->GetIndexes().begin();
+                        aIndexItr != aItr->GetIndexes().end();
+                        aIndexItr++ )
+                    {
+                        aNewProperty.mnIndex = *aIndexItr;
+                        aPropStates.AddPropertyState( aNewProperty );
+                    }
+                    aItr++;
+                }
+            }
+        }
+        else
+        {
+            FilterPropertyInfoList_Impl::iterator aItr = aPropInfos.begin();
+            for(sal_uInt32 i = 0; i < nCount; i++ )
+            {
+                sal_Bool bDirectValue =
+                    !pStates || *pStates == PropertyState_DIRECT_VALUE;
+                if( bDirectValue || bDefault )
+                {
+                    // The value is stored in the PropertySet itself, add to list.
+                    sal_Bool bGotValue = sal_False;
+                    XMLPropertyState aNewProperty( -1 );
+                    for( std::list<sal_uInt32>::iterator aIndexItr =
+                            aItr->GetIndexes().begin();
+                        aIndexItr != aItr->GetIndexes().end();
+                        aIndexItr++ )
+                    {
+                        if( bDirectValue ||
+                            (rPropMapper->GetEntryFlags( *aIndexItr ) &
+                                            MID_FLAG_DEFAULT_ITEM_EXPORT) != 0 )
+                        {
+                            try
+                            {
+                                if( !bGotValue )
+                                {
+                                    aNewProperty.maValue =
+                                        rPropSet->getPropertyValue( aItr->GetApiName() );
+                                    bGotValue = sal_True;
+                                }
+                                aNewProperty.mnIndex = *aIndexItr;
+                                aPropStates.AddPropertyState( aNewProperty );
+                            }
+                            catch( UnknownPropertyException& )
+                            {
+                                // might be a problem of getImplemenetationId
+                                OSL_ENSURE( !this, "unknown property in getPropertyValue" );
+                            }
+
+                        }
+                    }
+                }
+
+                aItr++;
+                if( pStates )
+                    pStates++;
+            }
         }
     }
     aPropStates.FillPropertyStateVector(rPropStates);
