@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 10:20:35 $
+ *  last change: $Author: kz $ $Date: 2001-08-29 20:49:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text [ italian ] = "~Nessuna" ;
         Text [ portuguese_brazilian ] = "~Nenhum" ;
         Text [ portuguese ] = "~Nenhum" ;
-        Text [ finnish ] = "~Ei mitään" ;
+        Text [ finnish ] = "~Ei mit??n" ;
         Text [ danish ] = "Ingen" ;
         Text [ french ] = "~Aucun(e)" ;
         Text [ swedish ] = "~Inga" ;
@@ -146,7 +146,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text [ italian ] = "Definito dall'utente" ;
         Text [ portuguese_brazilian ] = "~Definido pelo usu?rio" ;
         Text [ portuguese ] = "Definido pelo ~utilizador" ;
-        Text [ finnish ] = "~Käyttäjän määrittämät" ;
+        Text [ finnish ] = "~K?ytt?j?n m??ritt?m?t" ;
         Text [ danish ] = "Brugerdefineret" ;
         Text [ french ] = "Défini par l'~utilisateur" ;
         Text [ swedish ] = "~Användardefinierade" ;
@@ -262,17 +262,17 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         };
         StringList [ finnish ] =
         {
-            < "Summa" ; Default ; > ;
-            < "Laske" ; Default ; > ;
+            < "Sum" ; Default ; > ;
+            < "Lukum??r?" ; Default ; > ;
             < "Keskiarvo" ; Default ; > ;
             < "Enint" ; Default ; > ;
-            < "Väh" ; Default ; > ;
+            < "V?h" ; Default ; > ;
             < "Tuote" ; Default ; > ;
-            < "Määrä (vain numerot)" ; Default ; > ;
-            < "StDev (otos)" ; Default ; > ;
-            < "StDevP (populaatio)" ; Default ; > ;
-            < "Var (otos)" ; Default ; > ;
-            < "VarP (Populaatio)" ; Default ; > ;
+            < "M??r? (vain numerot)" ; Default ; > ;
+            < "StDev (vakiopoikkeama, Otos)" ; Default ; > ;
+            < "StDevP (vakiopoikkeama, populaatio)" ; Default ; > ;
+            < "Var (Otos)" ; Default ; > ;
+            < "VarP (populaatio)" ; Default ; > ;
         };
         StringList [ danish ] =
         {
@@ -546,7 +546,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ turkish ] = "~Ögeleri veriler olmadan görüntüle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Mostrar elementos sin datos";
-        Text[ finnish ] = "Näytä ~elementit ilman tietoja";
+        Text[ finnish ] = "N?yt? ~elementit ilman tietoja";
     };
     FixedText FT_NAMELABEL
     {
@@ -609,7 +609,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text [ italian ] = "Subtotali" ;
         Text [ portuguese_brazilian ] = "Sub Totais" ;
         Text [ portuguese ] = "Subtotais" ;
-        Text [ finnish ] = "Välisummat" ;
+        Text [ finnish ] = "V?lisummat" ;
         Text [ danish ] = "Subtotaler" ;
         Text [ french ] = "Sous-totaux" ;
         Text [ swedish ] = "Delresultat" ;
@@ -636,7 +636,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text [ italian ] = "Funzione" ;
         Text [ portuguese_brazilian ] = "Fun??o" ;
         Text [ portuguese ] = "Função" ;
-        Text [ finnish ] = "Toiminto" ;
+        Text [ finnish ] = "Funktio" ;
         Text [ danish ] = "Funktion" ;
         Text [ french ] = "Fonction" ;
         Text [ swedish ] = "Funktion" ;
@@ -671,8 +671,9 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     Text[ turkish ] = "Veri alaný";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Campo de datos";
-    Text[ finnish ] = "Tietokenttä";
+    Text[ finnish ] = "Tietokentt?";
 };
+
 
 
 
