@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Date: 2004-03-09 10:19:23 $
+#   last change: $Date: 2004-07-23 13:43:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,7 +70,7 @@ PACKAGE = test
 
 #----- compile .java files -----------------------------------------
 
-JARFILES        = sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar OOoRunner.jar
+JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar OOoRunner.jar
 JAVAFILES       = Job.java
 JAVACLASSFILES  = $(CLASSDIR)$/$(PACKAGE)$/Job.class
 
