@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediawindow_impl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2004-08-23 09:04:42 $
+ *  last change: $Author: rt $ $Date: 2004-11-03 15:54:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include "mediaevent_impl.hxx"
 #include "mediamisc.hxx"
 #include "mediawindow.hrc"
+#include "helpids.hrc"
 
 #include <algorithm>
 #include <cmath>
@@ -213,6 +214,7 @@ MediaWindowImpl::MediaWindowImpl( Window* pParent, MediaWindow* pMediaWindow, bo
     mpEmptyBmpEx( NULL ),
     mpAudioBmpEx( NULL )
 {
+    maChildWindow.SetHelpId( HID_AVMEDIA_PLAYERWINDOW );
     maChildWindow.Hide();
 
     if( mpMediaWindowControl )
@@ -260,15 +262,18 @@ void MediaWindowImpl::onURLChanged()
 {
     if( getPlayer().is() )
     {
-        uno::Sequence< uno::Any >   aArgs( 2 );
-        const Point                 aPoint;
-        const Size                  aSize( maChildWindow.GetSizePixel() );
+        uno::Sequence< uno::Any >              aArgs( 2 );
+        uno::Reference< media::XPlayerWindow > xPlayerWindow;
+        const Point                            aPoint;
+        const Size                             aSize( maChildWindow.GetSizePixel() );
+        const sal_Int32                        nWndHandle = static_cast< sal_Int32 >( maChildWindow.getParentWindowHandleForJava() );
 
-
-        aArgs[ 0 ] = uno::makeAny( (sal_Int32) maChildWindow.getParentWindowHandleForJava() );
+        aArgs[ 0 ] = uno::makeAny( nWndHandle );
         aArgs[ 1 ] = uno::makeAny( awt::Rectangle( aPoint.X(), aPoint.Y(), aSize.Width(), aSize.Height() ) );
 
-        uno::Reference< media::XPlayerWindow > xPlayerWindow( getPlayer()->createPlayerWindow( aArgs ) );
+        if( nWndHandle != 0 )
+            xPlayerWindow = getPlayer()->createPlayerWindow( aArgs );
+
         setPlayerWindow( xPlayerWindow );
 
         if( xPlayerWindow.is() )
