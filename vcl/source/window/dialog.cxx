@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:02:52 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 13:34:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -690,15 +690,33 @@ short Dialog::Execute()
     // zerstoert wird (sollte nicht sein und ist nur vorsichtsmassnahme)
     ImplDelData aDelData;
     ImplAddDel( &aDelData );
+    ImplDelData aParentDelData;
+
     pSVData->maAppData.mnModalMode++;
     //DBG_ASSERT( mpDialogParent, "Dialog::Execute() - no Parent: cannot set modal count!" );
-    if( mpDialogParent )
-        mpDialogParent->ImplIncModalCount();        // #106303# support frame based modal count
+    Window* pDialogParent = mpDialogParent;
+    if( pDialogParent )
+    {
+        pDialogParent->ImplIncModalCount();        // #106303# support frame based modal count
+        pDialogParent->ImplAddDel( &aParentDelData );
+    }
     while ( !aDelData.IsDelete() && mbInExecute )
         Application::Yield();
     pSVData->maAppData.mnModalMode--;
-    if( mpDialogParent )
-        mpDialogParent->ImplDecModalCount();        // #106303# support frame based modal count
+    if( pDialogParent  )
+    {
+        if( ! aParentDelData.IsDelete() )
+        {
+            pDialogParent->ImplDecModalCount();        // #106303# support frame based modal count
+            pDialogParent->ImplRemoveDel( &aParentDelData );
+        }
+#ifdef DBG_UTIL
+        else
+        {
+            DBG_ERROR( "Dialog::Execute() - Parent of dialog destroyed in Execute()" );
+        }
+#endif
+    }
     if ( !aDelData.IsDelete() )
         ImplRemoveDel( &aDelData );
 #ifdef DBG_UTIL
