@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-01 19:25:45 $
+ *  last change: $Author: gh $ $Date: 2001-06-06 09:23:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1489,4 +1489,52 @@ String S_NO_LIST_BOX_BUTTON
     Text[ arabic ] = "ListBoxButton does not exist in ($Arg1)";
     Text[ catalan ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
     Text[ finnish ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
+};
+String S_UNO_URL_EXECUTE_FAILED_NO_DISPATCHER
+{
+    Text = "Konnte UNO Url \"($Arg1)\"nicht ausführen: Keinen Dispatcher gefunden";
+    Text[ english_us ] = "Slot ID cannot be run. No ActiveDispatcher";
+    Text[ portuguese ] = "Foi impossível executar Slot ID: ActiveDispatcher inexistente";
+    Text[ russian ] = "Slot ID cannot be run. No ActiveDispatcher";
+    Text[ greek ] = "Slot ID cannot be run. No ActiveDispatcher";
+    Text[ dutch ] = "Kon slot ID niet uitvoeren: geen ActiveDispatcher";
+    Text[ french ] = "Impossible d'exécuter Slot ID : aucun dispatcheur actif";
+    Text[ spanish ] = "No se pudo ejecutar Slot ID. ActiveDispatcher inexistente";
+    Text[ italian ] = "Slot ID cannot be run. No ActiveDispatcher";
+    Text[ danish ] = "Slot ID cannot be run. No ActiveDispatcher";
+    Text[ swedish ] = "Slot ID cannot be run. No ActiveDispatcher";
+    Text[ polish ] = "Nie móg³ wykonaæ Slot ID: Brak ActiveDispatcher";
+    Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
+    Text[ japanese ] = "Slot ID cannot be run. No ActiveDispatcher";
+    Text[ korean ] = "½½·Ô ID¸¦ ½ÇÇàÇÏÁö ¸øÇß½À´Ï´Ù: ´Éµ¿ µð½ºÆÐÃ³°¡ ¾ø½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "Slot ID cannot be run. No ActiveDispatcher";
+    Text[ chinese_traditional ] = "Slot ID cannot be run. No ActiveDispatcher";
+    Text[ arabic ] = "Slot ID cannot be run. No ActiveDispatcher";
+    Text[ turkish ] = "Slot ID cannot be run. No ActiveDispatcher";
+    Text[ catalan ] = "No se pudo ejecutar Slot ID. ActiveDispatcher inexistente";
+    Text[ finnish ] = "Paikkatunnuksen suoritus ei onnistu. Ei aktiivista lähetintä";
+};
+String S_UNO_URL_EXECUTE_FAILED_NO_FRAME
+{
+    Text = "Konnte UNO Url \"($Arg1)\"nicht ausführen: Kein ActiveFrame am Desktop";
+    Text[ english_us ] = "Slot ID could not be run";
+    Text[ portuguese ] = "Impossível executar Slot ID.";
+    Text[ russian ] = "Slot ID could not be run";
+    Text[ greek ] = "Slot ID could not be run";
+    Text[ dutch ] = "Kon slot ID niet uitvoeren";
+    Text[ french ] = "Impossible d'exécuter Slot ID";
+    Text[ spanish ] = "No se pudo ejecutar Slot ID";
+    Text[ italian ] = "Slot ID could not be run";
+    Text[ danish ] = "Slot ID could not be run";
+    Text[ swedish ] = "Slot ID could not be run";
+    Text[ polish ] = "Nie móg³ wykonaæ Slot ID";
+    Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
+    Text[ japanese ] = "Slot ID could not be run";
+    Text[ korean ] = "½½·Ô ID¸¦¡¡½ÇÇàÇÏÁö¡¡¸øÇß½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "Slot ID could not be run";
+    Text[ chinese_traditional ] = "Slot ID could not be run";
+    Text[ arabic ] = "Slot ID could not be run";
+    Text[ turkish ] = "Slot ID could not be run";
+    Text[ catalan ] = "No se pudo ejecutar Slot ID";
+    Text[ finnish ] = "Paikkatunnusta ei voitu suorittaa";
 };
