@@ -1,0 +1,175 @@
+/*************************************************************************
+ *
+ *  $RCSfile: computedexpression.hxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:49:51 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _COMPUTEDEXPRESSION_HXX
+#define _COMPUTEDEXPRESSION_HXX
+
+
+// includes for member variables
+#include <rtl/ustring.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+
+// forward declaractions
+namespace com { namespace sun { namespace star
+{
+    namespace xml
+    {
+        namespace dom { class XNode; }
+        namespace dom { class XNodeset; }
+        namespace xpath { class XXPathAPI; }
+        namespace xpath { class XXPathObject; }
+    }
+    namespace container { class XNameContainer; }
+} } }
+namespace xforms { class EvaluationContext; }
+
+
+
+namespace xforms
+{
+
+/** ComputedExpression represents an XPath Expression and caches results.
+ *
+ * As this class has no virtual methods, it should never be used
+ * polymorphically. */
+class ComputedExpression
+{
+    /// the expression string
+    rtl::OUString msExpression;
+
+    /// the namespaces that are used to interpret the expression string
+    com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> mxNamespaces;
+
+    /// is msExpression empty?
+    bool mbIsEmpty;
+
+protected:
+    /// is msExpression a simple expression?
+    bool mbIsSimple;
+
+    /// the result from the last bind
+    com::sun::star::uno::Reference<com::sun::star::xml::xpath::XXPathObject> mxResult;
+
+
+    /// implementation of isSimpleExpression
+    bool _checkExpression( const sal_Char* pExpression ) const;
+
+    /// allow manipulation of the expression before it is evaluated
+    const rtl::OUString _getExpressionForEvaluation() const;
+
+    /// obtain a (suitable) XPathAPI implementation
+    com::sun::star::uno::Reference<com::sun::star::xml::xpath::XXPathAPI> _getXPathAPI(const xforms::EvaluationContext& aContext);
+
+    /// evaluate the expression relative to the content node.
+    bool _evaluate( const xforms::EvaluationContext& rContext,
+                    const rtl::OUString& sExpression );
+
+
+public:
+    ComputedExpression();
+    ~ComputedExpression();
+
+
+    /// get the expression string
+    rtl::OUString getExpression() const;
+
+    /// set a new expression string
+    void setExpression( const rtl::OUString& rExpression );
+
+    /// get the namespaces that are used to interpret the expression string
+    com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> getNamespaces() const;
+
+    /// set the namespaces that are used to interpret the expression string
+    void setNamespaces( const com::sun::star::uno::Reference<com::sun::star::container::XNameContainer>& );
+
+    /// do we have an actual expression?
+    bool isEmptyExpression() const;
+
+    /// heuristically determine whether this expression is 'simple',
+    /// i.e. whether its value will change depending on the values
+    /// of other nodes
+    bool isSimpleExpression() const;
+
+
+    /// evaluate the expression relative to the content node.
+    bool evaluate( const xforms::EvaluationContext& rContext );
+
+
+    /// does this expression have a value?
+    bool hasValue() const;
+
+
+    /// remove value/evaluate results
+    void clear();
+
+
+    // get the result of this expression as string/bool/...
+    // (Results will be based on the last call of evaluate(..). The caller
+    // must call evaluate to ensure current results.)
+    com::sun::star::uno::Reference<com::sun::star::xml::xpath::XXPathObject> getXPath();
+    bool getBool( bool bDefault = false ) const;
+    rtl::OUString getString( const rtl::OUString& rDefault = rtl::OUString() ) const;
+
+};
+
+} // namespace xforms
+
+#endif
