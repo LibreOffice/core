@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Any.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2002-08-19 07:18:44 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 10:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,6 +260,10 @@ public:
 template< class C >
 inline Any SAL_CALL makeAny( const C & value ) SAL_THROW( () );
 
+// additionally specialized for C++ bool
+template<>
+inline Any SAL_CALL makeAny( bool const & value ) SAL_THROW( () );
+
 class BaseReference;
 class Type;
 
@@ -312,6 +316,12 @@ inline sal_Bool SAL_CALL operator != ( const Any & rAny, const C & value ) SAL_T
 // bool
 inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_Bool & value ) SAL_THROW( () );
 inline sal_Bool SAL_CALL operator == ( const Any & rAny, const sal_Bool & value ) SAL_THROW( () );
+template<>
+inline sal_Bool SAL_CALL operator >>= ( Any const & rAny, bool & value )
+    SAL_THROW( () );
+template<>
+inline sal_Bool SAL_CALL operator == ( Any const & rAny, bool const & value )
+    SAL_THROW( () );
 // byte
 inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, sal_Int8 & value ) SAL_THROW( () );
 // short
