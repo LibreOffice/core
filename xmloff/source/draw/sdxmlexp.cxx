@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: aw $ $Date: 2001-10-01 11:43:24 $
+ *  last change: $Author: aw $ $Date: 2001-10-19 12:33:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -770,7 +770,8 @@ sal_uInt32 SdXMLExport::ImpRecursiveObjectCount(uno::Reference< drawing::XShapes
 
             if((aAny >>= xGroup) && xGroup.is())
             {
-                nRetval += ImpRecursiveObjectCount(xGroup);
+                // #93180# count group objects, too.
+                nRetval += 1 + ImpRecursiveObjectCount(xGroup);
             }
             else
             {
