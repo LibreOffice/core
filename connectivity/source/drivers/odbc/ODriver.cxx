@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODriver.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-29 10:23:33 $
+ *  last change: $Author: oj $ $Date: 2002-08-01 06:58:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,12 @@
 #ifndef _CONNECTIVITY_ODBC_OFUNCTIONS_HXX_
 #include "odbc/OFunctions.hxx"
 #endif
+#ifndef _CONNECTIVITY_OTOOLS_HXX_
 #include "odbc/OTools.hxx"
+#endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include "connectivity/dbexception.hxx"
+#endif
 
 using namespace connectivity::odbc;
 using namespace com::sun::star::uno;
@@ -144,6 +149,9 @@ SS SAL_CALL ODBCDriver::getSupportedServiceNames(  ) throw(RuntimeException)
 // --------------------------------------------------------------------------------
 Reference< XConnection > SAL_CALL ODBCDriver::connect( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
+    if ( ! acceptsURL(url) )
+        ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
+
     if(!m_pDriverHandle)
     {
         ::rtl::OUString aPath;
