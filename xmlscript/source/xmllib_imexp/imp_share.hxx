@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_share.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ab $ $Date: 2001-11-07 18:19:27 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 09:19:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,11 +58,8 @@
  *
  *
  ************************************************************************/
-#include <vector>
 
-#include <xmlscript/xmldlg_imexp.hxx>
 #include <xmlscript/xmllib_imexp.hxx>
-#include <xmlscript/xmlmod_imexp.hxx>
 
 #include <cppuhelper/implbase1.hxx>
 
@@ -73,9 +70,11 @@
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 
-#include <com/sun/star/xml/sax2/XExtendedAttributes.hpp>
-#include <com/sun/star/xml/XImportContext.hpp>
-#include <com/sun/star/xml/XImporter.hpp>
+#include <com/sun/star/xml/input/XRoot.hpp>
+
+#include <vector>
+
+#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
 
 using namespace ::rtl;
@@ -101,9 +100,10 @@ inline sal_Int32 toInt32( OUString const & rStr ) SAL_THROW( () )
 }
 inline bool getBoolAttr(
     sal_Bool * pRet, OUString const & rAttrName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::input::XAttributes > const & xAttributes, sal_Int32 uid )
 {
-    OUString aValue( xAttributes->getValueByUidName( XMLNS_LIBRARY_UID, rAttrName ) );
+    OUString aValue(
+        xAttributes->getValueByUidName( uid, rAttrName ) );
     if (aValue.getLength())
     {
         if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("true") ))
@@ -119,24 +119,30 @@ inline bool getBoolAttr(
         else
         {
             throw xml::sax::SAXException(
-                rAttrName + OUString( RTL_CONSTASCII_USTRINGPARAM(": no boolean value (true|false)!") ),
+                rAttrName +
+                OUString( RTL_CONSTASCII_USTRINGPARAM(
+                              ": no boolean value (true|false)!") ),
                 Reference< XInterface >(), Any() );
         }
     }
     return false;
 }
+
 inline bool getStringAttr(
     OUString * pRet, OUString const & rAttrName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::input::XAttributes > const & xAttributes, sal_Int32 uid )
 {
-    *pRet = xAttributes->getValueByUidName( XMLNS_LIBRARY_UID, rAttrName );
+    *pRet = xAttributes->getValueByUidName( uid, rAttrName );
     return (pRet->getLength() > 0);
 }
+
 inline bool getLongAttr(
     sal_Int32 * pRet, OUString const & rAttrName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::input::XAttributes > const & xAttributes,
+    sal_Int32 uid )
 {
-    OUString aValue( xAttributes->getValueByUidName( XMLNS_LIBRARY_UID, rAttrName ) );
+    OUString aValue(
+        xAttributes->getValueByUidName( uid, rAttrName ) );
     if (aValue.getLength())
     {
         *pRet = toInt32( aValue );
@@ -150,13 +156,16 @@ inline bool getLongAttr(
 
 //==================================================================================================
 struct LibraryImport
-    : public ::cppu::WeakImplHelper1< xml::XImporter >
+    : public ::cppu::WeakImplHelper1< xml::input::XRoot >
 {
     friend class LibrariesElement;
     friend class LibraryElement;
 
     LibDescriptorArray* mpLibArray;
     LibDescriptor*      mpLibDesc;      // Single library mode
+
+    sal_Int32 XMLNS_LIBRARY_UID;
+    sal_Int32 XMLNS_XLINK_UID;
 
 public:
     inline LibraryImport( LibDescriptorArray* pLibArray )
@@ -171,8 +180,9 @@ public:
     virtual ~LibraryImport()
         SAL_THROW( () );
 
-    // XImporter
-    virtual void SAL_CALL startDocument()
+    // XRoot
+    virtual void SAL_CALL startDocument(
+        Reference< container::XNameAccess > const & xUidMapping )
         throw (xml::sax::SAXException, RuntimeException);
     virtual void SAL_CALL endDocument()
         throw (xml::sax::SAXException, RuntimeException);
@@ -182,51 +192,54 @@ public:
     virtual void SAL_CALL setDocumentLocator(
         Reference< xml::sax::XLocator > const & xLocator )
         throw (xml::sax::SAXException, RuntimeException);
-    virtual Reference< xml::XImportContext > SAL_CALL createRootContext(
+    virtual Reference< xml::input::XElement > SAL_CALL startRootElement(
         sal_Int32 nUid, OUString const & rLocalName,
-        Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+        Reference< xml::input::XAttributes > const & xAttributes )
         throw (xml::sax::SAXException, RuntimeException);
 };
 
 //==================================================================================================
 class LibElementBase
-    : public ::cppu::WeakImplHelper1< xml::XImportContext >
+    : public ::cppu::WeakImplHelper1< xml::input::XElement >
 {
 protected:
     LibraryImport * _pImport;
     LibElementBase * _pParent;
 
     OUString _aLocalName;
-    Reference< xml::sax2::XExtendedAttributes > _xAttributes;
+    Reference< xml::input::XAttributes > _xAttributes;
 
 public:
     LibElementBase(
         OUString const & rLocalName,
-        Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
+        Reference< xml::input::XAttributes > const & xAttributes,
         LibElementBase * pParent, LibraryImport * pImport )
         SAL_THROW( () );
     virtual ~LibElementBase()
         SAL_THROW( () );
 
-    // XImportContext
-    virtual Reference< xml::XImportContext > SAL_CALL getParent()
+    // XElement
+    virtual Reference< xml::input::XElement > SAL_CALL getParent()
         throw (RuntimeException);
     virtual OUString SAL_CALL getLocalName()
         throw (RuntimeException);
     virtual sal_Int32 SAL_CALL getUid()
         throw (RuntimeException);
-    virtual Reference< xml::sax2::XExtendedAttributes > SAL_CALL getAttributes()
+    virtual Reference< xml::input::XAttributes > SAL_CALL getAttributes()
         throw (RuntimeException);
     virtual void SAL_CALL ignorableWhitespace(
         OUString const & rWhitespaces )
         throw (xml::sax::SAXException, RuntimeException);
     virtual void SAL_CALL characters( OUString const & rChars )
         throw (xml::sax::SAXException, RuntimeException);
+    virtual void SAL_CALL processingInstruction(
+        OUString const & rTarget, OUString const & rData )
+        throw (xml::sax::SAXException, RuntimeException);
     virtual void SAL_CALL endElement()
         throw (xml::sax::SAXException, RuntimeException);
-    virtual Reference< xml::XImportContext > SAL_CALL createChildContext(
+    virtual Reference< xml::input::XElement > SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
-        Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+        Reference< xml::input::XAttributes > const & xAttributes )
         throw (xml::sax::SAXException, RuntimeException);
 };
 
@@ -240,16 +253,16 @@ protected:
     vector< LibDescriptor > mLibDescriptors;
 
 public:
-    virtual Reference< xml::XImportContext > SAL_CALL createChildContext(
+    virtual Reference< xml::input::XElement > SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
-        Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+        Reference< xml::input::XAttributes > const & xAttributes )
         throw (xml::sax::SAXException, RuntimeException);
     virtual void SAL_CALL endElement()
         throw (xml::sax::SAXException, RuntimeException);
 
     LibrariesElement(
         OUString const & rLocalName,
-        Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
+        Reference< xml::input::XAttributes > const & xAttributes,
         LibElementBase * pParent, LibraryImport * pImport )
         SAL_THROW( () )
         : LibElementBase( rLocalName, xAttributes, pParent, pImport )
@@ -265,16 +278,16 @@ protected:
 
 public:
 
-    virtual Reference< xml::XImportContext > SAL_CALL createChildContext(
+    virtual Reference< xml::input::XElement > SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
-        Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+        Reference< xml::input::XAttributes > const & xAttributes )
         throw (xml::sax::SAXException, RuntimeException);
     virtual void SAL_CALL endElement()
         throw (xml::sax::SAXException, RuntimeException);
 
     LibraryElement(
         OUString const & rLocalName,
-        Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
+        Reference< xml::input::XAttributes > const & xAttributes,
         LibElementBase * pParent, LibraryImport * pImport )
         SAL_THROW( () )
         : LibElementBase( rLocalName, xAttributes, pParent, pImport )
