@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collator_unicode.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-20 13:24:21 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 14:39:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
     }
 
     if (options & CollatorOptions::CollatorOptions_IGNORE_CASE)
-        collator->setStrength(Collator::PRIMARY);
+        collator->setStrength(Collator::SECONDARY);
     else
         collator->setStrength(Collator::TERTIARY);
 
