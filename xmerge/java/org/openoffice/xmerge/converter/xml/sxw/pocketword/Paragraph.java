@@ -412,9 +412,7 @@ class Paragraph implements PocketWordConstants {
 
             if (data[i] == (byte)0xC4) {
                 if (data[i + 1] == (byte)0x00) {
-                    if (!isLastParagraph) {
-                        addTextSegment(sb.toString(), ts);
-                    }
+                    addTextSegment(sb.toString(), ts);
                     return;
                 }
                 sb.append("\t");
