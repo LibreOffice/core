@@ -328,6 +328,123 @@ sub register_javacomponents
     return $error_occured;
 }
 
+
+
+################################################################
+# Registering all uno component files in the services.rdb
+################################################################
+sub get_source_path_cygwin_safe
+{
+    my ( $name, $array, $int ) = @_;
+
+    my $ret = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$name, $array, $int);
+    if ( $installer::globals::iswin eq 1 && $ENV{'USE_SHELL'} eq "tcsh" )
+    {
+    if( substr( $$ret, 1,1 ) eq ":" )
+    {
+        $$ret = "/cygdrive/" . substr($$ret,0,1) .  substr($$ret,2);
+    }
+    }
+    return $ret;
+}
+
+sub register_pythoncomponents
+{
+    my ($pythoncomponents, $regcompfileref, $servicesfile,$includepatharrayref) = @_;
+
+    installer::logger::include_header_into_logfile("Registering python UNO components:");
+
+    my $error_occured = 0;
+    my $counter = 0;
+
+    my $systemcall = "";
+
+    my $allsourcepathes = get_all_sourcepathes($pythoncomponents);
+
+    for ( my $j = 0; $j <= $#{$allsourcepathes}; $j++ )
+    {
+        my $filestring = "";
+        my $onesourcepath = ${$allsourcepathes}[$j];
+        my $to = "";
+        my $from = cwd();
+        if ( $installer::globals::iswin ) { $from =~ s/\//\\/g; }
+
+        my $typesrdbname = "types.rdb";
+        my $typesrdbref =
+            get_source_path_cygwin_safe($typesrdbname, $includepatharrayref, 1);
+
+        if ( $$typesrdbref eq "" ) { installer::exiter::exit_program("ERROR: Could not find file $typesrdbname !", "register_pythoncomponents"); }
+
+
+        my $pyunoservicesrdbname = "pyuno_services.rdb";
+        my $pyunoservicesrdbref =
+            get_source_path_cygwin_safe($pyunoservicesrdbname, $includepatharrayref, 1);
+
+        if ( $$pyunoservicesrdbref eq "" ) { installer::exiter::exit_program("ERROR: Could not find file $pyunoservicesrname !", "register_pythoncomponents"); }
+
+
+        for ( my $i = 0; $i <= $#{$pythoncomponents}; $i++ )
+        {
+            my $doinclude = 1;
+            my $sourcepath = ${$pythoncomponents}[$i]->{'sourcepath'};
+
+            $to = $sourcepath;
+            installer::pathanalyzer::get_path_from_fullqualifiedname(\$to);
+
+            if (!($to eq $onesourcepath)) { $doinclude = 0; }
+
+            if ( $doinclude )
+            {
+                my $filename = ${$pythoncomponents}[$i]->{'Name'};
+                $filestring = $filestring . $filename . "\;";
+                $counter++;
+            }
+
+            if ((( $counter > 0 ) && ( $counter%$installer::globals::unomaxservices == 0 )) || (( $counter > 0 ) && ( $i == $#{$pythoncomponents} )))   # limiting to $installer::globals::maxservices files
+            {
+                $filestring =~ s/\;\s*$//;
+                $filestring = substr( $filestring, 0, length($filestring)-3);
+                chdir($onesourcepath);
+
+                my @regcompoutput = ();
+
+
+                                $systemcall = "$installer::globals::wrapcmd $$regcompfileref -register -br " . $$typesrdbref . " -br " . $$pyunoservicesrdbref . " -r $servicesfile -c vnd.openoffice.pymodule:" . $filestring . " -l com.sun.star.loader.Python 2\>\&1 |";
+
+                open (REG, "$systemcall");
+                while (<REG>) {push(@regcompoutput, $_); }
+                close (REG);
+
+                my $returnvalue = $?;   # $? contains the return value of the systemcall
+
+                my $infoline = "Systemcall: $systemcall\n";
+                push( @installer::globals::logfileinfo, $infoline);
+
+                for ( my $j = 0; $j <= $#regcompoutput; $j++ ) { push( @installer::globals::logfileinfo, "$regcompoutput[$j]"); }
+
+                if ($returnvalue)
+                {
+                    $infoline = "ERROR: $systemcall\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                    $error_occured = 1;
+                }
+                else
+                {
+                    $infoline = "SUCCESS: $systemcall\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                }
+
+                chdir($from);
+
+                $counter = 0;
+                $filestring = "";
+            }
+        }
+    }
+
+    return $error_occured;
+}
+
 ################################################################
 # Iterating over all files, to find all files with the
 # style UNO_COMPONENT. This can be libraries and jar files.
@@ -335,12 +452,13 @@ sub register_javacomponents
 
 sub register_all_components
 {
-    my ( $filesarrayref, $regcompfileref, $servicesfile, $regcomprdb ) = @_;
+    my ( $filesarrayref, $regcompfileref, $servicesfile, $regcomprdb, $includepatharrayref ) = @_;
 
     my $registererrorflag = 0;
 
     my @unocomponents = ();
     my @javacomponents = ();
+    my @pythoncomponents = ();
 
     for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
     {
@@ -360,20 +478,26 @@ sub register_all_components
             {
                 push(@javacomponents, $onefile);
             }
-            else    # uno_component
+            elsif( $filename =~ /\.py\s*$/ )    # python_component
             {
-                push(@unocomponents, $onefile);
+                    push(@pythoncomponents, $onefile);
+            }
+            else                            # uno component
+            {
+                    push(@unocomponents, $onefile);
             }
         }
     }
 
     $uno_error_occured = 0;
     $java_error_occured = 0;
+    $python_error_occured = 0;
 
     if ( $#unocomponents > -1 ) { $uno_error_occured = register_unocomponents(\@unocomponents, $regcompfileref, $servicesfile); }
     if ( $#javacomponents > -1 ) { $java_error_occured = register_javacomponents(\@javacomponents, $regcompfileref, $servicesfile, $regcomprdb); }
+    if ( $#pythoncomponents > -1 ) { $python_error_occured = register_pythoncomponents(\@pythoncomponents, $regcompfileref, $servicesfile, $includepatharrayref); }
 
-    if ( $uno_error_occured || $java_error_occured ) { $registererrorflag = 1; }
+    if ( $uno_error_occured || $java_error_occured || $python_error_occured ) { $registererrorflag = 1; }
 
     return $registererrorflag;
 }
@@ -687,7 +811,7 @@ sub create_services_rdb
 
         # and now iteration over all files
 
-        my $error_during_registration = register_all_components($filesarrayref, $regcompfileref, $servicesfile, $regcomprdb);
+        my $error_during_registration = register_all_components($filesarrayref, $regcompfileref, $servicesfile, $regcomprdb, $includepatharrayref);
 
         # Dependent from the success, the registration directory can be renamed.
 
