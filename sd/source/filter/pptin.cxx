@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:17:33 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:12:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -977,9 +977,9 @@ sal_Bool ImplSdPPTImport::Import()
         PptPageKind     ePageKind = eAktPageKind;
         UINT16          nPageNum = nAktPageNum;
 
-        eAktPageKind = PPT_NOTEPAGE;                // fuer das richtige Seitenformat
-        SdrPage* pPage = MakeBlancPage( FALSE );
-        pSdrModel->InsertPage( pPage );
+        SdPage* pHandoutPage = (SdPage*)MakeBlancPage( FALSE );
+        pHandoutPage->SetPageKind( PK_HANDOUT );
+        pSdrModel->InsertPage( pHandoutPage );
 
         USHORT nPageAnz = GetPageCount( PPT_SLIDEPAGE );
         if ( nPageAnz )
@@ -999,10 +999,10 @@ sal_Bool ImplSdPPTImport::Import()
                         pMasterPersist = (*pPageList)[ nMasterNum ];
                     pPage->SetLayoutName(((SdPage&)pPage->TRG_GetMasterPage()).GetLayoutName());
                 }
+                pPage->SetPageKind( PK_STANDARD );
                 pSdrModel->InsertPage( pPage );         // SJ: #i29625# because of form controls, the
                 ImportPage( pPage, pMasterPersist );    //  page must be inserted before importing
                 SetHeaderFooterPageSettings( pPage, pMasterPersist );
-                pPage->SetPageKind( PK_STANDARD );
                 ImportPageEffect( (SdPage*)pPage );
 
                 // creating the corresponding note page
@@ -1026,11 +1026,11 @@ sal_Bool ImplSdPPTImport::Import()
                             pMasterPersist = (*pPageList)[ nNotesMasterNum ];
                         pNotesPage->SetLayoutName( ((SdPage&)pNotesPage->TRG_GetMasterPage()).GetLayoutName() );
                     }
+                    pNotesPage->SetPageKind( PK_NOTES );
+                    pNotesPage->TRG_SetMasterPage(*pSdrModel->GetMasterPage(nNotesMasterNum));
                     pSdrModel->InsertPage( pNotesPage );        // SJ: #i29625# because of form controls, the
                     ImportPage( pNotesPage, pMasterPersist );   // page must be inserted before importing
                     SetHeaderFooterPageSettings( pNotesPage, pMasterPersist );
-                    pNotesPage->SetPageKind( PK_NOTES );
-                    pNotesPage->TRG_SetMasterPage(*pSdrModel->GetMasterPage(nNotesMasterNum));
                     pNotesPage->SetAutoLayout( AUTOLAYOUT_NOTES, FALSE );
                 }
                 else
@@ -1043,6 +1043,7 @@ sal_Bool ImplSdPPTImport::Import()
                     if ( pPageObj )
                         ((SdrPageObj*)pPageObj)->SetReferencedPage(pSdrModel->GetPage(( nPageNum << 1 ) + 1));
                 }
+
                 if( pStbMgr )
                     pStbMgr->SetState( nImportedPages++ );
             }
