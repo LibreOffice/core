@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mkcreate.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nf $ $Date: 2001-03-01 17:44:49 $
+ *  last change: $Author: nf $ $Date: 2001-03-15 16:14:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -630,6 +630,7 @@ SourceDirectory *SourceDirectory::CreateRootDirectory(
     GenericInformationList *pVerList = aParser.Execute(
         String( sStandLst, gsl_getSystemTextEncoding()));
 
+/*
     ByteString sPath( rVersion );
 #ifndef UNX
     sPath += ByteString( "/settings/solarlist" );
@@ -649,8 +650,10 @@ SourceDirectory *SourceDirectory::CreateRootDirectory(
     sSolarList = aIniManager.ToLocal( sSolarList );
     fprintf( stderr,
         "Reading directory information %s ...\n", sSolarList.GetBuffer());
+*/
 
-    Star aStar( String( sSolarList, gsl_getSystemTextEncoding()));
+    ByteString sVersion( rVersion );
+    Star aStar( pVerList, sVersion, TRUE, rRoot.GetBuffer());
     fprintf( stderr,
         "Creating virtual directory tree ...\n" );
 
@@ -796,9 +799,9 @@ BOOL SourceDirectory::CreateRecursiveMakefile( BOOL bAllChilds )
         "#\n"
         "#   $RCSfile: mkcreate.cxx,v $\n"
         "#\n"
-        "#   $Revision: 1.4 $\n"
+        "#   $Revision: 1.5 $\n"
         "#\n"
-        "#   last change: $Author: nf $ $Date: 2001-03-01 17:44:49 $\n"
+        "#   last change: $Author: nf $ $Date: 2001-03-15 16:14:16 $\n"
         "#\n"
         "#   The Contents of this file are made available subject to the terms of\n"
         "#   either of the following licenses\n"
