@@ -55,23 +55,99 @@
  *
  ************************************************************************/
 
-import sun.awt.*;
-import com.sun.star.awt.*;
+import java.awt.*;
+import java.lang.reflect.*;
 
 public class SystemWindowAdapter
 {
     static public java.awt.Frame createFrame( int windowHandle )
     {
-        java.awt.Frame aFrame;
+        String          aOS = (String) System.getProperty( "os.name" );
+        java.awt.Frame  aFrame = null;
 
-        // we're initialized with the operating system window handle
-        // as the parameter. We then generate a dummy Java frame with
-        // that window as the parent, to fake a root window for the
-        // Java implementation.
+        if( aOS.startsWith( "SunOS" ) )
+        {
+            try
+            {
+                Class aClass = Class.forName( "sun.awt.motif.MEmbeddedFrame" );
 
-        // now, we're getting slightly system dependent here.
-        String os = (String) System.getProperty( "os.name" );
+                if( aClass != null )
+                {
+                    try
+                    {
+                        Constructor aCtor = aClass.getConstructor( new Class[] { long.class, boolean.class } );
 
-        return new sun.awt.motif.MEmbeddedFrame( windowHandle );
+                        if( aCtor != null )
+                        {
+                            aFrame = (java.awt.Frame) aCtor.newInstance( new Object[] { new Long( windowHandle ),
+                                                                                    new Boolean( false ) } );
+                        }
+                    }
+                    catch( Exception e )
+                    {
+                    }
+
+                    if( aFrame == null )
+                    {
+                        try
+                        {
+                            Constructor aCtor = aClass.getConstructor( new Class[] { long.class } );
+
+                            if( aCtor != null )
+                            {
+                                 aFrame = (java.awt.Frame) aCtor.newInstance( new Object[] { new Long( windowHandle ) } );
+                            }
+                        }
+                        catch( Exception e )
+                        {
+                        }
+                    }
+                }
+            }
+            catch( Exception e )
+            {
+            }
+        }
+        else
+        {
+            try
+            {
+                Class aClass = Class.forName( "sun.awt.motif.MEmbeddedFrame" );
+
+                if( aClass != null )
+                {
+                    Constructor aCtor = aClass.getConstructor( new Class[] { long.class } );
+
+                    if( aCtor != null )
+                    {
+                        aFrame = (java.awt.Frame) aCtor.newInstance( new Object[] { new Long( windowHandle ) } );
+                    }
+                }
+            }
+            catch( Exception e )
+            {
+            }
+
+            if( aFrame == null )
+            {
+                try
+                {
+                    Class aClass = Class.forName( "sun.awt.X11.XEmbeddedFrame" );
+
+                    if( aClass != null )
+                    {
+                        Constructor aCtor = aClass.getConstructor( new Class[] { long.class } );
+
+                        if( aCtor != null )
+                            aFrame = (java.awt.Frame) aCtor.newInstance( new Object[] { new Long( windowHandle ) } );
+                    }
+                }
+                catch( Exception e )
+                {
+                }
+            }
+        }
+
+        return aFrame;
     }
 }
