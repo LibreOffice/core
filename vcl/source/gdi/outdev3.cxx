@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: hdu $ $Date: 2002-08-01 13:27:08 $
+ *  last change: $Author: hdu $ $Date: 2002-08-02 17:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,6 @@ static void ImplRotatePos( long nOriginX, long nOriginY, long& rX, long& rY,
             rY += nOriginY;
         }
     }
-
     else
     {
         double nRealOrientation = nOrientation*F_PI1800;
@@ -4280,8 +4279,8 @@ void OutputDevice::ImplGetEmphasisMark( PolyPolygon& rPolyPoly, BOOL& rPolyLine,
             break;
     }
 
-    // Calculate Position
-    long nOffY = 1+(mnDPIY/300); // One visible pixel space
+    // calculate position
+    long nOffY = 1+(mnDPIY/300); // one visible pixel space
     long nSpaceY = nHeight-nDotSize;
     if ( nSpaceY >= nOffY*2 )
         rYOff += nOffY;
@@ -4329,9 +4328,7 @@ void OutputDevice::ImplDrawEmphasisMark( long nX, long nY,
 
 // -----------------------------------------------------------------------
 
-void OutputDevice::ImplDrawEmphasisMarks( long nX, long nY,
-                                          const sal_Unicode* pStr, xub_StrLen nLen,
-                                          const long* pDXAry )
+void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
 {
     Color               aOldColor       = GetTextColor();
     Color               aOldLineColor   = GetLineColor();
@@ -4348,8 +4345,6 @@ void OutputDevice::ImplDrawEmphasisMarks( long nX, long nY,
     long                nEmphasisYOff;
     long                nEmphasisWidth;
     long                nEmphasisHeight;
-    long                nEmphasisWidth2;
-    long                nEmphasisHeight2;
     BOOL                bPolyLine;
 
     if ( nEmphasisMark & EMPHASISMARK_POS_BELOW )
@@ -4374,49 +4369,40 @@ void OutputDevice::ImplDrawEmphasisMarks( long nX, long nY,
         SetFillColor( GetTextColor() );
     }
 
-    long                nOffX = nX - mnOutOffX;
-    long                nOffY = nY - mnOutOffY;
-    long                nBaseX = nOffX;
-    long                nBaseY = nOffY;
-    xub_StrLen          i = 0;
+    Point aOffset = Point(0,0);
+
     if ( nEmphasisMark & EMPHASISMARK_POS_BELOW )
-        nOffY += mpFontEntry->maMetric.mnDescent+nEmphasisYOff;
-
+        aOffset.Y() += mpFontEntry->maMetric.mnDescent + nEmphasisYOff;
     else
-        nOffY -= mpFontEntry->maMetric.mnAscent+nEmphasisYOff;
+        aOffset.Y() -= mpFontEntry->maMetric.mnAscent + nEmphasisYOff;
 
-    nEmphasisWidth2     = nEmphasisWidth / 2;
-    nEmphasisHeight2    = nEmphasisHeight / 2;
-    nOffY += nEmphasisHeight2;
+    long nEmphasisWidth2     = nEmphasisWidth / 2;
+    long nEmphasisHeight2    = nEmphasisHeight / 2;
+    aOffset += Point( nEmphasisWidth2, nEmphasisHeight2 );
 
-    while ( i < nLen )
+    Point aOutPoint;
+    for( int nStart = 0;;)
     {
-        if ( ImplIsLineCharacter( *(pStr+i) ) )
+        long nGlyphIndex, nAdvance;
+        if( !rSalLayout.GetNextGlyphs( 1, &nGlyphIndex, aOutPoint, nStart, &nAdvance ) )
+            break;
+
+        if( !rSalLayout.IsSpacingGlyph( nGlyphIndex ) )
         {
-#ifdef ENABLE_CTL
-            // TODO: fix CTL case
-            long nStartX = 100;
-            long nEndX = 110;
-#else // ENABLE_CTL
-            long nStartX = ImplGetTextWidth( pStr, i, pDXAry );
-            long nEndX = ImplGetTextWidth( pStr, i+1, pDXAry );
-#endif
-            long nOutX = nOffX + nStartX + ((nEndX-nStartX-nEmphasisWidth)/2) + nEmphasisWidth2;
-            long nOutY = nOffY;
+            Point aAdjOffset = aOffset;
+            aAdjOffset.X() += (nAdvance - nEmphasisWidth) / 2;
             if ( mpFontEntry->mnOrientation )
-                ImplRotatePos( nBaseX, nBaseY, nOutX, nOutY, mpFontEntry->mnOrientation );
-            nOutX -= nEmphasisWidth2;
-            nOutY -= nEmphasisHeight2;
-            ImplDrawEmphasisMark( nOutX, nOutY,
+                ImplRotatePos( 0, 0, aAdjOffset.X(), aAdjOffset.Y(), mpFontEntry->mnOrientation );
+            aOutPoint += aAdjOffset;
+            aOutPoint -= Point( nEmphasisWidth2, nEmphasisHeight2 );
+            aOutPoint -= Point( mnOutOffX, mnOutOffY );
+            ImplDrawEmphasisMark( aOutPoint.X(), aOutPoint.Y(),
                                   aPolyPoly, bPolyLine,
                                   aRect1, aRect2 );
         }
-
-        i++;
     }
 
     SetLineColor( aOldLineColor );
-
     SetFillColor( aOldFillColor );
     mbMap = bOldMap;
     mpMetaFile = pOldMetaFile;
@@ -4619,7 +4605,7 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout, BOOL bTextLines )
 
     // emphasis marks
     if( maFont.GetEmphasisMark() & EMPHASISMARK_STYLE )
-;//###TODO:        ImplDrawEmphasisMarks( rSalLayout );
+        ImplDrawEmphasisMarks( rSalLayout );
 }
 
 // -----------------------------------------------------------------------
@@ -5653,7 +5639,7 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
 
 xub_StrLen OutputDevice::GetTextBreak( const String& rOrigStr, long nTextWidth,
                                        xub_StrLen nIndex, xub_StrLen nLen,
-                                       long nCharExtra ) const
+                                       long nCharExtra, BOOL /*bCellBreaking*/ ) const
 {
     DBG_TRACE( "OutputDevice::GetTextBreak()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
