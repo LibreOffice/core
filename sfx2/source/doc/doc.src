@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-10 21:15:51 $
+ *  last change: $Author: rt $ $Date: 2002-01-14 21:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2158,7 +2158,7 @@ QueryBox DLG_MACROQUERY
     Title [ english ] = "Execute Macro" ;
     Title [ english_us ] = "Run Macro" ;
     Title [ french ] = "Ex�cuter une macro" ;
-    Title[ italian ] = "Esegui macro";
+    Title[ italian ] = "Questo documento contiene macro. $(TEXT)";
     Title[ portuguese_brazilian ] = "Makro ausf?ren";
     Title[ portuguese ] = "Executar macro";
     Title[ danish ] = "Udf�r makro";
@@ -2186,6 +2186,8 @@ QueryBox DLG_MACROQUERY
     Message[ french ] = "Ce document contient des macros. $(TEXT)";
     Message[ spanish ] = "Ejecutar macro";
     Message[ japanese ] = "このドキュメントにはマクロが含まれています。$(TEXT)";
+    Message[ italian ] = "Dieses Dokument enth�lt Makros. $(TEXT)";
+    Message[ korean ] = "이 문서에는 매크로가 포함되어 있습니다. $(TEXT)";
 };
 
 String BTN_OK
@@ -2252,6 +2254,8 @@ String FT_CANCEL
     Text[ french ] = "Les param�tres de s�curit� n'autorisent normalement pas l'ex�cution des macros de ce document. Ex�cuter quand m�me ?";
     Text[ spanish ] = "Por motivos de seguridad las macros de este documento no se deber�an ejecutar. �Desea ejecutarlas a pesar de todo?";
     Text[ japanese ] = "セキュリティ設定に従うと、このドキュメントのマクロは実行できません。それでも実行しますか。";
+    Text[ italian ] = "In base alle impostazioni di sicurezza le macro di questo documento non devono essere eseguite. Volete eseguirle ugualmente?";
+    Text[ korean ] = "보안 설정에 따라 이 문서의 매크로는 실행될 수 없습니다. 이 매크로를 실행하시겠습니까?";
 };
 String FT_OK
 {
@@ -2260,9 +2264,12 @@ String FT_OK
     Text [english_us] = "Do you want to allow these macros to be run?";
     Text[ french ] = "Voulez-vous autoriser l'ex�cution de ces macros ?";
     Text[ spanish ] = "�Desea autorizar la ejecuci�n de estas macros?";
+    Text[ italian ] = "Volete far eseguire questa macro?";
+    Text[ korean ] = "이 매크로가 실행되도록 허락하시겠습니까?";
 };
 
 // ******************************************************************* EOF
+
 
 
 
