@@ -3,9 +3,9 @@
  *
  *  $RCSfile: VCL.xcs,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:34:51 $
+ *  last change: $Author: kz $ $Date: 2004-08-30 16:19:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,14 +90,14 @@
 					<desc>Contains a list of substitute fonts used in a HTML context (for example, HTML import/export).</desc>
 				</info>
 			</prop>
-			<prop oor:name="FontWidth" oor:type="xs:string">
-				<info>
-					<desc>Specifies the font width. Valid values are &quot;thin&quot;, &quot;ultralight&quot;, &quot;light&quot;, &quot;semilight&quot;, &quot;normal&quot;, &quot;medium&quot;, &quot;semibold&quot;, &quot;bold&quot;, &quot;ultrabold&quot;, &quot;black&quot; (in ascending order of weight) and &quot;unknown&quot;.</desc>
-				</info>
-			</prop>
 			<prop oor:name="FontWeight" oor:type="xs:string">
 				<info>
-					<desc>Specifies the font weight. Valid values are &quot;ultracondensed&quot;, &quot;extracondensed&quot;, &quot;condensed&quot;, &quot;semicondensed&quot;, &quot;normal&quot;, &quot;semiexpanded&quot;, &quot;expanded&quot;, &quot;extraexpanded&quot;, &quot;ultraexpanded&quot; (in ascending order of width) and &quot;unknown&quot;.</desc>
+					<desc>Specifies the font weight. Valid values are &quot;thin&quot;, &quot;ultralight&quot;, &quot;light&quot;, &quot;semilight&quot;, &quot;normal&quot;, &quot;medium&quot;, &quot;semibold&quot;, &quot;bold&quot;, &quot;ultrabold&quot;, &quot;black&quot; (in ascending order of weight) and &quot;unknown&quot;.</desc>
+				</info>
+			</prop>
+			<prop oor:name="FontWidth" oor:type="xs:string">
+				<info>
+					<desc>Specifies the font width. Valid values are &quot;ultracondensed&quot;, &quot;extracondensed&quot;, &quot;condensed&quot;, &quot;semicondensed&quot;, &quot;normal&quot;, &quot;semiexpanded&quot;, &quot;expanded&quot;, &quot;extraexpanded&quot;, &quot;ultraexpanded&quot; (in ascending order of width) and &quot;unknown&quot;.</desc>
 				</info>
 			</prop>
 			<prop oor:name="FontType" oor:type="xs:string">
@@ -146,15 +146,4 @@
 		</set>
 	</component>
 </oor:component-schema>
-
-
-
-
-
-
-
-
-
-
-
 
