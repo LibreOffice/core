@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xicontent.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:16:42 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:35:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,12 +70,6 @@
 #include "xicontent.hxx"
 #endif
 
-#ifndef _SV_GRAPH_HXX
-#include <vcl/graph.hxx>
-#endif
-#ifndef _SV_BMPACC_HXX
-#include <vcl/bmpacc.hxx>
-#endif
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
 #endif
@@ -107,9 +101,6 @@
 #define ITEMID_FIELD EE_FEATURE_FIELD
 #ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
-#endif
-#ifndef _SVX_BRSHITEM_HXX
-#include <svx/brshitem.hxx>
 #endif
 #ifndef _SVX_FLDITEM_HXX
 #include <svx/flditem.hxx>
@@ -173,6 +164,9 @@
 #ifndef SC_XIESCHER_HXX
 #include "xiescher.hxx"
 #endif
+#ifndef SC_XILINK_HXX
+#include "xilink.hxx"
+#endif
 
 #include "excform.hxx"
 
@@ -203,57 +197,6 @@ ScBaseCell* XclImpSst::CreateCell( sal_uInt32 nSstIndex, sal_uInt32 nXFIndex ) c
     if( !pString )
         pString = &maErrorString;
     return XclImpStringHelper::CreateCell( *this, *pString, nXFIndex );
-}
-
-
-// Background bitmap ==========================================================
-
-void XclImpBitmap::ReadBitmap( XclImpStream& rStrm )
-{
-    const XclImpRoot& rRoot = rStrm.GetRoot();
-    DBG_ASSERT( rRoot.mpRD->pStyleSheetItemSet, "XclImpBitmap::ReadBitmap - no itemset" );
-    if( !rRoot.mpRD->pStyleSheetItemSet ) return;
-    SfxItemSet& rItemSet = *rRoot.mpRD->pStyleSheetItemSet;
-
-    sal_uInt32 nID;
-    sal_uInt16 nWidth, nHeight, nPlanes, nDepth;
-
-    rStrm >> nID;
-    rStrm.Ignore( 8 );
-    rStrm >> nWidth >> nHeight >> nPlanes >> nDepth;
-
-    DBG_ASSERT( nID == EXC_BITMAP_UNKNOWNID, "XclImpBitmap::ReadBitmap - wrong ID" );
-    DBG_ASSERT( nDepth == 24, "XclImpBitmap::ReadBitmap - wrong depth" );
-    DBG_ASSERT( nPlanes == 1, "XclImpBitmap::ReadBitmap - wrong plane count" );
-    if( rStrm.IsValid() && (nID == EXC_BITMAP_UNKNOWNID) && (nDepth == 24) && (nPlanes == 1) )
-    {
-        sal_uInt32 nPadding = nWidth % 4;
-        if( rStrm.GetRecLeft() == (nWidth * 3UL + nPadding) * nHeight )
-        {
-            sal_Int32 nVclWidth = nWidth;
-            sal_Int32 nVclHeight = nHeight;
-            Bitmap aBmp( Size( nVclWidth, nVclHeight ), nDepth );
-            BitmapWriteAccess* pAccess = aBmp.AcquireWriteAccess();
-            if( pAccess )
-            {
-                sal_uInt8 nBlue, nGreen, nRed;
-                for( sal_Int32 nY = nVclHeight - 1; nY >= 0; --nY )
-                {
-                    for( sal_Int32 nX = 0; nX < nVclWidth; ++nX )
-                    {
-                        rStrm >> nBlue >> nGreen >> nRed;
-                        pAccess->SetPixel( nY, nX, BitmapColor( nRed, nGreen, nBlue ) );
-                    }
-                    rStrm.Ignore( nPadding );
-                }
-
-                aBmp.ReleaseAccess( pAccess );
-                rItemSet.Put( SvxBrushItem( Graphic( aBmp ), GPOS_TILED ) );
-            }
-        }
-        else
-            DBG_ERRORFILE( "XclImpBitmap::ReadBitmap - record size invalid" );
-    }
 }
 
 
@@ -982,17 +925,18 @@ void XclImpWebQueryBuffer::ReadQsi( XclImpStream& rStrm )
     if( GetBiff() == xlBiff8 )
     {
         rStrm.Ignore( 10 );
-        String aName;
-        rStrm.AppendUniString( aName );
+        String aXclName;
+        rStrm.AppendUniString( aXclName );
 
-        ScRangeName& rRangeNames = GetNamedRanges();
-        sal_uInt16 nIndex;
-        if( rRangeNames.SearchName( aName, nIndex ) )
+        // #101529# find the defined name used in Calc
+        if( const XclImpName* pName = GetNameBuffer().FindName( aXclName, GetScTab() ) )
         {
-            const ScRangeData* pRangeData = rRangeNames[ nIndex ];
-            ScRange aRange;
-            if( pRangeData && pRangeData->IsReference( aRange ) )
-                maWQList.Append( new XclImpWebQuery( aRange ) );
+            if( const ScRangeData* pRangeData = pName->GetScRangeData() )
+            {
+                ScRange aRange;
+                if( pRangeData->IsReference( aRange ) )
+                    maWQList.Append( new XclImpWebQuery( aRange ) );
+            }
         }
     }
     else
