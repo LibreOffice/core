@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-09 15:08:55 $
+#   last change: $Author: kz $ $Date: 2005-01-14 11:32:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -136,7 +136,9 @@ CONFIGURE_ACTION=$(BACK_PATH)..$/..$/convert.bat
 .ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
 BUILD_ACTION_SEP=;
+.IF "$(COMEX)"=="8"
 CONFIGURE_ACTION=sh $(BACK_PATH)..$/..$/convert.sh
+.ENDIF
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 BUILD_DIR=source
 .IF "full_debug" == ""
@@ -168,7 +170,7 @@ ICU_BUILD_LIBPOST=
 CONFIGURE_ACTION+= $(BUILD_ACTION_SEP) wdevenv allinone$/allinone $(ICU_BUILD_VERSION)
 BUILD_ACTION=devenv allinone$/allinone.sln /build $(ICU_BUILD_VERSION) /project all /useenv
 .ELIF "$(COMEX)"=="10"
-CONFIGURE_ACTION+= $(BUILD_ACTION_SEP) cp ..$/..$/..$/..$/..$/makefiles.zip . $(BUILD_ACTION_SEP) unzip makefiles.zip
+CONFIGURE_ACTION+= $(COPY) ..$/..$/..$/..$/..$/makefiles.zip . $(BUILD_ACTION_SEP) unzip makefiles.zip
 BUILD_ACTION=cd allinone$/all && cmd /c nmake /f all.mak CFG="all - Win32 Release" && cd ..$/..
 .ELSE
 BUILD_ACTION=msdev allinone$/allinone.dsw /useenv /MAKE "all - Win32 $(ICU_BUILD_VERSION)"
