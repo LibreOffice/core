@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-07 18:38:06 $
+ *  last change: $Author: mba $ $Date: 2002-03-27 17:24:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1364,7 +1364,7 @@ void SfxViewFrame::ReleaseObjectShell_Impl( sal_Bool bStoreView )
         xObjSh->DoClose();
     SfxObjectShellRef xDyingObjSh = xObjSh;
     xObjSh.Clear();
-    if( ( GetFrameType() & SFXFRAME_HASTITLE  ))
+    if( ( GetFrameType() & SFXFRAME_HASTITLE ) && pImp->nDocViewNo )
         xDyingObjSh->GetNoSet_Impl().ReleaseIndex(pImp->nDocViewNo-1);
     if ( pImp->bObjLocked )
     {
