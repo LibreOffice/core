@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides3.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ab $ $Date: 2002-10-31 12:42:44 $
+ *  last change: $Author: vg $ $Date: 2003-03-26 12:48:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,10 @@
 #include <basidesh.hxx>
 #include <baside3.hxx>
 #include <basobj.hxx>
+
+#ifndef _BASCTL_DLGEDVIEW_HXX
+#include <dlgedview.hxx>
+#endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
