@@ -2,8 +2,8 @@
  *
  *  $RCSfile: charmap.src,v $
  *
- *  $Revision: 1.40 $
- *  last change: $Author: pb $ $Date: 2001-12-17 14:01:59 $
+ *  $Revision: 1.41 $
+ *  last change: $Author: kz $ $Date: 2001-12-21 21:32:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ ModalDialog RID_SVXDLG_CHARMAP
         Text[ dutch ] = "~Bereik";
         Text[ french ] = "~Sous-ensemble";
         Text[ spanish ] = "~Área";
-        Text[ italian ] = "Set di ~caratteri";
+        Text[ italian ] = "Set ~caratt.";
         Text[ danish ] = "~Subset";
         Text[ swedish ] = "~Område";
         Text[ polish ] = "~Obszar";
@@ -2702,6 +2702,7 @@ String RID_SUBSETSTR_MONGOLIAN
 };
 
 // ********************************************************************** EOF
+
 
 
 
