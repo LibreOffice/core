@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.1 2000-09-29 16:16:04 mh Exp $
+	$Id: text.mod,v 1.2 2000-10-04 18:47:05 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -57,7 +57,6 @@
 				   text:time |
 				   text:page-number |
 				   text:page-continuation |
-				   text:sender-firstname |
 				   text:sender-firstname |
 				   text:sender-lastname |
 				   text:sender-initials | 
