@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 12:02:13 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:10:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,6 @@
  * fuer alle Nodes, Attribute, Formate und Chars.
  */
 
-
-#pragma hdrstop
 
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 #ifndef _HINTIDS_HXX
@@ -1213,28 +1211,66 @@ static Writer& OutWW8_SwUnderline( Writer& rWrt, const SfxPoolItem& rHt )
                             //  6 = thick,   7 = dash,       8 = dot(not used)
                             //  9 = dotdash 10 = dotdotdash, 11 = wave
     BYTE b = 0;
-    switch( rAttr.GetUnderline() )
+    switch (rAttr.GetUnderline())
     {
-    case UNDERLINE_SINGLE:          b = ( bWord ) ? 2 : 1;          break;
-    case UNDERLINE_BOLD:            b = rWrtWW8.bWrtWW8 ?  6 : 1;   break;
-    case UNDERLINE_DOUBLE:          b = 3;                          break;
-    case UNDERLINE_DOTTED:          b = 4;                          break;
-    case UNDERLINE_DASH:            b = rWrtWW8.bWrtWW8 ?  7 : 4;   break;
-    case UNDERLINE_DASHDOT:         b = rWrtWW8.bWrtWW8 ?  9 : 4;   break;
-    case UNDERLINE_DASHDOTDOT:      b = rWrtWW8.bWrtWW8 ? 10 : 4;   break;
-    case UNDERLINE_WAVE:            b = rWrtWW8.bWrtWW8 ? 11 : 3;   break;
-    // -------------  new in WW2000  -------------------------------------
-    case UNDERLINE_BOLDDOTTED:      b = rWrtWW8.bWrtWW8 ? 20 : 4;   break;
-    case UNDERLINE_BOLDDASH:        b = rWrtWW8.bWrtWW8 ? 23 : 4;   break;
-    case UNDERLINE_LONGDASH:        b = rWrtWW8.bWrtWW8 ? 39 : 4;   break;
-    case UNDERLINE_BOLDLONGDASH:    b = rWrtWW8.bWrtWW8 ? 55 : 4;   break;
-    case UNDERLINE_BOLDDASHDOT:     b = rWrtWW8.bWrtWW8 ? 25 : 4;   break;
-    case UNDERLINE_BOLDDASHDOTDOT:  b = rWrtWW8.bWrtWW8 ? 26 : 4;   break;
-    case UNDERLINE_BOLDWAVE:        b = rWrtWW8.bWrtWW8 ? 27 : 3;   break;
-    case UNDERLINE_DOUBLEWAVE:      b = rWrtWW8.bWrtWW8 ? 43 : 3;   break;
+        case UNDERLINE_SINGLE:
+            b = ( bWord ) ? 2 : 1;
+            break;
+        case UNDERLINE_BOLD:
+            b = rWrtWW8.bWrtWW8 ?  6 : 1;
+            break;
+        case UNDERLINE_DOUBLE:
+            b = 3;
+            break;
+        case UNDERLINE_DOTTED:
+            b = 4;
+            break;
+        case UNDERLINE_DASH:
+            b = rWrtWW8.bWrtWW8 ?  7 : 4;
+            break;
+        case UNDERLINE_DASHDOT:
+            b = rWrtWW8.bWrtWW8 ?  9 : 4;
+            break;
+        case UNDERLINE_DASHDOTDOT:
+            b = rWrtWW8.bWrtWW8 ? 10 : 4;
+            break;
+        case UNDERLINE_WAVE:
+            b = rWrtWW8.bWrtWW8 ? 11 : 3;
+            break;
+        // ------------  new in WW2000  -------------------------------------
+        case UNDERLINE_BOLDDOTTED:
+            b = rWrtWW8.bWrtWW8 ? 20 : 4;
+            break;
+        case UNDERLINE_BOLDDASH:
+            b = rWrtWW8.bWrtWW8 ? 23 : 4;
+            break;
+        case UNDERLINE_LONGDASH:
+            b = rWrtWW8.bWrtWW8 ? 39 : 4;
+            break;
+        case UNDERLINE_BOLDLONGDASH:
+            b = rWrtWW8.bWrtWW8 ? 55 : 4;
+            break;
+        case UNDERLINE_BOLDDASHDOT:
+            b = rWrtWW8.bWrtWW8 ? 25 : 4;
+            break;
+        case UNDERLINE_BOLDDASHDOTDOT:
+            b = rWrtWW8.bWrtWW8 ? 26 : 4;
+            break;
+        case UNDERLINE_BOLDWAVE:
+            b = rWrtWW8.bWrtWW8 ? 27 : 3;
+            break;
+        case UNDERLINE_DOUBLEWAVE:
+            b = rWrtWW8.bWrtWW8 ? 43 : 3;
+            break;
+        case UNDERLINE_NONE:
+            b = 0;
+            break;
+        default:
+            ASSERT(rAttr.GetUnderline() == UNDERLINE_NONE, "Unhandled underline type");
+            break;
     }
 
-    rWrtWW8.pO->Insert( b, rWrtWW8.pO->Count() );
+    rWrtWW8.pO->Insert(b, rWrtWW8.pO->Count());
     return rWrt;
 }
 
@@ -3256,11 +3292,14 @@ static Writer& OutWW8_SwFmtBreak( Writer& rWrt, const SfxPoolItem& rHt )
         case SVX_BREAK_PAGE_BEFORE:
         case SVX_BREAK_PAGE_BOTH:
             // sprmPPageBreakBefore/sprmPFPageBreakBefore
-            if( rWW8Wrt.bWrtWW8 )
-                rWW8Wrt.InsUInt16( 0x2407 );
+            if (rWW8Wrt.bWrtWW8)
+                rWW8Wrt.InsUInt16(0x2407);
             else
-                rWW8Wrt.pO->Insert( 9, rWW8Wrt.pO->Count() );
-            rWW8Wrt.pO->Insert(rBreak.GetValue() ? 1 : 0, rWW8Wrt.pO->Count());
+                rWW8Wrt.pO->Insert(9, rWW8Wrt.pO->Count());
+            rWW8Wrt.pO->Insert(rBreak.GetValue() ? 1 : 0,
+                rWW8Wrt.pO->Count());
+            break;
+        default:
             break;
         }
     }
@@ -3302,6 +3341,8 @@ static Writer& OutWW8_SwFmtBreak( Writer& rWrt, const SfxPoolItem& rHt )
         case SVX_BREAK_PAGE_AFTER:
         case SVX_BREAK_PAGE_BOTH:
             nC = 0xc;
+            break;
+        default:
             break;
         }
 
@@ -3656,16 +3697,20 @@ static Writer& OutWW8_SwFmtAnchor( Writer& rWrt, const SfxPoolItem& rHt )
         BYTE nP = 0;
         switch( rAnchor.GetAnchorId() )
         {
-        case FLY_PAGE:      nP |= ( 1 << 4 )        // Vert: Page
-                                  | ( 2 << 6 );     // Horz: Page
-                            break;
-        // Im Fall eine Flys als Zeichen: Absatz-gebunden setzen!!!
-        case FLY_AT_FLY:
-        case FLY_AUTO_CNTNT:
-        case FLY_AT_CNTNT:
-        case FLY_IN_CNTNT:  nP |= ( 2 << 4 )        // Vert: Text
-                                  | ( 0 << 6 );     // Horz: Column
-                            break;
+            case FLY_PAGE:
+                // Vert: Page | Horz: Page
+                nP |= (1 << 4) | (2 << 6);
+                break;
+            // Im Fall eine Flys als Zeichen: Absatz-gebunden setzen!!!
+            case FLY_AT_FLY:
+            case FLY_AUTO_CNTNT:
+            case FLY_AT_CNTNT:
+            case FLY_IN_CNTNT:
+                // Vert: Page | Horz: Page
+                nP |= (2 << 4) | (0 << 6);
+                break;
+            default:
+                break;
         }
 
         // sprmPPc
@@ -3796,7 +3841,7 @@ WW8_BRC SwWW8Writer::TranslateBorderLine(const SvxBorderLine& rLine,
 void SwWW8Writer::Out_BorderLine(WW8Bytes& rO, const SvxBorderLine* pLine,
     USHORT nDist, USHORT nOffset, bool bShadow)
 {
-    ASSERT( (0 <= nOffset && nOffset <= 3) || USHRT_MAX == nOffset ||
+    ASSERT( (nOffset <= 3) || USHRT_MAX == nOffset ||
             ((0x702b - 0x6424) <= nOffset && nOffset <= (0x702e - 0x6424)),
                 "SprmOffset ausserhalb des Bereichs" );
 
@@ -4068,15 +4113,17 @@ static Writer& OutWW8_SvxLineSpacing( Writer& rWrt, const SfxPoolItem& rHt )
 
     short nSpace = 240, nMulti = 0;
 
-    switch( rAttr.GetLineSpaceRule() )
+    switch (rAttr.GetLineSpaceRule())
     {
-    case SVX_LINE_SPACE_AUTO:
-    case SVX_LINE_SPACE_FIX:
-    case SVX_LINE_SPACE_MIN:
+        default:
+            break;
+        case SVX_LINE_SPACE_AUTO:
+        case SVX_LINE_SPACE_FIX:
+        case SVX_LINE_SPACE_MIN:
         {
-            switch( rAttr.GetInterLineSpaceRule() )
+            switch (rAttr.GetInterLineSpaceRule())
             {
-            case SVX_INTER_LINE_SPACE_FIX:      // unser Durchschuss
+                case SVX_INTER_LINE_SPACE_FIX:      // unser Durchschuss
                 {
                     // gibt es aber nicht in WW - also wie kommt man an
                     // die MaxLineHeight heran?
@@ -4113,7 +4160,6 @@ static Writer& OutWW8_SvxLineSpacing( Writer& rWrt, const SfxPoolItem& rHt )
                 nSpace = (short)(( 240L * rAttr.GetPropLineSpace() ) / 100L );
                 nMulti = 1;
                 break;
-
             default:                    // z.B. Minimum oder FIX?
                 if( SVX_LINE_SPACE_FIX == rAttr.GetLineSpaceRule() )
                     nSpace = -(short)rAttr.GetLineHeight();
@@ -4125,8 +4171,8 @@ static Writer& OutWW8_SvxLineSpacing( Writer& rWrt, const SfxPoolItem& rHt )
         break;
     }
 
-    rWrtWW8.InsUInt16( nSpace );
-    rWrtWW8.InsUInt16( nMulti );
+    rWrtWW8.InsUInt16(nSpace);
+    rWrtWW8.InsUInt16(nMulti);
     return rWrt;
 }
 
@@ -4363,6 +4409,8 @@ void SwWW8WrTabu::Add(const SvxTabStop & rTS, long nAdjustment)
             is a .
             */
             nPara = 3;
+            break;
+        default:
             break;
     }
 
