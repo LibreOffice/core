@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:01:44 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:45:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,11 +168,15 @@ namespace dbaui
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
         virtual FeatureState    GetState(sal_uInt16 nId) const;
         // execute a feature
-        virtual void            Execute(sal_uInt16 nId);
-        virtual ToolBox*        CreateToolBox(Window* pParent);
+        virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
 
         virtual void            reconnect( sal_Bool _bUI );
         virtual void            updateTitle( );
+        /** can be used to load sub toolbars, will be called by the <method>loadMenu</method>.
+            @param _xLayoutManager
+                The layout manager.
+        */
+        virtual void            loadSubToolbar(const ::com::sun::star::uno::Reference< drafts::com::sun::star::frame::XLayoutManager >& _xLayoutManager);
 
 
         OQueryContainerWindow*  getContainer() const { return static_cast< OQueryContainerWindow* >( getView() ); }
