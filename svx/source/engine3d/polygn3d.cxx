@@ -2,9 +2,9 @@
  *
  *  $RCSfile: polygn3d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-20 09:51:03 $
+ *  last change: $Author: aw $ $Date: 2001-01-26 14:01:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,61 +520,6 @@ void E3dPolygonObj::operator=(const SdrObject& rObj)
     aPolyTexture3D   = r3DObj.aPolyTexture3D;
     bLineOnly        = r3DObj.bLineOnly;
 }
-
-/*************************************************************************
-|*
-|* uebergebene Transformationsmatrix anwenden
-|*
-\************************************************************************/
-
-//void E3dPolygonObj::ApplyTransform(const Matrix4D& rMatrix)
-//{
-//  // call parent
-//  E3dCompoundObject::ApplyTransform(rMatrix);
-//
-//  // Anwenden auf lokale geometrie
-//  aPolyPoly3D.Transform(rMatrix);
-//}
-
-/*************************************************************************
-|*
-|* Attribute setzen
-|*
-\************************************************************************/
-
-//-/void E3dPolygonObj::Distribute3DAttributes(const SfxItemSet& rAttr)
-//-/{
-//-/    // call parent
-//-/    E3dCompoundObject::Distribute3DAttributes(rAttr);
-//-/}
-
-//-/void E3dPolygonObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
-//-/{
-//-/    // call parent
-//-/    E3dCompoundObject::NbcSetAttributes(rAttr, bReplaceAll);
-//-/
-//-/    // special Attr for E3dPolygonObj
-//-/}
-
-/*************************************************************************
-|*
-|* Attribute lesen
-|*
-\************************************************************************/
-
-//-/void E3dPolygonObj::Collect3DAttributes(SfxItemSet& rAttr) const
-//-/{
-//-/    // call parent
-//-/    E3dCompoundObject::Collect3DAttributes(rAttr);
-//-/}
-
-//-/void E3dPolygonObj::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTBOOL bOnlyHardAttr) const
-//-/{
-//-/    // call parent
-//-/    E3dCompoundObject::TakeAttributes(rAttr, bMerge, bOnlyHardAttr);
-//-/
-//-/    // special Attr for E3dPolygonObj
-//-/}
 
 /*************************************************************************
 |*

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cube3d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-20 09:51:03 $
+ *  last change: $Author: aw $ $Date: 2001-01-26 14:01:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,24 +360,6 @@ void E3dCubeObj::operator=(const SdrObject& rObj)
 
 /*************************************************************************
 |*
-|* uebergebene Transformationsmatrix anwenden
-|*
-\************************************************************************/
-
-//void E3dCubeObj::ApplyTransform(const Matrix4D& rMatrix)
-//{
-//  // call parent
-//  E3dCompoundObject::ApplyTransform(rMatrix);
-//
-//  // Anwenden auf lokale geometrie
-//  Vector3D aOuterEdge = aCubePos + aCubeSize;
-//  aCubePos *= rMatrix;
-//  aOuterEdge *= rMatrix;
-//  aCubeSize = aOuterEdge - aCubePos;
-//}
-
-/*************************************************************************
-|*
 |* Lokale Parameter setzen mit Geometrieneuerzeugung
 |*
 \************************************************************************/
@@ -417,46 +399,6 @@ void E3dCubeObj::SetSideFlags(UINT16 nNew)
         bGeometryValid = FALSE;
     }
 }
-
-/*************************************************************************
-|*
-|* Attribute setzen
-|*
-\************************************************************************/
-
-//-/void E3dCubeObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
-//-/{
-//-/    // call parent
-//-/    E3dCompoundObject::NbcSetAttributes(rAttr, bReplaceAll);
-//-/
-//-/    // special Attr for E3dCubeObj
-//-/}
-
-//-/void E3dCubeObj::Distribute3DAttributes(const SfxItemSet& rAttr)
-//-/{
-//-/    // call parent
-//-/    E3dCompoundObject::Distribute3DAttributes(rAttr);
-//-/}
-
-/*************************************************************************
-|*
-|* Attribute lesen
-|*
-\************************************************************************/
-
-//-/void E3dCubeObj::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTBOOL bOnlyHardAttr) const
-//-/{
-//-/    // call parent
-//-/    E3dCompoundObject::TakeAttributes(rAttr, bMerge, bOnlyHardAttr);
-//-/
-//-/    // special Attr for E3dCubeObj
-//-/}
-
-//-/void E3dCubeObj::Collect3DAttributes(SfxItemSet& rAttr) const
-//-/{
-//-/    // call parent
-//-/    E3dCompoundObject::Collect3DAttributes(rAttr);
-//-/}
 
 /*************************************************************************
 |*

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-30 14:58:17 $
+ *  last change: $Author: aw $ $Date: 2001-01-26 14:01:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,9 @@
 #include <gallery.hxx>
 #define GALLERY_THEME "3D"
 
+#ifndef _SFX_WHITER_HXX
+#include <svtools/whiter.hxx>
+#endif
 
 #include "float3d.hxx"
 #include "float3d.hrc"
@@ -298,6 +301,7 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
 
         pBindings           ( pInBindings ),
         pPool               ( NULL ),
+        mpRemember2DAttributes(NULL),
         bOnly3DChanged      ( FALSE )
 {
     FreeResource();
@@ -425,21 +429,6 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
 // -----------------------------------------------------------------------
 __EXPORT Svx3DWin::~Svx3DWin()
 {
-    // ListenSets loeschen
-    /*
-    if( pFavorSetList ) // sollte nicht NULL sein
-    {
-        SfxItemSet* pSet;
-        for( pSet = (SfxItemSet*) pFavorSetList->First();
-             pSet;
-             pSet = (SfxItemSet*) pFavorSetList->Next() )
-        {
-            delete pSet;
-        }
-        delete pFavorSetList;
-    }
-    */
-
     //delete pMatFavSetList;
     delete p3DView;
     delete pVDev;
@@ -450,6 +439,9 @@ __EXPORT Svx3DWin::~Svx3DWin()
     delete pConvertTo3DLatheItem;
 
     delete pLightGroup;
+
+    if(mpRemember2DAttributes)
+        delete mpRemember2DAttributes;
 }
 
 // -----------------------------------------------------------------------
@@ -541,6 +533,32 @@ void Svx3DWin::Reset()
 // -----------------------------------------------------------------------
 void Svx3DWin::Update( SfxItemSet& rAttrs )
 {
+    // remember 2d attributes
+    if(mpRemember2DAttributes)
+        mpRemember2DAttributes->ClearItem();
+    else
+        mpRemember2DAttributes = new SfxItemSet(*rAttrs.GetPool(),
+            SDRATTR_START, SDRATTR_SHADOW_LAST,
+            SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
+//          SDRATTR_START, SDRATTR_CIRC_LAST,
+//          SDRATTR_GRAF_FIRST, SDRATTR_3DSCENE_LAST,
+            0, 0);
+
+    SfxWhichIter aIter(*mpRemember2DAttributes);
+    sal_uInt16 nWhich(aIter.FirstWhich());
+
+    while(nWhich)
+    {
+        SfxItemState eState = rAttrs.GetItemState(nWhich, FALSE);
+        if(SFX_ITEM_DONTCARE == eState)
+            mpRemember2DAttributes->InvalidateItem(nWhich);
+        else if(SFX_ITEM_SET == eState)
+            mpRemember2DAttributes->Put(rAttrs.Get(nWhich, FALSE));
+
+        nWhich = aIter.NextWhich();
+    }
+
+    // construct field values
     const SfxPoolItem* pItem;
     BOOL bUpdate = FALSE;
 
@@ -1663,11 +1681,9 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     //aLbMatFavorites.SelectEntryPos( 0 );
 
     // Objektfarbe
-//-/    eState = rAttrs.GetItemState(SDRATTR_3DOBJ_MAT_COLOR);
     eState = rAttrs.GetItemState(XATTR_FILLCOLOR);
     if( eState != SFX_ITEM_DONTCARE )
     {
-//-/        aColor = ((const SvxColorItem&)rAttrs.Get(SDRATTR_3DOBJ_MAT_COLOR)).GetValue();
         aColor = ((const XFillColorItem&)rAttrs.Get(XATTR_FILLCOLOR)).GetValue();
         aCtlLightPreview.GetPreviewControl().SetMaterial( aColor, Base3DMaterialDiffuse );
         ColorLB* pLb = &aLbMatColor;
@@ -1789,7 +1805,20 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     {
         // Preview updaten
         aCtlLightPreview.GetPreviewControl().SetLightGroup( pLightGroup );
-        aCtlPreview.Set3DAttributes( rAttrs );
+
+        SfxItemSet aSet(rAttrs);
+
+        // set LineStyle hard to XLINE_NONE when it's not set so that
+        // the default (XLINE_SOLID) is not used for 3d preview
+        if(SFX_ITEM_SET != aSet.GetItemState(XATTR_LINESTYLE, FALSE))
+            aSet.Put(XLineStyleItem(XLINE_NONE));
+
+        // set FillColor hard to WHITE when it's SFX_ITEM_DONTCARE so that
+        // the default (Blue7) is not used for 3d preview
+        if(SFX_ITEM_DONTCARE == aSet.GetItemState(XATTR_FILLCOLOR, FALSE))
+            aSet.Put(XFillColorItem(String(), Color(COL_WHITE)));
+
+        aCtlPreview.Set3DAttributes(aSet);
     }
 
     // handle state of converts possible
@@ -1800,8 +1829,26 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
 // -----------------------------------------------------------------------
 void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
 {
-// 2D-Attribute und alle anderen holen
-    rAttrs.Put( aCtlPreview.Get3DAttributes() );
+    // 2D-Attribute und alle anderen holen
+//  rAttrs.Put( aCtlPreview.Get3DAttributes() );
+
+    // get remembered 2d attributes from the dialog
+    if(mpRemember2DAttributes)
+    {
+        SfxWhichIter aIter(*mpRemember2DAttributes);
+        sal_uInt16 nWhich(aIter.FirstWhich());
+
+        while(nWhich)
+        {
+            SfxItemState eState = mpRemember2DAttributes->GetItemState(nWhich, FALSE);
+            if(SFX_ITEM_DONTCARE == eState)
+                rAttrs.InvalidateItem(nWhich);
+            else if(SFX_ITEM_SET == eState)
+                rAttrs.Put(mpRemember2DAttributes->Get(nWhich, FALSE));
+
+            nWhich = aIter.NextWhich();
+        }
+    }
 
 // Sonstige, muss vorne stehen da auf allen Seiten
     // Perspektive
@@ -2289,12 +2336,10 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     if( aLbMatColor.GetSelectEntryCount() )
     {
         aColor = aLbMatColor.GetSelectEntryColor();
-//-/        rAttrs.Put( SvxColorItem( aColor, SDRATTR_3DOBJ_MAT_COLOR ) );
         rAttrs.Put( XFillColorItem( String(), aColor) );
     }
     else
     {
-//-/        rAttrs.InvalidateItem( SDRATTR_3DOBJ_MAT_COLOR );
         rAttrs.InvalidateItem( XATTR_FILLCOLOR );
     }
 
@@ -3196,12 +3241,13 @@ IMPL_LINK( Svx3DWin, ClickFavoriteHdl, void*, p )
         if( GalleryExplorer::GetSdrObj( GALLERY_THEME_3D, nItemId-1, pModel ) )
         {
             // VDev
-            if( pVDev == NULL )
+            if(!pVDev)
             {
                 pVDev = new VirtualDevice();
                 MapMode aMapMode( MAP_100TH_MM );
                 pVDev->SetMapMode( aMapMode );
             }
+
             // 3D View
             E3dView a3DView( pModel, pVDev );
             a3DView.SetMarkHdlHidden(TRUE);
@@ -3216,37 +3262,89 @@ IMPL_LINK( Svx3DWin, ClickFavoriteHdl, void*, p )
                 SID_3D_STATE, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 
             // Attribute des Favoriten holen und setzen
-            SfxItemSet* pSet;
+            SfxItemSet aFavoriteItemSet = a3DView.Get3DAttributes();
+
             if( aBtnOnly3D.IsChecked())
             {
-                // Normale (nicht-3D-) Attribute an der View
-                pSet = new SfxItemSet(
-                    pModel->GetItemPool(),
-                    SDRATTR_SHADOW,     SDRATTR_SHADOW,
-                    SDRATTR_3D_FIRST,   SDRATTR_3D_LAST,
-                    0, 0);
+                // throw out 2d attributes
+                for(sal_uInt16 a(SDRATTR_START); a < SDRATTR_3D_FIRST; a++)
+                {
+                    if(a != SDRATTR_SHADOW)
+                    {
+                        aFavoriteItemSet.ClearItem(a);
+                    }
+                }
+            }
+
+            // #61783# Remove distance and focus from prototypes
+            aFavoriteItemSet.ClearItem(SDRATTR_3DSCENE_DISTANCE);
+            aFavoriteItemSet.ClearItem(SDRATTR_3DSCENE_FOCAL_LENGTH);
+
+            // set ItemSet
+//          aCtlPreview.Set3DAttributes(aFavoriteItemSet);
+            BOOL bOldUpdate(bUpdate);
+            bUpdate = FALSE;
+
+            if(mpRemember2DAttributes)
+            {
+                SfxItemSet aNewItemSet(*mpRemember2DAttributes);
+                SfxWhichIter aIter(aFavoriteItemSet);
+                sal_uInt16 nWhich(aIter.FirstWhich());
+
+                while(nWhich)
+                {
+                    SfxItemState eState = aFavoriteItemSet.GetItemState(nWhich, FALSE);
+                    if(SFX_ITEM_DONTCARE == eState)
+                        aNewItemSet.InvalidateItem(nWhich);
+                    else if(SFX_ITEM_SET == eState)
+                        aNewItemSet.Put(aFavoriteItemSet.Get(nWhich, FALSE));
+                    else
+                        aNewItemSet.ClearItem(nWhich);
+
+                    nWhich = aIter.NextWhich();
+                }
+
+                Update(aNewItemSet);
             }
             else
             {
-                // Alle Attribute an der View
-                pSet = new SfxItemSet(pModel->GetItemPool(), SDRATTR_START, SDRATTR_END);
+                Update(aFavoriteItemSet);
             }
 
-            // Eingeschraenktes Set produzieren und zuweisen
-            pSet->Put( a3DView.Get3DAttributes(), FALSE );
-
-            // #61783# Remove distance and focus from prototypes
-            pSet->ClearItem(SDRATTR_3DSCENE_DISTANCE);
-            pSet->ClearItem(SDRATTR_3DSCENE_FOCAL_LENGTH);
-
-            aCtlPreview.Set3DAttributes( *pSet );
-
-            BOOL bOldUpdate = bUpdate;
-            bUpdate = FALSE;
-            Update( *pSet );
             bUpdate = bOldUpdate;
 
-            delete pSet;
+
+//          SfxItemSet* pSet;
+//          if( aBtnOnly3D.IsChecked())
+//          {
+//              // Normale (nicht-3D-) Attribute an der View
+//              pSet = new SfxItemSet(
+//                  pModel->GetItemPool(),
+//                  SDRATTR_SHADOW,     SDRATTR_SHADOW,
+//                  SDRATTR_3D_FIRST,   SDRATTR_3D_LAST,
+//                  0, 0);
+//          }
+//          else
+//          {
+//              // Alle Attribute an der View
+//              pSet = new SfxItemSet(pModel->GetItemPool(), SDRATTR_START, SDRATTR_END);
+//          }
+//
+//          // Eingeschraenktes Set produzieren und zuweisen
+//          pSet->Put( a3DView.Get3DAttributes(), FALSE );
+//
+//          // #61783# Remove distance and focus from prototypes
+//          pSet->ClearItem(SDRATTR_3DSCENE_DISTANCE);
+//          pSet->ClearItem(SDRATTR_3DSCENE_FOCAL_LENGTH);
+//
+//          aCtlPreview.Set3DAttributes( *pSet );
+//
+//          BOOL bOldUpdate = bUpdate;
+//          bUpdate = FALSE;
+//          Update( *pSet );
+//          bUpdate = bOldUpdate;
+//
+//          delete pSet;
         }
     }
     return( 0L );

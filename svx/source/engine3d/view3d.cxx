@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view3d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-20 09:51:03 $
+ *  last change: $Author: aw $ $Date: 2001-01-26 14:01:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -764,31 +764,6 @@ void E3dView::ImpChangeSomeAttributesFor3DConversion(SdrObject* pObj)
             pObj->SetItem(SvxColorItem(RGB_Color(COL_GRAY), rSet.GetPool()->GetWhich(SID_ATTR_CHAR_COLOR)));
         }
     }
-//-/    SfxItemPool& rPool = pMod->GetItemPool();
-//-/    SfxItemSet aSet(rPool);
-//-/    pObj->TakeAttributes(aSet, TRUE, FALSE);
-//-/    BOOL bChange(FALSE);
-//-/
-//-/    if(pObj->ISA(SdrTextObj))
-//-/    {
-//-/        const SvxColorItem& rTextColorItem = (const SvxColorItem&)aSet.Get(rPool.GetWhich(SID_ATTR_CHAR_COLOR));
-//-/        if(rTextColorItem.GetValue() == RGB_Color(COL_BLACK))
-//-/        {
-//-/            // Bei schwarzen Textobjekten wird die Farbe auf grau gesetzt
-//-/            SvxColorItem aNewTextColorItem(RGB_Color(COL_GRAY), rPool.GetWhich(SID_ATTR_CHAR_COLOR));
-//-/            aSet.Put(aNewTextColorItem);
-//-/            bChange = TRUE;
-//-/        }
-//-/    }
-//-/
-//-/    if(bChange)
-//-/    {
-//-/        // UNDO fuer Textfarbe Aenderung (nur bei nicht
-//-/        // temporaeren Objekten)
-//-/        if(pObj->GetPage())
-//-/            AddUndo(new SdrUndoAttrObj(*pObj, FALSE, FALSE));
-//-/        pObj->NbcSetAttributes(aSet, FALSE);
-//-/    }
 }
 
 void E3dView::ImpChangeSomeAttributesFor3DConversion2(SdrObject* pObj)
@@ -811,33 +786,6 @@ void E3dView::ImpChangeSomeAttributesFor3DConversion2(SdrObject* pObj)
             pObj->SetItem(XLineWidthItem(0L));
         }
     }
-//-/    SfxItemPool& rPool = pMod->GetItemPool();
-//-/    SfxItemSet aSet(rPool);
-//-/    pObj->TakeAttributes(aSet, TRUE, FALSE);
-//-/    BOOL bChange(FALSE);
-//-/
-//-/    if(pObj->ISA(SdrPathObj))
-//-/    {
-//-/        INT32 nLineWidth = ((const XLineWidthItem&)(aSet.Get(XATTR_LINEWIDTH))).GetValue();
-//-/        XLineStyle eLineStyle = (XLineStyle)((const XLineStyleItem&)aSet.Get(XATTR_LINESTYLE)).GetValue();
-//-/        XFillStyle eFillStyle = ITEMVALUE(aSet, XATTR_FILLSTYLE, XFillStyleItem);
-//-/
-//-/        if(((SdrPathObj*)pObj)->IsClosed() && eLineStyle == XLINE_SOLID && !nLineWidth && eFillStyle != XFILL_NONE)
-//-/        {
-//-/            aSet.Put(XLineStyleItem(XLINE_NONE));
-//-/            aSet.Put(XLineWidthItem(0L));
-//-/            bChange = TRUE;
-//-/        }
-//-/    }
-//-/
-//-/    if(bChange)
-//-/    {
-//-/        // UNDO fuer Textfarbe Aenderung (nur bei nicht
-//-/        // temporaeren Objekten)
-//-/        if(pObj->GetPage())
-//-/            AddUndo(new SdrUndoAttrObj(*pObj, FALSE, FALSE));
-//-/        pObj->NbcSetAttributes(aSet, FALSE);
-//-/    }
 }
 
 void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, BOOL bExtrude, double fDepth, Matrix4D& rLatheMat)
@@ -854,9 +802,6 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, BOO
             aDefault.SetDefaultLatheCharacterMode(TRUE);
 
         // ItemSet des Ursprungsobjektes holen
-//-/        SfxItemPool& rPool = pMod->GetItemPool();
-//-/        SfxItemSet aSet(rPool);
-//-/        pObj->TakeAttributes(aSet, FALSE, TRUE);
         SfxItemSet aSet(pObj->GetItemSet());
 
         XFillStyle eFillStyle = ITEMVALUE(aSet, XATTR_FILLSTYLE, XFillStyleItem);
@@ -873,7 +818,6 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, BOO
             aDefault.SetDefaultExtrudeCloseFront(FALSE);
             aDefault.SetDefaultExtrudeCloseBack(FALSE);
 
-//-/            aDefault.SetDefaultDoubleSided(TRUE);
             aSet.Put(Svx3DDoubleSidedItem(TRUE));
 
             // Fuellattribut setzen
@@ -903,7 +847,6 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, BOO
         {
             p3DObj->NbcSetLayer(pObj->GetLayer());
 
-//-/            p3DObj->NbcSetAttributes(aSet, FALSE);
             p3DObj->SetItemSet(aSet);
 
             p3DObj->NbcSetStyleSheet(pObj->GetStyleSheet(), TRUE);
@@ -1195,8 +1138,6 @@ void E3dView::DoDepthArrange(E3dScene* pScene, double fDepth)
                 E3dExtrudeObj* pExtrudeObj = (E3dExtrudeObj*)pSubObj;
                 const PolyPolygon3D& rExtrudePoly = pExtrudeObj->GetExtrudePolygon();
 
-//-/                SfxItemSet aLocalSet(rPool);
-//-/                pExtrudeObj->TakeAttributes(aLocalSet, FALSE, TRUE);
                 const SfxItemSet& rLocalSet = pExtrudeObj->GetItemSet();
                 XFillStyle eLocalFillStyle = ITEMVALUE(rLocalSet, XATTR_FILLSTYLE, XFillStyleItem);
                 Color aLocalColor = ((const XFillColorItem&)(rLocalSet.Get(XATTR_FILLCOLOR))).GetValue();
@@ -1218,8 +1159,6 @@ void E3dView::DoDepthArrange(E3dScene* pScene, double fDepth)
                         if(bOverlap)
                         {
                             // second ciriteria: is another fillstyle or color used?
-//-/                            SfxItemSet aCompareSet(rPool);
-//-/                            pAct->pObj->TakeAttributes(aCompareSet, FALSE, TRUE);
                             const SfxItemSet& rCompareSet = pAct->pObj->GetItemSet();
 
                             XFillStyle eCompareFillStyle = ITEMVALUE(rCompareSet, XATTR_FILLSTYLE, XFillStyleItem);
@@ -1291,7 +1230,6 @@ void E3dView::DoDepthArrange(E3dScene* pScene, double fDepth)
                 while(pAct)
                 {
                     // Anpassen
-//-/                    pAct->pObj->SetExtrudeDepth(fMinDepth);
                     pAct->pObj->SetItem(SfxUInt32Item(SDRATTR_3DOBJ_DEPTH, sal_uInt32(fMinDepth + 0.5)));
 
                     // Naechster Eintrag
@@ -1972,14 +1910,12 @@ void E3dView::InitView ()
     fDefaultRotateY          =
     fDefaultRotateZ          = 0.0;
     fDefaultExtrusionDeepth  = 1000; // old: 2000;
-//-/    fDefaultCamFocal         = 100;
     fDefaultLightIntensity   = 0.8; // old: 0.6;
     fDefaultAmbientIntensity = 0.4;
     nHDefaultSegments        = 12;
     nVDefaultSegments        = 12;
     aDefaultLightColor       = RGB_Color(COL_WHITE);
     aDefaultAmbientColor     = RGB_Color(COL_BLACK);
-//-/    aDefaultCamPos           = Vector3D (0, 0, 100);
     aDefaultLightPos         = Vector3D (1, 1, 1); // old: Vector3D (0, 0, 1);
     aDefaultLightPos.Normalize();
     bDoubleSided             = FALSE;
