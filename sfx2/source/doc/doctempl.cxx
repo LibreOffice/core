@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: dv $ $Date: 2000-12-21 18:00:29 $
+ *  last change: $Author: dv $ $Date: 2001-02-14 11:20:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3555,12 +3555,13 @@ sal_Bool SfxDocTemplate_Impl::DoUpdate()
     if ( ! GetTemplateRoot( aTemplRoot, bNewRoot ) )
         return sal_False;
 
-    ULONG i;
-    ULONG nCount = maDirs.GetTokenCount( C_DELIM );
+    ULONG i = maDirs.GetTokenCount( C_DELIM );
 
-    for ( i=0; i<nCount; i++ )
+    while( i )
     {
         Content aTemplDir;
+
+        i -= 1;
 
         if ( GetTemplateDir( (USHORT) i, aTemplDir ) )
             GetFolders( aTemplRoot, aTemplDir );
@@ -3568,7 +3569,7 @@ sal_Bool SfxDocTemplate_Impl::DoUpdate()
 
     // Now remove all non existing objects
 
-    nCount = GetRegionCount();
+    ULONG nCount = GetRegionCount();
 
     while ( nCount )
     {
