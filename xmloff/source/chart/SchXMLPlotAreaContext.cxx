@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-28 09:41:55 $
+ *  last change: $Author: bm $ $Date: 2001-05-29 14:27:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,12 +371,6 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
             DBG_ERRORFILE( "Properties missing" );
         }
     }
-}
-
-void SchXMLPlotAreaContext::EndElement()
-{
-    sal_Int32 i;
-    sal_Bool bIsThreeDim = sal_False;
 
     // set properties
     uno::Reference< beans::XPropertySet > xProp( mxDiagram, uno::UNO_QUERY );
@@ -393,24 +387,36 @@ void SchXMLPlotAreaContext::EndElement()
                 if( pStyle && pStyle->ISA( XMLPropStyleContext ))
                     (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
             }
+
+            // perform BuildChart to make scene etc. available
+            uno::Reference< chart::XChartDocument > xDoc( mrImportHelper.GetChartDocument(), uno::UNO_QUERY );
+            if( xDoc.is() &&
+                xDoc->hasControllersLocked())
+            {
+                xDoc->unlockControllers();
+                xDoc->lockControllers();
+            }
         }
     }
+}
 
-    // set 3d scene attributes
-    if( bIsThreeDim )
+void SchXMLPlotAreaContext::EndElement()
+{
+    sal_Int32 i;
+
+    uno::Reference< beans::XPropertySet > xProp( mxDiagram, uno::UNO_QUERY );
+    if( xProp.is())
     {
-        // perform BuildChart to make scene available
-        uno::Reference< chart::XChartDocument > xDoc( mrImportHelper.GetChartDocument(), uno::UNO_QUERY );
-        if( xDoc.is() &&
-            xDoc->hasControllersLocked())
-        {
-            xDoc->unlockControllers();
-            xDoc->lockControllers();
-        }
+        sal_Bool bIsThreeDim = sal_False;
+        uno::Any aAny = xProp->getPropertyValue( ::rtl::OUString::createFromAscii( "Dim3D" ));
+        aAny >>= bIsThreeDim;
 
-        // set scene attributes at diagram
-        if( xProp.is())
+        // set 3d scene attributes
+        if( bIsThreeDim )
+        {
+            // set scene attributes at diagram
             maSceneImportHelper.setSceneAttributes( xProp );
+        }
     }
 
     // set changed size and position after properties (esp. 3d)
