@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:52:16 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:03:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ String STR_ACCESS_DOC_NAME
     Text[ danish ] = "Document view";
     Text[ swedish ] = "Dokumentvy";
     Text[ polish ] = "Document view";
-    Text[ portuguese_brazilian ] = "Document view";
+    Text[ portuguese_brazilian ] = "Visualizar documento";
     Text[ japanese ] = "ドキュメントの表示";
     Text[ korean ] = "문서 보기";
     Text[ chinese_simplified ] = "文档视图";
@@ -107,7 +107,7 @@ String STR_ACCESS_DOC_DESC
     Text[ danish ] = "Document view";
     Text[ swedish ] = "Dokumentvy";
     Text[ polish ] = "Document view";
-    Text[ portuguese_brazilian ] = "Document view";
+    Text[ portuguese_brazilian ] = "Visualizar documento";
     Text[ japanese ] = "ドキュメントの表示";
     Text[ korean ] = "문서 보기";
     Text[ chinese_simplified ] = "文档视图";
@@ -137,7 +137,7 @@ String STR_ACCESS_PARAGRAPH_NAME
     Text[ danish ] = "Paragraph $(ARG1)";
     Text[ swedish ] = "Stycke $(ARG1)";
     Text[ polish ] = "Paragraph $(ARG1)";
-    Text[ portuguese_brazilian ] = "Paragraph $(ARG1)";
+    Text[ portuguese_brazilian ] = "Par�grafo $(ARG1)";
     Text[ japanese ] = "段落 $(ARG1)";
     Text[ korean ] = "단락 $(ARG1)";
     Text[ chinese_simplified ] = "段落 $(ARG1)";
@@ -167,7 +167,7 @@ String STR_ACCESS_PARAGRAPH_DESC
     Text[ danish ] = "Paragraph: $(ARG1)";
     Text[ swedish ] = "Stycke: $(ARG1) ";
     Text[ polish ] = "Paragraph: $(ARG1)";
-    Text[ portuguese_brazilian ] = "Paragraph: $(ARG1) ";
+    Text[ portuguese_brazilian ] = "Par�grafo: $(ARG1)";
     Text[ japanese ] = "段落: $(ARG1)";
     Text[ korean ] = "단락: $(ARG1)";
     Text[ chinese_simplified ] = "段落：$(ARG1)";
@@ -197,7 +197,7 @@ String STR_ACCESS_HEADING_NAME
     Text[ danish ] = "Heading $(ARG1)";
     Text[ swedish ] = "�verskrift $(ARG1)";
     Text[ polish ] = "Heading $(ARG1)";
-    Text[ portuguese_brazilian ] = "Heading $(ARG1)";
+    Text[ portuguese_brazilian ] = "T�tulo $(ARG1)";
     Text[ japanese ] = "見出し $(ARG1)";
     Text[ korean ] = "제목 $(ARG1)";
     Text[ chinese_simplified ] = "大标题 $(ARG1)";
@@ -227,7 +227,7 @@ String STR_ACCESS_HEADING_DESC
     Text[ danish ] = "Heading: $(ARG1)";
     Text[ swedish ] = "�verskrift: $(ARG1)";
     Text[ polish ] = "Heading: $(ARG1)";
-    Text[ portuguese_brazilian ] = "Heading: $(ARG1)";
+    Text[ portuguese_brazilian ] = "T�tulo: $(ARG1)";
     Text[ japanese ] = "見出し: $(ARG1)";
     Text[ korean ] = "제목: $(ARG1)";
     Text[ chinese_simplified ] = "大标题：$(ARG1)";
@@ -257,7 +257,7 @@ String STR_ACCESS_HEADING_WITH_NUM_DESC
     Text[ danish ] = "Heading number $(ARG2): $(ARG1)";
     Text[ swedish ] = "�verskrift nummer $(ARG2): $(ARG1)";
     Text[ polish ] = "Heading number $(ARG2): $(ARG1)";
-    Text[ portuguese_brazilian ] = "Heading number $(ARG2): $(ARG1)";
+    Text[ portuguese_brazilian ] = "N�mero do t�tulo $(ARG2): $(ARG1)";
     Text[ japanese ] = "見出し番号 $(ARG2): $(ARG1)";
     Text[ korean ] = "제목 번호 $(ARG2): $(ARG1)";
     Text[ chinese_simplified ] = "大标题的编号 $(ARG2): $(ARG1)";
@@ -287,7 +287,7 @@ String STR_ACCESS_HEADER_NAME
     Text[ danish ] = "Header $(ARG1)";
     Text[ swedish ] = "Sidhuvud $(ARG1)";
     Text[ polish ] = "Header $(ARG1)";
-    Text[ portuguese_brazilian ] = "Header $(ARG1)";
+    Text[ portuguese_brazilian ] = "Cabe�alho $(ARG1)";
     Text[ japanese ] = "ヘッダ $(ARG1)";
     Text[ korean ] = "머리글 $(ARG1)";
     Text[ chinese_simplified ] = "页眉 $(ARG1)";
@@ -317,7 +317,7 @@ String STR_ACCESS_HEADER_DESC
     Text[ danish ] = "Header page $(ARG1)";
     Text[ swedish ] = "Sidhuvud sida $(ARG1)";
     Text[ polish ] = "Header page $(ARG1)";
-    Text[ portuguese_brazilian ] = "Header page $(ARG1)";
+    Text[ portuguese_brazilian ] = "Cabe�alho p�gina $(ARG1)";
     Text[ japanese ] = "ヘッダのページ $(ARG1)";
     Text[ korean ] = "머리글 페이지 $(ARG1)";
     Text[ chinese_simplified ] = "页眉页面 $(ARG1)";
@@ -347,7 +347,7 @@ String STR_ACCESS_FOOTER_NAME
     Text[ danish ] = "Footer $(ARG1)";
     Text[ swedish ] = "Sidfot $(ARG1)";
     Text[ polish ] = "Footer $(ARG1)";
-    Text[ portuguese_brazilian ] = "Footer $(ARG1)";
+    Text[ portuguese_brazilian ] = "Rodap� $(ARG1)";
     Text[ japanese ] = "フッタ $(ARG1)";
     Text[ korean ] = "바닥글 $(ARG1)";
     Text[ chinese_simplified ] = "页尾 $(ARG1)";
@@ -377,7 +377,7 @@ String STR_ACCESS_FOOTER_DESC
     Text[ danish ] = "Footer page $(ARG1)";
     Text[ swedish ] = "Sidfot sida $(ARG1)";
     Text[ polish ] = "Footer page $(ARG1)";
-    Text[ portuguese_brazilian ] = "Footer page $(ARG1)";
+    Text[ portuguese_brazilian ] = "Rodap� p�gina $(ARG1)";
     Text[ japanese ] = "フッタのページ $(ARG1)";
     Text[ korean ] = "바닥글 페이지 $(ARG1)";
     Text[ chinese_simplified ] = "页尾页面 $(ARG1)";
@@ -407,7 +407,7 @@ String STR_ACCESS_FOOTNOTE_NAME
     Text[ danish ] = "Footnote $(ARG1)";
     Text[ swedish ] = "Fotnot $(ARG1)";
     Text[ polish ] = "Footnote $(ARG1)";
-    Text[ portuguese_brazilian ] = "Footnote $(ARG1)";
+    Text[ portuguese_brazilian ] = "Nota de rodap� $(ARG1)";
     Text[ japanese ] = "脚注 $(ARG1)";
     Text[ korean ] = "각주 $(ARG1)";
     Text[ chinese_simplified ] = "注脚 $(ARG1)";
@@ -437,7 +437,7 @@ String STR_ACCESS_FOOTNOTE_DESC
     Text[ danish ] = "Footnote $(ARG1)";
     Text[ swedish ] = "Fotnot $(ARG1)";
     Text[ polish ] = "Footnote $(ARG1)";
-    Text[ portuguese_brazilian ] = "Footnote $(ARG1)";
+    Text[ portuguese_brazilian ] = "Nota de rodap� $(ARG1)";
     Text[ japanese ] = "脚注 $(ARG1)";
     Text[ korean ] = "각주 $(ARG1)";
     Text[ chinese_simplified ] = "注脚 $(ARG1)";
@@ -467,7 +467,7 @@ String STR_ACCESS_ENDNOTE_NAME
     Text[ danish ] = "Endnote $(ARG1)";
     Text[ swedish ] = "Slutnot $(ARG1)";
     Text[ polish ] = "Endnote $(ARG1)";
-    Text[ portuguese_brazilian ] = "Endnote $(ARG1)";
+    Text[ portuguese_brazilian ] = "Nota de fim $(ARG1)";
     Text[ japanese ] = "文末脚注 $(ARG1)";
     Text[ korean ] = "미주 $(ARG1)";
     Text[ chinese_simplified ] = "尾注 $(ARG1)";
@@ -497,7 +497,7 @@ String STR_ACCESS_ENDNOTE_DESC
     Text[ danish ] = "Endnote $(ARG1)";
     Text[ swedish ] = "Slutnot $(ARG1)";
     Text[ polish ] = "Endnote $(ARG1)";
-    Text[ portuguese_brazilian ] = "Endnote $(ARG1)";
+    Text[ portuguese_brazilian ] = "Nota de fim $(ARG1)";
     Text[ japanese ] = "文末脚注 $(ARG1)";
     Text[ korean ] = "미주 $(ARG1)";
     Text[ chinese_simplified ] = "尾注 $(ARG1)";
@@ -527,7 +527,7 @@ String STR_ACCESS_TABLE_DESC
     Text[ danish ] = "$(ARG1) on page $(ARG2)";
     Text[ swedish ] = "$(ARG1) p� sida $(ARG2)";
     Text[ polish ] = "$(ARG1) on page $(ARG2)";
-    Text[ portuguese_brazilian ] = "$(ARG1) on page $(ARG2)";
+    Text[ portuguese_brazilian ] = "$(ARG1) na p�gina $(ARG2)";
     Text[ japanese ] = "$(ARG2) ページ目の $(ARG1)";
     Text[ korean ] = "$(ARG2) 페이지의 $(ARG1)";
     Text[ chinese_simplified ] = "$(ARG1) 在页 $(ARG2) 上";
@@ -566,7 +566,7 @@ String STR_ACCESS_PAGE_NAME
     Text[ czech ] = "Stránka $(ARG1)";
     Text[ hebrew ] = "Seite $(ARG1)";
     Text[ catalan ] = "Page $(ARG1)";
-    Text[ portuguese_brazilian ] = "Page $(ARG1)";
+    Text[ portuguese_brazilian ] = "P�gina $(ARG1)";
     Text[ thai ] = "Page $(ARG1)";
     Text[ hindi ] = "Page $(ARG1)";
     Text[ slovak ] = "Stránka $(ARG1)";
@@ -596,11 +596,12 @@ String STR_ACCESS_PAGE_DESC
     Text[ czech ] = "Stránka: $(ARG1)";
     Text[ hebrew ] = "Seite: $(ARG1)";
     Text[ catalan ] = "Page: $(ARG1)";
-    Text[ portuguese_brazilian ] = "Page: $(ARG1)";
+    Text[ portuguese_brazilian ] = "P�gina: $(ARG1)";
     Text[ thai ] = "Page: $(ARG1)";
     Text[ hindi ] = "Page: $(ARG1)";
     Text[ slovak ] = "Stránka: $(ARG1)";
 };
+
 
 
 
