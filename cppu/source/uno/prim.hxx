@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prim.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dbo $ $Date: 2002-08-21 09:19:30 $
+ *  last change: $Author: vg $ $Date: 2003-03-20 12:30:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,42 +62,44 @@
 #define PRIM_HXX
 
 #ifndef _TYPELIB_TYPEDESCRIPTION_H_
-#include <typelib/typedescription.h>
+#include "typelib/typedescription.h"
 #endif
 #ifndef _typelib_TypeClass_H_
-#include <typelib/typeclass.h>
+#include "typelib/typeclass.h"
 #endif
 #ifndef _UNO_SEQUENCE2_H_
-#include <uno/sequence2.h>
+#include "uno/sequence2.h"
 #endif
 #ifndef _UNO_ANY2_H_
-#include <uno/any2.h>
+#include "uno/any2.h"
 #endif
 #ifndef _UNO_DATA_H_
-#include <uno/data.h>
+#include "uno/data.h"
 #endif
 #ifndef _UNO_MAPPING_H_
-#include <uno/mapping.h>
+#include "uno/mapping.h"
 #endif
 #ifndef _UNO_DISPATCHER_H_
-#include <uno/dispatcher.h>
+#include "uno/dispatcher.h"
 #endif
 
 #ifndef _OSL_INTERLCK_H
-#include <osl/interlck.h>
+#include "osl/interlck.h"
 #endif
 #ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
+#include "osl/diagnose.h"
 #endif
 #ifndef _RTL_USTRING_HXX
-#include <rtl/ustring.hxx>
+#include "rtl/ustring.hxx"
 #endif
 #ifndef _RTL_ALLOC_H_
-#include <rtl/alloc.h>
+#include "rtl/alloc.h"
 #endif
 
-#include <com/sun/star/uno/Type.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#if defined DEBUG
+#include "rtl/ustrbuf.hxx"
+#include "rtl/string.hxx"
+#endif
 
 
 namespace cppu
@@ -105,13 +107,11 @@ namespace cppu
 
 extern uno_Sequence g_emptySeq;
 extern typelib_TypeDescriptionReference * g_pVoidType;
-extern typelib_TypeDescription * g_pQITD;
 
 //--------------------------------------------------------------------------------------------------
 inline void * _map(
     void * p,
-    typelib_TypeDescriptionReference * pType,
-    typelib_TypeDescription * pTypeDescr,
+    typelib_TypeDescriptionReference * pType, typelib_TypeDescription * pTypeDescr,
     uno_Mapping * mapping )
     SAL_THROW( () )
 {
@@ -120,20 +120,21 @@ inline void * _map(
     {
         if (pTypeDescr)
         {
-            (*mapping->mapInterface)( mapping, &pRet, p, (typelib_InterfaceTypeDescription *)pTypeDescr );
+            (*mapping->mapInterface)(
+                mapping, &pRet, p, (typelib_InterfaceTypeDescription *)pTypeDescr );
         }
         else
         {
             TYPELIB_DANGER_GET( &pTypeDescr, pType );
-            (*mapping->mapInterface)( mapping, &pRet, p, (typelib_InterfaceTypeDescription *)pTypeDescr );
+            (*mapping->mapInterface)(
+                mapping, &pRet, p, (typelib_InterfaceTypeDescription *)pTypeDescr );
             TYPELIB_DANGER_RELEASE( pTypeDescr );
         }
     }
     return pRet;
 }
 //--------------------------------------------------------------------------------------------------
-inline void _acquire( void * p, uno_AcquireFunc acquire )
-    SAL_THROW( () )
+inline void _acquire( void * p, uno_AcquireFunc acquire ) SAL_THROW( () )
 {
     if (p)
     {
@@ -148,10 +149,8 @@ inline void _acquire( void * p, uno_AcquireFunc acquire )
     }
 }
 //--------------------------------------------------------------------------------------------------
-inline void _releaseRef( void ** pRef, uno_ReleaseFunc release )
-    SAL_THROW( () )
+inline void _release( void * p, uno_ReleaseFunc release ) SAL_THROW( () )
 {
-    void * p = *pRef;
     if (p)
     {
         if (release)
@@ -199,28 +198,7 @@ inline typelib_TypeDescriptionReference * _getVoidType()
     ::osl_incrementInterlockedCount( &(pType)->nRefCount );
 
 //--------------------------------------------------------------------------------------------------
-inline typelib_TypeDescription * _getQueryInterfaceTypeDescr()
-    SAL_THROW( () )
-{
-    if (! g_pQITD)
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (! g_pQITD)
-        {
-            typelib_InterfaceTypeDescription * pTXInterfaceDescr = 0;
-            const com::sun::star::uno::Type & rXIType = ::getCppuType(
-                (const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > *)0 );
-            TYPELIB_DANGER_GET(
-                (typelib_TypeDescription **)&pTXInterfaceDescr, rXIType.getTypeLibType() );
-            OSL_ASSERT( pTXInterfaceDescr->ppAllMembers );
-            ::typelib_typedescriptionreference_getDescription(
-                &g_pQITD, pTXInterfaceDescr->ppAllMembers[0] );
-            TYPELIB_DANGER_RELEASE( (typelib_TypeDescription *)pTXInterfaceDescr );
-        }
-    }
-    ::typelib_typedescription_acquire( g_pQITD );
-    return g_pQITD;
-}
+void * binuno_queryInterface( void * pUnoI, typelib_TypeDescriptionReference * pDestType );
 
 //--------------------------------------------------------------------------------------------------
 inline typelib_TypeDescriptionReference * _unionGetSetType(
