@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpbody.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-23 18:24:00 $
+ *  last change: $Author: cl $ $Date: 2000-12-05 23:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
     // set PageProperties?
     if(maStyleName.getLength())
     {
-        const SvXMLImportContext* pContext = GetSdImport().GetShapeImport()->GetStylesContext();
+        const SvXMLImportContext* pContext = GetSdImport().GetShapeImport()->GetAutoStylesContext();
 
         if( pContext && pContext->ISA( SvXMLStyleContext ) )
         {

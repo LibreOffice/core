@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-05 15:44:41 $
+ *  last change: $Author: cl $ $Date: 2000-12-05 23:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ SdXMLPageMasterStyleContext::SdXMLPageMasterStyleContext(
             }
             case XML_TOK_PAGEMASTERSTYLE_PAGE_ORIENTATION:
             {
-                if(sValue.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_orientation_portrait))))
+                if(sValue.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_portrait))))
                     meOrientation = view::PaperOrientation_PORTRAIT;
                 else
                     meOrientation = view::PaperOrientation_LANDSCAPE;
@@ -593,6 +593,11 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
                 msPageMasterName = sValue;
                 break;
             }
+            case XML_TOK_MASTERPAGE_STYLE_NAME:
+            {
+                msStyleName = sValue;
+                break;
+            }
         }
     }
 
@@ -657,6 +662,57 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
                         aAny <<= pPageMasterContext->GetOrientation();
                         xPropSet->setPropertyValue(
                             OUString(RTL_CONSTASCII_USTRINGPARAM("Orientation")), aAny);
+                    }
+                }
+            }
+        }
+    }
+
+    // set PageProperties?
+    if(msStyleName.getLength())
+    {
+        const SvXMLImportContext* pContext = GetSdImport().GetShapeImport()->GetAutoStylesContext();
+
+        if( pContext && pContext->ISA( SvXMLStyleContext ) )
+        {
+            const SdXMLStylesContext* pStyles = (SdXMLStylesContext*)pContext;
+            if(pStyles)
+            {
+                const SvXMLStyleContext* pStyle = pStyles->FindStyleChildContext(
+                    XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID, msStyleName);
+
+                if(pStyle && pStyle->ISA(XMLPropStyleContext))
+                {
+                    XMLPropStyleContext* pPropStyle = (XMLPropStyleContext*)pStyle;
+
+                    uno::Reference <beans::XPropertySet> xPropSet1(rShapes, uno::UNO_QUERY);
+                    if(xPropSet1.is())
+                    {
+                        const OUString aBackground(RTL_CONSTASCII_USTRINGPARAM("Background"));
+                        uno::Reference< beans::XPropertySet > xPropSet2;
+                        uno::Reference< beans::XPropertySetInfo > xInfo( xPropSet1->getPropertySetInfo() );
+                        if( xInfo.is() && xInfo->hasPropertyByName( aBackground ) )
+                        {
+                            uno::Reference< lang::XMultiServiceFactory > xServiceFact(GetSdImport().GetModel(), uno::UNO_QUERY);
+                            if(xServiceFact.is())
+                            {
+                                uno::Reference< beans::XPropertySet > xTempSet(
+                                    xServiceFact->createInstance(
+                                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Background"))),
+                                    uno::UNO_QUERY);
+
+                                xPropSet2 = xTempSet;
+                            }
+                        }
+
+                        if(xPropSet2.is())
+                        {
+                            pPropStyle->FillPropertySet(xPropSet2);
+
+                            uno::Any aAny;
+                            aAny <<= xPropSet2;
+                            xPropSet1->setPropertyValue( aBackground, aAny );
+                        }
                     }
                 }
             }
