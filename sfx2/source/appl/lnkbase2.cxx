@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lnkbase2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:45:46 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,8 +186,7 @@ SvBaseLink::SvBaseLink( USHORT nUpdateMode, ULONG nContentType )
 |*    Beschreibung
 *************************************************************************/
 
-SvBaseLink::SvBaseLink( const String& rLinkName, USHORT nObjectType,
-                        SvLinkSource* pObj )
+SvBaseLink::SvBaseLink( const String& rLinkName, USHORT nObjectType, SvLinkSource* pObj )
 {
     bVisible = bSynchron = bUseCache = TRUE;
     aLinkName = rLinkName;
@@ -399,7 +398,7 @@ USHORT SvBaseLink::GetUpdateMode() const
 }
 
 
-void SvBaseLink::_GetRealObject( BOOL bConnect )
+void SvBaseLink::_GetRealObject( BOOL bConnect)
 {
     if( !pLinkMgr )
         return;
