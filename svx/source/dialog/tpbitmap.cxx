@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpbitmap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-22 10:52:30 $
+ *  last change: $Author: thb $ $Date: 2001-06-22 17:26:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@
 #include "dlgname.hxx"
 #include "dlgname.hrc"
 #include "dialmgr.hxx"
-#include "impgrf.hxx"
+#include "opengrf.hxx"
 
 #define DLGWIN this->GetParent()->GetParent()
 
@@ -767,28 +767,21 @@ IMPL_LINK( SvxBitmapTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 IMPL_LINK( SvxBitmapTabPage, ClickImportHdl_Impl, void *, EMPTYARG )
 {
     ResMgr* pMgr = DIALOG_MGR();
-    SvxImportGraphicDialog* pDlg = new SvxImportGraphicDialog( DLGWIN,
-        UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "Import" ) ), ENABLE_STANDARD );
+    SvxOpenGraphicDialog aDlg( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "Import" ) ) );
+    aDlg.EnableLink(sal_False);
 
-    if( pDlg->Execute() == RET_OK )
+    if( aDlg.Execute() == RET_OK )
     {
         Graphic         aGraphic;
-        GraphicFilter&  rFilter = pDlg->GetFilter();
-        INetURLObject   aURL( pDlg->GetPath() );
-        SvStream*       pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_READ | STREAM_SHARE_DENYNONE );
         USHORT          nError = 1;
 
-        if( pIStm )
-        {
-            EnterWait();
-            nError = rFilter.ImportGraphic( aGraphic, aURL.GetMainURL(), *pIStm );
-            LeaveWait();
-            delete pIStm;
-        }
+        EnterWait();
+        nError = aDlg.GetGraphic( aGraphic );
+        LeaveWait();
 
         if( !nError )
         {
-            String aName( aURL.getName() );
+            String aName( aDlg.GetPath() );
             String aDesc( ResId(RID_SVXSTR_DESC_EXT_BITMAP, pMgr) );
             WarningBox*    pWarnBox = NULL;
             SvxNameDialog* pDlg =
@@ -859,7 +852,6 @@ IMPL_LINK( SvxBitmapTabPage, ClickImportHdl_Impl, void *, EMPTYARG )
                       WinBits( WB_OK ),
                       String( ResId( RID_SVXSTR_READ_DATA_ERROR, pMgr ) ) ).Execute();
     }
-    delete pDlg;
 
     return 0L;
 }

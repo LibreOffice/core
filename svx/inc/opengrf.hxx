@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opengrf.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-21 15:47:36 $
+ *  last change: $Author: thb $ $Date: 2001-06-22 17:26:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,13 +77,19 @@ public:
     ~SvxOpenGraphicDialog   ();
 
     short                   Execute();
-    void                    SetPath( const String& rPath );
 
-    sal_Bool                IsAsLink() const;
+    void                    SetPath( const String& rPath );
+    void                    SetPath( const String& rPath, sal_Bool bLinkState );
+    String                  GetPath() const;
 
     int                     GetGraphic(Graphic&) const;
-    String                  GetPath() const;
+
+    void                    EnableLink(sal_Bool);
+    void                    AsLink(sal_Bool);
+    sal_Bool                IsAsLink() const;
+
     String                  GetCurrentFilter() const;
+    void                    SetCurrentFilter(const String&);
 
 private:
     // disable copy and assignment

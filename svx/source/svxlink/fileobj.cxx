@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileobj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:16:11 $
+ *  last change: $Author: thb $ $Date: 2001-06-22 17:26:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@
 #include "dialmgr.hxx"
 #include "dialogs.hrc"
 #include "xoutbmp.hxx"
+#include "opengrf.hxx"
 #include "impgrf.hxx"
 
 using namespace ::com::sun::star::uno;
@@ -539,22 +540,20 @@ String SvFileObject::Edit( Window* pParent, so3::SvBaseLink* pLink )
         {
             nType = FILETYPE_GRF;       // falls noch nicht gesetzt
 
-            SvxImportGraphicDialog* pDlg = new SvxImportGraphicDialog( pParent,
-                    String( ResId( RID_SVXSTR_EDITGRFLINK, DIALOG_MGR() ) ), FALSE );
+            SvxOpenGraphicDialog aDlg(String(ResId(RID_SVXSTR_EDITGRFLINK, DIALOG_MGR())));
+            aDlg.EnableLink(sal_False);
+            aDlg.SetPath( sFile, sal_True );
+            aDlg.SetCurrentFilter( sTmpFilter );
 
-            pDlg->SetPath( sFile, FALSE );
-            pDlg->SetCurFilter( sTmpFilter );
-
-            if( RET_OK == pDlg->Execute() )
+            if( !aDlg.Execute() )
             {
-                sFile = pDlg->GetPath();
+                sFile = aDlg.GetPath();
                 sFile += ::so3::cTokenSeperator;
                 sFile += ::so3::cTokenSeperator;
-                sFile += pDlg->GetCurFilter();
+                sFile += aDlg.GetCurrentFilter();
             }
             else
                 sFile.Erase();
-            delete pDlg;
         }
         break;
     case OBJECT_CLIENT_FILE:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2001-05-17 15:44:35 $
+ *  last change: $Author: thb $ $Date: 2001-06-22 17:26:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@
 #include "backgrnd.hxx"
 
 #include "xtable.hxx"
+#include "opengrf.hxx"
 #include "impgrf.hxx"
 #include "svxerr.hxx"
 #include "drawitem.hxx"
@@ -1517,20 +1518,18 @@ IMPL_LINK( SvxBackgroundTabPage, BrowseHdl_Impl, PushButton* , EMPTYARG )
 {
     if ( pPageImpl->pLoadTimer->IsActive() )
         return 0;
-    USHORT nEnable = ENABLE_STANDARD|ENABLE_LINK;
     BOOL bHtml = 0 != ( nHtmlMode & HTMLMODE_ON );
 
+    pImportDlg = new SvxOpenGraphicDialog( aStrBrowse );
     if ( bHtml || bLinkOnly )
-        nEnable &= ~ENABLE_LINK;
-
-    pImportDlg = new SvxImportGraphicDialog( this, aStrBrowse, nEnable );
-    pImportDlg->SetPath( aBgdGraphicPath, FALSE, aBtnLink.IsChecked() );
+        pImportDlg->EnableLink(sal_False);
+    pImportDlg->SetPath( aBgdGraphicPath, aBtnLink.IsChecked() );
 
     pPageImpl->bIsImportDlgInExecute = TRUE;
-    short nRet = pImportDlg->Execute();
+    short nErr = pImportDlg->Execute();
     pPageImpl->bIsImportDlgInExecute = FALSE;
 
-    if ( RET_OK == nRet )
+    if( !nErr )
     {
         if ( bHtml )
             aBtnLink.Check();
@@ -1573,18 +1572,15 @@ IMPL_LINK( SvxBackgroundTabPage, LoadTimerHdl_Impl, Timer* , pTimer )
             {
                 // neue Datei gew"ahlt
                 aBgdGraphicPath   = pImportDlg->GetPath();
-                aBgdGraphicFilter = pImportDlg->GetCurFilter();
-                BOOL bLink = ( nHtmlMode & HTMLMODE_ON ) || bLinkOnly ? TRUE : pImportDlg->AsLink();
+                aBgdGraphicFilter = pImportDlg->GetCurrentFilter();
+                BOOL bLink = ( nHtmlMode & HTMLMODE_ON ) || bLinkOnly ? TRUE : pImportDlg->IsAsLink();
                 aBtnLink.Check( bLink );
                 aBtnLink.Enable();
 
                 if ( aBtnPreview.IsChecked() )
                 {
-                    Graphic* pGraphic = pImportDlg->GetGraphic();
-
-                    if ( pGraphic )
+                    if( !pImportDlg->GetGraphic(aBgdGraphic) )
                     {
-                        aBgdGraphic = *pGraphic;
                         bIsGraphicValid = TRUE;
                     }
                     else

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-03 14:20:35 $
+ *  last change: $Author: thb $ $Date: 2001-06-22 17:26:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,9 +134,6 @@
 #ifndef _SVX_NUMVSET_HXX //autogen
 #include <numvset.hxx>
 #endif
-#ifndef _SVX_IMPGRF_HXX //autogen
-#include <impgrf.hxx>
-#endif
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -159,6 +156,9 @@
 #ifndef _SVX_XBITMAP_HXX //autogen
 #include <xbitmap.hxx>
 #endif
+
+#include "opengrf.hxx"
+
 #define MAX_BMP_WIDTH   16
 #define MAX_BMP_HEIGHT  16
 // define ----------------------------------------------------------------
@@ -1636,9 +1636,9 @@ IMPL_LINK( SvxLineTabPage, GraphicHdl_Impl, MenuButton *, pButton )
 {
     USHORT nItemId = pButton->GetCurItemId();
     const Graphic* pGraphic = 0;
+    Graphic aGraphic;
     String aGrfName;
     BOOL bDontSetSize=FALSE;
-    SvxImportGraphicDialog* pGrfDlg = 0;
     BOOL bEnable=TRUE;
 
     if(nItemId >= MN_GALLERY_ENTRY)
@@ -1692,12 +1692,15 @@ IMPL_LINK( SvxLineTabPage, GraphicHdl_Impl, MenuButton *, pButton )
         {
             SVX_TRACE(213,ByteString( "SVX_SYMBOLTYPE_ Brush lesen, wird aus Datei generiert" ) );
             nSymbolType=SVX_SYMBOLTYPE_BRUSHITEM;//wie Gallery, Graphic ist im Item enthalten
-            pGrfDlg = new SvxImportGraphicDialog(this,SVX_RESSTR(RID_STR_EDIT_GRAPHIC),ENABLE_STANDARD);
-            if ( pGrfDlg->Execute() == RET_OK )
+            SvxOpenGraphicDialog aGrfDlg(SVX_RESSTR(RID_STR_EDIT_GRAPHIC));
+            aGrfDlg.EnableLink(sal_False);
+            aGrfDlg.AsLink(sal_False);
+            if( !aGrfDlg.Execute() )
             {
                 // ausgewaehlten Filter merken
-                aGrfName = pGrfDlg->GetPath();
-                pGraphic = pGrfDlg->GetGraphic();
+                aGrfName = aGrfDlg.GetPath();
+                if( !aGrfDlg.GetGraphic(aGraphic) )
+                    pGraphic = &aGraphic;
             }
         }
         break;
@@ -1743,9 +1746,6 @@ IMPL_LINK( SvxLineTabPage, GraphicHdl_Impl, MenuButton *, pButton )
     aSymbolHeightMF.Enable(bEnable);
     aCtlPreview.Invalidate();
 
-
-
-    delete pGrfDlg;
     return 0;
 }
 IMPL_LINK( SvxLineTabPage, SizeHdl_Impl, MetricField *, pField)

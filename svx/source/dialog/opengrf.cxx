@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opengrf.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-21 15:47:37 $
+ *  last change: $Author: thb $ $Date: 2001-06-22 17:26:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,12 @@
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
+#ifndef _SVX_DIALMGR_HXX
+#include <svx/dialmgr.hxx>
+#endif
 
 #ifndef _SVX_OPENGRF_HXX
 #include "opengrf.hxx"
@@ -161,16 +167,16 @@ USHORT  SvxOpenGrfErr2ResId(    short   err     )
     switch( err )
     {
         case GRFILTER_OPENERROR:
-            return STR_GRFILTER_OPENERROR;
+            return RID_SVXSTR_GRFILTER_OPENERROR;
         case GRFILTER_IOERROR:
-            return STR_GRFILTER_IOERROR;
+            return RID_SVXSTR_GRFILTER_IOERROR;
         case GRFILTER_VERSIONERROR:
-            return STR_GRFILTER_VERSIONERROR;
+            return RID_SVXSTR_GRFILTER_VERSIONERROR;
         case GRFILTER_FILTERERROR:
-            return STR_GRFILTER_FILTERERROR;
+            return RID_SVXSTR_GRFILTER_FILTERERROR;
         case GRFILTER_FORMATERROR:
         default:
-            return STR_GRFILTER_FORMATERROR;
+            return RID_SVXSTR_GRFILTER_FORMATERROR;
     }
 }
 
@@ -189,6 +195,12 @@ SvxOpenGrf_Impl::SvxOpenGrf_Impl() :
 {
     Reference < XFilePicker > xFP = aFileDlg.GetFilePicker();
     xCtrlAcc = Reference < XFilePickerControlAccess >(xFP, UNO_QUERY);
+
+    // disable template dropdown
+    if( xCtrlAcc.is() )
+    {
+        xCtrlAcc->enableControl( ExtendedFilePickerElementIds::LISTBOX_TEMPLATE, sal_False );
+    }
 }
 
 
@@ -196,6 +208,16 @@ SvxOpenGraphicDialog::SvxOpenGraphicDialog( const String& rTitle ) :
     mpImpl( new SvxOpenGrf_Impl )
 {
     mpImpl->aFileDlg.SetTitle(rTitle);
+
+    // supply default path
+    SvtPathOptions aPathOpt;
+
+    String aStartPath = aPathOpt.GetGraphicPath();
+    sal_Bool bGrfPath = ( aStartPath.Len() > 0 );
+    if( !aStartPath.Len() )
+        aStartPath = aPathOpt.GetWorkPath();
+
+    SetPath( aStartPath );
 }
 
 
@@ -209,7 +231,7 @@ GraphicFilter* GetGrfFilter();
 short SvxOpenGraphicDialog::Execute()
 {
     USHORT  nImpRet;
-    BOOL    bQuitLoop=FALSE;
+    BOOL    bQuitLoop(FALSE);
 
     while( bQuitLoop == FALSE &&
            mpImpl->aFileDlg.Execute() == ERRCODE_NONE )
@@ -220,11 +242,12 @@ short SvxOpenGraphicDialog::Execute()
             INetURLObject aObj( GetPath() );
 
             // check whether we can load the graphic
-            String  aCurFilter( mpImpl->aFileDlg.GetCurrentFilter() );
+            String  aCurFilter( GetCurrentFilter() );
             USHORT  nFormatNum = pFilter->GetImportFormatNumber( aCurFilter );
             USHORT  nRetFormat = 0;
             USHORT  nFound = USHRT_MAX;
 
+            // non-local?
             if ( INET_PROT_FILE != aObj.GetProtocol() )
             {
                 SfxMedium aMed( aObj.GetMainURL(), STREAM_READ, TRUE );
@@ -258,7 +281,7 @@ short SvxOpenGraphicDialog::Execute()
             // could not load?
             if ( nFound == USHRT_MAX )
             {
-                WarningBox aWarningBox( NULL, WB_3DLOOK | WB_RETRY_CANCEL, String(ResId(SvxOpenGrfErr2ResId(nImpRet))) );
+                WarningBox aWarningBox( NULL, WB_3DLOOK | WB_RETRY_CANCEL, SVX_RESSTR( SvxOpenGrfErr2ResId(nImpRet) ) );
                 bQuitLoop = aWarningBox.Execute()==RET_RETRY ? FALSE : TRUE;
             }
             else
@@ -266,13 +289,17 @@ short SvxOpenGraphicDialog::Execute()
                 // setup appropriate filter (so next time, it will work)
                 if( pFilter->GetImportFormatCount() )
                 {
-                    mpImpl->aFileDlg.SetCurrentFilter(pFilter->GetImportFormatName(nFound));
+                    String  aFormatName(pFilter->GetImportFormatName(nFound));
+                    SetCurrentFilter(aFormatName);
                 }
+
+                return nImpRet;
             }
         }
     }
 
-    return nImpRet;
+    // cancel
+    return -1;
 }
 
 
@@ -281,12 +308,42 @@ void SvxOpenGraphicDialog::SetPath( const String& rPath )
     mpImpl->aFileDlg.SetDisplayDirectory(rPath);
 }
 
+void SvxOpenGraphicDialog::SetPath( const String& rPath, sal_Bool bLinkState )
+{
+    SetPath(rPath);
+    AsLink(bLinkState);
+}
+
+
+void SvxOpenGraphicDialog::EnableLink( sal_Bool  state  )
+{
+    if( mpImpl->xCtrlAcc.is() )
+    {
+        mpImpl->xCtrlAcc->enableControl( ExtendedFilePickerElementIds::CHECKBOX_LINK, state );
+    }
+}
+
+
+void SvxOpenGraphicDialog::AsLink(sal_Bool  bState)
+{
+    if( mpImpl->xCtrlAcc.is() )
+    {
+        Any aAny; aAny <<= bState;
+        mpImpl->xCtrlAcc->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aAny );
+    }
+}
+
 
 sal_Bool SvxOpenGraphicDialog::IsAsLink() const
 {
-    Any aVal = mpImpl->xCtrlAcc->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0 );
-    DBG_ASSERT(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found")
-    return aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True;
+    if( mpImpl->xCtrlAcc.is() )
+    {
+        Any aVal = mpImpl->xCtrlAcc->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0 );
+        DBG_ASSERT(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found")
+        return aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_False;
+    }
+
+    return sal_False;
 }
 
 
@@ -303,16 +360,16 @@ int SvxOpenGraphicDialog::GetGraphic(Graphic& rGraphic) const
                     : GRFILTER_FORMAT_DONTKNOW;
 
     INetURLObject   aURL( aPath );
-    int             nRes(GRFILTER_OK);
+    int             nRes(GRFILTER_OPENERROR);
 
     if ( aURL.HasError() || INET_PROT_NOT_VALID == aURL.GetProtocol() )
     {
         aURL.SetSmartProtocol( INET_PROT_FILE );
         aURL.SetSmartURL( aPath );
-
-        nRes = pFilter->ImportGraphic( rGraphic, aURL, nFilter );
     }
-    else if ( INET_PROT_FILE != aURL.GetProtocol() )
+
+    // non-local?
+    if ( INET_PROT_FILE != aURL.GetProtocol() )
     {
         SfxMedium       aMed( aPath, STREAM_READ, TRUE );
         SvStream*       pStream = NULL;
@@ -325,10 +382,14 @@ int SvxOpenGraphicDialog::GetGraphic(Graphic& rGraphic) const
         else
             nRes = pFilter->ImportGraphic( rGraphic, aURL, nFilter );
     }
+    else
+    {
+        nRes = pFilter->ImportGraphic( rGraphic, aURL, nFilter );
+    }
 
     if( nRes )
     {
-        WarningBox aWarningBox( NULL, WB_3DLOOK | WB_OK, String(ResId(SvxOpenGrfErr2ResId(nRes))) );
+        WarningBox aWarningBox( NULL, WB_3DLOOK | WB_OK, SVX_RESSTR( SvxOpenGrfErr2ResId(nRes) ) );
         aWarningBox.Execute();
     }
 
@@ -345,4 +406,10 @@ String SvxOpenGraphicDialog::GetPath() const
 String SvxOpenGraphicDialog::GetCurrentFilter() const
 {
     return mpImpl->aFileDlg.GetCurrentFilter();
+}
+
+
+void SvxOpenGraphicDialog::SetCurrentFilter(const String&   rStr)
+{
+    mpImpl->aFileDlg.SetCurrentFilter(rStr);
 }

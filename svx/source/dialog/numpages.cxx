@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-22 16:15:54 $
+ *  last change: $Author: thb $ $Date: 2001-06-22 17:26:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,9 +106,6 @@
 #ifndef _SV_GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
 #endif
-#ifndef _SVX_IMPGRF_HXX //autogen
-#include <impgrf.hxx>
-#endif
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -164,6 +161,7 @@
 
 #include <string>
 #include <algorithm>
+#include "opengrf.hxx"
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
@@ -2634,31 +2632,43 @@ IMPL_LINK( SvxNumOptionsTabPage, BulRelSizeHdl_Impl, MetricField *, pField)
 --------------------------------------------------*/
 IMPL_LINK( SvxNumOptionsTabPage, GraphicHdl_Impl, MenuButton *, pButton )
 {
-    USHORT nItemId = pButton->GetCurItemId();
-    const Graphic* pGraphic = 0;
-    String aGrfName;
-    SvxImportGraphicDialog* pGrfDlg = 0;
+    USHORT                  nItemId = pButton->GetCurItemId();
+    String                  aGrfName;
+    Size                    aSize;
+    sal_Bool                bSucc(sal_False);
+    SvxOpenGraphicDialog    aGrfDlg( SVX_RESSTR(RID_STR_EDIT_GRAPHIC) );
 
     if(MN_GALLERY_ENTRY <= nItemId )
     {
+        const Graphic* pGraphic = 0;
+
         aGrfName = *((String*)aGrfNames.GetObject( nItemId - MN_GALLERY_ENTRY));
         SvxBmpItemInfo* pInfo = (SvxBmpItemInfo*)aGrfBrushItems.GetObject(nItemId - MN_GALLERY_ENTRY);
-        pGraphic = pInfo->pBrushItem->GetGraphic();
+        if( (pGraphic=pInfo->pBrushItem->GetGraphic()) )
+        {
+            aSize = SvxNumberFormat::GetGraphicSizeMM100(pGraphic);
+            bSucc = sal_True;
+        }
     }
     else
     {
-        pGrfDlg = new SvxImportGraphicDialog( this,
-                                SVX_RESSTR(RID_STR_EDIT_GRAPHIC), ENABLE_STANDARD );
-        if ( pGrfDlg->Execute() == RET_OK )
+        aGrfDlg.EnableLink( sal_False );
+        aGrfDlg.AsLink( sal_False );
+        if ( !aGrfDlg.Execute() )
         {
             // ausgewaehlten Filter merken
-            aGrfName = pGrfDlg->GetPath();
-            pGraphic = pGrfDlg->GetGraphic();
+            aGrfName = aGrfDlg.GetPath();
+
+            Graphic aGraphic;
+            if( !aGrfDlg.GetGraphic(aGraphic) )
+            {
+                aSize = SvxNumberFormat::GetGraphicSizeMM100(&aGraphic);
+                bSucc = sal_True;
+            }
         }
     }
-    if(pGraphic)
+    if(bSucc)
     {
-        Size aSize = SvxNumberFormat::GetGraphicSizeMM100(pGraphic);
         aSize = OutputDevice::LogicToLogic(aSize, MAP_100TH_MM, (MapUnit)eCoreUnit);
 
         USHORT nMask = 1;
@@ -2691,7 +2701,6 @@ IMPL_LINK( SvxNumOptionsTabPage, GraphicHdl_Impl, MenuButton *, pButton )
         aOrientLB.Enable();
         SetModified();
     }
-    delete pGrfDlg;
     return 0;
 }
 /* -----------------27.07.99 12:20-------------------
