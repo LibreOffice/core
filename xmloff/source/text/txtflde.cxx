@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-22 12:21:40 $
+ *  last change: $Author: dvo $ $Date: 2001-03-22 13:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -846,7 +846,8 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
             // insert this text field master
             OUString sFieldMasterName = GetStringProperty(
                 sPropertyInstanceName, xDepField->getTextFieldMaster());
-            aMapIter->second.insert( sFieldMasterName );
+            if (sFieldMasterName.getLength() > 0)
+                aMapIter->second.insert( sFieldMasterName );
         }
         // else: no dependent field -> no master -> ignore
     }
