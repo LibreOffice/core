@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgimport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:17:13 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 15:18:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TASK_XJOB_HPP_
+#include <com/sun/star/task/XJob.hpp>
+#endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -83,11 +86,18 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#include <cppuhelper/implbase4.hxx>
+#endif
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYERHANDLER_HPP_
+#include <com/sun/star/configuration/backend/XLayerHandler.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYER_HPP_
+#include <com/sun/star/configuration/backend/XLayer.hpp>
 #endif
 
 #include <memory>
+#include <stack>
 
 namespace dbacfg
 {
@@ -95,8 +105,10 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
-typedef ::cppu::WeakImplHelper2 <       ::com::sun::star::lang::XServiceInfo
+typedef ::cppu::WeakImplHelper4 <       ::com::sun::star::lang::XServiceInfo
                                     ,   ::com::sun::star::lang::XInitialization
+                                    ,   ::com::sun::star::task::XJob
+                                    ,   ::com::sun::star::configuration::backend::XLayerHandler
                                 >   OCfgImport_COMPBASE;
 // -------------
 // - OCfgImport -
@@ -104,11 +116,32 @@ typedef ::cppu::WeakImplHelper2 <       ::com::sun::star::lang::XServiceInfo
 class OCfgImport : public OCfgImport_COMPBASE
 {
 private:
-    Reference< XMultiServiceFactory > m_xORB;
+    typedef ::std::pair< ::rtl::OUString,   sal_Int16>  TElementType;
+    typedef ::std::stack< TElementType >                TElementStack;
+    typedef ::std::vector< PropertyValue >              TDataSourceSettings;
+
+    Reference< XMultiServiceFactory >                               m_xORB;
+    Reference< XMultiServiceFactory >                               m_xOldORB;
+    Reference< ::com::sun::star::configuration::backend::XLayer>    m_xLayer;
+    Reference<XPropertySet>                                         m_xCurrentDS;
+    Reference<XPropertySet>                                         m_xCurrentObject; /// can either be a query or a table
+    Reference<XPropertySet>                                         m_xCurrentColumn;
+    Sequence< ::rtl::OUString>                                      m_aProperties;
+    Sequence< Any>                                                  m_aValues;
+    ::rtl::OUString                                                 m_sCurrentDataSourceName;
+    ::rtl::OUString                                                 m_sBookmarkName;
+    ::rtl::OUString                                                 m_sDocumentLocation;
+
+    TElementStack                                                   m_aStack;
+    TDataSourceSettings                                             m_aDataSourceSettings;
+    sal_Bool                                                        m_bPropertyMayBeVoid;
 
     /** convert the old configuration settings into new database documents.
     */
     void convert();
+    void createDataSource(const ::rtl::OUString& _sName);
+    void createObject(sal_Bool _bQuery ,const ::rtl::OUString& _sName);
+    void setProperties();
 
 protected:
     virtual ~OCfgImport()  throw();
@@ -124,6 +157,94 @@ public:
 
     // lang::XInitialization
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException);
+    // task::XJob
+    virtual ::com::sun::star::uno::Any SAL_CALL execute( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& Arguments ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+
+    // XLayerHandler
+    virtual void SAL_CALL startLayer()
+        throw(::com::sun::star::lang::WrappedTargetException);
+
+    virtual void SAL_CALL endLayer()
+        throw(
+            ::com::sun::star::configuration::backend::MalformedDataException,
+            ::com::sun::star::lang::WrappedTargetException );
+
+    virtual void SAL_CALL overrideNode(
+            const rtl::OUString& aName,
+            sal_Int16 aAttributes,
+            sal_Bool bClear)
+        throw(
+            ::com::sun::star::configuration::backend::MalformedDataException,
+            ::com::sun::star::lang::WrappedTargetException );
+
+    virtual void SAL_CALL addOrReplaceNode(
+            const rtl::OUString& aName,
+            sal_Int16 aAttributes)
+        throw(
+            ::com::sun::star::configuration::backend::MalformedDataException,
+            ::com::sun::star::lang::WrappedTargetException );
+
+    virtual void SAL_CALL  addOrReplaceNodeFromTemplate(
+            const rtl::OUString& aName,
+            const ::com::sun::star::configuration::backend::TemplateIdentifier& aTemplate,
+            sal_Int16 aAttributes )
+        throw(
+            ::com::sun::star::configuration::backend::MalformedDataException,
+            ::com::sun::star::lang::WrappedTargetException );
+
+    virtual void SAL_CALL  endNode()
+        throw(
+            ::com::sun::star::configuration::backend::MalformedDataException,
+            ::com::sun::star::lang::WrappedTargetException );
+
+    virtual void SAL_CALL  dropNode(
+            const rtl::OUString& aName )
+        throw(
+            ::com::sun::star::configuration::backend::MalformedDataException,
+            ::com::sun::star::lang::WrappedTargetException );
+
+    virtual void SAL_CALL  overrideProperty(
+            const rtl::OUString& aName,
+            sal_Int16 aAttributes,
+            const Type& aType,
+            sal_Bool bClear )
+        throw(
+            ::com::sun::star::configuration::backend::MalformedDataException,
+            ::com::sun::star::lang::WrappedTargetException );
+
+    virtual void SAL_CALL  setPropertyValue(
+            const Any& aValue )
+        throw(
+            ::com::sun::star::configuration::backend::MalformedDataException,
+            ::com::sun::star::lang::WrappedTargetException );
+
+    virtual void SAL_CALL setPropertyValueForLocale(
+            const Any& aValue,
+            const rtl::OUString& aLocale )
+        throw(
+            ::com::sun::star::configuration::backend::MalformedDataException,
+            ::com::sun::star::lang::WrappedTargetException );
+
+    virtual void SAL_CALL  endProperty()
+        throw(
+            ::com::sun::star::configuration::backend::MalformedDataException,
+            ::com::sun::star::lang::WrappedTargetException );
+
+    virtual void SAL_CALL  addProperty(
+            const rtl::OUString& aName,
+            sal_Int16 aAttributes,
+            const Type& aType )
+        throw(
+            ::com::sun::star::configuration::backend::MalformedDataException,
+            ::com::sun::star::lang::WrappedTargetException );
+
+    virtual void SAL_CALL  addPropertyWithValue(
+            const rtl::OUString& aName,
+            sal_Int16 aAttributes,
+            const Any& aValue )
+        throw(
+            ::com::sun::star::configuration::backend::MalformedDataException,
+            ::com::sun::star::lang::WrappedTargetException );
 };
 // -----------------------------------------------------------------------------
 } // dbacfg
