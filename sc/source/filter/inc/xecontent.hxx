@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xecontent.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:08:48 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:21:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ private:
 // Merged cells ===============================================================
 
 /** Represents a MERGEDCELLS record containing all merged cell ranges in a sheet. */
-class XclExpMergedcells : public XclExpRecord, protected XclExpRoot
+class XclExpMergedcells : public XclExpRecordBase, protected XclExpRoot
 {
 public:
     explicit            XclExpMergedcells( const XclExpRoot& rRoot );
@@ -133,10 +133,6 @@ public:
 
     /** Writes the record, if it contains at least one merged cell range. */
     virtual void        Save( XclExpStream& rStrm );
-
-private:
-    /** Writes the contents of the MERGEDCELLS record. */
-    virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
     ScRangeList         maMergedRanges;     /// All merged cell ranges of the sheet.
