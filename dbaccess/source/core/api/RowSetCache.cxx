@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-04 13:34:40 $
+ *  last change: $Author: oj $ $Date: 2000-10-05 14:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,11 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     if(xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_ISBOOKMARKABLE) && any2bool(xProp->getPropertyValue(PROPERTY_ISBOOKMARKABLE)))
     {
         m_pCacheSet = new OBookmarkSet(_xRs,_pIterator);
-        m_nPrivileges = Privilege::SELECT | Privilege::INSERT | Privilege::DELETE | Privilege::UPDATE;
+
+        // check privileges
+        m_nPrivileges = Privilege::SELECT;
+        if(Reference<XResultSetUpdate>(_xRs,UNO_QUERY).is())
+            m_nPrivileges |= Privilege::INSERT | Privilege::DELETE | Privilege::UPDATE;
     }
     else
     {
@@ -196,7 +200,10 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
         else
         {
             m_pCacheSet = new OKeySet(_xRs,_pIterator);
-            m_nPrivileges = Privilege::SELECT | Privilege::INSERT | Privilege::DELETE | Privilege::UPDATE;
+            // check privileges
+            m_nPrivileges = Privilege::SELECT;
+            if(Reference<XResultSetUpdate>(_xRs,UNO_QUERY).is())
+                m_nPrivileges |= Privilege::INSERT | Privilege::DELETE | Privilege::UPDATE;
         }
 
     }
@@ -964,8 +971,10 @@ sal_Bool ORowSetCache::moveWindow()
                 {
                     if(!m_bRowCountFinal)
                     {
-                        m_pCacheSet->previous(); // because we stand after the last row
-                        m_nRowCount = m_pCacheSet->getRow();//  + 1 removed
+                        if(m_pCacheSet->previous()) // because we stand after the last row
+                            m_nRowCount = m_pCacheSet->getRow();//  + 1 removed
+                        else
+                            m_nRowCount = 0;
                         m_bRowCountFinal = sal_True;
                     }
                 }
@@ -1076,10 +1085,10 @@ sal_Bool SAL_CALL ORowSetCache::last(  ) throw(SQLException, RuntimeException)
             m_nRowCount = m_nPosition = m_pCacheSet->getRow(); // not  + 1
         }
         m_bLast = sal_True;
+        m_nPosition = m_pCacheSet->getRow();
         moveWindow();
         // we have to repositioning because moveWindow can modify the cache
         m_pCacheSet->last();
-        m_nPosition = m_pCacheSet->getRow();
         if(m_nPosition > m_nFetchSize)
             m_aMatrixIter = m_pMatrix->end() -1;
         else
@@ -1418,6 +1427,9 @@ void SAL_CALL ORowSetCache::clearWarnings(  ) throw(SQLException, RuntimeExcepti
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/10/04 13:34:40  oj
+    some changes for deleteRow and updateRow
+
     Revision 1.2  2000/09/29 15:20:51  oj
     rowset impl
 

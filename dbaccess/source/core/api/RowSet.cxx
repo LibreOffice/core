@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 09:33:39 $
+ *  last change: $Author: oj $ $Date: 2000-10-05 14:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1644,11 +1644,13 @@ Reference< XConnection >  ORowSet::calcConnection() throw( SQLException, Runtime
             {
 #ifdef DEBUG
                 Reference<XDriverManager> xMan(m_xServiceManager->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdbc.DriverManager")),UNO_QUERY);
-                Sequence<PropertyValue> aInfo(1);
+                Sequence<PropertyValue> aInfo(2);
                 aInfo[0].Name    = ::rtl::OUString::createFromAscii("CharSet");
                 aInfo[0].Value <<= RTL_TEXTENCODING_IBM_850;
+                aInfo[1].Name    = ::rtl::OUString::createFromAscii("Extension");
+                aInfo[1].Value <<= ::rtl::OUString::createFromAscii("txt");
 
-                m_xActiveConnection = xMan->getConnectionWithInfo(::rtl::OUString::createFromAscii("sdbc:dbase:file:///G|/Office50/user/database/biblio/biblio.dbf"),aInfo);
+                m_xActiveConnection = xMan->getConnectionWithInfo(::rtl::OUString::createFromAscii("sdbc:flat:file:///G|/Office50/user/database/"),aInfo);
                 if(!m_xActiveConnection.is())
 #endif
                     throw SQLException();
@@ -2355,6 +2357,9 @@ sal_Int64 SAL_CALL ORowSetClone::getSomething( const Sequence< sal_Int8 >& rId )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/10/05 09:33:39  fs
+    using comphelper::OPropertyContainer instead of connectivity::OSimplePropertyContainer
+
     Revision 1.3  2000/10/04 13:34:40  oj
     some changes for deleteRow and updateRow
 
