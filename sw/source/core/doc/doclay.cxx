@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 13:05:17 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:01:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,6 +250,10 @@
 // #i11176#
 #ifndef _UNOFRAME_HXX
 #include <unoframe.hxx>
+#endif
+// OD 2004-05-24 #i28701#
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
 #endif
 
 // --> OD 2004-07-26 #i32089#
@@ -1209,16 +1213,14 @@ void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
     {
         if( pPage->GetSortedObjs() )
         {
-            SwSortDrawObjs &rObjs = *pPage->GetSortedObjs();
+            SwSortedObjs &rObjs = *pPage->GetSortedObjs();
             for( sal_uInt16 i = 0; i < rObjs.Count(); ++i)
             {
-                SdrObject *pO = rObjs[i];
-                SwVirtFlyDrawObj *pObj = pO->ISA(SwVirtFlyDrawObj) ?
-                                                    (SwVirtFlyDrawObj*)pO : 0;
-                if( pObj )
-                    pFly = pObj->GetFlyFrm()->GetFmt();
+                SwAnchoredObject* pAnchoredObj = rObjs[i];
+                if ( pAnchoredObj->ISA(SwFlyFrm) )
+                    pFly = &(pAnchoredObj->GetFrmFmt());
                 else if ( bDrawAlso )
-                    pFly = ::FindFrmFmt( rObjs[i] );
+                    pFly = &(pAnchoredObj->GetFrmFmt());
                 else
                     continue;
 
