@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:30:02 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:49:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,9 @@
 // OD 25.06.2003 #108784#
 #ifndef _SVDTYPES_HXX
 #include <svx/svdtypes.hxx>
+#endif
+#ifndef _SFXSTYLE_HXX //autogen // #116530#
+#include <svtools/style.hxx>
 #endif
 
 class SvxForbiddenCharactersTable;
@@ -319,6 +322,7 @@ class SwDoc
     friend class SwSwgReader; // Zugriff auf bDtor-Flag (wg. Loeschen v.Frames)
     friend class Sw3IoImp;    // Zugriff u.a. auf den Drawing Layer
     friend class SwCompareData; // fuers Undo vom CompareDoc
+    friend class SwDocShell;    // ClearRedo #116530#
 
     friend void _InitCore();
     friend void _FinitCore();
@@ -1252,16 +1256,18 @@ public:
     // Remove all language dependencies from all existing formats
     void RemoveAllFmtLanguageDependencies();
 
-    SwFrmFmt  *MakeFrmFmt(const String &rFmtName, SwFrmFmt *pDerivedFrom);
-    void       DelFrmFmt( SwFrmFmt *pFmt );
+    SwFrmFmt  *MakeFrmFmt(const String &rFmtName, SwFrmFmt *pDerivedFrom,
+                          BOOL bBroadcast = FALSE);
+    void       DelFrmFmt( SwFrmFmt *pFmt, BOOL bBroadcast = FALSE );
     SwFrmFmt* FindFrmFmtByName( const String& rName ) const
         {   return (SwFrmFmt*)FindFmtByName( (SvPtrarr&)*pFrmFmtTbl, rName ); }
     SwFrmFmt* FindSpzFrmFmtByName( const String& rName ) const
         {   return (SwFrmFmt*)FindFmtByName( (SvPtrarr&)*pSpzFrmFmtTbl, rName ); }
 
-    SwCharFmt *MakeCharFmt(const String &rFmtName, SwCharFmt *pDerivedFrom);
-    void       DelCharFmt(sal_uInt16 nFmt);
-    void       DelCharFmt(SwCharFmt* pFmt);
+    SwCharFmt *MakeCharFmt(const String &rFmtName, SwCharFmt *pDerivedFrom,
+                           BOOL bBroadcast = FALSE);
+    void       DelCharFmt(sal_uInt16 nFmt, BOOL bBroadcast = FALSE);
+    void       DelCharFmt(SwCharFmt* pFmt, BOOL bBroadcast = FALSE);
     SwCharFmt* FindCharFmtByName( const String& rName ) const
         {   return (SwCharFmt*)FindFmtByName( (SvPtrarr&)*pCharFmtTbl, rName ); }
 
@@ -1270,11 +1276,13 @@ public:
     const SwTxtFmtColl* GetDfltTxtFmtColl() const { return pDfltTxtFmtColl; }
     const SwTxtFmtColls *GetTxtFmtColls() const { return pTxtFmtCollTbl; }
     SwTxtFmtColl *MakeTxtFmtColl( const String &rFmtName,
-                                  SwTxtFmtColl *pDerivedFrom );
+                                  SwTxtFmtColl *pDerivedFrom,
+                                  BOOL bBroadcast = FALSE);
     SwConditionTxtFmtColl* MakeCondTxtFmtColl( const String &rFmtName,
-                                               SwTxtFmtColl *pDerivedFrom );
-    void DelTxtFmtColl(sal_uInt16 nFmt);
-    void DelTxtFmtColl( SwTxtFmtColl* pColl );
+                                               SwTxtFmtColl *pDerivedFrom,
+                                               BOOL bBroadcast = FALSE);
+    void DelTxtFmtColl(sal_uInt16 nFmt, BOOL bBroadcast = FALSE);
+    void DelTxtFmtColl( SwTxtFmtColl* pColl, BOOL bBroadcast = FALSE );
     sal_Bool SetTxtFmtColl( const SwPaM &rRg, SwTxtFmtColl *pFmt,
                         sal_Bool bReset = sal_True);
     SwTxtFmtColl* FindTxtFmtCollByName( const String& rName ) const
@@ -1461,17 +1469,24 @@ public:
         { _CopyPageDescHeaderFooter( sal_False, rSrcFmt, rDestFmt ); }
 
         //fuer Reader
+
     SwPageDesc * GetPageDesc( const String & rName );
     SwPageDesc& _GetPageDesc( sal_uInt16 i ) const { return *aPageDescs[i]; }
     void ChgPageDesc( const String & rName, const SwPageDesc& );
     void ChgPageDesc( sal_uInt16 i, const SwPageDesc& );
     BOOL FindPageDesc( const String & rName, sal_uInt16 * pFound );
-    void DelPageDesc( const String & rName);
-    void DelPageDesc( sal_uInt16 i );
+    // -> #116530#
+    void DelPageDesc( const String & rName, BOOL bBroadcast = FALSE);
+    void DelPageDesc( sal_uInt16 i, BOOL bBroadcast = FALSE );
+    // <- #116530#
     void PreDelPageDesc(SwPageDesc * pDel); // #i7983#
+    // -> #116530#
     sal_uInt16 MakePageDesc( const String &rName, const SwPageDesc* pCpy = 0,
-                             BOOL bRegardLanguage = TRUE);
-
+                             BOOL bRegardLanguage = TRUE,
+                             BOOL bBroadcast = FALSE);
+    void BroadcastStyleOperation(String rName, SfxStyleFamily eFamily,
+                                 USHORT nOp);
+    // <- #116530#
         // Methoden fuer die Verzeichnisse:
         // - Verzeichnismarke einfuegen loeschen travel
     sal_uInt16 GetCurTOXMark( const SwPosition& rPos, SwTOXMarks& ) const;
@@ -1579,11 +1594,15 @@ public:
     SwNumRule* GetCurrNumRule( const SwPosition& rPos ) const;
     SwNumRuleTbl& GetNumRuleTbl() { return *pNumRuleTbl; }
     const SwNumRuleTbl& GetNumRuleTbl() const { return *pNumRuleTbl; }
-    sal_uInt16 MakeNumRule( const String &rName, const SwNumRule* pCpy = 0 );
+    sal_uInt16 MakeNumRule( const String &rName, const SwNumRule* pCpy = 0,
+                            BOOL bBroadcast = FALSE);
     sal_uInt16 FindNumRule( const String& rName ) const;
     SwNumRule* FindNumRulePtr( const String& rName ) const;
     // loeschen geht nur, wenn die ::com::sun::star::chaos::Rule niemand benutzt!
-    sal_Bool DelNumRule( const String& rName );
+    // #106897#
+    sal_Bool RenameNumRule(const String & aOldName, const String & aNewName,
+                           BOOL bBroadcast = FALSE);
+    sal_Bool DelNumRule( const String& rName, BOOL bBroadCast = FALSE );
     String GetUniqueNumRuleName( const String* pChkStr = 0, sal_Bool bAutoNum = sal_True ) const;
     void UpdateNumRule( const String& rName, sal_uInt32 nUpdPos );
     void UpdateNumRule();   // alle invaliden Updaten
@@ -1595,8 +1614,6 @@ public:
     void ChgNumRuleFmts( const SwNumRule& rRule, const String * pOldName = 0 );
     sal_Bool ReplaceNumRule( const SwPosition& rPos, const String& rOldRule,
                         const String& rNewRule );
-     // #106897#
-    sal_Bool RenameNumRule(const String & rOldName, const String & rNewName);
 
         // zum naechsten/vorhergehenden Punkt auf gleicher Ebene
     sal_Bool GotoNextNum( SwPosition&, sal_Bool bOverUpper = sal_True,
@@ -2206,6 +2223,9 @@ public:
 
     // Change a format undoable.
     void ChgFmt(SwFmt & rFmt, const SfxItemSet & rSet);
+
+    void RenameFmt(SwFmt & rFmt, const String & sNewName,
+                   BOOL bBroadcast = FALSE);
 
     // Change a TOX undoable.
     void ChgTOX(SwTOXBase & rTOX, const SwTOXBase & rNew);
