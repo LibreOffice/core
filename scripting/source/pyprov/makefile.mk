@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2004-07-23 14:11:32 $
+#   last change: $Author: hr $ $Date: 2005-02-11 16:35:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,47 +64,15 @@ PRJ=..$/..
 
 PRJNAME=scripting
 TARGET=pyprov
-NO_BSYMBOLIC=	TRUE
-ENABLE_EXCEPTIONS=TRUE
-COMP1TYPELIST=$(TARGET)
-COMPRDB=$(SOLARBINDIR)$/types.rdb
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
-DLLPRE =
 
 # ------------------------------------------------------------------
 
-.INCLUDE :  ..$/cppumaker.mk
-
-SLOFILES= \
-        $(SLO)$/PScriptMetadataImporter.obj \
-        $(SLO)$/scriptbnode.obj \
-        $(SLO)$/parcelbnode.obj \
-        $(SLO)$/topbnode.obj \
-        $(SLO)$/pyprov.obj 
-
-SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX).uno
-SHL1IMPLIB=	i$(TARGET)
-
-SHL1VERSIONMAP=$(TARGET).map
-SHL1DEF=$(MISC)$/$(SHL1TARGET).def
-DEF1NAME=$(SHL1TARGET)
-
-SHL1STDLIBS= \
-        $(SFX2LIB) \
-        $(TOOLSLIB) \
-        $(COMPHELPERLIB) \
-        $(CPPUHELPERLIB) \
-        $(CPPULIB) \
-        $(UCBHELPERLIB) \
-        $(SALLIB)
-
-SHL1DEPN=
-SHL1LIBS=$(SLB)$/$(TARGET).lib
 
 # --- Targets ------------------------------------------------------
 ALL : ALLTAR \
