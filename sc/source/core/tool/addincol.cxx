@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addincol.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2002-11-21 16:15:02 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:46:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@
 #include "compiler.hxx"
 #include "scmatrix.hxx"
 #include "addinlis.hxx"
+#include "errorcodes.hxx"
 #include "scfuncs.hrc"
 
 using namespace com::sun::star;
@@ -123,61 +124,6 @@ static const sal_Char* __FAR_DATA aFuncNames[SC_FUNCGROUP_COUNT] =
         "Add-In"            // ID_FUNCTION_GRP_ADDINS
     };
 
-
-//------------------------------------------------------------------------
-
-struct ScAddInArgDesc
-{
-    String              aName;
-    String              aDescription;
-    ScAddInArgumentType eType;
-    BOOL                bOptional;
-};
-
-class ScUnoAddInFuncData
-{
-private:
-    String              aOriginalName;      // kept in formula
-    String              aLocalName;         // for display
-    String              aUpperName;         // for entering formulas
-    String              aUpperLocal;        // for entering formulas
-    String              aDescription;
-    uno::Reference<reflection::XIdlMethod> xFunction;
-    uno::Any            aObject;
-    long                nArgCount;
-    ScAddInArgDesc*     pArgDescs;
-    long                nCallerPos;
-    USHORT              nCategory;
-    USHORT              nHelpId;
-    mutable uno::Sequence<sheet::LocalizedName> aCompNames;
-    mutable BOOL        bCompInitialized;
-
-public:
-                ScUnoAddInFuncData( const String& rNam, const String& rLoc,
-                                    const String& rDesc,
-                                    USHORT nCat, USHORT nHelp,
-                                    const uno::Reference<reflection::XIdlMethod>& rFunc,
-                                    const uno::Any& rO,
-                                    long nAC, const ScAddInArgDesc* pAD,
-                                    long nCP );
-                ~ScUnoAddInFuncData();
-
-    const String&           GetOriginalName() const     { return aOriginalName; }
-    const String&           GetLocalName() const        { return aLocalName; }
-    const String&           GetUpperName() const        { return aUpperName; }
-    const String&           GetUpperLocal() const       { return aUpperLocal; }
-    const uno::Reference<reflection::XIdlMethod>& GetFunction() const
-                                                        { return xFunction; }
-    const uno::Any&         GetObject() const           { return aObject; }
-    long                    GetArgumentCount() const    { return nArgCount; }
-    const ScAddInArgDesc*   GetArguments() const        { return pArgDescs; }
-    long                    GetCallerPos() const        { return nCallerPos; }
-    const String&           GetDescription() const      { return aDescription; }
-    USHORT                  GetCategory() const         { return nCategory; }
-    USHORT                  GetHelpId() const           { return nHelpId; }
-
-    const uno::Sequence<sheet::LocalizedName>& GetCompNames() const;
-};
 
 //------------------------------------------------------------------------
 
@@ -971,7 +917,8 @@ ScUnoAddInCall::~ScUnoAddInCall()
 {
     // pFuncData is deleted with ScUnoAddInCollection
 
-    delete pMatrix;
+    if ( pMatrix )
+        pMatrix->Delete();
 }
 
 BOOL ScUnoAddInCall::ValidParamCount()
