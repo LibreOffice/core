@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdovirt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-07 12:08:48 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:30:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -728,3 +728,7 @@ void SdrVirtObj::AfterRead()
     // fehlende Implementation
 }
 
+const Point SdrVirtObj::GetOffset() const
+{
+    return Point(0,0);
+}
