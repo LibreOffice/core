@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-06 12:48:40 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 07:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1686,10 +1686,10 @@ void OTableEditorCtrl::SetPrimaryKey( sal_Bool bSet )
             {
                 pFieldDescr->SetIsNullable(ColumnValue::NO_NULLS);
                 pFieldDescr->SetDefaultValue(String());
-                //////////////////////////////////////////////////////////////////////
-                // Die Fielddesription updaten
-                pDescrWin->DisplayData(pFieldDescr);
             }
+            //////////////////////////////////////////////////////////////////////
+            // update field description
+            pDescrWin->DisplayData(pFieldDescr);
 
             nIndex = m_pRowList->end() - aIter;
             aDeletedPrimKeys.Insert( nIndex );
