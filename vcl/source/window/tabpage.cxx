@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabpage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:32:38 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:51:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,32 +196,7 @@ void TabPage::DeactivatePage()
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > TabPage::CreateAccessible()
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc;
+    // TODO: remove this method (incompatible)
 
-    Window* pParent = GetAccessibleParentWindow();
-    if ( pParent && pParent->GetType() == WINDOW_TABCONTROL )
-    {
-        TabControl* pTabControl = static_cast< TabControl* >( pParent );
-        if ( pTabControl )
-        {
-            for ( sal_uInt16 i = 0, nCount = pTabControl->GetPageCount(); i < nCount; ++i )
-            {
-                sal_uInt16 nPageId = pTabControl->GetPageId( i );
-                if ( pTabControl->GetTabPage( nPageId ) == this )
-                {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xParent = pTabControl->GetAccessible();
-                    if ( xParent.is() )
-                    {
-                        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > xParentContext( xParent->getAccessibleContext() );
-                        if ( xParentContext.is() )
-                            xAcc = xParentContext->getAccessibleChild( i );
-                    }
-                }
-            }
-        }
-    }
-    else
-        xAcc = Window::CreateAccessible();
-
-    return xAcc;
+    return Window::CreateAccessible();
 }
