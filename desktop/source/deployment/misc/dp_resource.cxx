@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_resource.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:25:28 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 14:09:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #include "dp_misc.h"
 #include "dp_resource.h"
 #include "osl/module.hxx"
+#include "cppuhelper/implbase1.hxx"
 #include "unotools/configmgr.hxx"
-#include "tools/resmgr.hxx"
 #include "tools/isolang.hxx"
 
 
@@ -72,50 +72,50 @@ using namespace ::com::sun::star::uno;
 using ::rtl::OUString;
 
 namespace dp_misc {
+namespace {
 
-static ::vos::OMutex s_mutex;
-::vos::IMutex * g_pResMgrMmutex = &s_mutex;
-
-static lang::Locale s_locale;
-
-//==============================================================================
-static ResMgr * getResMgr()
-{
-    static ResMgr * s_pResMgr = 0;
-    if (s_pResMgr == 0)
-    {
+struct OfficeLocale : public ::rtl::StaticData<lang::Locale, OfficeLocale> {
+    lang::Locale operator () () {
         OUString slang;
         if (! (::utl::ConfigManager::GetDirectConfigProperty(
                    ::utl::ConfigManager::LOCALE ) >>= slang))
-            throw RuntimeException( OUSTR("Cannot determine language!"),
-                                    Reference<XInterface>() );
-
-        s_locale = toLocale(slang);
-
-        OUString path;
-        ::osl::Module::getUrlFromAddress( (void *) getResMgr, path );
-        path = path.copy( 0, path.lastIndexOf( '/' ) + 1 ) + OUSTR("resource");
-        String resourcePath( path );
-
-        s_pResMgr = ResMgr::CreateResMgr(
-            "deployment" LIBRARY_SOLARUPD(), s_locale, NULL, &resourcePath );
-        OSL_ASSERT( s_pResMgr != 0 );
+            throw RuntimeException( OUSTR("Cannot determine language!"), 0 );
+        return toLocale(slang);
     }
-    return s_pResMgr;
-}
+};
+
+void dummy() {}
+struct DeploymentResMgr : public ::rtl::StaticData< ResMgr *,
+                                                    DeploymentResMgr > {
+    ResMgr * operator () () {
+        OUString path;
+        ::osl::Module::getUrlFromAddress( (void *) dummy, path );
+        String resourcePath(
+            path.copy( 0, path.lastIndexOf( '/' ) + 1 ) + OUSTR("resource") );
+        const ::vos::OGuard guard( g_pResMgrMutex );
+        return ResMgr::CreateResMgr( "deployment" LIBRARY_SOLARUPD(),
+                                     OfficeLocale::get(), NULL, &resourcePath );
+    }
+};
+
+::vos::OMutex s_mutex;
+
+} // anon namespace
+
+::vos::IMutex * g_pResMgrMutex = &s_mutex;
 
 //==============================================================================
 ResId getResId( USHORT id )
 {
-    ::vos::OGuard guard( g_pResMgrMmutex );
-    return ResId( id, getResMgr() );
+    const ::vos::OGuard guard( g_pResMgrMutex );
+    return ResId( id, DeploymentResMgr::get() );
 }
 
 //==============================================================================
 String getResourceString( USHORT id )
 {
-    ::vos::OGuard guard( g_pResMgrMmutex );
-    String ret( ResId( id, getResMgr() ) );
+    const ::vos::OGuard guard( g_pResMgrMutex );
+    String ret( ResId( id, DeploymentResMgr::get() ) );
     if (ret.SearchAscii( "%PRODUCTNAME" ) != STRING_NOTFOUND) {
         static String s_brandName;
         if (s_brandName.Len() == 0) {
@@ -133,11 +133,7 @@ String getResourceString( USHORT id )
 //==============================================================================
 lang::Locale const & getOfficeLocale()
 {
-    if (g_pResMgrMmutex == 0) {
-        ::vos::OGuard guard( g_pResMgrMmutex );
-        getResMgr(); // init locale
-    }
-    return s_locale;
+    return OfficeLocale::get();
 }
 
 }
