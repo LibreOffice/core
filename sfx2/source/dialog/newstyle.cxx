@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newstyle.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-28 07:54:44 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:12:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,9 @@
 #ifndef _SFXSTYLE_HXX //autogen
 #include <svtools/style.hxx>
 #endif
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "newstyle.hxx"
 #include "dialog.hrc"
