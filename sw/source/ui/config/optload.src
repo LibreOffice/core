@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:39:39 $
+ *  last change: $Author: kz $ $Date: 2001-06-05 21:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,21 +224,21 @@ TabPage TP_OPTLOAD_PAGE
         Text [ English ] = "Fields and Charts" ;
         Text[ english_us ] = "Update automatically";
         Text[ portuguese ] = "Actualizar campos e gráficos";
-        Text[ russian ] = "Îáíîâëÿòü ïîëÿ è äèàãğàììû";
+        Text[ russian ] = "Ïîëÿ è äèàãğàììû";
         Text[ greek ] = "Ğåäßá êáé äéáãñÜììáôá";
         Text[ dutch ] = "Velden en diagrammen actualiseren";
-        Text[ french ] = "Actualiser champs et diagrammes";
-        Text[ spanish ] = "Actualizar campos y diagramas";
+        Text[ french ] = "Champs et diagrammes";
+        Text[ spanish ] = "Campos y diagramas";
         Text[ finnish ] = "Felder und Diagramme aktualisieren";
         Text[ italian ] = "Aggiorna campi e diagrammi";
         Text[ danish ] = "Felter og diagrammer";
-        Text[ swedish ] = "Uppdatera fält och diagram";
-        Text[ polish ] = "Aktualizuj pola i wykresy";
+        Text[ swedish ] = "Fält och diagram";
+        Text[ polish ] = "Pola i wykresy";
         Text[ portuguese_brazilian ] = "Refresh links";
-        Text[ japanese ] = "Ì¨°ÙÄŞ‚Æ¸Ş×Ì‚ğXV";
+        Text[ japanese ] = "Ì¨°ÙÄŞ‚Æ¸Ş×Ì";
         Text[ korean ] = "ÇÊµå¿Í Â÷Æ®";
-        Text[ chinese_simplified ] = "¸üĞÂ×Ö¶ÎºÍÍ¼±í";
-        Text[ chinese_traditional ] = "§ó·sÄæ¦ì¤Î¹Ïªí";
+        Text[ chinese_simplified ] = "×Ö¶ÎºÍÍ¼±í";
+        Text[ chinese_traditional ] = "Äæ¦ì©M¹Ïªí";
         Text[ turkish ] = "Alan ve şemalar";
         Text[ arabic ] = "ÍŞæá æÑÓæã ÈíÇäíÉ";
         Text[ catalan ] = "Campos y diagramas";
@@ -427,7 +427,7 @@ TabPage TP_OPTLOAD_PAGE
         Text [ portuguese ] = "Unidade de medida";
         Text [ danish ] = "Måleenhed";
         Text [ french ] = "Unité de mesure";
-        Text [ swedish ] = "Måttenhet";
+        Text [ swedish ] = "~Måttenhet";
         Text [ dutch ] = "Maateenheid";
         Text [ spanish ] = "Unidad de medida";
         Text [ english_us ] = "Measurement unit";
@@ -463,7 +463,7 @@ TabPage TP_OPTLOAD_PAGE
         Text [ portuguese ] = "Espaço entre tabulações";
         Text [ danish ] = "Tabulatorafstand";
         Text [ french ] = "Espace entre les tabulations";
-        Text [ swedish ] = "Tabulatoravstånd";
+        Text [ swedish ] = "Tabulatorav~stånd";
         Text [ dutch ] = "Tabstops";
         Text [ spanish ] = "Distancia entre tabuladores";
         Text [ english_us ] = "Tab stops";
@@ -846,7 +846,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ chinese_traditional ] = "¼ĞÅÒ";
         Text[ arabic ] = "ÇáÊÓãíÉ ÇáÊæÖíÍíÉ";
         Text[ greek ] = "ÅğéãñáöŞ";
-        Text[ korean ] = "Ä¸¼Ç";
+        Text[ korean ] = "¶óº§";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Resim yazısı";
         Text[ catalan ] = "~Etiqueta";
@@ -1212,7 +1212,7 @@ TabPage TP_OPTCAPTION_PAGE
     Text[ chinese_traditional ] = "¼ĞÅÒ";
     Text[ arabic ] = "ÊÓãíÉ ÊæÖíÍíÉ";
     Text[ greek ] = "ÅğéãñáöŞ";
-    Text[ korean ] = "Ä¸¼Ç";
+    Text[ korean ] = "¶óº§";
     Text[ language_user1 ] = " ";
     Text[ turkish ] = "Resim yazısı";
     Text[ catalan ] = "Etiqueta";
@@ -1342,15 +1342,15 @@ StringArray STR_ARR_METRIC
         };
         ItemList [ swedish ] =
         {
-            < "Millimeter" ; FUNIT_MM ; > ;
-            < "Centimeter" ; FUNIT_CM ; > ;
-            < "Meter" ; FUNIT_M ; > ;
-            < "Kilometer" ; FUNIT_KM ; > ;
-            < "Tum" ; FUNIT_INCH ; > ;
-            < "Fot" ; FUNIT_FOOT ; > ;
-            < "Miles" ; FUNIT_MILE ; > ;
-            < "Pica" ; FUNIT_PICA ; > ;
-            < "Punkt" ; FUNIT_POINT ; > ;
+            < "millimeter" ; FUNIT_MM ; > ;
+            < "centimeter" ; FUNIT_CM ; > ;
+            < "meter" ; FUNIT_M ; > ;
+            < "kilometer" ; FUNIT_KM ; > ;
+            < "tum" ; FUNIT_INCH ; > ;
+            < "fot" ; FUNIT_FOOT ; > ;
+            < "miles" ; FUNIT_MILE ; > ;
+            < "pica" ; FUNIT_PICA ; > ;
+            < "punkt" ; FUNIT_POINT ; > ;
         };
         ItemList [ finnish ] =
         {
