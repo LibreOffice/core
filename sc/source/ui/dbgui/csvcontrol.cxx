@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvcontrol.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:51 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 18:00:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,10 +328,12 @@ sal_Int32 ScCsvControl::GetLineFromY( sal_Int32 nY ) const
 
 void ScCsvControl::ImplInvertRect( OutputDevice& rOutDev, const Rectangle& rRect )
 {
-    RasterOp eOldOp = rOutDev.GetRasterOp();
+    rOutDev.Push( PUSH_LINECOLOR | PUSH_FILLCOLOR | PUSH_RASTEROP );
+    rOutDev.SetLineColor( Color( COL_BLACK ) );
+    rOutDev.SetFillColor( Color( COL_BLACK ) );
     rOutDev.SetRasterOp( ROP_INVERT );
     rOutDev.DrawRect( rRect );
-    rOutDev.SetRasterOp( eOldOp );
+    rOutDev.Pop();
 }
 
 ScMoveMode ScCsvControl::GetHorzDirection( sal_uInt16 nCode, bool bHomeEnd )
