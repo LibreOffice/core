@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdb.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:15:39 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:41:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -910,7 +910,7 @@ ERRTYPE RscTypCont :: WriteHxx( FILE * fOutput, ULONG nFileKey )
     fprintf( fOutput, "#include <vcl/accel.hxx>\n" );
     fprintf( fOutput, "#include <vcl/bitmap.hxx>\n" );
     fprintf( fOutput, "#include <vcl/button.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/color.hxx>\n" );
+    fprintf( fOutput, "#include <tools/color.hxx>\n" );
     fprintf( fOutput, "#include <vcl/combobox.hxx>\n" );
     fprintf( fOutput, "#include <vcl/ctrl.hxx>\n" );
     fprintf( fOutput, "#include <vcl/dialog.hxx>\n" );
