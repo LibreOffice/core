@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tkscrollbar.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 15:56:17 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:58:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,7 @@ namespace toolkit
 
     sal_Int32 UnoScrollBarControl::getValue() throw(::com::sun::star::uno::RuntimeException)
     {
-        sal_Int32 n;
+        sal_Int32 n = 0;
         if ( getPeer().is() )
         {
             uno::Reference< awt::XScrollBar > xScrollBar( getPeer(), uno::UNO_QUERY );
@@ -271,7 +271,7 @@ namespace toolkit
 
     sal_Int32 UnoScrollBarControl::getMaximum() throw(::com::sun::star::uno::RuntimeException)
     {
-        sal_Int32 n;
+        sal_Int32 n = 0;
         if ( getPeer().is() )
         {
             uno::Reference< awt::XScrollBar > xScrollBar( getPeer(), uno::UNO_QUERY );
@@ -287,7 +287,7 @@ namespace toolkit
 
     sal_Int32 UnoScrollBarControl::getLineIncrement() throw(::com::sun::star::uno::RuntimeException)
     {
-        sal_Int32 n;
+        sal_Int32 n = 0;
         if ( getPeer().is() )
         {
             uno::Reference< awt::XScrollBar > xScrollBar( getPeer(), uno::UNO_QUERY );
@@ -303,7 +303,7 @@ namespace toolkit
 
     sal_Int32 UnoScrollBarControl::getBlockIncrement() throw(::com::sun::star::uno::RuntimeException)
     {
-        sal_Int32 n;
+        sal_Int32 n = 0;
         if ( getPeer().is() )
         {
             uno::Reference< awt::XScrollBar > xScrollBar( getPeer(), uno::UNO_QUERY );
@@ -319,7 +319,7 @@ namespace toolkit
 
     sal_Int32 UnoScrollBarControl::getVisibleSize() throw(::com::sun::star::uno::RuntimeException)
     {
-        sal_Int32 n;
+        sal_Int32 n = 0;
         if ( getPeer().is() )
         {
             uno::Reference< awt::XScrollBar > xScrollBar( getPeer(), uno::UNO_QUERY );
@@ -335,7 +335,7 @@ namespace toolkit
 
     sal_Int32 UnoScrollBarControl::getOrientation() throw(::com::sun::star::uno::RuntimeException)
     {
-        sal_Int32 n;
+        sal_Int32 n = 0;
         if ( getPeer().is() )
         {
             uno::Reference< awt::XScrollBar > xScrollBar( getPeer(), uno::UNO_QUERY );
