@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-10 05:48:21 $
+ *  last change: $Author: pb $ $Date: 2001-07-11 14:01:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,7 @@ extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // s
 #define IMAGE_URL               String(DEFINE_CONST_UNICODE("private:factory/"))
 #define PROPERTY_KEYWORDLIST    ::rtl::OUString(DEFINE_CONST_UNICODE("KeywordList"))
 #define PROPERTY_KEYWORDREF     ::rtl::OUString(DEFINE_CONST_UNICODE("KeywordRef"))
+#define PROPERTY_ANCHORREF      ::rtl::OUString(DEFINE_CONST_UNICODE("KeywordAnchorForRef"))
 #define PROPERTY_TITLE          ::rtl::OUString(DEFINE_CONST_UNICODE("Title"))
 #define HELP_URL                ::rtl::OUString(DEFINE_CONST_UNICODE("vnd.sun.star.help://"))
 #define HELP_SEARCH_TAG         ::rtl::OUString(DEFINE_CONST_UNICODE("/?Query="))
@@ -285,26 +286,32 @@ void IndexTabPage_Impl::InitializeIndex()
         aURL = aTemp;
         Content aCnt( aURL, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > xInfo = aCnt.getProperties();
-        if ( xInfo->hasPropertyByName( PROPERTY_KEYWORDLIST ) )
+        if ( xInfo->hasPropertyByName( PROPERTY_ANCHORREF ) )
         {
             ::com::sun::star::uno::Any aAny1 = aCnt.getPropertyValue( PROPERTY_KEYWORDLIST );
             ::com::sun::star::uno::Sequence< ::rtl::OUString > aKeywordList;
             ::com::sun::star::uno::Any aAny2 = aCnt.getPropertyValue( PROPERTY_KEYWORDREF );
             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > aKeywordRefList;
-            if ( ( aAny1 >>= aKeywordList ) && ( aAny2 >>= aKeywordRefList ) )
+            ::com::sun::star::uno::Any aAny3 = aCnt.getPropertyValue( PROPERTY_ANCHORREF );
+            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > aAnchorRefList;
+            if ( ( aAny1 >>= aKeywordList ) && ( aAny2 >>= aKeywordRefList ) && ( aAny3 >>= aAnchorRefList ) )
             {
                 const ::rtl::OUString* pKeywords  = aKeywordList.getConstArray();
                 const ::com::sun::star::uno::Sequence< ::rtl::OUString >* pRefs = aKeywordRefList.getConstArray();
+                const ::com::sun::star::uno::Sequence< ::rtl::OUString >* pAnchorRefs = aAnchorRefList.getConstArray();
                 sal_Int32 i, nCount = aKeywordList.getLength();
                 DBG_ASSERT( aKeywordRefList.getLength() == nCount, "keywordlist and reflist with different length" );
+                DBG_ASSERT( aAnchorRefList.getLength() == nCount, "keywordlist and anchorlist with different length" );
                 USHORT nPos;
                 String aIndex, aSubIndex;
 
                 for ( i = 0; i < nCount; ++i )
                 {
                     ::com::sun::star::uno::Sequence< ::rtl::OUString > aRefList = pRefs[i];
+                    ::com::sun::star::uno::Sequence< ::rtl::OUString > aAnchorList = pAnchorRefs[i];
                     const ::rtl::OUString* pRef  = aRefList.getConstArray();
-                    sal_Int32 j, nRefCount = aRefList.getLength();
+                    const ::rtl::OUString* pAnchor  = aAnchorList.getConstArray();
+                    sal_Int32 j, nRefCount = aRefList.getLength(), nAnchorCount = aAnchorList.getLength();
 
                     String aKeywordPair( pKeywords[i] );
                     xub_StrLen nTokenCount = aKeywordPair.GetTokenCount();
@@ -314,6 +321,12 @@ void IndexTabPage_Impl::InitializeIndex()
                         {
                             nPos = aIndexCB.InsertEntry( aKeywordPair );
                             String* pData = new String( pRef[j] );
+                            String aAnchor = String( pAnchor[j] );
+                            if ( aAnchor.Len() > 0 )
+                            {
+                                *pData += '#';
+                                *pData += aAnchor;
+                            }
                             aIndexCB.SetEntryData( nPos, (void*)(ULONG)pData );
                         }
                     }
@@ -330,8 +343,26 @@ void IndexTabPage_Impl::InitializeIndex()
                         aSubIndex += aKeywordPair.GetToken( 0, ';', nIdx );
                         for ( j = 0; j < nRefCount; ++j )
                         {
+                            if ( aIndexCB.GetEntryPos( aSubIndex ) != LISTBOX_ENTRY_NOTFOUND )
+                            {
+                                sal_Unicode cChar = aSubIndex.GetChar( aSubIndex.Len() - 1 );
+                                if (  ')' == cChar || ' ' == cChar )
+                                    aSubIndex += ' ';
+                                else
+                                {
+                                    aSubIndex += String( DEFINE_CONST_UNICODE(" (") );
+                                    aSubIndex += aIndex;
+                                    aSubIndex += ')';
+                                }
+                            }
                             nPos = aIndexCB.InsertEntry( aSubIndex );
                             String* pData = new String( pRef[j] );
+                            String aAnchor = String( pAnchor[j] );
+                            if ( aAnchor.Len() > 0 )
+                            {
+                                *pData += '#';
+                                *pData += aAnchor;
+                            }
                             aIndexCB.SetEntryData( nPos, (void*)(ULONG)pData );
                         }
                     }
@@ -1400,12 +1431,22 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenHdl, SfxHelpIndexWindow_Impl* , EMPTYARG )
         INetURLObject aObj( aEntry );
         if ( aObj.GetProtocol() != INET_PROT_VND_SUN_STAR_HELP )
         {
-            String aTemp = aEntry;
+            String aId, aAnchor('#');
+            if ( aEntry.GetTokenCount( '#' ) == 2 )
+            {
+                aId = aEntry.GetToken( 0, '#' );
+                aAnchor += aEntry.GetToken( 1, '#' );
+            }
+            else
+                aId = aEntry;
+
             aEntry = HELP_URL;
             aEntry += pIndexWin->GetFactory();
             aEntry += '/';
-            aEntry += aTemp;
+            aEntry += aId;
             AppendConfigToken_Impl( aEntry, sal_True );
+            if ( aAnchor.Len() > 1 )
+                aEntry += aAnchor;
         }
         URL aURL;
         aURL.Complete = aEntry;
