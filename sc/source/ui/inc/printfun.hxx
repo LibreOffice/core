@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:05:04 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:27:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,10 @@ private:
     long                nTabPages;
     long                nTotalPages;
 
-    USHORT              nObjectFlags;
+    // #109985#
+    // see new defines in svx containing SDRPAINTMODE_SC_
+    sal_uInt16          mnPaintMode;
+    //USHORT                nObjectFlags;
 
     Rectangle           aPageRect;          //  Dokument-Twips
 
