@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:39:14 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:43:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,71 +192,71 @@ FmFormPage::~FmFormPage()
 }
 
 //------------------------------------------------------------------
-void FmFormPage::WriteData(SvStream& rOut) const
-{
-#ifndef SVX_LIGHT
-    {
-        {
-            SdrDownCompat aVCCompat1( rOut, STREAM_WRITE );
-            sal_uInt16 n = 0;
-            rOut << n;
-        }
-        SdrPage::WriteData( rOut );
-        SdrDownCompat aVCCompat2( rOut, STREAM_WRITE );
-
-        rOut << ByteString(aPageName, gsl_getSystemTextEncoding());
-        rOut << (sal_uInt32)0x11051967;
-        rOut << (sal_uInt32)0x19670511;
-        sal_uInt16 nVer = 1;
-        rOut << nVer;
-        {
-            SdrDownCompat aVCCompat3( rOut, STREAM_WRITE);
-            sal_uInt32 nFormCount = 0;
-            rOut << nFormCount;
-        }
-    }
-
-    // dont use the flag in that way: if (rOut.GetVersion() >= SOFFICE_FILEFORMAT_40)
-    if (rOut.GetVersion() >= 3830)
-    {
-        SdrDownCompat aCompat(rOut, STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-        pImpl->WriteData(rOut);
-    }
-#else
-    DBG_ERROR( "FmFormPage::WriteData: not to be called in SVX_LIGHT version!" );
-#endif
-}
+//BFS01void FmFormPage::WriteData(SvStream& rOut) const
+//BFS01{
+//BFS01#ifndef SVX_LIGHT
+//BFS01 {
+//BFS01     {
+//BFS01         SdrDownCompat aVCCompat1( rOut, STREAM_WRITE );
+//BFS01         sal_uInt16 n = 0;
+//BFS01         rOut << n;
+//BFS01     }
+//BFS01     SdrPage::WriteData( rOut );
+//BFS01     SdrDownCompat aVCCompat2( rOut, STREAM_WRITE );
+//BFS01
+//BFS01     rOut << ByteString(aPageName, gsl_getSystemTextEncoding());
+//BFS01     rOut << (sal_uInt32)0x11051967;
+//BFS01     rOut << (sal_uInt32)0x19670511;
+//BFS01     sal_uInt16 nVer = 1;
+//BFS01     rOut << nVer;
+//BFS01     {
+//BFS01         SdrDownCompat aVCCompat3( rOut, STREAM_WRITE);
+//BFS01         sal_uInt32 nFormCount = 0;
+//BFS01         rOut << nFormCount;
+//BFS01     }
+//BFS01 }
+//BFS01
+//BFS01 // dont use the flag in that way: if (rOut.GetVersion() >= SOFFICE_FILEFORMAT_40)
+//BFS01 if (rOut.GetVersion() >= 3830)
+//BFS01 {
+//BFS01     SdrDownCompat aCompat(rOut, STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01     pImpl->WriteData(rOut);
+//BFS01 }
+//BFS01#else
+//BFS01 DBG_ERROR( "FmFormPage::WriteData: not to be called in SVX_LIGHT version!" );
+//BFS01#endif
+//BFS01}
 
 //------------------------------------------------------------------
-void FmFormPage::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
-{
-    {
-        {
-            SdrDownCompat aVCCompat1( rIn, STREAM_READ );
-        }
-        SdrPage::ReadData( rHead, rIn );
-        {
-            SdrDownCompat aVCCompat2( rIn, STREAM_READ );
-            ByteString aByteStringName;
-            rIn >> aByteStringName;
-            aPageName = String(aByteStringName, gsl_getSystemTextEncoding());
-        }
-    }
-
-    // dont use the flag in that way: if (rIn.GetVersion() >= SOFFICE_FILEFORMAT_40)
-    if (rIn.GetVersion() >= 3830 && rHead.GetVersion() >=14)
-    {
-        SdrDownCompat aCompat(rIn, STREAM_READ);    // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-#ifndef SVX_LIGHT
-        DBG_ASSERT( aCompat.GetBytesLeft(), "FmFormPage::ReadData: invalid file format!" );
-        if ( aCompat.GetBytesLeft() )
-            pImpl->ReadData(rHead, rIn);
-        // some old (corrupted) versions between 511 and 554 wrote an empty block here - and some of these documents
-        // are still out there
-        // So we allow for such an empty block ...
-#endif
-    }
-}
+//BFS01void FmFormPage::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
+//BFS01{
+//BFS01 {
+//BFS01     {
+//BFS01         SdrDownCompat aVCCompat1( rIn, STREAM_READ );
+//BFS01     }
+//BFS01     SdrPage::ReadData( rHead, rIn );
+//BFS01     {
+//BFS01         SdrDownCompat aVCCompat2( rIn, STREAM_READ );
+//BFS01         ByteString aByteStringName;
+//BFS01         rIn >> aByteStringName;
+//BFS01         aPageName = String(aByteStringName, gsl_getSystemTextEncoding());
+//BFS01     }
+//BFS01 }
+//BFS01
+//BFS01 // dont use the flag in that way: if (rIn.GetVersion() >= SOFFICE_FILEFORMAT_40)
+//BFS01 if (rIn.GetVersion() >= 3830 && rHead.GetVersion() >=14)
+//BFS01 {
+//BFS01     SdrDownCompat aCompat(rIn, STREAM_READ);    // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01#ifndef SVX_LIGHT
+//BFS01     DBG_ASSERT( aCompat.GetBytesLeft(), "FmFormPage::ReadData: invalid file format!" );
+//BFS01     if ( aCompat.GetBytesLeft() )
+//BFS01         pImpl->ReadData(rHead, rIn);
+//BFS01     // some old (corrupted) versions between 511 and 554 wrote an empty block here - and some of these documents
+//BFS01     // are still out there
+//BFS01     // So we allow for such an empty block ...
+//BFS01#endif
+//BFS01 }
+//BFS01}
 
 //------------------------------------------------------------------
 void FmFormPage::SetModel(SdrModel* pNewModel)
