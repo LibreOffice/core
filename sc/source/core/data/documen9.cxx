@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-31 16:44:36 $
+ *  last change: $Author: sab $ $Date: 2001-04-05 15:53:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,8 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
             }
 
         UpdateDrawPrinter();
+        if (bImportingXML)
+            pDrawLayer->EnableAdjust(FALSE);
     }
 }
 
@@ -841,6 +843,10 @@ void ScDocument::UpdateFontCharSet()
     }
 }
 
-
-
+void ScDocument::SetImportingXML( BOOL bVal )
+{
+    bImportingXML = bVal;
+    if (pDrawLayer)
+        pDrawLayer->EnableAdjust(!bImportingXML);
+}
 
