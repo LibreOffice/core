@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinteraction.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-15 15:48:13 $
+ *  last change: $Author: fs $ $Date: 2001-01-05 12:16:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    IMPLEMENT_SERVICE_INFO1_STATIC(OInteractionHandler, "com.sun.star.comp.dbaccess.OInteractionHandler", "com.sun.star.sdb.InteractionHandler");
+    IMPLEMENT_SERVICE_INFO1_STATIC(OInteractionHandler, "com.sun.star.comp.dbu.OInteractionHandler", "com.sun.star.sdb.InteractionHandler");
 
     //-------------------------------------------------------------------------
     void SAL_CALL OInteractionHandler::handle(const Reference< XInteractionRequest >& _rxRequest) throw(RuntimeException)
@@ -425,6 +425,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2000/12/15 15:48:13  fs
+ *  #82151# two instances of the registration helper module - one for every library in this project
+ *
  *  Revision 1.4  2000/11/08 11:01:05  fs
  *  set the account only the the requests states that there is an account ...
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoadmin.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-15 15:48:13 $
+ *  last change: $Author: fs $ $Date: 2001-01-05 12:16:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ Reference< XInterface > SAL_CALL ODatabaseAdministrationDialog::Create(const Ref
 //-------------------------------------------------------------------------
 ::rtl::OUString ODatabaseAdministrationDialog::getImplementationName_Static() throw(RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("org.openoffice.comp.sdb.ODatabaseAdministrationDialog");
+    return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.ODatasourceAdministrationDialog");
 }
 
 //-------------------------------------------------------------------------
@@ -240,6 +240,9 @@ void ODatabaseAdministrationDialog::implInitialize(const Any& _rValue)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2000/12/15 15:48:13  fs
+ *  #82151# two instances of the registration helper module - one for every library in this project
+ *
  *  Revision 1.4  2000/11/01 16:34:16  fs
  *  migrated from awt::XDialog to ui::XExecutableDialog / removed the star* namespace shortcuts
  *

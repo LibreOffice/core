@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosqlmessage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-15 15:48:13 $
+ *  last change: $Author: fs $ $Date: 2001-01-05 12:16:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ Reference< XInterface > SAL_CALL OSQLMessageDialog::Create(const Reference< XMul
 //-------------------------------------------------------------------------
 ::rtl::OUString OSQLMessageDialog::getImplementationName_Static() throw(RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("org.openoffice.comp.sdb.OSQLMessageDialog");
+    return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.OSQLMessageDialog");
 }
 
 //-------------------------------------------------------------------------
@@ -206,6 +206,9 @@ Dialog* OSQLMessageDialog::createDialog(Window* _pParent)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2000/12/15 15:48:13  fs
+ *  #82151# two instances of the registration helper module - one for every library in this project
+ *
  *  Revision 1.4  2000/11/06 17:47:01  fs
  *  forgot a property attribute in ctor
  *
