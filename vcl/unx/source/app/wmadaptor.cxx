@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:44:15 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:36:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,11 +315,7 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
                                        &pProperty) == 0
                    && nItems))
         {
-#if NeedWidePrototypes
-            if (*(sal_Int32*)pProperty)
-#else
             if (*pProperty)
-#endif
             {
                 m_aWMName = String(RTL_CONSTASCII_USTRINGPARAM("Dtwm"));
                 m_bTransientBehaviour = false;
@@ -597,7 +593,6 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
     unsigned long       nItems      = 0;
     unsigned long       nBytesLeft  = 0;
     unsigned char*  pProperty   = NULL;
-    bool                bGnomeWM    = false;
 
     initAtoms();
 
@@ -1404,13 +1399,6 @@ void NetWMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType 
         switch( eType )
         {
             case windowType_Utility:
-#if 0
-                // advertise tool windows as dialogues not utilities for now
-                // due to a bug in metacity 2.4.34 (smaller titlebar font on
-                // resizable utility windows)
-                eWMType = m_aWMAtoms[ NET_WM_WINDOW_TYPE_UTILITY ] ? NET_WM_WINDOW_TYPE_UTILITY : NET_WM_WINDOW_TYPE_DIALOG;
-                break;
-#endif
             case windowType_ModelessDialogue:
             case windowType_ModalDialogue:
                 eWMType = NET_WM_WINDOW_TYPE_DIALOG;
