@@ -1,8 +1,8 @@
 #ifndef SD_UNO_DRAW_VIEW_HXX
 #define SD_UNO_DRAW_VIEW_HXX
 
-#ifndef SD_DRAW_SUB_CONTROLLER_HXX
-#include "DrawSubController.hxx"
+#ifndef SD_DRAW_CONTROLLER_HXX
+#include "DrawController.hxx"
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWVIEW_HPP_
 #include <com/sun/star/drawing/XDrawView.hpp>
@@ -42,24 +42,37 @@ class SdPage;
 
 namespace sd {
 
-class View;
 class DrawViewShell;
-
 
 /**
  * This class implements the view component for a SdDrawViewShell
  */
 class SdUnoDrawView
-    : public DrawSubController
+    : public DrawController
 {
 public:
-    SdUnoDrawView (View& rView, DrawViewShell& rViewShell) throw();
-    virtual ~SdUnoDrawView() throw();
+    enum properties
+    {
+        PROPERTY_FIRST = DrawController::PROPERTY_FIRST_FREE,
+        PROPERTY_CURRENTPAGE = PROPERTY_FIRST,
+        PROPERTY_MASTERPAGEMODE,
+        PROPERTY_LAYERMODE,
+        PROPERTY_ACTIVE_LAYER,
+        PROPERTY_ZOOMTYPE,
+        PROPERTY_ZOOMVALUE,
+        PROPERTY_VIEWOFFSET,
+        PROPERTY_FIRST_FREE
+    };
+
+    SdUnoDrawView (
+        ViewShellBase& rBase,
+        ViewShell& rViewShell,
+        View& rView) throw();
+    virtual ~SdUnoDrawView (void) throw();
 
     virtual void FireChangeEditMode (bool bMasterPageMode) throw();
     virtual void FireChangeLayerMode (bool bLayerMode) throw();
     virtual void FireSwitchCurrentPage (SdPage* pCurrentPage) throw();
-    virtual void FireVisAreaChanged (const Rectangle& rVisArea) throw();
 
     // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -77,15 +90,9 @@ public:
     virtual void SAL_CALL setCurrentPage( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > SAL_CALL getCurrentPage(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    // XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
-
 protected:
-    /**
-     * This method must return the name to index table. This table contains all property
-     * names and types of this object.
-     */
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
+    virtual void FillPropertyTable (
+        ::std::vector< ::com::sun::star::beans::Property>& rProperties);
 
     /**
      * Converted the value rValue and return the result in rConvertedValue and the
