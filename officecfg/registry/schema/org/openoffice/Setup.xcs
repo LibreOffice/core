@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cd $ $Date: 2002-11-26 10:00:06 $
+ *  last change: $Author: cd $ $Date: 2002-11-26 10:02:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,9 +195,9 @@
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - View -->
 				<info>
-					<desc xml:lang="en-US">Specifies if the splash screen should be displayed or not during startup.</desc>
 					<deprecated>This feature is controlled by an entry in the soffice.ini or the -nologo command line parameter.</deprecated>
 					<author>CD</author>
+					<desc xml:lang="en-US">Specifies if the splash screen should be displayed or not during startup.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupConnectionURL" oor:type="xs:string">
