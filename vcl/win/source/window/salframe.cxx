@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-05 16:04:53 $
+ *  last change: $Author: ssa $ $Date: 2002-07-11 07:43:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,9 @@
 #endif
 #ifndef _SV_WINDOW_HXX
 #include <window.hxx>
+#endif
+#ifndef _SV_SALLAYOUT_HXX
+#include <sallayout.hxx>
 #endif
 
 #define COMPILE_MULTIMON_STUBS
@@ -303,7 +306,12 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
             if ( nSalFrameStyle & SAL_FRAME_STYLE_DEFAULT )
                 nExSysStyle |= WS_EX_APPWINDOW;
         }
-        if( nSalFrameStyle & SAL_FRAME_STYLE_TOOLWINDOW )
+        if( nSalFrameStyle & SAL_FRAME_STYLE_TOOLWINDOW &&
+            // #100656# toolwindows lead to bad alt-tab behaviour, if they have the focus
+            // you must press it twice to leave the application
+            // so toolwindows are only used for non sizeable windows
+            // which are typically small, so a small caption makes sense
+            !(nSalFrameStyle & SAL_FRAME_STYLE_SIZEABLE) )
         {
             pFrame->maFrameData.mbNoIcon = TRUE;
             nExSysStyle |= WS_EX_TOOLWINDOW;
@@ -888,7 +896,7 @@ SalGraphics* SalFrame::GetGraphics()
 
         if ( !maFrameData.mpGraphics2 )
         {
-            maFrameData.mpGraphics2 = new SalGraphics;
+            maFrameData.mpGraphics2 = new SalGraphicsLayout;
             maFrameData.mpGraphics2->maGraphicsData.mhDC        = 0;
             maFrameData.mpGraphics2->maGraphicsData.mhWnd       = maFrameData.mhWnd;
             maFrameData.mpGraphics2->maGraphicsData.mbPrinter   = FALSE;
@@ -923,7 +931,7 @@ SalGraphics* SalFrame::GetGraphics()
             HDC hDC = GetDC( maFrameData.mhWnd );
             if ( hDC )
             {
-                maFrameData.mpGraphics = new SalGraphics;
+                maFrameData.mpGraphics = new SalGraphicsLayout;
                 maFrameData.mpGraphics->maGraphicsData.mhDC      = hDC;
                 maFrameData.mpGraphics->maGraphicsData.mhWnd     = maFrameData.mhWnd;
                 maFrameData.mpGraphics->maGraphicsData.mbPrinter = FALSE;
@@ -1192,6 +1200,12 @@ void SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
 
     if ( ::GetParent( maFrameData.mhWnd ) )
     {
+            // --- RTL --- (mirror window pos)
+            RECT aParentRect;
+            GetClientRect( ::GetParent( maFrameData.mhWnd ), &aParentRect );
+            if( maFrameData.mpGraphics && (maFrameData.mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
+                nX = (aParentRect.right - aParentRect.left) - nWidth-1 - nX;
+
             POINT aPt;
             aPt.x = nX;
             aPt.y = nY;
@@ -2856,6 +2870,10 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
         if ( nEvent == SALEVENT_MOUSEBUTTONDOWN )
             UpdateWindow( hWnd );
 
+        // --- RTL --- (mirror mouse pos)
+        if( pFrame->maFrameData.mpGraphics && (pFrame->maFrameData.mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
+            aMouseEvt.mnX = pFrame->maGeometry.nWidth-1-aMouseEvt.mnX;
+
         nRet = pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
                                            nEvent, &aMouseEvt );
         if ( nMsg == WM_MOUSEMOVE )
@@ -3382,6 +3400,11 @@ static void ImplHandlePaintMsg( HWND hWnd )
                 aPEvt.mnBoundY          = aUpdateRect.top;
                 aPEvt.mnBoundWidth      = aUpdateRect.right-aUpdateRect.left;
                 aPEvt.mnBoundHeight     = aUpdateRect.bottom-aUpdateRect.top;
+
+                // --- RTL --- (mirror paint rect)
+                if( pFrame->maFrameData.mpGraphics && (pFrame->maFrameData.mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
+                    aPEvt.mnBoundX = pFrame->maGeometry.nWidth-aPEvt.mnBoundWidth-aPEvt.mnBoundX;
+
                 pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
                                             SALEVENT_PAINT, &aPEvt );
             }
@@ -3422,6 +3445,11 @@ static void ImplHandlePaintMsg2( HWND hWnd, RECT* pRect )
             aPEvt.mnBoundY          = pRect->top;
             aPEvt.mnBoundWidth      = pRect->right-pRect->left;
             aPEvt.mnBoundHeight     = pRect->bottom-pRect->top;
+
+            // --- RTL --- (mirror paint rect)
+            if( pFrame->maFrameData.mpGraphics && (pFrame->maFrameData.mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
+                aPEvt.mnBoundX = pFrame->maGeometry.nWidth-aPEvt.mnBoundWidth-aPEvt.mnBoundX;
+
             pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
                                         SALEVENT_PAINT, &aPEvt );
         }
@@ -4821,3 +4849,6 @@ bool GetSalSystemDisplayInfo( System::DisplayInfo& rInfo )
     else
         return false;
 }
+
+// -----------------------------------------------------------------------
+

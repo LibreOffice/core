@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-03 17:40:55 $
+ *  last change: $Author: ssa $ $Date: 2002-07-11 07:41:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #endif
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef _SV_SALFRAME_HXX
+#include <salframe.hxx>
 #endif
 #ifndef _SV_POLY_HXX
 #include "poly.hxx"
@@ -833,6 +836,26 @@ void SalGraphics::GetScreenFontResolution( long& rDPIX, long& rDPIY )
 USHORT SalGraphics::GetBitCount()
 {
     return (USHORT)GetDeviceCaps( maGraphicsData.mhDC, BITSPIXEL );
+}
+
+// -----------------------------------------------------------------------
+
+long SalGraphics::GetGraphicsWidth()
+{
+    SalFrame* pFrame = GetWindowPtr( maGraphicsData.mhWnd );
+    if( pFrame )
+    {
+        if( pFrame->maGeometry.nWidth )
+            return pFrame->maGeometry.nWidth;
+        else
+        {
+            // TODO: perhaps not needed, maGeometry should always be up-to-date
+            RECT aRect;
+            GetClientRect( maGraphicsData.mhWnd, &aRect );
+            return aRect.right;
+        }
+    }
+    return 0;
 }
 
 // -----------------------------------------------------------------------
