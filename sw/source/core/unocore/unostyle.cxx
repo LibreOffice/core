@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-13 11:48:25 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:35:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,9 +185,11 @@
 #ifndef _FMTRUBY_HXX
 #include <fmtruby.hxx>
 #endif
-
 #ifndef _COM_SUN_STAR_STYLE_PARAGRAPHSTYLECATEGORY_HPP_
 #include <com/sun/star/style/ParagraphStyleCategory.hpp>
+#endif
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
 #endif
 
 
@@ -200,6 +202,15 @@
 #define TYPE_SHADOW     4
 #define TYPE_LRSPACE    5
 #define TYPE_BOX        6
+
+const unsigned short aStyleByIndex[] =
+{
+    SFX_STYLE_FAMILY_CHAR,
+    SFX_STYLE_FAMILY_PARA,
+    SFX_STYLE_FAMILY_PAGE     ,
+    SFX_STYLE_FAMILY_FRAME    ,
+    SFX_STYLE_FAMILY_PSEUDO
+};
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -250,177 +261,22 @@ USHORT lcl_ConvertFNToRES(USHORT nFNId)
 
 }
 
-//-----------------------------------------------------------------------------
-const unsigned short aStyleByIndex[] =
+SwGetPoolIdFromName lcl_GetSwEnumFromSfxEnum ( SfxStyleFamily eFamily )
 {
-    SFX_STYLE_FAMILY_CHAR,
-    SFX_STYLE_FAMILY_PARA,
-    SFX_STYLE_FAMILY_PAGE     ,
-    SFX_STYLE_FAMILY_FRAME    ,
-    SFX_STYLE_FAMILY_PSEUDO
-};
-
-const Programmatic2UIName_Impl* lcl_GetStyleNameTable(SfxStyleFamily eFamily)
-{
-    const Programmatic2UIName_Impl* pRet = 0;
-    switch(eFamily)
+    switch ( eFamily )
     {
         case SFX_STYLE_FAMILY_CHAR:
-        {
-            static BOOL bInitialized = FALSE;
-            static Programmatic2UIName_Impl aCharFamilyNames[(STR_POOLCHR_PRGM_CURRENT_END - RC_POOLCHRFMT_PRGM_BEGIN) +
-                                                        (STR_POOLCHR_PRGM_HTML_CURRENT_END - RC_POOLCHRFMT_PRGM_HTML_BEGIN) + 3];
-            if(!bInitialized)
-            {
-                bInitialized = TRUE;
-                int nUIResId;
-                int nProgrammaticResId;
-                int nName = 0;
-                for(nUIResId = RC_POOLCHRFMT_BEGIN, nProgrammaticResId = RC_POOLCHRFMT_PRGM_BEGIN;
-                    nProgrammaticResId <= STR_POOLCHR_PRGM_CURRENT_END; nUIResId++, nProgrammaticResId++)
-                {
-                    aCharFamilyNames[nName].sUIName = String(SW_RES(nUIResId));
-                    aCharFamilyNames[nName++].sProgrammaticName = String(SW_RES(nProgrammaticResId));
-                }
-                for(nUIResId = RC_POOLCHRFMT_HTML_BEGIN, nProgrammaticResId = RC_POOLCHRFMT_PRGM_HTML_BEGIN;
-                    nProgrammaticResId <= STR_POOLCHR_PRGM_HTML_CURRENT_END; nUIResId++, nProgrammaticResId++)
-                {
-                    aCharFamilyNames[nName].sUIName = String(SW_RES(nUIResId));
-                    aCharFamilyNames[nName++].sProgrammaticName = String(SW_RES(nProgrammaticResId));
-                }
-            }
-            pRet = &aCharFamilyNames[0];
-        }
-        break;
+            return GET_POOLID_CHRFMT;
         case SFX_STYLE_FAMILY_PARA:
-        {
-            static BOOL bInitialized = FALSE;
-            static Programmatic2UIName_Impl aParaFamilyNames[
-                    ( STR_POCO_PRGM_HEADLINE10    -  STR_POCO_PRGM_STANDARD     ) +
-                    ( STR_POCO_PRGM_BUL_NONUM5    -  STR_POCO_PRGM_NUMBUL_BASE   )+
-                    ( STR_POCO_PRGM_LABEL_DRAWING -  STR_POCO_PRGM_HEADER        )+
-                    ( STR_POCO_PRGM_TOX_USER10    -  STR_POCO_PRGM_REGISTER_BASE  )+
-                    ( STR_POCO_PRGM_DOC_SUBTITEL  -  STR_POCO_PRGM_DOC_TITEL     )+
-                    ( STR_POCO_PRGM_HTML_DT       -  STR_POCO_PRGM_HTML_BLOCKQUOTE)+
-                    + 7 ];
-
-
-            if(!bInitialized)
-            {
-                struct ParaIds
-                {
-                    USHORT nUIStart, nUIEnd, nProgStart;
-                };
-                ParaIds aParaIds[] =
-                {
-                    {STR_POOLCOLL_STANDARD,         STR_POOLCOLL_HEADLINE10,    STR_POCO_PRGM_STANDARD       },
-                    {STR_POOLCOLL_NUMBUL_BASE,      STR_POOLCOLL_BUL_NONUM5,    STR_POCO_PRGM_NUMBUL_BASE    },
-                    {STR_POOLCOLL_HEADER,           STR_POOLCOLL_LABEL_DRAWING, STR_POCO_PRGM_HEADER             },
-                    {STR_POOLCOLL_REGISTER_BASE,    STR_POOLCOLL_TOX_USER10,    STR_POCO_PRGM_REGISTER_BASE   },
-                    {STR_POOLCOLL_DOC_TITEL,        STR_POOLCOLL_DOC_SUBTITEL,  STR_POCO_PRGM_DOC_TITEL      },
-                    {STR_POOLCOLL_HTML_BLOCKQUOTE,  STR_POOLCOLL_HTML_DT,       STR_POCO_PRGM_HTML_BLOCKQUOTE },
-                };
-                bInitialized = TRUE;
-                int nUIResId;
-                int nProgrammaticResId;
-                int nName = 0;
-                for(USHORT nPart = 0; nPart < 6; nPart++)
-                    for(nUIResId = aParaIds[nPart].nUIStart, nProgrammaticResId = aParaIds[nPart].nProgStart;
-                        nUIResId <= aParaIds[nPart].nUIEnd; nUIResId++, nProgrammaticResId++)
-                    {
-                        aParaFamilyNames[nName].sUIName = String(SW_RES(nUIResId));
-                        aParaFamilyNames[nName++].sProgrammaticName = String(SW_RES(nProgrammaticResId));
-                    }
-            }
-            pRet = &aParaFamilyNames[0];
-        }
-        break;
+            return GET_POOLID_TXTCOLL;
         case SFX_STYLE_FAMILY_FRAME:
-        {
-            static BOOL bInitialized = FALSE;
-            static Programmatic2UIName_Impl aFrameFamilyNames[(STR_POOLFRM_PRGM_LABEL - STR_POOLFRM_PRGM_FRAME) + 2];
-            if(!bInitialized)
-            {
-                bInitialized = TRUE;
-                int nUIResId;
-                int nProgrammaticResId;
-                int nName = 0;
-                for(nUIResId = STR_POOLFRM_FRAME, nProgrammaticResId = STR_POOLFRM_PRGM_FRAME;
-                    nProgrammaticResId <= STR_POOLFRM_PRGM_LABEL; nUIResId++, nProgrammaticResId++)
-                {
-                    aFrameFamilyNames[nName].sUIName = String(SW_RES(nUIResId));
-                    aFrameFamilyNames[nName++].sProgrammaticName = String(SW_RES(nProgrammaticResId));
-                }
-            }
-            pRet = &aFrameFamilyNames[0];
-        }
-        break;
+            return GET_POOLID_FRMFMT;
         case SFX_STYLE_FAMILY_PAGE:
-        {
-            static BOOL bInitialized = FALSE;
-            static Programmatic2UIName_Impl aPageFamilyNames[(STR_POOLPAGE_PRGM_ENDNOTE - STR_POOLPAGE_PRGM_STANDARD) + 2];
-            if(!bInitialized)
-            {
-                bInitialized = TRUE;
-                int nUIResId;
-                int nProgrammaticResId;
-                int nName = 0;
-                for(nUIResId = STR_POOLPAGE_STANDARD, nProgrammaticResId = STR_POOLPAGE_PRGM_STANDARD;
-                    nProgrammaticResId <= STR_POOLPAGE_PRGM_ENDNOTE; nUIResId++, nProgrammaticResId++)
-                {
-                    aPageFamilyNames[nName].sUIName = String(SW_RES(nUIResId));
-                    aPageFamilyNames[nName++].sProgrammaticName = String(SW_RES(nProgrammaticResId));
-                }
-            }
-            pRet = &aPageFamilyNames[0];
-        }
-        break;
+            return GET_POOLID_PAGEDESC;
         case SFX_STYLE_FAMILY_PSEUDO:
-        {
-            static BOOL bInitialized = FALSE;
-            static Programmatic2UIName_Impl aNumFamilyNames[(STR_POOLNUMRULE_PRGM_BUL5 - STR_POOLNUMRULE_PRGM_NUM1) + 2];
-            if(!bInitialized)
-            {
-                bInitialized = TRUE;
-                int nUIResId;
-                int nProgrammaticResId;
-                int nName = 0;
-                for(nUIResId = STR_POOLNUMRULE_NUM1, nProgrammaticResId = STR_POOLNUMRULE_PRGM_NUM1;
-                    nProgrammaticResId <= STR_POOLNUMRULE_PRGM_BUL5; nUIResId++, nProgrammaticResId++)
-                {
-                    aNumFamilyNames[nName].sUIName = String(SW_RES(nUIResId));
-                    aNumFamilyNames[nName++].sProgrammaticName = String(SW_RES(nProgrammaticResId));
-                }
-            }
-            pRet = &aNumFamilyNames[0];
-        }
-        break;
+            return GET_POOLID_NUMRULE;
     }
-    return pRet;
-}
-const String&   SwXStyleFamilies::GetProgrammaticName(const String& rUIName, SfxStyleFamily eFamily)
-{
-    const Programmatic2UIName_Impl* pNames =lcl_GetStyleNameTable(eFamily);
-    DBG_ASSERT(pNames, "no mapping found!!!")
-    if(pNames)
-    do
-    {
-        if(pNames->sUIName == rUIName)
-            return pNames->sProgrammaticName;
-    }
-    while((++pNames)->sUIName.Len());
-    return rUIName;
-}
-const String&   SwXStyleFamilies::GetUIName(const String& rProgrammaticName, SfxStyleFamily eFamily)
-{
-    const Programmatic2UIName_Impl* pNames = lcl_GetStyleNameTable(eFamily);
-    do
-    {
-        if(pNames->sProgrammaticName == rProgrammaticName)
-            return pNames->sUIName;
-    }
-    while((++pNames)->sProgrammaticName.Len());
-    return rProgrammaticName;
+    DBG_ASSERT(sal_False, "someone asking for all styles in unostyle.cxx!" );
 }
 
 /******************************************************************
@@ -823,7 +679,7 @@ Any SwXStyleFamily::getByName(const OUString& rName)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     Any aRet;
-    String sStyleName = SwXStyleFamilies::GetUIName(rName, eFamily);
+    String sStyleName = SwStyleNameMapper::GetUIName(rName, lcl_GetSwEnumFromSfxEnum ( eFamily ) );
     if(pBasePool)
     {
         pBasePool->SetSearchMask(eFamily, SFXSTYLEBIT_ALL );
@@ -864,7 +720,7 @@ Sequence< OUString > SwXStyleFamily::getElementNames(void) throw( RuntimeExcepti
         aRet.realloc(nCount);
         OUString* pArray = aRet.getArray();
         for(sal_uInt16 i = 0; i < nCount; i++)
-            pArray[i] = SwXStyleFamilies::GetProgrammaticName((*pIterator)[i]->GetName(), eFamily);
+            pArray[i] = SwStyleNameMapper::GetProgName((*pIterator)[i]->GetName(), lcl_GetSwEnumFromSfxEnum ( eFamily ) );
         delete pIterator;
     }
     else
@@ -880,7 +736,7 @@ sal_Bool SwXStyleFamily::hasByName(const OUString& rName) throw( RuntimeExceptio
     sal_Bool bRet = sal_False;
     if(pBasePool)
     {
-        String sStyleName(SwXStyleFamilies::GetUIName(rName, eFamily));
+        String sStyleName(SwStyleNameMapper::GetUIName(rName, lcl_GetSwEnumFromSfxEnum ( eFamily ) ));
         pBasePool->SetSearchMask(eFamily, SFXSTYLEBIT_ALL );
         SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
         bRet = 0 != pBase;
@@ -919,7 +775,7 @@ void SwXStyleFamily::insertByName(const OUString& rName, const Any& rElement)
         String sStyleName(rName);
         pBasePool->SetSearchMask(eFamily, SFXSTYLEBIT_ALL );
         SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
-        SfxStyleSheetBase* pUINameBase = pBasePool->Find(SwXStyleFamilies::GetUIName(sStyleName, eFamily));
+        SfxStyleSheetBase* pUINameBase = pBasePool->Find(SwStyleNameMapper::GetUIName(sStyleName, lcl_GetSwEnumFromSfxEnum ( eFamily ) ) );
         if(pBase || pUINameBase)
             throw container::ElementExistException();
         else
@@ -1016,7 +872,7 @@ void SwXStyleFamily::removeByName(const OUString& rName) throw( container::NoSuc
     if(pBasePool)
     {
         pBasePool->SetSearchMask(eFamily, SFXSTYLEBIT_ALL );
-        SfxStyleSheetBase* pBase = pBasePool->Find(SwXStyleFamilies::GetUIName(rName, eFamily));
+        SfxStyleSheetBase* pBase = pBasePool->Find(SwStyleNameMapper::GetUIName(rName, lcl_GetSwEnumFromSfxEnum ( eFamily ) ) );
         if(pBase)
             pBasePool->Erase(pBase);
         else
@@ -1264,7 +1120,7 @@ SwXStyle::SwXStyle(SfxStyleSheetBasePool& rPool, SfxStyleFamily eFam,
         DBG_ASSERT(pBase, "wo ist der Style?")
         if(pBase)
         {
-            const USHORT nId = pDoc->GetPoolId(sStyleName, GET_POOLID_TXTCOLL);
+            const USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName(sStyleName, GET_POOLID_TXTCOLL);
             if(nId != USHRT_MAX)
                 ::IsConditionalByPoolId( nId );
             else
@@ -1295,7 +1151,7 @@ OUString SwXStyle::getName(void) throw( RuntimeException )
         DBG_ASSERT(pBase, "wo ist der Style?")
         if(!pBase)
             throw RuntimeException();
-        sRet = SwXStyleFamilies::GetProgrammaticName(pBase->GetName(), eFamily);
+        sRet = SwStyleNameMapper::GetProgName(pBase->GetName(), lcl_GetSwEnumFromSfxEnum ( eFamily ));
     }
     else
         sRet = sStyleName;
@@ -1381,7 +1237,7 @@ OUString SwXStyle::getParentStyle(void) throw( RuntimeException )
         sRet = sParentStyleName;
     else
         throw RuntimeException();
-    return SwXStyleFamilies::GetProgrammaticName(sRet, eFamily);
+    return SwStyleNameMapper::GetProgName(sRet, lcl_GetSwEnumFromSfxEnum ( eFamily ));
 }
 /*-- 17.12.98 08:26:52---------------------------------------------------
 
@@ -1390,7 +1246,7 @@ void SwXStyle::setParentStyle(const OUString& rParentStyle)
             throw( container::NoSuchElementException, RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    String sParentStyle = SwXStyleFamilies::GetUIName(rParentStyle, eFamily);
+    String sParentStyle = SwStyleNameMapper::GetUIName(rParentStyle, lcl_GetSwEnumFromSfxEnum ( eFamily ));
     if(pBasePool)
     {
         pBasePool->SetSearchMask(eFamily);
@@ -1696,7 +1552,7 @@ void lcl_SetStyleProperty(const SfxItemPropertyMap* pMap,
         {
             OUString sTmp;
             rValue >>= sTmp;
-            rBase.pNewBase->SetFollow( SwXStyleFamilies::GetUIName(sTmp, eFamily)) ;
+            rBase.pNewBase->SetFollow( SwStyleNameMapper::GetUIName(sTmp, lcl_GetSwEnumFromSfxEnum ( eFamily ) )) ;
         }
         break;
         case RES_PAGEDESC :
@@ -1718,7 +1574,7 @@ void lcl_SetStyleProperty(const SfxItemPropertyMap* pMap,
                 pNewDesc = new SwFmtPageDesc();
             OUString uDescName;
             rValue >>= uDescName;
-            String sDescName(SwXStyleFamilies::GetUIName(uDescName, SFX_STYLE_FAMILY_PAGE));
+            String sDescName(SwStyleNameMapper::GetUIName(uDescName, GET_POOLID_PAGEDESC ));
             if(!pNewDesc->GetPageDesc() || pNewDesc->GetPageDesc()->GetName() != sDescName)
             {
                 sal_uInt16 nCount = pDoc->GetPageDescCnt();
@@ -1799,8 +1655,7 @@ void lcl_SetStyleProperty(const SfxItemPropertyMap* pMap,
             rBase.GetItemSet().Put(aReg);
 
             rBase.GetItemSet().Put(SfxStringItem(SID_SWREGISTER_COLLECTION,
-                            SwXStyleFamilies::GetUIName(sName,
-                                            SFX_STYLE_FAMILY_PARA) ));
+                            SwStyleNameMapper::GetUIName(sName, GET_POOLID_TXTCOLL ) ));
         }
         break;
         case RES_TXTATR_CJK_RUBY:
@@ -1816,12 +1671,12 @@ void lcl_SetStyleProperty(const SfxItemPropertyMap* pMap,
                         pRuby = new SwFmtRuby(*((SwFmtRuby*)pItem));
                     if(!pRuby)
                         pRuby = new SwFmtRuby(aEmptyStr);
-                    String sStyle(SwXStyleFamilies::GetUIName(sTmp, SFX_STYLE_FAMILY_CHAR));
+                    String sStyle(SwStyleNameMapper::GetUIName(sTmp, GET_POOLID_CHRFMT ));
                     pRuby->SetCharFmtName( sTmp );
                     pRuby->SetCharFmtId( 0 );
                     if(sTmp.getLength())
                     {
-                        sal_uInt16 nId = SwDoc::GetPoolId( sTmp, GET_POOLID_CHRFMT );
+                        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( sTmp, GET_POOLID_CHRFMT );
                         pRuby->SetCharFmtId(nId);
                     }
                     rStyleSet.Put(*pRuby);
@@ -1848,7 +1703,7 @@ void lcl_SetStyleProperty(const SfxItemPropertyMap* pMap,
                         pDrop = new SwFmtDrop();
                     OUString uStyle;
                     rValue >>= uStyle;
-                    String sStyle(SwXStyleFamilies::GetUIName(uStyle, SFX_STYLE_FAMILY_CHAR));
+                    String sStyle(SwStyleNameMapper::GetUIName(uStyle, GET_POOLID_CHRFMT ));
                     SwDocStyleSheet* pStyle =
                         (SwDocStyleSheet*)pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle, SFX_STYLE_FAMILY_CHAR);
                     if(pStyle)
@@ -1943,9 +1798,7 @@ void SwXStyle::setPropertyValues(
     if(aBaseImpl.HasItemSet())
         aBaseImpl.pNewBase->SetItemSet(aBaseImpl.GetItemSet());
 }
-/*-- 18.04.01 13:07:29---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Any lcl_GetStyleProperty(const SfxItemPropertyMap* pMap,
                         SfxItemPropertySet& rPropSet,
                         SwStyleBase_Impl& rBase,
@@ -1982,7 +1835,7 @@ Any lcl_GetStyleProperty(const SfxItemPropertyMap* pMap,
             }
             break;
             case FN_UNO_FOLLOW_STYLE:
-                aRet <<= OUString(SwXStyleFamilies::GetProgrammaticName(rBase.pNewBase->GetFollow(), eFamily));
+                aRet <<= OUString(SwStyleNameMapper::GetProgName(rBase.pNewBase->GetFollow(), lcl_GetSwEnumFromSfxEnum ( eFamily )));
             break;
             case RES_PAGEDESC :
             if( MID_PAGEDESC_PAGEDESCNAME != pMap->nMemberId)
@@ -1994,7 +1847,7 @@ Any lcl_GetStyleProperty(const SfxItemPropertyMap* pMap,
                 {
                     const SwPageDesc* pDesc = ((const SwFmtPageDesc*)pItem)->GetPageDesc();
                     if(pDesc)
-                        aRet <<= OUString( SwXStyleFamilies::GetProgrammaticName(pDesc->GetName(), SFX_STYLE_FAMILY_PAGE) );
+                        aRet <<= OUString( SwStyleNameMapper::GetProgName(pDesc->GetName(), GET_POOLID_PAGEDESC ) );
                 }
             }
             break;
@@ -2050,8 +1903,8 @@ Any lcl_GetStyleProperty(const SfxItemPropertyMap* pMap,
                 if( pPageDesc )
                     pCol = pPageDesc->GetRegisterFmtColl();
                 if( pCol )
-                    sName = SwXStyleFamilies::GetProgrammaticName(
-                                pCol->GetName(), SFX_STYLE_FAMILY_PARA );
+                    sName = SwStyleNameMapper::GetProgName(
+                                pCol->GetName(), GET_POOLID_TXTCOLL );
                 aRet <<= sName;
             }
             break;
