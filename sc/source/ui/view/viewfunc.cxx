@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-13 15:45:51 $
+ *  last change: $Author: nn $ $Date: 2000-11-16 13:13:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1727,35 +1727,45 @@ void ScViewFunc::DeleteContents( USHORT nFlags, BOOL bRecord )
 //  Spaltenbreiten/Zeilenhoehen (ueber Header) - Undo OK
 
 void ScViewFunc::SetWidthOrHeight( BOOL bWidth, USHORT nRangeCnt, USHORT* pRanges,
-                                    ScSizeMode eMode, USHORT nSizeTwips, BOOL bRecord, BOOL bPaint )
+                                    ScSizeMode eMode, USHORT nSizeTwips,
+                                    BOOL bRecord, BOOL bPaint, ScMarkData* pMarkData )
 {
     if (!nRangeCnt)
         return;
 
+    // use view's mark if none specified
+    if ( !pMarkData )
+        pMarkData = &GetViewData()->GetMarkData();
+
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
-    USHORT nTab = GetViewData()->GetTabNo();
+    USHORT nTabCount = pDoc->GetTableCount();
+    USHORT nFirstTab = pMarkData->GetFirstSelected();
+    USHORT nCurTab = GetViewData()->GetTabNo();
+    USHORT nTab;
 
     ScDocShellModificator aModificator( *pDocSh );
 
     BOOL bAllowed = TRUE;
-    for ( USHORT i=0; i<nRangeCnt && bAllowed; i++ )
-    {
-        BOOL bOnlyMatrix;
-        if (bWidth)
-            bAllowed = pDoc->IsBlockEditable( nTab,
-                                pRanges[2*i],0, pRanges[2*i+1],MAXROW, &bOnlyMatrix ) || bOnlyMatrix;
-        else
-            bAllowed = pDoc->IsBlockEditable( nTab,
-                                0,pRanges[2*i], MAXCOL,pRanges[2*i+1], &bOnlyMatrix ) || bOnlyMatrix;
-    }
+    for (nTab=0; nTab<nTabCount && bAllowed; nTab++)
+        if (pMarkData->GetTableSelect(nTab))
+        {
+            for ( USHORT i=0; i<nRangeCnt && bAllowed; i++ )
+            {
+                BOOL bOnlyMatrix;
+                if (bWidth)
+                    bAllowed = pDoc->IsBlockEditable( nTab,
+                                        pRanges[2*i],0, pRanges[2*i+1],MAXROW, &bOnlyMatrix ) || bOnlyMatrix;
+                else
+                    bAllowed = pDoc->IsBlockEditable( nTab,
+                                        0,pRanges[2*i], MAXCOL,pRanges[2*i+1], &bOnlyMatrix ) || bOnlyMatrix;
+            }
+        }
     if ( !bAllowed )
     {
         ErrorMessage(STR_PROTECTIONERR);
         return;
     }
-
-    ScMarkData& rMark = GetViewData()->GetMarkData();
 
     USHORT nStart = pRanges[0];
     USHORT nEnd = pRanges[2*nRangeCnt-1];
@@ -1776,104 +1786,128 @@ void ScViewFunc::SetWidthOrHeight( BOOL bWidth, USHORT nRangeCnt, USHORT* pRange
         pDoc->BeginDrawUndo();                          // Drawing Updates
 
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-        if (bWidth)
-        {
-            pUndoDoc->InitUndo( pDoc, nTab, nTab, TRUE, FALSE );
-            pDoc->CopyToDocument( nStart, 0, nTab, nEnd, MAXROW, nTab, IDF_NONE, FALSE, pUndoDoc );
-        }
-        else
-        {
-            pUndoDoc->InitUndo( pDoc, nTab, nTab, FALSE, TRUE );
-            pDoc->CopyToDocument( 0, nStart, nTab, MAXCOL, nEnd, nTab, IDF_NONE, FALSE, pUndoDoc );
-        }
+        for (nTab=0; nTab<nTabCount; nTab++)
+            if (pMarkData->GetTableSelect(nTab))
+            {
+                if (bWidth)
+                {
+                    if ( nTab == nFirstTab )
+                        pUndoDoc->InitUndo( pDoc, nTab, nTab, TRUE, FALSE );
+                    else
+                        pUndoDoc->AddUndoTab( nTab, nTab, TRUE, FALSE );
+                    pDoc->CopyToDocument( nStart, 0, nTab, nEnd, MAXROW, nTab, IDF_NONE, FALSE, pUndoDoc );
+                }
+                else
+                {
+                    if ( nTab == nFirstTab )
+                        pUndoDoc->InitUndo( pDoc, nTab, nTab, FALSE, TRUE );
+                    else
+                        pUndoDoc->AddUndoTab( nTab, nTab, FALSE, TRUE );
+                    pDoc->CopyToDocument( 0, nStart, nTab, MAXCOL, nEnd, nTab, IDF_NONE, FALSE, pUndoDoc );
+                }
+            }
 
         pUndoRanges = new USHORT[ 2*nRangeCnt ];
         memmove( pUndoRanges, pRanges, 2*nRangeCnt*sizeof(USHORT) );
 
-        ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
+        //! outlines from all tables?
+        ScOutlineTable* pTable = pDoc->GetOutlineTable( nCurTab );
         if (pTable)
             pUndoTab = new ScOutlineTable( *pTable );
     }
 
     if ( eMode==SC_SIZE_OPTIMAL || eMode==SC_SIZE_VISOPT )
-        rMark.MarkToMulti();
+        pMarkData->MarkToMulti();
 
     BOOL bShow = nSizeTwips > 0 || eMode != SC_SIZE_DIRECT;
     BOOL bOutline = FALSE;
 
-    pDoc->IncSizeRecalcLevel( nTab );       // nicht fuer jede Spalte einzeln
-    for (USHORT nRangeNo=0; nRangeNo<nRangeCnt; nRangeNo++)
-    {
-        USHORT nStartNo = *(pRanges++);
-        USHORT nEndNo = *(pRanges++);
-
-        if ( !bWidth )                      // Hoehen immer blockweise
+    for (nTab=0; nTab<nTabCount; nTab++)
+        if (pMarkData->GetTableSelect(nTab))
         {
-            if ( eMode==SC_SIZE_OPTIMAL || eMode==SC_SIZE_VISOPT )
+            const USHORT* pTabRanges = pRanges;
+
+            pDoc->IncSizeRecalcLevel( nTab );       // nicht fuer jede Spalte einzeln
+            for (USHORT nRangeNo=0; nRangeNo<nRangeCnt; nRangeNo++)
             {
-                BOOL bAll = ( eMode==SC_SIZE_OPTIMAL );
-                if (!bAll)
+                USHORT nStartNo = *(pTabRanges++);
+                USHORT nEndNo = *(pTabRanges++);
+
+                if ( !bWidth )                      // Hoehen immer blockweise
                 {
-                    //  fuer alle eingeblendeten CR_MANUALSIZE loeschen,
-                    //  dann SetOptimalHeight mit bShrink = FALSE
-                    for (USHORT nRow=nStartNo; nRow<=nEndNo; nRow++)
+                    if ( eMode==SC_SIZE_OPTIMAL || eMode==SC_SIZE_VISOPT )
                     {
-                        BYTE nOld = pDoc->GetRowFlags(nRow,nTab);
-                        if ( (nOld & CR_HIDDEN) == 0 && ( nOld & CR_MANUALSIZE ) )
-                            pDoc->SetRowFlags( nRow, nTab, nOld & ~CR_MANUALSIZE );
+                        BOOL bAll = ( eMode==SC_SIZE_OPTIMAL );
+                        if (!bAll)
+                        {
+                            //  fuer alle eingeblendeten CR_MANUALSIZE loeschen,
+                            //  dann SetOptimalHeight mit bShrink = FALSE
+                            for (USHORT nRow=nStartNo; nRow<=nEndNo; nRow++)
+                            {
+                                BYTE nOld = pDoc->GetRowFlags(nRow,nTab);
+                                if ( (nOld & CR_HIDDEN) == 0 && ( nOld & CR_MANUALSIZE ) )
+                                    pDoc->SetRowFlags( nRow, nTab, nOld & ~CR_MANUALSIZE );
+                            }
+                        }
+                        VirtualDevice aVirtDev;
+                        pDoc->SetOptimalHeight( nStartNo, nEndNo, nTab, nSizeTwips, &aVirtDev,
+                                                    GetViewData()->GetPPTX(),
+                                                    GetViewData()->GetPPTY(),
+                                                    GetViewData()->GetZoomX(),
+                                                    GetViewData()->GetZoomY(), bAll );
+                        if (bAll)
+                            pDoc->ShowRows( nStartNo, nEndNo, nTab, TRUE );
+
+                        //  Manual-Flag wird bei bAll=TRUE schon in SetOptimalHeight gesetzt
+                        //  (an bei Extra-Height, sonst aus).
+                    }
+                    else if ( eMode==SC_SIZE_DIRECT )
+                    {
+                        if (nSizeTwips)
+                            pDoc->SetRowHeightRange( nStartNo, nEndNo, nTab, nSizeTwips );
+                        pDoc->ShowRows( nStartNo, nEndNo, nTab, nSizeTwips != 0 );
+                        pDoc->SetManualHeight( nStartNo, nEndNo, nTab, TRUE );      // Manual-Flag
+                    }
+                    else if ( eMode==SC_SIZE_SHOW )
+                    {
+                        pDoc->ShowRows( nStartNo, nEndNo, nTab, TRUE );
                     }
                 }
-                VirtualDevice aVirtDev;
-                pDoc->SetOptimalHeight( nStartNo, nEndNo, nTab, nSizeTwips, &aVirtDev,
-                                            GetViewData()->GetPPTX(),
-                                            GetViewData()->GetPPTY(),
-                                            GetViewData()->GetZoomX(),
-                                            GetViewData()->GetZoomY(), bAll );
-                if (bAll)
-                    pDoc->ShowRows( nStartNo, nEndNo, nTab, TRUE );
-
-                //  Manual-Flag wird bei bAll=TRUE schon in SetOptimalHeight gesetzt
-                //  (an bei Extra-Height, sonst aus).
-            }
-            else if ( eMode==SC_SIZE_DIRECT )
-            {
-                if (nSizeTwips)
-                    pDoc->SetRowHeightRange( nStartNo, nEndNo, nTab, nSizeTwips );
-                pDoc->ShowRows( nStartNo, nEndNo, nTab, nSizeTwips != 0 );
-                pDoc->SetManualHeight( nStartNo, nEndNo, nTab, TRUE );      // Manual-Flag
-            }
-            else if ( eMode==SC_SIZE_SHOW )
-            {
-                pDoc->ShowRows( nStartNo, nEndNo, nTab, TRUE );
-            }
-        }
-        else                                // Spaltenbreiten
-        {
-            for (USHORT nCol=nStartNo; nCol<=nEndNo; nCol++)
-            {
-                if ( eMode != SC_SIZE_VISOPT ||
-                     (pDoc->GetColFlags( nCol, nTab ) & CR_HIDDEN) == 0 )
+                else                                // Spaltenbreiten
                 {
-                    USHORT nThisSize = nSizeTwips;
+                    for (USHORT nCol=nStartNo; nCol<=nEndNo; nCol++)
+                    {
+                        if ( eMode != SC_SIZE_VISOPT ||
+                             (pDoc->GetColFlags( nCol, nTab ) & CR_HIDDEN) == 0 )
+                        {
+                            USHORT nThisSize = nSizeTwips;
 
-                    if ( eMode==SC_SIZE_OPTIMAL || eMode==SC_SIZE_VISOPT )
-                        nThisSize = nSizeTwips + GetOptimalColWidth( nCol, nTab, bFormula );
-                    if ( nThisSize )
-                        pDoc->SetColWidth( nCol, nTab, nThisSize );
+                            if ( eMode==SC_SIZE_OPTIMAL || eMode==SC_SIZE_VISOPT )
+                                nThisSize = nSizeTwips + GetOptimalColWidth( nCol, nTab, bFormula );
+                            if ( nThisSize )
+                                pDoc->SetColWidth( nCol, nTab, nThisSize );
 
-                    pDoc->ShowCol( nCol, nTab, bShow );
+                            pDoc->ShowCol( nCol, nTab, bShow );
+                        }
+                    }
+                }
+
+                                    //  Outline anpassen
+
+                if (bWidth)
+                {
+                    if ( pDoc->UpdateOutlineCol( nStartNo, nEndNo, nTab, bShow ) )
+                        bOutline = TRUE;
+                }
+                else
+                {
+                    if ( pDoc->UpdateOutlineRow( nStartNo, nEndNo, nTab, bShow ) )
+                        bOutline = TRUE;
                 }
             }
+            pDoc->DecSizeRecalcLevel( nTab );       // nicht fuer jede Spalte einzeln
         }
 
-                            //  Outline anpassen
-
-        if (bWidth)
-            bOutline = bOutline || pDoc->UpdateOutlineCol( nStartNo, nEndNo, nTab, bShow );
-        else
-            bOutline = bOutline || pDoc->UpdateOutlineRow( nStartNo, nEndNo, nTab, bShow );
-    }
-    pDoc->DecSizeRecalcLevel( nTab );       // nicht fuer jede Spalte einzeln
 
     if (!bOutline)
         DELETEZ(pUndoTab);
@@ -1881,35 +1915,43 @@ void ScViewFunc::SetWidthOrHeight( BOOL bWidth, USHORT nRangeCnt, USHORT* pRange
     if (bRecord)
     {
         pDocSh->GetUndoManager()->AddUndoAction(
-            new ScUndoWidthOrHeight( pDocSh, rMark,
-                                     nStart, nTab, nEnd, nTab,
+            new ScUndoWidthOrHeight( pDocSh, *pMarkData,
+                                     nStart, nCurTab, nEnd, nCurTab,
                                      pUndoDoc, nRangeCnt, pUndoRanges,
                                      pUndoTab, eMode, nSizeTwips, bWidth ) );
     }
 
-    pDoc->UpdatePageBreaks( nTab );
+    for (nTab=0; nTab<nTabCount; nTab++)
+        if (pMarkData->GetTableSelect(nTab))
+            pDoc->UpdatePageBreaks( nTab );
+
     GetViewData()->GetView()->UpdateScrollBars();
 
     if (bPaint)
     {
         HideCursor();
 
-        if (bWidth)
-        {
-            if (pDoc->HasAttrib( nStart,0,nTab, nEnd,MAXROW,nTab, HASATTR_MERGED | HASATTR_OVERLAPPED ))
-                nStart = 0;
-            if (nStart)             // weiter oben anfangen wegen Linien und Cursor
-                --nStart;
-            pDocSh->PostPaint( nStart, 0, nTab, MAXCOL, MAXROW, nTab, PAINT_GRID | PAINT_TOP );
-        }
-        else
-        {
-            if (pDoc->HasAttrib( 0,nStart,nTab, MAXCOL,nEnd,nTab, HASATTR_MERGED | HASATTR_OVERLAPPED ))
-                nStart = 0;
-            if (nStart)
-                --nStart;
-            pDocSh->PostPaint( 0, nStart, nTab, MAXCOL, MAXROW, nTab, PAINT_GRID | PAINT_LEFT );
-        }
+        for (nTab=0; nTab<nTabCount; nTab++)
+            if (pMarkData->GetTableSelect(nTab))
+            {
+                if (bWidth)
+                {
+                    if (pDoc->HasAttrib( nStart,0,nTab, nEnd,MAXROW,nTab, HASATTR_MERGED | HASATTR_OVERLAPPED ))
+                        nStart = 0;
+                    if (nStart)             // weiter oben anfangen wegen Linien und Cursor
+                        --nStart;
+                    pDocSh->PostPaint( nStart, 0, nTab, MAXCOL, MAXROW, nTab, PAINT_GRID | PAINT_TOP );
+                }
+                else
+                {
+                    if (pDoc->HasAttrib( 0,nStart,nTab, MAXCOL,nEnd,nTab, HASATTR_MERGED | HASATTR_OVERLAPPED ))
+                        nStart = 0;
+                    if (nStart)
+                        --nStart;
+                    pDocSh->PostPaint( 0, nStart, nTab, MAXCOL, MAXROW, nTab, PAINT_GRID | PAINT_LEFT );
+                }
+            }
+
         pDocSh->UpdateOle(GetViewData());
         aModificator.SetDocumentModified();
 
