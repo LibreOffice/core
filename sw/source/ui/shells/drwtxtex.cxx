@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtex.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 12:26:14 $
+ *  last change: $Author: jp $ $Date: 2000-11-24 13:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,9 @@
 
 #pragma hdrstop
 
-#include "hintids.hxx"
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
+#endif
 
 #ifndef _SVDVIEW_HXX //autogen
 #include <svx/svdview.hxx>
@@ -177,27 +179,60 @@
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
-
-#include "doc.hxx"
+#ifndef _SVX_SCRIPTTYPEITEM_HXX
+#include <svx/scripttypeitem.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XTHESAURUS_HPP_
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #endif
 
-#include "wview.hxx"
-#include "viewopt.hxx"
-#include "wrtsh.hxx"
-#include "uiparam.hxx"
-#include "uitool.hxx"
-#include "cmdid.h"
-#include "globals.hrc"
-#include "shells.hrc"
-#include "chrdlg.hxx"
-#include "pardlg.hxx"
-#include "dataex.hxx"
-#include "drwtxtsh.hxx"
-#include "swmodule.hxx"
-#include "initui.hxx"               // fuer SpellPointer
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
+#ifndef _WVIEW_HXX
+#include <wview.hxx>
+#endif
+#ifndef _VIEWOPT_HXX
+#include <viewopt.hxx>
+#endif
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
+#ifndef _UIPARAM_HXX
+#include <uiparam.hxx>
+#endif
+#ifndef _UITOOL_HXX
+#include <uitool.hxx>
+#endif
+#ifndef _CHRDLG_HXX
+#include <chrdlg.hxx>
+#endif
+#ifndef _PARDLG_HXX
+#include <pardlg.hxx>
+#endif
+#ifndef _DATAEX_HXX
+#include <dataex.hxx>
+#endif
+#ifndef _DRWTXTSH_HXX
+#include <drwtxtsh.hxx>
+#endif
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
+#ifndef _INITUI_HXX
+#include <initui.hxx>               // fuer SpellPointer
+#endif
+
+#ifndef _CMDID_H
+#include <cmdid.h>
+#endif
+#ifndef _GLOBALS_HRC
+#include <globals.hrc>
+#endif
+#ifndef _SHELLS_HRC
+#include <shells.hrc>
+#endif
 
 using namespace ::com::sun::star;
 
@@ -205,9 +240,7 @@ using namespace ::com::sun::star;
     Beschreibung:
  --------------------------------------------------------------------*/
 
-
-
-void SwDrawTextShell::Execute(SfxRequest &rReq)
+void SwDrawTextShell::Execute( SfxRequest &rReq )
 {
     SwWrtShell &rSh = GetShell();
 
@@ -220,42 +253,23 @@ void SwDrawTextShell::Execute(SfxRequest &rReq)
 
     switch (nSlot)
     {
-        case SID_ATTR_CHAR_FONT:
-        case SID_ATTR_CHAR_FONTHEIGHT:
-        case SID_ATTR_CHAR_COLOR:
+    case SID_ATTR_CHAR_FONT:
+    case SID_ATTR_CHAR_FONTHEIGHT:
+    case SID_ATTR_CHAR_WEIGHT:
+    case SID_ATTR_CHAR_POSTURE:
         {
-            if (!pNewAttrs)
-                rSh.GetView().GetViewFrame()->GetDispatcher()->Execute(SID_CHAR_DLG, sal_False);
-            else
-            {
-                switch (nSlot)
-                {
-                    case SID_ATTR_CHAR_FONT:
-                        aNewAttr.Put(((const SvxFontItem&)pNewAttrs->Get(nWhich)), EE_CHAR_FONTINFO);
-                        break;
-                    case SID_ATTR_CHAR_FONTHEIGHT:
-                        aNewAttr.Put(((const SvxFontHeightItem&)pNewAttrs->Get(nWhich)), EE_CHAR_FONTHEIGHT);
-                        break;
-                    case SID_ATTR_CHAR_COLOR:
-                        aNewAttr.Put(((const SvxColorItem&)pNewAttrs->Get(nWhich)), EE_CHAR_COLOR);
-                        break;
-                }
-            }
+            SfxItemPool* pPool = aEditAttr.GetPool()->GetSecondaryPool();
+            if( !pPool )
+                pPool = aEditAttr.GetPool();
+            SvxScriptSetItem aSetItem( nSlot, *pPool );
+            aSetItem.PutItemForScriptType( pOLV->GetSelectedScriptType(),
+                                            pNewAttrs->Get( nWhich ));
+            aNewAttr.Put( aSetItem.GetItemSet() );
         }
         break;
 
-        case SID_ATTR_CHAR_WEIGHT:
-        {
-             FontWeight eFW = ((const SvxWeightItem&)aEditAttr.Get(EE_CHAR_WEIGHT)).GetWeight();
-            aNewAttr.Put(SvxWeightItem(eFW == WEIGHT_NORMAL ? WEIGHT_BOLD : WEIGHT_NORMAL, EE_CHAR_WEIGHT));
-        }
-        break;
-
-        case SID_ATTR_CHAR_POSTURE:
-        {
-            FontItalic eFI = ((const SvxPostureItem&)aEditAttr.Get(EE_CHAR_ITALIC)).GetPosture();
-            aNewAttr.Put(SvxPostureItem(eFI == ITALIC_NORMAL ? ITALIC_NONE : ITALIC_NORMAL, EE_CHAR_ITALIC));
-        }
+    case SID_ATTR_CHAR_COLOR:
+        aNewAttr.Put( pNewAttrs->Get(nWhich), EE_CHAR_COLOR );
         break;
 
         case SID_ATTR_CHAR_UNDERLINE:
@@ -477,8 +491,6 @@ void SwDrawTextShell::Execute(SfxRequest &rReq)
     Beschreibung:
  --------------------------------------------------------------------*/
 
-
-
 void SwDrawTextShell::GetState(SfxItemSet& rSet)
 {
     if (!IsTextEdit())  // Sonst manchmal Absturz!
@@ -571,46 +583,56 @@ void SwDrawTextShell::GetDrawTxtCtrlState(SfxItemSet& rSet)
 
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
+    USHORT nScriptType = pOLV->GetSelectedScriptType();
 
     while(nWhich)
     {
-        switch(GetPool().GetSlotId(nWhich))
+        USHORT nSlotId = GetPool().GetSlotId( nWhich );
+        switch( nSlotId )
         {
-            case SID_ATTR_CHAR_FONT:
-                rSet.Put(aEditAttr.Get(EE_CHAR_FONTINFO, sal_True), nWhich);
-                break;
-            case SID_ATTR_CHAR_FONTHEIGHT:
-                rSet.Put(aEditAttr.Get(EE_CHAR_FONTHEIGHT, sal_True), nWhich);
-                break;
-            case SID_ATTR_CHAR_COLOR:
-                rSet.Put(aEditAttr.Get(EE_CHAR_COLOR, sal_True), nWhich);
-                break;
-            case SID_ATTR_CHAR_WEIGHT:
-                rSet.Put(aEditAttr.Get(EE_CHAR_WEIGHT, sal_True), nWhich);
-                break;
-            case SID_ATTR_CHAR_POSTURE:
-                rSet.Put(aEditAttr.Get(EE_CHAR_ITALIC, sal_True), nWhich);
-                break;
-            case SID_ATTR_CHAR_UNDERLINE:
-                rSet.Put(aEditAttr.Get(EE_CHAR_UNDERLINE, sal_True), nWhich);
-                break;
-            case SID_ATTR_CHAR_CONTOUR:
-                rSet.Put(aEditAttr.Get(EE_CHAR_OUTLINE, sal_True), nWhich);
-                break;
-            case SID_ATTR_CHAR_SHADOWED:
-                rSet.Put(aEditAttr.Get(EE_CHAR_SHADOW, sal_True), nWhich);
-                break;
-            case SID_ATTR_CHAR_STRIKEOUT:
-                rSet.Put(aEditAttr.Get(EE_CHAR_STRIKEOUT, sal_True), nWhich);
-                break;
-            case SID_AUTOSPELL_MARKOFF:
-            case SID_AUTOSPELL_CHECK:
-                const SfxPoolItem* pState = SW_MOD()->GetSlotState(nWhich);
-                if (pState)
-                    rSet.Put(SfxBoolItem(nWhich, ((const SfxBoolItem*)pState)->GetValue()));
+        case SID_ATTR_CHAR_FONT:
+        case SID_ATTR_CHAR_FONTHEIGHT:
+        case SID_ATTR_CHAR_WEIGHT:
+        case SID_ATTR_CHAR_POSTURE:
+            {
+                SfxItemPool* pPool = aEditAttr.GetPool()->GetSecondaryPool();
+                if( !pPool )
+                    pPool = aEditAttr.GetPool();
+                SvxScriptSetItem aSetItem( nSlotId, *pPool );
+                aSetItem.GetItemSet().Put( aEditAttr, FALSE );
+                const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScriptType );
+                if( pI )
+                    rSet.Put( *pI, nWhich );
                 else
-                    rSet.DisableItem( nWhich );
+                    rSet.InvalidateItem( nWhich );
+            }
             break;
+
+
+
+        case SID_ATTR_CHAR_COLOR:
+            rSet.Put(aEditAttr.Get(EE_CHAR_COLOR, sal_True), nWhich);
+            break;
+        case SID_ATTR_CHAR_UNDERLINE:
+            rSet.Put(aEditAttr.Get(EE_CHAR_UNDERLINE, sal_True), nWhich);
+            break;
+        case SID_ATTR_CHAR_CONTOUR:
+            rSet.Put(aEditAttr.Get(EE_CHAR_OUTLINE, sal_True), nWhich);
+            break;
+        case SID_ATTR_CHAR_SHADOWED:
+            rSet.Put(aEditAttr.Get(EE_CHAR_SHADOW, sal_True), nWhich);
+            break;
+        case SID_ATTR_CHAR_STRIKEOUT:
+            rSet.Put(aEditAttr.Get(EE_CHAR_STRIKEOUT, sal_True), nWhich);
+            break;
+        case SID_AUTOSPELL_MARKOFF:
+        case SID_AUTOSPELL_CHECK:
+            const SfxPoolItem* pState = SW_MOD()->GetSlotState(nWhich);
+            if (pState)
+                rSet.Put(SfxBoolItem(nWhich, ((const SfxBoolItem*)pState)->GetValue()));
+            else
+                rSet.DisableItem( nWhich );
+        break;
         }
         nWhich = aIter.NextWhich();
     }
