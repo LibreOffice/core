@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlannoi.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-12-04 18:31:32 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 07:47:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,18 +113,17 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
         {
             case XML_TOK_TABLE_ANNOTATION_ATTR_AUTHOR:
             {
-                sAuthor = sValue;
+                sAuthorBuffer = sValue;
             }
             break;
             case XML_TOK_TABLE_ANNOTATION_ATTR_CREATE_DATE:
             {
-                sCreateDate = sValue;
+                sCreateDateBuffer = sValue;
             }
             break;
             case XML_TOK_TABLE_ANNOTATION_ATTR_CREATE_DATE_STRING:
             {
-                if (!sCreateDate.getLength())
-                    sCreateDate = sValue;
+                sCreateDateStringBuffer = sValue;
             }
             break;
             case XML_TOK_TABLE_ANNOTATION_ATTR_DISPLAY:
@@ -147,7 +146,22 @@ SvXMLImportContext *ScXMLAnnotationContext::CreateChildContext( USHORT nPrefix,
 {
     SvXMLImportContext *pContext = 0;
 
-    if ((nPrefix == XML_NAMESPACE_TEXT) && IsXMLToken(rLName, XML_P) )
+    if( XML_NAMESPACE_DC == nPrefix )
+    {
+        if( IsXMLToken( rLName, XML_CREATOR ) )
+            pContext = new ScXMLContentContext(GetScImport(), nPrefix,
+                                            rLName, xAttrList, sAuthorBuffer);
+        else if( IsXMLToken( rLName, XML_DATE ) )
+            pContext = new ScXMLContentContext(GetScImport(), nPrefix,
+                                            rLName, xAttrList, sCreateDateBuffer);
+    }
+    else if( XML_NAMESPACE_META == nPrefix )
+    {
+        if( IsXMLToken( rLName, XML_DATE_STRING ) )
+            pContext = new ScXMLContentContext(GetScImport(), nPrefix,
+                                            rLName, xAttrList, sCreateDateStringBuffer);
+    }
+    else if ((nPrefix == XML_NAMESPACE_TEXT) && IsXMLToken(rLName, XML_P) )
     {
         if (!bHasTextP)
         {
@@ -175,8 +189,10 @@ void ScXMLAnnotationContext::Characters( const ::rtl::OUString& rChars )
 void ScXMLAnnotationContext::EndElement()
 {
     ScMyImportAnnotation* pMyAnnotation = new ScMyImportAnnotation();
-    pMyAnnotation->sAuthor = sAuthor;
-    pMyAnnotation->sCreateDate = sCreateDate;
+    pMyAnnotation->sAuthor = sAuthorBuffer.makeStringAndClear();
+    pMyAnnotation->sCreateDate = sCreateDateBuffer.makeStringAndClear();
+    if (!pMyAnnotation->sCreateDate.getLength())
+        pMyAnnotation->sCreateDate = sCreateDateStringBuffer.makeStringAndClear();
     pMyAnnotation->sText = sOUText.makeStringAndClear();
     pMyAnnotation->bDisplay = bDisplay;
     pCellContext->AddAnnotation(pMyAnnotation);
