@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.4 $
+#  $Revision: 1.5 $
 #
-#  last change: $Author: vg $ $Date: 2003-07-09 10:38:37 $
+#  last change: $Author: rt $ $Date: 2004-05-18 13:27:00 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -106,11 +106,7 @@ $(COMPONENT3_NAME)_CLASSFILES = XMeaning_impl.class \
 	OneInstanceFactory.class \
 	$(COMPONENT3_NAME).class
 
-SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(OFFICE_CLASSES_DIR)/jurt.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/unoil.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/ridl.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/sandbox.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/juh.jar\
+SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
 		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
 
 .PHONY: ALL
@@ -125,18 +121,33 @@ $(OUT_COMP_CLASS)/%.Manifest :
 
 $(CLASSFILES) : $(JAVAFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	javac $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
+
+yyy:
+	@echo $(OUT_CLASS)/%.jar : $(OUT_COMP_CLASS)/%.Manifest 
 
 $(OUT_CLASS)/%.jar : $(OUT_COMP_CLASS)/%.Manifest $(CLASSFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && jar cvfm ../$(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm ../$(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
 
 $(OUT_BIN)/%.zip : $(OUT_CLASS)/%.jar
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	cd $(subst /,$(PS),$(OUT_CLASS)) && jar cvfM ../bin/$(@F) $(<F)
+	cd $(subst /,$(PS),$(OUT_CLASS)) && $(SDK_JAR) cvfM ../bin/$(@F) $(<F)
+
+$(COMPONENT1_JAR) : $(COMPONENT1_MANIFESTFILE)
+
+$(COMPONENT1_PACKAGE) : $(COMPONENT1_JAR)
+
+$(COMPONENT2_JAR) : $(COMPONENT2_MANIFESTFILE)
+
+$(COMPONENT2_PACKAGE) : $(COMPONENT2_JAR)
+
+$(COMPONENT3_JAR) : $(COMPONENT3_MANIFESTFILE)
+
+$(COMPONENT3_PACKAGE) : $(COMPONENT3_JAR)
 
 $(REGISTERFLAG) : $(COMPONENT1_PACKAGE) $(COMPONENT2_PACKAGE) $(COMPONENT3_PACKAGE)
-ifneq "$(SDK_AUTO_DEPLOYMENT)" ""
+ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst /,$(PS),$@)
 	$(DEPLOYTOOL) $(COMPONENT1_PACKAGE_URL)
@@ -163,12 +174,12 @@ OfficeDevLinguistic : $(REGISTERFLAG)
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_COMP_CLASS)/%.class
-	java -classpath "$(SDK_CLASSPATH)" $(basename $@)
+	$(SDK_JAVA) -classpath "$(SDK_CLASSPATH)" $(basename $@)
 
 .PHONY: clean
 clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
-	-$(DEL) $(subst /,$(PS),$(COMPONENT1_PACKAGE_URL))
-	-$(DEL) $(subst /,$(PS),$(COMPONENT2_PACKAGE_URL))
-	-$(DEL) $(subst /,$(PS),$(COMPONENT3_PACKAGE_URL))
-	-$(DEL) $(subst /,$(PS),$(REGISTERFLAG))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT1_PACKAGE_URL)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT2_PACKAGE_URL)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT3_PACKAGE_URL)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(REGISTERFLAG)))
