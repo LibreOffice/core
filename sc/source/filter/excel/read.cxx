@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-28 16:38:09 $
+ *  last change: $Author: dr $ $Date: 2001-11-30 16:08:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,8 +261,7 @@ FltError ImportExcel::Read( void )
                     case 0x18:  Name25(); break;        // NAME         [ 2  5]
                     case 0x1C:  Note(); break;          // NOTE         [ 2345]
                     case 0x1D:  Selection(); break;     // SELECTION    [ 2345]
-                    case 0x1E:  Format235(); break;     // FORMAT       [ 23 5]
-                    case 0x1F:  Formatcount(); break;   // FORMATCOUNT  [ 2   ]
+                    case 0x1E:  pExcRoot->pNumFmtBuffer->ReadFormat( aIn, xlBiff2 );break;
                     case 0x20:  Columndefault(); break; // COLUMNDEFAULT[ 2   ]
                     case 0x21:  Array25(); break;       // ARRAY        [ 2  5]
                     case 0x23:  Externname25(); break;  // EXTERNNAME   [ 2  5]
@@ -306,7 +305,7 @@ FltError ImportExcel::Read( void )
                     case 0x1B:  Horizontalpagebreaks(); break;
                     case 0x1C:  Note(); break;          // NOTE         [ 2345]
                     case 0x1D:  Selection(); break;     // SELECTION    [ 2345]
-                    case 0x1E:  Format235(); break;     // FORMAT       [ 23 5]
+                    case 0x1E:  pExcRoot->pNumFmtBuffer->ReadFormat( aIn, xlBiff3 );break;
                     case 0x22:  Rec1904(); break;       // 1904         [ 2345]
                     case 0x26:  Leftmargin(); break;    // LEFTMARGIN   [ 2345]
                     case 0x27:  Rightmargin(); break;   // RIGHTMARGIN  [ 2345]
@@ -394,7 +393,7 @@ FltError ImportExcel::Read( void )
                     case 0x023E: Window2_5(); break;    // WINDOW       [    5]
                     case 0x027E: Rk(); break;           // RK           [  34 ]
                     case 0x0406: Formula4(); break;     // FORMULA      [   4 ]
-                    case 0x041E: Format4(); break;      // FORMAT       [   4 ]
+                    case 0x041E: pExcRoot->pNumFmtBuffer->ReadFormat( aIn, xlBiff4 );break;
                     case 0x0443: pExcRoot->pXFBuffer->ReadXF( aIn, xlBiff4 );   break;
                 }
             }
@@ -436,7 +435,7 @@ FltError ImportExcel::Read( void )
                         else
                             eAkt = Z_Ende;
                         break;
-                    case 0x041E: Format4(); break;      // FORMAT       [   4 ]
+                    case 0x041E: pExcRoot->pNumFmtBuffer->ReadFormat( aIn, xlBiff4 );break;
                     case 0x0443: pExcRoot->pXFBuffer->ReadXF( aIn, xlBiff4 );   break;
                 }
 
@@ -510,7 +509,7 @@ FltError ImportExcel::Read( void )
                     case 0x0406:                        // FORMULA      [   4 ]
                         Formula4();
                         eAkt = Z_Biff4T;
-                    case 0x041E: Format4(); break;      // FORMAT       [   4 ]
+                    case 0x041E: pExcRoot->pNumFmtBuffer->ReadFormat( aIn, xlBiff4 );break;
                     case 0x0443: pExcRoot->pXFBuffer->ReadXF( aIn, xlBiff4 );   break;
                         break;
                 }
@@ -598,8 +597,7 @@ FltError ImportExcel::Read( void )
                         eAkt = Z_Biff5E;
                         break;
                     case 0x18:  Name25(); break;        // NAME         [ 2  5]
-                    case 0x1E:  Format235(); break;     // FORMAT       [ 23 5]
-                    case 0x1F:  Formatcount(); break;   // FORMATCOUNT  [ 2   ]
+                    case 0x1E:  pExcRoot->pNumFmtBuffer->ReadFormat( aIn, xlBiff5 );break;
                     case 0x22:  Rec1904(); break;       // 1904         [ 2345]
                     case 0x25:  Defrowheight2(); break; // DEFAULTROWHEI[ 2   ]
                     case 0x2F:                          // FILEPASS     [ 2345]
@@ -623,7 +621,7 @@ FltError ImportExcel::Read( void )
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345]
                     case 0x0231: pExcRoot->pFontBuffer->ReadFont( aIn, xlBiff4 );break;
                     case 0x0243: pExcRoot->pXFBuffer->ReadXF( aIn, xlBiff3 );   break;
-                    case 0x041E: Format4(); break;      // FORMAT       [   4 ]
+                    case 0x041E: pExcRoot->pNumFmtBuffer->ReadFormat( aIn, xlBiff5 );break;
                     case 0x0443: pExcRoot->pXFBuffer->ReadXF( aIn, xlBiff4 );   break;
                 }
 
@@ -1142,7 +1140,6 @@ FltError ImportExcel8::Read( void )
                         break;
                     case 0x17:  Externsheet(); break;   // EXTERNSHEET  [ 2345 8 ]
                     case 0x18:  Name(); break;          // NAME         [ 2  5 8 ]
-                    case 0x1F:  Formatcount(); break;   // FORMATCOUNT  [ 2      ]
                     case 0x22:  Rec1904(); break;       // 1904         [ 2345   ]
                     case 0x23:  Externname(); break;    // EXTERNNAME   [      8 ]
                     case 0x25:  Defrowheight2(); break; // DEFAULTROWHEI[ 2      ]
@@ -1171,7 +1168,7 @@ FltError ImportExcel8::Read( void )
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345   ]
                     case 0x0231: pExcRoot->pFontBuffer->ReadFont( aIn, xlBiff4 );break;
                     case 0x0293: pExcRoot->pXFBuffer->ReadStyle( aIn, xlBiff8 );break;
-                    case 0x041E: Format(); break;       // FORMAT       [   4    ]
+                    case 0x041E: pExcRoot->pNumFmtBuffer->ReadFormat( aIn, xlBiff8 );break;
                 }
 
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-28 16:38:09 $
+ *  last change: $Author: dr $ $Date: 2001-11-30 16:08:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,6 @@
 #endif
 
 #include "excimp8.hxx"
-#include "vfbuff.hxx"
 #include "fontbuff.hxx"
 #include "excform.hxx"
 #include "fltprgrs.hxx"
@@ -700,14 +699,6 @@ void ImportExcel8::Note( void )
         bTabTruncated = TRUE;
 
     pLastFormCell = NULL;
-}
-
-
-void ImportExcel8::Format( void )
-{
-    UINT16  nInd = aIn.ReaduInt16();
-    String aTmpStr( aIn.ReadUniString() );
-    pExcRoot->pValueFormBuffer->NewValueFormat( nInd, aTmpStr );
 }
 
 
@@ -1361,7 +1352,7 @@ void ImportExcel8::Name( void )
     BOOL                bSkip = FALSE;
 
     if( bBuiltIn )
-        ScfTools::GetBuiltInName( aName, cFirstChar, nSheet );
+        XclTools::GetBuiltInName( aName, cFirstChar, nSheet );
     else
         ScfTools::ConvertName( aName );
 
@@ -1516,9 +1507,6 @@ void ImportExcel8::PostDocLoad( void )
                         {
                             switch ( pObj->GetObjType() )
                             {
-                                case otChart:
-                                    nChartCnt++;
-                                break;
                                 case otOle:
                                     ((XclImpEscherOle*)pObj)->CreateSdrOle( *pDffMan, nOLEImpFlags );
                                 break;
@@ -1549,16 +1537,7 @@ void ImportExcel8::PostDocLoad( void )
         delete pDffMan;
     }
 
-//    if( (nChartCnt > 1) && !pExcRoot->pProgress )
-//        pExcRoot->pProgress = new FilterProgressBar( nChartCnt );
-
     aObjManager.Apply();
-
-//    if( pExcRoot->pProgress )
-//    {
-//        delete pExcRoot->pProgress;
-//        pExcRoot->pProgress = NULL;
-//    }
 
     // controls
 /*

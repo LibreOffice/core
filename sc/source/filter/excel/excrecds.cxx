@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-28 16:38:09 $
+ *  last change: $Author: dr $ $Date: 2001-11-30 16:08:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@
 #include "fontbuff.hxx"
 #include "excupn.hxx"
 
+#ifndef _SC_XCLTOOLS_HXX
+#include "XclTools.hxx"
+#endif
 #ifndef _SC_XCLEXPSTREAM_HXX
 #include "XclExpStream.hxx"
 #endif
@@ -2043,7 +2046,7 @@ void ExcName::SetUniqueName( const String& rRangeName )
 
 BOOL ExcName::SetBuiltInName( const String& rName, UINT8 nKey )
 {
-    if( ScfTools::IsBuiltInName( nTabNum, rName, nKey ) )
+    if( XclTools::IsBuiltInName( nTabNum, rName, nKey ) )
     {
         nBuiltInKey = nKey;
         bDummy = TRUE;

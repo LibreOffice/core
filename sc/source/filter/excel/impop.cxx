@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-28 16:38:09 $
+ *  last change: $Author: dr $ $Date: 2001-11-30 16:08:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,6 @@
 #endif
 
 #include "excimp8.hxx"
-#include "vfbuff.hxx"
 #include "fontbuff.hxx"
 #include "excform.hxx"
 
@@ -209,7 +208,6 @@ ImportExcel::ImportExcel( SvStream& aStream, ScDocument* pDoc ):
     pExcRoot->pFormTable = pDoc->GetFormatTable();
     pExcRoot->pScRangeName = pDoc->GetRangeName();
     pExcRoot->pColor = new ColorBuffer( pExcRoot );
-    pExcRoot->pFontBuffer = new XclImpFontBuffer( *pExcRoot );
     pExcRoot->eDefLanguage = ScGlobal::eLnge;   //LANGUAGE_SYSTEM;
     pExcRoot->aStandard.AssignAscii( "General" );
     pExcRoot->eDateiTyp = pExcRoot->eHauptDateiTyp = BiffX;
@@ -227,7 +225,10 @@ ImportExcel::ImportExcel( SvStream& aStream, ScDocument* pDoc ):
     pExcRoot->pProgress = NULL;
     pExcRoot->pEdEng = NULL;
     pExcRoot->pEdEngHF = NULL;
-    pExcRoot->pValueFormBuffer = new ValueFormBuffer( pExcRoot );
+
+    pExcRoot->pFontBuffer = new XclImpFontBuffer( *pExcRoot );
+    pExcRoot->pNumFmtBuffer = new XclImpNumFmtBuffer( *pExcRoot,
+        pExcRoot->pFormTable->GetStandardFormat( pExcRoot->eDefLanguage ) );
     pExcRoot->pXFBuffer = new XclImpXFBuffer( *pExcRoot );
 
     pExtNameBuff = new NameBuffer( pExcRoot );          //#94039# prevent empty rootdata
@@ -639,7 +640,7 @@ void ImportExcel::Name25( void )
 
         if( bBuildIn )
         {// Build-in name
-            ScfTools::GetBuiltInName( aName, cFirstNameChar, nSheet );
+            XclTools::GetBuiltInName( aName, cFirstNameChar, nSheet );
         }
         else
             ScfTools::ConvertName( aName );
@@ -728,21 +729,6 @@ void ImportExcel::Selection( void )
         pColRowBuff->SetSelection( ScRange( ( UINT16 ) nFirstCol, nFirstRow, nTab,
                                             ( UINT16 ) nLastCol, nLastRow, nTab ) );
     }
-}
-
-
-void ImportExcel::Format235( void )
-{
-    if( pExcRoot->eHauptDateiTyp == Biff5 )
-        aIn.Ignore( 2 );
-
-    String aTmpStr( aIn.ReadByteString( FALSE ) );
-    pExcRoot->pValueFormBuffer->NewValueFormat( aTmpStr );
-}
-
-
-void ImportExcel::Formatcount( void )
-{
 }
 
 
@@ -1727,7 +1713,7 @@ void ImportExcel::Name34( void )
         bPrintTitles = ( cFirstNameChar == EXC_BUILTIN_PRINTTITLES );
         bBuildIn = TRUE;
 
-        aName.AssignAscii( ScfTools::GetBuiltInName( cFirstNameChar ) );
+        aName.AssignAscii( XclTools::GetBuiltInName( cFirstNameChar ) );
     }
     else
     {
@@ -1950,14 +1936,6 @@ void ImportExcel::Bof4( void )
         pExcRoot->eDateiTyp = BiffX;
         pExcRoot->eHauptDateiTyp = BiffX;
     }
-}
-
-
-void ImportExcel::Format4( void )
-{
-    aIn.Ignore( 2 );
-    String aTmpStr( aIn.ReadByteString( FALSE ) );
-    pExcRoot->pValueFormBuffer->NewValueFormat( aTmpStr );
 }
 
 

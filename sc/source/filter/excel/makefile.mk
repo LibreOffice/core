@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: dr $ $Date: 2001-11-28 16:38:09 $
+#   last change: $Author: dr $ $Date: 2001-11-30 16:08:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,7 +104,6 @@ SLOFILES =	\
         $(SLO)$/excform.obj					\
         $(SLO)$/excform8.obj				\
         $(SLO)$/fontbuff.obj				\
-        $(SLO)$/vfbuff.obj					\
         $(SLO)$/tokstack.obj				\
         $(SLO)$/namebuff.obj				\
         $(SLO)$/colrowst.obj				\
