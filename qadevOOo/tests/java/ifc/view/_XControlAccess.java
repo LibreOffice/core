@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XControlAccess.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:14:09 $
+ *  last change:$Date: 2003-09-08 11:32:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,11 @@
 
 package ifc.view;
 
+import lib.MultiMethodTest;
+import lib.Status;
+import lib.StatusException;
+import util.FormTools;
+
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.drawing.XControlShape;
@@ -71,10 +76,6 @@ import com.sun.star.drawing.XShapes;
 import com.sun.star.lang.XComponent;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.view.XControlAccess;
-import lib.MultiMethodTest;
-import lib.Status;
-import lib.StatusException;
-import util.FormTools;
 
 /**
  * Testing <code>com.sun.star.view.XControlAccess</code>
