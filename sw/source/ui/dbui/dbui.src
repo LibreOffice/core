@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbui.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:20:54 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,6 +212,49 @@ String STR_DB_EMAIL
     Text [ en-US ] = "E-mail" ;
     Text [ x-comment ] = " ";
 };
+
+StringArray SA_ADDRESS_HEADER
+{
+    ItemList [de] =
+    {
+        < "Anrede" ;               MM_PART_TITLE           ;> ;
+        < "Vorname" ;              MM_PART_FIRSTNAME       ;> ;
+        < "Name" ;                 MM_PART_LASTNAME        ;> ;
+        < "Firmenname" ;           MM_PART_COMPANY         ;> ;
+        < "Addresszeile 1" ;       MM_PART_ADDRESS_1       ;> ;
+        < "Addresszeile 2" ;       MM_PART_ADDRESS_2       ;> ;
+        < "Stadt" ;                MM_PART_CITY            ;> ;
+        < "Bundesland" ;           MM_PART_REGION          ;> ;
+        < "Postleitzahl" ;         MM_PART_ZIP             ;> ;
+        < "Land" ;                 MM_PART_COUNTRY         ;> ;
+        < "Telefon privat" ;       MM_PART_PHONE_PRIVATE   ;> ;
+        < "Telefon geschäftlich" ; MM_PART_PHONE_BUSINESS  ;> ;
+        < "E-Mail Addresse" ;      MM_PART_E_MAIL          ;> ;
+        < "Geschlecht";            MM_PART_GENDER          ;> ;
+    };
+    ItemList [en-US]=
+    {
+        < "Title" ;                 MM_PART_TITLE           ;> ;
+        < "First Name" ;            MM_PART_FIRSTNAME       ;> ;
+        < "Last Name" ;             MM_PART_LASTNAME        ;> ;
+        < "Company Name" ;          MM_PART_COMPANY         ;> ;
+        < "Address Line 1" ;        MM_PART_ADDRESS_1       ;> ;
+        < "Address Line 2" ;        MM_PART_ADDRESS_2       ;> ;
+        < "City" ;                  MM_PART_CITY            ;> ;
+        < "State" ;                 MM_PART_REGION          ;> ;
+        < "ZIP" ;                   MM_PART_ZIP             ;> ;
+        < "Country" ;               MM_PART_COUNTRY         ;> ;
+        < "Telephone private" ;     MM_PART_PHONE_PRIVATE   ;> ;
+        < "Telephone business" ;    MM_PART_PHONE_BUSINESS  ;> ;
+        < "E-mail Address" ;        MM_PART_E_MAIL          ;> ;
+        < "Gender";                 MM_PART_GENDER          ;> ;
+    };
+};
+String STR_NOTASSIGNED
+{
+    Text [ de ] = " nicht verfügbar " ;
+    Text[ en-US ] = " not available ";
+};
 String STR_FILTER_ALL
 {
     Text [ de ] = "Alle Dateien (*.*)" ;
@@ -229,8 +272,8 @@ String STR_FILTER_SXB
 };
 String STR_FILTER_SXC
 {
-    Text [ de ] = "%PRODUCTNAME Calc (*.sxc)" ;
-    Text [ en-US ] = "%PRODUCTNAME Calc (*.sxc)" ;
+    Text [ de ] = "%PRODUCTNAME Calc(*.oxc)" ;
+    Text [ en-US ] = "%PRODUCTNAME Calc(*.oxc)" ;
 };
 String STR_FILTER_DBF
 {
