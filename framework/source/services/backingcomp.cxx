@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backingcomp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:41:44 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:38:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,8 +135,8 @@
 #include <com/sun/star/awt/KeyModifier.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
 
 //_______________________________________________
@@ -661,7 +661,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     }
 
         // create the menu bar for the backing component
-        css::uno::Reference< dcss::frame::XLayoutManager > xLayoutManager;
+        css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
         xPropSet->getPropertyValue(FRAME_PROPNAME_LAYOUTMANAGER) >>= xLayoutManager;
         if (xLayoutManager.is())
         {
