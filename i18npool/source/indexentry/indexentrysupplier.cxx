@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-14 09:28:45 $
+ *  last change: $Author: bustamam $ $Date: 2002-01-18 20:35:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,13 +156,14 @@ using namespace ::com::sun::star::i18n;
     static const struct {
         const sal_Char *pLang, *pFollowPage, *pFollowPages;
     } aFollowPageArr[] = {
-        { "en",     "p.",       "pp" },
+        { "en",     "p.",       "pp." },
         { "de",     "f.",       "ff." },
-        { "es",     "seg.",     "segs." },
-        { "it",     "seg.",     "segg." },
-        { "fr",     "suivante", "suivantes" },
+        { "es",     " s.",      " ss." },
+        { "it",     "seg.",     " e seg." },
+        { "fr",     " sv",      " sv" },
+        { "sv",     "f.",       "ff." },
         { "zh",     "",         "" },
-        { "ja",     "",         "" },
+        { "ja",     "p.",       "pp." },
         { "ko",     "",         "" },
         { 0, 0, 0 }
     };
