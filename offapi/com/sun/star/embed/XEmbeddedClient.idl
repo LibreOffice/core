@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XEmbeddedClient.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:25:14 $
+ *  last change: $Author: rt $ $Date: 2004-01-06 08:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 #include <com/sun/star/embed/WrongStateException.idl>
 #endif
 
+#ifndef __com_sun_star_embed_ObjectSaveVetoException_idl__
+#include <com/sun/star/embed/ObjectSaveVetoException.idl>
+#endif
+
 
 
 //=============================================================================
@@ -83,11 +87,15 @@ interface XEmbeddedClient: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /** Asks client to let the object store itself
 
+        @throws com::sun::star::uno::ObjectSaveVetoException
+            in case container whants to avoid saving of object
+
         @throws com::sun::star::uno::Exception
             in case of problems during saving
      */
     void saveObject()
-        raises( ::com::sun::star::uno::Exception );
+        raises( ::com::sun::star::embed::ObjectSaveVetoException,
+                ::com::sun::star::uno::Exception );
 
     //-------------------------------------------------------------------------
     /** Notifies when the object outplace window becomes visible or invisible
@@ -98,7 +106,8 @@ interface XEmbeddedClient: com::sun::star::uno::XInterface
         @throws com::sun::star::embed::WrongStateException
             the object is in wrong state
      */
-    void onShowWindow( [in] boolean bVisible );
+    void onShowWindow( [in] boolean bVisible )
+        raises( ::com::sun::star::embed::WrongStateException );
 
 };
 
