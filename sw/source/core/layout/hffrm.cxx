@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hffrm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-08-27 08:24:02 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-09-12 11:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,16 +313,18 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                 nRemaining = 0;
                 pFrm = Lower();
                 while ( pFrm )
-                {   nRemaining += pFrm->Frm().Height();
-                if( pFrm->IsTxtFrm() &&
-                    ((SwTxtFrm*)pFrm)->IsUndersized() )
-                    // Dieser TxtFrm waere gern ein bisschen groesser
-                    nRemaining += ((SwTxtFrm*)pFrm)->GetParHeight()
-                        - pFrm->Prt().Height();
-                else if( pFrm->IsSctFrm() &&
-                         ((SwSectionFrm*)pFrm)->IsUndersized() )
-                    nRemaining += ((SwSectionFrm*)pFrm)->Undersize();
-                pFrm = pFrm->GetNext();
+                {
+                    nRemaining += pFrm->Frm().Height();
+
+                    if( pFrm->IsTxtFrm() &&
+                        ((SwTxtFrm*)pFrm)->IsUndersized() )
+                        // Dieser TxtFrm waere gern ein bisschen groesser
+                        nRemaining += ((SwTxtFrm*)pFrm)->GetParHeight()
+                            - pFrm->Prt().Height();
+                    else if( pFrm->IsSctFrm() &&
+                             ((SwSectionFrm*)pFrm)->IsUndersized() )
+                        nRemaining += ((SwSectionFrm*)pFrm)->Undersize();
+                    pFrm = pFrm->GetNext();
                 }
                 if ( nRemaining < nMinHeight )
                     nRemaining = nMinHeight;
@@ -357,9 +359,15 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
 
                         while ( pFrm )
                         {
-                            if( pFrm->IsTxtFrm() &&
-                                ((SwTxtFrm*)pFrm)->IsUndersized() )
-                                pFrm->_InvalidateSize();
+                            if( pFrm->IsTxtFrm())
+                            {
+                                SwTxtFrm * pTmpFrm = (SwTxtFrm*) pFrm;
+                                if (pTmpFrm->IsUndersized() )
+                                {
+                                    pTmpFrm->InvalidateSize();
+                                    pTmpFrm->Prepare(PREP_ADJUST_FRM);
+                                }
+                            }
                             pFrm = pFrm->GetNext();
                         }
                       Grow( nDiff PHEIGHT );
