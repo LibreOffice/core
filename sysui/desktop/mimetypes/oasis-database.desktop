@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Hidden=false
+Icon=database
+Type=MimeType
+Patterns=*.odb
+MimeType=application/x-vnd.oasis.openoffice.database
+Comment=Open Office Database
