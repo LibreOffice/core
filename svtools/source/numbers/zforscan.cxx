@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2000-11-03 15:59:46 $
+ *  last change: $Author: er $ $Date: 2000-11-03 20:51:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #ifndef _INTN_HXX //autogen
 #include <tools/intn.hxx>
 #endif
+#ifndef _ISOLANG_HXX
+#include <tools/isolang.hxx>
+#endif
 #ifndef _SYSTEM_HXX //autogen
 #include <vcl/system.hxx>
 #endif
@@ -95,7 +98,6 @@ ImpSvNumberformatScan::ImpSvNumberformatScan( SvNumberFormatter* pFormatterP )
 #ifdef DOS
 #else
     pFormatter = pFormatterP;
-    const International* pIntl = pFormatter->GetInternational();
     bConvertMode = FALSE;
     //! alle Schluesselwoerter muessen aus Grossbuchstaben bestehen !!
                                                     // 0 bleibt leer!!
@@ -113,7 +115,7 @@ ImpSvNumberformatScan::ImpSvNumberformatScan( SvNumberFormatter* pFormatterP )
     sKeyword[NF_KEY_NNNN].AssignAscii( RTL_CONSTASCII_STRINGPARAM(  "NNNN" ) );             // Wochentag lang mit Sep
     sKeyword[NF_KEY_WW].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "WW" ) );                   // Kalenderwoche
     sKeyword[NF_KEY_CCC].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "CCC" ) );              // Waehrung Bank
-    SetDependentKeywords( pIntl->GetLanguage() );
+    SetDependentKeywords();
 
     StandardColor[0]  =  Color(COL_BLACK);
     StandardColor[1]  =  Color(COL_LIGHTBLUE);
@@ -140,7 +142,7 @@ ImpSvNumberformatScan::~ImpSvNumberformatScan()
     Reset();
 }
 
-void ImpSvNumberformatScan::SetDependentKeywords(LanguageType eLnge)
+void ImpSvNumberformatScan::SetDependentKeywords()
 {
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
@@ -148,15 +150,17 @@ void ImpSvNumberformatScan::SetDependentKeywords(LanguageType eLnge)
 
     const CharClass* pCharClass = pFormatter->GetCharClass();
     const LocaleDataWrapper* pLocaleData = pFormatter->GetLocaleData();
-    NumberFormatCodeWrapper aNumberFormatCode( pFormatter->GetServiceManager(), pLocaleData->getLocale() );
+    // #80023# be sure to generate keywords for the loaded Locale, not for the
+    // requested Locale, otherwise number format codes might not match
+    lang::Locale aLoadedLocale = pLocaleData->getLoadedLocale();
+    LanguageType eLang = ConvertIsoNamesToLanguage( aLoadedLocale.Language, aLoadedLocale.Country );
+    NumberFormatCodeWrapper aNumberFormatCode( pFormatter->GetServiceManager(), aLoadedLocale );
 
     NumberFormatCode aFormat = aNumberFormatCode.getFormatCode( NF_NUMBER_STANDARD );
     sNameStandardFormat = aFormat.Code;
     sKeyword[NF_KEY_GENERAL] = pCharClass->upper( sNameStandardFormat );
 
-    if (eLnge == LANGUAGE_SYSTEM)
-        eLnge = System::GetLanguage();
-    switch (eLnge)
+    switch ( eLang )
     {
         case LANGUAGE_GERMAN:
         case LANGUAGE_GERMAN_SWISS:
@@ -197,7 +201,7 @@ void ImpSvNumberformatScan::SetDependentKeywords(LanguageType eLnge)
         default:
         {
             // Tag
-            switch ( eLnge )
+            switch ( eLang )
             {
                 case LANGUAGE_ITALIAN       :
                 case LANGUAGE_ITALIAN_SWISS :
@@ -230,7 +234,7 @@ void ImpSvNumberformatScan::SetDependentKeywords(LanguageType eLnge)
                     sKeyword[NF_KEY_TTTT].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "DDDD" ) );
             }
             // Monat
-            switch ( eLnge )
+            switch ( eLang )
             {
                 case LANGUAGE_FINNISH :
                     sKeyword[NF_KEY_M].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "K" ) );
@@ -245,7 +249,7 @@ void ImpSvNumberformatScan::SetDependentKeywords(LanguageType eLnge)
                     sKeyword[NF_KEY_MMMM].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "MMMM" ) );
             }
             // Jahr
-            switch ( eLnge )
+            switch ( eLang )
             {
                 case LANGUAGE_ITALIAN       :
                 case LANGUAGE_ITALIAN_SWISS :
@@ -294,7 +298,7 @@ void ImpSvNumberformatScan::SetDependentKeywords(LanguageType eLnge)
                     sKeyword[NF_KEY_JJJJ].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "YYYY" ) );
             }
             // Stunde
-            switch ( eLnge )
+            switch ( eLang )
             {
                 case LANGUAGE_DUTCH         :
                 case LANGUAGE_DUTCH_BELGIAN :
@@ -443,7 +447,7 @@ Color* ImpSvNumberformatScan::GetColor(String& sStr)
 
 void ImpSvNumberformatScan::ChangeIntl()
 {
-    SetDependentKeywords(pFormatter->GetInternational()->GetLanguage());
+    SetDependentKeywords();
 }
 
 USHORT ImpSvNumberformatScan::GetKeyWord(const String& sSymbol)
