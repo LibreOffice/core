@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ab $ $Date: 2002-07-30 13:10:24 $
+ *  last change: $Author: kz $ $Date: 2002-08-02 20:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ ModalDialog RID_MACROCHOOSER
         Text [ portuguese_brazilian ] = "Nome da ~macro" ;
         Text [ portuguese ] = "Nome da ~macro" ;
         Text [ finnish ] = "Makron nimi" ;
-        Text [ danish ] = "Makronavn" ;
+        Text [ danish ] = "~Makronavn" ;
         Text [ french ] = "~Nom de la macro" ;
         Text [ swedish ] = "~Makronamn" ;
         Text [ dutch ] = "~Macronaam" ;
@@ -157,7 +157,7 @@ ModalDialog RID_MACROCHOOSER
         Text [ portuguese_brazilian ] = "Macro ~from" ;
         Text [ portuguese ] = "Macro ~de" ;
         Text [ finnish ] = "Makro tiedostosta" ;
-        Text [ danish ] = "Makro fra" ;
+        Text [ danish ] = "Makro f~ra" ;
         Text [ french ] = "~Macro de" ;
         Text [ swedish ] = "Ma~kro frÂn" ;
         Text [ dutch ] = "Ma~cro uit" ;
@@ -194,7 +194,7 @@ ModalDialog RID_MACROCHOOSER
         Text [ portuguese_brazilian ] = "De~scri??o" ;
         Text [ portuguese ] = "De~scriÁ„o" ;
         Text [ finnish ] = "Ku~vaus" ;
-        Text [ danish ] = "Beskrivelse" ;
+        Text [ danish ] = "Be~skrivelse" ;
         Text [ french ] = "Description" ;
         Text [ swedish ] = "Be~skrivning" ;
         Text [ dutch ] = "Be~schrijving" ;
@@ -225,7 +225,7 @@ ModalDialog RID_MACROCHOOSER
         Text [ portuguese_brazilian ] = "Exec~utar" ;
         Text [ portuguese ] = "Exec~utar" ;
         Text [ finnish ] = "Suo~rita" ;
-        Text [ danish ] = "K¯r" ;
+        Text [ danish ] = "K~¯r" ;
         Text [ french ] = "E~xÈcuter" ;
         Text [ swedish ] = "K~ˆr" ;
         Text [ dutch ] = "~Uitvoeren" ;
@@ -260,7 +260,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ spanish ] = "Cerrar";
         Text[ finnish ] = "Close";
         Text[ italian ] = "Chiudi";
-        Text[ danish ] = "Close";
+        Text[ danish ] = "Luk";
         Text[ swedish ] = "St‰ng";
         Text[ polish ] = "Zamknij";
         Text[ portuguese_brazilian ] = "Close";
@@ -270,7 +270,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ chinese_traditional ] = "ÈóúÈñâ";
         Text[ turkish ] = "Close";
         Text[ arabic ] = "Close";
-        Text[ catalan ] = "Close";
+        Text[ catalan ] = "Tanca";
         Text[ thai ] = "‡∏õ‡∏¥‡∏î";
     };
 
@@ -285,7 +285,7 @@ ModalDialog RID_MACROCHOOSER
         Text [ portuguese_brazilian ] = "~Assign..." ;
         Text [ portuguese ] = "~Atribuir" ;
         Text [ finnish ] = "~M‰‰rit‰" ;
-        Text [ danish ] = "Tildel..." ;
+        Text [ danish ] = "~Tilknyt..." ;
         Text [ french ] = "~Assigner..." ;
         Text [ swedish ] = "~Tilldela..." ;
         Text [ dutch ] = "~Toewijzen..." ;
@@ -360,7 +360,7 @@ ModalDialog RID_MACROCHOOSER
         Text [ portuguese_brazilian ] = "Apa~gar..." ;
         Text [ portuguese ] = "~Eliminar..." ;
         Text [ finnish ] = "~Poista" ;
-        Text [ danish ] = "~Slet..." ;
+        Text [ danish ] = "~Slet" ;
         Text [ french ] = "Supprimer" ;
         Text [ swedish ] = "Ra~dera..." ;
         Text [ dutch ] = "~Wissen" ;
@@ -390,7 +390,7 @@ ModalDialog RID_MACROCHOOSER
         Text [ portuguese_brazilian ] = "Geren~ciar..." ;
         Text [ portuguese ] = "~Gerir..." ;
         Text [ finnish ] = "~J‰rjestelytyˆkalu" ;
-        Text [ danish ] = "Administrer..." ;
+        Text [ danish ] = "~Administrer..." ;
         Text [ french ] = "~GÈrer..." ;
         Text [ swedish ] = "~Administrera..." ;
         Text [ dutch ] = "Be~heren..." ;
@@ -472,7 +472,7 @@ String RID_STR_BTNDEL
     Text [ portuguese_brazilian ] = "~Apagar..." ;
     Text [ portuguese ] = "E~liminar..." ;
     Text [ finnish ] = "~Poista" ;
-    Text [ danish ] = "~Slet..." ;
+    Text [ danish ] = "~Slet" ;
     Text [ french ] = "Supprimer" ;
     Text [ swedish ] = "Ra~dera..." ;
     Text [ dutch ] = "~Wissen" ;
@@ -626,7 +626,7 @@ String RID_STR_RECORD
     Text[ greek ] = "≈„„Ò·ˆﬁ";
     Text[ korean ] = "Í∏∞Î°ù(~R)";
     Text[ turkish ] = "Kaydet";
-    Text[ catalan ] = "~Record";
-    Text[ thai ] = "~Record";
+    Text[ catalan ] = "~Registre";
+    Text[ thai ] = "~‡∏£‡∏∞‡πÄ‡∏ö‡∏µ‡∏¢‡∏ô";
 };
 
