@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabline.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-09-26 06:37:20 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@
 #define ITEMID_DASH_LIST        SID_DASH_LIST
 #define ITEMID_LINEEND_LIST     SID_LINEEND_LIST
 
-#include "tabline.hxx"
+#include "cuitabline.hxx"
 #include "dlgname.hxx"
 #include "dialmgr.hxx"
 #include "svdmodel.hxx"
@@ -230,8 +230,8 @@ void SvxLineTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
             ( (SvxLineTabPage&) rPage ).SetColorTable( pColorTab );
             ( (SvxLineTabPage&) rPage ).SetDashList( pDashList );
             ( (SvxLineTabPage&) rPage ).SetLineEndList( pLineEndList );
-            ( (SvxLineTabPage&) rPage ).SetDlgType( &nDlgType );
-            ( (SvxLineTabPage&) rPage ).SetPageType( &nPageType );
+            ( (SvxLineTabPage&) rPage ).SetDlgType( nDlgType );//CHINA001 ( (SvxLineTabPage&) rPage ).SetDlgType( &nDlgType );
+            ( (SvxLineTabPage&) rPage ).SetPageType( nPageType );//CHINA001 ( (SvxLineTabPage&) rPage ).SetPageType( &nPageType );
             ( (SvxLineTabPage&) rPage ).SetPosDashLb( &nPosDashLb );
             ( (SvxLineTabPage&) rPage ).SetPosLineEndLb( &nPosLineEndLb );
             ( (SvxLineTabPage&) rPage ).SetDashChgd( &nDashListState );
