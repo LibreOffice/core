@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:17:24 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2325,11 +2325,13 @@ void XMLTextFieldExport::ExportMacro(
     // some strings we'll need
     OUString sEventType( RTL_CONSTASCII_USTRINGPARAM( "EventType" ));
     OUString sStarBasic( RTL_CONSTASCII_USTRINGPARAM( "StarBasic" ));
+    OUString sScript( RTL_CONSTASCII_USTRINGPARAM( "Script" ));
     OUString sLibrary( RTL_CONSTASCII_USTRINGPARAM( "Library" ));
     OUString sMacroName( RTL_CONSTASCII_USTRINGPARAM( "MacroName" ));
     OUString sOnClick( RTL_CONSTASCII_USTRINGPARAM( "OnClick" ));
     OUString sPropertyMacroLibrary( RTL_CONSTASCII_USTRINGPARAM( "MacroLibrary" ));
     OUString sPropertyMacroName( RTL_CONSTASCII_USTRINGPARAM( "MacroName" ));
+    OUString sPropertyScriptURL( RTL_CONSTASCII_USTRINGPARAM( "ScriptURL" ));
 
 
     // the description attribute
@@ -2344,14 +2346,32 @@ void XMLTextFieldExport::ExportMacro(
     // the <office:events>-macro:
 
     // 1) build sequence of PropertyValues
-    Sequence<PropertyValue> aSeq(3);
-    PropertyValue* pArr = aSeq.getArray();
-    pArr[0].Name = sEventType;
-    pArr[0].Value <<= sStarBasic;
-    pArr[1].Name = sLibrary;
-    pArr[1].Value = rPropSet->getPropertyValue( sPropertyMacroLibrary );
-    pArr[2].Name = sMacroName;
-    pArr[2].Value = rPropSet->getPropertyValue( sPropertyMacroName );
+    Sequence<PropertyValue> aSeq;
+    OUString sName;
+    rPropSet->getPropertyValue( sPropertyScriptURL ) >>= sName;
+
+    // if the ScriptURL property is not empty then this is a Scripting
+    // Framework URL, otherwise treat it as a Basic Macro
+    if (sName.getLength() != 0)
+    {
+        aSeq = Sequence<PropertyValue> (2);
+        PropertyValue* pArr = aSeq.getArray();
+        pArr[0].Name = sEventType;
+        pArr[0].Value <<= sScript;
+        pArr[1].Name = sScript;
+        pArr[1].Value = rPropSet->getPropertyValue( sPropertyScriptURL );
+    }
+    else
+    {
+        aSeq = Sequence<PropertyValue> (3);
+        PropertyValue* pArr = aSeq.getArray();
+        pArr[0].Name = sEventType;
+        pArr[0].Value <<= sStarBasic;
+        pArr[1].Name = sLibrary;
+        pArr[1].Value = rPropSet->getPropertyValue( sPropertyMacroLibrary );
+        pArr[2].Name = sMacroName;
+        pArr[2].Value = rPropSet->getPropertyValue( sPropertyMacroName );
+    }
 
     // 2) export the sequence
     GetExport().GetEventExport().ExportSingleEvent( aSeq, sOnClick, sal_False );
