@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:54:09 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 16:11:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,11 +328,15 @@ public:
 
     void            SetNote( USHORT nCol, USHORT nRow, USHORT nTab, const ScPostIt& rNote );
     void            DoSpellingChecker( BOOL bRecord = TRUE );
+    void            DoHangulHanjaConversion( BOOL bRecord = TRUE );
     void            DoThesaurus( BOOL bRecord = TRUE );
     DECL_LINK( SpellError, void * );
 
-    // if bEntireSheet==TRUE, pPrint is ignored
-    void            SetPrintRanges( BOOL bEntireSheet, const String* pPrint,
+    /** Generic implementation of sheet conversion functions. */
+    void            DoSheetConversion( ScConversionType eConvType, BOOL bRecord );
+
+    void            SetPrintRanges( BOOL bEntireSheet,
+                                    const String* pPrint,
                                     const String* pRepCol, const String* pRepRow,
                                     BOOL bAddPrint );
 
