@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Controller.xcu,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-10 14:00:37 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:08:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,30 @@
         </prop>
         <prop oor:name="Controller">
           <value>com.sun.star.comp.framework.RecentFilesMenuController</value>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="ToolBar">
+      <node oor:name="c1" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DBNewForm</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sdb.DatabaseDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.sdb.ApplicationToolboxController</value>
+        </prop>
+      </node>
+      <node oor:name="c2" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:Refresh</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sdb.DatabaseDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.sdb.ApplicationToolboxController</value>
         </prop>
       </node>
     </node>
