@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ama $ $Date: 2002-03-13 15:44:11 $
+ *  last change: $Author: ama $ $Date: 2002-04-24 12:50:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1022,12 +1022,22 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
 {
     SwPageFrm *pOldPage = FindPageFrm();
     const SwRect aOld( AddSpacesToFrm() );
-    SwCntntFrm *pCnt = (SwCntntFrm*)::FindAnchor( GetAnchor(), rNew );
+    Point aNew( rNew );
+    if( GetAnchor()->IsVertical() )
+        aNew.X() += Frm().Width();
+    SwCntntFrm *pCnt = (SwCntntFrm*)::FindAnchor( GetAnchor(), aNew );
     if( pCnt->IsProtected() )
         pCnt = (SwCntntFrm*)GetAnchor();
 
-    Point aNew( rNew );
     SwPageFrm *pPage = 0;
+    SWRECTFN( pCnt )
+    if( bVert != GetAnchor()->IsVertical() )
+    {
+        if( bVert )
+            aNew.X() += Frm().Width();
+        else
+            aNew.X() -= Frm().Width();
+    }
     if ( pCnt->IsInDocBody() )
     {
         //#38848 Vom Seitenrand in den Body ziehen.
@@ -1044,11 +1054,10 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
 //!!!!!Hier kann Optimiert werden: FindAnchor koennte die RelPos mitliefern!
     const SwFrm *pFrm = 0;
     SwTwips nY;
-    SWRECTFN( pCnt )
     if ( pCnt->Frm().IsInside( aNew ) )
     {
         if( bVert )
-            nY = pCnt->Frm().Left()+pCnt->Frm().Width()-rNew.X()+Frm().Width();
+            nY = pCnt->Frm().Left()+pCnt->Frm().Width()-rNew.X()-Frm().Width();
         else
             nY = rNew.Y() - pCnt->Frm().Top();
     }
