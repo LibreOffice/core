@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tkpstam2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:36 $
+ *  last change: $Author: vg $ $Date: 2003-07-02 13:50:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,7 @@ StateMachin2::Peek(intt in_nBranch)
 void
 StateMachin2::PrintOut()
 {
-    const anzahl = nNrofStati;
+    const intt anzahl = nNrofStati;
     for (int i = 0; i < anzahl; i++)
     {
         Cout() << i << ':';
