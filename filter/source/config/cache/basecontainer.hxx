@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basecontainer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 15:06:06 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 11:57:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef __FILTER_CONFIG_BASECONTAINER_HXX_
 #define __FILTER_CONFIG_BASECONTAINER_HXX_
 
@@ -95,8 +94,8 @@
 #include <cppuhelper/interfacecontainer.h>
 #endif
 
-#ifndef _COMPHELPER_SINGLETONREF_HXX_
-#include <comphelper/singletonref.hxx>
+#ifndef _SALHELPER_SINGLETONREF_HXX_
+#include <salhelper/singletonref.hxx>
 #endif
 
 #ifndef _CPPUHELPER_IMPLBASE4_HXX_
@@ -156,7 +155,7 @@ class BaseContainer : public BaseLock
 
         /** @short  reference(!) to a singleton filter cache implementation,
                     which is used to work with the underlying configuration. */
-        ::comphelper::SingletonRef< FilterCache > m_rCache;
+        ::salhelper::SingletonRef< FilterCache > m_rCache;
 
         /** @short  specify, which sub container of the used filter cache
                     must be wrapped by this container interface. */
