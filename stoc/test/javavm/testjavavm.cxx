@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testjavavm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:36 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 15:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #include <stdio.h>
 #include <uno/api.h>
 
-#include <vos/diagnose.hxx>
+//#include <vos/diagnose.hxx>
 #include <vos/dynload.hxx>
 
 #include <cppuhelper/servicefactory.hxx>

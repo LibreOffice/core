@@ -2,9 +2,9 @@
  *
  *  $RCSfile: proxyfac.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: armin $ $Date: 2001-03-08 09:40:04 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 15:36:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ static inline uno_Interface * uno_queryInterface(
     (*((uno_Interface *)pUnoI)->pDispatcher)(
         (uno_Interface *)pUnoI, pMTqueryInterface, &aRetI, pArgs, &pExc );
 
-    OSL_ENSHURE( !pExc, "### Exception occured during queryInterface()!" );
+    OSL_ENSURE( !pExc, "### Exception occured during queryInterface()!" );
     if (pExc) // cleanup exception
     {
         uno_any_destruct( pExc, 0 );
@@ -246,7 +246,7 @@ inline ProxyRoot::ProxyRoot( FactoryImpl * pFactory_, const Reference< XInterfac
 {
     pFactory->acquire();
     pFactory->aCpp2Uno.mapInterface( (void **)&pTarget, xTarget_.get(), ::getCppuType( &xTarget_ ) );
-    OSL_ENSHURE( pTarget, "### mapping interface failed!" );
+    OSL_ENSURE( pTarget, "### mapping interface failed!" );
     aInterfaces.reserve( 8 );
 }
 //__________________________________________________________________________________________________
@@ -319,7 +319,7 @@ Any ProxyRoot::queryAggregation( const Type & rType )
 
             Reference< XInterface > xRet;
             pFactory->aUno2Cpp.mapInterface( (void **)&xRet, (uno_Interface *)p, pTypeDescr );
-            OSL_ENSHURE( xRet.is(), "### mapping interface failed!" );
+            OSL_ENSURE( xRet.is(), "### mapping interface failed!" );
             aInterfaces.push_back( p );
             aRet.setValue( &xRet, (typelib_TypeDescription *)pTypeDescr );
         }
@@ -345,8 +345,8 @@ FactoryImpl::FactoryImpl()
     , aCpp2Uno( OUString( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ),
                 OUString( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) ) )
 {
-    OSL_ENSHURE( aUno2Cpp.is(), "### cannot get bridge uno <-> C++!" );
-    OSL_ENSHURE( aCpp2Uno.is(), "### cannot get bridge C++ <-> uno!" );
+    OSL_ENSURE( aUno2Cpp.is(), "### cannot get bridge uno <-> C++!" );
+    OSL_ENSURE( aCpp2Uno.is(), "### cannot get bridge C++ <-> uno!" );
 }
 
 // XProxyFactory
@@ -427,7 +427,7 @@ sal_Bool SAL_CALL component_writeInfo(
         }
         catch (InvalidRegistryException &)
         {
-            OSL_ENSHURE( sal_False, "### InvalidRegistryException!" );
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
         }
     }
     return sal_False;

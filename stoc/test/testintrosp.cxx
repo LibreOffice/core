@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testintrosp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pluby $ $Date: 2001-02-12 03:30:53 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 15:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #include <cppuhelper/servicefactory.hxx>
 
 #include <vos/diagnose.hxx>
-#include <vos/dynload.hxx>
+//#include <vos/dynload.hxx>
 
 #include <ModuleA/XIntroTest.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -88,7 +88,7 @@
 
 using namespace rtl;
 using namespace cppu;
-using namespace vos;
+//using namespace vos;
 using namespace ModuleA;
 //using namespace ModuleB;
 //using namespace ModuleC;

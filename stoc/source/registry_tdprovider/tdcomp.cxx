@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdcomp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-07 14:48:04 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 15:36:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ Sequence< Reference< XTypeDescription > > CompoundTypeDescriptionImpl::getMember
                 catch (NoSuchElementException &)
                 {
                 }
-                OSL_ENSHURE( pMembers[nFields].is(), "### compound member unknown!" );
+                OSL_ENSURE( pMembers[nFields].is(), "### compound member unknown!" );
             }
 
             _pMembers = pTempMembers;

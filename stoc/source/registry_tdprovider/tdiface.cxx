@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdiface.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-07 14:48:04 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 15:36:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,7 +354,7 @@ Sequence<Reference<XTypeDescription > > InterfaceMethodImpl::getExceptions()
                 catch (NoSuchElementException &)
                 {
                 }
-                OSL_ENSHURE( pExc[nExc].is(), "### exception type unknown!" );
+                OSL_ENSURE( pExc[nExc].is(), "### exception type unknown!" );
             }
 
             _pExceptions = pExceptions;

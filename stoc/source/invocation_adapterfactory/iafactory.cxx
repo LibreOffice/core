@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iafactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-10-06 14:25:14 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 15:34:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,7 +389,7 @@ void AdapterImpl::invoke(
         TYPELIB_DANGER_GET( &pShortSeqTD, rSeqShortType.getTypeLibType() );
 
         // write changed out params
-        OSL_ENSHURE( pOutParams->nElements == pOutIndices->nElements, "### out params lens differ!" );
+        OSL_ENSURE( pOutParams->nElements == pOutIndices->nElements, "### out params lens differ!" );
         if (pOutParams->nElements == pOutIndices->nElements)
         {
             sal_Int16 * pIndices = (sal_Int16 *)pOutIndices->elements;
@@ -399,7 +399,7 @@ void AdapterImpl::invoke(
                 sal_Int32 nIndex = pIndices[nPos];
                 typelib_TypeDescription * pTD = 0;
                 TYPELIB_DANGER_GET( &pTD, pFormalParams[nIndex].pTypeRef );
-                OSL_ENSHURE( nIndex < nParams, "### illegal index!" );
+                OSL_ENSURE( nIndex < nParams, "### illegal index!" );
                 if (! pFormalParams[nIndex].bIn) // is pure out param
                     uno_constructData( pArgs[nIndex], pTD );
                 if (! coerce_assign( pArgs[nIndex], pTD, &pOut[nPos] )) // if fail
@@ -413,7 +413,7 @@ void AdapterImpl::invoke(
                         sal_Int32 nIndex = pIndices[n];
                         pTD = 0;
                         TYPELIB_DANGER_GET( &pTD, pFormalParams[nIndex].pTypeRef );
-                        OSL_ENSHURE( nIndex < nParams, "### illegal index!" );
+                        OSL_ENSURE( nIndex < nParams, "### illegal index!" );
                         uno_destructData( pArgs[nIndex], pTD, 0 );
                         TYPELIB_DANGER_RELEASE( pTD );
                     }
@@ -613,7 +613,7 @@ FactoryImpl::FactoryImpl()
 
     _aUno2Cpp = Mapping( aUnoEnvTypeName, aCppEnvTypeName );
     _aCpp2Uno = Mapping( aCppEnvTypeName, aUnoEnvTypeName );
-    OSL_ENSHURE( _aUno2Cpp.is() && _aCpp2Uno.is(), "### no uno / c++ mappings!" );
+    OSL_ENSURE( _aUno2Cpp.is() && _aCpp2Uno.is(), "### no uno / c++ mappings!" );
 }
 
 // XInvocationAdapterFactory
@@ -719,7 +719,7 @@ sal_Bool SAL_CALL component_writeInfo(
         }
         catch (InvalidRegistryException &)
         {
-            OSL_ENSHURE( sal_False, "### InvalidRegistryException!" );
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
         }
     }
     return sal_False;

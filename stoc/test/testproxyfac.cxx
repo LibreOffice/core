@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testproxyfac.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pluby $ $Date: 2001-02-12 03:30:53 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 15:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ int __cdecl main( int argc, char * argv[] )
     {
         Reference< XImplementationRegistration > xImplReg(
             xMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration") ) ), UNO_QUERY );
-        OSL_ENSHURE( xImplReg.is(), "### no impl reg!" );
+        OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
         OUString aLibName( OUString::createFromAscii(REG_PREFIX) );
         aLibName += OUString::createFromAscii("proxyfac");
@@ -227,13 +227,13 @@ int __cdecl main( int argc, char * argv[] )
             OUString::createFromAscii("com.sun.star.loader.SharedLibrary"), aLibName, Reference< XSimpleRegistry >() );
 
         Reference< XProxyFactory > xProxyFac( xMgr->createInstance( OUString::createFromAscii("com.sun.star.reflection.ProxyFactory") ), UNO_QUERY );
-        OSL_ENSHURE( xProxyFac.is(), "### no proxy factory!" );
+        OSL_ENSURE( xProxyFac.is(), "### no proxy factory!" );
 
         bSucc = test_proxyfac( xProxyFac );
     }
     catch (Exception & rExc)
     {
-        OSL_ENSHURE( sal_False, "### exception occured!" );
+        OSL_ENSURE( sal_False, "### exception occured!" );
         OString aMsg( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
         OSL_TRACE( "### exception occured: " );
         OSL_TRACE( aMsg.getStr() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crbase.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:33 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 15:32:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ IdlClassImpl::IdlClassImpl( IdlReflectionServiceImpl * pReflection,
 
 #ifdef TEST_LIST_CLASSES
     ClassNameList::const_iterator iFind( find( g_aClassNames.begin(), g_aClassNames.end(), _aName ) );
-    OSL_ENSHURE( iFind == g_aClassNames.end(), "### idl class already exists!" );
+    OSL_ENSURE( iFind == g_aClassNames.end(), "### idl class already exists!" );
     g_aClassNames.push_front( _aName );
 #endif
 }
@@ -125,7 +125,7 @@ IdlClassImpl::~IdlClassImpl()
 
 #ifdef TEST_LIST_CLASSES
     ClassNameList::iterator iFind( find( g_aClassNames.begin(), g_aClassNames.end(), _aName ) );
-    OSL_ENSHURE( iFind != g_aClassNames.end(), "### idl class does not exist!" );
+    OSL_ENSURE( iFind != g_aClassNames.end(), "### idl class does not exist!" );
     g_aClassNames.erase( iFind );
 #endif
 }
@@ -200,21 +200,21 @@ void IdlClassImpl::createObject( Any & rObj )
 Sequence< Reference< XIdlClass > > IdlClassImpl::getClasses()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    OSL_ENSHURE( sal_False, "### unexpected use!" );
+    OSL_ENSURE( sal_False, "### unexpected use!" );
     return Sequence< Reference< XIdlClass > >();
 }
 //__________________________________________________________________________________________________
 Reference< XIdlClass > IdlClassImpl::getClass( const OUString & rName )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    OSL_ENSHURE( sal_False, "### unexpected use!" );
+    OSL_ENSURE( sal_False, "### unexpected use!" );
     return Reference< XIdlClass >();
 }
 //__________________________________________________________________________________________________
 Sequence< Reference< XIdlClass > > IdlClassImpl::getInterfaces()
     throw(::com::sun::star::uno::RuntimeException)
 {
-//      OSL_ENSHURE( sal_False, "### unexpected use!" );
+//      OSL_ENSURE( sal_False, "### unexpected use!" );
     return Sequence< Reference< XIdlClass > >();
 }
 

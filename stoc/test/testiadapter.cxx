@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testiadapter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pluby $ $Date: 2001-02-12 03:30:53 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 15:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,21 +92,21 @@ using namespace com::sun::star::registry;
 //==================================================================================================
 sal_Bool equals( const test::TestElement & rData1, const test::TestElement & rData2 )
 {
-    OSL_ENSHURE( rData1.Bool == rData2.Bool, "### bool does not match!" );
-    OSL_ENSHURE( rData1.Char == rData2.Char, "### char does not match!" );
-    OSL_ENSHURE( rData1.Byte == rData2.Byte, "### byte does not match!" );
-    OSL_ENSHURE( rData1.Short == rData2.Short, "### short does not match!" );
-    OSL_ENSHURE( rData1.UShort == rData2.UShort, "### unsigned short does not match!" );
-    OSL_ENSHURE( rData1.Long == rData2.Long, "### long does not match!" );
-    OSL_ENSHURE( rData1.ULong == rData2.ULong, "### unsigned long does not match!" );
-    OSL_ENSHURE( rData1.Hyper == rData2.Hyper, "### hyper does not match!" );
-    OSL_ENSHURE( rData1.UHyper == rData2.UHyper, "### unsigned hyper does not match!" );
-    OSL_ENSHURE( rData1.Float == rData2.Float, "### float does not match!" );
-    OSL_ENSHURE( rData1.Double == rData2.Double, "### double does not match!" );
-    OSL_ENSHURE( rData1.Enum == rData2.Enum, "### enum does not match!" );
-    OSL_ENSHURE( rData1.String == rData2.String, "### string does not match!" );
-    OSL_ENSHURE( rData1.Interface == rData2.Interface, "### interface does not match!" );
-    OSL_ENSHURE( rData1.Any == rData2.Any, "### any does not match!" );
+    OSL_ENSURE( rData1.Bool == rData2.Bool, "### bool does not match!" );
+    OSL_ENSURE( rData1.Char == rData2.Char, "### char does not match!" );
+    OSL_ENSURE( rData1.Byte == rData2.Byte, "### byte does not match!" );
+    OSL_ENSURE( rData1.Short == rData2.Short, "### short does not match!" );
+    OSL_ENSURE( rData1.UShort == rData2.UShort, "### unsigned short does not match!" );
+    OSL_ENSURE( rData1.Long == rData2.Long, "### long does not match!" );
+    OSL_ENSURE( rData1.ULong == rData2.ULong, "### unsigned long does not match!" );
+    OSL_ENSURE( rData1.Hyper == rData2.Hyper, "### hyper does not match!" );
+    OSL_ENSURE( rData1.UHyper == rData2.UHyper, "### unsigned hyper does not match!" );
+    OSL_ENSURE( rData1.Float == rData2.Float, "### float does not match!" );
+    OSL_ENSURE( rData1.Double == rData2.Double, "### double does not match!" );
+    OSL_ENSURE( rData1.Enum == rData2.Enum, "### enum does not match!" );
+    OSL_ENSURE( rData1.String == rData2.String, "### string does not match!" );
+    OSL_ENSURE( rData1.Interface == rData2.Interface, "### interface does not match!" );
+    OSL_ENSURE( rData1.Any == rData2.Any, "### any does not match!" );
 
     return (rData1.Bool == rData2.Bool &&
             rData1.Char == rData2.Char &&
@@ -140,7 +140,7 @@ sal_Bool equals( const test::TestData & rData1, const test::TestData & rData2 )
         {
             if (! equals( pElements1[nLen], pElements2[nLen] ))
             {
-                OSL_ENSHURE( sal_False, "### sequence element did not match!" );
+                OSL_ENSURE( sal_False, "### sequence element did not match!" );
                 return sal_False;
             }
         }
@@ -551,7 +551,7 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
         }
         else
         {
-            OSL_ENSHURE( sal_False, "no XLanguageBindingTest call received on invocation!" );
+            OSL_ENSURE( sal_False, "no XLanguageBindingTest call received on invocation!" );
         }
     }
     catch (IllegalArgumentException & rExc)
@@ -563,7 +563,7 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
     }
     catch (Exception &)
     {
-        OSL_ENSHURE( sal_False, "### unexpected exception caught!" );
+        OSL_ENSURE( sal_False, "### unexpected exception caught!" );
         throw;
     }
 
@@ -770,7 +770,7 @@ test::TestData Test_Impl::getValues( sal_Bool& bBool, sal_Unicode& cChar, sal_In
 //==================================================================================================
 sal_Bool performTest( const Reference<XLanguageBindingTest > & xLBT )
 {
-    OSL_ENSHURE( xLBT.is(), "### no test interface!" );
+    OSL_ENSURE( xLBT.is(), "### no test interface!" );
     if (xLBT.is())
     {
         // this data is never ever granted access to by calls other than equals(), assign()!
@@ -784,8 +784,8 @@ sal_Bool performTest( const Reference<XLanguageBindingTest > & xLBT )
                 (float)17.0815, 3.1415926359, TestEnum_LOLA, OUString::createFromAscii("dumdidum"), xI,
                 Any( &xI, ::getCppuType( (const Reference<XInterface > *)0 ) ) );
 
-        OSL_ENSHURE( aData.Any == xI, "### unexpected any!" );
-        OSL_ENSHURE( !(aData.Any != xI), "### unexpected any!" );
+        OSL_ENSURE( aData.Any == xI, "### unexpected any!" );
+        OSL_ENSURE( !(aData.Any != xI), "### unexpected any!" );
 
         aData.Sequence = Sequence<test::TestElement >( (const test::TestElement *)&aData, 1 );
         // aData complete
@@ -925,7 +925,7 @@ sal_Bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
             }
             catch (IllegalArgumentException aExc)
             {
-                OSL_ENSHURE( aExc.ArgumentPosition == 5 &&
+                OSL_ENSURE( aExc.ArgumentPosition == 5 &&
 //                               aExc.Context == xLBT &&
                              aExc.Message.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dum dum dum ich tanz im kreis herum...")),
                              "### unexpected exception content!" );
@@ -933,7 +933,7 @@ sal_Bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
                 Reference<XLanguageBindingTest > xLBT(
                     Reference<XLanguageBindingTest >::query( aExc.Context ) );
 
-                OSL_ENSHURE( xLBT.is(), "### unexpected source of exception!" );
+                OSL_ENSURE( xLBT.is(), "### unexpected source of exception!" );
                 if (xLBT.is())
                     xLBT->getRuntimeException();
                 else
@@ -942,14 +942,14 @@ sal_Bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
         }
         catch (const RuntimeException & rExc)
         {
-            OSL_ENSHURE(//rExc.Context == xLBT &&
+            OSL_ENSURE(//rExc.Context == xLBT &&
                         rExc.Message.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dum dum dum ich tanz im kreis herum...")),
                         "### unexpected exception content!" );
 
             Reference<XLanguageBindingTest > xLBT(
                 Reference<XLanguageBindingTest >::query( rExc.Context ) );
 
-            OSL_ENSHURE( xLBT.is(), "### unexpected source of exception!" );
+            OSL_ENSURE( xLBT.is(), "### unexpected source of exception!" );
             if (xLBT.is())
                 xLBT->setRuntimeException( 0xcafebabe );
             else
@@ -958,7 +958,7 @@ sal_Bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
     }
     catch (Exception & aExc)
     {
-        OSL_ENSHURE( //aExc.Context == xLBT &&
+        OSL_ENSURE( //aExc.Context == xLBT &&
                      aExc.Message.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dum dum dum ich tanz im kreis herum...")),
                      "### unexpected exception content!" );
         return (//aExc.Context == xLBT &&
@@ -1027,7 +1027,7 @@ int __cdecl main( int argc, char * argv[] )
             xMgr->createInstance(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration") ) ),
             UNO_QUERY );
-        OSL_ENSHURE( xImplReg.is(), "### no impl reg!" );
+        OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
         xImplReg->registerImplementation(
             OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),

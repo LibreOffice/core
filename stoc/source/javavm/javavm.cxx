@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pluby $ $Date: 2001-03-09 04:35:21 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 15:35:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #include <vos/module.hxx>
 #include <vos/thread.hxx>
 #include <vos/conditn.hxx>
-#include <vos/profile.hxx>
+//#include <vos/profile.hxx>
 
 #include <uno/environment.h>
 
@@ -750,7 +750,7 @@ extern "C" {
                 return sal_True;
             }
             catch (InvalidRegistryException &) {
-                OSL_ENSHURE( sal_False, "### InvalidRegistryException!" );
+                OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
             }
         }
         return sal_False;

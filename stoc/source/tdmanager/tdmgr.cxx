@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdmgr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: armin $ $Date: 2001-03-08 09:42:13 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 15:37:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,7 @@ void EventListenerImpl::disposing( const EventObject & rEvt )
     if (rEvt.Source == _pMgr->_xSMgr)
     {
         Reference< XComponent > xComp( _pMgr->_xSMgr, UNO_QUERY );
-        OSL_ENSHURE( xComp.is(), "### service manager must implement XComponent!" );
+        OSL_ENSURE( xComp.is(), "### service manager must implement XComponent!" );
         xComp->removeEventListener( this );
         _pMgr->_bCaching = sal_False;
         _pMgr->_aElements.clear();
@@ -314,7 +314,7 @@ extern "C"
 static void SAL_CALL tdmgr_typelib_callback( void * pContext, typelib_TypeDescription ** ppRet,
                                              rtl_uString * pTypeName )
 {
-    OSL_ENSHURE( pContext && ppRet && pTypeName, "### null ptr!" );
+    OSL_ENSURE( pContext && ppRet && pTypeName, "### null ptr!" );
     if (ppRet)
     {
         if (*ppRet)
@@ -363,13 +363,13 @@ ManagerImpl::ManagerImpl( const Reference< XMultiServiceFactory > & xSMgr )
 
     // listen to service manager vanishing...
     Reference< XComponent > xComp( _xSMgr, UNO_QUERY );
-    OSL_ENSHURE( xComp.is(), "### service manager must implement XComponent!" );
+    OSL_ENSURE( xComp.is(), "### service manager must implement XComponent!" );
     xComp->addEventListener( &_aEventListener );
 }
 //__________________________________________________________________________________________________
 ManagerImpl::~ManagerImpl()
 {
-    OSL_ENSHURE( _aProviders.size() == 0, "### still providers left!" );
+    OSL_ENSURE( _aProviders.size() == 0, "### still providers left!" );
     TRACE( "> TypeDescriptionManager shut down. <\n" );
     MutexGuard aGuard( _aComponentMutex );
 
@@ -381,11 +381,11 @@ inline void ManagerImpl::initProviders()
 {
     // looking up service manager for all known provider implementations
     Reference< XContentEnumerationAccess > xEnumAccess( _xSMgr, UNO_QUERY );
-    OSL_ENSHURE( xEnumAccess.is(), "### service manager must export XContentEnumerationAccess!" );
+    OSL_ENSURE( xEnumAccess.is(), "### service manager must export XContentEnumerationAccess!" );
 
     Reference< XEnumeration > xEnum( xEnumAccess->createContentEnumeration(
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.TypeDescriptionProvider") ) ) );
-    OSL_ENSHURE( xEnum.is(), "### no TypeDescriptionProviders available!" );
+    OSL_ENSURE( xEnum.is(), "### no TypeDescriptionProviders available!" );
     if (xEnum.is())
     {
         while (xEnum->hasMoreElements())
@@ -400,7 +400,7 @@ inline void ManagerImpl::initProviders()
                 {
                     Reference< XSingleServiceFactory > xFactory(
                         *(const Reference< XInterface > *)aAny.getValue(), UNO_QUERY );
-                    OSL_ENSHURE( xFactory.is(), "### the thing that should not be!" );
+                    OSL_ENSURE( xFactory.is(), "### the thing that should not be!" );
 
                     Reference< XHierarchicalNameAccess > xHA( xFactory->createInstance(), UNO_QUERY );
                     if (xHA.is())
@@ -420,7 +420,7 @@ inline void ManagerImpl::initProviders()
             }
         }
     }
-    OSL_ENSHURE( !_aProviders.empty(), "### no typedescription providers found!" );
+    OSL_ENSURE( !_aProviders.empty(), "### no typedescription providers found!" );
 }
 
 // XServiceInfo
@@ -798,7 +798,7 @@ sal_Bool SAL_CALL component_writeInfo(
         }
         catch (InvalidRegistryException &)
         {
-            OSL_ENSHURE( sal_False, "### InvalidRegistryException!" );
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
         }
     }
     return sal_False;

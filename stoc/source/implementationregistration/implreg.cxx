@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implreg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2000-11-23 01:32:54 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 15:33:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,8 @@
 #endif
 
 #include <uno/mapping.hxx>
-#include <vos/thread.hxx>
+#include <osl/thread.h>
+//#include <vos/thread.hxx>
 #include <vos/conditn.hxx>
 
 #include <rtl/ustring.hxx>
@@ -1717,7 +1718,7 @@ sal_Bool SAL_CALL component_writeInfo(
         }
         catch (InvalidRegistryException &)
         {
-            OSL_ENSHURE( sal_False, "### InvalidRegistryException!" );
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
         }
     }
     return sal_False;

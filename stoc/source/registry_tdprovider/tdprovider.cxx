@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdprovider.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-07 14:48:04 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 15:36:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ ProviderImpl::ProviderImpl( const Reference< XMultiServiceFactory > & xSMgr )
     , _xSMgr( xSMgr )
     , _xTDMgr( _xSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.TypeDescriptionManager") ) ), UNO_QUERY )
 {
-    OSL_ENSHURE( _xTDMgr.is(), "### cannot get service instance \"com.sun.star.reflection.TypeDescriptionManager\"!" );
+    OSL_ENSURE( _xTDMgr.is(), "### cannot get service instance \"com.sun.star.reflection.TypeDescriptionManager\"!" );
 }
 //__________________________________________________________________________________________________
 ProviderImpl::~ProviderImpl()
@@ -495,7 +495,7 @@ sal_Bool SAL_CALL component_writeInfo(
         }
         catch (InvalidRegistryException &)
         {
-            OSL_ENSHURE( sal_False, "### InvalidRegistryException!" );
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
         }
     }
     return sal_False;

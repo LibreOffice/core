@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crefl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:33 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 15:32:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ IdlReflectionServiceImpl::IdlReflectionServiceImpl( const Reference< XMultiServi
                UNO_QUERY )
     , _aElements( CACHE_SIZE )
 {
-    OSL_ENSHURE( _xTDMgr.is(), "### cannot get service \"com.sun.star.reflection.TypeDescriptionManager\"!" );
+    OSL_ENSURE( _xTDMgr.is(), "### cannot get service \"com.sun.star.reflection.TypeDescriptionManager\"!" );
 }
 //__________________________________________________________________________________________________
 IdlReflectionServiceImpl::~IdlReflectionServiceImpl()
@@ -179,7 +179,7 @@ void IdlReflectionServiceImpl::dispose()
     _xTDMgr.clear();
     _xMgr.clear();
 #ifdef TEST_LIST_CLASSES
-    OSL_ENSHURE( g_aClassNames.size() == 0, "### idl classes still alive!" );
+    OSL_ENSURE( g_aClassNames.size() == 0, "### idl classes still alive!" );
     ClassNameList::const_iterator iPos( g_aClassNames.begin() );
     while (iPos != g_aClassNames.end())
     {
@@ -228,7 +228,7 @@ Reference< XIdlClass > IdlReflectionServiceImpl::getType( const Any & rObj )
 inline Reference< XIdlClass > IdlReflectionServiceImpl::constructClass(
     typelib_TypeDescription * pTypeDescr )
 {
-    OSL_ENSHURE( pTypeDescr->eTypeClass != typelib_TypeClass_TYPEDEF, "### unexpected typedef!" );
+    OSL_ENSURE( pTypeDescr->eTypeClass != typelib_TypeClass_TYPEDEF, "### unexpected typedef!" );
 
     switch (pTypeDescr->eTypeClass)
     {
@@ -455,7 +455,7 @@ sal_Bool SAL_CALL component_writeInfo(
         }
         catch (InvalidRegistryException &)
         {
-            OSL_ENSHURE( sal_False, "### InvalidRegistryException!" );
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
         }
     }
     return sal_False;

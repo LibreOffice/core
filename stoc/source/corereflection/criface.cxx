@@ -2,9 +2,9 @@
  *
  *  $RCSfile: criface.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ganaya $ $Date: 2000-10-10 05:35:45 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 15:32:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,7 @@ Any IdlAttributeFieldImpl::get( const Any & rObj )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     uno_Interface * pUnoI = mapToUno( rObj, (typelib_InterfaceTypeDescription *)getDeclTypeDescr() );
-    OSL_ENSHURE( pUnoI, "### illegal destination object given!" );
+    OSL_ENSURE( pUnoI, "### illegal destination object given!" );
     if (pUnoI)
     {
         TypeDescription aTD( getTypeDescr()->pAttributeTypeRef );
@@ -273,7 +273,7 @@ void IdlAttributeFieldImpl::set( const Any & rObj, const Any & rValue )
     }
 
     uno_Interface * pUnoI = mapToUno( rObj, (typelib_InterfaceTypeDescription *)getDeclTypeDescr() );
-    OSL_ENSHURE( pUnoI, "### illegal destination object given!" );
+    OSL_ENSURE( pUnoI, "### illegal destination object given!" );
     if (pUnoI)
     {
         TypeDescription aTD( getTypeDescr()->pAttributeTypeRef );
@@ -646,7 +646,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
     }
 
     uno_Interface * pUnoI = mapToUno( rObj, (typelib_InterfaceTypeDescription *)getDeclTypeDescr() );
-    OSL_ENSHURE( pUnoI, "### illegal destination object given!" );
+    OSL_ENSURE( pUnoI, "### illegal destination object given!" );
     if (pUnoI)
     {
         sal_Int32 nParams = getTypeDescr()->nParams;
@@ -857,7 +857,7 @@ void InterfaceIdlClassImpl::initMembers()
 
         typelib_TypeDescription * pTD = 0;
         typelib_typedescriptionreference_getDescription( &pTD, ppAllMembers[nPos] );
-        OSL_ENSHURE( pTD, "### cannot get type description!" );
+        OSL_ENSURE( pTD, "### cannot get type description!" );
         pSortedMemberInit[nIndex].first = ((typelib_InterfaceMemberTypeDescription *)pTD)->pMemberName;
         pSortedMemberInit[nIndex].second = pTD;
     }
@@ -877,7 +877,7 @@ sal_Bool InterfaceIdlClassImpl::isAssignableFrom( const Reference< XIdlClass > &
             const Sequence< Reference< XIdlClass > > & rSeq = xType->getSuperclasses();
             if (rSeq.getLength())
             {
-                OSL_ENSHURE( rSeq.getLength() == 1, "### unexpected len of super classes!" );
+                OSL_ENSURE( rSeq.getLength() == 1, "### unexpected len of super classes!" );
                 return isAssignableFrom( rSeq[0] );
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicemanager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: armin $ $Date: 2001-03-08 09:40:46 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 15:37:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,11 +329,11 @@ void OServiceManager_Listener::disposing(const EventObject & rEvt )
         }
         catch( const IllegalArgumentException & )
         {
-            OSL_ENSHURE( sal_False, "IllegalArgumentException catched" );
+            OSL_ENSURE( sal_False, "IllegalArgumentException catched" );
         }
         catch( const NoSuchElementException & )
         {
-            OSL_ENSHURE( sal_False, "NoSuchElementException catched" );
+            OSL_ENSURE( sal_False, "NoSuchElementException catched" );
         }
     }
 }
@@ -1382,7 +1382,7 @@ sal_Bool SAL_CALL component_writeInfo(
         }
         catch (InvalidRegistryException &)
         {
-            OSL_ENSHURE( sal_False, "### InvalidRegistryException!" );
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
         }
     }
     return sal_False;

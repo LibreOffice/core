@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crcomp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:33 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 15:32:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,7 @@ Any IdlCompFieldImpl::get( const Any & rObj )
         while (pTD && !typelib_typedescription_equals( pTD, pDeclTD ))
             pTD = (typelib_TypeDescription *)((typelib_CompoundTypeDescription *)pTD)->pBaseTypeDescription;
 
-        OSL_ENSHURE( pTD, "### illegal object type!" );
+        OSL_ENSURE( pTD, "### illegal object type!" );
         if (pTD)
         {
             TYPELIB_DANGER_RELEASE( pObjTD );
@@ -255,7 +255,7 @@ void IdlCompFieldImpl::set( const Any & rObj, const Any & rValue )
         while (pTD && !typelib_typedescription_equals( pTD, pDeclTD ))
             pTD = (typelib_TypeDescription *)((typelib_CompoundTypeDescription *)pTD)->pBaseTypeDescription;
 
-        OSL_ENSHURE( pTD, "### illegal object type!" );
+        OSL_ENSURE( pTD, "### illegal object type!" );
         if (pTD)
         {
             TYPELIB_DANGER_RELEASE( pObjTD );
@@ -305,7 +305,7 @@ sal_Bool CompoundIdlClassImpl::isAssignableFrom( const Reference< XIdlClass > & 
                 const Sequence< Reference< XIdlClass > > & rSeq = xType->getSuperclasses();
                 if (rSeq.getLength())
                 {
-                    OSL_ENSHURE( rSeq.getLength() == 1, "### unexpected len of super classes!" );
+                    OSL_ENSURE( rSeq.getLength() == 1, "### unexpected len of super classes!" );
                     return isAssignableFrom( rSeq[0] );
                 }
             }
@@ -372,7 +372,7 @@ Sequence< Reference< XIdlField > > CompoundIdlClassImpl::getFields()
             {
                 typelib_TypeDescription * pTD = 0;
                 TYPELIB_DANGER_GET( &pTD, ppTypeRefs[nPos] );
-                OSL_ENSHURE( pTD, "### cannot get field in struct!" );
+                OSL_ENSURE( pTD, "### cannot get field in struct!" );
                 if (pTD)
                 {
                     OUString aName( ppNames[nPos] );

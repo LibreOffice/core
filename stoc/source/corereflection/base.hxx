@@ -2,9 +2,9 @@
  *
  *  $RCSfile: base.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2000-11-23 01:55:21 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 15:32:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,7 +441,7 @@ inline const Mapping & IdlMemberImpl::getCpp2Uno()
         {
             _aCpp2Uno = Mapping( OUString( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ),
                                  OUString( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) ) );
-            OSL_ENSHURE( _aCpp2Uno.is(), "### cannot c++ to uno mapping!" );
+            OSL_ENSURE( _aCpp2Uno.is(), "### cannot c++ to uno mapping!" );
             if (! _aCpp2Uno.is())
             {
                 throw RuntimeException(
@@ -463,7 +463,7 @@ inline const Mapping & IdlMemberImpl::getUno2Cpp()
         {
             _aUno2Cpp = Mapping( OUString( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) ),
                                  OUString( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ) );
-            OSL_ENSHURE( _aUno2Cpp.is(), "### cannot uno to c++ mapping!" );
+            OSL_ENSURE( _aUno2Cpp.is(), "### cannot uno to c++ mapping!" );
             if (! _aUno2Cpp.is())
             {
                 throw RuntimeException(

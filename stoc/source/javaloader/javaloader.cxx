@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaloader.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kr $ $Date: 2001-02-19 10:15:30 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 15:34:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,7 +347,7 @@ extern "C"
                 bRes = sal_True;
             }
             catch (InvalidRegistryException &) {
-                OSL_ENSHURE( sal_False, "### InvalidRegistryException!" );
+                OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
             }
         }
 

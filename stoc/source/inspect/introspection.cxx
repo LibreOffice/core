@@ -2,9 +2,9 @@
  *
  *  $RCSfile: introspection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2000-11-23 02:03:54 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 15:33:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,10 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
-#ifndef _VOS_MODULE_HXX_
-#include <vos/module.hxx>
-#endif
+//#ifndef _VOS_MODULE_HXX_
+//#include <vos/module.hxx>
+//#endif
+#include <vos/macros.hxx>
 
 #ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>
@@ -1933,7 +1934,7 @@ Reference<XIdlClass> TypeToIdlClass( const Type& rType, const Reference< XMultiS
         if( !xRefl.is() )
         {
             xRefl = Reference< XIdlReflection >( xMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.CoreReflection")) ), UNO_QUERY );
-            OSL_ENSHURE( xRefl.is(), "### no corereflection!" );
+            OSL_ENSURE( xRefl.is(), "### no corereflection!" );
         }
         xRetClass = xRefl->forName( sOWName );
     }
@@ -2229,7 +2230,7 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
                 }
                 else
                 {
-                    OSL_ENSHURE( sal_False,
+                    OSL_ENSURE( sal_False,
                         OString( "Introspection: Property \"" ) +
                         OUStringToOString( aPropName, RTL_TEXTENCODING_ASCII_US ) +
                         OString( "\" found more than once in PropertySet" ) );
@@ -2857,7 +2858,7 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
                     if( aSuperClassSeq.getLength() >= 1 )
                     {
                         xImplClass = aSuperClassSeq.getConstArray()[0];
-                        OSL_ENSHURE( xImplClass.is(), "super class null" );
+                        OSL_ENSURE( xImplClass.is(), "super class null" );
                     }
                     else
                     {
@@ -2890,7 +2891,7 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
         Reference<XIdlClass> xClassRef = TypeToIdlClass( aToInspectObj.getValueType(), m_xSMgr );
         if( !xClassRef.is() )
         {
-            OSL_ENSHURE( sal_False, "Can't get XIdlClass from Reflection" );
+            OSL_ENSURE( sal_False, "Can't get XIdlClass from Reflection" );
             return pAccess;
         }
 
@@ -2990,7 +2991,7 @@ sal_Bool SAL_CALL component_writeInfo(
         }
         catch (InvalidRegistryException &)
         {
-            OSL_ENSHURE( sal_False, "### InvalidRegistryException!" );
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
         }
     }
     return sal_False;
