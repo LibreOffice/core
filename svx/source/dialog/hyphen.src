@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphen.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:18:32 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:06:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,8 @@ ModalDialog RID_SVXDLG_HYPHENATE
         TEXT[ hebrew ] = "W~ort";
         TEXT[ hindi ] = "~शब्द";
         TEXT[ slovak ] = "~Slovo";
+        TEXT[ hungarian ] = "~Szó";
+        TEXT[ slovenian ] = "~Beseda";
     };
     PushButton BTN_HYPH_CONTINUE
     {
@@ -154,7 +156,7 @@ ModalDialog RID_SVXDLG_HYPHENATE
         Text [ spanish ] = "Continuar" ;
         Text [ french ] = "Suivant" ;
         Text [ swedish ] = "~N�sta" ;
-        Text [ danish ] = "N�ste" ;
+        Text [ danish ] = "~N�ste" ;
         Text [ portuguese ] = "~Continuar" ;
         Text [ portuguese_brazilian ] = "~Pr�ximo" ;
         Text[ chinese_simplified ] = "继续(~N)";
@@ -174,6 +176,8 @@ ModalDialog RID_SVXDLG_HYPHENATE
         Text[ hebrew ] = "‮הבא‬";
         Text[ hindi ] = "~आगे";
         Text[ slovak ] = "Ď~alší";
+        Text[ hungarian ] = "~Következő";
+        Text[ slovenian ] = "~Naprej";
     };
     PushButton BTN_HYPH_DELETE
     {
@@ -186,7 +190,7 @@ ModalDialog RID_SVXDLG_HYPHENATE
         TEXT [ portuguese_brazilian ] = "~Remover" ;
         TEXT [ portuguese ] = "~Remover" ;
         TEXT [ finnish ] = "~Poista" ;
-        TEXT [ danish ] = "Fjern" ;
+        TEXT [ danish ] = "~Fjern" ;
         TEXT [ french ] = "Supprimer" ;
         TEXT [ swedish ] = "Ta ~bort" ;
         TEXT [ dutch ] = "Ver~wijderen" ;
@@ -209,6 +213,8 @@ ModalDialog RID_SVXDLG_HYPHENATE
         TEXT[ hebrew ] = "‮הסרה‬";
         TEXT[ hindi ] = "~हटाओ";
         TEXT[ slovak ] = "Odst~rániť";
+        TEXT[ hungarian ] = "~Eltávolítás";
+        TEXT[ slovenian ] = "Odst~rani";
     };
     OKButton BTN_HYPH_CUT
     {
@@ -221,7 +227,7 @@ ModalDialog RID_SVXDLG_HYPHENATE
         TEXT [ portuguese_brazilian ] = "Dividir ~S�labas" ;
         TEXT [ portuguese ] = "~Separar" ;
         TEXT [ finnish ] = "~Tavuta" ;
-        TEXT [ danish ] = "Del ord" ;
+        TEXT [ danish ] = "~Del ord" ;
         TEXT [ french ] = "~Couper" ;
         TEXT [ swedish ] = "A~vstava" ;
         TEXT [ dutch ] = "~Afbreken" ;
@@ -245,6 +251,8 @@ ModalDialog RID_SVXDLG_HYPHENATE
         TEXT[ hebrew ] = "~Trennen";
         TEXT[ hindi ] = "~हाइफ़नेट्";
         TEXT[ slovak ] = "~Deliť slová";
+        TEXT[ hungarian ] = "~Elválasztás";
+        TEXT[ slovenian ] = "~Deli besede";
     };
     CancelButton BTN_HYPH_CANCEL
     {
@@ -274,8 +282,11 @@ ModalDialog RID_SVXDLG_HYPHENATE
     Text[ hebrew ] = "‮שבירת מלים‬";
     Text[ hindi ] = "हाइफ़नेशन्";
     Text[ slovak ] = "Delenie slov";
+    Text[ hungarian ] = "Elválasztás";
+    Text[ slovenian ] = "Deljenje besed";
 };
  // ******************************************************************* EOF
+
 
 
 
