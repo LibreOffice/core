@@ -2,9 +2,9 @@
  *
  *  $RCSfile: new.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:39:16 $
+ *  last change: $Author: kz $ $Date: 2001-07-19 20:12:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -641,5 +641,6 @@ ModalDialog DLG_NEW_FILE
     Text[ catalan ] = "Nuevo";
 };
  // ********************************************************************** EOF
+
 
 
