@@ -1,0 +1,8 @@
+[configuration]
+servertype=remote
+[RemoteRegistry]
+Server=munch-11072:100
+Timeout=2500
+[LocalRegistry]
+rootpath="G:\Configuration"
+

@@ -1,0 +1,140 @@
+/*************************************************************************
+ *
+ *  $RCSfile: fcomp.hxx,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:14:26 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _CONNECTIVITY_FILE_FCOMP_HXX_
+#define _CONNECTIVITY_FILE_FCOMP_HXX_
+
+#ifndef _CONNECTIVITY_FILE_FCODE_HXX_
+#include "file/fcode.hxx"
+#endif
+#ifndef _LIST_
+#include <list>
+#endif
+
+namespace connectivity
+{
+    class OSQLParseNode;
+    namespace file
+    {
+        class OCode;
+        class OOperand;
+        typedef::std::vector<OCode*> OCodeList;
+
+        class OPredicateCompiler
+        {
+            friend class OPredicateInterpreter;
+            friend class OSQLAnalyzer;
+
+            OCodeList                               m_aCodeList;
+            OFileColumns                            m_orgColumns; // in filecurs this are the filecolumns
+            ::vos::ORef< connectivity::OSQLColumns> m_aParameterColumns;
+            OSQLAnalyzer*                           m_pAnalyzer;
+            sal_Bool                                m_bORCondition;
+
+        public:
+            OPredicateCompiler(OSQLAnalyzer* pAnalyzer);
+
+            virtual ~OPredicateCompiler();
+
+            void start(connectivity::OSQLParseNode* pSQLParseNode);
+            OOperand* execute(connectivity::OSQLParseNode* pPredicateNode);
+
+            void Clean();
+            sal_Bool isClean() const {return m_aCodeList.empty();}
+            sal_Bool hasCode() const {return !isClean();}
+            sal_Bool hasORCondition() const {return m_bORCondition;}
+            void     setOrigColumns(const OFileColumns& rCols) { m_orgColumns = rCols; }
+            const OFileColumns getOrigColumns() const { return m_orgColumns; }
+
+            void setParameterColumns(::vos::ORef< connectivity::OSQLColumns > _rParaCols)
+            {
+                m_aParameterColumns = _rParaCols;
+            }
+
+        protected:
+            OOperand* execute_COMPARE(connectivity::OSQLParseNode* pPredicateNode);
+            OOperand* execute_LIKE(connectivity::OSQLParseNode* pPredicateNode);
+            OOperand* execute_ISNULL(connectivity::OSQLParseNode* pPredicateNode);
+            OOperand* execute_Operand(connectivity::OSQLParseNode* pPredicateNode);
+
+        private:
+            //  OCursor& Cursor() const;
+        };
+
+
+        class OPredicateInterpreter
+        {
+            OCodeStack          m_aStack;
+            OPredicateCompiler& m_rCompiler;
+
+        public:
+            OPredicateInterpreter(OPredicateCompiler& rComp) : m_rCompiler(rComp){}
+            virtual ~OPredicateInterpreter();
+
+            sal_Bool start()
+            {
+                return evaluate(m_rCompiler.m_aCodeList);
+            }
+            sal_Bool evaluate(OCodeList& rCodeList);
+        };
+    }
+}
+#endif // _CONNECTIVITY_FILE_FCOMP_HXX_
+

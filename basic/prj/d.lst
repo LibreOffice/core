@@ -1,0 +1,44 @@
+touch: ..\%__SRC%\misc\basic.hid %_DEST%\bin%_EXT%\basic.hid
+..\%__SRC%\lib\basic.lib %_DEST%\lib%_EXT%\basic.lib
+..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
+..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
+..\%__SRC%\slb\sb.lib %_DEST%\lib%_EXT%\xsb.lib
+..\%__SRC%\srs\classes.srs %_DEST%\res%_EXT%\basic.srs
+..\%__SRC%\res\*.srs %_DEST%\res%_EXT%\*.srs
+..\%__SRC%\bin\sb?????.dll %_DEST%\bin%_EXT%\sb?????.dll
+..\%__SRC%\bin\sb?????.sym %_DEST%\bin%_EXT%\sb?????.sym
+..\%__SRC%\misc\sb?????.map %_DEST%\bin%_EXT%\sb?????.map
+..\%__SRC%\bin\testtool.exe %_DEST%\bin%_EXT%\testtool.exe
+..\%__SRC%\bin\testtool %_DEST%\bin%_EXT%\testtool.bin
+..\%__SRC%\bin\stt%UPD%49.res %_DEST%\bin%_EXT%\testtool.res
+..\%__SRC%\bin\stt*.res %_DEST%\bin%_EXT%\stt*.res
+..\%__SRC%\inc\classes %_DEST%\bin%_EXT%\classes
+..\%__SRC%\inc\keycodes %_DEST%\bin%_EXT%\keycodes
+..\%__SRC%\inc\res_type %_DEST%\bin%_EXT%\res_type
+..\%__SRC%\lib\app.lib %_DEST%\lib%_EXT%\app.lib
+..\%__SRC%\lib\libapp.a %_DEST%\lib%_EXT%\libapp.a
+..\%__SRC%\lib\sample.lib %_DEST%\lib%_EXT%\sample.lib
+..\%__SRC%\lib\libsample.a %_DEST%\lib%_EXT%\libsample.a
+
+mkdir: %_DEST%\inc%_EXT%\basic
+hedabu: ..\inc\sbdef.hxx %_DEST%\inc%_EXT%\basic\sbdef.hxx
+hedabu: ..\inc\sbmod.hxx %_DEST%\inc%_EXT%\basic\sbmod.hxx
+hedabu: ..\inc\sbjsmod.hxx %_DEST%\inc%_EXT%\basic\sbjsmod.hxx
+hedabu: ..\inc\sbmeth.hxx %_DEST%\inc%_EXT%\basic\sbmeth.hxx
+hedabu: ..\inc\sbprop.hxx %_DEST%\inc%_EXT%\basic\sbprop.hxx
+hedabu: ..\inc\sbstar.hxx %_DEST%\inc%_EXT%\basic\sbstar.hxx
+hedabu: ..\inc\sbuno.hxx %_DEST%\inc%_EXT%\basic\sbuno.hxx
+hedabu: ..\inc\basmgr.hxx %_DEST%\inc%_EXT%\basic\basmgr.hxx
+hedabu: ..\inc\sberrors.hxx %_DEST%\inc%_EXT%\basic\sberrors.hxx
+hedabu: ..\inc\basrdll.hxx %_DEST%\inc%_EXT%\basic\basrdll.hxx
+hedabu: ..\inc\stdobj1.hxx %_DEST%\inc%_EXT%\basic\sbstdobj.hxx
+hedabu: ..\inc\hilight.hxx %_DEST%\inc%_EXT%\basic\hilight.hxx
+hedabu: ..\inc\process.hxx %_DEST%\inc%_EXT%\basic\process.hxx
+hedabu: ..\inc\testtool.hrc %_DEST%\inc%_EXT%\basic\testtool.hrc
+hedabu: ..\inc\ttmsg.hrc %_DEST%\inc%_EXT%\basic\ttmsg.hrc
+hedabu: ..\inc\mybasic.hxx %_DEST%\inc%_EXT%\basic\mybasic.hxx
+hedabu: ..\inc\testtool.hxx %_DEST%\inc%_EXT%\basic\testtool.hxx
+hedabu: ..\inc\basicrt.hxx %_DEST%\inc%_EXT%\basic\basicrt.hxx
+hedabu: ..\inc\dispdefs.hxx %_DEST%\inc%_EXT%\basic\dispdefs.hxx
+hedabu: ..\inc\ttstrhlp.hxx %_DEST%\inc%_EXT%\basic\ttstrhlp.hxx
+

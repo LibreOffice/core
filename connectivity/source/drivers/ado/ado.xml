@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding="UTF-8"?>
+<!DOCTYPE COMPONENTDESCRIPTION PUBLIC "-//W3C//DTD HTML 3.2//EN" "componentdependencies.dtd">
+<COMPONENTDESCRIPTION>
+
+<Name>  com.sun.star.sdbc.ADODriver </Name>
+
+<Description>
+    This is the implementation of the sdbc-ado bridge.
+</Description>
+
+<ModuleName>    ado </ModuleName>
+
+<LoaderName>    com.sun.star.loader.SharedLibrary   </LoaderName>
+
+<SupportedService>  com.sun.star.sdbc.Driver    </SupportedService>
+
+<ServiceDependency> ... </ServiceDependency>
+
+<ProjectBuildDependency>    cppuhelper  </ProjectBuildDependency>
+<ProjectBuildDependency>    cppu        </ProjectBuildDependency>
+<ProjectBuildDependency>    sal         </ProjectBuildDependency>
+<ProjectBuildDependency>    vos         </ProjectBuildDependency>
+
+<RuntimeModuleDependency>   cppuhelper  </RuntimeModuleDependency>
+<RuntimeModuleDependency>   cppu1       </RuntimeModuleDependency>
+<RuntimeModuleDependency>   sal1        </RuntimeModuleDependency>
+<RuntimeModuleDependency>   vos         </RuntimeModuleDependency>
+
+<Language>  c++ </Language>
+
+<Status StatusValue="final"/>
+
+<Type>  com.sun.star.util.XCancellable              </Type>
+<Type>  com.sun.star.util.XNumberFormatter          </Type>
+<Type>  com.sun.star.uno.TypeClass                  </Type>
+<Type>  com.sun.star.uno.XWeak                      </Type>
+<Type>  com.sun.star.uno.XAggregation               </Type>
+<Type>  com.sun.star.beans.XPropertyState           </Type>
+<Type>  com.sun.star.beans.XPropertySet             </Type>
+<Type>  com.sun.star.beans.PropertyValue            </Type>
+<Type>  com.sun.star.beans.XMultiPropertySet        </Type>
+<Type>  com.sun.star.beans.XFastPropertySet         </Type>
+<Type>  com.sun.star.lang.XTypeProvider             </Type>
+<Type>  com.sun.star.lang.EventObject               </Type>
+<Type>  com.sun.star.lang.XComponent                </Type>
+<Type>  com.sun.star.lang.IllegalArgumentException  </Type>
+<Type>  com.sun.star.lang.XMultiServiceFactory      </Type>
+<Type>  com.sun.star.java.XJavaThreadRegister_11    </Type>
+<Type>  com.sun.star.java.XJavaVM                   </Type>
+<Type>  com.sun.star.sdbc.XConnection               </Type>
+<Type>  com.sun.star.sdbc.XStatement                </Type>
+<Type>  com.sun.star.sdbc.XResultSet                </Type>
+<Type>  com.sun.star.sdbc.XResultSetMetaDataSupplier</Type>
+<Type>  com.sun.star.sdbc.XColumnLocate             </Type>
+<Type>  com.sun.star.sdbc.XResultSetUpdate          </Type>
+<Type>  com.sun.star.sdbc.XWarningsSupplier         </Type>
+<Type>  com.sun.star.sdbc.XRowUpdate                </Type>
+<Type>  com.sun.star.sdbc.XMultipleResults          </Type>
+<Type>  com.sun.star.sdbc.XBatchExecution           </Type>
+<Type>  com.sun.star.sdbc.XPreparedBatchExecution   </Type>
+<Type>  com.sun.star.sdbc.XParameters               </Type>
+<Type>  com.sun.star.sdbc.XOutParameters            </Type>
+<Type>  com.sun.star.sdbc.DriverPropertyInfo        </Type>
+<Type>  com.sun.star.sdbc.XRow                      </Type>
+<Type>  com.sun.star.sdb.XColumnUpdate              </Type>
+<Type>  com.sun.star.sdb.XColumn                    </Type>
+
+</COMPONENTDESCRIPTION>
+
+

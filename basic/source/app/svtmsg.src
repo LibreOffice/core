@@ -1,0 +1,1330 @@
+/*************************************************************************
+ *
+ *  $RCSfile: svtmsg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:12:09 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include <svtools/svtmsg.hrc>
+
+
+// Hier sind die Messages aus dem Verzeichnis /basic/source/app enhalten
+
+
+///////////////////////////////
+// Fehlermeldungen, die in das Resultfile gelangen.
+// *********************
+// ***  !!ACHTUNG!!  ***
+// *********************
+// Die Nummern dürfen sich NIE! ändern,
+// da sie in den Resultfiles gespeichert sind, und bei erneutem Anzeigen
+// statdessen die entsprechenden neuen oder garkeine Strings angzeigt werden.
+///////////////////////////////
+String S_GPF_ABORT
+{
+    Text = "Programm abgebrochen mit GPF";
+    Text[ english_us ] = "Program aborted with GPF";
+    Text[ portuguese ] = "Programa abortado com GPF";
+    Text[ russian ] = "Program aborted with GPF";
+    Text[ greek ] = "Program aborted with GPF";
+    Text[ dutch ] = "Programma gestopt met GPF";
+    Text[ french ] = "Programme interrompu à l'aide de GPF";
+    Text[ spanish ] = "Programa interrumpido con GPF";
+    Text[ italian ] = "Program aborted with GPF";
+    Text[ danish ] = "Program aborted with GPF";
+    Text[ swedish ] = "Program aborted with GPF";
+    Text[ polish ] = "Przerwanie programu przez GPF";
+    Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
+    Text[ japanese ] = "Program aborted with GPF";
+    Text[ korean ] = "ÇÁ·Î±×·¥ÀÌ GPF¿Í ÇÔ²² Ãë¼ÒµÇ¾ú½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "Program aborted with GPF";
+    Text[ chinese_traditional ] = "Program aborted with GPF";
+    Text[ arabic ] = "Program aborted with GPF";
+    Text[ turkish ] = "Program aborted with GPF";
+};
+String S_APP_SHUTDOWN
+{
+    Text = "Applikation wurde Beendet";
+    Text[ english_us ] = "Application has been shut down";
+    Text[ portuguese ] = "A aplicação foi fechada.";
+    Text[ russian ] = "Application has been shut down";
+    Text[ greek ] = "Application has been shut down";
+    Text[ dutch ] = "Applicatie werd beëindigd";
+    Text[ french ] = "L'application a été arrêtée.";
+    Text[ spanish ] = "Se cerró la aplicación";
+    Text[ italian ] = "Application has been shut down";
+    Text[ danish ] = "Application has been shut down";
+    Text[ swedish ] = "Application has been shut down";
+    Text[ polish ] = "Aplikacja zakoñczona";
+    Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
+    Text[ japanese ] = "Application has been shut down";
+    Text[ korean ] = "ÀÀ¿ëÇÁ·Î±×·¥ÀÌ Á¾·á µÇ¾ú½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "Application has been shut down";
+    Text[ chinese_traditional ] = "Application has been shut down";
+    Text[ arabic ] = "Application has been shut down";
+    Text[ turkish ] = "Application has been shut down";
+};
+String S_SID_EXECUTE_FAILED_NO_DISPATCHER
+{
+    Text = "Konnte Slot ID nicht ausführen: Kein ActiveDispatcher";
+    Text[ english_us ] = "Slot ID cannot be run. No ActiveDispatcher";
+    Text[ portuguese ] = "Foi impossível executar Slot ID: ActiveDispatcher inexistente";
+    Text[ russian ] = "Slot ID cannot be run. No ActiveDispatcher";
+    Text[ greek ] = "Slot ID cannot be run. No ActiveDispatcher";
+    Text[ dutch ] = "Kon slot ID niet uitvoeren: geen ActiveDispatcher";
+    Text[ french ] = "Impossible d'exécuter Slot ID : aucun dispatcheur actif";
+    Text[ spanish ] = "No se pudo ejecutar Slot ID. ActiveDispatcher inexistente";
+    Text[ italian ] = "Slot ID cannot be run. No ActiveDispatcher";
+    Text[ danish ] = "Slot ID cannot be run. No ActiveDispatcher";
+    Text[ swedish ] = "Slot ID cannot be run. No ActiveDispatcher";
+    Text[ polish ] = "Nie móg³ wykonaæ Slot ID: Brak ActiveDispatcher";
+    Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
+    Text[ japanese ] = "Slot ID cannot be run. No ActiveDispatcher";
+    Text[ korean ] = "½½·Ô ID°¡ ÀÛµ¿µÉ ¼ö ¾ø½À´Ï´Ù. ActiveDispatcher°¡ ¾ø½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "Slot ID cannot be run. No ActiveDispatcher";
+    Text[ chinese_traditional ] = "Slot ID cannot be run. No ActiveDispatcher";
+    Text[ arabic ] = "Slot ID cannot be run. No ActiveDispatcher";
+    Text[ turkish ] = "Slot ID cannot be run. No ActiveDispatcher";
+};
+String S_SID_EXECUTE_FAILED
+{
+    Text = "Konnte Slot ID nicht ausführen";
+    Text[ english_us ] = "Slot ID could not be run";
+    Text[ portuguese ] = "Impossível executar Slot ID.";
+    Text[ russian ] = "Slot ID could not be run";
+    Text[ greek ] = "Slot ID could not be run";
+    Text[ dutch ] = "Kon slot ID niet uitvoeren";
+    Text[ french ] = "Impossible d'exécuter Slot ID";
+    Text[ spanish ] = "No se pudo ejecutar Slot ID";
+    Text[ italian ] = "Slot ID could not be run";
+    Text[ danish ] = "Slot ID could not be run";
+    Text[ swedish ] = "Slot ID could not be run";
+    Text[ polish ] = "Nie móg³ wykonaæ Slot ID";
+    Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
+    Text[ japanese ] = "Slot ID could not be run";
+    Text[ korean ] = "½½·Ô ID°¡ ÀÛµ¿µÉ ¼ö ¾ø½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "Slot ID could not be run";
+    Text[ chinese_traditional ] = "Slot ID could not be run";
+    Text[ arabic ] = "Slot ID could not be run";
+    Text[ turkish ] = "Slot ID could not be run";
+};
+String S_UNO_PROPERTY_NITIALIZE_FAILED
+{
+    Text = "UnoSlot: Konnte Properties nicht initialisieren.";
+    Text[ english_us ] = "UnoSlot: Properties could not be initialized";
+    Text[ portuguese ] = "UnoSlot: impossível inicializar Properties.";
+    Text[ russian ] = "UnoSlot: Properties could not be initialized";
+    Text[ greek ] = "UnoSlot: Properties could not be initialized";
+    Text[ dutch ] = "UnoSlot: kon Properties niet initialiseren";
+    Text[ french ] = "UnoSlot : Impossible d'initialiser les propriétés.";
+    Text[ spanish ] = "UnoSlot: No se pudo instalar Properties";
+    Text[ italian ] = "UnoSlot: Properties could not be initialized.";
+    Text[ danish ] = "UnoSlot: Properties could not be initialized";
+    Text[ swedish ] = "UnoSlot: Properties could not be initialized";
+    Text[ polish ] = "UnoSlot: Nie móg³ rozpocz¹æ Properties.";
+    Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
+    Text[ japanese ] = "UnoSlot: Properties could not be initialized";
+    Text[ korean ] = "UnoSlot: ¼Ó¼ºÀÌ ÃÊ±âÈ­ µÇÁö ¾Ê½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "UnoSlot: Properties could not be initialized";
+    Text[ chinese_traditional ] = "UnoSlot: Properties could not be initialized";
+    Text[ arabic ] = "UnoSlot: Properties could not be initialized";
+    Text[ turkish ] = "UnoSlot: Properties could not be initialized";
+};
+String S_RESETAPPLICATION_FAILED_COMPLEX
+{
+    Text = "ResetApplication fehlgeschlagen: Zu komplex";
+    Text[ english_us ] = "ResetApplication failed: too complex";
+    Text[ portuguese ] = "ResetApplication falhou: demasiado complexa";
+    Text[ russian ] = "ResetApplication failed: too complex";
+    Text[ greek ] = "ResetApplication failed: too complex";
+    Text[ dutch ] = "ResetApplication mislukt: te gecompliceerd";
+    Text[ french ] = "Échec de ResetApplication : trop complexe";
+    Text[ spanish ] = "No se realizó ResetApplication: Demasiado compleja";
+    Text[ italian ] = "ResetApplication failed: too complex";
+    Text[ danish ] = "ResetApplication failed: too complex";
+    Text[ swedish ] = "ResetApplication failed: too complex";
+    Text[ polish ] = "ResetApplikation nie powid³o siê: za bardzo z³o¿one";
+    Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
+    Text[ japanese ] = "ResetApplication failed: too complex";
+    Text[ korean ] = "ResetApplication  ½ÇÆÐ : ³Ê¹« º¹ÀâÇÕ´Ï´Ù.";
+    Text[ chinese_simplified ] = "ResetApplication failed: too complex";
+    Text[ chinese_traditional ] = "ResetApplication failed: too complex";
+    Text[ arabic ] = "ResetApplication failed: too complex";
+    Text[ turkish ] = "ResetApplication failed: too complex";
+};
+String S_RESETAPPLICATION_FAILED_UNKNOWN
+{
+    Text = "ResetApplication fehlgeschlagen: Unbekannter Fenstertyp";
+    Text[ english_us ] = "ResetApplication failed: unknown window type";
+    Text[ portuguese ] = "ResetApplication falhou: tipo de janela desconhecido";
+    Text[ russian ] = "ResetApplication failed: unknown window type";
+    Text[ greek ] = "ResetApplication failed: unknown window type";
+    Text[ dutch ] = "RestApplication mislukt: onbekend venstertype";
+    Text[ french ] = "Échec de ResetApplication : type de fenêtre inconnu";
+    Text[ spanish ] = "No se realizó ResetApplication: Tipo desconocido de error";
+    Text[ italian ] = "RestApplication failed: unknown window type.";
+    Text[ danish ] = "ResetApplication failed: unknown window type";
+    Text[ swedish ] = "ResetApplication failed: unknown window type";
+    Text[ polish ] = "ResetApplikation nie powiod³o siê: nieznany typ okna";
+    Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
+    Text[ japanese ] = "ResetApplication failed: unknown window type";
+    Text[ korean ] = "ResetApplication  ½ÇÆÐ : ¾Ë¼ö¾ø´Â Ã¢ Å¸ÀÔ";
+    Text[ chinese_simplified ] = "ResetApplication failed: unknown window type";
+    Text[ chinese_traditional ] = "ResetApplication failed: unknown window type";
+    Text[ arabic ] = "ResetApplication failed: unknown window type";
+    Text[ turkish ] = "ResetApplication failed: unknown window type";
+};
+String S_NO_ACTIVE_WINDOW
+{
+    Text = "Kein aktives Fenster gefunden (GetNextCloseWindow)";
+    Text[ english_us ] = "Active window not found (GetNextCloseWindow)";
+    Text[ portuguese ] = "Impossível encontrar janela activa (GetNextCloseWindow)";
+    Text[ russian ] = "Active window not found (GetNextCloseWindow)";
+    Text[ greek ] = "Active window not found (GetNextCloseWindow)";
+    Text[ dutch ] = "Geen actief venster gevonden (GetNextCloseWindows)";
+    Text[ french ] = "Aucune fenêtre active détectée (GetNextCloseWindow)";
+    Text[ spanish ] = "No se encontró ninguna ventana activa (GetNextCloseWindow)";
+    Text[ italian ] = "Active window not found (GetNextCloseWindow)";
+    Text[ danish ] = "Active window not found (GetNextCloseWindow)";
+    Text[ swedish ] = "Active window not found (GetNextCloseWindow)";
+    Text[ polish ] = "Nie znaleziono aktywnego okna (GetNextCloseWindow) ";
+    Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
+    Text[ japanese ] = "Active window not found (GetNextCloseWindow)";
+    Text[ korean ] = "È°¼º Ã¢ÀÌ ¹ß°ßµÇÁö ¾Ê½À´Ï´Ù.(GetNextCloseWindow)";
+    Text[ chinese_simplified ] = "Active window not found (GetNextCloseWindow)";
+    Text[ chinese_traditional ] = "ResetApplication failed: unknown window type";
+    Text[ arabic ] = "Active window not found (GetNextCloseWindow)";
+    Text[ turkish ] = "Active window not found (GetNextCloseWindow)";
+};
+String S_NO_DIALOG_IN_GETACTIVE
+{
+    Text = "GetActive liefert keinen Dialog zurück! Bitte Entwicklung informieren";
+    Text[ english_us ] = "GetActive does not show a dialog! Inform development.";
+    Text[ portuguese ] = "GetActive não devolve nenhuma caixa de diálogo! Informe o departamento de programação.";
+    Text[ russian ] = "GetActive does not deliver a dialog! Inform development.";
+    Text[ greek ] = "GetActive does not deliver a dialog! Inform development.";
+    Text[ dutch ] = "GetActive levert geen dialoog terug! Ontwikkeling informeren!";
+    Text[ french ] = "GetActive ne fournit aucune boîte de dialogue ! Veuillez informer le service de développement.";
+    Text[ spanish ] = "¡GetActive no devuelve ningún diálogo! Informe por favor al servicio de programación";
+    Text[ italian ] = "GetActive does not deliver a dialog! Inform development.";
+    Text[ danish ] = "GetActive does not deliver a dialog! Inform development.";
+    Text[ swedish ] = "GetActive does not deliver a dialog! Inform development.";
+    Text[ polish ] = "GetActive nie wysy³a z powrotem ¿adnego dialogu! Proszê powiadomiæ o tym oddzia³ programowania.";
+    Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
+    Text[ japanese ] = "GetActive does not deliver a dialog! Inform development.";
+    Text[ korean ] = "GetActive does not deliver a dialog! Inform development.";
+    Text[ chinese_simplified ] = "GetActive does not deliver a dialog! Inform development.";
+    Text[ chinese_traditional ] = "GetActive does not deliver a dialog! Inform development.";
+    Text[ arabic ] = "GetActive does not deliver a dialog! Inform development.";
+    Text[ turkish ] = "GetActive does not deliver a dialog! Inform development.";
+};
+String S_NO_POPUP
+{
+    Text = "Kein PopupMenu geöffnet";
+    Text[ english_us ] = "PopUp menu not open";
+    Text[ portuguese ] = "PopupMenu não está aberto";
+    Text[ russian ] = "PopUp menu not open";
+    Text[ greek ] = "PopUp menu not open";
+    Text[ dutch ] = "Geen PopUpMenu geopend";
+    Text[ french ] = "Aucun menu Pop-Up ouvert";
+    Text[ spanish ] = "No existe ningún PopupMenu abierto";
+    Text[ italian ] = "PopUp menu not open";
+    Text[ danish ] = "PopUp menu not open";
+    Text[ swedish ] = "PopUp menu not open";
+    Text[ polish ] = "Nie otworzono ¿adnego menu Popup";
+    Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
+    Text[ japanese ] = "PopUp menu not open";
+    Text[ korean ] = "ÆË¾÷ ¸Þ´º°¡ ¿­¸®Áö ¾Ê½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "PopUp menu not open";
+    Text[ chinese_traditional ] = "PopUp menu not open";
+    Text[ arabic ] = "PopUp menu not open";
+    Text[ turkish ] = "PopUp menu not open";
+};
+String S_NO_SUBMENU
+{
+    Text = "Untermenü nicht vorhanden";
+    Text[ english_us ] = "Submenu does not exist";
+    Text[ portuguese ] = "Submenu inexistente";
+    Text[ russian ] = "Submenu does not exist";
+    Text[ greek ] = "Submenu does not exist";
+    Text[ dutch ] = "Submenu niet voorhanden";
+    Text[ french ] = "Sous-menu inexistant";
+    Text[ spanish ] = "Submenú inexistente";
+    Text[ italian ] = "Submenu does not exists";
+    Text[ danish ] = "Submenu does not exist";
+    Text[ swedish ] = "Submenu does not exist";
+    Text[ polish ] = "Menu podrzêdne nie istnieje";
+    Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
+    Text[ japanese ] = "Submenu does not exist";
+    Text[ korean ] = "¼­ºê ¸Þ´º°¡ ¾ø½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "Submenu does not exist";
+    Text[ chinese_traditional ] = "Submenu does not exist";
+    Text[ arabic ] = "Submenu does not exist";
+    Text[ turkish ] = "Submenu does not exist";
+};
+String S_CONTROLTYPE_NOT_SUPPORTED
+{
+    Text = "ControlType ($Arg1) wird nicht unterstützt";
+    Text[ english_us ] = "ControlType ($Arg1) is not supported";
+    Text[ portuguese ] = "ControlType ($Arg1) não tem suporte";
+    Text[ russian ] = "ControlType ($Arg1) is not supported";
+    Text[ greek ] = "ControlType ($Arg1) is not supported";
+    Text[ dutch ] = "ControlType ($Arg1) wordt niet ondersteund";
+    Text[ french ] = "ControlType ($Arg1) non supporté";
+    Text[ spanish ] = "No se apoya ControlType ($Arg1)";
+    Text[ italian ] = "ControlType ($Arg1) is not supported";
+    Text[ danish ] = "ControlType ($Arg1) is not supported";
+    Text[ swedish ] = "ControlType ($Arg1) is not supported";
+    Text[ polish ] = "ControlType ($Arg1) nie jest obs³ugiwany";
+    Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
+    Text[ japanese ] = "ControlType ($Arg1) is not supported";
+    Text[ korean ] = "ControlType ($Arg1) ÀÌ Áö¿øµÇÁö ¾Ê½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "ControlType ($Arg1) is not supported";
+    Text[ chinese_traditional ] = "ControlType ($Arg1) is not supported";
+    Text[ arabic ] = "ControlType ($Arg1) is not supported";
+    Text[ turkish ] = "ControlType ($Arg1) is not supported";
+};
+String S_SELECTION_BY_ATTRIBUTE_ONLY_DIRECTORIES
+{
+    Text = "Selektion nach Attributen nur für Directories möglich.";
+    Text[ english_us ] = "Selection by attributes only possible for directories";
+    Text[ portuguese ] = "A selecção por atributos é somente possível para directórios.";
+    Text[ russian ] = "Selection by attributes only possible for directories";
+    Text[ greek ] = "Selection by attributes only possible for directories";
+    Text[ dutch ] = "Selectie naar attributen alleen voor directory's mogelijk.";
+    Text[ french ] = "La sélection en fonction des attributs n'est possible que pour les répertoires.";
+    Text[ spanish ] = "La selección por atributos es solo posible para directorios.";
+    Text[ italian ] = "Selection by attributes only possible for directories";
+    Text[ danish ] = "Selection by attributes only possible for directories";
+    Text[ swedish ] = "Selection by attributes only possible for directories";
+    Text[ polish ] = "Selekcja wed³ug atrybutów mo¿liwa jest tylko w wypadku katalogów.";
+    Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
+    Text[ japanese ] = "Selection by attributes only possible for directories";
+    Text[ korean ] = "¼Ó¼º¿¡ÀÇÇÑ ¼±ÅÃÀº µð·¢Åä¸®¿¡¼­¸¸ °¡´ÉÇÕ´Ï´Ù.";
+    Text[ chinese_simplified ] = "Selection by attributes only possible for directories";
+    Text[ chinese_traditional ] = "Selection by attributes only possible for directories";
+    Text[ arabic ] = "Selection by attributes only possible for directories";
+    Text[ turkish ] = "Selection by attributes only possible for directories";
+};
+String S_NO_MORE_FILES
+{
+    Text = "Keine weiteren Dateien";
+    Text[ english_us ] = "No further files";
+    Text[ portuguese ] = "Não existem outros ficheiros";
+    Text[ russian ] = "No further files";
+    Text[ greek ] = "No further files";
+    Text[ dutch ] = "Geen verdere bestanden";
+    Text[ french ] = "Aucun autre fichier";
+    Text[ spanish ] = "Ningún otro archivo";
+    Text[ italian ] = "No further files";
+    Text[ danish ] = "No further files";
+    Text[ swedish ] = "No further files";
+    Text[ polish ] = "Brak innych plików";
+    Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
+    Text[ japanese ] = "No further files";
+    Text[ korean ] = "´õ ÀÌ»ó ÆÄÀÏÀÌ ¾ø½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "No further files";
+    Text[ chinese_traditional ] = "No further files";
+    Text[ arabic ] = "No further files";
+    Text[ turkish ] = "No further files";
+};
+String S_UNKNOWN_METHOD
+{
+    Text = "Unbekannte Methode '($Arg1)' an ($Arg2)";
+    Text[ english_us ] = "Unknown method '($Arg1)' to ($Arg2)";
+    Text[ portuguese ] = "Método desconhecido ($Arg1) para ($Arg2)";
+    Text[ russian ] = "Unknown method '($Arg1)' to ($Arg2)";
+    Text[ greek ] = "Unknown method '($Arg1)' to ($Arg2)";
+    Text[ dutch ] = "Onbekende methode '($Arg1)' aan ($Arg2)";
+    Text[ french ] = "Méthode inconnue '($Arg1)' vers ($Arg2)";
+    Text[ spanish ] = "Método desconocido '($Arg1)' a ($Arg2)";
+    Text[ italian ] = "Unknown method '($Arg1)' to ($Arg2)";
+    Text[ danish ] = "Unknown method '($Arg1)' to ($Arg2)";
+    Text[ swedish ] = "Unknown method '($Arg1)' to ($Arg2)";
+    Text[ polish ] = "Nieznana metoda '($Arg1)' do ($Arg2)";
+    Text[ portuguese_brazilian ] = "Unbekannte Methode an Objekt : ($Arg1).($Arg2)";
+    Text[ japanese ] = "Unknown method '($Arg1)' to ($Arg2)";
+    Text[ korean ] = "($Arg2)¿¡ º¸³»´Â ¾Ë ¼ö ¾ø´Â ¸Þ¼­µå '($Arg1)'";
+    Text[ chinese_simplified ] = "($Arg2)ÉÏ²»Ã÷µÄ·½·¨'($Arg1)'";
+    Text[ chinese_traditional ] = "Unknown method '($Arg1)' to ($Arg2)";
+    Text[ arabic ] = "Unknown method '($Arg1)' to ($Arg2)";
+    Text[ turkish ] = "Unknown method '($Arg1)' to ($Arg2)";
+};
+String S_INVALID_PARAMETERS
+{
+    Text = "Ungültige Parameter";
+    Text[ english_us ] = "Invalid Parameters";
+    Text[ portuguese ] = "Parâmetros não válidos";
+    Text[ russian ] = "Invalid Parameters";
+    Text[ greek ] = "Invalid Parameters";
+    Text[ dutch ] = "Ongeldige parameters";
+    Text[ french ] = "Paramètres incorrects";
+    Text[ spanish ] = "Parámetros incorrectos";
+    Text[ italian ] = "Invalid parameters";
+    Text[ danish ] = "Invalid Parameters";
+    Text[ swedish ] = "Invalid Parameters";
+    Text[ polish ] = "Nieprawid³owe parametry";
+    Text[ portuguese_brazilian ] = "Invalid Parameters";
+    Text[ japanese ] = "Invalid Parameters";
+    Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº ÆÄ¶ó¹ÌÅÍ";
+    Text[ chinese_simplified ] = "Invalid Parameters";
+    Text[ chinese_traditional ] = "Invalid Parameters";
+    Text[ arabic ] = "Invalid Parameters";
+    Text[ turkish ] = "Invalid Parameters";
+};
+String S_POINTER_OUTSIDE_APPWIN
+{
+    Text = "Pointer nicht innerhalb des Applikationsfensters bei '($Arg1)'";
+    Text[ english_us ] = "Pointer not located in application window at '($Arg1)'";
+    Text[ portuguese ] = "O ponteiro não está dentro da janela de aplicação em '($Arg1)'";
+    Text[ russian ] = "Pointer not located in application window at '($Arg1)'";
+    Text[ greek ] = "Pointer not located in application window at '($Arg1)'";
+    Text[ dutch ] = "Pointer niet in applicatievenster bij '($Arg1)'";
+    Text[ french ] = "Pointeur en dehors de la fenêtre de l'application pour '($Arg1)'";
+    Text[ spanish ] = "Pointer fuera de la ventana de aplicación en '($Arg1)'";
+    Text[ italian ] = "Pointer not located in application window at '($Arg1)'";
+    Text[ danish ] = "Pointer not located in application window at '($Arg1)'";
+    Text[ swedish ] = "Pointer not located in application window at '($Arg1)'";
+    Text[ polish ] = "Pointer poza obszarem okna aplikacji przy '($Arg1)' ";
+    Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
+    Text[ japanese ] = "Pointer not located in application window at '($Arg1)'";
+    Text[ korean ] = "ÀÀ¿ë ÇÁ·Î±×·¥ Ã¢ '($Arg1)'¿¡ Æ÷ÀÎÅÍ°¡ ¾ø½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "Pointer not located in application window at '($Arg1)'";
+    Text[ chinese_traditional ] = "Pointer not located in application window at '($Arg1)'";
+    Text[ arabic ] = "Pointer not located in application window at '($Arg1)'";
+    Text[ turkish ] = "Pointer not located in application window at '($Arg1)'";
+};
+String S_UNKNOWN_COMMAND
+{
+    Text = "Unbekannter Befehl '($Arg1)'";
+    Text[ english_us ] = "Unknown command '($Arg1)'";
+    Text[ portuguese ] = "Comando desconhecido '($Arg1)'";
+    Text[ russian ] = "Unknown command '($Arg1)'";
+    Text[ greek ] = "Unknown command '($Arg1)'";
+    Text[ dutch ] = "Onbekende opdracht '($Arg1)'";
+    Text[ french ] = "Commande inconnue '($Arg1)'";
+    Text[ spanish ] = "Error desconocido '($Arg1)'";
+    Text[ italian ] = "Unknown command '($Arg1)'";
+    Text[ danish ] = "Unknown command '($Arg1)'";
+    Text[ swedish ] = "Unknown command '($Arg1)'";
+    Text[ polish ] = "Nieznane polecenie ($Arg1)";
+    Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
+    Text[ japanese ] = "Unknown command '($Arg1)'";
+    Text[ korean ] = "¾Ë¼ö¾ø´Â ¸í·É¾î '($Arg1)'";
+    Text[ chinese_simplified ] = "Unknown command '($Arg1)'";
+    Text[ chinese_traditional ] = "Unknown command '($Arg1)'";
+    Text[ arabic ] = "Unknown command '($Arg1)'";
+    Text[ turkish ] = "Unknown command '($Arg1)'";
+};
+String S_WIN_NOT_FOUND
+{
+    Text = "Konnte ($Arg1) nicht finden.";
+    Text[ english_us ] = "($Arg1) could not be found";
+    Text[ portuguese ] = "Foi impossível encontrar ($Arg1).";
+    Text[ russian ] = "($Arg1) could not be found";
+    Text[ greek ] = "($Arg1) could not be found";
+    Text[ dutch ] = "Kon ($Arg1) niet vinden";
+    Text[ french ] = "($Arg1) introuvable";
+    Text[ spanish ] = "No se pudo encontrar ($Arg1)";
+    Text[ italian ] = "($Arg1) could not be found.";
+    Text[ danish ] = "($Arg1) could not be found";
+    Text[ swedish ] = "($Arg1) could not be found";
+    Text[ polish ] = "($Arg1) could not be found";
+    Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
+    Text[ japanese ] = "($Arg1) could not be found";
+    Text[ korean ] = "($Arg1) ÀÌ ¹ß°ßµÇÁö ¾Ê½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "($Arg1) could not be found.";
+    Text[ chinese_traditional ] = "($Arg1) could not be found";
+    Text[ arabic ] = "($Arg1) could not be found";
+    Text[ turkish ] = "($Arg1) could not be found";
+};
+String S_WIN_INVISIBLE
+{
+    Text = "($Arg1) ist unsichtbar.";
+    Text[ english_us ] = "($Arg1) is not visible";
+    Text[ portuguese ] = "($Arg1) é invisível.";
+    Text[ russian ] = "($Arg1) is not visible";
+    Text[ greek ] = "($Arg1) is not visible";
+    Text[ dutch ] = "($Arg1) is onzichtbaar";
+    Text[ french ] = "($Arg1) invisible";
+    Text[ spanish ] = "No se puede ver ($Arg1).";
+    Text[ italian ] = "$Arg1) is not visible";
+    Text[ danish ] = "($Arg1) is not visible";
+    Text[ swedish ] = "($Arg1) is not visible";
+    Text[ polish ] = "($Arg1) is not visible ";
+    Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
+    Text[ japanese ] = "($Arg1) is not visible";
+    Text[ korean ] = "($Arg1)Àº º¸ÀÌÁö ¾Ê½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "($Arg1) is not visible.";
+    Text[ chinese_traditional ] = "($Arg1) is not visible";
+    Text[ arabic ] = "($Arg1) is not visible";
+    Text[ turkish ] = "($Arg1) is not visible";
+};
+String S_WIN_DISABLED
+{
+    Text = "Konnte auf ($Arg1) nicht zugreifen.";
+    Text[ english_us ] = "(Arg1) could not be accessed";
+    Text[ portuguese ] = "Impossível o acesso a ($Arg1).";
+    Text[ russian ] = "(Arg1) could not be accessed";
+    Text[ greek ] = "(Arg1) could not be accessed";
+    Text[ dutch ] = "Geen toegang tot ($Arg1)";
+    Text[ french ] = "Accès à ($Arg1) impossible";
+    Text[ spanish ] = "No se pudo acceder a ($Arg1)";
+    Text[ italian ] = "(Arg1) could not be accessed.";
+    Text[ danish ] = "(Arg1) could not be accessed";
+    Text[ swedish ] = "(Arg1) could not be accessed";
+    Text[ polish ] = "(Arg1) could not be accessed ";
+    Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
+    Text[ japanese ] = "(Arg1) could not be accessed";
+    Text[ korean ] = "(Arg1)¿¡ Á¢±ÙÇÒ¼ö ¾ø½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "(Arg1) could not be accessed.";
+    Text[ chinese_traditional ] = "(Arg1) could not be accessed.";
+    Text[ arabic ] = "(Arg1) could not be accessed";
+    Text[ turkish ] = "(Arg1) could not be accessed";
+};
+String S_NUMBER_TOO_BIG
+{
+    Text = "Eintragsnummer ($Arg2) zu groß in ($Arg1). Maximum ist ($Arg3)";
+    Text[ english_us ] = "Entry number ($Arg2) is too large in ($Arg1). Max. allowed is ($Arg3)";
+    Text[ portuguese ] = "O número da entrada ($Arg2) é muito elevado em ($Arg1). O máximo é ($Arg3)";
+    Text[ russian ] = "Entry number ($Arg2) is too large in ($Arg1). Max. allowed is ($Arg3)";
+    Text[ greek ] = "Entry number ($Arg2) is too large in ($Arg1). Max. allowed is ($Arg3)";
+    Text[ dutch ] = "Nummer voor ($Arg2) te hoog in ($Arg1). Maximum is ($Arg3)";
+    Text[ french ] = "Le numéro d'entrée ($Arg2) est trop élevé pour ($Arg1). Le maximum possible est ($Arg3)";
+    Text[ spanish ] = "Núm. de entradas ($Arg2) es demasiado grande en ($Arg1). El máximo es ($Arg3)";
+    Text[ italian ] = "Entry number ($Arg2) is too large in ($Arg1). Max. allowed is ($Arg3)";
+    Text[ danish ] = "Entry number ($Arg2) is too large in ($Arg1). Max. allowed is ($Arg3)";
+    Text[ swedish ] = "Entry number ($Arg2) is too large in ($Arg1). Max. allowed is ($Arg3)";
+    Text[ polish ] = "Entry number ($Arg2) is too large in ($Arg1). Max. allowed is ($Arg3)";
+    Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
+    Text[ japanese ] = "Entry number ($Arg2) is too large in ($Arg1). Max. allowed is ($Arg3)";
+    Text[ korean ] = "($Arg1)¿¡¼­ Ç×¸ñ ¹øÈ£($Arg2)´Â ³Ê¹« Å®´Ï´Ù. Çã¿ëµÈ ÃÖ´ë°ªÀº  ($Arg3)ÀÔ´Ï´Ù.";
+    Text[ chinese_simplified ] = "Entry number ($Arg2) is too large in ($Arg1). Max. allowed is ($Arg3).";
+    Text[ chinese_traditional ] = "Entry number ($Arg2) is too large in ($Arg1). Max. allowed is ($Arg3)";
+    Text[ arabic ] = "Entry number ($Arg2) is too large in ($Arg1). Max. allowed is ($Arg3)";
+    Text[ turkish ] = "Entry number ($Arg2) is too large in ($Arg1). Max. allowed is ($Arg3)";
+};
+String S_NUMBER_TOO_SMALL
+{
+    Text = "Eintragsnummer ($Arg2) zu klein in ($Arg1). Minimum ist ($Arg3)";
+    Text[ english_us ] = "The entry number ($Arg2) is too small in ($Arg1). Min allowed is ($Arg3)";
+    Text[ portuguese ] = "O número da entrada ($Arg2) é muito baixo em ($Arg1). O mínimo é ($Arg3)";
+    Text[ russian ] = "The entry number ($Arg2) is too small in ($Arg1). Min allowed is ($Arg3)";
+    Text[ greek ] = "The entry number ($Arg2) is too small in ($Arg1). Min allowed is ($Arg3)";
+    Text[ dutch ] = "Nummer voor ($Arg2) te laag in ($Arg1). Minimum is ($Arg3)";
+    Text[ french ] = "Le numéro d'entrée ($Arg2) est trop bas pour ($Arg1). Le minimum possible est ($Arg3)";
+    Text[ spanish ] = "Núm. de entradas ($Arg2) es demasiado pequeño en ($Arg1). El mínimo es ($Arg3)";
+    Text[ italian ] = "The entry number ($Arg2) is too small in ($Arg1). Min allowed is ($Arg3)";
+    Text[ danish ] = "The entry number ($Arg2) is too small in ($Arg1). Min allowed is ($Arg3)";
+    Text[ swedish ] = "The entry number ($Arg2) is too small in ($Arg1). Min allowed is ($Arg3)";
+    Text[ polish ] = "The entry number ($Arg2) is too small in ($Arg1). Min allowed is ($Arg3)";
+    Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
+    Text[ japanese ] = "The entry number ($Arg2) is too small in ($Arg1). Min allowed is ($Arg3)";
+    Text[ korean ] = "($Arg1)¿¡¼­ Ç×¸ñ ¹øÈ£($Arg2)´Â ³Ê¹« ÀÛ½À´Ï´Ù. Çã¿ëµÈ ÃÖ¼Ò°ªÀº  ($Arg3)ÀÔ´Ï´Ù.";
+    Text[ chinese_simplified ] = "The entry number ($Arg2) is too small in ($Arg1). Min. allowed is ($Arg3).";
+    Text[ chinese_traditional ] = "The entry number ($Arg2) is too small in ($Arg1). Min allowed is ($Arg3)";
+    Text[ arabic ] = "The entry number ($Arg2) is too small in ($Arg1). Min allowed is ($Arg3)";
+    Text[ turkish ] = "The entry number ($Arg2) is too small in ($Arg1). Min allowed is ($Arg3)";
+};
+String S_WINDOW_DISAPPEARED
+{
+    Text = "Window zwischenzeitlich verschwunden bei ($Arg1)";
+    Text[ english_us ] = "Window momentarily not visible at ($Arg1)";
+    Text[ portuguese ] = "Desaparecimento momentâneo da janela em ($Arg1)";
+    Text[ russian ] = "Window momentarily not visible at ($Arg1)";
+    Text[ greek ] = "Window momentarily not visible at ($Arg1)";
+    Text[ dutch ] = "Windows momenteel niet zichtbaar bij ($Arg1)";
+    Text[ french ] = "Disparition momentanée de la fenêtre  ($Arg1)";
+    Text[ spanish ] = "Desaparación momentánea de Windows en ($Arg1)";
+    Text[ italian ] = "Window momentarily not visible at ($Arg1)";
+    Text[ danish ] = "Window momentarily not visible at ($Arg1)";
+    Text[ swedish ] = "Window momentarily not visible at ($Arg1)";
+    Text[ polish ] = "Window momentarily not visible at ($Arg1)";
+    Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
+    Text[ japanese ] = "Window momentarily not visible at ($Arg1)";
+    Text[ korean ] = "Window°¡ ±× »çÀÌ ($Arg1)¿¡¼­ »ç¶óÁü";
+    Text[ chinese_simplified ] = "Window momentarily not visible at ($Arg1)";
+    Text[ chinese_traditional ] = "Window momentarily not visible at ($Arg1)";
+    Text[ arabic ] = "Window momentarily not visible at ($Arg1)";
+    Text[ turkish ] = "Window momentarily not visible at ($Arg1)";
+};
+String S_ERROR_SAVING_IMAGE
+{
+    Text = "Fehler #($Arg1) beim Speichern des Bildes";
+    Text[ english_us ] = "Error #($Arg1) when saving the image";
+    Text[ portuguese ] = "Erro #($Arg1) ao guardar a imagem";
+    Text[ russian ] = "Error #($Arg1) when saving the image";
+    Text[ greek ] = "Error #($Arg1) when saving the image";
+    Text[ dutch ] = "Fout #($Arg1) bij opslaan van afbeelding";
+    Text[ french ] = "Erreur #($Arg1) lors de l'enregistrement de l'image";
+    Text[ spanish ] = "Error #($Arg1) al guardar la imagen";
+    Text[ italian ] = "Error #($Arg1) when saving the image";
+    Text[ danish ] = "Error #($Arg1) when saving the image";
+    Text[ swedish ] = "Error #($Arg1) when saving the image";
+    Text[ polish ] = "Error #($Arg1) when saving the image";
+    Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
+    Text[ japanese ] = "Error #($Arg1) when saving the image";
+    Text[ korean ] = "ÀÌ¹ÌÁö ÀúÀå ½Ã ¿À·ù #($Arg1)";
+    Text[ chinese_simplified ] = "Error #($Arg1) when saving the image";
+    Text[ chinese_traditional ] = "Error #($Arg1) when saving the image";
+    Text[ arabic ] = "Error #($Arg1) when saving the image";
+    Text[ turkish ] = "Error #($Arg1) when saving the image";
+};
+String S_INVALID_POSITION
+{
+    Text = "Ungültige Positionsangabe bei ($Arg1)";
+    Text[ english_us ] = "Invalid positon at ($Arg1)";
+    Text[ portuguese ] = "Posição indicada incorrectamente em ($Arg1)";
+    Text[ russian ] = "Invalid positon at ($Arg1)";
+    Text[ greek ] = "Invalid positon at ($Arg1)";
+    Text[ dutch ] = "Omgeldige positie aangegeven bij ($Arg1)";
+    Text[ french ] = "Erreur d'indication de l'emplacement de ($Arg1)";
+    Text[ spanish ] = "Posición indicada incorrecta en ($Arg1)";
+    Text[ italian ] = "Invalid positon at ($Arg1)";
+    Text[ danish ] = "Invalid positon at ($Arg1)";
+    Text[ swedish ] = "Invalid positon at ($Arg1)";
+    Text[ polish ] = "Invalid positon at ($Arg1)";
+    Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
+    Text[ japanese ] = "Invalid positon at ($Arg1)";
+    Text[ korean ] = "($Arg1)¿¡ À¯È¿ÇÏÁö ¾ÊÀº À§Ä¡";
+    Text[ chinese_simplified ] = "Invalid positon at ($Arg1)";
+    Text[ chinese_traditional ] = "Invalid positon at ($Arg1)";
+    Text[ arabic ] = "Invalid positon at ($Arg1)";
+    Text[ turkish ] = "Invalid positon at ($Arg1)";
+};
+String S_SPLITWIN_NOT_FOUND
+{
+    Text = "Konnte SplitWindow nicht finden bei ($Arg1)";
+    Text[ english_us ] = "Split window not found at ($Arg1)";
+    Text[ portuguese ] = "Foi impossível encontrar SplitWindow em ($Arg1)";
+    Text[ russian ] = "Split window not found at ($Arg1)";
+    Text[ greek ] = "Split window not found at ($Arg1)";
+    Text[ dutch ] = "Kon SplitWindow niet vinden bij ($Arg1)";
+    Text[ french ] = "SplitWindow introuvable pour ($Arg1)";
+    Text[ spanish ] = "No se pudo encontrar SplitWindow en ($Arg1)";
+    Text[ italian ] = "Split window not found at ($Arg1)";
+    Text[ danish ] = "Split window not found at ($Arg1)";
+    Text[ swedish ] = "Split window not found at ($Arg1)";
+    Text[ polish ] = "Split window not found at ($Arg1)";
+    Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
+    Text[ japanese ] = "Split window not found at ($Arg1)";
+    Text[ korean ] = "SplitWindow¸¦ ($Arg1)¿¡¼­ Ã£Áö ¸øÇßÀ½";
+    Text[ chinese_simplified ] = "Split window not found at ($Arg1)";
+    Text[ chinese_traditional ] = "Split window not found at ($Arg1)";
+    Text[ arabic ] = "Split window not found at ($Arg1)";
+    Text[ turkish ] = "Split window not found at ($Arg1)";
+};
+String S_INTERNAL_ERROR
+{
+    Text = "Interner Fehler bei ($Arg1)";
+    Text[ english_us ] = "Internal error at ($Arg1)";
+    Text[ portuguese ] = "Erro interno em ($Arg1)";
+    Text[ russian ] = "Internal error at ($Arg1)";
+    Text[ greek ] = "Internal error at ($Arg1)";
+    Text[ dutch ] = "Interne fout bij ($Arg1)";
+    Text[ french ] = "Erreur interne pour ($Arg1)";
+    Text[ spanish ] = "Error interno en ($Arg1)";
+    Text[ italian ] = "Internal error at ($Arg1)";
+    Text[ danish ] = "Internal error at ($Arg1)";
+    Text[ swedish ] = "Internal error at ($Arg1)";
+    Text[ polish ] = "Internal error at ($Arg1)";
+    Text[ portuguese_brazilian ] = "dummytext";
+    Text[ japanese ] = "Internal error at ($Arg1)";
+    Text[ korean ] = "($Arg1)¿¡ ³»ºÎ ¿À·ù";
+    Text[ chinese_simplified ] = "Internal error at ($Arg1)";
+    Text[ chinese_traditional ] = "Internal error at ($Arg1)";
+    Text[ arabic ] = "Internal error at ($Arg1)";
+    Text[ turkish ] = "Internal error at ($Arg1)";
+};
+String S_NO_STATUSBAR
+{
+    Text = "Keine StatusBar vorhanden bei ($Arg1)";
+    Text[ english_us ] = "No status bar at ($Arg1)";
+    Text[ portuguese ] = "Barra de estado em ($Arg1) inexistente";
+    Text[ russian ] = "No status bar at ($Arg1)";
+    Text[ greek ] = "No status bar at ($Arg1)";
+    Text[ dutch ] = "Geen StatusBar voorhanden bij ($Arg1)";
+    Text[ french ] = "Absence de barre d'état pour ($Arg1) ";
+    Text[ spanish ] = "No existe StatusBar en ($Arg1)";
+    Text[ italian ] = "No status bar at ($Arg1)";
+    Text[ danish ] = "No status bar at ($Arg1)";
+    Text[ swedish ] = "No status bar at ($Arg1)";
+    Text[ polish ] = "No status bar at ($Arg1)";
+    Text[ portuguese_brazilian ] = "dummytext";
+    Text[ japanese ] = "No status bar at ($Arg1)";
+    Text[ korean ] = "($Arg1)¿¡ »óÅÂ ¹Ù°¡ ¾ø½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "No status bar at ($Arg1)";
+    Text[ chinese_traditional ] = "No status bar at ($Arg1)";
+    Text[ arabic ] = "No status bar at ($Arg1)";
+    Text[ turkish ] = "No status bar at ($Arg1)";
+};
+String S_ITEMS_INVISIBLE
+{
+    Text = "Die Items sind ausgeblendet bei ($Arg1)";
+    Text[ english_us ] = "The items are hidden at ($Arg1)";
+    Text[ portuguese ] = "Os items em ($Arg1) estão ocultos";
+    Text[ russian ] = "The items are hidden at ($Arg1)";
+    Text[ greek ] = "The items are hidden at ($Arg1)";
+    Text[ dutch ] = "De items zijn verborgen bij ($Arg1)";
+    Text[ french ] = "Les Items sont masqués pour ($Arg1)";
+    Text[ spanish ] = "Los ítems en ($Arg1) están ocultos";
+    Text[ italian ] = "The items are hidden at ($Arg1)";
+    Text[ danish ] = "The items are hidden at ($Arg1)";
+    Text[ swedish ] = "The items are hidden at ($Arg1)";
+    Text[ polish ] = "The items are hidden at ($Arg1)";
+    Text[ portuguese_brazilian ] = "dummytext";
+    Text[ japanese ] = "The items are hidden at ($Arg1)";
+    Text[ korean ] = "($Arg1)¿¡ Ç×¸ñÀÌ ¼û°ÜÁ® ÀÖ½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "The items are hidden at ($Arg1)";
+    Text[ chinese_traditional ] = "The items are hidden at ($Arg1)";
+    Text[ arabic ] = "The items are hidden at ($Arg1)";
+    Text[ turkish ] = "The items are hidden at ($Arg1)";
+};
+String S_TABPAGE_NOT_FOUND
+{
+    Text = "Tabpage nicht gefunden bei ($Arg1)";
+    Text[ english_us ] = "Tab page not found at ($Arg1)";
+    Text[ portuguese ] = "Foi impossível encontrar o separador em ($Arg1)";
+    Text[ russian ] = "Tab page not found at ($Arg1)";
+    Text[ greek ] = "Tab page not found at ($Arg1)";
+    Text[ dutch ] = "Tabpage niet gevonden bij ($Arg1";
+    Text[ french ] = "Tabpage introuvable pour ($Arg1)";
+    Text[ spanish ] = "No se encontró tabpage en ($Arg1)";
+    Text[ italian ] = "Tab page not found at ($Arg1)";
+    Text[ danish ] = "Tab page not found at ($Arg1)";
+    Text[ swedish ] = "Tab page not found at ($Arg1)";
+    Text[ polish ] = "Tab page not found at ($Arg1)";
+    Text[ portuguese_brazilian ] = "dummytext";
+    Text[ japanese ] = "Tab page not found at ($Arg1)";
+    Text[ korean ] = "($Arg1)¿¡¼­ ÅÇ ÆäÀÌÁö°¡ ¹ß°ßµÇÁö ¾Ê½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "Tab page not found at ($Arg1)";
+    Text[ chinese_traditional ] = "Tab page not found at ($Arg1)";
+    Text[ arabic ] = "Tab page not found at ($Arg1)";
+    Text[ turkish ] = "Tab page not found at ($Arg1)";
+};
+String S_TRISTATE_NOT_ALLOWED
+{
+    Text = "Tristate darf nicht gesetzt werden bei ($Arg1)";
+    Text[ english_us ] = "Three state cannot be set at ($Arg1)";
+    Text[ portuguese ] = "Impossível indicar um valor \"tristate\" em ($Arg1)";
+    Text[ russian ] = "Three state cannot be set at ($Arg1)";
+    Text[ greek ] = "Three state cannot be set at ($Arg1)";
+    Text[ dutch ] = "Tristate mag niet worden gezet bij ($Arg1)";
+    Text[ french ] = "Impossible de placer une valeur Tristate pour ($Arg1)";
+    Text[ spanish ] = "No se pude aplicar tristate en ($Arg1)";
+    Text[ italian ] = "Three state cannot be set at ($Arg1)";
+    Text[ danish ] = "Three state cannot be set at ($Arg1)";
+    Text[ swedish ] = "Three state cannot be set at ($Arg1)";
+    Text[ polish ] = "Three state cannot be set at ($Arg1)";
+    Text[ portuguese_brazilian ] = "dummytext";
+    Text[ japanese ] = "Three state cannot be set at ($Arg1)";
+    Text[ korean ] = "¼¼°¡Áö »óÅÂ°¡ ($Arg1)¿¡  ¼³Á¤µÉ ¼ö ¾ø½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "Three state cannot be set at ($Arg1)";
+    Text[ chinese_traditional ] = "Three state cannot be set at ($Arg1)";
+    Text[ arabic ] = "Three state cannot be set at ($Arg1)";
+    Text[ turkish ] = "Three state cannot be set at ($Arg1)";
+    Text[ language_user1 ] = " ";
+};
+String S_ERROR_IN_SET_TEXT
+{
+    Text = "SetText hat nicht funktioniert";
+    Text[ english_us ] = "Set text did not function";
+    Text[ portuguese ] = "SetText não funcionou";
+    Text[ russian ] = "Set text did not function";
+    Text[ greek ] = "Set text did not function";
+    Text[ dutch ] = "SetText heeft niet gefunctioneerd";
+    Text[ french ] = "SetText n'a pas fonctionné";
+    Text[ spanish ] = "No ha funcionado SetText";
+    Text[ italian ] = "Set text did not function";
+    Text[ danish ] = "Set text did not function";
+    Text[ swedish ] = "Set text did not function";
+    Text[ polish ] = "Set text did not function";
+    Text[ portuguese_brazilian ] = "dummytext";
+    Text[ japanese ] = "Set text did not function";
+    Text[ korean ] = "ÅØ½ºÆ® ¼³Á¤ÀÌ ÀÛµ¿ÇÏÁö ¾Ê½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "Set text did not function";
+    Text[ chinese_traditional ] = "Set text did not function";
+    Text[ arabic ] = "Set text did not function";
+    Text[ turkish ] = "Set text did not function";
+};
+String S_ATTEMPT_TO_WRITE_READONLY
+{
+    Text = "Schreibversuch auf ReadOnly ($Arg1)";
+    Text[ english_us ] = "Attempt to write on read-only ($Arg1)";
+    Text[ portuguese ] = "Tentativa de escrita em ($Arg1) como só leitura";
+    Text[ russian ] = "Attempt to write on read-only ($Arg1)";
+    Text[ greek ] = "Attempt to write on read-only ($Arg1)";
+    Text[ dutch ] = "Schrijfpoging op ReadOnly ($Arg1)";
+    Text[ french ] = "Tentative d'éciture sur ($Arg1) (en lecture seule)";
+    Text[ spanish ] = "Intento de escritura en ReadOnly ($Arg1)";
+    Text[ italian ] = "Attempt to write on read-only ($Arg1)";
+    Text[ danish ] = "Attempt to write on read-only ($Arg1)";
+    Text[ swedish ] = "Attempt to write on read-only ($Arg1)";
+    Text[ polish ] = "Attempt to write on read-only ($Arg1)";
+    Text[ portuguese_brazilian ] = "dummytext";
+    Text[ japanese ] = "Attempt to write on read-only ($Arg1)";
+    Text[ korean ] = "ÀÐ±â Àü¿ë($Arg1)¿¡ ¾²±â¸¦ ½Ãµµ";
+    Text[ chinese_simplified ] = "Attempt to write on read-only ($Arg1)";
+    Text[ chinese_traditional ] = "Attempt to write on read-only ($Arg1)";
+    Text[ arabic ] = "Attempt to write on read-only ($Arg1)";
+    Text[ turkish ] = "Attempt to write on read-only ($Arg1)";
+};
+String S_NO_SELECT_FALSE
+{
+    Text = "Select FALSE nicht erlaubt. Bitte MultiSelect verwenden bei ($Arg1)";
+    Text[ english_us ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
+    Text[ portuguese ] = "Interdito seleccionar FALSE. Utilizar MultiSelect em ($Arg1)";
+    Text[ russian ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
+    Text[ greek ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
+    Text[ dutch ] = "Select FALSE niet toegestaan. Gebruik MultiSelect bij ($Arg1)";
+    Text[ french ] = "Interdit de sélectionner FALSE. Veuillez utiliser MultiSelect pour ($Arg1)";
+    Text[ spanish ] = "No se permite Select FALSE. Use MultiSelect en ($Arg1)";
+    Text[ italian ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
+    Text[ danish ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
+    Text[ swedish ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
+    Text[ polish ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
+    Text[ portuguese_brazilian ] = "dummytext";
+    Text[ japanese ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
+    Text[ korean ] = "FALSE ¼±ÅÃÀÌ Çã¿ëµÇÁö ¾Ê½À´Ï´Ù.  ($Arg1)¿¡ ´ÙÁß ¼±ÅÃ »ç¿ë.";
+    Text[ chinese_simplified ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
+    Text[ chinese_traditional ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
+    Text[ arabic ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
+    Text[ turkish ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
+};
+String S_ENTRY_NOT_FOUND
+{
+    Text = "Eintrag \"($Arg2)\" bei ($Arg1) nicht gefunden";
+    Text[ english_us ] = "\"($Arg2)\" entry at ($Arg1) not found";
+    Text[ portuguese ] = "Foi impossível encontrar a entrada \"($Arg2) em ($Arg1)";
+    Text[ russian ] = "\"($Arg2)\" entry at ($Arg1) not found";
+    Text[ greek ] = "\"($Arg2)\" entry at ($Arg1) not found";
+    Text[ dutch ] = "Optie ($Arg2) niet gevonden bij ($Arg1)";
+    Text[ french ] = "Entrée \"($Arg2)\" introuvable pour ($Arg1)";
+    Text[ spanish ] = "No se encontrá entrada \"($Arg2)\" en ($Arg1)";
+    Text[ italian ] = "\"($Arg2)\" entry at ($Arg1) not found";
+    Text[ danish ] = "\"($Arg2)\" entry at ($Arg1) not found";
+    Text[ swedish ] = "\"($Arg2)\" entry at ($Arg1) not found";
+    Text[ polish ] = "\"($Arg2)\" entry at ($Arg1) not found";
+    Text[ portuguese_brazilian ] = "dummytext";
+    Text[ japanese ] = "\"($Arg2)\" entry at ($Arg1) not found";
+    Text[ korean ] = "\"($Arg2)\" °¡ Ç×¸ñ ($Arg1)¿¡¼­ ¹ß°ßµÇÁö ¾Ê½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "\"($Arg2)\" entry at ($Arg1) not found";
+    Text[ chinese_traditional ] = "\"($Arg2)\" entry at ($Arg1) not found";
+    Text[ arabic ] = "\"($Arg2)\" entry at ($Arg1) not found";
+    Text[ turkish ] = "\"($Arg2)\" entry at ($Arg1) not found";
+};
+String S_METHOD_FAILED
+{
+    Text = "($Arg1) von Eintrag \"($Arg2)\" ist fehlgeschlagen";
+    Text[ english_us ] = "($Arg1) of entry \"($Arg2)\" failed";
+    Text[ portuguese ] = "($Arg1) da entrada \"($Arg2)\" falhou";
+    Text[ russian ] = "($Arg1) of entry \"($Arg2)\" failed";
+    Text[ greek ] = "($Arg1) of entry \"($Arg2)\" failed";
+    Text[ dutch ] = "($Arg1) van optie ($Arg2) mislukt";
+    Text[ french ] = "($Arg1) a échoué pour l'entrée \"($Arg2)\" ";
+    Text[ spanish ] = "No resultó ($Arg1) de la entrada \"($Arg2)\"";
+    Text[ italian ] = "($Arg1) of entry \"($Arg2)\" failed";
+    Text[ danish ] = "($Arg1) of entry \"($Arg2)\" failed";
+    Text[ swedish ] = "($Arg1) of entry \"($Arg2)\" failed";
+    Text[ polish ] = "($Arg1) of entry \"($Arg2)\" failed";
+    Text[ portuguese_brazilian ] = "dummytext";
+    Text[ japanese ] = "($Arg1) of entry \"($Arg2)\" failed";
+    Text[ korean ] = "Ç×¸ñ\"($Arg2)\"ÀÇ ($Arg1)°¡ Àß¸øµÆ½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "($Arg1) of entry \"($Arg2)\" failed";
+    Text[ chinese_traditional ] = "($Arg1) of entry \"($Arg2)\" failed";
+    Text[ arabic ] = "($Arg1) of entry \"($Arg2)\" failed";
+    Text[ turkish ] = "($Arg1) of entry \"($Arg2)\" failed";
+};
+String S_HELPID_ON_TOOLBOX_NOT_FOUND
+{
+    Text = "HelpID auf ToolBox nicht gefunden bei ($Arg1)";
+    Text[ english_us ] = "HelpID in ToolBox not found at ($Arg1)";
+    Text[ portuguese ] = "Impossível encontrar o HelpID da ToolBox em ($Arg1)";
+    Text[ russian ] = "HelpID in ToolBox not found at ($Arg1)";
+    Text[ greek ] = "HelpID in ToolBox not found at ($Arg1)";
+    Text[ dutch ] = "HelpID op ToolBox niet gevonden bij ($Arg1)";
+    Text[ french ] = "HelpID de la ToolBox introuvable pour ($Arg1)";
+    Text[ spanish ] = "No se encontró en ($Arg1) HelpID en ToolBox";
+    Text[ italian ] = "HelpID in ToolBox not found at ($Arg1)";
+    Text[ danish ] = "HelpID in ToolBox not found at ($Arg1)";
+    Text[ swedish ] = "HelpID in ToolBox not found at ($Arg1)";
+    Text[ polish ] = "HelpID in ToolBox not found at ($Arg1)";
+    Text[ portuguese_brazilian ] = "dummytext";
+    Text[ japanese ] = "HelpID in ToolBox not found at ($Arg1)";
+    Text[ korean ] = "µµ±¸»óÀÚÀÇ µµ¿ò¸» ID °¡  ($Arg1)¿¡¼­ ¹ß°ßµÇÁö ¾Ê½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "HelpID in ToolBox not found at ($Arg1)";
+    Text[ chinese_traditional ] = "HelpID in ToolBox not found at ($Arg1)";
+    Text[ arabic ] = "HelpID in ToolBox not found at ($Arg1)";
+    Text[ turkish ] = "HelpID in ToolBox not found at ($Arg1)";
+};
+String S_BUTTON_DISABLED_ON_TOOLBOX
+{
+    Text = "Der Button ist disabled in ToolBox bei ($Arg1)";
+    Text[ english_us ] = "The button is disabled in ToolBox at ($Arg1)";
+    Text[ portuguese ] = "O botão da ToolBox em ($Arg1) está desactivado";
+    Text[ russian ] = "The button is disabled in ToolBox at ($Arg1)";
+    Text[ greek ] = "The button is disabled in ToolBox at ($Arg1)";
+    Text[ dutch ] = "Button buiten werking in ToolBox bij ($Arg1)";
+    Text[ french ] = "Le bouton est désactivé dans la ToolBox pour ($Arg1)";
+    Text[ spanish ] = "El botón está desactivado en ToolBox en ($Arg1)";
+    Text[ italian ] = "The button is disabled in ToolBox at ($Arg1)";
+    Text[ danish ] = "The button is disabled in ToolBox at ($Arg1)";
+    Text[ swedish ] = "The button is disabled in ToolBox at ($Arg1)";
+    Text[ polish ] = "The button is disabled in ToolBox at ($Arg1)";
+    Text[ portuguese_brazilian ] = "dummytext";
+    Text[ japanese ] = "The button is disabled in ToolBox at ($Arg1)";
+    Text[ korean ] = "($Arg1)¿¡ µµ±¸»óÀÚÀÇ ¹öÆ°ÀÌ »ç¿ëÀÌ ¾ÈµË´Ï´Ù.";
+    Text[ chinese_simplified ] = "The button is disabled in ToolBox at ($Arg1)";
+    Text[ chinese_traditional ] = "The button is disabled in ToolBox at ($Arg1)";
+    Text[ arabic ] = "The button is disabled in ToolBox at ($Arg1)";
+    Text[ turkish ] = "The button is disabled in ToolBox at ($Arg1)";
+};
+String S_BUTTON_HIDDEN_ON_TOOLBOX
+{
+    Text = "Der Button ist hidden in ToolBox bei ($Arg1)";
+    Text[ english_us ] = "The button is hidden in ToolBox at ($Arg1)";
+    Text[ portuguese ] = "O botão da ToolBox em ($Arg1) está oculto";
+    Text[ russian ] = "The button is hidden in ToolBox at ($Arg1)";
+    Text[ greek ] = "The button is hidden in ToolBox at ($Arg1)";
+    Text[ dutch ] = "Button verborgen in Toolbox bij  ($Arg1)";
+    Text[ french ] = "Le bouton est caché dans la ToolBox pour ($Arg1)";
+    Text[ spanish ] = "El botón es hidden en ToolBox en ($Arg1)";
+    Text[ italian ] = "The button is hidden in ToolBox at ($Arg1)";
+    Text[ danish ] = "The button is hidden in ToolBox at ($Arg1)";
+    Text[ swedish ] = "The button is hidden in ToolBox at ($Arg1)";
+    Text[ polish ] = "The button is hidden in ToolBox at ($Arg1)";
+    Text[ portuguese_brazilian ] = "dummytext";
+    Text[ japanese ] = "The button is hidden in ToolBox at ($Arg1)";
+    Text[ korean ] = "($Arg1)¿¡ µµ±¸»óÀÚÀÇ ¹öÆ°ÀÌ ¼û°ÜÁ® ÀÖ½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "The button is hidden in ToolBox at ($Arg1)";
+    Text[ chinese_traditional ] = "The button is hidden in ToolBox at ($Arg1)";
+    Text[ arabic ] = "The button is hidden in ToolBox at ($Arg1)";
+    Text[ turkish ] = "The button is hidden in ToolBox at ($Arg1)";
+};
+String S_CANNOT_MAKE_BUTTON_VISIBLE_IN_TOOLBOX
+{
+    Text = "Button konnte nicht sichtbar gemacht werden in ToolBox bei ($Arg1)";
+    Text[ english_us ] = "Button cannot be made visible in ToolBox at ($Arg1)";
+    Text[ portuguese ] = "Foi impossível tornar o botão da ToolBox em ($Arg1) visível";
+    Text[ russian ] = "Button cannot be made visible in ToolBox at ($Arg1)";
+    Text[ greek ] = "Button cannot be made visible in ToolBox at ($Arg1)";
+    Text[ dutch ] = "Button kon niet zichtbaar worden gemaakt in Toolbox bij  ($Arg1)";
+    Text[ french ] = "Ímpossible d'afficher le bouton dans la ToolBox pour ($Arg1)";
+    Text[ spanish ] = "No se pudo mostrar el boton en ToolBox para ($Arg1)";
+    Text[ italian ] = "Button cannot be made visible in ToolBox at ($Arg1)";
+    Text[ danish ] = "Button cannot be made visible in ToolBox at ($Arg1)";
+    Text[ swedish ] = "Button cannot be made visible in ToolBox at ($Arg1)";
+    Text[ polish ] = "Button cannot be made visible in ToolBox at ($Arg1)";
+    Text[ portuguese_brazilian ] = "dummytext";
+    Text[ japanese ] = "Button cannot be made visible in ToolBox at ($Arg1)";
+    Text[ korean ] = "($Arg1)¿¡ µµ±¸»óÀÚÀÇ ¹öÆ°À» º¸ÀÌ°Ô ÇÒ¼ö ¾ø½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "Button cannot be made visible in ToolBox at ($Arg1)";
+    Text[ chinese_traditional ] = "Button cannot be made visible in ToolBox at ($Arg1)";
+    Text[ arabic ] = "Button cannot be made visible in ToolBox at ($Arg1)";
+    Text[ turkish ] = "Button cannot be made visible in ToolBox at ($Arg1)";
+};
+String S_TEAROFF_FAILED
+{
+    Text = "TearOff Fehlgeschlagen in ToolBox bei ($Arg1)";
+    Text[ english_us ] = "TearOff failed in ToolBox at ($Arg1)";
+    Text[ portuguese ] = "TearOff falhou na ToolBox em ($Arg1)";
+    Text[ russian ] = "TearOff failed in ToolBox at ($Arg1)";
+    Text[ greek ] = "TearOff failed in ToolBox at ($Arg1)";
+    Text[ dutch ] = "TearOff mislukt in ToolBox bij  ($Arg1)";
+    Text[ french ] = "TearOff a échoué dans la ToolBox pour ($Arg1)";
+    Text[ spanish ] = "Ha fallado TearOff en ToolBox para ($Arg1)";
+    Text[ italian ] = "TearOff failed in ToolBox at ($Arg1)";
+    Text[ danish ] = "TearOff failed in ToolBox at ($Arg1)";
+    Text[ swedish ] = "TearOff failed in ToolBox at ($Arg1)";
+    Text[ polish ] = "TearOff failed in ToolBox at ($Arg1)";
+    Text[ portuguese_brazilian ] = "dummytext";
+    Text[ japanese ] = "TearOff failed in ToolBox at ($Arg1)";
+    Text[ korean ] = "($Arg1)¿¡ µµ±¸»óÀÚ¿¡¼­ ÀýÃë°¡ ½ÇÆÐÇÏ¿´½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "TearOff failed in ToolBox at ($Arg1)";
+    Text[ chinese_traditional ] = "TearOff failed in ToolBox at ($Arg1)";
+    Text[ arabic ] = "TearOff failed in ToolBox at ($Arg1)";
+    Text[ turkish ] = "TearOff failed in ToolBox at ($Arg1)";
+};
+String S_NO_SELECTED_ENTRY
+{
+    Text = "Es ist kein Eintrag Selektiert in TreeListBox bei ($Arg1)";
+    Text[ english_us ] = "An entry has not been selected in TreeListBox at ($Arg1)";
+    Text[ portuguese ] = "Nenhuma entrada seleccionada na TreeListBox para ($Arg1)";
+    Text[ russian ] = "An entry has not been selected in TreeListBox at ($Arg1)";
+    Text[ greek ] = "An entry has not been selected in TreeListBox at ($Arg1)";
+    Text[ dutch ] = "Geen item geselecteerd in TreeListBox bij  ($Arg1)";
+    Text[ french ] = "Aucune entrée sélectionnée dans la TreeListBox pour ($Arg1)";
+    Text[ spanish ] = "No hay ninguna entrada seleccionada en TreeListBox para ($Arg1)";
+    Text[ italian ] = "An entry has not been selected in TreeListBox at ($Arg1)";
+    Text[ danish ] = "An entry has not been selected in TreeListBox at ($Arg1)";
+    Text[ swedish ] = "An entry has not been selected in TreeListBox at ($Arg1)";
+    Text[ polish ] = "An entry has not been selected in TreeListBox at ($Arg1)";
+    Text[ portuguese_brazilian ] = "dummytext";
+    Text[ japanese ] = "An entry has not been selected in TreeListBox at ($Arg1)";
+    Text[ korean ] = "($Arg1)¿¡ Æ®¸® ¸®½ºÆ® ¹Ú½º¿¡¼­ ¼±ÅÃµÈ Ç×¸ñÀÌ ¾ø½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "An entry has not been selected in TreeListBox at ($Arg1)";
+    Text[ chinese_traditional ] = "An entry has not been selected in TreeListBox at ($Arg1)";
+    Text[ arabic ] = "An entry has not been selected in TreeListBox at ($Arg1)";
+    Text[ turkish ] = "An entry has not been selected in TreeListBox at ($Arg1)";
+};
+String S_SELECT_DESELECT_VIA_STRING_NOT_IMPLEMENTED
+{
+    Text = "Select/Deselect mit String nicht implementiert bei ($Arg1)";
+    Text[ english_us ] = "Select/Deselect with string not implemented at ($Arg1)";
+    Text[ portuguese ] = "Seleccionar/Desseleccionar com String não implementado em ($Arg1)";
+    Text[ russian ] = "Select/Deselect with string not implemented at ($Arg1)";
+    Text[ greek ] = "Select/Deselect with string not implemented at ($Arg1)";
+    Text[ dutch ] = "Select/Deselect met String niet geïmplementeerd bij  ($Arg1)";
+    Text[ french ] = "Sélection/déselection d'un string pas implémentée pour ($Arg1)";
+    Text[ spanish ] = "Seleccionar/Deshacer selección con String no implementado para ($Arg1)";
+    Text[ italian ] = "Select/Deselect with string not implemented at ($Arg1)";
+    Text[ danish ] = "Select/Deselect with string not implemented at ($Arg1)";
+    Text[ swedish ] = "Select/Deselect with string not implemented at ($Arg1)";
+    Text[ polish ] = "Select/Deselect with string not implemented at ($Arg1)";
+    Text[ portuguese_brazilian ] = "dummytext";
+    Text[ japanese ] = "Select/Deselect with string not implemented at ($Arg1)";
+    Text[ korean ] = "($Arg1)¿¡¼­ ¹®ÀÚ¿­°ú ÇÔ²² ¼±ÅÃ/¼±ÅÃÇØÁ¦°¡ ±¸ÇöµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "Select/Deselect with string not implemented at ($Arg1)";
+    Text[ chinese_traditional ] = "Select/Deselect with string not implemented at ($Arg1)";
+    Text[ arabic ] = "Select/Deselect with string not implemented at ($Arg1)";
+    Text[ turkish ] = "Select/Deselect with string not implemented at ($Arg1)";
+};
+String S_ALLOWED_ONLY_IN_FLOATING_MODE
+{
+    Text = "Methode nur im Froating-Mode erlaubt bei ($Arg1)";
+    Text[ english_us ] = "Method only allowed in floating mode at ($Arg1)";
+    Text[ portuguese ] = "Método autorizado apenas em modo Froating em ($Arg1)";
+    Text[ russian ] = "Method only allowed in floating mode at ($Arg1)";
+    Text[ greek ] = "Method only allowed in floating mode at ($Arg1)";
+    Text[ dutch ] = "Methode alleen toegestaan in Froating Mode bij  ($Arg1)";
+    Text[ french ] = "Méthode autorisée uniquement en mode Froating pour ($Arg1)";
+    Text[ spanish ] = "Método permitido solo en modo Froating para ($Arg1)";
+    Text[ italian ] = "Method only allowed in floating mode at ($Arg1)";
+    Text[ danish ] = "Method only allowed in floating mode at ($Arg1)";
+    Text[ swedish ] = "Method only allowed in floating mode at ($Arg1)";
+    Text[ polish ] = "Method only allowed in floating mode at ($Arg1)";
+    Text[ portuguese_brazilian ] = "dummytext";
+    Text[ japanese ] = "Method only allowed in floating mode at ($Arg1)";
+    Text[ korean ] = "($Arg1)¿¡¼­ ÀÌµ¿ ¸ðµå¸Þ¼Òµå¸¸ Çã¿ëµË´Ï´Ù.";
+    Text[ chinese_simplified ] = "Method only allowed in floating mode at ($Arg1)";
+    Text[ chinese_traditional ] = "Method only allowed in floating mode at ($Arg1)";
+    Text[ arabic ] = "Method only allowed in floating mode at ($Arg1)";
+    Text[ turkish ] = "Method only allowed in floating mode at ($Arg1)";
+};
+String S_ALLOWED_ONLY_IN_DOCKING_MODE
+{
+    Text = "Methode nur im Docking-Mode erlaubt bei ($Arg1)";
+    Text[ english_us ] = "Method only allowed in docking mode at ($Arg1)";
+    Text[ portuguese ] = "Método somente autorizado em modo Docking em ($Arg1)";
+    Text[ russian ] = "Method only allowed in docking mode at ($Arg1)";
+    Text[ greek ] = "Method only allowed in docking mode at ($Arg1)";
+    Text[ dutch ] = "Methode alleen toegestaan in Docking-Mode bij  ($Arg1)";
+    Text[ french ] = "Méthode autorisée uniquement en mode Docking pour ($Arg1)";
+    Text[ spanish ] = "Método permitido solo en modo Docking para ($Arg1)";
+    Text[ italian ] = "Method only allowed in docking mode at ($Arg1)";
+    Text[ danish ] = "Method only allowed in docking mode at ($Arg1)";
+    Text[ swedish ] = "Method only allowed in docking mode at ($Arg1)";
+    Text[ polish ] = "Method only allowed in docking mode at ($Arg1)";
+    Text[ portuguese_brazilian ] = "dummytext";
+    Text[ japanese ] = "Method only allowed in docking mode at ($Arg1)";
+    Text[ korean ] = "($Arg1)¿¡¼­ ¿¬°á ¸ðµå ¸Þ¼Òµå¸¸ Çã¿ëµË´Ï´Ù.";
+    Text[ chinese_simplified ] = "Method only allowed in docking mode at ($Arg1)";
+    Text[ chinese_traditional ] = "Method only allowed in docking mode at ($Arg1)";
+    Text[ arabic ] = "Method only allowed in docking mode at ($Arg1)";
+    Text[ turkish ] = "Method only allowed in docking mode at ($Arg1)";
+};
+String S_SIZE_NOT_CHANGEABLE
+{
+    Text = "Größe ist nicht veränderbar bei ($Arg1)";
+    Text[ english_us ] = "Size cannot be altered at ($Arg1)";
+    Text[ portuguese ] = "Impossível alterar o tamanho em ($Arg1)";
+    Text[ russian ] = "Size cannot be altered at ($Arg1)";
+    Text[ greek ] = "Size cannot be altered at ($Arg1)";
+    Text[ dutch ] = "Grootte kan niet worden veranderd bij  ($Arg1)";
+    Text[ french ] = "Taille non modifiable pour ($Arg1)";
+    Text[ spanish ] = "Tamaño no modificable para ($Arg1)";
+    Text[ italian ] = "Size cannot be altered at ($Arg1)";
+    Text[ danish ] = "Size cannot be altered at ($Arg1)";
+    Text[ swedish ] = "Size cannot be altered at ($Arg1)";
+    Text[ polish ] = "Size cannot be altered at ($Arg1)";
+    Text[ portuguese_brazilian ] = "dummytext";
+    Text[ japanese ] = "Size cannot be altered at ($Arg1)";
+    Text[ korean ] = "($Arg1)¿¡¼­ Å©±â°¡ ¹Ù²ãÁöÁö ¾Ê½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "Size cannot be altered at ($Arg1)";
+    Text[ chinese_traditional ] = "Size cannot be altered at ($Arg1)";
+    Text[ arabic ] = "Size cannot be altered at ($Arg1)";
+    Text[ turkish ] = "Size cannot be altered at ($Arg1)";
+};
+String S_NO_OK_BUTTON
+{
+    Text = "Kein OK Button Vorhanden bei ($Arg1)";
+    Text[ english_us ] = "There is no OK button at ($Arg1)";
+    Text[ portuguese ] = "Botão OK inexistente em ($Arg1)";
+    Text[ russian ] = "There is no OK button at ($Arg1)";
+    Text[ greek ] = "There is no OK button at ($Arg1)";
+    Text[ dutch ] = "Geen OK-button voorhanden bij  ($Arg1)";
+    Text[ french ] = "Absence de bouton OK pour ($Arg1)";
+    Text[ spanish ] = "No existe botón Aceptar para ($Arg1)";
+    Text[ italian ] = "There is no OK button at ($Arg1)";
+    Text[ danish ] = "There is no OK button at ($Arg1)";
+    Text[ swedish ] = "There is no OK button at ($Arg1)";
+    Text[ polish ] = "There is no OK button at ($Arg1)";
+    Text[ portuguese_brazilian ] = "dummytext";
+    Text[ japanese ] = "There is no OK button at ($Arg1)";
+    Text[ korean ] = "($Arg1)¿¡ È®ÀÎ ¹öÆ°ÀÌ ¾ø½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "There is no OK button at ($Arg1)";
+    Text[ chinese_traditional ] = "There is no OK button at ($Arg1)";
+    Text[ arabic ] = "There is no OK button at ($Arg1)";
+    Text[ turkish ] = "There is no OK button at ($Arg1)";
+};
+String S_NO_CANCEL_BUTTON
+{
+    Text = "Kein Abbrechen Button Vorhanden bei ($Arg1)";
+    Text[ english_us ] = "There is no Cancel button at ($Arg1)";
+    Text[ portuguese ] = "Botão Cancelar inexistente em ($Arg1)";
+    Text[ russian ] = "There is no Cancel button at ($Arg1)";
+    Text[ greek ] = "There is no Cancel button at ($Arg1)";
+    Text[ dutch ] = "Geen Annuleren-button beschikbaar bij ($Arg1)";
+    Text[ french ] = "Absence de bouton Annuler pour ($Arg1)";
+    Text[ spanish ] = "No existe botón Cancelar para ($Arg1)";
+    Text[ italian ] = "There is no Cancel button at ($Arg1)";
+    Text[ danish ] = "There is no Cancel button at ($Arg1)";
+    Text[ swedish ] = "There is no Cancel button at ($Arg1)";
+    Text[ polish ] = "There is no Cancel button at ($Arg1)";
+    Text[ portuguese_brazilian ] = "dummytext";
+    Text[ japanese ] = "There is no Cancel button at ($Arg1)";
+    Text[ korean ] = "($Arg1)¿¡ Ãë¼Ò ¹öÆ°ÀÌ ¾ø½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "There is no Cancel button at ($Arg1)";
+    Text[ chinese_traditional ] = "There is no Cancel button at ($Arg1)";
+    Text[ arabic ] = "There is no Cancel button at ($Arg1)";
+    Text[ turkish ] = "There is no Cancel button at ($Arg1)";
+};
+String S_NO_YES_BUTTON
+{
+    Text = "Kein Ja Button Vorhanden bei ($Arg1)";
+    Text[ english_us ] = "There is no Yes button at ($Arg1)";
+    Text[ portuguese ] = "Botão Sim inexistente em ($Arg1)";
+    Text[ russian ] = "There is no Yes button at ($Arg1)";
+    Text[ greek ] = "There is no Yes button at ($Arg1)";
+    Text[ dutch ] = "Geen Ja-button beschikbaar bij  ($Arg1)";
+    Text[ french ] = "Absence de bouton Oui pour ($Arg1)";
+    Text[ spanish ] = "No existe botón Sí para ($Arg1)";
+    Text[ italian ] = "There is no Yes button at ($Arg1)";
+    Text[ danish ] = "There is no Yes button at ($Arg1)";
+    Text[ swedish ] = "There is no Yes button at ($Arg1)";
+    Text[ polish ] = "There is no Yes button at ($Arg1)";
+    Text[ portuguese_brazilian ] = "dummytext";
+    Text[ japanese ] = "There is no Yes button at ($Arg1)";
+    Text[ korean ] = "($Arg1)¿¡ \"¿¹\" ¹öÆ°ÀÌ ¾ø½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "There is no Yes button at ($Arg1)";
+    Text[ chinese_traditional ] = "There is no Yes button at ($Arg1)";
+    Text[ arabic ] = "There is no Yes button at ($Arg1)";
+    Text[ turkish ] = "There is no Yes button at ($Arg1)";
+};
+String S_NO_NO_BUTTON
+{
+    Text = "Kein Nein Button Vorhanden bei ($Arg1)";
+    Text[ english_us ] = "There is no No button at ($Arg1)";
+    Text[ portuguese ] = "Botão Não inexistente em ($Arg1)";
+    Text[ russian ] = "There is no No button at ($Arg1)";
+    Text[ greek ] = "There is no No button at ($Arg1)";
+    Text[ dutch ] = "Geen Nee-button beschikbaar bij ($Arg1)";
+    Text[ french ] = "Absence de bouton Non pour ($Arg1)";
+    Text[ spanish ] = "No existe boton No para ($Arg1)";
+    Text[ italian ] = "There is no No button at ($Arg1)";
+    Text[ danish ] = "There is no No button at ($Arg1)";
+    Text[ swedish ] = "There is no No button at ($Arg1)";
+    Text[ polish ] = "There is no No button at ($Arg1)";
+    Text[ portuguese_brazilian ] = "dummytext";
+    Text[ japanese ] = "There is no No button at ($Arg1)";
+    Text[ korean ] = "($Arg1)¿¡ \"¾Æ´Ï¿À\" ¹öÆ°ÀÌ ¾ø½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "There is no No button at ($Arg1)";
+    Text[ chinese_traditional ] = "There is no No button at ($Arg1)";
+    Text[ arabic ] = "There is no No button at ($Arg1)";
+    Text[ turkish ] = "There is no No button at ($Arg1)";
+};
+String S_NO_RETRY_BUTTON
+{
+    Text = "Kein Wiederholen Button Vorhanden bei ($Arg1)";
+    Text[ english_us ] = "There is no Repeat button at ($Arg1)";
+    Text[ portuguese ] = "Botão Repetir inexistente em ($Arg1)";
+    Text[ russian ] = "There is no Repeat button at ($Arg1)";
+    Text[ greek ] = "There is no Repeat button at ($Arg1)";
+    Text[ dutch ] = "Geen Herhalen-button beschikbaar bij ($Arg1)";
+    Text[ french ] = "Absence de bouton Réessayer pour ($Arg1)";
+    Text[ spanish ] = "No existe botón Repetir para ($Arg1)";
+    Text[ italian ] = "There is no Repeat button at ($Arg1)";
+    Text[ danish ] = "There is no Repeat button at ($Arg1)";
+    Text[ swedish ] = "There is no Repeat button at ($Arg1)";
+    Text[ polish ] = "There is no Repeat button at ($Arg1)";
+    Text[ portuguese_brazilian ] = "dummytext";
+    Text[ japanese ] = "There is no Repeat button at ($Arg1)";
+    Text[ korean ] = "($Arg1)¿¡ ¹Ýº¹ ¹öÆ°ÀÌ ¾ø½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "There is no Repeat button at ($Arg1)";
+    Text[ chinese_traditional ] = "There is no Repeat button at ($Arg1)";
+    Text[ arabic ] = "There is no Repeat button at ($Arg1)";
+    Text[ turkish ] = "There is no Repeat button at ($Arg1)";
+};
+String S_NO_HELP_BUTTON
+{
+    Text = "Kein Hilfe Button Vorhanden bei ($Arg1)";
+    Text[ english_us ] = "There is no Help button at ($Arg1)";
+    Text[ portuguese ] = "Botão Ajuda inexistente em ($Arg1)";
+    Text[ russian ] = "There is no Help button at ($Arg1)";
+    Text[ greek ] = "There is no Help button at ($Arg1)";
+    Text[ dutch ] = "Geen Help-button beschikbaar bij ($Arg1)";
+    Text[ french ] = "Absence de bouton Aide pour ($Arg1)";
+    Text[ spanish ] = "No existe botón Ayuda para ($Arg1)";
+    Text[ italian ] = "There is no Help button at ($Arg1)";
+    Text[ danish ] = "There is no Help button at ($Arg1)";
+    Text[ swedish ] = "There is no Help button at ($Arg1)";
+    Text[ polish ] = "There is no Help button at ($Arg1)";
+    Text[ portuguese_brazilian ] = "dummytext";
+    Text[ japanese ] = "There is no Help button at ($Arg1)";
+    Text[ korean ] = "($Arg1)¿¡ µµ¿ò¸» ¹öÆ°ÀÌ ¾ø½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "There is no Help button at ($Arg1)";
+    Text[ chinese_traditional ] = "There is no Help button at ($Arg1)";
+    Text[ arabic ] = "There is no Help button at ($Arg1)";
+    Text[ turkish ] = "There is no Help button at ($Arg1)";
+};
+String S_NO_DEFAULT_BUTTON
+{
+    Text = "Kein Default Button Definiert bei ($Arg1)";
+    Text[ english_us ] = "There is no Default button defined at ($Arg1)";
+    Text[ portuguese ] = "Botão Padrão inexistente em ($Arg1)";
+    Text[ russian ] = "There is no Default button defined at ($Arg1)";
+    Text[ greek ] = "There is no Default button defined at ($Arg1)";
+    Text[ dutch ] = "Geen Default-button beschikbaar bij ($Arg1)";
+    Text[ french ] = "Absence de bouton Par défaut pour ($Arg1)";
+    Text[ spanish ] = "No hay definido un botón Default para ($Arg1)";
+    Text[ italian ] = "There is no Default button defined at ($Arg1)";
+    Text[ danish ] = "There is no Default button defined at ($Arg1)";
+    Text[ swedish ] = "There is no Default button defined at ($Arg1)";
+    Text[ polish ] = "There is no Default button defined at ($Arg1)";
+    Text[ portuguese_brazilian ] = "dummytext";
+    Text[ japanese ] = "There is no Default button defined at ($Arg1)";
+    Text[ korean ] = "($Arg1)¿¡ Á¤ÀÇµÈ ±âº» ¹öÆ°ÀÌ ¾ø½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "There is no Default button defined at ($Arg1)";
+    Text[ chinese_traditional ] = "There is no Default button defined at ($Arg1)";
+    Text[ arabic ] = "There is no Default button defined at ($Arg1)";
+    Text[ turkish ] = "There is no Default button defined at ($Arg1)";
+};
+String S_BUTTON_ID_NOT_THERE
+{
+    Text = "Kein Button mit der ID ($Arg1) Vorhanden bei ($Arg2)";
+    Text[ english_us ] = "There is no button with a ($Arg1) ID at ($Arg2)";
+    Text[ portuguese ] = "Botão com ID ($Arg1) inexistente em ($Arg2)";
+    Text[ russian ] = "There is no button with a ($Arg1) ID at ($Arg2)";
+    Text[ greek ] = "There is no button with a ($Arg1) ID at ($Arg2)";
+    Text[ dutch ] = "Geen button met ID ($Arg1) beschikbaar bij ($Arg2)";
+    Text[ french ] = "Absence bouton portant l'ID ($Arg1) pour ($Arg2) ";
+    Text[ spanish ] = "No existe un botón con la ID ($Arg1) para ($Arg2)";
+    Text[ italian ] = "There is no button with a ($Arg1) ID at ($Arg2)";
+    Text[ danish ] = "There is no button with a ($Arg1) ID at ($Arg2)";
+    Text[ swedish ] = "There is no button with a ($Arg1) ID at ($Arg2)";
+    Text[ polish ] = "There is no button with a ($Arg1) ID at ($Arg2)";
+    Text[ portuguese_brazilian ] = "dummytext";
+    Text[ japanese ] = "There is no button with a ($Arg1) ID at ($Arg2)";
+    Text[ korean ] = "($Arg2)¿¡ ID ($Arg1)¸¦ °¡Áø ¹öÆ°ÀÌ ¾øÀ½";
+    Text[ chinese_simplified ] = "There is no button with a ($Arg1) ID at ($Arg2)";
+    Text[ chinese_traditional ] = "There is no button with a ($Arg1) ID at ($Arg2)";
+    Text[ arabic ] = "There is no button with a ($Arg1) ID at ($Arg2)";
+    Text[ turkish ] = "There is no button with a ($Arg1) ID at ($Arg2)";
+};
+String S_BUTTONID_REQUIRED
+{
+    Text = "Es muss eine ButtonId angegeben werden bei ($Arg1)";
+    Text[ english_us ] = "A button ID needs to be entered at ($Arg1)";
+    Text[ portuguese ] = "Necessário indicar ButtonId em ($Arg1)";
+    Text[ russian ] = "A button ID needs to be entered at ($Arg1)";
+    Text[ greek ] = "A button ID needs to be entered at ($Arg1)";
+    Text[ dutch ] = "Er moet een buttonID worden vermeld bij ($Arg1)";
+    Text[ french ] = "Il manque un ButtonID pour ($Arg1) ";
+    Text[ spanish ] = "Debe indicarse un ButtonId para ($Arg1)";
+    Text[ italian ] = "A button ID needs to be specified at ($Arg1)";
+    Text[ danish ] = "A button ID needs to be entered at ($Arg1)";
+    Text[ swedish ] = "A button ID needs to be entered at ($Arg1)";
+    Text[ polish ] = "A button ID needs to be entered at ($Arg1)";
+    Text[ portuguese_brazilian ] = "dummytext";
+    Text[ japanese ] = "A button ID needs to be entered at ($Arg1)";
+    Text[ korean ] = "($Arg1)¿¡¼­ ÀÔ·ÂµÉ ¹öÆ° ID";
+    Text[ chinese_simplified ] = "A button ID needs to be entered at ($Arg1)";
+    Text[ chinese_traditional ] = "A button ID needs to be entered at ($Arg1)";
+    Text[ arabic ] = "A button ID needs to be entered at ($Arg1)";
+    Text[ turkish ] = "A button ID needs to be entered at ($Arg1)";
+};
+String S_UNKNOWN_TYPE
+{
+    Text = "Unbekannter Objekttyp ($Arg1) aus UId";
+    Text[ english_us ] = "Unknown object type ($Arg1) from UId";
+    Text[ portuguese ] = "Tipo de objecto ($Arg1) desconhecido deste UId";
+    Text[ russian ] = "Unknown object type ($Arg1) from UId";
+    Text[ greek ] = "Unknown object type ($Arg1) from UId";
+    Text[ dutch ] = "Onbekend objecttype ($Arg1) uit UId";
+    Text[ french ] = "Type d'objet ($Arg1) inconnu pour cet UId";
+    Text[ spanish ] = "Tipo de objeto ($Arg1) desconocido por su UId";
+    Text[ italian ] = "Unknown object type ($Arg1) from UId";
+    Text[ danish ] = "Unknown object type ($Arg1) from UId";
+    Text[ swedish ] = "Unknown object type ($Arg1) from UId";
+    Text[ polish ] = "Unknown object type ($Arg1) from UId";
+    Text[ portuguese_brazilian ] = "dummytext";
+    Text[ japanese ] = "Unknown object type ($Arg1) from UId";
+    Text[ korean ] = "UId·ÎºÎÅÍ  ¾Ë¼ö¾ø´Â°³Ã¼ Å¸ÀÔ ($Arg1) ";
+    Text[ chinese_simplified ] = "Unknown object type ($Arg1) from UId";
+    Text[ chinese_traditional ] = "Unknown object type ($Arg1) from UId";
+    Text[ arabic ] = "Unknown object type ($Arg1) from UId";
+    Text[ turkish ] = "Unknown object type ($Arg1) from UId";
+};

@@ -1,0 +1,347 @@
+#*************************************************************************
+#
+#   $RCSfile: verinfo.rc,v $
+#
+#   $Revision: 1.1.1.1 $
+#
+#   last change: $Author: hr $ $Date: 2000-09-18 16:15:12 $
+#
+#   The Contents of this file are made available subject to the terms of
+#   either of the following licenses
+#
+#          - GNU Lesser General Public License Version 2.1
+#          - Sun Industry Standards Source License Version 1.1
+#
+#   Sun Microsystems Inc., October, 2000
+#
+#   GNU Lesser General Public License Version 2.1
+#   =============================================
+#   Copyright 2000 by Sun Microsystems, Inc.
+#   901 San Antonio Road, Palo Alto, CA 94303, USA
+#
+#   This library is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU Lesser General Public
+#   License version 2.1, as published by the Free Software Foundation.
+#
+#   This library is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#   Lesser General Public License for more details.
+#
+#   You should have received a copy of the GNU Lesser General Public
+#   License along with this library; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+#   MA  02111-1307  USA
+#
+#
+#   Sun Industry Standards Source License Version 1.1
+#   =================================================
+#   The contents of this file are subject to the Sun Industry Standards
+#   Source License Version 1.1 (the "License"); You may not use this file
+#   except in compliance with the License. You may obtain a copy of the
+#   License at http://www.openoffice.org/license.html.
+#
+#   Software provided under this License is provided on an "AS IS" basis,
+#   WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+#   WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+#   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+#   See the License for the specific provisions governing your rights and
+#   obligations concerning the Software.
+#
+#   The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+#
+#   Copyright: 2000 by Sun Microsystems, Inc.
+#
+#   All Rights Reserved.
+#
+#   Contributor(s): _______________________________________
+#
+#
+#
+#*************************************************************************
+
+#define VERSION			5
+#define SUBVERSION		20
+#define VERVARIANT		0
+// .0 + VER_CONCEPT
+// .100 + VER_ALPHA
+// .200 + VER_BETA
+// .300 + VER_GAMMA
+// .500 + VER_FINAL
+//#define VER_CONCEPT		0
+//#define VER_BETA		6
+#define VER_FINAL		0
+
+#define VER_DAY			9
+#define VER_MONTH		5
+#define VER_YEAR		2000
+
+// -----------------------------------------------------------------------
+
+#if !defined(ENGLISH)
+#define LG_D 					// generate always german version
+#endif
+
+#define VER_FIRSTYEAR	89
+
+#include <windows.h>
+#include "verinfo.hrc"
+
+#ifdef WIN32
+#define FOR_WIN_X " (32 Bit)"
+#else
+#define FOR_WIN_X ""
+#endif
+
+// -----------------------------------------------------------------------
+// 				language/character set specification table
+// -----------------------------------------------------------------------
+
+RCD_LANGUAGE rcdata
+{
+#ifdef LG_D
+	"040704B0", 	// Germany -> Unicode
+	"040704E4", 	// Germany -> Windows, Multilingual
+#else
+	"040904B0", 	// Germany -> Unicode
+	"040904E4", 	// USA -> Windows, Multilingual
+#endif
+	"04090000", 	// USA -> 7-Bit-ASCII
+	0				// end of table
+}
+
+// -----------------------------------------------------------------------
+// 				version information
+// -----------------------------------------------------------------------
+
+VS_VERSION_INFO versioninfo
+	fileversion    VERSION, SUBVERSION, VERVARIANT, VER_COUNT
+	productversion VERSION, SUBVERSION, VERVARIANT, VER_COUNT
+	fileflagsmask 0x3F
+	fileflags
+#if defined(DEBUG)
+	VS_FF_DEBUG |
+#endif
+#ifdef VER_PREL
+	VS_FF_PRERELEASE |
+#endif
+	0
+#ifndef WIN32
+	fileos VOS_DOS_WINDOWS16
+#else
+	fileos VOS_NT_WINDOWS32
+#endif
+	filetype VFT_APP
+	{
+		block "StringFileInfo"
+		{
+#ifdef LG_D
+			block "040704E4"
+			{
+				// German StringTable
+				value "CompanyName",		"Sun Microsystems, Inc.\0"
+				value "ProductName",		"StarOffice für Windows" FOR_WIN_X "\0"
+				value "FileDescription",	"StarOffice " S_VERSION "\0"
+				value "FileVersion",		PPS(VER_LEVEL) "\0"
+				value "ProductVersion",		PPS(VER_LEVEL) "\0"
+				value "OriginalFilename",	"SOFFICE.EXE\0"
+				value "InternalName",		"SOFFICE\0"
+				value "LegalCopyright",		S_CRIGHT " Sun Microsystems, Inc.\0"
+				value "LegalTrademarks",
+					"International Electronic Thesaurus Copyright 1992 "
+					"und International CorrectSpell Copyright 1991, "
+					"beide von Lernout & Hauspie Speech Products N.V. "
+					"Alle Rechte vorbehalten. "
+					"International CorrectSpell ist ein Warenzeichen von "
+					"Lernout & Hauspie Speech Products N.V."
+					"Oterro ist ein Warenzeichen von R:BASE Technologies, Inc. "
+					"Word for Word (R) Copyright (C) 1996 Inso Corporation. "
+					"Alle Rechte vorbehalten.\0"
+			}
+#else
+			block "040904E4"
+			{
+				// International StringTable
+				value "CompanyName", 		"Sun Microsystems, Inc.\0"
+				value "ProductName", 		"StarOffice for Windows" FOR_WIN_X "\0"
+				value "FileDescription",	"StarOffice " S_VERSION "\0"
+				value "FileVersion",		PPS(VER_LEVEL) "\0"
+				value "ProductVersion",		PPS(VER_LEVEL) "\0"
+				value "OriginalFilename",	"SOFFICE.EXE\0"
+				value "InternalName", 		"SOFFICE\0"
+				value "LegalCopyright", 	S_CRIGHT " Sun Microsystems, Inc.\0"
+				value "LegalTrademarks",
+					"International Electronic Thesaurus Copyright 1992 "
+					"and International CorrectSpell Copyright 1991, "
+					"both by Lernout & Hauspie Speech Products N.V. "
+					"All rights reserved. "
+					"International CorrectSpell is a trademark of "
+					"Lernout & Hauspie Speech Products N.V. "
+					"Oterro is a trademark of R:BASE Technologies, Inc. "
+					"Word for Word (R) Copyright (C) 1996 Inso Corporation. "
+					"All rights reserved.\0"
+			}
+#endif
+		}
+
+		block "VarFileInfo"
+		{
+#ifdef LG_D
+			value "Translation", 0x0407, 1252
+#else
+			value "Translation", 0x0409, 1252
+#endif
+		}
+	}
+
+// version binary entry
+VS_VERSION_INFO rcdata
+{
+	0xF0, "sw", 0x0F, VER_YEAR, VER_MONTH, VER_DAY,
+	VERSION, SUBVERSION, VERVARIANT, VER_COUNT
+};
+
+
+2 ICON "..\\res\\Writer.ico"
+//2 ICON "..\\res\\doc_sw.ico"
+3 ICON "..\\res\\Calc.ico"
+//3 ICON "..\\res\\doc_sc.ico"
+4 ICON "..\\res\\Impress.ico"
+//4 ICON "..\\res\\doc_sdd.ico"
+5 ICON "..\\res\\Draw.ico"
+//5 ICON "..\\res\\doc_sda.ico"
+6 ICON "..\\res\\Chart.ico"
+//6 ICON "..\\res\\doc_sch.ico"
+7 ICON "..\\res\\Math.ico"
+//7 ICON "..\\res\\doc_sm.ico"
+8 ICON "..\\res\\doc_ww.ico"
+9 ICON "..\\res\\Global.ico"
+//9 ICON "..\\res\\doc_gl.ico"
+10 ICON "..\\res\\storage.ico"
+11 ICON "..\\res\\doc_ww.ico"
+12 ICON "..\\res\\frameset.ico"
+13 ICON "..\\res\\prg_sweb.ico"
+14 ICON "..\\res\\Bild.ico"
+//14 ICON "..\\res\\doc_sim.ico"
+15 ICON "..\\res\\Html_doku.ico"
+//15 ICON "..\\res\\doc_web.ico"
+16 ICON "..\\res\\massage2.ico"
+//16 ICON "..\\res\\mailnews.ico"
+17 ICON "..\\res\\ftp.ico"
+18 ICON "..\\res\\Schedule_task_folder.ico"
+//18 ICON "..\\res\\sc_todo.ico"
+19 ICON "..\\res\\schedule_appointment_folder.ico"
+//19 ICON "..\\res\\sc_time.ico"
+// HRO: All icons added
+20 ICON "..\\res\\doc_sd.ico"
+21 ICON "..\\res\\message_NONRECOV_LOC_ERROR.ico"
+22 ICON "..\\res\\message_OUT_CONFIRMED.ico"
+23 ICON "..\\res\\message_OUT_WRITTEN.ico"
+24 ICON "..\\res\\news.ico"
+25 ICON "..\\res\\news_aboniert.ico"
+26 ICON "..\\res\\news_FOLDER_SOMEREADNEWS_NO_BODY.ico"
+27 ICON "..\\res\\news_gelesen.ico"
+28 ICON "..\\res\\news_gelesen_thread_killed.ico"
+29 ICON "..\\res\\folder_app.ico"
+30 ICON "..\\res\\Frameset_vor.ico"
+31 ICON "..\\res\\Gallery.ico"
+32 ICON "..\\res\\Gallery_cd.ico"
+33 ICON "..\\res\\Gallery_neues_thema.ico"
+34 ICON "..\\res\\Gallery_schreibgeschuetz.ico"
+35 ICON "..\\res\\datenbank_abfragen.ico"
+36 ICON "..\\res\\datenbank_abfragen_111.ico"
+37 ICON "..\\res\\datenbank_abfragen_folder.ico"
+38 ICON "..\\res\\datenbank_abfragen2.ico"
+39 ICON "..\\res\\datenbank_berichte.ico"
+40 ICON "..\\res\\datenbank_berichte2.ico"
+41 ICON "..\\res\\Datenbank_Formular.ico"
+42 ICON "..\\res\\Datenbank_Formular2.ico"
+43 ICON "..\\res\\box_project.ico"
+44 ICON "..\\res\\Calc_vor.ico"
+45 ICON "..\\res\\Chart_vor.ico"
+46 ICON "..\\res\\checkmark.ico"
+47 ICON "..\\res\\checkmark2.ico"
+48 ICON "..\\res\\datenbank.ico"
+49 ICON "..\\res\\app.ico"
+50 ICON "..\\res\\app_run.ico"
+51 ICON "..\\res\\Arbeitsplatz.ico"
+52 ICON "..\\res\\bookmark_SUBSCR_DEFAULT.ico"
+53 ICON "..\\res\\bookmark_SUBSCR_ERROR.ico"
+54 ICON "..\\res\\bookmark_SUBSCR_IN_PROGRESS.ico"
+55 ICON "..\\res\\news_marked_killed_read.ico"
+56 ICON "..\\res\\news_marked_killed_unread.ico"
+57 ICON "..\\res\\news_marked_read.ico"
+58 ICON "..\\res\\news_marked_unread.ico"
+59 ICON "..\\res\\news_NEWS_NO_BODY.ico"
+60 ICON "..\\res\\news_NEWS_NO_BODY_READ.ico"
+61 ICON "..\\res\\news_service.ico"
+62 ICON "..\\res\\news_SOMEREADNEWS.ico"
+63 ICON "..\\res\\mails_POP3_NO_BODY_READ.ico"
+64 ICON "..\\res\\mailserver.ico"
+65 ICON "..\\res\\massage1.ico"
+66 ICON "..\\res\\Math_vor.ico"
+67 ICON "..\\res\\message_EXT_ERROR.ico"
+68 ICON "..\\res\\message_nonrec_loc_err2.ico"
+69 ICON "..\\res\\mail3.ico"
+70 ICON "..\\res\\mails_DOC_POP3_SOMEREAD_NO_BODY.ico"
+71 ICON "..\\res\\mails_high_read.ico"
+72 ICON "..\\res\\mails_high_unread.ico"
+73 ICON "..\\res\\mails_low_read.ico"
+74 ICON "..\\res\\mails_low_unread.ico"
+75 ICON "..\\res\\mails_normal_read.ico"
+76 ICON "..\\res\\mails_normal_unread.ico"
+77 ICON "..\\res\\startmenue_user_2.ico"
+78 ICON "..\\res\\startmenue_user_3.ico"
+79 ICON "..\\res\\startmenue_user_4.ico"
+80 ICON "..\\res\\startmenue_user_5.ico"
+81 ICON "..\\res\\startmenue_user_7.ico"
+82 ICON "..\\res\\startmenue_user_8.ico"
+83 ICON "..\\res\\startmenue_user_9.ico"
+84 ICON "..\\res\\table_folder.ico"
+85 ICON "..\\res\\datenbank_relation.ico"
+86 ICON "..\\res\\datenbank_tabellen.ico"
+87 ICON "..\\res\\datenbank_tabellen_folder.ico"
+88 ICON "..\\res\\datenbank_tabellen_pfeil.ico"
+89 ICON "..\\res\\desktop.ico"
+90 ICON "..\\res\\desktop_aktive.ico"
+91 ICON "..\\res\\Draw_vor.ico"
+92 ICON "..\\res\\SCHEDULE_SERVERS.ico"
+93 ICON "..\\res\\Schedule_task.ico"
+94 ICON "..\\res\\soplayer_impress_doc.ico"
+95 ICON "..\\res\\startmenue_user_1.ico"
+96 ICON "..\\res\\startmenue_user_10.ico"
+97 ICON "..\\res\\startmenue_user_11.ico"
+98 ICON "..\\res\\startmenue_user_12.ico"
+99 ICON "..\\res\\news_ungelesen.ico"
+100 ICON "..\\res\\news_ungelesen_thread_killed.ico"
+101 ICON "..\\res\\newsgroup.ico"
+102 ICON "..\\res\\player2.ico"
+103 ICON "..\\res\\schedule.ico"
+104 ICON "..\\res\\Schedule_appointment.ico"
+105 ICON "..\\res\\schedule_server.ico"
+106 ICON "..\\res\\Writer_vor.ico"
+107 ICON "..\\res\\trash.ico"
+108 ICON "..\\res\\trash_full.ico"
+109 ICON "..\\res\\url.ico"
+110 ICON "..\\res\\VIM.ico"
+111 ICON "..\\res\\VIM_BBOARD.ico"
+112 ICON "..\\res\\VIM_INBOX.ico"
+113 ICON "..\\res\\Vorlage.ico"
+114 ICON "..\\res\\welten.ico"
+115 ICON "..\\res\\prg_sw10.ico"
+116 ICON "..\\res\\leeres_dokument.ico"
+117 ICON "..\\res\\macrolib.ico"
+118 ICON "..\\res\\mail_inbox.ico"
+119 ICON "..\\res\\mail_out_high.ico"
+120 ICON "..\\res\\mail_out_low.ico"
+121 ICON "..\\res\\mail_out_normal.ico"
+122 ICON "..\\res\\mail_outbox_full.ico"
+123 ICON "..\\res\\MAIL_SENTBOX.ico"
+124 ICON "..\\res\\help.ico"
+125 ICON "..\\res\\Html_doku_vor.ico"
+126 ICON "..\\res\\imap.ico"
+127 ICON "..\\res\\impress_compressed.ico"
+128 ICON "..\\res\\Impress_vor.ico"
+
+
+

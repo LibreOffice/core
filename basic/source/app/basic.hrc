@@ -1,0 +1,218 @@
+/*************************************************************************
+ *
+ *  $RCSfile: basic.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:12:08 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#define RID_OPTLIST 101
+#define RID_OPTLINES 102
+#define RID_OPTPACKS 103
+#define RID_OPTPACKD 104
+#define RID_OPTWARN1 105
+#define RID_OPTWARN2 106
+#define RID_OPTVIRT 107
+#define RID_PARAMS  108
+#define RID_RETTYPE 109
+#define RID_RETVAL 110
+//#define RID_APPICON 500
+//#define RID_APPICON2 501
+//#define RID_WORKICON 502
+//#define RID_LOADICON 503
+//#define RID_SAVEICON 504
+#define RID_APPMENUBAR 1000
+#define RID_APPFILE 1001
+#define RID_APPEDIT 1002
+#define RID_APPRUN 1003
+#define RID_APPWINDOW 1004
+#define RID_APPHELP 1005
+#define RID_FILE 1100
+#define RID_FILENEW 1101
+#define RID_FILEOPEN 1102
+#define RID_FILECLOSE 1103
+#define RID_FILESAVE 1104
+#define RID_FILESAVEAS 1105
+#define RID_FILELOADLIB 1106
+#define RID_FILESAVELIB 1107
+#define RID_FILEPRINT 1109
+#define RID_FILESETUP 1110
+#define RID_QUIT 1111
+#define IDM_FILE_LRU1 1112
+#define IDM_FILE_LRU2 (IDM_FILE_LRU1 + 1)
+#define IDM_FILE_LRU3 (IDM_FILE_LRU2 + 1)
+#define IDM_FILE_LRU4 (IDM_FILE_LRU3 + 1)
+#define RID_EDIT 1200
+#define RID_EDITUNDO 1201
+#define RID_EDITREDO 1202
+#define RID_EDITCUT 1203
+#define RID_EDITCOPY 1204
+#define RID_EDITPASTE 1205
+#define RID_EDITDEL 1206
+#define RID_EDITSEARCH 1207
+#define RID_EDITREPLACE 1208
+#define RID_EDITREPEAT 1209
+#define RID_RUN 1300
+#define RID_RUNCOMPILE 1301
+#define RID_RUNSTART 1302
+#define RID_RUNBREAK 1304
+#define RID_RUNSTOP 1303
+#define RID_RUNNEXTERR 1307
+#define RID_RUNPREVERR 1308
+#define RID_RUNDISAS 1310
+#define RID_RUNSTEPINTO 1311
+#define RID_RUNSTEPOVER 1312
+#define RID_RUNTOCURSOR 1313
+#define RID_TOGLEBRKPNT 1314
+#define RID_TT_EXTRAS_NAME 1400
+#define RID_TT_EXTRAS 1401
+#define RID_OPTIONS 1402
+#define RID_DECLARE_HELPER 1403
+#define RID_WINDOW 1501
+#define RID_WINTILE 1502
+#define RID_WINTILEHORZ 1503
+#define RID_WINTILEVERT 1504
+#define RID_WINCASCADE 1505
+#define RID_WIN_FILE1 1520
+#define RID_WIN_FILEn 1599
+
+#define RID_HELP 1601
+//#define RID_HELPINDEX 1602
+//#define RID_HELPKEYS 1603
+//#define RID_HELPINTRO 1604
+//#define RID_HELPTOPIC 1605
+#define RID_HELPABOUT 1606
+#define RID_POPUP 1700
+#define RID_POPUPEDITVAR 1701
+
+
+
+#define IDS_APPNAME 2000
+#define IDS_APPNAME2 2001
+#define IDS_APPMODE_BREAK 2002
+#define IDS_APPMODE_RUN 2003
+#define IDS_NONAME 2100
+#define IDS_NONAMEFILE 2101
+#define IDS_INCFILE 2102
+#define IDS_LIBFILE 2103
+#define IDS_RESFILE 2104
+#define IDS_TXTFILE 2105
+#define IDS_READERROR 2103
+#define IDS_WRITEERROR 2104
+#define IDS_COMPERROR 2105
+#define IDS_CONTINUE 2106
+#define IDS_CANCEL 2107
+#define IDS_NOPRINTERERROR 2108
+#define IDS_PATTERNNOTFOUND 2109
+#define IDS_INVALID_VALUE 2110
+#define IDS_ASK_DIRTY_SAVE                  2200
+#define IDS_ASK_DISKCHANGE_SAVE             2201
+#define IDS_ASK_DIRTY_AND_DISKCHANGE_SAVE   2202
+#define IDS_ASKSAVEERROR                    2203
+#define IDS_ASKRELOAD                       2204
+#define IDS_ASKDIRTYRELOAD                  2205
+#define IDS_LOADDLG 2300
+#define IDS_SAVEDLG 2301
+#define IDS_BASFILTER 2304
+#define IDS_LIBFILTER 2305
+#define IDS_INCFILTER 2306
+#define IDS_RESFILTER 2307
+#define IDS_TXTFILTER 2308
+#define IDS_PAGE 2401
+#define IDS_PRINTMSG 2402
+#define IDS_CANTLOAD 2501
+#define IDS_CANTSAVE 2502
+#define IDS_ERROR1 2601
+#define IDS_ERROR2 2602
+#define IDS_WARNING1 2603
+#define IDS_NO_LONGNAME 2604
+#define IDS_WARNING_PREFIX 2605
+#define IDS_OBJECT 2606
+#define IDS_EDIT_VAR 2607
+
+#define IDS_NOMAINPGM 2701
+#define IDS_DISASWIN 2702
+#define IDS_RUNNING 2703
+#define IDS_NOT_YET_IMPLEMENTED 2704
+#define IDS_LOSS_OF_INFORMATION 2705
+
+#define RID_ACCEL 3000
+
+#define IDD_LOADSAVE_DIALOG 4001
+#define IDD_ABOUT_DIALOG 4002
+#define IDD_TT_ABOUT_DIALOG 4003
+#define IDD_FIND_DIALOG 4004
+#define IDD_REPLACE_DIALOG 4005
+#define IDD_PRINT_DIALOG 4006
+#define IDD_OPTIONS_DLG 4007
+#define RID_TP_SPECIAL 4008
+#define RID_TP_GENERIC 4009
+#define IDD_DISPLAY_HID 4010
+#define IDD_EDIT_VAR 4010
+
+
+//#define RID_APPFONT 5000
+//#define RID_APPEDITFONT 5001
+//#define   RID_DLGBRUSH 5002
+#define RID_CALLDLG 6001
+#define MBP_PLUS 8001
+#define MBP_MINUS 8002
+#define MBP_ASSERT 8003
+#define RID_IMGLST_LAYOUT 8004
+#define MAIN_ACCEL 9001
+
+#define LOAD_CONF 10001
+#define WORK 10002
+#define FILENAME 10003

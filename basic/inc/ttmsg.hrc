@@ -1,0 +1,147 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ttmsg.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:12:07 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include <svtools/ttglobal.hrc>
+
+
+// Hier sind die Messages aus dem Verzeichnis /basic/source/testtool enhalten
+
+
+///////////////////////////////
+// Fehlermeldungen, die in das Resultfile gelangen.
+// *********************
+// ***  !!ACHTUNG!!  ***
+// *********************
+// Die Nummern dürfen sich NIE! ändern,
+// da sie in den Resultfiles gespeichert sind, und bei erneutem Anzeigen
+// statdessen die entsprechenden neuen oder garkeine Strings angzeigt werden.
+///////////////////////////////
+
+#define S_NAME_NOT_THERE                    ( TT_START +   0 )
+#define S_DOUBLE_NAME                       ( TT_START +   1 )
+#define S_READING_FILE                      ( TT_START +   2 )
+#define S_CANNOT_OPEN_FILE                  ( TT_START +   3 )
+#define S_INVALID_LINE                      ( TT_START +   4 )
+#define S_SHORTNAME_UNKNOWN                 ( TT_START +   5 )
+#define S_LONGNAME_UNKNOWN                  ( TT_START +   6 )
+#define S_FIRST_SHORTNAME_REQ_ASTRX         ( TT_START +   7 )
+#define S_TIMOUT_WAITING                    ( TT_START +   8 )
+#define S_APPLICATION_RESTARTED             ( TT_START +   9 )
+#define S_APPLICATION_START_FAILED          ( TT_START +  10 )
+#define S_TIMOUT_SENDING                    ( TT_START +  11 )
+#define S_NO_CONNECTION                     ( TT_START +  12 )
+#define S_NO_FILES_FOUND                    ( TT_START +  13 )
+#define S_ERRORS_DETECTED                   ( TT_START +  14 )
+#define S_NO_ERRORS_DETECTED                ( TT_START +  15 )
+#define S_WARNINGS_DETECTED                 ( TT_START +  16 )
+#define S_NO_WARNINGS_DETECTED              ( TT_START +  17 )
+#define S_UNKNOWN_SLOT_CONTROL              ( TT_START +  18 )
+#define S_RETURN_SEQUENCE_MISSMATCH         ( TT_START +  19 )
+#define S_RETURNED_VALUE_ID_MISSMATCH       ( TT_START +  20 )
+#define S_RETURNED_VALUE_NO_RECEIVER        ( TT_START +  21 )
+#define S_UNKNOWN_METHOD                    ( TT_START +  22 )
+#define S_INCLUDE_FILE_WARNINGS_DETECTED    ( TT_START +  23 )
+#define S_NO_INCLUDE_FILE_WARNINGS_DETECTED ( TT_START +  24 )
+
+
+// Stings
+
+
+/*
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+#define S_              ( TT_START +   0 )
+*/

@@ -1,0 +1,10 @@
+..\%__SRC%\bin\soffice.exe %_DEST%\bin%_EXT%\soffice.exe
+..\%__SRC%\bin\wrp?????.dll %_DEST%\bin%_EXT%\wrp?????.dll
+
+..\%__SRC%\bin\soffice %_DEST%\bin%_EXT%\soffice.bin
+..\%__SRC%\bin\sweb %_DEST%\bin%_EXT%\sweb.bin
+..\%__SRC%\bin\javaldx %_DEST%\bin%_EXT%\javaldx
+dos: chmod 775 ..\script\soffice.sh
+dos: attrib -r ..\script\soffice.sh
+dos: any2all -u -f ../script/soffice.sh
+..\script\soffice.sh %_DEST%\bin%_EXT%\soffice
