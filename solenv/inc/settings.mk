@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.70 $
+#   $Revision: 1.71 $
 #
-#   last change: $Author: hjs $ $Date: 2001-09-24 11:22:04 $
+#   last change: $Author: hjs $ $Date: 2001-10-05 16:03:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1008,11 +1008,6 @@ CDEFS= -D$(OS) -D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -D$(CPUNAME)
 
 .IF "$(TIMELOG)" != ""
 CDEFS+=-DTIMELOG
-.ENDIF
-
-#to be removed soon!!!
-.IF "$(TF_CFGDATA)" != ""
-CDEFS+=-DTF_CFGDATA
 .ENDIF
 
 .IF "$(GUI)"=="UNX"
