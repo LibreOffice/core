@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:01:31 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:24:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,11 +284,12 @@ sal_Bool SfxObjectShell::APISaveAs_Impl
         if( !aFilterName.Len() )
         {
             sal_uInt16 nActFilt = 0;
-            for( const SfxFilter* pFilt = GetFactory().GetFilter( 0 );
-                 pFilt && ( !pFilt->CanExport()
+            const SfxFilter* pFilt = GetFactory().GetFilter( 0 );
+
+            while( pFilt && ( !pFilt->CanExport()
                   || !bSaveTo && !pFilt->CanImport() // SaveAs case
-                  || pFilt->IsInternal() );
-                  pFilt = GetFactory().GetFilter( ++nActFilt ) );
+                  || pFilt->IsInternal() ) )
+                  pFilt = GetFactory().GetFilter( ++nActFilt );
 
             DBG_ASSERT( pFilt, "No default filter!\n" );
 
