@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:03:06 $
+#   last change: $Author: pl $ $Date: 2001-06-28 13:17:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,15 +73,14 @@ TARGET=rc
 
 # --- Files --------------------------------------------------------
 
-CXXFILES=	rc.cxx		   \
-            resmgr.cxx
-
-SLOFILES=	$(SLO)$/rc.obj	\
-            $(SLO)$/resmgr.obj
+SLOFILES=	$(SLO)$/rc.obj		\
+            $(SLO)$/resmgr.obj	\
+            $(SLO)$/resary.obj
 
 .IF "$(UPDATER)"!=""
-OBJFILES=	$(OBJ)$/rc.obj	\
-            $(OBJ)$/resmgr.obj
+OBJFILES=	$(OBJ)$/rc.obj		\
+            $(OBJ)$/resmgr.obj	\
+            $(OBJ)$/resary.obj
 .ENDIF
 
 # --- Targets ------------------------------------------------------
