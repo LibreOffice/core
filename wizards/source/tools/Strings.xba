@@ -253,7 +253,6 @@ Dim Separator as String
 			&apos; Is the delivered Path already a URL
 			If Instr(1,UCase(BigString),&quot;FILE:///&quot;) = 0 Then
 				BigString = ReplaceString(BigString,&quot;/&quot;,Separator)
-				BigString = ReplaceString(BigString,&quot;|&quot;,&quot;:&quot;)
 				BigString = &quot;file:///&quot; &amp; BigString
 			End If
 		End If
