@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdetect.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 13:30:46 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 12:35:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,13 +233,16 @@ BOOL lcl_MayBeDBase( SvStream& rStream )
     if ( nHeaderLen < 32 || nSize < nHeaderLen )
         return FALSE;
 
-    // last byte of header must be 0d
+    // Last byte of header must be 0x0d, this is how it's specified.
+    // #i9581#,#i26407# but some applications don't follow the specification
+    // and pad the header with one byte 0x00 to reach an even boundary.
 
-    rStream.Seek( nHeaderLen - 1 );
-    BYTE nEndFlag;
-    rStream >> nEndFlag;
+    rStream.Seek( nHeaderLen - 2 );
+    BYTE nOneBefore, nEndFlag;
+    rStream >> nOneBefore >> nEndFlag;
 
-    return ( nEndFlag == 0x0d );
+    return ( nEndFlag == 0x0d ||
+            ((nHeaderLen % 2 == 0) && nOneBefore == 0x0d && nEndFlag == 0x00) );
 }
 
 BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
