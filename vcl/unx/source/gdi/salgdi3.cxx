@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:39:03 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:27:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1355,10 +1355,16 @@ void X11SalGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
 
         if( aX11GlyphPeer.GetGlyphSet( rFont ) )
             DrawServerAAFontString( rLayout );
-        else if( aX11GlyphPeer.ForcedAntialiasing( rFont ) )
+        else
+#ifdef MACOSX
+            /* Simply draw everything antialiased, even the UI */
+          DrawServerAAForcedString( rLayout );
+#else
+        if( aX11GlyphPeer.ForcedAntialiasing( rFont ) )
             DrawServerAAForcedString( rLayout );
         else
             DrawServerSimpleFontString( rLayout );
+#endif
     }
 #endif
 }
