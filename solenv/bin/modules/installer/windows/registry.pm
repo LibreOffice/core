@@ -2,9 +2,9 @@
 #
 #   $RCSfile: registry.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 18:20:10 $
+#   last change: $Author: hr $ $Date: 2004-09-08 14:57:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -196,8 +196,8 @@ sub get_registry_value
     if ( $registry->{'Value'} ) { $value = $registry->{'Value'}; }
 
     $value =~ s/\\\"/\"/g;  # no more masquerading of '"'
-    $value =~ s/\<progpath\>/\[\Q$installer::globals::officefolder\E\]/;
-    $value =~ s/\[\Q$installer::globals::officefolder\E\]\\/\[\Q$installer::globals::officefolder\E\]/; # removing "\" after "[OfficeFolder]"
+    $value =~ s/\<progpath\>/\[INSTALLLOCATION\]/;
+    $value =~ s/\[INSTALLLOCATION\]\\/\[INSTALLLOCATION\]/; # removing "\" after "[INSTALLLOCATION]"
 
     return $value;
 }

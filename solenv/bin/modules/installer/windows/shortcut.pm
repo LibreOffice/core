@@ -2,9 +2,9 @@
 #
 #   $RCSfile: shortcut.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 18:20:35 $
+#   last change: $Author: hr $ $Date: 2004-09-08 14:57:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,7 +118,7 @@ sub get_shortcut_directory
 
     $directory = $onedir->{'uniquename'};
 
-    if ($directory eq "") { $directory = $installer::globals::officefolder; }       # Shortcuts in the root directory
+    if ($directory eq "") { $directory = "INSTALLLOCATION"; }       # Shortcuts in the root directory
 
     return $directory;
 }
