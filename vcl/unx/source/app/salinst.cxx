@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:31:59 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 08:58:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,21 +151,16 @@ extern "C"
 {
     SalInstance* create_SalInstance()
     {
-        return new X11SalInstance();
+        X11SalInstance* pInstance = new X11SalInstance( new SalYieldMutex() );
+
+        // initialize SalData
+        SalData *pSalData = new SalData;
+        SetSalData( pSalData );
+        pSalData->pInstance_ = pInstance;
+        pSalData->Init();
+
+        return pInstance;
     }
-}
-
-X11SalInstance::X11SalInstance()
-{
-    mpSalYieldMutex     = new SalYieldMutex;
-    mpSalYieldMutex->acquire();
-    mbPrinterInit       = false;
-
-    // initialize SalData
-    SalData *pSalData = new SalData;
-    SetSalData( pSalData );
-    pSalData->pInstance_ = this;
-    pSalData->Init();
 }
 
 X11SalInstance::~X11SalInstance()
