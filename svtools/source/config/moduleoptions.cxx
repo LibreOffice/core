@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleoptions.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:07:55 $
+ *  last change: $Author: rt $ $Date: 2004-07-05 10:37:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,10 @@
 #include <com/sun/star/document/XTypeDetection.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_UTIL_XSTRINGSUBSTITUTION_HPP_
+#include <com/sun/star/util/XStringSubstitution.hpp>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  namespaces
 //_________________________________________________________________________________________________________________
@@ -189,6 +193,8 @@ struct FactoryInfo
         FactoryInfo()
         {
             free();
+            // @@@ should be supplied from outside!
+            xSMgr = ::utl::getProcessServiceFactory();
         }
 
         //---------------------------------------------------------------------------------------------------------
@@ -224,8 +230,19 @@ struct FactoryInfo
 
             if( bChangedTemplateFile == sal_True )
             {
-                lProperties[nRealyChanged].Name    = sNodeBase + PROPERTYNAME_TEMPLATEFILE;
-                lProperties[nRealyChanged].Value <<= sTemplateFile;
+                lProperties[nRealyChanged].Name = sNodeBase + PROPERTYNAME_TEMPLATEFILE;
+
+                if ( sTemplateFile.getLength() > 0 )
+                {
+                    lProperties[nRealyChanged].Value
+                        <<= getStringSubstitution()
+                            ->reSubstituteVariables( sTemplateFile );
+                }
+                else
+                {
+                    lProperties[nRealyChanged].Value <<= sTemplateFile;
+                }
+
                 ++nRealyChanged;
             }
             if( bChangedWindowAttributes == sal_True )
@@ -284,12 +301,26 @@ struct FactoryInfo
         void initInstalled        ( sal_Bool               bNewInstalled        ) { bInstalled        = bNewInstalled        ; }
         void initFactory          ( const ::rtl::OUString& sNewFactory          ) { sFactory          = sNewFactory          ; }
         void initShortName        ( const ::rtl::OUString& sNewShortName        ) { sShortName        = sNewShortName        ; }
-        void initTemplateFile     ( const ::rtl::OUString& sNewTemplateFile     ) { sTemplateFile     = sNewTemplateFile     ; }
         void initWindowAttributes ( const ::rtl::OUString& sNewWindowAttributes ) { sWindowAttributes = sNewWindowAttributes ; }
         void initEmptyDocumentURL ( const ::rtl::OUString& sNewEmptyDocumentURL ) { sEmptyDocumentURL = sNewEmptyDocumentURL ; }
         void initDefaultFilter    ( const ::rtl::OUString& sNewDefaultFilter    ) { sDefaultFilter    = sNewDefaultFilter    ; }
         void setDefaultFilterReadonly( const sal_Bool bVal){bDefaultFilterReadonly = bVal;}
         void initIcon             ( sal_Int32              nNewIcon             ) { nIcon             = nNewIcon             ; }
+
+        //---------------------------------------------------------------------------------------------------------
+        void initTemplateFile( const ::rtl::OUString& sNewTemplateFile )
+        {
+            if ( sNewTemplateFile.getLength() > 0 )
+            {
+                sTemplateFile
+                    = getStringSubstitution()
+                        ->substituteVariables( sNewTemplateFile, sal_False );
+            }
+            else
+            {
+                sTemplateFile = sNewTemplateFile;
+            }
+        }
 
         //---------------------------------------------------------------------------------------------------------
         void setInstalled( sal_Bool bNewInstalled )
@@ -360,6 +391,28 @@ struct FactoryInfo
         };
 
     private:
+        css::uno::Reference< css::util::XStringSubstitution > getStringSubstitution()
+        {
+            if ( !xSubstVars.is() )
+            {
+                xSubstVars
+                    = css::uno::Reference< css::util::XStringSubstitution >(
+                        xSMgr->createInstance(
+                            ::rtl::OUString(
+                                RTL_CONSTASCII_USTRINGPARAM(
+                                    "com.sun.star.util.PathSubstitution" ) ) ),
+                            css::uno::UNO_QUERY );
+                if ( !xSubstVars.is() )
+                    throw css::uno::RuntimeException(
+                        ::rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM(
+                                "Cannot instanciate service "
+                                "com.sun.star.util.PathSubstitution" ) ),
+                        css::uno::Reference< css::uno::XInterface >() );
+            }
+            return xSubstVars;
+        }
+
         sal_Bool            bInstalled                      ;
         ::rtl::OUString     sFactory                        ;
         ::rtl::OUString     sShortName                      ;
@@ -375,6 +428,9 @@ struct FactoryInfo
         sal_Bool            bChangedDefaultFilter       :1  ;
         sal_Bool            bChangedIcon                :1  ;
         sal_Bool            bDefaultFilterReadonly      :1  ;
+
+        css::uno::Reference< css::lang::XMultiServiceFactory > xSMgr;
+        css::uno::Reference< css::util::XStringSubstitution >  xSubstVars;
 };
 
 typedef FactoryInfo   FactoryInfoList[FACTORYCOUNT];
