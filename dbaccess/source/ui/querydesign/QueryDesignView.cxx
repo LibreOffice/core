@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:05:15 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:33:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,7 +434,8 @@ namespace
     }
     //------------------------------------------------------------------------------
     ::rtl::OUString BuildTable( const Reference< XConnection>& _xConnection,
-                                const OQueryTableWindow* pEntryTab)
+                                const OQueryTableWindow* pEntryTab
+                                )
     {
         ::rtl::OUString aDBName(pEntryTab->GetComposedName());
 
@@ -451,8 +452,11 @@ namespace
 
                 ::rtl::OUString aQuote = xMetaData->getIdentifierQuoteString();
                 ::rtl::OUString aTableListStr(sComposedName);
-                aTableListStr += ::rtl::OUString(' ');
-                aTableListStr += ::dbtools::quoteName(aQuote, pEntryTab->GetAliasName());
+                if ( isAppendTableAliasEnabled(_xConnection) )
+                {
+                    aTableListStr += ::rtl::OUString(' ');
+                    aTableListStr += ::dbtools::quoteName(aQuote, pEntryTab->GetAliasName());
+                }
                 aDBName = aTableListStr;
             }
             catch(SQLException&)
@@ -497,7 +501,8 @@ namespace
     ::rtl::OUString BuildJoin(  const Reference< XConnection>& _xConnection,
                                 OQueryTableWindow* pLh,
                                 OQueryTableWindow* pRh,
-                                OQueryTableConnectionData* pData)
+                                OQueryTableConnectionData* pData
+                                )
     {
         return BuildJoin(_xConnection,BuildTable(_xConnection,pLh),BuildTable(_xConnection,pRh),pData);
     }
@@ -505,7 +510,8 @@ namespace
     ::rtl::OUString BuildJoin(  const Reference< XConnection>& _xConnection,
                                 const ::rtl::OUString &rLh,
                                 OQueryTableWindow* pRh,
-                                OQueryTableConnectionData* pData)
+                                OQueryTableConnectionData* pData
+                                )
     {
         return BuildJoin(_xConnection,rLh,BuildTable(_xConnection,pRh),pData);
     }
@@ -513,7 +519,8 @@ namespace
     ::rtl::OUString BuildJoin(  const Reference< XConnection>& _xConnection,
                                 OQueryTableWindow* pLh,
                                 const ::rtl::OUString &rRh,
-                                OQueryTableConnectionData* pData)
+                                OQueryTableConnectionData* pData
+                                )
     {
         return BuildJoin(_xConnection,BuildTable(_xConnection,pLh),rRh,pData);
     }
@@ -1103,7 +1110,8 @@ namespace
     void searchAndAppendName(const Reference< XConnection>& _xConnection,
                              const OQueryTableWindow* _pTableWindow,
                              map< ::rtl::OUString,sal_Bool,::comphelper::UStringMixLess>& _rTableNames,
-                             ::rtl::OUString& _rsTableListStr)
+                             ::rtl::OUString& _rsTableListStr
+                             )
     {
         ::rtl::OUString sTabName(BuildTable(_xConnection,_pTableWindow));
 
@@ -1117,7 +1125,8 @@ namespace
     //------------------------------------------------------------------------------
     ::rtl::OUString GenerateFromClause( const Reference< XConnection>& _xConnection,
                                         const OQueryTableView::OTableWindowMap* pTabList,
-                                        const ::std::vector<OTableConnection*>* pConnList)
+                                        const ::std::vector<OTableConnection*>* pConnList
+                                        )
     {
 
         ::rtl::OUString aTableListStr;
@@ -1982,7 +1991,7 @@ namespace
 
                 if ( SQL_ISRULE(pColumnRef,select_sublist) )
                      eErrorCode = fillSelectSubList(_pView,pTabList);
-                else if (SQL_ISRULE(pColumnRef,derived_column))
+                else if ( SQL_ISRULE(pColumnRef,derived_column) )
                 {
                     if ( xConnection.is() )
                     {
@@ -1999,6 +2008,7 @@ namespace
                         }
                         else if(SQL_ISRULEOR2(pColumnRef,general_set_fct ,set_fct_spec) ||
                                 SQL_ISRULEOR2(pColumnRef,position_exp,extract_exp)      ||
+                                SQL_ISRULEOR2(pColumnRef,fold,char_substring_fct)       ||
                                 SQL_ISRULEOR2(pColumnRef,length_exp,char_value_fct))
                         {
                             ::rtl::OUString aColumns;
