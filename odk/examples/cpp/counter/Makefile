@@ -43,56 +43,59 @@ ALL : \
 
 include $(SETTINGS)/stdtarget.mk
 
-# create all component sepcific output directories
-# and use OUT_COMP_GEN for dependencies 
-$(OUT_COMP_GEN) : $(OUT)
-	$(MKDIR) $(subst /,$(PS),$@)
-	$(MKDIR) $(subst /,$(PS),$(OUT_COMP_INC))
-	$(MKDIR) $(subst /,$(PS),$(OUT_COMP_OBJ))
-	$(MKDIR) $(subst /,$(PS),$(OUT_COMP_SLO))
-
-$(OUT_COMP_GEN)/%.urd : %.idl $(OUT_COMP_GEN)
+$(OUT_COMP_GEN)/%.urd : %.idl
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	idlc -I. -I$(IDL_DIR) -O$(OUT_COMP_GEN) $<
 
 # This example type library will be extended by the office types
-$(OUT_BIN)/%.rdb : $(GENURDFILES) $(OUT_COMP_GEN)
+$(OUT_BIN)/%.rdb : $(GENURDFILES)
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst /,$(PS),$@)
 	regmerge $@ /UCR $(GENURDFILES)
 	regmerge $@ / $(DKREGISTRYNAME) 
 
-$(COMPONENT_TYPEFLAG) : $(COMPONENT_RDB) $(COMPONENT_XML) $(OUT_COMP_GEN)
+$(COMPONENT_TYPEFLAG) : $(COMPONENT_RDB) $(COMPONENT_XML)
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst /,$(PS),$(COMPONENT_TYPEFLAG))
 	cppumaker -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(COMPONENT_RDB)
 	echo flagged > $@
 
-$(OUT_COMP_OBJ)/%.$(OBJ_EXT) : %.cxx $(COMPONENT_TYPEFLAG) $(OUT_COMP_GEN)
+$(OUT_COMP_OBJ)/%.$(OBJ_EXT) : %.cxx $(COMPONENT_TYPEFLAG)
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_COMP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
 
-$(OUT_COMP_SLO)/%.$(OBJ_EXT) : %.cxx $(COMPONENT_TYPEFLAG) $(OUT_COMP_GEN)
+$(OUT_COMP_SLO)/%.$(OBJ_EXT) : %.cxx $(COMPONENT_TYPEFLAG)
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_COMP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
 
 $(OUT_COMP_GEN)/%.uno.def : exports.dxp
 ifeq "$(OS)" "WIN"
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	@echo EXPORTS > $@
 	$(CAT) exports.dxp >> $@
 endif
 
 ifeq "$(OS)" "WIN"
-$(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES) $(OUT_COMP_GEN)/$(COMPONENT_NAME).uno.def $(OUT_COMP_GEN)
-	$(LINK) $(LIBRARY_LINK_FLAGS) /OUT:$@ /MAP:$(OUT_COMP_GEN)/$(COMPONENT_NAME).uno.map \
-	/DEF:$(OUT_COMP_GEN)/$(COMPONENT_NAME).uno.def $(SLOFILES) \
+$(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES) $(OUT_COMP_GEN)/%.def
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	-$(MKDIR) $(subst /,$(PS),$(OUT_COMP_GEN))
+	$(LINK) $(LIBRARY_LINK_FLAGS) /OUT:$@ /MAP:$(OUT_COMP_GEN)/$(subst $(SHAREDLIB_EXT),map,$(@F)) \
+	/DEF:$(OUT_COMP_GEN)/$(subst $(SHAREDLIB_EXT),def,$(@F)) $(SLOFILES) \
 	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) msvcrt.lib kernel32.lib
 else
 $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(LINK) $(LIBRARY_LINK_FLAGS) $(LINK_LIBS) -o $@ $^\
 	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) $(STC++LIB)
 endif	
 
-$(OUT_BIN)/%$(EXE_EXT) : $(OUT_COMP_OBJ)/%.$(OBJ_EXT) $(SHAREDLIB_OUT)/counter.uno.$(SHAREDLIB_EXT) $(OUT_COMP_GEN)
+$(OUT_BIN)/%$(EXE_EXT) : $(OUT_COMP_OBJ)/%.$(OBJ_EXT) $(SHAREDLIB_OUT)/counter.uno.$(SHAREDLIB_EXT)
 ifeq "$(OS)" "WIN"
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(LINK) $(EXE_LINK_FLAGS) /OUT:$@ /MAP:$(OUT_COMP_GEN)/$(basename $(@F)).map \
 	  $< $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STLPORTLIB)
 else
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(LINK) $(EXE_LINK_FLAGS) $(LINK_LIBS) -o $@ $< \
 	  $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STLPORTLIB) $(STDC++LIB)
 endif
