@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 15:19:40 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 10:54:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,18 +136,18 @@ namespace dbtools
         In any of these cases the calculated connection is <b>forwarded</b> to the RowSet, that means before
         returning from the function the connection is set as ActiveConnection property on the RowSet !
     */
-    ::com::sun::star::uno::Reference<::com::sun::star::sdbc::XConnection> calcConnection(
-        const ::com::sun::star::uno::Reference<::com::sun::star::sdbc::XRowSet>& _rxRowSet,
-        const ::com::sun::star::uno::Reference<::com::sun::star::lang::XMultiServiceFactory>& _rxFactory)
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> calcConnection(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory)
             throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
     /** returns the connection the RowSet is currently working with (which is the ActiveConnection property)
     */
-    ::com::sun::star::uno::Reference<::com::sun::star::sdbc::XConnection> getConnection(const ::com::sun::star::uno::Reference<::com::sun::star::sdbc::XRowSet>& _rxRowSet) throw (::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet) throw (::com::sun::star::uno::RuntimeException);
 
     /** returns the columns of the named table of the given connection
     */
-    ::com::sun::star::uno::Reference<::com::sun::star::container::XNameAccess> getTableFields(const ::com::sun::star::uno::Reference<::com::sun::star::sdbc::XConnection>& _rxConn, const ::rtl::OUString& _rName);
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getTableFields(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn, const ::rtl::OUString& _rName);
 
     /** create a new ::com::sun::star::sdbc::SQLContext, fill it with the given descriptions and the given source,
         and <i>append</i> _rException (i.e. put it into the NextException member of the SQLContext).
@@ -160,7 +160,7 @@ namespace dbtools
 
     /** quote the given table name (which may contain a catalog and a schema) according to the rules provided by the meta data
     */
-    ::rtl::OUString quoteTableName(const ::com::sun::star::uno::Reference<::com::sun::star::sdbc::XDatabaseMetaData>& _rxMeta, const ::rtl::OUString& _rName);
+    ::rtl::OUString quoteTableName(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _rxMeta, const ::rtl::OUString& _rName);
 
     /** split a fully qualified table name (including catalog and schema, if appliable) into it's component parts.
         @param  _rxConnMetaData     meta data describing the connection where you got the table name from
@@ -180,10 +180,10 @@ namespace dbtools
         @param      _rxFactory      required (only of _bAllowDefault is sal_True) for creating the DatabaseEnvironment.
         @return     the formatter all object related to the given connection should work with.
     */
-    ::com::sun::star::uno::Reference<::com::sun::star::util::XNumberFormatsSupplier> getNumberFormats(
-        const ::com::sun::star::uno::Reference<::com::sun::star::sdbc::XConnection>& _rxConn,
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier> getNumberFormats(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn,
         sal_Bool _bAllowDefault = sal_False,
-        const ::com::sun::star::uno::Reference<::com::sun::star::lang::XMultiServiceFactory>& _rxFactory = ::com::sun::star::uno::Reference<::com::sun::star::lang::XMultiServiceFactory>()
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>()
     );
 
     /** create an XSQLQueryComposer which represents the current settings (Command/CommandType/Filter/Order)
@@ -192,9 +192,9 @@ namespace dbtools
         is using via calcConnection. This implies that a connection will be set on the RowSet if needed.
         (need to changes this sometimes ...)
     */
-    ::com::sun::star::uno::Reference<::com::sun::star::sdb::XSQLQueryComposer> getCurrentSettingsComposer(
-                    const ::com::sun::star::uno::Reference<::com::sun::star::beans::XPropertySet>& _rxRowSetProps,
-                    const ::com::sun::star::uno::Reference<::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer> getCurrentSettingsComposer(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxRowSetProps,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
 
     /** transfer and translate properties between two FormComponents
         @param      _rxOld      the source property set
@@ -202,8 +202,8 @@ namespace dbtools
         @param      _rLocale    the locale for converting number related properties
     */
     void TransferFormComponentProperties(
-        const ::com::sun::star::uno::Reference<::com::sun::star::beans::XPropertySet>& _rxOld,
-        const ::com::sun::star::uno::Reference<::com::sun::star::beans::XPropertySet>& _rxNew,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxOld,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxNew,
         const ::com::sun::star::lang::Locale& _rLocale
         );
 
