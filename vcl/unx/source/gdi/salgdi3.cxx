@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: cp $ $Date: 2001-04-09 09:49:52 $
+ *  last change: $Author: avy $ $Date: 2001-04-09 17:08:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1629,7 +1629,7 @@ static void SetImplFontData( const psp::FastPrintFontInfo& aInfo, ImplFontData& 
     rData.mePitch       = ToFontPitch  (aInfo.m_ePitch);
     rData.meCharSet     = aInfo.m_aEncoding;
     rData.maName        = aInfo.m_aFamilyName;
-    rData.meScript      = SCRIPT_DONTKNOW;
+    // rData.meScript       = SCRIPT_DONTKNOW;
     /*rData.maStyleName = XXX */
 
     rData.mnWidth       = 0;
