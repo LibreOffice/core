@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-16 13:14:43 $
+ *  last change: $Author: svesik $ $Date: 2001-04-26 14:53:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,6 +260,8 @@ oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 n
                      pszModuleName, dlerror() );
 #endif
         return ((oslModule)pLib);
+#else
+        printf("No DL Functions\n");
 #endif
     }
     return NULL;
