@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-01 10:29:17 $
+ *  last change: $Author: dr $ $Date: 2002-10-08 11:49:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4438,7 +4438,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ContDump( nL );
                 break;
             case 0x1066:        // ChartGelframe
-                ContDump( nL );
+                EscherDump( nL );
                 break;
             case 0x1067:        // ChartBoppcustom
                 ContDump( nL );
@@ -4570,13 +4570,6 @@ static const sal_Char* GetBlipType( UINT8 n )
 
 void Biff8RecDumper::EscherDump( const ULONG nMaxLen )
 {
-#if 0
-// if an entire hex block is needed
-    ULONG nPos = pIn->Tell();
-    ContDump( nMaxLen );
-    pIn->Seek( nPos );
-#endif
-
     ULONG           n = nMaxLen;
     UINT16          nPre, nR;
     UINT32          nL;
@@ -4624,6 +4617,7 @@ void Biff8RecDumper::EscherDump( const ULONG nMaxLen )
             case 0xF015:    p = "MsofbtClientRule";         break;
             case 0xF017:    p = "MsofbtCalloutRule";        break;
             case 0xF119:    p = "MsofbtSelection";          break;
+            case 0xF122:    p = "MsofbtUDefProp";           break;
             default:
                 if( nR >= 0xF018 && nR <= 0xF117 )
                     p = "MsofbtBLIP";
@@ -4743,9 +4737,10 @@ void Biff8RecDumper::EscherDump( const ULONG nMaxLen )
             n -= nC;
             nL -= nC;
         }
-        else if ( nR == 0xF00B )
+        else if ( nR == 0xF00B || nR == 0xF122 )
         {   // OPT
-            while ( nL >= 6 && n >= 6 )
+            sal_uInt32 nComplex = 0;
+            while ( nL >= 6 + nComplex && n >= 6 + nComplex )
             {
                 UINT16 n16;
                 UINT32 n32;
@@ -4774,15 +4769,17 @@ void Biff8RecDumper::EscherDump( const ULONG nMaxLen )
                     aT += ", fComplex)  ";
                     __AddHex( aT, n32 );
                     Print( aT );
-                    while ( n32 && n > 0 )
-                    {
-                        nDumpSize = (n32 > (UINT32) n) ? (UINT16) n : (UINT16) n32;
-                        ContDump( nDumpSize );
-                        nL -= nDumpSize;
-                        n -= nDumpSize;
-                        n32 -= nDumpSize;
-                    }
+                    nComplex += n32;
                 }
+            }
+            // complex property data
+            while ( nComplex && n > 0 )
+            {
+                nDumpSize = (nComplex > (UINT32) n) ? (UINT16) n : (UINT16) nComplex;
+                ContDump( nDumpSize );
+                nComplex -= nDumpSize;
+                nL -= nDumpSize;
+                n -= nDumpSize;
             }
         }
 
