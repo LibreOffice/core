@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: ssa $ $Date: 2002-01-09 13:48:54 $
+#   last change: $Author: rt $ $Date: 2002-01-10 13:51:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,7 +95,7 @@ OBJFILES=       $(OBJ)$/toolsin.obj     \
             $(OBJ)$/l2txtenc.obj    \
             $(OBJ)$/gen.obj			\
             $(OBJ)$/config.obj		\
-            $(SLO)$/supd.obj
+            $(OBJ)$/supd.obj
 
 .ENDIF
 
