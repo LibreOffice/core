@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 20:53:20 $
+ *  last change: $Author: kz $ $Date: 2002-08-15 20:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,18 +298,18 @@ ImageList IMG_DOCUMENTLINKS_LCH
         Text[ russian ] = "Re~trieve generated values";\
         Text[ greek ] = "Re~trieve generated values";\
         Text[ dutch ] = "Re~trieve generated values";\
-        Text[ french ] = "Re~trieve generated values";\
+        Text[ french ] = "Extraire les valeurs g�n�r�es";\
         Text[ spanish ] = "Re~trieve generated values";\
         Text[ finnish ] = "Re~trieve generated values";\
-        Text[ italian ] = "Re~trieve generated values";\
+        Text[ italian ] = "Considera i valori generati";\
         Text[ danish ] = "Re~trieve generated values";\
-        Text[ swedish ] = "Re~trieve generated values";\
+        Text[ swedish ] = "H�mta ~genererade v�rden";\
         Text[ polish ] = "Re~trieve generated values";\
         Text[ portuguese_brazilian ] = "Re~trieve generated values";\
-        Text[ japanese ] = "Re~trieve generated values";\
-        Text[ korean ] = "Re~trieve generated values";\
-        Text[ chinese_simplified ] = "Re~trieve generated values";\
-        Text[ chinese_traditional ] = "Re~trieve generated values";\
+        Text[ japanese ] = "生成値を回復する";\
+        Text[ korean ] = "생성된 값 활성화";\
+        Text[ chinese_simplified ] = "顾及生成的数值";\
+        Text[ chinese_traditional ] = "顧及生成的數值";\
         Text[ turkish ] = "Re~trieve generated values";\
         Text[ arabic ] = "Re~trieve generated values";\
         Text[ catalan ] = "Re~trieve generated values";\
@@ -327,18 +327,18 @@ ImageList IMG_DOCUMENTLINKS_LCH
         Text[ russian ] = "~Auto-increment statement";\
         Text[ greek ] = "~Auto-increment statement";\
         Text[ dutch ] = "~Auto-increment statement";\
-        Text[ french ] = "~Auto-increment statement";\
+        Text[ french ] = "Expression auto-incr�ment";\
         Text[ spanish ] = "~Auto-increment statement";\
         Text[ finnish ] = "~Auto-increment statement";\
-        Text[ italian ] = "~Auto-increment statement";\
+        Text[ italian ] = "Espressione incremento automatico";\
         Text[ danish ] = "~Auto-increment statement";\
-        Text[ swedish ] = "~Auto-increment statement";\
+        Text[ swedish ] = "~Auto-inkrementsats";\
         Text[ polish ] = "~Auto-increment statement";\
         Text[ portuguese_brazilian ] = "~Auto-increment statement";\
-        Text[ japanese ] = "~Auto-increment statement";\
-        Text[ korean ] = "~Auto-increment statement";\
-        Text[ chinese_simplified ] = "~Auto-increment statement";\
-        Text[ chinese_traditional ] = "~Auto-increment statement";\
+        Text[ japanese ] = "オートインクリメント命令文";\
+        Text[ korean ] = "자동 증가량 문장";\
+        Text[ chinese_simplified ] = "自动递增陈述";\
+        Text[ chinese_traditional ] = "自動遞增陳述";\
         Text[ turkish ] = "~Auto-increment statement";\
         Text[ arabic ] = "~Auto-increment statement";\
         Text[ catalan ] = "~Auto-increment statement";\
@@ -365,18 +365,18 @@ ImageList IMG_DOCUMENTLINKS_LCH
         Text[ russian ] = "~Query of generated values";\
         Text[ greek ] = "~Query of generated values";\
         Text[ dutch ] = "~Query of generated values";\
-        Text[ french ] = "~Query of generated values";\
+        Text[ french ] = "Requ�te des valeurs g�n�r�es";\
         Text[ spanish ] = "~Query of generated values";\
         Text[ finnish ] = "~Query of generated values";\
-        Text[ italian ] = "~Query of generated values";\
+        Text[ italian ] = "Ricerca dei valori generati";\
         Text[ danish ] = "~Query of generated values";\
-        Text[ swedish ] = "~Query of generated values";\
+        Text[ swedish ] = "S�kning av genererade ~v�rden";\
         Text[ polish ] = "~Query of generated values";\
         Text[ portuguese_brazilian ] = "~Query of generated values";\
-        Text[ japanese ] = "~Query of generated values";\
-        Text[ korean ] = "~Query of generated values";\
-        Text[ chinese_simplified ] = "~Query of generated values";\
-        Text[ chinese_traditional ] = "~Query of generated values";\
+        Text[ japanese ] = "生成値のクエリー";\
+        Text[ korean ] = "생성된 값의 쿼리";\
+        Text[ chinese_simplified ] = "查询生成的数值";\
+        Text[ chinese_traditional ] = "查詢生成的數值";\
         Text[ turkish ] = "~Query of generated values";\
         Text[ arabic ] = "~Query of generated values";\
         Text[ catalan ] = "~Query of generated values";\
@@ -1122,12 +1122,12 @@ TabPage PAGE_GENERAL
         Text[ russian ] = "~����� ���� ������...";
         Text[ greek ] = "~new database";
         Text[ dutch ] = "~Nieuwe database";
-        Text[ french ] = "~Nouvelle base de donn�es...";
+        Text[ french ] = "Nouvelle base de donn�es...";
         Text[ spanish ] = "~Nueva base de datos...";
         Text[ finnish ] = "~Uusi tietokanta";
-        Text[ italian ] = "~Nuovo database...";
+        Text[ italian ] = "Nuovo database...";
         Text[ danish ] = "~Ny database...";
-        Text[ swedish ] = "~Ny databas";
+        Text[ swedish ] = "N~y databas...";
         Text[ polish ] = "Nowa baza danych...";
         Text[ portuguese_brazilian ] = "~new database";
         Text[ japanese ] = "新しいデータベース(~N)...";
@@ -1338,17 +1338,17 @@ TabPage PAGE_DBASE
         Text[ russian ] = "General";
         Text[ greek ] = "General";
         Text[ dutch ] = "General";
-        Text[ french ] = "General";
+        Text[ french ] = "G�n�ral";
         Text[ spanish ] = "General";
         Text[ finnish ] = "General";
-        Text[ italian ] = "General";
+        Text[ italian ] = "Generale";
         Text[ danish ] = "General";
-        Text[ swedish ] = "General";
+        Text[ swedish ] = "Allm�nt";
         Text[ polish ] = "General";
-        Text[ japanese ] = "General";
-        Text[ korean ] = "General";
-        Text[ chinese_simplified ] = "General";
-        Text[ chinese_traditional ] = "General";
+        Text[ japanese ] = "全般";
+        Text[ korean ] = "일반";
+        Text[ chinese_simplified ] = "一般";
+        Text[ chinese_traditional ] = "一般";
         Text[ turkish ] = "General";
         Text[ arabic ] = "General";
         Text[ catalan ] = "Continguts";
@@ -1399,17 +1399,17 @@ TabPage PAGE_DBASE
         Text[ russian ] = "Use SQL92 naming convention";
         Text[ greek ] = "Use SQL92 naming convention";
         Text[ dutch ] = "Use SQL92 naming convention";
-        Text[ french ] = "Use SQL92 naming convention";
+        Text[ french ] = "Utiliser les contraintes de nom SQL92";
         Text[ spanish ] = "Use SQL92 naming convention";
         Text[ finnish ] = "Use SQL92 naming convention";
-        Text[ italian ] = "Use SQL92 naming convention";
+        Text[ italian ] = "Usa vincolo del nome SQL92";
         Text[ danish ] = "Use SQL92 naming convention";
-        Text[ swedish ] = "Use SQL92 naming convention";
+        Text[ swedish ] = "Anv�nd SQL92-namnbegr�nsningar";
         Text[ polish ] = "Use SQL92 naming convention";
-        Text[ japanese ] = "Use SQL92 naming convention";
-        Text[ korean ] = "Use SQL92 naming convention";
-        Text[ chinese_simplified ] = "Use SQL92 naming convention";
-        Text[ chinese_traditional ] = "Use SQL92 naming convention";
+        Text[ japanese ] = "SQL92 で許された型の名前を使用する";
+        Text[ korean ] = "SQL92 이름 부여 협정 사용";
+        Text[ chinese_simplified ] = "使用 SQL92 命名规则";
+        Text[ chinese_traditional ] = "使用 SQL92 命名規則";
         Text[ turkish ] = "Use SQL92 naming convention";
         Text[ arabic ] = "Use SQL92 naming convention";
     };
@@ -1578,17 +1578,17 @@ TabPage PAGE_ADO
         Text[ russian ] = "General";
         Text[ greek ] = "General";
         Text[ dutch ] = "General";
-        Text[ french ] = "General";
+        Text[ french ] = "G�n�ral";
         Text[ spanish ] = "General";
         Text[ finnish ] = "General";
-        Text[ italian ] = "General";
+        Text[ italian ] = "Generale";
         Text[ danish ] = "General";
-        Text[ swedish ] = "General";
+        Text[ swedish ] = "Allm�nt";
         Text[ polish ] = "General";
-        Text[ japanese ] = "General";
+        Text[ japanese ] = "全般";
         Text[ korean ] = "General";
-        Text[ chinese_simplified ] = "General";
-        Text[ chinese_traditional ] = "General";
+        Text[ chinese_simplified ] = "一般";
+        Text[ chinese_traditional ] = "一般";
         Text[ turkish ] = "General";
         Text[ arabic ] = "General";
         Text[ catalan ] = "Continguts";
@@ -1608,17 +1608,17 @@ TabPage PAGE_ADO
         Text[ russian ] = "Use SQL92 naming convention";
         Text[ greek ] = "Use SQL92 naming convention";
         Text[ dutch ] = "Use SQL92 naming convention";
-        Text[ french ] = "Use SQL92 naming convention";
+        Text[ french ] = "Utiliser les contraintes de nom SQL92";
         Text[ spanish ] = "Use SQL92 naming convention";
         Text[ finnish ] = "Use SQL92 naming convention";
-        Text[ italian ] = "Use SQL92 naming convention";
+        Text[ italian ] = "Usa vincolo del nome SQL92";
         Text[ danish ] = "Use SQL92 naming convention";
-        Text[ swedish ] = "Use SQL92 naming convention";
+        Text[ swedish ] = "Anv�nd SQL92-namnbegr�nsningar";
         Text[ polish ] = "Use SQL92 naming convention";
-        Text[ japanese ] = "Use SQL92 naming convention";
-        Text[ korean ] = "Use SQL92 naming convention";
-        Text[ chinese_simplified ] = "Use SQL92 naming convention";
-        Text[ chinese_traditional ] = "Use SQL92 naming convention";
+        Text[ japanese ] = "SQL92 で許された型の名前を使用する";
+        Text[ korean ] = "SQL92 이름 부여 협정 사용 ";
+        Text[ chinese_simplified ] = "使用 SQL92 命名规则";
+        Text[ chinese_traditional ] = "使用 SQL92 命名規則";
         Text[ turkish ] = "Use SQL92 naming convention";
         Text[ arabic ] = "Use SQL92 naming convention";
     };
@@ -1787,17 +1787,17 @@ TabPage PAGE_JDBC
         Text[ russian ] = "General";
         Text[ greek ] = "General";
         Text[ dutch ] = "General";
-        Text[ french ] = "General";
+        Text[ french ] = "G�n�ral";
         Text[ spanish ] = "General";
         Text[ finnish ] = "General";
-        Text[ italian ] = "General";
+        Text[ italian ] = "Generale";
         Text[ danish ] = "General";
-        Text[ swedish ] = "General";
+        Text[ swedish ] = "Allm�nt";
         Text[ polish ] = "General";
-        Text[ japanese ] = "General";
-        Text[ korean ] = "General";
-        Text[ chinese_simplified ] = "General";
-        Text[ chinese_traditional ] = "General";
+        Text[ japanese ] = "全般";
+        Text[ korean ] = "일반";
+        Text[ chinese_simplified ] = "一般";
+        Text[ chinese_traditional ] = "一般";
         Text[ turkish ] = "General";
         Text[ arabic ] = "General";
         Text[ catalan ] = "Continguts";
@@ -1819,17 +1819,17 @@ TabPage PAGE_JDBC
         Text[ russian ] = "Use SQL92 naming convention";
         Text[ greek ] = "Use SQL92 naming convention";
         Text[ dutch ] = "Use SQL92 naming convention";
-        Text[ french ] = "Use SQL92 naming convention";
+        Text[ french ] = "Utiliser les contraintes de nom SQL92";
         Text[ spanish ] = "Use SQL92 naming convention";
         Text[ finnish ] = "Use SQL92 naming convention";
-        Text[ italian ] = "Use SQL92 naming convention";
+        Text[ italian ] = "Usa vincolo del nome SQL92";
         Text[ danish ] = "Use SQL92 naming convention";
-        Text[ swedish ] = "Use SQL92 naming convention";
+        Text[ swedish ] = "Anv�nd SQL92-namnbegr�nsningar";
         Text[ polish ] = "Use SQL92 naming convention";
-        Text[ japanese ] = "Use SQL92 naming convention";
-        Text[ korean ] = "Use SQL92 naming convention";
-        Text[ chinese_simplified ] = "Use SQL92 naming convention";
-        Text[ chinese_traditional ] = "Use SQL92 naming convention";
+        Text[ japanese ] = "SQL92 で許された型の名前を使用する";
+        Text[ korean ] = "SQL92 이름 부여 협정 사용";
+        Text[ chinese_simplified ] = "使用 SQL92 命名规则";
+        Text[ chinese_traditional ] = "使用 SQL92 命名規則";
         Text[ turkish ] = "Use SQL92 naming convention";
         Text[ arabic ] = "Use SQL92 naming convention";
     };
@@ -2006,17 +2006,17 @@ TabPage PAGE_ODBC
         Text[ russian ] = "General";
         Text[ greek ] = "General";
         Text[ dutch ] = "General";
-        Text[ french ] = "General";
+        Text[ french ] = "G�n�ral";
         Text[ spanish ] = "General";
         Text[ finnish ] = "General";
-        Text[ italian ] = "General";
+        Text[ italian ] = "Generale";
         Text[ danish ] = "General";
-        Text[ swedish ] = "General";
+        Text[ swedish ] = "Allm�nt";
         Text[ polish ] = "General";
-        Text[ japanese ] = "General";
-        Text[ korean ] = "General";
-        Text[ chinese_simplified ] = "General";
-        Text[ chinese_traditional ] = "General";
+        Text[ japanese ] = "全般";
+        Text[ korean ] = "일반";
+        Text[ chinese_simplified ] = "一般";
+        Text[ chinese_traditional ] = "一般";
         Text[ turkish ] = "General";
         Text[ arabic ] = "General";
         Text[ catalan ] = "Continguts";
@@ -2038,17 +2038,17 @@ TabPage PAGE_ODBC
         Text[ russian ] = "Use SQL92 naming convention";
         Text[ greek ] = "Use SQL92 naming convention";
         Text[ dutch ] = "Use SQL92 naming convention";
-        Text[ french ] = "Use SQL92 naming convention";
+        Text[ french ] = "Utiliser les contraintes de nom SQL92";
         Text[ spanish ] = "Use SQL92 naming convention";
         Text[ finnish ] = "Use SQL92 naming convention";
-        Text[ italian ] = "Use SQL92 naming convention";
+        Text[ italian ] = "Usa vincolo del nome SQL92";
         Text[ danish ] = "Use SQL92 naming convention";
-        Text[ swedish ] = "Use SQL92 naming convention";
+        Text[ swedish ] = "Anv�nd SQL92-namnbegr�nsningar";
         Text[ polish ] = "Use SQL92 naming convention";
-        Text[ japanese ] = "Use SQL92 naming convention";
-        Text[ korean ] = "Use SQL92 naming convention";
-        Text[ chinese_simplified ] = "Use SQL92 naming convention";
-        Text[ chinese_traditional ] = "Use SQL92 naming convention";
+        Text[ japanese ] = "SQL92 で許された型の名前を使用する";
+        Text[ korean ] = "SQL92 이름 부여 협정 사용";
+        Text[ chinese_simplified ] = "使用 SQL92 命名规则";
+        Text[ chinese_traditional ] = "使用 SQL92 命名規則";
         Text[ turkish ] = "Use SQL92 naming convention";
         Text[ arabic ] = "Use SQL92 naming convention";
     };
@@ -2727,17 +2727,17 @@ TabPage PAGE_TEXT
         Text[ russian ] = "General";
         Text[ greek ] = "General";
         Text[ dutch ] = "General";
-        Text[ french ] = "General";
+        Text[ french ] = "G�n�ral";
         Text[ spanish ] = "General";
         Text[ finnish ] = "General";
-        Text[ italian ] = "General";
+        Text[ italian ] = "Generale";
         Text[ danish ] = "General";
-        Text[ swedish ] = "General";
+        Text[ swedish ] = "Allm�nt";
         Text[ polish ] = "General";
-        Text[ japanese ] = "General";
-        Text[ korean ] = "General";
-        Text[ chinese_simplified ] = "General";
-        Text[ chinese_traditional ] = "General";
+        Text[ japanese ] = "全般";
+        Text[ korean ] = "일반";
+        Text[ chinese_simplified ] = "一般";
+        Text[ chinese_traditional ] = "一般";
         Text[ turkish ] = "General";
         Text[ arabic ] = "General";
         Text[ catalan ] = "Continguts";
@@ -2757,17 +2757,17 @@ TabPage PAGE_TEXT
         Text[ russian ] = "Use SQL92 naming convention";
         Text[ greek ] = "Use SQL92 naming convention";
         Text[ dutch ] = "Use SQL92 naming convention";
-        Text[ french ] = "Use SQL92 naming convention";
+        Text[ french ] = "Utiliser les contraintes de nom SQL92";
         Text[ spanish ] = "Use SQL92 naming convention";
         Text[ finnish ] = "Use SQL92 naming convention";
-        Text[ italian ] = "Use SQL92 naming convention";
+        Text[ italian ] = "Usa vincolo del nome SQL92";
         Text[ danish ] = "Use SQL92 naming convention";
-        Text[ swedish ] = "Use SQL92 naming convention";
+        Text[ swedish ] = "Anv�nd SQL92-namnbegr�nsningar";
         Text[ polish ] = "Use SQL92 naming convention";
-        Text[ japanese ] = "Use SQL92 naming convention";
-        Text[ korean ] = "Use SQL92 naming convention";
-        Text[ chinese_simplified ] = "Use SQL92 naming convention";
-        Text[ chinese_traditional ] = "Use SQL92 naming convention";
+        Text[ japanese ] = "SQL92 で許された型の名前を使用する";
+        Text[ korean ] = "SQL92 이름 부여 협정 사용";
+        Text[ chinese_simplified ] = "使用 SQL92 命名规则";
+        Text[ chinese_traditional ] = "使用 SQL92 命名規則";
         Text[ turkish ] = "Use SQL92 naming convention";
         Text[ arabic ] = "Use SQL92 naming convention";
     };
@@ -3951,6 +3951,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.105  2002/08/05 20:53:20  kz
+ *  Merge SRX643: 05.08.02 - 22:49:45
+ *
  *  Revision 1.104  2002/08/01 20:43:18  kz
  *  Merge SRX643: 01.08.02 - 22:40:24
  *
