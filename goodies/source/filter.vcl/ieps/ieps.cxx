@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ieps.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-10 08:34:35 $
+ *  last change: $Author: sj $ $Date: 2001-03-08 15:44:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,12 +171,12 @@ static int ImplGetLen( BYTE* pBuf, int nMax )
 
 #ifdef WNT
 extern "C" BOOL _cdecl GraphicImport(SvStream & rStream, Graphic & rGraphic,
-                              PFilterCallback pCallback, void * pCallerData,
-                              Config *, BOOL)
+                            PFilterCallback pCallback, void * pCallerData,
+                                FilterConfigItem*, BOOL)
 #else
 extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
-                              PFilterCallback pCallback, void * pCallerData,
-                              Config *, BOOL)
+                            PFilterCallback pCallback, void * pCallerData,
+                                FilterConfigItem*, BOOL)
 #endif
 {
     if ( rStream.GetError() )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ios2met.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-09-28 14:39:10 $
+ *  last change: $Author: sj $ $Date: 2001-03-08 15:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2281,7 +2281,7 @@ void OS2METReader::ReadImageData(USHORT nDataID, USHORT nDataLen)
 void OS2METReader::ReadFont(USHORT nFieldSize)
 {
     ULONG nPos, nMaxPos;
-    USHORT nLen,i;
+    USHORT nLen;
     BYTE nbyte, nTripType, nTripType2;
     OSFont * pF=new OSFont;
     pF->pSucc=pFontList; pFontList=pF;
@@ -2774,12 +2774,12 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
 
 #ifdef WNT
 extern "C" BOOL _cdecl GraphicImport(SvStream & rStream, Graphic & rGraphic,
-                              PFilterCallback pCallback, void * pCallerData,
-                              Config *, BOOL)
+                            PFilterCallback pCallback, void * pCallerData,
+                                FilterConfigItem*, BOOL)
 #else
 extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
-                              PFilterCallback pCallback, void * pCallerData,
-                              Config *, BOOL)
+                            PFilterCallback pCallback, void * pCallerData,
+                                FilterConfigItem*, BOOL)
 #endif
 {
     OS2METReader    aOS2METReader;

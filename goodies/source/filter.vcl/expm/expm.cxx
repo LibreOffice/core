@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:13 $
+ *  last change: $Author: sj $ $Date: 2001-03-08 15:38:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ public:
 
     BOOL                WriteXPM( const Graphic& rGraphic, SvStream& rXPM,
                                   PFilterCallback pCallback, void* pCallerdata,
-                                  Config* pOptionsConfig );
+                                  FilterConfigItem* pConfigItem );
 };
 
 //=================== Methoden von XPMWriter ==============================
@@ -132,7 +132,7 @@ BOOL XPMWriter::ImplCallback( USHORT nPercent )
 
 BOOL XPMWriter::WriteXPM( const Graphic& rGraphic, SvStream& rXPM,
                           PFilterCallback pCallback, void* pCallerdata,
-                          Config* pOptionsConfig )
+                          FilterConfigItem* pConfigItem )
 {
     Bitmap  aBmp;
 
@@ -247,7 +247,7 @@ void XPMWriter::ImplWriteNumber( sal_Int32 nNumber )
 {
     const ByteString aNum( ByteString::CreateFromInt32( nNumber ) );
 
-    for( sal_Int32 n = 0UL, nLen = aNum.Len(); n < nLen; n++  )
+    for( sal_Int16 n = 0UL, nLen = aNum.Len(); n < nLen; n++  )
         *mpOStm << aNum.GetChar( n );
 
 }
@@ -294,11 +294,11 @@ void XPMWriter::ImplWriteColor( USHORT nNumber )
 
 extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic,
                                                PFilterCallback pCallback, void* pCallerData,
-                                               Config* pOptionsConfig, BOOL )
+                                               FilterConfigItem* pConfigItem, BOOL )
 {
     XPMWriter aXPMWriter;
 
-    return aXPMWriter.WriteXPM( rGraphic, rStream, pCallback, pCallerData, pOptionsConfig );
+    return aXPMWriter.WriteXPM( rGraphic, rStream, pCallback, pCallerData, pConfigItem );
 }
 
 #pragma hdrstop

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eras.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:13 $
+ *  last change: $Author: sj $ $Date: 2001-03-08 15:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,8 @@ public:
                         ~RASWriter();
 
     BOOL                WriteRAS( const Graphic& rGraphic, SvStream& rRAS,
-                                  PFilterCallback pCallback, void* pCallerdata,
-                                  Config* pOptionsConfig );
+                            PFilterCallback pCallback, void* pCallerdata,
+                                FilterConfigItem* pConfigItem );
 };
 
 //=================== Methoden von RASWriter ==============================
@@ -132,8 +132,8 @@ BOOL RASWriter::ImplCallback( ULONG nYPos )
 //  ------------------------------------------------------------------------
 
 BOOL RASWriter::WriteRAS( const Graphic& rGraphic, SvStream& rRAS,
-                          PFilterCallback pCallback, void* pCallerdata,
-                          Config* pOptionsConfig )
+                            PFilterCallback pCallback, void* pCallerdata,
+                                FilterConfigItem* pConfigItem )
 {
     Bitmap  aBmp;
 
@@ -308,11 +308,11 @@ void RASWriter::ImplPutByte( BYTE nPutThis )
 
 extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic,
                                                PFilterCallback pCallback, void* pCallerData,
-                                               Config* pOptionsConfig, BOOL )
+                                               FilterConfigItem* pConfigItem, BOOL )
 {
     RASWriter aRASWriter;
 
-    return aRASWriter.WriteRAS( rGraphic, rStream, pCallback, pCallerData, pOptionsConfig );
+    return aRASWriter.WriteRAS( rGraphic, rStream, pCallback, pCallerData, pConfigItem );
 }
 
 #pragma hdrstop

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itga.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:16 $
+ *  last change: $Author: sj $ $Date: 2001-03-08 15:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -768,12 +768,12 @@ BOOL TGAReader::ImplReadPalette()
 
 #ifdef WNT
 extern "C" BOOL _cdecl GraphicImport(SvStream & rStream, Graphic & rGraphic,
-                              PFilterCallback pCallback, void * pCallerData,
-                              Config *, BOOL)
+                            PFilterCallback pCallback, void * pCallerData,
+                                FilterConfigItem*, BOOL)
 #else
 extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
-                              PFilterCallback pCallback, void * pCallerData,
-                              Config *, BOOL)
+                            PFilterCallback pCallback, void * pCallerData,
+                                FilterConfigItem*, BOOL)
 #endif
 {
     TGAReader aTGAReader;

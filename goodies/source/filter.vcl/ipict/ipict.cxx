@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ipict.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-09-28 13:26:46 $
+ *  last change: $Author: sj $ $Date: 2001-03-08 15:48:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1965,12 +1965,12 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile, P
 
 #ifdef WNT
 extern "C" BOOL _cdecl GraphicImport( SvStream& rIStm, Graphic & rGraphic,
-                                      PFilterCallback pCallback, void * pCallerData,
-                                      Config *, BOOL)
+                            PFilterCallback pCallback, void * pCallerData,
+                                FilterConfigItem*, BOOL)
 #else
 extern "C" BOOL GraphicImport( SvStream& rIStm, Graphic & rGraphic,
-                               PFilterCallback pCallback, void * pCallerData,
-                               Config *, BOOL)
+                            PFilterCallback pCallback, void * pCallerData,
+                                FilterConfigItem*, BOOL)
 #endif
 {
     GDIMetaFile aMTF;
