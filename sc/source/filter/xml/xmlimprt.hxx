@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:53:08 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -768,7 +768,7 @@ class ScXMLImport: public SvXMLImport
     ScMyImpDetectiveOpArray*    pDetectiveOpArray;
     ScUnoGuard*             pScUnoGuard;
 
-    rtl::OUString           sFirstTableStyle;
+    std::vector<rtl::OUString>          aTableStyles;
     XMLNumberFormatAttributesExportHelper* pNumberFormatAttributesExportHelper;
     ScMyStyleNumberFormats* pStyleNumberFormats;
     com::sun::star::uno::Reference <com::sun::star::util::XNumberFormats> xNumberFormats;
@@ -944,8 +944,8 @@ public:
     virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);
     virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps);
 
-    void SetFirstTableStyle(const rtl::OUString& rValue) { sFirstTableStyle = rValue; }
-    rtl::OUString GetFirstTableStyle() { return sFirstTableStyle; }
+    void SetTableStyle(const rtl::OUString& rValue) { aTableStyles.push_back(rValue); }
+    std::vector<rtl::OUString> GetTableStyle() { return aTableStyles; }
     ScMyStylesImportHelper* GetStylesImportHelper() { return pStylesImportHelper; }
     sal_Int32 SetCurrencySymbol(const sal_Int32 nKey, const rtl::OUString& rCurrency);
     sal_Bool IsCurrencySymbol(const sal_Int32 nNumberFormat, const rtl::OUString& sCurrencySymbol);
