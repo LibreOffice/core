@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hro $ $Date: 2003-06-10 13:09:27 $
+ *  last change: $Author: hro $ $Date: 2003-06-10 13:40:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1061,11 +1061,32 @@ static bool setup_version()
     return 0 != g_strReportServer.length();
 }
 
+// Use gconftool-2 to determine if gnome accessiblity is enabled
+
+static bool get_accessibility_state()
+{
+    bool bAccessible = false;
+    FILE *fin = popen( "gconftool-2 -g /desktop/gnome/interface/accessibility", "r");
+
+    if ( fin )
+    {
+        char buffer[sizeof("true")];
+
+        bAccessible = fgets( buffer, sizeof(buffer), fin ) && 0 == strcmp( buffer, "true" );
+
+        fclose( fin );
+    }
+
+    return bAccessible;
+}
+
 int main( int argc, char** argv )
 {
     freopen( "/dev/null", "w", stderr );
 
-    if ( setup_version() )
+    // Don't start if accessiblity is enabled or report server is not given
+
+    if ( setup_version() && !get_accessibility_state() )
     {
            gtk_set_locale ();
            gtk_init (&argc, &argv);
