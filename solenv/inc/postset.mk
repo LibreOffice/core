@@ -2,9 +2,9 @@
 #
 #   $RCSfile: postset.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-20 13:12:05 $
+#   last change: $Author: hjs $ $Date: 2001-08-20 13:16:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -310,5 +310,18 @@ rsclang_99=-lgEXTERN $(UTF8)
 rescharset_99=$(extern$(LANG_GUI))
 RCLANGFLAGS_99+= -d EXTERN
 iso_99=$(L10N-framework)
+
+.IF "$(RES_FINN)"!=""
+alllangext+=35
+finn$(LANG_GUI)*=$(default$(LANG_GUI))
+lang_35=finn
+longlang_35=finnish
+langext_35=35
+rsclang_35=-lgFINNiSH $(IBM_PC_437)
+rescharset_35=$(finn$(LANG_GUI))
+RCLANGFLAGS_35+= -d FINNISH
+iso_35=fi
+.ENDIF
+
 .ENDIF 
 
