@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:58 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,9 @@
 
 #include <memory>
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "dinfdlg.hxx"
 #include "sfxresid.hxx"
@@ -424,12 +426,12 @@ sal_Bool SfxDocumentInfoItem::PutValue( const com::sun::star::uno::Any& rVal, BY
 SfxDocumentDescPage::SfxDocumentDescPage( Window * pParent, const SfxItemSet &rItemSet)
      : SfxTabPage( pParent, SfxResId(TP_DOCINFODESC), rItemSet),
      aTitleFt( this, ResId( FT_TITLE ) ),
-     aThemaFt( this, ResId( FT_THEMA ) ),
-     aKeywordsFt( this, ResId( FT_KEYWORDS ) ),
-     aCommentFt( this, ResId( FT_COMMENT ) ),
      aTitleEd( this, ResId( ED_TITLE ) ),
+     aThemaFt( this, ResId( FT_THEMA ) ),
      aThemaEd( this, ResId( ED_THEMA ) ),
+     aKeywordsFt( this, ResId( FT_KEYWORDS ) ),
      aKeywordsEd( this, ResId( ED_KEYWORDS ) ),
+     aCommentFt( this, ResId( FT_COMMENT ) ),
      aCommentEd( this, ResId( ED_COMMENT ) ),
      pInfoItem(0)
 {
@@ -548,8 +550,8 @@ SfxDocumentPage::SfxDocumentPage( Window* pParent, const SfxItemSet& rItemSet ) 
     aChangeValFt    ( this, ResId( FT_CHANGE_VAL ) ),
     aDocNoFt        ( this, ResId( FT_DOCNO ) ),
     aDocNoValFt     ( this, ResId( FT_DOCNO_VAL ) ),
-    aPrintValFt     ( this, ResId( FT_PRINT_VAL ) ),
     aPrintFt        ( this, ResId( FT_PRINT ) ),
+    aPrintValFt     ( this, ResId( FT_PRINT_VAL ) ),
     aDeleteBtn      ( this, ResId( BTN_DELETE ) ),
     aUseUserDataCB  ( this, ResId( CB_USE_USERDATA ) ),
 
@@ -1106,17 +1108,17 @@ SfxDocumentUserPage::SfxDocumentUserPage( Window* pParent,
 
     SfxTabPage( pParent, SfxResId( TP_DOCINFOUSER ), rItemSet ),
 
+    bLabelModified  ( FALSE ),
     aInfo1Ft        ( this, ResId( FT_INFO1 ) ),
-    aInfo2Ft        ( this, ResId( FT_INFO2 ) ),
-    aInfo3Ft        ( this, ResId( FT_INFO3 ) ),
-    aInfo4Ft        ( this, ResId( FT_INFO4 ) ),
     aInfo1Ed        ( this, ResId( ED_INFO1 ) ),
+    aInfo2Ft        ( this, ResId( FT_INFO2 ) ),
     aInfo2Ed        ( this, ResId( ED_INFO2 ) ),
+    aInfo3Ft        ( this, ResId( FT_INFO3 ) ),
     aInfo3Ed        ( this, ResId( ED_INFO3 ) ),
+    aInfo4Ft        ( this, ResId( FT_INFO4 ) ),
     aInfo4Ed        ( this, ResId( ED_INFO4 ) ),
     aEditLabelBtn   ( this, ResId( BTN_EDITLABEL ) ),
 
-    bLabelModified  ( FALSE ),
     pInfoItem       ( NULL )
 
 {
