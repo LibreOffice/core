@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodule.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:49:28 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 19:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
-#include <com/sun/star/frame/XDispatch.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XNOTIFYINGDISPATCH_HPP_
+#include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
@@ -116,11 +116,12 @@ namespace com
 #define REFERENCE               ::com::sun::star::uno::Reference
 #define SEQUENCE                ::com::sun::star::uno::Sequence
 #define XDISPATCH               ::com::sun::star::frame::XDispatch
+#define XNOTIFYINGDISPATCH      ::com::sun::star::frame::XNotifyingDispatch
 #define OUSTRING                ::rtl::OUString
 #define UNOURL                  ::com::sun::star::util::URL
 #define DISPATCHDESCRIPTOR      ::com::sun::star::frame::DispatchDescriptor
 
-class SwUnoModule : public ::cppu::WeakImplHelper3< ::com::sun::star::frame::XDispatchProvider, ::com::sun::star::frame::XDispatch, ::com::sun::star::lang::XServiceInfo >
+class SwUnoModule : public ::cppu::WeakImplHelper3< ::com::sun::star::frame::XDispatchProvider, ::com::sun::star::frame::XNotifyingDispatch, ::com::sun::star::lang::XServiceInfo >
 {
     REFERENCE < ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 
@@ -128,6 +129,9 @@ public:
                             SwUnoModule( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& xFactory )
                                 : m_xFactory( xFactory )
                             {}
+
+    // XNotifyingDispatch
+    virtual void SAL_CALL dispatchWithNotification( const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
 
     // XDispatch
     virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) throw( ::com::sun::star::uno::RuntimeException );
