@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:13:43 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:48:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -835,6 +835,27 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
             {
                 SfxShell *pShell=0;
                 USHORT nIdx;
+
+                SfxInPlaceFrame* pIPFrame = pAct->GetIPFrame_Impl();
+                if ( pIPFrame )
+                {
+                    pAct = (SfxViewFrame *)pIPFrame;
+                    for (nIdx=0; (pShell=pAct->GetDispatcher()->GetShell(nIdx)); nIdx++)
+                    {
+                        const SfxInterface *pIFace = pShell->GetInterface();
+                        const SfxSlot* pSlot = pIFace->GetSlot( aURL.Path );
+                        if ( pSlot )
+                        {
+                            nId = pSlot->GetSlotId();
+                            if ( nId && pAct->GetDispatcher()->HasSlot_Impl( nId ) )
+                                return REFERENCE< XDISPATCH >( new SfxOfficeDispatch( pAct->GetBindings(), pAct->GetDispatcher(), nId, aURL) );
+                            break;
+                        }
+                    }
+                }
+
+                nId = 0;
+                pAct = m_pData->m_pViewShell->GetViewFrame() ;
                 for (nIdx=0; (pShell=pAct->GetDispatcher()->GetShell(nIdx)); nIdx++)
                 {
                     const SfxInterface *pIFace = pShell->GetInterface();
@@ -845,10 +866,25 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
                         break;
                     }
                 }
+
+                if ( nId && pAct->GetDispatcher()->HasSlot_Impl( nId ) )
+                    return REFERENCE< XDISPATCH >( new SfxOfficeDispatch( pAct->GetBindings(), pAct->GetDispatcher(), nId, aURL) );
             }
             else if ( aURL.Protocol.compareToAscii( "slot:" ) == COMPARE_EQUAL )
             {
                 nId = (USHORT) aURL.Path.toInt32();
+
+                SfxInPlaceFrame* pIPFrame = pAct->GetIPFrame_Impl();
+                if ( pIPFrame )
+                {
+                    pAct = (SfxViewFrame *)pIPFrame;
+                    if ( pAct->GetDispatcher()->HasSlot_Impl( nId ))
+                        return REFERENCE< XDISPATCH >( new SfxOfficeDispatch( pAct->GetBindings(), pAct->GetDispatcher(), nId, aURL ));
+                }
+
+                pAct = m_pData->m_pViewShell->GetViewFrame() ;
+                if ( pAct->GetDispatcher()->HasSlot_Impl( nId ))
+                    return REFERENCE< XDISPATCH >( new SfxOfficeDispatch( pAct->GetBindings(), pAct->GetDispatcher(), nId, aURL ));
             }
             else if( sTargetFrameName.compareToAscii( "_self" )==COMPARE_EQUAL || sTargetFrameName.getLength()==0 )
             {
