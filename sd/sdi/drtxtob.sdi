@@ -1,6 +1,6 @@
 
 
-shell SdDrawTextObjectBar
+shell TextObjectBar
 {
     SID_STYLE_APPLY  // ole : ?, status : ?
     [
