@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
+ *  last change: $Author: aw $ $Date: 2001-02-05 11:38:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3023,25 +3023,28 @@ void SdrPathObj::ConvertAllSegments(SdrPathType ePathType)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
 // with the base geometry and returns TRUE. Otherwise it returns FALSE.
-BOOL SdrPathObj::TRGetBaseGeometry(Vector2D& rScale, double& rShear, double& rRotate,
-    Vector2D& rTranslate, XPolyPolygon& rPolyPolygon) const
+BOOL SdrPathObj::TRGetBaseGeometry(Matrix3D& rMat, XPolyPolygon& rPolyPolygon) const
 {
     // get turn and shear
-    rRotate = (aGeo.nDrehWink / 100.0) * F_PI180;
-    rShear = (aGeo.nShearWink / 100.0) * F_PI180;
+    double fRotate = (aGeo.nDrehWink / 100.0) * F_PI180;
+    double fShear = (aGeo.nShearWink / 100.0) * F_PI180;
 
     // get path, remove rotate and shear
     rPolyPolygon = GetPathPoly();
+
     if(aGeo.nDrehWink)
         RotateXPoly(rPolyPolygon, Point(), -aGeo.nSin, aGeo.nCos);
+
     Rectangle aRectangle(rPolyPolygon.GetBoundRect());
     Point aTmp(aRectangle.TopLeft());
+
     if(aGeo.nShearWink)
     {
         ShearXPoly(rPolyPolygon, aTmp, -aGeo.nTan, FALSE);
         aRectangle = rPolyPolygon.GetBoundRect();
         aTmp = aRectangle.TopLeft();
     }
+
     RotatePoint(aTmp, Point(), aGeo.nSin, aGeo.nCos);
     aTmp -= aRectangle.TopLeft();
 
@@ -3052,13 +3055,18 @@ BOOL SdrPathObj::TRGetBaseGeometry(Vector2D& rScale, double& rShear, double& rRo
     aRectangle = rPolyPolygon.GetBoundRect();
 
     // fill in values
-    rScale.X() = (double)aRectangle.GetWidth();
-    rScale.Y() = (double)aRectangle.GetHeight();
-    rTranslate.X() = (double)aRectangle.Left();
-    rTranslate.Y() = (double)aRectangle.Top();
+    Vector2D aScale((double)aRectangle.GetWidth(), (double)aRectangle.GetHeight());
+    Vector2D aTranslate((double)aRectangle.Left(), (double)aRectangle.Top());
 
     // polygon to (0,0)
     rPolyPolygon.Move(-aRectangle.Left(), -aRectangle.Top());
+
+    // build matrix
+    rMat.Identity();
+    rMat.Scale(aScale.X(), aScale.Y());
+    rMat.ShearX(fShear);
+    rMat.Rotate(fRotate);
+    rMat.Translate(aTranslate.X(), aTranslate.Y());
 
     return TRUE;
 }
@@ -3071,7 +3079,7 @@ void SdrPathObj::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& rPo
     // break up matrix
     Vector2D aScale, aTranslate;
     double fShear, fRotate;
-    TRDecomposeAndCorrect(rMat, aScale, fShear, fRotate, aTranslate);
+    rMat.DecomposeAndCorrect(aScale, fShear, fRotate, aTranslate);
 
     // reset object shear and rotations
     aGeo.nDrehWink = 0;

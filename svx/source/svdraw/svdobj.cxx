@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-30 10:45:29 $
+ *  last change: $Author: aw $ $Date: 2001-02-05 11:38:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4297,17 +4297,17 @@ void SdrObject::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
 // with the base geometry and returns TRUE. Otherwise it returns FALSE.
-BOOL SdrObject::TRGetBaseGeometry(Vector2D& rScale, double& rShear, double& rRotate,
-    Vector2D& rTranslate, XPolyPolygon& rPolyPolygon) const
+BOOL SdrObject::TRGetBaseGeometry(Matrix3D& rMat, XPolyPolygon& rPolyPolygon) const
 {
     // any kind of SdrObject, just use SnapRect
     Rectangle aRectangle(GetSnapRect());
+    Vector2D aScale((double)aRectangle.GetWidth(), (double)aRectangle.GetHeight());
+    Vector2D aTranslate((double)aRectangle.Left(), (double)aRectangle.Top());
 
-    rScale.X() = (double)aRectangle.GetWidth();
-    rScale.Y() = (double)aRectangle.GetHeight();
-    rShear = rRotate = 0.0;
-    rTranslate.X() = (double)aRectangle.Left();
-    rTranslate.Y() = (double)aRectangle.Top();
+    // build matrix
+    rMat.Identity();
+    rMat.Scale(aScale.X(), aScale.Y());
+    rMat.Translate(aTranslate.X(), aTranslate.Y());
 
     return FALSE;
 }
@@ -4320,7 +4320,7 @@ void SdrObject::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& rPol
     // break up matrix
     Vector2D aScale, aTranslate;
     double fShear, fRotate;
-    TRDecomposeAndCorrect(rMat, aScale, fShear, fRotate, aTranslate);
+    rMat.DecomposeAndCorrect(aScale, fShear, fRotate, aTranslate);
 
     // build BaseRect
     Point aPoint(FRound(aTranslate.X()), FRound(aTranslate.Y()));
@@ -4330,59 +4330,6 @@ void SdrObject::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& rPol
 
     // set BaseRect
     SetSnapRect(aBaseRect);
-}
-
-// Help routine to decompose given homogen 3x3 matrix to components. A correction of
-// the components is done to avoid inaccuracies.
-BOOL SdrObject::TRDecomposeAndCorrect(const Matrix3D& rMat, Vector2D& rScale,
-    double& rShear, double& rRotate, Vector2D& rTranslate) const
-{
-    // break up homogen 3x3 matrix using homogen 4x4 matrix
-    Matrix4D aDecomposeTrans(rMat);
-    Vector3D aScale;
-    Vector3D aShear;
-    Vector3D aRotate;
-    Vector3D aTranslate;
-    if(aDecomposeTrans.Decompose(aScale, aTranslate, aRotate, aShear))
-    {
-        const double fSmallValue(SMALL_DVALUE);
-
-        // handle scale
-        if(fabs(aScale.X() - 1.0) < fSmallValue)
-            aScale.X() = 1.0;
-        if(fabs(aScale.Y() - 1.0) < fSmallValue)
-            aScale.Y() = 1.0;
-        rScale.X() = aScale.X();
-        rScale.Y() = aScale.Y();
-
-        // handle shear
-        if(fabs(aShear.X()) < fSmallValue)
-            aShear.X() = 0.0;
-        rShear = aShear.X();
-
-        // handle rotate
-        if(fabs(aRotate.Z()) < fSmallValue)
-            aRotate.Z() = 0.0;
-        rRotate = aRotate.Z();
-
-        // handle translate
-        if(fabs(aTranslate.X()) < fSmallValue)
-            aTranslate.X() = 0.0;
-        if(fabs(aTranslate.Y()) < fSmallValue)
-            aTranslate.Y() = 0.0;
-        rTranslate.X() = aTranslate.X();
-        rTranslate.Y() = aTranslate.Y();
-
-        return TRUE;
-    }
-    else
-    {
-        rScale.X() = rScale.Y() = 10000.0;
-        rShear = rRotate = 0.0;
-        rTranslate.X() = rTranslate.Y() = 0.0;
-
-        return FALSE;
-    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

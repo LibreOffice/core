@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
+ *  last change: $Author: aw $ $Date: 2001-02-05 11:38:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2070,21 +2070,25 @@ void SdrTextObj::SetVerticalWriting( BOOL bVertical )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
 // with the base geometry and returns TRUE. Otherwise it returns FALSE.
-BOOL SdrTextObj::TRGetBaseGeometry(Vector2D& rScale, double& rShear, double& rRotate,
-    Vector2D& rTranslate, XPolyPolygon& rPolyPolygon) const
+BOOL SdrTextObj::TRGetBaseGeometry(Matrix3D& rMat, XPolyPolygon& rPolyPolygon) const
 {
     // get turn and shear
-    rRotate = (aGeo.nDrehWink / 100.0) * F_PI180;
-    rShear = (aGeo.nShearWink / 100.0) * F_PI180;
+    double fRotate = (aGeo.nDrehWink / 100.0) * F_PI180;
+    double fShear = (aGeo.nShearWink / 100.0) * F_PI180;
 
     // get aRect, this is the unrotated snaprect
     Rectangle aRectangle(aRect);
 
     // fill other values
-    rScale.X() = (double)aRectangle.GetWidth();
-    rScale.Y() = (double)aRectangle.GetHeight();
-    rTranslate.X() = (double)aRectangle.Left();
-    rTranslate.Y() = (double)aRectangle.Top();
+    Vector2D aScale((double)aRectangle.GetWidth(), (double)aRectangle.GetHeight());
+    Vector2D aTranslate((double)aRectangle.Left(), (double)aRectangle.Top());
+
+    // build matrix
+    rMat.Identity();
+    rMat.Scale(aScale.X(), aScale.Y());
+    rMat.ShearX(fShear);
+    rMat.Rotate(fRotate);
+    rMat.Translate(aTranslate.X(), aTranslate.Y());
 
     return FALSE;
 }
@@ -2097,7 +2101,7 @@ void SdrTextObj::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& rPo
     // break up matrix
     Vector2D aScale, aTranslate;
     double fShear, fRotate;
-    TRDecomposeAndCorrect(rMat, aScale, fShear, fRotate, aTranslate);
+    rMat.DecomposeAndCorrect(aScale, fShear, fRotate, aTranslate);
 
     // reset object shear and rotations
     aGeo.nDrehWink = 0;
