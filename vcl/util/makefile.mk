@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.55 $
+#   $Revision: 1.56 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-05 09:20:49 $
+#   last change: $Author: rt $ $Date: 2004-07-13 16:32:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -207,7 +207,7 @@ SHL1DEPN=   $(L)$/itools.lib $(L)$/sot.lib
 SHL1LIBS=   $(LIB1TARGET)
 .IF "$(GUI)"!="UNX"
 SHL1OBJS=   $(SLO)$/salshl.obj
-.ELSE
+.ELIF "$(OS)"!="FREEBSD"
 SHL1STDLIBS+=-ldl
 .ENDIF
 
