@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hltpbase.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-06 16:20:11 $
+ *  last change: $Author: gt $ $Date: 2002-05-21 09:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,6 +396,8 @@ void SvxHyperlinkTabPageBase::InitStdControls ()
 
         mpBtScript->SetClickHdl ( LINK ( this, SvxHyperlinkTabPageBase, ClickScriptHdl_Impl ) );
         mpEdIndication->SetModifyHdl( LINK ( this, SvxHyperlinkTabPageBase, ModifiedIndicationHdl_Impl ) );
+
+        mpBtScript->SetModeImage( Image( ResId( IMG_SCRIPT_HC ) ), BMP_COLOR_HIGHCONTRAST );
     }
 
     mbStdControlsInit = TRUE;

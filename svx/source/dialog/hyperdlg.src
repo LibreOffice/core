@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-21 21:42:00 $
+ *  last change: $Author: gt $ $Date: 2002-05-21 09:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,6 +369,11 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ catalan ] = "Navegador";
         QuickHelpText[ finnish ] = "WWW-selain";
     };
+    Image IMG_BROWSE_HC
+    {
+        ImageBitmap = Bitmap { File = "browse_hc.bmp" ; };
+        MaskColor = STD_MASKCOLOR ;
+    };
     ImageButton BTN_TARGET
     {
         Pos = MAP_APPFONT ( 235, 40 ) ;
@@ -401,6 +406,11 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ turkish ] = "Target";
         QuickHelpText[ catalan ] = "Destino en documento";
         QuickHelpText[ finnish ] = "Kohde asiakirjassa";
+    };
+    Image IMG_TARGET_HC
+    {
+        ImageBitmap = Bitmap { File = "target_hc.bmp" ; };
+        MaskColor = STD_MASKCOLOR ;
     };
     FixedLine GRP_MORE
     {
@@ -716,6 +726,12 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ catalan ] = "Acontecimientos";
         QuickHelpText[ finnish ] = "Tapahtumat";
     };
+    Image IMG_SCRIPT_HC
+    {
+        ImageBitmap = Bitmap { File = "script_hc.bmp" ; };
+        MaskColor = STD_MASKCOLOR ;
+    };
+    Text[ thai ] = "เชื่อมโยงหลายมิติ";
 };
 
 /*************************************************************************
@@ -932,6 +948,11 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         QuickHelpText[ catalan ] = "Libreta de direcciones";
         QuickHelpText[ finnish ] = "Osoitekirja";
     };
+    Image IMG_ADRESSBOOK_HC
+    {
+        ImageBitmap = Bitmap { File = "adrbook_hc.bmp" ; };
+        MaskColor = STD_MASKCOLOR ;
+    };
 
     FixedLine GRP_MORE
     {
@@ -1247,6 +1268,12 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         QuickHelpText[ catalan ] = "Acontecimientos";
         QuickHelpText[ finnish ] = "Tapahtumat";
     };
+    Image IMG_SCRIPT_HC
+    {
+        ImageBitmap = Bitmap { File = "script_hc.bmp" ; };
+        MaskColor = STD_MASKCOLOR ;
+    };
+    Text[ thai ] = "เชื่อมโยงหลายมิติ";
 };
 
 /*************************************************************************
@@ -1373,6 +1400,11 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ turkish ] = "Datei �ffnen";
         QuickHelpText[ catalan ] = "Abrir archivo";
         QuickHelpText[ finnish ] = "Avaa tiedosto";
+    };
+    Image IMG_FILEOPEN_HC
+    {
+        ImageBitmap = Bitmap { File = "fileopen_hc.bmp" ; };
+        MaskColor = STD_MASKCOLOR ;
     };
 
     FixedLine GRP_TARGET
@@ -1524,6 +1556,11 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ catalan ] = "Destino en documento";
         QuickHelpText[ finnish ] = "Kohde asiakirjassa";
     };
+    Image IMG_BROWSE_HC
+    {
+        ImageBitmap = Bitmap { File = "browse_hc.bmp" ; };
+        MaskColor = STD_MASKCOLOR ;
+    };
 
     FixedLine GRP_MORE
     {
@@ -1839,6 +1876,12 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ catalan ] = "Acontecimientos";
         QuickHelpText[ finnish ] = "Tapahtumat";
     };
+    Image IMG_SCRIPT_HC
+    {
+        ImageBitmap = Bitmap { File = "script_hc.bmp" ; };
+        MaskColor = STD_MASKCOLOR ;
+    };
+    Text[ thai ] = "เชื่อมโยงหลายมิติ";
 };
 
 /*************************************************************************
@@ -2060,6 +2103,11 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         QuickHelpText[ turkish ] = "Pfad ausw�hlen";
         QuickHelpText[ catalan ] = "Seleccionar ruta";
         QuickHelpText[ finnish ] = "Valitse polku";
+    };
+    Image IMG_CREATE_HC
+    {
+        ImageBitmap = Bitmap { File = "newdoc_hc.bmp" ; };
+        MaskColor = STD_MASKCOLOR ;
     };
 
     FixedLine GRP_MORE
@@ -2376,6 +2424,12 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         QuickHelpText[ catalan ] = "Acontecimientos";
         QuickHelpText[ finnish ] = "Tapahtumat";
     };
+    Image IMG_SCRIPT_HC
+    {
+        ImageBitmap = Bitmap { File = "script_hc.bmp" ; };
+        MaskColor = STD_MASKCOLOR ;
+    };
+    Text[ thai ] = "เชื่อมโยงหลายมิติ";
 };
 
 /*************************************************************************

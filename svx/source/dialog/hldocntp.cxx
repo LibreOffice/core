@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldocntp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pb $ $Date: 2001-12-18 14:50:23 $
+ *  last change: $Author: gt $ $Date: 2002-05-21 09:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,9 @@ SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( Window *pParent, const SfxItemSet& 
     SvxHyperlinkTabPageBase ( pParent, SVX_RES( RID_SVXPAGE_HYPERLINK_NEWDOCUMENT ),
                               rItemSet )
 {
+    // set HC bitmaps
+    maBtCreate.SetModeImage( Image( ResId( IMG_CREATE_HC ) ), BMP_COLOR_HIGHCONTRAST );
+
     InitStdControls();
     FreeResource();
 
