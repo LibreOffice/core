@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:21:12 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:29:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,6 +419,12 @@ FASTBOOL SwOszControl::ChkOsz()
 
 void SwFlyAtCntFrm::MakeAll()
 {
+    // OD 2004-01-19 #110582#
+    if ( !GetFmt()->GetDoc()->IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) )
+    {
+        return;
+    }
+
     if ( !SwOszControl::IsInProgress( this ) && !IsLocked() && !IsColLocked() )
     {
         if( !GetPage() && GetAnchor() && GetAnchor()->IsInFly() )
@@ -506,7 +512,8 @@ void SwFlyAtCntFrm::MakeAll()
                     _InvalidateSize();
                     bExtra = FALSE; // Sicherhaltshalber gibt es nur eine Ehrenrunde.
                 }
-            } while ( !IsValid() && !bOsz );
+            } while ( !IsValid() && !bOsz &&
+                      GetFmt()->GetDoc()->IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) );
 
             if ( bOsz )
             {
