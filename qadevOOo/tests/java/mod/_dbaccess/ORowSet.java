@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ORowSet.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-09-08 11:43:18 $
+ *  last change:$Date: 2003-12-11 11:59:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 package mod._dbaccess;
 
+import com.sun.star.beans.Property;
 import java.io.PrintWriter;
 import java.util.Vector;
 
@@ -74,9 +75,12 @@ import util.utils;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XIndexAccess;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.CommandType;
+import com.sun.star.sdb.ParametersRequest;
 import com.sun.star.sdb.RowChangeEvent;
+import com.sun.star.sdb.XInteractionSupplyParameters;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbc.XResultSet;
@@ -84,10 +88,16 @@ import com.sun.star.sdbc.XResultSetUpdate;
 import com.sun.star.sdbc.XRow;
 import com.sun.star.sdbc.XRowSet;
 import com.sun.star.sdbc.XRowUpdate;
+import com.sun.star.task.XInteractionAbort;
+import com.sun.star.task.XInteractionContinuation;
+import com.sun.star.task.XInteractionRequest;
+import com.sun.star.ucb.AuthenticationRequest;
+import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import ifc.sdb._XCompletedExecution;
 
 /**
  * Test for object which is represented by service
@@ -470,6 +480,27 @@ public class ORowSet extends TestCase {
             tEnv.addObjRelation("XColumnLocate.ColumnName",
                 DBTools.TST_STRING_F) ;
 
+            // Adding relation for XCompletedExecution
+            tEnv.addObjRelation("InteractionHandlerChecker", new InteractionHandlerImpl());
+            XPropertySet xProp = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oObj) ;
+            try {
+                xProp.setPropertyValue("DataSourceName", dbSourceName) ;
+                if(isMySQLDB) {
+                    xProp.setPropertyValue("Command", "SELECT Column0  FROM soffice_test_table  WHERE ( (  Column0 = :param1 ) )");
+                }
+                else {
+                    xProp.setPropertyValue("Command", "SELECT \"_TEXT\" FROM \"ORowSet_tmp" + uniqueSuffix + "\" WHERE ( ( \"_TEXT\" = :param1 ) )");
+                }
+
+                xProp.setPropertyValue("CommandType", new Integer(CommandType.COMMAND)) ;
+            }
+            catch(Exception e) {
+            }
+
+
+
+
+
             // Adding relation for XParameters ifc test
             Vector params = new Vector() ;
 
@@ -560,4 +591,76 @@ public class ORowSet extends TestCase {
         }
     }
 
+    /**
+     * Implementation of interface _XCompletedExecution.CheckInteractionHandler
+     * for the XCompletedExecution test
+     * @see ifc.sdb._XCompletedExecution
+     */
+    public class InteractionHandlerImpl implements _XCompletedExecution.CheckInteractionHandler {
+        private boolean handlerWasUsed = false;
+        private PrintWriter log = new PrintWriter(System.out);
+
+        public boolean checkInteractionHandler() {
+            return handlerWasUsed;
+        }
+
+        public void handle(XInteractionRequest xInteractionRequest) {
+            log.println("### _XCompletedExecution.InteractionHandlerImpl: handle called.");
+            ParametersRequest req = null;
+            boolean abort = false;
+
+            Object o = xInteractionRequest.getRequest();
+            if (o instanceof ParametersRequest) {
+                req = (ParametersRequest)o;
+            }
+            else if (o instanceof AuthenticationRequest) {
+                log.println("### The request in XCompletedExecution is of type 'AuthenticationRequest'");
+                log.println("### This is not implemented in ORowSet.InteractionHandlerImpl test -> abort.");
+                abort = true;
+            }
+            else {
+                log.println("### Unknown request:" + o.toString());
+                log.println("### This is not implemented in ORowSet.InteractionHandlerImpl test -> abort.");
+                abort = true;
+            }
+
+            XInteractionContinuation[]xCont = xInteractionRequest.getContinuations();
+            XInteractionSupplyParameters xParamCallback = null;
+            for(int i=0; i<xCont.length; i++) {
+                if (abort) {
+                    XInteractionAbort xAbort = null;
+                    xAbort = (XInteractionAbort)UnoRuntime.queryInterface(XInteractionAbort.class, xCont[i]);
+                    if (xAbort != null)
+                        xAbort.select();
+                        return;
+                }
+                else {
+                    xParamCallback = (XInteractionSupplyParameters)
+                                    UnoRuntime.queryInterface(XInteractionSupplyParameters.class, xCont[i]);
+                    if (xParamCallback != null)
+                        break;
+                }
+            }
+            if (xParamCallback != null) {
+                log.println("### _XCompletedExecution.InteractionHandlerImpl: supplying parameters.");
+                handlerWasUsed = true;
+                PropertyValue[] prop = new PropertyValue[1];
+                prop[0] = new PropertyValue();
+                prop[0].Name = "param1";
+                prop[0].Value = "Hi.";
+
+                xParamCallback.setParameters(prop);
+                xParamCallback.select();
+            }
+            else { // we should never reach this: abort has to be true first.
+                log.println("### _XCompletedExecution.InteractionHandlerImpl: Got no " +
+                            "'XInteractionSupplyParameters' and no 'XInteractionAbort'.");
+            }
+        }
+
+        public void setLog(PrintWriter log) {
+            this.log = log;
+        }
+
+    }
 }
