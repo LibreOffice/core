@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedescription.h,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 14:39:53 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:26:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,6 +373,8 @@ typedef struct _typelib_InterfaceMethodTypeDescription
     sal_Bool                                    bOneWay;
 
     /** the interface description this method is a member of
+
+        @since #i21150#
     */
     struct _typelib_InterfaceTypeDescription *  pInterface;
     /** the inherited direct base method (null for a method that is not
@@ -408,6 +410,8 @@ typedef struct _typelib_InterfaceAttributeTypeDescription
     typelib_TypeDescriptionReference *          pAttributeTypeRef;
 
     /** the interface description this attribute is a member of
+
+        @since #i21150#
     */
     struct _typelib_InterfaceTypeDescription *  pInterface;
     /** the inherited direct base attribute (null for an attribute that is not
