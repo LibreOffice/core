@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: mt $ $Date: 2002-05-17 12:25:13 $
+ *  last change: $Author: mt $ $Date: 2002-05-27 13:46:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2317,12 +2317,20 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rF
         // Font wird nicht restauriert...
     }
 
-    if ( rFont.GetColor() == COL_AUTO )
+    if ( ( rFont.GetColor() == COL_AUTO ) && pOut )
     {
-        if ( IsAutoColorEnabled() && pOut && ( pOut->GetOutDevType() != OUTDEV_PRINTER ) )
+        if ( IsAutoColorEnabled() && ( pOut->GetOutDevType() != OUTDEV_PRINTER ) )
+        {
+            // Never use WindowTextColor on the printer
             rFont.SetColor( GetAutoColor() );
+        }
         else
-            rFont.SetColor( COL_BLACK );
+        {
+            if ( ( GetBackgroundColor() != COL_AUTO ) && GetBackgroundColor().IsDark() )
+                rFont.SetColor( COL_WHITE );
+            else
+                rFont.SetColor( COL_BLACK );
+        }
     }
 
     if ( mpIMEInfos && mpIMEInfos->pAttribs && ( mpIMEInfos->aPos.GetNode() == pNode ) &&
@@ -3438,11 +3446,9 @@ Color ImpEditEngine::GetAutoColor() const
 {
     Color aColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
 
-    if ( GetBackgroundColor() != COL_AUTO )
+    if ( ( GetBackgroundColor() != COL_AUTO ) && GetBackgroundColor().IsDark() )
     {
-        long n = GetBackgroundColor().GetRed() + GetBackgroundColor().GetGreen() + GetBackgroundColor().GetBlue();
-        if ( n < 154 )
-            aColor = COL_WHITE;
+        aColor = COL_WHITE;
     }
 
     return aColor;
