@@ -263,6 +263,62 @@ public class Convert implements Cloneable {
     }
 
     /**
+     *  NEW (HJ):
+     *  Convert the input specified in calls to the <code>addInputStream</code>
+     *  method to the output format specified by this <code>Convert</code>
+     *  class.
+     *  The (de)serializer may use the URLs to resolve links and choose name(s)
+     *  for destination document(s).
+     *
+     *  @return  The output data.
+     *
+     *  @param   sFromURL          URL of the source document (may be null if unknown)
+     *  @param   sToURL            URL of the destination document (may be null if unknown)
+     *
+     *  @throws  ConvertException  If any conversion error occurs.
+     *  @throws  IOException       If any I/O error occurs.
+     */
+    public ConvertData convert(String sFromURL, String sToURL) throws
+        ConvertException, IOException {
+
+        ConvertData dataOut = new ConvertData();
+
+        if (toOffice) {
+
+            //  From device format to Office format
+            //
+            DocumentDeserializerFactory myDocDeserializerFactory =
+                ci.getDocDeserializerFactory();
+            DocumentDeserializer deser =
+                myDocDeserializerFactory.createDocumentDeserializer(inputCD);
+            Document officeDoc = deser instanceof DocumentSerializer2 ?
+                ((DocumentDeserializer2) deser).deserialize(sFromURL,sToURL) :
+                deser.deserialize();
+
+
+            dataOut.addDocument(officeDoc);
+            return dataOut;
+
+        } else {
+
+            //  From Office format to device format
+            //
+            DocumentSerializerFactory myDocSerializerFactory =
+                ci.getDocSerializerFactory();
+
+            Enumeration e = inputCD.getDocumentEnumeration();
+
+            Document doc = (Document) e.nextElement();
+            DocumentSerializer ser = myDocSerializerFactory.createDocumentSerializer(doc);
+            dataOut = ser instanceof DocumentSerializer2 ?
+                ((DocumentSerializer2) ser).serialize(sFromURL,sToURL) :
+                ser.serialize();
+
+            return dataOut;
+        }
+    }
+
+    /**
      *  Returns the appropriate &quot;Office&quot; <code>Document</code>
      *  object for this plug-in.
      *
