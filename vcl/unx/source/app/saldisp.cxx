@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cp $ $Date: 2001-12-07 11:42:45 $
+ *  last change: $Author: cp $ $Date: 2002-02-18 19:16:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1913,7 +1913,7 @@ KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
                                     Status           *pStatusReturn,
                                     XIC              aInputContext ) const
 {
-    KeySym nKeySym;
+    KeySym nKeySym = 0;
     memset( pPrintable, 0, *pLen );
     *pStatusReturn = 0;
 
