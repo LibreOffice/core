@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.59 $
- *  last change: $Author: hdu $ $Date: 2001-10-29 10:37:46 $
+ *  $Revision: 1.60 $
+ *  last change: $Author: hdu $ $Date: 2001-11-07 12:26:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,10 @@
 // VERSION_MINOR in freetype.h is too coarse, we need to fine-tune ourselves:
 #if (SUPD <= 632)
     #define FTVERSION 198
-#else
+#elif (SUPD <= 641)
     #define FTVERSION 202
+#else
+    #define FTVERSION 205
 #endif
 
 #include "freetype/freetype.h"
@@ -828,19 +830,22 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
     SplitGlyphFlags( nGlyphIndex, nGlyphFlags );
     FT_Int nLoadFlags = mnLoadFlags;
 #if (FTVERSION >= 202)
+    // for 0/90/180/270 degree fonts enable autohinting even if not advisable
+    // non-hinted and non-antialiased bitmaps just look too ugly
     if( nCos==0 || nSin==0 )
         nLoadFlags &= ~FT_LOAD_NO_HINTING;
 #endif
 
     FT_Error rc = -1;
-#if (FTVERSION < 205)
-    // #88364# freetype<=204 prefers autohinting to embedded bitmaps
+#if (FTVERSION <= 205)
+    // #88364# freetype<=205 prefers autohinting to embedded bitmaps
     // => first we have to try without hinting
     if( (nLoadFlags & (FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP)) == 0 )
     {
         rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags|FT_LOAD_NO_HINTING );
         if( (rc==FT_Err_Ok) && (maFaceFT->glyph->format!=ft_glyph_format_bitmap) )
             rc = -1; // mark as "loading embedded bitmap" was unsuccessful
+        nLoadFlags |= FT_LOAD_NO_BITMAP;
     }
 #endif
 
@@ -919,12 +924,30 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
     int nGlyphFlags;
     SplitGlyphFlags( nGlyphIndex, nGlyphFlags );
     FT_Int nLoadFlags = mnLoadFlags;
-#if (FTVERSION < 205) && !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
+#if (FTVERSION <= 204) && !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
     // autohinting in FT<=2.0.4 makes antialiased glyphs look worse
     nLoadFlags |= FT_LOAD_NO_HINTING;
 #endif
 
-    FT_Error rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
+    // #94409# do not load embedded bitmaps for non-0/90/180/270 degree fonts
+    if( nCos!=0 && nSin!=0 )
+        nLoadFlags |= FT_LOAD_NO_BITMAP;
+
+    FT_Error rc = -1;
+#if (FTVERSION <= 205)
+    // #88364# freetype<=205 prefers autohinting to embedded bitmaps
+    // => first we have to try without hinting
+    if( (nLoadFlags & (FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP)) == 0 )
+    {
+        rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags|FT_LOAD_NO_HINTING );
+        if( (rc==FT_Err_Ok) && (maFaceFT->glyph->format!=ft_glyph_format_bitmap) )
+            rc = -1; // mark as "loading embedded bitmap" was unsuccessful
+        nLoadFlags |= FT_LOAD_NO_BITMAP;
+    }
+#endif
+
+    if( rc != FT_Err_Ok )
+        rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
     if( rc != FT_Err_Ok )
         return false;
 
