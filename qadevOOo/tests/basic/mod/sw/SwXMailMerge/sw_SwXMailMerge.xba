@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="sw_SwXMailMerge" script:language="StarBasic">
+
+'*************************************************************************
+'*
+'*  $RCSfile: sw_SwXMailMerge.xba,v $ 
+'*
+'*  $Revision: 1.1 $ 
+'*
+'*  last change:$Date: 2003-02-05 10:28:29 $ 
+'*
+'*  The Contents of this file are made available subject to the terms of
+'*  either of the following licenses
+'*
+'*         - GNU Lesser General Public License Version 2.1
+'*         - Sun Industry Standards Source License Version 1.1
+'*
+'*  Sun Microsystems Inc., October, 2000
+'*
+'*  GNU Lesser General Public License Version 2.1
+'*  =============================================
+'*  Copyright 2000 by Sun Microsystems, Inc.
+'*  901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*  This library is free software; you can redistribute it and/or
+'*  modify it under the terms of the GNU Lesser General Public
+'*  License version 2.1, as published by the Free Software Foundation.
+'*
+'*  This library is distributed in the hope that it will be useful,
+'*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*  Lesser General Public License for more details.
+'*
+'*  You should have received a copy of the GNU Lesser General Public
+'*  License along with this library; if not, write to the Free Software
+'*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*  MA  02111-1307  USA
+'*
+'*
+'*  Sun Industry Standards Source License Version 1.1
+'*  =================================================
+'*  The contents of this file are subject to the Sun Industry Standards
+'*  Source License Version 1.1 (the "License"); You may not use this file
+'*  except in compliance with the License. You may obtain a copy of the
+'*  License at http://www.openoffice.org/license.html.
+'*
+'*  Software provided under this License is provided on an "AS IS" basis,
+'*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+'*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+'*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+'*  See the License for the specific provisions governing your rights and
+'*  obligations concerning the Software.
+'*
+'*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+'*
+'*  Copyright: 2000 by Sun Microsystems, Inc.
+'*
+'*  All Rights Reserved.
+'*
+'*  Contributor(s): _______________________________________
+'*
+'*
+'*************************************************************************
+'*************************************************************************
+
+' REQUIRED VARIABLES for interface/service tests:
+
+' com.sun.star.task.XJob:
+Global vXJobArgs(0 to 3) as Variant
+
+' com.sun.star.text.MailMerge
+Global cMailMerge_DocumentURL as String
+
+Dim cDataSourceName  as String
+Dim cDataCommand as String
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' com.sun.star.sw.SwXMailMerge
+'*************************************************************************
+On Error Goto ErrHndl
+
+	Dim vXJobArg0(0 to 8) as new com.sun.star.beans.NamedValue
+	Dim vXJobArg1(0 to 7) as new com.sun.star.beans.NamedValue
+	Dim vXJobArg2(0 to 9) as new com.sun.star.beans.NamedValue
+	Dim vXJobArg3(0) as new com.sun.star.beans.NamedValue
+	Dim cTestDoc as String
+	Dim cOutputURL as String
+	Dim aSel(1) as Variant
+    Dim oXResultSet as Variant
+    Dim oXConnection as Variant
+	
+    oObj = createUnoService("com.sun.star.text.MailMerge")
+
+	cTestDoc = utils.Path2URL(cTestDocsDir + "/" + "MailMerge.sxw")
+    cMailMerge_DocumentURL = cTestDoc
+	cOutputURL = ConvertToURL(utils.getUserPath())
+    cDataSourceName  = "Bibliography"
+    cDataCommand = "biblio"
+    oXResultSet = getXResultSet()
+    oXConnection = oXResultSet.ActiveConnection
+    
+	' create arguments for XJob:
+	aSel(0) = 2
+	aSel(1) = 5
+	
+    oObj.DataSourceName = cDataSourceName
+    oObj.DataCommand = cDataCommand
+    oObj.DataCommandType = com.sun.star.sdb.CommandType.TABLE
+    oObj.OutputType = com.sun.star.text.MailMergeType.FILE
+    oObj.DocumentURL = cTestDoc
+    oObj.OutputURL = cOutputURL
+    oObj.FileNamePrefix = "Author"
+    oObj.FileNameFromColumn = TRUE
+    oObj.Selection = DimArray()
+    
+	' use a simple DataBase with simple Table
+	vXJobArg0(0).Name = "DataSourceName" : vXJobArg0(0).Value = cDataSourceName
+	vXJobArg0(1).Name = "DataCommand" : vXJobArg0(1).Value = cDataCommand
+	vXJobArg0(2).Name = "DataCommandType" : vXJobArg0(2).Value = com.sun.star.sdb.CommandType.TABLE
+	vXJobArg0(3).Name = "OutputType" : vXJobArg0(3).Value = com.sun.star.text.MailMergeType.FILE
+	vXJobArg0(4).Name = "DocumentURL" : vXJobArg0(4).Value = cTestDoc
+	vXJobArg0(5).Name = "OutputURL" : vXJobArg0(5).Value = cOutputURL
+	vXJobArg0(6).Name = "FileNamePrefix" : vXJobArg0(6).Value = "Identifier"
+	vXJobArg0(7).Name = "FileNameFromColumn" : vXJobArg0(7).Value = true
+	vXJobArg0(8).Name = "Selection" : vXJobArg0(8).Value = aSel()
+	
+	' use a simple DataBase with simple Table and write to printer
+	vXJobArg1(0).Name = "DataSourceName" : vXJobArg1(0).Value = cDataSourceName
+	vXJobArg1(1).Name = "DataCommand" : vXJobArg1(1).Value = cDataCommand
+	vXJobArg1(2).Name = "DataCommandType" : vXJobArg1(2).Value = com.sun.star.sdb.CommandType.TABLE
+	vXJobArg1(3).Name = "OutputType" : vXJobArg1(3).Value = com.sun.star.text.MailMergeType.PRINTER
+	vXJobArg1(4).Name = "FileNamePrefix" : vXJobArg1(4).Value = "Author"
+	vXJobArg1(5).Name = "FileNameFromColumn" : vXJobArg1(5).Value = true
+	vXJobArg1(6).Name = "Selection" : vXJobArg1(6).Value = aSel()
+	vXJobArg1(7).Name = "DocumentURL" : vXJobArg1(7).Value = cTestDoc
+	
+	' use a XConnection
+	vXJobArg2(0).Name = "Connection" : vXJobArg2(0).Value = oXConnection
+	vXJobArg2(1).Name = "DataSourceName" : vXJobArg2(1).Value = cDataSourceName
+	vXJobArg2(2).Name = "DataCommand" : vXJobArg2(2).Value = cDataCommand
+	vXJobArg2(3).Name = "DataCommandType" : vXJobArg2(3).Value = com.sun.star.sdb.CommandType.TABLE
+	vXJobArg2(4).Name = "OutputType" : vXJobArg2(4).Value = com.sun.star.text.MailMergeType.FILE
+	vXJobArg2(5).Name = "ResultSet" : vXJobArg2(5).Value = oXResultSet
+	vXJobArg2(6).Name = "OutputURL" : vXJobArg2(6).Value = cOutputURL
+	vXJobArg2(7).Name = "FileNamePrefix" : vXJobArg2(7).Value = "Identifier"
+	vXJobArg2(8).Name = "FileNameFromColumn" : vXJobArg2(8).Value = true
+	vXJobArg2(9).Name = "Selection" : vXJobArg2(9).Value = aSel()
+	
+	vXJobArgs(0) = vXJobArg0()
+	vXJobArgs(1) = vXJobArg1()
+	vXJobArgs(2) = vXJobArg2()
+	vXJobArgs(3) = DimArray()
+    
+    
+
+	out.log("com.sun.star.text.MailMerge created.")
+    
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+
+Sub XMailMergeEvent()
+    oObj.execute(vXJobArgs(0))
+end sub
+
+Function getXConnection() as Variant
+    Dim oRowSet as Object
+    oRowSet = createUnoService("com.sun.star.sdb.RowSet")
+    oRowSet.DataSourceName = cDataSourceName
+    oRowSet.Command = cDataCommand
+    oRowSet.CommandType = com.sun.star.sdb.CommandType.TABLE
+    oRowSet.execute()
+    wait(200)
+    getXConnection() = oRowSet.ActiveConnection
+end Function
+
+Function getXResultSet() as Variant
+    Dim oRowSet as Object
+    oRowSet = createUnoService("com.sun.star.sdb.RowSet")
+
+    oRowSet.DataSourceName = cDataSourceName
+    oRowSet.Command = cDataCommand
+    oRowSet.CommandType = com.sun.star.sdb.CommandType.TABLE
+    oRowSet.execute()
+    wait(200)
+    getXResultSet() = oRowSet 
+end Function
+
+</script:module>
