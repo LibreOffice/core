@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-15 12:38:06 $
+ *  last change: $Author: cmc $ $Date: 2002-02-19 12:59:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,6 @@ void ImplEESdrWriter::ImplWriteTextBundle( ImplEESdrObject& rObj, EscherProperty
         ESCHER_AnchorText   eAnchor = ESCHER_AnchorTop;
         ESCHER_txfl eFlow = ESCHER_txflHorzN;
         ESCHER_txDir eDir = ESCHER_txdirLTR;
-        eDir =
         UINT32              nTextAttr = 0x40004;    // rotate text with shape
 
         if ( rObj.ImplGetPropertyValue(
@@ -236,17 +235,18 @@ void ImplEESdrWriter::ImplWriteTextBundle( ImplEESdrObject& rObj, EscherProperty
             rObj.GetUsrAny() >>= eMode;
             switch (eMode)
             {
-                case ::com::sun::star::text::WritingMode_TB_RL)
-                    //Well if it so happens that we are fliped 180 we can use this
-                    //instead.
+                case ::com::sun::star::text::WritingMode_TB_RL:
+                    //Well if it so happens that we are fliped 180 we can use
+                    //this instead.
                     if (rObj.GetAngle() == 18000)
                         eFlow = ESCHER_txflBtoT;
                     else
                         eFlow = ESCHER_txflTtoBA;
                     break;
-                case ::com::sun::star::text::WritingMode_RL_TB)
+                case ::com::sun::star::text::WritingMode_RL_TB:
                     eDir = ESCHER_txdirRTL;
                     break;
+            }
         }
 
         if ( rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("TextVerticalAdjust") ) )
