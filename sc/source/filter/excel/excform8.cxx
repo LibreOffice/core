@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:42:40 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:56:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -681,6 +681,12 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
                             }
                         }
                         break;
+
+                        default:    // OLE link
+                        {
+                            aPool << ocBad;
+                            aPool >> aStack;
+                        }
                     }
                 }
                 else
