@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListEntrySource.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:38:21 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:07:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #ifndef __com_sun_star_form_binding_ListEntrySource_idl__
 #define __com_sun_star_form_binding_ListEntrySource_idl__
 
-#ifndef __com_sun_star_util_XListEntrySource_idl__
+#ifndef __com_sun_star_form_binding_XListEntrySource_idl__
 #include <com/sun/star/form/binding/XListEntrySource.idl>
 #endif
 #ifndef __com_sun_star_lang_XComponent_idl__
@@ -89,14 +89,14 @@ service ListEntrySource
 
     /** allows life time control for the component
 
-        <p>An <type>ValueBinding</type> will be known to one ore more components
-        supporting the <type>XBindableValue</type> interface, which all work with
-        this binding. However, they will not <em>own</em> the <type>ValueBinding</type>.
+        <p>An <type>ListEntrySource</type> will be known to one ore more components
+        supporting the <type>XListEntrySink</type> interface, which all work with
+        this source. However, they will not <em>own</em> the <type>ListEntrySource</type>.
         The ownership is with another instance, which may also decide to obsolete
-        the <type>ValueBinding</type> for whatever reasons (e.g. because the data model
-        which the binding reflected died). For this reason, a <type>ValueBinding</type>
+        the <type>ListEntrySource</type> for whatever reasons (e.g. because the data model
+        which the binding reflected died). For this reason, a <type>ListEntrySource</type>
         must offer a possibility to be obsoleted by it's owner, and to notify this
-        obsoletion to other interested parties, such as <type>XBindableValue</type>s.</p>
+        obsoletion to other interested parties, such as <type>XListEntrySink</type>s.</p>
     */
     interface com::sun::star::lang::XComponent;
 };
