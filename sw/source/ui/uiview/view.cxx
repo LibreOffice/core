@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:07:03 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:52:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -815,7 +815,7 @@ void SwView::_CheckReadonlySelection()
 
     if( pWrtShell->HasReadonlySel() &&
         ( !pWrtShell->GetDrawView() ||
-            !pWrtShell->GetDrawView()->GetMarkList().GetMarkCount() ))
+            !pWrtShell->GetDrawView()->GetMarkedObjectList().GetMarkCount() ))
         nDisableFlags |= SW_DISABLE_ON_PROTECTED_CURSOR;
 
     if( (SW_DISABLE_ON_PROTECTED_CURSOR & nDisableFlags ) !=
