@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdgi.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gt $ $Date: 2001-09-05 07:59:33 $
+ *  last change: $Author: gt $ $Date: 2001-09-12 07:43:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,6 +290,8 @@ public:
     SfxStyleFamily      GetActualFamily() const;
     String              GetSelectedEntry() const;
     SfxObjectShell*     GetObjectShell() const { return pCurObjShell; }
+
+    virtual void        PrepareDeleteAction();  // disable buttons, change button text, etc. when del is going to happen
 };
 
 // class SfxTemplateDialog_Impl ------------------------------------------
@@ -375,6 +377,8 @@ public:
     ~SfxTemplateCatalog_Impl();
 
 friend class SfxTemplateCatalog;
+
+    virtual void    PrepareDeleteAction();
 };
 
 #endif // #ifndef _SFX_TEMPDLGI_HXX

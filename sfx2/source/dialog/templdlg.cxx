@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-09-10 14:43:55 $
+ *  last change: $Author: gt $ $Date: 2001-09-12 07:42:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1977,6 +1977,8 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl(void *)
 #endif
             if ( RET_YES == aBox.Execute() )
             {
+                PrepareDeleteAction();
+
                 if ( pTreeBox ) // Damit die Treelistbox beim L"oschen nicht zuklappt
                 {
                     bDontUpdate = TRUE;
@@ -2182,6 +2184,10 @@ void SfxCommonTemplateDialog_Impl::EnableExample_Impl(USHORT nId, BOOL bEnable)
     else if( nId == SID_STYLE_UPDATE_BY_EXAMPLE )
         bUpdateByExampleDisabled = !bEnable;
     EnableItem(nId, bEnable);
+}
+
+void SfxCommonTemplateDialog_Impl::PrepareDeleteAction()
+{
 }
 
 // ------------------------------------------------------------------------
@@ -2530,8 +2536,6 @@ IMPL_LINK_INLINE_END( SfxTemplateCatalog_Impl, ChangeHdl, Button *, pButton )
 
 IMPL_LINK_INLINE_START( SfxTemplateCatalog_Impl, DelHdl, Button *, pButton )
 {
-    aDelBtn.Disable();
-    aCancelBtn.SetText( String( SfxResId( STR_CLOSE ) ) );
     SfxCommonTemplateDialog_Impl::DeleteHdl( NULL );
     return 0;
 }
@@ -2654,6 +2658,13 @@ void SfxTemplateCatalog_Impl::ClearFamilyList()
     aFamList.Clear();
     aFamIds.Remove( 0, aFamIds.Count() );
 }
+
+void SfxTemplateCatalog_Impl::PrepareDeleteAction()
+{
+    aDelBtn.Disable();
+    aCancelBtn.SetText( String( SfxResId( STR_CLOSE ) ) );
+}
+
 
 void SfxCommonTemplateDialog_Impl::SetFamily( USHORT nId )
 {
