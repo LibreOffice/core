@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 09:20:23 $
+ *  last change: $Author: cp $ $Date: 2004-07-29 11:31:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -756,12 +756,14 @@ SalX11Display::~SalX11Display()
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "SalX11Display::~SalX11Display()\n" );
 #endif
+#ifdef __FIXME__
     if( pDisp_ )
     {
         doDestruct();
         XCloseDisplay( pDisp_ );
         pDisp_ = NULL;
     }
+#endif
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
