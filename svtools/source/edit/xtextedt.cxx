@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtextedt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-20 14:05:50 $
+ *  last change: $Author: mt $ $Date: 2000-12-06 14:19:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,11 +228,11 @@ BOOL ExtTextEngine::Search( TextSelection& rSel, const utl::SearchParam& rSearch
         if ( bFound )
         {
             rSel.GetStart().GetPara() = nNode;
-            rSel.GetStart().GetIndex() = nStartPos;
+            rSel.GetStart().GetIndex() = bForward ? nStartPos : (nEndPos+1);
             rSel.GetEnd().GetPara() = nNode;
-            rSel.GetEnd().GetIndex() = nEndPos;
+            rSel.GetEnd().GetIndex() = bForward ? nEndPos : (nStartPos+1);
             // Ueber den Absatz selektieren?
-            if( nStartPos == (USHORT)(nEndPos+1) ) // USHORT fuer 0 und -1 !
+            if( nEndPos == (-1) ) // USHORT fuer 0 und -1 !
             {
                 if ( (rSel.GetEnd().GetPara()+1) < GetParagraphCount() )
                 {
@@ -245,10 +245,6 @@ BOOL ExtTextEngine::Search( TextSelection& rSel, const utl::SearchParam& rSearch
                     bFound = FALSE;
                 }
             }
-            else if ( bForward && ( rSel.GetEnd().GetIndex() < aText.Len() ) )
-                rSel.GetEnd().GetIndex()++;
-            else if ( !bForward && ( rSel.GetStart().GetIndex() < aText.Len() ) )
-                rSel.GetStart().GetIndex()++;
 
             break;
         }
