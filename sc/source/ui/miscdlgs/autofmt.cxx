@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-13 09:17:30 $
+ *  last change: $Author: nn $ $Date: 2002-12-04 18:54:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,6 @@
 #include <svtools/zforlist.hxx>
 #include <vcl/msgbox.hxx>
 #include <comphelper/processfactory.hxx>
-#include <svtools/accessibilityoptions.hxx>
 
 #include "sc.hrc"
 #include "scmod.hxx"
@@ -1428,8 +1427,8 @@ void AutoFmtPreview::NotifyChange( ScAutoFormatData* pNewData )
 void AutoFmtPreview::DoPaint( const Rectangle& rRect )
 {
     sal_uInt32 nOldDrawMode = aVD.GetDrawMode();
-    if( GetSettings().GetStyleSettings().GetHighContrastMode() &&
-            SC_MOD()->GetAccessOptions().GetIsForBorders() )
+    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
+    if( GetSettings().GetStyleSettings().GetHighContrastMode() )
         aVD.SetDrawMode( DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
 
     Size aWndSize( GetSizePixel() );

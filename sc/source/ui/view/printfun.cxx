@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-21 19:10:47 $
+ *  last change: $Author: nn $ $Date: 2002-12-04 18:55:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1236,9 +1236,9 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
     if (nEffHeight<=0 || nEffWidth<=0)
         return;                                         // leer
 
+    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     BOOL bCellContrast = bUseStyleColor &&
-            Application::GetSettings().GetStyleSettings().GetHighContrastMode() &&
-            SC_MOD()->GetAccessOptions().GetIsForBorders();
+            Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
     if ( pBackground && !bCellContrast )
     {

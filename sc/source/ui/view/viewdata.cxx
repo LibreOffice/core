@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-30 09:36:45 $
+ *  last change: $Author: nn $ $Date: 2002-12-04 18:55:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@
 #include <svx/editstat.hxx>
 #include <svx/outliner.hxx>
 #include <svx/unolingu.hxx>
-#include <svtools/accessibilityoptions.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/system.hxx>
@@ -992,9 +991,9 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     //      Hintergrundfarbe der Zelle
     Color aBackCol = ((const SvxBrushItem&)pPattern->GetItem(ATTR_BACKGROUND)).GetColor();
     ScModule* pScMod = SC_MOD();
+    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     if ( aBackCol.GetTransparency() > 0 ||
-            ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() &&
-              pScMod->GetAccessOptions().GetIsForBorders() ) )
+            Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         aBackCol.SetColor( pScMod->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor );
     }

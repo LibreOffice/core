@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-22 17:32:58 $
+ *  last change: $Author: nn $ $Date: 2002-12-04 18:55:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,6 @@
 #include <svx/scripttypeitem.hxx>
 #include <svx/udlnitem.hxx>
 #include <svx/unolingu.hxx>
-#include <svtools/accessibilityoptions.hxx>
 #include <svtools/zforlist.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/metric.hxx>
@@ -201,9 +200,9 @@ ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, BOOL bPTL) :
     pFormatter = pData->pDoc->GetFormatTable();
 
     ScModule* pScMod = SC_MOD();
+    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     bCellContrast = pOutput->bUseStyleColor &&
-            Application::GetSettings().GetStyleSettings().GetHighContrastMode() &&
-            pScMod->GetAccessOptions().GetIsForBorders();
+            Application::GetSettings().GetStyleSettings().GetHighContrastMode();
     aBackConfigColor.SetColor( pScMod->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor );
 }
 
@@ -1713,9 +1712,9 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
 
     ScModule* pScMod = SC_MOD();
     sal_Int32 nConfBackColor = pScMod->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor;
+    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     BOOL bCellContrast = bUseStyleColor &&
-            Application::GetSettings().GetStyleSettings().GetHighContrastMode() &&
-            pScMod->GetAccessOptions().GetIsForBorders();
+            Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
     ScFieldEditEngine* pEngine = NULL;
     BOOL bHyphenatorSet = FALSE;
@@ -2620,9 +2619,9 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
 
     ScModule* pScMod = SC_MOD();
     sal_Int32 nConfBackColor = pScMod->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor;
+    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     BOOL bCellContrast = bUseStyleColor &&
-            Application::GetSettings().GetStyleSettings().GetHighContrastMode() &&
-            pScMod->GetAccessOptions().GetIsForBorders();
+            Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
     ScFieldEditEngine* pEngine = NULL;
     BOOL bHyphenatorSet = FALSE;

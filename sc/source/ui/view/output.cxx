@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-12 09:21:43 $
+ *  last change: $Author: nn $ $Date: 2002-12-04 18:55:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -810,9 +810,9 @@ void ScOutputData::DrawBackground()
     BOOL bShowProt = bSyntaxMode && pDoc->IsTabProtected(nTab);
     BOOL bDoAll = bShowProt || bPagebreakMode || bSolidBackground;
 
+    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     BOOL bCellContrast = bUseStyleColor &&
-            Application::GetSettings().GetStyleSettings().GetHighContrastMode() &&
-            pScMod->GetAccessOptions().GetIsForBorders();
+            Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
     long nPosY = nScrY;
     for (USHORT nArrY=1; nArrY+1<nArrCount; nArrY++)
@@ -925,8 +925,8 @@ void ScOutputData::DrawShadow()
     pDev->SetLineColor();
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    BOOL bCellContrast = bUseStyleColor && rStyleSettings.GetHighContrastMode() &&
-                            SC_MOD()->GetAccessOptions().GetIsForBorders();
+    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
+    BOOL bCellContrast = bUseStyleColor && rStyleSettings.GetHighContrastMode();
     Color aAutoTextColor;
     if ( bCellContrast )
         aAutoTextColor = rStyleSettings.GetWindowTextColor();
@@ -1027,8 +1027,8 @@ void ScOutputData::DrawExtraShadow(BOOL bLeft, BOOL bTop, BOOL bRight, BOOL bBot
     pDev->SetLineColor();
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    BOOL bCellContrast = bUseStyleColor && rStyleSettings.GetHighContrastMode() &&
-                            SC_MOD()->GetAccessOptions().GetIsForBorders();
+    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
+    BOOL bCellContrast = bUseStyleColor && rStyleSettings.GetHighContrastMode();
     Color aAutoTextColor;
     if ( bCellContrast )
         aAutoTextColor = rStyleSettings.GetWindowTextColor();
@@ -1346,8 +1346,8 @@ void ScOutputData::DrawFrame()
     Rectangle aOldRect2;
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    BOOL bCellContrast = bUseStyleColor && rStyleSettings.GetHighContrastMode() &&
-                            SC_MOD()->GetAccessOptions().GetIsForBorders();
+    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
+    BOOL bCellContrast = bUseStyleColor && rStyleSettings.GetHighContrastMode();
     Color aAutoTextColor;
     if ( bCellContrast )
         aAutoTextColor = rStyleSettings.GetWindowTextColor();
@@ -1888,8 +1888,8 @@ void ScOutputData::DrawRotatedFrame()
     const SfxItemSet*    pOldCondSet = NULL;
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    BOOL bCellContrast = bUseStyleColor && rStyleSettings.GetHighContrastMode() &&
-                            SC_MOD()->GetAccessOptions().GetIsForBorders();
+    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
+    BOOL bCellContrast = bUseStyleColor && rStyleSettings.GetHighContrastMode();
 
     Color aAutoTextColor;
     const Color* pForceColor = NULL;
