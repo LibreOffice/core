@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-24 17:33:19 $
+#   last change: $Author: vg $ $Date: 2005-03-11 10:51:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,10 +81,16 @@ CDEFS+=-DTIMEBOMB=20050930
 
 SLOFILES =	$(SLO)$/evaluation.obj \
             $(SLO)$/oemjob.obj \
-            $(SLO)$/services.obj
+            $(SLO)$/services.obj \
+            $(SLO)$/firststart.obj
 
 SHL1DEPN=	makefile.mk
-SHL1OBJS=	$(SLOFILES)
+SHL1OBJS=	$(SLOFILES) \
+            $(SLO)$/pages.obj \
+            $(SLO)$/wizard.obj \
+            $(SLO)$/migration.obj \
+            $(SLO)$/cfgfilter.obj
+
 
 SHL1TARGET=	$(TARGET)
 SHL1IMPLIB= i$(TARGET)
@@ -94,8 +100,11 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 
 SHL1STDLIBS= \
-    $(VCLLIB)			\
-    $(UNOTOOLSLIB)		\
+    $(VCLLIB)           \
+    $(SVLLIB)           \
+    $(SVTOOLLIB)        \
+    $(COMPHELPERLIB)    \
+    $(UNOTOOLSLIB)      \
     $(TOOLSLIB)			\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
