@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlwizard.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:40:20 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:40:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
+#endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
 #endif
 
 //.........................................................................
@@ -323,6 +326,9 @@ namespace dbp
                 DBG_ERROR("OControlWizardPage::initializePage: caught an exception!");
             }
 
+            INetURLObject aURL( sDataSource );
+            if( aURL.GetProtocol() != INET_PROT_NOT_VALID )
+                sDataSource = aURL.GetName();
             m_pFormDatasource->SetText(sDataSource);
             m_pFormTable->SetText(sCommand);
 
