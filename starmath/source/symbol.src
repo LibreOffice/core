@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:58:22 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:50:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,8 +302,8 @@ Resource RID_LOCALIZED_NAMES
     };
     ItemList [ portuguese_brazilian ] =
     {
-             < "Griechisch" ; > ;
-        < "Spezial" ; > ;
+             < "Grego" ; > ;
+        < "Especial" ; > ;
     };
     ItemList [ japanese ] =
     {
@@ -327,7 +327,7 @@ Resource RID_LOCALIZED_NAMES
     };
     ItemList [ turkish ] =
     {
-             < "Yunanca" ; > ;
+             < "Yunan" ; > ;
         < "�zel" ; > ;
     };
     ItemList [ arabic ] =
@@ -344,6 +344,21 @@ Resource RID_LOCALIZED_NAMES
     {
          < "กรีก" ; > ;
         < "พิเศษ" ; > ;
+    };
+    ItemList [ czech ] =
+    {
+         < "Řecká písmena" ; > ;
+        < "Speciální" ; > ;
+    };
+    ItemList [ hebrew ] =
+    {
+         < "‮יוונית‬" ; > ;
+        < "‮מיוחד‬" ; > ;
+    };
+    ItemList [ hindi ] =
+    {
+         < "ग्रीक" ; > ;
+        < "विशेष" ; > ;
     };
     };
 
@@ -853,21 +868,21 @@ Resource RID_LOCALIZED_NAMES
         < "ETA" ; > ;
         < "theta" ; > ;
         < "THETA" ; > ;
-        < "jota" ; > ;
-        < "JOTA" ; > ;
+        < "iota" ; > ;
+        < "IOTA" ; > ;
         < "kappa" ; > ;
         < "KAPPA" ; > ;
         < "�" ; > ;
         < "�" ; > ;
-        < "my" ; > ;
-        < "MY" ; > ;
-        < "ny" ; > ;
-        < "NY" ; > ;
+        < "mu" ; > ;
+        < "MU" ; > ;
+        < "nu" ; > ;
+        < "NU" ; > ;
         < "xi" ; > ;
         < "XI" ; > ;
-        < "omikron" ; > ;
-        < "OMIKRON" ; > ;
-        < "PI" ; > ;
+        < "omicron" ; > ;
+        < "OMICRON" ; > ;
+        < "pi" ; > ;
         < "PI" ; > ;
         < "rho" ; > ;
         < "RHO" ; > ;
@@ -875,8 +890,8 @@ Resource RID_LOCALIZED_NAMES
         < "SIGMA" ; > ;
         < "tau" ; > ;
         < "TAU" ; > ;
-        < "ypsilon" ; > ;
-        < "YPSILON" ; > ;
+        < "upsilon" ; > ;
+        < "UPSILON" ; > ;
         < "phi" ; > ;
         < "PHI" ; > ;
         < "chi" ; > ;
@@ -892,17 +907,17 @@ Resource RID_LOCALIZED_NAMES
         < "varsigma" ; > ;
         < "varphi" ; > ;
         < "element" ; > ;
-        < "keinelement" ; > ;
-        < "kleingegen" ; > ;
+        < "noelement" ; > ;
+        < "strictlylessthan" ; > ;
         < "gro�gegen" ; > ;
         < "�������" ; > ;
         < "EXACT" ; > ;
-        < "strebt" ; > ;
+        < "tendto" ; > ;
         < "������" ; > ;
         < "�����" ; > ;
-        < "promille" ; > ;
+        < "perthousand" ; > ;
         < "KAI" ; > ;
-        < "OR" ; > ;
+        < "�" ; > ;
     };
     ItemList [ dutch ] =
     {
@@ -1334,34 +1349,34 @@ Resource RID_LOCALIZED_NAMES
         < "ZETA" ; > ;
         < "eta" ; > ;
         < "ETA" ; > ;
-        < "theta" ; > ;
-        < "THETA" ; > ;
-        < "iota" ; > ;
-        < "IOTA" ; > ;
+        < "teta" ; > ;
+        < "TETA" ; > ;
+        < "jota" ; > ;
+        < "JOTA" ; > ;
         < "kappa" ; > ;
         < "KAPPA" ; > ;
         < "lambda" ; > ;
         < "LAMBDA" ; > ;
-        < "mu" ; > ;
-        < "MU" ; > ;
-        < "nu" ; > ;
-        < "NU" ; > ;
-        < "xi" ; > ;
-        < "XI" ; > ;
+        < "mi" ; > ;
+        < "MI" ; > ;
+        < "ni" ; > ;
+        < "NI" ; > ;
+        < "ksi" ; > ;
+        < "KSI" ; > ;
         < "omikron" ; > ;
         < "OMIKRON" ; > ;
         < "pi" ; > ;
         < "PI" ; > ;
-        < "rho" ; > ;
-        < "RHO" ; > ;
+        < "ro" ; > ;
+        < "RO" ; > ;
         < "sigma" ; > ;
         < "SIGMA" ; > ;
         < "tau" ; > ;
         < "TAU" ; > ;
-        < "upsilon" ; > ;
-        < "UPSILON" ; > ;
-        < "phi" ; > ;
-        < "PHI" ; > ;
+        < "ypsilon" ; > ;
+        < "YPSILON" ; > ;
+        < "fi" ; > ;
+        < "FI" ; > ;
         < "chi" ; > ;
         < "CHI" ; > ;
         < "psi" ; > ;
@@ -1374,27 +1389,27 @@ Resource RID_LOCALIZED_NAMES
         < "varrho" ; > ;
         < "varsigma" ; > ;
         < "varphi" ; > ;
-        < "element" ; > ;
-        < "bez_elementu" ; > ;
-        < "mniejszy_ni�" ; > ;
-        < "wi�kszy_ni�" ; > ;
-        < "nier�wny" ; > ;
-        < "identyczny" ; > ;
+        < "nale�y" ; > ;
+        < "nienale�y" ; > ;
+        < "du�omniejsze" ; > ;
+        < "du�owi�ksze" ; > ;
+        < "nier�wne" ; > ;
+        < "identyczne" ; > ;
         < "d��y" ; > ;
         < "niesko�czono��" ; > ;
         < "k�t" ; > ;
         < "promil" ; > ;
-        < "oraz" ; > ;
+        < "i" ; > ;
         < "lub" ; > ;
     };
     ItemList [ portuguese_brazilian ] =
     {
-        < "alpha" ; > ;
-        < "ALPHA" ; > ;
+        < "alfa" ; > ;
+        < "ALFA" ; > ;
         < "beta" ; > ;
         < "BETA" ; > ;
-        < "gamma" ; > ;
-        < "GAMMA" ; > ;
+        < "gama" ; > ;
+        < "GAMA" ; > ;
         < "delta" ; > ;
         < "DELTA" ; > ;
         < "epsilon" ; > ;
@@ -1403,34 +1418,34 @@ Resource RID_LOCALIZED_NAMES
         < "ZETA" ; > ;
         < "eta" ; > ;
         < "ETA" ; > ;
-        < "theta" ; > ;
-        < "THETA" ; > ;
+        < "teta" ; > ;
+        < "TETA" ; > ;
         < "jota" ; > ;
         < "JOTA" ; > ;
-        < "kappa" ; > ;
-        < "KAPPA" ; > ;
+        < "kapa" ; > ;
+        < "KAPA" ; > ;
         < "lambda" ; > ;
         < "LAMBDA" ; > ;
-        < "my" ; > ;
-        < "MY" ; > ;
-        < "ny" ; > ;
-        < "NY" ; > ;
+        < "mi" ; > ;
+        < "MI" ; > ;
+        < "ni" ; > ;
+        < "NI" ; > ;
         < "xi" ; > ;
         < "XI" ; > ;
         < "omikron" ; > ;
         < "OMIKRON" ; > ;
         < "pi" ; > ;
         < "PI" ; > ;
-        < "rho" ; > ;
-        < "RHO" ; > ;
+        < "ro" ; > ;
+        < "RO" ; > ;
         < "sigma" ; > ;
         < "SIGMA" ; > ;
         < "tau" ; > ;
         < "TAU" ; > ;
         < "ypsilon" ; > ;
         < "YPSILON" ; > ;
-        < "phi" ; > ;
-        < "PHI" ; > ;
+        < "fi" ; > ;
+        < "FI" ; > ;
         < "chi" ; > ;
         < "CHI" ; > ;
         < "psi" ; > ;
@@ -1438,23 +1453,23 @@ Resource RID_LOCALIZED_NAMES
         < "omega" ; > ;
         < "OMEGA" ; > ;
         < "varepsilon" ; > ;
-        < "vartheta" ; > ;
+        < "varteta" ; > ;
         < "varpi" ; > ;
-        < "varrho" ; > ;
+        < "varro" ; > ;
         < "varsigma" ; > ;
-        < "varphi" ; > ;
-        < "element" ; > ;
-        < "keinelement" ; > ;
-        < "kleingegen" ; > ;
-        < "gro?gegen" ; > ;
-        < "ungleich" ; > ;
-        < "identisch" ; > ;
-        < "strebt" ; > ;
-        < "unendlich" ; > ;
-        < "winkel" ; > ;
-        < "promille" ; > ;
-        < "und" ; > ;
-        < "oder" ; > ;
+        < "varfi" ; > ;
+        < "elemento" ; > ;
+        < "n�o-elemento" ; > ;
+        < "estritamentemenorque" ; > ;
+        < "estritamentemaiorque" ; > ;
+        < "diferente" ; > ;
+        < "id�ntico" ; > ;
+        < "tendea" ; > ;
+        < "infinito" ; > ;
+        < "�ngulo" ; > ;
+        < "pormil" ; > ;
+        < "e" ; > ;
+        < "ou" ; > ;
     };
     ItemList [ japanese ] =
     {
@@ -1736,10 +1751,10 @@ Resource RID_LOCALIZED_NAMES
     {
         < "Alfa" ; > ;
         < "Alfa" ; > ;
-        < "Beta" ; > ;
-        < "Beta" ; > ;
-        < "Gamma" ; > ;
-        < "Gamma" ; > ;
+        < "beta" ; > ;
+        < "BETA" ; > ;
+        < "gama" ; > ;
+        < "GAMA" ; > ;
         < "delta" ; > ;
         < "DELTA" ; > ;
         < "epsilon" ; > ;
@@ -1750,30 +1765,30 @@ Resource RID_LOCALIZED_NAMES
         < "ETA" ; > ;
         < "theta" ; > ;
         < "THETA" ; > ;
-        < "jota" ; > ;
-        < "JOTA" ; > ;
+        < "iota" ; > ;
+        < "IOTA" ; > ;
         < "kappa" ; > ;
         < "KAPPA" ; > ;
-        < "Lambda" ; > ;
-        < "Lambda" ; > ;
-        < "my" ; > ;
-        < "MY" ; > ;
-        < "ny" ; > ;
-        < "NY" ; > ;
+        < "lambda" ; > ;
+        < "LAMDA" ; > ;
+        < "mu" ; > ;
+        < "MRT" ; > ;
+        < "nu" ; > ;
+        < "NU" ; > ;
         < "xi" ; > ;
         < "XI" ; > ;
         < "omikron" ; > ;
         < "OMIKRON" ; > ;
-        < "PI" ; > ;
-        < "PI" ; > ;
+        < "pi" ; > ;
+        < "P�" ; > ;
         < "rho" ; > ;
         < "RHO" ; > ;
         < "sigma" ; > ;
-        < "SIGMA" ; > ;
+        < "S�GMA" ; > ;
         < "tau" ; > ;
         < "TAU" ; > ;
-        < "ypsilon" ; > ;
-        < "YPSILON" ; > ;
+        < "upsilon" ; > ;
+        < "UPS�LON" ; > ;
         < "phi" ; > ;
         < "PHI" ; > ;
         < "chi" ; > ;
@@ -1789,15 +1804,15 @@ Resource RID_LOCALIZED_NAMES
         < "varsigma" ; > ;
         < "varphi" ; > ;
         < "element" ; > ;
-        < "keinelement" ; > ;
-        < "kleingegen" ; > ;
-        < "gro�gegen" ; > ;
-        < "e�it de�ildir" ; > ;
-        < "EXACT" ; > ;
-        < "strebt" ; > ;
+        < "element de�il" ; > ;
+        < "k���kt�r" ; > ;
+        < "b�y�kt�r" ; > ;
+        < "e�it de�il" ; > ;
+        < "ayn�" ; > ;
+        < "kadar" ; > ;
         < "Sonsuz" ; > ;
         < "A��" ; > ;
-        < "promille" ; > ;
+        < "bindebir" ; > ;
         < "ve" ; > ;
         < "VEYA" ; > ;
     };
@@ -1805,8 +1820,8 @@ Resource RID_LOCALIZED_NAMES
     {
         < "K" ; > ;
         < "K" ; > ;
-        < "Beta" ; > ;
-        < "Beta" ; > ;
+        < "beta" ; > ;
+        < "BETA" ; > ;
         < "����" ; > ;
         < "����" ; > ;
         < "delta" ; > ;
@@ -1819,21 +1834,21 @@ Resource RID_LOCALIZED_NAMES
         < "ETA" ; > ;
         < "theta" ; > ;
         < "THETA" ; > ;
-        < "jota" ; > ;
-        < "JOTA" ; > ;
+        < "iota" ; > ;
+        < "IOTA" ; > ;
         < "kappa" ; > ;
         < "KAPPA" ; > ;
-        < "Lambda" ; > ;
-        < "Lambda" ; > ;
-        < "my" ; > ;
-        < "MY" ; > ;
-        < "ny" ; > ;
-        < "NY" ; > ;
+        < "lambda" ; > ;
+        < "LAMBDA" ; > ;
+        < "mu" ; > ;
+        < "MU" ; > ;
+        < "nu" ; > ;
+        < "NU" ; > ;
         < "xi" ; > ;
         < "XI" ; > ;
-        < "omikron" ; > ;
-        < "OMIKRON" ; > ;
-        < "PI" ; > ;
+        < "omicron" ; > ;
+        < "OMICRON" ; > ;
+        < "pi" ; > ;
         < "PI" ; > ;
         < "rho" ; > ;
         < "RHO" ; > ;
@@ -1841,8 +1856,8 @@ Resource RID_LOCALIZED_NAMES
         < "SIGMA" ; > ;
         < "tau" ; > ;
         < "TAU" ; > ;
-        < "ypsilon" ; > ;
-        < "YPSILON" ; > ;
+        < "upsilon" ; > ;
+        < "UPSILON" ; > ;
         < "phi" ; > ;
         < "PHI" ; > ;
         < "chi" ; > ;
@@ -1858,16 +1873,16 @@ Resource RID_LOCALIZED_NAMES
         < "varsigma" ; > ;
         < "varphi" ; > ;
         < "element" ; > ;
-        < "keinelement" ; > ;
-        < "kleingegen" ; > ;
+        < "noelement" ; > ;
+        < "strictlylessthan" ; > ;
         < "gro�gegen" ; > ;
         < "�� �����" ; > ;
         < "EXACT" ; > ;
-        < "strebt" ; > ;
+        < "tendto" ; > ;
         < "�������" ; > ;
         < "�������" ; > ;
-        < "promille" ; > ;
-        < "AND" ; > ;
+        < "perthousand" ; > ;
+        < "�" ; > ;
         < "��" ; > ;
     };
     ItemList [ catalan ] =
@@ -2077,8 +2092,224 @@ Resource RID_LOCALIZED_NAMES
         < "และ" ; > ;
         < "or" ; > ;
     };
+    ItemList [ czech ] =
+    {
+         < "alpha" ; > ;
+        < "ALPHA" ; > ;
+        < "beta" ; > ;
+        < "BETA" ; > ;
+        < "gamma" ; > ;
+        < "GAMMA" ; > ;
+        < "delta" ; > ;
+        < "DELTA" ; > ;
+        < "epsilon" ; > ;
+        < "EPSILON" ; > ;
+        < "zeta" ; > ;
+        < "ZETA" ; > ;
+        < "eta" ; > ;
+        < "ETA" ; > ;
+        < "theta" ; > ;
+        < "THETA" ; > ;
+        < "iota" ; > ;
+        < "IOTA" ; > ;
+        < "kappa" ; > ;
+        < "KAPPA" ; > ;
+        < "lambda" ; > ;
+        < "LAMBDA" ; > ;
+        < "mu" ; > ;
+        < "MU" ; > ;
+        < "nu" ; > ;
+        < "NU" ; > ;
+        < "xi" ; > ;
+        < "XI" ; > ;
+        < "omicron" ; > ;
+        < "OMICRON" ; > ;
+        < "pi" ; > ;
+        < "PI" ; > ;
+        < "rho" ; > ;
+        < "RHO" ; > ;
+        < "sigma" ; > ;
+        < "SIGMA" ; > ;
+        < "tau" ; > ;
+        < "TAU" ; > ;
+        < "upsilon" ; > ;
+        < "UPSILON" ; > ;
+        < "phi" ; > ;
+        < "PHI" ; > ;
+        < "chi" ; > ;
+        < "CHI" ; > ;
+        < "psi" ; > ;
+        < "PSI" ; > ;
+        < "omega" ; > ;
+        < "OMEGA" ; > ;
+        < "varepsilon" ; > ;
+        < "vartheta" ; > ;
+        < "varpi" ; > ;
+        < "varrho" ; > ;
+        < "varsigma" ; > ;
+        < "varphi" ; > ;
+        < "je členem" ; > ;
+        < "není členem" ; > ;
+        < "naprosto menší než" ; > ;
+        < "naprosto větší než" ; > ;
+        < "nerovná se" ; > ;
+        < "je totožné s" ; > ;
+        < "blíží se k" ; > ;
+        < "nekonečno" ; > ;
+        < "úhel" ; > ;
+        < "promile" ; > ;
+        < "a" ; > ;
+        < "nebo" ; > ;
+    };
+    ItemList [ hebrew ] =
+    {
+         < "‮אלפא‬" ; > ;
+        < "ALPHA" ; > ;
+        < "‮בטא‬" ; > ;
+        < "BETA" ; > ;
+        < "‮גמא‬" ; > ;
+        < "GAMMA" ; > ;
+        < "‮דלטא‬" ; > ;
+        < "DELTA" ; > ;
+        < "‮אפסילון‬" ; > ;
+        < "EPSILON" ; > ;
+        < "‮זיטא‬" ; > ;
+        < "ZETA" ; > ;
+        < "‮איטא‬" ; > ;
+        < "ETA" ; > ;
+        < "‮תאיטא‬" ; > ;
+        < "THETA" ; > ;
+        < "‮איוטא‬" ; > ;
+        < "JOTA" ; > ;
+        < "‮קפא‬" ; > ;
+        < "KAPPA" ; > ;
+        < "‮למבדא‬" ; > ;
+        < "LAMBDA" ; > ;
+        < "‮מיו‬" ; > ;
+        < "MY" ; > ;
+        < "‮ניו‬" ; > ;
+        < "NY" ; > ;
+        < "‮קסיי‬" ; > ;
+        < "XI" ; > ;
+        < "‮אומיקרון‬" ; > ;
+        < "OMIKRON" ; > ;
+        < "‮פיי‬" ; > ;
+        < "PI" ; > ;
+        < "‮רו‬" ; > ;
+        < "RHO" ; > ;
+        < "‮סיגמא‬" ; > ;
+        < "SIGMA" ; > ;
+        < "‮טאו‬" ; > ;
+        < "TAU" ; > ;
+        < "‮אפסילון‬" ; > ;
+        < "YPSILON" ; > ;
+        < "‮פיי‬" ; > ;
+        < "PHI" ; > ;
+        < "‮צ'יי‬" ; > ;
+        < "CHI" ; > ;
+        < "‮פסיי‬" ; > ;
+        < "PSI" ; > ;
+        < "‮אומגא‬" ; > ;
+        < "OMEGA" ; > ;
+        < "‮וור אפסילון‬" ; > ;
+        < "‮וור תטא‬" ; > ;
+        < "‮וור פיי‬" ; > ;
+        < "‮וור רו‬" ; > ;
+        < "‮וור סיגמא‬" ; > ;
+        < "‮וור פיי‬" ; > ;
+        < "‮רכיב‬" ; > ;
+        < "‮ללא רכיב‬" ; > ;
+        < "‮פחות מ ‬" ; > ;
+        < "‮גדול מ ‬" ; > ;
+        < "‮לא שווה ‬" ; > ;
+        < "‮זהה ‬" ; > ;
+        < "‮נוטה ל ‬" ; > ;
+        < "‮אין סופי ‬" ; > ;
+        < "‮זווית‬" ; > ;
+        < "‮פרומיל‬" ; > ;
+        < "‮ו ‬" ; > ;
+        < "‮או ‬" ; > ;
+    };
+    ItemList [ hindi ] =
+    {
+         < "आल्फ़ा" ; > ;
+        < "ALPHA" ; > ;
+        < "बीटा" ; > ;
+        < "BETA" ; > ;
+        < "गामा" ; > ;
+        < "GAMMA" ; > ;
+        < "डेल्टा" ; > ;
+        < "DELTA" ; > ;
+        < "ऐप्सिलोन" ; > ;
+        < "EPSILON" ; > ;
+        < "झीटा" ; > ;
+        < "ZETA" ; > ;
+        < "eta" ; > ;
+        < "ETA" ; > ;
+        < "तीटा" ; > ;
+        < "THETA" ; > ;
+        < "iota" ; > ;
+        < "IOTA" ; > ;
+        < "काप्पा" ; > ;
+        < "KAPPA" ; > ;
+        < "लाम्डा" ; > ;
+        < "LAMBDA" ; > ;
+        < "mu" ; > ;
+        < "MU" ; > ;
+        < "nu" ; > ;
+        < "NU" ; > ;
+        < "xi" ; > ;
+        < "XI" ; > ;
+        < "ओमिक्रोन" ; > ;
+        < "OMICRON" ; > ;
+        < "pi" ; > ;
+        < "PI" ; > ;
+        < "rho" ; > ;
+        < "RHO" ; > ;
+        < "सिग्मा" ; > ;
+        < "SIGMA" ; > ;
+        < "tau" ; > ;
+        < "TAU" ; > ;
+        < "अप्सिलोन" ; > ;
+        < "UPSILON" ; > ;
+        < "phi" ; > ;
+        < "PHI" ; > ;
+        < "chi" ; > ;
+        < "CHI" ; > ;
+        < "psi" ; > ;
+        < "PSI" ; > ;
+        < "ओमेगा" ; > ;
+        < "OMEGA" ; > ;
+        < "varepsilon" ; > ;
+        < "vartheta" ; > ;
+        < "varpi" ; > ;
+        < "varrho" ; > ;
+        < "varsigma" ; > ;
+        < "varphi" ; > ;
+        < "ऐलिमेन्ट्" ; > ;
+        < "कोई ऐलिमेन्ट नहीं" ; > ;
+        < "से कम" ; > ;
+        < "से अधिक" ; > ;
+        < "असमान" ; > ;
+        < "सदृश" ; > ;
+        < "tendto" ; > ;
+        < "अनंत" ; > ;
+        < "कोण" ; > ;
+        < "एक हज़ार में" ; > ;
+        < "और" ; > ;
+        < "अथवा" ; > ;
+    };
     };
 };
+
+
+
+
+
+
+
+
+
 
 
 
