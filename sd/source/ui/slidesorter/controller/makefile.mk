@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-13 14:18:28 $
+#   last change: $Author: rt $ $Date: 2004-11-26 20:22:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,7 +92,6 @@ SLOFILES =      							\
                                             \
     $(SLO)$/SlsHideSlideFunction.obj		\
     $(SLO)$/SlsSelectionFunction.obj		\
-    $(SLO)$/SlsSlideParameterFunction.obj	\
     $(SLO)$/SlsSlideFunction.obj		
 
 EXCEPTIONSFILES=
