@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: tv $ $Date: 2001-07-02 12:46:23 $
+#   last change: $Author: hr $ $Date: 2004-08-02 14:31:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,7 @@ TARGET=databasegeneral
 
 ZIP1TARGET      = $(DATABASE_USER_TARGET)
 
-ZIP1LIST        = * -x makefile.* *.dbf *.dbt
+ZIP1LIST        = *.odb
 
 ZIP2TARGET      = $(DATABASE_USER_BIBLIO_TARGET)
 
