@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lockhelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-06-11 10:11:46 $
+ *  last change: $Author: as $ $Date: 2001-06-26 05:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ enum ELockType
 };
 
 #define ENVVAR_LOCKTYPE     DECLARE_ASCII("LOCKTYPE_FRAMEWORK")
-#define FALLBACK_LOCKTYPE   E_OWNMUTEX
+#define FALLBACK_LOCKTYPE   E_SOLARMUTEX
 
 //_________________________________________________________________________________________________________________
 //  declarations
