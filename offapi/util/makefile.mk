@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.58 $
+#   $Revision: 1.59 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-10 10:58:11 $
+#   last change: $Author: vg $ $Date: 2003-06-20 10:18:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,7 +98,6 @@ UNOIDLDBFILES= \
     $(UCR)$/cssfcontrol.db \
     $(UCR)$/cssform.db \
     $(UCR)$/cssformula.db \
-    $(UCR)$/cssframe.db \
     $(UCR)$/cssinstallation.db \
     $(UCR)$/cssi18n.db \
     $(UCR)$/cssldap.db \
@@ -149,11 +148,11 @@ REGISTRYCHECKFLAG=$(MISC)$/registrycheck.flag
 ALLTAR : $(UCR)$/types.db $(OUT)$/ucrdoc$/types_doc.db
 
 $(UCR)$/types.db : $(UCR)$/offapi.db $(SOLARBINDIR)$/udkapi.rdb
-    +-$(RM) $(REGISTRYCHECKFLAG) 
+    +-$(RM) $(REGISTRYCHECKFLAG)
     +$(GNUCOPY) -f $(UCR)$/offapi.db $@
     +$(REGMERGE) $@ / $(SOLARBINDIR)$/udkapi.rdb
 $(OUT)$/ucrdoc$/types_doc.db : $(OUT)$/ucrdoc$/offapi_doc.db $(SOLARBINDIR)$/udkapi_doc.rdb
-    +-$(RM) $(REGISTRYCHECKFLAG) 
+    +-$(RM) $(REGISTRYCHECKFLAG)
     +$(GNUCOPY) -f $(OUT)$/ucrdoc$/offapi_doc.db $@
     +$(REGMERGE) $@ / $(SOLARBINDIR)$/udkapi_doc.rdb
 
