@@ -3,6 +3,7 @@
 <filesystem>
     <folder name="Templates">
         <attr name="SystemFileSystem.localizingBundle" stringvalue="org.openoffice.netbeans.modules.office.resources.Bundle"/>
+
         <folder name="OfficeScripting">
             <attr name="SystemFileSystem.localizingBundle" stringvalue="org.openoffice.netbeans.modules.office.resources.Bundle"/>
             <folder name="Parcel">
@@ -13,8 +14,20 @@
                 <attr name="templateWizardIterator" newvalue="org.openoffice.netbeans.modules.office.wizard.ParcelContentsIterator"/>
                 <folder name="Contents">
                     <file name="parcel-descriptor.xml" url="templates/EmptyParcelDescriptor.xml_"/>
-                    <file name="Empty.java" url="templates/Empty.java_"/>
+                    <!-- file name="Empty.java" url="templates/Empty.java_"/ -->
                 </folder>
+            </folder>
+            <folder name="EmptyScript">
+                <attr name="SystemFileSystem.localizingBundle" stringvalue="org.openoffice.netbeans.modules.office.resources.Bundle"/>
+                <file name="Empty.java" url="templates/Empty.java_">
+                    <attr name="template" boolvalue="true"/>
+                    <attr name="SystemFileSystem.localizingBundle" stringvalue="org.openoffice.netbeans.modules.office.resources.Bundle"/>
+                    <attr name="templateWizardIterator" newvalue="org.openoffice.netbeans.modules.office.wizard.JavaScriptIterator"/>
+                </file>
+                <file name="Empty.bsh" url="templates/Empty.bsh_">
+                    <attr name="template" boolvalue="true"/>
+                    <attr name="SystemFileSystem.localizingBundle" stringvalue="org.openoffice.netbeans.modules.office.resources.Bundle"/>
+                </file>
             </folder>
         </folder>
         <attr boolvalue="true" name="Ant/OfficeScripting"/>

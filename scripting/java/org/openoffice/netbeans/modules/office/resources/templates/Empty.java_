@@ -1,14 +1,13 @@
-// If using XMultiServiceFactory need to uncomment import directive below:
-//import com.sun.star.lang.XMultiServiceFactory;
+// If using XComponentContext need to uncomment import directive below:
+// import com.sun.star.uno.XComponentContext;
 
 // If using XDesktop need to uncomment import directive below:
-//import com.sun.star.frame.XDesktop;
+// import com.sun.star.frame.XDesktop;
 
 // If using XComponent need to uncomment import directive below:
-//import com.sun.star.lang.XComponent;
+// import com.sun.star.frame.XModel;
 
 import drafts.com.sun.star.script.framework.XScriptContext;
-
 
 public class Empty {
 
@@ -17,7 +16,7 @@ public class Empty {
       /* Methods available from XScriptContext: 
             xSc.getDocument() returns XModel
             xSc.getDesktop() returns XDesktop
-            xSc.getMultiComponentFactory() returns XMultiComponentFactory
+            xSc.getComponentContext() returns XComponentContext
         */
         
         // Uncomment to get the current document as a component
