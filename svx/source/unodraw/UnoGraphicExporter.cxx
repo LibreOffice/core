@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-16 11:42:57 $
+ *  last change: $Author: cl $ $Date: 2002-09-25 09:45:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,6 +424,8 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
 
     // get the arguments from the descriptor
 
+    sal_Bool bTranslucent = sal_False; /* pFilter->GetExportFormatShortName( nFilter ).ToLowerAscii().EqualsAscii( "gif" ); */
+
     OUString aFilterName, aMediaType;
     URL aURL;
 
@@ -462,7 +464,30 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
             else if ( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterData" ) ) )
             {
                 pValues->Value >>= aFilterData;
+
+                sal_Int32 nArgs = aFilterData.getLength();
+                const PropertyValue* pValues = aFilterData.getConstArray();
+                while( nArgs-- )
+                {
+                    if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Translucent" ) ) )
+                    {
+                        pValues->Value >>= bTranslucent;
+                    }
+                    else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Width" ) ) )
+                    {
+                        pValues->Value >>= nWidth;
+                    }
+                    else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Height" ) ) )
+                    {
+                        pValues->Value >>= nHeight;
+                    }
+                    else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExportOnlyBackground" ) ) )
+                    {
+                        pValues->Value >>= bExportOnlyBackground;
+                    }
+                }
             }
+
             pValues++;
         }
     }
@@ -477,7 +502,6 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                             ? pFilter->GetExportFormatNumberForMediaType( aMediaType )
                             : pFilter->GetExportFormatNumberForShortName( aFilterName );
     sal_Bool            bVectorType = !pFilter->IsExportPixelFormat( nFilter );
-    sal_Bool            bTranslucent = pFilter->GetExportFormatShortName( nFilter ).ToLowerAscii().EqualsAscii( "gif" );
 
     std::vector< SdrObject* > aShapes;
 
