@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: as $ $Date: 2001-05-21 06:10:38 $
+ *  last change: $Author: as $ $Date: 2001-06-05 10:18:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@ class FilterCache   :   private FairRWLockBase
         //  constructor / destructor
         //---------------------------------------------------------------------------------------------------------
 
-         FilterCache();
+        FilterCache( sal_Int32 nVersion = DEFAULT_FILTERCACHE_VERSION );
 
         /*-****************************************************************************************************//**
             @short      standard destructor to delete instance
@@ -506,6 +506,7 @@ class FilterCache   :   private FairRWLockBase
 
         static sal_Int32        m_nRefCount ;
         static DataContainer*   m_pData     ;
+        static sal_Int32        m_nVersion  ;
 
 };      //  class FilterCache
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercachedata.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2001-05-30 08:49:36 $
+ *  last change: $Author: as $ $Date: 2001-06-05 10:19:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@
 #endif
 
 #ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
-    #define ENABLE_TIMEMEASURE
 #include <macros/debug.hxx>
 #endif
 
@@ -142,6 +141,10 @@ namespace framework{
 #define PACKAGENAME_TYPEDETECTION_STANDARD          DECLARE_ASCII("Office.TypeDetection"                            )
 #define PACKAGENAME_TYPEDETECTION_ADDITIONAL        DECLARE_ASCII("Office.TypeDetection"                            )
 #define PATHSEPERATOR                               DECLARE_ASCII("/"                                               )
+#define PROPERTY_SEPERATOR                          sal_Unicode(',')
+#define LIST_SEPERATOR                              sal_Unicode(';')
+#define LOCALE_FALLBACK                             DECLARE_ASCII("en-US"                                           )
+#define DEFAULT_FILTERCACHE_VERSION                 3
 
 #define NAME_DEFAULTDETECTOR                        DECLARE_ASCII("com.sun.star.comp.office.FilterDetect"           )
 #define NAME_GENERICLOADER                          DECLARE_ASCII("com.sun.star.comp.office.FrameLoader"            )
@@ -175,6 +178,7 @@ namespace framework{
 #define SUBKEY_ORDER                                DECLARE_ASCII("Order"                                           )
 #define SUBKEY_DEFAULTDETECTOR                      DECLARE_ASCII("DetectService"                                   )
 #define SUBKEY_GENERICLOADER                        DECLARE_ASCII("FrameLoader"                                     )
+#define SUBKEY_DATA                                 DECLARE_ASCII("Data"                                            )
 
 #define PROPERTY_PREFERRED                          DECLARE_ASCII("Preferred"                                       )
 #define PROPERTY_INSTALLED                          DECLARE_ASCII("Installed"                                       )
@@ -195,12 +199,16 @@ namespace framework{
 #define PROPERTY_TYPES                              DECLARE_ASCII("Types"                                           )
 
 #define PROPCOUNT_TYPE                              8
-#define PROPCOUNT_FILTER                            10
+#define PROPCOUNT_FILTER                            9
 #define PROPCOUNT_DETECTOR                          1
 #define PROPCOUNT_LOADER                            3
 
-#define SUBKEYCOUNT_TYPE                            7
-#define SUBKEYCOUNT_FILTER                          10
+#define SUBKEYCOUNT_TYPE_VERSION_1                  7
+#define SUBKEYCOUNT_TYPE_VERSION_2                  7
+#define SUBKEYCOUNT_TYPE_VERSION_3                  2
+#define SUBKEYCOUNT_FILTER_VERSION_1                9
+#define SUBKEYCOUNT_FILTER_VERSION_2                10
+#define SUBKEYCOUNT_FILTER_VERSION_3                3
 #define SUBKEYCOUNT_DETECTOR                        1
 #define SUBKEYCOUNT_LOADER                          2
 
@@ -213,9 +221,6 @@ namespace framework{
 #define CFGPROPERTY_SERVERTYPE                      DECLARE_ASCII("servertype"                                      )   // specify type of used configuration (fatoffice, network, webtop)
 #define CFGPROPERTY_SOURCEPATH                      DECLARE_ASCII("sourcepath"                                      )   // specify path to "share/config/registry" files
 #define CFGPROPERTY_UPDATEPATH                      DECLARE_ASCII("updatepath"                                      )   // specify path to "user/config/registry" files
-
-#define STRREFSIZE  4 // 4 Byte
-#define STRSIGNSIZE 2 // 2 Byte
 
 //_________________________________________________________________________________________________________________
 //  exported definitions
@@ -714,28 +719,36 @@ class FilterCFGAccess   :   public  ::utl::ConfigItem
 #endif
 {
     public:
-                 FilterCFGAccess    ( const ::rtl::OUString& sPath );
-        virtual ~FilterCFGAccess    (                              );
-        void     read               (       DataContainer&   rData );
-        void     write              (       DataContainer&   rData );
-
-        static   ::rtl::OUString encodeFilterName( const ::rtl::OUString& sName );
-        static   ::rtl::OUString decodeFilterName( const ::rtl::OUString& sName );
-
-    private:
-        void     impl_loadTypes     (       DataContainer&   rData );
-        void     impl_loadFilters   (       DataContainer&   rData );
-        void     impl_loadDetectors (       DataContainer&   rData );
-        void     impl_loadLoaders   (       DataContainer&   rData );
-        void     impl_loadDefaults  (       DataContainer&   rData );
-
-        void     impl_saveTypes     (       DataContainer&   rData );
-        void     impl_saveFilters   (       DataContainer&   rData );
-        void     impl_saveDetectors (       DataContainer&   rData );
-        void     impl_saveLoaders   (       DataContainer&   rData );
+                                    FilterCFGAccess ( const ::rtl::OUString& sPath                                  ,
+                                                            sal_Int32        nVersion = DEFAULT_FILTERCACHE_VERSION ); // open configuration
+        virtual                     ~FilterCFGAccess(                                                               );
+        void                        read            (       DataContainer&   rData                                  ); // read values from configuration into given struct
+        void                        write           (       DataContainer&   rData                                  ); // write values from given struct to configuration
+        static   ::rtl::OUString    encodeFilterName( const ::rtl::OUString& sName                                  ); // encode "/" of filter names ... configuration couldn't handle it otherwise
+        static   ::rtl::OUString    decodeFilterName( const ::rtl::OUString& sName                                  ); // decode "/" of filter names ...
+        static   ::rtl::OUString    encodeTypeData  ( const FileType&        aType                                  ); // build own formated string of type properties
+        static   void               decodeTypeData  ( const ::rtl::OUString& sData                                  ,
+                                                            FileType&        aType                                  );
+        static   ::rtl::OUString    encodeFilterData( const Filter&          aFilter                                ); // build own formated string of filter properties
+        static   void               decodeFilterData( const ::rtl::OUString& sData                                  ,
+                                                            Filter&          aFilter                                );
+        static   ::rtl::OUString    encodeStringList( const StringList&      lList                                  ); // build own formated string of StringList
+        static   StringList         decodeStringList( const ::rtl::OUString& sValue                                 );
 
     private:
-        EConfigType eConfigType;
+        void     impl_loadTypes     ( DataContainer& rData );
+        void     impl_loadFilters   ( DataContainer& rData );
+        void     impl_loadDetectors ( DataContainer& rData );
+        void     impl_loadLoaders   ( DataContainer& rData );
+        void     impl_loadDefaults  ( DataContainer& rData );
+        void     impl_saveTypes     ( DataContainer& rData );
+        void     impl_saveFilters   ( DataContainer& rData );
+        void     impl_saveDetectors ( DataContainer& rData );
+        void     impl_saveLoaders   ( DataContainer& rData );
+
+    private:
+        EConfigType m_eConfigType ; // obsolete? ...
+        sal_Int32   m_nVersion    ; // file format version of configuration! (neccessary for "xml2xcd" transformation!)
 };
 
 }       //  namespace framework
