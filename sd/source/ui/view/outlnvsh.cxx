@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: aw $ $Date: 2002-01-16 11:13:54 $
+ *  last change: $Author: aw $ $Date: 2002-01-18 13:46:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2177,14 +2177,19 @@ void SdOutlineViewShell::UpdatePreview( SdPage* pPage, BOOL bInit )
             if( !bTitleObject )
                 pPara = pOlView->GetPrevTitle( pPara );
 
-            if( bTitleObject || bNewPage )
+            // #96551# handle both updates when its an OutlineView
+            BOOL bOutlineView(FALSE);
+            if(OUTLINERMODE_OUTLINEVIEW == pOutliner->GetMode())
+                bOutlineView = TRUE;
+
+            if( bTitleObject || bNewPage || bOutlineView )
             {
                 /*********************************************************************
                 |* Titeltextobjekt
                 \********************************************************************/
                 bNewObject = UpdateTitleObject( pPage, pPara );
             }
-            if( !bTitleObject || bNewPage )
+            if( !bTitleObject || bNewPage || bOutlineView )
             {
                 /*********************************************************************
                 |* Gliederungstextobjekt
