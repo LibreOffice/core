@@ -66,8 +66,8 @@ import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.awt.*;
 
 // Canvas
-import drafts.com.sun.star.rendering.*;
-import drafts.com.sun.star.geometry.*;
+import com.sun.star.rendering.*;
+import com.sun.star.geometry.*;
 
 // Java AWT
 import java.awt.*;
@@ -84,7 +84,7 @@ public class CanvasGraphicDevice
     extends com.sun.star.lib.uno.helper.ComponentBase
     implements com.sun.star.lang.XServiceInfo,
                com.sun.star.beans.XPropertySet,
-               drafts.com.sun.star.rendering.XGraphicDevice
+               com.sun.star.rendering.XGraphicDevice
 {
     private java.awt.Graphics2D             graphics;
     private java.awt.GraphicsConfiguration  graphicsConfig;
@@ -116,19 +116,19 @@ public class CanvasGraphicDevice
         return null;
     }
 
-    public synchronized drafts.com.sun.star.geometry.RealSize2D getPhysicalResolution()
+    public synchronized com.sun.star.geometry.RealSize2D getPhysicalResolution()
     {
         CanvasUtils.printLog( "CanvasGraphicDevice.getPhysicalResolution!" );
         // TODO: getDefaultTransform + getNormalizingTransform
-        return new drafts.com.sun.star.geometry.RealSize2D(100,100);
+        return new com.sun.star.geometry.RealSize2D(100,100);
     }
 
-    public synchronized drafts.com.sun.star.geometry.RealSize2D getSize()
+    public synchronized com.sun.star.geometry.RealSize2D getSize()
     {
         CanvasUtils.printLog( "CanvasGraphicDevice.getSize!" );
         java.awt.Rectangle bounds = graphicsConfig.getBounds();
 
-        return new drafts.com.sun.star.geometry.RealSize2D(bounds.width, bounds.height);
+        return new com.sun.star.geometry.RealSize2D(bounds.width, bounds.height);
     }
 
     public synchronized XLinePolyPolygon2D createCompatibleLinePolyPolygon( RealPoint2D[][] points )
@@ -143,7 +143,7 @@ public class CanvasGraphicDevice
         return new BezierPolyPolygon( points );
     }
 
-    public synchronized drafts.com.sun.star.rendering.XBitmap createCompatibleBitmap( IntegerSize2D size )
+    public synchronized com.sun.star.rendering.XBitmap createCompatibleBitmap( IntegerSize2D size )
     {
         CanvasUtils.printLog( "createCompatibleBitmap called with size (" + size.Width + ", " + size.Height + ")" );
         return new CanvasBitmap( graphicsConfig.createCompatibleImage( size.Width,
@@ -151,14 +151,14 @@ public class CanvasGraphicDevice
                                                                        Transparency.OPAQUE ) );
     }
 
-    public synchronized drafts.com.sun.star.rendering.XVolatileBitmap createVolatileBitmap( IntegerSize2D size )
+    public synchronized com.sun.star.rendering.XVolatileBitmap createVolatileBitmap( IntegerSize2D size )
     {
         CanvasUtils.printLog( "createVolatileBitmap called with size (" + size.Width + ", " + size.Height + ")" );
         //return new CanvasBitmap( graphicsConfig.createCompatibleVolatileImage( size.Width, size.Height ) );
         return null;
     }
 
-    public synchronized drafts.com.sun.star.rendering.XBitmap createCompatibleAlphaBitmap( IntegerSize2D size )
+    public synchronized com.sun.star.rendering.XBitmap createCompatibleAlphaBitmap( IntegerSize2D size )
     {
         CanvasUtils.printLog( "createCompatibleBitmap called with size (" + size.Width + ", " + size.Height + ")" );
         return new CanvasBitmap( graphicsConfig.createCompatibleImage( size.Width,
@@ -166,14 +166,14 @@ public class CanvasGraphicDevice
                                                                         Transparency.TRANSLUCENT ) );
     }
 
-    public synchronized drafts.com.sun.star.rendering.XVolatileBitmap createVolatileAlphaBitmap( IntegerSize2D size )
+    public synchronized com.sun.star.rendering.XVolatileBitmap createVolatileAlphaBitmap( IntegerSize2D size )
     {
         CanvasUtils.printLog( "createVolatileBitmap called with size (" + size.Width + ", " + size.Height + ")" );
         //return new CanvasBitmap( graphicsConfig.createCompatibleVolatileImage( size.Width, size.Height ) );
         return null;
     }
 
-    public synchronized drafts.com.sun.star.rendering.XParametricPolyPolygon2DFactory getParametricPolyPolygonFactory()
+    public synchronized com.sun.star.rendering.XParametricPolyPolygon2DFactory getParametricPolyPolygonFactory()
     {
         // TODO
         return null;
@@ -250,7 +250,7 @@ public class CanvasGraphicDevice
     //
 
     private static final String s_implName = "XGraphicsDevice.java.impl";
-    private static final String s_serviceName = "drafts.com.sun.star.rendering.GraphicsDevice";
+    private static final String s_serviceName = "com.sun.star.rendering.GraphicsDevice";
 
     public String getImplementationName()
     {

@@ -65,8 +65,8 @@ import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.awt.*;
 
 // Canvas
-import drafts.com.sun.star.rendering.*;
-import drafts.com.sun.star.geometry.*;
+import com.sun.star.rendering.*;
+import com.sun.star.geometry.*;
 
 // system-dependent stuff
 import sun.awt.*;
@@ -75,15 +75,15 @@ import sun.awt.*;
 public class CanvasFont
     extends com.sun.star.lib.uno.helper.ComponentBase
     implements com.sun.star.lang.XServiceInfo,
-               drafts.com.sun.star.rendering.XCanvasFont
+               com.sun.star.rendering.XCanvasFont
 {
     private CanvasBase                                  associatedCanvas;
-    private drafts.com.sun.star.rendering.FontRequest   fontRequest;
+    private com.sun.star.rendering.FontRequest  fontRequest;
     private java.awt.Font                               font;
 
     //----------------------------------------------------------------------------------
 
-    public CanvasFont( drafts.com.sun.star.rendering.FontRequest    _fontRequest,
+    public CanvasFont( com.sun.star.rendering.FontRequest   _fontRequest,
                        CanvasBase                                   _canvas )
     {
         associatedCanvas = _canvas;
@@ -141,7 +141,7 @@ public class CanvasFont
     //
 
     private static final String s_implName = "CanvasFont.java.impl";
-    private static final String s_serviceName = "drafts.com.sun.star.rendering.XCanvasFont";
+    private static final String s_serviceName = "com.sun.star.rendering.XCanvasFont";
 
     public String getImplementationName()
     {
