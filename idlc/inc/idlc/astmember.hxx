@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astmember.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:23:01 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:40:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,35 +58,36 @@
  *
  *
  ************************************************************************/
+
 #ifndef _IDLC_ASTMEMBER_HXX_
 #define _IDLC_ASTMEMBER_HXX_
 
 #ifndef _IDLC_ASTDECLARATION_HXX_
-#include <idlc/astdeclaration.hxx>
+#include "idlc/astdeclaration.hxx"
 #endif
 
-class AstMember : public AstDeclaration
-{
+namespace rtl { class OString; }
+class AstScope;
+class AstType;
+
+class AstMember: public AstDeclaration {
 public:
-    AstMember(AstType *pType, const ::rtl::OString& name, AstScope* pScope)
-        : AstDeclaration(NT_member, name, pScope)
-        , m_pType(pType)
-        {}
-    AstMember(const NodeType type,
-              AstType *pType,
-              const ::rtl::OString& name,
-              AstScope* pScope)
-        : AstDeclaration(type, name, pScope)
-        , m_pType(pType)
-        {}
+    AstMember(
+        AstType const * pType, rtl::OString const & name, AstScope * pScope):
+        AstDeclaration(NT_member, name, pScope), m_pType(pType) {}
+
     virtual ~AstMember() {}
 
-    AstType* getType()
-        { return m_pType; }
+    AstType const * getType() const { return m_pType; }
+
+protected:
+    AstMember(
+        NodeType type, AstType const * pType, rtl::OString const & name,
+        AstScope * pScope):
+        AstDeclaration(type, name, pScope), m_pType(pType) {}
 
 private:
-    AstType*    m_pType;
+    AstType const * m_pType;
 };
 
-#endif // _IDLC_ASTMEMBER_HXX_
-
+#endif

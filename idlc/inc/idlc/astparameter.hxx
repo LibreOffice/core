@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astparameter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:23:01 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef _IDLC_ASTPARAMETER_HXX_
 #define _IDLC_ASTPARAMETER_HXX_
 
@@ -65,31 +66,25 @@
 #include <idlc/astmember.hxx>
 #endif
 
-enum Direction
-{
-    DIR_IN,
-    DIR_OUT,
-    DIR_INOUT
-};
+enum Direction { DIR_IN, DIR_OUT, DIR_INOUT };
 
-class AstParameter : public AstMember
-{
+class AstParameter: public AstMember {
 public:
-    AstParameter(Direction direction, AstType *pType, const ::rtl::OString& name, AstScope* pScope)
-        : AstMember(NT_parameter, pType, name, pScope)
-        , m_direction(direction)
-        , m_pType(pType)
-        {}
+    AstParameter(
+        Direction direction, bool rest, AstType const * type,
+        rtl::OString const & name, AstScope * scope):
+        AstMember(NT_parameter, type, name, scope), m_direction(direction),
+        m_rest(rest) {}
+
     virtual ~AstParameter() {}
 
-    Direction getDirection()
-        { return m_direction; }
-    AstType* getType()
-        { return m_pType; }
+    Direction getDirection() const { return m_direction; }
+
+    bool isRest() const { return m_rest; }
+
 private:
-    Direction   m_direction;
-    AstType*    m_pType;
+    Direction m_direction;
+    bool m_rest;
 };
 
-#endif // _IDLC_ASTPARAMETER_HXX_
-
+#endif
