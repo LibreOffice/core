@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-09-24 17:34:46 $
+ *  last change: $Author: sab $ $Date: 2002-03-14 15:24:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,8 @@
 #include "globstr.hrc"
 #include "drawview.hxx"
 #include "docsh.hxx"
+#include "viewuno.hxx"
+#include "AccessibilityHints.hxx"
 
 #include <string>
 #include <algorithm>
@@ -2121,6 +2123,24 @@ void ScTabView::SetNewVisArea()
     for (i=0; i<4; i++)
         if (pGridWin[i] && aDrawMode[i] != aOldMode[i])
             pGridWin[i]->SetMapMode(aOldMode[i]);
+
+    SfxViewFrame* pViewFrame = aViewData.GetViewShell()->GetViewFrame();
+    if (pViewFrame)
+    {
+        SfxFrame* pFrame = pViewFrame->GetFrame();
+        if (pFrame)
+        {
+            com::sun::star::uno::Reference<com::sun::star::frame::XController> xController = pFrame->GetController();
+            if (xController.is())
+            {
+                ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
+                if (pImp)
+                    pImp->VisAreaChanged();
+            }
+        }
+    }
+    if (aViewData.GetViewShell()->HasAccessibilityObjects())
+        aViewData.GetViewShell()->BroadcastAccessibility(SfxSimpleHint(SC_HINT_ACC_VISAREACHANGED));
 }
 
 void ScTabView::StartDataSelect()
