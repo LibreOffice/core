@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ivctrl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 15:48:01 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 11:23:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,16 +653,10 @@ void SvtIconChoiceCtrl::SetNoSelection()
     _pImp->SetNoSelection();
 }
 
-void SvtIconChoiceCtrl::AddEventListener( const Link& rEventListener )
+void SvtIconChoiceCtrl::CallImplEventListeners(ULONG nEvent, void* pData)
 {
-    _pImp->AddEventListener( rEventListener );
+    CallEventListeners(nEvent, pData);
 }
-
-void SvtIconChoiceCtrl::RemoveEventListener( const Link& rEventListener )
-{
-    _pImp->RemoveEventListener( rEventListener );
-}
-
 ::com::sun::star::uno::Reference< XAccessible > SvtIconChoiceCtrl::CreateAccessible()
 {
     Window* pParent = GetAccessibleParentWindow();
@@ -673,7 +667,10 @@ void SvtIconChoiceCtrl::RemoveEventListener( const Link& rEventListener )
     {
         ::com::sun::star::uno::Reference< XAccessible > xAccParent = pParent->GetAccessible();
         if ( xAccParent.is() )
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xTemp(GetComponentInterface());
             xAccessible = new svt::AccessibleIconChoiceCtrl( *this, xAccParent );
+        }
     }
     return xAccessible;
 }
