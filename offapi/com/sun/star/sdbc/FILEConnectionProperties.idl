@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FILEConnectionProperties.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:55 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 13:17:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,11 @@
 #ifndef __com_sun_star_sdbc_FILEConnectionProperties_idl__
 #define __com_sun_star_sdbc_FILEConnectionProperties_idl__
 
- module com {  module sun {  module star {  module sdbc {
-
 #ifndef __com_sun_star_sdbc_ConnectionProperties_idl__
 #include <com/sun/star/sdbc/ConnectionProperties.idl>
 #endif
+
+module com {  module sun {  module star {  module sdbc {
 
 /** represents the properties for a FILE connection (session) with a specific
     database. These properties can be used when calling the method
