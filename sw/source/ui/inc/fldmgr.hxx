@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-11-15 11:13:11 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,12 +97,6 @@ class ListBox;
 class SvNumberFormatter;
 
 /*--------------------------------------------------------------------
-    Beschreibung: Shell setzen auf der der SwFldMgr arbeitet
- --------------------------------------------------------------------*/
-
-void SetFldMgrShell(SwWrtShell* pSh);
-
-/*--------------------------------------------------------------------
     Beschreibung: Die Gruppen von Feldern
  --------------------------------------------------------------------*/
 
@@ -160,8 +154,6 @@ struct SwInsertFld_Data
 class SwFldMgr
 {
 private:
-    SvStringsDtor   aSubLst;
-
     SwField*            pCurFld;
     SbModule*           pModule;
     const SvxMacroItem* pMacroItem;
@@ -248,16 +240,17 @@ public:
 
     // TypeId des aktuellen Feldes
     USHORT          GetCurTypeId() const;
+
     // TypeId fuer einen konkrete Pos in der Liste
-    USHORT          GetTypeId(USHORT nPos) const;
+    static USHORT   GetTypeId(USHORT nPos);
     // Name des Typen in der Liste der Felder
-    const String&   GetTypeStr(USHORT nPos) const;
+    static const String&  GetTypeStr(USHORT nPos);
 
     // Pos in der Liste der Felder
-    USHORT          GetPos(USHORT nTypeId) const;
+    static USHORT   GetPos(USHORT nTypeId);
 
     // Untertypen zu einem Typ
-    SvStringsDtor&  GetSubTypes(USHORT nId);
+    BOOL            GetSubTypes(USHORT nId, SvStringsDtor& rToFill);
 
     BOOL            SetUserSubType(const String& rName, USHORT nSubType);
 
