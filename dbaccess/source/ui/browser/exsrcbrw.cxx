@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exsrcbrw.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-29 12:24:44 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:03:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,7 +458,7 @@ void SbaExternalSourceBrowser::Attach(const Reference< XRowSet > & xMaster)
         // at this point we have to reset the formatter for the new form
         initFormatter();
         // assume that the master form is already loaded
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         {
             Reference< XLoadable > xLoadable( xMaster, UNO_QUERY );
             OSL_ENSURE( xLoadable.is() && xLoadable->isLoaded(), "SbaExternalSourceBrowser::Attach: master is not loaded!" );
