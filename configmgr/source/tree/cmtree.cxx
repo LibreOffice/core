@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-30 08:31:49 $
+ *  last change: $Author: dg $ $Date: 2000-12-01 13:35:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,44 +400,6 @@ namespace configmgr
             m_aType = m_aValue.getValueType();
             OSL_ASSERT(m_aType != ::getVoidCppuType());
         }
-    }
-
-    bool ValueNode::isDefault() const
-    {
-        // POST: true, if only m_aDefaultValue is set.
-        return !m_aValue.hasValue() && hasDefault();
-    }
-
-    bool ValueNode::hasDefault() const
-    {
-        // POST: true, if only m_aDefaultValue is set.
-        return getAttributes().bNullable || m_aDefaultValue.hasValue();
-    }
-
-    bool ValueNode::isNull() const
-    {
-        // POST: true, if neither Any is set.
-        return !m_aValue.hasValue() && !m_aDefaultValue.hasValue();
-    }
-
-
-    Type ValueNode::getValueType() const
-    {
-        // POST: return Type of Any
-        return m_aType;
-    }
-
-    Any ValueNode::getValue() const
-    {
-        // POST: getValue, if not set, get DefaultValue
-        if (isDefault())
-            return m_aDefaultValue;
-        return m_aValue;
-    }
-
-    Any ValueNode::getDefault() const
-    {
-        return m_aDefaultValue;
     }
 
 

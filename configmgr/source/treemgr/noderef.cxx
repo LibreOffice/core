@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-29 12:49:15 $
+ *  last change: $Author: dg $ $Date: 2000-12-01 13:40:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,14 +233,7 @@ void NodeRef::swap(NodeRef& rOther)
 NodeRef::~NodeRef()
 {
 }
-//-----------------------------------------------------------------------------
 
-bool NodeRef::isValid() const
-{
-    OSL_ASSERT( m_pImpl != 0 || m_nPos == 0 );
-
-    return m_pImpl != 0;
-}
 //-----------------------------------------------------------------------------
 
 bool NodeRef::hasChildren() const
@@ -294,6 +287,8 @@ NodeRef NodeRef::getChild(Name const& aName, Tree& rTree) const
     }
     return NodeRef(); // nothing found
 }
+
+
 //-----------------------------------------------------------------------------
 
 NodeInfo NodeRef::getInfo() const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-14 10:53:36 $
+ *  last change: $Author: dg $ $Date: 2000-12-01 13:31:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef CONFIGMGR_CONFIGNODE_HXX_
 #define CONFIGMGR_CONFIGNODE_HXX_
+
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
 
 #include "apitypes.hxx"
 #include "configexcept.hxx"
@@ -138,7 +142,7 @@ namespace configmgr
             ~NodeRef();
 
             /// checks, if this represents an existing node
-            bool isValid() const;
+            inline bool isValid() const;
 
             /// checks whether this node has any child nodes (of its own).
             bool hasChildren() const;
@@ -430,6 +434,11 @@ namespace configmgr
         NodeID findNodeFromIndex(NodeID const& aNode, NodeOffset nIndex);
 
     //-------------------------------------------------------------------------
+        inline bool NodeRef::isValid() const
+        {
+            OSL_ASSERT( m_pImpl != 0 || m_nPos == 0 );
+            return m_pImpl != 0;
+        }
 
         inline bool operator!=(NodeID const& lhs, NodeID const& rhs)
         { return !(lhs == rhs); }

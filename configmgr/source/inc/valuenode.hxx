@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuenode.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-30 09:01:47 $
+ *  last change: $Author: dg $ $Date: 2000-12-01 13:31:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,13 +221,14 @@ namespace configmgr
             :INode(aName, _aAttrs), m_aValue(anAny), m_aDefaultValue(aDefault)
         { init(); }
 
-        bool isNull() const;
-        bool hasDefault() const;
-        bool isDefault() const;
 
-        uno::Type getValueType() const;
-        uno::Any getValue() const;
-        uno::Any getDefault() const;
+        bool isNull() const {return !m_aValue.hasValue() && !m_aDefaultValue.hasValue();}
+        bool hasDefault() const {return getAttributes().bNullable || m_aDefaultValue.hasValue();}
+        bool isDefault() const {return !m_aValue.hasValue() && hasDefault();}
+
+        uno::Type getValueType() const {return m_aType;}
+        uno::Any getValue() const {return isDefault() ? m_aDefaultValue : m_aValue;}
+        const uno::Any& getDefault() const {return m_aDefaultValue;}
 
         void setValue(uno::Any aValue);
         void changeDefault(uno::Any aValue);

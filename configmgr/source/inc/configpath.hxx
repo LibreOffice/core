@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configpath.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-30 08:59:20 $
+ *  last change: $Author: dg $ $Date: 2000-12-01 13:29:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ namespace configmgr
             bool isEmpty() const { return m_sRep.getLength() == 0; }
 
             /// get a string representation of this Name
-            OUString toString() const { return m_sRep; }
+            const OUString& toString() const { return m_sRep; }
 
         public:
         // comparison operators
