@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawingDocumentDrawView.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:41 $
+ *  last change: $Author: cl $ $Date: 2002-01-29 13:44:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #endif
 
-#ifndef __com_sun_star_frame_XController_idl__
-#include <com/sun/star/frame/XController.idl>
+#ifndef __com_sun_star_frame_Controller_idl__
+#include <com/sun/star/frame/Controller.idl>
 #endif
 
 #ifndef __com_sun_star_view_XSelectionSupplier_idl__
@@ -81,6 +81,10 @@
 #include <com/sun/star/lang/XServiceInfo.idl>
 #endif
 
+#ifndef __com_sun_star_drawing_XDrawPage_idl__
+#include <com/sun/star/drawing/XDrawPage.idl>
+#endif
+
 
 //=============================================================================
 
@@ -88,42 +92,43 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::drawing::DrawingDocumentDrawView
-/** This view service is implemented by objects that can display
-    <type>DrawPage</type>s or <type>MasterPage</type>s in drawing mode.
+/** This componend integrates a view to a <type>DrawPage</type>s or
+    <type>MasterPage</type> from a <type>DrawingDocument</type>.
  */
 service DrawingDocumentDrawView
 {
+    //-------------------------------------------------------------------------
 
+    /** this services offers the  integration of this component into the
+        desktop.
+    */
+    service com::sun::star::frame::Controller;
 
-    // DocMerge from xml: service com::sun::star::drawing::DrawingDocumentDrawView: interface com::sun::star::drawing::XDrawView
+    //-------------------------------------------------------------------------
+
     /** lets you set/get the current page displayed by this
-                view.
+        view.
      */
     interface com::sun::star::drawing::XDrawView;
 
+    //-------------------------------------------------------------------------
 
-    // DocMerge from xml: service com::sun::star::drawing::DrawingDocumentDrawView: interface com::sun::star::beans::XPropertySet
+
     /** lets you access the properties of this service.
      */
     interface com::sun::star::beans::XPropertySet;
 
-
-    // DocMerge from xml: service com::sun::star::drawing::DrawingDocumentDrawView: interface com::sun::star::frame::XController
-    /** lets you register for UI status information and
-                functionality.
-     */
-    interface com::sun::star::frame::XController;
+    //-------------------------------------------------------------------------
 
 
-    // DocMerge from xml: service com::sun::star::drawing::DrawingDocumentDrawView: interface com::sun::star::view::XSelectionSupplier
     /** gives you access to the selected entities of this
                 view.
      */
     interface com::sun::star::view::XSelectionSupplier;
 
 
-    // DocMerge from xml: service com::sun::star::drawing::DrawingDocumentDrawView: interface com::sun::star::lang::XServiceInfo
+    //-------------------------------------------------------------------------
+
     /** provides the names of the services implemented by
                 this instance.
      */
@@ -131,7 +136,6 @@ service DrawingDocumentDrawView
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::drawing::DrawingDocumentDrawView::IsMasterPageMode
     /** If the view is in masterpage mode, the view shows the masterpages
         of this model.
      */
@@ -139,11 +143,23 @@ service DrawingDocumentDrawView
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::drawing::DrawingDocumentDrawView::IsLayerMode
     /** If the view is in layer mode, the user can modify the layer of the
         model of this view in the user interface.
      */
     [property] boolean IsLayerMode;
+
+
+    //-------------------------------------------------------------------------
+
+    /** This is the drawing page that is currently visible.
+     */
+    [property] XDrawPage CurrentPage;
+
+    //-------------------------------------------------------------------------
+
+    /** This is the area that is currently visible.
+     */
+    [readonly, property] com::sun::star::awt::Rectangle VisibleArea;
 
 };
 
@@ -151,18 +167,4 @@ service DrawingDocumentDrawView
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:12  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:20  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:42  jsc
-    new
-
-
-=============================================================================*/
 #endif
