@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit5.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-30 16:58:25 $
+ *  last change: $Author: mt $ $Date: 2001-01-31 16:22:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ void ImpEditEngine::SetStyleSheet( EditSelection aSel, SfxStyleSheet* pStyle )
 
 void ImpEditEngine::SetStyleSheet( USHORT nPara, SfxStyleSheet* pStyle )
 {
-    DBG_ASSERT( GetStyleSheetPool(), "SetStyleSheet: No StyleSheetPool registered!" );
+    DBG_ASSERT( GetStyleSheetPool() || !pStyle, "SetStyleSheet: No StyleSheetPool registered!" );
     ContentNode* pNode = aEditDoc.SaveGetObject( nPara );
     SfxStyleSheet* pCurStyle = pNode->GetStyleSheet();
     if ( pStyle != pCurStyle )
