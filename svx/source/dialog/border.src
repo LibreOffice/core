@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 09:35:23 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 10:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -797,6 +797,7 @@ TabPage RID_SVXPAGE_BORDER
         Hide = TRUE;
         Text = "Eigenschaften" ;
         Text [ english_us ] = "Properties" ;
+        Text[ chinese_simplified ] = "属性";
     };
     CheckBox  CB_MERGEWITHNEXT
     {
@@ -805,6 +806,7 @@ TabPage RID_SVXPAGE_BORDER
         Hide = TRUE;
         Text = "Mit dem n�chsten Absatz verschmelzen" ;
         Text [ english_us ] = "~Merge with next paragraph" ;
+        Text[ chinese_simplified ] = "与下一个段落合并";
     };
 
 
