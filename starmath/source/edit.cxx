@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-08 09:25:55 $
+ *  last change: $Author: tl $ $Date: 2001-05-30 13:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,6 +409,11 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
     }
     else
     {
+        SmViewShell *pView = SmGetActiveView();
+        SmDocShell *pDocShell = pView ? pView->GetDoc() : 0;
+        if (pDocShell)
+            pDocShell->SetModified( TRUE );
+
         // Timer neu starten, um den Handler (auch bei längeren Eingaben)
         // möglichst nur einmal am Ende aufzurufen.
         aCursorMoveTimer.Start();
