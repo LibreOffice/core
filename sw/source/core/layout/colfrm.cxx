@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colfrm.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:14:52 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 13:07:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,8 +366,7 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
 |*
 |*************************************************************************/
 
-void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes,
-                                 BOOL bAutoWidth )
+void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes )
 {
     if( !Lower()->GetNext() )
     {
@@ -400,104 +399,106 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes,
     //Die Breiten werden mitgezaehlt, damit wir dem letzten den Rest geben
     //koennen.
     SwTwips nAvail = (Prt().*fnRect->fnGetWidth)();
-    const BOOL bR2L = IsRightToLeft();
     const BOOL bLine = pAttr->GetLineAdj() != COLADJ_NONE;
-    USHORT nMin = 0;
-    if ( bLine )
-        nMin = USHORT(20 + (pAttr->GetLineWidth() / 2));
+    const USHORT nMin = bLine ? USHORT( 20 + ( pAttr->GetLineWidth() / 2) ) : 0;
+
     SwFrm *pCol = Lower();
+
+    const BOOL bR2L = IsRightToLeft();
     if( bR2L )
+    {
         while( pCol->GetNext() )
             pCol = pCol->GetNext();
+    }
+
+    // --> FME 2004-07-16 #i27399#
+    // bOrtho means we have to adjust the column frames manually. Otherwise
+    // we may use the values returned by CalcColWidth:
+    const BOOL bOrtho = pAttr->IsOrtho() && pAttr->GetNumCols() > 0;
     long nGutter = 0;
-    BOOL bOrtho = bAutoWidth || ( pAttr->IsOrtho() && bAdjustAttributes &&
-                                  pAttr->GetNumCols() > 0 );
-    for ( USHORT i = 0; i < pAttr->GetNumCols();
-            pCol = bR2L ? pCol->GetPrev() : pCol->GetNext(), ++i )
+    // <--
+
+    for ( USHORT i = 0; i < pAttr->GetNumCols(); ++i )
     {
         if( !bOrtho )
         {
-            const SwTwips nWidth = i == (pAttr->GetNumCols() - 1) ? nAvail :
-            pAttr->CalcColWidth( i, USHORT( (Prt().*fnRect->fnGetWidth)() ) );
-            Size aColSz = bVert ? Size( Prt().Width(), nWidth ) :
-                                  Size( nWidth, Prt().Height() );
+            const SwTwips nWidth = i == (pAttr->GetNumCols() - 1) ?
+                                   nAvail :
+                                   pAttr->CalcColWidth( i, USHORT( (Prt().*fnRect->fnGetWidth)() ) );
+
+            const Size aColSz = bVert ?
+                                Size( Prt().Width(), nWidth ) :
+                                Size( nWidth, Prt().Height() );
+
             pCol->ChgSize( aColSz );
 
-        // Hierdurch werden die ColumnBodyFrms von Seitenspalten angepasst und
-        // ihr bFixHeight-Flag wird gesetzt, damit sie nicht schrumpfen/wachsen.
-        // Bei Rahmenspalten hingegen soll das Flag _nicht_ gesetzt werden,
-        // da BodyFrms in Rahmenspalten durchaus wachsen/schrumpfen duerfen.
+            // Hierdurch werden die ColumnBodyFrms von Seitenspalten angepasst und
+            // ihr bFixHeight-Flag wird gesetzt, damit sie nicht schrumpfen/wachsen.
+            // Bei Rahmenspalten hingegen soll das Flag _nicht_ gesetzt werden,
+            // da BodyFrms in Rahmenspalten durchaus wachsen/schrumpfen duerfen.
             if( IsBodyFrm() )
                 ((SwLayoutFrm*)pCol)->Lower()->ChgSize( aColSz );
 
             nAvail -= nWidth;
         }
 
-        if ( bAutoWidth || bAdjustAttributes )
+        if ( bOrtho || bAdjustAttributes )
         {
-            SwColumn *pC = pAttr->GetColumns()[i];
-            SwAttrSet* pSet = pCol->GetAttrSet();
+            const SwColumn *pC = pAttr->GetColumns()[i];
+            const SwAttrSet* pSet = pCol->GetAttrSet();
             SvxLRSpaceItem aLR( pSet->GetLRSpace() );
-            SvxULSpaceItem aUL( pSet->GetULSpace() );
 
-            {
             //Damit die Trennlinien Platz finden, muessen sie hier
             //Beruecksichtigung finden. Ueberall wo zwei Spalten aufeinanderstossen
             //wird jeweils rechts bzw. links ein Sicherheitsabstand von 20 plus
             //der halben Penbreite einkalkuliert.
-                USHORT nRight, nLeft;
-                if( sal_False && bR2L )
+            const USHORT nLeft = pC->GetLeft();
+            const USHORT nRight = pC->GetRight();
+
+            aLR.SetLeft ( nLeft );
+            aLR.SetRight( nRight );
+
+            if ( bLine )
+            {
+                if ( i == 0 )
                 {
-                    nRight = pC->GetLeft();
-                    nLeft = pC->GetRight();
+                    aLR.SetRight( Max( nRight, nMin ) );
+                }
+                else if ( i == pAttr->GetNumCols() - 1 )
+                {
+                    aLR.SetLeft ( Max( nLeft, nMin ) );
                 }
                 else
                 {
-                    nLeft = pC->GetLeft();
-                    nRight = pC->GetRight();
+                    aLR.SetLeft ( Max( nLeft,  nMin ) );
+                    aLR.SetRight( Max( nRight, nMin ) );
                 }
-                if ( bLine )
-                {
-                    if ( i == 0 )
-                    {   aLR.SetLeft ( nLeft );
-                        aLR.SetRight( Max(nRight, nMin) );
-                    }
-                    else if ( i == (pAttr->GetNumCols() - 1) )
-                    {   aLR.SetLeft ( Max(nLeft, nMin) );
-                        aLR.SetRight( nRight );
-                    }
-                    else
-                    {   aLR.SetLeft ( Max(nLeft,  nMin) );
-                        aLR.SetRight( Max(nRight, nMin) );
-                    }
-                }
-                else
-                {
-                    aLR.SetLeft ( nLeft );
-                    aLR.SetRight( nRight);
-                }
-                aUL.SetUpper( pC->GetUpper());
-                aUL.SetLower( pC->GetLower());
             }
 
             if ( bAdjustAttributes )
             {
+                SvxULSpaceItem aUL( pSet->GetULSpace() );
+                aUL.SetUpper( pC->GetUpper());
+                aUL.SetLower( pC->GetLower());
+
                 ((SwLayoutFrm*)pCol)->GetFmt()->SetAttr( aLR );
                 ((SwLayoutFrm*)pCol)->GetFmt()->SetAttr( aUL );
             }
 
             nGutter += aLR.GetLeft() + aLR.GetRight();
         }
+
+        pCol = bR2L ? pCol->GetPrev() : pCol->GetNext();
     }
+
     if( bOrtho )
     {
-        nAvail = (Prt().*fnRect->fnGetWidth)();
-        long nInnerWidth = ( nAvail - nGutter )/ pAttr->GetNumCols();
+        long nInnerWidth = ( nAvail - nGutter ) / pAttr->GetNumCols();
         pCol = Lower();
-        for( USHORT i = 0; i < pAttr->GetNumCols(); pCol = pCol->GetNext(), ++i)
+        for( USHORT i = 0; i < pAttr->GetNumCols(); pCol = pCol->GetNext(), ++i )
         {
             SwTwips nWidth;
-            if( i == (pAttr->GetNumCols() - 1) )
+            if ( i == pAttr->GetNumCols() - 1 )
                 nWidth = nAvail;
             else
             {
@@ -506,11 +507,16 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes,
             }
             if( nWidth < 0 )
                 nWidth = 0;
-            Size aColSz = bVert ? Size( Prt().Width(), nWidth ) :
-                                  Size( nWidth, Prt().Height() );
+
+            const Size aColSz = bVert ?
+                                Size( Prt().Width(), nWidth ) :
+                                Size( nWidth, Prt().Height() );
+
             pCol->ChgSize( aColSz );
+
             if( IsBodyFrm() )
                 ((SwLayoutFrm*)pCol)->Lower()->ChgSize( aColSz );
+
             nAvail -= nWidth;
         }
     }
