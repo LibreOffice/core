@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:09:29 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:47:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,7 @@ String STR_QUERY_INNER_JOIN
     Text[ portuguese_brazilian ] = "(no function);Average;Count;Maximum;Minimum;Sum;Grouping";
     Text[ japanese ] = "—Ό•ϋ‚ΜΓ°ΜήΩ‚ΕΨέΈ‚³‚κ‚½Μ¨°ΩΔή‚Μ“ΰ—e‚ªκ’v‚·‚ιΪΊ°Δή‚Ύ‚―‚πά‚έ‚ά‚·B";
     Text[ chinese_simplified ] = "Φ»°όΊ¬Α½Έφ±νΈρΦΠÒύΣΓΧΦ¶ΞΟΰΝ¬µΔΚύΎέΜυΔΏ΅£";
-    Text[ chinese_traditional ] = "¶Θ¥]§t¨β­Σªν®ζ¤¤³sµ²Δζ¦μ¬Ϋ¦PªΊΈκ®Ζ¶µ¥Ψ΅C";
+    Text[ chinese_traditional ] = "¶Θ¥]§t¨β­Σªν®ζ¤¤³sµ²Δζ¦μ¬Ϋ¦PªΊΈκ®Ζ±ψ¥Ψ΅C";
     Text[ dutch ] = "Bevat alleen records waarbij de inhoud van de gekoppelde velden in beide tabellen gelijk is.";
     Text[ chinese_simplified ] = "Φ»°όΊ¬Α½Έφ±νΈρΦΠÒύΣΓΧΦ¶ΞΟΰΝ¬µΔΚύΎέΜυΔΏ΅£";
     Text[ greek ] = "Περιέχει μόνο τις εγγραφές των δεδομένων στις οποίες ταυτίζονται τα περιεχόμενα των συνδεδεμένων πεδίων και στους δύο πίνακες.";
@@ -334,10 +334,10 @@ String STR_QUERY_LEFTRIGHT_JOIN
     Text[ portuguese_brazilian ] = "(no function);Average;Count;Maximum;Minimum;Sum;Grouping";
     Text[ japanese ] = "'%1' ‚Μ‚·‚Χ‚Δ‚ΜΪΊ°ΔήA‚¨‚ζ‚Ρ—Ό•ϋ‚ΜΓ°ΜήΩ‚ΕΨέΈ‚³‚κ‚½Μ¨°ΩΔή‚Μ“ΰ—e‚ªκ’v‚·‚ι '%2' ‚ΜΪΊ°Δή‚Ύ‚―‚πά‚έ‚ά‚·B";
     Text[ chinese_simplified ] = "Ί¬ΣΠ'%1'ΦΠµΔΛωΣΠΚύΎέΜυΔΏΊΝ'%2'ΦΠΑ½Έφ±νΈρÒύΣΓΧΦ¶ΞΟΰΝ¬µΔΚύΎέΜυΔΏ΅£";
-    Text[ chinese_traditional ] = "§t¦³'%1'¤¤ªΊ©Ò¦³Έκ®Ζ¶µ¥Ψ©M'%2'¤¤¨β­Σªν®ζªΊ³sµ²Δζ¦μ¬Ϋ¦PªΊΈκ®Ζ¶µ¥Ψ΅C";
+    Text[ chinese_traditional ] = "§t¦³'%1'¤¤ªΊ©Ò¦³Έκ®Ζ±ψ¥Ψ©M'%2'¤¤¨β­Σªν®ζªΊ³sµ²Δζ¦μ¬Ϋ¦PªΊΈκ®Ζ±ψ¥Ψ΅C";
     Text[ dutch ] = "Bevat ALLE records uit '%1' en alleen de records uit '%2' waarbij de inhoud van de gekoppelde velden in beide tabellen gelijk is.";
     Text[ chinese_simplified ] = "Ί¬ΣΠ'%1'ΦΠµΔΛωΣΠΚύΎέΜυΔΏΊΝ'%2'ΦΠΑ½Έφ±νΈρÒύΣΓΧΦ¶ΞΟΰΝ¬µΔΚύΎέΜυΔΏ΅£";
-    Text[ greek ] = "Περιέχει ΟΛΕΣ τις εγγραφές του πίνακα '%1' και τις εγγραφές του πίνακα '%2' στις οποίες ταυτίζονται τα περιεχόμενα των συνδεδεμένων πεδίων τω";
+    Text[ greek ] = "Περιέχει ΟΛΕΣ τις εγγραφές του πίνακα '%1' και τις εγγραφές του πίνακα '%2' στις οποίες ταυτίζονται τα περιεχόμενα των συνδεδεμένων πεδίων των ";
     Text[ korean ] = "ΕΧΐΜΊν'%1'Ώ΅΄Β Έπµη ·ΉΔΪµε, ΕΧΐΜΊν '%2'Ώ΅΄Β µΞ ΕΧΐΜΊνΐΗ ΈµΕ©µΘ ΗΚµε ³»ΏλΐΜ °°ΐΊ ·ΉΔΪµεΈΈΐΜ ΖχΗΤµΛ΄Ο΄Ω .";
     Text[ arabic ] = "νΝΚζν Ϊαμ ία ΣΜαΗΚ '%1'΅ ζΣΜαΗΚ '%2' ΗαΚν ΚΚΨΗΘή ένεΗ γΝΚζνΗΚ ΗαΝήζα ΗαγΡΚΘΨΙ έν ίαΗ ΗαΜΟζανδ έήΨ.";
     Text[ turkish ] = "'%1' tablosundaki kayύtlarύn TAMAMINI ve '%2' tablosundaki kayύtlardan yalnύzca her iki tablodaki iliώkili alan iηerikleri aynύ olan kayύtlarύ iηerir.";
@@ -363,7 +363,7 @@ String STR_QUERY_FULL_JOIN
     Text[ portuguese_brazilian ] = "(no function);Average;Count;Maximum;Minimum;Sum;Grouping";
     Text[ japanese ] = "'%1' ‚Ζ '%2' ‚Μ‚·‚Χ‚Δ‚ΜΪΊ°Δή‚πά‚έ‚ά‚·B";
     Text[ chinese_simplified ] = "Ί¬ΣΠ '%1'ΊΝ'%2'ΔΪΘ«²ΏµΔΚύΎέΜυΔΏ";
-    Text[ chinese_traditional ] = "§t¦³ '%1'©M'%2'¤Ί¥ώ³΅ªΊΈκ®Ζ¶µ¥Ψ";
+    Text[ chinese_traditional ] = "§t¦³ '%1'©M'%2'¤Ί¥ώ³΅ªΊΈκ®Ζ±ψ¥Ψ";
     Text[ dutch ] = "Bevat ALLE records uit '%1' en '%2'.";
     Text[ chinese_simplified ] = "Ί¬ΣΠ '%1'ΊΝ'%2'ΔΪΘ«²ΏµΔΚύΎέΜυΔΏ";
     Text[ greek ] = "Περιέχει ΟΛΕΣ τις εγγραφές των '%1' και '%2'.";
@@ -374,6 +374,7 @@ String STR_QUERY_FULL_JOIN
     Text[ catalan ] = "Contiene TODOS los registros de datos de '%1' y de '%2'";
     Text[ finnish ] = "Beinhaltet ALLE Datensδtze aus '%1' und aus '%2'.";
 };
+
 
 
 
