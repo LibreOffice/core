@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: kz $ $Date: 2004-01-28 14:32:23 $
+#   last change: $Author: kz $ $Date: 2004-02-25 17:46:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,7 +92,13 @@ SLOFILES=			$(SLO)$/timerhelper.obj	 						\
                     $(SLO)$/actiontriggerhelper.obj					\
                     $(SLO)$/persistentwindowstate.obj				\
                     $(SLO)$/networkdomain.obj						\
-                    $(SLO)$/acceleratorinfo.obj
+                    $(SLO)$/acceleratorinfo.obj                     \
+                    $(SLO)$/uielementwrapperbase.obj                \
+                    $(SLO)$/popupmenucontrollerbase.obj             \
+                    $(SLO)$/dockingareadefaultacceptor.obj          \
+                    $(SLO)$/uiconfigelementwrapperbase.obj          \
+                    $(SLO)$/moduleidentifier.obj                    \
+                    $(SLO)$/shareablemutex.obj
 
 # --- Targets ------------------------------------------------------
 
