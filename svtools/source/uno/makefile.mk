@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: pluby $ $Date: 2000-12-15 03:00:33 $
+#   last change: $Author: hjs $ $Date: 2001-01-11 12:33:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,9 +70,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE : svpre.mk
 .INCLUDE : settings.mk
-.INCLUDE : sv.mk
 
 # --- Files --------------------------------------------------------
 
@@ -236,7 +234,8 @@ SRS1NAME=	uno
 SRC1FILES=  unoifac2.src
 .ENDIF
 
-SLOFILES=   \
+SLOFILES= \
+            $(SLO)$/staticmbuno.obj\
             $(SLO)$/addrtempuno.obj	\
             $(SLO)$/genericunodialog.obj \
             $(SLO)$/registerservices.obj \
