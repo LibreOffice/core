@@ -1,4 +1,4 @@
-wp	writerperfect : sfx2 libwpd sot svx comphelper NULL
+wp	writerperfect : sfx2 LIBWPD:libwpd sot svx comphelper NULL
 wp	writerperfect			usr1	-	all	wp_mkout NULL
 wp	writerperfect\source\stream	nmake	-	all	wp_stream NULL
 wp	writerperfect\source\filter	nmake	-	all	wp_filter NULL
