@@ -72,6 +72,8 @@ TARGET=redhat
 
 # --- Files --------------------------------------------------------
 
+ICONPREFIX = $(UNIXFILENAME:s/.//)
+
 LAUNCHERLIST = writer calc draw impress math base printeradmin
 LAUNCHERDEPN = ../menus/{$(LAUNCHERLIST)}.desktop
 LAUNCHERDIR  = $(shell cd $(MISC)$/$(TARGET); pwd)
@@ -101,9 +103,24 @@ MIMELIST = \
     oasis-presentation-template \
     oasis-formula \
     oasis-master-document \
-        oasis-database
+    oasis-database \
+    oasis-web-template
 
-MIMEICONLIST = \
+HCMIMEICONLIST = \
+    oasis-text \
+    oasis-text-template \
+    oasis-spreadsheet \
+    oasis-spreadsheet-template \
+    oasis-drawing \
+    oasis-drawing-template \
+    oasis-presentation \
+    oasis-presentation-template \
+    oasis-formula \
+    oasis-master-document \
+    oasis-database \
+    oasis-web-template
+
+MIMEICONLIST = $(HCMIMEICONLIST) \
     text \
     text-template \
     spreadsheet \
@@ -114,7 +131,7 @@ MIMEICONLIST = \
     presentation-template \
     formula \
     master-document \
-        database
+    database
 
 GNOMEMIMEDEPN = ../mimetypes/{$(MIMELIST)}.keys ../mimetypes/openoffice.mime
 KDEMIMEDEPN = ../mimetypes/{$(MIMELIST)}.desktop
@@ -123,14 +140,18 @@ KDEMIMEFLAGFILE = \
     $(MISC)/$(TARGET)/usr/share/mimelnk/application.flag
         
 GNOMEICONLIST = \
-    {16x16 32x32 48x48}/apps/$(UNIXFILENAME)-{$(LAUNCHERLIST)}.png \
-    {16x16 32x32 48x48}/mimetypes/$(UNIXFILENAME)-{$(MIMEICONLIST)}.png
+    {16x16 32x32 48x48}/apps/$(ICONPREFIX)-{$(LAUNCHERLIST)}.png \
+    {16x16 32x32 48x48}/mimetypes/$(ICONPREFIX)-{$(MIMEICONLIST)}.png
+
+HCICONLIST = \
+    HighContrast/{16x16 32x32 48x48}/apps/$(ICONPREFIX)-{$(LAUNCHERLIST)}.png \
+    HighContrast/{16x16 32x32 48x48}/mimetypes/$(ICONPREFIX)-{$(HCMIMEICONLIST)}.png
     
 KDEICONLIST = \
-    hicolor/{16x16 32x32 48x48}/apps/$(UNIXFILENAME)-{$(LAUNCHERLIST)}.png \
-    hicolor/{16x16 32x32 48x48}/mimetypes/$(UNIXFILENAME)-{$(MIMEICONLIST)}.png \
-    locolor/{16x16 32x32}/apps/$(UNIXFILENAME)-{$(LAUNCHERLIST)}.png \
-    locolor/{16x16 32x32}/mimetypes/$(UNIXFILENAME)-{$(MIMEICONLIST)}.png
+    hicolor/{16x16 32x32 48x48}/apps/$(ICONPREFIX)-{$(LAUNCHERLIST)}.png \
+    hicolor/{16x16 32x32 48x48}/mimetypes/$(ICONPREFIX)-{$(MIMEICONLIST)}.png \
+    locolor/{16x16 32x32}/apps/$(ICONPREFIX)-{$(LAUNCHERLIST)}.png \
+    locolor/{16x16 32x32}/mimetypes/$(ICONPREFIX)-{$(MIMEICONLIST)}.png
 
 .IF "$(RPM)"!=""
 
@@ -143,6 +164,7 @@ RPMDEPN = \
     $(MISC)/$(TARGET)/usr/share/mime-info/$(UNIXFILENAME).mime \
     $(MISC)/$(TARGET)/usr/share/mimelnk/application.flag \
     $(MISC)/$(TARGET)/usr/share/icons/gnome/{$(GNOMEICONLIST)} \
+    $(MISC)/$(TARGET)/usr/share/icons/{$(HCICONLIST)} \
     $(MISC)/$(TARGET)/usr/share/icons/{$(KDEICONLIST)} 
         
 RPMDIR  = $(shell cd $(BIN); pwd)
@@ -168,7 +190,7 @@ $(LAUNCHERFLAGFILES) : $(LAUNCHERDEPN) ../productversion.mk ../share/brand.pl ..
     @$(MKDIRHIER) $(@:db)
     @echo Creating desktop entries ..
     @echo ---------------------------------
-    @$(PERL) ../share/brand.pl -p "$(LONGPRODUCTNAME)" -u $(UNIXFILENAME) --prefix "$(UNIXFILENAME)-" --iconprefix "$(UNIXFILENAME)-" --category "X-Red-Hat-Base" $(LAUNCHERDEPN) $(@:db)
+    @$(PERL) ../share/brand.pl -p "$(LONGPRODUCTNAME)" -u $(UNIXFILENAME) --prefix "$(UNIXFILENAME)-" --iconprefix "$(ICONPREFIX)-" --category "X-Red-Hat-Base" $(LAUNCHERDEPN) $(@:db)
     @$(PERL) ../share/translate.pl -p "$(LONGPRODUCTNAME)" -d $(@:db) --prefix "$(UNIXFILENAME)-" --ext "desktop" --key "Name" $(ULFDIR)/launcher_name.ulf
     @$(PERL) ../share/translate.pl -p "$(LONGPRODUCTNAME)" -d $(@:db) --prefix "$(UNIXFILENAME)-" --ext "desktop" --key "Comment" $(ULFDIR)/launcher_comment.ulf
 .IF "$(WITH_LIBSN)"=="YES"
@@ -182,11 +204,15 @@ $(LAUNCHERFLAGFILES) : $(LAUNCHERDEPN) ../productversion.mk ../share/brand.pl ..
 # This target is responsible for copying the GNOME icons to their package specific target
 # e.g. $(LAUNCHERDIR)/usr/share/icons/gnome/16x16/apps/openoffice-writer.png
 #
-$(MISC)/$(TARGET)/usr/share/icons/gnome/{$(GNOMEICONLIST)} : ../icons/hicolor/$$(@:d:d:d:d:f)/$$(@:d:d:f)/$$(@:f:s/$(UNIXFILENAME)-//)
+$(MISC)/$(TARGET)/usr/share/icons/gnome/{$(GNOMEICONLIST)} : ../icons/hicolor/$$(@:d:d:d:d:f)/$$(@:d:d:f)/$$(@:f:s/$(ICONPREFIX)-//)
     @$(MKDIRHIER) $(@:d)
     @$(COPY) $< $@
 
-$(MISC)/$(TARGET)/usr/share/icons/{$(KDEICONLIST)} : ../icons/$$(@:d:d:d:d:d:d:f)/$$(@:d:d:d:d:f)/$$(@:d:d:f)/$$(@:f:s/$(UNIXFILENAME)-//)
+$(MISC)/$(TARGET)/usr/share/icons/{$(HCICONLIST)} : ../icons/$$(@:d:d:d:d:d:d:f)/$$(@:d:d:d:d:f)/$$(@:d:d:f)/$$(@:f:s/$(ICONPREFIX)-//)
+    @$(MKDIRHIER) $(@:d)
+    @$(COPY) $< $@
+
+$(MISC)/$(TARGET)/usr/share/icons/{$(KDEICONLIST)} : ../icons/$$(@:d:d:d:d:d:d:f)/$$(@:d:d:d:d:f)/$$(@:d:d:f)/$$(@:f:s/$(ICONPREFIX)-//)
     @$(MKDIRHIER) $(@:d)
     @$(COPY) $< $@
     
@@ -196,7 +222,7 @@ $(MISC)/$(TARGET)/usr/share/mime-info/$(UNIXFILENAME).keys : $(GNOMEMIMEDEPN) ..
     @$(MKDIRHIER) $(@:d)
     @echo Creating GNOME .keys file ..
     @echo ---------------------------------
-    @$(PERL) ../share/brand.pl -p $(PRODUCTNAME) -u $(UNIXFILENAME) --iconprefix "$(UNIXFILENAME)-" $(GNOMEMIMEDEPN) $(MISC)/$(TARGET)
+    @$(PERL) ../share/brand.pl -p $(PRODUCTNAME) -u $(UNIXFILENAME) --iconprefix "$(ICONPREFIX)-" $(GNOMEMIMEDEPN) $(MISC)/$(TARGET)
     @$(PERL) ../share/translate.pl -p $(PRODUCTNAME) -d $(MISC)/$(TARGET) --ext "keys" --key "description"  $(ULFDIR)/documents.ulf
     @cat $(MISC)/$(TARGET)/{$(MIMELIST)}.keys > $@
 
@@ -210,7 +236,7 @@ $(KDEMIMEFLAGFILE) : $(KDEMIMEDEPN) ../productversion.mk ../share/brand.pl ../sh
     @$(MKDIRHIER) $(@:db)
     @echo Creating KDE mimelnk entries ..
     @echo ---------------------------------
-    @$(PERL) ../share/brand.pl -p "$(PRODUCTNAME)" -u $(UNIXFILENAME) --prefix "$(UNIXFILENAME)-" --iconprefix "$(UNIXFILENAME)-" $(KDEMIMEDEPN) $(@:db)
+    @$(PERL) ../share/brand.pl -p "$(PRODUCTNAME)" -u $(UNIXFILENAME) --prefix "$(UNIXFILENAME)-" --iconprefix "$(ICONPREFIX)-" $(KDEMIMEDEPN) $(@:db)
     @$(PERL) ../share/translate.pl -p "$(PRODUCTNAME)" -d $(@:db) --prefix "$(UNIXFILENAME)-" --ext "desktop" --key "Comment" $(ULFDIR)/documents.ulf
     @touch $@    
 
@@ -223,7 +249,7 @@ $(MISC)/$(TARGET)/usr/share/application-registry/$(UNIXFILENAME).applications : 
 # --- packaging ---------------------------------------------------
     
 $(RPMFLAGFILE) : $(RPMDEPN)
-    @cat $(@:b)-menus.spec | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/" -e "s/Version: .*/Version: $(PKGVERSION)/" -e "s/Release: .*/Release: $(PKGREV)/" > $(@:db)-menus.spec
+    @cat $(@:b)-menus.spec | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/" -e "s/%ICONPREFIX/$(ICONPREFIX)/" -e "s/Version: .*/Version: $(PKGVERSION)/" -e "s/Release: .*/Release: $(PKGREV)/" > $(@:db)-menus.spec
     @echo "%define _rpmdir $(RPMDIR)" >> $(@:db)-menus.spec
     @$(RPM) -bb $(@:db)-menus.spec --buildroot $(LAUNCHERDIR) --target noarch
     @touch $@
