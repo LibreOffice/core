@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OleDragSource.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-09 10:55:21 $
+ *  last change: $Author: arellano $ $Date: 2001-07-17 16:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ module com { module sun { module star { module datatransfer { module dnd {
 interface XDragSource;
 
 //=============================================================================
-/** This service connects the java like UNO drag and drop protocol to the protocol
+/** This service connects the Java-like UNO drag and drop protocol to the protocol
     used on window platforms. It realized the drag source.
 
     @see XDragSource
@@ -101,12 +101,14 @@ service OleDragSource
     interface XDragSource;
 
     //-------------------------------------------------------------------------
-    /** the service expects a byte sequence uniqly identifying the machine as
-        the first (and only) parameter. This idenifier should be checked to
+    /** the service expects a byte sequence uniquely identifying the machine as
+        the first, and only, parameter. This idenifier should be checked to
         ensure that the window ids used for creating DropTargets are valid for
-        the service, i.e. come from the same machine.
+        the service, that is, come from the same machine.
 
         <p>TODO: specify how such a machine id should look like.</p>
+
+    <!-- Editor: Should the last sentence be seen by the user? -->
 
         The second parameter is a window handle of the native windows window.
         Is is passed as an unsigned long.
