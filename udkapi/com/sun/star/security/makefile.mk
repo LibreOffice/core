@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dbo $ $Date: 2000-12-13 14:21:55 $
+#   last change: $Author: dbo $ $Date: 2001-12-10 19:16:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,8 +82,9 @@ IDLFILES= \
     XAccessController.idl \
     XAccessControlContext.idl \
     XPrivilegedAction.idl \
-    Permission.idl \
     AccessControlException.idl
+
+#	Permission.idl \
 
 # ------------------------------------------------------------------
 

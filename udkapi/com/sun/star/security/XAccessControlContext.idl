@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAccessControlContext.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:41 $
+ *  last change: $Author: dbo $ $Date: 2001-12-10 19:16:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,6 @@
 #include <com/sun/star/uno/XInterface.idl>
 #endif
 
-#ifndef __com_sun_star_security_Permission_idl__
-#include <com/sun/star/security/Permission.idl>
-#endif
-
 #ifndef __com_sun_star_security_AccessControlException_idl__
 #include <com/sun/star/security/AccessControlException.idl>
 #endif
@@ -80,8 +76,7 @@ module com {  module sun {  module star {  module security {
 
 //=============================================================================
 
-/** <p><b>WARNING: this is just a draft and may be changed!</b></p>
-    An XAccessControlContext is used to make system resource access decisions
+/** An XAccessControlContext is used to make system resource access decisions
     based on the context it encapsulates.
     <p>
     More specifically, it encapsulates a context and has methods to check
@@ -96,17 +91,37 @@ interface XAccessControlContext : com::sun::star::uno::XInterface
 {
     /** Determines whether the access request indicated by the specified
         permission should be allowed or denied, based on this context.
+        The type names and semantics are equivalent to the security permission
+        classes of the Java platform.
         <p>
         This method quietly returns if the access request is permitted,
         or throws a suitable AccessControlException otherwise.
         </p>
-        @param perm
-               access permission to be checked
+
+        @param permissionType
+               type name of permission; pre-defined names are:
+               <ul>
+               <li>java.io.FilePermission</li>
+               <li>java.net.SocketPermission</li>
+               <li>java.util.PropertyPermission</li>
+               <li>java.lang.RuntimePermission</li>
+               <li>java.net.NetPermission</li>
+               <li>java.security.SecurityPermission</li>
+               <li>java.security.AllPermission</li>
+               <li>... more?</li>
+               </ul>
+        @param permissionTarget
+               target of permission, e.g., file name
+        @param permissionActions
+               (list) of actions permitted, e.g., "read,write"
+
         @throws AccessControlException
                 thrown if access is denied
     */
     void checkPermission(
-        [in] Permission perm )
+        [in] string permissionType,
+        [in] string permissionTarget,
+        [in] string permissionActions )
         raises (AccessControlException);
 };
 
