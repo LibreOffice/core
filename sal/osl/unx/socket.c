@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.c,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 14:24:01 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:43:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,7 +494,7 @@ void SAL_CALL osl_psz_getLastSocketErrorDescription (
 /* osl_create/destroy-SocketImpl */
 /*****************************************************************************/
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 static sal_uInt32 g_nSocketImpl = 0;
 static sal_uInt32 g_nSocketAddr = 0;
 
@@ -513,7 +513,7 @@ struct LeakWarning
 LeakWarning socketWarning;
 #endif
 
-#endif /* DEBUG */
+#endif /* OSL_DEBUG_LEVEL */
 
 
 oslSocket __osl_createSocketImpl(int Socket)
@@ -532,7 +532,7 @@ oslSocket __osl_createSocketImpl(int Socket)
     pSocket->m_bIsAccepting = sal_False;
 #endif
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     g_nSocketImpl ++;
 #endif
     return pSocket;
@@ -542,7 +542,7 @@ void __osl_destroySocketImpl(oslSocket Socket)
 {
     if ( Socket != NULL)
         free((struct oslSocketImpl *) Socket);
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     g_nSocketImpl --;
 #endif
 }
@@ -550,7 +550,7 @@ void __osl_destroySocketImpl(oslSocket Socket)
 static oslSocketAddr __osl_createSocketAddr(  )
 {
     oslSocketAddr pAddr = (oslSocketAddr) rtl_allocateZeroMemory( sizeof( struct oslSocketAddrImpl ));
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     g_nSocketAddr ++;
 #endif
     return pAddr;
@@ -590,7 +590,7 @@ static oslSocketAddr __osl_createSocketAddrFromSystem( struct sockaddr *pSystemS
 
 static void __osl_destroySocketAddr( oslSocketAddr addr )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     g_nSocketAddr --;
 #endif
     rtl_freeMemory( addr );
@@ -1905,12 +1905,12 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
         socklen_t nSockLen = sizeof(aSockAddr);
 
         nRet = getsockname(nFD, &aSockAddr, &nSockLen);
-#if defined(DEBUG)
+#if OSL_DEBUG_LEVEL > 1
         if ( nRet < 0 )
         {
             perror("getsockname");
         }
-#endif /* DEBUG */
+#endif /* OSL_DEBUG_LEVEL */
 
         if ( aSockAddr.sa_family == AF_INET )
         {
@@ -1922,20 +1922,20 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
             }
 
             nConnFD = socket(AF_INET, SOCK_STREAM, 0);
-#if defined(DEBUG)
+#if OSL_DEBUG_LEVEL > 1
             if ( nConnFD < 0 )
             {
                 perror("socket");
             }
-#endif /* DEBUG */
+#endif /* OSL_DEBUG_LEVEL */
 
             nRet = connect(nConnFD, &aSockAddr, sizeof(aSockAddr));
-#if defined(DEBUG)
+#if OSL_DEBUG_LEVEL > 1
             if ( nRet < 0 )
             {
                 perror("connect");
             }
-#endif /* DEBUG */
+#endif /* OSL_DEBUG_LEVEL */
             close(nConnFD);
         }
     }
