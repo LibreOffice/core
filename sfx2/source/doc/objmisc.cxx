@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:43:14 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 10:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,12 +280,15 @@ SfxDocumentInfo& SfxObjectShell::GetDocInfo()
 
 void SfxObjectShell::FlushDocInfo()
 {
+    if ( IsLoading() )
+        return;
+
     SetModified(sal_True);
     SfxDocumentInfo &rInfo = GetDocInfo();
     Broadcast( SfxDocumentInfoHint( &rInfo ) );
     SetAutoLoad( rInfo.GetReloadURL(), rInfo.GetReloadDelay() * 1000,
                  rInfo.IsReloadEnabled() );
-
+/*
     // bitte beachten:
     // 1. Titel in DocInfo aber nicht am Doc (nach HTML-Import)
     //  => auch am Doc setzen
@@ -303,7 +306,7 @@ void SfxObjectShell::FlushDocInfo()
             SfxShell::SetName( GetTitle(SFX_TITLE_APINAME) );
             Broadcast( SfxSimpleHint(SFX_HINT_TITLECHANGED) );
         }
-    }
+    }*/
 }
 
 //-------------------------------------------------------------------------
@@ -625,6 +628,7 @@ String X(const String &rRet)
 #endif
 
 //--------------------------------------------------------------------
+//--------------------------------------------------------------------
 String SfxObjectShell::GetTitle
 (
     sal_uInt16  nMaxLength      /*  0 (default)
@@ -679,7 +683,9 @@ String SfxObjectShell::GetTitle
 {
 //    if ( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
 //        return String();
-SfxMedium *pMed = GetMedium();
+    SfxMedium *pMed = GetMedium();
+    if ( IsLoading() )
+        return String();
 
     // Titel erzeugen?
     if ( SFX_TITLE_DETECT == nMaxLength && !pImp->aTitle.Len() )
@@ -702,9 +708,9 @@ SfxMedium *pMed = GetMedium();
         if ( !aTitle.Len() )
         {
             // evtl. ist Titel aus DocInfo verwendbar
-            aTitle = pThis->GetDocInfo().GetTitle();
-            aTitle.EraseLeadingChars();
-            aTitle.EraseTrailingChars();
+            //aTitle = pThis->GetDocInfo().GetTitle();
+            //aTitle.EraseLeadingChars();
+            //aTitle.EraseTrailingChars();
 
             if ( !aTitle.Len() )
                 // sonst wie SFX_TITLE_FILENAME
@@ -778,7 +784,7 @@ SfxMedium *pMed = GetMedium();
         if ( !pImp->aTitle.Len() )
         {
             if ( nMaxLength == SFX_TITLE_FILENAME )
-                return X( aURL.getName( INetURLObject::LAST_SEGMENT,
+                return X( aURL.getBase( INetURLObject::LAST_SEGMENT,
                                         true, INetURLObject::DECODE_WITH_CHARSET ) );
 
             // sonst Titel aus Dateiname generieren
@@ -803,7 +809,8 @@ SfxMedium *pMed = GetMedium();
         }
         else if ( nMaxLength == SFX_TITLE_FILENAME )
         {
-            String aName( aURL.GetLastName() );
+            //String aName( aURL.GetLastName() );
+            String aName( aURL.GetBase() );
             aName = INetURLObject::decode( aName, INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET );
             if( !aName.Len() )
                 aName = aURL.GetURLNoPass();
