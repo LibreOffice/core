@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-27 10:44:08 $
+ *  last change: $Author: hr $ $Date: 2001-10-10 14:38:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,7 +403,7 @@ ANY SAL_CALL SfxBaseController::queryInterface( const UNOTYPE& rType ) throw( RU
 //  SfxBaseController -> XInterface
 //________________________________________________________________________________________________________
 
-void SAL_CALL SfxBaseController::acquire() throw( RUNTIMEEXCEPTION )
+void SAL_CALL SfxBaseController::acquire() throw()
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
@@ -416,7 +416,7 @@ void SAL_CALL SfxBaseController::acquire() throw( RUNTIMEEXCEPTION )
 //  SfxBaseController -> XInterface
 //________________________________________________________________________________________________________
 
-void SAL_CALL SfxBaseController::release() throw( RUNTIMEEXCEPTION )
+void SAL_CALL SfxBaseController::release() throw()
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
@@ -718,7 +718,8 @@ void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::Runtime
             m_pData->m_pViewShell = NULL;
             if ( pFrame->GetViewShell() == pShell )
             {
-                pFrame->GetFrame()->SetFrameInterface_Impl(  REFERENCE < XFRAME >() );
+                REFERENCE < XFRAME > aXFrame;
+                pFrame->GetFrame()->SetFrameInterface_Impl(  aXFrame );
                 pFrame->GetFrame()->DoClose();
             }
         }
