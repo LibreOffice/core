@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 16:37:36 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:47:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,19 @@
 #ifndef _RTL_URI_HXX_
 #include <rtl/uri.hxx>
 #endif
+#include <rtl/ustring.hxx>
+#include <comphelper/processfactory.hxx>
+#include <cppuhelper/bootstrap.hxx>
+#include <com/sun/star/uri/XExternalUriReferenceTranslator.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XCurrentContext.hpp>
+#include <uno/current_context.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+
+using namespace rtl;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::uri;
+using namespace com::sun::star::uno;
 
 namespace desktop
 {
@@ -118,10 +131,29 @@ void CommandLineArgs::ParseCommandLine_Impl( const ::vos::OExtCommandLine& aExtC
     ::rtl::OUString aDummy;
     String          aArguments;
 
+    Reference<XComponentContext> xComponentContext = ::cppu::defaultBootstrap_InitialComponentContext();
+    Reference<XMultiServiceFactory> xMS(xComponentContext->getServiceManager(), UNO_QUERY);
+    Reference< XExternalUriReferenceTranslator > xTranslator(
+        xMS->createInstance(
+        OUString::createFromAscii(
+        "com.sun.star.uri.ExternalUriReferenceTranslator")),
+        UNO_QUERY);
+
+
     // Extract cmdline parameters and concat them to the cmdline string format
     for( sal_uInt32 i=0; i < nCount; i++ )
     {
         aCmdLine.getCommandArg( i, aDummy );
+
+        // convert file URLs to internal form #112849#
+        if (aDummy.indexOf(OUString::createFromAscii("file:"))==0 &&
+            xTranslator.is())
+        {
+            OUString tmp(xTranslator->translateToInternal(aDummy));
+            if (tmp.getLength() > 0)
+                aDummy = tmp;
+        }
+
         aArguments += String( aDummy );
         aArguments += '|';
     }
@@ -348,7 +380,9 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
     }
     else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-quickstart" )) == sal_True )
     {
+#ifdef WNT
         SetBoolParam_Impl( CMD_BOOLPARAM_QUICKSTART, sal_True );
+#endif
         return sal_True;
     }
     else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-terminate_after_init" )) == sal_True )
