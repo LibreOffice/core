@@ -2,9 +2,9 @@
  *
  *  $RCSfile: readline.c,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-10-24 10:55:17 $
+ *  last change: $Author: tra $ $Date: 2001-10-24 11:48:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,7 @@ oslFileError SAL_CALL osl_readLine( oslFileHandle Handle, sal_Sequence** ppSeq )
             else /* any other character */
             {
                 /* correct the file pointer */
-                ferr = osl_setFilePos( Handle, -1, osl_Pos_Current );
+                ferr = osl_setFilePos( Handle, osl_Pos_Current, -1 );
 
                 if ( ferr != osl_File_E_None )
                 {
