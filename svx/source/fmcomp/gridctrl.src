@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2001-02-09 21:48:43 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 20:23:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ Menu RID_SVXMNU_ROWS
             Text[ russian ] = "Ρξυπΰνθςό ηΰοθρό δΰννϋυ";
             Text[ polish ] = "Zapisz rekord";
             Text[ japanese ] = "ΪΊ°Δή‚π•Ϋ‘¶";
-            Text[ chinese_traditional ] = "ΐx¦sΈκ®Ζ¶µ¥Ψ";
+            Text[ chinese_traditional ] = "ΐx¦sΈκ®Ζ±ψ¥Ψ";
             Text[ dutch ] = "Record opslaan";
             Text[ chinese_simplified ] = "΄ζΕΜΚύΎέΌΗΒΌ";
             Text[ greek ] = "Αποθήκευση εγγραφής δεδομένων";
@@ -590,8 +590,8 @@ Menu RID_SVXMNU_COLS
                         Text[ portuguese_brazilian ] = "~More ...";
                         Text[ japanese ] = "‚»‚Μ‘Ό(~M)...";
                         Text[ korean ] = "ΐΪΌΌΘχ (~M)...";
-                        Text[ chinese_simplified ] = "ΖδΛό(~M)...";
-                        Text[ chinese_traditional ] = "¨δ¥L(~M)...";
+                        Text[ chinese_simplified ] = "Έό¶ΰ(~M)...";
+                        Text[ chinese_traditional ] = "§σ¦h(~M)...";
                         Text[ arabic ] = "ΗαγÒνΟ ...";
                         Text[ language_user1 ] = "(ΔΔ): ή Περισσότερα ή επιπρόσθετα; - - - -";
                         Text[ turkish ] = "Diπer...";
