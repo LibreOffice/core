@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeProvider.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change:$Date: 2004-04-22 17:06:14 $
+ *  last change:$Date: 2004-05-03 09:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 package helper;
+
 import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.connection.XConnection;
 import com.sun.star.connection.XConnector;
@@ -113,8 +114,8 @@ public class OfficeProvider implements AppProvider {
 
             try {
                 desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
-                                                            msf.createInstance(
-                                                                    "com.sun.star.frame.Desktop"));
+                msf.createInstance(
+                "com.sun.star.frame.Desktop"));
             } catch (com.sun.star.uno.Exception ue) {
                 return false;
             }
@@ -136,7 +137,7 @@ public class OfficeProvider implements AppProvider {
      */
     public Object getManager(lib.TestParameters param) {
         String additionalArgs = (String) param.get(
-                                        "AdditionalConnectionArguments");
+        "AdditionalConnectionArguments");
 
         if (additionalArgs == null) {
             additionalArgs = ";";
@@ -145,7 +146,7 @@ public class OfficeProvider implements AppProvider {
         }
 
         String cncstr = "uno:" + param.get("ConnectionString") + ";urp" +
-                        additionalArgs + "StarOffice.ServiceManager";
+        additionalArgs + "StarOffice.ServiceManager";
 
         if (debug) {
             System.out.print("Connecting the Office with " + cncstr);
@@ -160,12 +161,12 @@ public class OfficeProvider implements AppProvider {
             boolean isExecutable = false;
             boolean isAppKnown = cncstr.indexOf("host=localhost") > 0;
             isAppKnown &= !((String) param.get("AppExecutionCommand")).equals(
-                                   "");
+            "");
 
             if (isAppKnown) {
                 if (debug) {
                     System.out.println(
-                            "Local Connection trying to start the Office");
+                    "Local Connection trying to start the Office");
                 }
 
                 //ensure that a pending officewatcher gets finished before a new
@@ -179,7 +180,7 @@ public class OfficeProvider implements AppProvider {
                 String cmd = (String) param.get("AppExecutionCommand");
                 DynamicClassLoader dcl = new DynamicClassLoader();
                 LogWriter log = (LogWriter) dcl.getInstance(
-                                        (String) param.get("LogWriter"));
+                (String) param.get("LogWriter"));
 
                 //create empty entry
                 DescEntry Entry = new DescEntry();
@@ -224,21 +225,21 @@ public class OfficeProvider implements AppProvider {
 
                 if (msf == null) {
                     System.out.println("Exception while connecting.\n" +
-                                       exc);
+                    exc);
                 } else if (isExecutable) {
                     //copy the user layer to a safe place
                     try {
                         XStringSubstitution sts = createStringSubstitution(msf);
                         String userLayer = sts.getSubstituteVariableValue(
-                                                   "$(user)");
+                        "$(user)");
                         userLayer = getDirSys(userLayer);
                         param.put("userLayer", userLayer);
 
                         //System.out.println("UserLayer: "+userLayer);
                         String copyLayer = System.getProperty("java.io.tmpdir") +
-                                           System.getProperty("file.separator") +
-                                           "user_backup" +
-                                           System.currentTimeMillis();
+                        System.getProperty("file.separator") +
+                        "user_backup" +
+                        System.currentTimeMillis();
                         param.put("copyLayer", copyLayer);
 
 
@@ -253,7 +254,7 @@ public class OfficeProvider implements AppProvider {
                 }
             } else {
                 System.out.println("Could not connect an Office" +
-                                   " and cannot start one.");
+                " and cannot start one.");
             }
         }
 
@@ -264,24 +265,24 @@ public class OfficeProvider implements AppProvider {
      * Connect an Office
      */
     protected static XMultiServiceFactory connect(String connectStr)
-                                           throws com.sun.star.uno.Exception,
-                                                  com.sun.star.uno.RuntimeException,
-                                                  com.sun.star.connection.NoConnectException,
-                                                  Exception {
+    throws com.sun.star.uno.Exception,
+    com.sun.star.uno.RuntimeException,
+    com.sun.star.connection.NoConnectException,
+    Exception {
         // Get component context
         XComponentContext xcomponentcontext = com.sun.star.comp.helper.Bootstrap.createInitialComponentContext(
-                                                      null);
+        null);
 
         // initial serviceManager
         XMultiComponentFactory xLocalServiceManager = xcomponentcontext.getServiceManager();
 
         // create a connector, so that it can contact the office
         Object xUrlResolver = xLocalServiceManager.createInstanceWithContext(
-                                      "com.sun.star.bridge.UnoUrlResolver",
-                                      xcomponentcontext);
+        "com.sun.star.bridge.UnoUrlResolver",
+        xcomponentcontext);
         XUnoUrlResolver urlResolver = (XUnoUrlResolver) UnoRuntime.queryInterface(
-                                              XUnoUrlResolver.class,
-                                              xUrlResolver);
+        XUnoUrlResolver.class,
+        xUrlResolver);
 
         Object rInitialObject = urlResolver.resolve(connectStr);
 
@@ -293,7 +294,7 @@ public class OfficeProvider implements AppProvider {
             }
 
             xMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(
-                           XMultiServiceFactory.class, rInitialObject);
+            XMultiServiceFactory.class, rInitialObject);
         }
 
         return xMSF;
@@ -306,7 +307,7 @@ public class OfficeProvider implements AppProvider {
      * it was running before the test
      */
     public boolean closeExistingOffice(lib.TestParameters param,
-                                       boolean closeIfPossible) {
+    boolean closeIfPossible) {
         debug = param.getBool("DebugIsActive");
 
         XMultiServiceFactory msf = (XMultiServiceFactory) param.getMSF();
@@ -334,7 +335,7 @@ public class OfficeProvider implements AppProvider {
             }
         } else {
             String cncstr = "uno:" + param.get("ConnectionString") +
-                            ";urp;StarOffice.ServiceManager";
+            ";urp;StarOffice.ServiceManager";
             msf = connectOffice(cncstr);
 
             if (closeIfPossible) {
@@ -365,7 +366,7 @@ public class OfficeProvider implements AppProvider {
     }
 
     private synchronized boolean disposeOffice(XMultiServiceFactory msf,
-                                               TestParameters param) {
+    TestParameters param) {
         XDesktop desk = null;
 
         boolean result = true;
@@ -373,8 +374,8 @@ public class OfficeProvider implements AppProvider {
         if (msf != null) {
             try {
                 desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
-                                                            msf.createInstance(
-                                                                    "com.sun.star.frame.Desktop"));
+                msf.createInstance(
+                "com.sun.star.frame.Desktop"));
                 msf = null;
 
                 if (desk != null) {
@@ -383,7 +384,7 @@ public class OfficeProvider implements AppProvider {
                     if (!allClosed) {
                         if (debug) {
                             System.out.println(
-                                    "Couldn't close all office windows!");
+                            "Couldn't close all office windows!");
                         }
                     }
 
@@ -437,8 +438,6 @@ public class OfficeProvider implements AppProvider {
                 System.out.println("Couldn't recover from backup");
                 e.printStackTrace();
             }
-
-            ph.kill();
         }
 
         return result;
@@ -452,8 +451,8 @@ public class OfficeProvider implements AppProvider {
         try {
             while (compEnum.hasMoreElements()) {
                 XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
-                                            XCloseable.class,
-                                            compEnum.nextElement());
+                XCloseable.class,
+                compEnum.nextElement());
 
                 if (closer != null) {
                     closer.close(true);
@@ -491,7 +490,7 @@ public class OfficeProvider implements AppProvider {
     // Copies all files under srcDir to dstDir.
     // If dstDir does not exist, it will be created.
     public void copyDirectory(File srcDir, File dstDir)
-                       throws IOException {
+    throws IOException {
         if (srcDir.getName().endsWith("temp")) {
             if (debug) {
                 System.out.println("Ignoring: " + srcDir.getName());
@@ -509,7 +508,7 @@ public class OfficeProvider implements AppProvider {
 
             for (int i = 0; i < children.length; i++) {
                 copyDirectory(new File(srcDir, children[i]),
-                              new File(dstDir, children[i]));
+                new File(dstDir, children[i]));
             }
         } else {
             copyFile(srcDir, dstDir);
@@ -521,27 +520,29 @@ public class OfficeProvider implements AppProvider {
 
         try {
             xPathSubst = xMSF.createInstance(
-                                 "com.sun.star.util.PathSubstitution");
+            "com.sun.star.util.PathSubstitution");
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace();
         }
 
         if (xPathSubst != null) {
             return (XStringSubstitution) UnoRuntime.queryInterface(
-                           XStringSubstitution.class, xPathSubst);
+            XStringSubstitution.class, xPathSubst);
         } else {
             return null;
         }
     }
 
     /**
-    * converts directory without 'file:///' prefix.
-    * and System dependend file separator
-    */
+     * converts directory without 'file:///' prefix.
+     * and System dependend file separator
+     */
     public static String getDirSys(String dir) {
         String sysDir = "";
 
         int idx = dir.indexOf("file://");
+
+        int idx2 = dir.indexOf("file:///");
 
         // remove leading 'file://'
         if (idx < 0) {
@@ -559,7 +560,12 @@ public class OfficeProvider implements AppProvider {
         String sep = System.getProperty("file.separator");
 
         if (sep.equalsIgnoreCase("\\")) {
-            sysDir = sysDir.substring(1);
+            if (!(idx2 < 0)) {
+                sysDir = sysDir.substring(1);
+            } else {
+                //network path
+                sysDir = "//"+sysDir;
+            }
             sysDir = sysDir.replace('/', '\\');
         }
 
@@ -586,4 +592,3 @@ public class OfficeProvider implements AppProvider {
         return dir.delete();
     }
 }
-
