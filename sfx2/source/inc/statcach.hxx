@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statcach.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-28 16:33:50 $
+ *  last change: $Author: mba $ $Date: 2002-09-24 15:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ friend class BindDispatch_Impl;
 
 private:
                             SfxStateCache( const SfxStateCache& rOrig ); // n.i.
-    void                    SetState_Impl( SfxItemState, const SfxPoolItem * );
+    void                    SetState_Impl( SfxItemState, const SfxPoolItem*, BOOL bMaybeDirty=FALSE );
 
 public:
                             SfxStateCache( sal_uInt16 nFuncId );
@@ -161,7 +161,7 @@ public:
     SfxPoolItem*            GetItem() const { return pLastItem; }
     void                    ClearCache();
 
-    void                    SetState( SfxItemState, const SfxPoolItem * );
+    void                    SetState( SfxItemState, const SfxPoolItem*, BOOL bMaybeDirty=FALSE );
     void                    SetCachedState();
     void                    DeleteFloatingWindows();
     void                    Invalidate( sal_Bool bWithSlot );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statcach.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-09 09:47:06 $
+ *  last change: $Author: mba $ $Date: 2002-09-24 15:12:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,7 +401,8 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
 void SfxStateCache::SetState
 (
     SfxItemState        eState,     // <SfxItemState> von 'pState'
-    const SfxPoolItem*  pState      // Status des Slots, ggf. 0 oder -1
+    const SfxPoolItem*  pState,     // Status des Slots, ggf. 0 oder -1
+    BOOL bMaybeDirty
 )
 
 /*  [Beschreibung]
@@ -416,14 +417,15 @@ void SfxStateCache::SetState
 {
     if ( pDispatch )
         return;
-    SetState_Impl( eState, pState );
+    SetState_Impl( eState, pState, bMaybeDirty );
 }
 
 
 void SfxStateCache::SetState_Impl
 (
     SfxItemState        eState,     // <SfxItemState> von 'pState'
-    const SfxPoolItem*  pState      // Status des Slots, ggf. 0 oder -1
+    const SfxPoolItem*  pState,     // Status des Slots, ggf. 0 oder -1
+    BOOL bMaybeDirty
 )
 {
     DBG_MEMTEST();
@@ -435,9 +437,8 @@ void SfxStateCache::SetState_Impl
         return;
 
     DBG_ASSERT( pController->GetId()==nId, "Cache mit falschem ControllerItem" );
-    DBG_ASSERT( !bSlotDirty, "setting state of dirty message" );
-    DBG_ASSERT( bCtrlDirty ||
-                ( aSlotServ.GetSlot() && aSlotServ.GetSlot()->IsMode(SFX_SLOT_VOLATILE) ),
+    DBG_ASSERT( bMaybeDirty || !bSlotDirty, "setting state of dirty message" );
+    DBG_ASSERT( bCtrlDirty || ( aSlotServ.GetSlot() && aSlotServ.GetSlot()->IsMode(SFX_SLOT_VOLATILE) ),
                 "setting state of non dirty controller" );
     DBG_ASSERT( SfxControllerItem::GetItemState(pState) == eState,
                 "invalid SfxItemState" );

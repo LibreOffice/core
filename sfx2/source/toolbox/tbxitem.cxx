@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-19 10:28:20 $
+ *  last change: $Author: mba $ $Date: 2002-09-24 15:13:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,11 +482,14 @@ void SfxPopupWindow::DeleteFloatingWindow()
 
             case SFX_POPUP_HIDE:
             {
+                // hide popups by disabling the corresponding slot
                 SfxStateCache* pCache = GetBindings().GetStateCache( GetId() );
+
+                // invalidate cache so it will forward any state to controllers anyway
                 pCache->Invalidate( FALSE );
-                pCache->SetState(SFX_ITEM_DISABLED, 0);
-                if ( GetParent() !=  SFX_APP()->GetTopWindow() )
-                    SetParent( SFX_APP()->GetTopWindow() );
+
+                // set desired state, even if cache is marked "message dirty"
+                pCache->SetState(SFX_ITEM_DISABLED, 0, TRUE);
                 break;
             }
             case SFX_POPUP_SHOW:
