@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsitems.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 09:53:17 $
+ *  last change: $Author: fs $ $Date: 2001-02-05 13:57:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,18 +89,22 @@
 #define DSID_NEWDATASOURCE          22          // meta data: sal_True if the data source described by the set is new
 #define DSID_DELETEDDATASOURCE      23          // meta data: sal_True if the data source described by the set is to-be-deleted
 #define DSID_SUPPRESSVERSIONCL      24          // meta data: sal_True if the data source described by the set is to-be-deleted
+#define DSID_DATASOURCE_UNO         25          // meta data: OPropertySetItem, the data source the set represents
 
 //========================================================================
 //= item range. Adjust this if you introduce new items above
 
 #define DSID_FIRST_ITEM_ID  DSID_NAME
-#define DSID_LAST_ITEM_ID   DSID_SUPPRESSVERSIONCL
+#define DSID_LAST_ITEM_ID   DSID_DATASOURCE_UNO
 
 #endif // _DBAUI_DATASOURCEITEMS_HXX_
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2000/10/20 09:53:17  fs
+ *  handling for the SuppresVersionColumns property of a data source
+ *
  *  Revision 1.4  2000/10/12 16:20:42  fs
  *  new implementations ... still under construction
  *
