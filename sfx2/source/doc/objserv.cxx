@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dv $ $Date: 2001-03-29 09:26:35 $
+ *  last change: $Author: dv $ $Date: 2001-03-29 14:27:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -642,15 +642,46 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             SfxErrorContext aEc(ERRCTX_SFX_DOCTEMPLATE,GetTitle());
             SfxDocumentTemplates *pTemplates =  new SfxDocumentTemplates;
 
+            // Find the template filter with the highest version number
+            const SfxFilter* pFilter;
+            const SfxObjectFactory& rFactory = GetFactory();
+            USHORT  nFilterCount = rFactory.GetFilterCount();
+            ULONG   nVersion = 0;
+            int n;
+            for( n=0; n<nFilterCount; n++)
+            {
+                const SfxFilter* pTemp = rFactory.GetFilter( n );
+                if( pTemp && pTemp->IsOwnFormat() &&
+                    pTemp->IsOwnTemplateFormat() &&
+                    ( pTemp->GetVersion() > nVersion ) )
+                {
+                    pFilter = pTemp;
+                    nVersion = pTemp->GetVersion();
+                }
+            }
+
+            DBG_ASSERT( pFilter, "Template Filter nicht gefunden" );
+            if( !pFilter )
+                pFilter = rFactory.GetFilter(0);
+
             if ( !rReq.GetArgs() )
             {
                 pDlg = new SfxDocumentTemplateDlg(0, pTemplates);
                 if ( RET_OK == pDlg->Execute() && pDlg->GetTemplateName().Len())
                 {
-                    rReq.AppendItem(SfxStringItem(
-                        SID_FILE_NAME,  pTemplates->GetTemplatePath(
+                    String aTargetURL = pTemplates->GetTemplatePath(
                             pDlg->GetRegion(),
-                            pDlg->GetTemplateName())));
+                            pDlg->GetTemplateName());
+
+                    if ( aTargetURL.Len() )
+                    {
+                        INetURLObject aTargetObj( aTargetURL );
+                        String aTplExtension( pFilter->GetDefaultExtension().Copy(2) );
+                        aTargetObj.setExtension( aTplExtension );
+                        aTargetURL = aTargetObj.GetMainURL();
+                    }
+
+                    rReq.AppendItem( SfxStringItem( SID_FILE_NAME, aTargetURL ) );
 
                     rReq.AppendItem(SfxStringItem(
                         SID_TEMPLATE_NAME, pDlg->GetTemplateName()));
@@ -710,28 +741,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             // Dateiname
             SFX_REQUEST_ARG(rReq, pFileItem, SfxStringItem, SID_FILE_NAME, FALSE);
             const String aFileName(((const SfxStringItem *)pFileItem)->GetValue());
-
-            // Find the template filter with the highest version number
-            const SfxFilter* pFilter;
-            const SfxObjectFactory& rFactory = GetFactory();
-            USHORT  nFilterCount = rFactory.GetFilterCount();
-            ULONG   nVersion = 0;
-            int n;
-            for( n=0; n<nFilterCount; n++)
-            {
-                const SfxFilter* pTemp = rFactory.GetFilter( n );
-                if( pTemp && pTemp->IsOwnFormat() &&
-                    pTemp->IsOwnTemplateFormat() &&
-                    ( pTemp->GetVersion() > nVersion ) )
-                {
-                    pFilter = pTemp;
-                    nVersion = pTemp->GetVersion();
-                }
-            }
-
-            DBG_ASSERT( pFilter, "Template Filter nicht gefunden" );
-            if( !pFilter )
-                pFilter = rFactory.GetFilter(0);
 
             // Medium zusammenbauen
             SfxItemSet* pSet = new SfxAllItemSet( *rReq.GetArgs() );
