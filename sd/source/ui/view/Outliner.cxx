@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Outliner.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: af $ $Date: 2004-09-23 13:43:49 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,8 @@
 #ifndef _MyEDITENG_HXX
 #include <svx/editeng.hxx>
 #endif
+
+#include <sfx2/viewfrm.hxx>
 
 #include "strings.hrc"
 #include "sdstring.hrc"
