@@ -8078,3 +8078,7 @@ _real@40c3880000000000
 ??_GWinImeStatus@@UAEPAXI@Z
 ?canToggle@WinImeStatus@@UAE_NXZ
 ?toggle@WinImeStatus@@UAEXXZ
+?SetReferenceDevice@VirtualDevice@@QAEXW4RefDevMode@1@@Z
+?_M_allocate_and_copy@?$vector@HV?$allocator@H@_STL@@@_STL@@IAEPAHIPAH0@Z
+?reserve@?$vector@HV?$allocator@H@_STL@@@_STL@@QAEXI@Z
+_real@3fd3333333333333
