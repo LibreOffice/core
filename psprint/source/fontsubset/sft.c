@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:14:17 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:10:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,12 @@
  *
  ************************************************************************/
 
-/* $Id: sft.c,v 1.21 2003-04-15 16:14:17 vg Exp $
+/*
  * Sun Font Tools
  *
  * Author: Alexander Gelfenbain
  *
-  */
+ */
 
 #if OSL_DEBUG_LEVEL == 0
 #define NDEBUG
@@ -1423,7 +1423,7 @@ static void GetKern(TrueTypeFont *ttf)
         for (i=0; i < ttf->nkern; i++) {
             ttf->kerntables[i] = ptr;
             ptr += GetUInt16(ptr, 2, 1);
-            // sanity check
+            /* sanity check */
             if( ptr > ttf->ptr+ttf->fsize )
             {
                 free( ttf->kerntables );
@@ -1443,7 +1443,7 @@ static void GetKern(TrueTypeFont *ttf)
         for (i = 0; i < ttf->nkern; i++) {
             ttf->kerntables[i] = ptr;
             ptr += GetUInt32(ptr, 0, 1);
-            // sanity check; there are some fonts that are broken in this regard
+            /* sanity check; there are some fonts that are broken in this regard */
             if( ptr > ttf->ptr+ttf->fsize )
             {
                 free( ttf->kerntables );
@@ -2495,6 +2495,10 @@ void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
             info->typoLineGap = XUnits(UPEm, GetInt16(table, 72, 1));
             info->winAscent = XUnits(UPEm, GetUInt16(table, 74, 1));
             info->winDescent = XUnits(UPEm, GetUInt16(table, 76, 1));
+            /* sanity check; some fonts treat winDescent as signed
+           * violating the standard */
+            if( info->winDescent > 5*UPEm )
+                info->winDescent = XUnits(UPEm, GetInt16(table, 76,1));
         }
         if (ttf->cmapType == CMAP_MS_Unicode) {
             info->rangeFlag = 1;
