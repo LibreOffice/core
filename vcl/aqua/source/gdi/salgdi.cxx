@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.56 $
- *  last change: $Author: thb $ $Date: 2002-06-19 11:38:38 $
+ *  $Revision: 1.57 $
+ *  last change: $Author: hr $ $Date: 2002-08-27 11:52:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,6 +482,24 @@ void SalGraphics::DrawRect( long  nX,
         long      nEndY       = 0;
         RGBColor  aBrushColor = maGraphicsData.maBrushColor;
         Rect      aRect;
+
+        // [ed] 12/1/01 Parameter checks.  Limit all of the parameters to fit within
+        // the current port bounds
+
+        Rect portBounds;
+        GetPortBounds(maGraphicsData.mpCGrafPort, &portBounds);
+
+        if(nX < portBounds.left)
+            nX=portBounds.left;
+
+        if(nY < portBounds.top)
+            nY=portBounds.top;
+
+        if((nHeight > (portBounds.bottom-portBounds.top)-(nY-portBounds.top)) || (nHeight < 0))
+            nHeight=portBounds.bottom-portBounds.top-(nY-portBounds.top)-1;
+
+        if((nWidth > (portBounds.right-portBounds.left-(nX-portBounds.left))) || (nHeight < 0))
+            nWidth=portBounds.right-portBounds.left-(nX-portBounds.left)-1;
 
         // Compute the second set of (nX,nY) coordinates
 
