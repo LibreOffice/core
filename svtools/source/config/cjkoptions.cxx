@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cjkoptions.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 10:23:14 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 10:35:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,7 @@ void SvtCJKOptions_Impl::Load()
     sal_uInt16 nType = SvtLanguageOptions::GetScriptTypeOfLanguage(LANGUAGE_SYSTEM);
     if ( !bCJKFont && ( nType & SCRIPTTYPE_ASIAN ) )
     {
-        bCJKFont = sal_True;
+        SetAll(sal_True);
     }
     bIsLoaded = sal_True;
 }
