@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABConnection.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-28 08:45:55 $
+ *  last change: $Author: wvd $ $Date: 2001-07-19 13:57:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include "file/FConnection.hxx"
 #endif
 
+#ifndef _CONNECTIVITY_MAB_COLUMNALIAS_HXX_
+#include "MABColumnAlias.hxx"
+#endif
+
 namespace com { namespace sun { namespace star { namespace sheet {
     class XSpreadsheetDocument;
 } } } }
@@ -78,7 +82,7 @@ namespace connectivity
         class OMozabDriver;
         class OMozabConnection : public file::OConnection
         {
-
+        OMozabColumnAlias m_aColumnAlias;
             rtl::OUString   m_sMozillaURI;
             sal_Int32       m_nAnonABCount;
             sal_Int32       m_nMaxResultRecords;
@@ -117,6 +121,8 @@ namespace connectivity
             sal_Bool    isOutlookExpress() const { return m_bOutlookExpress;}
             sal_Int32   getNextAnonymousAB()    { return (++m_nAnonABCount); }
             sal_Int32   getMaxResultRecords() const { return m_nMaxResultRecords; }
+        const OMozabColumnAlias & getColumnAlias() const
+                          { return (m_aColumnAlias); }
         };
     }
 }
