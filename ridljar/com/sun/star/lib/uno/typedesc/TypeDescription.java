@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescription.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kr $ $Date: 2001-02-21 12:10:25 $
+ *  last change: $Author: kr $ $Date: 2001-04-17 15:01:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ import com.sun.star.lib.uno.typeinfo.TypeInfo;
  * methods, which may be changed or moved in the furture, so please
  * do not use these methods.
  * <p>
- * @version     $Revision: 1.5 $ $ $Date: 2001-02-21 12:10:25 $
+ * @version     $Revision: 1.6 $ $ $Date: 2001-04-17 15:01:37 $
  * @author      Kay Ramme
  * @since       UDK2.0
  */
@@ -443,6 +443,47 @@ public class TypeDescription {
         }
     }
 
+    static public TypeDescription getTypeDescription(TypeInfo typeInfo, Class zClass) {
+          TypeDescription typeDescription = null;
+
+        if(typeInfo == null || !typeInfo.isInterface())
+            typeDescription = TypeDescription.getTypeDescription(zClass);
+
+        else {
+            // blackdown 118 bug workaround
+//                  __getFields(zClass);
+
+            // see if the typeinfo says, that the parameter is an interface
+            // and the parameter is not assignable to xinterface (mapping of xinterface to java.lang.Object)
+            // set the parameter to class of xinterface, cause it must be assignable
+
+            // unrole any arrays
+            int arrayNesting = 0;
+            while(zClass.isArray()) {
+                ++ arrayNesting;
+
+                zClass = zClass.getComponentType();
+            }
+
+            if(zClass.isInterface())
+                typeDescription = TypeDescription.getTypeDescription(zClass);
+
+            else {
+                typeDescription = TypeDescription.getTypeDescription(com.sun.star.uno.XInterface.class);
+
+                for(int i = 0; i < arrayNesting; ++ i) {
+                    try {
+                        typeDescription = TypeDescription.getTypeDescription("[]" + typeDescription.getTypeName());
+                    }
+                    catch(ClassNotFoundException classNotFoundException) { // this could never happen, but anyway...
+                        throw new RuntimeException(classNotFoundException.toString());
+                    }
+                }
+            }
+          }
+
+        return typeDescription;
+    }
 
     static public TypeDescription getTypeDescription(Class zClass) {
         TypeDescription typeDescription = (TypeDescription)__classToTypeDescription.get(zClass);
@@ -634,7 +675,7 @@ public class TypeDescription {
         int superOffset = 0;
 
         if(_class == com.sun.star.uno.XInterface.class) { // take special care for xinterface
-            MethodDescription queryInterface = new MethodDescription("queryInterface", 0, TypeInfo.ANY);
+              MethodDescription queryInterface = new MethodDescription("queryInterface", 0, TypeInfo.ANY);
             queryInterface.init(new Class[]{Type.class}, new ParameterTypeInfo[]{new ParameterTypeInfo(null, "queryInterface", 0, 0)},
                                 Object.class);
 
