@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-21 21:21:44 $
+ *  last change: $Author: kz $ $Date: 2002-01-14 21:17:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -23207,7 +23207,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ swedish ] = "Beräknar summan av den kvadratiska avvikelsen  från medelvärdet hos ett stickprov." ;
             Text [ dutch ] = "Berekent de som van de deviaties in het kwadraat in een steekproef." ;
             Text [ spanish ] = "Devuelve la suma de los cuadrados de las desviaciones entre la media y la muestra." ;
-            Text [ english_us ] = "Returns the sum of squares of deviations of a sample from the mean value." ;
+            Text [ english_us ] = "Returns the sum of squares of deviations from the sample mean value" ;
             Text[ chinese_simplified ] = "è®¡ç®—æŠ½æ ·ä¸å¹³å‡å€¼çš„åå·®çš„å¹³æ–¹å’Œã€‚";
             Text[ russian ] = "Âû÷èñëÿåò ñóììó êâàäğàòîâ îòêëîíåíèÿ âûáîğêè îò ñğåäíåãî çíà÷åíèÿ.";
             Text[ polish ] = "Oblicza sumê kwadratów odchyleñ próbki od wartoœci œredniej.";
@@ -41562,6 +41562,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
 #if defined(U2S)
 #undef U2S
 #endif
+
 
 
 
