@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: kz $ $Date: 2003-11-18 14:40:54 $
+#   last change: $Author: vg $ $Date: 2004-01-06 14:29:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,7 +102,6 @@ SLOFILES=\
             $(SLO)$/salsys.obj			\
             $(SLO)$/soicon.obj			\
             $(SLO)$/sm.obj				\
-            $(SLO)$/stacktrace.obj		\
             $(SLO)$/keysymnames.obj		\
             $(SLO)$/wmadaptor.obj		\
 
