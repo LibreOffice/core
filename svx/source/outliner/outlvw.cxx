@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlvw.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 10:35:45 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 15:50:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include <outl_pch.hxx>
 
 #pragma hdrstop
@@ -1374,11 +1373,23 @@ EESpellState OutlinerView::StartSpeller( BOOL bMultiDoc )
     return pEditView->StartSpeller( bMultiDoc );
 }
 
+
 EESpellState OutlinerView::StartThesaurus()
 {
     DBG_CHKTHIS(OutlinerView,0);
     return pEditView->StartThesaurus();
 }
+
+
+void OutlinerView::StartTextConversion( LanguageType nLang, BOOL bMultipleDoc )
+{
+    DBG_CHKTHIS(OutlinerView,0);
+    if (LANGUAGE_KOREAN == nLang)
+        pEditView->StartTextConversion( nLang, bMultipleDoc );
+    else
+        DBG_ERROR( "unexpected language" );
+}
+
 
 USHORT OutlinerView::StartSearchAndReplace( const SvxSearchItem& rSearchItem )
 {
