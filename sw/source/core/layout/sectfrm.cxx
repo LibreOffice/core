@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 08:45:32 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 13:07:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1178,9 +1178,8 @@ void SwSectionFrm::SimpleFormat()
     SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetPrtBottom)();
     // OD 22.10.2002 #97265# - call always method <lcl_ColumnRefresh(..)>, in
     // order to get calculated lowers, not only if there space left in its upper.
-    if( (Frm().*fnRect->fnBottomDist)( nDeadLine ) > 0 )
+    if( (Frm().*fnRect->fnBottomDist)( nDeadLine ) >= 0 )
     {
-        const Size aOldSz( Prt().SSize() );
         (Frm().*fnRect->fnSetBottom)( nDeadLine );
         long nHeight = (Frm().*fnRect->fnGetHeight)();
         long nTop = CalcUpperSpace();
