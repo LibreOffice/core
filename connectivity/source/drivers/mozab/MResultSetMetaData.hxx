@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MResultSetMetaData.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-26 13:51:14 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 18:29:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ namespace connectivity
             ::rtl::OUString                         m_aTableName;
             ::vos::ORef<connectivity::OSQLColumns>  m_xColumns;
             OTable*                                 m_pTable;
-
+            sal_Bool                                  m_bReadOnly;
 
         protected:
             virtual ~OResultSetMetaData();
@@ -101,8 +101,11 @@ namespace connectivity
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
             // OResultSetMetaData(OConnection*  _pConnection) : m_pConnection(_pConnection){}
             OResultSetMetaData(const ::vos::ORef<connectivity::OSQLColumns>& _rxColumns,
-                               const ::rtl::OUString& _aTableName,OTable* _pTable)
-                 : m_xColumns(_rxColumns), m_aTableName(_aTableName), m_pTable(_pTable){}
+                               const ::rtl::OUString& _aTableName,OTable* _pTable,sal_Bool aReadOnly
+                               )
+                 : m_xColumns(_rxColumns), m_aTableName(_aTableName), m_pTable(_pTable)
+                 ,m_bReadOnly(aReadOnly)
+                 {}
 
 
             /// Avoid ambigous cast error from the compiler.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-26 13:51:14 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 18:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isReadOnly( sal_Int32 column ) throw(SQLEx
     sal_Bool bReadOnly = (*m_xColumns)[column-1]->getPropertySetInfo()->hasPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FUNCTION)) &&
                          ::cppu::any2bool((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FUNCTION)));
 
-    return bReadOnly || m_pTable->isReadOnly();
+    return m_bReadOnly || bReadOnly || m_pTable->isReadOnly();
 }
 // -------------------------------------------------------------------------
 
