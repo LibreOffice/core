@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-09 13:45:46 $
+ *  last change: $Author: mt $ $Date: 2001-04-09 14:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4287,7 +4287,7 @@ SfxPoolItem* SvxCharReliefItem::Create(SvStream & rStrm, USHORT) const
 {
     sal_uInt16 nVal;
     rStrm >> nVal;
-    return new SvxCharScaleWidthItem( (FontRelief)nVal, Which() );
+    return new SvxCharReliefItem( (FontRelief)nVal, Which() );
 }
 
 SvStream& SvxCharReliefItem::Store(SvStream & rStrm, USHORT nIVer) const
