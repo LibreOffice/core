@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-10 14:02:34 $
+ *  last change: $Author: cmc $ $Date: 2002-01-11 15:14:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,6 +363,8 @@ class WW8ReaderSave
 {
     SwPosition aTmpPos;
     SwWW8FltControlStack* pOldStck;
+    SwWW8FltControlStack* pOldFldStck;
+    SwFltEndStack* pOldEndStck;
     WW8PLCFxSaveAll aPLCFxSave;
     WW8PLCFMan* pOldPlcxMan;
 

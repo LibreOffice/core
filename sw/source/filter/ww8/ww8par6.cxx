@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-10 14:05:43 $
+ *  last change: $Author: cmc $ $Date: 2002-01-11 15:14:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3936,8 +3936,12 @@ void SwWW8ImplReader::NeedAdjustStyleTabStops(short nLeft, short nFirstLineOfst,
         nFirstLineOfst = 0;
 
     const SfxPoolItem* pTabs=0;
-    BOOL bOnMarginStyle = pWWSty->pFmt->GetAttrSet().GetItemState(
-            RES_PARATR_TABSTOP, FALSE, &pTabs ) == SFX_ITEM_SET;
+    BOOL bOnMarginStyle;
+    if (pWWSty->pFmt)
+    {
+        bOnMarginStyle = pWWSty->pFmt->GetAttrSet().GetItemState(
+                RES_PARATR_TABSTOP, FALSE, &pTabs ) == SFX_ITEM_SET;
+    }
 
     if (pTabs)
     {

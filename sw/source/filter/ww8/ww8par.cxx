@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-10 14:02:34 $
+ *  last change: $Author: cmc $ $Date: 2002-01-11 15:14:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -810,7 +810,7 @@ void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
 //-----------------------------------------
 
 WW8ReaderSave::WW8ReaderSave( SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
-: aTmpPos(*pRdr->pPaM->GetPoint())
+    : aTmpPos(*pRdr->pPaM->GetPoint())
 {
     pWFlyPara       = pRdr->pWFlyPara;
     pSFlyPara       = pRdr->pSFlyPara;
@@ -837,11 +837,16 @@ WW8ReaderSave::WW8ReaderSave( SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
     pRdr->pSFlyPara = 0;
     pRdr->pTableDesc = 0;
 
-    // schliesse Attribute auf dem End-Stack
-    pRdr->pEndStck->SetAttr( *pRdr->pPaM->GetPoint(), 0, FALSE );
+    pOldEndStck = pRdr->pEndStck;
+    pRdr->pEndStck = new SwFltEndStack(&pRdr->rDoc, pRdr->nFieldFlags );
 
     pOldStck = pRdr->pCtrlStck;
-    pRdr->pCtrlStck = new SwWW8FltControlStack(&pRdr->rDoc, pRdr->nFieldFlags, *pRdr);
+    pRdr->pCtrlStck = new SwWW8FltControlStack(&pRdr->rDoc, pRdr->nFieldFlags,
+        *pRdr);
+
+    pOldFldStck = pRdr->pRefFldStck;
+    pRdr->pRefFldStck = new SwWW8FltControlStack(&pRdr->rDoc, pRdr->nFieldFlags,
+        *pRdr);
 
     // rette die Attributverwaltung: dies ist noetig, da der neu anzulegende
     // PLCFx Manager natuerlich auf die gleichen FKPs zugreift, wie der alte
@@ -851,8 +856,10 @@ WW8ReaderSave::WW8ReaderSave( SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
     pOldPlcxMan = pRdr->pPlcxMan;
 
     if (nStartCp != -1)
+    {
         pRdr->pPlcxMan = new WW8PLCFMan( pRdr->pSBase,
             pOldPlcxMan->GetManType(), nStartCp );
+    }
     pRdr->pSBase->SetNoAttrScan( 0 );
 }
 
@@ -877,25 +884,29 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
 
     // schliesse alle Attribute, da sonst Attribute
     // entstehen koennen, die aus dem Fly rausragen
-    pRdr->pCtrlStck->SetAttr( *pRdr->pPaM->GetPoint(), 0, FALSE );
-    pRdr->pEndStck->SetAttr(  *pRdr->pPaM->GetPoint(), 0, FALSE );
-
     pRdr->DeleteCtrlStk();
     pRdr->pCtrlStck = pOldStck;
 
+    pRdr->DeleteRefFldStk();
+    pRdr->pRefFldStck = pOldFldStck;
+
+    pRdr->DeleteEndStk();
+    pRdr->pEndStck = pOldEndStck;
+
     *pRdr->pPaM->GetPoint() = aTmpPos;
 
-    DELETEZ( pRdr->pPlcxMan );
+    delete pRdr->pPlcxMan;
 
     // restauriere die Attributverwaltung
     pRdr->pPlcxMan = pOldPlcxMan;
     pRdr->pPlcxMan->RestoreAllPLCFx( aPLCFxSave );
 }
 
-void SwWW8ImplReader::Read_HdFtFtnText( const SwNodeIndex* pSttIdx, long nStartCp,
-                                long nLen, short nType )
+void SwWW8ImplReader::Read_HdFtFtnText( const SwNodeIndex* pSttIdx,
+    long nStartCp, long nLen, short nType )
 {
-    WW8ReaderSave aSave( this );        // rettet Flags u.ae. u. setzt sie zurueck
+    // rettet Flags u.ae. u. setzt sie zurueck
+    WW8ReaderSave aSave( this );
 
     pPaM->GetPoint()->nNode = pSttIdx->GetIndex() + 1;      //
     pPaM->GetPoint()->nContent.Assign( pPaM->GetCntntNode(), 0 );
@@ -1065,23 +1076,21 @@ long SwWW8ImplReader::Read_And( WW8PLCFManResult* pRes, BOOL )
 #endif
     }
 
-    WW8PLCFxSaveAll aSave;
-    pPlcxMan->SaveAllPLCFx( aSave );
-    WW8PLCFMan* pOldPlcxMan = pPlcxMan;
-
     SwNodeIndex aNdIdx( rDoc.GetNodes().GetEndOfExtras() );
     aNdIdx = *rDoc.GetNodes().MakeTextSection( aNdIdx, SwNormalStartNode,
-                            rDoc.GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
+        rDoc.GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
 
-    SwPosition aTmpPos( *pPaM->GetPoint() );    // merke alte Cursorposition
-    Read_HdFtFtnText( &aNdIdx, pRes->nCp2OrIdx, pRes->nMemLen, MAN_AND );
-                                                // lese Inhalt ein
-    *pPaM->GetPoint() = aTmpPos;                // restore Cursor
+    {
+        SwPaM *pTempPaM = pPaM;
+        SwPaM aPaM(aNdIdx);
+        pPaM = &aPaM;
+        Read_HdFtFtnText( &aNdIdx, pRes->nCp2OrIdx, pRes->nMemLen, MAN_AND );
+        pPaM = pTempPaM;
+    }
 
     // erzeuge das PostIt
     Date aDate;
     String sTxt;
-
 
     {   // Text aus den Nodes in den String uebertragen
         SwNodeIndex aIdx( aNdIdx, 1 ),
@@ -1101,11 +1110,8 @@ long SwWW8ImplReader::Read_And( WW8PLCFManResult* pRes, BOOL )
     }
 
     rDoc.Insert( *pPaM, SwFmtFld( SwPostItField(
-                    (SwPostItFieldType*)rDoc.GetSysFldType( RES_POSTITFLD ),
-                    sAuthor, sTxt, aDate )));
-
-    pPlcxMan = pOldPlcxMan;             // Attributverwaltung restoren
-    pPlcxMan->RestoreAllPLCFx( aSave );
+        (SwPostItFieldType*)rDoc.GetSysFldType( RES_POSTITFLD ), sAuthor, sTxt,
+        aDate )));
     return 0;
 }
 
