@@ -402,7 +402,7 @@ Sub SetupXMLConfiguration()
 
 &apos; ToDo: define Filter for Masterdocument
 	XMLFilterName(7,0) = &quot;sgl&quot;
-	XMLFilterName(7,1) = &quot;swriter: writer_globaldocument_StarOffice_XML_Writer_GlobalDocument&quot;
+	XMLFilterName(7,1) = &quot;swriter/GlobalDocument: writer_globaldocument_StarOffice_XML_Writer_GlobalDocument&quot;
 	XMLFilterName(7,2) = &quot;sxg&quot;
 End Sub
 
