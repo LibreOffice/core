@@ -7,18 +7,15 @@
     </module-name>
 
     <component-description>
-        <supported-service>
-            com.sun.star.ucb.UniversalContentBroker
-        </supported-service>
-        <description>
-        This component provides access to a set of Contents via Content Providers.
-        </description>
         <author>
             Kai Sommerfeld
         </author>
         <name>
             UniversalContentBroker
         </name>
+        <description>
+        This component provides access to a set of Contents via Content Providers.
+        </description>
         <loader-name>
             com.sun.star.loader.SharedLibrary
         </loader-name>
@@ -26,24 +23,24 @@
             c++
         </language>
         <status value="final"/>
+        <supported-service>
+            com.sun.star.ucb.UniversalContentBroker
+        </supported-service>
 
         <service-dependency>
         com.sun.star.io.Pipe
         </service-dependency>
     </component-description>
     <component-description>
-        <supported-service>
-            com.sun.star.ucb.Store
-        </supported-service>
-        <description>
-        This component is a factory for components managing persistent data.
-        </description>
         <author>
             Kai Sommerfeld
         </author>
         <name>
             UcbStore
         </name>
+        <description>
+        This component is a factory for components managing persistent data.
+        </description>
         <loader-name>
             com.sun.star.loader.SharedLibrary
         </loader-name>
@@ -51,6 +48,9 @@
             c++
         </language>
         <status value="final"/>
+        <supported-service>
+            com.sun.star.ucb.Store
+        </supported-service>
 
         <service-dependency>
             com.sun.star.configuration.ConfigurationProvider
@@ -63,19 +63,16 @@
         </service-dependency>
     </component-description>
     <component-description>
-        <supported-service>
-            com.sun.star.ucb.PropertiesManager
-        </supported-service>
-        <description>
-        This component provides access to the meta data of the properties
-        known to the UCB.
-        </description>
         <author>
             Kai Sommerfeld
         </author>
         <name>
             UcbPropertiesManager
         </name>
+        <description>
+        This component provides access to the meta data of the properties
+        known to the UCB.
+        </description>
         <loader-name>
             com.sun.star.loader.SharedLibrary
         </loader-name>
@@ -83,20 +80,20 @@
             c++
         </language>
         <status value="final"/>
+        <supported-service>
+            com.sun.star.ucb.PropertiesManager
+        </supported-service>
     </component-description>
     <component-description>
-        <supported-service>
-            com.sun.star.ucb.ContentProviderProxyFactory
-        </supported-service>
-        <description>
-        This component is a factory for proxy objects for Content Providers.
-        </description>
         <author>
             Kai Sommerfeld
         </author>
         <name>
             UcbContentProviderProxyFactory
         </name>
+        <description>
+        This component is a factory for proxy objects for Content Providers.
+        </description>
         <loader-name>
             com.sun.star.loader.SharedLibrary
         </loader-name>
@@ -104,6 +101,9 @@
             c++
         </language>
         <status value="final"/>
+        <supported-service>
+            com.sun.star.ucb.ContentProviderProxyFactory
+        </supported-service>
     </component-description>
 
     <project-build-dependency> sal                </project-build-dependency>

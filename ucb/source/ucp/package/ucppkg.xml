@@ -7,20 +7,17 @@
     </module-name>
 
     <component-description>
-        <supported-service>
-            com.sun.star.ucb.PackageContentProvider
-        </supported-service>
-        <description>
-        This component implements a Content Provider for the Universal
-            Content Broker. It provides access to the contents of package (zip
-            archive) files.
-        </description>
         <author>
             Kai Sommerfeld
         </author>
         <name>
             PackageContentProvider
         </name>
+        <description>
+        This component implements a Content Provider for the Universal
+            Content Broker. It provides access to the contents of package (zip
+            archive) files.
+        </description>
         <loader-name>
             com.sun.star.loader.SharedLibrary
         </loader-name>
@@ -28,6 +25,9 @@
             c++
         </language>
         <status value="final"/>
+        <supported-service>
+            com.sun.star.ucb.PackageContentProvider
+        </supported-service>
 
         <service-dependency>
             com.sun.star.packages.comp.ZipPackage

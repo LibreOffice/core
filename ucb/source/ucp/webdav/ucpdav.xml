@@ -7,20 +7,17 @@
     </module-name>
 
     <component-description>
-        <supported-service>
-            com.sun.star.ucb.WebDAVContentProvider
-        </supported-service>
-        <description>
-        This component implements a Content Provider for the Universal
-            Content Broker. It provides access to contents stored on an HTTP/WebDAV
-            server.
-        </description>
         <author>
             Kai Sommerfeld
         </author>
         <name>
             WebDAVContentProvider
         </name>
+        <description>
+        This component implements a Content Provider for the Universal
+            Content Broker. It provides access to contents stored on an HTTP/WebDAV
+            server.
+        </description>
         <loader-name>
             com.sun.star.loader.SharedLibrary
         </loader-name>
@@ -28,6 +25,9 @@
             c++
         </language>
         <status value="final"/>
+        <supported-service>
+            com.sun.star.ucb.WebDAVContentProvider
+        </supported-service>
 
         <service-dependency>
             com.sun.star.configuration.ConfigurationAccess
