@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-05-18 15:38:10 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 13:07:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +216,7 @@ Idlc::Idlc(Options* pOptions)
     : m_pOptions(pOptions)
     , m_bIsInMainfile(sal_True)
     , m_errorCount(0)
+    , m_warningCount(0)
     , m_lineNumber(0)
     , m_parseState(PS_NoState)
     , m_bIsDocValid(sal_False)
@@ -252,6 +253,7 @@ void Idlc::init()
 void Idlc::reset()
 {
     m_errorCount = 0;
+    m_warningCount = 0;
     m_lineNumber = 0;
     m_parseState = PS_NoState;
 
