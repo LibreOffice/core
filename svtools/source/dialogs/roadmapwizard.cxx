@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roadmapwizard.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 11:16:10 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:42:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,13 +488,20 @@ namespace svt
             // nothing to do
             return 1L;
 
+        if(IsInCallOfLink())
+            return 0;
+        SetInCallOfLink( true );
+
         sal_Int32 nCurrentIndex = m_pImpl->getStateIndexInPath( getCurrentState(), m_pImpl->nActivePath );
         sal_Int32 nNewIndex     = m_pImpl->getStateIndexInPath( nCurItemId, m_pImpl->nActivePath );
 
         DBG_ASSERT( ( nCurrentIndex != -1 ) && ( nNewIndex != -1 ),
             "RoadmapWizard::OnRoadmapItemSelected: something's wrong here!" );
         if ( ( nCurrentIndex == -1 ) || ( nNewIndex == -1 ) )
+        {
+            SetInCallOfLink( false );
             return 0L;
+        }
 
         sal_Bool bResult = sal_True;
         if ( nNewIndex > nCurrentIndex )
@@ -513,6 +520,7 @@ namespace svt
         if ( !bResult )
             m_pImpl->pRoadmap->SelectRoadmapItemByID( getCurrentState() );
 
+        SetInCallOfLink( false );
         return 1L;
     }
 
