@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeactions.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:13:41 $
+ *  last change: $Author: fs $ $Date: 2000-11-21 19:05:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,26 @@ struct OChangeActionCounter : public ChangeTreeAction
     }
 };
 
+// ===================================================================
+// = CollectNames
+// ===================================================================
+class CollectNames :  public NodeAction
+{
+public:
+    NameList const& list() const { return aList; }
+
+    CollectNames() : aList() {}
+
+    void handle(ValueNode const& aValue)    { add(aValue); }
+    void handle(ISubtree const&  m_aSubtree)    { add(m_aSubtree); }
+
+    void add(INode const& aNode)
+    {
+        aList.push_back(aNode.getName());
+    }
+private:
+    NameList aList;
+};
 
 //..........................................................................
 }   // namespace configmgr
