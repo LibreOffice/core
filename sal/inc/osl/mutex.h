@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mutex.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-16 12:49:13 $
+ *  last change: $Author: obr $ $Date: 2001-11-08 15:48:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@ extern "C" {
 #endif
 
 struct _oslMutexImpl;
+
+/** a handle to a mutex synchronization object
+*/
 typedef struct _oslMutexImpl * oslMutex;
 
 /** Create a thread-local mutex.
