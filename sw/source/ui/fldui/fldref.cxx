@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldref.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:28:06 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:58:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,9 +505,10 @@ void SwFldRefPage::UpdateSubType()
     }
     else
     {
-        SvStringsDtor& rLst = GetFldMgr().GetSubTypes(nTypeId);
-        for (USHORT i = 0; i < rLst.Count(); ++i)
-            aSelectionLB.InsertEntry(*rLst[i]);
+        SvStringsDtor aLst;
+        GetFldMgr().GetSubTypes(nTypeId, aLst);
+        for (USHORT i = 0; i < aLst.Count(); ++i)
+            aSelectionLB.InsertEntry(*aLst[i]);
 
         if (IsFldEdit())
             sOldSel = pRefFld->GetSetRefName();
