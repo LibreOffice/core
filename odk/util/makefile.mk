@@ -21,7 +21,7 @@ all:\
 
 
 $(BIN)$/$(ZIPFILE) .SETDIR=$(DESTDIR)$/.. .PHONY:
-    +zip -ur $(ZIPFILE) $(ZIPDIR)
+    +zip -urq $(ZIPFILE) $(ZIPDIR)
 
 $(BIN)$/$(TARGZFILE) .SETDIR=$(DESTDIR)$/.. .PHONY:
 #	tar does not properly support update
