@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlcommand.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-10 12:09:07 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 15:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
