@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:47:22 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 13:58:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,9 +88,9 @@ ModalDialog DLG_DATASOURCE_SELECTION
     Text [ spanish ] = "Fuente de datos" ;
     Text [ english_us ] = "Data Source" ;
     Text[ chinese_simplified ] = "æ•°æ®æº";
-    Text[ russian ] = "Èñõîäíûå äàííûå";
+    Text[ russian ] = "Èñòî÷íèê äàííûõ";
     Text[ polish ] = "ród³o danych";
-    Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹";
     Text[ chinese_traditional ] = "è³‡æ–™æº";
     Text[ arabic ] = "ãÕÏÑ ÇáÈíÇäÇÊ";
     Text[ greek ] = "Ğñïİëåõóç äåäïìİíùí";
@@ -112,18 +112,19 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ french ] = "Choisissez une source de données :";
         Text[ spanish ] = "Seleccione una fuente de datos:";
         Text[ italian ] = "Scegli una sorgente dati:";
-        Text[ danish ] = "Choose a data source:";
+        Text[ danish ] = "Vælg en datakilde:";
         Text[ swedish ] = "Välj en datakälla:";
         Text[ polish ] = "Wybierz Ÿród³o danych:";
         Text[ portuguese_brazilian ] = "Choose a data source:";
-        Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½ã‚’é¸æŠã—ã¾ã™:";
-        Text[ korean ] = "ë°ì´í„°ì†ŒìŠ¤ë¥¼ ì„ íƒí•˜ì‹­ì‹œì˜¤:";
+        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã‚’é¸æŠã—ã¾ã™:";
+        Text[ korean ] = "ë°ì´í„° ì†ŒìŠ¤ë¥¼ ì„ íƒí•˜ì‹­ì‹œì˜¤:";
         Text[ chinese_simplified ] = "è¯·æ‚¨é€‰æ‹©ä¸€ä¸ªæ•°æ®æºï¼š";
         Text[ chinese_traditional ] = "é¸æ“‡è³‡æ–™æºï¼š";
         Text[ turkish ] = "Choose a data source:";
         Text[ arabic ] = "ÇÎÊÑ ãÕÏÑ ÈíÇäÇÊ:";
-        Text[ catalan ] = "Seleccione una fuente de datos:";
+        Text[ catalan ] = "Trieu una font de dades:";
         Text[ finnish ] = "Valitse tietolähde:";
+        Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥:";
     };
     ListBox LB_DATASOURCE
     {
@@ -181,8 +182,9 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ korean ] = "ê´€ë¦¬...";
         Text[ turkish ] = "Yönet...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Administrar...";
+        Text[ catalan ] = "Organitza...";
         Text[ finnish ] = "Järjestä";
+        Text[ thai ] = "à¸ˆà¸±à¸”à¸à¸²à¸£...";
     };
     String STR_LOCAL_DATASOURCES
     {
@@ -199,16 +201,17 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text [ dutch ] = "lokale gegevensbronnen" ;
         Text [ spanish ] = "fuentes de datos locales" ;
         Text [ english_us ] = "local data sources" ;
-        Text[ chinese_simplified ] = "å±€éƒ¨çš„æ•°æ®æº";
+        Text[ chinese_simplified ] = "æœ¬æœºçš„æ•°æ®æº";
         Text[ russian ] = "ëîêàëüíûå èñõîäíûå äàííûå";
         Text[ polish ] = "lokalne Ÿród³a danych";
-        Text[ japanese ] = "ï¾›ï½°ï½¶ï¾™ï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½";
-        Text[ chinese_traditional ] = "å±€éƒ¨çš„è³‡æ–™æº";
+        Text[ japanese ] = "ãƒ­ãƒ¼ã‚«ãƒ«ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹";
+        Text[ chinese_traditional ] = "æœ¬æ©Ÿçš„è³‡æ–™æº";
         Text[ arabic ] = "ãÕÇÏÑ ÈíÇäÇÊ ãÍáíÉ";
         Text[ greek ] = "ôïğéêİò ğñïåëåıóåéò äåäïìİíùí";
         Text[ korean ] = "ë¡œì»¬ ë°ì´í„° ì†ŒìŠ¤";
         Text[ turkish ] = "Yerel veri kaynakları";
-        Text[ catalan ] = "fuentes de datos locales";
+        Text[ catalan ] = "fonts locals de dades";
+        Text[ thai ] = "à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¹‰à¸­à¸‡à¸–à¸´à¹ˆà¸™";
     };
     String STR_COULDNOTLOAD_CONFIGLIB
     {
@@ -222,25 +225,30 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ french ] = "La bibliothèque de programme #lib# n'a pas pu être chargée ou est défectueuse. La configuration de la source de données ODBC n'est pas disponible.";
         Text[ spanish ] = "No se pudo cargar la biblioteca de programa #lib#, quizás esté dañada. La configuración de fuente de datos ODBC no está disponible.";
         Text[ italian ] = "Impossibile caricare la libreria programma #lib# oppure è difettosa. La configurazione della sorgente dati ODBC non è disponibile.";
-        Text[ danish ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
+        Text[ danish ] = "Programbiblioteket #lib# kunne ikke indlæses eller er beskadiget. Den valgte ODBC-datakildekonfiguration er ikke tilgængelig.";
         Text[ swedish ] = "Det gick inte att ladda programbiblioteket #lib# eller så är det defekt. Konfigurationen av ODBC-datakällor är inte tillgänglig.";
         Text[ polish ] = "Za³adowanie biblioteki programu #lib# nie by³o mo¿liwe. Jest ona byæ mo¿e uszkodzona. Wybór Ÿród³a danych ODBC nie jest mo¿liwy.";
         Text[ portuguese_brazilian ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
-        Text[ japanese ] = "#lib# ï¾Œï¾Ÿï¾›ï½¸ï¾ï¾—ï¾‘ï¾—ï½²ï¾Œï¾ï¾—ï¾˜ã‚’èª­ã¿è¾¼ã‚ãªã‹ã£ãŸã‹ã€ã¾ãŸã¯ãã‚Œè‡ªä½“ã«ï¾„ï¾—ï¾Œï¾ï¾™ãŒã‚ã‚Šã¾ã™ã€‚ODBC ï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½ã®è¨­å®šã¯ã§ãã¾ã›ã‚“ã€‚";
-        Text[ korean ] = "í”„ë¡œê·¸ë¨ ë¼ì´ë¸ŒëŸ¬ë¦¬ #lib#ë¥¼ ë¡œë“œí•  ìˆ˜ ì—†ì—ˆê±°ë‚˜ ë˜ëŠ” ê³ ì¥ì…ë‹ˆë‹¤.  ODBCë°ì´í„° ì†ŒìŠ¤ ì»¨í”¼ê·œë ˆì´ì…˜ì„ ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
+        Text[ japanese ] = "#lib# ãƒ—ãƒ­ã‚°ãƒ©ãƒ ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’èª­ã¿è¾¼ã‚ãªã‹ã£ãŸã‹ã€ã¾ãŸã¯ãã‚Œè‡ªä½“ã«ãƒˆãƒ©ãƒ–ãƒ«ãŒã‚ã‚Šã¾ã™ã€‚ODBC ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã®è¨­å®šã¯ã§ãã¾ã›ã‚“ã€‚";
+        Text[ korean ] = "í”„ë¡œê·¸ë¨ ë¼ì´ë¸ŒëŸ¬ë¦¬ #lib#ë¥¼ ë¡œë“œí•  ìˆ˜ ì—†ì—ˆê±°ë‚˜ ë¼ì´ë¸ŒëŸ¬ë¦¬ì— ì˜¤ë¥˜ê°€ ìˆìŠµë‹ˆë‹¤. ODBCë°ì´í„° ì†ŒìŠ¤ êµ¬ì„±ì„ ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
         Text[ chinese_simplified ] = "æ— æ³•è£…å…¥ç¨‹åºåº“ #lib# æˆ–å·²ç»æŸåã€‚æ— æ³•é…ç½® ODBC æ•°æ®æºã€‚";
         Text[ chinese_traditional ] = "ç„¡æ³•è¼‰å…¥ç¨‹å¼åº« #lib# æˆ–å·²ç¶“æåã€‚ç„¡æ³•è¨­å®š ODBC è³‡æ–™æºã€‚";
         Text[ turkish ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
         Text[ arabic ] = "ÅãÇ Ãäå ÊÚĞÑ ÊÍãíá ãßÊÈÉ ÇáÈÑäÇãÌ #lib#¡ Ãæ ÃäåÇ ãÚØæÈÉ. Êßæíä ãÕÇÏÑ ÈíÇäÇÊ ODBC ÛíÑ ãÊæİÑ.";
-        Text[ catalan ] = "No se pudo cargar la biblioteca de programa #lib#, quizás esté dañada. La configuración de fuente de datos ODBC no está disponible.";
-        Text[ finnish ] = "Ohjelmakirjaston lib lataaminen ei onnistunut tai kirjasto on vioittunut. ODBC-tietolähteiden kokoonpano ei ole käytettävissä.";
+        Text[ catalan ] = "No s'ha pogut carregar la biblioteca de programes #lib# o està corrompuda. La configuració de la font de dades ODBC no està disponible.";
+        Text[ finnish ] = "Ohjelmakirjaston #lib# lataaminen ei onnistunut tai kirjasto on vioittunut. ODBC-tietolähteiden kokoonpano ei ole käytettävissä.";
+        Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹‚à¸«à¸¥à¸”à¸Šà¸¸à¸”à¸„à¸³à¸ªà¸±à¹ˆà¸‡à¹‚à¸›à¸£à¹à¸à¸£à¸¡ #lib# à¸«à¸£à¸·à¸­à¹ƒà¸Šà¹‰à¸¡à¸±à¸™à¸œà¸´à¸” à¹‚à¸„à¸£à¸‡à¹à¸šà¸šà¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥ ODBC  à¹ƒà¸Šà¹‰à¹„à¸¡à¹ˆà¹„à¸”à¹‰";
     };
-    Text[ catalan ] = "Fuente de datos";
+    Text[ catalan ] = "Font de dades";
+    Text[ thai ] = "à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.30  2002/08/19 07:47:22  oj
+ *  #99473# change string resource files
+ *
  *  Revision 1.29  2001/11/16 22:58:45  kz
  *  Merge SRC638: 16.11.01 - 22:57:12
  *
