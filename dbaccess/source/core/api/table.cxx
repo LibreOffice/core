@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-06 08:59:21 $
+ *  last change: $Author: fs $ $Date: 2001-04-19 07:13:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -537,7 +537,7 @@ void SAL_CALL ODBTable::alterColumnByName( const ::rtl::OUString& _rName, const 
 
         ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,m_Name,sComposedName,sal_True);
         if(!sComposedName.getLength())
-            throw ::dbtools::FunctionSequenceException(*this);
+            ::dbtools::throwFunctionSequenceException(*this);
 
         sSql += sComposedName;
         sSql += ::rtl::OUString::createFromAscii(" ALTER ");

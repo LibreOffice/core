@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultset.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-06 08:59:52 $
+ *  last change: $Author: fs $ $Date: 2001-04-19 07:13:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -598,7 +598,7 @@ void OResultSet::updateNull(sal_Int32 columnIndex) throw( SQLException, RuntimeE
         throw DisposedException();
 
     if (isReadOnly())
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     m_xAggregateAsRowUpdate->updateNull(columnIndex);
 }
@@ -611,7 +611,7 @@ void OResultSet::updateBoolean(sal_Int32 columnIndex, sal_Bool x) throw( SQLExce
         throw DisposedException();
 
     if (isReadOnly())
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     m_xAggregateAsRowUpdate->updateBoolean(columnIndex, x);
 }
@@ -623,7 +623,7 @@ void OResultSet::updateByte(sal_Int32 columnIndex, sal_Int8 x) throw( SQLExcepti
         throw DisposedException();
 
     if (isReadOnly())
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     m_xAggregateAsRowUpdate->updateByte(columnIndex, x);
 }
@@ -635,7 +635,7 @@ void OResultSet::updateShort(sal_Int32 columnIndex, sal_Int16 x) throw( SQLExcep
         throw DisposedException();
 
     if (isReadOnly())
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     m_xAggregateAsRowUpdate->updateShort(columnIndex, x);
 }
@@ -647,7 +647,7 @@ void OResultSet::updateInt(sal_Int32 columnIndex, sal_Int32 x) throw( SQLExcepti
         throw DisposedException();
 
     if (isReadOnly())
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     m_xAggregateAsRowUpdate->updateInt(columnIndex, x);
 }
@@ -659,7 +659,7 @@ void OResultSet::updateLong(sal_Int32 columnIndex, sal_Int64 x) throw( SQLExcept
         throw DisposedException();
 
     if (isReadOnly())
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     m_xAggregateAsRowUpdate->updateLong(columnIndex, x);
 }
@@ -671,7 +671,7 @@ void OResultSet::updateFloat(sal_Int32 columnIndex, float x) throw( SQLException
         throw DisposedException();
 
     if (isReadOnly())
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     m_xAggregateAsRowUpdate->updateFloat(columnIndex, x);
 }
@@ -683,7 +683,7 @@ void OResultSet::updateDouble(sal_Int32 columnIndex, double x) throw( SQLExcepti
         throw DisposedException();
 
     if (isReadOnly())
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     m_xAggregateAsRowUpdate->updateDouble(columnIndex, x);
 }
@@ -695,7 +695,7 @@ void OResultSet::updateString(sal_Int32 columnIndex, const rtl::OUString& x) thr
         throw DisposedException();
 
     if (isReadOnly())
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     m_xAggregateAsRowUpdate->updateString(columnIndex, x);
 }
@@ -707,7 +707,7 @@ void OResultSet::updateBytes(sal_Int32 columnIndex, const Sequence< sal_Int8 >& 
         throw DisposedException();
 
     if (isReadOnly())
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     m_xAggregateAsRowUpdate->updateBytes(columnIndex, x);
 }
@@ -719,7 +719,7 @@ void OResultSet::updateDate(sal_Int32 columnIndex, const ::com::sun::star::util:
         throw DisposedException();
 
     if (isReadOnly())
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     m_xAggregateAsRowUpdate->updateDate(columnIndex, x);
 }
@@ -731,7 +731,7 @@ void OResultSet::updateTime(sal_Int32 columnIndex, const ::com::sun::star::util:
         throw DisposedException();
 
     if (isReadOnly())
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     m_xAggregateAsRowUpdate->updateTime(columnIndex, x);
 }
@@ -743,7 +743,7 @@ void OResultSet::updateTimestamp(sal_Int32 columnIndex, const ::com::sun::star::
         throw DisposedException();
 
     if (isReadOnly())
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     m_xAggregateAsRowUpdate->updateTimestamp(columnIndex, x);
 }
@@ -755,7 +755,7 @@ void OResultSet::updateBinaryStream(sal_Int32 columnIndex, const Reference< ::co
         throw DisposedException();
 
     if (isReadOnly())
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     m_xAggregateAsRowUpdate->updateBinaryStream(columnIndex, x, length);
 }
@@ -767,7 +767,7 @@ void OResultSet::updateCharacterStream(sal_Int32 columnIndex, const Reference< :
         throw DisposedException();
 
     if (isReadOnly())
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     m_xAggregateAsRowUpdate->updateCharacterStream(columnIndex, x, length);
 }
@@ -779,7 +779,7 @@ void OResultSet::updateNumericObject(sal_Int32 columnIndex, const Any& x, sal_In
         throw DisposedException();
 
     if (isReadOnly())
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     m_xAggregateAsRowUpdate->updateNumericObject(columnIndex, x, scale);
 }
@@ -792,7 +792,7 @@ void OResultSet::updateObject(sal_Int32 columnIndex, const Any& x) throw( SQLExc
         throw DisposedException();
 
     if (isReadOnly())
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     m_xAggregateAsRowUpdate->updateObject(columnIndex, x);
 }
@@ -987,7 +987,7 @@ Any OResultSet::getBookmark(void) throw( SQLException, RuntimeException )
         throw DisposedException();
 
     if (!m_bIsBookmarkable)
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     return Reference< XRowLocate >(m_xAggregateAsResultSet, UNO_QUERY)->getBookmark();
 }
@@ -1000,7 +1000,7 @@ sal_Bool OResultSet::moveToBookmark(const Any& bookmark) throw( SQLException, Ru
         throw DisposedException();
 
     if (!m_bIsBookmarkable)
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     return Reference< XRowLocate >(m_xAggregateAsResultSet, UNO_QUERY)->moveToBookmark(bookmark);
 }
@@ -1012,7 +1012,7 @@ sal_Bool OResultSet::moveRelativeToBookmark(const Any& bookmark, sal_Int32 rows)
     if (OResultSetBase::rBHelper.bDisposed)
         throw DisposedException();
     if (!m_bIsBookmarkable)
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     return Reference< XRowLocate >(m_xAggregateAsResultSet, UNO_QUERY)->moveRelativeToBookmark(bookmark, rows);
 }
@@ -1025,7 +1025,7 @@ sal_Int32 OResultSet::compareBookmarks(const Any& first, const Any& second) thro
         throw DisposedException();
 
     if (!m_bIsBookmarkable)
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     return Reference< XRowLocate >(m_xAggregateAsResultSet, UNO_QUERY)->compareBookmarks(first, second);
 }
@@ -1038,7 +1038,7 @@ sal_Bool OResultSet::hasOrderedBookmarks(void) throw( SQLException, RuntimeExcep
         throw DisposedException();
 
     if (!m_bIsBookmarkable)
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     return Reference< XRowLocate >(m_xAggregateAsResultSet, UNO_QUERY)->hasOrderedBookmarks();
 }
@@ -1051,7 +1051,7 @@ sal_Int32 OResultSet::hashBookmark(const Any& bookmark) throw( SQLException, Run
         throw DisposedException();
 
     if (!m_bIsBookmarkable)
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     return Reference< XRowLocate >(m_xAggregateAsResultSet, UNO_QUERY)->hashBookmark(bookmark);
 }
@@ -1065,7 +1065,7 @@ void OResultSet::insertRow(void) throw( SQLException, RuntimeException )
         throw DisposedException();
 
     if (isReadOnly())
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     Reference< XResultSetUpdate >(m_xAggregateAsResultSet, UNO_QUERY)->insertRow();
 }
@@ -1078,7 +1078,7 @@ void OResultSet::updateRow(void) throw( SQLException, RuntimeException )
         throw DisposedException();
 
     if (isReadOnly())
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     Reference< XResultSetUpdate >(m_xAggregateAsResultSet, UNO_QUERY)->updateRow();
 }
@@ -1091,7 +1091,7 @@ void OResultSet::deleteRow(void) throw( SQLException, RuntimeException )
         throw DisposedException();
 
     if (isReadOnly())
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     Reference< XResultSetUpdate >(m_xAggregateAsResultSet, UNO_QUERY)->deleteRow();
 }
@@ -1104,7 +1104,7 @@ void OResultSet::cancelRowUpdates(void) throw( SQLException, RuntimeException )
         throw DisposedException();
 
     if (isReadOnly())
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     Reference< XResultSetUpdate >(m_xAggregateAsResultSet, UNO_QUERY)->cancelRowUpdates();
 }
@@ -1117,7 +1117,7 @@ void OResultSet::moveToInsertRow(void) throw( SQLException, RuntimeException )
         throw DisposedException();
 
     if (isReadOnly())
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     Reference< XResultSetUpdate >(m_xAggregateAsResultSet, UNO_QUERY)->moveToInsertRow();
 }
@@ -1130,7 +1130,7 @@ void OResultSet::moveToCurrentRow(void) throw( SQLException, RuntimeException )
         throw DisposedException();
 
     if (isReadOnly())
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     Reference< XResultSetUpdate >(m_xAggregateAsResultSet, UNO_QUERY)->moveToCurrentRow();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontainer.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-29 07:06:28 $
+ *  last change: $Author: fs $ $Date: 2001-04-19 07:13:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,7 +355,7 @@ void SAL_CALL OViewContainer::appendByDescriptor( const Reference< XPropertySet 
 
         ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_True);
         if(!sComposedName.getLength())
-            throw ::dbtools::FunctionSequenceException(*this);
+            ::dbtools::throwFunctionSequenceException(*this);
 
         aSql += sComposedName + ::rtl::OUString::createFromAscii(" AS ");
         ::rtl::OUString sCommand;
@@ -400,7 +400,7 @@ void SAL_CALL OViewContainer::dropByName( const ::rtl::OUString& elementName ) t
         }
 
         if(!sComposedName.getLength())
-            throw ::dbtools::FunctionSequenceException(*this);
+            ::dbtools::throwFunctionSequenceException(*this);
 
         ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP VIEW ");
         aSql += sComposedName;

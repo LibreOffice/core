@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-18 14:36:54 $
+ *  last change: $Author: fs $ $Date: 2001-04-19 07:14:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,7 +553,7 @@ void SAL_CALL OTableContainer::appendByDescriptor( const Reference< XPropertySet
 
         ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_True);
         if(!sComposedName.getLength())
-            throw ::dbtools::FunctionSequenceException(*this);
+            ::dbtools::throwFunctionSequenceException(*this);
 
         aSql += sComposedName + ::rtl::OUString::createFromAscii(" (");
 
@@ -562,7 +562,7 @@ void SAL_CALL OTableContainer::appendByDescriptor( const Reference< XPropertySet
         Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
         // check if there are columns
         if(!xColumns.is() || !xColumns->getCount())
-            throw ::dbtools::FunctionSequenceException(*this);
+            ::dbtools::throwFunctionSequenceException(*this);
 
         Reference< XPropertySet > xColProp;
 
@@ -628,13 +628,13 @@ void SAL_CALL OTableContainer::appendByDescriptor( const Reference< XPropertySet
                     if(nKeyType == KeyType::PRIMARY)
                     {
                         if(!bPKey)
-                            throw ::dbtools::FunctionSequenceException(*this);
+                            ::dbtools::throwFunctionSequenceException(*this);
 
                         bPKey = sal_True;
                         xColumnSup = Reference<XColumnsSupplier>(xColProp,UNO_QUERY);
                         xColumns = Reference<XIndexAccess>(xColumnSup->getColumns(),UNO_QUERY);
                         if(!xColumns.is() || !xColumns->getCount())
-                            throw ::dbtools::FunctionSequenceException(*this);
+                            ::dbtools::throwFunctionSequenceException(*this);
 
                         aSql += ::rtl::OUString::createFromAscii(" PRIMARY KEY (");
                         for(sal_Int32 i=0;i<xColumns->getCount();++i)
@@ -651,7 +651,7 @@ void SAL_CALL OTableContainer::appendByDescriptor( const Reference< XPropertySet
                         xColumnSup = Reference<XColumnsSupplier>(xColProp,UNO_QUERY);
                         xColumns = Reference<XIndexAccess>(xColumnSup->getColumns(),UNO_QUERY);
                         if(!xColumns.is() || !xColumns->getCount())
-                            throw ::dbtools::FunctionSequenceException(*this);
+                            ::dbtools::throwFunctionSequenceException(*this);
 
                         aSql += ::rtl::OUString::createFromAscii(" UNIQUE (");
                         for(sal_Int32 i=0;i<xColumns->getCount();++i)
@@ -670,7 +670,7 @@ void SAL_CALL OTableContainer::appendByDescriptor( const Reference< XPropertySet
                         xColumnSup = Reference<XColumnsSupplier>(xColProp,UNO_QUERY);
                         xColumns = Reference<XIndexAccess>(xColumnSup->getColumns(),UNO_QUERY);
                         if(!xColumns.is() || !xColumns->getCount())
-                            throw ::dbtools::FunctionSequenceException(*this);
+                            ::dbtools::throwFunctionSequenceException(*this);
 
                         aSql += ::rtl::OUString::createFromAscii(" FOREIGN KEY ");
                         ::rtl::OUString sRefTable = getString(xColProp->getPropertyValue(PROPERTY_REFERENCEDTABLE));
@@ -683,7 +683,7 @@ void SAL_CALL OTableContainer::appendByDescriptor( const Reference< XPropertySet
 
 
                         if(!sComposedName.getLength())
-                            throw ::dbtools::FunctionSequenceException(*this);
+                            ::dbtools::throwFunctionSequenceException(*this);
                         aSql += sComposedName + ::rtl::OUString::createFromAscii(" (");
 
                         for(sal_Int32 i=0;i<xColumns->getCount();++i)
@@ -784,7 +784,7 @@ void SAL_CALL OTableContainer::dropByName( const ::rtl::OUString& elementName ) 
         }
 
         if(!sComposedName.getLength())
-            throw ::dbtools::FunctionSequenceException(*this);
+            ::dbtools::throwFunctionSequenceException(*this);
 
         ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP TABLE ");
         aSql += sComposedName;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statement.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 13:18:50 $
+ *  last change: $Author: fs $ $Date: 2001-04-19 07:13:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,7 +348,7 @@ Reference< XResultSet > SAL_CALL OStatementBase::getResultSet(  ) throw(SQLExcep
 
     // first check the meta data
     if (!Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData()->supportsMultipleResultSets())
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     return Reference< XMultipleResults >(m_xAggregateAsSet, UNO_QUERY)->getResultSet();
 }
@@ -362,7 +362,7 @@ sal_Int32 SAL_CALL OStatementBase::getUpdateCount(  ) throw(SQLException, Runtim
 
     // first check the meta data
     if (!Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData()->supportsMultipleResultSets())
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     return Reference< XMultipleResults >(m_xAggregateAsSet, UNO_QUERY)->getUpdateCount();
 }
@@ -376,7 +376,7 @@ sal_Bool SAL_CALL OStatementBase::getMoreResults(  ) throw(SQLException, Runtime
 
     // first check the meta data
     if (!Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData()->supportsMultipleResultSets())
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     // free the previous results
     disposeResultSet();
@@ -394,7 +394,7 @@ void SAL_CALL OStatementBase::addBatch(  ) throw(SQLException, RuntimeException)
 
     // first check the meta data
     if (!Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData()->supportsBatchUpdates())
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     Reference< XPreparedBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->addBatch();
 }
@@ -408,7 +408,7 @@ void SAL_CALL OStatementBase::clearBatch(  ) throw(SQLException, RuntimeExceptio
 
     // first check the meta data
     if (!Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData()->supportsBatchUpdates())
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     Reference< XPreparedBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->clearBatch();
 }
@@ -422,7 +422,7 @@ Sequence< sal_Int32 > SAL_CALL OStatementBase::executeBatch(  ) throw(SQLExcepti
 
     // first check the meta data
     if (!Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData()->supportsBatchUpdates())
-        throw FunctionSequenceException(*this);
+        throwFunctionSequenceException(*this);
 
     // free the previous results
     disposeResultSet();
