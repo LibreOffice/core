@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-06 13:01:12 $
+#   last change: $Author: mi $ $Date: 2000-11-07 16:41:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,7 +63,7 @@
 PRJ=..
 PRJPCH=
 
-PRJNAME=api
+PRJNAME=udkapi
 TARGET=applicat
 
 #use_starjar=true
@@ -76,65 +76,25 @@ TARGET=applicat
 # ------------------------------------------------------------------
 
 UNOIDLDBFILES= \
-    $(UCR)$/cssawt.db \
     $(UCR)$/cssbeans.db \
     $(UCR)$/cssbridge.db \
-    $(UCR)$/csschart.db \
     $(UCR)$/cssconnection.db\
-    $(UCR)$/cssconfiguration.db \
     $(UCR)$/csscontainer.db \
-    $(UCR)$/cssdata.db \
-    $(UCR)$/cssdatatransfer.db \
-    $(UCR)$/cssdclipboard.db \
-    $(UCR)$/cssdocument.db \
-    $(UCR)$/cssdrawing.db \
-    $(UCR)$/cssfcomp.db \
-    $(UCR)$/cssform.db \
-    $(UCR)$/cssformula.db \
-    $(UCR)$/cssframe.db \
-    $(UCR)$/cssinstallation.db \
-    $(UCR)$/cssi18n.db \
     $(UCR)$/cssio.db \
     $(UCR)$/cssjava.db \
     $(UCR)$/csslang.db \
-    $(UCR)$/csslinguistic2.db \
     $(UCR)$/cssloader.db \
-    $(UCR)$/cssmozilla.db \
-    $(UCR)$/csspgp.db \
-    $(UCR)$/cssplugin.db \
-    $(UCR)$/csspresentation.db \
     $(UCR)$/cssreflection.db \
     $(UCR)$/cssregistry.db \
-    $(UCR)$/cssresource.db \
-    $(UCR)$/csssax.db \
-    $(UCR)$/cssscanner.db \
     $(UCR)$/cssscript.db \
-    $(UCR)$/csssdb.db \
-    $(UCR)$/csssdbc.db \
-    $(UCR)$/csssdbcx.db \
-    $(UCR)$/csssheet.db \
-    $(UCR)$/cssstyle.db \
-    $(UCR)$/csstable.db \
-    $(UCR)$/csstask.db \
     $(UCR)$/csstest.db \
     $(UCR)$/cssperftest.db \
     $(UCR)$/cssbridgetest.db \
-    $(UCR)$/csstext.db \
-    $(UCR)$/cssucb.db \
     $(UCR)$/cssuno.db \
-    $(UCR)$/cssutil.db \
-    $(UCR)$/cssview.db \
     $(UCR)$/csscorba.db \
     $(UCR)$/cssiop.db \
     $(UCR)$/cssiiop.db \
-    $(UCR)$/cssgiop.db \
-    $(UCR)$/csssvg.db \
-    $(UCR)$/csssync.db \
-    $(UCR)$/cssxml.db \
-    $(UCR)$/csssetup.db \
-    $(UCR)$/cssui.db
-
-#	$(UCR)$/csstextfield.db \
+    $(UCR)$/cssgiop.db 
 
 # --- Targets ------------------------------------------------------
 
