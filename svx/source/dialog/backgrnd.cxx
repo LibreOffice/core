@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2002-09-17 15:10:00 $
+ *  last change: $Author: gt $ $Date: 2002-10-11 12:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,21 +276,14 @@ BackgroundPreviewImpl::~BackgroundPreviewImpl()
 
 //-----------------------------------------------------------------------
 void BackgroundPreviewImpl::NotifyChange( const Color& rColor )
-
-/*  [Beschreibung]
-
-*/
-
 {
     if ( !bIsBmp )
     {
-        nTransparency = lcl_TransparencyToPercent(rColor.GetTransparency());
-        if ( rColor == Color( COL_TRANSPARENT ) )
-        {
-            SetFillColor( GetSettings().GetStyleSettings().GetFieldColor() );
-            Paint( aDrawRect );
-        }
-        SetFillColor( rColor.GetRGBColor());
+        const static Color aTranspCol( COL_TRANSPARENT );
+
+        nTransparency = lcl_TransparencyToPercent( rColor.GetTransparency() );
+
+        SetFillColor( rColor == aTranspCol? GetSettings().GetStyleSettings().GetFieldColor() : rColor.GetRGBColor() );
         Paint( aDrawRect );
     }
 }
