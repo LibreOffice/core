@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPagesSelector.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:45:16 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,8 @@ public:
     */
     static SdPage* AddMasterPage (
         SdDrawDocument* pTargetDocument,
-        SdPage* pMasterPage);
+        SdPage* pMasterPage,
+        USHORT nInsertionIndex);
 
     virtual Size GetPreferredSize (void);
     virtual sal_Int32 GetPreferredWidth (sal_Int32 nHeight);
@@ -192,6 +193,37 @@ private:
     static void ProvideStyles (
         SdDrawDocument* pSourceDoc,
         SdDrawDocument* pTargetDoc,
+        SdPage* pPage);
+
+    /** Assign the given master page to the list of pages.
+        @param pMasterPage
+            This master page will usually be a member of the list of all
+            available master pages as provided by the MasterPageContainer.
+        @param rPageList
+            The pages to which to assign the master page.  These pages may
+            be slides or master pages themselves.
+    */
+    void AssignMasterPageToPageList (
+        SdPage* pMasterPage,
+        const ::std::vector<SdPage*>& rPageList);
+
+    /** Assign the given master page to the given page.
+        @param pMasterPage
+            In contrast to AssignMasterPageToPageList() this page is assumed
+            to be in the target document, i.e. the same document that pPage
+            is in.  The caller will usually call AddMasterPage() to create a
+            clone of a master page in a another document to create it.
+        @param rsBaseLayoutName
+            The layout name of the given master page.  It is given so that
+            it has not to be created on every call.  It could be generated
+            from the given master page, though.
+        @param pPage
+            The page to which to assign the master page.  It can be a slide
+            or a master page itself.
+    */
+    void AssignMasterPageToPage (
+        SdPage* pMasterPage,
+        const String& rsBaseLayoutName,
         SdPage* pPage);
 };
 
