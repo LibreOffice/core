@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShell.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-28 16:23:06 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:43:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,8 +330,18 @@ public:
 
     virtual BOOL  ActivateObject(SdrOle2Obj* pObj, long nVerb);
 
+    /** @returns
+            current or selected page or 0. This method
+            will fail in master page mode.
+
+        @deprecated, please use getCurrentPage();
+    */
     virtual SdPage* GetActualPage() = 0;
-                    // kann auch NULL sein
+
+    /** @returns
+            current or selected page or 0.
+    */
+    virtual SdPage* getCurrentPage() const = 0;
 
     FuPoor* GetOldFunction() const    { return pFuOld; }
     FuPoor* GetActualFunction() const { return pFuActual; }
