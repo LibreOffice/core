@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignControl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-14 07:56:01 $
+ *  last change: $Author: oj $ $Date: 2002-09-24 09:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,8 @@ namespace dbaui
         virtual ~OTableRowView();
 
         virtual void                SetData( long nRow, USHORT nColId, const OTypeInfo* _pTypeInfo ) = 0;
-        virtual void                SetData( long nRow, USHORT nColId, const String& _rNewData ) = 0;
-        virtual String              GetData( long nRow, USHORT nColId ) = 0;
+        virtual void                SetData( long nRow, USHORT nColId, const ::com::sun::star::uno::Any& _rNewData ) = 0;
+        virtual ::com::sun::star::uno::Any          GetData( long nRow, USHORT nColId ) = 0;
         virtual void                SetControlText( long nRow, USHORT nColId, const String& rText ) = 0;
         virtual String              GetControlText( long nRow, USHORT nColId ) = 0;
 

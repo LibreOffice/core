@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFieldControl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-26 09:35:15 $
+ *  last change: $Author: oj $ $Date: 2002-09-24 09:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ void OTableFieldControl::CellModified(long nRow, sal_uInt16 nColId )
     GetCtrl()->CellModified(nRow,nColId);
 }
 //------------------------------------------------------------------
-OTableEditorCtrl* OTableFieldControl::GetCtrl()
+OTableEditorCtrl* OTableFieldControl::GetCtrl() const
 {
     OTableDesignView* pDesignWin = static_cast<OTableDesignView*>(GetParent()->GetParent()->GetParent()->GetParent());
     OSL_ENSURE(pDesignWin,"no view!");
@@ -167,7 +167,7 @@ void OTableFieldControl::SetModified(BOOL bModified)
     return xCon->getMetaData();
 }
 // -----------------------------------------------------------------------------
-Reference< XNumberFormatter >   OTableFieldControl::GetFormatter()
+Reference< XNumberFormatter >   OTableFieldControl::GetFormatter() const
 {
     return GetCtrl()->GetView()->getController()->getNumberFormatter();
 }

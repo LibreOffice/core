@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescriptions.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-22 12:11:17 $
+ *  last change: $Author: oj $ $Date: 2002-09-24 09:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,12 +83,15 @@ namespace dbaui
 
     {
     private:
+        ::com::sun::star::uno::Any      m_aDefaultValue;    // the default value from the database
+        ::com::sun::star::uno::Any      m_aControlDefault;  // the value which the control inserts as default
+
         const OTypeInfo*    m_pType;
 
         ::rtl::OUString     m_sName;
         ::rtl::OUString     m_sTypeName;
         ::rtl::OUString     m_sDescription;
-        ::rtl::OUString     m_sDefaultValue;
+
         ::rtl::OUString     m_sAutoIncrementValue;
         sal_Int32           m_nType;    // only used when m_pType is null
         sal_Int32           m_nPrecision;
@@ -106,7 +109,8 @@ namespace dbaui
         OFieldDescription(  const ::rtl::OUString&  _sName,
                             const ::rtl::OUString&  _sTypeName,
                             const ::rtl::OUString&  _sDescription,
-                            const ::rtl::OUString&  _sDefaultValue,
+                            const ::com::sun::star::uno::Any&   _aDefaultValue,
+                            const ::com::sun::star::uno::Any&   _aControlDefault,
                             const ::rtl::OUString&  _sAutoIncrementValue,
                             const OTypeInfo*        _pType,
                             sal_Int32               _nPrecision,
@@ -123,7 +127,8 @@ namespace dbaui
         void SetName(const ::rtl::OUString& _rName)                         { m_sName = _rName; }
         //  void SetTypeName(const ::rtl::OUString& _rTypeName)                 { m_sTypeName = _rTypeName; }
         void SetDescription(const ::rtl::OUString& _rDescription)           { m_sDescription = _rDescription; }
-        void SetDefaultValue(const ::rtl::OUString& _rDefaultValue)         { m_sDefaultValue = _rDefaultValue; }
+        void SetDefaultValue(const ::com::sun::star::uno::Any& _rDefaultValue)      { m_aDefaultValue = _rDefaultValue; }
+        void SetControlDefault(const ::com::sun::star::uno::Any& _rControlDefault)  { m_aControlDefault = _rControlDefault; }
         void SetAutoIncrementValue(const ::rtl::OUString& _sAutoIncValue)   { m_sAutoIncrementValue = _sAutoIncValue; }
         void SetType(const OTypeInfo* _pType)                               { m_pType = _pType; if (m_pType) m_nType = m_pType->nType; }
         void SetTypeValue(sal_Int32 _nType)                                 { m_nType = _nType; OSL_ENSURE(!m_pType,"Invalid call here!");}
@@ -136,21 +141,22 @@ namespace dbaui
         void SetPrimaryKey(sal_Bool _bPKey)                                 { m_bIsPrimaryKey = _bPKey; }
         void SetCurrency(sal_Bool _bIsCurrency)                             { m_bIsCurrency = _bIsCurrency; }
 
-        ::rtl::OUString     GetName()               const { return m_sName; }
-        ::rtl::OUString     GetDescription()        const { return m_sDescription; }
-        ::rtl::OUString     GetDefaultValue()       const { return m_sDefaultValue; }
-        ::rtl::OUString     GetAutoIncrementValue() const { return m_sAutoIncrementValue; }
-        sal_Int32           GetType()               const { return m_pType ? m_pType->nType : m_nType; }
-        sal_Int32           GetPrecision()          const { return m_nPrecision; }
-        sal_Int32           GetScale()              const { return m_nScale; }
-        sal_Int32           GetIsNullable()         const { return m_nIsNullable; }
-        sal_Int32           GetFormatKey()          const { return m_nFormatKey; }
-        SvxCellHorJustify   GetHorJustify()         const { return m_eHorJustify; }
-        const OTypeInfo*    getTypeInfo()           const { return m_pType; }
-        sal_Bool            IsAutoIncrement()       const { return m_bIsAutoIncrement; }
-        sal_Bool            IsPrimaryKey()          const { return m_bIsPrimaryKey; }
-        sal_Bool            IsCurrency()            const { return m_bIsCurrency; }
-        sal_Bool            IsNullable()            const { return m_nIsNullable == ::com::sun::star::sdbc::ColumnValue::NULLABLE; }
+        ::rtl::OUString             GetName()               const { return m_sName; }
+        ::rtl::OUString             GetDescription()        const { return m_sDescription; }
+        ::com::sun::star::uno::Any  GetDefaultValue()       const { return m_aDefaultValue; }
+        ::com::sun::star::uno::Any  GetControlDefault()     const { return m_aControlDefault; }
+        ::rtl::OUString             GetAutoIncrementValue() const { return m_sAutoIncrementValue; }
+        sal_Int32                   GetType()               const { return m_pType ? m_pType->nType : m_nType; }
+        sal_Int32                   GetPrecision()          const { return m_nPrecision; }
+        sal_Int32                   GetScale()              const { return m_nScale; }
+        sal_Int32                   GetIsNullable()         const { return m_nIsNullable; }
+        sal_Int32                   GetFormatKey()          const { return m_nFormatKey; }
+        SvxCellHorJustify           GetHorJustify()         const { return m_eHorJustify; }
+        const OTypeInfo*            getTypeInfo()           const { return m_pType; }
+        sal_Bool                    IsAutoIncrement()       const { return m_bIsAutoIncrement; }
+        sal_Bool                    IsPrimaryKey()          const { return m_bIsPrimaryKey; }
+        sal_Bool                    IsCurrency()            const { return m_bIsCurrency; }
+        sal_Bool                    IsNullable()            const { return m_nIsNullable == ::com::sun::star::sdbc::ColumnValue::NULLABLE; }
     };
 }
 #endif // DBAUI_FIELDDESCRIPTIONS_HXX

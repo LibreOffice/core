@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-26 07:50:21 $
+ *  last change: $Author: oj $ $Date: 2002-09-24 09:18:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,14 +726,14 @@ sal_Int32 mapTextAllign(const SvxCellHorJustify& _eAlignment)
 // -----------------------------------------------------------------------------
 void setColumnUiProperties( const Reference< XPropertySet>& _rxColumn,const OFieldDescription* _pFieldDesc)
 {
-    if(_pFieldDesc->GetFormatKey() != NumberFormat::UNDEFINED && _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY))
+    if ( _pFieldDesc->GetFormatKey() != NumberFormat::UNDEFINED && _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY) )
         _rxColumn->setPropertyValue(PROPERTY_FORMATKEY,makeAny(_pFieldDesc->GetFormatKey()));
-    if(_rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ALIGN))
+    if ( _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ALIGN) )
         _rxColumn->setPropertyValue(PROPERTY_ALIGN,makeAny(dbaui::mapTextAllign(_pFieldDesc->GetHorJustify())));
-    if(_rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_HELPTEXT))
+    if ( _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_HELPTEXT) )
         _rxColumn->setPropertyValue(PROPERTY_HELPTEXT,makeAny(_pFieldDesc->GetDescription()));
-    if(_rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_CONTROLDEFAULT))
-        _rxColumn->setPropertyValue(PROPERTY_CONTROLDEFAULT,makeAny(_pFieldDesc->GetDefaultValue()));
+    if ( _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_CONTROLDEFAULT) )
+        _rxColumn->setPropertyValue(PROPERTY_CONTROLDEFAULT,_pFieldDesc->GetControlDefault());
 }
 // -----------------------------------------------------------------------------
 float ConvertFontWeight( ::FontWeight eWeight )

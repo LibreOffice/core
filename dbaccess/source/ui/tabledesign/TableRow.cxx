@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableRow.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-11 06:57:45 $
+ *  last change: $Author: oj $ $Date: 2002-09-24 09:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #include "FieldDescriptions.hxx"
 #endif
 #include <algorithm>
+#include <comphelper/types.hxx>
 
 using namespace dbaui;
 using namespace ::com::sun::star::sdbc;
@@ -156,7 +157,7 @@ void OTableRow::SetFieldType( const OTypeInfo* _pType, sal_Bool _bForce )
         {
             // reset type depending information
             m_pActFieldDescr->SetFormatKey(0);
-            m_pActFieldDescr->SetDefaultValue(::rtl::OUString());
+            m_pActFieldDescr->SetControlDefault(Any());
 
             sal_Bool bForce = _bForce || pOldType == NULL || pOldType->nType != _pType->nType;
             switch(_pType->nType)
@@ -209,7 +210,18 @@ namespace dbaui
         {
             _rStr.WriteByteString(pFieldDesc->GetName());
             _rStr.WriteByteString(pFieldDesc->GetDescription());
-            _rStr.WriteByteString(pFieldDesc->GetDefaultValue());
+            double nValue = 0.0;
+            Any aValue = pFieldDesc->GetControlDefault();
+            if ( aValue >>= nValue )
+            {
+                _rStr << sal_Int32(1);
+                _rStr << nValue;
+            }
+            else
+            {
+                _rStr << sal_Int32(2);
+                _rStr.WriteByteString(::comphelper::getString(aValue));
+            }
 
             _rStr << pFieldDesc->GetType();
 
@@ -240,10 +252,27 @@ namespace dbaui
             _rStr.ReadByteString(sValue);
             pFieldDesc->SetDescription(sValue);
 
-            _rStr.ReadByteString(sValue);
-            pFieldDesc->SetDefaultValue(sValue);
-
             sal_Int32 nValue;
+            _rStr >> nValue;
+            Any aControlDefault;
+            switch ( nValue )
+            {
+                case 1:
+                {
+                    double nControlDefault;
+                    _rStr >> nControlDefault;
+                    aControlDefault <<= nControlDefault;
+                    break;
+                }
+                case 2:
+                    _rStr.ReadByteString(sValue);
+                    aControlDefault <<= ::rtl::OUString(sValue);
+                    break;
+            }
+
+            pFieldDesc->SetControlDefault(aControlDefault);
+
+
             _rStr >> nValue;
             pFieldDesc->SetTypeValue(nValue);
 
@@ -264,6 +293,8 @@ namespace dbaui
             pFieldDesc->SetPrimaryKey(nValue != 0);
             _rStr >> nValue;
             pFieldDesc->SetCurrency(nValue != 0);
+
+
         }
         return _rStr;
     }

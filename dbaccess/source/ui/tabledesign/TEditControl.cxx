@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-21 06:28:00 $
+ *  last change: $Author: oj $ $Date: 2002-09-24 09:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,12 @@
 #endif
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
+#endif
+#ifndef DBAUI_FIELDDESCRIPTIONCONTROL_HXX
+#include "FieldDescControl.hxx"
+#endif
+#ifndef DBAUI_TABLEFIELDCONTROL_HXX
+#include "TableFieldControl.hxx"
 #endif
 
 using namespace ::dbaui;
@@ -1131,7 +1137,7 @@ void OTableEditorCtrl::SetData( long nRow, sal_uInt16 nColId, const OTypeInfo* _
     SetControlText(nRow,nColId,_pTypeInfo ? _pTypeInfo->aUIName : ::rtl::OUString());
 }
 //------------------------------------------------------------------------------
-void OTableEditorCtrl::SetData( long nRow, sal_uInt16 nColId, const String& _rNewData )
+void OTableEditorCtrl::SetData( long nRow, sal_uInt16 nColId, const ::com::sun::star::uno::Any& _rNewData )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     //////////////////////////////////////////////////////////////////////
@@ -1141,23 +1147,15 @@ void OTableEditorCtrl::SetData( long nRow, sal_uInt16 nColId, const String& _rNe
     OFieldDescription* pFieldDescr = GetFieldDescr( nRow );
     if( !pFieldDescr && nColId != FIELD_TYPE)
         return;
-//  {
-//      OTypeInfoMap::const_iterator aTypeIter = GetView()->getController()->getTypeInfo()->find(DataType::VARCHAR);
-//      if(aTypeIter == GetView()->getController()->getTypeInfo()->end())
-//          aTypeIter = GetView()->getController()->getTypeInfo()->begin();
-//
-//      OTableRow* pRow = (*m_pRowList)[nRow];
-//      pRow->SetFieldType( aTypeIter->second );
-//      pFieldDescr = pRow->GetActFieldDescr();
-//  }
 
-
+    String sValue;
     //////////////////////////////////////////////////////////////////////
     // Einzelne Felder setzen
     switch( nColId )
     {
         case FIELD_NAME:
-            pFieldDescr->SetName( _rNewData );
+            sValue = ::comphelper::getString(_rNewData);
+            pFieldDescr->SetName( sValue );
             break;
 
         case FIELD_TYPE:
@@ -1165,20 +1163,27 @@ void OTableEditorCtrl::SetData( long nRow, sal_uInt16 nColId, const String& _rNe
             break;
 
         case FIELD_DESCR:
-            pFieldDescr->SetDescription( _rNewData );
+            pFieldDescr->SetDescription( sValue = ::comphelper::getString(_rNewData) );
             break;
 
         case FIELD_PROPERTY_DEFAULT:
-            pFieldDescr->SetDefaultValue( _rNewData );
+            pFieldDescr->SetControlDefault( _rNewData );
+            sValue = GetView()->GetDescWin()->getGenPage()->getFieldControl()->getControlDefault(pFieldDescr);
             break;
 
         case FIELD_PROPERTY_REQUIRED:
-            pFieldDescr->SetIsNullable( _rNewData.ToInt32() );
+            {
+                sValue = ::comphelper::getString(_rNewData);
+                pFieldDescr->SetIsNullable( sValue.ToInt32() );
+            }
             break;
 
         case FIELD_PROPERTY_TEXTLEN:
         case FIELD_PROPERTY_LENGTH:
-            pFieldDescr->SetPrecision( _rNewData.ToInt32() );
+            {
+                sValue = ::comphelper::getString(_rNewData);
+                pFieldDescr->SetPrecision( sValue.ToInt32() );
+            }
             break;
 
         case FIELD_PROPERTY_NUMTYPE:
@@ -1189,33 +1194,40 @@ void OTableEditorCtrl::SetData( long nRow, sal_uInt16 nColId, const String& _rNe
         case FIELD_PROPERTY_AUTOINC:
             {
                 String strYes(ModuleRes(STR_VALUE_YES));
-                //  String strNo(ModuleRes(STR_VALUE_NO));
-                pFieldDescr->SetAutoIncrement(_rNewData.Equals(strYes));
+                sValue = ::comphelper::getString(_rNewData);
+                pFieldDescr->SetAutoIncrement(sValue.Equals(strYes));
             }
             break;
         case FIELD_PROPERTY_SCALE:
-            pFieldDescr->SetScale(_rNewData.ToInt32());
+            {
+                sValue = ::comphelper::getString(_rNewData);
+                pFieldDescr->SetScale(sValue.ToInt32());
+            }
             break;
 
         case FIELD_PROPERTY_BOOL_DEFAULT:
-            pFieldDescr->SetDefaultValue(GetView()->GetDescWin()->BoolStringPersistent(_rNewData));
+            sValue = GetView()->GetDescWin()->BoolStringPersistent(::comphelper::getString(_rNewData));
+            pFieldDescr->SetControlDefault(makeAny(::rtl::OUString(sValue)));
             break;
 
         case FIELD_PROPERTY_FORMAT:
-            pFieldDescr->SetFormatKey(_rNewData.ToInt32());
+            {
+                sValue = ::comphelper::getString(_rNewData);
+                pFieldDescr->SetFormatKey(sValue.ToInt32());
+            }
             break;
     }
 
-    SetControlText(nRow,nColId,_rNewData);
+    SetControlText(nRow,nColId,sValue);
 }
 
 //------------------------------------------------------------------------------
-String OTableEditorCtrl::GetData( long nRow, sal_uInt16 nColId )
+Any OTableEditorCtrl::GetData( long nRow, sal_uInt16 nColId )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     OFieldDescription* pFieldDescr = GetFieldDescr( nRow );
     if( !pFieldDescr )
-        return String();
+        return Any();
 
     //////////////////////////////////////////////////////////////////////
     // Aktuellen Datenzeiger umsetzen
@@ -1225,47 +1237,57 @@ String OTableEditorCtrl::GetData( long nRow, sal_uInt16 nColId )
 
     static const String strYes(ModuleRes(STR_VALUE_YES));
     static const String strNo(ModuleRes(STR_VALUE_NO));
+    ::rtl::OUString sValue;
     //////////////////////////////////////////////////////////////////////
     // Einzelne Felder auslesen
     switch( nColId )
     {
         case FIELD_NAME:
-            return pFieldDescr->GetName();
+            sValue = pFieldDescr->GetName();
+            break;
 
         case FIELD_TYPE:
-            return pFieldDescr->getTypeInfo()->aUIName;
+            sValue = pFieldDescr->getTypeInfo()->aUIName;
+            break;
 
         case FIELD_DESCR:
-            return pFieldDescr->GetDescription();
+            sValue = pFieldDescr->GetDescription();
+            break;
 
         case FIELD_PROPERTY_DEFAULT:
-            return pFieldDescr->GetDefaultValue();
+            return pFieldDescr->GetControlDefault();
 
         case FIELD_PROPERTY_REQUIRED:
-            return pFieldDescr->GetIsNullable() == ColumnValue::NULLABLE ? strYes : strNo;
+            sValue = pFieldDescr->GetIsNullable() == ColumnValue::NULLABLE ? strYes : strNo;
+            break;
 
         case FIELD_PROPERTY_TEXTLEN:
         case FIELD_PROPERTY_LENGTH:
-            return String::CreateFromInt32(pFieldDescr->GetPrecision());
+            sValue = String::CreateFromInt32(pFieldDescr->GetPrecision());
+            break;
 
         case FIELD_PROPERTY_NUMTYPE:
             OSL_ENSURE(sal_False, "OTableEditorCtrl::GetData: invalid column!");
             //  return pFieldDescr->GetNumType();
 
         case FIELD_PROPERTY_AUTOINC:
-            return pFieldDescr->IsAutoIncrement() ? strYes : strNo;
+            sValue = pFieldDescr->IsAutoIncrement() ? strYes : strNo;
+            break;
 
         case FIELD_PROPERTY_SCALE:
-            return String::CreateFromInt32(pFieldDescr->GetScale());
+            sValue = String::CreateFromInt32(pFieldDescr->GetScale());
+            break;
 
         case FIELD_PROPERTY_BOOL_DEFAULT:
-            return GetView()->GetDescWin()->BoolStringUI(pFieldDescr->GetDefaultValue());
+            sValue = GetView()->GetDescWin()->BoolStringUI(::comphelper::getString(pFieldDescr->GetControlDefault()));
+            break;
 
         case FIELD_PROPERTY_FORMAT:
-            return String::CreateFromInt32(pFieldDescr->GetFormatKey());
+            sValue = String::CreateFromInt32(pFieldDescr->GetFormatKey());
+            break;
     }
 
-    return String();
+    return makeAny(sValue);
 }
 
 //------------------------------------------------------------------------------
@@ -1274,7 +1296,7 @@ String OTableEditorCtrl::GetCellText( long nRow, sal_uInt16 nColId ) const
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     //////////////////////////////////////////////////////////////////////
     // Text aus Dokumentdaten holen
-    return const_cast<OTableEditorCtrl*>(this)->GetData( nRow, nColId );
+    return ::comphelper::getString(const_cast<OTableEditorCtrl*>(this)->GetData( nRow, nColId ));
 }
 
 //------------------------------------------------------------------------------
@@ -1712,7 +1734,7 @@ void OTableEditorCtrl::AdjustFieldDescription(OFieldDescription* _pFieldDesc,
     if(!_bSet && _pFieldDesc->getTypeInfo()->bNullable)
     {
         _pFieldDesc->SetIsNullable(ColumnValue::NO_NULLS);
-        _pFieldDesc->SetDefaultValue(String());
+        _pFieldDesc->SetControlDefault(Any());
     }
     //////////////////////////////////////////////////////////////////////
     // update field description

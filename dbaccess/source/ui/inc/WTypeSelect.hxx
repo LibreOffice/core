@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WTypeSelect.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-26 09:34:02 $
+ *  last change: $Author: oj $ $Date: 2002-09-24 09:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ namespace dbaui
         virtual void        SetModified(sal_Bool bModified);
 
         virtual ::com::sun::star::lang::Locale  GetLocale() const;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > GetFormatter();
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > GetFormatter() const;
         virtual const OTypeInfo*    getTypeInfo(sal_Int32 _nPos);
         virtual const OTypeInfoMap* getTypeInfo() const;
         virtual sal_Bool isAutoIncrementValueEnabled() const;

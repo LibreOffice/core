@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:41:25 $
+ *  last change: $Author: oj $ $Date: 2002-09-24 09:18:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,7 @@ using namespace ::com::sun::star::sdbc;
 #define SBA_ATTR_ALIGN_HOR_JUSTIFY  (100 + 145) //  SvxHorJustifyItem
 
 #define HSCROLL_STEP        20
+
 
 //==================================================================
 // class OFieldDescControl
@@ -784,7 +785,7 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
     if(pListBox == pRequired && pBoolDefault )
     {
         // wenn pRequired auf sal_True gesetzt ist, dann darf das sal_Bool Feld nicht den Eintrag <<keiner>> besitzen
-        String sDef = BoolStringUI((pActFieldDescr->GetDefaultValue()));
+        String sDef = BoolStringUI(::comphelper::getString(pActFieldDescr->GetControlDefault()));
 
         if(pRequired->GetSelectEntryPos() == 0) // JA
         {
@@ -1655,14 +1656,14 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
 
     if( pDefault )
     {
-        pDefault->SetText( pFieldDescr->GetDefaultValue() );
+        pDefault->SetText( getControlDefault(pFieldDescr) );
         pDefault->ClearModifyFlag();
     }
 
     if( pBoolDefault )
     {
         // wenn pRequired auf sal_True gesetzt ist, dann darf das sal_Bool Feld nicht den Eintrag <<keiner>> besitzen
-        String sDef = BoolStringUI(pFieldDescr->GetDefaultValue());
+        String sDef = BoolStringUI(::comphelper::getString(pFieldDescr->GetControlDefault()));
 
         // sicher stellen das <<keiner>> nur vorhanden ist, wenn das Feld NULL sein darf
         if(pFieldType && !pFieldType->bNullable || !pFieldDescr->IsNullable() )
@@ -1675,7 +1676,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
             else
                 pBoolDefault->SelectEntry(sDef);
 
-            pFieldDescr->SetDefaultValue(BoolStringPersistent(pBoolDefault->GetSelectEntry()));
+            pFieldDescr->SetControlDefault(makeAny(::rtl::OUString(BoolStringPersistent(pBoolDefault->GetSelectEntry()))));
         }
         else if(pBoolDefault->GetEntryCount() < 3)
         {
@@ -1869,13 +1870,39 @@ void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
 
     //////////////////////////////////////////////////////////////////////
     // Controls auslesen
-    String sDefault;
+    ::rtl::OUString sDefault;
     if (pDefault)
         sDefault = pDefault->GetText();
     else if (pBoolDefault)
         sDefault = BoolStringPersistent(pBoolDefault->GetSelectEntry());
 
-    pFieldDescr->SetDefaultValue(sDefault);
+    sal_uInt32 nFormatKey;
+    try
+    {
+        if ( isTextFormat(pFieldDescr,nFormatKey) )
+        {
+            pFieldDescr->SetControlDefault(makeAny(sDefault));
+        }
+        else
+        {
+            try
+            {
+                double nValue = GetFormatter()->convertStringToNumber(nFormatKey,sDefault);
+                pFieldDescr->SetControlDefault(makeAny(nValue));
+            }
+            catch(const Exception&)
+            {
+                if ( sDefault.getLength() )
+                    pFieldDescr->SetControlDefault(makeAny(sDefault));
+                else
+                    pFieldDescr->SetControlDefault(Any());
+            }
+        }
+    }
+    catch(const Exception&)
+    {
+    }
+
     if((pRequired && pRequired->GetSelectEntryPos() == 0) || pFieldDescr->IsPrimaryKey() || (pBoolDefault && pBoolDefault->GetEntryCount() == 2))  // yes
         pFieldDescr->SetIsNullable( ColumnValue::NO_NULLS );
     else
@@ -1907,49 +1934,8 @@ void OFieldDescControl::UpdateFormatSample(OFieldDescription* pFieldDescr)
         return;
     if(!pFormatSample)
         return;
-    sal_uInt32 nFormatKey = pFieldDescr->GetFormatKey();
 
-    try
-    {
-        Reference< XNumberFormatTypes> xNumberTypes(GetFormatter()->getNumberFormatsSupplier()->getNumberFormats(),UNO_QUERY);
-        OSL_ENSURE(xNumberTypes.is(),"XNumberFormatTypes is null!");
-
-
-        if (!nFormatKey)
-        {
-            nFormatKey = ::dbtools::getDefaultNumberFormat( pFieldDescr->GetType(),
-                pFieldDescr->GetScale(),
-                pFieldDescr->IsCurrency(),
-                xNumberTypes,
-                GetLocale());
-        }
-
-        String sDefault = pFieldDescr->GetDefaultValue();
-        sal_Int32 nNumberFormat = ::comphelper::getNumberFormatType(GetFormatter(),nFormatKey);
-        if(nNumberFormat == NumberFormat::TEXT)
-            pFormatSample->SetText(sDefault);
-        else
-        {
-            Reference<XNumberFormatPreviewer> xPreViewer(GetFormatter(),UNO_QUERY);
-            OSL_ENSURE(xPreViewer.is(),"XNumberFormatPreviewer is null!");
-
-            double nValue = 0;
-            if(sDefault.Len())
-                nValue = GetFormatter()->convertStringToNumber(nFormatKey,sDefault);
-            Reference<XPropertySet> xFormSet = GetFormatter()->getNumberFormatsSupplier()->getNumberFormats()->getByKey(nFormatKey);
-            OSL_ENSURE(xFormSet.is(),"XPropertySet is null!");
-
-            ::rtl::OUString sFormat;
-            xFormSet->getPropertyValue(::rtl::OUString::createFromAscii("FormatString")) >>= sFormat;
-
-            sDefault = xPreViewer->convertNumberToPreviewString(sFormat,nValue,GetLocale(),sal_True);
-        }
-        pFormatSample->SetText(sDefault);
-    }
-    catch(Exception&)
-    {
-
-    }
+    pFormatSample->SetText(getControlDefault(pFieldDescr));
 }
 
 //------------------------------------------------------------------------------
@@ -2034,6 +2020,91 @@ void OFieldDescControl::paste()
         reinterpret_cast<Edit*>(m_pActFocusWindow)->Paste();
 }
 // -----------------------------------------------------------------------------
+sal_Bool OFieldDescControl::isTextFormat(const OFieldDescription* _pFieldDescr,sal_uInt32& _nFormatKey) const
+{
+    _nFormatKey = _pFieldDescr->GetFormatKey();
+    sal_Bool bTextFormat = sal_True;
+
+    try
+    {
+        if (!_nFormatKey)
+        {
+            Reference< XNumberFormatTypes> xNumberTypes(GetFormatter()->getNumberFormatsSupplier()->getNumberFormats(),UNO_QUERY);
+            OSL_ENSURE(xNumberTypes.is(),"XNumberFormatTypes is null!");
+
+            _nFormatKey = ::dbtools::getDefaultNumberFormat( _pFieldDescr->GetType(),
+                _pFieldDescr->GetScale(),
+                _pFieldDescr->IsCurrency(),
+                xNumberTypes,
+                GetLocale());
+        }
+        sal_Int32 nNumberFormat = ::comphelper::getNumberFormatType(GetFormatter(),_nFormatKey);
+        bTextFormat = (nNumberFormat == NumberFormat::TEXT);
+    }
+    catch(const Exception&)
+    {
+
+    }
+
+    return bTextFormat;
+}
+// -----------------------------------------------------------------------------
+String OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDescr ) const
+{
+    ::rtl::OUString sDefault;
+    if ( _pFieldDescr->GetControlDefault().hasValue() )
+    {
+        sal_uInt32 nFormatKey;
+        sal_Bool bTextFormat = sal_False;
+        double nValue = 0.0;
+
+        try
+        {
+            bTextFormat = isTextFormat(_pFieldDescr,nFormatKey);
+            if ( _pFieldDescr->GetControlDefault() >>= sDefault )
+            {
+                if ( !bTextFormat )
+                {
+                    if ( sDefault.getLength() )
+                    {
+                        try
+                        {
+                            nValue = GetFormatter()->convertStringToNumber(nFormatKey,sDefault);
+                        }
+                        catch(const Exception&)
+                        {
+                            return ::rtl::OUString(); // return empty string for format example
+                        }
+                    }
+                }
+            }
+            else
+                _pFieldDescr->GetControlDefault() >>= nValue;
+
+            if ( !bTextFormat )
+            {
+                Reference<XNumberFormatPreviewer> xPreViewer(GetFormatter(),UNO_QUERY);
+                OSL_ENSURE(xPreViewer.is(),"XNumberFormatPreviewer is null!");
+
+                Reference<XPropertySet> xFormSet = GetFormatter()->getNumberFormatsSupplier()->getNumberFormats()->getByKey(nFormatKey);
+                OSL_ENSURE(xFormSet.is(),"XPropertySet is null!");
+
+                ::rtl::OUString sFormat;
+                xFormSet->getPropertyValue(::rtl::OUString::createFromAscii("FormatString")) >>= sFormat;
+
+                sDefault = xPreViewer->convertNumberToPreviewString(sFormat,nValue,GetLocale(),sal_True);
+            }
+        }
+        catch(const Exception&)
+        {
+
+        }
+    }
+
+    return sDefault;
+}
+// -----------------------------------------------------------------------------
+
 
 
 

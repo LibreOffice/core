@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescriptions.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:45:22 $
+ *  last change: $Author: oj $ $Date: 2002-09-24 09:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,8 @@ OFieldDescription::OFieldDescription( const OFieldDescription& rDescr ) :
      m_sName(rDescr.m_sName)
     ,m_sTypeName(rDescr.m_sTypeName)
     ,m_sDescription(rDescr.m_sDescription)
-    ,m_sDefaultValue(rDescr.m_sDefaultValue)
+    ,m_aDefaultValue(rDescr.m_aDefaultValue)
+    ,m_aControlDefault(rDescr.m_aControlDefault)
     ,m_sAutoIncrementValue(rDescr.m_sAutoIncrementValue)
     ,m_pType(rDescr.m_pType)
     ,m_nPrecision(rDescr.m_nPrecision)
@@ -132,7 +133,8 @@ OFieldDescription::OFieldDescription( const OFieldDescription& rDescr ) :
 OFieldDescription::OFieldDescription(   const ::rtl::OUString&  _sName,
                     const ::rtl::OUString&  _sTypeName,
                     const ::rtl::OUString&  _sDescription,
-                    const ::rtl::OUString&  _sDefaultValue,
+                    const ::com::sun::star::uno::Any&   _aDefaultValue,
+                    const ::com::sun::star::uno::Any&   _aControlDefault,
                     const ::rtl::OUString&  _sAutoIncrementValue,
                     const OTypeInfo*        _pType,
                     sal_Int32               _nPrecision,
@@ -146,7 +148,8 @@ OFieldDescription::OFieldDescription(   const ::rtl::OUString&  _sName,
  m_sName(_sName)
 ,m_sTypeName(_sTypeName)
 ,m_sDescription(_sDescription)
-,m_sDefaultValue(_sDefaultValue)
+,m_aDefaultValue(_aDefaultValue)
+,m_aControlDefault(_aControlDefault)
 ,m_sAutoIncrementValue(_sAutoIncrementValue)
 ,m_pType(_pType)
 ,m_nPrecision(_nPrecision)
@@ -189,7 +192,11 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
         if(xPropSetInfo->hasPropertyByName(PROPERTY_DESCRIPTION))
             SetDescription(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_DESCRIPTION)));
         if(xPropSetInfo->hasPropertyByName(PROPERTY_DEFAULTVALUE))
-            SetDefaultValue(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_DEFAULTVALUE)));
+            SetDefaultValue( xAffectedCol->getPropertyValue(PROPERTY_DEFAULTVALUE) );
+
+        if(xPropSetInfo->hasPropertyByName(PROPERTY_CONTROLDEFAULT))
+            SetControlDefault( xAffectedCol->getPropertyValue(PROPERTY_CONTROLDEFAULT) );
+
         if(xPropSetInfo->hasPropertyByName(PROPERTY_AUTOINCREMENTCREATION))
             SetAutoIncrementValue(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_AUTOINCREMENTCREATION)));
         if(xPropSetInfo->hasPropertyByName(PROPERTY_TYPE))

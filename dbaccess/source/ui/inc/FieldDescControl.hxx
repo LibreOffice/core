@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-26 09:34:01 $
+ *  last change: $Author: oj $ $Date: 2002-09-24 09:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,7 @@ namespace dbaui
         void                ScrollAggregate(Control* pText, Control* pInput, Control* pButton, long nDeltaX, long nDeltaY);
         void                ScrollAllAggregates();
 
+        sal_Bool            isTextFormat(const OFieldDescription* _pFieldDescr,sal_uInt32& _nFormatKey) const;
     protected:
         OFieldDescription*      pActFieldDescr; // falls geloescht werden soll
 
@@ -196,7 +197,7 @@ namespace dbaui
         virtual BOOL        IsReadOnly() { return FALSE; };
 
         // Sind von den abgeleiteten Klassen zu impl.
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > GetFormatter() = 0;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > GetFormatter() const = 0;
 
         virtual ::com::sun::star::lang::Locale  GetLocale() const = 0;
 
@@ -246,6 +247,8 @@ namespace dbaui
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() = 0;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection() = 0;
+
+        String              getControlDefault( const OFieldDescription* _pFieldDescr ) const;
     protected:
         void    implFocusLost(Window* _pWhich);
     };

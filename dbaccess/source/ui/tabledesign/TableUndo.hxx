@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableUndo.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-22 07:56:56 $
+ *  last change: $Author: oj $ $Date: 2002-09-24 09:19:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,11 @@
 #ifndef _SV_MULTISEL_HXX
 #include <tools/multisel.hxx>
 #endif
-#ifndef _VECTOR_
+
 #include <vector>
+
+#ifndef _COM_SUN_STAR_UNO_ANY_H_
+#include <com/sun/star/uno/Any.h>
 #endif
 
 namespace dbaui
@@ -107,8 +110,8 @@ namespace dbaui
     protected:
         USHORT  m_nCol;
         long    m_nRow;
-        ::rtl::OUString m_sOldText;
-        ::rtl::OUString m_sNewText;
+        ::com::sun::star::uno::Any  m_sOldText;
+        ::com::sun::star::uno::Any  m_sNewText;
 
         virtual void    Undo();
         virtual void    Redo();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WTypeSelect.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:51:09 $
+ *  last change: $Author: oj $ $Date: 2002-09-24 09:18:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ void OWizTypeSelectControl::SetModified(sal_Bool bModified) {}
     return static_cast<OWizTypeSelect*>(GetParent())->m_pParent->GetLocale();
 }
 // -----------------------------------------------------------------------------
-Reference< XNumberFormatter > OWizTypeSelectControl::GetFormatter()
+Reference< XNumberFormatter > OWizTypeSelectControl::GetFormatter() const
 {
     return static_cast<OWizTypeSelect*>(GetParent())->m_pParent->GetFormatter();
 }
@@ -363,7 +363,7 @@ void OWizTypeSelectList::setPrimaryKey(OFieldDescription* _pFieldDescr,sal_uInt1
         InsertEntry(sColumnName,((OWizTypeSelect*)GetParent())->m_imgPKey,_nPos);
     else if( _pFieldDescr->getTypeInfo()->bNullable )
     {
-        _pFieldDescr->SetDefaultValue(String());
+        _pFieldDescr->SetControlDefault(Any());
         InsertEntry(sColumnName,_nPos);
     }
     SetEntryData(_nPos,_pFieldDescr);

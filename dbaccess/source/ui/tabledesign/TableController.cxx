@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-20 11:05:39 $
+ *  last change: $Author: oj $ $Date: 2002-09-24 09:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1027,7 +1027,8 @@ void OTableController::loadData()
             sal_Int32 nAlign        = 0;
 
             sal_Bool bIsAutoIncrement,bIsCurrency;
-            ::rtl::OUString sName,sControlDefault,sDescription,sTypeName;
+            ::rtl::OUString sName,sDescription,sTypeName;
+            Any aControlDefault;
 
             // get the properties from the column
             xColumn->getPropertyValue(PROPERTY_NAME)            >>= sName;
@@ -1043,7 +1044,7 @@ void OTableController::loadData()
             if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_HELPTEXT))
                 xColumn->getPropertyValue(PROPERTY_HELPTEXT)    >>= sDescription;
             if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_CONTROLDEFAULT))
-                xColumn->getPropertyValue(PROPERTY_CONTROLDEFAULT)>>= sControlDefault;
+                aControlDefault = xColumn->getPropertyValue(PROPERTY_CONTROLDEFAULT);
             if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY))
                 xColumn->getPropertyValue(PROPERTY_FORMATKEY)   >>= nFormatKey;
             if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ALIGN))
@@ -1073,7 +1074,7 @@ void OTableController::loadData()
                 //////////////////////////////////////////////////////////////////////
                 // Spezielle Daten
                 pActFieldDescr->SetIsNullable(nNullable);
-                pActFieldDescr->SetDefaultValue(sControlDefault);
+                pActFieldDescr->SetControlDefault(aControlDefault);
                 pActFieldDescr->SetPrecision(nPrecision);
                 pActFieldDescr->SetScale(nScale);
             }
@@ -1299,7 +1300,8 @@ void OTableController::alterColumns()
 
             sal_Int32 nType,nPrecision,nScale,nNullable,nFormatKey=0,nAlignment=0;
             sal_Bool bAutoIncrement;
-            ::rtl::OUString sDescription,sControlDefault;
+            ::rtl::OUString sDescription;
+            Any aControlDefault;
 
             xColumn->getPropertyValue(PROPERTY_TYPE)            >>= nType;
             xColumn->getPropertyValue(PROPERTY_PRECISION)       >>= nPrecision;
@@ -1310,7 +1312,7 @@ void OTableController::alterColumns()
             if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_HELPTEXT))
                 xColumn->getPropertyValue(PROPERTY_HELPTEXT) >>= sDescription;
             if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_CONTROLDEFAULT))
-                xColumn->getPropertyValue(PROPERTY_CONTROLDEFAULT) >>= sControlDefault;
+                aControlDefault = xColumn->getPropertyValue(PROPERTY_CONTROLDEFAULT);
             if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY))
                 xColumn->getPropertyValue(PROPERTY_FORMATKEY)   >>= nFormatKey;
             if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ALIGN))
@@ -1385,10 +1387,10 @@ void OTableController::alterColumns()
                 if(xColumn.is() && xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_HELPTEXT))
                     xColumn->setPropertyValue(PROPERTY_HELPTEXT,makeAny(pField->GetDescription()));
             }
-            if(sControlDefault != pField->GetDefaultValue())
+            if ( aControlDefault != pField->GetControlDefault())
             {
                 if(xColumn.is() && xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_CONTROLDEFAULT))
-                    xColumn->setPropertyValue(PROPERTY_CONTROLDEFAULT,makeAny(pField->GetDefaultValue()));
+                    xColumn->setPropertyValue(PROPERTY_CONTROLDEFAULT,pField->GetControlDefault());
             }
         }
         else if(xColumnFactory.is() && xAlter.is() && nPos < nColumnCount)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFieldDescWin.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 13:22:55 $
+ *  last change: $Author: oj $ $Date: 2002-09-24 09:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,8 @@ namespace dbaui
         void    cut();
         void    copy();
         void    paste();
+
+        inline OFieldDescGenWin* getGenPage() const { return m_pGenPage; }
 
     };
 }

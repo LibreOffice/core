@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFieldControl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-26 09:35:15 $
+ *  last change: $Author: oj $ $Date: 2002-09-24 09:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ namespace dbaui
     //==================================================================
     class OTableFieldControl : public OFieldDescControl
     {
-        OTableEditorCtrl*   GetCtrl();
+        OTableEditorCtrl*   GetCtrl() const;
     protected:
         virtual void        ActivateAggregate( EControlType eType );
         virtual void        DeactivateAggregate( EControlType eType );
@@ -82,7 +82,7 @@ namespace dbaui
         virtual void        CellModified(long nRow, USHORT nColId );
         virtual BOOL        IsReadOnly();
         virtual void        SetModified(BOOL bModified);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    GetFormatter();
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    GetFormatter() const;
 
         virtual ::com::sun::star::lang::Locale  GetLocale() const;
 

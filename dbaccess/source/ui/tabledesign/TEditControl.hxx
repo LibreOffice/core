@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-09 12:38:20 $
+ *  last change: $Author: oj $ $Date: 2002-09-24 09:19:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,8 +191,8 @@ namespace dbaui
             // erzwingt das Anzeigen der genannten Zeile (selbst wenn es eigentlich schon die aktuelle ist)
 
         virtual void    SetData( long nRow, USHORT nColId, const OTypeInfo* _pTypeInfo );
-        virtual void    SetData( long nRow, USHORT nColId, const String& _rSaveData );
-        virtual String  GetData( long nRow, USHORT nColId );
+        virtual void    SetData( long nRow, USHORT nColId, const ::com::sun::star::uno::Any& _rSaveData );
+        virtual ::com::sun::star::uno::Any  GetData( long nRow, USHORT nColId );
         virtual void    SetControlText( long nRow, USHORT nColId, const String& rText );
         virtual String  GetControlText( long nRow, USHORT nColId );
 

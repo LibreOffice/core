@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableUndo.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:45:25 $
+ *  last change: $Author: oj $ $Date: 2002-09-24 09:19:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,12 +171,8 @@ void OTableDesignCellUndoAct::Undo()
     // Wenn erstes Undo zurueckgenommen wurde, ist Zelle nicht mehr modifiziert
     if (m_pTabDgnCtrl->GetCurUndoActId() == 1)
     {
-#if SUPD > 636
         CellControllerRef xController = m_pTabDgnCtrl->Controller();
-#else
-        DbCellControllerRef xController = m_pTabDgnCtrl->Controller();
-#endif
-        if(xController.Is())
+        if ( xController.Is() )
             xController->ClearModified();
         m_pTabDgnCtrl->GetView()->getController()->setModified(sal_False);
 
