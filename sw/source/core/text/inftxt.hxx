@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-07 11:39:40 $
+ *  last change: $Author: fme $ $Date: 2001-05-08 08:02:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,8 @@ public:
     // vertical alignment
     inline USHORT GetVertAlign() const { return nVertAlign; }
     inline sal_Bool HasSpecialAlign() const
-        { return SvxParaVertAlignItem::BASELINE != nVertAlign; };
+        { return SvxParaVertAlignItem::BASELINE != nVertAlign &&
+                 SvxParaVertAlignItem::AUTOMATIC != nVertAlign; };
 
 //  friend ostream &operator<<( ostream &rOS, const SwLineInfo &rInf );
     friend SvStream &operator<<( SvStream &rOS, const SwLineInfo &rInf );

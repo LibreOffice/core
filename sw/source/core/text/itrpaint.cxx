@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-23 08:03:50 $
+ *  last change: $Author: fme $ $Date: 2001-05-08 08:02:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,7 +300,13 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     if( GetInfo().OnWin() && pPor && !pPor->Width() )
     {
         SeekAndChg( GetInfo() );
+        const SwTwips nOldY = GetInfo().Y();
+
+        if( GetLineInfo().HasSpecialAlign() )
+            GetInfo().Y( GetInfo().GetPos().Y() + AdjustBaseLine( *pCurr, *pPor ) );
+
         pPor->PrePaint( GetInfo(), pPor );
+        GetInfo().Y( nOldY );
     }
 
     // 7923: EndPortions geben auch Zeichen aus, deswegen den Fnt wechseln!
@@ -359,8 +365,10 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         // Wenn das Ende der Portion hinausragt, wird geclippt.
         // Es wird ein Sicherheitsabstand von Height-Halbe aufaddiert,
         // damit die TTF-"f" nicht im Seitenrand haengen...
-        if(bClip && GetInfo().X() + pPor->Width() + (pPor->Height()/2) > nMaxRight)
-        {   bClip = sal_False;
+        if( bClip &&
+            GetInfo().X() + pPor->Width() + ( pPor->Height() / 2 ) > nMaxRight )
+        {
+            bClip = sal_False;
             rClip.ChgClip( rPaint );
         }
 

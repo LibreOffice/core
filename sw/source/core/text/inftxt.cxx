@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-07 11:39:40 $
+ *  last change: $Author: fme $ $Date: 2001-05-08 08:02:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -706,7 +706,8 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
  *                          lcl_CalcRect()
  *************************************************************************/
 
-SwRect lcl_CalcRect( const SwTxtPaintInfo *pInf, const SwLinePortion &rPor )
+void lcl_CalcRect( const SwTxtPaintInfo* pInf, const SwLinePortion& rPor,
+                   SwRect* pRect, SwRect* pIntersect )
 {
     Size aSize( rPor.Width(), rPor.Height() );
     if( rPor.IsHangingPortion() )
@@ -744,7 +745,11 @@ SwRect lcl_CalcRect( const SwTxtPaintInfo *pInf, const SwLinePortion &rPor )
     }
 
     SwRect aRect( aPoint, aSize );
-    if( aRect.HasArea() )
+
+    if ( pRect )
+        *pRect = aRect;
+
+    if( aRect.HasArea() && pIntersect )
     {
         ::SwAlignRect( aRect, (ViewShell*)pInf->GetVsh() );
 
@@ -753,8 +758,9 @@ SwRect lcl_CalcRect( const SwTxtPaintInfo *pInf, const SwLinePortion &rPor )
             SwRect aClip( pInf->GetOut()->GetClipRegion().GetBoundRect() );
             aRect.Intersection( aClip );
         }
+
+        *pIntersect = aRect;
     }
-    return aRect;
 }
 
 /*************************************************************************
@@ -787,7 +793,9 @@ void SwTxtPaintInfo::DrawTab( const SwLinePortion &rPor ) const
 {
     if( OnWin() )
     {
-        const SwRect aRect( lcl_CalcRect( this, rPor ) );
+        SwRect aRect;
+
+        lcl_CalcRect( this, rPor, &aRect, 0 );
 
         if ( ! aRect.HasArea() )
             return;
@@ -812,7 +820,11 @@ void SwTxtPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
     {
         KSHORT nOldWidth = rPor.Width();
         ((SwLinePortion&)rPor).Width( pOpt->GetLineBreakWidth( pWin ) );
-        const SwRect aRect( lcl_CalcRect( this, rPor ) );
+
+        SwRect aRect;
+
+        lcl_CalcRect( this, rPor, &aRect, 0 );
+
         ((SwLinePortion&)rPor).Width( nOldWidth );
         if( aRect.HasArea() )
              pOpt->PaintLineBreak( pWin, aRect.SVRect() );
@@ -843,9 +855,11 @@ void SwTxtPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
 {
     ASSERT( OnWin(), "SwTxtPaintInfo::DrawBackground: printer polution ?" );
 
-    SwRect aRect = lcl_CalcRect( this, rPor );
+    SwRect aIntersect;
 
-    if ( aRect.HasArea() )
+    lcl_CalcRect( this, rPor, 0, &aIntersect );
+
+    if ( aIntersect.HasArea() )
     {
         OutputDevice *pOut = (OutputDevice*)GetOut();
         Color aCol( COL_LIGHTGRAY );
@@ -854,7 +868,7 @@ void SwTxtPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
         if( 0 != (bChgBrsh = aOldColor != aCol) )
             pOut->SetFillColor( aCol );
 
-        DrawRect( aRect, sal_True );
+        DrawRect( aIntersect, sal_True );
 
         if ( bChgBrsh )
             pOut->SetFillColor( aOldColor );
@@ -864,22 +878,25 @@ void SwTxtPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
 void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
 {
     ASSERT( pFnt->GetBackColor(), "DrawBackBrush: Lost Color" );
-    SwRect aRect = lcl_CalcRect( this, rPor );
+
+    SwRect aIntersect;
+
+    lcl_CalcRect( this, rPor, 0, &aIntersect );
 
     if( GetSpaceAdd() < 0 )
     {
         if( !rPor.GetPortion() || rPor.GetPortion()->InFixMargGrp() )
-            aRect.Width( aRect.Width() + GetSpaceAdd() );
+            aIntersect.Width( aIntersect.Width() + GetSpaceAdd() );
     }
 
-    if ( aRect.HasArea() )
+    if ( aIntersect.HasArea() )
     {
         OutputDevice *pOut = (OutputDevice*)GetOut();
         const Color aOldColor( pOut->GetFillColor() );
         sal_Bool bChgColor;
         if( 0 != ( bChgColor = aOldColor != *pFnt->GetBackColor() ) )
             pOut->SetFillColor( *pFnt->GetBackColor() );
-        DrawRect( aRect, sal_True, sal_False );
+        DrawRect( aIntersect, sal_True, sal_False );
         if( bChgColor )
             pOut->SetFillColor( aOldColor );
     }
@@ -926,8 +943,12 @@ void SwTxtPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
 void SwTxtPaintInfo::_NotifyURL( const SwLinePortion &rPor ) const
 {
     ASSERT( pNoteURL, "NotifyURL: pNoteURL gone with the wind!" );
-    SwRect aRect = lcl_CalcRect( this, rPor );
-    if( aRect.HasArea() )
+
+    SwRect aIntersect;
+
+    lcl_CalcRect( this, rPor, 0, &aIntersect );
+
+    if( aIntersect.HasArea() )
     {
         SwTxtNode *pNd = (SwTxtNode*)GetTxtFrm()->GetTxtNode();
         SwIndex aIndex( pNd, GetIdx() );
@@ -936,7 +957,7 @@ void SwTxtPaintInfo::_NotifyURL( const SwLinePortion &rPor ) const
         {
             const SwFmtINetFmt& rFmt = pAttr->GetINetFmt();
             pNoteURL->InsertURLNote( rFmt.GetValue(), rFmt.GetTargetFrame(),
-                aRect );
+                aIntersect );
         }
     }
 }
@@ -1419,7 +1440,7 @@ SwDefFontSave::SwDefFontSave( const SwTxtSizeInfo &rInf )
 
     const sal_Bool bFamily = bAlter && COMPARE_EQUAL !=
             pFnt->GetName( pFnt->GetActual() ).CompareToAscii( sBulletFntName );
-    const sal_Bool bRotation = pFnt->GetOrientation();
+    const sal_Bool bRotation = (sal_Bool)pFnt->GetOrientation();
 
     if( bFamily || bRotation )
     {
