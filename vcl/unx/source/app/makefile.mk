@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hjs $ $Date: 2001-02-09 11:48:39 $
+#   last change: $Author: hjs $ $Date: 2001-02-09 11:54:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -136,5 +136,5 @@ EXCEPTIONSFILES=$(SLO)$/salmain.obj	\
 
 
 $(SLO)$/%.obj: %.s
-    CC -c -o $(@:b).o $< && touch $@
+    CC -c -o $(@:s/.obj/.o/) $< && touch $@
 
