@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-09 13:11:18 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 21:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,7 +301,7 @@ TabPage TP_OPTIONS_SNAP
         CustomUnitText [ ENGLISH_US ] = "Pixels" ;
         CustomUnitText [ SPANISH ] = "Píxel" ;
         CustomUnitText [ FINNISH ] = " Pixel" ;
-        CustomUnitText [ FRENCH ] = "Pixels" ;
+        CustomUnitText [ FRENCH ] = " Pixels" ;
         CustomUnitText [ ITALIAN ] = "Pixel" ;
         CustomUnitText [ DUTCH ] = "Pixels" ;
         CustomUnitText [ PORTUGUESE_BRAZILIAN ] = "Pixel" ;
@@ -485,7 +485,7 @@ TabPage TP_OPTIONS_SNAP
         CustomUnitText [ english_us ] = "degrees" ;
         CustomUnitText [ italian ] = "gradi" ;
         CustomUnitText [ spanish ] = "grados" ;
-        CustomUnitText [ french ] = "degrés" ;
+        CustomUnitText [ french ] = " degrés" ;
         CustomUnitText [ dutch ] = "graden" ;
         CustomUnitText [ swedish ] = "grader" ;
         CustomUnitText [ danish ] = "grader" ;
@@ -547,7 +547,7 @@ TabPage TP_OPTIONS_SNAP
         CustomUnitText [ english_us ] = "degrees" ;
         CustomUnitText [ italian ] = "gradi" ;
         CustomUnitText [ spanish ] = "grados" ;
-        CustomUnitText [ french ] = "degrés" ;
+        CustomUnitText [ french ] = " degrés" ;
         CustomUnitText [ dutch ] = "graden" ;
         CustomUnitText [ swedish ] = "grader" ;
         CustomUnitText [ danish ] = "grader" ;
