@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-01 15:03:34 $
+ *  last change: $Author: dr $ $Date: 2002-10-10 09:52:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1248,7 +1248,12 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, SdrObj
             if( IsProperty( DFF_Prop_fillBlip ) )
             {
                 Graphic aGraf;
-                if ( rManager.GetBLIP( GetPropertyValue( DFF_Prop_fillBlip ), aGraf ) )
+                // first try to get BLIP from cache
+                BOOL bOK = rManager.GetBLIP( GetPropertyValue( DFF_Prop_fillBlip ), aGraf );
+                // then try directly from stream (i.e. Excel chart hatches/bitmaps)
+                if ( !bOK )
+                    bOK = SeekToContent( DFF_Prop_fillBlip, rIn ) && rManager.GetBLIPDirect( rIn, aGraf );
+                if ( bOK )
                 {
                     Bitmap aBmp( aGraf.GetBitmap() );
 
