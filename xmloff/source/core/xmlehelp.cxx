@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlehelp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:12 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:06:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -536,19 +536,9 @@ MapUnit SvXMLExportHelper::GetUnitFromString(const ::rtl::OUString& rString, Map
             case sal_Unicode('i'):
             case sal_Unicode('I'):
             {
-                if(nPos+3 < nLen)
-                {
-                    if(rString[nPos+1] == sal_Unicode('n') || rString[nPos+1] == sal_Unicode('N'))
-                    {
-                        if(rString[nPos+2] == sal_Unicode('c') || rString[nPos+2] == sal_Unicode('C'))
-                        {
-                            if(rString[nPos+3] == sal_Unicode('h') || rString[nPos+3] == sal_Unicode('H'))
-                            {
-                                eRetUnit = MAP_INCH;
-                            }
-                        }
-                    }
-                }
+                if(nPos+1 < nLen && (rString[nPos+1] == sal_Unicode('n')
+                    || rString[nPos+1] == sal_Unicode('n')))
+                    eRetUnit = MAP_INCH;
                 break;
             }
             case sal_Unicode('m'):
