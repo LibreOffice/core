@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_info.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 10:50:34 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:01:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,6 @@ inline bool is_XInterface( typelib_TypeDescriptionReference * type )
 //==============================================================================
 struct JNI_type_info
 {
-    JNI_type_info const *                       m_base;
     ::com::sun::star::uno::TypeDescription      m_td;
     jclass                                      m_class;
 
@@ -133,6 +132,7 @@ struct JNI_interface_type_info : public JNI_type_info
 //==============================================================================
 struct JNI_compound_type_info : public JNI_type_info
 {
+    JNI_type_info const *                       m_base;
     // ctor( msg ) for exceptions
     jmethodID                                   m_exc_ctor;
     // sorted via typelib member index
@@ -328,9 +328,19 @@ inline void JNI_info::append_sig(
         ::rtl::OUString const & uno_name =
               ::rtl::OUString::unacquired( &type->pTypeName );
         buf->append( 'L' );
-        buf->append(
-            ::rtl::OUStringToOString(
-                uno_name.replace( '.', '/' ), RTL_TEXTENCODING_JAVA_UTF8 ) );
+        // Erase type arguments of instantiated polymorphic struct types:
+        sal_Int32 i = uno_name.indexOf( '<' );
+        if ( i < 0 ) {
+            buf->append(
+                ::rtl::OUStringToOString(
+                    uno_name.replace( '.', '/' ),
+                    RTL_TEXTENCODING_JAVA_UTF8 ) );
+        } else {
+            buf->append(
+                ::rtl::OUStringToOString(
+                    uno_name.copy( 0, i ).replace( '.', '/' ),
+                    RTL_TEXTENCODING_JAVA_UTF8 ) );
+        }
         buf->append( ';' );
         break;
     }
