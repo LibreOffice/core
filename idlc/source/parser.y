@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser.y,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 14:43:01 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:20:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,11 +290,27 @@ AstDeclaration const * createNamedType(
     return decl;
 }
 
-AstDeclaration const * eraseStructInstances(AstDeclaration const * decl) {
-    OSL_ASSERT(decl != 0);
-    return decl->getNodeType() == NT_instantiated_struct
-        ? static_cast< AstStructInstance const * >(decl)->getTypeTemplate()
-        : decl;
+bool includes(AstDeclaration const * type1, AstDeclaration const * type2) {
+    OSL_ASSERT(type2 != 0);
+    if (type1 != 0) {
+        if (type1->getNodeType() == NT_instantiated_struct) {
+            AstStructInstance const * inst
+                = static_cast< AstStructInstance const * >(type1);
+            if (inst->getTypeTemplate() == type2) {
+                return true;
+            }
+            for (DeclList::const_iterator i(inst->getTypeArgumentsBegin());
+                 i != inst->getTypeArgumentsEnd(); ++i)
+            {
+                if (includes(*i, type2)) {
+                    return true;
+                }
+            }
+        } else if (type1 == type2) {
+            return true;
+        }
+    }
+    return false;
 }
 
 %}
@@ -410,7 +426,7 @@ AstDeclaration const * eraseStructInstances(AstDeclaration const * decl) {
 %type <cdclval> array_type constructed_type_spec enum_type op_type_spec
 %type <cdclval> sequence_type_spec simple_type_spec struct_type switch_type_spec
 %type <cdclval> template_type_spec type_spec union_type
-%type <cdclval> fundamental_type type type_or_parameter
+%type <cdclval> fundamental_type type_arg type_or_parameter
 %type <dclsval> opt_raises raises exception_list
 %type <attexcpval> opt_attribute_get_raises attribute_get_raises
 %type <attexcpval> opt_attribute_set_raises attribute_set_raises
@@ -2445,20 +2461,31 @@ opt_type_args:
     ;
 
 type_args:
-    type
+    type_arg
     {
         $$ = new DeclList;
         $$->push_back(const_cast< AstDeclaration * >($1)); //TODO: const_cast
     }
-    | type_args ',' type
+    | type_args ',' type_arg
     {
         $1->push_back(const_cast< AstDeclaration * >($3)); //TODO: const_cast
         $$ = $1;
     }
     ;
 
-type:
+type_arg:
     fundamental_type
+    {
+        if ($1 != 0 && $1->getNodeType() == NT_predefined) {
+            switch (static_cast< AstBaseType const * >($1)->getExprType()) {
+            case ET_ushort:
+            case ET_ulong:
+            case ET_uhyper:
+                idlc()->error()->error0(EIDL_UNSIGNED_TYPE_ARGUMENT);
+                break;
+            }
+        }
+    }
     | scoped_name opt_type_args
     {
         $$ = createNamedType($1, $2);
@@ -2846,9 +2873,9 @@ type_or_parameter:
             delete $2;
         } else {
             decl = createNamedType($1, $2);
-            if (decl != 0 && eraseStructInstances(decl) == scopeAsDecl(scope)) {
+            if (scope != 0 && includes(decl, scopeAsDecl(scope))) {
                 idlc()->error()->error1(
-                    EIDL_RECURSIVE_TYPE, eraseStructInstances(decl));
+                    EIDL_RECURSIVE_TYPE, scopeAsDecl(scope));
                 decl = 0;
             }
         }
