@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-24 18:27:53 $
+ *  last change: $Author: mtg $ $Date: 2001-10-02 22:16:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,13 @@
 #ifndef _CONTENT_INFO_HXX_
 #include <ContentInfo.hxx>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
+#include <cppuhelper/typeprovider.hxx>
+#endif
+
 
 using namespace com::sun::star::packages::zip::ZipConstants;
 using namespace com::sun::star::packages::zip;
@@ -103,6 +110,21 @@ using namespace com::sun::star::io;
 using namespace cppu;
 using namespace rtl;
 using namespace std;
+
+::cppu::class_data6 ZipPackageFolder::s_cd =
+{
+    6 +1, sal_False, sal_False,
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    {
+        { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumerationAccess > const * ))   &getCppuType, ((sal_Int32)(::com::sun::star::container::XEnumerationAccess *) (ZipPackageFolder * ) 16) - 16 },
+        { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > const * )) &getCppuType, ((sal_Int32)(::com::sun::star::beans::XPropertySet *) (ZipPackageFolder * ) 16) - 16 },
+        { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > const * ))   &getCppuType, ((sal_Int32)(::com::sun::star::container::XNamed *)   (ZipPackageFolder * ) 16) - 16 },
+        { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild > const * ))   &getCppuType, ((sal_Int32)(::com::sun::star::container::XChild *)   (ZipPackageFolder * ) 16) - 16 },
+        { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > const * ))   &getCppuType, ((sal_Int32)(::com::sun::star::container::XNameContainer *)   (ZipPackageFolder * ) 16) - 16 },
+        { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > const * ))    &getCppuType, ((sal_Int32)(::com::sun::star::lang::XUnoTunnel *)    (ZipPackageFolder * ) 16) - 16 },
+        { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider > const * )) &getCppuType, ((sal_Int32)(::com::sun::star::lang::XTypeProvider *) (ZipPackageFolder * ) 16) - 16 }
+    }
+};
 
 ZipPackageFolder::ZipPackageFolder (void)
 : ZipPackageEntry ( true )
@@ -140,38 +162,6 @@ void ZipPackageFolder::copyZipEntry( ZipEntry &rDest, const ZipEntry &rSource)
     rDest.nOffset           = rSource.nOffset;
     rDest.sName             = rSource.sName;
 }
-Any SAL_CALL ZipPackageFolder::queryInterface( const Type& rType )
-    throw(RuntimeException)
-{
-    // cppu::queryInterface is an inline template so it's fast
-    // unfortunately, it always creates an Any...we should be able to optimise
-    // this with a class static containing supported interfaces
-    // ...will research this further ...mtg 15/12/00
-    return ::cppu::queryInterface ( rType                                       ,
-                                        // OWeakObject interfaces
-                                        reinterpret_cast< XInterface*       > ( this )  ,
-                                        static_cast< XWeak*         > ( this )  ,
-                                        // ZipPackageEntry interfaces
-                                        static_cast< XNamed*        > ( this )  ,
-                                        static_cast< XChild*        > ( this )  ,
-                                        static_cast< XUnoTunnel*        > ( this )  ,
-                                        // my own interfaces
-                                        static_cast< XNameContainer*        > ( this )  ,
-                                        static_cast< XEnumerationAccess*        > ( this )  ,
-                                        static_cast< XPropertySet*  > ( this ) );
-
-}
-
-void SAL_CALL ZipPackageFolder::acquire(  )
-    throw()
-{
-    OWeakObject::acquire();
-}
-void SAL_CALL ZipPackageFolder::release(  )
-    throw()
-{
-    OWeakObject::release();
-}
 
     // XNameContainer
 void SAL_CALL ZipPackageFolder::insertByName( const OUString& aName, const Any& aElement )
@@ -187,8 +177,16 @@ void SAL_CALL ZipPackageFolder::insertByName( const OUString& aName, const Any& 
         {
             sal_Int64 nTest;
             ZipPackageEntry *pEntry;
-            if ( ( nTest = xRef->getSomething ( ZipPackageEntry::getUnoTunnelImplementationId() ) ) != 0 )
-                pEntry = reinterpret_cast < ZipPackageEntry * > ( nTest );
+            if ( ( nTest = xRef->getSomething ( ZipPackageFolder::getUnoTunnelImplementationId() ) ) != 0 )
+            {
+                ZipPackageFolder *pFolder = reinterpret_cast < ZipPackageFolder * > ( nTest );
+                pEntry = static_cast < ZipPackageEntry * > ( pFolder );
+            }
+            else if ( ( nTest = xRef->getSomething ( ZipPackageStream::getUnoTunnelImplementationId() ) ) != 0 )
+            {
+                ZipPackageStream *pStream = reinterpret_cast < ZipPackageStream * > ( nTest );
+                pEntry = static_cast < ZipPackageEntry * > ( pStream );
+            }
             else
                 throw IllegalArgumentException();
 
@@ -469,31 +467,12 @@ void ZipPackageFolder::releaseUpwardRef( void )
     clearParent();
 }
 
-Sequence< sal_Int8 >& ZipPackageFolder::getUnoTunnelImplementationId( void )
-    throw (RuntimeException)
-{
-    static ::cppu::OImplementationId * pId = 0;
-    static Sequence < sal_Int8 > aIDSeq;
-    if (! pId)
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static ::cppu::OImplementationId aId;
-            pId = &aId;
-            aIDSeq = pId->getImplementationId();
-        }
-    }
-    return aIDSeq;
-}
-
 sal_Int64 SAL_CALL ZipPackageFolder::getSomething( const Sequence< sal_Int8 >& aIdentifier )
     throw(RuntimeException)
 {
     sal_Int64 nMe = 0;
-    if (aIdentifier.getLength() == 16 &&
-        ( 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  aIdentifier.getConstArray(), 16 ) ||
-          0 == rtl_compareMemory(ZipPackageEntry::getUnoTunnelImplementationId().getConstArray(),  aIdentifier.getConstArray(), 16 ) ) )
+    if ( aIdentifier.getLength() == 16 &&
+         0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  aIdentifier.getConstArray(), 16 ) )
         nMe = reinterpret_cast < sal_Int64 > ( this );
     return nMe;
 }
