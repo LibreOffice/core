@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tv $ $Date: 2001-04-23 11:14:51 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:37:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,10 +214,10 @@ String sNextButton
     Text[ spanish ] = "~Continuar >>";
     Text[ portuguese ] = "~Seguinte >>";
     Text[ dutch ] = "~Volgende >>";
-    Text[ swedish ] = "~Fortsätt >>";
+    Text[ swedish ] = "~Nästa >>";
     Text[ greek ] = "~Óõíİ÷åéá >>";
     Text[ dutch ] = "~Volgende >>";
-    Text[ swedish ] = "~Fortsätt >>";
+    Text[ swedish ] = "~Nästa >>";
     Text[ russian ] = "Äàëåå >>";
     Text[ danish ] = "~Næste >>";
     Text[ polish ] = "Dalej >>";
@@ -266,13 +266,13 @@ String sWelcometextLabel1
     Text[ spanish ] = "Este AutoPiloto convierte documentos del antiguo StarOffice y de Microsoft Office al nuevo formato %PRODUCTNAME XML.";
     Text[ portuguese ] = "Este AutoPiloto converte documentos em formato StarOffice antigo e Microsoft Office para o novo formato XML do %PRODUCTNAME.";
     Text[ dutch ] = "Deze AutoPiloot converteert oude %PRODUCTNAME -en Microsoft Office-documenten naar het nieuwe %PRODUCTNAME XML-formaat.";
-    Text[ swedish ] = "Den här autopiloten konverterar dokument i det gamla StarOffice-formatet och Microsoft Office-dokument till det nya %PRODUCTNAME-XML-formatet.";
+    Text[ swedish ] = "Den här AutoPiloten konverterar dokument i det gamla StarOffice-formatet och Microsoft Office-dokument till det nya %PRODUCTNAME-XML-formatet.";
     Text[ greek ] = "Áõôü ôï ğñüãñáììá ôïõ AutoPilot ìåôáôñİğåé ğáëéÜ İããñáöá ôïõ StarOffice êáé ôïõ Microsoft Office óå İããñáöá ìå ôçí íİá ìïñöŞ %PRODUCTNAME XML.";
     Text[ dutch ] = "Deze AutoPiloot converteert oude %PRODUCTNAME -en Microsoft Office-documenten naar het nieuwe %PRODUCTNAME XML-formaat.";
-    Text[ swedish ] = "Den här autopiloten konverterar dokument i det gamla StarOffice-formatet och Microsoft Office-dokument till det nya %PRODUCTNAME-XML-formatet.";
+    Text[ swedish ] = "Den här AutoPiloten konverterar dokument i det gamla StarOffice-formatet och Microsoft Office-dokument till det nya %PRODUCTNAME-XML-formatet.";
     Text[ russian ] = "İòîò Àâòîïèëîò ïğåîáğàçóåò ñòàğûå ôîğìàòû StarOffice è äîêóìåíòû Microsoft Office â íîâûé ôîğìàò %PRODUCTNAME XML.";
     Text[ danish ] = "Denne AutoPilot gennemsøger en hel mappe med alle underbiblioteker efter filer i Microsoft Office-format. Du kan konvertere alle dokumenter og/eller skabeloner til et %PRODUCTNAME-format.";
-    Text[ polish ] = "Dany AutoPilot konwertuje starsze dokumenty formatu StarOffice oraz Microsoft Office na nowy format %PRODUCTNAME XML.";
+    Text[ polish ] = "Dany AutoPilot konwertuje starsze dokumenty formatu StarOffice oraz dokumenty Microsoft Office na nowy format %PRODUCTNAME XML.";
     Text[ portuguese_brazilian ] = "This AutoPilot searches through a complete file with all subdirectories in the Microsoft Office Format. You can convert all documents and/or templates to a %PRODUCTNAME Format.";
     Text[ japanese ] = "‚±‚Ìµ°ÄÊß²Û¯Ä‚ÍA‹Œ StarSuite ÄŞ·­ÒİÄ‚Æ Microsoft Office ÄŞ·­ÒİÄ‚ğAV‚µ‚¢ %PRODUCTNAME ‚Ì XML Œ`®‚É•ÏŠ·‚µ‚Ü‚·B";
     Text[ korean ] = "ÀÌ ÀÚµ¿ÆÄÀÏ·µÀº ÀÌÀü StarOffice£­¼­½Ä°ú Microsoft Office - ¹®¼­¸¦%PRODUCTNAME XML Æ÷¸ËÀ¸·Î º¯È¯ÇÕ´Ï´Ù.";
@@ -323,7 +323,7 @@ String sWelcometextLabel3
     Text[ italian ] = "Selezionate il tipo di documento da convertire:";
     Text[ danish ] = "Select which kind of documents you wish to convert:";
     Text[ swedish ] = "Välj dokumenttyperna som ska konverteras:";
-    Text[ polish ] = "Wybierz typ dokumentu; który ma zostaæ skonwertowany:";
+    Text[ polish ] = "Wybierz typ dokumentu, który ma zostaæ skonwertowany:";
     Text[ portuguese_brazilian ] = "Select which kind of documents you wish to convert:";
     Text[ japanese ] = "•ÏŠ·‚·‚éÄŞ·­ÒİÄ‚Ìí—Ş‚ğ‘I‘ğ‚µ‚Ü‚·B";
     Text[ korean ] = "º¯È¯µÇ¾î¾ß ÇÏ´Â ¹®¼­ À¯ÇüÀ» ¼±ÅÃÇÏ½Ê½Ã¿À:";
@@ -429,7 +429,7 @@ String sMSDocumentCheckbox_1_
     Text[ swedish ] = "Word-dokument";
     Text[ russian ] = "Word - Äîêóìåíòû";
     Text[ danish ] = "Word-dokumenter";
-    Text[ polish ] = "Dokumenty Word";
+    Text[ polish ] = "Word - Dokumenty";
     Text[ portuguese_brazilian ] = "Word documents";
     Text[ japanese ] = "Word ÄŞ·­ÒİÄ";
     Text[ korean ] = "Word -¹®¼­";
@@ -455,7 +455,7 @@ String sMSDocumentCheckbox_2_
     Text[ swedish ] = "Excel-dokument";
     Text[ russian ] = "Excel - Äîêóìåíòû";
     Text[ danish ] = "Excel-dokumenter";
-    Text[ polish ] = "Dokumenty Excel";
+    Text[ polish ] = "Excel - Dokumenty";
     Text[ portuguese_brazilian ] = "Excel documents";
     Text[ japanese ] = "Excel ÄŞ·­ÒİÄ";
     Text[ korean ] = "Excel -¹®¼­";
@@ -481,7 +481,7 @@ String sMSDocumentCheckbox_3_
     Text[ swedish ] = "PowerPoint-dokument";
     Text[ russian ] = "PowerPoint - Äîêóìåíòû";
     Text[ danish ] = "PowerPoint-dokumenter";
-    Text[ polish ] = "Dokumenty PowerPoint";
+    Text[ polish ] = "PowerPoint - Dokumenty";
     Text[ portuguese_brazilian ] = "PowerPoint documents";
     Text[ japanese ] = "PowerPoint ÄŞ·­ÒİÄ";
     Text[ korean ] = "PowerPoint -¹®¼­";
@@ -502,13 +502,13 @@ String sSearchInSubDir
     Text[ spanish ] = "incluidos subdirectorios";
     Text[ portuguese ] = "incl. subdirectórios";
     Text[ dutch ] = "incl. subdirectory's";
-    Text[ swedish ] = "inkl. undermappar";
+    Text[ swedish ] = "inkl. underordnade kataloger";
     Text[ greek ] = "óõìğåñéëáìâ. õğïêáôáëüãïõò";
     Text[ dutch ] = "incl. subdirectory's";
-    Text[ swedish ] = "inkl. undermappar";
+    Text[ swedish ] = "inkl. underordnade kataloger";
     Text[ russian ] = "âêëş÷àÿ ïîäïàïêè";
     Text[ danish ] = "Inkluder underbiblioteker";
-    Text[ polish ] = "³¹cznie z podfolderami";
+    Text[ polish ] = "³¹cznie z katalogami podrzêdnymi";
     Text[ portuguese_brazilian ] = "including subdirectories";
     Text[ japanese ] = "‰ºˆÊÃŞ¨Ú¸ÄØ‚ğŠÜ‚Ş";
     Text[ korean ] = "¼­ºê µğ·ºÅä¸® Æ÷ÇÔ";
@@ -528,13 +528,13 @@ String sSumInclusiveSubDir
     Text[ spanish ] = "Se tendrán en cuenta todos los subdirectorios";
     Text[ portuguese ] = "Serão considerados todos os subdirectórios!";
     Text[ dutch ] = "Er wordt rekening gehouden met alle subdirectory's";
-    Text[ swedish ] = "Det tas hänsyn till alla undermappar";
+    Text[ swedish ] = "Det tas hänsyn till alla underordnade kataloger";
     Text[ greek ] = "Èá åîåôáóôïıí üëïé ïé õğïêáôÜëïãïé";
     Text[ dutch ] = "Er wordt rekening gehouden met alle subdirectory's";
-    Text[ swedish ] = "Det tas hänsyn till alla undermappar";
+    Text[ swedish ] = "Det tas hänsyn till alla underordnade kataloger";
     Text[ russian ] = "Âêëş÷åíû âñå ïîäïàïêè";
     Text[ danish ] = "Der tages hensyn til alle underbiblioteker";
-    Text[ polish ] = "Uwzglêdnione zostan¹ wszystkie podfoldery";
+    Text[ polish ] = "Uwzglêdnione zostan¹ wszystkie katalogi podrzêdne";
     Text[ portuguese_brazilian ] = "All directories will be considered";
     Text[ japanese ] = "‚·‚×‚Ä‚Ì‰ºˆÊÃŞ¨Ú¸ÄØ‚ª‘ÎÛ‚É‚È‚è‚Ü‚·B";
     Text[ korean ] = "¸ğµç µğ·ºÅä¸®°¡ ÂüÀÛµË´Ï´Ù.";
@@ -554,11 +554,11 @@ String sSumSaveDokumente
     Text[ spanish ] = "Se exportarán al siguiente directorio:";
     Text[ portuguese ] = "Estes serão exportados para o seguinte directório:";
     Text[ dutch ] = "Ze worden geëxporteerd naar de volgende  directory:";
-    Text[ swedish ] = "De exporteras till följande mapp:";
+    Text[ swedish ] = "De exporteras till följande katalog:";
     Text[ greek ] = "Èá ãßíåé åîáãùãŞ ôïõò óôïí åîŞò êáôÜëïãï:";
     Text[ dutch ] = "Ze worden geëxporteerd naar de volgende  directory:";
-    Text[ swedish ] = "De exporteras till följande mapp:";
-    Text[ russian ] = "İêñïîğòèğóşòñÿ â ñëåäóşùóş ïàïêó:";
+    Text[ swedish ] = "De exporteras till följande katalog:";
+    Text[ russian ] = "Îíè ıêñïîğòèğóşòñÿ â ñëåäóşùóş ïàïêó:";
     Text[ danish ] = "De bliver eksporteret til følgende bibliotek:";
     Text[ polish ] = "Eksportowane zostan¹ do nastêpuj¹cego katalogu:";
     Text[ portuguese_brazilian ] = "These will be exported in the following directory:";
@@ -789,10 +789,10 @@ String sProgressDesc1
     Text[ spanish ] = "Progresión: ";
     Text[ portuguese ] = "Progresso: ";
     Text[ dutch ] = "Vooruitgang:  ";
-    Text[ swedish ] = "Framsteg:  ";
+    Text[ swedish ] = "Framsteg: ";
     Text[ greek ] = "Ğñüïäïò: ";
     Text[ dutch ] = "Vooruitgang:  ";
-    Text[ swedish ] = "Framsteg:  ";
+    Text[ swedish ] = "Framsteg: ";
     Text[ russian ] = "Ïğîãğåññ:   ";
     Text[ danish ] = "Fremgang: ";
     Text[ polish ] = "Postêp: ";
@@ -893,11 +893,11 @@ String sNoDirCreation
     Text[ spanish ] = "No se puede crear el directorio '%1': ";
     Text[ portuguese ] = "É impossível criar o directório '%1'.";
     Text[ dutch ] = "Directory '%1' kan niet worden aangelegd:  ";
-    Text[ swedish ] = "Det går inte att skapa katalogen '%1':";
+    Text[ swedish ] = "Det går inte att skapa katalogen '%1': ";
     Text[ greek ] = "Äåí åßíáé äõíáôüí íá äçìéïõñãçèåß ï êáôÜëïãïò '%1': ";
     Text[ dutch ] = "Directory '%1' kan niet worden aangelegd:  ";
-    Text[ swedish ] = "Det går inte att skapa katalogen '%1':";
-    Text[ russian ] = "Ñîçäàòü ïàïêó  '%1' íåâîçìîæíî: ";
+    Text[ swedish ] = "Det går inte att skapa katalogen '%1': ";
+    Text[ russian ] = "Ñîçäàòü ïàïêó '%1' íåâîçìîæíî: ";
     Text[ danish ] = "Følgende bibliotek eksisterer ikke: ";
     Text[ polish ] = "Utworzenie katalogu '%1' nie jest mo¿liwe: ";
     Text[ portuguese_brazilian ] = "The following directory is not available: ";
@@ -998,10 +998,10 @@ String sMorePathsError3
     Text[ spanish ] = "Directorios no existentes";
     Text[ portuguese ] = "Directórios não existem";
     Text[ dutch ] = "Directory niet voorhanden";
-    Text[ swedish ] = "Mappar finns ej";
+    Text[ swedish ] = "Kataloger finns ej";
     Text[ greek ] = "Ïé êáôÜëïãïé äåí õğÜñ÷ïõí";
     Text[ dutch ] = "Directory niet voorhanden";
-    Text[ swedish ] = "Mappar finns ej";
+    Text[ swedish ] = "Kataloger finns ej";
     Text[ russian ] = "Ïàïîê íå èìååòñÿ";
     Text[ danish ] = "Bibliotekerne eksisterer ikke";
     Text[ polish ] = "Katalogi nie istniej¹";
@@ -1070,7 +1070,7 @@ String sRTErrorDesc
 {
     Text = "Es ist ein unerwarteter Fehler im Autopiloten aufgetreten.";
     Text[English] = "An unexpected Autopilot error has occured.";
-    Text[ English_us ] = "An unexpected error has occured in the AutoPilot.";
+    Text[ English_us ] = "An unexpected error has occurred in the AutoPilot.";
     Text[ french ] = "Une erreur imprévue s'est produite dans l'AutoPilote.";
     Text[ italian ] = "Si è avuto un errore inatteso nel pilota automatico.";
     Text[ spanish ] = "Ha ocurrido un error inesperado en el AutoPiloto";
@@ -1082,7 +1082,7 @@ String sRTErrorDesc
     Text[ swedish ] = "Ett oväntat fel har uppstått i Autopiloten.";
     Text[ russian ] = "Â Àâòîïèëîòå ïğîèçîøëà íåîæèäàííàÿ îøèáêà.";
     Text[ danish ] = "Der opstod en uventet fejl i AutoPiloten.";
-    Text[ polish ] = "Wyst¹pi³ niespodziewany b³¹d w AutoPilocie";
+    Text[ polish ] = "Wyst¹pi³ niespodziewanie b³¹d w AutoPilocie";
     Text[ portuguese_brazilian ] = "An unexpected Autopilot error has occured.";
     Text[ japanese ] = "µ°ÄÊß²Û¯Ä‚É—\\Šú‚³‚ê‚È‚¢´×°‚ª”­¶‚µ‚Ü‚µ‚½B";
     Text[ korean ] = "ÀÚµ¿ÆÄÀÏ·µ¿¡ ¿¹»óÄ¡ ¾ÊÀº ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.";
@@ -1129,11 +1129,11 @@ String sPathDialogMessage
     Text[ spanish ] = "Elija un directorio";
     Text[ portuguese ] = "Seleccione um directório";
     Text[ dutch ] = "Selecteer een directory";
-    Text[ swedish ] = "Välj ut en mapp";
+    Text[ swedish ] = "Välj ut en katalog";
     Text[ greek ] = "Åğéëİîôå êáôÜëïãï";
     Text[ dutch ] = "Selecteer een directory";
-    Text[ swedish ] = "Välj ut en mapp";
-    Text[ russian ] = "Âûäåëèòå ïàïêó";
+    Text[ swedish ] = "Välj ut en katalog";
+    Text[ russian ] = "Âûáåğèòå ïàïêó";
     Text[ danish ] = "Vælg et bibliotek";
     Text[ polish ] = "Wybierz katalog";
     Text[ portuguese_brazilian ] = "Select a directory";
@@ -1206,7 +1206,7 @@ String sProgressPage2
     Text[ spanish ] = "Recogida de los documentos relevantes:";
     Text[ italian ] = "Recupero dei documenti importanti:";
     Text[ danish ] = "Bestemmer de relevante dokumenter...";
-    Text[ swedish ] = "Bestämning av de relevanta dokumenten:";
+    Text[ swedish ] = "Samlar de relevanta dokumenten:";
     Text[ polish ] = "Przywracanie wa¿nych dokumentów:";
     Text[ portuguese_brazilian ] = "Retrieval of the relevant documents";
     Text[ japanese ] = "ŠÖ˜A‚·‚éÄŞ·­ÒİÄ‚ğ‚Ü‚Æ‚ß‚Ä‚¢‚Ü‚·:";
@@ -1255,7 +1255,7 @@ String sProgressFound
     Text[ spanish ] = "Encontrado:";
     Text[ italian ] = "Trovato:";
     Text[ danish ] = "Found";
-    Text[ swedish ] = "Hittad";
+    Text[ swedish ] = "Hittad:";
     Text[ polish ] = "Znaleziono:";
     Text[ portuguese_brazilian ] = "Found";
     Text[ japanese ] = "Œ©‚Â‚©‚è‚Ü‚µ‚½:";
@@ -1281,7 +1281,7 @@ String sProgressPage5
     Text[ italian ] = "%1 trovato";
     Text[ danish ] = "%1 found";
     Text[ swedish ] = "%1 hittad";
-    Text[ polish ] = "%1 zmaleziono";
+    Text[ polish ] = "znaleziono %1";
     Text[ portuguese_brazilian ] = "%1 found";
     Text[ japanese ] = "%1 ‚ªŒ©‚Â‚©‚è‚Ü‚µ‚½B";
     Text[ korean ] = "%1À»(¸¦) Ã£¾ÒÀ½";
@@ -1529,14 +1529,14 @@ String sXMLHelperApplications_1
     Text[ English_us ] = "master documents";
     Text[ language_user1 ] = "EM(1.2.01) kommt mitten im Satz vor, deshalb kleingeschr auf Eng. Zuständig ist BC/Extras.";
     Text[ portuguese ] = "documentos mestres";
-    Text[ russian ] = "Ãëàâíûå äîêóìåíòû";
+    Text[ russian ] = "ãëàâíûå äîêóìåíòû";
     Text[ greek ] = "êıñéá İããñáöá";
     Text[ dutch ] = "Masterdocumenten";
     Text[ french ] = "Documents globaux";
-    Text[ spanish ] = "Documentos globales";
+    Text[ spanish ] = "documentos globales";
     Text[ italian ] = "documenti master";
     Text[ danish ] = "Master Documents";
-    Text[ swedish ] = "Samlingsdokument";
+    Text[ swedish ] = "samlingsdokument";
     Text[ polish ] = "dokumenty g³ówne";
     Text[ portuguese_brazilian ] = "Master Documents";
     Text[ japanese ] = "¸ŞÛ°ÊŞÙÄŞ·­ÒİÄ";
