@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2002-05-31 11:52:16 $
+ *  last change: $Author: mba $ $Date: 2002-06-03 10:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,24 +130,36 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUSTRING & aName, const ANY &
     ::osl::MutexGuard aGuard( maMutex );
 
     // find the event in the list and replace the data
-
     long nCount = maEventNames.getLength();
-
     for ( long i=0; i<nCount; i++ )
     {
         if ( maEventNames[i] == aName )
         {
             // check for correct type of the element
-            if ( ::getCppuType( (const SEQUENCE < PROPERTYVALUE > *)0 ) ==
-                 rElement.getValueType() )
+            if ( ::getCppuType( (const SEQUENCE < PROPERTYVALUE > *)0 ) == rElement.getValueType() )
             {
                 ANY aValue = BlowUpMacro( rElement );
-
                 maEventData[i] = aValue;
 
-                SvxMacro   *pMacro = ConvertToMacro( aValue, mpObjShell );
-                USHORT      nID = (USHORT) SfxEventConfiguration::GetEventId_Impl( aName );
+                SEQUENCE < PROPERTYVALUE > aProperties;
+                if ( aValue >>= aProperties )
+                {
+                    long nCount = aProperties.getLength();
+                    for ( long nIndex = 0; nIndex < nCount; nIndex++ )
+                    {
+                        if ( aProperties[ nIndex ].Name.compareToAscii( PROP_EVENT_TYPE ) == 0 )
+                        {
+                            ::rtl::OUString aType;
+                            aProperties[ nIndex ].Value >>= aType;
+                            if ( aType.compareToAscii( STAR_BASIC ) != COMPARE_EQUAL )
+                                return;
+                            break;
+                        }
+                    }
+                }
 
+                SvxMacro *pMacro = ConvertToMacro( aValue, mpObjShell );
+                USHORT nID = (USHORT) SfxEventConfiguration::GetEventId_Impl( aName );
                 if ( nID )
                 {
                     if ( pMacro )
