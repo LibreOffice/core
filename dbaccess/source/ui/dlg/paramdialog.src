@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paramdialog.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:54:32 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:01:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ ModalDialog DLG_PARAMETERS
         Text[ english_us ] = "~Value";
         Text[ portuguese ] = "~Valor";
         Text[ russian ] = "~Ηνΰχενθε";
-        Text[ greek ] = "Τιμή";
+        Text[ greek ] = "~Τιμή";
         Text[ dutch ] = "~Waarde";
         Text[ french ] = "Valeur";
         Text[ spanish ] = "~Valor";
@@ -268,6 +268,13 @@ ModalDialog DLG_PARAMETERS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.28.8.1  2003/07/03 14:44:15  ihi
+ *  rc-2 merge all languages
+ *
+ *  Revision 1.28  2003/06/13 12:54:32  hr
+ *  INTEGRATION: CWS rcmerge (1.27.24); FILE MERGED
+ *  2003/06/12 10:57:55 gh 1.27.24.1: final Merge RC
+ *
  *  Revision 1.27.24.1  2003/06/12 10:57:55  gh
  *  final Merge RC
  *
@@ -380,6 +387,7 @@ ModalDialog DLG_PARAMETERS
  *
  *  Revision 1.0 26.10.00 15:14:44  fs
  ************************************************************************/
+
 
 
 
