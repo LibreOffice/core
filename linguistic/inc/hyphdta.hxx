@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphdta.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-17 12:48:39 $
+ *  last change: $Author: tl $ $Date: 2002-11-26 11:24:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,13 @@ public:
     virtual sal_Bool SAL_CALL
         isAlternativeSpelling()
             throw(::com::sun::star::uno::RuntimeException);
+
+    ::rtl::OUString GetWord()           { return aWord; }
+    ::rtl::OUString GetHyphenatedWord() { return aHyphenatedWord; }
+    INT16           GetLanguage()       { return nLanguage; }
+    void            SetWord( ::rtl::OUString &rTxt )            { aWord = rTxt; }
+    void            SetHyphenatedWord( ::rtl::OUString &rTxt )  { aHyphenatedWord = rTxt; }
+    void            SetLanguage( INT16 nLang )                  { nLanguage = nLang; }
 };
 
 
@@ -161,6 +168,11 @@ public:
     virtual ::com::sun::star::uno::Sequence< sal_Int16 > SAL_CALL
         getHyphenationPositions()
             throw(::com::sun::star::uno::RuntimeException);
+
+    ::rtl::OUString GetWord()       { return aWord; }
+    INT16           GetLanguage()   { return nLanguage; }
+    void            SetWord( ::rtl::OUString &rTxt )    { aWord = rTxt; }
+    void            SetLanguage( INT16 nLang )          { nLanguage = nLang; }
 };
 
 
