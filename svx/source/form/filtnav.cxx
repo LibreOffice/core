@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2001-08-14 15:02:22 $
+ *  last change: $Author: hjs $ $Date: 2001-09-12 18:10:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,7 +402,7 @@ public:
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( RuntimeException );
 
 // ::com::sun::star::awt::XTextListener
-    virtual void SAL_CALL textChanged(const ::com::sun::star::awt::TextEvent& e);
+    virtual void SAL_CALL textChanged(const ::com::sun::star::awt::TextEvent& e) throw( ::com::sun::star::uno::RuntimeException );
 
 // helpers
     void dispose() throw( RuntimeException );
@@ -587,7 +587,7 @@ Reference< ::com::sun::star::form::XForm > FmFilterAdapter::findForm(const Refer
 
 // XTextListener
 //------------------------------------------------------------------------
-void FmFilterAdapter::textChanged(const ::com::sun::star::awt::TextEvent& e)
+void FmFilterAdapter::textChanged(const ::com::sun::star::awt::TextEvent& e) throw( ::com::sun::star::uno::RuntimeException )
 {
     // Find the according formitem in the
     Reference< ::com::sun::star::awt::XControl > xControl(e.Source, UNO_QUERY);

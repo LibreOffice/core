@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-24 13:41:05 $
+ *  last change: $Author: hjs $ $Date: 2001-09-12 18:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,13 +357,13 @@ public:
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw(::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::beans::XPropertyChangeListener
-    virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt);
+    virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::container::XContainerListener
 
-    virtual void SAL_CALL elementInserted(const  ::com::sun::star::container::ContainerEvent& rEvent);
-    virtual void SAL_CALL elementReplaced(const  ::com::sun::star::container::ContainerEvent& rEvent);
-    virtual void SAL_CALL elementRemoved(const  ::com::sun::star::container::ContainerEvent& rEvent);
+    virtual void SAL_CALL elementInserted(const  ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL elementReplaced(const  ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL elementRemoved(const  ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException);
 
     void Lock() { m_nLocks++; }
     void UnLock() { m_nLocks--; }

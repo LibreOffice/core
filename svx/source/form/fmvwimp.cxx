@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-22 15:00:46 $
+ *  last change: $Author: hjs $ $Date: 2001-09-12 18:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -495,7 +495,7 @@ void SAL_CALL FmXFormView::disposing(const ::com::sun::star::lang::EventObject& 
 
 // ::com::sun::star::form::XFormControllerListener
 //------------------------------------------------------------------------------
-void SAL_CALL FmXFormView::formActivated(const ::com::sun::star::lang::EventObject& rEvent)
+void SAL_CALL FmXFormView::formActivated(const ::com::sun::star::lang::EventObject& rEvent) throw( ::com::sun::star::uno::RuntimeException )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >  xController(rEvent.Source, ::com::sun::star::uno::UNO_QUERY);
     // benachrichtigung der Shell
@@ -508,14 +508,14 @@ void SAL_CALL FmXFormView::formActivated(const ::com::sun::star::lang::EventObje
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL FmXFormView::formDeactivated(const ::com::sun::star::lang::EventObject& rEvent)
+void SAL_CALL FmXFormView::formDeactivated(const ::com::sun::star::lang::EventObject& rEvent) throw( ::com::sun::star::uno::RuntimeException )
 {
     // deaktivierung wird nicht registriert
 }
 
 // ::com::sun::star::container::XContainerListener
 //------------------------------------------------------------------------------
-void SAL_CALL FmXFormView::elementInserted(const ::com::sun::star::container::ContainerEvent& evt)
+void SAL_CALL FmXFormView::elementInserted(const ::com::sun::star::container::ContainerEvent& evt) throw( ::com::sun::star::uno::RuntimeException )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >  xCC(evt.Source, ::com::sun::star::uno::UNO_QUERY);
     if( xCC.is() )
@@ -533,13 +533,13 @@ void SAL_CALL FmXFormView::elementInserted(const ::com::sun::star::container::Co
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL FmXFormView::elementReplaced(const ::com::sun::star::container::ContainerEvent& evt)
+void SAL_CALL FmXFormView::elementReplaced(const ::com::sun::star::container::ContainerEvent& evt) throw( ::com::sun::star::uno::RuntimeException )
 {
     elementInserted(evt);
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL FmXFormView::elementRemoved(const ::com::sun::star::container::ContainerEvent& evt)
+void SAL_CALL FmXFormView::elementRemoved(const ::com::sun::star::container::ContainerEvent& evt) throw( ::com::sun::star::uno::RuntimeException )
 {
 }
 

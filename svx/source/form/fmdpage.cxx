@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmdpage.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:16 $
+ *  last change: $Author: hjs $ $Date: 2001-09-12 18:10:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ SvxFmDrawPage::SvxFmDrawPage( SdrPage* pInPage ) :
     m_pHoldImplIdHelper = new ::form::OImplementationIdsRef();
 }
 
-SvxFmDrawPage::~SvxFmDrawPage()
+SvxFmDrawPage::~SvxFmDrawPage() throw ()
 {
     delete m_pHoldImplIdHelper;
     DBG_DTOR(SvxFmDrawPage,NULL);
@@ -129,7 +129,7 @@ SvxFmDrawPage::~SvxFmDrawPage()
     return aTypes;
 }
 
-SdrObject *SvxFmDrawPage::_CreateSdrObject( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & xDescr )
+SdrObject *SvxFmDrawPage::_CreateSdrObject( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & xDescr ) throw ()
 {
     ::rtl::OUString aShapeType( xDescr->getShapeType() );
 
@@ -140,7 +140,7 @@ SdrObject *SvxFmDrawPage::_CreateSdrObject( const ::com::sun::star::uno::Referen
 
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  SvxFmDrawPage::_CreateShape( SdrObject *pObj ) const
+::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  SvxFmDrawPage::_CreateShape( SdrObject *pObj ) const throw ()
 {
     if( FmFormInventor == pObj->GetObjInventor() )
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-21 13:08:28 $
+ *  last change: $Author: hjs $ $Date: 2001-09-12 18:10:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -737,7 +737,7 @@ void SAL_CALL FmXFormShell::disposing(const EventObject& e) throw( RuntimeExcept
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL FmXFormShell::propertyChange(const PropertyChangeEvent& evt)
+void SAL_CALL FmXFormShell::propertyChange(const PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
     OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     if (evt.PropertyName == FM_PROP_ISMODIFIED)
@@ -805,7 +805,7 @@ void SAL_CALL FmXFormShell::propertyChange(const PropertyChangeEvent& evt)
 
 // XModifyListener
 //------------------------------------------------------------------------------
-void SAL_CALL FmXFormShell::modified(const EventObject& rEvent)
+void SAL_CALL FmXFormShell::modified(const EventObject& rEvent) throw(::com::sun::star::uno::RuntimeException)
 {
     OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     if (!m_bActiveModified)
@@ -3069,7 +3069,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
 
   // XContainerListener
 //------------------------------------------------------------------------------
-void FmXFormShell::elementInserted(const ContainerEvent& evt)
+void FmXFormShell::elementInserted(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
     OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     // neues Object zum lauschen
@@ -3080,7 +3080,7 @@ void FmXFormShell::elementInserted(const ContainerEvent& evt)
 }
 
 //------------------------------------------------------------------------------
-void FmXFormShell::elementReplaced(const ContainerEvent& evt)
+void FmXFormShell::elementReplaced(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
     OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     Reference< XInterface> xTemp;
@@ -3091,7 +3091,7 @@ void FmXFormShell::elementReplaced(const ContainerEvent& evt)
 }
 
 //------------------------------------------------------------------------------
-void FmXFormShell::elementRemoved(const ContainerEvent& evt)
+void FmXFormShell::elementRemoved(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
     OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     Reference< XInterface> xTemp;
@@ -3168,7 +3168,7 @@ void FmXFormShell::RemoveElement(const Reference< XInterface>& Element)
 }
 
 //------------------------------------------------------------------------------
-void FmXFormShell::selectionChanged(const EventObject& rEvent)
+void FmXFormShell::selectionChanged(const EventObject& rEvent) throw(::com::sun::star::uno::RuntimeException)
 {
     OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     Reference< ::com::sun::star::view::XSelectionSupplier> xSupplier(rEvent.Source, UNO_QUERY);

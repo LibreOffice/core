@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-06 15:56:17 $
+ *  last change: $Author: hjs $ $Date: 2001-09-12 18:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,7 +484,7 @@ void SAL_CALL FmXUndoEnvironment::disposing(const EventObject& e) throw( Runtime
 
 // XPropertyChangeListener
 //------------------------------------------------------------------------------
-void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
+void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
     if (!IsLocked())
     {
@@ -637,7 +637,7 @@ void SAL_CALL FmXUndoEnvironment::vetoableChange(const PropertyChangeEvent& aEve
 
 // XContainerListener
 //------------------------------------------------------------------------------
-void SAL_CALL FmXUndoEnvironment::elementInserted(const ContainerEvent& evt)
+void SAL_CALL FmXUndoEnvironment::elementInserted(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
     // neues Object zum lauschen
     Reference< XInterface >  xIface;
@@ -652,7 +652,7 @@ void SAL_CALL FmXUndoEnvironment::elementInserted(const ContainerEvent& evt)
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL FmXUndoEnvironment::elementReplaced(const ContainerEvent& evt)
+void SAL_CALL FmXUndoEnvironment::elementReplaced(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
     Reference< XInterface >  xIface;
     evt.ReplacedElement >>= xIface;
@@ -669,7 +669,7 @@ void SAL_CALL FmXUndoEnvironment::elementReplaced(const ContainerEvent& evt)
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL FmXUndoEnvironment::elementRemoved(const ContainerEvent& evt)
+void SAL_CALL FmXUndoEnvironment::elementRemoved(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
     Reference< XInterface >  xIface;
     evt.Element >>= xIface;
@@ -902,13 +902,13 @@ void FmXUndoEnvironment::firing_Impl( const ScriptEvent& evt, Any *pSyncRet )
     }
 }
 
-void SAL_CALL FmXUndoEnvironment::firing(const ScriptEvent& evt)
+void SAL_CALL FmXUndoEnvironment::firing(const ScriptEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
     firing_Impl( evt );
 }
 
 //------------------------------------------------------------------------------
-Any SAL_CALL FmXUndoEnvironment::approveFiring(const ScriptEvent& evt)
+Any SAL_CALL FmXUndoEnvironment::approveFiring(const ScriptEvent& evt) throw(::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException)
 {
     Any aRet;
     firing_Impl( evt, &aRet );

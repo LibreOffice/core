@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrcimp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-07 13:07:22 $
+ *  last change: $Author: hjs $ $Date: 2001-09-12 18:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,7 +300,7 @@ void FmRecordCountListener::NotifyCurrentCount()
 }
 
 //------------------------------------------------------------------------
-void FmRecordCountListener::propertyChange(const  ::com::sun::star::beans::PropertyChangeEvent& evt)
+void FmRecordCountListener::propertyChange(const  ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
     NotifyCurrentCount();
 }

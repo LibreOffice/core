@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-24 13:42:38 $
+ *  last change: $Author: hjs $ $Date: 2001-09-12 18:10:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -717,7 +717,7 @@ void SAL_CALL FmXExplPropertyChangeList::disposing(const ::com::sun::star::lang:
 }
 
 //------------------------------------------------------------------------
-void SAL_CALL FmXExplPropertyChangeList::propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt)
+void SAL_CALL FmXExplPropertyChangeList::propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
     if( !m_pExplModel ) return;
     if( evt.PropertyName != FM_PROP_NAME ) return;
@@ -742,7 +742,7 @@ void SAL_CALL FmXExplPropertyChangeList::propertyChange(const ::com::sun::star::
 
 // ::com::sun::star::container::XContainerListener
 //------------------------------------------------------------------------------
-void SAL_CALL FmXExplPropertyChangeList::elementInserted(const ::com::sun::star::container::ContainerEvent& evt)
+void SAL_CALL FmXExplPropertyChangeList::elementInserted(const ::com::sun::star::container::ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
     if (IsLocked() || !m_pExplModel)
         return;
@@ -781,7 +781,7 @@ void FmXExplPropertyChangeList::Insert(const ::com::sun::star::uno::Reference< :
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL FmXExplPropertyChangeList::elementReplaced(const ::com::sun::star::container::ContainerEvent& evt)
+void SAL_CALL FmXExplPropertyChangeList::elementReplaced(const ::com::sun::star::container::ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
     if (IsLocked() || !m_pExplModel)
         return;
@@ -812,7 +812,7 @@ void SAL_CALL FmXExplPropertyChangeList::elementReplaced(const ::com::sun::star:
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL FmXExplPropertyChangeList::elementRemoved(const ::com::sun::star::container::ContainerEvent& evt)
+void SAL_CALL FmXExplPropertyChangeList::elementRemoved(const ::com::sun::star::container::ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
     if (IsLocked() || !m_pExplModel)
         return;
