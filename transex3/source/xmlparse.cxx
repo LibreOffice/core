@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlparse.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:12:15 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 15:58:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,12 +462,19 @@ void XMLFile::Print( XMLNode *pCur, USHORT nLevel )
 
                 fprintf( stdout, "<%s", ByteString( pElement->GetName(), RTL_TEXTENCODING_UTF8 ).GetBuffer());
                 if ( pElement->GetAttributeList())
-                    for ( ULONG j = 0; j < pElement->GetAttributeList()->Count(); j++ )
-                        fprintf( stdout, " %s=\"%s\"",
-                            ByteString( *pElement->GetAttributeList()->GetObject( j ),
-                                RTL_TEXTENCODING_UTF8 ).GetBuffer(),
-                            ByteString( pElement->GetAttributeList()->GetObject( j )->GetValue(),
-                                RTL_TEXTENCODING_UTF8 ).GetBuffer());
+                    for ( ULONG j = 0; j < pElement->GetAttributeList()->Count(); j++ ){
+                        ByteString aAttrName( *pElement->GetAttributeList()->GetObject( j ), RTL_TEXTENCODING_UTF8 );
+                        //if( !( bNo_XML_Lang && aAttrName.EqualsIgnoreCaseAscii( XML_LANG ) ) ){
+                        //if( !aAttrName.EqualsIgnoreCaseAscii( XML_LANG ) ){
+                        if( !aAttrName.EqualsIgnoreCaseAscii( XML_LANG ) ) {
+                            fprintf( stdout, " %s=\"%s\"",
+                                //ByteString( *pElement->GetAttributeList()->GetObject( j ),
+                                //    RTL_TEXTENCODING_UTF8 ).GetBuffer(),
+                                aAttrName.GetBuffer(),
+                                ByteString( pElement->GetAttributeList()->GetObject( j )->GetValue(),
+                                    RTL_TEXTENCODING_UTF8 ).GetBuffer());
+                        }
+                    }
                 if ( !pElement->GetChildList())
                     fprintf( stdout, "/>" );
                 else {
@@ -879,10 +886,12 @@ OUString XMLElement::ToOUString(){
     return result;
 }
 /*****************************************************************************/
-void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement){
+void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement ){
 /*****************************************************************************/
     const String COMMENT = String::CreateFromAscii("comment");
     XMLUtil& xmlutil=XMLUtil::Instance();
+    const OUString XML_LANG ( OUString::createFromAscii("xml-lang") );
+
     if(pCur!=NULL){
         if(rootelement){
             XMLElement *pElement = ( XMLElement * ) pCur;
@@ -901,18 +910,25 @@ void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement)
         switch( pCur->GetNodeType()) {
             case XML_NODE_TYPE_ELEMENT: {
                 XMLElement *pElement = ( XMLElement * ) pCur;
+
                 if(  !pElement->GetName().EqualsIgnoreCaseAscii( COMMENT ) ){
                     buffer.append( OUString::createFromAscii("\\<") );
                     buffer.append( pElement->GetName() );
-                    if ( pElement->GetAttributeList())
+                    if ( pElement->GetAttributeList()){
                         for ( ULONG j = 0; j < pElement->GetAttributeList()->Count(); j++ ){
-                            buffer.append( OUString::createFromAscii(" ") );
-                            buffer.append( *pElement->GetAttributeList()->GetObject( j ) );
-                            buffer.append( OUString::createFromAscii("=") );
-                            buffer.append( OUString::createFromAscii("\\\"") );
-                            buffer.append( pElement->GetAttributeList()->GetObject( j )->GetValue() );
-                            buffer.append( OUString::createFromAscii("\\\"") );
+
+                            OUString aAttrName( *pElement->GetAttributeList()->GetObject( j ) );
+                            if( !aAttrName.equalsIgnoreAsciiCase( XML_LANG ) ) {
+                                //buffer.append( *pElement->GetAttributeList()->GetObject( j ) );
+                                buffer.append( OUString::createFromAscii(" ") );
+                                buffer.append( aAttrName );
+                                buffer.append( OUString::createFromAscii("=") );
+                                buffer.append( OUString::createFromAscii("\\\"") );
+                                buffer.append( pElement->GetAttributeList()->GetObject( j )->GetValue() );
+                                buffer.append( OUString::createFromAscii("\\\"") );
+                            }
                         }
+                    }
                     if ( !pElement->GetChildList())
                         buffer.append( OUString::createFromAscii("/\\>") );
                     else {
@@ -927,7 +943,6 @@ void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement)
                         buffer.append( OUString::createFromAscii("\\>") );
                     }
                 }
-
             }
             break;
             case XML_NODE_TYPE_DATA: {
