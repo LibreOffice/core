@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BtreeDict.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: abi $ $Date: 2001-07-05 18:50:40 $
+ *  last change: $Author: abi $ $Date: 2001-07-06 11:04:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,7 +357,8 @@ void BlockProcessorImpl::process( Block* block ) const
 
 
 BtreeDict::BtreeDict( const util::IndexAccessor& indexAccessor ) throw( IOException )
-    : blocks_( 0 ),
+    : blocksL_( 0 ),
+      blocks_( 0 ),
       blockManager_( new DBEnvImpl( indexAccessor ) )   // may throw IOExcption
 {
 
@@ -379,7 +380,7 @@ BtreeDict::BtreeDict( const util::IndexAccessor& indexAccessor ) throw( IOExcept
 
         idx = 4 + aStr.lastIndexOf( "id1=" );
         sal_Int32 count = atoi( bff + idx );
-        blocks_ = new sal_Int32[ count ];
+        blocks_ = new sal_Int32[ blocksL_ = count ];
 
         delete[] bff;
         BlockProcessorImpl blProc( this );
@@ -456,6 +457,9 @@ sal_Int32 BtreeDict::fetch( const rtl::OUString& key ) const throw( excep::XmlSe
 
 rtl::OUString BtreeDict::fetch( sal_Int32 conceptID ) const throw( excep::XmlSearchException )
 {
+    if( blocksL_ <= conceptID )
+        throw excep::XmlSearchException( rtl::OUString() );
+
     return findID( blocks_[conceptID], conceptID );
 }
 
