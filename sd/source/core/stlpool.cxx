@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:29:54 $
+ *  last change: $Author: cl $ $Date: 2001-03-30 15:28:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1284,7 +1284,7 @@ void SdStyleSheetPool::AdjustLRSpaceItems()
 \************************************************************************/
 
 void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
-                                         Font& rBulletFont ) const
+                                         Font& rBulletFont )
 {
     String aHelpFile;
     ULONG nHelpId = pSheet->GetHelpId( aHelpFile );
