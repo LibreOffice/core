@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XPropertySet.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:15:47 $
+ *  last change:$Date: 2004-03-19 15:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -533,6 +533,7 @@ public class _XPropertySet extends MultiMethodTest {
             if (name.startsWith("IsNumbering")) isWritable = false;
             if (name.startsWith("LayerName")) isWritable = false;
             if (name.startsWith("Line")) isWritable = false;
+            if (name.startsWith("TextWriting")) isWritable = false;
 
             //if (name.equals("xinterfaceA") || name.equals("xtypeproviderA")
             //|| name.equals("arAnyA")) isWritable=false;
