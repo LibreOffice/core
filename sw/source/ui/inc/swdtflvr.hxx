@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-11 15:05:34 $
+ *  last change: $Author: jp $ $Date: 2001-10-26 11:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,7 @@ public:
     int  CopyGlossary( SwTextBlocks& rGlossary, const String& rStr );
 
     // remove the DDE-Link format promise
-    void RemoveDDELinkFormat();
+    void RemoveDDELinkFormat( const Window& rWin );
 
     // paste - methods and helper methods for the paste
     static BOOL IsPaste( const SwWrtShell&, const TransferableDataHelper& );

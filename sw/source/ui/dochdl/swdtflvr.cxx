@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-23 15:32:02 $
+ *  last change: $Author: jp $ $Date: 2001-10-26 11:14:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -485,10 +485,10 @@ SvEmbeddedObject* SwTransferable::FindOLEObj() const
 
 // -----------------------------------------------------------------------
 
-void SwTransferable::RemoveDDELinkFormat()
+void SwTransferable::RemoveDDELinkFormat( const Window& rWin )
 {
     RemoveFormat( SOT_FORMATSTR_ID_LINK );
-    CopyToClipboard( &pWrtShell->GetView().GetEditWin() );
+    CopyToClipboard( (Window*)&rWin );
 }
 
 // -----------------------------------------------------------------------
@@ -3409,7 +3409,8 @@ void SwTrnsfrDdeLink::DataChanged( const String& ,
     // tja das wars dann mit dem Link
     if( !bInDisconnect )
     {
-        rTrnsfr.RemoveDDELinkFormat();
+        if( FindDocShell() && pDocShell->GetView() )
+            rTrnsfr.RemoveDDELinkFormat( pDocShell->GetView()->GetEditWin() );
         Disconnect( FALSE );
     }
 }
