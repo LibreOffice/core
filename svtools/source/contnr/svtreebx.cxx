@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: pb $ $Date: 2002-09-20 10:54:16 $
+ *  last change: $Author: pb $ $Date: 2002-09-25 12:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -619,13 +619,13 @@ SvButtonState SvTreeListBox::GetCheckButtonState( SvLBoxEntry* pEntry ) const
     return eState;
 }
 
-
 void SvTreeListBox::CheckButtonHdl()
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     aCheckButtonHdl.Call( this );
+    if ( pCheckButtonData )
+        pImp->CallEventListeners( VCLEVENT_CHECKBOX_TOGGLE, (void*)pCheckButtonData->GetActEntry() );
 }
-
 
 // *********************************************************************
 // *********************************************************************
@@ -2527,6 +2527,8 @@ void SvTreeListBox::FillAccessibleEntryStateSet( SvLBoxEntry* pEntry, ::utl::Acc
         rStateSet.AddState( nState );
     }
 
+    if ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED )
+        rStateSet.AddState( AccessibleStateType::CHECKED );
     if ( IsEntryVisible( pEntry ) )
         rStateSet.AddState( AccessibleStateType::VISIBLE );
     if ( IsSelected( pEntry ) )
