@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_iface.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:41:18 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,9 +387,6 @@ PE_Interface::On_std_GotoAttribute(const char * )
 void
 PE_Interface::On_std_GotoBaseInterface(const char * )
 {
-    // KORR_DEBUG
-    Cerr() << "\nOn_std_GotoBaseInterface" << Endl();
-
        SetResult(done, push_sure, pPE_Type.Ptr());
     eState = in_base_interface;
 }
