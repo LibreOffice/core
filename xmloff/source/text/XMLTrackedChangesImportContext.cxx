@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTrackedChangesImportContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,6 @@ void XMLTrackedChangesImportContext::StartElement(
     const Reference<XAttributeList> & xAttrList )
 {
     sal_Bool bTrackChanges = sal_True;
-    Sequence<sal_Int8> aProtectionKey;
 
     // scan for text:track-changes and text:protection-key attributes
     sal_Int16 nLength = xAttrList->getLength();
@@ -143,21 +142,11 @@ void XMLTrackedChangesImportContext::StartElement(
                     bTrackChanges = bTmp;
                 }
             }
-            else if ( IsXMLToken( sLocalName, XML_PROTECTION_KEY ) )            {
-                Sequence<sal_Int8> aSequence;
-                SvXMLUnitConverter::decodeBase64(
-                    aSequence, xAttrList->getValueByIndex(i));
-                if ( aSequence.getLength() > 0 )
-                {
-                    aProtectionKey = aSequence;
-                }
-            }
         }
     }
 
     // set tracked changes
     GetImport().GetTextImport()->SetRecordChanges( bTrackChanges );
-    GetImport().GetTextImport()->SetChangesProtectionKey( aProtectionKey );
 }
 
 
