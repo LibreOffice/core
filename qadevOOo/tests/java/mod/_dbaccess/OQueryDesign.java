@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OQueryDesign.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:14:37 $
+ *  last change:$Date: 2003-02-27 11:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,8 @@ public class OQueryDesign extends TestCase {
 
         //Adding ObjRelations for XInitialization
         tEnv.addObjRelation("XInitialization.args", params);
+
+        tEnv.addObjRelation("Frame", Frame);
 
         log.println("ImplementationName"+util.utils.getImplName(oObj));
 
