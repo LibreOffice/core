@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salplug.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 09:03:46 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 14:53:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,11 +355,17 @@ SalInstance *CreateSalInstance()
         _exit( 1 );
     }
 
+    // acquire SolarMutex
+    pInst->AcquireYieldMutex( 1 );
+
     return pInst;
 }
 
 void DestroySalInstance( SalInstance *pInst )
 {
+    // release SolarMutex
+    pInst->ReleaseYieldMutex();
+
     delete pInst;
     if( pCloseModule )
         osl_unloadModule( pCloseModule );
