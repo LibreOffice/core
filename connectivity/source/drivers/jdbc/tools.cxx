@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tools.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 12:48:03 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:05:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,8 @@ java_util_Properties* connectivity::createStringPropertyArray(JNIEnv *pEnv,const
             pBegin->Name.compareToAscii("IsPasswordRequired") &&
             pBegin->Name.compareToAscii("IsAutoRetrievingEnabled") &&
             pBegin->Name.compareToAscii("AutoRetrievingStatement") &&
+            pBegin->Name.compareToAscii("UseCatalogInSelect") &&
+            pBegin->Name.compareToAscii("UseSchemaInSelect") &&
             pBegin->Name.compareToAscii("AutoIncrementCreation") &&
             pBegin->Name.compareToAscii("Extension") &&
             pBegin->Name.compareToAscii("NoNameLengthLimit") &&
