@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: sb $ $Date: 2001-06-20 07:57:05 $
+#   last change: $Author: cd $ $Date: 2001-07-26 07:16:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -129,7 +129,6 @@ SHL1IMPLIB= isfx
 
 SHL1STDLIBS+=\
                 $(FWELIB) \
-        $(AUTOMATIONLIB) \
         $(BASICLIB) \
         $(VOSLIB) \
         $(SALLIB) \
