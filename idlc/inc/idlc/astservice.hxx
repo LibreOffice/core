@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astservice.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-05-18 15:33:49 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:42:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ public:
         {}
     virtual ~AstService() {}
 
-    virtual sal_Bool dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader);
+    virtual sal_Bool dump(RegistryKey& rKey);
 };
 
 #endif // _IDLC_ASTSERVICE_HXX_
