@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-05 10:58:51 $
+ *  last change: $Author: tl $ $Date: 2001-07-17 07:37:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1599,7 +1599,12 @@ void SmViewShell::Activate( BOOL bIsMDIActivate )
     SmEditWindow *pEdit = GetEditWindow();
     if ( pEdit )
     {
-//        pEdit->SetText( GetDoc()->GetEditEngine().GetText( LINEEND_LF ) );
+        //! Since there is no way to be informed if a "drag and drop"
+        //! event has taken place, we call SetText here in order to
+        //! syncronize the GraphicWindow display with the text in the
+        //! EditEngine.
+        SmDocShell *pDoc = GetDoc();
+        pDoc->SetText( pDoc->GetEditEngine().GetText( LINEEND_LF ) );
 
         if ( bIsMDIActivate )
             pEdit->GrabFocus();
