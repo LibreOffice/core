@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2001-06-08 13:47:30 $
+ *  last change: $Author: os $ $Date: 2001-06-29 13:30:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2411,6 +2411,9 @@ int SwTransferable::_PasteDBData( TransferableDataHelper& rData,
             SfxUsrAnyItem* pConnectionItem = 0;
             SfxUsrAnyItem* pColumnItem = 0;
             SfxUsrAnyItem* pSourceItem = 0;
+            SfxUsrAnyItem* pCommandItem = 0;
+            SfxUsrAnyItem* pCommandTypeItem = 0;
+
             DataFlavorExVector& rVector = rData.GetDataFlavorExVector();
             if(OColumnTransferable::canExtractColumnDescriptor(rVector, CTF_COLUMN_DESCRIPTOR))
             {
@@ -2418,6 +2421,9 @@ int SwTransferable::_PasteDBData( TransferableDataHelper& rData,
                                                                     rData);
                 pConnectionItem = new SfxUsrAnyItem(FN_DB_CONNECTION_ANY, aColDesc[daConnection]);
                 pColumnItem = new SfxUsrAnyItem(FN_DB_COLUMN_ANY, aColDesc[daColumnObject]);
+                pSourceItem = new SfxUsrAnyItem(FN_DB_DATA_SOURCE_ANY, aColDesc[daDataSource]);
+                pCommandItem = new SfxUsrAnyItem(FN_DB_DATA_COMMAND_ANY, aColDesc[daCommand]);
+                pCommandTypeItem = new SfxUsrAnyItem(FN_DB_DATA_COMMAND_TYPE_ANY, aColDesc[daCommandType]);
             }
 
             SwView& rView = rSh.GetView();
@@ -2427,9 +2433,14 @@ int SwTransferable::_PasteDBData( TransferableDataHelper& rData,
             SfxStringItem aDataDesc( nWh, sTxt );
             rView.GetViewFrame()->GetDispatcher()->Execute(
                                 nWh, SFX_CALLMODE_ASYNCHRON, &aDataDesc,
-                                pConnectionItem, pColumnItem, 0L);
+                                pConnectionItem, pColumnItem,
+                                pSourceItem, pCommandItem, pCommandTypeItem,
+                                0L);
             delete pConnectionItem;
             delete pColumnItem;
+            delete pSourceItem;
+            delete pCommandItem;
+            delete pCommandTypeItem;
         }
         else
         {

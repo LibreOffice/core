@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-06-25 13:42:09 $
+ *  last change: $Author: os $ $Date: 2001-06-29 13:30:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1033,7 +1033,9 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_DB_INSERT_COLUMNS            (FN_QUERY2 + 2)     /* insert data into text/table/as fields*/
 #define FN_DB_CONNECTION_ANY            (FN_QUERY2 + 3)
 #define FN_DB_COLUMN_ANY                (FN_QUERY2 + 4)
-
+#define FN_DB_DATA_SOURCE_ANY           (FN_QUERY2 + 5)
+#define FN_DB_DATA_COMMAND_ANY          (FN_QUERY2 + 6)
+#define FN_DB_DATA_COMMAND_TYPE_ANY     (FN_QUERY2 + 7)
 
 /*--------------------------------------------------------------------
     Bereich: Envelope

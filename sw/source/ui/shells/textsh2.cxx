@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-06-20 14:40:59 $
+ *  last change: $Author: os $ $Date: 2001-06-29 13:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,18 +247,31 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
 
         case FN_QRY_INSERT_FIELD:
             {
-                String sSbaData = ((const SfxStringItem&)pArgs->Get(FN_QRY_INSERT_FIELD)).GetValue();
                 const SfxPoolItem* pConnectionItem = 0;
                 const SfxPoolItem* pColumnItem = 0;
+                const SfxPoolItem* pSourceItem = 0;
+                const SfxPoolItem* pCommandItem = 0;
+                const SfxPoolItem* pCommandTypeItem = 0;
+
                 pArgs->GetItemState(FN_DB_CONNECTION_ANY, FALSE, &pConnectionItem);
                 pArgs->GetItemState(FN_DB_COLUMN_ANY, FALSE, &pColumnItem);
+                pArgs->GetItemState(FN_DB_DATA_SOURCE_ANY, FALSE, &pSourceItem);
+                pArgs->GetItemState(FN_DB_DATA_COMMAND_ANY, FALSE, &pCommandItem);
+                pArgs->GetItemState(FN_DB_DATA_COMMAND_TYPE_ANY, FALSE, &pCommandTypeItem);
 
-                String sDBName = sSbaData.GetToken(0, DB_DD_DELIM);
+                OUString sSource, sCommand;
+                sal_Int32 nCommandType = 0;
+                if(pSourceItem)
+                    ((SfxUsrAnyItem*)pSourceItem)->GetValue() >>= sSource;
+                if(pCommandItem)
+                    ((SfxUsrAnyItem*)pCommandItem)->GetValue() >>= sCommand;
+                if(pCommandTypeItem)
+                    ((SfxUsrAnyItem*)pCommandTypeItem)->GetValue() >>= nCommandType;
+                String sDBName = sSource;
                 sDBName += DB_DELIM;
-                sDBName += sSbaData.GetToken(1, DB_DD_DELIM);
+                sDBName += (String)sCommand;
                 sDBName += DB_DELIM;
-                BOOL bTable = sSbaData.GetToken(2, DB_DD_DELIM) == C2S("1");
-                sDBName += sSbaData.GetToken(3, DB_DD_DELIM);   // Column name
+                sDBName += String::CreateFromInt32(nCommandType);
 
                 SwFldMgr aFldMgr(GetShellPtr());
                 SwInsertFld_Data aData(TYP_DBFLD, 0, sDBName, aEmptyStr, 0, FALSE, TRUE);
