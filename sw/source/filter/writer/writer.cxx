@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-06 11:13:10 $
+ *  last change: $Author: os $ $Date: 2001-09-28 07:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -655,109 +655,4 @@ ULONG StgWriter::Write( SwPaM& rPaM, SvStorage& rStg, const String* pFName )
 
     return nRet;
 }
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/writer/writer.cxx,v 1.9 2001-03-06 11:13:10 mib Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.8  2001/02/27 14:59:28  os
-      Complete use of DefaultNumbering component
-
-      Revision 1.7  2001/01/22 12:29:52  mib
-      Block mode for Writers added
-
-      Revision 1.6  2000/11/27 19:09:58  jp
-      Bug #80732#: AddPutEditEngFontsInAttrPool: use the correct Itempool
-
-      Revision 1.5  2000/11/20 11:15:52  mib
-      create impl when adding fonts to pool (required for XML filter)
-
-      Revision 1.4  2000/11/13 17:26:24  jp
-      new method PutCJKandCTLFontsInAttrPool
-
-      Revision 1.3  2000/11/01 19:31:51  jp
-      Writer:CopyLocalFileToINet: export of mail graphics removed and SvFileStream access removed
-
-      Revision 1.2  2000/10/17 15:13:50  os
-      Change: SfxMedium Ctor
-
-      Revision 1.1.1.1  2000/09/18 17:14:57  hr
-      initial import
-
-      Revision 1.103  2000/09/18 16:04:55  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.102  2000/08/04 16:25:50  jp
-      read/write unicode ascii files
-
-      Revision 1.101  2000/06/26 13:01:26  os
-      INetURLObject::SmartRelToAbs removed
-
-      Revision 1.100  2000/06/13 09:43:46  os
-      using UCB
-
-      Revision 1.99  2000/05/08 16:51:53  jp
-      Changes for Unicode
-
-      Revision 1.98  1999/10/13 10:38:29  jp
-      PutEditEngFontsInAtrPool - check if the editenginepool exist
-
-      Revision 1.97  1999/10/12 20:04:37  jp
-      Writer: put EditEngine fonts into the writer pool
-
-      Revision 1.96  1999/08/12 10:19:56  MIB
-      Don\'t delete impl if it hasn\'t been set (for XML filter)
-
-
-      Rev 1.95   12 Aug 1999 12:19:56   MIB
-   Don't delete impl if it hasn't been set (for XML filter)
-
-      Rev 1.94   30 Jun 1999 18:53:20   JP
-   dtor for impl class
-
-      Rev 1.93   24 Jun 1999 22:51:34   JP
-   new: Writer with internal Impl-structur, build Bookmark table sortet by nodes
-
-      Rev 1.92   23 Jun 1999 19:13:40   JP
-   interface of Writer::FindPos_Bkmk has changed
-
-      Rev 1.91   16 Jun 1999 19:52:14   JP
-   Change interface of base class Writer
-
-      Rev 1.90   28 Jan 1999 14:21:28   JP
-   GraphicFilter-SS hat sich geaendert - Task #59174#
-
-      Rev 1.89   30 Oct 1998 18:30:02   JP
-   Task #58596#: neues Flag an der Writerklasse -> schreibe nur die 1. Tabelle
-
-      Rev 1.88   27 Jun 1998 16:02:08   JP
-   Writer mit neuen Flags; fuer den ASCII-Writer, etwas aufgeraeumt
-
-      Rev 1.87   23 Apr 1998 19:07:44   MIB
-   fix #49729#: Stream beim kopieren von Grafiken ins INet schliessen
-
-      Rev 1.86   22 Jan 1998 20:02:56   JP
-   CTOR des SwPaM umgestellt
-
-      Rev 1.85   26 Nov 1997 14:29:14   MA
-   headerfiles
-
-      Rev 1.84   03 Nov 1997 14:12:48   MA
-   precomp entfernt
-
-      Rev 1.83   13 Oct 1997 16:06:34   JP
-   pNext vom Ring wurde privat; zugriff ueber GetNext()
-
-      Rev 1.82   09 Oct 1997 14:26:24   JP
-   Umstellung NodeIndex/-Array/BigPtrArray
-
-      Rev 1.81   03 Sep 1997 11:59:44   JP
-   zusaetzliches include von docary
-
-*************************************************************************/
 

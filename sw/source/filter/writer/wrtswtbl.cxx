@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtswtbl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-13 09:31:49 $
+ *  last change: $Author: os $ $Date: 2001-09-28 07:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -936,30 +936,4 @@ SwWriteTable::SwWriteTable( const SwHTMLTableLayout *pLayoutInfo )
     if( bCollectBorderWidth && !nBorder )
         nBorder = nInnerBorder;
 }
-
-
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/writer/wrtswtbl.cxx,v 1.2 2000-12-13 09:31:49 mib Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.1.1.1  2000/09/18 17:14:57  hr
-      initial import
-
-      Revision 1.3  2000/09/18 16:04:55  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.2  2000/03/03 15:22:02  os
-      StarView remainders removed
-
-      Revision 1.1  1999/10/29 17:38:03  jp
-      class for build a '2D-Table' from a SwTable
-
-
-*************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrt_fn.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:57 $
+ *  last change: $Author: os $ $Date: 2001-09-28 07:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,69 +162,5 @@ Writer& Out( const SwNodeFnTab pTab, SwNode& rNode, Writer & rWrt )
         (*pOut)( rWrt, *pCNd );
     return rWrt;
 }
-
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/writer/wrt_fn.cxx,v 1.1.1.1 2000-09-18 17:14:57 hr Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.32  2000/09/18 16:04:55  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.31  1999/07/06 12:55:38  JP
-      Out_SfxItemSet: test to default items optional
-
-
-      Rev 1.30   06 Jul 1999 14:55:38   JP
-   Out_SfxItemSet: test to default items optional
-
-      Rev 1.29   26 Nov 1997 14:29:14   MA
-   headerfiles
-
-      Rev 1.28   03 Nov 1997 14:12:48   MA
-   precomp entfernt
-
-      Rev 1.27   22 Jan 1997 12:01:18   JP
-   neu: Tabellen Box Attribute
-
-      Rev 1.26   16 Oct 1996 16:58:54   JP
-   unbenutzte Methoden entfernt
-
-      Rev 1.25   01 Jul 1996 16:03:14   MA
-   includes
-
-      Rev 1.24   22 Mar 1996 14:52:12   SWG
-   include hinzugefuegt
-
-      Rev 1.23   24 Nov 1995 17:24:42   OM
-   PCH->PRECOMPILED
-
-      Rev 1.22   25 Oct 1994 15:57:12   MA
-   PreHdr.
-
-      Rev 1.21   04 Oct 1994 16:34:06   JP
-   Out_SfxItemSet: optimiert
-
-      Rev 1.20   28 Sep 1994 12:37:34   JP
-   neue Methode: Out_SfxItemSet
-
-      Rev 1.19   25 Aug 1994 18:09:12   JP
-   Umstellung Attribute (von SwHint -> SfxPoolItem)
-
-      Rev 1.18   15 Feb 1994 15:31:30   MI
-   handsegmentierung
-
-      Rev 1.17   28 Jan 1994 11:34:06   MI
-   TCOV() entfernt, SW_... nach SEG_... umbenannt
-
-      Rev 1.16   13 Jan 1994 08:31:32   MI
-   Segmentierung per #define ermoeglicht
-
-*************************************************************************/
 
 
