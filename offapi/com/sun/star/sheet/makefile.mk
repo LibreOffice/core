@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: sab $ $Date: 2002-09-27 11:03:13 $
+#   last change: $Author: nn $ $Date: 2002-10-22 13:23:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -185,6 +185,7 @@ IDLFILES=\
     XCellFormatRangesSupplier.idl\
     XCellRangeAddressable.idl\
     XCellRangeData.idl\
+    XCellRangeFormula.idl\
     XCellRangeMovement.idl\
     XCellRangeReferrer.idl\
     XCellRangesQuery.idl\
