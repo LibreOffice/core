@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-31 11:30:22 $
+ *  last change: $Author: mt $ $Date: 2001-06-12 13:08:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1558,7 +1558,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
 
     sal_uInt16 nBreakInLine = nPortionStart - pLine->GetStart();
     sal_uInt16 nMax = nBreakInLine + pPortion->GetLen();
-    while ( ( nBreakInLine < nMax ) && ( pLine->GetCharPosArray()[nBreakInLine] <= nRemainingWidth ) )
+    while ( ( nBreakInLine < nMax ) && ( pLine->GetCharPosArray()[nBreakInLine] < nRemainingWidth ) )
         nBreakInLine++;
     sal_uInt16 nMaxBreakPos = nBreakInLine + pLine->GetStart();
 
