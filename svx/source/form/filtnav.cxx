@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 10:56:32 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 10:05:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::util;
 using namespace ::svxform;
 using namespace ::connectivity::simple;
 using namespace ::connectivity;
@@ -1027,9 +1026,9 @@ sal_Bool FmFilterModel::ValidateText(FmFilterItem* pItem, UniString& rText, UniS
 
     OStaticDataAccessTools aStaticTools;
     Reference< XConnection > xConnection(aStaticTools.getRowSetConnection(Reference< XRowSet > (m_xController->getModel(), UNO_QUERY)));
-    Reference< XNumberFormatsSupplier >  xFormatSupplier = aStaticTools.getNumberFormats(xConnection, sal_True);
+    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xFormatSupplier = aStaticTools.getNumberFormats(xConnection, sal_True);
 
-    Reference< XNumberFormatter >  xFormatter(m_xORB->createInstance(FM_NUMBER_FORMATTER), UNO_QUERY);
+    Reference< ::com::sun::star::util::XNumberFormatter >  xFormatter(m_xORB->createInstance(FM_NUMBER_FORMATTER), UNO_QUERY);
     xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
 
     ::rtl::OUString aErr, aTxt(rText);

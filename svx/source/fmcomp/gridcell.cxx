@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:13:38 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 10:02:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,6 @@ using namespace ::comphelper;
 using namespace ::svt;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::beans;
@@ -950,7 +949,7 @@ void DbCellControl::Paint( OutputDevice& _rDev, const Rectangle& _rRect )
 }
 
 //------------------------------------------------------------------------------
-void DbCellControl::Paint( OutputDevice& _rDev, const Rectangle& _rRect, const Reference< XColumn >& _rxField, const Reference< XNumberFormatter >& _rxFormatter )
+void DbCellControl::Paint( OutputDevice& _rDev, const Rectangle& _rRect, const Reference< XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter )
 {
     m_pPainter->SetText( GetFormatText( _rxField, _rxFormatter ) );
     Paint( _rDev, _rRect );
@@ -1119,7 +1118,7 @@ CellControllerRef DbTextField::CreateController() const
 }
 
 //------------------------------------------------------------------------------
-void DbTextField::Paint( OutputDevice& _rDev, const Rectangle& _rRect, const Reference< XColumn >& _rxField, const Reference< XNumberFormatter >& _rxFormatter )
+void DbTextField::Paint( OutputDevice& _rDev, const Rectangle& _rRect, const Reference< XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter )
 {
     if ( m_pPainterImplementation )
         m_pPainterImplementation->SetText( GetFormatText( _rxField, _rxFormatter, NULL ) );
@@ -1131,7 +1130,7 @@ void DbTextField::Paint( OutputDevice& _rDev, const Rectangle& _rRect, const Ref
 }
 
 //------------------------------------------------------------------------------
-String DbTextField::GetFormatText(const Reference< XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter, Color** ppColor)
+String DbTextField::GetFormatText(const Reference< XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor)
 {
     ::rtl::OUString aString;
     if ( _rxField.is() )
@@ -1808,7 +1807,7 @@ void DbNumericField::implAdjustGenericFieldSetting( const Reference< XPropertySe
 
         // dem Field und dem Painter einen Formatter spendieren
         // zuerst testen, ob ich von dem Service hinter einer Connection bekommen kann
-        Reference< XNumberFormatsSupplier >  xSupplier;
+        Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier;
         Reference< XRowSet > xForm;
         if ( m_rColumn.GetParent().getDataSource() )
             xForm = Reference< XRowSet >( ( Reference< XInterface > )*m_rColumn.GetParent().getDataSource(), UNO_QUERY );
@@ -3218,7 +3217,7 @@ FmXEditCell::FmXEditCell(DbGridColumn* pColumn, DbCellControl* pControl)
 }
 
 //------------------------------------------------------------------
-void FmXEditCell::Paint( OutputDevice& _rDev, const Rectangle& _rRect, const Reference< XColumn >& _rxField, const Reference< XNumberFormatter >& _rxFormatter )
+void FmXEditCell::Paint( OutputDevice& _rDev, const Rectangle& _rRect, const Reference< XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter )
 {
     m_pCellControl->Paint( _rDev, _rRect, _rxField, _rxFormatter );
 }

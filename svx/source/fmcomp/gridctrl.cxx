@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:32:30 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 10:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdb;
-using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::container;
 using namespace com::sun::star::accessibility;
@@ -1499,10 +1498,10 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
     // get a new formatter and data cursor
     m_xFormatter = NULL;
     OStaticDataAccessTools aStaticTools;
-    Reference< XNumberFormatsSupplier >  xSupplier = aStaticTools.getNumberFormats(aStaticTools.getRowSetConnection(_xCursor), sal_True);
+    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = aStaticTools.getNumberFormats(aStaticTools.getRowSetConnection(_xCursor), sal_True);
     if (xSupplier.is() && m_xServiceFactory.is())
     {
-        m_xFormatter =  Reference< XNumberFormatter >(
+        m_xFormatter =  Reference< ::com::sun::star::util::XNumberFormatter >(
             m_xServiceFactory->createInstance(FM_NUMBER_FORMATTER),
             UNO_QUERY);
         if (m_xFormatter.is())

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:13:25 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 10:02:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::util;
 
 using ::com::sun::star::sdbcx::XColumnsSupplier;
 using ::com::sun::star::frame::XDispatchProviderInterceptor;
@@ -792,7 +791,7 @@ void SAL_CALL FmXGridControl::draw( long x, long y ) throw( RuntimeException )
 //------------------------------------------------------------------------------
 void SAL_CALL FmXGridControl::setDesignMode(sal_Bool bOn) throw( RuntimeException )
 {
-    ModeChangeEvent aModeChangeEvent;
+    ::com::sun::star::util::ModeChangeEvent aModeChangeEvent;
 
     // --- <mutex_lock> ---
     {
@@ -835,7 +834,7 @@ void SAL_CALL FmXGridControl::setDesignMode(sal_Bool bOn) throw( RuntimeExceptio
     }
 
     // --- </mutex_lock> ---
-    NOTIFY_LISTENERS( maModeChangeListeners, XModeChangeListener, modeChanged, aModeChangeEvent );
+    NOTIFY_LISTENERS( maModeChangeListeners, ::com::sun::star::util::XModeChangeListener, modeChanged, aModeChangeEvent );
 }
 
 // XBoundComponent
@@ -1217,6 +1216,7 @@ sal_Int64 SAL_CALL FmXGridPeer::getSomething( const Sequence< sal_Int8 >& _rIden
 //------------------------------------------------------------------------------
 void FmXGridPeer::disposing(const EventObject& e) throw( RuntimeException )
 {
+using namespace ::com::sun::star::util;
     bool bKnownSender = false;
 
     Reference< XIndexContainer >  xCols( e.Source, UNO_QUERY );
