@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:40:17 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:50:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,9 @@
 #ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/NamedValue.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -193,6 +196,9 @@
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
 #endif
+#ifndef _COMPHELPER_STORAGEHELPER_HXX
+#include <comphelper/storagehelper.hxx>
+#endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
@@ -236,6 +242,7 @@
 
 //-----------------------------------------------------------------------------
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
@@ -768,10 +775,17 @@ void FileDialogHelper_Impl::updateVersions()
         if ( ( aObj.GetProtocol() == INET_PROT_FILE ) &&
             ( utl::UCBContentHelper::IsDocument( aObj.GetMainURL( INetURLObject::NO_DECODE ) ) ) )
         {
-            SvStorageRef pStor = new SvStorage( FALSE, aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ, 0 );
-            if( pStor->GetError() == SVSTREAM_OK )
+            try
             {
-                SfxVersionTableDtor* pVerTable = SfxMedium::GetVersionList( pStor ); // aMed.GetVersionList();
+                uno::Reference< embed::XStorage > xStorage = ::comphelper::OStorageHelper::GetStorageFromURL(
+                                                                aObj.GetMainURL( INetURLObject::NO_DECODE ),
+                                                                embed::ElementModes::READ );
+
+                DBG_ASSERT( xStorage.is(), "The method must return the storage or throw an exception!" );
+                if ( !xStorage.is() )
+                    throw uno::RuntimeException();
+
+                SfxVersionTableDtor* pVerTable = SfxMedium::GetVersionList( xStorage );
 
                 if ( pVerTable )
                 {
@@ -786,16 +800,20 @@ void FileDialogHelper_Impl::updateVersions()
                     delete pVersions;
                     delete pVerTable;
                 }
-                else
-                {
-                    SfxFilterFlags nMust = SFX_FILTER_IMPORT | SFX_FILTER_OWN;
-                    SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED | SFX_FILTER_STARONEFILTER;
-                    if ( SFX_APP()->GetFilterMatcher().GetFilter4ClipBoardId( pStor->GetFormat(), nMust, nDont ) )
-                    {
-                        aEntries.realloc( 1 );
-                        aEntries[0] = OUString( String ( SfxResId( STR_SFX_FILEDLG_ACTUALVERSION ) ) );
-                    }
-                }
+                // TODO/LATER: not sure that this information must be shown in future ( binfilter? )
+//REMOVE                    else
+//REMOVE                    {
+//REMOVE                        SfxFilterFlags nMust = SFX_FILTER_IMPORT | SFX_FILTER_OWN;
+//REMOVE                        SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED | SFX_FILTER_STARONEFILTER;
+//REMOVE                        if ( SFX_APP()->GetFilterMatcher().GetFilter4ClipBoardId( pStor->GetFormat(), nMust, nDont ) )
+//REMOVE                        {
+//REMOVE                            aEntries.realloc( 1 );
+//REMOVE                            aEntries[0] = OUString( String ( SfxResId( STR_SFX_FILEDLG_ACTUALVERSION ) ) );
+//REMOVE                        }
+//REMOVE                    }
+            }
+            catch( uno::Exception& )
+            {
             }
         }
     }
