@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: cd $ $Date: 2002-07-10 06:56:37 $
+ *  last change: $Author: cd $ $Date: 2002-08-16 14:14:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #ifndef BUILD_SOSL
 #include "ssoinit.hxx"
 #endif
+#include "javainteractionhandler.hxx"
 
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -160,6 +161,7 @@
 #endif
 
 #include <com/sun/star/beans/XMaterialHolder.hpp>
+#include <com/sun/star/java/XJavaVM.hpp>
 
 #ifndef _SOLAR_H
 #include <tools/solar.h>
@@ -443,7 +445,6 @@ ResMgr* Desktop::GetDesktopResManager()
     {
         String aMgrName = String::CreateFromAscii( "dkt" );
         aMgrName += String::CreateFromInt32(SOLARUPD); // current version number
-
         // Create desktop resource manager and bootstrap process
         // was successful. Use default way to get language specific message.
         if ( Application::IsInExecute() )
@@ -1274,6 +1275,15 @@ void Desktop::Main()
 
     ResMgr::SetReadStringHook( ReplaceStringHookProc );
     SetAppName( DEFINE_CONST_UNICODE("soffice") );
+
+    Reference< XCurrentContext > xCurrentContext;
+
+    if ( !Application::IsRemoteServer() )
+    {
+        JavaContext* pJavaContext = new JavaContext;
+        xCurrentContext = Reference< XCurrentContext >( (cppu::OWeakObject *)pJavaContext, UNO_QUERY );
+        pJavaContext->Initialize();
+    }
 
     // ----  Startup screen ----
     OpenStartupScreen();
