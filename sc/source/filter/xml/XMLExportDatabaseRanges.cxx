@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDatabaseRanges.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-03 06:06:30 $
+ *  last change: $Author: sab $ $Date: 2001-04-23 17:27:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -752,6 +752,13 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges(const com::sun::star::uno::R
                                         if (bOrientation)
                                             rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_orientation, sXML_column);
                                 }
+                            }
+                            sal_Int32 nRefresh( pDBData->GetRefreshDelay() );
+                            if( nRefresh )
+                            {
+                                rtl::OUStringBuffer sBuffer;
+                                SvXMLUnitConverter::convertTime( sBuffer, (double)nRefresh / 86400 );
+                                rExport.AddAttribute( XML_NAMESPACE_TABLE, sXML_refresh_delay, sBuffer.makeStringAndClear() );
                             }
                             SvXMLElementExport aElemDR(rExport, XML_NAMESPACE_TABLE, sXML_database_range, sal_True, sal_True);
                             rExport.CheckAttrList();

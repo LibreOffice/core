@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-05 10:57:41 $
+ *  last change: $Author: sab $ $Date: 2001-04-23 17:27:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,7 +398,8 @@ enum ScXMLDatabaseRangeAttrTokens
     XML_TOK_DATABASE_RANGE_ATTR_ORIENTATION,
     XML_TOK_DATABASE_RANGE_ATTR_CONTAINS_HEADER,
     XML_TOK_DATABASE_RANGE_ATTR_DISPLAY_FILTER_BUTTONS,
-    XML_TOK_DATABASE_RANGE_ATTR_TARGET_RANGE_ADDRESS
+    XML_TOK_DATABASE_RANGE_ATTR_TARGET_RANGE_ADDRESS,
+    XML_TOK_DATABASE_RANGE_ATTR_REFRESH_DELAY
 };
 
 enum ScXMLDatabaseRangeSourceSQLAttrTokens

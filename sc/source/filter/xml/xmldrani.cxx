@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldrani.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2001-04-23 09:44:43 $
+ *  last change: $Author: sab $ $Date: 2001-04-23 17:27:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlkywd.hxx>
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include <xmloff/xmluconv.hxx>
+#endif
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
@@ -157,6 +160,7 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
+    nRefresh(0),
     bIsSelection(sal_False),
     bKeepFormats(sal_False),
     bMoveCells(sal_False),
@@ -238,6 +242,13 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
             case XML_TOK_DATABASE_RANGE_ATTR_TARGET_RANGE_ADDRESS :
             {
                 sRangeAddress = sValue;
+            }
+            break;
+            case XML_TOK_DATABASE_RANGE_ATTR_REFRESH_DELAY :
+            {
+                double fTime;
+                if( SvXMLUnitConverter::convertTime( fTime, sValue ) )
+                    nRefresh = Max( (sal_Int32)(fTime * 86400.0), (sal_Int32)0 );
             }
             break;
         }
@@ -435,10 +446,6 @@ void ScXMLDatabaseRangeContext::EndElement()
                     }
                     if ( pDBData->HasImportParam() && !pDBData->HasImportSelection() )
                     {
-                        ULONG nRefresh = 0;
-//!!!!!!!
-//! TODO: (erAck 23.04.01) export/import refresh delay
-//!!!!!!!
                         pDBData->SetRefreshDelay( nRefresh );
                         pDBData->SetRefreshHandler( pDBCollection->GetRefreshHandler() );
                         pDBData->SetRefreshControl( pDoc->GetRefreshTimerControlAddress() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-06 14:47:00 $
+ *  last change: $Author: sab $ $Date: 2001-04-23 17:27:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -570,6 +570,7 @@ static __FAR_DATA SvXMLTokenMapEntry aDatabaseRangeAttrTokenMap[] =
     { XML_NAMESPACE_TABLE, sXML_contains_header,        XML_TOK_DATABASE_RANGE_ATTR_CONTAINS_HEADER         },
     { XML_NAMESPACE_TABLE, sXML_display_filter_buttons, XML_TOK_DATABASE_RANGE_ATTR_DISPLAY_FILTER_BUTTONS  },
     { XML_NAMESPACE_TABLE, sXML_target_range_address,   XML_TOK_DATABASE_RANGE_ATTR_TARGET_RANGE_ADDRESS    },
+    { XML_NAMESPACE_TABLE, sXML_refresh_delay,          XML_TOK_DATABASE_RANGE_ATTR_REFRESH_DELAY           },
     XML_TOKEN_MAP_END
 };
 
