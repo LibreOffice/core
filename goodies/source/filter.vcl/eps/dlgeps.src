@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2002-01-25 21:11:10 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 10:34:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,11 +316,11 @@ ModalDialog DLG_EXPORT_EPS
         Text = "~Farbe" ;
         Text [ ENGLISH ] = "~Color" ;
         TabStop = TRUE ;
-        Text[ italian ] = "~Colore";
+        Text[ italian ] = "Colore";
         Text[ portuguese_brazilian ] = "~Farbe";
         Text[ portuguese ] = "~Cor";
         Text[ danish ] = "~Farve";
-        Text[ french ] = "~Couleur";
+        Text[ french ] = "Couleur";
         Text[ swedish ] = "~Färg";
         Text[ dutch ] = "~Kleur";
         Text[ spanish ] = "~Color";
