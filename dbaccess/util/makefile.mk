@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-17 10:46:32 $
+#   last change: $Author: kz $ $Date: 2004-05-19 04:37:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -111,6 +111,7 @@ RES1FILELIST=\
     $(SRS)$/core_strings.srs
 
 RESLIB1NAME=$(TARGET)
+RESLIB1IMAGES=$(PRJ)$/res
 RESLIB1SRSFILES=$(RES1FILELIST)
 
 # --- database ui (dbu) -----------------------------------
@@ -177,6 +178,7 @@ SHL2STDLIBS+=		ole32.lib \
 .ENDIF
 
 RESLIB2NAME=$(TARGET2)
+RESLIB2IMAGES=$(PRJ)$/res
 RESLIB2SRSFILES=$(RES2FILELIST)
 
 # --- Targets ----------------------------------
