@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hjs $ $Date: 2003-08-18 14:45:30 $
+#   last change: $Author: rt $ $Date: 2004-09-08 14:04:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,8 +70,9 @@ TARGETTYPE=GUI
 .INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------
-
+.IF "$(WITH_MOZILLA)" != "NO"
 LIB1TARGET = $(SLB)$/plall.lib
+.ENDIF
 LIB1FILES  = \
     $(SLB)$/plbase.lib	\
     $(SHL1LINKLIB)
