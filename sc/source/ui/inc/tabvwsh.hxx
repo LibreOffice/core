@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-09 20:00:36 $
+ *  last change: $Author: nn $ $Date: 2000-11-13 19:25:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,10 @@ class ScDPObject;
 
 struct ScHeaderFieldData;
 
+namespace com { namespace sun { namespace star { namespace frame {
+    class XDispatchProviderInterceptor;
+} } } }
+
 
 enum ObjectSelectionType
 {
@@ -161,6 +165,10 @@ private:
     ScInputHandler*         pInputHandler;              // fuer OLE-Eingabezeile
 
     SvxBorderLine*          pCurFrameLine;
+
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::frame::XDispatchProviderInterceptor >
+                            xDisProvInterceptor;
 
     Point                   aWinPos;
 

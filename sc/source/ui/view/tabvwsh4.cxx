@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-09 20:01:35 $
+ *  last change: $Author: nn $ $Date: 2000-11-13 19:27:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@
 #include "dbcolect.hxx"     // fuer ReImport
 #include "reffact.hxx"
 #include "viewuno.hxx"
+#include "dispuno.hxx"
 #include "anyrefdg.hxx"
 #include "chgtrack.hxx"
 #include "cellsh.hxx"
@@ -1584,6 +1585,9 @@ void ScTabViewShell::Construct()
     }
 
     UpdateAutoFillMark();
+
+    // ScDispatchProviderInterceptor registers itself in ctor
+    xDisProvInterceptor = new ScDispatchProviderInterceptor( this );
 
     bFirstActivate = TRUE; // NavigatorUpdate aufschieben bis Activate()
 }
