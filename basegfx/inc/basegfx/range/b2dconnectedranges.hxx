@@ -1,0 +1,292 @@
+/*************************************************************************
+ *
+ *  $RCSfile: b2dconnectedranges.hxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:34:31 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _BGFX_RANGE_B2DCONNECTEDRANGES_HXX
+#define _BGFX_RANGE_B2DCONNECTEDRANGES_HXX
+
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
+
+#ifndef _BGFX_RANGE_B2DRANGE_HXX
+#include <basegfx/range/b2drange.hxx>
+#endif
+
+#include <list>
+#include <utility>
+#include <algorithm>
+
+
+namespace basegfx
+{
+    /** Calculate connected ranges from input ranges.
+
+        This template constructs a list of connected ranges from the
+        given input ranges. That is, the output will contain a set of
+        ranges, itself containing a number of input ranges, which will
+        be mutually non-intersecting.
+
+        Example:
+        <code>
+        -------------------
+        |          -------|
+        |          |     ||
+        | ---      |     ||
+        | | |      -------|        --------
+        | | +---------    |        |      |
+        | --+        |    |        |      |
+        |   |        |    |        --------
+        |   ----------    |
+        -------------------
+        </code
+
+        Here, the outer rectangles represent the output
+        ranges. Contained are the input rectangles that comprise these
+        output ranges.
+
+        @tpl UserData
+        User data to be stored along with the range, to later identify
+        which range went into which connected component. Must be
+        assignable, default- and copy-constructible.
+     */
+    template< typename UserData > class B2DConnectedRanges
+    {
+    public:
+        /// Type of the basic entity (rect + user data)
+        typedef ::std::pair< B2DRange, UserData > ComponentType;
+
+        /// List of (intersecting) components, plus overall bounds
+        struct ConnectedComponents
+        {
+            ::std::list< ComponentType >    maComponentList;
+            B2DRange                        maTotalBounds;
+        };
+
+        typedef ::std::list< ConnectedComponents > ConnectedComponentsType;
+
+
+        /// Create the range calculator
+        B2DConnectedRanges() :
+            maDisjunctAggregatesList(),
+            maTotalBounds()
+        {
+        }
+
+        /** Query total bounds of all added ranges.
+
+            @return the union bound rect over all added ranges.
+         */
+        B2DRange getBounds() const
+        {
+            return maTotalBounds;
+        }
+
+        /** Add an additional range.
+
+            This method integrates a new range into the connected
+            ranges lists. The method has a worst-case time complexity
+            of O(n^3), with n denoting the number of already added
+            ranges.
+         */
+        void addRange( const B2DRange&  rRange,
+                       const UserData&  rUserData )
+        {
+            // update own global bounds range
+            maTotalBounds.expand( rRange );
+
+            // assemble anything intersecting with rRange into
+            // this new connected component
+            ConnectedComponents aNewConnectedComponent;
+
+            // as at least rRange will be a member of
+            // aNewConnectedComponent (will be added below), can
+            // preset the overall bounds here.
+            aNewConnectedComponent.maTotalBounds = rRange;
+
+
+            //
+            //  STAGE 1: Search for intersecting maDisjunctAggregatesList entries
+            //  =================================================================
+            //
+
+            // if rRange is empty, it will intersect with no
+            // maDisjunctAggregatesList member. Thus, we can safe us
+            // the check.
+
+            if( !rRange.isEmpty() )
+            {
+                typename ConnectedComponentsType::iterator aCurrAggregate;
+                typename ConnectedComponentsType::iterator aLastAggregate;
+
+                // flag, determining whether we touched one or more of
+                // the maDisjunctAggregatesList entries. _If_ we did,
+                // we have to repeat the intersection process, because
+                // these changes might have generated new
+                // intersections.
+                bool                                    bSomeAggregatesChanged;
+
+                // loop, until bSomeAggregatesChanged stays false
+                do
+                {
+                    // only continue loop if 'intersects' branch below was hit
+                    bSomeAggregatesChanged = false;
+
+                    // iterate over all current members of maDisjunctAggregatesList
+                    for( aCurrAggregate=maDisjunctAggregatesList.begin(),
+                             aLastAggregate=maDisjunctAggregatesList.end();
+                         aCurrAggregate != aLastAggregate; )
+                    {
+                        // first check if current component's bounds
+                        // are empty. This ensures that distinct empty
+                        // components are not merged into one
+                        // aggregate. As a matter of fact, they have
+                        // no position and size.
+
+                        if( !aCurrAggregate->maTotalBounds.isEmpty() &&
+                            aCurrAggregate->maTotalBounds.overlaps( rRange ) )
+                        {
+                            // union the intersecting
+                            // maDisjunctAggregatesList element into
+                            // aNewConnectedComponent
+
+                            // calc union bounding box
+                            aNewConnectedComponent.maTotalBounds.expand( aCurrAggregate->maTotalBounds );
+
+                            // extract all aCurrAggregate components
+                            // to aNewConnectedComponent
+                            aNewConnectedComponent.maComponentList.splice(
+                                aNewConnectedComponent.maComponentList.end(),
+                                aCurrAggregate->maComponentList );
+
+                            // remove and delete aCurrCC element from
+                            // list (we've gutted it's content above).
+                            // list::erase() will update our iterator
+                            // with the predecessor here.
+                            aCurrAggregate = maDisjunctAggregatesList.erase( aCurrAggregate );
+
+                            // at least one aggregate changed, need to rescan everything
+                            bSomeAggregatesChanged = true;
+                        }
+                        else
+                        {
+                            aCurrAggregate++;
+                        }
+                    }
+                }
+                while( bSomeAggregatesChanged );
+            }
+
+            //
+            //  STAGE 2: Add newly generated CC list element
+            //  ============================================
+            //
+
+            // add new component to the end of the component list
+            aNewConnectedComponent.maComponentList.push_back(
+                ComponentType( rRange, rUserData ) );
+
+            // do some consistency checks (aka post conditions)
+            OSL_ENSURE( !aNewConnectedComponent.maComponentList.empty(),
+                        "B2DConnectedRanges::addRange(): empty aggregate list" );
+            OSL_ENSURE( !aNewConnectedComponent.maTotalBounds.isEmpty() ||
+                        (aNewConnectedComponent.maTotalBounds.isEmpty() &&
+                         aNewConnectedComponent.maComponentList.size() == 1),
+                        "B2DConnectedRanges::addRange(): empty ranges must be solitary");
+
+            // add aNewConnectedComponent as a new entry to
+            // maDisjunctAggregatesList
+            maDisjunctAggregatesList.push_back( aNewConnectedComponent );
+        }
+
+        /** Apply a functor to each of the disjunct component
+            aggregates.
+
+            @param aFunctor
+            Functor to apply. Must provide an operator( const ConnectedComponents& ).
+
+            @return a copy of the functor, as applied to all aggregates.
+         */
+        template< typename UnaryFunctor > UnaryFunctor forEachAggregate( UnaryFunctor aFunctor ) const
+        {
+            return ::std::for_each( maDisjunctAggregatesList.begin(),
+                                    maDisjunctAggregatesList.end(),
+                                    aFunctor );
+        }
+
+    private:
+        // default: disabled copy/assignment
+        B2DConnectedRanges(const B2DConnectedRanges&);
+        B2DConnectedRanges& operator=( const B2DConnectedRanges& );
+
+        /** Current list of disjunct sets of connected components
+
+            Each entry corresponds to one of the top-level rectangles
+            in the drawing above.
+         */
+        ConnectedComponentsType maDisjunctAggregatesList;
+
+        /** Global bound rect over all added ranges.
+         */
+        B2DRange                maTotalBounds;
+    };
+}
+
+#endif /* _BGFX_RANGE_B2DCONNECTEDRANGES_HXX */
