@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfsh.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-07-17 08:43:35 $
+ *  last change: $Author: os $ $Date: 2001-11-21 14:35:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,8 +519,10 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
             break;
         case SID_ATTR_GRAF_GAMMA:
             if( pItem )
-                aGrfSet.Put( SwGammaGrf(
-                            ((SfxUInt32Item*)pItem)->GetValue() / 100 ));
+            {
+                double fVal = ((SfxUInt32Item*)pItem)->GetValue();
+                aGrfSet.Put( SwGammaGrf(fVal/100. ));
+            }
             break;
         case SID_ATTR_GRAF_TRANSPARENCE:
             if( pItem )
