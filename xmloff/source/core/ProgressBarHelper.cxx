@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProgressBarHelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2001-11-26 11:05:51 $
+ *  last change: $Author: sab $ $Date: 2002-03-08 09:21:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@ ProgressBarHelper::ProgressBarHelper(const ::com::sun::star::uno::Reference < ::
     xStatusIndicator(xTempStatusIndicator),
     nReference(0),
     nValue(0),
+#ifndef PRODUCT
+    bFailure(sal_False),
+#endif
     bStrict(bTempStrict)
 {
 }
@@ -137,8 +140,13 @@ void ProgressBarHelper::SetValue(sal_Int32 nTempValue)
 //              fOldPercent = fPercent;
 //          }
         }
-        else
+#ifndef PRODUCT
+        else if (!bFailure)
+        {
             DBG_ERROR("tried to set a wrong value on the progressbar");
+            bFailure = sal_True;
+        }
+#endif
     }
 }
 
