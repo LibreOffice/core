@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-06 11:07:24 $
+ *  last change: $Author: sab $ $Date: 2002-08-16 12:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,9 @@
 #endif
 #ifndef _UTL_ACCESSIBLERELATIONSETHELPER_HXX_
 #include <unotools/accessiblerelationsethelper.hxx>
+#endif
+#ifndef _VCL_UNOHELP_HXX
+#include <vcl/unohelp.hxx>
 #endif
 
 using namespace ::rtl;
@@ -664,6 +667,8 @@ void ScAccessibleContextBase::CommitFocusGained() const
     aEvent.NewValue <<= AccessibleStateType::FOCUSED;
 
     CommitChange(aEvent);
+
+    ::vcl::unohelper::NotifyAccessibleStateEventGlobally(aEvent);
 }
 
 void ScAccessibleContextBase::CommitFocusLost() const
@@ -674,6 +679,8 @@ void ScAccessibleContextBase::CommitFocusLost() const
     aEvent.OldValue <<= AccessibleStateType::FOCUSED;
 
     CommitChange(aEvent);
+
+    vcl::unohelper::NotifyAccessibleStateEventGlobally(aEvent);
 }
 
 Rectangle ScAccessibleContextBase::GetBoundingBoxOnScreen(void) const
