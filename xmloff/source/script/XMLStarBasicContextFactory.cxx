@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStarBasicContextFactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-03 18:14:08 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:17:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ SvXMLImportContext* XMLStarBasicContextFactory::CreateContext(
     const Reference<XAttributeList> & xAttrList,
     XMLEventsImportContext* rEvents,
     const OUString& rApiEventName,
-    const OUString& rLanguage)
+    const OUString& rApiLanguage)
 {
     OUString sLibraryVal;
     OUString sMacroNameVal;
@@ -131,24 +131,42 @@ SvXMLImportContext* XMLStarBasicContextFactory::CreateContext(
 
         if (XML_NAMESPACE_SCRIPT == nPrefix)
         {
-            if (IsXMLToken(sLocalName, XML_LIBRARY))
-            {
-                sLibraryVal = xAttrList->getValueByIndex(nAttr);
-            }
-            if (IsXMLToken(sLocalName, XML_LOCATION))
-            {
-                sLibraryVal = xAttrList->getValueByIndex(nAttr);
-                if ( IsXMLToken( sLibraryVal, XML_APPLICATION ) )
-                    sLibraryVal =
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("StarOffice"));
-            }
-            else if (IsXMLToken(sLocalName, XML_MACRO_NAME))
+//          if (IsXMLToken(sLocalName, XML_LIBRARY))
+//          {
+//              sLibraryVal = xAttrList->getValueByIndex(nAttr);
+//          }
+//          if (IsXMLToken(sLocalName, XML_LOCATION))
+//          {
+//              sLibraryVal = xAttrList->getValueByIndex(nAttr);
+//                if ( IsXMLToken( sLibraryVal, XML_APPLICATION ) )
+//                    sLibraryVal =
+//                        OUString(RTL_CONSTASCII_USTRINGPARAM("StarOffice"));
+//          }
+//          else
+            if (IsXMLToken(sLocalName, XML_MACRO_NAME))
             {
                 sMacroNameVal = xAttrList->getValueByIndex(nAttr);
             }
             // else: ingore
         }
         // else: ignore
+    }
+
+    const OUString& rApp = GetXMLToken( XML_APPLICATION );
+    const OUString& rDoc = GetXMLToken( XML_DOCUMENT );
+    if( sMacroNameVal.getLength() > rApp.getLength()+1 &&
+        sMacroNameVal.copy(0,rApp.getLength()).equalsIgnoreAsciiCase( rApp ) &&
+        ':' == sMacroNameVal[rApp.getLength()] )
+    {
+        sLibraryVal = OUString(RTL_CONSTASCII_USTRINGPARAM("StarOffice"));
+        sMacroNameVal = sMacroNameVal.copy( rApp.getLength()+1 );
+    }
+    else if( sMacroNameVal.getLength() > rDoc.getLength()+1 &&
+        sMacroNameVal.copy(0,rDoc.getLength()).equalsIgnoreAsciiCase( rDoc ) &&
+        ':' == sMacroNameVal[rDoc.getLength()] )
+    {
+        sLibraryVal = rDoc;
+        sMacroNameVal = sMacroNameVal.copy( rDoc.getLength()+1 );
     }
 
     Sequence<PropertyValue> aValues(3);
