@@ -2,9 +2,9 @@
 #
 #   $RCSfile: converter.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2004-11-12 11:26:16 $
+#   last change: $Author: obo $ $Date: 2004-11-18 08:33:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -178,10 +178,13 @@ sub make_path_conform
 
     my $oldpath = $path;
 
-    while ( $path =~ /(^.*)(\Q$installer::globals::separator\E.*?)(\Q$installer::globals::separator\E\.\.)(\Q$installer::globals::separator\E.*$)/ )
+    while ( $path =~ /(^.*)(\Q$installer::globals::separator\E.*?[^\.])(\Q$installer::globals::separator\E\.\.)(\Q$installer::globals::separator\E.*$)/ )
     {
         my $part1 = $1;
         my $part2 = $4;
+
+        # $2 must not end with a "." ! Problem with "..\.."
+
         $path = $part1 . $part2;
     }
 
