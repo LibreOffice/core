@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lotus.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:50:25 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:48:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,21 +58,12 @@
  *
  *
  ************************************************************************/
-
-#ifdef PCH
-#include "filt_pch.hxx"
-#endif
-
-#pragma hdrstop
-
-//------------------------------------------------------------------------
+#include "lotimpop.hxx"
 
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
 
-#include "flttools.hxx"
 #include "scerrors.hxx"
-#include "lotimpop.hxx"
 #include "root.hxx"
 #include "filtopt.hxx"
 
@@ -131,7 +122,7 @@ FltError ScImportLotus123( SfxMedium& rMedium, ScDocument* pDocument, CharSet eS
     if( pLotusRoot->eFirstType == Lotus_WK3 )
     {// versuchen *.FM3-File zu laden
         INetURLObject aURL( rMedium.GetURLObject() );
-        aURL.setExtension( _STRINGCONST( "FM3" ) );
+        aURL.setExtension( CREATE_STRING( "FM3" ) );
         SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_STD_READ, TRUE );
         SvStream* pStream = aMedium.GetInStream();
         if ( pStream )
