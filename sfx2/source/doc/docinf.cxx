@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-07 15:00:11 $
+ *  last change: $Author: mba $ $Date: 2002-06-14 07:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #include <tools/urlobj.hxx>
 #include <svtools/saveopt.hxx>
 #include <tools/tenccvt.hxx>
+#include <svtools/useroptions.hxx>
 
 #include "docfilt.hxx"
 #include "fcontnr.hxx"
@@ -1632,4 +1633,15 @@ void SfxDocumentInfo::SetKeywords( const String& rVal )
     aKeywords = AdjustTextLen_Impl( rVal, SFXDOCINFO_KEYWORDLENMAX );
 }
 
-
+void SfxDocumentInfo::DeleteUserData( BOOL bUseAuthor )
+{
+    SfxStamp aCreated;
+    if ( bUseAuthor  )
+        aCreated.SetName( SvtUserOptions().GetFullName() );
+    SetCreated( aCreated );
+    SfxStamp aInvalid( TIMESTAMP_INVALID_DATETIME );
+    SetChanged( aInvalid );
+    SetPrinted( aInvalid );
+    SetTime( 0L );
+    SetDocumentNumber( 1 );
+}
