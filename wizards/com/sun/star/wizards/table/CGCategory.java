@@ -2,9 +2,9 @@
 *
 *  $RCSfile: CGCategory.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: pjunck $ $Date: 2004-10-27 13:37:15 $
+*  last change: $Author: vg $ $Date: 2005-02-21 14:00:16 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -57,16 +57,17 @@
 *  Contributor(s): _______________________________________
 *
 */
-
 package com.sun.star.wizards.table;
 
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XNameAccess;
+import com.sun.star.lang.Locale;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Configuration;
+import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.Properties;
 
@@ -106,7 +107,8 @@ public class CGCategory{
     public String[] getTableNames(){
     try {
         xNameAccessTablesNode = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xNameAccessCurBusinessNode.getByName("Tables"));
-        return Configuration.getNodeDisplayNames(xNameAccessTablesNode);
+        String[] sTableNames = Configuration.getNodeDisplayNames(xNameAccessTablesNode);
+        return sTableNames;
     } catch (Exception e) {
         e.printStackTrace(System.out);
         return null;

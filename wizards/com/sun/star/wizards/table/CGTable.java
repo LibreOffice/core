@@ -2,9 +2,9 @@
 *
 *  $RCSfile: CGTable.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: pjunck $ $Date: 2004-10-27 13:37:26 $
+*  last change: $Author: vg $ $Date: 2005-02-21 14:00:31 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -57,7 +57,6 @@
 *  Contributor(s): _______________________________________
 *
 */
-
 package com.sun.star.wizards.table;
 
 
@@ -69,6 +68,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.ConfigGroup;
 import com.sun.star.wizards.common.Configuration;
+import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
 
 
@@ -97,10 +97,16 @@ public class CGTable{
 
     public String[] getFieldNames(boolean _bgetbyShortName){
     try {
+        String[] fieldnames = null;
         if (_bgetbyShortName)
-            return Configuration.getNodeChildNames(xNameAccessFieldsNode, "ShortName");
+            fieldnames = Configuration.getNodeChildNames(xNameAccessFieldsNode, "ShortName");
         else
-            return Configuration.getNodeChildNames(xNameAccessFieldsNode, "Name");
+            fieldnames = Configuration.getNodeChildNames(xNameAccessFieldsNode, "Name");
+
+        for (int i = 0;i < fieldnames.length; i++){
+            fieldnames[i] = Desktop.removeSpecialCharacters(xMSF, Configuration.getOfficeLocale(xMSF), fieldnames[i]);
+        }
+        return fieldnames;
     } catch (Exception e) {
         e.printStackTrace(System.out);
         return null;
