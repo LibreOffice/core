@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.71 $
+#   $Revision: 1.72 $
 #
-#   last change: $Author: hr $ $Date: 2004-03-08 14:11:03 $
+#   last change: $Author: obo $ $Date: 2004-03-17 16:38:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -148,6 +148,8 @@ UNOIDLDBFILES= \
     $(UCR)$/dcssframe.db \
     $(UCR)$/dcssui.db \
     $(UCR)$/dcssfstatus.db \
+    $(UCR)$/dcssgeometry.db \
+    $(UCR)$/dcssrendering.db \
     $(UCR)$/dcssform.db \
     $(UCR)$/dcssformcomp.db \
     $(UCR)$/dcsstable.db
