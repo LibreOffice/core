@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwd.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:16:45 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:38:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text[ japanese ] = "γƒ‘γ‚Ήγƒ―γƒΌγƒ‰(~P)";
         Text[ chinese_traditional ] = "ε―†ηΆΌ(~P)";
         Text[ arabic ] = "ίαγΙ ΗαΣΡ";
-        Text[ greek ] = "Κωδικός πρόσβασης";
+        Text[ greek ] = "Κ~ωδικός πρόσβασης";
         Text[ korean ] = "μ•”νΈ(~P)";
         Text[ turkish ] = "ήifre";
         Text[ language_user1 ] = " ";
@@ -135,7 +135,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text[ japanese ] = "ζ—§γƒ‘γ‚Ήγƒ―γƒΌγƒ‰";
         Text[ chinese_traditional ] = "θε―†ηΆΌ";
         Text[ arabic ] = "ήΟνγΙ";
-        Text[ greek ] = "Παλιό";
+        Text[ greek ] = "Παλιός κωδικός πρόσβασης";
         Text[ korean ] = "μ΄μ „ μ•”νΈ";
         Text[ turkish ] = "Eski Parola";
         Text[ language_user1 ] = " ";
@@ -168,7 +168,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text[ japanese ] = "γƒ‘γ‚Ήγƒ―γƒΌγƒ‰(~S)";
         Text[ chinese_traditional ] = "ε―†ηΆΌ(~S)";
         Text[ arabic ] = "ίαγΙ ΗαΣΡ";
-        Text[ greek ] = "Κωδικός πρόσβασης";
+        Text[ greek ] = "Κω~δικός πρόσβασης";
         Text[ korean ] = "μ•”νΈ(~S)";
         Text[ turkish ] = "ήifre";
         Text[ language_user1 ] = " ";
@@ -196,7 +196,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text[ english_us ] = "Confi~rm";
         Text[ portuguese ] = "~Confirmar";
         Text[ russian ] = "Οξδςβεπδθςό";
-        Text[ greek ] = "Επανάληψη";
+        Text[ greek ] = "Επι~βεβαίωση";
         Text[ dutch ] = "~Bevestigen";
         Text[ french ] = "Confirmation";
         Text[ spanish ] = "~Repetir";
@@ -247,7 +247,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text[ japanese ] = "ζ–°γ—γ„γƒ‘γ‚Ήγƒ―γƒΌγƒ‰";
         Text[ chinese_traditional ] = "ζ–°ε―†ηΆΌ";
         Text[ arabic ] = "ΜΟνΟΙ";
-        Text[ greek ] = "Νέος";
+        Text[ greek ] = "Νέος κωδικός πρόσβασης";
         Text[ korean ] = "μƒ μ•”νΈ";
         Text[ turkish ] = "Yeni ώifre";
         Text[ language_user1 ] = " ";
@@ -295,7 +295,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text[ japanese ] = "η„΅εΉγªγƒ‘γ‚Ήγƒ―γƒΌγƒ‰";
         Text[ chinese_traditional ] = "ε―†ηΆΌη„΅ζ•";
         Text[ arabic ] = "ίαγΙ ΣΡ ΫνΡ ΥΗαΝΙ";
-        Text[ greek ] = "Άκυρος κωδικός πρόσβασης";
+        Text[ greek ] = "Ο κωδικός πρόσβασης δεν είναι έγκυρος";
         Text[ korean ] = "μ•”νΈκ°€ μλª»λμ—μµλ‹λ‹¤.";
         Text[ turkish ] = "Geηersiz Parola";
         Text[ language_user1 ] = " ";
@@ -326,7 +326,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text[ japanese ] = "γƒ‘γ‚Ήγƒ―γƒΌγƒ‰γδΈ€θ‡΄γ—γΎγ›γ‚“";
         Text[ chinese_traditional ] = "ε―†ηΆΌη„΅ζ•";
         Text[ arabic ] = "ίαγΗΚ ΗαΣΡ ΫνΡ γΚΨΗΘήΙ";
-        Text[ greek ] = "Οι κωδικοί πρόσβασης δεν συμπίπτουν";
+        Text[ greek ] = "Οι κωδικοί πρόσβασης δεν συμφωνούν";
         Text[ korean ] = "μ•”νΈκ°€ μΌμΉν•μ§€ μ•μµλ‹λ‹¤.";
         Text[ turkish ] = "Parolalar uyuώmuyor";
         Text[ language_user1 ] = " ";
@@ -366,6 +366,7 @@ ModalDialog RID_SVXDLG_PASSWORD
     Text[ slovak ] = "ZmeniΕ¥ heslo";
 };
  // ********************************************************************** EOF
+
 
 
 
