@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-02 07:28:42 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:41:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,11 +313,14 @@ void __EXPORT ScFilterListBox::SelectHdl()
     }
 }
 
+// ============================================================================
+
 // use a System floating window for the above filter listbox
 class ScFilterFloatingWindow : public FloatingWindow
 {
 public:
     ScFilterFloatingWindow( Window* pParent, WinBits nStyle = WB_STDFLOATWIN );
+    virtual ~ScFilterFloatingWindow();
     // required for System FloatingWindows that will not process KeyInput by themselves
     virtual Window* GetPreferredKeyInputWindow();
 };
@@ -326,15 +329,21 @@ ScFilterFloatingWindow::ScFilterFloatingWindow( Window* pParent, WinBits nStyle 
     FloatingWindow( pParent, nStyle|WB_SYSTEMWINDOW ) // make it a system floater
     {}
 
+ScFilterFloatingWindow::~ScFilterFloatingWindow()
+{
+    EndPopupMode();
+}
+
 Window* ScFilterFloatingWindow::GetPreferredKeyInputWindow()
 {
     // redirect keyinput in the child window
     return GetWindow(WINDOW_FIRSTCHILD) ? GetWindow(WINDOW_FIRSTCHILD) : NULL;    // will be the FilterBox
 }
 
+// ============================================================================
+
 #ifdef AUTOFILTER_POPUP
 
-//==================================================================
 class AutoFilterPopup : public PopupMenu
 {
 public:
@@ -439,7 +448,8 @@ ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhic
             aCurMousePos( 0,0 ),
             nPaintCount( 0 ),
             bNeedsRepaint( FALSE ),
-            bAutoMarkVisible( FALSE )
+            bAutoMarkVisible( FALSE ),
+            bListValButton( FALSE )
 {
     switch(eWhich)
     {
@@ -479,8 +489,6 @@ ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhic
 __EXPORT ScGridWindow::~ScGridWindow()
 {
     delete pFilterBox;
-    if (pFilterFloat)
-        pFilterFloat->EndPopupMode();
     delete pFilterFloat;
     delete pNoteMarker;
 }
@@ -493,8 +501,6 @@ void __EXPORT ScGridWindow::Resize( const Size& rSize )
 void ScGridWindow::ClickExtern()
 {
     DELETEZ(pFilterBox);
-    if (pFilterFloat)
-        pFilterFloat->EndPopupMode();
     DELETEZ(pFilterFloat);
 }
 
@@ -509,8 +515,6 @@ IMPL_LINK( ScGridWindow, PopupModeEndHdl, FloatingWindow*, pFloat )
 void ScGridWindow::DoScenarioMenue( const ScRange& rScenRange )
 {
     delete pFilterBox;
-    if (pFilterFloat)
-        pFilterFloat->EndPopupMode();
     delete pFilterFloat;
 
     USHORT nCol = rScenRange.aEnd.Col();        // Zelle unterhalb des Buttons
@@ -651,8 +655,6 @@ void ScGridWindow::DoAutoFilterMenue( USHORT nCol, USHORT nRow, BOOL bDataSelect
      */
 
     delete pFilterBox;
-    if (pFilterFloat)
-        pFilterFloat->EndPopupMode();
     delete pFilterFloat;
 
     USHORT i;
@@ -839,8 +841,6 @@ void ScGridWindow::DoAutoFilterMenue( USHORT nCol, USHORT nRow, BOOL bDataSelect
     if ( bEmpty )
     {
         DELETEZ(pFilterBox);                // war nix
-        if (pFilterFloat)
-            pFilterFloat->EndPopupMode();
         DELETEZ(pFilterFloat);
         Sound::Beep();                      // bemerkbar machen
     }
@@ -1497,6 +1497,21 @@ void __EXPORT ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
         {
             DoPushButton( nPosX, nPosY, rMEvt );    // setzt evtl. bPivotMouse / bDPMouse
             return;
+        }
+
+        //  List Validity drop-down button
+
+        if ( bListValButton )
+        {
+            Rectangle aButtonRect = GetListValButtonRect( aListValPos );
+            if ( aButtonRect.IsInside( aPos ) )
+            {
+                DoAutoFilterMenue( aListValPos.Col(), aListValPos.Row(), TRUE );
+
+                nMouseStatus = SC_GM_FILTER;    // not set in DoAutoFilterMenue for bDataSelect
+                CaptureMouse();
+                return;
+            }
         }
     }
 
@@ -3460,6 +3475,32 @@ void ScGridWindow::UpdateAutoFillMark(BOOL bMarked, const ScRange& rMarkRange)
         if ( bMarked )
             aAutoMarkPos = rMarkRange.aEnd;
         ShowCursor();
+    }
+}
+
+void ScGridWindow::UpdateListValPos( BOOL bVisible, const ScAddress& rPos )
+{
+    BOOL bOldButton = bListValButton;
+    ScAddress aOldPos = aListValPos;
+
+    bListValButton = bVisible;
+    aListValPos = rPos;
+
+    if ( bListValButton )
+    {
+        if ( !bOldButton || aListValPos != aOldPos )
+        {
+            // paint area of new button
+            Invalidate( PixelToLogic( GetListValButtonRect( aListValPos ) ) );
+        }
+    }
+    if ( bOldButton )
+    {
+        if ( !bListValButton || aListValPos != aOldPos )
+        {
+            // paint area of old button
+            Invalidate( PixelToLogic( GetListValButtonRect( aOldPos ) ) );
+        }
     }
 }
 
