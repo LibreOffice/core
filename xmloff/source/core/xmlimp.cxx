@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-27 12:08:10 $
+ *  last change: $Author: dvo $ $Date: 2001-07-27 13:44:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1148,6 +1148,26 @@ OUString SvXMLImport::GetAbsoluteReference(const OUString& rValue)
 {
     return INetURLObject::RelToAbs( rValue );
 }
+
+void SvXMLImport::_CreateNumberFormatsSupplier()
+{
+    DBG_ASSERT( !xNumberFormatsSupplier.is(),
+                "number formats supplier already exists!" );
+    xNumberFormatsSupplier =
+        uno::Reference< util::XNumberFormatsSupplier> (xModel, uno::UNO_QUERY);
+}
+
+
+void SvXMLImport::_CreateDataStylesImport()
+{
+    DBG_ASSERT( pNumImport == NULL, "data styles import already exists!" );
+    uno::Reference<util::XNumberFormatsSupplier> xNum =
+        GetNumberFormatsSupplier();
+    if ( xNum.is() )
+        pNumImport = new SvXMLNumFmtHelper(xNum);
+}
+
+
 #ifdef CONV_STAR_FONTS
 sal_Unicode SvXMLImport::ConvStarBatsCharToStarSymbol( sal_Unicode c )
 {
