@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:20 $
+ *  last change: $Author: ama $ $Date: 2001-03-07 11:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,12 +69,16 @@
 #include <tools/string.hxx>
 #endif
 #include "errhdl.hxx"
+#ifndef _FRACT_HXX
+#include <tools/fract.hxx>
+#endif
 
 class OutputDevice;
 class Point;
 class SwWrongList;
 class Size;
 class SwFont;
+class ViewShell;
 
 class SwDrawTextInfo
 {
@@ -85,6 +89,7 @@ class SwDrawTextInfo
     const SwWrongList* pWrong;
     const Size* pSize;
     SwFont *pFnt;
+    Fraction aZoom;
     long nLeft;
     long nRight;
     xub_StrLen nIdx;
@@ -147,6 +152,10 @@ public:
         ASSERT( bPos, "DrawTextInfo: Undefined Position" );
         return *pPos;
     }
+
+    const Fraction &GetZoom() const { return aZoom; }
+    Fraction &GetZoom() { return aZoom; }
+
     const XubString &GetText() const {
         ASSERT( bText, "DrawTextInfo: Undefined String" );
         return *pText;

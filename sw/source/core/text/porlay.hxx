@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-05 12:51:11 $
+ *  last change: $Author: ama $ $Date: 2001-03-07 11:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #endif
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
+#endif
+#ifndef _FRACT_HXX
+#include <tools/fract.hxx>
 #endif
 
 #include "swrect.hxx"   // SwRepaint
@@ -307,6 +310,7 @@ class SwParaPortion : public SwLineLayout
     // neu zu formatierender Bereich
     SwCharRange aReformat;
     SwScriptInfo aScriptInfo;
+    Fraction aZoom;
     long nDelta;
 
     // Wenn ein SwTxtFrm gelocked ist, werden keine Veraenderungen an den
@@ -394,6 +398,9 @@ public:
     // schneller, hoeher, weiter: Read/Write-Methoden fuer den SWG-Filter
     SvStream &ReadSwg ( SvStream& rStream ); //$ istream
     SvStream &WriteSwg( SvStream& rStream ); //$ ostream
+
+    const Fraction &GetZoom() const { return aZoom; }
+    Fraction &GetZoom() { return aZoom; }
 
     // nErgo in der QuoVadisPortion setzen
     void SetErgoSumNum( const XubString &rErgo );

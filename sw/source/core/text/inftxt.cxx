@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-06 14:15:15 $
+ *  last change: $Author: ama $ $Date: 2001-03-07 11:49:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,6 +361,7 @@ void SwTxtSizeInfo::CtorInit( SwTxtFrm *pFrame, SwFont *pNewFnt,
     if( pVsh && pNd->GetDoc()->IsBrowseMode() &&
         !pVsh->GetViewOptions()->IsPrtFormat() )
         pPrt = pOut;
+
     nIdx = nNewIdx;
     nLen = nNewLen;
     bNotEOL = sal_False;
@@ -525,6 +526,8 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     aDrawInf.SetRight( GetPaintRect().Right() );
     aDrawInf.SetSpecialUnderline( bSpecialUnderline );
     aDrawInf.SetSpace( nSpaceAdd );
+    if( !pPrt )
+        aDrawInf.GetZoom() = GetParaPortion()->GetZoom();
 
     if( GetTxtFly()->IsOn() )
     {
@@ -862,6 +865,8 @@ void SwTxtFormatInfo::CtorInit( SwTxtFrm *pNewFrm, const sal_Bool bNewInterHyph,
                                 const sal_Bool bNewQuick, const sal_Bool bTst )
 {
     SwTxtPaintInfo::CtorInit( pNewFrm, SwRect() );
+    if( !pPrt )
+        GetParaPortion()->GetZoom() = pOut->GetMapMode().GetScaleX();
     bQuick = bNewQuick;
     bInterHyph = bNewInterHyph;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-13 08:53:29 $
+ *  last change: $Author: ama $ $Date: 2001-03-07 11:46:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,8 +779,24 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                                     rInf.GetLen() );
         }
         else
+        {
+            BOOL bRestore = FALSE;
+            MapMode aOld( rInf.GetOut().GetMapMode() );
+            if( rInf.GetZoom().GetNumerator() &&
+                rInf.GetZoom() != aOld.GetScaleX() )
+            {
+                MapMode aNew( aOld );
+                aNew.SetScaleX( rInf.GetZoom() );
+                aNew.SetScaleY( rInf.GetZoom() );
+                rInf.GetOut().SetMapMode( aNew );
+                bRestore = TRUE;
+            }
             rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
                                         rInf.GetIdx(), rInf.GetLen() );
+            if( bRestore )
+                rInf.GetOut().SetMapMode( aOld );
+        }
+
         if( bBullet )
         {
             aStr = rInf.GetText().Copy( rInf.GetIdx(), rInf.GetLen() );
