@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basprov.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 14:07:33 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:17:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,9 @@ namespace basprov
         bool m_bIsUserCtx;
         ::rtl::OUString m_sCtxLocation;
 
+        bool isLibraryShared(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >& rxLibContainer,
+            const ::rtl::OUString& rLibName );
 
     public:
         BasicProviderImpl(
