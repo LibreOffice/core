@@ -82,6 +82,7 @@ ZIP3LIST   = *.desktop
 ZIP3DIR    = $(MISC)$/gnome
 
 SCRIPTS= \
+    $(BIN)$/update-mime-data.sh \
     $(BIN)$/update-user-mime-data.sh \
     $(BIN)$/update-redhat-user-menus.sh \
     $(BIN)$/update-suse-user-menus.sh \
