@@ -67,7 +67,7 @@ public class RecordTable{
         XNameAccess xAllTextTables = oTextTableHandler.xTextTablesSupplier.getTextTables();
         if (xAllTextTables.hasByName("Tbl_RecordSection") == false){
             XIndexAccess xTableIndex = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, xAllTextTables);
-            xTextTable = (XTextTable) xTableIndex.getByIndex(xTableIndex.getCount()-1);
+            xTextTable = (XTextTable) UnoRuntime.queryInterface(XTextTable.class, xTableIndex.getByIndex(xTableIndex.getCount()-1));
             xTableName = (XNamed) UnoRuntime.queryInterface(XNamed.class, xTextTable);
             xTableName.setName("Tbl_RecordSection");
         }
