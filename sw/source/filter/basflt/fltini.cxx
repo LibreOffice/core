@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:37:08 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:27:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,10 +241,6 @@ void _InitFilter()
 #ifdef DEBUG_SH
     _SetFltPtr( nCnt, new Internal_W4WReader, sW4W_Int);
 #endif // DEBUG_SH
-
-#if !( defined(PRODUCT) || defined(MAC) || defined(PM2))
-    nCnt += 2;      // haben keine Reader sind nur EXPORT!
-#endif
 
     _SetFltPtr( nCnt, ReadAscii, FILTER_TEXT );
 
