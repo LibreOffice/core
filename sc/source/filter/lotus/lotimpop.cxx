@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lotimpop.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:50:10 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:48:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,14 +58,7 @@
  *
  *
  ************************************************************************/
-
-#ifdef PCH
-#include "filt_pch.hxx"
-#endif
-
-#pragma hdrstop
-
-//------------------------------------------------------------------------
+#include "lotimpop.hxx"
 
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
@@ -81,14 +74,12 @@
 #include "global.hxx"
 
 #include "root.hxx"
-#include "lotimpop.hxx"
 #include "lotfntbf.hxx"
 #include "lotform.hxx"
 #include "tool.h"
 #include "namebuff.hxx"
 #include "lotrange.hxx"
 #include "lotattr.hxx"
-#include "flttools.hxx"
 
 
 static NAMESPACE_VOS( OMutex )      aLotImpSemaphore;
@@ -99,8 +90,6 @@ ImportLotus::ImportLotus( SvStream& aStream, ScDocument* pDoc, CharSet eQ ) :
     pIn( &aStream ),
     aConv( *pIn, eQ, FALSE )
 {
-    pExtOpt = NULL;
-
     // good point to start locking of import lotus
     aLotImpSemaphore.acquire();
 
@@ -258,7 +247,7 @@ void ImportLotus::Errcell( void )
 
     Read( aA );
 
-    pD->PutCell( aA.Col(), aA.Row(), aA.Tab(), new ScStringCell( _STRINGCONST( "#ERR!" ) ), (BOOL)TRUE );
+    pD->PutCell( aA.Col(), aA.Row(), aA.Tab(), new ScStringCell( CREATE_STRING( "#ERR!" ) ), (BOOL)TRUE );
 }
 
 
@@ -268,7 +257,7 @@ void ImportLotus::Nacell( void )
 
     Read( aA );
 
-    pD->PutCell( aA.Col(), aA.Row(), aA.Tab(), new ScStringCell( _STRINGCONST( "#NA!" ) ), (BOOL)TRUE );
+    pD->PutCell( aA.Col(), aA.Row(), aA.Tab(), new ScStringCell( CREATE_STRING( "#NA!" ) ), (BOOL)TRUE );
 }
 
 
