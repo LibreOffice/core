@@ -2,9 +2,9 @@
  *
  *  $RCSfile: richtextmodel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:41:54 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,7 @@ namespace frm
         getPropertyDefaultByHandle( PROPERTY_ID_MULTILINE               ) >>= m_bMultiLine;
         getPropertyDefaultByHandle( PROPERTY_ID_RICH_TEXT               ) >>= m_bReallyActAsRichText;
         getPropertyDefaultByHandle( PROPERTY_ID_HIDEINACTIVESELECTION   ) >>= m_bHideInactiveSelection;
+        getPropertyDefaultByHandle( PROPERTY_ID_LINEEND_FORMAT          ) >>= m_nLineEndFormat;
 
         implInit();
     }
@@ -189,7 +190,7 @@ namespace frm
         m_bPrintable             = _pOriginal->m_bPrintable;
         m_bReallyActAsRichText   = _pOriginal->m_bReallyActAsRichText;
         m_bHideInactiveSelection = _pOriginal->m_bHideInactiveSelection;
-
+        m_nLineEndFormat         = _pOriginal->m_nLineEndFormat;
 
         m_aAlign               = _pOriginal->m_aAlign;
         m_nEchoChar            = _pOriginal->m_nEchoChar;
