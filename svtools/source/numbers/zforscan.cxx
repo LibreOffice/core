@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: er $ $Date: 2001-04-23 11:38:41 $
+ *  last change: $Author: er $ $Date: 2001-04-26 17:51:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,22 @@
 #define _ZFORSCAN_CXX
 #include "zforscan.hxx"
 #undef _ZFORSCAN_CXX
+
+
+String ImpSvNumberformatScan::theEnglishColors[SC_MAX_ANZ_STANDARD_FARBEN] =
+{
+    String( RTL_CONSTASCII_USTRINGPARAM( "BLACK" ) ),
+    String( RTL_CONSTASCII_USTRINGPARAM( "BLUE" ) ),
+    String( RTL_CONSTASCII_USTRINGPARAM( "GREEN" ) ),
+    String( RTL_CONSTASCII_USTRINGPARAM( "CYAN" ) ),
+    String( RTL_CONSTASCII_USTRINGPARAM( "RED" ) ),
+    String( RTL_CONSTASCII_USTRINGPARAM( "MAGENTA" ) ),
+    String( RTL_CONSTASCII_USTRINGPARAM( "BROWN" ) ),
+    String( RTL_CONSTASCII_USTRINGPARAM( "GREY" ) ),
+    String( RTL_CONSTASCII_USTRINGPARAM( "YELLOW" ) ),
+    String( RTL_CONSTASCII_USTRINGPARAM( "WHITE" ) )
+};
+
 
 ImpSvNumberformatScan::ImpSvNumberformatScan( SvNumberFormatter* pFormatterP )
 {
@@ -364,13 +380,6 @@ void ImpSvNumberformatScan::SetDependentKeywords()
         DBG_ERRORFILE( "SetDependentKeywords: FALSE_WORD?" );
         sKeyword[NF_KEY_FALSE].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "FALSE" ) );
     }
-    // quarter
-    sKeyword[NF_KEY_QUARTER] = pLocaleData->getQuarterWord();
-    if ( !sKeyword[NF_KEY_QUARTER].Len() )
-    {
-        DBG_ERRORFILE( "SetDependentKeywords: QUARTER_WORD?" );
-        sKeyword[NF_KEY_QUARTER].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "quarter" ) );
-    }
 
     // currency symbol
     sCurString = pCharClass->upper( pLocaleData->getCurrSymbol() );
@@ -397,6 +406,15 @@ Color* ImpSvNumberformatScan::GetColor(String& sStr)
     while (i < SC_MAX_ANZ_STANDARD_FARBEN &&
            sString != sKeyword[NF_KEY_FIRSTCOLOR+i] )
         i++;
+    if ( i >= SC_MAX_ANZ_STANDARD_FARBEN )
+    {
+        USHORT j = 0;
+        while ( j < SC_MAX_ANZ_STANDARD_FARBEN &&
+                sString != theEnglishColors[j] )
+            ++j;
+        if ( j < SC_MAX_ANZ_STANDARD_FARBEN )
+            i = j;
+    }
     if (i >= SC_MAX_ANZ_STANDARD_FARBEN)
     {
         const String& rColorWord = sKeyword[NF_KEY_COLOR];

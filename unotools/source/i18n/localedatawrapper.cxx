@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: er $ $Date: 2001-03-28 10:32:57 $
+ *  last change: $Author: er $ $Date: 2001-04-26 17:53:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -607,10 +607,10 @@ void LocaleDataWrapper::getOneReservedWordImpl( sal_Int16 nWord )
 
 const String& LocaleDataWrapper::getOneReservedWord( sal_Int16 nWord ) const
 {
-    if ( nWord >= reservedWords::COUNT )
+    if ( nWord < 0 || nWord >= reservedWords::COUNT )
     {
         DBG_ERRORFILE( "getOneReservedWord: bounds" );
-        return aReservedWord[0];
+        nWord = reservedWords::FALSE_WORD;
     }
     if ( aReservedWord[nWord].Len() == 0 )
     {   // no cached content

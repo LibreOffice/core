@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2000-12-07 15:51:26 $
+ *  last change: $Author: er $ $Date: 2001-04-26 17:51:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,6 @@ public:
     const LocaleDataWrapper& GetLoc() const     { return *pFormatter->GetLocaleData(); }
     CalendarWrapper& GetCal() const             { return *pFormatter->GetCalendar(); }
 
-    const String& GetQuarterString() const  { return sKeyword[NF_KEY_QUARTER]; }
     const String& GetTrueString() const     { return sKeyword[NF_KEY_TRUE]; }
     const String& GetFalseString() const    { return sKeyword[NF_KEY_FALSE]; }
     const String& GetColorString() const    { return sKeyword[NF_KEY_COLOR]; }
@@ -173,6 +172,7 @@ public:
 
 
 private:                            // ---- privater Teil
+    static String theEnglishColors[SC_MAX_ANZ_STANDARD_FARBEN];
     NfKeywordTable sKeyword;                    // Schluesselworte der Syntax
     Color StandardColor[SC_MAX_ANZ_STANDARD_FARBEN];
                                                 // Array der Standardfarben

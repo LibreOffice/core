@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: er $ $Date: 2001-04-06 18:04:40 $
+ *  last change: $Author: er $ $Date: 2001-04-26 17:51:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2508,25 +2508,16 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
             }
             break;
             case NF_KEY_Q:                  // Q
+            {
+                OutString += 'Q';
+                USHORT nMonth = aDate.GetMonth();
+                OutString += sal_Unicode( '1' + ((nMonth-1) / 3) );
+            }
+            break;
             case NF_KEY_QQ:                 // QQ
             {
-                if (rInfo.nTypeArray[i] == NF_KEY_Q)
-                    OutString += 'Q';
                 USHORT nMonth = aDate.GetMonth();
-                if (nMonth <= 3)
-                    OutString += '1';
-                else if (nMonth <=6)
-                    OutString += '2';
-                else if (nMonth <= 9)
-                    OutString += '3';
-                else
-                    OutString += '4';
-                if (rInfo.nTypeArray[i] == NF_KEY_QQ)
-                {
-                    OutString += '.';       // #40387# "1. Quartal" mit Leerzeichen
-                    OutString += ' ';
-                    OutString += rScan.GetQuarterString();
-                }
+                OutString += rLoc().getQuarterWord( (nMonth-1) / 3 );
             }
             break;
             case NF_KEY_D:                  // D
@@ -2881,17 +2872,7 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             case NF_KEY_QQ:                 // QQ
             {
                 USHORT nMonth = aDateTime.GetMonth();
-                if (nMonth <= 3)
-                    OutString += '1';
-                else if (nMonth <=6)
-                    OutString += '2';
-                else if (nMonth <= 9)
-                    OutString += '3';
-                else
-                    OutString += '4';
-                OutString += '.';       // #40387# "1. Quartal" mit Leerzeichen
-                OutString += ' ';
-                OutString += rScan.GetQuarterString();
+                OutString += rLoc().getQuarterWord( (nMonth-1) / 3 );
                 if (rInfo.nTypeArray[i] == NF_KEY_QQ)
                 {
                     OutString += ' ';

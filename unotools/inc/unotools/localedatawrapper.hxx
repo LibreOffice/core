@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2001-03-28 10:32:36 $
+ *  last change: $Author: er $ $Date: 2001-04-26 17:52:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,8 +259,9 @@ public:
                                     { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::TRUE_WORD ); }
     inline  const String&       getFalseWord() const
                                     { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::FALSE_WORD ); }
-    inline  const String&       getQuarterWord() const
-                                    { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::QUARTER_WORD ); }
+    /// return a quarter string matching nQuarter (0..3) => "1st quarter" .. "4th quarter"
+    inline  const String&       getQuarterWord( sal_Int16 nQuarter ) const
+                                    { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::QUARTER1_WORD + nQuarter ); }
     inline  const String&       getAboveWord() const
                                     { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::ABOVE_WORD ); }
     inline  const String&       getBelowWord() const
