@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttmsg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:15:39 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 17:09:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,7 @@ String S_SHORTNAME_UNKNOWN
     Text[ japanese ] = "Short name unknown during copying: ($Arg1)";
     Text[ korean ] = "犒餌衛縑 憲熱 橈朝 穠擎 檜葷: ($Arg1)";
     Text[ chinese_simplified ] = "葩秶奀祥隴腔潠備ㄩ($Arg1)";
-    Text[ chinese_traditional ] = "复製時檔案短名稱不明：($Arg1)";
+    Text[ chinese_traditional ] = "複製時檔案短名稱不明：($Arg1)";
     Text[ arabic ] = "Short name unknown during copying: ($Arg1)";
     Text[ turkish ] = "Short name unknown during copying: ($Arg1)";
 };
@@ -223,7 +223,7 @@ String S_LONGNAME_UNKNOWN
     Text[ japanese ] = "Short name unknown during copying: ($Arg1)";
     Text[ korean ] = "犒餌衛縑 憲熱 橈朝 穠擎 檜葷: ($Arg1)";
     Text[ chinese_simplified ] = "葩秶奀祥隴腔潠備ㄩ($Arg1)";
-    Text[ chinese_traditional ] = "复製時檔案短名稱不明：($Arg1)";
+    Text[ chinese_traditional ] = "複製時檔案短名稱不明：($Arg1)";
     Text[ arabic ] = "Short name unknown during copying: ($Arg1)";
     Text[ turkish ] = "Short name unknown during copying: ($Arg1)";
 };
