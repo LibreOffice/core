@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgegif.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:12:12 $
+ *  last change: $Author: vg $ $Date: 2001-07-17 20:12:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,7 @@ ModalDialog DLG_EXPORT_GIF
         Text [ portuguese ] = "~Guardar em modo transparente" ;
         Text[ chinese_simplified ] = "´æÅÌÍ¸Ã÷(~T)";
         Text[ russian ] = "Ñîõğàíèòü â ïğîçğà÷íîì ğåæèìå";
-        Text[ polish ] = "Zapisz w trybie przezroczystym";
+        Text[ polish ] = "Zapisz w trybie przeŸroczystym";
         Text[ japanese ] = "“§‰ß«‚Ì‚Ü‚Ü•Û‘¶(~T)";
         Text[ chinese_traditional ] = "Àx¦s³z©ú(~T)";
         Text[ arabic ] = "ÍİÙ ÔİÇİ";
@@ -238,6 +238,7 @@ ModalDialog DLG_EXPORT_GIF
     Text[ catalan ] = "Opciones GIF";
     Text[ finnish ] = "GIF-asetukset";
 };
+
 
 
 
