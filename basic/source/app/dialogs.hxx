@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-26 12:04:36 $
+ *  last change: $Author: kz $ $Date: 2003-08-25 14:50:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ class ProfileOptions : public TabPage
     CheckBox aAutoSave;
     CheckBox aStopOnSyntaxError;
 
-    Config &aConf;
+    Config &rConf;
 
     void LoadData();
 
@@ -211,8 +211,8 @@ class ProfileOptions : public TabPage
     void Save();
 
 public:
-    ProfileOptions( Window*, Config &aConfig );
-    void Save( Config &aConfig );
+    ProfileOptions( Window*, Config &rConfig );
+    void Save( Config &rConfig );
 };
 
 class MiscOptions : public TabPage
