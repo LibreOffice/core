@@ -68,6 +68,7 @@ Public Const SBAPPLKEY = 9
 Sub FillStep_Welcome()
 Dim i as Integer
 &apos;	bDoKeepApplValues = False
+	ImportDialogArea.Title = sTitle
 	With ImportDialog
 		.cbHelp.Label = sHelpButton
 		.cbCancel.Label = sCancelButton
@@ -120,7 +121,11 @@ Dim Index as Integer
 		.DocumentImportPath.Text = ConvertFromUrl(Applications(CurOffice,SBDOCSOURCE))
 		.DocumentExportPath.Text = ConvertFromUrl(Applications(CurOffice,SBDOCTARGET))
 		.hlnDocuments.Label = sProgressMoreDocs
-
+		If WizardMode = SBXMLMODE Then
+			ImportDialogArea.Title = sTitle &amp; &quot; - &quot; &amp; sSODocumentCheckBox(Index)
+		Else
+			ImportDialogArea.Title = sTitle &amp; &quot; - &quot; &amp; sMSDocumentCheckBox(Index)
+		End If
 		If WizardMode = SBXMLMODE AND Index = 3 Then
 			&apos; Note: SO-Helper Applications are partly treated like templates although they only have documents
 			.hlnTemplates.Label = sProgressMoreDocs
@@ -212,6 +217,8 @@ Dim bDoEnable as Boolean
 		.TemplateExportPath.Enabled = bDoEnable
 		.TemplateSearchSubDir.Enabled = bDoEnable
 		.TemplateImportPath.Enabled = bDoEnable
+		.Button1.Enabled = bDoEnable
+		.Button2.Enabled = bDoEnable
 		If Not bDoEnable Then
 			.cbGoOn.Enabled = .DocumentPathCheckbox.State = 1
 		Else
@@ -230,6 +237,8 @@ Dim bDoEnable as Boolean
 		.DocumentSearchSubDir.Enabled = bDoEnable
 		.DocumentImportPath.Enabled = bDoEnable
 		.DocumentExportPath.Enabled = bDoEnable
+		.Button3.Enabled = bDoEnable
+		.Button4.Enabled = bDoEnable
 	End With
 	ToggleNextButton()
 End Sub
@@ -285,6 +294,7 @@ End Function
 
 Sub FillStep_Summary()
 &apos; Todo: Angabe über die Vorlagengruppen,bzw. Template-Exportpfad
+	ImportDialogArea.Title = sTitle
 	With ImportDialog
 		.SummaryTextbox.Text = MakeSummaryString()
 		.cbGoOn.Enabled = .SummaryTextbox.Text &lt;&gt; &quot;&quot;
@@ -384,7 +394,7 @@ Sub SetupXMLConfiguration()
 	XMLFilterName(5,2) = &quot;stc&quot;
 
 	XMLFilterName(6,0) = &quot;application/vnd.stardivision.impress;application/x-starimpress|application/vnd.stardivision.draw;application/x-stardraw&quot;
-	XMLFilterName(6,1) = &quot;simpress: impress_StarOffice_XML_Impress_Template|draw_StarOffice_XML_Draw_Template&quot;
+	XMLFilterName(6,1) = &quot;simpress: impress_StarOffice_XML_Impress_Template|sdraw: draw_StarOffice_XML_Draw_Template&quot;
 	XMLFilterName(6,2) = &quot;sti|std&quot;
 
 	XMLFilterName(7,0) = &quot;sgl&quot;
@@ -495,5 +505,4 @@ Dim oRefControl
 	oRefControl = ImportDialogArea.GetControl(RefControlName)
 	GetFolderName(oRefControl.Model)
 	ToggleNextButton()
-End Sub
-</script:module>
+End Sub</script:module>

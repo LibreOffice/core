@@ -316,15 +316,7 @@ Dim i as Integer
 Dim bLogExists as Boolean
 	If ImportDialog.chkLogfile.State = 1 Then
 		i = 2
-&apos;Dim oArg() as new com.sun.star.beans.PropertyValue
-&apos;Dim oUrl as new com.sun.star.util.URL
-&apos;Dim oDisp as Object
-&apos;	oUrl.Complete = &quot;private:factory/swriter&quot;
-&apos;	oDisp = StarDesktop.currentFrame.queryDispatch(oUrl, &quot;_self&quot;, 0)	
-&apos;	oDisp = StarDesktop.currentFrame.queryDispatch(oUrl, &quot;_self&quot;, 0)	
-
-&apos;	oDisp.dispatch(oUrl, oArg())
-	oLogDocument = StarDesktop.LoadComponentFromURL(&quot;private:factory/swriter&quot;, &quot;_blank&quot;, 4, NoArgs())&apos; HiddenProperties()) &apos; HiddenProperties())
+		oLogDocument = StarDesktop.LoadComponentFromURL(&quot;private:factory/swriter&quot;, &quot;_blank&quot;, 4, NoArgs())&apos; HiddenProperties()) &apos; HiddenProperties())
 		oLogCursor = oLogDocument.Text.CreateTextCursor
 		oLogTable =  oLogDocument.CreateInstance(&quot;com.sun.star.text.TextTable&quot;)
 		oLogCursor.Text.InsertTextContent(oLogCursor, oLogTable, True)
@@ -333,7 +325,7 @@ Dim bLogExists as Boolean
 		oLogCursor = oLogTable.GetCellbyPosition(1,0).createTextCursor
 		oLogCursor.SetString(sTargetDocuments)
 		bInsertRow = False
-		&apos; Todo: Strings in Resourcen
+&apos; Todo: Strings in Resourcen
 		sLogUrl = SOWorkPath &amp; &quot;/Logfile.sxw&quot;
 		Do
 			bLogExists = oUcb.Exists(sLogUrl)

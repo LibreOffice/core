@@ -102,7 +102,6 @@ Sub LoadLanguage()
 		GetApplResourceArray(3110, 4, sSumSOTemplates())
 		GetApplResourceArray(3200, 3, sSumMSDocuments())
 		GetApplResourceArray(3210, 3, sSumMSTemplates())
-		ImportDialogArea.Title = sTitle
 		With ImportDialog
 			sImportLabel = GetResText(1033) 
 			sExportLabel = GetResText(1034)	
@@ -128,5 +127,4 @@ Dim a as Integer
 		BigArray(a) = GetResText(i)
 		a = a + 1
 	Next			
-End Sub
-</script:module>
+End Sub</script:module>

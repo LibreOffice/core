@@ -14,6 +14,7 @@ Public bSetFonts as Boolean
 Public bConversionIsRunnig as Boolean
 
 Sub Main()
+Dim RetValue as Integer
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	bSetFonts = False
 	bConversionIsRunnig = False
@@ -39,7 +40,11 @@ Sub Main()
 	RepaintHeaderPreview()
 	SetStates()
 	ImportDialog.cbGoOn.DefaultButton = True
-	ImportDialogArea.Execute()
+	ImportDialogArea.GetControl(&quot;OptSODocuments&quot;).SetFocus() 
+	RetValue = ImportDialogArea.Execute()
+	If RetValue = 0 Then
+		CallCancelTask()
+	End If
 	ImportDialogArea.Dispose()
 	End
 	Exit Sub
@@ -223,5 +228,4 @@ Sub TakeOverPathSettings()
 			Applications(CurOffice,SBTEMPLTARGET) = Applications(0,SBTEMPLTARGET)					
 		End If
 	End If
-End Sub
-</script:module>
+End Sub</script:module>

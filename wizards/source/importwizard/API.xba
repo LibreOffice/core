@@ -31,10 +31,9 @@ Declare Function RegQueryValueExNULL Lib &quot;advapi32.dll&quot; Alias &quot;Re
   ByVal lpData As Long, _
   lpcbData As Long) As Long
 
-Declare Function RegCloseKey Lib &quot;advapi32.dll&quot; _
+Declare Function RegCloseKeyA Lib &quot;advapi32.dll&quot; Alias &quot;RegCloseKey&quot; _
  (ByVal hKey As Long) As Long
 
-Declare Function RegCloseKey Lib &quot;advapi32.dll&quot; (hKey As Long) As Long
 
 Public Const HKEY_CLASSES_ROOT = &amp;H80000000
 Public Const HKEY_CURRENT_USER = &amp;H80000001
@@ -65,7 +64,7 @@ Dim lRetValue as Long
 	lRetValue = RegOpenKeyEx(lBaseKey, sKeyName, 0, KEY_ALL_ACCESS, hKey)
 &apos;	lRetValue = QueryValue(HKEY_LOCAL_MACHINE, &quot;SOFTWARE\Microsoft\Outlook Express\5.0\Default Settings&quot;, &quot;Revocation Checking&quot;)
 	If hKey &lt;&gt; 0 Then
-	    RegCloseKey (hKey)
+	    RegCloseKeyA (hKey)
 	End If
 	OpenRegKey() = lRetValue
 End Function
@@ -197,7 +196,6 @@ Dim vValue As String        &apos; Key value
 
     lRetVal = RegOpenKeyEx(BaseKey, sKeyName, 0, KEY_ALL_ACCESS, hKey)
     lRetVal = QueryValueEx(hKey, sValueName, vValue)
-    RegCloseKey (hKey)
+    RegCloseKeyA (hKey)
     QueryValue = vValue
-End Function
-</script:module>
+End Function</script:module>
