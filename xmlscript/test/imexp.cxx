@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imexp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-19 08:46:35 $
+ *  last change: $Author: dbo $ $Date: 2001-09-24 12:46:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,11 +117,12 @@ static void reg(
         buf.append( (sal_Int32)SUPD );
 #ifdef SAL_W32
         buf.appendAscii( "mi" );
-#endif
+#else
 #ifdef SOLARIS
         buf.appendAscii( "ss" );
 #else
         buf.appendAscii( "li" );
+#endif
 #endif
     }
 #ifndef SAL_W32
