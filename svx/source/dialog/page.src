@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:35:20 $
+ *  last change: $Author: kz $ $Date: 2001-04-05 19:18:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,10 +394,10 @@ TabPage RID_SVXPAGE_PAGE
         };
         StringList [ french ] =
         {
-            < "Toutes les pages" ; Default ; > ;
+            < "Pages de droite et de gauche" ; Default ; > ;
             < "Pages en vis-à-vis" ; Default ; > ;
-            < "À droite" ; Default ; > ;
-            < "À gauche" ; Default ; > ;
+            < "Pages de droite" ; Default ; > ;
+            < "Page de gauche" ; Default ; > ;
         };
         StringList [ swedish ] =
         {
