@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-18 12:27:20 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 16:52:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -557,17 +557,25 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         // if we are still in the first row of
                         // our 2 line multiportion, we use the FirstMulti flag
                         // to indicate this
-                        if ( ((SwMultiPortion*)pPor)->IsDouble() &&
-                              pCurr == &((SwMultiPortion*)pPor)->GetRoot() )
+                        if ( ((SwMultiPortion*)pPor)->IsDouble() )
                         {
-                            GetInfo().SetFirstMulti( sal_True );
+                            // the recursion may have damaged our font size
+                            SetPropFont( nOldProp );
+                            if ( !nOldProp )
+                                nOldProp = 100;
+                            GetInfo().GetFont()->SetProportion( 100 );
 
-                            // we want to treat a double line portion like a
-                            // single line portion, if there is no text in the
-                            // second line
-                            if ( !pCurr->GetNext() ||
-                                 !pCurr->GetNext()->GetLen() )
-                                GetInfo().SetMulti( sal_False );
+                            if ( pCurr == &((SwMultiPortion*)pPor)->GetRoot() )
+                            {
+                                GetInfo().SetFirstMulti( sal_True );
+
+                                // we want to treat a double line portion like a
+                                // single line portion, if there is no text in
+                                // the second line
+                                if ( !pCurr->GetNext() ||
+                                     !pCurr->GetNext()->GetLen() )
+                                    GetInfo().SetMulti( sal_False );
+                            }
                         }
                         // ruby portions are treated like single line portions
                         else if( ((SwMultiPortion*)pPor)->IsRuby() )
@@ -622,7 +630,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         pCurr = pOldCurr;
                         nStart = nOldStart;
                         bPrev = sal_False;
-                        SetPropFont( nOldProp );
+
                         return;
                     }
                     if ( pPor->PrtWidth() )
