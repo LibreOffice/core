@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.34 $
- *  last change: $Author: pluby $ $Date: 2000-12-24 03:38:20 $
+ *  $Revision: 1.35 $
+ *  last change: $Author: pluby $ $Date: 2000-12-24 19:39:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -668,17 +668,25 @@ static OSStatus OpenQDPort ( SalGraphicsDataPtr rSalGraphicsData )
     {
         // Get the graph port and lock focus on it
 
-        rSalGraphicsData->mpCGrafPort = VCLGraphics_LockFocusCGrafPort( rSalGraphicsData->mhDC );
+        if ( rSalGraphicsData->mbWindow )
+        {
+            rSalGraphicsData->mpCGrafPort = VCLGraphics_LockFocusCGrafPort( rSalGraphicsData->mhDC );
+        }
 
         if ( rSalGraphicsData->mpCGrafPort != NULL )
         {
             // Set to the current graph port
 
-            MacSetPort( rSalGraphicsData->mpCGrafPort );
+            SetGWorld( rSalGraphicsData->mpCGrafPort, NULL );
 
             // Was there a QD error when we set the port?
 
             rSalGraphicsData->mnMacOSStatus = QDErr();
+
+            // Set background and foreground colors on this graph port
+
+            SetWhiteBackColor();
+            SetBlackForeColor();
         } // if
     } // if
 
@@ -693,13 +701,17 @@ static OSStatus CloseQDPort ( SalGraphicsDataPtr rSalGraphicsData )
 
     if ( rSalGraphicsData->mnMacOSStatus == noErr )
     {
+
         // Flush the QuickDraw buffer
 
         QDFlushPortBuffer( rSalGraphicsData->mpCGrafPort, NULL );
 
         // Unlock focus on the current NSView
 
-        VCLGraphics_UnLockFocusCGrafPort( rSalGraphicsData->mhDC );
+        if ( rSalGraphicsData->mbWindow )
+        {
+            VCLGraphics_UnLockFocusCGrafPort( rSalGraphicsData->mhDC );
+        }
 
         // When we get here then the QD port must have changed(?)
 
@@ -911,10 +923,6 @@ SalGraphics::SalGraphics()
 
     InitStatusFlags(  &maGraphicsData );
 
-    // Set background and foreground colors on this graph port
-
-    SetWhiteBackColor();
-    SetBlackForeColor();
 } // SalGraphics Class Constructor
 
 // -----------------------------------------------------------------------
@@ -1900,15 +1908,31 @@ void SalGraphics::DrawText( long                nX,
 {
     // The implementation is not yet complete
 
-    if ( ( pStr != NULL ) && ( nLen > 0 ) )
+    OSStatus aQDStatus = noErr;
+
+    aQDStatus = OpenQDPort( &maGraphicsData );
+
+    if ( aQDStatus == noErr )
     {
-        short        nFirstByte = 0;
-        short        nByteCount = nLen;
-        const char  *pTextBuf   = (char *)pStr;
+        if ( ( pStr != NULL ) && ( nLen > 0 ) )
+        {
+            short        nFirstByte = 0;
+            short        nByteCount = nLen;
+            ByteString   aByteString( pStr, nLen, gsl_getSystemTextEncoding() );
 
-        MoveTo( nX, nY );
+            RGBForeColor( &(maGraphicsData.maFontColor) );
 
-        ::MacDrawText( pTextBuf, nFirstByte, nByteCount );
+            aQDStatus = BeginClip( &maGraphicsData );
+
+            if ( aQDStatus == noErr )
+            {
+                MoveTo( nX, nY );
+
+                ::MacDrawText( aByteString.GetBuffer(), nFirstByte, nByteCount );
+                EndClip( &maGraphicsData );
+            } // if
+        } // if
+        CloseQDPort( &maGraphicsData );
     } // if
 } // SalGraphics::DrawText
 
