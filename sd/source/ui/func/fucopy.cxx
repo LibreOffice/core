@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fucopy.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:46:31 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:01:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,10 +130,10 @@ FuCopy::FuCopy (
     SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
-    if( pView->HasMarkedObj() )
+    if( pView->AreObjectsMarked() )
     {
         // Undo
-        String aString( pView->GetMarkDescription() );
+        String aString( pView->GetDescriptionOfMarkedObjects() );
         aString.Append( sal_Unicode(' ') );
         aString.Append( String( SdResId( STR_UNDO_COPYOBJECTS ) ) );
         pView->BegUndo( aString );
@@ -247,7 +247,7 @@ FuCopy::FuCopy (
             bWaiting = TRUE;
         }
 
-        const SdrMarkList   aMarkList( pView->GetMarkList() );
+        const SdrMarkList   aMarkList( pView->GetMarkedObjectList() );
         const ULONG         nMarkCount = aMarkList.GetMarkCount();
         SdrPageView*        pPageView = pView->GetPageViewPvNum( 0 );
         SdrObject*          pObj = NULL;
@@ -286,7 +286,7 @@ FuCopy::FuCopy (
             pView->CopyMarked();
 
             // get newly selected objects
-            SdrMarkList aCopyMarkList( pView->GetMarkList() );
+            SdrMarkList aCopyMarkList( pView->GetMarkedObjectList() );
             ULONG       j, nCopyMarkCount = aMarkList.GetMarkCount();
 
             // set protection flags at marked copies to null
