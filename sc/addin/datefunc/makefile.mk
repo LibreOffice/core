@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hjs $ $Date: 2001-07-13 16:01:13 $
+#   last change: $Author: hjs $ $Date: 2002-05-14 11:07:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -110,7 +110,7 @@ $(MISC)$/x$(TARGET).c: $(TARGET).cl $(CL2CSRC) $(MISC)$/cl2c.pl
     $(CL2C) $(TARGET).cl $(MISC)$/x$(TARGET).c $(CL2CSRC) $(CL2CRID)
 
 $(MISC)$/cl2c.pl: ..$/util/cl2c.pl
-.IF "$(GUI)"=="UNX"
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     +tr -d "\015" < ..$/util$/cl2c.pl > $@
     +chmod +rw $@
 .ELSE
@@ -118,12 +118,7 @@ $(MISC)$/cl2c.pl: ..$/util/cl2c.pl
 .ENDIF
     
 $(INCCOM)$/xlang.h : $(SOLARINCDIR)$/tools$/lang.hxx
-.IF "$(GUI)"=="OS2"
-    @+$(COPY) $(SOLARINCDIR)$/tools$/lang.hxx $(tmp)$/lang.hxx 
-    @+$(COPY) $(tmp)$/lang.hxx $@
-.ELSE
     @+$(COPY) $(SOLARINCDIR)$/tools$/lang.hxx $@
-.ENDIF
 
 $(SLOFILES) : $(INCCOM)$/xlang.h 
 
@@ -132,35 +127,27 @@ $(MISC)$/$(TARGET).lst : \
     $(INCCOM)$/xlang.h \
     ..$/inc$/$(TARGET).hrc \
     ..$/inc$/addin.h
-.IF "$(GUI)"=="WNT"
-    +echo $(<:+"\n":s/ //) > $@
-.ELSE
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     +echo $< > $@
+.ELSE
+    +echo $(<:+"\n":s/ //) > $@
 .ENDIF
 
 # --- Def-File ---
 
 # ------------------------------------------------------------------
-# Windows + OS/2 DEF File
+# Windows DEF File
 # ------------------------------------------------------------------
 
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="WNT"
 
 $(MISC)$/$(SHL1TARGET).def: makefile.mk
     @echo ------------------------------
     @echo Making: $@
     @echo LIBRARY     $(SHL1TARGET)>$@
     @echo DESCRIPTION 'DateF StarCalc Addin DLL'>>$@
-.IF "$(GUI)" == "WNT"
     @echo DATA        READ WRITE NONSHARED>>$@
     @echo EXPORTS>>$@
-.ENDIF
-.IF "$(GUI)" == "OS2"
-    @echo PROTMODE                                                  >>$@
-    @echo CODE        LOADONCALL                                    >>$@
-    @echo DATA        PRELOAD MULTIPLE NONSHARED                    >>$@
-    @echo EXPORTS                                                   >>$@
-.ENDIF
     @echo     GetFunctionCount>>$@
     @echo     GetFunctionData>>$@
     @echo     GetParameterDescription>>$@
