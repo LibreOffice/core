@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:54:51 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:26:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,31 +206,34 @@ void AccessibleShape::Init (void)
         if (pView != NULL && pWindow != NULL && mxShape.is())
         {
             // #107948# Determine whether shape text is empty
-            SdrObject* pObj = GetSdrObjectFromXShape(mxShape);
-            SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, pObj );
-            OutlinerParaObject* pOutlinerParaObject = NULL;
-
-            if( pTextObj )
-                pOutlinerParaObject = pTextObj->GetEditOutlinerParaObject(); // Get the OutlinerParaObject if text edit is active
-
-            if( !pOutlinerParaObject && pObj )
-                pOutlinerParaObject = pObj->GetOutlinerParaObject();
-
-            // create AccessibleTextHelper to handle this shape's text
-            if( !pOutlinerParaObject )
+            SdrObject* pSdrObject = GetSdrObjectFromXShape(mxShape);
+            if( pSdrObject )
             {
-                // empty text -> use proxy edit source to delay creation of EditEngine
-                ::std::auto_ptr<SvxEditSource> pEditSource( new AccessibleEmptyEditSource ( *pObj, *pView, *pWindow) );
-                mpText = new AccessibleTextHelper( pEditSource );
-            }
-            else
-            {
-                // non-empty text -> use full-fledged edit source right away
-                ::std::auto_ptr<SvxEditSource> pEditSource( new SvxTextEditSource ( *pObj, *pView, *pWindow) );
-                mpText = new AccessibleTextHelper( pEditSource );
-            }
+                SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, pSdrObject );
+                OutlinerParaObject* pOutlinerParaObject = NULL;
 
-            mpText->SetEventSource(this);
+                if( pTextObj )
+                    pOutlinerParaObject = pTextObj->GetEditOutlinerParaObject(); // Get the OutlinerParaObject if text edit is active
+
+                if( !pOutlinerParaObject && pSdrObject )
+                    pOutlinerParaObject = pSdrObject->GetOutlinerParaObject();
+
+                // create AccessibleTextHelper to handle this shape's text
+                if( !pOutlinerParaObject )
+                {
+                    // empty text -> use proxy edit source to delay creation of EditEngine
+                    ::std::auto_ptr<SvxEditSource> pEditSource( new AccessibleEmptyEditSource ( *pSdrObject, *pView, *pWindow) );
+                    mpText = new AccessibleTextHelper( pEditSource );
+                }
+                else
+                {
+                    // non-empty text -> use full-fledged edit source right away
+                    ::std::auto_ptr<SvxEditSource> pEditSource( new SvxTextEditSource ( *pSdrObject, *pView, *pWindow) );
+                    mpText = new AccessibleTextHelper( pEditSource );
+                }
+
+                mpText->SetEventSource(this);
+            }
         }
     }
 }
