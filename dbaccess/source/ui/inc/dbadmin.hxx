@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-30 11:31:03 $
+ *  last change: $Author: fs $ $Date: 2001-07-31 15:58:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,8 +126,9 @@ public:
     */
     enum OperationMode
     {
-        omFull,
-        omSingleEdit
+        omFull,                 // full administration of data sources
+        omSingleEdit,           // edit a single data source only
+        omSingleEditFixedType   // edit a single data source only, don't allow a type change
     };
 
 private:
@@ -359,6 +360,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.21  2001/07/30 11:31:03  fs
+ *  #88530# changes to allow operating the dialog in a 'edit one single data source only' mode
+ *
  *  Revision 1.20  2001/06/25 16:03:39  fs
  *  #88004# outsourced ODataSourceMap and ODataSourceSelector
  *
