@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-13 18:14:25 $
+#   last change: $Author: obo $ $Date: 2005-03-18 10:31:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -111,6 +111,12 @@ SLOFILES+=\
 .IF "$(ENABLE_PASF)" != ""
 CFLAGS+=-DUSE_PASF
 SLOFILES+=$(SLO)$/pasfsound.obj
+.IF "$(SYSTEM_SNDFILE)" == "YES"
+CFLAGS+=-DSYSTEM_SNDFILE
+.ENDIF
+.IF "$(SYSTEM_PORTAUDIO)" == "YES"
+CFLAGS+=-DSYSTEM_PORTAUDIO
+.ENDIF
 .ENDIF
 
 .IF "$(WITH_LIBSN)"=="YES"
