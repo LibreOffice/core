@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table5.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:11:36 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:58:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,8 +236,11 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
                 DBG_ERRORFILE("ScTable::UpdatePageBreaks: row heights overflow");
 #endif
             nPageSizeY -= nHeights;
-            pRowFlags->AndValue( nY, nRepeatEndY, ~CR_PAGEBREAK);
-            nY = nRepeatEndY;
+            if (nY <= nRepeatEndY)
+            {
+                pRowFlags->AndValue( nY, nRepeatEndY, ~CR_PAGEBREAK);
+                nY = nRepeatEndY + 1;
+            }
             bRowFound = TRUE;
         }
 
