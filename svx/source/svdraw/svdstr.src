@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 05:31:22 $
+ *  last change: $Author: rt $ $Date: 2001-05-12 06:23:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5389,7 +5389,7 @@ String STR_EditMergeMergePoly
     Text [ ENGLISH ] = "Merge %O" ;
     Text[ english_us ] = "Merge %O";
     Text[ portuguese ] = "Unir %O";
-    Text[ russian ] = "Ñîåäèíèòü %O";
+    Text[ russian ] = "Ñëèÿíèå %O";
     Text[ greek ] = "Óõã÷şíåõóç %O";
     Text[ dutch ] = "Merge %O";
     Text[ french ] = "Fusionner %O";
@@ -5414,7 +5414,7 @@ String STR_EditMergeSubstractPoly
     Text [ ENGLISH ] = "Substract %O" ;
     Text[ english_us ] = "Subtract %O";
     Text[ portuguese ] = "Subtrair %O";
-    Text[ russian ] = "Îòíÿòü %O";
+    Text[ russian ] = "Âû÷èòàíèå %O";
     Text[ greek ] = "Áöáßñåóç %O";
     Text[ dutch ] = "Subtract %O";
     Text[ french ] = "Soustraire %O";
@@ -5439,7 +5439,7 @@ String STR_EditMergeIntersectPoly
     Text [ ENGLISH ] = "Intersect %O" ;
     Text[ english_us ] = "Intersect %O";
     Text[ portuguese ] = "Intersectar %O";
-    Text[ russian ] = "Îòğåçàòü %O";
+    Text[ russian ] = "Ïåğåñå÷åíèå %O";
     Text[ greek ] = "ÔïìŞ %O";
     Text[ dutch ] = "Intersect %O";
     Text[ french ] = "Intersecter %O";
@@ -5447,7 +5447,7 @@ String STR_EditMergeIntersectPoly
     Text[ italian ] = "Interseca %O";
     Text[ danish ] = "Skær %O af";
     Text[ swedish ] = "Skär av %O";
-    Text[ polish ] = "Odetnij %O";
+    Text[ polish ] = "Przetnij %O";
     Text[ portuguese_brazilian ] = "Intersect %O";
     Text[ japanese ] = "%O‚Ìˆê•”‚ğØ‚èæ‚é";
     Text[ korean ] = "%O ÀÚ¸£±â";
@@ -8172,14 +8172,14 @@ String STR_ItemValTEXTANI_SLIDE
     Text [ spanish ] = "solo entrar" ;
     Text [ french ] = "seulement défiler dedans" ;
     Text [ dutch ] = "alleen rollen" ;
-    Text[ chinese_simplified ] = "Ö»ÊÇËÍÈë";
+    Text[ chinese_simplified ] = "Ö»ÊÇÍÆÈë";
     Text[ russian ] = "Ïåğåäâèæåíèå òîëüêî âî âíóòğü";
     Text[ polish ] = "Tylko zwin¹æ";
     Text[ japanese ] = "ŠŠ‚è‚Ü‚¹‚é‚Ì‚İ";
-    Text[ chinese_traditional ] = "¥u¬O°e¤J";
+    Text[ chinese_traditional ] = "¥u¬O±À¤J";
     Text[ arabic ] = "İŞØ ÅÒÇÍÉ ááÏÇÎá";
     Text[ dutch ] = "alleen rollen";
-    Text[ chinese_simplified ] = "Ö»ÊÇËÍÈë";
+    Text[ chinese_simplified ] = "Ö»ÊÇÍÆÈë";
     Text[ greek ] = "Ìüíï êıëéóç ğñïò ôá ìİóá";
     Text[ korean ] = "½ºÅ©·Ñ ÀÎ";
     Text[ turkish ] = "İçeri sür";
