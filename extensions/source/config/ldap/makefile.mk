@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-15 14:14:22 $
+#   last change: $Author: kz $ $Date: 2005-01-18 15:18:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -116,6 +116,9 @@ SHL1STDLIBS=    \
         $(CPPULIB) \
         $(SALHELPERLIB) \
         $(SALLIB)
+.IF "$(OS)"=="FREEBSD"
+SHL1STDLIBS+=-lcompat
+.ENDIF
 
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp    
