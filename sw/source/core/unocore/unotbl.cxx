@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-07 15:13:52 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -713,16 +713,22 @@ void lcl_setValue( SwXCell &rCell, double nVal )
     if(rCell.IsValid())
     {
         // Der Text muß zunaechst (vielleicht) geloescht werden
-        sal_uInt32 nNdPos = rCell.pBox->IsValidNumTxtNd( sal_True );
-        if(USHRT_MAX == nNdPos)
+        ULONG nNdPos = rCell.pBox->IsValidNumTxtNd( sal_True );
+        if(ULONG_MAX != nNdPos)
             lcl_setString( rCell, OUString() );
         SwDoc* pDoc = rCell.GetDoc();
         UnoActionContext aAction(pDoc);
         SwFrmFmt* pBoxFmt = rCell.pBox->ClaimFrmFmt();
         SfxItemSet aSet(pDoc->GetAttrPool(), RES_BOXATR_FORMAT, RES_BOXATR_VALUE);
         const SfxPoolItem* pItem;
+
+        //!! do we need to set a new number format? Yes, if
+        // - there is no current number format
+        // - the current number format is not a number format according to the number formatter, but rather a text format
+        // - the current number format is not even a valid number formatter number format, but rather Writer's own 'special' text number format
         if(SFX_ITEM_SET != pBoxFmt->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, sal_True, &pItem)
-            ||  pDoc->GetNumberFormatter()->IsTextFormat(((SwTblBoxNumFormat*)pItem)->GetValue()))
+            ||  pDoc->GetNumberFormatter()->IsTextFormat(((SwTblBoxNumFormat*)pItem)->GetValue())
+            ||  ((SwTblBoxNumFormat*)pItem)->GetValue() == NUMBERFORMAT_TEXT)
         {
             aSet.Put(SwTblBoxNumFormat(0));
         }
