@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: as $ $Date: 2002-10-11 13:41:15 $
+#   last change: $Author: cd $ $Date: 2002-10-14 11:41:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,7 +72,7 @@ BOOTSTRAP_SERVICE=	FALSE
 
 # --- Generate -----------------------------------------------------
 
-SLOFILES=           $(SLO)$/job.obj             \
+SLOFILES=           $(SLO)$/jobdispatch.obj   	\
                     $(SLO)$/jobhandler.obj      \
                     $(SLO)$/joburl.obj          \
                     $(SLO)$/configaccess.obj
