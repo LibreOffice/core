@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statcach.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:54 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 19:22:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,7 +497,7 @@ void SfxStateCache::SetState_Impl
 
 // alten Status in allen Controllern nochmal setzen
 
-void SfxStateCache::SetCachedState()
+void SfxStateCache::SetCachedState( BOOL bAlways )
 {
     DBG_MEMTEST();
     DBG_CHKTHIS(SfxStateCache, 0);
@@ -508,7 +508,7 @@ void SfxStateCache::SetCachedState()
     // nur updaten wenn cached item vorhanden und auch verarbeitbar
     // (Wenn der State gesendet wird, mu\s sichergestellt sein, da\s ein
     // Slotserver vorhanden ist, s. SfxControllerItem::GetCoreMetric() )
-    if ( !bItemDirty && !bSlotDirty )
+    if ( bAlways || ( !bItemDirty && !bSlotDirty ) )
     {
         // Controller updaten
         for ( SfxControllerItem *pCtrl = pController;
