@@ -228,8 +228,9 @@ public class XSLTransformer
                     // remove any dtd references but keep localy defined
                     // entities
 
-                    ByteArrayOutputStream bufstream = new ByteArrayOutputStream();
-                    final int bsize = 2000;
+                    // ByteArrayOutputStream bufstream = new ByteArrayOutputStream();
+                    StringBuffer strbuf = new StringBuffer();
+                    final int bsize = 4000;
                     int rbytes = 0;
                     byte[][] byteBuffer = new byte[1][bsize];
                     // rewind
@@ -238,13 +239,15 @@ public class XSLTransformer
                         xseek.seek(0);
                     }
                     while ((rbytes = xistream.readSomeBytes(byteBuffer, bsize)) != 0)
-                        bufstream.write(byteBuffer[0], 0, rbytes);
+                        strbuf.append(new String(byteBuffer[0], 0, rbytes, "UTF-8"));
+                        // bufstream.write(byteBuffer[0], 0, rbytes);
 
                     // close the input stream after we have transferred all data
                     // into the buffer so it won't keep the content open until it
                     // gets finalized by the java GC
                     xistream.closeInput();
 
+                    /*
                     String xmlFile = bufstream.toString("UTF-8");
                     if (xmlFile.indexOf("<!DOCTYPE")!=-1){
                         String tag = xmlFile.substring(xmlFile.lastIndexOf("/")+1,
@@ -266,11 +269,45 @@ public class XSLTransformer
                             xmlFile.lastIndexOf(">")+1);
                         xmlFile= newDocType.concat(xmlFile);
                     }
-                    StreamSource xmlsource = new StreamSource(
-                        new ByteArrayInputStream(xmlFile.getBytes("UTF-8")));
+                    */
+                    if (strbuf.indexOf("<!DOCTYPE")!=-1){
+                        // document element tag name
+                        String tag = strbuf.substring(strbuf.lastIndexOf("/")+1,
+                                                      strbuf.lastIndexOf(">"));
+                        String entities = new String();
+                        // look for inline doctype/entities to preserve
+                        if (strbuf.indexOf("[",strbuf.indexOf("<!DOCTYPE"))!=-1){
+                            if (strbuf.indexOf("[",strbuf.indexOf("<!DOCTYPE")) <
+                                strbuf.indexOf(">",strbuf.indexOf("<!DOCTYPE")))
+                            {
+                                // copy inline doctype/entities
+                                entities = strbuf.substring(
+                                    strbuf.indexOf("[",strbuf.indexOf("<!DOCTYPE")),
+                                    strbuf.indexOf("]",strbuf.indexOf("<!DOCTYPE"))+1);
+                            }
+                        }
+                        // construct a new doctype/header including only the saved inline information
+                        String newDocType =
+                            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE "
+                            +tag+" "+entities+">";
+                        // replace the header of the original buffer (end index is exclusive)
+                        strbuf.replace(0, strbuf.indexOf("<"+tag, 0), newDocType);
+                    }
 
-                    ByteArrayOutputStream resultbuf = new ByteArrayOutputStream();
-                    StreamResult xmlresult = new StreamResult(resultbuf);
+                    // StreamSource xmlsource = new StreamSource(
+                    //     new ByteArrayInputStream(xmlFile.getBytes("UTF-8")));
+
+                    char[] xmlchars = new char[strbuf.length()];  // we need to copy here :(
+                    strbuf.getChars(0, strbuf.length(), xmlchars, 0) ;
+                    strbuf = null;
+
+                    StreamSource xmlsource = new StreamSource(
+                        new CharArrayReader(xmlchars));
+
+                    // ByteArrayOutputStream resultbuf = new ByteArrayOutputStream();
+                    BufferedOutputStream output = new BufferedOutputStream(
+                        new XOutputStreamToOutputStreamAdapter(xostream));
+                    StreamResult xmlresult = new StreamResult(output);
                     TransformerFactory tfactory = TransformerFactory.newInstance();
                     Transformer transformer = tfactory.newTransformer(stylesource);
 
@@ -292,8 +329,11 @@ public class XSLTransformer
                     if (statsp != null) {
                         statsp.println("finished transformation in "+time+"ms");
                     }
-                    String resultstring = resultbuf.toString();
-                    xostream.writeBytes(resultbuf.toByteArray());
+                    // dereference input buffer
+                    xmlsource = null;
+                    xmlchars = null;
+
+                    output.close();
                     xostream.closeOutput();
 
                     // notify any listeners about close
