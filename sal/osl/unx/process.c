@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obr $ $Date: 2002-10-11 08:28:30 $
+ *  last change: $Author: tra $ $Date: 2002-11-13 10:55:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,14 +444,14 @@ oslProcessError SAL_CALL osl_getExecutableFile( rtl_uString** pustrFile )
         {
             if( NULL != getcwd(szAbsolutePath, sizeof(szAbsolutePath)) )
             {
-                size_t n = PATH_MAX - strlen(szAbsolutePath);
+                size_t n  = strlen(szAbsolutePath);
                 size_t n2 = strlen(pszCmdLine);
 
                 /* check remaining size and append '/' and argument #0 is possible */
                 if( n + n2 + 1 < PATH_MAX )
                 {
                     szAbsolutePath[n] = '/';
-                    strncpy(szAbsolutePath+n+1, pszCmdLine, n2+1);
+                    strncpy(szAbsolutePath + n + 1, pszCmdLine, n2 + 1);
 
                     /* replace the original pszRealPathSrc pointer */
                     pszRealPathSrc = szAbsolutePath;
