@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: svesik $ $Date: 2001-02-16 01:18:23 $
+ *  last change: $Author: hdu $ $Date: 2001-02-16 14:14:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1102,7 +1102,9 @@ SalGraphicsData::DrawText( long nX, long nY,
     SalConverterCache   *pCvt     = GetDisplay()->GetConverter();
     GC                  pGC       = SelectFont();
 
+#ifdef USE_XRENDER
     tmpClipRegion = pClipRegion_;
+#endif //USE_XRENDER
     DrawUnicodeString( mpServerSideFont, pDisplay, hDrawable_, pGC, nX, nY,
             pStr, nLen, nFontOrientation_ * 64 / 10, bFontVertical_, pCvt, xFont_ );
 }
@@ -1180,7 +1182,9 @@ SalGraphicsData::DrawText(
     Point   aOrigin( nX, nY );
     Point   aCharPos;
 
+#ifdef USE_XRENDER
     tmpClipRegion = pClipRegion_;
+#endif //USE_XRENDER
     DrawUnicodeString( mpServerSideFont, GetXDisplay(), hDrawable_, pGC,
             aOrigin.X(), aOrigin.Y(), pStr, 1, angle, bVertical, pCvt, xFont_ );
 
@@ -1191,7 +1195,9 @@ SalGraphicsData::DrawText(
         aPolygon.Rotate( aOrigin, nFontOrientation_ );
         aCharPos = aPolygon.GetPoint( 0 );
 
+#ifdef USE_XRENDER
         tmpClipRegion = pClipRegion_;
+#endif // USE_XRENDER
         DrawUnicodeString( mpServerSideFont, GetXDisplay(), hDrawable_, pGC,
                 aCharPos.X(), aCharPos.Y(), pStr + i, 1, angle, bVertical, pCvt, xFont_ );
     }
