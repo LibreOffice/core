@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontainer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-13 14:03:54 $
+ *  last change: $Author: oj $ $Date: 2001-09-19 09:59:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,7 +377,7 @@ void SAL_CALL OViewContainer::appendByDescriptor( const Reference< XPropertySet 
 
         aSql += sComposedName + ::rtl::OUString::createFromAscii(" AS ");
         ::rtl::OUString sCommand;
-        descriptor->getPropertyValue(PROPERTY_NAME)         >>= sCommand;
+        descriptor->getPropertyValue(PROPERTY_COMMAND)          >>= sCommand;
         aSql += sCommand;
 
 
