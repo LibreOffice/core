@@ -2,9 +2,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 11:58:22 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 16:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,6 +324,72 @@ BOOL AboutDialog::Close()
 
 // -----------------------------------------------------------------------
 
+#if SUPD == 645
+struct ExtraDeveloper_Impl
+{
+    char*   _pName;
+    long    _nValue;
+};
+static ExtraDeveloper_Impl Developer_Impl[] =
+{
+    { "", 0 },
+    { "S t a r O f f i c e  C h i n a  T e a m", 8 },
+    { "", 0 },
+    { "William Wan", 0 },
+    { "", 0 },
+    { "Binary Filter Stripping Project", 8 },
+    { "", 0 },
+    { "Gary Yang", 0 },
+    { "James Meng", 0 },
+    { "Minna Wu", 0 },
+    { "", 0 },
+    { "XML Security Project", 8 },
+    { "", 0 },
+    { "Michael Mi", 0 },
+    { "Andrew Fan", 0 },
+    { "Keanu Duan", 0 },
+    { "Stone Xiang", 0 },
+    { "", 0 },
+    { "XSLT Transformation", 8 },
+    { "", 0 },
+    { "Gavin Lu", 0 },
+    { "Tom Chen", 0 },
+    { "", 0 },
+    { "Evolution Address Book Intergration", 8 },
+    { "", 0 },
+    { "Berry Jia", 0 },
+    { "Gilbert Fang", 0 },
+    { "Wind Li", 0 },
+    { "", 0 },
+    { "SI - OSL", 8 },
+    { "", 0 },
+    { "Gorden Lin", 0 },
+    { "", 0 },
+    { "SDK", 8 },
+    { "", 0 },
+    { "Robert Chen", 0 },
+    { "", 0 },
+    { "QADEV", 8 },
+    { "", 0 },
+    { "Mia Xia", 0 },
+    { "Mindy Liu", 0 },
+    { "", 0 },
+    { "QA", 8 },
+    { "", 0 },
+    { "Hercule Li", 0 },
+    { "", 0 },
+    { "Release Engineering", 8 },
+    { "", 0 },
+    { "Tin Tian", 0 },
+    { "", 0 },
+    { "StarOffice BD", 8 },
+    { "", 0 },
+    { "Sophia Zhang", 0 },
+    { "Xiaoyan Tian", 0 },
+    { "", 0 }
+};
+#endif
+
 void AboutDialog::Paint( const Rectangle& rRect )
 {
     if ( bNormal )
@@ -341,37 +407,42 @@ void AboutDialog::Paint( const Rectangle& rRect )
     Point aPnt( nW - ( aSize.Width() / 2 ), nPos );
     long nPos1 = aPnt.Y(), nPos2 = nPos1 + aSize.Height(), nTop = rRect.Top();
 
-#if SUPD == 633
-    String aExtraText( DEFINE_CONST_UNICODE("Early Access 3") );
-    Size aExtraSize = Size( GetTextWidth( aExtraText ), GetTextHeight() );
-    long nDelta = aExtraSize.Height() + 3;
-    nPos2 += nDelta;
-#endif
-
     if ( nPos1 <= nTop && nTop < nPos2 )
-    {
         DrawText( aPnt, aDevVersionStr );
-#if SUPD == 633
-        aPnt.X() = nW - ( aExtraSize.Width() / 2 );
-        aPnt.Y() += nDelta;
-        nPos += nDelta;
-        DrawText( aPnt, aExtraText );
-#endif
-    }
 
     nPos += aSize.Height() + 3;
     USHORT nDevCnt = aDeveloperAry.Count();
+    USHORT nCount = nDevCnt;
 
-    if ( nDevCnt )
+#if SUPD == 645
+    int nExtra = sizeof(Developer_Impl) / sizeof(ExtraDeveloper_Impl);
+    nCount += nExtra;
+#endif
+
+    if ( nCount )
     {
         // use deactive color for some headers
         Color aGrayColor = GetSettings().GetStyleSettings().GetDeactiveColor();
+        USHORT nEmptyString = 0;
 
-        for ( USHORT i = 0; i < nDevCnt; ++i )
+        for ( USHORT i = 0; i < nCount; ++i )
         {
-            String aStr = aDeveloperAry.GetString(i);
-            long nVal = aDeveloperAry.GetValue(i);
+            String aStr;
+            long nVal = 0;
 
+            if ( i < nDevCnt )
+            {
+                aStr = aDeveloperAry.GetString(i);
+                nVal = aDeveloperAry.GetValue(i);
+            }
+#if SUPD == 645
+            else
+            {
+                USHORT nDev = i - nDevCnt;
+                aStr = String::CreateFromAscii( Developer_Impl[nDev]._pName );
+                nVal = Developer_Impl[nDev]._nValue;
+            }
+#endif
             if ( nVal )
             {
                 // Versionsnummern gibt es nur in den fetten Zeilen
