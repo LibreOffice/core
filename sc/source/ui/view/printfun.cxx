@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:09 $
+ *  last change: $Author: nn $ $Date: 2000-11-09 21:21:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,6 +402,25 @@ void ScPrintFunc::SetDrawView( FmFormView* pNew )
     pDrawView = pNew;
 }
 
+void lcl_HidePrint( RowInfo* pRowInfo, USHORT nArrCount, USHORT nX1, USHORT nX2 )
+{
+    for (USHORT nArrY=1; nArrY+1<nArrCount; nArrY++)
+    {
+        RowInfo* pThisRowInfo = &pRowInfo[nArrY];
+        for (USHORT nX=nX1; nX<=nX2; nX++)
+        {
+            const CellInfo& rCellInfo = pThisRowInfo->pCellInfo[nX+1];
+            if (!rCellInfo.bEmptyCellText)
+                if (((const ScProtectionAttr&)rCellInfo.pPatternAttr->
+                            GetItem(ATTR_PROTECTION, rCellInfo.pConditionSet)).GetHidePrint())
+                {
+                    pThisRowInfo->pCellInfo[nX+1].pCell          = NULL;
+                    pThisRowInfo->pCellInfo[nX+1].bEmptyCellText = TRUE;
+                }
+        }
+    }
+}
+
 //
 //          Ausgabe auf Device (static)
 //
@@ -512,6 +531,7 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double nPrint
     RowInfo* pRowInfo = new RowInfo[ROWINFO_MAX];
     USHORT nArrCount = pDoc->FillInfo( pRowInfo, nX1, nY1, nX2, nY2, nTab,
                                         nScaleX, nScaleY, FALSE, bFormula );
+    lcl_HidePrint( pRowInfo, nArrCount, nX1, nX2 );
 
     if (bEmbed)
         pDoc->SetEmbedded(aEStart,aEEnd);
@@ -1393,25 +1413,6 @@ void ScPrintFunc::PrintRowHdr( USHORT nY1, USHORT nY2, long nScrX, long nScrY )
             pDev->DrawText( Point( nPosX+nAddX,nPosY+nAddY ), aText );
 
             nPosY = nEndY;
-        }
-    }
-}
-
-void lcl_HidePrint( RowInfo* pRowInfo, USHORT nArrCount, USHORT nX1, USHORT nX2 )
-{
-    for (USHORT nArrY=1; nArrY+1<nArrCount; nArrY++)
-    {
-        RowInfo* pThisRowInfo = &pRowInfo[nArrY];
-        for (USHORT nX=nX1; nX<=nX2; nX++)
-        {
-            const CellInfo& rCellInfo = pThisRowInfo->pCellInfo[nX+1];
-            if (!rCellInfo.bEmptyCellText)
-                if (((const ScProtectionAttr&)rCellInfo.pPatternAttr->
-                            GetItem(ATTR_PROTECTION, rCellInfo.pConditionSet)).GetHidePrint())
-                {
-                    pThisRowInfo->pCellInfo[nX+1].pCell          = NULL;
-                    pThisRowInfo->pCellInfo[nX+1].bEmptyCellText = TRUE;
-                }
         }
     }
 }
