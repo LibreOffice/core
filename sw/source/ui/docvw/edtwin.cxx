@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 13:53:34 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 09:14:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2438,13 +2438,23 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
          rMEvt.GetClicks() == 1 && MOUSE_LEFT == rMEvt.GetButtons() &&
         !rSh.IsTableMode();
     if (  bTmp &&
-         0 != (nMouseTabCol = rSh.WhichMouseTabCol( aDocPos ) ))
+         0 != (nMouseTabCol = rSh.WhichMouseTabCol( aDocPos ) ) &&
+         !rSh.IsObjSelectable( aDocPos ) )
     {
+        // --> FME 2004-07-30 #i32329# Enhanced table selection
+        if ( SW_TABSEL_HORI <= nMouseTabCol && SW_TABCOLSEL_VERT >= nMouseTabCol )
+        {
+            rSh.SelectTableRowCol( aDocPos );
+            return;
+        }
+        // <--
+
         //Zuppeln von Tabellenspalten aus dem Dokument heraus.
         if(SW_TABCOL_VERT == nMouseTabCol || SW_TABCOL_HORI == nMouseTabCol)
             rView.SetTabColFromDoc( TRUE );
         else
             rView.SetTabRowFromDoc( TRUE );
+
         rView.SetTabColFromDocPos( aDocPos );
         rView.InvalidateRulerPos();
         SfxBindings& rBind = rView.GetViewFrame()->GetBindings();
@@ -2572,12 +2582,18 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         BOOL bExecHyperlinks = rSh.GetViewOptions()->IsExecHyperlinks()^
                             (rMEvt.GetModifier() == KEY_MOD2 ? TRUE : FALSE);
 
+        // --> FME 2004-07-30 #i32329# Enhanced selection
+        BYTE nNumberOfClicks = rMEvt.GetClicks() % 4;
+        if ( 0 == nNumberOfClicks && 0 < rMEvt.GetClicks() )
+            nNumberOfClicks = 4;
+        // <--
+
         switch ( rMEvt.GetModifier() + rMEvt.GetButtons() )
         {
             case MOUSE_LEFT:
             case MOUSE_LEFT + KEY_MOD1:
             case MOUSE_LEFT + KEY_MOD2:
-                switch ( rMEvt.GetClicks() )
+                switch ( nNumberOfClicks )
                 {
                     case 1:
                     {
@@ -2814,6 +2830,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         return;
                     }
                     case 3:
+                    case 4:
+                    {
                         bFrmDrag = FALSE;
                         //im Extended Mode hat Doppel- und
                         //Dreifachklick keine Auswirkungen.
@@ -2827,16 +2845,25 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             return;
 
                         //Zeile selektieren, gfs. Additional Mode
-                        if ( KEY_MOD1 == rMEvt.GetModifier() && !rSh.IsAddMode())
-                        {
+                        const bool bMod = KEY_MOD1 == rMEvt.GetModifier() &&
+                                         !rSh.IsAddMode();
+
+                        if ( bMod )
                             rSh.EnterAddMode();
-                            rSh.SelLine( &aDocPos );
-                            rSh.LeaveAddMode();
-                        }
+
+                        // --> FME 2004-07-30 #i32329# Enhanced selection
+                        if ( 3 == nNumberOfClicks )
+                            rSh.SelSentence( &aDocPos );
                         else
-                            rSh.SelLine( &aDocPos );
+                            rSh.SelPara( &aDocPos );
+                        // <--
+
+                        if ( bMod )
+                            rSh.LeaveAddMode();
+
                         bHoldSelection = TRUE;
                         return;
+                    }
 
                     default:
                         return;
@@ -3203,12 +3230,45 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
     if( !bIsDocReadOnly && bInsWin && !pApplyTempl && !rSh.IsInSelect() &&
         !rSh.IsTableMode())
     {
-        if (0 != (nMouseTabCol = rSh.WhichMouseTabCol( aDocPt )))
+        if ( SW_TABCOL_NONE != (nMouseTabCol = rSh.WhichMouseTabCol( aDocPt ) ) &&
+             !rSh.IsObjSelectable( aDocPt ) )
         {
-            //Zuppeln von Tabellenspalten aus dem Dokument heraus.
+            USHORT nPointer = USHRT_MAX;
+            switch ( nMouseTabCol )
+            {
+                case SW_TABCOL_VERT :
+                case SW_TABROW_HORI :
+                    nPointer = POINTER_VSIZEBAR;
+                    break;
+                case SW_TABROW_VERT :
+                case SW_TABCOL_HORI :
+                    nPointer = POINTER_HSIZEBAR;
+                    break;
+                // --> FME 2004-07-30 #i20126# Enhanced table selection
+                case SW_TABSEL_HORI :
+                    nPointer = POINTER_TAB_SELECT_SE;
+                    break;
+                case SW_TABSEL_HORI_RTL :
+                case SW_TABSEL_VERT :
+                    nPointer = POINTER_TAB_SELECT_SW;
+                    break;
+                case SW_TABCOLSEL_HORI :
+                case SW_TABROWSEL_VERT :
+                    nPointer = POINTER_TAB_SELECT_S;
+                    break;
+                case SW_TABROWSEL_HORI :
+                    nPointer = POINTER_TAB_SELECT_E;
+                    break;
+                case SW_TABROWSEL_HORI_RTL :
+                case SW_TABCOLSEL_VERT :
+                    nPointer = POINTER_TAB_SELECT_W;
+                    break;
+                // <--
+            }
 
-            SetPointer( SW_TABCOL_VERT == nMouseTabCol || SW_TABROW_HORI == nMouseTabCol ?
-                    POINTER_VSIZEBAR : POINTER_HSIZEBAR );
+            if ( USHRT_MAX != nPointer )
+                SetPointer( nPointer );
+
             return;
         }
         // #i23726#
