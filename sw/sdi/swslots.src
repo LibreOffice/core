@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 17:29:56 $
+ *  last change: $Author: kz $ $Date: 2002-11-25 15:10:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6435,7 +6435,7 @@ SfxSlotInfo FN_PREVIEW_ZOOM
     SlotName[ greek ] = " ÎﬂÏ·Í· ÒÔ‚ÔÎﬁÚ ÛÂÎﬂ‰·Ú";
     SlotName[ dutch ] = "Zoom afdrukvoorbeeld";
     SlotName[ french ] = "…chelle de l'aperÁu";
-    SlotName[ spanish ] = "Escala previsualizaciÛn";
+    SlotName[ spanish ] = "Escala de la previsualizaciÛn";
     SlotName[ italian ] = "Zoom";
     SlotName[ danish ] = "MÂlestok sidevisning";
     SlotName[ swedish ] = "Skala sidvy";
