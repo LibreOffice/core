@@ -24,6 +24,8 @@ $(DEF1EXPORTFILE) : $(SHL1VERSIONMAP)
 .ENDIF			# "$(DEF1EXPORTFILE)"==""
 .ENDIF			# "$(SHL1VERSIONMAP)"!=""
 
+DEF1UNIQE:=$(mktmp $(GUI))
+
 .IF "$(GUI)"=="WNT"
 .IF "$(APP1HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
@@ -43,7 +45,7 @@ $(DEF1TARGETN) .PHONY : \
 #
 # don't forget to have the right DEFSTAG set!
 #
-    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
+    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF1UNIQE:b) update $(DEFSTAG)
     +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB1NAME)"!=""
@@ -82,7 +84,7 @@ $(DEF1TARGETN) .PHONY : \
 #
 # don't forget to have the right DEFSTAG set!
 #
-    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl commit
+    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF1UNIQE:b) commit
     +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
@@ -202,6 +204,8 @@ $(DEF2EXPORTFILE) : $(SHL2VERSIONMAP)
 .ENDIF			# "$(DEF2EXPORTFILE)"==""
 .ENDIF			# "$(SHL2VERSIONMAP)"!=""
 
+DEF2UNIQE:=$(mktmp $(GUI))
+
 .IF "$(GUI)"=="WNT"
 .IF "$(APP2HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
@@ -221,7 +225,7 @@ $(DEF2TARGETN) .PHONY : \
 #
 # don't forget to have the right DEFSTAG set!
 #
-    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
+    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF2UNIQE:b) update $(DEFSTAG)
     +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB2NAME)"!=""
@@ -260,7 +264,7 @@ $(DEF2TARGETN) .PHONY : \
 #
 # don't forget to have the right DEFSTAG set!
 #
-    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl commit
+    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF2UNIQE:b) commit
     +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
@@ -380,6 +384,8 @@ $(DEF3EXPORTFILE) : $(SHL3VERSIONMAP)
 .ENDIF			# "$(DEF3EXPORTFILE)"==""
 .ENDIF			# "$(SHL3VERSIONMAP)"!=""
 
+DEF3UNIQE:=$(mktmp $(GUI))
+
 .IF "$(GUI)"=="WNT"
 .IF "$(APP3HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
@@ -399,7 +405,7 @@ $(DEF3TARGETN) .PHONY : \
 #
 # don't forget to have the right DEFSTAG set!
 #
-    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
+    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF3UNIQE:b) update $(DEFSTAG)
     +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB3NAME)"!=""
@@ -438,7 +444,7 @@ $(DEF3TARGETN) .PHONY : \
 #
 # don't forget to have the right DEFSTAG set!
 #
-    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl commit
+    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF3UNIQE:b) commit
     +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
@@ -558,6 +564,8 @@ $(DEF4EXPORTFILE) : $(SHL4VERSIONMAP)
 .ENDIF			# "$(DEF4EXPORTFILE)"==""
 .ENDIF			# "$(SHL4VERSIONMAP)"!=""
 
+DEF4UNIQE:=$(mktmp $(GUI))
+
 .IF "$(GUI)"=="WNT"
 .IF "$(APP4HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
@@ -577,7 +585,7 @@ $(DEF4TARGETN) .PHONY : \
 #
 # don't forget to have the right DEFSTAG set!
 #
-    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
+    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF4UNIQE:b) update $(DEFSTAG)
     +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB4NAME)"!=""
@@ -616,7 +624,7 @@ $(DEF4TARGETN) .PHONY : \
 #
 # don't forget to have the right DEFSTAG set!
 #
-    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl commit
+    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF4UNIQE:b) commit
     +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
@@ -736,6 +744,8 @@ $(DEF5EXPORTFILE) : $(SHL5VERSIONMAP)
 .ENDIF			# "$(DEF5EXPORTFILE)"==""
 .ENDIF			# "$(SHL5VERSIONMAP)"!=""
 
+DEF5UNIQE:=$(mktmp $(GUI))
+
 .IF "$(GUI)"=="WNT"
 .IF "$(APP5HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
@@ -755,7 +765,7 @@ $(DEF5TARGETN) .PHONY : \
 #
 # don't forget to have the right DEFSTAG set!
 #
-    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
+    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF5UNIQE:b) update $(DEFSTAG)
     +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB5NAME)"!=""
@@ -794,7 +804,7 @@ $(DEF5TARGETN) .PHONY : \
 #
 # don't forget to have the right DEFSTAG set!
 #
-    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl commit
+    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF5UNIQE:b) commit
     +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
@@ -914,6 +924,8 @@ $(DEF6EXPORTFILE) : $(SHL6VERSIONMAP)
 .ENDIF			# "$(DEF6EXPORTFILE)"==""
 .ENDIF			# "$(SHL6VERSIONMAP)"!=""
 
+DEF6UNIQE:=$(mktmp $(GUI))
+
 .IF "$(GUI)"=="WNT"
 .IF "$(APP6HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
@@ -933,7 +945,7 @@ $(DEF6TARGETN) .PHONY : \
 #
 # don't forget to have the right DEFSTAG set!
 #
-    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
+    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF6UNIQE:b) update $(DEFSTAG)
     +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB6NAME)"!=""
@@ -972,7 +984,7 @@ $(DEF6TARGETN) .PHONY : \
 #
 # don't forget to have the right DEFSTAG set!
 #
-    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl commit
+    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF6UNIQE:b) commit
     +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
@@ -1092,6 +1104,8 @@ $(DEF7EXPORTFILE) : $(SHL7VERSIONMAP)
 .ENDIF			# "$(DEF7EXPORTFILE)"==""
 .ENDIF			# "$(SHL7VERSIONMAP)"!=""
 
+DEF7UNIQE:=$(mktmp $(GUI))
+
 .IF "$(GUI)"=="WNT"
 .IF "$(APP7HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
@@ -1111,7 +1125,7 @@ $(DEF7TARGETN) .PHONY : \
 #
 # don't forget to have the right DEFSTAG set!
 #
-    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
+    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF7UNIQE:b) update $(DEFSTAG)
     +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB7NAME)"!=""
@@ -1150,7 +1164,7 @@ $(DEF7TARGETN) .PHONY : \
 #
 # don't forget to have the right DEFSTAG set!
 #
-    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl commit
+    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF7UNIQE:b) commit
     +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
@@ -1270,6 +1284,8 @@ $(DEF8EXPORTFILE) : $(SHL8VERSIONMAP)
 .ENDIF			# "$(DEF8EXPORTFILE)"==""
 .ENDIF			# "$(SHL8VERSIONMAP)"!=""
 
+DEF8UNIQE:=$(mktmp $(GUI))
+
 .IF "$(GUI)"=="WNT"
 .IF "$(APP8HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
@@ -1289,7 +1305,7 @@ $(DEF8TARGETN) .PHONY : \
 #
 # don't forget to have the right DEFSTAG set!
 #
-    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
+    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF8UNIQE:b) update $(DEFSTAG)
     +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB8NAME)"!=""
@@ -1328,7 +1344,7 @@ $(DEF8TARGETN) .PHONY : \
 #
 # don't forget to have the right DEFSTAG set!
 #
-    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl commit
+    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF8UNIQE:b) commit
     +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
@@ -1448,6 +1464,8 @@ $(DEF9EXPORTFILE) : $(SHL9VERSIONMAP)
 .ENDIF			# "$(DEF9EXPORTFILE)"==""
 .ENDIF			# "$(SHL9VERSIONMAP)"!=""
 
+DEF9UNIQE:=$(mktmp $(GUI))
+
 .IF "$(GUI)"=="WNT"
 .IF "$(APP9HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
@@ -1467,7 +1485,7 @@ $(DEF9TARGETN) .PHONY : \
 #
 # don't forget to have the right DEFSTAG set!
 #
-    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
+    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF9UNIQE:b) update $(DEFSTAG)
     +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB9NAME)"!=""
@@ -1506,7 +1524,7 @@ $(DEF9TARGETN) .PHONY : \
 #
 # don't forget to have the right DEFSTAG set!
 #
-    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl commit
+    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF9UNIQE:b) commit
     +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
@@ -1626,6 +1644,8 @@ $(DEF10EXPORTFILE) : $(SHL10VERSIONMAP)
 .ENDIF			# "$(DEF10EXPORTFILE)"==""
 .ENDIF			# "$(SHL10VERSIONMAP)"!=""
 
+DEF10UNIQE:=$(mktmp $(GUI))
+
 .IF "$(GUI)"=="WNT"
 .IF "$(APP10HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
@@ -1645,7 +1665,7 @@ $(DEF10TARGETN) .PHONY : \
 #
 # don't forget to have the right DEFSTAG set!
 #
-    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
+    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF10UNIQE:b) update $(DEFSTAG)
     +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB10NAME)"!=""
@@ -1684,7 +1704,7 @@ $(DEF10TARGETN) .PHONY : \
 #
 # don't forget to have the right DEFSTAG set!
 #
-    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl commit
+    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF10UNIQE:b) commit
     +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""

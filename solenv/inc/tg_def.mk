@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: hjs $ $Date: 2002-04-16 11:42:08 $
+#   last change: $Author: hjs $ $Date: 2002-08-09 18:04:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -127,6 +127,8 @@ $(DEF$(TNR)EXPORTFILE) : $(SHL$(TNR)VERSIONMAP)
 .ENDIF			# "$(DEF$(TNR)EXPORTFILE)"==""
 .ENDIF			# "$(SHL$(TNR)VERSIONMAP)"!=""
 
+DEF$(TNR)UNIQE:=$(mktmp $(GUI))
+
 .IF "$(GUI)"=="WNT"
 .IF "$(APP$(TNR)HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
@@ -146,7 +148,7 @@ $(DEF$(TNR)TARGETN) .PHONY : \
 #
 # don't forget to have the right DEFSTAG set!
 #
-    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
+    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF$(TNR)UNIQE:b) update $(DEFSTAG)
     +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB$(TNR)NAME)"!=""
@@ -185,7 +187,7 @@ $(DEF$(TNR)TARGETN) .PHONY : \
 #
 # don't forget to have the right DEFSTAG set!
 #
-    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl commit
+    +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF$(TNR)UNIQE:b) commit
     +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
