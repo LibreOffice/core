@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:50:24 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:43:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,7 +462,7 @@ UINT16 Exc1904::GetNum( void ) const
 
 //------------------------------------------------------ class ExcBundlesheet -
 
-ExcBundlesheetBase::ExcBundlesheetBase( RootData& rRootData, UINT16 nTab ) :
+ExcBundlesheetBase::ExcBundlesheetBase( RootData& rRootData, SCTAB nTab ) :
     nGrbit( rRootData.pER->GetTabInfo().IsVisibleTab( nTab ) ? 0x0000 : 0x0001 ),
     nOwnPos( STREAM_SEEK_TO_END ),
     nStrPos( STREAM_SEEK_TO_END )
@@ -493,7 +493,7 @@ UINT16 ExcBundlesheetBase::GetNum( void ) const
 
 
 
-ExcBundlesheet::ExcBundlesheet( RootData& rRootData, UINT16 nTab ) :
+ExcBundlesheet::ExcBundlesheet( RootData& rRootData, SCTAB nTab ) :
     ExcBundlesheetBase( rRootData, nTab )
 {
     String sTabName;
@@ -808,7 +808,7 @@ void ExcRKMulRK::SaveCont( XclExpStream& rStrm )
     }
     else
     {
-        UINT16  nLastCol = aPos.Col();
+        UINT16  nLastCol = static_cast<sal_uInt16>(aPos.Col());
         rStrm << (UINT16) aPos.Row()  << nLastCol;
         while( pCurr )
         {
@@ -1223,9 +1223,9 @@ ExcFormula::ExcFormula(
             pExcUPN->GetShrdFmla( pData, nFormLen );
 
             if( pExcUPN->GetCode() && pExcUPN->GetLen() )
-                *ppArray = new ExcArray( *pExcUPN, ( UINT8 ) rPos.Col(), rPos.Row() );
+                *ppArray = new ExcArray( *pExcUPN,  static_cast<UINT8>(rPos.Col()), static_cast<sal_uInt16>(rPos.Row()) );
             else
-                *ppArray = new ExcArray( ( UINT8 ) rPos.Col(), rPos.Row(), pExcUPN->GetArrayFormId() );
+                *ppArray = new ExcArray(  static_cast<UINT8>(rPos.Col()), static_cast<sal_uInt16>(rPos.Row()), pExcUPN->GetArrayFormId() );
             break;
         case EC_ShrdFmla:
             if( ppShrdFmla && pExcUPN->GetShrdFmla( pData, nFormLen ) )
@@ -1406,7 +1406,7 @@ ExcBlankMulblank::ExcBlankMulblank(
     bDummy = FALSE;
 
     nRecLen = 2 * nCount - 2;
-    nLastCol = aPos.Col() + nCount - 1;
+    nLastCol = static_cast<sal_uInt16>(aPos.Col() + nCount - 1);
     bMulBlank = (nCount > 1);
 
     AddEntries( rPos, pAttr, rRootData, nCount, rExcTab );
@@ -1440,7 +1440,7 @@ void ExcBlankMulblank::AddEntries(
         ExcTable& rExcTab )
 {
     DBG_ASSERT( nCount > 0, "ExcBlankMulblank::AddEntries - count==0!" );
-    DBG_ASSERT( rPos.Col() + nCount <= MAXCOL + 1, "ExcBlankMulblank::AddEntries - column overflow" );
+    DBG_ASSERT( rPos.Col() + static_cast<SCCOL>(nCount) <= MAXCOL + 1, "ExcBlankMulblank::AddEntries - column overflow" );
 
     ScAddress   aCurrPos( rPos );
     sal_uInt32  nCellXFId = rRootData.pER->GetXFBuffer().Insert( pAttr );
@@ -1455,7 +1455,7 @@ void ExcBlankMulblank::AddEntries(
             nMergeCount = Min( nMergeCount, nTmpCount );
             Append( nMergeXFId, nMergeCount );
             nTmpCount -= nMergeCount;
-            aCurrPos.IncCol( nMergeCount );
+            aCurrPos.IncCol( static_cast<SCCOL>(nMergeCount) );
         }
         else
         {
@@ -1463,19 +1463,19 @@ void ExcBlankMulblank::AddEntries(
             UINT16 nColCount = nTmpCount;
 
             if( rRootData.pCellMerging->FindNextMerge( aCurrPos, nMergeCol ) )
-                nColCount = Min( (UINT16)(nMergeCol - aCurrPos.Col()), nTmpCount );
+                nColCount = Min( (UINT16)(nMergeCol - static_cast<sal_uInt16>(aCurrPos.Col())), nTmpCount );
 
             if( nColCount )
             {
                 Append( nCellXFId, nColCount );
                 nTmpCount -= nColCount;
-                aCurrPos.IncCol( nColCount );
+                aCurrPos.IncCol( static_cast<SCCOL>(nColCount) );
             }
         }
     }
 
     // #98133# set default row formatting from last cell in the row
-    if( !maCellList.empty() && (rPos.Col() + nCount > MAXCOL) )
+    if( !maCellList.empty() && (rPos.Col() + static_cast<SCCOL>(nCount) > MAXCOL) )
     {
         rExcTab.SetDefRowXF( rPos.Row(), maCellList.back().mnXFId );
         if( maCellList.size() == 1 )
@@ -1498,7 +1498,7 @@ void ExcBlankMulblank::SaveDiff( XclExpStream& rStrm )
     if( !bMulBlank ) return;
 
     const XclExpXFBuffer& rXFBuffer = rStrm.GetRoot().GetXFBuffer();
-    UINT16 nLastCol = (UINT16) aPos.Col();
+    UINT16 nLastCol = static_cast<sal_uInt16>(aPos.Col());
     XclExpBlankCellVec::const_iterator aBegin = maCellList.begin(), aIter = aBegin, aEnd = maCellList.end();
     for( ; aIter != aEnd; ++aIter )
     {
@@ -1549,7 +1549,7 @@ ExcNameListEntry::ExcNameListEntry() :
 }
 
 
-ExcNameListEntry::ExcNameListEntry( RootData& rRootData, UINT16 nScTab, UINT8 nKey ) :
+ExcNameListEntry::ExcNameListEntry( RootData& rRootData, SCTAB nScTab, UINT8 nKey ) :
     pData( NULL ),
     nFormLen( 0 ),
     nTabNum( rRootData.pER->GetTabInfo().GetXclTab( nScTab ) + 1 ),
@@ -1818,7 +1818,7 @@ ULONG ExcName::GetLen() const
 
 // ---- class XclBuildInName -----------------------------------------
 
-XclBuildInName::XclBuildInName( RootData& rRootData, UINT16 nScTab, UINT8 nKey ) :
+XclBuildInName::XclBuildInName( RootData& rRootData, SCTAB nScTab, UINT8 nKey ) :
     ExcNameListEntry( rRootData, nScTab, nKey )
 {
 }
@@ -1839,7 +1839,7 @@ void XclBuildInName::CreateFormula( RootData& rRootData )
 
 // ---- class XclPrintRange, class XclTitleRange ---------------------
 
-XclPrintRange::XclPrintRange( RootData& rRootData, UINT16 nScTab ) :
+XclPrintRange::XclPrintRange( RootData& rRootData, SCTAB nScTab ) :
         XclBuildInName( rRootData, nScTab, EXC_BUILTIN_PRINTAREA )
 {
     if( rRootData.pDoc->HasPrintRange() )
@@ -1860,18 +1860,18 @@ XclPrintRange::XclPrintRange( RootData& rRootData, UINT16 nScTab ) :
 
 
 
-XclPrintTitles::XclPrintTitles( RootData& rRootData, UINT16 nScTab ) :
+XclPrintTitles::XclPrintTitles( RootData& rRootData, SCTAB nScTab ) :
         XclBuildInName( rRootData, nScTab, EXC_BUILTIN_PRINTTITLES )
 {
     UINT16 nXclTab = rRootData.pER->GetTabInfo().GetXclTab( nScTab );
     const ScRange* pRange = rRootData.pDoc->GetRepeatColRange( nScTab );
     if( pRange )
-        Append( ScRange( pRange->aStart.Col(), 0, nXclTab,
-            pRange->aEnd.Col(), rRootData.nRowMax, nXclTab ) );
+        Append( ScRange( pRange->aStart.Col(), 0, static_cast<SCTAB>(nXclTab),
+            pRange->aEnd.Col(), rRootData.nRowMax, static_cast<SCTAB>(nXclTab) ) );
     pRange = rRootData.pDoc->GetRepeatRowRange( nScTab );
     if( pRange )
-        Append( ScRange( 0, pRange->aStart.Row(), nXclTab,
-            rRootData.nColMax, pRange->aEnd.Row(), nXclTab ) );
+        Append( ScRange( 0, pRange->aStart.Row(), static_cast<SCTAB>(nXclTab),
+            rRootData.nColMax, pRange->aEnd.Row(), static_cast<SCTAB>(nXclTab) ) );
     CreateFormula( rRootData );
 }
 
@@ -1887,10 +1887,11 @@ ExcNameList::ExcNameList( RootData& rRootData ) :
     ScDocument&         rDoc = *rRootData.pDoc;
     XclExpTabInfo&      rTabInfo = rRootData.pER->GetTabInfo();
     USHORT              nCount, nIndex;
-    UINT16              nScTab, nTab, nExpIx;
+    SCTAB               nScTab, nTab;
+    UINT16              nExpIx;
 
     // print ranges and print titles, insert in table name sort order
-    UINT16 nScTabCount = rTabInfo.GetScTabCount();
+    SCTAB nScTabCount = rTabInfo.GetScTabCount();
     for( nTab = 0; nTab < nScTabCount; ++nTab )
     {
         nScTab = rTabInfo.GetRealScTab( nTab ); // sorted -> real
@@ -1974,7 +1975,7 @@ UINT16 ExcNameList::Append( ExcNameListEntry* pName )
 }
 
 
-void ExcNameList::InsertSorted( RootData& rRootData, ExcNameListEntry* pName, sal_uInt16 nScTab )
+void ExcNameList::InsertSorted( RootData& rRootData, ExcNameListEntry* pName, SCTAB nScTab )
 {
     // real -> sorted
     sal_uInt32 nSortIx = rRootData.pER->GetTabInfo().GetSortedScTab( nScTab );
@@ -2033,21 +2034,21 @@ ExcDimensions::ExcDimensions( BiffTyp eBiffP )
 }
 
 
-ExcDimensions::ExcDimensions(  UINT16 nFirstCol, UINT16 nFirstRow,
-    UINT16 nLastCol, UINT16 nLastRow, BiffTyp eBiffP )
+ExcDimensions::ExcDimensions(  SCCOL nFirstCol, SCROW nFirstRow,
+    SCCOL nLastCol, SCROW nLastRow, BiffTyp eBiffP )
             : eBiff( eBiffP )
 {
     SetLimits( nFirstCol, nFirstRow, nLastCol, nLastRow );
 }
 
 
-void ExcDimensions::SetLimits( UINT16 nFirstCol, UINT16 nFirstRow,
-    UINT16 nLastCol, UINT16 nLastRow )
+void ExcDimensions::SetLimits( SCCOL nFirstCol, SCROW nFirstRow,
+    SCCOL nLastCol, SCROW nLastRow )
 {
-    nRwMic = nFirstRow;
-    nRwMac = nLastRow + 1;
-    nColMic = nFirstCol;
-    nColMac = nLastCol + 1;
+    nRwMic = static_cast<sal_uInt16>(nFirstRow);
+    nRwMac = static_cast<sal_uInt16>(nLastRow + 1);
+    nColMic = static_cast<sal_uInt16>(nFirstCol);
+    nColMac = static_cast<sal_uInt16>(nLastCol + 1);
 }
 
 
@@ -2086,14 +2087,14 @@ ExcEOutline::ExcEOutline( ScOutlineArray* pArray ) :
     for( UINT16 nLev = 0; nLev < SC_OL_MAXDEPTH; nLev++ )
     {
         pEntry = pArray ? pArray->GetEntryByPos( nLev, 0 ) : NULL;
-        nEnd[ nLev ] = pEntry ? pEntry->GetEnd() : 0;
+        nEnd[ nLev ] = pEntry ? static_cast<sal_uInt16>(pEntry->GetEnd()) : 0;
         bHidden[ nLev ] = FALSE;
     }
 
 }
 
 
-void ExcEOutline::Update( UINT16 nNum )
+void ExcEOutline::Update( SCCOLROW nNum )
 {
     if( !pOLArray )
         return;
@@ -2107,12 +2108,12 @@ void ExcEOutline::Update( UINT16 nNum )
     {
         bIsColl = FALSE;
         for( nLevel = 0; nLevel < nNewExcLevel; nLevel++ )
-            if( nEnd[ nLevel ] < nNum )
+            if( nEnd[ nLevel ] < static_cast<sal_uInt16>(nNum) )
             {
                 ScOutlineEntry* pEntry = pOLArray->GetEntryByPos( nLevel, nNum );
                 if( pEntry )
                 {
-                    nEnd[ nLevel ] = pEntry->GetEnd();
+                    nEnd[ nLevel ] = static_cast<sal_uInt16>(pEntry->GetEnd());
                     bHidden[ nLevel ] = pEntry->IsHidden();
                 }
             }
@@ -2164,9 +2165,9 @@ ULONG ExcEGuts::GetLen() const
 
 //-------------------------------------------------------------- class ExcRow -
 
-ExcRow::ExcRow( const XclExpRoot& rRoot, UINT16 nRow, UINT16 nTab, UINT16 nFCol, UINT16 nLCol,
+ExcRow::ExcRow( const XclExpRoot& rRoot, SCROW nRow, SCTAB nTab, SCCOL nFCol, SCCOL nLCol,
                 sal_uInt32 nXFId, ScDocument& rDoc, ExcEOutline& rOutline, ExcTable& rTab ) :
-        nNum( nRow ),
+        nNum( static_cast<sal_uInt16>(nRow) ),
         mnXFId( nXFId ),
         nOptions( 0x0000 ),
         rExcTab( rTab )
@@ -2195,12 +2196,12 @@ ExcRow::ExcRow( const XclExpRoot& rRoot, UINT16 nRow, UINT16 nTab, UINT16 nFCol,
 }
 
 
-void ExcRow::SetRange( UINT16 nFCol, UINT16 nLCol )
+void ExcRow::SetRange( SCCOL nFCol, SCCOL nLCol )
 {
     DBG_ASSERT( nFCol <= nLCol, "+ExcRow::SetRange(): First Col > Last Col!" );
 
-    nFirstCol = nFCol;
-    nLastCol = nLCol;
+    nFirstCol = static_cast<sal_uInt16>(nFCol);
+    nLastCol = static_cast<sal_uInt16>(nLCol);
 }
 
 
@@ -2221,9 +2222,9 @@ void ExcRow::SetHeight( UINT16 nNewHeight, BOOL bUser )
 }
 
 BOOL ExcRow::ForceUserHeightFlag( const XclExpRoot& rRoot, ScDocument& rDoc,
-                                      sal_uInt16 nRow, sal_uInt16 nTab)
+                                      SCROW nRow, SCTAB nTab)
 {
-    for(sal_uInt16 nCol = nFirstCol; nCol <= nLastCol; nCol++)
+    for(SCCOL nCol = static_cast<SCCOL>(nFirstCol); nCol <= static_cast<SCCOL>(nLastCol); nCol++)
     {
         const ScPatternAttr* pPattern = rDoc.GetPattern( nCol, nRow, nTab );
         if(pPattern && rDoc.HasStringData(nCol, nRow, nTab))
@@ -2258,7 +2259,7 @@ BOOL ExcRow::ForceUserHeightFlag( const XclExpRoot& rRoot, ScDocument& rDoc,
 void ExcRow::SaveCont( XclExpStream& rStrm )
 {
     nOptions |= EXC_ROW_FLAGCOMMON;
-    if( rExcTab.ModifyToDefaultRowXF( nNum, mnXFId ) )
+    if( rExcTab.ModifyToDefaultRowXF( static_cast<SCROW>(nNum), mnXFId ) )
         nOptions |= EXC_ROW_GHOSTDIRTY;
 
     sal_uInt16 nXF = rStrm.GetRoot().GetXFBuffer().GetXFIndex( mnXFId );
@@ -2339,18 +2340,18 @@ void ExcRowBlock::Save( XclExpStream& rStrm )
 // ============================================================================
 
 XclExpColinfo::XclExpColinfo(
-        const XclExpRoot& rRoot, sal_uInt16 nScCol, sal_uInt16 nScTab, sal_uInt32 nXFId, ExcEOutline& rOutline ) :
+        const XclExpRoot& rRoot, SCCOL nScCol, SCTAB nScTab, sal_uInt32 nXFId, ExcEOutline& rOutline ) :
     XclExpRecord( EXC_ID_COLINFO, 12 ),
     XclExpRoot( rRoot ),
     mnXFId( nXFId ),
-    mnFirstXclCol( nScCol ),
-    mnLastXclCol( nScCol ),
+    mnFirstXclCol( static_cast<sal_uInt16>(nScCol) ),
+    mnLastXclCol( static_cast<sal_uInt16>(nScCol) ),
     mnWidth( GetWidth( nScCol, nScTab ) ),
     mnFlags( GetFlags( nScCol, nScTab, rOutline ) )
 {
 }
 
-bool XclExpColinfo::Expand( sal_uInt16 nScCol, sal_uInt16 nScTab, sal_uInt32 nXFId, ExcEOutline& rOutline )
+bool XclExpColinfo::Expand( SCCOL nScCol, SCTAB nScTab, sal_uInt32 nXFId, ExcEOutline& rOutline )
 {
     if( (mnXFId == nXFId) &&
         (mnLastXclCol + 1 == nScCol) &&
@@ -2363,15 +2364,15 @@ bool XclExpColinfo::Expand( sal_uInt16 nScCol, sal_uInt16 nScTab, sal_uInt32 nXF
     return false;
 }
 
-sal_uInt16 XclExpColinfo::GetWidth( sal_uInt16 nScCol, sal_uInt16 nScTab ) const
+sal_uInt16 XclExpColinfo::GetWidth( SCCOL nScCol, SCTAB nScTab ) const
 {
     return XclTools::GetXclColumnWidth( GetDoc().GetColWidth( nScCol, nScTab ), GetCharWidth() );
 }
 
-sal_uInt16 XclExpColinfo::GetFlags( sal_uInt16 nScCol, sal_uInt16 nScTab, ExcEOutline& rOutline ) const
+sal_uInt16 XclExpColinfo::GetFlags( SCCOL nScCol, SCTAB nScTab, ExcEOutline& rOutline ) const
 {
     sal_uInt8 nScColFlags = GetDoc().GetColFlags( nScCol, nScTab );
-    rOutline.Update( nScCol );
+    rOutline.Update( static_cast<SCCOLROW>(nScCol) );
 
     sal_uInt16 nFlags = 0;
     ::set_flag( nFlags, EXC_COLINFO_HIDDEN, (nScColFlags & CR_HIDDEN) != 0 );
@@ -2423,7 +2424,7 @@ ULONG ExcExterncount::GetLen( void ) const
 
 //------------------------------------------------------ class ExcExternsheet -
 
-ExcExternsheet::ExcExternsheet( RootData* pExcRoot, const UINT16 nNewTabNum ) : ExcRoot( pExcRoot )
+ExcExternsheet::ExcExternsheet( RootData* pExcRoot, const SCTAB nNewTabNum ) : ExcRoot( pExcRoot )
 {
     DBG_ASSERT( pExcRoot->pDoc->HasTable( nNewTabNum ),
         "*ExcExternsheet::ExcExternsheet(): table not found" );
@@ -2791,7 +2792,7 @@ ULONG ExcAutoFilter::GetLen() const
 
 
 
-ExcAutoFilterRecs::ExcAutoFilterRecs( RootData& rRoot, UINT16 nTab ) :
+ExcAutoFilterRecs::ExcAutoFilterRecs( RootData& rRoot, SCTAB nTab ) :
         pFilterMode( NULL ),
         pFilterInfo( NULL )
 {
@@ -2825,7 +2826,7 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( RootData& rRoot, UINT16 nTab ) :
 
         ScRange aRange( aParam.nCol1, aParam.nRow1, aParam.nTab,
                         aParam.nCol2, aParam.nRow2, aParam.nTab );
-        UINT16  nColCnt = aParam.nCol2 - aParam.nCol1 + 1;
+        SCCOL   nColCnt = aParam.nCol2 - aParam.nCol1 + 1;
 
         rRoot.pNameList->InsertSorted( rRoot, new ExcName( rRoot, aRange, EXC_BUILTIN_AUTOFILTER, TRUE ), nTab );
 
@@ -2855,17 +2856,17 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( RootData& rRoot, UINT16 nTab ) :
             BOOL    bConflict   = FALSE;
             BOOL    bContLoop   = TRUE;
             BOOL    bHasOr      = FALSE;
-            UINT16  nFirstField = aParam.GetEntry( 0 ).nField;
+            SCCOLROW nFirstField = aParam.GetEntry( 0 ).nField;
 
             // create AUTOFILTER records for filtered columns
-            for( UINT16 nEntry = 0; !bConflict && bContLoop && (nEntry < aParam.GetEntryCount()); nEntry++ )
+            for( SCSIZE nEntry = 0; !bConflict && bContLoop && (nEntry < aParam.GetEntryCount()); nEntry++ )
             {
                 const ScQueryEntry& rEntry  = aParam.GetEntry( nEntry );
 
                 bContLoop = rEntry.bDoQuery;
                 if( bContLoop )
                 {
-                    ExcAutoFilter* pFilter = GetByCol( rEntry.nField - aRange.aStart.Col() );
+                    ExcAutoFilter* pFilter = GetByCol( static_cast<SCCOL>(rEntry.nField) - aRange.aStart.Col() );
 
                     if( nEntry > 0 )
                         bHasOr |= (rEntry.eConnect == SC_OR);
@@ -2910,30 +2911,30 @@ void ExcAutoFilterRecs::DeleteList()
     List::Clear();
 }
 
-ExcAutoFilter* ExcAutoFilterRecs::GetByCol( UINT16 nCol )
+ExcAutoFilter* ExcAutoFilterRecs::GetByCol( SCCOL nCol )
 {
     ExcAutoFilter* pFilter;
     for( pFilter = _First(); pFilter; pFilter = _Next() )
-        if( pFilter->GetCol() == nCol )
+        if( pFilter->GetCol() == static_cast<sal_uInt16>(nCol) )
             return pFilter;
-    pFilter = new ExcAutoFilter( nCol );
+    pFilter = new ExcAutoFilter( static_cast<sal_uInt16>(nCol) );
     Append( pFilter );
     return pFilter;
 }
 
-BOOL ExcAutoFilterRecs::IsFiltered( UINT16 nCol )
+BOOL ExcAutoFilterRecs::IsFiltered( SCCOL nCol )
 {
     ExcAutoFilter* pFilter;
     for( pFilter = _First(); pFilter; pFilter = _Next() )
-        if( pFilter->GetCol() == nCol )
+        if( pFilter->GetCol() == static_cast<sal_uInt16>(nCol) )
             return TRUE;
     return FALSE;
 }
 
-void ExcAutoFilterRecs::AddObjRecs( RootData& rRoot, const ScAddress& rPos, UINT16 nCols )
+void ExcAutoFilterRecs::AddObjRecs( RootData& rRoot, const ScAddress& rPos, SCCOL nCols )
 {
     ScAddress aAddr( rPos );
-    for( UINT16 nObj = 0; nObj < nCols; nObj++ )
+    for( SCCOL nObj = 0; nObj < nCols; nObj++ )
     {
         XclObjDropDown* pObj = new XclObjDropDown( *rRoot.pER, aAddr, IsFiltered( nObj ) );
         rRoot.pObjRecs->Add( pObj );
@@ -3175,7 +3176,7 @@ void ExcShrdFmla::SaveCont( XclExpStream& rStrm )
 
 
 ExcShrdFmla::ExcShrdFmla( const sal_Char* p, UINT16 n, const ScRange& r ) :
-    ExcArray( p, n, ( UINT8 ) r.aStart.Col(), r.aStart.Row() )
+    ExcArray( p, n, static_cast<UINT8>(r.aStart.Col()), static_cast<sal_uInt16>(r.aStart.Row()) )
 {
 }
 
@@ -3224,14 +3225,14 @@ XclExpTableOp::XclExpTableOp(
         const ScAddress& rRowFirstPos,
         USHORT nNewMode ) :
     nMode( nNewMode ),
-    nColInpCol( rColFirstPos.Col() ),
-    nColInpRow( rColFirstPos.Row() ),
-    nRowInpCol( rRowFirstPos.Col() ),
-    nRowInpRow( rRowFirstPos.Row() ),
+    nColInpCol( static_cast<sal_uInt16>(rColFirstPos.Col()) ),
+    nColInpRow( static_cast<sal_uInt16>(rColFirstPos.Row()) ),
+    nRowInpCol( static_cast<sal_uInt16>(rRowFirstPos.Col()) ),
+    nRowInpRow( static_cast<sal_uInt16>(rRowFirstPos.Row()) ),
     bIsValid( FALSE )
 {
-    nFirstCol = nLastCol = nNextCol = rFormula.GetPosition().Col();
-    nFirstRow = nLastRow = rFormula.GetPosition().Row();
+    nFirstCol = nLastCol = nNextCol = static_cast<sal_uInt16>(rFormula.GetPosition().Col());
+    nFirstRow = nLastRow = static_cast<sal_uInt16>(rFormula.GetPosition().Row());
     Append( &rFormula );
 }
 
@@ -3241,8 +3242,8 @@ XclExpTableOp::~XclExpTableOp()
 
 BOOL XclExpTableOp::IsAppendable( const ScAddress& rPos )
 {
-    return  ((rPos.Col() == nLastCol + 1) && (rPos.Row() == nFirstRow)) ||
-            ((rPos.Col() == nNextCol) && (rPos.Row() == nLastRow + 1));
+    return  ((static_cast<sal_uInt16>(rPos.Col()) == nLastCol + 1) && (static_cast<sal_uInt16>(rPos.Row()) == nFirstRow)) ||
+            ((static_cast<sal_uInt16>(rPos.Col()) == nNextCol) && (static_cast<sal_uInt16>(rPos.Row()) == nLastRow + 1));
 }
 
 BOOL XclExpTableOp::CheckPosition(
@@ -3256,36 +3257,36 @@ BOOL XclExpTableOp::CheckPosition(
 
     if( ((nMode == 2) == bMode2) &&
         (rPos.Tab() == rFmlaPos.Tab()) &&
-        (nColInpCol == rColFirstPos.Col()) &&
-        (nColInpRow == rColFirstPos.Row()) &&
+        (nColInpCol == static_cast<sal_uInt16>(rColFirstPos.Col())) &&
+        (nColInpRow == static_cast<sal_uInt16>(rColFirstPos.Row())) &&
         (rPos.Tab() == rColFirstPos.Tab()) &&
         (rPos.Tab() == rColRelPos.Tab()) )
     {
         if( nMode == 0 )
         {
             bRet =  (rPos.Col() == rFmlaPos.Col()) &&
-                    (nFirstRow == rFmlaPos.Row() + 1) &&
-                    (nFirstCol == rColRelPos.Col() + 1) &&
+                    (nFirstRow == static_cast<sal_uInt16>(rFmlaPos.Row()) + 1) &&
+                    (nFirstCol == static_cast<sal_uInt16>(rColRelPos.Col()) + 1) &&
                     (rPos.Row() == rColRelPos.Row());
         }
         else if( nMode == 1 )
         {
-            bRet =  (nFirstCol == rFmlaPos.Col() + 1) &&
+            bRet =  (nFirstCol == static_cast<sal_uInt16>(rFmlaPos.Col()) + 1) &&
                     (rPos.Row() == rFmlaPos.Row()) &&
                     (rPos.Col() == rColRelPos.Col()) &&
-                    (nFirstRow == rColRelPos.Row() + 1);
+                    (nFirstRow == static_cast<sal_uInt16>(rColRelPos.Row()) + 1);
         }
         else if( nMode == 2 )
         {
-            bRet =  (nFirstCol == rFmlaPos.Col() + 1) &&
-                    (nFirstRow == rFmlaPos.Row() + 1) &&
-                    (nFirstCol == rColRelPos.Col() + 1) &&
+            bRet =  (nFirstCol == static_cast<sal_uInt16>(rFmlaPos.Col()) + 1) &&
+                    (nFirstRow == static_cast<sal_uInt16>(rFmlaPos.Row()) + 1) &&
+                    (nFirstCol == static_cast<sal_uInt16>(rColRelPos.Col()) + 1) &&
                     (rPos.Row() == rColRelPos.Row()) &&
-                    (nRowInpCol == rRowFirstPos.Col()) &&
-                    (nRowInpRow == rRowFirstPos.Row()) &&
+                    (nRowInpCol == static_cast<sal_uInt16>(rRowFirstPos.Col())) &&
+                    (nRowInpRow == static_cast<sal_uInt16>(rRowFirstPos.Row())) &&
                     (rPos.Tab() == rRowFirstPos.Tab()) &&
                     (rPos.Col() == rRowRelPos.Col()) &&
-                    (nFirstRow == rRowRelPos.Row() + 1) &&
+                    (nFirstRow == static_cast<sal_uInt16>(rRowRelPos.Row()) + 1) &&
                     (rPos.Tab() == rRowRelPos.Tab());
         }
     }
@@ -3342,12 +3343,12 @@ BOOL XclExpTableOp::CheckFirstPosition(
 void XclExpTableOp::InsertCell( ExcFormula& rFormula )
 {
     const ScAddress& rPos = rFormula.GetPosition();
-    if( (rPos.Col() == nLastCol + 1) && (rPos.Row() == nFirstRow) )     // next cell of first row
+    if( (static_cast<sal_uInt16>(rPos.Col()) == nLastCol + 1) && (static_cast<sal_uInt16>(rPos.Row()) == nFirstRow) )       // next cell of first row
     {
         nLastCol++;
         Append( &rFormula );
     }
-    else if( (rPos.Col() == nNextCol) && (rPos.Row() == nLastRow + 1) ) // next cell of next row
+    else if( (static_cast<sal_uInt16>(rPos.Col()) == nNextCol) && (static_cast<sal_uInt16>(rPos.Row()) == nLastRow + 1) )   // next cell of next row
     {
         nNextCol++;
         Append( &rFormula );
@@ -3379,8 +3380,8 @@ void XclExpTableOp::UpdateCells()
     for( ExcFormula* pFmla = _First(); pFmla; pFmla = _Next() )
     {
         const ScAddress& rPos = pFmla->GetPosition();
-        if( (nFirstCol <= rPos.Col()) && (rPos.Col() <= nLastCol) &&
-            (nFirstRow <= rPos.Row()) && (rPos.Row() <= nLastRow) )
+        if( (nFirstCol <= static_cast<sal_uInt16>(rPos.Col())) && (static_cast<sal_uInt16>(rPos.Col()) <= nLastCol) &&
+            (nFirstRow <= static_cast<sal_uInt16>(rPos.Row())) && (static_cast<sal_uInt16>(rPos.Row()) <= nLastRow) )
             pFmla->SetTableOp( nFirstCol, nFirstRow );
     }
 }
