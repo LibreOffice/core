@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:22:21 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 15:01:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -998,7 +998,7 @@ BOOL View::GetExchangeList( List*& rpExchangeList, List* pBookmarkList, USHORT n
 
             if( nType == 0  || nType == 2 )
                 bNameOK = pDocSh->CheckPageName (
-                    pViewSh->GetWindow(), *pNewName);
+                    pViewSh->GetActiveWindow(), *pNewName);
 
             if( bNameOK && ( nType == 1  || nType == 2 ) )
             {
@@ -1009,7 +1009,7 @@ BOOL View::GetExchangeList( List*& rpExchangeList, List* pBookmarkList, USHORT n
                     //CHINA001 SvxNameDialog*  pDlg = new SvxNameDialog( pViewSh->GetWindow(), *pNewName, aDesc );
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-                    AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( pViewSh->GetWindow(), *pNewName, aDesc, ResId(RID_SVXDLG_NAME) );
+                    AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( pViewSh->GetActiveWindow(), *pNewName, aDesc, ResId(RID_SVXDLG_NAME) );
                     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                     pDlg->SetEditHelpId( HID_SD_NAMEDIALOG_OBJECT );
 
