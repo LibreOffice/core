@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selglos.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:52:08 $
+ *  last change: $Author: obo $ $Date: 2001-06-08 22:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,11 +121,11 @@ ModalDialog DLG_SEL_GLOS
         Text [ french ] = "AutoTextes pour raccourci " ;
         Text [ swedish ] = "AutoText till genvägen " ;
         Text [ dutch ] = "AutoTekst voor afkortingen  " ;
-        Text [ spanish ] = "AutoTexto para abreviatura  " ;
+        Text [ spanish ] = "AutoTexto para abreviatura " ;
         Text [ english_us ] = "AutoTexts for shortcut " ;
         Text[ chinese_simplified ] = "×Ô¶¯Í¼ÎÄ¼¯µÄËõĞ´ ";
-        Text[ russian ] = "Àâòîòåêñò ê ñîêğàùåíèş  ";
-        Text[ polish ] = "Autotekst do skrótu   ";
+        Text[ russian ] = "Àâòîòåêñò äëÿ ñîêğàùåíèÿ";
+        Text[ polish ] = "Autotekst skrótu";
         Text[ japanese ] = "¼®°Ä¶¯Ä“ü—Íx‰‡ ";
         Text[ chinese_traditional ] = "¦Û°Ê¹Ï¤å¶°ªºÁY¼g ";
         Text[ arabic ] = "äÕ ÊáŞÇÆí ááÇÎÊÕÇÑ ";
@@ -155,3 +155,4 @@ ModalDialog DLG_SEL_GLOS
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar AutoTexto";
 };
+
