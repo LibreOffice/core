@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
-<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="UserfieldDlg" dlg:title="Modify Userfields" dlg:left="161" dlg:top="57" dlg:width="281" dlg:height="214">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="UserfieldDlg" dlg:title="Modify User Data" dlg:left="161" dlg:top="57" dlg:width="281" dlg:height="214">
  <dlg:bulletinboard>
   <dlg:text dlg:id="Label1" dlg:tab-index="0" dlg:left="6" dlg:top="48" dlg:width="57" dlg:height="8" dlg:value="Label1"/>
   <dlg:text dlg:id="Label2" dlg:tab-index="1" dlg:left="6" dlg:top="64" dlg:width="57" dlg:height="8" dlg:value="Label2"/>
@@ -23,13 +23,13 @@
   <dlg:scrollbar dlg:id="ScrollBar1" dlg:tab-index="18" dlg:left="263" dlg:top="46" dlg:width="12" dlg:height="140" dlg:align="vertical">
    <script:event script:event-name="on-mouseup" script:location="application" script:macro-name="Gimmicks.Userfields.ScrollControls" script:language="StarBasic"/>
   </dlg:scrollbar>
-  <dlg:button dlg:id="cmdQuit" dlg:tab-index="19" dlg:left="6" dlg:top="193" dlg:width="35" dlg:height="14" dlg:help-text="Quit Macro" dlg:value="Quit">
+  <dlg:button dlg:id="cmdQuit" dlg:tab-index="19" dlg:left="6" dlg:top="193" dlg:width="35" dlg:height="14" dlg:help-text="Exit Macro" dlg:value="Exit">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="Gimmicks.Userfields.StopMacro" script:language="StarBasic"/>
   </dlg:button>
-  <dlg:button dlg:id="cmdSave" dlg:tab-index="20" dlg:left="45" dlg:top="193" dlg:width="35" dlg:height="14" dlg:help-text="Save all Data of all users to file" dlg:value="~Save">
+  <dlg:button dlg:id="cmdSave" dlg:tab-index="20" dlg:left="45" dlg:top="193" dlg:width="35" dlg:height="14" dlg:help-text="Save All Data of All Users to File" dlg:value="~Save">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="Gimmicks.Userfields.SaveSettings" script:language="StarBasic"/>
   </dlg:button>
-  <dlg:button dlg:id="cmdTakeOver" dlg:tab-index="21" dlg:left="84" dlg:top="193" dlg:width="35" dlg:height="14" dlg:help-text="Insert current User Data into Office Application" dlg:value="Se~lect">
+  <dlg:button dlg:id="cmdTakeOver" dlg:tab-index="21" dlg:left="84" dlg:top="193" dlg:width="35" dlg:height="14" dlg:help-text="Replace the User Data in &lt;PRODUCTNAME&gt; With the User Data Above" dlg:value="Se~lect">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="Gimmicks.Userfields.SelectCurrentFields" script:language="StarBasic"/>
   </dlg:button>
   <dlg:button dlg:id="cmdNextUser" dlg:tab-index="22" dlg:left="162" dlg:top="193" dlg:width="35" dlg:height="14" dlg:tag="1" dlg:help-text="Show Data of Next User" dlg:value="Next &gt;&gt;">
@@ -38,11 +38,11 @@
   <dlg:button dlg:id="cmdPrevUser" dlg:tab-index="23" dlg:left="123" dlg:top="193" dlg:width="35" dlg:height="14" dlg:tag="-1" dlg:help-text="Show Data of Previous User" dlg:value="&lt;&lt;Previous">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="Gimmicks.Userfields.StepToRecord" script:language="StarBasic"/>
   </dlg:button>
-  <dlg:button dlg:id="CommandButton1" dlg:tab-index="24" dlg:left="201" dlg:top="193" dlg:width="35" dlg:height="14" dlg:help-text="Add new User" dlg:value="~New">
+  <dlg:button dlg:id="CommandButton1" dlg:tab-index="24" dlg:left="201" dlg:top="193" dlg:width="35" dlg:height="14" dlg:help-text="Add Data for New User" dlg:value="~New">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="Gimmicks.Userfields.AddRecord" script:language="StarBasic"/>
   </dlg:button>
-  <dlg:text dlg:id="Label10" dlg:tab-index="25" dlg:left="6" dlg:top="6" dlg:width="269" dlg:height="34" dlg:value="This Macro offers the opportunity to administrate several user Data in a simple way.&#x0a;The User data of several users may be stored in an own file in the directory &lt;ConfigDir&gt; from where they can be inserted as the main user data into the office." dlg:multiline="true"/>
-  <dlg:button dlg:id="cmdDelete" dlg:tab-index="26" dlg:left="240" dlg:top="193" dlg:width="35" dlg:height="14" dlg:tag="Delete Data of current User" dlg:value="Delete">
+  <dlg:text dlg:id="Label10" dlg:tab-index="25" dlg:left="6" dlg:top="6" dlg:width="269" dlg:height="34" dlg:value="This macro lets you easily administrate several user profiles.&#x0a;The user data of several users may be stored in a single file in the directory &lt;ConfigDir&gt;. From there, you can select a particular user whose data is then the current user data in &lt;PRODUCTNAME&gt;." dlg:multiline="true"/>
+  <dlg:button dlg:id="cmdDelete" dlg:tab-index="26" dlg:left="240" dlg:top="193" dlg:width="35" dlg:height="14" dlg:help-text="Delete Data of Current User" dlg:value="Delete">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="Gimmicks.Userfields.DeleteCurrentSettings" script:language="StarBasic"/>
   </dlg:button>
  </dlg:bulletinboard>

@@ -16,15 +16,15 @@ Const MBYES = 6
 Const MBABORT = 2
 Const MBNO = 7
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
-	MSGBOXTITLE = &quot;Change all characters to a &apos;&quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos;&quot;
-	NOTSAVEDTEXT = &quot;This Document is modified: All characters are changed to an &quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos;. Shall the document be saved now?&quot;
+	MSGBOXTITLE = &quot;Change All Characters to an &apos;&quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos;&quot;
+	NOTSAVEDTEXT = &quot;This document has already been modified: All characters will be changed to an &quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos;. Should the document be saved now?&quot;
 	WARNING = &quot;This macro changes all characters and numbers to an &apos;&quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos; in this document.&quot;
 
 	On Local Error GoTo NODOCUMENT
 	oDocument = StarDesktop.ActiveFrame.Controller.Model
 	NODOCUMENT:
 	If Err &lt;&gt; 0 Then
-		Msgbox(&quot;This Macro extracts all Data of a displayed Writer-Document.&quot; &amp; chr(13) &amp; &quot;Activate a Writer-Document!&quot; , 16, GetProductName())
+		Msgbox(WARNING &amp; chr(13) &amp; &quot;First, activate a Writer document.&quot; , 16, GetProductName())
 		Exit Sub
 	End If
 	On Local Error Goto 0
@@ -51,7 +51,7 @@ Const MBNO = 7
 			ReplaceAllStrings(oDocument)
 
 		Case Else
-			Msgbox(&quot;This Macro only works with Writer-Documents!&quot;, 16, GetProductName())
+			Msgbox(&quot;This macro only works with Writer documents.&quot;, 16, GetProductName())
 	End Select
 End Sub
 

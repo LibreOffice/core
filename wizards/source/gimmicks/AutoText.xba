@@ -20,15 +20,8 @@ Dim oContentStyle as Object
 Dim oHeaderStyle as Object
 Dim oGroupTitleStyle as Object
 Dim n, m, iAutoCount as Integer
-Dim oLocale as New com.sun.star.lang.Locale	
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
-	oLocale = GetStarOfficeLocale()
-	strHeading1 = &quot;Überschrift 1&quot;
-	strGroup = &quot;Bereich:&quot;
-	strBlockName = &quot;Name des Bausteins&quot;
-	strBlockShortName = &quot;Kürzel&quot;
-	strColumnWidth = &quot;13cm&quot;
-	sDocumentTitle = &quot;Installierte Autotextbausteine&quot;
+	sDocumentTitle = &quot;Installed AutoTexts&quot;
 
 	&apos; Open a new empty document
 	oDocument = StarDesktop.LoadComponentFromURL(&quot;private:factory/swriter&quot;,&quot;_blank&quot;,0,NoArgs)
@@ -74,8 +67,8 @@ Dim oLocale as New com.sun.star.lang.Locale
 &apos;		oTable.KeepTogether = False
 		oTable.RepeatHeadLine = True
 		oAutoTextCursor.Text.InsertTextContent(oAutoTextCursor,oTable,False)
-		InsertStringToCell(&quot;AutoText-Title&quot;,oTable.GetCellbyPosition(0,0), &quot;AutoTextHeading&quot;)
-		InsertStringToCell(&quot;AutoText-Name&quot;,oTable.GetCellbyPosition(1,0), &quot;AutoTextHeading&quot;)
+		InsertStringToCell(&quot;AutoText Name&quot;,oTable.GetCellbyPosition(0,0), &quot;AutoTextHeading&quot;)
+		InsertStringToCell(&quot;AutoText Shortcut&quot;,oTable.GetCellbyPosition(1,0), &quot;AutoTextHeading&quot;)
 		&apos; Insert one row at the bottom of the table
 		oRows = oTable.Rows
 		iAutoCount = oAutoGroup.Count

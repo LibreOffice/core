@@ -33,8 +33,8 @@ Dim oCharStyles as Object
 	sDocType = GetDocumentType(oDocument)
 	NODOCUMENT:
 	If Err &lt;&gt; 0 Then
-		Msgbox(&quot;This Macro extracts all Data of the displayed Writer-, Calc or Draw-Documents.&quot; &amp; chr(13) &amp;_
-			   &quot;To start this macro you have to activate a Document first!&quot; , 16, GetProductName)
+		Msgbox(&quot;This macro extracts all data from the active Writer, Calc or Draw document.&quot; &amp; chr(13) &amp;_
+			   &quot;To start this macro you have to activate a document first.&quot; , 16, GetProductName)
 		Exit Sub
 	End If
 	On Local Error Goto 0
@@ -46,11 +46,11 @@ Dim oCharStyles as Object
 	&apos; create and define the character styles of the Log-document
 	oCharStyles = oLogDocument.StyleFamilies.GetByName(&quot;CharacterStyles&quot;)
 	oLogHeaderStyle = oLogDocument.createInstance(&quot;com.sun.star.style.CharacterStyle&quot;)
-	oCharStyles.InsertbyName(&quot;LogHeaderText&quot;, oLogHeaderStyle)
+	oCharStyles.InsertbyName(&quot;Log Header&quot;, oLogHeaderStyle)
 
 	oLogHeaderStyle.charWeight = com.sun.star.awt.FontWeight.BOLD
 	oLogBodyTextStyle = oLogDocument.createInstance(&quot;com.sun.star.style.CharacterStyle&quot;)
-	oCharStyles.InsertbyName(&quot;LogBodyText&quot;, oLogBodyTextStyle)
+	oCharStyles.InsertbyName(&quot;Log Body&quot;, oLogBodyTextStyle)
 
 	&apos; Insert the title of the activated document as a hyperlink
 	oHyperCursor = oLogText.createTextCursor()
@@ -83,7 +83,7 @@ Dim oCharStyles as Object
 		Case &quot;sdraw&quot;
 			GetDrawStrings()
 		Case Else
-			Msgbox(&quot;This Macro only works with Writer-, Calc or Draw/Impress-Documents!&quot;, 16, GetProductName())
+			Msgbox(&quot;This macro only works with a Writer, Calc or Draw/Impress document.&quot;, 16, GetProductName())
 	End Select
 
 End Sub
@@ -102,21 +102,21 @@ Dim oSheets as Object
 	For i = 0 to osheets.Count - 1
 		oSheet = osheets.GetbyIndex(i)
 		SheetName = oSheet.Name
-		MakeLogHeadLine(&quot;Sheet No &quot; &amp; i &amp; &quot;(&quot; &amp; SheetName &amp; &quot;)&quot; )
+		MakeLogHeadLine(&quot;Sheet No. &quot; &amp; i &amp; &quot;(&quot; &amp; SheetName &amp; &quot;)&quot; )
 
 		&apos; Check the &quot;body&quot; of the sheet
 		GetCellTexts(oSheet)
 
 		If oSheet.IsScenario then
-			MakeLogHeadLine(&quot;Scenario-Comments of &quot; &amp; SheetName &amp; &quot;&apos;&quot;)
+			MakeLogHeadLine(&quot;Scenario Comments from &quot; &amp; SheetName &amp; &quot;&apos;&quot;)
 			WriteStringtoLogFile(osheet.ScenarioComment)
 		End if
 
-		GetAnnotations(oSheet, &quot;Annotations of &apos;&quot; &amp; SheetName &amp; &quot;&apos;&quot;)
+		GetAnnotations(oSheet, &quot;Annotations from &apos;&quot; &amp; SheetName &amp; &quot;&apos;&quot;)
 
-		GetChartStrings(oSheet, &quot;Charts of &apos;&quot; &amp; SheetName &amp; &quot;&apos;&quot;)
+		GetChartStrings(oSheet, &quot;Charts from &apos;&quot; &amp; SheetName &amp; &quot;&apos;&quot;)
 
-		GetControlStrings(oSheet.DrawPage, &quot;Controls of &apos;&quot; &amp; SheetName &amp; &quot;&apos;&quot;)
+		GetControlStrings(oSheet.DrawPage, &quot;Controls from &apos;&quot; &amp; SheetName &amp; &quot;&apos;&quot;)
 	Next
 
 	&apos; Pictures
@@ -164,7 +164,7 @@ End Sub
 
 Sub GetCalcGraphicNames()
 Dim n,m as integer
-	MakeLogHeadLine(&quot;Pictures&quot;)
+	MakeLogHeadLine(&quot;Graphics&quot;)
 	For n = 0 To oDocument.Drawpages.count-1
 		For m = 0 To oDocument.Drawpages.GetbyIndex(n).Count - 1
 			WriteStringtoLogFile(oDocument.DrawPages.GetbyIndex(n).GetbyIndex(m).Text.String)
@@ -264,7 +264,7 @@ Dim oFrameTextPort as Object
 
 		&apos; Is the frame bound to the Page
 		If oTextFrame.AnchorType  = com.sun.star.text.TextContentAnchorType.AT_PAGE  Then
-			GetParagraphTexts(oTextFrame, &quot;Textframe Content&quot;)
+			GetParagraphTexts(oTextFrame, &quot;Text Frame Contents&quot;)
 		End If
 
 		oFrameEnum = oTextFrame.CreateEnumeration
@@ -290,7 +290,7 @@ Sub GetTextFieldStrings()
 Dim aTextField as Object
 Dim i as integer
 Dim CurElement as Object
-	MakeLogHeadLine(&quot;TextFields&quot;)
+	MakeLogHeadLine(&quot;Text Fields&quot;)
 	aTextfield = oDocument.getTextfields.CreateEnumeration
 	While aTextField.hasmoreElements
 		CurElement = aTextField.NextElement
@@ -312,7 +312,7 @@ Dim oDocSections as Object
 Dim LinkedFileName as String
 Dim i as Integer
 	If Right(oDocument.URL,3) = &quot;sgl&quot; Then
-		MakeLogHeadLine(&quot;Sub Documents&quot;)
+		MakeLogHeadLine(&quot;Sub-documents&quot;)
 		oDocSections = oDocument.TextSections
 		For i = 0 to oDocSections.Count - 1
 			LinkedFileName = oDocSections.GetbyIndex(i).FileLink.FileURL
@@ -410,7 +410,7 @@ End Sub
 
 Sub GetDocumentInfo()
 Dim oDocuInfo as Object
-	MakeLogHeadLine(&quot;Document Info&quot;)
+	MakeLogHeadLine(&quot;Document Properties&quot;)
 	oDocuInfo = oDocument.DocumentInfo
 	WriteStringToLogFile(oDocuInfo.Title)
 	WriteStringToLogFile(oDocuInfo.Description)
@@ -430,7 +430,7 @@ Dim oAllHyperLinks as Object
 Dim SrchAttributes(0) as new com.sun.star.beans.PropertyValue
 Dim oSearchDesc as Object
 
-	MakeLogHeadLine(&quot;HyperLinks&quot;)
+	MakeLogHeadLine(&quot;Hyperlinks&quot;)
 	&apos; create a Search-Descriptor
 	oSearchDesc = oDocument.CreateSearchDescriptor
 	oSearchDesc.Valuesearch = False
@@ -455,7 +455,7 @@ End Sub
 Sub GetGraphicNames()
 Dim i as integer
 Dim oDocGraphics as Object
-	MakeLogHeadLine(&quot;Pictures&quot;)
+	MakeLogHeadLine(&quot;Graphics&quot;)
 	oDocGraphics = oDocument.GraphicObjects
 	For i = 0 to oDocGraphics.count - 1
 		WriteStringtoLogFile(oDocGraphics.GetbyIndex(i).Name)
@@ -465,7 +465,7 @@ End Sub
 
 Sub GetStyles()
 Dim m,n as integer
-	MakeLogHeadLine(&quot;Userdefined Templates&quot;)
+	MakeLogHeadLine(&quot;User-defined Templates&quot;)
 
 	&apos; Check all StyleFamilies(i.e. PageStyles, ParagraphStyles, CharacterStyles, cellStyles)
 	For n = 0 to oDocument.StyleFamilies.Count - 1
@@ -521,9 +521,9 @@ End Sub
 
 
 Sub MakeLogHeadLine(HeadText as String)
-	oLogCursor.CharStyleName = &quot;LogHeaderText&quot;
+	oLogCursor.CharStyleName = &quot;Log Header&quot;
 	oLogText.insertControlCharacter(oLogCursor,com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK,False)
 	oLogText.insertString(oLogCursor,HeadText,False)
 	oLogText.insertControlCharacter(oLogCursor,com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK,False)
-	oLogCursor.CharStyleName = &quot;LogBodyText&quot;
+	oLogCursor.CharStyleName = &quot;Log Body&quot;
 End Sub</script:module>

@@ -47,13 +47,13 @@ Dim oStandardTemplate as Object
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	oDocument = StarDesktop.LoadComponentFromURL(&quot;private:factory/sdraw&quot;,&quot;_blank&quot;,0, NoArgs())
 	oPage = oDocument.DrawPages(0)
-	oStandardTemplate = oDocument.StyleFamilies.GetByName(&quot;graphics&quot;).GetByName(&quot;Standard&quot;)
+	oStandardTemplate = oDocument.StyleFamilies.GetByName(&quot;graphics&quot;).GetByName(&quot;Default&quot;)
 	oStandardTemplate.CharHeight = 10
 	oStandardTemplate.TextLeftDistance = 100
 	oStandardTemplate.TextRightDistance = 100
 	oStandardTemplate.TextUpperDistance = 50
 	oStandardTemplate.TextLowerDistance = 50
-	DlgReadDir = LoadDialog(&quot;Gimmicks&quot;,&quot;ReadDirDlg&quot;)
+	DlgReadDir = LoadDialog(&quot;Gimmicks&quot;,&quot;ReadDirdlg&quot;)
 	oProgressBar = DlgReadDir.Model.ProgressBar1
 	DlgReadDir.Model.TextField1.Text = ConvertFromUrl(GetPathSettings(&quot;Work&quot;))
 	DlgReadDir.Model.cmdGoOn.DefaultButton = True

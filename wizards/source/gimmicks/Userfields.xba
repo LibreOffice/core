@@ -22,9 +22,9 @@ Dim SystemPath as String
 	UserFieldDatatype(0,1) = &quot;o&quot;
 	UserFieldDatatype(1,0) = &quot;FIRSTNAME&quot;
 	UserFieldDatatype(1,1) = &quot;givenname&quot;
-	UserFieldDatatype(2,0) = &quot;NAME&quot;
+	UserFieldDatatype(2,0) = &quot;LASTNAME&quot;
 	UserFieldDatatype(2,1) = &quot;sn&quot;
-	UserFieldDatatype(3,0) = &quot;SHORTCUT&quot;
+	UserFieldDatatype(3,0) = &quot;INITIALS&quot;
 	UserFieldDatatype(3,1) = &quot;initials&quot;
 	UserFieldDatatype(4,0) = &quot;STREET&quot;
 	UserFieldDatatype(4,1) = &quot;street&quot;
@@ -38,13 +38,13 @@ Dim SystemPath as String
 	UserFieldDatatype(8,1) = &quot;title&quot;
 	UserFieldDatatype(9,0) = &quot;POSITION&quot;
 	UserFieldDatatype(9,1) = &quot;position&quot;
-	UserFieldDatatype(10,0) = &quot;PHONE_PRIVATE&quot;
+	UserFieldDatatype(10,0) = &quot;PHONE_HOME&quot;
 	UserFieldDatatype(10,1) = &quot;homephone&quot;
-	UserFieldDatatype(11,0) = &quot;PHONE_COMPANY&quot;
+	UserFieldDatatype(11,0) = &quot;PHONE_WORK&quot;
 	UserFieldDatatype(11,1) = &quot;telephonenumber&quot;
 	UserFieldDatatype(12,0) = &quot;FAX&quot;
 	UserFieldDatatype(12,1) = &quot;facsimiletelephonenumber&quot;
-	UserFieldDatatype(13,0) = &quot;EMAIL&quot;
+	UserFieldDatatype(13,0) = &quot;E-MAIL&quot;
 	UserFieldDatatype(13,1) = &quot;mail&quot;
 	UserFieldDatatype(14,0) = &quot;STATE&quot;
 	UserFieldDatatype(14,1) = &quot;st&quot;
@@ -118,30 +118,6 @@ Dim MaxIndex as Integer
 End Sub
 
 
-Sub SaveDataToFile(FilePath as String, DataList() as String)
-Dim FileChannel as Integer
-Dim i as Integer
-Dim oFile as Object
-Dim oOutputStream as Object
-Dim oStreamString as Object
-Dim oUcb as Object
-Dim sCRLF as String
-
-	sCRLF = CHR(10) &amp; CHR(13)
-	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
-	oOutputStream = createUnoService(&quot;com.sun.star.io.TextOutputStream&quot;)
-	If oUcb.Exists(FilePath) Then
-		oUcb.Kill(FilePath)
-	End If
-	oFile = oUcb.OpenFileReadWrite(FilePath)
-	oOutputStream.SetOutputStream(oFile.GetOutputStream)
-	For i = 0 To Ubound(DataList())
-		oOutputStream.WriteString(DataList(i) &amp; sCRLF)
-	Next i
-	oOutputStream.CloseOutput()
-End Sub
-
-
 Sub ToggleButtons(ByVal Index as Integer)
 Dim i as Integer
 	CurFieldIndex = Index
@@ -150,37 +126,6 @@ Dim i as Integer
 End Sub
 
 
-Function LoadDataFromFile(FilePath as String, DataList() as String) as Boolean
-Dim oInputStream as Object
-Dim i as Integer
-Dim oUcb as Object
-Dim oFile as Object
-Dim MaxIndex as Integer
-	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
-	If oUcb.Exists(FilePath) Then
-		MaxIndex = 10
-		oInputStream = createUnoService(&quot;com.sun.star.io.TextInputStream&quot;)
-		oFile = oUcb.OpenFileReadWrite(FilePath)
-		oInputStream.SetInputStream(oFile.GetInputStream)
-		i = -1
-		Redim Preserve DataList(MaxIndex) as String
-		While Not oInputStream.IsEOF
-			i = i + 1
-			If i &gt; MaxIndex Then
-				MaxIndex = MaxIndex + 10
-				Redim Preserve DataList(MaxIndex) as String
-			End If
-			DataList(i) = oInputStream.ReadLine
-		Wend
-		If i &gt; -1 And i &lt;&gt; MaxIndex Then
-			Redim Preserve DataList(i) as String
-		End If
-		LoadDataFromFile() = True
-		oOutputStream.CloseInput()
-	Else
-		LoadDataFromFile() = False
-	End If
-End Function
 
 
 Sub InitializeUserFamily()
