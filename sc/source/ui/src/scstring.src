@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2001-03-21 21:19:15 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:36:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -575,7 +575,7 @@ String SCSTR_GRAPHICSHELL
     Text[ swedish ] = "Grafik";
     Text[ polish ] = "Grafika";
     Text[ portuguese_brazilian ] = "Graphic";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸";
+    Text[ japanese ] = "}";
     Text[ korean ] = "±×·¡ÇÈ";
     Text[ chinese_simplified ] = "Í¼ĞÎ";
     Text[ chinese_traditional ] = "¹Ï§Î";
@@ -2748,7 +2748,7 @@ String SCSTR_GRFILTER_OPENERROR
     Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÍ¼ĞÎÎÄ¼ş";
     Text[ russian ] = "Îòêğûòü ãğàôè÷åñêèé ôàéë íåâîçìîæíî";
     Text[ polish ] = "Pliku graficznego nie mo¿na by³o otworzyæ";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸Ì§²Ù‚ªŠJ‚«‚Ü‚¹‚ñB";
+    Text[ japanese ] = "‰æ‘œÌ§²Ù‚ğŠJ‚¯‚Ü‚¹‚ñB";
     Text[ chinese_traditional ] = "µLªk¶}±Ò¹Ï§ÎÀÉ®×";
     Text[ arabic ] = "áÇ íãßä İÊÍ ãáİ ÇáÑÓæãÇÊ";
     Text[ dutch ] = "Grafisch bestand kan niet worden geopend";
@@ -2776,7 +2776,7 @@ String SCSTR_GRFILTER_IOERROR
     Text[ chinese_simplified ] = "ÎŞ·¨¶ÁÈ¡Í¼ĞÎÎÄ¼ş";
     Text[ russian ] = "Ïğî÷èòàòü ãğàôè÷åñêèé ôàéë íåâîçìîæíî";
     Text[ polish ] = "Pliku graficznego nie mo¿na by³o odczytaæ";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸Ì§²Ù‚ğ“Ç‚İ‚ß‚Ü‚¹‚ñB";
+    Text[ japanese ] = "‰æ‘œÌ§²Ù‚ğ“Ç‚İ‚ß‚Ü‚¹‚ñ";
     Text[ chinese_traditional ] = "µLªkÅª¨ú¹Ï§ÎÀÉ®×";
     Text[ arabic ] = "áÇ íãßä ŞÑÇÁÉ ãáİ ÇáÑÓæãÇÊ";
     Text[ dutch ] = "Grafisch bestand kan niet worden gelezen";
@@ -2804,7 +2804,7 @@ String SCSTR_GRFILTER_FORMATERROR
     Text[ chinese_simplified ] = "²»Ã÷µÄÍ¼ĞÎ¸ñÊ½";
     Text[ russian ] = "Íåèçâåñòíûé ãğàôè÷åñêèé ôîğìàò";
     Text[ polish ] = "Nieznany format graficzny";
-    Text[ japanese ] = "•s–¾‚È¸Ş×Ì¨¯¸‘®";
+    Text[ japanese ] = "•s–¾‚È}‚Ì‘®";
     Text[ chinese_traditional ] = "¤£©úªº¹Ï§Î®æ¦¡";
     Text[ arabic ] = "ÊäÓíŞ ÑÓæãÇÊ ÛíÑ ãÚÑæİ";
     Text[ dutch ] = "Onbekend afbeeldingsformaat";
@@ -2832,7 +2832,7 @@ String SCSTR_GRFILTER_VERSIONERROR
     Text[ chinese_simplified ] = "²»Ö§³ÖÕâ¸öÍ¼ĞÎÎÄ¼ş°æ±¾";
     Text[ russian ] = "Âåğñèÿ ãğàôè÷åñêîãî ôàéëà íå ïîääåğæèâàåòñÿ";
     Text[ polish ] = "Wersja pliku graficznego nie bêdzie obs³ugiwana";
-    Text[ japanese ] = "‚±‚ÌÊŞ°¼Ş®İ‚Ì¸Ş×Ì¨¯¸Ì§²Ù‚Ì‚Íx‰‡‚³‚ê‚Ü‚¹‚ñB";
+    Text[ japanese ] = "‚±‚Ì‰æ‘œÌ§²Ù‚ÌÊŞ°¼Ş®İ‚Íx‰‡‚³‚ê‚Ü‚¹‚ñB";
     Text[ chinese_traditional ] = "¤£¤ä´©³o­Óª©¥»ªº¹Ï§ÎÀÉ®×";
     Text[ arabic ] = "áÇ íÊã ÏÚã ÅÕÏÇÑ ãáİ ÇáÑÓæãÇÊ";
     Text[ dutch ] = "Deze versie van het grafische bestand wordt niet ondersteund";
@@ -2860,7 +2860,7 @@ String SCSTR_GRFILTER_FILTERERROR
     Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½Í¼ĞÎ¹ıÂËÆ÷";
     Text[ russian ] = "Ãğàôè÷åñêèé ôèëüòğ íå íàéäåí";
     Text[ polish ] = "Nie znaleziono filtrów graficznych";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸Ì¨ÙÀ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB";
+    Text[ japanese ] = "‰æ‘œÌ¨ÙÀ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB";
     Text[ chinese_traditional ] = "¨S¦³§ä¨ì¹Ï§Î¹LÂo¾¹";
     Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì İáÊÑ ÇáÑÓæãÇÊ";
     Text[ dutch ] = "Grafische filter niet gevonden";
@@ -2914,7 +2914,7 @@ String SCSTR_UNDO_GRAFFILTER
     Text[ swedish ] = "Grafikfilter";
     Text[ polish ] = "Filtr graficzny";
     Text[ portuguese_brazilian ] = "Graphic filter";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸Ì¨ÙÀ";
+    Text[ japanese ] = "‰æ‘œÌ¨ÙÀ";
     Text[ korean ] = "±×·¡ÇÈ ÇÊÅÍ";
     Text[ chinese_simplified ] = "Í¼ĞÎ¹ıÂËÆ÷";
     Text[ chinese_traditional ] = "¹Ï§Î¹LÂo¾¹";
