@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2002-05-23 15:24:05 $
+ *  last change: $Author: thb $ $Date: 2002-06-19 11:26:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -692,7 +692,7 @@ SalGraphics::~SalGraphics()
 
     // Cache-Daten zerstoeren
     if ( maGraphicsData.mpStdClipRgnData )
-        delete maGraphicsData.mpStdClipRgnData;
+        delete [] maGraphicsData.mpStdClipRgnData;
 
     if ( maGraphicsData.mpLogFont )
         delete maGraphicsData.mpLogFont;
@@ -855,7 +855,7 @@ void SalGraphics::EndSetClipRegion()
         }
 
         if ( maGraphicsData.mpClipRgnData != maGraphicsData.mpStdClipRgnData )
-            delete maGraphicsData.mpClipRgnData;
+            delete [] maGraphicsData.mpClipRgnData;
     }
 
     SelectClipRgn( maGraphicsData.mhDC, maGraphicsData.mhRegion );
@@ -1293,11 +1293,10 @@ void SalGraphics::DrawPolyPolygon( ULONG nPoly, const ULONG* pPoints,
     }
 
     if ( pWinPointAry != aWinPointAry )
-        delete pWinPointAry;
+        delete [] pWinPointAry;
     if ( pWinPointAryAry != aWinPointAryAry )
-        delete pWinPointAryAry;
+        delete [] pWinPointAryAry;
 }
-
 
 // -----------------------------------------------------------------------
 
@@ -1453,7 +1452,7 @@ BOOL SalGraphics::DrawEPS( long nX, long nY, long nWidth, long nHeight, void* pP
                 Escape ( maGraphicsData.mhDC, nEscape, pTemp - pBuf, (LPTSTR)((BYTE*)pBuf), 0 );
                 bRetValue = TRUE;
             }
-            delete pBuf;
+            delete [] pBuf;
         }
     }
 
