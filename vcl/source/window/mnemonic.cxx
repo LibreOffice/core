@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnemonic.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:30:21 $
+ *  last change: $Author: kz $ $Date: 2003-08-25 13:54:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,13 +201,27 @@ BOOL MnemonicGenerator::CreateMnemonic( XubString& rKey )
     // will get mnemonics in the form: xyz (M)
     // thus steps 1) and 2) are skipped for CJK locales
 
-    // follow-up: #110361# but no CJK mnemonics for '...' an '>>'
-    if( bCJK && nLen <= 3 )
+    // #110720#, avoid CJK-style mnemonics for latin-only strings that do not contain useful mnemonic chars
+    if( bCJK )
     {
-        static sal_Unicode cDotDotDot[] = { 0xFF0E, 0xFF0E, 0xFF0E };
-        static sal_Unicode cGreaterGreater[] = { 0xFF1E, 0xFF1E };
-        if ( rKey.EqualsAscii( "..." ) || rKey.Equals( cDotDotDot ) ||
-             rKey.EqualsAscii( ">>")   || rKey.Equals( cGreaterGreater ) )
+        BOOL bLatinOnly = TRUE;
+        BOOL bMnemonicIndexFound = FALSE;
+        sal_Unicode     c;
+        xub_StrLen      nIndex;
+
+        for( nIndex=0; nIndex < nLen; nIndex++ )
+        {
+            c = aKey.GetChar( nIndex );
+            if ( ((c >= 0x3000) && (c <= 0xD7FF)) ||    // cjk
+                 ((c >= 0xFF61) && (c <= 0xFFDC)) )     // halfwidth forms
+            {
+                bLatinOnly = FALSE;
+                break;
+            }
+            if( ImplGetMnemonicIndex( c ) != MNEMONIC_INDEX_NOTFOUND )
+                bMnemonicIndexFound = TRUE;
+        }
+        if( bLatinOnly && !bMnemonicIndexFound )
             return FALSE;
     }
 
