@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:24:08 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:16:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2002,6 +2002,11 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
         }
         else
             pField->PutValue( rValue, pMap->nWID );
+        //#114571# changes of the expanded string have to be notified to the SwTxtFld
+        if(RES_DBFLD == nWhich && pFmtFld->GetTxtFld())
+        {
+            pFmtFld->GetTxtFld()->Expand();
+        }
     }
     else if(m_pProps)
     {
