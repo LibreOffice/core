@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testbasi.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:18:03 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 11:12:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,11 +71,7 @@ class ErrorEntry;
 
 #define SBXID_TTBASIC   0x5454      // TTBasic: TT
 
-#ifdef _MSC_VER
-#  define        SBXCR_TEST2             0x545345542i64  // TEST
-#else
-#  define        SBXCR_TEST2             0x545345542LL   // TEST
-#endif
+#define SBXCR_TEST2   0x54534554L   // TEST
 
 class TTBasic : public MyBasic
 {
