@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-18 08:51:15 $
+ *  last change: $Author: kz $ $Date: 2001-07-20 20:26:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2406,4 +2406,5 @@ String STR_DATASOURCE_DELETED
     Text = "Die zugehörige Datenquelle wurde gelöscht. Es können keine dies bezüglichen Daten gespeichert werden.";
     Text [ ENGLISH ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
 };
+
 
