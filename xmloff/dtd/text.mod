@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.10 2000-12-02 21:43:39 dvo Exp $
+	$Id: text.mod,v 1.11 2000-12-04 16:54:27 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -120,7 +120,14 @@
 				   text:footnote-ref |
 				   text:endnote-ref |
 				   text:sheet-name |
-				   text:bibliography-mark ">
+				   text:bibliography-mark |
+				   text:page-count |
+				   text:paragraph-count |
+				   text:word-count |
+				   text:character-count |
+				   text:table-count |
+				   text:image-count |
+				   text:object-count" >
 
 
 <!ENTITY % inline-text "(#PCDATA|
@@ -541,6 +548,7 @@
 <!ELEMENT text:execute-macro (#PCDATA)>
 <!ATTLIST text:execute-macro text:name %string; #REQUIRED>
 
+
 <!ELEMENT text:dde-connection-decls (text:dde-connection-decl)*>
 
 <!ELEMENT text:dde-connection-decl EMPTY>
@@ -574,6 +582,34 @@
 <!ATTLIST text:endnote-ref text:reference-format (page|chapter|text|direction) #IMPLIED>
 
 <!ELEMENT text:sheet-name (#PCDATA)>
+
+<!ELEMENT text:page-count (#PCDATA)>
+<!ATTLIST text:page-count style:num-format %string; #IMPLIED>
+<!ATTLIST text:page-count style:num-letter-sync %boolean; "false">
+
+<!ELEMENT text:paragraph-count (#PCDATA)>
+<!ATTLIST text:paragraph-count style:num-format %string; #IMPLIED>
+<!ATTLIST text:paragraph-count style:num-letter-sync %boolean; "false">
+
+<!ELEMENT text:word-count (#PCDATA)>
+<!ATTLIST text:word-count style:num-format %string; #IMPLIED>
+<!ATTLIST text:word-count style:num-letter-sync %boolean; "false">
+
+<!ELEMENT text:character-count (#PCDATA)>
+<!ATTLIST text:character-count style:num-format %string; #IMPLIED>
+<!ATTLIST text:character-count style:num-letter-sync %boolean; "false">
+
+<!ELEMENT text:table-count (#PCDATA)>
+<!ATTLIST text:table-count style:num-format %string; #IMPLIED>
+<!ATTLIST text:table-count style:num-letter-sync %boolean; "false">
+
+<!ELEMENT text:image-count (#PCDATA)>
+<!ATTLIST text:image-count style:num-format %string; #IMPLIED>
+<!ATTLIST text:image-count style:num-letter-sync %boolean; "false">
+
+<!ELEMENT text:object-count (#PCDATA)>
+<!ATTLIST text:object-count style:num-format %string; #IMPLIED>
+<!ATTLIST text:object-count style:num-letter-sync %boolean; "false">
 
 <!ELEMENT text:bibliography-mark (#PCDATA)>
 <!ATTLIST text:bibliography-mark text:bibiliographic-type 
