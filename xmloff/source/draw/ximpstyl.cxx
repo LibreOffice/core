@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-04 23:07:53 $
+ *  last change: $Author: cl $ $Date: 2001-03-05 15:37:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,10 @@
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
+#include <com/sun/star/beans/XPropertyState.hpp>
 #endif
 
 #ifndef _XMLOFF_XMLPROPERTYSETCONTEXT_HXX
@@ -1271,6 +1275,35 @@ void SdXMLStylesContext::ImpSetGraphicStyles(
                 {
                     aAny = xPageStyles->getByName(aPureStyleName);
                     aAny >>= xStyle;
+
+                    // set properties of existing styles to default
+                    uno::Reference< beans::XPropertySet > xPropSet( xStyle, uno::UNO_QUERY );
+                    uno::Reference< beans::XPropertySetInfo > xPropSetInfo;
+                    if( xPropSet.is() )
+                        xPropSetInfo = xPropSet->getPropertySetInfo();
+
+                    uno::Reference< beans::XPropertyState > xPropState( xStyle, uno::UNO_QUERY );
+
+                    if( xPropState.is() )
+                    {
+                        UniReference < XMLPropertySetMapper > xPrMap;
+                        UniReference < SvXMLImportPropertyMapper > xImpPrMap = GetImportPropertyMapper( nFamily );
+                        DBG_ASSERT( xImpPrMap.is(), "There is the import prop mapper" );
+                        if( xImpPrMap.is() )
+                            xPrMap = xImpPrMap->getPropertySetMapper();
+                        if( xPrMap.is() )
+                        {
+                            const sal_Int32 nCount = xPrMap->GetEntryCount();
+                            for( sal_Int32 i = 0; i < nCount; i++ )
+                            {
+                                const OUString& rName = xPrMap->GetEntryAPIName( i );
+                                if( xPropSetInfo->hasPropertyByName( rName ) && beans::PropertyState_DIRECT_VALUE == xPropState->getPropertyState( rName ) )
+                                {
+                                    xPropState->setPropertyToDefault( rName );
+                                }
+                            }
+                        }
+                    }
                 }
                 else
                 {
