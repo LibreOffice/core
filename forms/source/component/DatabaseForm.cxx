@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:27:46 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:33:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,7 +335,7 @@ public:
 EventObject* OFormSubmitResetThread::cloneEvent(
         const EventObject *pEvt ) const
 {
-    return new MouseEvent( *(MouseEvent *)pEvt );
+    return new ::com::sun::star::awt::MouseEvent( *(::com::sun::star::awt::MouseEvent *)pEvt );
 }
 
 //------------------------------------------------------------------
@@ -346,7 +346,7 @@ void OFormSubmitResetThread::processEvent(
         sal_Bool _bSubmit)
 {
     if (_bSubmit)
-        ((ODatabaseForm *)pCompImpl)->submit_impl(_rControl, *reinterpret_cast<const MouseEvent*>(_pEvt), true);
+        ((ODatabaseForm *)pCompImpl)->submit_impl(_rControl, *reinterpret_cast<const ::com::sun::star::awt::MouseEvent*>(_pEvt), true);
     else
         ((ODatabaseForm *)pCompImpl)->reset_impl(true);
 }
@@ -509,7 +509,7 @@ ODatabaseForm::~ODatabaseForm()
 //==============================================================================
 // html tools
 //------------------------------------------------------------------------
-::rtl::OUString ODatabaseForm::GetDataURLEncoded(const Reference<XControl>& SubmitButton, const MouseEvent& MouseEvt)
+::rtl::OUString ODatabaseForm::GetDataURLEncoded(const Reference<XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt)
 {
 
     // Liste von successful Controls fuellen
@@ -557,7 +557,7 @@ ODatabaseForm::~ODatabaseForm()
 //==============================================================================
 // html tools
 //------------------------------------------------------------------------
-::rtl::OUString ODatabaseForm::GetDataTextEncoded(const Reference<XControl>& SubmitButton, const MouseEvent& MouseEvt)
+::rtl::OUString ODatabaseForm::GetDataTextEncoded(const Reference<XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt)
 {
 
     // Liste von successful Controls fuellen
@@ -602,7 +602,7 @@ ODatabaseForm::~ODatabaseForm()
 }
 
 //------------------------------------------------------------------------
-Sequence<sal_Int8> ODatabaseForm::GetDataMultiPartEncoded(const Reference<XControl>& SubmitButton, const MouseEvent& MouseEvt, ::rtl::OUString& rContentType)
+Sequence<sal_Int8> ODatabaseForm::GetDataMultiPartEncoded(const Reference<XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt, ::rtl::OUString& rContentType)
 {
 
     // Parent erzeugen
@@ -668,7 +668,7 @@ namespace
 
 //------------------------------------------------------------------------
 void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Reference<XPropertySet>& xComponentSet, const ::rtl::OUString& rNamePrefix,
-                     const Reference<XControl>& rxSubmitButton, const MouseEvent& MouseEvt)
+                     const Reference<XControl>& rxSubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt)
 {
     if (!xComponentSet.is())
         return;
@@ -996,7 +996,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
 
 //------------------------------------------------------------------------
 void ODatabaseForm::FillSuccessfulList( HtmlSuccessfulObjList& rList,
-    const Reference<XControl>& rxSubmitButton, const MouseEvent& MouseEvt )
+    const Reference<XControl>& rxSubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt )
 {
     // Liste loeschen
     rList.clear();
@@ -2095,7 +2095,7 @@ void SAL_CALL ODatabaseForm::removeResetListener(const Reference<XResetListener>
 // com::sun::star::form::XSubmit
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::submit( const Reference<XControl>& Control,
-                              const MouseEvent& MouseEvt ) throw( RuntimeException )
+                              const ::com::sun::star::awt::MouseEvent& MouseEvt ) throw( RuntimeException )
 {
     {
         ::osl::MutexGuard aGuard(m_aMutex);
@@ -2126,7 +2126,7 @@ void SAL_CALL ODatabaseForm::submit( const Reference<XControl>& Control,
 }
 
 //------------------------------------------------------------------------------
-void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const MouseEvent& MouseEvt, bool _bAproveByListeners)
+void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com::sun::star::awt::MouseEvent& MouseEvt, bool _bAproveByListeners)
 {
 
     if (_bAproveByListeners)
