@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2002-11-20 14:57:53 $
+ *  last change: $Author: obo $ $Date: 2002-11-22 13:17:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,15 @@
 #define WARNINGBOX_JAVALDXNOTSTARTED        (RID_DESKTOP_DIALOG_START+5)
 
 #define INFOBOX_PLEASERESTARTOFFICE         (RID_DESKTOP_DIALOG_START+50)
-#define INFOBOX_CMDLINEHELP                 (RID_DESKTOP_DIALOG_START+51)
 
 #define QBX_USERDATALOCKED                  (RID_DESKTOP_DIALOG_START+100)
+
+#define DLG_CMDLINEHELP                     (RID_DESKTOP_DIALOG_START+101)
+#define TXT_DLG_CMDLINEHELP_HEADER          (RID_DESKTOP_DIALOG_START+102)
+#define TXT_DLG_CMDLINEHELP_LEFT            (RID_DESKTOP_DIALOG_START+103)
+#define TXT_DLG_CMDLINEHELP_RIGHT           (RID_DESKTOP_DIALOG_START+104)
+#define TXT_DLG_CMDLINEHELP_BOTTOM          (RID_DESKTOP_DIALOG_START+105)
+#define BTN_DLG_CMDLINEHELP_OK              (RID_DESKTOP_DIALOG_START+106)
 
 #define STR_RECOVER_QUERY                   (RID_DESKTOP_STRING_START+0)
 #define STR_RECOVER_TITLE                   (RID_DESKTOP_STRING_START+1)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 16:15:46 $
+ *  last change: $Author: obo $ $Date: 2002-11-22 13:17:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ WarningBox WARNINGBOX_MISSINGJAVARUNTIME
     Message[ russian ] = "This operation requires a Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION was configured to use the JRE located at %s. This JRE was not found. To start the Java Setup, click 'OK'. To abort the current operation, click  'Cancel'.";
     Message[ greek ] = "This operation requires a Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION was configured to use the JRE located at %s. This JRE was not found. To start the Java Setup, click 'OK'. To abort the current operation, click  'Cancel'.";
     Message[ dutch ] = "This operation requires a Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION was configured to use the JRE located at %s. This JRE was not found. To start the Java Setup, click 'OK'. To abort the current operation, click  'Cancel'.";
-    Message[ french ] = "L'opération en cours requiert un environnement Runtime Java (JRE). %PRODUCTNAME %PRODUCTVERSION a été configuré pour utiliser le JRE placé dans le dossier %s. Il est cependant impossible de détecter ce JRE.\nCliquez sur 'OK' pour lancer le Setup de Java. Pour interrompre l'opération en cours, cliquez sur 'Annuler'.";
+    Message[ french ] = "L'opération en cours requiert un Environnement Runtime Java (JRE). %PRODUCTNAME %PRODUCTVERSION a été configuré pour utiliser le JRE placé dans le dossier %s. Il est cependant impossible de détecter ce JRE.\nCliquez sur 'OK' pour lancer le Setup de Java. Pour interrompre l'opération en cours, cliquez sur 'Annuler'.";
     Message[ spanish ] = "Esta operación requiere un entorno de ejecución Java (JRE). %PRODUCTNAME %PRODUCTVERSION se configuró para utilizar el entorno de ejecución Java (JRE) ubicado en la carpeta %s. Este JRE no se ha encontrado. Para iniciar el programa de instalación de Java pulse en 'Aceptar'. Para finalizar la operación actual pulse en 'Cancelar'.";
     Message[ finnish ] = "This operation requires a Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION was configured to use the JRE located at %s. This JRE was not found. To start the Java Setup, click 'OK'. To abort the current operation, click  'Cancel'.";
     Message[ italian ] = "Questa operazione richiede JRE (Java Runtime Environment). La configurazione di %PRODUCTNAME %PRODUCTVERSION utilizza JRE nella cartella %s. JRE non è stato trovato.\nCliccate 'OK' per avviare l'installazione di Java. Per terminare l'operazione fate click su 'Annulla'.";
@@ -159,7 +159,7 @@ WarningBox WARNINGBOX_JVMCREATIONFAILED
     Message[ russian ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
     Message[ greek ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
     Message[ dutch ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
-    Message[ french ] = "L'opération en cours requiert un environnement Runtime Java (JRE). Le JRE détecté par %PRODUCTNAME %PRODUCTVERSION est cependant défectueux.\nCliquez sur 'OK' pour lancer le Setup de Java. Pour interrompre l'opération en cours, cliquez sur 'Annuler'.";
+    Message[ french ] = "L'opération en cours requiert un Environnement Runtime Java (JRE). Le JRE détecté par %PRODUCTNAME %PRODUCTVERSION est cependant défectueux.\nCliquez sur 'OK' pour lancer le Setup de Java. Pour interrompre l'opération en cours, cliquez sur 'Annuler'.";
     Message[ spanish ] = "Esta operación requiere un entorno de ejecución Java (Java Runtime Environment -JRE). Sin embargo el JRE que %PRODUCTNAME %PRODUCTVERSION ha detectado es defectuoso.\nPara iniciar el programa de instalación de Java pulse en 'Aceptar'. Para cancelar la operación pulse en 'Cancelar'.";
     Message[ finnish ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
     Message[ italian ] = "Questa operazione richiede JRE (Java Runtime Environment). %PRODUCTNAME %PRODUCTVERSION ne ha rilevato una configurazione difettosa.\nFate click su 'OK' per avviare il setup di Java. Per terminare l'operazione cliccate 'Annulla'.";
@@ -242,26 +242,6 @@ InfoBox INFOBOX_PLEASERESTARTOFFICE
     Message = "Damit die neuen Java Einstellungen wirksam werden, ist ein Neustart von %PRODUCTNAME %PRODUCTVERSION erforderlich." ;
     Message[ ENGLISH ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect." ;
     Message[ english_us ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect." ;
-    Message[ portuguese ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
-    Message[ russian ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
-    Message[ greek ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
-    Message[ dutch ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
-    Message[ french ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
-    Message[ spanish ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
-    Message[ finnish ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
-    Message[ italian ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
-    Message[ danish ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
-    Message[ swedish ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
-    Message[ polish ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
-    Message[ portuguese_brazilian ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
-    Message[ japanese ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
-    Message[ korean ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
-    Message[ chinese_simplified ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
-    Message[ chinese_traditional ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
-    Message[ turkish ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
-    Message[ arabic ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
-    Message[ catalan ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
-    Message[ thai ] = "You have to restart %PRODUCTNAME %PRODUCTVERSION for the Java settings to take effect.";
 };
 
 String STR_RECOVER_QUERY
@@ -722,270 +702,60 @@ String STR_SSO_RELOGIN
 {
     Text = "Bitte wiederholen Sie Ihre Anmeldung. " ;
     Text[ ENGLISH ] = "Please log in again. " ;
-    Text[ english_us ] = "Please log in again. ";
-    Text[ portuguese ] = "Please log in again. ";
-    Text[ russian ] = "Please log in again. ";
-    Text[ greek ] = "Please log in again. ";
-    Text[ dutch ] = "Please log in again. ";
-    Text[ french ] = "Please log in again. ";
-    Text[ spanish ] = "Please log in again. ";
-    Text[ finnish ] = "Please log in again. ";
-    Text[ italian ] = "Please log in again. ";
-    Text[ danish ] = "Please log in again. ";
-    Text[ swedish ] = "Please log in again. ";
-    Text[ polish ] = "Please log in again. ";
-    Text[ portuguese_brazilian ] = "Please log in again. ";
-    Text[ japanese ] = "Please log in again. ";
-    Text[ korean ] = "Please log in again. ";
-    Text[ chinese_simplified ] = "Please log in again. ";
-    Text[ chinese_traditional ] = "Please log in again. ";
-    Text[ turkish ] = "Please log in again. ";
-    Text[ arabic ] = "Please log in again. ";
-    Text[ catalan ] = "Please log in again. ";
-    Text[ thai ] = "Please log in again. ";
 };
 
 String STR_CONFIG_WARN_LOCAL_FALLBACK
 {
     Text = "StarOffice wird Ihre lokal-gespeicherten persönlichen Einstellungen verwenden, um mit dem Programmstart fortzufahren. " ;
     Text[ ENGLISH ] = "StarOffice will continue the startup using your locally stored personal settings. " ;
-    Text[ english_us ] = "StarOffice will continue the startup using your locally stored personal settings.";
-    Text[ portuguese ] = "StarOffice will continue the startup using your locally stored personal settings. ";
-    Text[ russian ] = "StarOffice will continue the startup using your locally stored personal settings. ";
-    Text[ greek ] = "StarOffice will continue the startup using your locally stored personal settings. ";
-    Text[ dutch ] = "StarOffice will continue the startup using your locally stored personal settings. ";
-    Text[ french ] = "StarOffice will continue the startup using your locally stored personal settings. ";
-    Text[ spanish ] = "StarOffice will continue the startup using your locally stored personal settings. ";
-    Text[ finnish ] = "StarOffice will continue the startup using your locally stored personal settings. ";
-    Text[ italian ] = "StarOffice will continue the startup using your locally stored personal settings. ";
-    Text[ danish ] = "StarOffice will continue the startup using your locally stored personal settings. ";
-    Text[ swedish ] = "StarOffice will continue the startup using your locally stored personal settings. ";
-    Text[ polish ] = "StarOffice will continue the startup using your locally stored personal settings. ";
-    Text[ portuguese_brazilian ] = "StarOffice will continue the startup using your locally stored personal settings. ";
-    Text[ japanese ] = "StarOffice will continue the startup using your locally stored personal settings. ";
-    Text[ korean ] = "StarOffice will continue the startup using your locally stored personal settings. ";
-    Text[ chinese_simplified ] = "StarOffice will continue the startup using your locally stored personal settings. ";
-    Text[ chinese_traditional ] = "StarOffice will continue the startup using your locally stored personal settings. ";
-    Text[ turkish ] = "StarOffice will continue the startup using your locally stored personal settings. ";
-    Text[ arabic ] = "StarOffice will continue the startup using your locally stored personal settings. ";
-    Text[ catalan ] = "StarOffice will continue the startup using your locally stored personal settings. ";
-    Text[ thai ] = "StarOffice will continue the startup using your locally stored personal settings. ";
 };
 
 String STR_CONFIG_WARN_OFFLINE
 {
     Text = "Ihre geänderten persönlichen Einstellungen werden von StarOffice zunächst lokal gespeichert und beim nächsten Programmstart synchronisiert. " ;
     Text[ ENGLISH ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. " ;
-    Text[ english_us ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice.";
-    Text[ portuguese ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
-    Text[ russian ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
-    Text[ greek ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
-    Text[ dutch ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
-    Text[ french ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
-    Text[ spanish ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
-    Text[ finnish ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
-    Text[ italian ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
-    Text[ danish ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
-    Text[ swedish ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
-    Text[ polish ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
-    Text[ portuguese_brazilian ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
-    Text[ japanese ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
-    Text[ korean ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
-    Text[ chinese_simplified ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
-    Text[ chinese_traditional ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
-    Text[ turkish ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
-    Text[ arabic ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
-    Text[ catalan ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
-    Text[ thai ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
 };
 
 String STR_CONFIG_ERR_SETTINGS_INCOMPLETE
 {
     Text = "Die Starteinstellungen für den Zugriff auf die zentrale Konfiguration sind unvollständig. " ;
     Text[ ENGLISH ] = "The startup settings for accessing the central configuration are incomplete. " ;
-    Text[ english_us ] = "The startup settings for accessing the central configuration are incomplete. ";
-    Text[ portuguese ] = "The startup settings for accessing the central configuration are incomplete. ";
-    Text[ russian ] = "The startup settings for accessing the central configuration are incomplete. ";
-    Text[ greek ] = "The startup settings for accessing the central configuration are incomplete. ";
-    Text[ dutch ] = "The startup settings for accessing the central configuration are incomplete. ";
-    Text[ french ] = "The startup settings for accessing the central configuration are incomplete. ";
-    Text[ spanish ] = "The startup settings for accessing the central configuration are incomplete. ";
-    Text[ finnish ] = "The startup settings for accessing the central configuration are incomplete. ";
-    Text[ italian ] = "The startup settings for accessing the central configuration are incomplete. ";
-    Text[ danish ] = "The startup settings for accessing the central configuration are incomplete. ";
-    Text[ swedish ] = "The startup settings for accessing the central configuration are incomplete. ";
-    Text[ polish ] = "The startup settings for accessing the central configuration are incomplete. ";
-    Text[ portuguese_brazilian ] = "The startup settings for accessing the central configuration are incomplete. ";
-    Text[ japanese ] = "The startup settings for accessing the central configuration are incomplete. ";
-    Text[ korean ] = "The startup settings for accessing the central configuration are incomplete. ";
-    Text[ chinese_simplified ] = "The startup settings for accessing the central configuration are incomplete. ";
-    Text[ chinese_traditional ] = "The startup settings for accessing the central configuration are incomplete. ";
-    Text[ turkish ] = "The startup settings for accessing the central configuration are incomplete. ";
-    Text[ arabic ] = "The startup settings for accessing the central configuration are incomplete. ";
-    Text[ catalan ] = "The startup settings for accessing the central configuration are incomplete. ";
-    Text[ thai ] = "The startup settings for accessing the central configuration are incomplete. ";
 };
 
 String STR_CONFIG_ERR_CANNOT_CONNECT
 {
     Text = "Eine Verbindung zur zentralen Konfiguration kann nicht hergestellt werden. " ;
     Text[ ENGLISH ] = "A connection to the central configuration could not be established. " ;
-    Text[ english_us ] = "A connection to the central configuration could not be established. ";
-    Text[ portuguese ] = "A connection to the central configuration could not be established. ";
-    Text[ russian ] = "A connection to the central configuration could not be established. ";
-    Text[ greek ] = "A connection to the central configuration could not be established. ";
-    Text[ dutch ] = "A connection to the central configuration could not be established. ";
-    Text[ french ] = "A connection to the central configuration could not be established. ";
-    Text[ spanish ] = "A connection to the central configuration could not be established. ";
-    Text[ finnish ] = "A connection to the central configuration could not be established. ";
-    Text[ italian ] = "A connection to the central configuration could not be established. ";
-    Text[ danish ] = "A connection to the central configuration could not be established. ";
-    Text[ swedish ] = "A connection to the central configuration could not be established. ";
-    Text[ polish ] = "A connection to the central configuration could not be established. ";
-    Text[ portuguese_brazilian ] = "A connection to the central configuration could not be established. ";
-    Text[ japanese ] = "A connection to the central configuration could not be established. ";
-    Text[ korean ] = "A connection to the central configuration could not be established. ";
-    Text[ chinese_simplified ] = "A connection to the central configuration could not be established. ";
-    Text[ chinese_traditional ] = "A connection to the central configuration could not be established. ";
-    Text[ turkish ] = "A connection to the central configuration could not be established. ";
-    Text[ arabic ] = "A connection to the central configuration could not be established. ";
-    Text[ catalan ] = "A connection to the central configuration could not be established. ";
-    Text[ thai ] = "A connection to the central configuration could not be established. ";
 };
 
 String STR_CONFIG_ERR_RIGHTS_MISSING
 {
     Text = "Aufgrund fehlender Zugriffsrechte können Sie nicht auf die zentrale Konfiguration zugreifen. " ;
     Text[ ENGLISH ] = "You cannot access the central configuration because of missing access rights. " ;
-    Text[ english_us ] = "You cannot access the central configuration because of missing access rights. ";
-    Text[ portuguese ] = "You cannot access the central configuration because of missing access rights. ";
-    Text[ russian ] = "You cannot access the central configuration because of missing access rights. ";
-    Text[ greek ] = "You cannot access the central configuration because of missing access rights. ";
-    Text[ dutch ] = "You cannot access the central configuration because of missing access rights. ";
-    Text[ french ] = "You cannot access the central configuration because of missing access rights. ";
-    Text[ spanish ] = "You cannot access the central configuration because of missing access rights. ";
-    Text[ finnish ] = "You cannot access the central configuration because of missing access rights. ";
-    Text[ italian ] = "You cannot access the central configuration because of missing access rights. ";
-    Text[ danish ] = "You cannot access the central configuration because of missing access rights. ";
-    Text[ swedish ] = "You cannot access the central configuration because of missing access rights. ";
-    Text[ polish ] = "You cannot access the central configuration because of missing access rights. ";
-    Text[ portuguese_brazilian ] = "You cannot access the central configuration because of missing access rights. ";
-    Text[ japanese ] = "You cannot access the central configuration because of missing access rights. ";
-    Text[ korean ] = "You cannot access the central configuration because of missing access rights. ";
-    Text[ chinese_simplified ] = "You cannot access the central configuration because of missing access rights. ";
-    Text[ chinese_traditional ] = "You cannot access the central configuration because of missing access rights. ";
-    Text[ turkish ] = "You cannot access the central configuration because of missing access rights. ";
-    Text[ arabic ] = "You cannot access the central configuration because of missing access rights. ";
-    Text[ catalan ] = "You cannot access the central configuration because of missing access rights. ";
-    Text[ thai ] = "You cannot access the central configuration because of missing access rights. ";
 };
 
 String STR_CONFIG_ERR_LOGIN_FAILED
 {
     Text = "Die Anmeldung zur zentralen Konfiguration ist fehlgeschlagen. Der Benutzername oder das Kennwort ist falsch. " ;
     Text[ ENGLISH ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. " ;
-    Text[ english_us ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
-    Text[ portuguese ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
-    Text[ russian ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
-    Text[ greek ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
-    Text[ dutch ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
-    Text[ french ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
-    Text[ spanish ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
-    Text[ finnish ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
-    Text[ italian ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
-    Text[ danish ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
-    Text[ swedish ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
-    Text[ polish ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
-    Text[ portuguese_brazilian ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
-    Text[ japanese ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
-    Text[ korean ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
-    Text[ chinese_simplified ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
-    Text[ chinese_traditional ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
-    Text[ turkish ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
-    Text[ arabic ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
-    Text[ catalan ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
-    Text[ thai ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
 };
 
 String STR_CONFIG_ERR_MECHANISM_INVALID
 {
     Text = "Die gewählte Authentifizierungsmethode für den Zugriff auf die zentrale Konfiguration wird nicht unterstützt. " ;
     Text[ ENGLISH ] = "The specified authentication method to access the central configuration is not supported. " ;
-    Text[ english_us ] = "The specified authentication method to access the central configuration is not supported. ";
-    Text[ portuguese ] = "The specified authentication method to access the central configuration is not supported. ";
-    Text[ russian ] = "The specified authentication method to access the central configuration is not supported. ";
-    Text[ greek ] = "The specified authentication method to access the central configuration is not supported. ";
-    Text[ dutch ] = "The specified authentication method to access the central configuration is not supported. ";
-    Text[ french ] = "The specified authentication method to access the central configuration is not supported. ";
-    Text[ spanish ] = "The specified authentication method to access the central configuration is not supported. ";
-    Text[ finnish ] = "The specified authentication method to access the central configuration is not supported. ";
-    Text[ italian ] = "The specified authentication method to access the central configuration is not supported. ";
-    Text[ danish ] = "The specified authentication method to access the central configuration is not supported. ";
-    Text[ swedish ] = "The specified authentication method to access the central configuration is not supported. ";
-    Text[ polish ] = "The specified authentication method to access the central configuration is not supported. ";
-    Text[ portuguese_brazilian ] = "The specified authentication method to access the central configuration is not supported. ";
-    Text[ japanese ] = "The specified authentication method to access the central configuration is not supported. ";
-    Text[ korean ] = "The specified authentication method to access the central configuration is not supported. ";
-    Text[ chinese_simplified ] = "The specified authentication method to access the central configuration is not supported. ";
-    Text[ chinese_traditional ] = "The specified authentication method to access the central configuration is not supported. ";
-    Text[ turkish ] = "The specified authentication method to access the central configuration is not supported. ";
-    Text[ arabic ] = "The specified authentication method to access the central configuration is not supported. ";
-    Text[ catalan ] = "The specified authentication method to access the central configuration is not supported. ";
-    Text[ thai ] = "The specified authentication method to access the central configuration is not supported. ";
 };
 
 String STR_CONFIG_ERR_ACCESS_GENERAL
 {
     Text = "Ein genereller Fehler ist beim Zugriff auf die zentrale Konfiguration aufgetreten. " ;
     Text[ ENGLISH ] = "A general access error occurred while accessing your central configuration. " ;
-    Text[ english_us ] = "A general error occurred while accessing your central configuration. ";
-    Text[ portuguese ] = "A general access error occurred while accessing your central configuration. ";
-    Text[ russian ] = "A general access error occurred while accessing your central configuration. ";
-    Text[ greek ] = "A general access error occurred while accessing your central configuration. ";
-    Text[ dutch ] = "A general access error occurred while accessing your central configuration. ";
-    Text[ french ] = "A general access error occurred while accessing your central configuration. ";
-    Text[ spanish ] = "A general access error occurred while accessing your central configuration. ";
-    Text[ finnish ] = "A general access error occurred while accessing your central configuration. ";
-    Text[ italian ] = "A general access error occurred while accessing your central configuration. ";
-    Text[ danish ] = "A general access error occurred while accessing your central configuration. ";
-    Text[ swedish ] = "A general access error occurred while accessing your central configuration. ";
-    Text[ polish ] = "A general access error occurred while accessing your central configuration. ";
-    Text[ portuguese_brazilian ] = "A general access error occurred while accessing your central configuration. ";
-    Text[ japanese ] = "A general access error occurred while accessing your central configuration. ";
-    Text[ korean ] = "A general access error occurred while accessing your central configuration. ";
-    Text[ chinese_simplified ] = "A general access error occurred while accessing your central configuration. ";
-    Text[ chinese_traditional ] = "A general access error occurred while accessing your central configuration. ";
-    Text[ turkish ] = "A general access error occurred while accessing your central configuration. ";
-    Text[ arabic ] = "A general access error occurred while accessing your central configuration. ";
-    Text[ catalan ] = "A general access error occurred while accessing your central configuration. ";
-    Text[ thai ] = "A general access error occurred while accessing your central configuration. ";
 };
 
 String STR_CONFIG_ERR_NO_WRITE_ACCESS
 {
     Text = "Ihre geänderten persönlichen Einstellungen können aufgrund fehlender Zugriffsrechte nicht zentral gespeichert werden. " ;
     Text[ ENGLISH ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. " ;
-    Text[ english_us ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
-    Text[ portuguese ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
-    Text[ russian ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
-    Text[ greek ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
-    Text[ dutch ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
-    Text[ french ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
-    Text[ spanish ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
-    Text[ finnish ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
-    Text[ italian ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
-    Text[ danish ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
-    Text[ swedish ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
-    Text[ polish ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
-    Text[ portuguese_brazilian ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
-    Text[ japanese ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
-    Text[ korean ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
-    Text[ chinese_simplified ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
-    Text[ chinese_traditional ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
-    Text[ turkish ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
-    Text[ arabic ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
-    Text[ catalan ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
-    Text[ thai ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
 };
 
 
@@ -1155,9 +925,66 @@ QueryBox QBX_USERDATALOCKED
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message = "Eine andere Instanz von %PRODUCTNAME scheint auf Ihre Benutzerdaten zuzugreifen.\n"\
-              "Die Daten wurden von dem Benutzer $u auf dem Host $h am $t geöffnet.\n"\
-              "Das gleichzeitige Öffnen der Benutzerdaten durch mehrere Instanzen von %PRODUCTNAME kann zu Inkonsistenzen in den Daten führen.\n"\
-              "Möchten Sie wirklich fortfahren?" ;
+    Message =
+        "Eine andere Instanz von %PRODUCTNAME greift auf Ihre persönlichen Einstellungen zu\n"\
+        "oder hat diese nicht wieder freigegeben.\n"\
+        "Der gleichzeitige Zugriff kann zu Inkonsistenzen in Ihren persönlichen Einstellungen führen.\n"\
+        "Bevor Sie Fortfahren sollten Sie sicher stellen, dass %PRODUCTNAME auf dem Host '$h' vom\n"\
+        "Benutzer '$u' beendet wird.\n"\
+        "\n"\
+        "Möchten Sie wirklich fortfahren?";
+    Message[ ENGLISH ] =
+        "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal\n"\
+        "settings are locked.\n"\
+        "Simultaneous access can lead to inconsistencies in your personal settings. Before continuing,\n"\
+        "you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n"\
+        "\n"\
+        "Do you really want to continue?";
 };
 
+String STR_TITLE_USERDATALOCKED
+{
+    Text = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ ENGLISH ] = "%PRODUCTNAME %PRODUCTVERSION";
+};
+
+ModalDialog DLG_CMDLINEHELP
+{
+    Text = "Help Message...";
+    Size = MAP_APPFONT(250, 320);
+    Border = True;
+    SVLook = True;
+    Moveable = True;
+
+    FixedText TXT_DLG_CMDLINEHELP_HEADER
+    {
+        Size = MAP_APPFONT(240, 50);
+        Pos = MAP_APPFONT(5, 5);
+        Text = "HEADER";
+    };
+    FixedText TXT_DLG_CMDLINEHELP_LEFT
+    {
+        Size = MAP_APPFONT(50, 145);
+        Pos = MAP_APPFONT(5, 55);
+        Text = "LEFT";
+    };
+    FixedText TXT_DLG_CMDLINEHELP_RIGHT
+    {
+        Size = MAP_APPFONT(190, 145);
+        Pos = MAP_APPFONT(60, 55);
+        Text = "RIGHT";
+    };
+    FixedText TXT_DLG_CMDLINEHELP_BOTTOM
+    {
+        Size = MAP_APPFONT(240, 100);
+        Pos = MAP_APPFONT(5, 195);
+        Text = "BOTTOM";
+    };
+    OKButton BTN_DLG_CMDLINEHELP_OK
+    {
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT(95, 300);
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+};
