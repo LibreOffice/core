@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdraw.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-02 20:58:50 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:35:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,6 +401,24 @@ FloatingWindow RID_SVXTBX_DRAW
                 RadioCheck = TRUE ;
                 Text = "Vertikaler Text" ;
                 Text [ ENGLISH ] = "Vertical Text" ;
+                Text[ english_us ] = "Vertical Text";
+                Text[ portuguese ] = "Vertical Text";
+                Text[ russian ] = "Vertical Text";
+                Text[ greek ] = "Vertical Text";
+                Text[ dutch ] = "Vertical Text";
+                Text[ french ] = "Vertical Text";
+                Text[ spanish ] = "Vertical Text";
+                Text[ italian ] = "Vertical Text";
+                Text[ danish ] = "Vertical Text";
+                Text[ swedish ] = "Vertical Text";
+                Text[ polish ] = "Vertical Text";
+                Text[ portuguese_brazilian ] = "Vertical Text";
+                Text[ japanese ] = "Vertical Text";
+                Text[ korean ] = "Vertical Text";
+                Text[ chinese_simplified ] = "Vertical Text";
+                Text[ chinese_traditional ] = "Vertical Text";
+                Text[ turkish ] = "Vertical Text";
+                Text[ arabic ] = "Vertical Text";
             };
             ToolBoxItem
             {
@@ -465,6 +483,24 @@ FloatingWindow RID_SVXTBX_DRAW
                 RadioCheck = TRUE ;
                 Text = "Vertikale Legende" ;
                 Text [ ENGLISH ] = "Vertical Caption" ;
+                Text[ english_us ] = "Vertical Caption";
+                Text[ portuguese ] = "Vertical Caption";
+                Text[ russian ] = "Vertical Caption";
+                Text[ greek ] = "Vertical Caption";
+                Text[ dutch ] = "Vertical Caption";
+                Text[ french ] = "Vertical Caption";
+                Text[ spanish ] = "Vertical Caption";
+                Text[ italian ] = "Vertical Caption";
+                Text[ danish ] = "Vertical Caption";
+                Text[ swedish ] = "Vertical Caption";
+                Text[ polish ] = "Vertical Caption";
+                Text[ portuguese_brazilian ] = "Vertical Caption";
+                Text[ japanese ] = "Vertical Caption";
+                Text[ korean ] = "Vertical Caption";
+                Text[ chinese_simplified ] = "Vertical Caption";
+                Text[ chinese_traditional ] = "Vertical Caption";
+                Text[ turkish ] = "Vertical Caption";
+                Text[ arabic ] = "Vertical Caption";
             };
         };
     };
