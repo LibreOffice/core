@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Aolevariant.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-26 12:35:03 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:49:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,14 +214,25 @@ OLEVariant::OLEVariant(IDispatch* pDispInterface)
 OLEVariant::OLEVariant(const ::com::sun::star::uno::Sequence< sal_Int8 >& x)
 {
     VariantInit(this);
+
     vt      = VT_ARRAY|VT_UI1;
+
+    SAFEARRAYBOUND rgsabound[1];
+    rgsabound[0].lLbound = 0;
+    rgsabound[0].cElements = x.getLength();
+    //  parray  = SafeArrayCreate(VT_UI1,1,rgsabound);
     parray  = SafeArrayCreateVector(VT_UI1, 0, x.getLength());
     const sal_Int8* pBegin = x.getConstArray();
     const sal_Int8* pEnd = pBegin + x.getLength();
-    for(sal_Int32 i=0;pBegin != pEnd;++i,++pBegin)
-        SafeArrayPutElement(parray,&i,&pBegin);
-}
 
+    for(sal_Int32 i=0;pBegin != pEnd;++i,++pBegin)
+    {
+        sal_Int32 nData = *pBegin;
+        HRESULT rs = SafeArrayPutElement(parray,&i,&nData);
+        OSL_ENSURE(S_OK == rs,"Error while copy byte data");
+    }
+}
+//
 OLEVariant& OLEVariant::operator=(const OLEVariant& varSrc)
 {
     HRESULT eRet = ::VariantCopy(this, const_cast<VARIANT*>(static_cast<const VARIANT*>(&varSrc)));
@@ -475,14 +486,20 @@ OLEVariant::operator ::com::sun::star::uno::Sequence< sal_Int8 >() const
             // Verify that the SafeArray is the proper shape.
             hresult1 = ::SafeArrayGetLBound(pArray, 1, &lBound);
             hresult2 = ::SafeArrayGetUBound(pArray, 1, &uBound);
-            if(SUCCEEDED(hresult1) && SUCCEEDED(hresult2))
+            if ( SUCCEEDED(hresult1) && SUCCEEDED(hresult2) )
             {
-                long nIndex = 0;
                 long nCount = uBound-lBound+1;
                 aRet.realloc(nCount);
-                for(long i=0;i<nCount;++i)
+                sal_Int8* pData = aRet.getArray();
+                for(long i=0; SUCCEEDED(hresult1) && lBound <= uBound ;++i,++lBound)
                 {
-                    ::SafeArrayGetElement(pArray,&nIndex,(void*)aRet.getArray()[i]);
+                    sal_Int32 nData = 0;
+                    hresult1 = ::SafeArrayGetElement(pArray,&lBound,&nData);
+                    if ( SUCCEEDED(hresult1) )
+                    {
+                        *pData = static_cast<sal_Int8>(nData);
+                        ++pData;
+                    }
                 }
             }
         }
@@ -668,6 +685,7 @@ CY OLEVariant::getCurrency() const
     if(isNull())
     {
         CY aVar;
+        aVar.int64 = sal_Int64(0);
         return aVar;
     }
     OLEVariant varDest;
