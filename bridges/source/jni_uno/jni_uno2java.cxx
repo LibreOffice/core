@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_uno2java.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2002-10-29 10:55:08 $
+ *  last change: $Author: dbo $ $Date: 2002-11-01 14:24:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,9 @@ using namespace ::rtl;
 namespace jni_bridge
 {
 
-//--------------------------------------------------------------------------------------------------
-static void handle_java_exc(
-    JNI_attach const & attach, jni_Bridge const * bridge,
-    JLocalAutoRef const & jo_exc, uno_Any * uno_exc )
+//__________________________________________________________________________________________________
+void jni_Bridge::handle_java_exc(
+    JNI_attach const & attach, JLocalAutoRef const & jo_exc, uno_Any * uno_exc ) const
 {
     OSL_ASSERT( jo_exc.is() );
     if (! jo_exc.is())
@@ -89,7 +88,7 @@ static void handle_java_exc(
         // call toString()
         JLocalAutoRef jo_descr(
             attach, attach->CallObjectMethodA(
-                jo_exc.get(), bridge->m_jni_info->m_method_Object_toString, 0 ) );
+                jo_exc.get(), m_jni_info->m_method_Object_toString, 0 ) );
         attach.ensure_no_exception();
         OUString descr( jstring_to_oustring( attach, (jstring)jo_descr.get() ) );
         throw BridgeRuntimeError( OUSTR("non-UNO exception occurred: ") + descr );
@@ -98,7 +97,7 @@ static void handle_java_exc(
     auto_ptr< rtl_mem > uno_data( rtl_mem::allocate( td.get()->nSize ) );
     jvalue val;
     val.l = jo_exc.get();
-    bridge->map_to_uno(
+    map_to_uno(
         attach, uno_data.get(), val, td.get()->pWeakRef, 0,
         false /* no assign */, false /* no out param */ );
 
@@ -113,7 +112,6 @@ static void handle_java_exc(
     OSL_TRACE( cstr_msg.getStr() );
 #endif
 }
-
 //__________________________________________________________________________________________________
 void jni_Bridge::call_java(
     jobject javaI, JNI_type_info const * info, sal_Int32 function_pos,
@@ -226,7 +224,7 @@ void jni_Bridge::call_java(
                 attach->DeleteLocalRef( java_args[ nPos ].l );
         }
 
-        handle_java_exc( attach, this, jo_exc, *uno_exc );
+        handle_java_exc( attach, jo_exc, *uno_exc );
     }
     else // no exception
     {
@@ -301,7 +299,8 @@ struct jni_unoInterfaceProxy : public uno_Interface
     // ctor
     inline jni_unoInterfaceProxy(
         JNI_attach const & attach, jni_Bridge const * bridge,
-        jobject javaI, jstring jo_oid, OUString const & oid, JNI_type_info const * info );
+        jobject javaI, jstring jo_oid, OUString const & oid, JNI_type_info const * info )
+        SAL_THROW( () );
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -375,7 +374,7 @@ static void SAL_CALL jni_unoInterfaceProxy_acquire( jni_unoInterfaceProxy * that
 //--------------------------------------------------------------------------------------------------
 static void SAL_CALL jni_unoInterfaceProxy_release( jni_unoInterfaceProxy * that ) SAL_THROW( () )
 {
-    if (! osl_decrementInterlockedCount( &that->m_ref ))
+    if (0 == osl_decrementInterlockedCount( &that->m_ref ))
     {
         // revoke from uno env on last release
         (*that->m_bridge->m_uno_env->revokeInterface)( that->m_bridge->m_uno_env, that );
@@ -385,6 +384,7 @@ static void SAL_CALL jni_unoInterfaceProxy_release( jni_unoInterfaceProxy * that
 inline jni_unoInterfaceProxy::jni_unoInterfaceProxy(
     JNI_attach const & attach, jni_Bridge const * bridge,
     jobject javaI, jstring jo_oid, OUString const & oid, JNI_type_info const * info )
+    SAL_THROW( () )
     : m_ref( 1 ),
       m_oid( oid ),
       m_type_info( info )
@@ -488,15 +488,7 @@ static void SAL_CALL jni_unoInterfaceProxy_dispatch(
                     (void **)&pInterface, that->m_oid.pData,
                     (typelib_InterfaceTypeDescription *)demanded_td.get() );
 
-                if (pInterface)
-                {
-                    uno_any_construct(
-                        reinterpret_cast< uno_Any * >( uno_ret ),
-                        &pInterface, demanded_td.get(), 0 );
-                    (*pInterface->release)( pInterface );
-                    *uno_exc = 0;
-                }
-                else
+                if (0 == pInterface)
                 {
                     JNI_info const * jni_info = bridge->m_jni_info;
                     JNI_attach attach( bridge->m_java_env );
@@ -517,7 +509,7 @@ static void SAL_CALL jni_unoInterfaceProxy_dispatch(
                     {
                         JLocalAutoRef jo_exc( attach, attach->ExceptionOccurred() );
                         attach->ExceptionClear();
-                        handle_java_exc( attach, bridge, jo_exc, *uno_exc );
+                        bridge->handle_java_exc( attach, jo_exc, *uno_exc );
                     }
                     else
                     {
@@ -531,30 +523,21 @@ static void SAL_CALL jni_unoInterfaceProxy_dispatch(
                             JLocalAutoRef jo_iface(
                                 attach, jni_info->java_env_registerInterface(
                                     attach, jo_ret.get(), that->m_jo_oid, info->m_jo_type ) );
-                            try
-                            {
-                                // refcount initially 1
-                                uno_Interface * pUnoI = new jni_unoInterfaceProxy(
-                                    attach, bridge, jo_iface.get(),
-                                    (jstring)jo_oid.get(), oid, info );
 
-                                (*bridge->m_uno_env->registerProxyInterface)(
-                                    bridge->m_uno_env, reinterpret_cast< void ** >( &pUnoI ),
-                                    (uno_freeProxyFunc)jni_unoInterfaceProxy_free,
-                                    that->m_oid.pData,
-                                    (typelib_InterfaceTypeDescription *)info->m_td.get() );
+                            // refcount initially 1
+                            uno_Interface * pUnoI = new jni_unoInterfaceProxy(
+                                attach, bridge, jo_iface.get(),
+                                that->m_jo_oid, that->m_oid, info );
 
-                                uno_any_construct(
-                                    (uno_Any *)uno_ret, &pUnoI, demanded_td.get(), 0 );
-                                (*pUnoI->release)( pUnoI );
-                            }
-                            catch (...)
-                            {
-                                // cleanup
-                                jni_info->java_env_revokeInterface(
-                                    attach, that->m_jo_oid, info->m_jo_type );
-                                throw;
-                            }
+                            (*bridge->m_uno_env->registerProxyInterface)(
+                                bridge->m_uno_env, reinterpret_cast< void ** >( &pUnoI ),
+                                (uno_freeProxyFunc)jni_unoInterfaceProxy_free,
+                                that->m_oid.pData,
+                                (typelib_InterfaceTypeDescription *)info->m_td.get() );
+
+                            uno_any_construct(
+                                (uno_Any *)uno_ret, &pUnoI, demanded_td.get(), 0 );
+                            (*pUnoI->release)( pUnoI );
                         }
                         else // object does not support demanded interface
                         {
@@ -563,6 +546,14 @@ static void SAL_CALL jni_unoInterfaceProxy_dispatch(
                         // no excetpion occured
                         *uno_exc = 0;
                     }
+                }
+                else
+                {
+                    uno_any_construct(
+                        reinterpret_cast< uno_Any * >( uno_ret ),
+                        &pInterface, demanded_td.get(), 0 );
+                    (*pInterface->release)( pInterface );
+                    *uno_exc = 0;
                 }
                 break;
             }
@@ -622,30 +613,22 @@ uno_Interface * jni_Bridge::map_java2uno(
     (*m_uno_env->getRegisteredInterface)(
         m_uno_env, (void **)&pUnoI,
         oid.pData, (typelib_InterfaceTypeDescription *)info->m_td.get() );
+
     if (0 == pUnoI) // no existing interface, register new proxy
     {
         JLocalAutoRef jo_iface(
             attach, m_jni_info->java_env_registerInterface(
                 attach, javaI, (jstring)jo_oid.get(), info->m_jo_type ) );
-        try
-        {
-            // refcount initially 1
-            pUnoI = new jni_unoInterfaceProxy(
-                attach, const_cast< jni_Bridge * >( this ),
-                jo_iface.get(), (jstring)jo_oid.get(), oid, info );
 
-            (*m_uno_env->registerProxyInterface)(
-                m_uno_env, reinterpret_cast< void ** >( &pUnoI ),
-                (uno_freeProxyFunc)jni_unoInterfaceProxy_free,
-                oid.pData, (typelib_InterfaceTypeDescription *)info->m_td.get() );
-        }
-        catch (...)
-        {
-            // cleanup
-            m_jni_info->java_env_revokeInterface(
-                attach, (jstring)jo_oid.get(), info->m_jo_type );
-            throw;
-        }
+        // refcount initially 1
+        pUnoI = new jni_unoInterfaceProxy(
+            attach, const_cast< jni_Bridge * >( this ),
+            jo_iface.get(), (jstring)jo_oid.get(), oid, info );
+
+        (*m_uno_env->registerProxyInterface)(
+            m_uno_env, reinterpret_cast< void ** >( &pUnoI ),
+            (uno_freeProxyFunc)jni_unoInterfaceProxy_free,
+            oid.pData, (typelib_InterfaceTypeDescription *)info->m_td.get() );
     }
     return pUnoI;
 }

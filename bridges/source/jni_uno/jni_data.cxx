@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_data.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2002-10-29 12:20:27 $
+ *  last change: $Author: dbo $ $Date: 2002-11-01 14:24:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,7 +276,7 @@ void jni_Bridge::map_to_uno(
         OUString type_name( jstring_to_oustring( attach, (jstring)jo_type_name.get() ) );
         ::com::sun::star::uno::TypeDescription td( type_name );
         if (! td.is())
-            throw BridgeRuntimeError( OUSTR("type not found: ") + type_name );
+            throw BridgeRuntimeError( OUSTR("UNO type not found: ") + type_name );
         typelib_typedescriptionreference_acquire( td.get()->pWeakRef );
         if (assign)
         {
@@ -300,7 +300,7 @@ void jni_Bridge::map_to_uno(
 //             (typelib_TypeDescriptionReference **)uno_data, type_class, type_name.pData );
         break;
     }
-    case typelib_TypeClass_ANY:
+    case typelib_TypeClass_ANY: // xxx todo: possible opt on anys
     {
         JLocalAutoRef jo_out_holder;
         if (out_param)
@@ -327,15 +327,15 @@ void jni_Bridge::map_to_uno(
         attach.ensure_no_exception();
         jvalue arg;
         arg.l = jo_class.get();
-        bool equals =
+        bool is_any =
             (JNI_FALSE != attach->CallBooleanMethodA(
                 m_jni_info->m_class_Any, m_jni_info->m_method_Object_equals, &arg ));
         attach.ensure_no_exception();
 
         JLocalAutoRef jo_type;
-        JLocalAutoRef jo_wrapped;
+        JLocalAutoRef jo_wrapped_holder;
 
-        if (equals) // is com.sun.star.uno.Any
+        if (is_any)
         {
             // wrapped value type
             jo_type.reset(
@@ -343,13 +343,27 @@ void jni_Bridge::map_to_uno(
             if (! jo_type.is())
                 throw BridgeRuntimeError( OUSTR("no type set at com.sun.star.uno.Any!") );
             // wrapped value
-            jo_wrapped.reset(
+            jo_wrapped_holder.reset(
                 attach, attach->GetObjectField( java_data.l, m_jni_info->m_field_Any__object ) );
-            java_data.l = jo_wrapped.get();
+            java_data.l = jo_wrapped_holder.get();
         }
         else
         {
-            jo_type.reset( attach, create_type( attach, (jclass)jo_class.get() ) );
+            // check whether this is a proxy
+            if (JNI_FALSE != attach->IsAssignableFrom(
+                    (jclass)jo_class.get(), m_jni_info->m_class_TypedProxy ))
+            {
+                // is proxy => determine exact type
+                jo_type.reset(
+                    attach, attach->CallObjectMethodA(
+                        java_data.l, m_jni_info->m_method_TypedProxy_getType, 0 ) );
+                attach.ensure_no_exception();
+            }
+            else
+            {
+                jo_type.reset(
+                    attach, create_type( attach, (jclass)jo_class.get() ) );
+            }
         }
 
         // get type name
@@ -360,7 +374,7 @@ void jni_Bridge::map_to_uno(
 
         ::com::sun::star::uno::TypeDescription value_td( type_name );
         if (! value_td.is())
-            throw BridgeRuntimeError( OUSTR("type not found: ") + type_name );
+            throw BridgeRuntimeError( OUSTR("UNO type not found: ") + type_name );
         typelib_TypeClass type_class = value_td.get()->eTypeClass;
 
         // just as fallback: should never happen
@@ -595,9 +609,9 @@ void jni_Bridge::map_to_uno(
                     {
                         OSL_ASSERT(
                             typelib_typedescriptionreference_equals(
-                                type, m_jni_info->m_Exception.getTypeLibType() ) ||
+                                type, m_jni_info->m_Exception_type.getTypeLibType() ) ||
                             typelib_typedescriptionreference_equals(
-                                type, m_jni_info->m_RuntimeException.getTypeLibType() ) );
+                                type, m_jni_info->m_RuntimeException_type.getTypeLibType() ) );
                         OSL_ASSERT( 0 == nPos ); // first member
                         // call getMessage()
                         jo_field.reset(
@@ -833,7 +847,7 @@ void jni_Bridge::map_to_uno(
 //__________________________________________________________________________________________________
 void jni_Bridge::map_to_java(
     JNI_attach const & attach,
-    jvalue * java_data, void * uno_data,
+    jvalue * java_data, void const * uno_data,
     typelib_TypeDescriptionReference * type, JNI_type_info const * info /* maybe 0 */,
     bool in_param, bool out_param, bool special_wrapped_integral_types ) const
 {
@@ -1102,15 +1116,27 @@ void jni_Bridge::map_to_java(
             map_to_java(
                 attach, args, pAny->pData, pAny->pType, 0,
                 true /* in */, false /* no out */, true /* create integral wrappers */ );
-            JLocalAutoRef jo_val( attach, args[ 0 ].l );
-            JLocalAutoRef jo_type( attach, create_type( attach, pAny->pType ) );
-            args[ 0 ].l = jo_type.get();
-            args[ 1 ].l = jo_val.get();
-            // build up any
-            jo_any.reset(
-                attach, attach->NewObjectA(
-                    m_jni_info->m_class_Any, m_jni_info->m_ctor_Any_with_Type_Object, args ) );
-            attach.ensure_no_exception();
+            switch (pAny->pType->eTypeClass)
+            {
+            case typelib_TypeClass_UNSIGNED_SHORT:
+            case typelib_TypeClass_UNSIGNED_LONG:
+            case typelib_TypeClass_UNSIGNED_HYPER:
+            {
+                // build up com.sun.star.uno.Any
+                JLocalAutoRef jo_val( attach, args[ 0 ].l );
+                JLocalAutoRef jo_type( attach, create_type( attach, pAny->pType ) );
+                args[ 0 ].l = jo_type.get();
+                args[ 1 ].l = jo_val.get();
+                jo_any.reset(
+                    attach, attach->NewObjectA(
+                        m_jni_info->m_class_Any, m_jni_info->m_ctor_Any_with_Type_Object, args ) );
+                attach.ensure_no_exception();
+                break;
+            }
+            default:
+                jo_any.reset( attach, args[ 0 ].l );
+                break;
+            }
         }
         if (out_param)
         {
@@ -1202,7 +1228,7 @@ void jni_Bridge::map_to_java(
                     jfieldID field_id = linfo->m_fields[ nPos ];
                     if (0 != field_id)
                     {
-                        void * p = (char *)uno_data + pMemberOffsets[ nPos ];
+                        void const * p = (char const *)uno_data + pMemberOffsets[ nPos ];
                         typelib_TypeDescriptionReference * member_type = ppMemberTypeRefs[ nPos ];
                         switch (member_type->eTypeClass)
                         {
@@ -1285,10 +1311,10 @@ void jni_Bridge::map_to_java(
         JLocalAutoRef jo_ar;
 
         sal_Int32 nElements;
-        uno_Sequence * seq = 0;
+        uno_Sequence const * seq = 0;
         if (in_param)
         {
-            seq = *(uno_Sequence **)uno_data;
+            seq = *(uno_Sequence * const *)uno_data;
             nElements = seq->nElements;
         }
         else
@@ -1391,7 +1417,7 @@ void jni_Bridge::map_to_java(
             attach.ensure_no_exception();
             if (in_param)
             {
-                rtl_uString ** pp = (rtl_uString **)seq->elements;
+                rtl_uString * const * pp = (rtl_uString * const *)seq->elements;
                 for ( sal_Int32 nPos = 0; nPos < nElements; ++nPos )
                 {
                     JLocalAutoRef jo_string( attach, ustring_to_jstring( attach, pp[ nPos ] ) );
@@ -1407,8 +1433,8 @@ void jni_Bridge::map_to_java(
             attach.ensure_no_exception();
             if (in_param)
             {
-                typelib_TypeDescriptionReference ** pp =
-                    (typelib_TypeDescriptionReference **)seq->elements;
+                typelib_TypeDescriptionReference * const * pp =
+                    (typelib_TypeDescriptionReference * const *)seq->elements;
                 for ( sal_Int32 nPos = 0; nPos < nElements; ++nPos )
                 {
                     jvalue val;
@@ -1428,7 +1454,7 @@ void jni_Bridge::map_to_java(
             attach.ensure_no_exception();
             if (in_param)
             {
-                uno_Any * p = (uno_Any *)seq->elements;
+                uno_Any const * p = (uno_Any const *)seq->elements;
                 for ( sal_Int32 nPos = 0; nPos < nElements; ++nPos )
                 {
                     jvalue val;
@@ -1515,7 +1541,7 @@ void jni_Bridge::map_to_java(
         case typelib_TypeClass_SEQUENCE:
         {
             OStringBuffer buf( 64 );
-            m_jni_info->append_sig( &buf, element_type ); // xxx todo opt
+            m_jni_info->append_sig( &buf, element_type );
             OString class_name( buf.makeStringAndClear() );
             JLocalAutoRef jo_seq_class( attach, find_class( attach, class_name.getStr() ) );
 
@@ -1614,7 +1640,7 @@ void jni_Bridge::map_to_java(
         if (out_param)
         {
             if (typelib_typedescriptionreference_equals(
-                    type, m_jni_info->m_XInterface.get()->pWeakRef ))
+                    type, m_jni_info->m_XInterface_td.get()->pWeakRef ))
             {
                 java_data->l = attach->NewObjectArray(
                     1, m_jni_info->m_class_Object, jo_iface.get() );

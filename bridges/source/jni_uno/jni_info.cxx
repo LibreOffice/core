@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_info.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2002-10-29 10:55:07 $
+ *  last change: $Author: dbo $ $Date: 2002-11-01 14:24:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ JNI_type_info::JNI_type_info(
 
     // if ! XInterface
     if (! typelib_typedescriptionreference_equals(
-            ((typelib_TypeDescription *)td)->pWeakRef, jni_info->m_XInterface.get()->pWeakRef ))
+            ((typelib_TypeDescription *)td)->pWeakRef, jni_info->m_XInterface_td.get()->pWeakRef ))
     {
         try
         {
@@ -253,10 +253,10 @@ JNI_type_info::JNI_type_info(
     {
         if (typelib_typedescriptionreference_equals(
                 ((typelib_TypeDescription *)td)->pWeakRef,
-                jni_info->m_Exception.getTypeLibType() ) ||
+                jni_info->m_Exception_type.getTypeLibType() ) ||
             typelib_typedescriptionreference_equals(
                 ((typelib_TypeDescription *)td)->pWeakRef,
-                jni_info->m_RuntimeException.getTypeLibType() ))
+                jni_info->m_RuntimeException_type.getTypeLibType() ))
         {
             m_fields = new jfieldID[ 2 ];
             m_fields[ 0 ] = 0; // special Throwable.getMessage()
@@ -364,15 +364,70 @@ JNI_type_info const * JNI_info::get_type_info(
     return info;
 }
 //__________________________________________________________________________________________________
+JNI_type_info const * JNI_info::get_type_info(
+    JNI_attach const & attach, OUString const & uno_name ) const
+{
+    JNI_type_info * info;
+
+    ClearableMutexGuard guard( m_mutex );
+    t_str2type::const_iterator iFind( m_type_map.find( uno_name ) );
+    if (m_type_map.end() == iFind)
+    {
+        guard.clear();
+
+        ::com::sun::star::uno::TypeDescription td( uno_name );
+        if (! td.is())
+            throw BridgeRuntimeError( OUSTR("UNO type not found: ") + uno_name );
+
+        JNI_type_info * new_info;
+        switch (td.get()->eTypeClass)
+        {
+        case typelib_TypeClass_STRUCT:
+        case typelib_TypeClass_EXCEPTION:
+            new_info = new JNI_type_info( attach, (typelib_CompoundTypeDescription *)td.get() );
+            break;
+        case typelib_TypeClass_INTERFACE:
+            new_info = new JNI_type_info( attach, (typelib_InterfaceTypeDescription *)td.get() );
+            break;
+        default:
+            throw BridgeRuntimeError( OUSTR("unsupported: type info for ") + uno_name );
+        }
+
+        // look again
+        ClearableMutexGuard guard( m_mutex );
+        JNI_type_info_holder & holder = m_type_map[ uno_name ];
+        if (0 == holder.m_info) // new insertion
+        {
+            holder.m_info = new_info;
+            guard.clear();
+            info = new_info;
+        }
+        else // inserted in the meantime
+        {
+            info = holder.m_info;
+            guard.clear();
+            JNI_type_info::_delete( attach, new_info );
+        }
+    }
+    else
+    {
+        info = iFind->second.m_info;
+    }
+
+    return info;
+}
+//__________________________________________________________________________________________________
 JNI_info::JNI_info( uno_Environment * java_env )
     : m_java_env( java_env ), // unacquired pointer to owner
-      m_XInterface(
+      m_XInterface_td(
           ::getCppuType(
               (::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > const *)0 ) ),
-      m_Exception(
+      m_XInterface_queryInterface_td(
+          ((typelib_InterfaceTypeDescription *)m_XInterface_td.get())->ppMembers[ 0 ] ),
+      m_Exception_type(
           ::getCppuType(
               (::com::sun::star::uno::Exception const *)0 ) ),
-      m_RuntimeException(
+      m_RuntimeException_type(
           ::getCppuType(
               (::com::sun::star::uno::RuntimeException const *)0 ) ),
       m_class_JNI_proxy( 0 )
@@ -418,6 +473,8 @@ JNI_info::JNI_info( uno_Environment * java_env )
         attach, find_class( attach, "com/sun/star/uno/TypeClass" ) );
     JLocalAutoRef jo_IEnvironment(
         attach, find_class( attach, "com/sun/star/uno/IEnvironment" ) );
+    JLocalAutoRef jo_TypedProxy(
+        attach, find_class( attach, "com/sun/star/lib/uno/TypedProxy" ) );
     JLocalAutoRef jo_JNI_proxy(
         attach, find_class( attach, "com/sun/star/bridges/jni_uno/JNI_proxy" ) );
 
@@ -607,10 +664,17 @@ JNI_info::JNI_info( uno_Environment * java_env )
     attach.ensure_no_exception();
     OSL_ASSERT( 0 != m_method_IEnvironment_revokeInterface );
 
+    // method TypedProxy.getType()
+    m_method_TypedProxy_getType = attach->GetMethodID(
+        (jclass)jo_TypedProxy.get(), "getType",
+        "()Lcom/sun/star/uno/Type;" );
+    attach.ensure_no_exception();
+    OSL_ASSERT( 0 != m_method_TypedProxy_getType );
+
     // static method JNI_proxy.create()
     m_method_JNI_proxy_create = attach->GetStaticMethodID(
         (jclass)jo_JNI_proxy.get(), "create",
-        "(JJJLcom/sun/star/uno/Type;Ljava/lang/String;)Ljava/lang/Object;" );
+        "(JLcom/sun/star/uno/IEnvironment;JJLcom/sun/star/uno/Type;Ljava/lang/String;)Ljava/lang/Object;" );
     attach.ensure_no_exception();
     OSL_ASSERT( 0 != m_method_JNI_proxy_create );
     // field JNI_proxy.m_receiver_handle
@@ -649,11 +713,12 @@ JNI_info::JNI_info( uno_Environment * java_env )
             (jclass)jo_UnoRuntime.get(), method_getEnvironment, args ) );
 
     // make global refs
+    m_class_UnoRuntime = (jclass)attach->NewGlobalRef( jo_UnoRuntime.get() );
+    m_class_RuntimeException = (jclass)attach->NewGlobalRef( jo_RuntimeException.get() );
     m_class_Any = (jclass)attach->NewGlobalRef( jo_Any.get() );
     m_class_Type = (jclass)attach->NewGlobalRef( jo_Type.get() );
     m_class_TypeClass = (jclass)attach->NewGlobalRef( jo_TypeClass.get() );
-    m_class_UnoRuntime = (jclass)attach->NewGlobalRef( jo_UnoRuntime.get() );
-    m_class_RuntimeException = (jclass)attach->NewGlobalRef( jo_RuntimeException.get() );
+    m_class_TypedProxy = (jclass)attach->NewGlobalRef( jo_TypedProxy.get() );
     m_class_JNI_proxy = (jclass)attach->NewGlobalRef( jo_JNI_proxy.get() );
 
     m_class_Character = (jclass)attach->NewGlobalRef( jo_Character.get() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_helper.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2002-10-29 10:55:38 $
+ *  last change: $Author: dbo $ $Date: 2002-11-01 14:24:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,12 +77,11 @@ inline void jstring_to_ustring( JNI_attach const & attach, rtl_uString ** out_us
     }
     else
     {
-        OSL_ASSERT( sizeof (sal_Unicode) == sizeof (jchar) );
         jsize len = attach->GetStringLength( jstr );
         ::std::auto_ptr< rtl_mem > mem(
             rtl_mem::allocate( sizeof (rtl_uString) + (len * sizeof (sal_Unicode)) ) );
         rtl_uString * ustr = (rtl_uString *)mem.get();
-        attach->GetStringRegion( jstr, 0, len, ustr->buffer );
+        attach->GetStringRegion( jstr, 0, len, (jchar *)ustr->buffer );
         attach.ensure_no_exception();
         ustr->refCount = 1;
         ustr->length = len;
@@ -101,10 +100,9 @@ inline ::rtl::OUString jstring_to_oustring( JNI_attach const & attach, jstring j
     return ::rtl::OUString( ustr, SAL_NO_ACQUIRE );
 }
 //--------------------------------------------------------------------------------------------------
-inline jstring ustring_to_jstring( JNI_attach const & attach, rtl_uString * ustr )
+inline jstring ustring_to_jstring( JNI_attach const & attach, rtl_uString const * ustr )
 {
-    OSL_ASSERT( sizeof (sal_Unicode) == sizeof (jchar) );
-    jstring jstr = attach->NewString( ustr->buffer, ustr->length );
+    jstring jstr = attach->NewString( (jchar const *)ustr->buffer, ustr->length );
     attach.ensure_no_exception();
     return jstr;
 }

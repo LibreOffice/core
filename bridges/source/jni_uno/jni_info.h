@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_info.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2002-10-29 10:55:07 $
+ *  last change: $Author: dbo $ $Date: 2002-11-01 14:24:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,14 +120,16 @@ class JNI_info
     jmethodID                   m_method_IEnvironment_getRegisteredInterface;
     jmethodID                   m_method_IEnvironment_registerInterface;
     jmethodID                   m_method_IEnvironment_revokeInterface;
-    //
-    jobject                     m_object_java_env;
 
 public:
     //
-    ::com::sun::star::uno::TypeDescription m_XInterface;
-    ::com::sun::star::uno::Type const & m_Exception;
-    ::com::sun::star::uno::Type const & m_RuntimeException;
+    jobject                     m_object_java_env;
+
+    //
+    ::com::sun::star::uno::TypeDescription m_XInterface_td;
+    ::com::sun::star::uno::TypeDescription m_XInterface_queryInterface_td;
+    ::com::sun::star::uno::Type const & m_Exception_type;
+    ::com::sun::star::uno::Type const & m_RuntimeException_type;
 
     //
     jclass                      m_class_Object;
@@ -146,6 +148,7 @@ public:
     jclass                      m_class_Any;
     jclass                      m_class_Type;
     jclass                      m_class_TypeClass;
+    jclass                      m_class_TypedProxy;
     jclass                      m_class_JNI_proxy;
 
     //
@@ -181,6 +184,7 @@ public:
     jfieldID                    m_field_Type__typeName;
     jmethodID                   m_method_TypeClass_fromInt;
     jfieldID                    m_field_Enum_m_value;
+    jmethodID                   m_method_TypedProxy_getType;
 
     jmethodID                   m_method_JNI_proxy_create;
     jfieldID                    m_field_JNI_proxy_m_receiver_handle;
@@ -195,6 +199,8 @@ public:
     //
     JNI_type_info const * get_type_info(
         JNI_attach const & attach, typelib_TypeDescription * td ) const;
+    JNI_type_info const * get_type_info(
+        JNI_attach const & attach, ::rtl::OUString const & uno_name ) const;
     //
     inline void append_sig(
         ::rtl::OStringBuffer * buf, typelib_TypeDescriptionReference * type ) const;
@@ -205,7 +211,6 @@ public:
         JNI_attach const & attach, jobject javaI, jstring oid, jobject type ) const;
     inline void java_env_revokeInterface(
         JNI_attach const & attach, jstring oid, jobject type ) const;
-
 };
 //__________________________________________________________________________________________________
 inline void JNI_info::append_sig(
@@ -273,7 +278,7 @@ inline void JNI_info::append_sig(
         break;
     }
     case typelib_TypeClass_INTERFACE:
-        if (typelib_typedescriptionreference_equals( type, m_XInterface.get()->pWeakRef ))
+        if (typelib_typedescriptionreference_equals( type, m_XInterface_td.get()->pWeakRef ))
         {
             buf->append( RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Object;") );
         }
