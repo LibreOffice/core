@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-16 15:25:11 $
+ *  last change: $Author: jp $ $Date: 2001-09-21 08:28:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,12 @@
 #endif
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
+#endif
+#ifndef _TXTFLD_HXX
+#include <txtfld.hxx>
+#endif
+#ifndef _FMTFLD_HXX
+#include <fmtfld.hxx>
 #endif
 
 
@@ -464,6 +470,29 @@ inline USHORT lcl_SetScriptFlags( USHORT nType )
     return nRet;
 }
 
+BOOL lcl_GetIsFldAtPos( const SwTxtNode& rTNd, xub_StrLen nPos, USHORT &rScrpt )
+{
+    BOOL bRet = FALSE;
+    const String& rTxt = rTNd.GetTxt();
+    const SwTxtAttr* pTFld;
+    if( CH_TXTATR_BREAKWORD == rTxt.GetChar( nPos ) &&
+        0 != ( pTFld = rTNd.GetTxtAttr( nPos ) ) )
+    {
+        bRet = TRUE;                    // all other then fields can be
+                                        // defined as weak-script ?
+        const SwField* pFld;
+        String sExp;
+        if( RES_TXTATR_FIELD == pTFld->Which() &&
+            0 != (pFld = pTFld->GetFld().GetFld() ) &&
+            (sExp = pFld->Expand()).Len() )
+        {
+            rScrpt |= lcl_SetScriptFlags( pBreakIt->xBreak->
+                                getScriptType( sExp, sExp.Len()-1 ));
+        }
+    }
+    return bRet;
+}
+
 // returns the scripttpye of the selection
 USHORT SwEditShell::GetScriptType() const
 {
@@ -490,7 +519,9 @@ USHORT SwEditShell::GetScriptType() const
                         if( pTNd->GoPrevious( &aIdx ) )
                             nPos = aIdx.GetIndex();
                     }
-                    nRet |= lcl_SetScriptFlags( pBreakIt->xBreak->
+
+                    if( !lcl_GetIsFldAtPos( *pTNd, nPos, nRet ))
+                        nRet |= lcl_SetScriptFlags( pBreakIt->xBreak->
                                     getScriptType( pTNd->GetTxt(), nPos ));
                 }
             }
@@ -501,13 +532,15 @@ USHORT SwEditShell::GetScriptType() const
                 for( ; aIdx.GetIndex() <= nEndIdx; aIdx++ )
                     if( aIdx.GetNode().IsTxtNode() )
                     {
-                        const String& rTxt = aIdx.GetNode().GetTxtNode()->GetTxt();
+                        const SwTxtNode* pTNd = aIdx.GetNode().GetTxtNode();
+                        const String& rTxt = pTNd->GetTxt();
                         xub_StrLen nChg = aIdx == pStt->nNode
                                                 ? pStt->nContent.GetIndex()
                                                 : 0,
                                     nEndPos = aIdx == nEndIdx
                                                 ? pEnd->nContent.GetIndex()
-                                                : rTxt.Len();
+                                                : rTxt.Len(),
+                                    nSttPos = nChg;
                         ASSERT( nEndPos <= rTxt.Len(), "Index outside the range - endless loop!" );
                         if( nEndPos > rTxt.Len() )
                             nEndPos = rTxt.Len();
@@ -527,14 +560,23 @@ USHORT SwEditShell::GetScriptType() const
                             if( bFirstCall )
                                 bFirstCall = FALSE;
                             else
-                                nScript = pBreakIt->xBreak->getScriptType( rTxt, nChg );
+                                nScript = pBreakIt->xBreak->getScriptType(
+                                                                rTxt, nChg );
 
-                            nRet |= lcl_SetScriptFlags( nScript );
+                            if( !lcl_GetIsFldAtPos( *pTNd, nChg, nRet ))
+                                nRet |= lcl_SetScriptFlags( nScript );
+
                             if( (SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN |
                                 SCRIPTTYPE_COMPLEX) == nRet )
                                 break;
+
+                            xub_StrLen nFldPos = nChg+1;
                             nChg = pBreakIt->xBreak->endOfScript(
-                                                        rTxt, nChg, nScript );
+                                                    rTxt, nChg, nScript );
+                            nFldPos = rTxt.Search(
+                                            CH_TXTATR_BREAKWORD, nFldPos );
+                            if( nFldPos < nChg )
+                                nChg = nFldPos;
                         }
                         if( (SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN |
                                 SCRIPTTYPE_COMPLEX) == nRet )
