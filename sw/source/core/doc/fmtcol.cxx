@@ -2,9 +2,17 @@
  *
  *  $RCSfile: fmtcol.cxx,v $
  *
- *  $Revision: 1.8 $
+<<<<<<< fmtcol.cxx
+ *  $Revision: 1.9 $
+=======
+ *  $Revision: 1.9 $
+>>>>>>> 1.8
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:24:32 $
+<<<<<<< fmtcol.cxx
+ *  last change: $Author: hr $ $Date: 2004-11-27 11:41:20 $
+=======
+ *  last change: $Author: hr $ $Date: 2004-11-27 11:41:20 $
+>>>>>>> 1.8
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +180,8 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         break;
     case RES_CHRATR_CTL_FONTSIZE:
         aFontSizeArr[2] = (SvxFontHeightItem*)pNew;
+        break;
+    default:
         break;
     }
 
