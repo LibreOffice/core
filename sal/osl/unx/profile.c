@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profile.c,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:43:24 $
+ *  last change: $Author: vg $ $Date: 2003-05-13 12:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,7 +322,9 @@ oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, oslProfi
 /*
     OSL_VERIFY(osl_getFullPath(pszProfileName, pProfile->m_FileName, sizeof(pProfile->m_FileName)));
 */
-    OSL_VERIFY(NULL != realpath(pszProfileName, pProfile->m_FileName));
+    /* #109261# using osl profiles is deprecated */
+    /* OSL_VERIFY(NULL != realpath(pszProfileName, pProfile->m_FileName)); */
+    realpath(pszProfileName, pProfile->m_FileName);
 
     if (pProfile->m_pFile == NULL)
         closeFileImpl(pFile,pProfile->m_Flags);
