@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exsrcbrw.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 15:52:33 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 11:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,9 +456,19 @@ void SbaExternalSourceBrowser::Attach(const Reference< XRowSet > & xMaster)
 
     // the grid will move the form's cursor to the first record, but we want the form to remain unchanged
     Any aOldPos;
+    // restore the old position
+    sal_Bool bBeforeFirst   = sal_True;
+    sal_Bool bAfterLast     = sal_True;
+    Reference< ::com::sun::star::sdbc::XResultSet >  xResultSet(xMaster, UNO_QUERY);
     Reference< ::com::sun::star::sdbcx::XRowLocate >  xCursor(xMaster, UNO_QUERY);
-    if (xCursor.is())
-        aOldPos = xCursor->getBookmark();
+    if (xCursor.is() && xResultSet.is())
+    {
+        bBeforeFirst = xResultSet->isBeforeFirst();
+        bAfterLast   = xResultSet->isBeforeFirst();
+        if(!bBeforeFirst && !bAfterLast)
+            aOldPos = xCursor->getBookmark();
+    }
+
     sal_Bool bWasInsertRow = sal_False;
     Reference< ::com::sun::star::beans::XPropertySet >  xMasterProps(xMaster, UNO_QUERY);
     if (xMasterProps.is())
@@ -486,8 +496,12 @@ void SbaExternalSourceBrowser::Attach(const Reference< XRowSet > & xMaster)
                 xUpdate->moveToInsertRow();
             else if (xCursor.is() && aOldPos.hasValue())
                 xCursor->moveToBookmark(aOldPos);
+            else if(bBeforeFirst && xResultSet.is())
+                xResultSet->beforeFirst();
+            else if(bAfterLast && xResultSet.is())
+                xResultSet->afterLast();
         }
-        catch(...)
+        catch(Exception&)
         {
             OSL_ASSERT("SbaExternalSourceBrowser::Attach : couldn't restore the cursor position !");
         }
