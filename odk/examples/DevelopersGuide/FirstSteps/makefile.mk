@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-27 16:44:26 $
+#   last change: $Author: rt $ $Date: 2005-01-31 16:27:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,8 @@ TARGET=copying
 #----------------------------------------------------
 
 FIRSTSTEPS_FILES=\
-    $(DESTDIRDEVGUIDEEXAMPLES)$/FirstSteps$/FirstConnection.java \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/FirstSteps$/FirstUnoContact.java \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/FirstSteps$/build_FirstUnoContact.xml \
     $(DESTDIRDEVGUIDEEXAMPLES)$/FirstSteps$/FirstLoadComponent.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/FirstSteps$/HelloTextTableShape.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/FirstSteps$/Makefile
