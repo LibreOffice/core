@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splash.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:36:38 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 10:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,8 @@ private:
     sal_Bool _bPaintProgress;
     sal_Bool _bVisible;
     long _height, _width, _tlx, _tly, _barwidth;
-    const long _xoffset, _yoffset, _barheight, _barspace;
+    const long _xoffset, _yoffset, _barspace;
+    long _barheight;
 
 
 public:
