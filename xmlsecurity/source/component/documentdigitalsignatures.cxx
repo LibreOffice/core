@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdigitalsignatures.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-23 09:38:48 $
+ *  last change: $Author: gt $ $Date: 2004-07-23 09:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #include <xmlsecurity/digitalsignaturesdialog.hxx>
 #include <xmlsecurity/macrosecurity.hxx>
 #include <xmlsecurity/baseencoding.hxx>
+#include <../dialogs/resourcemanager.hxx>
 
 #ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
 #include <com/sun/star/embed/XStorage.hpp>
@@ -235,8 +236,8 @@ void DocumentDigitalSignatures::addAuthorToTrustedSources( const ::com::sun::sta
     SvtSecurityOptions aSecOpts;
 
     SvtSecurityOptions::Certificate aNewCert;
-    aNewCert[ 0 ] = GetContentPart( Author->getIssuerName(), String::CreateFromAscii( "CN" ) );
-    aNewCert[ 1 ] = GetHexString( Author->getIssuerUniqueID(), " " );
+    aNewCert[ 0 ] = XmlSec::GetContentPart( Author->getIssuerName(), String::CreateFromAscii( "CN" ) );
+    aNewCert[ 1 ] = XmlSec::GetHexString( Author->getIssuerUniqueID(), " " );
     aNewCert[ 2 ] = baseEncode( Author->getEncoded(), BASE64 );
 
     uno::Sequence< SvtSecurityOptions::Certificate > aTrustedAuthors = aSecOpts.GetTrustedAuthors();
@@ -252,11 +253,11 @@ void DocumentDigitalSignatures::addLocationToTrustedSources( const ::rtl::OUStri
     SvtSecurityOptions aSecOpt;
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aSecURLs = aSecOpt.GetSecureURLs();
-    sal_Int32 nCnt = aSecOpt.getLength();
-    aSecOpt.realloc( nCnt + 1 );
-    aSecOpt[ nCnt ] = Location;
+    sal_Int32 nCnt = aSecURLs.getLength();
+    aSecURLs.realloc( nCnt + 1 );
+    aSecURLs[ nCnt ] = Location;
 
-    aSecOpt.SetSecureURLs( )
+    aSecOpt.SetSecureURLs( aSecURLs );
 }
 
 
