@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-06 15:55:42 $
+ *  last change: $Author: fs $ $Date: 2002-04-15 09:07:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8662,39 +8662,39 @@ String RID_SVXITEMS_PARAVERTALIGN_BOTTOM
 
 String RID_SVXITEMS_FRMDIR_HORI_LEFT_TOP
 {
-    Text = "Textfluss horizontal von links";
+    Text = "Textfluss Links-nach-rechts (horizontal)";
     Text [ English ] = "text flow horizontal from left";
 };
 String RID_SVXITEMS_FRMDIR_HORI_RIGHT_TOP
 {
-    Text = "Textfluss horizontal von rechts";
+    Text = "Textfluss Rechts-nach-links (horizontal)";
     Text [ English ] = "text flow horizontal from right";
 };
 String RID_SVXITEMS_FRMDIR_VERT_TOP_RIGHT
 {
-    Text = "Textfluss vertikal von rechts";
+    Text = "Textfluss Rechts-nach-links (vertikal)";
     Text [ English ] = "text flow vertical from right";
 };
 String RID_SVXITEMS_FRMDIR_VERT_TOP_LEFT
 {
-    Text = "Textfluss vertikal von links";
+    Text = "Textfluss Links-nach-rechts (vertikal)";
     Text [ English ] = "text flow vertical from left";
 };
 String RID_SVXITEMS_FRMDIR_ENVIRONMENT
 {
-    Text = "Textfluss aus der Umgebung";
+    Text = "Textfluss-Einstellung des übergeordneten Objektes verwenden";
     Text [ English ] = "text flow from environment";
 };
 
 String RID_SVXITEMS_PARASNAPTOGRID_ON
 {
-    Text = "Absatz-Gitter aktiv";
+    Text = "Absatz wird am Textraster gefangen (wenn aktiviert)";
     Text [ English ] = "paragraph snap to grid";
 };
 
 String RID_SVXITEMS_PARASNAPTOGRID_OFF
 {
-    Text = "Absatz-Gitter nicht aktiv";
+    Text = "Absatz wird nicht am Textraster gefangen";
     Text [ English ] = "paragraph does not snap to grid";
 };
 
