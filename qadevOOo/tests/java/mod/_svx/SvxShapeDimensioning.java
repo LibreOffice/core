@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxShapeDimensioning.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 13:37:31 $
+ *  last change:$Date: 2003-09-08 12:38:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,14 +61,8 @@
 
 package mod._svx;
 
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.drawing.XShape;
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.style.XStyle;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -78,8 +72,15 @@ import util.DrawTools;
 import util.InstCreator;
 import util.SOfficeFactory;
 
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.drawing.XShape;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.style.XStyle;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 public class SvxShapeDimensioning extends TestCase {
 
@@ -149,14 +150,6 @@ public class SvxShapeDimensioning extends TestCase {
 
             SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
               oShape = SOF.createShape(xDrawDoc,4000,4000,3000,3000,"Measure");
-
-              XPropertySet xProps = (XPropertySet) UnoRuntime.queryInterface(
-                  XPropertySet.class, oShape) ;
-
-              //xProps.setPropertyValue("LineStart",
-              //  new Point[] {new Point(3000, 3000)}) ;
-              //xProps.setPropertyValue("LineEnd",
-              //  new Point[] {new Point(5000, 6000)}) ;
 
             DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape);
 
