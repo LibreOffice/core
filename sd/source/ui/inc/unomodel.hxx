@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-15 09:44:36 $
+ *  last change: $Author: cl $ $Date: 2001-02-19 13:14:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,11 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
+
+    // XModel
+    virtual void SAL_CALL lockControllers(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL unlockControllers(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasControllersLocked(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);

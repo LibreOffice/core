@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-15 09:50:20 $
+ *  last change: $Author: cl $ $Date: 2001-02-19 13:15:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,6 +461,25 @@ void SdXImpressDocument::SetModified( sal_Bool bModified /* = sal_True */ ) thro
         pDoc->SetChanged( bModified );
 }
 
+void SAL_CALL SdXImpressDocument::lockControllers(  )
+    throw(uno::RuntimeException)
+{
+    if( pDoc )
+        pDoc->setLock( sal_True );
+}
+
+void SAL_CALL SdXImpressDocument::unlockControllers(  )
+    throw(uno::RuntimeException)
+{
+    if( pDoc )
+        pDoc->setLock( sal_False );
+}
+
+sal_Bool SAL_CALL SdXImpressDocument::hasControllersLocked(  )
+    throw(uno::RuntimeException)
+{
+    return pDoc && pDoc->isLocked();
+}
 
 // XDrawPageDuplicator
 uno::Reference< drawing::XDrawPage > SAL_CALL SdXImpressDocument::duplicate( const uno::Reference< drawing::XDrawPage >& xPage )
