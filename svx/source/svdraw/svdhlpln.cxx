@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdhlpln.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-04 15:56:25 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:41:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,8 @@
 #include "svdhlpln.hxx"
 #include "svdio.hxx"
 
-#ifndef _GDIOBJ_HXX //autogen
-#include <vcl/gdiobj.hxx>
-#endif
-
-#ifndef _COLOR_HXX //autogen
-#include <vcl/color.hxx>
+#ifndef _TOOLS_COLOR_HXX
+#include <tools/color.hxx>
 #endif
 
 #ifndef _OUTDEV_HXX //autogen
@@ -78,8 +74,8 @@
 #include <vcl/window.hxx>
 #endif
 
-#ifndef _SV_POLY_HXX //autogen
-#include <vcl/poly.hxx>
+#ifndef _TL_POLY_HXX
+#include <tools/poly.hxx>
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
