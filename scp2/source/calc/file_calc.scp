@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_calc.scp,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: is $ $Date: 2004-02-05 18:08:28 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:23:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,28 @@ File gid_File_Help_Scalc_Zip
     Dir = gid_Dir_Help_Isolanguage;
     ARCHIVE_TXT_FILE_BODY;
     EXTRA_ALL_LANG(scalc);
+End
+
+// new user interface configuration files
+File gid_File_Share_Config_Sofficecfg_Calc_Menubar_Xml
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Config_Sofficecfg_Scalc_Menubar;
+    Name = "/uiconfig/scalc/menubar/menubar.xml";
+End
+
+File gid_File_Oo_Office_Ui_Calccommands_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
+    Name = "/registry/schema/org/openoffice/Office/UI/CalcCommands.xcs";
+End
+       
+File gid_File_Oo_Office_Ui_Calccommands_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
+    Name = "/registry/data/org/openoffice/Office/UI/CalcCommands.xcu";
 End
 
 #ifdef UNX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_calc.scp,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: is $ $Date: 2004-02-05 18:08:33 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:24:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,8 @@ Module gid_Module_Prg_Calc_Bin
     ParentID = gid_Module_Prg_Calc;
     Minimal = YES;
     Default = YES;
-    Files = (gid_File_Extra_Cdecalc,gid_File_Lib_Calc,gid_File_Exe_Scalc,gid_File_Lib_Sc,gid_File_Lib_Scd,gid_File_Res_Sc,gid_File_Extra_Urldesktop_Calc,gid_File_Extra_Urlnew_Calc,gid_File_Extra_Urlstart_Calc,gid_File_Extra_Urltasks_Calc,gid_File_Oo_Office_Filter_Calc_Pkg);
+    Files = (gid_File_Extra_Cdecalc,gid_File_Lib_Calc,gid_File_Exe_Scalc,gid_File_Lib_Sc,gid_File_Lib_Scd,gid_File_Res_Sc,gid_File_Extra_Urldesktop_Calc,gid_File_Extra_Urlnew_Calc,gid_File_Extra_Urlstart_Calc,gid_File_Extra_Urltasks_Calc,gid_File_Oo_Office_Filter_Calc_Pkg,gid_File_Share_Config_Sofficecfg_Calc_Menubar_Xml,
+    gid_File_Oo_Office_Ui_Calccommands_Xcs,gid_File_Oo_Office_Ui_Calccommands_Xcu);
 End
 
 Module gid_Module_Prg_Calc_Help
