@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 19:18:04 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,11 +132,13 @@
 #include <svtools/filter.hxx>
 #endif
 #ifndef _SO_CLSIDS_HXX
-#include <so3/clsids.hxx>
+#include <sot/clsids.hxx>
 #endif
 #ifndef _SFX_TOPFRM_HXX
 #include <sfx2/topfrm.hxx>
 #endif
+
+#include <sfx2/fcontnr.hxx>
 
 #include "app.hrc"
 #include "app.hxx"
@@ -185,8 +187,16 @@ SFX_IMPL_INTERFACE(SdDrawDocShell, SfxObjectShell, SdResId(0))
     SFX_CHILDWINDOW_REGISTRATION(SID_SEARCH_DLG);
 }
 
-SFX_IMPL_OBJECTFACTORY_LOD(SdDrawDocShell, simpress,
-                           SvGlobalName(SO3_SIMPRESS_CLASSID), Sd)
+
+SFX_IMPL_OBJECTFACTORY( SdDrawDocShell, SFXOBJECTSHELL_STD_NORMAL, simpress, SvGlobalName(SO3_SIMPRESS_CLASSID) )
+{
+    SdDrawDocShell::Factory().SetCreateNewSlotId( SID_SD_AUTOPILOT );
+    SdDrawDocShell::Factory().SetDocumentServiceName( String( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) );
+    //SdDrawDocShell::Factory().GetFilterContainer()->SetDetectFilter( &SdDLL::DetectFilter );
+    SdDrawDocShell::Factory().RegisterMenuBar( SdResId( RID_DRAW_DEFAULTMENU ) );
+    SdDrawDocShell::Factory().RegisterPluginMenuBar( SdResId( RID_DRAW_PORTALMENU ) );
+    SdDrawDocShell::Factory().RegisterAccel( SdResId( RID_DRAW_DEFAULTACCEL ) );
+}
 
 /*************************************************************************
 |*
