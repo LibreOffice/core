@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextField.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 12:05:50 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:01:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,9 +69,9 @@
 
 module com { module sun { module star { module accessibility {
 
-interface XAccessibleExtendedComponent;
-interface XAccessibleComponent;
-interface XAccessibleText;
+ published interface XAccessibleExtendedComponent;
+ published interface XAccessibleComponent;
+ published interface XAccessibleText;
 
 }; }; }; };
 
@@ -88,7 +88,7 @@ module com { module sun { module star { module awt {
 
     @since #103639#
 */
-service AccessibleTextField
+published service AccessibleTextField
 {
     /** This interface gives access to the structural information of a text filed:
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleToolBoxItem.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 12:05:59 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:01:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,11 +69,11 @@
 
 module com { module sun { module star { module accessibility {
 
-interface XAccessibleAction;
-interface XAccessibleText;
-interface XAccessibleValue;
-interface XAccessibleExtendedComponent;
-interface XAccessibleComponent;
+ published interface XAccessibleAction;
+ published interface XAccessibleText;
+ published interface XAccessibleValue;
+ published interface XAccessibleExtendedComponent;
+ published interface XAccessibleComponent;
 
 }; }; }; };
 
@@ -92,7 +92,7 @@ module com { module sun { module star { module awt {
 
     @since #103639#
 */
-service AccessibleToolBoxItem
+published service AccessibleToolBoxItem
 {
     /** This interface gives access to the structural information of a tool box item:
 
