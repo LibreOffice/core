@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-02 16:48:43 $
+ *  last change: $Author: dr $ $Date: 2000-11-03 12:59:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@
 #include <com/sun/star/sheet/XSubTotalField.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/sheet/CellFlags.hpp>
-#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+//#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 
 #ifndef _COM_SUN_STAR_SHEET_XSHEETCONDITION_HPP_
 #include <com/sun/star/sheet/XSheetCondition.hpp>
@@ -4750,28 +4750,20 @@ void ScXMLExport::WriteDataPilots(const uno::Reference <sheet::XSpreadsheetDocum
                             AddAttribute(XML_NAMESPACE_TABLE, sXML_source_field_name, rtl::OUString(pDim->GetName()));
                             if (pDim->IsDataLayout())
                                 AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_is_data_layout_field, sXML_true);
-                            switch (pDim->GetOrientation())
-                            {
-                                case sheet::DataPilotFieldOrientation_COLUMN :
-                                    AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_orientation, sXML_column); break;
-                                case sheet::DataPilotFieldOrientation_DATA :
-                                    AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_orientation, sXML_data); break;
-                                case sheet::DataPilotFieldOrientation_HIDDEN :
-                                    AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_orientation, sXML_hidden); break;
-                                case sheet::DataPilotFieldOrientation_PAGE :
-                                    AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_orientation, sXML_page); break;
-                                case sheet::DataPilotFieldOrientation_ROW :
-                                    AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_orientation, sXML_row); break;
-                            }
+                            OUString sValueStr;
+                            ScXMLConverter::GetStringFromOrientation( sValueStr,
+                                (sheet::DataPilotFieldOrientation) pDim->GetOrientation() );
+                            if( sValueStr.getLength() )
+                                AddAttribute(XML_NAMESPACE_TABLE, sXML_orientation, sValueStr );
                             if (pDim->GetUsedHierarchy() != 1)
                             {
                                 rtl::OUStringBuffer sBuffer;
                                 SvXMLUnitConverter::convertNumber(sBuffer, pDim->GetUsedHierarchy());
                                 AddAttribute(XML_NAMESPACE_TABLE, sXML_used_hierarchy, sBuffer.makeStringAndClear());
                             }
-                            rtl::OUString sFunction;
-                            ScXMLConverter::GetStringFromFunction( sFunction, (sheet::GeneralFunction) pDim->GetFunction() );
-                            AddAttribute(XML_NAMESPACE_TABLE, sXML_function, sFunction);
+                            ScXMLConverter::GetStringFromFunction( sValueStr,
+                                (sheet::GeneralFunction) pDim->GetFunction() );
+                            AddAttribute(XML_NAMESPACE_TABLE, sXML_function, sValueStr);
                             SvXMLElementExport aElemDPF(*this, XML_NAMESPACE_TABLE, sXML_data_pilot_field, sal_True, sal_True);
                             CheckAttrList();
                             {

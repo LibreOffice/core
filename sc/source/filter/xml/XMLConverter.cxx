@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConverter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-02 16:32:20 $
+ *  last change: $Author: dr $ $Date: 2000-11-03 12:59:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,51 +96,6 @@ using namespace ::com::sun::star;
 
 //___________________________________________________________________
 
-sal_Int32 ScXMLConverter::GetTokenByOffset(
-        OUString& rToken,
-        const OUString& rString,
-        sal_Int32 nOffset,
-        sal_Unicode cQuote )
-{
-    rToken = OUString();
-    if( nOffset >= rString.getLength() )
-        return -1;
-
-    OUStringBuffer  aBuffer;
-    sal_Int32       nLength     = rString.getLength();
-    sal_Int32       nIndex      = nOffset;
-    sal_Bool        bQuoted     = sal_False;
-    sal_Bool        bExitLoop   = sal_False;
-
-    while( !bExitLoop && (nIndex < nLength) )
-    {
-        sal_Unicode cCode = rString[ nIndex ];
-        if( (cCode != ' ') || bQuoted )
-        {
-            aBuffer.append( cCode );
-            bQuoted = (bQuoted != (cCode == cQuote));
-        }
-        else bExitLoop = (cCode == ' ');
-        nIndex++;
-    }
-    rToken = aBuffer.makeStringAndClear();
-    return nIndex;
-}
-
-sal_Int32 ScXMLConverter::GetTokenCount( const OUString& rString )
-{
-    OUString    sToken;
-    sal_Int32   nCount = 0;
-    sal_Int32   nOffset = 0;
-    while( nOffset >= 0 )
-    {
-        nOffset = GetTokenByOffset( sToken, rString, nOffset );
-        if( nOffset >= 0 )
-            nCount++;
-    }
-    return nCount;
-}
-
 void ScXMLConverter::AssignString(
         OUString& rString,
         const OUString& rNewStr,
@@ -159,6 +114,85 @@ void ScXMLConverter::AssignString(
         rString = rNewStr;
 }
 
+sal_Int32 ScXMLConverter::IndexOf(
+        const OUString& rString,
+        sal_Unicode cSearchChar,
+        sal_Int32 nOffset,
+        sal_Unicode cQuote )
+{
+    sal_Int32       nLength     = rString.getLength();
+    sal_Int32       nIndex      = nOffset;
+    sal_Bool        bQuoted     = sal_False;
+    sal_Bool        bExitLoop   = sal_False;
+
+    while( !bExitLoop && (nIndex < nLength) )
+    {
+        sal_Unicode cCode = rString[ nIndex ];
+        bExitLoop = (cCode == cSearchChar) && !bQuoted;
+        bQuoted = (bQuoted != (cCode == cQuote));
+        if( !bExitLoop )
+            nIndex++;
+    }
+    return (nIndex < nLength) ? nIndex : -1;
+}
+
+sal_Int32 ScXMLConverter::IndexOfDifferent(
+        const OUString& rString,
+        sal_Unicode cSearchChar,
+        sal_Int32 nOffset )
+{
+    sal_Int32       nLength     = rString.getLength();
+    sal_Int32       nIndex      = nOffset;
+    sal_Bool        bExitLoop   = sal_False;
+
+    while( !bExitLoop && (nIndex < nLength) )
+    {
+        bExitLoop = (rString[ nIndex ] != cSearchChar);
+        if( !bExitLoop )
+            nIndex++;
+    }
+    return (nIndex < nLength) ? nIndex : -1;
+}
+
+
+//___________________________________________________________________
+
+sal_Int32 ScXMLConverter::GetTokenByOffset(
+        OUString& rToken,
+        const OUString& rString,
+        sal_Int32 nOffset,
+        sal_Unicode cQuote )
+{
+    sal_Int32 nLength = rString.getLength();
+    if( nOffset >= nLength )
+    {
+        rToken = OUString();
+        return -1;
+    }
+
+    sal_Int32 nTokenEnd = IndexOf( rString, ' ', nOffset );
+    if( nTokenEnd < 0 )
+        nTokenEnd = nLength;
+    rToken = rString.copy( nOffset, nTokenEnd - nOffset );
+
+    sal_Int32 nNextBegin = IndexOfDifferent( rString, ' ', nTokenEnd );
+    return (nNextBegin < 0) ? nLength : nNextBegin;
+}
+
+sal_Int32 ScXMLConverter::GetTokenCount( const OUString& rString )
+{
+    OUString    sToken;
+    sal_Int32   nCount = 0;
+    sal_Int32   nOffset = 0;
+    while( nOffset >= 0 )
+    {
+        nOffset = GetTokenByOffset( sToken, rString, nOffset );
+        if( nOffset >= 0 )
+            nCount++;
+    }
+    return nCount;
+}
+
 void ScXMLConverter::AppendString( OUString& rString, const OUString& rNewStr )
 {
     AssignString( rString, rNewStr, sal_True );
@@ -169,6 +203,7 @@ ScDocument* ScXMLConverter::GetScDocument( uno::Reference< frame::XModel > xMode
     ScModelObj* pDocObj = ScModelObj::getImplementation( xModel );
     return pDocObj ? pDocObj->GetDocument() : NULL;
 }
+
 
 //___________________________________________________________________
 
@@ -195,13 +230,18 @@ sal_Int32 ScXMLConverter::GetRangeFromString(
     nOffset = GetTokenByOffset( sToken, rRangeStr, nOffset );
     if( nOffset >= 0 )
     {
-        sal_Int32 nIndex = 0;
-        while( (sToken[ nIndex ] != ':') && (nIndex < sToken.getLength()) )
-            nIndex++;
-        OUString sOUStartAddress( sToken.copy( 0, nIndex ) );
-        OUString sOUEndAddress( sToken.copy( nIndex + 1 ) );
-        rRange.aStart.Parse( sOUStartAddress, pDocument );
-        rRange.aEnd.Parse( sOUEndAddress, pDocument );
+        sal_Int32 nLength = sToken.getLength();
+        sal_Int32 nIndex = sToken.indexOf( ':' );
+        if( nIndex < 0 )
+        {
+            rRange.aStart.Parse( sToken, pDocument );
+            rRange.aEnd = rRange.aStart;
+        }
+        else
+        {
+            rRange.aStart.Parse( sToken.copy( 0, nIndex ), pDocument );
+            rRange.aEnd.Parse( sToken.copy( nIndex + 1 ), pDocument );
+        }
     }
     return nOffset;
 }
@@ -514,6 +554,53 @@ void ScXMLConverter::GetStringFromFunction(
         case SUBTOTAL_FUNC_VARP:    sFuncStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_varp ) );        break;
     }
     AssignString( rString, sFuncStr, bAppendStr );
+}
+
+
+//___________________________________________________________________
+
+sheet::DataPilotFieldOrientation ScXMLConverter::GetOrientationFromString(
+    const OUString& rString )
+{
+    if( rString.compareToAscii( sXML_column ) == 0 )
+        return sheet::DataPilotFieldOrientation_COLUMN;
+    if( rString.compareToAscii( sXML_row ) == 0 )
+        return sheet::DataPilotFieldOrientation_ROW;
+    if( rString.compareToAscii( sXML_page ) == 0 )
+        return sheet::DataPilotFieldOrientation_PAGE;
+    if( rString.compareToAscii( sXML_data ) == 0 )
+        return sheet::DataPilotFieldOrientation_DATA;
+    return sheet::DataPilotFieldOrientation_HIDDEN;
+}
+
+
+//___________________________________________________________________
+
+void ScXMLConverter::GetStringFromOrientation(
+    OUString& rString,
+    const sheet::DataPilotFieldOrientation eOrientation,
+    sal_Bool bAppendStr )
+{
+    OUString sOrientStr;
+    switch( eOrientation )
+    {
+        case sheet::DataPilotFieldOrientation_HIDDEN:
+            sOrientStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_hidden ) );
+        break;
+        case sheet::DataPilotFieldOrientation_COLUMN:
+            sOrientStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_column ) );
+        break;
+        case sheet::DataPilotFieldOrientation_ROW:
+            sOrientStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_row ) );
+        break;
+        case sheet::DataPilotFieldOrientation_PAGE:
+            sOrientStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_page ) );
+        break;
+        case sheet::DataPilotFieldOrientation_DATA:
+            sOrientStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_data ) );
+        break;
+    }
+    AssignString( rString, sOrientStr, bAppendStr );
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldpimp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-02 16:39:54 $
+ *  last change: $Author: dr $ $Date: 2000-11-03 12:59:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,8 +328,6 @@ public:
                                      const NAMESPACE_RTL(OUString)& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
-
-    sal_Int16 GetOrientation(const rtl::OUString& sOrientation);
 
     virtual void EndElement();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldpimp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-02 16:39:54 $
+ *  last change: $Author: dr $ $Date: 2000-11-03 12:59:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlkywd.hxx>
 
-#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+//#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 
 using namespace com::sun::star;
 
@@ -145,7 +145,7 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
     bIsNative(sal_True),
     bIgnoreEmptyRows(sal_False),
     bIdentifyCategories(sal_False),
-    pDoc(NULL),
+    pDoc(GetScImport().GetDocument()),
     pDPObject(NULL),
     pDPSave(NULL)
 {
@@ -182,46 +182,28 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
                 if (sValue.compareToAscii(sXML_true) == 0)
                     bIgnoreEmptyRows = sal_True;
             }
+            break;
             case XML_TOK_DATA_PILOT_TABLE_ATTR_IDENTIFY_CATEGORIES :
             {
                 if (sValue.compareToAscii(sXML_true) == 0)
                     bIdentifyCategories = sal_True;
             }
+            break;
             case XML_TOK_DATA_PILOT_TABLE_ATTR_TARGET_RANGE_ADDRESS :
             {
-                ScXMLImport& rXMLImport = GetScImport();
-                ScModelObj* pDocObj = ScModelObj::getImplementation( rXMLImport.GetModel() );
-                if ( pDocObj )
-                {
-                    ScDocument* pDoc = pDocObj->GetDocument();
-                    ScAddress aStartCellAddress;
-                    ScAddress aEndCellAddress;
-                    sal_Int16 i = 0;
-                    while ((sValue[i] != ':') && (i < sValue.getLength()))
-                        i++;
-                    rtl::OUString sStartCellAddress = sValue.copy(0, i);
-                    rtl::OUString sEndCellAddress = sValue.copy(i + 1);
-                    aStartCellAddress.Parse(sStartCellAddress, pDoc);
-                    aEndCellAddress.Parse(sEndCellAddress, pDoc);
-                    aTargetRangeAddress = ScRange(aStartCellAddress, aEndCellAddress);
-                }
+                ScXMLConverter::GetRangeFromString( aTargetRangeAddress, sValue, pDoc );
             }
+            break;
             case XML_TOK_DATA_PILOT_TABLE_ATTR_BUTTONS :
             {
                 sButtons = sValue;
             }
+            break;
         }
     }
-    ScModelObj* pDocObj = ScModelObj::getImplementation( GetScImport().GetModel() );
-    if ( pDocObj )
-    {
-        pDoc = pDocObj->GetDocument();
-        if (pDoc)
-        {
-            pDPObject = new ScDPObject(pDoc);
-             pDPSave = new ScDPSaveData();
-        }
-    }
+
+    pDPObject = new ScDPObject(pDoc);
+     pDPSave = new ScDPSaveData();
 }
 
 ScXMLDataPilotTableContext::~ScXMLDataPilotTableContext()
@@ -281,28 +263,17 @@ SvXMLImportContext *ScXMLDataPilotTableContext::CreateChildContext( USHORT nPref
 
 void ScXMLDataPilotTableContext::SetButtons()
 {
-    sal_Int32 nCount = sButtons.getLength();
-    if (nCount)
+    OUString sAddress;
+    sal_Int32 nOffset = 0;
+    while( nOffset >= 0 )
     {
-        sal_Bool bIn(sal_False);
-        sal_Int32 nPos = 0;
-        sal_Int32 nOldPos = 0;
-        while(nPos < nCount)
+        nOffset = ScXMLConverter::GetTokenByOffset( sAddress, sButtons, nOffset );
+        if( nOffset >= 0 )
         {
-            if (sButtons[nPos] == '\'')
-                bIn = !bIn;
-            if ((!bIn && sButtons[nPos] == ' ') || (nPos == nCount - 1 && nPos > nOldPos))
-            {
-                if (nPos == nCount - 1)
-                    nPos++;
-                rtl::OUString sCellAddress = sButtons.copy(nOldPos, nPos - nOldPos);
-                ScAddress aCellAddress;
-                aCellAddress.Parse(sCellAddress, pDoc);
-                ScMergeFlagAttr aAttr(SC_MF_BUTTON);
-                pDoc->ApplyAttr(aCellAddress.Col(), aCellAddress.Row(), aCellAddress.Tab(), aAttr);
-                nOldPos = nPos + 1;
-            }
-            nPos++;
+            ScAddress aScAddress;
+            ScXMLConverter::GetAddressFromString( aScAddress, sAddress, pDoc );
+            ScMergeFlagAttr aAttr( SC_MF_BUTTON );
+            pDoc->ApplyAttr( aScAddress.Col(), aScAddress.Row(), aScAddress.Tab(), aAttr );
         }
     }
 }
@@ -662,23 +633,9 @@ ScXMLSourceCellRangeContext::ScXMLSourceCellRangeContext( ScXMLImport& rImport,
         {
             case XML_TOK_SOURCE_CELL_RANGE_ATTR_CELL_RANGE_ADDRESS :
             {
-                ScXMLImport& rXMLImport = GetScImport();
-                ScModelObj* pDocObj = ScModelObj::getImplementation( rXMLImport.GetModel() );
-                if ( pDocObj )
-                {
-                    ScDocument* pDoc = pDocObj->GetDocument();
-                    ScAddress aStartCellAddress;
-                    ScAddress aEndCellAddress;
-                    sal_Int16 i = 0;
-                    while ((sValue[i] != ':') && (i < sValue.getLength()))
-                        i++;
-                    rtl::OUString sStartCellAddress = sValue.copy(0, i);
-                    rtl::OUString sEndCellAddress = sValue.copy(i + 1);
-                    aStartCellAddress.Parse(sStartCellAddress, pDoc);
-                    aEndCellAddress.Parse(sEndCellAddress, pDoc);
-                    ScRange aSourceRangeAddress(aStartCellAddress, aEndCellAddress);
-                    pDataPilotTable->SetSourceCellRangeAddress(aSourceRangeAddress);
-                }
+                ScRange aSourceRangeAddress;
+                ScXMLConverter::GetRangeFromString( aSourceRangeAddress, sValue, GetScImport().GetDocument() );
+                pDataPilotTable->SetSourceCellRangeAddress(aSourceRangeAddress);
             }
             break;
         }
@@ -760,7 +717,7 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
             break;
             case XML_TOK_DATA_PILOT_FIELD_ATTR_ORIENTATION :
             {
-                nOrientation = GetOrientation(sValue);
+                nOrientation = (sal_Int16) ScXMLConverter::GetOrientationFromString( sValue );
             }
             break;
             case XML_TOK_DATA_PILOT_FIELD_ATTR_USED_HIERARCHY :
@@ -797,22 +754,6 @@ SvXMLImportContext *ScXMLDataPilotFieldContext::CreateChildContext( USHORT nPref
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
 
     return pContext;
-}
-
-sal_Int16 ScXMLDataPilotFieldContext::GetOrientation(const rtl::OUString& sOrientation)
-{
-    if (sOrientation.compareToAscii(sXML_row) == 0)
-        return sheet::DataPilotFieldOrientation_ROW;
-    else if (sOrientation.compareToAscii(sXML_column) == 0)
-        return sheet::DataPilotFieldOrientation_COLUMN;
-    else if (sOrientation.compareToAscii(sXML_data) == 0)
-        return sheet::DataPilotFieldOrientation_DATA;
-    else if (sOrientation.compareToAscii(sXML_page) == 0)
-        return sheet::DataPilotFieldOrientation_PAGE;
-    else if (sOrientation.compareToAscii(sXML_hidden) == 0)
-        return sheet::DataPilotFieldOrientation_HIDDEN;
-    else
-        return 0;
 }
 
 void ScXMLDataPilotFieldContext::EndElement()

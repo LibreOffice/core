@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConverter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-02 16:32:20 $
+ *  last change: $Author: dr $ $Date: 2000-11-03 12:59:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #include <com/sun/star/frame/XModel.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDORIENTATION_HPP_
+#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SHEET_GENERALFUNCTION_HPP_
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #endif
@@ -94,6 +97,17 @@ protected:
                             ::rtl::OUString& rString,
                             const ::rtl::OUString& rNewStr,
                             sal_Bool bAppendStr );
+
+    static sal_Int32    IndexOf(
+                            const ::rtl::OUString& rString,
+                            sal_Unicode cSearchChar,
+                            sal_Int32 nOffset,
+                            sal_Unicode cQuote = '\'' );
+
+    static sal_Int32    IndexOfDifferent(
+                            const ::rtl::OUString& rString,
+                            sal_Unicode cSearchChar,
+                            sal_Int32 nOffset );
 
 public:
     inline              ScXMLConverter()    {}
@@ -192,9 +206,9 @@ public:
 // IMPORT: GeneralFunction / ScSubTotalFunc
     static ::com::sun::star::sheet::GeneralFunction
                         GetFunctionFromString(
-                            const ::rtl::OUString& sFunction );
+                            const ::rtl::OUString& rString );
     static ScSubTotalFunc GetSubTotalFuncFromString(
-                            const ::rtl::OUString& sFunction );
+                            const ::rtl::OUString& rString );
 
 // EXPORT: GeneralFunction / ScSubTotalFunc
     static void         GetStringFromFunction(
@@ -204,6 +218,17 @@ public:
     static void         GetStringFromFunction(
                             ::rtl::OUString& rString,
                             const ScSubTotalFunc eFunction,
+                            sal_Bool bAppendStr = sal_False );
+
+// IMPORT: DataPilotFieldOrientation
+    static ::com::sun::star::sheet::DataPilotFieldOrientation
+                        GetOrientationFromString(
+                            const ::rtl::OUString& rString );
+
+// EXPORT: DataPilotFieldOrientation
+    static void         GetStringFromOrientation(
+                            ::rtl::OUString& rString,
+                            const ::com::sun::star::sheet::DataPilotFieldOrientation eOrientation,
                             sal_Bool bAppendStr = sal_False );
 
 // IMPORT: Formulas
