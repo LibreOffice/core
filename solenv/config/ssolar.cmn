@@ -84,6 +84,7 @@ common
 		PCLEAN_PATH
 		PRE
 		PROEXT
+		PROFILE
 		profile
 		RES_ARAB
 		RES_CHINSIM
