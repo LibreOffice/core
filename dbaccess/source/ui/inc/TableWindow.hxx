@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-26 12:47:48 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:21:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,7 @@ namespace dbaui
         virtual void                Command(const CommandEvent& rEvt);
 
         // Accessibility
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
         // Linien neu zeichnen
         void InvalidateLines();
