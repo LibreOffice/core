@@ -2,9 +2,9 @@
  *
  *  $RCSfile: measure.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-16 11:29:53 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 20:25:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ TabPage RID_SVXPAGE_MEASURE
     Text [ dutch ] = "Afmetingen" ;
     Text [ swedish ] = "Dimensionering" ;
     Text [ danish ] = "Dimensionering" ;
-    Text [ portuguese_brazilian ] = "Bemaßung" ;
+    Text [ portuguese_brazilian ] = "Bema?ung" ;
     Text [ portuguese ] = "Dimensionar" ;
 
     FixedLine FL_LINE
@@ -89,6 +89,26 @@ TabPage RID_SVXPAGE_MEASURE
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Text = "Line" ;
         Text [ ENGLISH ] = "Line" ;
+        Text[ english_us ] = "Line";
+        Text[ portuguese ] = "Line";
+        Text[ russian ] = "Line";
+        Text[ greek ] = "Line";
+        Text[ dutch ] = "Line";
+        Text[ french ] = "Line";
+        Text[ spanish ] = "Línea";
+        Text[ finnish ] = "Line";
+        Text[ italian ] = "Line";
+        Text[ danish ] = "Line";
+        Text[ swedish ] = "Linje";
+        Text[ polish ] = "Lina";
+        Text[ portuguese_brazilian ] = "Line";
+        Text[ japanese ] = "Line";
+        Text[ korean ] = "Line";
+        Text[ chinese_simplified ] = "ÏßÌõ";
+        Text[ chinese_traditional ] = "?±ø";
+        Text[ turkish ] = "Line";
+        Text[ arabic ] = "Line";
+        Text[ catalan ] = "Line";
     };
     FixedText FT_LINE_DIST
     {
@@ -147,7 +167,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text [ dutch ] = "Hulplijn ~overhangend" ;
         Text [ swedish ] = "Hjälplinje~överhäng" ;
         Text [ danish ] = "Hjælpelinjeoverhæng" ;
-        Text [ portuguese_brazilian ] = "Hilfslinien~überhang" ;
+        Text [ portuguese_brazilian ] = "Hilfslinien~?erhang" ;
         Text [ portuguese ] = "Linhas auxiliares realçadas" ;
         Text[ chinese_simplified ] = "¸¨ÖúÏßÑÓ³¤(~O)";
         Text[ russian ] = "Âûñòóï íàïğàâëÿşùèõ ëèíèé";
@@ -317,6 +337,26 @@ TabPage RID_SVXPAGE_MEASURE
         TabStop = TRUE ;
         Text = "Maßlinie u~nterhalb des Objekts" ;
         Text [ ENGLISH ] = "Measure ~below reference edge" ;
+        Text[ english_us ] = "~Below reference edge";
+        Text[ portuguese ] = "Mostrar ~abaixo";
+        Text[ russian ] = "Ïîêàç íèæå";
+        Text[ greek ] = "ÅìöÜíéóç êÜôù áğü";
+        Text[ dutch ] = "~Weergave onder";
+        Text[ french ] = "Afficher ~en dessous";
+        Text[ spanish ] = "Línea de tamaño ~debajo del objeto";
+        Text[ finnish ] = "~Viitereunan alapuolella";
+        Text[ italian ] = "Mostra in basso";
+        Text[ danish ] = "Vis nedenfor";
+        Text[ swedish ] = "Måttlinje ~nedanför objekt";
+        Text[ polish ] = "Poka¿ poni¿ej";
+        Text[ portuguese_brazilian ] = "Anzeige ~unterhalb";
+        Text[ japanese ] = "‰º•û‚É•\\¦(~B)";
+        Text[ korean ] = "¾Æ·¡¿¡ Ç¥½Ã(~B)";
+        Text[ chinese_simplified ] = "³ß´çÏßÌõÏÔÊ¾ÔÚ¶ÔÏóÏÂ·½(~B)";
+        Text[ chinese_traditional ] = "¤Ø¤o?±øÅã¥Ü¦bª«¥ó¤U¤è(~B)";
+        Text[ turkish ] = "Altta ~görüntüle";
+        Text[ arabic ] = "ÅÙåÇÑ ÇáŞíÇÓ ÈÇáÃÓİá";
+        Text[ catalan ] = "Mostrar ~abajo";
     };
     FixedLine FL_VERT
     {
@@ -329,6 +369,26 @@ TabPage RID_SVXPAGE_MEASURE
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Text = "Beschriftung" ;
         Text [ ENGLISH ] = "Legend" ;
+        Text[ english_us ] = "Legend";
+        Text[ portuguese ] = "Legend";
+        Text[ russian ] = "Legend";
+        Text[ greek ] = "Legend";
+        Text[ dutch ] = "Legend";
+        Text[ french ] = "Legend";
+        Text[ spanish ] = "Etiqueta";
+        Text[ finnish ] = "Legend";
+        Text[ italian ] = "Legend";
+        Text[ danish ] = "Legend";
+        Text[ swedish ] = "Etikett";
+        Text[ polish ] = "Etykieta";
+        Text[ portuguese_brazilian ] = "Legend";
+        Text[ japanese ] = "Legend";
+        Text[ korean ] = "Legend";
+        Text[ chinese_simplified ] = "±êÇ©";
+        Text[ chinese_traditional ] = "¼ĞÅÒ";
+        Text[ turkish ] = "Legend";
+        Text[ arabic ] = "Legend";
+        Text[ catalan ] = "Legend";
     };
     FixedText FT_POSITION
     {
@@ -337,11 +397,11 @@ TabPage RID_SVXPAGE_MEASURE
         Text = "~Textposition" ;
         Text [ ENGLISH ] = "Text position" ;
         Text [ dutch ] = "Tekstpositie" ;
-        Text [ english_us ] = "Text position" ;
+        Text [ english_us ] = "~Text position" ;
         Text [ italian ] = "Posizione testo" ;
         Text [ spanish ] = "Posición del texto" ;
         Text [ french ] = "Position du texte" ;
-        Text [ swedish ] = "Textposition" ;
+        Text [ swedish ] = "~Textposition" ;
         Text [ danish ] = "Tekstplacering" ;
         Text [ portuguese_brazilian ] = "Textposition" ;
         Text [ portuguese ] = "Posição do texto" ;
@@ -382,7 +442,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ spanish ] = "~Vertical automáticamente";
         Text[ italian ] = "Verticale ~autom.";
         Text[ danish ] = "Automatisk lodret";
-        Text[ swedish ] = "Automatiskt vertikal";
+        Text[ swedish ] = "Automatiskt ~vertikal";
         Text[ polish ] = "Automatycznie pionowo";
         Text[ portuguese_brazilian ] = "~Automatic vertical";
         Text[ japanese ] = "©“®“I‚Éc•ûŒü‚Ö(~A)";
@@ -411,7 +471,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ spanish ] = "~Horizontal automáticamente";
         Text[ italian ] = "~Orizzontale automat.";
         Text[ danish ] = "Automatisk vandret";
-        Text[ swedish ] = "Automatiskt horisontal";
+        Text[ swedish ] = "Automatiskt ~horisontell";
         Text[ polish ] = "Automatycznie poziomo";
         Text[ portuguese_brazilian ] = "~Automatic horizontal";
         Text[ japanese ] = "©“®“I‚É‰¡•ûŒü‚Ö(~U)";
@@ -434,17 +494,17 @@ TabPage RID_SVXPAGE_MEASURE
         Text [ dutch ] = "Weergave ~metriek" ;
         Text [ english_us ] = "Show ~meas. units" ;
         Text [ italian ] = "~Mostra la metrica" ;
-        Text [ spanish ] = "~Mostrar métrica" ;
+        Text [ spanish ] = "~Mostrar unidad" ;
         Text [ french ] = "Afficher l'~unité" ;
-        Text [ swedish ] = "Visa ~metrik" ;
+        Text [ swedish ] = "Visa ~enhet" ;
         Text [ danish ] = "Vis metrik" ;
         Text [ portuguese ] = "Mostrar ~métrica" ;
         Text [ portuguese_brazilian ] = "~Metrik anzeigen" ;
-        Text[ chinese_simplified ] = "ÏÔÊ¾¹«ÖÆ(~M)";
+        Text[ chinese_simplified ] = "ÏÔÊ¾³ß´çµ¥Î»(~M)";
         Text[ russian ] = "Ïîêàç ìåòğèêè";
-        Text[ polish ] = "Poka¿ metrykê";
+        Text[ polish ] = "Poka¿ jednostkê miary";
         Text[ japanese ] = "’PˆÊ‚ğ•\\¦(~M)";
-        Text[ chinese_traditional ] = "Åã¥Ü¤½¨î(~M)";
+        Text[ chinese_traditional ] = "Åã¥Ü¤Ø¤o³æ¦ì(~M)";
         Text[ arabic ] = "ÅÙåÇÑ æÍÏÇÊ ÇáŞíÇÓ";
         Text[ greek ] = "ÅìöÜíéóç ìïíÜäùí ìİôñçóçò";
         Text[ korean ] = "´ÜÀ§ Ç¥½Ã(~M)";
@@ -469,6 +529,26 @@ TabPage RID_SVXPAGE_MEASURE
         TabStop = TRUE ;
         Text = "Beschriftung ~parallel zur Hilfslinie" ;
         Text [ ENGLISH ] = "legend ~parallel to help line" ;
+        Text[ english_us ] = "~Parallel";
+        Text[ portuguese ] = "Paralelamente";
+        Text[ russian ] = "Ïàğàëëåëüíî";
+        Text[ greek ] = "ĞáñÜëëçëç ğñïâïëŞ";
+        Text[ dutch ] = "Weergave ~parallel";
+        Text[ french ] = "Affichage ~parallèle";
+        Text[ spanish ] = "Etiqueta paralela a líneas auxiliares";
+        Text[ finnish ] = "~Samansuuntainen";
+        Text[ italian ] = "Mostra ~parallelamente";
+        Text[ danish ] = "Vis parallelt";
+        Text[ swedish ] = "Etikett ~parallell med hjälplinje";
+        Text[ polish ] = "Ustaw etykietê równolegle do linii pomocniczej";
+        Text[ portuguese_brazilian ] = "Anzeige ~parallel";
+        Text[ japanese ] = "•½s‚É•\\¦(~P)";
+        Text[ korean ] = "ÆòÇàÀ¸·Î Ç¥½Ã(~P)";
+        Text[ chinese_simplified ] = "±êÇ©ºÍ¸¨ÖúÏßÆ½ĞĞ(~P)";
+        Text[ chinese_traditional ] = "¼ĞÅÒ©M»²§U½u¥­¦æ(~P)";
+        Text[ turkish ] = "Paralel ~görüntüle";
+        Text[ arabic ] = "ÅÙåÇÑ ÇáŞíÇÓ ãÊæÇÒíÇğ";
+        Text[ catalan ] = "M~ostrar paralelamente";
     };
     Control CTL_PREVIEW
     {
@@ -502,6 +582,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ turkish ] = "Otomatik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Automático";
+        Text[ finnish ] = "Automaattinen";
     };
     Text[ chinese_simplified ] = "¶¨³ß´ç";
     Text[ russian ] = "Ğàçìåğû";
