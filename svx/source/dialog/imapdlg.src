@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:43:21 $
+ *  last change: $Author: rt $ $Date: 2000-12-06 14:36:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,7 +384,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ chinese_traditional ] = "Εά§σΒI";
                 Text[ arabic ] = "ΚΝΡνΡ ΗαδήΗΨ";
                 Text[ greek ] = "Επεξεργασία σημείων";
-                Text[ korean ] = "Α΅ ΖνΑύ";
+                Text[ korean ] = "ΗΧΈρ ΖνΑύ";
                 Text[ turkish ] = "Noktalarύ dόzenle";
                 Text[ language_user1 ] = " ";
             };
@@ -532,7 +532,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ chinese_traditional ] = "΄_­μ ";
                 Text[ arabic ] = "ΚΡΗΜΪ";
                 Text[ greek ] = "Αναίρεση ";
-                Text[ korean ] = "ΐΫΎχΓλΌÒ ";
+                Text[ korean ] = "½ΗΗΰ ΓλΌÒ ";
                 Text[ turkish ] = "Geri al ";
                 Text[ language_user1 ] = " ";
             };
@@ -565,7 +565,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ chinese_traditional ] = "«μ΄_ ";
                 Text[ arabic ] = "ΕΪΗΟΙ";
                 Text[ greek ] = "Επαναφορά ";
-                Text[ korean ] = "ΊΉΏψ ";
+                Text[ korean ] = "µΗµΉΈ®±β ";
                 Text[ turkish ] = "Yinele ";
                 Text[ language_user1 ] = " ";
             };
