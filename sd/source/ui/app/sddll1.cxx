@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll1.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:14:44 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:11:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,26 +163,6 @@ void SdDLL::RegisterFactorys()
     {
         ::sd::GraphicViewShellBase::RegisterFactory (::sd::DRAW_FACTORY_ID);
     }
-
-    /* af
-    if (SvtModuleOptions().IsImpress())
-    {
-        // Impress
-        ::sd::DrawViewShell::RegisterFactory(1);
-        ::sd::SlideViewShell::RegisterFactory(2);
-        ::sd::OutlineViewShell::RegisterFactory(3);
-        ::sd::PresentationViewShell::RegisterFactory(4);
-        ::sd::PreviewViewShell::RegisterFactory(5);
-    }
-
-    if (SvtModuleOptions().IsDraw()) {
-        // Draw
-        ::sd::GraphicViewShell::RegisterFactory(1);
-
-        // #93468# Need preview view also for draw documents
-        ::sd::PreviewViewShell::RegisterFactory(5);
-    }
-    */
 }
 
 
