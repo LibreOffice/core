@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unokywds.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-11 07:51:02 $
+ *  last change: $Author: cl $ $Date: 2001-05-16 13:41:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,8 @@ SD_CONSTASCII_ACTION( sUNO_Prop_TabStop,                "TabStop" );
 SD_CONSTASCII_ACTION( sUNO_Prop_CharLocale,             "CharLocale" );
 SD_CONSTASCII_ACTION( sUNO_Prop_AutomContFocus,         "AutomaticControlFocus" );
 SD_CONSTASCII_ACTION( sUNO_Prop_ApplyFrmDsgnMode,       "ApplyFormDesignMode" );
+SD_CONSTASCII_ACTION( sUNO_Prop_IsBackgroundVisible,    "IsBackgroundVisible" );
+SD_CONSTASCII_ACTION( sUNO_Prop_IsBackgroundObjectsVisible, "IsBackgroundObjectsVisible" );
 
 // view settings
 SD_CONSTASCII_ACTION( sUNO_View_ViewId,                         "ViewId" );

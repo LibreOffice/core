@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-02 11:08:11 $
+ *  last change: $Author: cl $ $Date: 2001-05-16 13:45:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,26 +170,15 @@ using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star;
 
-#define WID_PAGE_LEFT   0
-#define WID_PAGE_RIGHT  1
-#define WID_PAGE_TOP    2
-#define WID_PAGE_BOTTOM 3
-#define WID_PAGE_WIDTH  4
-#define WID_PAGE_HEIGHT 5
-#define WID_PAGE_EFFECT 6
-#define WID_PAGE_CHANGE 7
-#define WID_PAGE_SPEED  8
-#define WID_PAGE_NUMBER 9
-#define WID_PAGE_ORIENT 10
-#define WID_PAGE_LAYOUT 11
-#define WID_PAGE_DURATION 12
-#define WID_PAGE_LDNAME 13
-#define WID_PAGE_LDBITMAP 14
-#define WID_PAGE_BACK 15
-#define WID_PAGE_PREVIEW 16
-#define WID_PAGE_VISIBLE 17
-#define WID_PAGE_SOUNDFILE 18
-#define WID_PAGE_BACKFULL 19
+/* this are the ids for page properties */
+enum WID_PAGE
+{
+    WID_PAGE_LEFT, WID_PAGE_RIGHT, WID_PAGE_TOP, WID_PAGE_BOTTOM, WID_PAGE_WIDTH,
+    WID_PAGE_HEIGHT, WID_PAGE_EFFECT, WID_PAGE_CHANGE, WID_PAGE_SPEED, WID_PAGE_NUMBER,
+    WID_PAGE_ORIENT, WID_PAGE_LAYOUT, WID_PAGE_DURATION, WID_PAGE_LDNAME, WID_PAGE_LDBITMAP,
+    WID_PAGE_BACK, WID_PAGE_PREVIEW, WID_PAGE_VISIBLE, WID_PAGE_SOUNDFILE, WID_PAGE_BACKFULL,
+    WID_PAGE_BACKVIS, WID_PAGE_BACKOBJVIS
+};
 
 #ifndef SEQTYPE
  #if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)
@@ -201,9 +190,9 @@ using namespace ::com::sun::star;
 
 static sal_Char __FAR_DATA sEmptyPageName[sizeof("page")] = "page";
 
+/** this function stores the property maps for draw pages in impress and draw */
 const SfxItemPropertyMap* ImplGetDrawPagePropertyMap( sal_Bool bImpress )
 {
-    // Achtung: Der erste Parameter MUSS sortiert vorliegen !!!
     static const SfxItemPropertyMap aDrawPagePropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN(UNO_NAME_PAGE_BACKGROUND),       WID_PAGE_BACK,      &ITYPE( beans::XPropertySet ),                  beans::PropertyAttribute::MAYBEVOID,0},
@@ -225,10 +214,11 @@ const SfxItemPropertyMap* ImplGetDrawPagePropertyMap( sal_Bool bImpress )
         { MAP_CHAR_LEN(UNO_NAME_PAGE_PREVIEW),          WID_PAGE_PREVIEW,   SEQTYPE(::getCppuType((::com::sun::star::uno::Sequence<sal_Int8>*)0)), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { MAP_CHAR_LEN(UNO_NAME_PAGE_VISIBLE),          WID_PAGE_VISIBLE,   &::getBooleanCppuType(),                        0, 0},
         { MAP_CHAR_LEN(UNO_NAME_OBJ_SOUNDFILE),         WID_PAGE_SOUNDFILE, &::getCppuType((const OUString*)0),             0, 0},
+        { MAP_CHAR_LEN(sUNO_Prop_IsBackgroundVisible),  WID_PAGE_BACKVIS,   &::getBooleanCppuType(),                        0, 0},
+        { MAP_CHAR_LEN(sUNO_Prop_IsBackgroundObjectsVisible),   WID_PAGE_BACKOBJVIS,    &::getBooleanCppuType(),                        0, 0},
         {0,0,0,0,0}
     };
 
-    // Achtung: Der erste Parameter MUSS sortiert vorliegen !!!
     static const SfxItemPropertyMap aGraphicPagePropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN(UNO_NAME_PAGE_BACKGROUND),       WID_PAGE_BACK,      &ITYPE( beans::XPropertySet),                   beans::PropertyAttribute::MAYBEVOID,0},
@@ -252,6 +242,7 @@ const SfxItemPropertyMap* ImplGetDrawPagePropertyMap( sal_Bool bImpress )
         return aGraphicPagePropertyMap_Impl;
 }
 
+/** this function stores the property map for master pages in impress and draw */
 const SfxItemPropertyMap* ImplGetMasterPagePropertyMap()
 {
     static const SfxItemPropertyMap aMasterPagePropertyMap_Impl[] =
@@ -272,11 +263,6 @@ const SfxItemPropertyMap* ImplGetMasterPagePropertyMap()
     };
     return aMasterPagePropertyMap_Impl;
 }
-
-SfxItemPropertyMap aEmptyPropertyMap_Impl[] =
-{
-    {0,0,0,0,0}
-};
 
 UNO3_GETIMPLEMENTATION2_IMPL( SdGenericDrawPage, SvxFmDrawPage );
 
@@ -554,6 +540,41 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             GetPage()->SetBackgroundFullSize( bFullSize );
             break;
         }
+        case WID_PAGE_BACKVIS:
+        {
+            sal_Bool bVisible;
+            if( ! ( aValue >>= bVisible ) )
+                throw lang::IllegalArgumentException();
+
+            SdrPage* pPage = GetPage();
+            if( pPage )
+            {
+                SdDrawDocument* pDoc = (SdDrawDocument*)pPage->GetModel();
+                SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
+                SetOfByte aVisibleLayers = pPage->GetMasterPageVisibleLayers(0);
+                aVisibleLayers.Set(rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE), bVisible);
+                pPage->SetMasterPageVisibleLayers(aVisibleLayers, 0);
+            }
+            break;
+        }
+        case WID_PAGE_BACKOBJVIS:
+        {
+            sal_Bool bVisible;
+            if( ! ( aValue >>= bVisible ) )
+                throw lang::IllegalArgumentException();
+
+            SdrPage* pPage = GetPage();
+            if( pPage )
+            {
+                SdDrawDocument* pDoc = (SdDrawDocument*)pPage->GetModel();
+                SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
+                SetOfByte aVisibleLayers = pPage->GetMasterPageVisibleLayers(0);
+                aVisibleLayers.Set(rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE), bVisible);
+                pPage->SetMasterPageVisibleLayers(aVisibleLayers, 0);
+            }
+
+            break;
+        }
         default:
             throw beans::UnknownPropertyException();
             break;
@@ -692,7 +713,28 @@ uno::Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyN
         aAny = uno::Any( &bFullSize, ::getBooleanCppuType() );
         break;
     }
-
+    case WID_PAGE_BACKVIS:
+    {
+        SdrPage* pPage = GetPage();
+        if( pPage )
+        {
+            SdDrawDocument* pDoc = (SdDrawDocument*)pPage->GetModel();
+            SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
+            SetOfByte aVisibleLayers = pPage->GetMasterPageVisibleLayers(0);
+            aAny <<= (sal_Bool)aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE));
+        }
+    }
+    case WID_PAGE_BACKOBJVIS:
+    {
+        SdrPage* pPage = GetPage();
+        if( pPage )
+        {
+            SdDrawDocument* pDoc = (SdDrawDocument*)pPage->GetModel();
+            SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
+            SetOfByte aVisibleLayers = pPage->GetMasterPageVisibleLayers(0);
+            aAny <<= (sal_Bool)aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE));
+        }
+    }
     default:
         throw beans::UnknownPropertyException();
         break;
