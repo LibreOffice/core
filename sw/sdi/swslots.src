@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: kz $ $Date: 2002-06-13 14:59:32 $
+ *  last change: $Author: gt $ $Date: 2002-07-25 12:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4141,32 +4141,9 @@ SfxSlotInfo FN_INSERT_LINEBREAK
 };
 SfxSlotInfo FN_INSERT_OBJ_CTRL
 {
-    SlotName = "Objekte einfügen";
-    SlotName [ english ] =  "Objekte einfügen";
-    SlotName[ english_us ] = "Insert Objects";
-    SlotName[ portuguese ] = "Inserir objectos";
-    SlotName[ russian ] = "Âñòàâèòü îáúåêò";
-    SlotName[ dutch ] = "Objecten invoegen";
-    SlotName[ french ] = "Insérer des objets";
-    SlotName[ spanish ] = "Insertar objetos";
-    SlotName[ italian ] = "Inserisci oggetti";
-    SlotName[ danish ] = "Indsæt objekt";
-    SlotName[ swedish ] = "Infoga objekt";
-    SlotName[ polish ] = "Wstaw obiekty";
-    SlotName[ portuguese_brazilian ] = "InsertObjCtrl";
-    SlotName[ japanese ] = "ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æŒ¿å…¥";
-    SlotName[ chinese_simplified ] = "æ’å…¥å¯¹è±¡";
-    SlotName[ chinese_traditional ] = "æ’å…¥ç‰©ä»¶";
-    SlotName[ arabic ] = "ÅÏÑÇÌ ßÇÆäÇÊ";
-    SlotName[ dutch ] = "Objecten invoegen";
-    SlotName[ chinese_simplified ] = "æ’å…¥å¯¹è±¡";
-    SlotName[ greek ] = "ÅéóáãùãŞ áíôéêåéìİíùí";
-    SlotName[ korean ] = "ê°œì²´ ì‚½ì…";
-    SlotName[ turkish ] = "Nesne ekle";
-    SlotName[ language_user1 ] = " ";
-    SlotName[ catalan ] = "Insertar objetos";
-    SlotName[ finnish ] = "Lisää objektit";
-    SlotName[ thai ] = "à¹à¸—à¸£à¸à¸§à¸±à¸•à¸–à¸¸";
+    SlotName = "Objekt einfügen";
+    SlotName [ english ] =  "Objekt einfügen";
+    SlotName[ english_us ] = "Insert Object";
 };
 SfxSlotInfo FN_INSERT_OBJECT_DLG
 {
