@@ -1,18 +1,17 @@
 package com.sun.star.wizards.fax;
 
 import com.sun.star.wizards.common.*;
-import com.sun.star.wizards.document.*;
 import com.sun.star.wizards.text.*;
 import com.sun.star.frame.XDesktop;
-import com.sun.star.table.BorderLine;
+import com.sun.star.frame.XTerminateListener;
 import com.sun.star.text.*;
+import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.drawing.XShape;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.NoSuchElementException;
 import com.sun.star.awt.Size;
 import com.sun.star.style.NumberingType;
 import com.sun.star.style.ParagraphAdjust;
@@ -23,9 +22,11 @@ public class FaxDocument extends TextDocument {
 
     XDesktop xDesktop;
     Size DocSize = null;
+    boolean keepLogoFrame = true;
+    boolean keepTypeFrame = true;
 
-    public FaxDocument(XMultiServiceFactory xMSF) {
-        super(xMSF);
+    public FaxDocument(XMultiServiceFactory xMSF, XTerminateListener listener) {
+        super(xMSF, listener);
     }
 
     public XWindowPeer getWindowPeer() {
@@ -44,8 +45,14 @@ public class FaxDocument extends TextDocument {
         }
     }
 
+    public void updateDateFields() {
+        TextFieldHandler FH = new TextFieldHandler(xMSFDoc, xTextDocument);
+        FH.updateDateFields();
+    }
+
     public void switchFooter(String sPageStyle, boolean bState, boolean bPageNumber, String sText) {
         if (xTextDocument != null) {
+            xTextDocument.lockControllers();
             try {
                 XStyleFamiliesSupplier xStyleFamiliesSupplier = (XStyleFamiliesSupplier) com.sun.star.uno.UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, xTextDocument);
                 com.sun.star.container.XNameAccess xNameAccess = null;
@@ -77,6 +84,7 @@ public class FaxDocument extends TextDocument {
                 } else {
                     Helper.setUnoPropertyValue(xPageStyle, "FooterIsOn", new Boolean(false));
                 }
+                xTextDocument.unlockControllers();
             } catch (Exception exception) {
                 exception.printStackTrace(System.out);
             }
@@ -121,13 +129,20 @@ public class FaxDocument extends TextDocument {
         myFieldHandler.removeUserFieldByContent("");
     }
 
-    public void loadResult(String sLoadURL, boolean bAsTemplate) {
-        PropertyValue loadValues[] = new PropertyValue[1];
-        loadValues[0] = new PropertyValue();
-        loadValues[0].Name = "AsTemplate";
-        loadValues[0].Value = new Boolean(bAsTemplate);
-        String sFrame = "_self";
-        OfficeDocument.load(xDesktop, sLoadURL, sFrame, loadValues);
+    public void killEmptyFrames() {
+        try {
+            if (!keepLogoFrame) {
+                XTextFrame xTF = TextFrameHandler.getFrameByName("Company Logo", xTextDocument);
+                if (xTF != null) xTF.dispose();
+            }
+            if (!keepTypeFrame) {
+                XTextFrame xTF = TextFrameHandler.getFrameByName("Communication Type", xTextDocument);
+                if (xTF != null) xTF.dispose();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
 }
