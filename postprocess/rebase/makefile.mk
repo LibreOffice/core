@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-08 10:40:00 $
+#   last change: $Author: rt $ $Date: 2004-11-29 10:09:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,8 +70,10 @@ TARGET=rebase
 
 $(TARGET) .PHONY :
 .IF "$(GUI)"=="WNT"
+.IF "$(product)"=="full"
     @+echo ------ rebase dlls ------
     +rebase -b 0x68000000 -C $(MISC)$/coffbase.txt -d -l $(MISC)$/rebase_log.txt -R $(SOLARBINDIR) -N no_rebase.txt $(SOLARBINDIR)$/*.dll $(SOLARBINDIR)$/so$/*.dll 
+.ENDIF
 .ELSE
     @+echo Nothing to do, 'rebase' is windows only.
 .ENDIF
