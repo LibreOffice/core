@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:10 $
+ *  last change: $Author: nn $ $Date: 2001-07-05 14:17:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@
 #include "scitems.hxx"
 #include <vcl/msgbox.hxx>
 #include <sfx2/childwin.hxx>
+#include <sfx2/dispatch.hxx>
 
 #include "tabvwsh.hxx"
 #include "sc.hrc"
@@ -157,6 +158,13 @@ BOOL lcl_IsValueCol( ScDocument* pDoc, USHORT nCol, USHORT nRow1, USHORT nRow2, 
 
 //------------------------------------------------------------------
 
+void ScTabViewShell::SetCurRefDlgId( USHORT nNew )
+{
+    //  CurRefDlgId is stored in ScModule to find if a ref dialog is open,
+    //  and in the view to identify the view that has opened the dialog
+    nCurRefDlgId = nNew;
+}
+
 SfxModelessDialog* ScTabViewShell::CreateRefDialog(
                         SfxBindings* pB, SfxChildWindow* pCW, SfxChildWinInfo* pInfo,
                         Window* pParent, USHORT nSlotId )
@@ -166,6 +174,15 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
 
     if ( SC_MOD()->GetCurRefDlgId() != nSlotId )
         return NULL;
+
+    if ( nCurRefDlgId != nSlotId )
+    {
+        //  the dialog has been opened in a different view
+        //  -> lock the dispatcher for this view (modal mode)
+
+        GetViewData()->GetDispatcher().Lock( TRUE );    // lock is reset when closing dialog
+        return NULL;
+    }
 
     SfxModelessDialog* pResult = 0;
 

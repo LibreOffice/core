@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-08 14:55:10 $
+ *  last change: $Author: nn $ $Date: 2001-07-05 14:17:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1479,6 +1479,7 @@ FASTBOOL __EXPORT ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
     bChartAreaValid(FALSE),     \
     bChartDlgIsEdit(FALSE),     \
     pDialogDPObject(NULL),      \
+    nCurRefDlgId(0),            \
     aTarget( this )
 
 

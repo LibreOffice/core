@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-29 19:38:48 $
+ *  last change: $Author: nn $ $Date: 2001-07-05 14:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,7 @@ private:
     ScRangeListRef          aChartSource;
     Rectangle               aChartPos;
     USHORT                  nChartDestTab;
+    USHORT                  nCurRefDlgId;
 
 private:
     void    Construct();
@@ -433,6 +434,8 @@ public:
     void    StartSimpleRefDialog( const String& rTitle, const String& rInitVal,
                                     BOOL bCloseOnButtonUp );
     void    StopSimpleRefDialog();
+
+    void    SetCurRefDlgId( USHORT nNew );
 };
 
 //==================================================================

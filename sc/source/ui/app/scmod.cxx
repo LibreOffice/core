@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-29 19:34:53 $
+ *  last change: $Author: nn $ $Date: 2001-07-05 14:21:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1444,7 +1444,14 @@ void ScModule::SetRefDialog( USHORT nId, BOOL bVis, SfxViewFrame* pViewFrm )
         nCurRefDlgId = bVis ? nId : 0 ;             // before SetChildWindow
 
         if ( pViewFrm )
+        {
+            //  store the dialog id also in the view shell
+            SfxViewShell* pViewSh = pViewFrm->GetViewShell();
+            if ( pViewSh && pViewSh->ISA( ScTabViewShell ) )
+                ((ScTabViewShell*)pViewSh)->SetCurRefDlgId( nCurRefDlgId );
+
             pViewFrm->SetChildWindow( nId, bVis );
+        }
 
         SfxApplication* pSfxApp = SFX_APP();
         pSfxApp->Broadcast( SfxSimpleHint( FID_REFMODECHANGED ) );
