@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:17:49 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:55:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,8 @@
 #ifndef _SD_ACCESSIBILITY_ACCESSIBLE_DRAW_DOCUMENT_VIEW_HXX
 #include "AccessibleDrawDocumentView.hxx"
 #endif
-
+#include "LayerTabBar.hxx"
+#include "LayerDialogChildWindow.hxx"
 
 #include "strings.hrc"
 #include "res_bmp.hrc"
@@ -144,6 +145,7 @@
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
+#include "LayerDialogContent.hxx"
 
 namespace sd {
 
@@ -180,6 +182,52 @@ void DrawViewShell::ModelHasChanged()
         pOutliner->SetStyleSheetPool(pSPool);
     }
 }
+
+void DrawViewShell::Resize (const Point &rPos, const Size &rSize)
+{
+    if (!pFuSlideShow || !pFuSlideShow->IsFullScreen())
+    {
+        ViewShell::Resize(rPos, rSize);
+
+        if ( GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+        {
+            SetZoomRect( GetDocSh()->GetVisArea(ASPECT_CONTENT) );
+        }
+    }
+
+    FuSlideShow* pSlideShow = ( pFuSlideShow ? pFuSlideShow : ( pDrView ? pDrView->GetSlideShow() : NULL ) );
+
+    if( pSlideShow && !pSlideShow->IsFullScreen())
+        pSlideShow->Resize( rSize );
+}
+
+#if 0
+
+/*************************************************************************
+|*
+|* Ersatz fuer AdjustPosSizePixel ab Sfx 248a
+|*
+\************************************************************************/
+
+void DrawViewShell::OuterResizePixel(const Point &rPos, const Size &rSize)
+{
+    if (!pFuSlideShow || !pFuSlideShow->IsFullScreen())
+    {
+        ViewShell::OuterResizePixel(rPos, rSize);
+
+        if ( GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+        {
+            SetZoomRect( GetDocSh()->GetVisArea(ASPECT_CONTENT) );
+        }
+    }
+
+    FuSlideShow* pSlideShow = ( pFuSlideShow ? pFuSlideShow : ( pDrView ? pDrView->GetSlideShow() : NULL ) );
+
+    if( pSlideShow && !pSlideShow->IsFullScreen())
+        pSlideShow->Resize( rSize );
+}
+
+
 
 /*************************************************************************
 |*
@@ -233,52 +281,27 @@ void DrawViewShell::AdjustPosSizePixel(const Point &rNewPos,
 {
     ViewShell::AdjustPosSizePixel (rNewPos, rNewSize);
 }
+#endif
 
 
-
-void DrawViewShell::ArrangeGUIElements ()
+void DrawViewShell::ArrangeGUIElements (void)
 {
-    Size aTabSize = aTabControl.GetSizePixel();
-
     // Retrieve the current size (thickness) of the scroll bars.  That is
     // the width of the vertical and the height of the horizontal scroll
     // bar.
-    int nScrollBarSize = GetViewFrame()->GetWindow().GetSettings().GetStyleSettings().GetScrollBarSize();
+    int nScrollBarSize =
+        GetParentWindow()->GetSettings().GetStyleSettings().GetScrollBarSize();
     aScrBarWH = Size (nScrollBarSize, nScrollBarSize);
 
-    if( 0 == aTabSize.Width() )
-    {
-        if( 0.0 == pFrameView->GetTabCtrlPercent() )
-            aTabSize.Width() = TABCONTROL_INITIAL_SIZE;
-        else
-        {
-            const Size aFrameSize( GetViewFrame()->GetWindow().GetOutputSizePixel() );
-            aTabSize.Width() = FRound( aFrameSize.Width() * pFrameView->GetTabCtrlPercent() );
-        }
-    }
-
-    aTabSize.Height() = aScrBarWH.Height();
     Point aHPos = aViewPos;
-    aHPos.Y() += aViewSize.Height() - aTabSize.Height();
+    aHPos.Y() += aViewSize.Height();
 
-    Size aBtnSize(aScrBarWH);
-    aPageBtn.SetPosSizePixel(aHPos, aBtnSize);
-    aHPos.X() += aBtnSize.Width();
-    aMasterPageBtn.SetPosSizePixel(aHPos, aBtnSize);
-    aHPos.X() += aBtnSize.Width();
-    aLayerBtn.SetPosSizePixel(aHPos, aBtnSize);
-    aHPos.X() += aBtnSize.Width();
-
-    aTabControl.SetSizePixel(aTabSize);
 
     ViewShell::ArrangeGUIElements ();
 
-    aTabSize.Width() = pHScrlArray[0]->GetPosPixel().X() - aHPos.X();
-    if ( aTabSize.Width() < 0 )
-        aTabSize.Width() = 0;
-
-    aTabControl.SetPosSizePixel(aHPos, aTabSize);
-    aLayerTab.SetPosSizePixel(aHPos, aTabSize);
+    aTabControl.Hide();
+    //af aTabControl.SetSizePixel(aTabSize);
+    //af    aTabControl.SetPosSizePixel(aHPos, aTabSize);
 
     OSL_ASSERT (GetViewShell()!=NULL);
     Client* pIPClient = static_cast<Client*>(GetViewShell()->GetIPClient());
@@ -292,7 +315,7 @@ void DrawViewShell::ArrangeGUIElements ()
     if ( bZoomOnPage && !bInPlaceActive && !bClientActive )
     {
         // bei Split immer erstes Fenster resizen
-        pWindow = pWinArray[0][0];
+        //af pWindow = mpContentWindow.get();
         SfxRequest aReq(SID_SIZE_PAGE, 0, GetDoc()->GetItemPool());
         ExecuteSlot( aReq );
     }
@@ -478,8 +501,8 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
     SwitchPage(nSelectedPage);
 
     // DrawMode fuer 'Normales' Fenster wiederherstellen
-    if(pWindow->GetDrawMode() != pView->GetDrawMode())
-      pWindow->SetDrawMode(pView->GetDrawMode());
+    if(GetActiveWindow()->GetDrawMode() != pView->GetDrawMode())
+      GetActiveWindow()->SetDrawMode(pView->GetDrawMode());
 
     if ( pDrView->IsDesignMode() != pView->IsDesignMode() )
     {
@@ -539,8 +562,8 @@ void DrawViewShell::WriteFrameViewData()
 
     pFrameView->SetDesignMode( pDrView->IsDesignMode() );
 
-    Size aVisSizePixel = pWindow->GetOutputSizePixel();
-    Rectangle aVisArea = pWindow->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
+    Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
+    Rectangle aVisArea = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
     pFrameView->SetVisArea(aVisArea);
 
     if( ePageKind == PK_HANDOUT )
@@ -557,7 +580,7 @@ void DrawViewShell::WriteFrameViewData()
     }
 
     pFrameView->SetViewShEditMode(eEditMode, ePageKind);
-    pFrameView->SetLayerMode(bLayerMode);
+    pFrameView->SetLayerMode(IsLayerModeActive());
 
     SdrPageView* pPageView = pDrView->GetPageViewPvNum(0);
 
@@ -590,11 +613,11 @@ void DrawViewShell::WriteFrameViewData()
         pFrameView->SetActiveLayer( pDrView->GetActiveLayer() );
 
     // DrawMode fuer 'Normales' Fenster merken
-    if(pFrameView->GetDrawMode() != pWindow->GetDrawMode())
-      pFrameView->SetDrawMode(pWindow->GetDrawMode());
+    if(pFrameView->GetDrawMode() != GetActiveWindow()->GetDrawMode())
+      pFrameView->SetDrawMode(GetActiveWindow()->GetDrawMode());
 
     // remember tabcontrol extent as percentage of whole frame width
-    const Size aFrameSize( GetViewFrame()->GetWindow().GetOutputSizePixel() );
+    const Size aFrameSize(GetParentWindow()->GetOutputSizePixel() );
 
     if( aFrameSize.Width() )
         pFrameView->SetTabCtrlPercent( (double) aTabControl.GetSizePixel().Width() / aFrameSize.Width() );
@@ -728,8 +751,8 @@ void DrawViewShell::SetZoomFactor(const Fraction& rZoomX, const Fraction& rZoomY
 {
     ViewShell::SetZoomFactor(rZoomX, rZoomY);
     bZoomOnPage = FALSE;
-    Point aOrigin = pWindow->GetViewOrigin();
-    pWindow->SetWinViewPos(aOrigin);
+    Point aOrigin = GetActiveWindow()->GetViewOrigin();
+    GetActiveWindow()->SetWinViewPos(aOrigin);
 }
 
 /*************************************************************************
@@ -753,13 +776,13 @@ Size DrawViewShell::GetOptimalSizePixel() const
             if (!bZoomOnPage)
             {
                 // Gegenwaertigen MapMode beruecksichtigen
-                aSize = pWindow->LogicToPixel( pPage->GetSize() );
+                aSize = GetActiveWindow()->LogicToPixel( pPage->GetSize() );
             }
             else
             {
                 // 1:1 Darstellung
                 MapMode aMapMode(MAP_100TH_MM);
-                aSize = pWindow->LogicToPixel( pPage->GetSize(), aMapMode );
+                aSize = GetActiveWindow()->LogicToPixel( pPage->GetSize(), aMapMode );
                 ( (DrawViewShell*) this)->bZoomOnPage = TRUE;
             }
         }
@@ -777,7 +800,8 @@ Size DrawViewShell::GetOptimalSizePixel() const
 
 void DrawViewShell::HidePage(SdrPageView* pPV)
 {
-    FmFormShell* pFormShell = GetObjectBarManager().GetFormShell();
+    FmFormShell* pFormShell = static_cast<FmFormShell*>(
+        GetObjectBarManager().GetObjectBar(RID_FORMLAYER_TOOLBOX));
     if (pFormShell != NULL)
         pFormShell->PrepareClose (FALSE);
 }
@@ -822,52 +846,21 @@ void DrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence
 
         if (ePageKind == PK_NOTES)
         {
-            // DrawViewShell buttons
-            aLayerBtn.Disable();
-
-            // ViewShell buttons
-            aDrawBtn.Check(FALSE);
-            aOutlineBtn.Check(FALSE);
-            aSlideBtn.Check(FALSE);
-            aHandoutBtn.Check(FALSE);
-            aPresentationBtn.Check(FALSE);
-            aNotesBtn.Check(TRUE);
-
             SetHelpId( SID_NOTESMODE );
-            pWindow->SetHelpId( SID_NOTESMODE );
-            pWindow->SetUniqueId( SID_NOTESMODE );
+            GetActiveWindow()->SetHelpId( SID_NOTESMODE );
+            GetActiveWindow()->SetUniqueId( SID_NOTESMODE );
         }
         else if (ePageKind == PK_HANDOUT)
         {
-            // DrawViewShell buttons
-            aPageBtn.Disable();
-            aLayerBtn.Disable();
-
-            // ViewShell buttons
-            aDrawBtn.Check(FALSE);
-            aOutlineBtn.Check(FALSE);
-            aSlideBtn.Check(FALSE);
-            aPresentationBtn.Check(FALSE);
-            aNotesBtn.Check(FALSE);
-            aHandoutBtn.Check(TRUE);
-
             SetHelpId( SID_HANDOUTMODE );
-            pWindow->SetHelpId( SID_HANDOUTMODE );
-            pWindow->SetUniqueId( SID_HANDOUTMODE );
+            GetActiveWindow()->SetHelpId( SID_HANDOUTMODE );
+            GetActiveWindow()->SetUniqueId( SID_HANDOUTMODE );
         }
         else
         {
-            // ViewShell buttons
-            aOutlineBtn.Check(FALSE);
-            aSlideBtn.Check(FALSE);
-            aPresentationBtn.Check(FALSE);
-            aNotesBtn.Check(FALSE);
-            aHandoutBtn.Check(FALSE);
-            aDrawBtn.Check(TRUE);
-
             SetHelpId( SD_IF_SDDRAWVIEWSHELL );
-            pWindow->SetHelpId( SD_IF_SDDRAWVIEWSHELL );
-            pWindow->SetUniqueId( SD_IF_SDDRAWVIEWSHELL );
+            GetActiveWindow()->SetHelpId( SD_IF_SDDRAWVIEWSHELL );
+            GetActiveWindow()->SetUniqueId( SD_IF_SDDRAWVIEWSHELL );
         }
     }
 
@@ -888,15 +881,14 @@ void DrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence
 
         if (pView)
         {
-            pView->VisAreaChanged(pWindow);
+            pView->VisAreaChanged(GetActiveWindow());
         }
 
         SetZoomRect(aVisArea);
     }
 
-    ChangeEditMode( eEditMode, !bLayerMode );
-    ChangeEditMode( eEditMode, !bLayerMode );
-
+    ChangeEditMode (eEditMode, ! IsLayerModeActive());
+    ChangeEditMode (eEditMode, ! IsLayerModeActive());
 }
 
 void DrawViewShell::VisAreaChanged(const Rectangle& rRect)
@@ -944,18 +936,14 @@ void DrawViewShell::VisAreaChanged(const Rectangle& rRect)
 
 
 
-int DrawViewShell::GetTabLayerCount (void) const
-{
-    return aLayerTab.GetPageCount();
-
-}
-
-
-
-
 int DrawViewShell::GetActiveTabLayerIndex (void) const
 {
-    return aLayerTab.GetPagePos (aLayerTab.GetCurPageId());
+    const LayerTabBar* pBar
+        = const_cast<DrawViewShell*>(this)->GetLayerTabControl ();
+    if (pBar != NULL)
+        return pBar->GetPagePos (pBar->GetCurPageId());
+    else
+        return -1;
 }
 
 
@@ -963,13 +951,17 @@ int DrawViewShell::GetActiveTabLayerIndex (void) const
 
 void DrawViewShell::SetActiveTabLayerIndex (int nIndex)
 {
-    // Ignore invalid indices silently.
-    if (nIndex>=0 && nIndex<aLayerTab.GetPageCount())
+    LayerTabBar* pBar = GetLayerTabControl ();
+    if (pBar != NULL)
     {
-        // Tell the draw view and the tab control of the new active layer.
-        pDrView->SetActiveLayer (aLayerTab.GetPageText (aLayerTab.GetPageId (nIndex)));
-        aLayerTab.SetCurPageId (aLayerTab.GetPageId (nIndex));
-   }
+        // Ignore invalid indices silently.
+        if (nIndex>=0 && nIndex<pBar->GetPageCount())
+        {
+            // Tell the draw view and the tab control of the new active layer.
+            pDrView->SetActiveLayer (pBar->GetPageText (pBar->GetPageId (nIndex)));
+            pBar->SetCurPageId (pBar->GetPageId (nIndex));
+        }
+    }
 }
 
 
@@ -985,7 +977,21 @@ TabControl* DrawViewShell::GetPageTabControl (void)
 
 LayerTabBar* DrawViewShell::GetLayerTabControl (void)
 {
-    return &aLayerTab;
+    return mpLayerTabBar.get();
 }
+
+
+
+
+int DrawViewShell::GetTabLayerCount (void) const
+{
+    const LayerTabBar* pBar
+        = const_cast<DrawViewShell*>(this)->GetLayerTabControl ();
+    if (pBar != NULL)
+        return pBar->GetPageCount();
+    else
+        return 0;
+}
+
 
 } // end of namespace sd
