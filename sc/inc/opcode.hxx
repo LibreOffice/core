@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opcode.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: er $ $Date: 2001-02-21 18:21:10 $
+ *  last change: $Author: er $ $Date: 2001-02-28 11:50:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #include "compiler.hrc"                     // OpCodes
 #endif
 
-enum OpCode
+enum OpCodeEnum
 {
     // Spezielle Kommandos
         ocPush              = SC_OPCODE_PUSH,
@@ -404,5 +404,13 @@ enum OpCode
     // kein OpCode
         ocNone              = SC_OPCODE_NONE
 };
+
+#ifdef PRODUCT
+// save memory since compilers tend to int an enum
+typedef USHORT OpCode;
+#else
+// have enum names in debugger
+typedef OpCodeEnum OpCode;
+#endif
 
 #endif
