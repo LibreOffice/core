@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-03 14:37:20 $
+ *  last change: $Author: sj $ $Date: 2001-08-07 15:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1233,6 +1233,8 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 {
                     case mso_anchorTop:
                     case mso_anchorTopCentered:
+                    case mso_anchorTopBaseline:
+                    case mso_anchorTopCenteredBaseline:
                         eTHA = SDRTEXTHORZADJUST_RIGHT;
                     break;
 
@@ -1243,6 +1245,8 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
 
                     case mso_anchorBottom:
                     case mso_anchorBottomCentered:
+                    case mso_anchorBottomBaseline:
+                    case mso_anchorBottomCenteredBaseline:
                         eTHA = SDRTEXTHORZADJUST_LEFT;
                     break;
                 }
@@ -1289,6 +1293,8 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 {
                     case mso_anchorTop:
                     case mso_anchorTopCentered:
+                    case mso_anchorTopBaseline:
+                    case mso_anchorTopCenteredBaseline:
                         eTVA = SDRTEXTVERTADJUST_TOP;
                     break;
 
@@ -1299,15 +1305,10 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
 
                     case mso_anchorBottom:
                     case mso_anchorBottomCentered:
+                    case mso_anchorBottomBaseline:
+                    case mso_anchorBottomCenteredBaseline:
                         eTVA = SDRTEXTVERTADJUST_BOTTOM;
                     break;
-    /*
-                    case mso_anchorTopBaseline:
-                    case mso_anchorBottomBaseline:
-                    case mso_anchorTopCenteredBaseline:
-                    case mso_anchorBottomCenteredBaseline:
-                    break;
-    */
                 }
                 nTextFlags &= PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT   | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT
                             | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_CENTER | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_BLOCK;
@@ -1318,6 +1319,8 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     case mso_anchorTopCentered :
                     case mso_anchorMiddleCentered :
                     case mso_anchorBottomCentered :
+                    case mso_anchorTopCenteredBaseline:
+                    case mso_anchorBottomCenteredBaseline:
                     {
                         // check if it is sensible to use the centered alignment
                         sal_uInt32 nMask = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT;
