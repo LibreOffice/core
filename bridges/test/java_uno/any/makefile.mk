@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-23 16:34:22 $
+#   last change: $Author: vg $ $Date: 2003-05-22 08:41:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,6 +78,13 @@ JAVAFLAGS += -sourcepath $(OUT)$/misc$/java$/test
 JAVAFILES = \
     $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES)))
 
+# Make sure TestBed.class is found under $(CLASSDIR)$/test:
+.IF "$(XCLASSPATH)" == ""
+XCLASSPATH := $(CLASSDIR)$/test
+.ELSE
+XCLASSPATH !:= $(XCLASSPATH)$(PATH_SEPERATOR)$(CLASSDIR)$/test
+.ENDIF
+
 EXEC_CLASSPATH_TMP = \
     $(foreach,i,$(JARFILES) $(SOLARBINDIR)$/$i)$(PATH_SEPERATOR)$(XCLASSPATH)
 EXEC_CLASSPATH = \
@@ -132,7 +139,7 @@ ALLTAR : \
 
 $(OUT)$/bin$/TestRemote$(SCRIPTEXT) : $(JAVACLASSFILES)
     -rm -f $@
-    +echo java -classpath .$(PATH_SEPERATOR)..$/class$(PATH_SEPERATOR)$(EXEC_CLASSPATH) \
+    +echo java -classpath ..$/class$/test$(PATH_SEPERATOR)..$/class$(PATH_SEPERATOR)$(EXEC_CLASSPATH) \
         test.java_uno.anytest.TestRemote > $@
     $(GIVE_EXEC_RIGHTS) $@
 
