@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:57:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,10 +287,10 @@ TabPage TP_FOOTNOTEOPTION
         Text[ italian ] = "Conteggio";
         Text[ danish ] = "Counting";
         Text[ swedish ] = "Rδk~ning";
-        Text[ polish ] = "Liczenie";
+        Text[ polish ] = "Obliczenie";
         Text[ portuguese_brazilian ] = "Counting";
         Text[ japanese ] = "”‚¦‚ι(~C)";
-        Text[ korean ] = "~Δ«ΏξΖ®";
+        Text[ korean ] = "Δ«ΏξΖ®";
         Text[ chinese_simplified ] = "ΌΖΚύ(~C)";
         Text[ chinese_traditional ] = "­pΌΖ(~C)";
         Text[ turkish ] = "Counting";
@@ -849,11 +849,11 @@ TabPage TP_FOOTNOTEOPTION
         Text [ english_us ] = "Continuation notice" ;
         Text[ chinese_simplified ] = "¶ΰÒ³ΧΆ½ΕµΔΜαΚΎΞΔ";
         Text[ russian ] = "Σκΰηΰςελόνϋι ςεκρς δλÿ ρνξρξκ νΰ νερκξλόκθυ ρςπΰνθφΰυ";
-        Text[ polish ] = "Tekst wskazujΉcy na kilkustronne przypisy dolne.";
+        Text[ polish ] = "Wskazσwka dotyczΉca kontynuacji przypisσw dolnych";
         Text[ japanese ] = "‹r’‚ªΝί°Όή‚Ι‘±‚­Ϋ‚Μ’Σ‘‚«";
         Text[ chinese_traditional ] = "¦h­¶µωΈ}ªΊ΄£¥ά¤ε";
         Text[ arabic ] = "γαΗΝΩΙ Ϊαμ Τία ΝζΗΤν ΣέανΙ έν ΓίΛΡ γδ ΥέΝΙ";
-        Text[ greek ] = "Κείμενο συμβουλής πολυσέλιδων υποσημειώσεων";
+        Text[ greek ] = "Κείμενο συμβουλής για πολυσέλιδες υποσημειώσεις";
         Text[ korean ] = "Ώ©·― ΒΚΐΗ °ΆΑΦΏ΅ ΄λΗΡ Βό°ν";
         Text[ turkish ] = "Devam eden dipnotu ile ilgili bilgi metni";
         Text[ language_user1 ] = " ";
@@ -994,7 +994,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ polish ] = "Numeracja";
         Text[ portuguese_brazilian ] = "Numbering";
         Text[ japanese ] = "”Τ†•t‚―(~N)";
-        Text[ korean ] = "~ΉψΘ£ΈΕ±β±β";
+        Text[ korean ] = "ΉψΘ£ΈΕ±β±β";
         Text[ chinese_simplified ] = "±ΰΊΕ(~N)";
         Text[ chinese_traditional ] = "½sΈΉ(~N)";
         Text[ turkish ] = "Numbering";
@@ -1344,7 +1344,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ italian ] = "Modelli di carattere";
         Text[ danish ] = "Tegntypografi";
         Text[ swedish ] = "Teckenformatmallar";
-        Text[ polish ] = "Style znaku";
+        Text[ polish ] = "Style znakσw";
         Text[ portuguese_brazilian ] = "Character styles";
         Text[ japanese ] = "•¶½ΐ²Ω";
         Text[ korean ] = "Ή®ΐΪ ΐ―Ηό";
@@ -1450,11 +1450,11 @@ TabPage TP_ENDNOTEOPTION
         Text [ english_us ] = "Continuation notice" ;
         Text[ chinese_simplified ] = "¶ΰÒ³ΧΆ½ΕµΔΜαΚΎΞΔ";
         Text[ russian ] = "Σκΰηΰςελόνϋι ςεκρς δλÿ ρνξρξκ νΰ νερκξλόκθυ ρςπΰνθφΰυ";
-        Text[ polish ] = "Tekst wskazujΉcy na kilkustronne przypisy dolne.";
+        Text[ polish ] = "Wskazσwka dotyczΉca kontynuacji przypisσw dolnych";
         Text[ japanese ] = "‹r’‚ªΝί°Όή‚Ι‘±‚­Ϋ‚Μ’Σ‘‚«";
         Text[ chinese_traditional ] = "¦h­¶µωΈ}ªΊ΄£¥ά¤ε";
         Text[ arabic ] = "γαΗΝΩΙ Ϊαμ Τία ΝζΗΤν ΣέανΙ έν ΓίΛΡ γδ ΥέΝΙ";
-        Text[ greek ] = "Κείμενο συμβουλής πολυσέλιδων υποσημειώσεων";
+        Text[ greek ] = "Κείμενο συμβουλής για πολυσέλιδες υποσημειώσεις";
         Text[ korean ] = "Ώ©·― ΒΚΐΗ °ΆΑΦΏ΅ ΄λΗΡ Βό°ν";
         Text[ turkish ] = "Devam eden dipnotu ile ilgili bilgi metni";
         Text[ language_user1 ] = " ";
@@ -1539,3 +1539,4 @@ TabPage TP_ENDNOTEOPTION
         MaxTextLength = 30 ;
     };
 };
+
