@@ -561,7 +561,10 @@ public abstract class OfficeDocument
         //System.out.println("\nParsing Input stream, validating?: "+builder.isValidating());
         //contentDoc=  builder.parse((InputStream)is);
 
-            org.w3c.dom.Document newDoc = builder.parse((InputStream)is);
+               Reader r = secondHack(is);
+               InputSource ins = new InputSource(r);
+            org.w3c.dom.Document newDoc = builder.parse(ins);
+            //org.w3c.dom.Document newDoc = builder.parse((InputStream)is);
             Element rootElement=newDoc.getDocumentElement();
 
             NodeList nodeList;
@@ -1130,6 +1133,36 @@ public abstract class OfficeDocument
         }
 
         StringReader r = new StringReader(buffer.toString());
+        return r;
+    }
+
+    /**
+     *  <p>Transform the InputStream to a Reader Stream.</p>
+     *
+     *  <p>This hacked code needs to be changed later on.</p>
+     *
+     *  <p>Issue: the new oasis input file stream means
+     *  that the old input stream fails. see #i33702# </p>
+     *
+     *  @param  is  <code>InputStream</code> to be filtered.
+     *
+     *  @return  Reader value of the InputStream().
+     *
+     *  @throws  IOException  If any I/O error occurs.
+     */
+    private static Reader secondHack(InputStream is) throws IOException {
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+     char[] charArray = new char[is.available()];
+
+     br.read(charArray,0,is.available());
+        String sStr = new String(charArray);
+        StringBuffer sBuf = new StringBuffer(is.available());
+     // ensure there is no trailing garbage after the end of the stream.
+        int sIndex = sStr.lastIndexOf("</office:document>");
+        sBuf.append(sStr.substring(0, sIndex));
+        sBuf.append("</office:document>");
+        StringReader r = new StringReader(sBuf.toString());
         return r;
     }
 
