@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.42 $
+#*  $Revision: 1.43 $
 #*
-#*  last change: $Author: hr $ $Date: 2003-03-27 14:39:53 $
+#*  last change: $Author: vg $ $Date: 2003-04-01 13:38:20 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -72,9 +72,7 @@ GEN_HID_OTHER=TRUE
 ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :	svpre.mk
 .INCLUDE :	settings.mk
-.INCLUDE :	sv.mk
 
 USE_LDUMP2=TRUE
 
@@ -128,11 +126,6 @@ LIB7FILES=	\
         $(SLB)$/svhtml2.lib     \
         $(SLB)$/filepicker.lib  \
         $(SLB)$/heavyconfig.lib
-
-
-.IF "$(GUI)" == "OS2"
-LIB7FILES+= 	$(SLB)$/eaimp.lib
-.ENDIF
 
 .IF "$(GUI)" == "UNX"
 LIB7FILES+= 	$(SLB)$/eaimp.lib
@@ -213,6 +206,7 @@ SHL1LIBS= \
         $(LB)$/svmem.lib
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
+SHL1DEPN=$(SHL2TARGETN)
 
 DEF1NAME=	$(SHL1TARGET)
 DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt
@@ -257,7 +251,7 @@ DEF2DES =SvTools lite
 
 APP1TARGET	=	bmpgui
 APP1BASE	=	0x10000000
-APP1DEPN	=   $(L)$/itools.lib  $(SVLIBDEPEND)
+APP1DEPN	=   $(SHL1TARGETN) $(SHL2TARGETN)
 APP1OBJS	=   $(OBJ)$/bmpgui.obj	\
                 $(OBJ)$/bmpcore.obj
 
@@ -277,7 +271,8 @@ APP1STDLIBS+= -lsvl$(UPD)$(DLLSUFFIX)
 
 APP2TARGET	=	g2g
 APP2BASE	=	0x10000000
-APP2DEPN	=   $(L)$/itools.lib  $(SVLIBDEPEND)
+APP2DEPN	=   $(SHL1TARGETN) $(SHL2TARGETN)
+
 APP2OBJS	=   $(OBJ)$/g2g.obj
 
 APP2STDLIBS	=	$(SVLIB)		\
