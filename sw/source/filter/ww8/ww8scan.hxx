@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-11 16:16:51 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:29:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -988,6 +988,10 @@ public:
     bool AreThereFootnotes() const { return pFtnPLCF->Count() > 0; };
     bool AreThereEndnotes()  const { return pEdnPLCF->Count() > 0; };
 
+    //If you use WW8Fc2Cp you are almost certainly doing the wrong thing
+    //when it comes to fastsaved files, avoid like the plague. For export
+    //given that we never write fastsaved files you can use it, otherwise
+    //I will beat you with a stick
     WW8_CP WW8Fc2Cp(WW8_FC nFcPos) const ;
     WW8_FC WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode = 0,
         WW8_CP* pNextPieceCp = 0, bool* pTestFlag = 0) const;
