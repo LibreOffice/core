@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helppopupwindow.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-06 08:48:59 $
+ *  last change: $Author: tra $ $Date: 2001-09-05 13:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,17 +95,19 @@ namespace /* private */
 
 #define HELPPOPUPWND_CLASS_NAME L"hlppopupwnd###"
 
-const sal_Int32 DEFAULT_MINWIDTH = 250;
+const sal_Int32 MAX_CHARS_PER_LINE = 55;
 
 const sal_Int32 SHADOW_WIDTH  = 6;
 const sal_Int32 SHADOW_HEIGHT = 6;
 const sal_Int32 SHADOW_OFFSET = 6;
-const sal_Int32 YOFFSET   = 20;
+const sal_Int32 YOFFSET       = 20;
 
-const DWORD OUTER_FRAME_COLOR = 0;        // black
+const DWORD OUTER_FRAME_COLOR     = 0; // black
+const sal_Int32 OUTER_FRAME_WIDTH = 1; // pixel
 
 // it's the standard windows color of an inactive window border
-const DWORD INNER_FRAME_COLOR = 0xC8D0D4;
+const DWORD INNER_FRAME_COLOR     = 0xC8D0D4;
+const sal_Int32 INNER_FRAME_WIDTH = 1; // pixel
 
 //---------------------------------------------------
 // static member initialization
@@ -125,9 +127,10 @@ CHelpPopupWindow::CHelpPopupWindow(
     sal_Int32 minWidth,
     sal_Int32 hMargins,
     sal_Int32 vMargins ) :
-    m_minWidth( minWidth ? minWidth : DEFAULT_MINWIDTH ),
     m_hMargins( hMargins ),
     m_vMargins( vMargins ),
+    m_avCharWidth( 0 ),
+    m_avCharHeight( 0 ),
     m_hwnd( NULL ),
     m_hwndParent( hwndParent ),
     m_hInstance( hInstance ),
@@ -230,24 +233,42 @@ void SAL_CALL CHelpPopupWindow::calcWindowRect( LPRECT lprect )
 {
     OSL_ASSERT( m_hwnd && lprect );
 
-    SetRectEmpty( lprect );
-    SetRect( lprect, 0, 0, ( m_minWidth - 2 * m_hMargins ), 0 );
+    SetRect( lprect, 0, 0, MAX_CHARS_PER_LINE * m_avCharWidth, 0 );
 
     HDC hdc = GetDC( m_hwnd );
+
+    // set the font we are using later
+    HGDIOBJ oldFont = SelectObject(
+        hdc, GetStockObject( DEFAULT_GUI_FONT ) );
+
+    UINT nFormat = DT_WORDBREAK | DT_CALCRECT | DT_EXTERNALLEADING | DT_LEFT;
+
+    if ( m_HelpText.getLength( ) <= MAX_CHARS_PER_LINE )
+        nFormat |= DT_SINGLELINE;
 
     int nRet = DrawTextW(
       hdc,
       m_HelpText.getStr( ),
       m_HelpText.getLength( ),
       lprect,
-      DT_INTERNAL | DT_WORDBREAK | DT_CALCRECT | DT_VCENTER | DT_LEFT );
+      nFormat );
 
-    lprect->bottom += m_vMargins + SHADOW_HEIGHT;
+    // add the necessary space for the frames
+    // and margins
 
-    if ( lprect->right < m_minWidth )
-        lprect->right = m_minWidth;
+    lprect->bottom +=
+        m_vMargins +
+        SHADOW_HEIGHT +
+        OUTER_FRAME_WIDTH * 2 +
+        INNER_FRAME_WIDTH * 2;
 
-    lprect->right += SHADOW_WIDTH;
+    lprect->right +=
+        SHADOW_WIDTH +
+        2 * m_avCharWidth +
+        OUTER_FRAME_WIDTH * 2 +
+        INNER_FRAME_WIDTH * 2;
+
+    SelectObject( hdc, oldFont );
 
     ReleaseDC( m_hwnd, hdc );
 }
@@ -353,9 +374,9 @@ void SAL_CALL CHelpPopupWindow::onPaint( HWND hWnd, HDC hdc )
     hpenOld = SelectObject( hdc, hpen );
 
     Rectangle(  hdc,
-                rc.left + 1,
-                rc.top + 1,
-                rc.right - SHADOW_WIDTH,
+                rc.left   + OUTER_FRAME_WIDTH,
+                rc.top    + OUTER_FRAME_WIDTH,
+                rc.right  - SHADOW_WIDTH,
                 rc.bottom - SHADOW_HEIGHT);
 
     SelectObject( hdc, oldBrush );
@@ -373,10 +394,10 @@ void SAL_CALL CHelpPopupWindow::onPaint( HWND hWnd, HDC hdc )
     hpenOld = SelectObject( hdc, hpen );
 
     Rectangle(  hdc,
-                rc.left + 2,
-                rc.top + 2,
-                rc.right - SHADOW_WIDTH - 1,
-                rc.bottom - SHADOW_HEIGHT - 1 );
+                rc.left   + OUTER_FRAME_WIDTH + 1,
+                rc.top    + OUTER_FRAME_WIDTH + 1,
+                rc.right  - SHADOW_WIDTH  - OUTER_FRAME_WIDTH,
+                rc.bottom - SHADOW_HEIGHT - OUTER_FRAME_WIDTH );
 
     SelectObject( hdc, oldBrush );
     SelectObject( hdc, hpenOld );
@@ -386,29 +407,34 @@ void SAL_CALL CHelpPopupWindow::onPaint( HWND hWnd, HDC hdc )
 
     // Write some text to this window
 
-    rect.left   = rc.left + 1 + m_hMargins;
-    rect.top    = rc.top  + 1 + m_vMargins / 2;
-    rect.right  = rc.right  - SHADOW_WIDTH  - m_hMargins;
-    rect.bottom = rc.bottom - SHADOW_HEIGHT - m_vMargins / 2;
+    rect.left   = rc.left   + OUTER_FRAME_WIDTH + INNER_FRAME_WIDTH + 1 + m_hMargins;
+    rect.top    = rc.top    + OUTER_FRAME_WIDTH + INNER_FRAME_WIDTH + 1 + m_vMargins / 2;
+    rect.right  = rc.right  - SHADOW_WIDTH      - OUTER_FRAME_WIDTH - INNER_FRAME_WIDTH - m_hMargins;
+    rect.bottom = rc.bottom - SHADOW_HEIGHT     - OUTER_FRAME_WIDTH - INNER_FRAME_WIDTH - m_vMargins / 2;
 
     oldBkColor   = SetBkColor( hdc, GetSysColor( COLOR_INFOBK ) );
     oldTextColor = SetTextColor( hdc, COLOR_INFOTEXT );
 
     oldFont = SelectObject( hdc, GetStockObject( DEFAULT_GUI_FONT ) );
 
+    UINT nFormat = DT_WORDBREAK | DT_EXTERNALLEADING | DT_LEFT;
+
+    if ( m_HelpText.getLength( ) <= MAX_CHARS_PER_LINE )
+        nFormat |= DT_SINGLELINE;
+
     DrawTextW(
         hdc,
         (LPWSTR)m_HelpText.getStr( ),
         m_HelpText.getLength( ),
         &rect,
-        DT_INTERNAL | DT_WORDBREAK | DT_VCENTER | DT_LEFT );
+        nFormat );
 
     SelectObject( hdc, oldFont );
     SetTextColor( hdc, oldTextColor );
     SetBkColor( hdc, oldBkColor );
 
-    // set text color and text background color is
-    // MSDN PatBlt
+    // set text color and text background color
+    // see MSDN PatBlt
 
     oldBkColor   = SetBkColor( hdc, RGB( 0, 0, 0 ) );
     oldTextColor = SetTextColor( hdc, RGB( 255, 255, 255 ) );
@@ -460,18 +486,22 @@ void SAL_CALL CHelpPopupWindow::onCreate( HWND hwnd )
 
     HDC hdc = GetDC( m_hwnd );
 
-    TEXTMETRIC tm;
+    HGDIOBJ oldFont = SelectObject(
+        hdc, GetStockObject( DEFAULT_GUI_FONT ) );
 
+    TEXTMETRIC tm;
     GetTextMetrics( hdc, &tm );
 
-    sal_Int32 cxChar = tm.tmAveCharWidth;
-    sal_Int32 cyChar = tm.tmHeight;
+    m_avCharWidth  = tm.tmAveCharWidth;
+    m_avCharHeight = tm.tmHeight;
 
     if ( 0 == m_hMargins )
-        m_hMargins = cxChar;
+        m_hMargins = m_avCharWidth;
 
     if ( 0 == m_vMargins )
-        m_vMargins = cyChar;
+        m_vMargins = m_avCharHeight;
+
+    SelectObject( hdc, oldFont );
 
     ReleaseDC( m_hwnd, hdc );
 }
@@ -534,9 +564,9 @@ LRESULT CALLBACK CHelpPopupWindow::WndProc(
             }
          break;
 
+         case WM_LBUTTONDOWN:
          case WM_KEYDOWN:
          case WM_SYSKEYDOWN:
-         case WM_LBUTTONDOWN:
          case WM_MBUTTONDOWN:
          case WM_RBUTTONDOWN:
              ReleaseCapture();

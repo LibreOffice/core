@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helppopupwindow.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-03 13:51:10 $
+ *  last change: $Author: tra $ $Date: 2001-09-05 13:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,9 +153,10 @@ private:
     static LRESULT CALLBACK WndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 
 private:
-    sal_Int32       m_minWidth;
     sal_Int32       m_hMargins;
     sal_Int32       m_vMargins;
+    sal_Int32       m_avCharWidth;
+    sal_Int32       m_avCharHeight;
     HWND            m_hwnd;
     HWND            m_hwndParent;
     HINSTANCE       m_hInstance;

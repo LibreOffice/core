@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Test_fps.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-06 07:35:17 $
+ *  last change: $Author: tra $ $Date: 2001-09-05 13:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,14 +420,16 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
         //arguments[0] = makeAny( FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS );
         //arguments[0] = makeAny( FILESAVE_AUTOEXTENSION_SELECTION );
         //arguments[0] = makeAny( FILESAVE_AUTOEXTENSION_TEMPLATE );
-        arguments[0] = makeAny( FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE );
+        //arguments[0] = makeAny( FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE );
         //arguments[0] = makeAny( FILEOPEN_PLAY );
         //arguments[0] = makeAny( FILEOPEN_READONLY_VERSION );
+        arguments[0] = makeAny( FILESAVE_AUTOEXTENSION );
+
 
     Reference< XFilePicker > xFilePicker = Reference< XFilePicker >(
         g_xFactory->createInstanceWithArguments(
             OUString::createFromAscii( FILE_PICKER_SERVICE_NAME ), arguments ), UNO_QUERY );
-
+/*
         // install a FilePicker notifier
         Reference< XFilePickerListener > xFPListener(
             static_cast< XFilePickerListener* >( new FilePickerListener()), UNO_QUERY );
@@ -468,8 +470,10 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
         xFPControlAccess->setValue( LISTBOX_VERSION, ADD_ITEM, aAny );
         xFPControlAccess->setValue( LISTBOX_VERSION, ADD_ITEM, aAny );
 
+        xFPControlAccess->setLabel( LISTBOX_VERSION, OUString::createFromAscii( "" ) );
+*/
         xFilePicker->execute( );
-
+/*
         sal_Bool bCheckState;
         aAny = xFPControlAccess->getValue( CHECKBOX_AUTOEXTENSION, 0 );
         if ( aAny.hasValue( ) )
@@ -493,7 +497,7 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
 
         if ( xFPNotifier.is( ) )
             xFPNotifier->removeFilePickerListener( xFPListener );
-
+*/
     //--------------------------------------------------
     // shutdown
     //--------------------------------------------------
