@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:29:43 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:19:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ String STR_PRINTER_NOTAVAIL
     TEXT [ portuguese ] = "O documento foi formatado para a impressora $1. A impressora não está disponível.\nUsar a impressora padrão $2?" ;
     TEXT [ finnish ] = "Asiakirja on muotoiltu tulostinta $1 varten. Määritetty tulostin ei ole käytettävissä. \nHaluatko käyttää vakiotulostinta $2 ?" ;
     TEXT [ danish ] = "Dette dokument er formateret til printeren $1. Denne printer er ikke tilgængelig.\nVil du bruge standardprinteren $2?" ;
-    TEXT [ french ] = "Ce document a été mis en page pour l'imprimante $1. L'imprimante n'est pas disponible.\nUtiliser $2 comme imprimante par défaut ?" ;
+    TEXT [ french ] = "Ce document a été formaté pour l'imprimante $1. L'imprimante n'est pas disponible.\nUtiliser l'imprimante par défaut $2 ?" ;
     TEXT [ swedish ] = "Dokumentet har formaterats för skrivaren $1. Denna skrivare är inte tillgänglig.\nSkall standardskrivaren $2 användas?" ;
     TEXT [ dutch ] = "Dit document is opgemaakt voor printer $1. Deze printer is niet voorhanden.\nWilt u de standaardprinter $2 gebruiken?" ;
     TEXT [ spanish ] = "Este documento se ha formateado para la impresora $1, pero esta no está disponible.\n¿Desea usar la impresora predeterminada $2?" ;
@@ -155,13 +155,13 @@ String STR_PRINTER_NOTDEFAULT
     TEXT[ russian ] = "This document was previously formatted for the printer $1, but that printer is not the default printer.\nUse default printer $2?";
     TEXT[ greek ] = "This document was previously formatted for the printer $1, but that printer is not the default printer.\nUse default printer $2?";
     TEXT[ dutch ] = "Het document werd geformatteerd voor printer $1. Deze printer is echter geen standaarprinter.\nGebruik standaardprinter $2?";
-    TEXT[ french ] = "This document was previously formatted for the printer $1, but that printer is not the default printer.\nUse default printer $2?";
-    TEXT[ spanish ] = "This document was previously formatted for the printer $1, but that printer is not the default printer.\nUse default printer $2?";
+    TEXT[ french ] = "Ce document a été formaté pour l'imprimante $1 qui n'est pas l'imprimante par défaut.\nUtiliser l'imprimante par défaut $2 ?";
+    TEXT[ spanish ] = "Este documento se ha formateado para la impresora $1, pero esta no está disponible.\n¿Desea usar la impresora predeterminada $2?";
     TEXT[ finnish ] = "This document was previously formatted for the printer $1, but that printer is not the default printer.\nUse default printer $2?";
     TEXT[ italian ] = "This document was previously formatted for the printer $1, but that printer is not the default printer.\nUse default printer $2?";
     TEXT[ danish ] = "This document was previously formatted for the printer $1, but that printer is not the default printer.\nUse default printer $2?";
     TEXT[ swedish ] = "Dokumentet formaterades för skrivaren $1 men detta är inte standardskrivaren.\nSka standardskrivaren $2 användas?";
-    TEXT[ polish ] = "This document was previously formatted for the printer $1, but that printer is not the default printer.\nUse default printer $2?";
+    TEXT[ polish ] = "Dokument ten sformatowano do wydrukowania na drukarce $1, nie jest to jednak drukarka domyœlna.\nU¿yæ drukarki domyœlnej $2?";
     TEXT[ portuguese_brazilian ] = "This document was previously formatted for the printer $1, but that printer is not the default printer.\nUse default printer $2?";
     TEXT[ japanese ] = "‚±‚ÌÄŞ·­ÒİÄ‚ÍÌßØİÀ $1 —p‚É‘®İ’è‚³‚ê‚Ü‚µ‚½‚ªA‚±‚ÌÌßØİÀ‚Í•W€ÌßØİÀ‚Å‚Í‚ ‚è‚Ü‚¹‚ñB\n•W€ÌßØİÀ $2 ‚ğg—p‚µ‚Ü‚·‚©B";
     TEXT[ korean ] = "This document was previously formatted for the printer $1, but that printer is not the default printer.\nUse default printer $2?";
@@ -1098,6 +1098,7 @@ String STR_FORWARDMAIL
     Text[ catalan ] = "Mensaje transmitido por regla.\nEl mensaje original como anexo.";
     Text[ finnish ] = "Viesti edelleenlähetettiin säännön mukaan.\nAlkuperäinen viesti liitteenä.";
 };
+
 
 
 
