@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwview.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 08:25:58 $
+ *  last change: $Author: oj $ $Date: 2002-05-02 07:10:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,8 @@ void UnoDataBrowserView::Construct(const Reference< ::com::sun::star::awt::XCont
             SbaXGridPeer* pPeer = SbaXGridPeer::getImplementation(xPeer);
             if (pPeer)
                 m_pVclControl = static_cast<SbaGridControl*>(pPeer->GetWindow());
+
+            ::dbaui::notifySystemWindow(this,m_pVclControl,::comphelper::mem_fun(&TaskPaneList::AddWindow));
         }
 
         DBG_ASSERT(m_pVclControl != NULL, "UnoDataBrowserView::Construct : no real grid control !");
@@ -193,6 +195,8 @@ void UnoDataBrowserView::Construct(const Reference< ::com::sun::star::awt::XCont
 // -------------------------------------------------------------------------
 UnoDataBrowserView::~UnoDataBrowserView()
 {
+
+    ::dbaui::notifySystemWindow(this,m_pVclControl,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
     m_pVclControl = NULL;
 
     delete m_pSplitter;
@@ -347,8 +351,8 @@ sal_uInt16 UnoDataBrowserView::ViewColumnCount() const
 //------------------------------------------------------------------
 void UnoDataBrowserView::GetFocus()
 {
-    Window::GetFocus();
-    if( m_pTreeView && m_pTreeView->IsVisible() )
+    ODataView::GetFocus();
+    if( m_pTreeView && m_pTreeView->IsVisible() && !m_pTreeView->HasChildPathFocus())
         m_pTreeView->GrabFocus();
     else if (m_pVclControl && m_xGrid.is())
     {
@@ -359,7 +363,7 @@ void UnoDataBrowserView::GetFocus()
             if( bGrabFocus )
                 m_pVclControl->GrabFocus();
         }
-        if(!bGrabFocus && m_pTreeView)
+        if(!bGrabFocus && m_pTreeView && m_pTreeView->IsVisible() )
             m_pTreeView->GrabFocus();
     }
 }
@@ -369,45 +373,20 @@ long UnoDataBrowserView::PreNotify( NotifyEvent& rNEvt )
     long nDone = 0L;
     if(rNEvt.GetType() == EVENT_KEYINPUT)
     {
-        const KeyEvent* pKeyEvt = rNEvt.GetKeyEvent();
-        const KeyCode& rKeyCode = pKeyEvt->GetKeyCode();
-
-        Window* pLeft  = m_pTreeView;
-        Window* pRight = getToolBox();
-
         sal_Bool bGrabAllowed = isGrabVclControlFocusAllowed(this);
-        if( rKeyCode == KeyCode(KEY_E,TRUE,TRUE,FALSE) )
+        if ( bGrabAllowed )
         {
-            if ( pLeft && m_pVclControl && pLeft->HasChildPathFocus() && bGrabAllowed )
-                m_pVclControl->GrabFocus();
-//          else if ( m_pVclControl && pLeft && pLeft->IsVisible() && m_pVclControl->HasChildPathFocus() )
-//              pLeft->GrabFocus();
-            nDone = 1L;
-        }
-        else if (       !rKeyCode.IsMod1()
-                    &&  !rKeyCode.IsMod2()
-                    &&  rKeyCode.GetCode() == KEY_F6)
-        {
-            nDone = 1L;
-
-            if ( rKeyCode.IsShift() )
+            const KeyEvent* pKeyEvt = rNEvt.GetKeyEvent();
+            const KeyCode& rKeyCode = pKeyEvt->GetKeyCode();
+            if( rKeyCode == KeyCode(KEY_E,TRUE,TRUE,FALSE) )
             {
-                pLeft  = getToolBox();
-                pRight = m_pTreeView;
-                if ( pRight->IsVisible() )
-                    pRight = pLeft;
+                if ( m_pTreeView && m_pVclControl && m_pTreeView->HasChildPathFocus() )
+                    m_pVclControl->GrabFocus();
+                nDone = 1L;
             }
-
-            if ( pLeft && m_pVclControl && pLeft->HasChildPathFocus() && bGrabAllowed )
-                m_pVclControl->GrabFocus();
-//          else if ( m_pVclControl && pRight && pRight->IsVisible() && m_pVclControl->HasChildPathFocus() )
-//              pRight->GrabFocus();
-            else
-                nDone = 0L;
         }
-
     }
-    return nDone ? nDone : Window::PreNotify(rNEvt);
+    return nDone ? nDone : ODataView::PreNotify(rNEvt);
 }
 
 // -----------------------------------------------------------------------------
@@ -424,6 +403,8 @@ BrowserViewStatusDisplay::~BrowserViewStatusDisplay( )
     if (m_pView)
         m_pView->showStatus(String());
 }
+// -----------------------------------------------------------------------------
+
 
 
 
