@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ka $ $Date: 2002-06-21 11:31:21 $
+ *  last change: $Author: sj $ $Date: 2002-12-03 18:16:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -713,6 +713,12 @@ void GalleryTransferable::DragFinished( sal_Int8 nDropAction )
 {
     mpTheme->SetDragging( FALSE );
     mpTheme->SetDragPos( 0 );
+    if ( nDropAction )
+    {
+        Window *pFocusWindow = Application::GetFocusWindow();
+        if ( pFocusWindow )
+            pFocusWindow->GrabFocusToDocument();
+    }
 }
 
 // ------------------------------------------------------------------------
