@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaexchange.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-08 09:25:12 $
+ *  last change: $Author: oj $ $Date: 2002-10-25 08:34:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,6 +484,9 @@ namespace svx
         m_aDescriptor[daCommandType]    <<= nObjectType;
         m_aDescriptor[daCommand]        <<= sObjectName;
 
+         if ( xConnection.is() )     // #104474# OJ
+            m_aDescriptor[daConnection] <<= xConnection;
+
         sal_Bool bIsStatement = CommandType::COMMAND == nObjectType;
         String sObjectKind = (CommandType::TABLE == nObjectType) ? String('1') : String('0');
 
@@ -680,6 +683,9 @@ namespace svx
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/08/08 09:25:12  fs
+ *  #88849# OColumnTransferable: don't fake the to-be-dragged statement if the data source is no CommandType::COMMAND
+ *
  *  Revision 1.7  2001/08/07 08:57:14  fs
  *  #90660# +addDataToContainer
  *
