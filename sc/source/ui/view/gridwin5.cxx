@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin5.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:09 $
+ *  last change: $Author: nn $ $Date: 2000-09-25 17:35:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,7 +318,8 @@ void __EXPORT ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
                 USHORT      nTab = pViewData->GetTabNo();
                 pViewData->GetPosFromPixel( aPosPixel.X(), aPosPixel.Y(), eWhich, nPosX, nPosY );
                 const ScPatternAttr* pPattern = pDoc->GetPattern( nPosX, nPosY, nTab );
-                aPixRect = pViewData->GetEditArea( eWhich, nPosX, nPosY, this, pPattern );
+                // bForceToTop = FALSE, use the cell's real position
+                aPixRect = pViewData->GetEditArea( eWhich, nPosX, nPosY, this, pPattern, FALSE );
             }
         }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:36:21 $
+ *  last change: $Author: nn $ $Date: 2000-09-25 17:35:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2963,7 +2963,8 @@ void ScGridWindow::UpdateEditViewPos()
         }
         else
         {
-            Rectangle aPixRect = pViewData->GetEditArea( eWhich, nCol, nRow, this );
+            // bForceToTop = TRUE for editing
+            Rectangle aPixRect = pViewData->GetEditArea( eWhich, nCol, nRow, this, NULL, TRUE );
             Point aScrPos = PixelToLogic( aPixRect.TopLeft(), pViewData->GetLogicMode() );
 
             Rectangle aRect = pView->GetOutputArea();
@@ -3492,7 +3493,8 @@ BOOL ScGridWindow::GetEditUrlOrError( BOOL bSpellErr, const Point& rPos,
     while ( !bFound );
 
     const ScPatternAttr* pPattern = pDoc->GetPattern( nPosX, nPosY, nTab );
-    Rectangle aEditRect = pViewData->GetEditArea( eWhich, nPosX, nPosY, this, pPattern );
+    // bForceToTop = FALSE, use the cell's real position
+    Rectangle aEditRect = pViewData->GetEditArea( eWhich, nPosX, nPosY, this, pPattern, FALSE );
     if (rPos.Y() < aEditRect.Top())
         return FALSE;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:26:47 $
+ *  last change: $Author: nn $ $Date: 2000-09-25 17:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -680,10 +680,12 @@ void ScViewData::ResetOldCursor()
 }
 
 Rectangle ScViewData::GetEditArea( ScSplitPos eWhich, USHORT nPosX, USHORT nPosY,
-                                    Window* pWin, const ScPatternAttr* pPattern )
+                                    Window* pWin, const ScPatternAttr* pPattern,
+                                    BOOL bForceToTop )
 {
     return ScEditUtil( pDoc, nPosX, nPosY, nTabNo, GetScrPos(nPosX,nPosY,eWhich,TRUE),
-                        pWin, nPPTX, nPPTY, GetZoomX(), GetZoomY() ).GetEditArea( pPattern );
+                        pWin, nPPTX, nPPTY, GetZoomX(), GetZoomY() ).
+                            GetEditArea( pPattern, bForceToTop );
 }
 
 void ScViewData::SetEditEngine( ScSplitPos eWhich,
@@ -740,10 +742,9 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     if (pMergeAttr->GetRowMerge() > 1)
         nEditEndRow += pMergeAttr->GetRowMerge() - 1;
 
-//  Rectangle aPixRect = GetEditArea( eWhich, nNewX, nNewY, pWin, pPattern );
     Rectangle aPixRect = ScEditUtil( pDoc, nNewX,nNewY,nTabNo, GetScrPos(nNewX,nNewY,eWhich),
                                         pWin, nPPTX,nPPTY,GetZoomX(),GetZoomY() ).
-                                            GetEditArea( pPattern );
+                                            GetEditArea( pPattern, TRUE );
 
     //  bei rechtsbuendigem Editieren muss rechts noch Platz fuer den Cursor sein
     if ( nEditAdjust == SVX_ADJUST_RIGHT )

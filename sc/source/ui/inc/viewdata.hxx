@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:25:05 $
+ *  last change: $Author: nn $ $Date: 2000-09-25 17:33:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,7 +405,7 @@ public:
     USHORT          GetEditEndRow() const           { return nEditEndRow; }
 
     Rectangle       GetEditArea( ScSplitPos eWhich, USHORT nPosX, USHORT nPosY, Window* pWin,
-                                    const ScPatternAttr* pPattern = NULL );
+                                    const ScPatternAttr* pPattern, BOOL bForceToTop );
 
     void            SetTabNo( USHORT nNewTab );
     void            SetActivePart( ScSplitPos eNewActive );

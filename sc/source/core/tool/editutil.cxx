@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editutil.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:17 $
+ *  last change: $Author: nn $ $Date: 2000-09-25 17:33:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,8 +121,11 @@ String ScEditUtil::GetSpaceDelimitedString( const EditEngine& rEngine )
 
 //------------------------------------------------------------------------
 
-Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern )
+Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, BOOL bForceToTop )
 {
+    // bForceToTop = always align to top, for editing
+    // (FALSE for querying URLs etc.)
+
     USHORT i;
 
     if (!pPattern)
@@ -161,11 +164,13 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern )
     long nTopMargin = (long) ( pMargin->GetTopMargin() * nPPTY );
     SvxCellVerJustify eJust = (SvxCellVerJustify) ((const SvxVerJustifyItem&)pPattern->
                                                 GetItem(ATTR_VER_JUSTIFY)).GetValue();
-    if ( eJust == SVX_VER_JUSTIFY_TOP )
+    if ( bForceToTop || eJust == SVX_VER_JUSTIFY_TOP )
         nPixDifY = nTopMargin;
     else
     {
-//      MapMode aMode = pDev->SetMapMode( MAP_PIXEL );
+        MapMode aMode = pDev->GetMapMode();
+        pDev->SetMapMode( MAP_PIXEL );
+
         long nTextHeight = pDoc->GetNeededSize( nCol, nRow, nTab,
                                                 pDev, nPPTX, nPPTY, aZoomX, aZoomY, FALSE );
         if (!nTextHeight)
@@ -176,7 +181,8 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern )
             nTextHeight = pDev->GetTextHeight() + nTopMargin +
                             (long) ( pMargin->GetBottomMargin() * nPPTY );
         }
-//      pDev->SetMapMode(aMode);
+
+        pDev->SetMapMode(aMode);
 
         if ( nTextHeight > nCellY + nTopMargin )
             nPixDifY = 0;                           // zu gross -> oben anfangen
