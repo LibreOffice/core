@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XComponent.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-13 15:47:01 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 16:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ interface XComponent: com::sun::star::uno::XInterface
         <p>The broadcaster fires the disposing method of this listener
         if the <member>XComponent::dispose</member> method is called.  </p>
 
-        @see removeEventListener()
+        @see XComponent::removeEventListener
      */
     void addEventListener( [in] XEventListener xListener );
 
@@ -166,7 +166,7 @@ interface XComponent: com::sun::star::uno::XInterface
 
         <p>It is a "noop" if the specified listener is not registered.  </p>
 
-        @see addEventListener()
+        @see XComponent::addEventListener
      */
     void removeEventListener( [in] XEventListener aListener );
 
@@ -179,6 +179,9 @@ interface XComponent: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/13 15:47:01  mi
+    symtactical documentation and minor semantic documentation flaws fixed
+
     Revision 1.4  2000/11/08 12:28:41  mi
     moved from api
 

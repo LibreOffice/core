@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCommandInfoChangeListener.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 16:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,8 @@ module com { module sun { module star { module ucb {
 
     @version  1.0
     @author   Kai Sommerfeld
-    @see      CommandInfoChangeEvent, XCommandInfoChangeNotifier
+    @see      CommandInfoChangeEvent
+    @see      XCommandInfoChangeNotifier
 */
 [ uik(54D27620-DA3A-11d3-9F590050-04526AC8), ident( "XCommandInfoChangeListener", 1.0 ) ]
 interface XCommandInfoChangeListener : com::sun::star::lang::XEventListener

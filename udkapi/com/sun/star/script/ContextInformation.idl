@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContextInformation.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:52 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 16:15:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,10 +101,10 @@ struct ContextInformation
         <p>If "name" addresses a function, all line and column values
         are nevertheless given relative to the module's source. If
         source code is not available, this value addresses a binary
-        position in the compiled code.
+        position in the compiled code.  </p>
 
-        </p>@see XLibraryAccess::getModuleCode(string)
-                @see XLibraryAccess::getFunctionCode(string)
+        @see XLibraryAccess::getModuleCode
+        @see XLibraryAccess::getFunctionCode
      */
     long StartLine;
 
@@ -149,6 +149,9 @@ struct ContextInformation
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:52  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:35  hjs
     initial import
 

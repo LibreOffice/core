@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAggregation.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 15:32:26 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 16:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ interface XAggregation: com::sun::star::uno::XInterface
 
         </listing>
 
-        @see #queryAggregation(Class)
+        @see XAggregation::queryAggregation
     */
     void setDelegator( [in] com::sun::star::uno::XInterface pDelegator );
 
@@ -186,7 +186,7 @@ interface XAggregation: com::sun::star::uno::XInterface
 
         </listing>
 
-        @see #setDelegator(UnoAggregation)
+        @see XAggregation::setDelegator
     */
     any queryAggregation( [in] type aType );
 //  boolean queryAggregation( [in] com::sun::star::uno::Uik aUik,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPropertySetInfoChangeNotifier.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:20 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 16:15:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,10 @@
 //=============================================================================
 
 // DocMerge from xml: interface com::sun::star::beans::XPropertySetInfoChangeNotifier
-/** a notifier for changes of <type>XPropertySetInfo</type>s.@see      PropertySetInfoChangeEvent, XPropertySetInfoChangeListener
+/** a notifier for changes of <type>XPropertySetInfo</type>s.
+
+    @see    PropertySetInfoChangeEvent
+    @see    XPropertySetInfoChangeListener
  */
 [ uik(54D27628-DA3A-11d3-9F590050-04526AC8), ident( "XPropertySetInfoChangeNotifier", 1.0 ) ]
 interface XPropertySetInfoChangeNotifier: com::sun::star::uno::XInterface
@@ -104,6 +107,9 @@ interface XPropertySetInfoChangeNotifier: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:20  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:34:56  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBridgeTest.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:59 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 16:15:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,9 +220,9 @@ interface XBridgeTestBase : com::sun::star::uno::XInterface
     /***
      * methods to check sequence of calls. Call call() and callOneway
      * in an arbitrary sequence. Increase the callId for every call.
-     * The testobject sets an error flag (@see testSequencePassed()),
-     * when
-     *
+     * The testobject sets an error flag.
+
+        @see testSequencePassed
      ***/
     void call( [in] long nCallId, [in] long nWaitMUSEC );
     [oneway] void callOneway( [in] long nCallId, [in] long nWaitMUSEC );
