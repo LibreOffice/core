@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-08 13:02:30 $
+ *  last change: $Author: ka $ $Date: 2001-10-25 15:37:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,7 +385,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     {
         SvxPluginFileDlg aDlg( &GetView().GetViewFrame()->GetWindow(), nSlot );
 
-        if ( RET_OK == aDlg.Execute() )
+        if ( ERRCODE_NONE == aDlg.Execute() )
         {
             // URL ermitteln
             String aStrURL( aDlg.GetPath() );
@@ -1060,6 +1060,9 @@ void SwTextShell::InsertSymbol(const String& rChars, const String& rFontName)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.10  2001/10/08 13:02:30  jp
+    Task #87333#: remove unused code
+
     Revision 1.9  2001/09/28 16:53:33  jp
     Bug #85610#: InsertSymbol - set always the attributes for all scripts of the inserted text
 
