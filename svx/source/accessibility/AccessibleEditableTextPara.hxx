@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:53:26 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:50:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,8 @@
 #include <cppuhelper/weakref.hxx>
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE6_HXX_
-#include <cppuhelper/implbase6.hxx>
+#ifndef _CPPUHELPER_COMPBASE6_HXX_
+#include <cppuhelper/compbase6.hxx>
 #endif
 
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
@@ -114,6 +114,10 @@
 #include <comphelper/accessibletexthelper.hxx>
 #endif
 
+#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
+#include <comphelper/broadcasthelper.hxx>
+#endif
+
 #ifndef _SVX_ACCESSIBLE_PARA_MANAGER_HXX
 #include "AccessibleParaManager.hxx"
 #endif
@@ -129,7 +133,7 @@
 
 namespace accessibility
 {
-    typedef ::cppu::WeakImplHelper6< ::com::sun::star::accessibility::XAccessible,
+    typedef ::cppu::WeakComponentImplHelper6< ::com::sun::star::accessibility::XAccessible,
                                      ::com::sun::star::accessibility::XAccessibleContext,
                                      ::com::sun::star::accessibility::XAccessibleComponent,
                                      ::com::sun::star::accessibility::XAccessibleEditableText,
@@ -138,7 +142,7 @@ namespace accessibility
 
     /** This class implements the actual text paragraphs for the EditEngine/Outliner UAA
      */
-    class AccessibleEditableTextPara : public AccessibleTextParaInterfaceBase, public ::comphelper::OCommonAccessibleText
+    class AccessibleEditableTextPara : public ::comphelper::OBaseMutex, public AccessibleTextParaInterfaceBase, public ::comphelper::OCommonAccessibleText
     {
 
     protected:
