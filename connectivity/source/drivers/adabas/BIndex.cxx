@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BIndex.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:14:27 $
+ *  last change: $Author: fs $ $Date: 2001-03-08 13:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ void OAdabasIndex::refreshColumns()
             ::rtl::OUString aColName;
             while(xResult->next())
             {
-                if(xRow->getString(9) == m_Name)
+                if(xRow->getString(6) == m_Name)
                 {
                     aColName = xRow->getString(9);
                     if(!xRow->wasNull())
