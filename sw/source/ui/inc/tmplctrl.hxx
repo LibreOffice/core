@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmplctrl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:42 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:35:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,12 +79,13 @@ class SwTemplateControl : public SfxStatusBarControl
 protected:
     virtual void    Command( const CommandEvent& rCEvt );
 public:
-    virtual void    StateChanged( const SfxPoolItem* pState );
+    virtual void    StateChanged( USHORT nSID, SfxItemState eState,
+                                  const SfxPoolItem* pState );
     virtual void    Paint( const UserDrawEvent& rEvt );
 
     SFX_DECL_STATUSBAR_CONTROL();
 
-    SwTemplateControl( USHORT nId, StatusBar& rStb, SfxBindings& rBind );
+    SwTemplateControl( USHORT nSlotId, USHORT nId, StatusBar& rStb );
     ~SwTemplateControl();
 
 private:
