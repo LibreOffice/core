@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editutil.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:12:18 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:45:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -824,3 +824,13 @@ void __EXPORT ScFieldEditEngine::FieldClicked( const SvxFieldItem& rField, USHOR
     }
 }
 
+//------------------------------------------------------------------------
+
+ScNoteEditEngine::ScNoteEditEngine( SfxItemPool* pEnginePool,
+            SfxItemPool* pTextObjectPool, BOOL bDeleteEnginePool ) :
+    ScEditEngineDefaulter( pEnginePool, bDeleteEnginePool )
+{
+    if ( pTextObjectPool )
+        SetEditTextObjectPool( pTextObjectPool );
+    SetControlWord( (GetControlWord() | EE_CNTRL_MARKFIELDS) & ~EE_CNTRL_RTFSTYLESHEETS );
+}
