@@ -2,8 +2,8 @@
  *
  *  $RCSfile: dirent.cxx,v $
  *
- *  $Revision: 1.17 $
- *  last change: $Author: rt $ $Date: 2004-06-17 11:37:34 $
+ *  $Revision: 1.18 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,11 @@
 #endif
 
 #include <osl/file.hxx>
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
+
+
 using namespace osl;
 using namespace rtl;
 
@@ -2176,8 +2181,7 @@ USHORT DirEntry::GetMaxNameLen( FSysPathStyle eFormatter )
 |*    Letzte Aenderung  MI 06.02.98
 |*
 *************************************************************************/
-
-DirEntry aTempNameBase_Impl;
+namespace { struct TempNameBase_Impl : public rtl::Static< DirEntry, TempNameBase_Impl > {}; }
 
 const DirEntry& DirEntry::SetTempNameBase( const String &rBase )
 {
@@ -2202,17 +2206,19 @@ const DirEntry& DirEntry::SetTempNameBase( const String &rBase )
 #else
         aTempDir.MakeDir();
 #endif
-        aTempNameBase_Impl = aTempDir.TempName( FSYS_KIND_DIR );
-        return aTempNameBase_Impl;
+        DirEntry &rEntry = TempNameBase_Impl::get();
+        rEntry = aTempDir.TempName( FSYS_KIND_DIR );
+        return rEntry;
 }
 
 DirEntry DirEntry::TempName( DirEntryKind eKind ) const
 {
         // ggf. Base-Temp-Dir verwenden (macht Remote keinen Sinn => vorher)
-        if ( !pParent && FSYS_FLAG_CURRENT != aTempNameBase_Impl.eFlag && FSYS_FLAG_ABSROOT != eFlag )
+    const DirEntry &rEntry = TempNameBase_Impl::get();
+        if ( !pParent && FSYS_FLAG_CURRENT != rEntry.eFlag && FSYS_FLAG_ABSROOT != eFlag )
 
         {
-                DirEntry aFactory( aTempNameBase_Impl );
+                DirEntry aFactory( rEntry );
                 aFactory += GetName();
                 return aFactory.TempName();
         }
