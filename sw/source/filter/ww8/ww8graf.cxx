@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:44:06 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:17:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,6 +225,9 @@
 #ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
 #endif
+#ifndef _SWDOCSH_HXX
+#include <docsh.hxx>
+#endif
 #ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>           // Progress
 #endif
@@ -262,6 +265,16 @@
 #define ITEMID_FIELD            EE_FEATURE_FIELD
 #include <svx/flditem.hxx>
 #endif
+
+#ifndef SW_WRITERHELPER
+#include "writerhelper.hxx"
+#endif
+#ifndef SW_WRITERWORDGLUE
+#include "writerwordglue.hxx"
+#endif
+
+using namespace sw::types;
+using namespace sw::util;
 
 // Hilfsroutinen
 
@@ -791,7 +804,7 @@ void SwWW8ImplReader::InsertTxbxAttrs(long nStartCp, long nEndCp,
     {
         //nStart is the beginning of the attributes for this range, and
         //may be before the text itself. So watch out for that
-        long nTxtStart = nStart;
+        WW8_CP nTxtStart = nStart;
         if (nTxtStart < nStartCp)
             nTxtStart = nStartCp;
         // get position of next SPRM
@@ -832,7 +845,8 @@ void SwWW8ImplReader::InsertTxbxAttrs(long nStartCp, long nEndCp,
                     {
                         bDoingSymbol = false;
                         String sTemp;
-                        sTemp.Fill(nTxtStart - nStartReplace, cReplaceSymbol);
+                        sTemp.Fill(writer_cast<xub_StrLen>(
+                            nTxtStart - nStartReplace), cReplaceSymbol);
                         pDrawEditEngine->QuickInsertText(sTemp,
                             GetESelection(nStartReplace - nStartCp,
                             nTxtStart - nStartCp ) );
@@ -1201,8 +1215,7 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                                     ((SdrGrafObj*)pNew)->SetGraphic(aGraph);
                                 }
 
-                                if( !pDrawModel )
-                                    GrafikCtor();
+                                GrafikCtor();
 
                                 pNew->SetModel( pDrawModel );
                                 pNew->SetLogicRect( pTextObj->GetBoundRect() );
@@ -1253,7 +1266,7 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
 
                         pFlyFmt->SetAttr( aFlySet );
 
-                        MatchWrapDistancesIntoFlyFmt( pRecord, pFlyFmt );
+                        MapWrapIntoFlyFmt(pRecord, pFlyFmt);
                     }
                 }
                 aString.Erase();
@@ -1800,8 +1813,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
 */
 
     // 1. GrafikObjekt des Docs?
-    if( !pDrawModel )
-        GrafikCtor();
+    GrafikCtor();
 
     const SfxItemSet& rOldSet = pSdrObj->GetItemSet();
 
@@ -1823,7 +1835,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
 
     // jetzt die Umrandung berechnen und die Box bauen: Das Mass wird fuer die
     // Rahmen-GROESSE benoetigt!
-    SvxBoxItem aBox;
+    SvxBoxItem aBox(sw::util::ItemGet<SvxBoxItem>(rFlySet, RES_BOX));
     // dashed oder solid wird zu solid
     INT32 nLineThick = 0, nOutside=0;
 
@@ -1939,7 +1951,6 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
         //const USHORT nShdTrans= WW8ITEMVALUE(rOldSet,
         //   SDRATTR_SHADOWTRANSPARENCE, SdrShadowTransparenceItem);
 
-        // diese gibt es im Writer nicht  :-(
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         //
         // SfxVoidItem( SDRATTR_SHADOW3D    )
@@ -1947,7 +1958,8 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
 
         aShadow.SetColor( Color( aShdColor ) );
 
-        aShadow.SetWidth( (Abs( nShdDistX ) + Abs( nShdDistY )) / 2 );
+        aShadow.SetWidth(writer_cast<USHORT>((Abs( nShdDistX) +
+            Abs( nShdDistY )) / 2 ));
 
         SvxShadowLocation eShdPosi;
         if( 0 <= nShdDistX )
@@ -2048,94 +2060,171 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
         rFlySet.Put(aBrushItem, RES_BACKGROUND);
 }
 
-void SwWW8ImplReader::AdjustLRWrapForWordMargins(SvxMSDffImportRec* pRecord,
-    SvxLRSpaceItem* pLR)
+void SwWW8ImplReader::AdjustLRWrapForWordMargins(
+    const SvxMSDffImportRec &rRecord, SvxLRSpaceItem &rLR)
 {
     // Left adjustments - if horizontally aligned to left of
     // margin or column then remove the left wrapping
-    if (pRecord->nXAlign == 1)
+    if (rRecord.nXAlign == 1)
     {
-        if ((pRecord->nXRelTo == 0) || (pRecord->nXRelTo == 2))
-            pLR->SetLeft((USHORT)0);
+        if ((rRecord.nXRelTo == 0) || (rRecord.nXRelTo == 2))
+            rLR.SetLeft((USHORT)0);
     }
 
     // Right adjustments - if horizontally aligned to right of
     // margin or column then remove the right wrapping
-    if (pRecord->nXAlign == 3)
+    if (rRecord.nXAlign == 3)
     {
-        if ((pRecord->nXRelTo == 0) || (pRecord->nXRelTo == 2))
-            pLR->SetRight((USHORT)0);
+        if ((rRecord.nXRelTo == 0) || (rRecord.nXRelTo == 2))
+            rLR.SetRight((USHORT)0);
     }
 
     //Inside margin, remove left wrapping
-    if ((pRecord->nXAlign == 4) && (pRecord->nXRelTo == 0))
+    if ((rRecord.nXAlign == 4) && (rRecord.nXRelTo == 0))
     {
-        pLR->SetLeft((USHORT)0);
+        rLR.SetLeft((USHORT)0);
     }
 
     //Outside margin, remove left wrapping
-    if ((pRecord->nXAlign == 5) && (pRecord->nXRelTo == 0))
+    if ((rRecord.nXAlign == 5) && (rRecord.nXRelTo == 0))
     {
-        pLR->SetRight((USHORT)0);
+        rLR.SetRight((USHORT)0);
     }
 }
 
 
-void SwWW8ImplReader::AdjustULWrapForWordMargins(SvxMSDffImportRec* pRecord,
-    SvxULSpaceItem* pUL)
+void SwWW8ImplReader::AdjustULWrapForWordMargins(
+    const SvxMSDffImportRec &rRecord, SvxULSpaceItem &rUL)
 {
     // Top adjustment - remove upper wrapping if aligned to page
     // printable area or to page
-    if (pRecord->nYAlign == 1)
+    if (rRecord.nYAlign == 1)
     {
-        if ((pRecord->nYRelTo == 0) || (pRecord->nYRelTo == 1))
-            pUL->SetUpper((USHORT)0);
+        if ((rRecord.nYRelTo == 0) || (rRecord.nYRelTo == 1))
+            rUL.SetUpper((USHORT)0);
     }
 
     // Bottom adjustment - remove bottom wrapping if aligned to page or
     // printable area or to page
-    if (pRecord->nYAlign == 3)
+    if (rRecord.nYAlign == 3)
     {
-        if ((pRecord->nYRelTo == 0) || (pRecord->nYRelTo == 1))
-            pUL->SetLower((USHORT)0);
+        if ((rRecord.nYRelTo == 0) || (rRecord.nYRelTo == 1))
+            rUL.SetLower((USHORT)0);
     }
 
     //Remove top margin if aligned vertically inside margin
-    if ((pRecord->nYAlign == 4) && (pRecord->nYRelTo == 0))
-        pUL->SetUpper((USHORT)0);
+    if ((rRecord.nYAlign == 4) && (rRecord.nYRelTo == 0))
+        rUL.SetUpper((USHORT)0);
 
     /*
     // Something like this needs to be done once inside and outside are
     // fixed
-    if (pRecord->nYAlign == 4)
+    if (rRecord.nYAlign == 4)
     {
-        if (pRecord->nYRelTo == 0)
-            pUL->SetUpper((USHORT)0);
+        if (rRecord.nYRelTo == 0)
+            rUL.SetUpper((USHORT)0);
     }
     */
 }
 
-void SwWW8ImplReader::MatchWrapDistancesIntoFlyFmt(SvxMSDffImportRec* pRecord,
-    SwFrmFmt* pFlyFmt )
+void SwWW8ImplReader::MapWrapIntoFlyFmt(SvxMSDffImportRec* pRecord,
+    SwFrmFmt* pFlyFmt)
 {
     if (!pRecord || !pFlyFmt)
         return;
 
     if (pRecord->nDxWrapDistLeft || pRecord->nDxWrapDistRight)
     {
-        SvxLRSpaceItem aLR;
-        aLR.SetLeft(pRecord->nDxWrapDistLeft);
-        aLR.SetRight(pRecord->nDxWrapDistRight);
-        AdjustLRWrapForWordMargins(pRecord, &aLR);
+        SvxLRSpaceItem aLR(writer_cast<USHORT>(pRecord->nDxWrapDistLeft),
+            writer_cast<USHORT>(pRecord->nDxWrapDistRight));
+        AdjustLRWrapForWordMargins(*pRecord, aLR);
         pFlyFmt->SetAttr(aLR);
     }
     if (pRecord->nDyWrapDistTop || pRecord->nDyWrapDistBottom)
     {
-        SvxULSpaceItem aUL;
-        aUL.SetUpper((USHORT)pRecord->nDyWrapDistTop);
-        aUL.SetLower((USHORT)pRecord->nDyWrapDistBottom);
-        AdjustULWrapForWordMargins(pRecord, &aUL);
+        SvxULSpaceItem aUL(writer_cast<USHORT>(pRecord->nDyWrapDistTop),
+            writer_cast<USHORT>(pRecord->nDyWrapDistBottom));
+        AdjustULWrapForWordMargins(*pRecord, aUL);
         pFlyFmt->SetAttr(aUL);
+    }
+
+    //If we are contoured and have a custom polygon...
+    if (pRecord->pWrapPolygon && pFlyFmt->GetSurround().IsContour())
+    {
+        if (SwNoTxtNode *pNd = GetNoTxtNodeFromSwFrmFmt(*pFlyFmt))
+        {
+
+            /*
+             Gather round children and hear of a tale that will raise the
+             hairs on the back of your neck this dark halloween night.
+
+             There is a polygon in word that describes the wraping around
+             the graphic.
+
+             Here are some sample values for the simplest case of a square
+             around some solid coloured graphics
+
+                                X       Y       Pixel size of graphic
+                TopLeft         -54     21600   400x400
+                Bottom Right    0       21546
+
+                TopLeft         -108    21600   200x200
+                Bottom Right    0       21492
+
+                TopLeft         -216    21600   100x100
+                Bottom Right    0       21384
+
+                TopLeft         -432    21600   50x50
+                Bottom Right    0       21168
+
+                TopLeft         -76     21600   283x212
+                Bottom Right    0       21498
+
+             So given that the size of the values remains pretty much the
+             same despite the size of the graphic, we can tell that the
+             polygon is measured in units that are independant of the
+             graphic. But why does the left corner move a different value
+             to the left each time, and why does the bottom move upwards
+             each time, when the right and top remain at the same value ?
+
+             I have no idea, but clearly once we calculate the values out
+             we see that the left margin is always a fixed realworld
+             distance from the true left and the polygon bottom is the same
+             fixed value from the bottom. i.e. 15twips.
+
+             So here we take our word provided polygon, shift it to the
+             right by 15twips and rescale it widthwise to shrink the width
+             a little to fit the now moved right margin back to where it
+             was, and stretch the height a little to make the bottom move
+             down the missing 15twips then we get a polygon that matches
+             what I actually see in word
+            */
+
+            PolyPolygon aPoly(*pRecord->pWrapPolygon);
+            const Size &rSize = pNd->GetTwipSize();
+            /*
+             Move to the left by 15twips, and rescale to
+             a) shrink right bound back to orig position
+             b) stretch bottom bound to where I think it should have been
+             in the first place
+            */
+            Fraction aMoveHack(ww::nWrap100Percent, rSize.Width());
+            aMoveHack *= Fraction(15, 1);
+            long nMove(aMoveHack);
+            aPoly.Move(nMove, 0);
+
+            Fraction aHackX(ww::nWrap100Percent, ww::nWrap100Percent + nMove);
+            Fraction aHackY(ww::nWrap100Percent, ww::nWrap100Percent - nMove);
+            aPoly.Scale(aHackX, aHackY);
+
+            //Turn polygon back into units that match the graphic's
+            const Size &rOrigSize = pNd->GetGraphic().GetPrefSize();
+            Fraction aMapPolyX(rOrigSize.Width(), ww::nWrap100Percent);
+            Fraction aMapPolyY(rOrigSize.Height(), ww::nWrap100Percent);
+            aPoly.Scale(aMapPolyX, aMapPolyY);
+
+            pNd->SetContourAPI(&aPoly);
+        }
     }
 }
 
@@ -2519,8 +2608,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     if( pPlcxMan->GetManType() == MAN_HDFT )
         nDrawCpO += pWwFib->ccpTxbx;
 
-    if( !pDrawModel )// 1. GrafikObjekt des Docs
-        GrafikCtor();
+    GrafikCtor();
 
     WW8PLCFspecial* pPF = pPlcxMan->GetFdoa();
     if( !pPF )
@@ -2741,13 +2829,27 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                 }
             }
 
-            /*
-            #97824#  Need to make sure that the correct layer ordering is
-            applied.
-            */
-            pWWZOrder->InsertEscherObject(pObject, pF->nSpId);
+            if (!IsInlineEscherHack())
+            {
+                /*
+                #97824#  Need to make sure that the correct layer ordering is
+                applied.
+                */
+                pWWZOrder->InsertEscherObject(pObject, pF->nSpId);
+            }
+            else
+            {
+                /*
+                #i17086#  SHAPE field contents are anchored as character
+                */
+                eAnchor = FLY_IN_CNTNT;
+                SwFmtAnchor aAnchor(eAnchor);
+                aAnchor.SetAnchor(pPaM->GetPoint());
+                aFlySet.Put(aAnchor);
+                pWWZOrder->InsertTextLayerObject(pObject);
+            }
 
-            pRetFrmFmt = rDoc.Insert( *pPaM, *pObject, &aFlySet );
+            pRetFrmFmt = rDoc.Insert(*pPaM, *pObject, &aFlySet);
 
             ASSERT(pRetFrmFmt->GetAnchor().GetAnchorId() ==
                 eAnchor, "Not the anchor type requested!");
@@ -2771,7 +2873,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
         }
     }
 
-    MatchWrapDistancesIntoFlyFmt(pRecord, pRetFrmFmt);
+    MapWrapIntoFlyFmt(pRecord, pRetFrmFmt);
     return AddAutoAnchor(pRetFrmFmt);
 }
 
@@ -3087,13 +3189,25 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
 
 void SwWW8ImplReader::GrafikCtor()  // Fuer SVDraw und VCControls und Escher
 {
-    rDoc.MakeDrawModel( );
-    pDrawModel  = rDoc.GetDrawModel();
-    ASSERT(pDrawModel, "Kann DrawModel nicht anlegen");
-    pDrawPg = pDrawModel->GetPage(0);
+    if (!pDrawModel)
+    {
+        rDoc.MakeDrawModel( );
+        pDrawModel  = rDoc.GetDrawModel();
+        ASSERT(pDrawModel, "Kann DrawModel nicht anlegen");
+        pDrawPg = pDrawModel->GetPage(0);
 
-    pWWZOrder = new wwZOrderer(sw::hack::SetLayer(rDoc), pDrawPg,
-        pMSDffManager ? pMSDffManager->GetShapeOrders() : 0);
+        pMSDffManager = new SwMSDffManager(*this);
+        pMSDffManager->SetModel(pDrawModel, 1440);
+        /*
+         #79055#
+         Now the dff manager always needs a controls //converter as well, but a
+         control converter may still exist //without a dffmanager. cmc
+        */
+        pFormImpl = new SwMSConvertControls(rDoc.GetDocShell(), pPaM);
+
+        pWWZOrder = new wwZOrderer(sw::hack::SetLayer(rDoc), pDrawPg,
+            pMSDffManager ? pMSDffManager->GetShapeOrders() : 0);
+    }
 }
 
 void SwWW8ImplReader::GrafikDtor()
