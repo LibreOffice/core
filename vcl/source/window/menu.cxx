@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-06 10:04:05 $
+ *  last change: $Author: cp $ $Date: 2001-11-14 10:46:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2467,7 +2467,7 @@ void MenuFloatingWindow::KillActivePopup( PopupMenu* pThisOnly )
 {
     if ( pActivePopup && ( !pThisOnly || ( pThisOnly == pActivePopup ) ) )
     {
-        //if( pActivePopup->pWindow->mbFloatWin )
+        if( pActivePopup->pWindow != NULL )
             if( ((FloatingWindow *) pActivePopup->pWindow)->IsInCleanUp() )
                 return; // kill it later
         if ( pActivePopup->bInCallback )
@@ -3136,7 +3136,7 @@ void MenuBarWindow::KillActivePopup()
 {
     if ( pActivePopup )
     {
-        //if( pActivePopup->pWindow->mbFloatWin )
+        if( pActivePopup->pWindow != NULL )
             if( ((FloatingWindow *) pActivePopup->pWindow)->IsInCleanUp() )
                 return; // kill it later
 
