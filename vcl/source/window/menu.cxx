@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:39:00 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:13:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#define _SV_MENU_CXX
 
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
@@ -116,7 +114,7 @@
 #include <bitmap.hxx>
 #endif
 #ifndef _SV_RC_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
 #ifndef _SV_MENU_HXX
 #include <menu.hxx>
@@ -126,9 +124,6 @@
 #endif
 #ifndef _SV_GRADIENT_HXX
 #include <gradient.hxx>
-#endif
-#ifndef _SV_ACCESS_HXX
-#include <access.hxx>
 #endif
 #ifndef _VCL_I18NHELP_HXX
 #include <i18nhelp.hxx>
@@ -706,7 +701,6 @@ static BOOL ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, USHORT nHighl
 {
     BOOL bDone = FALSE;
     USHORT nId = 0;
-    ImplSVData* pSVData = ImplGetSVData();
 
     if ( nHighlightedItem != ITEMPOS_INVALID )
     {
@@ -1672,8 +1666,6 @@ void Menu::SetItemImageAngle( USHORT nItemId, long nAngle10 )
 
     if ( pData )
     {
-        Size aOldSize = pData->aImage.GetSizePixel();
-
         long nDeltaAngle = (nAngle10 - pData->nItemImageAngle) % 3600;
         while( nDeltaAngle < 0 )
             nDeltaAngle += 3600;
@@ -2048,11 +2040,7 @@ Size Menu::ImplCalcSize( Window* pWin )
                     aSz.Width() += pData->aSz.Width();
                 }
                 else
-#if (_MSC_VER < 1300)
-                    pData->aSz.Height() = std::max( std::max( nTextHeight, pData->aSz.Height() ), nMinMenuItemHeight );
-#else
-                    pData->aSz.Height() = max( max( nTextHeight, pData->aSz.Height() ), nMinMenuItemHeight );
-#endif
+                    pData->aSz.Height() = Max( Max( nTextHeight, pData->aSz.Height() ), nMinMenuItemHeight );
             }
 
             // Accel
@@ -2071,14 +2059,7 @@ Size Menu::ImplCalcSize( Window* pWin )
                 if ( nFontHeight > nMaxAccWidth )
                     nMaxAccWidth = nFontHeight;
 
-#if (_MSC_VER < 1300)
-                pData->aSz.Height() = std::max( std::max( nFontHeight, pData->aSz.Height() ), nMinMenuItemHeight );
-#else
-                pData->aSz.Height() = max( max( nFontHeight, pData->aSz.Height() ), nMinMenuItemHeight );
-#endif
-
-//                if ( nFontHeight > pData->aSz.Height() )
-//                    pData->aSz.Height() = nFontHeight;
+                pData->aSz.Height() = Max( Max( nFontHeight, pData->aSz.Height() ), nMinMenuItemHeight );
             }
 
             pData->aSz.Height() += EXTRAITEMHEIGHT; // Etwas mehr Abstand:
@@ -2090,11 +2071,7 @@ Size Menu::ImplCalcSize( Window* pWin )
 
     if ( !bIsMenuBar )
     {
-#if (_MSC_VER < 1300)
-        USHORT gfxExtra = (USHORT) std::max( nExtra, 7L ); // #107710# increase space between checkmarks/images/text
-#else
-        USHORT gfxExtra = (USHORT) max( nExtra, 7L ); // #107710# increase space between checkmarks/images/text
-#endif
+        USHORT gfxExtra = (USHORT) Max( nExtra, 7L ); // #107710# increase space between checkmarks/images/text
         nCheckPos = (USHORT)nExtra;
         nImagePos = (USHORT)(nCheckPos + nFontHeight/2 + gfxExtra );
         nTextPos = (USHORT)(nImagePos+aMaxImgSz.Width());
@@ -2131,7 +2108,6 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
         aTopLeft.X() = pLogo->aBitmap.GetSizePixel().Width();
 
     Size aOutSz = pWin->GetOutputSizePixel();
-    long nMaxY = aOutSz.Height() - nBorder;
     USHORT nCount = (USHORT)pItemList->Count();
     if( bLayout )
         mpLayoutData->m_aVisibleItemBoundRects.clear();
@@ -2450,11 +2426,6 @@ MenuLogo Menu::GetLogo() const
     return aLogo;
 }
 
-void Menu::GetAccessObject( AccessObjectRef& rAcc ) const
-{
-    rAcc = new AccessObject( (void*) this, bIsMenuBar? ACCESS_TYPE_MENUBAR : ACCESS_TYPE_MENU );
-}
-
 void Menu::ImplKillLayoutData() const
 {
     delete mpLayoutData, mpLayoutData = NULL;
@@ -2491,7 +2462,7 @@ Rectangle Menu::GetCharacterBounds( USHORT nItemID, long nIndex ) const
         ImplFillLayoutData();
     if( mpLayoutData )
     {
-        for( int i = 0; i < (int) mpLayoutData->m_aLineItemIds.size(); i++ )
+        for( size_t i = 0; i < mpLayoutData->m_aLineItemIds.size(); i++ )
         {
             if( mpLayoutData->m_aLineItemIds[i] == nItemID )
             {
@@ -2513,7 +2484,7 @@ long Menu::GetIndexForPoint( const Point& rPoint, USHORT& rItemID ) const
     if( mpLayoutData )
     {
         nIndex = mpLayoutData->GetIndexForPoint( rPoint );
-        for( int i = 0; i < (int) mpLayoutData->m_aLineIndices.size(); i++ )
+        for( size_t i = 0; i < mpLayoutData->m_aLineIndices.size(); i++ )
         {
             if( mpLayoutData->m_aLineIndices[i] <= nIndex &&
                 (i == mpLayoutData->m_aLineIndices.size()-1 || mpLayoutData->m_aLineIndices[i+1] > nIndex) )
@@ -2547,7 +2518,7 @@ Pair Menu::GetItemStartEnd( USHORT nItem ) const
     if( ! mpLayoutData )
         ImplFillLayoutData();
 
-    for( long i = 0; i < (long) mpLayoutData->m_aLineItemIds.size(); i++ )
+    for( size_t i = 0; i < mpLayoutData->m_aLineItemIds.size(); i++ )
         if( mpLayoutData->m_aLineItemIds[i] == nItem )
             return GetLineStartEnd( i );
 
@@ -2559,7 +2530,7 @@ USHORT Menu::GetDisplayItemId( long nLine ) const
     USHORT nItemId = 0;
     if( ! mpLayoutData )
         ImplFillLayoutData();
-    if( mpLayoutData && nLine >= 0 && nLine < (long) mpLayoutData->m_aLineItemIds.size() )
+    if( mpLayoutData && ( nLine >= 0 ) && ( nLine < (long)mpLayoutData->m_aLineItemIds.size() ) )
         nItemId = mpLayoutData->m_aLineItemIds[nLine];
     return nItemId;
 }
@@ -3237,9 +3208,6 @@ MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, Window* pParent, WinBits nSt
     aSubmenuCloseTimer.SetTimeout( GetSettings().GetMouseSettings().GetMenuDelay() );
     aSubmenuCloseTimer.SetTimeoutHdl( LINK( this, MenuFloatingWindow, SubmenuClose ) );
     aScrollTimer.SetTimeoutHdl( LINK( this, MenuFloatingWindow, AutoScroll ) );
-
-    if ( Application::GetAccessHdlCount() )
-        Application::AccessNotify( AccessNotification( ACCESS_EVENT_POPUPMENU_START, pMenu ) );
 }
 
 MenuFloatingWindow::~MenuFloatingWindow()
@@ -3270,9 +3238,6 @@ MenuFloatingWindow::~MenuFloatingWindow()
 
     // free the reference to the accessible component
     SetAccessible( ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >() );
-
-    if( Application::GetAccessHdlCount() )
-        Application::AccessNotify( AccessNotification( ACCESS_EVENT_POPUPMENU_END, pMenu ) );
 
     aHighlightChangedTimer.Stop();
 
@@ -4011,7 +3976,7 @@ void MenuFloatingWindow::ImplCursorUpDown( BOOL bUp, BOOL bHomeEnd )
         }
         else
         {
-            n = -1;
+            n = (USHORT)-1;
             nLoop = n+1;
         }
     }
@@ -4720,7 +4685,7 @@ BOOL MenuBarWindow::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu 
             USHORT nLoop = n;
 
             if( nCode == KEY_HOME )
-                { n = -1; nLoop = n+1; }
+                { n = (USHORT)-1; nLoop = n+1; }
             if( nCode == KEY_END )
                 { n = pMenu->GetItemCount(); nLoop = n-1; }
 
