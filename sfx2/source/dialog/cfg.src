@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 21:57:50 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,7 @@
     Text[ russian ] = "Κΰςεγξπθÿ";  \
     Text[ polish ] = "Obszar";  \
     Text[ japanese ] = "”ΝΝ(~C)";  \
-    Text[ chinese_traditional ] = "­S³ς(~C)";   \
+    Text[ chinese_traditional ] = "½d³ς(~C)";   \
     Text[ arabic ] = "ΗαέΖΙ";   \
     Text[ greek ] = "~Κατηγορία";   \
     Text[ korean ] = "ΏµΏª(~C)";    \
@@ -314,7 +314,7 @@ TabPage TP_CONFIG_MENU
         Text[ portuguese ] = "Entradas de menu";
         Text[ russian ] = "Οσνκςϋ μενώ";
         Text[ greek ] = "Menu entries";
-        Text[ dutch ] = "Menu entries";
+        Text[ dutch ] = "Menu-items";
         Text[ french ] = "Entrιes de menu";
         Text[ spanish ] = "Entradas de menϊ";
         Text[ finnish ] = "Menu entries";
@@ -542,7 +542,7 @@ TabPage TP_CONFIG_ACCEL
         Text[ portuguese ] = "Teclas de atalho";
         Text[ russian ] = "Κξμαθνΰφθθ κλΰβθψ";
         Text[ greek ] = "Keyboard shortcuts";
-        Text[ dutch ] = "Keyboard shortcuts";
+        Text[ dutch ] = "Toetsencombinaties";
         Text[ french ] = "Raccourcis clavier";
         Text[ spanish ] = "Combinaciσn de teclas";
         Text[ finnish ] = "Keyboard shortcuts";
@@ -916,11 +916,11 @@ TabDialog DLG_CONFIG
             };
         };
     };
-    Text[ chinese_simplified ] = "ΕδΦΓ";
+    Text[ chinese_simplified ] = "µχΥϋ";
     Text[ russian ] = "Κξντθγσπΰφθθ";
     Text[ polish ] = "Konfiguracja";
     Text[ japanese ] = "έ’θ";
-    Text[ chinese_traditional ] = "°tΈm";
+    Text[ chinese_traditional ] = "½ΥΎγ";
     Text[ arabic ] = "ΚΞΥνΥ";
     Text[ greek ] = "Προσαρμογή";
     Text[ korean ] = "±ΈΌΊ";
@@ -1108,7 +1108,7 @@ String STR_CUT
     Text [ dutch ] = "Knippen" ;
     Text [ spanish ] = "Cortar" ;
     Text [ english_us ] = "Cut" ;
-    Text[ chinese_simplified ] = "Ότ³ύ";
+    Text[ chinese_simplified ] = "ΌτΗΠ";
     Text[ russian ] = "Βϋπεηΰςό";
     Text[ polish ] = "Wytnij";
     Text[ japanese ] = "Ψ‚θζ‚θ";
@@ -1372,7 +1372,7 @@ QueryBox QBX_MNUCFG_POPUP_FUNCTIONS
     Message[ japanese ] = "‚ά‚ΎΞί―Μί±―Μί‚Μ‚έ‚Ι„‚θ“–‚Δ‚η‚κ‚ι‹@”\\‚Μ€–Ϊ‚ª‚ ‚θ‚ά‚·B\n\n‚±‚Μέ’θ‚π“K—p‚µ‚Δ‚ΰ‚Ά‚Ά‚Ε‚·‚©?";
     Message[ chinese_traditional ] = "ΑΩ¦s¦b¤@¨Η¥u―ΰΕύµΉ§ΦΕγ¥\\―ΰªν°υ¦ζªΊ¶µ¥Ψ΅C\n±zΑΩ¬O­n±µ¨ό³o­Σ°tΈm΅H";
     Message[ arabic ] = "γΗÒΗαΚ εδΗαί ΕΟΞΗαΗΚ ΘεΗ γεΗγ αΗ νγίδ ΚΪννδεΗ ΕαΗ αήζΗΖγ ΗδΘΛΗήνΙ έήΨ.\n\nεα ΚΡνΟ ήΘζα ΗαΚίζνδ Ϊαμ ΗαΡΫγ γδ ΠαίΏ";
-    Message[ greek ] = "Υπάρχουν ακόμη εγγραφές με λειτουργίες των οποίων μπορεί να γίνει μόνο αντιστοίχιση με αναδυόμενα παράθυρα.\n\nΘέλετε να αποδεχτείτε τη δι";
+    Message[ greek ] = "Υπάρχουν ακόμη εγγραφές με λειτουργίες των οποίων μπορεί να γίνει μόνο αντιστοίχιση με αναδυόμενα παράθυρα.\n\nΘέλετε να αποδεχτείτε τη δια ";
     Message[ korean ] = "ΖΛΎχΏ΅ΈΈ ΗΨ΄ηµΙ Όφ ΐΦ΄Β ±β΄Ιΐ» °΅Αψ ΗΧΈρµιΐΜ ΎΖΑχ ΐΦ½ΐ΄Ο΄Ω.\n\n±Χ·΅µµ ΐΜ ±ΈΌΊΐ» ΐϋΏλΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Message[ turkish ] = "Yalnύzca aηύlan mφnόlere atanabilen iώlevleri olan giriώler mevcut.\n\nBu konfigόrasyon ile devam etmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
@@ -1587,6 +1587,7 @@ String STR_MENU
     Text[ finnish ] = "Valikko";
 };
  // ********************************************************************** EOF
+
 
 
 
