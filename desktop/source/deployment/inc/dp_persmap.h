@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_persmap.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:06:02 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 08:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,11 @@
 #define INCLUDED_DP_PERSMAP_H
 
 #include "rtl/ustring.hxx"
+#ifdef SYSTEM_DB3
+#include <db3/db_cxx.h>
+#else
 #include "berkeleydb/db_cxx.h"
+#endif
 #include <hash_map>
 
 
