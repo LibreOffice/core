@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DispatchStatement.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-22 11:35:45 $
+ *  last change: $Author: mba $ $Date: 2002-08-29 13:36:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,15 +70,47 @@
  module com {  module sun {  module star {  module frame {
 
 //=============================================================================
-/**
-        @deprecated draft
+
+// DocMerge from xml: struct com::sun::star::frame::DispatchStatement
+/** represents a dispatch statement from a recorded macro
  */
-struct DispatchDescriptor
+struct DispatchStatement
 {
-        string DispatchCommand;
+    // DocMerge from xml: field com::sun::star::frame::DispatchStatement::aCommand
+    /** Specifies the dispatch command
+     */
+    string aCommand;
 
-        sequence < com::sun::star::beans::PropertyValue > Arguments;
+    //-------------------------------------------------------------------------
 
+
+        // DocMerge from xml: field com::sun::star::frame::DispatchStatement::aTarget
+        /**
+         */
+        string aTarget;
+
+        //-------------------------------------------------------------------------
+
+        // DocMerge from xml: field com::sun::star::frame::DispatchStatement::aArgs
+        /** Specifies the dispatch command arguments
+         */
+        sequence < com::sun::star::beans::PropertyValue > aArgs;
+
+        //-------------------------------------------------------------------------
+
+        // DocMerge from xml: field com::sun::star::frame::DispatchStatement::nFlags
+        /**
+         */
+        long nFlags;
+
+        //-------------------------------------------------------------------------
+
+        // DocMerge from xml: field com::sun::star::frame::DispatchStatement::bIsComment
+        /** specifies if this statement shoudl be recorded as commented out or not
+         */
+        boolean bIsComment;
+
+        //-------------------------------------------------------------------------
 };
 
 //=============================================================================

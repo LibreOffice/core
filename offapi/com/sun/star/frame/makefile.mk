@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: as $ $Date: 2002-04-22 12:49:51 $
+#   last change: $Author: mba $ $Date: 2002-08-29 13:36:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,7 @@ IDLFILES=\
     DispatchDescriptor.idl\
     DispatchRecorder.idl\
     DispatchRecorderSupplier.idl\
+    DispatchStatement.idl\
         DocumentTemplates.idl\
     FeatureStateEvent.idl\
     Frame.idl\
