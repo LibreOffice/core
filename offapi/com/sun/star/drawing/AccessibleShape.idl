@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:08:59 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,8 @@ module com {  module sun {  module star {  module drawing {
     this service or one of the 'derived' services
     <type>AccessibleGraphicShape</type> or <type>AccessibleOLEShape</type>.
     See the section Children in the description of the
-    <type>XAccessibleContext</type> interface support for more details.</p>
+    <type scope="::com::sun::star::accessibility"
+    >XAccessibleContext</type> interface support for more details.</p>
 
     <p>There are two services that extend this one:  the
     <type>AccessibleGraphicShape</type> and the
@@ -93,8 +94,9 @@ module com {  module sun {  module star {  module drawing {
     See there for details.</p>
 
     <p>A shape object is either fully or partially visible on the screen or
-    has set the state DEFUNC to indicate that it is no longer actively
-    supported by its parent.</p>
+    has set the <const scope="::com::sun::star::accessibility"
+    >AccessibleStateType::DEFUNC</const> state to indicate that it is no longer
+    actively supported by its parent.</p>
 
     <p>Each shape object that has not set the DEFUNC state has a valid
     parent.  That is either the containing draw page or a group shape or a
@@ -105,7 +107,8 @@ module com {  module sun {  module star {  module drawing {
 service AccessibleShape
 {
     /** Base interface for being accessible.  It gives access to the
-        <type>XAccessibleContext</type> interface.
+        <type scope="::com::sun::star::accessibility">XAccessibleContext</type>
+        interface.
     */
     interface ::com::sun::star::accessibility::XAccessible;
 
@@ -125,7 +128,8 @@ service AccessibleShape
             shapes or accessible text paragraphs.  Only group shapes, 3D scene
             shapes, and OLE shapes may contain other shapes as children.
             Some of the shapes may have text paragraphs as (additional)
-            children.  See <type>(Yet to be written)</type> for details of
+            children.  See <type scope="::com::sun::star::text"
+            >AccessibleParagraphView</type> for details of
             how this text is represented.</li>
         <li>Parent: The parent is either the document view as represented by
             <type>AccessibleDrawDocumentView</type> or a group shape, 3D
@@ -148,7 +152,8 @@ service AccessibleShape
                 scope="com::sun::star::accessibility"
                 >AccessibleStateType::DEFUNC</const> state set has already
                 been disposed and subsequent calls to this object result in
-                <type>DisposedException</type> exceptions.</p>
+                <type scope="::com::sun::star::lang">DisposedException</type>
+                exceptions.</p>
                 <p>If this state is set then no other of the states below is
                 set.  This  is also true for the states that are otherwise
                 allways set (which  makes 'allways' more of a sort of
@@ -165,8 +170,9 @@ service AccessibleShape
                 >AccessibleStateType::FOCUSED</const> is set according to
                 whether the shape currently has the focus.</li>
             <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::MULTILINE</const> is set if a shape
-                supports the <type>XAccessibleText</type> interface.</li>
+                >AccessibleStateType::MULTI_LINE</const> is set if a shape
+                supports the <type scope="::com::sun::star::accessibility"
+                >XAccessibleText</type> interface.</li>
             <li><const scope="com::sun::star::accessibility"
                 >AccessibleStateType::OPAQUE</const> is set for certain shapes
                 with certain attributes like for a filled rectangle.</li>
@@ -191,17 +197,17 @@ service AccessibleShape
 
     /** Give access to the graphical representation of a shape.
 
-        <p>The bounding box returned by the <member
+        <p>The bounding box returned by the <method
         scope="::com::sun::star::accessibility"
-        >XAccessibleComponent::getBounds</member> function returns the
+        >XAccessibleComponent::getBounds</method> function returns the
         shape's bounding box clipped at its parent's bounding box</p>
 
         <p>An accessible shape tries as best as it can to return proper
         values for calls to the
-        <member scope="::com::sun::star::accessibility"
-        >XAccessibleExtendedComponent::getForeground</member> and
-        <member  scope="::com::sun::star::accessibility"
-        >XAccessibleExtendedComponent::getBackground</member> functions.
+        <method scope="::com::sun::star::accessibility"
+        >XAccessibleExtendedComponent::getForeground</method> and
+        <method scope="::com::sun::star::accessibility"
+        >XAccessibleExtendedComponent::getBackground</method> functions.
         If the shape is painted with a uniform and non-transparent color
         then the returned colors may differ from the ones visible on the
         screen.</p>
@@ -212,13 +218,13 @@ service AccessibleShape
 
     /** Give extended access to the graphical representation of a shape.
 
-        <p>The functions <member
+        <p>The functions <method
         scope="::com::sun::star::accessibility"
-        >XAccessibleExtendedComponent::getFont</member>,
-        <member scope="::com::sun::star::accessibility"
-        >XAccessibleExtendedComponent::getTitledBorderText</member>, and
-        <member scope="::com::sun::star::accessibility"
-        >XAccessibleExtendedComponent::getToolTipText</member> are not
+        >XAccessibleExtendedComponent::getFont</method>,
+        <method scope="::com::sun::star::accessibility"
+        >XAccessibleExtendedComponent::getTitledBorderText</method>, and
+        <method scope="::com::sun::star::accessibility"
+        >XAccessibleExtendedComponent::getToolTipText</method> are not
         supported and return empty references respectively empty
         strings.</p>
 
