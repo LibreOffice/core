@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-04 17:48:30 $
+ *  last change: $Author: dvo $ $Date: 2002-02-06 12:33:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -695,7 +695,15 @@ const SwPropNameTab aPropNameTab = {
 /* 0613 CELL_NAME */                    {MAP_CHAR_LEN("CellName")},
 /* 0614 PARA_USER_DEFINED_ATTRIBUTES */ {MAP_CHAR_LEN("ParaUserDefinedAttributes")},
 /* 0615 UNO_NAME_MERGE_LAST_PARA */     {MAP_CHAR_LEN("MergeLastPara")},
-/* 0616 UNO_NAME_WRITING_MODE */        {MAP_CHAR_LEN("WritingMode")}
+/* 0616 UNO_NAME_WRITING_MODE */        {MAP_CHAR_LEN("WritingMode")},
+/* 0617 UNO_NAME_GRID_COLOR */          {MAP_CHAR_LEN("GridColor")},
+/* 0618 UNO_NAME_GRID_LINES */          {MAP_CHAR_LEN("GridLines")},
+/* 0619 UNO_NAME_GRID_BASE_HEIGHT */    {MAP_CHAR_LEN("GridBaseHeight")},
+/* 0620 UNO_NAME_GRID_RUBY_HEIGHT */    {MAP_CHAR_LEN("GridRubyHeight")},
+/* 0621 UNO_NAME_GRID_MODE */           {MAP_CHAR_LEN("GridMode")},
+/* 0622 UNO_NAME_GRID_RUBY_BELOW */     {MAP_CHAR_LEN("RubyBelow")},
+/* 0623 UNO_NAME_GRID_PRINT */          {MAP_CHAR_LEN("GridPrint")},
+/* 0624 UNO_NAME_GRID_DISPLAY */        {MAP_CHAR_LEN("GridDisplay")}
 };
 
 #ifndef PRODUCT

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-31 14:06:42 $
+ *  last change: $Author: dvo $ $Date: 2002-02-06 12:33:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
 #include <com/sun/star/container/XIndexContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_TEXTGRIDMODE_HPP_
+#include <com/sun/star/text/TextGridMode.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
 #include <com/sun/star/awt/Size.hpp>
@@ -2386,14 +2389,138 @@ BOOL SwTextGridItem::QueryValue( com::sun::star::uno::Any& rVal,
                                  BYTE nMemberId ) const
 {
     BOOL bRet = TRUE;
+
+    switch( nMemberId & ~CONVERT_TWIPS )
+    {
+        case MID_GRID_COLOR:
+            rVal <<= GetColor().GetColor();
+            break;
+        case MID_GRID_LINES:
+            rVal <<= GetLines();
+            break;
+        case MID_GRID_RUBY_BELOW:
+            rVal.setValue( &bRubyTextBelow, ::getBooleanCppuType() );
+            break;
+        case MID_GRID_PRINT:
+            rVal.setValue( &bPrintGrid, ::getBooleanCppuType() );
+            break;
+        case MID_GRID_DISPLAY:
+            rVal.setValue( &bDisplayGrid, ::getBooleanCppuType() );
+            break;
+        case MID_GRID_BASEHEIGHT:
+            DBG_ASSERT( (nMemberId & CONVERT_TWIPS) != 0,
+                        "This value needs TWIPS-MM100 conversion" );
+            rVal <<= (sal_Int32) TWIP_TO_MM100(nBaseHeight);
+            break;
+        case MID_GRID_RUBYHEIGHT:
+            DBG_ASSERT( (nMemberId & CONVERT_TWIPS) != 0,
+                        "This value needs TWIPS-MM100 conversion" );
+            rVal <<= (sal_Int32)TWIP_TO_MM100(nRubyHeight);
+            break;
+        case MID_GRID_TYPE:
+            switch( GetGridType() )
+            {
+                case GRID_NONE:
+                    rVal <<= TextGridMode::NONE;
+                    break;
+                case GRID_LINES_ONLY:
+                    rVal <<= TextGridMode::LINES;
+                    break;
+                case GRID_LINES_CHARS:
+                    rVal <<= TextGridMode::LINES_AND_CHARS;
+                    break;
+                default:
+                    DBG_ERROR("unknown SwTextGrid value");
+                    bRet = FALSE;
+                    break;
+            }
+            break;
+        default:
+            DBG_ERROR("Unknown SwTextGridItem member");
+            bRet = FALSE;
+            break;
+    }
+
     return bRet;
 }
 
 BOOL SwTextGridItem::PutValue( const com::sun::star::uno::Any& rVal,
                                BYTE nMemberId )
 {
-    nMemberId &= ~CONVERT_TWIPS;
-    sal_Bool bRet = sal_True;
+    BOOL bRet = TRUE;
+    switch( nMemberId & ~CONVERT_TWIPS )
+    {
+        case MID_GRID_COLOR:
+        {
+            sal_Int32 nTmp;
+            bRet = (rVal >>= nTmp);
+            if( bRet )
+                SetColor( Color(nTmp) );
+        }
+        break;
+        case MID_GRID_LINES:
+        {
+            sal_Int16 nTmp;
+            bRet = (rVal >>= nTmp);
+            if( bRet && (nTmp >= 0) )
+                SetLines( (sal_uInt16)nTmp );
+            else
+                bRet = FALSE;
+        }
+        break;
+        case MID_GRID_RUBY_BELOW:
+            SetRubyTextBelow( *(sal_Bool*)rVal.getValue() );
+            break;
+        case MID_GRID_PRINT:
+            SetPrintGrid( *(sal_Bool*)rVal.getValue() );
+            break;
+        case MID_GRID_DISPLAY:
+            SetDisplayGrid( *(sal_Bool*)rVal.getValue() );
+            break;
+        case MID_GRID_BASEHEIGHT:
+        case MID_GRID_RUBYHEIGHT:
+        {
+            DBG_ASSERT( (nMemberId & CONVERT_TWIPS) != 0,
+                        "This value needs TWIPS-MM100 conversion" );
+            sal_Int32 nTmp;
+            bRet = (rVal >>= nTmp);
+            nTmp = MM100_TO_TWIP( nTmp );
+            if( bRet && (nTmp >= 0) && ( nTmp <= USHRT_MAX) )
+                if( (nMemberId & ~CONVERT_TWIPS) == MID_GRID_BASEHEIGHT )
+                    SetBaseHeight( (USHORT)nTmp );
+                else
+                    SetRubyHeight( (USHORT)nTmp );
+            else
+                bRet = FALSE;
+        }
+        break;
+        case MID_GRID_TYPE:
+            sal_Int16 nTmp;
+            bRet = (rVal >>= nTmp);
+            if( bRet )
+            {
+                switch( nTmp )
+                {
+                    case TextGridMode::NONE:
+                        SetGridType( GRID_NONE );
+                        break;
+                    case TextGridMode::LINES:
+                        SetGridType( GRID_LINES_ONLY );
+                        break;
+                    case TextGridMode::LINES_AND_CHARS:
+                        SetGridType( GRID_LINES_CHARS );
+                        break;
+                    default:
+                        bRet = FALSE;
+                        break;
+                }
+            }
+            break;
+        default:
+            DBG_ERROR("Unknown SwTextGridItem member");
+            bRet = FALSE;
+    }
+
     return bRet;
 }
 

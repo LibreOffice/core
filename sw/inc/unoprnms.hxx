@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-04 17:14:41 $
+ *  last change: $Author: dvo $ $Date: 2002-02-06 12:32:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -694,8 +694,16 @@ enum SwPropNameIds
 /* 0614 */  UNO_NAME_PARA_USER_DEFINED_ATTRIBUTES,
 /* 0615 */  UNO_NAME_MERGE_LAST_PARA,
 /* 0616 */  UNO_NAME_WRITING_MODE,
+/* 0617 */  UNO_NAME_GRID_COLOR,
+/* 0618 */  UNO_NAME_GRID_LINES,
+/* 0619 */  UNO_NAME_GRID_BASE_HEIGHT,
+/* 0620 */  UNO_NAME_GRID_RUBY_HEIGHT,
+/* 0621 */  UNO_NAME_GRID_MODE,
+/* 0622 */  UNO_NAME_GRID_RUBY_BELOW,
+/* 0623 */  UNO_NAME_GRID_PRINT,
+/* 0624 */  UNO_NAME_GRID_DISPLAY,
 
-/* 0617 */  SW_PROPNAME_END
+/* 0625 */  SW_PROPNAME_END
 };
 
 
