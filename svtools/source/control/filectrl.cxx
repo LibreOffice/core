@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filectrl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:57 $
+ *  last change: $Author: mt $ $Date: 2001-08-14 11:26:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,18 @@
 #include <filectrl.hrc>
 
 #pragma hdrstop
+
+#include <vcl/unohelp.hxx>
+
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#endif
+
+using namespace ::com::sun::star;
 
 // =======================================================================
 
@@ -231,37 +243,22 @@ void FileControl::Resize()
 IMPL_LINK( FileControl, ButtonHdl, PushButton*, EMPTYARG )
 {
     XubString aNewText;
-    mpVclDlg = GetpApp()->CreateFileDialog( this, mbOpenDlg ? WB_OPEN : WB_SAVEAS );
 
-    if ( mpVclDlg )
+    uno::Reference< lang::XMultiServiceFactory > xMSF = vcl::unohelper::GetMultiServiceFactory();
+    uno::Reference < ui::dialogs::XFilePicker > xFilePicker( xMSF->createInstance( String(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ) ) ), uno::UNO_QUERY );
+    if ( xFilePicker.is() && xFilePicker->execute() )
     {
-        mpVclDlg->SetPath( maEdit.GetText() );
+        uno::Sequence < rtl::OUString > aPathSeq = xFilePicker->getFiles();
 
-        maDialogCreatedHdl.Call( this );
-
-        if ( mpVclDlg->Execute()  )
-            aNewText = mpVclDlg->GetPath();
-        DELETEZ( mpVclDlg );
-    }
-    else
-    {
-        mpFDlg = new FileDialog( this, mbOpenDlg ? WB_OPEN : WB_SAVEAS );
-        mpFDlg->SetPath( maEdit.GetText() );
-
-        maDialogCreatedHdl.Call( this );
-
-        if ( mpFDlg->Execute()  )
-            aNewText = mpFDlg->GetPath();
-        DELETEZ( mpFDlg );
-    }
-
-    if ( aNewText.Len() )
-    {
-        INetURLObject aObj( aNewText );
-        if ( aObj.GetProtocol() == INET_PROT_FILE )
-            aNewText = aObj.PathToFileName();
-        SetText( aNewText );
-        maEdit.GetModifyHdl().Call( &maEdit );
+        if ( aPathSeq.getLength() )
+        {
+            aNewText = aPathSeq[0];
+            INetURLObject aObj( aNewText );
+            if ( aObj.GetProtocol() == INET_PROT_FILE )
+                aNewText = aObj.PathToFileName();
+            SetText( aNewText );
+            maEdit.GetModifyHdl().Call( &maEdit );
+        }
     }
 
     return 0;
