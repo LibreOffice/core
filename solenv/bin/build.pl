@@ -1,13 +1,13 @@
 :
-eval 'exec perl -wS $0 ${1+"$@"}'
+eval 'exec perl -S $0 ${1+"$@"}'
     if 0;
 #*************************************************************************
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.54 $
+#   $Revision: 1.55 $
 #
-#   last change: $Author: vg $ $Date: 2002-05-06 16:24:33 $
+#   last change: $Author: hr $ $Date: 2002-05-07 16:25:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,17 +67,15 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 # build - build entire project
 #
 
-use Cwd;
 use Config;
-$^W = 0;
 use POSIX;
-$^W = 1;
+use Cwd;
 
 #### script id #####
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.54 $ ';
+$id_str = ' $Revision: 1.55 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
