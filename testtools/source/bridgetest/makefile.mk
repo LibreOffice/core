@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-20 09:16:09 $
+#   last change: $Author: obo $ $Date: 2004-11-15 13:05:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -223,16 +223,14 @@ $(DLLDEST)$/uno_services.rdb .ERRREMOVE: $(DLLDEST)$/uno_types.rdb \
         $(DLLDEST)$/bridgetest.uno$(DLLPOST) $(DLLDEST)$/cppobj.uno$(DLLPOST) \
         $(MISC)$/$(TARGET)$/bootstrap.rdb
     - $(MKDIR) $(@:d)
-    $(REGCOMP) -register -br $(DLLDEST)$/uno_types.rdb -r $@ \
+    cd $(DLLDEST) && $(REGCOMP) -register -br uno_types.rdb -r uno_services.rdb\
         -c acceptor.uno$(DLLPOST) \
         -c bridgefac.uno$(DLLPOST) \
         -c connector.uno$(DLLPOST) \
         -c remotebridge.uno$(DLLPOST) \
         -c uuresolver.uno$(DLLPOST) \
-        -c \
-    $(subst,$/,/ $(FILEURLPREFIX)$(PWD)$/$(DLLDEST)$/bridgetest.uno$(DLLPOST)) \
-        -c \
-        $(subst,$/,/ $(FILEURLPREFIX)$(PWD)$/$(DLLDEST)$/cppobj.uno$(DLLPOST))
+        -c bridgetest.uno$(DLLPOST) \
+        -c cppobj.uno$(DLLPOST) 
 .IF "$(SOLAR_JAVA)" != ""
     $(REGCOMP) -register -br $(DLLDEST)$/uno_types.rdb -r $@ \
         -c javaloader.uno$(DLLPOST) -c javavm.uno$(DLLPOST)
