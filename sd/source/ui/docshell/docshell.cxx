@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $ $Date: 2002-06-07 08:28:46 $
+ *  last change: $Author: thb $ $Date: 2002-07-19 12:04:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,6 +510,10 @@ void SdDrawDocShell::ApplySlotFilter() const
 void SdDrawDocShell::SetModified( BOOL bSet /* = TRUE */ )
 {
     SfxInPlaceObject::SetModified( bSet );
+
+    // #100237# change model state, too
+    if( pDoc )
+        pDoc->NbcSetChanged( bSet );
 
     Broadcast( SfxSimpleHint( SFX_HINT_DOCCHANGED ) );
 }
