@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xerecord.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:09 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:43:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,10 +102,6 @@ public:
     too complex or just impossible until the record is really written). */
 class XclExpRecord : public XclExpRecordBase
 {
-private:
-    sal_uInt32                  mnRecSize;      /// The predicted record size.
-    sal_uInt16                  mnRecId;        /// The record ID.
-
 public:
     /** @param nRecId  The record ID of this record. May be set later with SetRecId().
         @param nRecSize  The predicted record size. May be set later with SetRecSize(). */
@@ -134,6 +130,10 @@ private:
     /** Writes the body of the record (without record header).
         @descr  Usually this method will be overwritten by derived classes. */
     virtual void                WriteBody( XclExpStream& rStrm );
+
+private:
+    sal_uInt32                  mnRecSize;      /// The predicted record size.
+    sal_uInt16                  mnRecId;        /// The record ID.
 };
 
 
@@ -156,13 +156,10 @@ inline XclExpEmptyRecord::XclExpEmptyRecord( sal_uInt16 nRecId ) :
 // ============================================================================
 
 /** A record with a single value of type Type.
-    @descr  Requires operator<<( SvStream&, const Type& ). */
+    @descr  Requires operator<<( XclExpStream&, const Type& ). */
 template< typename Type >
 class XclExpValueRecord : public XclExpRecord
 {
-private:
-    Type                        maValue;        /// The record data.
-
 public:
     /** @param nRecId  The record ID of this record.
         @param rValue  The value for the record body.
@@ -180,6 +177,9 @@ public:
 private:
     /** Writes the body of the record. */
     virtual void                WriteBody( XclExpStream& rStrm );
+
+private:
+    Type                        maValue;        /// The record data.
 };
 
 template< typename Type >
@@ -214,9 +214,6 @@ typedef XclExpValueRecord< double >         XclExpDoubleRecord;
     @descr  The value is stored as 16-bit value: 0x0000 = FALSE, 0x0001 = TRUE. */
 class XclExpBoolRecord : public XclExpRecord
 {
-private:
-    bool                        mbValue;        /// The record data.
-
 public:
     /** @param nRecId  The record ID of this record.
         @param nValue  The value for the record body. */
@@ -231,6 +228,9 @@ public:
 private:
     /** Writes the body of the record. */
     virtual void                WriteBody( XclExpStream& rStrm );
+
+private:
+    bool                        mbValue;        /// The record data.
 };
 
 
@@ -239,12 +239,9 @@ private:
 /** Record which exports a memory data array. */
 class XclExpDummyRecord : public XclExpRecord
 {
-private:
-    const void*                 mpData;         /// The record data.
-
 public:
     /** @param nRecId  The record ID of this record.
-        @param nRecData  Pointer to the data array representing the record body.
+        @param pRecData  Pointer to the data array representing the record body.
         @param nRecSize  Size of the data array. */
     explicit                    XclExpDummyRecord(
                                     sal_uInt16 nRecId, const void* pRecData, sal_uInt32 nRecSize );
@@ -255,6 +252,9 @@ public:
 private:
     /** Writes the body of the record. */
     virtual void                WriteBody( XclExpStream& rStrm );
+
+private:
+    const void*                 mpData;         /// The record data.
 };
 
 
@@ -266,14 +266,14 @@ private:
     This prevents that the list takes ownership of the passed record. */
 class XclExpRefRecord : public XclExpRecordBase
 {
-protected:
-    XclExpRecordBase&           mrRec;          /// Reference to the record.
-
 public:
     inline explicit             XclExpRefRecord( XclExpRecordBase& rRec ) : mrRec( rRec ) {}
 
     /** Writes the entire record. */
     virtual void                Save( XclExpStream& rStrm );
+
+protected:
+    XclExpRecordBase&           mrRec;          /// Reference to the record.
 };
 
 
