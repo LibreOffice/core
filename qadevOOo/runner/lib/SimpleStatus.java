@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SimpleStatus.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-11-18 16:15:38 $
+ *  last change:$Date: 2004-11-02 11:37:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,46 @@ package lib;
  * Status behaviour: its state, reason and log are defined when creating
  * the SimpleSTatus instance.
  */
-class SimpleStatus extends Status {
+class SimpleStatus {
+    /* Run states. */
+
+    /**
+     * The constatnt represents PASSED runtime state.
+     */
+    public final static int PASSED = 0;
+
+    /**
+     * The constant represents EXCEPTION runtime state.
+     */
+    public final static int EXCEPTION = 3;
+
+    /**
+     * The constant represents EXCLUDED runtime state.
+     */
+    public final static int EXCLUDED = 2;
+
+    /**
+     * The constant represents SKIPPED runtime state.
+     */
+    public final static int SKIPPED = 1;
+
+    /**
+     * This is a private indicator for a user defined runtime state
+     */
+    private final static int USER_DEFINED = 4;
+
+    /* Test states */
+
+    /**
+     * The constant represents FAILED state.
+     */
+    public final static boolean FAILED = false;
+
+    /**
+     * The constant represents OK state.
+     */
+    public final static boolean OK = true;
+
     /**
      * The field is holding state of the status.
      */
@@ -78,18 +117,44 @@ class SimpleStatus extends Status {
     protected final int runState;
 
     /**
-     * The constructor initialize state and reson field.
+     * This is the run state: either SKIPPED, PASSED, etc.
+     * or user defined. Deriving classes can overwrite it for own run states.
+     */
+    protected String runStateString;
+
+    /**
+     * The constructor initialize state and reason field.
      */
     protected SimpleStatus( int runState, boolean state ) {
         this.state = state;
         this.runState = runState;
+        if ( runState == PASSED ) {
+            runStateString = "PASSED";
+        } else if ( runState == EXCLUDED ) {
+            runStateString = "EXCLUDED";
+        } else if ( runState == SKIPPED ) {
+            runStateString = "SKIPPED";
+        } else if ( runState == EXCEPTION ) {
+            runStateString = "EXCEPTION";
+        } else {
+            runStateString = "UNKNOWN";
+        }
+    }
+
+    /**
+     * The constructor initialize state and reson field.
+     */
+    protected SimpleStatus(String runStateString, boolean state) {
+        this.state = state;
+        this.runState = USER_DEFINED;
+        this.runStateString = runStateString;
     }
 
     /**
      * getState implementation. Just returns the state field value.
      */
-    public int getState() {
-        return (state ? OK : FAILED);
+    public boolean getState() {
+        return state;
     }
 
     /**
@@ -103,33 +168,16 @@ class SimpleStatus extends Status {
      * getReason implementation. Just returns the reason field value.
      */
     public String getRunStateString() {
-        int runState = getRunState();
-
-        if ( runState == PASSED ) {
-            return "PASSED";
-        } else if ( runState == EXCLUDED ) {
-            return "EXCLUDED";
-        } else if ( runState == SKIPPED ) {
-            return "SKIPPED";
-        } else {
-            return "UNKNOWN";
-        }
+        return runStateString;
     }
 
     /**
-     * Compares this Status with obj.
-     *
-     * @return <tt>true</tt> if obj is a SimpleStatus instance and it has
-     * the same state and runstate, <tt>false</tt> otherwise.
+     * Get the ressult: passed or failed.
      */
-/*    public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof SimpleStatus)) {
-            return false;
-        }
+    public String getStateString() {
+        if (state)
+            return "OK";
+        return "FAILED";
 
-        SimpleStatus other = (SimpleStatus)obj;
-
-        return this.getState() == other.getState()
-                && this.getRunState() == other.getRunState();
-    } */
+    }
 }

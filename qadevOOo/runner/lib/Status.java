@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Status.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-11-18 16:15:48 $
+ *  last change:$Date: 2004-11-02 11:38:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,56 +79,25 @@ import java.io.PrintWriter;
  *   - other variants are not formalized now and can be represented by
  *     Status.failed() method. They always have a FAILED state.
  */
-public abstract class Status {
-    /* Run states. */
+public class Status extends SimpleStatus {
 
     /**
-     * The constatnt represents PASSED runtime state.
+     * Construct a status: use runState and state
+     * @param runState: either PASSED, SKIPPED, etc.
+     * @param state: OK or FAILED.
      */
-    public final static int PASSED = 0;
+    public Status(int runState, boolean state ) {
+        super(runState, state);
+    }
 
     /**
-     * The constant represents EXCEPTION runtime state.
+     * Construct a status: use own message and state.
+     * @parame messaeg An own message for the status.
+     * @param state: OK or FAILED.
      */
-    public final static int EXCEPTION = 4;
-
-    /**
-     * The constant represents EXCLUDED runtime state.
-     */
-    public final static int EXCLUDED = 5;
-
-    /**
-     * The constant represents SKIPPED runtime state.
-     */
-    public final static int SKIPPED = 2;
-
-    /* Test states */
-
-    /**
-     * The constant represents FAILED state.
-     */
-    public final static int FAILED = 1;
-
-    /**
-     * The constant represents OK state.
-     */
-    public final static int OK = 3;
-
-    /**
-     * Returns the test state of the Status.
-     */
-    public abstract int getState();
-
-    /**
-     * Returns the run state of the Status.
-     */
-    public abstract int getRunState();
-
-    /**
-     * Returns the string describing run state of the Status. For example,
-     * "PASSED", "SKIPPED", "File file.txt is not found".
-     */
-    public abstract String getRunStateString();
+    public Status(String message, boolean state) {
+        super( message, state );
+    }
 
     /**
      * This is a factory method for creating a Status representing normal
@@ -138,7 +107,7 @@ public abstract class Status {
      * otherwise).
      */
     public static Status passed( boolean state ) {
-        return new SimpleStatus(PASSED, state );
+        return new Status(PASSED, state );
     }
 
     /**
@@ -159,7 +128,7 @@ public abstract class Status {
      * otherwise).
      */
     public static Status skipped( boolean state ) {
-        return new SimpleStatus( SKIPPED, state );
+        return new Status( SKIPPED, state );
     }
 
     /**
@@ -167,7 +136,7 @@ public abstract class Status {
      * result of the activity was excluded. It alwas has FAILED state.
      */
     public static Status excluded() {
-        return new SimpleStatus( EXCLUDED, false );
+        return new Status( EXCLUDED, false );
     }
 
     /**
@@ -177,27 +146,7 @@ public abstract class Status {
      * @param reason describes why the activity failed
      */
     public static Status failed(final String reason) {
-        return new Status() {
-            public int getState() {
-                return FAILED;
-            }
-
-            public int getRunState() {
-                return SKIPPED;
-            }
-
-            public String getRunStateString() {
-                return reason;
-            }
-
-/*            public boolean equals(Object obj) {
-                if (obj == null || this.getClass() != obj.getClass()) {
-                    return false;
-                }
-                return this.getRunStateString().equals(
-                        ((Status)obj).getRunStateString());
-            } */
-        };
+        return new Status(reason, FAILED);
     }
 
     /**
@@ -207,17 +156,7 @@ public abstract class Status {
      * "FAILED.The getLabel works wrong", "PASSED.OK".
      */
     public String toString() {
-        String str = getRunStateString() + ".";
-
-        // Getting state of the status and converting it to string.
-        int state = getState();
-        if (state == OK) {
-            str += "OK";
-        } else {
-            // Although, normally, there should be only FAILED state,
-            // all other marked as failed too.
-            str += "FAILED";
-        }
+        String str = getRunStateString() + "." + getStateString();;
 
         return str;
     }
@@ -254,14 +193,14 @@ public abstract class Status {
      * Checks whether the status state is failed.
      */
     public boolean isFailed() {
-        return getState() == FAILED;
+        return !getState();
     }
 
     /**
      * Checks whether the status state is ok.
      */
     public boolean isOK() {
-        return getState() == OK;
+        return getState();
     }
 
     public String getDescription () {
