@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: aw $ $Date: 2001-11-20 11:25:33 $
+ *  last change: $Author: aw $ $Date: 2002-02-04 13:57:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1341,7 +1341,7 @@ void FuText::ReceiveRequest(SfxRequest& rReq)
 
     SdrViewEvent aVEvt;
 
-    if (nSlotId == SID_TEXTEDIT || pViewShell->GetFrameView()->IsQuickEdit())
+    if (nSlotId == SID_TEXTEDIT || pViewShell->GetFrameView()->IsQuickEdit() || /*#95971#*/ SID_ATTR_CHAR == nSlotId)
     {
         MouseEvent aMEvt(pWindow->GetPointerPosPixel());
 
