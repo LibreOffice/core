@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testtool.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 09:15:08 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:20:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ String S_INVALID_KEYCODE
     Text[ chinese_traditional ] = "µL®ÄªºÁä½X¡I";
     Text[ arabic ] = "Is an invalid KeyCode!";
     Text[ turkish ] = "Geçerli bir KeyCode deðil!";
+    Text[ catalan ] = "¡No es un KeyCode correcto!";
 };
 String S_MANDATORY_FILE
 {
@@ -107,6 +108,7 @@ String S_MANDATORY_FILE
     Text[ chinese_traditional ] = "\n¨S¦³³Q§ä¨ì¡C\n³o­ÓÀÉ®×¬O¥²¤£¥i¤Öªº¡C";
     Text[ arabic ] = "\ncould not be found.\nThis file is indispensable.";
     Text[ turkish ] = "\nbulunamadý.\nBu dosya mutlaka gerekli.";
+    Text[ catalan ] = "\nno se encontró.\nEste archivo es imprescindible.";
 };
 String S_READING_LONGNAMES
 {
@@ -129,6 +131,7 @@ String S_READING_LONGNAMES
     Text[ chinese_traditional ] = "Åª¨úªø¦WºÙ¡C";
     Text[ arabic ] = "Reading long names";
     Text[ turkish ] = "Uzun adlar okunuyor";
+    Text[ catalan ] = "Leyendo nombres largos";
 };
 String S_READING_SLOT_IDS
 {
@@ -151,6 +154,7 @@ String S_READING_SLOT_IDS
     Text[ chinese_traditional ] = "Åª¨ú Slot IDs";
     Text[ arabic ] = "Reading Slot IDs";
     Text[ turkish ] = "Slot ID'ler okunuyor";
+    Text[ catalan ] = "Leyendo Slot IDs";
 };
 String S_READING_CONTROLS
 {
@@ -173,6 +177,7 @@ String S_READING_CONTROLS
     Text[ chinese_traditional ] = "Åª¨ú±±¨î¶µ";
     Text[ arabic ] = "Reading Controls";
     Text[ turkish ] = "Control'ler okunuyor";
+    Text[ catalan ] = "Leyendo Controls";
 };
 String S_READING_BASIC_MODULE
 {
@@ -195,6 +200,7 @@ String S_READING_BASIC_MODULE
     Text[ chinese_traditional ] = "Åª¨ú BASIC ¼Ò¶ô";
     Text[ arabic ] = "Reading BASIC module";
     Text[ turkish ] = "BASIC modülü okunuyor";
+    Text[ catalan ] = "Leyendo módulo BASIC";
 };
 String S_STARTING_APPLICATION
 {
@@ -217,5 +223,6 @@ String S_STARTING_APPLICATION
     Text[ chinese_traditional ] = "±Ò°ÊÀ³¥Îµ{¦¡";
     Text[ arabic ] = "Starting application";
     Text[ turkish ] = "Uygulama baþlatýlýyor";
+    Text[ catalan ] = "Iniciando la aplicación";
 };
 
