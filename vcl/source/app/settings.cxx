@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 14:01:03 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:55:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,6 +465,7 @@ ImplStyleData::ImplStyleData()
 {
     mnRefCount                  = 1;
     mnScrollBarSize             = 16;
+    mnMinThumbSize              = 16;
     mnSplitSize                 = 3;
     mnSpinSize                  = 16;
     mnIconHorzSpace             = 50;
@@ -556,6 +557,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnTearOffTitleHeight        = rData.mnTearOffTitleHeight;
     mnMenuBarHeight             = rData.mnMenuBarHeight;
     mnScrollBarSize             = rData.mnScrollBarSize;
+    mnMinThumbSize              = rData.mnMinThumbSize;
     mnSplitSize                 = rData.mnSplitSize;
     mnSpinSize                  = rData.mnSpinSize;
     mnIconHorzSpace             = rData.mnIconHorzSpace;
@@ -867,6 +869,7 @@ BOOL StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->mnTearOffTitleHeight      == rSet.mpData->mnTearOffTitleHeight)       &&
          (mpData->mnMenuBarHeight           == rSet.mpData->mnMenuBarHeight)            &&
          (mpData->mnScrollBarSize           == rSet.mpData->mnScrollBarSize)            &&
+         (mpData->mnMinThumbSize            == rSet.mpData->mnMinThumbSize)             &&
          (mpData->mnSplitSize               == rSet.mpData->mnSplitSize)                &&
          (mpData->mnSpinSize                == rSet.mpData->mnSpinSize)                 &&
          (mpData->mnIconHorzSpace           == rSet.mpData->mnIconHorzSpace)            &&
