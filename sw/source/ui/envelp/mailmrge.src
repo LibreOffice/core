@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 21:02:31 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:49:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ ModalDialog DLG_MAILMERGE
         Text[ chinese_traditional ] = "¥ş³¡(~A)";
         Text[ arabic ] = "Çáßá";
         Text[ greek ] = "¼ëá";
-        Text[ korean ] = "ÀüÃ¼";
+        Text[ korean ] = "ÀüÃ¼(~A)";
         Text[ turkish ] = "Tümü";
         Text[ language_user1 ] = " ";
     };
@@ -142,7 +142,7 @@ ModalDialog DLG_MAILMERGE
         Text[ chinese_traditional ] = "¿ï¨úªº¸ê®Æ±ø¥Ø(~S)";
         Text[ arabic ] = "ÇáÓÌáÇÊ ÇáãÍÏÏÉ";
         Text[ greek ] = "Åğéëåãìİíåò åããñáöİò";
-        Text[ korean ] = "¼±ÅÃÇ¥½ÃµÈ ·¹ÄÚµå";
+        Text[ korean ] = "¼±ÅÃÇ¥½ÃµÈ ·¹ÄÚµå(~S)";
         Text[ turkish ] = "Seçili veri kümeleri";
         Text[ language_user1 ] = " ";
     };
@@ -171,7 +171,7 @@ ModalDialog DLG_MAILMERGE
         Text[ chinese_traditional ] = "±q(~F)¡G";
         Text[ arabic ] = "ãä:";
         Text[ greek ] = "Áğü:";
-        Text[ korean ] = "·Î ºÎÅÍ:";
+        Text[ korean ] = "·Î ºÎÅÍ(~F):";
         Text[ turkish ] = "İlk:";
         Text[ language_user1 ] = " ";
     };
@@ -210,7 +210,7 @@ ModalDialog DLG_MAILMERGE
         Text[ chinese_traditional ] = "¦Ü(~T)¡G";
         Text[ arabic ] = "Åáì:";
         Text[ greek ] = "Ğñïò:";
-        Text[ korean ] = "±îÁö:)";
+        Text[ korean ] = "±îÁö:)(~T)";
         Text[ turkish ] = "Son:";
         Text[ language_user1 ] = "RB: SW Datei - Serienbrief";
     };
@@ -276,7 +276,7 @@ ModalDialog DLG_MAILMERGE
         Text[ chinese_traditional ] = "¦Lªí¾÷(~P)";
         Text[ arabic ] = "Åáì ÇáØÇÈÚÉ";
         Text[ greek ] = "ÅêôõğùôŞò";
-        Text[ korean ] = "ÇÁ¸°ÅÍ";
+        Text[ korean ] = "ÇÁ¸°ÅÍ(~P)";
         Text[ turkish ] = "~Yazıcı";
         Text[ language_user1 ] = " ";
     };
@@ -296,14 +296,14 @@ ModalDialog DLG_MAILMERGE
         Text [ danish ] = "Mailing" ;
         Text [ portuguese ] = "~Correio-e" ;
         Text [ portuguese_brazilian ] = "~Mailing" ;
-        Text[ chinese_simplified ] = "µç×ÓÓÊ¼ş(~M)";
+        Text[ chinese_simplified ] = "µç×ÓÓÊ¼ş(~E)";
         Text[ russian ] = "Ïî÷òà";
         Text[ polish ] = "Po~czta";
-        Text[ japanese ] = "Ò°Ù‚Æ‚µ‚Ä(~M)";
-        Text[ chinese_traditional ] = "¹q¤l¶l¥ó(~M)";
+        Text[ japanese ] = "Ò°Ù‚Æ‚µ‚Ä(~E)";
+        Text[ chinese_traditional ] = "¹q¤l¶l¥ó(~E)";
         Text[ arabic ] = "ßÈÑíÏ ÅáßÊÑæäí";
         Text[ greek ] = "Áëëçëïãñáößá";
-        Text[ korean ] = "¸ŞÀÏ";
+        Text[ korean ] = "¸ŞÀÏ(~E)";
         Text[ turkish ] = "E-posta";
         Text[ language_user1 ] = "ENG:the anglicism \"Mailing\" as used in German cannot be used in Eng. because the real meaning has nothing to do with e-mail.EM17.5.00";
     };
@@ -502,7 +502,7 @@ ModalDialog DLG_MAILMERGE
         Text[ chinese_traditional ] = "²£¥Í³æ­Ó¦C¦L¥ô°È(~S)";
         Text[ arabic ] = "ÅäÔÇÁ æÙÇÆİ ØÈÇÚÉ İÑÏíÉ";
         Text[ greek ] = "Äçìéïõñãßá ìåìïíùìİíùí åñãáóéşí åêôığùóçò";
-        Text[ korean ] = "°¢ ÀÎ¼â ÀÛ¾÷¡¡¸¸µé±â";
+        Text[ korean ] = "°¢ ÀÎ¼â ÀÛ¾÷¡¡¸¸µé±â(~S)";
         Text[ turkish ] = "Bireysel yazdırma işleri oluştur";
         Text[ language_user1 ] = " ";
     };
@@ -530,7 +530,7 @@ ModalDialog DLG_MAILMERGE
         Text[ chinese_traditional ] = "¦a§}Äæ(~F)";
         Text[ arabic ] = "ÍŞá ÇáÚäæÇä";
         Text[ greek ] = "Ğåäßï äéåıèõíóçò";
-        Text[ korean ] = "ÁÖ¼Ò ÇÊµå";
+        Text[ korean ] = "ÁÖ¼Ò ÇÊµå(~F)";
         Text[ turkish ] = "Adres alanı";
         Text[ language_user1 ] = " ";
     };
@@ -567,7 +567,7 @@ ModalDialog DLG_MAILMERGE
         Text[ chinese_traditional ] = "¥D¦®(~S)";
         Text[ arabic ] = "ÇáãæÖæÚ";
         Text[ greek ] = "Èİìá";
-        Text[ korean ] = "Á¦¸ñ";
+        Text[ korean ] = "Á¦¸ñ(~S)";
         Text[ turkish ] = "Konu";
         Text[ language_user1 ] = " ";
     };
@@ -668,14 +668,14 @@ ModalDialog DLG_MAILMERGE
         Text [ french ] = "HTM~L" ;
         Text [ dutch ] = "~HTML" ;
         Text [ portuguese ] = "HTM~L" ;
-        Text[ chinese_simplified ] = "HTML(~L)";
+        Text[ chinese_simplified ] = "HTM~L";
         Text[ russian ] = "HTM~L";
         Text[ polish ] = "HTML";
-        Text[ japanese ] = "HTMLŒ`®(~L)";
+        Text[ japanese ] = "HTM~LŒ`®";
         Text[ chinese_traditional ] = "HTM~L";
         Text[ arabic ] = "HTM~L";
         Text[ greek ] = "HTML";
-        Text[ korean ] = "HTML";
+        Text[ korean ] = "HTM~L";
         Text[ turkish ] = "HTM~L";
         Text[ language_user1 ] = " ";
     };
@@ -695,14 +695,14 @@ ModalDialog DLG_MAILMERGE
         Text [ french ] = "~RTF" ;
         Text [ dutch ] = "~RTF" ;
         Text [ portuguese ] = "~RTF" ;
-        Text[ chinese_simplified ] = "RTF(~F)";
+        Text[ chinese_simplified ] = "RT~F";
         Text[ russian ] = "~RTF";
         Text[ polish ] = "RTF";
-        Text[ japanese ] = "RTF(~F)";
+        Text[ japanese ] = "RT~F";
         Text[ chinese_traditional ] = "RT~F";
         Text[ arabic ] = "RTF~";
         Text[ greek ] = "RTF";
-        Text[ korean ] = "RTF";
+        Text[ korean ] = "RT~F";
         Text[ turkish ] = "~RTF";
         Text[ language_user1 ] = " ";
     };
