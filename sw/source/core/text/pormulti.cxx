@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-13 08:32:25 $
+ *  last change: $Author: fme $ $Date: 2001-06-18 09:55:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1581,7 +1581,10 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         nMultiLen -= rInf.GetIdx();
     }
 
+    // save some values
     const XubString* pOldTxt = &(rInf.GetTxt());
+    const SwTwips nOldPaintOfst = rInf.GetPaintOfst();
+
     XubString aMultiStr( rInf.GetTxt(), 0, nMultiLen + rInf.GetIdx() );
     rInf.SetTxt( aMultiStr );
     SwTxtFormatInfo aInf( rInf, rMulti.GetRoot(), nActWidth );
@@ -1815,6 +1818,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     }
 
     rInf.SetTxt( *pOldTxt );
+    rInf.SetPaintOfst( nOldPaintOfst );
     rInf.SetStop( aInf.IsStop() );
     SeekAndChg( rInf );
     delete pFirstRest;
