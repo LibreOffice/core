@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphset.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-27 16:11:07 $
+ *  last change: $Author: pl $ $Date: 2001-10-16 17:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,7 +486,7 @@ GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
         {
             nSize += psp::appendStr ("/",
                                      pEncodingVector + nSize);
-            nSize += psp::appendStr (rMgr.getAdobeNameFromUnicode((*aSortedGlyph).second),
+            nSize += psp::appendStr ((*rMgr.getAdobeNameFromUnicode((*aSortedGlyph).second).first).second,
                                      pEncodingVector + nSize);
             nSize += psp::appendStr (" ",
                                      pEncodingVector + nSize);

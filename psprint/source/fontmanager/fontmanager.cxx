@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cp $ $Date: 2001-09-27 13:16:07 $
+ *  last change: $Author: pl $ $Date: 2001-10-16 17:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -662,24 +662,42 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
             }
             else if( pChar->name )
             {
-                sal_Unicode aChar = rManager.getUnicodeFromAdobeName( pChar->name );
-                if( aChar != 0 )
-                    m_pMetrics->m_aMetrics[ aChar ] = aMetric;
+                ::std::pair< ::std::hash_multimap< ::rtl::OString, sal_Unicode, ::rtl::OStringHash >::const_iterator,
+                      ::std::hash_multimap< ::rtl::OString, sal_Unicode, ::rtl::OStringHash >::const_iterator >
+                      aCodes = rManager.getUnicodeFromAdobeName( pChar->name );
+                while( aCodes.first != aCodes.second )
+                {
+                    if( (*aCodes.first).second != 0 )
+                        m_pMetrics->m_aMetrics[ (*aCodes.first).second ] = aMetric;
+                    ++aCodes.first;
+                }
             }
         }
         else if( nAdobeEncoding == 1 || nAdobeEncoding == 2 )
         {
             if( pChar->name )
             {
-                sal_Unicode aChar = rManager.getUnicodeFromAdobeName( pChar->name );
-                if( aChar != 0 )
-                    m_pMetrics->m_aMetrics[ aChar ] = aMetric;
+                ::std::pair< ::std::hash_multimap< ::rtl::OString, sal_Unicode, ::rtl::OStringHash >::const_iterator,
+                      ::std::hash_multimap< ::rtl::OString, sal_Unicode, ::rtl::OStringHash >::const_iterator >
+                      aCodes = rManager.getUnicodeFromAdobeName( pChar->name );
+                while( aCodes.first != aCodes.second )
+                {
+                    if( (*aCodes.first).second != 0 )
+                        m_pMetrics->m_aMetrics[ (*aCodes.first).second ] = aMetric;
+                    ++aCodes.first;
+                }
             }
             else if( pChar->code != -1 )
             {
-                sal_Unicode aChar = rManager.getUnicodeFromAdobeCode( pChar->code );
-                if( aChar != 0 )
-                    m_pMetrics->m_aMetrics[ aChar ] = aMetric;
+                ::std::pair< ::std::hash_multimap< sal_uInt8, sal_Unicode >::const_iterator,
+                      ::std::hash_multimap< sal_uInt8, sal_Unicode >::const_iterator >
+                      aCodes = rManager.getUnicodeFromAdobeCode( pChar->code );
+                while( aCodes.first != aCodes.second )
+                {
+                    if( (*aCodes.first).second != 0 )
+                        m_pMetrics->m_aMetrics[ (*aCodes.first).second ] = aMetric;
+                    ++aCodes.first;
+                }
             }
         }
         else if( nAdobeEncoding == 3 )
@@ -766,6 +784,14 @@ PrintFontManager::PrintFontManager() :
 {
     for( int i = 0; i < sizeof( aAdobeCodes )/sizeof( aAdobeCodes[0] ); i++ )
     {
+        m_aUnicodeToAdobename.insert( ::std::hash_multimap< sal_Unicode, ::rtl::OString >::value_type( aAdobeCodes[i].aUnicode, aAdobeCodes[i].pAdobename ) );
+        m_aAdobenameToUnicode.insert( ::std::hash_multimap< ::rtl::OString, sal_Unicode, ::rtl::OStringHash >::value_type( aAdobeCodes[i].pAdobename, aAdobeCodes[i].aUnicode ) );
+        if( aAdobeCodes[i].aAdobeStandardCode )
+        {
+            m_aUnicodeToAdobecode.insert( ::std::hash_multimap< sal_Unicode, sal_uInt8 >::value_type( aAdobeCodes[i].aUnicode, aAdobeCodes[i].aAdobeStandardCode ) );
+            m_aAdobecodeToUnicode.insert( ::std::hash_multimap< sal_uInt8, sal_Unicode >::value_type( aAdobeCodes[i].aAdobeStandardCode, aAdobeCodes[i].aUnicode ) );
+        }
+#if 0
         m_aUnicodeToAdobename[ aAdobeCodes[i].aUnicode ] = aAdobeCodes[i].pAdobename;
         m_aAdobenameToUnicode[ aAdobeCodes[i].pAdobename ] = aAdobeCodes[i].aUnicode;
         if( aAdobeCodes[i].aAdobeStandardCode )
@@ -773,6 +799,7 @@ PrintFontManager::PrintFontManager() :
             m_aUnicodeToAdobecode[ aAdobeCodes[i].aUnicode ] = aAdobeCodes[i].aAdobeStandardCode;
             m_aAdobecodeToUnicode[ aAdobeCodes[i].aAdobeStandardCode ] = aAdobeCodes[i].aUnicode;
         }
+#endif
     }
 }
 
