@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.51 $
+#   $Revision: 1.52 $
 #
-#   last change: $Author: dbo $ $Date: 2002-06-28 13:18:26 $
+#   last change: $Author: mav $ $Date: 2002-07-18 13:49:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,7 @@
 #
 #*************************************************************************
 
-LIBSMKREV!:="$$Revision: 1.51 $$"
+LIBSMKREV!:="$$Revision: 1.52 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -214,6 +214,7 @@ SDLIB=-lsdlib
 SDLLIB=-lsdl
 SWLIB=-lswlib
 PKGCHKLIB=-lpkgchk$(OFFICEUPD)$(DLLPOSTFIX)
+SYSSHELLLIB=-lsysshell
 
 #
 # USED_%NAME%_LIBS
@@ -363,6 +364,7 @@ SVXLLIB=$(LIBPRE) svxl.lib
 FREETYPELIB=freetype.lib
 FREETYPELIBST=freetype.lib
 PKGCHKLIB=$(LIBPRE) ipkgchk.lib
+SYSSHELLLIB=sysshell.lib
 
 .ENDIF              # "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
 
