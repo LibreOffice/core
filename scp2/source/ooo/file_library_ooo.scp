@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.64 $
+*  $Revision: 1.65 $
 *
-*  last change: $Author: hr $ $Date: 2004-11-09 12:39:22 $
+*  last change: $Author: hr $ $Date: 2004-11-09 16:51:31 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1921,6 +1921,52 @@ End
 STD_SETUPZIP_LIB_FILE( gid_File_Lib_BaseGfx, basegfx )
 
 STD_SETUPZIP_LIB_FILE( gid_File_Lib_Vcl, vcl )
+
+#ifdef USE_PASF
+
+File gid_File_Lib_Portaudio
+    TXT_FILE_BODY;
+    Name    = STRING(CONCAT3(libportaudio,UNXSUFFIX,.0.0.18));
+    Dir                 = gid_Dir_Program;
+    Styles              = (PACKED, SETUPZIP);
+End
+
+Shortcut gid_Shortcut_Lib_Portaudio
+    FileID              = gid_File_Lib_Portaudio;
+    Dir                 = gid_Dir_Program;
+    Name                = STRING(CONCAT3(libportaudio,UNXSUFFIX,.0));
+    Styles              = (NETWORK, RELATIVE);
+End
+
+Shortcut gid_Shortcut_Lib_Portaudio_2
+    ShortcutID  = gid_Shortcut_Lib_Portaudio;
+    Dir         = gid_Dir_Program;
+    Name        = STRING(CONCAT2(libportaudio,UNXSUFFIX));
+    Styles      = (NETWORK, RELATIVE);
+End
+
+File gid_File_Lib_Sndfile
+    TXT_FILE_BODY;
+    Name    = STRING(CONCAT3(libsndfile,UNXSUFFIX,.1.0.9));
+    Dir                 = gid_Dir_Program;
+    Styles              = (PACKED, SETUPZIP);
+End
+
+Shortcut gid_Shortcut_Lib_Sndfile
+    FileID              = gid_File_Lib_Sndfile;
+    Dir                 = gid_Dir_Program;
+    Name                = STRING(CONCAT3(libsndfile,UNXSUFFIX,.1));
+    Styles              = (NETWORK, RELATIVE);
+End
+
+Shortcut gid_Shortcut_Lib_Sndfile_2
+    ShortcutID  = gid_Shortcut_Lib_Sndfile;
+    Dir         = gid_Dir_Program;
+    Name        = STRING(CONCAT2(libsndfile,UNXSUFFIX));
+    Styles      = (NETWORK, RELATIVE);
+End
+
+#endif
 
 File gid_File_Lib_Vos
     TXT_FILE_BODY;
