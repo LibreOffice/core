@@ -2,9 +2,9 @@
  *
  *  $RCSfile: seltrans.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-16 16:23:22 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:30:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ ScSelectionTransferObj* ScSelectionTransferObj::CreateFromView( ScTabView* pView
             const ScMarkData& rMark = pViewData->GetMarkData();
             //  allow MultiMarked because GetSimpleArea may be able to merge into a simple range
             //  (GetSimpleArea modifies a local copy of MarkData)
-            if ( ( rMark.IsMarked() || rMark.IsMultiMarked() ) && pViewData->GetSimpleArea( aRange, TRUE ) )
+            if ( ( rMark.IsMarked() || rMark.IsMultiMarked() ) && pViewData->GetSimpleArea( aRange ) )
             {
                 //  only for "real" selection, cursor alone isn't used
                 if ( aRange.aStart == aRange.aEnd )
