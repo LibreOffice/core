@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:21 $
+ *  last change: $Author: mfe $ $Date: 2000-10-18 16:14:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2452,32 +2452,6 @@ sal_Bool osl_getFullPath(const sal_Char* pszFilename, sal_Char* pszPath, sal_uIn
     }
 
     return sal_False;
-}
-
-void debug_ustring(rtl_uString* ustr)
-{
-    sal_Char* psz=0;
-    rtl_String* str=0;
-
-    if ( ustr != 0 )
-    {
-        rtl_uString2String( &str,
-                            rtl_uString_getStr(ustr),
-                            rtl_uString_getLength(ustr),
-                            RTL_TEXTENCODING_UTF8,
-                            OUSTRING_TO_OSTRING_CVTFLAGS );
-
-        psz = rtl_string_getStr(str);
-    }
-
-    fprintf(stderr,"'%s'\n",psz);
-
-    if ( str != 0 )
-    {
-        rtl_string_release(str);
-    }
-
-    return;
 }
 
 
