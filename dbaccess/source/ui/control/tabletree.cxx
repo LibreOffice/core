@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-05 12:39:45 $
+ *  last change: $Author: fs $ $Date: 2001-06-25 09:05:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,10 +363,6 @@ void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _r
     // throw away all the old stuff
     Clear();
 
-    if (!_rTables.getLength() && !_rViews.getLength())
-        // nothing to do
-        return;
-
     try
     {
         // the root entry saying "all objects"
@@ -382,6 +378,10 @@ void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _r
                 sRootEntryText = String(ModuleRes(STR_ALL_TABLES_AND_VIEWS));
             pAllObjects = InsertEntry(sRootEntryText);
         }
+
+        if (!_rTables.getLength() && !_rViews.getLength())
+            // nothing to do (besides inserting the root entry)
+            return;
 
         // get the table/view names
         const ::rtl::OUString* pTables = NULL;
@@ -535,6 +535,9 @@ void OTableTreeListBox::InitEntry(SvLBoxEntry* _pEntry, const XubString& _rStrin
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2001/06/05 12:39:45  fs
+ *  #87680# implEmphasize corrected / #87771# UpdateTableList: ask for VIEW, TABLE and
+ *
  *  Revision 1.13  2001/05/22 06:31:30  oj
  *  #87081# show all tabletypes
  *
