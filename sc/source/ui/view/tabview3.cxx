@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 12:59:54 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,9 +107,8 @@
 #include "patattr.hxx"
 #include "dociter.hxx"
 #include "seltrans.hxx"
+#include "fillinfo.hxx"
 #include "AccessibilityHints.hxx"
-//! hier und output2.cxx in irgendein Headerfile verschieben!
-#define SC_CLIPMARK_SIZE    64
 
 using namespace com::sun::star;
 
