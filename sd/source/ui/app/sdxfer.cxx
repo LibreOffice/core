@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-09 10:45:19 $
+ *  last change: $Author: ka $ $Date: 2002-01-15 13:33:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #endif
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
+#endif
+#ifndef _UNTOOLS_TEMPFILE_HXX
+#include <unotools/tempfile.hxx>
 #endif
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
@@ -595,8 +598,10 @@ sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject
         case( SDTRANSFER_OBJECTTYPE_DRAWOLE ):
         {
             SvEmbeddedObject*   pEmbObj = (SvEmbeddedObject*) pObject;
-            SvStorageRef        xWorkStore( new SvStorage( TRUE, String() ) );
-            const String        aStoreName( xWorkStore->GetName() );
+            ::utl::TempFile     aTempFile;
+            SvStorageRef        xWorkStore( new SvStorage( TRUE, aTempFile.GetURL() ) );
+
+            aTempFile.EnableKillingFile();
 
             // write document storage
             xWorkStore->SetVersion( SOFFICE_FILEFORMAT_60 );
@@ -606,7 +611,7 @@ sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject
             xWorkStore->Commit();
             xWorkStore.Clear();
 
-            SvStream* pSrcStm = ::utl::UcbStreamHelper::CreateStream( aStoreName, STREAM_READ );
+            SvStream* pSrcStm = ::utl::UcbStreamHelper::CreateStream( aTempFile.GetURL(), STREAM_READ );
 
             if( pSrcStm )
             {
