@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profile.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-11 19:20:10 $
+ *  last change: $Author: jl $ $Date: 2001-08-20 14:36:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2556,7 +2556,7 @@ static sal_Bool lookupProfile(const sal_Char *pszPath, const sal_Char *pszFile, 
     sal_Char *pChr, *pStr;
     sal_Char Path[PATH_MAX];
     sal_Char Product[132];
-    sal_Char Buffer[1024];
+    sal_Char Buffer[4096];
 
     Path[0] = '\0';
     Product[0] = '\0';
