@@ -543,7 +543,7 @@ sub get_folderitem_showcmd
 
 sub create_shortcut_table
 {
-    my ($filesref, $linksref, $folderref, $folderitemsref, $dirref, $basedir, $languagesarrayref, $iconfilecollector) = @_;
+    my ($filesref, $linksref, $folderref, $folderitemsref, $dirref, $basedir, $languagesarrayref, $includepatharrayref, $iconfilecollector) = @_;
 
     for ( my $m = 0; $m <= $#{$languagesarrayref}; $m++ )
     {
@@ -659,6 +659,24 @@ sub create_shortcut_table
                 unshift(@{$iconfilecollector}, $sourcepath);
                 $installer::globals::sofficeiconadded = 1;
             }
+        }
+
+        # For language packs the soffice.exe has to be included, even if it is not part of the product.
+        # Also as part of the ARP applet (no substitution needed for ProductName, because the file is not installed!)
+
+        if (( $onefile eq "" ) && ( $installer::globals::languagepack ))
+        {
+            my $sourcepathref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$sofficefile, $includepatharrayref, 1);
+            if ($$sourcepathref eq "") { installer::exiter::exit_program("ERROR: Could not find $sofficefile as icon in language pack!", "create_shortcut_table"); }
+
+            if (! installer::existence::exists_in_array($$sourcepathref, $iconfilecollector))
+            {
+                unshift(@{$iconfilecollector}, $$sourcepathref);
+                $installer::globals::sofficeiconadded = 1;
+            }
+
+            my $localinfoline = "Added icon file $$sourcepathref for language pack into icon file collector.\n";
+            push(@installer::globals::logfileinfo, $localinfoline);
         }
 
         # Saving the file
