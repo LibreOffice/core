@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pcrstrings.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:04:53 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:09:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,10 @@ namespace pcr
     // properties
     PCR_CONSTASCII_STRING( PROPERTY_DEFAULTCONTROL,         "DefaultControl" );
     PCR_CONSTASCII_STRING( PROPERTY_INTROSPECTEDOBJECT,     "IntrospectedObject" );
+    PCR_CONSTASCII_STRING( PROPERTY_INTROSPECTEDCOLLECTION, "IntrospectedCollection" );
     PCR_CONSTASCII_STRING( PROPERTY_CURRENTPAGE,            "CurrentPage" );
     PCR_CONSTASCII_STRING( PROPERTY_CONTROLCONTEXT,         "ControlContext" );
+    PCR_CONSTASCII_STRING( PROPERTY_CONTEXTDOCUMENT,        "ContextDocument" );
     PCR_CONSTASCII_STRING( PROPERTY_TABBINGMODEL,           "TabbingModel" );
 
     // services
