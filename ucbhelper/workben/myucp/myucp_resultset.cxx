@@ -2,9 +2,9 @@
  *
  *  $RCSfile: myucp_resultset.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-17 15:38:10 $
+ *  last change: $Author: kso $ $Date: 2002-11-19 15:03:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,9 @@
 #include "myucp_resultset.hxx"
 #endif
 
-using namespace com::sun::star::lang;
-using namespace com::sun::star::ucb;
-using namespace com::sun::star::uno;
+
+using namespace com::sun;
+using namespace com::sun::star;
 
 // @@@ Adjust namespace name.
 using namespace myucp;
@@ -93,10 +93,10 @@ using namespace myucp;
 //=========================================================================
 
 DynamicResultSet::DynamicResultSet(
-                      const Reference< XMultiServiceFactory >& rxSMgr,
-                      const vos::ORef< Content >& rxContent,
-                      const OpenCommandArgument2& rCommand,
-                      const Reference< XCommandEnvironment >& rxEnv )
+                      const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+                      const rtl::Reference< Content >& rxContent,
+                      const star::ucb::OpenCommandArgument2& rCommand,
+                      const uno::Reference< star::ucb::XCommandEnvironment >& rxEnv )
 : ResultSetImplHelper( rxSMgr, rCommand ),
   m_xContent( rxContent ),
   m_xEnv( rxEnv )

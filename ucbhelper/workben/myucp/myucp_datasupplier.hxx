@@ -2,9 +2,9 @@
  *
  *  $RCSfile: myucp_datasupplier.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-17 15:38:10 $
+ *  last change: $Author: kso $ $Date: 2002-11-19 15:03:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 #ifndef _MYUCP_DATASUPPLIER_HXX
 #define _MYUCP_DATASUPPLIER_HXX
 
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
+#endif
 #ifndef _UCBHELPER_RESULTSET_HXX
 #include <ucbhelper/resultset.hxx>
 #endif
@@ -80,7 +83,7 @@ class DataSupplier : public ucb::ResultSetDataSupplier
 public:
     DataSupplier( const com::sun::star::uno::Reference<
                       com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-                  const vos::ORef< Content >& rContent,
+                  const rtl::Reference< Content >& rContent,
                   sal_Int32 nOpenMode );
     virtual ~DataSupplier();
 

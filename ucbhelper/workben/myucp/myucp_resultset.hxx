@@ -2,9 +2,9 @@
  *
  *  $RCSfile: myucp_resultset.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-17 15:38:10 $
+ *  last change: $Author: kso $ $Date: 2002-11-19 15:03:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,11 +63,11 @@
 #ifndef _MYUCP_RESULTSET_HXX
 #define _MYUCP_RESULTSET_HXX
 
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
+#endif
 #ifndef _UCBHELPER_RESULTSETHELPER_HXX
 #include <ucbhelper/resultsethelper.hxx>
-#endif
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
 #endif
 
 // @@@ Adjust multi-include-protection-ifdef and header file name.
@@ -80,7 +80,7 @@ namespace myucp {
 
 class DynamicResultSet : public ::ucb::ResultSetImplHelper
 {
-      vos::ORef< Content > m_xContent;
+      rtl::Reference< Content > m_xContent;
     com::sun::star::uno::Reference<
         com::sun::star::ucb::XCommandEnvironment > m_xEnv;
 
@@ -92,7 +92,7 @@ public:
     DynamicResultSet(
             const com::sun::star::uno::Reference<
                 com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-              const vos::ORef< Content >& rxContent,
+              const rtl::Reference< Content >& rxContent,
             const com::sun::star::ucb::OpenCommandArgument2& rCommand,
               const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XCommandEnvironment >& rxEnv );
