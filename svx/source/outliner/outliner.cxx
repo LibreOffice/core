@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-23 14:39:24 $
+ *  last change: $Author: cl $ $Date: 2001-09-25 10:11:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2052,5 +2052,7 @@ String Outliner::ImplGetBulletText( USHORT nPara )
 // this is needed for StarOffice Api
 void Outliner::SetLevelDependendStyleSheet( USHORT nPara )
 {
+    SfxItemSet aOldAttrs( pEditEngine->GetParaAttribs( nPara ) );
     ImplSetLevelDependendStyleSheet( nPara );
+    pEditEngine->SetParaAttribs( nPara, aOldAttrs );
 }
