@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-04-25 16:05:35 $
+ *  last change: $Author: pl $ $Date: 2001-06-21 16:34:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ struct SalPrinterData
     ::psp::PrinterJob       m_aPrintJob;
     ::psp::JobData          m_aJobData;
     ::psp::PrinterGfx       m_aPrinterGfx;
+    ULONG                   m_nCopies;
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-21 16:07:34 $
+ *  last change: $Author: pl $ $Date: 2001-06-21 16:34:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -820,20 +820,13 @@ BOOL SalPrinter::StartJob(
     maPrinterData.m_bPdf        = false;
     maPrinterData.m_aFileName   = pFileName ? *pFileName : String();
     maPrinterData.m_aTmpFile    = String();
+    maPrinterData.m_nCopies     = nCopies;
 
-    // get the job data
     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, maPrinterData.m_aJobData );
-    maPrinterData.m_aJobData.m_nCopies = nCopies;
-    // update jobsetup data
-    // this is necessary because copies are currently only set in StartJob
-    void* pNewDriverData = NULL;
-    int nNewDriverDataBytes = NULL;
-    if( maPrinterData.m_aJobData.getStreamBuffer( pNewDriverData, nNewDriverDataBytes ) )
-    {
-        delete pJobSetup->mpDriverData;
-        pJobSetup->mpDriverData     = (unsigned char*)pNewDriverData;
-        pJobSetup->mnDriverDataLen  = nNewDriverDataBytes;
-    }
+    if( maPrinterData.m_nCopies > 1 )
+        // in case user did not do anything (m_nCopies=1)
+        // take the default from jobsetup
+        maPrinterData.m_aJobData.m_nCopies = maPrinterData.m_nCopies;
 
     // check wether this printer is configured as fax
     const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( maPrinterData.m_aJobData.m_aPrinterName ) );
@@ -916,6 +909,10 @@ SalGraphics* SalPrinter::StartPage( ImplJobSetup* pJobSetup, BOOL bNewJobData )
     maPrinterData.m_pGraphics->maGraphicsData.bPrinter_         = true;
     maPrinterData.m_pGraphics->maGraphicsData.m_pPhoneNr        = maPrinterData.m_bFax ? &maPrinterData.m_aFaxNr : NULL;
     maPrinterData.m_pGraphics->maGraphicsData.m_bSwallowFaxNo   = maPrinterData.m_bSwallowFaxNo;
+    if( maPrinterData.m_nCopies > 1 )
+        // in case user did not do anything (m_nCopies=1)
+        // take the default from jobsetup
+        maPrinterData.m_aJobData.m_nCopies = maPrinterData.m_nCopies;
 
     maPrinterData.m_aPrintJob.StartPage( maPrinterData.m_aJobData, bNewJobData ? sal_True : sal_False );
     maPrinterData.m_aPrinterGfx.Init( maPrinterData.m_aPrintJob );
