@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: gh $ $Date: 2002-03-18 15:15:43 $
+ *  last change: $Author: gh $ $Date: 2002-03-26 15:15:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,6 +417,21 @@ void BasicApp::Main( )
 #ifdef _USE_UNO
     Reference< XContentProviderManager > xUcb = InitializeUCB();
 #endif
+
+    {
+        DirEntry aIniPath( Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ) );
+        if ( !aIniPath.Exists() )
+        {   // look for it besides the executable
+            String aAppDir ( DirEntry( GetAppFileName() ).GetPath().GetFull() );
+            DirEntry aDefIniPath( Config::GetConfigName( aAppDir, CUniString("testtool") ) );
+
+            if ( aDefIniPath.Exists() )
+            {
+                aDefIniPath.CopyTo( aIniPath, FSYS_ACTION_COPYFILE );
+            }
+        }
+    }
+
     {
         LanguageType aRequestedLanguage;
         Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
