@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:13:16 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:00:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ ImportExcel8::ImportExcel8( XclImpRootData& rImpData ) :
 {
     delete pFormConv;
 
-    pFormConv = pExcRoot->pFmlaConverter = new ExcelToSc8( pExcRoot, aIn );
+    pFormConv = pExcRoot->pFmlaConverter = new ExcelToSc8( aIn );
 
     bHasBasic = FALSE;
 }
