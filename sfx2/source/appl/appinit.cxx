@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-24 10:40:54 $
+ *  last change: $Author: cd $ $Date: 2001-08-10 05:39:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,7 @@
 #include "ucbhelp.hxx"
 #include "fcontnr.hxx"
 #include "helper.hxx"   // SfxContentHelper::Kill()
+#include "sfxpicklist.hxx"
 
 #ifdef UNX
 #define stricmp(a,b) strcmp(a,b)
@@ -303,6 +304,7 @@ FASTBOOL SfxApplication::Initialize_Impl()
     // diverse Pointer
     pImp->pAutoSaveTimer = new Timer;
     SfxPickList_Impl::GetOrCreate( SvtHistoryOptions().GetSize( ePICKLIST ) );
+    SfxPickList::GetOrCreate( SvtHistoryOptions().GetSize( ePICKLIST ) );
 
     /////////////////////////////////////////////////////////////////
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: rt $ $Date: 2001-07-18 08:30:31 $
+#   last change: $Author: cd $ $Date: 2001-08-10 05:42:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -133,7 +133,8 @@ SLOFILES =  \
         $(SLO)$/helpinterceptor.obj \
                 $(SLO)$/cmdlineargs.obj \
         $(SLO)$/shutdownicon.obj \
-        $(SLO)$/shutdowniconw32.obj
+        $(SLO)$/shutdowniconw32.obj \
+        $(SLO)$/sfxpicklist.obj
 
 
 EXCEPTIONSFILES=\
@@ -149,7 +150,8 @@ EXCEPTIONSFILES=\
     $(SLO)$/newhelp.obj			\
     $(SLO)$/sfxhelp.obj			\
     $(SLO)$/shutdownicon.obj	\
-    $(SLO)$/shutdowniconw32.obj
+    $(SLO)$/shutdowniconw32.obj \
+    $(SLO)$/sfxpicklist.obj
 
 .IF "$(GUI)" == "MAC"
 SLOFILES +=\

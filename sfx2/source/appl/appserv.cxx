@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-03 17:21:57 $
+ *  last change: $Author: cd $ $Date: 2001-08-10 05:41:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@
 #include "tabdlg.hxx"
 #include "arrdecl.hxx"
 #include "fltfnc.hxx"
-#include "picklist.hxx"
+//#include "picklist.hxx"
 #include "sfx.hrc"
 #include "app.hrc"
 #include "tbxcust.hxx"
@@ -180,6 +180,7 @@
 #include "urlframe.hxx"
 #include "module.hxx"
 #include "topfrm.hxx"
+#include "sfxpicklist.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -486,6 +487,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_PICK8:
         case SID_PICK9:
         {
+            SfxPickList::Get()->ExecuteEntry( rReq.GetSlot() - SID_PICK1 );
+/*
             USHORT nPickNo = rReq.GetSlot()-SID_PICK1;
             if ( nPickNo >= SfxPickList_Impl::Get()->GetAllowedMenuSize() )
                 break;
@@ -508,6 +511,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
             rReq.AppendItem(SfxStringItem(SID_FILTER_NAME, aFilter));
             ExecuteSlot( rReq );
+*/
             return;
         }
 
@@ -797,11 +801,14 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                 case SID_PICK6:
                 case SID_PICK7:
                 case SID_PICK8:
-                case SID_PICK9: {
-                    if ( ( nWhich - SID_PICK1 ) <
-                           (USHORT)SfxPickList_Impl::Get()->GetAllowedMenuSize() )
-                        rSet.Put( SfxStringItem( nWhich,
-                            SfxPickList_Impl::Get()->GetMenuPickEntry(nWhich - SID_PICK1)->aTitle ) );
+                case SID_PICK9:
+                {
+                    SfxPickList* pPickList = SfxPickList::Get();
+                    if (( nWhich - SID_PICK1 ) < (USHORT)pPickList->GetAllowedMenuSize() )
+                    {
+                        String aTitle = pPickList->GetMenuEntryTitle( nWhich - SID_PICK1 );
+                        rSet.Put( SfxStringItem( nWhich, aTitle ));
+                    }
                     break;
                 }
 
