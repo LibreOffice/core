@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimplobj.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-07 14:48:18 $
+ *  last change: $Author: jb $ $Date: 2001-02-13 17:20:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,15 +133,15 @@ void ReadOnlyValueNodeImpl::setDefault()
 }
 //-----------------------------------------------------------------------------
 
-void ReadOnlyValueNodeImpl::setNodeName(Name const& )
+void ReadOnlyValueNodeImpl::doSetNodeName(Name const& )
 {
     failReadOnly();
 }
 //-----------------------------------------------------------------------------
 
-void ReadOnlyValueNodeImpl::getNodeInfo(NodeInfo& rInfo) const
+void ReadOnlyValueNodeImpl::doGetNodeInfo(NodeInfo& rInfo) const
 {
-    ValueNodeImpl::getNodeInfo(rInfo);
+    ValueNodeImpl::doGetNodeInfo(rInfo);
     rInfo.aAttributes.bWritable = false;
 }
 //-----------------------------------------------------------------------------
@@ -228,9 +228,9 @@ void DirectValueNodeImpl::setDefault()
 }
 //-----------------------------------------------------------------------------
 
-void DirectValueNodeImpl::setNodeName(Name const& aName)
+void DirectValueNodeImpl::doSetNodeName(Name const& aName)
 {
-    ValueNodeImpl::setNodeName(aName);
+    ValueNodeImpl::doSetNodeName(aName);
 }
 //-----------------------------------------------------------------------------
 
@@ -369,15 +369,15 @@ void DeferredValueNodeImpl::setDefault()
 }
 //-----------------------------------------------------------------------------
 
-void DeferredValueNodeImpl::getNodeInfo(NodeInfo& rInfo) const
+void DeferredValueNodeImpl::doGetNodeInfo(NodeInfo& rInfo) const
 {
-    ValueNodeImpl::getNodeInfo(rInfo);
+    ValueNodeImpl::doGetNodeInfo(rInfo);
     if (m_pNewName)
         rInfo.aName = *m_pNewName;
 }
 //-----------------------------------------------------------------------------
 
-void DeferredValueNodeImpl::setNodeName(Name const& aNewName)
+void DeferredValueNodeImpl::doSetNodeName(Name const& aNewName)
 {
     std::auto_ptr<Name> pNewName( new Name(aNewName) );
     delete m_pNewName;
@@ -454,14 +454,14 @@ void DeferredValueNodeImpl::doCommitChanges()
 
     if (m_pNewName)
     {
-        ValueNodeImpl::setNodeName(*m_pNewName);
+        ValueNodeImpl::doSetNodeName(*m_pNewName);
 
         delete m_pNewName, m_pNewName = 0;
     }
 }
 //-----------------------------------------------------------------------------
 
-std::auto_ptr<ValueChange> DeferredValueNodeImpl::preCommitChange()
+std::auto_ptr<ValueChange> DeferredValueNodeImpl::doPreCommitChange()
 {
     OSL_ENSURE( !m_pNewName, "Renaming not supported with old changes !");
 
@@ -488,7 +488,7 @@ std::auto_ptr<ValueChange> DeferredValueNodeImpl::preCommitChange()
 
     // now get the name of this node
     NodeInfo aInfo;
-    getNodeInfo(aInfo);
+    doGetNodeInfo(aInfo);
 
     // now make a ValueChange
     ValueChange* pChange = new ValueChange( aInfo.aName.toString(), getValue(),
@@ -498,7 +498,7 @@ std::auto_ptr<ValueChange> DeferredValueNodeImpl::preCommitChange()
 }
 //-----------------------------------------------------------------------------
 
-void DeferredValueNodeImpl::finishCommit(ValueChange& rChange)
+void DeferredValueNodeImpl::doFinishCommit(ValueChange& rChange)
 {
     OSL_ENSURE(rChange.getNewValue() == this->getValue(),"Committed change does not match the intended value");
 
@@ -509,14 +509,14 @@ void DeferredValueNodeImpl::finishCommit(ValueChange& rChange)
 }
 //-----------------------------------------------------------------------------
 
-void DeferredValueNodeImpl::revertCommit(ValueChange& rChange)
+void DeferredValueNodeImpl::doRevertCommit(ValueChange& rChange)
 {
     OSL_ENSURE(rChange.getNewValue() == this->getValue(),"Reverted change does not match the intended value");
     OSL_ENSURE(doHasChanges(), "DeferredValueNodeImpl: No Changes to restore");
 }
 //-----------------------------------------------------------------------------
 
-void DeferredValueNodeImpl::failedCommit(ValueChange& rChange)
+void DeferredValueNodeImpl::doFailedCommit(ValueChange& rChange)
 {
     // discard the change
     delete m_pNewValue, m_pNewValue = 0;
@@ -547,15 +547,15 @@ NodeImplHolder DeferredValueNodeImpl::doCloneIndirect(bool bIndirect)
 // class ReadOnlyGroupNodeImpl
 //-----------------------------------------------------------------------------
 
-void ReadOnlyGroupNodeImpl::setNodeName(Name const& )
+void ReadOnlyGroupNodeImpl::doSetNodeName(Name const& )
 {
     failReadOnly();
 }
 //-----------------------------------------------------------------------------
 
-void ReadOnlyGroupNodeImpl::getNodeInfo(NodeInfo& rInfo) const
+void ReadOnlyGroupNodeImpl::doGetNodeInfo(NodeInfo& rInfo) const
 {
-    GroupNodeImpl::getNodeInfo(rInfo);
+    GroupNodeImpl::doGetNodeInfo(rInfo);
     rInfo.aAttributes.bWritable = false;
 }
 //-----------------------------------------------------------------------------
@@ -600,9 +600,9 @@ DirectGroupNodeImpl::DirectGroupNodeImpl(DeferredGroupNodeImpl& rOriginal)
 {}
 //-----------------------------------------------------------------------------
 
-void DirectGroupNodeImpl::setNodeName(Name const& rName)
+void DirectGroupNodeImpl::doSetNodeName(Name const& rName)
 {
-    GroupNodeImpl::setNodeName(rName);
+    GroupNodeImpl::doSetNodeName(rName);
 }
 //-----------------------------------------------------------------------------
 
@@ -659,15 +659,15 @@ DeferredGroupNodeImpl::~DeferredGroupNodeImpl()
 }
 //-----------------------------------------------------------------------------
 
-void DeferredGroupNodeImpl::getNodeInfo(NodeInfo& rInfo) const
+void DeferredGroupNodeImpl::doGetNodeInfo(NodeInfo& rInfo) const
 {
-    GroupNodeImpl::getNodeInfo(rInfo);
+    GroupNodeImpl::doGetNodeInfo(rInfo);
     if (m_pNewName)
         rInfo.aName = *m_pNewName;
 }
 //-----------------------------------------------------------------------------
 
-void DeferredGroupNodeImpl::setNodeName(Name const& aNewName)
+void DeferredGroupNodeImpl::doSetNodeName(Name const& aNewName)
 {
     std::auto_ptr<Name> pNewName( new Name(aNewName) );
     delete m_pNewName;
@@ -694,14 +694,14 @@ void DeferredGroupNodeImpl::doCommitChanges()
 
     if (m_pNewName)
     {
-        GroupNodeImpl::setNodeName(*m_pNewName);
+        GroupNodeImpl::doSetNodeName(*m_pNewName);
 
         delete m_pNewName, m_pNewName = 0;
     }
 }
 //-----------------------------------------------------------------------------
 
-std::auto_ptr<SubtreeChange> DeferredGroupNodeImpl::preCommitChanges()
+std::auto_ptr<SubtreeChange> DeferredGroupNodeImpl::doPreCommitChanges()
 {
     OSL_ENSURE( !m_pNewName, "Renaming not supported with old changes !");
 
@@ -711,7 +711,7 @@ std::auto_ptr<SubtreeChange> DeferredGroupNodeImpl::preCommitChanges()
     {
         // get the name of this node
         NodeInfo aInfo;
-        getNodeInfo(aInfo);
+        doGetNodeInfo(aInfo);
         aRet.reset( new SubtreeChange(aInfo.aName.toString(),
                                       rtl::OUString(),
                                       aInfo.aAttributes) );
@@ -720,21 +720,21 @@ std::auto_ptr<SubtreeChange> DeferredGroupNodeImpl::preCommitChanges()
 }
 //-----------------------------------------------------------------------------
 
-void DeferredGroupNodeImpl::finishCommit(SubtreeChange& rChange)
+void DeferredGroupNodeImpl::doFinishCommit(SubtreeChange& rChange)
 {
     OSL_ENSURE(!rChange.isSetNodeChange(),"ERROR: Change type SET does not match group");
     m_bChanged = false;
 }
 //-----------------------------------------------------------------------------
 
-void DeferredGroupNodeImpl::revertCommit(SubtreeChange& rChange)
+void DeferredGroupNodeImpl::doRevertCommit(SubtreeChange& rChange)
 {
     OSL_ENSURE(!rChange.isSetNodeChange(),"ERROR: Change type SET does not match group");
     OSL_ENSURE(m_bChanged, "DeferredGroupNodeImpl: No Changes to restore");
 }
 //-----------------------------------------------------------------------------
 
-void DeferredGroupNodeImpl::failedCommit(SubtreeChange& rChange)
+void DeferredGroupNodeImpl::doFailedCommit(SubtreeChange& rChange)
 {
     OSL_ENSURE(!rChange.isSetNodeChange(),"ERROR: Change type SET does not match group");
     // discard the change
@@ -789,15 +789,15 @@ ReadOnlyTreeSetNodeImpl::Element ReadOnlyTreeSetNodeImpl::doMakeAdditionalElemen
 }
 //-----------------------------------------------------------------------------
 
-void ReadOnlyTreeSetNodeImpl::setNodeName(Name const& )
+void ReadOnlyTreeSetNodeImpl::doSetNodeName(Name const& )
 {
     failReadOnly();
 }
 //-----------------------------------------------------------------------------
 
-void ReadOnlyTreeSetNodeImpl::getNodeInfo(NodeInfo& rInfo) const
+void ReadOnlyTreeSetNodeImpl::doGetNodeInfo(NodeInfo& rInfo) const
 {
-    TreeSetNodeImpl::getNodeInfo(rInfo);
+    TreeSetNodeImpl::doGetNodeInfo(rInfo);
     rInfo.aAttributes.bWritable = false;
 }
 //-----------------------------------------------------------------------------
@@ -859,15 +859,15 @@ ReadOnlyValueSetNodeImpl::Element ReadOnlyValueSetNodeImpl::doMakeAdditionalElem
 }
 //-----------------------------------------------------------------------------
 
-void ReadOnlyValueSetNodeImpl::setNodeName(Name const& )
+void ReadOnlyValueSetNodeImpl::doSetNodeName(Name const& )
 {
     failReadOnly();
 }
 //-----------------------------------------------------------------------------
 
-void ReadOnlyValueSetNodeImpl::getNodeInfo(NodeInfo& rInfo) const
+void ReadOnlyValueSetNodeImpl::doGetNodeInfo(NodeInfo& rInfo) const
 {
-    ValueSetNodeImpl::getNodeInfo(rInfo);
+    ValueSetNodeImpl::doGetNodeInfo(rInfo);
     rInfo.aAttributes.bWritable = false;
 }
 //-----------------------------------------------------------------------------
@@ -944,9 +944,9 @@ DirectTreeSetNodeImpl::Element DirectTreeSetNodeImpl::doMakeAdditionalElement(Ad
 }
 //-----------------------------------------------------------------------------
 
-void DirectTreeSetNodeImpl::setNodeName(Name const& aNewName)
+void DirectTreeSetNodeImpl::doSetNodeName(Name const& aNewName)
 {
-    TreeSetNodeImpl::setNodeName(aNewName);
+    TreeSetNodeImpl::doSetNodeName(aNewName);
 }
 //-----------------------------------------------------------------------------
 
@@ -1024,9 +1024,9 @@ DirectValueSetNodeImpl::Element DirectValueSetNodeImpl::doMakeAdditionalElement(
 }
 //-----------------------------------------------------------------------------
 
-void DirectValueSetNodeImpl::setNodeName(Name const& aName)
+void DirectValueSetNodeImpl::doSetNodeName(Name const& aName)
 {
-    ValueSetNodeImpl::setNodeName(aName);
+    ValueSetNodeImpl::doSetNodeName(aName);
 }
 //-----------------------------------------------------------------------------
 
@@ -1157,15 +1157,15 @@ SetNodeVisitor::Result DeferredTreeSetNodeImpl::doDispatchToElements(SetNodeVisi
 }
 //-----------------------------------------------------------------------------
 
-void DeferredTreeSetNodeImpl::getNodeInfo(NodeInfo& rInfo) const
+void DeferredTreeSetNodeImpl::doGetNodeInfo(NodeInfo& rInfo) const
 {
-    TreeSetNodeImpl::getNodeInfo(rInfo);
+    TreeSetNodeImpl::doGetNodeInfo(rInfo);
     if (m_pNewName)
         rInfo.aName = *m_pNewName;
 }
 //-----------------------------------------------------------------------------
 
-void DeferredTreeSetNodeImpl::setNodeName(Name const& aNewName)
+void DeferredTreeSetNodeImpl::doSetNodeName(Name const& aNewName)
 {
     std::auto_ptr<Name> pNewName( new Name(aNewName) );
     delete m_pNewName;
@@ -1329,20 +1329,20 @@ void DeferredTreeSetNodeImpl::doCommitChanges()
 
     if (m_pNewName)
     {
-        TreeSetNodeImpl::setNodeName(*m_pNewName);
+        TreeSetNodeImpl::doSetNodeName(*m_pNewName);
 
         delete m_pNewName, m_pNewName = 0;
     }
 }
 //-----------------------------------------------------------------------------
 
-std::auto_ptr<SubtreeChange> DeferredTreeSetNodeImpl::preCommitChanges()
+std::auto_ptr<SubtreeChange> DeferredTreeSetNodeImpl::doPreCommitChanges()
 {
     OSL_ENSURE( !m_pNewName, "Renaming not supported with old changes !");
 
     // nowfirst get the name of this node
     NodeInfo aInfo;
-    getNodeInfo(aInfo);
+    doGetNodeInfo(aInfo);
 
     // and make a SubtreeChange
     std::auto_ptr<SubtreeChange> pSetChange( new SubtreeChange(aInfo.aName.toString(),
@@ -1410,7 +1410,7 @@ std::auto_ptr<SubtreeChange> DeferredTreeSetNodeImpl::preCommitChanges()
 }
 //-----------------------------------------------------------------------------
 
-void DeferredTreeSetNodeImpl::finishCommit(SubtreeChange& rChanges)
+void DeferredTreeSetNodeImpl::doFinishCommit(SubtreeChange& rChanges)
 {
     OSL_ENSURE(rChanges.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
     OSL_ENSURE( rChanges.getChildTemplateName() ==  getElementTemplate()->getPath().toString(),
@@ -1497,7 +1497,7 @@ void DeferredTreeSetNodeImpl::finishCommit(SubtreeChange& rChanges)
 }
 //-----------------------------------------------------------------------------
 
-void DeferredTreeSetNodeImpl::revertCommit(SubtreeChange& rChanges)
+void DeferredTreeSetNodeImpl::doRevertCommit(SubtreeChange& rChanges)
 {
     OSL_ENSURE(rChanges.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
     OSL_ENSURE( rChanges.getChildTemplateName() ==  getElementTemplate()->getPath().toString(),
@@ -1567,7 +1567,7 @@ void DeferredTreeSetNodeImpl::revertCommit(SubtreeChange& rChanges)
 }
 //-----------------------------------------------------------------------------
 
-void DeferredTreeSetNodeImpl::failedCommit(SubtreeChange& rChanges)
+void DeferredTreeSetNodeImpl::doFailedCommit(SubtreeChange& rChanges)
 {
     OSL_ENSURE(rChanges.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
     OSL_ENSURE( rChanges.getChildTemplateName() ==  getElementTemplate()->getPath().toString(),
@@ -1738,7 +1738,7 @@ void DeferredTreeSetNodeImpl::implRemoveOldElement(Name const& aName)
 }
 //-----------------------------------------------------------------------------
 
-void DeferredTreeSetNodeImpl::doAdjustChangedElement(NodeChanges& rLocalChanges, Name const& aName, Change const& aChange, TemplateProvider const& aTemplateProvider)
+void DeferredTreeSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange, TemplateProvider const& aTemplateProvider)
 {
     if (Element* pLocalElement = m_aChangedData.getElement(aName))
     {
@@ -1748,7 +1748,7 @@ void DeferredTreeSetNodeImpl::doAdjustChangedElement(NodeChanges& rLocalChanges,
             Element aLocalElement = *pLocalElement;
 
             // also signal something happened
-            rLocalChanges.add( NodeChange( doCreateReplace(aName,aLocalElement,aLocalElement) ) );
+            addLocalChangeHelper(rLocalChanges, NodeChange( doCreateReplace(aName,aLocalElement,aLocalElement) ) );
         }
         else
         {
@@ -1939,15 +1939,15 @@ SetNodeVisitor::Result DeferredValueSetNodeImpl::doDispatchToElements(SetNodeVis
 }
 //-----------------------------------------------------------------------------
 
-void DeferredValueSetNodeImpl::getNodeInfo(NodeInfo& rInfo) const
+void DeferredValueSetNodeImpl::doGetNodeInfo(NodeInfo& rInfo) const
 {
-    ValueSetNodeImpl::getNodeInfo(rInfo);
+    ValueSetNodeImpl::doGetNodeInfo(rInfo);
     if (m_pNewName)
         rInfo.aName = *m_pNewName;
 }
 //-----------------------------------------------------------------------------
 
-void DeferredValueSetNodeImpl::setNodeName(Name const& aNewName)
+void DeferredValueSetNodeImpl::doSetNodeName(Name const& aNewName)
 {
     std::auto_ptr<Name> pNewName( new Name(aNewName) );
     delete m_pNewName;
@@ -2109,20 +2109,20 @@ void DeferredValueSetNodeImpl::doCommitChanges()
 
     if (m_pNewName)
     {
-        ValueSetNodeImpl::setNodeName(*m_pNewName);
+        ValueSetNodeImpl::doSetNodeName(*m_pNewName);
 
         delete m_pNewName, m_pNewName = 0;
     }
 }
 //-----------------------------------------------------------------------------
 
-std::auto_ptr<SubtreeChange> DeferredValueSetNodeImpl::preCommitChanges()
+std::auto_ptr<SubtreeChange> DeferredValueSetNodeImpl::doPreCommitChanges()
 {
     OSL_ENSURE( !m_pNewName, "Renaming not supported with old changes !");
 
     // nowfirst get the name of this node
     NodeInfo aInfo;
-    getNodeInfo(aInfo);
+    doGetNodeInfo(aInfo);
 
     // and make a SubtreeChange
     std::auto_ptr<SubtreeChange> pSetChange( new SubtreeChange(aInfo.aName.toString(), getElementTemplate()->getPath().toString(), aInfo.aAttributes) );
@@ -2188,7 +2188,7 @@ std::auto_ptr<SubtreeChange> DeferredValueSetNodeImpl::preCommitChanges()
 }
 //-----------------------------------------------------------------------------
 
-void DeferredValueSetNodeImpl::finishCommit(SubtreeChange& rChanges)
+void DeferredValueSetNodeImpl::doFinishCommit(SubtreeChange& rChanges)
 {
     OSL_ENSURE(rChanges.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
     OSL_ENSURE( rChanges.getChildTemplateName() ==  getElementTemplate()->getPath().toString(),
@@ -2275,7 +2275,7 @@ void DeferredValueSetNodeImpl::finishCommit(SubtreeChange& rChanges)
 }
 //-----------------------------------------------------------------------------
 
-void DeferredValueSetNodeImpl::revertCommit(SubtreeChange& rChanges)
+void DeferredValueSetNodeImpl::doRevertCommit(SubtreeChange& rChanges)
 {
     OSL_ENSURE(rChanges.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
     OSL_ENSURE( rChanges.getChildTemplateName() ==  getElementTemplate()->getPath().toString(),
@@ -2345,7 +2345,7 @@ void DeferredValueSetNodeImpl::revertCommit(SubtreeChange& rChanges)
 }
 //-----------------------------------------------------------------------------
 
-void DeferredValueSetNodeImpl::failedCommit(SubtreeChange& rChanges)
+void DeferredValueSetNodeImpl::doFailedCommit(SubtreeChange& rChanges)
 {
     OSL_ENSURE(rChanges.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
     OSL_ENSURE( rChanges.getChildTemplateName() ==  getElementTemplate()->getPath().toString(),
@@ -2516,7 +2516,7 @@ void DeferredValueSetNodeImpl::implRemoveOldElement(Name const& aName)
 }
 //-----------------------------------------------------------------------------
 
-void DeferredValueSetNodeImpl::doAdjustChangedElement(NodeChanges& rLocalChanges, Name const& aName, Change const& aChange, TemplateProvider const& aTemplateProvider)
+void DeferredValueSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange, TemplateProvider const& aTemplateProvider)
 {
     if (Element* pLocalElement = m_aChangedData.getElement(aName))
     {
@@ -2526,7 +2526,7 @@ void DeferredValueSetNodeImpl::doAdjustChangedElement(NodeChanges& rLocalChanges
             Element aLocalElement = *pLocalElement;
 
             // also signal something happened
-            rLocalChanges.add( NodeChange( doCreateReplace(aName,aLocalElement,aLocalElement) ) );
+            addLocalChangeHelper( rLocalChanges, NodeChange( doCreateReplace(aName,aLocalElement,aLocalElement) ) );
         }
         else
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimplobj.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-07 14:48:18 $
+ *  last change: $Author: jb $ $Date: 2001-02-13 17:20:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 
 #include "nodeimpl.hxx"
 #include "setnodeimpl.hxx"
-#include <stl/memory>
+#include <memory>
 
 namespace configmgr
 {
@@ -96,11 +96,11 @@ namespace configmgr
             virtual void    setValue(UnoAny const& aNewValue);
             virtual void    setDefault();
 
-        // NodeImpl implementation
-            virtual void getNodeInfo(NodeInfo& rInfo) const;
-            virtual void setNodeName(Name const& rName);
-
         protected:
+        // NodeImpl implementation
+            virtual void doGetNodeInfo(NodeInfo& rInfo) const;
+            virtual void doSetNodeName(Name const& rName);
+
             virtual bool doHasChanges() const;
             virtual void doCommitChanges();
             virtual void doMarkChanged();
@@ -128,10 +128,10 @@ namespace configmgr
             virtual void    setValue(UnoAny const& aNewValue);
             virtual void    setDefault();
 
-        // NodeImpl implementation
-            virtual void setNodeName(Name const& rName);
-
         protected:
+        // NodeImpl implementation
+            virtual void doSetNodeName(Name const& rName);
+
             virtual bool doHasChanges() const;
             virtual void doCommitChanges();
             virtual void doMarkChanged();
@@ -159,19 +159,19 @@ namespace configmgr
             virtual void    setValue(UnoAny const& aNewValue);
             virtual void    setDefault();
 
-        // NodeImpl implementation
-            virtual void getNodeInfo(NodeInfo& rInfo) const;
-            virtual void setNodeName(Name const& rName);
-
         protected:
         // legacy commit support
-            virtual std::auto_ptr<ValueChange> preCommitChange();
-            virtual void finishCommit(ValueChange& rChange);
-            virtual void revertCommit(ValueChange& rChange);
-            virtual void failedCommit(ValueChange& rChange);
+            virtual std::auto_ptr<ValueChange> doPreCommitChange();
+            virtual void doFinishCommit(ValueChange& rChange);
+            virtual void doRevertCommit(ValueChange& rChange);
+            virtual void doFailedCommit(ValueChange& rChange);
 
             virtual NodeChangeImpl* doAdjustToChange(ValueChange const& rExternalChange);
         protected:
+        // NodeImpl implementation
+            virtual void doGetNodeInfo(NodeInfo& rInfo) const;
+            virtual void doSetNodeName(Name const& rName);
+
             virtual bool doHasChanges() const;
             virtual NodeChangeImpl* doCollectChange() const;
             virtual void doCommitChanges();
@@ -197,12 +197,12 @@ namespace configmgr
             : GroupNodeImpl(rOriginal)
             {}
 
-        // NodeImpl implementation
-            virtual void getNodeInfo(NodeInfo& rInfo) const;
-            virtual void setNodeName(Name const& rName);
-
         // Base obverrideables
         private:
+        // NodeImpl implementation
+            virtual void doGetNodeInfo(NodeInfo& rInfo) const;
+            virtual void doSetNodeName(Name const& rName);
+
             virtual bool doHasChanges() const;
             virtual void doCommitChanges();
             virtual void doMarkChanged();
@@ -220,11 +220,11 @@ namespace configmgr
             explicit
             DirectGroupNodeImpl(DeferredGroupNodeImpl& rOriginal);
 
-        // NodeImpl implementation
-            virtual void setNodeName(Name const& rName);
-
         // Base obverrideables
         private:
+        // NodeImpl implementation
+            virtual void doSetNodeName(Name const& rName);
+
             virtual bool doHasChanges() const;
             virtual void doCommitChanges();
             virtual void doMarkChanged();
@@ -242,19 +242,19 @@ namespace configmgr
 
             ~DeferredGroupNodeImpl();
 
-        // NodeImpl implementation
-            virtual void getNodeInfo(NodeInfo& rInfo) const;
-            virtual void setNodeName(Name const& rName);
-
         protected:
         // legacy commit support
-            virtual std::auto_ptr<SubtreeChange> preCommitChanges();
-            virtual void finishCommit(SubtreeChange& rChange);
-            virtual void revertCommit(SubtreeChange& rChange);
-            virtual void failedCommit(SubtreeChange& rChange);
+            virtual std::auto_ptr<SubtreeChange> doPreCommitChanges();
+            virtual void doFinishCommit(SubtreeChange& rChange);
+            virtual void doRevertCommit(SubtreeChange& rChange);
+            virtual void doFailedCommit(SubtreeChange& rChange);
 
         // Base obverrideables
         private:
+        // NodeImpl implementation
+            virtual void doGetNodeInfo(NodeInfo& rInfo) const;
+            virtual void doSetNodeName(Name const& rName);
+
             virtual bool doHasChanges() const;
             virtual void doCollectChangesWithTarget(NodeChanges& rChanges, TreeImpl* pParent, NodeOffset nNode) const;
             virtual void doCommitChanges();
@@ -278,12 +278,12 @@ namespace configmgr
             {}
 
 
-        // NodeImpl implementation
-            virtual void getNodeInfo(NodeInfo& rInfo) const;
-            virtual void setNodeName(Name const& rName);
-
         // Base Overrideables
         private:
+        // NodeImpl implementation
+            virtual void doGetNodeInfo(NodeInfo& rInfo) const;
+            virtual void doSetNodeName(Name const& rName);
+
             virtual void doInsertElement(Name const& aName, SetEntry const& aNewEntry);
             virtual void doRemoveElement(Name const& aName);
 
@@ -307,10 +307,6 @@ namespace configmgr
             {}
 
 
-        // NodeImpl implementation
-            virtual void getNodeInfo(NodeInfo& rInfo) const;
-            virtual void setNodeName(Name const& rName);
-
         // Base Overrideables
         private:
             virtual void doInsertElement(Name const& aName,  SetEntry const& aNewEntry);
@@ -318,6 +314,10 @@ namespace configmgr
 
             virtual void doInitElements(TemplateProvider const& aTemplateProvider, ISubtree& rTree, TreeDepth nDepth);
             virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
+
+        // NodeImpl implementation
+            virtual void doGetNodeInfo(NodeInfo& rInfo) const;
+            virtual void doSetNodeName(Name const& rName);
 
             virtual bool doHasChanges() const;
             virtual void doCollectChanges(NodeChanges& rChanges) const;
@@ -338,11 +338,11 @@ namespace configmgr
             DirectTreeSetNodeImpl(DeferredTreeSetNodeImpl& rOriginal);
 
 
-        // NodeImpl implementation
-            virtual void setNodeName(Name const& rName);
-
         // Base Overrideables
         private:
+        // NodeImpl implementation
+            virtual void doSetNodeName(Name const& rName);
+
             virtual void doInsertElement(Name const& aName, SetEntry const& aNewEntry);
             virtual void doRemoveElement(Name const& aName);
 
@@ -367,11 +367,11 @@ namespace configmgr
             explicit
             DirectValueSetNodeImpl(DeferredValueSetNodeImpl& rOriginal);
 
-        // NodeImpl implementation
-            virtual void setNodeName(Name const& rName);
-
         // Base Overrideables
         private:
+        // NodeImpl implementation
+            virtual void doSetNodeName(Name const& rName);
+
             virtual void doInsertElement(Name const& aName,  SetEntry const& aNewEntry);
             virtual void doRemoveElement(Name const& aName);
 
@@ -395,19 +395,19 @@ namespace configmgr
             DeferredTreeSetNodeImpl(DirectTreeSetNodeImpl& rOriginal);
 
 
-        // NodeImpl implementation
-            virtual void getNodeInfo(NodeInfo& rInfo) const;
-            virtual void setNodeName(Name const& rName);
-
         protected:
         // legacy commit support
-            virtual std::auto_ptr<SubtreeChange> preCommitChanges();
-            virtual void finishCommit(SubtreeChange& rChanges);
-            virtual void revertCommit(SubtreeChange& rChanges);
-            virtual void failedCommit(SubtreeChange& rChanges);
+            virtual std::auto_ptr<SubtreeChange> doPreCommitChanges();
+            virtual void doFinishCommit(SubtreeChange& rChanges);
+            virtual void doRevertCommit(SubtreeChange& rChanges);
+            virtual void doFailedCommit(SubtreeChange& rChanges);
 
         // Base Overrideables
         private:
+        // NodeImpl implementation
+            virtual void doGetNodeInfo(NodeInfo& rInfo) const;
+            virtual void doSetNodeName(Name const& rName);
+
             virtual bool        doIsEmpty() const;
             virtual SetEntry    doFindElement(Name const& aName) ;
             virtual void        doClearElements();
@@ -419,7 +419,7 @@ namespace configmgr
             virtual void doInitElements(TemplateProvider const& aTemplateProvider, ISubtree& rTree, TreeDepth nDepth);
             virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
 
-            virtual void doAdjustChangedElement(NodeChanges& rLocalChanges, Name const& aName, Change const& aChange, TemplateProvider const& aTemplateProvider);
+            virtual void doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange, TemplateProvider const& aTemplateProvider);
 
             virtual NodeChangeImpl* doAdjustToAddedElement(Name const& aName, AddNode const& aAddNodeChange, Element const& aNewElement);
             virtual NodeChangeImpl* doAdjustToRemovedElement(Name const& aName, RemoveNode const& aRemoveNodeChange);
@@ -451,19 +451,19 @@ namespace configmgr
             DeferredValueSetNodeImpl(DirectValueSetNodeImpl& rOriginal);
 
 
-        // NodeImpl implementation
-            virtual void getNodeInfo(NodeInfo& rInfo) const;
-            virtual void setNodeName(Name const& rName);
-
         protected:
         // legacy commit support
-            virtual std::auto_ptr<SubtreeChange> preCommitChanges();
-            virtual void finishCommit(SubtreeChange& rChanges);
-            virtual void revertCommit(SubtreeChange& rChanges);
-            virtual void failedCommit(SubtreeChange& rChanges);
+            virtual std::auto_ptr<SubtreeChange> doPreCommitChanges();
+            virtual void doFinishCommit(SubtreeChange& rChanges);
+            virtual void doRevertCommit(SubtreeChange& rChanges);
+            virtual void doFailedCommit(SubtreeChange& rChanges);
 
         // Base Overrideables
         private:
+        // NodeImpl implementation
+            virtual void doGetNodeInfo(NodeInfo& rInfo) const;
+            virtual void doSetNodeName(Name const& rName);
+
             virtual bool        doIsEmpty() const;
             virtual SetEntry    doFindElement(Name const& aName) ;
             virtual void        doClearElements();
@@ -475,7 +475,7 @@ namespace configmgr
             virtual void doInitElements(TemplateProvider const& aTemplateProvider, ISubtree& rTree, TreeDepth nDepth);
             virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
 
-            virtual void doAdjustChangedElement(NodeChanges& rLocalChanges, Name const& aName, Change const& aChange, TemplateProvider const& aTemplateProvider);
+            virtual void doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange, TemplateProvider const& aTemplateProvider);
 
             virtual NodeChangeImpl* doAdjustToAddedElement(Name const& aName, AddNode const& aAddNodeChange, Element const& aNewElement);
             virtual NodeChangeImpl* doAdjustToRemovedElement(Name const& aName, RemoveNode const& aRemoveNodeChange);

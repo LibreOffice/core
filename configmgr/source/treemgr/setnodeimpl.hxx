@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setnodeimpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-20 01:38:19 $
+ *  last change: $Author: jb $ $Date: 2001-02-13 17:20:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #include "treeimpl.hxx"
 
 #include <vos/ref.hxx>
-#include <stl/map>
+#include <map>
 
 namespace configmgr
 {
@@ -187,7 +187,7 @@ namespace configmgr
 
             void        doClearElements();
 
-            void        doAdjustToChanges(NodeChanges& rLocalChanges, SubtreeChange const& rExternalChanges, TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
+            void        doAdjustToChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& rExternalChanges, TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
 
             SetNodeVisitor::Result doDispatchToElements(SetNodeVisitor& aVisitor);
 
@@ -198,12 +198,12 @@ namespace configmgr
             void    implInitElement(Element const& aNewElement);
             void    implMakeIndirect(bool bIndirect); // ensures kids are (in)direct
 
-            void implAdjustToElementChange(NodeChanges& rLocalChanges, Change const& aChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
+            void implAdjustToElementChange(NodeChangesInformation& rLocalChanges, Change const& aChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
 
         // new overrideables
             virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth) = 0;
 
-            virtual void doAdjustChangedElement(NodeChanges& rLocalChanges, Name const& aName, Change const& aChange, TemplateProvider const& aTemplateProvider);
+            virtual void doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange, TemplateProvider const& aTemplateProvider);
 
             virtual NodeChangeImpl* doAdjustToAddedElement(Name const& aName, AddNode const& aAddNodeChange, Element const& aNewElement);
             virtual NodeChangeImpl* doAdjustToRemovedElement(Name const& aName, RemoveNode const& aRemoveNodeChange);
@@ -241,7 +241,7 @@ namespace configmgr
 
         // base class implementation (or helpers)
         protected:
-            NodeType::Enum  getType() const;
+            NodeType::Enum  doGetType() const;
 
             void doInsertElement(Name const& aName, SetEntry const& aNewEntry) = 0;
             void doRemoveElement(Name const& aName) = 0;
@@ -263,7 +263,7 @@ namespace configmgr
 
         // base class implementations (or helpers)
         protected:
-            NodeType::Enum  getType() const;
+            NodeType::Enum  doGetType() const;
 
             void doInsertElement(Name const& aName, SetEntry const& aNewEntry) = 0;
             void doRemoveElement(Name const& aName) = 0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setnodeimpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-30 08:20:25 $
+ *  last change: $Author: jb $ $Date: 2001-02-13 17:20:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,7 +362,7 @@ void AbstractSetNodeImpl::implInitElement(Element const& aNewElement)
 }
 //-------------------------------------------------------------------------
 
-void AbstractSetNodeImpl::doAdjustToChanges(NodeChanges& rLocalChanges, SubtreeChange const& rExternalChanges,
+void AbstractSetNodeImpl::doAdjustToChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& rExternalChanges,
                                             TemplateProvider const& aTemplateProvider, TreeDepth nDepth)
 {
     for (SubtreeChange::ChildIterator it = rExternalChanges.begin(); it != rExternalChanges.end(); ++it)
@@ -372,8 +372,10 @@ void AbstractSetNodeImpl::doAdjustToChanges(NodeChanges& rLocalChanges, SubtreeC
 }
 //-------------------------------------------------------------------------
 
-void AbstractSetNodeImpl::implAdjustToElementChange(NodeChanges& rLocalChanges, Change const& aChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth)
+void AbstractSetNodeImpl::implAdjustToElementChange(NodeChangesInformation& rLocalChanges, Change const& aChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth)
 {
+    OSL_ENSURE( implHasLoadedElements() , "Unexpected call: Processing element change in uninitialized set");
+
     Name aName( aChange.getNodeName(), Name::NoValidate() );
 
     NodeChangeImpl* pThisChange = 0;
@@ -406,14 +408,14 @@ void AbstractSetNodeImpl::implAdjustToElementChange(NodeChanges& rLocalChanges, 
 
     if (pThisChange)
     {
-        rLocalChanges.add( NodeChange(pThisChange) );
+        addLocalChangeHelper( rLocalChanges, NodeChange(pThisChange) );
     }
 }
 
 // Default implementations
 //-------------------------------------------------------------------------
 
-void AbstractSetNodeImpl::doAdjustChangedElement(NodeChanges& rLocalChanges, Name const& aName, Change const& aChange, TemplateProvider const& aTemplateProvider)
+void AbstractSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange, TemplateProvider const& aTemplateProvider)
 {
     if (Element* pElement = getStoredElement(aName))
     {
@@ -728,13 +730,13 @@ ElementTreeHolder ValueSetNodeImpl::makeAdditionalElement(TemplateProvider const
 }
 //-------------------------------------------------------------------------
 
-NodeType::Enum TreeSetNodeImpl::getType() const
+NodeType::Enum TreeSetNodeImpl::doGetType() const
 {
     return NodeType::eTREESET;
 }
 //-------------------------------------------------------------------------
 
-NodeType::Enum  ValueSetNodeImpl::getType() const
+NodeType::Enum  ValueSetNodeImpl::doGetType() const
 {
     return NodeType::eVALUESET;
 }
