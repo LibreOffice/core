@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageHeaderArea.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-24 15:11:15 $
+ *  last change: $Author: sab $ $Date: 2002-07-04 08:17:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,13 @@ public:
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
         getImplementationId(void)
         throw (::com::sun::star::uno::RuntimeException);
+
+protected:
+    virtual ::rtl::OUString SAL_CALL createAccessibleDescription(void) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL createAccessibleName(void) throw (::com::sun::star::uno::RuntimeException);
+
+    virtual Rectangle GetBoundingBoxOnScreen(void) const throw(::com::sun::star::uno::RuntimeException);
+    virtual Rectangle GetBoundingBox(void) const throw (::com::sun::star::uno::RuntimeException);
 
 private:
     EditTextObject* mpEditObj;
