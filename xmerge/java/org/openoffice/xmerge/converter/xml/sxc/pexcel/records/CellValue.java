@@ -60,9 +60,11 @@ import java.io.OutputStream;
 import java.io.InputStream;
 import java.io.IOException;
 
+import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 
- public abstract class CellValue implements BIFFRecord {
+public abstract class CellValue implements BIFFRecord {
 
     protected byte[] rw = new byte[2];
     protected byte   col;
@@ -119,6 +121,37 @@ import org.openoffice.xmerge.util.EndianConverter;
      */
     public void setCol(int col) {
         this.col = (byte) (col - 1);        // The cols start at 1
+    }
+
+    /**
+     * Writes basic cell value attributes to the specified <code>Outputstream</code>
+     *
+     * @param os the <code>OutputStream</code> to write to
+     */
+    public void write(OutputStream output) throws IOException {
+
+        output.write(rw);
+        output.write(col);
+        output.write(ixfe);
+    }
+
+    /**
+     * Writes a<code>LabelCell</code> to the specified <code>Outputstream</code>
+     *
+     * @param os the <code>OutputStream</code> to write to
+     */
+    public int read(InputStream input) throws IOException {
+
+        int numOfBytesRead  = input.read(rw);
+        col                 += input.read();
+        numOfBytesRead++;
+        numOfBytesRead      += input.read(ixfe);
+
+        Debug.log(Debug.TRACE, "\tRow : "+ EndianConverter.readShort(rw) +
+                            " Column : " + col +
+                            " ixfe : " + EndianConverter.readShort(ixfe));
+
+        return numOfBytesRead;
     }
 
 

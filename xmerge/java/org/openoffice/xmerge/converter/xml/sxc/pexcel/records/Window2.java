@@ -62,6 +62,8 @@ import java.io.IOException;
 
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
+
 
 /**
  * Represents a BIFF Record that describes worksheet window attributes
@@ -96,7 +98,7 @@ public class Window2 implements BIFFRecord {
      * @return the hex code for <code>Window2</code>
      */
     public short getBiffType() {
-        return PocketExcelBiffConstants.SHEET_WINDOW_INFO;
+        return PocketExcelConstants.SHEET_WINDOW_INFO;
     }
 
        /**

@@ -64,6 +64,8 @@ import java.util.Enumeration;
 import org.openoffice.xmerge.util.IntArrayList;
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.converter.xml.sxc.ColumnRowInfo;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
+
 
 /**
  *  This class is used by <code>PxlDocument</code> to maintain pexcel
@@ -147,91 +149,92 @@ public class Worksheet {
         while(b!=-1) {
             switch (b)
             {
-                case PocketExcelBiffConstants.BLANK_CELL:
+                case PocketExcelConstants.BLANK_CELL:
                     Debug.log(Debug.TRACE,"Blank Cell (01h)");
                     BlankCell bc = new BlankCell(is);
+                    cells.add(bc);
                     break;
 
-                case PocketExcelBiffConstants.NUMBER_CELL:
+                case PocketExcelConstants.NUMBER_CELL:
                     Debug.log(Debug.TRACE,"NUMBER: Cell Value, Floating-Point Number (03h)");
                     FloatNumber fn = new FloatNumber(is);
                     cells.add(fn);
                     break;
 
-                case PocketExcelBiffConstants.LABEL_CELL:
+                case PocketExcelConstants.LABEL_CELL:
                     Debug.log(Debug.TRACE,"LABEL: Cell Value, String Constant (04h)");
                     LabelCell lc = new LabelCell(is);
                     cells.add(lc);
                     break;
 
-                case PocketExcelBiffConstants.BOOLERR_CELL:
+                case PocketExcelConstants.BOOLERR_CELL:
                     Debug.log(Debug.TRACE,"BOOLERR: Cell Value, Boolean or Error (05h)");
                     BoolErrCell bec = new BoolErrCell(is);
                     break;
 
-                case PocketExcelBiffConstants.FORMULA_CELL:
+                case PocketExcelConstants.FORMULA_CELL:
                     Debug.log(Debug.TRACE,"FORMULA: Cell Formula (06h)");
                     Formula f = new Formula(is, wb);
                     cells.add(f);
                     break;
 
-                 case PocketExcelBiffConstants.FORMULA_STRING:
+                 case PocketExcelConstants.FORMULA_STRING:
                     Debug.log(Debug.TRACE,"String Value of a Formula (07h)");
                     StringValue sv = new StringValue(is);
                     break;
 
-                case PocketExcelBiffConstants.ROW_DESCRIPTION:
+                case PocketExcelConstants.ROW_DESCRIPTION:
                     Debug.log(Debug.TRACE,"ROW: Describes a Row (08h)");
                     Row rw = new Row(is);
                     rows.add(rw);
                     break;
 
-                case PocketExcelBiffConstants.BOF_RECORD:
+                case PocketExcelConstants.BOF_RECORD:
                     Debug.log(Debug.TRACE,"BOF Record");
                     bof = new BeginningOfFile(is);
                     break;
 
-                case PocketExcelBiffConstants.EOF_MARKER:
+                case PocketExcelConstants.EOF_MARKER:
                     Debug.log(Debug.TRACE,"EOF Marker");
                     eof = new Eof();
                     return true;
                    /*
-                case PocketExcelBiffConstants.DEFINED_NAME:
+                case PocketExcelConstants.DEFINED_NAME:
                     Debug.log(Debug.TRACE,"NAME: Defined Name (18h)");
                     DefinedName dn = new DefinedName(is, wb);
                     break;
                      */
-                case PocketExcelBiffConstants.CURRENT_SELECTION:
+                case PocketExcelConstants.CURRENT_SELECTION:
                     Debug.log(Debug.TRACE,"SELECTION: Current Selection (1Dh)");
                     Selection s = new Selection(is);
                     break;
 
-                case PocketExcelBiffConstants.NUMBER_FORMAT:
+                case PocketExcelConstants.NUMBER_FORMAT:
                     Debug.log(Debug.TRACE,"FORMAT: Number Format (1Eh)");
                     NumberFormat nf = new NumberFormat(is);
                     break;
 
-                case PocketExcelBiffConstants.DEFAULT_ROW_HEIGHT:
+                case PocketExcelConstants.DEFAULT_ROW_HEIGHT:
                     Debug.log(Debug.TRACE,"DEFAULTROWHEIGHT: Default Row Height (25h)");
                     drh = new DefRowHeight(is);
                     break;
 
-                case PocketExcelBiffConstants.SHEET_WINDOW_INFO:
+                case PocketExcelConstants.SHEET_WINDOW_INFO:
                     Debug.log(Debug.TRACE,"WINDOW2: Sheet Window Information (3Eh) [PXL 2.0]");
                     win2 = new Window2(is);
                     break;
 
-                case PocketExcelBiffConstants.PANE_INFO:
+                case PocketExcelConstants.PANE_INFO:
                     Debug.log(Debug.TRACE,"PANE: Number of Panes and their Position (41h) [PXL 2.0]");
                     Pane p = new Pane(is);
                     break;
 
-                case PocketExcelBiffConstants.DEF_COL_WIDTH:
+                case PocketExcelConstants.DEF_COL_WIDTH:
                     Debug.log(Debug.TRACE,"DEFCOLWIDTH: Default Column Width (55h) [PXL 2.0]");
                     dcw = new DefColWidth(is);
                     break;
 
-                case PocketExcelBiffConstants.COLINFO:
+                case PocketExcelConstants.COLINFO:
                     Debug.log(Debug.TRACE,"COLINFO: Column Formatting Information (7Dh) [PXL 2.0]");
                     ColInfo ci = new ColInfo(is);
                     colInfo.add(ci);

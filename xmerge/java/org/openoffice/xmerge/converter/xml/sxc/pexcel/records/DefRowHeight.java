@@ -62,6 +62,7 @@ import java.io.IOException;
 
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 
 /**
  * Represents a BIFF record defiuning the default row height
@@ -97,7 +98,7 @@ public class DefRowHeight implements BIFFRecord {
      * @return the hex code for <code>DefRowHeight</code>
      */
     public short getBiffType() {
-        return PocketExcelBiffConstants.DEFAULT_ROW_HEIGHT;
+        return PocketExcelConstants.DEFAULT_ROW_HEIGHT;
     }
 
     public int read(InputStream input) throws IOException {

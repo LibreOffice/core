@@ -62,6 +62,7 @@ import java.io.IOException;
 
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 
 /**
  * Represents a BIFF Record used to mark the end of a section of file
@@ -80,7 +81,7 @@ public class Eof implements BIFFRecord {
      * @return the hex code for <code>BeginningOfFile</code>
      */
     public short getBiffType() {
-        return PocketExcelBiffConstants.EOF_MARKER;
+        return PocketExcelConstants.EOF_MARKER;
     }
 
     public int read(InputStream input) throws IOException {

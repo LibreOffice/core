@@ -63,6 +63,7 @@ import java.io.IOException;
 
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 
 /**
  * Represents a BIFF Record that describes a Boolean or Error value
@@ -105,15 +106,20 @@ public class BoolErrCell extends CellValue {
      * @return the hex code for <code>BoolErrCEll</code>
      */
     public short getBiffType() {
-        return PocketExcelBiffConstants.BOOLERR_CELL;
+        return PocketExcelConstants.BOOLERR_CELL;
     }
 
+    /**
+     * Writes a <code>BoolErrCell</code> to the specified <code>Outputstream</code>
+     *
+     * @param os the <code>OutputStream</code> to write to
+     */
     public void write(OutputStream output) throws IOException {
 
         output.write(getBiffType());
-        output.write(rw);
-        output.write(col);
-        output.write(ixfe);
+
+        super.write(output);
+
         output.write(bBoolErr);
         output.write(fError);
 
@@ -127,17 +133,13 @@ public class BoolErrCell extends CellValue {
       */
     public int read(InputStream input) throws IOException {
 
-        int numOfBytesRead  = input.read(rw);
-        col                 = (byte) input.read();
-        numOfBytesRead      += input.read(ixfe);
+        int numOfBytesRead = super.read(input);
+
         bBoolErr            = (byte) input.read();
         fError              = (byte) input.read();
-           numOfBytesRead += 3;
+           numOfBytesRead += 2;
 
-        Debug.log(Debug.TRACE,"\tRow : "+ EndianConverter.readShort(rw) +
-                            " Column : " + col +
-                            " ixfe : " + EndianConverter.readShort(ixfe) +
-                            " bBoolErr : " + bBoolErr +
+        Debug.log(Debug.TRACE, " bBoolErr : " + bBoolErr +
                             " fError : " + fError);
         return numOfBytesRead;
     }

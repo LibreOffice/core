@@ -62,6 +62,8 @@ import java.io.IOException;
 
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
+
 
 /**
  * Represents a BIFF Record that describes the selected area of a worksheet
@@ -103,7 +105,7 @@ public class Selection implements BIFFRecord {
      * @return the hex code for <code>Selection</code>
      */
     public short getBiffType() {
-        return PocketExcelBiffConstants.CURRENT_SELECTION;
+        return PocketExcelConstants.CURRENT_SELECTION;
     }
 
     /**
@@ -133,7 +135,7 @@ public class Selection implements BIFFRecord {
 
     public void write(OutputStream output) throws IOException {
 
-        output.write(PocketExcelBiffConstants.CURRENT_SELECTION);
+        output.write(getBiffType());
         output.write(rwTop);
         output.write(colLeft);
         output.write(rwBottom);

@@ -66,6 +66,7 @@ import org.openoffice.xmerge.util.EndianConverter;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.formula.FormulaHelper;
 import org.openoffice.xmerge.converter.xml.sxc.NameDefinition;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 
 /**
  * Represents a BIFF Record representing a defined name in the workbook
@@ -120,7 +121,7 @@ public class DefinedName implements BIFFRecord {
      * @return the hex code for <code>DefinedName</code>
      */
     public short getBiffType() {
-        return PocketExcelBiffConstants.DEFINED_NAME;
+        return PocketExcelConstants.DEFINED_NAME;
     }
 
     /**

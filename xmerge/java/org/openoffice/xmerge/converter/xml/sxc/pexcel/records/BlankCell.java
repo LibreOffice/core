@@ -62,16 +62,12 @@ import java.io.IOException;
 
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
-import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.PocketExcelBiffConstants;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 
 /**
  * Represents a BIFF Record that describes a blank cell
  */
-public class BlankCell implements BIFFRecord {
-
-    private byte[] row  = new byte[2];
-    private byte   col;
-    private byte[] ixfe = new byte[2];
+public class BlankCell extends CellValue {
 
     /**
      * Constructs a BlankCell <code>InputStream</code>
@@ -83,48 +79,33 @@ public class BlankCell implements BIFFRecord {
     }
 
     /**
+      * Constructs a <code>BlankCell</code> using specified attributes
+     *
+     * @param row row number
+     * @param col column number
+     * @param cellContents contents of the cell
+     * @param ixfe font index
+      */
+    public BlankCell(int row, int column, int ixfe) throws IOException {
+
+        setRow(row);
+           setCol(column);
+        setIxfe(ixfe);
+    }
+
+    /**
      * Get the hex code for this particular <code>BIFFRecord</code>
      *
      * @return the hex code for <code>BlankCell</code>
      */
     public short getBiffType() {
-        return PocketExcelBiffConstants.BLANK_CELL;
-    }
-
-    public int getRow()
-    {
-        return EndianConverter.readShort(row);
-    }
-
-    public void setRow(short row)
-    {
-        this.row = EndianConverter.writeShort(row);
-    }
-
-    public int getCol()
-    {
-        return (int) col;
-    }
-
-    public void setCol(short col)
-    {
-        this.col = (byte) col;
-    }
-
-    public int getXFIndex()
-    {
-        return EndianConverter.readShort(ixfe);
-    }
-
-    public void setXFIndex(short ixfe)
-    {
-        this.ixfe = EndianConverter.writeShort(ixfe);
+        return PocketExcelConstants.BLANK_CELL;
     }
 
     public void write(OutputStream output) throws IOException {
 
         output.write(getBiffType());
-        output.write(row);
+        output.write(rw);
         output.write(col);
         output.write(ixfe);
 
@@ -139,16 +120,25 @@ public class BlankCell implements BIFFRecord {
      */
     public int read(InputStream input) throws IOException {
 
-        int numOfBytesRead  = input.read(row);
+        int numOfBytesRead  = input.read(rw);
         numOfBytesRead++;
         col                 += input.read();
         numOfBytesRead      += input.read(ixfe);
 
-        Debug.log(Debug.TRACE, "\tRow : "+ EndianConverter.readShort(row) +
+        Debug.log(Debug.TRACE, "\tRow : "+ EndianConverter.readShort(rw) +
                             " Column : " + col +
                             " ixfe : " + EndianConverter.readShort(ixfe));
 
         return numOfBytesRead;
     }
 
+    /**
+     * Gets the <code>String</code> representing the cells contents
+     *
+     * @return the <code>String</code> representing the cells contents
+     */
+    public String getString() throws IOException {
+
+        return (new String(""));
+    }
 }

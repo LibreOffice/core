@@ -62,6 +62,7 @@ import java.io.OutputStream;
 
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 
 /**
  * ColInfo describes the formatting for a column
@@ -129,7 +130,7 @@ public class ColInfo implements BIFFRecord {
      * @return the hex code for <code>ColInfo</code>
      */
     public short getBiffType() {
-        return PocketExcelBiffConstants.COLINFO;
+        return PocketExcelConstants.COLINFO;
     }
     /**
      * Get the width of this column
@@ -165,7 +166,7 @@ public class ColInfo implements BIFFRecord {
      */
     public void write(OutputStream output) throws IOException {
 
-        output.write(PocketExcelBiffConstants.COLINFO);
+        output.write(getBiffType());
         output.write(colFirst);
         output.write(colLast);
         output.write(colDX);

@@ -138,7 +138,6 @@
             <include name="${package}/CellValue.java"/>
             <include name="${package}/Workbook.java"/>
             <include name="${package}/Worksheet.java"/>
-            <include name="${package}/PocketExcelBiffConstants.java"/>
             <include name="${package}/BeginningOfFile.java"/>
             <include name="${package}/BlankCell.java"/>
             <include name="${package}/BoolErrCell.java"/>

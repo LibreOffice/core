@@ -62,6 +62,7 @@ import java.io.IOException;
 
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 
 /**
  * Represents a BIFF Record describing a floating point
@@ -103,30 +104,30 @@ public class FloatNumber extends CellValue {
      * @return the hex code for <code>FloatNumber</code>
      */
     public short getBiffType() {
-        return PocketExcelBiffConstants.NUMBER_CELL;
+        return PocketExcelConstants.NUMBER_CELL;
     }
 
+    /**
+     * Reads a<code>FloatNumber</code> from the specified <code>InputStream</code>
+     *
+     * @param input the <code>InputStram</code> to read from
+     */
     public int read(InputStream input) throws IOException {
 
-        int numOfBytesRead  = input.read(rw);
-        col                 = (byte) input.read();
-        numOfBytesRead++;
-        numOfBytesRead  = input.read(ixfe);
-        numOfBytesRead  = input.read(num);
+        int numOfBytesRead = super.read(input);
 
-        Debug.log(Debug.TRACE,"\trw : "+ EndianConverter.readShort(rw) +
-                            " col : " + col +
-                            " ixfe : " + EndianConverter.readShort(ixfe) +
-                            " num : " + getString());
+        numOfBytesRead += input.read(num);
+
+        Debug.log(Debug.TRACE," num : " + getString());
         return numOfBytesRead;
     }
 
     public void write(OutputStream output) throws IOException {
 
         output.write(getBiffType());
-        output.write(rw);
-        output.write(col);
-        output.write(ixfe);
+
+        super.write(output);
+
         output.write(num);
 
         Debug.log(Debug.TRACE,"Writing FloatNumber record");

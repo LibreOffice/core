@@ -62,6 +62,8 @@ import java.io.IOException;
 
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
+
 
 /**
  * Reperesent a BIFF Record descibing a cell containing a string
@@ -105,9 +107,9 @@ public class LabelCell extends CellValue {
     public void write(OutputStream output) throws IOException {
 
         output.write(getBiffType());
-        output.write(rw);
-        output.write(col);
-        output.write(ixfe);
+
+        super.write(output);
+
         output.write(cch);
         output.write(rgch);
 
@@ -120,30 +122,25 @@ public class LabelCell extends CellValue {
      * @return the hex code for <code>LabelCell</code>
      */
     public short getBiffType() {
-        return PocketExcelBiffConstants.LABEL_CELL;
+        return PocketExcelConstants.LABEL_CELL;
     }
 
     /**
-     * Writes a<code>LabelCell</code> to the specified <code>Outputstream</code>
+     * Reads a<code>LabelCell</code> from the specified <code>InputStream</code>
      *
-     * @param os the <code>OutputStream</code> to write to
+     * @param input the <code>InputStram</code> to read from
      */
     public int read(InputStream input) throws IOException {
 
-        int numOfBytesRead  = input.read(rw);
-        col                 += input.read();
-        numOfBytesRead++;
-        numOfBytesRead      += input.read(ixfe);
-        numOfBytesRead      += input.read(cch);
+        int numOfBytesRead = super.read(input);
+
+        numOfBytesRead += input.read(cch);
 
         int strLen = EndianConverter.readShort(cch)*2;
         rgch = new byte[strLen];
         input.read(rgch, 0, strLen);
 
-        Debug.log(Debug.TRACE, "\tRow : "+ EndianConverter.readShort(rw) +
-                            " Column : " + col +
-                            " ixfe : " + EndianConverter.readShort(ixfe) +
-                            " cch : " + EndianConverter.readShort(cch) +
+        Debug.log(Debug.TRACE, " cch : " + EndianConverter.readShort(cch) +
                             " rgch : " + new String(rgch, "UTF-16LE"));
 
         return numOfBytesRead;

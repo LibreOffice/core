@@ -61,7 +61,7 @@ import java.io.IOException;
 
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
-import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.PocketExcelBiffConstants;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 
 /**
  *  This class describes the beginning of file. It is the
@@ -126,7 +126,7 @@ public class BeginningOfFile implements BIFFRecord {
 
     public void write(OutputStream output) throws IOException {
 
-        output.write(PocketExcelBiffConstants.BOF_RECORD);
+        output.write(getBiffType());
         output.write(version);
         output.write(subStream);
 
@@ -139,6 +139,6 @@ public class BeginningOfFile implements BIFFRecord {
      * @return the hex code for <code>BeginningOfFile</code>
      */
     public short getBiffType() {
-        return PocketExcelBiffConstants.BOF_RECORD;
+        return PocketExcelConstants.BOF_RECORD;
    }
 }

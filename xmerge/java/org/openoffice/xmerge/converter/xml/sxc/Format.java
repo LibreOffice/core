@@ -121,15 +121,7 @@ public class Format implements Cloneable {
      *  Constructor for creating a new <code>Format</code>.
      */
     public Format() {
-        category = "";
-        value = "";
-        formatSpecifier = "";
-        fontName = "";
-        align = LEFT_ALIGN;
-        vertAlign = BOTTOM_ALIGN;
-        attributes = 0;
-        foreground = Color.black;
-        background = Color.white;
+        clearFormatting();
     }
 
     /**
@@ -181,8 +173,8 @@ public class Format implements Cloneable {
        align = LEFT_ALIGN;
        vertAlign = BOTTOM_ALIGN;
        fontName = "";
-       foreground = Color.black;
-       background = Color.white;
+       foreground = null;
+       background = null;
     }
 
     /**
@@ -395,8 +387,8 @@ public class Format implements Cloneable {
       *  @param  color  A <code>Color</code> object representing the
       *                 foreground color.
       */
-     public void setForeground(Color color) {
-         foreground = new Color(color.getRGB());
+     public void setForeground(Color c) {
+        foreground = c;
      }
 
 
@@ -406,7 +398,7 @@ public class Format implements Cloneable {
       *  @return  Foreground <code>Color</code> value.
       */
      public Color getForeground() {
-         return new Color(foreground.getRGB());
+         return foreground;
      }
 
 
@@ -416,9 +408,8 @@ public class Format implements Cloneable {
       *  @param  color  A <code>Color</code> object representing
       *                 the background color.
       */
-     public void setBackground(Color backgroundColor) {
-         if(backgroundColor != null)
-             background = new Color(backgroundColor.getRGB());
+     public void setBackground(Color c) {
+         background = c;
      }
 
 
@@ -428,7 +419,7 @@ public class Format implements Cloneable {
       *  @return  Background <code>Color</code> value
       */
      public Color getBackground() {
-         return new Color(background.getRGB());
+         return background;
      }
 
      /**

@@ -135,7 +135,6 @@
                deprecation="${deprecation}"
                optimize="${optimize}">
             <classpath refid="classpath"/>
-                        <include name="${package}/ColourConverter.java"/>
             <include name="${package}/DocumentDescriptor.java"/>
                         <include name="${package}/DocumentDeserializerImpl.java"/>
             <include name="${package}/DocumentSerializerImpl.java"/>

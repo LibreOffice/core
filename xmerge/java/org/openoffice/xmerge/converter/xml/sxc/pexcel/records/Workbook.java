@@ -66,6 +66,8 @@ import org.openoffice.xmerge.converter.xml.sxc.Format;
 import org.openoffice.xmerge.converter.xml.sxc.NameDefinition;
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.IntArrayList;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
+
 
 /**
  *  This class is used by <code> PxlDocument</code> to maintain pexcel
@@ -104,7 +106,7 @@ OfficeConstants {
      *                  extension)
      */
     public Workbook(String name) throws IOException {
-        fileName = name + ".pxl";
+        fileName = name + PocketExcelConstants.FILE_EXTENSION;
         Format defaultFormat = new Format();
         FontDescription fd = new FontDescription(defaultFormat);
         fonts.add(fd);
@@ -178,18 +180,18 @@ OfficeConstants {
 
             switch (b)
             {
-                case PocketExcelBiffConstants.DEFINED_NAME:
+                case PocketExcelConstants.DEFINED_NAME:
                     Debug.log(Debug.TRACE,"NAME: Defined Name (18h)");
                     DefinedName dn = new DefinedName(is, this);
                     definedNames.add(dn);
                     break;
 
-                case PocketExcelBiffConstants.BOF_RECORD:
+                case PocketExcelConstants.BOF_RECORD:
                     Debug.log(Debug.TRACE,"BOF Record");
                     bof.read(is);
                     break;
 
-                case PocketExcelBiffConstants.EOF_MARKER:
+                case PocketExcelConstants.EOF_MARKER:
                     Debug.log(Debug.TRACE,"EOF Marker");
                     eof.read(is);
                     Worksheet ws = new Worksheet(this);
@@ -199,29 +201,29 @@ OfficeConstants {
                     }
                     break;
 
-                case PocketExcelBiffConstants.FONT_DESCRIPTION:
+                case PocketExcelConstants.FONT_DESCRIPTION:
                     Debug.log(Debug.TRACE,"FONT: Font Description (31h)");
                     FontDescription fd = new FontDescription(is);
                     fonts.add(fd);
                     break;
 
-                case PocketExcelBiffConstants.WINDOW_INFO:
+                case PocketExcelConstants.WINDOW_INFO:
                     Debug.log(Debug.TRACE,"WINDOW1: Window Information (3Dh) [PXL 2.0]");
                     win1.read(is);
                     break;
 
-                case PocketExcelBiffConstants.CODEPAGE:
+                case PocketExcelConstants.CODEPAGE:
                     Debug.log(Debug.TRACE,"CODEPAGE : Codepage and unknown fields (42h)");
                     cp.read(is);
                     break;
 
-                case PocketExcelBiffConstants.BOUND_SHEET:
+                case PocketExcelConstants.BOUND_SHEET:
                     Debug.log(Debug.TRACE,"BOUNDSHEET: Sheet Information (85h)");
                     BoundSheet bs = new BoundSheet(is);
                     boundsheets.add(bs);
                     break;
 
-                case PocketExcelBiffConstants.EXTENDED_FORMAT:
+                case PocketExcelConstants.EXTENDED_FORMAT:
                     Debug.log(Debug.TRACE,"XF: Extended Format (E0h) [PXL 2.0]");
                     ExtendedFormat xf = new ExtendedFormat(is);
                     extendedFormats.add(xf);

@@ -62,6 +62,8 @@ import java.io.IOException;
 
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
+
 
 /**
  * Represents s BIFF Record that describes the format of a column
@@ -101,7 +103,7 @@ public class Row implements BIFFRecord {
      * @return the hex code for <code>Row</code>
      */
     public short getBiffType() {
-        return PocketExcelBiffConstants.ROW_DESCRIPTION;
+        return PocketExcelConstants.ROW_DESCRIPTION;
     }
 
     /**
@@ -143,7 +145,7 @@ public class Row implements BIFFRecord {
 
     public void write(OutputStream output) throws IOException {
 
-        output.write(PocketExcelBiffConstants.ROW_DESCRIPTION);
+        output.write(getBiffType());
         output.write(rw);
         output.write(miyRw);
         output.write(grbit);

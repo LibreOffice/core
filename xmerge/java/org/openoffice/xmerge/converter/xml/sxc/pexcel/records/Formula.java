@@ -71,6 +71,8 @@ import org.openoffice.xmerge.converter.xml.OfficeConstants;
 import org.openoffice.xmerge.converter.xml.sxc.Format;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.formula.FormulaHelper;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
+
 
 /**
  * Represents a BIFF Record describing a formula
@@ -172,7 +174,7 @@ public class Formula extends CellValue implements OfficeConstants {
      * @return the hex code for <code>Formula</code>
      */
     public short getBiffType() {
-        return PocketExcelBiffConstants.FORMULA_CELL;
+        return PocketExcelConstants.FORMULA_CELL;
     }
 
     /**
@@ -183,11 +185,9 @@ public class Formula extends CellValue implements OfficeConstants {
      */
     public int read(InputStream input) throws IOException {
 
-        int numOfBytesRead  = input.read(rw);
-        col                 = (byte) input.read();
-        numOfBytesRead      ++;
-        numOfBytesRead      += input.read(ixfe);
-        numOfBytesRead      += input.read(num);
+        int numOfBytesRead = super.read(input);
+
+        numOfBytesRead += input.read(num);
         grbit               = (byte) input.read();
         numOfBytesRead      ++;
         numOfBytesRead      += input.read(cce);
@@ -196,10 +196,7 @@ public class Formula extends CellValue implements OfficeConstants {
         rgce = new byte[strLen];
         input.read(rgce, 0, strLen);
 
-        Debug.log(Debug.TRACE,"\trw : "+ EndianConverter.readShort(rw) +
-                            " col : " + col +
-                            " ixfe : " + EndianConverter.readShort(ixfe) +
-                            " num : " + num +
+        Debug.log(Debug.TRACE, " num : " + num +
                             "\n\tgrbit : " + grbit +
                             " cce : " + EndianConverter.readShort(cce) +
                             " rgce : " + new String(rgce,"UTF-16LE") +
@@ -216,9 +213,9 @@ public class Formula extends CellValue implements OfficeConstants {
     public void write(OutputStream output) throws IOException {
 
         output.write(getBiffType());
-        output.write(rw);
-        output.write(col);
-        output.write(ixfe);
+
+        super.write(output);
+
         output.write(num);
         output.write(grbit);
         output.write(cce);

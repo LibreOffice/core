@@ -67,7 +67,7 @@ import java.util.Enumeration;
 import java.awt.Color;
 
 import org.openoffice.xmerge.util.EndianConverter;
-
+import org.openoffice.xmerge.util.ColourConverter;
 import org.openoffice.xmerge.converter.xml.ParaStyle;
 import org.openoffice.xmerge.converter.xml.TextStyle;
 
@@ -308,7 +308,8 @@ class Paragraph implements PocketWordConstants {
 
                     case COLOUR_TAG:
                         if (data[i + 1] != 0) {
-                            textColour = ColourConverter.convertToRGB(
+                            ColourConverter cc = new ColourConverter();
+                            textColour = cc.convertToRGB(
                                 EndianConverter.readShort(new byte[] { data[i + 1],
                                                                     data[i + 2] } ));
                             attrsSet++;

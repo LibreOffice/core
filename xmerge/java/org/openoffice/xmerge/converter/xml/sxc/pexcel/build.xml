@@ -134,6 +134,7 @@
                deprecation="${deprecation}"
                optimize="${optimize}">
             <classpath refid="classpath"/>
+            <include name="${package}/PocketExcelConstants.java"/>
             <include name="${package}/PocketExcelDecoder.java"/>
             <include name="${package}/PocketExcelEncoder.java"/>
             <include name="${package}/SxcDocumentDeserializerImpl.java"/>

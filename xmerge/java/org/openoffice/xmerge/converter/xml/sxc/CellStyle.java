@@ -199,7 +199,7 @@ public class CellStyle extends Style implements Cloneable {
         } catch (NumberFormatException e) {
             Debug.log(Debug.ERROR, "Problem parsing a color string", e);
         }
-        return new Color(red, green, blue);
+        return new Color(red, green, blue, 0);
     }
 
 
@@ -267,11 +267,10 @@ public class CellStyle extends Style implements Cloneable {
         else if (attr.equals("fo:color"))
             fmt.setForeground(parseColorString(value));
 
-        else if (attr.equals("style:text-background-color"))
+        else if (attr.equals("fo:background-color"))
             fmt.setBackground(parseColorString(value));
 
         else if (attr.equals("fo:text-align")) {
-            // fmt.setAlign(Format.RIGHT_ALIGN);
             if(value.equals("center")) {
                 fmt.setAlign(Format.CENTER_ALIGN);
             } else if(value.equals("end")) {
@@ -282,7 +281,6 @@ public class CellStyle extends Style implements Cloneable {
         }
 
         else if (attr.equals("fo:vertical-align")) {
-            // fmt.setVertAlign(Format.TOP_ALIGN);
             if(value.equals("top")) {
                 fmt.setVertAlign(Format.TOP_ALIGN);
             } else if(value.equals("middle")) {
@@ -491,7 +489,7 @@ public class CellStyle extends Style implements Cloneable {
             node.setAttribute("fo:color", buildColorString(fmt.getForeground()));
 
         if (fmt.getBackground() != null)
-            node.setAttribute("style:text-background-color",
+            node.setAttribute("fo:background-color",
                               buildColorString(fmt.getBackground()));
 
         if (fmt.getAttribute(Format.TOP_BORDER))

@@ -62,6 +62,8 @@ import java.io.IOException;
 
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
+
 
 /**
  * Represents a BIFF REcord that describes workbook window attributes
@@ -94,7 +96,7 @@ public class Window1 implements BIFFRecord {
      * @return the hex code for <code>Window1</code>
      */
     public short getBiffType() {
-        return PocketExcelBiffConstants.WINDOW_INFO;
+        return PocketExcelConstants.WINDOW_INFO;
     }
 
        /**
@@ -115,7 +117,7 @@ public class Window1 implements BIFFRecord {
 
     public void write(OutputStream output) throws IOException {
 
-        output.write(PocketExcelBiffConstants.WINDOW_INFO);
+        output.write(getBiffType());
         output.write(grbit);
         output.write(itabCur);
 

@@ -62,6 +62,8 @@ import org.openoffice.xmerge.converter.xml.TextStyle;
 
 import org.openoffice.xmerge.util.EndianConverter;
 
+import org.openoffice.xmerge.util.ColourConverter;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
@@ -154,8 +156,9 @@ class ParagraphTextSegment implements PocketWordConstants {
         try {
             if (pStyle != null) {
                 if (pStyle.getFontColor() != null) {
-                    short colourCode = ColourConverter.convertFromRGB(pStyle.getFontColor());
-                    if (colourCode != BLACK) {
+                    ColourConverter cc = new ColourConverter();
+                    short colourCode = cc.convertFromRGB(pStyle.getFontColor());
+                    if (colourCode != 0) {  // not black
                         data.write(COLOUR_TAG);
                         data.write(EndianConverter.writeShort(colourCode));
                         colourSet = true;

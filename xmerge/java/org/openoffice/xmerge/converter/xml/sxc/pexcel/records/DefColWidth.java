@@ -62,6 +62,7 @@ import java.io.IOException;
 
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 
 /**
  * Represents a BIFF record defiuning the defualt column width
@@ -94,7 +95,7 @@ public class DefColWidth implements BIFFRecord {
      * @return the hex code for <code>DefColWidth</code>
      */
     public short getBiffType() {
-        return PocketExcelBiffConstants.DEF_COL_WIDTH;
+        return PocketExcelConstants.DEF_COL_WIDTH;
     }
 
     public void write(OutputStream output) throws IOException {

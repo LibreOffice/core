@@ -62,6 +62,7 @@ import java.io.IOException;
 
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 
 /**
  * Represents the codepage for the document. There is a number of unknown
@@ -99,7 +100,7 @@ public class CodePage implements BIFFRecord {
      * @return the hex code for <code>BoundSheet</code>
      */
     public short getBiffType() {
-        return PocketExcelBiffConstants.CODEPAGE;
+        return PocketExcelConstants.CODEPAGE;
     }
 
     public int read(InputStream input) throws IOException {

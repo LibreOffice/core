@@ -59,10 +59,13 @@ import java.io.DataInputStream;
 import java.io.OutputStream;
 import java.io.InputStream;
 import java.io.IOException;
+import java.awt.Color;
 
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
+import org.openoffice.xmerge.util.ColourConverter;
 import org.openoffice.xmerge.converter.xml.sxc.Format;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 
 /**
  * Represents a BIFF Record descibing extended formatting information
@@ -84,7 +87,6 @@ org.openoffice.xmerge.converter.xml.OfficeConstants {
     private byte bBottom;                       // Bottom border style
     private byte backstyle;
     private byte borderstyle;
-    private Format fmt;
 
     public static final int TOP_BORDER      = 0x01;
     public static final int LEFT_BORDER     = 0x02;
@@ -122,7 +124,6 @@ org.openoffice.xmerge.converter.xml.OfficeConstants {
       */
     public ExtendedFormat(int ixfnt, Format fmt) {
 
-        this.fmt = fmt;
         this.ixfnt          = EndianConverter.writeShort((short)ixfnt);
         String category = fmt.getCategory();
         if(category.equalsIgnoreCase(CELLTYPE_CURRENCY)) {
@@ -182,14 +183,22 @@ org.openoffice.xmerge.converter.xml.OfficeConstants {
             fTextAttr[1] |= BOTTOM_BORDER;
         }
 
-        this.icvFore        = new byte[] {(byte)0xFF,(byte)0x00};
-        this.icvFill        = new byte[] {(byte)0xFF,(byte)0x00};
-        this.bRight         = (byte) 0xFF;
-        this.bTop           = (byte) 0xFF;
-        this.bLeft          = (byte) 0xFF;
-        this.bBottom        = (byte) 0xFF;
-        this.backstyle      = (byte) 0x00;
-        this.borderstyle    = (byte) 0x00;
+        Color background = fmt.getBackground();
+        if( background != null ) {
+            ColourConverter cc = new ColourConverter(PocketExcelConstants.cLookup);
+            icvFill = EndianConverter.writeShort(cc.convertFromRGB(background));
+        } else {
+            icvFill     = new byte[] {(byte)0xFF,(byte)0x00};
+        }
+
+        icvFore     = new byte[] {(byte)0xFF,(byte)0x00};
+
+        bRight      = (byte) 0xFF;
+        bTop        = (byte) 0xFF;
+        bLeft       = (byte) 0xFF;
+        bBottom     = (byte) 0xFF;
+        backstyle   = (byte) 0x00;
+        borderstyle = (byte) 0x00;
 
     }
 
@@ -218,6 +227,21 @@ org.openoffice.xmerge.converter.xml.OfficeConstants {
      */
     public int getTextAttr() {
         return EndianConverter.readShort(fTextAttr);
+    }
+
+    /**
+     * Get the background color this format uses
+     *
+     * @return the background color
+     */
+    public Color getBackground() {
+        short rgb = EndianConverter.readShort(icvFill);
+        Color c = null;
+        if(rgb!=0xFF) {
+            ColourConverter cc = new ColourConverter(PocketExcelConstants.cLookup);
+            c = cc.convertToRGB(rgb);
+        }
+        return c;
     }
 
     /**
@@ -290,6 +314,9 @@ org.openoffice.xmerge.converter.xml.OfficeConstants {
      */
     public boolean compareTo(ExtendedFormat rhs) {
 
+        if(this.getBackground() != rhs.getBackground())
+            return false;
+
         if(this.getTextAttr() != rhs.getTextAttr())
             return false;
 
@@ -314,7 +341,7 @@ org.openoffice.xmerge.converter.xml.OfficeConstants {
      * @return the hex code for <code>ExtendedFormat</code>
      */
     public short getBiffType() {
-        return PocketExcelBiffConstants.EXTENDED_FORMAT;
+        return PocketExcelConstants.EXTENDED_FORMAT;
     }
 
     /**

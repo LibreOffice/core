@@ -62,6 +62,8 @@ import java.io.IOException;
 
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
+
 
 /**
  * Represents a BIFF Record describing a number format
@@ -86,7 +88,7 @@ public class NumberFormat implements BIFFRecord {
      * @return the hex code for <code>NumberFormat</code>
      */
     public short getBiffType() {
-        return PocketExcelBiffConstants.NUMBER_FORMAT;
+        return PocketExcelConstants.NUMBER_FORMAT;
     }
 
     /**

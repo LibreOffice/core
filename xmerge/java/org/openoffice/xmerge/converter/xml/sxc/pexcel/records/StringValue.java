@@ -63,6 +63,8 @@ import java.io.UnsupportedEncodingException;
 
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
+
 
 /**
  * Represents a BIFF Record that describes the value of a formula that
@@ -99,7 +101,7 @@ public class StringValue implements BIFFRecord {
      * @return the hex code for <code>StringValue</code>
      */
     public short getBiffType() {
-        return PocketExcelBiffConstants.FORMULA_STRING;
+        return PocketExcelConstants.FORMULA_STRING;
     }
 
        /**

@@ -62,6 +62,7 @@ import java.io.InputStream;
 
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 
 /**
  * Represents a BoundSheet Record which describes the name of a worksheet
@@ -121,7 +122,7 @@ public class BoundSheet implements BIFFRecord {
      * @return the hex code for <code>BoundSheet</code>
      */
     public short getBiffType() {
-        return PocketExcelBiffConstants.BOUND_SHEET;
+        return PocketExcelConstants.BOUND_SHEET;
     }
 
      /**
