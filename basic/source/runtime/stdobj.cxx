@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdobj.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ab $ $Date: 2002-11-18 08:37:32 $
+ *  last change: $Author: ab $ $Date: 2002-11-22 14:33:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,7 +414,7 @@ static Methods aMethods[] = {
 
 { "Nothing",        SbxOBJECT,        _CPROP,    RTLNAME(Nothing)           },
 { "Now",            SbxDATE,          _FUNCTION, RTLNAME(Now)               },
-{ "Null",           SbxOBJECT,        _CPROP,    RTLNAME(Null)              },
+{ "Null",           SbxNULL,          _CPROP,    RTLNAME(Null)              },
 { "Oct",            SbxSTRING,    1 | _FUNCTION, RTLNAME(Oct)               },
   { "number",       SbxLONG },
 { "Pi",             SbxDOUBLE,        _CPROP,    RTLNAME(PI)                },
