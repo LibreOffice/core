@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:44:32 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef SC_XIESCHER_HXX
 #define SC_XIESCHER_HXX
 
@@ -75,15 +76,12 @@
 #include "xihelper.hxx"
 #endif
 
-#ifndef _CHRTDEFS_HXX
-#include "chrtdefs.hxx"
-#endif
-
 namespace com { namespace sun { namespace star {
     namespace script { struct ScriptEventDescriptor; }
 } } }
 
 class ScfProgressBar;
+class ScfPropertySet;
 
 // Escher stream consumer =====================================================
 
@@ -180,8 +178,9 @@ public:
 
     /** Returns the needed size on the progress bar. */
     virtual sal_uInt32  GetProgressSize() const;
-    /** Inserts the contained SdrObj into the draw page. */
-    virtual void        Apply( ScfProgressBar& rProgress );
+    /** Inserts the contained SdrObj into the draw page.
+        @return  true = object converted and inserted. */
+    virtual bool        Apply( ScfProgressBar& rProgress );
 
 protected:
     typedef ::std::auto_ptr< SdrObject > SdrObjectPtr;
@@ -208,8 +207,8 @@ public:
     /** Constructor takes ownership of the members of rSrcObj, which will be invalidated.
         @param bAreaObj  true = Width and height of the object must be greater than 0. */
     explicit            XclImpEscherDrawing( XclImpEscherObj& rSrcObj, bool bAreaObj );
-
-    virtual void                Apply( ScfProgressBar& rProgress );
+    /** Inserts the contained SdrObj into the draw page. */
+    virtual bool        Apply( ScfProgressBar& rProgress );
 };
 
 // ----------------------------------------------------------------------------
@@ -225,21 +224,18 @@ public:
 
     /** Returns the string data, if there is any. */
     inline const XclImpString* GetString() const { return mxString.get(); }
+    /** Returns the rotation text alignment. */
+    inline XclTxoRotation GetRotation() const { return meRotation; }
+
     /** Sets a new plain or rich string. This object will own the string. */
     inline void         SetString( XclImpString* pString ) { mxString.reset( pString ); }
-
     /** Sets the horizontal and vertical text alignment from the passed Excel TXO flags. */
     void                SetAlignment( sal_uInt16 nAlign );
     /** Sets the rotation text alignment from the passed Excel TXO orientation flags. */
     void                SetRotation( sal_uInt16 nOrient );
-    /** Gets the rotation text alignment. */
-    inline XclTxoRotation      GetRotation() const { return meRotation; }
 
     /** Sets the text of this Escher text object to the passed SdrObj, if it can take text. */
     void                ApplyTextOnSdrObj( SdrObject& rSdrObj ) const;
-
-    /** Sets a new SdrObj for this Escher object. This object owns the passed SdrObj. */
-    virtual void        SetSdrObj( SdrObject* pSdrObj );
 
 private:
     /** Sets the text of this Escher object to the own SdrObj. */
@@ -265,16 +261,14 @@ public:
     /** Constructor takes ownership of the members of rSrcObj, which will be invalidated. */
     explicit            XclImpEscherNote( XclImpEscherObj& rSrcObj );
 
-    virtual void                Apply( ScfProgressBar& rProgress );
+    /** Sets the note position in the Calc sheet. */
+    inline void         SetScPos( const ScAddress& rScPos ) { maScPos = rScPos; }
 
-    inline SCCOL                GetCol() const          { return mnCol; }
-    inline SCROW                GetRow() const          { return mnRow; }
-    inline void                 SetCol(SCCOL nCol) { mnCol = nCol; }
-    inline void                 SetRow(SCROW nRow) { mnRow = nRow; }
+    /** Inserts the note into the document, makes it visible according to the settings. */
+    virtual bool        Apply( ScfProgressBar& rProgress );
 
 private:
-    SCCOL                  mnCol;        /// Calc source column index of the cell note.
-    SCROW                  mnRow;        /// Row source column index of the cell note.
+    ScAddress           maScPos;        /// Cell position of the note object.
 };
 
 // ----------------------------------------------------------------------------
@@ -335,15 +329,14 @@ public:
     ::rtl::OUString     GetServiceName() const;
 
     /** Sets form control specific properties. */
-    void                SetProperties( ::com::sun::star::uno::Reference<
-                            ::com::sun::star::beans::XPropertySet >& rxPropSet ) const;
+    void                WriteToPropertySet( ScfPropertySet& rPropSet ) const;
     /** Tries to fill the passed descriptor with imported macro data.
         @return  true = Control is associated with a macro, rEvent contains valid data. */
     bool                FillMacroDescriptor(
                             ::com::sun::star::script::ScriptEventDescriptor& rEvent ) const;
 
     /** Inserts the contained SdrObj into the draw page. */
-    virtual void        Apply( ScfProgressBar& rProgress );
+    virtual bool        Apply( ScfProgressBar& rProgress );
 
 private:
     ScfInt16Vec         maMultiSel;     /// Indexes of all selected entries in a multi selection.
@@ -379,35 +372,34 @@ public:
     /** Returns true, if this object is a form control, and false, if it is a common OLE object. */
     inline bool         IsControl() const { return mbControl; }
 
+    /** Returns control name indicated by MsofbtOPT property DFF_Prop_wzName if present*/
+    inline const ::rtl::OUString& GetName() const { return maName; }
     /** Returns the OLE storage name used in the Excel document. */
     inline const String& GetStorageName() const { return maStorageName; }
     /** Returns the BLIP identifier for the meta file. */
     inline sal_uInt32   GetBlipId() const { return mnBlipId; }
     /** Returns the position in Ctrl stream for additional form control data. */
     inline sal_uInt32   GetCtrlStreamPos() const { return mnCtrlStrmPos; }
-    /** Returns control name indicated by MsofbtOPT property DFF_Prop_wzName
-        if present*/
-    inline ::rtl::OUString      GetName() { return msName; }
-    /** Sets the BLIP identifier for the meta file. */
 
+    /** Sets name indicated by MsofbtOPT property DFF_Prop_wzName. */
+    inline void         SetName( const ::rtl::OUString& rName ) { maName = rName; }
+    /** Sets the BLIP identifier for the meta file. */
     inline void         SetBlipId( sal_uInt32 nBlipId ) { mnBlipId = nBlipId; }
-    /** Sets name indicated by MsofbtOPT property DFF_Prop_wzName */
-    inline void                 SetName( const rtl::OUString& sName ) { msName = sName; }
+
     /** Reads the contents of the ftPioGrbit sub structure in an OBJ record. */
     void                ReadPioGrbit( XclImpStream& rStrm );
     /** Reads the contents of the ftPictFmla sub structure in an OBJ record. */
     void                ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize );
 
     /** Sets form control specific properties. */
-    void                SetProperties( ::com::sun::star::uno::Reference<
-                            ::com::sun::star::beans::XPropertySet >& rxPropSet ) const;
+    void                WriteToPropertySet( ScfPropertySet& rPropSet ) const;
 
     /** Inserts the contained SdrObj into the draw page. */
-    virtual void        Apply( ScfProgressBar& rProgress );
+    virtual bool        Apply( ScfProgressBar& rProgress );
 
 private:
+    ::rtl::OUString     maName;         /// control name if form control
     String              maStorageName;  /// Name of the OLE storage for this object.
-    ::rtl::OUString     msName;         /// control name if form control
     sal_uInt32          mnBlipId;       /// The BLIP identifier (meta file).
     sal_uInt32          mnCtrlStrmPos;  /// Position in Ctrl stream for controls.
     bool                mbAsSymbol;     /// true = Show as symbol.
@@ -419,53 +411,36 @@ private:
 
 class XclImpChart;
 
-/** A chart object. */
+/** A chart object. This is the Escher object wrapper for the chart data. */
 class XclImpEscherChart : public XclImpEscherObj
 {
 public:
     TYPEINFO();
 
-    /** Constructor takes ownership of the members of rSrcObj, which will be invalidated. */
-    explicit            XclImpEscherChart( XclImpEscherObj& rSrcObj );
+    /** Constructor takes ownership of the members of rSrcObj, which will be invalidated.
+        @param bOwnTab  True = chart is on an own sheet; false = chart is an embedded object. */
+    explicit            XclImpEscherChart( XclImpEscherObj& rSrcObj, bool bOwnTab );
 
-    /** Returns the chart this object contains. */
-    inline XclImpChart* GetChartData() { return mxChart.get(); }
-    /** Sets a new chart at this object. */
-    void                SetChartData( XclImpChart* pChart );
+    /** Reads the complete chart substream (BOF/EOF block).
+        @descr  The passed stream must be located in the BOF record of the chart substream. */
+    void                ReadChartSubStream( XclImpStream& rStrm );
 
     /** Returns the needed size on the progress bar. */
     virtual sal_uInt32  GetProgressSize() const;
     /** Inserts the contained chart into the document. */
-    virtual void        Apply( ScfProgressBar& rProgress );
+    virtual bool        Apply( ScfProgressBar& rProgress );
 
 private:
-    typedef ::std::auto_ptr< XclImpChart > XclImpChartPtr;
+    /** Calculates and sets the object anchor of a sheet chart (chart fills one page). */
+    void                SetTabChartAnchor();
 
-    XclImpChartPtr      mxChart;        /// The chart itself.
+private:
+    typedef ScfRef< XclImpChart > XclImpChartRef;
+    XclImpChartRef      mxChart;        /// The chart itself.
+    bool                mbOwnTab;       /// true = own sheet; false = embedded object.
 };
 
 // Escher object data =========================================================
-
-/** Represents the position (anchor) of an Escher object in the Calc document. */
-struct XclImpEscherAnchor
-{
-    SCTAB               mnScTab;    /// Calc sheet index of the object.
-
-    sal_uInt16          mnLCol;     /// Left column index.
-    sal_uInt16          mnLX;       /// X offset in left column (1/1024 of column width).
-    sal_uInt16          mnTRow;     /// Top row index.
-    sal_uInt16          mnTY;       /// Y offset in top row (1/256 of row height).
-    sal_uInt16          mnRCol;     /// Right column index.
-    sal_uInt16          mnRX;       /// X offset in right column (1/1024 of column width).
-    sal_uInt16          mnBRow;     /// Bottom row index.
-    sal_uInt16          mnBY;       /// Y offset in bottom row (1/256 of row height).
-
-    explicit            XclImpEscherAnchor( SCTAB nScTab );
-};
-
-SvStream& operator>>( SvStream& rStrm, XclImpEscherAnchor& rAnchor );
-
-// ----------------------------------------------------------------------------
 
 /** Contains all information of an Escher object.
     @descr  This is the Escher object itself (XclImpEscherObj) and the position
@@ -486,20 +461,31 @@ public:
 
     /** Returns true, if the passed stream position is part of the current object. */
     bool                ContainsStrmPos( ULONG nStrmPos ) const;
+    /** Returns the needed size on the progress bar. */
+    sal_uInt32          GetProgressSize() const;
+
+    /** Inserts the object into the Calc document. */
+    void                Apply( ScfProgressBar& rProgress );
+
+    /** Extends the passed range by the position of this object, if valid and on the specified sheet. */
+    void                ExtendUsedArea( const XclImpRoot& rRoot, ScRange& rScUsedArea, SCTAB nScTab ) const;
 
 private:
     typedef ::std::auto_ptr< XclImpEscherObj > XclImpEscherObjPtr;
 
     XclEscherAnchor     maAnchor;       /// The sheet position of the object.
     XclImpEscherObjPtr  mxEscherObj;    /// The Escher object itself.
+    bool                mbInserted;     /// true = object inserted into drawing layer.
 };
 
 // ----------------------------------------------------------------------------
 
 /** This list contains all read Escher objects with their anchor positions. */
-class XclImpEscherObjList : ScfNoCopy
+class XclImpEscherObjList : protected XclImpRoot
 {
 public:
+    explicit            XclImpEscherObjList( const XclImpRoot& rRoot );
+
     /** Returns the number of contained objects. */
     inline ULONG        GetObjCount() const { return maObjDataList.Count(); }
 
@@ -522,6 +508,9 @@ public:
 
     /** Inserts all objects into the Calc document. */
     void                Apply( ScfProgressBar& rProgress );
+
+    /** Extends the passed range by the positions of all valid objects in the specified sheet. */
+    void                ExtendUsedArea( ScRange& rScUsedArea, SCTAB nScTab ) const;
 
 private:
     /** Updates the cache data with the last inserted object for searching. */
@@ -646,17 +635,6 @@ public:
 
     // *** Chart *** ----------------------------------------------------------
 
-    /** Returns true, if the current object is a chart. */
-    bool                IsCurrObjChart() const;
-
-    /** Returns the chart data of the current chart object, or 0, if there is no chart. */
-    XclImpChart*        GetCurrChartData();
-    /** Sets a new chart data (with the passed chart type) at the current object.
-        @descr  Reads additional properies of the chart type from stream.
-        @return  The new chart data. The old chart data, returned by GetCurrChartData(),
-        is no longer valid. */
-    XclImpChart*        ReplaceChartData( XclImpStream& rStrm, XclChartType eNewType );
-
     /** Inserts a new chart object.
         @descr  Used to import sheet charts, which do not have a corresponding OBJ record. */
     void                StartNewChartObj();
@@ -685,6 +663,10 @@ public:
     /** Reads the TXO record. */
     void                ReadTxo( XclImpStream& rStrm );
 
+    /** Reads a complete chart substream (BOF/EOF block) for the last started chart.
+        @descr  The passed stream must be located in the BOF record of the chart substream. */
+    void                ReadChartSubStream( XclImpStream& rStrm );
+
     // *** Misc *** -----------------------------------------------------------
 
     /** Lets the object manager add a dummy object, before the next object is read. */
@@ -700,6 +682,9 @@ public:
 
     /** Inserts all objects into the Calc document. */
     void                Apply( ScfProgressBar& rProgress );
+
+    /** Extends the passed range by the positions of all valid objects in the specified sheet. */
+    void                ExtendUsedArea( ScRange& rScUsedArea, SCTAB nScTab ) const;
 
     // ------------------------------------------------------------------------
 private:
