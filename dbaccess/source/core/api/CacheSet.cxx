@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-14 13:28:20 $
+ *  last change: $Author: oj $ $Date: 2000-11-29 10:23:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #endif
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_KEYTYPE_HPP_
+#include <com/sun/star/sdbcx/KeyType.hpp>
 #endif
 
 using namespace dbaccess;
@@ -196,7 +199,20 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
     Reference<XNameAccess> xKeyColumns;
     if(xKeys.is() && xKeys->getCount())
     {
-        xKeys->getByIndex(0) >>= xKeyColsSup; // there is only one key per table
+        Reference<XPropertySet> xProp;
+        Reference<XColumnsSupplier> xColumnsSupplier;
+        // search the one and only primary key
+        for(sal_Int32 i=0;i< xKeys->getCount();++i)
+        {
+            xKeys->getByIndex(i) >>= xProp;
+            sal_Int32 nKeyType = 0;
+            xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
+            if(KeyType::PRIMARY == nKeyType)
+            {
+                xKeyColsSup = Reference<XColumnsSupplier>(xProp,UNO_QUERY);
+                break;
+            }
+        }
         if(xKeyColsSup.is())
             xKeyColumns = xKeyColsSup->getColumns();
     }
@@ -313,7 +329,20 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
     Reference<XNameAccess> xKeyColumns;
     if(xKeys.is() && xKeys->getCount())
     {
-        xKeys->getByIndex(0) >>= xKeyColsSup; // there is only one key per table
+        Reference<XPropertySet> xProp;
+        Reference<XColumnsSupplier> xColumnsSupplier;
+        // search the one and only primary key
+        for(sal_Int32 i=0;i< xKeys->getCount();++i)
+        {
+            xKeys->getByIndex(i) >>= xProp;
+            sal_Int32 nKeyType = 0;
+            xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
+            if(KeyType::PRIMARY == nKeyType)
+            {
+                xKeyColsSup = Reference<XColumnsSupplier>(xProp,UNO_QUERY);
+                break;
+            }
+        }
         if(xKeyColsSup.is())
             xKeyColumns = xKeyColsSup->getColumns();
     }
@@ -345,7 +374,6 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
     sal_Int32 nCheckCount = 1; // index for the orginal values
     for(; aIter != _rDeleteRow->end();++aIter,++nCheckCount)
     {
-        if(aIter->isModified())
         {
             aColumnName = m_xSetMetaData->getColumnName(i++);
             if(xKeyColumns.is() && xKeyColumns->hasByName(aColumnName))
@@ -497,6 +525,9 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2000/11/14 13:28:20  oj
+    change for rowset when getRow returns 0
+
     Revision 1.6  2000/11/03 14:32:31  oj
     some problems with refcount resolved
 

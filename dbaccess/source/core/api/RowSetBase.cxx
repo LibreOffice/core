@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-22 14:56:33 $
+ *  last change: $Author: oj $ $Date: 2000-11-29 10:23:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@
 
 using namespace dbaccess;
 using namespace connectivity;
+using namespace connectivity::sdbcx;
 using namespace comphelper;
 using namespace dbtools;
 using namespace ::com::sun::star::uno;
