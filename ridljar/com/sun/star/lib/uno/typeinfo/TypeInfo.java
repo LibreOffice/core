@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeInfo.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2000-11-08 15:38:23 $
+ *  last change: $Author: kr $ $Date: 2000-12-07 17:11:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,10 @@ public class TypeInfo
     public String getName()
     {
         return m_name;
+    }
+
+    public int getFlags() {
+        return m_flags;
     }
 
     public boolean isUnsigned()
