@@ -2,9 +2,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:56 $
+ *  last change: $Author: vg $ $Date: 2003-07-09 10:55:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,45 +96,6 @@
 
 typedef unsigned short (*fncUshort)();
 typedef const char* (*fncChar)();
-
-// functions -------------------------------------------------------------
-
-long CalcTextRows_Impl( const FixedText& rCtrl, long nTextWidth )
-{
-    long nRows = 0;
-    String aText = rCtrl.GetText();
-    while ( aText.Len() > 0 )
-    {
-        USHORT nBreakPos = rCtrl.GetTextBreak( aText, nTextWidth );
-        USHORT nNewLinePos = aText.Search( '\n' );
-        if ( nNewLinePos < nBreakPos )
-        {
-            USHORT nCutLen = nNewLinePos + 1;
-            nRows++;
-            if ( aText.GetChar( nNewLinePos + 1 ) == '\n' )
-            {
-                nCutLen++;
-                nRows++;
-            }
-            aText = aText.Erase( 0, nCutLen );
-        }
-        else
-        {
-            nRows++;
-            if ( nBreakPos != STRING_NOTFOUND )
-            {
-                // search for word break
-                while ( aText.GetChar( nBreakPos ) != ' ' && nBreakPos > 0 )
-                    nBreakPos--;
-                aText = aText.Erase( 0, nBreakPos + 1 );
-            }
-            else
-                break;
-        }
-    }
-
-    return nRows;
-}
 
 // class AboutDialog -----------------------------------------------------
 
@@ -239,8 +200,6 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
 
     // Texte (Gr"osse und Position )
     Size a6Size = aVersionText.LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
-    long nRowH = GetTextHeight();
-    long nSpace = SPACE_OFFSET * 2;
     long nY = 0;
     Point aTextPos = aVersionText.GetPosPixel();
     aTextPos.X() = a6Size.Width() * 2;
@@ -250,9 +209,9 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     Size aTxtSiz = aVersionText.GetSizePixel();
     aTxtSiz.Width() = aAppLogoSiz.Width() - ( a6Size.Width() * 4 );
     long nTextWidth = aTxtSiz.Width();
-    long nSub = GetTextWidth( DEFINE_CONST_UNICODE( "x" ) );
-    long nRows = CalcTextRows_Impl( aVersionText, nTextWidth - nSub );
-    aTxtSiz.Height() = nRows * nRowH + nSpace;
+    Size aCalcSize = aVersionText.CalcMinimumSize( nTextWidth );
+
+    aTxtSiz.Height() = aCalcSize.Height();
     aVersionText.SetSizePixel( aTxtSiz );
     nY += aTxtSiz.Height() + ( a6Size.Height() / 3 );
 
@@ -262,8 +221,8 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     aCopyrightText.SetPosPixel( aTextPos );
     aTxtSiz = aCopyrightText.GetSizePixel();
     aTxtSiz.Width() = nTextWidth;
-    nRows = CalcTextRows_Impl( aCopyrightText, nTextWidth - nSub );
-    aTxtSiz.Height() = nRows * nRowH + nSpace;
+    aCalcSize = aCopyrightText.CalcMinimumSize( nTextWidth );
+    aTxtSiz.Height() = aCalcSize.Height();
     aCopyrightText.SetSizePixel( aTxtSiz );
     nY += aTxtSiz.Height() + ( a6Size.Height() / 2 );
 
