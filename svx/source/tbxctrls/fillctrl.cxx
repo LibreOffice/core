@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fillctrl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-19 14:48:13 $
+ *  last change: $Author: obo $ $Date: 2001-01-16 11:48:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,7 +353,8 @@ void SvxFillToolBoxControl::SFX_NOTIFY( SfxBroadcaster& rBC,
                         aTmpStr += TMP_STR_END;
 
                         XGradientEntry* pEntry = new XGradientEntry( pGradientItem->GetValue(), aTmpStr );
-                         XGradientList aGradientList( String() );
+                        String aEmptyString = String();
+                         XGradientList aGradientList( aEmptyString );
                         aGradientList.Insert( pEntry );
                         aGradientList.SetDirty( FALSE );
                         Bitmap* pBmp = aGradientList.CreateBitmapForUI( 0 );
@@ -402,7 +403,8 @@ void SvxFillToolBoxControl::SFX_NOTIFY( SfxBroadcaster& rBC,
                         aTmpStr += TMP_STR_END;
 
                         XHatchEntry* pEntry = new XHatchEntry( pHatchItem->GetValue(), aTmpStr );
-                        XHatchList aHatchList( String() );
+                        String aEmptyString = String();
+                        XHatchList aHatchList( aEmptyString );
                         aHatchList.Insert( pEntry );
                         aHatchList.SetDirty( FALSE );
                         Bitmap* pBmp = aHatchList.CreateBitmapForUI( 0 );
