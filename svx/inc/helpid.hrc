@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: pb $ $Date: 2002-12-02 07:51:31 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 13:18:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,6 +511,8 @@
 #define HID_GALLERY_NEWTHEME_ADDFILES           (HID_SVX_EXT0_START + 10)
 #define HID_NUMBERINGOPT_SEL_GRF_FROM_FILE      (HID_SVX_EXT0_START + 11)
 #define HID_OPTIONS_CTL                         (HID_SVX_EXT0_START + 12)
+#define HID_REDLINING_VIEW_DG_VIEW_TABLE        (HID_SVX_EXT0_START + 13)
+#define HID_REDLINING_VIEW_DG_VIEW_HEADER       (HID_SVX_EXT0_START + 14)
 
 // -----------------------------------------------------------------------
 // "Uberlaufpr"ufung -----------------------------------------------------
