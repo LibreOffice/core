@@ -67,8 +67,8 @@ import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.awt.*;
 
 // Canvas
-import drafts.com.sun.star.rendering.*;
-import drafts.com.sun.star.geometry.*;
+import com.sun.star.rendering.*;
+import com.sun.star.geometry.*;
 
 // Java AWT
 import java.awt.*;
@@ -80,7 +80,7 @@ import sun.awt.*;
 
 public abstract class CanvasBase
     extends com.sun.star.lib.uno.helper.ComponentBase
-    implements drafts.com.sun.star.rendering.XCanvas
+    implements com.sun.star.rendering.XCanvas
 {
     // to be overridden
     public abstract Graphics2D getGraphics();
@@ -230,23 +230,23 @@ public abstract class CanvasBase
                                                                          ViewState                                  viewState,
                                                                          RenderState                                renderState,
                                                                          Texture[]                                  textures,
-                                                                         drafts.com.sun.star.geometry.XMapping2D    xMapping,
+                                                                         com.sun.star.geometry.XMapping2D   xMapping,
                                                                          StrokeAttributes                           strokeAttributes ) throws com.sun.star.lang.IllegalArgumentException, VolatileContentDestroyedException
     {
         return null;
     }
 
-    public synchronized XPolyPolygon2D queryStrokeShapes( drafts.com.sun.star.rendering.XPolyPolygon2D   xPolyPolygon,
-                                                          drafts.com.sun.star.rendering.ViewState        viewState,
-                                                          drafts.com.sun.star.rendering.RenderState      renderState,
-                                                          drafts.com.sun.star.rendering.StrokeAttributes strokeAttributes ) throws com.sun.star.lang.IllegalArgumentException
+    public synchronized XPolyPolygon2D queryStrokeShapes( com.sun.star.rendering.XPolyPolygon2D   xPolyPolygon,
+                                                          com.sun.star.rendering.ViewState        viewState,
+                                                          com.sun.star.rendering.RenderState      renderState,
+                                                          com.sun.star.rendering.StrokeAttributes strokeAttributes ) throws com.sun.star.lang.IllegalArgumentException
     {
         return null;
     }
 
-    public synchronized XCachedPrimitive fillPolyPolygon( drafts.com.sun.star.rendering.XPolyPolygon2D xPolyPolygon,
-                                                          drafts.com.sun.star.rendering.ViewState      viewState,
-                                                          drafts.com.sun.star.rendering.RenderState    renderState ) throws com.sun.star.lang.IllegalArgumentException
+    public synchronized XCachedPrimitive fillPolyPolygon( com.sun.star.rendering.XPolyPolygon2D xPolyPolygon,
+                                                          com.sun.star.rendering.ViewState      viewState,
+                                                          com.sun.star.rendering.RenderState    renderState ) throws com.sun.star.lang.IllegalArgumentException
     {
         CanvasUtils.printLog( "CanvasBase.fillPolyPolygon() called" );
 
@@ -264,10 +264,10 @@ public abstract class CanvasBase
         return null;
     }
 
-    public synchronized XCachedPrimitive fillTexturedPolyPolygon( drafts.com.sun.star.rendering.XPolyPolygon2D    xPolyPolygon,
-                                                                  drafts.com.sun.star.rendering.ViewState         viewState,
-                                                                  drafts.com.sun.star.rendering.RenderState       renderState,
-                                                                  drafts.com.sun.star.rendering.Texture []        textures ) throws com.sun.star.lang.IllegalArgumentException
+    public synchronized XCachedPrimitive fillTexturedPolyPolygon( com.sun.star.rendering.XPolyPolygon2D    xPolyPolygon,
+                                                                  com.sun.star.rendering.ViewState         viewState,
+                                                                  com.sun.star.rendering.RenderState       renderState,
+                                                                  com.sun.star.rendering.Texture []        textures ) throws com.sun.star.lang.IllegalArgumentException
     {
         return null;
     }
@@ -276,12 +276,12 @@ public abstract class CanvasBase
                                                                        ViewState                                viewState,
                                                                        RenderState                              renderState,
                                                                        Texture[]                                textures,
-                                                                       drafts.com.sun.star.geometry.XMapping2D  xMapping ) throws com.sun.star.lang.IllegalArgumentException, VolatileContentDestroyedException
+                                                                       com.sun.star.geometry.XMapping2D     xMapping ) throws com.sun.star.lang.IllegalArgumentException, VolatileContentDestroyedException
     {
         return null;
     }
 
-    public synchronized XCanvasFont createFont( FontRequest fontRequest, com.sun.star.beans.PropertyValue[] extraFontProperties, drafts.com.sun.star.geometry.Matrix2D fontMatrix ) throws com.sun.star.lang.IllegalArgumentException
+    public synchronized XCanvasFont createFont( FontRequest fontRequest, com.sun.star.beans.PropertyValue[] extraFontProperties, com.sun.star.geometry.Matrix2D fontMatrix ) throws com.sun.star.lang.IllegalArgumentException
     {
         // TODO: support extra arguments
         return new CanvasFont( fontRequest, this );
@@ -338,9 +338,9 @@ public abstract class CanvasBase
         return null;
     }
 
-    public synchronized XCachedPrimitive drawBitmap( drafts.com.sun.star.rendering.XBitmap      xBitmap,
-                                                     drafts.com.sun.star.rendering.ViewState    viewState,
-                                                     drafts.com.sun.star.rendering.RenderState  renderState ) throws com.sun.star.lang.IllegalArgumentException
+    public synchronized XCachedPrimitive drawBitmap( com.sun.star.rendering.XBitmap     xBitmap,
+                                                     com.sun.star.rendering.ViewState   viewState,
+                                                     com.sun.star.rendering.RenderState     renderState ) throws com.sun.star.lang.IllegalArgumentException
     {
         CanvasUtils.printLog( "CanvasBase.drawBitmap() called" );
 
@@ -359,9 +359,9 @@ public abstract class CanvasBase
         return null;
     }
 
-    public synchronized XCachedPrimitive drawBitmapModulated( drafts.com.sun.star.rendering.XBitmap     xBitmap,
-                                                              drafts.com.sun.star.rendering.ViewState   viewState,
-                                                              drafts.com.sun.star.rendering.RenderState renderState ) throws com.sun.star.lang.IllegalArgumentException
+    public synchronized XCachedPrimitive drawBitmapModulated( com.sun.star.rendering.XBitmap    xBitmap,
+                                                              com.sun.star.rendering.ViewState  viewState,
+                                                              com.sun.star.rendering.RenderState renderState ) throws com.sun.star.lang.IllegalArgumentException
     {
         CanvasUtils.printLog( "CanvasBase.drawBitmapModulated() called" );
 

@@ -65,14 +65,14 @@ import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.awt.*;
 
 // Canvas
-import drafts.com.sun.star.rendering.*;
-import drafts.com.sun.star.geometry.*;
+import com.sun.star.rendering.*;
+import com.sun.star.geometry.*;
 
 public class CanvasBitmap
     extends CanvasBase
     implements com.sun.star.lang.XServiceInfo,
-               drafts.com.sun.star.rendering.XBitmapCanvas,
-               drafts.com.sun.star.rendering.XIntegerBitmap
+               com.sun.star.rendering.XBitmapCanvas,
+               com.sun.star.rendering.XIntegerBitmap
 {
     private java.awt.image.BufferedImage    bitmap;
     private java.awt.Graphics2D             graphics;
@@ -138,7 +138,7 @@ public class CanvasBitmap
 
     //----------------------------------------------------------------------------------
 
-    public synchronized drafts.com.sun.star.rendering.XBitmap getScaledBitmap( RealSize2D newSize, boolean beFast ) throws com.sun.star.lang.IllegalArgumentException, VolatileContentDestroyedException
+    public synchronized com.sun.star.rendering.XBitmap getScaledBitmap( RealSize2D newSize, boolean beFast ) throws com.sun.star.lang.IllegalArgumentException, VolatileContentDestroyedException
     {
         return new CanvasBitmap( newSize, beFast, this );
     }
@@ -150,13 +150,13 @@ public class CanvasBitmap
     // ==================
     //
 
-    public synchronized void copyRect( drafts.com.sun.star.rendering.XBitmapCanvas  sourceCanvas,
-                                       drafts.com.sun.star.geometry.RealRectangle2D sourceRect,
-                                       drafts.com.sun.star.rendering.ViewState      sourceViewState,
-                                       drafts.com.sun.star.rendering.RenderState    sourceRenderState,
-                                       drafts.com.sun.star.geometry.RealRectangle2D destRect,
-                                       drafts.com.sun.star.rendering.ViewState      destViewState,
-                                       drafts.com.sun.star.rendering.RenderState    destRenderState )
+    public synchronized void copyRect( com.sun.star.rendering.XBitmapCanvas sourceCanvas,
+                                       com.sun.star.geometry.RealRectangle2D sourceRect,
+                                       com.sun.star.rendering.ViewState         sourceViewState,
+                                       com.sun.star.rendering.RenderState   sourceRenderState,
+                                       com.sun.star.geometry.RealRectangle2D    destRect,
+                                       com.sun.star.rendering.ViewState         destViewState,
+                                       com.sun.star.rendering.RenderState   destRenderState )
     {
         CanvasUtils.printLog( "JavaCanvas.copyRect() called" );
 
@@ -205,7 +205,7 @@ public class CanvasBitmap
 
     //----------------------------------------------------------------------------------
 
-    public synchronized void setData( byte[] data, IntegerBitmapLayout bitmapLayout, drafts.com.sun.star.geometry.IntegerRectangle2D rect )
+    public synchronized void setData( byte[] data, IntegerBitmapLayout bitmapLayout, com.sun.star.geometry.IntegerRectangle2D rect )
     {
         int [] pixelData = CanvasUtils.byte2int( data );
         bitmap.setRGB( rect.X1, rect.Y1, rect.X2 - rect.X1, rect.Y2 - rect.Y1, pixelData, 0, bitmap.getWidth() );
@@ -213,7 +213,7 @@ public class CanvasBitmap
 
     //----------------------------------------------------------------------------------
 
-    public synchronized void setPixel( byte[] color, IntegerBitmapLayout bitmapLayout, drafts.com.sun.star.geometry.IntegerPoint2D pos )
+    public synchronized void setPixel( byte[] color, IntegerBitmapLayout bitmapLayout, com.sun.star.geometry.IntegerPoint2D pos )
     {
         if( color.length != 4 )
             CanvasUtils.printLog( "CanvasBitmap.setPixel: Wrong color format" );
@@ -271,7 +271,7 @@ public class CanvasBitmap
     //
 
     private static final String s_implName = "XIntegerBitmap.java.impl";
-    private static final String s_serviceName = "drafts.com.sun.star.rendering.IntegerBitmap";
+    private static final String s_serviceName = "com.sun.star.rendering.IntegerBitmap";
 
     public String getImplementationName()
     {
