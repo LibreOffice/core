@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-20 17:45:23 $
+ *  last change: $Author: mt $ $Date: 2000-11-23 15:08:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,25 @@ using namespace ::rtl;
 
 #define UNDERLINE_LAST      UNDERLINE_BOLDWAVE
 #define STRIKEOUT_LAST      STRIKEOUT_X
+
+// -----------------------------------------------------------------------
+
+static void ImplRotatePos( long nOriginX, long nOriginY, long& rX, long& rY,
+                           short nOrientation )
+{
+    double nRealOrientation = nOrientation*F_PI1800;
+    double nCos = cos( nRealOrientation );
+    double nSin = sin( nRealOrientation );
+
+    // Translation...
+    long nX = rX-nOriginX;
+    long nY = rY-nOriginY;
+
+    // Rotation...
+    rX = ((long)   ( nCos*nX + nSin*nY )) + nOriginX;
+    rY = ((long) - ( nSin*nX - nCos*nY )) + nOriginY;
+}
+
 
 // =======================================================================
 
@@ -2493,10 +2512,9 @@ int OutputDevice::ImplNewFont()
         long nOrientation = pFontEntry->mnOrientation;
         if ( nOrientation )
         {
-            double nRad = ((double)nOrientation * F_2PI) / 3600.0;
-            long nOff = pFontEntry->maMetric.mnAscent;
-            mnTextOffX = (long)(nOff * sin( nRad ));
-            mnTextOffY = (long)(nOff * cos( nRad ));
+            mnTextOffX = 0;
+            mnTextOffY = pFontEntry->maMetric.mnAscent;
+            ImplRotatePos( 0, 0, mnTextOffX, mnTextOffY, nOrientation );
         }
         else
         {
@@ -2509,11 +2527,9 @@ int OutputDevice::ImplNewFont()
         long nOrientation = pFontEntry->mnOrientation;
         if ( nOrientation )
         {
-            double nRad = ((double)nOrientation * F_2PI) / 3600.0;
-            long nOff = pFontEntry->maMetric.mnDescent;
-            mnTextOffX = (long)(nOff - (nOff * sin( nRad )));
-            nOff = -nOff;
-            mnTextOffY = (long)(nOff * cos( nRad ));
+            mnTextOffX = 0;
+            mnTextOffY = -pFontEntry->maMetric.mnDescent;
+            ImplRotatePos( 0, 0, mnTextOffX, mnTextOffY, nOrientation );
         }
         else
         {
@@ -2822,23 +2838,6 @@ long OutputDevice::ImplGetTextWidth( const xub_Unicode* pStr, xub_StrLen nLen,
     return nWidth;
 }
 
-// -----------------------------------------------------------------------
-
-static void ImplRotatePos( long nOriginX, long nOriginY, long& rX, long& rY,
-                           short nOrientation )
-{
-    double nRealOrientation = nOrientation*F_PI1800;
-    double nCos = cos( nRealOrientation );
-    double nSin = sin( nRealOrientation );
-
-    // Translation...
-    long nX = rX-nOriginX;
-    long nY = rY-nOriginY;
-
-    // Rotation...
-    rX = ((long)   ( nCos*nX + nSin*nY )) + nOriginX;
-    rY = ((long) - ( nSin*nX - nCos*nY )) + nOriginY;
-}
 
 // -----------------------------------------------------------------------
 
