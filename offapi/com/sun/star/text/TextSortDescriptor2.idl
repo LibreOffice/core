@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextSortDescriptor2.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 00:22:48 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:40:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@
 /** describes sort criterias for sorting paragraphs or table contents in
     a text document.
 
-    @since #107627#
+    @since OOo 1.1.2
  */
 published service TextSortDescriptor2
 {
