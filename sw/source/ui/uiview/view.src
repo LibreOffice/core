@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-27 08:31:42 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 11:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,7 +585,7 @@ String STR_ERROR_NOLANG
     TEXT[ chinese_traditional ] = "¦bΐΛ¬dªΊ°Ο°μ¤Ί¨S¦³Ώο©w¥τ¦σ»y¨¥΅C";
     TEXT[ arabic ] = ".αγ νΚγ ΚΝΟνΟ ΓνΙ αΫΙ έν ΗαδΨΗή ΗαγΟήή ένε";
     TEXT[ greek ] = "Δεν ορίστηκε γλώσσα για την ελεγχόμενη περιοχή.";
-    TEXT[ korean ] = "°ΛΑυµΘ ±ΈΏªΏ΅Ό­ Ό±ΕΓµΘ ΎπΎξ°΅ Ύψ½ΐ΄Ο΄Ω.";
+    TEXT[ korean ] = "°Λ»φµΘ ±ΈΏªΏ΅΄Β Ό³Α¤µΘ ΎπΎξ°΅ Ύψ½ΐ΄Ο΄Ω.";
     TEXT[ turkish ] = "Denetlenen bφlόmde dil seηilmedi.";
     TEXT[ language_user1 ] = " ";
 };
