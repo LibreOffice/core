@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-27 11:12:54 $
+ *  last change: $Author: sab $ $Date: 2001-10-15 11:16:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -951,8 +951,8 @@ private:
     void AddStyleRange(const com::sun::star::table::CellRangeAddress& rCellRange);
     void SetStyleToRanges();
 public:
-    void SetStyleToRange(const ScRange& rRange, const rtl::OUString& rStyleName,
-        const sal_Int16 nCellType, const rtl::OUString& rCurrency);
+    void SetStyleToRange(const ScRange& rRange, const rtl::OUString* pStyleName,
+        const sal_Int16 nCellType, const rtl::OUString* pCurrency);
     sal_Bool SetNullDateOnUnitConverter();
     XMLNumberFormatAttributesExportHelper* GetNumberFormatAttributesExportHelper();
     ScMyStyleNumberFormats* GetStyleNumberFormats();

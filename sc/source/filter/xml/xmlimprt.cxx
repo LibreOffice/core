@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-08 08:06:19 $
+ *  last change: $Author: sab $ $Date: 2001-10-15 11:16:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2121,22 +2121,35 @@ void ScXMLImport::SetStyleToRanges()
     DBG_ASSERT(xSheetCellRanges.is(), "didn't get SheetCellRanges");
 }
 
-void ScXMLImport::SetStyleToRange(const ScRange& rRange, const rtl::OUString& rStyleName,
-        const sal_Int16 nCellType, const rtl::OUString& rCurrency)
+void ScXMLImport::SetStyleToRange(const ScRange& rRange, const rtl::OUString* pStyleName,
+        const sal_Int16 nCellType, const rtl::OUString* pCurrency)
 {
     if (!sPrevStyleName.getLength())
     {
         nPrevCellType = nCellType;
-        sPrevStyleName = rStyleName;
-        sPrevCurrency = rCurrency;
+        if (pStyleName)
+            sPrevStyleName = *pStyleName;
+        if (pCurrency)
+            sPrevCurrency = *pCurrency;
+        else if (sPrevCurrency.getLength())
+            sPrevCurrency = sEmpty;
     }
-    else if ((nCellType != nPrevCellType || !rStyleName.equals(sPrevStyleName) ||
-            !rCurrency.equals(sPrevCurrency)))
+    else if ((nCellType != nPrevCellType) ||
+            ((pStyleName && !pStyleName->equals(sPrevStyleName)) ||
+            (!pStyleName && sPrevStyleName.getLength())) ||
+            ((pCurrency && !pCurrency->equals(sPrevCurrency)) ||
+            (!pCurrency && sPrevCurrency.getLength())))
     {
         SetStyleToRanges();
         nPrevCellType = nCellType;
-        sPrevStyleName = rStyleName;
-        sPrevCurrency = rCurrency;
+        if (pStyleName)
+            sPrevStyleName = *pStyleName;
+        else if(sPrevStyleName.getLength())
+            sPrevStyleName = sEmpty;
+        if (pCurrency)
+            sPrevCurrency = *pCurrency;
+        else if(sPrevCurrency.getLength())
+            sPrevCurrency = sEmpty;
     }
     table::CellRangeAddress aCellRange;
     aCellRange.StartColumn = rRange.aStart.Col();

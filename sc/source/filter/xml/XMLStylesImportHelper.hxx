@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesImportHelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-21 07:35:48 $
+ *  last change: $Author: sab $ $Date: 2001-10-15 11:16:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,31 +147,31 @@ class ScMyStyleRanges : public SvRefBase
     ScMyCurrencyStylesSet*  pCurrencyList;
 
     void AddRange(const ScRange& rRange, ScRangeList* pList,
-        const rtl::OUString& rStyleName, const sal_Int16 nType,
+        const rtl::OUString* pStyleName, const sal_Int16 nType,
         ScXMLImport& rImport, const sal_uInt32 nMaxRanges);
     void AddCurrencyRange(const ScRange& rRange, ScRangeListRef xList,
-        const rtl::OUString& rStyleName, const rtl::OUString& rCurrency,
+        const rtl::OUString* pStyleName, const rtl::OUString* pCurrency,
         ScXMLImport& rImport, const sal_uInt32 nMaxRanges);
     void InsertColRow(const ScRange& rRange, const sal_Int16 nDx, const sal_Int16 nDy,
         const sal_Int16 nDz, ScDocument* pDoc);
     void SetStylesToRanges(ScRangeList* pList,
-        const rtl::OUString& rStyleName, const sal_Int16 nCellType,
-        const rtl::OUString& rCurrency, ScXMLImport& rImport);
+        const rtl::OUString* pStyleName, const sal_Int16 nCellType,
+        const rtl::OUString* pCurrency, ScXMLImport& rImport);
     void SetStylesToRanges(ScRangeListRef xList,
-        const rtl::OUString& rStyleName, const sal_Int16 nCellType,
-        const rtl::OUString& rCurrency, ScXMLImport& rImport);
+        const rtl::OUString* pStyleName, const sal_Int16 nCellType,
+        const rtl::OUString* pCurrency, ScXMLImport& rImport);
 public:
     ScMyStyleRanges();
     ~ScMyStyleRanges();
     void AddRange(const ScRange& rRange,
-        const rtl::OUString& rStyleName, const sal_Int16 nType,
+        const rtl::OUString* pStyleName, const sal_Int16 nType,
         ScXMLImport& rImport, const sal_uInt32 nMaxRanges);
     void AddCurrencyRange(const ScRange& rRange,
-        const rtl::OUString& rStyleName, const rtl::OUString& rCurrency,
+        const rtl::OUString* pStyleName, const rtl::OUString* pCurrency,
         ScXMLImport& rImport, const sal_uInt32 nMaxRanges);
     void InsertRow(const sal_Int32 nRow, const sal_Int32 nTab, ScDocument* pDoc);
     void InsertCol(const sal_Int32 nCol, const sal_Int32 nTab, ScDocument* pDoc);
-    void SetStylesToRanges(const rtl::OUString& rStyleName, ScXMLImport& rImport);
+    void SetStylesToRanges(const rtl::OUString* pStyleName, ScXMLImport& rImport);
 };
 SV_DECL_IMPL_REF( ScMyStyleRanges );
 
@@ -201,11 +201,10 @@ class ScMyStylesImportHelper
     ScMyStyles          aColDefaultStyles;
     ScMyStylesSet::iterator aRowDefaultStyle;
     ScXMLImport&        rImport;
-    rtl::OUString       sStyleName;
-    rtl::OUString       sPrevStyleName;
-    rtl::OUString       sCurrency;
-    rtl::OUString       sPrevCurrency;
-    rtl::OUString       sEmpty;
+    rtl::OUString*      pStyleName;
+    rtl::OUString*      pPrevStyleName;
+    rtl::OUString*      pCurrency;
+    rtl::OUString*      pPrevCurrency;
     ScRange             aPrevRange;
     sal_uInt32          nMaxRanges;
     sal_Int16           nCellType;
@@ -213,17 +212,24 @@ class ScMyStylesImportHelper
     sal_Bool            bPrevRangeAdded;
 
     void ResetAttributes();
-    ScMyStylesSet::iterator GetIterator(const rtl::OUString& sStyleName);
+    ScMyStylesSet::iterator GetIterator(const rtl::OUString* pStyleName);
     void AddDefaultRange(const ScRange& rRange);
     void AddSingleRange(const ScRange& rRange);
     void AddRange();
+    sal_Bool IsEqual(const rtl::OUString* pFirst, const rtl::OUString* pSecond)
+    {
+        return ((pFirst && pSecond && pFirst->equals(*pSecond)) ||
+                (!pFirst && !pSecond) ||
+                (!pFirst && pSecond && !pSecond->getLength()) ||
+                (!pSecond &&  pFirst && !pFirst->getLength()));
+    }
 public:
     ScMyStylesImportHelper(ScXMLImport& rImport);
     ~ScMyStylesImportHelper();
     void AddColumnStyle(const rtl::OUString& rStyleName, const sal_Int32 nColumn, const sal_Int32 nRepeat);
     void SetRowStyle(const rtl::OUString& rStyleName);
-    void SetAttributes(const rtl::OUString& rStyleName,
-        const rtl::OUString& sCurrency, const sal_Int16 nCellType);
+    void SetAttributes(rtl::OUString* pStyleName,
+        rtl::OUString* pCurrency, const sal_Int16 nCellType);
     void AddRange(const ScRange& rRange);
     void AddRange(const com::sun::star::table::CellRangeAddress& rRange);
     void AddCell(const ScAddress& rAddress);
