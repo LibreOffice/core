@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkresid.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-11 14:19:11 $
+ *  last change: $Author: rt $ $Date: 2003-10-01 10:22:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,3 +104,4 @@ FwkResId::FwkResId( USHORT nId ) :
 }
 
 }
+
