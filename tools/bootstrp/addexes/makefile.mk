@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mh $ $Date: 2001-10-04 17:06:59 $
+#   last change: $Author: vg $ $Date: 2001-12-21 15:43:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,7 +88,7 @@ APP1STDLIBS=$(STATIC_LIBS)
 APP1LIBS=	$(LB)$/bootstrp.lib
 APP1DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
 
-#APP2TARGET=	include
+APP2TARGET=	include
 APP2STACK=	16000
 APP2OBJS=   $(OBJ)$/include.obj
 APP2STDLIBS=$(STATIC_LIBS)
