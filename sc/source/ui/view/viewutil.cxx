@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewutil.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:10 $
+ *  last change: $Author: nn $ $Date: 2000-11-24 20:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #include "scitems.hxx"
 #include <svx/charmap.hxx>
 #include <svx/fontitem.hxx>
+#include <svx/scripttypeitem.hxx>
+#include <svtools/itempool.hxx>
+#include <svtools/itemset.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
@@ -82,6 +85,23 @@
 // STATIC DATA -----------------------------------------------------------
 
 //==================================================================
+
+//  static
+void ScViewUtil::PutItemScript( SfxItemSet& rShellSet, const SfxItemSet& rCoreSet,
+                                USHORT nWhichId, USHORT nScript )
+{
+    //  take the effective item from rCoreSet according to nScript
+    //  and put in rShellSet under the (base) nWhichId
+
+    SfxItemPool& rPool = *rShellSet.GetPool();
+    SvxScriptSetItem aSetItem( rPool.GetSlotId(nWhichId), rPool );
+    aSetItem.GetItemSet().Put( rCoreSet, FALSE );
+    const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScript );
+    if (pI)
+        rShellSet.Put( *pI, nWhichId );
+    else
+        rShellSet.InvalidateItem( nWhichId );
+}
 
 //  static
 BOOL ScViewUtil::IsActionShown( const ScChangeAction& rAction,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewutil.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:02 $
+ *  last change: $Author: nn $ $Date: 2000-11-24 20:06:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #endif
 
 class String;
+class SfxItemSet;
 class SvxFontItem;
 
 class ScChangeAction;
@@ -89,6 +90,9 @@ public:
     static BOOL IsActionShown( const ScChangeAction& rAction,
                                 const ScChangeViewSettings& rSettings,
                                 ScDocument& rDocument );
+
+    static void PutItemScript( SfxItemSet& rShellSet, const SfxItemSet& rCoreSet,
+                                USHORT nWhichId, USHORT nScript );
 };
 
 // ---------------------------------------------------------------------------
