@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-20 09:01:20 $
+ *  last change: $Author: cmc $ $Date: 2002-10-18 13:28:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,6 +542,8 @@ public:
     SwXTableRows(SwFrmFmt& rFrmFmt);
     virtual ~SwXTableRows();
 
+    TYPEINFO();
+
 // automatisch auskommentiert - [getIdlClass or queryInterface] - Bitte XTypeProvider benutzen!
 //  virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >  > getIdlClasses(void) throw( ::com::sun::star::uno::RuntimeException );
 
@@ -587,6 +589,7 @@ public:
     SwXTableColumns(SwFrmFmt& rFrmFmt);
     virtual ~SwXTableColumns();
 
+    TYPEINFO();
 // automatisch auskommentiert - [getIdlClass or queryInterface] - Bitte XTypeProvider benutzen!
 //  virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >  > getIdlClasses(void) throw( ::com::sun::star::uno::RuntimeException );
 

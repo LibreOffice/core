@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-16 10:19:39 $
+ *  last change: $Author: cmc $ $Date: 2002-10-18 13:29:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4636,8 +4636,8 @@ Sequence< OUString > SwXTableRows::getSupportedServiceNames(void) throw( Runtime
     pArray[0] = C2U("com.sun.star.text.TableRows");
     return aRet;
 }
+TYPEINIT1(SwXTableRows, SwClient);
 /*-- 03.02.99 07:37:41---------------------------------------------------
-
   -----------------------------------------------------------------------*/
 SwXTableRows::SwXTableRows(SwFrmFmt& rFrmFmt) :
     SwClient(&rFrmFmt)
@@ -4854,8 +4854,8 @@ Sequence< OUString > SwXTableColumns::getSupportedServiceNames(void) throw( Runt
     pArray[0] = C2U("com.sun.star.text.TableColumns");
     return aRet;
 }
+TYPEINIT1(SwXTableColumns, SwClient);
 /*-- 03.02.99 07:37:41---------------------------------------------------
-
   -----------------------------------------------------------------------*/
 SwXTableColumns::SwXTableColumns(SwFrmFmt& rFrmFmt) :
     SwClient(&rFrmFmt)
