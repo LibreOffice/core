@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.139 $
+ *  $Revision: 1.140 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:37:31 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -578,6 +578,8 @@ sal_Bool SfxObjectShell::DoInitNew( const uno::Reference< embed::XStorage >& xSt
         pMedium = new SfxMedium;
     }
 
+    pMedium->CanDisposeStorage_Impl( sal_True );
+
     if ( InitNew( xStorage ) )
     {
         // empty documents always get their macros from the user, so there is no reason to restrict access
@@ -755,6 +757,8 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         GetpApp()->ShowStatusText( SfxResId(STR_DOC_LOADING) );
 
     pMedium = pMed;
+    pMedium->CanDisposeStorage_Impl( sal_True );
+
     sal_Bool bOk = sal_False;
     const SfxFilter* pFilter = pMed->GetFilter();
     SfxItemSet* pSet = pMedium->GetItemSet();
@@ -1641,8 +1645,18 @@ sal_Bool SfxObjectShell::ConnectTmpStorage_Impl( const uno::Reference< embed::XS
                 throw uno::RuntimeException();
 
             // TODO/LATER: may be it should be done in SwitchPersistence also
-            CopyStoragesOfUnknownMediaType( xStorage, xTmpStorage );
+            // TODO/LATER: find faster way to copy storage; perhaps sharing with backup?!
+            xStorage->copyToStorage( xTmpStorage );
+            //CopyStoragesOfUnknownMediaType( xStorage, xTmpStorage );
             SaveCompleted( xTmpStorage );
+
+            SfxDialogLibraryContainer* pDialogCont = pImp->pDialogLibContainer;
+            if( pDialogCont )
+                pDialogCont->setStorage( xTmpStorage );
+
+            SfxScriptLibraryContainer* pBasicCont = pImp->pBasicLibContainer;
+            if( pBasicCont )
+                pBasicCont->setStorage( xTmpStorage );
 
             bResult = sal_True;
         }
@@ -1773,7 +1787,10 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium * pNewMed )
     // delete Medium (and Storage!) after all notifications
     SfxMedium* pOld = pMedium;
     if ( bMedChanged )
+    {
         pMedium = pNewMed;
+        pMedium->CanDisposeStorage_Impl( sal_True );
+    }
 
     const SfxFilter *pFilter = pMedium ? pMedium->GetFilter() : 0;
     if ( pNewMed )
