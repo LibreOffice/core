@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-14 11:13:33 $
+ *  last change: $Author: jp $ $Date: 2002-01-21 17:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #define ITEMID_LRSPACE      0
 #define ITEMID_ULSPACE      0
 #define ITEMID_SIZE         0
+#define ITEMID_FRAMEDIR     0
 
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
@@ -110,6 +111,7 @@
 #include "lrspitem.hxx"
 #include "ulspitem.hxx"
 #include "sizeitem.hxx"
+#include "frmdiritem.hxx"
 #include "bbdlg.hxx"
 #include "dlgutil.hxx"
 #include "dialmgr.hxx"
@@ -263,6 +265,8 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     aRegisterCB         ( this, ResId( CB_REGISTER ) ),
     aRegisterFT         ( this, ResId( FT_REGISTER ) ),
     aRegisterLB         ( this, ResId( LB_REGISTER ) ),
+    aTextFlowBox        ( this, ResId( LB_TEXT_FLOW ) ),
+    aTextFlowLbl        ( this, ResId( FT_TEXT_FLOW ) ),
 
     aInsideText         (       ResId( STR_INSIDE ) ),
     aOutsideText        (       ResId( STR_OUTSIDE ) ),
@@ -387,6 +391,9 @@ void SvxPageDescPage::Init_Impl()
 
     aHorzBox.SetClickHdl( LINK( this, SvxPageDescPage, CenterHdl_Impl ) );
     aVertBox.SetClickHdl( LINK( this, SvxPageDescPage, CenterHdl_Impl ) );
+
+    //Textfluss
+    aTextFlowBox.SetSelectHdl( LINK( this, SvxPageDescPage, TextFlowSelect_Impl ));
 }
 
 // -----------------------------------------------------------------------
@@ -634,6 +641,27 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
         aRegisterLB.SaveValue();
     }
 
+    SfxItemState eState = rSet.GetItemState( GetWhich( SID_ATTR_FRAMEDIRECTION ),
+                                                TRUE, &pItem );
+    if( SFX_ITEM_UNKNOWN != eState )
+    {
+        aTextFlowLbl.Show();
+        aTextFlowBox.Show();
+
+        sal_uInt16 nPos, nVal = SFX_ITEM_SET == eState
+                                ? ((SvxFrameDirectionItem*)pItem)->GetValue()
+                                : 0;
+        for( nPos = aTextFlowBox.GetEntryCount(); nPos; )
+            if( (sal_uInt16)(long*)aTextFlowBox.GetEntryData( --nPos ) == nVal )
+                break;
+        aTextFlowBox.SelectEntryPos( nPos );
+        aTextFlowBox.SaveValue();
+    }
+    else
+    {
+        aTextFlowLbl.Hide();
+        aTextFlowBox.Hide();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -860,6 +888,15 @@ BOOL SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
         delete pRegItem;
     }
 
+    if( aTextFlowBox.IsVisible() &&
+        ( nPos = aTextFlowBox.GetSelectEntryPos() ) !=
+                                            aTextFlowBox.GetSavedValue() )
+    {
+        nPos = (sal_uInt16)(long*)aTextFlowBox.GetEntryData( nPos );
+        rSet.Put( SvxFrameDirectionItem( (SvxFrameDirection)nPos,
+                                    GetWhich( SID_ATTR_FRAMEDIRECTION )));
+        bModified = TRUE;
+    }
 
     return bModified;
 }
@@ -1643,4 +1680,9 @@ IMPL_LINK( SvxPageDescPage, RegisterModify, CheckBox*, pBox )
     return 0;
 }
 
+// -----------------------------------------------------------------------
 
+IMPL_LINK( SvxPageDescPage, TextFlowSelect_Impl, ListBox*, pBox )
+{
+    return 0;
+}

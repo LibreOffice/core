@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-05-17 06:15:17 $
+ *  last change: $Author: jp $ $Date: 2002-01-21 17:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #define FL_LAYOUT        31
 #define FT_NUMBER_FORMAT        32
 
+#define FT_TEXT_FLOW            35
+#define LB_TEXT_FLOW            36
+
 #define WN_BSP                  40
 
 #define FT_ORIENTATION          48
@@ -110,7 +113,6 @@
 #define STR_INSIDE              90
 #define STR_OUTSIDE             91
 #define STR_QUERY_PRINTRANGE    92
-
 
 #endif
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-18 21:20:23 $
+ *  last change: $Author: jp $ $Date: 2002-01-21 17:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,6 +313,41 @@ TabPage RID_SVXPAGE_PAGE
         Pos = MAP_APPFONT ( 176 , 6 ) ;
         Size = MAP_APPFONT ( 75 , 46 ) ;
     };
+
+    FixedText FT_TEXT_FLOW
+    {
+        Pos = MAP_APPFONT ( 113 , 58 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Left = TRUE ;
+        Hide = TRUE ;
+        Text = "~Textfluss" ;
+        Text [ ENGLISH ] = "~Text flow" ;
+    };
+    ListBox LB_TEXT_FLOW
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 165 , 58 ) ;
+        Size = MAP_APPFONT ( 83 , 50 ) ;
+        DropDown = TRUE ;
+        Hide = TRUE ;
+        StringList =
+        {
+            < "Horizontal von links" ; 0; > ;
+//          < "Horizontal von rechts" ; 1; > ;
+            < "Vertikal von rechts" ; 2; > ;
+//          < "Vertikal von links" ; 3; > ;
+//          < "Wie die Umgebung" ; 4; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "Horizontal from left" ; 0; > ;
+//          < "Horizontal from right" ; 1; > ;
+            < "Vertical from right" ; 2; > ;
+//          < "Vertical from left" ; 3; > ;
+//          < "Like the environment" ; 4; > ;
+        };
+    };
+
     FixedText FT_PAPER_TRAY
     {
         Pos = MAP_APPFONT ( 113 , 74 ) ;
