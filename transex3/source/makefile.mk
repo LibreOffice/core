@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: nf $ $Date: 2001-08-23 11:45:30 $
+#   last change: $Author: nf $ $Date: 2001-08-23 14:13:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -135,7 +135,7 @@ APP7OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy.obj $(OBJ)$/merge.obj $(OBJ)$/ex
 APP7STDLIBS=$(BTSTRPLIB) $(STATIC_LIBS)
 
 # extractor and merger for *.xrm
-APP8TARGET= xrmlex
+APP8TARGET= xrmex
 APP8STACK=  16000
 APP8OBJS=   $(OBJ)$/xrmmerge.obj $(OBJ)$/xrm_yy.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
 APP8STDLIBS=$(BTSTRPLIB) $(STATIC_LIBS)

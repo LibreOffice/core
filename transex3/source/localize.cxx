@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nf $ $Date: 2001-08-07 13:49:45 $
+ *  last change: $Author: nf $ $Date: 2001-08-23 14:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@ const char *ExeTable[][5] = {
     { "xxl", "xmlex", "-UTF8 -e", "negative", "iso" },
     { "xgf", "xmlex", "-UTF8 -e -t:xgf", "negative", "iso" },
     { "xcd", "cfgex", "-UTF8 -e", "negative", "iso" },
+    { "xrm", "xrmex", "-UTF8 -e", "negative", "iso" },
     { "NULL", "NULL", "NULL", "NULL", "NULL" }
 };
 

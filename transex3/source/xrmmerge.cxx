@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xrmmerge.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nf $ $Date: 2001-08-23 11:45:30 $
+ *  last change: $Author: nf $ $Date: 2001-08-23 14:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,7 @@ extern char *GetOutputFile( int argc, char* argv[])
                     sMergeSrc = ByteString( argv[ i ]);
                     bMergeMode = TRUE; // activate merge mode, cause merge database found
                 }
+                break;
                 case STATE_LANGUAGES: {
                     Export::sLanguages = ByteString( argv[ i ]);
                 }
@@ -374,11 +375,13 @@ int XRMResParser::Execute( int nToken, char * pToken )
                 bText = TRUE;
                 sCurrentText = "";
                 sCurrentOpenTag = rToken;
+                Output( rToken );
             }
         break;
 
         case XRM_TEXT_END: {
             if ( sLocalized.GetChar( sLocalized.Len() - 1 ) == '1' ) {
+                sCurrentCloseTag = rToken;
 
                 ByteString sLang = GetAttribute( sCurrentOpenTag, "xml:lang" );
                 if ( Export::GetLangByIsoLang( sLang ) != GERMAN ) {
@@ -678,15 +681,15 @@ void XRMResMerge::WorkOnText(
     USHORT nLang = Export::GetLangByIsoLang( sLang );
     USHORT nLangIndex = Export::GetLangIndex( nLang );
 
-    if ( LANGUAGE_ALLOWED( nLangIndex )) {
-        if ( pMergeDataFile ) {
-            if ( !pResData ) {
-                ByteString sPlatform( "" );
-                pResData = new ResData( sPlatform, GetGID());
-                pResData->sId = GetLID();
-                pResData->sResTyp = "readmeitem";
-            }
+    if ( pMergeDataFile ) {
+        if ( !pResData ) {
+            ByteString sPlatform( "" );
+            pResData = new ResData( sPlatform, GetGID());
+            pResData->sId = GetLID();
+            pResData->sResTyp = "readmeitem";
+        }
 
+        if ( LANGUAGE_ALLOWED( nLangIndex )) {
             PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
             if ( pEntrys ) {
                 ByteString sContent;
@@ -739,7 +742,8 @@ void XRMResMerge::EndOfText(
 
                     Export::QuotHTML( sText );
 
-                    ByteString sAdditionalLine( rOpenTag );
+                    ByteString sAdditionalLine( "\t" );
+                    sAdditionalLine += rOpenTag;
                     ByteString sSearch = "xml:lang=\"";
                     ByteString sReplace( sSearch );
 
@@ -751,6 +755,9 @@ void XRMResMerge::EndOfText(
                     sAdditionalLine += sText;
                     sAdditionalLine += rCloseTag;
                     sAdditionalLine += "\n";
+
+                    for ( USHORT i = 0; i + 1 < GetGID().GetTokenCount( '.' ); i++ )
+                        sAdditionalLine += "\t";
 
                     Output( sAdditionalLine );
                 }
