@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 19:30:00 $
+#   last change: $Author: rt $ $Date: 2005-01-11 14:27:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,7 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
+.INCLUDE: $(PRJ)$/util$/makefile.pmk
 CDEFS+=-DCONV_STAR_FONTS
 
 # --- to build xmlkywd.obj in obj, too -----------------------------
