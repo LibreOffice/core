@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cmc $ $Date: 2000-11-14 10:28:59 $
+ *  last change: $Author: sab $ $Date: 2000-11-16 18:16:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,6 +439,10 @@ void SAL_CALL SvXMLImport::allowLineBreak( void )
 
 void SAL_CALL SvXMLImport::unknown( const OUString& sString )
     throw(xml::sax::SAXException, uno::RuntimeException)
+{
+}
+
+void SvXMLImport::SetStatisticAttributes(const uno::Reference< xml::sax::XAttributeList > & xAttribs)
 {
 }
 
