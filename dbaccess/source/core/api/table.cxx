@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-04 10:02:30 $
+ *  last change: $Author: oj $ $Date: 2001-05-25 10:39:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ ODBTable::ODBTable(const OConfigurationNode& _rTableConfig,
         const ::rtl::OUString& _rType,
         const ::rtl::OUString& _rDesc) throw(SQLException)
         : connectivity::sdbcx::OTable(_rxMetaData->storesMixedCaseQuotedIdentifiers(),_rName,_rType,_rDesc,_rSchema,_rCatalog)
-        ,OConfigurationFlushable(m_aMutex,_rTableConfig.cloneAsRoot())
+        ,OConfigurationFlushable(m_aMutex,_rTableConfig.isValid() ? _rTableConfig.cloneAsRoot() : OConfigurationTreeRoot())
         ,m_nPrivileges(0)
         ,m_xMetaData(_rxMetaData)
 {
