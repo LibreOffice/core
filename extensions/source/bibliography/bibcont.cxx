@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibcont.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: gt $ $Date: 2002-04-25 09:27:20 $
+ *  last change: $Author: os $ $Date: 2002-05-08 10:12:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,9 @@ using namespace ::rtl;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
 #define PROPERTY_FRAME                      1
-
+//split window size is a percent value
+#define WIN_MIN_HEIGHT 10
+#define WIN_STEP_SIZE 5
 
 BibWindowContainer::BibWindowContainer( Window* pParent, WinBits nStyle ) :
         Window( pParent, nStyle ),
@@ -382,3 +384,33 @@ void BibBookContainer::GetFocus()
     if( pBottomWin )
         pBottomWin->GrabFocus();
 }
+
+long BibBookContainer::PreNotify( NotifyEvent& rNEvt )
+{
+    long nHandled = 0;
+    if( EVENT_KEYINPUT == rNEvt.GetType()  )
+    {
+        const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
+        const KeyCode aKeyCode = pKEvt->GetKeyCode();
+        USHORT nKey = aKeyCode.GetCode();
+        const USHORT nModifier = aKeyCode.GetModifier();
+        if(KEY_MOD2 == nModifier &&
+            (KEY_UP == nKey || KEY_DOWN == nKey))
+        {
+            if(pTopWin && pBottomWin)
+            {
+                USHORT nFirstWinId = KEY_UP == nKey ? TOP_WINDOW : BOTTOM_WINDOW;
+                USHORT nSecondWinId = KEY_UP == nKey ? BOTTOM_WINDOW : TOP_WINDOW;
+                long nHeight = GetItemSize( nFirstWinId );
+                nHeight -= WIN_STEP_SIZE;
+                if(nHeight < WIN_MIN_HEIGHT)
+                    nHeight = WIN_MIN_HEIGHT;
+                SetItemSize( nFirstWinId, nHeight );
+                SetItemSize( nSecondWinId, 100 - nHeight );
+            }
+            nHandled = 1;
+        }
+    }
+    return nHandled;
+}
+

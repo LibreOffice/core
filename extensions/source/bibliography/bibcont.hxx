@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibcont.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gt $ $Date: 2002-04-25 09:27:20 $
+ *  last change: $Author: os $ $Date: 2002-05-08 10:12:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@ class BibBookContainer: public SplitWindow
 
         void                    CreateTopWin();
         void                    CreateBottomWin();
+        virtual long            PreNotify( NotifyEvent& rNEvt );
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > GetTopComponentInterface( sal_Bool bCreate = sal_True );
         void                    SetTopComponentInterface( ::com::sun::star::awt::XWindowPeer* pIFace );
 
