@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jp $ $Date: 2000-11-20 09:48:57 $
+#   last change: $Author: vg $ $Date: 2003-04-17 15:03:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,9 +64,6 @@ PRJ=..$/..$/..
 
 PRJNAME=sw
 TARGET=writer
-
-PROJECTPCH=filt_pch
-PROJECTPCHSOURCE=..\filt_1st\filt_pch
 
 # --- Settings -----------------------------------------------------
 
