@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:25:26 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:22:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
 #endif
 #ifndef _COM_SUN_STAR_EMBED_XCLASSIFIEDOBJECT_HPP_
 #include <com/sun/star/embed/XClassifiedObject.hpp>
@@ -2263,7 +2266,14 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
                     //TODO/LATER: from where do I get a ViewAspect? And how do I transport it to the OLENode?
                     sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
 
-                    // TODO/LEAN: VisualArea may switch object to running state
+                    // TODO/LEAN: VisualArea still needs running state
+                    svt::EmbeddedObjectRef::TryRunningState( xIPObj );
+
+                    // set parent to get correct VisArea(in case of object needing parent printer)
+                    uno::Reference < container::XChild > xChild( xIPObj, uno::UNO_QUERY );
+                    if ( xChild.is() )
+                        xChild->setParent( pDoc->GetDocShell()->GetModel() );
+
                     //The Size should be suggested by the OLE server if not manually set
                     MapUnit aRefMap = VCLUnoHelper::UnoEmbed2VCLMapUnit( xIPObj->getMapUnit( nAspect ) );
                     awt::Size aSize;
