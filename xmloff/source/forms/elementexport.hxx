@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 12:03:37 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:04:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,19 +232,15 @@ namespace xmloff
 
         /** exports the ListSource property of a control as attribute
 
-            <p>The ListSource property may be exported in different ways: For a ComboBox, it is an attribute
-            of the form:combobox element.</p>
+            The ListSource property may be exported in different ways: For a ComboBox, it is an attribute
+            of the form:combobox element.
 
-            <p>For a ListBox, it's an attribute if the ListSourceType states that the ListBox does <em>not</em>
+            For a ListBox, it's an attribute if the ListSourceType states that the ListBox does <em>not</em>
             display a value list. In case of a value list, the ListSource is not exported, and the pairs of
-            StringItem/ValueItem are exported as sub-elements.<br/>
-            (For a value list ListBox, As every setting of the ListSource immediately sets the ValueList to the
-            same value, so nothing is lost when exporting this).</p>
+            StringItem/ValueItem are exported as sub-elements.
 
-            <p>It's really strange, isn't it? Don't know why we have this behaviour in our controls ...</p>
-
-            <p>This method does the attribute part: It exports the ListSource property as attribute, not caring
-            about whether the object is a ComboBox or a ListBox.</p>
+            This method does the attribute part: It exports the ListSource property as attribute, not caring
+            about whether the object is a ComboBox or a ListBox.
         */
         void exportListSourceAsAttribute();
 
@@ -271,6 +267,31 @@ namespace xmloff
             a list-like control
         */
         void exportCellListSourceRange( );
+
+        /** determines whether the control we're exporting has an active data binding.
+
+            Bindings which count here are:
+            <ul><li>an established connection to a database field</li>
+                <li>a binding to an external value supplier (<type scope="com::sun::star::form::binding">XValueBinding</type>)</li>
+            </ul>
+        */
+        bool controlHasActiveDataBinding() const;
+
+        /** retrieves the string specifying the ListSource of a list or combo box
+        */
+        ::rtl::OUString OControlExport::getScalarListSourceValue() const;
+
+        /** determines whether the list entries (of a combo or list box) are supplied by the user
+
+            List entries may be
+            <ul><li>specified by the user</li>
+                <li>specified by an external list source (<type scope="com::sun::star::form::binding">XListEntrySource</type>)</li>
+                <li>obtained from a database query (in various ways)</li>
+            </ul>
+
+            In the latter two cases, this method will return <FALSE/>
+        */
+        bool controlHasUserSuppliedListEntries() const;
     };
 
     //=====================================================================
@@ -335,6 +356,14 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9.106.1  2004/05/17 12:06:51  fs
+ *  #i29644# don't export current-value and list entries if they're not provided by the user, but implicitly obtained from another source (such as a database, or an external binding/list source supplier)
+ *
+ *  Revision 1.9  2003/12/01 12:03:37  rt
+ *  INTEGRATION: CWS geordi2q09 (1.8.24); FILE MERGED
+ *  2003/11/24 15:02:47 obo 1.8.24.2: undo last change
+ *  2003/11/21 16:55:12 obo 1.8.24.1: #111934# join CWS comboboxlink
+ *
  *  Revision 1.8.24.2  2003/11/24 15:02:47  obo
  *  undo last change
  *
