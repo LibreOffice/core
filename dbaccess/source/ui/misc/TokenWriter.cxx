@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TokenWriter.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-02 08:18:46 $
+ *  last change: $Author: oj $ $Date: 2002-08-01 07:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,8 @@ ODatabaseImportExport::ODatabaseImportExport(const ODataAccessDescriptor& _aData
         _aDataDescriptor[daConnection]  >>= m_xConnection;
     if(_aDataDescriptor.has(daSelection))
         _aDataDescriptor[daSelection]   >>= m_aSelection;
+    if(_aDataDescriptor.has(daCursor))
+        _aDataDescriptor[daCursor]  >>= m_xResultSet;
 
     xub_StrLen nCount = rExchange.GetTokenCount(char(11));
     if( nCount > SBA_FORMAT_SELECTION_COUNT && rExchange.GetToken(4).Len())
@@ -327,20 +329,29 @@ void ODatabaseImportExport::initialize()
             if(m_xObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_FONT))
                 m_xObject->getPropertyValue(PROPERTY_FONT) >>= m_aFont;
 
-            m_xResultSet = Reference< XResultSet >(m_xFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdb.RowSet")),UNO_QUERY);
-            Reference<XPropertySet > xProp(m_xResultSet,UNO_QUERY);
-            if(xProp.is())
+            // the result set may be already set with the datadescriptor
+            if ( m_xResultSet.is() )
             {
-                xProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,makeAny(m_xConnection));
-                xProp->setPropertyValue(PROPERTY_COMMANDTYPE,makeAny(m_nCommandType));
-                xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(m_sName));
-                Reference<XRowSet> xRowSet(xProp,UNO_QUERY);
-                xRowSet->execute();
-                m_xRow = Reference<XRow>(xRowSet,UNO_QUERY);
+                m_xRow = Reference<XRow>(m_xResultSet,UNO_QUERY);
                 m_xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(m_xRow,UNO_QUERY)->getMetaData();
             }
             else
-                OSL_ENSURE(sal_False, "ODatabaseImportExport::initialize: could not instantiate a rowset!");
+            {
+                m_xResultSet = Reference< XResultSet >(m_xFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdb.RowSet")),UNO_QUERY);
+                Reference<XPropertySet > xProp(m_xResultSet,UNO_QUERY);
+                if(xProp.is())
+                {
+                    xProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,makeAny(m_xConnection));
+                    xProp->setPropertyValue(PROPERTY_COMMANDTYPE,makeAny(m_nCommandType));
+                    xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(m_sName));
+                    Reference<XRowSet> xRowSet(xProp,UNO_QUERY);
+                    xRowSet->execute();
+                    m_xRow = Reference<XRow>(xRowSet,UNO_QUERY);
+                    m_xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(m_xRow,UNO_QUERY)->getMetaData();
+                }
+                else
+                    OSL_ENSURE(sal_False, "ODatabaseImportExport::initialize: could not instantiate a rowset!");
+            }
         }
         catch(Exception& )
         {
