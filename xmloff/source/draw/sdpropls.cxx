@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-18 13:25:00 $
+ *  last change: $Author: cl $ $Date: 2000-12-19 16:21:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,7 +334,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     { "D3DTextureProjectionY",          XML_NAMESPACE_DR3D, sXML_tex_generation_mode_y, XML_SD_TYPE_TEX_GENERATION_MODE_Y, 0 },
     { "D3DTextureKind",                 XML_NAMESPACE_DR3D, sXML_tex_kind,              XML_SD_TYPE_TEX_KIND, 0 },
     { "D3DTextureMode",                 XML_NAMESPACE_DR3D, sXML_tex_mode,              XML_SD_TYPE_TEX_MODE, 0 },
-    { "D3DTextureFilter",               XML_NAMESPACE_DR3D, sXML_tex_filter,            XML_TYPE_BOOL, 0 },
+    { "D3DTextureFilter",               XML_NAMESPACE_DR3D, sXML_tex_filter,            XML_SD_TYPE_BACKFACE_CULLING, 0 },
 
     // 3D material attributes
     { "D3DMaterialColor",               XML_NAMESPACE_DR3D, sXML_diffuse_color,         XML_TYPE_COLOR, 0 },
@@ -343,7 +343,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     { "D3DMaterialSpecularIntensity",   XML_NAMESPACE_DR3D, sXML_shininess,             XML_TYPE_PERCENT, 0 },
 
     // 3D shadow attributes
-    { "D3DShadow3D",                    XML_NAMESPACE_DR3D, sXML_shadow,                XML_TYPE_BOOL, 0 },
+    { "D3DShadow3D",                    XML_NAMESPACE_DR3D, sXML_shadow,                XML_SD_TYPE_SHADOW, 0 },
 
     { 0L }
 };
