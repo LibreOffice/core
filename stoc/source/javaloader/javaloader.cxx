@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaloader.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 12:00:45 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:09:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,8 +201,11 @@ namespace stoc_javaloader {
             rtl::Reference< jvmaccess::VirtualMachine > xVirtualMachine(
                 reinterpret_cast< jvmaccess::VirtualMachine * >(nPointer));
             if (!xVirtualMachine.is())
-                throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
-                   "javaloader error - JavaVirtualMachine service could not provide a VM")), css::uno::Reference<XInterface>());
+                //throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                //   "javaloader error - JavaVirtualMachine service could not provide a VM")), css::uno::Reference<XInterface>());
+                // We must not throw a RuntimeException, because this might end the applications. It is ok if java components
+                // are not working because the office can be installed without Java support.
+                return;
 
             try
             {
@@ -334,7 +337,11 @@ namespace stoc_javaloader {
     sal_Bool SAL_CALL JavaComponentLoader::writeRegistryInfo(const css::uno::Reference<XRegistryKey> & xKey, const OUString & blabla, const OUString & rLibName)
         throw(CannotRegisterImplementationException, RuntimeException)
     {
-        return _javaLoader->writeRegistryInfo(xKey, blabla, rLibName);
+        if (_javaLoader.is())
+            return _javaLoader->writeRegistryInfo(xKey, blabla, rLibName);
+        else
+            throw CannotRegisterImplementationException(
+                OUString(RTL_CONSTASCII_USTRINGPARAM("Could not create Java implementation loader")), NULL);
     }
 
 
@@ -344,7 +351,11 @@ namespace stoc_javaloader {
                                                                  const css::uno::Reference<XRegistryKey> & xKey)
         throw(CannotActivateFactoryException, RuntimeException)
     {
-        return _javaLoader->activate(rImplName, blabla, rLibName, xKey);
+        if (_javaLoader.is())
+            return _javaLoader->activate(rImplName, blabla, rLibName, xKey);
+        else
+            throw CannotActivateFactoryException(
+                OUString(RTL_CONSTASCII_USTRINGPARAM("Could not create Java implementation loader")), NULL);
     }
 
     static Mutex & getInitMutex()
