@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-25 11:33:39 $
+ *  last change: $Author: ama $ $Date: 2002-02-01 10:25:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,7 +401,6 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
         {
             SwSelUnion *pUnion = aUnions[i];
             const SwTabFrm *pTable = pUnion->GetTable();
-
             if( !pTable->IsValid() && nLoopMax )
             {
                 bTblIsValid = FALSE;
@@ -717,6 +716,15 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
 
 BOOL IsFrmInTblSel( const SwRect& rUnion, const SwFrm* pCell )
 {
+#ifdef VERTICAL_LAYOUT
+    if( pCell->IsVertical() )
+        return ( rUnion.Right() >= pCell->Frm().Right() &&
+            rUnion.Left() <= pCell->Frm().Left() &&
+            (( rUnion.Top() <= pCell->Frm().Top()+20 &&
+               rUnion.Bottom() > pCell->Frm().Top() ) ||
+             ( rUnion.Top() >= pCell->Frm().Top() &&
+               rUnion.Bottom() < pCell->Frm().Bottom() )) ? TRUE : FALSE );
+#endif
     return (
         rUnion.Top() <= pCell->Frm().Top() &&
         rUnion.Bottom() >= pCell->Frm().Bottom() &&
@@ -1790,10 +1798,27 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
             bExchange = TRUE;
         }
     }
+#ifdef VERTICAL_LAYOUT
+    else
+    {
+        SWRECTFN( pStart )
+        long nSttTop = (pStart->Frm().*fnRect->fnGetTop)();
+        long nEndTop = (pEnd->Frm().*fnRect->fnGetTop)();
+        if( nSttTop == nEndTop )
+        {
+            if( (pStart->Frm().*fnRect->fnGetLeft)() >
+                (pEnd->Frm().*fnRect->fnGetLeft)() )
+                bExchange = TRUE;
+        }
+        else if( bVert == ( nSttTop < nEndTop ) )
+            bExchange = TRUE;
+    }
+#else
     else if ( pStart->Frm().Top() > pEnd->Frm().Top() ||
              (pStart->Frm().Top() == pEnd->Frm().Top() &&
               pStart->Frm().Left() > pEnd->Frm().Left()) )
         bExchange = TRUE;
+#endif
     if ( bExchange )
     {
         const SwLayoutFrm *pTmp = pStart;
@@ -1821,6 +1846,52 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
     const long nWish = Max( 1L, pTable->GetFmt()->GetFrmSize().GetWidth() );
     while ( pTable )
     {
+#ifdef VERTICAL_LAYOUT
+        SWRECTFN( pTable )
+        const long nOfst = (pTable->*fnRect->fnGetPrtLeft)();
+        const long nPrtWidth = (pTable->Prt().*fnRect->fnGetWidth)();
+        long nSt1 = ::lcl_CalcWish( pStart, nWish, nPrtWidth ) + nOfst;
+        long nEd1 = ::lcl_CalcWish( pEnd,   nWish, nPrtWidth ) + nOfst;
+
+        if ( nSt1 <= nEd1 )
+            nEd1 += (long)((nEdSz * nPrtWidth) / nWish) - 1;
+        else
+            nSt1 += (long)((nStSz * nPrtWidth) / nWish) - 1;
+
+        long nSt2;
+        long nEd2;
+        if( pTable->IsAnLower( pStart ) )
+            nSt2 = (pStart->Frm().*fnRect->fnGetTop)();
+        else
+            nSt2 = (pTable->Frm().*fnRect->fnGetTop)();
+        if( pTable->IsAnLower( pEnd ) )
+            nEd2 = (pEnd->Frm().*fnRect->fnGetBottom)();
+        else
+            nEd2 = (pTable->Frm().*fnRect->fnGetBottom)();
+        Point aSt, aEd;
+        if( nSt1 > nEd1 )
+        {
+            long nTmp = nSt1;
+            nSt1 = nEd1;
+            nEd1 = nTmp;
+        }
+        if( nSt2 > nEd2 )
+        {
+            long nTmp = nSt2;
+            nSt2 = nEd2;
+            nEd2 = nTmp;
+        }
+        if( bVert )
+        {
+            aSt = Point( nSt2, nSt1 );
+            aEd = Point( nEd2, nEd1 );
+        }
+        else
+        {
+            aSt = Point( nSt1, nSt2 );
+            aEd = Point( nEd1, nEd2 );
+        }
+#else
         const long nOfst = pTable->Frm().Left() + pTable->Prt().Left();
         long nSt = ::lcl_CalcWish( pStart, nWish, pTable->Prt().Width() ) + nOfst;
         long nEd = ::lcl_CalcWish( pEnd,   nWish, pTable->Prt().Width() ) + nOfst;
@@ -1837,6 +1908,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
             aSt.Y() = pTable->Frm().Top();
         if ( !pTable->IsAnLower( pEnd ) )
             aEd.Y() = pTable->Frm().Bottom();
+#endif
 
         SwRect aUnion( aSt, aEd );
         aUnion.Justify();
@@ -1871,9 +1943,16 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
                 pLast = ::lcl_FindCellFrm( pLast->GetPrevLayoutLeaf() );
 
             if ( pFirst && pLast ) //Robust
+#ifdef VERTICAL_LAYOUT
+            {
+                aUnion = pFirst->Frm();
+                aUnion.Union( pLast->Frm() );
+            }
+#else
                 aUnion = SwRect( pFirst->Frm().Pos(),
                                  Point( pLast->Frm().Right(),
                                          pLast->Frm().Bottom() ) );
+#endif
             else
                 aUnion.Width( 0 );
         }
