@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-29 10:23:32 $
+ *  last change: $Author: oj $ $Date: 2000-12-01 11:55:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1107,6 +1107,8 @@ void ORowSetBase::firePropertyChange(const ORowSetMatrix::iterator& _rOldRow)
 // -----------------------------------------------------------------------------
 sal_Int32 ORowSetBase::assginFormatByType(sal_Bool _bCurrency,sal_Int32 _nType,const Locale& _rLocale)
 {
+    if(!m_xNumberFormatTypes.is())
+        return 0;
     sal_Int32 nNumberType   = _bCurrency ? NumberFormat::CURRENCY : NumberFormat::NUMBER;
     sal_Int32 nTextType     = NumberFormat::TEXT;
     sal_Int32 nFormatkey    = 0;
