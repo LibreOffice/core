@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdprovider.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 15:04:44 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,9 +79,14 @@
 #ifndef _CPPUHELPER_COMPBASE4_HXX_
 #include <cppuhelper/compbase4.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
+
+#include <cppuhelper/weakref.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -107,6 +112,7 @@
 #define SERVICENAME "com.sun.star.reflection.TypeDescriptionProvider"
 #define IMPLNAME    "com.sun.star.comp.stoc.RegistryTypeDescriptionProvider"
 
+using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::registry;
 
@@ -114,7 +120,7 @@ namespace stoc_rdbtdp
 {
 rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
 
-static Sequence< OUString > rdbtdp_getSupportedServiceNames()
+static uno::Sequence< OUString > rdbtdp_getSupportedServiceNames()
 {
     static Sequence < OUString > *pNames = 0;
     if( ! pNames )
@@ -157,8 +163,34 @@ class ProviderImpl
                                        XTypeDescriptionEnumerationAccess,
                                        XInitialization >
 {
+    // XHierarchicalNameAccess wrapper first asking the tdmgr instance, then
+    // looking up locally
+    class TypeDescriptionManagerWrapper
+        : public ::cppu::WeakImplHelper1<container::XHierarchicalNameAccess>
+    {
+        com::sun::star::uno::Reference<container::XHierarchicalNameAccess>
+        m_xTDMgr;
+        com::sun::star::uno::Reference<container::XHierarchicalNameAccess>
+        m_xThisProvider;
+    public:
+        TypeDescriptionManagerWrapper( ProviderImpl * pProvider )
+            : m_xTDMgr( pProvider->_xContext->getValueByName(
+                            OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                          "/singletons/com.sun.star.reflection."
+                                          "theTypeDescriptionManager") ) ),
+                        UNO_QUERY_THROW ),
+              m_xThisProvider( pProvider )
+            {}
+        // XHierarchicalNameAccess
+        virtual Any SAL_CALL getByHierarchicalName( OUString const & name )
+            throw (container::NoSuchElementException, RuntimeException);
+        virtual sal_Bool SAL_CALL hasByHierarchicalName( OUString const & name )
+            throw (RuntimeException);
+    };
+    friend class TypeDescriptionManagerWrapper;
+
     com::sun::star::uno::Reference< XComponentContext >              _xContext;
-    com::sun::star::uno::Reference< XHierarchicalNameAccess >        _xTDMgr;
+    com::sun::star::uno::WeakReference<XHierarchicalNameAccess> _xTDMgr;
     com::sun::star::uno::Reference< XHierarchicalNameAccess > getTDMgr() SAL_THROW( () );
 
     RegistryKeyList                             _aBaseKeys;
@@ -208,32 +240,59 @@ ProviderImpl::~ProviderImpl()
 {
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
+
+//______________________________________________________________________________
+Any ProviderImpl::TypeDescriptionManagerWrapper::getByHierarchicalName(
+    OUString const & name ) throw (container::NoSuchElementException,
+                                   RuntimeException)
+{
+    try
+    {
+        // first try tdmgr:
+        return m_xTDMgr->getByHierarchicalName( name );
+    }
+    catch (container::NoSuchElementException &)
+    {
+        // then lookup locally:
+        return m_xThisProvider->getByHierarchicalName( name );
+    }
+}
+
+//______________________________________________________________________________
+sal_Bool ProviderImpl::TypeDescriptionManagerWrapper::hasByHierarchicalName(
+    OUString const & name ) throw (RuntimeException)
+{
+    try
+    {
+        return getByHierarchicalName( name ).hasValue();
+    }
+    catch (container::NoSuchElementException &)
+    {
+        return false;
+    }
+}
+
 //__________________________________________________________________________________________________
 com::sun::star::uno::Reference< XHierarchicalNameAccess > ProviderImpl::getTDMgr()
     SAL_THROW( () )
 {
-    if (! _xTDMgr.is())
+    // harden weak reference:
+    com::sun::star::uno::Reference<container::XHierarchicalNameAccess> xTDMgr(
+        _xTDMgr );
+    if (! xTDMgr.is())
     {
-        com::sun::star::uno::Reference< XHierarchicalNameAccess > xTDMgr;
-        _xContext->getValueByName( OUString( RTL_CONSTASCII_USTRINGPARAM(
-            "/singletons/com.sun.star.reflection.theTypeDescriptionManager") ) ) >>= xTDMgr;
-        OSL_ENSURE( xTDMgr.is(), "### cannot get singleton \"TypeDescriptionManager\" from context!" );
-
+        xTDMgr.set( new TypeDescriptionManagerWrapper(this) );
         {
         MutexGuard guard( _aComponentMutex );
-        if (! _xTDMgr.is())
-        {
-            _xTDMgr = xTDMgr;
-        }
+        _xTDMgr = xTDMgr;
         }
     }
-    return _xTDMgr;
+    return xTDMgr;
 }
 
 //__________________________________________________________________________________________________
 void ProviderImpl::disposing()
 {
-    _xTDMgr.clear();
     _xContext.clear();
 
     for ( RegistryKeyList::const_iterator iPos( _aBaseKeys.begin() );
@@ -420,7 +479,7 @@ ProviderImpl::createTypeDescriptionEnumeration(
             RuntimeException )
 {
     return com::sun::star::uno::Reference< XTypeDescriptionEnumeration >(
-        TypeDescriptionEnumerationImpl::createInstance( _xContext,
+        TypeDescriptionEnumerationImpl::createInstance( getTDMgr(),
                                                         moduleName,
                                                         types,
                                                         depth,
