@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MethodConcept.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 15:32:23 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 14:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ constants MethodConcept
 
     // DocMerge from idl: value com::sun::star::beans::MethodConcept::DANGEROUS
     /** specifies methods which can result in an unstable state
-        (i.e. deadlock, application crash, security hole ... ) when called
+        (i.e., deadlock, application crash, security hole, etc.) when called
         directly by the user.
      */
     const long DANGEROUS = 1;
@@ -120,7 +120,7 @@ constants MethodConcept
     /** specifies methods of the <em>enumeration concept</em>.
 
         <p>These methods have the signature  <code>create...Enumeration</code>
-        and return an interface that  was derived from
+        and return an interface that was derived from
         <type scope="com::sun::star::container">XEnumeration</type>.
         Additionally, the method
         <member scope="com::sun::star::container">XEnumerationAccess::getElementType</member>
@@ -135,7 +135,7 @@ constants MethodConcept
 
         <p>These methods have the signature <code>get...ByName()</code>,
         <code>set...ByName()</code>, <code>replace...ByName()</code>,
-        <code>remove...ByName()</code>, <code>has...ByName()</code> or
+        <code>remove...ByName()</code>, <code>has...ByName()</code>, or
         <code>get...Names</code>.  In addition, the method
         <member>XNameAccess::getElementType()</member> belongs to this
         concept. </p>
@@ -148,7 +148,7 @@ constants MethodConcept
     /** specifies methods of the <em>index container concept</em>.
 
         <p>These methods have the signature <code>get...ByIndex()</code>,
-        <code>insert...ByIndex()</code>, <code>replace...ByIndex()</code> or
+        <code>insert...ByIndex()</code>, <code>replace...ByIndex()</code>, or
         <code>remove...ByIndex()</code>.  The method
         <member scope="com::sun::star::container">XIndexAccess::getCount()</member>
         also belongs to this concept. </p>
@@ -164,6 +164,9 @@ constants MethodConcept
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2000/12/19 15:32:23  mi
+    documentation syntax fixed
+
     Revision 1.5  2000/12/11 16:09:35  mi
     documentation syntax fixed and some minor semantic documentation fixes
 

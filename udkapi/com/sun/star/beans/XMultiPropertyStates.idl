@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMultiPropertyStates.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:32 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 14:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,10 +90,9 @@ module com { module sun { module star { module beans {
 /** makes it possible to query information about the state of
     one or more properties.
 
-    <p>The state contains the information if a value is available or void and
-    if the value is stored in the object itself, or if a default value
-    is to be used and if the value cannot be determined, due to ambiguity
-    (multi selection with multipe values). </p>
+    <p>The state of a property contains information about the source of
+    the value, e.g. the object itself, a default or a stylesheet.
+    For more information see <type>PropertyState</type>.
 */
 interface XMultiPropertyStates: com::sun::star::uno::XInterface
 {
@@ -141,7 +140,7 @@ interface XMultiPropertyStates: com::sun::star::uno::XInterface
     /** @returns
             the default values of the propertes with the specified names.
 
-        <p>If no default exists, is not known or is void,
+        <p>If no default exists, is not known, or is void,
         then the return type at the corresponding position in the
         sequence returned is <type>void</type>. </p>
 

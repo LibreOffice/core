@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMultiPropertySet.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:32 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 14:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,8 +117,8 @@ interface XMultiPropertySet: com::sun::star::uno::XInterface
 
         <p>The values of the properties must change before the bound
         events are fired. The values of the constrained properties
-        should change after the vetoable events are fired and after if no
-        exception occur Unknown properties are ignored.  </p>
+        should change after the vetoable events are fired and only if no
+        exception occured. Unknown properties are ignored.  </p>
 
         @param aPropertyNames
             specifies the names of the properties. All names must be unique.
@@ -129,8 +129,8 @@ interface XMultiPropertySet: com::sun::star::uno::XInterface
             as in <var>aPropertyNames</var>.
 
         @throws IllegalArgumentException
-            if one of th enew values cannot be converted to the type
-            of the unterlying property by an identity or widening conversion.
+            if one of the new values cannot be converted to the type
+            of the underlying property by an identity or widening conversion.
 
         @throws com::sun::star::lang:WrappedTargetException
             if the implementation has an internal reason for the exception.
@@ -185,7 +185,7 @@ interface XMultiPropertySet: com::sun::star::uno::XInterface
         <p>It is a "noop" if the listener is not registered.  </p>
 
         @param
-            contains th elistener to be removed.
+            contains the listener to be removed.
 
         @see addPropertiesChangeListener
      */
@@ -215,6 +215,9 @@ interface XMultiPropertySet: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.8  2001/03/16 15:10:32  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.7  2000/12/19 16:15:24  mi
     documentation syntax fixed
 

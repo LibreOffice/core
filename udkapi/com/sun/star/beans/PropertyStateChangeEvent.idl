@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyStateChangeEvent.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-15 16:22:48 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 14:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ module com {  module sun {  module star {  module beans {
     <p>It is sent as an argument to the method of
     <type>XPropertyStateChangeListener</type>.  </p>
 
-    <p>Normally these events are accompanied by the name and the old
+    <p>Normally these events are accompanied by the name, and the old
     and new values of the changed property.  </p>
 
     <p>Void values may be provided for the old and new values if their
@@ -134,6 +134,9 @@ struct PropertyStateChangeEvent: com::sun::star::lang::EventObject
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2000/12/15 16:22:48  mi
+    lost documentation from src536 inserted
+
     Revision 1.5  2000/12/11 16:09:35  mi
     documentation syntax fixed and some minor semantic documentation fixes
 

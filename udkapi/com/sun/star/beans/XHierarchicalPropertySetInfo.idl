@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XHierarchicalPropertySetInfo.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:32 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 14:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ interface XHierarchicalPropertySetInfo: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     /** @returns
-                <TRUE/> if a property with the specified name exist;
+                <TRUE/> if a property with the specified name exists;
                 otherwise <FALSE/> is returned.
 
         @param  aHierarchicalName
@@ -138,6 +138,9 @@ interface XHierarchicalPropertySetInfo: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/03/16 15:10:32  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.5  2000/12/11 16:09:35  mi
     documentation syntax fixed and some minor semantic documentation fixes
 

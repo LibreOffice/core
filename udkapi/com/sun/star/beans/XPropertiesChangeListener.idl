@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPropertiesChangeListener.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:32 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 14:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ interface XPropertiesChangeListener: com::sun::star::lang::XEventListener
     /** gets called when bound properties are changed.
 
         @param aEvent
-            constains a sequence of <type>PropertiesChangeEvent</type> objects
+            contains a sequence of <type>PropertiesChangeEvent</type> objects
             which describe the event source and the properites wich have
             changed.
      */
@@ -102,6 +102,9 @@ interface XPropertiesChangeListener: com::sun::star::lang::XEventListener
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/03/16 15:10:32  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.5  2000/12/15 16:22:48  mi
     lost documentation from src536 inserted
 

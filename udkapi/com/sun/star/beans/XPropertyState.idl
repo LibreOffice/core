@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPropertyState.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:32 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 14:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ module com {  module sun {  module star {  module beans {
         <li>a value is available or void</li>
         <li>the value is stored in the object itself, or if a default value is to be used</li>
         <li>and if the value cannot be determined, due to ambiguity
-            (multi selection with multipe values).</li>
+            (multi selection with multiple values).</li>
     </ul>
  */
 interface XPropertyState: com::sun::star::uno::XInterface
@@ -128,7 +128,7 @@ interface XPropertyState: com::sun::star::uno::XInterface
         given property names. </p>
 
         @param aPropertyNames
-            contains te sequence of property names.
+            contains the sequence of property names.
 
         @throws UnknownPropertyException
             if one property does not exist.
@@ -189,6 +189,9 @@ interface XPropertyState: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/03/16 15:10:32  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.6  2000/12/15 16:22:48  mi
     lost documentation from src536 inserted
 

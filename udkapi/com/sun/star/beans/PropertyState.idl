@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyState.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-20 16:21:50 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 14:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ module com {  module sun {  module star {  module beans {
     <ol>
         <li>whether a value is available or void, </li>
         <li>whether the value is stored in the property set itself or is a
-            default or ambiguous.  </li>
+            default, or ambiguous.  </li>
     </ol>
 
     @see XPropertyState
@@ -98,7 +98,7 @@ enum PropertyState
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::beans::PropertyState::DEFAULT_VALUE
-    /** The value of the property is available from a master (e.g. template).
+    /** The value of the property is available from a master (e.g., template).
 
         <p>The <member>PropertyAttribute</member> field in the struct
         <type>Property</type> must contain the
@@ -114,7 +114,7 @@ enum PropertyState
 
     // DocMerge from xml: value com::sun::star::beans::PropertyState::AMBIGUOUS_VALUE
     /** The value of the property is only a recommendation because there
-        are multiple values for this property (e.g. from a multi selection).
+        are multiple values for this property (e.g., from a multi selection).
 
         <p>The <member>PropertyAttribute</member> field in the struct
         <type>Property</type> must contain the
@@ -135,6 +135,9 @@ enum PropertyState
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2000/12/20 16:21:50  mi
+    @see interface/struct/... ident -> @see ident - for new documentation generator
+
     Revision 1.5  2000/12/11 16:09:35  mi
     documentation syntax fixed and some minor semantic documentation fixes
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyAttribute.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 15:32:23 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 14:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 //=============================================================================
 
 // DocMerge from idl: constants com::sun::star::beans::PropertyAttribute
-/** These values are used to specify the behaviour of a <type>Property</type>.
+/** These values are used to specify the behavior of a <type>Property</type>.
  */
 constants PropertyAttribute
 {
@@ -134,7 +134,7 @@ constants PropertyAttribute
 
     // DocMerge from idl: value com::sun::star::beans::PropertyAttribute::REMOVEABLE
     /** indicates that the property can be removed
-        (i.e. by calling <member>XPropertyContainer::removeProperty</member>).
+        (i.e., by calling <member>XPropertyContainer::removeProperty</member>).
      */
     const short REMOVEABLE = 128;
 
@@ -151,6 +151,9 @@ constants PropertyAttribute
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2000/12/19 15:32:23  mi
+    documentation syntax fixed
+
     Revision 1.5  2000/12/11 16:09:35  mi
     documentation syntax fixed and some minor semantic documentation fixes
 

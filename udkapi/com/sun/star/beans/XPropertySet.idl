@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPropertySet.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-06-11 14:44:47 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 14:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,9 +149,9 @@ interface XPropertySet: com::sun::star::uno::XInterface
         changed.  </p>
 
         @raises com::sun::star::beans::PropertyVetoException
-            if the property is read-only or it is a vetoable
-            property and one of the listeners throws this exception
-            because of the value.
+            if the property is read-only or vetoable
+            and one of the listeners throws this exception
+            because of an unaccepted new value.
      */
     void setPropertyValue( [in] string aPropertyName,
              [in] any aValue )
@@ -253,6 +253,9 @@ interface XPropertySet: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/06/11 14:44:47  mi
+    setPropertyValue thrws VetoException when read-only
+
     Revision 1.6  2001/03/16 15:10:32  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 
