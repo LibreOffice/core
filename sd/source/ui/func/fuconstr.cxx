@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconstr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2000-11-10 16:21:18 $
+ *  last change: $Author: dl $ $Date: 2000-12-13 11:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,7 +354,8 @@ void FuConstruct::SetStyleSheet(SfxItemSet& rAttr, SdrObject* pObj)
 {
     SdPage* pPage = (SdPage*) pView->GetPageViewPvNum(0)->GetPage();
 
-    if (pPage->IsMasterPage() && pPage->GetPageKind() == PK_STANDARD)
+    if ( pPage->IsMasterPage() && pPage->GetPageKind() == PK_STANDARD &&
+         pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
     {
         /******************************************************************
         * Objekt wurde auf Hintergrund erzeugt
