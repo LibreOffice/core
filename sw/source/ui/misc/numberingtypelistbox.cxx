@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numberingtypelistbox.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-03-02 14:06:02 $
+ *  last change: $Author: os $ $Date: 2001-07-10 07:08:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,8 +148,8 @@ void SwNumberingTypeListBox::Reload(USHORT nTypeFlags)
         }
         if(bInsert)
         {
-            InsertEntry(rNames.GetString(i));
-            SetEntryData( i, (void*)nValue );
+            USHORT nEntry = InsertEntry(rNames.GetString(i));
+            SetEntryData( nEntry, (void*)nValue );
         }
     }
     if(0 != (nTypeFlags&INSERT_NUM_EXTENDED_TYPES))
