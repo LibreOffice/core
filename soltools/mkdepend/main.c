@@ -27,6 +27,11 @@ in this Software without prior written authorization from the X Consortium.
 
 */
 
+#if defined(FREEBSD)
+#include <sys/types.h>
+#include <sys/stat.h>
+#endif
+
 #include "def.h"
 #ifdef hpux
 #define sigvec sigvector
