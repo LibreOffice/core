@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writerhelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:17:58 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:53:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -786,16 +786,44 @@ namespace sw
 
         Polygon PolygonFromPolyPolygon(const PolyPolygon &rPolyPoly)
         {
-            PolyPolygon3D aPolyPoly(rPolyPoly);
-            aPolyPoly.Merge();
-            const PolyPolygon &rNewPolyPoly = aPolyPoly.GetPolyPolygon();
-            if (!rNewPolyPoly.Count())
-                return Polygon();
+            if(1 == rPolyPoly.Count())
+            {
+                return rPolyPoly[0];
+            }
             else
             {
-                ASSERT(rNewPolyPoly.Count() == 1,
-                    "I (cmc) must not have understood PolyPoly3D Merge");
-                return rPolyPoly.GetObject(0);
+                // This method will now just concatenate the polygons contained
+                // in the given PolyPolygon. Anything else which might be thought of
+                // for reducing to a single polygon will just need nore power and
+                // cannot create more correct results.
+                sal_uInt32 nPointCount(0L);
+                sal_uInt16 a;
+
+                for(a = 0; a < rPolyPoly.Count(); a++)
+                {
+                    nPointCount += (sal_uInt32)rPolyPoly[a].GetSize();
+                }
+
+                if(nPointCount > 0x0000ffff)
+                {
+                    DBG_ERROR("PolygonFromPolyPolygon: too many points for a single polygon (!)");
+                    nPointCount = 0x0000ffff;
+                }
+
+                Polygon aRetval((sal_uInt16)nPointCount);
+                sal_uInt32 nAppendIndex(0L);
+
+                for(a = 0; a < rPolyPoly.Count(); a++)
+                {
+                    const Polygon& rCandidate = rPolyPoly[a];
+
+                    for(sal_uInt16 b(0); nAppendIndex <= nPointCount && b < rCandidate.GetSize(); b++)
+                    {
+                        aRetval[(sal_uInt16)nAppendIndex++] = rCandidate[b];
+                    }
+                }
+
+                return aRetval;
             }
         }
 
