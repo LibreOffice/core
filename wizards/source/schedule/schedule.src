@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schedule.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:06:30 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:56:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -602,7 +602,7 @@ Text[ dutch ] = "Eenmalig";
 Text[ swedish ] = "Engångsföreteelse";
     Text[ russian ] = "Îäíîêğàòíî";
     Text[ greek ] = "ÌïíáäéêŞ öïñÜ";
-    Text[ danish ] = "Engangsforteelse";
+    Text[ danish ] = "én gang";
     Text[ polish ] = "Jednorazowo";
     Text[ portuguese_brazilian ] = "One-Time";
     Text[ japanese ] = "1‰ñ‚Ì‚İ";
@@ -1250,12 +1250,12 @@ String  sProgress
 Text = "Fortschritt:";
 Text[ English ] = "Progress:";
 Text[ English_us ] = "Progress:";
-    Text[ portuguese ] = "Progress";
+    Text[ portuguese ] = "Progressão:";
     Text[ russian ] = "Progress";
-    Text[ greek ] = "Progress";
-    Text[ dutch ] = "Progress";
+    Text[ greek ] = "Ğñüïäïò:";
+    Text[ dutch ] = "Vooruitgang:";
     Text[ french ] = "Progression :";
-    Text[ spanish ] = "Progress";
+    Text[ spanish ] = "Progreso:";
     Text[ italian ] = "Progress";
     Text[ danish ] = "Fremgang:";
     Text[ swedish ] = "Progress";
@@ -1266,5 +1266,5 @@ Text[ English_us ] = "Progress:";
     Text[ chinese_simplified ] = "½ø³Ì£º";
     Text[ chinese_traditional ] = "¶iµ{¡G";
     Text[ turkish ] = "Progress";
-    Text[ arabic ] = "Progress";
+    Text[ arabic ] = "ÇáÊŞÏã:";
 };
