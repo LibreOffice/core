@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
+ *  last change: $Author: pl $ $Date: 2001-05-14 09:08:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -611,7 +611,7 @@ sal_Bool OEditModel::_commit()
     m_xAggregateFastSet->getFastPropertyValue(OEditModel::nTextHandle) >>= sNewValue;
     if (sNewValue != m_aSaveValue)
     {
-        if (!sNewValue.len() && !m_bRequired && m_bEmptyIsNull)
+        if (!sNewValue.getLength() && !m_bRequired && m_bEmptyIsNull)
             m_xColumnUpdate->updateNull();
         else
         {

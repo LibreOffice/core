@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 09:46:00 $
+ *  last change: $Author: pl $ $Date: 2001-05-14 09:08:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,7 +526,7 @@ void SAL_CALL OListBoxModel::read(const Reference<stario::XObjectInputStream>& _
         ::rtl::OUString sListSource;
         _rxInStream >> sListSource;
 
-        sal_int32 nTokens = 1;
+        sal_Int32 nTokens = 1;
         const sal_Unicode* pStr = sListSource.getStr();
         while ( *pStr )
         {

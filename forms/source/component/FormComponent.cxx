@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-26 12:36:04 $
+ *  last change: $Author: pl $ $Date: 2001-05-14 09:08:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,7 +512,7 @@ OControlModel::OControlModel(
             m_xAggregate = Reference<XAggregation>(_rxFactory->createInstance(_rUnoControlModelTypeName), UNO_QUERY);
             setAggregation(m_xAggregate);
 
-            if (m_xAggregateSet.is() && rDefault.len())
+            if (m_xAggregateSet.is() && rDefault.getLength())
                 m_xAggregateSet->setPropertyValue(PROPERTY_DEFAULTCONTROL, makeAny(rDefault));
         }
 
