@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionImportContext.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-26 13:16:22 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:35:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,8 +367,18 @@ void XMLSectionImportContext::ProcessAttributes(
                 bValid = sal_True;
                 break;
             case XML_TOK_SECTION_CONDITION:
-                sCond = sAttr;
-                bCondOK = sal_True;
+                {
+                    OUString sTmp;
+                    sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+                                    GetKeyByAttrName( sAttr, &sTmp );
+                    if( XML_NAMESPACE_OOOW == nPrefix )
+                    {
+                        sCond = sTmp;
+                        bCondOK = sal_True;
+                    }
+                    else
+                        sCond = sAttr;
+                }
                 break;
             case XML_TOK_SECTION_DISPLAY:
                 if (IsXMLToken(sAttr, XML_TRUE))
