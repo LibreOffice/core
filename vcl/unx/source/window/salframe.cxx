@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-30 08:30:53 $
+ *  last change: $Author: cp $ $Date: 2001-03-30 12:50:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1930,7 +1930,7 @@ GetAlternateKeyCode( const USHORT nKeyCode )
 long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
 {
     KeySym          nKeySym;
-    int             nLen = 256;
+    int             nLen = 2048;
     unsigned char   *pPrintable = (unsigned char*)alloca( nLen );
     pPrintable[0] = 0;
 
