@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.151 $
+ *  $Revision: 1.152 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-15 10:46:29 $
+ *  last change: $Author: ssa $ $Date: 2002-11-18 12:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6740,10 +6740,13 @@ Rectangle Window::ImplOutputToUnmirroredAbsoluteScreenPixel( const Rectangle &rR
 Rectangle Window::GetWindowExtentsRelative( Window *pRelativeWindow )
 {
     SalFrameGeometry g = mpFrame->GetGeometry();
-    Point aPos( OutputToScreenPixel( Point(0,0) ) );
+    // make sure we use the extent of our border window,
+    // otherwise we miss a few pixels
+    Window *pWin = mpBorderWindow ? mpBorderWindow : this;
+    Point aPos( pWin->OutputToScreenPixel( Point(0,0) ) );
     aPos.X() += g.nX;
     aPos.Y() += g.nY;
-    Size aSize ( GetSizePixel() );
+    Size aSize ( pWin->GetSizePixel() );
     if( mbFrame || (mpBorderWindow && mpBorderWindow->mbFrame) )
     {
         aPos.X() -= g.nLeftDecoration;
