@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_ucb.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 12:10:52 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:09:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,7 @@ bool create_ucb_content(
     Reference<XCommandEnvironment> const & xCmdEnv,
     bool throw_exc )
 {
-    try
-    {
+    try {
         // dilemma: no chance to use the given iahandler here, because it would
         //          raise no such file dialogs, else no interaction for
         //          passwords, ...? xxx todo
@@ -99,12 +98,10 @@ bool create_ucb_content(
             *ret_ucbContent = ::ucb::Content( url, xCmdEnv );
         return true;
     }
-    catch (RuntimeException &)
-    {
+    catch (RuntimeException &) {
         throw;
     }
-    catch (Exception &)
-    {
+    catch (Exception &) {
         if (throw_exc)
             throw;
     }
@@ -117,7 +114,8 @@ bool create_folder(
     Reference<XCommandEnvironment> const & xCmdEnv, bool throw_exc )
 {
     ::ucb::Content ucb_content;
-    if (create_ucb_content( &ucb_content, url_, xCmdEnv, false /* no throw */ ))
+    if (create_ucb_content(
+            &ucb_content, url_, xCmdEnv, false /* no throw */ ))
     {
         if (ucb_content.isFolder())
         {
@@ -130,8 +128,7 @@ bool create_folder(
     OUString url( url_ );
     // xxx todo: find parent
     sal_Int32 slash = url.lastIndexOf( '/' );
-    if (slash < 0)
-    {
+    if (slash < 0) {
         // fallback:
         url = expand_url( url );
         slash = url.lastIndexOf( '/' );
@@ -162,30 +159,25 @@ bool create_folder(
                         RTL_CONSTASCII_STRINGPARAM("Title") ))
                     continue;
 
-                try
-                {
+                try {
                     if (parentContent.insertNewContent(
                             info.Type,
                             Sequence<OUString>( &strTitle, 1 ),
                             Sequence<Any>( &title, 1 ),
-                            ucb_content ))
-                    {
+                            ucb_content )) {
                         if (ret_ucb_content != 0)
                             *ret_ucb_content = ucb_content;
                         return true;
                     }
                 }
-                catch (RuntimeException &)
-                {
+                catch (RuntimeException &) {
                     throw;
                 }
-                catch (CommandFailedException &)
-                {
+                catch (CommandFailedException &) {
                     // Interaction Handler already handled the error
                     // that has occured...
                 }
-                catch (Exception &)
-                {
+                catch (Exception &) {
                     if (throw_exc)
                         throw;
                     return false;
@@ -208,17 +200,14 @@ bool erase_path( OUString const & url,
     ::ucb::Content ucb_content;
     if (create_ucb_content( &ucb_content, url, xCmdEnv, false /* no throw */ ))
     {
-        try
-        {
+        try {
             ucb_content.executeCommand(
                 OUSTR("delete"), makeAny( true /* delete physically */ ) );
         }
-        catch (RuntimeException &)
-        {
+        catch (RuntimeException &) {
             throw;
         }
-        catch (Exception &)
-        {
+        catch (Exception &) {
             if (throw_exc)
                 throw;
             return false;
@@ -258,14 +247,14 @@ bool readLine( OUString * res, OUString const & startingWith,
             for (;;)
             {
                 pos = file.indexOf( LF, pos );
-                if (pos < 0) // EOF
-                {
+                if (pos < 0) { // EOF
                     buf.append( file.copy( start ) );
                 }
                 else
                 {
-                    if (pos > 0 && file[ pos - 1 ] == CR) // consume extra CR
+                    if (pos > 0 && file[ pos - 1 ] == CR)
                     {
+                        // consume extra CR
                         buf.append( file.copy( start, pos - start - 1 ) );
                         ++pos;
                     }
