@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-23 10:54:47 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1140,13 +1140,9 @@ BOOL ScViewFunc::MoveBlockTo( const ScRange& rSource, const ScAddress& rDestPos,
         if ( !bIncludeFiltered )
         {
             //  manually find number of non-filtered rows
-            SCROW nPastedCount = 0;
-            SCROW nTestEndRow = rSource.aEnd.Row();
-            SCTAB nFlagTab = rSource.aStart.Tab();
-            ScDocument* pDoc = pDocSh->GetDocument();
-            for (SCROW nRow = rSource.aStart.Row(); nRow <= nTestEndRow; nRow++)
-                if ( ( pDoc->GetRowFlags( nRow, nFlagTab ) & CR_FILTERED ) == 0 )
-                    ++nPastedCount;
+            SCROW nPastedCount = pDocSh->GetDocument()->GetRowFlagsArray(
+                    rSource.aStart.Tab()).CountForCondition(
+                    rSource.aStart.Row(), rSource.aEnd.Row(), CR_FILTERED, 0);
             if ( nPastedCount == 0 )
                 nPastedCount = 1;
             aDestEnd.SetRow( rDestPos.Row() + nPastedCount - 1 );
