@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-02 19:32:49 $
+ *  last change: $Author: nn $ $Date: 2001-02-08 16:00:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,8 +226,6 @@ sal_Bool ScTransferObj::GetData( const ::com::sun::star::datatransfer::DataFlavo
     sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
     sal_Bool    bOK = sal_False;
 
-    //  this is for cell contents:
-
     if( HasFormat( nFormat ) )
     {
         if ( nFormat == SOT_FORMATSTR_ID_LINKSRCDESCRIPTOR || nFormat == SOT_FORMATSTR_ID_OBJECTDESCRIPTOR )
@@ -405,8 +403,6 @@ void ScTransferObj::ObjectReleased()
 //  initialize aDocShellRef with a live document from the ClipDoc
 //
 
-//! move to different class?
-
 void ScTransferObj::InitDocShell()
 {
     if ( !aDocShellRef.Is() )
@@ -420,125 +416,117 @@ void ScTransferObj::InitDocShell()
         ScMarkData aDestMark;
         aDestMark.SelectTable( 0, TRUE );
 
-        if (pDoc)
+        String aTabName;
+        pDoc->GetName( aBlock.aStart.Tab(), aTabName );
+        pDestDoc->RenameTab( 0, aTabName, FALSE );          // no UpdateRef (empty)
+
+        //  cell range is copied to the original position, but on the first sheet
+        //  -> bCutMode must be set
+        //  pDoc is always a Clipboard-document
+
+        pDestDoc->CopyStdStylesFrom( pDoc );
+
+        USHORT nStartX = aBlock.aStart.Col();
+        USHORT nStartY = aBlock.aStart.Row();
+        USHORT nEndX = aBlock.aEnd.Col();
+        USHORT nEndY = aBlock.aEnd.Row();
+        ScRange aDestRange( nStartX,nStartY,0, nEndX,nEndY,0 );
+        BOOL bWasCut = pDoc->IsCutMode();
+        if (!bWasCut)
+            pDoc->SetClipArea( aDestRange, TRUE );          // Cut
+        pDestDoc->CopyFromClip( aDestRange, aDestMark, IDF_ALL, NULL, pDoc, FALSE );
+        pDoc->SetClipArea( aDestRange, bWasCut );
+
+        StripRefs( pDoc, nStartX,nStartY, nEndX,nEndY, pDestDoc, 0,0 );
+
+        ScRange aMergeRange = aDestRange;
+        pDestDoc->ExtendMerge( aMergeRange, TRUE );
+
+        pDoc->CopyDdeLinks( pDestDoc );         // copy values of DDE Links
+
+        //  widths / heights
+
+        USHORT nCol;
+        USHORT nRow;
+        for (nCol=nStartX; nCol<=nEndX; nCol++)
+            if ( pDoc->GetColFlags( nCol, aBlock.aStart.Tab() ) & CR_HIDDEN )
+                pDestDoc->ShowCol( nCol, 0, FALSE );
+            else
+                pDestDoc->SetColWidth( nCol, 0,
+                    pDoc->GetColWidth( nCol, aBlock.aStart.Tab() ) );
+        for (nRow=nStartY; nRow<=nEndY; nRow++)
+            if ( pDoc->GetRowFlags( nRow, aBlock.aStart.Tab() ) & CR_HIDDEN )
+                pDestDoc->ShowRow( nRow, 0, FALSE );
+            else
+                pDestDoc->SetRowHeight( nRow, 0,
+                    pDoc->GetRowHeight( nRow, aBlock.aStart.Tab() ) );
+
+        //  page format (grid etc) and page size (maximum size for ole object)
+
+        Size aPaperSize = SvxPaperInfo::GetPaperSize( SVX_PAPER_A4 );       // Twips
+        ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
+        String aStyleName = pDoc->GetPageStyle( aBlock.aStart.Tab() );
+        SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName, SFX_STYLE_FAMILY_PAGE );
+        if (pStyleSheet)
         {
-            String aTabName;
-            pDoc->GetName( aBlock.aStart.Tab(), aTabName );
-            pDestDoc->RenameTab( 0, aTabName, FALSE );          // no UpdateRef (empty)
+            const SfxItemSet& rSourceSet = pStyleSheet->GetItemSet();
+            aPaperSize = ((const SvxSizeItem&) rSourceSet.Get(ATTR_PAGE_SIZE)).GetSize();
 
-            //  cell range is copied to the original position, but on the first sheet
-            //  -> bCutMode must be set
-            //  pDoc is always a Clipboard-document
-
-            pDestDoc->CopyStdStylesFrom( pDoc );
-
-            USHORT nStartX = aBlock.aStart.Col();
-            USHORT nStartY = aBlock.aStart.Row();
-            USHORT nEndX = aBlock.aEnd.Col();
-            USHORT nEndY = aBlock.aEnd.Row();
-            ScRange aDestRange( nStartX,nStartY,0, nEndX,nEndY,0 );
-            BOOL bWasCut = pDoc->IsCutMode();
-            if (!bWasCut)
-                pDoc->SetClipArea( aDestRange, TRUE );          // Cut
-            pDestDoc->CopyFromClip( aDestRange, aDestMark, IDF_ALL, NULL, pDoc, FALSE );
-            pDoc->SetClipArea( aDestRange, bWasCut );
-
-            StripRefs( pDoc, nStartX,nStartY, nEndX,nEndY, pDestDoc, 0,0 );
-
-            ScRange aMergeRange = aDestRange;
-            pDestDoc->ExtendMerge( aMergeRange, TRUE );
-
-            pDoc->CopyDdeLinks( pDestDoc );         // copy values of DDE Links
-
-            //  widths / heights
-
-            USHORT nCol;
-            USHORT nRow;
-            for (nCol=nStartX; nCol<=nEndX; nCol++)
-                if ( pDoc->GetColFlags( nCol, aBlock.aStart.Tab() ) & CR_HIDDEN )
-                    pDestDoc->ShowCol( nCol, 0, FALSE );
-                else
-                    pDestDoc->SetColWidth( nCol, 0,
-                        pDoc->GetColWidth( nCol, aBlock.aStart.Tab() ) );
-            for (nRow=nStartY; nRow<=nEndY; nRow++)
-                if ( pDoc->GetRowFlags( nRow, aBlock.aStart.Tab() ) & CR_HIDDEN )
-                    pDestDoc->ShowRow( nRow, 0, FALSE );
-                else
-                    pDestDoc->SetRowHeight( nRow, 0,
-                        pDoc->GetRowHeight( nRow, aBlock.aStart.Tab() ) );
-
-            //  page format (grid etc) and page size (maximum size for ole object)
-
-            Size aPaperSize = SvxPaperInfo::GetPaperSize( SVX_PAPER_A4 );       // Twips
-            ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
-            String aStyleName = pDoc->GetPageStyle( aBlock.aStart.Tab() );
-            SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName, SFX_STYLE_FAMILY_PAGE );
-            if (pStyleSheet)
-            {
-                const SfxItemSet& rSourceSet = pStyleSheet->GetItemSet();
-                aPaperSize = ((const SvxSizeItem&) rSourceSet.Get(ATTR_PAGE_SIZE)).GetSize();
-
-                //  CopyStyleFrom kopiert SetItems mit richtigem Pool
-                ScStyleSheetPool* pDestPool = pDestDoc->GetStyleSheetPool();
-                pDestPool->CopyStyleFrom( pStylePool, aStyleName, SFX_STYLE_FAMILY_PAGE );
-            }
-
-            ScViewData aViewData( pDocSh, NULL );
-            aViewData.SetScreen( nStartX,nStartY, nEndX,nEndY );
-            aViewData.SetCurX( nStartX );
-            aViewData.SetCurY( nStartY );
-
-            pDestDoc->SetViewOptions( pDoc->GetViewOptions() );
-
-            //      Size
-            //! get while copying sizes
-
-            long nPosX = 0;
-            long nPosY = 0;
-
-            for (nCol=0; nCol<nStartX; nCol++)
-                nPosX += pDestDoc->GetColWidth( nCol, 0 );
-            for (nRow=0; nRow<nStartY; nRow++)
-                nPosY += pDestDoc->FastGetRowHeight( nRow, 0 );
-            nPosX = (long) ( nPosX * HMM_PER_TWIPS );
-            nPosY = (long) ( nPosY * HMM_PER_TWIPS );
-
-
-            aPaperSize.Width()  *= 2;       // limit OLE object to double of page size
-            aPaperSize.Height() *= 2;
-
-            long nSizeX = 0;
-            long nSizeY = 0;
-            for (nCol=nStartX; nCol<=nEndX; nCol++)
-            {
-                long nAdd = pDestDoc->GetColWidth( nCol, 0 );
-                if ( nSizeX+nAdd > aPaperSize.Width() && nSizeX )   // above limit?
-                    break;
-                nSizeX += nAdd;
-            }
-            for (nRow=nStartY; nRow<=nEndY; nRow++)
-            {
-                long nAdd = pDestDoc->FastGetRowHeight( nRow, 0 );
-                if ( nSizeY+nAdd > aPaperSize.Height() && nSizeY )  // above limit?
-                    break;
-                nSizeY += nAdd;
-            }
-            nSizeX = (long) ( nSizeX * HMM_PER_TWIPS );
-            nSizeY = (long) ( nSizeY * HMM_PER_TWIPS );
-
-
-//          pDocSh->SetVisAreaSize( Size(nSizeX,nSizeY) );
-
-            Rectangle aNewArea( Point(nPosX,nPosY), Size(nSizeX,nSizeY) );
-            pDocSh->SvInPlaceObject::SetVisArea( aNewArea );
-            pDocSh->SetVisArea( aNewArea );
-
-            pDocSh->UpdateOle(&aViewData, TRUE);
+            //  CopyStyleFrom kopiert SetItems mit richtigem Pool
+            ScStyleSheetPool* pDestPool = pDestDoc->GetStyleSheetPool();
+            pDestPool->CopyStyleFrom( pStylePool, aStyleName, SFX_STYLE_FAMILY_PAGE );
         }
-        else
+
+        ScViewData aViewData( pDocSh, NULL );
+        aViewData.SetScreen( nStartX,nStartY, nEndX,nEndY );
+        aViewData.SetCurX( nStartX );
+        aViewData.SetCurY( nStartY );
+
+        pDestDoc->SetViewOptions( pDoc->GetViewOptions() );
+
+        //      Size
+        //! get while copying sizes
+
+        long nPosX = 0;
+        long nPosY = 0;
+
+        for (nCol=0; nCol<nStartX; nCol++)
+            nPosX += pDestDoc->GetColWidth( nCol, 0 );
+        for (nRow=0; nRow<nStartY; nRow++)
+            nPosY += pDestDoc->FastGetRowHeight( nRow, 0 );
+        nPosX = (long) ( nPosX * HMM_PER_TWIPS );
+        nPosY = (long) ( nPosY * HMM_PER_TWIPS );
+
+
+        aPaperSize.Width()  *= 2;       // limit OLE object to double of page size
+        aPaperSize.Height() *= 2;
+
+        long nSizeX = 0;
+        long nSizeY = 0;
+        for (nCol=nStartX; nCol<=nEndX; nCol++)
         {
-            DBG_ERROR("object from draw model: not implemented");
+            long nAdd = pDestDoc->GetColWidth( nCol, 0 );
+            if ( nSizeX+nAdd > aPaperSize.Width() && nSizeX )   // above limit?
+                break;
+            nSizeX += nAdd;
         }
+        for (nRow=nStartY; nRow<=nEndY; nRow++)
+        {
+            long nAdd = pDestDoc->FastGetRowHeight( nRow, 0 );
+            if ( nSizeY+nAdd > aPaperSize.Height() && nSizeY )  // above limit?
+                break;
+            nSizeY += nAdd;
+        }
+        nSizeX = (long) ( nSizeX * HMM_PER_TWIPS );
+        nSizeY = (long) ( nSizeY * HMM_PER_TWIPS );
+
+//      pDocSh->SetVisAreaSize( Size(nSizeX,nSizeY) );
+
+        Rectangle aNewArea( Point(nPosX,nPosY), Size(nSizeX,nSizeY) );
+        pDocSh->SvInPlaceObject::SetVisArea( aNewArea );
+        pDocSh->SetVisArea( aNewArea );
+
+        pDocSh->UpdateOle(&aViewData, TRUE);
     }
 }
 
