@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XExtendedToolkit.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 17:34:57 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:48:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ module com {  module sun {  module star {  module awt {
         This interface was only implemented in an intermediate developer
         release anyway.
 
-    @since #107627#
+    @since OOo 1.1.2
 */
 published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
 {
