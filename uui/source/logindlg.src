@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:12:56 $
+ *  last change: $Author: vg $ $Date: 2001-07-19 20:06:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,7 +395,7 @@ ModalDialog DLG_UUI_LOGIN
     Text [ french ] = "Nom d'utilisateur et mot de passe requis" ;
     Text [ dutch ] = "Naam gebruiker en wachtwoord vereist" ;
     Text [ portuguese ] = "Requere-se nome de utilizador e senha" ;
-    Text[ chinese_simplified ] = "ÒªÇóÊäÈëÊ¹ÓÃÃûºÍÃÜÂë";
+    Text[ chinese_simplified ] = "ÒªÇóÊäÈëÊ¹ÓÃÕßÃû³ÆºÍÃÜÂë";
     Text[ russian ] = "Íåîáõîäèìû èìÿ ïîëüçîâàòåëÿ è ïàğîëü";
     Text[ polish ] = "Nale¿y podaæ nazwê u¿ytkownika i has³o.";
     Text[ japanese ] = "Õ°»Ş°–¼‚ÆÊß½Ü°ÄŞ‚ª•K—v";
@@ -407,6 +407,7 @@ ModalDialog DLG_UUI_LOGIN
     Text[ catalan ] = "Se requieren el nombre de usuario y la contraseña";
     Text[ finnish ] = "Käyttäjätunnus ja salasana pakolliset";
 };
+
 
 
 
