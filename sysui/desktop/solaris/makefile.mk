@@ -162,10 +162,18 @@ $(MISC)/$(TARGET)/pkginfo : $$(@:f) ../productversion.mk
     @$(MKDIRHIER) $(@:d)
     @cat $(@:f) | tr -d "\015" | sed -e "s/%PRODUCTNAME/$(LONGPRODUCTNAME)/g" > $@
 
-# --- space, prototype, postinstall & mailcap --------------------
+# --- prototype ---------------------------------------------------
 
 # Copy the prototype file to $(MISC)
-$(MISC)/$(TARGET)/{space prototype postinstall mailcap} : $$(@:f) ../productversion.mk
+$(MISC)/$(TARGET)/prototype : $$(@:f) ../productversion.mk $(MISC)/cde/$(UNIXFILENAME).flag
+    @$(MKDIRHIER) $(@:d)
+    @cat $(@:f) | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" -e "s_%SOURCE_$(MISC)/$(TARGET)_g" > $@
+    @pkgproto $(MISC)/cde/types=usr/dt/appconfig/types | awk '{ printf "%s %s %s 0%d%d root bin\n",$$1, $$2, $$3, $$4/100, $$4%10*11 }' >> $@
+
+# --- space, postinstall & mailcap ---------------------------------
+
+# Copy the prototype file to $(MISC)
+$(MISC)/$(TARGET)/{space postinstall mailcap} : $$(@:f) ../productversion.mk
     @$(MKDIRHIER) $(@:d)
     @cat $(@:f) | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" -e "s_%SOURCE_$(MISC)/$(TARGET)_g" > $@
 
