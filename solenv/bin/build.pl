@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: vg $ $Date: 2001-09-07 16:27:44 $
+#   last change: $Author: vg $ $Date: 2001-09-20 16:57:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.38 $ ';
+$id_str = ' $Revision: 1.39 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -240,6 +240,13 @@ sub GetParentsString {
         return '';
     };
     while (<PrjBuildFile>) {
+        if ($_ =~ /#/) {
+            if ($`) {
+                $_ = $`;
+            } else {
+                next;
+            };
+        };
         s/\r\n//;
         if ($_ =~ /\:+\s+/) {
             close PrjBuildFile;
@@ -286,6 +293,13 @@ sub BuildPrj {
     open (PrjBuildFile, 'prj/build.lst');
     &get_prj_platform;
     while (<PrjBuildFile>) {
+        if ($_ =~ /#/) {
+            if ($`) {
+                $_ = $`;
+            } else {
+                next;
+            };
+        };
         s/\r\n//;
         if ($_ =~ /nmake/) {
             my ($Platform, $Dependencies, $Dir, $DirAlias, @Array);
