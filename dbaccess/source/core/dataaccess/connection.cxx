@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 16:29:21 $
+ *  last change: $Author: oj $ $Date: 2002-07-11 06:52:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -716,9 +716,9 @@ Reference< XNameAccess > SAL_CALL OConnection::getViews(  ) throw(RuntimeExcepti
         }
 
         if (xMaster.is() && xMaster->getViews().is())
-        {   // yes -> wrap them
             m_pViews->construct(xMaster->getViews(),m_aTableFilter, m_aTableTypeFilter);
-        }
+        else
+            m_pViews->construct(m_aTableFilter, m_aTableTypeFilter);
     }
 
     return m_pViews;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-21 14:01:35 $
+ *  last change: $Author: oj $ $Date: 2002-07-11 06:51:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -517,7 +517,15 @@ Reference< XNamed > OTableContainer::createObject(const ::rtl::OUString& _rName)
         if(sCatalog.getLength())
             aCatalog <<= sCatalog;
         ::rtl::OUString sType,sDescription;
-        Reference< XResultSet > xRes = m_xMetaData->getTables(aCatalog,sSchema,sTable,Sequence< ::rtl::OUString>());
+        Sequence< ::rtl::OUString> aTypeFilter(3);
+        static const ::rtl::OUString sAll = ::rtl::OUString::createFromAscii("%");
+        static const ::rtl::OUString s_sTableTypeView(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
+        static const ::rtl::OUString s_sTableTypeTable(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
+        aTypeFilter[0] = s_sTableTypeView;
+        aTypeFilter[1] = s_sTableTypeTable;
+        aTypeFilter[2] = sAll;  // just to be sure to include anything else ....
+
+        Reference< XResultSet > xRes = m_xMetaData->getTables(aCatalog,sSchema,sTable,aTypeFilter);
         if(xRes.is() && xRes->next())
         {
             Reference< XRow > xRow(xRes,UNO_QUERY);

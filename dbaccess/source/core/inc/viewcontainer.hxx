@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontainer.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-31 18:19:10 $
+ *  last change: $Author: oj $ $Date: 2002-07-11 06:52:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,15 @@ namespace dbaccess
                         sal_Bool _bCase,
                         IWarningsContainer* _pWarningsContainer = NULL
                         );
-        ~OViewContainer();
+        virtual ~OViewContainer();
+
+        /** late ctor. The container will fill itself with the data got by the connection meta data, considering the
+            filters given (the connection is the parent object you passed in the ctor).
+        */
+        void construct(
+            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableFilter,
+            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableTypeFilter
+            );
 
         /** late ctor. The container will fill itself with wrapper objects for the tables returned by the given
             name container.
