@@ -2,9 +2,9 @@
 #
 #   $RCSfile: check.pl,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2004-02-11 15:04:35 $
+#   last change: $Author: obo $ $Date: 2004-02-20 10:36:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,7 @@ if (-d "$StartDir") {
     {
         if (! -e "$StartDir/$OperatingSystem/bin/$i$ExePrefix") {
         $return++;
-        print "-";
+        print "\nERROR: \"$StartDir/$OperatingSystem/bin/$i$ExePrefix\" is missing\n";
         } else {
         print "+";
         }
@@ -110,7 +110,7 @@ if (-d "$StartDir") {
     {
         if (! -e "$StartDir/docs/$i") {
         $return++;
-        print "-";
+        print "\nERROR: \"$StartDir/docs/$i\" is missing\n";
         } else {
         print "+";
         }
@@ -123,7 +123,7 @@ if (-d "$StartDir") {
     # check file format specification
     print "check xml format specifiaction: ";
     if (! -e "$StartDir/docs/common/spec/xml_format/xml_specification.pdf") {
-    print "-";
+    print "\nERROR: \"$StartDir/docs/common/spec/xml_format/xml_specification.pdf\" is missing\n";
     $return++;
     }
     print "\n";
@@ -132,24 +132,24 @@ if (-d "$StartDir") {
     print "check config files: ";
     if ($OperatingSystem eq "windows") {
     if (! -e "$StartDir/configureWindows.bat") {
-        print "-";
+        print "\nERROR: \"$StartDir/configureWindows.bat\" is missing\n";
         $return++;
     }
     if (! -e "$StartDir/setsdkenv_windows.bat") {
-        print "-";
+        print "\nERROR: \"$StartDir/setsdkenv_windows.bat\" is missing\n";
         $return++;
     }
     } else {
     if (! -e "$StartDir/configure") {
-        print "-";
+        print "\nERROR: \"$StartDir/configure\" is missing\n";
         $return++;
     }
     if (! -e "$StartDir/configure.pl") {
-        print "-";
+        print "\nERROR: \"$StartDir/configure.pl\" is missing\n";
         $return++;
     }
     if (! -e "$StartDir/setsdkenv_unix.in") {
-        print "-";
+        print "\nERROR: \"$StartDir/setsdkenv_unix.in\" is missing\n";
         $return++;
     }
     }
@@ -159,15 +159,15 @@ if (-d "$StartDir") {
     print "check setting files: ";
     if (-d "$StartDir/settings") {
     if (! -e "$StartDir/settings/settings.mk") {
-        print "-";
+        print "\nERROR: \"$StartDir/settings/settings.mk\" is missing\n";
         $return++;
     }
     if (! -e "$StartDir/settings/std.mk") {
-        print "-";
+        print "\nERROR: \"$StartDir/settings/std.mk\" is missing\n";
         $return++;
     }
     if (! -e "$StartDir/settings/stdtarget.mk") {
-        print "-";
+        print "\nERROR: \"$StartDir/settings/stdtarget.mk\" is missing\n";
         $return++;
     }
     } else {
@@ -180,15 +180,15 @@ if (-d "$StartDir") {
     print "check cpp docu: ";
     if (-d "$StartDir/docs/cpp/ref") {
     if (! -e "$StartDir/docs/cpp/ref/index.html") {
-        print ":";
+        print "\nERROR: \"$StartDir/docs/cpp/ref/index.html\" is missing\n";
         $return++;
     }
     if (! -d "$StartDir/docs/cpp/ref/index-files") {
-        print ":";
+        print "\nERROR: \"$StartDir/docs/cpp/ref/index-files\" is missing\n";
         $return++;
     }
     if (! -e "$StartDir/docs/cpp/ref/index-files/index-10.html") {
-        print ":";
+        print "\nERROR: \"$StartDir/docs/cpp/ref/index-files/index-10.html\" is missing\n";
         $return++;
     }
 
@@ -198,7 +198,7 @@ if (-d "$StartDir") {
     {
         if (! -d "$StartDir/docs/cpp/ref/names/$i") {
         $return++;
-        print "-";
+        print "\nERROR: \"$StartDir/docs/cpp/ref/names/$i\" is missing\n";
         } else {
         print "+";
         }
@@ -208,46 +208,33 @@ if (-d "$StartDir") {
     }
     print "\n";
 
-    # check cpp docu, it is only a first and simple check
-    # improvement required
-    print "check cpp docu: ";
-    if (! -d "$StartDir/docs/cpp/ref/index-files") {
-        print ":";
-        $return++;
-    }
-    if (! -e "$StartDir/docs/cpp/ref/index-files/index-10.html") {
-        print ":";
-        $return++;
-    }
-    print "\n";
-
     #check java docu, it is only a first and simple check
     # improvement required
     my $solar_java = $ENV{"SOLAR_JAVA"};
     if (defined($solar_java) && $solar_java ne "") {
-        print "check java docu: ";
-        if (-d "$StartDir/docs/java/ref") {
-            if (! -e "$StartDir/docs/java/ref/index.html") {
-                print ":";
-                $return++;
-            }
+    print "check java docu: ";
+    if (-d "$StartDir/docs/java/ref") {
+        if (! -e "$StartDir/docs/java/ref/index.html") {
+        print "\nERROR: \"$StartDir/docs/java/ref/index.html\" is missing\n";
+        $return++;
+        }
 
-            my @dir_list = ( "lib","lib/uno","lib/uno/helper","lib/uno/helper/class-use","uno",
+        my @dir_list = ( "lib","lib/uno","lib/uno/helper","lib/uno/helper/class-use","uno",
                  "uno/class-use","comp","comp/helper","comp/helper/class-use","tools",
                  "tools/uno","tools/uno/class-use");
 
-            foreach $i (@dir_list) {
-                if (! -d "$StartDir/docs/java/ref/com/sun/star/$i") {
-                    $return++;
-                    print "-";
-                } else {
-                    print "+";
-                }
-            }
-        } else {
+        foreach $i (@dir_list) {
+        if (! -d "$StartDir/docs/java/ref/com/sun/star/$i") {
             $return++;
+            print "\nERROR: \"$StartDir/docs/java/ref/com/sun/star/$i\" is missing\n";
+        } else {
+            print "+";
         }
-        print "\n";
+        }
+    } else {
+        $return++;
+    }
+    print "\n";
     }
 
     #check examples, it is only a first and simple check
@@ -255,11 +242,11 @@ if (-d "$StartDir") {
     print "check examples: ";
     if (-d "$StartDir/examples") {
     if (! -e "$StartDir/examples/examples.html") {
-        print ":";
+        print "\nERROR: \"$StartDir/examples/examples.html\" is missing\n";
         $return++;
     }
     if (! -e "$StartDir/examples/DevelopersGuide/examples.html") {
-        print ":";
+        print "\nERROR: \"$StartDir/examples/DevelopersGuide/examples.html\" is missing\n";
         $return++;
     }
 
@@ -268,7 +255,7 @@ if (-d "$StartDir") {
     {
         if (! -d "$StartDir/examples/$i") {
         $return++;
-        print "-";
+        print "\nERROR: \"$StartDir/examples/$i\" is missing\n";
         } else {
         print "+";
         }
