@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _xoutbmp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:27 $
+ *  last change: $Author: sj $ $Date: 2000-10-13 11:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,7 +546,7 @@ USHORT XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
                     aURL.SetName( aName );
                 }
 
-                SfxMedium aMedium( rFileName = aURL.PathToFileName(), STREAM_WRITE | STREAM_SHARE_DENYNONE, TRUE, FALSE );
+                SfxMedium aMedium( rFileName = aURL.PathToFileName(), STREAM_WRITE | STREAM_SHARE_DENYNONE, TRUE );
 
                 aMedium.DownLoad();
 
