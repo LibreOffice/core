@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: os $ $Date: 2001-06-20 09:16:58 $
+ *  last change: $Author: mtg $ $Date: 2001-06-22 12:45:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -755,8 +755,8 @@ void SwUnoPropertyMapProvider::Sort( sal_uInt16 nId )
         { SW_PROP_NMID(UNO_NAME_HYPER_LINK_U_R_L), RES_TXTATR_INETFMT,     CPPU_E2T(CPPUTYPE_OUSTRING),      PropertyAttribute::MAYBEVOID ,MID_URL_URL},                                                                 \
         { SW_PROP_NMID(UNO_NAME_HYPER_LINK_TARGET), RES_TXTATR_INETFMT,     CPPU_E2T(CPPUTYPE_OUSTRING),      PropertyAttribute::MAYBEVOID ,MID_URL_TARGET},                                                              \
         { SW_PROP_NMID(UNO_NAME_HYPER_LINK_NAME), RES_TXTATR_INETFMT,     CPPU_E2T(CPPUTYPE_OUSTRING),         PropertyAttribute::MAYBEVOID ,MID_URL_HYPERLINKNAME  },                                                      \
-        { SW_PROP_NMID(UNO_NAME_UNVISITED_CHAR_STYLE_NAME), RES_TXTATR_INETFMT,     CPPU_E2T(CPPUTYPE_OUSTRING),       PropertyAttribute::MAYBEVOID ,MID_URL_VISITED_FMT   },                                                       \
-        { SW_PROP_NMID(UNO_NAME_VISITED_CHAR_STYLE_NAME), RES_TXTATR_INETFMT,     CPPU_E2T(CPPUTYPE_OUSTRING),        PropertyAttribute::MAYBEVOID ,MID_URL_UNVISITED_FMT  },                                                     \
+        { SW_PROP_NMID(UNO_NAME_UNVISITED_CHAR_STYLE_NAME), RES_TXTATR_INETFMT,     CPPU_E2T(CPPUTYPE_OUSTRING),       PropertyAttribute::MAYBEVOID ,MID_URL_UNVISITED_FMT   },                                                       \
+        { SW_PROP_NMID(UNO_NAME_VISITED_CHAR_STYLE_NAME), RES_TXTATR_INETFMT,     CPPU_E2T(CPPUTYPE_OUSTRING),        PropertyAttribute::MAYBEVOID ,MID_URL_VISITED_FMT  },                                                     \
         { SW_PROP_NMID(UNO_NAME_USER_DEFINED_ATTRIBUTES), RES_UNKNOWNATR_CONTAINER, CPPU_E2T(CPPUTYPE_REFNAMECNT), PropertyAttribute::MAYBEVOID, 0 },                                   \
         { SW_PROP_NMID(UNO_NAME_TEXT_USER_DEFINED_ATTRIBUTES), RES_TXTATR_UNKNOWN_CONTAINER, CPPU_E2T(CPPUTYPE_REFNAMECNT), PropertyAttribute::MAYBEVOID, 0 },                               \
         { SW_PROP_NMID(UNO_NAME_PARA_SHADOW_FORMAT), RES_SHADOW,            CPPU_E2T(CPPUTYPE_SHADOWFMT),   PROPERTY_NONE, CONVERT_TWIPS}, \
