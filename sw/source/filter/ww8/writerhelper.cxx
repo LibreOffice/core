@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writerhelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 12:48:01 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:10:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -781,6 +781,13 @@ namespace sw
                     "I (cmc) must not have understood PolyPoly3D Merge");
                 return rPolyPoly.GetObject(0);
             }
+        }
+
+        bool IsStarSymbol(const String &rFontName)
+        {
+            String sFamilyNm(GetFontToken(rFontName, 0));
+            return (sFamilyNm.EqualsIgnoreCaseAscii("starsymbol") ||
+                sFamilyNm.EqualsIgnoreCaseAscii("opensymbol"));
         }
 
         Size GetSwappedInSize(const SwNoTxtNode& rNd)
