@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-09 13:56:47 $
+ *  last change: $Author: ssa $ $Date: 2001-10-24 08:49:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,6 @@
 #ifndef _VCL_I18NHELP_HXX
 #include <i18nhelp.hxx>
 #endif
-
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
 #endif
@@ -1943,6 +1942,12 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
         nFocusId = Window::SaveFocus();
         bRealExecute = TRUE;
     }
+    else
+    {
+        // assure that only one menu is open at a time
+        if( pStartedFrom->bIsMenuBar && pSVData->maWinData.mpFirstFloat )
+            pSVData->maWinData.mpFirstFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
+    }
 
     DBG_ASSERT( !ImplGetWindow(), "Win?!" );
     Rectangle aRect( rRect );
@@ -2002,7 +2007,7 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
             aMnemonicGenerator.CreateMnemonic( pItemList->GetDataFromPos(n)->aText );
     }
 
-    MenuFloatingWindow* pWin = new MenuFloatingWindow( this, pW, nStyle );
+    MenuFloatingWindow* pWin = new MenuFloatingWindow( this, pW, nStyle | WB_SYSTEMWINDOW );
     pWindow = pWin;
 
     Size aSz = ImplCalcSize( pWin );
@@ -2305,8 +2310,9 @@ IMPL_LINK( MenuFloatingWindow, PopupEnd, FloatingWindow*, pPopup )
     {
         if ( pActivePopup )
         {
-            DBG_ASSERT( !pActivePopup->ImplGetWindow(), "PopupEnd, obwohl pActivePopup MIT Window!" );
-            pActivePopup->bCanceled = TRUE;
+            //DBG_ASSERT( !pActivePopup->ImplGetWindow(), "PopupEnd, obwohl pActivePopup MIT Window!" );
+            KillActivePopup(); // should be ok to just remove it
+            //pActivePopup->bCanceled = TRUE;
         }
         bInExecute = FALSE;
         pMenu->bInCallback = TRUE;
@@ -2351,7 +2357,10 @@ IMPL_LINK( MenuFloatingWindow, HighlightChanged, Timer*, pTimer )
     {
         if ( pActivePopup && ( pActivePopup != pData->pSubMenu ) )
         {
+            ULONG nOldFlags = GetPopupModeFlags();
+            SetPopupModeFlags( GetPopupModeFlags() | FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE );
             KillActivePopup();
+            SetPopupModeFlags( nOldFlags );
         }
         if ( pData->bEnabled && pData->pSubMenu && pData->pSubMenu->GetItemCount() && ( pData->pSubMenu != pActivePopup ) )
         {
@@ -2389,7 +2398,10 @@ IMPL_LINK( MenuFloatingWindow, HighlightChanged, Timer*, pTimer )
             // die lange im Activate Rescheduled haben und jetzt schon nicht mehr
             // angezeigt werden sollen.
             Menu* pTest = pActivePopup;
+            ULONG nOldFlags = GetPopupModeFlags();
+            SetPopupModeFlags( GetPopupModeFlags() | FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE );
             USHORT nRet = pActivePopup->ImplExecute( this, Rectangle( aItemTopLeft, aItemBottomRight ), FLOATWIN_POPUPMODE_RIGHT, pMenu, pTimer ? FALSE : TRUE  );
+            SetPopupModeFlags( nOldFlags );
 
             // nRet != 0, wenn es waerend Activate() abgeschossen wurde...
             if ( !nRet && ( pActivePopup == pTest ) && pActivePopup->ImplGetWindow() )
@@ -2454,6 +2466,9 @@ void MenuFloatingWindow::KillActivePopup( PopupMenu* pThisOnly )
 {
     if ( pActivePopup && ( !pThisOnly || ( pThisOnly == pActivePopup ) ) )
     {
+        //if( pActivePopup->pWindow->mbFloatWin )
+            if( ((FloatingWindow *) pActivePopup->pWindow)->IsInCleanUp() )
+                return; // kill it later
         if ( pActivePopup->bInCallback )
             pActivePopup->bCanceled = TRUE;
 
@@ -2469,6 +2484,7 @@ void MenuFloatingWindow::KillActivePopup( PopupMenu* pThisOnly )
             pPopup->ImplGetFloatingWindow()->StopExecute();
             delete pPopup->pWindow;
             pPopup->pWindow = NULL;
+
             Update();
         }
     }
@@ -3088,6 +3104,7 @@ void MenuBarWindow::ImplCreatePopup( BOOL bPreSelectFirst )
             }
             pData = pMenu->pItemList->GetDataFromPos( nHighlightedItem );
 //          Point MyPos = GetPosPixel();
+//          Point aItemTopLeft( MyPos.X()+nX, MyPos.Y() );
             Point aItemTopLeft( nX, 0 );
             Point aItemBottomRight( aItemTopLeft );
             aItemBottomRight.X() += pData->aSz.Width();
@@ -3117,6 +3134,10 @@ void MenuBarWindow::KillActivePopup()
 {
     if ( pActivePopup )
     {
+        //if( pActivePopup->pWindow->mbFloatWin )
+            if( ((FloatingWindow *) pActivePopup->pWindow)->IsInCleanUp() )
+                return; // kill it later
+
         if ( pActivePopup->bInCallback )
             pActivePopup->bCanceled = TRUE;
 

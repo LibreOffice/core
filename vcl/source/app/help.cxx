@@ -2,9 +2,9 @@
  *
  *  $RCSfile: help.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-20 07:33:31 $
+ *  last change: $Author: ssa $ $Date: 2001-10-24 08:47:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -615,7 +615,11 @@ void ImplSetHelpWindowPos( Window* pHelpWin, USHORT nHelpWinStyle, USHORT nStyle
 {
     Point       aPos = rPos;
     Size        aSz = pHelpWin->GetSizePixel();
-    Rectangle   aScreenRect = pHelpWin->ImplGetFrameWindow()->GetDesktopRectPixel();
+    //Rectangle aScreenRect = pHelpWin->ImplGetFrameWindow()->GetDesktopRectPixel();
+    // GetDesktopRectPixel only makes sense for system windows, the help window
+    // however is (still) a VCL window, so we have to align it with the frame window:
+    Rectangle aScreenRect( Point(), pHelpWin->ImplGetFrameWindow()->GetSizePixel() );
+
     if ( nHelpWinStyle == HELPWINSTYLE_QUICK )
     {
         if ( !(nStyle & QUICKHELP_NOAUTOPOS) )

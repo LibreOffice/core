@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-12 09:20:59 $
+ *  last change: $Author: ssa $ $Date: 2001-10-24 08:56:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,7 @@ class SalFrameData
 
     void            GetPosSize( Rectangle &rPosSize );
     void            SetSize   ( const Size      &rSize );
+    void            Center();
     void            SetPosSize( const Rectangle &rPosSize );
     void            Minimize();
     void            Maximize();

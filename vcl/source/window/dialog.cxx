@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: th $ $Date: 2001-08-07 11:54:21 $
+ *  last change: $Author: ssa $ $Date: 2001-10-24 08:49:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,6 +426,9 @@ void Dialog::ImplCenterDialog()
     Point       aDeskPos = aDeskRect.TopLeft();
     Size        aDeskSize = aDeskRect.GetSize();
     Size        aWinSize = GetSizePixel();
+    Window *pWindow = this;
+    while ( pWindow->mpBorderWindow )
+        pWindow = pWindow->mpBorderWindow;
     Point       aWinPos( ((aDeskSize.Width() - aWinSize.Width()) / 2) + aDeskPos.X(),
                          ((aDeskSize.Height() - aWinSize.Height()) / 2) + aDeskPos.Y() );
 
@@ -440,7 +443,8 @@ void Dialog::ImplCenterDialog()
     if ( aWinPos.Y() < aDeskPos.Y() )
         aWinPos.Y() = aDeskPos.Y();
 
-    SetPosPixel( aWinPos );
+    //SetPosPixel( aWinPos );
+    SetPosPixel( pWindow->ScreenToOutputPixel( aWinPos ) );
 }
 
 // -----------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: th $ $Date: 2001-08-07 12:49:38 $
+ *  last change: $Author: ssa $ $Date: 2001-10-24 08:52:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ public:
     BOOL                    mbFixBorder;            // has window a fixed border
     BOOL                    mbSizeBorder;           // has window a sizeable border
     BOOL                    mbNoIcon;               // is an window without an icon
+    BOOL                    mbFloatWin;             // is a FloatingWindow
     BOOL                    mbFullScreen;           // TRUE: in full screen mode
     BOOL                    mbPresentation;         // TRUE: Presentation Mode running
     BOOL                    mbInShow;               // innerhalb eines Show-Aufrufs

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: floatwin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2001-08-23 13:41:53 $
+ *  last change: $Author: ssa $ $Date: 2001-10-24 08:49:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,9 @@
 #ifndef _SV_FLOATWIN_HXX
 #include <floatwin.hxx>
 #endif
-
+#ifndef _SV_WINDOW_H
+#include <window.h>
+#endif
 #ifndef _SV_RC_H
 #include <rc.h>
 #endif
@@ -98,6 +100,7 @@
 void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
 {
     mbFloatWin = TRUE;
+    mbInCleanUp = FALSE;
 
     if ( !pParent )
         pParent = Application::GetAppWindow();
@@ -105,7 +108,7 @@ void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
     DBG_ASSERT( pParent, "FloatWindow::FloatingWindow(): - pParent == NULL and no AppWindow exists" );
 
     // no Border, then we dont need a border window
-    if ( !nStyle )
+    if ( !(nStyle & (WB_BORDER|WB_MOVEABLE|WB_SIZEABLE)) )
     {
         if ( nStyle & WB_SYSTEMWINDOW )
             mbFrame = TRUE;
@@ -239,6 +242,18 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
     Point       aPos;
     Size        aSize = pWindow->GetSizePixel();
     Rectangle   aScreenRect = pWindow->ImplGetFrameWindow()->GetDesktopRectPixel();
+
+    // convert....
+    Window* pW = pWindow;
+    if ( pW->mpRealParent )
+        pW = pW->mpRealParent;
+
+    Rectangle normRect( rRect );  // rRect is already relative to top-level window
+    normRect.SetPos( pW->ScreenToOutputPixel( normRect.TopLeft() ) );
+
+    Rectangle devRect(  pW->OutputToAbsoluteScreenPixel( normRect.TopLeft() ),
+                        pW->OutputToAbsoluteScreenPixel( normRect.BottomRight() ) );
+
     USHORT      nArrangeAry[5];
     USHORT      nArrangeIndex;
     BOOL        bLeft;
@@ -288,26 +303,26 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
         switch ( nArrangeAry[nArrangeIndex] )
         {
             case FLOATWIN_POPUPMODE_LEFT:
-                aPos.X() = rRect.Left()-aSize.Width();
-                aPos.Y() = rRect.Top();
+                aPos.X() = devRect.Left()-aSize.Width();
+                aPos.Y() = devRect.Top();
                 aPos.Y() -= pWindow->mnTopBorder;
                 if ( aPos.X() < aScreenRect.Left() )
                     bBreak = FALSE;
                 break;
             case FLOATWIN_POPUPMODE_RIGHT:
-                aPos     = rRect.TopRight();
+                aPos     = devRect.TopRight();
                 aPos.Y() -= pWindow->mnTopBorder;
                 if ( aPos.X()+aSize.Width() > aScreenRect.Right() )
                     bBreak = FALSE;
                 break;
             case FLOATWIN_POPUPMODE_UP:
-                aPos.X() = rRect.Left();
-                aPos.Y() = rRect.Top()-aSize.Height();
+                aPos.X() = devRect.Left();
+                aPos.Y() = devRect.Top()-aSize.Height();
                 if ( aPos.Y() < aScreenRect.Top() )
                     bBreak = FALSE;
                 break;
             case FLOATWIN_POPUPMODE_DOWN:
-                aPos = rRect.BottomLeft();
+                aPos = devRect.BottomLeft();
                 if ( aPos.Y()+aSize.Height() > aScreenRect.Bottom() )
                     bBreak = FALSE;
                 break;
@@ -322,7 +337,7 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
                 if ( aPos.Y()+aSize.Height() > aScreenRect.Bottom() )
                 {
                     bTop = TRUE;
-                    aPos.Y() = rRect.Bottom()-aSize.Height();
+                    aPos.Y() = devRect.Bottom()-aSize.Height();
                     if ( aPos.Y() < aScreenRect.Top() )
                         aPos.Y() = aScreenRect.Top();
                 }
@@ -332,7 +347,7 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
                  if ( aPos.X()+aSize.Width() > aScreenRect.Right() )
                  {
                     bLeft = TRUE;
-                    aPos.X() = rRect.Right()-aSize.Width();
+                    aPos.X() = devRect.Right()-aSize.Width();
                     if ( aPos.X() < aScreenRect.Left() )
                         aPos.X() = aScreenRect.Left();
                  }
@@ -356,7 +371,10 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
         aPos.Y() = aScreenRect.Top();
 
     rArrangeIndex = nArrangeIndex;
-    return aPos;
+
+    aPos = pW->AbsoluteScreenToOutputPixel( aPos );
+    // caller expects cordinates relative to top-level win
+    return pW->OutputToScreenPixel( aPos );
 }
 
 // -----------------------------------------------------------------------
@@ -607,13 +625,12 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, ULONG nFlags )
     }
     else
 */
-        Show();
-
     // FloatingWindow in Liste der Fenster aufnehmen, die sich im PopupModus
     // befinden
     ImplSVData* pSVData = ImplGetSVData();
     mpNextFloat = pSVData->maWinData.mpFirstFloat;
     pSVData->maWinData.mpFirstFloat = this;
+    Show( TRUE, SHOW_NOACTIVATE );
 }
 
 // -----------------------------------------------------------------------
@@ -668,9 +685,12 @@ void FloatingWindow::ImplEndPopupMode( USHORT nFlags, ULONG nFocusId )
 
     ImplSVData* pSVData = ImplGetSVData();
 
+    mbInCleanUp = TRUE; // prevent killing this window due to focus change while working with it
+
     // Bei allen nachfolgenden PopupMode-Fenster den Modus auch beenden
-    while ( pSVData->maWinData.mpFirstFloat != this )
+    while ( pSVData->maWinData.mpFirstFloat && pSVData->maWinData.mpFirstFloat != this )
         pSVData->maWinData.mpFirstFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL );
+
 
     // Fenster aus der Liste austragen
     pSVData->maWinData.mpFirstFloat = mpNextFloat;
@@ -728,6 +748,8 @@ void FloatingWindow::ImplEndPopupMode( USHORT nFlags, ULONG nFocusId )
             }
         }
     }
+
+    mbInCleanUp = FALSE;
 }
 
 // -----------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hro $ $Date: 2001-10-19 14:55:57 $
+ *  last change: $Author: ssa $ $Date: 2001-10-24 08:49:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,7 +556,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
         if ( nStyle & WB_APP )
             nFrameStyle |= SAL_FRAME_STYLE_DEFAULT;
         if ( mbFloatWin || ((GetType() == WINDOW_BORDERWINDOW) && ((ImplBorderWindow*)this)->mbFloatWindow) )
-            nFrameStyle = 0;
+            nFrameStyle = SAL_FRAME_STYLE_FLOAT; // hmmm, was '0' before ????
 
         SalFrame* pParentFrame = NULL;
         if ( pParent )
@@ -2942,6 +2942,16 @@ void Window::ImplPosSizeWindow( long nX, long nY,
         }
     }
 
+/*    if ( nFlags & (WINDOW_POSSIZE_X|WINDOW_POSSIZE_Y) )
+    {
+        POINT aPt;
+        aPt.x = maPos.X();
+        aPt.y = maPos.Y();
+        ClientToScreen( mpFrame->maFrameData.mhWnd , &aPt );
+        maPos.X() = aPt.x;
+        maPos.Y() = aPt.y;
+    }
+*/
     if ( bNewPos || bNewSize )
     {
 #ifndef REMOTE_APPSERVER
@@ -3602,11 +3612,18 @@ void Window::ImplGrabFocus( USHORT nFlags )
         if ( !mpFrameData->mbHasFocus )
 #endif
         {
-            // Hier setzen wir schon den Focus um, da ToTop() den Focus
-            // nicht auf ein anderes Fenster setzen darf
-            DBG_WARNING( "Window::GrabFocus() - Frame doesn't have the focus" );
-            mpFrame->ToTop( 0 );
-            return;
+            // menue windows never get the system focus
+            // the application will keep the focus
+            if( mbFloatWin )
+                return;
+            else
+            {
+                // Hier setzen wir schon den Focus um, da ToTop() den Focus
+                // nicht auf ein anderes Fenster setzen darf
+                DBG_WARNING( "Window::GrabFocus() - Frame doesn't have the focus" );
+                mpFrame->ToTop( 0 );
+                return;
+            }
         }
 
         Window* pOldFocusWindow = pSVData->maWinData.mpFocusWin;
@@ -5952,21 +5969,29 @@ void Window::SetPosSizePixel( long nX, long nY,
 
     if ( pWindow->mbFrame )
     {
-        // Nur Groessenaenderungen werden beruecksichtig
-        if ( (nFlags & WINDOW_POSSIZE_SIZE) == WINDOW_POSSIZE_SIZE )
-        {
-            if ( !(nFlags & WINDOW_POSSIZE_WIDTH) )
-                nWidth = pWindow->mnOutWidth;
-            if ( !(nFlags & WINDOW_POSSIZE_HEIGHT) )
-                nHeight = pWindow->mnOutHeight;
+        if ( !(nFlags & WINDOW_POSSIZE_WIDTH) )
+            nWidth = pWindow->mnOutWidth;
+        if ( !(nFlags & WINDOW_POSSIZE_HEIGHT) )
+            nHeight = pWindow->mnOutHeight;
 
-            pWindow->mpFrame->SetClientSize( nWidth, nHeight );
-            // Resize should be called directly. If we havn't
-            // set the correct size, we get a second resize from
-            // the system with the correct size. This can be happend
-            // if the size is to small or to lare.
-            ImplHandleResize( pWindow, nWidth, nHeight );
-        }
+        long nOldWidth  = pWindow->mnOutWidth;
+        long nOldHeight = pWindow->mnOutHeight;
+
+        USHORT nSysFlags=0;
+        if( nFlags & WINDOW_POSSIZE_WIDTH )
+            nSysFlags |= SAL_FRAME_POSSIZE_WIDTH;
+        if( nFlags & WINDOW_POSSIZE_HEIGHT )
+            nSysFlags |= SAL_FRAME_POSSIZE_HEIGHT;
+        if( nFlags & WINDOW_POSSIZE_X )
+            nSysFlags |= SAL_FRAME_POSSIZE_X;
+        if( nFlags & WINDOW_POSSIZE_Y )
+            nSysFlags |= SAL_FRAME_POSSIZE_Y;
+        pWindow->mpFrame->SetPosSize( nX, nY, nWidth, nHeight, nSysFlags );
+        // Resize should be called directly. If we havn't
+        // set the correct size, we get a second resize from
+        // the system with the correct size. This can be happend
+        // if the size is to small or to large.
+        ImplHandleResize( pWindow, nWidth, nHeight );
     }
     else
     {
@@ -5980,18 +6005,16 @@ void Window::SetPosSizePixel( long nX, long nY,
 
 Rectangle Window::GetDesktopRectPixel() const
 {
-/*
     Rectangle rRect;
     mpFrameWindow->mpFrame->GetWorkArea( rRect );
     return rRect;
-    */
-    return Rectangle( ScreenToOutputPixel( Point() ), mpFrameWindow->GetOutputSizePixel() );
 }
 
 // -----------------------------------------------------------------------
 
 Point Window::OutputToScreenPixel( const Point& rPos ) const
 {
+    // relative to top level parent
     return Point( rPos.X()+mnOutOffX, rPos.Y()+mnOutOffY );
 }
 
@@ -5999,7 +6022,32 @@ Point Window::OutputToScreenPixel( const Point& rPos ) const
 
 Point Window::ScreenToOutputPixel( const Point& rPos ) const
 {
+    // relative to top level parent
     return Point( rPos.X()-mnOutOffX, rPos.Y()-mnOutOffY );
+}
+
+// -----------------------------------------------------------------------
+
+Point Window::OutputToAbsoluteScreenPixel( const Point& rPos ) const
+{
+    // relative to the screen
+    Point p = OutputToScreenPixel( rPos );
+    SalFrame::Geometry g = mpFrame->GetGeometry();
+    p.X() += g.nX;
+    p.Y() += g.nY;
+    return p;
+}
+
+// -----------------------------------------------------------------------
+
+Point Window::AbsoluteScreenToOutputPixel( const Point& rPos ) const
+{
+    // relative to the screen
+    Point p = ScreenToOutputPixel( rPos );
+    SalFrame::Geometry g = mpFrame->GetGeometry();
+    p.X() -= g.nX;
+    p.Y() -= g.nY;
+    return p;
 }
 
 // -----------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-19 13:19:21 $
+ *  last change: $Author: ssa $ $Date: 2001-10-24 08:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,9 @@
 #ifndef _PSPRINT_PRINTERINFOMANAGER_HXX_
 #include <psprint/printerinfomanager.hxx>
 #endif
+#endif
+#ifndef _SV_FLOATWIN_HXX
+#include <floatwin.hxx>
 #endif
 
 #include <svapp.hxx>
@@ -663,7 +666,24 @@ inline SalFrameData::SalFrameData( SalFrame *pFrame )
     mnIconID                    = 0; // ICON_DEFAULT
 }
 
-SalFrame::SalFrame() : maFrameData( this ) {}
+SalFrame::SalFrame() : maFrameData( this )
+{
+    memset( &maGeometry, 0, sizeof(maGeometry) );
+}
+
+const SalFrame::Geometry& SalFrame::GetGeometry()
+{
+    maGeometry.nX = maFrameData.aPosSize_.Left();
+    maGeometry.nY = maFrameData.aPosSize_.Top();
+    maGeometry.nWidth = maFrameData.aPosSize_.GetWidth();
+    maGeometry.nHeight = maFrameData.aPosSize_.GetHeight();
+    maGeometry.nLeftDecoration = maFrameData.nLeft_;
+    maGeometry.nRightDecoration = maFrameData.nRight_;
+    maGeometry.nTopDecoration = maFrameData.nTop_;
+    maGeometry.nBottomDecoration = maFrameData.nBottom_;
+
+    return maGeometry;
+}
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 inline SalFrameData::~SalFrameData()
@@ -952,6 +972,18 @@ void SalFrame::Show( BOOL bVisible )
         }
 
         XSync( _GetXDisplay(), False );
+        if (maFrameData.mpParent != NULL && maFrameData.nStyle_ == 0)
+        {
+            ImplSVData* pSVData = ImplGetSVData();
+            if (pSVData->maWinData.mpFirstFloat != NULL)
+            {
+                ULONG nMode =
+                        pSVData->maWinData.mpFirstFloat->GetPopupModeFlags();
+                pSVData->maWinData.mpFirstFloat->SetPopupModeFlags(
+                               nMode | FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE);
+            }
+            XSetInputFocus(_GetXDisplay(), maFrameData.GetWindow(), RevertToParent, 0);
+        }
         maFrameData.Call( SALEVENT_RESIZE, NULL );
 
         /*
@@ -996,7 +1028,11 @@ void SalFrame::ToTop( USHORT nFlags )
          it != maFrameData.maChildren.end(); ++it )
         (*it)->ToTop( nFlags );
 }
-
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void SalFrame::GetWorkArea( Rectangle& rWorkArea )
+{
+    rWorkArea = maFrameData.pDisplay_->getWMAdaptor()->getWorkArea( 0 );
+}
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalFrame::GetClientSize( long &rWidth, long &rHeight )
 {
@@ -1021,29 +1057,23 @@ void SalFrame::GetClientSize( long &rWidth, long &rHeight )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void SalFrame::SetClientSize( long nWidth, long nHeight )
+
+void SalFrameData::Center( )
 {
-    if( maFrameData.nStyle_ & SAL_FRAME_STYLE_FLOAT )
-    {
-        maFrameData.SetPosSize( Rectangle(
-            Point( maFrameData.aPosSize_.Left(), maFrameData.aPosSize_.Top() ),
-            Size( nWidth, nHeight ) ) );
-        return;
-    }
 
     XLIB_Window     aDummy;
     int             nX, nY, nScreenWidth, nScreenHeight;
     int             nRealScreenWidth, nRealScreenHeight;
     int             nScreenX = 0, nScreenY = 0;
 
-    nScreenWidth        = _GetDisplay()->GetScreenSize().Width();
-    nScreenHeight       = _GetDisplay()->GetScreenSize().Height();
+    nScreenWidth        = GetDisplay()->GetScreenSize().Width();
+    nScreenHeight       = GetDisplay()->GetScreenSize().Height();
     nRealScreenWidth    = nScreenWidth;
     nRealScreenHeight   = nScreenHeight;
 
-    if( maFrameData.mpParent )
+    if( mpParent )
     {
-        SalFrame* pFrame = maFrameData.mpParent;
+        SalFrame* pFrame = mpParent;
         while( pFrame->maFrameData.mpParent )
             pFrame = pFrame->maFrameData.mpParent;
         if( pFrame->maFrameData.aPosSize_.IsEmpty() )
@@ -1053,7 +1083,7 @@ void SalFrame::SetClientSize( long nWidth, long nHeight )
         {
             XLIB_Window aRoot;
             unsigned int bw, depth;
-            XGetGeometry( maFrameData.GetXDisplay(),
+            XGetGeometry( GetXDisplay(),
                           pFrame->maFrameData.hForeignTopLevelWindow_,
                           &aRoot,
                           &nScreenX, &nScreenY,
@@ -1070,71 +1100,82 @@ void SalFrame::SetClientSize( long nWidth, long nHeight )
         }
     }
 
-    nX = maFrameData.aPosSize_.Left();
-    nY = maFrameData.aPosSize_.Top();
-
-    if ( maFrameData.bDefaultPosition_ )
+    SalFrameData* pParentData = mpParent ? &mpParent->maFrameData : NULL;
+    if( pParentData && pParentData->nShowState_ == SHOWSTATE_NORMAL )
     {
-        SalFrameData* pParentData = maFrameData.mpParent ? &maFrameData.mpParent->maFrameData : NULL;
-        if( pParentData && pParentData->nShowState_ == SHOWSTATE_NORMAL )
+        if( aPosSize_.GetWidth() >= pParentData->aPosSize_.GetWidth() &&
+            aPosSize_.GetHeight() >= pParentData->aPosSize_.GetHeight() )
         {
-            if( nWidth >= pParentData->aPosSize_.GetWidth() &&
-                nHeight >= pParentData->aPosSize_.GetHeight() )
-            {
-                nX = pParentData->aPosSize_.Left()+40;
-                nY = pParentData->aPosSize_.Top()+40;
-            }
-            else
-            {
-                // center the window relative to the top level frame
-                nX = (nScreenWidth  - nWidth ) / 2 + nScreenX;
-                nY = (nScreenHeight - nHeight) / 2 + nScreenY;
-            }
+            nX = nScreenX + 40;
+            nY = nScreenY + 40;
         }
         else
         {
-            // center the window relative to screen
-            nX = (nRealScreenWidth  - nWidth ) / 2;
-            nY = (nRealScreenHeight - nHeight) / 2;
+            // center the window relative to the top level frame
+            nX = (nScreenWidth  - aPosSize_.GetWidth() ) / 2 + nScreenX;
+            nY = (nScreenHeight - aPosSize_.GetHeight()) / 2 + nScreenY;
         }
-        nX = nX < 0 ? 0 : nX;
-        nY = nY < 0 ? 0 : nY;
-
-        if( maFrameData.nShowState_ == SHOWSTATE_NORMAL)
-            maFrameData.bDefaultPosition_ = False;
     }
-
-    // once centered, we leave the window where it is with new size
-    // but only if it does not run out of screen (unless user placed it there)
-
-    if( nWidth > maFrameData.aPosSize_.GetWidth() )
+    else
     {
-        if ( nX + nWidth  > nRealScreenWidth  )
-            nX = nRealScreenWidth  - nWidth;
-        nX = nX < 0 ? 0 : nX;
+        // center the window relative to screen
+        nX = (nRealScreenWidth  - aPosSize_.GetWidth() ) / 2;
+        nY = (nRealScreenHeight - aPosSize_.GetHeight()) / 2;
     }
-    if( nHeight > maFrameData.aPosSize_.GetHeight() )
+    nX = nX < 0 ? 0 : nX;
+    nY = nY < 0 ? 0 : nY;
+
+    bDefaultPosition_ = False;
+    if( mpParent )
     {
-        if ( nY + nHeight > nRealScreenHeight )
-            nY = nRealScreenHeight - nHeight;
-        // guess: size of top window decoration is 20
-        nY = nY < 20 ? 20 : nY;
+        nX -= mpParent->maFrameData.aPosSize_.Left();
+        nY -= mpParent->maFrameData.aPosSize_.Top();
     }
 
     Point aPoint ( nX, nY );
-    Size  aSize  ( nWidth, nHeight );
-    maFrameData.SetPosSize( Rectangle( aPoint, aSize ) );
+    SetPosSize( Rectangle( aPoint, aPosSize_.GetSize() ) );
 }
 
-#if 0
-void SalFrame::SetClientPosSize( const Rectangle& rRect )
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, USHORT nFlags )
 {
     if( maFrameData.nStyle_ & SAL_FRAME_STYLE_CHILD )
         return;
 
-    maFrameData.SetPosSize( rRect );
+    // relative positioning in SalFrameData::SetPosSize
+
+    Rectangle aPosSize( maFrameData.aPosSize_ );
+    aPosSize.Justify();
+
+    if( ! ( nFlags & SAL_FRAME_POSSIZE_X ) )
+    {
+        nX = aPosSize.Left();
+        if( maFrameData.mpParent )
+            nX -= maFrameData.mpParent->maFrameData.aPosSize_.Left();
+    }
+    if( ! ( nFlags & SAL_FRAME_POSSIZE_Y ) )
+    {
+        nY = aPosSize.Top();
+        if( maFrameData.mpParent )
+            nY -= maFrameData.mpParent->maFrameData.aPosSize_.Top();
+    }
+    if( ! ( nFlags & SAL_FRAME_POSSIZE_WIDTH ) )
+        nWidth = aPosSize.GetWidth();
+    if( ! ( nFlags & SAL_FRAME_POSSIZE_HEIGHT ) )
+        nHeight = aPosSize.GetHeight();
+
+    aPosSize = Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) );
+
+    if( maFrameData.bDefaultPosition_
+        && ! ( nFlags & ( SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y ) ) )
+    {
+        maFrameData.aPosSize_.SetSize( aPosSize.GetSize() );
+        maFrameData.Center();
+    }
+    else
+        maFrameData.SetPosSize( aPosSize );
+    maFrameData.bDefaultPosition_ = False;
 }
-#endif
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalFrame::SetAlwaysOnTop( BOOL bOnTop )
@@ -1238,7 +1279,7 @@ SalFrame::SetWindowState( const SalFrameState *pState )
             if (pWM->supportsICCCMPos())
                 maFrameData.SetPosSize( aPosSize );
             else
-                SetClientSize (aPosSize.GetWidth(), aPosSize.GetHeight());
+                SetPosSize( 0, 0, aPosSize.GetWidth(), aPosSize.GetHeight(), SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
         }
     }
 
@@ -1414,6 +1455,30 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
 
     if ( !values.width || !values.height || aPosSize_ == rPosSize )
         return;
+#ifdef DEBUG
+    fprintf(stderr, "SalFrameData::SetPosSize( %dx%d+%d+%d )\n",
+            rPosSize.GetWidth(), rPosSize.GetHeight(),
+            rPosSize.Left(), rPosSize.Top() );
+#endif
+
+     if( mpParent )
+     {
+         XLIB_Window aChild;
+         // coordinates are relative to parent, so translate to root coordinates
+         XTranslateCoordinates( GetDisplay()->GetDisplay(),
+                                mpParent->maFrameData.GetWindow(),
+                                GetDisplay()->GetRootWindow(),
+                                values.x, values.y,
+                                &values.x, &values.y,
+                                & aChild );
+     }
+
+    bool bMoved = false;
+    bool bSized = false;
+    if( values.x != aPosSize_.Left() || values.y != aPosSize_.Top() )
+        bMoved = true;
+    if( values.width != aPosSize_.GetWidth() || values.height != aPosSize_.GetHeight() )
+        bSized = true;
 
     if( ! ( nStyle_ & ( SAL_FRAME_STYLE_CHILD | SAL_FRAME_STYLE_FLOAT ) ) )
     {
@@ -1425,17 +1490,6 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
             values.y    -= nTop_;
         }
     }
-     if( ( nStyle_ & SAL_FRAME_STYLE_FLOAT ) && mpParent )
-     {
-         XLIB_Window aChild;
-         // coordinates are relative to parent, so translate to root coordinates
-         XTranslateCoordinates( GetDisplay()->GetDisplay(),
-                                mpParent->maFrameData.GetWindow(),
-                                GetDisplay()->GetRootWindow(),
-                                values.x, values.y,
-                                &values.x, &values.y,
-                                & aChild );
-     }
 
     if( ! ( nStyle_ & SAL_FRAME_STYLE_SIZEABLE ) )
      {
@@ -1450,8 +1504,13 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
     XMoveResizeWindow( GetXDisplay(), GetShellWindow(), values.x, values.y, values.width, values.height );
     XMoveResizeWindow( GetXDisplay(), GetWindow(), 0, 0, values.width, values.height );
 
-    aPosSize_ = rPosSize;
-    Call ( SALEVENT_RESIZE, NULL );
+    aPosSize_ = Rectangle( Point( values.x, values.y ), Size( values.width, values.height ) );;
+    if( bSized && ! bMoved )
+        Call ( SALEVENT_RESIZE, NULL );
+    else if( bMoved && ! bSized )
+        Call ( SALEVENT_MOVE, NULL );
+    else
+        Call ( SALEVENT_MOVERESIZE, NULL );
 
     // allow the external status window to reposition
     if (mbInputFocus && mpInputContext != NULL)
@@ -2028,8 +2087,12 @@ long SalFrameData::HandleMouseEvent( XEvent *pEvent )
         // is "a little tricky"
         // on some wm however, this leads to closing our menues before the menu event
         // was fired (#89867), so we cancel this now
-        // if( nStyle_ & SAL_FRAME_STYLE_CHILD )
-        //    XSetInputFocus( GetDisplay()->GetDisplay(), GetWindow(), RevertToParent, CurrentTime );
+          //if( nStyle_ & SAL_FRAME_STYLE_CHILD )
+        //XSetInputFocus( GetDisplay()->GetDisplay(), GetWindow(), RevertToParent, CurrentTime );
+
+        // let mouse events reach the correct window
+        XUngrabPointer( GetXDisplay(), CurrentTime );
+
         if( pEvent->xbutton.button == Button1 ||
             pEvent->xbutton.button == Button2 ||
             pEvent->xbutton.button == Button3 )
@@ -2407,7 +2470,19 @@ long SalFrameData::HandleFocusEvent( XFocusChangeEvent *pEvent )
             }
 #endif
             mbInputFocus = True;
-            return Call( SALEVENT_GETFOCUS,  0 );
+            ImplSVData* pSVData = ImplGetSVData();
+
+
+
+            long nRet = Call( SALEVENT_GETFOCUS,  0 );
+            if ((mpParent != NULL && nStyle_ == 0)
+                && pSVData->maWinData.mpFirstFloat )
+            {
+                ULONG nMode = pSVData->maWinData.mpFirstFloat->GetPopupModeFlags();
+                pSVData->maWinData.mpFirstFloat->SetPopupModeFlags(
+                                        nMode & ~(FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE));
+            }
+            return nRet;
         }
         else
         {
@@ -2510,6 +2585,7 @@ long SalFrameData::HandleSizeEvent( XConfigureEvent *pEvent )
 {
     if (   pEvent->window != XtWindow( hShell_ )
         && pEvent->window != XtWindow( hComposite_ )
+        && pEvent->window != hStackingWindow_
         && pEvent->window != hForeignParent_
         && pEvent->window != hForeignTopLevelWindow_ )
     {
@@ -2536,6 +2612,17 @@ long SalFrameData::HandleSizeEvent( XConfigureEvent *pEvent )
         XtSetArg(args[n], XtNwidth,  pEvent->width);    n++;
         XtSetValues( hShell_, args, n );
     }
+
+    if( pEvent->window == hStackingWindow_ )
+    {
+        if( aPosSize_.Left() != pEvent->x || aPosSize_.Top() != pEvent->y )
+        {
+            aPosSize_ = Rectangle( Point( pEvent->x, pEvent->y ), Size( pEvent->width, pEvent->height ) );
+            Call( SALEVENT_MOVE, NULL );
+        }
+        return 1;
+    }
+
     if( SHOWSTATE_UNKNOWN == nShowState_ )
     {
         nShowState_ = SHOWSTATE_NORMAL;
@@ -2590,11 +2677,25 @@ long SalFrameData::HandleSizeEvent( XConfigureEvent *pEvent )
 
 IMPL_LINK( SalFrameData, HandleResizeTimer, void*, pDummy )
 {
+    bool bMoved = false;
+    bool bSized = true;
+    if( maResizeBuffer.Left() != aPosSize_.Left() ||
+        maResizeBuffer.Top() != aPosSize_.Top() )
+        bMoved = true;
+    if( maResizeBuffer.GetWidth() != aPosSize_.GetWidth() ||
+        maResizeBuffer.GetHeight() != aPosSize_.GetHeight() )
+        bSized = true;
+
     aPosSize_ = maResizeBuffer;
     // update children's position
     RepositionChildren();
 
-    Call( SALEVENT_RESIZE, NULL );
+    if( bSized && ! bMoved )
+        Call ( SALEVENT_RESIZE, NULL );
+    else if( bMoved && ! bSized )
+        Call ( SALEVENT_MOVE, NULL );
+    else
+        Call ( SALEVENT_MOVERESIZE, NULL );
 
     SalPaintEvent aPEvt;
 
@@ -3129,6 +3230,8 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                     nRet = HandleSizeEvent( &pEvent->xconfigure );
 
                 if( pEvent->xconfigure.window == hStackingWindow_ )
+                    nRet = HandleSizeEvent( &pEvent->xconfigure );
+#if 0
                 {
                     // update position here as well as in HandleSizeEvent
                     // if the window is only moved this is the only
@@ -3143,6 +3246,7 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                                            &hDummy );
                     aPosSize_.SetPos( Point( nX, nY ) );
                 }
+#endif
                 RepositionChildren();
                 break;
         }

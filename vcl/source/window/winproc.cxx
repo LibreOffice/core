@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: th $ $Date: 2001-08-13 11:36:36 $
+ *  last change: $Author: ssa $ $Date: 2001-10-24 08:49:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -761,7 +761,8 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
     // Fenster bei Klick nach vorne bringen
     if ( nSVEvent == EVENT_MOUSEBUTTONDOWN )
     {
-        pChild->ToTop();
+        if( !pChild->mbFloatWin )   // totop for floating windows would change the focus
+            pChild->ToTop();
         if ( aDelData.IsDelete() )
             return 1;
     }
@@ -910,7 +911,10 @@ static Window* ImplGetKeyInputWindow( Window* pWindow )
 
     // find window - is every time the window which has currently the
     // focus or the last time the focus.
-    Window* pChild = pWindow->mpFrameData->mpFocusWin;
+    // the first floating window always has the focus
+    Window* pChild = pSVData->maWinData.mpFirstFloat;
+    if( !pChild )
+        pChild = pWindow->mpFrameData->mpFocusWin;
 
     // no child - than no input
     if ( !pChild )
@@ -1390,8 +1394,9 @@ void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
             pWindow->mbWaitSystemResize = FALSE;
             if ( pWindow->IsReallyVisible() )
                 pWindow->ImplSetClipFlag();
-            if ( pWindow->IsVisible() || pWindow->ImplGetWindow()->mbAllResize )
-                pWindow->Resize();
+            if ( pWindow->IsVisible() || pWindow->ImplGetWindow()->mbAllResize ||
+                ( pWindow->mbFrame && pWindow->mpClientWindow ) )   // propagate resize for system border windows
+                pWindow->Resize();                                  // otherwise menues cannot be positioned
             else
                 pWindow->mbCallResize = TRUE;
         }
@@ -1400,6 +1405,25 @@ void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
     pWindow->mpFrameData->mbNeedSysWindow = (nNewWidth < IMPL_MIN_NEEDSYSWIN) ||
                                             (nNewHeight < IMPL_MIN_NEEDSYSWIN);
     pWindow->mpFrameData->mbMinimized = (nNewWidth <= 0) || (nNewHeight <= 0);
+}
+
+// -----------------------------------------------------------------------
+
+void ImplHandleMove( Window* pWindow, long nNewX, long nNewY )
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    if ( pSVData->maWinData.mpFirstFloat && pWindow->ImplIsRealParentPath( pSVData->maWinData.mpFirstFloat ) )
+    {
+        if ( !(pSVData->maWinData.mpFirstFloat->GetPopupModeFlags() & FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE) )
+            pSVData->maWinData.mpFirstFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void ImplHandleMoveResize( Window* pWindow, long nNewX, long nNewY, long nNewWidth, long nNewHeight )
+{
+    ImplHandleResize( pWindow, nNewWidth, nNewHeight );
 }
 
 // -----------------------------------------------------------------------
@@ -1459,6 +1483,7 @@ IMPL_LINK( Window, ImplAsyncFocusHdl, void*, EMPTYARG )
     }
     else
     {
+/*
         Window* pFocusWin = mpFrameData->mpFocusWin;
         if ( pFocusWin )
         {
@@ -1504,6 +1529,7 @@ IMPL_LINK( Window, ImplAsyncFocusHdl, void*, EMPTYARG )
         // Alle FloatingFenster deaktiv zeichnen
         if ( mpFrameData->mbStartFocusState != bHasFocus )
             ImplActivateFloatingWindows( this, bHasFocus );
+*/
     }
 
     return 0;
@@ -1879,12 +1905,26 @@ long ImplWindowFrameProc( void* pInst, SalFrame* pFrame,
             }
             break;
 
+        case SALEVENT_MOVE:
+            {
+            SalFrame::Geometry g = ((Window*)pInst)->mpFrame->GetGeometry();
+            ImplHandleMove( (Window*)pInst, g.nX, g.nY );
+            }
+            break;
+
         case SALEVENT_RESIZE:
             {
             long nNewWidth;
             long nNewHeight;
             ((Window*)pInst)->mpFrame->GetClientSize( nNewWidth, nNewHeight );
             ImplHandleResize( (Window*)pInst, nNewWidth, nNewHeight );
+            }
+            break;
+
+        case SALEVENT_MOVERESIZE:
+            {
+            SalFrame::Geometry g = ((Window*)pInst)->mpFrame->GetGeometry();
+            ImplHandleMoveResize( (Window*)pInst, g.nX, g.nY, g.nWidth, g.nHeight );
             }
             break;
 

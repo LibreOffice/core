@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: as $ $Date: 2001-10-10 07:54:45 $
+ *  last change: $Author: ssa $ $Date: 2001-10-24 08:53:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,7 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
     DWORD       nSysStyle = 0;
     DWORD       nExSysStyle = 0;
     BOOL        bSubFrame = FALSE;
+    BOOL        bSaveBits = FALSE;
 
     // determine creation data
     if ( nSalFrameStyle & SAL_FRAME_STYLE_CHILD )
@@ -232,6 +233,12 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
             pFrame->maFrameData.mbNoIcon = TRUE;
             nExSysStyle |= WS_EX_TOOLWINDOW;
         }
+    }
+    if ( nSalFrameStyle & SAL_FRAME_STYLE_FLOAT )
+    {
+        nExSysStyle |= WS_EX_TOOLWINDOW;
+        pFrame->maFrameData.mbFloatWin = TRUE;
+        bSaveBits = TRUE;
     }
 
     // init frame data
@@ -671,9 +678,13 @@ SalFrame::SalFrame()
     maFrameData.mbSpezIME           = FALSE;
     maFrameData.mbAtCursorIME       = FALSE;
     maFrameData.mbCandidateMode     = FALSE;
+    maFrameData.mbFloatWin          = FALSE;
     maFrameData.mbNoIcon            = FALSE;
+
     memset( &maFrameData.maState, 0, sizeof( SalFrameState ) );
     maFrameData.maSysData.nSize     = sizeof( SystemEnvData );
+
+    memset( &maGeometry, 0, sizeof( Geometry ) );
 
     // Daten ermitteln, wenn erster Frame angelegt wird
     if ( !pSalData->mpFirstFrame )
@@ -743,6 +754,12 @@ SalFrame::~SalFrame()
 
 // -----------------------------------------------------------------------
 
+const SalFrame::Geometry& SalFrame::GetGeometry()
+{
+    return maGeometry;
+}
+
+// -----------------------------------------------------------------------
 SalGraphics* SalFrame::GetGraphics()
 {
     if ( maFrameData.mbGraphics )
@@ -899,6 +916,10 @@ static void ImplSalShow( HWND hWnd, BOOL bVisible )
         pFrame->maFrameData.mbOverwriteState = TRUE;
         pFrame->maFrameData.mbInShow = TRUE;
         ShowWindow( hWnd, pFrame->maFrameData.mnShowState );
+        if ( pFrame->maFrameData.mbFloatWin )
+            pFrame->maFrameData.mnShowState = SW_SHOWNOACTIVATE;
+        else
+            pFrame->maFrameData.mnShowState = SW_SHOW;
         // Damit Taskleiste unter W98 auch gleich ausgeblendet wird
         if ( pFrame->maFrameData.mbPresentation )
         {
@@ -907,7 +928,7 @@ static void ImplSalShow( HWND hWnd, BOOL bVisible )
                 SetForegroundWindow( hWndParent );
             SetForegroundWindow( hWnd );
         }
-        pFrame->maFrameData.mnShowState = SW_SHOW;
+
         pFrame->maFrameData.mbInShow = FALSE;
 
         // Direct Paint only, if we get the SolarMutx
@@ -983,48 +1004,86 @@ void SalFrame::SetMinClientSize( long nWidth, long nHeight )
 
 // -----------------------------------------------------------------------
 
-void SalFrame::SetClientSize( long nWidth, long nHeight )
+void SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
+                                                   USHORT nFlags )
 {
     BOOL bVisible = (GetWindowStyle( maFrameData.mhWnd ) & WS_VISIBLE) != 0;
     if ( !bVisible )
-        maFrameData.mnShowState = SW_SHOWNORMAL;
+    {
+        if ( maFrameData.mbFloatWin )
+                maFrameData.mnShowState = SW_SHOWNOACTIVATE;
+        else
+                maFrameData.mnShowState = SW_SHOWNORMAL;
+    }
     else
     {
         if ( IsIconic( maFrameData.mhWnd ) || IsZoomed( maFrameData.mhWnd ) )
-            ShowWindow( maFrameData.mhWnd, SW_RESTORE );
+                ShowWindow( maFrameData.mhWnd, SW_RESTORE );
     }
 
-    // Fenstergroesse berechnen
-    RECT aWinRect;
-    aWinRect.left   = 0;
-    aWinRect.right  = (int)nWidth;
-    aWinRect.top    = 0;
-    aWinRect.bottom = (int)nHeight;
-    AdjustWindowRectEx( &aWinRect,
-                        GetWindowStyle( maFrameData.mhWnd ),
-                        FALSE,
-                        GetWindowExStyle( maFrameData.mhWnd ) );
-    nWidth  = aWinRect.right-aWinRect.left;
-    nHeight = aWinRect.bottom-aWinRect.top;
+    USHORT nEvent = 0;
+    UINT    nPosSize = 0;
+    RECT    aClientRect, aWindowRect;
+    GetClientRect( maFrameData.mhWnd, &aClientRect );   // x,y always 0,0, but width and height without border
+    GetWindowRect( maFrameData.mhWnd, &aWindowRect );   // x,y in screen coordinates, width and height with border
 
-    // Position so berechnen, das Fenster zentiert auf dem Desktop
-    // angezeigt wird
-    int     nX;
-    int     nY;
-    int     nScreenX;
-    int     nScreenY;
-    int     nScreenWidth;
-    int     nScreenHeight;
-
-    RECT aRect;
-    SystemParametersInfo( SPI_GETWORKAREA, 0, &aRect, 0 );
-    nScreenX        = aRect.left;
-    nScreenY        = aRect.top;
-    nScreenWidth    = aRect.right-aRect.left;
-    nScreenHeight   = aRect.bottom-aRect.top;
-
-    if ( maFrameData.mbDefPos )
+    if ( !(nFlags & (SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y)) )
+        nPosSize |= SWP_NOMOVE;
+    else
     {
+        //DBG_ASSERT( nX && nY, " Windowposition of (0,0) requested!" );
+        nEvent = SALEVENT_MOVE;
+    }
+    if ( !(nFlags & (SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT)) )
+        nPosSize |= SWP_NOSIZE;
+    else
+        nEvent = (nEvent == SALEVENT_MOVE) ? SALEVENT_MOVERESIZE : SALEVENT_RESIZE;
+
+    if ( !(nFlags & SAL_FRAME_POSSIZE_X) )
+        nX = aWindowRect.left;
+    if ( !(nFlags & SAL_FRAME_POSSIZE_Y) )
+        nY = aWindowRect.top;
+    if ( !(nFlags & SAL_FRAME_POSSIZE_WIDTH) )
+        nWidth = aClientRect.right-aClientRect.left;
+    if ( !(nFlags & SAL_FRAME_POSSIZE_HEIGHT) )
+        nHeight = aClientRect.bottom-aClientRect.top;
+
+    // Calculate window size including the border
+    RECT    aWinRect;
+    aWinRect.left   = 0;
+    aWinRect.right  = (int)nWidth-1;
+    aWinRect.top    = 0;
+    aWinRect.bottom = (int)nHeight-1;
+    AdjustWindowRectEx( &aWinRect, GetWindowStyle( maFrameData.mhWnd ),
+                        FALSE,     GetWindowExStyle( maFrameData.mhWnd ) );
+    nWidth  = aWinRect.right - aWinRect.left + 1;
+    nHeight = aWinRect.bottom - aWinRect.top + 1;
+
+    if ( ::GetParent( maFrameData.mhWnd ) )
+    {
+            POINT aPt;
+            aPt.x = nX;
+            aPt.y = nY;
+            ClientToScreen( ::GetParent( maFrameData.mhWnd ), &aPt );
+            nX = aPt.x;
+            nY = aPt.y;
+    }
+
+    if ( maFrameData.mbDefPos && (nPosSize & SWP_NOMOVE)) // we got no positioning request, so choose default position
+    {
+        // center window
+        int     nScreenX;
+        int     nScreenY;
+        int     nScreenWidth;
+        int     nScreenHeight;
+
+        RECT aRect;
+        SystemParametersInfo( SPI_GETWORKAREA, 0, &aRect, 0 );
+        nScreenX        = aRect.left;
+        nScreenY        = aRect.top;
+        nScreenWidth    = aRect.right-aRect.left;
+        nScreenHeight   = aRect.bottom-aRect.top;
+
         HWND hWndParent = ::GetParent( maFrameData.mhWnd );
         // Search for TopLevel Frame
         while ( hWndParent && (GetWindowStyle( hWndParent ) & WS_CHILD) )
@@ -1069,42 +1128,52 @@ void SalFrame::SetClientSize( long nWidth, long nHeight )
         if ( nY < nScreenY )
             nY = nScreenY;
 
-        if ( bVisible )
-            maFrameData.mbDefPos = FALSE;
-    }
-    else
-    {
-        RECT aWinRect;
-        GetWindowRect( maFrameData.mhWnd, &aWinRect );
-        nX = aWinRect.left;
-        nY = aWinRect.top;
-        // Window should be visible in the screen, so we adjust the window
-        // if the size would be bigger
-        if ( nWidth > aWinRect.right-aWinRect.left )
-        {
-            if ( nX+nWidth > nScreenX+nScreenWidth )
-                nX = (nScreenX+nScreenWidth) - nWidth;
-            if ( nX < nScreenX )
-                nX = nScreenX;
-        }
-        if ( nHeight > aWinRect.bottom-aWinRect.top )
-        {
-            if ( nY+nHeight > nScreenY+nScreenHeight )
-                nY = (nScreenY+nScreenHeight) - nHeight;
-            if ( nY < nScreenY )
-                nY = nScreenY;
-        }
+        //if ( bVisible )
+        //    maFrameData.mbDefPos = FALSE;
+
+        maFrameData.mbDefPos = FALSE;   // center only once
+        nPosSize &= ~SWP_NOMOVE;        // activate positioning
+        nEvent = SALEVENT_MOVERESIZE;
     }
 
-    SetWindowPos( maFrameData.mhWnd, 0, nX, nY, (int)nWidth, (int)nHeight, SWP_NOZORDER | SWP_NOACTIVATE );
+
+    SetWindowPos( maFrameData.mhWnd, 0, nX, nY, (int)nWidth, (int)nHeight, SWP_NOZORDER | SWP_NOACTIVATE | nPosSize );
+
+    if( !(nPosSize & SWP_NOMOVE) )
+    {
+        maGeometry.nX = nX;
+        maGeometry.nY = nY;
+    }
+    if( !(nPosSize & SWP_NOSIZE) )
+    {
+        maGeometry.nWidth  = nWidth;
+        maGeometry.nHeight = nHeight;
+    }
+
+    // Notification -- really ???
+    if( nEvent )
+        maFrameData.mpProc( maFrameData.mpInst, this, nEvent, NULL );
+}
+
+// -----------------------------------------------------------------------
+
+void SalFrame::GetWorkArea( Rectangle &rRect )
+{
+    RECT aRect;
+    SystemParametersInfo( SPI_GETWORKAREA, 0, &aRect, 0 );
+    rRect.nLeft     = aRect.left;
+    rRect.nRight    = aRect.right-1;
+    rRect.nTop      = aRect.top;
+    rRect.nBottom   = aRect.bottom-1;
 }
 
 // -----------------------------------------------------------------------
 
 void SalFrame::GetClientSize( long& rWidth, long& rHeight )
 {
-    rWidth  = maFrameData.mnWidth;
-    rHeight = maFrameData.mnHeight;
+    Geometry rGeo = GetGeometry();
+    rWidth  = rGeo.nWidth;
+    rHeight = rGeo.nHeight;
 }
 
 // -----------------------------------------------------------------------
@@ -2506,6 +2575,9 @@ static long ImplHandleMouseActivateMsg( HWND hWnd )
     if ( !pFrame )
         return 0;
 
+    if ( pFrame->maFrameData.mbFloatWin )
+        return TRUE;
+
     SalMouseActivateEvent   aMouseActivateEvt;
     POINT                   aPt;
     GetCursorPos( &aPt );
@@ -3062,6 +3134,53 @@ static void ImplHandlePaintMsg2( HWND hWnd, RECT* pRect )
 
 // -----------------------------------------------------------------------
 
+static void UpdateFrameGeometry( HWND hWnd, SalFrame* pFrame )
+{
+    if( !pFrame )
+        return;
+
+    RECT aRect;
+    GetWindowRect( hWnd, &aRect );
+    /// calc coordinates of client area, ie without border
+    if ( GetWindowStyle( hWnd ) & WS_CAPTION )
+    {
+        aRect.top += GetSystemMetrics(SM_CYCAPTION);
+    }
+    if ( GetWindowStyle( hWnd ) & WS_BORDER )
+    {
+        aRect.left += GetSystemMetrics(SM_CXBORDER);
+        aRect.top  += GetSystemMetrics(SM_CYBORDER);
+    }
+    if ( GetWindowStyle( hWnd ) & WS_THICKFRAME )
+    {
+        aRect.left += GetSystemMetrics(SM_CXEDGE);
+        aRect.top  += GetSystemMetrics(SM_CYEDGE);
+    }
+    pFrame->maGeometry.nX = aRect.left;
+    pFrame->maGeometry.nY = aRect.top;
+
+    GetClientRect( hWnd, &aRect );
+    pFrame->maGeometry.nWidth  = aRect.right - aRect.left;
+    pFrame->maGeometry.nHeight = aRect.bottom - aRect.top;
+}
+
+// -----------------------------------------------------------------------
+
+static void ImplCallMoveHdl( HWND hWnd )
+{
+    SalFrame* pFrame = GetWindowPtr( hWnd );
+    if ( pFrame )
+    {
+        pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
+                                    SALEVENT_MOVE, 0 );
+        // Um doppelte Paints von VCL und SAL zu vermeiden
+        if ( IsWindowVisible( hWnd ) && !pFrame->maFrameData.mbInShow )
+            UpdateWindow( hWnd );
+    }
+}
+
+// -----------------------------------------------------------------------
+
 static void ImplHandleMoveMsg( HWND hWnd )
 {
     if ( ImplSalYieldMutexTryToAcquire() )
@@ -3069,6 +3188,8 @@ static void ImplHandleMoveMsg( HWND hWnd )
         SalFrame* pFrame = GetWindowPtr( hWnd );
         if ( pFrame )
         {
+            UpdateFrameGeometry( hWnd, pFrame );
+
             if ( GetWindowStyle( hWnd ) & WS_VISIBLE )
                 pFrame->maFrameData.mbDefPos = FALSE;
 
@@ -3084,6 +3205,8 @@ static void ImplHandleMoveMsg( HWND hWnd )
 
             // Status merken
             ImplSaveFrameState( pFrame );
+            // Call Hdl
+            ImplCallMoveHdl( hWnd );
         }
 
         ImplSalYieldMutexRelease();
@@ -3125,6 +3248,8 @@ static void ImplHandleSizeMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
         SalFrame* pFrame = GetWindowPtr( hWnd );
         if ( pFrame )
         {
+            UpdateFrameGeometry( hWnd, pFrame );
+
             pFrame->maFrameData.mnWidth  = (int)LOWORD(lParam);
             pFrame->maFrameData.mnHeight = (int)HIWORD(lParam);
             // Status merken
