@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formsimp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-24 17:06:08 $
+ *  last change: $Author: thb $ $Date: 2001-07-25 11:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,9 +95,5 @@ XMLFormsContext::~XMLFormsContext()
 SvXMLImportContext * XMLFormsContext::CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
-#ifndef SVX_LIGHT
     return GetImport().GetFormImport()->createContext( nPrefix, rLocalName, xAttrList );
-#else
-    return NULL;
-#endif
 }

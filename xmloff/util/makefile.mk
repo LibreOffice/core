@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: thb $ $Date: 2001-07-24 17:06:10 $
+#   last change: $Author: thb $ $Date: 2001-07-25 11:45:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -129,7 +129,6 @@ LIB2FILES=  \
             $(LB)$/sxl_core.lib\
             $(LB)$/sxl_draw.lib\
             $(LB)$/sxl_forms.lib\
-            $(LB)$/sxl_meta.lib\
             $(LB)$/sxl_script.lib\
             $(LB)$/sxl_style.lib\
             $(LB)$/sxl_text.lib
