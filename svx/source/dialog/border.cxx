@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-09-14 14:09:07 $
+ *  last change: $Author: os $ $Date: 2001-12-19 12:47:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,7 +492,8 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
                 if ( SFX_ITEM_SET == rSet.GetItemState( nWhichBox, FALSE ) &&
                      pBoxInfoItem->IsValid( VALID_DISTANCE ) )
                 {
-                    if( !pFrameSel->IsAnyLineSet() )
+                    if( !pFrameSel->IsAnyLineSet()||
+                        !pBoxInfoItem->IsMinDist() )
                     {
                         aLeftMF.SetMin( 0 );
                         aLeftMF.SetFirst( 0 );
@@ -517,7 +518,8 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
                     // mehr autom. veraendert werden
                     const long nDefDist = pBoxInfoItem->GetDefDist();
                     if((pBoxItem->GetDistance() ||
-                            (nSWMode & SW_BORDER_MODE_FRAME)&& pFrameSel->IsAnyLineSet()) &&
+                            (nSWMode & SW_BORDER_MODE_FRAME|SW_BORDER_MODE_TABLE)&&
+                                pFrameSel->IsAnyLineSet()) &&
                                 (nDefDist != nLeftDist ||
                                 nDefDist != nRightDist ||
                                 nDefDist != nTopDist   ||
@@ -1430,7 +1432,7 @@ IMPL_LINK( SvxBorderTabPage, LinesChanged_Impl, void*, EMPTYARG )
     if(aLeftMF.IsVisible())
     {
         BOOL bLineSet = pFrameSel->IsAnyLineSet();
-        BOOL bMinAllowed = nSWMode & SW_BORDER_MODE_FRAME;
+        BOOL bMinAllowed = 0 != (nSWMode & SW_BORDER_MODE_FRAME|SW_BORDER_MODE_TABLE);
         BOOL bSpaceModified =   aLeftMF  .IsModified()||
                                 aRightMF .IsModified()||
                                 aTopMF   .IsModified()||
