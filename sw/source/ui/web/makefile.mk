@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:58:02 $
+#   last change: $Author: pjunck $ $Date: 2004-10-22 13:58:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,8 +75,7 @@ TARGET=web
 
 SRS1NAME=$(TARGET)
 SRC1FILES =  \
-        web.src	\
-        webport.src
+        web.src 
 
 SLOFILES =  \
         $(SLO)$/wdrwbase.obj	\
