@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-28 09:09:09 $
+ *  last change: $Author: fs $ $Date: 2001-06-05 16:09:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1665,56 +1665,61 @@ void OResultSet::fillRow(sal_Int32 _nToColumn)
     }
     m_bFetchData = sal_False;
     Reference< XResultSetMetaData > xMeta = getMetaData();
-    for(sal_Int32 i=m_nLastColumnPos+1;i <= _nToColumn; ++i)
+
+    sal_Int32                               nColumn     = m_nLastColumnPos + 1;
+    ::std::vector< ORowSetValue >::iterator pColumn     = m_aRow.begin() + nColumn;
+    ::std::vector< ORowSetValue >::iterator pColumnEnd  = m_aRow.begin() + _nToColumn + 1;
+
+    for (; pColumn < pColumnEnd; ++nColumn, ++pColumn)
     {
-        m_aRow[_nToColumn].setTypeKind(xMeta->getColumnType(i));
-        switch (m_aRow[_nToColumn].getTypeKind())
+        pColumn->setTypeKind(xMeta->getColumnType(nColumn));
+        switch (pColumn->getTypeKind())
         {
             case DataType::CHAR:
             case DataType::VARCHAR:
-                m_aRow[i] = getString(i);
+                *pColumn = getString(nColumn);
                 break;
             case DataType::DECIMAL:
             case DataType::NUMERIC:
             case DataType::BIGINT:
-                m_aRow[i] = getString(i);
+                *pColumn = getString(nColumn);
                 break;
             case DataType::DOUBLE:
-                m_aRow[i] = getDouble(i);
+                *pColumn = getDouble(nColumn);
                 break;
             case DataType::LONGVARCHAR:
-                m_aRow[i] = getString(i);
+                *pColumn = getString(nColumn);
                 break;
             case DataType::LONGVARBINARY:
-                m_aRow[i] = getBytes(i);
+                *pColumn = getBytes(nColumn);
                 break;
             case DataType::DATE:
-                m_aRow[i] = getDate(i);
+                *pColumn = getDate(nColumn);
                 break;
             case DataType::TIME:
-                m_aRow[i] = getTime(i);
+                *pColumn = getTime(nColumn);
                 break;
             case DataType::TIMESTAMP:
-                m_aRow[i] = getTimestamp(i);
+                *pColumn = getTimestamp(nColumn);
                 break;
             case DataType::BIT:
-                m_aRow[i] = getBoolean(i);
+                *pColumn = getBoolean(nColumn);
                 break;
             case DataType::TINYINT:
-                m_aRow[i] = getByte(i);
+                *pColumn = getByte(nColumn);
                 break;
             case DataType::SMALLINT:
-                m_aRow[i] = getShort(i);
+                *pColumn = getShort(nColumn);
                 break;
             case DataType::INTEGER:
-                m_aRow[i] = getInt(i);
+                *pColumn = getInt(nColumn);
                 break;
             case DataType::REAL:
-                m_aRow[i] = getFloat(i);
+                *pColumn = getFloat(nColumn);
                 break;
             case DataType::BINARY:
             case DataType::VARBINARY:
-                m_aRow[i] = getBytes(i);
+                *pColumn = getBytes(nColumn);
                 break;
         }
     }
