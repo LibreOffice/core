@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 14:13:41 $
+ *  last change: $Author: kz $ $Date: 2003-09-11 10:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,20 @@
 #ifndef _ZIP_FILE_HXX
 #define _ZIP_FILE_HXX
 
+#ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPEXCEPTION_HPP_
+#include <com/sun/star/packages/zip/ZipException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPIOEXCEPTION_HPP_
+#include <com/sun/star/packages/zip/ZipIOException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PACKAGES_NOENCRYPTIONEXCEPTION_HPP_
+#include <com/sun/star/packages/NoEncryptionException.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_PACKAGES_WRONGPASSWORDEXCEPTION_HPP_
+#include <com/sun/star/packages/WrongPasswordException.hpp>
+#endif
+
 #ifndef _BYTE_GRABBER_HXX_
 #include <ByteGrabber.hxx>
 #endif
@@ -70,9 +84,7 @@
 #ifndef _INFLATER_HXX
 #include <Inflater.hxx>
 #endif
-#ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPEXCEPTION_HPP_
-#include <com/sun/star/packages/zip/ZipException.hpp>
-#endif
+
 
 namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; }
@@ -119,11 +131,13 @@ protected:
             sal_Bool bRawStream,
             sal_Bool bDecrypt );
 
+    // aMediaType parameter is used only for raw stream header creation
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream >  createUnbufferedStream(
             ZipEntry & rEntry,
             const vos::ORef < EncryptionData > &rData,
-            sal_Bool bRawStream,
-            sal_Bool bDecrypt );
+            sal_Int8 nStreamMode,
+            sal_Bool bDecrypt,
+            ::rtl::OUString aMediaType = ::rtl::OUString() );
 
     sal_Bool hasValidPassword ( ZipEntry & rEntry, const vos::ORef < EncryptionData > &rData );
 
@@ -152,21 +166,59 @@ public:
     ~ZipFile();
 
     void setInputStream ( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewStream );
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawStream(
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawData(
             ZipEntry& rEntry,
             const vos::ORef < EncryptionData > &rData,
             sal_Bool bDecrypt)
         throw(::com::sun::star::io::IOException, ::com::sun::star::packages::zip::ZipException, ::com::sun::star::uno::RuntimeException);
 
     static void StaticGetCipher ( const vos::ORef < EncryptionData > & xEncryptionData, rtlCipher &rCipher );
-    static void StaticFillHeader ( const vos::ORef < EncryptionData > & rData, sal_Int32 nSize, sal_Int8 * & pHeader );
-    static sal_Bool StaticFillData ( vos::ORef < EncryptionData > & rData, sal_Int32 &rSize, ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &rStream );
+
+    static void StaticFillHeader ( const vos::ORef < EncryptionData > & rData,
+                                    sal_Int32 nSize,
+                                    const ::rtl::OUString& aMediaType,
+                                    sal_Int8 * & pHeader );
+
+    static sal_Bool StaticFillData ( vos::ORef < EncryptionData > & rData,
+                                     sal_Int32 &rSize,
+                                     ::rtl::OUString& aMediaType,
+                                     ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &rStream );
+
+    static ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > StaticGetDataFromRawStream(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xStream,
+            const vos::ORef < EncryptionData > &rData )
+        throw ( ::com::sun::star::packages::WrongPasswordException,
+                ::com::sun::star::packages::zip::ZipIOException,
+                ::com::sun::star::uno::RuntimeException );
+
+    static sal_Bool StaticHasValidPassword ( const ::com::sun::star::uno::Sequence< sal_Int8 > &aReadBuffer,
+                                             const vos::ORef < EncryptionData > &rData );
+
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream(
             ZipEntry& rEntry,
             const vos::ORef < EncryptionData > &rData,
             sal_Bool bDecrypt )
         throw(::com::sun::star::io::IOException, ::com::sun::star::packages::zip::ZipException, ::com::sun::star::uno::RuntimeException);
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getDataStream(
+            ZipEntry& rEntry,
+            const vos::ORef < EncryptionData > &rData,
+            sal_Bool bDecrypt )
+        throw ( ::com::sun::star::packages::WrongPasswordException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::packages::zip::ZipException,
+                ::com::sun::star::uno::RuntimeException );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getWrappedRawStream(
+            ZipEntry& rEntry,
+            const vos::ORef < EncryptionData > &rData,
+            const ::rtl::OUString& aMediaType )
+        throw ( ::com::sun::star::packages::NoEncryptionException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::packages::zip::ZipException,
+                ::com::sun::star::uno::RuntimeException );
+
     ::rtl::OUString SAL_CALL getName(  )
         throw(::com::sun::star::uno::RuntimeException);
     sal_Int32 SAL_CALL getSize(  )
