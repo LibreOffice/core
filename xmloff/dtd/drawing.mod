@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.31 2001-01-31 16:16:18 cl Exp $
+	$Id: drawing.mod,v 1.32 2001-02-01 17:40:31 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -70,6 +70,7 @@
 <!ENTITY % vector3D "CDATA">
 <!ENTITY % text-anchor "text:anchor-type %anchorType; #IMPLIED text:anchor-page-number %positiveInteger; #IMPLIED">
 <!ENTITY % layerName "CDATA">
+<!ENTITY % table-background "table:table-background (true | false) #IMPLIED">
 
 <!-- commont presentation shape attributes -->
 <!ENTITY % presentation-style-name "presentation:style-name %styleName; #IMPLIED">
@@ -84,6 +85,7 @@
 <!ELEMENT draw:rect %draw-text;>
 <!ATTLIST draw:rect %draw-position; >
 <!ATTLIST draw:rect %draw-end-position; >
+<!ATTLIST draw:rect %table-background; >
 <!ATTLIST draw:rect %draw-size; >
 <!ATTLIST draw:rect %draw-style-name; >
 <!ATTLIST draw:rect %draw-transform; >
@@ -102,6 +104,7 @@
 <!ATTLIST draw:line %draw-transform; >
 <!ATTLIST draw:line %zindex;>
 <!ATTLIST draw:line %draw-end-position; >
+<!ATTLIST draw:line %table-background; >
 <!ATTLIST draw:line draw:id %shapeId;>
 <!ATTLIST draw:line %text-anchor;>
 <!ATTLIST draw:line draw:layer %layerName; #IMPLIED>
@@ -115,6 +118,7 @@
 <!ATTLIST draw:polyline %draw-transform; >
 <!ATTLIST draw:polyline %zindex;>
 <!ATTLIST draw:polyline %draw-end-position; >
+<!ATTLIST draw:polyline %table-background; >
 <!ATTLIST draw:polyline draw:id %shapeId;>
 <!ATTLIST draw:polyline %text-anchor;>
 <!ATTLIST draw:polyline draw:layer %layerName; #IMPLIED>
@@ -122,6 +126,7 @@
 <!ELEMENT draw:polygon %draw-text; >
 <!ATTLIST draw:polygon %draw-position; >
 <!ATTLIST draw:polygon %draw-end-position; >
+<!ATTLIST draw:polygon %table-background; >
 <!ATTLIST draw:polygon %draw-size; >
 <!ATTLIST draw:polygon %draw-viewbox; >
 <!ATTLIST draw:polygon svg:points %points; #REQUIRED >
@@ -135,6 +140,7 @@
 <!ELEMENT draw:path %draw-text; >
 <!ATTLIST draw:path %draw-position;>
 <!ATTLIST draw:path %draw-end-position; >
+<!ATTLIST draw:path %table-background; >
 <!ATTLIST draw:path %draw-size; >
 <!ATTLIST draw:path %draw-viewbox; >
 <!ATTLIST draw:path svg:d %pathData; #REQUIRED >
@@ -153,6 +159,7 @@
 <!ATTLIST draw:circle %draw-transform; >
 <!ATTLIST draw:circle %zindex;>
 <!ATTLIST draw:circle %draw-end-position; >
+<!ATTLIST draw:circle %table-background; >
 <!ATTLIST draw:circle draw:id %shapeId;>
 <!ATTLIST draw:circle draw:kind (full|section|cut|arc) "full">
 <!ATTLIST draw:circle draw:start-angle %nonNegativeInteger; #IMPLIED>
@@ -169,6 +176,7 @@
 <!ATTLIST draw:ellipse %draw-transform; >
 <!ATTLIST draw:ellipse %zindex;>
 <!ATTLIST draw:ellipse %draw-end-position; >
+<!ATTLIST draw:ellipse %table-background; >
 <!ATTLIST draw:ellipse draw:id %shapeId;>
 <!ATTLIST draw:ellipse draw:kind (full|section|cut|arc) "full">
 <!ATTLIST draw:ellipse draw:start-angle %nonNegativeInteger; #IMPLIED>
@@ -190,6 +198,7 @@
 <!ATTLIST draw:connector draw:end-glue-point %integer; #IMPLIED>
 <!ATTLIST draw:connector %zindex;>
 <!ATTLIST draw:connector %draw-end-position; >
+<!ATTLIST draw:connector %table-background; >
 <!ATTLIST draw:connector draw:id %shapeId;>
 <!ATTLIST draw:connector %text-anchor;>
 <!ATTLIST draw:connector draw:layer %layerName; #IMPLIED>
@@ -201,6 +210,7 @@
 <!ATTLIST draw:control %control-id; >
 <!ATTLIST draw:control %zindex;>
 <!ATTLIST draw:control %draw-end-position; >
+<!ATTLIST draw:control %table-background; >
 <!ATTLIST draw:control draw:id %shapeId;>
 <!ATTLIST draw:control %text-anchor;>
 <!ATTLIST draw:control draw:layer %layerName; #IMPLIED>
@@ -209,6 +219,7 @@
 <!ATTLIST draw:g %draw-transform; >
 <!ATTLIST draw:g %zindex;>
 <!ATTLIST draw:g %draw-end-position; >
+<!ATTLIST draw:g %table-background; >
 <!ATTLIST draw:g draw:id %shapeId;>
 <!ATTLIST draw:g %text-anchor;>
 <!ATTLIST draw:g draw:layer %layerName; #IMPLIED>
@@ -220,6 +231,7 @@
 <!ATTLIST draw:page-thumbnail %presentation-class; >
 <!ATTLIST draw:page-thumbnail %zindex;>
 <!ATTLIST draw:page-thumbnail %draw-end-position; >
+<!ATTLIST draw:page-thumbnail %table-background; >
 <!ATTLIST draw:page-thumbnail draw:id %shapeId;>
 <!ATTLIST draw:page-thumbnail %text-anchor;>
 <!ATTLIST draw:page-thumbnail draw:layer %layerName; #IMPLIED>
@@ -227,6 +239,7 @@
 <!ELEMENT draw:caption %draw-text;>
 <!ATTLIST draw:caption %draw-position; >
 <!ATTLIST draw:caption %draw-end-position; >
+<!ATTLIST draw:caption %table-background; >
 <!ATTLIST draw:caption %draw-size; >
 <!ATTLIST draw:caption %draw-style-name; >
 <!ATTLIST draw:caption %draw-transform; >
@@ -243,6 +256,7 @@
 <!ATTLIST draw:measure svg:x2 %coordinate; #REQUIRED>
 <!ATTLIST draw:measure svg:y2 %coordinate; #REQUIRED>
 <!ATTLIST draw:measure %draw-end-position; >
+<!ATTLIST draw:measure %table-background; >
 <!ATTLIST draw:measure %draw-style-name; >
 <!ATTLIST draw:measure %draw-transform; >
 <!ATTLIST draw:measure %zindex;>
@@ -463,6 +477,7 @@
 <!ATTLIST draw:text-box %text-anchor;>
 <!ATTLIST draw:text-box %draw-position;>
 <!ATTLIST draw:text-box %draw-end-position; >
+<!ATTLIST draw:text-box %table-background; >
 <!ATTLIST draw:text-box svg:width %lengthOrPercentage; #IMPLIED>
 <!ATTLIST draw:text-box svg:height %lengthOrPercentage; #IMPLIED>
 <!ATTLIST draw:text-box fo:min-height %lengthOrPercentage; #IMPLIED>
@@ -484,6 +499,7 @@
 <!ATTLIST draw:image %text-anchor;>
 <!ATTLIST draw:image %draw-position;>
 <!ATTLIST draw:image %draw-end-position; >
+<!ATTLIST draw:image %table-background; >
 <!ATTLIST draw:image svg:width %lengthOrPercentage; #IMPLIED>
 <!ATTLIST draw:image svg:height %lengthOrPercentage; #IMPLIED>
 <!ATTLIST draw:image %presentation-class; >
@@ -501,6 +517,7 @@
 <!ATTLIST draw:object %text-anchor;>
 <!ATTLIST draw:object %draw-position;>
 <!ATTLIST draw:object %draw-end-position; >
+<!ATTLIST draw:object %table-background; >
 <!ATTLIST draw:object svg:width %lengthOrPercentage; #IMPLIED>
 <!ATTLIST draw:object svg:height %lengthOrPercentage; #IMPLIED>
 <!ATTLIST draw:object %presentation-class; >
@@ -518,6 +535,7 @@
 <!ATTLIST draw:object-ole %text-anchor;>
 <!ATTLIST draw:object-ole %draw-position;>
 <!ATTLIST draw:object-ole %draw-end-position; >
+<!ATTLIST draw:object-ole %table-background; >
 <!ATTLIST draw:object-ole svg:width %lengthOrPercentage; #IMPLIED>
 <!ATTLIST draw:object-ole svg:height %lengthOrPercentage; #IMPLIED>
 <!ATTLIST draw:object-ole %presentation-class; >
@@ -587,6 +605,7 @@
 <!ATTLIST dr3d:cube %zindex;>
 <!ATTLIST dr3d:cube draw:id %shapeId;>
 <!ATTLIST dr3d:cube %draw-end-position; >
+<!ATTLIST dr3d:cube %table-background; >
 <!ATTLIST dr3d:cube %draw-style-name; >
 
 <!ELEMENT dr3d:sphere EMPTY>
@@ -596,6 +615,7 @@
 <!ATTLIST dr3d:sphere %zindex;>
 <!ATTLIST dr3d:sphere draw:id %shapeId;>
 <!ATTLIST dr3d:sphere %draw-end-position; >
+<!ATTLIST dr3d:sphere %table-background; >
 <!ATTLIST dr3d:sphere %draw-style-name; >
 
 <!ELEMENT dr3d:extrude EMPTY>
@@ -605,6 +625,7 @@
 <!ATTLIST dr3d:extrude %zindex;>
 <!ATTLIST dr3d:extrude draw:id %shapeId;>
 <!ATTLIST dr3d:extrude %draw-end-position; >
+<!ATTLIST dr3d:extrude %table-background; >
 <!ATTLIST dr3d:extrude %draw-style-name; >
 
 <!ELEMENT dr3d:rotate EMPTY>
@@ -614,6 +635,7 @@
 <!ATTLIST dr3d:rotate %zindex;>
 <!ATTLIST dr3d:rotate draw:id %shapeId;>
 <!ATTLIST dr3d:rotate %draw-end-position; >
+<!ATTLIST dr3d:rotate %table-background; >
 <!ATTLIST dr3d:rotate %draw-style-name; >
 
 <!ELEMENT dr3d:scene (dr3d:light*,(%shapes3d;)*)>
@@ -635,6 +657,7 @@
 <!ATTLIST dr3d:scene %zindex;>
 <!ATTLIST dr3d:scene draw:id %shapeId;>
 <!ATTLIST dr3d:scene %draw-end-position; >
+<!ATTLIST dr3d:scene %table-background; >
 
 <!ELEMENT draw:layer-set (draw:layer*)>
 
