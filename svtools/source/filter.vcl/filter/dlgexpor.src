@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgexpor.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:38:26 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:39:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ ModalDialog DLG_EXPORT_PIX
         Text [ ENGLISH ] = "Color resolution" ;
         Text [ english_us ] = "Color resolution" ;
         Text [ portuguese ] = "Resolu��o de cores" ;
-        Text [ portuguese_brazilian ] = "Farbaufl�sung" ;
+        Text [ portuguese_brazilian ] = "Resolu��o de cores" ;
         Text [ swedish ] = "F�rguppl�sning" ;
         Text [ danish ] = "Farveopl�sning" ;
         Text [ italian ] = "Profondit� cromatica" ;
@@ -97,6 +97,9 @@ ModalDialog DLG_EXPORT_PIX
         Text[ catalan ] = "Resoluci� del color";
         Text[ finnish ] = "V�ritarkkuus";
         Text[ thai ] = "เลือกสี";
+        Text[ czech ] = "Počet barev";
+        Text[ hebrew ] = "‮רזולוצית צבע‬";
+        Text[ hindi ] = "रंग का रॉज़ल्यूशन्";
     };
     ListBox LB_COLORS
     {
@@ -152,13 +155,13 @@ ModalDialog DLG_EXPORT_PIX
         stringlist [ portuguese_brazilian ] =
         {
             < "Original" ; Default ; > ;
-            < "1Bit - Schwellenwert" ; Default ; > ;
-            < "1Bit - Gedithert" ; Default ; > ;
-            < "4Bit - Graustufenpalette" ; Default ; > ;
-            < "4Bit - Farbpalette" ; Default ; > ;
-            < "8Bit - Graustufenpalette" ; Default ; > ;
-            < "8Bit - Farbpalette" ; Default ; > ;
-            < "24Bit - Echtfarben" ; Default ; > ;
+            < "Valor limite de 1 Bit" ; Default ; > ;
+            < "Dithering de 1 Bit" ; Default ; > ;
+            < "Tons de Cinza de 4 Bits" ; Default ; > ;
+            < "Paleta de Cores de 4 Bits." ; Default ; > ;
+            < "Tons de Cinza de 8 Bits" ; Default ; > ;
+            < "Paleta de Cores de 8 Bits." ; Default ; > ;
+            < "Cores Reais de 24 Bits" ; Default ; > ;
         };
         stringlist [ swedish ] =
         {
@@ -251,13 +254,13 @@ ModalDialog DLG_EXPORT_PIX
     StringList [ polish ] =
     {
             < "Orygina�" ; Default ; > ;
-        < "Warto�� progowa - 1bit" ; Default ; > ;
-        < "Rozsiewanie - 1 bit" ; Default ; > ;
-        < "Paleta odcieni szaro�ci - 4bity" ; Default ; > ;
-        < "Paleta kolor�w - 4bity" ; Default ; > ;
-        < "Paleta odcieni szaro�ci - 8bit�w" ; Default ; > ;
-        < "Paleta kolor�w - 8bit�w" ; Default ; > ;
-        < "True Color - 24bity" ; Default ; > ;
+        < "Warto�� progowa 1-bitowa" ; Default ; > ;
+        < "Rozsiewanie 1-bitowe" ; Default ; > ;
+        < "4-bitowa paleta odcieni szaro�ci" ; Default ; > ;
+        < "4-bitowa paleta kolor�w" ; Default ; > ;
+        < "8-bitowa paleta odcieni szaro�ci" ; Default ; > ;
+        < "8-bitowa paleta kolor�w" ; Default ; > ;
+        < "True Colors 24 bity" ; Default ; > ;
     };
     StringList [ japanese ] =
     {
@@ -369,6 +372,39 @@ ModalDialog DLG_EXPORT_PIX
         < "8 บิท - จานสี" ; Default ; > ;
         < "24 บิท - สีจริง" ; Default ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "Původní" ; Default ; > ;
+        < "1 bit - prahová hodnota" ; Default ; > ;
+        < "1 bit - dithering" ; Default ; > ;
+        < "4 bity - odstíny šedi" ; Default ; > ;
+        < "4 bity - barevná paleta" ; Default ; > ;
+        < "8 bitů - odstíny šedi" ; Default ; > ;
+        < "8 bitů - barevná paleta" ; Default ; > ;
+        < "24 bitů - pravé barvy" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "‮מקורי‬" ; Default ; > ;
+        < "‮ערך סף של סיבית אחת‬" ; Default ; > ;
+        < "‮גיוונון - 1 סיבית‬" ; Default ; > ;
+        < "‮סולם האפור - 4 סיבית‬" ; Default ; > ;
+        < "‮לוח צבע - 4 סיבית‬" ; Default ; > ;
+        < "‮סולם האפור - 8 סיבית‬" ; Default ; > ;
+        < "‮לוח צבע - 8 סיבית‬" ; Default ; > ;
+        < "‮צבע אמיתי 24 סיבית‬" ; Default ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "यथार्थ" ; Default ; > ;
+        < "1Bit - त्रेशोल्ड़ मूल्य" ; Default ; > ;
+        < "1Bit - Gedithert" ; Default ; > ;
+        < "4Bit - Graustufenpalette" ; Default ; > ;
+        < "4Bit - Farbpalette" ; Default ; > ;
+        < "8Bit - Graustufenpalette" ; Default ; > ;
+        < "8Bit - Farbpalette" ; Default ; > ;
+        < "24Bit - Echtfarben" ; Default ; > ;
+    };
     };
     CheckBox CBX_RLE
     {
@@ -378,7 +414,7 @@ ModalDialog DLG_EXPORT_PIX
         Text = "RLE-Kodierung" ;
         Text [ ENGLISH ] = "RLE-Coding" ;
         Text [ english_us ] = "RLE coding" ;
-        Text [ portuguese_brazilian ] = "RLE-Kodierung" ;
+        Text [ portuguese_brazilian ] = "Codifica��o RLE" ;
         Text [ swedish ] = "RLE-kodning" ;
         Text [ danish ] = "RLE-kodning" ;
         Text [ italian ] = "Codifica RLE" ;
@@ -399,6 +435,9 @@ ModalDialog DLG_EXPORT_PIX
         Text[ catalan ] = "Codificaci� RLE";
         Text[ finnish ] = "RLE-koodaus";
         Text[ thai ] = "การเข้ารหัส RLE ";
+        Text[ czech ] = "RLE kódování";
+        Text[ hebrew ] = "‮קידוד ‬RLE";
+        Text[ hindi ] = "RLE कोड़िंग";
     };
     FixedLine GRP_MODE_PIX
     {
@@ -414,7 +453,7 @@ ModalDialog DLG_EXPORT_PIX
         Text [ swedish ] = "L�ge" ;
         Text [ danish ] = "Modus" ;
         Text [ portuguese ] = "Modo" ;
-        Text [ portuguese_brazilian ] = "Modus" ;
+        Text [ portuguese_brazilian ] = "Modo" ;
         Text[ chinese_simplified ] = "模式";
         Text[ russian ] = "�����";
         Text[ polish ] = "Tryb";
@@ -428,6 +467,9 @@ ModalDialog DLG_EXPORT_PIX
         Text[ catalan ] = "Mode";
         Text[ finnish ] = "Tila";
         Text[ thai ] = "โหมด";
+        Text[ czech ] = "Režim";
+        Text[ hebrew ] = "‮מצב עבודה‬";
+        Text[ hindi ] = "प्रकार";
     };
     RadioButton RB_ORIGINAL_PIX
     {
@@ -447,7 +489,7 @@ ModalDialog DLG_EXPORT_PIX
         Text [ portuguese_brazilian ] = "~Original" ;
         Text[ chinese_simplified ] = "原件(~O)";
         Text[ russian ] = "�������� �����";
-        Text[ polish ] = "Orygina�";
+        Text[ polish ] = "~Orygina�";
         Text[ japanese ] = "オリジナル(~O)";
         Text[ chinese_traditional ] = "原件(~O)";
         Text[ arabic ] = "�����";
@@ -458,6 +500,9 @@ ModalDialog DLG_EXPORT_PIX
         Text[ catalan ] = "~Original";
         Text[ finnish ] = "~Alkuper�inen";
         Text[ thai ] = "~ต้นฉบับ";
+        Text[ czech ] = "Původní";
+        Text[ hebrew ] = "‮מקורי‬";
+        Text[ hindi ] = "~यथार्थ";
     };
     RadioButton RB_RES_PIX
     {
@@ -474,10 +519,10 @@ ModalDialog DLG_EXPORT_PIX
         Text [ swedish ] = "~Uppl�sning" ;
         Text [ danish ] = "Opl�sning" ;
         Text [ portuguese ] = "~Resolu��o" ;
-        Text [ portuguese_brazilian ] = "~Aufl?ung" ;
+        Text [ portuguese_brazilian ] = "~Resolu��o" ;
         Text[ chinese_simplified ] = "分辨率(~R)";
         Text[ russian ] = "����������";
-        Text[ polish ] = "Rozdzielczo��";
+        Text[ polish ] = "Rozdziel~czo��";
         Text[ japanese ] = "解像度(~R)";
         Text[ chinese_traditional ] = "解析度(~R)";
         Text[ arabic ] = "���������";
@@ -488,6 +533,9 @@ ModalDialog DLG_EXPORT_PIX
         Text[ catalan ] = "~Resoluci�";
         Text[ finnish ] = "~Tarkkuus";
         Text[ thai ] = "~ความละเอียด";
+        Text[ czech ] = "Rozlišení";
+        Text[ hebrew ] = "‮רזולוציה‬";
+        Text[ hindi ] = "~Resolution";
     };
     ComboBox CBB_RES_PIX
     {
@@ -518,10 +566,10 @@ ModalDialog DLG_EXPORT_PIX
         Text [ swedish ] = "~Storlek" ;
         Text [ danish ] = "St�rrelse" ;
         Text [ portuguese ] = "~Tamanho" ;
-        Text [ portuguese_brazilian ] = "~Gr?e" ;
+        Text [ portuguese_brazilian ] = "~Tamanho" ;
         Text[ chinese_simplified ] = "大小(~S)";
         Text[ russian ] = "������";
-        Text[ polish ] = "Rozmiar";
+        Text[ polish ] = "~Rozmiar";
         Text[ japanese ] = "サイズ(~S)";
         Text[ chinese_traditional ] = "大小(~S)";
         Text[ arabic ] = "�����";
@@ -532,6 +580,9 @@ ModalDialog DLG_EXPORT_PIX
         Text[ catalan ] = "~Mida";
         Text[ finnish ] = "~Koko";
         Text[ thai ] = "~ขนาด";
+        Text[ czech ] = "Velikost";
+        Text[ hebrew ] = "‮גודל‬";
+        Text[ hindi ] = "~परिमाण";
     };
     MetricField MTF_SIZEX_PIX
     {
@@ -563,11 +614,11 @@ ModalDialog DLG_EXPORT_PIX
         Text [ dutch ] = "Breedte" ;
         Text [ swedish ] = "Bredd" ;
         Text [ danish ] = "Bredde" ;
-        Text [ portuguese_brazilian ] = "Breite" ;
+        Text [ portuguese_brazilian ] = "Largura" ;
         Text [ portuguese ] = "Largura" ;
         Text[ chinese_simplified ] = "宽度";
         Text[ russian ] = "������";
-        Text[ polish ] = "Szer.";
+        Text[ polish ] = "Szeroko��";
         Text[ japanese ] = "幅";
         Text[ chinese_traditional ] = "寬度";
         Text[ arabic ] = "�����";
@@ -578,6 +629,9 @@ ModalDialog DLG_EXPORT_PIX
         Text[ catalan ] = "Amplada";
         Text[ finnish ] = "Leveys";
         Text[ thai ] = "ความกว้าง";
+        Text[ czech ] = "Šířka";
+        Text[ hebrew ] = "‮רוחב‬";
+        Text[ hindi ] = "चौड़ाई";
     };
     MetricField MTF_SIZEY_PIX
     {
@@ -610,10 +664,10 @@ ModalDialog DLG_EXPORT_PIX
         Text [ swedish ] = "H�jd" ;
         Text [ danish ] = "H�jde" ;
         Text [ portuguese ] = "Altura" ;
-        Text [ portuguese_brazilian ] = "H?e" ;
+        Text [ portuguese_brazilian ] = "Altura" ;
         Text[ chinese_simplified ] = "高度";
         Text[ russian ] = "������";
-        Text[ polish ] = "Wys.";
+        Text[ polish ] = "Wysoko��";
         Text[ japanese ] = "高さ";
         Text[ chinese_traditional ] = "高度";
         Text[ arabic ] = "��������";
@@ -624,6 +678,9 @@ ModalDialog DLG_EXPORT_PIX
         Text[ catalan ] = "Altura";
         Text[ finnish ] = "Korkeus";
         Text[ thai ] = "ความสูง";
+        Text[ czech ] = "Výška";
+        Text[ hebrew ] = "‮גובה‬";
+        Text[ hindi ] = "ऊँचाई";
     };
     OKButton BTN_OK_PIX
     {
@@ -666,7 +723,7 @@ ModalDialog DLG_EXPORT_VEC
         Text [ french ] = "Mode" ;
         Text [ swedish ] = "L�ge" ;
         Text [ danish ] = "Modus" ;
-        Text [ portuguese_brazilian ] = "Modus" ;
+        Text [ portuguese_brazilian ] = "Modo" ;
         Text [ portuguese ] = "Modo" ;
         Text[ chinese_simplified ] = "模式";
         Text[ russian ] = "�����";
@@ -681,6 +738,9 @@ ModalDialog DLG_EXPORT_VEC
         Text[ catalan ] = "Mode";
         Text[ finnish ] = "Tila";
         Text[ thai ] = "โหมด";
+        Text[ czech ] = "Režim";
+        Text[ hebrew ] = "‮מצב עבודה‬";
+        Text[ hindi ] = "प्रकार";
     };
     RadioButton RB_ORIGINAL_VEC
     {
@@ -700,7 +760,7 @@ ModalDialog DLG_EXPORT_VEC
         Text [ portuguese ] = "~Original" ;
         Text[ chinese_simplified ] = "原件(~O)";
         Text[ russian ] = "�������� ������";
-        Text[ polish ] = "Orygina�";
+        Text[ polish ] = "~Orygina�";
         Text[ japanese ] = "オリジナル(~O)";
         Text[ chinese_traditional ] = "原件(~O)";
         Text[ arabic ] = "�����";
@@ -711,6 +771,9 @@ ModalDialog DLG_EXPORT_VEC
         Text[ catalan ] = "~Original";
         Text[ finnish ] = "~Alkuper�inen";
         Text[ thai ] = "~ต้นฉบับ";
+        Text[ czech ] = "Originál";
+        Text[ hebrew ] = "‮מקורי‬";
+        Text[ hindi ] = "~यथार्थ";
     };
     RadioButton RB_SIZE_VEC
     {
@@ -726,11 +789,11 @@ ModalDialog DLG_EXPORT_VEC
         Text [ french ] = "Taille" ;
         Text [ swedish ] = "~Storlek" ;
         Text [ danish ] = "St�rrelse" ;
-        Text [ portuguese_brazilian ] = "~Gr?e" ;
+        Text [ portuguese_brazilian ] = "~Tamanho" ;
         Text [ portuguese ] = "~Tamanho" ;
         Text[ chinese_simplified ] = "大小(~S)";
         Text[ russian ] = "������";
-        Text[ polish ] = "Rozmiar";
+        Text[ polish ] = "~Rozmiar";
         Text[ japanese ] = "サイズ(~S)";
         Text[ chinese_traditional ] = "大小(~S)";
         Text[ arabic ] = "�����";
@@ -741,6 +804,9 @@ ModalDialog DLG_EXPORT_VEC
         Text[ catalan ] = "~Mida";
         Text[ finnish ] = "~Koko";
         Text[ thai ] = "~ขนาด";
+        Text[ czech ] = "Velikost";
+        Text[ hebrew ] = "‮גודל‬";
+        Text[ hindi ] = "~परिमाण";
     };
     FixedLine GRP_SIZE_VEC
     {
@@ -755,7 +821,7 @@ ModalDialog DLG_EXPORT_VEC
         Text [ french ] = "Taille" ;
         Text [ swedish ] = "Storlek" ;
         Text [ danish ] = "St�rrelse" ;
-        Text [ portuguese_brazilian ] = "Gr��e" ;
+        Text [ portuguese_brazilian ] = "Tamanho" ;
         Text [ portuguese ] = "Tamanho" ;
         Text[ chinese_simplified ] = "大小";
         Text[ russian ] = "������";
@@ -765,11 +831,14 @@ ModalDialog DLG_EXPORT_VEC
         Text[ arabic ] = "�����";
         Text[ greek ] = "�������";
         Text[ korean ] = "크기";
-        Text[ turkish ] = "B�y�kl�k";
+        Text[ turkish ] = "Boyut";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Mida";
         Text[ finnish ] = "Koko";
         Text[ thai ] = "ขนาด";
+        Text[ czech ] = "Velikost";
+        Text[ hebrew ] = "‮גודל‬";
+        Text[ hindi ] = "परिमाण";
     };
     FixedText FT_SIZEX_VEC
     {
@@ -785,10 +854,10 @@ ModalDialog DLG_EXPORT_VEC
         Text [ swedish ] = "Bredd" ;
         Text [ danish ] = "Bredde" ;
         Text [ portuguese ] = "Largura" ;
-        Text [ portuguese_brazilian ] = "Breite" ;
+        Text [ portuguese_brazilian ] = "Largura" ;
         Text[ chinese_simplified ] = "宽度";
         Text[ russian ] = "������";
-        Text[ polish ] = "Szer.";
+        Text[ polish ] = "Szeroko��";
         Text[ japanese ] = "幅";
         Text[ chinese_traditional ] = "寬度";
         Text[ arabic ] = "�����";
@@ -799,6 +868,9 @@ ModalDialog DLG_EXPORT_VEC
         Text[ catalan ] = "Amplada";
         Text[ finnish ] = "Leveys";
         Text[ thai ] = "ความกว้าง";
+        Text[ czech ] = "Šířka";
+        Text[ hebrew ] = "‮רוחב‬";
+        Text[ hindi ] = "चौड़ाई";
     };
     MetricField MTF_SIZEX_VEC
     {
@@ -830,11 +902,11 @@ ModalDialog DLG_EXPORT_VEC
         Text [ dutch ] = "Hoogte" ;
         Text [ swedish ] = "H�jd" ;
         Text [ danish ] = "H�jde" ;
-        Text [ portuguese_brazilian ] = "H?e" ;
+        Text [ portuguese_brazilian ] = "Altura" ;
         Text [ portuguese ] = "Altura" ;
         Text[ chinese_simplified ] = "高度";
         Text[ russian ] = "������";
-        Text[ polish ] = "Wys.";
+        Text[ polish ] = "Wysoko��";
         Text[ japanese ] = "高さ";
         Text[ chinese_traditional ] = "高度";
         Text[ arabic ] = "��������";
@@ -845,6 +917,9 @@ ModalDialog DLG_EXPORT_VEC
         Text[ catalan ] = "Altura";
         Text[ finnish ] = "Korkeus";
         Text[ thai ] = "ความสูง";
+        Text[ czech ] = "Výška";
+        Text[ hebrew ] = "‮גובה‬";
+        Text[ hindi ] = "ऊँचाई";
     };
     MetricField MTF_SIZEY_VEC
     {
@@ -883,6 +958,19 @@ ModalDialog DLG_EXPORT_VEC
         TabStop = TRUE ;
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
