@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:31:07 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -638,22 +638,20 @@ static BOOL AddUNICODEString( ByteString& rStr, XclImpStream& rStrm, const BOOL 
         rStr += " format blocks (";
         nCrun *= 4;
         __AddDec( rStr, nCrun );
-        rStr += " Bytes)";
+        rStr += " bytes)";
+        rStrm.Ignore( nCrun );
     }
     if( nExtLen )
     {
         rStr += " + ";
         __AddDec( rStr, nExtLen );
-        rStr += " Byte extended info";
+        rStr += " byte extended:";
+        for( sal_uInt32 nIdx = 0; rStrm.IsValid() && (nIdx < nExtLen); ++nIdx )
+        {
+            rStr.Append( ' ' );
+            __AddPureHex( rStr, rStrm.ReaduInt8() );
+        }
     }
-
-    if( nSeek > 2048 )
-    {
-        rStr += " (Gruetze!)";
-        bRet = FALSE;
-    }
-
-    rStrm.SkipUniStringExtData( nSeek );
 
     return bRet;
 }
