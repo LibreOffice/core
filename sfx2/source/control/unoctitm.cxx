@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-15 11:10:35 $
+ *  last change: $Author: mba $ $Date: 2002-08-30 09:46:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,8 +518,8 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
             pDispatcher = GetBindings().GetDispatcher_Impl();
 
         // Try to find call mode and frame name inside given arguments...
-        SfxCallMode nCall         = SFX_CALLMODE_SYNCHRON;
-        sal_Int32   nFileNameArg  = -1               ;
+        SfxCallMode nCall = SFX_CALLMODE_SYNCHRON;
+        sal_Int32   nMarkArg = -1;
 
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > lNewArgs( aArgs );
         sal_Int32 nCount = lNewArgs.getLength();
@@ -527,37 +527,27 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         for( sal_Int32 n=0; n<nCount; n++ )
         {
             const ::com::sun::star::beans::PropertyValue& rProp = lNewArgs[n];
-            if( rProp.Name.compareToAscii("SynchronMode")== 0 && ( rProp.Value >>=bTemp ) )
+            if( rProp.Name.compareToAscii("SynchronMode")== 0 )
             {
-                nCall = bTemp ? SFX_CALLMODE_SYNCHRON : SFX_CALLMODE_ASYNCHRON;
+                if( rProp.Value >>=bTemp )
+                    nCall = bTemp ? SFX_CALLMODE_SYNCHRON : SFX_CALLMODE_ASYNCHRON;
             }
-            else if( rProp.Name.compareToAscii("FileName")== 0 )
-                nFileNameArg = n;
+            else if( rProp.Name.compareToAscii("Bookmark")== 0 )
+                nMarkArg = n;
         }
 
         // Overwrite possible detected sychron argument, if real listener exist!
         if ( rListener.is() )
             nCall = SFX_CALLMODE_SYNCHRON;
 
-        // Special mode for dispatch of full qualified ... but relativ meaned URL's.
-        // Then we set jump mark as pure file name in argument list ...
-        if( GetId() == SID_JUMPTOMARK )
+        if( GetId() == SID_JUMPTOMARK && nMarkArg == - 1 )
         {
-            // We must map ID to OpenDoc here ... because
-            // We must open this relativ URL!
-            pBindings->ENTERREGISTRATIONS();
-            UnBind();
-            Bind( SID_OPENDOC, pBindings );
-            pBindings->LEAVEREGISTRATIONS();
-            if( nFileNameArg == - 1 )
-            {
-                lNewArgs.realloc( lNewArgs.getLength()+1 );
-                nFileNameArg = lNewArgs.getLength()-1;
-            }
-            ::rtl::OUString sTemp(RTL_CONSTASCII_USTRINGPARAM("#"));
-                            sTemp += aURL.Mark;
-            lNewArgs[nFileNameArg].Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FileName"));
-            lNewArgs[nFileNameArg].Value <<= sTemp;
+            // we offer dispatches for SID_JUMPTOMARK if the URL points to a bookmark inside the document
+            // so we must retrieve this as an argument from the parsed URL
+            lNewArgs.realloc( lNewArgs.getLength()+1 );
+            nMarkArg = lNewArgs.getLength()-1;
+            lNewArgs[nMarkArg].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Bookmark"));
+            lNewArgs[nMarkArg].Value <<= aURL.Mark;
         }
 
         sal_Bool bSuccess = sal_False;
