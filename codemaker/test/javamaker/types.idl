@@ -1,0 +1,323 @@
+/*************************************************************************
+ *
+ *  $RCSfile: types.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:54:45 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "com/sun/star/lang/ClassNotFoundException.idl"
+#include "com/sun/star/lang/IllegalAccessException.idl"
+#include "com/sun/star/lang/Locale.idl"
+#include "com/sun/star/uno/DeploymentException.idl"
+#include "com/sun/star/uno/Exception.idl"
+#include "com/sun/star/uno/RuntimeException.idl"
+#include "com/sun/star/uno/XInterface.idl"
+#include "com/sun/star/uno/XNamingService.idl"
+
+module test { module codemaker { module javamaker {
+
+interface XTest {
+    boolean test();
+
+    [attribute, bound] long A1;
+    [attribute, bound, readonly] long A2;
+    [attribute] long A3 {
+        get raises
+            (com::sun::star::uno::Exception,
+             com::sun::star::lang::ClassNotFoundException);
+        set raises (com::sun::star::uno::RuntimeException);
+    };
+    [attribute, readonly] long A4 {
+        get raises (com::sun::star::uno::DeploymentException);
+    };
+};
+
+typedef boolean Boolean;
+typedef byte Byte;
+typedef short Short;
+typedef unsigned short UnsignedShort;
+typedef long Long;
+typedef unsigned long UnsignedLong;
+typedef hyper Hyper;
+typedef unsigned hyper UnsignedHyper;
+typedef float Float;
+typedef double Double;
+typedef char Char;
+typedef string String;
+typedef type Type;
+typedef any Any;
+typedef com::sun::star::lang::Locale Locale;
+typedef com::sun::star::uno::XInterface XInterface;
+typedef com::sun::star::uno::XNamingService XNamingService;
+
+typedef sequence< Boolean > SequenceBoolean;
+typedef sequence< Byte > SequenceByte;
+typedef sequence< Short > SequenceShort;
+typedef sequence< UnsignedShort > SequenceUnsignedShort;
+typedef sequence< Long > SequenceLong;
+typedef sequence< UnsignedLong > SequenceUnsignedLong;
+typedef sequence< Hyper > SequenceHyper;
+typedef sequence< UnsignedHyper > SequenceUnsignedHyper;
+typedef sequence< Float > SequenceFloat;
+typedef sequence< Double > SequenceDouble;
+typedef sequence< Char > SequenceChar;
+typedef sequence< String > SequenceString;
+typedef sequence< Type > SequenceType;
+typedef sequence< Any > SequenceAny;
+typedef sequence< Locale > SequenceLocale;
+typedef sequence< XInterface > SequenceXInterface;
+typedef sequence< XNamingService > SequenceXNamingService;
+
+service S1: XTest {
+    create1();
+
+    create2([in] any... create2)
+        raises (com::sun::star::uno::RuntimeException,
+                com::sun::star::lang::ClassNotFoundException,
+                com::sun::star::uno::Exception,
+                com::sun::star::lang::IllegalAccessException,
+                com::sun::star::uno::DeploymentException);
+
+    create3([in] sequence<any> S1)
+        raises (com::sun::star::uno::RuntimeException,
+                com::sun::star::lang::ClassNotFoundException,
+                com::sun::star::lang::IllegalAccessException,
+                com::sun::star::uno::DeploymentException);
+
+    create4([in] long javamaker, [in] long S1, [in] long create4);
+
+    create5(
+        [in] boolean p1,
+        [in] byte p2,
+        [in] short p3,
+        [in] unsigned short p4,
+        [in] long p5,
+        [in] unsigned long p6,
+        [in] hyper p7,
+        [in] unsigned hyper p8,
+        [in] float p9,
+        [in] double p10,
+        [in] char p11,
+        [in] string p12,
+        [in] type p13,
+        [in] any p14,
+        [in] com::sun::star::lang::Locale p15,
+        [in] com::sun::star::uno::XInterface p16,
+        [in] com::sun::star::uno::XNamingService p17,
+        [in] Boolean t1,
+        [in] Byte t2,
+        [in] Short t3,
+        [in] UnsignedShort t4,
+        [in] Long t5,
+        [in] UnsignedLong t6,
+        [in] Hyper t7,
+        [in] UnsignedHyper t8,
+        [in] Float t9,
+        [in] Double t10,
+        [in] Char t11,
+        [in] String t12,
+        [in] Type t13,
+        [in] Any t14,
+        [in] Locale t15,
+        [in] XInterface t16,
+        [in] XNamingService t17,
+        [in] sequence< sequence< boolean > > a1,
+        [in] sequence< sequence< byte > > a2,
+        [in] sequence< sequence< short > > a3,
+        [in] sequence< sequence< unsigned short > > a4,
+        [in] sequence< sequence< long > > a5,
+        [in] sequence< sequence< unsigned long > > a6,
+        [in] sequence< sequence< hyper > > a7,
+        [in] sequence< sequence< unsigned hyper > > a8,
+        [in] sequence< sequence< float > > a9,
+        [in] sequence< sequence< double > > a10,
+        [in] sequence< sequence< char > > a11,
+        [in] sequence< sequence< string > > a12,
+        [in] sequence< sequence< type > > a13,
+        [in] sequence< sequence< any > > a14,
+        [in] sequence< sequence< com::sun::star::lang::Locale > > a15,
+        [in] sequence< sequence< com::sun::star::uno::XInterface > > a16,
+        [in] sequence< sequence<
+            com::sun::star::uno::XNamingService > > a17,
+        [in] sequence< SequenceBoolean > at1,
+        [in] sequence< SequenceByte > at2,
+        [in] sequence< SequenceShort > at3,
+        [in] sequence< SequenceUnsignedShort > at4,
+        [in] sequence< SequenceLong > at5,
+        [in] sequence< SequenceUnsignedLong > at6,
+        [in] sequence< SequenceHyper > at7,
+        [in] sequence< SequenceUnsignedHyper > at8,
+        [in] sequence< SequenceFloat > at9,
+        [in] sequence< SequenceDouble > at10,
+        [in] sequence< SequenceChar > at11,
+        [in] sequence< SequenceString > at12,
+        [in] sequence< SequenceType > at13,
+        [in] sequence< SequenceAny > at14,
+        [in] sequence< SequenceLocale > at15,
+        [in] sequence< SequenceXInterface > at16,
+        [in] sequence< SequenceXNamingService > at17);
+
+    abstract([in] long abstract);
+    assert([in] long assert);
+    //TODO: boolean([in] long boolean);
+    break([in] long break);
+    //TODO: byte([in] long byte);
+    //TODO: case([in] long case);
+    catch([in] long catch);
+    //TODO: char([in] long char);
+    class([in] long class);
+    //TODO: const([in] long const);
+    continue([in] long continue);
+    //TODO: default([in] long default);
+    do([in] long do);
+    //TODO: double([in] long double);
+    else([in] long else);
+    //TODO: enum([in] long enum);
+    extends([in] long extends);
+    final([in] long final);
+    finally([in] long finally);
+    //TODO: float([in] long float);
+    for([in] long for);
+    goto([in] long goto);
+    if([in] long if);
+    implements([in] long implements);
+    import([in] long import);
+    instanceof([in] long instanceof);
+    int([in] long int);
+    //TODO: interface([in] long interface);
+    //TODO: long([in] long long);
+    native([in] long native);
+    new([in] long new);
+    package([in] long package);
+    private([in] long private);
+    protected([in] long protected);
+    public([in] long public);
+    return([in] long return);
+    //TODO: short([in] long short);
+    static([in] long static);
+    strictfp([in] long strictfp);
+    super([in] long super);
+    //TODO: switch([in] long switch);
+    synchronized([in] long synchronized);
+    this([in] long this);
+    throw([in] long throw);
+    throws([in] long throws);
+    //TODO: transient([in] long transient);
+    try([in] long try);
+    //TODO: void([in] long void);
+    volatile([in] long volatile);
+    while([in] long while);
+};
+
+service S2: XTest;
+
+service S3 { interface XTest; };
+
+singleton S4 { service S2; };
+
+singleton abstract: com::sun::star::uno::XNamingService;
+singleton assert: com::sun::star::uno::XNamingService;
+//TODO: singleton boolean: com::sun::star::uno::XNamingService;
+singleton break: com::sun::star::uno::XNamingService;
+//TODO: singleton byte: com::sun::star::uno::XNamingService;
+//TODO: singleton case: com::sun::star::uno::XNamingService;
+singleton catch: com::sun::star::uno::XNamingService;
+//TODO: singleton char: com::sun::star::uno::XNamingService;
+singleton class: com::sun::star::uno::XNamingService;
+//TODO: singleton const: com::sun::star::uno::XNamingService;
+singleton continue: com::sun::star::uno::XNamingService;
+//TODO: singleton default: com::sun::star::uno::XNamingService;
+singleton do: com::sun::star::uno::XNamingService;
+//TODO: singleton double: com::sun::star::uno::XNamingService;
+singleton else: com::sun::star::uno::XNamingService;
+//TODO: singleton enum: com::sun::star::uno::XNamingService;
+singleton extends: com::sun::star::uno::XNamingService;
+singleton final: com::sun::star::uno::XNamingService;
+singleton finally: com::sun::star::uno::XNamingService;
+//TODO: singleton float: com::sun::star::uno::XNamingService;
+singleton for: com::sun::star::uno::XNamingService;
+singleton goto: com::sun::star::uno::XNamingService;
+singleton if: com::sun::star::uno::XNamingService;
+singleton implements: com::sun::star::uno::XNamingService;
+singleton import: com::sun::star::uno::XNamingService;
+singleton instanceof: com::sun::star::uno::XNamingService;
+singleton int: com::sun::star::uno::XNamingService;
+//TODO: singleton interface: com::sun::star::uno::XNamingService;
+//TODO: singleton long: com::sun::star::uno::XNamingService;
+singleton native: com::sun::star::uno::XNamingService;
+singleton new: com::sun::star::uno::XNamingService;
+singleton package: com::sun::star::uno::XNamingService;
+singleton private: com::sun::star::uno::XNamingService;
+singleton protected: com::sun::star::uno::XNamingService;
+singleton public: com::sun::star::uno::XNamingService;
+singleton return: com::sun::star::uno::XNamingService;
+//TODO: singleton short: com::sun::star::uno::XNamingService;
+singleton static: com::sun::star::uno::XNamingService;
+singleton strictfp: com::sun::star::uno::XNamingService;
+singleton super: com::sun::star::uno::XNamingService;
+//TODO: singleton switch: com::sun::star::uno::XNamingService;
+singleton synchronized: com::sun::star::uno::XNamingService;
+singleton this: com::sun::star::uno::XNamingService;
+singleton throw: com::sun::star::uno::XNamingService;
+singleton throws: com::sun::star::uno::XNamingService;
+//TODO: singleton transient: com::sun::star::uno::XNamingService;
+singleton try: com::sun::star::uno::XNamingService;
+//TODO: singleton void: com::sun::star::uno::XNamingService;
+singleton volatile: com::sun::star::uno::XNamingService;
+singleton while: com::sun::star::uno::XNamingService;
+
+}; }; };
