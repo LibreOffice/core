@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-04 17:08:54 $
+ *  last change: $Author: fs $ $Date: 2002-04-03 10:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,10 +588,15 @@ void FormattedField::SetDecimalDigits(USHORT _nPrecision)
 }
 
 //------------------------------------------------------------------------------
-void FormattedField::FormatChanged(FORMAT_CHANGE_TYPE /*nWhat*/)
+void FormattedField::FormatChanged( FORMAT_CHANGE_TYPE _nWhat )
 {
     DBG_CHKTHIS(FormattedField, NULL);
     m_pLastOutputColor = NULL;
+
+    if ( 0 != ( _nWhat & FCT_FORMATTER ) )
+        m_pFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_INTL_FORMAT );
+        // 95845 - 03.04.2002 - fs@openoffice.org
+
     ReFormat();
 }
 
