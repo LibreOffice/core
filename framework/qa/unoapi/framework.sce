@@ -1,0 +1,17 @@
+-o fwk.DispatchRecorder
+-o fwk.DispatchRecorderSupplier
+-o fwk.DocumentProperties
+-o fwk.Frame
+-o fwk.JobExecutor
+-o fwk.JobHandler
+-o fwk.MailToDispatcher
+-o fwk.ServiceHandler
+-o fwk.SoundHandler
+-o fwk.URLTransformer
+-o fwl.ContentHandlerFactory
+-o fwl.FilterFactory
+-o fwl.FrameLoaderFactory
+-o fwl.SubstituteVariables
+-o fwl.TypeDetection
+-o fwl.PathSettings
+-o fwk.Desktop
