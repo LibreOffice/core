@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dl $ $Date: 2001-05-28 07:40:41 $
+ *  last change: $Author: dl $ $Date: 2001-05-29 09:05:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,6 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
 
     if (!pArgs)
     {
-//      SfxFileDialog       aFileDialog( pWin, SFXWB_INSERT | WB_3DLOOK | WB_STDMODAL );
         sfx2::FileDialogHelper aFileDialog( WB_OPEN | SFXWB_INSERT | WB_STDMODAL );
         Reference< XFilePicker > xFilePicker( aFileDialog.GetFilePicker(), UNO_QUERY );
         Reference< XFilterManager > xFilterManager( xFilePicker, UNO_QUERY );
