@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-17 16:19:22 $
+#   last change: $Author: hr $ $Date: 2004-12-10 18:00:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,9 +77,6 @@ RSCDEFS+=-DOOO_VENDOR="$(USER)$(USERNAME)" -DOOO_LICENSE="LGPL"
 .ELSE
 RSCDEFS+=-DBUILD_SPECIAL=True
 .ENDIF
-
-.INCLUDE :  $(UPD)minor.mk
-RSCUPDVER=$(RSCREVISION)
 
 # --- Allgemein -----------------------------------------------------------
 
