@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:43:23 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:27:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,7 @@ const SfxItemPropertyMap* GetNumberingRulesMap()
         { SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC),              WID_IS_AUTOMATIC,   &::getBooleanCppuType(),            PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_IS_CONTINUOUS_NUMBERING),   WID_CONTINUOUS,     &::getBooleanCppuType(),            PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_NAME),                      WID_RULE_NAME   ,   &::getCppuType((const OUString*)0), PropertyAttribute::READONLY,     0},
+        { SW_PROP_NAME(UNO_NAME_NUMBERING_IS_OUTLINE),      WID_IS_OUTLINE, &::getBooleanCppuType(),            PROPERTY_NONE,     0},
         {0,0,0,0}
     };
     return aNumberingRulesMap_Impl;
@@ -1732,6 +1733,13 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
             if(nOutLevel == nIndex)
             {
                 sValue = rTxtColl.GetName();
+                break; // the style for the level in question has been found
+            }
+            else if( sValue==rTxtColl.GetName() )
+            {
+                // if the default for the level is existing, but its
+                // level is different, then it cannot be the default.
+                sValue.Erase();
             }
         }
         String aString;
@@ -2216,6 +2224,13 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
         pDocRule ? pDocRule->SetAbsSpaces(bVal) :
             pCreatedRule ? pCreatedRule->SetAbsSpaces(bVal) : pNumRule->SetAbsSpaces(bVal);
     }
+    else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NUMBERING_IS_OUTLINE)))
+    {
+        BOOL bVal = *(sal_Bool*)rValue.getValue();
+        SwNumRuleType eNumRuleType = bVal ? OUTLINE_RULE : NUM_RULE;
+        pDocRule ? pDocRule->SetRuleType(eNumRuleType) :
+            pCreatedRule ? pCreatedRule->SetRuleType(eNumRuleType) : pNumRule->SetRuleType(eNumRuleType);
+    }
     else
         throw UnknownPropertyException();
     if(pDocRule)
@@ -2260,6 +2275,11 @@ Any SwXNumberingRules::getPropertyValue( const OUString& rPropertyName )
     else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_ABSOLUTE_MARGINS)))
     {
         BOOL bVal = pRule->IsAbsSpaces();
+        aRet.setValue(&bVal, ::getBooleanCppuType());
+    }
+    else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NUMBERING_IS_OUTLINE)))
+    {
+        BOOL bVal = pRule->IsOutlineRule();
         aRet.setValue(&bVal, ::getBooleanCppuType());
     }
     else
