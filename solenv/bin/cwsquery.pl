@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsquery.pl,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-12 15:10:57 $
+#   last change: $Author: hr $ $Date: 2004-12-13 17:26:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,7 @@ use Cws;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.3 $ ';
+my $id_str = ' $Revision: 1.4 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -266,7 +266,7 @@ sub usage
 {
     print STDERR "Usage: cwsquery [-h] [-m master] [-c child] <modules|taskIDs|state>\n";
     print STDERR "       cwsquery [-h] [-m master] <latest>\n";
-    print STDERR "Query child workspace for miscancellous information.\n";
+    print STDERR "Query child workspace for miscellaneous information.\n";
     print STDERR "Modes:\n";
     print STDERR "\tmodules\t\tquery modules added to the CWS\n";
     print STDERR "\ttaskids\t\tquery taskids to be handled on the CWS\n";
