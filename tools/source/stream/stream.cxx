@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stream.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mh $ $Date: 2001-07-23 09:01:19 $
+ *  last change: $Author: hr $ $Date: 2001-09-26 17:09:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@ c |= nSwapTmp;
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 #include <stream.hxx>
 #include <osl/thread.h>
+#if defined(min)
+#undef min
+#endif
 #include <algorithm>
 
 // -----------------------------------------------------------------------
