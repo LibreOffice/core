@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:46:37 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 09:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -612,6 +612,11 @@ void SwDoc::InitDrawModel()
         pSdrPool->SetPoolDefaultItem(SdrEdgeNode1VertDistItem(nDefEdgeDist));
         pSdrPool->SetPoolDefaultItem(SdrEdgeNode2HorzDistItem(nDefEdgeDist));
         pSdrPool->SetPoolDefaultItem(SdrEdgeNode2VertDistItem(nDefEdgeDist));
+
+        // #i33700#
+        // Set shadow distance defaults as PoolDefaultItems. Details see bug.
+        pSdrPool->SetPoolDefaultItem(SdrShadowXDistItem((300 * 72) / 127));
+        pSdrPool->SetPoolDefaultItem(SdrShadowYDistItem((300 * 72) / 127));
     }
     SfxItemPool *pEEgPool = EditEngine::CreatePool( FALSE );
     pSdrPool->SetSecondaryPool( pEEgPool );
