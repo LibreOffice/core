@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdocapt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:56:30 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:01:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,23 +240,26 @@ TYPEINIT1(SdrCaptionObj,SdrRectObj);
 SdrCaptionObj::SdrCaptionObj():
     SdrRectObj(OBJ_TEXT),
     aTailPoly(3),  // Default Groesse: 3 Punkte = 2 Linien
-    mbSpecialTextBoxShadow(FALSE)
+    mbSpecialTextBoxShadow(FALSE),
+    mbFixedTail(FALSE)
 {
 }
 
 SdrCaptionObj::SdrCaptionObj(const Rectangle& rRect):
     SdrRectObj(OBJ_TEXT,rRect),
     aTailPoly(3),  // Default Groesse: 3 Punkte = 2 Linien
-    mbSpecialTextBoxShadow(FALSE)
+    mbSpecialTextBoxShadow(FALSE),
+    mbFixedTail(FALSE)
 {
 }
 
 SdrCaptionObj::SdrCaptionObj(const Rectangle& rRect, const Point& rTail):
     SdrRectObj(OBJ_TEXT,rRect),
     aTailPoly(3),  // Default Groesse: 3 Punkte = 2 Linien
-    mbSpecialTextBoxShadow(FALSE)
+    mbSpecialTextBoxShadow(FALSE),
+    mbFixedTail(FALSE)
 {
-    aTailPoly[0]=rTail;
+    aTailPoly[0]=maFixedTailPos=rTail;
 }
 
 SdrCaptionObj::~SdrCaptionObj()
@@ -757,6 +760,8 @@ void SdrCaptionObj::NbcMove(const Size& rSiz)
 {
     SdrRectObj::NbcMove(rSiz);
     MovePoly(aTailPoly,rSiz);
+    if(mbFixedTail)
+        SetTailPos(GetFixedTailPos());
 }
 
 void SdrCaptionObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
@@ -764,6 +769,8 @@ void SdrCaptionObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fr
     SdrRectObj::NbcResize(rRef,xFact,yFact);
     ResizePoly(aTailPoly,rRef,xFact,yFact);
     ImpRecalcTail();
+    if(mbFixedTail)
+        SetTailPos(GetFixedTailPos());
 }
 
 void SdrCaptionObj::NbcSetRelativePos(const Point& rPnt)
