@@ -2,15 +2,15 @@
  *
  *  $RCSfile: salinst.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-17 03:23:31 $
+ *  last change: $Author: pluby $ $Date: 2000-11-27 01:47:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
- *         - GNU Lesser General Public License Version 2.1
- *         - Sun Industry Standards Source License Version 1.1
+ *       - GNU Lesser General Public License Version 2.1
+ *       - Sun Industry Standards Source License Version 1.1
  *
  *  Sun Microsystems Inc., October, 2000
  *
@@ -65,6 +65,12 @@
 #ifndef _SV_SV_H
 #include <sv.h>
 #endif
+#ifndef _VOS_MUTEX_HXX
+#include <vos/mutex.hxx>
+#endif
+#ifndef _VOS_THREAD_HXX
+#include <vos/thread.hxx>
+#endif
 
 #ifndef _SV_VCLWINDOW_H
 #include <VCLWindow.h>
@@ -72,25 +78,31 @@
 
 #ifdef __cplusplus
 
-#ifdef _VOS_NO_NAMESPACE
-class OMutex;
-#else
-namespace vos { class OMutex; }
-#endif
 class SalYieldMutex;
-class SalInstance;
-class SalFrame;
-class SalObject;
 
 #else // __cplusplus
 
-#define OMutex void
 #define SalYieldMutex void
-#define SalInstance void
-#define SalFrame void
-#define SalObject void
 
 #endif // __cplusplus
+
+// -----------------
+// - SalYieldMutex -
+// -----------------
+
+class SalYieldMutex : public NAMESPACE_VOS(OMutex)
+{
+    ULONG                                       mnCount;
+    NAMESPACE_VOS(OThread)::TThreadIdentifier   mnThreadId;
+
+public:
+                                                SalYieldMutex();
+    virtual void                                acquire();
+    virtual void                                release();
+    virtual sal_Bool                            tryToAcquire();
+    ULONG                                       GetAcquireCount() const { return mnCount; }
+    NAMESPACE_VOS(OThread)::TThreadIdentifier   GetThreadId() const { return mnThreadId; }
+};
 
 // -------------------
 // - SalInstanceData -
@@ -99,16 +111,9 @@ class SalObject;
 struct SalInstanceData
 {
 public:
-    VCLWINDOW           mhComWnd;               // window, for communication (between threads and the main thread)
     void*               mpFilterInst;
     void*               mpFilterCallback;
     SalYieldMutex*      mpSalYieldMutex;        // Sal-Yield-Mutex
-#ifdef _VOS_NO_NAMESPACE
-    OMutex*             mpSalWaitMutex;         // Sal-Wait-Mutex
-#else
-    vos::OMutex*        mpSalWaitMutex;         // Sal-Wait-Mutex
-#endif
-    USHORT              mnYieldWaitCount;       // Wait-Count
 };
 
 #endif // _SV_SALINST_H

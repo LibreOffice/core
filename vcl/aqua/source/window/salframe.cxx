@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-22 02:59:09 $
+ *  last change: $Author: pluby $ $Date: 2000-11-27 01:47:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,8 +129,11 @@ SalFrame::SalFrame()
 
 SalFrame::~SalFrame()
 {
-    ReleaseGraphics( maFrameData.mpGraphics );
-    VCLWindow_Release( maFrameData.mhWnd );
+    if ( maFrameData.mpGraphics )
+        delete maFrameData.mpGraphics;
+
+    if ( maFrameData.mhWnd )
+        VCLWindow_Release( maFrameData.mhWnd );
 }
 
 // -----------------------------------------------------------------------
@@ -174,17 +177,16 @@ SalGraphics* SalFrame::GetGraphics()
 
 // -----------------------------------------------------------------------
 
-void SalFrame::ReleaseGraphics( SalGraphics* )
+void SalFrame::ReleaseGraphics( SalGraphics *pGraphics )
 {
-    if ( maFrameData.mpGraphics )
-        delete maFrameData.mpGraphics;
+    maFrameData.mbGraphics = FALSE;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL SalFrame::PostEvent( void* pData )
+BOOL SalFrame::PostEvent( void *pData )
 {
-    return FALSE;
+    return VCLWindow_PostEvent( maFrameData.mhWnd, pData );
 }
 
 // -----------------------------------------------------------------------

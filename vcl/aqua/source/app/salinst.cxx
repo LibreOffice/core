@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-22 02:43:50 $
+ *  last change: $Author: pluby $ $Date: 2000-11-27 01:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,44 @@ void SetFilterCallback( void* pCallback, void* pInst )
 
 // =======================================================================
 
+SalYieldMutex::SalYieldMutex()
+{
+    mnCount  = 0;
+    mnThreadId  = 0;
+}
+
+void SalYieldMutex::acquire()
+{
+    OMutex::acquire();
+    mnThreadId = NAMESPACE_VOS(OThread)::getCurrentIdentifier();
+    mnCount++;
+}
+
+void SalYieldMutex::release()
+{
+    if ( mnThreadId == NAMESPACE_VOS(OThread)::getCurrentIdentifier() )
+    {
+        if ( mnCount == 1 )
+            mnThreadId = 0;
+        mnCount--;
+    }
+    OMutex::release();
+}
+
+sal_Bool SalYieldMutex::tryToAcquire()
+{
+    if ( OMutex::tryToAcquire() )
+    {
+        mnThreadId = NAMESPACE_VOS(OThread)::getCurrentIdentifier();
+        mnCount++;
+        return True;
+    }
+    else
+        return False;
+}
+
+// =======================================================================
+
 SalInstance* CreateSalInstance()
 {
     SalData* pSalData = GetSalData();
@@ -147,63 +185,80 @@ void DestroySalInstance( SalInstance* pInst )
 
 SalInstance::SalInstance()
 {
+    maInstData.mpFilterCallback = NULL;
+    maInstData.mpFilterInst = NULL;
+    maInstData.mpSalYieldMutex = new SalYieldMutex;
+    maInstData.mpSalYieldMutex->acquire();
 }
 
 // -----------------------------------------------------------------------
 
 SalInstance::~SalInstance()
 {
+    maInstData.mpSalYieldMutex->release();
+    delete maInstData.mpSalYieldMutex;
 }
 
 // -----------------------------------------------------------------------
 
+#ifdef _VOS_NO_NAMESPACE
+IMutex* SalInstance::GetYieldMutex()
+#else
 vos::IMutex* SalInstance::GetYieldMutex()
+#endif
 {
-    return NULL;
+    return maInstData.mpSalYieldMutex;
 }
 
 // -----------------------------------------------------------------------
 
 ULONG SalInstance::ReleaseYieldMutex()
 {
-    return 0;
+    SalYieldMutex* pYieldMutex = maInstData.mpSalYieldMutex;
+    if ( pYieldMutex->GetThreadId() ==
+         NAMESPACE_VOS(OThread)::getCurrentIdentifier() )
+    {
+        ULONG nCount = pYieldMutex->GetAcquireCount();
+        ULONG n = nCount;
+        while ( n )
+        {
+            pYieldMutex->release();
+            n--;
+        }
+
+        return nCount;
+    }
+    else
+        return 0;
 }
 
 // -----------------------------------------------------------------------
 
 void SalInstance::AcquireYieldMutex( ULONG nCount )
 {
+    SalYieldMutex* pYieldMutex = maInstData.mpSalYieldMutex;
+    while ( nCount )
+    {
+        pYieldMutex->acquire();
+        nCount--;
+    }
 }
 
 // -----------------------------------------------------------------------
 
 void SalInstance::Yield( BOOL bWait )
 {
-    ImplSVData* pSVData = ImplGetSVData();
+    ULONG nCount = 0;
 
-    // Check if this is a request from a modal window
-    if ( pSVData->maAppData.mnModalMode )
-    {
-        // If this is a request from a modal window, run a modal session.
-        // Note that VCLApplication_RunModalForWindow will not return until
-        // the modal session has ended.
-        Dialog *pDialog = pSVData->maWinData.mpLastExecuteDlg;
-        if ( pDialog ) {
-            SalFrame *pFrame = pDialog->ImplGetFrame();
-            if ( pFrame && pFrame->maFrameData.mhWnd )
-                VCLApplication_RunModalForWindow( pFrame->maFrameData.mhWnd );
-        }
-    }
-    else
-    {
-        // If this is not a request from a modal window, start the event queue.
-        // Note that VCLApplication_Run will not return until the
-        // application shuts down. On other platforms, this function returns
-        // after each event is pulled off the event queue and dispatched.
-        // Instead, we have enter this method only once and let
-        // VCLApplication_Run do all of the pulling and dispatching of events.
-        VCLApplication_Run();
-    }
+    // Release all locks so that we don't deadlock when we pull pending
+    // events from the event queue
+    nCount = ReleaseYieldMutex();
+
+    // Pull pending events from the event queue and dispatch them.
+    VCLApplication_Run( bWait );
+
+    // Reset all locks
+    AcquireYieldMutex( nCount );
 }
 
 // -----------------------------------------------------------------------
@@ -228,6 +283,9 @@ SalFrame* SalInstance::CreateFrame( SalFrame* pParent, ULONG nSalFrameStyle )
 
     pFrame->maFrameData.mpParent = pParent;
 
+    // Setup up autorelease pool for this window's Objective-C objects
+    pFrame->maFrameData.mhAutoreleasePool = VCLAutoreleasePool_Init();
+
     // Create the native window
     pFrame->maFrameData.mhWnd = VCLWindow_New( nSalFrameStyle, NULL,
         pFrame, &(pFrame->maFrameData) );
@@ -239,6 +297,9 @@ SalFrame* SalInstance::CreateFrame( SalFrame* pParent, ULONG nSalFrameStyle )
 
 void SalInstance::DestroyFrame( SalFrame* pFrame )
 {
+    // Release autorelease pool
+    VCLAutoreleasePool_Release( pFrame->maFrameData.mhAutoreleasePool );
+
     delete ( pFrame );
 }
 
