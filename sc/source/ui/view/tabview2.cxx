@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:18:10 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:55:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/childwin.hxx>
 
+#include "attrib.hxx"
 #include "pagedata.hxx"
 #include "tabview.hxx"
 #include "tabvwsh.hxx"
@@ -91,6 +92,7 @@
 #include "colrowba.hxx"
 #include "waitoff.hxx"
 #include "globstr.hrc"
+#include "scmod.hxx"
 
 #define SC_BLOCKMODE_NONE       0
 #define SC_BLOCKMODE_NORMAL     1
@@ -182,22 +184,25 @@ void ScTabView::InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
         bIsBlockMode = SC_BLOCKMODE_NORMAL;         //! Variable umbenennen!
         bBlockCols = bCols;
         bBlockRows = bRows;
-        nBlockStartX = nCurX;
-        nBlockStartY = nCurY;
+        nBlockStartX = nBlockStartXOrig = nCurX;
+        nBlockStartY = nBlockStartYOrig = nCurY;
         nBlockStartZ = nCurZ;
-        nBlockEndX = nBlockStartX;
-        nBlockEndY = nBlockStartY;
+        nBlockEndX = nOldCurX = nBlockStartX;
+        nBlockEndY = nOldCurY = nBlockStartY;
         nBlockEndZ = nBlockStartZ;
+
         if (bBlockCols)
         {
-            nBlockStartY = 0;
+            nBlockStartY = nBlockStartYOrig = 0;
             nBlockEndY = MAXROW;
         }
+
         if (bBlockRows)
         {
-            nBlockStartX = 0;
+            nBlockStartX = nBlockStartXOrig = 0;
             nBlockEndX = MAXCOL;
         }
+
         rMark.SetMarkArea( ScRange( nBlockStartX,nBlockStartY, nTab, nBlockEndX,nBlockEndY, nTab ) );
         InvertBlockMark( nBlockStartX,nBlockStartY,nBlockEndX,nBlockEndY );
 
@@ -248,7 +253,8 @@ void ScTabView::DoneBlockMode( BOOL bContinue )            // Default FALSE
     }
 }
 
-void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, BOOL bCols, BOOL bRows )
+void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
+                            BOOL bCols, BOOL bRows, BOOL bCellSelection )
 {
     if (!ValidCol(nCurX)) nCurX = MAXCOL;
     if (!ValidRow(nCurY)) nCurY = MAXROW;
@@ -285,11 +291,13 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, BOOL bCols, B
                         nBlockStartZ, rMark.IsMarkNegative(), bCols, bRows );
     }
 
-    SCCOL nOldCurX = nBlockEndX;
-    SCROW nOldCurY = nBlockEndY;
+    SCCOL nOldBlockEndX = nBlockEndX;
+    SCROW nOldBlockEndY = nBlockEndY;
 
     if ( nCurX != nOldCurX || nCurY != nOldCurY )
     {
+        // Current cursor has moved
+
         SCTAB       nTab = nCurZ;
 
         SCCOL       nDrawStartCol;
@@ -297,14 +305,109 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, BOOL bCols, B
         SCCOL       nDrawEndCol;
         SCROW       nDrawEndRow;
 
-        ScUpdateRect aRect( nBlockStartX, nBlockStartY, nOldCurX, nOldCurY );
-        aRect.SetNew( nBlockStartX, nBlockStartY, nCurX, nCurY );
+        // Set old selection area
+        ScUpdateRect aRect( nBlockStartX, nBlockStartY, nOldBlockEndX, nOldBlockEndY );
 
+        if ( bCellSelection )
+        {
+            // Expand selection area accordingly when the current selection ends
+            // with a merged cell.
+            SCsCOL nCurXOffset = 0;
+            SCsCOL nBlockStartXOffset = 0;
+            SCsROW nCurYOffset = 0;
+            SCsROW nBlockStartYOffset = 0;
+            BOOL bBlockStartMerged = FALSE;
+            const ScMergeAttr* pMergeAttr = NULL;
+            ScDocument* pDocument = aViewData.GetDocument();
+
+            // The following block checks whether or not the "BlockStart" (anchor)
+            // cell is merged.  If it's merged, it'll then move the position of the
+            // anchor cell to the corner that's diagonally opposite of the
+            // direction of a current selection area.  For instance, if a current
+            // selection is moving in the upperleft direction, the anchor cell will
+            // move to the lower-right corner of the merged anchor cell, and so on.
+
+            pMergeAttr = static_cast<const ScMergeAttr*>(
+                pDocument->GetAttr( nBlockStartXOrig, nBlockStartYOrig, nTab, ATTR_MERGE ) );
+            if ( pMergeAttr->IsMerged() )
+            {
+                SCsCOL nColSpan = pMergeAttr->GetColMerge();
+                SCsROW nRowSpan = pMergeAttr->GetRowMerge();
+
+                if ( !( nCurX >= nBlockStartXOrig + nColSpan - 1 && nCurY >= nBlockStartYOrig + nRowSpan - 1 ) )
+                {
+                    nBlockStartX = nCurX >= nBlockStartXOrig ? nBlockStartXOrig : nBlockStartXOrig + nColSpan - 1;
+                    nBlockStartY = nCurY >= nBlockStartYOrig ? nBlockStartYOrig : nBlockStartYOrig + nRowSpan - 1;
+                    nCurXOffset  = nCurX >= nBlockStartXOrig && nCurX < nBlockStartXOrig + nColSpan - 1 ?
+                        nBlockStartXOrig - nCurX + nColSpan - 1 : 0;
+                    nCurYOffset  = nCurY >= nBlockStartYOrig && nCurY < nBlockStartYOrig + nRowSpan - 1 ?
+                        nBlockStartYOrig - nCurY + nRowSpan - 1 : 0;
+                    bBlockStartMerged = TRUE;
+                }
+            }
+
+            // The following block checks whether or not the current cell is
+            // merged.  If it is, it'll then set the appropriate X & Y offset
+            // values (nCurXOffset & nCurYOffset) such that the selection area will
+            // grow by those specified offset amounts.  Note that the values of
+            // nCurXOffset/nCurYOffset may also be specified in the previous code
+            // block, in which case whichever value is greater will take on.
+
+            pMergeAttr = static_cast<const ScMergeAttr*>(
+                pDocument->GetAttr( nCurX, nCurY, nTab, ATTR_MERGE ) );
+            if ( pMergeAttr->IsMerged() )
+            {
+                SCsCOL nColSpan = pMergeAttr->GetColMerge();
+                SCsROW nRowSpan = pMergeAttr->GetRowMerge();
+
+                if ( !( nBlockStartX >= nCurX + nColSpan - 1 && nBlockStartY >= nCurY + nRowSpan - 1 ) )
+                {
+                    if ( nBlockStartX <= nCurX + nColSpan - 1 )
+                    {
+                        SCsCOL nCurXOffsetTemp = nCurX < nCurX + nColSpan - 1 ? nColSpan - 1 : 0;
+                        nCurXOffset = nCurXOffset > nCurXOffsetTemp ? nCurXOffset : nCurXOffsetTemp;
+                    }
+                    if ( nBlockStartY <= nCurY + nRowSpan - 1 )
+                    {
+                        SCsROW nCurYOffsetTemp = nCurY < nCurY + nRowSpan - 1 ? nRowSpan - 1 : 0;
+                        nCurYOffset = nCurYOffset > nCurYOffsetTemp ? nCurYOffset : nCurYOffsetTemp;
+                    }
+                    if ( !( nBlockStartX <= nCurX && nBlockStartY <= nCurY ) &&
+                         !( nBlockStartX > nCurX + nColSpan - 1 && nBlockStartY > nCurY + nRowSpan - 1 ) )
+                    {
+                        nBlockStartXOffset = nBlockStartX > nCurX && nBlockStartX <= nCurX + nColSpan - 1 ? nCurX - nBlockStartX : 0;
+                        nBlockStartYOffset = nBlockStartY > nCurY && nBlockStartY <= nCurY + nRowSpan - 1 ? nCurY - nBlockStartY : 0;
+                    }
+                }
+            }
+            else
+            {
+                // The current cell is not merged.  Move the anchor cell to its
+                // original position.
+                if ( !bBlockStartMerged )
+                {
+                    nBlockStartX = nBlockStartXOrig;
+                    nBlockStartY = nBlockStartYOrig;
+                }
+            }
+
+            nBlockStartX = nBlockStartX + nBlockStartXOffset >= 0 ? nBlockStartX + nBlockStartXOffset : 0;
+            nBlockStartY = nBlockStartY + nBlockStartYOffset >= 0 ? nBlockStartY + nBlockStartYOffset : 0;
+            nBlockEndX = nCurX + nCurXOffset > MAXCOL ? MAXCOL : nCurX + nCurXOffset;
+            nBlockEndY = nCurY + nCurYOffset > MAXROW ? MAXROW : nCurY + nCurYOffset;
+        }
+        else
+        {
+            nBlockEndX = nCurX;
+            nBlockEndY = nCurY;
+        }
+        // end of "if ( bCellSelection )"
+
+        // Set new selection area
+        aRect.SetNew( nBlockStartX, nBlockStartY, nBlockEndX, nBlockEndY );
         BOOL bCont;
         BOOL bDraw = aRect.GetXorDiff( nDrawStartCol, nDrawStartRow,
                                         nDrawEndCol, nDrawEndRow, bCont );
-        nBlockEndX = nCurX;
-        nBlockEndY = nCurY;
         rMark.SetMarkArea( ScRange( nBlockStartX, nBlockStartY, nTab, nBlockEndX, nBlockEndY, nTab ) );
 
         if ( bDraw )
@@ -321,6 +424,9 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, BOOL bCols, B
             }
             ShowAllCursors();
         }
+
+        nOldCurX = nCurX;
+        nOldCurY = nCurY;
 
         aViewData.GetViewShell()->UpdateInputHandler();
 //      InvalidateAttribs();
@@ -763,6 +869,12 @@ void ScTabView::MakeDrawLayer()
 
 void ScTabView::ErrorMessage( USHORT nGlobStrId )
 {
+    if ( SC_MOD()->IsInExecuteDrop() )
+    {
+        // #i28468# don't show error message when called from Drag&Drop, silently abort instead
+        return;
+    }
+
     StopMarking();      // falls per Focus aus MouseButtonDown aufgerufen
 
     Window* pParent = aViewData.GetDialogParent();
