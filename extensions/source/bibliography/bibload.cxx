@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibload.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 10:24:31 $
+ *  last change: $Author: os $ $Date: 2001-06-12 07:24:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,7 @@
 #include <svtools/svmedit.hxx>
 #endif
 
+#include "bibresid.hxx"
 #ifndef BIB_HRC
 #include "bib.hrc"
 #endif
@@ -395,7 +396,13 @@ void BibliographyLoader::load(const Reference< frame::XFrame > & rFrame, const r
 
     String aURLStr( rURL );
     String aPartName = aURLStr.GetToken( 1, '/' );
-
+    Reference<XPropertySet> xPrSet(rFrame, UNO_QUERY);
+    if(xPrSet.is())
+    {
+        Any aTitle;
+        aTitle <<= OUString(String(BibResId(RID_BIB_STR_FRAME_TITLE)));
+        xPrSet->setPropertyValue(C2U("Title"), aTitle);
+    }
     if(aPartName.EqualsAscii("View") || aPartName.EqualsAscii("View1"))
     {
         loadView(rFrame, rURL, rArgs, rListener);
@@ -410,6 +417,33 @@ void BibliographyLoader::loadView(const Reference< frame::XFrame > & rFrame, con
     //!
     if(!m_pBibMod)
         m_pBibMod = OpenBibModul();
+
+    //create the menu
+    ResMgr* pResMgr = (*m_pBibMod)->GetResMgr();
+    INetURLObject aEntry( URIHelper::SmartRelToAbs(pResMgr->GetFileName()) );
+    String aMenuRes( RTL_CONSTASCII_USTRINGPARAM( "private:resource/" ));
+    aMenuRes += ( aEntry.GetName() += '/' );
+    aMenuRes+=String::CreateFromInt32(RID_MAIN_MENU);
+
+    util::URL aURL;
+    aURL.Complete = aMenuRes;
+
+    Reference< XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
+    Reference< util::XURLTransformer >  xTrans ( xMgr->createInstance( C2U("com.sun.star.util.URLTransformer") ), UNO_QUERY );
+    if( xTrans.is() )
+    {
+        // Datei laden
+        xTrans->parseStrict( aURL );
+
+        Reference< frame::XDispatchProvider >  xProv( rFrame, UNO_QUERY );
+        if ( xProv.is() )
+        {
+            Reference< frame::XDispatch >  aDisp = xProv->queryDispatch( aURL,  C2U("_menubar"), 12 );
+            if ( aDisp.is() )
+                aDisp->dispatch( aURL, Sequence<PropertyValue>() );
+        }
+    }
+
 
     BibDataManager* pDatMan=(*m_pBibMod)->createDataManager();
     m_xDatMan = m_pDatMan;
@@ -457,62 +491,9 @@ void BibliographyLoader::loadView(const Reference< frame::XFrame > & rFrame, con
 
         pDatMan->loadDatabase();
 
-        ResMgr* pResMgr = (*m_pBibMod)->GetResMgr();
-        INetURLObject aEntry( URIHelper::SmartRelToAbs(pResMgr->GetFileName()) );
-        String aMenuRes( RTL_CONSTASCII_USTRINGPARAM( "private:resource/" ));
-        aMenuRes += ( aEntry.GetName() += '/' );
-        aMenuRes+=String::CreateFromInt32(RID_MAIN_MENU);
-
-        util::URL aURL;
-        aURL.Complete = aMenuRes;
-
-        Reference< XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
-        Reference< util::XURLTransformer >  xTrans ( xMgr->createInstance( C2U("com.sun.star.util.URLTransformer") ), UNO_QUERY );
-        if( xTrans.is() )
-        {
-            // Datei laden
-            xTrans->parseStrict( aURL );
-
-            Reference< frame::XDispatchProvider >  xProv( rFrame, UNO_QUERY );
-            if ( xProv.is() )
-            {
-                Reference< frame::XDispatch >  aDisp = xProv->queryDispatch( aURL,  C2U("_menubar"), 12 );
-                if ( aDisp.is() )
-                    aDisp->dispatch( aURL, Sequence<PropertyValue>() );
-            }
-        }
         if ( rListener.is() )
             rListener->loadFinished( this );
 
-/*
-        ResMgr* pResMgr = (*m_pBibMod)->GetResMgr();
-        INetURLObject aEntry( URIHelper::SmartRelToAbs(pResMgr->GetFileName()) );
-        String aResFile = String::CreateFromAscii(".component:");
-        ( aResFile += aEntry.GetName() ) += '/';
-        String aMenuRes = aResFile;
-        aMenuRes+=String::CreateFromInt32(RID_MAIN_MENU);
-
-        util::URL aURL;
-        aURL.Complete = aMenuRes;
-
-        Reference< XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
-        Reference< util::XURLTransformer >  xTrans ( xMgr->createInstance( C2U("com.sun.star.util.URLTransformer") ), UNO_QUERY );
-        if( xTrans.is() )
-        {
-            // Datei laden
-            xTrans->parseStrict( aURL );
-
-            Reference< frame::XDispatchProvider >  xProv( rFrame, UNO_QUERY );
-            if ( xProv.is() )
-            {
-                Reference< frame::XDispatch >  aDisp = xProv->queryDispatch( aURL,  C2U("_tool:_menubar"), 12 );
-                if ( aDisp.is() )
-                    aDisp->dispatch( aURL, Sequence<PropertyValue>() );
-            }
-        }
-        if ( rListener.is() )
-            rListener->loadFinished( this );
-*/
     }
     else
     {

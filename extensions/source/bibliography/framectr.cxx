@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framectr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-05-22 11:10:49 $
+ *  last change: $Author: os $ $Date: 2001-06-12 07:24:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,8 +296,7 @@ uno::Reference< frame::XDispatch >  BibFrameController_Impl::queryDispatch( cons
         String aCommand( aURL.Path );
         if (    aCommand.EqualsAscii("Undo") || aCommand.EqualsAscii("Cut") ||
                 aCommand.EqualsAscii("Copy") || aCommand.EqualsAscii("Paste") ||
-                aCommand.EqualsAscii("SelectAll") || aCommand.Copy(0,4).EqualsAscii("Bib/")||
-                aCommand.EqualsAscii("Title"))
+                aCommand.EqualsAscii("SelectAll") || aCommand.Copy(0,4).EqualsAscii("Bib/"))
 
             return (frame::XDispatch*) this;
     }
@@ -471,16 +470,6 @@ void BibFrameController_Impl::addStatusListener(
         aEvent.Source     = (XDispatch *) this;
         aListener->statusChanged( aEvent );
         //break; because there are more than one
-    }
-    else
-    {
-        FeatureStateEvent aEvent;
-        aEvent.FeatureURL = aURL;
-        aEvent.IsEnabled  = sal_True;
-        aEvent.Requery    = sal_False;
-        aEvent.Source     = (XDispatch *) this;
-        aEvent.State <<= OUString(String(BibResId(RID_BIB_STR_FRAME_TITLE)));
-        aListener->statusChanged( aEvent );
     }
 }
 //-----------------------------------------------------------------------------
