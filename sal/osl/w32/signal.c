@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 14:26:12 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,9 @@ static sal_Bool               bInitSignal = sal_False;
 static oslMutex               SignalListMutex;
 static oslSignalHandlerImpl*  SignalList;
 
-long WINAPI SignalHandlerFunction(LPEXCEPTION_POINTERS lpEP);
+static long WINAPI SignalHandlerFunction(LPEXCEPTION_POINTERS lpEP);
 
-static sal_Bool InitSignal()
+static sal_Bool InitSignal(void)
 {
     HMODULE hFaultRep;
 
@@ -103,7 +103,7 @@ static sal_Bool InitSignal()
     return sal_True;
 }
 
-static sal_Bool DeInitSignal()
+static sal_Bool DeInitSignal(void)
 {
     SetUnhandledExceptionFilter(NULL);
 
@@ -198,7 +198,7 @@ static BOOL ReportCrash( LPEXCEPTION_POINTERS lpEP )
 /* SignalHandlerFunction    */
 /*****************************************************************************/
 
-static BOOL WINAPI IsWin95A()
+static BOOL WINAPI IsWin95A(void)
 {
     OSVERSIONINFO   ovi;
 
