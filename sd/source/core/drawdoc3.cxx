@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:24:25 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 12:26:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1832,8 +1832,9 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
         List* pPageList = new List;
 
 //      #98456, this has to be removed according to CL (KA 07/08/2002)
-//      pPageList->Insert(pMaster, LIST_APPEND);
-//      pPageList->Insert(pNotesMaster, LIST_APPEND);
+//      #109884# but we need them again to restore the styles of the presentation objects while undo
+        pPageList->Insert(pMaster, LIST_APPEND);
+        pPageList->Insert(pNotesMaster, LIST_APPEND);
 
         if (bMaster || bLayoutReloaded)
         {
