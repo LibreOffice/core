@@ -2,9 +2,9 @@
  *
  *  $RCSfile: applab.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 14:29:44 $
+ *  last change: $Author: jp $ $Date: 2000-10-30 14:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,23 +78,20 @@
 #ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
 #endif
+#ifndef _MSGBOX_HXX //autogen
+#include <vcl/msgbox.hxx>
+#endif
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
 #endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
-#ifndef _SBASLTID_HRC //autogen
-#include <offmgr/sbasltid.hrc>
-#endif
-#ifndef _SFX_BINDINGS_HXX //autogen
-#include <sfx2/bindings.hxx>
-#endif
-#ifndef _MSGBOX_HXX //autogen
-#include <vcl/msgbox.hxx>
-#endif
 #ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
+#endif
+#ifndef _LINKMGR_HXX
+#include <so3/linkmgr.hxx>
 #endif
 #ifndef _SVX_PBINITEM_HXX //autogen
 #include <svx/pbinitem.hxx>
@@ -111,11 +108,11 @@
 #ifndef _SVX_PAPERINF_HXX
 #include <svx/paperinf.hxx>
 #endif
-#ifndef _LINKMGR_HXX
-#include <so3/linkmgr.hxx>
-#endif
 #ifndef _SVX_PROTITEM_HXX //autogen
 #include <svx/protitem.hxx>
+#endif
+#ifndef _SBASLTID_HRC //autogen
+#include <offmgr/sbasltid.hrc>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
@@ -123,6 +120,7 @@
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
+
 #ifndef _FMTHDFT_HXX //autogen
 #include <fmthdft.hxx>
 #endif
