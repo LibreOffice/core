@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparaimphint.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-14 14:03:35 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 10:49:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,6 +311,20 @@ public:
         return xTxt;
     }
 
+    // --> OD 2004-08-24 #i33242#
+    Reference < drawing::XShape > GetShape() const
+    {
+        Reference < drawing::XShape > xShape;
+        SvXMLImportContext *pContext = &xContext;
+        if( pContext->ISA( XMLTextFrameContext ) )
+            xShape = PTR_CAST( XMLTextFrameContext, pContext )->GetShape();
+        else if( pContext->ISA( XMLTextFrameHyperlinkContext ) )
+            xShape = PTR_CAST( XMLTextFrameHyperlinkContext, pContext )->GetShape();
+
+        return xShape;
+    }
+    // <--
+
     sal_Bool IsBoundAtChar() const
     {
         sal_Bool bRet = sal_False;
@@ -345,10 +359,12 @@ public:
     {
     }
 
-    SvXMLShapeContext* GetShapeContext() const
+    // --> OD 2004-08-24 #i33242#
+    Reference < drawing::XShape > GetShape() const
     {
-    return static_cast<SvXMLShapeContext*>(&xContext);
+        return static_cast<SvXMLShapeContext*>(&xContext)->getShape();
     }
+    // <--
 };
 // <--
 #endif
