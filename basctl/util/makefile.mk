@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: vg $ $Date: 2003-03-26 12:52:18 $
+#   last change: $Author: vg $ $Date: 2003-04-15 14:18:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,7 +67,6 @@ TARGET=basctl
 #svx.hid generieren
 GEN_HID=TRUE
 GEN_HID_OTHER=TRUE
-USE_LDUMP2=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -86,40 +85,33 @@ SHL1IMPLIB= basctl
 SHL1BASE  = 0x1d800000
 SHL1STDLIBS= \
             $(SVXLIB) \
-            $(SALLIB) \
-            $(TOOLSLIB) \
-            $(SVTOOLLIB) \
-             $(SVLLIB)	\
-            $(CPPULIB) \
-            $(CPPUHELPERLIB) \
-            $(VCLLIB) \
-            $(SO2LIB) \
-            $(SOTLIB) \
             $(SFX2LIB) \
             $(BASICLIB) \
-            $(COMPHELPERLIB) \
-            $(UNOTOOLSLIB) \
+            $(SO2LIB) \
+            $(SVTOOLLIB) \
             $(TKLIB) \
-            $(XMLSCRIPTLIB)
-
+            $(VCLLIB) \
+            $(SVLLIB) \
+            $(SOTLIB) \
+            $(UNOTOOLSLIB) \
+            $(TOOLSLIB) \
+            $(XMLSCRIPTLIB) \
+            $(COMPHELPERLIB) \
+            $(CPPUHELPERLIB) \
+            $(CPPULIB) \
+            $(SALLIB)
 
 .IF "$(GUI)"=="WNT"
-SHL1STDLIBS+=\
-            $(SHELLLIB)
-.ENDIF
-
-.IF "$(SOLAR_JAVA)" != ""
-SHL1STDLIBS+=\
-        $(SJLIB)
-.ENDIF
+SHL1STDLIBS+= $(SHELLLIB)
+.ENDIF # WNT
 
 
 SHL1LIBS=       $(SLB)$/basctl.lib
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
 
+SHL1VERSIONMAP=basctl.map
+
 DEF1NAME        =$(SHL1TARGET)
-DEF1DES		= Rtf, Edt, Outliner, SvDraw, Form, Fmcomp, Engine3D, MSFilter
-DEF1EXPORTFILE	= basctl.dxp
 
 LIB1TARGET      =$(SLB)$/basctl.lib
 LIB1FILES       = \
@@ -130,7 +122,7 @@ LIB1FILES       = \
 SRSFILELIST=\
                 $(SRS)$/basicide.srs \
                 $(SRS)$/dlged.srs
-                
+
 SRSFILELIST+=   $(SOLARVERSION)$/$(INPATH)$/res$(UPDMINOREXT)$/sfx.srs
 
 RESLIB1NAME=basctl
@@ -140,7 +132,5 @@ RESLIB1SRSFILES= $(SRSFILELIST)
 
 .INCLUDE :  target.mk
 
-
-
-.ENDIF                  # "$(header)" == ""
+.ENDIF # "$(header)" == ""
 
