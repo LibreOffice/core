@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:11:18 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:41:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,11 @@ typedef void*               HDC;
 #endif
 #endif //_ADO_DATALINK_BROWSE_
 
+#ifndef _COM_SUN_STAR_MOZILLA_XMOZILLABOOTSTRAP_HPP_
+#include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
+#endif
+#include <unotools/processfactory.hxx>
+
 
 
 //.........................................................................
@@ -206,6 +211,7 @@ namespace dbaui
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::container;
+    using namespace ::com::sun::star::mozilla;
     using namespace ::dbtools;
     using namespace ::svt;
 
@@ -430,8 +436,9 @@ namespace dbaui
             case DST_ODBC:
             {
                 // collect all ODBC data source names
+                ::rtl::OUString sCurrDatasource=getURLNoPrefix();
                 ::rtl::OUString sDataSource;
-                if ( getSelectedDataSource(m_eType,sDataSource) && sDataSource.getLength() )
+                if ( getSelectedDataSource(m_eType,sDataSource,sCurrDatasource) && sDataSource.getLength() )
                 {
                     setURLNoPrefix(sDataSource);
                     SetRoadmapStateValue(sal_True);
@@ -459,7 +466,50 @@ namespace dbaui
             }
             break;
 #endif
+            case DST_MOZILLA:
+            case DST_THUNDERBIRD:
+            {
+                MozillaProductType profileType = MozillaProductType_Mozilla;
+                if (m_eType == DST_THUNDERBIRD)
+                    profileType = MozillaProductType_Thunderbird;
 
+                Reference<XMultiServiceFactory> xFactory = ::comphelper::getProcessServiceFactory();
+                OSL_ENSURE( xFactory.is(), "can't get service factory" );
+
+                Reference<XInterface> xInstance = xFactory->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.mozilla.MozillaBootstrap")) );
+                OSL_ENSURE( xInstance.is(), "failed to create instance" );
+                Reference<XMozillaBootstrap> xMozillaBootstrap =  Reference<XMozillaBootstrap>(xInstance,UNO_QUERY);
+                OSL_ENSURE( xMozillaBootstrap.is(), "failed to create instance" );
+
+                if (xMozillaBootstrap.is())
+                {
+                    // collect all Mozilla Profiles
+                    ::com::sun::star::uno::Sequence< ::rtl::OUString > list;
+
+                    sal_Int32 length = xMozillaBootstrap->getProfileList(profileType,list);
+                    const ::rtl::OUString * pArray = list.getConstArray();
+
+                    sal_Int32 count = list.getLength();
+
+                    StringBag aProfiles;
+                    for (sal_Int32 index=0; index < count; index++)
+                        aProfiles.insert(pArray[index]);
+
+
+                    // excute the select dialog
+                    ODatasourceSelectDialog aSelector(GetParent(), aProfiles, m_eType);
+                    ::rtl::OUString sOldProfile=getURLNoPrefix();
+
+                    if (sOldProfile.getLength())
+                        aSelector.Select(sOldProfile);
+                    else
+                        aSelector.Select(xMozillaBootstrap->getDefaultProfile(profileType));
+
+                    if ( RET_OK == aSelector.Execute() )
+                        setURLNoPrefix(aSelector.GetSelected());
+                    break;
+                }
+            }
         }
 
         checkTestConnection();
