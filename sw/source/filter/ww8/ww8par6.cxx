@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.150 $
+ *  $Revision: 1.151 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:41:13 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 09:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2279,6 +2279,7 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
     if (!rReader.mbNewDoc)
         Reader::ResetFrmFmtAttrs(*this);    // Abstand/Umrandung raus
                                             // Position
+    Put(SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP));
 /*Below can all go when we have from left in rtl mode*/
     long nXPos = pFS->nXPos;
     SwRelationOrient eHRel = pFS->eHRel;
