@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 13:29:35 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 09:10:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -663,6 +663,11 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
     LOG_ASSERT2( implcp_initialize( xWindow ), "Frame::initialize()", "Invalid parameter detected!" )
+
+    // if window is initially visible, we will never get a windowShowing event
+    Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+    if ( pWindow && pWindow->IsVisible() )
+        m_bIsHidden = sal_False;
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
