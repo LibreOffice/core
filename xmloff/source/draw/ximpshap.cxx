@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-01 11:10:35 $
+ *  last change: $Author: cl $ $Date: 2000-12-06 16:53:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1059,14 +1059,20 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
             // Add, set Style and properties from base shape
             AddShape(xShape);
 
-            if(bIsPresShape && !mbIsPlaceholder)
+            if(bIsPresShape)
             {
                 uno::Reference< beans::XPropertySet > xProps(xShape, uno::UNO_QUERY);
                 if(xProps.is())
                 {
                     uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
-                    if( xPropsInfo.is() && xPropsInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") )))
-                        xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") ), ::cppu::bool2any( sal_False ) );
+                    if( xPropsInfo.is() )
+                    {
+                        if( !mbIsPlaceholder && xPropsInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") )))
+                            xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") ), ::cppu::bool2any( sal_False ) );
+
+                        if( mbIsUserTransformed && xPropsInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IsPlaceholderDependent") )))
+                            xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsPlaceholderDependent") ), ::cppu::bool2any( sal_False ) );
+                    }
                 }
             }
 
@@ -1496,6 +1502,7 @@ void SdXMLPageShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
         {
             // add, set style and properties from base shape
             AddShape(xShape);
+
             SetStyle();
             SdXMLShapeContext::StartElement(xAttrList);
 
@@ -1648,6 +1655,20 @@ SdXMLGraphicObjectShapeContext::SdXMLGraphicObjectShapeContext(
             }
         }
 
+        if(mbIsUserTransformed)
+        {
+            uno::Reference< beans::XPropertySet > xProps(xShape, uno::UNO_QUERY);
+            if(xProps.is())
+            {
+                uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
+                if( xPropsInfo.is() )
+                {
+                    if( xPropsInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IsPlaceholderDependent") )))
+                        xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsPlaceholderDependent") ), ::cppu::bool2any( sal_False ) );
+                }
+            }
+        }
+
         SetStyle();
 
         // set local parameters on shape
@@ -1755,6 +1776,20 @@ SdXMLChartShapeContext::SdXMLChartShapeContext(
                     {
                         mpChartContext = rImport.GetChartImport()->CreateChartContext( rImport, nPrfx, rLocalName, xChartModel, xAttrList );
                     }
+                }
+            }
+        }
+
+        if(mbIsUserTransformed)
+        {
+            uno::Reference< beans::XPropertySet > xProps(xShape, uno::UNO_QUERY);
+            if(xProps.is())
+            {
+                uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
+                if( xPropsInfo.is() )
+                {
+                    if( xPropsInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IsPlaceholderDependent") )))
+                        xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsPlaceholderDependent") ), ::cppu::bool2any( sal_False ) );
                 }
             }
         }

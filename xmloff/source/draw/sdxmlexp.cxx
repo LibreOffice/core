@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-06 12:55:33 $
+ *  last change: $Author: cl $ $Date: 2000-12-06 16:53:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,35 +357,8 @@ ImpXMLShapeStyleInfo::ImpXMLShapeStyleInfo(
 {
 }
 
+
 DECLARE_LIST(ImpXMLShapeStyleInfoList, ImpXMLShapeStyleInfo*);
-
-//////////////////////////////////////////////////////////////////////////////
-
-class ImpXMLDrawPageInfo
-{
-    OUString                        msStyleName;
-    OUString                        msPageLayoutName;
-
-public:
-    ImpXMLDrawPageInfo(const OUString& rStyStr);
-
-    void SetPageLayoutName(const OUString& rStr);
-
-    const OUString& GetStyleName() const { return msStyleName; }
-    const OUString& GetPageLayoutName() const { return msPageLayoutName; }
-};
-
-ImpXMLDrawPageInfo::ImpXMLDrawPageInfo(const OUString& rStyStr)
-:   msStyleName(rStyStr)
-{
-}
-
-void ImpXMLDrawPageInfo::SetPageLayoutName(const OUString& rStr)
-{
-    msPageLayoutName = rStr;
-}
-
-DECLARE_LIST(ImpXMLDrawPageInfoList, ImpXMLDrawPageInfo*);
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -640,8 +613,6 @@ SdXMLExport::SdXMLExport(
 :   SvXMLExport( rFileName, rHandler, rMod, rEGO, MAP_CM ),
     mpPageMasterInfoList(new ImpXMLEXPPageMasterList(1, 4, 4)),
     mpPageMaterUsageList(new ImpXMLEXPPageMasterList(1, 4, 4)),
-    mpDrawPageInfoList(new ImpXMLDrawPageInfoList(4, 8, 8)),
-    mpMasterPageInfoList(new ImpXMLDrawPageInfoList(4, 8, 8)),
     mpShapeStyleInfoList(new ImpXMLShapeStyleInfoList(16, 64, 64)),
     mpAutoLayoutInfoList(new ImpXMLAutoLayoutInfoList(1, 4, 4)),
     mpPropertySetMapper(0L),
@@ -658,6 +629,8 @@ SdXMLExport::SdXMLExport(
     msStartShape( RTL_CONSTASCII_USTRINGPARAM("StartShape") ),
     msEndShape( RTL_CONSTASCII_USTRINGPARAM("EndShape") )
 {
+    const OUString aEmpty;
+
     // prepare factory parts
     mpSdPropHdlFactory = new XMLSdPropHdlFactory( rMod );
     if(mpSdPropHdlFactory)
@@ -721,6 +694,7 @@ SdXMLExport::SdXMLExport(
         if(mxDocMasterPages.is())
         {
             mnDocMasterPageCount = mxDocMasterPages->getCount();
+            maMasterPagesStyleNames.insert( maMasterPagesStyleNames.begin(), mnDocMasterPageCount, aEmpty );
         }
     }
 
@@ -732,6 +706,11 @@ SdXMLExport::SdXMLExport(
         if(mxDocDrawPages.is())
         {
             mnDocDrawPageCount = mxDocDrawPages->getCount();
+            maDrawPagesStyleNames.insert( maDrawPagesStyleNames.begin(), mnDocDrawPageCount, aEmpty );
+            if( !bIsDraw )
+            {
+                maDrawPagesAutoLayoutNames.insert( maDrawPagesAutoLayoutNames.begin(), mnDocDrawPageCount, aEmpty );
+            }
         }
     }
 
@@ -802,24 +781,6 @@ __EXPORT SdXMLExport::~SdXMLExport()
     {
         delete mpPageMaterUsageList;
         mpPageMaterUsageList = 0L;
-    }
-
-    // clear draw style infos
-    if(mpDrawPageInfoList)
-    {
-        while(mpDrawPageInfoList->Count())
-            delete mpDrawPageInfoList->Remove(mpDrawPageInfoList->Count() - 1L);
-        delete mpDrawPageInfoList;
-        mpDrawPageInfoList = 0L;
-    }
-
-    // clear draw style infos
-    if(mpMasterPageInfoList)
-    {
-        while(mpMasterPageInfoList->Count())
-            delete mpMasterPageInfoList->Remove(mpMasterPageInfoList->Count() - 1L);
-        delete mpMasterPageInfoList;
-        mpMasterPageInfoList = 0L;
     }
 
     // clear shape style infos
@@ -962,6 +923,26 @@ void SdXMLExport::ImpWriteObjGraphicStyleInfos()
 }
 
 //////////////////////////////////////////////////////////////////////////////
+
+void SdXMLExport::ImpPrepAutoLayoutInfos()
+{
+    if(IsImpress())
+    {
+        // prepare name creation
+        for(sal_Int32 nCnt = 0L; nCnt < mnDocDrawPageCount; nCnt++)
+        {
+            uno::Any aAny(mxDocDrawPages->getByIndex(nCnt));
+            uno::Reference<drawing::XDrawPage> xDrawPage;
+
+            if((aAny >>= xDrawPage) && xDrawPage.is())
+            {
+                OUString aStr;
+                if(ImpPrepAutoLayoutInfo(xDrawPage, aStr))
+                    maDrawPagesAutoLayoutNames[nCnt] = aStr;
+            }
+        }
+    }
+}
 
 BOOL SdXMLExport::ImpPrepAutoLayoutInfo(const uno::Reference<drawing::XDrawPage>& xPage, OUString& rName)
 {
@@ -1554,21 +1535,8 @@ void SdXMLExport::ImpPrepDrawPageInfos()
                             // Style did not exist, add it to AutoStalePool
                             sStyleName = GetAutoStylePool()->Add(XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID, sStyleName, xPropStates);
                         }
-                    }
-                }
 
-                // create Info object
-                ImpXMLDrawPageInfo* pInfo = new ImpXMLDrawPageInfo(sStyleName);
-                mpDrawPageInfoList->Insert(pInfo, LIST_APPEND);
-
-                if(IsImpress())
-                {
-                    // create presentation-page-layout
-                    OUString aStr;
-
-                    if(ImpPrepAutoLayoutInfo(xDrawPage, aStr))
-                    {
-                        pInfo->SetPageLayoutName(aStr);
+                        maDrawPagesStyleNames[nCnt] = sStyleName;
                     }
                 }
             }
@@ -1629,13 +1597,11 @@ void SdXMLExport::ImpPrepMasterPageInfos()
                                 // Style did not exist, add it to AutoStalePool
                                 sStyleName = GetAutoStylePool()->Add(XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID, sStyleName, xPropStates);
                             }
+
+                            maMasterPagesStyleNames[nCnt] = sStyleName;
                         }
                     }
                 }
-
-                // create Info object
-                ImpXMLDrawPageInfo* pInfo = new ImpXMLDrawPageInfo(sStyleName);
-                mpMasterPageInfoList->Insert(pInfo, LIST_APPEND);
             }
         }
     }
@@ -1700,13 +1666,8 @@ void SdXMLExport::_ExportContent()
                 AddAttribute(XML_NAMESPACE_DRAW, sXML_name, xNamed->getName());
 
             // draw:style-name (presentation page attributes AND background attributes)
-            ImpXMLDrawPageInfo* pInfo = mpDrawPageInfoList->GetObject(nPageInd);
-            if(pInfo)
-            {
-                OUString sString = pInfo->GetStyleName();
-                if( sString.getLength() )
-                    AddAttribute(XML_NAMESPACE_DRAW, sXML_style_name, sString);
-            }
+            if( maDrawPagesStyleNames[nPageInd].getLength() )
+                AddAttribute(XML_NAMESPACE_DRAW, sXML_style_name, maDrawPagesStyleNames[nPageInd]);
 
             // draw:master-page-name
             uno::Reference < drawing::XMasterPageTarget > xMasterPageInt(xDrawPage, uno::UNO_QUERY);
@@ -1724,10 +1685,9 @@ void SdXMLExport::_ExportContent()
             }
 
             // presentation:page-layout-name
-            if(pInfo && IsImpress() && pInfo->GetPageLayoutName().getLength())
+            if( IsImpress() && maDrawPagesAutoLayoutNames[nPageInd].getLength())
             {
-                OUString sString = pInfo->GetPageLayoutName();
-                AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_presentation_page_layout_name, sString);
+                AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_presentation_page_layout_name, maDrawPagesAutoLayoutNames[nPageInd]);
             }
 
             // write page
@@ -3856,6 +3816,9 @@ void SdXMLExport::_ExportStyles(BOOL bUsed)
     // write presentation styles
     ImpWritePresentationStyles();
 
+    // prepare draw:auto-layout-name for page export
+    ImpPrepAutoLayoutInfos();
+
     // write draw:auto-layout-name for page export
     ImpWriteAutoLayoutInfos();
 }
@@ -4016,13 +3979,8 @@ void SdXMLExport::_ExportMasterStyles()
             }
 
             // draw:style-name (background attributes)
-            ImpXMLDrawPageInfo* pStyleInfo = mpMasterPageInfoList->GetObject(nMPageId);
-            if(pInfo)
-            {
-                OUString sString = pStyleInfo->GetStyleName();
-                if( sString.getLength() )
-                    AddAttribute(XML_NAMESPACE_DRAW, sXML_style_name, sString);
-            }
+            if( maMasterPagesStyleNames[nMPageId].getLength() )
+                AddAttribute(XML_NAMESPACE_DRAW, sXML_style_name, maMasterPagesStyleNames[nMPageId]);
 
             // write masterpage
             SvXMLElementExport aMPG(*this, XML_NAMESPACE_STYLE, sXML_master_page, sal_True, sal_True);

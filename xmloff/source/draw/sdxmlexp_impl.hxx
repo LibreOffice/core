@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp_impl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-05 23:22:55 $
+ *  last change: $Author: cl $ $Date: 2000-12-06 16:53:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,10 +186,12 @@ class SdXMLExport : public SvXMLExport
     // temporary infos
     ImpXMLEXPPageMasterList*    mpPageMasterInfoList;
     ImpXMLEXPPageMasterList*    mpPageMaterUsageList;
-    ImpXMLDrawPageInfoList*     mpDrawPageInfoList;
-    ImpXMLDrawPageInfoList*     mpMasterPageInfoList;
     ImpXMLShapeStyleInfoList*   mpShapeStyleInfoList;
     ImpXMLAutoLayoutInfoList*   mpAutoLayoutInfoList;
+
+    ::std::vector<::rtl::OUString>      maDrawPagesAutoLayoutNames;
+    ::std::vector<::rtl::OUString>      maDrawPagesStyleNames;
+    ::std::vector<::rtl::OUString>      maMasterPagesStyleNames;
 
     XMLSdPropHdlFactory*                mpSdPropHdlFactory;
     XMLShapeExportPropertyMapper*       mpPropertySetMapper;
@@ -213,6 +215,8 @@ class SdXMLExport : public SvXMLExport
     void ImpPrepPageMasterInfos();
     void ImpPrepDrawMasterInfos();
     void ImpWritePageMasterInfos();
+    void ImpPrepAutoLayoutInfos();
+
     ImpXMLEXPPageMasterInfo* ImpGetPageMasterInfoByName(const rtl::OUString& rName);
 
     void ImpPrepDrawPageInfos();
