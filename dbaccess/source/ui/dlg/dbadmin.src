@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-08 22:04:38 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:24:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -764,7 +764,7 @@ TabPage PAGE_GENERAL
         Text [ english_us ] = "Another data source already has this name. As data sources have to have globally unique names, please choose another one.";
         Text [ portuguese ] = "Jα existe uma fonte de dados com este nome. Os nomes das fontes de dados devem ser ϊnicos, por esta razγo ι recomendαvel seleccionar outro nome.";
         Text [ russian ] = "Οξδ ςΰκθμ θμενεμ σζε ρσωερςβσες ξδθν θρςξχνθκ δΰννϋυ. Οξρκξλόκσ θμενΰ θρςξχνθκξβ δΰννϋυ δξλζνϋ αϋςό σνθκΰλόνϋμθ, νεξαυξδθμξ οπθρβξθςό δπσγξε θμÿ.";
-        Text [ greek ] = "Υπάρχει ήδη μια προέλευση δεδομένων με αυτό το όνομα. Κάθε όνομα των προελεύσεων των δεδομένων επιτρέπεται να υπάρχει μόνο μια φορά. Παρακα";
+        Text [ greek ] = "Υπάρχει ήδη μια προέλευση δεδομένων με αυτό το όνομα. Κάθε όνομα των προελεύσεων των δεδομένων επιτρέπεται να υπάρχει μόνο μια φορά. Παρακα ";
         Text [ dutch ] = "Er bestaat reeds een andere gegevensbron met deze naam. Kies een andere naam.";
         Text [ french ] = "Ce nom a dιjΰ ιtι attribuι ΰ une autre source de donnιes. Ιtant donnι que les sources de donnιes doivent avoir des noms globalement uniques, vous devez en choisir un autre.";
         Text [ spanish ] = "Ya existe otra fuente de datos con este nombre. Debe elegir otro ya que el nombre de la fuente de datos debe ser globalmente ϊnico.";
@@ -814,7 +814,7 @@ TabPage PAGE_GENERAL
         Text [ english_us ] = "Could not load the program library #lib# or it is corrupted. The ODBC data source selection is not available.";
         Text [ portuguese ] = "Ou foi impossνvel carregar a biblioteca #lib# do programa ou esta estα com defeito. A selecηγo da fonte de dados ODBC nγo estα disponνvel.";
         Text [ russian ] = "Αθαλθξςεκΰ οπξγπΰμμϋ #lib# νε ηΰγπσζΰεςρÿ θλθ ξνΰ οξβπεζδενΰ. Βϋαξπ θρςξχνθκΰ δΰννϋυ ODBC νε δξρςσοεν.";
-        Text [ greek ] = "Η βιβλιοθήκη του προγράμματος #lib# δεν ήταν δυνατόν να φορτωθεί ή είναι ελαττωματική. Η επιλογή της προέλευσης των δεδομένων του ODBC δεν είνα?";
+        Text [ greek ] = "Η βιβλιοθήκη του προγράμματος #lib# δεν ήταν δυνατόν να φορτωθεί ή είναι ελαττωματική. Η επιλογή της προέλευσης των δεδομένων του ODBC δεν είνα? ";
         Text [ dutch ] = "De programmabibliotheek #lib# kon niet worden geladen of is defect. De functie ODBC gegevensbronnen kiezen is niet beschikbaar.";
         Text [ french ] = "La bibliothθque de programme #lib# n'a pas pu κtre chargιe ou est dιfectueuse. La sιlection de la source de donnιes ODBC n'est pas disponible.";
         Text [ spanish ] = "No se pudo cargar la biblioteca de programa #lib#, quizαs estι daρada. La selecciσn de fuente de datos ODBC no estα disponible.";
@@ -865,7 +865,7 @@ TabPage PAGE_GENERAL
         Text[ portuguese ] = "Esta plataforma nγo tem suporte para este tipo de fonte de dados.\nPoderα modificar as definiηυes, contudo a ligaηγo ΰ base de dados ι improvαvel.";
         Text[ russian ] = "Òθο ύςξγξ θρςξχνθκΰ δΰννϋυ νΰ ύςξι ολΰςτξπμε νΰ οξδδεπζθβΰεςρÿ.\nΒϋ μξζεςε θημενθςό νΰρςπξικθ, νξ ςξγδΰ, βεπξÿςνεε βρεγξ, Βϋ νε ρμξζεςε ρεδθνθςόρÿ ρ ύςξι αΰηξι δΰννϋυ.";
         Text[ greek ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
-        Text[ dutch ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
+        Text[ dutch ] = "Dit type gegevensbron wordt op dit platform niet ondersteund.\nU kunt wel de instellingen veranderen, maar vermoedelijk geen verbinding met de database tot stand brengen.";
         Text[ french ] = "Ce type de source de donnιes n'est pas supportι par la plateforme en question.\nMκme si les paramθtres sont modifiables, une connexion ΰ la BD n'est pas garantie.";
         Text[ spanish ] = "Esta plataforma no apoya este tipo de fuente de datos.\nPuede modificar los datos, pero seguramente no podrα establecer una conexiσn con la base de datos.";
         Text[ finnish ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
@@ -1592,7 +1592,7 @@ TabPage PAGE_LDAP
         Text[ portuguese ] = "~Computador";
         Text[ russian ] = "~Θμÿ σηλΰ";
         Text[ greek ] = "~Hostname";
-        Text[ dutch ] = "~Hostname";
+        Text[ dutch ] = "~Hostnaam";
         Text[ french ] = "~Ordinateur";
         Text[ spanish ] = "~Nombre del equipo";
         Text[ finnish ] = "~Hostname";
@@ -1644,6 +1644,7 @@ TabPage PAGE_LDAP
         Text[ turkish ] = "~Base DN";
         Text[ arabic ] = "~Base DN";
         Text[ catalan ] = "~Base DN";
+        Text[ language_user1 ] = "ZL: I got this information about Base DN-----------------------------------------Name of the LDAP Base Distinguished Name (DN) to use for LDAP lookupsFormat: Base DN  Example: o=exampleCompany.com,c=US  Specifying a Base DNThe base DN refers to the part of the directory held on your local server. The DN is the LDAP equivalent of the fully qualified domain name. If the Base DN contains spaces, for example o=MyCompany.com, c=US, it must be enclosed by quotation marks. The configuration wizard automatically adds any necessary quotation marks to the base DN.";
     };
     Edit ET_BASEDN
     {
@@ -1669,7 +1670,7 @@ TabPage PAGE_LDAP
         Text[ portuguese ] = "~Porta";
         Text[ russian ] = "~Νξμεπ οξπςΰ";
         Text[ greek ] = "~Portnumber";
-        Text[ dutch ] = "~Portnumber";
+        Text[ dutch ] = "~Poortnummer";
         Text[ french ] = "~Port";
         Text[ spanish ] = "~Nϊmero de puerto";
         Text[ finnish ] = "~Portnumber";
@@ -2524,7 +2525,7 @@ ErrorBox ERR_COULDNOTRESTOREDS
     Message [ english_us ] = "The name of the deleted data source has already been given to another data source. You have to rename the latter before you can restore the former.";
     Message[ portuguese ] = "O nome da fonte de dados eliminada jα foi atribuνdo a outra fonte de dados! Primeiro terα que mudar o nome a esta ϊltima para poder restaurar a actual.";
     Message[ russian ] = "Βϋ σζε οπθρβξθλθ δπσγξμσ θρςξχνθκσ δΰννϋυ θμÿ σδΰλενξγξ θρςξχνθκΰ. Βϋ δξλζνϋ οεπεθμενξβΰςό οπεζνθι θρςξχνθκ δλÿ βξρρςΰνξβλενθÿ ςεκσωεγξ.";
-    Message[ greek ] = "Το όνομα της προέλευσης δεδομένων που διαγράφηκε, δόθηκε ήδη σε μια άλλη προέλευση δεδομένων! Θα πρέπει να μετονομάσετε την υπάρχουσα προέ?";
+    Message[ greek ] = "Το όνομα της προέλευσης δεδομένων που διαγράφηκε, δόθηκε ήδη σε μια άλλη προέλευση δεδομένων! Θα πρέπει να μετονομάσετε την υπάρχουσα προέ? ";
     Message[ dutch ] = "De naam van de gewiste gegevensbron heeft u reeds gebruikt voor een andere! Wilt u de gewiste gegevensbron weer herstellen dan moet u eerst de naam van de andere wijzigen.";
     Message[ french ] = "Le nom de la source de donnιes supprimιe a dιjΰ ιtι attribuι ΰ une autre source que vous devez commencer par renommer afin de pouvoir restaurer l'ancienne.";
     Message[ spanish ] = "΅Ya ha aplicado a otra fuente de datos el nombre de la eliminada! Debe cambiar el nombre a la primera para poder restaurar la actual.";
@@ -2802,7 +2803,7 @@ Menu RID_NEW_FORM
             Text[ portuguese ] = "A~utoPiloto...";
             Text[ russian ] = "~ΐβςξοθλξς...";
             Text[ greek ] = "~ΑυτοΠιλότος";
-            Text[ dutch ] = "~AutoPiloot";
+            Text[ dutch ] = "~AutoPiloot...";
             Text[ french ] = "~AutoPilote...";
             Text[ spanish ] = "A~utoPiloto";
             Text[ finnish ] = "~Automaattinen ohjaus";
@@ -2832,7 +2833,7 @@ Menu RID_NEW_FORM
             Text[ portuguese ] = "A partir de ~modelo...";
             Text[ russian ] = "Θη ψΰαλξνξβ...";
             Text[ greek ] = "From Templ~ate";
-            Text[ dutch ] = "Uit ~sjabloon";
+            Text[ dutch ] = "Uit ~sjabloon...";
             Text[ french ] = "ΐ partir d'un ~modθle...";
             Text[ spanish ] = "De pl~antilla";
             Text[ finnish ] = "Aus ~Vorlage";
@@ -2867,12 +2868,12 @@ WarningBox WARN_SAVEFORQUERIES
     Message[ language_user1 ] = "For $objects$, there will be used one of the strings STR_QUERY_OBJECTS and STR_DOCUMENT_OBJECTS.";
     Message[ portuguese ] = "Ι necessαrio guardar a fonte de dados para poder gerir os respectivos $objects$.\nGuardar todas as modificaηυes efectuadas atι agora nesta caixa de diαlogo?";
     Message[ russian ] = "Δλÿ σοπΰβλενθÿ $objects$ θρςξχνθκΰ δΰννϋυ, νεξαυξδθμξ ύςξς θρςξχνθκ δΰννϋυ ρξυπΰνθςό.\nΡξυπΰνθςό βρε θημενενθÿ, βϋοξλνεννϋε β ύςξμ δθΰλξγε?";
-    Message[ greek ] = "Για να είναι δυνατή η διαχείριση των ερωτημάτων μιας προέλευσης θα πρέπει πρώτα να αποθηκευτεί.\nΘέλετε να αποθηκευτούν όλες οι αλλαγές που";
+    Message[ greek ] = "Για να είναι δυνατή η διαχείριση των ερωτημάτων μιας προέλευσης θα πρέπει πρώτα να αποθηκευτεί.\nΘέλετε να αποθηκευτούν όλες οι αλλαγές που ";
     Message[ dutch ] = "Om de $objects$ van een gegevensbron te beheren moet deze zijn opgeslagen.\nWilt u de wijzigingen die u in deze dialoog heeft aangebracht nu opslaan?";
     Message[ french ] = "Vous devez enregistrer la source de donnιes afin de pouvoir en gιrer les $objects$.\nEnregistrer toutes les modifications effectuιes dans cette boξte de dialogue ?";
     Message[ spanish ] = "Para poder administrar $objects$ de una fuente de datos, debe guardarse esta.\nΏDesea guardar todas las modificaciones realizadas hasta ahora en este diαlogo?";
     Message[ finnish ] = "Um die $objects$ einer Datenquelle zu administrieren, muss diese gespeichert werden.\nSollen sδmtliche bis jetzt in diesem Dialog vorgenommene Δnderungen jetzt gespeichert werden?";
-    Message[ italian ] = "Per gestire $objects$ di una sorgente di dati θ necessario prima salvare la sorgente di dati.\nVolete salvare le modifiche raccolte fino adesso nel dialogo?";
+    Message[ italian ] = "Per gestire $objects$ di una sorgente dati θ necessario prima salvare la sorgente dati.\nVolete salvare le modifiche raccolte fino adesso nel dialogo?";
     Message[ danish ] = "To administrate the queries of a data source, it must be saved.\nShould all changes made in this dialog now be saved?";
     Message[ swedish ] = "Fφr att $objects$ i en datakδlla ska kunna administreras mεste datakδllan sparas.\nSka alla δndringar som hittills har gjorts i den hδr dialogrutan sparas nu?";
     Message[ polish ] = "Administracja '$objects$' okrelonego rσd³a danych wymaga jego uprzedniego zapisania.\nZapisaζ wszystkie zmiany ³Ήcznie ze zmianami dokonanymi w danym oknie dialogowym?";
@@ -2903,7 +2904,7 @@ ErrorBox ERR_CANTADMINQUERIES
     Message[ dutch ] = "Om de $objects$ van een gegevensbron te beheren moet deze opgeslagen zijn.\nMaar met de actuele instellingen is het opslaan van wijzigingen niet mogelijk (moeilijkheden met naamgeving).\n\nU kunt de $objects$  niet beheren zolang deze moeilijkheden niet zijn opgelost en de wijzigingen niet werden opgeslagen.";
     Message[ french ] = "Vous devez enregistrer la source de donnιes afin de pouvoir en gιrer les $objects$.\nLes paramθtres actifs ne permettent cependant pas d'enregistrer les modifications car il y a des conflits de noms.\n\nTant que ces conflits persisteront et que les modifications n'auront pas ιtι enregistrιes, la gestion des $objects$ sera impossible.";
     Message[ spanish ] = "Para administrar $objects$ de una fuente de datos, esta debe guardarse.\nLas entradas actuales, sin embargo, no permiten guardar las modificaciones (existen conflictos con los nombres).\n\nNo podrα administrar $objects$ mientras no solucione estos conflictos y mientras no guarde las modificaciones.";
-    Message[ italian ] = "Per gestire i contenuti ($objects$) di una sorgente di dati θ necessario prima salvare la sorgente di dati.\nLe indicazioni attuali non permettono di salvare la ricerca in quanto genera un conflitto di nomi.\n\nFintanto non avete risolto il conflitto fra i nomi e salvato le modifiche sarΰ impossibile gestire $objects$.";
+    Message[ italian ] = "Per gestire i contenuti ($objects$) di una sorgente dati θ necessario prima salvare la sorgente dati.\nLe indicazioni attuali non permettono di salvare la ricerca in quanto genera un conflitto di nomi.\n\nFintanto non avete risolto il conflitto fra i nomi e salvato le modifiche sarΰ impossibile gestire $objects$.";
     Message[ danish ] = "To administrate the queries of a data source, it must be saved.\nBut, the current settings do not allow to save the changes (there are name conflicts).\n\nYou won't be able to administrate the queries until these conflicts are resolved and the changes are saved.";
     Message[ swedish ] = "En datakδlla mεste sparas om det ska gε att administrera $objects$ i den.\nMen de aktuella inmatningarna tillεter inte att δndringarna sparas (det finns namnkonflikter).\n\nDu kan inte administrera $objects$ sεlδnge de hδr konflikterna inte δr lφsta och δndringarna har sparats.";
     Message[ polish ] = "Administracja $objects$ okrelonego rσd³a danych wymaga jego uprzedniego zapisania.\nAktualne wpisy nie pozwalajΉ jednak zapisaζ rσd³a danych (wystΉpi³ konflikt nazw).\n\nAdministracja $objects$ moΏliwa bκdzie dopiero po rozwiΉzaniu konfliktu i zapisaniu zmian.";
@@ -2934,7 +2935,7 @@ ErrorBox ERR_CANTDOTABLEACTION
     Message[ french ] = "Vous devez enregistrer les modifications apportιes ΰ la source de donnιes afin de pouvoir exιcuter cette opιration.\nLes paramθtres actifs ne permettent cependant pas de le faire car il y a des conflits de noms entre plusieurs sources de donnιes.\n\nTant que ces conflits persisteront, l'exιcution de cette opιration sera impossible.";
     Message[ spanish ] = "Para ejecutar esta acciσn se deben guardar las modificaciones en la fuente de datos.\nPero la informaciσn introducida no lo permite debido a conflicto con los nombres de las diversas fuentes de datos.\n\nPara realizar la acciσn debe solucionar primero este conflicto.";
     Message[ finnish ] = "For this operation, the data source must be saved.\nHowever, the current settings do not allow this, due to conflicting names of different data sources.\n\nAs long as these conflicts aren't resolved, you won't be able to do the requested operation.";
-    Message[ italian ] = "Per questa operazione θ necessario salvare le modifiche della sorgente di dati.\nTuttavia non θ possibile salvare le modifiche a causa di un conflitto di nomi tra diverse sorgenti di dati.\n\nFintanto non verrΰ risolto il problema sarΰ impossibile salvare le modifiche.";
+    Message[ italian ] = "Per questa operazione θ necessario salvare le modifiche della sorgente dati.\nTuttavia non θ possibile salvare le modifiche a causa di un conflitto di nomi tra diverse sorgenti di dati.\n\nFintanto non verrΰ risolto il problema sarΰ impossibile salvare le modifiche.";
     Message[ danish ] = "For this operation, the data source must be saved.\nHowever, the current settings do not allow this, due to conflicting names of different data sources.\n\nAs long as these conflicts aren't resolved, you won't be able to do the requested operation.";
     Message[ swedish ] = "Fφr den hδr εtgδrden mεste δndringarna av datakδllan sparas.\nMen de aktuella inmatningarna tillεter inte detta eftersom det finns namnkonflikter mellan olika datakδllor.\n\nSεlδnge de hδr konflikterna inte δr lφsta kan du inte utfφra den hδr εtgδrden.";
     Message[ polish ] = "Operacja ta wymaga zapisania zmian dokonanych w rσdle danych.\nNiestety, bieΏΉce dane uniemoΏliwiajΉ zapisania zmian, poniewaΏ miκdzy rσΏnymi rσd³ami danych powsta³y konflikty nazw.\n\nWykonanie operacji moΏliwe bκdzie dopiero po rozwiΉzaniu wymienionych konfliktσw.";
@@ -3120,7 +3121,7 @@ String STR_ADDRESSBOOK_SYSTEM
     Text[ portuguese ] = "Livro de endereηos Windows";
     Text[ russian ] = "ΐδπερνΰÿ κνθγΰ Windows";
     Text[ greek ] = "Windows addressbook";
-    Text[ dutch ] = "Windows addressbook";
+    Text[ dutch ] = "Windows adresboek";
     Text[ french ] = "Carnet d'adresses Windows";
     Text[ spanish ] = "Libreta de direcciones de Windows";
     Text[ finnish ] = "Windows addressbook";
@@ -3170,7 +3171,7 @@ String STR_ADDRESSBOOK_MOZILLA
     Text[ portuguese ] = "Livro de endereηos Mozilla";
     Text[ russian ] = "ΐδπερνΰÿ κνθγΰ Mozilla";
     Text[ greek ] = "Mozilla addressbook";
-    Text[ dutch ] = "Mozilla addressbook";
+    Text[ dutch ] = "Mozilla adresboek";
     Text[ french ] = "Carnet d'adresses Mozilla";
     Text[ spanish ] = "Libreta de direcciones de Mozilla";
     Text[ finnish ] = "Mozilla addressbook";
@@ -3195,7 +3196,7 @@ String STR_ADDRESSBOOK_LDAP
     Text[ portuguese ] = "Livro de endereηos LDAP";
     Text[ russian ] = "ΐδπερνΰÿ κνθγΰ LDAP";
     Text[ greek ] = "LDAP addressbook";
-    Text[ dutch ] = "LDAP addressbook";
+    Text[ dutch ] = "LDAP adresboek";
     Text[ french ] = "Carnet d'adresses LDAP";
     Text[ spanish ] = "Libreta de direcciones LDAP";
     Text[ finnish ] = "LDAP addressbook";
@@ -3216,6 +3217,9 @@ String STR_ADDRESSBOOK_LDAP
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.55  2001/06/08 22:04:38  rt
+ *  Merge SRC633: 09.06.01 - 00:05:04
+ *
  *  Revision 1.54  2001/06/01 19:30:31  obo
  *  Merge SRC633: 01.06.01 - 21:33:03
  *
@@ -3269,5 +3273,6 @@ String STR_ADDRESSBOOK_LDAP
  *
  *  Revision 1.0 20.09.00 10:58:47  fs
  ************************************************************************/
+
 
 
