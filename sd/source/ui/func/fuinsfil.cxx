@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:17:20 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:03:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include "fuinsfil.hxx"
 
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
@@ -138,23 +140,32 @@
 #endif
 
 #include "sdresid.hxx"
-#include "fuinsfil.hxx"
 #include "drawdoc.hxx"
-#include "sdwindow.hxx"
-#include "sdview.hxx"
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
 #include "strings.hrc"
 #include "stlpool.hxx"
 #include "glob.hrc"
 #include "sdpage.hxx"
 #include "strmname.h"
 #include "strings.hrc"
-#include "drviewsh.hxx"
-#include "outlview.hxx"
-#include "docshell.hxx"
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+#ifndef SD_OUTLINE_VIEW_SHELL_HXX
+#include "OutlineViewShell.hxx"
+#endif
+#include "DrawDocShell.hxx"
 #include "app.hrc"
 #include "unmovss.hxx"
 #include "inspagob.hxx"
-#include "sdoutl.hxx"
+#ifndef SD_OUTLINER_HXX
+#include "Outliner.hxx"
+#endif
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -162,6 +173,7 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
+namespace sd {
 
 TYPEINIT1( FuInsertFile, FuPoor );
 
@@ -175,12 +187,13 @@ TYPEINIT1( FuInsertFile, FuPoor );
 |*
 \************************************************************************/
 
-FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
-                           SdWindow*       pWin,
-                           SdView*         pView,
-                           SdDrawDocument* pDoc,
-                           SfxRequest&     rReq)
-           : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+FuInsertFile::FuInsertFile (
+    ViewShell*    pViewSh,
+    ::sd::Window*      pWin,
+    ::sd::View*        pView,
+    SdDrawDocument* pDoc,
+    SfxRequest&    rReq)
+    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
     SfxFilterMatcher&       rMatcher = SFX_APP()->GetFilterMatcher();
     ::std::vector< String > aFilterVector;
@@ -309,7 +322,7 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
     SfxMedium*          pMedium = new SfxMedium( aFile, STREAM_READ | STREAM_NOCREATE, FALSE );
     const SfxFilter*    pFilter = NULL;
     ErrCode             nErr = SFX_APP()->GetFilterMatcher().GuessFilter( *pMedium, &pFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
-    BOOL                bDrawMode = pViewSh->ISA(SdDrawViewShell);
+    BOOL                bDrawMode = pViewSh->ISA(DrawViewShell);
     BOOL                bInserted = FALSE;
 
     if( pFilter )
@@ -429,7 +442,7 @@ BOOL FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 
     // Ev. wird eine QueryBox geoeffnet ("Links aktualisieren?"),
     // daher wird der Dialog der aktuelle DefModalDialogParent
-    Window* pDefParent = GetpApp()->GetDefDialogParent();
+    ::Window* pDefParent = GetpApp()->GetDefDialogParent();
     GetpApp()->SetDefDialogParent(pDlg);
 
     USHORT nRet = pDlg->Execute();
@@ -445,15 +458,15 @@ BOOL FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
         BOOL bLink = pDlg->IsLink();
         BOOL bReplace = FALSE;
         SdPage* pPage = NULL;
-        SdView* pView = pViewShell->GetView();
+        ::sd::View* pView = pViewShell->GetView();
 
-        if (pView->ISA(SdOutlineView))
+        if (pView->ISA(OutlineView))
         {
-            pPage = ((SdOutlineView*) pView)->GetActualPage();
+            pPage = static_cast<OutlineView*>(pView)->GetActualPage();
         }
         else
         {
-            pPage = (SdPage*) pView->GetPageViewPvNum(0)->GetPage();
+            pPage = static_cast<SdPage*>(pView->GetPageViewPvNum(0)->GetPage());
         }
 
         USHORT nPos = 0xFFFF;
@@ -590,7 +603,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
         // der globale Outliner koennte in SdPage::CreatePresObj
         // benutzt werden
 //      SfxItemPool* pPool = pDoc->GetDrawOutliner().GetEmptyItemSet().GetPool();
-        SdrOutliner* pOutliner = new SdOutliner( pDoc, OUTLINERMODE_TEXTOBJECT );
+        SdrOutliner* pOutliner = new ::sd::Outliner( pDoc, OUTLINERMODE_TEXTOBJECT );
 //      pOutliner->SetStyleSheetPool((SfxStyleSheetPool*)pDoc->GetStyleSheetPool());
 //      pOutliner->SetEditTextObjectPool(pPool);
 //      pOutliner->SetForbiddenCharsTable( pDoc->GetForbiddenCharsTable() );
@@ -598,7 +611,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
         // Referenz-Device setzen
         pOutliner->SetRefDevice( SD_MOD()->GetRefDevice( *pDocSh ) );
 
-        SdPage* pPage = ((SdDrawViewShell*)pViewShell)->GetActualPage();
+        SdPage* pPage = static_cast<DrawViewShell*>(pViewShell)->GetActualPage();
         aLayoutName = pPage->GetLayoutName();
         aLayoutName.Erase(aLayoutName.SearchAscii(SD_LT_SEPARATOR));
 
@@ -620,7 +633,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
         else
         {
             // ist es eine Masterpage?
-            if (((SdDrawViewShell*)pViewShell)->GetEditMode() == EM_MASTERPAGE &&
+            if (static_cast<DrawViewShell*>(pViewShell)->GetEditMode() == EM_MASTERPAGE &&
                 !pPage->IsMasterPage())
             {
                 pPage = (SdPage*)pPage->GetMasterPage(0);
@@ -707,7 +720,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     else if( aFilterName.SearchAscii( "HTML" ) != STRING_NOTFOUND )
         nFormat = EE_FORMAT_HTML;
 
-    Outliner*      pDocliner = ((SdOutlineView*)pView)->GetOutliner();
+    ::Outliner*    pDocliner = static_cast<OutlineView*>(pView)->GetOutliner();
     List*          pList     = pDocliner->GetView(0)->CreateSelectionList();
     Paragraph*     pPara     = (Paragraph*)pList->First();
 
@@ -739,7 +752,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     // was zeichnen muessen;
     // der globale Outliner koennte in SdPage::CreatePresObj
     // benutzt werden
-    Outliner* pOutliner = new Outliner( &pDoc->GetItemPool(), OUTLINERMODE_OUTLINEOBJECT );
+    ::Outliner* pOutliner = new ::Outliner( &pDoc->GetItemPool(), OUTLINERMODE_OUTLINEOBJECT );
     pOutliner->SetStyleSheetPool((SfxStyleSheetPool*)pDoc->GetStyleSheetPool());
 
     // Referenz-Device setzen
@@ -832,7 +845,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 
 void FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
 {
-    SdOutlineView* pOlView = (SdOutlineView*)pView;
+    OutlineView* pOlView = static_cast<OutlineView*>(pView);
 
     // Outliner-Inhalte ins SdDrawDocument uebertragen
     pOlView->PrepareClose();
@@ -840,7 +853,7 @@ void FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
     // einlesen wie im Zeichenmodus
     if (InsSDDinDrMode(pMedium))
     {
-        Outliner* pOutliner = pOlView->GetViewByWindow(pWindow)->GetOutliner();
+        ::Outliner* pOutliner = pOlView->GetViewByWindow(pWindow)->GetOutliner();
 
         // Benachrichtigungs-Links temporaer trennen
         Link aOldParagraphInsertedHdl = pOutliner->GetParaInsertedHdl();
@@ -888,3 +901,5 @@ void FuInsertFile::GetSupportedFilterVector( ::std::vector< String >& rFilterVec
     if( ( pSearchFilter = rMatcher.GetFilter4Mime( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "text/html" ) ) ) ) != NULL )
         rFilterVector.push_back( pSearchFilter->GetMimeType() );
 }
+
+} // end of namespace sd
