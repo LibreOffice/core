@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futransf.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 10:15:45 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,13 +104,13 @@ FuTransform::FuTransform(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pVi
                          SdDrawDocument* pDoc, SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
-    if( pView->HasMarkedObj() )
+    if( pView->AreObjectsMarked() )
     /*  ( pView->IsResizeAllowed() ||
           pView->IsMoveAllowed() ||
           pView->IsRotateAllowed() ) ) */
     {
         // Undo
-        String aString( pView->GetMarkDescription() );
+        String aString( pView->GetDescriptionOfMarkedObjects() );
         aString.Append( sal_Unicode(' ') );
         aString.Append( String( SdResId( STR_TRANSFORM ) ) );
         pView->BegUndo( aString );
@@ -122,7 +122,7 @@ FuTransform::FuTransform(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pVi
             // --------- Itemset fuer Groesse und Position --------
             SfxItemSet aSet( pView->GetGeoAttrFromMarked() );
 
-            const SdrMarkList& rMarkList = pView->GetMarkList();
+            const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
             SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
             if( rMarkList.GetMarkCount() == 1 &&
                 pObj->GetObjInventor() == SdrInventor &&
@@ -189,7 +189,7 @@ FuTransform::FuTransform(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pVi
         * An der E3dView muss demnaechst SetGeoAttrToMarked() mit folgendem
         * Code ueberladen werden:
         **********************************************************************/
-        const SdrMarkList& rMarkList = pView->GetMarkList();
+        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
         ULONG nCount = rMarkList.GetMarkCount();
 
         for (ULONG nMark = 0; nMark < nCount; nMark++)
