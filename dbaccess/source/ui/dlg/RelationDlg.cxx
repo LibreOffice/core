@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationDlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 14:15:17 $
+ *  last change: $Author: oj $ $Date: 2001-05-04 10:53:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,8 +573,8 @@ ORelationDialog::ORelationDialog( OJoinTableView* pParent,
         m_pRC_Tables->SetDestDef(pInitialRight->GetTable());
 
         // die in einer ComboBox ausgewaehlte Tabelle darf nicht in der anderen zur Verfuegung stehen
-        m_strCurrentLeft = pInitialLeft->GetTableName();
-        m_strCurrentRight = pInitialRight->GetTableName();
+        m_strCurrentLeft = pInitialLeft->GetComposedName();
+        m_strCurrentRight = pInitialRight->GetComposedName();
         if (pTabWins->size() > 2)
         {
             m_lmbLeftTable.RemoveEntry(m_strCurrentRight);
@@ -790,7 +790,7 @@ IMPL_LINK( ORelationDialog, OnTableChanged, ListBox*, pListBox )
         OTableWindow* pSecond = aIter->second;
 
         Reference< XPropertySet> xLeftTable, xRightTable;
-        if (m_lmbLeftTable.GetSelectEntry() == String(pFirst->GetTableName()))
+        if (m_lmbLeftTable.GetSelectEntry() == String(pFirst->GetComposedName()))
         {
             xLeftTable = pFirst->GetTable();
             xRightTable = pSecond->GetTable();

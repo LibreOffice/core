@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowTitle.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-02 11:05:23 $
+ *  last change: $Author: oj $ $Date: 2001-05-04 10:56:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,13 +147,9 @@ void OTableWindowTitle::LoseFocus()
 //------------------------------------------------------------------------------
 void OTableWindowTitle::RequestHelp( const HelpEvent& rHEvt )
 {
-    Reference<XPropertySet> xProp(m_pTabWin->GetTable(),UNO_QUERY);
-
-    if(xProp.is())
+    if(m_pTabWin)
     {
-        ::rtl::OUString aTableName;
-        xProp->getPropertyValue(PROPERTY_NAME) >>= aTableName;
-        String aHelpText = aTableName.getStr();
+        String aHelpText = m_pTabWin->GetComposedName();
         if( aHelpText.Len())
         {
             // Hilfe anzeigen
