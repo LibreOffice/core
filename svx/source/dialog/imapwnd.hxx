@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapwnd.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-12 11:54:45 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ public:
 |*
 |*
 \************************************************************************/
-
+/* move to cui //CHINA001
 class URLDlg : public ModalDialog
 {
     FixedLine           aFlURL;
@@ -191,7 +191,7 @@ public:
     String              GetTarget() const { return aCbbTargets.GetText(); }
     String              GetName() const { return aEdtName.GetText(); }
 };
-
+*/
 
 /*************************************************************************
 |*
