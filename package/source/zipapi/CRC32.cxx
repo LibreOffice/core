@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRC32.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mtg $ $Date: 2001-12-04 17:48:19 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:01:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,11 @@
 #include <CRC32.hxx>
 #endif
 #ifndef _ZLIB_H
+#ifdef SYSTEM_ZLIB
+#include <zlib.h>
+#else
 #include <external/zlib/zlib.h>
+#endif
 #endif
 #ifndef _PACKAGE_CONSTANTS_HXX_
 #include <PackageConstants.hxx>
