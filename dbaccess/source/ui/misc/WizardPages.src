@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WizardPages.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:38:45 $
+ *  last change: $Author: kz $ $Date: 2001-03-19 11:32:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,7 +296,7 @@ ModalDialog WIZ_RTFCOPYTABLE
         Text[ portuguese_brazilian ] = "Cancel";
         Text[ japanese ] = "·¬Ý¾Ù";
         Text[ korean ] = "Ãë¼Ò";
-        Text[ chinese_simplified ] = "È¡Ïû";
+        Text[ chinese_simplified ] = "È¡Ïû(~C)";
         Text[ chinese_traditional ] = "¨ú®ø";
         Text[ arabic ] = "ÅáÛÇÁ ÇáÃãÑ";
         Text[ turkish ] = "Ýptal";
@@ -322,7 +322,7 @@ ModalDialog WIZ_RTFCOPYTABLE
         Text[ portuguese_brazilian ] = "~Next>";
         Text[ japanese ] = "ŽŸ‚Ö(~N)>";
         Text[ korean ] = "´ÙÀ½(~N)";
-        Text[ chinese_simplified ] = "¼ÌÐø>(~N)";
+        Text[ chinese_simplified ] = "¼ÌÐø(~N) >";
         Text[ chinese_traditional ] = "Ä~Äò >";
         Text[ arabic ] = "ÇáÊÇáí>";
         Text[ turkish ] = "Devam>";
@@ -348,7 +348,7 @@ ModalDialog WIZ_RTFCOPYTABLE
         Text[ portuguese_brazilian ] = "< ~Back";
         Text[ japanese ] = "< –ß‚é(~B)";
         Text[ korean ] = "<µÚ·Î(~B)";
-        Text[ chinese_simplified ] = "<·µ»Ø(~B)";
+        Text[ chinese_simplified ] = "< ·µ»Ø(~B)";
         Text[ chinese_traditional ] = "< ªð¦^(~B)";
         Text[ arabic ] = "<ÇáÓÇÈÞ";
         Text[ turkish ] = "<Geri";
@@ -391,7 +391,7 @@ TabPage TAB_WIZ_COLUMN_SELECT
         Text[ portuguese_brazilian ] = "Tablename:";
         Text[ japanese ] = "Šù‘¶‚Ì—ñ";
         Text[ korean ] = "±âÁ¸ÀÇ ÄÃ·³:";
-        Text[ chinese_simplified ] = "ÏÖÓÐµÄÁÐ";
+        Text[ chinese_simplified ] = "ÏÖ´æµÄÁÐ";
         Text[ chinese_traditional ] = "²{¦sªºÄæ";
         Text[ arabic ] = "ÇáÃÚãÏÉ ÇáãæÌæÏÉ";
         Text[ turkish ] = "Mevcut sütunlar";
@@ -566,7 +566,7 @@ TabPage TAB_WIZ_TYPE_SELECT
         Text[ portuguese ] = "Informação sobre colunas";
         Text[ russian ] = "Èíôîðìàöèÿ î êîëîíêàõ";
         Text[ greek ] = "Ðëçñïöïñßåò ãéá ôéò óôÞëåò";
-        Text[ dutch ] = "Kolom informatie";
+        Text[ dutch ] = "Kolomgegevens";
         Text[ french ] = "Information sur les colonnes";
         Text[ spanish ] = "Información sobre columnas";
         Text[ italian ] = "Informazione colonne";
@@ -576,7 +576,7 @@ TabPage TAB_WIZ_TYPE_SELECT
         Text[ portuguese_brazilian ] = "Tablename:";
         Text[ japanese ] = "—ñ‚Ìî•ñ:";
         Text[ korean ] = "ÄÃ·³Á¤º¸";
-        Text[ chinese_simplified ] = "ÁÐÃû";
+        Text[ chinese_simplified ] = "ÁÐµÄÐÅÏ¢";
         Text[ chinese_traditional ] = "Äæ¸ê°T";
         Text[ arabic ] = "ãÚáæãÇÊ ÇáÚãæÏ";
         Text[ turkish ] = "Sütun bilgileri";
@@ -626,7 +626,7 @@ TabPage TAB_WIZ_TYPE_SELECT
         Text[ portuguese ] = "Linhas (max.):";
         Text[ russian ] = "(ìàêñ.) ñòðîê:";
         Text[ greek ] = "ÃñáììÝò (ìåã.):";
-        Text[ dutch ] = "(max.) ~regels";
+        Text[ dutch ] = "(max.) ~regels:";
         Text[ french ] = "~Lignes (max.) :";
         Text[ spanish ] = "~Líneas (máx.):";
         Text[ italian ] = "~Righe (max):";
@@ -636,7 +636,7 @@ TabPage TAB_WIZ_TYPE_SELECT
         Text[ portuguese_brazilian ] = "Tablename:";
         Text[ japanese ] = "Å‘ås”(~X):";
         Text[ korean ] = "ÁÙ[ÃÖ´ë(~X)";
-        Text[ chinese_simplified ] = "(×î¶à)ÐÐ£º(~X)";
+        Text[ chinese_simplified ] = "(×î¶à)ÐÐ£º";
         Text[ chinese_traditional ] = "(³Ì¦h)¦C¡G";
         Text[ arabic ] = "(ÇáÍÏ ÇáÃÞÕì) ááÕÝæÝ:";
         Text[ turkish ] = "Satýrlar (azami):";
@@ -1082,7 +1082,7 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ portuguese ] = "Como ~vista de tabela";
         Text[ russian ] = "Êàê âèä òàáëèöû";
         Text[ greek ] = "Ù~ò ðñïâïëÞ ðßíáêá";
-        Text[ dutch ] = "Al~s voorbeeld";
+        Text[ dutch ] = "Al~s tabelmodus";
         Text[ french ] = "Comme ~vue";
         Text[ spanish ] = "Como visualización de t~abla";
         Text[ italian ] = "Come ~vista tabella";
@@ -1092,7 +1092,7 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ portuguese_brazilian ] = "A~s View";
         Text[ japanese ] = "Ã°ÌÞÙËÞ­°‚Æ‚µ‚Ä(~S)";
         Text[ korean ] = "Å×ÀÌºí º¸±â·Î(~S)";
-        Text[ chinese_simplified ] = "×÷Îª±í¸ñÊÓÍ¼(~S)";
+        Text[ chinese_simplified ] = "µ±×÷±í¸ñÊÓÍ¼(~S)";
         Text[ chinese_traditional ] = "·í§@ªí®æÀËµø(~S)";
         Text[ arabic ] = "ãËá ØÑíÞÉ ÚÑÖ ÇáÌÏæá";
         Text[ turkish ] = "Tablo görünümü olarak";
@@ -1113,7 +1113,7 @@ TabPage TAB_WIZ_COPYTABLE
         Text [ french ]     = "~Joindre des données" ;
         Text [ dutch ]      = "~Gegevens toevoegen" ;
         Text [ portuguese ] = "A~nexar dados" ;
-        Text[ chinese_simplified ] = "¸½´øÊý¾Ý";
+        Text[ chinese_simplified ] = "¸½¼ÓÊý¾Ý";
         Text[ russian ]     = "Âëîæèòü äàííûå";
         Text[ polish ]      = "Za³¹cz dane";
         Text[ japanese ]    = "ÃÞ°À‚Ì“Y•t";
@@ -1144,7 +1144,7 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ portuguese_brazilian ] = "~Create primary key";
         Text[ japanese ] = "Ìß×²ÏØ·°‚Ìì¬(~C)";
         Text[ korean ] = "±âº»Å° ¸¸µé±â(~C)";
-        Text[ chinese_simplified ] = "Éú³ÉÖ÷¹Ø¼ü×Ö(~C)";
+        Text[ chinese_simplified ] = "Éú³ÉÖ÷¹Ø¼ü×Ö";
         Text[ chinese_traditional ] = "¥Í¦¨¥DÃöÁä¦r(~C)";
         Text[ arabic ] = "ÅäÔÇÁ ãÝÊÇÍ ÃÓÇÓí";
         Text[ turkish ] = "Birincil anahtar oluþtur";
@@ -1295,7 +1295,7 @@ ErrorBox ERROR_INVALID_TABLE_NAME
     Message[ polish ] = "Ta nazwa tabeli jest nieprawid³owa w aktualnej bazie danych.";
     Message[ portuguese_brazilian ] = "This isn't a valid tablename in the current database.";
     Message[ japanese ] = "Œ»Ý‚ÌÃÞ°ÀÍÞ°½‚Å‚ÍA‚±‚ÌÃ°ÌÞÙ–¼‚Í–³Œø‚Å‚·B";
-    Message[ chinese_simplified ] = "ÎÞ·¨´¦ÀíÖÐÎÄ±í¸ñÃû³Æ£¬ÇëÓÃ×ÖÄ¸»òÊý×Ö´úÌæ¡£";
+    Message[ chinese_simplified ] = "Õâ²»ÊÇµ±Ç°Êý¾Ý¿âÓÐÐ§µÄ±í¸ñÃû³Æ¡£";
     Message[ chinese_traditional ] = "·í«e¨Ï¥Îªº¸ê®Æ®wµLªk±µ¨ü³o­ÓµL®ÄªºÅÜ§ó¦WºÙ¡C";
     Message[ arabic ] = "ýåÐÇ ÇÓã ÌÏæá ÛíÑ ÕÇáÍ Ýí ÞÇÚÏÉ ÇáÈíÇäÇÊ ÇáÍÇáíÉ.";
     Message[ greek ] = "Áõôü ôï üíïìá ôïõ ðßíáêá äåí åßíáé Ýãêõñï óôçí ôñÝ÷ïõóá âÜóç äåäïìÝíùí.";
@@ -1314,12 +1314,12 @@ String STR_ERR_DUPL_TABLENAME
     Text [ italian ] = "Il nome della tabella \'$name$\' esiste già .\nPotete indicare un nuovo nome oppure \nallegare i dati alla tabella esistente." ;
     Text [ spanish ] = "El nombre de tabla \'$name$\' ya existe.\nPuede escribir otro nombre\no adjuntar los datos a la tabla existente." ;
     Text [ french ] = "Le nom de table \'$name$\' existe déjà.\nVous pouvez en indiquer un autre\nou bien joindre les données à la table existante." ;
-    Text [ dutch ] = "Tabelnaam \'$name$\' bestaat reeds.\nU kunt een nieuwe naam opgeven \nof de gegevens aan de bestaande tabel toevoegen." ;
+    Text [ dutch ] = "Tabelnaam \'$name$\' bestaat reeds.\nU kunt een nieuwe naam aangeven \nof de gegevens aan de bestaande tabel toevoegen." ;
     Text[ chinese_simplified ] = "±í¸ñÃû³Æ \'$name$\' ÒÑ¾­´æÔÚ¡£\nÄúÄÜ¹»¸ø¶¨Ò»¸öÐÂÃû³Æ\n»òÕß½«Êý¾Ý¸½¼ÓÔÚÏÖ´æµÄ±í¸ñÄÚ¡£";
     Text[ russian ] = "Èìÿ òàáëèöû \'$name$\' óæå ñóùåñòâóåò.\nÂû ìîæåòå ââåñòè íîâîå èìÿ\nèëè ïðèëîæèòü äàííûå ê ñóùåñòâóþùåé òàáëèöå.";
     Text[ polish ] = "Nazwa tabeli \'$name$\' ju¿ istnieje.\nWybierz inn¹ nazwê nlub do³¹cz dane do istniej¹cej tabeli.";
     Text[ japanese ] = "\'$name$\' ‚ÌÃ°ÌÞÙ–¼‚Í‚·‚Å‚É‚ ‚è‚Ü‚·B\nV‚µ‚¢–¼‘O‚ð“ü—Í‚©A\n‚Ü‚½‚ÍŠù‘¶‚ÌÃ°ÌÞÙ‚ÉÃÞ°À‚ð“Y•t‚µ‚Ü‚·B";
-    Text[ chinese_traditional ] = "ªí®æ¦WºÙ \\\'$name$\\\' ¤w¸g¦s¦b¡C\n±z¯à°÷¿é¤J¤@­Ó·s¦WºÙ\n©ÎªÌ±N¸ê®Æªþ¥[¦b²{¦sªºªí®æ¤º¡C";
+    Text[ chinese_traditional ] = "ªí®æ¦WºÙ \'$name$\' ¤w¸g¦s¦b¡C\n±z¯à°÷¿é¤J¤@­Ó·s¦WºÙ\n©ÎªÌ±N¸ê®Æªþ¥[¦b²{¦sªºªí®æ¤º¡C";
     Text[ arabic ] = "ÇÓã ÇáÌÏæá \'$name$\' ãæÌæÏ ãÓÈÞÇð.\níãßäß ÅÏÎÇá ÇÓã ÌÏíÏ\nÃæ ÅáÍÇÞ ÇáÈíÇäÇÊ ÈÇáÌÏæá ÇáãæÌæÏ.";
     Text[ greek ] = "Ôï üíïìá ôïõ ðßíáêá \'$name$\' õðÜñ÷åé Þäç.\nÌðïñåßôå íá åéóÜãåôå Ýíá íÝï üíïìá\nÞ íá ðñïóêïëëÞóåôå ôá äåäïìÝíá óôïí Þäç õðÜñ÷ùí ðßíáêá.";
     Text[ korean ] = "Å×ÀÌºí ÀÌ¸§ \'$name$\'´Â ÀÌ¹Ì ÀÖ½À´Ï´Ù. \n»õ ÀÌ¸§À» ÀÔ·ÂÇÏ°Å³ª\nµ¥ÀÌÅÍ¸¦ ±âÁ¸ Å×ÀÌºí¿¡ Ã·ºÎÇÒ ¼ö ÀÖ½À´Ï´Ù.";
