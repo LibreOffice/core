@@ -2,9 +2,9 @@
  *
  *  $RCSfile: w1class.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:29:30 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:02:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,11 +193,7 @@ protected:
     ULONG ulSeek;
     BOOL bOK;
 public:
-    Ww1PlainText( Ww1Fib& rFib, ULONG ulFilePos, ULONG ulCountBytes )
-        : rFib( rFib ), ulCountBytes( ulCountBytes ),
-        ulFilePos( ulFilePos ), ulSeek( 0 ), bOK(TRUE)
-    {}
-
+    Ww1PlainText(Ww1Fib& rWwFib, ULONG nFilePos, ULONG nCountBytes);
     // innerhalb des textes
     ULONG Where() const                 { return ulSeek; }
     void Seek( ULONG ulNew )
@@ -483,9 +479,8 @@ class Ww1SingleSprmWord : public Ww1SingleSprm {
 public:
     ostream& Dump(ostream&, BYTE*, USHORT);
 //  USHORT Size(BYTE*);
-    Ww1SingleSprmWord(sal_Char* sName = 0) :
-        Ww1SingleSprm(2, sName) {
-        }
+    Ww1SingleSprmWord(sal_Char* sName = 0)
+    : Ww1SingleSprm(2, sName) {}
 };
 
 class Ww1SingleSprmLong : public Ww1SingleSprm {
@@ -600,28 +595,26 @@ public:
 // denen der folgenden versionen. diese werden zum glueck aber auch
 // von anderen sprms abgerufen.
 // SH: Ab sofort alle 4 Umrandungen ueber nur 1 Klasse.
-class Ww1SingleSprmPBrc10 : public Ww1SingleSprmPBrc {
+class Ww1SingleSprmPBrc10 : public Ww1SingleSprmPBrc
+{
     USHORT nLine;   // BRC_TOP, BRC_LEFT, ...
 public:
-    Ww1SingleSprmPBrc10(USHORT nL, sal_Char* sName) :
-        nLine(nL), Ww1SingleSprmPBrc(sName) {
-        }
+    Ww1SingleSprmPBrc10(USHORT nL, sal_Char* sName)
+    : Ww1SingleSprmPBrc(sName), nLine(nL) {}
     void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
 };
 
 class Ww1SingleSprmParaSpace : public Ww1SingleSprmWord {
 public:
-    Ww1SingleSprmParaSpace(sal_Char* sName) :
-        Ww1SingleSprmWord(sName) {
-        }
+    Ww1SingleSprmParaSpace(sal_Char* sName)
+    : Ww1SingleSprmWord(sName) {}
     void Stop(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
 };
 
 class Ww1SingleSprmPDyaBefore : public Ww1SingleSprmParaSpace {
 public:
-    Ww1SingleSprmPDyaBefore(sal_Char* sName) :
-        Ww1SingleSprmParaSpace(sName) {
-        }
+    Ww1SingleSprmPDyaBefore(sal_Char* sName)
+    : Ww1SingleSprmParaSpace(sName) {}
     void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
 };
 
@@ -688,10 +681,8 @@ public:
 
 class Ww1SingleSprmTJc : public Ww1SingleSprmWord {
 public:
-    Ww1SingleSprmTJc(sal_Char* sName) :
-        Ww1SingleSprmWord(sName) {
-        }
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
+    Ww1SingleSprmTJc(sal_Char* sName)
+    : Ww1SingleSprmWord(sName) {}
 };
 
 //class Ww1SingleSprmTDxaLeft : public Ww1SingleSprmWord {
@@ -1466,13 +1457,11 @@ public:
 /////////////////////////////////////////////////////////////////// Sep
 class Ww1Sep : public Ww1PlcSep
 {
-    USHORT nPlcIndex;
     Ww1HeaderFooter aHdd;
+    USHORT nPlcIndex;
 public:
     Ww1Sep(Ww1Fib& rFib, USHORT grpfIhdt)
-        : Ww1PlcSep(rFib), aHdd(rFib, grpfIhdt),nPlcIndex(0)
-    {}
-//  ~Ww1Sep() {}
+    : Ww1PlcSep(rFib), aHdd(rFib, grpfIhdt), nPlcIndex(0) {}
 
     Ww1HeaderFooter& GetHdd()   { return aHdd; }
     void operator++(int)        { nPlcIndex++; }
