@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Writer.xcs,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-08-14 13:20:05 $
+ *  last change: $Author: os $ $Date: 2002-08-22 13:38:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3720,8 +3720,8 @@
           <!-- OldPath: Writer/AutoComplete/Words -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- Responsible: OS -->
-          <!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  Endless suggestions -->
-          <value>false</value>
+          <!-- UIHints: no UI available anymore -->
+          <value>true</value>
           <info>
             <desc xml:lang="en-US">Specifies, if the list containing the suitable suggestions can be endlessly flipped through by using (Ctrl)(Tab)(forward)</desc>
             <label xml:lang="en-US">Endless suggestions</label>
