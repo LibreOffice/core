@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameHyperlinkContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-25 13:35:19 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:53:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,8 @@ namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
 } } }
 
+// OD 2004-04-21 #i26791#
+class XMLTextFrameHint_Impl;
 
 class XMLTextFrameHyperlinkContext : public SvXMLImportContext
 {
@@ -85,9 +87,8 @@ class XMLTextFrameHyperlinkContext : public SvXMLImportContext
     ::rtl::OUString              sName;
     ::rtl::OUString              sTargetFrameName;
     ::com::sun::star::text::TextContentAnchorType eAnchorType;
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::text::XTextContent> *pTextContent;
-    ::com::sun::star::text::TextContentAnchorType *pAnchorType;
+    // OD 2004-04-20 #i26791#
+    XMLTextFrameHint_Impl* mpTextFrameHint;
     sal_Bool                    bMap;
 
 public:
@@ -100,9 +101,8 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             ::com::sun::star::text::TextContentAnchorType eAnchorType,
-            ::com::sun::star::uno::Reference <
-                ::com::sun::star::text::XTextContent> *pTxtCntnt = 0 ,
-            ::com::sun::star::text::TextContentAnchorType *pAnchrType = 0 );
+            // OD 2004-04-20 #i26791#
+            XMLTextFrameHint_Impl* pTextFrameHint = 0 );
     virtual ~XMLTextFrameHyperlinkContext();
 
     virtual void EndElement();
