@@ -1,4 +1,4 @@
-    <node oor:name="StarOffice XML (Writer)" oor:op="replace">
+    <node oor:name="StarOffice XML (Writer)" oor:op="replace" oor:finalized="true" oor:mandatory="true">
         <prop oor:name="FileFormatVersion"><value>6200</value></prop>
         <prop oor:name="Type"><value>writer_StarOffice_XML_Writer</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.text.TextDocument</value></prop>
@@ -12,11 +12,11 @@
             <value xml:lang="ja">%productname% %formatversion% 文書ドキュメント</value>
             <value xml:lang="es">%productname% %formatversion% Documento de texto</value>
             <value xml:lang="tr">%productname% %formatversion% Metin Belgesi</value>
-            <value xml:lang="ru">%productname% %formatversion% Текстовый документ</value>
-            <value xml:lang="th">เอกสารข้อความ %productname% (ต้นฉบับเอกสาร %productname% )</value>
+            <value xml:lang="ru">%productname% %formatversion% Тек�?товый документ</value>
+            <value xml:lang="th">เอ�?สารข้อความ %productname% (ต้นฉบับเอ�?สาร %productname% )</value>
             <value xml:lang="x-comment">%productname% %formatversion% Textdokument</value>
             <value xml:lang="ca">%productname% %formatversion% Text Document</value>
-            <value xml:lang="el">%productname% %formatversion% Έγγραφο Κειμένου</value>
+            <value xml:lang="el">%productname% %formatversion% Έγγ�?αφο Κειμένου</value>
             <value xml:lang="zh-CN">%productname% %formatversion% 文本文档</value>
             <value xml:lang="pt">%productname% %formatversion% Texto</value>
             <value xml:lang="cs">Textový dokument %productname% %formatversion%</value>
@@ -32,11 +32,11 @@
             <value xml:lang="sv">%productname% %formatversion% textdokument</value>
             <value xml:lang="da">%productname% %formatversion%-tekstdokument</value>
             <value xml:lang="de">%productname% %formatversion% Textdokument</value>
-            <value xml:lang="ko">%productname% %formatversion% 텍스트 문서</value>
+            <value xml:lang="ko">%productname% %formatversion% �?스트 문서</value>
             <value xml:lang="nl">%productname% %formatversion% Tekstdocument</value>
             <value xml:lang="pt-BR">%productname% %formatversion% Text Document</value>
             <value xml:lang="it">%productname% %formatversion% Documento di testo</value>
             <value xml:lang="x-translate">%productname% %formatversion% Textdokument</value>
         </prop>
-        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN DEFAULT PREFERRED</value></prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN PREFERRED</value></prop>
     </node>
