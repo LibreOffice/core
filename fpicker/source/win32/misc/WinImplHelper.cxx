@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinImplHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-10 12:27:57 $
+ *  last change: $Author: tra $ $Date: 2001-11-14 16:43:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,6 +355,22 @@ Any SAL_CALL ListboxGetSelectedItem( HWND hwnd )
 
     Any aAny;
     aAny <<= ListboxGetString( hwnd, idxItem );
+
+    return aAny;
+}
+
+//------------------------------------------------------------
+//
+//------------------------------------------------------------
+
+Any SAL_CALL ListboxGetSelectedItemIndex( HWND hwnd )
+{
+    OSL_ASSERT( IsWindow( hwnd ) );
+
+    LRESULT idxItem = SendMessageW( hwnd, CB_GETCURSEL, 0, 0 );
+
+    Any aAny;
+    aAny <<= static_cast< sal_Int32 >( idxItem );
 
     return aAny;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinImplHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-10 12:27:57 $
+ *  last change: $Author: tra $ $Date: 2001-11-14 16:43:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ void SAL_CALL ListboxSetSelectedItem(
 // get actions
 ::com::sun::star::uno::Any SAL_CALL ListboxGetItems( HWND hwnd );
 ::com::sun::star::uno::Any SAL_CALL ListboxGetSelectedItem( HWND hwnd );
+::com::sun::star::uno::Any SAL_CALL ListboxGetSelectedItemIndex( HWND hwnd );
 
 // checkbox helper functions
 ::com::sun::star::uno::Any SAL_CALL CheckboxGetState( HWND hwnd );
