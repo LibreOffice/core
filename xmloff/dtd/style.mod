@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.29 2001-02-06 14:08:20 dvo Exp $
+	$Id: style.mod,v 1.30 2001-02-11 13:41:04 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -151,6 +151,7 @@
 						   (none|single-line|double-line|thick-line|slash|X)
 						   #IMPLIED>
 <!ATTLIST style:properties style:text-position CDATA #IMPLIED>
+<!ATTLIST style:properties style:text-align (left|right|start|center|end|justify|justified) #IMPLIED>
 
 <!ATTLIST style:properties style:font-name %string; #IMPLIED>
 <!ATTLIST style:properties fo:font-family %string; #IMPLIED>
