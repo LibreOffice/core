@@ -7,7 +7,7 @@
         <prop oor:name="FilterService"/>
         <prop oor:name="TemplateName"/>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">dBASE</value>
+            <value>dBASE</value>
         </prop>
         <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN USESOPTIONS</value></prop>
     </node>
