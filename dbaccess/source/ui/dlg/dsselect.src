@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 09:49:28 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
     Text[ russian ] = "Èñòî÷íèê äàííûõ";
     Text[ polish ] = "ród³o danych";
     Text[ japanese ] = "ÃŞ°À¿°½";
-    Text[ chinese_traditional ] = "¸ê®Æ·½";
+    Text[ chinese_traditional ] = "¸ê®Æ¨Ó·½";
     Text[ arabic ] = "ãÕÏÑ ÇáÈíÇäÇÊ";
     Text[ greek ] = "Ğñïİëåõóç äåäïìİíùí";
     Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º";
@@ -119,7 +119,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ japanese ] = "ÃŞ°À¿°½‚ğ‘I‘ğ‚µ‚Ü‚·:";
         Text[ korean ] = "µ¥ÀÌÅÍ¼Ò½º¸¦ ¼±ÅÃÇÏ½Ê½Ã¿À:";
         Text[ chinese_simplified ] = "ÇëÄúÑ¡ÔñÒ»¸öÊı¾İÔ´£º";
-        Text[ chinese_traditional ] = "¿ï¾Ü¸ê®Æ·½¡G";
+        Text[ chinese_traditional ] = "¿ï¾Ü¸ê®Æ¨Ó·½¡G";
         Text[ turkish ] = "Choose a data source:";
         Text[ arabic ] = "ÇÎÊÑ ãÕÏÑ ÈíÇäÇÊ:";
     };
@@ -199,7 +199,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ russian ] = "ëîêàëüíûé èñòî÷íèê äàííûõ";
         Text[ polish ] = "lokalne Ÿród³a danych";
         Text[ japanese ] = "Û°¶ÙÃŞ°À¿°½";
-        Text[ chinese_traditional ] = "§½³¡ªº¸ê®Æ·½";
+        Text[ chinese_traditional ] = "§½³¡ªº¸ê®Æ¨Ó·½";
         Text[ arabic ] = "ãÕÇÏÑ ÈíÇäÇÊ ãÍáíÉ";
         Text[ greek ] = "ôïğéêİò ğñïåëåıóåéò äåäïìİíùí";
         Text[ korean ] = "·ÎÄÃ µ¥ÀÌÅÍ ¼Ò½º";
@@ -216,7 +216,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ dutch ] = "De programmabibliotheek #lib# kon niet worden geladen of is defect. De functie ODBC gegevensbron kiezen is niet beschikbaar.";
         Text[ french ] = "La bibliothèque de programme #lib# n'a pas pu être chargée ou est défectueuse. La configuration de la source de données ODBC n'est pas disponible.";
         Text[ spanish ] = "No se pudo cargar la biblioteca de programa #lib#, quizás esté dañada. La configuración de fuente de datos ODBC no está disponible.";
-        Text[ italian ] = "Impossibile caricare la program library  #lib# oppure è difettosa. La configurazione della sorgente dati ODBC non è disponibile.";
+        Text[ italian ] = "Impossibile caricare la libreria programma #lib# oppure è difettosa. La configurazione della sorgente dati ODBC non è disponibile.";
         Text[ danish ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
         Text[ swedish ] = "Det gick inte att ladda programbiblioteket #lib# eller så är det defekt. Konfigurationen av ODBC-datakällor är inte tillgänglig.";
         Text[ polish ] = "Za³adowanie biblioteki programu #lib# nie by³o mo¿liwe. Jest ona byæ mo¿e uszkodzona. Wybór Ÿród³a danych ODBC nie jest mo¿liwy.";
@@ -224,7 +224,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ japanese ] = "#lib# ÌßÛ¸Ş×Ñ×²ÌŞ×Ø‚ğ“Ç‚İ‚ß‚È‚©‚Á‚½‚©A‚Ü‚½‚Í‚»‚ê©‘Ì‚ÉÄ×ÌŞÙ‚ª‚ ‚è‚Ü‚·BODBC ÃŞ°À¿°½‚Ìİ’è‚Í‚Å‚«‚Ü‚¹‚ñB";
         Text[ korean ] = "ÇÁ·Î±×·¥ ¶óÀÌºê·¯¸® #lib#¸¦ ·ÎµåÇÒ ¼ö ¾ø¾ú°Å³ª ¶Ç´Â °íÀåÀÔ´Ï´Ù.  ODBCµ¥ÀÌÅÍ ¼Ò½º ÄÁÇÇ±Ô·¹ÀÌ¼ÇÀ» »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.";
         Text[ chinese_simplified ] = "ÎŞ·¨×°Èë³ÌĞò¿â #lib# »òÒÑ¾­Ëğ»µ¡£ÎŞ·¨ÅäÖÃ ODBC Êı¾İÔ´¡£";
-        Text[ chinese_traditional ] = "µLªk¸Ë¤Jµ{¦¡®w #lib# ©Î¤w¸g·l§¥¡CµLªk³]©w ODBC ¸ê®Æ·½¡C";
+        Text[ chinese_traditional ] = "µLªk¸Ë¤Jµ{¦¡®w #lib# ©Î¤w¸g·l§¥¡CµLªk³]©w ODBC ¸ê®Æ¨Ó·½¡C";
         Text[ turkish ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
         Text[ arabic ] = "ÅãÇ Ãäå ÊÚĞÑ ÊÍãíá ãßÊÈÉ ÇáÈÑäÇãÌ #lib#¡ Ãæ ÃäåÇ ãÚØæÈÉ. Êßæíä ãÕÇÏÑ ÈíÇäÇÊ ODBC ÛíÑ ãÊæİÑ.";
     };
@@ -233,6 +233,9 @@ ModalDialog DLG_DATASOURCE_SELECTION
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2000/11/29 09:49:28  kz
+ *  Merge SRC614: 29.11.00 - 10:48:38 (NoBranch)
+ *
  *  Revision 1.6  2000/11/27 07:46:50  kz
  *  Merge SRC614: 27.11.00 - 08:46:28 (NoBranch)
  *
