@@ -1,5 +1,11 @@
+# executables are *.exe for WNT. This variable is necessary since Cygwin 1.5.x
+if ( "$GUI" == "WNT" ) then
+  setenv EXEEXT ".exe"
+else
+  setenv EXEEXT ""
+endif
 
-if ( ! -f $SRC_ROOT/dmake/dmake ) then
+if ( ! -f $SRC_ROOT/dmake/dmake$EXEEXT ) then
 
 cd $SRC_ROOT/dmake
 if "$?" != "0" exit $?
