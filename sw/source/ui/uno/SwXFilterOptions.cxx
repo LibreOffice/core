@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXFilterOptions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2002-06-24 13:58:02 $
+ *  last change: $Author: mav $ $Date: 2002-08-13 07:33:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +216,10 @@ sal_Int16 SwXFilterOptions::execute() throw (uno::RuntimeException)
             nRet = ui::dialogs::ExecutableDialogResults::OK;
         }
     }
+
+    if( pInStream )
+        delete pInStream;
+
     return nRet;
 }
 /*-- 2002/06/21 11:01:26---------------------------------------------------
