@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-28 13:48:15 $
+ *  last change: $Author: fs $ $Date: 2000-11-29 22:29:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -668,10 +668,10 @@ OCommonBehaviourTabPage::OCommonBehaviourTabPage(Window* pParent, sal_uInt16 nRe
         m_pCharset = new ListBox(this, ResId(LB_CHARSET));
         m_pCharset->SetSelectHdl(getControlModifiedLink());
 
-        OCharsetCollection::CharsetIterator aLoop = m_aCharsets.begin();
+        OCharsetDisplay::const_iterator aLoop = m_aCharsets.begin();
         while (aLoop != m_aCharsets.end())
         {
-            m_pCharset->InsertEntry(aLoop.getName());
+            m_pCharset->InsertEntry((*aLoop).getDisplayName());
             ++aLoop;
         }
     }
@@ -732,7 +732,17 @@ void OCommonBehaviourTabPage::implInitControls(const SfxItemSet& _rSet, sal_Bool
 
         if ((m_nControlFlags & CBTP_USE_CHARSET) == CBTP_USE_CHARSET)
         {
-            m_pCharset->SelectEntry(m_aCharsets.KeyToName(pCharsetItem->GetValue()));
+            OCharsetDisplay::const_iterator aFind = m_aCharsets.find(pCharsetItem->GetValue(), OCharsetDisplay::IANA());
+            if (aFind == m_aCharsets.end())
+            {
+                DBG_ERROR("OCommonBehaviourTabPage::implInitControls: unjknown charset falling back to system language!");
+                aFind = m_aCharsets.find(RTL_TEXTENCODING_DONTKNOW);
+                // fallback: system language
+            }
+            if (aFind == m_aCharsets.end())
+                m_pCharset->SelectEntry(String());
+            else
+                m_pCharset->SelectEntry((*aFind).getDisplayName());
             if (_bSaveValue)
                 m_pCharset->SaveValue();
         }
@@ -793,7 +803,10 @@ sal_Bool OCommonBehaviourTabPage::FillItemSet(SfxItemSet& _rSet)
     {
         if (m_pCharset->GetSelectEntryPos() != m_pCharset->GetSavedValue())
         {
-            _rSet.Put(SfxStringItem(DSID_CHARSET, m_aCharsets.NameToKey(m_pCharset->GetSelectEntry())));
+            OCharsetDisplay::const_iterator aFind = m_aCharsets.find(m_pCharset->GetSelectEntry(), OCharsetDisplay::Display());
+            DBG_ASSERT(aFind != m_aCharsets.end(), "OCommonBehaviourTabPage::FillItemSet: could not translate the selected character set!");
+            if (aFind != m_aCharsets.end())
+                _rSet.Put(SfxStringItem(DSID_CHARSET, (*aFind).getIanaName()));
             bChangedSomething = sal_True;
         }
     }
@@ -1763,6 +1776,9 @@ IMPL_LINK( OTableSubscriptionPage, OnRadioButtonClicked, Button*, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.16  2000/11/28 13:48:15  fs
+ *  #80152# m_bDisplayingDeleted -> m_bDisplayingInvalid
+ *
  *  Revision 1.15  2000/11/28 11:41:42  oj
  *  #80827# check dbroot if dbconfig failed
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-28 13:47:31 $
+ *  last change: $Author: fs $ $Date: 2000-11-29 22:29:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,7 +249,7 @@ protected:
     FixedText*          m_pCharsetLabel;
     ListBox*            m_pCharset;
 
-    OCharsetCollection  m_aCharsets;
+    OCharsetDisplay     m_aCharsets;
 
     USHORT              m_nControlFlags;
 
@@ -460,6 +460,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2000/11/28 13:47:31  fs
+ *  #80152# m_bDisplayingDeleted renamed in m_bDisplayingInvalid
+ *
  *  Revision 1.12  2000/11/28 11:41:42  oj
  *  #80827# check dbroot if dbconfig failed
  *
