@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arealink.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-22 19:55:20 $
+ *  last change: $Author: nn $ $Date: 2001-07-06 12:36:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,6 +461,9 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
 
         if ( aNewRange != aDestArea )
             aDestArea = aNewRange;
+
+        if ( nNewRefresh != GetRefreshDelay() )
+            SetRefreshDelay( nNewRefresh );
 
         USHORT nPaintEndX = Max( aOldRange.aEnd.Col(), aNewRange.aEnd.Col() );
         USHORT nPaintEndY = Max( aOldRange.aEnd.Row(), aNewRange.aEnd.Row() );
