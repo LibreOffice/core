@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: mav $ $Date: 2002-06-21 08:47:36 $
+ *  last change: $Author: mav $ $Date: 2002-06-26 14:10:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,7 +559,9 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     Point aPos;
                     DBG_ASSERT( sal_False, "TransformParameters()\nProperty \"PosSize\" isn't supported yet!\n" );
                 }
-                else if ( aName == sMacroExecMode && rProp.Value.getValueType() == ::getCppuType((const sal_Int16*)0) )
+                else if ( aName == sMacroExecMode
+                    && ( rProp.Value.getValueType() == ::getCppuType((const sal_Int16*)0)
+                      || rProp.Value.getValueType() == ::getCppuType((const sal_Int8*)0) ) )
                     rSet.Put( SfxUInt16Item( SID_MACROEXECMODE, *((sal_Int16*)rProp.Value.getValue()) ) );
             }
         }
