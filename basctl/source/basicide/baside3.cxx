@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: tbe $ $Date: 2002-04-24 14:45:30 $
+ *  last change: $Author: tbe $ $Date: 2002-05-02 12:10:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,14 +262,11 @@ void DialogWindow::Command( const CommandEvent& rCEvt )
     }
     else if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
     {
-        Point aPos( rCEvt.IsMouseEvent() ? rCEvt.GetMousePosPixel() : Point(1,1) );
         BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
         SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
         SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         if ( pDispatcher )
-        {
-            pDispatcher->ExecutePopup( IDEResId(RID_POPUP_DLGED), this, &aPos );
-        }
+            pDispatcher->ExecutePopup( IDEResId(RID_POPUP_DLGED) );
     }
     else
         IDEBaseWindow::Command( rCEvt );

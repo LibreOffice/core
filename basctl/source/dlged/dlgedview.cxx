@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2002-04-24 14:50:16 $
+ *  last change: $Author: tbe $ $Date: 2002-05-02 12:11:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,10 +117,66 @@ DlgEdView::~DlgEdView()
 
 void DlgEdView::MakeVisible( const Rectangle& rRect, Window& rWin )
 {
-    SdrPaintView::MakeVisible( rRect, rWin );
+    // visible area
+    MapMode aMap( rWin.GetMapMode() );
+    Point aOrg( aMap.GetOrigin() );
+    Size aVisSize( rWin.GetOutputSize() );
+    Rectangle aVisRect( Rectangle( Point(-aOrg.X(),-aOrg.Y()), aVisSize ) );
 
-    if ( pDlgEditor )
+    // check, if rectangle is inside visible area
+    if ( !aVisRect.IsInside( rRect ) )
+    {
+        // calculate scroll distance; the rectangle must be inside the visible area
+        sal_Int32 nScrollX = 0, nScrollY = 0;
+
+        sal_Int32 nVisLeft   = aVisRect.Left();
+        sal_Int32 nVisRight  = aVisRect.Right();
+        sal_Int32 nVisTop    = aVisRect.Top();
+        sal_Int32 nVisBottom = aVisRect.Bottom();
+
+        sal_Int32 nDeltaX = pDlgEditor->GetHScroll()->GetLineSize();
+        sal_Int32 nDeltaY = pDlgEditor->GetVScroll()->GetLineSize();
+
+        while ( rRect.Right() > nVisRight + nScrollX )
+            nScrollX += nDeltaX;
+
+        while ( rRect.Left() < nVisLeft + nScrollX )
+            nScrollX -= nDeltaX;
+
+        while ( rRect.Bottom() > nVisBottom + nScrollY )
+            nScrollY += nDeltaY;
+
+        while ( rRect.Top() < nVisTop + nScrollY )
+            nScrollY -= nDeltaY;
+
+        // don't scroll beyond the page size
+        Size aPageSize = pDlgEditor->GetPage()->GetSize();
+        sal_Int32 nPageWidth  = aPageSize.Width();
+        sal_Int32 nPageHeight = aPageSize.Height();
+
+        if ( nVisRight + nScrollX > nPageWidth )
+            nScrollX = nPageWidth - nVisRight;
+
+        if ( nVisLeft + nScrollX < 0 )
+            nScrollX = -nVisLeft;
+
+        if ( nVisBottom + nScrollY > nPageHeight )
+            nScrollY = nPageHeight - nVisBottom;
+
+        if ( nVisTop + nScrollY < 0 )
+            nScrollY = -nVisTop;
+
+        // scroll window
+        rWin.Update();
+        rWin.Scroll( -nScrollX, -nScrollY );
+        aMap.SetOrigin( Point( aOrg.X() - nScrollX, aOrg.Y() - nScrollY ) );
+        rWin.SetMapMode( aMap );
+        rWin.Update();
+        rWin.Invalidate();
+
+        // update scroll bars
         pDlgEditor->UpdateScrollBars();
+    }
 }
 
 //----------------------------------------------------------------------------
