@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commtest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:29:05 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:05:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ CommunicationTester::CommunicationTester()
 
 void CommunicationTester::Main()
 {
-    ResMgr *pRes = new ResMgr( CUniString("commtest.res") );
+    ResMgr *pRes = ResMgr::CreateResMgr( "commtest" );
     Resource::SetResManager( pRes );
     WorkWindow aWW( NULL, WB_APP | WB_STDWORK );
     aWW.Show();
