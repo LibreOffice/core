@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:55:59 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:44:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef PCH
 #include "core_pch.hxx"
 #endif
@@ -215,11 +214,10 @@ void ScStyleSheetPool::CopyStyleFrom( ScStyleSheetPool* pSrcPool,
         SfxItemSet& rDestSet = pDestSheet->GetItemSet();
         rDestSet.PutExtended( rSourceSet, SFX_ITEM_DONTCARE, SFX_ITEM_DEFAULT );
 
+        const SfxPoolItem* pItem;
         if ( eFamily == SFX_STYLE_FAMILY_PAGE )
         {
             //  Set-Items
-
-            const SfxPoolItem* pItem;
 
             if ( rSourceSet.GetItemState( ATTR_PAGE_HEADERSET, FALSE, &pItem ) == SFX_ITEM_SET )
             {
@@ -234,6 +232,19 @@ void ScStyleSheetPool::CopyStyleFrom( ScStyleSheetPool* pSrcPool,
                 SfxItemSet aDestSub( *rDestSet.GetPool(), rSrcSub.GetRanges() );
                 aDestSub.PutExtended( rSrcSub, SFX_ITEM_DONTCARE, SFX_ITEM_DEFAULT );
                 rDestSet.Put( SvxSetItem( ATTR_PAGE_FOOTERSET, aDestSub ) );
+            }
+        }
+        else    // cell styles
+        {
+            // #b5017505# number format exchange list has to be handled here, too
+
+            if ( pDoc && pDoc->GetFormatExchangeList() &&
+                 rSourceSet.GetItemState( ATTR_VALUE_FORMAT, FALSE, &pItem ) == SFX_ITEM_SET )
+            {
+                ULONG nOldFormat = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
+                ULONG* pNewFormat = static_cast<ULONG*>(pDoc->GetFormatExchangeList()->Get( nOldFormat ));
+                if (pNewFormat)
+                    rDestSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, *pNewFormat ) );
             }
         }
     }
