@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-06 16:47:38 $
+ *  last change: $Author: mt $ $Date: 2001-03-07 10:30:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1495,7 +1495,9 @@ void Edit::Command( const CommandEvent& rCEvt )
             uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = ImplGetClipboard();
             if ( xClipboard.is() )
             {
+                const sal_uInt32 nRef = Application::ReleaseSolarMutex();
                 uno::Reference< datatransfer::XTransferable > xDataObj = xClipboard->getContents();
+                Application::AcquireSolarMutex( nRef );
                 if ( xDataObj.is() )
                 {
                     datatransfer::DataFlavor aFlavor;
@@ -2150,7 +2152,9 @@ void Edit::Paste()
     uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = ImplGetClipboard();
     if ( xClipboard.is() )
     {
+        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
         uno::Reference< datatransfer::XTransferable > xDataObj = xClipboard->getContents();
+        Application::AcquireSolarMutex( nRef );
         if ( xDataObj.is() )
         {
             datatransfer::DataFlavor aFlavor;

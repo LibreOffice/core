@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-13 10:36:28 $
+ *  last change: $Author: mt $ $Date: 2001-03-07 10:26:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1034,7 +1034,9 @@ void TextView::Copy()
         if ( mpTextEngine->HasAttrib( TEXTATTR_HYPERLINK ) )  // Dann auch als HTML
             mpTextEngine->Write( pDataObj->GetHTMLStream(), &maSelection, TRUE );
 
+        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
         xClipboard->setContents( pDataObj, NULL );
+        Application::AcquireSolarMutex( nRef );
     }
 }
 
@@ -1043,7 +1045,9 @@ void TextView::Paste()
     uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = ImplGetClipboard();
     if ( xClipboard.is() )
     {
+        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
         uno::Reference< datatransfer::XTransferable > xDataObj = xClipboard->getContents();
+        Application::AcquireSolarMutex( nRef );
         if ( xDataObj.is() )
         {
             datatransfer::DataFlavor aFlavor;
