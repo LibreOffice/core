@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXHeadFootText.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-04-07 08:02:39 $
+ *  last change:$Date: 2003-04-07 08:21:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,14 +224,13 @@ public class SwXHeadFootText extends TestCase {
         ParagraphDsc pDsc = new ParagraphDsc();
         tEnv.addObjRelation( "PARA", new InstCreator( xTextDoc, pDsc ) );
 
-        log.println( "adding TextDocument as mod relation to environment" );
-        tEnv.addObjRelation("TEXTDOC", xTextDoc);
-
         log.println( "adding InstDescriptor object" );
         TableDsc tDsc = new TableDsc( 6, 4 );
 
         log.println( "adding InstCreator object" );
         tEnv.addObjRelation( "XTEXTINFO", new InstCreator( xTextDoc, tDsc ) );
+
+        tEnv.addObjRelation( "TEXT", oObj);
 
         return tEnv;
     } // finish method getTestEnvironment
