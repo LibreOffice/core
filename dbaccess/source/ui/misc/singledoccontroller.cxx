@@ -2,9 +2,9 @@
  *
  *  $RCSfile: singledoccontroller.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:47:19 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:52:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,12 @@
 #ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_XDOCUMENTDATASOURCE_HPP_
+#include <com/sun/star/sdb/XDocumentDataSource.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XOFFICEDATABASEDOCUMENT_HPP_
+#include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
 #endif
@@ -115,6 +121,7 @@ namespace dbaui
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::sdbc;
+    using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::frame;
 
     //====================================================================
@@ -308,7 +315,7 @@ namespace dbaui
         sal_Bool bReConnect = sal_True;
         if ( _bUI )
         {
-            QueryBox aQuery( getView(), ModuleRes(TABLE_QUERY_CONNECTION_LOST) );
+            QueryBox aQuery( getView(), ModuleRes(QUERY_CONNECTION_LOST) );
             bReConnect = ( RET_YES == aQuery.Execute() );
         }
 
@@ -358,9 +365,13 @@ namespace dbaui
         m_aUndoManager.Clear();
 
         disconnect();
-        Reference<XModel> xModel(m_xDataSource,UNO_QUERY);
-        if ( xModel.is() )
-            xModel->disconnectController( this );
+        Reference<XDocumentDataSource> xDocumentDataSource(m_xDataSource,UNO_QUERY);
+        if ( xDocumentDataSource.is() )
+        {
+            Reference<XModel> xModel(xDocumentDataSource->getDatabaseDocument(),UNO_QUERY);
+            if ( xModel.is() )
+                xModel->disconnectController( this );
+        }
 
         Reference < XFrame > xFrame;
         attachFrame( xFrame );
@@ -541,7 +552,9 @@ namespace dbaui
     {
         m_bModified = _bModified;
         InvalidateFeature(ID_BROWSER_SAVEDOC);
-        InvalidateFeature(ID_BROWSER_SAVEASDOC);
+
+        if ( isFeatureSupported( ID_BROWSER_SAVEASDOC ) )
+            InvalidateFeature(ID_BROWSER_SAVEASDOC);
     }
     // -----------------------------------------------------------------------------
     Reference< XModel >  SAL_CALL OSingleDocumentController::getModel(void) throw( RuntimeException )
@@ -552,7 +565,8 @@ namespace dbaui
     sal_Bool SAL_CALL OSingleDocumentController::attachModel(const Reference< XModel > & xModel) throw( RuntimeException )
     {
         ::osl::MutexGuard aGuard(m_aMutex);
-        m_xDataSource.set(xModel,UNO_QUERY);
+        Reference<XOfficeDatabaseDocument> xOfficeDoc(xModel,UNO_QUERY);
+        m_xDataSource.set(xOfficeDoc.is() ? xOfficeDoc->getDataSource() : Reference<XDataSource>(),UNO_QUERY);
         return m_xDataSource.is();
     }
     // -----------------------------------------------------------------------------
