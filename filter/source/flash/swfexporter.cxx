@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfexporter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-03 15:50:15 $
+ *  last change: $Author: cl $ $Date: 2002-12-06 12:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,8 +502,6 @@ sal_uInt16 FlashExporter::exportDrawPageBackground(sal_uInt16 nPage, Reference< 
             gPrivateCache[privatechecksum] = nPage;
 
             rBackgroundID = mpWriter->defineShape( aMtfPrivate );
-
-            mpWriter->placeShape( rBackgroundID, _uInt16(0), 0, 0 );
 
             maPagesMap[nPage].mnBackgroundID = rBackgroundID;
             return nPage;
