@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shells.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-05 12:27:50 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 17:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,7 +440,7 @@ String STR_REDLINE_AUTOFMT
     TEXT[ arabic ] = "ΚδΣνή ΚαήΗΖν";
     TEXT[ dutch ] = "AutoOpmaak";
     TEXT[ chinese_simplified ] = "ΧΤ¶―ΈρΚ½";
-    TEXT[ greek ] = "ΑυτοΜορφοποίηση";
+    TEXT[ greek ] = "ΑυτοΜορφή";
     TEXT[ korean ] = "ΐΪµΏ Ό­½Δ";
     TEXT[ turkish ] = "Otomatik formatlama";
     TEXT[ language_user1 ] = " ";
@@ -544,7 +544,7 @@ String STR_REDLINE_TITLE
     Text[ arabic ] = "ΚδΣνή ΚαήΗΖν";
     Text[ dutch ] = "AutoOpmaak";
     Text[ chinese_simplified ] = "ΧΤ¶―ΈρΚ½";
-    Text[ greek ] = "ΑυτοΜορφοποίηση";
+    Text[ greek ] = "ΑυτοΜορφή";
     Text[ korean ] = "ΐΪµΏ Ό­½Δ";
     Text[ turkish ] = "Otomatik formatlama";
     Text[ language_user1 ] = " ";
@@ -563,14 +563,14 @@ String STR_REDLINE_MSG
     Text[ spanish ] = "El AutoFormato ha concluido.\nAhora puede aceptar o rechazar todos los cambios\na la vez o uno por uno.";
     Text[ english_us ] = "AutoFormat completed.\nYou can accept or reject all changes,\nor accept or reject particular changes.";
     Text[ chinese_simplified ] = "ÒΡΎ­Νκ³ΙΧΤ¶―ΈρΚ½΅£\nΔϊΟΦΤΪΔάΉ»½ΣΚά»ςΎάΎψΛωΣΠµΔΈόΈΔ£¬»ςΥί\n½ΣΚά»ςΎάΎψµ¥ΈφΈόΈΔ΅£";
-    Text[ russian ] = "ΐβςξτξπμΰςθπξβΰνθε ηΰκξνχενξ.\nΡειχΰρ Βϋ μξζεςε οπθνÿςό θλθ ξςκλξνθςό ρπΰησ βρε θημενενθÿ,\nθλθ κΰζδξε οξ ξςδελόνξρςθ.";
+    Text[ russian ] = "ΐβςξτξπμΰςθπξβΰνθε ηΰκξνχενξ.\nΡειχΰρ βϋ μξζεςε οπθνÿςό θλθ ξςκλξνθςό ρπΰησ βρε θημενενθÿ,\nθλθ κΰζδξε οξ ξςδελόνξρςθ.";
     Text[ polish ] = "Autoformatowanie jest zakoρczone.\nMoΏesz zaaakceptowaζ lub odrzuciζ teraz wszystkie zmiany,\nlub akceptowaζ je oraz odrzucaζ pojedynczo.";
     Text[ japanese ] = "µ°ΔΜ«°Ο―Δ‚ªI—Ή‚µ‚ά‚µ‚½B\n‚·‚Χ‚Δ‚Μ•ΟX‚πσ‚―“ό‚κ‚ι‚©A³‚Ι–ί‚·‚±‚Ζ‚ª‚Ε‚«‚ά‚·B\n‚ά‚½‚Ν‚Π‚Ζ‚Β‚Π‚Ζ‚Β‚Μ•ΟX‚Ι‚Β‚Ά‚Δ“Ά‚·‚ι‚±‚Ζ‚ΰ‚Ε‚«‚ά‚·B";
     Text[ chinese_traditional ] = "¤wΈg§Ή¦¨¦Ϋ°Κ®ζ¦΅΅C\n±z²{¦b―ΰ°χ±µ¨ό©Ξ©Ϊµ΄©Ò¦³ªΊΕά§σ΅A±z¤]―ΰ°χ\n±µ¨ό©Ξ©Ϊµ΄³ζ­ΣªΊΕά§σ΅C";
     Text[ arabic ] = "ΚγψσΚ ΪγανΙ ΗαΚδΣνή ΗαΚαήΗΖν.\nνγίδί ΗαΒδ ήΘζα Γζ ΡέΦ ΗαΚΫννΡΗΚ ίαεΗ΅\nΓζ ήΘζα Γζ ΡέΦ ία ΚΫννΡ Ϊαμ ΝΟε.";
     Text[ dutch ] = "AutoOpmaak voltooid.\nU kunt nu alle wijzigingen accepteren of verwerpen,\nof afzonderlijke wijzigingen accepteren of verwerpen.";
     Text[ chinese_simplified ] = "ÒΡΎ­Νκ³ΙΧΤ¶―ΈρΚ½΅£\nΔϊΟΦΤΪΔάΉ»½ΣΚά»ςΎάΎψΛωΣΠµΔΈόΈΔ£¬»ςΥί\n½ΣΚά»ςΎάΎψµ¥ΈφΈόΈΔ΅£";
-    Text[ greek ] = "Η ΑυτοΜορφοποίηση ολοκληρώθηκε.\nΈχετε τη δυνατότητα να αποδεχτείτε ή να απορρίψετε όλες ή μεμονωμένες αλλαγές.";
+    Text[ greek ] = "Η ΑυτοΜορφή ολοκληρώθηκε.\nΜπορείτε να αποδεχτείτε ή να απορρίψετε όλες\nή μεμονωμένες αλλαγές.";
     Text[ korean ] = "ΐΪµΏ Ό­½ΔΐΜ ΑΎ·αµΗΎϊ½ΐ΄Ο΄Ω.\nΑφ±έ Ί―°ζ»ηΗΧΐ» ΈπµΞ ΐϋΏλΗΟ°Ε³ª ΓλΌÒΗÒ Όφ ΐΦΐΈΈη\nΘ¤ΐΊ °³Ί°ΐϋΐΈ·Ξ ΐϋΏλΗΟ°Ε³ª ΓλΌÒΗÒ Όφ ΐΦ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "Otomatik formatlama tamamlandύ.\nήimdi deπiώiklikleri tόmden veya tek tek\n kabul ya da redd edebilirsiniz.";
     Text[ language_user1 ] = " ";
@@ -2234,7 +2234,7 @@ String STR_SWBG_TABLE_ROW
     Text [ danish ] = "Tabelrζkke" ;
     Text [ italian ] = "Riga" ;
     Text [ spanish ] = "Fila de la tabla" ;
-    Text [ french ] = "Ligne de table" ;
+    Text [ french ] = "Ligne de tableau" ;
     Text [ dutch ] = "Tabelrij" ;
     Text [ portuguese ] = "Linha de tabela" ;
     Text[ chinese_simplified ] = "Ή¤Χχ±νµ¥ΤªΈρ";
@@ -2260,7 +2260,7 @@ String STR_SWBG_TABLE_CELL
     Text [ danish ] = "Tabelcelle" ;
     Text [ italian ] = "Cella" ;
     Text [ spanish ] = "Celda de la tabla" ;
-    Text [ french ] = "Cellule de table" ;
+    Text [ french ] = "Cellule de tableau" ;
     Text [ dutch ] = "Tabelcel" ;
     Text [ portuguese ] = "Cιlula de tabela" ;
     Text[ chinese_simplified ] = "Ή¤Χχ±νµ¥ΤªΈρ";
