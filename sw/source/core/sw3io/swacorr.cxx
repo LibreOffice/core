@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swacorr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-16 09:27:41 $
+ *  last change: $Author: os $ $Date: 2001-04-04 14:37:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 #include <SwXMLTextBlocks.hxx>
 #endif
 
-#ifndef _SWERROR_H
+#ifndef _SWSERROR_H
 #include <swerror.h>
 #endif
 #ifndef _DOCSH_HXX
