@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 10:58:35 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:13:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2754,7 +2754,7 @@ void SwTabFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
 |*************************************************************************/
 BOOL SwTabFrm::GetInfo( SfxPoolItem &rHnt ) const
 {
-    if ( RES_VIRTPAGENUM_INFO == rHnt.Which() && IsInDocBody() )
+    if ( RES_VIRTPAGENUM_INFO == rHnt.Which() && IsInDocBody() && !IsFollow() )
     {
         SwVirtPageNumInfo &rInfo = (SwVirtPageNumInfo&)rHnt;
         const SwPageFrm *pPage = FindPageFrm();
@@ -3542,42 +3542,63 @@ void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
             const USHORT nBottomLineSize  = lcl_GetBottomLineSize( *this );
             const USHORT nBottomLineDist  = lcl_GetBottomLineDist( *this );
 
-            // Get the previous row, calculate prt top for lowers:
-            const SwRowFrm* pPreviousRow = (SwRowFrm*)GetPrev();
-            if ( pTabFrm->IsFollow() &&
-                 ( !pPreviousRow || this == pTabFrm->GetFirstNonHeadlineRow() ) )
-            {
-                const SwTable* pTable = pTabFrm->GetTable();
-                SwTableLine* pPrevTabLine = 0;
 
+            const SwRowFrm* pPreviousRow = 0;
+
+            // --> FME 2004-09-14 #i32456#
+            // In order to calculate the top printing area for the lower cell
+            // frames, we have to find the 'previous' row frame and compare
+            // the bottom values of the 'previous' row with the 'top' values
+            // of this row. The best way to find the 'previous' row is to
+            // use the table structure:
+            const SwTable* pTable = pTabFrm->GetTable();
+            const SwTableLine* pPrevTabLine = 0;
+            const SwRowFrm* pTmpRow = this;
+
+            while ( pTmpRow && !pPrevTabLine )
+            {
                 USHORT nIdx = 0;
-                const SwTableLines& rLines = GetTabLine()->GetUpper() ?
-                                             GetTabLine()->GetUpper()->GetTabLines() :
+                const SwTableLines& rLines = pTmpRow->GetTabLine()->GetUpper() ?
+                                             pTmpRow->GetTabLine()->GetUpper()->GetTabLines() :
                                              pTable->GetTabLines();
 
-                while ( rLines[ nIdx ] != GetTabLine() )
+                while ( rLines[ nIdx ] != pTmpRow->GetTabLine() )
                     ++nIdx;
 
                 if ( nIdx > 0 )
                 {
-                    --nIdx;
-                    pPrevTabLine = pTable->GetTabLines()[ nIdx ];
+                    // pTmpRow has a 'previous' row in the table structure:
+                    pPrevTabLine = rLines[ nIdx - 1 ];
+                }
+                else
+                {
+                    // pTmpRow is a first row in the table structue.
+                    // We go up in the table structure:
+                    pTmpRow = pTmpRow->GetUpper()->GetUpper() &&
+                              pTmpRow->GetUpper()->GetUpper()->IsRowFrm() ?
+                              static_cast<const SwRowFrm*>( pTmpRow->GetUpper()->GetUpper() ) :
+                              0;
+                }
+            }
 
-                    SwClientIter aIter( *pPrevTabLine->GetFrmFmt() );
-                    SwClient* pLast;
-                    for ( pLast = aIter.First( TYPE( SwFrm ) ); pLast; pLast = aIter.Next() )
+            // If we found a 'previous' row, we look for the appropriate row frame:
+            if ( pPrevTabLine )
+            {
+                SwClientIter aIter( *pPrevTabLine->GetFrmFmt() );
+                SwClient* pLast;
+                for ( pLast = aIter.First( TYPE( SwFrm ) ); pLast; pLast = aIter.Next() )
+                {
+                    ASSERT( ((SwFrm*)pLast)->IsRowFrm(),
+                                "Non-row frame registered in table line" )
+                    SwRowFrm* pRow = (SwRowFrm*)pLast;
+                    if ( pRow->GetTabLine() == pPrevTabLine )
                     {
-                       ASSERT( ((SwFrm*)pLast)->IsRowFrm(),
-                                    "Non-row frame registered in table line" )
-                        SwRowFrm* pRow = (SwRowFrm*)pLast;
-                        if ( pRow->GetTabLine() == pPrevTabLine )
-                        {
-                            pPreviousRow = pRow;
-                            break;
-                        }
+                        pPreviousRow = pRow;
+                        break;
                     }
                 }
             }
+            // <--
 
             USHORT nTopPrtMargin = nTopSpace;
             if ( pPreviousRow )
@@ -4500,92 +4521,92 @@ SwTwips lcl_CalcHeightOfFirstContentLine( const SwRowFrm& rSourceLine )
 
     while ( pCurrSourceCell )
     {
-        if ( pCurrSourceCell->Lower() && pCurrSourceCell->Lower()->IsRowFrm() )
+        const SwFrm *pTmp = pCurrSourceCell->Lower();
+        if ( pTmp )
         {
-            SwRowFrm* pTmpSourceRow = (SwRowFrm*)pCurrSourceCell->Lower();
-            while ( pTmpSourceRow )
+            SwTwips nTmpHeight = USHRT_MAX;
+            // --> FME 2004-09-14 #i32456# Consider lower row frames
+            if ( pTmp->IsRowFrm() )
             {
-                // TODO: recursion
-                pTmpSourceRow = (SwRowFrm*)pTmpSourceRow->GetNext();
+                const SwRowFrm* pTmpSourceRow = (SwRowFrm*)pCurrSourceCell->Lower();
+                nTmpHeight = lcl_CalcHeightOfFirstContentLine( *pTmpSourceRow );
             }
-        }
-        else
-        {
-            const SwFrm *pTmp = pCurrSourceCell->Lower();
-            if ( pTmp )
+            // <--
+            if ( pTmp->IsTabFrm() )
             {
-                SwTwips nTmpHeight = USHRT_MAX;
-                if ( pTmp->IsTabFrm() )
-                {
-                    nTmpHeight = ((SwTabFrm*)pTmp)->CalcHeightOfFirstContentLine();
-                }
-                else if ( pTmp->IsTxtFrm() )
-                {
-                    SwTxtFrm* pTxtFrm = (SwTxtFrm*)pTmp;
-                    pTxtFrm->GetFormatted();
-                    nTmpHeight = pTxtFrm->FirstLineHeight();
-                }
+                nTmpHeight = ((SwTabFrm*)pTmp)->CalcHeightOfFirstContentLine();
+            }
+            else if ( pTmp->IsTxtFrm() )
+            {
+                SwTxtFrm* pTxtFrm = (SwTxtFrm*)pTmp;
+                pTxtFrm->GetFormatted();
+                nTmpHeight = pTxtFrm->FirstLineHeight();
+            }
 
-                if ( USHRT_MAX != nTmpHeight )
+            if ( USHRT_MAX != nTmpHeight )
+            {
+                const SwCellFrm* pPrevCell = pCurrSourceCell->GetPreviousCell();
+                if ( pPrevCell )
                 {
-                    const SwCellFrm* pPrevCell = pCurrSourceCell->GetPreviousCell();
-                    if ( pPrevCell )
+                    // If we are in a split row, there may be some space
+                    // left in the cell frame of the master row.
+                    // We look for the minimum of all first line heights;
+                    SwTwips nReal = (pPrevCell->Prt().*fnRect->fnGetHeight)();
+                    const SwFrm* pFrm = pPrevCell->Lower();
+                    const SwFrm* pLast = pFrm;
+                    while ( pFrm )
                     {
-                        // If we are in a split row, there may be some space
-                        // left in the cell frame of the master row.
-                        // We look for the minimum of all first line heights;
-                        SwTwips nReal = (pPrevCell->Prt().*fnRect->fnGetHeight)();
-                        const SwFrm* pFrm = pPrevCell->Lower();
-                        const SwFrm* pLast = pFrm;
-                        while ( pFrm )
-                        {
-                            nReal -= (pFrm->Frm().*fnRect->fnGetHeight)();
-                            pLast = pFrm;
-                            pFrm = pFrm->GetNext();
-                        }
+                        nReal -= (pFrm->Frm().*fnRect->fnGetHeight)();
+                        pLast = pFrm;
+                        pFrm = pFrm->GetNext();
+                    }
 
-                        // --> FME, OD 2004-07-15 #i26831#, #i26520#
-                        // The additional lower space of the current last.
-                        if ( pLast )
-                        {
-                            nReal += SwFlowFrm::CastFlowFrm(pLast)->CalcAddLowerSpaceAsLastInTableCell();
-                        }
-                        // Don't forget the upper space and lower space,
+                    // --> FME, OD 2004-07-15 #i26831#, #i26520#
+                    // The additional lower space of the current last.
+                    if ( pLast && pLast->IsFlowFrm() )
+                    {
+                        nReal += SwFlowFrm::CastFlowFrm(pLast)->CalcAddLowerSpaceAsLastInTableCell();
+                    }
+                    // Don't forget the upper space and lower space,
+                    if ( pTmp->IsFlowFrm() )
+                    {
                         nTmpHeight += SwFlowFrm::CastFlowFrm(pTmp)->CalcUpperSpace( NULL, pLast);
                         nTmpHeight += SwFlowFrm::CastFlowFrm(pTmp)->CalcLowerSpace();
-                        // <--
-
-                        if ( nReal > 0 )
-                            nTmpHeight -= nReal;
                     }
-                    else
-                    {
-                        // pFirstRow is not a FollowFlowRow. In this case,
-                        // we look for the maximum of all first line heights:
-                        SwBorderAttrAccess aAccess( SwFrm::GetCache(), pCurrSourceCell );
-                        const SwBorderAttrs &rAttrs = *aAccess.Get();
-                        nTmpHeight += rAttrs.CalcTop() + rAttrs.CalcBottom();
-                        // --> OD 2004-07-16 #i26250#
-                        // Don't forget the upper space and lower space,
-                        nTmpHeight += SwFlowFrm::CastFlowFrm(pTmp)->CalcUpperSpace();
-                        nTmpHeight += SwFlowFrm::CastFlowFrm(pTmp)->CalcLowerSpace();
-                        // <--
-                    }
-                }
+                    // <--
 
-                if ( bIsInFollowFlowLine )
-                {
-                    // minimum
-                    if ( nTmpHeight < nHeight )
-                        nHeight = nTmpHeight;
+                    if ( nReal > 0 )
+                        nTmpHeight -= nReal;
                 }
                 else
                 {
-                    // maximum
-                    if ( nTmpHeight > nHeight && USHRT_MAX != nTmpHeight )
-                        nHeight = nTmpHeight;
+                    // pFirstRow is not a FollowFlowRow. In this case,
+                    // we look for the maximum of all first line heights:
+                    SwBorderAttrAccess aAccess( SwFrm::GetCache(), pCurrSourceCell );
+                    const SwBorderAttrs &rAttrs = *aAccess.Get();
+                    nTmpHeight += rAttrs.CalcTop() + rAttrs.CalcBottom();
+                    // --> OD 2004-07-16 #i26250#
+                    // Don't forget the upper space and lower space,
+                    if ( pTmp->IsFlowFrm() )
+                    {
+                        nTmpHeight += SwFlowFrm::CastFlowFrm(pTmp)->CalcUpperSpace();
+                        nTmpHeight += SwFlowFrm::CastFlowFrm(pTmp)->CalcLowerSpace();
+                    }
+                    // <--
                 }
+            }
 
+            if ( bIsInFollowFlowLine )
+            {
+                // minimum
+                if ( nTmpHeight < nHeight )
+                    nHeight = nTmpHeight;
+            }
+            else
+            {
+                // maximum
+                if ( nTmpHeight > nHeight && USHRT_MAX != nTmpHeight )
+                    nHeight = nTmpHeight;
             }
         }
 
