@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cd $ $Date: 2002-05-15 15:44:57 $
+ *  last change: $Author: cd $ $Date: 2002-05-22 13:57:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1718,7 +1718,20 @@ void SvxTbxButtonColorUpdater::Update( const Color& rColor )
 
     aVirDev.SetOutputSizePixel( theBmpSize );
     aVirDev.DrawBitmap( aNullPnt, *pBtnBmp );
-    aVirDev.SetLineColor( COL_BLACK );
+
+    // Choose line color according to background color
+    if ( pTbx->GetBackground().GetColor().IsDark() )
+        aVirDev.SetLineColor( COL_WHITE );
+    else
+        aVirDev.SetLineColor( COL_BLACK );
+
+    if ( nDrawMode == TBX_UPDATER_MODE_CHAR_COLOR_NEW &&
+         ( rColor.GetColor() != COL_AUTO &&
+           rColor.GetColor() != IMAGE_COL_TRANSPARENT ))
+    {
+        // Draw border only if COLOR_AUTO is the new color!
+        aVirDev.SetLineColor( rColor );
+    }
     aVirDev.SetFillColor( rColor );
 
     if ( nDrawMode == TBX_UPDATER_MODE_CHAR_COLOR_NEW )
