@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoexe.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-28 15:31:06 $
+ *  last change: $Author: dbo $ $Date: 2001-06-29 08:59:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ static sal_Bool readOption( OUString * pValue, const sal_Char * pOpt,
         ++(*pnIndex);
 
         rtl_getAppCommandArg(*pnIndex, &pValue->pData);
-        if (*pnIndex >= rtl_getAppCommandArgCount() || pValue->copy(1).equals(dash))
+        if (*pnIndex >= (sal_Int32)rtl_getAppCommandArgCount() || pValue->copy(1).equals(dash))
         {
             OUStringBuffer buf( 32 );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("incomplete option \"-") );
@@ -597,8 +597,9 @@ extern "C" int SAL_CALL main( int argc, const char * argv[] )
         OUString aReadWriteRegistry;
 
         sal_Int32 nPos = 0;
+        sal_Int32 nCount = (sal_Int32)rtl_getAppCommandArgCount();
         // read up to arguments
-        while (nPos < rtl_getAppCommandArgCount())
+        while (nPos < nCount)
         {
             OUString arg;
 
@@ -668,13 +669,13 @@ extern "C" int SAL_CALL main( int argc, const char * argv[] )
             out( "\n> warning: service name given, will ignore location!" );
 
         // read component params
-        aParams.realloc( argc - nPos );
+        aParams.realloc( nCount - nPos );
         OUString * pParams = aParams.getArray();
 
         sal_Int32 nOffset = nPos;
-        for ( ; nPos < argc; ++nPos )
+        for ( ; nPos < nCount; ++nPos )
         {
-            pParams[nPos -nOffset] = OUString::createFromAscii( argv[nPos] );
+            OSL_VERIFY( rtl_getAppCommandArg( nPos, &pParams[nPos -nOffset].pData ) == osl_Process_E_None );
         }
 
         //#### create registry #####################################################################
@@ -811,11 +812,6 @@ extern "C" int SAL_CALL main( int argc, const char * argv[] )
     Reference< XComponent > xComp( xContext, UNO_QUERY );
     if (xComp.is())
         xComp->dispose();
-
-    if (xRegistry.is())
-    {
-        xRegistry->close();
-    }
 
     out( "\n" );
     return nRet;
