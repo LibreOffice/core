@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-03 08:12:44 $
+ *  last change: $Author: ka $ $Date: 2001-05-07 10:53:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,11 +499,16 @@ const SfxFont* SfxPrinter::GetFontByName( const String &rFontName )
 
 BOOL SfxPrinter::InitJob( Window* pUIParent, BOOL bDocumentContainsTransparentObjects )
 {
-    BOOL    bTransparencyWarningShown = FALSE;
-    BOOL    bReduceTransparency = FALSE;
-    BOOL    bRet = TRUE;
+    const SvtPrinterOptions     aPrinterOpt;
+    const SvtPrintFileOptions   aPrintFileOpt;
+    const SvtBasePrintOptions*  pPrinterOpt = &aPrinterOpt;
+    const SvtBasePrintOptions*  pPrintFileOpt = &aPrintFileOpt;
+    PrinterOptions              aNewPrinterOptions;
+    BOOL                        bRet = TRUE;
 
-    if( bDocumentContainsTransparentObjects )
+    ( ( IsPrintFileEnabled() && GetPrintFile().Len() ) ? pPrintFileOpt : pPrinterOpt )->GetPrinterOptions( aNewPrinterOptions );
+
+    if( bDocumentContainsTransparentObjects && !aNewPrinterOptions.IsReduceTransparency() )
     {
         SvtPrintWarningOptions aWarnOpt;
 
@@ -516,28 +521,14 @@ BOOL SfxPrinter::InitJob( Window* pUIParent, BOOL bDocumentContainsTransparentOb
                 bRet = FALSE;
             else
             {
-                bTransparencyWarningShown = TRUE;
-                bReduceTransparency = ( nRet != RET_NO );
+                aNewPrinterOptions.SetReduceTransparency( nRet != RET_NO );
                 aWarnOpt.SetTransparency( !aWarnBox.IsNoWarningChecked() );
             }
         }
     }
 
     if( bRet )
-    {
-        const SvtPrinterOptions     aPrinterOpt;
-        const SvtPrintFileOptions   aPrintFileOpt;
-        const SvtBasePrintOptions*  pPrinterOpt = &aPrinterOpt;
-        const SvtBasePrintOptions*  pPrintFileOpt = &aPrintFileOpt;
-        PrinterOptions              aNewPrinterOptions;
-
-        ( ( IsPrintFileEnabled() && GetPrintFile().Len() ) ? pPrintFileOpt : pPrinterOpt )->GetPrinterOptions( aNewPrinterOptions );
-
-        if( bTransparencyWarningShown )
-            aNewPrinterOptions.SetReduceTransparency( bReduceTransparency );
-
         SetPrinterOptions( aNewPrinterOptions );
-    }
 
     return bRet;
 }
