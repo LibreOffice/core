@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eerdll.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-28 15:56:53 $
+ *  last change: $Author: mt $ $Date: 2000-11-29 12:56:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,8 @@ SfxPoolItem** GlobalEditData::GetDefItems()
     {
         ppDefItems = new SfxPoolItem*[EDITITEMCOUNT];
 
+
+
         // Absatzattribute:
         SvxNumRule aTmpNumRule( 0, 0, FALSE );
 
@@ -169,7 +171,6 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         ppDefItems[34] = new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CJK );
         ppDefItems[35] = new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CTL );
         ppDefItems[36] = new SvxEmphasisMarkItem( EMPHASISMARK_NONE, EE_CHAR_EMPHASISMARK );
-//      ppDefItems[36] = new SfxVoidItem( EE_CHAR_EMPHASISMARK );
         ppDefItems[37] = new SfxVoidItem( EE_CHAR_2LINES_DUMMY );
         ppDefItems[38] = new SfxVoidItem( EE_CHAR_RUBI_DUMMY );
         ppDefItems[39] = new SfxVoidItem( EE_CHAR_ROTATION_DUMMY );
@@ -181,6 +182,11 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         ppDefItems[43] = new SvxFieldItem( SvxFieldData(), EE_FEATURE_FIELD );
 
         DBG_ASSERT( EDITITEMCOUNT == 44, "ITEMCOUNT geaendert, DefItems nicht angepasst!" );
+
+        // Init DefFonts:
+        GetDefaultFonts( *(SvxFontItem*)ppDefItems[EE_CHAR_FONTINFO - EE_ITEMS_START],
+                         *(SvxFontItem*)ppDefItems[EE_CHAR_FONTINFO_CJK - EE_ITEMS_START],
+                         *(SvxFontItem*)ppDefItems[EE_CHAR_FONTINFO_CTL - EE_ITEMS_START] );
     }
 
     return ppDefItems;
