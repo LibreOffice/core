@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsnap.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:32 $
+ *  last change: $Author: af $ $Date: 2001-05-16 15:53:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,8 @@ SdSnapLineDlg::SdSnapLineDlg(Window* pWindow, const SfxItemSet& rInAttrs,
     aFtY        (this, SdResId(FT_Y)),
     aMtrFldX    (this, SdResId(MTR_FLD_X)),
     aMtrFldY    (this, SdResId(MTR_FLD_Y)),
-    aGrpPos     (this, SdResId(GRP_POSITION)),
-    aGrpDir     (this, SdResId(GRP_DIRECTION)),
+    aFlPos      (this, SdResId(FL_POSITION)),
+    aFlDir      (this, SdResId(FL_DIRECTION)),
     aRbHorz     (this, SdResId(RB_HORIZONTAL)),
     aRbVert     (this, SdResId(RB_VERTICAL)),
     aRbPoint    (this, SdResId(RB_POINT)),
@@ -205,7 +205,7 @@ void SdSnapLineDlg::GetAttr(SfxItemSet& rOutAttrs)
 
 void SdSnapLineDlg::HideRadioGroup()
 {
-    aGrpDir.Hide();
+    aFlDir.Hide();
     aRbHorz.Hide();
     aRbVert.Hide();
     aRbPoint.Hide();

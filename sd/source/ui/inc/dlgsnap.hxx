@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsnap.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:38 $
+ *  last change: $Author: af $ $Date: 2001-05-16 15:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,12 +104,12 @@ enum SnapKind { SK_HORIZONTAL, SK_VERTICAL, SK_POINT };
 class SdSnapLineDlg : public ModalDialog
 {
 private:
-    GroupBox            aGrpPos;
+    FixedLine           aFlPos;
     FixedText           aFtX;
     MetricField         aMtrFldX;
     FixedText           aFtY;
     MetricField         aMtrFldY;
-    GroupBox            aGrpDir;
+    FixedLine           aFlDir;
     ImageRadioButton    aRbPoint;
     ImageRadioButton    aRbVert;
     ImageRadioButton    aRbHorz;

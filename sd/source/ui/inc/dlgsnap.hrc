@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsnap.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:38 $
+ *  last change: $Author: af $ $Date: 2001-05-16 15:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,12 +63,12 @@
 #define BTN_CANCEL 2
 #define BTN_HELP 3
 #define BTN_DELETE 4
-#define GRP_POSITION 5
+#define FL_POSITION 5
 #define FT_X 6
 #define MTR_FLD_X 7
 #define FT_Y 8
 #define MTR_FLD_Y 9
-#define GRP_DIRECTION 10
+#define FL_DIRECTION 10
 #define RB_HORIZONTAL 11
 #define RB_VERTICAL 12
 #define RB_POINT 13
