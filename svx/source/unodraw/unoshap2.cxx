@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-16 20:18:55 $
+ *  last change: $Author: ka $ $Date: 2001-01-24 13:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1323,9 +1323,18 @@ uno::Any SAL_CALL SvxGraphicObject::getPropertyValue( const OUString& aPropertyN
         }
         return aAny;
     }
+    else if( pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_GRAFSTREAMURL)) )
+    {
+        const OUString  aStreamURL( ( (SdrGrafObj*) pObj )->GetGrafStreamURL() );
+        uno::Any        aAny;
 
-/*
-    else if( pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("NativeFormat")) )
+        if( aStreamURL.getLength() )
+            aAny <<= aStreamURL;
+
+        return aAny;
+    }
+
+/*  else if( pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("NativeFormat")) )
     {
         const Graphic& rGraphic = ((SdrGrafObj*)pObj)->GetGraphic();
         GfxLink aLink = ((Graphic*)&rGraphic)->GetLink();
