@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh6.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:23:25 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 16:28:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,24 +240,54 @@ void __EXPORT ScDocShell::SetVisArea( const Rectangle & rVisArea )
     SetVisAreaOrSize( rVisArea, TRUE );
 }
 
+void lcl_SetTopRight( Rectangle& rRect, const Point& rPos )
+{
+    Size aSize = rRect.GetSize();
+    rRect.Right() = rPos.X();
+    rRect.Left() = rPos.X() - aSize.Width() + 1;
+    rRect.Top() = rPos.Y();
+    rRect.Bottom() = rPos.Y() + aSize.Height() - 1;
+}
+
 void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea, BOOL bModifyStart )
 {
+    BOOL bNegativePage = aDocument.IsNegativePage( aDocument.GetVisibleTab() );
+
     Rectangle aArea = rVisArea;
     if (bModifyStart)
     {
-        if ( aArea.Left() < 0 || aArea.Top() < 0 )
+        // when loading, don't check for negative values, because the sheet orientation
+        // might be set later
+        if ( !aDocument.IsImportingXML() )
         {
-            //  VisArea start position can't be negative.
-            //  Move the VisArea, otherwise only the upper left position would
-            //  be changed in SnapVisArea, and the size would be wrong.
+            if ( ( bNegativePage ? (aArea.Right() > 0) : (aArea.Left() < 0) ) || aArea.Top() < 0 )
+            {
+                //  VisArea start position can't be negative.
+                //  Move the VisArea, otherwise only the upper left position would
+                //  be changed in SnapVisArea, and the size would be wrong.
 
-            Point aNewPos( Max( aArea.Left(), (long) 0 ),
-                           Max( aArea.Top(), (long) 0 ) );
-            aArea.SetPos( aNewPos );
+                Point aNewPos( 0, Max( aArea.Top(), (long) 0 ) );
+                if ( bNegativePage )
+                {
+                    aNewPos.X() = Min( aArea.Right(), (long) 0 );
+                    lcl_SetTopRight( aArea, aNewPos );
+                }
+                else
+                {
+                    aNewPos.X() = Max( aArea.Left(), (long) 0 );
+                    aArea.SetPos( aNewPos );
+                }
+            }
         }
     }
     else
-        aArea.SetPos( SfxInPlaceObject::GetVisArea().TopLeft() );
+    {
+        Rectangle aOldVisArea = SfxInPlaceObject::GetVisArea();
+        if ( bNegativePage )
+            lcl_SetTopRight( aArea, aOldVisArea.TopRight() );
+        else
+            aArea.SetPos( aOldVisArea.TopLeft() );
+    }
 
     //      hier Position anpassen!
 
@@ -326,18 +356,23 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, BOOL bSnapSize )
         aNewArea = aDocument.GetEmbeddedRect();
     else
     {
-        USHORT nX = pViewData->GetPosX(SC_SPLIT_LEFT);
-        USHORT nY = pViewData->GetPosY(SC_SPLIT_BOTTOM);
-        Point aStart = aDocument.GetMMRect( nX,nY, nX,nY, 0 ).TopLeft();
-        aNewArea.SetPos(aStart);
-        if (bSnapSize)
-            aDocument.SnapVisArea(aNewArea);
-
-        if ( pViewData->GetTabNo() != aDocument.GetVisibleTab() )
+        USHORT nTab = pViewData->GetTabNo();
+        if ( nTab != aDocument.GetVisibleTab() )
         {
-            aDocument.SetVisibleTab( pViewData->GetTabNo() );
+            aDocument.SetVisibleTab( nTab );
             bChange = TRUE;
         }
+
+        BOOL bNegativePage = aDocument.IsNegativePage( nTab );
+        USHORT nX = pViewData->GetPosX(SC_SPLIT_LEFT);
+        USHORT nY = pViewData->GetPosY(SC_SPLIT_BOTTOM);
+        Rectangle aMMRect = aDocument.GetMMRect( nX,nY, nX,nY, nTab );
+        if (bNegativePage)
+            lcl_SetTopRight( aNewArea, aMMRect.TopRight() );
+        else
+            aNewArea.SetPos( aMMRect.TopLeft() );
+        if (bSnapSize)
+            aDocument.SnapVisArea(aNewArea);            // uses the new VisibleTab
     }
 
     if (aNewArea != aOldArea)
