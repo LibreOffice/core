@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-17 11:55:29 $
+ *  last change: $Author: fs $ $Date: 2002-09-25 12:35:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_HPP_
 #include <com/sun/star/container/XContainerListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
+#include <com/sun/star/container/XContainer.hpp>
 #endif
 
 
@@ -239,6 +242,11 @@ public:
 class FmEntryDataList;
 class FmEntryData
 {
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >       m_xNormalizedIFace;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xProperties;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild >     m_xChild;
+
 protected:
     Image               m_aNormalImage;
     Image               m_aHCImage;
@@ -247,10 +255,13 @@ protected:
     FmEntryDataList*    pChildList;
     FmEntryData*        pParent;
 
+protected:
+    void    newObject( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxIFace );
+
 public:
     TYPEINFO();
 
-    FmEntryData( FmEntryData* pParentData );
+    FmEntryData( FmEntryData* pParentData, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rIFace );
     FmEntryData( const FmEntryData& rEntryData );
     virtual ~FmEntryData();
 
@@ -268,7 +279,22 @@ public:
     virtual sal_Bool IsEqualWithoutChilds( FmEntryData* pEntryData );
     virtual FmEntryData* Clone() = 0;
 
-    virtual const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& GetElement() const = 0;
+    // note that the interface returned is normalized, i.e. querying the given XInterface of the object
+    // for XInterface must return the interface itself.
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& GetElement() const
+    {
+        return m_xNormalizedIFace;
+    }
+
+    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& GetPropertySet() const
+    {
+        return m_xProperties;
+    }
+
+    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild >& GetChildIFace() const
+    {
+        return m_xChild;
+    }
 };
 
 //========================================================================
@@ -306,7 +332,8 @@ public:
 //========================================================================
 class FmFormData : public FmEntryData
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  m_xForm;
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >           m_xForm;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer > m_xContainer;
 
 public:
     TYPEINFO();
@@ -321,13 +348,18 @@ public:
     FmFormData( const FmFormData& rFormData );
     virtual ~FmFormData();
 
-    void SetForm( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& xForm ){ m_xForm = xForm; }
+    void SetForm( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& xForm )
+    {
+        m_xForm = xForm;
+        m_xContainer = m_xContainer.query( m_xForm );
+        newObject( m_xForm );
+    }
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& GetFormIface() const { return m_xForm; }
+    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >& GetContainer() const { return m_xContainer; }
+
     virtual sal_Bool IsEqualWithoutChilds( FmEntryData* pEntryData );
     virtual FmEntryData* Clone();
-
-    virtual const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& GetElement() const { return m_xForm;}
 };
 
 
@@ -353,7 +385,6 @@ public:
     const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& GetFormComponent() const { return m_xFormComponent; }
     virtual sal_Bool IsEqualWithoutChilds( FmEntryData* pEntryData );
     virtual FmEntryData* Clone();
-    virtual const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& GetElement() const { return m_xFormComponent;}
 
     void ModelReplaced(
         const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& _rxNew,
