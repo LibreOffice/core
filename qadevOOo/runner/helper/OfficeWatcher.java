@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeWatcher.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2004-07-23 10:43:00 $
+ *  last change:$Date: 2005-02-02 13:56:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ public class OfficeWatcher extends Thread implements share.Watcher {
     public boolean finish;
 
     TestParameters params;
-    String StoredPing = "";
+    int StoredPing = 0;
 
     /** Creates new OfficeWatcher */
     public OfficeWatcher(TestParameters param) {
@@ -87,7 +87,18 @@ public class OfficeWatcher extends Thread implements share.Watcher {
      * pings the office watcher to check for changes
      */
     public void ping() {
-        StoredPing += ".";
+        try{
+            StoredPing ++;
+        } catch (Exception e){
+            StoredPing=0;
+        }
+    }
+
+    /**
+     * returns the amount of pings
+     */
+    public int getPing(){
+        return StoredPing;
     }
 
     public void run() {
@@ -99,10 +110,10 @@ public class OfficeWatcher extends Thread implements share.Watcher {
         }
         while (!isDone) {
             timeOut = params.getInt("TimeOut");
-            String previous = StoredPing;
+            int previous = StoredPing;
             shortWait(timeOut==0?30000:timeOut);
             // a timeout with value 0 lets watcher not react.
-            if (StoredPing.equals(previous) && timeOut != 0){
+            if ((StoredPing == previous) && timeOut != 0){
                 isDone = true;
             }
             // execute in case the watcher is not needed anymore
@@ -133,5 +144,6 @@ public class OfficeWatcher extends Thread implements share.Watcher {
             this.sleep(timeOut);
         } catch (java.lang.InterruptedException ie) {}
     }
+
 
 }
