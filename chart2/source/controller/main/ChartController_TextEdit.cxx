@@ -103,6 +103,9 @@ bool ChartController::EndTextEdit()
         TitleHelper::setCompleteString( aString, uno::Reference<
             ::drafts::com::sun::star::chart2::XTitle >::query( xPropSet ), m_xCC );
     }
+    //we invalidate the outliner region because the outliner has some
+    //paint problems (left and right borders are not completly painted)
+    m_pChartWindow->Invalidate( m_pDrawViewWrapper->GetMarkedObjBoundRect() );
     return true;
 }
 
