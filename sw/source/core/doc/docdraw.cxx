@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:54:16 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:01:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,7 +237,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
 
             pFmt = (SwDrawFrmFmt*)pContact->GetFmt();
             //loescht sich selbst!
-            pContact->Changed(*pObj, SDRUSERCALL_DELETE, pObj->GetBoundRect() );
+            pContact->Changed(*pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
             pObj->SetUserCall( 0 );
 
             if( pUndo )
@@ -351,7 +351,7 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
         if( 1 == rMrkList.GetMarkCount() )
         {
             SdrObject *pObj = rMrkList.GetMark( 0 )->GetObj();
-            if( pObj->IsWriterFlyFrame() )
+            if( pObj->ISA(SwVirtFlyDrawObj) )
             {
                 SwFlyFrmFmt* pFrmFmt = (SwFlyFrmFmt*)
                     ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->GetFmt();
@@ -385,7 +385,7 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
         for( i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             SdrObject *pObj = rMrkList.GetMark( i )->GetObj();
-            if( !pObj->IsWriterFlyFrame() )
+            if( !pObj->ISA(SwVirtFlyDrawObj) )
             {
                 SwDrawContact *pC = (SwDrawContact*)GetUserCall(pObj);
                 SwDrawFrmFmt *pFrmFmt = (SwDrawFrmFmt*)pC->GetFmt();
@@ -426,7 +426,7 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
                                     "<SwDrawVirtObj> is still marked for delete. application will crash!" );
                         }
                         //loescht sich selbst!
-                        pContact->Changed(*pObj, SDRUSERCALL_DELETE, pObj->GetBoundRect() );
+                        pContact->Changed(*pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
                         pObj->SetUserCall( 0 );
 
                         if( pUndo )
