@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-06 09:09:41 $
+ *  last change: $Author: fs $ $Date: 2001-06-08 12:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1454,6 +1454,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
                         aDescriptor[daDataSource]   =   xProp->getPropertyValue(PROPERTY_DATASOURCENAME);
                         aDescriptor[daCommand]      =   xProp->getPropertyValue(PROPERTY_COMMAND);
                         aDescriptor[daCommandType]  =   xProp->getPropertyValue(PROPERTY_COMMANDTYPE);
+                        aDescriptor[daConnection]   =   xProp->getPropertyValue(PROPERTY_ACTIVECONNECTION);
                         aDescriptor[daCursor]       <<= xCursorClone;
                         aDescriptor[daSelection]    <<= aSelection;
 
