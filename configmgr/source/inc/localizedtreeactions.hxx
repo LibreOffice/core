@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localizedtreeactions.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-14 16:35:13 $
+ *  last change: $Author: jb $ $Date: 2001-12-07 18:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,41 +67,8 @@
 //..........................................................................
 namespace configmgr
 {
-//==========================================================================
-//= OCloneForLocale
-//==========================================================================
-//= clones a subtree , in the process selecting only the best match locale
-//= from the set representation of localized values
-//==========================================================================
-class OCloneForLocale : public NodeAction
-{
-    rtl::OUString           m_sTargetLocale;
-    std::auto_ptr<INode>    m_pClone;
-public:
-    OCloneForLocale(OUString const& aLocale) : m_sTargetLocale(aLocale) {}
-    std::auto_ptr<INode> getResult() { return m_pClone; }
+class SubtreeChange;
 
-private:
-    void handle(ValueNode const& _aValue);
-    void handle(ISubtree const&  _aSubtree);
-};
-
-//==========================================================================
-//= OExpandLocalizedValues
-//==========================================================================
-//= clones a subtree , in the process expanding localized value nodes to a one-element set
-//==========================================================================
-class OExpandLocalizedValues : public NodeAction
-{
-    std::auto_ptr<INode>    m_pClone;
-public:
-    OExpandLocalizedValues() {}
-    std::auto_ptr<INode> getResult() { return m_pClone; }
-
-private:
-    void handle(ValueNode const& _aValue);
-    void handle(ISubtree const&  _aSubtree);
-};
 //==========================================================================
 // Helper function to invoke the previous ones properly
 
@@ -113,6 +80,11 @@ std::auto_ptr<INode> cloneExpandedForLocale(INode const* _pNode, OUString const&
 std::auto_ptr<INode> cloneExpandedForLocale(ISubtree const* _pNode, OUString const& _sLocale);
 // convert to the given locale format, assuming the original representation was expanded
 std::auto_ptr<INode> reduceExpandedForLocale(std::auto_ptr<ISubtree> _pNode, OUString const& _sLocale);
+
+// convert to the expanded locale format, assuming the original representation was reduced for the given locale
+void expandForLocale(ISubtree& _rNode, OUString const& _sLocale);
+// convert to the expanded locale format, assuming the original representation was reduced for the given locale
+void expandForLocale(SubtreeChange& _rNode, OUString const& _sLocale);
 
 //..........................................................................
 }   // namespace configmgr

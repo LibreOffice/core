@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localizedtreeactions.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-14 16:35:14 $
+ *  last change: $Author: jb $ $Date: 2001-12-07 18:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,18 @@
 #ifndef CONFIGMGR_TYPECONVERTER_HXX
 #include "typeconverter.hxx"
 #endif
+#ifndef CONFIGMGR_CHANGE_HXX
+#include "change.hxx"
+#endif
+#ifndef CONFIGMGR_TREE_CHANGEFACTORY_HXX
+#include "treechangefactory.hxx"
+#endif
+#ifndef CONFIGMGR_TREE_NODEFACTORY_HXX
+#include "treenodefactory.hxx"
+#endif
+#ifndef _CONFIGMGR_STRDECL_HXX_
+#include "strdecl.hxx"
+#endif
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
@@ -91,6 +103,25 @@ namespace configmgr
 namespace
 {
     using localehelper::FindBestLocale;
+//--------------------------------------------------------------------------
+    //==========================================================================
+    //= OCloneForLocale
+    //==========================================================================
+    //= clones a subtree , in the process selecting only the best match locale
+    //= from the set representation of localized values
+    //==========================================================================
+    class OCloneForLocale : public NodeAction
+    {
+        rtl::OUString           m_sTargetLocale;
+        std::auto_ptr<INode>    m_pClone;
+    public:
+        OCloneForLocale(OUString const& aLocale) : m_sTargetLocale(aLocale) {}
+        std::auto_ptr<INode> getResult() { return m_pClone; }
+
+    private:
+        void handle(ValueNode const& _aValue);
+        void handle(ISubtree const&  _aSubtree);
+    };
 //--------------------------------------------------------------------------
     struct OCloneChildrenForLocale : NodeAction
     {
@@ -245,9 +276,6 @@ namespace
 
         m_rParent.addChild(pClone);
     }
-//--------------------------------------------------------------------------
-
-} // anonymous namespace
 
 //--------------------------------------------------------------------------
 //= OCloneForLocale
@@ -271,6 +299,7 @@ void OCloneForLocale::handle(ISubtree const&  _aSubtree)
 }
 //--------------------------------------------------------------------------
 //--------------------------------------------------------------------------
+} // anonymous namespace
 
 //==========================================================================
 // Helper function to invoke the previous ones properly
@@ -292,6 +321,7 @@ static std::auto_ptr<INode> impl_cloneExpandedForLocale(INode const* _pNode, OUS
         return aCloner.getResult();
     }
 }
+//--------------------------------------------------------------------------
 
 // convert to the given locale format, no matter what the original representation
 std::auto_ptr<INode> cloneForLocale(INode const* _pNode, OUString const& _sLocale)
@@ -302,6 +332,7 @@ std::auto_ptr<INode> cloneForLocale(INode const* _pNode, OUString const& _sLocal
 
     return cloneExpandedForLocale(_pNode,_sLocale);
 }
+//--------------------------------------------------------------------------
 
 // convert to the given locale format, assuming the original representation was expanded
 std::auto_ptr<INode> cloneExpandedForLocale(INode const* _pNode, OUString const& _sLocale)
@@ -317,6 +348,7 @@ std::auto_ptr<INode> cloneExpandedForLocale(INode const* _pNode, OUString const&
     else
         return impl_cloneExpandedForLocale(_pNode,_sLocale);
 }
+//--------------------------------------------------------------------------
 
 // convert to the given locale format, assuming the original representation was expanded
 std::auto_ptr<INode> cloneExpandedForLocale(ISubtree const* _pNode, OUString const& _sLocale)
@@ -329,6 +361,7 @@ std::auto_ptr<INode> cloneExpandedForLocale(ISubtree const* _pNode, OUString con
     else
         return impl_cloneExpandedForLocale(_pNode,_sLocale);
 }
+//--------------------------------------------------------------------------
 
 // convert to the given locale format, assuming the original representation was expanded
 std::auto_ptr<INode> reduceExpandedForLocale(std::auto_ptr<ISubtree> _pNode, OUString const& _sLocale)
@@ -358,10 +391,230 @@ std::auto_ptr<INode> reduceExpandedForLocale(std::auto_ptr<ISubtree> _pNode, OUS
     }
     return aResult;
 }
+//--------------------------------------------------------------------------
+namespace
+{
+//--------------------------------------------------------------------------
+    class ExpandTreeForLocale : NodeModification
+    {
+        ISubtree & m_rParent;
+        OUString const & m_aSourceLocale;
 
+        ExpandTreeForLocale(ISubtree & _rParent,OUString const & _aSourceLocale)
+        : m_rParent(_rParent)
+        , m_aSourceLocale(_aSourceLocale)
+        {}
+
+        void handle(ISubtree& _rNode);
+        void handle(ValueNode& _rNode);
+
+        void substitute(std::auto_ptr<INode> _aExpanded);
+    public:
+        static void expand(ISubtree& _rTree, OUString const & _aSourceLocale)
+        {
+            ExpandTreeForLocale(_rTree,_aSourceLocale).applyToChildren(_rTree);
+        }
+
+        // returns NULL, if not a localized value
+        static std::auto_ptr<ISubtree> expanded(ValueNode const& _aNode, OUString const & _aSourceLocale);
+    };
+
+//--------------------------------------------------------------------------
+    class ExpandChangesForLocale : ChangeTreeModification
+    {
+        SubtreeChange & m_rParent;
+        OUString const & m_aSourceLocale;
+
+        ExpandChangesForLocale(SubtreeChange & _rParent,OUString const & _aSourceLocale)
+        : m_rParent(_rParent)
+        , m_aSourceLocale(_aSourceLocale)
+        {}
+
+        void handle(SubtreeChange& _rNode);
+        void handle(ValueChange& _rNode);
+
+        void handle(AddNode& _rNode);
+        void handle(RemoveNode& _rNode);
+
+        void substitute(std::auto_ptr<Change> _aExpanded);
+    public:
+        static void expand(SubtreeChange& _rTree, OUString const & _aSourceLocale)
+        {
+            ExpandChangesForLocale(_rTree,_aSourceLocale).applyToChildren(_rTree);
+        }
+
+        // returns NULL, if not a localized value
+        static std::auto_ptr<SubtreeChange> expanded(ValueChange const& _aNode, OUString const & _aSourceLocale);
+    };
+//--------------------------------------------------------------------------
+inline
+void ExpandTreeForLocale::substitute(std::auto_ptr<INode> _aExpanded)
+{
+    m_rParent.removeChild(_aExpanded->getName());
+    m_rParent.addChild(_aExpanded);
+}
+
+//--------------------------------------------------------------------------
+void ExpandTreeForLocale::handle(ISubtree& _rNode)
+{
+    expand(_rNode,m_aSourceLocale);
+}
+
+//--------------------------------------------------------------------------
+void ExpandTreeForLocale::handle(ValueNode& _rNode)
+{
+    std::auto_ptr<ISubtree> aExpanded = expanded(_rNode,m_aSourceLocale);
+
+    if (aExpanded.get())
+        substitute( base_ptr( aExpanded ) );
+}
 
 //--------------------------------------------------------------------------
 
+std::auto_ptr<ISubtree> ExpandTreeForLocale::expanded(ValueNode const& _aNode, OUString const & _aSourceLocale)
+{
+    std::auto_ptr<ISubtree> aRet;
+    if (_aNode.isLocalized())
+    {
+        OTreeNodeFactory & rFactory = getDefaultTreeNodeFactory();
+
+        node::Attributes aValueAttributes = _aNode.getAttributes();
+
+        aValueAttributes.bLocalized = false;
+        if (aValueAttributes.state() == node::isMerged)
+            aValueAttributes.setState( node::isReplaced );
+
+
+        std::auto_ptr<ValueNode> aValue = _aNode.isNull()
+                    ? rFactory.createNullValueNode(_aSourceLocale,_aNode.getValueType(),aValueAttributes)
+                    : rFactory.createValueNode(_aSourceLocale,_aNode.getValue(),aValueAttributes);
+
+        aRet = rFactory.createSetNode( _aNode.getName(),
+                                        toTemplateName(_aNode.getValueType()),
+                                        TEMPLATE_MODULE_LOCALIZED_VALUE,
+                                        _aNode.getAttributes() );
+
+        aRet->addChild(base_ptr(aValue));
+    }
+    return aRet;
+}
+
+//--------------------------------------------------------------------------
+//--------------------------------------------------------------------------
+inline
+void ExpandChangesForLocale::substitute(std::auto_ptr<Change> _aExpanded)
+{
+    m_rParent.removeChange(_aExpanded->getNodeName());
+    m_rParent.addChange(_aExpanded);
+}
+
+//--------------------------------------------------------------------------
+
+void ExpandChangesForLocale::handle(SubtreeChange& _rNode)
+{
+    expand(_rNode,m_aSourceLocale);
+}
+
+//--------------------------------------------------------------------------
+void ExpandChangesForLocale::handle(ValueChange& _rNode)
+{
+    std::auto_ptr<SubtreeChange> aExpanded = expanded(_rNode,m_aSourceLocale);
+
+    if (aExpanded.get())
+        substitute( base_ptr( aExpanded ) );
+}
+
+//--------------------------------------------------------------------------
+void ExpandChangesForLocale::handle(AddNode& _rNode)
+{
+    if (INode* pAdded = _rNode.getAddedNode())
+    {
+        if (ISubtree * pAddedTree = pAdded->asISubtree())
+        {
+            ExpandTreeForLocale::expand(*pAddedTree,m_aSourceLocale);
+        }
+        else if(ValueNode * pAddedValue = pAdded->asValueNode())
+        {
+            std::auto_ptr<ISubtree> aExpanded =
+                ExpandTreeForLocale::expanded(*pAddedValue,m_aSourceLocale);
+
+            if (aExpanded.get())
+            {
+                std::auto_ptr<AddNode> aExpandedAdd( new AddNode( base_ptr(aExpanded), _rNode.getNodeName(), _rNode.isToDefault() ) );
+
+                if (_rNode.isReplacing()) aExpandedAdd->setReplacing();
+
+                substitute( base_ptr( aExpandedAdd ) );
+            }
+        }
+        else
+            OSL_ENSURE(false, "Cannot expand unknown Node type (found in AddNode)");
+    }
+    else
+        OSL_ENSURE(false, "Cannot expand AddNode without content");
+}
+
+//--------------------------------------------------------------------------
+void ExpandChangesForLocale::handle(RemoveNode& )
+{
+    // nothing to do
+}
+
+//--------------------------------------------------------------------------
+std::auto_ptr<SubtreeChange> ExpandChangesForLocale::expanded(ValueChange const& _aNode, OUString const & _aSourceLocale)
+{
+    std::auto_ptr<SubtreeChange> aRet;
+    if (_aNode.isLocalizedValue())
+    {
+        OTreeNodeFactory & rNodeFactory = getDefaultTreeNodeFactory();
+        OTreeChangeFactory & rFactory = getDefaultTreeChangeFactory();
+
+        node::Attributes aValueAttributes = _aNode.getAttributes();
+
+        aValueAttributes.bLocalized = false;
+        if (aValueAttributes.state() == node::isMerged)
+            aValueAttributes.setState( node::isReplaced );
+
+
+        std::auto_ptr<ValueNode> aValue = _aNode.getNewValue().hasValue()
+                    ? rNodeFactory.createValueNode(_aSourceLocale,_aNode.getNewValue(),aValueAttributes)
+                    : rNodeFactory.createNullValueNode(_aSourceLocale,_aNode.getValueType(),aValueAttributes);
+
+        std::auto_ptr<AddNode> aAddValue = rFactory.createAddNodeChange(base_ptr(aValue),_aSourceLocale,_aNode.isToDefault());
+        aAddValue->setReplacing();
+
+        aRet = rFactory.createSetNodeChange( _aNode.getNodeName(),
+                                            toTemplateName(_aNode.getValueType()),
+                                            TEMPLATE_MODULE_LOCALIZED_VALUE,
+                                            _aNode.getAttributes() );
+
+        aRet->addChange(base_ptr(aAddValue));
+    }
+    return aRet;
+}
+
+//--------------------------------------------------------------------------
+} // anonymous namespace
+//--------------------------------------------------------------------------
+
+void expandForLocale(ISubtree& _rNode, OUString const& _sLocale)
+{
+    using namespace localehelper;
+
+    if ( ! designatesAllLocales(makeLocale(_sLocale)) ) // nothing to reduce
+        ExpandTreeForLocale::expand(_rNode,_sLocale);
+}
+//--------------------------------------------------------------------------
+
+void expandForLocale(SubtreeChange& _rNode, OUString const& _sLocale)
+{
+    using namespace localehelper;
+
+    if ( ! designatesAllLocales(makeLocale(_sLocale)) ) // nothing to reduce
+        ExpandChangesForLocale::expand(_rNode,_sLocale);
+}
+
+//--------------------------------------------------------------------------
 //..........................................................................
 }   // namespace configmgr
 //..........................................................................
