@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-21 12:14:21 $
+ *  last change: $Author: obo $ $Date: 2001-03-09 20:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -590,7 +590,7 @@ ModalDialog RID_SVX_DLG_INPUTRECORDNO
         Text[ japanese ] = "Úº°ÄŞ‚Ö";
         Text[ korean ] = "·¹ÄÚµå·Î °¡±â";
         Text[ chinese_simplified ] = "×ªµ½Êı¾İÌõÄ¿";
-        Text[ chinese_traditional ] = "Âà¨ì¼ÆÕu±ø¥Ø";
+        Text[ chinese_traditional ] = "Âà¨ì¸ê®Æ±ø¥Ø";
         Text[ arabic ] = "ÇáÇäÊŞÇá Åáì ÇáÓÌá";
         Text[ turkish ] = "Veri kümesine git";
     };
@@ -616,7 +616,7 @@ ModalDialog RID_SVX_DLG_INPUTRECORDNO
     };
     Text[ greek ] = "Áñéèìüò åããñáöŞò";
     Text[ korean ] = "µ¥ÀÌÅÍ ·¹ÄÚµå ¹øÈ£";
-    Text[ chinese_traditional ] = "¼ÆÕu±ø¥Ø½s¸¹";
+    Text[ chinese_traditional ] = "¸ê®Æ±ø¥Ø½s¸¹";
     Text[ arabic ] = "ÑŞã ÇáÓÌá";
     Text[ turkish ] = "Veri kümesi no.";
 };
