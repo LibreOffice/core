@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connect.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-21 07:30:09 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,11 +322,11 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ french ] = "Début h~orizontal" ;
         Text [ dutch ] = "Begin h~orizontaal" ;
         Text [ portuguese ] = "Início h~orizontal" ;
-        Text[ chinese_simplified ] = "½ÓÍ·²¿·ÖÊÇË®Æ½·½Ïò(~B)";
+        Text[ chinese_simplified ] = "½ÓÍ·ÎªË®Æ½·½Ïò(~B)";
         Text[ russian ] = "Íà÷àëî ãîğèçîíòàëüíî";
         Text[ polish ] = "Pocz¹tek poziomo";
         Text[ japanese ] = "‰¡ü‚Ìn“_(~B)";
-        Text[ chinese_traditional ] = "°_©l³¡¤À¬O¤ô¥­¤è¦V(~B)";
+        Text[ chinese_traditional ] = "°_©l¬O¤ô¥­¤è¦V(~B)";
         Text[ arabic ] = "ÇáÈÏÇíÉ ÃİŞíÇğ";
         Text[ greek ] = "Åêêßíçóç ïñéæüíôéá";
         Text[ korean ] = "°¡·Î¼± ½ÃÀÛ(~B)";
@@ -366,11 +366,11 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ french ] = "Fin ho~rizontale" ;
         Text [ dutch ] = "Einde ho~rizontaal" ;
         Text [ portuguese ] = "Fim ho~rizontal" ;
-        Text[ chinese_simplified ] = "½áÎ²²¿·ÖÊÇË®Æ½·½Ïò(~H)";
+        Text[ chinese_simplified ] = "½áÎ²ÎªË®Æ½·½Ïò(~H)";
         Text[ russian ] = "Êîíåö ãîğèçîíòàëüíî";
         Text[ polish ] = "Koniec poziomo";
         Text[ japanese ] = "‰¡ü‚ÌI“_(~H)";
-        Text[ chinese_traditional ] = "µ²§À³¡¤À¬O¤ô¥­¤è¦V(~H)";
+        Text[ chinese_traditional ] = "µ²§À¬O¤ô¥­¤è¦V(~H)";
         Text[ arabic ] = "ÇáäåÇíÉ ÃİŞíÇğ";
         Text[ greek ] = "Ôİëïò ïñéæïíôßùò";
         Text[ korean ] = "°¡·Î¼± ³¡(~H)";
@@ -491,23 +491,23 @@ TabPage RID_SVXPAGE_CONNECTION
         Size = MAP_APPFONT ( 118 , 121 ) ;
         QuickHelpText = "Vorschau" ;
         QuickHelpText [ ENGLISH ] = "Preview" ;
-        QuickHelpText[ english_us ] = "Preview!";
-        QuickHelpText[ portuguese ] = "Preview";
-        QuickHelpText[ russian ] = "Ïğîñìîòğ!";
+        QuickHelpText[ english_us ] = "Preview";
+        QuickHelpText[ portuguese ] = "Visualizar!";
+        QuickHelpText[ russian ] = "Ïğîñìîòğ";
         QuickHelpText[ greek ] = "Preview";
         QuickHelpText[ dutch ] = "Preview";
-        QuickHelpText[ french ] = "Aperçu!";
-        QuickHelpText[ spanish ] = "Previsualización!";
+        QuickHelpText[ french ] = "Aperçu";
+        QuickHelpText[ spanish ] = "Previsualización";
         QuickHelpText[ finnish ] = "Preview";
-        QuickHelpText[ italian ] = "Anteprima!";
+        QuickHelpText[ italian ] = "Anteprima";
         QuickHelpText[ danish ] = "Preview";
-        QuickHelpText[ swedish ] = "Förhandsvisning!";
-        QuickHelpText[ polish ] = "Podgl¹d!";
+        QuickHelpText[ swedish ] = "Förhandsvisning";
+        QuickHelpText[ polish ] = "Podgl¹d";
         QuickHelpText[ portuguese_brazilian ] = "Preview";
-        QuickHelpText[ japanese ] = "ÌßÚËŞ­°!";
+        QuickHelpText[ japanese ] = "ÌßÚËŞ­°";
         QuickHelpText[ korean ] = "Preview";
-        QuickHelpText[ chinese_simplified ] = "Ô¤ÊÓ!";
-        QuickHelpText[ chinese_traditional ] = "¹wÄı!";
+        QuickHelpText[ chinese_simplified ] = "Ô¤ÊÓ";
+        QuickHelpText[ chinese_traditional ] = "¹wÄı";
         QuickHelpText[ turkish ] = "Preview";
         QuickHelpText[ arabic ] = "Preview";
         QuickHelpText[ catalan ] = "Preview";
@@ -526,6 +526,7 @@ TabPage RID_SVXPAGE_CONNECTION
     Text[ finnish ] = "Liitin";
 };
  // ******************************************************************* EOF
+
 
 
 
