@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:13:55 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 10:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3520,6 +3520,25 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
         }
         else
             nMaximum = LONG_MAX;
+
+        // --> OD 2004-08-25 #i3317# - reset temporarly consideration
+        // of wrapping style influence
+        SwPageFrm* pPageFrm = FindPageFrm();
+        SwSortedObjs* pObjs = pPageFrm ? pPageFrm->GetSortedObjs() : 0L;
+        if ( pObjs )
+        {
+            sal_uInt32 i = 0;
+            for ( i = 0; i < pObjs->Count(); ++i )
+            {
+                SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
+
+                if ( IsAnLower( pAnchoredObj->GetAnchorFrm() ) )
+                {
+                    pAnchoredObj->SetTmpConsiderWrapInfluence( false );
+                }
+            }
+        }
+        // <--
         do
         {
             //Kann eine Weile dauern, deshalb hier auf Waitcrsr pruefen.
@@ -3690,6 +3709,24 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                     ChgLowersProp( aOldSz );
                     NotifyLowerObjs();
 
+                    // --> OD 2004-08-25 #i3317# - reset temporarly consideration
+                    // of wrapping style influence
+                    SwPageFrm* pPageFrm = FindPageFrm();
+                    SwSortedObjs* pObjs = pPageFrm ? pPageFrm->GetSortedObjs() : 0L;
+                    if ( pObjs )
+                    {
+                        sal_uInt32 i = 0;
+                        for ( i = 0; i < pObjs->Count(); ++i )
+                        {
+                            SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
+
+                            if ( IsAnLower( pAnchoredObj->GetAnchorFrm() ) )
+                            {
+                                pAnchoredObj->SetTmpConsiderWrapInfluence( false );
+                            }
+                        }
+                    }
+                    // <--
                     //Es muss geeignet invalidiert werden, damit
                     //sich die Frms huebsch ausbalancieren
                     //- Der jeweils erste ab der zweiten Spalte bekommt
