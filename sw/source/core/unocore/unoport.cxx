@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-04-05 13:22:59 $
+ *  last change: $Author: os $ $Date: 2001-04-17 09:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -730,7 +730,11 @@ sal_Bool SwXTextPortion::supportsService(const OUString& rServiceName) throw( un
         throw uno::RuntimeException();
 
     sal_Bool bRet = sal_False;
-    if(COMPARE_EQUAL == rServiceName.compareToAscii("com.sun.star.text.TextPortion"))
+    if(!rServiceName.compareToAscii("com.sun.star.text.TextPortion") ||
+            !rServiceName.compareToAscii("com.sun.star.style.CharacterProperties") ||
+            !rServiceName.compareToAscii("com.sun.star.style.CharacterPropertiesAsian") ||
+            !rServiceName.compareToAscii("com.sun.star.style.CharacterPropertiesComplex") ||
+            !rServiceName.compareToAscii("com.sun.star.style.ParagraphProperties"))
         bRet = sal_True;
     else if(COMPARE_EQUAL == rServiceName.compareToAscii("com.sun.star.text.TextField"))
         bRet = 0 != GetFldFmt();
@@ -773,12 +777,16 @@ uno::Sequence< OUString > SwXTextPortion::getSupportedServiceNames(void)
     if(!pUnoCrsr)
         throw uno::RuntimeException();
     sal_Bool bField = 0 != GetFldFmt();
-    sal_uInt16 nCount = bField ? 2 : 1;
+    sal_uInt16 nCount = bField ? 6 : 5;
     uno::Sequence< OUString > aRet(nCount);
     OUString* pArray = aRet.getArray();
     pArray[0] = C2U("com.sun.star.text.TextPortion");
+    pArray[1] = C2U("com.sun.star.style.CharacterProperties");
+    pArray[2] = C2U("com.sun.star.style.CharacterPropertiesAsian");
+    pArray[3] = C2U("com.sun.star.style.CharacterPropertiesComplex");
+    pArray[4] = C2U("com.sun.star.style.ParagraphProperties");
     if(bField)
-        pArray[1] = C2U("com.sun.star.text.TextField");
+        pArray[5] = C2U("com.sun.star.text.TextField");
     else
     {
         SwFrmFmt* pCurFrmFmt = pFrameFmt;
@@ -796,16 +804,16 @@ uno::Sequence< OUString > SwXTextPortion::getSupportedServiceNames(void)
         }
         if(pCurFrmFmt)
         {
-            aRet.realloc(2);
+            aRet.realloc(6);
             pArray = aRet.getArray();
             const SwNodeIndex* pIdx = pCurFrmFmt->GetCntnt().GetCntntIdx();
             const SwNode* pNd = GetCrsr()->GetDoc()->GetNodes()[ pIdx->GetIndex() + 1 ];
             if(!pNd->IsNoTxtNode())
-                pArray[1] = C2U("com.sun.star.text.TextFrame");
+                pArray[5] = C2U("com.sun.star.text.TextFrame");
             else if(pNd->IsGrfNode())
-                pArray[1] = C2U("com.sun.star.text.TextGraphicObject");
+                pArray[5] = C2U("com.sun.star.text.TextGraphicObject");
             else
-                pArray[1] = C2U("com.sun.star.text.TextEmbeddedObject");
+                pArray[5] = C2U("com.sun.star.text.TextEmbeddedObject");
         }
     }
     return aRet;
