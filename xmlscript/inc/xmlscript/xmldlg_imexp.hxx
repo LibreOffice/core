@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_imexp.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-16 14:14:47 $
+ *  last change: $Author: dbo $ $Date: 2001-02-21 20:49:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,13 +74,14 @@ namespace xmlscript
 
 
 //==================================================================================================
-void exportDialogModel(
+SAL_DLLEXPORT void SAL_CALL exportDialogModel(
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > const & xDialogModel,
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XExtendedDocumentHandler > const & xOut )
     throw (::com::sun::star::uno::Exception);
 
 //==================================================================================================
-::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > importDialogModel(
+SAL_DLLEXPORT ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >
+SAL_CALL importDialogModel(
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > const & xDialogModel )
     throw (::com::sun::star::uno::Exception);
 

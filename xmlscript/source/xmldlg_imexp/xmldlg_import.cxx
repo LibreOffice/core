@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_import.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-20 16:51:10 $
+ *  last change: $Author: dbo $ $Date: 2001-02-21 20:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -596,6 +596,19 @@ bool ControlImportContext::importStringProperty(
     return false;
 }
 //__________________________________________________________________________________________________
+bool ControlImportContext::importDoubleProperty(
+    OUString const & rPropName, OUString const & rAttrName,
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+{
+    OUString aValue( xAttributes->getValueByUidName( XMLNS_DIALOGS_UID, rAttrName ) );
+    if (aValue.getLength())
+    {
+        _xControlModel->setPropertyValue( rPropName, makeAny( aValue.toDouble() ) );
+        return true;
+    }
+    return false;
+}
+//__________________________________________________________________________________________________
 bool ControlImportContext::importBooleanProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
@@ -680,8 +693,121 @@ bool ControlImportContext::importAlignProperty(
                 Reference< XInterface >(), Any() );
         }
 
-        _xControlModel->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("Align") ), makeAny( nAlign ) );
+        _xControlModel->setPropertyValue( rPropName, makeAny( nAlign ) );
+        return true;
+    }
+    return false;
+}
+//__________________________________________________________________________________________________
+bool ControlImportContext::importDateFormatProperty(
+    OUString const & rPropName, OUString const & rAttrName,
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+{
+    OUString aFormat( xAttributes->getValueByUidName( XMLNS_DIALOGS_UID, rAttrName ) );
+    if (aFormat.getLength())
+    {
+        sal_Int16 nFormat;
+        if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("system short") ))
+        {
+            nFormat = 0;
+        }
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("system short YY") ))
+        {
+            nFormat = 1;
+        }
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("system short YYYY") ))
+        {
+            nFormat = 2;
+        }
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("system long") ))
+        {
+            nFormat = 3;
+        }
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short DDMMYY") ))
+        {
+            nFormat = 4;
+        }
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short MMDDYY") ))
+        {
+            nFormat = 5;
+        }
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short YYMMDD") ))
+        {
+            nFormat = 6;
+        }
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short DDMMYYYY") ))
+        {
+            nFormat = 7;
+        }
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short MMDDYYYY") ))
+        {
+            nFormat = 8;
+        }
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short YYYYMMDD") ))
+        {
+            nFormat = 9;
+        }
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short YYMMDD DIN5008") ))
+        {
+            nFormat = 10;
+        }
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("short YYYYMMDD DIN5008") ))
+        {
+            nFormat = 11;
+        }
+        else
+        {
+            throw xml::sax::SAXException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid date-format value!") ),
+                Reference< XInterface >(), Any() );
+        }
+
+        _xControlModel->setPropertyValue( rPropName, makeAny( nFormat ) );
+        return true;
+    }
+    return false;
+}
+//__________________________________________________________________________________________________
+bool ControlImportContext::importTimeFormatProperty(
+    OUString const & rPropName, OUString const & rAttrName,
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+{
+    OUString aFormat( xAttributes->getValueByUidName( XMLNS_DIALOGS_UID, rAttrName ) );
+    if (aFormat.getLength())
+    {
+        sal_Int16 nFormat;
+        if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("24h short") ))
+        {
+            nFormat = 0;
+        }
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("24h long") ))
+        {
+            nFormat = 1;
+        }
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("12h short") ))
+        {
+            nFormat = 2;
+        }
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("12h long") ))
+        {
+            nFormat = 3;
+        }
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Duration short") ))
+        {
+            nFormat = 4;
+        }
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Duration long") ))
+        {
+            nFormat = 5;
+        }
+        else
+        {
+            throw xml::sax::SAXException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid time-format value!") ),
+                Reference< XInterface >(), Any() );
+        }
+
+        _xControlModel->setPropertyValue( rPropName, makeAny( nFormat ) );
         return true;
     }
     return false;
@@ -691,6 +817,14 @@ void ControlImportContext::importDefaults(
     sal_Int32 nBaseX, sal_Int32 nBaseY,
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
 {
+    sal_Bool bDisable;
+    if (getBoolAttr( &bDisable, OUString( RTL_CONSTASCII_USTRINGPARAM("disabled") ), xAttributes ) &&
+        bDisable)
+    {
+        _xControlModel->setPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("Enabled") ), makeAny( sal_False ) );
+    }
+
     if (!importLongProperty( nBaseX,
                              OUString( RTL_CONSTASCII_USTRINGPARAM("PositionX") ),
                              OUString( RTL_CONSTASCII_USTRINGPARAM("left") ),
@@ -711,14 +845,8 @@ void ControlImportContext::importDefaults(
             Reference< XInterface >(), Any() );
     }
 
-    importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Enabled") ),
-                           OUString( RTL_CONSTASCII_USTRINGPARAM("default") ),
-                           xAttributes );
     importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Printable") ),
                            OUString( RTL_CONSTASCII_USTRINGPARAM("printable") ),
-                           xAttributes );
-    importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
-                           OUString( RTL_CONSTASCII_USTRINGPARAM("tabstop") ),
                            xAttributes );
 }
 //__________________________________________________________________________________________________
@@ -929,7 +1057,7 @@ Reference< xml::XImportContext > DialogImport::getStyle(
 //##################################################################################################
 
 //==================================================================================================
-Reference< xml::sax::XDocumentHandler > importDialogModel(
+SAL_DLLEXPORT Reference< xml::sax::XDocumentHandler > SAL_CALL importDialogModel(
     Reference< container::XNameContainer > const & xDialogModel )
     throw (Exception)
 {

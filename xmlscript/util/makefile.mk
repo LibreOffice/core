@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: dbo $ $Date: 2001-02-16 14:14:51 $
+#   last change: $Author: dbo $ $Date: 2001-02-21 20:49:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,7 +80,7 @@ LIB1FILES= \
         $(SLB)$/xml_helper.lib		\
         $(SLB)$/xmldlg_imexp.lib
 
-SHL1TARGET= $(TARGET)
+SHL1TARGET=xcr$(UPD)$(DLLPOSTFIX)
 
 SHL1LIBS= \
         $(LIB1TARGET)
@@ -91,7 +91,7 @@ SHL1STDLIBS= \
         $(SALLIB)
 
 SHL1DEPN=
-SHL1IMPLIB=	i$(TARGET)
+SHL1IMPLIB=	i$(SHL1TARGET)
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=	$(SHL1TARGET)
@@ -103,4 +103,18 @@ DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt
 .INCLUDE :	target.mk
 
 $(MISC)$/$(SHL1TARGET).flt : makefile.mk
-    echo __CT >>$@
+.IF "$(COM)"=="MSC"
+    @echo ??_7>>$@
+    @echo ??_8>>$@
+    @echo ??_C>>$@
+    @echo ??_E>>$@
+    @echo ??_F>>$@
+    @echo ??_G>>$@
+    @echo ??_H>>$@
+    @echo ??_I>>$@
+    @echo 0Imp>>$@
+    @echo Impl@@>>$@
+    @echo Imp@@>>$@
+    @echo __CT>>$@
+    @echo _STL>>$@
+.ENDIF

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-20 16:51:10 $
+ *  last change: $Author: dbo $ $Date: 2001-02-21 20:49:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
     pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ), _id );
 
     // background-color
-    if ((_set & 0x1) != 0)
+    if (_set & 0x1)
     {
         OUStringBuffer buf( 16 );
         buf.append( (sal_Unicode)'0' );
@@ -102,7 +102,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
     }
 
     // text-color
-    if ((_set & 0x2) != 0)
+    if (_set & 0x2)
     {
         OUStringBuffer buf( 16 );
         buf.append( (sal_Unicode)'0' );
@@ -113,7 +113,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
     }
 
     // border
-    if ((_set & 0x4) != 0)
+    if (_set & 0x4)
     {
         switch (_border)
         {
@@ -135,7 +135,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
     }
 
     // font-
-    if ((_set & 0x8) != 0)
+    if (_set & 0x8)
     {
         awt::FontDescriptor def_descr;
 
@@ -510,6 +510,18 @@ void ElementDescriptor::readStringAttr( OUString const & rPropName, OUString con
     }
 }
 //__________________________________________________________________________________________________
+void ElementDescriptor::readDoubleAttr( OUString const & rPropName, OUString const & rAttrName )
+{
+    if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
+    {
+        Any a( _xProps->getPropertyValue( rPropName ) );
+        if (a.getValueTypeClass() == TypeClass_DOUBLE)
+        {
+            addAttr( rAttrName, OUString::valueOf( *(double const *)a.getValue() ) );
+        }
+    }
+}
+//__________________________________________________________________________________________________
 void ElementDescriptor::readLongAttr( OUString const & rPropName, OUString const & rAttrName )
 {
     if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
@@ -562,6 +574,88 @@ void ElementDescriptor::readBoolAttr( OUString const & rPropName, OUString const
     }
 }
 //__________________________________________________________________________________________________
+void ElementDescriptor::readDateFormatAttr( OUString const & rPropName, OUString const & rAttrName )
+{
+    if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
+    {
+        Any a( _xProps->getPropertyValue( rPropName ) );
+        if (a.getValueTypeClass() == TypeClass_SHORT)
+        {
+            switch (*(sal_Int16 const *)a.getValue())
+            {
+            case 0:
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("system short") ) );
+                break;
+            case 1:
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("system short YY") ) );
+                break;
+            case 2:
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("system short YYYY") ) );
+                break;
+            case 3:
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("system long") ) );
+                break;
+            case 4:
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short DDMMYY") ) );
+                break;
+            case 5:
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short MMDDYY") ) );
+                break;
+            case 6:
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short YYMMDD") ) );
+                break;
+            case 7:
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short DDMMYYYY") ) );
+                break;
+            case 8:
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short MMDDYYYY") ) );
+                break;
+            case 9:
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short YYYYMMDD") ) );
+                break;
+            case 10:
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short YYMMDD DIN5008") ) );
+                break;
+            case 11:
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short YYYYMMDD DIN5008") ) );
+                break;
+            }
+        }
+    }
+}
+//__________________________________________________________________________________________________
+void ElementDescriptor::readTimeFormatAttr( OUString const & rPropName, OUString const & rAttrName )
+{
+    if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
+    {
+        Any a( _xProps->getPropertyValue( rPropName ) );
+        if (a.getValueTypeClass() == TypeClass_SHORT)
+        {
+            switch (*(sal_Int16 const *)a.getValue())
+            {
+            case 0:
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("24h short") ) );
+                break;
+            case 1:
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("24h long") ) );
+                break;
+            case 2:
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("12h short") ) );
+                break;
+            case 3:
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("12h long") ) );
+                break;
+            case 4:
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("Duration short") ) );
+                break;
+            case 5:
+                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("Duration long") ) );
+                break;
+            }
+        }
+    }
+}
+//__________________________________________________________________________________________________
 void ElementDescriptor::readAlignAttr( OUString const & rPropName, OUString const & rAttrName )
 {
     if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
@@ -603,11 +697,6 @@ void ElementDescriptor::readDefaults()
         OSL_ENSURE( 0, "unexpected property type for \"Enabled\": not bool!" );
     }
 
-    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Printable") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":printable") ) );
-    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tabstop") ) );
-
     readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("PositionX") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":left") ) );
     readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("PositionY") ),
@@ -616,9 +705,11 @@ void ElementDescriptor::readDefaults()
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":width") ) );
     readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Height") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":height") ) );
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Printable") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":printable") ) );
 }
 //__________________________________________________________________________________________________
-void ElementDescriptor::addEvents()
+void ElementDescriptor::readEvents()
     throw (Exception)
 {
     Reference< script::XScriptEventsSupplier > xSupplier( _xProps, UNO_QUERY );
@@ -712,46 +803,55 @@ OUString StyleBag::getStyleId( Style const & rStyle )
     {
         Style * pStyle = _styles[ nStylesPos ];
 
-        if ((rStyle._set & pStyle->_set & 0x1) != 0 &&
-            rStyle._backgroundColor != pStyle->_backgroundColor)
-        {
-            continue;
-        }
-        if ((rStyle._set & pStyle->_set & 0x2) != 0 &&
-            rStyle._textColor != pStyle->_textColor)
-        {
-            continue;
-        }
-        if ((rStyle._set & pStyle->_set & 0x4) != 0 &&
-            rStyle._border != pStyle->_border)
-        {
-            continue;
-        }
-        if ((rStyle._set & pStyle->_set & 0x8) != 0 &&
-            !equals( rStyle._descr, pStyle->_descr))
-        {
-            continue;
-        }
+        // xxx todo: have a look at this...
 
-        // merge in
-        if ((rStyle._set & !pStyle->_set & 0x1) != 0)
+        short demanded_defaults = ~rStyle._set & rStyle._all;
+        // test, if defaults are not set
+        if ((~pStyle->_set & demanded_defaults) == demanded_defaults &&
+            (rStyle._set & (pStyle->_all & ~pStyle->_set)) == 0)
         {
-            pStyle->_backgroundColor = rStyle._backgroundColor;
-        }
-        if ((rStyle._set & !pStyle->_set & 0x2) != 0)
-        {
-            pStyle->_textColor = rStyle._textColor;
-        }
-        if ((rStyle._set & !pStyle->_set & 0x4) != 0)
-        {
-            pStyle->_border = rStyle._border;
-        }
-        if ((rStyle._set & !pStyle->_set & 0x8) != 0)
-        {
-            pStyle->_descr = rStyle._descr;
-        }
+            short bset = rStyle._set & pStyle->_set;
+            if ((bset & 0x1) && rStyle._backgroundColor != pStyle->_backgroundColor)
+            {
+                continue;
+            }
+            if ((bset & 0x2) && rStyle._textColor != pStyle->_textColor)
+            {
+                continue;
+            }
+            if ((bset & 0x4) && rStyle._border != pStyle->_border)
+            {
+                continue;
+            }
+            if ((bset & 0x8) && !equals( rStyle._descr, pStyle->_descr))
+            {
+                continue;
+            }
 
-        return pStyle->_id;
+            // merge in
+            short bnset = rStyle._set & ~pStyle->_set;
+            if (bnset & 0x1)
+            {
+                pStyle->_backgroundColor = rStyle._backgroundColor;
+            }
+            if (bnset & 0x2)
+            {
+                pStyle->_textColor = rStyle._textColor;
+            }
+            if (bnset & 0x4)
+            {
+                pStyle->_border = rStyle._border;
+            }
+            if (bnset & 0x8)
+            {
+                pStyle->_descr = rStyle._descr;
+            }
+
+            pStyle->_all |= rStyle._all;
+            pStyle->_set |= rStyle._set;
+
+            return pStyle->_id;
+        }
     }
 
     // no appr style found, append new
@@ -811,7 +911,7 @@ void ElementDescriptor::dump( Reference< xml::sax::XExtendedDocumentHandler > co
 }
 
 //==================================================================================================
-void exportDialogModel(
+SAL_DLLEXPORT void SAL_CALL exportDialogModel(
     Reference< container::XNameContainer > const & xDialogModel,
     Reference< xml::sax::XExtendedDocumentHandler > const & xOut )
     throw (Exception)
@@ -871,7 +971,6 @@ void exportDialogModel(
             pElem->addAttr(
                 OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":id") ), rName );
             pElem->readRadioButtonModel( &all_styles );
-            pElem->addEvents();
             pRadioGroup->addSubElem( xElem );
         }
         else // no radio
@@ -887,7 +986,6 @@ void exportDialogModel(
                 pElem->addAttr(
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":id") ), rName );
                 pElem->readButtonModel( &all_styles );
-                pElem->addEvents();
             }
             else if (aControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlCheckBoxModel") ))
             {
@@ -898,7 +996,6 @@ void exportDialogModel(
                 pElem->addAttr(
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":id") ), rName );
                 pElem->readCheckBoxModel( &all_styles );
-                pElem->addEvents();
             }
             else if (aControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlComboBoxModel") ))
             {
@@ -909,7 +1006,6 @@ void exportDialogModel(
                 pElem->addAttr(
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":id") ), rName );
                 pElem->readComboBoxModel( &all_styles );
-                pElem->addEvents();
             }
             else if (aControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlListBoxModel") ))
             {
@@ -920,7 +1016,6 @@ void exportDialogModel(
                 pElem->addAttr(
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":id") ), rName );
                 pElem->readListBoxModel( &all_styles );
-                pElem->addEvents();
             }
             else if (aControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlGroupBoxModel") ))
             {
@@ -931,7 +1026,6 @@ void exportDialogModel(
                 pElem->addAttr(
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":id") ), rName );
                 pElem->readGroupBoxModel( &all_styles );
-                pElem->addEvents();
             }
             else if (aControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFixedTextModel") ))
             {
@@ -942,7 +1036,6 @@ void exportDialogModel(
                 pElem->addAttr(
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":id") ), rName );
                 pElem->readFixedTextModel( &all_styles );
-                pElem->addEvents();
             }
             else if (aControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlEditModel") ))
             {
@@ -953,88 +1046,76 @@ void exportDialogModel(
                 pElem->addAttr(
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":id") ), rName );
                 pElem->readEditModel( &all_styles );
-                pElem->addEvents();
-            }
-
-
-
-
-            else if (aControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlCurrencyFieldModel") ))
-            {
-                pElem = new ElementDescriptor(
-                    xProps, xPropState,
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":") ) );
-                xElem = static_cast< xml::sax::XAttributeList * >( pElem );
-                pElem->addAttr(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":id") ), rName );
-                pElem->readCurrencyFieldModel( &all_styles );
-                pElem->addEvents();
-            }
-            else if (aControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlDateFieldModel") ))
-            {
-                pElem = new ElementDescriptor(
-                    xProps, xPropState,
-                OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":") ) );
-                xElem = static_cast< xml::sax::XAttributeList * >( pElem );
-                pElem->addAttr(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":id") ), rName );
-                pElem->readDateFieldModel( &all_styles );
-                pElem->addEvents();
-            }
-            else if (aControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFileControlModel") ))
-            {
-                pElem = new ElementDescriptor(
-                    xProps, xPropState,
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":") ) );
-                xElem = static_cast< xml::sax::XAttributeList * >( pElem );
-                pElem->addAttr(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":id") ), rName );
-                pElem->readFileControlModel( &all_styles );
-                pElem->addEvents();
             }
             else if (aControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlImageControlModel") ))
             {
                 pElem = new ElementDescriptor(
                     xProps, xPropState,
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":") ) );
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":img") ) );
                 xElem = static_cast< xml::sax::XAttributeList * >( pElem );
                 pElem->addAttr(
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":id") ), rName );
                 pElem->readImageControlModel( &all_styles );
-                pElem->addEvents();
+            }
+            else if (aControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFileControlModel") ))
+            {
+                pElem = new ElementDescriptor(
+                    xProps, xPropState,
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":filecontrol") ) );
+                xElem = static_cast< xml::sax::XAttributeList * >( pElem );
+                pElem->addAttr(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":id") ), rName );
+                pElem->readFileControlModel( &all_styles );
+            }
+            else if (aControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlCurrencyFieldModel") ))
+            {
+                pElem = new ElementDescriptor(
+                    xProps, xPropState,
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":currencyfield") ) );
+                xElem = static_cast< xml::sax::XAttributeList * >( pElem );
+                pElem->addAttr(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":id") ), rName );
+                pElem->readCurrencyFieldModel( &all_styles );
+            }
+            else if (aControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlDateFieldModel") ))
+            {
+                pElem = new ElementDescriptor(
+                    xProps, xPropState,
+                OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":datefield") ) );
+                xElem = static_cast< xml::sax::XAttributeList * >( pElem );
+                pElem->addAttr(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":id") ), rName );
+                pElem->readDateFieldModel( &all_styles );
             }
             else if (aControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlNumericFieldModel") ))
             {
                 pElem = new ElementDescriptor(
                     xProps, xPropState,
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":") ) );
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":numericfield") ) );
                 xElem = static_cast< xml::sax::XAttributeList * >( pElem );
                 pElem->addAttr(
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":id") ), rName );
                 pElem->readNumericFieldModel( &all_styles );
-                pElem->addEvents();
-            }
-            else if (aControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlPatternFieldModel") ))
-            {
-                pElem = new ElementDescriptor(
-                    xProps, xPropState,
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":") ) );
-                xElem = static_cast< xml::sax::XAttributeList * >( pElem );
-                pElem->addAttr(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":id") ), rName );
-                pElem->readPatternFieldModel( &all_styles );
-                pElem->addEvents();
             }
             else if (aControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlTimeFieldModel") ))
             {
                 pElem = new ElementDescriptor(
                     xProps, xPropState,
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":") ) );
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":timefield") ) );
                 xElem = static_cast< xml::sax::XAttributeList * >( pElem );
                 pElem->addAttr(
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":id") ), rName );
                 pElem->readTimeFieldModel( &all_styles );
-                pElem->addEvents();
+            }
+            else if (aControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlPatternFieldModel") ))
+            {
+                pElem = new ElementDescriptor(
+                    xProps, xPropState,
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":patternfield") ) );
+                xElem = static_cast< xml::sax::XAttributeList * >( pElem );
+                pElem->addAttr(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":id") ), rName );
+                pElem->readPatternFieldModel( &all_styles );
             }
             //
 

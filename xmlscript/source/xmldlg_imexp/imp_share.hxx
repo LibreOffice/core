@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_share.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-20 16:51:10 $
+ *  last change: $Author: dbo $ $Date: 2001-02-21 20:49:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,7 +237,7 @@ public:
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
         throw (xml::sax::SAXException, RuntimeException);
 
-    StylesElement(
+    inline StylesElement(
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -273,7 +273,7 @@ public:
     bool importBorderStyle(
         Reference< beans::XPropertySet > const & xProps );
 
-    StyleElement(
+    inline StyleElement(
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -298,7 +298,7 @@ public:
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
         throw (xml::sax::SAXException, RuntimeException);
 
-    MenuPopupElement(
+    inline MenuPopupElement(
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -326,7 +326,7 @@ public:
     vector< Reference< xml::sax2::XExtendedAttributes > > const * getEvents() throw ()
         { return &_events; }
 
-    ControlElement(
+    inline ControlElement(
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -363,6 +363,9 @@ public:
     bool importStringProperty(
         OUString const & rPropName, OUString const & rAttrName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
+    bool importDoubleProperty(
+        OUString const & rPropName, OUString const & rAttrName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
     bool importBooleanProperty(
         OUString const & rPropName, OUString const & rAttrName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
@@ -379,6 +382,12 @@ public:
     bool importAlignProperty(
         OUString const & rPropName, OUString const & rAttrName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
+    bool importDateFormatProperty(
+        OUString const & rPropName, OUString const & rAttrName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
+    bool importTimeFormatProperty(
+        OUString const & rPropName, OUString const & rAttrName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
 };
 //==================================================================================================
 class WindowElement
@@ -392,7 +401,7 @@ public:
     virtual void SAL_CALL endElement()
         throw (xml::sax::SAXException, RuntimeException);
 
-    WindowElement(
+    inline WindowElement(
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -408,7 +417,7 @@ public:
     virtual void SAL_CALL endElement()
         throw (xml::sax::SAXException, RuntimeException);
 
-    EventElement(
+    inline EventElement(
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -426,7 +435,7 @@ public:
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
         throw (xml::sax::SAXException, RuntimeException);
 
-    BulletinBoardElement(
+    inline BulletinBoardElement(
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -444,7 +453,7 @@ public:
     virtual void SAL_CALL endElement()
         throw (xml::sax::SAXException, RuntimeException);
 
-    ButtonElement(
+    inline ButtonElement(
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -464,7 +473,7 @@ public:
     virtual void SAL_CALL endElement()
         throw (xml::sax::SAXException, RuntimeException);
 
-    CheckBoxElement(
+    inline CheckBoxElement(
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -485,7 +494,7 @@ public:
     virtual void SAL_CALL endElement()
         throw (xml::sax::SAXException, RuntimeException);
 
-    ComboBoxElement(
+    inline ComboBoxElement(
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -506,7 +515,7 @@ public:
     virtual void SAL_CALL endElement()
         throw (xml::sax::SAXException, RuntimeException);
 
-    MenuListElement(
+    inline MenuListElement(
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -524,7 +533,7 @@ public:
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
         throw (xml::sax::SAXException, RuntimeException);
 
-    RadioElement(
+    inline RadioElement(
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -545,7 +554,7 @@ public:
     void SAL_CALL endElement()
         throw (xml::sax::SAXException, RuntimeException);
 
-    RadioGroupElement(
+    inline RadioGroupElement(
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -567,7 +576,7 @@ public:
     virtual void SAL_CALL endElement()
         throw (xml::sax::SAXException, RuntimeException);
 
-    TitledBoxElement(
+    inline TitledBoxElement(
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -587,7 +596,7 @@ public:
     virtual void SAL_CALL endElement()
         throw (xml::sax::SAXException, RuntimeException);
 
-    TextElement(
+    inline TextElement(
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
@@ -607,7 +616,147 @@ public:
     virtual void SAL_CALL endElement()
         throw (xml::sax::SAXException, RuntimeException);
 
-    TextFieldElement(
+    inline TextFieldElement(
+        OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
+        ElementBase * pParent, DialogImport * pImport )
+        throw ()
+        : ControlElement( rLocalName, xAttributes, pParent, pImport )
+        {}
+};
+//==================================================================================================
+class ImageControlElement
+    : public ControlElement
+{
+public:
+    virtual Reference< xml::XImportContext > SAL_CALL createChildContext(
+        sal_Int32 nUid, OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+        throw (xml::sax::SAXException, RuntimeException);
+    virtual void SAL_CALL endElement()
+        throw (xml::sax::SAXException, RuntimeException);
+
+    inline ImageControlElement(
+        OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
+        ElementBase * pParent, DialogImport * pImport )
+        throw ()
+        : ControlElement( rLocalName, xAttributes, pParent, pImport )
+        {}
+};
+//==================================================================================================
+class FileControlElement
+    : public ControlElement
+{
+public:
+    virtual Reference< xml::XImportContext > SAL_CALL createChildContext(
+        sal_Int32 nUid, OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+        throw (xml::sax::SAXException, RuntimeException);
+    virtual void SAL_CALL endElement()
+        throw (xml::sax::SAXException, RuntimeException);
+
+    inline FileControlElement(
+        OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
+        ElementBase * pParent, DialogImport * pImport )
+        throw ()
+        : ControlElement( rLocalName, xAttributes, pParent, pImport )
+        {}
+};
+//==================================================================================================
+class CurrencyFieldElement
+    : public ControlElement
+{
+public:
+    virtual Reference< xml::XImportContext > SAL_CALL createChildContext(
+        sal_Int32 nUid, OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+        throw (xml::sax::SAXException, RuntimeException);
+    virtual void SAL_CALL endElement()
+        throw (xml::sax::SAXException, RuntimeException);
+
+    inline CurrencyFieldElement(
+        OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
+        ElementBase * pParent, DialogImport * pImport )
+        throw ()
+        : ControlElement( rLocalName, xAttributes, pParent, pImport )
+        {}
+};
+//==================================================================================================
+class DateFieldElement
+    : public ControlElement
+{
+public:
+    virtual Reference< xml::XImportContext > SAL_CALL createChildContext(
+        sal_Int32 nUid, OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+        throw (xml::sax::SAXException, RuntimeException);
+    virtual void SAL_CALL endElement()
+        throw (xml::sax::SAXException, RuntimeException);
+
+    inline DateFieldElement(
+        OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
+        ElementBase * pParent, DialogImport * pImport )
+        throw ()
+        : ControlElement( rLocalName, xAttributes, pParent, pImport )
+        {}
+};
+//==================================================================================================
+class NumericFieldElement
+    : public ControlElement
+{
+public:
+    virtual Reference< xml::XImportContext > SAL_CALL createChildContext(
+        sal_Int32 nUid, OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+        throw (xml::sax::SAXException, RuntimeException);
+    virtual void SAL_CALL endElement()
+        throw (xml::sax::SAXException, RuntimeException);
+
+    inline NumericFieldElement(
+        OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
+        ElementBase * pParent, DialogImport * pImport )
+        throw ()
+        : ControlElement( rLocalName, xAttributes, pParent, pImport )
+        {}
+};
+//==================================================================================================
+class TimeFieldElement
+    : public ControlElement
+{
+public:
+    virtual Reference< xml::XImportContext > SAL_CALL createChildContext(
+        sal_Int32 nUid, OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+        throw (xml::sax::SAXException, RuntimeException);
+    virtual void SAL_CALL endElement()
+        throw (xml::sax::SAXException, RuntimeException);
+
+    inline TimeFieldElement(
+        OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
+        ElementBase * pParent, DialogImport * pImport )
+        throw ()
+        : ControlElement( rLocalName, xAttributes, pParent, pImport )
+        {}
+};
+//==================================================================================================
+class PatternFieldElement
+    : public ControlElement
+{
+public:
+    virtual Reference< xml::XImportContext > SAL_CALL createChildContext(
+        sal_Int32 nUid, OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+        throw (xml::sax::SAXException, RuntimeException);
+    virtual void SAL_CALL endElement()
+        throw (xml::sax::SAXException, RuntimeException);
+
+    inline PatternFieldElement(
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )

@@ -1,12 +1,13 @@
 <window xmlns="http://openoffice.org/2000/dialog"
     xmlns:dlg="http://openoffice.org/2000/dialog"
 
-    label="Test-Dialog" height="600" width="600">
+    label="Test-Dialog" height="800" width="800">
 
 <dlg:styles>
   <dlg:style style-id="bla" background-color="0xffffff" dlg:text-color="255"/>
   <dlg:style style-id="bla2" background-color="0xff00ff" dlg:text-color="255193873"/>
   <dlg:style style-id="bla3" background-color="0" dlg:text-color="0xffffff" font-name="Arial" font-height="24"/>
+  <dlg:style style-id="no_border" border="none"/>
 </dlg:styles>
 
     <dlg:bulletinboard xmlns:ns="http://www.fake">
@@ -58,7 +59,7 @@
             </menupopup>
         </combobox>
         <combobox id="combo2" value="combotext2" left="310" top="150" width="50" height="50"
-              spin-button="true"
+              spin="true"
               >
             <menupopup>
                 <menuitem value="Citem3"/>
@@ -101,12 +102,39 @@
         <textfield id="field1" left="250" top="520" width="50" height="40"
                value="edit text here..." readonly="true" vscroll="true"
                multiline="true"
-               align="right"/>
+               align="right" style-id="no_border"/>
 
         <textfield id="field2" left="320" top="520" width="50" height="40"
-               value="edit text2 here..." hscroll="true"
-               multiline="true" echochar="*"
+               value="hidden text" hscroll="true"
+               echochar="*"
                align="left"/>
+
+        <img id="image1" left="50" top="600" width="80" height="50"
+             src="../../test/w3c.jpg"/>
+
+        <filecontrol id="file1" left="150" top="600" width="100" height="100"
+             value="f:\script\xmlscript\test\w3c.jpg"/>
+<!--
+        <currencyfield id="currency1" left="250" top="600" width="100" height="20"
+             value="5.6075" value-min="0.5" value-max="10.0" value-step="0.1"
+             spin="true" thousands-separator="true" currency-symbol="$"/>
+
+        <numericfield id="numeric1" left="400" top="100" width="100" height="20"
+             value="5.6075" value-min="0.5" value-max="10.0" value-step="0.1"
+             thousands-separator="true" />
+-->
+
+        <datefield id="datefield1" left="400" top="50" width="100" height="20"
+            date-format="short DDMMYY"
+             spin="true"/>
+
+        <timefield id="time1" left="400" top="150" width="100" height="20"
+             time-format="24h short" value-min="0" value-max="12"
+             strict-format="true" value="6"
+             spin="true"/>
+
+        <patternfield id="pattern1" left="400" top="200" width="100" height="20"
+             value="pattern" strict-format="true" readonly="true"/>
 
     </dlg:bulletinboard>
 

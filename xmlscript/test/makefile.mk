@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: dbo $ $Date: 2001-02-16 14:14:49 $
+#   last change: $Author: dbo $ $Date: 2001-02-21 20:49:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,7 +92,7 @@ APP1STDLIBS= \
         $(CPPULIB)			\
         $(CPPUHELPERLIB)		\
         $(SALLIB)			\
-        ixmlscript.lib
+        ixcr$(UPD)$(DLLPOSTFIX).lib
 
 APP1DEF=	$(MISC)$/imexp.def
 
@@ -108,14 +108,14 @@ APP1DEF=	$(MISC)$/imexp.def
 .IF "$(GUI)" == "WIN"
 
 $(MISC)$/imexp.def: makefile.mk
-    echo  NAME			imexp							>$@
-    echo  DESCRIPTION	'XML dialogs im-/ exporter'          >>$@
-    echo  EXETYPE		WINDOWS 						   >>$@
-    echo  STUB			'winSTUB.EXE'                      >>$@
-    echo  PROTMODE										   >>$@
-    echo  CODE			PRELOAD MOVEABLE DISCARDABLE	   >>$@
-    echo  DATA			PRELOAD MOVEABLE MULTIPLE		   >>$@
-    echo  HEAPSIZE		8192							   >>$@
-    echo  STACKSIZE 	32768							   >>$@
+    echo  NAME			imexp			>$@
+    echo  DESCRIPTION	'XML dialogs im-/ exporter'     >>$@
+    echo  EXETYPE		WINDOWS 			>>$@
+    echo  STUB			'winSTUB.EXE'           >>$@
+    echo  PROTMODE						>>$@
+    echo  CODE			PRELOAD MOVEABLE DISCARDABLE	>>$@
+    echo  DATA			PRELOAD MOVEABLE MULTIPLE	>>$@
+    echo  HEAPSIZE		8192					>>$@
+    echo  STACKSIZE 	32768					>>$@
 
 .ENDIF

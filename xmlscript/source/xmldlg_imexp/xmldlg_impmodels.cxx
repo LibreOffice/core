@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-20 16:51:10 $
+ *  last change: $Author: dbo $ $Date: 2001-02-21 20:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,493 @@ using namespace ::com::sun::star::uno;
 namespace xmlscript
 {
 
+// patternfield
+//__________________________________________________________________________________________________
+Reference< xml::XImportContext > PatternFieldElement::createChildContext(
+    sal_Int32 nUid, OUString const & rLocalName,
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    if (XMLNS_DIALOGS_UID != nUid)
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
+            Reference< XInterface >(), Any() );
+    }
+    // event
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    {
+        return new EventElement( rLocalName, xAttributes, this, _pImport );
+    }
+    else
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("expected event element!") ),
+            Reference< XInterface >(), Any() );
+    }
+}
+//__________________________________________________________________________________________________
+void PatternFieldElement::endElement()
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    ControlImportContext ctx(
+        _pImport, getControlId( _xAttributes ),
+        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlPatternFieldModel") ) );
+
+    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    if (xStyle.is())
+    {
+        StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
+        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+        pStyle->importBackgroundColorStyle( xControlModel );
+        pStyle->importTextColorStyle( xControlModel );
+        pStyle->importBorderStyle( xControlModel );
+        pStyle->importFontStyle( xControlModel );
+    }
+
+    ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("tabstop") ),
+                               _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("readonly") ),
+                               _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("StrictFormat") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("strict-format") ),
+                               _xAttributes );
+    ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Text") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
+                              _xAttributes );
+    ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("EditMask") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("edit-mask") ),
+                              _xAttributes );
+    ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("LiteralMask") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("literal-mask") ),
+                              _xAttributes );
+    ctx.importEvents( _events );
+}
+
 //##################################################################################################
 
-// fixed text
+// timefield
+//__________________________________________________________________________________________________
+Reference< xml::XImportContext > TimeFieldElement::createChildContext(
+    sal_Int32 nUid, OUString const & rLocalName,
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    if (XMLNS_DIALOGS_UID != nUid)
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
+            Reference< XInterface >(), Any() );
+    }
+    // event
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    {
+        return new EventElement( rLocalName, xAttributes, this, _pImport );
+    }
+    else
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("expected event element!") ),
+            Reference< XInterface >(), Any() );
+    }
+}
+//__________________________________________________________________________________________________
+void TimeFieldElement::endElement()
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    ControlImportContext ctx(
+        _pImport, getControlId( _xAttributes ),
+        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlTimeFieldModel") ) );
+
+    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    if (xStyle.is())
+    {
+        StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
+        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+        pStyle->importBackgroundColorStyle( xControlModel );
+        pStyle->importTextColorStyle( xControlModel );
+        pStyle->importBorderStyle( xControlModel );
+        pStyle->importFontStyle( xControlModel );
+    }
+
+    ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("tabstop") ),
+                               _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("readonly") ),
+                               _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("StrictFormat") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("strict-format") ),
+                               _xAttributes );
+    ctx.importTimeFormatProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("TimeFormat") ),
+                                  OUString( RTL_CONSTASCII_USTRINGPARAM("time-format") ),
+                                  _xAttributes );
+    ctx.importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Time") ),
+                            OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
+                            _xAttributes );
+    ctx.importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("TimeMin") ),
+                            OUString( RTL_CONSTASCII_USTRINGPARAM("value-min") ),
+                            _xAttributes );
+    ctx.importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("TimeMax") ),
+                            OUString( RTL_CONSTASCII_USTRINGPARAM("value-max") ),
+                            _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Spin") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("spin") ),
+                               _xAttributes );
+    ctx.importEvents( _events );
+}
+
+//##################################################################################################
+
+// numericfield
+//__________________________________________________________________________________________________
+Reference< xml::XImportContext > NumericFieldElement::createChildContext(
+    sal_Int32 nUid, OUString const & rLocalName,
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    if (XMLNS_DIALOGS_UID != nUid)
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
+            Reference< XInterface >(), Any() );
+    }
+    // event
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    {
+        return new EventElement( rLocalName, xAttributes, this, _pImport );
+    }
+    else
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("expected event element!") ),
+            Reference< XInterface >(), Any() );
+    }
+}
+//__________________________________________________________________________________________________
+void NumericFieldElement::endElement()
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    ControlImportContext ctx(
+        _pImport, getControlId( _xAttributes ),
+        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlNumericFieldModel") ) );
+
+    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    if (xStyle.is())
+    {
+        StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
+        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+        pStyle->importBackgroundColorStyle( xControlModel );
+        pStyle->importTextColorStyle( xControlModel );
+        pStyle->importBorderStyle( xControlModel );
+        pStyle->importFontStyle( xControlModel );
+    }
+
+    ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("tabstop") ),
+                               _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("readonly") ),
+                               _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("StrictFormat") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("strict-format") ),
+                               _xAttributes );
+    ctx.importShortProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("DecimalAccuracy") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("decimal-accuracy") ),
+                               _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ShowThousandsSeparator") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("thousands-separator") ),
+                               _xAttributes );
+    ctx.importDoubleProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Value") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
+                              _xAttributes );
+    ctx.importDoubleProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ValueMin") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("value-min") ),
+                              _xAttributes );
+    ctx.importDoubleProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ValueMax") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("value-max") ),
+                              _xAttributes );
+    ctx.importDoubleProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ValueStep") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("value-step") ),
+                              _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Spin") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("spin") ),
+                               _xAttributes );
+    ctx.importEvents( _events );
+}
+
+//##################################################################################################
+
+// datefield
+//__________________________________________________________________________________________________
+Reference< xml::XImportContext > DateFieldElement::createChildContext(
+    sal_Int32 nUid, OUString const & rLocalName,
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    if (XMLNS_DIALOGS_UID != nUid)
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
+            Reference< XInterface >(), Any() );
+    }
+    // event
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    {
+        return new EventElement( rLocalName, xAttributes, this, _pImport );
+    }
+    else
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("expected event element!") ),
+            Reference< XInterface >(), Any() );
+    }
+}
+//__________________________________________________________________________________________________
+void DateFieldElement::endElement()
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    ControlImportContext ctx(
+        _pImport, getControlId( _xAttributes ),
+        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlDateFieldModel") ) );
+
+    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    if (xStyle.is())
+    {
+        StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
+        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+        pStyle->importBackgroundColorStyle( xControlModel );
+        pStyle->importTextColorStyle( xControlModel );
+        pStyle->importBorderStyle( xControlModel );
+        pStyle->importFontStyle( xControlModel );
+    }
+
+    ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("tabstop") ),
+                               _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("readonly") ),
+                               _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("StrictFormat") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("strict-format") ),
+                               _xAttributes );
+    ctx.importDateFormatProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("DateFormat") ),
+                                  OUString( RTL_CONSTASCII_USTRINGPARAM("date-format") ),
+                                  _xAttributes );
+    ctx.importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Date") ),
+                            OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
+                            _xAttributes );
+    ctx.importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("DateMin") ),
+                            OUString( RTL_CONSTASCII_USTRINGPARAM("value-min") ),
+                            _xAttributes );
+    ctx.importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("DateMax") ),
+                            OUString( RTL_CONSTASCII_USTRINGPARAM("value-max") ),
+                            _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Spin") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("spin") ),
+                               _xAttributes );
+    ctx.importEvents( _events );
+}
+
+//##################################################################################################
+
+// currencyfield
+//__________________________________________________________________________________________________
+Reference< xml::XImportContext > CurrencyFieldElement::createChildContext(
+    sal_Int32 nUid, OUString const & rLocalName,
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    if (XMLNS_DIALOGS_UID != nUid)
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
+            Reference< XInterface >(), Any() );
+    }
+    // event
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    {
+        return new EventElement( rLocalName, xAttributes, this, _pImport );
+    }
+    else
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("expected event element!") ),
+            Reference< XInterface >(), Any() );
+    }
+}
+//__________________________________________________________________________________________________
+void CurrencyFieldElement::endElement()
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    ControlImportContext ctx(
+        _pImport, getControlId( _xAttributes ),
+        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlCurrencyFieldModel") ) );
+
+    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    if (xStyle.is())
+    {
+        StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
+        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+        pStyle->importBackgroundColorStyle( xControlModel );
+        pStyle->importTextColorStyle( xControlModel );
+        pStyle->importBorderStyle( xControlModel );
+        pStyle->importFontStyle( xControlModel );
+    }
+
+    ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("tabstop") ),
+                               _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("readonly") ),
+                               _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("StrictFormat") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("strict-format") ),
+                               _xAttributes );
+    ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("CurrencySymbol") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("currency-symbol") ),
+                              _xAttributes );
+    ctx.importShortProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("DecimalAccuracy") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("decimal-accuracy") ),
+                               _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ShowThousandsSeparator") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("thousands-separator") ),
+                               _xAttributes );
+    ctx.importDoubleProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Value") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
+                              _xAttributes );
+    ctx.importDoubleProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ValueMin") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("value-min") ),
+                              _xAttributes );
+    ctx.importDoubleProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ValueMax") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("value-max") ),
+                              _xAttributes );
+    ctx.importDoubleProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ValueStep") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("value-step") ),
+                              _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Spin") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("spin") ),
+                               _xAttributes );
+    ctx.importEvents( _events );
+}
+
+//##################################################################################################
+
+// filecontrol
+//__________________________________________________________________________________________________
+Reference< xml::XImportContext > FileControlElement::createChildContext(
+    sal_Int32 nUid, OUString const & rLocalName,
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    if (XMLNS_DIALOGS_UID != nUid)
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
+            Reference< XInterface >(), Any() );
+    }
+    // event
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    {
+        return new EventElement( rLocalName, xAttributes, this, _pImport );
+    }
+    else
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("expected event element!") ),
+            Reference< XInterface >(), Any() );
+    }
+}
+//__________________________________________________________________________________________________
+void FileControlElement::endElement()
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    ControlImportContext ctx(
+        _pImport, getControlId( _xAttributes ),
+        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlFileControlModel") ) );
+
+    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    if (xStyle.is())
+    {
+        StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
+        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+        pStyle->importBackgroundColorStyle( xControlModel );
+        pStyle->importTextColorStyle( xControlModel );
+        pStyle->importBorderStyle( xControlModel );
+        pStyle->importFontStyle( xControlModel );
+    }
+
+    ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("tabstop") ),
+                               _xAttributes );
+    ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Text") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
+                              _xAttributes );
+    ctx.importEvents( _events );
+}
+
+//##################################################################################################
+
+// imagecontrol
+//__________________________________________________________________________________________________
+Reference< xml::XImportContext > ImageControlElement::createChildContext(
+    sal_Int32 nUid, OUString const & rLocalName,
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    if (XMLNS_DIALOGS_UID != nUid)
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
+            Reference< XInterface >(), Any() );
+    }
+    // event
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    {
+        return new EventElement( rLocalName, xAttributes, this, _pImport );
+    }
+    else
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("expected event element!") ),
+            Reference< XInterface >(), Any() );
+    }
+}
+//__________________________________________________________________________________________________
+void ImageControlElement::endElement()
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    ControlImportContext ctx(
+        _pImport, getControlId( _xAttributes ),
+        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlImageControlModel") ) );
+
+    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    if (xStyle.is())
+    {
+        StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
+        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+        pStyle->importBackgroundColorStyle( xControlModel );
+        pStyle->importBorderStyle( xControlModel );
+    }
+
+    ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
+    ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ImageURL") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("src") ),
+                              _xAttributes );
+    ctx.importEvents( _events );
+}
+
+//##################################################################################################
+
+// textfield
 //__________________________________________________________________________________________________
 Reference< xml::XImportContext > TextElement::createChildContext(
     sal_Int32 nUid, OUString const & rLocalName,
@@ -117,7 +601,6 @@ void TextElement::endElement()
     }
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
-
     ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Label") ),
                               OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
                               _xAttributes );
@@ -127,7 +610,6 @@ void TextElement::endElement()
     ctx.importAlignProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Align") ),
                              OUString( RTL_CONSTASCII_USTRINGPARAM("align") ),
                              _xAttributes );
-
     ctx.importEvents( _events );
 }
 
@@ -178,7 +660,9 @@ void TextFieldElement::endElement()
     }
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
-
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("tabstop") ),
+                               _xAttributes );
     ctx.importAlignProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Align") ),
                              OUString( RTL_CONSTASCII_USTRINGPARAM("align") ),
                              _xAttributes );
@@ -326,7 +810,9 @@ void TitledBoxElement::endElement()
         }
 
         ctx.importDefaults( _nBasePosX, _nBasePosY, xAttributes );
-
+        ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
+                                   OUString( RTL_CONSTASCII_USTRINGPARAM("tabstop") ),
+                                   xAttributes );
         ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Label") ),
                                   OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
                                   xAttributes );
@@ -435,7 +921,9 @@ void RadioGroupElement::endElement()
         }
 
         ctx.importDefaults( _nBasePosX, _nBasePosY, xAttributes );
-
+        ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
+                                   OUString( RTL_CONSTASCII_USTRINGPARAM("tabstop") ),
+                                   xAttributes );
         ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Label") ),
                                   OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
                                   xAttributes );
@@ -578,12 +1066,14 @@ void MenuListElement::endElement()
     }
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
-
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("tabstop") ),
+                               _xAttributes );
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("MultiSelection") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("multiselection") ),
                                _xAttributes );
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Dropdown") ),
-                               OUString( RTL_CONSTASCII_USTRINGPARAM("spin-button") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("spin") ),
                                _xAttributes );
     ctx.importShortProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("LineCount") ),
                              OUString( RTL_CONSTASCII_USTRINGPARAM("linecount") ),
@@ -651,7 +1141,9 @@ void ComboBoxElement::endElement()
     }
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
-
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("tabstop") ),
+                               _xAttributes );
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("readonly") ),
                                _xAttributes );
@@ -659,7 +1151,7 @@ void ComboBoxElement::endElement()
                                OUString( RTL_CONSTASCII_USTRINGPARAM("autocomplete") ),
                                _xAttributes );
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Dropdown") ),
-                               OUString( RTL_CONSTASCII_USTRINGPARAM("spin-button") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("spin") ),
                                _xAttributes );
     ctx.importShortProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("MaxTextLen") ),
                              OUString( RTL_CONSTASCII_USTRINGPARAM("maxlength") ),
@@ -724,7 +1216,9 @@ void CheckBoxElement::endElement()
     }
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
-
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("tabstop") ),
+                               _xAttributes );
     ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Label") ),
                               OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
                               _xAttributes );
@@ -799,7 +1293,9 @@ void ButtonElement::endElement()
     }
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
-
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("tabstop") ),
+                               _xAttributes );
     ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Label") ),
                               OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
                               _xAttributes );
@@ -865,8 +1361,41 @@ Reference< xml::XImportContext > BulletinBoardElement::createChildContext(
     {
         return new TextFieldElement( rLocalName, xAttributes, this, _pImport );
     }
-
-
+    // img
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("img") ))
+    {
+        return new ImageControlElement( rLocalName, xAttributes, this, _pImport );
+    }
+    // filecontrol
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("filecontrol") ))
+    {
+        return new FileControlElement( rLocalName, xAttributes, this, _pImport );
+    }
+    // currency-field
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("currencyfield") ))
+    {
+        return new CurrencyFieldElement( rLocalName, xAttributes, this, _pImport );
+    }
+    // date-field
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("datefield") ))
+    {
+        return new DateFieldElement( rLocalName, xAttributes, this, _pImport );
+    }
+    // date-field
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("numericfield") ))
+    {
+        return new NumericFieldElement( rLocalName, xAttributes, this, _pImport );
+    }
+    // time-field
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("timefield") ))
+    {
+        return new TimeFieldElement( rLocalName, xAttributes, this, _pImport );
+    }
+    // pattern-field
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("patternfield") ))
+    {
+        return new PatternFieldElement( rLocalName, xAttributes, this, _pImport );
+    }
     // bulletinboard
     else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bulletinboard") ))
     {

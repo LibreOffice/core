@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exp_share.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-20 16:51:10 $
+ *  last change: $Author: dbo $ $Date: 2001-02-21 20:49:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,12 +86,14 @@ struct Style
     sal_uInt32 _textColor;
     sal_Int16 _border;
     awt::FontDescriptor _descr;
+    short _all;
     short _set;
 
     OUString _id;
 
-    Style()
-        : _set( 0 )
+    Style( short all_ )
+        : _all( all_ )
+        , _set( 0 )
         {}
 
     Reference< xml::sax::XAttributeList > createElement();
@@ -149,17 +151,20 @@ public:
     void readDefaults();
     //
     void readStringAttr( OUString const & rPropName, OUString const & rAttrName );
+    void readDoubleAttr( OUString const & rPropName, OUString const & rAttrName );
     void readLongAttr( OUString const & rPropName, OUString const & rAttrName );
     void readHexLongAttr( OUString const & rPropName, OUString const & rAttrName );
     void readShortAttr( OUString const & rPropName, OUString const & rAttrName );
     void readBoolAttr( OUString const & rPropName, OUString const & rAttrName );
     void readAlignAttr( OUString const & rPropName, OUString const & rAttrName );
+    void readDateFormatAttr( OUString const & rPropName, OUString const & rAttrName );
+    void readTimeFormatAttr( OUString const & rPropName, OUString const & rAttrName );
     //
     inline void addAttr( OUString const & rAttrName, OUString const & rValue );
     inline void addBoolAttr( OUString const & rAttrName, sal_Bool bValue );
 
     //
-    void addEvents()
+    void readEvents()
         throw (Exception);
     //
     void readButtonModel( StyleBag * all_styles )
@@ -191,8 +196,6 @@ public:
     void readPatternFieldModel( StyleBag * all_styles )
         throw (Exception);
     void readTimeFieldModel( StyleBag * all_styles )
-        throw (Exception);
-    void readContainerModel( StyleBag * all_styles )
         throw (Exception);
 
     // XAttributeList
