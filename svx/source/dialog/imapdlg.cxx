@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-03 11:10:20 $
+ *  last change: $Author: dv $ $Date: 2001-07-09 14:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,14 +97,14 @@
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif
+#ifndef _SVTOOLS_INETTBC_HXX
+#include <svtools/inettbc.hxx>
+#endif
 #ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
 #endif
 #ifndef _SFXMODULE_HXX
 #include <sfx2/module.hxx>
-#endif
-#ifndef _SFX_INETTBC_HXX
-#include <sfx2/inettbc.hxx>
 #endif
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
@@ -258,7 +258,7 @@ SvxIMapDlg::SvxIMapDlg( SfxBindings *pBindings, SfxChildWindow *pCW,
     FreeResource();
 
     // nur temporaer bis Vollupdate
-    pOwnData->pURLBox = new SfxURLBox( this );
+    pOwnData->pURLBox = new SvtURLBox( this );
     pOwnData->pURLBox->SetPosSizePixel( aCbbURL.GetPosPixel(), aCbbURL.GetSizePixel() );
     aCbbURL.Hide();
     pOwnData->pURLBox->Show();

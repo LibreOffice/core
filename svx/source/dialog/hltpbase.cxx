@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hltpbase.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-09 14:54:43 $
+ *  last change: $Author: dv $ $Date: 2001-07-09 14:55:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,6 @@ BOOL SvxFramesComboBox::GetCurrentFrameNames ()
 |*
 |************************************************************************/
 
-<<<<<<< hltpbase.cxx
 SvxHyperURLBox::SvxHyperURLBox( Window* pParent, INetProtocol eSmart, BOOL bAddresses )
 : SvtURLBox         ( pParent, eSmart ),
   DropTargetHelper  ( this ),
