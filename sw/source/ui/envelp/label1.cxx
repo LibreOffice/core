@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label1.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-26 19:45:44 $
+ *  last change: $Author: os $ $Date: 2001-04-27 11:29:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1192,7 +1192,7 @@ IMPL_LINK( SwVisitingCardPage, FrameControlInitializedHdl, void*, EMPTYARG )
  --------------------------------------------------*/
 IMPL_LINK( SwVisitingCardPage, AutoTextSelectHdl, void*, pBox )
 {
-    if(pExampleFrame->IsInitialized() && _xAutoText.is())
+    if(_xAutoText.is())
     {
         if( &aAutoTextGroupLB == pBox )
         {
@@ -1211,8 +1211,8 @@ IMPL_LINK( SwVisitingCardPage, AutoTextSelectHdl, void*, pBox )
                                 aTitles.getConstArray(),
                                 aBlockNames.getConstArray() );
         }
-
-        pExampleFrame->ClearDocument( TRUE );
+        if(pExampleFrame->IsInitialized())
+            pExampleFrame->ClearDocument( TRUE );
     }
     return 0;
 }
