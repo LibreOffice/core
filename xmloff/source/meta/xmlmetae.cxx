@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmetae.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:11:39 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:04:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include "xmlmetae.hxx"
 #include "attrlist.hxx"
 #include "nmspmap.hxx"
+
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include <xmluconv.hxx>
+#endif
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
@@ -580,6 +584,33 @@ void SfxXMLMetaExport::Export()
                                       XML_USER_DEFINED, sal_True, sal_False );
             rExport.Characters( aUFValue );
         }
+    }
+
+    // extended user fields (type safe)
+          uno::Reference< beans::XPropertySetInfo > xSetInfo = xInfoProp->getPropertySetInfo();
+    const uno::Sequence< beans::Property >          lProps   = xSetInfo->getProperties();
+    const beans::Property*                          pProps   = lProps.getConstArray();
+          sal_Int32                                 c        = lProps.getLength();
+          sal_Int32                                 i        = 0;
+    for (i=0; i<c; ++i)
+    {
+        // "fix" property ? => ignore it !
+        if (pProps[i].Handle >= 0)
+            continue;
+
+        // "dynamic" prop => export it
+        uno::Any              aValue = xInfoProp->getPropertyValue(pProps[i].Name);
+        ::rtl::OUStringBuffer sValue;
+        ::rtl::OUStringBuffer sType ;
+
+        if (!SvXMLUnitConverter::convertAny(sValue, sType, aValue))
+            continue;
+
+        rExport.AddAttribute( XML_NAMESPACE_META, XML_NAME, pProps[i].Name );
+        rExport.AddAttribute( XML_NAMESPACE_META, XML_VALUE_TYPE, sType.makeStringAndClear() );
+        SvXMLElementExport aElem( rExport, XML_NAMESPACE_META,
+                                  XML_USER_DEFINED, sal_True, sal_False );
+        rExport.Characters( sValue.makeStringAndClear() );
     }
 }
 
