@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:20:07 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:33:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,7 @@
 #endif
 
 #pragma hdrstop
+
 
 // =======================================================================
 
@@ -1715,6 +1716,12 @@ IMPL_LINK( Window, ImplAsyncFocusHdl, void*, EMPTYARG )
         {
             if ( mpFrameData->mpFocusWin->IsEnabled() && mpFrameData->mpFocusWin->IsInputEnabled() )
                 mpFrameData->mpFocusWin->GrabFocus();
+            else if( mpFrameData->mpFocusWin->ImplHasDlgCtrl() )
+            {
+                // #109094# if the focus is restored to a disabled dialog control (was disabled meanwhile)
+                // try to move it to the next control
+                mpFrameData->mpFocusWin->ImplDlgCtrlNextWindow();
+            }
             else
             {
                 ImplSVData* pSVData = ImplGetSVData();
