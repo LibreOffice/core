@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 09:46:29 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:21:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,11 +63,17 @@
 #include <osl/diagnose.h>
 #include <osl/process.h>
 
-#if defined(LINUX) || defined(SOLARIS) || defined(IRIX) || defined(NETBSD) || defined(FREEBSD)
+#if defined(LINUX) || defined(SOLARIS) || defined(IRIX) || defined(NETBSD) || defined(FREEBSD) || defined(MACOSX)
 #include <pthread.h>
-#include <locale.h>
-#include <langinfo.h>
-#endif
+#ifndef MACOSX
+ #include <locale.h>
+ #include <langinfo.h>
+#else
+#include <osl/module.h>
+#include <osl/thread.h>
+#include <unxmacxp_protos.h>
+#endif  /* !MACOSX */
+#endif  /* LINUX || SOLARIS || IRIX || NETBSD || MACOSX */
 
 /*****************************************************************************/
 /* typedefs
@@ -240,7 +246,7 @@ static rtl_Locale * _parse_locale( const char * locale )
     return NULL;
 }
 
-#if defined(LINUX) || defined(SOLARIS) || defined(IRIX) || defined(NETBSD) || defined(FREEBSD)
+#if defined(LINUX) || defined(SOLARIS) || defined(IRIX) || defined(NETBSD) || defined(FREEBSD) || defined(MACOSX)
 
 /*
  * This implementation of osl_getTextEncodingFromLocale maps
@@ -323,7 +329,7 @@ const _pair _nl_language_list[] = {
    { "sjis",        RTL_TEXTENCODING_SHIFT_JIS  } /* Japan */
 };
 
-#elif defined(LINUX) || defined(NETBSD)
+#elif defined(LINUX) || defined(NETBSD) || defined(MACOSX)
 
 const _pair _nl_language_list[] = {
     { "ANSI_X3.110-1983",           RTL_TEXTENCODING_DONTKNOW   },  /* ISO-IR-99 NAPLPS */
@@ -557,9 +563,111 @@ const _pair _nl_language_list[] = {
     { "UTF-8",         RTL_TEXTENCODING_UTF8           }  /* ISO-10646/UTF-8 */
 };
 
-#endif /* ifdef SOLARIS IRIX LINUX FREEBSD NETBSD */
+#endif /* ifdef SOLARIS IRIX LINUX FREEBSD NETBSD MACOSX */
+
+#ifdef MACOSX
+/* MacOS X has some special names for some of its encodings.  These encoding names are
+ * returned by CFStringConvertEncodingToIANACharSetName() when given a CFTextEncoding
+ * argument from one of the ones in CFStringEncodingExt.h in the CoreFoundation framework.
+ */
+const _pair _macxp_language_list[] = {
+    { "MACINTOSH",              RTL_TEXTENCODING_ISO_8859_1 },      /* kCFStringEncodingMacRoman */
+    { "X-MAC-JAPANESE",         RTL_TEXTENCODING_EUC_JP },          /* kCFStringEncodingMacJapanese */
+    { "X-MAC-TRAD-CHINESE",     RTL_TEXTENCODING_APPLE_CHINTRAD },      /* kCFStringEncodingMacChineseTrad */
+    { "X-MAC-KOREAN",           RTL_TEXTENCODING_EUC_KR },          /* kCFStringEncodingMacKorean */
+    { "X-MAC-ARABIC",           RTL_TEXTENCODING_APPLE_ARABIC },        /* kCFStringEncodingMacArabic */
+    { "X-MAC-HEBREW",           RTL_TEXTENCODING_APPLE_HEBREW },        /* kCFStringEncodingMacHebrew */
+    { "X-MAC-GREEK",            RTL_TEXTENCODING_APPLE_GREEK },     /* kCFStringEncodingMacGreek */
+    { "X-MAC-CYRILLIC",         RTL_TEXTENCODING_APPLE_CYRILLIC },      /* kCFStringEncodingMacCyrillic */
+    { "X-MAC-DEVANAGARI",       RTL_TEXTENCODING_APPLE_DEVANAGARI },    /* kCFStringEncodingMacDevanagari */
+    { "X-MAC-GURMUKHI",         RTL_TEXTENCODING_APPLE_GURMUKHI },      /* kCFStringEncodingMacGurmukhi */
+    { "X-MAC-GUJARATI",         RTL_TEXTENCODING_APPLE_GUJARATI },      /* kCFStringEncodingMacGujarati */
+    { "X-MAC-ORIYA",            RTL_TEXTENCODING_DONTKNOW },            /* kCFStringEncodingMacOriya */
+    { "X-MAC-BENGALI",          RTL_TEXTENCODING_DONTKNOW },            /* kCFStringEncodingMacBengali */
+    { "X-MAC-TAMIL",            RTL_TEXTENCODING_DONTKNOW },            /* kCFStringEncodingMacTamil */
+    { "X-MAC-TELUGU",           RTL_TEXTENCODING_DONTKNOW },            /* kCFStringEncodingMacTelugu */
+    { "X-MAC-KANNADA",          RTL_TEXTENCODING_DONTKNOW },            /* kCFStringEncodingMacKannada */
+    { "X-MAC-MALAYALAM",        RTL_TEXTENCODING_DONTKNOW },            /* kCFStringEncodingMacMalayalam */
+    { "X-MAC-SINHALESE",        RTL_TEXTENCODING_DONTKNOW },            /* kCFStringEncodingMacSinhalese */
+    { "X-MAC-BURMESE",          RTL_TEXTENCODING_DONTKNOW },            /* kCFStringEncodingMacBurmese */
+    { "X-MAC-KHMER",            RTL_TEXTENCODING_DONTKNOW },            /* kCFStringEncodingMacKhmer */
+    { "X-MAC-THAI",         RTL_TEXTENCODING_APPLE_THAI },      /* kCFStringEncodingMacThai */
+    { "X-MAC-LAOTIAN",          RTL_TEXTENCODING_DONTKNOW },            /* kCFStringEncodingMacLaotian */
+    { "X-MAC-GEORGIAN",         RTL_TEXTENCODING_DONTKNOW },            /* kCFStringEncodingMacGeorgian */
+    { "X-MAC-ARMENIAN",         RTL_TEXTENCODING_DONTKNOW },            /* kCFStringEncodingMacArmenian */
+    { "X-MAC-SIMP-CHINESE",     RTL_TEXTENCODING_APPLE_CHINSIMP },      /* kCFStringEncodingMacChineseSimp */
+    { "X-MAC-TIBETAN",          RTL_TEXTENCODING_DONTKNOW },            /* kCFStringEncodingMacTibetan */
+    { "X-MAC-MONGOLIAN",        RTL_TEXTENCODING_DONTKNOW },            /* kCFStringEncodingMacMongolian */
+    { "X-MAC-ETHIOPIC",         RTL_TEXTENCODING_DONTKNOW },            /* kCFStringEncodingMacEthiopic */
+    { "X-MAC-CENTRALEURROMAN",  RTL_TEXTENCODING_APPLE_CENTEURO },      /* kCFStringEncodingMacCentralEurRoman */
+    { "X-MAC-VIETNAMESE",       RTL_TEXTENCODING_DONTKNOW },            /* kCFStringEncodingMacVietnamese */
+    { "X-MAC-EXTARABIC",        RTL_TEXTENCODING_DONTKNOW },            /* kCFStringEncodingMacExtArabic */
+    { "X-MAC-SYMBOL",           RTL_TEXTENCODING_DONTKNOW },            /* kCFStringEncodingMacSymbol */
+    { "X-MAC-DINGBATS",         RTL_TEXTENCODING_DONTKNOW },            /* kCFStringEncodingMacDingbats */
+    { "X-MAC-TURKISH",          RTL_TEXTENCODING_APPLE_TURKISH },       /* kCFStringEncodingMacTurkish */
+    { "X-MAC-CROATIAN",         RTL_TEXTENCODING_APPLE_CROATIAN },      /* kCFStringEncodingMacCroatian */
+    { "X-MAC-ICELANDIC",        RTL_TEXTENCODING_APPLE_ICELAND },       /* kCFStringEncodingMacIcelandic */
+    { "X-MAC-ROMANIAN",         RTL_TEXTENCODING_APPLE_ROMANIAN },      /* kCFStringEncodingMacRomanian */
+    { "UNICODE-2-0",            RTL_TEXTENCODING_DONTKNOW },            /*  */
+    { "X-MAC-FARSI",            RTL_TEXTENCODING_APPLE_FARSI },     /* kCFStringEncodingMacFarsi */
+    { "X-MAC-UKRAINIAN",        RTL_TEXTENCODING_APPLE_UKRAINIAN }, /* kCFStringEncodingMacUkrainian */
+    { "X-MAC-VT100",            RTL_TEXTENCODING_DONTKNOW },            /* kCFStringEncodingMacVT100 */
+    { "macintosh",              RTL_TEXTENCODING_DONTKNOW },            /* kCFStringEncodingMacHFS */
+    { "UTF-16BE",               RTL_TEXTENCODING_UNICODE },         /* kCFStringEncodingUnicode */
+    { "UNICODE-1-1",            RTL_TEXTENCODING_DONTKNOW },            /*  */
+    { "UNICODE-1-1",            RTL_TEXTENCODING_DONTKNOW },            /*  */
+    { "UNICODE-2-0",            RTL_TEXTENCODING_DONTKNOW },            /*  */
+    { "csUnicode",              RTL_TEXTENCODING_DONTKNOW },            /*  */
+    { "CP437",              RTL_TEXTENCODING_IBM_437 },         /* kCFStringEncodingDOSLatinUS */
+    { "CP737",              RTL_TEXTENCODING_IBM_737 },         /* kCFStringEncodingDOSGreek */
+    { "CP775",              RTL_TEXTENCODING_IBM_775 },         /* kCFStringEncodingDOSBalticRim */
+    { "CP850",              RTL_TEXTENCODING_IBM_850 },         /* kCFStringEncodingDOSLatin1 */
+    { "CP852",              RTL_TEXTENCODING_IBM_852 },         /* kCFStringEncodingDOSGreek1 */
+    { "CP857",              RTL_TEXTENCODING_IBM_857 },         /* kCFStringEncodingDOSTurkish */
+    { "CP861",              RTL_TEXTENCODING_IBM_861 },         /* kCFStringEncodingDOSIcelandic */
+    { "cp864",              RTL_TEXTENCODING_IBM_864 },         /* kCFStringEncodingDOSArabic */
+    { "CP866",              RTL_TEXTENCODING_IBM_866 },         /* kCFStringEncodingDOSRussian */
+    { "CP874",              RTL_TEXTENCODING_DONTKNOW },            /* kCFStringEncodingDOSThai */
+    { "CP932",              RTL_TEXTENCODING_DONTKNOW },            /* kCFStringEncodingDOSJapanese */
+    { "CP936",              RTL_TEXTENCODING_DONTKNOW },            /* kCFStringEncodingDOSChineseSimplif */
+    { "CP949",              RTL_TEXTENCODING_DONTKNOW },            /* kCFStringEncodingDOSKorean */
+    { "CP950",              RTL_TEXTENCODING_DONTKNOW },            /* kCFStringEncodingDOSChineseTrad */
+    { "WINDOWS-1252",           RTL_TEXTENCODING_MS_1252 },         /* kCFStringEncodingWindowsLatin1 */
+    { "WINDOWS-1250",           RTL_TEXTENCODING_MS_1250 },         /* kCFStringEncodingWindowsLatin2 */
+    { "WINDOWS-1251",           RTL_TEXTENCODING_MS_1251 },         /* kCFStringEncodingWindowsCyrillic */
+    { "WINDOWS-1253",           RTL_TEXTENCODING_MS_1253 },         /* kCFStringEncodingWindowsGreek */
+    { "WINDOWS-1254",           RTL_TEXTENCODING_MS_1254 },         /* kCFStringEncodingWindowsLatin5 */
+    { "WINDOWS-1255",           RTL_TEXTENCODING_MS_1255 },         /* kCFStringEncodingWindowsHebrew */
+    { "WINDOWS-1256",           RTL_TEXTENCODING_MS_1256 },         /* kCFStringEncodingWindowsArabic */
+    { "WINDOWS-1257",           RTL_TEXTENCODING_MS_1257 },         /* kCFStringEncodingWindowsBalticRim */
+    { "WINDOWS-1258",           RTL_TEXTENCODING_MS_1258 },         /* kCFStringEncodingWindowsVietnamese */
+    { "US-ASCII",               RTL_TEXTENCODING_ASCII_US },            /* kCFStringEncodingASCII */
+    { "JIS_C6226-1983",         RTL_TEXTENCODING_GB_2312 },         /* kCFStringEncodingJIS_X0208_90 */
+    { "csISO58GB231280",        RTL_TEXTENCODING_GB_2312 },         /* kCFStringEncodingGB_2312_80 */
+    { "X-GBK",              RTL_TEXTENCODING_GBK },             /* kCFStringEncodingGBK_95 */
+    { "csKSC56011987",          RTL_TEXTENCODING_DONTKNOW },            /* kCFStringEncodingKSC_5601_87 */
+    { "ISO-2022-JP",            RTL_TEXTENCODING_ISO_2022_JP },     /* kCFStringEncodingISO_2022_JP */
+    { "ISO-2022-CN",            RTL_TEXTENCODING_ISO_2022_CN },     /* kCFStringEncodingISO_2022_CN */
+    { "ISO-2022-CN-EXT",        RTL_TEXTENCODING_DONTKNOW },            /* kCFStringEncodingISO_2022_CN_EXT */
+    { "ISO-2022-KR",            RTL_TEXTENCODING_ISO_2022_KR },     /* kCFStringEncodingISO_2022_KR */
+    { "EUC-JP",             RTL_TEXTENCODING_EUC_JP },          /* kCFStringEncodingEUC_JP */
+    { "EUC-CN",             RTL_TEXTENCODING_EUC_CN },          /* kCFStringEncodingEUC_CN */
+    { "EUC-TW",             RTL_TEXTENCODING_EUC_TW },          /* kCFStringEncodingEUC_TW */
+    { "EUC-KR",             RTL_TEXTENCODING_EUC_KR },          /* kCFStringEncodingEUC_KR */
+    { "SHIFT_JIS",              RTL_TEXTENCODING_SHIFT_JIS },           /* kCFStringEncodingShiftJIS */
+    { "KOI8-R",             RTL_TEXTENCODING_KOI8_R },          /* kCFStringEncodingKOI8_R */
+    { "X-MAC-ROMAN-LATIN1",     RTL_TEXTENCODING_APPLE_ROMAN },     /* kCFStringEncodingMacRomanLatin1 */
+    { "HZ-GB-2312",         RTL_TEXTENCODING_GB_2312 },         /* kCFStringEncodingHZ_GB_2312 */
+    { "Big5-HKSCS",         RTL_TEXTENCODING_BIG5_HKSCS },      /* kCFStringEncodingBig5_HKSCS_1999 */
+    { "X-NEXTSTEP",         RTL_TEXTENCODING_DONTKNOW },            /* kCFStringEncodingNextStepLatin */
+    { "cp037",              RTL_TEXTENCODING_DONTKNOW }         /* kCFStringEncodingEBCDIC_CP037 */
+/* ___________ Add more encodings here ___________ */
+};
+#endif  /* ifdef MACOSX */
 
 static pthread_mutex_t aLocalMutex = PTHREAD_MUTEX_INITIALIZER;
+
+#ifndef MACOSX
 
 /*****************************************************************************/
 /* return the text encoding corresponding to the given locale
@@ -679,11 +787,21 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
     return ret;
 }
 
-#elif defined(MACOSX) /* ifdef LINUX || SOLARIS || NETBSD */
+#else   /* ifndef MACOSX */
 
 /*
- * FIXME: the MacOS X implemetation is missing
+ * MacOS X specific Locale manipulation code
  */
+
+#include <premac.h>
+#include <CoreFoundation/CoreFoundation.h>
+#include <postmac.h>
+
+/* OS X locale discovery function from dylib */
+int (*pGetOSXLocale)( char *, sal_uInt32 );
+int (*pConvertTextEncodingToIANACharsetName)( char *, unsigned int, CFStringEncoding );
+
+void macxp_ConvertCFEncodingToIANACharSetName( char *buffer, unsigned int bufferLen, CFStringEncoding cfEncoding );
 
 /*****************************************************************************/
 /* return the text encoding corresponding to the given locale
@@ -691,6 +809,84 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
 
 rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 {
+    const _pair          *pLanguage = NULL;
+    char                 sEncoding[ 64 ] = "";
+    CFStringEncoding     sCFSysEncoding;
+    const unsigned int   macxpListMembers = sizeof(_macxp_language_list) / sizeof(_pair);
+    const unsigned int   otherListMembers = sizeof(_nl_language_list) / sizeof(_pair);
+    unsigned int         isDarwin;
+    unsigned int         majorVersion;
+    unsigned int         minorVersion;
+    unsigned int         minorMinorVersion;
+
+    /* For retrieving the CoreFoundation text encoding, the process goes like
+     * this:
+     * 1) On MacOS X this will be the first language listed in the
+     *     Language tab of the International preference pane.
+     * 2) On Darwin 5 the value is currently hardwired to
+     *     kCFStringEncodingMacRoman.
+     */
+    sCFSysEncoding = CFStringGetSystemEncoding();
+
+    /* If running on OS X, attempt to convert text encoding to a charset name using CoreFoundation calls. */
+    /* Must use osl_psz_xxxx variants of functions here because otherwise osl_loadModule() tries to get the
+     * un-Unicode the string we pass to it, which results in this function being called again and again and
+     * again, finally overflowing the stack.
+     */
+    macxp_getSystemVersion( &isDarwin, &majorVersion, &minorVersion, &minorMinorVersion );
+    if( !isDarwin )
+    {
+        /* Load the text encoding conversion library if we are running on OS X */
+        const sal_Char   *aTextEncConvertLibName          = "libsalextra_x11osx_mxp.dylib";
+        const sal_Char   *aOSXTextEncConvertFunctionName  = "macxp_OSXConvertCFEncodingToIANACharSetName";
+        oslModule         pTextEncCovertLib;
+        void             *pFunc;
+        int               err;
+
+        pTextEncCovertLib = osl_psz_loadModule( aTextEncConvertLibName, SAL_LOADMODULE_DEFAULT );
+        if( !pTextEncCovertLib )
+        {
+            fprintf( stderr, "Could not load the OS X text encoding coversion library! (%s)\n", aTextEncConvertLibName );
+        }
+        else
+        {
+            /* Grab a pointer to the text encoding conversion function and call it */
+            pFunc = osl_psz_getSymbol( pTextEncCovertLib, aOSXTextEncConvertFunctionName );
+            if( pFunc )
+            {
+                pConvertTextEncodingToIANACharsetName = ( int(*)(char *, unsigned int, CFStringEncoding) )( pFunc );
+                err = (*pConvertTextEncodingToIANACharsetName)( sEncoding, 64, sCFSysEncoding );
+            }
+            else
+                fprintf( stderr, "Could not grab pointer to the OS X text encoding coversion routine! (%s)\n", aOSXTextEncConvertFunctionName );
+        }
+        osl_unloadModule( pTextEncCovertLib );
+    }
+
+    if ( strlen(sEncoding) <= 0 )
+    {
+        /*
+         * Darwin doesn't have a CFStringConvertEncodingToIANACharSetName(),
+         * so we call our own replacement.  Also fall back to our replacement
+         * if for some reason we can't load our OS X convert library.
+         */
+        macxp_ConvertCFEncodingToIANACharSetName( sEncoding, 64, sCFSysEncoding );
+    }
+
+    /* Try the Mac-specific list first, then non-Mac list (picks up MACINTOSH from non-Mac list) */
+    pLanguage = _pair_search( sEncoding, _macxp_language_list, macxpListMembers );
+    if ( pLanguage == NULL )
+        pLanguage = _pair_search( sEncoding, _nl_language_list, otherListMembers );
+
+    OSL_ASSERT( pLanguage && ( RTL_TEXTENCODING_DONTKNOW != pLanguage->value ) );
+
+    /*
+     * a matching item in our list provides a mapping from codeset to
+     * rtl-codeset
+      */
+    if ( pLanguage != NULL  )
+        return pLanguage->value;
+
     return RTL_TEXTENCODING_DONTKNOW;
 }
 
@@ -700,7 +896,79 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 
 void _imp_getProcessLocale( rtl_Locale ** ppLocale )
 {
-    *ppLocale = _parse_locale( "C" );
+    static const char *locale = NULL;
+
+    /* basic thread safeness */
+    pthread_mutex_lock( &aLocalMutex );
+
+    /* Only fetch the locale once and cache it */
+    if ( NULL == locale )
+    {
+        unsigned int    isDarwin;
+        unsigned int    majorVersion;
+        unsigned int    minorVersion;
+        unsigned int    minorMinorVersion;
+
+        /* If running on OS X, attempt to fetch the locale using CoreServices calls. */
+        macxp_getSystemVersion( &isDarwin, &majorVersion, &minorVersion, &minorMinorVersion );
+        if( !isDarwin )
+        {
+            /* Load the locale discovery library if we are running on OS X */
+            const sal_Char   *aLocaleLibName             = "libsalextra_x11osx_mxp.dylib";
+            const sal_Char   *aGetOSXLocaleFunctionName  = "macxp_getOSXLocale";
+            oslModule         pLocaleLib;
+            void             *pFunc;
+            int               err;
+
+            pLocaleLib = osl_psz_loadModule( aLocaleLibName, SAL_LOADMODULE_DEFAULT );
+            if( pLocaleLib )
+            {
+                /* Grab a pointer to the locale function and call it */
+                pFunc = osl_psz_getSymbol( pLocaleLib, aGetOSXLocaleFunctionName );
+                if( pFunc )
+                {
+                    pGetOSXLocale = ( int(*)(char *, sal_uInt32) )( pFunc );
+                    locale = (char *)malloc( 20 );
+                    if ( locale )
+                        err = (*pGetOSXLocale)( locale, 20 );
+                    else
+                        fprintf( stderr, "nlsupport.c:  locale allocation returned NULL!\n" );
+                }
+                else
+                    fprintf( stderr, "Could not load the OS X locale discovery function! (%s)\n", aGetOSXLocaleFunctionName );
+            }
+            else
+                fprintf( stderr, "Could not load the OS X locale discovery library! (%s)\n", aLocaleLibName );
+
+            /* Let go of the module, we don't need it anymore */
+            osl_unloadModule( pLocaleLib );
+         }
+    }
+
+    /* handle the case where OS specific method of finding locale fails */
+    if ( NULL == locale )
+    {
+        /* simulate behavior of setlocale */
+        locale = getenv( "LC_ALL" );
+
+        if( NULL == locale )
+            locale = getenv( "LC_CTYPE" );
+
+        if( NULL == locale )
+            locale = getenv( "LANG" );
+
+        if( NULL == locale )
+            locale = "C";
+    }
+
+    /* return the locale */
+    *ppLocale = _parse_locale( locale );
+#ifdef DEBUG
+    fprintf( stderr, "nlsupport.c:  _imp_getProcessLocale() returning %s as current locale.\n", locale );
+#endif
+
+    pthread_mutex_unlock( &aLocalMutex );
+
 }
 
 /*****************************************************************************/
@@ -709,8 +977,135 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
 
 int _imp_setProcessLocale( rtl_Locale * pLocale )
 {
+    /* There is not yet any way to set the locale of a process
+     * on Darwin or MacOS X through BSD layer functions.
+     *
+     * On MacOS X locale and language are set by the user through
+     * the International pane of the System Preferences application.
+     *
+     * FIXME when this can be done.
+     */
     return 0;
 }
+
+
+/*****************************************************************************/
+/* Get a charset name from a CoreFoundation text encoding number
+/*****************************************************************************/
+void macxp_ConvertCFEncodingToIANACharSetName( char *buffer, unsigned int bufferLen, CFStringEncoding cfEncoding )
+{
+    switch( cfEncoding )
+    {
+        case 0:     strncpy( buffer, "MACINTOSH", bufferLen-1 );                break;  /* kCFStringEncodingMacRoman */
+        case 1:     strncpy( buffer, "X-MAC-JAPANESE", bufferLen-1 );           break;  /* kCFStringEncodingMacJapanese */
+        case 2:     strncpy( buffer, "X-MAC-TRAD-CHINESE", bufferLen-1 );       break;  /* kCFStringEncodingMacChineseTrad */
+        case 3:     strncpy( buffer, "X-MAC-KOREAN", bufferLen-1 );         break;  /* kCFStringEncodingMacKorean */
+        case 4:     strncpy( buffer, "X-MAC-ARABIC", bufferLen-1 );         break;  /* kCFStringEncodingMacArabic */
+        case 5:     strncpy( buffer, "X-MAC-HEBREW", bufferLen-1 );         break;  /* kCFStringEncodingMacHebrew */
+        case 6:     strncpy( buffer, "X-MAC-GREEK", bufferLen-1 );          break;  /* kCFStringEncodingMacGreek */
+        case 7:     strncpy( buffer, "X-MAC-CYRILLIC", bufferLen-1 );           break;  /* kCFStringEncodingMacCyrillic */
+        case 9:     strncpy( buffer, "X-MAC-DEVANAGARI", bufferLen-1 );     break;  /* kCFStringEncodingMacDevanagari */
+        case 10:        strncpy( buffer, "X-MAC-GURMUKHI", bufferLen-1 );           break;  /* kCFStringEncodingMacGurmukhi */
+        case 11:        strncpy( buffer, "X-MAC-GUJARATI", bufferLen-1 );           break;  /* kCFStringEncodingMacGujarati */
+        case 12:        strncpy( buffer, "X-MAC-ORIYA", bufferLen-1 );          break;  /* kCFStringEncodingMacOriya */
+        case 13:        strncpy( buffer, "X-MAC-BENGALI", bufferLen-1 );            break;  /* kCFStringEncodingMacBengali */
+        case 14:        strncpy( buffer, "X-MAC-TAMIL", bufferLen-1 );          break;  /* kCFStringEncodingMacTamil */
+        case 15:        strncpy( buffer, "X-MAC-TELUGU", bufferLen-1 );         break;  /* kCFStringEncodingMacTamil */
+        case 16:        strncpy( buffer, "X-MAC-KANNADA", bufferLen-1 );            break;  /* kCFStringEncodingMacKannada */
+        case 17:        strncpy( buffer, "X-MAC-MALAYALAM", bufferLen-1 );      break;  /* kCFStringEncodingMacMalayalam */
+        case 18:        strncpy( buffer, "X-MAC-SINHALESE", bufferLen-1 );      break;  /* kCFStringEncodingMacSinhalese */
+        case 19:        strncpy( buffer, "X-MAC-BURMESE", bufferLen-1 );            break;  /* kCFStringEncodingMacBurmese */
+        case 20:        strncpy( buffer, "X-MAC-KHMER", bufferLen-1 );          break;  /* kCFStringEncodingMacKhmer */
+        case 21:        strncpy( buffer, "X-MAC-THAI", bufferLen-1 );           break;  /* kCFStringEncodingMacThai */
+        case 22:        strncpy( buffer, "X-MAC-LAOTIAN", bufferLen-1 );            break;  /* kCFStringEncodingMacLaotian */
+        case 23:        strncpy( buffer, "X-MAC-GEORGIAN", bufferLen-1 );           break;  /* kCFStringEncodingMacGeorgian */
+        case 24:        strncpy( buffer, "X-MAC-ARMENIAN", bufferLen-1 );           break;  /* kCFStringEncodingMacArmenian */
+        case 25:        strncpy( buffer, "X-MAC-SIMP-CHINESE", bufferLen-1 );       break;  /* kCFStringEncodingMacChineseSimp */
+        case 26:        strncpy( buffer, "X-MAC-TIBETAN", bufferLen-1 );            break;  /* kCFStringEncodingMacTibetan */
+        case 27:        strncpy( buffer, "X-MAC-MONGOLIAN", bufferLen-1 );      break;  /* kCFStringEncodingMacMongolian */
+        case 28:        strncpy( buffer, "X-MAC-ETHIOPIC", bufferLen-1 );           break;  /* kCFStringEncodingMacEthiopic */
+        case 29:        strncpy( buffer, "X-MAC-CENTRALEURROMAN", bufferLen-1 );    break;  /* kCFStringEncodingMacCentralEurRoman */
+        case 30:        strncpy( buffer, "X-MAC-VIETNAMESE", bufferLen-1 );     break;  /* kCFStringEncodingMacVietnamese */
+        case 31:        strncpy( buffer, "X-MAC-EXTARABIC", bufferLen-1 );      break;  /* kCFStringEncodingMacExtArabic */
+        case 33:        strncpy( buffer, "X-MAC-SYMBOL", bufferLen-1 );         break;  /* kCFStringEncodingMacSymbol */
+        case 34:        strncpy( buffer, "X-MAC-DINGBATS", bufferLen-1 );           break;  /* kCFStringEncodingMacDingbats */
+        case 35:        strncpy( buffer, "X-MAC-TURKISH", bufferLen-1 );            break;  /* kCFStringEncodingMacTurkish */
+        case 36:        strncpy( buffer, "X-MAC-CROATIAN", bufferLen-1 );           break;  /* kCFStringEncodingMacCroatian */
+        case 37:        strncpy( buffer, "X-MAC-ICELANDIC", bufferLen-1 );      break;  /* kCFStringEncodingMacIcelandic */
+        case 38:        strncpy( buffer, "X-MAC-ROMANIAN", bufferLen-1 );           break;  /* kCFStringEncodingMacRomanian */
+        case 126:       strncpy( buffer, "UNICODE-2-0", bufferLen-1 );          break;  /*  */
+        case 140:       strncpy( buffer, "X-MAC-FARSI", bufferLen-1 );          break;  /* kCFStringEncodingMacFarsi */
+        case 152:       strncpy( buffer, "X-MAC-UKRAINIAN", bufferLen-1 );      break;  /* kCFStringEncodingMacUkrainian */
+        case 252:       strncpy( buffer, "X-MAC-VT100", bufferLen-1 );          break;  /* kCFStringEncodingMacVT100 */
+        case 255:       strncpy( buffer, "macintosh", bufferLen-1 );                break;  /* kCFStringEncodingMacHFS */
+        case 256:       strncpy( buffer, "UTF-16BE", bufferLen-1 );             break;  /* kCFStringEncodingUnicode */
+        case 257:       strncpy( buffer, "UNICODE-1-1", bufferLen-1 );          break;  /*  */
+        case 258:       strncpy( buffer, "UNICODE-1-1", bufferLen-1 );          break;  /*  */
+        case 259:       strncpy( buffer, "UNICODE-2-0", bufferLen-1 );          break;  /*  */
+        case 260:       strncpy( buffer, "csUnicode", bufferLen-1 );                break;  /*  */
+        case 513:       strncpy( buffer, "ISO-8859-1", bufferLen-1 );           break;  /* kCFStringEncodingISOLatin1 */
+        case 514:       strncpy( buffer, "ISO-8859-2", bufferLen-1 );           break;  /* kCFStringEncodingISOLatin2 */
+        case 515:       strncpy( buffer, "ISO-8859-3", bufferLen-1 );           break;  /* kCFStringEncodingISOLatin3 */
+        case 516:       strncpy( buffer, "ISO-8859-4", bufferLen-1 );           break;  /* kCFStringEncodingISOLatin4 */
+        case 517:       strncpy( buffer, "ISO-8859-5", bufferLen-1 );           break;  /* kCFStringEncodingISOLatinCyrillic */
+        case 518:       strncpy( buffer, "ISO-8859-6", bufferLen-1 );           break;  /* kCFStringEncodingISOLatinArabic */
+        case 519:       strncpy( buffer, "ISO-8859-7", bufferLen-1 );           break;  /* kCFStringEncodingISOLatinGreek */
+        case 520:       strncpy( buffer, "ISO-8859-8", bufferLen-1 );           break;  /* kCFStringEncodingISOLatinHebrew */
+        case 521:       strncpy( buffer, "ISO-8859-9", bufferLen-1 );           break;  /* kCFStringEncodingISOLatin5 */
+        case 522:       strncpy( buffer, "ISO-8859-10", bufferLen-1 );          break;  /* kCFStringEncodingISOLatin6 */
+        case 523:       strncpy( buffer, "ISO-8859-11", bufferLen-1 );          break;  /* kCFStringEncodingISOLatinThai */
+        case 525:       strncpy( buffer, "ISO-8859-13", bufferLen-1 );          break;  /* kCFStringEncodingISOLatin7 */
+        case 526:       strncpy( buffer, "ISO-8859-14", bufferLen-1 );          break;  /* kCFStringEncodingISOLatin8 */
+        case 527:       strncpy( buffer, "ISO-8859-15", bufferLen-1 );          break;  /* kCFStringEncodingISOLatin9 */
+        case 1024:  strncpy( buffer, "CP437", bufferLen-1 );                break;  /* kCFStringEncodingDOSLatinUS */
+        case 1029:  strncpy( buffer, "CP737", bufferLen-1 );                break;  /* kCFStringEncodingDOSGreek */
+        case 1030:  strncpy( buffer, "CP775", bufferLen-1 );                break;  /* kCFStringEncodingDOSBalticRim */
+        case 1040:  strncpy( buffer, "CP850", bufferLen-1 );                break;  /* kCFStringEncodingDOSLatin1 */
+        case 1042:  strncpy( buffer, "CP852", bufferLen-1 );                break;  /* kCFStringEncodingDOSGreek1 */
+        case 1044:  strncpy( buffer, "CP857", bufferLen-1 );                break;  /* kCFStringEncodingDOSTurkish */
+        case 1046:  strncpy( buffer, "CP861", bufferLen-1 );                break;  /* kCFStringEncodingDOSIcelandic */
+        case 1049:  strncpy( buffer, "cp864", bufferLen-1 );                break;  /* kCFStringEncodingDOSArabic */
+        case 1051:  strncpy( buffer, "CP866", bufferLen-1 );                break;  /* kCFStringEncodingDOSRussian */
+        case 1053:  strncpy( buffer, "CP874", bufferLen-1 );                break;  /* kCFStringEncodingDOSThai */
+        case 1056:  strncpy( buffer, "CP932", bufferLen-1 );                break;  /* kCFStringEncodingDOSJapanese */
+        case 1057:  strncpy( buffer, "CP936", bufferLen-1 );                break;  /* kCFStringEncodingDOSChineseSimplif */
+        case 1058:  strncpy( buffer, "CP949", bufferLen-1 );                break;  /* kCFStringEncodingDOSKorean */
+        case 1059:  strncpy( buffer, "CP950", bufferLen-1 );                break;  /* kCFStringEncodingDOSChineseTrad */
+        case 1280:  strncpy( buffer, "WINDOWS-1252", bufferLen-1 );         break;  /* kCFStringEncodingWindowsLatin1 */
+        case 1281:  strncpy( buffer, "WINDOWS-1250", bufferLen-1 );         break;  /* kCFStringEncodingWindowsLatin2 */
+        case 1282:  strncpy( buffer, "WINDOWS-1251", bufferLen-1 );         break;  /* kCFStringEncodingWindowsCyrillic */
+        case 1283:  strncpy( buffer, "WINDOWS-1253", bufferLen-1 );         break;  /* kCFStringEncodingWindowsGreek */
+        case 1284:  strncpy( buffer, "WINDOWS-1254", bufferLen-1 );         break;  /* kCFStringEncodingWindowsLatin5 */
+        case 1285:  strncpy( buffer, "WINDOWS-1255", bufferLen-1 );         break;  /* kCFStringEncodingWindowsHebrew */
+        case 1286:  strncpy( buffer, "WINDOWS-1256", bufferLen-1 );         break;  /* kCFStringEncodingWindowsArabic */
+        case 1287:  strncpy( buffer, "WINDOWS-1257", bufferLen-1 );         break;  /* kCFStringEncodingWindowsBalticRim */
+        case 1288:  strncpy( buffer, "WINDOWS-1258", bufferLen-1 );         break;  /* kCFStringEncodingWindowsVietnamese */
+        case 1536:  strncpy( buffer, "US-ASCII", bufferLen-1 );             break;  /* kCFStringEncodingASCII */
+        case 1570:  strncpy( buffer, "JIS_C6226-1983", bufferLen-1 );           break;  /* kCFStringEncodingJIS_X0208_90 */
+        case 1584:  strncpy( buffer, "csISO58GB231280", bufferLen-1 );      break;  /* kCFStringEncodingGB_2312_80 */
+        case 1585:  strncpy( buffer, "X-GBK", bufferLen-1 );                break;  /* kCFStringEncodingGBK_95 */
+        case 1600:  strncpy( buffer, "csKSC56011987", bufferLen-1 );            break;  /* kCFStringEncodingKSC_5601_87 */
+        case 2080:  strncpy( buffer, "ISO-2022-JP", bufferLen-1 );          break;  /* kCFStringEncodingISO_2022_JP */
+        case 2096:  strncpy( buffer, "ISO-2022-CN", bufferLen-1 );          break;  /* kCFStringEncodingISO_2022_CN */
+        case 2097:  strncpy( buffer, "ISO-2022-CN-EXT", bufferLen-1 );      break;  /* kCFStringEncodingISO_2022_CN_EXT */
+        case 2112:  strncpy( buffer, "ISO-2022-KR", bufferLen-1 );          break;  /* kCFStringEncodingISO_2022_KR */
+        case 2336:  strncpy( buffer, "EUC-JP", bufferLen-1 );               break;  /* kCFStringEncodingEUC_JP */
+        case 2352:  strncpy( buffer, "EUC-CN", bufferLen-1 );               break;  /* kCFStringEncodingEUC_CN */
+        case 2353:  strncpy( buffer, "EUC-TW", bufferLen-1 );               break;  /* kCFStringEncodingEUC_TW */
+        case 2368:  strncpy( buffer, "EUC-KR", bufferLen-1 );               break;  /* kCFStringEncodingEUC_KR */
+        case 2561:  strncpy( buffer, "SHIFT_JIS", bufferLen-1 );                break;  /* kCFStringEncodingShiftJIS */
+        case 2562:  strncpy( buffer, "KOI8-R", bufferLen-1 );               break;  /* kCFStringEncodingKOI8_R */
+        case 2563:  strncpy( buffer, "BIG5", bufferLen-1 );                 break;  /* kCFStringEncodingBig5 */
+        case 2564:  strncpy( buffer, "X-MAC-ROMAN-LATIN1", bufferLen-1 );       break;  /* kCFStringEncodingMacRomanLatin1 */
+        case 2565:  strncpy( buffer, "HZ-GB-2312", bufferLen-1 );           break;  /* kCFStringEncodingHZ_GB_2312 */
+        case 2566:  strncpy( buffer, "Big5-HKSCS", bufferLen-1 );           break;  /* kCFStringEncodingBig5_HKSCS_1999 */
+        case 2817:  strncpy( buffer, "X-NEXTSTEP", bufferLen-1 );           break;  /* kCFStringEncodingNextStepLatin */
+        case 3074:  strncpy( buffer, "cp037", bufferLen-1 );                break;  /* kCFStringEncodingEBCDIC_CP037 */
+        default:        strncpy( buffer, "", bufferLen-1 );                 break;  /* Not listed */
+    }
+}
+
+#endif    /* ifndef MACOSX */
 
 #else /* ifdef LINUX || SOLARIS || MACOSX || NETBSD */
 
