@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-07 16:12:42 $
+ *  last change: $Author: tl $ $Date: 2002-10-31 12:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,8 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_HORIZONTAL_GRID_RESOLUTION,
     HANDLE_HORIZONTAL_GRID_SUBDIVISION,
     HANDLE_VERTICAL_GRID_RESOLUTION,
-    HANDLE_VERTICAL_GRID_SUBDIVISION
+    HANDLE_VERTICAL_GRID_SUBDIVISION,
+    HANDLE_UPDATE_FROM_TEMPLATE
 };
 
 MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -179,6 +180,7 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("CurrentDatabaseCommand"),     HANDLE_CURRENT_DATABASE_COMMAND,        CPPUTYPE_OUSTRING,          0,   0},
         { RTL_CONSTASCII_STRINGPARAM("CurrentDatabaseCommandType"), HANDLE_CURRENT_DATABASE_COMMAND_TYPE,   CPPUTYPE_INT16,             0,   0},
         { RTL_CONSTASCII_STRINGPARAM("SaveVersionOnClose"),         HANDLE_SAVE_VERSION_ON_CLOSE,           CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("UpdateFromTemplate"),         HANDLE_UPDATE_FROM_TEMPLATE,            CPPUTYPE_BOOLEAN,           0,   0},
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
  * find another solution before adding them to this property set - MTG
@@ -425,6 +427,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             rInfo.SetSaveVersionOnClose ( bSaveVersion );
         }
         break;
+        case HANDLE_UPDATE_FROM_TEMPLATE:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDocSh->GetDocInfo().SetQueryLoadTemplate( bTmp );
+        }
+        break;
         default:
             throw UnknownPropertyException();
     }
@@ -568,6 +576,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
             SfxDocumentInfo& rInfo = mpDocSh->GetDocInfo();
             sal_Bool bSaveVersion = rInfo.IsSaveVersionOnClose();
             rValue.setValue(&bSaveVersion, ::getBooleanCppuType());
+        }
+        break;
+        case HANDLE_UPDATE_FROM_TEMPLATE:
+        {
+            sal_Bool bTmp = mpDocSh->GetDocInfo().IsQueryLoadTemplate();
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
         default:
