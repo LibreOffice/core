@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exchange.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-16 13:14:17 $
+ *  last change: $Author: fs $ $Date: 2001-03-23 11:28:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,10 @@ static const DataFlavorRepresentation aFormatArray_Impl[] =
 /*113 SOT_FORMATSTR_ID_STARCHART_60*/           { "application/vnd.sun.xml.chart", "Chart 6.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /*114 SOT_FORMATSTR_ID_STARMATH_60*/            { "application/vnd.sun.xml.math", "Math 6.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /*115 SOT_FORMATSTR_WMF*/                       { "application/x-openoffice;windows_formatname=\"Image WMF\"", "Windows MetaFile", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-/*116 SOT_FORMATSTR_ID_DUMMY4*/                 { "application/x-openoffice;windows_formatname=\"SO_DUMMYFORMAT_4\"", "SO_DUMMYFORMAT_4", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) }
+/*116 SOT_FORMATSTR_ID_DBACCESS_QUERY*/         { "application/x-openoffice;windows_formatname=\"Data source Query Object\"", "Data source Query Object", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/*117 SOT_FORMATSTR_ID_DBACCESS_TABLE*/         { "application/x-openoffice;windows_formatname=\"Data source Table\"", "Data source Table", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/*118 SOT_FORMATSTR_ID_DBACCESS_COMMAND*/       { "application/x-openoffice;windows_formatname=\"SQL query\"", "SQL query", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/*119 SOT_FORMATSTR_ID_DUMMY7*/                 { "application/x-openoffice;windows_formatname=\"SO_DUMMYFORMAT_7\"", "SO_DUMMYFORMAT_7", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) }
 };
 
 //-----------------------------------------------------------------------
