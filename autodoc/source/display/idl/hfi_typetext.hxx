@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_typetext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-14 18:01:57 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:34:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,10 +98,23 @@ class HF_IdlTypeText : public HtmlFactory_Idl
                             const String &      i_member ) const;
     void                Produce_LocalLinkInDocu(
                             const String &      i_member ) const;
+
+    /// Produce the first link for Java-help understood index entries.
     void                Produce_IndexLink(
                             Xml::Element &      o_out,
                             const client &      i_ce ) const;
+    /** Produce the second link for Java-help understood index entries.
+        For members this will be a link to their owner (this function is
+        used), else see @->Produce_IndexSecondEntryLink();
+    */
     void                Produce_IndexOwnerLink(
+                            Xml::Element &      o_out,
+                            const client &      i_owner ) const;
+    /** Produce the second link for Java-help understood index entries.
+        For non- members this will again be a link to to the entry itself
+        (this function is used), else see @->Produce_IndexOwnerLink();
+    */
+    void                Produce_IndexSecondEntryLink(
                             Xml::Element &      o_out,
                             const client &      i_ce ) const;
   private:
