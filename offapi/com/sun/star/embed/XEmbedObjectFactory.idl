@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XEmbedObjectFactory.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-06 08:53:12 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 18:04:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,25 +85,31 @@
 #include <com/sun/star/beans/PropertyValue.idl>
 #endif
 
-//=============================================================================
+//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//=============================================================================
-/** Allows to create and initialize a new embedded object of specified type.
+//============================================================================
+/** allows to create and initialize a new embedded object of specified type.
+    <p>
+    This interface provides user with full control over object creation.
+    </p>
  */
 interface XEmbedObjectFactory: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
-    /** Creates a new object and transport parameters for persistent initialization.
+    //------------------------------------------------------------------------
+    /** creates a new object and transport parameters for persistent
+        initialization.
 
-        <p> This method can be used to have a full control over persistence initialization of a object.
+        <p>
+        This method can be used to have a full control over persistence
+        initialization of a object.
         </p>
 
         @param aClassID
             the class id of the new object
 
-        @param aClassName
+        @param sClassName
             the class name of the new object
 
         @param xStorage
@@ -114,15 +120,17 @@ interface XEmbedObjectFactory: com::sun::star::uno::XInterface
 
         @param nEntryConnectionMode
             a mode in which the object should be initialized from entry
-            can take values from EntryInitModes constant set
+            can take values from <type>EntryInitModes</type> constant set
 
-        @param lArguments
-            optional parameters for the embedded document persistence initialization
-            see also <type scope="com::sun::star::document">MediaDescriptor</type>
+        @param aArgs
+            optional parameters for the embedded document persistence
+            initialization, see also
+            <type scope="com::sun::star::document">MediaDescriptor</type>
 
-        @param lObjArgs
-            optional parameters for the object persistence initialization
-            see also <type scope="com::sun::star::embed">EmbeddedObjectDescriptor</type>
+        @param aObjectArgs
+            optional parameters for the object persistence initialization,
+            see also
+            <type scope="com::sun::star::embed">EmbeddedObjectDescriptor</type>
 
         @thrown ::com::sun::star::lang::IllegalArgumentException
             one of arguments is illegal
@@ -134,19 +142,19 @@ interface XEmbedObjectFactory: com::sun::star::uno::XInterface
             in case of other problems
      */
     ::com::sun::star::uno::XInterface createInstanceUserInit(
-                            [in] sequence< byte > aClassID,
-                            [in] string aClassName,
-                            [in] ::com::sun::star::embed::XStorage xStorage,
-                            [in] string sEntName,
-                            [in] long nEntryConnectionMode,
-                            [in] sequence< ::com::sun::star::beans::PropertyValue > lArguments,
-                            [in] sequence< ::com::sun::star::beans::PropertyValue > lObjArgs )
+            [in] sequence< byte > aClassID,
+            [in] string sClassName,
+            [in] ::com::sun::star::embed::XStorage xStorage,
+            [in] string sEntName,
+            [in] long nEntryConnectionMode,
+            [in] sequence< ::com::sun::star::beans::PropertyValue > aArgs,
+            [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs )
         raises( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::Exception );
 };
 
-//=============================================================================
+//============================================================================
 
 }; }; }; };
 
