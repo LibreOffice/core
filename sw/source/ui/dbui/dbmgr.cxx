@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 13:57:43 $
+ *  last change: $Author: os $ $Date: 2001-02-16 14:58:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -892,6 +892,7 @@ BOOL SwNewDBMgr::GetColumnNames(ListBox* pListBox,
 
 SwNewDBMgr::SwNewDBMgr() :
             pMergeData(0),
+            pMergeDialog(0),
             bInMerge(FALSE),
             nMergeType(DBMGR_INSERT),
             bInitDBFields(FALSE)
@@ -2199,6 +2200,9 @@ Sequence<OUString> SwNewDBMgr::GetExistingDatabaseNames()
 void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
                         const Sequence<PropertyValue>& rProperties)
 {
+    //prevent second call
+    if(pMergeDialog)
+        return ;
     OUString sDataSource, sDataTableOrQuery;
     Reference<XResultSet>  xResSet;
     Sequence<sal_Int32> aSelection;
@@ -2228,15 +2232,15 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
         DBG_ERROR("PropertyValues missing or unset")
         return;
     }
-    SwMailMergeDlg* pDlg = new SwMailMergeDlg(
+    pMergeDialog = new SwMailMergeDlg(
                     &rSh.GetView().GetViewFrame()->GetWindow(), rSh,
                     sDataSource,
                     sDataTableOrQuery,
                     nCmdType, aSelection );
 
-    if (pDlg->Execute() == RET_OK)
+    if(pMergeDialog->Execute() == RET_OK)
     {
-        SetMergeType(  pDlg->GetMergeType() );
+        SetMergeType(  pMergeDialog->GetMergeType() );
 
         Sequence<PropertyValue> aNewProperties = rProperties;
         if(!bHasSelectionProperty)
@@ -2245,13 +2249,13 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
             aNewProperties.realloc(rProperties.getLength() + 1);
         }
         PropertyValue* pNewValues = aNewProperties.getArray();
-        pNewValues[nSelectionPos].Value <<= pDlg->GetSelection();
+        pNewValues[nSelectionPos].Value <<= pMergeDialog->GetSelection();
         OFF_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, rSh.GetView().GetViewFrame()->GetObjectShell()));
         MergeNew(GetMergeType(),
                             rSh,
                             aNewProperties);
-        delete(pDlg);
     }
+    DELETEZ(pMergeDialog);
 }
 /* -----------------------------13.11.00 08:20--------------------------------
 
