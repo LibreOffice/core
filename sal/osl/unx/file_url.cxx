@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_url.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:46:03 $
+ *  last change: $Author: vg $ $Date: 2003-05-13 12:28:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -943,8 +943,6 @@ oslFileError FileURLToPath(char * buffer, size_t bufLen, rtl_uString* ustrFileUR
 {
     rtl_uString* ustrSystemPath = NULL;
     oslFileError osl_error      = osl_getSystemPathFromFileURL(ustrFileURL, &ustrSystemPath);
-
-    OSL_ASSERT(osl_File_E_None == osl_error);
 
     if(osl_File_E_None != osl_error)
         return osl_error;
