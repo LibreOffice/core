@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-16 09:20:27 $
+ *  last change: $Author: mba $ $Date: 2001-07-20 10:27:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,6 +576,8 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             pMedium->GetItemSet()->ClearItem( SID_DOC_SALVAGE );
             pMedium->GetItemSet()->ClearItem( SID_FILE_NAME );
         }
+        else
+            pMedium->GetItemSet()->ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >  xModel ( GetModel(), ::com::sun::star::uno::UNO_QUERY );
         if ( xModel.is() )
