@@ -2,9 +2,9 @@
 *
 *  $RCSfile: DBMetaData.java,v $
 *
-*  $Revision: 1.9 $
+*  $Revision: 1.10 $
 *
-*  last change: $Author: vg $ $Date: 2005-03-10 17:20:02 $
+*  last change: $Author: kz $ $Date: 2005-03-18 16:15:05 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -127,7 +127,6 @@ public class DBMetaData {
     public XPropertySet xDataSourcePropertySet;
     private int[] nDataTypes = null;
     private XWindowPeer xWindowPeer;
-    private boolean bConnectionOvergiven = true;
     public String[] DataSourceNames;
     public String[] CommandNames;
     public String[] TableNames = new String[] {};
@@ -141,7 +140,7 @@ public class DBMetaData {
     public String DataSourceName;
     public com.sun.star.sdbc.XConnection DBConnection;
     public com.sun.star.lang.XMultiServiceFactory xMSF;
-    public XComponent xComponent;
+    public XComponent xConnectionComponent;
     public SQLQueryComposer oSQLQueryComposer;
     int iMaxColumnsInSelect;
     int iMaxColumnsInGroupBy;
@@ -160,7 +159,6 @@ public class DBMetaData {
     private long lDateCorrection = INVALID;
     private boolean bdisposeConnection = false;
 
-
     public DBMetaData(XMultiServiceFactory xMSF) {
         getInterfaces(xMSF);
         InitializeWidthList();
@@ -172,8 +170,6 @@ public class DBMetaData {
         getInterfaces(xMSF);
         InitializeWidthList();
     }
-
-
 
 
     public NumberFormatter getNumberFormatter(){
@@ -203,6 +199,7 @@ public class DBMetaData {
 
 
 
+
     void getInterfaces(XMultiServiceFactory xMSF) {
         try {
             this.xMSF = xMSF;
@@ -215,6 +212,7 @@ public class DBMetaData {
             exception.printStackTrace(System.out);
         }
     }
+
 
 
 
@@ -239,6 +237,7 @@ public class DBMetaData {
             }
         }
     }
+
 
     public boolean hasTableByName(String _stablename){
         getTableNames();
@@ -277,6 +276,7 @@ public class DBMetaData {
         CommandObject oQueryObject = new CommandObject(_QueryName, com.sun.star.sdb.CommandType.QUERY);
         this.CommandObjects.addElement(oQueryObject);
     }
+
 
     public class CommandObject {
         public XNameAccess xColumns;
@@ -366,7 +366,6 @@ public class DBMetaData {
         BinaryTypes[9] = DataType.CLOB;
         BinaryTypes[10] = DataType.REF;
         BinaryTypes[11] = DataType.OTHER;
-
     }
 
 
@@ -488,7 +487,6 @@ public class DBMetaData {
                 Properties.getPropertyValue(curproperties, "ActiveConnection"));
             if (xConnection !=null)
             {
-                bdisposeConnection = true;
                 com.sun.star.container.XChild child = (com.sun.star.container.XChild)UnoRuntime.queryInterface(com.sun.star.container.XChild.class, xConnection);
 
                 xDataSource = (XDataSource) UnoRuntime.queryInterface(XDataSource.class, child.getParent());
@@ -500,7 +498,11 @@ public class DBMetaData {
                     DataSourceName = AnyConverter.toString(xPSet.getPropertyValue("Name"));
                 return getConnection(xConnection);
             }
+            else
+                bdisposeConnection = true;
         }
+        else
+            bdisposeConnection = true;
         if (Properties.hasPropertyValue(curproperties, "DataSourceName")){
             String sDataSourceName = AnyConverter.toString(Properties.getPropertyValue(curproperties, "DataSourceName"));
             return getConnection(sDataSourceName);
@@ -516,8 +518,8 @@ public class DBMetaData {
             String sDataSourceName = AnyConverter.toString(Properties.getPropertyValue(curproperties, "DatabaseLocation"));
             return getConnection(sDataSourceName);
         }
-
         else if (xConnection !=null){
+            bdisposeConnection = false;
             return getConnection(xConnection);
         }
     } catch (IllegalArgumentException e){
@@ -546,7 +548,6 @@ public class DBMetaData {
     try {
         this.DBConnection = _DBConnection;
         getDataSourceObjects();
-        bConnectionOvergiven = true;
         return true;
     } catch (Exception e) {
         e.printStackTrace(System.out);
@@ -555,13 +556,12 @@ public class DBMetaData {
 
 
     private boolean getConnection(XDataSource xDataSource){
-    bConnectionOvergiven = false;
     Resource oResource = new Resource(xMSF, "Database", "dbw");
     try {
         int iMsg = 0;
         boolean bgetConnection = false;
         if (DBConnection != null)
-            xComponent.dispose();
+            xConnectionComponent.dispose();
         getDataSourceInterfaces();
         if (bPasswordIsRequired == false) {
             DBConnection = xDataSource.getConnection("", "");
@@ -591,7 +591,7 @@ public class DBMetaData {
             showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, sMsgConnectionImpossible);
         }
         else {
-            xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, DBConnection);
+            xConnectionComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, DBConnection);
             getDataSourceObjects();
         }
         return bgetConnection;
@@ -668,8 +668,8 @@ public class DBMetaData {
     }
 
     public void dispose() {
-        if ((xComponent != null) && (this.bdisposeConnection))
-            xComponent.dispose();
+        if ((DBConnection != null) && (this.bdisposeConnection))
+            xConnectionComponent.dispose();
     }
 
     public XHierarchicalNameAccess getReportDocuments(){
@@ -793,7 +793,6 @@ public class DBMetaData {
         return sColValues;
     }
 
-
     public String[] getCatalogNames(){
         try {
             XResultSet xResultSet = xDBMetaData.getCatalogs();
@@ -814,6 +813,7 @@ public class DBMetaData {
             return null;
         }
     }
+
 
     public boolean storeDatabaseDocumentToTempPath(XComponent _xcomponent, String _storename){
     try {
