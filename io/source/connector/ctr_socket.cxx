@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctr_socket.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-20 17:04:52 $
+ *  last change: $Author: kr $ $Date: 2000-10-30 12:32:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,20 @@ using namespace ::com::sun::star::connection;
 
 namespace stoc_connector {
     template<class T>
-    void notifyListeners(SocketConnection * pCon, T t)
+    void notifyListeners(SocketConnection * pCon, sal_Bool * notified, T t)
     {
-        ::osl::MutexGuard guard(pCon->_mutex);
-        ::std::for_each(pCon->_listeners.begin(), pCon->_listeners.end(), t);
+          XStreamListener_hash_set listeners;
+
+        {
+            ::osl::MutexGuard guard(pCon->_mutex);
+            if(!*notified)
+            {
+                *notified = sal_True;
+                listeners = pCon->_listeners;
+            }
+        }
+
+        ::std::for_each(listeners.begin(), listeners.end(), t);
     }
 
 
@@ -109,7 +119,10 @@ namespace stoc_connector {
     SocketConnection::SocketConnection( const OUString &s, sal_uInt16 nPort, sal_Bool bIgnoreClose ) :
         m_nStatus( 0 ),
         m_sDescription( OUString::createFromAscii( "socket:" ) ),
-        m_bIgnoreClose( bIgnoreClose )
+        m_bIgnoreClose( bIgnoreClose ),
+        _started(sal_False),
+        _closed(sal_False),
+        _error(sal_False)
     {
         m_sDescription += s;
         m_sDescription += OUString::createFromAscii( ":" );
@@ -126,12 +139,7 @@ namespace stoc_connector {
     {
         if( ! m_nStatus )
         {
-            if(_firstRead) {
-                _firstRead = false;
-
-                notifyListeners(this, callStarted);
-            }
-
+            notifyListeners(this, &_started, callStarted);
 
             if( aReadBytes.getLength() != nBytesToRead )
             {
@@ -141,27 +149,20 @@ namespace stoc_connector {
 
             if(i != nBytesToRead)
             {
-                if(i < 0) // error?
-                {
-                    OUString errMessage;
-                    m_socket.getError(errMessage);
+                OUString errMessage;
+                m_socket.getError(errMessage);
 
-                    OUString message(RTL_CONSTASCII_USTRINGPARAM("ctr_socket.cxx:SocketConnection::read: error - "));
-                    message += errMessage;
+                OUString message(RTL_CONSTASCII_USTRINGPARAM("ctr_socket.cxx:SocketConnection::read: error - "));
+                message += errMessage;
 
-                    IOException ioException(message, Reference<XInterface>(static_cast<XConnection *>(this)));
+                IOException ioException(message, Reference<XInterface>(static_cast<XConnection *>(this)));
 
-                    Any any;
-                    any <<= ioException;
+                Any any;
+                any <<= ioException;
 
-                    notifyListeners(this, callError(any));
+                notifyListeners(this, &_error, callError(any));
 
-                    throw ioException;
-                }
-                else  // connection closed!
-                {
-                    notifyListeners(this, callClosed);
-                }
+                throw ioException;
             }
 
             return i;
@@ -175,7 +176,7 @@ namespace stoc_connector {
             Any any;
             any <<= ioException;
 
-            notifyListeners(this, callError(any));
+            notifyListeners(this, &_error, callError(any));
 
             throw ioException;
         }
@@ -200,7 +201,7 @@ namespace stoc_connector {
                 Any any;
                 any <<= ioException;
 
-                notifyListeners(this, callError(any));
+                notifyListeners(this, &_error, callError(any));
 
                 throw ioException;
             }
@@ -214,7 +215,7 @@ namespace stoc_connector {
             Any any;
             any <<= ioException;
 
-            notifyListeners(this, callError(any));
+            notifyListeners(this, &_error, callError(any));
 
             throw ioException;
         }
@@ -235,7 +236,7 @@ namespace stoc_connector {
         if( ! m_bIgnoreClose && 1 == osl_incrementInterlockedCount( (&m_nStatus) ) )
         {
             m_socket.shutdown();
-            notifyListeners(this, callClosed);
+            notifyListeners(this, &_closed, callClosed);
         }
     }
 

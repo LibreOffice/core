@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connector.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:24:18 $
+ *  last change: $Author: kr $ $Date: 2000-10-30 12:32:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,11 @@ namespace stoc_connector
         }
     };
 
+    typedef ::std::hash_set< ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener>,
+                             ReferenceHash< ::com::sun::star::io::XStreamListener>,
+                             ReferenceEqual< ::com::sun::star::io::XStreamListener> >
+            XStreamListener_hash_set;
+
     class PipeConnection :
         public ::cppu::WeakImplHelper1< ::com::sun::star::connection::XConnection >
 
@@ -158,10 +163,11 @@ namespace stoc_connector
         sal_Bool m_bIgnoreClose;
 
         ::osl::Mutex _mutex;
-        sal_Bool                             _firstRead;
-          ::std::hash_set< ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener>,
-              ReferenceHash< ::com::sun::star::io::XStreamListener>,
-              ReferenceEqual< ::com::sun::star::io::XStreamListener> > _listeners;
+        sal_Bool     _started;
+        sal_Bool     _closed;
+        sal_Bool     _error;
+
+          XStreamListener_hash_set _listeners;
     };
 
     class ChannelConnection :
