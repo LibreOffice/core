@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:35:39 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 14:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2215,7 +2215,7 @@ BOOL SalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
             if( SYMBOL_CHARSET == (BYTE)pFont->mpSysData )
                 if( (nGlyphIdx & 0xF000) == 0 )
                     nGlyphIdx |= 0xF000;
-            nGlyphIdx = MapChar( aSftTTF.get(), nGlyphIdx, 1 );
+            nGlyphIdx = MapChar( aSftTTF.get(), nGlyphIdx, (nGlyphIdx & GF_ROTMASK) ? 1 : 0 );
         }
         aShortIDs[i] = static_cast<USHORT>( nGlyphIdx );
         if( !nGlyphIdx )
