@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dataview.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-10 11:36:09 $
+ *  last change: $Author: oj $ $Date: 2002-02-19 13:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,9 +80,13 @@
 #ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
 #endif
+#ifndef DBAUI_ICONTROLLER_HXX
+#include "IController.hxx"
+#endif
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 
 //.........................................................................
@@ -114,13 +118,18 @@ namespace dbaui
 
     DBG_NAME(ODataView)
     // -------------------------------------------------------------------------
-    ODataView::ODataView(Window* pParent, const Reference< XMultiServiceFactory >& _rFactory, WinBits nStyle)
+    ODataView::ODataView(   Window* pParent,
+                            IController* _pController,
+                            const Reference< XMultiServiceFactory >& _rFactory,
+                            WinBits nStyle)
         :Window(pParent,nStyle)
-        ,m_pToolBox(NULL)
+        ,m_pToolBox( NULL )
         ,m_xServiceFactory(_rFactory)
         ,m_pSeparator( NULL )
+        ,m_pController( _pController )
     {
         DBG_CTOR(ODataView,NULL);
+        OSL_ENSURE(m_pController,"Controller must be not NULL!");
     }
 
     // -------------------------------------------------------------------------
@@ -235,6 +244,48 @@ namespace dbaui
         if(aSize.Width() > 0 && aSize.Height() > 0)
             resizeAll( Rectangle( Point( 0, 0), GetSizePixel() ) );
     }
+    // -----------------------------------------------------------------------------
+    long ODataView::PreNotify( NotifyEvent& rNEvt )
+    {
+        BOOL bHandled = FALSE;
+        switch (rNEvt.GetType())
+        {
+            case EVENT_KEYINPUT:
+            {
+                const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
+                const KeyCode& aKeyCode = pKeyEvent->GetKeyCode();
+                ::rtl::OUString sCommand;
+
+                if ( aKeyCode.IsMod1() )
+                {
+                    switch ( pKeyEvent->GetKeyCode().GetCode() )
+                    {
+                        case KEY_S:
+                        {
+                            sCommand = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Save"));
+                            bHandled = TRUE;
+                            break;
+                        }
+                        case KEY_Z:
+                        {
+                            sCommand =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Undo"));
+                            bHandled = TRUE;
+                            break;
+                        }
+                    }
+                }
+                if ( bHandled )
+                {
+                    URL aCommand;
+                    aCommand.Complete = sCommand;
+                    m_pController->executeChecked( aCommand );
+                }
+            }
+            break;
+        }
+        return bHandled ? 1L : Window::PreNotify(rNEvt);
+    }
+    // -----------------------------------------------------------------------------
 
 //.........................................................................
 }   // namespace dbaui
