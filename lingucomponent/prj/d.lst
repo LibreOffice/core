@@ -16,3 +16,9 @@
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 ..\%__SRC%\lib\libspell*.so %_DEST%\lib%_EXT%\libspell*.so
 
+..\%__SRC%\bin\hyph* %_DEST%\bin%_EXT%\hyph*
+..\%__SRC%\lib\ihyph* %_DEST%\lib%_EXT%\ihyph*
+..\%__SRC%\lib\libhnj.* %_DEST%\lib%_EXT%\libhnj.*
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+..\%__SRC%\lib\libhyphen*.so %_DEST%\lib%_EXT%\libhyphen*.so
+
