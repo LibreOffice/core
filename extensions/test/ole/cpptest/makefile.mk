@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-22 09:27:33 $
+#   last change: $Author: rt $ $Date: 2004-08-20 12:35:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,15 +92,11 @@ UNOUCROUT=	$(OUT)$/inc
 INCPRE+=	$(OUT)$/inc -I$(ATL_INCLUDE)
 .ENDIF
 
+.IF "$(NETTOOLKIT)"==""
 UNOTYPES= com.sun.star.bridge.ModelDependent \
           com.sun.star.lang.XMultiServiceFactory \
           com.sun.star.bridge.XBridgeSupplier2
 
-
-
-.IF "$(depend)" != ""
-
-.ENDIF # depend
 
 APP1TARGET=	$(TARGET)
 APP1OBJS=	$(OBJ)$/cppTest.obj
@@ -132,6 +128,6 @@ APP2STDLIBS += $(LIBCIMT)
 APP1DEF=	$(MISC)\$(APP1TARGET).def
 
 # --- Targets ---
-
+.ENDIF #"$(NETTOOLKIT)"==""
 .INCLUDE : target.mk
 
