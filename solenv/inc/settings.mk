@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.86 $
+#   $Revision: 1.87 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-21 17:17:23 $
+#   last change: $Author: hjs $ $Date: 2001-11-26 18:23:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,6 @@ SOLARVERSION=$(SOLARVER)$/$(UPD)
 %minor.mk :
 .IF "$(SOURCEVERSION)"=="$(WORK_STAMP)"
     @+-$(MKDIRHIER) $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT) >& $(NULLDEV)
-    @+$(COPY) $(SOLARENV)$/inc$/minor.mk $(SOLARVERSION)$/$(UPD)minor.mk >& $(NULLDEV)
 .ELSE			# "$(SOURCEVERSION)"=="$(WORK_STAMP)"
     @+echo "#"
     @+echo "#"
@@ -100,9 +99,10 @@ SOLARVERSION=$(SOLARVER)$/$(UPD)
     force_dmake_to_error
 .ENDIF			# "$(SOURCEVERSION)"=="$(WORK_STAMP)"
 .IF "$(GUI)"=="UNX"
-    @+tr -d "\015" < $(SOLARVERSION)$/$(UPD)minor.mk > $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk
+    @+tr -d "\015" < $(SOLARENV)$/inc$/minor.mk > $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk
+    @+$(TOUCH) $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg >& $(NULLDEV)
 .ELSE			# "$(GUI)"=="UNX"
-    @+$(COPY) $(SOLARVERSION)$/$(UPD)minor.mk $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk >& $(NULLDEV)
+    @+$(COPY) $(SOLARENV)$/inc$/minor.mk $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk >& $(NULLDEV)
     @+$(TOUCH) $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg >& $(NULLDEV)
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF          # "$(UPDATER)"!=""
