@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-12 15:34:54 $
+ *  last change: $Author: sb $ $Date: 2002-08-28 12:40:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2023,7 +2023,16 @@ static void ImplSalFrameSetInputContext( HWND hWnd, const SalInputContext* pCont
             {
                 LOGFONTW aLogFont;
                 HDC hDC = GetDC( pFrame->maFrameData.mhWnd );
-                ImplGetLogFontFromFontSelect( hDC, pContext->mpFont, aLogFont );
+                // In case of vertical writing, always append a '@' to the
+                // Windows font name, not only if such a Windows font really is
+                // available (bTestVerticalAvail == false in the below call):
+                // The Windows IME's candidates window seems to always use a
+                // font that has all necessary glyphs, not necessarily the one
+                // specified by this font name; but it seems to decide whether
+                // to use that font's horizontal or vertical variant based on a
+                // '@' in front of this font name.
+                ImplGetLogFontFromFontSelect( hDC, pContext->mpFont, aLogFont,
+                                              false );
                 ReleaseDC( pFrame->maFrameData.mhWnd, hDC );
                 ImmSetCompositionFontW( hIMC, &aLogFont );
                 ImmReleaseContext( pFrame->maFrameData.mhWnd, hIMC );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sb $ $Date: 2002-08-13 12:59:50 $
+ *  last change: $Author: sb $ $Date: 2002-08-28 12:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,29 +561,35 @@ int CALLBACK SalEnumQueryFontProcExW( const ENUMLOGFONTEXW*,
 
 // -----------------------------------------------------------------------
 
-static void ImplSalGetVerticalFontNameW( HDC hDC, UniString& rName )
+static void ImplSalGetVerticalFontNameW( HDC hDC, UniString& rName,
+                                         bool bTestAvail )
 {
-    if ( !rName.Len() )
+    if (rName.Len() == 0 || rName.GetChar(0) == '@')
         return;
 
     // Vertical fonts starts with a @
     UniString aTemp = rName;
     aTemp.Insert( (sal_Unicode)'@', 0 );
 
-    // Test, if vertical Font available
-    LOGFONTW aLogFont;
-    memset( &aLogFont, 0, sizeof( aLogFont ) );
-    aLogFont.lfCharSet = DEFAULT_CHARSET;
+    BOOL bAvailable = !bTestAvail;
+    if (!bAvailable)
+    {
+        // Test, if vertical Font available
+        LOGFONTW aLogFont;
+        memset( &aLogFont, 0, sizeof( aLogFont ) );
+        aLogFont.lfCharSet = DEFAULT_CHARSET;
 
-    UINT nNameLen = aTemp.Len();
-    if ( nNameLen > (sizeof( aLogFont.lfFaceName )/sizeof( wchar_t ))-1 )
-        nNameLen = (sizeof( aLogFont.lfFaceName )/sizeof( wchar_t ))-1;
-    memcpy( aLogFont.lfFaceName, aTemp.GetBuffer(), nNameLen*sizeof( wchar_t ) );
-    aLogFont.lfFaceName[nNameLen] = 0;
+        UINT nNameLen = aTemp.Len();
+        if ( nNameLen > (sizeof( aLogFont.lfFaceName )/sizeof( wchar_t ))-1 )
+            nNameLen = (sizeof( aLogFont.lfFaceName )/sizeof( wchar_t ))-1;
+        memcpy( aLogFont.lfFaceName, aTemp.GetBuffer(),
+                nNameLen*sizeof( wchar_t ) );
+        aLogFont.lfFaceName[nNameLen] = 0;
 
-    BOOL bAvailable = FALSE;
-    EnumFontFamiliesExW( hDC, &aLogFont, (FONTENUMPROCW)SalEnumQueryFontProcExW,
-                         (LPARAM)(void*)&bAvailable, 0 );
+        EnumFontFamiliesExW( hDC, &aLogFont,
+                             (FONTENUMPROCW)SalEnumQueryFontProcExW,
+                             (LPARAM)(void*)&bAvailable, 0 );
+    }
     if ( bAvailable )
         rName = aTemp;
 }
@@ -675,7 +681,8 @@ BOOL ImplIsFontAvailable( HDC hDC, const UniString& rName )
 
 void ImplGetLogFontFromFontSelect( HDC hDC,
                                    const ImplFontSelectData* pFont,
-                                   LOGFONTW& rLogFont )
+                                   LOGFONTW& rLogFont,
+                                   bool bTestVerticalAvail )
 {
     UniString   aName;
     if ( pFont->mpFontData )
@@ -685,7 +692,7 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
 
     // Test for vertical
     if ( pFont->mbVertical )
-        ImplSalGetVerticalFontNameW( hDC, aName );
+        ImplSalGetVerticalFontNameW( hDC, aName, bTestVerticalAvail );
 
     UINT nNameLen = aName.Len();
     if ( nNameLen > (sizeof( rLogFont.lfFaceName )/sizeof( wchar_t ))-1 )
@@ -707,7 +714,7 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
     rLogFont.lfStrikeOut       = 0;
     rLogFont.lfItalic          = (pFont->meItalic) != ITALIC_NONE;
     rLogFont.lfEscapement      = pFont->mnOrientation;
-    rLogFont.lfOrientation     = 0;
+    rLogFont.lfOrientation     = rLogFont.lfEscapement;
     rLogFont.lfClipPrecision   = CLIP_DEFAULT_PRECIS;
     rLogFont.lfQuality         = DEFAULT_QUALITY;
     rLogFont.lfOutPrecision    = OUT_TT_PRECIS;
@@ -775,7 +782,8 @@ USHORT SalGraphics::SetFont( ImplFontSelectData* pFont )
     if ( aSalShlData.mbWNT )
     {
         LOGFONTW aLogFont;
-        ImplGetLogFontFromFontSelect( maGraphicsData.mhDC, pFont, aLogFont );
+        ImplGetLogFontFromFontSelect( maGraphicsData.mhDC, pFont, aLogFont,
+                                      true );
 
         // Auf dem Bildschirm nehmen wir Courier New, wenn Courier nicht
         // skalierbar ist und wenn der Font skaliert oder rotiert werden
