@@ -2,9 +2,9 @@
  *
  *  $RCSfile: requesttypes.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2002-03-19 11:35:00 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 08:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,19 +106,19 @@ namespace configmgr
             typedef std::auto_ptr<ISubtree> Data;
 
             explicit
-            NodeInstance(AbsolutePath const & _rootpath, Data & _node)
-            : node(_node)
-            , root(_rootpath)
+            NodeInstance(Data _node, AbsolutePath const & _rootpath)
+            : m_node(_node)
+            , m_root(_rootpath)
             {
             }
 
-            NodeInstance(NodeInstance const & _other)
-            : node(_other.node)
-            , root(_other.root)
-            {}
+            Data        const & data() const { return m_node; }
+            NodePath    const & root() const { return m_root; }
 
-            mutable Data     node;
-            NodePath root;
+            Data extractData() { return m_node; }
+        private:
+            Data        m_node;
+            NodePath    m_root;
         };
 // ---------------------------------------------------------------------------
         struct TemplateInstance
@@ -126,45 +126,125 @@ namespace configmgr
             typedef std::auto_ptr<INode> Data;
 
             explicit
-            TemplateInstance(Data & _node, Name const & _component)
-            : node(_node)
-            , component(_component)
+            TemplateInstance(Data _node, Name const & _name, Name const & _component)
+            : m_node(_node)
+            , m_name(_name)
+            , m_component(_component)
             {
             }
 
-            explicit
-            TemplateInstance(Data & _node, Name const & _name, Name const & _component)
-            : node(_node)
-            , name(_name)
-            , component(_component)
-            {
-            }
+            Data        const & data() const { return m_node; }
+            Name        const & name() const { return m_name; }
+            Name        const & component() const { return m_component; }
 
-            TemplateInstance(TemplateInstance const & _other)
-            : node(_other.node)
-            , name(_other.name)
-            , component(_other.component)
-            {}
-
-            mutable Data node;
-            Name name; // if empty, this is a complete set of component templates
-            Name component;
+            Data extractData() { return m_node; }
+    private:
+            Data m_node;
+            Name m_name; // if empty, this is a complete set of component templates
+            Name m_component;
         };
 // ---------------------------------------------------------------------------
         struct UpdateInstance
         {
-            typedef std::auto_ptr<SubtreeChange> Data;
+            typedef SubtreeChange *         Data;
+            typedef SubtreeChange const *   ConstData;
 
             explicit
-            UpdateInstance(AbsolutePath const & _rootpath, Data & _update)
-            : update(_update)
-            , root(_rootpath)
+            UpdateInstance(Data _update, AbsolutePath const & _rootpath)
+            : m_update(_update)
+            , m_root(_rootpath)
             {
             }
 
-            Data        update;
-            NodePath    root;
+            UpdateInstance(UpdateInstance & _aModifiableOther)
+            : m_update(_aModifiableOther.m_update)
+            , m_root(_aModifiableOther.m_root)
+            {
+            }
+
+            Data                data()       { return m_update; }
+            ConstData           data() const { return m_update; }
+            NodePath    const & root() const { return m_root; }
+        private:
+            Data        m_update;
+            NodePath    m_root;
         };
+// ---------------------------------------------------------------------------
+        struct ConstUpdateInstance
+        {
+            typedef UpdateInstance::ConstData   Data, ConstData;
+
+            explicit
+            ConstUpdateInstance(Data _update, AbsolutePath const & _rootpath)
+            : m_update(_update)
+            , m_root(_rootpath)
+            {
+            }
+
+            // conversion
+            ConstUpdateInstance(UpdateInstance const & _aModifiable)
+            : m_update(_aModifiable.data())
+            , m_root(_aModifiable.root())
+            {
+            }
+
+            Data                data() const { return m_update; }
+            NodePath    const & root() const { return m_root; }
+        private:
+            Data        m_update;
+            NodePath    m_root;
+        };
+// ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+// Due to the use of auto_ptr, the XxxInstance classes cannot easily be used as return values
+// To return them, they should be wrapped into a ResultHolder
+
+        template <class Instance_>
+        class ResultHolder
+        {
+            struct RCInstance : public salhelper::SimpleReferenceObject
+            {
+                RCInstance(Instance_ & _instance) : instance(_instance) {}
+                Instance_ instance;
+            };
+            typedef rtl::Reference< RCInstance > InstanceRef;
+
+            InstanceRef m_xInstance;
+        public:
+            typedef Instance_ Instance;
+
+            explicit
+            ResultHolder(Instance & _rInstance)
+            : m_xInstance( new RCInstance(_rInstance) )
+            {}
+
+            bool isEmpty() const { return !m_xInstance.is(); }
+
+            bool is() const { return m_xInstance.is() && m_xInstance->instance.data().get(); }
+
+            Instance const & instance() const { return  m_xInstance->instance; }
+
+            Instance const & operator *() const { return  instance(); }
+            Instance const * operator->() const { return &instance(); }
+
+            typename Instance::Data extractDataAndClear()
+            {
+                typename Instance::Data aData = m_xInstance->instance.extractData();
+                this->clear();
+                return aData;
+            }
+
+            void releaseAndClear()
+            {
+                typename Instance::Data aData = this->extractDataAndClear();
+                aData.release();
+            }
+
+            void clear() { m_xInstance.clear(); }
+        };
+// ---------------------------------------------------------------------------
+        typedef ResultHolder< NodeInstance >        NodeResult;
+        typedef ResultHolder< TemplateInstance >    TemplateResult;
 // ---------------------------------------------------------------------------
     }
 // ---------------------------------------------------------------------------
