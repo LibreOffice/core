@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XFrame.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-10-06 13:30:36 $
+ *  last change:$Date: 2004-03-02 13:41:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,5 +594,12 @@ public class _XFrame extends MultiMethodTest {
         else {
             return false;
         }
+    }
+
+    /**
+    * Forces environment recreation.
+    */
+    public void after() {
+        disposeEnvironment();
     }
 }
