@@ -4,10 +4,10 @@ Installation instructions:
 - If no web server is available you should install your favourite web server.
 - Download the servlet support Java archive (cos.jar) from 
 http://www.servlets.com/cos/index.html and copy the file to the directory 
-<ODK>/classes. Also make these classes known to your web server.
+<OFFICE_HOME>/program/classes. Also make these classes known to your web server.
 - Make sure the Servlet API is in the classpath of your web server. You can 
 download the Servlet API from http://java.sun.com/products/servlet/index.html . 
-Also, you must copy the file "servlet.jar" to the directory <ODK>/classes.
+Also, you must copy the file "servlet.jar" to the directory <OFFICE_HOME>/program/classes.
 - Use your GNU make (http://www.gnu.org) to build the servlet class.
 - Make the servlet class known to your web server.
 
