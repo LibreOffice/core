@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 19:27:17 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:33:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ String STR_ObjNameSingulNONE
     Text[ korean ] = "±×¸®±â °³Ã¼";
     Text[ turkish ] = "Çizim nesnesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objeto de dibujo";
 };
 String STR_ObjNamePluralNONE
 {
@@ -117,6 +118,7 @@ String STR_ObjNamePluralNONE
     Text[ korean ] = "±×¸®±â °³Ã¼";
     Text[ turkish ] = "Çizim nesnesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objetos de dibujo";
 };
  ////////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ObjNameSingulGRUP
@@ -146,6 +148,7 @@ String STR_ObjNameSingulGRUP
     Text[ korean ] = "±×·ì °³Ã¼";
     Text[ turkish ] = "Grup nesnesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objeto de grupo";
 };
 String STR_ObjNamePluralGRUP
 {
@@ -174,6 +177,7 @@ String STR_ObjNamePluralGRUP
     Text[ korean ] = "±×·ì °³Ã¼";
     Text[ turkish ] = "Grup nesneleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objetos de grupo";
 };
 String STR_ObjNameSingulGRUPEMPTY
 {
@@ -200,6 +204,7 @@ String STR_ObjNameSingulGRUPEMPTY
     Text[ korean ] = "ºñ¾î ÀÖ´Â ±×·ì °³Ã¼";
     Text[ turkish ] = "Boþ grup nesnesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objeto de grupo vacío";
 };
 String STR_ObjNamePluralGRUPEMPTY
 {
@@ -226,6 +231,7 @@ String STR_ObjNamePluralGRUPEMPTY
     Text[ korean ] = "ºñ¾î ÀÖ´Â ±×·ì °³Ã¼";
     Text[ turkish ] = "Boþ grup nesneleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objetos de grupo vacíos";
 };
 String STR_ObjNameSingulGRUPLNK
 {
@@ -252,6 +258,7 @@ String STR_ObjNameSingulGRUPLNK
     Text[ korean ] = "¿¬°áµÈ ±×·ì °³Ã¼";
     Text[ turkish ] = "Baðlantýlý grup nesnesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objeto de grupo enlazado";
 };
 String STR_ObjNamePluralGRUPLNK
 {
@@ -278,6 +285,7 @@ String STR_ObjNamePluralGRUPLNK
     Text[ korean ] = "¿¬°áµÈ ±×·ì °³Ã¼";
     Text[ turkish ] = "Baðlantýlý grup nesneleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objetos de grupo vinculados";
 };
  ////////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ObjNameSingulLINE
@@ -307,6 +315,7 @@ String STR_ObjNameSingulLINE
     Text[ korean ] = "¼±";
     Text[ turkish ] = "Çizgi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Línea";
 };
 String STR_ObjNameSingulLINE_Hori
 {
@@ -333,6 +342,7 @@ String STR_ObjNameSingulLINE_Hori
     Text[ korean ] = "¼öÆò¼±";
     Text[ turkish ] = "Yatay çizgi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Línea horizontal";
 };
 String STR_ObjNameSingulLINE_Vert
 {
@@ -359,6 +369,7 @@ String STR_ObjNameSingulLINE_Vert
     Text[ korean ] = "¼öÁ÷¼±";
     Text[ turkish ] = "Dikey çizgi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Línea vertical";
 };
 String STR_ObjNameSingulLINE_Diag
 {
@@ -385,6 +396,7 @@ String STR_ObjNameSingulLINE_Diag
     Text[ korean ] = "´ë°¢¼±";
     Text[ turkish ] = "Diyagonal çizgi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Línea diagonal";
 };
 String STR_ObjNamePluralLINE
 {
@@ -413,6 +425,7 @@ String STR_ObjNamePluralLINE
     Text[ korean ] = "¼±";
     Text[ turkish ] = "Çizgi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Líneas";
 };
  ////////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ObjNameSingulRECT
@@ -442,6 +455,7 @@ String STR_ObjNameSingulRECT
     Text[ korean ] = "Á÷»ç°¢Çü";
     Text[ turkish ] = "Dikdörtgen";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Rectángulo";
 };
 String STR_ObjNamePluralRECT
 {
@@ -470,6 +484,7 @@ String STR_ObjNamePluralRECT
     Text[ korean ] = "Á÷»ç°¢Çü";
     Text[ turkish ] = "Dikdörtgenler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Rectángulos";
 };
 String STR_ObjNameSingulQUAD
 {
@@ -496,6 +511,7 @@ String STR_ObjNameSingulQUAD
     Text[ korean ] = "Á¤»ç°¢Çü";
     Text[ turkish ] = "Kare";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Cuadrado";
 };
 String STR_ObjNamePluralQUAD
 {
@@ -522,6 +538,7 @@ String STR_ObjNamePluralQUAD
     Text[ korean ] = "Á¤»ç°¢Çü";
     Text[ turkish ] = "Kareler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Cuadrados";
 };
 String STR_ObjNameSingulPARAL
 {
@@ -548,6 +565,7 @@ String STR_ObjNameSingulPARAL
     Text[ korean ] = "ÆòÇà»çº¯Çü";
     Text[ turkish ] = "Paralelkenar";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Paralelograma";
 };
 String STR_ObjNamePluralPARAL
 {
@@ -574,6 +592,7 @@ String STR_ObjNamePluralPARAL
     Text[ korean ] = "ÆòÇà»çº¯Çü";
     Text[ turkish ] = "Paralelkenarlar";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Paralelogramos";
 };
 String STR_ObjNameSingulRAUTE
 {
@@ -600,6 +619,7 @@ String STR_ObjNameSingulRAUTE
     Text[ korean ] = "¸¶¸§¸ð²Ã";
     Text[ turkish ] = "Elmas";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Rombo";
 };
 String STR_ObjNamePluralRAUTE
 {
@@ -626,6 +646,7 @@ String STR_ObjNamePluralRAUTE
     Text[ korean ] = "¸¶¸§¸ð²Ã";
     Text[ turkish ] = "Elmaslar";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Rombos";
 };
 String STR_ObjNameSingulRECTRND
 {
@@ -652,6 +673,7 @@ String STR_ObjNameSingulRECTRND
     Text[ korean ] = "µÕ±Û¸° Á÷»ç°¢Çü";
     Text[ turkish ] = "Yuvarlak köþeli dikdörtgen";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Rectángulo redondeado";
 };
 String STR_ObjNamePluralRECTRND
 {
@@ -678,6 +700,7 @@ String STR_ObjNamePluralRECTRND
     Text[ korean ] = "µÕ±Û¸° Á÷»ç°¢Çü";
     Text[ turkish ] = "Yuvarlak köþeli dikdörtgenler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Rectángulos redondeados";
 };
 String STR_ObjNameSingulQUADRND
 {
@@ -704,6 +727,7 @@ String STR_ObjNameSingulQUADRND
     Text[ korean ] = "µÕ±Û¸° Á¤»ç°¢Çü";
     Text[ turkish ] = "Yuvarlak köþeli kare";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Cuadrado redondeado";
 };
 String STR_ObjNamePluralQUADRND
 {
@@ -730,6 +754,7 @@ String STR_ObjNamePluralQUADRND
     Text[ korean ] = "¸ð¼­¸®°¡ µÕ±Ù Á¤»ç°¢Çü";
     Text[ turkish ] = "Yuvarlak köþeli kareler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Cuadrados redondeados";
 };
 String STR_ObjNameSingulPARALRND
 {
@@ -756,6 +781,7 @@ String STR_ObjNameSingulPARALRND
     Text[ korean ] = "µÕ±Û¸° ÆòÇà»çº¯Çü";
     Text[ turkish ] = "Yuvarlak köþeli paralelkenar";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Paralelograma redondeado";
 };
 String STR_ObjNamePluralPARALRND
 {
@@ -782,6 +808,7 @@ String STR_ObjNamePluralPARALRND
     Text[ korean ] = "µÕ±Û¸° ÆòÇà»çº¯Çü";
     Text[ turkish ] = "Yuvarlak köþeli paralelkenarlar";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Paralelogramas redondeados";
 };
 String STR_ObjNameSingulRAUTERND
 {
@@ -808,6 +835,7 @@ String STR_ObjNameSingulRAUTERND
     Text[ korean ] = "µÕ±Û¸° ¸¶¸§¸ð²Ã";
     Text[ turkish ] = "Yuvarlak köþeli elmas";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Rombo redondeado";
 };
 String STR_ObjNamePluralRAUTERND
 {
@@ -834,6 +862,7 @@ String STR_ObjNamePluralRAUTERND
     Text[ korean ] = "µÕ±Û¸° ¸¶¸§¸ð²Ã";
     Text[ turkish ] = "Yuvarlak köþeli elmaslar";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Rombos redondeados";
 };
  ////////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ObjNameSingulCIRC
@@ -863,6 +892,7 @@ String STR_ObjNameSingulCIRC
     Text[ korean ] = "¿ø";
     Text[ turkish ] = "Daire";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Círculo";
 };
 String STR_ObjNamePluralCIRC
 {
@@ -891,6 +921,7 @@ String STR_ObjNamePluralCIRC
     Text[ korean ] = "¿ø";
     Text[ turkish ] = "Daire";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Círculos";
 };
 String STR_ObjNameSingulSECT
 {
@@ -919,6 +950,7 @@ String STR_ObjNameSingulSECT
     Text[ korean ] = "¿ø ºÎÃ¤²Ã";
     Text[ turkish ] = "Pasta";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Sector de círculo";
 };
 String STR_ObjNamePluralSECT
 {
@@ -947,6 +979,7 @@ String STR_ObjNamePluralSECT
     Text[ korean ] = "¿ø ºÎÃ¤²Ã";
     Text[ turkish ] = "Pastalar";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Sectores de círculo";
 };
 String STR_ObjNameSingulCARC
 {
@@ -975,6 +1008,7 @@ String STR_ObjNameSingulCARC
     Text[ korean ] = "¿øÈ£";
     Text[ turkish ] = "Yay";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Arco de círculo";
 };
 String STR_ObjNamePluralCARC
 {
@@ -1003,6 +1037,7 @@ String STR_ObjNamePluralCARC
     Text[ korean ] = "¿øÈ£";
     Text[ turkish ] = "Yaylar";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Arcos de círculo";
 };
 String STR_ObjNameSingulCCUT
 {
@@ -1031,6 +1066,7 @@ String STR_ObjNameSingulCCUT
     Text[ korean ] = "¿øÀÇ ÀýÆí";
     Text[ turkish ] = "Daire parçasý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Segmento de círculo";
 };
 String STR_ObjNamePluralCCUT
 {
@@ -1059,6 +1095,7 @@ String STR_ObjNamePluralCCUT
     Text[ korean ] = "¿øÀÇ ÀýÆí";
     Text[ turkish ] = "Daire parçalarý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Segmentos de círculo";
 };
 String STR_ObjNameSingulCIRCE
 {
@@ -1087,6 +1124,7 @@ String STR_ObjNameSingulCIRCE
     Text[ korean ] = "Å¸¿ø";
     Text[ turkish ] = "Elips";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Elipse";
 };
 String STR_ObjNamePluralCIRCE
 {
@@ -1115,6 +1153,7 @@ String STR_ObjNamePluralCIRCE
     Text[ korean ] = "Å¸¿ø";
     Text[ turkish ] = "Elips";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Elipses";
 };
 String STR_ObjNameSingulSECTE
 {
@@ -1143,6 +1182,7 @@ String STR_ObjNameSingulSECTE
     Text[ korean ] = "Å¸¿ø ºÎÃ¤²Ã";
     Text[ turkish ] = "Elips pasta";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Sector elíptico";
 };
 String STR_ObjNamePluralSECTE
 {
@@ -1171,6 +1211,7 @@ String STR_ObjNamePluralSECTE
     Text[ korean ] = "Å¸¿ø ºÎÃ¤²Ã";
     Text[ turkish ] = "Elips pastalar";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Sectores de la elipse";
 };
 String STR_ObjNameSingulCARCE
 {
@@ -1199,6 +1240,7 @@ String STR_ObjNameSingulCARCE
     Text[ korean ] = "Å¸¿øÈ£";
     Text[ turkish ] = "Elips yay";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Arco de elipse";
 };
 String STR_ObjNamePluralCARCE
 {
@@ -1227,6 +1269,7 @@ String STR_ObjNamePluralCARCE
     Text[ korean ] = "Å¸¿øÈ£";
     Text[ turkish ] = "Elips yaylar";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Arcos elípticos";
 };
 String STR_ObjNameSingulCCUTE
 {
@@ -1255,6 +1298,7 @@ String STR_ObjNameSingulCCUTE
     Text[ korean ] = "Å¸¿ø ÀýÆí";
     Text[ turkish ] = "Elips parçasý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Segmento elíptico";
 };
 String STR_ObjNamePluralCCUTE
 {
@@ -1283,6 +1327,7 @@ String STR_ObjNamePluralCCUTE
     Text[ korean ] = "Å¸¿ø ÀýÆí";
     Text[ turkish ] = "Elips parçalarý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Segmentos elípticos";
 };
  ////////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ObjNameSingulPOLY
@@ -1312,6 +1357,7 @@ String STR_ObjNameSingulPOLY
     Text[ korean ] = "´Ù°¢Çü";
     Text[ turkish ] = "Çokgen";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Polígono";
 };
 String STR_ObjNameSingulPOLY_PntAnz
 {
@@ -1340,6 +1386,7 @@ String STR_ObjNameSingulPOLY_PntAnz
     Text[ korean ] = "%N Á¡ÀÌ ÀÖ´Â ´Ù°¢Çü";
     Text[ turkish ] = "%N noktalý çokgen";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Polígono con %N puntos";
 };
 String STR_ObjNamePluralPOLY
 {
@@ -1368,6 +1415,7 @@ String STR_ObjNamePluralPOLY
     Text[ korean ] = "´Ù°¢Çü";
     Text[ turkish ] = "Çokgenler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Polígonos";
 };
 String STR_ObjNameSingulPLIN
 {
@@ -1396,6 +1444,7 @@ String STR_ObjNameSingulPLIN
     Text[ korean ] = "´ÙÁß¼±";
     Text[ turkish ] = "Çoklu çizgi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Polilínea";
 };
 String STR_ObjNameSingulPLIN_PntAnz
 {
@@ -1424,6 +1473,7 @@ String STR_ObjNameSingulPLIN_PntAnz
     Text[ korean ] = "%N Á¡ÀÌ ÀÖ´Â ´ÙÁß¼±";
     Text[ turkish ] = "%N noktalý çoklu çizgiler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Polilínea con %N puntos";
 };
 String STR_ObjNamePluralPLIN
 {
@@ -1452,6 +1502,7 @@ String STR_ObjNamePluralPLIN
     Text[ korean ] = "´ÙÁß¼±";
     Text[ turkish ] = "Çoklu çizgiler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Polilíneas";
 };
 String STR_ObjNameSingulPATHLINE
 {
@@ -1480,6 +1531,7 @@ String STR_ObjNameSingulPATHLINE
     Text[ korean ] = "º£Áö¿¡ °î¼±";
     Text[ turkish ] = "Bézier eðrisi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Curva de Bézier";
 };
 String STR_ObjNamePluralPATHLINE
 {
@@ -1508,6 +1560,7 @@ String STR_ObjNamePluralPATHLINE
     Text[ korean ] = "º£Áö¿¡ °î¼±";
     Text[ turkish ] = "Bézier eðrileri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Curvas de Bézier";
 };
 String STR_ObjNameSingulPATHFILL
 {
@@ -1536,6 +1589,7 @@ String STR_ObjNameSingulPATHFILL
     Text[ korean ] = "º£Áö¿¡ °î¼±";
     Text[ turkish ] = "Bézier eðrisi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Curva de Bézier";
 };
 String STR_ObjNamePluralPATHFILL
 {
@@ -1564,6 +1618,7 @@ String STR_ObjNamePluralPATHFILL
     Text[ korean ] = "º£Áö¿¡ °î¼±";
     Text[ turkish ] = "Bézier eðrileri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Curvas de Bézier";
 };
 String STR_ObjNameSingulFREELINE
 {
@@ -1592,6 +1647,7 @@ String STR_ObjNameSingulFREELINE
     Text[ korean ] = "ÀÚÀ¯Çü ¼±";
     Text[ turkish ] = "Serbest çizgi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Línea a mano alzada";
 };
 String STR_ObjNamePluralFREELINE
 {
@@ -1620,6 +1676,7 @@ String STR_ObjNamePluralFREELINE
     Text[ korean ] = "ÀÚÀ¯Çü ¼±";
     Text[ turkish ] = "Serbest çizgiler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Líneas a mano alzada";
 };
 String STR_ObjNameSingulFREEFILL
 {
@@ -1648,6 +1705,7 @@ String STR_ObjNameSingulFREEFILL
     Text[ korean ] = "ÀÚÀ¯Çü ¼±";
     Text[ turkish ] = "Serbest çizgi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Línea a mano alzada";
 };
 String STR_ObjNamePluralFREEFILL
 {
@@ -1676,6 +1734,7 @@ String STR_ObjNamePluralFREEFILL
     Text[ korean ] = "ÀÚÀ¯Çü ¼±";
     Text[ turkish ] = "Serbest çizgiler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Líneas a mano alzada";
 };
 String STR_ObjNameSingulCOMBLINE
 {
@@ -1702,6 +1761,7 @@ String STR_ObjNameSingulCOMBLINE
     Text[ korean ] = "°î¼± °³Ã¼";
     Text[ turkish ] = "Eðri nesneler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objeto de curva";
 };
 String STR_ObjNamePluralCOMBLINE
 {
@@ -1728,6 +1788,7 @@ String STR_ObjNamePluralCOMBLINE
     Text[ korean ] = "°î¼± °³Ã¼";
     Text[ turkish ] = "Eðri nesneler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objetos de curva";
 };
 String STR_ObjNameSingulCOMBFILL
 {
@@ -1754,6 +1815,7 @@ String STR_ObjNameSingulCOMBFILL
     Text[ korean ] = "°î¼± °³Ã¼";
     Text[ turkish ] = "Eðri nesne";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objeto de curva";
 };
 String STR_ObjNamePluralCOMBFILL
 {
@@ -1780,6 +1842,7 @@ String STR_ObjNamePluralCOMBFILL
     Text[ korean ] = "°î¼± °³Ã¼";
     Text[ turkish ] = "Eðri nesneler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objetos de curva";
 };
  ////////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ObjNameSingulNATSPLN
@@ -1809,6 +1872,7 @@ String STR_ObjNameSingulNATSPLN
     Text[ korean ] = "ÀÚ¿¬ÀûÀÎ ½ºÇÃ¶óÀÎ";
     Text[ turkish ] = "Doðal Spline";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Spline natural";
 };
 String STR_ObjNamePluralNATSPLN
 {
@@ -1837,6 +1901,7 @@ String STR_ObjNamePluralNATSPLN
     Text[ greek ] = "ÖõóéêÝò Splines";
     Text[ korean ] = "ÀÚ¿¬ÀûÀÎ ½ºÇÃ¶óÀÎ";
     Text[ turkish ] = "Doðal Spline";
+    Text[ catalan ] = "splines naturales";
 };
 String STR_ObjNameSingulPERSPLN
 {
@@ -1865,6 +1930,7 @@ String STR_ObjNameSingulPERSPLN
     Text[ korean ] = "ÁÖ±âÀû ½ºÇÃ¶óÀÎ";
     Text[ turkish ] = "Düzenli Spline";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "spline periódico";
 };
 String STR_ObjNamePluralPERSPLN
 {
@@ -1893,6 +1959,7 @@ String STR_ObjNamePluralPERSPLN
     Text[ greek ] = "ÐåñéïäéêÝò Splines";
     Text[ korean ] = "ÁÖ±âÀû ½ºÇÃ¶óÀÎ";
     Text[ turkish ] = "Düzenli Spline";
+    Text[ catalan ] = "splines periódicos";
 };
  ////////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ObjNameSingulTEXT
@@ -1922,6 +1989,7 @@ String STR_ObjNameSingulTEXT
     Text[ korean ] = "ÅØ½ºÆ® Æ²";
     Text[ turkish ] = "Metin çerçevesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Marco de texto";
 };
 String STR_ObjNamePluralTEXT
 {
@@ -1950,6 +2018,7 @@ String STR_ObjNamePluralTEXT
     Text[ korean ] = "ÅØ½ºÆ® Æ²";
     Text[ turkish ] = "Metin çerçevesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Marco de texto";
 };
 String STR_ObjNameSingulTEXTLNK
 {
@@ -1976,6 +2045,7 @@ String STR_ObjNameSingulTEXTLNK
     Text[ korean ] = "¿¬°áµÈ ÅØ½ºÆ® Æ²";
     Text[ turkish ] = "Baðlantýlý metin çerçevesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Marco de texto vinculado";
 };
 String STR_ObjNamePluralTEXTLNK
 {
@@ -2002,6 +2072,7 @@ String STR_ObjNamePluralTEXTLNK
     Text[ korean ] = "¿¬°áµÈ ÅØ½ºÆ® Æ²";
     Text[ turkish ] = "Baðlantýlý metin çerçeveleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Marcos de texto vinculados";
 };
  //String STR_ObjNameSingulXTXT {
  //    Text="Textfortsetzungsrahmen";
@@ -2060,6 +2131,7 @@ String STR_ObjNameSingulFITTEXT
     Text[ korean ] = "ÅØ½ºÆ® °³Ã¼¿¡ Å©±â ¸ÂÃã";
     Text[ turkish ] = "Ayarlanmýþ metin nesnesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objeto de texto ajustado";
 };
 String STR_ObjNamePluralFITTEXT
 {
@@ -2088,6 +2160,7 @@ String STR_ObjNamePluralFITTEXT
     Text[ korean ] = "ÅØ½ºÆ® °³Ã¼¿¡ Å©±â ¸ÂÃã";
     Text[ turkish ] = "Ayarlanmýþ metin nesneleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objetos de texto ajustados";
 };
 String STR_ObjNameSingulFITALLTEXT
 {
@@ -2116,6 +2189,7 @@ String STR_ObjNameSingulFITALLTEXT
     Text[ korean ] = "ÅØ½ºÆ® °³Ã¼¿¡ Å©±â ¸ÂÃã";
     Text[ turkish ] = "Ayarlanmýþ metin nesnesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objeto de texto ajustado";
 };
 String STR_ObjNamePluralFITALLTEXT
 {
@@ -2144,6 +2218,7 @@ String STR_ObjNamePluralFITALLTEXT
     Text[ korean ] = "ÅØ½ºÆ® °³Ã¼¿¡ Å©±â ¸ÂÃã";
     Text[ turkish ] = "Ayarlanmýþ metin nesneleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objetos de texto ajustados";
 };
 String STR_ObjNameSingulTITLETEXT
 {
@@ -2172,6 +2247,7 @@ String STR_ObjNameSingulTITLETEXT
     Text[ korean ] = "Á¦¸ñ ÅØ½ºÆ®";
     Text[ turkish ] = "Baþlýk metni";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Texto del título";
 };
 String STR_ObjNamePluralTITLETEXT
 {
@@ -2200,6 +2276,7 @@ String STR_ObjNamePluralTITLETEXT
     Text[ korean ] = "Á¦¸ñ ÅØ½ºÆ®";
     Text[ turkish ] = "Baþlýk metinleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Textos del título";
 };
 String STR_ObjNameSingulOUTLINETEXT
 {
@@ -2228,6 +2305,7 @@ String STR_ObjNameSingulOUTLINETEXT
     Text[ korean ] = "´Ù´Ü°è ÅØ½ºÆ®";
     Text[ turkish ] = "Anahat metni";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Texto del esquema";
 };
 String STR_ObjNamePluralOUTLINETEXT
 {
@@ -2256,6 +2334,7 @@ String STR_ObjNamePluralOUTLINETEXT
     Text[ korean ] = "´Ù´Ü°è ÅØ½ºÆ®";
     Text[ turkish ] = "Anahat metinleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Textos del esquema";
 };
  ////////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ObjNameSingulGRAF
@@ -2285,6 +2364,7 @@ String STR_ObjNameSingulGRAF
     Text[ greek ] = "Ãñáöéêü";
     Text[ korean ] = "±×·¡ÇÈ";
     Text[ turkish ] = "Grafik";
+    Text[ catalan ] = "Imagen";
 };
 String STR_ObjNamePluralGRAF
 {
@@ -2313,6 +2393,7 @@ String STR_ObjNamePluralGRAF
     Text[ greek ] = "ÃñáöéêÜ";
     Text[ korean ] = "±×·¡ÇÈ";
     Text[ turkish ] = "Grafik";
+    Text[ catalan ] = "Imágenes";
 };
 String STR_ObjNameSingulGRAFLNK
 {
@@ -2339,6 +2420,7 @@ String STR_ObjNameSingulGRAFLNK
     Text[ korean ] = "¿¬°áµÈ ±×·¡ÇÈ";
     Text[ turkish ] = "Baðlantýlý grafik";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Imagen vinculada";
 };
 String STR_ObjNamePluralGRAFLNK
 {
@@ -2365,6 +2447,7 @@ String STR_ObjNamePluralGRAFLNK
     Text[ korean ] = "¿¬°áµÈ ±×·¡ÇÈ";
     Text[ turkish ] = "Baðlantýlý grafikler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Imágenes vinculadas";
 };
 String STR_ObjNameSingulGRAFNONE
 {
@@ -2393,6 +2476,7 @@ String STR_ObjNameSingulGRAFNONE
     Text[ korean ] = "ºñ¾î ÀÖ´Â ±×·¡ÇÈ °³Ã¼";
     Text[ turkish ] = "Boþ grafik nesnesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objeto gráfico vacío";
 };
 String STR_ObjNamePluralGRAFNONE
 {
@@ -2421,6 +2505,7 @@ String STR_ObjNamePluralGRAFNONE
     Text[ korean ] = "ºñ¾î ÀÖ´Â ±×·¡ÇÈ °³Ã¼";
     Text[ turkish ] = "Boþ grafik nesneleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objetos gráficos vacíos";
 };
 String STR_ObjNameSingulGRAFNONELNK
 {
@@ -2447,6 +2532,7 @@ String STR_ObjNameSingulGRAFNONELNK
     Text[ korean ] = "ºñ¾î ÀÖ´Â ¿¬°áµÈ ±×·¡ÇÈ °³Ã¼";
     Text[ turkish ] = "Boþ baðlantýlý grafik nesnesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objeto gráfico enlazado vacío";
 };
 String STR_ObjNamePluralGRAFNONELNK
 {
@@ -2473,6 +2559,7 @@ String STR_ObjNamePluralGRAFNONELNK
     Text[ korean ] = "ºñ¾î ÀÖ´Â ¿¬°á ±×·¡ÇÈ °³Ã¼";
     Text[ turkish ] = "Boþ baðlantýlý grafik nesneleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objetos gráficos vinculados vacíos";
 };
 String STR_ObjNameSingulGRAFMTF
 {
@@ -2501,6 +2588,7 @@ String STR_ObjNameSingulGRAFMTF
     Text[ korean ] = "¸ÞÅ¸ÆÄÀÏ";
     Text[ turkish ] = "Metafile";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Metaarchivo";
 };
 String STR_ObjNamePluralGRAFMTF
 {
@@ -2529,6 +2617,7 @@ String STR_ObjNamePluralGRAFMTF
     Text[ korean ] = "¸ÞÅ¸ ÆÄÀÏ";
     Text[ turkish ] = "Meta dosyasý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Metaarchivos";
 };
 String STR_ObjNameSingulGRAFMTFLNK
 {
@@ -2555,6 +2644,7 @@ String STR_ObjNameSingulGRAFMTFLNK
     Text[ korean ] = "¿¬°áµÈ ¸ÞÅ¸ÆÄÀÏ";
     Text[ turkish ] = "Baðlantýlý Metafile";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Metaarchivo vinculado";
 };
 String STR_ObjNamePluralGRAFMTFLNK
 {
@@ -2581,6 +2671,7 @@ String STR_ObjNamePluralGRAFMTFLNK
     Text[ korean ] = "¿¬°áµÈ ¸ÞÅ¸ ÆÄÀÏ";
     Text[ turkish ] = "Baðlantýlý meta dosyalarý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Metaarchivos vinculados";
 };
 String STR_ObjNameSingulGRAFBMP
 {
@@ -2609,6 +2700,7 @@ String STR_ObjNameSingulGRAFBMP
     Text[ korean ] = "ºñÆ®¸Ê";
     Text[ turkish ] = "Bit eþlem";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Bitmap";
 };
 String STR_ObjNamePluralGRAFBMP
 {
@@ -2637,6 +2729,7 @@ String STR_ObjNamePluralGRAFBMP
     Text[ korean ] = "ºñÆ®¸Ê";
     Text[ turkish ] = "Bit eþlem";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Bitmaps";
 };
 String STR_ObjNameSingulGRAFBMPLNK
 {
@@ -2663,6 +2756,7 @@ String STR_ObjNameSingulGRAFBMPLNK
     Text[ korean ] = "¿¬°áµÈ ºñÆ®¸Ê";
     Text[ turkish ] = "Baðlantýlý bit eþlem";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Bitmap vinculado";
 };
 String STR_ObjNamePluralGRAFBMPLNK
 {
@@ -2689,6 +2783,7 @@ String STR_ObjNamePluralGRAFBMPLNK
     Text[ korean ] = "¿¬°áµÈ ºñÆ®¸Ê";
     Text[ turkish ] = "Baðlantýlý bit eþlemler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Bitmaps vinculados";
 };
 String STR_ObjNameSingulGRAFMAC
 {
@@ -2717,6 +2812,7 @@ String STR_ObjNameSingulGRAFMAC
     Text[ korean ] = "Mac ±×·¡ÇÈ";
     Text[ turkish ] = "Mac grafiði";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Imagen Mac";
 };
 String STR_ObjNamePluralGRAFMAC
 {
@@ -2745,6 +2841,7 @@ String STR_ObjNamePluralGRAFMAC
     Text[ korean ] = "Mac ±×·¡ÇÈ";
     Text[ turkish ] = "Mac grafikleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Imágenes Mac";
 };
 String STR_ObjNameSingulGRAFMACLNK
 {
@@ -2771,6 +2868,7 @@ String STR_ObjNameSingulGRAFMACLNK
     Text[ korean ] = "¿¬°áµÈ Mac ±×·¡ÇÈ";
     Text[ turkish ] = "Baðlantýlý Mac grafikleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Imágenes Mac vinculadas";
 };
 String STR_ObjNamePluralGRAFMACLNK
 {
@@ -2797,6 +2895,7 @@ String STR_ObjNamePluralGRAFMACLNK
     Text[ korean ] = "¿¬°áµÈ Mac ±×·¡ÇÈ";
     Text[ turkish ] = "Baðlantýlý Mac grafikleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Imagen Mac vinculada";
 };
  ////////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ObjNameSingulOLE2
@@ -2826,6 +2925,7 @@ String STR_ObjNameSingulOLE2
     Text[ korean ] = "¸ÅÀÔµÈ °³Ã¼(OLE)";
     Text[ turkish ] = "Gömülü nesne (OLE)";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objeto incrustado (OLE)";
 };
 String STR_ObjNamePluralOLE2
 {
@@ -2854,6 +2954,7 @@ String STR_ObjNamePluralOLE2
     Text[ korean ] = "Æ÷ÇÔµÈ °³Ã¼(OLE)";
     Text[ turkish ] = "gömülü nesne (OLE)";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objetos incrustados (OLE)";
 };
 String STR_ObjNameSingulUno
 {
@@ -2880,6 +2981,7 @@ String STR_ObjNameSingulUno
     Text[ korean ] = "ÄÁÆ®·Ñ ÇÊµå";
     Text[ turkish ] = "Komut alaný";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Campo de control";
 };
 String STR_ObjNamePluralUno
 {
@@ -2906,6 +3008,7 @@ String STR_ObjNamePluralUno
     Text[ korean ] = "ÄÁÆ®·Ñ ÇÊµå";
     Text[ turkish ] = "Komut alaný";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Campos de control";
 };
 String STR_ObjNameSingulOLE2LNK
 {
@@ -2932,6 +3035,7 @@ String STR_ObjNameSingulOLE2LNK
     Text[ korean ] = "¿¬°áµÈ Æ÷ÇÔ °³Ã¼(OLE)";
     Text[ turkish ] = "Baðlantýlý gömülü nesne (OLE)";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objeto (OLE) incrustado vinculado";
 };
 String STR_ObjNamePluralOLE2LNK
 {
@@ -2958,6 +3062,7 @@ String STR_ObjNamePluralOLE2LNK
     Text[ korean ] = "¿¬°áµÈ Æ÷ÇÔ °³Ã¼ (OLE)";
     Text[ turkish ] = "Baðlantýlý, gömülü nesne (OLE)";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objetos (OLE) incrustados vinculados";
 };
 String STR_ObjOLE2NamePrefix
 {
@@ -2984,6 +3089,7 @@ String STR_ObjOLE2NamePrefix
     Text[ korean ] = "°³Ã¼";
     Text[ turkish ] = "Nesne";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objeto";
 };
  ////////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ObjNameSingulFrame
@@ -3011,6 +3117,7 @@ String STR_ObjNameSingulFrame
     Text[ korean ] = "ÇÁ·¹ÀÓ";
     Text[ turkish ] = "Frame";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Frame";
 };
 String STR_ObjNamePluralFrame
 {
@@ -3037,6 +3144,7 @@ String STR_ObjNamePluralFrame
     Text[ korean ] = "ÇÁ·¹ÀÓ";
     Text[ turkish ] = "Frame";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Frames";
 };
 String STR_ObjFrameNamePrefix
 {
@@ -3063,6 +3171,7 @@ String STR_ObjFrameNamePrefix
     Text[ korean ] = "ÇÁ·¹ÀÓ";
     Text[ turkish ] = "Frame";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Frame";
 };
  ////////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ObjNameSingulEDGE
@@ -3092,6 +3201,7 @@ String STR_ObjNameSingulEDGE
     Text[ korean ] = "°³Ã¼ ¿¬°á¼±";
     Text[ turkish ] = "Nesne baðlayýcýsý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Conectores de objetos";
 };
 String STR_ObjNamePluralEDGE
 {
@@ -3120,6 +3230,7 @@ String STR_ObjNamePluralEDGE
     Text[ korean ] = "°³Ã¼ ¿¬°á¼±";
     Text[ turkish ] = "Nesne baðlayýcýsý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Conectores de objetos";
 };
 String STR_ObjNameSingulCAPTION
 {
@@ -3148,6 +3259,7 @@ String STR_ObjNameSingulCAPTION
     Text[ korean ] = "¹ü·Ê";
     Text[ turkish ] = "Belirtme çizgisi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Leyenda";
 };
 String STR_ObjNamePluralCAPTION
 {
@@ -3176,6 +3288,7 @@ String STR_ObjNamePluralCAPTION
     Text[ korean ] = "¹ü·Ê";
     Text[ turkish ] = "Belirtme çizgileri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Leyendas";
 };
  ////////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ObjNameSingulPAGE
@@ -3205,6 +3318,7 @@ String STR_ObjNameSingulPAGE
     Text[ korean ] = "ÆäÀÌÁö ¸ð¾ç °³Ã¼";
     Text[ turkish ] = "Önizleme nesnesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objeto de presentación de página";
 };
 String STR_ObjNamePluralPAGE
 {
@@ -3233,6 +3347,7 @@ String STR_ObjNamePluralPAGE
     Text[ korean ] = "ÆäÀÌÁö ¸ð¾ç °³Ã¼";
     Text[ turkish ] = "Önizleme nesneleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objetos para presentaciones de páginas";
 };
 String STR_ObjNameSingulMEASURE
 {
@@ -3261,6 +3376,7 @@ String STR_ObjNameSingulMEASURE
     Text[ korean ] = "Ä¡¼ö °³Ã¼";
     Text[ turkish ] = "Ölçüm nesnesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objeto de dimensiones";
 };
 String STR_ObjNamePluralMEASURE
 {
@@ -3289,6 +3405,7 @@ String STR_ObjNamePluralMEASURE
     Text[ korean ] = "Ä¡¼ö °³Ã¼";
     Text[ turkish ] = "Ölçüm nesneleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objetos de dimensiones";
 };
 String STR_ObjNamePlural
 {
@@ -3317,6 +3434,7 @@ String STR_ObjNamePlural
     Text[ korean ] = "±×¸®±â °³Ã¼";
     Text[ turkish ] = "Çizim nesneleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objetos de dibujo";
 };
 String STR_ObjNameNoObj
 {
@@ -3345,6 +3463,7 @@ String STR_ObjNameNoObj
     Text[ korean ] = "±×¸®±â °³Ã¼ ¾øÀ½";
     Text[ turkish ] = "Çizim nesnesi yok";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ningún objeto de dibujo";
 };
 String STR_ObjNameAnd
 {
@@ -3373,6 +3492,7 @@ String STR_ObjNameAnd
     Text[ korean ] = "±×¸®°í";
     Text[ turkish ] = "ve";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "y";
 };
 String STR_ObjNameSingulPlural
 {
@@ -3401,6 +3521,7 @@ String STR_ObjNameSingulPlural
     Text[ korean ] = "±×¸®±â °³Ã¼";
     Text[ turkish ] = "Çizim nesnesi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "objeto(s) de dibujo";
 };
 
  ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3431,6 +3552,7 @@ String STR_ObjNameSingulCube3d
     Text[ arabic ] = "ãßÚÈ ËáÇËí ÇáÃÈÚÇÏ";
     Text[ turkish ] = "3B küp";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Cubo 3D";
 };
 
 String STR_ObjNamePluralCube3d
@@ -3456,6 +3578,7 @@ String STR_ObjNamePluralCube3d
     Text[ arabic ] = "ãßÚÈÇÊ ËáÇËíÉ ÇáÃÈÚÇÏ";
     Text[ turkish ] = "3B küpler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Cubos 3D";
 };
 
 String STR_ObjNameSingulExtrude3d
@@ -3480,6 +3603,7 @@ String STR_ObjNameSingulExtrude3d
     Text[ chinese_traditional ] = "¼ÒÀ£¦¡ª«¥ó";
     Text[ arabic ] = "ßÇÆä ãäÈËÞ";
     Text[ turkish ] = "Kalýp nesne";
+    Text[ catalan ] = "Objeto de extrusión";
 };
 
 String STR_ObjNamePluralExtrude3d
@@ -3504,6 +3628,7 @@ String STR_ObjNamePluralExtrude3d
     Text[ chinese_traditional ] = "¼ÒÀ£¦¡ª«¥ó";
     Text[ arabic ] = "ßÇÆäÇÊ ãäÈËÞÉ";
     Text[ turkish ] = "Kalýp nesneler";
+    Text[ catalan ] = "Objetos de extrusión";
 };
 
 String STR_ObjNameSingulLabel3d
@@ -3529,6 +3654,7 @@ String STR_ObjNameSingulLabel3d
     Text[ arabic ] = "äÕ ËáÇËí ÇáÃÈÚÇÏ";
     Text[ turkish ] = "3B metin";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Texto 3D";
 };
 
 String STR_ObjNamePluralLabel3d
@@ -3554,6 +3680,7 @@ String STR_ObjNamePluralLabel3d
     Text[ arabic ] = "äÕæÕ ËáÇËíÉ ÇáÃÈÚÇÏ";
     Text[ turkish ] = "3B metinler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Textos 3D";
 };
 
 String STR_ObjNameSingulLathe3d
@@ -3578,6 +3705,7 @@ String STR_ObjNameSingulLathe3d
     Text[ chinese_traditional ] = "±ÛÂàª«¥ó";
     Text[ arabic ] = "ßÇÆä ÇÓÊÏÇÑÉ";
     Text[ turkish ] = "Döner nesne";
+    Text[ catalan ] = "Objeto de rotación";
 };
 
 String STR_ObjNamePluralLathe3d
@@ -3602,6 +3730,7 @@ String STR_ObjNamePluralLathe3d
     Text[ chinese_traditional ] = "±ÛÂàª«¥ó";
     Text[ arabic ] = "ßÇÆäÇÊ ÇÓÊÏÇÑÉ";
     Text[ turkish ] = "Döner nesneler";
+    Text[ catalan ] = "Objetos de rotación";
 };
 
 String STR_ObjNameSingulObj3d
@@ -3627,6 +3756,7 @@ String STR_ObjNameSingulObj3d
     Text[ arabic ] = "ßÇÆä ËáÇËí ÇáÃÈÚÇÏ";
     Text[ turkish ] = "3B nesne";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objeto 3D";
 };
 
 String STR_ObjNamePluralObj3d
@@ -3652,6 +3782,7 @@ String STR_ObjNamePluralObj3d
     Text[ arabic ] = "ßÇÆäÇÊ ËáÇËíÉ ÇáÃÈÚÇÏ";
     Text[ turkish ] = "3B nesneler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objetos 3D";
 };
 
 String STR_ObjNameSingulPoly3d
@@ -3677,6 +3808,7 @@ String STR_ObjNameSingulPoly3d
     Text[ arabic ] = "ãÖáÚ ËáÇËí ÇáÃÈÚÇÏ";
     Text[ turkish ] = "3B çokgen";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Polígono 3D";
 };
 
 String STR_ObjNamePluralPoly3d
@@ -3702,6 +3834,7 @@ String STR_ObjNamePluralPoly3d
     Text[ arabic ] = "ãÖáÚÇÊ ËáÇËíÉ ÇáÃÈÚÇÏ";
     Text[ turkish ] = "3B çokgenler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Polígonos 3D";
 };
 
 String STR_ObjNameSingulScene3d
@@ -3727,6 +3860,7 @@ String STR_ObjNameSingulScene3d
     Text[ arabic ] = "ãÔåÏ ËáÇËí ÇáÃÈÚÇÏ";
     Text[ turkish ] = "3B görüntü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Escena 3D";
 };
 
 String STR_ObjNamePluralScene3d
@@ -3752,6 +3886,7 @@ String STR_ObjNamePluralScene3d
     Text[ arabic ] = "ãÔÇåÏ ËáÇËíÉ ÇáÃÈÚÇÏ";
     Text[ turkish ] = "3B görüntüler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Escenas 3D";
 };
 
 String STR_ObjNameSingulSphere3d
@@ -3776,6 +3911,7 @@ String STR_ObjNameSingulSphere3d
     Text[ chinese_traditional ] = "²yÅé";
     Text[ arabic ] = "ßÑÉ";
     Text[ turkish ] = "Küre";
+    Text[ catalan ] = "Esfera";
 };
 
 String STR_ObjNamePluralSphere3d
@@ -3800,6 +3936,7 @@ String STR_ObjNamePluralSphere3d
     Text[ chinese_traditional ] = "²yÅé";
     Text[ arabic ] = "ßÑÇÊ";
     Text[ turkish ] = "Küreler";
+    Text[ catalan ] = "Esferas";
 };
 
  ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3833,6 +3970,7 @@ String STR_EditWithCopy
     Text[ korean ] = "º¹»ç¿Í ÇÔ²²";
     Text[ turkish ] = "ile birlikte kopyala";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "con copia";
 };
 String STR_EditPosSize
 {
@@ -3863,6 +4001,7 @@ String STR_EditPosSize
     Text[ korean ] = "%O¿¡ À§Ä¡¿Í Å©±â ¼³Á¤";
     Text[ turkish ] = "%O için konum ve boyut belirle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Definir posición y tamaño para %O";
 };
 String STR_EditDelete
 {
@@ -3893,6 +4032,7 @@ String STR_EditDelete
     Text[ korean ] = "%O »èÁ¦";
     Text[ turkish ] = "Sil: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Eliminar %O";
 };
 String STR_EditMovToTop
 {
@@ -3921,6 +4061,7 @@ String STR_EditMovToTop
     Text[ korean ] = "%O °è¼ÓÇØ¼­ ¾ÕÀ¸·Î ÀÌµ¿";
     Text[ turkish ] = "Bir öne getir: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Desplazar %O hacia adelante";
 };
 String STR_EditMovToBtm
 {
@@ -3949,6 +4090,7 @@ String STR_EditMovToBtm
     Text[ korean ] = "%O °è¼ÓÇØ¼­ µÚ·Î ÀÌµ¿";
     Text[ turkish ] = "Bir alta gönder: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Desplazar %O hacia atrás";
 };
 String STR_EditPutToTop
 {
@@ -3977,6 +4119,7 @@ String STR_EditPutToTop
     Text[ korean ] = "%O ¾ÕÀ¸·Î ÀÌµ¿";
     Text[ turkish ] = "En öne getir: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Desplazar %O al frente";
 };
 String STR_EditPutToBtm
 {
@@ -4005,6 +4148,7 @@ String STR_EditPutToBtm
     Text[ korean ] = "%O µÚ·Î ÀÌµ¿";
     Text[ turkish ] = "En alta gönder: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Desplazar %O hacia atrás";
 };
 String STR_EditRevOrder
 {
@@ -4031,6 +4175,7 @@ String STR_EditRevOrder
     Text[ korean ] = "%OÀÇ ¼ø¼­¸¦ ¹Ý´ë·Î";
     Text[ turkish ] = "Sýrasýný deðiþtir: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Invertir el orden de %O";
 };
 String STR_EditMove
 {
@@ -4059,6 +4204,7 @@ String STR_EditMove
     Text[ korean ] = "%O ÀÌµ¿";
     Text[ turkish ] = "Taþý: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Desplazar %O";
 };
 String STR_EditResize
 {
@@ -4089,6 +4235,7 @@ String STR_EditResize
     Text[ korean ] = "%OÀÇ Å©±â º¯°æ";
     Text[ turkish ] = "Boyutunu deðiþtir: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Modificar tamaño de %O";
 };
 String STR_EditRotate
 {
@@ -4117,6 +4264,7 @@ String STR_EditRotate
     Text[ korean ] = "%O È¸Àü";
     Text[ turkish ] = "Döndür: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Rodar %O";
 };
 String STR_EditMirrorHori
 {
@@ -4145,6 +4293,7 @@ String STR_EditMirrorHori
     Text[ korean ] = "%O ¼öÆòÀ¸·Î ´ëÄª";
     Text[ turkish ] = "Yatay yansýt: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Reflejar %O horizontalmente";
 };
 String STR_EditMirrorVert
 {
@@ -4173,6 +4322,7 @@ String STR_EditMirrorVert
     Text[ korean ] = "%O ¼öÁ÷À¸·Î ´ëÄª";
     Text[ turkish ] = "Dikey yansýt: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Reflejar %O verticalmente";
 };
 String STR_EditMirrorDiag
 {
@@ -4201,6 +4351,7 @@ String STR_EditMirrorDiag
     Text[ korean ] = "%O ´ë°¢¼±À¸·Î ´ëÄª";
     Text[ turkish ] = "Diyagonal yansýt: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Reflejar %O diagonalmente";
 };
 String STR_EditMirrorFree
 {
@@ -4229,6 +4380,7 @@ String STR_EditMirrorFree
     Text[ korean ] = "%O ÀÓÀÇ´ë·Î ´ëÄª";
     Text[ turkish ] = "Serbest yansýt: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Reflejar %O libremente";
 };
 String STR_EditShear
 {
@@ -4259,6 +4411,7 @@ String STR_EditShear
     Text[ korean ] = "%O ÀÏ±×·¯¶ß¸²(±â¿ï±â)";
     Text[ turkish ] = "Çarpýt (eð): %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Distorsionar (inclinar) %O";
 };
 String STR_EditCrook
 {
@@ -4285,6 +4438,7 @@ String STR_EditCrook
     Text[ korean ] = "%OÀ» ¿ø ¾È¿¡¼­ Á¤·Ä";
     Text[ turkish ] = "Daire biçiminde düzenle: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Organizar %O en círculo";
 };
 String STR_EditCrookContortion
 {
@@ -4313,6 +4467,7 @@ String STR_EditCrookContortion
     Text[ korean ] = "%OÀ» ¿øÇüÅÂ·Î ±¸ºÎ¸²";
     Text[ turkish ] = "Daire biçiminde eð: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Doblar %O en círculo";
 };
 String STR_EditDistort
 {
@@ -4339,6 +4494,7 @@ String STR_EditDistort
     Text[ korean ] = "%O ÀÓÀÇ´ë·Î ÀÏ±×·¯¶ß¸²";
     Text[ turkish ] = "Serbest çarpýt: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Distorsión libre de %O";
 };
 String STR_EditRipUp
 {
@@ -4367,6 +4523,7 @@ String STR_EditRipUp
     Text[ korean ] = "%O ºÐ¸®";
     Text[ turkish ] = "Böl: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Separar %O";
 };
 String STR_EditSetPointsSmooth
 {
@@ -4395,6 +4552,7 @@ String STR_EditSetPointsSmooth
     Text[ korean ] = "%O º£Áö¿¡ ¼Ó¼º º¯°æ";
     Text[ turkish ] = "Bézier özelliklerini deðiþtir: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Modificar propiedades Bézier de %O";
 };
 String STR_EditSetSegmentsKind
 {
@@ -4423,6 +4581,7 @@ String STR_EditSetSegmentsKind
     Text[ korean ] = "%O º£Áö¿¡ ¼Ó¼º º¯°æ";
     Text[ turkish ] = "Bézier özelliklerini deðiþtir: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Modificar propiedades Bézier de %O";
 };
 String STR_EditShut
 {
@@ -4453,6 +4612,7 @@ String STR_EditShut
     Text[ korean ] = "%O ´Ý±â";
     Text[ turkish ] = "Kapat: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Cerrar %O";
 };
 String STR_EditSetGlueEscDir
 {
@@ -4481,6 +4641,7 @@ String STR_EditSetGlueEscDir
     Text[ greek ] = "Ïñéóìüò êáôåýèõíóçò åîüäïõ ãéá %O";
     Text[ korean ] = "%OÀÇ ³¡³»±â ¹æÇâ ¼³Á¤";
     Text[ turkish ] = "%O için çýkýþ yönü belirle";
+    Text[ catalan ] = "Definir dirección de salida de %O";
 };
 String STR_EditSetGluePercent
 {
@@ -4509,6 +4670,7 @@ String STR_EditSetGluePercent
     Text[ korean ] = "%OÀÇ »ó´ë ¼Ó¼º ¼³Á¤";
     Text[ turkish ] = "%O için göreceli öznitelik belirle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Definir atributo relativo para %O";
 };
 String STR_EditSetGlueAlign
 {
@@ -4537,6 +4699,7 @@ String STR_EditSetGlueAlign
     Text[ korean ] = "%O¸¦ À§ÇÑ ÂüÁ¶ Æ÷ÀÎÆ® ¼³Á¤";
     Text[ turkish ] = "%O için referans noktasý belirle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Definir puntos de referencia para %O";
 };
 String STR_EditGroup
 {
@@ -4565,6 +4728,7 @@ String STR_EditGroup
     Text[ korean ] = "%O ±×·ìÈ­";
     Text[ turkish ] = "Grupla: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Agrupar %O";
 };
 String STR_EditUngroup
 {
@@ -4595,6 +4759,7 @@ String STR_EditUngroup
     Text[ korean ] = "%O ±×·ì ÇØÁ¦";
     Text[ turkish ] = "Grubu çöz: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Deshacer %O";
 };
 String STR_EditSetAttributes
 {
@@ -4623,6 +4788,7 @@ String STR_EditSetAttributes
     Text[ korean ] = "¼Ó¼º %O¿¡ Àû¿ë";
     Text[ turkish ] = "Öznitelikleri uygula: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Aplicar atributos a %O";
 };
 String STR_EditSetStylesheet
 {
@@ -4651,6 +4817,7 @@ String STR_EditSetStylesheet
     Text[ korean ] = "%O¿¡ ¼­½Ä Àû¿ë";
     Text[ turkish ] = "Biçimleri %O için kullan";
     Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM - -";
+    Text[ catalan ] = "Aplicar estilo a %O";
 };
 String STR_EditDelStylesheet
 {
@@ -4679,6 +4846,7 @@ String STR_EditDelStylesheet
     Text[ korean ] = "%O¿¡¼­  ¼­½Ä Á¦°Å";
     Text[ turkish ] = "Biçimini kaldýr: %O";
     Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM - -";
+    Text[ catalan ] = "Eliminar estilo de %O";
 };
 String STR_EditConvToPoly
 {
@@ -4707,6 +4875,7 @@ String STR_EditConvToPoly
     Text[ korean ] = "%OÀ» ´Ù°¢ÇüÀ¸·Î º¯È¯";
     Text[ turkish ] = "Çokgene dönüþtür: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Convertir %O en polígono";
 };
 String STR_EditConvToPolys
 {
@@ -4735,6 +4904,7 @@ String STR_EditConvToPolys
     Text[ korean ] = "%OÀ» ´Ù°¢ÇüÀ¸·Î º¯È¯";
     Text[ turkish ] = "Çokgenlere dönüþtür: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Convertir %O en polígonos";
 };
 String STR_EditConvToCurve
 {
@@ -4763,6 +4933,7 @@ String STR_EditConvToCurve
     Text[ korean ] = "%OÀ» °î¼±À¸·Î º¯È¯";
     Text[ turkish ] = "Eðriye dönüþtür: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Convertir %O en curva";
 };
 String STR_EditConvToCurves
 {
@@ -4791,6 +4962,7 @@ String STR_EditConvToCurves
     Text[ korean ] = "%OÀ» °î¼±À¸·Î º¯È¯";
     Text[ turkish ] = "Eðrilere dönüþtür: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Convertir %O en curvas";
 };
 String STR_EditConvToContour
 {
@@ -4814,6 +4986,7 @@ String STR_EditConvToContour
     Text[ chinese_traditional ] = "%O Âà´«¦¨½ü¹ø";
     Text[ arabic ] = "ÊÍæíá %O Åáì ÎØ ßÝÇÝí";
     Text[ turkish ] = "Kontura dönüþtür: %O";
+    Text[ catalan ] = "Convertir %O en contorno";
 };
 String STR_EditConvToContours
 {
@@ -4837,6 +5010,7 @@ String STR_EditConvToContours
     Text[ chinese_traditional ] = "%O Âà´«¦¨½ü¹ø";
     Text[ arabic ] = "ÊÍæíá %O Åáì ÎØæØ ßÝÇÝíÉ";
     Text[ turkish ] = "Konturlara dönüþtür: %O";
+    Text[ catalan ] = "Convertir %O en contornos";
 };
 String STR_EditAlign
 {
@@ -4865,6 +5039,7 @@ String STR_EditAlign
     Text[ korean ] = "%O ¸ÂÃã";
     Text[ turkish ] = "Hizala: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Alinear %O";
 };
 String STR_EditAlignVTop
 {
@@ -4895,6 +5070,7 @@ String STR_EditAlignVTop
     Text[ korean ] = "%O À§ ¸ÂÃã";
     Text[ turkish ] = "Yukarý doðru hizala: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Alinear %O arriba";
 };
 String STR_EditAlignVBottom
 {
@@ -4925,6 +5101,7 @@ String STR_EditAlignVBottom
     Text[ korean ] = "%O ¾Æ·¡ ¸ÂÃã";
     Text[ turkish ] = "Aþaðý doðru hizala: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Alinear %O al pie";
 };
 String STR_EditAlignVCenter
 {
@@ -4953,6 +5130,7 @@ String STR_EditAlignVCenter
     Text[ korean ] = "%O ¼öÆòÀ¸·Î  °¡¿îµ¥ ¸ÂÃã";
     Text[ turkish ] = "Yatay ortala: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Centrar %O horizontalmente";
 };
 String STR_EditAlignHLeft
 {
@@ -4983,6 +5161,7 @@ String STR_EditAlignHLeft
     Text[ korean ] = "%O ¿ÞÂÊÀ¸·Î ¸ÂÃã";
     Text[ turkish ] = "Sola hizala: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Alinear %O a la izquierda";
 };
 String STR_EditAlignHRight
 {
@@ -5013,6 +5192,7 @@ String STR_EditAlignHRight
     Text[ korean ] = "%O ¿À¸¥ÂÊÀ¸·Î ¸ÂÃã";
     Text[ turkish ] = "Saða hizala: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Alinear %O a la derecha";
 };
 String STR_EditAlignHCenter
 {
@@ -5041,6 +5221,7 @@ String STR_EditAlignHCenter
     Text[ korean ] = "%O ¼öÁ÷À¸·Î °¡¿îµ¥ ¸ÂÃã";
     Text[ turkish ] = "Dikey ortala: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Centrar %O verticalmente";
 };
 String STR_EditAlignCenter
 {
@@ -5069,6 +5250,7 @@ String STR_EditAlignCenter
     Text[ korean ] = "%O °¡¿îµ¥ ¸ÂÃã";
     Text[ turkish ] = "Ortala: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Centrar %O";
 };
 String STR_EditTransform
 {
@@ -5097,6 +5279,7 @@ String STR_EditTransform
     Text[ korean ] = "%O º¯Çü";
     Text[ turkish ] = "Dönüþtür: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Transformar %O";
 };
 String STR_EditCombine_PolyPoly
 {
@@ -5123,6 +5306,7 @@ String STR_EditCombine_PolyPoly
     Text[ korean ] = "%O Á¶ÇÕ";
     Text[ turkish ] = "Birleþtir: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Combinar %O";
 };
 String STR_EditMergeMergePoly
 {
@@ -5146,6 +5330,7 @@ String STR_EditMergeMergePoly
     Text[ chinese_traditional ] = "¦X¨Ö %O";
     Text[ arabic ] = "ÏãÌ %O";
     Text[ turkish ] = "Birleþtir: %O";
+    Text[ catalan ] = "Unir %O";
 };
 String STR_EditMergeSubstractPoly
 {
@@ -5169,6 +5354,7 @@ String STR_EditMergeSubstractPoly
     Text[ chinese_traditional ] = "´î¥h %O";
     Text[ arabic ] = "ØÑÍ %O";
     Text[ turkish ] = "%O çýkart";
+    Text[ catalan ] = "Substraer %O";
 };
 String STR_EditMergeIntersectPoly
 {
@@ -5192,6 +5378,7 @@ String STR_EditMergeIntersectPoly
     Text[ chinese_traditional ] = "°£¥h %O";
     Text[ arabic ] = "ÔØÑ %O";
     Text[ turkish ] = "%O kes";
+    Text[ catalan ] = "Cortar %O";
 };
 String STR_DistributeMarkedObjects
 {
@@ -5216,6 +5403,7 @@ String STR_DistributeMarkedObjects
     Text[ arabic ] = "ÊæÒíÚ ÇáßÇÆäÇÊ ÇáãÍÏÏÉ";
     Text[ turkish ] = "Seçilen nesneleri daðýt";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Distribuir objetos de la selección";
 };
 String STR_EditCombine_OnePoly
 {
@@ -5242,6 +5430,7 @@ String STR_EditCombine_OnePoly
     Text[ korean ] = "%O °áÇÕ";
     Text[ turkish ] = "Baðlantý oluþtur: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Enlazar %O";
 };
 String STR_EditDismantle_Polys
 {
@@ -5268,6 +5457,7 @@ String STR_EditDismantle_Polys
     Text[ korean ] = "%OÀÇ Á¶ÇÕ ÇØÁ¦";
     Text[ turkish ] = "Kombinasyonu kaldýr: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Deshacer combinación de %O";
 };
 String STR_EditDismantle_Lines
 {
@@ -5294,6 +5484,7 @@ String STR_EditDismantle_Lines
     Text[ korean ] = "%O ºÐÇÒ";
     Text[ turkish ] = "Ayýr: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "%O dividir";
 };
 String STR_EditImportMtf
 {
@@ -5320,6 +5511,7 @@ String STR_EditImportMtf
     Text[ korean ] = "%O ºÐÇÒ";
     Text[ turkish ] = "Ayýr: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Dividir %O";
 };
 String STR_EditImportSGV
 {
@@ -5362,6 +5554,7 @@ String STR_ExchangePaste
     Text[ korean ] = "°³Ã¼ »ðÀÔ";
     Text[ turkish ] = "Nesne ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Pegar objeto(s)";
 };
 String STR_ExchangeClpCut
 {
@@ -5390,6 +5583,7 @@ String STR_ExchangeClpCut
     Text[ korean ] = "%O Àß¶ó³»±â";
     Text[ turkish ] = "Kes: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Recortar %O";
 };
 String STR_ExchangeClpPaste
 {
@@ -5420,6 +5614,7 @@ String STR_ExchangeClpPaste
     Text[ korean ] = "Å¬¸³º¸µå ºÙ¿©³Ö±â";
     Text[ turkish ] = "Pano içeriðini yapýþtýr";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Pegar contenido del portapapeles";
 };
 String STR_ExchangeDD
 {
@@ -5448,6 +5643,7 @@ String STR_ExchangeDD
     Text[ korean ] = "%O µå·¡±× ¾Ø µå·Ó";
     Text[ turkish ] = "Sürükle ve býrak: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Arrastrar y colocar %O";
 };
 String STR_ExchangeDDPaste
 {
@@ -5478,6 +5674,7 @@ String STR_ExchangeDDPaste
     Text[ korean ] = "µå·¡±× ¾Ø µå·Ó »ðÀÔ";
     Text[ turkish ] = "Sürükle ve býrak iþleviyle ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Insertar arrastrar y colocar";
 };
 String STR_DragInsertPoint
 {
@@ -5508,6 +5705,7 @@ String STR_DragInsertPoint
     Text[ korean ] = "Á¡À» %O·Î »ðÀÔ";
     Text[ turkish ] = "Nokta ekle: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Insertar punto en %O";
 };
 String STR_DragInsertGluePoint
 {
@@ -5536,6 +5734,7 @@ String STR_DragInsertGluePoint
     Text[ korean ] = "Á¢ÂøÁ¡À» %O·Î »ðÀÔ";
     Text[ turkish ] = "Yapýþtýrma noktasý ekle: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Añadir punto de adhesión en %O";
 };
 String STR_DragMethMovHdl
 {
@@ -5564,6 +5763,7 @@ String STR_DragMethMovHdl
     Text[ korean ] = "ÂüÁ¶Á¡ ÀÌµ¿";
     Text[ turkish ] = "Referans noktasýný taþý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Desplazar punto de referencia";
 };
 String STR_DragMethObjOwn
 {
@@ -5594,6 +5794,7 @@ String STR_DragMethObjOwn
     Text[ korean ] = "%O ±âÇÏÇÐÀû Á¶Á¤";
     Text[ turkish ] = "Geometrik deðiþiklik yap: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Modificar geométricamente %O";
 };
 String STR_DragMethMove
 {
@@ -5622,6 +5823,7 @@ String STR_DragMethMove
     Text[ korean ] = "%O ÀÌµ¿";
     Text[ turkish ] = "Taþý: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Desplazar %O";
 };
 String STR_DragMethResize
 {
@@ -5652,6 +5854,7 @@ String STR_DragMethResize
     Text[ korean ] = "%OÀÇ Å©±â Á¶Á¤";
     Text[ turkish ] = "Boyutunu deðiþtir: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Modificar el tamaño de %O";
 };
 String STR_DragMethRotate
 {
@@ -5680,6 +5883,7 @@ String STR_DragMethRotate
     Text[ korean ] = "%O È¸Àü";
     Text[ turkish ] = "Döndür: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Rodar %O";
 };
 String STR_DragMethMirrorHori
 {
@@ -5708,6 +5912,7 @@ String STR_DragMethMirrorHori
     Text[ korean ] = "%OÀ»(¸¦) ¼öÆòÀ¸·Î ´ëÄª";
     Text[ turkish ] = "Yatay yansýt: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Reflejar %O horizontalmente";
 };
 String STR_DragMethMirrorVert
 {
@@ -5736,6 +5941,7 @@ String STR_DragMethMirrorVert
     Text[ korean ] = "%OÀ»(¸¦) ¼öÁ÷À¸·Î ´ëÄª";
     Text[ turkish ] = "Dikey yansýt: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Reflejar %O verticalmente";
 };
 String STR_DragMethMirrorDiag
 {
@@ -5764,6 +5970,7 @@ String STR_DragMethMirrorDiag
     Text[ korean ] = "%OÀ»(¸¦) ´ë°¢¼±À¸·Î ´ëÄª";
     Text[ turkish ] = "Diyagonal yansýt: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Reflejar %O diagonalmente";
 };
 String STR_DragMethMirrorFree
 {
@@ -5792,6 +5999,7 @@ String STR_DragMethMirrorFree
     Text[ korean ] = "%OÀ»(¸¦) ÀÓÀÇ´ë·Î ´ëÄª";
     Text[ turkish ] = "Serbest yansýt: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Reflejar libremente %O";
 };
 String STR_DragMethGradient
 {
@@ -5815,6 +6023,7 @@ String STR_DragMethGradient
     Text[ chinese_traditional ] = "%O ¥æ°Ê¦¡±m¦â¹Ï®×";
     Text[ arabic ] = "ÊÏÑÌ áæä ÊÈÇÏáí áÜ %O";
     Text[ turkish ] = "%O için etkileþimli gradyan";
+    Text[ catalan ] = "gradiente interactivo para %O";
 };
 String STR_DragMethTransparence
 {
@@ -5838,6 +6047,7 @@ String STR_DragMethTransparence
     Text[ chinese_traditional ] = "%O ªº¥æ°Ê¦¡³z©ú";
     Text[ arabic ] = "ÔÝÇÝíÉ ÊÈÇÏáíÉ áÜ %O";
     Text[ turkish ] = "%O için etkileþimli saydamlýk";
+    Text[ catalan ] = "transparencia interactiva para %O";
 };
 String STR_DragMethShear
 {
@@ -5868,6 +6078,7 @@ String STR_DragMethShear
     Text[ korean ] = "%O ÀÏ±×·¯¶ß¸²(±â¿ï±â)";
     Text[ turkish ] = "Çarpýt (eð): %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Distorsionar (inclinar) %O";
 };
 String STR_DragMethCrook
 {
@@ -5894,6 +6105,7 @@ String STR_DragMethCrook
     Text[ korean ] = "%OÀ»(¸¦) ¿ø ¾È¿¡¼­ Á¤·Ä";
     Text[ turkish ] = "Daire biçiminde düzenle: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Organizar %O en círculo";
 };
 String STR_DragMethCrookContortion
 {
@@ -5922,6 +6134,7 @@ String STR_DragMethCrookContortion
     Text[ korean ] = "%OÀ»(¸¦) ¿øÇüÅÂ·Î ±¸ºÎ¸²";
     Text[ turkish ] = "Daire biçiminde eð: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Doblar %O en círculo";
 };
 String STR_DragMethDistort
 {
@@ -5948,6 +6161,7 @@ String STR_DragMethDistort
     Text[ korean ] = "%OÀ»(¸¦) ÀÏ±×·¯¶ß¸²";
     Text[ turkish ] = "Serbest çarpýt: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Distorsión libre de %O";
 };
 String STR_DragRectEckRad
 {
@@ -5978,6 +6192,7 @@ String STR_DragRectEckRad
     Text[ korean ] = "%OÀÇ ¸ð¼­¸®°¢µµ º¯°æ";
     Text[ turkish ] = "Köþe çapýný deðiþtir: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Modificar radio de ángulo en %O";
 };
 String STR_DragPathObj
 {
@@ -6008,6 +6223,7 @@ String STR_DragPathObj
     Text[ korean ] = "%O º¯°æ";
     Text[ turkish ] = "Deðiþtir: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Modificar %O";
 };
 String STR_DragRectResize
 {
@@ -6038,6 +6254,7 @@ String STR_DragRectResize
     Text[ korean ] = "%OÀÇ Å©±â Á¶Á¤";
     Text[ turkish ] = "Boyutunu deðiþtir: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Cambiar el tamaño de %O";
 };
 String STR_DragCaptFram
 {
@@ -6066,6 +6283,7 @@ String STR_DragCaptFram
     Text[ korean ] = "%O ÀÌµ¿";
     Text[ turkish ] = "Taþý: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Desplazar %O";
 };
 String STR_DragCaptTail
 {
@@ -6094,6 +6312,7 @@ String STR_DragCaptTail
     Text[ korean ] = "%OÀÇ ³¡Á¡ ÀÌµ¿";
     Text[ turkish ] = "Bitiþ noktasýný taþý: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Desplazar punto final de %O";
 };
 String STR_DragCircAngle
 {
@@ -6124,6 +6343,7 @@ String STR_DragCircAngle
     Text[ korean ] = "%O °¢ ÀÌµ¿";
     Text[ turkish ] = "Açýsýný deðiþtir: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Modificar ángulo de %O";
 };
 String STR_DragEdgeTail
 {
@@ -6154,6 +6374,7 @@ String STR_DragEdgeTail
     Text[ korean ] = "%O Á¶Á¤";
     Text[ turkish ] = "Deðiþtir: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Modificar %O";
 };
 String STR_ViewTextEdit
 {
@@ -6180,6 +6401,7 @@ String STR_ViewTextEdit
     Text[ korean ] = "ÅØ½ºÆ® ÆíÁý: ´Ü¶ô %a, Çà %z, ¿­ %s";
     Text[ turkish ] = "Metin düzenleme: Paragraf %a, Satýr %z, Sütun %s";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Editar Texto: Párrafo %a, Línea %z, Columna %s";
 };
 String STR_ViewMarked
 {
@@ -6208,6 +6430,7 @@ String STR_ViewMarked
     Text[ korean ] = "%O ¼±ÅÃ Ç¥½Ã";
     Text[ language_user1 ] = " ";
     Text[ turkish ] = "%O seçildi";
+    Text[ catalan ] = "%O marcado";
 };
 String STR_ViewMarkedPoint
 {
@@ -6234,6 +6457,7 @@ String STR_ViewMarkedPoint
     Text[ korean ] = "%OÀÇ Á¡";
     Text[ turkish ] = "Nokta: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Punto de %O";
 };
 String STR_ViewMarkedPoints
 {
@@ -6260,6 +6484,7 @@ String STR_ViewMarkedPoints
     Text[ korean ] = "%OÀÇ %N Á¡";
     Text[ turkish ] = "%N yapýþtýrma noktasý: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "%N Puntos de %O";
 };
 String STR_ViewMarkedGluePoint
 {
@@ -6286,6 +6511,7 @@ String STR_ViewMarkedGluePoint
     Text[ korean ] = "%OÀÇ Á¢ÂøÁ¡";
     Text[ turkish ] = "Yapýþtýrma noktasý: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Punto de adhesión de %O";
 };
 String STR_ViewMarkedGluePoints
 {
@@ -6312,6 +6538,7 @@ String STR_ViewMarkedGluePoints
     Text[ korean ] = "%OÀÇ %N Á¢ÂøÁ¡";
     Text[ turkish ] = "%N yapýþtýrma noktasý: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "%N Puntos de adhesión de %O";
 };
 String STR_ViewMarkObjs
 {
@@ -6340,6 +6567,7 @@ String STR_ViewMarkObjs
     Text[ korean ] = "°³Ã¼ ¼±ÅÃ Ç¥½Ã";
     Text[ turkish ] = "Nesneleri seç";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Marcar objetos";
 };
 String STR_ViewMarkMoreObjs
 {
@@ -6368,6 +6596,7 @@ String STR_ViewMarkMoreObjs
     Text[ korean ] = "±âÅ¸ °³Ã¼ ¼±ÅÃ Ç¥½Ã";
     Text[ turkish ] = "Ek nesneler seç";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Marcar objetos adicionales";
 };
 String STR_ViewMarkPoints
 {
@@ -6394,6 +6623,7 @@ String STR_ViewMarkPoints
     Text[ korean ] = "Á¡ ¼±ÅÃ Ç¥½Ã";
     Text[ turkish ] = "Noktalarý seç";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Marcar puntos";
 };
 String STR_ViewMarkMorePoints
 {
@@ -6420,6 +6650,7 @@ String STR_ViewMarkMorePoints
     Text[ korean ] = "±âÅ¸ Á¡ ¼±ÅÃ Ç¥½Ã";
     Text[ turkish ] = "Ek noktalar seç";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Marcar puntos adicionales";
 };
 String STR_ViewMarkGluePoints
 {
@@ -6446,6 +6677,7 @@ String STR_ViewMarkGluePoints
     Text[ korean ] = "Á¢ÂøÁ¡ ¼±ÅÃ Ç¥½Ã";
     Text[ turkish ] = "Yapýþtýrma noktalarýný seç";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Marcar puntos de adhesión";
 };
 String STR_ViewMarkMoreGluePoints
 {
@@ -6472,6 +6704,7 @@ String STR_ViewMarkMoreGluePoints
     Text[ korean ] = "±âÅ¸ Á¢ÂøÁ¡ ¼±ÅÃ Ç¥½Ã";
     Text[ turkish ] = "Ek yapýþtýrma noktalarý seç";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Marcar puntos de adhesión adicionales";
 };
 String STR_ViewCreateObj
 {
@@ -6500,6 +6733,7 @@ String STR_ViewCreateObj
     Text[ korean ] = "%O ¸¸µé±â";
     Text[ turkish ] = "Oluþtur: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Crear %O";
 };
 String STR_UndoInsertObj
 {
@@ -6530,6 +6764,7 @@ String STR_UndoInsertObj
     Text[ korean ] = "%O »ðÀÔ";
     Text[ turkish ] = "Ekle: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Insertar %O";
 };
 String STR_UndoCopyObj
 {
@@ -6558,6 +6793,7 @@ String STR_UndoCopyObj
     Text[ korean ] = "%O º¹»ç";
     Text[ turkish ] = "Kopyala: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Copiar %O";
 };
 String STR_UndoObjOrdNum
 {
@@ -6588,6 +6824,7 @@ String STR_UndoObjOrdNum
     Text[ korean ] = "%OÀÇ °³Ã¼ ¼ø¼­ º¯°æ";
     Text[ turkish ] = "Nesne sýrasýný deðiþtir: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Modificar el orden de %O";
 };
 String STR_UndoObjSetText
 {
@@ -6616,6 +6853,7 @@ String STR_UndoObjSetText
     Text[ korean ] = "%OÀÇ ÅØ½ºÆ® ÆíÁý";
     Text[ turkish ] = "Metnini düzenle: %O";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Editar texto de %O";
 };
 String STR_UndoNewPage
 {
@@ -6646,6 +6884,7 @@ String STR_UndoNewPage
     Text[ korean ] = "ÆäÀÌÁö »ðÀÔ";
     Text[ turkish ] = "Sayfa ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Insertar página";
 };
 String STR_UndoDelPage
 {
@@ -6676,6 +6915,7 @@ String STR_UndoDelPage
     Text[ korean ] = "ÆäÀÌÁö »èÁ¦";
     Text[ turkish ] = "Sayfayý sil";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Eliminar página";
 };
 String STR_UndoCopPage
 {
@@ -6704,6 +6944,7 @@ String STR_UndoCopPage
     Text[ korean ] = "ÆäÀÌÁö º¹»ç";
     Text[ turkish ] = "Sayfayý kopyala";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Copiar página";
 };
 String STR_UndoMovPage
 {
@@ -6734,6 +6975,7 @@ String STR_UndoMovPage
     Text[ korean ] = "ÆäÀÌÁö ¼ø¼­ º¯°æ";
     Text[ turkish ] = "Sayfa sýrasýný deðiþtir";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Modificar el orden de las páginas";
 };
 String STR_UndoNewPageMasterDscr
 {
@@ -6760,6 +7002,7 @@ String STR_UndoNewPageMasterDscr
     Text[ korean ] = "¹è°æ ÆäÀÌÁö ¹èÁ¤";
     Text[ turkish ] = "Artalan sayfasý ata";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Asignar página de fondo";
 };
 String STR_UndoDelPageMasterDscr
 {
@@ -6786,6 +7029,7 @@ String STR_UndoDelPageMasterDscr
     Text[ korean ] = "¹è°æ ÆäÀÌÁö ¹èÁ¤ Á¦°Å";
     Text[ turkish ] = "Artalan sayfa atamasýný kaldýr";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Eliminar atributos de la página de fondo";
 };
 String STR_UndoMovPageMasterDscr
 {
@@ -6812,6 +7056,7 @@ String STR_UndoMovPageMasterDscr
     Text[ korean ] = "¹è°æ ÆäÀÌÁö ¹èÁ¤ ÀÌµ¿";
     Text[ turkish ] = "Artalan sayfa atamasýný taþý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Desplazar atributos de la página de fondo";
 };
 String STR_UndoChgPageMasterDscr
 {
@@ -6840,6 +7085,7 @@ String STR_UndoChgPageMasterDscr
     Text[ korean ] = "¹è°æ ÆäÀÌÁö ¹èÁ¤ º¯°æ";
     Text[ turkish ] = "Artalan sayfa atamasýný deðiþtir";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Modificar atributos de la página de fondo";
 };
 String STR_UndoMergeModel
 {
@@ -6868,6 +7114,7 @@ String STR_UndoMergeModel
     Text[ korean ] = "¹®¼­ »ðÀÔ";
     Text[ turkish ] = "Belge ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Insertar documento";
 };
 String STR_UndoNewLayer
 {
@@ -6896,6 +7143,7 @@ String STR_UndoNewLayer
     Text[ korean ] = "°èÃþ »ðÀÔ";
     Text[ turkish ] = "Düzey ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Insertar nivel";
 };
 String STR_UndoDelLayer
 {
@@ -6924,6 +7172,7 @@ String STR_UndoDelLayer
     Text[ korean ] = "°èÃþ »èÁ¦";
     Text[ turkish ] = "Düzey sil";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Eliminar nivel";
 };
 String STR_UndoMovLayer
 {
@@ -6952,6 +7201,7 @@ String STR_UndoMovLayer
     Text[ korean ] = "°èÃþ ¼ø¼­ º¯°æ";
     Text[ turkish ] = "Düzey sýrasýný deðiþtir";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Modificar el orden de los niveles";
 };
 String STR_StandardLayerName
 {
@@ -6980,6 +7230,7 @@ String STR_StandardLayerName
     Text[ korean ] = "Ç¥ÁØ";
     Text[ turkish ] = "Standart";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Predeterminado";
 };
  ////////////////////////////////////////////////////////////////////////////////////////////////////
  ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -7009,6 +7260,7 @@ String STR_ItemValON
     Text[ korean ] = "Àû¿ë";
     Text[ turkish ] = "Açýk";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "activado";
 };
 String STR_ItemValOFF
 {
@@ -7035,6 +7287,7 @@ String STR_ItemValOFF
     Text[ korean ] = "ÇØÁ¦";
     Text[ turkish ] = "Kapalý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "desactivado";
 };
 String STR_ItemValYES
 {
@@ -7061,6 +7314,7 @@ String STR_ItemValYES
     Text[ korean ] = "¿¹";
     Text[ turkish ] = "Evet";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "sí";
 };
 String STR_ItemValNO
 {
@@ -7087,6 +7341,7 @@ String STR_ItemValNO
     Text[ korean ] = "¾Æ´Ï¿À";
     Text[ turkish ] = "Hayýr";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No";
 };
  ////////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ItemValCAPTIONTYPE1
@@ -7114,6 +7369,7 @@ String STR_ItemValCAPTIONTYPE1
     Text[ korean ] = "À¯Çü 1";
     Text[ turkish ] = "Tip 1";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tipo 1";
 };
 String STR_ItemValCAPTIONTYPE2
 {
@@ -7140,6 +7396,7 @@ String STR_ItemValCAPTIONTYPE2
     Text[ korean ] = "À¯Çü 2";
     Text[ turkish ] = "Tip 2";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tipo 2";
 };
 String STR_ItemValCAPTIONTYPE3
 {
@@ -7166,6 +7423,7 @@ String STR_ItemValCAPTIONTYPE3
     Text[ korean ] = "À¯Çü 3";
     Text[ turkish ] = "Tip 3";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tipo 3";
 };
 String STR_ItemValCAPTIONTYPE4
 {
@@ -7192,6 +7450,7 @@ String STR_ItemValCAPTIONTYPE4
     Text[ korean ] = "À¯Çü 4";
     Text[ turkish ] = "Tip 4";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tipo 4";
 };
 String STR_ItemValCAPTIONESCHORI
 {
@@ -7218,6 +7477,7 @@ String STR_ItemValCAPTIONESCHORI
     Text[ korean ] = "¼öÆò";
     Text[ turkish ] = "Yatay";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Horizontal";
 };
 String STR_ItemValCAPTIONESCVERT
 {
@@ -7244,6 +7504,7 @@ String STR_ItemValCAPTIONESCVERT
     Text[ korean ] = "¼öÁ÷";
     Text[ turkish ] = "Dikey";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Vertical";
 };
 String STR_ItemValCAPTIONESCBESTFIT
 {
@@ -7270,6 +7531,7 @@ String STR_ItemValCAPTIONESCBESTFIT
     Text[ korean ] = "ÀÚµ¿";
     Text[ turkish ] = "Otomatik";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Automático";
 };
  ///////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ItemValFITTOSIZENONE
@@ -7297,6 +7559,7 @@ String STR_ItemValFITTOSIZENONE
     Text[ korean ] = "ÇØÁ¦";
     Text[ turkish ] = "Kapalý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Desactivado";
 };
 String STR_ItemValFITTOSIZEPROP
 {
@@ -7323,6 +7586,7 @@ String STR_ItemValFITTOSIZEPROP
     Text[ korean ] = "ºñ·Ê";
     Text[ turkish ] = "Orantýlý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Proporcional";
 };
 String STR_ItemValFITTOSIZEALLLINES
 {
@@ -7349,6 +7613,7 @@ String STR_ItemValFITTOSIZEALLLINES
     Text[ korean ] = "¸ðµç ÇàÀ» ºÐ¸®";
     Text[ turkish ] = "Tüm satýrlarý tek tek sýðdýr";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Todas las filas separadas";
 };
 String STR_ItemValFITTOSIZERESIZEAT
 {
@@ -7375,6 +7640,7 @@ String STR_ItemValFITTOSIZERESIZEAT
     Text[ greek ] = "×ñÞóç \"óêëçñþí\" éäéïôÞôùí";
     Text[ korean ] = "°íÁ¤ ¼Ó¼º »ç¿ë";
     Text[ turkish ] = "Sabit öznitelikler";
+    Text[ catalan ] = "Usar atributos fijos";
 };
  ///////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ItemValTEXTVADJTOP
@@ -7402,6 +7668,7 @@ String STR_ItemValTEXTVADJTOP
     Text[ korean ] = "À§";
     Text[ turkish ] = "Üst";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Arriba";
 };
 String STR_ItemValTEXTVADJCENTER
 {
@@ -7428,6 +7695,7 @@ String STR_ItemValTEXTVADJCENTER
     Text[ korean ] = "°¡¿îµ¥";
     Text[ turkish ] = "Orta";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Centro";
 };
 String STR_ItemValTEXTVADJBOTTOM
 {
@@ -7454,6 +7722,7 @@ String STR_ItemValTEXTVADJBOTTOM
     Text[ korean ] = "¾Æ·¡";
     Text[ turkish ] = "Alt";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Abajo";
 };
 String STR_ItemValTEXTVADJBLOCK
 {
@@ -7482,6 +7751,7 @@ String STR_ItemValTEXTVADJBLOCK
     Text[ korean ] = "ÀüÃ¼ ³ôÀÌ ÀÌ¿ë";
     Text[ turkish ] = "Tüm yüksekliði kullan";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Utilizar toda la altura";
 };
 String STR_ItemValTEXTVADJSTRETCH
 {
@@ -7508,6 +7778,7 @@ String STR_ItemValTEXTVADJSTRETCH
     Text[ korean ] = "¾ÓÂÊ ´ÃÀÓ";
     Text[ turkish ] = "Geniþletilmiþ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Extendido";
 };
 String STR_ItemValTEXTHADJLEFT
 {
@@ -7534,6 +7805,7 @@ String STR_ItemValTEXTHADJLEFT
     Text[ korean ] = "¿ÞÂÊ";
     Text[ turkish ] = "Sol";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Izquierda";
 };
 String STR_ItemValTEXTHADJCENTER
 {
@@ -7560,6 +7832,7 @@ String STR_ItemValTEXTHADJCENTER
     Text[ korean ] = "°¡¿îµ¥";
     Text[ turkish ] = "Orta";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Centro";
 };
 String STR_ItemValTEXTHADJRIGHT
 {
@@ -7586,6 +7859,7 @@ String STR_ItemValTEXTHADJRIGHT
     Text[ korean ] = "¿À¸¥ÂÊ";
     Text[ turkish ] = "Sað";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "A la derecha";
 };
 String STR_ItemValTEXTHADJBLOCK
 {
@@ -7612,6 +7886,7 @@ String STR_ItemValTEXTHADJBLOCK
     Text[ korean ] = "ÀüÃ¼ ³Êºñ ÀÌ¿ë";
     Text[ turkish ] = "Tüm geniþliði kullan";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Utilizar todo el ancho";
 };
 String STR_ItemValTEXTHADJSTRETCH
 {
@@ -7638,6 +7913,7 @@ String STR_ItemValTEXTHADJSTRETCH
     Text[ korean ] = "¾çÂÊ ´ÃÀÓ";
     Text[ turkish ] = "Geniþletilmiþ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Extendido";
 };
  ///////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ItemValTEXTANI_NONE
@@ -7665,6 +7941,7 @@ String STR_ItemValTEXTANI_NONE
     Text[ korean ] = "ÇØÁ¦";
     Text[ turkish ] = "Kapalý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "desactivado";
 };
 String STR_ItemValTEXTANI_BLINK
 {
@@ -7691,6 +7968,7 @@ String STR_ItemValTEXTANI_BLINK
     Text[ korean ] = "±ô¹ÚÀÓ";
     Text[ turkish ] = "Yanýp sönme";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "intermitente";
 };
 String STR_ItemValTEXTANI_SCROLL
 {
@@ -7717,6 +7995,7 @@ String STR_ItemValTEXTANI_SCROLL
     Text[ korean ] = "ÀüÃ¼ ½ºÅ©·Ñ";
     Text[ turkish ] = "Kaydýr";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "continuo";
 };
 String STR_ItemValTEXTANI_ALTERNATE
 {
@@ -7743,6 +8022,7 @@ String STR_ItemValTEXTANI_ALTERNATE
     Text[ korean ] = "´ëÃ¼ Áß";
     Text[ turkish ] = "Deðiken";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "alternando";
 };
 String STR_ItemValTEXTANI_SLIDE
 {
@@ -7769,6 +8049,7 @@ String STR_ItemValTEXTANI_SLIDE
     Text[ korean ] = "½ºÅ©·Ñ ÀÎ";
     Text[ turkish ] = "Ýçeri sür";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "solo entrar";
 };
 String STR_ItemValTEXTANI_LEFT
 {
@@ -7795,6 +8076,7 @@ String STR_ItemValTEXTANI_LEFT
     Text[ greek ] = "ðñïò ôá áñéóôåñÜ";
     Text[ korean ] = "¿ÞÂÊÀ¸·Î";
     Text[ turkish ] = "Sola";
+    Text[ catalan ] = "hacia la izquierda";
 };
 String STR_ItemValTEXTANI_UP
 {
@@ -7821,6 +8103,7 @@ String STR_ItemValTEXTANI_UP
     Text[ korean ] = "À§·Î";
     Text[ language_user1 ] = " ";
     Text[ turkish ] = "Yukarý";
+    Text[ catalan ] = "hacia arriba";
 };
 String STR_ItemValTEXTANI_RIGHT
 {
@@ -7847,6 +8130,7 @@ String STR_ItemValTEXTANI_RIGHT
     Text[ korean ] = "¿À¸¥ÂÊÀ¸·Î";
     Text[ turkish ] = "Saða";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "hacia la derecha";
 };
 String STR_ItemValTEXTANI_DOWN
 {
@@ -7873,6 +8157,7 @@ String STR_ItemValTEXTANI_DOWN
     Text[ korean ] = "¾Æ·¡·Î";
     Text[ turkish ] = "Aþaðý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "hacia abajo";
 };
  ///////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ItemValEDGE_ORTHOLINES
@@ -7900,6 +8185,7 @@ String STR_ItemValEDGE_ORTHOLINES
     Text[ korean ] = "Ç¥ÁØ ¿¬°á¼±";
     Text[ turkish ] = "Standart baðlayýcý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Conector estándar";
 };
 String STR_ItemValEDGE_THREELINES
 {
@@ -7926,6 +8212,7 @@ String STR_ItemValEDGE_THREELINES
     Text[ korean ] = "¼± ¿¬°á¼±";
     Text[ turkish ] = "Köþeli baðlayýcý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Conector lineal";
 };
 String STR_ItemValEDGE_ONELINE
 {
@@ -7952,6 +8239,7 @@ String STR_ItemValEDGE_ONELINE
     Text[ korean ] = "Á÷¼± ¿¬°á¼±";
     Text[ turkish ] = "Düz baðlayýcý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Conector directo";
 };
 String STR_ItemValEDGE_BEZIER
 {
@@ -7978,6 +8266,7 @@ String STR_ItemValEDGE_BEZIER
     Text[ korean ] = "°î¼± ¿¬°á¼±";
     Text[ turkish ] = "Eðri baðlayýcý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Conector curvo";
 };
  ///////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ItemValMEASURE_STD
@@ -8005,6 +8294,7 @@ String STR_ItemValMEASURE_STD
     Text[ korean ] = "Ç¥ÁØ";
     Text[ turkish ] = "Standart";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Predeterminado";
 };
 String STR_ItemValMEASURE_RADIUS
 {
@@ -8031,6 +8321,7 @@ String STR_ItemValMEASURE_RADIUS
     Text[ korean ] = "¹ÝÁö¸§";
     Text[ turkish ] = "Çap";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Radio";
 };
 String STR_ItemValMEASURE_TEXTHAUTO
 {
@@ -8057,6 +8348,7 @@ String STR_ItemValMEASURE_TEXTHAUTO
     Text[ korean ] = "ÀÚµ¿";
     Text[ turkish ] = "otomatik";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "automático";
 };
 String STR_ItemValMEASURE_TEXTLEFTOUTSIDE
 {
@@ -8085,6 +8377,7 @@ String STR_ItemValMEASURE_TEXTLEFTOUTSIDE
     Text[ korean ] = "¿ÞÂÊ ¹Ù±ù";
     Text[ turkish ] = "Sol dýþta";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "izquierda fuera";
 };
 String STR_ItemValMEASURE_TEXTINSIDE
 {
@@ -8111,6 +8404,7 @@ String STR_ItemValMEASURE_TEXTINSIDE
     Text[ korean ] = "¾È(°¡¿îµ¥)";
     Text[ turkish ] = "Ýç (orta)";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "interior centro";
 };
 String STR_ItemValMEASURE_TEXTRIGHTOUTSID
 {
@@ -8139,6 +8433,7 @@ String STR_ItemValMEASURE_TEXTRIGHTOUTSID
     Text[ korean ] = "¿À¸¥ÂÊ ¹Ù±ù";
     Text[ turkish ] = "Sað dýþta";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "derecha fuera";
 };
 String STR_ItemValMEASURE_TEXTVAUTO
 {
@@ -8165,6 +8460,7 @@ String STR_ItemValMEASURE_TEXTVAUTO
     Text[ korean ] = "ÀÚµ¿";
     Text[ turkish ] = "Otomatik";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "automático";
 };
 String STR_ItemValMEASURE_ABOVE
 {
@@ -8191,6 +8487,7 @@ String STR_ItemValMEASURE_ABOVE
     Text[ korean ] = "¼± À§";
     Text[ turkish ] = "Çizgi üzerinde";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "en la línea";
 };
 String STR_ItemValMEASURETEXT_BREAKEDLINE
 {
@@ -8217,6 +8514,7 @@ String STR_ItemValMEASURETEXT_BREAKEDLINE
     Text[ korean ] = "Áß´ÜµÈ ¼±";
     Text[ turkish ] = "Kesik çizgi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "línea interrumpida";
 };
 String STR_ItemValMEASURE_BELOW
 {
@@ -8243,6 +8541,7 @@ String STR_ItemValMEASURE_BELOW
     Text[ korean ] = "¼± ¾Æ·¡";
     Text[ turkish ] = "Çizginin altýnda";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "bajo la línea";
 };
 String STR_ItemValMEASURETEXT_VERTICALCEN
 {
@@ -8269,6 +8568,7 @@ String STR_ItemValMEASURETEXT_VERTICALCEN
     Text[ korean ] = "°¡¿îµ¥";
     Text[ turkish ] = "Ortala";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "centrado según línea";
 };
  ///////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ItemValCIRC_FULL
@@ -8296,6 +8596,7 @@ String STR_ItemValCIRC_FULL
     Text[ korean ] = "¿ÏÀüÇÑ ¿ø";
     Text[ turkish ] = "Tam daire";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Círculo completo";
 };
 String STR_ItemValCIRC_SECT
 {
@@ -8322,6 +8623,7 @@ String STR_ItemValCIRC_SECT
     Text[ korean ] = "¿ø ºÎÃ¤²Ã";
     Text[ turkish ] = "Daire dilimi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Sector de círculo";
 };
 String STR_ItemValCIRC_CUT
 {
@@ -8348,6 +8650,7 @@ String STR_ItemValCIRC_CUT
     Text[ korean ] = "¿øÀÇ ÀýÆí";
     Text[ turkish ] = "Daire parçasý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Segmento de círculo";
 };
 String STR_ItemValCIRC_ARC
 {
@@ -8374,6 +8677,7 @@ String STR_ItemValCIRC_ARC
     Text[ korean ] = "¿øÈ£";
     Text[ turkish ] = "Yay";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Arco de círculo";
 };
  ///////////////////////////////////////////////////////////////////////////////////////////////////
  ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -8402,6 +8706,7 @@ String STR_ItemNam_SHADOW
     Text[ korean ] = "À½¿µ";
     Text[ turkish ] = "Gölge";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Sombra";
 };
 String STR_ItemNam_SHADOWCOLOR
 {
@@ -8428,6 +8733,7 @@ String STR_ItemNam_SHADOWCOLOR
     Text[ korean ] = "À½¿µ »ö»ó";
     Text[ turkish ] = "Gölge rengi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Color de sombra";
 };
 String STR_ItemNam_SHADOWXDIST
 {
@@ -8454,6 +8760,7 @@ String STR_ItemNam_SHADOWXDIST
     Text[ korean ] = "¼öÆòÀû À½¿µ À±°û";
     Text[ turkish ] = "Yatay gölge konumu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Desplazamiento hor. de sombra";
 };
 String STR_ItemNam_SHADOWYDIST
 {
@@ -8480,6 +8787,7 @@ String STR_ItemNam_SHADOWYDIST
     Text[ korean ] = "¼öÁ÷Àû À½¿µ À±°û";
     Text[ turkish ] = "Dikey gölge kaymasý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Desplazamiento vert. de sombra";
 };
 String STR_ItemNam_SHADOWTRANSPARENCE
 {
@@ -8506,6 +8814,7 @@ String STR_ItemNam_SHADOWTRANSPARENCE
     Text[ korean ] = "Åõ¸í À½¿µ";
     Text[ turkish ] = "Gölge saydamlýðý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Transparencia de sombra";
 };
 String STR_ItemNam_SHADOW3D
 {
@@ -8532,6 +8841,7 @@ String STR_ItemNam_SHADOW3D
     Text[ korean ] = "3D-À½¿µ";
     Text[ turkish ] = "3B gölge";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Sombra 3D";
 };
 String STR_ItemNam_SHADOWPERSP
 {
@@ -8558,6 +8868,7 @@ String STR_ItemNam_SHADOWPERSP
     Text[ korean ] = "¿ø±Ù°¨ÀÖ´Â À½¿µ";
     Text[ turkish ] = "Perspektifli gölge";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Sombra en perspectiva";
 };
 String STR_ItemNam_SHADOWRESERVE1 { Text = "" ; };
 String STR_ItemNam_SHADOWRESERVE2 { Text = "" ; };
@@ -8589,6 +8900,7 @@ String STR_ItemNamSET_SHADOW
     Text[ korean ] = "À½¿µ ¼Ó¼º";
     Text[ turkish ] = "Gölge öznitelikleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Atributos de sombra";
 };
 String STR_ItemNam_CAPTIONTYPE
 {
@@ -8615,6 +8927,7 @@ String STR_ItemNam_CAPTIONTYPE
     Text[ korean ] = "¹ü·Ê Çü½Ä";
     Text[ turkish ] = "Belirtme çizgisi tipi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tipo de leyenda";
 };
 String STR_ItemNam_CAPTIONFIXEDANGLE
 {
@@ -8641,6 +8954,7 @@ String STR_ItemNam_CAPTIONFIXEDANGLE
     Text[ korean ] = "ÁÖ¾îÁø °¢µµ";
     Text[ turkish ] = "Belirlenen açý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ángulo dado";
 };
 String STR_ItemNam_CAPTIONANGLE
 {
@@ -8667,6 +8981,7 @@ String STR_ItemNam_CAPTIONANGLE
     Text[ korean ] = "°¢µµ";
     Text[ turkish ] = "Açý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ángulo";
 };
 String STR_ItemNam_CAPTIONGAP
 {
@@ -8693,6 +9008,7 @@ String STR_ItemNam_CAPTIONGAP
     Text[ korean ] = "°ø¹é";
     Text[ turkish ] = "Boþluk";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Espacio libre";
 };
 String STR_ItemNam_CAPTIONESCDIR
 {
@@ -8719,6 +9035,7 @@ String STR_ItemNam_CAPTIONESCDIR
     Text[ korean ] = "³¡³»±â ¹æÇâ";
     Text[ turkish ] = "Çýkýþ yönü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Dirección de salida";
 };
 String STR_ItemNam_CAPTIONESCISREL
 {
@@ -8745,6 +9062,7 @@ String STR_ItemNam_CAPTIONESCISREL
     Text[ korean ] = "»ó´ëÀû ³¡³»±â À§Ä¡";
     Text[ turkish ] = "Göreceli çýkýþ konumu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Dirección de salida relativa";
 };
 String STR_ItemNam_CAPTIONESCREL
 {
@@ -8771,6 +9089,7 @@ String STR_ItemNam_CAPTIONESCREL
     Text[ korean ] = "³¡³»±â À§Ä¡";
     Text[ turkish ] = "Çýkýþ konumu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Posición de salida";
 };
 String STR_ItemNam_CAPTIONESCABS
 {
@@ -8797,6 +9116,7 @@ String STR_ItemNam_CAPTIONESCABS
     Text[ korean ] = "³¡³»±â À§Ä¡";
     Text[ turkish ] = "Çýkýþ konumu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Posición de salida";
 };
 String STR_ItemNam_CAPTIONLINELEN
 {
@@ -8825,6 +9145,7 @@ String STR_ItemNam_CAPTIONLINELEN
     Text[ korean ] = "¼± ±æÀÌ";
     Text[ turkish ] = "Çizgi uzunluðu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Largo de la línea";
 };
 String STR_ItemNam_CAPTIONFITLINELEN
 {
@@ -8853,6 +9174,7 @@ String STR_ItemNam_CAPTIONFITLINELEN
     Text[ korean ] = "ÀÚµ¿ ¼± ±æÀÌ";
     Text[ turkish ] = "Otomatik çizgi uzunluðu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Largo de línea automático";
 };
 String STR_ItemNam_CAPTIONRESERVE1 { Text = "" ; };
 String STR_ItemNam_CAPTIONRESERVE2 { Text = "" ; };
@@ -8884,6 +9206,7 @@ String STR_ItemNamSET_CAPTION
     Text[ korean ] = "¹ü·Ê ¼Ó¼º";
     Text[ turkish ] = "Belirtme çizgisi öznitelikleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Atributos de leyenda";
 };
 String STR_ItemNamSET_OUTLINER
 {
@@ -8910,6 +9233,7 @@ String STR_ItemNamSET_OUTLINER
     Text[ korean ] = "ÅØ½ºÆ® ¼Ó¼º";
     Text[ turkish ] = "Metin öznitelikleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Atributos de texto";
 };
 String STR_ItemNam_ECKENRADIUS
 {
@@ -8936,6 +9260,7 @@ String STR_ItemNam_ECKENRADIUS
     Text[ korean ] = "¸ð¼­¸® °¢µµ";
     Text[ turkish ] = "Köþe çapý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Radio de ángulo";
 };
 String STR_ItemNam_TEXT_LEFTDIST
 {
@@ -8962,6 +9287,7 @@ String STR_ItemNam_TEXT_LEFTDIST
     Text[ korean ] = "¿ÞÂÊ Æ² °£°Ý";
     Text[ turkish ] = "Sol çerçeve aralýðý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Margen izquierdo";
 };
 String STR_ItemNam_TEXT_RIGHTDIST
 {
@@ -8988,6 +9314,7 @@ String STR_ItemNam_TEXT_RIGHTDIST
     Text[ korean ] = "¿À¸¥ÂÊ Æ² °£°Ý";
     Text[ turkish ] = "Sað çerçeve aralýðý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Margen derecho";
 };
 String STR_ItemNam_TEXT_UPPERDIST
 {
@@ -9014,6 +9341,7 @@ String STR_ItemNam_TEXT_UPPERDIST
     Text[ korean ] = "À§ Æ² °£°Ý";
     Text[ turkish ] = "Üst çerçeve aralýðý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Margen superior";
 };
 String STR_ItemNam_TEXT_LOWERDIST
 {
@@ -9040,6 +9368,7 @@ String STR_ItemNam_TEXT_LOWERDIST
     Text[ korean ] = "¾Æ·¡ Æ² °£°Ý";
     Text[ turkish ] = "Alt çerçeve aralýðý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Margen inferior";
 };
 String STR_ItemNam_TEXT_AUTOGROWHEIGHT
 {
@@ -9068,6 +9397,7 @@ String STR_ItemNam_TEXT_AUTOGROWHEIGHT
     Text[ korean ] = "ÇÁ·¹ÀÓ ³ôÀÌ ÀÚµ¿ ¸ÂÃã";
     Text[ turkish ] = "Otomatik çerçeve yüksekliði ayarý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ajuste automático de la altura del marco";
 };
 String STR_ItemNam_TEXT_MINFRAMEHEIGHT
 {
@@ -9096,6 +9426,7 @@ String STR_ItemNam_TEXT_MINFRAMEHEIGHT
     Text[ korean ] = "ÃÖ¼Ò Æ² ³ôÀÌ";
     Text[ turkish ] = "Asgari çerçeve yüksekliði";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Altura mínima del marco";
 };
 String STR_ItemNam_TEXT_MAXFRAMEHEIGHT
 {
@@ -9124,6 +9455,7 @@ String STR_ItemNam_TEXT_MAXFRAMEHEIGHT
     Text[ korean ] = "ÃÖ´ë Æ² ³ôÀÌ";
     Text[ turkish ] = "Azami çerçeve yüksekliði";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Altura máxima del marco";
 };
 String STR_ItemNam_TEXT_AUTOGROWWIDTH
 {
@@ -9150,6 +9482,7 @@ String STR_ItemNam_TEXT_AUTOGROWWIDTH
     Text[ korean ] = "ÇÁ·¹ÀÓ ³Êºñ ÀÚµ¿ Á¶Àý";
     Text[ turkish ] = "Otomatik çerçeve geniþliði ayarý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ajuste automático del ancho del marco";
 };
 String STR_ItemNam_TEXT_MINFRAMEWIDTH
 {
@@ -9176,6 +9509,7 @@ String STR_ItemNam_TEXT_MINFRAMEWIDTH
     Text[ korean ] = "ÃÖ¼Ò Æ² ³Êºñ";
     Text[ turkish ] = "Asgari çerçeve geniþliði";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ancho mínimo del marco";
 };
 String STR_ItemNam_TEXT_MAXFRAMEWIDTH
 {
@@ -9202,6 +9536,7 @@ String STR_ItemNam_TEXT_MAXFRAMEWIDTH
     Text[ korean ] = "ÃÖ´ë Æ² ³Êºñ";
     Text[ turkish ] = "Azami çerçeve geniþliði";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ancho máximo del marco";
 };
 String STR_ItemNam_TEXT_VERTADJUST
 {
@@ -9228,6 +9563,7 @@ String STR_ItemNam_TEXT_VERTADJUST
     Text[ korean ] = "¼öÁ÷À¸·Î ÅØ½ºÆ® À§Ä¡ °íÁ¤";
     Text[ turkish ] = "Dikey metin sabitleme";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Anclaje vertical del texto";
 };
 String STR_ItemNam_TEXT_HORZADJUST
 {
@@ -9254,6 +9590,7 @@ String STR_ItemNam_TEXT_HORZADJUST
     Text[ korean ] = "¼öÆòÀ¸·Î ÅØ½ºÆ® À§Ä¡ °íÁ¤";
     Text[ turkish ] = "Yatay metin sabitleme";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Anclaje horizontal del texto";
 };
 String STR_ItemNam_TEXT_FITTOSIZE
 {
@@ -9280,6 +9617,7 @@ String STR_ItemNam_TEXT_FITTOSIZE
     Text[ korean ] = "ÅØ½ºÆ®¸¦ Æ²¿¡ ¸ÂÃã";
     Text[ turkish ] = "Metni çerçeveye sýðdýr";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Texto en marco";
 };
 
 String STR_ItemNam_GRAFRED
@@ -9304,6 +9642,7 @@ String STR_ItemNam_GRAFRED
     Text[ chinese_traditional ] = "¬õ¦â¤ñ¨Ò";
     Text[ arabic ] = "äÓÈÉ ÇáÃÍãÑ";
     Text[ turkish ] = "Kýrmýzý oraný";
+    Text[ catalan ] = "Proporción de rojo";
 };
 String STR_ItemNam_GRAFGREEN
 {
@@ -9327,6 +9666,7 @@ String STR_ItemNam_GRAFGREEN
     Text[ chinese_traditional ] = "ºñ¦â¤ñ¨Ò";
     Text[ arabic ] = "äÓÈÉ ÇáÃÎÖÑ";
     Text[ turkish ] = "Yeþil oraný";
+    Text[ catalan ] = "Proporción de verde";
 };
 String STR_ItemNam_GRAFBLUE
 {
@@ -9350,6 +9690,7 @@ String STR_ItemNam_GRAFBLUE
     Text[ chinese_traditional ] = "ÂÅ¦â¤ñ¨Ò";
     Text[ arabic ] = "äÓÈÉ ÇáÃÒÑÞ";
     Text[ turkish ] = "Mavi oraný";
+    Text[ catalan ] = "Proporción de azul";
 };
 String STR_ItemNam_GRAFLUMINANCE
 {
@@ -9373,6 +9714,7 @@ String STR_ItemNam_GRAFLUMINANCE
     Text[ chinese_traditional ] = "«G«×";
     Text[ arabic ] = "ÇáÅÖÇÁÉ";
     Text[ turkish ] = "Parlaklýk";
+    Text[ catalan ] = "Brillo";
 };
 String STR_ItemNam_GRAFCONTRAST
 {
@@ -9396,6 +9738,7 @@ String STR_ItemNam_GRAFCONTRAST
     Text[ chinese_traditional ] = "¹ï¤ñ«×";
     Text[ arabic ] = "ÇáÊÈÇíä";
     Text[ turkish ] = "Kontrast";
+    Text[ catalan ] = "Contraste";
 };
 String STR_ItemNam_GRAFGAMMA
 {
@@ -9419,6 +9762,7 @@ String STR_ItemNam_GRAFGAMMA
     Text[ chinese_traditional ] = "¦Ç¦â¨t¼Æ";
     Text[ arabic ] = "ÛÇãÇ";
     Text[ turkish ] = "Gamma";
+    Text[ catalan ] = "Gamma";
 };
 String STR_ItemNam_GRAFTRANSPARENCE
 {
@@ -9442,6 +9786,7 @@ String STR_ItemNam_GRAFTRANSPARENCE
     Text[ chinese_traditional ] = "³z©ú";
     Text[ arabic ] = "ÔÝÇÝíÉ";
     Text[ turkish ] = "Saydamlýk";
+    Text[ catalan ] = "Transparencia";
 };
 String STR_ItemNam_GRAFINVERT
 {
@@ -9465,6 +9810,7 @@ String STR_ItemNam_GRAFINVERT
     Text[ chinese_traditional ] = "¤¬¸É¦âÂà´«";
     Text[ arabic ] = "ÚßÓ";
     Text[ turkish ] = "Tersine çevir";
+    Text[ catalan ] = "Invertir";
 };
 String STR_ItemNam_GRAFMODE
 {
@@ -9488,6 +9834,7 @@ String STR_ItemNam_GRAFMODE
     Text[ chinese_traditional ] = "¹Ï§Î¼Ò¦¡";
     Text[ arabic ] = "æÖÚ ÇáÕæÑ";
     Text[ turkish ] = "Grafik kipi";
+    Text[ catalan ] = "Modo gráfico";
 };
 String STR_ItemNam_GRAFRESERVE2 { Text = "" ; };
 String STR_ItemNam_GRAFRESERVE3 { Text = "" ; };
@@ -9521,6 +9868,7 @@ String STR_ItemNamSET_MISC
     Text[ korean ] = "´Ù¾çÇÑ ¼Ó¼º";
     Text[ turkish ] = "Çeþitli öznitelikler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Atributos diversos";
 };
 String STR_ItemNam_OBJMOVEPROTECT
 {
@@ -9547,6 +9895,7 @@ String STR_ItemNam_OBJMOVEPROTECT
     Text[ korean ] = "À§Ä¡ º¸È£";
     Text[ turkish ] = "Konum korumasý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Protección de posición";
 };
 String STR_ItemNam_OBJSIZEPROTECT
 {
@@ -9575,6 +9924,7 @@ String STR_ItemNam_OBJSIZEPROTECT
     Text[ korean ] = "Å©±â º¸È£";
     Text[ turkish ] = "Boyut korumasý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Protección de tamaño";
 };
 String STR_ItemNam_OBJPRINTABLE
 {
@@ -9601,6 +9951,7 @@ String STR_ItemNam_OBJPRINTABLE
     Text[ korean ] = "ÀÎ¼â ¾ÊÀ½";
     Text[ turkish ] = "Yazdýrma";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No imprimir";
 };
 String STR_ItemNam_LAYERID
 {
@@ -9627,6 +9978,7 @@ String STR_ItemNam_LAYERID
     Text[ korean ] = "°èÃþ Ç¥½Ã";
     Text[ turkish ] = "Düzey tanýtýcýsý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Identificación de niveles";
 };
 String STR_ItemNam_LAYERNAME
 {
@@ -9653,6 +10005,7 @@ String STR_ItemNam_LAYERNAME
     Text[ korean ] = "°èÃþ(~V)";
     Text[ turkish ] = "Düzey";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Nivel";
 };
 String STR_ItemNam_OBJECTNAME
 {
@@ -9679,6 +10032,7 @@ String STR_ItemNam_OBJECTNAME
     Text[ korean ] = "°³Ã¼ ÀÌ¸§";
     Text[ turkish ] = "Nesne adý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Nombre del objeto";
 };
 String STR_ItemNam_STARTANGLE
 {
@@ -9705,6 +10059,7 @@ String STR_ItemNam_STARTANGLE
     Text[ korean ] = "½ÃÀÛ °¢µµ";
     Text[ turkish ] = "Baþlangýç açýsý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ángulo inicial";
 };
 String STR_ItemNam_ENDANGLE
 {
@@ -9731,6 +10086,7 @@ String STR_ItemNam_ENDANGLE
     Text[ korean ] = "³¡ °¢µµ";
     Text[ turkish ] = "Son açý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ángulo final";
 };
 String STR_ItemNam_POSITIONX
 {
@@ -9757,6 +10113,7 @@ String STR_ItemNam_POSITIONX
     Text[ korean ] = "X À§Ä¡";
     Text[ turkish ] = "X konumu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Posición X";
 };
 String STR_ItemNam_POSITIONY
 {
@@ -9783,6 +10140,7 @@ String STR_ItemNam_POSITIONY
     Text[ korean ] = "Y À§Ä¡";
     Text[ turkish ] = "Y konumu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Posición Y";
 };
 String STR_ItemNam_SIZEWIDTH
 {
@@ -9809,6 +10167,7 @@ String STR_ItemNam_SIZEWIDTH
     Text[ korean ] = "³Êºñ";
     Text[ turkish ] = "Geniþlik";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ancho";
 };
 String STR_ItemNam_SIZEHEIGHT
 {
@@ -9837,6 +10196,7 @@ String STR_ItemNam_SIZEHEIGHT
     Text[ korean ] = "³ôÀÌ";
     Text[ turkish ] = "Yükseklik";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Altura";
 };
 String STR_ItemNam_ROTATEANGLE
 {
@@ -9863,6 +10223,7 @@ String STR_ItemNam_ROTATEANGLE
     Text[ korean ] = "È¸Àü °¢µµ";
     Text[ turkish ] = "Dönüþ açýsý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ángulo de rotación";
 };
 String STR_ItemNam_SHEARANGLE
 {
@@ -9889,6 +10250,7 @@ String STR_ItemNam_SHEARANGLE
     Text[ korean ] = "±³Â÷°¢";
     Text[ turkish ] = "Kesiþme açýsý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ángulo de desviación";
 };
  ////////////////////////////////////////////////////////////////////////////////////////////////////
  ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -9924,6 +10286,7 @@ String SIP_UNKNOWN_ATTR
     Text[ greek ] = "¢ãíùóôç éäéüôçôá";
     Text[ korean ] = "¾Ë·ÁÁ®¡¡ÀÖÁö ¾ÊÀº ¼Ó¼º";
     Text[ turkish ] = "Bilinmeyen öznitelik";
+    Text[ catalan ] = "Atributo desconocido";
 };
 
 // Strings fuer den Vorlagen-Dialog
@@ -9952,6 +10315,7 @@ String SIP_XA_LINESTYLE
     Text[ korean ] = "¼± À¯Çü";
     Text[ turkish ] = "Çizgi biçimi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Estilo de línea";
 };
 
 String SIP_XA_LINEDASH
@@ -9978,6 +10342,7 @@ String SIP_XA_LINEDASH
     Text[ greek ] = "Ó÷Ýäéï ãñáììþí";
     Text[ korean ] = "¼± ÆÐÅÏ";
     Text[ turkish ] = "Çizgi deseni";
+    Text[ catalan ] = "Diseño de línea";
 };
 
 String SIP_XA_LINEWIDTH
@@ -10004,6 +10369,7 @@ String SIP_XA_LINEWIDTH
     Text[ greek ] = "ÐÜ÷ïò ãñáììÞò";
     Text[ korean ] = "¼± ³Êºñ";
     Text[ turkish ] = "Çizgi kalýnlýðý";
+    Text[ catalan ] = "Espesor del trazo";
 };
 
 String SIP_XA_LINECOLOR
@@ -10031,6 +10397,7 @@ String SIP_XA_LINECOLOR
     Text[ korean ] = "¼±ÀÇ »ö";
     Text[ turkish ] = "Çizgi rengi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Color de línea";
 };
 
 String SIP_XA_LINESTART
@@ -10057,6 +10424,7 @@ String SIP_XA_LINESTART
     Text[ greek ] = "Áñ÷Þ ãñáììÞò";
     Text[ korean ] = "¼± ½ÃÀÛ";
     Text[ turkish ] = "Çizgi baþý";
+    Text[ catalan ] = "Comienzo de línea";
 };
 
 String SIP_XA_LINEEND
@@ -10083,6 +10451,7 @@ String SIP_XA_LINEEND
     Text[ greek ] = "ÔÝëïò ãñáììÞò";
     Text[ korean ] = "¼± ³¡";
     Text[ turkish ] = "Çizgi sonu";
+    Text[ catalan ] = "Fin de línea";
 };
 
 String SIP_XA_LINESTARTWIDTH
@@ -10109,6 +10478,7 @@ String SIP_XA_LINESTARTWIDTH
     Text[ greek ] = "ÐëÜôïò áñ÷Þò ãñáììÞò";
     Text[ korean ] = "¼± ½ÃÀÛÀÇ ³Êºñ";
     Text[ turkish ] = "Çizgi baþý geniþliði";
+    Text[ catalan ] = "Ancho de comienzo de línea";
 };
 
 String SIP_XA_LINEENDWIDTH
@@ -10135,6 +10505,7 @@ String SIP_XA_LINEENDWIDTH
     Text[ greek ] = "ÐëÜôïò ôÝëïõò ãñáììÞò";
     Text[ korean ] = "¼± ³¡ÀÇ ³Êºñ";
     Text[ turkish ] = "Çizgi sonu geniþliði";
+    Text[ catalan ] = "Ancho de fin de línea";
 };
 
 String SIP_XA_LINESTARTCENTER
@@ -10161,6 +10532,7 @@ String SIP_XA_LINESTARTCENTER
     Text[ greek ] = "Áñ÷Þ ãñáììÞò êåíôñáñéóìÝíá";
     Text[ korean ] = "¼± ½ÃÀÛ - °¡¿îµ¥";
     Text[ turkish ] = "Çizgi baþýný ortala";
+    Text[ catalan ] = "Comienzo de línea, centrado";
 };
 
 String SIP_XA_LINEENDCENTER
@@ -10187,6 +10559,7 @@ String SIP_XA_LINEENDCENTER
     Text[ greek ] = "ÊåíôñáñéóìÝíï ôÝëïò ãñáììÞò";
     Text[ korean ] = "¼± ³¡ - °¡¿îµ¥";
     Text[ turkish ] = "Çizgi sonunu ortala";
+    Text[ catalan ] = "Fines de línea, centrado";
 };
 
 String SIP_XA_LINETRANSPARENCE
@@ -10213,6 +10586,7 @@ String SIP_XA_LINETRANSPARENCE
     Text[ greek ] = "ÄéáöÜíåéá ãñáììÞò";
     Text[ korean ] = "Åõ¸í ¼±";
     Text[ turkish ] = "Çizgi saydamlýðý";
+    Text[ catalan ] = "Transparencia de línea";
 };
 
 String SIP_XA_LINEJOINT
@@ -10237,6 +10611,7 @@ String SIP_XA_LINEJOINT
     Text[ chinese_traditional ] = "½u±ø±µ¦X";
     Text[ arabic ] = "æÕáÉ ÎØæØ";
     Text[ turkish ] = "Çizgi geçiþi";
+    Text[ catalan ] = "Junta de líneas";
 };
 
 String SIP_XA_LINERESERVED2
@@ -10263,6 +10638,7 @@ String SIP_XA_LINERESERVED2
     Text[ greek ] = "ÃñáììÞ åíáëëáêô. 2";
     Text[ korean ] = "¼± ¿¹ºñ2";
     Text[ turkish ] = "Çizgi - Yedek 2";
+    Text[ catalan ] = "Línea reserva 2";
 };
 
 String SIP_XA_LINERESERVED3
@@ -10289,6 +10665,7 @@ String SIP_XA_LINERESERVED3
     Text[ greek ] = "ÃñáììÞ åíáëëáêô. 3";
     Text[ korean ] = "¼± ¿¹ºñ3";
     Text[ turkish ] = "Çizgi - Yedek 3";
+    Text[ catalan ] = "Línea reserva 3";
 };
 
 String SIP_XA_LINERESERVED4
@@ -10315,6 +10692,7 @@ String SIP_XA_LINERESERVED4
     Text[ greek ] = "ÃñáììÞ åíáëëáêô. 4";
     Text[ korean ] = "¼± ¿¹ºñ4";
     Text[ turkish ] = "Çizgi - Yedek 4";
+    Text[ catalan ] = "Línea reserva 4";
 };
 
 String SIP_XA_LINERESERVED5
@@ -10341,6 +10719,7 @@ String SIP_XA_LINERESERVED5
     Text[ greek ] = "ÃñáììÞ åíáëëáêô. 5";
     Text[ korean ] = "¼± ¿¹ºñ5";
     Text[ turkish ] = "Çizgi - Yedek 5";
+    Text[ catalan ] = "Línea reserva 5";
 };
 
 String SIP_XA_LINERESERVED_LAST
@@ -10367,6 +10746,7 @@ String SIP_XA_LINERESERVED_LAST
     Text[ greek ] = "ÃñáììÞ åíáëëáêô. 6";
     Text[ korean ] = "¼± ¿¹ºñ6";
     Text[ turkish ] = "Çizgi - Yedek 6";
+    Text[ catalan ] = "Línea reserva 6";
 };
 
 String SIP_XATTRSET_LINE
@@ -10393,6 +10773,7 @@ String SIP_XATTRSET_LINE
     Text[ greek ] = "Éäéüôçôåò ãñáììÞò";
     Text[ korean ] = "¼± ¼Ó¼º";
     Text[ turkish ] = "Çizgi öznitelikleri";
+    Text[ catalan ] = "Atributos de línea";
 };
 
 String SIP_XA_FILLSTYLE
@@ -10420,6 +10801,7 @@ String SIP_XA_FILLSTYLE
     Text[ korean ] = "Ã¤¿ì±â À¯Çü";
     Text[ turkish ] = "Dolgu biçimi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Estilo de relleno";
 };
 
 String SIP_XA_FILLCOLOR
@@ -10447,6 +10829,7 @@ String SIP_XA_FILLCOLOR
     Text[ korean ] = "Ã¤¿ì±â »ö»ó";
     Text[ turkish ] = "Dolgu rengi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Color de relleno";
 };
 
 String SIP_XA_FILLGRADIENT
@@ -10473,6 +10856,7 @@ String SIP_XA_FILLGRADIENT
     Text[ greek ] = "ÄéáâÜèìéóç ÷ñþìáôïò";
     Text[ korean ] = "±×¶óµ¥ÀÌ¼Ç";
     Text[ turkish ] = "Gradyan";
+    Text[ catalan ] = "Gradiente";
 };
 
 String SIP_XA_FILLHATCH
@@ -10499,6 +10883,7 @@ String SIP_XA_FILLHATCH
     Text[ greek ] = "ÃñáììïóêéÜ";
     Text[ korean ] = "ÇØÄª";
     Text[ turkish ] = "Tarama";
+    Text[ catalan ] = "Trama";
 };
 
 String SIP_XA_FILLBITMAP
@@ -10526,6 +10911,7 @@ String SIP_XA_FILLBITMAP
     Text[ korean ] = "Ã¤¿ì±â ºñÆ®¸Ê";
     Text[ turkish ] = "Dolgu için bit eþlem";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Bitmap de relleno";
 };
 
 String SIP_XA_FILLTRANSPARENCE
@@ -10552,6 +10938,7 @@ String SIP_XA_FILLTRANSPARENCE
     Text[ greek ] = "ÄéáöÜíåéá åðéöÜíåéáò";
     Text[ korean ] = "Åõ¸í Ã¤¿ì±â";
     Text[ turkish ] = "Yüzey saydamlýðý";
+    Text[ catalan ] = "Transparencia";
 };
 
 String SIP_XA_GRADIENTSTEPCOUNT
@@ -10578,6 +10965,7 @@ String SIP_XA_GRADIENTSTEPCOUNT
     Text[ greek ] = "Áñéèìüò âçìÜôùí äéáâÜèìéóçò ÷ñþìáôïò";
     Text[ korean ] = "±×¶óµ¥ÀÌ¼Ç ´Ü°èÀÇ ¼ö";
     Text[ turkish ] = "Gradyan adýmlarý sayýsý";
+    Text[ catalan ] = "Incremento";
 };
 
 String SIP_XA_FILLBMP_TILE
@@ -10604,6 +10992,7 @@ String SIP_XA_FILLBMP_TILE
     Text[ greek ] = "ÃÝìéóìá ðáñÜèåóçò";
     Text[ korean ] = "¹ÙµÏÆÇ Ã¤¿ì±â";
     Text[ turkish ] = "Döþeme taþlarý";
+    Text[ catalan ] = "Relleno de azulejo";
 };
 
 String SIP_XA_FILLBMP_POS
@@ -10631,6 +11020,7 @@ String SIP_XA_FILLBMP_POS
     Text[ korean ] = "Ã¤¿ì±â ºñÆ®¸Ê À§Ä¡";
     Text[ turkish ] = "Dolgu bit eþlem konumu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Posición bitmap de relleno";
 };
 
 String SIP_XA_FILLBMP_SIZEX
@@ -10658,6 +11048,7 @@ String SIP_XA_FILLBMP_SIZEX
     Text[ korean ] = "Ã¤¿ì±â ºñÆ®¸Ê ³Êºñ";
     Text[ turkish ] = "Dolgu bit eþlem geniþliði";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ancho bitmap de relleno";
 };
 
 String SIP_XA_FILLBMP_SIZEY
@@ -10685,6 +11076,7 @@ String SIP_XA_FILLBMP_SIZEY
     Text[ korean ] = "Ã¤¿ì±â ºñÆ®¸ÊÀÇ ³ôÀÌ";
     Text[ turkish ] = "Dolgu bit eþlem yüksekliði";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Alto de bitmap de relleno";
 };
 
 String SIP_XA_FILLFLOATTRANSPARENCE
@@ -10709,6 +11101,7 @@ String SIP_XA_FILLFLOATTRANSPARENCE
     Text[ chinese_traditional ] = "³z©ú¹Ï®×";
     Text[ arabic ] = "ÊÏÑÌ ÔÝÇÝ";
     Text[ turkish ] = "Saydam gradyan";
+    Text[ catalan ] = "Gradiente transparente";
 };
 
 String SIP_XA_FILLRESERVED2
@@ -10735,6 +11128,7 @@ String SIP_XA_FILLRESERVED2
     Text[ greek ] = "ÃÝìéóìá åíáëëáêô. 2";
     Text[ korean ] = "Ã¤¿ì±â¡¡¿¹ºñ2";
     Text[ turkish ] = "Dolgu - Yedek 2";
+    Text[ catalan ] = "Relleno reserva 2";
 };
 
 String SIP_XA_FILLBMP_SIZELOG
@@ -10761,6 +11155,7 @@ String SIP_XA_FILLBMP_SIZELOG
     Text[ greek ] = "ÌÝãåèïò åðéêÜëõøçò ü÷é óå %";
     Text[ korean ] = "¹ÙµÏÆÇ Å©±â¸¦ %·Î ÇÏÁö ¾ÊÀ½";
     Text[ turkish ] = "Döþeme taþlarý boyutu % deðil";
+    Text[ catalan ] = "Tamaño de azulejo en %";
 };
 
 String SIP_XA_FILLBMP_TILEOFFSETX
@@ -10787,6 +11182,7 @@ String SIP_XA_FILLBMP_TILEOFFSETX
     Text[ greek ] = "Ìåôáôüðéóç åðéêÜëõøçò X óå %";
     Text[ korean ] = "¹ÙµÏÆÇ ¿ÀÇÁ¼ÂX¸¦ %·Î";
     Text[ turkish ] = "Döþeme taþý konumu X (%)";
+    Text[ catalan ] = "Desplazamiento de azulejo en %";
 };
 
 String SIP_XA_FILLBMP_TILEOFFSETY
@@ -10813,6 +11209,7 @@ String SIP_XA_FILLBMP_TILEOFFSETY
     Text[ greek ] = "Ìåôáôüðéóç åðéêÜëõøçò Y óå %";
     Text[ korean ] = "¹ÙµÏÆÇ ¿ÀÇÁ¼ÂY¸¦ %·Î";
     Text[ turkish ] = "Döþeme taþý konumu Y (%)";
+    Text[ catalan ] = "Desplazamiento de azulejo Y en %";
 };
 
 String SIP_XA_FILLBMP_STRETCH
@@ -10839,6 +11236,7 @@ String SIP_XA_FILLBMP_STRETCH
     Text[ greek ] = "ÅðéìÞêõíóç Bitmap";
     Text[ korean ] = "ºñÆ®¸Ê ±æ°Ô ´ÃÀÓ";
     Text[ turkish ] = "Bit eþlem ölçeklendirme";
+    Text[ catalan ] = "Redimensionamiento de bitmap";
 };
 
 String SIP_XA_FILLRESERVED3
@@ -10865,6 +11263,7 @@ String SIP_XA_FILLRESERVED3
     Text[ greek ] = "Bitmap åíáëëáêô. 3";
     Text[ korean ] = "ºñÆ®¸Ê ¿¹ºñ3";
     Text[ turkish ] = "Bit eþlem - Yedek 3";
+    Text[ catalan ] = "Bitmap reserva 3";
 };
 
 String SIP_XA_FILLRESERVED4
@@ -10891,6 +11290,7 @@ String SIP_XA_FILLRESERVED4
     Text[ greek ] = "Bitmap åíáëëáêô. 4";
     Text[ korean ] = "ºñÆ®¸Ê ¿¹ºñ4";
     Text[ turkish ] = "Bit eþlem - Yedek 4";
+    Text[ catalan ] = "Bitmap reserva 4";
 };
 
 String SIP_XA_FILLRESERVED5
@@ -10917,6 +11317,7 @@ String SIP_XA_FILLRESERVED5
     Text[ greek ] = "Bitmap åíáëëáêô. 5";
     Text[ korean ] = "ºñÆ®¸Ê ¿¹ºñ5";
     Text[ turkish ] = "Bit eþlem - Yedek 5";
+    Text[ catalan ] = "Bitmap reserva 5";
 };
 
 String SIP_XA_FILLRESERVED6
@@ -10943,6 +11344,7 @@ String SIP_XA_FILLRESERVED6
     Text[ greek ] = "Bitmap åíáëëáêô. 6";
     Text[ korean ] = "ºñÆ®¸Ê ¿¹ºñ6";
     Text[ turkish ] = "Bit eþlem - Yedek 6";
+    Text[ catalan ] = "Bitmap reserva 6";
 };
 
 String SIP_XA_FILLRESERVED7
@@ -10969,6 +11371,7 @@ String SIP_XA_FILLRESERVED7
     Text[ greek ] = "Bitmap åíáëëáêô. 7";
     Text[ korean ] = "ºñÆ®¸Ê ¿¹ºñ7";
     Text[ turkish ] = "Bit eþlem - Yedek 7";
+    Text[ catalan ] = "Bitmap reserva 7";
 };
 
 String SIP_XA_FILLRESERVED8
@@ -10995,6 +11398,7 @@ String SIP_XA_FILLRESERVED8
     Text[ greek ] = "Bitmap åíáëëáêô. 8";
     Text[ korean ] = "ºñÆ®¸Ê ¿¹ºñ8";
     Text[ turkish ] = "Bit eþlem - Yedek 8";
+    Text[ catalan ] = "Bitmap reserva 8";
 };
 
 String SIP_XA_FILLBMP_POSOFFSETX
@@ -11021,6 +11425,7 @@ String SIP_XA_FILLBMP_POSOFFSETX
     Text[ greek ] = "ÈÝóç X ðáñÜèåóçò óå %";
     Text[ korean ] = "¹ÙµÏÆÇ À§Ä¡X ¸¦ %·Î";
     Text[ turkish ] = "Döþeme taþý konumu X (%)";
+    Text[ catalan ] = "Posición azulejo X en %";
 };
 
 String SIP_XA_FILLBMP_POSOFFSETY
@@ -11047,6 +11452,7 @@ String SIP_XA_FILLBMP_POSOFFSETY
     Text[ greek ] = "ÈÝóç Y ðáñÜèåóçò óå %";
     Text[ korean ] = "¹ÙµÏÆÇ À§Ä¡Y¸¦ %·Î";
     Text[ turkish ] = "Döþeme taþý konumu Y (%)";
+    Text[ catalan ] = "Posición azulejo Y en %";
 };
 
 String SIP_XA_FILLBACKGROUND
@@ -11072,6 +11478,7 @@ String SIP_XA_FILLBACKGROUND
     Text[ arabic ] = "ÊÚÈÆÉ ÇáÎáÝíÉ";
     Text[ turkish ] = "Artalan dolgusu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Relleno de fondo";
 };
 
 String SIP_XA_FILLRESERVED10
@@ -11098,6 +11505,7 @@ String SIP_XA_FILLRESERVED10
     Text[ greek ] = "ÃÝìéóìá åíáëëáêô. 10";
     Text[ korean ] = "Ã¤¿ì±â¡¡¿¹ºñ10";
     Text[ turkish ] = "Dolgu - Yedek 10";
+    Text[ catalan ] = "Relleno reserva 10";
 };
 
 String SIP_XA_FILLRESERVED11
@@ -11124,6 +11532,7 @@ String SIP_XA_FILLRESERVED11
     Text[ greek ] = "ÃÝìéóìá åíáëëáêô. 11";
     Text[ korean ] = "Ã¤¿ì±â¡¡¿¹ºñ 11";
     Text[ turkish ] = "Dolgu - Yedek 11";
+    Text[ catalan ] = "Relleno reserva 11";
 };
 
 String SIP_XA_FILLRESERVED_LAST
@@ -11150,6 +11559,7 @@ String SIP_XA_FILLRESERVED_LAST
     Text[ greek ] = "ÃÝìéóìá åíáëëáêô. 12";
     Text[ korean ] = "Ã¤¿ì±â ¿¹ºñ12";
     Text[ turkish ] = "Dolgu - Yedek 12";
+    Text[ catalan ] = "Relleno reserva 12";
 };
 
 String SIP_XATTRSET_FILL
@@ -11177,6 +11587,7 @@ String SIP_XATTRSET_FILL
     Text[ korean ] = "Ã¤¿ì±â ¼Ó¼º";
     Text[ turkish ] = "Yüzey öznitelikleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Atributos de relleno";
 };
 
 String SIP_XA_FORMTXTSTYLE
@@ -11203,6 +11614,7 @@ String SIP_XA_FORMTXTSTYLE
     Text[ greek ] = "Óôõë Fontwork";
     Text[ korean ] = "Fontwork À¯Çü";
     Text[ turkish ] = "Fontwork biçimi";
+    Text[ catalan ] = "Estilos Fontwork";
 };
 
 String SIP_XA_FORMTXTADJUST
@@ -11230,6 +11642,7 @@ String SIP_XA_FORMTXTADJUST
     Text[ korean ] = "Fontwork ¸ÂÃã";
     Text[ turkish ] = "Fontwork hizalamasý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Alineación Fontwork";
 };
 
 String SIP_XA_FORMTXTDISTANCE
@@ -11257,6 +11670,7 @@ String SIP_XA_FORMTXTDISTANCE
     Text[ korean ] = "Fontwork °£°Ý";
     Text[ turkish ] = "Fontwork aralýðý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Distancia Fontwork";
 };
 
 String SIP_XA_FORMTXTSTART
@@ -11284,6 +11698,7 @@ String SIP_XA_FORMTXTSTART
     Text[ korean ] = "Fontwork ±Û²Ã ½ÃÀÛ";
     Text[ turkish ] = "Fontwork: Yazýtipi baþý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Inicio Fontwork";
 };
 
 String SIP_XA_FORMTXTMIRROR
@@ -11310,6 +11725,7 @@ String SIP_XA_FORMTXTMIRROR
     Text[ greek ] = "Êáèñåðôéóìüò ãñáöÞò Fontwork";
     Text[ korean ] = "Fontwork ´ëÄª±Û²Ã";
     Text[ turkish ] = "Fontwork aynalý yazý";
+    Text[ catalan ] = "Reflejo Fontwork";
 };
 
 String SIP_XA_FORMTXTOUTLINE
@@ -11336,6 +11752,7 @@ String SIP_XA_FORMTXTOUTLINE
     Text[ greek ] = "Ðåñßãñáììá Fontwork";
     Text[ korean ] = "Fontwork À±°û ¹®ÀÚ";
     Text[ turkish ] = "Fontwork: Konturlu yazý";
+    Text[ catalan ] = "Contorno Fontwork";
 };
 
 String SIP_XA_FORMTXTSHADOW
@@ -11362,6 +11779,7 @@ String SIP_XA_FORMTXTSHADOW
     Text[ greek ] = "ÓêéÜ Fontwork";
     Text[ korean ] = "Fontwork À½¿µ";
     Text[ turkish ] = "Fontwork gölgesi";
+    Text[ catalan ] = "Sombra Fontwork";
 };
 
 String SIP_XA_FORMTXTSHDWCOLOR
@@ -11388,6 +11806,7 @@ String SIP_XA_FORMTXTSHDWCOLOR
     Text[ greek ] = "×ñþìá óêéÜò Fontwork";
     Text[ korean ] = "Fontwork À½¿µ »ö»ó";
     Text[ turkish ] = "Fontwork gölge rengi";
+    Text[ catalan ] = "Color de sombra Fontwork";
 };
 
 String SIP_XA_FORMTXTSHDWXVAL
@@ -11414,6 +11833,7 @@ String SIP_XA_FORMTXTSHDWXVAL
     Text[ greek ] = "Ìåôáôüðéóç × óêéÜò Fontwork";
     Text[ korean ] = "Fontwork À½¿µ ¿ÀÇÁ¼Â X";
     Text[ turkish ] = "Fontwork gölge konumu X";
+    Text[ catalan ] = "Desplaz. sombra de Fontwork X";
 };
 
 String SIP_XA_FORMTXTSHDWYVAL
@@ -11440,6 +11860,7 @@ String SIP_XA_FORMTXTSHDWYVAL
     Text[ greek ] = "Ìåôáôüðéóç Y óêéÜò Fontwork";
     Text[ korean ] = "Fontwork À½¿µ ¿ÀÇÁ¼Â Y";
     Text[ turkish ] = "Fontwork gölge konumu Y";
+    Text[ catalan ] = "Desplaz. sombra de Fontwork Y";
 };
 
 String SIP_XA_FORMTXTSTDFORM
@@ -11467,6 +11888,7 @@ String SIP_XA_FORMTXTSTDFORM
     Text[ korean ] = "Fontwork ±âº»Çü";
     Text[ turkish ] = "Fontwork: Standart biçim";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Forma estándar Fontwork";
 };
 
 String SIP_XA_FORMTXTHIDEFORM
@@ -11493,6 +11915,7 @@ String SIP_XA_FORMTXTHIDEFORM
     Text[ greek ] = "Áðüêñõøç ðåñéãñÜììáôïò Fontwork";
     Text[ korean ] = "Fontwork À±°û ¼û±â±â";
     Text[ turkish ] = "Fontwork konturunu gizle";
+    Text[ catalan ] = "Ocultar contorno Fontwork";
 };
 
 String SIP_XA_FORMTXTSHDWTRANSP
@@ -11519,6 +11942,7 @@ String SIP_XA_FORMTXTSHDWTRANSP
     Text[ greek ] = "ÄéáöÜíåéá óêéÜò Fontwork";
     Text[ korean ] = "Fontwork À½¿µ¡¡Åõ¸í";
     Text[ turkish ] = "Fontwork gölge saydamlýðý";
+    Text[ catalan ] = "Transparencia de sombra Fontwork";
 };
 
 String SIP_XA_FTRESERVED2
@@ -11545,6 +11969,7 @@ String SIP_XA_FTRESERVED2
     Text[ greek ] = "Fontwork åíáëëáêô. 2";
     Text[ korean ] = "Fontwork ¿¹ºñ 2";
     Text[ turkish ] = "Fontwork: Yedek 2";
+    Text[ catalan ] = "Fontwork reserva 2";
 };
 
 String SIP_XA_FTRESERVED3
@@ -11571,6 +11996,7 @@ String SIP_XA_FTRESERVED3
     Text[ greek ] = "Fontwork åíáëëáêô. 3";
     Text[ korean ] = "Fontwork ¿¹ºñ 3";
     Text[ turkish ] = "Fontwork: Yedek 3";
+    Text[ catalan ] = "Fontwork reserva 3";
 };
 
 String SIP_XA_FTRESERVED4
@@ -11597,6 +12023,7 @@ String SIP_XA_FTRESERVED4
     Text[ greek ] = "Fontwork åíáëëáêô. 4";
     Text[ korean ] = "Fontwork ¿¹ºñ 4";
     Text[ turkish ] = "Fontwork: Yedek 4";
+    Text[ catalan ] = "Fontwork reserva 4";
 };
 
 String SIP_XA_FTRESERVED5
@@ -11623,6 +12050,7 @@ String SIP_XA_FTRESERVED5
     Text[ greek ] = "Fontwork åíáëëáêô. 5";
     Text[ korean ] = "Fontwork ¿¹ºñ 5";
     Text[ turkish ] = "Fontwork: Yedek 5";
+    Text[ catalan ] = "Fontwork reserva 5";
 };
 
 String SIP_XA_FTRESERVED_LAST
@@ -11649,6 +12077,7 @@ String SIP_XA_FTRESERVED_LAST
     Text[ greek ] = "Fontwork åíáëëáêô. 6";
     Text[ korean ] = "Fontwork ¿¹ºñ 6";
     Text[ turkish ] = "Fontwork: Yedek 6";
+    Text[ catalan ] = "Fontwork reserva 6";
 };
 
 String SIP_XATTRSET_TEXT
@@ -11676,6 +12105,7 @@ String SIP_XATTRSET_TEXT
     Text[ korean ] = "Fontwork ¼Ó¼º";
     Text[ turkish ] = "Fontwork öznitelikleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Atributos de Fontwork";
 };
 
 String SIP_SA_SHADOW
@@ -11702,6 +12132,7 @@ String SIP_SA_SHADOW
     Text[ greek ] = "ÓêéÜ";
     Text[ korean ] = "À½¿µ";
     Text[ turkish ] = "Gölge";
+    Text[ catalan ] = "Sombra";
 };
 
 String SIP_SA_SHADOWCOLOR
@@ -11729,6 +12160,7 @@ String SIP_SA_SHADOWCOLOR
     Text[ korean ] = "À½¿µ »ö»ó";
     Text[ turkish ] = "Gölge rengi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Color de sombra";
 };
 
 String SIP_SA_SHADOWXDIST
@@ -11755,6 +12187,7 @@ String SIP_SA_SHADOWXDIST
     Text[ greek ] = "Áðüóôáóç óêéÜò X";
     Text[ korean ] = "À½¿µ °£°Ý X";
     Text[ turkish ] = "Gölge aralýðý X";
+    Text[ catalan ] = "Distancia de sombra X";
 };
 
 String SIP_SA_SHADOWYDIST
@@ -11781,6 +12214,7 @@ String SIP_SA_SHADOWYDIST
     Text[ greek ] = "Áðüóôáóç óêéÜò Y";
     Text[ korean ] = "À½¿µ °£°Ý Y";
     Text[ turkish ] = "Gölge aralýðý Y";
+    Text[ catalan ] = "Distancia de sombra Y";
 };
 
 String SIP_SA_SHADOWTRANSPARENCE
@@ -11807,6 +12241,7 @@ String SIP_SA_SHADOWTRANSPARENCE
     Text[ greek ] = "ÄéáöÜíåéá óêéÜò";
     Text[ korean ] = "Åõ¸í À½¿µ";
     Text[ turkish ] = "Gölge saydamlýðý";
+    Text[ catalan ] = "Transparencia de sombra";
 };
 
 String SIP_SA_SHADOW3D
@@ -11834,6 +12269,7 @@ String SIP_SA_SHADOW3D
     Text[ korean ] = "3£Ä£­ À½¿µ";
     Text[ turkish ] = "3B gölge";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Sombra 3D";
 };
 
 String SIP_SA_SHADOWPERSP
@@ -11860,6 +12296,7 @@ String SIP_SA_SHADOWPERSP
     Text[ greek ] = "ÐñïïðôéêÞ óêéÜ";
     Text[ korean ] = "¿ø±Ù°¨ÀÖ´Â À½¿µ";
     Text[ turkish ] = "Perspektifli gölge";
+    Text[ catalan ] = "Sombra en perspectiva";
 };
 
 String SIP_SA_SHADOWRESERVE1
@@ -11886,6 +12323,7 @@ String SIP_SA_SHADOWRESERVE1
     Text[ greek ] = "ÓêéÜ åíáëëáêô. 1";
     Text[ korean ] = "À½¿µ ¿¹ºñ1";
     Text[ turkish ] = "Gölge - Yedek 1";
+    Text[ catalan ] = "Sombra reserva 1";
 };
 
 String SIP_SA_SHADOWRESERVE2
@@ -11912,6 +12350,7 @@ String SIP_SA_SHADOWRESERVE2
     Text[ greek ] = "ÓêéÜ åíáëëáêô. 2";
     Text[ korean ] = "À½¿µ ¿¹ºñ2";
     Text[ turkish ] = "Gölge - Yedek 2";
+    Text[ catalan ] = "Sombra reserva 2";
 };
 
 String SIP_SA_SHADOWRESERVE3
@@ -11938,6 +12377,7 @@ String SIP_SA_SHADOWRESERVE3
     Text[ greek ] = "ÓêéÜ åíáëëáêô. 3";
     Text[ korean ] = "À½¿µ ¿¹ºñ3";
     Text[ turkish ] = "Gölge - Yedek 3";
+    Text[ catalan ] = "Sombra reserva 3";
 };
 
 String SIP_SA_SHADOWRESERVE4
@@ -11964,6 +12404,7 @@ String SIP_SA_SHADOWRESERVE4
     Text[ greek ] = "ÓêéÜ åíáëëáêô. 4";
     Text[ korean ] = "À½¿µ ¿¹ºñ4";
     Text[ turkish ] = "Gölge - Yedek 4";
+    Text[ catalan ] = "Sombra reserva 4";
 };
 
 String SIP_SA_SHADOWRESERVE5
@@ -11990,6 +12431,7 @@ String SIP_SA_SHADOWRESERVE5
     Text[ greek ] = "ÓêéÜ åíáëëáêô. 5";
     Text[ korean ] = "À½¿µ ¿¹ºñ5";
     Text[ turkish ] = "Gölge - Yedek 5";
+    Text[ catalan ] = "Sombra reserva 5";
 };
 
 String SIP_SDRATTRSET_SHADOW
@@ -12016,6 +12458,7 @@ String SIP_SDRATTRSET_SHADOW
     Text[ greek ] = "Éäéüôçôåò óêéÜò";
     Text[ korean ] = "À½¿µ ¼Ó¼º";
     Text[ turkish ] = "Gölge öznitelikleri";
+    Text[ catalan ] = "Atributos de sombra";
 };
 
 String SIP_SA_CAPTIONTYPE
@@ -12042,6 +12485,7 @@ String SIP_SA_CAPTIONTYPE
     Text[ greek ] = "Ôýðïò õðïìíÞìáôïò";
     Text[ korean ] = "¹ü·Ê Çü½Ä";
     Text[ turkish ] = "Belirtme çizgisi tipi";
+    Text[ catalan ] = "Tipo de leyenda";
 };
 
 String SIP_SA_CAPTIONFIXEDANGLE
@@ -12068,6 +12512,7 @@ String SIP_SA_CAPTIONFIXEDANGLE
     Text[ greek ] = "Ñýèìéóç êëßóçò õðïìíÞìáôïò";
     Text[ korean ] = "¹ü·Ê °¢µµ °íÁ¤";
     Text[ turkish ] = "Sabit belirtme çizgisi açýsý";
+    Text[ catalan ] = "Fijación ángulo de leyenda";
 };
 
 String SIP_SA_CAPTIONANGLE
@@ -12094,6 +12539,7 @@ String SIP_SA_CAPTIONANGLE
     Text[ greek ] = "Êëßóç õðïìíÞìáôïò";
     Text[ korean ] = "¹ü·Ê °¢µµ";
     Text[ turkish ] = "Belirtme çizgisi açýsý";
+    Text[ catalan ] = "Angulo de leyenda";
 };
 
 String SIP_SA_CAPTIONGAP
@@ -12120,6 +12566,7 @@ String SIP_SA_CAPTIONGAP
     Text[ greek ] = "Áðüóôáóç ãñáììÞò õðïìíÞìáôïò";
     Text[ korean ] = "¹ü·Ê¼± °£°Ý";
     Text[ turkish ] = "Belirtme çizgisi aralýðý";
+    Text[ catalan ] = "Distancia línea de leyenda";
 };
 
 String SIP_SA_CAPTIONESCDIR
@@ -12147,6 +12594,7 @@ String SIP_SA_CAPTIONESCDIR
     Text[ greek ] = "Êáôåýèõíóç åîüäïõ õðïìíÞìáôïò";
     Text[ korean ] = "¹ü·Ê ³¡³»±â ¹æÇâ";
     Text[ turkish ] = "Belirtme çizgisi çýkýþ yönü";
+    Text[ catalan ] = "Dirección salida de leyenda";
 };
 
 String SIP_SA_CAPTIONESCISREL
@@ -12174,6 +12622,7 @@ String SIP_SA_CAPTIONESCISREL
     Text[ greek ] = "Ó÷åôéêÞ Ýîïäïò õðïìíÞìáôïò";
     Text[ korean ] = "¹ü·Ê »ó´ëÀû ³¡³»±â";
     Text[ turkish ] = "Belirtme çizgisi: Göreceli çýkýþ";
+    Text[ catalan ] = "Salida relativa de leyenda";
 };
 
 String SIP_SA_CAPTIONESCREL
@@ -12200,6 +12649,7 @@ String SIP_SA_CAPTIONESCREL
     Text[ greek ] = "Ó÷åôéêÞ Ýîïäïò õðïìíÞìáôïò";
     Text[ korean ] = "¹ü·Ê »ó´ëÀû ³¡³»±â";
     Text[ turkish ] = "Belirtme çizgisi: Göreceli çýkýþ";
+    Text[ catalan ] = "Salida relativa de leyenda";
 };
 
 String SIP_SA_CAPTIONESCABS
@@ -12226,6 +12676,7 @@ String SIP_SA_CAPTIONESCABS
     Text[ greek ] = "Áðüëõôç Ýîïäïò õðïìíÞìáôïò";
     Text[ korean ] = "¹ü·Ê Àý´ëÀû ³¡³»±â";
     Text[ turkish ] = "Belirtme çizgisi: Mutlak çýkýþ";
+    Text[ catalan ] = "Salida absoluta de leyenda";
 };
 
 String SIP_SA_CAPTIONLINELEN
@@ -12252,6 +12703,7 @@ String SIP_SA_CAPTIONLINELEN
     Text[ greek ] = "ÌÞêïò ãñáììÞò õðïìíÞìáôïò";
     Text[ korean ] = "¹ü·Ê ¼± ±æÀÌ";
     Text[ turkish ] = "Belirtme çizgisi uzunluðu";
+    Text[ catalan ] = "Longitud de línea de leyenda";
 };
 
 String SIP_SA_CAPTIONFITLINELEN
@@ -12278,6 +12730,7 @@ String SIP_SA_CAPTIONFITLINELEN
     Text[ greek ] = "Áõôüìáôï ìÞêïò ãñáììÞò õðïìíÞìáôïò";
     Text[ korean ] = "ÀÚµ¿ ¹ü·Ê¼± ±æÀÌ";
     Text[ turkish ] = "Otomatik belirtme çizgisi uzunluðu";
+    Text[ catalan ] = "Longitud de línea de leyenda, automático";
 };
 
 String SIP_SA_CAPTIONRESERVE1
@@ -12304,6 +12757,7 @@ String SIP_SA_CAPTIONRESERVE1
     Text[ greek ] = "Õðüìíçìá åíáëëáêô. 1";
     Text[ korean ] = "¹ü·Ê ¿¹ºñ1";
     Text[ turkish ] = "Belirtme çizgisi - Yedek 1";
+    Text[ catalan ] = "Leyenda reserva 1";
 };
 
 String SIP_SA_CAPTIONRESERVE2
@@ -12330,6 +12784,7 @@ String SIP_SA_CAPTIONRESERVE2
     Text[ greek ] = "Õðüìíçìá åíáëëáêô. 2";
     Text[ korean ] = "¹ü·Ê ¿¹ºñ2";
     Text[ turkish ] = "Belirtme çizgisi - Yedek 2";
+    Text[ catalan ] = "Leyenda reserva 2";
 };
 
 String SIP_SA_CAPTIONRESERVE3
@@ -12356,6 +12811,7 @@ String SIP_SA_CAPTIONRESERVE3
     Text[ greek ] = "Õðüìíçìá åíáëëáêô. 3";
     Text[ korean ] = "¹ü·Ê ¿¹ºñ3";
     Text[ turkish ] = "Belirtme çizgisi - Yedek 3";
+    Text[ catalan ] = "Leyenda reserva 3";
 };
 
 String SIP_SA_CAPTIONRESERVE4
@@ -12382,6 +12838,7 @@ String SIP_SA_CAPTIONRESERVE4
     Text[ greek ] = "Õðüìíçìá åíáëëáêô. 4";
     Text[ korean ] = "¹ü·Ê ¿¹ºñ4";
     Text[ turkish ] = "Belirtme çizgisi - Yedek 4";
+    Text[ catalan ] = "Leyenda reserva 4";
 };
 
 String SIP_SA_CAPTIONRESERVE5
@@ -12408,6 +12865,7 @@ String SIP_SA_CAPTIONRESERVE5
     Text[ greek ] = "Õðüìíçìá åíáëëáêô. 5";
     Text[ korean ] = "¹ü·Ê ¿¹ºñ5";
     Text[ turkish ] = "Belirtme çizgisi - Yedek 5";
+    Text[ catalan ] = "Leyenda reserva 5";
 };
 
 String SIP_SDRATTRSET_CAPTION
@@ -12434,6 +12892,7 @@ String SIP_SDRATTRSET_CAPTION
     Text[ greek ] = "Éäéüôçôåò õðïìíÞìáôïò";
     Text[ korean ] = "¹ü·Ê ¼Ó¼º";
     Text[ turkish ] = "Belirtme çizgisi öznitelikleri";
+    Text[ catalan ] = "Atributos de leyenda";
 };
 
 String SIP_SDRATTRSET_OUTLINER
@@ -12461,6 +12920,7 @@ String SIP_SDRATTRSET_OUTLINER
     Text[ korean ] = "ÅØ½ºÆ® ¼Ó¼º";
     Text[ turkish ] = "Metin öznitelikleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Atributos de texto";
 };
 
 String SIP_SA_ECKENRADIUS
@@ -12487,6 +12947,7 @@ String SIP_SA_ECKENRADIUS
     Text[ greek ] = "Áêôßíá ãùíßáò";
     Text[ korean ] = "¸ð¼­¸® °¢µµ";
     Text[ turkish ] = "Köþe çapý";
+    Text[ catalan ] = "Radio de ángulo";
 };
 
 String SIP_SA_TEXT_MINFRAMEHEIGHT
@@ -12513,6 +12974,7 @@ String SIP_SA_TEXT_MINFRAMEHEIGHT
     Text[ greek ] = "ÅëÜ÷éóôï ýøïò ðëáéóßïõ";
     Text[ korean ] = "ÃÖ¼Ò Æ² ³ôÀÌ";
     Text[ turkish ] = "Asgari çerçeve yüksekliði";
+    Text[ catalan ] = "Altura de marco mínima";
 };
 
 String SIP_SA_TEXT_AUTOGROWHEIGHT
@@ -12539,6 +13001,7 @@ String SIP_SA_TEXT_AUTOGROWHEIGHT
     Text[ greek ] = "Áõôüìáôç ðñïóáñìïãÞ ôïõ ýøïõò";
     Text[ korean ] = "ÀÚµ¿ ³ôÀÌ Á¶Á¤";
     Text[ turkish ] = "Otomatik yükseklik ayarý";
+    Text[ catalan ] = "Ajute de altura automático";
 };
 
 String SIP_SA_TEXT_FITTOSIZE
@@ -12566,6 +13029,7 @@ String SIP_SA_TEXT_FITTOSIZE
     Text[ korean ] = "ÅØ½ºÆ®¸¦ Æ²¿¡ ¸ÂÃã";
     Text[ turkish ] = "Metni çerçeveye sýðdýr";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ajustar texto al marco";
 };
 
 String SIP_SA_TEXT_LEFTDIST
@@ -12593,6 +13057,7 @@ String SIP_SA_TEXT_LEFTDIST
     Text[ korean ] = "¿ÞÂÊ ÅØ½ºÆ® Æ² °£°Ý";
     Text[ turkish ] = "Sol metin çerçevesi aralýðý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Distancia izquierda al marco de texto";
 };
 
 String SIP_SA_TEXT_RIGHTDIST
@@ -12619,6 +13084,7 @@ String SIP_SA_TEXT_RIGHTDIST
     Text[ greek ] = "ÄåîéÜ áðüóôáóç ðëáéóßïõ êåéìÝíïõ";
     Text[ korean ] = "¿À¸¥ÂÊ ÅØ½ºÆ® Æ² °£°Ý";
     Text[ turkish ] = "Sað metin çerçevesi aralýðý";
+    Text[ catalan ] = "Distancia derecha al marco de texto";
 };
 
 String SIP_SA_TEXT_UPPERDIST
@@ -12645,6 +13111,7 @@ String SIP_SA_TEXT_UPPERDIST
     Text[ greek ] = "¢íù ðåñéèþñéï ðëáéóßïõ êåéìÝíïõ";
     Text[ korean ] = "À§ÂÊ ÅØ½ºÆ® Æ² °£°Ý";
     Text[ turkish ] = "Üst metin çerçevesi aralýðý";
+    Text[ catalan ] = "Distancia superior al marco de texto";
 };
 
 String SIP_SA_TEXT_LOWERDIST
@@ -12672,6 +13139,7 @@ String SIP_SA_TEXT_LOWERDIST
     Text[ korean ] = "¾Æ·¡ÂÊ ÅØ½ºÆ® Æ² °£°Ý";
     Text[ turkish ] = "Alt metin çerçevesi aralýðý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Distancia inferior al marco de texto";
 };
 
 String SIP_SA_TEXT_VERTADJUST
@@ -12699,6 +13167,7 @@ String SIP_SA_TEXT_VERTADJUST
     Text[ korean ] = "¼öÁ÷¹æÇâ ÅØ½ºÆ® °íÁ¤";
     Text[ turkish ] = "Dikey metin sabitleme";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Anclaje de texto, vertical";
 };
 
 String SIP_SA_TEXT_MAXFRAMEHEIGHT
@@ -12725,6 +13194,7 @@ String SIP_SA_TEXT_MAXFRAMEHEIGHT
     Text[ greek ] = "ÌÝãéóôï ýøïò ðëáéóßïõ";
     Text[ korean ] = "ÃÖ´ë Æ² ³ôÀÌ";
     Text[ turkish ] = "Azami çerçeve yüksekliði";
+    Text[ catalan ] = "Altura de marco máxima";
 };
 
 String SIP_SA_TEXT_MINFRAMEWIDTH
@@ -12751,6 +13221,7 @@ String SIP_SA_TEXT_MINFRAMEWIDTH
     Text[ greek ] = "ÅëÜ÷éóôï ðëÜôïò ðëáéóßïõ";
     Text[ korean ] = "ÃÖ¼Ò Æ² ³Êºñ";
     Text[ turkish ] = "Asgari çerçeve geniþliði";
+    Text[ catalan ] = "Ancho mínimo de marco";
 };
 
 String SIP_SA_TEXT_MAXFRAMEWIDTH
@@ -12777,6 +13248,7 @@ String SIP_SA_TEXT_MAXFRAMEWIDTH
     Text[ greek ] = "ÌÝãéóôï ðëÜôïò ðëáéóßïõ";
     Text[ korean ] = "ÃÖ´ë Æ² ³Êºñ";
     Text[ turkish ] = "Azami çerçeve geniþliði";
+    Text[ catalan ] = "Ancho máximo de marco";
 };
 
 String SIP_SA_TEXT_AUTOGROWWIDTH
@@ -12803,6 +13275,7 @@ String SIP_SA_TEXT_AUTOGROWWIDTH
     Text[ greek ] = "Áõôüìáôç ðñïóáñìïãÞ ðëÜôïõò";
     Text[ korean ] = "ÀÚµ¿ ³Êºñ Á¶Á¤";
     Text[ turkish ] = "Otomatik geniþlik ayarý";
+    Text[ catalan ] = "Ajuste automático de ancho";
 };
 
 String SIP_SA_TEXT_HORZADJUST
@@ -12830,6 +13303,7 @@ String SIP_SA_TEXT_HORZADJUST
     Text[ korean ] = "¼öÆò¹æÇâ ÅØ½ºÆ® °íÁ¤";
     Text[ turkish ] = "Yatay metin sabitleme";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Anclaje horizontal de texto";
 };
 
 String SIP_SA_TEXT_ANIKIND
@@ -12856,6 +13330,7 @@ String SIP_SA_TEXT_ANIKIND
     Text[ greek ] = "Êéíïýìåíï êåßìåíï";
     Text[ korean ] = "Æ¼Ä¿";
     Text[ turkish ] = "Hareketli yazý";
+    Text[ catalan ] = "Animación de texto";
 };
 
 String SIP_SA_TEXT_ANIDIRECTION
@@ -12882,6 +13357,7 @@ String SIP_SA_TEXT_ANIDIRECTION
     Text[ greek ] = "Êáôåýèõíóç êéíïýìåíïõ êåéìÝíïõ";
     Text[ korean ] = "Æ¼Ä¿ ¹æÇâ";
     Text[ turkish ] = "Hareketli yazý yönü";
+    Text[ catalan ] = "Dirección de la animación de texto";
 };
 
 String SIP_SA_TEXT_ANISTARTINSIDE
@@ -12908,6 +13384,7 @@ String SIP_SA_TEXT_ANISTARTINSIDE
     Text[ greek ] = "Åêêßíçóç êéíïýìåíïõ êåéìÝíïõ åóùôåñéêÜ";
     Text[ korean ] = "Æ¼Ä¿ ½ÃÀÛ ¹üÀ§";
     Text[ turkish ] = "Hareketli yazý baþlangýcý:";
+    Text[ catalan ] = "Inicio de la animación en";
 };
 
 String SIP_SA_TEXT_ANISTOPINSIDE
@@ -12935,6 +13412,7 @@ String SIP_SA_TEXT_ANISTOPINSIDE
     Text[ korean ] = "Æ¼Ä¿ Á¤Áö ¹üÀ§";
     Text[ turkish ] = "Hareketli yazý duraðý:";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Parada de animación en";
 };
 
 String SIP_SA_TEXT_ANICOUNT
@@ -12961,6 +13439,7 @@ String SIP_SA_TEXT_ANICOUNT
     Text[ greek ] = "Áñéèìüò åðáíáëÞøåùí êéíïýìåíïõ êåéìÝíïõ";
     Text[ korean ] = "¼øÈ¯ ¹®ÀÚ  ¼ö";
     Text[ turkish ] = "Hareketli yazý hareket sayýsý";
+    Text[ catalan ] = "Cantidad de animaciones";
 };
 
 String SIP_SA_TEXT_ANIDELAY
@@ -12987,6 +13466,7 @@ String SIP_SA_TEXT_ANIDELAY
     Text[ greek ] = "Ñõèìüò êéíïýìåíïõ êåéìÝíïõ";
     Text[ korean ] = "Æ¼Ä¿ ¼Óµµ";
     Text[ turkish ] = "Hareketli yazý hýzý";
+    Text[ catalan ] = "Incremento de animación";
 };
 
 String SIP_SA_TEXT_ANIAMOUNT
@@ -13013,6 +13493,7 @@ String SIP_SA_TEXT_ANIAMOUNT
     Text[ greek ] = "ÂÞìá êéíïýìåíïõ êåéìÝíïõ";
     Text[ korean ] = "Æ¼Ä¿ Áõ°¡Æø";
     Text[ turkish ] = "Hareketli yazý aralýðý";
+    Text[ catalan ] = "Retardo de la animación";
 };
 
 String SIP_SA_TEXT_CONTOURFRAME
@@ -13039,6 +13520,7 @@ String SIP_SA_TEXT_CONTOURFRAME
     Text[ greek ] = "ÑïÞ êåéìÝíïõ ðåñéãñÜììáôïò";
     Text[ korean ] = "À±°û ÅØ½ºÆ® Èå¸§";
     Text[ turkish ] = "Konturlu metin akýþý";
+    Text[ catalan ] = "Flujo de texto de contorno";
 };
 
 String SIP_SA_AUTOSHAPE_ADJUSTMENT
@@ -13063,6 +13545,7 @@ String SIP_SA_AUTOSHAPE_ADJUSTMENT
     Text[ chinese_traditional ] = "§Îª¬¦Û°Ê½Õ¾A";
     Text[ turkish ] = "SvDraw Autoshape Adjustment";
     Text[ arabic ] = "ÖÈØ ÇáÃÔßÇá ÇáÊáÞÇÆíÉ";
+    Text[ catalan ] = "Ajuste de autoformas";
 };
 
 String SIP_SA_RESERVE14
@@ -13089,6 +13572,7 @@ String SIP_SA_RESERVE14
     Text[ greek ] = "SvDraw åíáëëáêô. 14";
     Text[ korean ] = "SvDraw ¿¹ºñ 14";
     Text[ turkish ] = "SvDraw - Yedek 14";
+    Text[ catalan ] = "SvDraw reserva 14";
 };
 
 String SIP_SA_RESERVE15
@@ -13115,6 +13599,7 @@ String SIP_SA_RESERVE15
     Text[ greek ] = "SvDraw åíáëëáêô. 15";
     Text[ korean ] = "SvDraw ¿¹ºñ 15";
     Text[ turkish ] = "SvDraw - Yedek 15";
+    Text[ catalan ] = "SvDraw reserva 15";
 };
 
 String SIP_SA_RESERVE16
@@ -13141,6 +13626,7 @@ String SIP_SA_RESERVE16
     Text[ greek ] = "SvDraw åíáëëáêô. 16";
     Text[ korean ] = "SvDraw ¿¹ºñ 16";
     Text[ turkish ] = "SvDraw - Yedek 16";
+    Text[ catalan ] = "SvDraw reserva 16";
 };
 
 String SIP_SA_RESERVE17
@@ -13167,6 +13653,7 @@ String SIP_SA_RESERVE17
     Text[ greek ] = "SvDraw åíáëëáêô. 17";
     Text[ korean ] = "SvDraw ¿¹ºñ 17";
     Text[ turkish ] = "SvDraw - Yedek 17";
+    Text[ catalan ] = "SvDraw reserva 17";
 };
 
 String SIP_SA_RESERVE18
@@ -13193,6 +13680,7 @@ String SIP_SA_RESERVE18
     Text[ greek ] = "SvDraw åíáëëáêô. 18";
     Text[ korean ] = "SvDraw ¿¹ºñ 18";
     Text[ turkish ] = "SvDraw - Yedek 18";
+    Text[ catalan ] = "SvDraw reserva 18";
 };
 
 String SIP_SA_RESERVE19
@@ -13219,6 +13707,7 @@ String SIP_SA_RESERVE19
     Text[ greek ] = "SvDraw åíáëëáêô. 19";
     Text[ korean ] = "SvDraw ¿¹ºñ 19";
     Text[ turkish ] = "SvDraw - Yedek 19";
+    Text[ catalan ] = "SvDraw reserva 19";
 };
 
 String SIP_SDRATTRSET_MISC
@@ -13245,6 +13734,7 @@ String SIP_SDRATTRSET_MISC
     Text[ greek ] = "ÄéÜöïñåò éäéüôçôåò";
     Text[ korean ] = "´Ù¾çÇÑ ¼Ó¼º";
     Text[ turkish ] = "Çeþitli öznitelikler";
+    Text[ catalan ] = "Diversos atributos";
 };
 
 String SIP_SA_EDGEKIND
@@ -13271,6 +13761,7 @@ String SIP_SA_EDGEKIND
     Text[ greek ] = "Ôýðïò óýíäåóçò";
     Text[ korean ] = "¿¬°á¼± À¯Çü";
     Text[ turkish ] = "Baðlayýcý tipi";
+    Text[ catalan ] = "Tipo de conector";
 };
 
 String SIP_SA_EDGENODE1HORZDIST
@@ -13297,6 +13788,7 @@ String SIP_SA_EDGENODE1HORZDIST
     Text[ greek ] = "Ïñéæ. áðüóôáóç áíôéêåéìÝíïõ 1";
     Text[ korean ] = "¼öÆò °£°Ý °³Ã¼ 1";
     Text[ turkish ] = "Yatay uzaklýk Nesne 1";
+    Text[ catalan ] = "Distancia horz. objeto 1";
 };
 
 String SIP_SA_EDGENODE1VERTDIST
@@ -13323,6 +13815,7 @@ String SIP_SA_EDGENODE1VERTDIST
     Text[ greek ] = "Êáôáê. áðüóôáóç áíôéêåéìÝíïõ 1";
     Text[ korean ] = "¼öÁ÷ °£°Ý °³Ã¼ 1";
     Text[ turkish ] = "Dikey uzaklýk Nesne 1";
+    Text[ catalan ] = "Distancia vert. objeto 1";
 };
 
 String SIP_SA_EDGENODE2HORZDIST
@@ -13350,6 +13843,7 @@ String SIP_SA_EDGENODE2HORZDIST
     Text[ korean ] = "¼öÆò °£°Ý °³Ã¼ 2";
     Text[ turkish ] = "Yatay uzaklýk Nesne 2";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Distancia hor. objeto 2";
 };
 
 String SIP_SA_EDGENODE2VERTDIST
@@ -13376,6 +13870,7 @@ String SIP_SA_EDGENODE2VERTDIST
     Text[ greek ] = "Êáôáê. áðüóôáóç áíôéêåéìÝíïõ 2";
     Text[ korean ] = "¼öÁ÷ °£°Ý °³Ã¼ 2";
     Text[ turkish ] = "Dikey uzaklýk Nesne 2";
+    Text[ catalan ] = "Distancia ver. objeto 2";
 };
 
 String SIP_SA_EDGENODE1GLUEDIST
@@ -13402,6 +13897,7 @@ String SIP_SA_EDGENODE1GLUEDIST
     Text[ greek ] = "Áðüóôáóç êüëëçóçò áíôéêåéìÝíïõ 1";
     Text[ korean ] = "Á¢Âø °£°Ý °³Ã¼ 1";
     Text[ turkish ] = "Yapýþtýrma aralýðý: Nesne 1";
+    Text[ catalan ] = "Distancia adhesión objeto 1";
 };
 
 String SIP_SA_EDGENODE2GLUEDIST
@@ -13428,6 +13924,7 @@ String SIP_SA_EDGENODE2GLUEDIST
     Text[ greek ] = "Áðüóôáóç êüëëçóçò áíôéêåéìÝíïõ 2";
     Text[ korean ] = "Á¢Âø °£°Ý °³Ã¼ 2";
     Text[ turkish ] = "Yapýþtýrma aralýðý: Nesne 2";
+    Text[ catalan ] = "Distancia adhesión objeto 2";
 };
 
 String SIP_SA_EDGELINEDELTAANZ
@@ -13454,6 +13951,7 @@ String SIP_SA_EDGELINEDELTAANZ
     Text[ greek ] = "Áñéèìüò ãñáììþí ðïõ ìåôáêéíïýíôáé";
     Text[ korean ] = "ÀÌµ¿°¡´ÉÇÑ ¼±ÀÇ °³¼ö";
     Text[ turkish ] = "Taþýnabilir çizgi sayýsý";
+    Text[ catalan ] = "Núm. líneas desplazables";
 };
 
 String SIP_SA_EDGELINE1DELTA
@@ -13480,6 +13978,7 @@ String SIP_SA_EDGELINE1DELTA
     Text[ greek ] = "ÃñáììÞ ìåôáôüðéóçò 1";
     Text[ korean ] = "¿ÀÇÁ¼Â ¼± 1";
     Text[ turkish ] = "Kayma çizgisi 1";
+    Text[ catalan ] = "Desplazamiento línea 1";
 };
 
 String SIP_SA_EDGELINE2DELTA
@@ -13506,6 +14005,7 @@ String SIP_SA_EDGELINE2DELTA
     Text[ greek ] = "ÃñáììÞ ìåôáôüðéóçò 2";
     Text[ korean ] = "¿ÀÇÁ¼Â ¼± 2";
     Text[ turkish ] = "Kayma çizgisi 2";
+    Text[ catalan ] = "Desplazamiento línea 2";
 };
 
 String SIP_SA_EDGELINE3DELTA
@@ -13532,6 +14032,7 @@ String SIP_SA_EDGELINE3DELTA
     Text[ greek ] = "ÃñáììÞ ìåôáôüðéóçò 3";
     Text[ korean ] = "¿ÀÇÁ¼Â ¼± 3";
     Text[ turkish ] = "Kayma çizgisi 3";
+    Text[ catalan ] = "Desplazamiento línea 3";
 };
 
 String SIP_SA_EDGERESERVE02
@@ -13558,6 +14059,7 @@ String SIP_SA_EDGERESERVE02
     Text[ greek ] = "ÓõíäÝóåéò åíáëëáêô. 2";
     Text[ korean ] = "Ä¿³ØÅÍ¡¡¿¹ºñ2";
     Text[ turkish ] = "Baðlayýcý - Yedek 2";
+    Text[ catalan ] = "Conector reserva 2";
 };
 
 String SIP_SA_EDGERESERVE03
@@ -13584,6 +14086,7 @@ String SIP_SA_EDGERESERVE03
     Text[ greek ] = "ÓõíäÝóåéò åíáëëáêô. 3";
     Text[ korean ] = "Ä¿³ØÅÍ ¿¹ºñ3";
     Text[ turkish ] = "Baðlayýcý - Yedek 3";
+    Text[ catalan ] = "Conector reserva 3";
 };
 
 String SIP_SA_EDGERESERVE04
@@ -13610,6 +14113,7 @@ String SIP_SA_EDGERESERVE04
     Text[ greek ] = "ÓõíäÝóåéò åíáëëáêô. 4";
     Text[ korean ] = "Ä¿³ØÅÍ ¿¹ºñ4";
     Text[ turkish ] = "Baðlayýcý - Yedek 4";
+    Text[ catalan ] = "Conector reserva 4";
 };
 
 String SIP_SA_EDGERESERVE05
@@ -13636,6 +14140,7 @@ String SIP_SA_EDGERESERVE05
     Text[ greek ] = "ÓõíäÝóåéò åíáëëáêô. 5";
     Text[ korean ] = "Ä¿³ØÅÍ ¿¹ºñ5";
     Text[ turkish ] = "Baðlayýcý - Yedek 5";
+    Text[ catalan ] = "Conector reserva 5";
 };
 
 String SIP_SA_EDGERESERVE06
@@ -13662,6 +14167,7 @@ String SIP_SA_EDGERESERVE06
     Text[ greek ] = "ÓõíäÝóåéò åíáëëáêô. 6";
     Text[ korean ] = "Ä¿³ØÅÍ ¿¹ºñ6";
     Text[ turkish ] = "Baðlayýcý - Yedek 6";
+    Text[ catalan ] = "Conector reserva 6";
 };
 
 String SIP_SA_EDGERESERVE07
@@ -13688,6 +14194,7 @@ String SIP_SA_EDGERESERVE07
     Text[ greek ] = "ÓõíäÝóåéò åíáëëáêô. 7";
     Text[ korean ] = "Ä¿³ØÅÍ ¿¹ºñ7";
     Text[ turkish ] = "Baðlayýcý - Yedek 7";
+    Text[ catalan ] = "Conector reserva 7";
 };
 
 String SIP_SA_EDGERESERVE08
@@ -13714,6 +14221,7 @@ String SIP_SA_EDGERESERVE08
     Text[ greek ] = "ÓõíäÝóåéò åíáëëáêô. 8";
     Text[ korean ] = "Ä¿³ØÅÍ¡¡¿¹ºñ8";
     Text[ turkish ] = "Baðlayýcý - Yedek 8";
+    Text[ catalan ] = "Conector reserva 8";
 };
 
 String SIP_SA_EDGERESERVE09
@@ -13740,6 +14248,7 @@ String SIP_SA_EDGERESERVE09
     Text[ greek ] = "ÓõíäÝóåéò åíáëëáêô. 9";
     Text[ korean ] = "Ä¿³ØÅÍ¡¡¿¹ºñ9";
     Text[ turkish ] = "Baðlayýcý - Yedek 9";
+    Text[ catalan ] = "Conector reserva 9";
 };
 
 String SIP_SDRATTRSET_EDGE
@@ -13766,6 +14275,7 @@ String SIP_SDRATTRSET_EDGE
     Text[ greek ] = "Éäéüôçôåò óýíäåóçò";
     Text[ korean ] = "Ä¿³ØÅÍ ¼Ó¼º";
     Text[ turkish ] = "Baðlayýcý öznitelikleri";
+    Text[ catalan ] = "Atributos de conector";
 };
 
 String SIP_SA_MEASUREKIND
@@ -13792,6 +14302,7 @@ String SIP_SA_MEASUREKIND
     Text[ greek ] = "Ôýðïò äéáóôáóéïëüãçóçò";
     Text[ korean ] = "Ä¡¼ö À¯Çü";
     Text[ turkish ] = "Ölçüm tipi";
+    Text[ catalan ] = "Tipo de dimensionamiento";
 };
 
 String SIP_SA_MEASURETEXTHPOS
@@ -13819,6 +14330,7 @@ String SIP_SA_MEASURETEXTHPOS
     Text[ greek ] = "Êåßìåíï äéáóôáóéïëüãçóçò - Ïñéæüíôéá èÝóç";
     Text[ korean ] = "Ä¡¼ö°ª - ¼öÆò À§Ä¡";
     Text[ turkish ] = "Ölçüm metni - Yatay konum";
+    Text[ catalan ] = "Pos. horiz. texto dimension.";
 };
 
 String SIP_SA_MEASURETEXTVPOS
@@ -13846,6 +14358,7 @@ String SIP_SA_MEASURETEXTVPOS
     Text[ greek ] = "Êåßìåíï äéáóôáóéïëüãçóçò - Êáôáêüñõöç èÝóç";
     Text[ korean ] = "Ä¡¼ö°ª - ¼öÁ÷ À§Ä¡";
     Text[ turkish ] = "Ölçüm metni - Dikey konum";
+    Text[ catalan ] = "Pos. vert. texto dimension.";
 };
 
 String SIP_SA_MEASURELINEDIST
@@ -13873,6 +14386,7 @@ String SIP_SA_MEASURELINEDIST
     Text[ korean ] = "Ä¡¼ö¼± °£°Ý";
     Text[ turkish ] = "Ölçüm çizgisi aralýðý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Distancia líneas dimensiones";
 };
 
 String SIP_SA_MEASUREHELPLINEOVERHANG
@@ -13899,6 +14413,7 @@ String SIP_SA_MEASUREHELPLINEOVERHANG
     Text[ greek ] = "Ðñïåîï÷Þ âïçèçôéêÞò ãñáììÞò äéáóôáóéïëüãçóçò";
     Text[ korean ] = "Ä¡¼ö ¾È³»¼± µ¹Ãâ";
     Text[ turkish ] = "Yardýmcý çizgi sarkmasý";
+    Text[ catalan ] = "Guías sobresalientes";
 };
 
 String SIP_SA_MEASUREHELPLINEDIST
@@ -13925,6 +14440,7 @@ String SIP_SA_MEASUREHELPLINEDIST
     Text[ greek ] = "Áðüóôáóç ôçò âïçèçôéêÞò ãñáììÞò äéáóôáóéïëüãçóçò";
     Text[ korean ] = "Ä¡¼ö ¾È³»¼± °£°Ý";
     Text[ turkish ] = "Yardýmcý ölçüm çizgisi aralýðý";
+    Text[ catalan ] = "Distancia entre guías";
 };
 
 String SIP_SA_MEASUREHELPLINE1LEN
@@ -13951,6 +14467,7 @@ String SIP_SA_MEASUREHELPLINE1LEN
     Text[ greek ] = "Ðñïåîï÷Þ âïçèçôéêÞò ãñáììÞò äéáóôáóéïëüãçóçò 1";
     Text[ korean ] = "Ä¡¼ö ¾È³»¼± ¹é·Î±× 1";
     Text[ turkish ] = "Yardýmcý ölçüm çizgisi taþmasý 1";
+    Text[ catalan ] = "Extralargo líneas aux. de dimensionamiento 1";
 };
 
 String SIP_SA_MEASUREHELPLINE2LEN
@@ -13977,6 +14494,7 @@ String SIP_SA_MEASUREHELPLINE2LEN
     Text[ greek ] = "Ðñïåîï÷Þ âïçèçôéêÞò ãñáììÞò äéáóôáóéïëüãçóçò 2";
     Text[ korean ] = "Ä¡¼ö ¾È³»¼± ¹é·Î±× 2";
     Text[ turkish ] = "Yardýmcý ölçüm çizgisi taþmasý 2";
+    Text[ catalan ] = "Extralargo líneas aux. de dimensionamiento 2";
 };
 
 String SIP_SA_MEASUREBELOWREFEDGE
@@ -14003,6 +14521,7 @@ String SIP_SA_MEASUREBELOWREFEDGE
     Text[ greek ] = "Äéáóôáóéïëüãçóç êÜôù Üêñïõ";
     Text[ korean ] = "¾Æ·¡ ¸ð¼­¸® Ä¡¼ö";
     Text[ turkish ] = "Alt kenar ölçüsü";
+    Text[ catalan ] = "Dimensiones borde inferior";
 };
 
 String SIP_SA_MEASURETEXTROTA90
@@ -14029,6 +14548,7 @@ String SIP_SA_MEASURETEXTROTA90
     Text[ greek ] = "Êåßìåíï äéáóôáóéïëüãçóçò ëïîÜ ðñïò ãñáììÞ äéáóôáóéïëüãçóçò";
     Text[ korean ] = "Ä¡¼ö°ªÀ» Ä¡¼ö¼±¿¡ °¡·Î·Î";
     Text[ turkish ] = "Ölçüm çizgisini kesen ölçüm metni";
+    Text[ catalan ] = "Dimens. de texto a través de línea";
 };
 
 String SIP_SA_MEASURETEXTUPSIDEDOWN
@@ -14055,6 +14575,7 @@ String SIP_SA_MEASURETEXTUPSIDEDOWN
     Text[ greek ] = "ÐåñéóôñïöÞ êåéìÝíïõ äéáóôáóéïëüãçóçò êáôÜ 180ø";
     Text[ korean ] = "Ä¡¼ö°ª 180 È¸Àü";
     Text[ turkish ] = "Ölçüm metnini 180ø döndür";
+    Text[ catalan ] = "Girar texto dimens. en 180ø";
 };
 
 String SIP_SA_MEASUREOVERHANG
@@ -14081,6 +14602,7 @@ String SIP_SA_MEASUREOVERHANG
     Text[ greek ] = "Ðñïåîï÷Þ ãñáììÞò äéáóôáóéïëüãçóçò";
     Text[ korean ] = "Ä¡¼ö¼± µ¹Ãâ";
     Text[ turkish ] = "Ölçüm çizgisi sarkmasý";
+    Text[ catalan ] = "Resalte líneas de dimensiones";
 };
 
 String SIP_SA_MEASUREUNIT
@@ -14107,6 +14629,7 @@ String SIP_SA_MEASUREUNIT
     Text[ greek ] = "ÌïíÜäá ìÝôñçóçò";
     Text[ korean ] = "Ä¡¼ö ´ÜÀ§";
     Text[ turkish ] = "Ölçüm birimi";
+    Text[ catalan ] = "Unidad de medida";
 };
 
 String SIP_SA_MEASURESCALE
@@ -14134,6 +14657,7 @@ String SIP_SA_MEASURESCALE
     Text[ korean ] = "¹èÀ² Ãß°¡ÀûÀÎ ¿äÀÎ";
     Text[ turkish ] = "Ek ölçek faktörü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Factor adicional de escala";
 };
 
 String SIP_SA_MEASURESHOWUNIT
@@ -14160,6 +14684,7 @@ String SIP_SA_MEASURESHOWUNIT
     Text[ greek ] = "ÅìöÜíéóç ìïíÜäáò ìÝôñçóçò";
     Text[ korean ] = "Ä¡¼ö ´ÜÀ§ Ç¥½Ã";
     Text[ turkish ] = "Ölçü birimini göster";
+    Text[ catalan ] = "Visualización unidades de medida";
 };
 
 String SIP_SA_MEASUREFORMATSTRING
@@ -14186,6 +14711,7 @@ String SIP_SA_MEASUREFORMATSTRING
     Text[ greek ] = "ÌïñöÞ êåéìÝíïõ äéáóôáóéïëüãçóçò";
     Text[ korean ] = "Ä¡¼ö°ª Æ÷¸Ë";
     Text[ turkish ] = "Ölçüm metni formatý";
+    Text[ catalan ] = "Formato texto dimensionado";
 };
 
 String SIP_SA_MEASURETEXTAUTOANGLE
@@ -14212,6 +14738,7 @@ String SIP_SA_MEASURETEXTAUTOANGLE
     Text[ greek ] = "Áõôüìáôïò ïñéóìüò èÝóçò êåéìÝíïõ äéáóôáóéïëüãçóçò";
     Text[ korean ] = "Ä¡¼ö°ª°¢ ÀÚµ¿";
     Text[ turkish ] = "Otomatik ölçüm metni açýsý";
+    Text[ catalan ] = "Posicionamiento automático del texto de ángulo";
 };
 
 String SIP_SA_MEASURETEXTAUTOANGLEVIEW
@@ -14238,6 +14765,7 @@ String SIP_SA_MEASURETEXTAUTOANGLEVIEW
     Text[ greek ] = "Ãùíßá êëßóçò ãéá ôïí áõôüìáôï ïñéóìü èÝóçò ôïõ êåéìÝíïõ äéáóôáóéïëüãçóçò";
     Text[ korean ] = "Ä¡¼ö°ª°¢ ÀÚµ¿¿ë °¢µµ";
     Text[ turkish ] = "Otomatik ölçüm metni açýsý için açý";
+    Text[ catalan ] = "Angulo para ángulo automát. de texto dimens.";
 };
 
 String SIP_SA_MEASURETEXTISFIXEDANGLE
@@ -14264,6 +14792,7 @@ String SIP_SA_MEASURETEXTISFIXEDANGLE
     Text[ greek ] = "Êáèïñéóìüò ôçò êëßóçò ôïõ êåéìÝíïõ äéáóôáóéïëüãçóçò";
     Text[ korean ] = "Ä¡¼ö°ª°¢ Á¤ÀÇ";
     Text[ turkish ] = "Ölçüm metni açýsýnýn belirlenmesi";
+    Text[ catalan ] = "Definición del ángulo de texto dimensionado";
 };
 
 String SIP_SA_MEASURETEXTFIXEDANGLE
@@ -14290,6 +14819,7 @@ String SIP_SA_MEASURETEXTFIXEDANGLE
     Text[ greek ] = "Ãùíßá êëßóçò êåéìÝíïõ äéáóôáóéïëüãçóçò";
     Text[ korean ] = "Ä¡¼ö°ª°¢";
     Text[ turkish ] = "Ölçüm metni açýsý";
+    Text[ catalan ] = "Angulo de texto dimensionado";
 };
 
 String SIP_SA_MEASURERESERVE04
@@ -14316,6 +14846,7 @@ String SIP_SA_MEASURERESERVE04
     Text[ greek ] = "Äéáóôáóéïëüãçóç åíáëëáêô. 4";
     Text[ korean ] = "Ä¡¼ö ¿¹ºñ4";
     Text[ turkish ] = "Boyutlar - Yedek 4";
+    Text[ catalan ] = "Dimensiones reserva 4";
 };
 
 String SIP_SA_MEASURERESERVE05
@@ -14342,6 +14873,7 @@ String SIP_SA_MEASURERESERVE05
     Text[ greek ] = "Äéáóôáóéïëüãçóç åíáëëáêô. 5";
     Text[ korean ] = "Ä¡¼ö ¿¹ºñ5";
     Text[ turkish ] = "Boyutlar - Yedek 5";
+    Text[ catalan ] = "Dimensionamiento reserva 5";
 };
 
 String SIP_SA_MEASURERESERVE06
@@ -14368,6 +14900,7 @@ String SIP_SA_MEASURERESERVE06
     Text[ greek ] = "Äéáóôáóéïëüãçóç åíáëëáêô. 6";
     Text[ korean ] = "Ä¡¼ö ¿¹ºñ6";
     Text[ turkish ] = "Boyutlar - Yedek 6";
+    Text[ catalan ] = "Dimensionamiento reserva 6";
 };
 
 String SIP_SA_MEASURERESERVE07
@@ -14394,6 +14927,7 @@ String SIP_SA_MEASURERESERVE07
     Text[ greek ] = "Äéáóôáóéïëüãçóç åíáëëáêô. 7";
     Text[ korean ] = "Ä¡¼ö ¿¹ºñ7";
     Text[ turkish ] = "Boyutlar - Yedek 7";
+    Text[ catalan ] = "Dimensionamiento reserva 7";
 };
 
 String SIP_SDRATTRSET_MEASURE
@@ -14420,6 +14954,7 @@ String SIP_SDRATTRSET_MEASURE
     Text[ greek ] = "Éäéüôçôåò äéáóôáóéïëüãçóçò";
     Text[ korean ] = "Ä¡¼ö ¼Ó¼º";
     Text[ turkish ] = "Boyut öznitelikleri";
+    Text[ catalan ] = "Atributo de dimensiones";
 };
 
 String SIP_SA_CIRCKIND
@@ -14447,6 +14982,7 @@ String SIP_SA_CIRCKIND
     Text[ korean ] = "¿ø À¯Çü";
     Text[ turkish ] = "Daire tipi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tipo de círculo";
 };
 
 String SIP_SA_CIRCSTARTANGLE
@@ -14474,6 +15010,7 @@ String SIP_SA_CIRCSTARTANGLE
     Text[ korean ] = "½ÃÀÛ °¢µµ";
     Text[ turkish ] = "Baþlangýç açýsý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Angulo inicial";
 };
 
 String SIP_SA_CIRCENDANGLE
@@ -14500,6 +15037,7 @@ String SIP_SA_CIRCENDANGLE
     Text[ greek ] = "ÔåëéêÞ ãùíßá";
     Text[ korean ] = "³¡ °¢µµ";
     Text[ turkish ] = "Bitiþ açýsý";
+    Text[ catalan ] = "Angulo final";
 };
 
 String SIP_SA_CIRCRESERVE0
@@ -14526,6 +15064,7 @@ String SIP_SA_CIRCRESERVE0
     Text[ greek ] = "Êýêëïò åíáëëáêô. 0";
     Text[ korean ] = "¿ø ¿¹ºñ0";
     Text[ turkish ] = "Daire - Yedek 0";
+    Text[ catalan ] = "Círculo reserva 0";
 };
 
 String SIP_SA_CIRCRESERVE1
@@ -14552,6 +15091,7 @@ String SIP_SA_CIRCRESERVE1
     Text[ greek ] = "Êýêëïò åíáëëáêô. 1";
     Text[ korean ] = "¿ø ¿¹ºñ1";
     Text[ turkish ] = "Daire - Yedek 1";
+    Text[ catalan ] = "Círculo reserva 1";
 };
 
 String SIP_SA_CIRCRESERVE2
@@ -14578,6 +15118,7 @@ String SIP_SA_CIRCRESERVE2
     Text[ greek ] = "Êýêëïò åíáëëáêô. 2";
     Text[ korean ] = "¿ø ¿¹ºñ2";
     Text[ turkish ] = "Daire - Yedek 2";
+    Text[ catalan ] = "Círculo reserva 2";
 };
 
 String SIP_SA_CIRCRESERVE3
@@ -14604,6 +15145,7 @@ String SIP_SA_CIRCRESERVE3
     Text[ greek ] = "Êýêëïò åíáëëáêô. 3";
     Text[ korean ] = "¿ø ¿¹ºñ3";
     Text[ turkish ] = "Daire - Yedek 3";
+    Text[ catalan ] = "Círculo reserva 3";
 };
 
 String SIP_SDRATTRSET_CIRC
@@ -14630,6 +15172,7 @@ String SIP_SDRATTRSET_CIRC
     Text[ greek ] = "Éäéüôçôåò êýêëïõ";
     Text[ korean ] = "¿ø ¼Ó¼º";
     Text[ turkish ] = "Daire öznitelikleri";
+    Text[ catalan ] = "Atributos de círculo";
 };
 
 String SIP_SA_OBJMOVEPROTECT
@@ -14656,6 +15199,7 @@ String SIP_SA_OBJMOVEPROTECT
     Text[ greek ] = "Ðñïóôáôåõüìåíç èÝóç áíôéêåéìÝíïõ";
     Text[ korean ] = "°³Ã¼ À§Ä¡ º¸È£";
     Text[ turkish ] = "Nesne konumu korumalý";
+    Text[ catalan ] = "Posición de objeto protegida";
 };
 
 String SIP_SA_OBJSIZEPROTECT
@@ -14683,6 +15227,7 @@ String SIP_SA_OBJSIZEPROTECT
     Text[ korean ] = "°³Ã¼ Å©±â º¸È£";
     Text[ turkish ] = "Nesne boyutu korumalý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tamaño de objeto protegido";
 };
 
 String SIP_SA_OBJPRINTABLE
@@ -14710,6 +15255,7 @@ String SIP_SA_OBJPRINTABLE
     Text[ korean ] = "°³Ã¼, ÀÎ¼â °¡´É";
     Text[ turkish ] = "Nesne yazdýrýlabilir";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objeto imprimible";
 };
 
 String SIP_SA_LAYERID
@@ -14736,6 +15282,7 @@ String SIP_SA_LAYERID
     Text[ greek ] = "Ôáõôüôçôá åðéðÝäïõ";
     Text[ korean ] = "·¹º§ ID";
     Text[ turkish ] = "Düzey tanýtýcýsý";
+    Text[ catalan ] = "Identificación de niveles";
 };
 
 String SIP_SA_LAYERNAME
@@ -14762,6 +15309,7 @@ String SIP_SA_LAYERNAME
     Text[ greek ] = "Åðßðåäï";
     Text[ korean ] = "·¹º§";
     Text[ turkish ] = "Düzey";
+    Text[ catalan ] = "Nivel";
 };
 
 String SIP_SA_OBJECTNAME
@@ -14789,6 +15337,7 @@ String SIP_SA_OBJECTNAME
     Text[ korean ] = "°³Ã¼ ÀÌ¸§";
     Text[ turkish ] = "Nesne adý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Nombre de objeto";
 };
 
 String SIP_SA_ALLPOSITIONX
@@ -14815,6 +15364,7 @@ String SIP_SA_ALLPOSITIONX
     Text[ greek ] = "ÈÝóç X, ðëÞñçò";
     Text[ korean ] = "X À§Ä¡, ÀüÃ¼";
     Text[ turkish ] = "X konumu (tümü)";
+    Text[ catalan ] = "Posición X, todo";
 };
 
 String SIP_SA_ALLPOSITIONY
@@ -14841,6 +15391,7 @@ String SIP_SA_ALLPOSITIONY
     Text[ greek ] = "ÈÝóç Y, ðëÞñçò";
     Text[ korean ] = "Y À§Ä¡, ÀüÃ¼";
     Text[ turkish ] = "Y konumu (tümü)";
+    Text[ catalan ] = "Posición Y, todo";
 };
 
 String SIP_SA_ALLSIZEWIDTH
@@ -14867,6 +15418,7 @@ String SIP_SA_ALLSIZEWIDTH
     Text[ greek ] = "ÐëÜôïò, ðëÞñçò";
     Text[ korean ] = "³Êºñ, ÀüÃ¼";
     Text[ turkish ] = "Toplam geniþlik";
+    Text[ catalan ] = "Ancho, todo";
 };
 
 String SIP_SA_ALLSIZEHEIGHT
@@ -14893,6 +15445,7 @@ String SIP_SA_ALLSIZEHEIGHT
     Text[ greek ] = "¾øïò, óõíïëéêÜ";
     Text[ korean ] = "³ôÀÌ, ÀüÃ¼";
     Text[ turkish ] = "Toplam yükseklik";
+    Text[ catalan ] = "Alto, todo";
 };
 
 String SIP_SA_ONEPOSITIONX
@@ -14919,6 +15472,7 @@ String SIP_SA_ONEPOSITIONX
     Text[ greek ] = "ÈÝóç X ÷ùñéóôÜ";
     Text[ korean ] = "X À§Ä¡, ´ÜÀÏ";
     Text[ turkish ] = "X konumu (tek)";
+    Text[ catalan ] = "Posición X, individual";
 };
 
 String SIP_SA_ONEPOSITIONY
@@ -14945,6 +15499,7 @@ String SIP_SA_ONEPOSITIONY
     Text[ greek ] = "ÈÝóç Y ÷ùñéóôÜ";
     Text[ korean ] = "Y À§Ä¡, ´ÜÀÏ";
     Text[ turkish ] = "Y konumu (tek)";
+    Text[ catalan ] = "Posición Y, individual";
 };
 
 String SIP_SA_ONESIZEWIDTH
@@ -14971,6 +15526,7 @@ String SIP_SA_ONESIZEWIDTH
     Text[ greek ] = "ÐëÜôïò îå÷ùñéóôÜ";
     Text[ korean ] = "´ÜÀÏ ³Êºñ";
     Text[ turkish ] = "Geniþlik (tek)";
+    Text[ catalan ] = "Ancho, individual";
 };
 
 String SIP_SA_ONESIZEHEIGHT
@@ -14997,6 +15553,7 @@ String SIP_SA_ONESIZEHEIGHT
     Text[ greek ] = "¾øïò ìåìïíùìÝíá";
     Text[ korean ] = "´ÜÀÏ ³ôÀÌ";
     Text[ turkish ] = "Yükseklik (tek)";
+    Text[ catalan ] = "Alto, individual";
 };
 
 String SIP_SA_LOGICSIZEWIDTH
@@ -15023,6 +15580,7 @@ String SIP_SA_LOGICSIZEWIDTH
     Text[ greek ] = "Ëïãéêü ðëÜôïò";
     Text[ korean ] = "³í¸®Àû ³Êºñ";
     Text[ turkish ] = "Mantýksal geniþlik";
+    Text[ catalan ] = "Ancho, lógico";
 };
 
 String SIP_SA_LOGICSIZEHEIGHT
@@ -15049,6 +15607,7 @@ String SIP_SA_LOGICSIZEHEIGHT
     Text[ greek ] = "Ëïãéêü ýøïò";
     Text[ korean ] = "³í¸®Àû ³ôÀÌ";
     Text[ turkish ] = "Mantýksal yükseklik";
+    Text[ catalan ] = "Alto, lógico";
 };
 
 String SIP_SA_ROTATEANGLE
@@ -15075,6 +15634,7 @@ String SIP_SA_ROTATEANGLE
     Text[ greek ] = "Ãùíßá ðåñéóôñïöÞò ìåìïíùìÝíá";
     Text[ korean ] = "´ÜÀÏ È¸Àü °¢µµ";
     Text[ turkish ] = "Dönüþ açýsý (tek)";
+    Text[ catalan ] = "Angulo de rotación, individual";
 };
 
 String SIP_SA_SHEARANGLE
@@ -15101,6 +15661,7 @@ String SIP_SA_SHEARANGLE
     Text[ greek ] = "Ãùíßá äéÜôìçóçò, ìåìïíùìÝíá";
     Text[ korean ] = "´ÜÀÏ ±³Â÷ °¢µµ";
     Text[ turkish ] = "Kesiþme açýsý (tek)";
+    Text[ catalan ] = "Angulo de desviación, individual";
 };
 
 String SIP_SA_MOVEX
@@ -15128,6 +15689,7 @@ String SIP_SA_MOVEX
     Text[ korean ] = "¼öÆò ÀÌµ¿";
     Text[ turkish ] = "Yatay taþý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Desplazar horizontal";
 };
 
 String SIP_SA_MOVEY
@@ -15155,6 +15717,7 @@ String SIP_SA_MOVEY
     Text[ korean ] = "¼öÁ÷ ÀÌµ¿";
     Text[ turkish ] = "Dikey taþý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Desplazar vertical";
 };
 
 String SIP_SA_RESIZEXONE
@@ -15182,6 +15745,7 @@ String SIP_SA_RESIZEXONE
     Text[ korean ] = "Å©±â º¯°æ X, ´ÜÀÏ";
     Text[ turkish ] = "X için yeni boyut (tek)";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Redimensión X, individual";
 };
 
 String SIP_SA_RESIZEYONE
@@ -15209,6 +15773,7 @@ String SIP_SA_RESIZEYONE
     Text[ korean ] = "Å©±â º¯°æ Y, ´ÜÀÏ";
     Text[ turkish ] = "Y için yeni boyut (tek)";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Redimensión Y, individual";
 };
 
 String SIP_SA_ROTATEONE
@@ -15235,6 +15800,7 @@ String SIP_SA_ROTATEONE
     Text[ greek ] = "ÐåñéóôñïöÞ, ìåìïíùìÝíá";
     Text[ korean ] = "´ÜÀÏ È¸Àü";
     Text[ turkish ] = "Döndür (tek)";
+    Text[ catalan ] = "Rodar, individual";
 };
 
 String SIP_SA_HORZSHEARONE
@@ -15261,6 +15827,7 @@ String SIP_SA_HORZSHEARONE
     Text[ greek ] = "Ïñéæüíôéá äéÜôìçóç, ìåìïíùìÝíá";
     Text[ korean ] = "¼öÆòÀ¸·Î ´ÜÀÏ ±³Â÷";
     Text[ turkish ] = "Yatay kesiþme (tek)";
+    Text[ catalan ] = "Cortar horiz., individual";
 };
 
 String SIP_SA_VERTSHEARONE
@@ -15287,6 +15854,7 @@ String SIP_SA_VERTSHEARONE
     Text[ greek ] = "Êáôáêüñõöç äéÜôìçóç, ìåìïíùìÝíá";
     Text[ korean ] = "¼öÁ÷À¸·Î ´ÜÀÏ ±³Â÷";
     Text[ turkish ] = "Dikey kesiþme (tek)";
+    Text[ catalan ] = "Cortar vert., individual";
 };
 
 String SIP_SA_RESIZEXALL
@@ -15314,6 +15882,7 @@ String SIP_SA_RESIZEXALL
     Text[ korean ] = "Å©±â º¯°æ X, ÀüÃ¼";
     Text[ turkish ] = "X için yeni boyut (tümü)";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Redimensión X, todo";
 };
 
 String SIP_SA_RESIZEYALL
@@ -15341,6 +15910,7 @@ String SIP_SA_RESIZEYALL
     Text[ korean ] = "Å©±â º¯°æ Y, ÀüÃ¼";
     Text[ turkish ] = "Y için yeni boyut (tümü)";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Redimensión Y, todo";
 };
 
 String SIP_SA_ROTATEALL
@@ -15367,6 +15937,7 @@ String SIP_SA_ROTATEALL
     Text[ greek ] = "ÓôñïöÞ, ðëÞñçò";
     Text[ korean ] = "ÀüÃ¼ È¸Àü";
     Text[ turkish ] = "Döndür (tümü)";
+    Text[ catalan ] = "Rodar, todo";
 };
 
 String SIP_SA_HORZSHEARALL
@@ -15394,6 +15965,7 @@ String SIP_SA_HORZSHEARALL
     Text[ korean ] = "¼öÆòÀ¸·Î ÀüÃ¼ È¸Àü";
     Text[ turkish ] = "Yatay kesiþme (tümü)";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Cortar horiz., todo";
 };
 
 String SIP_SA_VERTSHEARALL
@@ -15420,6 +15992,7 @@ String SIP_SA_VERTSHEARALL
     Text[ greek ] = "Êáôáêüñõöç äéÜôìçóç, óõíïëéêÜ";
     Text[ korean ] = "¼öÁ÷À¸·Î ÀüÃ¼ ±³Â÷";
     Text[ turkish ] = "Dikey kesiþme (tümü)";
+    Text[ catalan ] = "Cortar vert., todo";
 };
 
 String SIP_SA_TRANSFORMREF1X
@@ -15447,6 +16020,7 @@ String SIP_SA_TRANSFORMREF1X
     Text[ korean ] = "ÂüÁ¶ Æ÷ÀÎÆ® 1 X";
     Text[ turkish ] = "Referans noktasý 1 X";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Punto de referencia 1 X";
 };
 
 String SIP_SA_TRANSFORMREF1Y
@@ -15474,6 +16048,7 @@ String SIP_SA_TRANSFORMREF1Y
     Text[ korean ] = "ÂüÁ¶ Æ÷ÀÎÆ® 1 Y";
     Text[ turkish ] = "Referans noktasý 1 Y";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Punto de referencia 1 Y";
 };
 
 String SIP_SA_TRANSFORMREF2X
@@ -15501,6 +16076,7 @@ String SIP_SA_TRANSFORMREF2X
     Text[ korean ] = "ÂüÁ¶ Æ÷ÀÎÆ® 2 X";
     Text[ turkish ] = "Referans noktasý 2 X";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Punto de referencia 2 X";
 };
 
 String SIP_SA_TRANSFORMREF2Y
@@ -15528,6 +16104,7 @@ String SIP_SA_TRANSFORMREF2Y
     Text[ korean ] = "ÂüÁ¶ Æ÷ÀÎÆ® 2 Y";
     Text[ turkish ] = "Referans noktasý 2 Y";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Punto de referencia 2 Y";
 };
 
 String SIP_EE_PARA_HYPHENATE
@@ -15555,6 +16132,7 @@ String SIP_EE_PARA_HYPHENATE
     Text[ korean ] = "ÇÏÀÌÇÂ ³Ö±â";
     Text[ turkish ] = "Heceleme";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Separación silábica";
 };
 
 String SIP_EE_PARA_BULLETSTATE
@@ -15582,6 +16160,7 @@ String SIP_EE_PARA_BULLETSTATE
     Text[ korean ] = "±Û¸Ó¸®±âÈ£  ³ªÅ¸³»±â";
     Text[ turkish ] = "Madde iþaretlerini göster";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Mostrar viñeta";
 };
 
 String SIP_EE_PARA_OUTLLRSPACE
@@ -15609,6 +16188,7 @@ String SIP_EE_PARA_OUTLLRSPACE
     Text[ korean ] = "±Û¸Ó¸®±âÈ£¿¡¼­ µé¿©¾²±â";
     Text[ turkish ] = "Numaralama için girintiler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Sangría en enumeración";
 };
 
 String SIP_EE_PARA_OUTLLEVEL
@@ -15636,6 +16216,7 @@ String SIP_EE_PARA_OUTLLEVEL
     Text[ korean ] = "±Û¸Ó¸®±âÈ£¡¡¼öÁØ";
     Text[ turkish ] = "Numaralama düzeyi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Nivel de enumeración";
 };
 
 String SIP_EE_PARA_BULLET
@@ -15663,6 +16244,7 @@ String SIP_EE_PARA_BULLET
     Text[ korean ] = "±Û¸Ó¸®±âÈ£";
     Text[ turkish ] = "Numaralama ve madde iþaretleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Viñeta";
 };
 
 String SIP_EE_PARA_LRSPACE
@@ -15690,6 +16272,7 @@ String SIP_EE_PARA_LRSPACE
     Text[ korean ] = "µé¿©¾²±â";
     Text[ turkish ] = "Girintiler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Sangrías";
 };
 
 String SIP_EE_PARA_ULSPACE
@@ -15716,6 +16299,7 @@ String SIP_EE_PARA_ULSPACE
     Text[ greek ] = "ÁðïóôÜóåéò ðáñáãñÜöùí";
     Text[ korean ] = "´Ü¶ô °£°Ý";
     Text[ turkish ] = "Paragraf aralýklarý";
+    Text[ catalan ] = "Espacios entre párrafos";
 };
 
 String SIP_EE_PARA_SBL
@@ -15742,6 +16326,7 @@ String SIP_EE_PARA_SBL
     Text[ greek ] = "ÄéÜóôé÷ï";
     Text[ korean ] = "Çà°£";
     Text[ turkish ] = "Satýr aralýðý";
+    Text[ catalan ] = "Interlineado";
 };
 
 String SIP_EE_PARA_JUST
@@ -15769,6 +16354,7 @@ String SIP_EE_PARA_JUST
     Text[ korean ] = "´Ü¶ô ¸ÂÃã";
     Text[ turkish ] = "Paragraf hizalamasý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Alineación de párrafo";
 };
 
 String SIP_EE_PARA_TABS
@@ -15795,6 +16381,7 @@ String SIP_EE_PARA_TABS
     Text[ greek ] = "ÓôçëïèÝôåò";
     Text[ korean ] = "ÅÇ";
     Text[ turkish ] = "Sekmeler";
+    Text[ catalan ] = "Tabulaciones";
 };
 
 String SIP_EE_CHAR_COLOR
@@ -15822,6 +16409,7 @@ String SIP_EE_CHAR_COLOR
     Text[ korean ] = "±Û²Ã »ö";
     Text[ turkish ] = "Yazýtipi rengi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Color de fuente";
 };
 
 String SIP_EE_CHAR_FONTINFO
@@ -15848,6 +16436,7 @@ String SIP_EE_CHAR_FONTINFO
     Text[ greek ] = "Óåô ÷áñáêôÞñùí";
     Text[ korean ] = "¹®ÀÚÁýÇÕ";
     Text[ turkish ] = "Karakter kümesi";
+    Text[ catalan ] = "Juego de caracteres";
 };
 
 String SIP_EE_CHAR_FONTHEIGHT
@@ -15875,6 +16464,7 @@ String SIP_EE_CHAR_FONTHEIGHT
     Text[ korean ] = "±Û²Ã Å©±â";
     Text[ turkish ] = "Yazýtipi boyutu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tamaño de fuente";
 };
 
 String SIP_EE_CHAR_FONTWIDTH
@@ -15902,6 +16492,7 @@ String SIP_EE_CHAR_FONTWIDTH
     Text[ korean ] = "±Û²Ã ³Êºñ";
     Text[ turkish ] = "Yazýtipi geniþliði";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ancho de fuente";
 };
 
 String SIP_EE_CHAR_WEIGHT
@@ -15928,6 +16519,7 @@ String SIP_EE_CHAR_WEIGHT
     Text[ greek ] = "ÐÜ÷ïò ãñáììáôïóåéñÜò";
     Text[ korean ] = "±Û²Ã µÎ²²";
     Text[ turkish ] = "Yazýtipi kalýnlýðý";
+    Text[ catalan ] = "Negrita";
 };
 
 String SIP_EE_CHAR_UNDERLINE
@@ -15955,6 +16547,7 @@ String SIP_EE_CHAR_UNDERLINE
     Text[ korean ] = "¹ØÁÙ";
     Text[ turkish ] = "Altý çizili";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Subrayado";
 };
 
 String SIP_EE_CHAR_STRIKEOUT
@@ -15982,6 +16575,7 @@ String SIP_EE_CHAR_STRIKEOUT
     Text[ korean ] = "Ãë¼Ò¼±";
     Text[ turkish ] = "Üstü çizili";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tachado";
 };
 
 String SIP_EE_CHAR_ITALIC
@@ -16009,6 +16603,7 @@ String SIP_EE_CHAR_ITALIC
     Text[ korean ] = "ÀÌÅÅ¸¯Ã¼";
     Text[ turkish ] = "Ýtalik";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Cursiva";
 };
 
 String SIP_EE_CHAR_OUTLINE
@@ -16035,6 +16630,7 @@ String SIP_EE_CHAR_OUTLINE
     Text[ greek ] = "ÃñáììáôïóåéñÜ ðåñéãñÜììáôïò";
     Text[ korean ] = "À±°û¹®ÀÚ";
     Text[ turkish ] = "Konturlu yazý";
+    Text[ catalan ] = "Contorno";
 };
 
 String SIP_EE_CHAR_SHADOW
@@ -16061,6 +16657,7 @@ String SIP_EE_CHAR_SHADOW
     Text[ greek ] = "ÓêéÜ ãñáììáôïóåéñÜò";
     Text[ korean ] = "±Û²Ã À½¿µ";
     Text[ turkish ] = "Yazýtipi gölgesi";
+    Text[ catalan ] = "Sombra";
 };
 
 String SIP_EE_CHAR_ESCAPEMENT
@@ -16088,6 +16685,7 @@ String SIP_EE_CHAR_ESCAPEMENT
     Text[ korean ] = "À§ Ã·ÀÚ/ ¾Æ·¡ Ã·ÀÚ";
     Text[ turkish ] = "Alt/üst simge";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Sub/Superíndice";
 };
 
 String SIP_EE_CHAR_PAIRKERNING
@@ -16115,6 +16713,7 @@ String SIP_EE_CHAR_PAIRKERNING
     Text[ korean ] = "Ä¿´×";
     Text[ turkish ] = "Aralýk azaltma";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ajuste entre caracteres";
 };
 
 String SIP_EE_CHAR_KERNING
@@ -16141,6 +16740,7 @@ String SIP_EE_CHAR_KERNING
     Text[ greek ] = "×åéñïêßíçôç äéáãñáììÜôùóç";
     Text[ korean ] = "¼öµ¿ Ä¿´×";
     Text[ turkish ] = "Manüel aralýk azaltma";
+    Text[ catalan ] = "Ajuste entre caracteres, manual";
 };
 
 String SIP_EE_CHAR_WLM
@@ -16168,6 +16768,7 @@ String SIP_EE_CHAR_WLM
     Text[ korean ] = "°ø¹é¿¡ ¹ØÁÙ ±ßÁö ¾ÊÀ½";
     Text[ turkish ] = "Boþluklarýn altýný çizme";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No subrayar espacios vacíos";
 };
 
 String SIP_EE_FEATURE_TAB
@@ -16195,6 +16796,7 @@ String SIP_EE_FEATURE_TAB
     Text[ korean ] = "ÅÇ";
     Text[ turkish ] = "Sekme";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tabulación";
 };
 
 String SIP_EE_FEATURE_LINEBR
@@ -16221,6 +16823,7 @@ String SIP_EE_FEATURE_LINEBR
     Text[ greek ] = "ÁðáëÞ áëëáãÞ ãñáììÞò";
     Text[ korean ] = "ÀÓÀÇÀÇ °³Çà";
     Text[ turkish ] = "Satýr sonu";
+    Text[ catalan ] = "Salto de línea manual";
 };
 
 String SIP_EE_FEATURE_NOTCONV
@@ -16247,6 +16850,7 @@ String SIP_EE_FEATURE_NOTCONV
     Text[ greek ] = "Ìç ìåôáôñÝøéìïò ÷áñáêôÞñáò";
     Text[ korean ] = "º¯È¯ ºÒ°¡´ÉÇÑ ¹®ÀÚ";
     Text[ turkish ] = "Dönüþtürülemeyen karakter";
+    Text[ catalan ] = "Carácter no convertible";
 };
 
 String SIP_EE_FEATURE_FIELD
@@ -16273,6 +16877,7 @@ String SIP_EE_FEATURE_FIELD
     Text[ greek ] = "ÅíôïëÞ ðåäßïõ";
     Text[ korean ] = "ÇÊµå ¸í·É";
     Text[ turkish ] = "Alan öðesi";
+    Text[ catalan ] = "Campo";
 };
 
 String SIP_SA_GRAFRED
@@ -16297,6 +16902,7 @@ String SIP_SA_GRAFRED
     Text[ chinese_traditional ] = "¬õ¦â¤ñ¨Ò";
     Text[ arabic ] = "äÓÈÉ ÇáÃÍãÑ";
     Text[ turkish ] = "Kýrmýzý oraný";
+    Text[ catalan ] = "Proporción de rojo";
 };
 String SIP_SA_GRAFGREEN
 {
@@ -16320,6 +16926,7 @@ String SIP_SA_GRAFGREEN
     Text[ chinese_traditional ] = "ºñ¦â¤ñ¨Ò";
     Text[ arabic ] = "äÓÈÉ ÇáÃÎÖÑ";
     Text[ turkish ] = "Yeþil oraný";
+    Text[ catalan ] = "Proporción de verde";
 };
 String SIP_SA_GRAFBLUE
 {
@@ -16343,6 +16950,7 @@ String SIP_SA_GRAFBLUE
     Text[ chinese_traditional ] = "ÂÅ¦â¤ñ¨Ò";
     Text[ arabic ] = "äÓÈÉ ÇáÃÒÑÞ";
     Text[ turkish ] = "Mavi oraný";
+    Text[ catalan ] = "Proporción de azul";
 };
 String SIP_SA_GRAFLUMINANCE
 {
@@ -16366,6 +16974,7 @@ String SIP_SA_GRAFLUMINANCE
     Text[ chinese_traditional ] = "«G«×";
     Text[ arabic ] = "ÇáÅÖÇÁÉ";
     Text[ turkish ] = "Parlaklýk";
+    Text[ catalan ] = "Brillo";
 };
 String SIP_SA_GRAFCONTRAST
 {
@@ -16389,6 +16998,7 @@ String SIP_SA_GRAFCONTRAST
     Text[ chinese_traditional ] = "¹ï¤ñ«×";
     Text[ arabic ] = "ÇáÊÈÇíä";
     Text[ turkish ] = "Kontrast";
+    Text[ catalan ] = "Contraste";
 };
 String SIP_SA_GRAFGAMMA
 {
@@ -16412,6 +17022,7 @@ String SIP_SA_GRAFGAMMA
     Text[ chinese_traditional ] = "¦Ç¦â¨t¼Æ";
     Text[ arabic ] = "ÛÇãÇ";
     Text[ turkish ] = "Gamma";
+    Text[ catalan ] = "Gamma";
 };
 String SIP_SA_GRAFTRANSPARENCE
 {
@@ -16435,6 +17046,7 @@ String SIP_SA_GRAFTRANSPARENCE
     Text[ chinese_traditional ] = "³z©ú";
     Text[ arabic ] = "ÔÝÇÝíÉ";
     Text[ turkish ] = "Saydamlýk";
+    Text[ catalan ] = "Transparencia";
 };
 String SIP_SA_GRAFINVERT
 {
@@ -16458,6 +17070,7 @@ String SIP_SA_GRAFINVERT
     Text[ chinese_traditional ] = "¤¬¸É¦âÂà´«";
     Text[ arabic ] = "ÚßÓ";
     Text[ turkish ] = "Tersine çevir";
+    Text[ catalan ] = "Invertir";
 };
 String SIP_SA_GRAFMODE
 {
@@ -16481,6 +17094,7 @@ String SIP_SA_GRAFMODE
     Text[ chinese_traditional ] = "¹Ï§Î¼Ò¦¡";
     Text[ arabic ] = "æÖÚ ÇáÕæÑ";
     Text[ turkish ] = "Grafik kipi";
+    Text[ catalan ] = "Modo gráfico";
 };
 String SIP_SA_GRAFCROP
 {
@@ -16505,6 +17119,7 @@ String SIP_SA_GRAFCROP
     Text[ chinese_traditional ] = "µô°Å";
     Text[ turkish ] = "Crop";
     Text[ arabic ] = "ÇÞÊÕÇÕ";
+    Text[ catalan ] = "Cortar";
 };
 String SIP_SA_GRAFRESERVE3 { Text = "" ; };
 String SIP_SA_GRAFRESERVE4 { Text = "" ; };
@@ -16532,6 +17147,7 @@ String SIP_SDRATTRSET_GRAF
     Text[ chinese_traditional ] = "¹Ï§ÎÄÝ©Ê";
     Text[ arabic ] = "ÓãÇÊ ÇáÕæÑ";
     Text[ turkish ] = "Grafik öznitelikleri";
+    Text[ catalan ] = "Atributos de imagen";
 };
 
 Bitmap SIP_SA_MARKERS
