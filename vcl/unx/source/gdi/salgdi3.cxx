@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 16:15:48 $
+ *  last change: $Author: hdu $ $Date: 2001-05-16 11:23:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1974,7 +1974,7 @@ GetCharWidth( ServerFont *pServerFont, int nChar, long* nWidth )
     int nGlyphIndex = pServerFont->GetGlyphIndex( nChar );
 
     const GlyphMetric& rGM = pServerFont->GetGlyphMetric( nGlyphIndex );
-    *nWidth = rGM.GetDelta().X();
+    *nWidth = rGM.GetCharWidth();
 
     return nGlyphIndex;
 }
