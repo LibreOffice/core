@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelContentsIterator.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-09-10 10:46:30 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:26:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ import org.openide.loaders.*;
 import org.openide.util.NbBundle;
 import org.openide.filesystems.*;
 
-import com.sun.star.script.framework.browse.ParcelDescriptor;
+import com.sun.star.script.framework.container.ParcelDescriptor;
 import org.openoffice.idesupport.zip.ParcelZipper;
 import org.openoffice.netbeans.modules.office.loader.ParcelFolder;
 import org.openoffice.netbeans.modules.office.loader.ParcelContentsFolder;
