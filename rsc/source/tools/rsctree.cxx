@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsctree.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:30 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:31:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #include <stdio.h>
 #include <string.h>
 
-// Programmabh„ngige Includes.
+// Programmabhï¿½ngige Includes.
 #ifndef _LINK_HXX //autogen
 #include <tools/link.hxx>
 #endif
@@ -132,7 +132,7 @@ BiNode * BiNode::ChangeDLListBTree( BiNode * pList ){
     BiNode * pRightNode;
     BiNode * pMiddle;
     BiNode * pTmp;
-    USHORT nEle, i;
+    sal_uInt32 nEle, i;
 
     if( pList ){
         while( pList->Left() )
@@ -142,7 +142,7 @@ BiNode * BiNode::ChangeDLListBTree( BiNode * pList ){
             pTmp = pTmp->Right();
         pMiddle = pList;
         if( nEle / 2 )
-            for( i = 0; i < (USHORT)(nEle / 2); i++ )
+            for( i = 0; i < (nEle / 2); i++ )
                 pMiddle = pMiddle->Right();
         else
             pList = (BiNode *)0;
@@ -275,7 +275,7 @@ NameNode* NameNode::SearchParent( const NameNode * pSearch ) const{
 // search for a parent node.
 // return a pointer to the parent node if found.
 // otherwise return 0.
-    short nCmp = Compare( pSearch );
+    int nCmp = Compare( pSearch );
 
     if( nCmp == GREATER ){
         if( Left() ){
@@ -307,7 +307,7 @@ NameNode* NameNode::Search( const NameNode * pSearch ) const{
 // search for a node.
 // return a pointer to the node if found.
 // otherwise return 0.
-    short nCmp = Compare( pSearch );
+    int nCmp = Compare( pSearch );
 
     if( nCmp == GREATER ){
         if( Left() )
@@ -327,7 +327,7 @@ NameNode* NameNode::Search( const void * pSearch ) const{
 // search for a node.
 // return a pointer to the node if found.
 // otherwise return 0.
-    short nCmp = Compare( pSearch );
+    int nCmp = Compare( pSearch );
 
     if( nCmp == GREATER ){
         if( Left() )
@@ -352,13 +352,13 @@ NameNode* NameNode::Search( const void * pSearch ) const{
 |*    Letzte Aenderung  MM 11.01.91
 |*
 *************************************************************************/
-BOOL NameNode::Insert( NameNode * pTN, USHORT * pnDepth ){
+BOOL NameNode::Insert( NameNode * pTN, sal_uInt32* pnDepth ){
 // Ein Knoten wird in den Baum eingefuegt
 // Gibt es einen Knoten mit dem gleichen Namen, dann return FALSE
 // sonst return TRUE. Der Knoten wird auf jeden Fall eingefuegt.
 
     BOOL bRet = TRUE;
-    short nCmp = Compare( pTN );
+    int nCmp = Compare( pTN );
 
     *pnDepth += 1;
     if( nCmp == GREATER ){
@@ -391,8 +391,8 @@ BOOL NameNode::Insert( NameNode * pTN ){
 // insert a node in the tree.
 // if the node with the same name is in, return FALSE and no insert.
 // if not return true.
-    USHORT  nDepth = 0;
-    BOOL            bRet;
+    sal_uInt32  nDepth = 0;
+    BOOL        bRet;
 
     bRet = Insert( pTN, &nDepth );
     if( bRet ){
@@ -486,7 +486,7 @@ BOOL NameNode::IsOrderTree() const{
 |*    Letzte Aenderung  MM 06.11.91
 |*
 *************************************************************************/
-IdNode * IdNode::Search( USHORT nTypeName ) const{
+IdNode * IdNode::Search( sal_uInt32 nTypeName ) const{
     return( (IdNode *)NameNode::Search( (const void *)&nTypeName ) );
 }
 
@@ -501,20 +501,20 @@ IdNode * IdNode::Search( USHORT nTypeName ) const{
 *************************************************************************/
 COMPARE IdNode::Compare( const NameNode * pSearch ) const
 {
-    if( GetId() < (USHORT)(((const IdNode *)pSearch)->GetId()) )
+    if( GetId() < (sal_uInt32)(((const IdNode *)pSearch)->GetId()) )
         return LESS;
-    else if( GetId() > (USHORT)(((const IdNode *)pSearch)->GetId()) )
+    else if( GetId() > (sal_uInt32)(((const IdNode *)pSearch)->GetId()) )
         return GREATER;
     else
         return EQUAL;
 }
 
 COMPARE IdNode::Compare( const void * pSearch ) const{
-// pSearch ist ein Zeiger auf USHORT
+// pSearch ist ein Zeiger auf sal_uInt32
 
-    if( GetId() < *((const USHORT *)pSearch) )
+    if( GetId() < *((const sal_uInt32 *)pSearch) )
         return LESS;
-    else if( GetId() > *((const USHORT *)pSearch) )
+    else if( GetId() > *((const sal_uInt32 *)pSearch) )
         return GREATER;
     else
         return EQUAL;
@@ -529,9 +529,9 @@ COMPARE IdNode::Compare( const void * pSearch ) const{
 |*    Letzte Aenderung  MM 23.09.91
 |*
 *************************************************************************/
-USHORT IdNode::GetId() const
+sal_uInt32 IdNode::GetId() const
 {
-    return( 0xFFFF );
+    return( 0xFFFFFFFF );
 }
 
 /*************************************************************************
@@ -558,8 +558,8 @@ StringNode * StringNode::Search( const char * pSearch ) const{
 *************************************************************************/
 COMPARE StringNode::Compare( const NameNode * pSearch ) const
 {
-    short nCmp = strcmp( aName.GetBuffer(),
-                         ((const StringNode *)pSearch)->aName.GetBuffer() );
+    int nCmp = strcmp( aName.GetBuffer(),
+                       ((const StringNode *)pSearch)->aName.GetBuffer() );
     if( nCmp < 0 )
         return LESS;
     else if( nCmp > 0 )
@@ -571,7 +571,7 @@ COMPARE StringNode::Compare( const NameNode * pSearch ) const
 COMPARE StringNode::Compare( const void * pSearch ) const
 {
 // pSearch ist ein Zeiger auf const char *
-    short nCmp = strcmp( aName.GetBuffer(), (const char *)pSearch );
+    int nCmp = strcmp( aName.GetBuffer(), (const char *)pSearch );
 
     if( nCmp < 0 )
         return LESS;
