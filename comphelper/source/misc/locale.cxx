@@ -2,9 +2,9 @@
  *
  *  $RCSfile: locale.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:30:21 $
+ *  last change: $Author: as $ $Date: 2004-12-07 13:04:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,12 +551,19 @@ sal_Bool Locale::similar(const Locale& aComparable) const
 {
     Locale aReference(sReferenceISO);
 
-    // Note: Only the same language or "en"/"en-US" can be used as fallback ...
-    // Other languages are mostly not understandable for a normal user!
-    ::std::vector< ::rtl::OUString >::const_iterator pSimilar = lISOList.end();
-    ::std::vector< ::rtl::OUString >::const_iterator pDefault = lISOList.end();
-    ::std::vector< ::rtl::OUString >::const_iterator pEN_US   = lISOList.end();
-    ::std::vector< ::rtl::OUString >::const_iterator pEN      = lISOList.end();
+    // Note: The same language or "en"/"en-US" should be preferred as fallback.
+    // On the other side some localized variables doesnt use localzation in real.
+    // May be the use a "fix" value only ... marked as X-DEFAULT or X-NOTRANSLATE.
+    // At least it can be discussed, if any language is a valid fallback ...
+    // But in case some office functionality depends on that (that means real functionality instead
+    // of pure UI descriptions) we should do anything, so it can work.
+
+    ::std::vector< ::rtl::OUString >::const_iterator pSimilar      = lISOList.end();
+    ::std::vector< ::rtl::OUString >::const_iterator pEN_US        = lISOList.end();
+    ::std::vector< ::rtl::OUString >::const_iterator pEN           = lISOList.end();
+    ::std::vector< ::rtl::OUString >::const_iterator pXDefault     = lISOList.end();
+    ::std::vector< ::rtl::OUString >::const_iterator pXNoTranslate = lISOList.end();
+    ::std::vector< ::rtl::OUString >::const_iterator pAny          = lISOList.end();
 
     ::std::vector< ::rtl::OUString >::const_iterator pIt;
     for (  pIt  = lISOList.begin();
@@ -577,15 +584,6 @@ sal_Bool Locale::similar(const Locale& aComparable) const
             pSimilar = pIt;
         }
         else
-        // found an explicit default value(!) => safe it as fallback
-        if (
-            (pDefault == lISOList.end()) &&
-            (aCheck.equals(X_DEFAULT()))
-           )
-        {
-            pDefault = pIt;
-        }
-        else
         // found en-US => safe it as fallback
         if (
             (pEN_US == lISOList.end()) &&
@@ -603,19 +601,48 @@ sal_Bool Locale::similar(const Locale& aComparable) const
         {
             pEN = pIt;
         }
+        else
+        // found an explicit default value(!) => safe it as fallback
+        if (
+            (pXDefault == lISOList.end()) &&
+            (aCheck.equals(X_DEFAULT()) )
+           )
+        {
+            pXDefault = pIt;
+        }
+        else
+        // found an implicit default value(!) => safe it as fallback
+        if (
+            (pXNoTranslate == lISOList.end()) &&
+            (aCheck.equals(X_NOTRANSLATE()) )
+           )
+        {
+            pXNoTranslate = pIt;
+        }
+        else
+        // safe the first locale, which isn't an explicit fallback
+        // as "last possible fallback"
+        if (pAny == lISOList.end())
+            pAny = pIt;
     }
 
     if (pSimilar != lISOList.end())
         return pSimilar;
-
-    if (pDefault != lISOList.end())
-        return pDefault;
 
     if (pEN_US != lISOList.end())
         return pEN_US;
 
     if (pEN != lISOList.end())
         return pEN;
+
+    if (pXDefault != lISOList.end())
+        return pXDefault;
+
+    if (pXNoTranslate != lISOList.end())
+        return pXNoTranslate;
+
+    if (pAny != lISOList.end())
+        return pAny;
 
     return lISOList.end();
 }

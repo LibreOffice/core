@@ -2,9 +2,9 @@
  *
  *  $RCSfile: locale.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:30:08 $
+ *  last change: $Author: as $ $Date: 2004-12-07 13:04:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,7 +381,14 @@ class Locale
                         If "en-US" could not be located, we search for
                         a Locale "en" inside the given list.
 
-                        Further fallbacks are not implemented :-)
+                        If no "same" nor any "similar" locale could be found,
+                        we try "x-default" and "x-notranslate" explicitly.
+                        Sometimes localized variables are optimized and doesnt use
+                        localzation realy. E.g. in case the localized value is a fix
+                        product name.
+
+                        If no locale match till now, we use any other existing
+                        locale, which exists inside the set of given ones!
 
             @seealso    equals()
             @seealso    similar()
