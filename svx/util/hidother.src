@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:28 $
+ *  last change: $Author: os $ $Date: 2000-11-27 20:43:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,6 +356,13 @@ hidspecial HID_AUTOCORR_HELP_CHGWEIGHTUNDERL    { HelpID =  HID_AUTOCORR_HELP_CH
 hidspecial HID_AUTOCORR_HELP_CHGFRACTIONSYMBOL  { HelpID =  HID_AUTOCORR_HELP_CHGFRACTIONSYMBOL;};
 hidspecial HID_AUTOCORR_HELP_CHGTOENEMDASH      { HelpID =  HID_AUTOCORR_HELP_CHGTOENEMDASH;};
 hidspecial HID_AUTOCORR_HELP_CHGORDINALNUMBER   { HelpID =  HID_AUTOCORR_HELP_CHGORDINALNUMBER;};
+hidspecial HID_CLB_EDIT_MODULES_DICS            { HelpID =  HID_CLB_EDIT_MODULES_DICS       ;};
+hidspecial HID_CLB_EDIT_MODULES_MODULES         { HelpID =  HID_CLB_EDIT_MODULES_MODULES    ;};
+hidspecial HID_CLB_LINGU_MODULES                { HelpID =  HID_CLB_LINGU_MODULES           ;};
+hidspecial HID_CLB_LINGU_OPTIONS                { HelpID =  HID_CLB_LINGU_OPTIONS           ;};
+
+
+
 //HID_AUTOCORR_HELP_END
 
 
