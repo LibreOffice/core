@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: mtg $ $Date: 2001-06-26 11:43:39 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 17:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,8 +245,9 @@
 #ifndef _DRAWDOC_HXX
 #include <drawdoc.hxx>
 #endif
-
-
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -280,7 +281,7 @@ SwTxtFmtColl *lcl_GetParaStyle(const String& rCollName, SwDoc* pDoc)
     SwTxtFmtColl* pColl = pDoc->FindTxtFmtCollByName( rCollName );
     if( !pColl )
     {
-        sal_uInt16 nId = pDoc->GetPoolId( rCollName, GET_POOLID_TXTCOLL );
+        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( rCollName, GET_POOLID_TXTCOLL );
         if( USHRT_MAX != nId )
             pColl = pDoc->GetTxtCollFromPool( nId );
     }

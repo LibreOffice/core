@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uitool.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-27 17:53:46 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 17:06:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,9 @@
 #ifndef _CHARFMT_HXX //autogen wg. SwCharFmt
 #include <charfmt.hxx>
 #endif
-
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 // 50 cm 28350
 //
 #define MAXHEIGHT 28350
@@ -418,7 +420,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
             SwTxtFmtColl* pColl = rDoc.FindTxtFmtCollByName( rColl );
             if( !pColl )
             {
-                USHORT nId = rDoc.GetPoolId( rColl, GET_POOLID_TXTCOLL );
+                USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName( rColl, GET_POOLID_TXTCOLL );
                 if( USHRT_MAX != nId )
                     pColl = rDoc.GetTxtCollFromPool( nId );
                 else
@@ -807,7 +809,7 @@ void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, BOOL bSorted)
     pPool->SetSearchMask(SFX_STYLE_FAMILY_CHAR, SFXSTYLEBIT_ALL);
     SwDoc* pDoc = pDocSh->GetDoc();
     const SfxStyleSheetBase* pBase = pPool->First();
-    String sStandard; GetDocPoolNm( RES_POOLCOLL_STANDARD, sStandard );
+    String sStandard; SwStyleNameMapper::GetUIName( RES_POOLCOLL_STANDARD, sStandard );
     while(pBase)
     {
         if(pBase->GetName() !=  sStandard)
@@ -817,7 +819,7 @@ void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, BOOL bSorted)
                 nPos = InsertStringSorted(pBase->GetName(), rToFill, bHasOffset );
             else
                 nPos = rToFill.InsertEntry(pBase->GetName());
-            long nPoolId = pDoc->GetPoolId( pBase->GetName(), GET_POOLID_CHRFMT );
+            long nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( pBase->GetName(), GET_POOLID_CHRFMT );
             rToFill.SetEntryData( nPos, (void*) (nPoolId));
         }
         pBase = pPool->Next();
@@ -897,170 +899,3 @@ String GetAppLangDateTimeString( const DateTime& rDT )
     ( sRet += ' ' ) += rAppLclData.getTime( rDT, FALSE, FALSE );
     return sRet;
 }
-
-
-/*------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2001/04/12 08:25:49  jp
-    Bug #85969#: ItemSetToPageDesc: don't use the current WrtShell for search a SwTxtFmtColl
-
-    Revision 1.4  2001/02/23 12:45:30  os
-    Complete use of DefaultNumbering component
-
-    Revision 1.3  2001/02/14 09:58:47  jp
-    changes: international -> localdatawrapper
-
-    Revision 1.2  2000/09/28 15:25:03  os
-    use of configuration service in view options
-
-    Revision 1.1.1.1  2000/09/18 17:14:50  hr
-    initial import
-
-    Revision 1.124  2000/09/18 16:06:19  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.123  2000/08/25 10:13:03  os
-    #77214# sorted insert into a ListBox
-
-    Revision 1.122  2000/07/26 16:33:54  jp
-    use the new function GetDocPoolNm to get the collectionames
-
-    Revision 1.121  2000/06/26 13:05:24  os
-    INetURLObject::SmartRelToAbs removed
-
-    Revision 1.120  2000/06/19 12:10:36  os
-    #71623# FillCharStyleListBox: optional sorted insertion
-
-    Revision 1.119  2000/06/07 13:28:53  os
-    CutPath removed
-
-    Revision 1.118  2000/04/26 15:03:20  os
-    GetName() returns const String&
-
-    Revision 1.117  2000/04/18 15:14:09  os
-    UNICODE
-
-    Revision 1.116  2000/03/03 15:17:05  os
-    StarView remainders removed
-
-    Revision 1.115  2000/02/11 15:00:54  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.114  1999/12/17 12:35:29  os
-    #70529# dont't insert default char format
-
-    Revision 1.113  1999/08/23 07:48:54  OS
-    #61218# correct handling of left_and_width oriented tables
-
-
-      Rev 1.112   23 Aug 1999 09:48:54   OS
-   #61218# correct handling of left_and_width oriented tables
-
-      Rev 1.111   02 Jul 1999 16:23:18   OS
-   FillCharStyleListBox: SetPoolId as UserData
-
-      Rev 1.110   05 Feb 1999 17:45:48   JP
-   Task #61467#/#61014#: neu FindPageDescByName
-
-      Rev 1.109   17 Nov 1998 10:59:12   OS
-   #58263# NumType durch SvxExtNumType ersetzt
-
-      Rev 1.108   12 Nov 1998 15:07:28   JP
-   Bug #54342#: auch bei GlobalDocs das Filepasswort an die Section uebertragen
-
-      Rev 1.107   08 Sep 1998 17:05:48   OS
-   #56134# Metric fuer Text und HTML getrennt
-
-      Rev 1.106   28 Apr 1998 09:14:52   OS
-   GetTableWidth() verschoben
-
-      Rev 1.105   15 Apr 1998 14:32:12   OS
-   ::FillCharStyleListBox
-
-      Rev 1.104   17 Feb 1998 09:03:56   TJ
-   include
-
-      Rev 1.103   13 Feb 1998 14:17:12   JP
-   neu: globale Funktion zum rufen des InserDocDialog
-
-      Rev 1.102   29 Nov 1997 15:08:58   MA
-   includes
-
-      Rev 1.101   21 Nov 1997 12:10:16   MA
-   includes
-
-      Rev 1.100   03 Nov 1997 13:59:22   MA
-   precomp entfernt
-
-      Rev 1.99   30 Oct 1997 11:19:50   AMA
-   Chg: Kein AutoFlag mehr an Break bzw. PageDesc-Attributen
-
-      Rev 1.98   15 Aug 1997 12:16:08   OS
-   chartar/frmatr/txtatr aufgeteilt
-
-      Rev 1.97   11 Aug 1997 10:34:16   OS
-   paraitem/frmitems/textitem aufgeteilt
-
-      Rev 1.96   15 Jul 1997 11:33:04   OS
-   Konvertierung von Basic-Namen: Sub(Lib.Modul) ->Lib.Modul.Sub
-
-      Rev 1.95   08 Jul 1997 14:13:36   OS
-   ConfigItems von der App ans Module
-
-      Rev 1.94   03 Feb 1997 15:23:22   OS
-   wird der PageDesc-Name nicht mitgeliefert, muss er von der Shell kommen
-
-      Rev 1.93   30 Jan 1997 15:30:18   OS
-   PageOffset des PageDesc an der richtigen Stelle setzen
-
-      Rev 1.92   16 Jan 1997 10:28:56   OS
-   GetDfltMetric: Modulmetric besorgen
-
-      Rev 1.91   13 Jan 1997 16:53:02   OS
-   TabStop am Module; Dynamische Kopf-/Fusszeilenhoehe
-
-      Rev 1.90   03 Dec 1996 12:39:32   AMA
-   Opt: Parameter aufgeraeumt, denn PageDescToItem benutzt keinen Drucker mehr
-
-      Rev 1.89   24 Oct 1996 18:00:56   OS
-   svxid fuer Registerhaltigkeit
-
-      Rev 1.88   24 Oct 1996 16:55:22   JP
-   Optimierung: Find...ByName
-
-      Rev 1.87   28 Aug 1996 15:42:36   OS
-   includes
-
-      Rev 1.86   27 Jul 1996 10:54:00   OS
-   RegisterItem benutzen
-
-      Rev 1.85   24 Jul 1996 15:13:50   OS
-   gfs. Register an der Absatzvorlage einschalten
-
-      Rev 1.84   23 Jul 1996 16:07:48   OS
-   ItemSetToPageDesc mit SwWrtsh*, Registerhaltigkeit
-
-      Rev 1.83   25 Jun 1996 20:17:26   HJS
-   includes
-
-      Rev 1.82   06 Jun 1996 14:52:26   OS
-   ClearItem erst aufrufen, wenn die Referenz nicht mehr gebraucht wird bug#28346#
-
-      Rev 1.81   25 Mar 1996 16:22:36   AMA
-   Opt: Auffuellen mit DefTabStops nur noch beim Abspeichern notwendig.
-
-      Rev 1.80   21 Mar 1996 14:08:32   OM
-   Umstellung 311
-
-      Rev 1.79   18 Mar 1996 14:27:22   OS
-   GetNextView an der App arbeitet nicht mehr mit static
-
-      Rev 1.78   27 Feb 1996 12:13:04   OS
-   neu: Get/SetDfltMetric
-
-      Rev 1.77   04 Dec 1995 12:40:42   JP
-   PageDescToItemSet: const PageDesc uebergeben
-
-------------------------------------------------------------------------*/
-
-
