@@ -2,9 +2,9 @@
 #
 #   $RCSfile: ooverinfo.rc,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hjs $ $Date: 2003-08-18 15:31:44 $
+#   last change: $Author: hr $ $Date: 2004-08-02 14:40:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -192,7 +192,7 @@ VS_VERSION_INFO rcdata
 11 ICON "icons\\ooo_office.ico"
 12 ICON "icons\\ooo_html.ico"
 13 ICON "icons\\ooo_office.ico"
-14 ICON "icons\\ooo_office.ico"
+14 ICON "icons\\014_database_document.ico"
 15 ICON "icons\\ooo_math.ico"
 16 ICON "icons\\ooo_template.ico"
 17 ICON "icons\\ooo_office.ico"
