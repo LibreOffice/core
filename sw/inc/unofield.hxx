@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-03-23 15:28:20 $
+ *  last change: $Author: os $ $Date: 2001-03-30 14:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,10 +99,10 @@ class SwXFieldMaster : public cppu::WeakImplHelper4
     public SwClient
 {
     SwEventListenerContainer    aLstnrCntnr;
-    sal_uInt16                      nResTypeId;
+    sal_uInt16                  nResTypeId;
     SwDoc*                      m_pDoc;
 
-    sal_Bool                        m_bIsDescriptor;
+    sal_Bool                    m_bIsDescriptor;
 
     String                      sParam1;    //Content / Database / NumberingSeparator
     String                      sParam2;    // -    /DataTablename
@@ -113,8 +113,6 @@ class SwXFieldMaster : public cppu::WeakImplHelper4
     sal_Int16                   nParam2;
 
 public:
-// automatisch auskommentiert - [getImplementation] - Wird von OWeakObject nicht weiter unterstützt!
-//  // fuer getImplementation() und fuer den ServiceProvider
 
     SwXFieldMaster(SwDoc* pDoc, sal_uInt16 nResId);
     SwXFieldMaster(SwFieldType& rType, SwDoc* pDoc);
@@ -154,7 +152,7 @@ public:
     static rtl::OUString GetSetExpUIName(const rtl::OUString& rName);
     static rtl::OUString LocalizeFormula(const SwSetExpField& rFld, const rtl::OUString& rFormula, sal_Bool bQuery);
 
-    SwFieldType* GetFldType() const { return (SwFieldType*)GetRegisteredIn(); }
+    SwFieldType* GetFldType(sal_Bool bDontCreate = sal_False) const;
     SwDoc*      GetDoc() {return m_pDoc;}
 
     sal_Bool        IsDescriptor()const  {return m_bIsDescriptor;}

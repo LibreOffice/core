@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: os $ $Date: 2001-03-23 15:29:03 $
+ *  last change: $Author: os $ $Date: 2001-03-30 14:15:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -811,7 +811,7 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
             static SfxItemPropertyMap aDBFieldTypePropMap           [] =
             {
                 {SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME   ), 0, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, &::getCppuType((short*)0),   PROPERTY_NONE, 0},
+                {SW_PROP_NAME(UNO_NAME_DATA_COMMAND_TYPE), 0, &::getCppuType((short*)0),   PROPERTY_NONE, 0},
                 {SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME  ), 0, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
                 {SW_PROP_NAME(UNO_NAME_DATA_COLUMN_NAME ), 0, &::getCppuType((const OUString*)0),   PROPERTY_NONE, 0},
 #if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
@@ -1052,6 +1052,7 @@ SwXFieldMaster::SwXFieldMaster(SwDoc* pDoc, sal_uInt16 nResId) :
     nParam1(-1),
     nParam2(0)
 {
+    pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
 }
 /*-- 14.12.98 11:08:33---------------------------------------------------
 
@@ -1104,7 +1105,7 @@ void SwXFieldMaster::setPropertyValue(const OUString& rPropertyName, const uno::
             IllegalArgumentException, WrappedTargetException, uno::RuntimeException)
 {
     vos::OGuard  aGuard(Application::GetSolarMutex());
-    SwFieldType* pType = GetFldType();
+    SwFieldType* pType = GetFldType(sal_True);
     if(pType)
     {
         sal_Bool bSetValue = sal_True;
@@ -1133,8 +1134,7 @@ void SwXFieldMaster::setPropertyValue(const OUString& rPropertyName, const uno::
             pType->PutValue(aValue, rPropertyName);
     }
     else if(!pType && m_pDoc &&
-        ( COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_NAME)
-            || COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DATA_BASE_NAME)))
+        ( COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_NAME)))
     {
         OUString uTmp;
         aValue >>= uTmp;
@@ -1156,16 +1156,6 @@ void SwXFieldMaster::setPropertyValue(const OUString& rPropertyName, const uno::
                     ((SwUserFieldType*)pType)->SetContent(sParam1);
                     ((SwUserFieldType*)pType)->SetValue(fParam1);
                     ((SwUserFieldType*)pType)->SetType(bParam1 ? GSE_EXPR : GSE_STRING);
-                }
-                break;
-                case RES_DBFLD :
-                {
-                    SwDBData aData;
-                    aData.sDataSource = sTypeName;
-                    aData.sCommand = sParam2;
-                    aData.nCommandType = nParam2;
-                    SwDBFieldType aType(m_pDoc, sParam3,  aData);
-                    pType = m_pDoc->InsertFldType(aType);
                 }
                 break;
                 case RES_DDEFLD :
@@ -1197,9 +1187,7 @@ void SwXFieldMaster::setPropertyValue(const OUString& rPropertyName, const uno::
     }
     else
     {
-        if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DATA_COMMAND_TYPE))
-            aValue >>= nParam2;
-        else if(nResTypeId == RES_USERFLD)
+        if(nResTypeId == RES_USERFLD)
         {
             if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_CONTENT))
             {
@@ -1227,10 +1215,17 @@ void SwXFieldMaster::setPropertyValue(const OUString& rPropertyName, const uno::
             String sTmp(uTmp);
             if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DATA_BASE_NAME))
                 sParam1 = sTmp;
-            if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DATA_TABLE_NAME))
+            else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DATA_TABLE_NAME))
                 sParam2 = sTmp;
-            if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DATA_COLUMN_NAME))
+            else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DATA_COLUMN_NAME))
                 sParam3 = sTmp;
+            else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DATA_COMMAND_TYPE))
+                aValue >>= nParam2;
+
+            if(sParam1.Len() && sParam2.Len() && sParam3.Len())
+            {
+                GetFldType();
+            }
         }
         else if(RES_SETEXPFLD == nResTypeId)
         {
@@ -1272,6 +1267,29 @@ void SwXFieldMaster::setPropertyValue(const OUString& rPropertyName, const uno::
     }
 
 }
+/* -----------------------------30.03.01 14:40--------------------------------
+
+ ---------------------------------------------------------------------------*/
+SwFieldType* SwXFieldMaster::GetFldType(sal_Bool bDontCreate) const
+{
+    if(!bDontCreate && RES_DBFLD == nResTypeId && m_bIsDescriptor && m_pDoc)
+    {
+        SwDBData aData;
+        aData.sDataSource = sParam1;
+        aData.sCommand = sParam2;
+        aData.nCommandType = nParam2;
+        SwDBFieldType aType(m_pDoc, sParam3,  aData);
+        SwFieldType* pType = m_pDoc->InsertFldType(aType);
+        SwXFieldMaster* pThis = ((SwXFieldMaster*)this);
+        pType->Add(pThis);
+        pThis->m_bIsDescriptor = sal_False;
+    }
+    if(m_bIsDescriptor)
+        return 0;
+    else
+        return (SwFieldType*)GetRegisteredIn();
+}
+
 /*-- 14.12.98 11:08:36---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -1284,7 +1302,7 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
 {
     vos::OGuard  aGuard(Application::GetSolarMutex());
     uno::Any aRet;
-    SwFieldType* pType = GetFldType();
+    SwFieldType* pType = GetFldType(sal_True);
     if(pType)
     {
         if(COMPARE_EQUAL == rPropertyName.compareToAscii("Name"))
@@ -1433,7 +1451,7 @@ void SwXFieldMaster::removeVetoableChangeListener(const OUString& PropertyName, 
 void SwXFieldMaster::dispose(void)          throw( uno::RuntimeException )
 {
     vos::OGuard  aGuard(Application::GetSolarMutex());
-    SwFieldType* pFldType = GetFldType();
+    SwFieldType* pFldType = GetFldType(sal_True);
     if(pFldType)
     {
         sal_uInt16 nTypeIdx = USHRT_MAX;
