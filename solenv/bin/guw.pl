@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: guw.pl,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hjs $ $Date: 2002-05-06 10:59:51 $
+#   last change: $Author: hjs $ $Date: 2002-07-17 15:45:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
                          'MAP', 'NODEFAULTLIB', 'OPT', 'PDB', 'RELEASE',
                          'SUBSYSTEM', 'STACK', 'out:', 'map:', 'ENTRY:',
                          'implib:', 'def' ],
+               'regcomp', [ '-env:', 'vnd.sun.star.expand:' ],
                'regmerge', [ '/UCR' ] );
 
 #---------------------------------------------------------------------------
@@ -191,4 +192,5 @@ print( STDERR "Command: $command\n" );
 
 replace_cyg(\@params);
 if ( defined $debug ) { print(STDERR "\n---------------------\nExecute: $command @params\n");};
+#print( STDERR "$command", @params);
 exec( "$command", @params);
