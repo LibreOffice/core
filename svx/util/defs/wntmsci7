@@ -18610,3 +18610,4 @@ _real@8@3ff9a0a0a0a0a0a0a000
 ?InitBitmap@SvxCtrDialBmp@@QAEXABVSize@@ABVColor@@ABVFont@@@Z
 ?Invalidate@SvxCtrDial@@UAEXXZ
 _real@8@40088f3d4c83f2e79800
+?getDataModeIdentifier@fmgridif@@YA?BVOUString@rtl@@XZ
