@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-03 13:58:27 $
+ *  last change: $Author: dl $ $Date: 2001-07-03 14:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1316,18 +1316,25 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
             }
         }
 
-        // check for correct background shape position
-        // previous version may moved other shapes behind the background
-        // shape. For performance reason this has to be fixed because
-        // the background shape should always have position 0
-        for ( USHORT nPage = 0; nPage < GetMasterSdPageCount( PK_STANDARD ); nPage++)
+        for ( USHORT nPage = 0; nPage < GetMasterPageCount(); nPage++)
         {
-            SdPage* pPage = GetMasterSdPage( nPage, PK_STANDARD );
-            SdrObject* pPresObj = pPage->GetPresObj( PRESOBJ_BACKGROUND ) ;
+            // LayoutName and PageName must be the same
+            SdPage* pPage = (SdPage*) GetMasterPage( nPage );
 
-            DBG_ASSERT( pPresObj, "Masterpage without a background object!" );
-            if (pPresObj && pPresObj->GetOrdNum() != 0 )
-                pPage->NbcSetObjectOrdNum(pPresObj->GetOrdNum(),0);
+            String aName( pPage->GetLayoutName() );
+            aName.Erase( aName.SearchAscii( SD_LT_SEPARATOR ) );
+
+            if( aName != pPage->GetName() )
+                pPage->SetName( aName );
+
+            if( pPage->GetPageKind() == PK_STANDARD )
+            {
+                SdrObject* pPresObj = pPage->GetPresObj( PRESOBJ_BACKGROUND ) ;
+
+                DBG_ASSERT( pPresObj, "Masterpage without a background object!" );
+                if (pPresObj && pPresObj->GetOrdNum() != 0 )
+                    pPage->NbcSetObjectOrdNum(pPresObj->GetOrdNum(),0);
+            }
         }
 
         // Sprachabhaengige Namen der StandardLayer erzeugen
