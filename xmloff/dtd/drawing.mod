@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.60 2001-06-14 17:03:08 cl Exp $
+	$Id: drawing.mod,v 1.61 2001-06-15 11:30:58 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -530,7 +530,7 @@
 
 <!-- presentation page attributes -->
 <!ATTLIST style:properties presentation:transition-type (manual|automatic|semi-automatic) #IMPLIED >
-<!ATTLIST style:properties presentation:transition-style (none|fade-from-left|fade-from-top|fade-from-right|fade-from-bottom|fade-to-center|fade-from-center|move-from-left|move-from-top|move-from-right|move-from-bottom|roll-from-left|roll-from-right|roll-from-bottom|vertical-stripes|horizontal-stripes|clockwise|counterclockwise|fade-from-upperleft|fade-from-upperright|fade-from-lowerleft|fade-from-lowerright|close-vertical|close-horizontal|open-vertical|open-horizontal|spiralin-left|spiralin-right|spiralout-left|spiralout-right|dissolve|wavyline-from-left|wavyline-from-top|wavyline-from-right|wavyline-from-bottom|random|stretch-from-left|stretch-from-top|stretch-from-right|stretch-from-bottom|vertical-lines|horizontal-lines) #IMPLIED >
+<!ATTLIST style:properties presentation:transition-style (none|fade-from-left|fade-from-top|fade-from-right|fade-from-bottom|fade-to-center|fade-from-center|move-from-left|move-from-top|move-from-right|move-from-bottom|roll-from-top|roll-from-left|roll-from-right|roll-from-bottom|vertical-stripes|horizontal-stripes|clockwise|counterclockwise|fade-from-upperleft|fade-from-upperright|fade-from-lowerleft|fade-from-lowerright|close-vertical|close-horizontal|open-vertical|open-horizontal|spiralin-left|spiralin-right|spiralout-left|spiralout-right|dissolve|wavyline-from-left|wavyline-from-top|wavyline-from-right|wavyline-from-bottom|random|stretch-from-left|stretch-from-top|stretch-from-right|stretch-from-bottom|vertical-lines|horizontal-lines) #IMPLIED >
 <!ATTLIST style:properties presentation:transition-speed %presentationSpeeds; #IMPLIED >
 <!ATTLIST style:properties presentation:duration %timeDuration; #IMPLIED>
 <!ATTLIST style:properties presentation:visibility (visible|hidden) #IMPLIED>
