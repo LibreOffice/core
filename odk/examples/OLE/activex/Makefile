@@ -1,4 +1,4 @@
-# Builds the OLE activx C++ component example of the SDK.
+# Builds the OLE activex C++ component example of the SDK.
 
 PRJ=../../..
 SETTINGS=$(PRJ)/settings
@@ -57,8 +57,8 @@ $(SHAREDLIB_OUT)/$(SHAREDLIB_PRE)%.$(SHAREDLIB_EXT) : $(SLOFILES) $(OUT_COMP_GEN
 OleActvieXComponentExample : $(COMPONENT_IMPL)
 ifeq "$(OS)" "WIN"
 	@echo --------------------------------------------------------------------------------
-	@echo The activex control was created, pleae use the example.html file to use this
-	@echo activex control in the InternetExplorer.
+	@echo The activex control was created, please load the example.html file in your
+	@echo InternetExplorer to use the activex control.
 	@echo --------------------------------------------------------------------------------
 else
 	@echo --------------------------------------------------------------------------------
