@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:04:49 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:34:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,6 @@
 #include "docoptio.hxx"
 #include "viewopti.hxx"
 #include "scextopt.hxx"
-#include "scdebug.hxx"
 #include "rechead.hxx"
 #include "ddelink.hxx"
 #include "scmatrix.hxx"
@@ -486,7 +485,7 @@ BOOL ScDocument::IdleCalcTextWidth()            // TRUE = demnaechst wieder vers
 // ULONG nMs = 0;
 // USHORT nIter = 0;
 
-    const ULONG         nStart   = GetSysTicks();
+    const ULONG         nStart   = Time::GetSystemTicks();
     double              nPPTX    = 0.0;
     double              nPPTY    = 0.0;
     OutputDevice*       pDev     = NULL;
@@ -640,7 +639,7 @@ BOOL ScDocument::IdleCalcTextWidth()            // TRUE = demnaechst wieder vers
 
 // nMs = SysTicksToMs( GetSysTicks() - nStart );
 
-            if (   ( 50L < SysTicksToMs( GetSysTicks() - nStart ) )
+            if (   ( 50L < Time::GetSystemTicks() - nStart )
                 || ( !(nCount&31) && Application::AnyInput( ABORT_EVENTS ) ) )
                 nCount = CALCMAX;
         }
