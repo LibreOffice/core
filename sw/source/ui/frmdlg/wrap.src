@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:35 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:19:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,16 +87,19 @@ TabPage TP_FRM_WRAP
         Text[ italian ] = "Predefiniti";
         Text[ danish ] = "Forudindstillinger";
         Text[ swedish ] = "Förinställningar";
-        Text[ polish ] = "Ustawienia domyœlne";
-        Text[ portuguese_brazilian ] = "Presets";
+        Text[ polish ] = "Ustawienia";
+        Text[ portuguese_brazilian ] = "Definições";
         Text[ japanese ] = "ãƒ—ãƒªã‚»ãƒƒãƒˆ";
         Text[ korean ] = "ê¸°ë³¸ ì„¤ì •";
         Text[ chinese_simplified ] = "é¢„ç½®";
         Text[ chinese_traditional ] = "é è¨­";
-        Text[ turkish ] = "Presets";
+        Text[ turkish ] = "Ayarlar";
         Text[ arabic ] = "Presets";
         Text[ catalan ] = "Predefinits";
         Text[ thai ] = "à¸à¸³à¸«à¸™à¸”";
+        Text[ czech ] = "NastavenÃ­";
+        Text[ hebrew ] = "â€®×”×’×“×¨×•×ªâ€¬";
+        Text[ hindi ] = "à¤¨à¤¿à¤°à¥à¤§à¤¾à¤°à¤£";
     };
     ImageRadioButton RB_NO_WRAP
     {
@@ -114,10 +117,10 @@ TabPage TP_FRM_WRAP
         Text [ swedish ] = "~Ingen" ;
         Text [ danish ] = "Ingen" ;
         Text [ portuguese ] = "~Nenhum" ;
-        Text [ portuguese_brazilian ] = "~Kein" ;
+        Text [ portuguese_brazilian ] = "~Nenhum" ;
         Text[ chinese_simplified ] = "æ— (~N)";
         Text[ russian ] = "Íåò";
-        Text[ polish ] = "Brak";
+        Text[ polish ] = "~Brak";
         Text[ japanese ] = "ä¸Šä¸‹(~N)";
         Text[ language_user1 ] = "Íåò";
         Text[ chinese_traditional ] = "ç„¡(~N)";
@@ -128,6 +131,9 @@ TabPage TP_FRM_WRAP
         Text[ catalan ] = "C~ap";
         Text[ finnish ] = "Ei mitään";
         Text[ thai ] = "à¹„~à¸¡à¹ˆà¸¡à¸µ";
+        Text[ czech ] = "Å½Ã¡dnÃ©";
+        Text[ hebrew ] = "â€®×œ×œ×â€¬";
+        Text[ hindi ] = "~à¤•à¥‹à¤ˆ à¤¨à¤¹à¥€à¤‚";
     };
     ImageRadioButton RB_WRAP_LEFT
     {
@@ -147,16 +153,19 @@ TabPage TP_FRM_WRAP
         Text[ italian ] = "Prima";
         Text[ danish ] = "Venstre";
         Text[ swedish ] = "Före";
-        Text[ polish ] = "Z le~wej";
-        Text[ portuguese_brazilian ] = "~Links";
+        Text[ polish ] = "Z ~lewej";
+        Text[ portuguese_brazilian ] = "~Esquerda";
         Text[ japanese ] = "å‰";
         Text[ korean ] = "ì•";
         Text[ chinese_simplified ] = "å‰";
         Text[ chinese_traditional ] = "å‰";
-        Text[ turkish ] = "So~l";
+        Text[ turkish ] = "Önce";
         Text[ arabic ] = "Åáì ÇáíÓÇÑ";
         Text[ thai ] = "~à¸‹à¹‰à¸²à¸¢";
         Text[ catalan ] = "~Esquerra";
+        Text[ czech ] = "Vlevo";
+        Text[ hebrew ] = "â€®×œ×¤× ×™â€¬";
+        Text[ hindi ] = "~à¤¬à¤¾à¤¯à¤¾à¤";
     };
     ImageRadioButton RB_WRAP_RIGHT
     {
@@ -176,16 +185,19 @@ TabPage TP_FRM_WRAP
         Text[ italian ] = "Dopo";
         Text[ danish ] = "Høj~re";
         Text[ swedish ] = "Efter";
-        Text[ polish ] = "Z prawej";
-        Text[ portuguese_brazilian ] = "~Rechts";
+        Text[ polish ] = "Z prawe~j";
+        Text[ portuguese_brazilian ] = "~Direita";
         Text[ japanese ] = "å¾Œ";
         Text[ korean ] = "ë’¤";
         Text[ chinese_simplified ] = "å";
         Text[ chinese_traditional ] = "å¾Œ";
-        Text[ turkish ] = "Sa~ğ";
+        Text[ turkish ] = "Sonra";
         Text[ arabic ] = "Åáì Çáíãíä";
         Text[ thai ] = "à¸‚~à¸§à¸²";
         Text[ catalan ] = "~Dreta";
+        Text[ czech ] = "Vpravo";
+        Text[ hebrew ] = "â€®××—×¨×™â€¬";
+        Text[ hindi ] = "à¤¦à¤¾~à¤¹à¤¿à¤¨à¤¾";
     };
     ImageRadioButton RB_WRAP_PARALLEL
     {
@@ -203,10 +215,10 @@ TabPage TP_FRM_WRAP
         Text [ swedish ] = "~Parallell" ;
         Text [ danish ] = "Parallel" ;
         Text [ portuguese ] = "~Paralelo" ;
-        Text [ portuguese_brazilian ] = "~Parallel" ;
+        Text [ portuguese_brazilian ] = "~Paralelo" ;
         Text[ chinese_simplified ] = "å¹³è¡Œ(~P)";
         Text[ russian ] = "Ïî êîíòóğó";
-        Text[ polish ] = "Równ~olegle";
+        Text[ polish ] = "Ró~wnolegle";
         Text[ japanese ] = "ä¸¡å´(~P)";
         Text[ chinese_traditional ] = "å¹³è¡Œ(~P)";
         Text[ arabic ] = "ãÊæÇÒ";
@@ -216,6 +228,9 @@ TabPage TP_FRM_WRAP
         Text[ catalan ] = "~Paral.lel";
         Text[ finnish ] = "Ympärillä";
         Text[ thai ] = "~à¸‚à¸™à¸²à¸™";
+        Text[ czech ] = "RovnobÄ›Å¾nÄ›";
+        Text[ hebrew ] = "~Parallel";
+        Text[ hindi ] = "~à¤¸à¤®à¤¾à¤¨à¤¾à¤¨à¥à¤¤à¤°";
     };
     ImageRadioButton RB_WRAP_THROUGH
     {
@@ -226,7 +241,7 @@ TabPage TP_FRM_WRAP
         Text [ ENGLISH ] = "Thro~ugh" ;
         Text [ norwegian ] = "Wrap ~through" ;
         Text [ italian ] = "Attraverso" ;
-        Text [ portuguese_brazilian ] = "Circundarmento ~atrav?s" ;
+        Text [ portuguese_brazilian ] = "Atra~vés" ;
         Text [ portuguese ] = "~Através do objecto" ;
         Text [ finnish ] = "Läpi" ;
         Text [ danish ] = "Gennem" ;
@@ -238,7 +253,7 @@ TabPage TP_FRM_WRAP
         TopImage = True ;
         Text[ chinese_simplified ] = "è´¯ç©¿(~U)";
         Text[ russian ] = "Ñêâîçíîå";
-        Text[ polish ] = "Przep³. te~kstu";
+        Text[ polish ] = "Przep³ywa~nie";
         Text[ japanese ] = "æŠ˜ã‚Šè¿”ã—ãªã—(~U)";
         Text[ chinese_traditional ] = "ä¸ç’°ç¹(~U)";
         Text[ arabic ] = "ÚÈÑ";
@@ -247,6 +262,9 @@ TabPage TP_FRM_WRAP
         Text[ turkish ] = "~Metin arkasına gönder";
         Text[ catalan ] = "~Continu";
         Text[ thai ] = "~à¸œà¹ˆà¸²à¸™";
+        Text[ czech ] = "PÅ™es";
+        Text[ hebrew ] = "~Durchlauf";
+        Text[ hindi ] = "~à¤®à¥‡à¤‚";
     };
     ImageRadioButton RB_WRAP_IDEAL
     {
@@ -264,10 +282,10 @@ TabPage TP_FRM_WRAP
         Text [ swedish ] = "D~ynamisk" ;
         Text [ danish ] = "Dynamisk" ;
         Text [ portuguese ] = "D~inâmico" ;
-        Text [ portuguese_brazilian ] = "D~ynamisch" ;
+        Text [ portuguese_brazilian ] = "~Otimizado" ;
         Text[ chinese_simplified ] = "æœ€ä½³(~O)";
         Text[ russian ] = "Îïòèìàëüíîå";
-        Text[ polish ] = "Dyna~miczny";
+        Text[ polish ] = "~Optymalnie";
         Text[ japanese ] = "å·¦å³å‹•çš„(~O)";
         Text[ chinese_traditional ] = "æœ€é©(~O)";
         Text[ arabic ] = "ÏíäÇãíßí";
@@ -277,6 +295,9 @@ TabPage TP_FRM_WRAP
         Text[ catalan ] = "Dinà~mic";
         Text[ finnish ] = "Optimaalinen";
         Text[ thai ] = "à¹€~à¸«à¸¡à¸²à¸°à¸—à¸µà¹ˆà¸ªà¸¸à¸”";
+        Text[ czech ] = "OptimÃ¡lnÃ­";
+        Text[ hebrew ] = "D~ynamisch";
+        Text[ hindi ] = "~à¤¯à¥‹à¤—à¥à¤¯";
     };
 
     CheckBox CB_ANCHOR_ONLY
@@ -292,20 +313,23 @@ TabPage TP_FRM_WRAP
         Text [ dutch ] = "~Eerste alinea" ;
         Text [ swedish ] = "För~sta stycket" ;
         Text [ danish ] = "Første afsnit" ;
-        Text [ portuguese_brazilian ] = "Erster Absat~z" ;
+        Text [ portuguese_brazilian ] = "~Primeiro parágrafo" ;
         Text [ portuguese ] = "Primeiro pará~grafo" ;
         Text[ chinese_simplified ] = "ç¬¬ä¸€æ®µè½(~F)";
         Text[ russian ] = "Ïåğâûé àáçàö";
-        Text[ polish ] = "Pierwszy akapit";
+        Text[ polish ] = "Pierwszy ~akapit";
         Text[ japanese ] = "æœ€åˆã®æ®µè½(~F)";
         Text[ chinese_traditional ] = "ç¬¬ä¸€æ®µè½(~F)";
         Text[ arabic ] = "ÇáİŞÑÉ ÇáÃæáì";
         Text[ greek ] = "Ğñşôç ğáñÜãñáöï~ò";
         Text[ korean ] = "ì²«ë²ˆì§¸ ë‹¨ë½(~F)";
-        Text[ turkish ] = "İlk paragraf";
+        Text[ turkish ] = "~İlk paragraf";
         Text[ catalan ] = "Primer paràgra~f";
         Text[ finnish ] = "Ensimmäinen kappale";
         Text[ thai ] = "à¸¢à¹ˆà¸­à¸«à¸™à¹‰à¸²à¹~à¸£à¸";
+        Text[ czech ] = "PrvnÃ­ odstavec";
+        Text[ hebrew ] = "Er~ster Absatz";
+        Text[ hindi ] = "~à¤ªà¤¹à¤¿à¤²à¤¾ à¤ªà¤°à¤¿à¤šà¥à¤›à¥‡à¤¦";
     };
     CheckBox CB_TRANSPARENT
     {
@@ -321,10 +345,10 @@ TabPage TP_FRM_WRAP
         Text [ swedish ] = "I ~bakgrunden" ;
         Text [ danish ] = "I baggrunden" ;
         Text [ portuguese ] = "Em ~segundo plano" ;
-        Text [ portuguese_brazilian ] = "Im Hin~tergrund" ;
+        Text [ portuguese_brazilian ] = "No plano de ~fundo" ;
         Text[ chinese_simplified ] = "ç½®äºèƒŒæ™¯(~K)";
         Text[ russian ] = "Íà ôîíå";
-        Text[ polish ] = "W tle";
+        Text[ polish ] = "W ~tle";
         Text[ japanese ] = "èƒŒæ™¯ã«(~K)";
         Text[ chinese_traditional ] = "ç½®æ–¼èƒŒæ™¯(~K)";
         Text[ arabic ] = "İí ÇáÎáİíÉ";
@@ -334,6 +358,9 @@ TabPage TP_FRM_WRAP
         Text[ catalan ] = "En el ~fons";
         Text[ finnish ] = "Taustalla";
         Text[ thai ] = "à¹ƒà¸™à¸à¸·à¹‰à¸™~à¸«à¸¥à¸±à¸‡";
+        Text[ czech ] = "Na pozadÃ­";
+        Text[ hebrew ] = "Im Hin~tergrund";
+        Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤ ~à¤­à¤¾à¤— à¤®à¥‡à¤‚";
     };
     CheckBox CB_OUTLINE
     {
@@ -350,19 +377,22 @@ TabPage TP_FRM_WRAP
         Text [ swedish ] = "~Kontur" ;
         Text [ danish ] = "Kontur" ;
         Text [ portuguese ] = "~Contorno" ;
-        Text [ portuguese_brazilian ] = "Kontu~r" ;
+        Text [ portuguese_brazilian ] = "~Contorno" ;
         Text[ chinese_simplified ] = "è½®å»“(~C)";
         Text[ russian ] = "Êîíòóğ";
-        Text[ polish ] = "Kontur";
+        Text[ polish ] = "~Kontur";
         Text[ japanese ] = "è¼ªéƒ­(~C)";
         Text[ chinese_traditional ] = "è¼ªå»“(~C)";
         Text[ arabic ] = "ÇáÎØ ÇáßİÇİí";
         Text[ greek ] = "Ğåñßãñáììá";
         Text[ korean ] = "ìœ¤ê³½(~C)";
-        Text[ turkish ] = "Kontu~r";
+        Text[ turkish ] = "~Dış çizgiler";
         Text[ catalan ] = "~Contorn";
         Text[ finnish ] = "Ääriviiva";
         Text[ thai ] = "à¹€~à¸ªà¹‰à¸™à¹à¸ªà¸”à¸‡à¸£à¸¹à¸›à¸£à¹ˆà¸²à¸‡";
+        Text[ czech ] = "Obrys";
+        Text[ hebrew ] = "Kont~ur";
+        Text[ hindi ] = "à¤ªà¤°à¤¿à¤µà¥‡~à¤¶";
     };
     CheckBox CB_ONLYOUTSIDE
     {
@@ -373,7 +403,7 @@ TabPage TP_FRM_WRAP
         Hide = TRUE ;
         Text [ portuguese ] = "Só ~exterior" ;
         Text [ english_us ] = "Outside only" ;
-        Text [ portuguese_brazilian ] = "Nur au?en" ;
+        Text [ portuguese_brazilian ] = "Apenas o exterior" ;
         Text [ swedish ] = "Bara uta~nför" ;
         Text [ danish ] = "Kun yderside" ;
         Text [ italian ] = "Solo esterno" ;
@@ -388,10 +418,13 @@ TabPage TP_FRM_WRAP
         Text[ arabic ] = "İí ÇáÎÇÑÌ İŞØ";
         Text[ greek ] = "Ìü~íï åîùôåñéêÜ";
         Text[ korean ] = "ë°”ê¹¥ìª½ë§Œ";
-        Text[ turkish ] = "Yalnızca dışarıda";
+        Text[ turkish ] = "Sadece dış kısım";
         Text[ catalan ] = "Només a l'exterior";
         Text[ finnish ] = "Vain ulkopuoli";
         Text[ thai ] = "à¸”à¹‰à¸²à¸™à¸™à¸­à¸à¹€à¸—à¹ˆà¸²à¸™à¸±à¹‰à¸™";
+        Text[ czech ] = "Pouze vnÄ›";
+        Text[ hebrew ] = "~Nur auÃŸen";
+        Text[ hindi ] = "à¤•à¥‡à¤µà¤² à¤¬à¤¾à¤¹à¤°à¥€ à¤“à¤°";
     };
     FixedLine FL_OPTION
     {
@@ -407,7 +440,7 @@ TabPage TP_FRM_WRAP
         Text [ swedish ] = "Alternativ" ;
         Text [ danish ] = "Indstillinger" ;
         Text [ portuguese ] = "Opções" ;
-        Text [ portuguese_brazilian ] = "Optionen" ;
+        Text [ portuguese_brazilian ] = "Opções" ;
         Text[ chinese_simplified ] = "é€‰é¡¹";
         Text[ russian ] = "Ïàğàìåòğû";
         Text[ polish ] = "Opcje";
@@ -420,6 +453,9 @@ TabPage TP_FRM_WRAP
         Text[ catalan ] = "Opcions";
         Text[ finnish ] = "Asetukset";
         Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
+        Text[ czech ] = "Volby";
+        Text[ hebrew ] = "â€®××¤×©×¨×•×™×•×ªâ€¬";
+        Text[ hindi ] = "à¤µà¤¿à¤•à¤²à¥à¤ª";
     };
     FixedLine FL_OPTION_SEP
     {
@@ -447,7 +483,7 @@ TabPage TP_FRM_WRAP
         Left = TRUE ;
         Text[ chinese_simplified ] = "å·¦(~E)";
         Text[ russian ] = "Ñëåâà";
-        Text[ polish ] = "Z lewej";
+        Text[ polish ] = "~Z lewej";
         Text[ japanese ] = "å·¦(~E)";
         Text[ chinese_traditional ] = "å·¦(~E)";
         Text[ arabic ] = "Åáì ÇáíÓÇÑ";
@@ -456,6 +492,9 @@ TabPage TP_FRM_WRAP
         Text[ turkish ] = "S~ol";
         Text[ catalan ] = "E~squerra";
         Text[ thai ] = "à¸‹à¹‰à¸²~à¸¢";
+        Text[ czech ] = "Vlevo";
+        Text[ hebrew ] = "L~inks";
+        Text[ hindi ] = "à¤¬à¤¾~à¤¯à¤¾à¤";
     };
     MetricField ED_LEFT_MARGIN
     {
@@ -492,7 +531,7 @@ TabPage TP_FRM_WRAP
         Left = TRUE ;
         Text[ chinese_simplified ] = "å³(~R)";
         Text[ russian ] = "Ñïğàâà";
-        Text[ polish ] = "Z prawej";
+        Text[ polish ] = "Z p~rawej";
         Text[ japanese ] = "å³(~R)";
         Text[ chinese_traditional ] = "å³(~R)";
         Text[ arabic ] = "Åáì Çáíãíä";
@@ -501,6 +540,9 @@ TabPage TP_FRM_WRAP
         Text[ turkish ] = "S~ağ";
         Text[ catalan ] = "Dre~ta";
         Text[ thai ] = "~à¸‚à¸§à¸²";
+        Text[ czech ] = "Vpravo";
+        Text[ hebrew ] = "Re~chts";
+        Text[ hindi ] = "~à¤¦à¤¾à¤¹à¤¿à¤¨à¤¾";
     };
     MetricField ED_RIGHT_MARGIN
     {
@@ -525,7 +567,7 @@ TabPage TP_FRM_WRAP
         Text [ ENGLISH ] = "~Top" ;
         Text [ norwegian ] = "~Top" ;
         Text [ italian ] = "In alto" ;
-        Text [ portuguese_brazilian ] = "~Topo" ;
+        Text [ portuguese_brazilian ] = "Em ~Cima" ;
         Text [ portuguese ] = "~Topo" ;
         Text [ finnish ] = "Yläreuna" ;
         Text [ danish ] = "~Øverst" ;
@@ -537,15 +579,18 @@ TabPage TP_FRM_WRAP
         Left = TRUE ;
         Text[ chinese_simplified ] = "ä¸Š(~T)";
         Text[ russian ] = "Ñâåğõó";
-        Text[ polish ] = "W górze";
+        Text[ polish ] = "U ~góry";
         Text[ japanese ] = "ä¸Š(~T)";
         Text[ chinese_traditional ] = "ä¸Š(~T)";
         Text[ arabic ] = "ÃÚáì";
         Text[ greek ] = "ĞÜíù";
         Text[ korean ] = "ìœ„(~T)";
-        Text[ turkish ] = "Üs~t";
+        Text[ turkish ] = "~Yukarı";
         Text[ catalan ] = "Part s~uperior";
         Text[ thai ] = "~à¸šà¸™";
+        Text[ czech ] = "NahoÅ™e";
+        Text[ hebrew ] = "~Oben";
+        Text[ hindi ] = "~à¤Šà¤ªà¤°";
     };
     MetricField ED_TOP_MARGIN
     {
@@ -570,7 +615,7 @@ TabPage TP_FRM_WRAP
         Text [ ENGLISH ] = "~Bottom" ;
         Text [ norwegian ] = "~Bottom" ;
         Text [ italian ] = "~Basso" ;
-        Text [ portuguese_brazilian ] = "~Base" ;
+        Text [ portuguese_brazilian ] = "Em ~Baixo" ;
         Text [ portuguese ] = "Em ~baixo" ;
         Text [ finnish ] = "Alareuna" ;
         Text [ danish ] = "Nederst" ;
@@ -582,7 +627,7 @@ TabPage TP_FRM_WRAP
         Left = TRUE ;
         Text[ chinese_simplified ] = "ä¸‹(~B)";
         Text[ russian ] = "Âíèçó";
-        Text[ polish ] = "Na dole";
+        Text[ polish ] = "~U do³u";
         Text[ japanese ] = "ä¸‹(~B)";
         Text[ chinese_traditional ] = "ä¸‹(~B)";
         Text[ arabic ] = "ÃÓİá";
@@ -591,6 +636,9 @@ TabPage TP_FRM_WRAP
         Text[ turkish ] = "A~lt";
         Text[ catalan ] = "Part ~inferior";
         Text[ thai ] = "~à¸¥à¹ˆà¸²à¸‡";
+        Text[ czech ] = "Dole";
+        Text[ hebrew ] = "Unt~en";
+        Text[ hindi ] = "~à¤¨à¥€à¤šà¥‡";
     };
     MetricField ED_BOTTOM_MARGIN
     {
@@ -615,7 +663,7 @@ TabPage TP_FRM_WRAP
         Text [ ENGLISH ] = "Margins" ;
         Text [ norwegian ] = "Margins" ;
         Text [ italian ] = "Distanze" ;
-        Text [ portuguese_brazilian ] = "Margens" ;
+        Text [ portuguese_brazilian ] = "Afastamento" ;
         Text [ portuguese ] = "Espaçamento" ;
         Text [ finnish ] = "Välit" ;
         Text [ danish ] = "Afstand" ;
@@ -626,15 +674,18 @@ TabPage TP_FRM_WRAP
         Text [ english_us ] = "Spacing" ;
         Text[ chinese_simplified ] = "é—´éš”";
         Text[ russian ] = "Èíòåğâàëû";
-        Text[ polish ] = "Odstêpy";
+        Text[ polish ] = "Odstêp";
         Text[ japanese ] = "ä½™ç™½";
         Text[ chinese_traditional ] = "é–“éš”";
         Text[ arabic ] = "ÇáÊÈÇÚÏ";
         Text[ greek ] = "AğïóôÜóåéò";
         Text[ korean ] = "ê°„ê²©";
-        Text[ turkish ] = "Aralık";
+        Text[ turkish ] = "Boşlık";
         Text[ catalan ] = "Distàncies";
         Text[ thai ] = "à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡";
+        Text[ czech ] = "VzdÃ¡lenost";
+        Text[ hebrew ] = "â€®×¨×•×•×•×—â€¬";
+        Text[ hindi ] = "à¤…à¤¨à¥à¤¤à¤° à¤¦à¥‡à¤¨à¤¾";
     };
 #define WRAP_IDLIST \
         IdList =            \
@@ -666,6 +717,19 @@ TabPage TP_FRM_WRAP
     };
 
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
