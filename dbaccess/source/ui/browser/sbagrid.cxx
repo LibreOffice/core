@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-14 08:34:30 $
+ *  last change: $Author: fs $ $Date: 2001-05-21 13:56:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1680,16 +1680,26 @@ void SbaGridControl::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
 
         // check which kind of dragging has to be initiated
         if  (   bHitHandle                          //  the handle column
-            &&  (   GetSelectRowCount()             //  at least one row is selected
-                ||  (   (nRow >= 0)                 //  a row below the header
-                    &&  !bCurrentRowVirtual         //  we aren't appending a new record
-                    &&  (nRow != GetCurrentPos())   //  a row which is not the current one
+                                                    // AND
+            &&  (   GetSelectRowCount()                     //  at least one row is selected
+                                                        // OR
+                ||  (   (nRow >= 0)                         //  a row below the header
+                    &&  !bCurrentRowVirtual                 //  we aren't appending a new record
+                    &&  (nRow != GetCurrentPos())           //  a row which is not the current one
+                    )                                   // OR
+                ||  (   (0 == GetSelectRowCount())          // no rows selected
+                    &&  (-1 == nRow)                        // hit the header
                     )
                 )
             )
         {   // => start dragging the row
             if (GetDataWindow().IsMouseCaptured())
                 GetDataWindow().ReleaseMouse();
+
+            if (0 == GetSelectRowCount())
+                // no rows selected, but here in this branch
+                // -> the user started dragging the upper left corner, which symbolizes the whole table
+                SelectAll();
 
             getMouseEvent().Clear();
             DoRowDrag(nRow);
