@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:38 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:50:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,51 +59,39 @@
  *
  ************************************************************************/
 
-#ifndef _SD_DRAWVIEW_HXX
-#define _SD_DRAWVIEW_HXX
+#ifndef SD_DRAW_VIEW_HXX
+#define SD_DRAW_VIEW_HXX
+
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
 
 
-//#ifndef _SD_SDVIEW_HXX
-#include "sdview.hxx"
-//#endif
+namespace sd {
 
-class SdDrawDocShell;
-class SdDrawViewShell;
+class DrawDocShell;
+class DrawViewShell;
 class FuSlideShow;
 
 #define SDDRAWVIEW_MAGIC  0x456789BA
 
 /*************************************************************************
 |*
-|* Ableitung von SdView; enthaelt auch einen Zeiger auf das Dokument
+|* Ableitung von ::sd::View; enthaelt auch einen Zeiger auf das Dokument
 |*
 \************************************************************************/
 
-class SdDrawView : public SdView
+class DrawView
+    : public ::sd::View
 {
-    SdDrawDocShell*     pDocShell;
-    SdDrawViewShell*    pDrawViewShell;
-    VirtualDevice*      pVDev;
-
-    USHORT              nPOCHSmph;  // zum blockieren des PageOrderChangedHint
-    USHORT              nPresPaintSmph;     // zum Blockieren des Zeichnens
-                                            // in der Diashow
-    BOOL                bPixelMode;
-    FuSlideShow*        pSlideShow;
-    BOOL                bInAnimation;
-    ULONG               nMagic;
-
-    BOOL                bActionMode;
-
- protected:
-    virtual void ModelHasChanged();
-
- public:
+public:
     TYPEINFO();
 
-     SdDrawView(SdDrawDocShell* pDocSh, OutputDevice* pOutDev,
-                SdDrawViewShell* pShell);
-    ~SdDrawView();
+    DrawView (
+        DrawDocShell* pDocSh,
+        OutputDevice* pOutDev,
+        DrawViewShell* pShell);
+    virtual ~DrawView (void);
 
     virtual void MarkListHasChanged();
     void InitRedraw(OutputDevice* pOutDev, const Region& rReg);
@@ -138,8 +126,26 @@ class SdDrawView : public SdView
     FuSlideShow* GetSlideShow() { return pSlideShow; }
 
     virtual SdrObject* GetMaxToBtmObj(SdrObject* pObj) const;
+
+protected:
+    virtual void ModelHasChanged();
+
+private:
+    DrawDocShell*   pDocShell;
+    DrawViewShell* pDrawViewShell;
+    VirtualDevice*      pVDev;
+
+    USHORT              nPOCHSmph;  // zum blockieren des PageOrderChangedHint
+    USHORT              nPresPaintSmph;     // zum Blockieren des Zeichnens
+                                            // in der Diashow
+    BOOL                bPixelMode;
+    FuSlideShow*        pSlideShow;
+    BOOL                bInAnimation;
+    ULONG               nMagic;
+
+    BOOL                bActionMode;
 };
 
+} // end of namespace sd
 
-
-#endif      // _SD_DRAWVIEW_HXX
+#endif
