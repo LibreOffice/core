@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkeddocuments.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:51:11 $
+ *  last change: $Author: oj $ $Date: 2002-10-15 06:32:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,7 +389,7 @@ namespace dbaui
             OSL_ENSURE(xLoader.is(), "OLinkedDocumentsAccess::implOpen: invalid desktop object!");
             if (xLoader.is())
             {
-                ::rtl::OUString sTargetFrame = ::rtl::OUString::createFromAscii("_blank");
+                ::rtl::OUString sTargetFrame = ::rtl::OUString::createFromAscii("_default"); // #104099# OJ
 
                 sal_Int32 nSearchFlags = FrameSearchFlag::CHILDREN | FrameSearchFlag::CREATE;
 
@@ -586,7 +586,7 @@ namespace dbaui
             OSL_ENSURE(xLoader.is(), "OLinkedDocumentsAccess::newForm: invalid desktop object!");
             if (xLoader.is())
             {
-                ::rtl::OUString sTargetFrame = ::rtl::OUString::createFromAscii("_blank");
+                ::rtl::OUString sTargetFrame = ::rtl::OUString::createFromAscii("_default"); // #104099# OJ
 
                 sal_Int32 nSearchFlags = FrameSearchFlag::CHILDREN | FrameSearchFlag::CREATE;
 
@@ -658,6 +658,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2002/08/19 07:51:11  oj
+ *  #99473# change string resource files
+ *
  *  Revision 1.4  2002/07/25 06:53:40  oj
  *  #100280# new method to start report autopilot
  *
