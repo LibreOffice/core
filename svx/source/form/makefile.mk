@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: hr $ $Date: 2004-04-13 11:00:27 $
+#   last change: $Author: rt $ $Date: 2004-05-07 15:49:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,10 +83,14 @@ SRC1FILES= \
     filtnav.src		\
     fmstring.src 	\
     tbxform.src		\
-    fmsearch.src
+    fmsearch.src    \
+    formshell.src
 
 
 SLOFILES = \
+    $(SLO)$/fmtextcontroldialogs.obj \
+    $(SLO)$/fmtextcontrolfeature.obj \
+    $(SLO)$/fmtextcontrolshell.obj \
     $(SLO)$/dbcharsethelper.obj			\
     $(SLO)$/ParseContext.obj			\
     $(SLO)$/typeconversionclient.obj    \
