@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2003-07-16 17:34:17 $
+#   last change: $Author: hjs $ $Date: 2003-07-18 15:45:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -219,4 +219,6 @@ $(PYTHONCORELINK2) : makefile.mk $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
 $(PYVERSIONFILE) : pyversion.mk $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
     -rm -f $@
     cat $? > $@
+
+patch : $(MISC)$/convert_dos_flag
 
