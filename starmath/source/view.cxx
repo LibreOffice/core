@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:58:23 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,7 @@ void SmGraphicWindow::ApplyColorConfigValues( const svtools::ColorConfig &rColor
 {
     // Note: SetTextColor not necessary since the nodes that
     // get painted have the color information.
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     ColorData nVal = rColorCfg.GetColorValue(svtools::DOCCOLOR).nColor;
 #endif
     SetBackground( Color( (ColorData) rColorCfg.GetColorValue(svtools::DOCCOLOR).nColor ) );
@@ -562,7 +562,7 @@ SmEditController::SmEditController(SmEditWindow &rSmEdit,
 }
 
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 SmEditController::~SmEditController()
 {
 }
@@ -782,7 +782,7 @@ SmCmdBoxWrapper::SmCmdBoxWrapper(Window *pParentWindow, USHORT nId,
 }
 
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 SmCmdBoxWrapper::~SmCmdBoxWrapper()
 {
 }
