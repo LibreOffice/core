@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-19 16:20:17 $
+#   last change: $Author: rt $ $Date: 2004-03-30 15:03:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,17 +62,17 @@
 
 PRJ=..
 PRJNAME=configmgr
-TARGET=cfgmgr
+TARGET=configmgr
 
 ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE : settings.mk
 .INCLUDE :  $(PRJ)$/version.mk
-
+DLLPRE = 
 
 # --- Library -----------------------------------
 
-SHL1TARGET=	$(CFGMGR_TARGET)$(CFGMGR_MAJOR)
+SHL1TARGET=	$(CFGMGR_TARGET)$(CFGMGR_MAJOR).uno
 .IF "$(OS)"=="MACOSX"
 #SHL1VERSIONMAP= $(TARGET).$(DLLPOSTFIX).map
 .ELSE
