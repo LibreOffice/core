@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errorhandler.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 15:10:04 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 
 using namespace ::rtl;
 
-static sal_Char* errorCodeToMessage(ErrorCode eCode)
+static const sal_Char* errorCodeToMessage(ErrorCode eCode)
 {
     switch (eCode)
     {
@@ -200,7 +200,7 @@ static sal_Char* errorCodeToMessage(ErrorCode eCode)
     return "unknown errror";
 }
 
-static sal_Char* warningCodeToMessage(WarningCode wCode)
+static const sal_Char* warningCodeToMessage(WarningCode wCode)
 {
     switch (wCode)
     {
@@ -218,7 +218,7 @@ static sal_Char* warningCodeToMessage(WarningCode wCode)
     return "unkown warning";
 }
 
-static sal_Char* parseStateToMessage(ParseState state)
+static const sal_Char* parseStateToMessage(ParseState state)
 {
     switch (state)
     {
@@ -618,7 +618,7 @@ void ErrorHandler::warning2(WarningCode w, AstDeclaration* d1, AstDeclaration* d
         idlc()->incWarningCount();
 }
 
-void ErrorHandler::syntaxError(ParseState ps, sal_Int32 lineNumber,const  sal_Char* errmsg)
+void ErrorHandler::syntaxError(ParseState ps, sal_Int32 lineNumber, const sal_Char* errmsg)
 {
     errorHeader(EIDL_SYNTAX_ERROR, lineNumber);
     fprintf(stderr, "%s: %s\n", parseStateToMessage(ps), errmsg);
