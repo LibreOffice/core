@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:38:13 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 14:25:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,68 +308,71 @@ void Desktop::DestroyApplicationServiceManager( Reference< XMultiServiceFactory 
 
 void Desktop::RegisterServices( Reference< XMultiServiceFactory >& xSMgr )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::registerServices" );
-
-    // read command line parameters
-    ::rtl::OUString conDcp;
-    ::rtl::OUString aClientDisplay;
-    ::rtl::OUString aUserDir;
-    ::rtl::OUString aTmpString;
-    sal_Bool        bHeadlessMode = sal_False;
-
-    // interpret command line arguments
-    CommandLineArgs* pCmdLine = GetCommandLineArgs();
-
-    // read accept string from configuration
-    conDcp = SvtStartOptions().GetConnectionURL();
-
-    if ( pCmdLine->GetAcceptString( aTmpString ))
-        conDcp = aTmpString;
-    pCmdLine->GetUserDir( aUserDir );
-
-    // Headless mode for FAT Office
-    bHeadlessMode   = pCmdLine->IsHeadless();
-    if ( bHeadlessMode )
-        Application::EnableHeadlessMode();
-
-    if ( conDcp.getLength() > 0 )
+    if( !m_bServicesRegistered )
     {
-        // accept incoming connections (scripting and one rvp)
-        RTL_LOGFILE_CONTEXT( aLog, "desktop (lo119109) desktop::Desktop::createAcceptor()" );
-        createAcceptor(conDcp);
-    }
+        RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::registerServices" );
 
-    // improves parallel processing on Sun ONE Webtop
-    // servicemanager up -> copy user installation
-    if ( pCmdLine->IsServer() )
-    {
-        // Check some mandatory environment states if "-server" is possible. Otherwise ignore
-        // this parameter.
-        Reference< com::sun::star::container::XContentEnumerationAccess > rContent( xSMgr , UNO_QUERY );
-        if( rContent.is() )
+        // read command line parameters
+        ::rtl::OUString conDcp;
+        ::rtl::OUString aClientDisplay;
+        ::rtl::OUString aUserDir;
+        ::rtl::OUString aTmpString;
+        sal_Bool        bHeadlessMode = sal_False;
+
+        // interpret command line arguments
+        CommandLineArgs* pCmdLine = GetCommandLineArgs();
+
+        // read accept string from configuration
+        conDcp = SvtStartOptions().GetConnectionURL();
+
+        if ( pCmdLine->GetAcceptString( aTmpString ))
+            conDcp = aTmpString;
+        pCmdLine->GetUserDir( aUserDir );
+
+        // Headless mode for FAT Office
+        bHeadlessMode   = pCmdLine->IsHeadless();
+        if ( bHeadlessMode )
+            Application::EnableHeadlessMode();
+
+        if ( conDcp.getLength() > 0 )
         {
-            OUString sPortalService = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.portal.InstallUser" ) );
-            Reference < com::sun::star::container::XEnumeration > rEnum = rContent->createContentEnumeration( sPortalService );
-            if ( !rEnum.is() )
+            // accept incoming connections (scripting and one rvp)
+            RTL_LOGFILE_CONTEXT( aLog, "desktop (lo119109) desktop::Desktop::createAcceptor()" );
+            createAcceptor(conDcp);
+        }
+
+        // improves parallel processing on Sun ONE Webtop
+        // servicemanager up -> copy user installation
+        if ( pCmdLine->IsServer() )
+        {
+            // Check some mandatory environment states if "-server" is possible. Otherwise ignore
+            // this parameter.
+            Reference< com::sun::star::container::XContentEnumerationAccess > rContent( xSMgr , UNO_QUERY );
+            if( rContent.is() )
             {
-                // Reset server parameter so it is ignored in the furthermore startup process
-                pCmdLine->SetBoolParam( CommandLineArgs::CMD_BOOLPARAM_SERVER, sal_False );
+                OUString sPortalService = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.portal.InstallUser" ) );
+                Reference < com::sun::star::container::XEnumeration > rEnum = rContent->createContentEnumeration( sPortalService );
+                if ( !rEnum.is() )
+                {
+                    // Reset server parameter so it is ignored in the furthermore startup process
+                    pCmdLine->SetBoolParam( CommandLineArgs::CMD_BOOLPARAM_SERVER, sal_False );
+                }
             }
         }
+
+        ::rtl::OUString aPortalConnect;
+        bool bServer = (bool)pCmdLine->IsServer();
+
+        pCmdLine->GetPortalConnectString( aPortalConnect );
+        if ( !configureUcb( bServer, aPortalConnect ) )
+        {
+            DBG_ERROR( "Can't configure UCB" );
+            throw com::sun::star::uno::Exception(rtl::OUString::createFromAscii("RegisterServices, configureUcb"), NULL);
+        }
+
+        CreateTemporaryDirectory();
+        m_bServicesRegistered = true;
     }
-
-    ::rtl::OUString aPortalConnect;
-    bool bServer = (bool)pCmdLine->IsServer();
-
-    pCmdLine->GetPortalConnectString( aPortalConnect );
-    if ( !configureUcb( bServer, aPortalConnect ) )
-    {
-        DBG_ERROR( "Can't configure UCB" );
-        throw com::sun::star::uno::Exception(rtl::OUString::createFromAscii("RegisterServices, configureUcb"), NULL);
-    }
-
-//  UCB_Helper::Initialize(); !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    CreateTemporaryDirectory();
 }
 
 AcceptorMap     Desktop::m_acceptorMap;
