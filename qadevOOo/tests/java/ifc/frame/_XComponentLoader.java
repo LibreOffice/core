@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XComponentLoader.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:37:48 $
+ *  last change:$Date: 2004-03-02 13:40:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,8 @@ public class _XComponentLoader extends MultiMethodTest {
             Arg.Name = "UpdateDocMode";
             Arg.Value = new Short(com.sun.star.document.UpdateDocMode.NO_UPDATE);
             szArgs[0]=Arg;
-            String url = util.utils.getFullTestURL("Writer_Link.sxw");
+            String url = util.utils.getFullTestURL("Writer_link.sxw");
+            log.println("try to load '" + url + "'");
             oDoc = oObj.loadComponentFromURL(
                             url, frameName, 0, szArgs);
 
@@ -116,6 +117,7 @@ public class _XComponentLoader extends MultiMethodTest {
             oDoc.dispose();
 
             url = util.utils.getFullTestURL("Calc_Link.sxc");
+            log.println("try to load '" + url + "'");
             oDoc = oObj.loadComponentFromURL(
                             url, frameName, 0, szArgs);
 
