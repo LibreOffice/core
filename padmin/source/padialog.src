@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 10:57:51 $
+ *  last change: $Author: kz $ $Date: 2002-09-12 09:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2305,16 +2305,16 @@ String RID_ERR_REMOVESGENPRT
     Text[ greek ] = "The driver \"%s\" is always needed and can therefore not be removed.";
     Text[ dutch ] = "The driver \"%s\" is always needed and can therefore not be removed.";
     Text[ french ] = "The driver \"%s\" is always needed and can therefore not be removed.";
-    Text[ spanish ] = "The driver \"%s\" is always needed and can therefore not be removed.";
+    Text[ spanish ] = "El controlador \"%s\" se utiliza siempre y por lo tanto no se puede eliminar.";
     Text[ finnish ] = "The driver \"%s\" is always needed and can therefore not be removed.";
-    Text[ italian ] = "The driver \"%s\" is always needed and can therefore not be removed.";
+    Text[ italian ] = "Il driver \"%s\" viene sempre utilizzato per questo non pu� essere rimosso.";
     Text[ danish ] = "The driver \"%s\" is always needed and can therefore not be removed.";
-    Text[ swedish ] = "The driver \"%s\" is always needed and can therefore not be removed.";
+    Text[ swedish ] = "Drivrutinen \"%s\" beh�vs alltid och kan d�rf�r inte tas bort.";
     Text[ polish ] = "The driver \"%s\" is always needed and can therefore not be removed.";
     Text[ portuguese_brazilian ] = "The driver \"%s\" is always needed and can therefore not be removed.";
-    Text[ japanese ] = "The driver \"%s\" is always needed and can therefore not be removed.";
-    Text[ korean ] = "The driver \"%s\" is always needed and can therefore not be removed.";
-    Text[ chinese_simplified ] = "The driver \"%s\" is always needed and can therefore not be removed.";
+    Text[ japanese ] = "ドライバ \"%s\" は常に必要とされるので、削除することはできません。";
+    Text[ korean ] = "드라이버 \"%s\" 는 항상 필요하므로 삭제할 수 없습니다.";
+    Text[ chinese_simplified ] = "这是一个必要的驱动程序 \"%s\" ，因此不能够删除。";
     Text[ chinese_traditional ] = "這是一個必要的驅動程式 \"%s\" ，因此不能夠刪除。";
     Text[ turkish ] = "The driver \"%s\" is always needed and can therefore not be removed.";
     Text[ arabic ] = "The driver \"%s\" is always needed and can therefore not be removed.";
@@ -2326,23 +2326,23 @@ String RID_ERR_REMOVEDRIVERFAILED
 {
     Text = "Der Treiber \"%s1\" konnte nicht entfernt werden. Das L�schen der Datei\n\n%s2\n\nist fehlgeschlagen.";
     Text [ English ] = "The driver \"%s1\" could not be removed. Removing the file\n\n%s2\n\nwas not possible.";
-    Text[ english_us ] = "The driver \"%s1\" could not be removed. Removing the file\n\n%s2\n\nwas not possible.";
+    Text[ english_us ] = "The driver \"%s1\" could not be removed. It was not possible to remove the file\n\n%s2.";
     Text[ portuguese ] = "The driver \"%s1\" could not be removed. Removing the file\n\n%s2\n\nwas not possible.";
     Text[ russian ] = "The driver \"%s1\" could not be removed. Removing the file\n\n%s2\n\nwas not possible.";
     Text[ greek ] = "The driver \"%s1\" could not be removed. Removing the file\n\n%s2\n\nwas not possible.";
     Text[ dutch ] = "The driver \"%s1\" could not be removed. Removing the file\n\n%s2\n\nwas not possible.";
     Text[ french ] = "The driver \"%s1\" could not be removed. Removing the file\n\n%s2\n\nwas not possible.";
-    Text[ spanish ] = "The driver \"%s1\" could not be removed. Removing the file\n\n%s2\n\nwas not possible.";
+    Text[ spanish ] = "El controlador \"%s1\" no se pudo eliminar. La eliminaci�n del archivo \n\n%s2\n\n no ha sido posible.";
     Text[ finnish ] = "The driver \"%s1\" could not be removed. Removing the file\n\n%s2\n\nwas not possible.";
-    Text[ italian ] = "The driver \"%s1\" could not be removed. Removing the file\n\n%s2\n\nwas not possible.";
+    Text[ italian ] = "Impossibile eliminare il driver \"%s1\". La rimozione del file\n\n%s2\n\nnon � stata possibile.";
     Text[ danish ] = "The driver \"%s1\" could not be removed. Removing the file\n\n%s2\n\nwas not possible.";
-    Text[ swedish ] = "The driver \"%s1\" could not be removed. Removing the file\n\n%s2\n\nwas not possible.";
+    Text[ swedish ] = "Drivrutinen \"%s1\" kunde inte tas bort. Det gick inte att radera filen\n\n%s2.";
     Text[ polish ] = "The driver \"%s1\" could not be removed. Removing the file\n\n%s2\n\nwas not possible.";
     Text[ portuguese_brazilian ] = "The driver \"%s1\" could not be removed. Removing the file\n\n%s2\n\nwas not possible.";
-    Text[ japanese ] = "The driver \"%s1\" could not be removed. Removing the file\n\n%s2\n\nwas not possible.";
-    Text[ korean ] = "The driver \"%s1\" could not be removed. Removing the file\n\n%s2\n\nwas not possible.";
-    Text[ chinese_simplified ] = "The driver \"%s1\" could not be removed. Removing the file\n\n%s2\n\nwas not possible.";
-    Text[ chinese_traditional ] = "這個驅動程式 \"%s1\" 無法被刪除。沒有成功地刪除檔案\n\n%s2\n\n。";
+    Text[ japanese ] = "ドライバ \"%s1\" は削除できませんでした。ファイル\n\n%s2\n\nの削除は不可能でした。";
+    Text[ korean ] = "드라이브 \"%s1\" 를 삭제할 수 없었습니다. 파일\n\n%s2\n\n 의 삭제는 불가능합니다.";
+    Text[ chinese_simplified ] = "无法删除驱动程序 \"%s1\" 。没有能够成功地删除文件\n\n%s2\n\n";
+    Text[ chinese_traditional ] = "這個驅動程式 \"%s1\" 無法被刪除。沒有成功地刪除檔案\n\n%s2\n\n";
     Text[ turkish ] = "The driver \"%s1\" could not be removed. Removing the file\n\n%s2\n\nwas not possible.";
     Text[ arabic ] = "The driver \"%s1\" could not be removed. Removing the file\n\n%s2\n\nwas not possible.";
     Text[ catalan ] = "The driver \"%s1\" could not be removed. Removing the file\n\n%s2\n\nwas not possible.";
