@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-07 16:26:36 $
+ *  last change: $Author: aw $ $Date: 2001-02-09 13:38:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,8 +386,8 @@ void XMLShapeExport::ImpPrepareExport3DScene(
         OUString aStr;
         OUStringBuffer sStringBuffer;
 
-        ImpExportPosition( xShape, nFeatures, pRefPoint );
-        ImpExportSize( xShape, nFeatures );
+        // Transformation
+        ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
 
         // world transformation (UNO_NAME_3D_TRANSFORM_MATRIX == "D3DTransformMatrix")
         uno::Any aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DTransformMatrix")));

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-08 14:45:43 $
+ *  last change: $Author: aw $ $Date: 2001-02-09 13:38:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,10 @@
 #include <com/sun/star/drawing/ConnectorType.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_DRAWING_HOMOGENMATRIX3_HPP_
+#include <com/sun/star/drawing/HomogenMatrix3.hpp>
+#endif
+
 #ifndef _XMLOFF_PROPERTYSETMERGER_HXX_
 #include "PropertySetMerger.hxx"
 #endif
@@ -159,14 +163,12 @@ SdXMLShapeContext::SdXMLShapeContext(
     uno::Reference< drawing::XShapes >& rShapes)
 :   SvXMLImportContext( rImport, nPrfx, rLocalName ),
     mxShapes( rShapes ),
-    mnRotate( 0L ),
     mnStyleFamily(XML_STYLE_FAMILY_SD_GRAPHICS_ID),
     mbIsPlaceholder(FALSE),
     mbIsUserTransformed(FALSE),
     mxAttrList(xAttrList),
     mnZOrder(-1),
-    mnShapeId(-1),
-    maSize( 1, 1 )
+    mnShapeId(-1)
 {
 }
 
@@ -281,33 +283,34 @@ void SdXMLShapeContext::AddShape(const char* pServiceName )
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLShapeContext::SetSize()
+void SdXMLShapeContext::SetTransformation()
 {
-    if( mxShape.is() )
-        mxShape->setSize(maSize);
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-void SdXMLShapeContext::SetPosition()
-{
-    if( mxShape.is() )
-        mxShape->setPosition(maPosition);
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-void SdXMLShapeContext::SetRotation()
-{
-    if(mnRotate != 0L)
+    if(mnTransform.NeedsAction())
     {
         uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
         if(xPropSet.is())
         {
+            Matrix3D aMat;
+            mnTransform.GetFullTransform(aMat);
+
+            drawing::HomogenMatrix3 aMatrix;
+            aMatrix.Line1.Column1 = aMat[0].X();
+            aMatrix.Line1.Column2 = aMat[0].Y();
+            aMatrix.Line1.Column3 = aMat[0].W();
+
+            aMatrix.Line2.Column1 = aMat[1].X();
+            aMatrix.Line2.Column2 = aMat[1].Y();
+            aMatrix.Line2.Column3 = aMat[1].W();
+
+            aMatrix.Line3.Column1 = aMat[2].X();
+            aMatrix.Line3.Column2 = aMat[2].Y();
+            aMatrix.Line3.Column3 = aMat[2].W();
+
             uno::Any aAny;
-            aAny <<= mnRotate;
+            aAny <<= aMatrix;
+
             xPropSet->setPropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("RotateAngle")), aAny);
+                OUString(RTL_CONSTASCII_USTRINGPARAM("Transformation")), aAny);
         }
     }
 }
@@ -445,31 +448,9 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUStr
     }
     else if( XML_NAMESPACE_SVG == nPrefix )
     {
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_x)) )
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_transform)) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(maPosition.X, rValue);
-        }
-        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_y)) )
-        {
-            GetImport().GetMM100UnitConverter().convertMeasure(maPosition.Y, rValue);
-        }
-        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_width)) )
-        {
-            GetImport().GetMM100UnitConverter().convertMeasure(maSize.Width, rValue);
-        }
-        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_height)) )
-        {
-            GetImport().GetMM100UnitConverter().convertMeasure(maSize.Height, rValue);
-        }
-        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_transform)) )
-        {
-            SdXMLImExTransform2D aTransform(rValue, GetImport().GetMM100UnitConverter());
-            if(aTransform.NeedsAction())
-            {
-                double fVal(0.0);
-                if(aTransform.FindRotate(fVal) && fVal != 0.0)
-                    mnRotate = (sal_Int32)(fVal * 100.0);
-            }
+            mnTransform.SetString(rValue, GetImport().GetMM100UnitConverter());
         }
     }
 }
@@ -525,9 +506,8 @@ void SdXMLRectShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
         SetStyle();
         SetLayer();
 
-        // set local parameters on shape
-        SetSizeAndPosition();
-        SetRotation();
+        // set pos, size, shear and rotate
+        SetTransformation();
 
         if(mnRadius)
         {
@@ -741,13 +721,8 @@ void SdXMLEllipseShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
         SetStyle();
         SetLayer();
 
-        // set local parameters on shape
-        awt::Point aPoint(mnCX - mnRX, mnCY - mnRY);
-        awt::Size aSize(mnRX + mnRX, mnRY + mnRY);
-        mxShape->setPosition(aPoint);
-        mxShape->setSize(aSize);
-
-        SetRotation();
+        // set pos, size, shear and rotate
+        SetTransformation();
 
         if( meKind != drawing::CircleKind_FULL )
         {
@@ -832,10 +807,6 @@ void SdXMLPolygonShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
         SetStyle();
         SetLayer();
 
-        // set parameters on shape
-        SetSizeAndPosition();
-        SetRotation();
-
         // set local parameters on shape
         uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
         if(xPropSet.is())
@@ -844,15 +815,20 @@ void SdXMLPolygonShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
             if(maPoints.getLength() && maViewBox.getLength())
             {
                 SdXMLImExViewBox aViewBox(maViewBox, GetImport().GetMM100UnitConverter());
-                SdXMLImExPointsElement aPoints(maPoints, aViewBox, maPosition, maSize,
-                    GetImport().GetMM100UnitConverter());
+                awt::Size aSize(aViewBox.GetWidth(), aViewBox.GetHeight());
+                awt::Point aPosition(aViewBox.GetX(), aViewBox.GetY());
+                SdXMLImExPointsElement aPoints(maPoints, aViewBox,
+                    aPosition, aSize, GetImport().GetMM100UnitConverter());
 
                 uno::Any aAny;
                 aAny <<= aPoints.GetPointSequenceSequence();
                 xPropSet->setPropertyValue(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("PolyPolygon")), aAny);
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("Geometry")), aAny);
             }
         }
+
+        // set pos, size, shear and rotate and get copy of matrix
+        SetTransformation();
 
         SdXMLShapeContext::StartElement(xAttrList);
     }
@@ -911,7 +887,10 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
     {
         // prepare some of the parameters
         SdXMLImExViewBox aViewBox(maViewBox, GetImport().GetMM100UnitConverter());
-        SdXMLImExSvgDElement aPoints(maD, aViewBox, maPosition, maSize, GetImport().GetMM100UnitConverter());
+        awt::Size aSize(aViewBox.GetWidth(), aViewBox.GetHeight());
+        awt::Point aPosition(aViewBox.GetX(), aViewBox.GetY());
+        SdXMLImExSvgDElement aPoints(maD, aViewBox,
+            aPosition, aSize, GetImport().GetMM100UnitConverter());
 
         char* pService;
         // now create shape
@@ -945,10 +924,6 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
             SetStyle();
             SetLayer();
 
-            // set parameters on shape
-            SetSizeAndPosition();
-            SetRotation();
-
             // set local parameters on shape
             uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
             if(xPropSet.is())
@@ -966,16 +941,20 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
 
                         aAny <<= aSourcePolyPolygon;
                         xPropSet->setPropertyValue(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("PolyPolygonBezier")), aAny);
+                            OUString(RTL_CONSTASCII_USTRINGPARAM("Geometry")), aAny);
                     }
                     else
                     {
                         aAny <<= aPoints.GetPointSequenceSequence();
                         xPropSet->setPropertyValue(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("PolyPolygon")), aAny);
+                            OUString(RTL_CONSTASCII_USTRINGPARAM("Geometry")), aAny);
                     }
                 }
             }
+
+            // set pos, size, shear and rotate
+            SetTransformation();
+
             SdXMLShapeContext::StartElement(xAttrList);
         }
     }
@@ -1067,14 +1046,17 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
         }
 
         // set parameters on shape
-        if(!bIsPresShape || mbIsUserTransformed)
-        {
-            // set pos and size on shape, this should remove binding
-            // to pres object on masterpage
-            SetSizeAndPosition();
-        }
+//A AW->CL: Eventually You need to strip scale and translate from the transformation
+//A to reach the same goal again.
+//A     if(!bIsPresShape || mbIsUserTransformed)
+//A     {
+//A         // set pos and size on shape, this should remove binding
+//A         // to pres object on masterpage
+//A         SetSizeAndPosition();
+//A     }
 
-        SetRotation();
+        // set pos, size, shear and rotate
+        SetTransformation();
 
         SdXMLShapeContext::StartElement(xAttrList);
     }
@@ -1128,8 +1110,8 @@ void SdXMLControlShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
         SetStyle();
         SetLayer();
 
-        // set parameters on shape
-        SetSizeAndPosition();
+        // set pos, size, shear and rotate
+        SetTransformation();
 
         DBG_ASSERT( maFormId.getLength(), "draw:control without a form:id attribute!" );
         if( maFormId.getLength() )
@@ -1449,8 +1431,8 @@ void SdXMLPageShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
         SetStyle();
         SetLayer();
 
-        // set parameters on shape
-        SetSizeAndPosition();
+        // set pos, size, shear and rotate
+        SetTransformation();
 
         SdXMLShapeContext::StartElement(xAttrList);
     }
@@ -1489,9 +1471,8 @@ void SdXMLCaptionShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
         SetStyle();
         SetLayer();
 
-        // set parameters on shape
-        SetSizeAndPosition();
-        SetRotation();
+        // set pos, size, shear and rotate
+        SetTransformation();
 
         SdXMLShapeContext::StartElement(xAttrList);
     }
@@ -1579,9 +1560,8 @@ void SdXMLGraphicObjectShapeContext::StartElement( const ::com::sun::star::uno::
             }
         }
 
-        // set parameters on shape
-        SetSizeAndPosition();
-        SetRotation();
+        // set pos, size, shear and rotate
+        SetTransformation();
 
         SdXMLShapeContext::StartElement(xAttrList);
     }
@@ -1669,8 +1649,8 @@ void SdXMLChartShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
         }
 
 
-        // set parameters on shape
-        SetSizeAndPosition();
+        // set pos, size, shear and rotate
+        SetTransformation();
 
         SdXMLShapeContext::StartElement(xAttrList);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-08 14:45:43 $
+ *  last change: $Author: aw $ $Date: 2001-02-09 13:38:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,10 +445,6 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetEllipseShapeAttrTokenMap()
 */
 static __FAR_DATA SvXMLTokenMapEntry aPolygonShapeAttrTokenMap[] =
 {
-    { XML_NAMESPACE_SVG,    sXML_x,                 XML_TOK_POLYGONSHAPE_X              },
-    { XML_NAMESPACE_SVG,    sXML_y,                 XML_TOK_POLYGONSHAPE_Y              },
-    { XML_NAMESPACE_SVG,    sXML_width,             XML_TOK_POLYGONSHAPE_WIDTH          },
-    { XML_NAMESPACE_SVG,    sXML_height,            XML_TOK_POLYGONSHAPE_HEIGHT         },
     { XML_NAMESPACE_SVG,    sXML_viewBox,           XML_TOK_POLYGONSHAPE_VIEWBOX        },
     { XML_NAMESPACE_DRAW,   sXML_points,            XML_TOK_POLYGONSHAPE_POINTS         },
     XML_TOKEN_MAP_END
@@ -465,10 +461,6 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetPolygonShapeAttrTokenMap()
 
 static __FAR_DATA SvXMLTokenMapEntry aPathShapeAttrTokenMap[] =
 {
-    { XML_NAMESPACE_SVG,    sXML_x,                 XML_TOK_PATHSHAPE_X                 },
-    { XML_NAMESPACE_SVG,    sXML_y,                 XML_TOK_PATHSHAPE_Y                 },
-    { XML_NAMESPACE_SVG,    sXML_width,             XML_TOK_PATHSHAPE_WIDTH             },
-    { XML_NAMESPACE_SVG,    sXML_height,            XML_TOK_PATHSHAPE_HEIGHT            },
     { XML_NAMESPACE_SVG,    sXML_viewBox,           XML_TOK_PATHSHAPE_VIEWBOX           },
     { XML_NAMESPACE_SVG,    sXML_d,                 XML_TOK_PATHSHAPE_D                 },
     XML_TOKEN_MAP_END
@@ -521,10 +513,6 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetControlShapeAttrTokenMap()
 
 static __FAR_DATA SvXMLTokenMapEntry a3DSceneShapeAttrTokenMap[] =
 {
-    { XML_NAMESPACE_SVG,    sXML_x,                 XML_TOK_3DSCENESHAPE_X              },
-    { XML_NAMESPACE_SVG,    sXML_y,                 XML_TOK_3DSCENESHAPE_Y              },
-    { XML_NAMESPACE_SVG,    sXML_width,             XML_TOK_3DSCENESHAPE_WIDTH          },
-    { XML_NAMESPACE_SVG,    sXML_height,            XML_TOK_3DSCENESHAPE_HEIGHT         },
     { XML_NAMESPACE_DR3D,   sXML_transform,         XML_TOK_3DSCENESHAPE_TRANSFORM      },
     { XML_NAMESPACE_DR3D,   sXML_vrp,               XML_TOK_3DSCENESHAPE_VRP            },
     { XML_NAMESPACE_DR3D,   sXML_vpn,               XML_TOK_3DSCENESHAPE_VPN            },

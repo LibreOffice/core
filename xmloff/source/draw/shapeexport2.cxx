@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-07 16:26:36 $
+ *  last change: $Author: aw $ $Date: 2001-02-09 13:38:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,10 @@
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_DRAWING_HOMOGENMATRIX3_HPP_
+#include <com/sun/star/drawing/HomogenMatrix3.hpp>
+#endif
+
 #ifndef _XMLOFF_ANIM_HXX
 #include "anim.hxx"
 #endif
@@ -119,78 +123,84 @@
 #include "xexptran.hxx"
 #endif
 
+#ifndef _SV_SALBTYPE_HXX
+#include <vcl/salbtype.hxx>     // FRound
+#endif
+
 #include "xmlkywd.hxx"
 #include "xmlnmspe.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
+
 //////////////////////////////////////////////////////////////////////////////
 
-void XMLShapeExport::ImpExportSize( const uno::Reference< drawing::XShape >& xShape, sal_Int32 nFeatures )
+void XMLShapeExport::ImpExportNewTrans(const uno::Reference< beans::XPropertySet >& xPropSet,
+    sal_Int32 nFeatures, awt::Point* pRefPoint)
 {
-    OUStringBuffer sStringBuffer;
+    // get matrix
+    Matrix3D aMat;
+    ImpExportNewTrans_GetMatrix3D(aMat, xPropSet);
 
-    awt::Size aSize( xShape->getSize() );
+    // decompose and correct abour pRefPoint
+    Vector2D aTRScale;
+    double fTRShear(0.0);
+    double fTRRotate(0.0);
+    Vector2D aTRTranslate;
+    ImpExportNewTrans_DecomposeAndRefPoint(aMat, aTRScale, fTRShear, fTRRotate, aTRTranslate, pRefPoint);
 
-    if( nFeatures & SEF_EXPORT_WIDTH )
+    // use features and write
+    ImpExportNewTrans_FeaturesAndWrite(aTRScale, fTRShear, fTRRotate, aTRTranslate, nFeatures);
+}
+
+void XMLShapeExport::ImpExportNewTrans_GetMatrix3D(Matrix3D& rMat,
+    const uno::Reference< beans::XPropertySet >& xPropSet)
+{
+    uno::Any aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Transformation")));
+    drawing::HomogenMatrix3 aMatrix;
+    aAny >>= aMatrix;
+    rMat[0] = Point3D( aMatrix.Line1.Column1, aMatrix.Line1.Column2, aMatrix.Line1.Column3 );
+    rMat[1] = Point3D( aMatrix.Line2.Column1, aMatrix.Line2.Column2, aMatrix.Line2.Column3 );
+    rMat[2] = Point3D( aMatrix.Line3.Column1, aMatrix.Line3.Column2, aMatrix.Line3.Column3 );
+}
+
+void XMLShapeExport::ImpExportNewTrans_DecomposeAndRefPoint(const Matrix3D& rMat,
+    Vector2D& rTRScale, double& fTRShear, double& fTRRotate, Vector2D& rTRTranslate,
+    awt::Point* pRefPoint)
+{
+    // decompose matrix
+    rMat.DecomposeAndCorrect(rTRScale, fTRShear, fTRRotate, rTRTranslate);
+
+    // correct translation about pRefPoint
+    if(pRefPoint)
     {
-        // svg: width
-        rExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, aSize.Width);
-        rExport.AddAttribute(XML_NAMESPACE_SVG, sXML_width, sStringBuffer.makeStringAndClear());
-    }
-
-    if( nFeatures & SEF_EXPORT_HEIGHT )
-    {
-        // svg: height
-        rExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, aSize.Height);
-        rExport.AddAttribute(XML_NAMESPACE_SVG, sXML_height, sStringBuffer.makeStringAndClear());
+        rTRTranslate.X() -= pRefPoint->X;
+        rTRTranslate.Y() -= pRefPoint->Y;
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
-void XMLShapeExport::ImpExportPosition( const uno::Reference< drawing::XShape >& xShape, sal_Int32 nFeatures, awt::Point* pRefPoint )
+void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(Vector2D& rTRScale, double fTRShear,
+    double fTRRotate, Vector2D& rTRTranslate, const sal_Int32 nFeatures)
 {
-    OUStringBuffer sStringBuffer;
-
-    awt::Point aPoint( xShape->getPosition() );
-    if( pRefPoint )
-    {
-        aPoint.X -= pRefPoint->X;
-        aPoint.Y -= pRefPoint->Y;
-    }
-
-    if( nFeatures & SEF_EXPORT_X )
-    {
-        // svg: x
-        rExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, aPoint.X);
-        rExport.AddAttribute(XML_NAMESPACE_SVG, sXML_x, sStringBuffer.makeStringAndClear());
-    }
-
-    if( nFeatures & SEF_EXPORT_Y )
-    {
-        // svg: y
-        rExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, aPoint.Y);
-        rExport.AddAttribute(XML_NAMESPACE_SVG, sXML_y, sStringBuffer.makeStringAndClear());
-    }
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-void XMLShapeExport::ImpExportTransformation( const uno::Reference< beans::XPropertySet >& xPropSet )
-{
-    OUStringBuffer sStringBuffer;
-
     SdXMLImExTransform2D aTransform;
 
-    // evtl. rotation (100'th degree, part of transformation)?
-    sal_Int32 nRotAngle(0L);
-    uno::Any aAny = xPropSet->getPropertyValue(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("RotateAngle")));
-    aAny >>= nRotAngle;
-    if(nRotAngle)
-        aTransform.AddRotate(nRotAngle / 100.0);
+    if(!(nFeatures & SEF_EXPORT_WIDTH))
+        rTRScale.X() = 0.0;
+
+    if(!(nFeatures & SEF_EXPORT_HEIGHT))
+        rTRScale.Y() = 0.0;
+
+    if(!(nFeatures & SEF_EXPORT_X))
+        rTRTranslate.X() = 0.0;
+
+    if(!(nFeatures & SEF_EXPORT_Y))
+        rTRTranslate.Y() = 0.0;
+
+    aTransform.AddScale(rTRScale);
+    aTransform.AddSkewX(fTRShear);
+    aTransform.AddRotate(fTRRotate);
+    aTransform.AddTranslate(rTRTranslate);
 
     // does transformation need to be exported?
     if(aTransform.NeedsAction())
@@ -509,19 +519,17 @@ void XMLShapeExport::ImpExportGroupShape( const uno::Reference< drawing::XShape 
 
 void XMLShapeExport::ImpExportTextBoxShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */ )
+    XmlShapeType eShapeType, sal_Int32 nFeatures, awt::Point* pRefPoint)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
     {
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
 
-        OUString aStr;
-        OUStringBuffer sStringBuffer;
-
         // presentation attribute (if presentation)
         sal_Bool bIsPresShape(FALSE);
         sal_Bool bIsEmptyPresObj(FALSE);
+        OUString aStr;
 
         switch(eShapeType)
         {
@@ -551,9 +559,8 @@ void XMLShapeExport::ImpExportTextBoxShape(
             }
         }
 
-        ImpExportPosition( xShape, nFeatures, pRefPoint );
-        ImpExportSize( xShape, nFeatures );
-        ImpExportTransformation( xPropSet );
+        // Transformation
+        ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
 
         if(bIsPresShape)
             bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, aStr );
@@ -571,22 +578,20 @@ void XMLShapeExport::ImpExportTextBoxShape(
 
 void XMLShapeExport::ImpExportRectangleShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType eShapeType, sal_Int32 nFeatures /*= SEF_DEFAULT */,    com::sun::star::awt::Point* pRefPoint /* = NULL */ )
+    XmlShapeType eShapeType, sal_Int32 nFeatures, com::sun::star::awt::Point* pRefPoint)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
     {
-        OUStringBuffer sStringBuffer;
-
-        ImpExportPosition( xShape, nFeatures, pRefPoint );
-        ImpExportSize( xShape, nFeatures );
-        ImpExportTransformation( xPropSet );
+        // Transformation
+        ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
 
         // evtl. corner radius?
         sal_Int32 nCornerRadius(0L);
         xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CornerRadius"))) >>= nCornerRadius;
         if(nCornerRadius)
         {
+            OUStringBuffer sStringBuffer;
             rExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, nCornerRadius);
             rExport.AddAttribute(XML_NAMESPACE_DRAW, sXML_corner_radius, sStringBuffer.makeStringAndClear());
         }
@@ -603,12 +608,11 @@ void XMLShapeExport::ImpExportRectangleShape(
 
 void XMLShapeExport::ImpExportLineShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */ )
+    XmlShapeType eShapeType, sal_Int32 nFeatures, awt::Point* pRefPoint)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
     {
-        SdXMLImExTransform2D aTransform;
         OUString aStr;
         OUStringBuffer sStringBuffer;
         awt::Point aStart(0,0);
@@ -699,49 +703,25 @@ void XMLShapeExport::ImpExportLineShape(
 
 void XMLShapeExport::ImpExportEllipseShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
+    XmlShapeType eShapeType, sal_Int32 nFeatures, awt::Point* pRefPoint)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
     {
-        SdXMLImExTransform2D aTransform;
         // get size to decide between Circle and Ellipse
-        awt::Point aPoint = xShape->getPosition();
-        if( pRefPoint )
-        {
-            aPoint.X -= pRefPoint->X;
-            aPoint.Y -= pRefPoint->Y;
-        }
-
         awt::Size aSize = xShape->getSize();
         sal_Int32 nRx((aSize.Width + 1) / 2);
         sal_Int32 nRy((aSize.Height + 1) / 2);
         BOOL bCircle(nRx == nRy);
-        OUString aStr;
-        OUStringBuffer sStringBuffer;
 
-        if( nFeatures & SEF_EXPORT_X )
-        {
-            // svg: cx
-            rExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, aPoint.X + nRx);
-            aStr = sStringBuffer.makeStringAndClear();
-            rExport.AddAttribute(XML_NAMESPACE_SVG, sXML_cx, aStr);
-        }
-
-        if( nFeatures & SEF_EXPORT_Y )
-        {
-            // svg: cy
-            rExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, aPoint.Y + nRy);
-            aStr = sStringBuffer.makeStringAndClear();
-            rExport.AddAttribute(XML_NAMESPACE_SVG, sXML_cy, aStr);
-        }
-
-        ImpExportTransformation( xPropSet );
+        // Transformation
+        ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
 
         drawing::CircleKind eKind = drawing::CircleKind_FULL;
         xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CircleKind")) ) >>= eKind;
         if( eKind != drawing::CircleKind_FULL )
         {
+            OUStringBuffer sStringBuffer;
             sal_Int32 nStartAngle;
             sal_Int32 nEndAngle;
             xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CircleStartAngle")) ) >>= nStartAngle;
@@ -750,23 +730,21 @@ void XMLShapeExport::ImpExportEllipseShape(
             const double dStartAngle = nStartAngle / 100.0;
             const double dEndAngle = nEndAngle / 100.0;
 
+            // export circle kind
             SvXMLUnitConverter::convertEnum( sStringBuffer, (USHORT)eKind, aXML_CircleKind_EnumMap );
             rExport.AddAttribute(XML_NAMESPACE_DRAW, sXML_kind, sStringBuffer.makeStringAndClear() );
 
+            // export start angle
             SvXMLUnitConverter::convertNumber( sStringBuffer, dStartAngle );
             rExport.AddAttribute(XML_NAMESPACE_DRAW, sXML_start_angle, sStringBuffer.makeStringAndClear() );
 
+            // export end angle
             SvXMLUnitConverter::convertNumber( sStringBuffer, dEndAngle );
             rExport.AddAttribute(XML_NAMESPACE_DRAW, sXML_end_angle, sStringBuffer.makeStringAndClear() );
         }
 
         if(bCircle)
         {
-            // svg: r
-            rExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, nRx);
-            aStr = sStringBuffer.makeStringAndClear();
-            rExport.AddAttribute(XML_NAMESPACE_SVG, sXML_r, aStr);
-
             // write circle
             SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_circle, sal_True, sal_True);
 
@@ -775,16 +753,6 @@ void XMLShapeExport::ImpExportEllipseShape(
         }
         else
         {
-            // svg: rx
-            rExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, nRx);
-            aStr = sStringBuffer.makeStringAndClear();
-            rExport.AddAttribute(XML_NAMESPACE_SVG, sXML_rx, aStr);
-
-            // svg: ry
-            rExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, nRy);
-            aStr = sStringBuffer.makeStringAndClear();
-            rExport.AddAttribute(XML_NAMESPACE_SVG, sXML_ry, aStr);
-
             // write ellipse
             SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_ellipse, sal_True, sal_True);
 
@@ -798,7 +766,7 @@ void XMLShapeExport::ImpExportEllipseShape(
 
 void XMLShapeExport::ImpExportPolygonShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
+    XmlShapeType eShapeType, sal_Int32 nFeatures, awt::Point* pRefPoint)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
@@ -808,22 +776,30 @@ void XMLShapeExport::ImpExportPolygonShape(
         BOOL bBezier(eShapeType == XmlShapeTypeDrawClosedBezierShape
             || eShapeType == XmlShapeTypeDrawOpenBezierShape);
 
-        OUStringBuffer sStringBuffer;
+        // get matrix
+        Matrix3D aMat;
+        ImpExportNewTrans_GetMatrix3D(aMat, xPropSet);
 
-        ImpExportPosition( xShape, nFeatures, pRefPoint );
-        ImpExportSize( xShape, nFeatures );
-        ImpExportTransformation( xPropSet );
+        // decompose and correct abour pRefPoint
+        Vector2D aTRScale;
+        double fTRShear(0.0);
+        double fTRRotate(0.0);
+        Vector2D aTRTranslate;
+        ImpExportNewTrans_DecomposeAndRefPoint(aMat, aTRScale, fTRShear, fTRRotate, aTRTranslate, pRefPoint);
+
+        // use features and write
+        ImpExportNewTrans_FeaturesAndWrite(aTRScale, fTRShear, fTRRotate, aTRTranslate, nFeatures);
 
         // create and export ViewBox
-        awt::Point aPoint( xShape->getPosition() );
-        awt::Size aSize( xShape->getSize() );
+        awt::Point aPoint(0, 0);
+        awt::Size aSize(FRound(aTRScale.X()), FRound(aTRScale.Y()));
         SdXMLImExViewBox aViewBox(0, 0, aSize.Width, aSize.Height);
         rExport.AddAttribute(XML_NAMESPACE_SVG, sXML_viewBox, aViewBox.GetExportString(rExport.GetMM100UnitConverter()));
 
         if(bBezier)
         {
             // get PolygonBezier
-            uno::Any aAny( xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("PolyPolygonBezier"))) );
+            uno::Any aAny( xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Geometry"))) );
             drawing::PolyPolygonBezierCoords* pSourcePolyPolygon =
                 (drawing::PolyPolygonBezierCoords*)aAny.getValue();
 
@@ -864,7 +840,7 @@ void XMLShapeExport::ImpExportPolygonShape(
         else
         {
             // get non-bezier polygon
-            uno::Any aAny( xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("PolyPolygon"))) );
+            uno::Any aAny( xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Geometry"))) );
             drawing::PointSequenceSequence* pSourcePolyPolygon = (drawing::PointSequenceSequence*)aAny.getValue();
 
             if(pSourcePolyPolygon && pSourcePolyPolygon->getLength())
@@ -928,19 +904,16 @@ void XMLShapeExport::ImpExportPolygonShape(
 
 void XMLShapeExport::ImpExportGraphicObjectShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
+    XmlShapeType eShapeType, sal_Int32 nFeatures, awt::Point* pRefPoint)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
     {
-        OUStringBuffer sStringBuffer;
-
         sal_Bool bIsEmptyPresObj = sal_False;
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
 
-        ImpExportPosition( xShape, nFeatures, pRefPoint );
-        ImpExportSize( xShape, nFeatures  );
-        ImpExportTransformation( xPropSet );
+        // Transformation
+        ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
 
         if(eShapeType == XmlShapeTypePresGraphicObjectShape)
             bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_presentation_graphic)) );
@@ -983,7 +956,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
 
 void XMLShapeExport::ImpExportChartShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
+    XmlShapeType eShapeType, sal_Int32 nFeatures, awt::Point* pRefPoint)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
@@ -994,10 +967,8 @@ void XMLShapeExport::ImpExportChartShape(
         if(eShapeType == XmlShapeTypePresChartShape)
             bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_presentation_chart)) );
 
-        OUStringBuffer sStringBuffer;
-
-        ImpExportPosition( xShape, nFeatures, pRefPoint );
-        ImpExportSize( xShape, nFeatures );
+        // Transformation
+        ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
 
         uno::Reference< chart::XChartDocument > xChartDoc;
         if( !bIsEmptyPresObj )
@@ -1041,12 +1012,14 @@ void XMLShapeExport::ImpExportSpreadsheetShape(
 
 void XMLShapeExport::ImpExportControlShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
+    XmlShapeType eShapeType, sal_Int32 nFeatures, awt::Point* pRefPoint)
 {
-    OUStringBuffer sStringBuffer;
-
-    ImpExportPosition( xShape, nFeatures, pRefPoint );
-    ImpExportSize( xShape, nFeatures );
+    const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
+    if(xPropSet.is())
+    {
+        // Transformation
+        ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
+    }
 
     uno::Reference< drawing::XControlShape > xControl( xShape, uno::UNO_QUERY );
     DBG_ASSERT( xControl.is(), "Control shape is not supporting XControlShape" );

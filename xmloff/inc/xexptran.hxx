@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xexptran.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-24 16:46:35 $
+ *  last change: $Author: aw $ $Date: 2001-02-09 13:35:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ class SdXMLImExTransform2D
     rtl::OUString                   msString;
 
     void EmptyList();
-    ImpSdXMLExpTransObj2DBase* FindObject(sal_uInt16 nType, sal_uInt32 nInd = 0L);
+ImpSdXMLExpTransObj2DBase* FindObject(sal_uInt16 nType, sal_uInt32 nInd = 0L);
 
 public:
     SdXMLImExTransform2D() {}
@@ -130,11 +130,12 @@ public:
     void AddSkewY(double fNew);
     void AddMatrix(const Matrix3D& rNew);
 
-    sal_Bool FindRotate(double& rNew, sal_uInt32 nInd = 0L);
+sal_Bool FindRotate(double& rNew, sal_uInt32 nInd = 0L);
 
     sal_Bool NeedsAction() const { return (sal_Bool)(maList.Count() > 0L); }
-
+    void GetFullTransform(Matrix3D& rFullTrans);
     const rtl::OUString& GetExportString(const SvXMLUnitConverter& rConv);
+    void SetString(const rtl::OUString& rNew, const SvXMLUnitConverter& rConv);
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -159,11 +160,11 @@ public:
     void AddMatrix(const Matrix3D& rNew);
 
     void AddHomogenMatrix(const com::sun::star::drawing::HomogenMatrix& xHomMat);
-
     sal_Bool NeedsAction() const { return (sal_Bool)(maList.Count() > 0L); }
     void GetFullTransform(Matrix4D& rFullTrans);
     BOOL GetFullHomogenTransform(com::sun::star::drawing::HomogenMatrix& xHomMat);
     const rtl::OUString& GetExportString(const SvXMLUnitConverter& rConv);
+    void SetString(const rtl::OUString& rNew, const SvXMLUnitConverter& rConv);
 };
 
 //////////////////////////////////////////////////////////////////////////////

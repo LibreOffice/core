@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-01 19:06:28 $
+ *  last change: $Author: aw $ $Date: 2001-02-09 13:38:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,10 @@
 #include <tools/rtti.hxx>
 #endif
 
+#ifndef _XEXPTRANSFORM_HXX
+#include "xexptran.hxx"
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 // common shape context
 
@@ -105,7 +109,6 @@ protected:
     rtl::OUString               maDrawStyleName;
     rtl::OUString               maPresentationClass;
     rtl::OUString               maShapeName;
-    sal_Int32                   mnRotate;
     sal_uInt16                  mnStyleFamily;
     sal_uInt16                  mnClass;
     sal_Bool                    mbIsPlaceholder;
@@ -114,21 +117,13 @@ protected:
     sal_Int32                   mnShapeId;
     rtl::OUString               maLayerName;
 
-    com::sun::star::awt::Size   maSize;
-    com::sun::star::awt::Point  maPosition;
-    sal_Int32                   mnX;
-    sal_Int32                   mnY;
-    sal_Int32                   mnWidth;
-    sal_Int32                   mnHeight;
+    SdXMLImExTransform2D        mnTransform;
 
     void SetStyle();
     void SetLayer();
     void AddShape(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape);
     void AddShape(const char* pServiceName );
-    void SetSize();
-    void SetPosition();
-    void SetRotation();
-    void SetSizeAndPosition() { SetPosition(); SetSize(); }
+    void SetTransformation();
 
     SvXMLImport& GetImport() { return SvXMLImportContext::GetImport(); }
     const SvXMLImport& GetImport() const { return SvXMLImportContext::GetImport(); }

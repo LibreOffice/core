@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-06 13:33:45 $
+ *  last change: $Author: aw $ $Date: 2001-02-09 13:38:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1169,7 +1169,7 @@ void SdXMLStylesContext::EndElement()
 //
 void SdXMLStylesContext::SetMasterPageStyles(SdXMLMasterPageContext& rMaster) const
 {
-    UniString sPrefix(rMaster.GetName(), rMaster.GetName().getLength());
+    UniString sPrefix(rMaster.GetName(), (sal_uInt16)rMaster.GetName().getLength());
     sPrefix += sal_Unicode('-');
 
     if(GetSdImport().GetLocalDocStyleFamilies()->hasByName(rMaster.GetName()))
@@ -1224,7 +1224,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles(
 
         if(nFamily == pStyle->GetFamily())
         {
-            const UniString aStyleName(pStyle->GetName(), pStyle->GetName().getLength());
+            const UniString aStyleName(pStyle->GetName(), (sal_uInt16)pStyle->GetName().getLength());
             if(!nPrefLen || aStyleName.Equals(rPrefix, 0, nPrefLen))
             {
                 uno::Reference< style::XStyle > xStyle;
@@ -1287,7 +1287,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles(
 
         if(pStyle && nFamily == pStyle->GetFamily())
         {
-            const UniString aStyleName(pStyle->GetName(), pStyle->GetName().getLength());
+            const UniString aStyleName(pStyle->GetName(), (sal_uInt16)pStyle->GetName().getLength());
             if(!nPrefLen || aStyleName.Equals(rPrefix, 0, nPrefLen))
             {
                 OUString aPureParentName;

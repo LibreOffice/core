@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximp3dscene.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-13 19:13:03 $
+ *  last change: $Author: aw $ $Date: 2001-02-09 13:38:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,8 @@ void SdXML3DSceneShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     {
         mxChilds = uno::Reference< drawing::XShapes >::query( mxShape );
 
-        SetSizeAndPosition();
+        // set pos, size, shear and rotate
+        SetTransformation();
     }
 
     // read attributes for the 3DScene
@@ -209,26 +210,6 @@ void SdXML3DSceneShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
 
         switch(rAttrTokenMap.Get(nPrefix, aLocalName))
         {
-            case XML_TOK_3DSCENESHAPE_X:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnX, sValue);
-                break;
-            }
-            case XML_TOK_3DSCENESHAPE_Y:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnY, sValue);
-                break;
-            }
-            case XML_TOK_3DSCENESHAPE_WIDTH:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnWidth, sValue);
-                break;
-            }
-            case XML_TOK_3DSCENESHAPE_HEIGHT:
-            {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnHeight, sValue);
-                break;
-            }
             case XML_TOK_3DSCENESHAPE_TRANSFORM:
             {
                 SdXMLImExTransform3D aTransform(sValue, GetImport().GetMM100UnitConverter());
