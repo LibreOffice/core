@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-27 09:49:18 $
+ *  last change: $Author: mba $ $Date: 2001-12-11 15:03:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -677,8 +677,9 @@ void Application::Reschedule()
     ImplSVData* pSVData = ImplGetSVData();
 
     // Restliche Timer abarbeitet
-    while ( pSVData->mbNotAllTimerCalled )
-        ImplTimerCallbackProc();
+    if ( !pSVData->mbNoCallTimer )
+        while ( pSVData->mbNotAllTimerCalled )
+            ImplTimerCallbackProc();
 
     pSVData->maAppData.mnDispatchLevel++;
 #ifndef REMOTE_APPSERVER
@@ -696,8 +697,9 @@ void Application::Yield()
     ImplSVData* pSVData = ImplGetSVData();
 
     // Restliche Timer abarbeitet
-    while ( pSVData->mbNotAllTimerCalled )
-        ImplTimerCallbackProc();
+    if ( !pSVData->mbNoCallTimer )
+        while ( pSVData->mbNotAllTimerCalled )
+            ImplTimerCallbackProc();
 
     // Wenn Application schon beendet wurde, warten wir nicht mehr auf
     // Messages, sondern verarbeiten nur noch welche, wenn noch welche
