@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-19 10:44:02 $
+ *  last change: $Author: ka $ $Date: 2001-05-18 09:15:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -706,6 +706,7 @@
 #define STR_EFFECT_VERTICAL_CHECKERBOARD    (RID_APP_START+612)
 #define STR_EFFECT_HORIZONTAL_CHECKERBOARD  (RID_APP_START+613)
 
+#define STR_EFFECT_MOVE                     (RID_APP_START+619)
 #define STR_EFFECT_MOVE_TO_UL               (RID_APP_START+620)
 #define STR_EFFECT_MOVE_TO_UR               (RID_APP_START+621)
 #define STR_EFFECT_MOVE_TO_LR               (RID_APP_START+622)
