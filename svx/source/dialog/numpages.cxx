@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-05-11 07:41:52 $
+ *  last change: $Author: os $ $Date: 2001-05-18 14:06:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,7 +493,7 @@ IMPL_LINK(SvxSingleNumPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
         SvxNumSettings_ImplPtr pSet = aNumSettingsArr.GetObject(nIdx);
         SvxExtNumType eNewType = (SvxExtNumType)pSet->nNumberType;
         const sal_Unicode   cPrefix = pSet->sPrefix.getLength() ? pSet->sPrefix.getStr()[0] : 0;
-        const sal_Unicode   cSuffix = pSet->sPrefix.getLength() ? pSet->sSuffix.getStr()[0] : 0;
+        const sal_Unicode   cSuffix = pSet->sSuffix.getLength() ? pSet->sSuffix.getStr()[0] : 0;
 
         USHORT nMask = 1;
         for(USHORT i = 0; i < pActNum->GetLevelCount(); i++)
@@ -506,11 +506,11 @@ IMPL_LINK(SvxSingleNumPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
                 if(cPrefix == ' ')
                     aFmt.SetPrefix( aEmptyStr );
                 else
-                    aFmt.SetPrefix( String( cPrefix  ) );
+                    aFmt.SetPrefix(pSet->sPrefix);
                 if(cSuffix == ' ')
                     aFmt.SetSuffix( aEmptyStr );
                 else
-                    aFmt.SetSuffix( String( cSuffix ) );
+                    aFmt.SetSuffix(pSet->sSuffix);
                 aFmt.SetCharFmtName(sNumCharFmtName);
                 pActNum->SetLevel(i, aFmt);
             }
