@@ -84,8 +84,8 @@ fi
 # Check and get the list of packages to install
 #
 
-COREPKG=`find $PACKAGE_PATH/* -type d -prune -name "*-core*" -print`
-PKGLIST=`find $PACKAGE_PATH/* -type d -prune ! -name "*adabas*" ! -name "*j3*" ! -name "*-desktop-int*" ! -name "*-cde*" ! -name "*-core*" ! -name "*-gnome*" -print`
+COREPKG=`find $PACKAGE_PATH/* -type d -prune -name "*-core01*" -print`
+PKGLIST=`find $PACKAGE_PATH/* -type d -prune ! -name "*adabas*" ! -name "*j3*" ! -name "*-desktop-int*" ! -name "*-cde*" ! -name "*-core01*" ! -name "*-gnome*" -print`
 
 if [ -z "$COREPKG" ]
 then
