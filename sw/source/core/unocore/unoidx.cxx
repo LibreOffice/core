@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-05 15:57:38 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:24:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2577,6 +2577,11 @@ void SwXIndexTokenAccess_Impl::replaceByIndex(sal_Int32 nIndex, const uno::Any& 
                 }
                 aToken.nAuthorityField = nType;
             }
+            // #i21237#
+            else if ( pProperties[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("WithTab")))
+            {
+                aToken.bWithTab = lcl_AnyToBool(pProperties[j].Value);
+            }
 
         }
         //exception if wrong TokenType
@@ -2627,17 +2632,20 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
     (nIndex > pTOXBase->GetTOXForm().GetFormMax()))
         throw IndexOutOfBoundsException();
 
-    SwFormTokenEnumerator aEnumerator(pTOXBase->GetTOXForm().
-                                        GetPattern((sal_uInt16) nIndex));
+    // #i21237#
+    SwFormTokens aPattern = pTOXBase->GetTOXForm().
+        GetPattern((sal_uInt16) nIndex);
+    SwFormTokens::iterator aIt = aPattern.begin();
+
     sal_uInt16 nTokenCount = 0;
     uno::Sequence< PropertyValues > aRetSeq;
     String aString;
-    while(aEnumerator.HasNextToken())
+    while(aIt != aPattern.end()) // #i21237#
     {
         nTokenCount++;
         aRetSeq.realloc(nTokenCount);
         PropertyValues* pTokenProps = aRetSeq.getArray();
-        SwFormToken  aToken = aEnumerator.GetNextToken();
+        SwFormToken  aToken = *aIt; // #i21237#
 
         Sequence< PropertyValue >& rCurTokenSeq = pTokenProps[nTokenCount-1];
         SwStyleNameMapper::FillProgName(
@@ -2676,7 +2684,7 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
             break;
             case TOKEN_TAB_STOP     :
             {
-                rCurTokenSeq.realloc(4);
+                rCurTokenSeq.realloc(5); // #i21237#
                 PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = C2U("TokenType");
@@ -2701,6 +2709,9 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 pArr[2].Value <<= OUString(aToken.cTabFillChar);
                 pArr[3].Name = C2U("CharacterStyleName");
                 pArr[3].Value <<= aProgCharStyle;
+                // #i21237#
+                pArr[4].Name = C2U("WithTab");
+                pArr[4].Value.setValue(&aToken.bWithTab, ::getCppuBooleanType());
             }
             break;
             case TOKEN_TEXT         :
@@ -2788,6 +2799,8 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 pArr[2].Value <<= sal_Int16(aToken.nAuthorityField);
             break;
         }
+
+        aIt++; // #i21237#
     }
 
     uno::Any aRet(&aRetSeq, ::getCppuType((uno::Sequence< PropertyValues >*)0));
