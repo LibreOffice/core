@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: thb $ $Date: 2001-07-24 17:06:07 $
+#   last change: $Author: rt $ $Date: 2004-04-02 13:52:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,12 +100,15 @@ SLOFILES =	\
         $(SLO)$/shapeexport.obj \
         $(SLO)$/shapeexport2.obj \
         $(SLO)$/shapeexport3.obj \
+        $(SLO)$/shapeexport4.obj \
         $(SLO)$/shapeimport.obj \
         $(SLO)$/XMLImageMapExport.obj \
         $(SLO)$/XMLImageMapContext.obj \
         $(SLO)$/XMLShapePropertySetContext.obj \
         $(SLO)$/XMLShapeStyleContext.obj \
-        $(SLO)$/ximppage.obj
+        $(SLO)$/ximppage.obj \
+        $(SLO)$/ximpcustomshape.obj \
+        $(SLO)$/EnhancedCustomShapeToken.obj
 
 SVXLIGHTOBJFILES =	\
         $(OBJ)$/XMLNumberStyles.obj\
