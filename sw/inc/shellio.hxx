@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-01 19:26:54 $
+ *  last change: $Author: jp $ $Date: 2000-11-13 17:26:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,6 +442,7 @@ class Writer : public SvRefBase
     SwAsciiOptions aAscOpts;
 
     void _AddFontItem( SfxItemPool& rPool, const SvxFontItem& rFont );
+    void _AddFontItems( SfxItemPool& rPool, USHORT nWhichId );
 
 protected:
     Writer_Impl* pImpl;
@@ -454,7 +455,8 @@ protected:
     BOOL CopyNextPam( SwPaM ** );
 
     void PutNumFmtFontsInAttrPool();
-    void PutEditEngFontsInAttrPool();
+    void PutEditEngFontsInAttrPool( BOOL bIncl_CJK_CTL = TRUE );
+    void PutCJKandCTLFontsInAttrPool();
 
     virtual ULONG WriteStream() = 0;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-01 19:31:51 $
+ *  last change: $Author: jp $ $Date: 2000-11-13 17:26:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,10 +94,6 @@
 #include <svx/eeitem.hxx>
 #endif
 
-
-#ifndef _TOOLS_TEMPFILE_HXX
-#include <tools/tempfile.hxx>
-#endif
 #ifndef _SHELLIO_HXX
 #include <shellio.hxx>
 #endif
@@ -503,23 +499,40 @@ void Writer::PutNumFmtFontsInAttrPool()
                 }
 }
 
-void Writer::PutEditEngFontsInAttrPool()
+void Writer::PutEditEngFontsInAttrPool( BOOL bIncl_CJK_CTL )
+{
+    SfxItemPool* pPool = pDoc->GetAttrPool().GetSecondaryPool();
+    if( pPool )
+    {
+        _AddFontItems( *pPool, EE_CHAR_FONTINFO );
+        if( bIncl_CJK_CTL )
+        {
+            _AddFontItems( *pPool, EE_CHAR_FONTINFO_CJK );
+            _AddFontItems( *pPool, EE_CHAR_FONTINFO_CTL );
+        }
+    }
+}
+
+void Writer::PutCJKandCTLFontsInAttrPool()
 {
     SfxItemPool& rPool = pDoc->GetAttrPool();
-    if( rPool.GetSecondaryPool() )
-    {
-        USHORT nW = EE_CHAR_FONTINFO;
-        const SvxFontItem* pFont = (const SvxFontItem*)&rPool.GetDefaultItem( nW );
+    _AddFontItems( rPool, RES_CHRATR_CJK_FONT );
+    _AddFontItems( rPool, RES_CHRATR_CTL_FONT );
+}
+
+
+void Writer::_AddFontItems( SfxItemPool& rPool, USHORT nW )
+{
+    const SvxFontItem* pFont = (const SvxFontItem*)&rPool.GetDefaultItem( nW );
+    _AddFontItem( rPool, *pFont );
+
+    if( 0 != ( pFont = (const SvxFontItem*)rPool.GetPoolDefaultItem( nW )) )
         _AddFontItem( rPool, *pFont );
 
-        if( 0 != ( pFont = (const SvxFontItem*)rPool.GetPoolDefaultItem( nW )) )
+    USHORT nMaxItem = rPool.GetItemCount( nW );
+    for( USHORT nGet = 0; nGet < nMaxItem; ++nGet )
+        if( 0 != (pFont = (const SvxFontItem*)rPool.GetItem( nW, nGet )) )
             _AddFontItem( rPool, *pFont );
-
-        USHORT nMaxItem = rPool.GetItemCount( nW );
-        for( USHORT nGet = 0; nGet < nMaxItem; ++nGet )
-            if( 0 != (pFont = (const SvxFontItem*)rPool.GetItem( nW, nGet )) )
-                _AddFontItem( rPool, *pFont );
-    }
 }
 
 void Writer::_AddFontItem( SfxItemPool& rPool, const SvxFontItem& rFont )
@@ -636,11 +649,14 @@ ULONG StgWriter::Write( SwPaM& rPaM, SvStorage& rStg, const String* pFName )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/writer/writer.cxx,v 1.3 2000-11-01 19:31:51 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/writer/writer.cxx,v 1.4 2000-11-13 17:26:24 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/11/01 19:31:51  jp
+      Writer:CopyLocalFileToINet: export of mail graphics removed and SvFileStream access removed
+
       Revision 1.2  2000/10/17 15:13:50  os
       Change: SfxMedium Ctor
 
