@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-06 09:13:07 $
+ *  last change: $Author: ama $ $Date: 2000-11-09 11:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1315,36 +1315,21 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
 
     if( IsFollow() && IsFieldFollow() && rLine.GetStart() == GetOfst() )
     {
-        SwFldPortion* pRest = rLine.GetFieldRest( rInf );
-        if( pRest )
+        const SwLineLayout* pLine;
         {
             SwTxtFrm *pMaster = FindMaster();
             ASSERT( pMaster, "SwTxtFrm::Format: homeless follow" );
-            const SwFldPortion *pFld = pMaster->GetRestPortion();
-            if( pFld )
-            {
-                pRest->TakeNextOffset( pFld );
-                const SwTxtAttr* pTwoLines;
-                // If we get a field portion rest in a multi-line part of the
-                // text, we have to create the surrounding multi-portion, too.
-                if( GetOfst() &&
-                    0 != (pTwoLines = rInf.GetTwoLines( GetOfst()-1) ) )
-                {
-                    SwDoubleLinePortion* pTmp =
-                        new SwDoubleLinePortion( *pTwoLines->GetEnd() );
-#ifdef DEBUG
-                    //pTmp->SetRuby( pRest );
-                    pTmp->SetBrackets( 0, ']' );
-#endif
-                    pTmp->SetFldRest( pRest );
-                    rInf.SetRest( pTmp );
-                }
-                else
-                    rInf.SetRest( pRest );
-            }
-            else
-                delete pRest;
+            if( !pMaster->HasPara() )
+                pMaster->GetFormatted();
+            SwTxtSizeInfo aInf( pMaster );
+            SwTxtIter aMasterLine( pMaster, &aInf );
+            aMasterLine.Bottom();
+            pLine = aMasterLine.GetCurr();
         }
+        SwLinePortion* pRest =
+            rLine.MakeRestPortion( pLine, GetOfst() );
+        if( pRest )
+            rInf.SetRest( pRest );
         else
             SetFieldFollow( sal_False );
     }
@@ -1378,7 +1363,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
             if( !rLine.Next() )
             {
                 if( !bFormat )
-                    rLine.MakeRestPortion();
+                    rLine.MakeRestPortion( rLine.GetCurr(), rLine.GetEnd() );
                 rLine.Insert( new SwLineLayout() );
                 rLine.Next();
                 bFormat = sal_True;

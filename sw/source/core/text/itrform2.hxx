@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-16 13:09:38 $
+ *  last change: $Author: ama $ $Date: 2000-11-09 11:34:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,8 @@ class SwTxtFormatter : public SwTxtPainter
     SwDropPortion *NewDropPortion( SwTxtFormatInfo &rInf ) const;
     SwNumberPortion *NewFtnNumPortion( SwTxtFormatInfo &rInf ) const;
     SwErgoSumPortion *NewErgoSumPortion( SwTxtFormatInfo &rInf ) const;
-    SwExpandPortion *NewFldPortion( SwTxtFormatInfo &rInf, SwTxtAttr *pHt ) const;
+    SwExpandPortion *NewFldPortion( SwTxtFormatInfo &rInf,
+                                    const SwTxtAttr *pHt ) const;
     SwFtnPortion *NewFtnPortion( SwTxtFormatInfo &rInf, SwTxtAttr *pHt );
     SwFlyCntPortion *NewFlyCntPortion( SwTxtFormatInfo &rInf,
                                        SwTxtAttr *pHt ) const;
@@ -201,8 +202,7 @@ public:
     // Wie breit waerest Du ohne rechte Begrenzungen (Flys etc.)?
     KSHORT _CalcFitToContent( );
 
-    SwFldPortion *GetFieldRest( SwTxtFormatInfo &rInf ) const;
-    void MakeRestPortion();
+    SwLinePortion* MakeRestPortion(const SwLineLayout* pLine, xub_StrLen nPos);
 
     inline const SwFmtDrop *GetDropFmt() const { return pDropFmt; }
     inline void ClearDropFmt() { pDropFmt = 0; }

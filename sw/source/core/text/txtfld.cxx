@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfld.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-17 10:22:50 $
+ *  last change: $Author: ama $ $Date: 2000-11-09 11:33:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ sal_Bool lcl_IsInBody( SwFrm *pFrm )
 
 
 SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
-                                                SwTxtAttr *pHint ) const
+                                                const SwTxtAttr *pHint ) const
 {
     SwExpandPortion *pRet;
     SwFrm *pFrame = (SwFrm*)pFrm;
@@ -292,63 +292,6 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
     return pRet;
 }
 
-
-SwFldPortion *SwTxtFormatter::GetFieldRest( SwTxtFormatInfo &rInf ) const
-{
-    if( !nStart )
-        return NULL;
-    SwTxtAttr *pHint = GetAttr( nStart - 1 );
-    SwFldPortion *pRet = NULL;
-    if( !pHint )
-        return pRet;
-
-    if( pHint->Which() == RES_TXTATR_FIELD )
-    {
-        SwExpandPortion* pNew = NewFldPortion( rInf, pHint );
-        if( pNew->InFldGrp() )
-            pRet = (SwFldPortion*)pNew;
-        else
-            delete pNew;
-    }
-    return pRet;
-}
-
-
-void SwTxtFormatter::MakeRestPortion()
-{
-    const SwFldPortion* pFld = NULL;
-    const SwLinePortion* pLine = GetCurr();
-    while( pLine )
-    {
-        if( pLine->InFldGrp() )
-            pFld = (SwFldPortion*)pLine;
-        pLine = pLine->GetPortion();
-    }
-    if( pFld && pFld->HasFollow() )
-    {
-        xub_StrLen nNext = nStart + GetCurr()->GetLen();
-        if( !nNext )
-            return;
-        SwTxtAttr *pHint = GetAttr( nNext - 1 );
-        if( !pHint )
-            return;
-        SwFldPortion *pRest = NULL;
-
-        if( pHint->Which() == RES_TXTATR_FIELD )
-        {
-            SwExpandPortion* pNew = NewFldPortion( GetInfo(), pHint );
-            if( pNew->InFldGrp() )
-                pRest = (SwFldPortion*)pNew;
-            else
-                delete pNew;
-        }
-        if( pRest )
-        {
-            pRest->TakeNextOffset( pFld );
-            GetInfo().SetRest( pRest );
-        }
-    }
-}
 
 /*************************************************************************
  *                      SwTxtFormatter::NewExtraPortion()
@@ -511,48 +454,4 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
     }
     return pRet;
 }
-
-/*-----------------16.10.00 09:55-------------------
- * SwTxtFrm::GetRestPortion() returns a field portion,
- * if the last portion in the last line is a field portion,
- * which is not complete. So the following part of the text frame
- * has to start with the rest of the field.
- * If the field portion is inside a multi-portion, the next text frame
- * starts with a multi-portion, too.
- * --------------------------------------------------*/
-
-const SwFldPortion* SwTxtFrm::GetRestPortion()
-{
-    if( !HasPara() )
-        GetFormatted();
-    SwTxtSizeInfo aInf( this );
-    SwTxtIter aLine( this, &aInf );
-    aLine.Bottom();
-    SwFldPortion* pRet = NULL;
-    const SwLinePortion* pLine = aLine.GetCurr();
-    const SwMultiPortion *pMulti = NULL;
-    while( pLine )
-    {
-        if( pLine->InFldGrp() )
-        {
-            pMulti = NULL;
-            pRet = (SwFldPortion*)pLine;
-        }
-        else if( pLine->IsMultiPortion() )
-        {
-            pRet = NULL;
-            pMulti = (SwMultiPortion*)pLine;
-        }
-        pLine = pLine->GetPortion();
-        // If the last portion is a multi-portion, we enter it
-        // and look for a field portion inside.
-        if( !pLine && pMulti )
-            pLine = pMulti->GetRoot().GetNext();
-    }
-    if( pRet && !pRet->HasFollow() )
-        pRet = NULL;
-    return pRet;
-}
-
-
 
