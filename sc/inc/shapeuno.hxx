@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeuno.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-23 13:04:17 $
+ *  last change: $Author: hr $ $Date: 2001-10-23 11:14:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,8 +116,8 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
                                 const ::com::sun::star::uno::Type & rType )
                                     throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   acquire() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   release() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   acquire() throw();
+    virtual void SAL_CALL   release() throw();
 
                             // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
