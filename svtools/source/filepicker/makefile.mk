@@ -2,9 +2,9 @@
 #
 #	$RCSfile: makefile.mk,v $
 #
-#	$Revision: 1.6 $
+#	$Revision: 1.7 $
 #
-#	last change: $Author: fs $ $Date: 2002-12-02 11:53:00 $
+#	last change: $Author: kz $ $Date: 2003-08-25 15:42:03 $
 #
 #	The Contents of this file are made available subject to the terms of
 #	either of the following licenses
@@ -68,9 +68,7 @@ AUTOSEG=true
 
 # --- Settings -----------------------------------------------------------
 
-.INCLUDE :	svpre.mk
 .INCLUDE :	settings.mk
-.INCLUDE :	sv.mk
 
 # --- Files --------------------------------------------------------------
 
@@ -94,7 +92,8 @@ SLOFILES =\
         $(SLO)$/commonpicker.obj	\
         $(SLO)$/fpinteraction.obj
 
-SRCFILES =	iodlg.src	 \
+SRS1NAME=$(TARGET)
+SRC1FILES =	iodlg.src	 \
             filepicker.src
 
 # --- Targets -------------------------------------------------------
