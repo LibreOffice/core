@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosqlmessage.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-25 12:56:32 $
+ *  last change: $Author: fs $ $Date: 2000-10-27 08:08:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #ifndef _DBA_REGISTRATION_HELPER_HXX_
 #include "registrationhelper.hxx"
 #endif
-#ifndef _DBASHARED_STRINGCONSTANTS_HRC_
-#include "stringconstants.hrc"
+#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
+#include "dbustrings.hrc"
 #endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
@@ -78,7 +78,6 @@
 #include <connectivity/dbexception.hxx>
 #endif
 
-using namespace dbaccess;
 using namespace dbaui;
 using namespace dbtools;
 
@@ -203,6 +202,9 @@ Dialog* OSQLMessageDialog::createDialog(Window* _pParent)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/25 12:56:32  fs
+ *  moved herein from ..\dlg
+ *
  *  Revision 1.3  2000/10/16 10:46:59  fs
  *  service name changed
  *
