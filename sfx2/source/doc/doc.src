@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:04:07 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:34:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,12 +559,15 @@ String STR_EDITOBJECT
     Text [ x-comment ] = " ";
 };
 
+// --> PB 2004-08-20 #i33095#
+/* obsolete
 String STR_OPENOBJECT
 {
     Text [ de ] = "~Öffnen";
     Text [ en-US ] = "~Open";
     Text [ x-comment ] = " ";
 };
+*/
 
 QueryBox DLG_MACROQUERY
 {
@@ -630,57 +633,57 @@ String STR_LABEL_FILEFORMAT
     Text [ en-US ] = "File format:" ;
 };
 
+String STR_HIDDENINFO_CONTAINS
+{
+    Text [ x-comment ] = "pb: we need two linefeeds here" ;
+    Text [ de ] = "Das Dokument enthält:\n\n" ;
+    Text [ en-US ] = "This document contains:\n\n" ;
+};
+String STR_HIDDENINFO_RECORDCHANGES
+{
+    Text [ de ] = "Aufgezeichnete Änderungen" ;
+    Text [ en-US ] = "Recorded changes" ;
+};
+String STR_HIDDENINFO_NOTES
+{
+    Text [ de ] = "Notizen" ;
+    Text [ en-US ] = "Notes" ;
+};
+String STR_HIDDENINFO_DOCVERSIONS
+{
+    Text [ de ] = "Dokumentversionen" ;
+    Text [ en-US ] = "Documentversions" ;
+};
+String STR_HIDDENINFO_FIELDS
+{
+    Text [ de ] = "Felder" ;
+    Text [ en-US ] = "Fields" ;
+};
+String STR_HIDDENINFO_LINKDATA
+{
+    Text [ de ] = "Verknüpfte Daten..." ;
+    Text [ en-US ] = "Linked data..." ;
+};
+String STR_HIDDENINFO_CONTINUE_SAVING
+{
+    Text [ de ] = "Möchten Sie mit dem Speichern des Dokumentes fortfahren?" ;
+    Text [ en-US ] = "Do you want to continue saving the document?" ;
+};
+String STR_HIDDENINFO_CONTINUE_PRINTING
+{
+    Text [ de ] = "Möchten Sie mit dem Drucken des Dokumentes fortfahren?" ;
+    Text [ en-US ] = "Do you want to continue printing the document?" ;
+};
+String STR_HIDDENINFO_CONTINUE_SIGNING
+{
+    Text [ de ] = "Möchten Sie mit dem Signieren des Dokumentes fortfahren?" ;
+    Text [ en-US ] = "Do you want to continue signing the document?" ;
+};
+String STR_HIDDENINFO_CONTINUE_CREATEPDF
+{
+    Text [ de ] = "Möchten Sie mit dem Erstellen der PDF-Datei fortfahren?" ;
+    Text [ en-US ] = "Do you want to continue creating a PDF file?" ;
+};
+
 // ******************************************************************* EOF
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
