@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: cd $ $Date: 2001-12-12 13:14:31 $
+ *  last change: $Author: mba $ $Date: 2001-12-12 15:27:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,6 +535,23 @@ ULONG SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String &rFil
     xDoc->InvalidateName();
     xDoc->SetModified(FALSE);
     xDoc->ResetError();
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >  xModel ( xDoc->GetModel(), ::com::sun::star::uno::UNO_QUERY );
+    if ( xModel.is() )
+    {
+        SfxItemSet* pNew = xDoc->GetMedium()->GetItemSet()->Clone();
+        pNew->ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
+        pNew->Put( SfxStringItem( SID_FILTER_NAME, xDoc->GetFactory().GetFilter(0)->GetFilterName() ) );
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs;
+        TransformItems( SID_OPENDOC, *pNew, aArgs );
+        sal_Int32 nLength = aArgs.getLength();
+        aArgs.realloc( nLength + 1 );
+        aArgs[nLength].Name = DEFINE_CONST_UNICODE("Title");
+        aArgs[nLength].Value <<= ::rtl::OUString( xDoc->GetTitle( SFX_TITLE_DETECT ) );
+        xModel->attachResource( ::rtl::OUString(), aArgs );
+        delete pNew;
+    }
+
     return xDoc->GetErrorCode();
 }
 
@@ -708,7 +725,7 @@ SfxObjectShellLock SfxApplication::NewDoc_Impl( const String& rFact, const SfxIt
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >  xModel ( xDoc->GetModel(), ::com::sun::star::uno::UNO_QUERY );
         if ( xModel.is() )
         {
-            SfxItemSet* pNew = pSet->Clone();
+            SfxItemSet* pNew = xDoc->GetMedium()->GetItemSet()->Clone();
             pNew->ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs;
             TransformItems( SID_OPENDOC, *pNew, aArgs );
