@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextImpl.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2002-10-02 07:05:28 $
+ *  last change: $Author: obr $ $Date: 2002-10-08 06:48:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,15 +205,15 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
 
         catch(com.sun.star.uno.RuntimeException e) {
             if( Build.DEBUG ) {
-                AccessibleObject.printDebugString("Exception caught for getIndexAtPoint(" + point.x + ", " + point.y + ")");
-                AccessibleObject.printDebugString(e.getMessage());
+                System.err.println("Exception caught for getIndexAtPoint(" + point.x + ", " + point.y + ")");
+                System.err.println(e.getMessage());
             }
         }
 
         catch(Exception e) {
             if( Build.DEBUG ) {
-                AccessibleObject.printDebugString("Exception caught for getIndexAtPoint(" + point.x + ", " + point.y + ")");
-                AccessibleObject.printDebugString(e.getMessage());
+                System.err.println("Exception caught for getIndexAtPoint(" + point.x + ", " + point.y + ")");
+                System.err.println(e.getMessage());
             }
         }
 

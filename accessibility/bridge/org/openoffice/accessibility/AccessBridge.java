@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessBridge.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obr $ $Date: 2002-10-02 16:14:59 $
+ *  last change: $Author: obr $ $Date: 2002-10-08 06:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,13 +143,12 @@ public class AccessBridge {
                     // Needed to attach C++ accessibility event monitor. This is extremly important to avoid
                     // deadlocks with frames that are not created in the VCL main thread, because they use a
                     // synchronous SendMessage call with acquired SolarMutex !!!
-                    if( xTopWindowListener != null ) {
-                        xTopWindow.addTopWindowListener(xTopWindowListener);
-                    }
+//                  if( xTopWindowListener != null ) {
+//                      xTopWindow.addTopWindowListener(xTopWindowListener);
+//                  }
 
                     // Add the window fake object as top window listener to receive activate/deactivate events
-//                  frameMap.put(handle, new WindowFake(xAccessible, xTopWindow, true));
-                    frameMap.put(handle, new WindowFake(xAccessible, xTopWindow, false));
+                    frameMap.put(handle, new WindowFake(xAccessible, xTopWindow));
                 }
             }
 
@@ -192,13 +191,6 @@ public class AccessBridge {
                 if(bridge != null) {
                     registerVirtualFrame = bridge.getMethod("registerVirtualFrame", parameterTypes);
                     revokeVirtualFrame = bridge.getMethod("revokeVirtualFrame", parameterTypes);
-/*
-                    if( Build.DEBUG ) {
-                        Class[] debugTypes = { String.class };
-                        org.openoffice.java.accessibility.AccessibleObject.debugOut =
-                            bridge.getMethod("sendDebugString", debugTypes);
-                    }
-*/
                 }
 
             }
@@ -220,24 +212,6 @@ public class AccessBridge {
             catch(ClassNotFoundException e) {
                 // Forward this exception to UNO to indicate that the service will not work correctly.
                 throw new com.sun.star.uno.RuntimeException("ClassNotFound exception caught: " + e.getMessage());
-            }
-
-            // Redirect output to log file on Windows for stdout / stderr are not visible
-            if( Build.DEBUG && System.getProperty("AccessBridge.LogPath") != null ) {
-//          if( Build.DEBUG ) {
-                try {
-                    java.io.PrintStream log = new java.io.PrintStream(
-                        new java.io.FileOutputStream( System.getProperty("AccessBridge.LogPath") +
-                            java.io.File.pathSeparator + "AccessBridge.log")
-//                      new java.io.FileOutputStream("AccessBridge.log")
-                    );
-
-                    System.setOut(log);
-                    System.setErr(log);
-                }
-
-                catch(java.io.FileNotFoundException e) {
-                }
             }
         }
 
@@ -298,9 +272,10 @@ public class AccessBridge {
                     // synchronous SendMessage call with acquired SolarMutex !!!
                     if( xTopWindowListener != null ) {
                         xTopWindow.addTopWindowListener(xTopWindowListener);
+                        AccessibleObjectFactory.autoPopulate = false;
                     }
 
-                    WindowFake w = new WindowFake(xAccessible, xTopWindow, false);
+                    WindowFake w = new WindowFake(xAccessible, xTopWindow);
                     if( Build.DEBUG ) {
                         System.out.println("register native frame: " + handle);
                     }
@@ -348,6 +323,8 @@ public class AccessBridge {
             // Initialize toolkit to register at Java <-> Windows access bridge
             java.awt.Toolkit tk = java.awt.Toolkit.getDefaultToolkit();
 
+            String logPath = null;
+
             try {
                 XInterface instance = (XInterface) multiFactory.createInstance(
                     "org.openoffice.accessibility.internal.RemoteAccessBridge"
@@ -359,6 +336,9 @@ public class AccessBridge {
 
                     if(infoProvider != null) {
                         AccessibleObjectFactory.getDefault().setInformationProvider(infoProvider);
+                        if( Build.DEBUG ) {
+                            logPath = infoProvider.getEnvironment("ACCESSBRIDGE_LOGPATH");
+                        }
                     } else {
                         System.err.println("InfoProvider does not implement XAccessibleInformationProvider.");
                     }
@@ -367,7 +347,6 @@ public class AccessBridge {
                     if( xTopWindowListener == null ) {
                         System.err.println("InfoProvider does not implement XTopWindowListener.");
                     }
-
                 } else {
                     System.err.println("InfoProvider service not found.");
                     throw new com.sun.star.uno.RuntimeException("RemoteAccessBridge service not found.\n");
@@ -377,6 +356,21 @@ public class AccessBridge {
             catch (com.sun.star.uno.Exception e) {
                 System.err.println(e.getMessage());
                 throw new com.sun.star.uno.RuntimeException(e.getMessage());
+            }
+
+               // Redirect output to log file if ACCESSBRIDGE_LOGPATH environment variable is set.
+            if( logPath != null && logPath.length() > 0 ) {
+                try {
+                    java.io.PrintStream log = new java.io.PrintStream(
+                        new java.io.FileOutputStream( logPath + java.io.File.separator + "AccessBridge.log")
+                    );
+
+                    System.setOut(log);
+                    System.setErr(log);
+                }
+
+                catch(java.io.FileNotFoundException e) {
+                }
             }
 
             Class serviceClass;

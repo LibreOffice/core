@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeyHandler.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2002-08-30 06:13:27 $
+ *  last change: $Author: obr $ $Date: 2002-10-08 06:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ public class KeyHandler extends Component implements XKeyHandler {
     public boolean keyPressed(com.sun.star.awt.KeyEvent event) {
 
         if( Build.DEBUG ) {
-            System.err.println("retrieved key pressed event: " + event.KeyChar );
+//          System.err.println("retrieved key pressed event: " + event.KeyChar );
         }
 
         eventQueue.postEvent(new VCLKeyEvent(KeyEvent.KEY_PRESSED, event));
@@ -154,7 +154,7 @@ public class KeyHandler extends Component implements XKeyHandler {
     /** Handler for KeyReleased events */
     public boolean keyReleased(com.sun.star.awt.KeyEvent event) {
         if( Build.DEBUG ) {
-            System.err.println("retrieved key released event\n");
+//          System.err.println("retrieved key released event\n");
         }
 
         eventQueue.postEvent(new VCLKeyEvent(KeyEvent.KEY_RELEASED, event));

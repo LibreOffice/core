@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleKeyBinding.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2002-08-23 09:29:13 $
+ *  last change: $Author: obr $ $Date: 2002-10-08 06:48:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,7 @@ public class AccessibleKeyBinding extends Object implements javax.accessibility.
 
     public AccessibleKeyBinding(KeyStroke[] keys) {
         data = new javax.swing.KeyStroke[keys.length];
-
-        for(int i=0; i<keys.length; i++) {
+        for(int i=0; i < keys.length; i++) {
             data[i] = javax.swing.KeyStroke.getKeyStroke(
                 convertKeyCode(keys[i].KeyCode),
                 convertModifiers(keys[i].Modifiers)

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obr $ $Date: 2002-10-01 07:16:40 $
+#   last change: $Author: obr $ $Date: 2002-10-08 06:48:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,6 +102,7 @@ JAVAFILES = \
     AccessibleTextImpl.java \
     AccessibleTextTable.java \
     AccessibleTreeList.java \
+    AccessibleUNOComponent.java \
     AccessibleWindow.java \
     GenericAccessibleEditableText.java \
     GenericAccessibleExtendedTable.java \
