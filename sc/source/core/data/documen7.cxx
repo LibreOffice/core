@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen7.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:53:35 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 #include "brdcst.hxx"
 #include "bcaslot.hxx"
 #include "cell.hxx"
-#include "compiler.hxx"     // errCircularReference
+#include "errorcodes.hxx"       // errCircularReference
 #include "scerrors.hxx"
 #include "docoptio.hxx"
 #include "refupdat.hxx"
