@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFootnote.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:57:04 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:30:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 // DocMerge from xml: interface com::sun::star::text::XFootnote
 /** specifies a footnote within a Text.@see Footnote
  */
-interface XFootnote: com::sun::star::text::XTextContent
+published interface XFootnote: com::sun::star::text::XTextContent
 {
     //-------------------------------------------------------------------------
 
