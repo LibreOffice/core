@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: pl $ $Date: 2001-04-11 15:10:11 $
+ *  last change: $Author: svesik $ $Date: 2001-04-18 22:03:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 
-#if !defined(USE_PSPRINT) && !defined(PRINTER_DUMMY) && !defined(_USE_PRINT_EXTENSION_)
+#if !defined(USE_PSPRINT) && !defined(PRINTER_DUMMY)
 #define Font XLIB_Font
 #define Region XLIB_Region
 #include <xprinter/xp.h>
@@ -1828,7 +1828,7 @@ SalGraphics::GetFontMetric( ImplFontMetricData *pMetric )
     {
         pFont->ToImplFontMetricData( pMetric );
 
-#ifndef USE_PSPRINT
+#if !defined(USE_PSPRINT) && !defined(_USE_PRINT_EXTENSION_)
         if( XSalCanDrawRotString( maGraphicsData.GetXDisplay(), None ) )
             pMetric->mnOrientation = maGraphicsData.nFontOrientation_;
 #endif
