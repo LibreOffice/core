@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphicproperties.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:50:15 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 13:10:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,9 @@ namespace sdr
             // call parent
             RectangleProperties::PreProcessSave();
 
+            // force ItemSet
+            GetObjectItemSet();
+
             // prepare SetItems for storage
             const SfxItemSet& rSet = *mpItemSet;
             const SfxItemSet* pParent = mpStyleSheet ? &(mpStyleSheet->GetItemSet()) : 0L;
@@ -187,7 +190,9 @@ namespace sdr
             // call parent
             RectangleProperties::ForceDefaultAttributes();
 
+            // force ItemSet
             GetObjectItemSet();
+
             mpItemSet->Put( SdrGrafLuminanceItem( 0 ) );
             mpItemSet->Put( SdrGrafContrastItem( 0 ) );
             mpItemSet->Put( SdrGrafRedItem( 0 ) );
