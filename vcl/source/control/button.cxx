@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-29 16:55:00 $
+ *  last change: $Author: mt $ $Date: 2001-10-31 11:03:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1272,6 +1272,8 @@ OKButton::OKButton( Window* pParent, const ResId& rResId ) :
 
 void OKButton::Click()
 {
+    PushButton::Click();
+
     // Ist kein Link gesetzt, dann schliesse Parent
     if ( !GetClickHdl() || GetComponentInterface( FALSE ).is() )
     {
@@ -1295,10 +1297,6 @@ void OKButton::Click()
                     ((SystemWindow*)pParent)->Close();
             }
         }
-    }
-    if ( GetClickHdl().IsSet() )
-    {
-        PushButton::Click();
     }
 }
 
@@ -1338,6 +1336,8 @@ CancelButton::CancelButton( Window* pParent, const ResId& rResId ) :
 
 void CancelButton::Click()
 {
+    PushButton::Click();
+
     // Ist kein Link gesetzt, dann schliesse Parent
     if ( !GetClickHdl() || GetComponentInterface( FALSE ).is() )
     {
@@ -1361,11 +1361,6 @@ void CancelButton::Click()
                     ((SystemWindow*)pParent)->Close();
             }
         }
-    }
-    else
-    if ( GetClickHdl().IsSet() )
-    {
-        PushButton::Click();
     }
 }
 
@@ -1405,6 +1400,8 @@ HelpButton::HelpButton( Window* pParent, const ResId& rResId ) :
 
 void HelpButton::Click()
 {
+    PushButton::Click();
+
     // Ist kein Link gesetzt, loese Hilfe aus
     if ( !GetClickHdl() || GetComponentInterface( FALSE ).is() )
     {
@@ -1414,11 +1411,6 @@ void HelpButton::Click()
 
         HelpEvent aEvt( pFocusWin->GetPointerPosPixel(), HELPMODE_CONTEXT );
         pFocusWin->RequestHelp( aEvt );
-    }
-
-    if ( GetClickHdl().IsSet() )
-    {
-        PushButton::Click();
     }
 }
 
