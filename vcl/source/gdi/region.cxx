@@ -2,9 +2,9 @@
  *
  *  $RCSfile: region.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2002-09-30 17:28:03 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:23:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2198,49 +2198,6 @@ SvStream& operator<<( SvStream& rOStrm, const Region& rRegion )
     }
 
     return rOStrm;
-}
-
-// -----------------------------------------------------------------------
-
-RegionOverlapType Region::GetOverlapType( const Rectangle& rRect ) const
-{
-    DBG_CHKTHIS( Region, ImplDbgTestRegion );
-
-    // is rectangle empty? -> not inside
-    if ( rRect.IsEmpty() )
-        return REGION_OUTSIDE;
-
-    ((Region*)this)->ImplPolyPolyRegionToBandRegion();
-
-    // no instance data? -> not inside
-    if ( (mpImplRegion == &aImplEmptyRegion) || (mpImplRegion == &aImplNullRegion) )
-        return REGION_OUTSIDE;
-
-    // resolve pointer
-    ImplRegionBand*     pBand   = mpImplRegion->mpFirstBand;
-    ImplRegionBandSep*  pSep    = pBand->mpFirstSep;
-
-    // complex region? don't check for now. This may change in the future...
-    if ( pBand->mpNextBand || pSep->mpNextSep )
-        return REGION_OVER;
-
-    // get justified rectangle
-    long nLeft      = Min( rRect.Left(), rRect.Right() );
-    long nTop       = Min( rRect.Top(), rRect.Bottom() );
-    long nRight     = Max( rRect.Left(), rRect.Right() );
-    long nBottom    = Max( rRect.Top(), rRect.Bottom() );
-
-    // check rectangle region
-    BOOL boLeft   = (nLeft >= pSep->mnXLeft) && (nLeft < pSep->mnXRight);
-    BOOL boRight  = (nRight <= pSep->mnXRight) && (nRight > pSep->mnXLeft);
-    BOOL boTop    = (nTop >= pBand->mnYTop) && (nTop < pBand->mnYBottom);
-    BOOL boBottom = (nBottom <= pBand->mnYBottom) && (nBottom > pBand->mnYTop);
-    if ( boLeft && boRight && boTop && boBottom )
-        return REGION_INSIDE;
-    if ( boLeft || boRight || boTop || boBottom )
-        return REGION_OVER;
-
-    return REGION_OUTSIDE;
 }
 
 // -----------------------------------------------------------------------
