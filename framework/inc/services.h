@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-07-02 13:36:00 $
+ *  last change: $Author: as $ $Date: 2001-07-31 08:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@ namespace framework{
 #define IMPLEMENTATIONNAME_DOCUMENTPROPERTIES               DECLARE_ASCII("com.sun.star.comp.framework.DocumentProperties"      )
 #define IMPLEMENTATIONNAME_SOUNDHANDLER                     DECLARE_ASCII("com.sun.star.comp.framework.SoundHandler"            )
 #define IMPLEMENTATIONNAME_CONTENTHANDLERFACTORY            DECLARE_ASCII("com.sun.star.comp.framework.ContentHandlerFactory"   )
+#define IMPLEMENTATIONNAME_PIPETERMINATOR                   DECLARE_ASCII("com.sun.star.comp.OfficeIPCThreadController"         )
 
 }       //  namespace framework
 
