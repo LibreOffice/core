@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provprox.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-05 09:49:55 $
+ *  last change: $Author: sb $ $Date: 2001-04-26 09:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,8 +330,7 @@ UcbContentProviderProxy::deregisterInstance( const OUString& Template,
         {
             try
             {
-                return xParamProvider->deregisterInstance( Template,
-                                                                Arguments );
+                xParamProvider->deregisterInstance( Template, Arguments );
             }
             catch ( IllegalIdentifierException const & )
             {
