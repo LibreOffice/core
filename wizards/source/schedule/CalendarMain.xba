@@ -111,6 +111,8 @@ Dim iThisMonth as Integer
 	DlgCalendar.GetControl(&quot;lstHolidays&quot;).SelectItemPos(0,True)
 	DlgCalModel.cmdGoOn.DefaultButton = True
 	ToggleWindow(True)
+	fHeightCorrFactor = DlgCalendar.GetControl(&quot;imgCountry&quot;).Size.Height/198
+	fWidthCorrFactor = DlgCalendar.GetControl(&quot;imgCountry&quot;).Size.Width/166
 	DlgCalendar.Execute()
 	DlgCalendar.Dispose()
 	Exit Sub

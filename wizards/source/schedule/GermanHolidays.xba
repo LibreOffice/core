@@ -29,22 +29,22 @@ Function CalGetGermanLandAtMousePos(byval X as single, byval Y as single) as Int
 	ElseIf (X&gt;=78)And(X&lt;112)And(Y&gt;=95)And(Y&lt;117) Then 
 		CalChoosenLand = CalBLThueringen
 		
-	ElseIf (X&gt;=112)And(X&lt;155)And(Y&gt;=88)And(Y&lt;114) Then
+	ElseIf (X&gt;=112)And(X&lt;158)And(Y&gt;=88)And(Y&lt;114) Then
 		CalChoosenLand = CalBLSachsen
 
-	ElseIf (X&gt;76)And(X&lt;80)And(Y&gt;35)And(Y&lt;42) Then
+	ElseIf (X&gt;77)And(X&lt;84)And(Y&gt;35)And(Y&lt;42) Then
 		CalChoosenLand = CalBLHamburg
 
-	ElseIf (X&gt;55)And(X&lt;59)And(Y&gt;36)And(Y&lt;41) Then 
+	ElseIf (X&gt;56)And(X&lt;60)And(Y&gt;36)And(Y&lt;41) Then 
 		CalChoosenLand = CalBLBremen
 
-	ElseIf (X&gt;57)And(X&lt;62)And(Y&gt;44)And(Y&lt;52) Then
+	ElseIf (X&gt;58)And(X&lt;63)And(Y&gt;44)And(Y&lt;52) Then
 		CalChoosenLand = CalBLBremen
 		
 	ElseIf (X&gt;52)And(X&lt;95)And(Y&gt;8)And(Y&lt;40) Then
 		CalChoosenLand = CalBLSchlHolstein
 
-	ElseIf (X&gt;90)And(X&lt;146)And(Y&gt;23)And(Y&lt;48) Then
+	ElseIf (X&gt;90)And(X&lt;149)And(Y&gt;23)And(Y&lt;48) Then
 		CalChoosenLand = CalBLMeckPomm
 
 	ElseIf (X&gt;28)And(X&lt;90)And(Y&gt;35)And(Y&lt;69) Then
@@ -53,13 +53,13 @@ Function CalGetGermanLandAtMousePos(byval X as single, byval Y as single) as Int
 	ElseIf (X&gt;60)And(X&lt;90)And(Y&gt;=69)And(Y&lt;95) Then
 		CalChoosenLand = CalBLNiedersachsen
 
-	ElseIf (X&gt;=90)And(X&lt;=112)And(Y&gt;47)And(Y&lt;95) Then
+	ElseIf (X&gt;=90)And(X&lt;=115)And(Y&gt;47)And(Y&lt;95) Then
 		CalChoosenLand = CalBLSachsenAnhalt
 
-	ElseIf (X&gt;127)And(X&lt;135)And(Y&gt;60)And(Y&lt;66) Then 
+	ElseIf (X&gt;129)And(X&lt;139)And(Y&gt;60)And(Y&lt;66) Then 
 		CalChoosenLand = CalBLBerlin
 
-	ElseIf (X&gt;112)And(X&lt;146)And(Y&gt;=48)And(Y&lt;88) Then
+	ElseIf (X&gt;115)And(X&lt;151)And(Y&gt;=48)And(Y&lt;88) Then
 		CalChoosenLand = CalBLBrandenburg
 	End If
 	CalGetGermanLandAtMousePos = CalChoosenLand
