@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 20:37:27 $
+#   last change: $Author: kz $ $Date: 2005-01-18 15:19:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,13 +75,12 @@ USE_DEFFILE=TRUE
 # --- Resources ----------------------------------------------------
 
 RESLIB1NAME=sd
-RESLIB1IMAGES=$(PRJ)$/res/imagelst $(PRJ)$/res 
+RESLIB1IMAGES=$(PRJ)$/res/imagelst $(PRJ)$/res
 RESLIB1SRSFILES=\
     $(SRS)$/app.srs				\
     $(SRS)$/dlg.srs				\
     $(SRS)$/core.srs			\
     $(SRS)$/html.srs			\
-    $(SRS)$/sdslots.srs			\
     $(SRS)$/accessibility.srs	\
     $(SRS)$/notes.srs			\
     $(SRS)$/animui.srs			\
@@ -121,7 +120,7 @@ SHL1STDLIBS+= \
     $(VOSLIB) \
     $(CANVASLIB) \
     $(SALLIB) \
-    $(AVMEDIALIB)	
+    $(AVMEDIALIB)
 
 # on MacOSX static libs must be at end of libraries to link with
 .IF "$(OS)" == "MACOSX"
