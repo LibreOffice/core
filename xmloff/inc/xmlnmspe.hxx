@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnmspe.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-09 19:12:04 $
+ *  last change: $Author: mtg $ $Date: 2001-03-14 14:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ XML_NAMESPACE( BLOCKLIST,       17U )
 XML_NAMESPACE( FRAMEWORK,       18U )
 XML_NAMESPACE( CONFIG,          19U )
 
-#define _XML_OLD_NAMESPACE_BASE 19U
+#define _XML_OLD_NAMESPACE_BASE 20U
 
 // namespaces used in the technical preview (SO 5.2)
 XML_OLD_NAMESPACE( FO,      0U )
