@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:20:49 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:29:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,8 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
     bAtCnt( FALSE ),
     bLayout( FALSE ),
     bAutoPosition( FALSE ),
-    bNoShrink( FALSE )
+    bNoShrink( FALSE ),
+    bLockDeleteContent( FALSE )
 {
     nType = FRMC_FLY;
 
@@ -234,8 +235,81 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
     else if ( rFrmSize.GetSizeType() == ATT_FIX_SIZE )
         bFixSize = TRUE;
 
-    //Spalten?
-    const SwFmtCol &rCol = pFmt->GetCol();
+    // OD 2004-02-12 #110582#-2 - insert columns, if necessary
+    InsertColumns();
+
+    //Erst das Init, dann den Inhalt, denn zum Inhalt koennen  widerum
+    //Objekte/Rahmen gehoeren die dann angemeldet werden.
+    InitDrawObj( FALSE );
+
+    // OD 2004-01-19 #110582#
+    Chain( pAnch );
+
+    // OD 2004-01-19 #110582#
+    InsertCnt();
+
+    //Und erstmal in den Wald stellen die Kiste, damit bei neuen Dokument nicht
+    //unnoetig viel formatiert wird.
+    Frm().Pos().X() = Frm().Pos().Y() = WEIT_WECH;
+}
+
+// OD 2004-01-19 #110582#
+void SwFlyFrm::Chain( SwFrm* _pAnch )
+{
+    // Connect to chain neighboors.
+    // No problem, if a neighboor doesn't exist - the construction of the
+    // neighboor will make the connection
+    const SwFmtChain& rChain = GetFmt()->GetChain();
+    if ( rChain.GetPrev() || rChain.GetNext() )
+    {
+        if ( rChain.GetNext() )
+        {
+            SwFlyFrm* pFollow = FindChainNeighbour( *rChain.GetNext(), _pAnch );
+            if ( pFollow )
+            {
+                ASSERT( !pFollow->GetPrevLink(), "wrong chain detected" );
+                if ( !pFollow->GetPrevLink() )
+                    SwFlyFrm::ChainFrames( this, pFollow );
+            }
+        }
+        if ( rChain.GetPrev() )
+        {
+            SwFlyFrm *pMaster = FindChainNeighbour( *rChain.GetPrev(), _pAnch );
+            if ( pMaster )
+            {
+                ASSERT( !pMaster->GetNextLink(), "wrong chain detected" );
+                if ( !pMaster->GetNextLink() )
+                    SwFlyFrm::ChainFrames( pMaster, this );
+            }
+        }
+    }
+}
+
+// OD 2004-01-19 #110582#
+void SwFlyFrm::InsertCnt()
+{
+    if ( !GetPrevLink() )
+    {
+        const SwFmtCntnt& rCntnt = GetFmt()->GetCntnt();
+        ASSERT( rCntnt.GetCntntIdx(), ":-( no content prepared." );
+        ULONG nIndex = rCntnt.GetCntntIdx()->GetIndex();
+        // Lower() bedeutet SwColumnFrm, eingefuegt werden muss der Inhalt dann in den (Column)BodyFrm
+        ::_InsertCnt( Lower() ? (SwLayoutFrm*)((SwLayoutFrm*)Lower())->Lower() : (SwLayoutFrm*)this,
+                      GetFmt()->GetDoc(), nIndex );
+
+        //NoTxt haben immer eine FixHeight.
+        if ( Lower() && Lower()->IsNoTxtFrm() )
+        {
+            bFixSize = TRUE;
+            bMinHeight = FALSE;
+        }
+    }
+}
+
+ // OD 2004-02-12 #110582#-2
+ void SwFlyFrm::InsertColumns()
+ {
+    const SwFmtCol &rCol = GetFmt()->GetCol();
     if ( rCol.GetNumCols() > 1 )
     {
         //PrtArea ersteinmal so gross wie der Frm, damit die Spalten
@@ -247,60 +321,7 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
                              //Old-Wert hereingereicht wird.
         ChgColumns( aOld, rCol );
     }
-
-    //Erst das Init, dann den Inhalt, denn zum Inhalt koennen  widerum
-    //Objekte/Rahmen gehoeren die dann angemeldet werden.
-    InitDrawObj( FALSE );
-
-    //Fuer Verkettungen kann jetzt die Verbindung aufgenommen werden. Wenn
-    //ein Nachbar nicht existiert, so macht das nichts, denn dieser wird ja
-    //irgendwann Konsturiert und nimmt dann die Verbindung auf.
-    const SwFmtChain &rChain = pFmt->GetChain();
-    if ( rChain.GetPrev() || rChain.GetNext() )
-    {
-        if ( rChain.GetNext() )
-        {
-            SwFlyFrm *pFollow = FindChainNeighbour( *rChain.GetNext(), pAnch );
-            if ( pFollow )
-            {
-                ASSERT( !pFollow->GetPrevLink(), "wrong chain detected" );
-                if ( !pFollow->GetPrevLink() )
-                    SwFlyFrm::ChainFrames( this, pFollow );
-            }
-        }
-        if ( rChain.GetPrev() )
-        {
-            SwFlyFrm *pMaster = FindChainNeighbour( *rChain.GetPrev(), pAnch );
-            if ( pMaster )
-            {
-                ASSERT( !pMaster->GetNextLink(), "wrong chain detected" );
-                if ( !pMaster->GetNextLink() )
-                    SwFlyFrm::ChainFrames( pMaster, this );
-            }
-        }
-    }
-
-    if ( !GetPrevLink() ) //Inhalt gehoert sonst immer dem Master und meiner Zaehlt nicht
-    {
-        const SwFmtCntnt &rCntnt = pFmt->GetCntnt();
-        ASSERT( rCntnt.GetCntntIdx(), ":-( Kein Inhalt vorbereitet." );
-        ULONG nIndex = rCntnt.GetCntntIdx()->GetIndex();
-        // Lower() bedeutet SwColumnFrm, eingefuegt werden muss der Inhalt dann in den (Column)BodyFrm
-        ::_InsertCnt( Lower() ? (SwLayoutFrm*)((SwLayoutFrm*)Lower())->Lower() : (SwLayoutFrm*)this,
-                      pFmt->GetDoc(), nIndex );
-
-        //NoTxt haben immer eine FixHeight.
-        if ( Lower() && Lower()->IsNoTxtFrm() )
-        {
-            bFixSize = TRUE;
-            bMinHeight = FALSE;
-        }
-    }
-
-    //Und erstmal in den Wald stellen die Kiste, damit bei neuen Dokument nicht
-    //unnoetig viel formatiert wird.
-    Frm().Pos().X() = Frm().Pos().Y() = WEIT_WECH;
-}
+ }
 
 /*************************************************************************
 |*
@@ -313,7 +334,6 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
 
 SwFlyFrm::~SwFlyFrm()
 {
-#ifdef ACCESSIBLE_LAYOUT
     // Accessible objects for fly frames will be destroyed in this destructor.
     // For frames bound as char or frames that don't have an anchor we have
     // to do that ourselves. For any other frame the call RemoveFly at the
@@ -332,63 +352,73 @@ SwFlyFrm::~SwFlyFrm()
             }
         }
     }
-#endif
 
     if( GetFmt() && !GetFmt()->GetDoc()->IsInDtor() )
     {
-        //Aus der Verkettung loessen.
-        if ( GetPrevLink() )
-            UnchainFrames( GetPrevLink(), this );
-        if ( GetNextLink() )
-            UnchainFrames( this, GetNextLink() );
+        // OD 2004-01-19 #110582#
+        Unchain();
 
-        //Unterstruktur zerstoeren, wenn dies erst im LayFrm DTor passiert ist's
-        //zu spaet, denn dort ist die Seite nicht mehr erreichbar (muss sie aber
-        //sein, damit sich ggf. weitere Flys abmelden koennen).
-        SwFrm *pFrm = pLower;
-        while ( pFrm )
-        {
-            //Erst die Flys des Frm vernichten, denn diese koennen sich sonst nach
-            //dem Remove nicht mehr bei der Seite abmelden.
-            while ( pFrm->GetDrawObjs() && pFrm->GetDrawObjs()->Count() )
-            {
-                SdrObject *pObj = (*pFrm->GetDrawObjs())[0];
-                if ( pObj->ISA(SwVirtFlyDrawObj) )
-                    delete ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
-                else
-                // OD 23.06.2003 #108784# - consider 'virtual' drawing objects
-                {
-                    if ( pObj->ISA(SwDrawVirtObj) )
-                    {
-                        SwDrawVirtObj* pDrawVirtObj = static_cast<SwDrawVirtObj*>(pObj);
-                        pDrawVirtObj->RemoveFromWriterLayout();
-                        pDrawVirtObj->RemoveFromDrawingPage();
-                    }
-                    else
-                    {
-                        SdrObjUserCall* pUserCall = GetUserCall(pObj);
-                        if ( pUserCall )
-                        {
-                            static_cast<SwDrawContact*>(pUserCall)->DisconnectFromLayout();
-                        }
-                    }
-                }
-            }
-            pFrm->Remove();
-            delete pFrm;
-            pFrm = pLower;
-        }
-
-        //Damit kein zerstoerter Cntnt als Turbo bei der Root angemeldet bleiben
-        //kann verhindere ich hier, dass dort ueberhaupt noch einer angemeldet
-        //ist.
-        InvalidatePage();
+        // OD 2004-01-19 #110582#
+        DeleteCnt();
 
         //Tschuess sagen.
         if ( pAnchor )
             pAnchor->RemoveFly( this );
     }
+
     FinitDrawObj();
+}
+
+// OD 2004-01-19 #110582#
+void SwFlyFrm::Unchain()
+{
+    if ( GetPrevLink() )
+        UnchainFrames( GetPrevLink(), this );
+    if ( GetNextLink() )
+        UnchainFrames( this, GetNextLink() );
+}
+
+// OD 2004-01-19 #110582#
+void SwFlyFrm::DeleteCnt()
+{
+    // #110582#-2
+    if ( IsLockDeleteContent() )
+        return;
+
+    SwFrm* pFrm = pLower;
+    while ( pFrm )
+    {
+        while ( pFrm->GetDrawObjs() && pFrm->GetDrawObjs()->Count() )
+        {
+            SdrObject *pObj = (*pFrm->GetDrawObjs())[0];
+            if ( pObj->ISA(SwVirtFlyDrawObj) )
+                delete ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
+            else
+            // OD 23.06.2003 #108784# - consider 'virtual' drawing objects
+            {
+                if ( pObj->ISA(SwDrawVirtObj) )
+                {
+                    SwDrawVirtObj* pDrawVirtObj = static_cast<SwDrawVirtObj*>(pObj);
+                    pDrawVirtObj->RemoveFromWriterLayout();
+                    pDrawVirtObj->RemoveFromDrawingPage();
+                }
+                else
+                {
+                    SdrObjUserCall* pUserCall = GetUserCall(pObj);
+                    if ( pUserCall )
+                    {
+                        static_cast<SwDrawContact*>(pUserCall)->DisconnectFromLayout();
+                    }
+                }
+            }
+        }
+
+        pFrm->Remove();
+        delete pFrm;
+        pFrm = pLower;
+    }
+
+    InvalidatePage();
 }
 
 /*************************************************************************
@@ -416,9 +446,12 @@ void SwFlyFrm::InitDrawObj( BOOL bNotify )
     pDrawObj = pContact->CreateNewRef( this );
 
     //Den richtigen Layer setzen.
-    pDrawObj->SetLayer( GetFmt()->GetOpaque().GetValue() ?
-                            GetFmt()->GetDoc()->GetHeavenId() :
-                            GetFmt()->GetDoc()->GetHellId() );
+    // OD 2004-01-19 #110582#
+    SdrLayerID nHeavenId = GetFmt()->GetDoc()->GetHeavenId();
+    SdrLayerID nHellId = GetFmt()->GetDoc()->GetHellId();
+    pDrawObj->SetLayer( GetFmt()->GetOpaque().GetValue()
+                        ? nHeavenId
+                        : nHellId );
     if ( bNotify )
         NotifyDrawObj();
 }
