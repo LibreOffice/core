@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-24 08:24:06 $
+ *  last change: $Author: cl $ $Date: 2001-10-12 16:12:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,6 +228,8 @@ using namespace ::xmloff::token;
 
 const XMLPropertyMapEntry aXMLSDProperties[] =
 {
+    MAP( "ShapeUserDefinedAttributes",      XML_NAMESPACE_TEXT, XML_XMLNS,                  XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
+
     // stroke attributes
     MAP( "LineStyle",                       XML_NAMESPACE_DRAW, XML_STROKE,                 XML_SD_TYPE_STROKE, 0 ),
     MAP( "LineDashName",                    XML_NAMESPACE_DRAW, XML_STROKE_DASH,            XML_TYPE_STRING, CTF_DASHNAME ),
@@ -414,6 +416,8 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
 
 const XMLPropertyMapEntry aXMLSDPresPageProps[] =
 {
+    MAP( "UserDefinedAttributes",       XML_NAMESPACE_TEXT, XML_XMLNS,                  XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
+
     MAP( "Change",                      XML_NAMESPACE_PRESENTATION, XML_TRANSITION_TYPE,    XML_SD_TYPE_PRESPAGE_TYPE, CTF_PAGE_TRANS_TYPE ),
     MAP( "Effect",                      XML_NAMESPACE_PRESENTATION, XML_TRANSITION_STYLE,   XML_SD_TYPE_PRESPAGE_STYLE, CTF_PAGE_TRANS_STYLE ),
     MAP( "Speed",                       XML_NAMESPACE_PRESENTATION, XML_TRANSITION_SPEED,   XML_SD_TYPE_PRESPAGE_SPEED, CTF_PAGE_TRANS_SPEED ),

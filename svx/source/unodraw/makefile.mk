@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: cl $ $Date: 2001-08-24 11:57:40 $
+#   last change: $Author: cl $ $Date: 2001-10-12 16:08:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 CXXFILES =				\
+        UnoNamespaceMap.cxx \
         UnoGraphicExporter.cxx \
         unopool.cxx \
         XPropertyTable.cxx \
@@ -129,6 +130,7 @@ SVXLIGHTOBJFILES=\
         $(OBJ)$/gluepts.obj
 
 SLOFILES =	\
+        $(SLO)$/UnoNamespaceMap.obj \
         $(SLO)$/UnoGraphicExporter.obj \
         $(SLO)$/unopool.obj \
         $(SLO)$/XPropertyTable.obj \

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimppr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-04 15:59:13 $
+ *  last change: $Author: cl $ $Date: 2001-10-12 16:16:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,16 +309,25 @@ void SvXMLImportPropertyMapper::importXML(
                         xAttrContainer = xNew;
 
                         // find map entry and create new property state
-                        sal_Int32 nTextIndex = maPropMapper->FindEntryIndex( "TextUserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
-                        sal_Int32 nUserIndex = maPropMapper->FindEntryIndex( "UserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
-                        if ((nTextIndex > -1) && (nUserIndex > -1))
-                            nIndex = (nTextIndex < nUserIndex) ? nTextIndex : nUserIndex;
-                        else if (nTextIndex > -1)
-                            nIndex = nTextIndex;
-                        else if (nUserIndex > -1)
-                            nIndex = nUserIndex;
+                        sal_Int32 nShapeIndex = maPropMapper->FindEntryIndex( "ShapeUserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
+                        if( nShapeIndex > -1 )
+                        {
+                            nIndex = nShapeIndex;
+                        }
                         else
-                            DBG_ERROR("not able to store alien attribute");
+                        {
+                            sal_Int32 nTextIndex = maPropMapper->FindEntryIndex( "TextUserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
+                            sal_Int32 nUserIndex = maPropMapper->FindEntryIndex( "UserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
+
+                            if ((nTextIndex > -1) && (nUserIndex > -1))
+                                nIndex = (nTextIndex < nUserIndex) ? nTextIndex : nUserIndex;
+                            else if (nTextIndex > -1)
+                                nIndex = nTextIndex;
+                            else if (nUserIndex > -1)
+                                nIndex = nUserIndex;
+                            else
+                                DBG_ERROR("not able to store alien attribute");
+                        }
 
                         Any aAny;
                         aAny <<= xAttrContainer;
