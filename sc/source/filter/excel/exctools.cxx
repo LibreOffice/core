@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:43:45 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 13:59:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,14 +93,11 @@
 #include "xcl97rec.hxx"
 #include "formel.hxx"
 
-#ifndef SC_XCLIMPPIVOTTABES_HXX
-#include "XclImpPivotTables.hxx"
+#ifndef SC_XILINK_HXX
+#include "xilink.hxx"
 #endif
 #ifndef SC_XECONTENT_HXX
 #include "xecontent.hxx"
-#endif
-#ifndef SC_XCLEXPPIVOTTABES_HXX
-#include "XclExpPivotTables.hxx"
 #endif
 
 // - ALLGEMEINE ----------------------------------------------------------
@@ -124,7 +121,6 @@ RootData::RootData( void )
     bChartTab = FALSE;
 
     pRootStorage = pPivotCacheStorage = /*pCtrlStorage = */NULL;
-    pImpPivotCacheList = NULL;
     pAutoFilterBuffer = NULL;
     pPrintRanges = new _ScRangeListTabs;
     pPrintTitles = new _ScRangeListTabs;
@@ -140,8 +136,6 @@ RootData::RootData( void )
 
     pObjRecs = NULL;
     pEscher = NULL;
-
-    pPivotCacheList = NULL;
 
     bWriteVBAStorage = FALSE;
 
@@ -163,11 +157,6 @@ RootData::~RootData()
         delete pScNameList;
     if( pExtSheetCntAndRecs )
         delete pExtSheetCntAndRecs;
-
-    if( pImpPivotCacheList )
-        delete pImpPivotCacheList;
-    if( pPivotCacheList )
-        delete pPivotCacheList;
 
     delete pAutoFilterBuffer;
     delete pPrintRanges;
@@ -469,10 +458,11 @@ ExcScenario::~ExcScenario()
 }
 
 
-void ExcScenario::Apply( ScDocument& r, const BOOL bLast )
+void ExcScenario::Apply( const XclImpRoot& rRoot, const BOOL bLast )
 {
     UINT32              nNumCells = List::Count();
 
+    ScDocument&         r = rRoot.GetDoc();
     ExcScenarioCell*    p = EXCSCFIRST();
     String              aSzenName( *pName );
     ScfTools::ConvertToScSheetName( aSzenName );
@@ -506,6 +496,7 @@ void ExcScenario::Apply( ScDocument& r, const BOOL bLast )
     ScExtDocOptions* pExtDocOptions = r.GetExtDocOptions();
     if(pExtDocOptions && nTab < pExtDocOptions->nActTab)
         pExtDocOptions->SetActTab((pExtDocOptions->nActTab) + 1);
+    rRoot.GetTabInfo().InsertScTab( nNewTab );
 }
 
 
@@ -523,7 +514,7 @@ ExcScenarioList::~ExcScenarioList()
 }
 
 
-void ExcScenarioList::Apply( ScDocument& r )
+void ExcScenarioList::Apply( const XclImpRoot& rRoot )
 {
     ExcScenario*    p = _Last();
     UINT16          n = ( UINT16 ) Count();
@@ -531,7 +522,7 @@ void ExcScenarioList::Apply( ScDocument& r )
     while( p )
     {
         n--;
-        p->Apply( r, ( BOOL ) ( n == nLastScenario ) );
+        p->Apply( rRoot, ( BOOL ) ( n == nLastScenario ) );
         p = _Prev();
     }
 }
