@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syslocaleoptions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: er $ $Date: 2001-06-18 09:32:41 $
+ *  last change: $Author: er $ $Date: 2001-06-21 17:58:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,11 +115,15 @@ Link                        SvtSysLocaleOptions::aCurrencyChangeLink;
 
 class SvtSysLocaleOptions_Impl : public utl::ConfigItem
 {
-        OUString                m_aLocaleString;    // en-US or de-DE
+        OUString                m_aLocaleString;    // en-US or de-DE or empty for SYSTEM
+        LanguageType            m_eLocaleLanguageType;  // same for convenience access
         OUString                m_aCurrencyString;  // USD-en-US or EUR-de-DE
         SvtBroadcaster          m_aBroadcaster;
 
     static  const Sequence< /* const */ OUString >  GetPropertyNames();
+
+            void                ChangeLocaleSettings();
+            void                ChangeDefaultCurrency() const;
 
 public:
                                 SvtSysLocaleOptions_Impl();
@@ -131,11 +135,12 @@ public:
             const OUString&     GetLocaleString() const
                                     { return m_aLocaleString; }
             void                SetLocaleString( const OUString& rStr );
+            LanguageType        GetLocaleLanguageType() const
+                                    { return m_eLocaleLanguageType; }
 
             const OUString&     GetCurrencyString() const
                                     { return m_aCurrencyString; }
             void                SetCurrencyString( const OUString& rStr );
-            void                ChangeDefaultCurrency() const;
 
             SvtBroadcaster&     GetBroadcaster()
                                     { return m_aBroadcaster; }
@@ -207,6 +212,7 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
             }
         }
     }
+    ChangeLocaleSettings();
     EnableNotification( aNames );
 }
 
@@ -248,9 +254,20 @@ void SvtSysLocaleOptions_Impl::SetLocaleString( const OUString& rStr )
     {
         m_aLocaleString = rStr;
         SetModified();
+        ChangeLocaleSettings();
         SfxSimpleHint aHint( SYSLOCALEOPTIONS_HINT_LOCALE );
         GetBroadcaster().Broadcast( aHint );
     }
+}
+
+
+void SvtSysLocaleOptions_Impl::ChangeLocaleSettings()
+{
+    // An empty config value denotes SYSTEM locale
+    if ( m_aLocaleString.getLength() )
+        m_eLocaleLanguageType = ConvertIsoStringToLanguage( m_aLocaleString );
+    else
+        m_eLocaleLanguageType = LANGUAGE_SYSTEM;
 }
 
 
@@ -287,6 +304,7 @@ void SvtSysLocaleOptions_Impl::Notify( const Sequence< rtl::OUString >& seqPrope
             DBG_ASSERT( seqValues[nProp].getValueTypeClass() == TypeClass_STRING, "Locale property type" );
             seqValues[nProp] >>= m_aLocaleString;
             nHint |= SYSLOCALEOPTIONS_HINT_LOCALE;
+            ChangeLocaleSettings();
         }
         else if( seqPropertyNames[nProp] == PROPERTYNAME_CURRENCY )
         {
@@ -396,6 +414,13 @@ void SvtSysLocaleOptions::SetCurrencyConfigString( const OUString& rStr )
 {
     MutexGuard aGuard( GetMutex() );
     pOptions->SetCurrencyString( rStr );
+}
+
+
+LanguageType SvtSysLocaleOptions::GetLocaleLanguageType() const
+{
+    MutexGuard aGuard( GetMutex() );
+    return pOptions->GetLocaleLanguageType();
 }
 
 
