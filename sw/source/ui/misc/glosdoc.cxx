@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosdoc.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:35:00 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:36:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,7 +569,7 @@ void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
                 if( sErrPath.Len() )
                     sErrPath += SVT_SEARCHPATH_DELIMITER;
                 INetURLObject aTemp( sPth );
-                sErrPath += aTemp.GetFull();
+                sErrPath += String(aTemp.GetFull());
             }
             else
                 pPathArr->Insert(new String(sPth), pPathArr->Count());
