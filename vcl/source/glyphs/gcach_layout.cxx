@@ -4,8 +4,8 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.1 $
- *  last change: $Author: hdu $ $Date: 2002-02-15 16:07:33 $
+ *  $Revision: 1.2 $
+ *  last change: $Author: hdu $ $Date: 2002-02-26 13:43:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,9 +494,6 @@ ServerFontLayout* IcuLayoutEngine::operator()( ServerFont* pFont,
     int nGlyphCount = mpIcuLE->layoutChars( pIcuChars, rArgs.mnFirstCharIndex,
         rArgs.mnEndCharIndex - rArgs.mnFirstCharIndex, rArgs.mnLength,
         bRightToLeft, 0.0, 0.0, rcIcu );
-#ifdef DEBUG
-    fprintf(stderr,"using ICULE(%d,%d,%d) => %d,%d \n", rArgs.mnFirstCharIndex,rArgs.mnEndCharIndex-rArgs.mnFirstCharIndex, rArgs.mnLength,rcIcu,nGlyphCount);
-#endif
     if( LE_FAILURE(rcIcu) )
         return NULL;
 
@@ -515,11 +512,11 @@ ServerFontLayout* IcuLayoutEngine::operator()( ServerFont* pFont,
 
     // export layout info to ServerFontLayout
     GlyphItem* pGlyphBuffer = new GlyphItem[ nGlyphCount ];
-
-    const IcuPosition* pPos = pGlyphPositions;
-    Point aNewPos;
     bool bWantFallback = false;
-    const FreetypeServerFont* pFtFont = reinterpret_cast<FreetypeServerFont*>(pFont);
+
+    Point aNewPos;
+    const IcuPosition* pPos = pGlyphPositions;
+    FreetypeServerFont* pFtFont = reinterpret_cast<FreetypeServerFont*>(pFont);
     for( int i = 0; i < nGlyphCount; ++i, ++pPos )
     {
         //TODO: remove workaround below for ICU getting pCharIndex wrong
