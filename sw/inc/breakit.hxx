@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakit.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-24 15:24:58 $
+ *  last change: $Author: jp $ $Date: 2001-06-07 10:00:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,15 +92,23 @@ private:
     LanguageType aLast;          // language of the current locale
     LanguageType aForbiddenLang; // language of the current forbiddenChar struct
 
-    com::sun::star::lang::Locale& _GetLocale( const LanguageType aLang );
-    com::sun::star::i18n::ForbiddenCharacters& _GetForbidden( const LanguageType    aLang );
+    void _GetLocale( const LanguageType aLang );
+    void _GetForbidden( const LanguageType  aLang );
 public:
     SwBreakIt();
     ~SwBreakIt() { delete pLocale; delete pForbidden; }
     com::sun::star::lang::Locale& GetLocale( const LanguageType aLang )
-    { if( aLast == aLang ) return *pLocale; return _GetLocale( aLang ); }
+    {
+        if( aLast != aLang )
+            _GetLocale( aLang );
+        return *pLocale;
+    }
     com::sun::star::i18n::ForbiddenCharacters& GetForbidden( const LanguageType aLang )
-    { if( aForbiddenLang == aLang ) return *pForbidden; return _GetForbidden( aLang ); }
+    {
+        if( !pForbidden || aForbiddenLang != aLang )
+            _GetForbidden( aLang );
+        return *pForbidden;
+    }
 };
 
 extern SwBreakIt* pBreakIt;
