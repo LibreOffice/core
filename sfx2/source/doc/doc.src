@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-05 21:17:20 $
+ *  last change: $Author: nf $ $Date: 2002-02-06 12:46:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2158,7 +2158,7 @@ QueryBox DLG_MACROQUERY
     Title [ english ] = "Execute Macro" ;
     Title [ english_us ] = "Run Macro" ;
     Title [ french ] = "Ex�cuter une macro" ;
-    Title[ italian ] = "Questo documento contiene macro. $(TEXT)";
+    Title[ italian ] = "Esegui macro";
     Title[ portuguese_brazilian ] = "Makro ausf?ren";
     Title[ portuguese ] = "Executar macro";
     Title[ danish ] = "Udf�r makro";
@@ -2186,7 +2186,7 @@ QueryBox DLG_MACROQUERY
     Message[ french ] = "Ce document contient des macros. $(TEXT)";
     Message[ spanish ] = "Ejecutar macro";
     Message[ japanese ] = "このドキュメントにはマクロが含まれています。$(TEXT)";
-    Message[ italian ] = "Dieses Dokument enth�lt Makros. $(TEXT)";
+    Message[ italian ] = "Questo documento contiene macro. $(TEXT)";
     Message[ korean ] = "이 문서에는 매크로가 포함되어 있습니다. $(TEXT)";
     Message[ portuguese ] = "Dieses Dokument enth�lt Makros. $(TEXT)";
     Message[ russian ] = "Dieses Dokument enth�lt Makros. $(TEXT)";
