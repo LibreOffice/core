@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-04 03:21:42 $
+#   last change: $Author: obo $ $Date: 2004-08-12 12:16:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,6 +97,7 @@ UNOTYPES= \
         com.sun.star.uno.XUnloadingPreference    	\
         com.sun.star.uno.DeploymentException    	\
         com.sun.star.uno.RuntimeException \
+        com.sun.star.lang.WrappedTargetRuntimeException \
         com.sun.star.lang.DisposedException 		\
         com.sun.star.lang.XMultiServiceFactory 		\
         com.sun.star.lang.XSingleServiceFactory 	\
@@ -125,6 +126,7 @@ UNOTYPES= \
         com.sun.star.beans.PropertyValue 		\
         com.sun.star.beans.XFastPropertySet 		\
         com.sun.star.beans.PropertyAttribute 		\
+        com.sun.star.container.XNameContainer \
         com.sun.star.container.XHierarchicalNameAccess	\
         com.sun.star.registry.XRegistryKey		\
         com.sun.star.loader.XImplementationLoader	\
