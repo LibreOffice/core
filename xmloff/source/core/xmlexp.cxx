@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-20 05:35:38 $
+ *  last change: $Author: sab $ $Date: 2000-11-10 18:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,10 @@
 #include "families.hxx"
 #endif
 
+#ifndef _XMLOFF_PROGRESSBARHELPER_HXX
+#include "ProgressBarHelper.hxx"
+#endif
+
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
@@ -183,7 +187,8 @@ SvXMLExport::SvXMLExport(
     pAttrList( new SvXMLAttributeList ),
     bExtended( sal_False ),
     xHandler( rHandler ),
-    xExtHandler( rHandler, uno::UNO_QUERY )
+    xExtHandler( rHandler, uno::UNO_QUERY ),
+    pProgressBarHelper( NULL )
 {
     _InitCtor();
 }
@@ -205,7 +210,8 @@ SvXMLExport::SvXMLExport(
     xExtHandler( rHandler, uno::UNO_QUERY ),
     xModel( rModel ),
     pNumExport(0L),
-    xNumberFormatsSupplier (rModel, uno::UNO_QUERY)
+    xNumberFormatsSupplier (rModel, uno::UNO_QUERY),
+    pProgressBarHelper( new ProgressBarHelper(rModel, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "XML Export" ))))
 {
     _InitCtor();
     if (xNumberFormatsSupplier.is())
@@ -216,6 +222,8 @@ SvXMLExport::~SvXMLExport()
 {
     delete pNamespaceMap;
     delete pUnitConv;
+    if (pProgressBarHelper)
+        delete pProgressBarHelper;
 }
 
 void SvXMLExport::AddAttributeASCII( sal_uInt16 nPrefixKey,

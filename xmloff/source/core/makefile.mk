@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: cl $ $Date: 2000-11-08 12:03:08 $
+#   last change: $Author: sab $ $Date: 2000-11-10 18:12:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,6 +95,7 @@ CXXFILES = \
         xmlkywd.cxx		\
         xmltkmap.cxx	\
         xmluconv.cxx	\
+        ProgressBarHelper.cxx	\
         PropertySetMerger.cxx
 
 SLOFILES =	\
@@ -110,11 +111,12 @@ SLOFILES =	\
         $(SLO)$/xmlkywd.obj		\
         $(SLO)$/xmltkmap.obj	\
         $(SLO)$/xmluconv.obj	\
+        $(SLO)$/ProgressBarHelper.obj	\
         $(SLO)$/PropertySetMerger.obj
 
 # NETBSD: somewhere we have to instantiate the static data members.
 # NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols 
+# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
 .IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
 SLOFILES+=$(SLO)$/staticmb.obj
 .ENDIF

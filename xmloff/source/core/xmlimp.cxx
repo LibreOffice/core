@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pw $ $Date: 2000-10-16 13:30:27 $
+ *  last change: $Author: sab $ $Date: 2000-11-10 18:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,10 @@
 #endif
 #ifndef _XMLOFF_XMLNUMFI_HXX
 #include "xmlnumfi.hxx"
+#endif
+
+#ifndef _XMLOFF_PROGRESSBARHELPER_HXX
+#include "ProgressBarHelper.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HDL_
@@ -192,7 +196,8 @@ SvXMLImport::SvXMLImport() throw () :
     pNamespaceMap( new SvXMLNamespaceMap ),
     pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM ) ),
     pContexts( new SvXMLImportContexts_Impl ),
-    pNumImport( NULL )
+    pNumImport( NULL ),
+    pProgressBarHelper( NULL )
 {
     _InitCtor();
 }
@@ -204,7 +209,8 @@ SvXMLImport::SvXMLImport( const Reference< XModel > & rModel ) throw () :
     pContexts( new SvXMLImportContexts_Impl ),
     pNumImport( NULL ),
     xModel( rModel ),
-    xNumberFormatsSupplier (xModel, uno::UNO_QUERY)
+    xNumberFormatsSupplier (rModel, uno::UNO_QUERY),
+    pProgressBarHelper( new ProgressBarHelper(rModel, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("XML Import"))))
 {
     _InitCtor();
     if (xNumberFormatsSupplier.is())
@@ -218,6 +224,8 @@ SvXMLImport::~SvXMLImport() throw ()
     delete pContexts;
     if (pNumImport)
         delete pNumImport;
+    if (pProgressBarHelper)
+        delete pProgressBarHelper;
 }
 
 // XUnoTunnel & co
