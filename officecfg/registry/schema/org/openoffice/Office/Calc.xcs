@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Calc.xcs,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-24 13:12:07 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 17:50:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 				<desc xml:lang="th">Describes a conversion between two units.</desc>
 				<desc xml:lang="hi-IN">Describes a conversion between two units.</desc>
 				<desc xml:lang="x-comment">Describes a conversion between two units.</desc>
+				<desc xml:lang="hu">Describes a conversion between two units.</desc>
+				<desc xml:lang="sk">Describes a conversion between two units.</desc>
+				<desc xml:lang="sl">Describes a conversion between two units.</desc>
 			</info>
 			<prop oor:name="FromUnit" oor:type="xs:string">
 				<info>
@@ -120,6 +123,9 @@
 					<desc xml:lang="th">Specifies the name of the first unit.</desc>
 					<desc xml:lang="hi-IN">Specifies the name of the first unit.</desc>
 					<desc xml:lang="x-comment">Specifies the name of the first unit.</desc>
+					<desc xml:lang="hu">Specifies the name of the first unit.</desc>
+					<desc xml:lang="sk">Specifies the name of the first unit.</desc>
+					<desc xml:lang="sl">Specifies the name of the first unit.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ToUnit" oor:type="xs:string">
@@ -149,6 +155,9 @@
 					<desc xml:lang="th">Specifies the name of the second unit.</desc>
 					<desc xml:lang="hi-IN">Specifies the name of the second unit.</desc>
 					<desc xml:lang="x-comment">Specifies the name of the second unit.</desc>
+					<desc xml:lang="hu">Specifies the name of the second unit.</desc>
+					<desc xml:lang="sk">Specifies the name of the second unit.</desc>
+					<desc xml:lang="sl">Specifies the name of the second unit.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Factor" oor:type="xs:double">
@@ -178,6 +187,9 @@
 					<desc xml:lang="th">Specifies the conversion factor between the two units.</desc>
 					<desc xml:lang="hi-IN">Specifies the conversion factor between the two units.</desc>
 					<desc xml:lang="x-comment">Specifies the conversion factor between the two units.</desc>
+					<desc xml:lang="hu">Specifies the conversion factor between the two units.</desc>
+					<desc xml:lang="sk">Specifies the conversion factor between the two units.</desc>
+					<desc xml:lang="sl">Specifies the conversion factor between the two units.</desc>
 				</info>
 			</prop>
 		</group>
@@ -208,6 +220,9 @@
 				<desc xml:lang="th">Describes a complete date value.</desc>
 				<desc xml:lang="hi-IN">Describes a complete date value.</desc>
 				<desc xml:lang="x-comment">Describes a complete date value.</desc>
+				<desc xml:lang="hu">Describes a complete date value.</desc>
+				<desc xml:lang="sk">Describes a complete date value.</desc>
+				<desc xml:lang="sl">Describes a complete date value.</desc>
 			</info>
 			<prop oor:name="YY" oor:type="xs:int">
 				<info>
@@ -236,9 +251,12 @@
 						<desc xml:lang="th">Specifies the year.</desc>
 						<desc xml:lang="hi-IN">Specifies the year.</desc>
 						<desc xml:lang="x-comment">Specifies the year.</desc>
+						<desc xml:lang="hu">Specifies the year.</desc>
+						<desc xml:lang="sk">Specifies the year.</desc>
+						<desc xml:lang="sl">Specifies the year.</desc>
 					<label xml:lang="en-US">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
 					<label xml:lang="el">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
-					<label xml:lang="nl">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
+					<label xml:lang="nl">12/30/1899 (Standaard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
 					<label xml:lang="fr">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
 					<label xml:lang="fi">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
 					<label xml:lang="cs">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
@@ -261,6 +279,9 @@
 					<label xml:lang="th">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
 					<label xml:lang="hi-IN">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
 					<label xml:lang="x-comment">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
+					<label xml:lang="hu">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
+					<label xml:lang="sk">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
+					<label xml:lang="sl">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
 				</info>
 			</prop>
 			<prop oor:name="MM" oor:type="xs:int">
@@ -290,9 +311,12 @@
 						<desc xml:lang="th">Specifies the month.</desc>
 						<desc xml:lang="hi-IN">Specifies the month.</desc>
 						<desc xml:lang="x-comment">Specifies the month.</desc>
+						<desc xml:lang="hu">Specifies the month.</desc>
+						<desc xml:lang="sk">Specifies the month.</desc>
+						<desc xml:lang="sl">Specifies the month.</desc>
 					<label xml:lang="en-US">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
 					<label xml:lang="el">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
-					<label xml:lang="nl">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
+					<label xml:lang="nl">12/30/1899 (Standaard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
 					<label xml:lang="fr">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
 					<label xml:lang="fi">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
 					<label xml:lang="cs">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
@@ -315,6 +339,9 @@
 					<label xml:lang="th">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
 					<label xml:lang="hi-IN">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
 					<label xml:lang="x-comment">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
+					<label xml:lang="hu">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
+					<label xml:lang="sk">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
+					<label xml:lang="sl">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
 				</info>
 			</prop>
 			<prop oor:name="DD" oor:type="xs:int">
@@ -344,9 +371,12 @@
 						<desc xml:lang="th">Specifies the day.</desc>
 						<desc xml:lang="hi-IN">Specifies the day.</desc>
 						<desc xml:lang="x-comment">Specifies the day.</desc>
+						<desc xml:lang="hu">Specifies the day.</desc>
+						<desc xml:lang="sk">Specifies the day.</desc>
+						<desc xml:lang="sl">Specifies the day.</desc>
 					<label xml:lang="en-US">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
 					<label xml:lang="el">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
-					<label xml:lang="nl">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
+					<label xml:lang="nl">12/30/1899 (Standaard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
 					<label xml:lang="fr">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
 					<label xml:lang="fi">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
 					<label xml:lang="cs">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
@@ -369,6 +399,9 @@
 					<label xml:lang="th">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
 					<label xml:lang="hi-IN">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
 					<label xml:lang="x-comment">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
+					<label xml:lang="hu">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
+					<label xml:lang="sk">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
+					<label xml:lang="sl">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
 				</info>
 			</prop>
 		</group>
@@ -405,6 +438,9 @@
 				<desc xml:lang="th">Specifies the Euro currency conversion rates and possibly other unit conversion rules for the CONVERT function.</desc>
 				<desc xml:lang="hi-IN">Specifies the Euro currency conversion rates and possibly other unit conversion rules for the CONVERT function.</desc>
 				<desc xml:lang="x-comment">Specifies the Euro currency conversion rates and possibly other unit conversion rules for the CONVERT function.</desc>
+				<desc xml:lang="hu">Specifies the Euro currency conversion rates and possibly other unit conversion rules for the CONVERT function.</desc>
+				<desc xml:lang="sk">Specifies the Euro currency conversion rates and possibly other unit conversion rules for the CONVERT function.</desc>
+				<desc xml:lang="sl">Specifies the Euro currency conversion rates and possibly other unit conversion rules for the CONVERT function.</desc>
 			</info>
 		</set>
 		<group oor:name="Content">
@@ -434,6 +470,9 @@
 				<desc xml:lang="th">Contains settings for spreadsheet content.</desc>
 				<desc xml:lang="hi-IN">Contains settings for spreadsheet content.</desc>
 				<desc xml:lang="x-comment">Contains settings for spreadsheet content.</desc>
+				<desc xml:lang="hu">Contains settings for spreadsheet content.</desc>
+				<desc xml:lang="sk">Contains settings for spreadsheet content.</desc>
+				<desc xml:lang="sl">Contains settings for spreadsheet content.</desc>
 			</info>
 			<group oor:name="Display">
 				<info>
@@ -462,6 +501,9 @@
 					<desc xml:lang="th">Specifies which contents are displayed in a spreadsheet.</desc>
 					<desc xml:lang="hi-IN">Specifies which contents are displayed in a spreadsheet.</desc>
 					<desc xml:lang="x-comment">Specifies which contents are displayed in a spreadsheet.</desc>
+					<desc xml:lang="hu">Specifies which contents are displayed in a spreadsheet.</desc>
+					<desc xml:lang="sk">Specifies which contents are displayed in a spreadsheet.</desc>
+					<desc xml:lang="sl">Specifies which contents are displayed in a spreadsheet.</desc>
 				</info>
 				<prop oor:name="Formula" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Contents/Display -->
@@ -494,9 +536,12 @@
 							<desc xml:lang="th">Indicates whether formulas instead of results are displayed in the cells.</desc>
 							<desc xml:lang="hi-IN">Indicates whether formulas instead of results are displayed in the cells.</desc>
 							<desc xml:lang="x-comment">Indicates whether formulas instead of results are displayed in the cells.</desc>
+							<desc xml:lang="hu">Indicates whether formulas instead of results are displayed in the cells.</desc>
+							<desc xml:lang="sk">Indicates whether formulas instead of results are displayed in the cells.</desc>
+							<desc xml:lang="sl">Indicates whether formulas instead of results are displayed in the cells.</desc>
 						<label xml:lang="en-US">Formulas</label>
 						<label xml:lang="el">Τύποι</label>
-						<label xml:lang="nl">Formulas</label>
+						<label xml:lang="nl">Formules</label>
 						<label xml:lang="fr">Formulas</label>
 						<label xml:lang="fi">Kaavat</label>
 						<label xml:lang="cs">Vzorce</label>
@@ -520,6 +565,8 @@
 						<label xml:lang="hi-IN">सूत्रें</label>
 						<label xml:lang="x-comment">Formulas</label>
 						<label xml:lang="sk">Vzorce</label>
+						<label xml:lang="hu">Formulas</label>
+						<label xml:lang="sl">Formulas</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -554,6 +601,9 @@
 							<desc xml:lang="th">Indicates whether numbers containing the 0 value are shown.</desc>
 							<desc xml:lang="hi-IN">Indicates whether numbers containing the 0 value are shown.</desc>
 							<desc xml:lang="x-comment">Indicates whether numbers containing the 0 value are shown.</desc>
+							<desc xml:lang="hu">Indicates whether numbers containing the 0 value are shown.</desc>
+							<desc xml:lang="sk">Indicates whether numbers containing the 0 value are shown.</desc>
+							<desc xml:lang="sl">Indicates whether numbers containing the 0 value are shown.</desc>
 						<label xml:lang="en-US">Zero values</label>
 						<label xml:lang="el">Μηδενικές τιμές</label>
 						<label xml:lang="nl">Nulwaarden</label>
@@ -580,6 +630,8 @@
 						<label xml:lang="hi-IN">शून्य मूल्य</label>
 						<label xml:lang="x-comment">Zero values</label>
 						<label xml:lang="sk">Nulové hodnoty</label>
+						<label xml:lang="hu">Zero values</label>
+						<label xml:lang="sl">Zero values</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -614,9 +666,12 @@
 							<desc xml:lang="th">Indicates whether notes are marked.</desc>
 							<desc xml:lang="hi-IN">Indicates whether notes are marked.</desc>
 							<desc xml:lang="x-comment">Indicates whether notes are marked.</desc>
+							<desc xml:lang="hu">Indicates whether notes are marked.</desc>
+							<desc xml:lang="sk">Indicates whether notes are marked.</desc>
+							<desc xml:lang="sl">Indicates whether notes are marked.</desc>
 						<label xml:lang="en-US">Note tags</label>
 						<label xml:lang="el">Note tags</label>
-						<label xml:lang="nl">Note tags</label>
+						<label xml:lang="nl">Aantekeningen markeren</label>
 						<label xml:lang="fr">Note tags</label>
 						<label xml:lang="fi">Note tags</label>
 						<label xml:lang="cs">Note tags</label>
@@ -639,6 +694,9 @@
 						<label xml:lang="th">Note tags</label>
 						<label xml:lang="hi-IN">Note tags</label>
 						<label xml:lang="x-comment">Note tags</label>
+						<label xml:lang="hu">Note tags</label>
+						<label xml:lang="sk">Note tags</label>
+						<label xml:lang="sl">Note tags</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -673,9 +731,12 @@
 							<desc xml:lang="th">Indicates whether all values are highlighted in the sheet (text black, numbers blue, others green).</desc>
 							<desc xml:lang="hi-IN">Indicates whether all values are highlighted in the sheet (text black, numbers blue, others green).</desc>
 							<desc xml:lang="x-comment">Indicates whether all values are highlighted in the sheet (text black, numbers blue, others green).</desc>
+							<desc xml:lang="hu">Indicates whether all values are highlighted in the sheet (text black, numbers blue, others green).</desc>
+							<desc xml:lang="sk">Indicates whether all values are highlighted in the sheet (text black, numbers blue, others green).</desc>
+							<desc xml:lang="sl">Indicates whether all values are highlighted in the sheet (text black, numbers blue, others green).</desc>
 						<label xml:lang="en-US">Value highlighting</label>
 						<label xml:lang="el">Value highlighting</label>
-						<label xml:lang="nl">Value highlighting</label>
+						<label xml:lang="nl">Waarden accentueren</label>
 						<label xml:lang="fr">Value highlighting</label>
 						<label xml:lang="fi">Value highlighting</label>
 						<label xml:lang="cs">Value highlighting</label>
@@ -698,6 +759,9 @@
 						<label xml:lang="th">Value highlighting</label>
 						<label xml:lang="hi-IN">Value highlighting</label>
 						<label xml:lang="x-comment">Value highlighting</label>
+						<label xml:lang="hu">Value highlighting</label>
+						<label xml:lang="sk">Value highlighting</label>
+						<label xml:lang="sl">Value highlighting</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -732,6 +796,9 @@
 							<desc xml:lang="th">Indicates whether anchor icons are displayed next to selected graphics in the document.</desc>
 							<desc xml:lang="hi-IN">Indicates whether anchor icons are displayed next to selected graphics in the document.</desc>
 							<desc xml:lang="x-comment">Indicates whether anchor icons are displayed next to selected graphics in the document.</desc>
+							<desc xml:lang="hu">Indicates whether anchor icons are displayed next to selected graphics in the document.</desc>
+							<desc xml:lang="sk">Indicates whether anchor icons are displayed next to selected graphics in the document.</desc>
+							<desc xml:lang="sl">Indicates whether anchor icons are displayed next to selected graphics in the document.</desc>
 						<label xml:lang="en-US">Anchor</label>
 						<label xml:lang="el">Αγκύρωση</label>
 						<label xml:lang="nl">Verankering</label>
@@ -758,6 +825,8 @@
 						<label xml:lang="hi-IN">ऐन्कर</label>
 						<label xml:lang="x-comment">Anchor</label>
 						<label xml:lang="sk">Ukotvenie</label>
+						<label xml:lang="hu">Anchor</label>
+						<label xml:lang="sl">Anchor</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -792,9 +861,12 @@
 							<desc xml:lang="th">Indicates whether text overflow is marked via a small triangle.</desc>
 							<desc xml:lang="hi-IN">Indicates whether text overflow is marked via a small triangle.</desc>
 							<desc xml:lang="x-comment">Indicates whether text overflow is marked via a small triangle.</desc>
+							<desc xml:lang="hu">Indicates whether text overflow is marked via a small triangle.</desc>
+							<desc xml:lang="sk">Indicates whether text overflow is marked via a small triangle.</desc>
+							<desc xml:lang="sl">Indicates whether text overflow is marked via a small triangle.</desc>
 						<label xml:lang="en-US">Text overflow</label>
 						<label xml:lang="el">Text overflow</label>
-						<label xml:lang="nl">Text overflow</label>
+						<label xml:lang="nl">Tekstoverloop</label>
 						<label xml:lang="fr">Text overflow</label>
 						<label xml:lang="fi">Text overflow</label>
 						<label xml:lang="cs">Text overflow</label>
@@ -817,6 +889,9 @@
 						<label xml:lang="th">Text overflow</label>
 						<label xml:lang="hi-IN">Text overflow</label>
 						<label xml:lang="x-comment">Text overflow</label>
+						<label xml:lang="hu">Text overflow</label>
+						<label xml:lang="sk">Text overflow</label>
+						<label xml:lang="sl">Text overflow</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -851,9 +926,12 @@
 							<desc xml:lang="th">Indicates whether objects and graphics are shown, hidden or replaced by a placeholder.</desc>
 							<desc xml:lang="hi-IN">Indicates whether objects and graphics are shown, hidden or replaced by a placeholder.</desc>
 							<desc xml:lang="x-comment">Indicates whether objects and graphics are shown, hidden or replaced by a placeholder.</desc>
+							<desc xml:lang="hu">Indicates whether objects and graphics are shown, hidden or replaced by a placeholder.</desc>
+							<desc xml:lang="sk">Indicates whether objects and graphics are shown, hidden or replaced by a placeholder.</desc>
+							<desc xml:lang="sl">Indicates whether objects and graphics are shown, hidden or replaced by a placeholder.</desc>
 						<label xml:lang="en-US">Objects and Graphics</label>
 						<label xml:lang="el">Objects and Graphics</label>
-						<label xml:lang="nl">Objects and Graphics</label>
+						<label xml:lang="nl">Objecten en afbeeldingen</label>
 						<label xml:lang="fr">Objects and Graphics</label>
 						<label xml:lang="fi">Objects and Graphics</label>
 						<label xml:lang="cs">Objects and Graphics</label>
@@ -876,6 +954,9 @@
 						<label xml:lang="th">Objects and Graphics</label>
 						<label xml:lang="hi-IN">Objects and Graphics</label>
 						<label xml:lang="x-comment">Objects and Graphics</label>
+						<label xml:lang="hu">Objects and Graphics</label>
+						<label xml:lang="sk">Objects and Graphics</label>
+						<label xml:lang="sl">Objects and Graphics</label>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
@@ -906,6 +987,8 @@
 								<desc xml:lang="hi-IN">दिखाओ</desc>
 								<desc xml:lang="x-comment">Show</desc>
 								<desc xml:lang="sk">Zobraziť</desc>
+								<desc xml:lang="hu">Show</desc>
+								<desc xml:lang="sl">Show</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
@@ -936,13 +1019,15 @@
 								<desc xml:lang="hi-IN">छिपाओ</desc>
 								<desc xml:lang="x-comment">Hide</desc>
 								<desc xml:lang="sk">Skryť</desc>
+								<desc xml:lang="hu">Hide</desc>
+								<desc xml:lang="sl">Hide</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
 							<info>
 								<desc xml:lang="en-US">Show placeholders</desc>
 								<desc xml:lang="el">Show placeholders</desc>
-								<desc xml:lang="nl">Show placeholders</desc>
+								<desc xml:lang="nl">Plaatsvervangers tonen</desc>
 								<desc xml:lang="fr">Show placeholders</desc>
 								<desc xml:lang="fi">Show placeholders</desc>
 								<desc xml:lang="cs">Show placeholders</desc>
@@ -966,6 +1051,8 @@
 								<desc xml:lang="hi-IN">Show placeholders</desc>
 								<desc xml:lang="x-comment">Show placeholders</desc>
 								<desc xml:lang="sk">Show placeholders</desc>
+								<desc xml:lang="hu">Show placeholders</desc>
+								<desc xml:lang="sl">Show placeholders</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -1002,6 +1089,9 @@
 							<desc xml:lang="th">Indicates whether charts are shown, hidden or replaced by a placeholder.</desc>
 							<desc xml:lang="hi-IN">Indicates whether charts are shown, hidden or replaced by a placeholder.</desc>
 							<desc xml:lang="x-comment">Indicates whether charts are shown, hidden or replaced by a placeholder.</desc>
+							<desc xml:lang="hu">Indicates whether charts are shown, hidden or replaced by a placeholder.</desc>
+							<desc xml:lang="sk">Indicates whether charts are shown, hidden or replaced by a placeholder.</desc>
+							<desc xml:lang="sl">Indicates whether charts are shown, hidden or replaced by a placeholder.</desc>
 						<label xml:lang="en-US">Charts</label>
 						<label xml:lang="el">Διαγράμματα</label>
 						<label xml:lang="nl">Diagrammen</label>
@@ -1028,6 +1118,8 @@
 						<label xml:lang="hi-IN">चार्ट</label>
 						<label xml:lang="x-comment">Charts</label>
 						<label xml:lang="sk">Grafy</label>
+						<label xml:lang="hu">Charts</label>
+						<label xml:lang="sl">Charts</label>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
@@ -1058,6 +1150,8 @@
 								<desc xml:lang="hi-IN">दिखाओ</desc>
 								<desc xml:lang="x-comment">Show</desc>
 								<desc xml:lang="sk">Zobraziť</desc>
+								<desc xml:lang="hu">Show</desc>
+								<desc xml:lang="sl">Show</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
@@ -1088,13 +1182,15 @@
 								<desc xml:lang="hi-IN">छिपाओ</desc>
 								<desc xml:lang="x-comment">Hide</desc>
 								<desc xml:lang="sk">Skryť</desc>
+								<desc xml:lang="hu">Hide</desc>
+								<desc xml:lang="sl">Hide</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
 							<info>
 								<desc xml:lang="en-US">Show placeholders</desc>
 								<desc xml:lang="el">Show placeholders</desc>
-								<desc xml:lang="nl">Show placeholders</desc>
+								<desc xml:lang="nl">Plaatsvervangers tonen</desc>
 								<desc xml:lang="fr">Show placeholders</desc>
 								<desc xml:lang="fi">Show placeholders</desc>
 								<desc xml:lang="cs">Show placeholders</desc>
@@ -1118,6 +1214,8 @@
 								<desc xml:lang="hi-IN">Show placeholders</desc>
 								<desc xml:lang="x-comment">Show placeholders</desc>
 								<desc xml:lang="sk">Show placeholders</desc>
+								<desc xml:lang="hu">Show placeholders</desc>
+								<desc xml:lang="sl">Show placeholders</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -1154,6 +1252,9 @@
 							<desc xml:lang="th">Indicates whether drawing objects are shown, hidden or replaced by a placeholder.</desc>
 							<desc xml:lang="hi-IN">Indicates whether drawing objects are shown, hidden or replaced by a placeholder.</desc>
 							<desc xml:lang="x-comment">Indicates whether drawing objects are shown, hidden or replaced by a placeholder.</desc>
+							<desc xml:lang="hu">Indicates whether drawing objects are shown, hidden or replaced by a placeholder.</desc>
+							<desc xml:lang="sk">Indicates whether drawing objects are shown, hidden or replaced by a placeholder.</desc>
+							<desc xml:lang="sl">Indicates whether drawing objects are shown, hidden or replaced by a placeholder.</desc>
 						<label xml:lang="en-US">Drawing objects</label>
 						<label xml:lang="el">Αντικείμενα σχεδίασης</label>
 						<label xml:lang="nl">Tekenobjecten</label>
@@ -1180,6 +1281,8 @@
 						<label xml:lang="hi-IN">रेखाचित्र वस्तु</label>
 						<label xml:lang="x-comment">Drawing objects</label>
 						<label xml:lang="sk">Grafické objekty</label>
+						<label xml:lang="hu">Drawing objects</label>
+						<label xml:lang="sl">Drawing objects</label>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
@@ -1210,6 +1313,8 @@
 								<desc xml:lang="hi-IN">दिखाओ</desc>
 								<desc xml:lang="x-comment">Show</desc>
 								<desc xml:lang="sk">Zobraziť</desc>
+								<desc xml:lang="hu">Show</desc>
+								<desc xml:lang="sl">Show</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
@@ -1240,13 +1345,15 @@
 								<desc xml:lang="hi-IN">छिपाओ</desc>
 								<desc xml:lang="x-comment">Hide</desc>
 								<desc xml:lang="sk">Skryť</desc>
+								<desc xml:lang="hu">Hide</desc>
+								<desc xml:lang="sl">Hide</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
 							<info>
 								<desc xml:lang="en-US">Show placeholders</desc>
 								<desc xml:lang="el">Show placeholders</desc>
-								<desc xml:lang="nl">Show placeholders</desc>
+								<desc xml:lang="nl">Plaatsvervangers tonen</desc>
 								<desc xml:lang="fr">Show placeholders</desc>
 								<desc xml:lang="fi">Show placeholders</desc>
 								<desc xml:lang="cs">Show placeholders</desc>
@@ -1270,6 +1377,8 @@
 								<desc xml:lang="hi-IN">Show placeholders</desc>
 								<desc xml:lang="x-comment">Show placeholders</desc>
 								<desc xml:lang="sk">Show placeholders</desc>
+								<desc xml:lang="hu">Show placeholders</desc>
+								<desc xml:lang="sl">Show placeholders</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -1303,6 +1412,9 @@
 					<desc xml:lang="th">Contains settings that specify how contents are updated.</desc>
 					<desc xml:lang="hi-IN">Contains settings that specify how contents are updated.</desc>
 					<desc xml:lang="x-comment">Contains settings that specify how contents are updated.</desc>
+					<desc xml:lang="hu">Contains settings that specify how contents are updated.</desc>
+					<desc xml:lang="sk">Contains settings that specify how contents are updated.</desc>
+					<desc xml:lang="sl">Contains settings that specify how contents are updated.</desc>
 				</info>
 				<prop oor:name="Link" oor:type="xs:int">
 					<!-- OldPath: Calc/Other/Update -->
@@ -1335,6 +1447,9 @@
 							<desc xml:lang="th">Specifies if and how links are updated when loading a document.</desc>
 							<desc xml:lang="hi-IN">Specifies if and how links are updated when loading a document.</desc>
 							<desc xml:lang="x-comment">Specifies if and how links are updated when loading a document.</desc>
+							<desc xml:lang="hu">Specifies if and how links are updated when loading a document.</desc>
+							<desc xml:lang="sk">Specifies if and how links are updated when loading a document.</desc>
+							<desc xml:lang="sl">Specifies if and how links are updated when loading a document.</desc>
 						<label xml:lang="en-US">Update Links</label>
 						<label xml:lang="el">Ενημέρωση συνδέσεων</label>
 						<label xml:lang="nl">Verbindingen actualiseren</label>
@@ -1360,13 +1475,16 @@
 						<label xml:lang="th">Update Links</label>
 						<label xml:lang="hi-IN">Update Links</label>
 						<label xml:lang="x-comment">Update Links</label>
+						<label xml:lang="hu">Update Links</label>
+						<label xml:lang="sk">Update Links</label>
+						<label xml:lang="sl">Update Links</label>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
 							<info>
 								<desc xml:lang="en-US">Update always</desc>
 								<desc xml:lang="el">Update always</desc>
-								<desc xml:lang="nl">Update always</desc>
+								<desc xml:lang="nl">Altijd actualiseren</desc>
 								<desc xml:lang="fr">Update always</desc>
 								<desc xml:lang="fi">Update always</desc>
 								<desc xml:lang="cs">Update always</desc>
@@ -1390,13 +1508,15 @@
 								<desc xml:lang="hi-IN">Update always</desc>
 								<desc xml:lang="x-comment">Update always</desc>
 								<desc xml:lang="sk">Update always</desc>
+								<desc xml:lang="hu">Update always</desc>
+								<desc xml:lang="sl">Update always</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
 							<info>
 								<desc xml:lang="en-US">Update never</desc>
 								<desc xml:lang="el">Update never</desc>
-								<desc xml:lang="nl">Update never</desc>
+								<desc xml:lang="nl">Nooit actualiseren</desc>
 								<desc xml:lang="fr">Update never</desc>
 								<desc xml:lang="fi">Update never</desc>
 								<desc xml:lang="cs">Update never</desc>
@@ -1420,13 +1540,15 @@
 								<desc xml:lang="hi-IN">Update never</desc>
 								<desc xml:lang="x-comment">Update never</desc>
 								<desc xml:lang="sk">Update never</desc>
+								<desc xml:lang="hu">Update never</desc>
+								<desc xml:lang="sl">Update never</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
 							<info>
 								<desc xml:lang="en-US">Update on request</desc>
 								<desc xml:lang="el">Update on request</desc>
-								<desc xml:lang="nl">Update on request</desc>
+								<desc xml:lang="nl">Op verzoek actualiseren</desc>
 								<desc xml:lang="fr">Update on request</desc>
 								<desc xml:lang="fi">Update on request</desc>
 								<desc xml:lang="cs">Update on request</desc>
@@ -1450,6 +1572,8 @@
 								<desc xml:lang="hi-IN">Update on request</desc>
 								<desc xml:lang="x-comment">Update on request</desc>
 								<desc xml:lang="sk">Update on request</desc>
+								<desc xml:lang="hu">Update on request</desc>
+								<desc xml:lang="sl">Update on request</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -1484,6 +1608,9 @@
 				<desc xml:lang="th">Contains settings that affect the window layout.</desc>
 				<desc xml:lang="hi-IN">Contains settings that affect the window layout.</desc>
 				<desc xml:lang="x-comment">Contains settings that affect the window layout.</desc>
+				<desc xml:lang="hu">Contains settings that affect the window layout.</desc>
+				<desc xml:lang="sk">Contains settings that affect the window layout.</desc>
+				<desc xml:lang="sl">Contains settings that affect the window layout.</desc>
 			</info>
 			<group oor:name="Line">
 				<info>
@@ -1512,6 +1639,9 @@
 					<desc xml:lang="th">Contains settings that control visual aids.</desc>
 					<desc xml:lang="hi-IN">Contains settings that control visual aids.</desc>
 					<desc xml:lang="x-comment">Contains settings that control visual aids.</desc>
+					<desc xml:lang="hu">Contains settings that control visual aids.</desc>
+					<desc xml:lang="sk">Contains settings that control visual aids.</desc>
+					<desc xml:lang="sl">Contains settings that control visual aids.</desc>
 				</info>
 				<prop oor:name="GridLine" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Layout/Lines -->
@@ -1544,6 +1674,9 @@
 							<desc xml:lang="th">Specifies whether grid lines are displayed.</desc>
 							<desc xml:lang="hi-IN">Specifies whether grid lines are displayed.</desc>
 							<desc xml:lang="x-comment">Specifies whether grid lines are displayed.</desc>
+							<desc xml:lang="hu">Specifies whether grid lines are displayed.</desc>
+							<desc xml:lang="sk">Specifies whether grid lines are displayed.</desc>
+							<desc xml:lang="sl">Specifies whether grid lines are displayed.</desc>
 						<label xml:lang="en-US">Grid lines</label>
 						<label xml:lang="el">Γραμμές πλέγματος</label>
 						<label xml:lang="nl">Rasterlijnen</label>
@@ -1570,6 +1703,8 @@
 						<label xml:lang="hi-IN">जाल रेखाएँ</label>
 						<label xml:lang="x-comment">Grid lines</label>
 						<label xml:lang="sk">Čiary mriežky</label>
+						<label xml:lang="hu">Grid lines</label>
+						<label xml:lang="sl">Grid lines</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -1605,6 +1740,9 @@
 							<desc xml:lang="th">Specifies the color of the grid lines.</desc>
 							<desc xml:lang="hi-IN">Specifies the color of the grid lines.</desc>
 							<desc xml:lang="x-comment">Specifies the color of the grid lines.</desc>
+							<desc xml:lang="hu">Specifies the color of the grid lines.</desc>
+							<desc xml:lang="sk">Specifies the color of the grid lines.</desc>
+							<desc xml:lang="sl">Specifies the color of the grid lines.</desc>
 						<label xml:lang="en-US">Color</label>
 						<label xml:lang="el">Χρώμα</label>
 						<label xml:lang="nl">Kleur</label>
@@ -1631,6 +1769,8 @@
 						<label xml:lang="hi-IN">रंग</label>
 						<label xml:lang="x-comment">Color</label>
 						<label xml:lang="sk">Farba</label>
+						<label xml:lang="hu">Color</label>
+						<label xml:lang="sl">Color</label>
 					</info>
 					<value>12632256</value>
 				</prop>
@@ -1665,9 +1805,12 @@
 							<desc xml:lang="th">Specifies whether page breaks are displayed.</desc>
 							<desc xml:lang="hi-IN">Specifies whether page breaks are displayed.</desc>
 							<desc xml:lang="x-comment">Specifies whether page breaks are displayed.</desc>
+							<desc xml:lang="hu">Specifies whether page breaks are displayed.</desc>
+							<desc xml:lang="sk">Specifies whether page breaks are displayed.</desc>
+							<desc xml:lang="sl">Specifies whether page breaks are displayed.</desc>
 						<label xml:lang="en-US">Page breaks</label>
 						<label xml:lang="el">Page breaks</label>
-						<label xml:lang="nl">Page breaks</label>
+						<label xml:lang="nl">Pagina-einden</label>
 						<label xml:lang="fr">Sauts de page</label>
 						<label xml:lang="fi">Page breaks</label>
 						<label xml:lang="cs">Zalomení stránek</label>
@@ -1691,6 +1834,8 @@
 						<label xml:lang="hi-IN">Page breaks</label>
 						<label xml:lang="x-comment">Page breaks</label>
 						<label xml:lang="sk">Zalomenie stránky</label>
+						<label xml:lang="hu">Page breaks</label>
+						<label xml:lang="sl">Page breaks</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -1725,6 +1870,9 @@
 							<desc xml:lang="th">Specifies whether guides are displayed when moving objects.</desc>
 							<desc xml:lang="hi-IN">Specifies whether guides are displayed when moving objects.</desc>
 							<desc xml:lang="x-comment">Specifies whether guides are displayed when moving objects.</desc>
+							<desc xml:lang="hu">Specifies whether guides are displayed when moving objects.</desc>
+							<desc xml:lang="sk">Specifies whether guides are displayed when moving objects.</desc>
+							<desc xml:lang="sl">Specifies whether guides are displayed when moving objects.</desc>
 						<label xml:lang="en-US">Guides</label>
 						<label xml:lang="el">Βοηθητικές γραμμές</label>
 						<label xml:lang="nl">Hulplijnen</label>
@@ -1751,6 +1899,8 @@
 						<label xml:lang="hi-IN">सलाह</label>
 						<label xml:lang="x-comment">Guides</label>
 						<label xml:lang="sk">Vodítka</label>
+						<label xml:lang="hu">Guides</label>
+						<label xml:lang="sl">Guides</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -1785,9 +1935,12 @@
 							<desc xml:lang="th">Specifies whether control points are displayed as simple squares without 3D effect.</desc>
 							<desc xml:lang="hi-IN">Specifies whether control points are displayed as simple squares without 3D effect.</desc>
 							<desc xml:lang="x-comment">Specifies whether control points are displayed as simple squares without 3D effect.</desc>
+							<desc xml:lang="hu">Specifies whether control points are displayed as simple squares without 3D effect.</desc>
+							<desc xml:lang="sk">Specifies whether control points are displayed as simple squares without 3D effect.</desc>
+							<desc xml:lang="sl">Specifies whether control points are displayed as simple squares without 3D effect.</desc>
 						<label xml:lang="en-US">Simple control points</label>
 						<label xml:lang="el">Simple control points</label>
-						<label xml:lang="nl">Simple control points</label>
+						<label xml:lang="nl">Eenvoudige besturingspunten</label>
 						<label xml:lang="fr">Simple control points</label>
 						<label xml:lang="fi">Simple control points</label>
 						<label xml:lang="cs">Simple control points</label>
@@ -1810,6 +1963,9 @@
 						<label xml:lang="th">Simple control points</label>
 						<label xml:lang="hi-IN">Simple control points</label>
 						<label xml:lang="x-comment">Simple control points</label>
+						<label xml:lang="hu">Simple control points</label>
+						<label xml:lang="sk">Simple control points</label>
+						<label xml:lang="sl">Simple control points</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -1844,9 +2000,12 @@
 							<desc xml:lang="th">Specifies whether control points are displayed as larger than the default size.</desc>
 							<desc xml:lang="hi-IN">Specifies whether control points are displayed as larger than the default size.</desc>
 							<desc xml:lang="x-comment">Specifies whether control points are displayed as larger than the default size.</desc>
+							<desc xml:lang="hu">Specifies whether control points are displayed as larger than the default size.</desc>
+							<desc xml:lang="sk">Specifies whether control points are displayed as larger than the default size.</desc>
+							<desc xml:lang="sl">Specifies whether control points are displayed as larger than the default size.</desc>
 						<label xml:lang="en-US">Large control points</label>
 						<label xml:lang="el">Large control points</label>
-						<label xml:lang="nl">Large control points</label>
+						<label xml:lang="nl">Grote besturingspunten</label>
 						<label xml:lang="fr">Large control points</label>
 						<label xml:lang="fi">Large control points</label>
 						<label xml:lang="cs">Large control points</label>
@@ -1869,6 +2028,9 @@
 						<label xml:lang="th">Large control points</label>
 						<label xml:lang="hi-IN">Large control points</label>
 						<label xml:lang="x-comment">Large control points</label>
+						<label xml:lang="hu">Large control points</label>
+						<label xml:lang="sk">Large control points</label>
+						<label xml:lang="sl">Large control points</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -1900,6 +2062,9 @@
 					<desc xml:lang="th">Contains settings that control which windows are shown around the editing window.</desc>
 					<desc xml:lang="hi-IN">Contains settings that control which windows are shown around the editing window.</desc>
 					<desc xml:lang="x-comment">Contains settings that control which windows are shown around the editing window.</desc>
+					<desc xml:lang="hu">Contains settings that control which windows are shown around the editing window.</desc>
+					<desc xml:lang="sk">Contains settings that control which windows are shown around the editing window.</desc>
+					<desc xml:lang="sl">Contains settings that control which windows are shown around the editing window.</desc>
 				</info>
 				<prop oor:name="ColumnRowHeader" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Layout/Window -->
@@ -1932,9 +2097,12 @@
 							<desc xml:lang="th">Specifies whether row and column headers are displayed.</desc>
 							<desc xml:lang="hi-IN">Specifies whether row and column headers are displayed.</desc>
 							<desc xml:lang="x-comment">Specifies whether row and column headers are displayed.</desc>
+							<desc xml:lang="hu">Specifies whether row and column headers are displayed.</desc>
+							<desc xml:lang="sk">Specifies whether row and column headers are displayed.</desc>
+							<desc xml:lang="sl">Specifies whether row and column headers are displayed.</desc>
 						<label xml:lang="en-US">Column/Row headers</label>
 						<label xml:lang="el">Column/Row headers</label>
-						<label xml:lang="nl">Column/Row headers</label>
+						<label xml:lang="nl">Kolom/Rijkoppen</label>
 						<label xml:lang="fr">Column/Row headers</label>
 						<label xml:lang="fi">Column/Row headers</label>
 						<label xml:lang="cs">Column/Row headers</label>
@@ -1957,6 +2125,9 @@
 						<label xml:lang="th">Column/Row headers</label>
 						<label xml:lang="hi-IN">Column/Row headers</label>
 						<label xml:lang="x-comment">Column/Row headers</label>
+						<label xml:lang="hu">Column/Row headers</label>
+						<label xml:lang="sk">Column/Row headers</label>
+						<label xml:lang="sl">Column/Row headers</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -1991,9 +2162,12 @@
 							<desc xml:lang="th">Specifies whether a horizontal scroll bar is displayed.</desc>
 							<desc xml:lang="hi-IN">Specifies whether a horizontal scroll bar is displayed.</desc>
 							<desc xml:lang="x-comment">Specifies whether a horizontal scroll bar is displayed.</desc>
+							<desc xml:lang="hu">Specifies whether a horizontal scroll bar is displayed.</desc>
+							<desc xml:lang="sk">Specifies whether a horizontal scroll bar is displayed.</desc>
+							<desc xml:lang="sl">Specifies whether a horizontal scroll bar is displayed.</desc>
 						<label xml:lang="en-US">Horizontal scroll</label>
 						<label xml:lang="el">Horizontal scroll</label>
-						<label xml:lang="nl">Horizontal scroll</label>
+						<label xml:lang="nl">Horizontale scrollbalk</label>
 						<label xml:lang="fr">Horizontal scroll</label>
 						<label xml:lang="fi">Horizontal scroll</label>
 						<label xml:lang="cs">Horizontal scroll</label>
@@ -2016,6 +2190,9 @@
 						<label xml:lang="th">Horizontal scroll</label>
 						<label xml:lang="hi-IN">Horizontal scroll</label>
 						<label xml:lang="x-comment">Horizontal scroll</label>
+						<label xml:lang="hu">Horizontal scroll</label>
+						<label xml:lang="sk">Horizontal scroll</label>
+						<label xml:lang="sl">Horizontal scroll</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -2050,9 +2227,12 @@
 							<desc xml:lang="th">Specifies whether a vertical scroll bar is displayed.</desc>
 							<desc xml:lang="hi-IN">Specifies whether a vertical scroll bar is displayed.</desc>
 							<desc xml:lang="x-comment">Specifies whether a vertical scroll bar is displayed.</desc>
+							<desc xml:lang="hu">Specifies whether a vertical scroll bar is displayed.</desc>
+							<desc xml:lang="sk">Specifies whether a vertical scroll bar is displayed.</desc>
+							<desc xml:lang="sl">Specifies whether a vertical scroll bar is displayed.</desc>
 						<label xml:lang="en-US">Vertical Scroll</label>
 						<label xml:lang="el">Vertical Scroll</label>
-						<label xml:lang="nl">Vertical Scroll</label>
+						<label xml:lang="nl">Verticale scrollbalk</label>
 						<label xml:lang="fr">Vertical Scroll</label>
 						<label xml:lang="fi">Vertical Scroll</label>
 						<label xml:lang="cs">Vertical Scroll</label>
@@ -2075,6 +2255,9 @@
 						<label xml:lang="th">Vertical Scroll</label>
 						<label xml:lang="hi-IN">Vertical Scroll</label>
 						<label xml:lang="x-comment">Vertical Scroll</label>
+						<label xml:lang="hu">Vertical Scroll</label>
+						<label xml:lang="sk">Vertical Scroll</label>
+						<label xml:lang="sl">Vertical Scroll</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -2109,9 +2292,12 @@
 							<desc xml:lang="th">Specifies whether sheet tabs are displayed.</desc>
 							<desc xml:lang="hi-IN">Specifies whether sheet tabs are displayed.</desc>
 							<desc xml:lang="x-comment">Specifies whether sheet tabs are displayed.</desc>
+							<desc xml:lang="hu">Specifies whether sheet tabs are displayed.</desc>
+							<desc xml:lang="sk">Specifies whether sheet tabs are displayed.</desc>
+							<desc xml:lang="sl">Specifies whether sheet tabs are displayed.</desc>
 						<label xml:lang="en-US">Sheet tabs</label>
 						<label xml:lang="el">Sheet tabs</label>
-						<label xml:lang="nl">Sheet tabs</label>
+						<label xml:lang="nl">Werkblad-tabs</label>
 						<label xml:lang="fr">Sheet tabs</label>
 						<label xml:lang="fi">Sheet tabs</label>
 						<label xml:lang="cs">Sheet tabs</label>
@@ -2134,6 +2320,9 @@
 						<label xml:lang="th">Sheet tabs</label>
 						<label xml:lang="hi-IN">Sheet tabs</label>
 						<label xml:lang="x-comment">Sheet tabs</label>
+						<label xml:lang="hu">Sheet tabs</label>
+						<label xml:lang="sk">Sheet tabs</label>
+						<label xml:lang="sl">Sheet tabs</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -2168,9 +2357,12 @@
 							<desc xml:lang="th">Specifies whether outline symbols are displayed.</desc>
 							<desc xml:lang="hi-IN">Specifies whether outline symbols are displayed.</desc>
 							<desc xml:lang="x-comment">Specifies whether outline symbols are displayed.</desc>
+							<desc xml:lang="hu">Specifies whether outline symbols are displayed.</desc>
+							<desc xml:lang="sk">Specifies whether outline symbols are displayed.</desc>
+							<desc xml:lang="sl">Specifies whether outline symbols are displayed.</desc>
 						<label xml:lang="en-US">Outline symbols</label>
 						<label xml:lang="el">Outline symbols</label>
-						<label xml:lang="nl">Outline symbols</label>
+						<label xml:lang="nl">Opsommingstekens</label>
 						<label xml:lang="fr">Outline symbols</label>
 						<label xml:lang="fi">Outline symbols</label>
 						<label xml:lang="cs">Outline symbols</label>
@@ -2193,6 +2385,9 @@
 						<label xml:lang="th">Outline symbols</label>
 						<label xml:lang="hi-IN">Outline symbols</label>
 						<label xml:lang="x-comment">Outline symbols</label>
+						<label xml:lang="hu">Outline symbols</label>
+						<label xml:lang="sk">Outline symbols</label>
+						<label xml:lang="sl">Outline symbols</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -2224,6 +2419,9 @@
 					<desc xml:lang="th">Contains other layout settings.</desc>
 					<desc xml:lang="hi-IN">Contains other layout settings.</desc>
 					<desc xml:lang="x-comment">Contains other layout settings.</desc>
+					<desc xml:lang="hu">Contains other layout settings.</desc>
+					<desc xml:lang="sk">Contains other layout settings.</desc>
+					<desc xml:lang="sl">Contains other layout settings.</desc>
 				</info>
 				<prop oor:name="StatusbarFunction" oor:type="xs:int">
 					<!-- OldPath: Calc/Layout -->
@@ -2233,7 +2431,7 @@
 						<author>NN</author>
 						<desc xml:lang="en-US">Selects a function that is calculated for the selected cells, and which shows the result in the status bar.</desc>
 							<desc xml:lang="el">Selects a function that is calculated for the selected cells, and which shows the result in the status bar.</desc>
-							<desc xml:lang="nl">Selects a function that is calculated for the selected cells, and which shows the result in the status bar.</desc>
+							<desc xml:lang="nl">Selecteert een functie die wordt berekend voor de geselecteerde cellen, en die het resultaat in de statusbalk toont.</desc>
 							<desc xml:lang="fr">Selects a function that is calculated for the selected cells, and which shows the result in the status bar.</desc>
 							<desc xml:lang="fi">Selects a function that is calculated for the selected cells, and which shows the result in the status bar.</desc>
 							<desc xml:lang="cs">Selects a function that is calculated for the selected cells, and which shows the result in the status bar.</desc>
@@ -2256,9 +2454,12 @@
 							<desc xml:lang="th">Selects a function that is calculated for the selected cells, and which shows the result in the status bar.</desc>
 							<desc xml:lang="hi-IN">Selects a function that is calculated for the selected cells, and which shows the result in the status bar.</desc>
 							<desc xml:lang="x-comment">Selects a function that is calculated for the selected cells, and which shows the result in the status bar.</desc>
+							<desc xml:lang="hu">Selects a function that is calculated for the selected cells, and which shows the result in the status bar.</desc>
+							<desc xml:lang="sk">Selects a function that is calculated for the selected cells, and which shows the result in the status bar.</desc>
+							<desc xml:lang="sl">Selects a function that is calculated for the selected cells, and which shows the result in the status bar.</desc>
 						<label xml:lang="en-US">Statusbar Function</label>
 						<label xml:lang="el">Statusbar Function</label>
-						<label xml:lang="nl">Statusbar Function</label>
+						<label xml:lang="nl">Statusbalk Functie</label>
 						<label xml:lang="fr">Statusbar Function</label>
 						<label xml:lang="fi">Statusbar Function</label>
 						<label xml:lang="cs">Statusbar Function</label>
@@ -2281,6 +2482,9 @@
 						<label xml:lang="th">Statusbar Function</label>
 						<label xml:lang="hi-IN">Statusbar Function</label>
 						<label xml:lang="x-comment">Statusbar Function</label>
+						<label xml:lang="hu">Statusbar Function</label>
+						<label xml:lang="sk">Statusbar Function</label>
+						<label xml:lang="sl">Statusbar Function</label>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
@@ -2311,6 +2515,8 @@
 								<desc xml:lang="hi-IN">कोई फंक्शन् नहीं</desc>
 								<desc xml:lang="x-comment">No function</desc>
 								<desc xml:lang="sk">Bez funkcie</desc>
+								<desc xml:lang="hu">No function</desc>
+								<desc xml:lang="sl">No function</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
@@ -2341,13 +2547,15 @@
 								<desc xml:lang="hi-IN">माध्य</desc>
 								<desc xml:lang="x-comment">Average</desc>
 								<desc xml:lang="sk">Priemer</desc>
+								<desc xml:lang="hu">Average</desc>
+								<desc xml:lang="sl">Average</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
 							<info>
 								<desc xml:lang="en-US">Number count</desc>
 								<desc xml:lang="el">Number count</desc>
-								<desc xml:lang="nl">Number count</desc>
+								<desc xml:lang="nl">Aantal getallen</desc>
 								<desc xml:lang="fr">Number count</desc>
 								<desc xml:lang="fi">Number count</desc>
 								<desc xml:lang="cs">Number count</desc>
@@ -2371,13 +2579,15 @@
 								<desc xml:lang="hi-IN">Number count</desc>
 								<desc xml:lang="x-comment">Number count</desc>
 								<desc xml:lang="sk">Number count</desc>
+								<desc xml:lang="hu">Number count</desc>
+								<desc xml:lang="sl">Number count</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="3">
 							<info>
 								<desc xml:lang="en-US">Count of all non-empty cells</desc>
 								<desc xml:lang="el">Count of all non-empty cells</desc>
-								<desc xml:lang="nl">Count of all non-empty cells</desc>
+								<desc xml:lang="nl">Aantal van alle niet-lege cellen</desc>
 								<desc xml:lang="fr">Count of all non-empty cells</desc>
 								<desc xml:lang="fi">Count of all non-empty cells</desc>
 								<desc xml:lang="cs">Count of all non-empty cells</desc>
@@ -2401,6 +2611,8 @@
 								<desc xml:lang="hi-IN">Count of all non-empty cells</desc>
 								<desc xml:lang="x-comment">Count of all non-empty cells</desc>
 								<desc xml:lang="sk">Count of all non-empty cells</desc>
+								<desc xml:lang="hu">Count of all non-empty cells</desc>
+								<desc xml:lang="sl">Count of all non-empty cells</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="4">
@@ -2431,6 +2643,8 @@
 								<desc xml:lang="hi-IN">अधिकतम</desc>
 								<desc xml:lang="x-comment">Maximum</desc>
 								<desc xml:lang="sk">Maximum</desc>
+								<desc xml:lang="hu">Maximum</desc>
+								<desc xml:lang="sl">Maximum</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="5">
@@ -2461,6 +2675,8 @@
 								<desc xml:lang="hi-IN">न्यूनतम</desc>
 								<desc xml:lang="x-comment">Minimum</desc>
 								<desc xml:lang="sk">Minimum</desc>
+								<desc xml:lang="hu">Minimum</desc>
+								<desc xml:lang="sl">Minimum</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="9">
@@ -2491,6 +2707,8 @@
 								<desc xml:lang="hi-IN">जोड़</desc>
 								<desc xml:lang="x-comment">Sum</desc>
 								<desc xml:lang="sk">Celkom</desc>
+								<desc xml:lang="hu">Sum</desc>
+								<desc xml:lang="sl">Sum</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -2527,6 +2745,9 @@
 							<desc xml:lang="th">Specifies the distance between tabulator stops in 1/100th millimeters.</desc>
 							<desc xml:lang="hi-IN">Specifies the distance between tabulator stops in 1/100th millimeters.</desc>
 							<desc xml:lang="x-comment">Specifies the distance between tabulator stops in 1/100th millimeters.</desc>
+							<desc xml:lang="hu">Specifies the distance between tabulator stops in 1/100th millimeters.</desc>
+							<desc xml:lang="sk">Specifies the distance between tabulator stops in 1/100th millimeters.</desc>
+							<desc xml:lang="sl">Specifies the distance between tabulator stops in 1/100th millimeters.</desc>
 						<label xml:lang="en-US">Tab stops</label>
 						<label xml:lang="el">Στηλοθέτες</label>
 						<label xml:lang="nl">Tabstops</label>
@@ -2553,6 +2774,8 @@
 						<label xml:lang="hi-IN">टॉब रुकावट</label>
 						<label xml:lang="x-comment">Tab stops</label>
 						<label xml:lang="sk">Kroky tabulátora</label>
+						<label xml:lang="hu">Tab stops</label>
+						<label xml:lang="sl">Tab stops</label>
 					</info>
 					<prop oor:name="Metric" oor:type="xs:int">
 						<info>
@@ -2581,6 +2804,9 @@
 								<desc xml:lang="th">Specifies the tabulator distance with locales that use the metric system.</desc>
 								<desc xml:lang="hi-IN">Specifies the tabulator distance with locales that use the metric system.</desc>
 								<desc xml:lang="x-comment">Specifies the tabulator distance with locales that use the metric system.</desc>
+								<desc xml:lang="hu">Specifies the tabulator distance with locales that use the metric system.</desc>
+								<desc xml:lang="sk">Specifies the tabulator distance with locales that use the metric system.</desc>
+								<desc xml:lang="sl">Specifies the tabulator distance with locales that use the metric system.</desc>
 							<label xml:lang="en-US"/>
 						</info>
 						<value>1250</value>
@@ -2612,6 +2838,9 @@
 								<desc xml:lang="th">Specifies the tabulator distance with locales that don&apos;t use the metric system.</desc>
 								<desc xml:lang="hi-IN">Specifies the tabulator distance with locales that don&apos;t use the metric system.</desc>
 								<desc xml:lang="x-comment">Specifies the tabulator distance with locales that don&apos;t use the metric system.</desc>
+								<desc xml:lang="hu">Specifies the tabulator distance with locales that don&apos;t use the metric system.</desc>
+								<desc xml:lang="sk">Specifies the tabulator distance with locales that don&apos;t use the metric system.</desc>
+								<desc xml:lang="sl">Specifies the tabulator distance with locales that don&apos;t use the metric system.</desc>
 							<label xml:lang="en-US"/>
 						</info>
 						<value>1270</value>
@@ -2648,6 +2877,9 @@
 							<desc xml:lang="th">Specifies the measurement unit to be used in the user interface.</desc>
 							<desc xml:lang="hi-IN">Specifies the measurement unit to be used in the user interface.</desc>
 							<desc xml:lang="x-comment">Specifies the measurement unit to be used in the user interface.</desc>
+							<desc xml:lang="hu">Specifies the measurement unit to be used in the user interface.</desc>
+							<desc xml:lang="sk">Specifies the measurement unit to be used in the user interface.</desc>
+							<desc xml:lang="sl">Specifies the measurement unit to be used in the user interface.</desc>
 						<label xml:lang="en-US">Measurement unit</label>
 						<label xml:lang="el">~Μονάδα μέτρησης</label>
 						<label xml:lang="nl">~Maateenheid</label>
@@ -2674,6 +2906,8 @@
 						<label xml:lang="hi-IN">नाप यूनिट्</label>
 						<label xml:lang="x-comment">Measurement unit</label>
 						<label xml:lang="sk">Jednotka miery</label>
+						<label xml:lang="hu">Measurement unit</label>
+						<label xml:lang="sl">Measurement unit</label>
 					</info>
 					<prop oor:name="Metric" oor:type="xs:int">
 						<info>
@@ -2702,6 +2936,9 @@
 							<desc xml:lang="th">Specifies the measurement unit that is used with locales that use the metric system.</desc>
 							<desc xml:lang="hi-IN">Specifies the measurement unit that is used with locales that use the metric system.</desc>
 							<desc xml:lang="x-comment">Specifies the measurement unit that is used with locales that use the metric system.</desc>
+							<desc xml:lang="hu">Specifies the measurement unit that is used with locales that use the metric system.</desc>
+							<desc xml:lang="sk">Specifies the measurement unit that is used with locales that use the metric system.</desc>
+							<desc xml:lang="sl">Specifies the measurement unit that is used with locales that use the metric system.</desc>
 						</info>
 						<constraints>
 							<enumeration oor:value="1">
@@ -2732,6 +2969,8 @@
 									<desc xml:lang="hi-IN">मिल्लिमीटर</desc>
 									<desc xml:lang="x-comment">Millimeter</desc>
 									<desc xml:lang="sk">Milimeter</desc>
+									<desc xml:lang="hu">Millimeter</desc>
+									<desc xml:lang="sl">Millimeter</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="2">
@@ -2762,6 +3001,8 @@
 									<desc xml:lang="hi-IN">सेंटिमीटर</desc>
 									<desc xml:lang="x-comment">Centimeter</desc>
 									<desc xml:lang="sk">Centimeter</desc>
+									<desc xml:lang="hu">Centimeter</desc>
+									<desc xml:lang="sl">Centimeter</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="6">
@@ -2792,6 +3033,8 @@
 									<desc xml:lang="hi-IN">बिन्दु</desc>
 									<desc xml:lang="x-comment">Point</desc>
 									<desc xml:lang="sk">Bod</desc>
+									<desc xml:lang="hu">Point</desc>
+									<desc xml:lang="sl">Point</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="7">
@@ -2822,6 +3065,8 @@
 									<desc xml:lang="hi-IN">पिका</desc>
 									<desc xml:lang="x-comment">Pica</desc>
 									<desc xml:lang="sk">Pika</desc>
+									<desc xml:lang="hu">Pica</desc>
+									<desc xml:lang="sl">Pica</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="8">
@@ -2852,6 +3097,8 @@
 									<desc xml:lang="hi-IN">इंच</desc>
 									<desc xml:lang="x-comment">Inch</desc>
 									<desc xml:lang="sk">Palec</desc>
+									<desc xml:lang="hu">Inch</desc>
+									<desc xml:lang="sl">Inch</desc>
 								</info>
 							</enumeration>
 						</constraints>
@@ -2884,6 +3131,9 @@
 							<desc xml:lang="th">Specifies the measurement unit that is used with locales that don&apos;t use the metric system.</desc>
 							<desc xml:lang="hi-IN">Specifies the measurement unit that is used with locales that don&apos;t use the metric system.</desc>
 							<desc xml:lang="x-comment">Specifies the measurement unit that is used with locales that don&apos;t use the metric system.</desc>
+							<desc xml:lang="hu">Specifies the measurement unit that is used with locales that don&apos;t use the metric system.</desc>
+							<desc xml:lang="sk">Specifies the measurement unit that is used with locales that don&apos;t use the metric system.</desc>
+							<desc xml:lang="sl">Specifies the measurement unit that is used with locales that don&apos;t use the metric system.</desc>
 						</info>
 						<constraints>
 							<enumeration oor:value="1">
@@ -2914,6 +3164,8 @@
 									<desc xml:lang="hi-IN">मिल्लिमीटर</desc>
 									<desc xml:lang="x-comment">Millimeter</desc>
 									<desc xml:lang="sk">Milimeter</desc>
+									<desc xml:lang="hu">Millimeter</desc>
+									<desc xml:lang="sl">Millimeter</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="2">
@@ -2944,6 +3196,8 @@
 									<desc xml:lang="hi-IN">सेंटिमीटर</desc>
 									<desc xml:lang="x-comment">Centimeter</desc>
 									<desc xml:lang="sk">Centimeter</desc>
+									<desc xml:lang="hu">Centimeter</desc>
+									<desc xml:lang="sl">Centimeter</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="6">
@@ -2974,6 +3228,8 @@
 									<desc xml:lang="hi-IN">बिन्दु</desc>
 									<desc xml:lang="x-comment">Point</desc>
 									<desc xml:lang="sk">Bod</desc>
+									<desc xml:lang="hu">Point</desc>
+									<desc xml:lang="sl">Point</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="7">
@@ -3004,6 +3260,8 @@
 									<desc xml:lang="hi-IN">पिका</desc>
 									<desc xml:lang="x-comment">Pica</desc>
 									<desc xml:lang="sk">Pika</desc>
+									<desc xml:lang="hu">Pica</desc>
+									<desc xml:lang="sl">Pica</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="8">
@@ -3034,6 +3292,8 @@
 									<desc xml:lang="hi-IN">इंच</desc>
 									<desc xml:lang="x-comment">Inch</desc>
 									<desc xml:lang="sk">Palec</desc>
+									<desc xml:lang="hu">Inch</desc>
+									<desc xml:lang="sl">Inch</desc>
 								</info>
 							</enumeration>
 						</constraints>
@@ -3044,7 +3304,7 @@
 			<group oor:name="Zoom">
 				<info>
 					<desc xml:lang="en-US">Specifies the zoom for new spreadsheet documents.</desc>
-					<desc xml:lang="el">Specifies the zoom for new spreadsheet documents.</desc>
+					<desc xml:lang="el">Ορίζει την εστίαση για νέα υπολογιστικά φύλλα.</desc>
 					<desc xml:lang="nl">Specifies the zoom for new spreadsheet documents.</desc>
 					<desc xml:lang="fr">Specifies the zoom for new spreadsheet documents.</desc>
 					<desc xml:lang="fi">Specifies the zoom for new spreadsheet documents.</desc>
@@ -3068,6 +3328,9 @@
 					<desc xml:lang="th">Specifies the zoom for new spreadsheet documents.</desc>
 					<desc xml:lang="hi-IN">Specifies the zoom for new spreadsheet documents.</desc>
 					<desc xml:lang="x-comment">Specifies the zoom for new spreadsheet documents.</desc>
+					<desc xml:lang="hu">Specifies the zoom for new spreadsheet documents.</desc>
+					<desc xml:lang="sk">Specifies the zoom for new spreadsheet documents.</desc>
+					<desc xml:lang="sl">Specifies the zoom for new spreadsheet documents.</desc>
 				</info>
 				<prop oor:name="Type" oor:type="xs:int">
 					<!-- OldPath: Calc/Layout -->
@@ -3076,7 +3339,7 @@
 					<info>
 						<author>NN</author>
 						<desc xml:lang="en-US">Specifies the zoom type.</desc>
-							<desc xml:lang="el">Specifies the zoom type.</desc>
+							<desc xml:lang="el">Ορίζει τον τύπο εστίασης.</desc>
 							<desc xml:lang="nl">Specifies the zoom type.</desc>
 							<desc xml:lang="fr">Specifies the zoom type.</desc>
 							<desc xml:lang="fi">Specifies the zoom type.</desc>
@@ -3100,9 +3363,12 @@
 							<desc xml:lang="th">Specifies the zoom type.</desc>
 							<desc xml:lang="hi-IN">Specifies the zoom type.</desc>
 							<desc xml:lang="x-comment">Specifies the zoom type.</desc>
+							<desc xml:lang="hu">Specifies the zoom type.</desc>
+							<desc xml:lang="sk">Specifies the zoom type.</desc>
+							<desc xml:lang="sl">Specifies the zoom type.</desc>
 						<label xml:lang="en-US">Zoom Type</label>
-						<label xml:lang="el">Zoom Type</label>
-						<label xml:lang="nl">Zoom Type</label>
+						<label xml:lang="el">Τύπος Εστίασης</label>
+						<label xml:lang="nl">Zoomtype</label>
 						<label xml:lang="fr">Zoom Type</label>
 						<label xml:lang="fi">Zoom Type</label>
 						<label xml:lang="cs">Zoom Type</label>
@@ -3125,12 +3391,15 @@
 						<label xml:lang="th">Zoom Type</label>
 						<label xml:lang="hi-IN">Zoom Type</label>
 						<label xml:lang="x-comment">Zoom Type</label>
+						<label xml:lang="hu">Zoom Type</label>
+						<label xml:lang="sk">Zoom Type</label>
+						<label xml:lang="sl">Zoom Type</label>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
 							<info>
 								<desc xml:lang="en-US">Percentage value</desc>
-								<desc xml:lang="el">Percentage value</desc>
+								<desc xml:lang="el">Ποσοστιαία τιμή</desc>
 								<desc xml:lang="nl">Percentage value</desc>
 								<desc xml:lang="fr">Percentage value</desc>
 								<desc xml:lang="fi">Percentage value</desc>
@@ -3155,13 +3424,15 @@
 								<desc xml:lang="hi-IN">Percentage value</desc>
 								<desc xml:lang="x-comment">Percentage value</desc>
 								<desc xml:lang="sk">Percentage value</desc>
+								<desc xml:lang="hu">Percentage value</desc>
+								<desc xml:lang="sl">Percentage value</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
 							<info>
 								<desc xml:lang="en-US">Whole page</desc>
-								<desc xml:lang="el">Whole page</desc>
-								<desc xml:lang="nl">Whole page</desc>
+								<desc xml:lang="el">Ολόκληρη σελίδα</desc>
+								<desc xml:lang="nl">Hele pagina</desc>
 								<desc xml:lang="fr">Whole page</desc>
 								<desc xml:lang="fi">Whole page</desc>
 								<desc xml:lang="cs">Whole page</desc>
@@ -3185,13 +3456,15 @@
 								<desc xml:lang="hi-IN">Whole page</desc>
 								<desc xml:lang="x-comment">Whole page</desc>
 								<desc xml:lang="sk">Whole page</desc>
+								<desc xml:lang="hu">Whole page</desc>
+								<desc xml:lang="sl">Whole page</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="3">
 							<info>
 								<desc xml:lang="en-US">Width of a page</desc>
-								<desc xml:lang="el">Width of a page</desc>
-								<desc xml:lang="nl">Width of a page</desc>
+								<desc xml:lang="el">Πλάτος της σελίδας</desc>
+								<desc xml:lang="nl">Breedte van een pagina</desc>
 								<desc xml:lang="fr">Width of a page</desc>
 								<desc xml:lang="fi">Width of a page</desc>
 								<desc xml:lang="cs">Width of a page</desc>
@@ -3215,6 +3488,8 @@
 								<desc xml:lang="hi-IN">Width of a page</desc>
 								<desc xml:lang="x-comment">Width of a page</desc>
 								<desc xml:lang="sk">Width of a page</desc>
+								<desc xml:lang="hu">Width of a page</desc>
+								<desc xml:lang="sl">Width of a page</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -3227,7 +3502,7 @@
 					<info>
 						<author>NN</author>
 						<desc xml:lang="en-US">Specifies the percentage value to which the view is scaled.</desc>
-							<desc xml:lang="el">Specifies the percentage value to which the view is scaled.</desc>
+							<desc xml:lang="el">Ορίζει την ποσοστιαία τιμή στην οποία γίνεται η προβολή.</desc>
 							<desc xml:lang="nl">Specifies the percentage value to which the view is scaled.</desc>
 							<desc xml:lang="fr">Specifies the percentage value to which the view is scaled.</desc>
 							<desc xml:lang="fi">Specifies the percentage value to which the view is scaled.</desc>
@@ -3251,9 +3526,12 @@
 							<desc xml:lang="th">Specifies the percentage value to which the view is scaled.</desc>
 							<desc xml:lang="hi-IN">Specifies the percentage value to which the view is scaled.</desc>
 							<desc xml:lang="x-comment">Specifies the percentage value to which the view is scaled.</desc>
+							<desc xml:lang="hu">Specifies the percentage value to which the view is scaled.</desc>
+							<desc xml:lang="sk">Specifies the percentage value to which the view is scaled.</desc>
+							<desc xml:lang="sl">Specifies the percentage value to which the view is scaled.</desc>
 						<label xml:lang="en-US">Zoom Value</label>
-						<label xml:lang="el">Zoom Value</label>
-						<label xml:lang="nl">Zoom Value</label>
+						<label xml:lang="el">Τιμή εστίασης</label>
+						<label xml:lang="nl">Zoomwaarde</label>
 						<label xml:lang="fr">Zoom Value</label>
 						<label xml:lang="fi">Zoom Value</label>
 						<label xml:lang="cs">Zoom Value</label>
@@ -3276,6 +3554,9 @@
 						<label xml:lang="th">Zoom Value</label>
 						<label xml:lang="hi-IN">Zoom Value</label>
 						<label xml:lang="x-comment">Zoom Value</label>
+						<label xml:lang="hu">Zoom Value</label>
+						<label xml:lang="sk">Zoom Value</label>
+						<label xml:lang="sl">Zoom Value</label>
 					</info>
 					<value>100</value>
 				</prop>
@@ -3284,7 +3565,7 @@
 		<group oor:name="Input">
 			<info>
 				<desc xml:lang="en-US">Contains settings that affect cell input.</desc>
-				<desc xml:lang="el">Contains settings that affect cell input.</desc>
+				<desc xml:lang="el">Περιέχει ρυθμίσεις που ορίζουν την εισαγωγή σε κελιά.</desc>
 				<desc xml:lang="nl">Contains settings that affect cell input.</desc>
 				<desc xml:lang="fr">Contains settings that affect cell input.</desc>
 				<desc xml:lang="fi">Contains settings that affect cell input.</desc>
@@ -3308,6 +3589,9 @@
 				<desc xml:lang="th">Contains settings that affect cell input.</desc>
 				<desc xml:lang="hi-IN">Contains settings that affect cell input.</desc>
 				<desc xml:lang="x-comment">Contains settings that affect cell input.</desc>
+				<desc xml:lang="hu">Contains settings that affect cell input.</desc>
+				<desc xml:lang="sk">Contains settings that affect cell input.</desc>
+				<desc xml:lang="sl">Contains settings that affect cell input.</desc>
 			</info>
 			<prop oor:name="MoveSelection" oor:type="xs:boolean">
 				<!-- OldPath: Calc/Input -->
@@ -3316,7 +3600,7 @@
 				<info>
 					<author>NN</author>
 					<desc xml:lang="en-US">Specifies whether pressing the Enter key should move the selection.</desc>
-						<desc xml:lang="el">Specifies whether pressing the Enter key should move the selection.</desc>
+						<desc xml:lang="el">Ορίζει αν το πάτημα του πλήκτρου Enter θα μετακινεί την επιλογή.</desc>
 						<desc xml:lang="nl">Specifies whether pressing the Enter key should move the selection.</desc>
 						<desc xml:lang="fr">Specifies whether pressing the Enter key should move the selection.</desc>
 						<desc xml:lang="fi">Specifies whether pressing the Enter key should move the selection.</desc>
@@ -3340,9 +3624,12 @@
 						<desc xml:lang="th">Specifies whether pressing the Enter key should move the selection.</desc>
 						<desc xml:lang="hi-IN">Specifies whether pressing the Enter key should move the selection.</desc>
 						<desc xml:lang="x-comment">Specifies whether pressing the Enter key should move the selection.</desc>
+						<desc xml:lang="hu">Specifies whether pressing the Enter key should move the selection.</desc>
+						<desc xml:lang="sk">Specifies whether pressing the Enter key should move the selection.</desc>
+						<desc xml:lang="sl">Specifies whether pressing the Enter key should move the selection.</desc>
 					<label xml:lang="en-US">Press Enter to move selection</label>
-					<label xml:lang="el">Press Enter to move selection</label>
-					<label xml:lang="nl">Press Enter to move selection</label>
+					<label xml:lang="el">Πατήστε το Enter για να μετακινήσετε την επιλογή</label>
+					<label xml:lang="nl">Druk Enter om de selectie te verplaatsen</label>
 					<label xml:lang="fr">Press Enter to move selection</label>
 					<label xml:lang="fi">Press Enter to move selection</label>
 					<label xml:lang="cs">Press Enter to move selection</label>
@@ -3365,6 +3652,9 @@
 					<label xml:lang="th">Press Enter to move selection</label>
 					<label xml:lang="hi-IN">Press Enter to move selection</label>
 					<label xml:lang="x-comment">Press Enter to move selection</label>
+					<label xml:lang="hu">Press Enter to move selection</label>
+					<label xml:lang="sk">Press Enter to move selection</label>
+					<label xml:lang="sl">Press Enter to move selection</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -3375,7 +3665,7 @@
 				<info>
 					<author>NN</author>
 					<desc xml:lang="en-US">Specifies the direction where the selection is moved when pressing Enter, if moving is enabled.</desc>
-						<desc xml:lang="el">Specifies the direction where the selection is moved when pressing Enter, if moving is enabled.</desc>
+						<desc xml:lang="el">Ορίζει την κατεύθυνση προς την οποία μετακινείται η επιλογή με το πάτημα του Enter, αν η μετακίνηση έχει ενεργοποιηθεί.</desc>
 						<desc xml:lang="nl">Specifies the direction where the selection is moved when pressing Enter, if moving is enabled.</desc>
 						<desc xml:lang="fr">Specifies the direction where the selection is moved when pressing Enter, if moving is enabled.</desc>
 						<desc xml:lang="fi">Specifies the direction where the selection is moved when pressing Enter, if moving is enabled.</desc>
@@ -3399,9 +3689,12 @@
 						<desc xml:lang="th">Specifies the direction where the selection is moved when pressing Enter, if moving is enabled.</desc>
 						<desc xml:lang="hi-IN">Specifies the direction where the selection is moved when pressing Enter, if moving is enabled.</desc>
 						<desc xml:lang="x-comment">Specifies the direction where the selection is moved when pressing Enter, if moving is enabled.</desc>
+						<desc xml:lang="hu">Specifies the direction where the selection is moved when pressing Enter, if moving is enabled.</desc>
+						<desc xml:lang="sk">Specifies the direction where the selection is moved when pressing Enter, if moving is enabled.</desc>
+						<desc xml:lang="sl">Specifies the direction where the selection is moved when pressing Enter, if moving is enabled.</desc>
 					<label xml:lang="en-US">Direction to move selection</label>
-					<label xml:lang="el">Direction to move selection</label>
-					<label xml:lang="nl">Direction to move selection</label>
+					<label xml:lang="el">Κατεύθυνση μετακίνησης της επιλογής</label>
+					<label xml:lang="nl">Richting om de selectie te verplaatsen</label>
 					<label xml:lang="fr">Direction to move selection</label>
 					<label xml:lang="fi">Direction to move selection</label>
 					<label xml:lang="cs">Direction to move selection</label>
@@ -3424,12 +3717,15 @@
 					<label xml:lang="th">Direction to move selection</label>
 					<label xml:lang="hi-IN">Direction to move selection</label>
 					<label xml:lang="x-comment">Direction to move selection</label>
+					<label xml:lang="hu">Direction to move selection</label>
+					<label xml:lang="sk">Direction to move selection</label>
+					<label xml:lang="sl">Direction to move selection</label>
 				</info>
 				<constraints>
 					<enumeration oor:value="0">
 						<info>
 							<desc xml:lang="en-US">Move down</desc>
-							<desc xml:lang="el">Μετακίνηση προς τα κάτω</desc>
+							<desc xml:lang="el">Προς τα κάτω</desc>
 							<desc xml:lang="nl">Naar beneden</desc>
 							<desc xml:lang="fr">Vers le bas</desc>
 							<desc xml:lang="fi">Siirrä alas</desc>
@@ -3454,6 +3750,8 @@
 							<desc xml:lang="hi-IN">नीचे की ओर स्थान परिवर्तन करो</desc>
 							<desc xml:lang="x-comment">Move down</desc>
 							<desc xml:lang="sk">Presunúť dole</desc>
+							<desc xml:lang="hu">Move down</desc>
+							<desc xml:lang="sl">Move down</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
@@ -3484,6 +3782,8 @@
 							<desc xml:lang="hi-IN">दाहिनी ओर स्थान परिवर्तन करो</desc>
 							<desc xml:lang="x-comment">Move right</desc>
 							<desc xml:lang="sk">Presunúť vpravo</desc>
+							<desc xml:lang="hu">Move right</desc>
+							<desc xml:lang="sl">Move right</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
@@ -3514,6 +3814,8 @@
 							<desc xml:lang="hi-IN">ऊपर की ओर स्थान परिवर्तन करो</desc>
 							<desc xml:lang="x-comment">Move up</desc>
 							<desc xml:lang="sk">Presunúť nahor</desc>
+							<desc xml:lang="hu">Move up</desc>
+							<desc xml:lang="sl">Move up</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="3">
@@ -3544,6 +3846,8 @@
 							<desc xml:lang="hi-IN">बायाँ ओर स्थान परिवर्तन करो</desc>
 							<desc xml:lang="x-comment">Move left</desc>
 							<desc xml:lang="sk">Presunúť vľavo</desc>
+							<desc xml:lang="hu">Move left</desc>
+							<desc xml:lang="sl">Move left</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -3556,7 +3860,7 @@
 				<info>
 					<author>NN</author>
 					<desc xml:lang="en-US">Specifies whether the selected cell can be edited immediately after pressing the Enter key.</desc>
-						<desc xml:lang="el">Specifies whether the selected cell can be edited immediately after pressing the Enter key.</desc>
+						<desc xml:lang="el">Ορίζει αν το επιλεγμένο κελί μπορεί να επεξεργαστεί αμέσως μετά το πάτημα του πλήκτρου Enter.</desc>
 						<desc xml:lang="nl">Specifies whether the selected cell can be edited immediately after pressing the Enter key.</desc>
 						<desc xml:lang="fr">Specifies whether the selected cell can be edited immediately after pressing the Enter key.</desc>
 						<desc xml:lang="fi">Specifies whether the selected cell can be edited immediately after pressing the Enter key.</desc>
@@ -3580,9 +3884,12 @@
 						<desc xml:lang="th">Specifies whether the selected cell can be edited immediately after pressing the Enter key.</desc>
 						<desc xml:lang="hi-IN">Specifies whether the selected cell can be edited immediately after pressing the Enter key.</desc>
 						<desc xml:lang="x-comment">Specifies whether the selected cell can be edited immediately after pressing the Enter key.</desc>
+						<desc xml:lang="hu">Specifies whether the selected cell can be edited immediately after pressing the Enter key.</desc>
+						<desc xml:lang="sk">Specifies whether the selected cell can be edited immediately after pressing the Enter key.</desc>
+						<desc xml:lang="sl">Specifies whether the selected cell can be edited immediately after pressing the Enter key.</desc>
 					<label xml:lang="en-US">Press Enter to switch to edit mode</label>
-					<label xml:lang="el">Press Enter to switch to edit mode</label>
-					<label xml:lang="nl">Press Enter to switch to edit mode</label>
+					<label xml:lang="el">Πατήστε το Enter για να γυρίσετε σε κατάσταση επεξεργασίας</label>
+					<label xml:lang="nl">Druk de Entertoets om naar bewerkingsmodus te schakelen</label>
 					<label xml:lang="fr">Press Enter to switch to edit mode</label>
 					<label xml:lang="fi">Press Enter to switch to edit mode</label>
 					<label xml:lang="cs">Press Enter to switch to edit mode</label>
@@ -3605,6 +3912,9 @@
 					<label xml:lang="th">Press Enter to switch to edit mode</label>
 					<label xml:lang="hi-IN">Press Enter to switch to edit mode</label>
 					<label xml:lang="x-comment">Press Enter to switch to edit mode</label>
+					<label xml:lang="hu">Press Enter to switch to edit mode</label>
+					<label xml:lang="sk">Press Enter to switch to edit mode</label>
+					<label xml:lang="sl">Press Enter to switch to edit mode</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -3615,7 +3925,7 @@
 				<info>
 					<author>NN</author>
 					<desc xml:lang="en-US">Specifies whether formatting a cell also affects subsequently entered cells.</desc>
-						<desc xml:lang="el">Specifies whether formatting a cell also affects subsequently entered cells.</desc>
+						<desc xml:lang="el">Ορίζει αν η μορφοποίηση ενός κελιού θα επηρεάζει τα κελιά που πριστίθενται στη συνέχεια.</desc>
 						<desc xml:lang="nl">Specifies whether formatting a cell also affects subsequently entered cells.</desc>
 						<desc xml:lang="fr">Specifies whether formatting a cell also affects subsequently entered cells.</desc>
 						<desc xml:lang="fi">Specifies whether formatting a cell also affects subsequently entered cells.</desc>
@@ -3639,9 +3949,12 @@
 						<desc xml:lang="th">Specifies whether formatting a cell also affects subsequently entered cells.</desc>
 						<desc xml:lang="hi-IN">Specifies whether formatting a cell also affects subsequently entered cells.</desc>
 						<desc xml:lang="x-comment">Specifies whether formatting a cell also affects subsequently entered cells.</desc>
+						<desc xml:lang="hu">Specifies whether formatting a cell also affects subsequently entered cells.</desc>
+						<desc xml:lang="sk">Specifies whether formatting a cell also affects subsequently entered cells.</desc>
+						<desc xml:lang="sl">Specifies whether formatting a cell also affects subsequently entered cells.</desc>
 					<label xml:lang="en-US">Expand formatting</label>
-					<label xml:lang="el">Expand formatting</label>
-					<label xml:lang="nl">Expand formatting</label>
+					<label xml:lang="el">Επέκταση μορφοποίησης</label>
+					<label xml:lang="nl">Formattering uitbreiden</label>
 					<label xml:lang="fr">Expand formatting</label>
 					<label xml:lang="fi">Expand formatting</label>
 					<label xml:lang="cs">Expand formatting</label>
@@ -3664,6 +3977,9 @@
 					<label xml:lang="th">Expand formatting</label>
 					<label xml:lang="hi-IN">Expand formatting</label>
 					<label xml:lang="x-comment">Expand formatting</label>
+					<label xml:lang="hu">Expand formatting</label>
+					<label xml:lang="sk">Expand formatting</label>
+					<label xml:lang="sl">Expand formatting</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -3674,7 +3990,7 @@
 				<info>
 					<author>NN</author>
 					<desc xml:lang="en-US">Specifies whether formula references from the input line are highlighted in color in the cell.</desc>
-						<desc xml:lang="el">Specifies whether formula references from the input line are highlighted in color in the cell.</desc>
+						<desc xml:lang="el">Ορίζει αν οι παραπομπές τύπων από τη γραμμή εισαγωγής εμφανίζονται χρωματιστές στο κελί.</desc>
 						<desc xml:lang="nl">Specifies whether formula references from the input line are highlighted in color in the cell.</desc>
 						<desc xml:lang="fr">Specifies whether formula references from the input line are highlighted in color in the cell.</desc>
 						<desc xml:lang="fi">Specifies whether formula references from the input line are highlighted in color in the cell.</desc>
@@ -3698,6 +4014,9 @@
 						<desc xml:lang="th">Specifies whether formula references from the input line are highlighted in color in the cell.</desc>
 						<desc xml:lang="hi-IN">Specifies whether formula references from the input line are highlighted in color in the cell.</desc>
 						<desc xml:lang="x-comment">Specifies whether formula references from the input line are highlighted in color in the cell.</desc>
+						<desc xml:lang="hu">Specifies whether formula references from the input line are highlighted in color in the cell.</desc>
+						<desc xml:lang="sk">Specifies whether formula references from the input line are highlighted in color in the cell.</desc>
+						<desc xml:lang="sl">Specifies whether formula references from the input line are highlighted in color in the cell.</desc>
 					<label xml:lang="en-US">Show references in color</label>
 					<label xml:lang="el">Έγχ~ρωμη προβολή των παραπομπών</label>
 					<label xml:lang="nl">~Verwijzingen in kleur weergeven</label>
@@ -3724,6 +4043,8 @@
 					<label xml:lang="hi-IN">रेफरेन्स को रंग में दिखाओ</label>
 					<label xml:lang="x-comment">Show references in color</label>
 					<label xml:lang="sk">Zobraziť odkazy farebne</label>
+					<label xml:lang="hu">Show references in color</label>
+					<label xml:lang="sl">Show references in color</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -3734,7 +4055,7 @@
 				<info>
 					<author>NN</author>
 					<desc xml:lang="en-US">Specifies whether references are expanded when inserting columns or rows next to, above or below the reference range.</desc>
-						<desc xml:lang="el">Specifies whether references are expanded when inserting columns or rows next to, above or below the reference range.</desc>
+						<desc xml:lang="el">Ορίζει αν οι παραπομπές θα εκτείνονται όταν προστίθενται στήλες ή γραμμές δίπλα, πάνω ή κάτω από την περιοχή παραπομπής.</desc>
 						<desc xml:lang="nl">Specifies whether references are expanded when inserting columns or rows next to, above or below the reference range.</desc>
 						<desc xml:lang="fr">Specifies whether references are expanded when inserting columns or rows next to, above or below the reference range.</desc>
 						<desc xml:lang="fi">Specifies whether references are expanded when inserting columns or rows next to, above or below the reference range.</desc>
@@ -3758,9 +4079,12 @@
 						<desc xml:lang="th">Specifies whether references are expanded when inserting columns or rows next to, above or below the reference range.</desc>
 						<desc xml:lang="hi-IN">Specifies whether references are expanded when inserting columns or rows next to, above or below the reference range.</desc>
 						<desc xml:lang="x-comment">Specifies whether references are expanded when inserting columns or rows next to, above or below the reference range.</desc>
+						<desc xml:lang="hu">Specifies whether references are expanded when inserting columns or rows next to, above or below the reference range.</desc>
+						<desc xml:lang="sk">Specifies whether references are expanded when inserting columns or rows next to, above or below the reference range.</desc>
+						<desc xml:lang="sl">Specifies whether references are expanded when inserting columns or rows next to, above or below the reference range.</desc>
 					<label xml:lang="en-US">Expand references if new columns/rows are inserted</label>
-					<label xml:lang="el">Expand references if new columns/rows are inserted</label>
-					<label xml:lang="nl">Expand references if new columns/rows are inserted</label>
+					<label xml:lang="el">Επέκταση παραπομπών αν προστεθούν νέες γραμμές/στήλες</label>
+					<label xml:lang="nl">Verwijzingen uitbreiden wanneer nieuwe kolommen/rijen worden ingevoegd</label>
 					<label xml:lang="fr">Expand references if new columns/rows are inserted</label>
 					<label xml:lang="fi">Expand references if new columns/rows are inserted</label>
 					<label xml:lang="cs">Expand references if new columns/rows are inserted</label>
@@ -3783,6 +4107,9 @@
 					<label xml:lang="th">Expand references if new columns/rows are inserted</label>
 					<label xml:lang="hi-IN">Expand references if new columns/rows are inserted</label>
 					<label xml:lang="x-comment">Expand references if new columns/rows are inserted</label>
+					<label xml:lang="hu">Expand references if new columns/rows are inserted</label>
+					<label xml:lang="sk">Expand references if new columns/rows are inserted</label>
+					<label xml:lang="sl">Expand references if new columns/rows are inserted</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -3817,9 +4144,12 @@
 						<desc xml:lang="th">Specifies whether column and row headers are highlighted in the selected columns or rows.</desc>
 						<desc xml:lang="hi-IN">Specifies whether column and row headers are highlighted in the selected columns or rows.</desc>
 						<desc xml:lang="x-comment">Specifies whether column and row headers are highlighted in the selected columns or rows.</desc>
+						<desc xml:lang="hu">Specifies whether column and row headers are highlighted in the selected columns or rows.</desc>
+						<desc xml:lang="sk">Specifies whether column and row headers are highlighted in the selected columns or rows.</desc>
+						<desc xml:lang="sl">Specifies whether column and row headers are highlighted in the selected columns or rows.</desc>
 					<label xml:lang="en-US">Highlight selection in column/row headings</label>
 					<label xml:lang="el">Highlight selection in column/row headings</label>
-					<label xml:lang="nl">Highlight selection in column/row headings</label>
+					<label xml:lang="nl">Selectie in kolom/rijkoppen markeren</label>
 					<label xml:lang="fr">Highlight selection in column/row headings</label>
 					<label xml:lang="fi">Highlight selection in column/row headings</label>
 					<label xml:lang="cs">Highlight selection in column/row headings</label>
@@ -3842,6 +4172,9 @@
 					<label xml:lang="th">Highlight selection in column/row headings</label>
 					<label xml:lang="hi-IN">Highlight selection in column/row headings</label>
 					<label xml:lang="x-comment">Highlight selection in column/row headings</label>
+					<label xml:lang="hu">Highlight selection in column/row headings</label>
+					<label xml:lang="sk">Highlight selection in column/row headings</label>
+					<label xml:lang="sl">Highlight selection in column/row headings</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -3876,9 +4209,12 @@
 						<desc xml:lang="th">Specifies whether pressing Enter will move the cursor to the column where it was before the Tab key was used to change columns.</desc>
 						<desc xml:lang="hi-IN">Specifies whether pressing Enter will move the cursor to the column where it was before the Tab key was used to change columns.</desc>
 						<desc xml:lang="x-comment">Specifies whether pressing Enter will move the cursor to the column where it was before the Tab key was used to change columns.</desc>
+						<desc xml:lang="hu">Specifies whether pressing Enter will move the cursor to the column where it was before the Tab key was used to change columns.</desc>
+						<desc xml:lang="sk">Specifies whether pressing Enter will move the cursor to the column where it was before the Tab key was used to change columns.</desc>
+						<desc xml:lang="sl">Specifies whether pressing Enter will move the cursor to the column where it was before the Tab key was used to change columns.</desc>
 					<label xml:lang="en-US">Use Tab Column</label>
 					<label xml:lang="el">Use Tab Column</label>
-					<label xml:lang="nl">Use Tab Column</label>
+					<label xml:lang="nl">Tabulatorkolom gebruiken</label>
 					<label xml:lang="fr">Use Tab Column</label>
 					<label xml:lang="fi">Use Tab Column</label>
 					<label xml:lang="cs">Use Tab Column</label>
@@ -3901,6 +4237,9 @@
 					<label xml:lang="th">Use Tab Column</label>
 					<label xml:lang="hi-IN">Use Tab Column</label>
 					<label xml:lang="x-comment">Use Tab Column</label>
+					<label xml:lang="hu">Use Tab Column</label>
+					<label xml:lang="sk">Use Tab Column</label>
+					<label xml:lang="sl">Use Tab Column</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -3933,9 +4272,12 @@
 						<desc xml:lang="th">Specifies whether text metrics from the printer will be used to format text on the screen.</desc>
 						<desc xml:lang="hi-IN">Specifies whether text metrics from the printer will be used to format text on the screen.</desc>
 						<desc xml:lang="x-comment">Specifies whether text metrics from the printer will be used to format text on the screen.</desc>
+						<desc xml:lang="hu">Specifies whether text metrics from the printer will be used to format text on the screen.</desc>
+						<desc xml:lang="sk">Specifies whether text metrics from the printer will be used to format text on the screen.</desc>
+						<desc xml:lang="sl">Specifies whether text metrics from the printer will be used to format text on the screen.</desc>
 					<label xml:lang="en-US">Use printer metrics for text formatting</label>
 					<label xml:lang="el">Χρήση ~διαστάσεων εκτύπωσης για την μορφοποίηση του κειμένου</label>
-					<label xml:lang="nl">~Printermaten voor tekstopmaak gebruiken</label>
+					<label xml:lang="nl">~Printermetrieken voor tekstopmaak gebruiken</label>
 					<label xml:lang="fr">Utilisation des paramètres de l&apos;imprimante pour le formatage du texte</label>
 					<label xml:lang="fi">Käytä tulostimen mittoja tekstin muotoilussa</label>
 					<label xml:lang="cs">Použít metriku tiskárny pro formátování textu</label>
@@ -3959,6 +4301,8 @@
 					<label xml:lang="hi-IN">टेक्स्ट् का रचना करने केलिए मुद्रक मेट्रिक्स का उपयोग करो </label>
 					<label xml:lang="x-comment">Use printer metrics for text formatting</label>
 					<label xml:lang="sk">Použiť mierky tlačiarne pri formátovaní textu</label>
+					<label xml:lang="hu">Use printer metrics for text formatting</label>
+					<label xml:lang="sl">Use printer metrics for text formatting</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -3967,7 +4311,7 @@
 				<info>
 					<author>NN</author>
 					<desc xml:lang="en-US">Specifies whether a warning box will appear when existing cells are replaced (i.e. pasting from clipboard).</desc>
-						<desc xml:lang="el">Specifies whether a warning box will appear when existing cells are replaced (i.e. pasting from clipboard).</desc>
+						<desc xml:lang="el">Ορίζει αν θα εμφανίζεται προειδοποίηση όταν αντικαθίστανται υπάρχοντα κελιά (π.χ. επικόλληση από το πρόχειρο).</desc>
 						<desc xml:lang="nl">Specifies whether a warning box will appear when existing cells are replaced (i.e. pasting from clipboard).</desc>
 						<desc xml:lang="fr">Specifies whether a warning box will appear when existing cells are replaced (i.e. pasting from clipboard).</desc>
 						<desc xml:lang="fi">Specifies whether a warning box will appear when existing cells are replaced (i.e. pasting from clipboard).</desc>
@@ -3991,9 +4335,12 @@
 						<desc xml:lang="th">Specifies whether a warning box will appear when existing cells are replaced (i.e. pasting from clipboard).</desc>
 						<desc xml:lang="hi-IN">Specifies whether a warning box will appear when existing cells are replaced (i.e. pasting from clipboard).</desc>
 						<desc xml:lang="x-comment">Specifies whether a warning box will appear when existing cells are replaced (i.e. pasting from clipboard).</desc>
+						<desc xml:lang="hu">Specifies whether a warning box will appear when existing cells are replaced (i.e. pasting from clipboard).</desc>
+						<desc xml:lang="sk">Specifies whether a warning box will appear when existing cells are replaced (i.e. pasting from clipboard).</desc>
+						<desc xml:lang="sl">Specifies whether a warning box will appear when existing cells are replaced (i.e. pasting from clipboard).</desc>
 					<label xml:lang="en-US">Warn before replacing cells</label>
-					<label xml:lang="el">Warn before replacing cells</label>
-					<label xml:lang="nl">Warn before replacing cells</label>
+					<label xml:lang="el">Προειδοποίηση πριν την αντικατάσταση κελιών</label>
+					<label xml:lang="nl">Waarschuwen alvorens cellen te vervangen</label>
 					<label xml:lang="fr">Warn before replacing cells</label>
 					<label xml:lang="fi">Warn before replacing cells</label>
 					<label xml:lang="cs">Warn before replacing cells</label>
@@ -4016,6 +4363,9 @@
 					<label xml:lang="th">Warn before replacing cells</label>
 					<label xml:lang="hi-IN">Warn before replacing cells</label>
 					<label xml:lang="x-comment">Warn before replacing cells</label>
+					<label xml:lang="hu">Warn before replacing cells</label>
+					<label xml:lang="sk">Warn before replacing cells</label>
+					<label xml:lang="sl">Warn before replacing cells</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -4025,7 +4375,7 @@
 				<info>
 					<author>NN</author>
 					<desc xml:lang="en-US">Specifies the functions last used.</desc>
-						<desc xml:lang="el">Specifies the functions last used.</desc>
+						<desc xml:lang="el">Ορίζει τις πιο πρόσφατα χρησιμοποιημένες συναρτήσεις.</desc>
 						<desc xml:lang="nl">Specifies the functions last used.</desc>
 						<desc xml:lang="fr">Specifies the functions last used.</desc>
 						<desc xml:lang="fi">Specifies the functions last used.</desc>
@@ -4049,9 +4399,12 @@
 						<desc xml:lang="th">Specifies the functions last used.</desc>
 						<desc xml:lang="hi-IN">Specifies the functions last used.</desc>
 						<desc xml:lang="x-comment">Specifies the functions last used.</desc>
+						<desc xml:lang="hu">Specifies the functions last used.</desc>
+						<desc xml:lang="sk">Specifies the functions last used.</desc>
+						<desc xml:lang="sl">Specifies the functions last used.</desc>
 					<label xml:lang="en-US">Last Used Functions</label>
-					<label xml:lang="el">Last Used Functions</label>
-					<label xml:lang="nl">Last Used Functions</label>
+					<label xml:lang="el">Πιο πρόσφατα χρησιμοποιημένες συναρτήσεις</label>
+					<label xml:lang="nl">Laatst gebruikte functies</label>
 					<label xml:lang="fr">Last Used Functions</label>
 					<label xml:lang="fi">Last Used Functions</label>
 					<label xml:lang="cs">Last Used Functions</label>
@@ -4074,12 +4427,15 @@
 					<label xml:lang="th">Last Used Functions</label>
 					<label xml:lang="hi-IN">Last Used Functions</label>
 					<label xml:lang="x-comment">Last Used Functions</label>
+					<label xml:lang="hu">Last Used Functions</label>
+					<label xml:lang="sk">Last Used Functions</label>
+					<label xml:lang="sl">Last Used Functions</label>
 				</info>
 				<constraints>
 					<enumeration oor:value="224">
 						<info>
 							<desc xml:lang="en-US">SUM</desc>
-							<desc xml:lang="el">Άθροισμα</desc>
+							<desc xml:lang="el">SUM</desc>
 							<desc xml:lang="nl">Som</desc>
 							<desc xml:lang="fr">Somme</desc>
 							<desc xml:lang="fi">Summa</desc>
@@ -4104,12 +4460,14 @@
 							<desc xml:lang="hi-IN">जोड़</desc>
 							<desc xml:lang="x-comment">SUM</desc>
 							<desc xml:lang="sk">Celkom</desc>
+							<desc xml:lang="hu">SUM</desc>
+							<desc xml:lang="sl">SUM</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="226">
 						<info>
 							<desc xml:lang="en-US">AVERAGE</desc>
-							<desc xml:lang="el">Μέση τιμή</desc>
+							<desc xml:lang="el">AVERAGE</desc>
 							<desc xml:lang="nl">Gemiddelde</desc>
 							<desc xml:lang="fr">Moyenne</desc>
 							<desc xml:lang="fi">Keskiarvo</desc>
@@ -4134,12 +4492,14 @@
 							<desc xml:lang="hi-IN">माध्य</desc>
 							<desc xml:lang="x-comment">AVERAGE</desc>
 							<desc xml:lang="sk">Priemer</desc>
+							<desc xml:lang="hu">AVERAGE</desc>
+							<desc xml:lang="sl">AVERAGE</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="222">
 						<info>
 							<desc xml:lang="en-US">MIN</desc>
-							<desc xml:lang="el">Ελαχ</desc>
+							<desc xml:lang="el">MIN</desc>
 							<desc xml:lang="nl">MIN</desc>
 							<desc xml:lang="fr">MIN</desc>
 							<desc xml:lang="fi">Väh</desc>
@@ -4164,12 +4524,14 @@
 							<desc xml:lang="hi-IN">न्यूनतम</desc>
 							<desc xml:lang="x-comment">MIN</desc>
 							<desc xml:lang="sk">MIN</desc>
+							<desc xml:lang="hu">MIN</desc>
+							<desc xml:lang="sl">MIN</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="223">
 						<info>
 							<desc xml:lang="en-US">MAX</desc>
-							<desc xml:lang="el">Μεγ</desc>
+							<desc xml:lang="el">MAX</desc>
 							<desc xml:lang="nl">MAX</desc>
 							<desc xml:lang="fr">MAX</desc>
 							<desc xml:lang="fi">Enint</desc>
@@ -4194,6 +4556,8 @@
 							<desc xml:lang="hi-IN">अधिकतम</desc>
 							<desc xml:lang="x-comment">MAX</desc>
 							<desc xml:lang="sk">MAX</desc>
+							<desc xml:lang="hu">MAX</desc>
+							<desc xml:lang="sl">MAX</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="5">
@@ -4224,6 +4588,8 @@
 							<desc xml:lang="hi-IN">IF</desc>
 							<desc xml:lang="x-comment">IF</desc>
 							<desc xml:lang="sk">IF</desc>
+							<desc xml:lang="hu">IF</desc>
+							<desc xml:lang="sl">IF</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -4260,9 +4626,12 @@
 						<desc xml:lang="th">Specifies whether the AutoInput function is active.</desc>
 						<desc xml:lang="hi-IN">Specifies whether the AutoInput function is active.</desc>
 						<desc xml:lang="x-comment">Specifies whether the AutoInput function is active.</desc>
+						<desc xml:lang="hu">Specifies whether the AutoInput function is active.</desc>
+						<desc xml:lang="sk">Specifies whether the AutoInput function is active.</desc>
+						<desc xml:lang="sl">Specifies whether the AutoInput function is active.</desc>
 					<label xml:lang="en-US">Auto Input</label>
 					<label xml:lang="el">Auto Input</label>
-					<label xml:lang="nl">Auto Input</label>
+					<label xml:lang="nl">AutoInvoer</label>
 					<label xml:lang="fr">Auto Input</label>
 					<label xml:lang="fi">Auto Input</label>
 					<label xml:lang="cs">Auto Input</label>
@@ -4285,6 +4654,9 @@
 					<label xml:lang="th">Auto Input</label>
 					<label xml:lang="hi-IN">Auto Input</label>
 					<label xml:lang="x-comment">Auto Input</label>
+					<label xml:lang="hu">Auto Input</label>
+					<label xml:lang="sk">Auto Input</label>
+					<label xml:lang="sl">Auto Input</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -4319,9 +4691,12 @@
 						<desc xml:lang="th">Specifies whether all the Detective traces in the sheet are automatically refreshed when modifying a formula.</desc>
 						<desc xml:lang="hi-IN">Specifies whether all the Detective traces in the sheet are automatically refreshed when modifying a formula.</desc>
 						<desc xml:lang="x-comment">Specifies whether all the Detective traces in the sheet are automatically refreshed when modifying a formula.</desc>
+						<desc xml:lang="hu">Specifies whether all the Detective traces in the sheet are automatically refreshed when modifying a formula.</desc>
+						<desc xml:lang="sk">Specifies whether all the Detective traces in the sheet are automatically refreshed when modifying a formula.</desc>
+						<desc xml:lang="sl">Specifies whether all the Detective traces in the sheet are automatically refreshed when modifying a formula.</desc>
 					<label xml:lang="en-US">Detective Auto Refresh</label>
 					<label xml:lang="el">Detective Auto Refresh</label>
-					<label xml:lang="nl">Detective Auto Refresh</label>
+					<label xml:lang="nl">Detective AutoVerversing</label>
 					<label xml:lang="fr">Detective Auto Refresh</label>
 					<label xml:lang="fi">Detective Auto Refresh</label>
 					<label xml:lang="cs">Detective Auto Refresh</label>
@@ -4344,6 +4719,9 @@
 					<label xml:lang="th">Detective Auto Refresh</label>
 					<label xml:lang="hi-IN">Detective Auto Refresh</label>
 					<label xml:lang="x-comment">Detective Auto Refresh</label>
+					<label xml:lang="hu">Detective Auto Refresh</label>
+					<label xml:lang="sk">Detective Auto Refresh</label>
+					<label xml:lang="sl">Detective Auto Refresh</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -4375,6 +4753,9 @@
 				<desc xml:lang="th">Contains settings for the grid.</desc>
 				<desc xml:lang="hi-IN">Contains settings for the grid.</desc>
 				<desc xml:lang="x-comment">Contains settings for the grid.</desc>
+				<desc xml:lang="hu">Contains settings for the grid.</desc>
+				<desc xml:lang="sk">Contains settings for the grid.</desc>
+				<desc xml:lang="sl">Contains settings for the grid.</desc>
 			</info>
 			<group oor:name="Option">
 				<info>
@@ -4403,6 +4784,9 @@
 					<desc xml:lang="th">Contains settings that control the behavior of the grid.</desc>
 					<desc xml:lang="hi-IN">Contains settings that control the behavior of the grid.</desc>
 					<desc xml:lang="x-comment">Contains settings that control the behavior of the grid.</desc>
+					<desc xml:lang="hu">Contains settings that control the behavior of the grid.</desc>
+					<desc xml:lang="sk">Contains settings that control the behavior of the grid.</desc>
+					<desc xml:lang="sl">Contains settings that control the behavior of the grid.</desc>
 				</info>
 				<prop oor:name="SnapToGrid" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Grid/Options -->
@@ -4435,6 +4819,9 @@
 							<desc xml:lang="th">Specifies whether frames, drawing elements and form functions are only movable between grid points.</desc>
 							<desc xml:lang="hi-IN">Specifies whether frames, drawing elements and form functions are only movable between grid points.</desc>
 							<desc xml:lang="x-comment">Specifies whether frames, drawing elements and form functions are only movable between grid points.</desc>
+							<desc xml:lang="hu">Specifies whether frames, drawing elements and form functions are only movable between grid points.</desc>
+							<desc xml:lang="sk">Specifies whether frames, drawing elements and form functions are only movable between grid points.</desc>
+							<desc xml:lang="sl">Specifies whether frames, drawing elements and form functions are only movable between grid points.</desc>
 						<label xml:lang="en-US">Snap to grid</label>
 						<label xml:lang="el">Προσκόλληση στο πλέγμα</label>
 						<label xml:lang="nl">Vangen aan raster</label>
@@ -4461,6 +4848,8 @@
 						<label xml:lang="hi-IN">जाल में स्नॉप</label>
 						<label xml:lang="x-comment">Snap to grid</label>
 						<label xml:lang="sk">Zachytiť na mriežku</label>
+						<label xml:lang="hu">Snap to grid</label>
+						<label xml:lang="sl">Snap to grid</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -4495,9 +4884,12 @@
 							<desc xml:lang="th">Specifies whether the snap grid is matched with the main grid.</desc>
 							<desc xml:lang="hi-IN">Specifies whether the snap grid is matched with the main grid.</desc>
 							<desc xml:lang="x-comment">Specifies whether the snap grid is matched with the main grid.</desc>
+							<desc xml:lang="hu">Specifies whether the snap grid is matched with the main grid.</desc>
+							<desc xml:lang="sk">Specifies whether the snap grid is matched with the main grid.</desc>
+							<desc xml:lang="sl">Specifies whether the snap grid is matched with the main grid.</desc>
 						<label xml:lang="en-US">Size to grid</label>
 						<label xml:lang="el">Size to grid</label>
-						<label xml:lang="nl">Size to grid</label>
+						<label xml:lang="nl">Afmeting aan raster</label>
 						<label xml:lang="fr">Size to grid</label>
 						<label xml:lang="fi">Size to grid</label>
 						<label xml:lang="cs">Size to grid</label>
@@ -4520,6 +4912,9 @@
 						<label xml:lang="th">Size to grid</label>
 						<label xml:lang="hi-IN">Size to grid</label>
 						<label xml:lang="x-comment">Size to grid</label>
+						<label xml:lang="hu">Size to grid</label>
+						<label xml:lang="sk">Size to grid</label>
+						<label xml:lang="sl">Size to grid</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -4554,9 +4949,12 @@
 							<desc xml:lang="th">Specifies whether the grid is displayed.</desc>
 							<desc xml:lang="hi-IN">Specifies whether the grid is displayed.</desc>
 							<desc xml:lang="x-comment">Specifies whether the grid is displayed.</desc>
+							<desc xml:lang="hu">Specifies whether the grid is displayed.</desc>
+							<desc xml:lang="sk">Specifies whether the grid is displayed.</desc>
+							<desc xml:lang="sl">Specifies whether the grid is displayed.</desc>
 						<label xml:lang="en-US">Visible grid</label>
 						<label xml:lang="el">Visible grid</label>
-						<label xml:lang="nl">Visible grid</label>
+						<label xml:lang="nl">Zichtbaar raster</label>
 						<label xml:lang="fr">Visible grid</label>
 						<label xml:lang="fi">Visible grid</label>
 						<label xml:lang="cs">Visible grid</label>
@@ -4579,6 +4977,9 @@
 						<label xml:lang="th">Visible grid</label>
 						<label xml:lang="hi-IN">Visible grid</label>
 						<label xml:lang="x-comment">Visible grid</label>
+						<label xml:lang="hu">Visible grid</label>
+						<label xml:lang="sk">Visible grid</label>
+						<label xml:lang="sl">Visible grid</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -4613,9 +5014,12 @@
 							<desc xml:lang="th">Specifies whether the current grid settings are changed symmetrically. The resolution and subdivision for the X/Y axes remain the same.</desc>
 							<desc xml:lang="hi-IN">Specifies whether the current grid settings are changed symmetrically. The resolution and subdivision for the X/Y axes remain the same.</desc>
 							<desc xml:lang="x-comment">Specifies whether the current grid settings are changed symmetrically. The resolution and subdivision for the X/Y axes remain the same.</desc>
+							<desc xml:lang="hu">Specifies whether the current grid settings are changed symmetrically. The resolution and subdivision for the X/Y axes remain the same.</desc>
+							<desc xml:lang="sk">Specifies whether the current grid settings are changed symmetrically. The resolution and subdivision for the X/Y axes remain the same.</desc>
+							<desc xml:lang="sl">Specifies whether the current grid settings are changed symmetrically. The resolution and subdivision for the X/Y axes remain the same.</desc>
 						<label xml:lang="en-US">Synchronize axes</label>
 						<label xml:lang="el">Synchronize axes</label>
-						<label xml:lang="nl">Synchronize axes</label>
+						<label xml:lang="nl">Assen synchroniseren</label>
 						<label xml:lang="fr">Synchronize axes</label>
 						<label xml:lang="fi">Synchronize axes</label>
 						<label xml:lang="cs">Synchronize axes</label>
@@ -4638,6 +5042,9 @@
 						<label xml:lang="th">Synchronize axes</label>
 						<label xml:lang="hi-IN">Synchronize axes</label>
 						<label xml:lang="x-comment">Synchronize axes</label>
+						<label xml:lang="hu">Synchronize axes</label>
+						<label xml:lang="sk">Synchronize axes</label>
+						<label xml:lang="sl">Synchronize axes</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -4673,6 +5080,9 @@
 							<desc xml:lang="th">Defines the horizontal distance between the single grid points in 1/100th millimeters.</desc>
 							<desc xml:lang="hi-IN">Defines the horizontal distance between the single grid points in 1/100th millimeters.</desc>
 							<desc xml:lang="x-comment">Defines the horizontal distance between the single grid points in 1/100th millimeters.</desc>
+							<desc xml:lang="hu">Defines the horizontal distance between the single grid points in 1/100th millimeters.</desc>
+							<desc xml:lang="sk">Defines the horizontal distance between the single grid points in 1/100th millimeters.</desc>
+							<desc xml:lang="sl">Defines the horizontal distance between the single grid points in 1/100th millimeters.</desc>
 						<label xml:lang="en-US">X axis</label>
 						<label xml:lang="el">Άξονας X</label>
 						<label xml:lang="nl">X-as</label>
@@ -4699,6 +5109,8 @@
 						<label xml:lang="hi-IN">X अक्ष</label>
 						<label xml:lang="x-comment">X axis</label>
 						<label xml:lang="sk">Os X</label>
+						<label xml:lang="hu">X axis</label>
+						<label xml:lang="sl">X axis</label>
 					</info>
 					<prop oor:name="Metric" oor:type="xs:int">
 						<info>
@@ -4727,6 +5139,9 @@
 								<desc xml:lang="th">Specifies the distance that is used with locales that use the metric system.</desc>
 								<desc xml:lang="hi-IN">Specifies the distance that is used with locales that use the metric system.</desc>
 								<desc xml:lang="x-comment">Specifies the distance that is used with locales that use the metric system.</desc>
+								<desc xml:lang="hu">Specifies the distance that is used with locales that use the metric system.</desc>
+								<desc xml:lang="sk">Specifies the distance that is used with locales that use the metric system.</desc>
+								<desc xml:lang="sl">Specifies the distance that is used with locales that use the metric system.</desc>
 							<label xml:lang="en-US"/>
 						</info>
 						<value>1000</value>
@@ -4758,6 +5173,9 @@
 								<desc xml:lang="th">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 								<desc xml:lang="hi-IN">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 								<desc xml:lang="x-comment">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
+								<desc xml:lang="hu">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
+								<desc xml:lang="sk">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
+								<desc xml:lang="sl">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 							<label xml:lang="en-US"/>
 						</info>
 						<value>1270</value>
@@ -4795,6 +5213,9 @@
 							<desc xml:lang="th">Defines the vertical distance between the single grid points in 1/100th millimeters.</desc>
 							<desc xml:lang="hi-IN">Defines the vertical distance between the single grid points in 1/100th millimeters.</desc>
 							<desc xml:lang="x-comment">Defines the vertical distance between the single grid points in 1/100th millimeters.</desc>
+							<desc xml:lang="hu">Defines the vertical distance between the single grid points in 1/100th millimeters.</desc>
+							<desc xml:lang="sk">Defines the vertical distance between the single grid points in 1/100th millimeters.</desc>
+							<desc xml:lang="sl">Defines the vertical distance between the single grid points in 1/100th millimeters.</desc>
 						<label xml:lang="en-US">Y axis</label>
 						<label xml:lang="el">Άξονας Y</label>
 						<label xml:lang="nl">Y-as</label>
@@ -4821,6 +5242,8 @@
 						<label xml:lang="hi-IN">Y अक्ष</label>
 						<label xml:lang="x-comment">Y axis</label>
 						<label xml:lang="sk">Os Y</label>
+						<label xml:lang="hu">Y axis</label>
+						<label xml:lang="sl">Y axis</label>
 					</info>
 					<prop oor:name="Metric" oor:type="xs:int">
 						<info>
@@ -4849,6 +5272,9 @@
 								<desc xml:lang="th">Specifies the distance that is used with locales that use the metric system.</desc>
 								<desc xml:lang="hi-IN">Specifies the distance that is used with locales that use the metric system.</desc>
 								<desc xml:lang="x-comment">Specifies the distance that is used with locales that use the metric system.</desc>
+								<desc xml:lang="hu">Specifies the distance that is used with locales that use the metric system.</desc>
+								<desc xml:lang="sk">Specifies the distance that is used with locales that use the metric system.</desc>
+								<desc xml:lang="sl">Specifies the distance that is used with locales that use the metric system.</desc>
 							<label xml:lang="en-US"/>
 						</info>
 						<value>1000</value>
@@ -4880,6 +5306,9 @@
 								<desc xml:lang="th">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 								<desc xml:lang="hi-IN">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 								<desc xml:lang="x-comment">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
+								<desc xml:lang="hu">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
+								<desc xml:lang="sk">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
+								<desc xml:lang="sl">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 							<label xml:lang="en-US"/>
 						</info>
 						<value>1270</value>
@@ -4889,7 +5318,7 @@
 			<group oor:name="Resolution">
 				<info>
 					<desc xml:lang="en-US">Specifies the grid&apos;s resolution.</desc>
-					<desc xml:lang="el">Specifies the grid&apos;s resolution.</desc>
+					<desc xml:lang="el">Ορίζει την ανάλυση του πλέγματος.</desc>
 					<desc xml:lang="nl">Specifies the grid&apos;s resolution.</desc>
 					<desc xml:lang="fr">Specifies the grid&apos;s resolution.</desc>
 					<desc xml:lang="fi">Specifies the grid&apos;s resolution.</desc>
@@ -4913,6 +5342,9 @@
 					<desc xml:lang="th">Specifies the grid&apos;s resolution.</desc>
 					<desc xml:lang="hi-IN">Specifies the grid&apos;s resolution.</desc>
 					<desc xml:lang="x-comment">Specifies the grid&apos;s resolution.</desc>
+					<desc xml:lang="hu">Specifies the grid&apos;s resolution.</desc>
+					<desc xml:lang="sk">Specifies the grid&apos;s resolution.</desc>
+					<desc xml:lang="sl">Specifies the grid&apos;s resolution.</desc>
 				</info>
 				<group oor:name="XAxis">
 					<!-- OldPath: Calc/Grid/Resolution -->
@@ -4946,9 +5378,12 @@
 							<desc xml:lang="th">Defines the distance between grid points on the X axis in 1/100th millimeters.</desc>
 							<desc xml:lang="hi-IN">Defines the distance between grid points on the X axis in 1/100th millimeters.</desc>
 							<desc xml:lang="x-comment">Defines the distance between grid points on the X axis in 1/100th millimeters.</desc>
+							<desc xml:lang="hu">Defines the distance between grid points on the X axis in 1/100th millimeters.</desc>
+							<desc xml:lang="sk">Defines the distance between grid points on the X axis in 1/100th millimeters.</desc>
+							<desc xml:lang="sl">Defines the distance between grid points on the X axis in 1/100th millimeters.</desc>
 						<label xml:lang="en-US">X Axis Resolution</label>
-						<label xml:lang="el">X Axis Resolution</label>
-						<label xml:lang="nl">X Axis Resolution</label>
+						<label xml:lang="el">Ανάλυση Άξονα X</label>
+						<label xml:lang="nl">Resolutie X-as</label>
 						<label xml:lang="fr">X Axis Resolution</label>
 						<label xml:lang="fi">X Axis Resolution</label>
 						<label xml:lang="cs">X Axis Resolution</label>
@@ -4971,6 +5406,9 @@
 						<label xml:lang="th">X Axis Resolution</label>
 						<label xml:lang="hi-IN">X Axis Resolution</label>
 						<label xml:lang="x-comment">X Axis Resolution</label>
+						<label xml:lang="hu">X Axis Resolution</label>
+						<label xml:lang="sk">X Axis Resolution</label>
+						<label xml:lang="sl">X Axis Resolution</label>
 					</info>
 					<prop oor:name="Metric" oor:type="xs:int">
 						<info>
@@ -4999,6 +5437,9 @@
 								<desc xml:lang="th">Specifies the distance that is used with locales that use the metric system.</desc>
 								<desc xml:lang="hi-IN">Specifies the distance that is used with locales that use the metric system.</desc>
 								<desc xml:lang="x-comment">Specifies the distance that is used with locales that use the metric system.</desc>
+								<desc xml:lang="hu">Specifies the distance that is used with locales that use the metric system.</desc>
+								<desc xml:lang="sk">Specifies the distance that is used with locales that use the metric system.</desc>
+								<desc xml:lang="sl">Specifies the distance that is used with locales that use the metric system.</desc>
 							<label xml:lang="en-US"/>
 						</info>
 						<value>1000</value>
@@ -5030,6 +5471,9 @@
 								<desc xml:lang="th">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 								<desc xml:lang="hi-IN">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 								<desc xml:lang="x-comment">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
+								<desc xml:lang="hu">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
+								<desc xml:lang="sk">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
+								<desc xml:lang="sl">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 							<label xml:lang="en-US"/>
 						</info>
 						<value>1270</value>
@@ -5067,9 +5511,12 @@
 							<desc xml:lang="th">Defines the distance between grid points on the Y axis in 1/100th millimeters.</desc>
 							<desc xml:lang="hi-IN">Defines the distance between grid points on the Y axis in 1/100th millimeters.</desc>
 							<desc xml:lang="x-comment">Defines the distance between grid points on the Y axis in 1/100th millimeters.</desc>
+							<desc xml:lang="hu">Defines the distance between grid points on the Y axis in 1/100th millimeters.</desc>
+							<desc xml:lang="sk">Defines the distance between grid points on the Y axis in 1/100th millimeters.</desc>
+							<desc xml:lang="sl">Defines the distance between grid points on the Y axis in 1/100th millimeters.</desc>
 						<label xml:lang="en-US">Y Axis Resolution</label>
 						<label xml:lang="el">Y Axis Resolution</label>
-						<label xml:lang="nl">Y Axis Resolution</label>
+						<label xml:lang="nl">Resolutie Y-as</label>
 						<label xml:lang="fr">Y Axis Resolution</label>
 						<label xml:lang="fi">Y Axis Resolution</label>
 						<label xml:lang="cs">Y Axis Resolution</label>
@@ -5092,6 +5539,9 @@
 						<label xml:lang="th">Y Axis Resolution</label>
 						<label xml:lang="hi-IN">Y Axis Resolution</label>
 						<label xml:lang="x-comment">Y Axis Resolution</label>
+						<label xml:lang="hu">Y Axis Resolution</label>
+						<label xml:lang="sk">Y Axis Resolution</label>
+						<label xml:lang="sl">Y Axis Resolution</label>
 					</info>
 					<prop oor:name="Metric" oor:type="xs:int">
 						<info>
@@ -5120,6 +5570,9 @@
 								<desc xml:lang="th">Specifies the distance that is used with locales that use the metric system.</desc>
 								<desc xml:lang="hi-IN">Specifies the distance that is used with locales that use the metric system.</desc>
 								<desc xml:lang="x-comment">Specifies the distance that is used with locales that use the metric system.</desc>
+								<desc xml:lang="hu">Specifies the distance that is used with locales that use the metric system.</desc>
+								<desc xml:lang="sk">Specifies the distance that is used with locales that use the metric system.</desc>
+								<desc xml:lang="sl">Specifies the distance that is used with locales that use the metric system.</desc>
 							<label xml:lang="en-US"/>
 						</info>
 						<value>1000</value>
@@ -5151,6 +5604,9 @@
 								<desc xml:lang="th">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 								<desc xml:lang="hi-IN">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 								<desc xml:lang="x-comment">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
+								<desc xml:lang="hu">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
+								<desc xml:lang="sk">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
+								<desc xml:lang="sl">Specifies the distance that is used with locales that don&apos;t use the metric system.</desc>
 							<label xml:lang="en-US"/>
 						</info>
 						<value>1270</value>
@@ -5184,6 +5640,9 @@
 					<desc xml:lang="th">Specifies how the grid is divided.</desc>
 					<desc xml:lang="hi-IN">Specifies how the grid is divided.</desc>
 					<desc xml:lang="x-comment">Specifies how the grid is divided.</desc>
+					<desc xml:lang="hu">Specifies how the grid is divided.</desc>
+					<desc xml:lang="sk">Specifies how the grid is divided.</desc>
+					<desc xml:lang="sl">Specifies how the grid is divided.</desc>
 				</info>
 				<prop oor:name="XAxis" oor:type="xs:int">
 					<!-- OldPath: Calc/Grid/Subdivision -->
@@ -5216,9 +5675,12 @@
 							<desc xml:lang="th">Specifies the number of intervals between two grid points on the X axis.</desc>
 							<desc xml:lang="hi-IN">Specifies the number of intervals between two grid points on the X axis.</desc>
 							<desc xml:lang="x-comment">Specifies the number of intervals between two grid points on the X axis.</desc>
+							<desc xml:lang="hu">Specifies the number of intervals between two grid points on the X axis.</desc>
+							<desc xml:lang="sk">Specifies the number of intervals between two grid points on the X axis.</desc>
+							<desc xml:lang="sl">Specifies the number of intervals between two grid points on the X axis.</desc>
 						<label xml:lang="en-US">X Axis Subdivision</label>
 						<label xml:lang="el">X Axis Subdivision</label>
-						<label xml:lang="nl">X Axis Subdivision</label>
+						<label xml:lang="nl">Onderverdeling X-as</label>
 						<label xml:lang="fr">X Axis Subdivision</label>
 						<label xml:lang="fi">X Axis Subdivision</label>
 						<label xml:lang="cs">X Axis Subdivision</label>
@@ -5241,6 +5703,9 @@
 						<label xml:lang="th">X Axis Subdivision</label>
 						<label xml:lang="hi-IN">X Axis Subdivision</label>
 						<label xml:lang="x-comment">X Axis Subdivision</label>
+						<label xml:lang="hu">X Axis Subdivision</label>
+						<label xml:lang="sk">X Axis Subdivision</label>
+						<label xml:lang="sl">X Axis Subdivision</label>
 					</info>
 					<value>1</value>
 				</prop>
@@ -5275,9 +5740,12 @@
 							<desc xml:lang="th">Specifies the number of intervals between two grid points on the Y axis.</desc>
 							<desc xml:lang="hi-IN">Specifies the number of intervals between two grid points on the Y axis.</desc>
 							<desc xml:lang="x-comment">Specifies the number of intervals between two grid points on the Y axis.</desc>
+							<desc xml:lang="hu">Specifies the number of intervals between two grid points on the Y axis.</desc>
+							<desc xml:lang="sk">Specifies the number of intervals between two grid points on the Y axis.</desc>
+							<desc xml:lang="sl">Specifies the number of intervals between two grid points on the Y axis.</desc>
 						<label xml:lang="en-US">Y Axis Subdivision</label>
 						<label xml:lang="el">Y Axis Subdivision</label>
-						<label xml:lang="nl">Y Axis Subdivision</label>
+						<label xml:lang="nl">Onderverdeling Y-as</label>
 						<label xml:lang="fr">Y Axis Subdivision</label>
 						<label xml:lang="fi">Y Axis Subdivision</label>
 						<label xml:lang="cs">Y Axis Subdivision</label>
@@ -5300,6 +5768,9 @@
 						<label xml:lang="th">Y Axis Subdivision</label>
 						<label xml:lang="hi-IN">Y Axis Subdivision</label>
 						<label xml:lang="x-comment">Y Axis Subdivision</label>
+						<label xml:lang="hu">Y Axis Subdivision</label>
+						<label xml:lang="sk">Y Axis Subdivision</label>
+						<label xml:lang="sl">Y Axis Subdivision</label>
 					</info>
 					<value>1</value>
 				</prop>
@@ -5332,6 +5803,9 @@
 				<desc xml:lang="th">Contains the sort list settings.</desc>
 				<desc xml:lang="hi-IN">Contains the sort list settings.</desc>
 				<desc xml:lang="x-comment">Contains the sort list settings.</desc>
+				<desc xml:lang="hu">Contains the sort list settings.</desc>
+				<desc xml:lang="sk">Contains the sort list settings.</desc>
+				<desc xml:lang="sl">Contains the sort list settings.</desc>
 			</info>
 			<prop oor:name="List" oor:type="oor:string-list">
 				<!-- OldPath: Calc/Sort_Lists -->
@@ -5365,9 +5839,12 @@
 						<desc xml:lang="th">Specifies the available lists.</desc>
 						<desc xml:lang="hi-IN">Specifies the available lists.</desc>
 						<desc xml:lang="x-comment">Specifies the available lists.</desc>
+						<desc xml:lang="hu">Specifies the available lists.</desc>
+						<desc xml:lang="sk">Specifies the available lists.</desc>
+						<desc xml:lang="sl">Specifies the available lists.</desc>
 					<label xml:lang="en-US">Lists</label>
 					<label xml:lang="el">Lists</label>
-					<label xml:lang="nl">Lists</label>
+					<label xml:lang="nl">Lijsten</label>
 					<label xml:lang="fr">Lists</label>
 					<label xml:lang="fi">Lists</label>
 					<label xml:lang="cs">Lists</label>
@@ -5390,6 +5867,9 @@
 					<label xml:lang="th">Lists</label>
 					<label xml:lang="hi-IN">Lists</label>
 					<label xml:lang="x-comment">Lists</label>
+					<label xml:lang="hu">Lists</label>
+					<label xml:lang="sk">Lists</label>
+					<label xml:lang="sl">Lists</label>
 				</info>
 				<value>NULL</value>
 			</prop>
@@ -5421,6 +5901,9 @@
 				<desc xml:lang="th">Contains settings that affect cell calculation.</desc>
 				<desc xml:lang="hi-IN">Contains settings that affect cell calculation.</desc>
 				<desc xml:lang="x-comment">Contains settings that affect cell calculation.</desc>
+				<desc xml:lang="hu">Contains settings that affect cell calculation.</desc>
+				<desc xml:lang="sk">Contains settings that affect cell calculation.</desc>
+				<desc xml:lang="sl">Contains settings that affect cell calculation.</desc>
 			</info>
 			<group oor:name="IterativeReference">
 				<info>
@@ -5449,6 +5932,9 @@
 					<desc xml:lang="th">Contains settings for iterative calculation of circular references.</desc>
 					<desc xml:lang="hi-IN">Contains settings for iterative calculation of circular references.</desc>
 					<desc xml:lang="x-comment">Contains settings for iterative calculation of circular references.</desc>
+					<desc xml:lang="hu">Contains settings for iterative calculation of circular references.</desc>
+					<desc xml:lang="sk">Contains settings for iterative calculation of circular references.</desc>
+					<desc xml:lang="sl">Contains settings for iterative calculation of circular references.</desc>
 				</info>
 				<prop oor:name="Iteration" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Calculate/Iterative_References -->
@@ -5481,9 +5967,12 @@
 							<desc xml:lang="th">Specifies whether iterative calculation is used for formulas with circular references.</desc>
 							<desc xml:lang="hi-IN">Specifies whether iterative calculation is used for formulas with circular references.</desc>
 							<desc xml:lang="x-comment">Specifies whether iterative calculation is used for formulas with circular references.</desc>
+							<desc xml:lang="hu">Specifies whether iterative calculation is used for formulas with circular references.</desc>
+							<desc xml:lang="sk">Specifies whether iterative calculation is used for formulas with circular references.</desc>
+							<desc xml:lang="sl">Specifies whether iterative calculation is used for formulas with circular references.</desc>
 						<label xml:lang="en-US">Iterations</label>
 						<label xml:lang="el">Iterations</label>
-						<label xml:lang="nl">Iterations</label>
+						<label xml:lang="nl">Iteraties</label>
 						<label xml:lang="fr">Iterations</label>
 						<label xml:lang="fi">Iterations</label>
 						<label xml:lang="cs">Iterations</label>
@@ -5506,6 +5995,9 @@
 						<label xml:lang="th">Iterations</label>
 						<label xml:lang="hi-IN">Iterations</label>
 						<label xml:lang="x-comment">Iterations</label>
+						<label xml:lang="hu">Iterations</label>
+						<label xml:lang="sk">Iterations</label>
+						<label xml:lang="sl">Iterations</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -5540,9 +6032,12 @@
 							<desc xml:lang="th">Specifies the maximum number of iteration steps.</desc>
 							<desc xml:lang="hi-IN">Specifies the maximum number of iteration steps.</desc>
 							<desc xml:lang="x-comment">Specifies the maximum number of iteration steps.</desc>
+							<desc xml:lang="hu">Specifies the maximum number of iteration steps.</desc>
+							<desc xml:lang="sk">Specifies the maximum number of iteration steps.</desc>
+							<desc xml:lang="sl">Specifies the maximum number of iteration steps.</desc>
 						<label xml:lang="en-US">Steps</label>
 						<label xml:lang="el">Steps</label>
-						<label xml:lang="nl">Steps</label>
+						<label xml:lang="nl">Stappen</label>
 						<label xml:lang="fr">Steps</label>
 						<label xml:lang="fi">Steps</label>
 						<label xml:lang="cs">Steps</label>
@@ -5565,6 +6060,9 @@
 						<label xml:lang="th">Steps</label>
 						<label xml:lang="hi-IN">Steps</label>
 						<label xml:lang="x-comment">Steps</label>
+						<label xml:lang="hu">Steps</label>
+						<label xml:lang="sk">Steps</label>
+						<label xml:lang="sl">Steps</label>
 					</info>
 					<value>100</value>
 				</prop>
@@ -5599,9 +6097,12 @@
 							<desc xml:lang="th">Specifies the result change value below which iteration is stopped.</desc>
 							<desc xml:lang="hi-IN">Specifies the result change value below which iteration is stopped.</desc>
 							<desc xml:lang="x-comment">Specifies the result change value below which iteration is stopped.</desc>
+							<desc xml:lang="hu">Specifies the result change value below which iteration is stopped.</desc>
+							<desc xml:lang="sk">Specifies the result change value below which iteration is stopped.</desc>
+							<desc xml:lang="sl">Specifies the result change value below which iteration is stopped.</desc>
 						<label xml:lang="en-US">Minimum Change</label>
 						<label xml:lang="el">Minimum Change</label>
-						<label xml:lang="nl">Minimum Change</label>
+						<label xml:lang="nl">Minimum verandering</label>
 						<label xml:lang="fr">Minimum Change</label>
 						<label xml:lang="fi">Minimum Change</label>
 						<label xml:lang="cs">Minimum Change</label>
@@ -5624,6 +6125,9 @@
 						<label xml:lang="th">Minimum Change</label>
 						<label xml:lang="hi-IN">Minimum Change</label>
 						<label xml:lang="x-comment">Minimum Change</label>
+						<label xml:lang="hu">Minimum Change</label>
+						<label xml:lang="sk">Minimum Change</label>
+						<label xml:lang="sl">Minimum Change</label>
 					</info>
 					<value>0.001</value>
 				</prop>
@@ -5655,6 +6159,9 @@
 					<desc xml:lang="th">Contains other calculation settings.</desc>
 					<desc xml:lang="hi-IN">Contains other calculation settings.</desc>
 					<desc xml:lang="x-comment">Contains other calculation settings.</desc>
+					<desc xml:lang="hu">Contains other calculation settings.</desc>
+					<desc xml:lang="sk">Contains other calculation settings.</desc>
+					<desc xml:lang="sl">Contains other calculation settings.</desc>
 				</info>
 				<prop oor:name="CaseSensitive" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Calculate -->
@@ -5687,6 +6194,9 @@
 							<desc xml:lang="th">Specifies whether upper and lower case in texts are distinguished when comparing cell contents.</desc>
 							<desc xml:lang="hi-IN">Specifies whether upper and lower case in texts are distinguished when comparing cell contents.</desc>
 							<desc xml:lang="x-comment">Specifies whether upper and lower case in texts are distinguished when comparing cell contents.</desc>
+							<desc xml:lang="hu">Specifies whether upper and lower case in texts are distinguished when comparing cell contents.</desc>
+							<desc xml:lang="sk">Specifies whether upper and lower case in texts are distinguished when comparing cell contents.</desc>
+							<desc xml:lang="sl">Specifies whether upper and lower case in texts are distinguished when comparing cell contents.</desc>
 						<label xml:lang="en-US">Case sensitive</label>
 						<label xml:lang="el">Συμφωνία πεζών-κεφαλαίων</label>
 						<label xml:lang="nl">Hoofdletters/~kleine letters belangrijk</label>
@@ -5713,6 +6223,8 @@
 						<label xml:lang="hi-IN">केस सचेतन</label>
 						<label xml:lang="x-comment">Case sensitive</label>
 						<label xml:lang="sk">Rozlišovať veľké a malé písmená</label>
+						<label xml:lang="hu">Case sensitive</label>
+						<label xml:lang="sl">Case sensitive</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -5747,9 +6259,12 @@
 							<desc xml:lang="th">Specifies whether the calculation uses the rounded values displayed in the sheet.</desc>
 							<desc xml:lang="hi-IN">Specifies whether the calculation uses the rounded values displayed in the sheet.</desc>
 							<desc xml:lang="x-comment">Specifies whether the calculation uses the rounded values displayed in the sheet.</desc>
+							<desc xml:lang="hu">Specifies whether the calculation uses the rounded values displayed in the sheet.</desc>
+							<desc xml:lang="sk">Specifies whether the calculation uses the rounded values displayed in the sheet.</desc>
+							<desc xml:lang="sl">Specifies whether the calculation uses the rounded values displayed in the sheet.</desc>
 						<label xml:lang="en-US">Precision as shown</label>
 						<label xml:lang="el">Precision as shown</label>
-						<label xml:lang="nl">Precision as shown</label>
+						<label xml:lang="nl">Precisie zoals getoond</label>
 						<label xml:lang="fr">Precision as shown</label>
 						<label xml:lang="fi">Precision as shown</label>
 						<label xml:lang="cs">Precision as shown</label>
@@ -5772,6 +6287,9 @@
 						<label xml:lang="th">Precision as shown</label>
 						<label xml:lang="hi-IN">Precision as shown</label>
 						<label xml:lang="x-comment">Precision as shown</label>
+						<label xml:lang="hu">Precision as shown</label>
+						<label xml:lang="sk">Precision as shown</label>
+						<label xml:lang="sl">Precision as shown</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -5806,9 +6324,12 @@
 							<desc xml:lang="th">Specifies whether search criteria in formulas must match the whole of the cell contents.</desc>
 							<desc xml:lang="hi-IN">Specifies whether search criteria in formulas must match the whole of the cell contents.</desc>
 							<desc xml:lang="x-comment">Specifies whether search criteria in formulas must match the whole of the cell contents.</desc>
+							<desc xml:lang="hu">Specifies whether search criteria in formulas must match the whole of the cell contents.</desc>
+							<desc xml:lang="sk">Specifies whether search criteria in formulas must match the whole of the cell contents.</desc>
+							<desc xml:lang="sl">Specifies whether search criteria in formulas must match the whole of the cell contents.</desc>
 						<label xml:lang="en-US">Search criteria = and &lt;&gt; must apply to whole cells</label>
 						<label xml:lang="el">Search criteria = and &lt;&gt; must apply to whole cells</label>
-						<label xml:lang="nl">Search criteria = and &lt;&gt; must apply to whole cells</label>
+						<label xml:lang="nl">Zoekcriteria = en &lt;&amp;gt; moeten op hele cellen toepasbaar zijn</label>
 						<label xml:lang="fr">Search criteria = and &lt;&gt; must apply to whole cells</label>
 						<label xml:lang="fi">Search criteria = and &lt;&gt; must apply to whole cells</label>
 						<label xml:lang="cs">Search criteria = and &lt;&gt; must apply to whole cells</label>
@@ -5831,6 +6352,9 @@
 						<label xml:lang="th">Search criteria = and &lt;&gt; must apply to whole cells</label>
 						<label xml:lang="hi-IN">Search criteria = and &lt;&gt; must apply to whole cells</label>
 						<label xml:lang="x-comment">Search criteria = and &lt;&gt; must apply to whole cells</label>
+						<label xml:lang="hu">Search criteria = and &lt;&gt; must apply to whole cells</label>
+						<label xml:lang="sk">Search criteria = and &lt;&gt; must apply to whole cells</label>
+						<label xml:lang="sl">Search criteria = and &lt;&gt; must apply to whole cells</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -5865,9 +6389,12 @@
 							<desc xml:lang="th">Specifies whether column and row labels are used to refer to the column area beneath the text cell or to the row area at the right of the text cell while running a search.</desc>
 							<desc xml:lang="hi-IN">Specifies whether column and row labels are used to refer to the column area beneath the text cell or to the row area at the right of the text cell while running a search.</desc>
 							<desc xml:lang="x-comment">Specifies whether column and row labels are used to refer to the column area beneath the text cell or to the row area at the right of the text cell while running a search.</desc>
+							<desc xml:lang="hu">Specifies whether column and row labels are used to refer to the column area beneath the text cell or to the row area at the right of the text cell while running a search.</desc>
+							<desc xml:lang="sk">Specifies whether column and row labels are used to refer to the column area beneath the text cell or to the row area at the right of the text cell while running a search.</desc>
+							<desc xml:lang="sl">Specifies whether column and row labels are used to refer to the column area beneath the text cell or to the row area at the right of the text cell while running a search.</desc>
 						<label xml:lang="en-US">Automatically find column and row labels</label>
 						<label xml:lang="el">Automatically find column and row labels</label>
-						<label xml:lang="nl">Automatically find column and row labels</label>
+						<label xml:lang="nl">Automatisch kolom- en rijlabels vinden</label>
 						<label xml:lang="fr">Automatically find column and row labels</label>
 						<label xml:lang="fi">Automatically find column and row labels</label>
 						<label xml:lang="cs">Automatically find column and row labels</label>
@@ -5890,6 +6417,9 @@
 						<label xml:lang="th">Automatically find column and row labels</label>
 						<label xml:lang="hi-IN">Automatically find column and row labels</label>
 						<label xml:lang="x-comment">Automatically find column and row labels</label>
+						<label xml:lang="hu">Automatically find column and row labels</label>
+						<label xml:lang="sk">Automatically find column and row labels</label>
+						<label xml:lang="sl">Automatically find column and row labels</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -5924,6 +6454,9 @@
 							<desc xml:lang="th">Specifies the number of decimals to be displayed for the Standard number format.</desc>
 							<desc xml:lang="hi-IN">Specifies the number of decimals to be displayed for the Standard number format.</desc>
 							<desc xml:lang="x-comment">Specifies the number of decimals to be displayed for the Standard number format.</desc>
+							<desc xml:lang="hu">Specifies the number of decimals to be displayed for the Standard number format.</desc>
+							<desc xml:lang="sk">Specifies the number of decimals to be displayed for the Standard number format.</desc>
+							<desc xml:lang="sl">Specifies the number of decimals to be displayed for the Standard number format.</desc>
 						<label xml:lang="en-US">Decimal places</label>
 						<label xml:lang="el">Δεκαδικά ψηφία</label>
 						<label xml:lang="nl">~Cijfers achter de komma</label>
@@ -5949,6 +6482,9 @@
 						<label xml:lang="th">Decimal places</label>
 						<label xml:lang="hi-IN">Decimal places</label>
 						<label xml:lang="x-comment">Decimal places</label>
+						<label xml:lang="hu">Decimal places</label>
+						<label xml:lang="sk">Decimal places</label>
+						<label xml:lang="sl">Decimal places</label>
 					</info>
 					<value>2</value>
 				</prop>
@@ -5981,9 +6517,12 @@
 							<desc xml:lang="th">Specifies whether the calculation uses regular expressions in formulas, e.g. for functions which look up sheet contents.</desc>
 							<desc xml:lang="hi-IN">Specifies whether the calculation uses regular expressions in formulas, e.g. for functions which look up sheet contents.</desc>
 							<desc xml:lang="x-comment">Specifies whether the calculation uses regular expressions in formulas, e.g. for functions which look up sheet contents.</desc>
+							<desc xml:lang="hu">Specifies whether the calculation uses regular expressions in formulas, e.g. for functions which look up sheet contents.</desc>
+							<desc xml:lang="sk">Specifies whether the calculation uses regular expressions in formulas, e.g. for functions which look up sheet contents.</desc>
+							<desc xml:lang="sl">Specifies whether the calculation uses regular expressions in formulas, e.g. for functions which look up sheet contents.</desc>
 						<label xml:lang="en-US">Enable regular expressions in formulas</label>
 						<label xml:lang="el">Enable regular expressions in formulas</label>
-						<label xml:lang="nl">Enable regular expressions in formulas</label>
+						<label xml:lang="nl">Reguliere expressies in formules inschakelen</label>
 						<label xml:lang="fr">Enable regular expressions in formulas</label>
 						<label xml:lang="fi">Enable regular expressions in formulas</label>
 						<label xml:lang="cs">Enable regular expressions in formulas</label>
@@ -6006,6 +6545,9 @@
 						<label xml:lang="th">Enable regular expressions in formulas</label>
 						<label xml:lang="hi-IN">Enable regular expressions in formulas</label>
 						<label xml:lang="x-comment">Enable regular expressions in formulas</label>
+						<label xml:lang="hu">Enable regular expressions in formulas</label>
+						<label xml:lang="sk">Enable regular expressions in formulas</label>
+						<label xml:lang="sl">Enable regular expressions in formulas</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -6036,6 +6578,9 @@
 						<desc xml:lang="th">Specifies the date that is represented by the number 0.</desc>
 						<desc xml:lang="hi-IN">Specifies the date that is represented by the number 0.</desc>
 						<desc xml:lang="x-comment">Specifies the date that is represented by the number 0.</desc>
+						<desc xml:lang="hu">Specifies the date that is represented by the number 0.</desc>
+						<desc xml:lang="sk">Specifies the date that is represented by the number 0.</desc>
+						<desc xml:lang="sl">Specifies the date that is represented by the number 0.</desc>
 					</info>
 				</node-ref>
 			</group>
@@ -6067,6 +6612,9 @@
 				<desc xml:lang="th">Contains settings that affect revision marking.</desc>
 				<desc xml:lang="hi-IN">Contains settings that affect revision marking.</desc>
 				<desc xml:lang="x-comment">Contains settings that affect revision marking.</desc>
+				<desc xml:lang="hu">Contains settings that affect revision marking.</desc>
+				<desc xml:lang="sk">Contains settings that affect revision marking.</desc>
+				<desc xml:lang="sl">Contains settings that affect revision marking.</desc>
 			</info>
 			<group oor:name="Color">
 				<info>
@@ -6095,6 +6643,9 @@
 					<desc xml:lang="th">Specifies the colors for revision marking.</desc>
 					<desc xml:lang="hi-IN">Specifies the colors for revision marking.</desc>
 					<desc xml:lang="x-comment">Specifies the colors for revision marking.</desc>
+					<desc xml:lang="hu">Specifies the colors for revision marking.</desc>
+					<desc xml:lang="sk">Specifies the colors for revision marking.</desc>
+					<desc xml:lang="sl">Specifies the colors for revision marking.</desc>
 				</info>
 				<prop oor:name="Change" oor:type="xs:int">
 					<!-- OldPath: Calc/Changes/Colors -->
@@ -6128,6 +6679,9 @@
 							<desc xml:lang="th">Specifies the modification color for changes of cell contents.</desc>
 							<desc xml:lang="hi-IN">Specifies the modification color for changes of cell contents.</desc>
 							<desc xml:lang="x-comment">Specifies the modification color for changes of cell contents.</desc>
+							<desc xml:lang="hu">Specifies the modification color for changes of cell contents.</desc>
+							<desc xml:lang="sk">Specifies the modification color for changes of cell contents.</desc>
+							<desc xml:lang="sl">Specifies the modification color for changes of cell contents.</desc>
 						<label xml:lang="en-US">Changes</label>
 						<label xml:lang="el">Αλλαγές</label>
 						<label xml:lang="nl">Wijzigingen</label>
@@ -6154,6 +6708,8 @@
 						<label xml:lang="hi-IN">जाल</label>
 						<label xml:lang="x-comment">Changes</label>
 						<label xml:lang="sk">Mriežka</label>
+						<label xml:lang="hu">Changes</label>
+						<label xml:lang="sl">Changes</label>
 					</info>
 					<value>-1</value>
 				</prop>
@@ -6189,9 +6745,12 @@
 							<desc xml:lang="th">Specifies the color to highlight deletions.</desc>
 							<desc xml:lang="hi-IN">Specifies the color to highlight deletions.</desc>
 							<desc xml:lang="x-comment">Specifies the color to highlight deletions.</desc>
+							<desc xml:lang="hu">Specifies the color to highlight deletions.</desc>
+							<desc xml:lang="sk">Specifies the color to highlight deletions.</desc>
+							<desc xml:lang="sl">Specifies the color to highlight deletions.</desc>
 						<label xml:lang="en-US">Deletions</label>
 						<label xml:lang="el">Διαγραφή</label>
-						<label xml:lang="nl">Wissen</label>
+						<label xml:lang="nl">Verwijderingen</label>
 						<label xml:lang="fr">Supprimer</label>
 						<label xml:lang="fi">Poistot</label>
 						<label xml:lang="cs">Smazané položky</label>
@@ -6215,6 +6774,8 @@
 						<label xml:lang="hi-IN">मिटाना</label>
 						<label xml:lang="x-comment">Deletions</label>
 						<label xml:lang="sk">Zmazané položky</label>
+						<label xml:lang="hu">Deletions</label>
+						<label xml:lang="sl">Deletions</label>
 					</info>
 					<value>-1</value>
 				</prop>
@@ -6250,9 +6811,12 @@
 							<desc xml:lang="th">Specifies the color to highlight insertions.</desc>
 							<desc xml:lang="hi-IN">Specifies the color to highlight insertions.</desc>
 							<desc xml:lang="x-comment">Specifies the color to highlight insertions.</desc>
+							<desc xml:lang="hu">Specifies the color to highlight insertions.</desc>
+							<desc xml:lang="sk">Specifies the color to highlight insertions.</desc>
+							<desc xml:lang="sl">Specifies the color to highlight insertions.</desc>
 						<label xml:lang="en-US">Insertions</label>
 						<label xml:lang="el">Εισαγωγή</label>
-						<label xml:lang="nl">Invoegen</label>
+						<label xml:lang="nl">Invoegingen</label>
 						<label xml:lang="fr">Insérer</label>
 						<label xml:lang="fi">Lisäykset</label>
 						<label xml:lang="cs">Vložené položky</label>
@@ -6276,6 +6840,8 @@
 						<label xml:lang="hi-IN">जोड़ना</label>
 						<label xml:lang="x-comment">Insertions</label>
 						<label xml:lang="sk">Vložené položky</label>
+						<label xml:lang="hu">Insertions</label>
+						<label xml:lang="sl">Insertions</label>
 					</info>
 					<value>-1</value>
 				</prop>
@@ -6311,9 +6877,12 @@
 							<desc xml:lang="th">Specifies the color to highlight moved contents.</desc>
 							<desc xml:lang="hi-IN">Specifies the color to highlight moved contents.</desc>
 							<desc xml:lang="x-comment">Specifies the color to highlight moved contents.</desc>
+							<desc xml:lang="hu">Specifies the color to highlight moved contents.</desc>
+							<desc xml:lang="sk">Specifies the color to highlight moved contents.</desc>
+							<desc xml:lang="sl">Specifies the color to highlight moved contents.</desc>
 						<label xml:lang="en-US">Moved entries</label>
 						<label xml:lang="el">Moved entries</label>
-						<label xml:lang="nl">Moved entries</label>
+						<label xml:lang="nl">Verplaatste items</label>
 						<label xml:lang="fr">Moved entries</label>
 						<label xml:lang="fi">Moved entries</label>
 						<label xml:lang="cs">Moved entries</label>
@@ -6336,6 +6905,9 @@
 						<label xml:lang="th">Moved entries</label>
 						<label xml:lang="hi-IN">Moved entries</label>
 						<label xml:lang="x-comment">Moved entries</label>
+						<label xml:lang="hu">Moved entries</label>
+						<label xml:lang="sk">Moved entries</label>
+						<label xml:lang="sl">Moved entries</label>
 					</info>
 					<value>-1</value>
 				</prop>
@@ -6368,6 +6940,9 @@
 				<desc xml:lang="th">Contains settings for file format filters.</desc>
 				<desc xml:lang="hi-IN">Contains settings for file format filters.</desc>
 				<desc xml:lang="x-comment">Contains settings for file format filters.</desc>
+				<desc xml:lang="hu">Contains settings for file format filters.</desc>
+				<desc xml:lang="sk">Contains settings for file format filters.</desc>
+				<desc xml:lang="sl">Contains settings for file format filters.</desc>
 			</info>
 			<group oor:name="Import">
 				<info>
@@ -6396,6 +6971,9 @@
 					<desc xml:lang="th">Contains settings for import filters.</desc>
 					<desc xml:lang="hi-IN">Contains settings for import filters.</desc>
 					<desc xml:lang="x-comment">Contains settings for import filters.</desc>
+					<desc xml:lang="hu">Contains settings for import filters.</desc>
+					<desc xml:lang="sk">Contains settings for import filters.</desc>
+					<desc xml:lang="sl">Contains settings for import filters.</desc>
 				</info>
 				<group oor:name="VBA">
 					<info>
@@ -6424,6 +7002,9 @@
 						<desc xml:lang="th">Specifies how VBA macros are treated in Excel files.</desc>
 						<desc xml:lang="hi-IN">Specifies how VBA macros are treated in Excel files.</desc>
 						<desc xml:lang="x-comment">Specifies how VBA macros are treated in Excel files.</desc>
+						<desc xml:lang="hu">Specifies how VBA macros are treated in Excel files.</desc>
+						<desc xml:lang="sk">Specifies how VBA macros are treated in Excel files.</desc>
+						<desc xml:lang="sl">Specifies how VBA macros are treated in Excel files.</desc>
 					</info>
 					<prop oor:name="Load" oor:type="xs:boolean">
 						<!-- OldPath: Filter/MS_Office/Basic/Excel -->
@@ -6456,9 +7037,12 @@
 								<desc xml:lang="th">Indicates whether VBA macros are imported as comments.</desc>
 								<desc xml:lang="hi-IN">Indicates whether VBA macros are imported as comments.</desc>
 								<desc xml:lang="x-comment">Indicates whether VBA macros are imported as comments.</desc>
+								<desc xml:lang="hu">Indicates whether VBA macros are imported as comments.</desc>
+								<desc xml:lang="sk">Indicates whether VBA macros are imported as comments.</desc>
+								<desc xml:lang="sl">Indicates whether VBA macros are imported as comments.</desc>
 							<label xml:lang="en-US">Load Basic Code to edit</label>
 							<label xml:lang="el">Load Basic Code to edit</label>
-							<label xml:lang="nl">Load Basic Code to edit</label>
+							<label xml:lang="nl">Laad BASIC code om te bewerken</label>
 							<label xml:lang="fr">Load Basic Code to edit</label>
 							<label xml:lang="fi">Load Basic Code to edit</label>
 							<label xml:lang="cs">Load Basic Code to edit</label>
@@ -6481,6 +7065,9 @@
 							<label xml:lang="th">Load Basic Code to edit</label>
 							<label xml:lang="hi-IN">Load Basic Code to edit</label>
 							<label xml:lang="x-comment">Load Basic Code to edit</label>
+							<label xml:lang="hu">Load Basic Code to edit</label>
+							<label xml:lang="sk">Load Basic Code to edit</label>
+							<label xml:lang="sl">Load Basic Code to edit</label>
 						</info>
 						<value>true</value>
 					</prop>
@@ -6515,9 +7102,12 @@
 								<desc xml:lang="th">Indicates whether the original VBA storage is preserved while editing.</desc>
 								<desc xml:lang="hi-IN">Indicates whether the original VBA storage is preserved while editing.</desc>
 								<desc xml:lang="x-comment">Indicates whether the original VBA storage is preserved while editing.</desc>
+								<desc xml:lang="hu">Indicates whether the original VBA storage is preserved while editing.</desc>
+								<desc xml:lang="sk">Indicates whether the original VBA storage is preserved while editing.</desc>
+								<desc xml:lang="sl">Indicates whether the original VBA storage is preserved while editing.</desc>
 							<label xml:lang="en-US">Save Original Basic Code again</label>
 							<label xml:lang="el">Save Original Basic Code again</label>
-							<label xml:lang="nl">Save Original Basic Code again</label>
+							<label xml:lang="nl">Originele BASIC code weer opslaan</label>
 							<label xml:lang="fr">Save Original Basic Code again</label>
 							<label xml:lang="fi">Save Original Basic Code again</label>
 							<label xml:lang="cs">Save Original Basic Code again</label>
@@ -6540,6 +7130,9 @@
 							<label xml:lang="th">Save Original Basic Code again</label>
 							<label xml:lang="hi-IN">Save Original Basic Code again</label>
 							<label xml:lang="x-comment">Save Original Basic Code again</label>
+							<label xml:lang="hu">Save Original Basic Code again</label>
+							<label xml:lang="sk">Save Original Basic Code again</label>
+							<label xml:lang="sl">Save Original Basic Code again</label>
 						</info>
 						<value>true</value>
 					</prop>
@@ -6571,6 +7164,9 @@
 						<desc xml:lang="th">Contains settings for Lotus 1-2-3 import.</desc>
 						<desc xml:lang="hi-IN">Contains settings for Lotus 1-2-3 import.</desc>
 						<desc xml:lang="x-comment">Contains settings for Lotus 1-2-3 import.</desc>
+						<desc xml:lang="hu">Contains settings for Lotus 1-2-3 import.</desc>
+						<desc xml:lang="sk">Contains settings for Lotus 1-2-3 import.</desc>
+						<desc xml:lang="sl">Contains settings for Lotus 1-2-3 import.</desc>
 					</info>
 					<prop oor:name="WK3" oor:type="xs:boolean">
 						<!-- OldPath: Common -->
@@ -6602,9 +7198,12 @@
 								<desc xml:lang="th">Indicates whether the import of Lotus wk3 files is enabled.</desc>
 								<desc xml:lang="hi-IN">Indicates whether the import of Lotus wk3 files is enabled.</desc>
 								<desc xml:lang="x-comment">Indicates whether the import of Lotus wk3 files is enabled.</desc>
+								<desc xml:lang="hu">Indicates whether the import of Lotus wk3 files is enabled.</desc>
+								<desc xml:lang="sk">Indicates whether the import of Lotus wk3 files is enabled.</desc>
+								<desc xml:lang="sl">Indicates whether the import of Lotus wk3 files is enabled.</desc>
 							<label xml:lang="en-US">Enable WK3 Filter</label>
 							<label xml:lang="el">Enable WK3 Filter</label>
-							<label xml:lang="nl">Enable WK3 Filter</label>
+							<label xml:lang="nl">WK3 Filter inschakelen</label>
 							<label xml:lang="fr">Enable WK3 Filter</label>
 							<label xml:lang="fi">Enable WK3 Filter</label>
 							<label xml:lang="cs">Enable WK3 Filter</label>
@@ -6627,6 +7226,9 @@
 							<label xml:lang="th">Enable WK3 Filter</label>
 							<label xml:lang="hi-IN">Enable WK3 Filter</label>
 							<label xml:lang="x-comment">Enable WK3 Filter</label>
+							<label xml:lang="hu">Enable WK3 Filter</label>
+							<label xml:lang="sk">Enable WK3 Filter</label>
+							<label xml:lang="sl">Enable WK3 Filter</label>
 						</info>
 						<value>false</value>
 					</prop>
@@ -6658,6 +7260,9 @@
 						<desc xml:lang="th">Contains settings for MS Excel import.</desc>
 						<desc xml:lang="hi-IN">Contains settings for MS Excel import.</desc>
 						<desc xml:lang="x-comment">Contains settings for MS Excel import.</desc>
+						<desc xml:lang="hu">Contains settings for MS Excel import.</desc>
+						<desc xml:lang="sk">Contains settings for MS Excel import.</desc>
+						<desc xml:lang="sl">Contains settings for MS Excel import.</desc>
 					</info>
 					<prop oor:name="ColScale" oor:type="xs:double">
 						<!-- OldPath: Common -->
@@ -6689,9 +7294,12 @@
 								<desc xml:lang="th">Specifies the factor for multiplying the column width when importing Excel documents from Biff 5 format.</desc>
 								<desc xml:lang="hi-IN">Specifies the factor for multiplying the column width when importing Excel documents from Biff 5 format.</desc>
 								<desc xml:lang="x-comment">Specifies the factor for multiplying the column width when importing Excel documents from Biff 5 format.</desc>
+								<desc xml:lang="hu">Specifies the factor for multiplying the column width when importing Excel documents from Biff 5 format.</desc>
+								<desc xml:lang="sk">Specifies the factor for multiplying the column width when importing Excel documents from Biff 5 format.</desc>
+								<desc xml:lang="sl">Specifies the factor for multiplying the column width when importing Excel documents from Biff 5 format.</desc>
 							<label xml:lang="en-US">Excel Column Width Scale</label>
 							<label xml:lang="el">Excel Column Width Scale</label>
-							<label xml:lang="nl">Excel Column Width Scale</label>
+							<label xml:lang="nl">Excel Kolombreedte schaal</label>
 							<label xml:lang="fr">Excel Column Width Scale</label>
 							<label xml:lang="fi">Excel Column Width Scale</label>
 							<label xml:lang="cs">Excel Column Width Scale</label>
@@ -6714,6 +7322,9 @@
 							<label xml:lang="th">Excel Column Width Scale</label>
 							<label xml:lang="hi-IN">Excel Column Width Scale</label>
 							<label xml:lang="x-comment">Excel Column Width Scale</label>
+							<label xml:lang="hu">Excel Column Width Scale</label>
+							<label xml:lang="sk">Excel Column Width Scale</label>
+							<label xml:lang="sl">Excel Column Width Scale</label>
 						</info>
 						<constraints>
 							<minExclusive oor:value="0.1">
@@ -6744,6 +7355,8 @@
 									<desc xml:lang="hi-IN">Specifies the minimum allowed value.</desc>
 									<desc xml:lang="x-comment">Specifies the minimum allowed value.</desc>
 									<desc xml:lang="sk">Specifies the minimum allowed value.</desc>
+									<desc xml:lang="hu">Specifies the minimum allowed value.</desc>
+									<desc xml:lang="sl">Specifies the minimum allowed value.</desc>
 								</info>
 							</minExclusive>
 						</constraints>
@@ -6779,6 +7392,9 @@
 								<desc xml:lang="th">Specifies the factor for multiplying the row height when importing Excel documents from Biff 5 format.</desc>
 								<desc xml:lang="hi-IN">Specifies the factor for multiplying the row height when importing Excel documents from Biff 5 format.</desc>
 								<desc xml:lang="x-comment">Specifies the factor for multiplying the row height when importing Excel documents from Biff 5 format.</desc>
+								<desc xml:lang="hu">Specifies the factor for multiplying the row height when importing Excel documents from Biff 5 format.</desc>
+								<desc xml:lang="sk">Specifies the factor for multiplying the row height when importing Excel documents from Biff 5 format.</desc>
+								<desc xml:lang="sl">Specifies the factor for multiplying the row height when importing Excel documents from Biff 5 format.</desc>
 							<label xml:lang="en-US">Excel Row Height Scale</label>
 							<label xml:lang="el">Excel Row Height Scale</label>
 							<label xml:lang="nl">Excel Row Height Scale</label>
@@ -6804,6 +7420,9 @@
 							<label xml:lang="th">Excel Row Height Scale</label>
 							<label xml:lang="hi-IN">Excel Row Height Scale</label>
 							<label xml:lang="x-comment">Excel Row Height Scale</label>
+							<label xml:lang="hu">Excel Row Height Scale</label>
+							<label xml:lang="sk">Excel Row Height Scale</label>
+							<label xml:lang="sl">Excel Row Height Scale</label>
 						</info>
 						<constraints>
 							<minExclusive oor:value="0.1">
@@ -6834,6 +7453,8 @@
 									<desc xml:lang="hi-IN">Specifies the minimum allowed value.</desc>
 									<desc xml:lang="x-comment">Specifies the minimum allowed value.</desc>
 									<desc xml:lang="sk">Specifies the minimum allowed value.</desc>
+									<desc xml:lang="hu">Specifies the minimum allowed value.</desc>
+									<desc xml:lang="sl">Specifies the minimum allowed value.</desc>
 								</info>
 							</minExclusive>
 						</constraints>
@@ -6870,6 +7491,9 @@
 				<desc xml:lang="th">Contains settings that affect printing.</desc>
 				<desc xml:lang="hi-IN">Contains settings that affect printing.</desc>
 				<desc xml:lang="x-comment">Contains settings that affect printing.</desc>
+				<desc xml:lang="hu">Contains settings that affect printing.</desc>
+				<desc xml:lang="sk">Contains settings that affect printing.</desc>
+				<desc xml:lang="sl">Contains settings that affect printing.</desc>
 			</info>
 			<group oor:name="Page">
 				<info>
@@ -6898,6 +7522,9 @@
 					<desc xml:lang="th">Contains settings that affect which pages are printed.</desc>
 					<desc xml:lang="hi-IN">Contains settings that affect which pages are printed.</desc>
 					<desc xml:lang="x-comment">Contains settings that affect which pages are printed.</desc>
+					<desc xml:lang="hu">Contains settings that affect which pages are printed.</desc>
+					<desc xml:lang="sk">Contains settings that affect which pages are printed.</desc>
+					<desc xml:lang="sl">Contains settings that affect which pages are printed.</desc>
 				</info>
 				<prop oor:name="EmptyPages" oor:type="xs:boolean">
 					<info>
@@ -6926,9 +7553,12 @@
 							<desc xml:lang="th">Specifies whether empty pages are printed.</desc>
 							<desc xml:lang="hi-IN">Specifies whether empty pages are printed.</desc>
 							<desc xml:lang="x-comment">Specifies whether empty pages are printed.</desc>
+							<desc xml:lang="hu">Specifies whether empty pages are printed.</desc>
+							<desc xml:lang="sk">Specifies whether empty pages are printed.</desc>
+							<desc xml:lang="sl">Specifies whether empty pages are printed.</desc>
 						<label xml:lang="en-US">Printing Empty Pages</label>
 						<label xml:lang="el">Printing Empty Pages</label>
-						<label xml:lang="nl">Printing Empty Pages</label>
+						<label xml:lang="nl">Lege pagina&apos;s afdrukken</label>
 						<label xml:lang="fr">Printing Empty Pages</label>
 						<label xml:lang="fi">Printing Empty Pages</label>
 						<label xml:lang="cs">Printing Empty Pages</label>
@@ -6951,6 +7581,9 @@
 						<label xml:lang="th">Printing Empty Pages</label>
 						<label xml:lang="hi-IN">Printing Empty Pages</label>
 						<label xml:lang="x-comment">Printing Empty Pages</label>
+						<label xml:lang="hu">Printing Empty Pages</label>
+						<label xml:lang="sk">Printing Empty Pages</label>
+						<label xml:lang="sl">Printing Empty Pages</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -6982,6 +7615,9 @@
 					<desc xml:lang="th">Contains other print settings.</desc>
 					<desc xml:lang="hi-IN">Contains other print settings.</desc>
 					<desc xml:lang="x-comment">Contains other print settings.</desc>
+					<desc xml:lang="hu">Contains other print settings.</desc>
+					<desc xml:lang="sk">Contains other print settings.</desc>
+					<desc xml:lang="sl">Contains other print settings.</desc>
 				</info>
 				<prop oor:name="AllSheets" oor:type="xs:boolean">
 					<info>
@@ -7010,9 +7646,12 @@
 							<desc xml:lang="th">Specifies whether all sheets are printed instead of only the selected sheets.</desc>
 							<desc xml:lang="hi-IN">Specifies whether all sheets are printed instead of only the selected sheets.</desc>
 							<desc xml:lang="x-comment">Specifies whether all sheets are printed instead of only the selected sheets.</desc>
+							<desc xml:lang="hu">Specifies whether all sheets are printed instead of only the selected sheets.</desc>
+							<desc xml:lang="sk">Specifies whether all sheets are printed instead of only the selected sheets.</desc>
+							<desc xml:lang="sl">Specifies whether all sheets are printed instead of only the selected sheets.</desc>
 						<label xml:lang="en-US">Print all Sheets</label>
 						<label xml:lang="el">Print all Sheets</label>
-						<label xml:lang="nl">Print all Sheets</label>
+						<label xml:lang="nl">Alle bladen afdrukken</label>
 						<label xml:lang="fr">Print all Sheets</label>
 						<label xml:lang="fi">Print all Sheets</label>
 						<label xml:lang="cs">Print all Sheets</label>
@@ -7035,6 +7674,9 @@
 						<label xml:lang="th">Print all Sheets</label>
 						<label xml:lang="hi-IN">Print all Sheets</label>
 						<label xml:lang="x-comment">Print all Sheets</label>
+						<label xml:lang="hu">Print all Sheets</label>
+						<label xml:lang="sk">Print all Sheets</label>
+						<label xml:lang="sl">Print all Sheets</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -7067,6 +7709,9 @@
 				<desc xml:lang="th">Contains miscellaneous settings.</desc>
 				<desc xml:lang="hi-IN">Contains miscellaneous settings.</desc>
 				<desc xml:lang="x-comment">Contains miscellaneous settings.</desc>
+				<desc xml:lang="hu">Contains miscellaneous settings.</desc>
+				<desc xml:lang="sk">Contains miscellaneous settings.</desc>
+				<desc xml:lang="sl">Contains miscellaneous settings.</desc>
 			</info>
 			<group oor:name="DefaultObjectSize">
 				<info>
@@ -7096,9 +7741,12 @@
 						<desc xml:lang="th">Defines the default size of newly created objects using CTRL-Return or CTRL-Click at an object creating Button.</desc>
 						<desc xml:lang="hi-IN">Defines the default size of newly created objects using CTRL-Return or CTRL-Click at an object creating Button.</desc>
 						<desc xml:lang="x-comment">Defines the default size of newly created objects using CTRL-Return or CTRL-Click at an object creating Button.</desc>
+						<desc xml:lang="hu">Defines the default size of newly created objects using CTRL-Return or CTRL-Click at an object creating Button.</desc>
+						<desc xml:lang="sk">Defines the default size of newly created objects using CTRL-Return or CTRL-Click at an object creating Button.</desc>
+						<desc xml:lang="sl">Defines the default size of newly created objects using CTRL-Return or CTRL-Click at an object creating Button.</desc>
 					<label xml:lang="en-US">Default Object Size</label>
 					<label xml:lang="el">Default Object Size</label>
-					<label xml:lang="nl">Default Object Size</label>
+					<label xml:lang="nl">Standaard objectgrootte</label>
 					<label xml:lang="fr">Default Object Size</label>
 					<label xml:lang="fi">Default Object Size</label>
 					<label xml:lang="cs">Default Object Size</label>
@@ -7121,6 +7769,9 @@
 					<label xml:lang="th">Default Object Size</label>
 					<label xml:lang="hi-IN">Default Object Size</label>
 					<label xml:lang="x-comment">Default Object Size</label>
+					<label xml:lang="hu">Default Object Size</label>
+					<label xml:lang="sk">Default Object Size</label>
+					<label xml:lang="sl">Default Object Size</label>
 				</info>
 				<prop oor:name="Width" oor:type="xs:int">
 					<info>
@@ -7149,6 +7800,9 @@
 							<desc xml:lang="th">Specifies the default width in 1/100th millimeters.</desc>
 							<desc xml:lang="hi-IN">Specifies the default width in 1/100th millimeters.</desc>
 							<desc xml:lang="x-comment">Specifies the default width in 1/100th millimeters.</desc>
+							<desc xml:lang="hu">Specifies the default width in 1/100th millimeters.</desc>
+							<desc xml:lang="sk">Specifies the default width in 1/100th millimeters.</desc>
+							<desc xml:lang="sl">Specifies the default width in 1/100th millimeters.</desc>
 						<label xml:lang="en-US"/>
 					</info>
 					<value>8000</value>
@@ -7180,6 +7834,9 @@
 							<desc xml:lang="th">Specifies the default height in 1/100th millimeters.</desc>
 							<desc xml:lang="hi-IN">Specifies the default height in 1/100th millimeters.</desc>
 							<desc xml:lang="x-comment">Specifies the default height in 1/100th millimeters.</desc>
+							<desc xml:lang="hu">Specifies the default height in 1/100th millimeters.</desc>
+							<desc xml:lang="sk">Specifies the default height in 1/100th millimeters.</desc>
+							<desc xml:lang="sl">Specifies the default height in 1/100th millimeters.</desc>
 						<label xml:lang="en-US"/>
 					</info>
 					<value>5000</value>
@@ -7188,6 +7845,7 @@
 		</group>
 	</component>
 </oor:component-schema>
+
 
 
 
