@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2004-01-28 14:27:27 $
+#   last change: $Author: svesik $ $Date: 2004-04-21 12:06:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,6 @@
 #
 #*************************************************************************
 PRJ=..$/..
-
 PRJNAME=			framework
 TARGET=             fwk_constant
 ENABLE_EXCEPTIONS=	TRUE
@@ -77,7 +76,6 @@ BOOTSTRAP_SERVICE=	FALSE
 SLOFILES=           $(SLO)$/filter.obj              \
                     $(SLO)$/frameloader.obj         \
                     $(SLO)$/contenthandler.obj      \
-                    $(SLO)$/mediadescriptor.obj     \
                     $(SLO)$/containerquery.obj
 
 # --- Targets ------------------------------------------------------
