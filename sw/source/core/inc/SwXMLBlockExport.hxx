@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLBlockExport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-10 17:16:17 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:13:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,21 +72,32 @@ class SwXMLBlockListExport : public SvXMLExport
 private:
     SwXMLTextBlocks &rBlockList;
 public:
-    SwXMLBlockListExport( SwXMLTextBlocks & rBlocks, const rtl::OUString &rFileName,
-          com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler);
+    // #110680#
+    SwXMLBlockListExport(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+        SwXMLTextBlocks & rBlocks,
+        const rtl::OUString &rFileName,
+        com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler);
+
     virtual ~SwXMLBlockListExport ( void ) {}
     sal_uInt32 exportDoc( enum ::xmloff::token::XMLTokenEnum eClass);
     void _ExportAutoStyles() {}
     void _ExportMasterStyles () {}
     void _ExportContent() {}
 };
+
 class SwXMLTextBlockExport : public SvXMLExport
 {
 private:
     SwXMLTextBlocks &rBlockList;
 public:
-    SwXMLTextBlockExport( SwXMLTextBlocks & rBlocks, const rtl::OUString &rFileName,
-          com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler);
+    // #110680#
+    SwXMLTextBlockExport(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+        SwXMLTextBlocks & rBlocks,
+        const rtl::OUString &rFileName,
+        com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler);
+
     virtual ~SwXMLTextBlockExport ( void ) {}
     sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum eClass) {return 0;}
     sal_uInt32 exportDoc(const String & rText);
