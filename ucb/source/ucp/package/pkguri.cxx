@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkguri.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:15:34 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 17:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,8 +549,8 @@ void appendUCS4(rtl::OUStringBuffer & rTheText, sal_uInt32 nUCS4,
                 sal_Char cEscapePrefix, rtl_TextEncoding eCharset,
                 bool bKeepVisibleEscapes)
 {
-    bool bEscape;
-    rtl_TextEncoding eTargetCharset;
+    bool bEscape = false;
+    rtl_TextEncoding eTargetCharset = RTL_TEXTENCODING_ASCII_US;
     switch (eEscapeType)
     {
         case ESCAPE_NO:
