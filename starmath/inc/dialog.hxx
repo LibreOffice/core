@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-24 12:11:57 $
+ *  last change: $Author: hr $ $Date: 2004-02-05 16:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,6 @@
 #endif
 #ifndef _SVX_CHARMAP_HXX
 #include <svx/charmap.hxx>
-#endif
-#ifndef _SVX_OPTGENRL_HXX //autogen
-#include <svx/optgenrl.hxx>
 #endif
 #ifndef _BASEDLGS_HXX //autogen
 #include <sfx2/basedlgs.hxx>
