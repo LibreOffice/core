@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextRange.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:21 $
+ *  last change: $Author: os $ $Date: 2001-04-23 09:57:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,12 @@
 #ifndef __com_sun_star_style_ParagraphProperties_idl__
 #include <com/sun/star/style/ParagraphProperties.idl>
 #endif
-
-
+#ifndef __com_sun_star_style_CharacterPropertiesAsian_idl__
+#include <com/sun/star/style/CharacterPropertiesAsian.idl>
+#endif
+#ifndef __com_sun_star_style_CharacterPropertiesComplex_idl__
+#include <com/sun/star/style/CharacterPropertiesComplex.idl>
+#endif
 #ifndef __com_sun_star_container_XContentEnumerationAccess_idl__
 #include <com/sun/star/container/XContentEnumerationAccess.idl>
 #endif
@@ -127,6 +131,9 @@ service TextRange
     // DocMerge: empty anyway
     service com::sun::star::style::CharacterProperties;
 
+    [optional] service com::sun::star::style::CharacterPropertiesAsian;
+
+    [optional] service com::sun::star::style::CharacterPropertiesComplex;
     // DocMerge: empty anyway
     service com::sun::star::style::ParagraphProperties;
 
@@ -139,6 +146,9 @@ service TextRange
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/21 08:35:21  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.4  2000/12/20 16:52:37  cl
     #79272# made some interfaces optional
 
