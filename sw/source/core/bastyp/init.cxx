@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-10 17:04:46 $
+ *  last change: $Author: os $ $Date: 2002-06-17 11:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,6 +417,7 @@ USHORT __FAR_DATA aTableSetRange[] = {
     RES_HORI_ORIENT,    RES_HORI_ORIENT,
     RES_KEEP,           RES_KEEP,
     RES_LAYOUT_SPLIT,   RES_LAYOUT_SPLIT,
+    RES_FRAMEDIR,       RES_FRAMEDIR,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
     0
 };
@@ -841,7 +842,7 @@ void _InitCore()
     aAttrTab[ RES_FTN_AT_TXTEND - POOLATTR_BEGIN ] = new SwFmtFtnAtTxtEnd;
     aAttrTab[ RES_END_AT_TXTEND - POOLATTR_BEGIN ] = new SwFmtEndAtTxtEnd;
     aAttrTab[ RES_COLUMNBALANCE - POOLATTR_BEGIN ] = new SwFmtNoBalancedColumns;
-    aAttrTab[ RES_FRAMEDIR - POOLATTR_BEGIN ] = new SvxFrameDirectionItem;
+    aAttrTab[ RES_FRAMEDIR - POOLATTR_BEGIN ] = new SvxFrameDirectionItem(FRMDIR_ENVIRONMENT);
 
 // FrameAttr - Dummies
     aAttrTab[ RES_FRMATR_DUMMY8 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_FRMATR_DUMMY8 );
