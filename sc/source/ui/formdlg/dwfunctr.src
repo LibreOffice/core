@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dwfunctr.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-07 15:13:17 $
+ *  last change: $Author: kz $ $Date: 2001-08-14 14:53:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -619,6 +619,7 @@ DockingWindow FID_FUNCTION_BOX
     Text[ finnish ] = "Toiminnot";
 };
  // ********************************************************************** EOF
+
 
 
 
