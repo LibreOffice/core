@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConnectionBroadcaster.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:34 $
+ *  last change: $Author: jbu $ $Date: 2002-01-18 13:34:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,21 +69,20 @@
 
 
 
-// DocMerge from idl: interface com::sun::star::connection::XConnectionBroadcaster
-/** @missing
+/** allows to add listeners to a connection.
+    <p> Maybe supported by connections returned from <member>XAcceptor::accept</member>
+    or <member>XConnector::connect</member>.
  */
 interface XConnectionBroadcaster: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::connection::XConnectionBroadcaster::addStreamListener
     /** registers an object to receive events from this connection.
      */
     void addStreamListener( [in] com::sun::star::io::XStreamListener aListener );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::connection::XConnectionBroadcaster::removeStreamListener
     /** unregisters an object to receive events from this connection.
      */
     void removeStreamListener( [in] com::sun::star::io::XStreamListener aListener );

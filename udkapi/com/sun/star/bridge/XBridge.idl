@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBridge.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 14:24:19 $
+ *  last change: $Author: jbu $ $Date: 2002-01-18 13:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,10 @@
 
 module com {  module sun {  module star {  module bridge {
 
-/**
+/** main interface for an interprocess bridge.
  */
 interface XBridge: com::sun::star::uno::XInterface
 {
-    // DocMerge from xml: method com::sun::star::bridge::XBridge::getInstance
     /** tries to get an interface from the remote that is known by this name.
 
         <p>In general, this method is called once to get the initial object from the
@@ -78,19 +77,17 @@ interface XBridge: com::sun::star::uno::XInterface
         @param sInstanceName The name of the object, that shall be retrieved from the
                              remote process. The call is delegated to
                              com.sun.star.bridge.XInstanceProvider.getInstance() in the
-                             remote process
+                             remote process.
         @see com.sun.star.bridge.XInstanceProvider
      */
     XInterface getInstance( [in] string sInstanceName );
 
 
-    // DocMerge from xml: method com::sun::star::bridge::XBridge::getName
     /** name that the bridge got when it was created.
      */
     string getName();
 
 
-    // DocMerge from xml: method com::sun::star::bridge::XBridge::getDescription
     /** a unique descriptive string: protocol + ":" + XConnection.getDescription()
      */
     string getDescription();

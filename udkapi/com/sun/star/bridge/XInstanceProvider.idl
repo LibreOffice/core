@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInstanceProvider.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 14:24:19 $
+ *  last change: $Author: jbu $ $Date: 2002-01-18 13:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
  module com {  module sun {  module star {  module bridge {
 
 
-/** Allows to export UNO objects to other processes.
+/** allows to export UNO objects to other processes.
 
     @see XBridge
  */
@@ -82,7 +82,7 @@ interface XInstanceProvider: com::sun::star::uno::XInterface
        @returns
             the object associated with the name. The return value may be null in case
             there is no object to offer for this string. In this case, XBridge.getInstance()
-            will also return a null reference
+            (in the other process) will also return a null reference.
 
        @throws NoSuchElementException
             You may throw this exception to indicate, that there is no object for this

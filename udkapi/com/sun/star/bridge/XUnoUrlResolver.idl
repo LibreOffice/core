@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XUnoUrlResolver.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:33 $
+ *  last change: $Author: jbu $ $Date: 2002-01-18 13:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,15 +72,17 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::bridge::XUnoUrlResolver
-/** service <type scope="com::sun::star::bridge">UnoUrlResolver</type>
-    implements this interface.
+/** allows to resolve an object using the uno-url.
  */
 interface XUnoUrlResolver: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::bridge::XUnoUrlResolver::resolve
-    /** resolves an object, on the uno url.
+    /** resolves an object using the given uno-url.
+        @param sUnoUrl the uno-url. The uno-url is specified
+        <a href="http://udk.openoffice.org/common/man/spec/uno-url.html">here</a>.
+
+        @returns the resolved object, in general a proxy for a remote object.
+                 You can use it the same way as you use local references.
      */
     com::sun::star::uno::XInterface resolve( [in] string sUnoUrl )
         raises (com::sun::star::connection::NoConnectException,
@@ -95,6 +97,9 @@ interface XUnoUrlResolver: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/03/16 15:10:33  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.5  2000/12/11 16:09:40  mi
     documentation syntax fixed and some minor semantic documentation fixes
 
