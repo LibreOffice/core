@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_configuration.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 12:14:39 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:10:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include "svtools/inettype.hxx"
 #include "com/sun/star/ucb/NameClash.hpp"
 #include "com/sun/star/io/XActiveDataSink.hpp"
+#include "com/sun/star/util/XRefreshable.hpp"
 #include "com/sun/star/configuration/backend/XLayerImporter.hpp"
 #include <memory>
 
@@ -84,12 +85,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using ::rtl::OUString;
 
-namespace dp_registry
-{
-namespace backend
-{
-namespace configuration
-{
+namespace dp_registry {
+namespace backend {
+namespace configuration {
 
 //==============================================================================
 class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
@@ -114,20 +112,13 @@ public:
                        Reference< XCommandEnvironment > const & xCmdEnv );
     ::std::auto_ptr<PersistentMap> m_registeredPackages;
     OUString const & getConfigLayer();
+    Reference<util::XRefreshable> m_defaultProvider;
 
-    inline BackendImpl(
+    BackendImpl(
+        Sequence<Any> const & args,
         Reference<XComponentContext> const & xComponentContext,
         OUString const & implName,
-        Sequence<OUString> const & supportedMediaTypes )
-        : PackageRegistryBackend(
-            xComponentContext, implName, supportedMediaTypes ),
-          m_strConfSchema( getResourceString(RID_STR_CONF_SCHEMA) ),
-          m_strConfData( getResourceString(RID_STR_CONF_DATA) )
-        {}
-
-    // XInitialization
-    virtual void SAL_CALL initialize( Sequence<Any> const & args )
-        throw (Exception);
+        Sequence<OUString> const & supportedMediaTypes );
 };
 
 //==============================================================================
@@ -140,7 +131,7 @@ protected:
         { return static_cast< BackendImpl * >(m_myBackend.get()); }
 
     // Package
-    virtual bool isRegistered_(
+    virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
         ::osl::ResettableMutexGuard & guard,
         ::rtl::Reference<AbortChannel> const & abortChannel,
         Reference<XCommandEnvironment> const & xCmdEnv );
@@ -175,8 +166,8 @@ OUString SAL_CALL getImplementationName()
 
 //==============================================================================
 Reference<XInterface> SAL_CALL create(
+    Sequence<Any> const & args,
     Reference<XComponentContext> const & xComponentContext )
-    SAL_THROW( (Exception) )
 {
     OUString const mediaTypes [] = {
         OUSTR("application/vnd.sun.star.configuration-data"),
@@ -184,18 +175,31 @@ Reference<XInterface> SAL_CALL create(
     };
     return static_cast< ::cppu::OWeakObject * >(
         new BackendImpl(
-            xComponentContext, getImplementationName(),
+            args, xComponentContext, getImplementationName(),
             Sequence<OUString>( mediaTypes, ARLEN(mediaTypes) ) ) );
 }
 
 //______________________________________________________________________________
-void BackendImpl::initialize( Sequence<Any> const & args )
-    throw (Exception)
+BackendImpl::BackendImpl(
+    Sequence<Any> const & args,
+    Reference<XComponentContext> const & xComponentContext,
+    OUString const & implName,
+    Sequence<OUString> const & supportedMediaTypes )
+    : PackageRegistryBackend(
+        args, xComponentContext, implName, supportedMediaTypes ),
+      m_strConfSchema( getResourceString(RID_STR_CONF_SCHEMA) ),
+      m_strConfData( getResourceString(RID_STR_CONF_DATA) ),
+      m_defaultProvider(
+          xComponentContext->getValueByName(
+              OUSTR("/singletons/com.sun.star."
+                    "configuration.theDefaultProvider") ), UNO_QUERY )
 {
-    PackageRegistryBackend::initialize( args );
+    OSL_ASSERT( m_defaultProvider.is() );
 
-    if (! transientMode())
-    {
+    if (transientMode()) {
+        m_registeredPackages.reset( new PersistentMap );
+    }
+    else {
         m_registeredPackages.reset(
             new PersistentMap(
                 make_url( getCachePath(), OUSTR("registered_packages.db") ),
@@ -267,8 +271,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
 //______________________________________________________________________________
 OUString const & BackendImpl::getConfigLayer()
 {
-    if (m_configLayer.getLength() == 0)
-    {
+    if (m_configLayer.getLength() == 0) {
         OUString path(
             make_url( expand_url(getCachePath()), OUSTR("registry") ) );
         ::osl::FileBase::RC rc = ::osl::File::getAbsoluteFileURL(
@@ -312,19 +315,16 @@ Reference< xml::input::XElement > SchemaFileRoot::startRootElement(
     // "name" attribute
     m_name = xAttributes->getValueByUidName( getUid(), OUSTR("name") );
     if (m_name.getLength() == 0)
-    {
         throw xml::sax::SAXException(
             OUSTR("missing schema name attribute!"),
             static_cast< OWeakObject * >(this), Any() );
-    }
+
     // "package" attribute
     m_package = xAttributes->getValueByUidName( getUid(), OUSTR("package") );
     if (m_package.getLength() == 0)
-    {
         throw xml::sax::SAXException(
             OUSTR("missing schema package attribute!"),
             static_cast<OWeakObject *>(this), Any() );
-    }
 
     // don't go deeper...
     return Reference<xml::input::XElement>();
@@ -354,11 +354,10 @@ void BackendImpl::xcs_merge_in(
     // assure dest folder is existing:
     ::ucb::Content ucb_dest_folder;
     create_folder( &ucb_dest_folder, dest_folder, xCmdEnv );
-    // ought to give no error, because destination file does not exist
     if (! ucb_dest_folder.transferContent(
             ::ucb::Content( url, xCmdEnv ),
             ::ucb::InsertOperation_COPY,
-            title, NameClash::ASK ))
+            title, NameClash::OVERWRITE ))
         throw RuntimeException(
             OUSTR("::ucb::Content::transferContent() failed!"), 0 );
 }
@@ -374,8 +373,7 @@ static OUString encodeForXml( OUString const & text )
     for ( sal_Int32 pos = 0; pos < len; ++pos )
     {
         sal_Unicode c = text[ pos ];
-        switch (c)
-        {
+        switch (c) {
         case '<':
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("&lt;") );
             break;
@@ -417,8 +415,7 @@ void BackendImpl::xcu_merge_in(
     while (nBytes > 0)
     {
         sal_Int32 index = rtl_str_indexOfChar_WithLength( pBytes, nBytes, '%' );
-        if (index < 0)
-        {
+        if (index < 0) {
             if (! use_filtered) // opt
                 break;
             index = nBytes;
@@ -450,8 +447,8 @@ void BackendImpl::xcu_merge_in(
                      RTL_CONSTASCII_STRINGPARAM("origin%"),
                      sizeof ("origin%") - 1 ) == 0)
         {
-            if (origin.getLength() == 0) // encode only once
-            {
+            if (origin.getLength() == 0) {
+                // encode only once
                 origin = ::rtl::OUStringToOString(
                     encodeForXml( url.copy( 0, url.lastIndexOf( '/' ) ) ),
                     // xxx todo: encode always for UTF-8? => lookup doc-header?
@@ -472,8 +469,7 @@ void BackendImpl::xcu_merge_in(
         filtered.realloc( write_pos );
 
     Reference<XComponentContext> const & xContext = getComponentContext();
-    if (! m_xMergeImporter.is())
-    {
+    if (! m_xMergeImporter.is()) {
         m_xMergeImporter.set(
             xContext->getServiceManager()->createInstanceWithContext(
                 OUSTR("com.sun.star.configuration.backend.MergeImporter"),
@@ -491,7 +487,11 @@ void BackendImpl::xcu_merge_in(
                                              filtered ) );
     else
         ucb_content.openStream( xActiveDataSink );
-    m_xMergeImporter->importLayerForEntity( xLayer, getConfigLayer() );
+
+    if (transientMode())
+        m_xMergeImporter->importLayer( xLayer );
+    else
+        m_xMergeImporter->importLayerForEntity( xLayer, getConfigLayer() );
 }
 
 //##############################################################################
@@ -502,8 +502,7 @@ Any PackageImpl::getIcon( sal_Bool highContrast, sal_Bool smallIcon )
     throw (RuntimeException)
 {
     OSL_ASSERT( smallIcon );
-    if (smallIcon)
-    {
+    if (smallIcon) {
         sal_uInt16 ret = highContrast ? RID_IMG_CONF_XML_HC : RID_IMG_CONF_XML;
         return makeAny(ret);
     }
@@ -512,23 +511,16 @@ Any PackageImpl::getIcon( sal_Bool highContrast, sal_Bool smallIcon )
 
 // Package
 //______________________________________________________________________________
-bool PackageImpl::isRegistered_(
+beans::Optional< beans::Ambiguous<sal_Bool> > PackageImpl::isRegistered_(
     ::osl::ResettableMutexGuard & guard,
     ::rtl::Reference<AbortChannel> const & abortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     BackendImpl * that = getMyBackend();
-    OUString val;
-    if (that->m_registeredPackages->get( &val, m_url ))
-    {
-        if (val.getLength() == 0)
-            throw beans::UnknownPropertyException(
-                OUSTR("registration status unknown: ") + m_url,
-                static_cast<OWeakObject *>(this) );
-        return true;
-    }
-    else
-        return false;
+    return beans::Optional< beans::Ambiguous<sal_Bool> >(
+        true /* IsPresent */,
+        beans::Ambiguous<sal_Bool>( that->m_registeredPackages->has( m_url ),
+                                    false /* IsAmbiguous */ ) );
 }
 
 //______________________________________________________________________________
@@ -543,9 +535,13 @@ void PackageImpl::processPackage_(
     {
         if (m_isSchema)
         {
-            that->xcs_merge_in( m_url, xCmdEnv );
-            OUString insertion = OUSTR("vnd.sun.star.configuration-schema");
-            that->m_registeredPackages->put( m_url, insertion );
+            OSL_ENSURE( ! that->transientMode(),
+                        "### schema cannot be deployed transiently!" );
+            if (! that->transientMode()) {
+                that->xcs_merge_in( m_url, xCmdEnv );
+                OUString insertion = OUSTR("vnd.sun.star.configuration-schema");
+                that->m_registeredPackages->put( m_url, insertion );
+            }
         }
         else
         {
@@ -554,7 +550,7 @@ void PackageImpl::processPackage_(
             that->m_registeredPackages->put( m_url, insertion );
         }
     }
-    else
+    else // revoke
     {
         OSL_ASSERT( that->m_registeredPackages->has( m_url ) );
         t_string2string_map entries( that->m_registeredPackages->getEntries() );
@@ -563,72 +559,76 @@ void PackageImpl::processPackage_(
 
         if (m_isSchema)
         {
-            ::ucb::Content ucbSaveLayer(
-                make_url( that->getConfigLayer(), OUSTR("schema") ), xCmdEnv );
-            ucbSaveLayer.setPropertyValue(
-                OUSTR("Title"), makeAny( OUSTR("schema.bak") ) );
-            try
+            if (! that->transientMode())
             {
-                for ( ; iPos != iEnd; ++iPos )
-                {
-                    checkAborted( abortChannel );
-
-                    if (iPos->second.equalsAsciiL(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "vnd.sun.star.configuration-schema") ) &&
-                        !iPos->first.equals( m_url ))
-                        that->xcs_merge_in( iPos->first, xCmdEnv );
-                }
-            }
-            catch (RuntimeException &)
-            {
-                throw;
-            }
-            catch (Exception &)
-            {
+                ::ucb::Content ucbSaveLayer(
+                    make_url( that->getConfigLayer(), OUSTR("schema") ),
+                    xCmdEnv );
                 ucbSaveLayer.setPropertyValue(
-                    OUSTR("Title"), makeAny( OUSTR("schema") ) );
-                throw;
+                    OUSTR("Title"), makeAny( OUSTR("schema.bak") ) );
+                try {
+                    for ( ; iPos != iEnd; ++iPos )
+                    {
+                        checkAborted( abortChannel );
+                        if (iPos->second.equalsAsciiL(
+                                RTL_CONSTASCII_STRINGPARAM(
+                                    "vnd.sun.star.configuration-schema") ) &&
+                            !iPos->first.equals( m_url )) {
+                            that->xcs_merge_in( iPos->first, xCmdEnv );
+                        }
+                    }
+                }
+                catch (RuntimeException &) {
+                    throw;
+                }
+                catch (Exception &) {
+                    ucbSaveLayer.setPropertyValue(
+                        OUSTR("Title"), makeAny( OUSTR("schema") ) );
+                    throw;
+                }
+                that->m_registeredPackages->erase( m_url );
+                ucbSaveLayer.executeCommand(
+                    OUSTR("delete"), makeAny( true /* delete physically */ ) );
             }
-            that->m_registeredPackages->erase( m_url );
-            ucbSaveLayer.executeCommand(
-                OUSTR("delete"), makeAny( true /* delete physically */ ) );
         }
-        else
+        else // data
         {
-            ::ucb::Content ucbSaveLayer(
-                make_url( that->getConfigLayer(), OUSTR("data") ), xCmdEnv );
-            ucbSaveLayer.setPropertyValue(
-                OUSTR("Title"), makeAny( OUSTR("data.bak") ) );
-            try
+            if (! that->transientMode())
             {
-                for ( ; iPos != iEnd; ++iPos )
-                {
-                    checkAborted( abortChannel );
-
-                    if (iPos->second.equalsAsciiL(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "vnd.sun.star.configuration-data") ) &&
-                        !iPos->first.equals( m_url ))
-                        that->xcu_merge_in( iPos->first, xCmdEnv );
-                }
-            }
-            catch (RuntimeException &)
-            {
-                throw;
-            }
-            catch (Exception &)
-            {
+                ::ucb::Content ucbSaveLayer(
+                    make_url( that->getConfigLayer(), OUSTR("data") ),
+                    xCmdEnv );
                 ucbSaveLayer.setPropertyValue(
-                    OUSTR("Title"), makeAny( OUSTR("data") ) );
-                throw;
+                    OUSTR("Title"), makeAny( OUSTR("data.bak") ) );
+                try {
+                    for ( ; iPos != iEnd; ++iPos )
+                    {
+                        checkAborted( abortChannel );
+                        if (iPos->second.equalsAsciiL(
+                                RTL_CONSTASCII_STRINGPARAM(
+                                    "vnd.sun.star.configuration-data") ) &&
+                            !iPos->first.equals( m_url )) {
+                            that->xcu_merge_in( iPos->first, xCmdEnv );
+                        }
+                    }
+                }
+                catch (RuntimeException &) {
+                    throw;
+                }
+                catch (Exception &) {
+                    ucbSaveLayer.setPropertyValue(
+                        OUSTR("Title"), makeAny( OUSTR("data") ) );
+                    throw;
+                }
+                that->m_registeredPackages->erase( m_url );
+                ucbSaveLayer.executeCommand(
+                    OUSTR("delete"), makeAny( true /* delete physically */ ) );
             }
-            that->m_registeredPackages->erase( m_url );
-            ucbSaveLayer.executeCommand(
-                OUSTR("delete"), makeAny( true /* delete physically */ ) );
         }
     }
-    // xxx todo: XRefreshable
+
+    if (!m_isSchema && getMyBackend()->m_defaultProvider.is())
+        getMyBackend()->m_defaultProvider->refresh();
 }
 
 } // namespace configuration
