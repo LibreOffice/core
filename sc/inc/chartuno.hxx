@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartuno.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:48 $
+ *  last change: $Author: nn $ $Date: 2001-01-11 15:26:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
 #endif
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_TABLE_XTABLECHART_HPP_
 #include <com/sun/star/table/XTableChart.hpp>
@@ -84,12 +87,12 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
+#include <com/sun/star/container/XNamed.hpp>
+#endif
 
 #ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
-#include <cppuhelper/implbase3.hxx>
 #endif
 
 
@@ -164,9 +167,10 @@ public:
 };
 
 
-class ScChartObj : public cppu::WeakImplHelper3<
+class ScChartObj : public cppu::WeakImplHelper4<
                             com::sun::star::table::XTableChart,
                             com::sun::star::document::XEmbeddedObjectSupplier,
+                            com::sun::star::container::XNamed,
                             com::sun::star::lang::XServiceInfo >,
                         public SfxListener
 {
@@ -200,6 +204,11 @@ public:
                             // XEmbeddedObjectSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL
                             getEmbeddedObject() throw(::com::sun::star::uno::RuntimeException);
+
+                            // XNamed
+    virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setName( const ::rtl::OUString& aName )
+                                throw(::com::sun::star::uno::RuntimeException);
 
                             // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName()
