@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:39:14 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:36:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,14 +208,14 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ portuguese ] = "~Centrado" ;
         Text [ finnish ] = "~Keskitetty" ;
         Text [ danish ] = "Centreret" ;
-        Text [ french ] = "~Centré" ;
+        Text [ french ] = "Centré" ;
         Text [ swedish ] = "~Centrerad" ;
         Text [ dutch ] = "~Centreren" ;
         Text [ spanish ] = "Cen~trado" ;
         Text [ english_us ] = "C~entered" ;
         Text[ chinese_simplified ] = "¾ÓÖĞ(~E)";
         Text[ russian ] = "Ïî öåíòğó";
-        Text[ polish ] = "Poœrodku";
+        Text[ polish ] = "Do œrodka";
         Text[ japanese ] = "’†‰›‘µ‚¦(~E)";
         Text[ chinese_traditional ] = "¸m¤¤(~E)";
         Text[ arabic ] = "ÊæÓíØ";
@@ -276,7 +276,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ portuguese ] = "~Caracteres" ;
         Text [ finnish ] = "~Merkki" ;
         Text [ danish ] = "Tegn" ;
-        Text [ french ] = "~Caractère" ;
+        Text [ french ] = "Caractère" ;
         Text [ swedish ] = "T~ecken" ;
         Text [ dutch ] = "T~eken" ;
         Text [ spanish ] = "~Carácter" ;
@@ -347,7 +347,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ portuguese ] = "N~enhum" ;
         Text [ finnish ] = "~Ei mitään" ;
         Text [ danish ] = "Ingen" ;
-        Text [ french ] = "A~ucun(e)" ;
+        Text [ french ] = "Aucun(e)" ;
         Text [ swedish ] = "~Inga" ;
         Text [ dutch ] = "~Geen" ;
         Text [ spanish ] = "Nin~guno" ;
@@ -469,7 +469,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ russian ] = "Ñîçä~àòü";
         Text[ polish ] = "Nowy";
         Text[ japanese ] = "V‹Kì¬(~N)";
-        Text[ chinese_traditional ] = "¼W¥[(~N)";
+        Text[ chinese_traditional ] = "·s«Ø(~N)";
         Text[ arabic ] = "ÌÏíÏ";
         Text[ greek ] = "Äçìéïõñãßá";
         Text[ korean ] = "»õ·Î(~N)";
@@ -548,6 +548,7 @@ TabPage RID_SVXPAGE_TABULATOR
     Text[ catalan ] = "Tabulaciones";
 };
  // ********************************************************************** EOF
+
 
 
 
