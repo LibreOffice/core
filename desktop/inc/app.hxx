@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:34:50 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:50:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,9 @@ class Desktop : public Application
             if ( m_aBootstrapError == BE_OK )
                 m_aBootstrapError = nError;
         }
+
+        DECL_STATIC_LINK( Desktop, AsyncTerminate, void*);
+        static sal_Bool CheckOEM();
 
     private:
         // Bootstrap methods
