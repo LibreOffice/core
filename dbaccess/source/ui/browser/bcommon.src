@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bcommon.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:12 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:20:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ String RID_STR_QRY_TITLE
     Text [ ENGLISH ] = "Query #" ;
     Text [ english_us ] = "Query #" ;
     Text [ portuguese ] = "Consulta #" ;
-    Text [ portuguese_brazilian ] = "Abfrage #" ;
+    Text [ portuguese_brazilian ] = "Consulta #" ;
     Text [ swedish ] = "S�kning #" ;
     Text [ danish ] = "Foresp�rgsel #" ;
     Text [ italian ] = "Ricerca #" ;
@@ -86,11 +86,14 @@ String RID_STR_QRY_TITLE
     Text[ korean ] = "쿼리 #";
     Text[ chinese_traditional ] = "查詢 #";
     Text[ arabic ] = "��������� #";
-    Text[ turkish ] = "Sorgu #";
+    Text[ turkish ] = "Sogrulama #";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Consulta #";
     Text[ finnish ] = "Kysely #";
     Text[ thai ] = "แบบสอบถาม  #";
+    Text[ czech ] = "Dotaz #";
+    Text[ hebrew ] = "Abfrage #";
+    Text[ hindi ] = "जानकारी #";
 };
 String RID_STR_TBL_TITLE
 {
@@ -98,7 +101,7 @@ String RID_STR_TBL_TITLE
     Text [ ENGLISH ] = "Table #" ;
     Text [ english_us ] = "Table #" ;
     Text [ portuguese ] = "Tabela #" ;
-    Text [ portuguese_brazilian ] = "Tabelle #" ;
+    Text [ portuguese_brazilian ] = "Tabela #" ;
     Text [ swedish ] = "Tabell #" ;
     Text [ danish ] = "Tabel #" ;
     Text [ italian ] = "Tabella #" ;
@@ -120,7 +123,24 @@ String RID_STR_TBL_TITLE
     Text[ catalan ] = "Taula #";
     Text[ finnish ] = "Taulu #";
     Text[ thai ] = "ตาราง #";
+    Text[ czech ] = "Tabulka #";
+    Text[ hebrew ] = "Tabelle #";
+    Text[ hindi ] = "सारणी #";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
