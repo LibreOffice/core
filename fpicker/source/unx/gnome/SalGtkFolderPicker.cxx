@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SalGtkFolderPicker.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 17:07:57 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,6 @@ void SAL_CALL SalGtkFolderPicker::setDescription( const rtl::OUString& rDescript
     throw( uno::RuntimeException )
 {
     ::rtl::OString aDescription = OUStringToOString( rDescription, RTL_TEXTENCODING_UTF8 );
-    fprintf(stderr, "desc is %s\n", aDescription.getStr());
 }
 
 
@@ -222,9 +221,6 @@ void SAL_CALL SalGtkFolderPicker::setTitle( const rtl::OUString& aTitle ) throw(
 
     ::rtl::OString aWindowTitle = OUStringToOString( aTitle, RTL_TEXTENCODING_UTF8 );
     gtk_window_set_title( GTK_WINDOW( m_pDialog ), aWindowTitle.getStr() );
-
-    fprintf(stderr, "title is %s\n", aWindowTitle.getStr());
-
 }
 
 sal_Int16 SAL_CALL SalGtkFolderPicker::execute() throw( uno::RuntimeException )
