@@ -6,6 +6,8 @@ ex	extensions\source\plugin\workben		get	-	all	ex_plwkb NULL
 ex	extensions\source\plugin\inc\plugin\win		get	-	all	ex_piwi NULL
 ex	extensions\source\plugin\inc\plugin\unx		get	-	all	ex_piux NULL
 ex	extensions\source\plugin\inc\plugin\os2		get	-	all	ex_pios2 NULL
+ex	extensions\source\activex\msidl		nmake	-	w	ex_axmsidl NULL
+ex	extensions\source\activex\main		nmake	-	w	ex_axmain ex_axmsidl.w NULL
 ex	extensions\source\ole				nmake	-	w	ex_ole NULL
 ex	extensions\source\resource			nmake	-	all	ex_resrc NULL
 ex	extensions\source\installation			nmake	-	w	ex_inst NULL
