@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-27 08:25:54 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -485,7 +485,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ chinese_traditional ] = "¤β¤u§σ΄«§λΌv¤ω(~C)";
         Text[ arabic ] = "ΚΫννΡ ΗαΤΡνΝΙ νΟζνΗπ";
         Text[ greek ] = "Αλλαγή δια~φανειών (slides) χειροκίνητα";
-        Text[ korean ] = "ΌφµΏΐΈ·Ξ ½½¶σΐΜµε ±³Θ―(~C)";
+        Text[ korean ] = "ΌφµΏΐΈ·Ξ ½½¶σΐΜµε ΐόΘ―";
         Text[ turkish ] = "Manόel slayt geηiώi";
         Text[ language_user1 ] = " ";
     };
@@ -624,7 +624,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ chinese_traditional ] = "«φ¤@¤UΉ«ΑδΕά§σΒ²³ψ(~M)";
         Text[ arabic ] = "ΚΫννΡ ΗαΤΡνΝΙ ΪδΟ ΗαδήΡ έζή ΗαΞαένΙ";
         Text[ greek ] = "Αλλαγή διαφάνειας (slides) με ~κλικ του φόντου";
-        Text[ korean ] = "Ήθ°ζΏ΅ Ε¬Έ―ΗÒ ¶§ ½½¶σΐΜµε ±³Θ―(~M)";
+        Text[ korean ] = "Ήθ°ζΏ΅ Ε¬Έ―ΗΨΌ­ ½½¶σΐΜµε ΐόΘ―";
         Text[ turkish ] = "Artalana tύklayύnca slayt deπiώtir";
         Text[ language_user1 ] = "RB: bitte auf die Lδnge des Textes achten. Der Text soll nicht die Lδnge des deutschen Textes όberschreiten.";
     };
