@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-30 16:46:50 $
+ *  last change: $Author: mt $ $Date: 2001-05-31 11:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,6 +246,7 @@ private:
     sal_uInt16          nScrollDiffX;
     sal_Bool            bReadOnly;
     sal_Bool            bClickedInSelection;
+    sal_Bool            bActiveDragAndDropListener;
 
     Point               aAnchorPoint;
     Rectangle           aOutArea;

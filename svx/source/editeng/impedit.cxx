@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-30 16:46:50 $
+ *  last change: $Author: mt $ $Date: 2001-05-31 11:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,7 @@ ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, Window* pWindow ) :
     nInvMore            = 1;
     nTravelXPos         = TRAVEL_X_DONTKNOW;
     nControl            = EV_CNTRL_AUTOSCROLL | EV_CNTRL_ENABLEPASTE;
+    bActiveDragAndDropListener = FALSE;
 
     aEditSelection.Min() = pEng->pImpEditEngine->GetEditDoc().GetStartPaM();
     aEditSelection.Max() = pEng->pImpEditEngine->GetEditDoc().GetEndPaM();
@@ -1696,7 +1697,7 @@ void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTarge
 void ImpEditView::AddDragAndDropListeners()
 {
     Window* pWindow = GetWindow();
-    if ( pWindow && pWindow->GetDragGestureRecognizer().is() )
+    if ( !bActiveDragAndDropListener && pWindow && pWindow->GetDragGestureRecognizer().is() )
     {
         vcl::unohelper::DragAndDropWrapper* pDnDWrapper = new vcl::unohelper::DragAndDropWrapper( this );
         mxDnDListener = pDnDWrapper;
@@ -1707,17 +1708,21 @@ void ImpEditView::AddDragAndDropListeners()
         pWindow->GetDropTarget()->addDropTargetListener( xDTL );
         pWindow->GetDropTarget()->setActive( sal_True );
         pWindow->GetDropTarget()->setDefaultActions( datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE );
+
+        bActiveDragAndDropListener = TRUE;
     }
 }
 
 void ImpEditView::RemoveDragAndDropListeners()
 {
-    if ( GetWindow() && GetWindow()->GetDragGestureRecognizer().is() )
+    if ( bActiveDragAndDropListener && GetWindow() && GetWindow()->GetDragGestureRecognizer().is() )
     {
         uno::Reference< datatransfer::dnd::XDragGestureListener> xDGL( mxDnDListener, uno::UNO_QUERY );
         GetWindow()->GetDragGestureRecognizer()->removeDragGestureListener( xDGL );
         uno::Reference< datatransfer::dnd::XDropTargetListener> xDTL( xDGL, uno::UNO_QUERY );
         GetWindow()->GetDropTarget()->removeDropTargetListener( xDTL );
+
+        bActiveDragAndDropListener = FALSE;
     }
 }
 
