@@ -2,9 +2,9 @@
  *
  *  $RCSfile: submission.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:56:45 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 14:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include "submission.hxx"
 
 #include "model.hxx"
@@ -304,7 +303,7 @@ void Submission::setIncludeNamespacePrefixes( const OUString& sIncludeNamespaceP
     {
         vPrefixes.push_back(sIncludeNamespacePrefixes.getToken(0, ',', p));
     }
-    msIncludeNamespacePrefixes = Sequence< OUString >(vPrefixes.begin(), vPrefixes.size());
+    msIncludeNamespacePrefixes = Sequence< OUString >(&(vPrefixes[0]), vPrefixes.size());
 }
 
 bool Submission::doSubmit( const Reference< XInteractionHandler >& aHandler )
