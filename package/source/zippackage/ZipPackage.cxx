@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-23 16:09:39 $
+ *  last change: $Author: mtg $ $Date: 2001-03-23 18:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -705,7 +705,7 @@ Sequence< OUString > ZipPackage_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames(1);
 #if SUPD>625
-    seqNames.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.comp.ZipPackage" ) );
+    seqNames.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.ZipPackage" ) );
 #else
     seqNames.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.package.Package" ) );
 #endif
@@ -728,7 +728,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* p
 #if SUPD>625
             Reference< XRegistryKey > xNewKey(
             reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                 OUString( RTL_CONSTASCII_USTRINGPARAM ( "/com.sun.star.packages.ZipPackage/UNO/SERVICES" ) ) ) );
+                 OUString( RTL_CONSTASCII_USTRINGPARAM ( "/com.sun.star.packages.comp.ZipPackage/UNO/SERVICES" ) ) ) );
 #else
             Reference< XRegistryKey > xNewKey(
             reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
