@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:11:01 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:52:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -716,7 +716,11 @@ void SwTxtFrm::Paint( const SwRect &rRect ) const
         if( !HasPara() )
         {
             ASSERT( GetValidPosFlag(), "+SwTxtFrm::Paint: no Calc()" );
-            ((SwTxtFrm*)this)->GetFormatted();
+
+            // --> FME 2004-10-29 #i29062# pass info that we are currently
+            // painting.
+            ((SwTxtFrm*)this)->GetFormatted( true );
+            // <--
             if( IsEmpty() )
             {
                 PaintEmpty( rRect, sal_False );
