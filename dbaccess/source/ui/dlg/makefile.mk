@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.23 $
+ #  $Revision: 1.24 $
  #
- #  last change: $Author: kz $ $Date: 2003-08-25 15:03:05 $
+ #  last change: $Author: obo $ $Date: 2004-03-17 10:46:07 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -131,6 +131,9 @@ SLOFILES=	\
         $(SLO)$/dsselect.obj	\
         $(SLO)$/adminpages.obj
 
+.IF "$(GUI)"=="WNT"
+SLOFILES+=		$(SLO)$/adodatalinks.obj
+.ENDIF
 
 # --- Targets ----------------------------------
 
