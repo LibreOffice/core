@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitypes.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2001-02-02 17:56:28 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:20:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/XInterface.hpp>
 
 #include <rtl/ustring.hxx>
 
@@ -85,6 +86,12 @@ namespace configmgr
         uno::Type getAnyType( )
         {
             return ::getCppuType( static_cast< uno::Any const * >(0) );
+        }
+
+        inline
+        uno::Type getUnoInterfaceType( )
+        {
+            return ::getCppuType( static_cast< uno::Reference< uno::XInterface > const * >(0) );
         }
 
         template <typename Interface>
