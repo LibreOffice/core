@@ -1,8 +1,11 @@
 bc	basctl	:	svx NULL
 bc	basctl									usr1	-	all	bc_mkout NULL
+bc	basctl\inc								get		-	all	bc_inc NULL
+bc	basctl\source\inc						get		-	all	bc_sinc NULL
 bc	basctl\sdi								nmake	-	all	bc_sdi NULL
 bc	basctl\source\isetbrw					nmake	-	all	bc_ibrw NULL
 bc	basctl\source\si						nmake	-	all	bc_si NULL
 bc	basctl\source\vcdlged					nmake	-	all	bc_vcdlg NULL
+bc	basctl\source\dlged						nmake	-	all	bc_dlg NULL
 bc	basctl\source\basicide					nmake	-	all	bc_bide bc_sdi NULL
-bc	basctl\util								nmake	-	all	bc_util bc_bide bc_ibrw bc_si bc_vcdlg NULL
+bc	basctl\util								nmake	-	all	bc_util bc_bide bc_ibrw bc_si bc_vcdlg bc_dlg NULL
