@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: mt $ $Date: 2001-12-07 13:29:48 $
+ *  last change: $Author: mt $ $Date: 2002-01-16 10:37:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -619,7 +619,7 @@ private:
                         SvxFontTable& rFontTable, SvxColorList& rColorList );
     sal_Bool            WriteItemListAsRTF( ItemList& rLst, SvStream& rOutput, sal_uInt16 nPara, sal_uInt16 nPos,
                         SvxFontTable& rFontTable, SvxColorList& rColorList );
-    inline long         LogicToTwips( long n );
+    long                LogicToTwips( long n );
 
     inline short        GetXValue( short nXValue ) const;
     inline sal_uInt16   GetXValue( sal_uInt16 nXValue ) const;
@@ -894,14 +894,6 @@ public:
     vos::ORef<SvxForbiddenCharactersTable>  GetForbiddenCharsTable( BOOL bGetInternal = TRUE ) const;
     void                SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars );
 };
-
-inline long ImpEditEngine::LogicToTwips( long n )
-{
-    Point aPnt( n, 0 );
-    aPnt = pRefDev->LogicToPixel( aPnt );
-    aPnt = pRefDev->PixelToLogic( aPnt, MapMode( MAP_TWIP ) );
-    return aPnt.X();
-}
 
 inline EPaM ImpEditEngine::CreateEPaM( const EditPaM& rPaM )
 {
