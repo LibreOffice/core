@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-30 18:22:27 $
+ *  last change: $Author: mtg $ $Date: 2001-05-08 14:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,7 @@ Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawStream( com::sun:
     {
         try
         {
+            xEncryptionData->aKey = rZipPackage.getEncryptionKey();
             return rZipPackage.getZipFile().getRawStream(rEntry, xEncryptionData);
         }
         catch (packages::ZipException &)//rException)
@@ -177,6 +178,7 @@ Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream(  )
     {
         try
         {
+            xEncryptionData->aKey = rZipPackage.getEncryptionKey();
             return rZipPackage.getZipFile().getInputStream( aEntry, xEncryptionData);
         }
         catch (packages::ZipException &)//rException)
@@ -274,9 +276,4 @@ Any SAL_CALL ZipPackageStream::getPropertyValue( const OUString& PropertyName )
     }
     else
         throw beans::UnknownPropertyException();
-}
-
-const com::sun::star::uno::Sequence < sal_Int8 >& ZipPackageStream::getEncryptionKey ()
-{
-    return rZipPackage.getEncryptionKey();
 }
