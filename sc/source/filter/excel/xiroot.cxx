@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiroot.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:20:20 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,11 +94,10 @@
 #include "root.hxx"
 #include "excimp8.hxx"
 
-
 // Global data ================================================================
 
-XclImpRootData::XclImpRootData( XclBiff eBiff, ScDocument& rDocument, const String& rDocUrl, CharSet eCharSet ) :
-    XclRootData( eBiff, rDocument, rDocUrl, eCharSet )
+XclImpRootData::XclImpRootData( XclBiff eBiff, SfxMedium& rMedium, ScDocument& rDocument, CharSet eCharSet ) :
+    XclRootData( eBiff, rMedium, rDocument, eCharSet, false )
 {
 }
 
@@ -106,14 +105,12 @@ XclImpRootData::~XclImpRootData()
 {
 }
 
-
 // ----------------------------------------------------------------------------
 
 XclImpRoot::XclImpRoot( XclImpRootData& rImpRootData ) :
     XclRoot( rImpRootData ),
     mrImpData( rImpRootData )
 {
-    mrImpData.mpTracer.reset( new XclTracer( GetDocUrl(), CREATE_OUSTRING( "Office.Tracing/Import/Excel" ) ) );
     mrImpData.mpPalette.reset( new XclImpPalette( GetRoot() ) );
     mrImpData.mpFontBuffer.reset( new XclImpFontBuffer( GetRoot() ) );
     mrImpData.mpNumFmtBuffer.reset( new XclImpNumFmtBuffer( GetRoot() ) );
