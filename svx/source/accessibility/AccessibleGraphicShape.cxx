@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleGraphicShape.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-29 17:56:47 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:53:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 using namespace ::accessibility;
 using namespace ::rtl;
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
@@ -181,7 +181,7 @@ void SAL_CALL
     // ...and add additional names.
     aServiceNames.realloc (nCount + 1);
     static const OUString sAdditionalServiceName (RTL_CONSTASCII_USTRINGPARAM(
-        "drafts.com.sun.star.drawing.AccessibleGraphicShape"));
+        "com.sun.star.drawing.AccessibleGraphicShape"));
     aServiceNames[nCount] = sAdditionalServiceName;
 
     return aServiceNames;
