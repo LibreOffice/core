@@ -2,8 +2,8 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.18 $
-#   last change: $Author: obo $ $Date: 2004-10-18 13:52:14 $
+#   $Revision: 1.19 $
+#   last change: $Author: pjunck $ $Date: 2004-11-03 07:56:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -192,8 +192,9 @@ BEGIN
     @packagelistitems = ("module", "solarispackagename", "packagename", "copyright", "vendor", "description" );
     @regcompjars = ( "unoil.jar", "java_uno.jar", "ridl.jar", "jurt.jar", "juh.jar", "xmerge.jar" );
     @regcompregisterlibs = ( "javavm.uno", "javaloader.uno" );
-    @selfreglibraries = ("shlxthdl.dll", "ooofilt.dll");                # to be removed after scp changes, see parameter.pm
-    @binarytablefiles = ("gid_File_Lib_Reg4msdocmsi", "gid_File_Lib_Regactivex_Msi", "gid_File_Lib_Jfregca", "gid_File_Lib_Netframework", "gid_File_Lib_Qslnkmsi", "gid_File_Lib_Sdqsmsi"); # to be removed after scp changes, see parameter.pm
+
+    @selfreglibraries = ();             # to be removed after scp changes, see parameter.pm
+    @binarytablefiles = ("gid_File_Lib_Reg4msdocmsi", "gid_File_Lib_Regactivex_Msi", "gid_File_Lib_Jfregca", "gid_File_Lib_Netframework", "gid_File_Lib_Qslnkmsi", "gid_File_Lib_Sdqsmsi", "gid_File_Lib_Shlxtmsi", "gid_File_Lib_Instooofiltmsi"); # to be removed after scp changes, see parameter.pm
     @msiassemblyfiles = ("gid_File_Lib_Cli_Basetypes", "gid_File_Lib_Cli_Types_Assembly", "gid_File_Lib_Cli_Cppuhelper_Assembly", "gid_File_Lib_Cli_Ure_Assembly"); # to be removed after scp changes
     @msiassemblynamecontent = ("gid_File_Lib_Cli_Basetypes", "cli_basetypes", "ce2cb7e279207b9e", "1.0.0.0", "gid_File_Lib_Cli_Types_Assembly", "cli_types", "ce2cb7e279207b9e", "1.0.0.0", "gid_File_Lib_Cli_Cppuhelper_Assembly", "cli_cppuhelper", "ce2cb7e279207b9e", "1.0.0.0", "gid_File_Lib_Cli_Ure_Assembly", "cli_ure", "ce2cb7e279207b9e", "1.0.0.0");    # to be removed after scp changes
     @add_unocomponent_libraries = ("gid_File_Lib_Gnomevfs");                # to be removed after scp changes
