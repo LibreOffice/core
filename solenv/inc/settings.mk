@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.89 $
+#   $Revision: 1.90 $
 #
-#   last change: $Author: hjs $ $Date: 2001-12-06 19:29:42 $
+#   last change: $Author: rt $ $Date: 2001-12-11 10:32:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -922,21 +922,12 @@ BIN=$(BIN)$/dbg
 .ENDIF
 .ENDIF
 
-.IF "$(UPD)">="616"
 .IF "$(PRE)"==""
 #JARDIR=$(CLASSDIR)
 JARDIR=$(OUT)$/class
 .ELSE
 JARDIR=$(PRE)$/class
 .ENDIF
-.ELSE			# "$(UPD)">="616"
-# alles mit $(BIN) durch?
-.IF "$(PRE)"==""
-JARDIR=$(BIN)
-.ELSE
-JARDIR=$(PRE)$/bin
-.ENDIF
-.ENDIF			# "$(UPD)">="616"
 
 #now mess around with SOLARINC, SOLARINCLUDES, SOLARLIB and LIB
 .IF "$(UDKVERSION)"!=""
