@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_environment.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:27:52 $
+ *  last change: $Author: jbu $ $Date: 2001-01-09 13:43:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ import com.sun.star.uno.XInterface;
  * interface defined in the uno runtime.
  * <p>
  * <p>
- * @version     $Revision: 1.1.1.1 $ $ $Date: 2000-09-18 15:27:52 $
+ * @version     $Revision: 1.2 $ $ $Date: 2001-01-09 13:43:15 $
  * @author      Kay Ramme
  * @see         com.sun.star.uno.UnoRuntime
  * @see         com.sun.star.uno.IEnvironment
@@ -194,7 +194,7 @@ public class java_environment implements IEnvironment, Disposable {
         }
 
         public void finalize() {
-            if(DEBUG) System.err.println("###################### Proxy Proxy is dying");
+              if(java_environment.DEBUG) System.err.println("###################### Proxy Proxy is dying");
             _holder.decRefCount();
         }
     }
