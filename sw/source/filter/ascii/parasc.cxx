@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parasc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-08 12:06:44 $
+ *  last change: $Author: jp $ $Date: 2002-02-08 12:13:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -918,8 +918,8 @@ ULONG SwASCIIParser::ReadChars()
 
     if( hConverter )
     {
-        rtl_destroyTextToUnicodeConverter( hConverter );
         rtl_destroyTextToUnicodeContext( hConverter, hContext );
+        rtl_destroyTextToUnicodeConverter( hConverter );
     }
     return 0;
 }
