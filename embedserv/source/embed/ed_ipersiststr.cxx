@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ed_ipersiststr.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-05 15:50:10 $
+ *  last change: $Author: mav $ $Date: 2003-03-10 16:09:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,7 @@ EmbedDocument_Impl::EmbedDocument_Impl( const uno::Reference< lang::XMultiServic
 , m_xFactory( xFactory )
 , m_guid( *guid )
 , m_bIsDirty( sal_False )
+, m_nAdviseNum( 0 )
 {
 }
 
@@ -420,7 +421,7 @@ STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
                     if ( hr == S_OK )
                     {
                         hr = pStg->CreateStream( aOfficeEmbedStreamName,
-                                                 STGM_CREATE | nStreamMode,
+                                                 STGM_CREATE | ( nStreamMode & 0x73 ),
                                                  0,
                                                  0,
                                                  &m_pOwnStream );
@@ -472,7 +473,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
     DWORD nStreamMode = aStat.grfMode;
     hr = pStg->OpenStream( aOfficeEmbedStreamName,
                             0,
-                            nStreamMode,
+                            nStreamMode & 0x73,
                             0,
                             &m_pOwnStream );
     if ( FAILED( hr ) || !m_pOwnStream ) return E_FAIL;
