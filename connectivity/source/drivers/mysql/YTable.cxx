@@ -2,9 +2,9 @@
  *
  *  $RCSfile: YTable.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-11 08:29:54 $
+ *  last change: $Author: oj $ $Date: 2002-11-28 10:27:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,9 +86,9 @@
 #ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #endif
-//#ifndef _COMPHELPER_SEQUENCE_HXX_
-//#include <comphelper/sequence.hxx>
-//#endif
+#ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
+#include <com/sun/star/sdbcx/Privilege.hpp>
+#endif
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
 #endif
@@ -136,6 +136,16 @@ OMySQLTable::OMySQLTable(   sdbcx::OCollection* _pTables,
                            const Reference< XConnection >& _xConnection)
     :OTableHelper(_pTables,_xConnection,sal_True)
 {
+    // we create a new table here, so we should have all the rights or ;-)
+    m_nPrivileges = Privilege::DROP         |
+                    Privilege::REFERENCE    |
+                    Privilege::ALTER        |
+                    Privilege::CREATE       |
+                    Privilege::READ         |
+                    Privilege::DELETE       |
+                    Privilege::UPDATE       |
+                    Privilege::INSERT       |
+                    Privilege::SELECT;
     construct();
 }
 // -------------------------------------------------------------------------
@@ -145,7 +155,8 @@ OMySQLTable::OMySQLTable(   sdbcx::OCollection* _pTables,
                     const ::rtl::OUString& _Type,
                     const ::rtl::OUString& _Description ,
                     const ::rtl::OUString& _SchemaName,
-                    const ::rtl::OUString& _CatalogName
+                    const ::rtl::OUString& _CatalogName,
+                    sal_Int32 _nPrivileges
                 ) : OTableHelper(   _pTables,
                                     _xConnection,
                                     sal_True,
@@ -154,8 +165,29 @@ OMySQLTable::OMySQLTable(   sdbcx::OCollection* _pTables,
                                     _Description,
                                     _SchemaName,
                                     _CatalogName)
+ , m_nPrivileges(_nPrivileges)
 {
     construct();
+}
+// -------------------------------------------------------------------------
+void OMySQLTable::construct()
+{
+    OTableHelper::construct();
+    if ( !isNew() )
+        registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRIVILEGES),  PROPERTY_ID_PRIVILEGES,PropertyAttribute::READONLY,&m_nPrivileges,  ::getCppuType(&m_nPrivileges));
+}
+// -----------------------------------------------------------------------------
+::cppu::IPropertyArrayHelper* OMySQLTable::createArrayHelper( sal_Int32 _nId) const
+{
+    Sequence< Property > aProps;
+    describeProperties(aProps);
+    changePropertyAttributte(aProps);
+    return new ::cppu::OPropertyArrayHelper(aProps);
+}
+// -------------------------------------------------------------------------
+::cppu::IPropertyArrayHelper & OMySQLTable::getInfoHelper()
+{
+    return *static_cast<OMySQLTable_PROP*>(const_cast<OMySQLTable*>(this))->getArrayHelper(isNew() ? 1 : 0);
 }
 // -----------------------------------------------------------------------------
 sdbcx::OCollection* OMySQLTable::createColumns(const TStringVector& _rNames)

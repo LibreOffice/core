@@ -2,9 +2,9 @@
  *
  *  $RCSfile: YUsers.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-25 09:48:57 $
+ *  last change: $Author: oj $ $Date: 2002-11-28 10:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ void OUsers::appendObject( const Reference< XPropertySet >& descriptor )
 void OUsers::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
     {
-        ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("REVOKE ALL ON * TO ");
+        ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("REVOKE ALL ON * FROM ");
         ::rtl::OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString(  );
         aSql += ::dbtools::quoteName(aQuote,_sElementName);
 

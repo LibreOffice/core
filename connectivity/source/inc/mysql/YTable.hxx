@@ -2,9 +2,9 @@
  *
  *  $RCSfile: YTable.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-11 08:56:22 $
+ *  last change: $Author: oj $ $Date: 2002-11-28 10:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #endif
+#ifndef COMPHELPER_IDPROPERTYARRAYUSAGEHELPER_HXX
+#include <comphelper/IdPropArrayHelper.hxx>
+#endif
 
 namespace connectivity
 {
@@ -76,8 +79,12 @@ namespace connectivity
 
         ::rtl::OUString getTypeString(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xColProp);
 
+        class OMySQLTable;
+        typedef ::comphelper::OIdPropertyArrayUsageHelper< OMySQLTable >    OMySQLTable_PROP;
         class OMySQLTable : public OTableHelper
+                            ,public OMySQLTable_PROP
         {
+            sal_Int32 m_nPrivileges; // we have to set our privileges by our own
 
             /** executes the statmenmt.
                 @param  _rStatement
@@ -103,6 +110,19 @@ namespace connectivity
                     The index names.
             */
             virtual sdbcx::OCollection* createIndexes(const TStringVector& _rNames);
+
+            /** used to implement the creation of the array helper which is shared amongst all instances of the class.
+                This method needs to be implemented in derived classes.
+                <BR>
+                The method gets called with s_aMutex acquired.
+                <BR>
+                as long as IPropertyArrayHelper has no virtual destructor, the implementation of ~OPropertyArrayUsageHelper
+                assumes that you created an ::cppu::OPropertyArrayHelper when deleting s_pProps.
+                @return                         an pointer to the newly created array helper. Must not be NULL.
+            */
+            virtual ::cppu::IPropertyArrayHelper* createArrayHelper(sal_Int32 nId) const;
+            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
+
         public:
             OMySQLTable(    sdbcx::OCollection* _pTables,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection);
@@ -112,9 +132,12 @@ namespace connectivity
                             const ::rtl::OUString& _Type,
                             const ::rtl::OUString& _Description = ::rtl::OUString(),
                             const ::rtl::OUString& _SchemaName = ::rtl::OUString(),
-                            const ::rtl::OUString& _CatalogName = ::rtl::OUString()
+                            const ::rtl::OUString& _CatalogName = ::rtl::OUString(),
+                            sal_Int32 _nPrivileges = 0
                 );
 
+            // ODescriptor
+            virtual void construct();
             // com::sun::star::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
@@ -130,6 +153,7 @@ namespace connectivity
             void alterColumnType(sal_Int32 nNewType,const ::rtl::OUString& _rColName,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xDescriptor);
             void alterDefaultValue(const ::rtl::OUString& _sNewDefault,const ::rtl::OUString& _rColName);
             void dropDefaultValue(const ::rtl::OUString& _sNewDefault);
+
         };
     }
 }

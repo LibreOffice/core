@@ -2,9 +2,9 @@
  *
  *  $RCSfile: YTables.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-25 09:48:57 $
+ *  last change: $Author: oj $ $Date: 2002-11-28 10:27:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
+#include <com/sun/star/sdbcx/Privilege.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBC_KEYRULE_HPP_
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #endif
@@ -143,8 +146,36 @@ Reference< XNamed > OTables::createObject(const ::rtl::OUString& _rName)
         Reference< XRow > xRow(xResult,UNO_QUERY);
         if ( xResult->next() ) // there can be only one table with this name
         {
-            OMySQLTable* pRet = new OMySQLTable(this,   static_cast<OMySQLCatalog&>(m_rParent).getConnection(),
-                                        sTable,xRow->getString(4),xRow->getString(5),sSchema,sCatalog);
+//          Reference<XStatement> xStmt = m_xConnection->createStatement();
+//          if ( xStmt.is() )
+//          {
+//              Reference< XResultSet > xPrivRes = xStmt->executeQuery();
+//              Reference< XRow > xPrivRow(xPrivRes,UNO_QUERY);
+//              while ( xPrivRes.is() && xPrivRes->next() )
+//              {
+//                  if ( xPrivRow->getString(1) )
+//                  {
+//                  }
+//              }
+//          }
+            sal_Int32 nPrivileges = Privilege::DROP         |
+                                    Privilege::REFERENCE    |
+                                    Privilege::ALTER        |
+                                    Privilege::CREATE       |
+                                    Privilege::READ         |
+                                    Privilege::DELETE       |
+                                    Privilege::UPDATE       |
+                                    Privilege::INSERT       |
+                                    Privilege::SELECT;
+
+            OMySQLTable* pRet = new OMySQLTable( this
+                                                ,static_cast<OMySQLCatalog&>(m_rParent).getConnection()
+                                                ,sTable
+                                                ,xRow->getString(4)
+                                                ,xRow->getString(5)
+                                                ,sSchema
+                                                ,sCatalog
+                                                ,nPrivileges);
             xRet = pRet;
         }
         ::comphelper::disposeComponent(xResult);
