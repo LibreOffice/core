@@ -137,6 +137,16 @@ sub get_feature_display
         $display = "2";                                 # all other modules do not show subfeatures
     }
 
+    # special case: Feature is below root module and has flag "HIDDEN_ROOT" -> $display is 0
+
+    my $styles = "";
+    if ( $onefeature->{'Styles'} ) { $styles = $onefeature->{'Styles'}; }
+
+    if (( $parentid eq "gid_Module_Root" ) && ( $styles =~ /\bHIDDEN_ROOT\b/ ))
+    {
+        $display = "0";
+    }
+
     if ( $installer::globals::languagepack ) { $display = "0"; }     # making all feature invisible!
 
     return $display
@@ -334,8 +344,7 @@ sub create_feature_table
             my $onefeature = ${$modulesref}[$i];
 
             # Controlling the language!
-            # Only language independent folderitems or folderitems with the correct language
-            # will be included into the table
+            # Only language independent feature or feature with the correct language will be included into the table
 
             if (! (!(( $onefeature->{'ismultilingual'} )) || ( $onefeature->{'specificlanguage'} eq $onelanguage )) )  { next; }
 
