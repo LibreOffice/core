@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-22 18:11:06 $
+ *  last change: $Author: sj $ $Date: 2000-11-29 15:41:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1169,7 +1169,7 @@ sal_Bool PPTWriter::ImplCreateMainMaster()
     SolverContainer aSolverContainer;
 
     mp_EscherEx->OpenContainer( EPP_PPDrawing );
-    mp_EscherEx->OpenContainer( _Escher_DgContainer );
+    mp_EscherEx->OpenContainer( ESCHER_DgContainer );
     mp_EscherEx->EnterGroup();
 
     ImplWritePage( aSolverContainer, MASTER, TRUE );    // Die Shapes der Seite werden im PPT Dok. erzeugt
@@ -1188,32 +1188,32 @@ sal_Bool PPTWriter::ImplCreateMainMaster()
             ::rtl::OUString aUString( mXText->getString() );
             sal_uInt16 nChar;
 
-            mp_EscherEx->OpenContainer( _Escher_SpContainer );
+            mp_EscherEx->OpenContainer( ESCHER_SpContainer );
             mnShapeMasterTitle = mp_EscherEx->GetShapeID();
-            mp_EscherEx->AddShape( _Escher_ShpInst_Rectangle, 0xa00, mnShapeMasterTitle );// Flags: HaveAnchor | HasSpt
+            mp_EscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xa00, mnShapeMasterTitle );// Flags: HaveAnchor | HasSpt
             mp_EscherEx->BeginCount();
-            mp_EscherEx->AddOpt( _Escher_Prop_LockAgainstGrouping, 0x10001 );
-            mp_EscherEx->AddOpt( _Escher_Prop_lTxid, mnTxId += 0x60 );
-            mp_EscherEx->AddOpt( _Escher_Prop_AnchorText, _Escher_AnchorMiddle );
-            mp_EscherEx->AddOpt( _Escher_Prop_fillColor, mnFillColor );
-            mp_EscherEx->AddOpt( _Escher_Prop_fillBackColor, mnFillBackColor );
-            mp_EscherEx->AddOpt( _Escher_Prop_fNoFillHitTest, 0x110001 );
-            mp_EscherEx->AddOpt( _Escher_Prop_lineColor, 0x8000001 );
-            mp_EscherEx->AddOpt( _Escher_Prop_fNoLineDrawDash, 0x90001 );
-            mp_EscherEx->AddOpt( _Escher_Prop_shadowColor, 0x8000002 );
+            mp_EscherEx->AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x10001 );
+            mp_EscherEx->AddOpt( ESCHER_Prop_lTxid, mnTxId += 0x60 );
+            mp_EscherEx->AddOpt( ESCHER_Prop_AnchorText, ESCHER_AnchorMiddle );
+            mp_EscherEx->AddOpt( ESCHER_Prop_fillColor, mnFillColor );
+            mp_EscherEx->AddOpt( ESCHER_Prop_fillBackColor, mnFillBackColor );
+            mp_EscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x110001 );
+            mp_EscherEx->AddOpt( ESCHER_Prop_lineColor, 0x8000001 );
+            mp_EscherEx->AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90001 );
+            mp_EscherEx->AddOpt( ESCHER_Prop_shadowColor, 0x8000002 );
             ImplWriteFillBundle( TRUE );
             ImplWriteTextBundle();
-            mp_EscherEx->EndCount( _Escher_OPT, 3 );
-            mp_EscherEx->AddAtom( 8, _Escher_ClientAnchor );
+            mp_EscherEx->EndCount( ESCHER_OPT, 3 );
+            mp_EscherEx->AddAtom( 8, ESCHER_ClientAnchor );
             *mpStrm << (sal_Int16)maRect.Top() << (sal_Int16)maRect.Left() << (sal_Int16)maRect.Right() << (sal_Int16)maRect.Bottom();      // oben, links, rechts, unten ????
-            mp_EscherEx->OpenContainer( _Escher_ClientData );
+            mp_EscherEx->OpenContainer( ESCHER_ClientData );
             mp_EscherEx->AddAtom( 8, EPP_OEPlaceholderAtom );
             *mpStrm << (sal_uInt32)0                                                        // PlacementID
                     << (sal_uInt8)EPP_PLACEHOLDER_MASTERTITLE                               // PlaceHolderID
                     << (sal_uInt8)0                                                         // Size of PlaceHolder ( 0 = FULL, 1 = HALF, 2 = QUARTER )
                     << (sal_uInt16)0;                                                       // padword
-            mp_EscherEx->CloseContainer();  // _Escher_ClientData
-            mp_EscherEx->OpenContainer( _Escher_ClientTextbox );
+            mp_EscherEx->CloseContainer();  // ESCHER_ClientData
+            mp_EscherEx->OpenContainer( ESCHER_ClientTextbox );
             mp_EscherEx->AddAtom( 4, EPP_TextHeaderAtom );
             *mpStrm << (sal_uInt32)EPP_TEXTTYPE_Title;
             mp_EscherEx->AddAtom( mnTextSize << 1, EPP_TextCharsAtom );
@@ -1229,8 +1229,8 @@ sal_Bool PPTWriter::ImplCreateMainMaster()
             *mpStrm << (sal_uInt32)( mnTextSize + 1 ) << (sal_uInt16)0;
             mp_EscherEx->AddAtom( 10, EPP_TextSpecInfoAtom );
             *mpStrm << (sal_uInt32)( mnTextSize + 1 ) << (sal_uInt32)1 << (sal_uInt16)0;
-            mp_EscherEx->CloseContainer();  // _Escher_ClientTextBox
-            mp_EscherEx->CloseContainer();  // _Escher_SpContainer
+            mp_EscherEx->CloseContainer();  // ESCHER_ClientTextBox
+            mp_EscherEx->CloseContainer();  // ESCHER_SpContainer
         }
     }
 
@@ -1245,31 +1245,31 @@ sal_Bool PPTWriter::ImplCreateMainMaster()
 
         if ( ImplGetText() )
         {
-            mp_EscherEx->OpenContainer( _Escher_SpContainer );
+            mp_EscherEx->OpenContainer( ESCHER_SpContainer );
             mnShapeMasterBody = mp_EscherEx->GetShapeID();
-            mp_EscherEx->AddShape( _Escher_ShpInst_Rectangle, 0xa00, mnShapeMasterBody );   // Flags: HaveAnchor | HasSpt
+            mp_EscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xa00, mnShapeMasterBody );    // Flags: HaveAnchor | HasSpt
             mp_EscherEx->BeginCount();
-            mp_EscherEx->AddOpt( _Escher_Prop_LockAgainstGrouping, 0x10001 );
-            mp_EscherEx->AddOpt( _Escher_Prop_lTxid, mnTxId += 0x60 );
-            mp_EscherEx->AddOpt( _Escher_Prop_fillColor, mnFillColor );
-            mp_EscherEx->AddOpt( _Escher_Prop_fillBackColor, mnFillBackColor );
-            mp_EscherEx->AddOpt( _Escher_Prop_fNoFillHitTest, 0x110001 );
-            mp_EscherEx->AddOpt( _Escher_Prop_lineColor, 0x8000001 );
-            mp_EscherEx->AddOpt( _Escher_Prop_fNoLineDrawDash, 0x90001 );
-            mp_EscherEx->AddOpt( _Escher_Prop_shadowColor, 0x8000002 );
+            mp_EscherEx->AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x10001 );
+            mp_EscherEx->AddOpt( ESCHER_Prop_lTxid, mnTxId += 0x60 );
+            mp_EscherEx->AddOpt( ESCHER_Prop_fillColor, mnFillColor );
+            mp_EscherEx->AddOpt( ESCHER_Prop_fillBackColor, mnFillBackColor );
+            mp_EscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x110001 );
+            mp_EscherEx->AddOpt( ESCHER_Prop_lineColor, 0x8000001 );
+            mp_EscherEx->AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90001 );
+            mp_EscherEx->AddOpt( ESCHER_Prop_shadowColor, 0x8000002 );
             ImplWriteFillBundle( TRUE );
             ImplWriteTextBundle();
-            mp_EscherEx->EndCount( _Escher_OPT, 3 );
-            mp_EscherEx->AddAtom( 8, _Escher_ClientAnchor );
+            mp_EscherEx->EndCount( ESCHER_OPT, 3 );
+            mp_EscherEx->AddAtom( 8, ESCHER_ClientAnchor );
             *mpStrm << (sal_Int16)maRect.Top() << (sal_Int16)maRect.Left() << (sal_Int16)maRect.Right() << (sal_Int16)maRect.Bottom();  // oben, links, rechts, unten ????
-            mp_EscherEx->OpenContainer( _Escher_ClientData );
+            mp_EscherEx->OpenContainer( ESCHER_ClientData );
             mp_EscherEx->AddAtom( 8, EPP_OEPlaceholderAtom );
             *mpStrm << (sal_uInt32)1                                                        // PlacementID
                     << (sal_uInt8)EPP_PLACEHOLDER_MASTERBODY                                    // PlaceHolderID
                     << (sal_uInt8)0                                                         // Size of PlaceHolder ( 0 = FULL, 1 = HALF, 2 = QUARTER )
                     << (sal_uInt16)0;                                                       // padword
-            mp_EscherEx->CloseContainer();  // _Escher_ClientData
-            mp_EscherEx->OpenContainer( _Escher_ClientTextbox );        // printf
+            mp_EscherEx->CloseContainer();  // ESCHER_ClientData
+            mp_EscherEx->OpenContainer( ESCHER_ClientTextbox );     // printf
             mp_EscherEx->AddAtom( 4, EPP_TextHeaderAtom );
             *mpStrm << (sal_uInt32)EPP_TEXTTYPE_Body;
 
@@ -1291,8 +1291,8 @@ sal_Bool PPTWriter::ImplCreateMainMaster()
             mp_EscherEx->AddAtom( 10, EPP_TextSpecInfoAtom );
             *mpStrm << (sal_uInt32)( mnTextSize ) << (sal_uInt32)1 << (sal_uInt16)0;
 
-            mp_EscherEx->CloseContainer();  // _Escher_ClientTextBox
-            mp_EscherEx->CloseContainer();  // _Escher_SpContainer
+            mp_EscherEx->CloseContainer();  // ESCHER_ClientTextBox
+            mp_EscherEx->CloseContainer();  // ESCHER_SpContainer
         }
     }
     mp_EscherEx->LeaveGroup();
@@ -1301,7 +1301,7 @@ sal_Bool PPTWriter::ImplCreateMainMaster()
 
     aSolverContainer.WriteSolver( mpStrm, mp_EscherEx );
 
-    mp_EscherEx->CloseContainer();  // _Escher_DgContainer
+    mp_EscherEx->CloseContainer();  // ESCHER_DgContainer
     mp_EscherEx->CloseContainer();  // EPP_Drawing
     mp_EscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 1 );
     *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0x99cc00 << (sal_uInt32)0xcc3333 << (sal_uInt32)0xffcccc << (sal_uInt32)0xb2b2b2;
@@ -1352,29 +1352,29 @@ sal_Bool PPTWriter::ImplCreateMainNotes()
     *mpStrm << (sal_uInt32)0x80000000                                               // Number that identifies this slide
             << (sal_uInt32)0;                                                       // follow nothing
     mp_EscherEx->OpenContainer( EPP_PPDrawing );
-    mp_EscherEx->OpenContainer( _Escher_DgContainer );
+    mp_EscherEx->OpenContainer( ESCHER_DgContainer );
     mp_EscherEx->EnterGroup();
 
     ImplWritePage( aSolverContainer, NOTICE, TRUE );
 
     mp_EscherEx->LeaveGroup();
-    mp_EscherEx->OpenContainer( _Escher_SpContainer );
-    mp_EscherEx->AddShape( _Escher_ShpInst_Rectangle, 0xc00 );
+    mp_EscherEx->OpenContainer( ESCHER_SpContainer );
+    mp_EscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xc00 );
     mp_EscherEx->BeginCount();
-    mp_EscherEx->AddOpt( _Escher_Prop_fillColor, 0xffffff );                    // stock valued fill color
-    mp_EscherEx->AddOpt( _Escher_Prop_fillBackColor, 0 );
-    mp_EscherEx->AddOpt( _Escher_Prop_fillRectRight, 0x68bdde );
-    mp_EscherEx->AddOpt( _Escher_Prop_fillRectBottom, 0x8b9f8e );
-    mp_EscherEx->AddOpt( _Escher_Prop_fNoFillHitTest, 0x120012 );
-    mp_EscherEx->AddOpt( _Escher_Prop_fNoLineDrawDash, 0 );
-    mp_EscherEx->AddOpt( _Escher_Prop_bWMode, _Escher_wDontShow );
-    mp_EscherEx->AddOpt( _Escher_Prop_fBackground, 0x10001 );                       // if true, this is the background shape
-    mp_EscherEx->EndCount( _Escher_OPT, 3 );
-    mp_EscherEx->CloseContainer();  // _Escher_SpContainer
+    mp_EscherEx->AddOpt( ESCHER_Prop_fillColor, 0xffffff );                 // stock valued fill color
+    mp_EscherEx->AddOpt( ESCHER_Prop_fillBackColor, 0 );
+    mp_EscherEx->AddOpt( ESCHER_Prop_fillRectRight, 0x68bdde );
+    mp_EscherEx->AddOpt( ESCHER_Prop_fillRectBottom, 0x8b9f8e );
+    mp_EscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x120012 );
+    mp_EscherEx->AddOpt( ESCHER_Prop_fNoLineDrawDash, 0 );
+    mp_EscherEx->AddOpt( ESCHER_Prop_bWMode, ESCHER_wDontShow );
+    mp_EscherEx->AddOpt( ESCHER_Prop_fBackground, 0x10001 );                        // if true, this is the background shape
+    mp_EscherEx->EndCount( ESCHER_OPT, 3 );
+    mp_EscherEx->CloseContainer();  // ESCHER_SpContainer
 
     aSolverContainer.WriteSolver( mpStrm, mp_EscherEx );
 
-    mp_EscherEx->CloseContainer();  // _Escher_DgContainer
+    mp_EscherEx->CloseContainer();  // ESCHER_DgContainer
     mp_EscherEx->CloseContainer();  // EPP_Drawing
     mp_EscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 1 );
     *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0x99cc00 << (sal_uInt32)0xcc3333 << (sal_uInt32)0xffcccc << (sal_uInt32)0xb2b2b2;
@@ -1408,7 +1408,7 @@ sal_Bool PPTWriter::ImplCreateTitleMasterPage( int nPageNum )
     SolverContainer aSolverContainer;
 
     mp_EscherEx->OpenContainer( EPP_PPDrawing );
-    mp_EscherEx->OpenContainer( _Escher_DgContainer );
+    mp_EscherEx->OpenContainer( ESCHER_DgContainer );
     mp_EscherEx->EnterGroup();
 
     ImplWritePage( aSolverContainer, MASTER, TRUE );            // Die Shapes der Seite werden im PPT Dok. erzeugt
@@ -1419,7 +1419,7 @@ sal_Bool PPTWriter::ImplCreateTitleMasterPage( int nPageNum )
 
     aSolverContainer.WriteSolver( mpStrm, mp_EscherEx );
 
-    mp_EscherEx->CloseContainer();  // _Escher_DgContainer
+    mp_EscherEx->CloseContainer();  // ESCHER_DgContainer
     mp_EscherEx->CloseContainer();  // EPP_Drawing
     mp_EscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 1 );
     *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0x99cc00 << (sal_uInt32)0xcc3333 << (sal_uInt32)0xffcccc << (sal_uInt32)0xb2b2b2;
@@ -1634,7 +1634,7 @@ sal_Bool PPTWriter::ImplCreateSlide( int nPageNum )
 
     SolverContainer aSolverContainer;
     mp_EscherEx->OpenContainer( EPP_PPDrawing );
-    mp_EscherEx->OpenContainer( _Escher_DgContainer );
+    mp_EscherEx->OpenContainer( ESCHER_DgContainer );
     mp_EscherEx->EnterGroup();
     ImplWritePage( aSolverContainer, NORMAL, FALSE, nPageNum );             // Die Shapes der Seite werden im PPT Dok. erzeugt
     mp_EscherEx->LeaveGroup();
@@ -1643,24 +1643,24 @@ sal_Bool PPTWriter::ImplCreateSlide( int nPageNum )
         ImplWriteBackground( aXBackgroundPropSet );
     else
     {
-        mp_EscherEx->OpenContainer( _Escher_SpContainer );
-        mp_EscherEx->AddShape( _Escher_ShpInst_Rectangle, 0xc00 );              // Flags: Connector | Background | HasSpt
+        mp_EscherEx->OpenContainer( ESCHER_SpContainer );
+        mp_EscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xc00 );               // Flags: Connector | Background | HasSpt
         mp_EscherEx->BeginCount();
-        mp_EscherEx->AddOpt( _Escher_Prop_fillColor, mnFillColor );             // stock valued fill color
-        mp_EscherEx->AddOpt( _Escher_Prop_fillBackColor, mnFillBackColor );
-        mp_EscherEx->AddOpt( _Escher_Prop_fillRectRight, PPTtoEMU( maDestPageSize.Width ) );
-        mp_EscherEx->AddOpt( _Escher_Prop_fillRectBottom, PPTtoEMU( maDestPageSize.Width ) );
-        mp_EscherEx->AddOpt( _Escher_Prop_fNoFillHitTest, 0x120012 );
-        mp_EscherEx->AddOpt( _Escher_Prop_fNoLineDrawDash, 0x80000 );
-        mp_EscherEx->AddOpt( _Escher_Prop_bWMode, _Escher_wDontShow );
-        mp_EscherEx->AddOpt( _Escher_Prop_fBackground, 0x10001 );               // if true, this is the background shape
-        mp_EscherEx->EndCount( _Escher_OPT, 3 );
-        mp_EscherEx->CloseContainer();  // _Escher_SpContainer
+        mp_EscherEx->AddOpt( ESCHER_Prop_fillColor, mnFillColor );              // stock valued fill color
+        mp_EscherEx->AddOpt( ESCHER_Prop_fillBackColor, mnFillBackColor );
+        mp_EscherEx->AddOpt( ESCHER_Prop_fillRectRight, PPTtoEMU( maDestPageSize.Width ) );
+        mp_EscherEx->AddOpt( ESCHER_Prop_fillRectBottom, PPTtoEMU( maDestPageSize.Width ) );
+        mp_EscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x120012 );
+        mp_EscherEx->AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x80000 );
+        mp_EscherEx->AddOpt( ESCHER_Prop_bWMode, ESCHER_wDontShow );
+        mp_EscherEx->AddOpt( ESCHER_Prop_fBackground, 0x10001 );                // if true, this is the background shape
+        mp_EscherEx->EndCount( ESCHER_OPT, 3 );
+        mp_EscherEx->CloseContainer();  // ESCHER_SpContainer
     }
 
     aSolverContainer.WriteSolver( mpStrm, mp_EscherEx );
 
-    mp_EscherEx->CloseContainer();  // _Escher_DgContainer
+    mp_EscherEx->CloseContainer();  // ESCHER_DgContainer
     mp_EscherEx->CloseContainer();  // EPP_Drawing
     mp_EscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 1 );
     *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0x99cc00 << (sal_uInt32)0xcc3333 << (sal_uInt32)0xffcccc << (sal_uInt32)0xb2b2b2;
@@ -1685,29 +1685,29 @@ sal_Bool PPTWriter::ImplCreateNotes( int nPageNum )
     SolverContainer aSolverContainer;
 
     mp_EscherEx->OpenContainer( EPP_PPDrawing );
-    mp_EscherEx->OpenContainer( _Escher_DgContainer );
+    mp_EscherEx->OpenContainer( ESCHER_DgContainer );
     mp_EscherEx->EnterGroup();
 
     ImplWritePage( aSolverContainer, NOTICE, FALSE );   // Die Shapes der Seite werden im PPT Dok. erzeugt
 
     mp_EscherEx->LeaveGroup();
-    mp_EscherEx->OpenContainer( _Escher_SpContainer );
-    mp_EscherEx->AddShape( _Escher_ShpInst_Rectangle, 0xc00 );  // Flags: Connector | Background | HasSpt
+    mp_EscherEx->OpenContainer( ESCHER_SpContainer );
+    mp_EscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xc00 );   // Flags: Connector | Background | HasSpt
     mp_EscherEx->BeginCount();
-    mp_EscherEx->AddOpt( _Escher_Prop_fillColor, 0xffffff );        // stock valued fill color
-    mp_EscherEx->AddOpt( _Escher_Prop_fillBackColor, 0 );
-    mp_EscherEx->AddOpt( _Escher_Prop_fillRectRight, 0x8b9f8e );
-    mp_EscherEx->AddOpt( _Escher_Prop_fillRectBottom, 0x68bdde );
-    mp_EscherEx->AddOpt( _Escher_Prop_fNoFillHitTest, 0x120012 );
-    mp_EscherEx->AddOpt( _Escher_Prop_fNoLineDrawDash, 0x80000 );
-    mp_EscherEx->AddOpt( _Escher_Prop_bWMode, _Escher_wDontShow );
-    mp_EscherEx->AddOpt( _Escher_Prop_fBackground, 0x10001 );
-    mp_EscherEx->EndCount( _Escher_OPT, 3 );
-    mp_EscherEx->CloseContainer();  // _Escher_SpContainer
+    mp_EscherEx->AddOpt( ESCHER_Prop_fillColor, 0xffffff );     // stock valued fill color
+    mp_EscherEx->AddOpt( ESCHER_Prop_fillBackColor, 0 );
+    mp_EscherEx->AddOpt( ESCHER_Prop_fillRectRight, 0x8b9f8e );
+    mp_EscherEx->AddOpt( ESCHER_Prop_fillRectBottom, 0x68bdde );
+    mp_EscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x120012 );
+    mp_EscherEx->AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x80000 );
+    mp_EscherEx->AddOpt( ESCHER_Prop_bWMode, ESCHER_wDontShow );
+    mp_EscherEx->AddOpt( ESCHER_Prop_fBackground, 0x10001 );
+    mp_EscherEx->EndCount( ESCHER_OPT, 3 );
+    mp_EscherEx->CloseContainer();  // ESCHER_SpContainer
 
     aSolverContainer.WriteSolver( mpStrm, mp_EscherEx );
 
-    mp_EscherEx->CloseContainer();  // _Escher_DgContainer
+    mp_EscherEx->CloseContainer();  // ESCHER_DgContainer
     mp_EscherEx->CloseContainer();  // EPP_Drawing
     mp_EscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 1 );
     *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0x99cc00 << (sal_uInt32)0xcc3333 << (sal_uInt32)0xffcccc << (sal_uInt32)0xb2b2b2;
@@ -1724,10 +1724,10 @@ void PPTWriter::ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::su
     sal_uInt32 nFillColor = 0xffffff;
     sal_uInt32 nFillBackColor = 0;
 
-    mp_EscherEx->OpenContainer( _Escher_SpContainer );
-    mp_EscherEx->AddShape( _Escher_ShpInst_Rectangle, 0xc00 );                      // Flags: Connector | Background | HasSpt
+    mp_EscherEx->OpenContainer( ESCHER_SpContainer );
+    mp_EscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xc00 );                       // Flags: Connector | Background | HasSpt
     mp_EscherEx->BeginCount();
-    mp_EscherEx->AddOpt( _Escher_Prop_fillType, _Escher_FillSolid );
+    mp_EscherEx->AddOpt( ESCHER_Prop_fillType, ESCHER_FillSolid );
 
     ::com::sun::star::drawing::FillStyle aFS( ::com::sun::star::drawing::FillStyle_NONE );
     if ( ImplGetPropertyValue( rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" ) ) ) )
@@ -1740,7 +1740,7 @@ void PPTWriter::ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::su
             if ( ImplGetPropertyValue( rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillGradient" ) ) ) )
             {
                 mp_EscherEx->WriteGradient( (::com::sun::star::awt::Gradient*)mAny.getValue() );
-                mp_EscherEx->AddOpt( _Escher_Prop_fNoFillHitTest, 0x1f001e );
+                mp_EscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x1f001e );
                 nFillColor = mp_EscherEx->GetGradientColor( (::com::sun::star::awt::Gradient*)mAny.getValue(), 0 );
                 nFillBackColor = mp_EscherEx->GetGradientColor( (::com::sun::star::awt::Gradient*)mAny.getValue(), 1 );
             }
@@ -1751,9 +1751,9 @@ void PPTWriter::ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::su
         {
             if ( ImplGetGraphic( rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapURL" ) ), TRUE ) )
             {
-                mp_EscherEx->AddOpt( _Escher_Prop_shadowColor, 0x8000001 );         // stock valued fill color
-                mp_EscherEx->AddOpt( _Escher_Prop_fNoFillHitTest, 0x140014 );
-                mp_EscherEx->AddOpt( _Escher_Prop_fillType, _Escher_FillPicture );
+                mp_EscherEx->AddOpt( ESCHER_Prop_shadowColor, 0x8000001 );          // stock valued fill color
+                mp_EscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x140014 );
+                mp_EscherEx->AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
             }
         }
         break;
@@ -1769,18 +1769,18 @@ void PPTWriter::ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::su
         }
         case ::com::sun::star::drawing::FillStyle_NONE :
         default:
-            mp_EscherEx->AddOpt( _Escher_Prop_fNoFillHitTest, 0x120012 );
+            mp_EscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x120012 );
         break;
     }
-    mp_EscherEx->AddOpt( _Escher_Prop_fillColor, nFillColor );
-    mp_EscherEx->AddOpt( _Escher_Prop_fillBackColor, nFillBackColor );
-    mp_EscherEx->AddOpt( _Escher_Prop_fillRectRight, PPTtoEMU( maDestPageSize.Width ) );
-    mp_EscherEx->AddOpt( _Escher_Prop_fillRectBottom, PPTtoEMU( maDestPageSize.Height ) );
-    mp_EscherEx->AddOpt( _Escher_Prop_fNoLineDrawDash, 0x80000 );
-    mp_EscherEx->AddOpt( _Escher_Prop_bWMode, _Escher_bwWhite );
-    mp_EscherEx->AddOpt( _Escher_Prop_fBackground, 0x10001 );
-    mp_EscherEx->EndCount( _Escher_OPT, 3 );
-    mp_EscherEx->CloseContainer();  // _Escher_SpContainer
+    mp_EscherEx->AddOpt( ESCHER_Prop_fillColor, nFillColor );
+    mp_EscherEx->AddOpt( ESCHER_Prop_fillBackColor, nFillBackColor );
+    mp_EscherEx->AddOpt( ESCHER_Prop_fillRectRight, PPTtoEMU( maDestPageSize.Width ) );
+    mp_EscherEx->AddOpt( ESCHER_Prop_fillRectBottom, PPTtoEMU( maDestPageSize.Height ) );
+    mp_EscherEx->AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x80000 );
+    mp_EscherEx->AddOpt( ESCHER_Prop_bWMode, ESCHER_bwWhite );
+    mp_EscherEx->AddOpt( ESCHER_Prop_fBackground, 0x10001 );
+    mp_EscherEx->EndCount( ESCHER_OPT, 3 );
+    mp_EscherEx->CloseContainer();  // ESCHER_SpContainer
 }
 
 void PPTWriter::ImplWriteCString( SvStream& rSt, const String& rString, sal_uInt32 nInstance )
