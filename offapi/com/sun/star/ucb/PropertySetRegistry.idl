@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertySetRegistry.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 16:03:51 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:21:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ module com { module sun { module star { module ucb {
 /** This service contains the interfaces to implement by objects
     returned by <member>XPropertySetRegistryFactory::createRegistry</member>.
   */
-service PropertySetRegistry
+published service PropertySetRegistry
 {
     //-------------------------------------------------------------------------
     /** A propertyset registry.
