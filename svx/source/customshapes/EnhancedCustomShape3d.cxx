@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShape3d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:33:47 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:05:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,8 +152,8 @@
 #ifndef _SDR_PROPERTIES_PROPERTIES_HXX
 #include <svx/sdr/properties/properties.hxx>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERPARIR_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERPARIR_HPP_
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #endif
 
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
@@ -164,7 +164,7 @@ const rtl::OUString sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
 
 void GetOrigin( SdrCustomShapeGeometryItem& rItem, double& rOriginX, double& rOriginY )
 {
-    ::drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aOriginParaPair;
+    ::com::sun::star::drawing::EnhancedCustomShapeParameterPair aOriginParaPair;
      const rtl::OUString    sOrigin( RTL_CONSTASCII_USTRINGPARAM ( "Origin" ) );
     Any* pAny = rItem.GetPropertyValueByName( sExtrusion, sOrigin );
     if ( ! ( pAny && ( *pAny >>= aOriginParaPair ) && ( aOriginParaPair.First.Value >>= rOriginX ) && ( aOriginParaPair.Second.Value >>= rOriginY ) ) )
@@ -175,7 +175,7 @@ void GetOrigin( SdrCustomShapeGeometryItem& rItem, double& rOriginX, double& rOr
 }
 void GetRotateAngle( SdrCustomShapeGeometryItem& rItem, double& rAngleX, double& rAngleY )
 {
-    ::drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aRotateAngleParaPair;
+    ::com::sun::star::drawing::EnhancedCustomShapeParameterPair aRotateAngleParaPair;
      const rtl::OUString    sRotateAngle( RTL_CONSTASCII_USTRINGPARAM ( "RotateAngle" ) );
     Any* pAny = rItem.GetPropertyValueByName( sExtrusion, sRotateAngle );
     if ( ! ( pAny && ( *pAny >>= aRotateAngleParaPair ) && ( aRotateAngleParaPair.First.Value >>= rAngleX ) && ( aRotateAngleParaPair.Second.Value >>= rAngleY ) ) )
@@ -188,7 +188,7 @@ void GetRotateAngle( SdrCustomShapeGeometryItem& rItem, double& rAngleX, double&
 }
 void GetSkew( SdrCustomShapeGeometryItem& rItem, double& rSkewAmount, double& rSkewAngle )
 {
-    ::drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aSkewParaPair;
+    ::com::sun::star::drawing::EnhancedCustomShapeParameterPair aSkewParaPair;
      const rtl::OUString    sSkew( RTL_CONSTASCII_USTRINGPARAM ( "Skew" ) );
     Any* pAny = rItem.GetPropertyValueByName( sExtrusion, sSkew );
     if ( ! ( pAny && ( *pAny >>= aSkewParaPair ) && ( aSkewParaPair.First.Value >>= rSkewAmount ) && ( aSkewParaPair.Second.Value >>= rSkewAngle ) ) )
@@ -200,7 +200,7 @@ void GetSkew( SdrCustomShapeGeometryItem& rItem, double& rSkewAmount, double& rS
 }
 void GetExtrusionDepth( SdrCustomShapeGeometryItem& rItem, const double* pMap, double& rBackwardDepth, double& rForwardDepth )
 {
-    ::drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aDepthParaPair;
+    ::com::sun::star::drawing::EnhancedCustomShapeParameterPair aDepthParaPair;
     double fDepth, fFraction;
     const rtl::OUString sDepth( RTL_CONSTASCII_USTRINGPARAM ( "Depth" ) );
     Any* pAny = rItem.GetPropertyValueByName( sExtrusion, sDepth );
