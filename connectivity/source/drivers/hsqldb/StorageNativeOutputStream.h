@@ -7,6 +7,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+/* Inaccessible static: class_00024com_00024sun_00024star_00024sdbcx_00024comp_00024hsqldb_00024StorageNativeOutputStream */
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream
  * Method:    openStream
@@ -18,42 +19,50 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputSt
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream
  * Method:    write
- * Signature: (Lcom/sun/star/embed/XStorage;Ljava/lang/String;Ljava/lang/String;[BII)V
+ * Signature: (Ljava/lang/String;Ljava/lang/String;[BII)V
  */
-JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_write__Lcom_sun_star_embed_XStorage_2Ljava_lang_String_2Ljava_lang_String_2_3BII
-  (JNIEnv *, jobject, jobject, jstring, jstring, jbyteArray, jint, jint);
+JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_write__Ljava_lang_String_2Ljava_lang_String_2_3BII
+  (JNIEnv *, jobject, jstring, jstring, jbyteArray, jint, jint);
 
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream
  * Method:    write
- * Signature: (Lcom/sun/star/embed/XStorage;Ljava/lang/String;Ljava/lang/String;[B)V
+ * Signature: (Ljava/lang/String;Ljava/lang/String;[B)V
  */
-JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_write__Lcom_sun_star_embed_XStorage_2Ljava_lang_String_2Ljava_lang_String_2_3B
-  (JNIEnv *, jobject, jobject, jstring, jstring, jbyteArray);
+JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_write__Ljava_lang_String_2Ljava_lang_String_2_3B
+  (JNIEnv *, jobject, jstring, jstring, jbyteArray);
 
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream
  * Method:    close
- * Signature: (Lcom/sun/star/embed/XStorage;Ljava/lang/String;Ljava/lang/String;)V
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_close
-  (JNIEnv *, jobject, jobject, jstring, jstring);
+  (JNIEnv *, jobject, jstring, jstring);
 
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream
  * Method:    write
- * Signature: (Lcom/sun/star/embed/XStorage;Ljava/lang/String;Ljava/lang/String;I)V
+ * Signature: (Ljava/lang/String;Ljava/lang/String;I)V
  */
-JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_write__Lcom_sun_star_embed_XStorage_2Ljava_lang_String_2Ljava_lang_String_2I
-  (JNIEnv *, jobject, jobject, jstring, jstring, jint);
+JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_write__Ljava_lang_String_2Ljava_lang_String_2I
+  (JNIEnv *, jobject, jstring, jstring, jint);
 
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream
  * Method:    flush
- * Signature: (Lcom/sun/star/embed/XStorage;Ljava/lang/String;Ljava/lang/String;)V
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_flush
-  (JNIEnv *, jobject, jobject, jstring, jstring);
+  (JNIEnv *, jobject, jstring, jstring);
+
+/*
+ * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream
+ * Method:    sync
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_sync
+  (JNIEnv *, jobject, jstring, jstring);
 
 #ifdef __cplusplus
 }

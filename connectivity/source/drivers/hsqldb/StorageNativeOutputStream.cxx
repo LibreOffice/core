@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StorageNativeOutputStream.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:09:35 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:52:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #include "cppuhelper/compbase1.hxx"
 #include "cppuhelper/component_context.hxx"
 
+#ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
@@ -125,158 +128,129 @@ using namespace ::connectivity::hsqldb;
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_openStream
   (JNIEnv * env, jobject obj_this, jstring name, jstring key, jint mode)
 {
-    Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_openStream(env,obj_this,name,key,mode);
+#if OSL_DEBUG_LEVEL > 1
+    {
+        ::rtl::OUString sOrgName = StorageContainer::jstring2ustring(env,name);
+        sOrgName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".output"));
+        ::rtl::OString sName = ::rtl::OUStringToOString(sOrgName,RTL_TEXTENCODING_ASCII_US);
+        getStreams()[sOrgName] = fopen( sName.getStr(), "a+" );
+    }
+#endif
+    StorageContainer::registerStream(env,name,key,mode);
 }
 /*
- * Class:     Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_write__Lcom_sun_star_embed_XStorage_2Ljava_lang_String_2Ljava_lang_String_2_3BII
+ * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream
  * Method:    write
  * Signature: (Ljava/lang/String;Ljava/lang/String;[BII)V
  */
-JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_write__Lcom_sun_star_embed_XStorage_2Ljava_lang_String_2Ljava_lang_String_2_3BII
-  (JNIEnv * env, jobject obj_this,jobject storage, jstring key, jstring name, jbyteArray buffer, jint off, jint len)
+JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_write__Ljava_lang_String_2Ljava_lang_String_2_3BII
+  (JNIEnv * env, jobject obj_this, jstring key, jstring name, jbyteArray buffer, jint off, jint len)
 {
-    ::boost::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
-    Reference< XOutputStream> xOut = pHelper.get() ? pHelper->getOutputStream() : Reference< XOutputStream>();
-    OSL_ENSURE(xOut.is(),"Stream is NULL");
-
-    try
-    {
-        if ( xOut.is() )
-        {
-            jbyte *buf = env->GetByteArrayElements(buffer,NULL);
-
-            if (JNI_FALSE != env->ExceptionCheck())
-            {
-                env->ExceptionClear();
-                OSL_ENSURE(0,"ExceptionClear");
-            }
-            OSL_ENSURE(buf,"buf is NULL");
-            if ( buf )
-            {
-                Sequence< ::sal_Int8 > aData(buf + off,len);
-                xOut->writeBytes(aData);
-                env->ReleaseByteArrayElements(buffer, buf, JNI_ABORT);
-            }
-        }
-        else
-        {
-            ThrowException( env,
-                            "java/io/IOException",
-                            "Stream is not valid");
-        }
-    }
-    catch(Exception& e)
-    {
-        OSL_ENSURE(0,"Exception catched! : write [BII)V");
-        if (JNI_FALSE != env->ExceptionCheck())
-            env->ExceptionClear();
-        ::rtl::OString cstr( ::rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
-        OSL_TRACE( __FILE__": forwarding Exception: %s", cstr.getStr() );
-        ThrowException( env,
-                        "java/io/IOException",
-                        cstr.getStr());
-    }
+    Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_write(env,obj_this,name,key,buffer,off,len);
 }
 // -----------------------------------------------------------------------------
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream
  * Method:    write
- * Signature: (Lcom/sun/star/embed/XStorage;Ljava/lang/String;Ljava/lang/String;[B)V
+ * Signature: (Ljava/lang/String;Ljava/lang/String;[B)V
  */
-JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_write__Lcom_sun_star_embed_XStorage_2Ljava_lang_String_2Ljava_lang_String_2_3B
-  (JNIEnv * env, jobject obj_this,jobject storage, jstring key, jstring name, jbyteArray buffer)
+JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_write__Ljava_lang_String_2Ljava_lang_String_2_3B
+  (JNIEnv * env, jobject obj_this, jstring key, jstring name, jbyteArray buffer)
 {
-    ::boost::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
-    Reference< XOutputStream> xOut = pHelper.get() ? pHelper->getOutputStream() : Reference< XOutputStream>();
-    OSL_ENSURE(xOut.is(),"Stream is NULL");
-    try
-    {
-        if ( xOut.is() )
-        {
-            jsize nLen = env->GetArrayLength(buffer);
-            jbyte *buf = env->GetByteArrayElements(buffer,NULL);
-            OSL_ENSURE(buf,"buf is NULL");
-            Sequence< ::sal_Int8 > aData(buf,nLen);
-            xOut->writeBytes(aData);
-            env->ReleaseByteArrayElements(buffer, buf, JNI_ABORT);
-        }
-        else
-        {
-            ThrowException( env,
-                            "java/io/IOException",
-                            "Stream is not valid");
-        }
-    }
-    catch(Exception& e)
-    {
-        OSL_ENSURE(0,"Exception catched! : writeBytes(aData); [B)V");
-        if (JNI_FALSE != env->ExceptionCheck())
-            env->ExceptionClear();
-        ::rtl::OString cstr( ::rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
-        OSL_TRACE( __FILE__": forwarding Exception: %s", cstr.getStr() );
-        ThrowException( env,
-                        "java/io/IOException",
-                        cstr.getStr());
-    }
+    Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_write(env,obj_this,name,key,buffer,0,env->GetArrayLength(buffer));
 }
 // -----------------------------------------------------------------------------
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream
  * Method:    close
- * Signature: (Lcom/sun/star/embed/XStorage;Ljava/lang/String;Ljava/lang/String;)V
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_close
-  (JNIEnv * env, jobject obj_this,jobject storage, jstring key, jstring name)
+  (JNIEnv * env, jobject obj_this, jstring key, jstring name)
 {
-    Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_close(env,obj_this,name,key);
+    ::boost::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
+    Reference< XOutputStream> xFlush = pHelper.get() ? pHelper->getOutputStream() : Reference< XOutputStream>();
+    if ( xFlush.is() )
+        try
+        {
+            xFlush->flush();
+        }
+        catch(Exception&)
+        {}
+
+#if OSL_DEBUG_LEVEL > 1
+    {
+        ::rtl::OUString sOrgName = StorageContainer::jstring2ustring(env,name);
+        sOrgName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".output"));
+        fclose( getStreams()[sOrgName] );
+        getStreams().erase(sOrgName);
+    }
+#endif
+    StorageContainer::revokeStream(env,name,key);
 }
 // -----------------------------------------------------------------------------
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream
  * Method:    write
- * Signature: (Lcom/sun/star/embed/XStorage;Ljava/lang/String;Ljava/lang/String;I)V
+ * Signature: (Ljava/lang/String;Ljava/lang/String;I)V
  */
-JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_write__Lcom_sun_star_embed_XStorage_2Ljava_lang_String_2Ljava_lang_String_2I
-  (JNIEnv * env, jobject obj_this,jobject storage, jstring key, jstring name,jint b)
+JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_write__Ljava_lang_String_2Ljava_lang_String_2I
+  (JNIEnv * env, jobject obj_this, jstring key, jstring name,jint b)
 {
-    ::boost::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
-    Reference< XOutputStream> xOut = pHelper.get() ? pHelper->getOutputStream() : Reference< XOutputStream>();
-    OSL_ENSURE(xOut.is(),"Stream is NULL");
-    try
-    {
-        if ( xOut.is() )
-        {
-            Sequence< ::sal_Int8 > aData(1);
-            aData[0] = static_cast< ::sal_Int8>(b);
-            xOut->writeBytes(aData);
-        }
-        else
-        {
-            ThrowException( env,
-                            "java/io/IOException",
-                            "Stream is not valid");
-        }
-    }
-    catch(Exception& e)
-    {
-        OSL_ENSURE(0,"Exception catched! : writeBytes(aData);");
-        if (JNI_FALSE != env->ExceptionCheck())
-            env->ExceptionClear();
-        ::rtl::OString cstr( ::rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
-        OSL_TRACE( __FILE__": forwarding Exception: %s", cstr.getStr() );
-        ThrowException( env,
-                        "java/io/IOException",
-                        cstr.getStr());
-    }
+    Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_writeInt(env,obj_this,name,key,b);
 }
 // -----------------------------------------------------------------------------
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream
  * Method:    flush
- * Signature: (Lcom/sun/star/embed/XStorage;Ljava/lang/String;Ljava/lang/String;)V
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_flush
-  (JNIEnv * env, jobject obj_this,jobject storage, jstring key, jstring name)
+  (JNIEnv * env, jobject obj_this, jstring key, jstring name)
 {
+}
+// -----------------------------------------------------------------------------
+/*
+ * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream
+ * Method:    sync
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_sync
+  (JNIEnv * env, jobject obj_this, jstring key, jstring name)
+{
+    TStorages::mapped_type aStoragePair = StorageContainer::getRegisteredStorage(StorageContainer::jstring2ustring(env,key));
+    Reference<XTransactedObject> xTrans(aStoragePair.first.first,UNO_QUERY);
+    if ( xTrans.is() )
+    {
+        try
+        {
+            TStreamMap::iterator aIter = aStoragePair.second.begin();
+            TStreamMap::iterator aEnd = aStoragePair.second.end();
+            for (;aIter != aEnd ; ++aIter)
+            {
+                ::boost::shared_ptr<StreamHelper> pHelper = aIter->second;
+                Reference< XOutputStream> xFlush = pHelper.get() ? pHelper->getOutputStream() : Reference< XOutputStream>();
+                if ( xFlush.is() )
+                    try
+                    {
+                        xFlush->flush();
+                    }
+                    catch(Exception&)
+                    {}
+            }
+            xTrans->commit();
+        }
+        catch(Exception& e)
+        {
+            OSL_ENSURE(0,"Exception catched! : sync();");
+            if (JNI_FALSE != env->ExceptionCheck())
+                env->ExceptionClear();
+            ::rtl::OString cstr( ::rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
+            OSL_TRACE( __FILE__": forwarding Exception: %s", cstr.getStr() );
+            ThrowException( env,
+                            "java/io/IOException",
+                            cstr.getStr());
+        }
+    }
 }
 // -----------------------------------------------------------------------------
