@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:18:39 $
+ *  last change: $Author: kz $ $Date: 2001-04-11 18:36:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: kz $ $Date: 2001-03-09 21:18:39 $ $Revision: 1.13 $
+ // $Author: kz $ $Date: 2001-04-11 18:36:16 $ $Revision: 1.14 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -514,7 +514,7 @@ String RID_PLUGINTOOLBOX
     Text = "Funktionsleiste für PlugIns" ;
     Text [ english ] = "PlugIn Function Bar" ;
     Text [ dutch ] = "Functiebalk voor PlugIns" ;
-    Text [ english_us ] = "Function Bar for Plug-Ins" ;
+    Text [ english_us ] = "Function Bar for Plug-ins" ;
     Text [ italian ] = "Barra delle funzioni per PlugIn" ;
     Text [ spanish ] = "Barra de funciones para Plug-ins" ;
     Text [ french ] = "Barre de fonctions Plug-ins" ;
