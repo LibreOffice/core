@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wordcountdialog.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 13:44:22 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:25:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,23 +67,23 @@ ModalDialog DLG_WORDCOUNT
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 170 , 108 ) ;
-    Text = "Wortanzahl" ;
-    Text [ english_us ] = "Word Count" ;
+    Text [ de ] = "Wortanzahl" ;
+    Text [ en-US ] = "Word Count" ;
     Moveable = TRUE ;
 
     FixedLine  FL_CURRENT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 158 , 8 ) ;
-        Text = "Aktuelle Auswahl" ;
-        Text[ english_us ] = "Current selection";
+        Text [ de ] = "Aktuelle Auswahl" ;
+        Text [ en-US ] = "Current selection";
     };
     FixedText       FT_CURRENTWORD
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text = "Wörter:" ;
-        Text[ english_us ] = "Words:";
+        Text [ de ] = "Wörter:" ;
+        Text [ en-US ] = "Words:";
     };
     FixedText       FI_CURRENTWORD
     {
@@ -95,8 +95,8 @@ ModalDialog DLG_WORDCOUNT
     {
         Pos = MAP_APPFONT ( 12 , 26 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text = "Zeichen:" ;
-        Text[ english_us ] = "Characters:";
+        Text [ de ] = "Zeichen:" ;
+        Text [ en-US ] = "Characters:";
     };
     FixedText       FI_CURRENTCHARACTER
     {
@@ -108,15 +108,15 @@ ModalDialog DLG_WORDCOUNT
     {
         Pos = MAP_APPFONT (  6, 40 ) ;
         Size = MAP_APPFONT ( 158 , 8 ) ;
-        Text = "Gesamtes Dokument" ;
-        Text[ english_us ] = "Whole document";
+        Text [ de ] = "Gesamtes Dokument" ;
+        Text [ en-US ] = "Whole document";
     };
     FixedText       FT_DOCWORD
     {
         Pos = MAP_APPFONT (  12, 51 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text = "Wörter:" ;
-        Text[ english_us ] = "Words:";
+        Text [ de ] = "Wörter:" ;
+        Text [ en-US ] = "Words:";
     };
     FixedText       FI_DOCWORD
     {
@@ -128,8 +128,8 @@ ModalDialog DLG_WORDCOUNT
     {
         Pos = MAP_APPFONT ( 12 , 63 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text = "Zeichen:" ;
-        Text[ english_us ] = "Characters:";
+        Text [ de ] = "Zeichen:" ;
+        Text [ en-US ] = "Characters:";
     };
     FixedText       FI_DOCCHARACTER
     {
