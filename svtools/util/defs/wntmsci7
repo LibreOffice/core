@@ -10202,3 +10202,4 @@ lpfnDrawStateW
 ?lcl_MoveControl@?%O:\SRX641\src\svtools\source\filepicker\iodlg.cxx1816313359@@YAXPAVControl@@JJAAJ@Z
 ?lcl_getHomeDirectory@?%O:\SRX641\src\svtools\source\filepicker\iodlg.cxx1816313359@@YAEABVString@@AAV2@@Z
 ?lcl_DecoratedFilter@?%O:\SRX641\src\svtools\source\filepicker\iodlgimp.cxx238653556@@YA?AVString@@ABV2@@Z
+?ClearTxtConvContext@SvParser@@IAEXXZ
