@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:42:59 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:19:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,8 +89,8 @@ PushButton RID_PREVIEW_BUTTON
     Text [ portuguese ] = "~Tocar" ;
     Text[ chinese_simplified ] = "·ÅÓ³";
     Text[ russian ] = "Âîñïğîèçâåñòè";
-    Text[ polish ] = "Odtwarzaj";
-    Text[ japanese ] = "Ä¶‚·‚é";
+    Text[ polish ] = "Odtwórz";
+    Text[ japanese ] = "Ä¶";
     Text[ chinese_traditional ] = "©ñ¬M";
     Text[ arabic ] = "ÊÔÛíá";
     Text[ greek ] = "Åêôİëå~óç";
@@ -844,4 +844,5 @@ Bitmap BMP_PRESOBJ_IMAGE
     File = "image.bmp" ;
 };
 #endif
+
 
