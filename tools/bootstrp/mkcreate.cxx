@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mkcreate.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:03:02 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 15:01:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -627,8 +627,8 @@ SourceDirectory *SourceDirectory::CreateRootDirectory(
     ByteString sStandLst( aIniManager.ToLocal( sDefLst ));
     String s = String( sStandLst, gsl_getSystemTextEncoding());
     InformationParser aParser;
-    fprintf( stderr,
-        "Reading database %s ...\n", sStandLst.GetBuffer());
+//  fprintf( stderr,
+//      "Reading database %s ...\n", sStandLst.GetBuffer());
     GenericInformationList *pVerList = aParser.Execute(
         s );
 
@@ -656,8 +656,8 @@ SourceDirectory *SourceDirectory::CreateRootDirectory(
 
     ByteString sVersion( rVersion );
     Star aStar( pVerList, sVersion, TRUE, rRoot.GetBuffer());
-    fprintf( stderr,
-        "Creating virtual directory tree ...\n" );
+//  fprintf( stderr,
+//      "Creating virtual directory tree ...\n" );
 
 
     SourceDirectory *pSourceRoot = new SourceDirectory( rRoot, OS_ALL );
@@ -801,9 +801,9 @@ BOOL SourceDirectory::CreateRecursiveMakefile( BOOL bAllChilds )
         "#\n"
         "#   $RCSfile: mkcreate.cxx,v $\n"
         "#\n"
-        "#   $Revision: 1.11 $\n"
+        "#   $Revision: 1.12 $\n"
         "#\n"
-        "#   last change: $Author: hr $ $Date: 2003-03-27 17:03:02 $\n"
+        "#   last change: $Author: hjs $ $Date: 2004-06-25 15:01:34 $\n"
         "#\n"
         "#   The Contents of this file are made available subject to the terms of\n"
         "#   either of the following licenses\n"
