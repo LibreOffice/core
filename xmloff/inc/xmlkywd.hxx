@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2000-09-29 07:24:20 $
+ *  last change: $Author: dr $ $Date: 2000-10-10 09:36:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,7 @@ XML_CONSTASCII_ACTION( sXML_boolean_style, "boolean-style" );
 XML_CONSTASCII_ACTION( sXML_boolean_value, "boolean-value");
 XML_CONSTASCII_ACTION( sXML_border, "border" );
 XML_CONSTASCII_ACTION( sXML_border_bottom, "border-bottom" );
+XML_CONSTASCII_ACTION( sXML_border_color, "border-color" );
 XML_CONSTASCII_ACTION( sXML_border_left, "border-left" );
 XML_CONSTASCII_ACTION( sXML_border_line_width, "border-line-width" );
 XML_CONSTASCII_ACTION( sXML_border_line_width_bottom, "border-line-width-bottom" );
@@ -258,6 +259,7 @@ XML_CONSTASCII_ACTION( sXML_columns, "columns" );
 XML_CONSTASCII_ACTION( sXML_columnsplit_auto, "auto" );
 XML_CONSTASCII_ACTION( sXML_columnsplit_avoid, "avoid" );
 XML_CONSTASCII_ACTION( sXML_command, "command" );
+XML_CONSTASCII_ACTION( sXML_comment, "comment" );
 XML_CONSTASCII_ACTION( sXML_cond_style_name, "cond-style-name" );
 XML_CONSTASCII_ACTION( sXML_condition, "condition" );
 XML_CONSTASCII_ACTION( sXML_condition_source, "condition-source");
@@ -277,6 +279,9 @@ XML_CONSTASCII_ACTION( sXML_content_validation_name, "validation-name");
 XML_CONSTASCII_ACTION( sXML_continue_numbering, "continue-numbering" );
 XML_CONSTASCII_ACTION( sXML_contrast , "contrast" );
 XML_CONSTASCII_ACTION( sXML_control, "control" );
+XML_CONSTASCII_ACTION( sXML_copy_back, "copy-back" );
+XML_CONSTASCII_ACTION( sXML_copy_formulas, "copy-formulas" );
+XML_CONSTASCII_ACTION( sXML_copy_styles, "copy-styles" );
 XML_CONSTASCII_ACTION( sXML_corner_radius , "corner-radius" );
 XML_CONSTASCII_ACTION( sXML_counterclockwise, "counterclockwise" );
 XML_CONSTASCII_ACTION( sXML_country, "country" );
@@ -352,6 +357,7 @@ XML_CONSTASCII_ACTION( sXML_descending, "descending");
 XML_CONSTASCII_ACTION( sXML_description, "description" );
 XML_CONSTASCII_ACTION( sXML_direction, "direction");
 XML_CONSTASCII_ACTION( sXML_display, "display" );
+XML_CONSTASCII_ACTION( sXML_display_border, "display-border");
 XML_CONSTASCII_ACTION( sXML_display_details, "display-details");
 XML_CONSTASCII_ACTION( sXML_display_duplicates, "display-duplicates");
 XML_CONSTASCII_ACTION( sXML_display_empty, "display-empty");
@@ -533,6 +539,7 @@ XML_CONSTASCII_ACTION( sXML_inset, "inset" );
 XML_CONSTASCII_ACTION( sXML_inside, "inside" );
 XML_CONSTASCII_ACTION( sXML_interval_major, "interval-major" );
 XML_CONSTASCII_ACTION( sXML_interval_minor, "interval-minor" );
+XML_CONSTASCII_ACTION( sXML_is_active, "is-active");
 XML_CONSTASCII_ACTION( sXML_is_data_layout_field, "is-data-layout-field");
 XML_CONSTASCII_ACTION( sXML_is_selection, "is-selection");
 XML_CONSTASCII_ACTION( sXML_justified, "justified" );
@@ -811,6 +818,8 @@ XML_CONSTASCII_ACTION( sXML_ry, "ry" );
 XML_CONSTASCII_ACTION( sXML_s, "s" );
 XML_CONSTASCII_ACTION( sXML_scale_text, "scale-text" );
 XML_CONSTASCII_ACTION( sXML_scatter, "scatter" );
+XML_CONSTASCII_ACTION( sXML_scenario, "scenario" );
+XML_CONSTASCII_ACTION( sXML_scenario_ranges, "scenario-ranges" );
 XML_CONSTASCII_ACTION( sXML_scientific_number, "scientific-number" );
 XML_CONSTASCII_ACTION( sXML_score_spaces, "score-spaces" );
 XML_CONSTASCII_ACTION( sXML_script, "script" );
