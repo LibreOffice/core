@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 08:46:15 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 14:03:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2846,6 +2846,10 @@ void SfxViewFrame::ExecView_Impl
             {
                 pMed->GetItemSet()->Put( SfxStringItem( SID_USER_DATA, aUserData ) );
 
+                BOOL bHidden = FALSE;
+                SFX_REQUEST_ARG( rReq, pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False );
+                if ( pHiddenItem )
+                    bHidden = pHiddenItem->GetValue();
                 SFX_REQUEST_ARG( rReq, pFrameItem, SfxUnoAnyItem, SID_FILLFRAME, sal_False );
                 if ( pFrameItem )
                 {
@@ -2854,13 +2858,11 @@ void SfxViewFrame::ExecView_Impl
                     SfxFrame* pFrame = SfxTopFrame::Create( xFrame );
                     pMed->GetItemSet()->ClearItem( SID_HIDDEN );
                     pFrame->InsertDocument( GetObjectShell() );
+                    if ( !bHidden )
+                        xFrame->getContainerWindow()->setVisible( sal_True );
                 }
                 else
                 {
-                    BOOL bHidden = FALSE;
-                    SFX_REQUEST_ARG( rReq, pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False );
-                    if ( pHiddenItem )
-                        bHidden = pHiddenItem->GetValue();
                     SfxAllItemSet aSet( GetPool() );
                     aSet.Put( SfxBoolItem( SID_OPEN_NEW_VIEW, TRUE ) );
                     SfxFrame* pFrame = SfxTopFrame::Create( GetObjectShell(), GetCurViewId(), bHidden, &aSet );
