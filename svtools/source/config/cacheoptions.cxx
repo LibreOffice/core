@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheoptions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-19 12:24:50 $
+ *  last change: $Author: ka $ $Date: 2001-05-08 09:06:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,18 +101,21 @@ using namespace ::com::sun::star::uno;
 #define DEFAULT_DRAWINGOLE                  20
 #define DEFAULT_GRFMGR_TOTALSIZE            10000000
 #define DEFAULT_GRFMGR_OBJECTSIZE           2400000
+#define DEFAULT_GRFMGR_OBJECTRELEASE        600
 
 #define PROPERTYNAME_WRITEROLE              OUString(RTL_CONSTASCII_USTRINGPARAM("Writer/OLE_Objects"))
 #define PROPERTYNAME_DRAWINGOLE             OUString(RTL_CONSTASCII_USTRINGPARAM("DrawingEngine/OLE_Objects"))
 #define PROPERTYNAME_GRFMGR_TOTALSIZE       OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicManager/TotalCacheSize"))
 #define PROPERTYNAME_GRFMGR_OBJECTSIZE      OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicManager/ObjectCacheSize"))
+#define PROPERTYNAME_GRFMGR_OBJECTRELEASE   OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicManager/ObjectReleaseTime"))
 
 #define PROPERTYHANDLE_WRITEROLE            0
 #define PROPERTYHANDLE_DRAWINGOLE           1
 #define PROPERTYHANDLE_GRFMGR_TOTALSIZE     2
 #define PROPERTYHANDLE_GRFMGR_OBJECTSIZE    3
+#define PROPERTYHANDLE_GRFMGR_OBJECTRELEASE 4
 
-#define PROPERTYCOUNT                       4
+#define PROPERTYCOUNT                       5
 
 class SvtCacheOptions_Impl : public ConfigItem
 {
@@ -139,11 +142,13 @@ public:
     sal_Int32       GetDrawingEngineOLE_Objects() const;
     sal_Int32       GetGraphicManagerTotalCacheSize() const;
     sal_Int32       GetGraphicManagerObjectCacheSize() const;
+    sal_Int32       GetGraphicManagerObjectReleaseTime() const;
 
     void            SetWriterOLE_Objects( sal_Int32 nObjects );
     void            SetDrawingEngineOLE_Objects( sal_Int32 nObjects );
     void            SetGraphicManagerTotalCacheSize( sal_Int32 nTotalCacheSize );
     void            SetGraphicManagerObjectCacheSize( sal_Int32 nObjectCacheSize );
+    void            SetGraphicManagerObjectReleaseTime( sal_Int32 nReleaseTimeSeconds );
 
 //-------------------------------------------------------------------------------------------------------------
 //  private methods
@@ -163,6 +168,7 @@ private:
         sal_Int32   mnDrawingOLE;
         sal_Int32   mnGrfMgrTotalSize;
         sal_Int32   mnGrfMgrObjectSize;
+        sal_Int32   mnGrfMgrObjectRelease;
 };
 
 //_________________________________________________________________________________________________________________
@@ -177,7 +183,8 @@ SvtCacheOptions_Impl::SvtCacheOptions_Impl() :
     mnWriterOLE( DEFAULT_WRITEROLE ),
     mnDrawingOLE( DEFAULT_DRAWINGOLE ),
     mnGrfMgrTotalSize( DEFAULT_GRFMGR_TOTALSIZE ),
-    mnGrfMgrObjectSize( DEFAULT_GRFMGR_OBJECTSIZE )
+    mnGrfMgrObjectSize( DEFAULT_GRFMGR_OBJECTSIZE ),
+    mnGrfMgrObjectRelease( DEFAULT_GRFMGR_OBJECTRELEASE )
 {
     Sequence< OUString >    seqNames( impl_GetPropertyNames() );
     Sequence< Any >         seqValues   = GetProperties( seqNames ) ;
@@ -221,6 +228,13 @@ SvtCacheOptions_Impl::SvtCacheOptions_Impl() :
                         seqValues[nProperty] >>= mnGrfMgrObjectSize;
                 }
                 break;
+
+                case PROPERTYHANDLE_GRFMGR_OBJECTRELEASE:
+                {
+                    if( seqValues[ nProperty ].getValueTypeClass() == TypeClass_LONG )
+                        seqValues[nProperty] >>= mnGrfMgrObjectRelease;
+                }
+                break;
             }
         }
     }
@@ -261,6 +275,10 @@ void SvtCacheOptions_Impl::Commit()
 
             case PROPERTYHANDLE_GRFMGR_OBJECTSIZE:
                 aSeqValues[nProperty] <<= mnGrfMgrObjectSize;
+            break;
+
+            case PROPERTYHANDLE_GRFMGR_OBJECTRELEASE:
+                aSeqValues[nProperty] <<= mnGrfMgrObjectRelease;
             break;
         }
     }
@@ -303,6 +321,14 @@ sal_Int32 SvtCacheOptions_Impl::GetGraphicManagerObjectCacheSize() const
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
+sal_Int32 SvtCacheOptions_Impl::GetGraphicManagerObjectReleaseTime() const
+{
+    return mnGrfMgrObjectRelease;
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
 void SvtCacheOptions_Impl::SetWriterOLE_Objects( sal_Int32 nWriterOLE )
 {
     mnWriterOLE = nWriterOLE;
@@ -337,6 +363,15 @@ void SvtCacheOptions_Impl::SetGraphicManagerObjectCacheSize( sal_Int32 nGrfMgrOb
 }
 
 //*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+void SvtCacheOptions_Impl::SetGraphicManagerObjectReleaseTime( sal_Int32 nGrfMgrObjectReleaseTime )
+{
+    mnGrfMgrObjectRelease = nGrfMgrObjectReleaseTime;
+    SetModified();
+}
+
+//*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
 Sequence< OUString > SvtCacheOptions_Impl::impl_GetPropertyNames()
@@ -347,7 +382,8 @@ Sequence< OUString > SvtCacheOptions_Impl::impl_GetPropertyNames()
         PROPERTYNAME_WRITEROLE,
         PROPERTYNAME_DRAWINGOLE,
         PROPERTYNAME_GRFMGR_TOTALSIZE,
-        PROPERTYNAME_GRFMGR_OBJECTSIZE
+        PROPERTYNAME_GRFMGR_OBJECTSIZE,
+        PROPERTYNAME_GRFMGR_OBJECTRELEASE
     };
     // Initialize return sequence with these list ...
     static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
@@ -436,6 +472,15 @@ sal_Int32 SvtCacheOptions::GetGraphicManagerObjectCacheSize() const
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
+sal_Int32 SvtCacheOptions::GetGraphicManagerObjectReleaseTime() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->GetGraphicManagerObjectReleaseTime();
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
 void SvtCacheOptions::SetWriterOLE_Objects( sal_Int32 nWriterOLE )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
@@ -467,6 +512,15 @@ void SvtCacheOptions::SetGraphicManagerObjectCacheSize( sal_Int32 nGrfMgrObjectS
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetGraphicManagerObjectCacheSize( nGrfMgrObjectSize );
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+void SvtCacheOptions::SetGraphicManagerObjectReleaseTime( sal_Int32 nGrfMgrObjectReleaseTime )
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    m_pDataContainer->SetGraphicManagerObjectReleaseTime( nGrfMgrObjectReleaseTime );
 }
 
 //*****************************************************************************************************************

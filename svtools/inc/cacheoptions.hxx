@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheoptions.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-12 14:58:59 $
+ *  last change: $Author: ka $ $Date: 2001-05-08 09:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,11 +161,13 @@ class SvtCacheOptions
         sal_Int32   GetDrawingEngineOLE_Objects() const;
         sal_Int32   GetGraphicManagerTotalCacheSize() const;
         sal_Int32   GetGraphicManagerObjectCacheSize() const;
+        sal_Int32   GetGraphicManagerObjectReleaseTime() const;
 
         void        SetWriterOLE_Objects( sal_Int32 nObjects );
         void        SetDrawingEngineOLE_Objects( sal_Int32 nObjects );
         void        SetGraphicManagerTotalCacheSize( sal_Int32 nTotalCacheSize );
         void        SetGraphicManagerObjectCacheSize( sal_Int32 nObjectCacheSize );
+        void        SetGraphicManagerObjectReleaseTime( sal_Int32 nReleaseTimeSeconds );
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
