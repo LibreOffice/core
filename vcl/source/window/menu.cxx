@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-25 14:58:37 $
+ *  last change: $Author: pl $ $Date: 2002-10-31 13:15:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2339,6 +2339,8 @@ long Menu::GetIndexForPoint( const Point& rPoint, USHORT& rItemID ) const
             if( mpLayoutData->m_aLineIndices[i] <= nIndex &&
                 (i == mpLayoutData->m_aLineIndices.size()-1 || mpLayoutData->m_aLineIndices[i+1] > nIndex) )
             {
+                // make index relative to item
+                nIndex -= mpLayoutData->m_aLineIndices[i];
                 rItemID = mpLayoutData->m_aLineItemIds[i];
                 break;
             }
@@ -2359,6 +2361,18 @@ Pair Menu::GetLineStartEnd( long nLine ) const
     if( ! mpLayoutData )
         ImplFillLayoutData();
     return mpLayoutData ? mpLayoutData->GetLineStartEnd( nLine ) : Pair( -1, -1 );
+}
+
+Pair Menu::GetItemStartEnd( USHORT nItem ) const
+{
+    if( ! mpLayoutData )
+        ImplFillLayoutData();
+
+    for( long i = 0; i < mpLayoutData->m_aLineItemIds.size(); i++ )
+        if( mpLayoutData->m_aLineItemIds[i] == nItem )
+            return GetLineStartEnd( i );
+
+    return Pair( -1, -1 );
 }
 
 USHORT Menu::GetDisplayItemId( long nLine ) const
