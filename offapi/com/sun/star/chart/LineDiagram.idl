@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineDiagram.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-10 08:50:56 $
+ *  last change: $Author: bm $ $Date: 2001-08-27 14:35:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,19 @@ service LineDiagram
      */
     [property] long SplineType;
 
+    //-------------------------------------------------------------------------
+
+    /** specifies the power of the polynomials used for spline calculation
+
+        This property is only valid for b-splines
+     */
+    [optional, property] long SplineOrder;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the number of sampling points of a spline
+     */
+    [optional, property] long SplineResolution;
 };
 
 //=============================================================================
@@ -198,6 +211,9 @@ service LineDiagram
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/05/10 08:50:56  bm
+    +optional property SymbolSize
+
     Revision 1.5  2001/01/23 10:08:03  mi
     optional interfaces now marked as [optional] instead of just a prosa description of this fact
 
