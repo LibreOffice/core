@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-03 15:51:16 $
+ *  last change: $Author: oj $ $Date: 2002-04-29 08:30:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,7 +348,6 @@ extern "C" void SAL_CALL createRegistryInfo_OBrowser()
 {
     static OMultiInstanceAutoRegistration< SbaTableQueryBrowser > aAutoRegistration;
 }
-
 // -------------------------------------------------------------------------
 void SafeAddPropertyListener(const Reference< XPropertySet > & xSet, const ::rtl::OUString& rPropName, XPropertyChangeListener* pListener)
 {
@@ -405,6 +404,7 @@ SbaTableQueryBrowser::SbaTableQueryBrowser(const Reference< XMultiServiceFactory
     ,m_nAsyncDrop(0)
     ,m_nAsyncClose( 0 )
     ,m_bQueryEscapeProcessing( sal_False )
+    ,m_bHiContrast(sal_False)
 {
     DBG_CTOR(SbaTableQueryBrowser,NULL);
 
@@ -567,6 +567,8 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
 
         m_pTreeView->getListBox()->setControlActionListener(this);
         m_pTreeView->SetHelpId(HID_CTL_TREEVIEW);
+
+        m_bHiContrast = isHiContrast();
 
         // a default pos for the splitter, so that the listbox is about 80 (logical) pixels wide
         m_pSplitter->SetSplitPosPixel( getBrowserView()->LogicToPixel( Size( 80, 0 ), MAP_APPFONT ).Width() );
@@ -1869,14 +1871,14 @@ void SbaTableQueryBrowser::implAddDatasource(const String& _rDbName, Image& _rDb
         _rBookmarkName = String(ModuleRes(RID_STR_BOOKMARKS_CONTAINER));
 
     if (!_rQueryImage)
-        _rQueryImage = Image(ModuleRes(QUERYFOLDER_TREE_ICON));
+        _rQueryImage = Image(ModuleRes( DBTreeListModel::getImageResId(etQueryContainer,isHiContrast()) ));
     if (!_rTableImage)
-        _rTableImage = Image(ModuleRes(TABLEFOLDER_TREE_ICON));
+        _rTableImage = Image(ModuleRes( DBTreeListModel::getImageResId(etTableContainer,isHiContrast()) ));
     if (!_rBookmarkImage)
-        _rBookmarkImage = Image(ModuleRes(BOOKMARKFOLDER_TREE_ICON));
+        _rBookmarkImage = Image(ModuleRes( DBTreeListModel::getImageResId(etBookmarkContainer,isHiContrast()) ));
 
     if (!_rDbImage)
-        _rDbImage = Image(ModuleRes(IMG_DATABASE));
+        _rDbImage = Image(ModuleRes( DBTreeListModel::getImageResId(etDatasource,isHiContrast()) ));
 
     // add the entry for the data source
     SvLBoxEntry* pDatasourceEntry = m_pTreeView->getListBox()->InsertEntry(_rDbName, _rDbImage, _rDbImage, NULL, sal_False);
@@ -1933,7 +1935,7 @@ sal_Bool SbaTableQueryBrowser::populateTree(const Reference<XNameAccess>& _xName
     if(pData) // don't ask if the nameaccess is already set see OnExpandEntry views and tables
         pData->xObject = _xNameAccess;
 
-    ModuleRes aResId(DBTreeListModel::getImageResId(_rEntryType));
+    ModuleRes aResId(DBTreeListModel::getImageResId(_rEntryType,isHiContrast()));
     Image aImage(aResId);
 
     try
@@ -2654,7 +2656,7 @@ void SAL_CALL SbaTableQueryBrowser::elementInserted( const ContainerEvent& _rEve
             else
                 pNewData->eType = etTable;
 
-            sal_uInt16 nImageResId = DBTreeListModel::getImageResId(pNewData->eType);
+            sal_uInt16 nImageResId = DBTreeListModel::getImageResId(pNewData->eType,isHiContrast());
             vos::OGuard aGuard( Application::GetSolarMutex() );
             Image aImage = Image(ModuleRes(nImageResId));
             m_pTreeView->getListBox()->InsertEntry(::comphelper::getString(_rEvent.Accessor),
@@ -2679,7 +2681,7 @@ void SAL_CALL SbaTableQueryBrowser::elementInserted( const ContainerEvent& _rEve
                 //  _rEvent.Element >>= pNewData->xObject;// remember the new element
                 pNewData->eType = pContainerData->eType == etQueryContainer ? etQuery : etBookmark;
 
-                sal_uInt16 nImageResId = DBTreeListModel::getImageResId(pNewData->eType);
+                sal_uInt16 nImageResId = DBTreeListModel::getImageResId(pNewData->eType,isHiContrast());
                 vos::OGuard aGuard( Application::GetSolarMutex() );
                 Image aImage = Image(ModuleRes(nImageResId));
                 m_pTreeView->getListBox()->InsertEntry(::comphelper::getString(_rEvent.Accessor),
@@ -4155,7 +4157,14 @@ IMPL_LINK( SbaTableQueryBrowser, OnAsyncClose, void*, NOTINTERESTEDIN )
     }
     return 0L;
 }
-
+// -----------------------------------------------------------------------------
+sal_Bool SbaTableQueryBrowser::isHiContrast() const
+{
+    sal_Bool bRet = sal_False;
+    if ( m_pTreeView )
+        bRet = m_pTreeView->getListBox()->GetBackground().GetColor().IsDark();
+    return bRet;
+}
 // .........................................................................
 }   // namespace dbaui
 // .........................................................................
