@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-20 18:49:33 $
+ *  last change: $Author: cd $ $Date: 2001-08-10 05:45:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,9 +87,10 @@
 #include "ipfrm.hxx"
 #include "ipenv.hxx"
 #include "appdata.hxx"
-#include "picklist.hxx"
+//#include "picklist.hxx"
 #include "viewsh.hxx"
 #include "imgmgr.hxx"
+#include "sfxpicklist.hxx"
 
 //=========================================================================
 
@@ -628,7 +629,8 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
         // ggf. Pick-Menu erzeugen
         if ( pParent && pSVMenu == pParent->pPickMenu )
         {
-            SfxPickList_Impl::Get()->SetPickMenu( pParent->pPickMenu );
+            SfxPickList::Get()->CreateMenuEntries( pParent->pPickMenu );
+//            SfxPickList_Impl::Get()->SetPickMenu( pParent->pPickMenu );
         }
         else
             pPickMenu = pSVMenu->GetPopupMenu(SID_PICKLIST);
@@ -774,7 +776,8 @@ IMPL_LINK( SfxVirtualMenu, Select, Menu *, pMenu )
     }
     else if ( nId >= START_ITEMID_PICKLIST && nId <= END_ITEMID_PICKLIST )
     {
-        SfxPickList_Impl::Get()->ExecuteMenuEntry( nId );
+        SfxPickList::Get()->ExecuteMenuEntry( nId );
+//        SfxPickList_Impl::Get()->ExecuteMenuEntry( nId );
         return sal_True;
     }
 
