@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.160 $
+ *  $Revision: 1.161 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-13 17:19:25 $
+ *  last change: $Author: sab $ $Date: 2002-08-23 14:32:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2515,14 +2515,6 @@ void ScXMLExport::WriteTableShapes()
         {
             if (aItr->is())
             {
-                uno::Reference< beans::XPropertySet > xShapeProp( *aItr, uno::UNO_QUERY );
-                if( xShapeProp.is() )
-                {
-                    uno::Any aPropAny = xShapeProp->getPropertyValue(sLayerID);
-                    sal_Int16 nLayerID;
-                    if( (aPropAny >>= nLayerID) && (nLayerID == SC_LAYER_BACK) )
-                        AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE_BACKGROUND, XML_TRUE);
-                }
                 ExportShape(*aItr, NULL);
             }
             aItr = (*pTableShapes)[nCurrentTable].erase(aItr);
