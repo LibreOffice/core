@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 10:11:24 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:45:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,8 @@ protected:
     SwFrm *pFrm;
     const SwRect aFrm;
     const SwRect aPrt;
+    SwTwips mnFlyAnchorOfst;
+    SwTwips mnFlyAnchorOfstNoWrap;
     FASTBOOL     bHadFollow;
     FASTBOOL     bInvaKeep;
 #ifdef ACCESSIBLE_LAYOUT
