@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view3d.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:35:33 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:42:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,7 @@ E3dView::E3dView(SdrModel* pModel, OutputDevice* pOut) :
 |*
 \************************************************************************/
 
-E3dView::E3dView(SdrModel* pModel, ExtOutputDevice* pExtOut) :
+E3dView::E3dView(SdrModel* pModel, XOutputDevice* pExtOut) :
     SdrView(pModel, pExtOut)
 {
     InitView ();
@@ -1169,7 +1169,7 @@ void E3dView::ConvertMarkedObjTo3D(BOOL bExtrude, Vector3D aPnt1, Vector3D aPnt2
             // Default-Rotation setzen
             double XRotateDefault = 20;
             pScene->RotateX(DEG2RAD(XRotateDefault));
-            pScene->SetSortingMode(E3D_SORT_FAST_SORTING|E3D_SORT_IN_PARENTS|E3D_SORT_TEST_LENGTH);
+            //BFS01pScene->SetSortingMode(E3D_SORT_FAST_SORTING|E3D_SORT_IN_PARENTS|E3D_SORT_TEST_LENGTH);
 
             // SnapRects der Objekte ungueltig
             pScene->CorrectSceneDimensions();
@@ -1432,7 +1432,7 @@ BOOL E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
 
                         // die nicht erlaubten Rotationen ausmaskieren
                         eConstraint = E3dDragConstraint(eConstraint& eDragConstraint);
-                        pForcedMeth = new E3dDragRotate(*this, GetMarkedObjectList(), eDragDetail, eConstraint,
+                        pForcedMeth = new E3dDragRotate(*this, GetMarkedObjectList(), /*BFS01eDragDetail,*/ eConstraint,
                                                         SvtOptions3D().IsShowFull() );
                     }
                     break;
@@ -1441,7 +1441,7 @@ BOOL E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
                     {
                         if(!bThereAreRootScenes)
                         {
-                            pForcedMeth = new E3dDragMove(*this, GetMarkedObjectList(), eDragDetail, eDragHdl, eConstraint,
+                            pForcedMeth = new E3dDragMove(*this, GetMarkedObjectList(), /*BFS01eDragDetail,*/ eDragHdl, eConstraint,
                                                           SvtOptions3D().IsShowFull() );
                         }
                     }
@@ -1455,13 +1455,13 @@ BOOL E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
                     case SDRDRAG_GRADIENT:
                     default:
                     {
-                        long nCnt = GetMarkedObjectCount();
-                        for(long nObjs = 0;nObjs < nCnt;nObjs++)
-                        {
-                            SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
-                            if(pObj && pObj->ISA(E3dObject))
-                                ((E3dObject*) pObj)->SetDragDetail(eDragDetail);
-                        }
+//BFS01                     long nCnt = GetMarkedObjectCount();
+//BFS01                     for(long nObjs = 0;nObjs < nCnt;nObjs++)
+//BFS01                     {
+//BFS01                         SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
+//BFS01                         if(pObj && pObj->ISA(E3dObject))
+//BFS01                             ((E3dObject*) pObj)->SetDragDetail(eDragDetail);
+//BFS01                     }
                     }
                     break;
                 }
@@ -1991,7 +1991,7 @@ long DistPoint2Line (Point u,
 void E3dView::InitView ()
 {
     eDragConstraint          = E3DDRAG_CONSTR_XYZ;
-    eDragDetail              = E3DDETAIL_ONEBOX;
+    //BFS01eDragDetail           = E3DDETAIL_ONEBOX;
     b3dCreationActive        = FALSE;
     pMirrorPolygon           = 0;
     pMirroredPolygon         = 0;
@@ -2179,8 +2179,8 @@ void E3dView::MergeScenes ()
                     ******************************************************/
                     SdrObject* pSubObj = aIter.Next();
 
-                    if (!pSubObj->ISA(E3dLight))
-                    {
+//BFS01                    if (!pSubObj->ISA(E3dLight))
+//BFS01                    {
                         E3dObject *pNewObj = 0;
 
                         switch (pSubObj->GetObjIdentifier())
@@ -2190,10 +2190,10 @@ void E3dView::MergeScenes ()
                                 *(E3dObject*)pNewObj = *(E3dObject*)pSubObj;
                                 break;
 
-                            case E3D_POLYOBJ_ID :
-                                pNewObj = new E3dPolyObj;
-                                *(E3dPolyObj*)pNewObj= *(E3dPolyObj*)pSubObj;
-                                break;
+//BFS01                         case E3D_POLYOBJ_ID :
+//BFS01                             pNewObj = new E3dPolyObj;
+//BFS01                             *(E3dPolyObj*)pNewObj= *(E3dPolyObj*)pSubObj;
+//BFS01                             break;
 
                             case E3D_CUBEOBJ_ID :
                                 pNewObj = new E3dCubeObj;
@@ -2239,7 +2239,7 @@ void E3dView::MergeScenes ()
 
                         if (pNewObj) aBoundVol.Union (pNewObj->GetBoundVolume());
                         pScene->Insert3DObj (pNewObj);
-                    }
+//BFS01                    }
                 }
             }
 
