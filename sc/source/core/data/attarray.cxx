@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attarray.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-06 14:11:25 $
+ *  last change: $Author: er $ $Date: 2002-01-18 12:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,20 +442,25 @@ void ScAttrArray::SetPatternArea(USHORT nStartRow, USHORT nEndRow, const ScPatte
             USHORT nj = ni;     // stop position of range to replace
             while ( nj < nCount && pData[nj].nRow <= nEndRow )
                 nj++;
-            if ( !bSplit && nj < nCount && pData[nj].pPattern == pPattern )
-            {   // combine
-                if ( ni > 0 )
-                {
-                    if ( pData[ni-1].pPattern == pPattern )
-                    {   // adjacent entries
-                        pData[ni-1].nRow = pData[nj].nRow;
-                        nj++;
+            if ( !bSplit )
+            {
+                if ( nj < nCount && pData[nj].pPattern == pPattern )
+                {   // combine
+                    if ( ni > 0 )
+                    {
+                        if ( pData[ni-1].pPattern == pPattern )
+                        {   // adjacent entries
+                            pData[ni-1].nRow = pData[nj].nRow;
+                            nj++;
+                        }
+                        else if ( nj == nInsert && nj == ni )
+                            pData[ni-1].nRow = nStartRow - 1;   // shrink
                     }
-                    else if ( nj == nInsert && nj == ni )
-                        pData[ni-1].nRow = nStartRow - 1;   // shrink
+                    nInsert = MAXROW+1;
+                    bCombined = TRUE;
                 }
-                nInsert = MAXROW+1;
-                bCombined = TRUE;
+                else if ( ni > 0 && ni == nInsert )
+                    pData[ni-1].nRow = nStartRow - 1;   // shrink
             }
             ScDocumentPool* pDocPool = pDocument->GetPool();
             if ( bSplit )
