@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-05 13:32:02 $
+#   last change: $Author: kz $ $Date: 2004-08-31 14:54:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,15 +80,24 @@ MODULEFILES= \
     Setup-calc.xcu   \
     Setup-draw.xcu   \
     Setup-impress.xcu   \
-    Setup-math.xcu 
+    Setup-math.xcu
 
-LOCALIZEDFILES= 
+LOCALIZEDFILES=
+
+SAMPLEFILES= \
+    LDAP.xcu.sample
 
 .INCLUDE :  target.mk
 .INCLUDE :  $(PRJ)$/registry$/data$/localtarget.mk
 
 LANGUAGEPACKS=$(MISC)$/registry$/spool$/Langpack-{$(alllangiso)}.xcu
+SAMPLETARGETS=$(MISC)$/registry$/data$/$(PACKAGEDIR)$/{$(SAMPLEFILES)}
 
 ALLTAR : $(LANGUAGEPACKS)
+ALLTAR : $(SAMPLETARGETS)
+
+$(SAMPLETARGETS) : $(SAMPLEFILES)
+    -$(MKDIRHIER) $(@:d)
+    +$(COPY) $< $@
 
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
