@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmark.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 09:06:22 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:55:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -641,7 +641,7 @@ FASTBOOL SdrMarkList::TakeBoundRect(SdrPageView* pPV, Rectangle& rRect) const
     for (ULONG i=0; i<GetMarkCount(); i++) {
         SdrMark* pMark=GetMark(i);
         if (pPV==NULL || pMark->GetPageView()==pPV) {
-            aR=pMark->GetObj()->GetBoundRect();
+            aR=pMark->GetObj()->GetCurrentBoundRect();
             if (bFnd) {
                 rRect.Union(aR);
             } else {
