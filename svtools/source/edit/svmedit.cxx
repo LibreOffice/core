@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mt $ $Date: 2002-10-17 09:50:50 $
+ *  last change: $Author: mt $ $Date: 2002-11-15 11:42:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1050,6 +1050,9 @@ void MultiLineEdit::ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackgr
 void MultiLineEdit::Modify()
 {
     aModifyHdlLink.Call( this );
+
+    CallEventListeners( VCLEVENT_EDIT_MODIFY );
+
     if ( pUpdateDataTimer )
         pUpdateDataTimer->Start();
 }
