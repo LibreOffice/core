@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: vg $ $Date: 2002-09-06 12:24:06 $
+#   last change: $Author: ghiggins $ $Date: 2002-10-08 13:10:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,7 +99,6 @@ EXCEPTIONSFILES= \
         $(SLO)$/optlingu.obj \
         $(SLO)$/optaccessibility.obj \
         $(SLO)$/optsave.obj \
-        $(SLO)$/optsso.obj \
         $(SLO)$/optpath.obj
 
 SLOFILES=	$(EXCEPTIONSFILES) \
@@ -116,10 +115,6 @@ SLOFILES=	$(EXCEPTIONSFILES) \
         $(SLO)$/optextbr.obj    \
         $(SLO)$/srchcfg.obj
 
-.IF "$(BUILD_SOSL)" == ""
-SRCFILES += optsso.src
-
-.ENDIF
 
 SVXLIGHTOBJFILES= \
         $(OBJ)$/adritem.obj
