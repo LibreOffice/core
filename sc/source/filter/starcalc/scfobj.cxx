@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfobj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:05:55 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:10:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,19 @@
 #include "filt_pch.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XVISUALOBJECT_HPP_
+#include <com/sun/star/embed/XVisualObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
+#include <com/sun/star/embed/Aspects.hpp>
+#endif
+
 #pragma hdrstop
+
+using namespace com::sun::star;
 
 // INCLUDE ---------------------------------------------------------------
 
@@ -71,8 +83,7 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
 #include <sfx2/objsh.hxx>
-#include <so3/ipobj.hxx>
-#include <so3/svstor.hxx>
+#include <sot/storage.hxx>
 #include <sch/schdll.hxx>
 #include <sch/memchrt.hxx>
 #include <sfx2/app.hxx>
@@ -99,11 +110,12 @@ void Sc10InsertObject::InsertChart( ScDocument* pDoc, SCTAB nDestTab, const Rect
     if ( !SvtModuleOptions().IsChart() )
         return;
 
-    SvInPlaceObjectRef aNewIPObj = SvInPlaceObject::CreateObject( SvGlobalName( SO3_SCH_CLASSID ) );
-    if ( aNewIPObj.Is() )
+    ::rtl::OUString aName;
+    uno::Reference < embed::XEmbeddedObject > xObj = pDoc->GetDocumentShell()->
+            GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aName );
+    if ( xObj.is() )
     {
-        String aName = pDoc->GetDocumentShell()->InsertObject( aNewIPObj, String() )->GetObjName();
-        SdrOle2Obj* pSdrOle2Obj = new SdrOle2Obj( aNewIPObj, aName, rRect );
+        SdrOle2Obj* pSdrOle2Obj = new SdrOle2Obj( xObj, aName, rRect );
 
         ScDrawLayer* pModel = pDoc->GetDrawLayer();
         if (!pModel)
@@ -118,7 +130,11 @@ void Sc10InsertObject::InsertChart( ScDocument* pDoc, SCTAB nDestTab, const Rect
         pPage->InsertObject(pSdrOle2Obj);
 
         pSdrOle2Obj->SetLogicRect(rRect);               // erst nach InsertObject !!!
-        aNewIPObj->SetVisAreaSize(rRect.GetSize());
+        uno::Reference < embed::XVisualObject > xVis( xObj, uno::UNO_QUERY );
+        awt::Size aSz;
+        aSz.Width = rRect.GetSize().Width();
+        aSz.Height = rRect.GetSize().Height();
+        xVis->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, aSz );
 
             // hier kann das Chart noch nicht mit Daten gefuettert werden,
             // weil die Formeln noch nicht berechnet sind.
