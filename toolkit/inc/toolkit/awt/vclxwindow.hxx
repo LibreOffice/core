@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:20:36 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:54:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > mxAccessibleContext;
 
-    ULONG                           nDummy1;
+    ULONG                           mnListenerLockLevel;
     ULONG                           nDummy2;
     void*                           pDummy1;
     void*                           pDummy2;
@@ -171,6 +171,9 @@ public:
     virtual void    SetWindow( Window* pWindow );
     Window*         GetWindow() const                                   { return (Window*)GetOutputDevice(); }
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics> GetViewGraphics() const { return mxViewGraphics; }
+
+    void    suspendVclEventListening( );
+    void    resumeVclEventListening( );
 
     EventListenerMultiplexer&       GetEventListeners()     { return maEventListeners; }
     FocusListenerMultiplexer&       GetFocusListeners()     { return maFocusListeners; }
