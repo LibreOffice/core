@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 17:57:55 $
+#   last change: $Author: vg $ $Date: 2003-04-15 14:37:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,42 +63,34 @@ PRJ=..$/..
 
 PRJNAME=			filter
 TARGET=				fl_xmlfilterdetect
-USE_DEFFILE=		TRUE
+
 NO_BSYMBOLIC=		TRUE
 ENABLE_EXCEPTIONS=	TRUE
 BOOTSTRAP_SERVICE=	FALSE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  		svpre.mk
 .INCLUDE :  		settings.mk
-.INCLUDE :  		sv.mk
+
 # --- defines ------------------------------------------------------
 
 CDEFS+=-DCOMPMOD_NAMESPACE=framework
 
 # --- Targets ------------------------------------------------------
+
 SHL1TARGET=		xmlfd$(UPD)$(DLLPOSTFIX)
-
 SHL1IMPLIB=		i$(SHL1TARGET)
-                
-SHL1OBJS=		$(SLO)$/fdcomp.obj		\
-                $(SLO)$/filterdetect.obj	
-                
 
-                
-SHL1STDLIBS=	$(CPPULIB)			\
-                $(CPPUHELPERLIB)	\
-                $(COMPHELPERLIB)	\
-                $(SALLIB)	\
-                $(UCBHELPERLIB)	
-                
-
+SHL1VERSIONMAP= xmlfd.map
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
-
-
 DEF1NAME=		$(SHL1TARGET)
 
-DEF1EXPORTFILE=	exports.dxp
+SHL1OBJS=		$(SLO)$/fdcomp.obj		\
+                $(SLO)$/filterdetect.obj	
+
+SHL1STDLIBS=	$(UCBHELPERLIB)	 \
+                $(CPPUHELPERLIB) \
+                $(CPPULIB) \
+                $(SALLIB)
 
 .INCLUDE :			target.mk
