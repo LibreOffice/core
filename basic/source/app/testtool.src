@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testtool.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:09 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:08:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ String S_INVALID_KEYCODE
     Text[ portuguese_brazilian ] = "Ist kein gültiger KeyCode!";
     Text[ japanese ] = "Is an invalid KeyCode!";
     Text[ korean ] = "Å° ÄÚµå°¡ ¸ÂÁö¾Ê½À´Ï´Ù!";
-    Text[ chinese_simplified ] = "Is an invalid KeyCode!";
+    Text[ chinese_simplified ] = "ÊÇÒ»¸öÎÞÐ§µÄ¼üÂë£¡";
     Text[ chinese_traditional ] = "Ist kein gültiger KeyCode!";
     Text[ arabic ] = "Is an invalid KeyCode!";
     Text[ turkish ] = "Geçerli bir KeyCode deðil!";
@@ -103,7 +103,7 @@ String S_MANDATORY_FILE
     Text[ portuguese_brazilian ] = "\nwurde nicht gefunden.\nDiese Datei ist unentbehrlich.";
     Text[ japanese ] = "\ncould not be found.\nThis file is indispensable.";
     Text[ korean ] = "\n¹ß°ßµÇÁö ¾Ê½À´Ï´Ù.\nÀÌ ÆÄÀÏÀº ¹Ýµå½Ã ÀÖ¾î¾ßÇÕ´Ï´Ù.";
-    Text[ chinese_simplified ] = "\ncould not be found.\nThis file is indispensable.";
+    Text[ chinese_simplified ] = "\nÎÞ·¨ÕÒµ½¡£\nÒ»¶¨ÐèÒªÕâ¸öÎÄ¼þ¡£";
     Text[ chinese_traditional ] = "\nwurde nicht gefunden.\nDiese Datei ist unentbehrlich.";
     Text[ arabic ] = "\ncould not be found.\nThis file is indispensable.";
     Text[ turkish ] = "\nbulunamadý.\nBu dosya mutlaka gerekli.";
@@ -125,7 +125,7 @@ String S_READING_LONGNAMES
     Text[ portuguese_brazilian ] = "Einlesen der Langnamen";
     Text[ japanese ] = "Reading long names";
     Text[ korean ] = "±ä ÀÌ¸§ ÀÐ±â";
-    Text[ chinese_simplified ] = "Reading long names";
+    Text[ chinese_simplified ] = "¶ÁÈ¡³¤Ãû³Æ";
     Text[ chinese_traditional ] = "Einlesen der Langnamen";
     Text[ arabic ] = "Reading long names";
     Text[ turkish ] = "Uzun adlar okunuyor";
@@ -147,7 +147,7 @@ String S_READING_SLOT_IDS
     Text[ portuguese_brazilian ] = "Einlesen der Slot IDs";
     Text[ japanese ] = "Reading Slot IDs";
     Text[ korean ] = "½½·Ô ¾ÆÀÌµð ÀÐ±â";
-    Text[ chinese_simplified ] = "Reading Slot IDs";
+    Text[ chinese_simplified ] = "¶ÁÈ¡ Slot IDs";
     Text[ chinese_traditional ] = "Einlesen der Slot IDs";
     Text[ arabic ] = "Reading Slot IDs";
     Text[ turkish ] = "Slot ID'ler okunuyor";
@@ -169,7 +169,7 @@ String S_READING_CONTROLS
     Text[ portuguese_brazilian ] = "Einlesen der Controls";
     Text[ japanese ] = "Reading Controls";
     Text[ korean ] = "ÄÁÆ®·Ñ ÀÐ±â";
-    Text[ chinese_simplified ] = "Reading Controls";
+    Text[ chinese_simplified ] = "¶ÁÈ¡¿ØÖÆ";
     Text[ chinese_traditional ] = "Einlesen der Controls";
     Text[ arabic ] = "Reading Controls";
     Text[ turkish ] = "Control'ler okunuyor";
@@ -191,7 +191,7 @@ String S_READING_BASIC_MODULE
     Text[ portuguese_brazilian ] = "Einlesen BASIC Modul";
     Text[ japanese ] = "Reading BASIC module";
     Text[ korean ] = "BASIC ¸ðµâ ÀÐ±â";
-    Text[ chinese_simplified ] = "Reading BASIC module";
+    Text[ chinese_simplified ] = "¶ÁÈ¡ BASIC Ä£¿é";
     Text[ chinese_traditional ] = "Einlesen BASIC Modul";
     Text[ arabic ] = "Reading BASIC module";
     Text[ turkish ] = "BASIC modülü okunuyor";
@@ -213,7 +213,7 @@ String S_STARTING_APPLICATION
     Text[ portuguese_brazilian ] = "Starten der Applikation";
     Text[ japanese ] = "Starting application";
     Text[ korean ] = "ÀÀ¿ëÇÁ·Î±×·¥ ½ÃÀÛ";
-    Text[ chinese_simplified ] = "Starting application";
+    Text[ chinese_simplified ] = "Æô¶¯Ó¦ÓÃ³ÌÐò";
     Text[ chinese_traditional ] = "Starten der Applikation";
     Text[ arabic ] = "Starting application";
     Text[ turkish ] = "Uygulama baþlatýlýyor";
