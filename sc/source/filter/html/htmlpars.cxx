@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlpars.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-09 13:58:50 $
+ *  last change: $Author: er $ $Date: 2002-10-01 19:10:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -850,7 +850,7 @@ void ScHTMLParser::Adjust()
         }
         USHORT nPos;
         if ( pE->nWidth && SeekOffset( pColOffset, pE->nOffset + pE->nWidth, &nPos ) )
-            pE->nColOverlap = nPos - pE->nCol;
+            pE->nColOverlap = (nPos > pE->nCol ? nPos - pE->nCol : 1);
         else
         {
 //2do: das muss nicht korrekt sein, ist aber..
