@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2001-03-21 21:23:27 $
+ *  last change: $Author: nn $ $Date: 2001-03-30 14:22:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -617,6 +617,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Size = MAP_APPFONT ( 90 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
+        Sort = TRUE ;
     };
     ListBox LB_ALGORITHM
     {
