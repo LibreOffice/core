@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dtint.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-09 11:44:34 $
+ *  last change: $Author: pl $ $Date: 2002-07-23 13:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,12 +107,16 @@ DtIntegrator::DtIntegrator( SalFrame* pFrame ) :
         mpSalFrame( pFrame ),
         meType( DtGeneric ),
         mnRefCount( 0 ),
-        mnSystemLookCommandProcess( -1 ),
-        mpSalDisplay( pFrame->maFrameData.GetDisplay() )
+        mnSystemLookCommandProcess( -1 )
 {
+    if( pFrame )
+        mpSalDisplay = pFrame->maFrameData.GetDisplay();
+    else
+        mpSalDisplay = GetSalData()->GetDefDisp();
     mpDisplay = mpSalDisplay->GetDisplay();
     aIntegratorList.Insert( this, LIST_APPEND );
-    aHomeDir = String( getenv( "HOME" ), gsl_getSystemTextEncoding() );
+    static const char* pHome = getenv( "HOME" );
+    aHomeDir = String( pHome, osl_getThreadTextEncoding() );
 }
 
 DtIntegrator::~DtIntegrator()
@@ -125,18 +129,16 @@ DtIntegrator* DtIntegrator::CreateDtIntegrator( SalFrame* pFrame )
     if( ! pFrame && aIntegratorList.Count() )
         return aIntegratorList.GetObject( 0 );
 
+    SalDisplay* pSalDisplay = pFrame ? pFrame->maFrameData.GetDisplay() : GetSalData()->GetDefDisp();
+    Display* pDisplay = pSalDisplay->GetDisplay();
+
     for( int i = 0; i < aIntegratorList.Count(); i++ )
     {
         DtIntegrator* pIntegrator = aIntegratorList.GetObject( i );
-        if( pIntegrator->mpDisplay == pFrame->maFrameData.GetXDisplay() )
+        if( pIntegrator->mpDisplay == pDisplay )
             return pIntegrator;
     }
 
-    if( ! pFrame )
-        pFrame = GetSalData()->pFirstFrame_;
-
-    Display* pDisplay = pFrame->maFrameData.GetXDisplay();
-    SalDisplay* pSalDisplay = pFrame->maFrameData.GetDisplay();
     Atom nDtAtom = None;
 
 #ifdef USE_CDE

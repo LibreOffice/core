@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mt $ $Date: 2002-06-14 08:46:49 $
+ *  last change: $Author: pl $ $Date: 2002-07-23 13:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,12 @@
 #endif
 #ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
 #include <unotools/collatorwrapper.hxx>
+#endif
+
+#ifdef UNX
+#include <prex.h>
+#include <postx.h>
+#include <dtint.hxx>
 #endif
 
 #pragma hdrstop
@@ -1173,6 +1179,25 @@ BOOL MiscSettings::GetEnableATToolSupport() const
 {
     if( mpData->mnEnableATT == (USHORT)~0 )
     {
+#ifdef UNX
+        mpData->mnEnableATT = 0;
+
+        DtIntegrator* pIntegrator = DtIntegrator::CreateDtIntegrator( NULL );
+        if( pIntegrator && pIntegrator->GetDtType() == DtGNOME )
+        {
+            char buf[16];
+            FILE* fp = popen( "gconftool-2 -g /desktop/gnome/interface/accessibility", "r" );
+            if( fp )
+            {
+                if( fgets( buf, sizeof(buf), fp ) )
+                {
+                    int nCompare = strncasecmp( buf, "true", 4 );
+                    mpData->mnEnableATT = (nCompare == 0 ? 1 : 0);
+                }
+                pclose( fp );
+            }
+        }
+#else
         static const char* pEnv = getenv("SAL_ACCESSIBILITY_ENABLED" );
         if( !pEnv || !*pEnv )
         {
@@ -1180,10 +1205,11 @@ BOOL MiscSettings::GetEnableATToolSupport() const
                 vcl::SettingsConfigItem::get()->
                 getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Accessibility" ) ),
                           rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableATToolSupport" ) ) );
-            mpData->mnEnableATT = aEnable.equalsIgnoreAsciiCaseAscii( "true" ) ? TRUE : FALSE;
+            mpData->mnEnableATT = aEnable.equalsIgnoreAsciiCaseAscii( "true" ) ? 1 : 0;
         }
         else
-            mpData->mnEnableATT = true;
+            mpData->mnEnableATT = 1;
+#endif
     }
     return (BOOL)mpData->mnEnableATT;
 }
@@ -1201,7 +1227,7 @@ void MiscSettings::SetEnableATToolSupport( BOOL bEnable )
             setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Accessibility" ) ),
                       rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableATToolSupport" ) ),
                       rtl::OUString::createFromAscii( bEnable ? "true" : "false" ) );
-        mpData->mnEnableATT = bEnable;
+        mpData->mnEnableATT = bEnable ? 1 : 0;
     }
 }
 
