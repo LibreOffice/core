@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: as $ $Date: 2001-05-02 13:00:48 $
+#   last change: $Author: cd $ $Date: 2001-05-03 12:33:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,12 +83,13 @@ SLOFILES=			$(SLO)$/otasksaccess.obj	 					\
                     $(SLO)$/ocomponentenumeration.obj				\
                     $(SLO)$/odispatchprovider.obj					\
                     $(SLO)$/odesktopdispatcher.obj					\
-                    $(SLO)$/oframes.obj						\
+                    $(SLO)$/oframes.obj								\
                     $(SLO)$/opluginframedispatcher.obj				\
                     $(SLO)$/ostatusindicatorfactory.obj				\
                     $(SLO)$/ostatusindicator.obj					\
                     $(SLO)$/ointerceptionhelper.obj					\
-                    $(SLO)$/omenudispatcher.obj
+                    $(SLO)$/omenudispatcher.obj						\
+                    $(SLO)$/imageproducer.obj
 
 # --- Targets ------------------------------------------------------
 
