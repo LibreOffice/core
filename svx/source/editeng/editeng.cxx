@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-09 12:17:17 $
+ *  last change: $Author: hr $ $Date: 2001-08-14 14:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,10 +125,6 @@
 
 #ifndef _SV_HELP_HXX //autogen
 #include <vcl/help.hxx>
-#endif
-
-#ifndef _SV_EXCHANGE_HXX //autogen
-#include <vcl/exchange.hxx>
 #endif
 
 #ifndef _XPOLY_HXX //autogen
@@ -2103,7 +2099,7 @@ sal_uInt32 EditEngine::RegisterClipboardFormatName()
 {
     static sal_uInt32 nFormat = 0;
     if ( !nFormat )
-        nFormat = Exchange::RegisterFormatName( String( RTL_CONSTASCII_USTRINGPARAM( "EditEngineFormat" ) ) );
+        nFormat = SotExchange::RegisterFormatName( String( RTL_CONSTASCII_USTRINGPARAM( "EditEngineFormat" ) ) );
     return nFormat;
 }
 
