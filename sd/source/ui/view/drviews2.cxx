@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:25:52 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:43:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,8 @@
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
 #pragma hdrstop
+
+#include <sfx2/viewfrm.hxx>
 
 #include "app.hrc"
 #include "glob.hrc"
