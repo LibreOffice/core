@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:11:34 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 09:22:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,7 +420,7 @@ StringArray SCSTR_DPFUNCLISTBOX
         < "à¤®à¤¾à¤§à¥à¤¯" ; Default ; > ;
         < "à¤…à¤§à¤¿à¤•à¤¤à¤®" ; Default ; > ;
         < "à¤¨à¥à¤¯à¥‚à¤¨à¤¤à¤®" ; Default ; > ;
-        < "à¤—à¥à¤£à¤¨" ; Default ; > ;
+        < "à¤—à¥à¤Â£à¤¨" ; Default ; > ;
         < "à¤—à¤¿à¤¨à¤¤à¥€ (à¤•à¥‡à¤µà¤² à¤¸à¤‚à¤–à¥à¤¯à¤¾)" ; Default ; > ;
         < "StDev (à¤¨à¤®à¥‚à¤¨à¤¾)" ; Default ; > ;
         < "StDevP (à¤œà¤¨à¤¸à¤‚à¤–à¥à¤¯à¤¾)" ; Default ; > ;
@@ -722,13 +722,8 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     HelpId = HID_SC_PIVOTSUBT ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 220 , 155 ) ;
-    Text = "Datenfeld" ;
-    Text [ ENGLISH ] = "Data Field" ;
-    Text [ norwegian ] = "Data Field" ;
-    Text [ italian ] = "Campo di dati" ;
-    Text [ portuguese_brazilian ] = "Campo de Dados" ;
-    Text [ portuguese ] = "Campo de dados" ;
-    Text [ english_us ] = "Data Field" ;
+    Text [ de ] = "Datenfeld" ;
+    Text [ en-US ] = "Data Field" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
     Hide = TRUE ;
@@ -736,112 +731,26 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 140 , 10 ) ;
-        Text = "~Keine" ;
-        Text [ ENGLISH ] = "~None" ;
-        Text [ norwegian ] = "~Ingen " ;
-        Text [ italian ] = "~Nessuna" ;
-        Text [ portuguese_brazilian ] = "~Nenhum" ;
-        Text [ portuguese ] = "~Nenhum" ;
-        Text [ finnish ] = "~Ei mitään" ;
-        Text [ danish ] = "Ing~en" ;
-        Text [ french ] = "Aucun(e)" ;
-        Text [ swedish ] = "~Inga" ;
-        Text [ dutch ] = "~Geen" ;
-        Text [ spanish ] = "~Ningún" ;
-        Text [ english_us ] = "~None" ;
+        Text [ de ] = "~Keine" ;
+        Text [ en-US ] = "~None" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "æ— (~N)";
-        Text[ russian ] = "Íåò";
-        Text[ polish ] = "~Brak";
-        Text[ japanese ] = "ãªã—(~N)";
-        Text[ chinese_traditional ] = "ç„¡(~N)";
-        Text[ arabic ] = "ÈÏæä";
-        Text[ greek ] = "Êáíİíá";
-        Text[ korean ] = "ì—†ìŒ(~N)";
-        Text[ turkish ] = "~Yok";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Cap";
-        Text[ thai ] = "à¹„~à¸¡à¹ˆà¸¡à¸µ";
-        Text[ czech ] = "Å½Ã¡dnÃ½";
-        Text[ hebrew ] = "â€®×œ×œ×â€¬";
-        Text[ hindi ] = "~à¤•à¥‹à¤ˆ à¤¨à¤¹à¥€à¤‚";
-        Text[ slovak ] = "~NiÄ";
-        Text[ hungarian ] = "~Egyik sem";
-        Text[ slovenian ] = "~Brez";
+        Text [ x-comment ] = " ";
     };
     RadioButton RB_AUTO
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 140 , 10 ) ;
-        Text = "~Automatisch" ;
-        Text [ ENGLISH ] = "~Auto" ;
-        Text [ norwegian ] = "~Auto" ;
-        Text [ italian ] = "Automatico" ;
-        Text [ portuguese_brazilian ] = "~Automático" ;
-        Text [ portuguese ] = "~Automaticamente" ;
-        Text [ finnish ] = "~Automaattinen" ;
-        Text [ danish ] = "~Automatisk" ;
-        Text [ french ] = "Automatique" ;
-        Text [ swedish ] = "~Automatiskt" ;
-        Text [ dutch ] = "~Automatisch" ;
-        Text [ spanish ] = "~Automático" ;
-        Text [ english_us ] = "~Automatic" ;
+        Text [ de ] = "~Automatisch" ;
+        Text [ en-US ] = "~Automatic" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "è‡ªåŠ¨(~A)";
-        Text[ russian ] = "Àâòîìàòè÷åñêè";
-        Text[ polish ] = "~Automatycznie";
-        Text[ japanese ] = "è‡ªå‹•(~A)";
-        Text[ chinese_traditional ] = "è‡ªå‹•(~A)";
-        Text[ arabic ] = "ÊáŞÇÆí";
-        Text[ greek ] = "Áõôüìáôá";
-        Text[ korean ] = "ìë™(~A)";
-        Text[ turkish ] = "~Otomatik";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Automàtic";
-        Text[ thai ] = "~à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
-        Text[ czech ] = "Automaticky";
-        Text[ hebrew ] = "â€®××•×˜×•××˜×™â€¬";
-        Text[ hindi ] = "~à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤";
-        Text[ slovak ] = "~Automaticky";
-        Text[ hungarian ] = "~Automatikus";
-        Text[ slovenian ] = "S~amodejno";
     };
     RadioButton RB_USER
     {
         Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 140 , 10 ) ;
-        Text = "~Benutzerdefiniert" ;
-        Text [ ENGLISH ] = "~Userdefined" ;
-        Text [ norwegian ] = "~Brukerdefinert " ;
-        Text [ italian ] = "Definito dall'utente" ;
-        Text [ portuguese_brazilian ] = "Definido pelo ~usuário" ;
-        Text [ portuguese ] = "Definido pelo ~utilizador" ;
-        Text [ finnish ] = "~Käyttäjän määrittämät" ;
-        Text [ danish ] = "~Brugerdefineret" ;
-        Text [ french ] = "Défini par l'utilisateur" ;
-        Text [ swedish ] = "~Användardefinierade" ;
-        Text [ dutch ] = "Ge~bruikergedefinieerd" ;
-        Text [ spanish ] = "Definido por el ~usuario" ;
-        Text [ english_us ] = "~User-defined" ;
+        Text [ de ] = "~Benutzerdefiniert" ;
+        Text [ en-US ] = "~User-defined" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ä½¿ç”¨è€…è‡ªè®¾(~U)";
-        Text[ russian ] = "Îïğåäåëÿåìûé ïîëüçîâàòåëåì";
-        Text[ polish ] = "Definiowane przez ~u¿ytkownika";
-        Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©(~U)";
-        Text[ chinese_traditional ] = "ä½¿ç”¨è€…è‡ªè¨‚(~U)";
-        Text[ arabic ] = "ãÚÑİ ãä ŞÈá ÇáãÓÊÎÏã";
-        Text[ greek ] = "Ïñéæüìåíï áğü ôïí ÷ñŞóôç";
-        Text[ korean ] = "ì‚¬ìš©ì ì •ì˜(~U)";
-        Text[ turkish ] = "~Kullanıcı~tanımlı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Definit per l'~usuari";
-        Text[ thai ] = "à¸£à¸°à¸šà¸¸~à¸œà¸¹à¹‰à¹ƒà¸Šà¹‰";
-        Text[ czech ] = "UÅ¾ivatelem definovanÃ©";
-        Text[ hebrew ] = "~Benutzerdefiniert";
-        Text[ hindi ] = "~à¤‰à¤ªà¤­à¥‹à¤•à¥à¤¤à¤¾ à¤¸à¥‡ à¤ªà¤°à¤¿à¤­à¤¾à¤·à¤¾ à¤•à¤¿à¤¯à¤¾ à¤¹à¥à¤†";
-        Text[ slovak ] = "~UÅ¾Ã­vateÄ¾om definovanÃ©";
-        Text[ hungarian ] = "~EgyÃ©ni";
-        Text[ slovenian ] = "~UporabniÅ¡ko doloÄeno";
     };
     MultiListBox LB_FUNC
     {
@@ -856,109 +765,24 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 152 , 8 ) ;
-        Text = "Teilergebnisse" ;
-        Text [ ENGLISH ] = "Sub Totals" ;
-        Text [ norwegian ] = "Sum" ;
-        Text [ italian ] = "Subtotali" ;
-        Text [ portuguese_brazilian ] = "Sub-totais" ;
-        Text [ portuguese ] = "Subtotais" ;
-        Text [ finnish ] = "Välisummat" ;
-        Text [ danish ] = "Subtotaler" ;
-        Text [ french ] = "Sous-totaux" ;
-        Text [ swedish ] = "Delresultat" ;
-        Text [ dutch ] = "Subtotalen" ;
-        Text [ spanish ] = "Subtotales" ;
-        Text [ english_us ] = "Subtotals" ;
-        Text[ chinese_simplified ] = "åˆ†ç±»æ±‡æ€»";
-        Text[ russian ] = "Ïğîìåæóòî÷íûå èòîãè";
-        Text[ polish ] = "Sumy czêœciowe";
-        Text[ japanese ] = "å°è¨ˆ";
-        Text[ chinese_traditional ] = "å°è¨ˆ";
-        Text[ arabic ] = "Subtotals";
-        Text[ greek ] = "ÌåñéêÜ áèñïßóìáôá";
-        Text[ korean ] = "ë¶€ë¶„í•©";
-        Text[ turkish ] = "Alttoplamlar";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Subtotals";
-        Text[ thai ] = "à¸œà¸¥à¸£à¸§à¸¡à¸¢à¹ˆà¸­à¸¢";
-        Text[ czech ] = "MezisouÄty";
-        Text[ hebrew ] = "Teilergebnisse";
-        Text[ hindi ] = "à¤†à¤§à¤¾ à¤•à¥à¤²à¤œà¥‹à¤¡";
-        Text[ slovak ] = "MedzisÃºÄty";
-        Text[ hungarian ] = "RÃ©szÃ¶sszegek";
-        Text[ slovenian ] = "Delne vsote";
+        Text [ de ] = "Teilergebnisse" ;
+        Text [ en-US ] = "Subtotals" ;
     };
     CheckBox CB_SHOWALL
     {
         Pos = MAP_APPFONT ( 12 , 127 ) ;
         Size = MAP_APPFONT ( 140 , 10 ) ;
-        Text = "~Elemente ohne Daten anzeigen" ;
-        Text [ ENGLISH ] = "Show elements without data" ;
+        Text [ de ] = "~Elemente ohne Daten anzeigen" ;
+        Text [ en-US ] = "Show it~ems without data";
         TabStop = TRUE ;
-        Text[ english_us ] = "Show it~ems without data";
-        Text[ portuguese ] = "Mostrar ~elementos sem dados";
-        Text[ russian ] = "Ïîêàçàòü ıëåìåíòû áåç äàííûõ";
-        Text[ greek ] = "ÅìöÜíéóç óôïé÷åßùí äß÷ùò äåäïìİíá";
-        Text[ dutch ] = "~Elementen weergeven zonder gegevens";
-        Text[ french ] = "Afficher les ~éléments sans données";
-        Text[ spanish ] = "~Mostrar elementos sin datos";
-        Text[ italian ] = "Mostra ~elementi senza dati";
-        Text[ danish ] = "Vis ~elementer uden data";
-        Text[ swedish ] = "Visa objekt utan data";
-        Text[ polish ] = "Poka¿ ~elementy bez danych";
-        Text[ portuguese_brazilian ] = "Mostrar ~elementos sem dados";
-        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã®ãªã„è¦ç´ ã‚’è¡¨ç¤ºã™ã‚‹(~E)";
-        Text[ korean ] = "ë°ì´í„° ì—†ì´ ìš”ì†Œ ë³´ê¸°(~E)";
-        Text[ chinese_simplified ] = "æ˜¾ç¤ºä¸å«æ•°æ®çš„æ¡ç›®(~E)";
-        Text[ chinese_traditional ] = "é¡¯ç¤ºç„¡æ•¸æ“šçš„å–®å…ƒ(~E)";
-        Text[ arabic ] = "ÅÙåÇÑ ÇáÚäÇÕÑ ÈÏæä ÈíÇäÇÊ";
-        Text[ turkish ] = "~Ögeleri veriler olmadan görüntüle";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Mostra els ~elements sense dades";
-        Text[ finnish ] = "Näytä ~elementit ilman tietoja";
-        Text[ thai ] = "à¹à¸ªà¸”à¸‡~à¸­à¸‡à¸„à¹Œà¸›à¸£à¸°à¸à¸­à¸šà¸—à¸µà¹ˆà¹„à¸¡à¹ˆà¸¡à¸µà¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-        Text[ czech ] = "Zobrazit prvky bez dat";
-        Text[ hebrew ] = "~Elemente ohne Daten anzeigen";
-        Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤•à¥‡ à¤¬à¤¿à¤¨à¤¾ ~à¤à¤²à¤¿à¤®à¥‡à¤¨à¥à¤Ÿà¥ à¤•à¥‹ à¤¦à¤¿à¤–à¤¾à¤“";
-        Text[ slovak ] = "Zobraz prvky b~ez dÃ¡t";
-        Text[ hungarian ] = "Minta ~mutatÃ¡sa adat nÃ©lkÃ¼l";
-        Text[ slovenian ] = "PokaÅ¾i ~elemente brez podatkov";
     };
     FixedText FT_NAMELABEL
     {
         Pos = MAP_APPFONT ( 6 , 141 ) ;
         Size = MAP_APPFONT ( 25 , 8 ) ;
-        Text = "Name:" ;
-        Text [ ENGLISH ] = "Name:" ;
-        Text [ norwegian ] = "Navn:" ;
-        Text [ italian ] = "Nome:" ;
-        Text [ portuguese_brazilian ] = "Nome:" ;
-        Text [ portuguese ] = "Nome:" ;
-        Text [ finnish ] = "Nimi:" ;
-        Text [ danish ] = "Navn:" ;
-        Text [ french ] = "Nom :" ;
-        Text [ swedish ] = "Namn:" ;
-        Text [ dutch ] = "Naam:" ;
-        Text [ spanish ] = "Nombre:" ;
-        Text [ english_us ] = "Name:" ;
-        Text[ chinese_simplified ] = "åç§°ï¼š";
-        Text[ russian ] = "Èìÿ:";
-        Text[ polish ] = "Nazwa:";
-        Text[ japanese ] = "åå‰:";
-        Text[ chinese_traditional ] = "åç¨±ï¼š";
-        Text[ arabic ] = "ÇáÇÓã:";
-        Text[ greek ] = "¼íïìá:";
-        Text[ korean ] = "ì´ë¦„:";
-        Text[ turkish ] = "Ad:";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nom:";
-        Text[ thai ] = "à¸Šà¸·à¹ˆà¸­:";
-        Text[ czech ] = "JmÃ©no:";
-        Text[ hebrew ] = "Name:";
-        Text[ hindi ] = "à¤¨à¤¾à¤®:";
-        Text[ slovak ] = "NÃ¡zov:";
-        Text[ hungarian ] = "NÃ©v:";
-        Text[ slovenian ] = "Ime:";
+        Text [ de ] = "Name:" ;
+        Text [ en-US ] = "Name:" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_NAME
     {
@@ -989,33 +813,9 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Pos = MAP_APPFONT ( 164 , 135 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text = "~Optionen...";
-        Text [ english_us ] = "~Options...";
+        Text [ de ] = "~Optionen...";
+        Text [ en-US ] = "~Options...";
     };
-    Text [ spanish ] = "Campo de datos" ;
-    Text [ french ] = "Champ de données" ;
-    Text [ dutch ] = "Gegevensveld" ;
-    Text [ swedish ] = "Datafält" ;
-    Text [ danish ] = "Datafelt" ;
-    Text[ chinese_simplified ] = "æ•°æ®å­—æ®µ";
-    Text[ russian ] = "Ïîëå äàííûõ";
-    Text[ polish ] = "Pole danych";
-    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰";
-    Text[ chinese_traditional ] = "è³‡æ–™æ¬„ä½";
-    Text[ arabic ] = "ÍŞá ÈíÇäÇÊ";
-    Text[ greek ] = "Ğåäßï äåäïìİíùí";
-    Text[ korean ] = "ë°ì´í„° í•„ë“œ";
-    Text[ turkish ] = "Veri alanı";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Camp de dades";
-    Text[ finnish ] = "Tietokenttä";
-    Text[ thai ] = "à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸‚à¸­à¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ czech ] = "DatovÃ© pole";
-    Text[ hebrew ] = "Datenfeld";
-    Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤•à¥à¤·à¥‡à¤¤à¥à¤°";
-    Text[ slovak ] = "DÃ¡tovÃ© pole";
-    Text[ hungarian ] = "AdatmezÅ‘";
-    Text[ slovenian ] = "Podatkovno polje";
 };
 
 // ----------------------------------------------------------------------------
