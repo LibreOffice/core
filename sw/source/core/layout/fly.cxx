@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:07:16 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:59:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #include "hintids.hxx"
@@ -1581,15 +1580,21 @@ void CalcCntnt( SwLayoutFrm *pLay,
             // of the prev to be invalid:
             // OD 2004-03-15 #116560# - Do not consider invalid previous frame
             // due to its keep-attribute, if current frame is a follow or is locked.
+            // --> OD 2005-03-08 #i44049# - do not consider invalid previous
+            // frame due to its keep-attribute, if it can't move forward.
             SwFrm* pTmpPrev = pFrm->FindPrev();
-            bool bPrevInvalid = ( pFrm->IsFlowFrm()
-                                  ? ( !SwFlowFrm::CastFlowFrm(pFrm)->IsFollow() &&
-                                      !SwFlowFrm::CastFlowFrm(pFrm)->IsJoinLocked() )
-                                  : true ) &&
-                                pTmpPrev &&
-                               !pTmpPrev->GetValidPosFlag() &&
-                                pTmpPrev->GetAttrSet()->GetKeep().GetValue() &&
-                                pLay->IsAnLower( pTmpPrev );
+            const bool bPrevInvalid = ( pFrm->IsFlowFrm()
+                                        ? ( !SwFlowFrm::CastFlowFrm(pFrm)->IsFollow() &&
+                                            !SwFlowFrm::CastFlowFrm(pFrm)->IsJoinLocked() )
+                                        : true ) &&
+                                      pTmpPrev &&
+                                      !pTmpPrev->GetValidPosFlag() &&
+                                      pTmpPrev->GetAttrSet()->GetKeep().GetValue() &&
+                                      pLay->IsAnLower( pTmpPrev ) &&
+                                      ( pTmpPrev->IsFlowFrm()
+                                        ? SwFlowFrm::CastFlowFrm(pTmpPrev)->IsKeepFwdMoveAllowed()
+                                        : true );
+            // <--
 
             // format floating screen objects anchored to the frame.
             bool bRestartLayoutProcess = false;
@@ -2253,7 +2258,9 @@ void SwFrm::InvalidateObjs( const bool _bInvaPosOnly,
 // --> OD 2004-10-08 #i26945# - correct check, if anchored object is a lower
 // of the layout frame. E.g., anchor character text frame can be a follow text
 // frame.
-void SwLayoutFrm::NotifyLowerObjs()
+// --> OD 2005-03-11 #i44016# - add parameter <_bUnlockPosOfObjs> to
+// force an unlockposition call for the lower objects.
+void SwLayoutFrm::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
 {
     // invalidate lower floating screen objects
     SwPageFrm* pPageFrm = FindPageFrm();
@@ -2291,6 +2298,12 @@ void SwLayoutFrm::NotifyLowerObjs()
                     pFly->_Invalidate( pPageFrm );
                     if ( !bLow || pFly->IsFlyAtCntFrm() )
                     {
+                        // --> OD 2005-03-11 #i44016#
+                        if ( _bUnlockPosOfObjs )
+                        {
+                            pFly->UnlockPosition();
+                        }
+                        // <--
                         pFly->_InvalidatePos();
                     }
                     else
@@ -2308,6 +2321,12 @@ void SwLayoutFrm::NotifyLowerObjs()
                      pAnchorFrm->FindPageFrm() != pPageFrm )
                 // <--
                 {
+                    // --> OD 2005-03-11 #i44016#
+                    if ( _bUnlockPosOfObjs )
+                    {
+                        pObj->UnlockPosition();
+                    }
+                    // <--
                     pObj->InvalidateObjPos();
                 }
             }
