@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_unmarshal.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-29 11:10:47 $
+ *  last change: $Author: jbu $ $Date: 2001-07-04 10:16:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,9 +229,46 @@ sal_Bool Unmarshal::unpackType( void *pDest )
                     bReturn = bReturn && unpackString( &pString );
                     if( bReturn )
                     {
-                        ::typelib_typedescriptionreference_new(
-                            &pTypeRef, (typelib_TypeClass )(nTypeClass & 0x7f), pString );
-                        if( nCacheIndex != 0xffff )
+                        typelib_TypeDescription *pType = 0;
+                        typelib_typedescription_getByName( &pType, pString );
+                        if( pType )
+                        {
+                            // type is known in this process
+                            if( (typelib_TypeClass )(nTypeClass & 0x7f) == pType->eTypeClass )
+                            {
+                                //typename and typeclass match, this is as it should be
+                                pTypeRef = pType->pWeakRef;
+                                typelib_typedescriptionreference_acquire( pTypeRef );
+                            }
+                            else
+                            {
+                                // typename and typeclass do not match, dispose the bridge
+                                // as there must be inconsistent type base between both processes
+                                // or trash comes over the wire ...
+                                bReturn = sal_False;
+                            }
+                            typelib_typedescription_release( pType );
+                            pType = 0;
+                        }
+                        else
+                        {
+                            // a type by this name is not known in the process.
+                            if( (nTypeClass & 0x7f) >= 0 &&
+                                (nTypeClass & 0x7f) < typelib_TypeClass_UNKNOWN )
+                            {
+                                // typeclass is within a valid range, introduce the new
+                                // type.
+                                typelib_typedescriptionreference_new(
+                                    &pTypeRef, (typelib_TypeClass )(nTypeClass & 0x7f), pString );
+                            }
+                            else
+                            {
+                                // typeclass is out of range !
+                                bReturn = sal_False;
+                            }
+                        }
+
+                        if( bReturn && nCacheIndex != 0xffff )
                         {
                             if( nCacheIndex < m_pBridgeImpl->m_properties.nTypeCacheSize )
                             {
