@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2001-04-24 11:31:29 $
+ *  last change: $Author: aw $ $Date: 2001-08-13 10:17:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -713,63 +713,97 @@ public:
     USHORT                      nNextNextPnt0;
     FASTBOOL                    bEliminate;     // Punkt loeschen? (wird von MovDrag gesetzt)
 
+    // ##
+    BOOL                        mbMultiPointDrag;
+    const XPolyPolygon&         mrOrig;
+    XPolyPolygon                maMove;
+    Container                   maHandles;
+
 public:
-    ImpSdrPathDragData(const SdrPathObj& rPO, const SdrHdl& rHdl);
+    ImpSdrPathDragData(const SdrPathObj& rPO, const SdrHdl& rHdl, BOOL bMuPoDr, const SdrDragStat& rDrag);
     void ResetPoly(const SdrPathObj& rPO);
+    BOOL IsMultiPointDrag() const { return mbMultiPointDrag; }
 };
 
-ImpSdrPathDragData::ImpSdrPathDragData(const SdrPathObj& rPO, const SdrHdl& rHdl):
-    aXP(5)
+ImpSdrPathDragData::ImpSdrPathDragData(const SdrPathObj& rPO, const SdrHdl& rHdl, BOOL bMuPoDr, const SdrDragStat& rDrag)
+:   aXP(5),
+    mbMultiPointDrag(bMuPoDr),
+    mrOrig(rPO.GetPathPoly()),
+    maHandles(0)
 {
-    bValid=FALSE;
-    bClosed=rPO.IsClosed();          // geschlossenes Objekt?
-    nPoly=rHdl.GetPolyNum();            // Nummer des Polygons im PolyPolygon
-    nPnt=rHdl.GetPointNum();            // Punktnummer innerhalb des obigen Polygons
-    const XPolygon& rXP=rPO.aPathPolygon[nPoly];     // Referenz auf das Polygon
-    nPntAnz=rXP.GetPointCount();        // Punktanzahl des Polygons
-    if (nPntAnz==0 || (bClosed && nPntAnz==1)) return; // min. 1Pt bei Line, min. 2 bei Polygon
-    nPntMax=nPntAnz-1;                  // Maximaler Index
-    bBegPnt=!bClosed && nPnt==0;        // Gedraggter Punkt ist der Anfangspunkt einer Polyline
-    bEndPnt=!bClosed && nPnt==nPntMax;  // Gedraggter Punkt ist der Endpunkt einer Polyline
-    if (bClosed && nPntAnz<=3) {        // Falls Polygon auch nur eine Linie ist
-        bBegPnt=(nPntAnz<3) || nPnt==0;
-        bEndPnt=(nPntAnz<3) || nPnt==nPntMax-1;
+    if(mbMultiPointDrag)
+    {
+        const SdrMarkView& rMarkView = *rDrag.GetView();
+        const SdrHdlList& rHdlList = rMarkView.GetHdlList();
+        const sal_uInt32 nHdlCount = rHdlList.GetHdlCount();
+
+        for(sal_uInt32 a(0); a < nHdlCount; a++)
+        {
+            SdrHdl* pTestHdl = rHdlList.GetHdl(a);
+
+            if(pTestHdl
+                && pTestHdl->IsSelected()
+                && pTestHdl->GetObj() == (SdrObject*)&rPO)
+            {
+                maHandles.Insert(pTestHdl, CONTAINER_APPEND);
+            }
+        }
+
+        maMove = mrOrig;
+        bValid = TRUE;
     }
-    nPrevPnt=nPnt;                      // Index des vorherigen Punkts
-    nNextPnt=nPnt;                      // Index des naechsten Punkts
-    if (!bBegPnt) nPrevPnt=GetPrevPnt(nPnt,nPntMax,bClosed);
-    if (!bEndPnt) nNextPnt=GetNextPnt(nPnt,nPntMax,bClosed);
-    bPrevIsBegPnt=bBegPnt || (!bClosed && nPrevPnt==0);
-    bNextIsEndPnt=bEndPnt || (!bClosed && nNextPnt==nPntMax);
-    nPrevPrevPnt=nPnt;                  // Index des vorvorherigen Punkts
-    nNextNextPnt=nPnt;                  // Index des uebernaechsten Punkts
-    if (!bPrevIsBegPnt) nPrevPrevPnt=GetPrevPnt(nPrevPnt,nPntMax,bClosed);
-    if (!bNextIsEndPnt) nNextNextPnt=GetNextPnt(nNextPnt,nPntMax,bClosed);
-    bControl=rHdl.IsPlusHdl();          // Punkt ist ein Kontrollpunkt
-    bIsPrevControl=FALSE;               // Punkt ist Kontrollpunkt vor einem Stuetzpunkt
-    bIsNextControl=FALSE;               // Punkt ist Kontrollpunkt hinter einem Stuetzpunkt
-    bPrevIsControl=FALSE;               // Falls nPnt ein StPnt: Davor ist ein Kontrollpunkt
-    bNextIsControl=FALSE;               // Falls nPnt ein StPnt: Dahinter ist ein Kontrollpunkt
-    if (bControl) {
-        bIsPrevControl=rXP.IsControl(nPrevPnt);
-        bIsNextControl=!bIsPrevControl;
-    } else {
-        bPrevIsControl=!bBegPnt && !bPrevIsBegPnt && rXP.GetFlags(nPrevPnt)==XPOLY_CONTROL;
-        bNextIsControl=!bEndPnt && !bNextIsEndPnt && rXP.GetFlags(nNextPnt)==XPOLY_CONTROL;
+    else
+    {
+        bValid=FALSE;
+        bClosed=rPO.IsClosed();          // geschlossenes Objekt?
+        nPoly=rHdl.GetPolyNum();            // Nummer des Polygons im PolyPolygon
+        nPnt=rHdl.GetPointNum();            // Punktnummer innerhalb des obigen Polygons
+        const XPolygon& rXP=rPO.aPathPolygon[nPoly];     // Referenz auf das Polygon
+        nPntAnz=rXP.GetPointCount();        // Punktanzahl des Polygons
+        if (nPntAnz==0 || (bClosed && nPntAnz==1)) return; // min. 1Pt bei Line, min. 2 bei Polygon
+        nPntMax=nPntAnz-1;                  // Maximaler Index
+        bBegPnt=!bClosed && nPnt==0;        // Gedraggter Punkt ist der Anfangspunkt einer Polyline
+        bEndPnt=!bClosed && nPnt==nPntMax;  // Gedraggter Punkt ist der Endpunkt einer Polyline
+        if (bClosed && nPntAnz<=3) {        // Falls Polygon auch nur eine Linie ist
+            bBegPnt=(nPntAnz<3) || nPnt==0;
+            bEndPnt=(nPntAnz<3) || nPnt==nPntMax-1;
+        }
+        nPrevPnt=nPnt;                      // Index des vorherigen Punkts
+        nNextPnt=nPnt;                      // Index des naechsten Punkts
+        if (!bBegPnt) nPrevPnt=GetPrevPnt(nPnt,nPntMax,bClosed);
+        if (!bEndPnt) nNextPnt=GetNextPnt(nPnt,nPntMax,bClosed);
+        bPrevIsBegPnt=bBegPnt || (!bClosed && nPrevPnt==0);
+        bNextIsEndPnt=bEndPnt || (!bClosed && nNextPnt==nPntMax);
+        nPrevPrevPnt=nPnt;                  // Index des vorvorherigen Punkts
+        nNextNextPnt=nPnt;                  // Index des uebernaechsten Punkts
+        if (!bPrevIsBegPnt) nPrevPrevPnt=GetPrevPnt(nPrevPnt,nPntMax,bClosed);
+        if (!bNextIsEndPnt) nNextNextPnt=GetNextPnt(nNextPnt,nPntMax,bClosed);
+        bControl=rHdl.IsPlusHdl();          // Punkt ist ein Kontrollpunkt
+        bIsPrevControl=FALSE;               // Punkt ist Kontrollpunkt vor einem Stuetzpunkt
+        bIsNextControl=FALSE;               // Punkt ist Kontrollpunkt hinter einem Stuetzpunkt
+        bPrevIsControl=FALSE;               // Falls nPnt ein StPnt: Davor ist ein Kontrollpunkt
+        bNextIsControl=FALSE;               // Falls nPnt ein StPnt: Dahinter ist ein Kontrollpunkt
+        if (bControl) {
+            bIsPrevControl=rXP.IsControl(nPrevPnt);
+            bIsNextControl=!bIsPrevControl;
+        } else {
+            bPrevIsControl=!bBegPnt && !bPrevIsBegPnt && rXP.GetFlags(nPrevPnt)==XPOLY_CONTROL;
+            bNextIsControl=!bEndPnt && !bNextIsEndPnt && rXP.GetFlags(nNextPnt)==XPOLY_CONTROL;
+        }
+        nPrevPrevPnt0=nPrevPrevPnt;
+        nPrevPnt0    =nPrevPnt;
+        nPnt0        =nPnt;
+        nNextPnt0    =nNextPnt;
+        nNextNextPnt0=nNextNextPnt;
+        nPrevPrevPnt=0;
+        nPrevPnt=1;
+        nPnt=2;
+        nNextPnt=3;
+        nNextNextPnt=4;
+        bEliminate=FALSE;
+        ResetPoly(rPO);
+        bValid=TRUE;
     }
-    nPrevPrevPnt0=nPrevPrevPnt;
-    nPrevPnt0    =nPrevPnt;
-    nPnt0        =nPnt;
-    nNextPnt0    =nNextPnt;
-    nNextNextPnt0=nNextNextPnt;
-    nPrevPrevPnt=0;
-    nPrevPnt=1;
-    nPnt=2;
-    nNextPnt=3;
-    nNextNextPnt=4;
-    bEliminate=FALSE;
-    ResetPoly(rPO);
-    bValid=TRUE;
 }
 
 void ImpSdrPathDragData::ResetPoly(const SdrPathObj& rPO)
@@ -1056,13 +1090,44 @@ XPolygon ImpPathCreateUser::GetRectPoly() const
 FASTBOOL SdrPathObj::BegDrag(SdrDragStat& rDrag) const
 {
     const SdrHdl* pHdl=rDrag.GetHdl();
-    if (pHdl==NULL) return FALSE;
-    ImpSdrPathDragData* pID=new ImpSdrPathDragData(*this,*pHdl);
+    if(!pHdl)
+        return FALSE;
+
+    BOOL bMultiPointDrag(TRUE);
+
+    if(aPathPolygon[pHdl->GetPolyNum()].IsControl(pHdl->GetPointNum()))
+        bMultiPointDrag = FALSE;
+
+    if(bMultiPointDrag)
+    {
+        const SdrMarkView& rMarkView = *rDrag.GetView();
+        const SdrHdlList& rHdlList = rMarkView.GetHdlList();
+        const sal_uInt32 nHdlCount = rHdlList.GetHdlCount();
+        sal_uInt32 nSelectedPoints(0);
+
+        for(sal_uInt32 a(0); a < nHdlCount; a++)
+        {
+            SdrHdl* pTestHdl = rHdlList.GetHdl(a);
+
+            if(pTestHdl
+                && pTestHdl->IsSelected()
+                && pTestHdl->GetObj() == (SdrObject*)this)
+            {
+                nSelectedPoints++;
+            }
+        }
+
+        if(nSelectedPoints <= 1)
+            bMultiPointDrag = FALSE;
+    }
+
+    ImpSdrPathDragData* pID=new ImpSdrPathDragData(*this,*pHdl,bMultiPointDrag,rDrag);
     if (!pID->bValid) {
         DBG_ERROR("SdrPathObj::BegDrag(): ImpSdrPathDragData ist ungueltig");
         delete pID;
         return FALSE;
     }
+
     rDrag.SetUser(pID);
     return TRUE;
 }
@@ -1074,178 +1139,228 @@ FASTBOOL SdrPathObj::MovDrag(SdrDragStat& rDrag) const
         DBG_ERROR("SdrPathObj::MovDrag(): ImpSdrPathDragData ist ungueltig");
         return FALSE;
     }
-    pID->ResetPoly(*this);
 
-    // Div. Daten lokal Kopieren fuer weniger Code und schnelleren Zugriff
-    FASTBOOL bClosed       =pID->bClosed       ; // geschlossenes Objekt?
-    USHORT   nPnt          =pID->nPnt          ; // Punktnummer innerhalb des obigen Polygons
-    FASTBOOL bBegPnt       =pID->bBegPnt       ; // Gedraggter Punkt ist der Anfangspunkt einer Polyline
-    FASTBOOL bEndPnt       =pID->bEndPnt       ; // Gedraggter Punkt ist der Endpunkt einer Polyline
-    USHORT   nPrevPnt      =pID->nPrevPnt      ; // Index des vorherigen Punkts
-    USHORT   nNextPnt      =pID->nNextPnt      ; // Index des naechsten Punkts
-    FASTBOOL bPrevIsBegPnt =pID->bPrevIsBegPnt ; // Vorheriger Punkt ist Anfangspunkt einer Polyline
-    FASTBOOL bNextIsEndPnt =pID->bNextIsEndPnt ; // Folgepunkt ist Endpunkt einer Polyline
-    USHORT   nPrevPrevPnt  =pID->nPrevPrevPnt  ; // Index des vorvorherigen Punkts
-    USHORT   nNextNextPnt  =pID->nNextNextPnt  ; // Index des uebernaechsten Punkts
-    FASTBOOL bControl      =pID->bControl      ; // Punkt ist ein Kontrollpunkt
-    FASTBOOL bIsPrevControl=pID->bIsPrevControl; // Punkt ist Kontrollpunkt vor einem Stuetzpunkt
-    FASTBOOL bIsNextControl=pID->bIsNextControl; // Punkt ist Kontrollpunkt hinter einem Stuetzpunkt
-    FASTBOOL bPrevIsControl=pID->bPrevIsControl; // Falls nPnt ein StPnt: Davor ist ein Kontrollpunkt
-    FASTBOOL bNextIsControl=pID->bNextIsControl; // Falls nPnt ein StPnt: Dahinter ist ein Kontrollpunkt
-
-    // Ortho bei Linien/Polygonen = Winkel beibehalten
-    if (!bControl && rDrag.GetView()!=NULL && rDrag.GetView()->IsOrtho()) {
-        FASTBOOL bBigOrtho=rDrag.GetView()->IsBigOrtho();
-        Point  aPos(rDrag.GetNow());      // die aktuelle Position
-        Point  aPnt(pID->aXP[nPnt]);      // der gedraggte Punkt
-        USHORT nPnt1=0xFFFF,nPnt2=0xFFFF; // seine Nachbarpunkte
-        Point  aNeuPos1,aNeuPos2;         // die neuen Alternativen fuer aPos
-        FASTBOOL bPnt1=FALSE,bPnt2=FALSE; // die neuen Alternativen gueltig?
-        if (!bClosed && pID->nPntAnz>=2) { // Mind. 2 Pt bei Linien
-            if (!bBegPnt) nPnt1=nPrevPnt;
-            if (!bEndPnt) nPnt2=nNextPnt;
-        }
-        if (bClosed && pID->nPntAnz>=3) { // Mind. 3 Pt bei Polygon
-            nPnt1=nPrevPnt;
-            nPnt2=nNextPnt;
-        }
-        if (nPnt1!=0xFFFF && !bPrevIsControl) {
-            Point aPnt1=pID->aXP[nPnt1];
-            long ndx0=aPnt.X()-aPnt1.X();
-            long ndy0=aPnt.Y()-aPnt1.Y();
-            FASTBOOL bHLin=ndy0==0;
-            FASTBOOL bVLin=ndx0==0;
-            if (!bHLin || !bVLin) {
-                long ndx=aPos.X()-aPnt1.X();
-                long ndy=aPos.Y()-aPnt1.Y();
-                bPnt1=TRUE;
-                double nXFact=0; if (!bVLin) nXFact=(double)ndx/(double)ndx0;
-                double nYFact=0; if (!bHLin) nYFact=(double)ndy/(double)ndy0;
-                FASTBOOL bHor=bHLin || (!bVLin && (nXFact>nYFact) ==bBigOrtho);
-                FASTBOOL bVer=bVLin || (!bHLin && (nXFact<=nYFact)==bBigOrtho);
-                if (bHor) ndy=long(ndy0*nXFact);
-                if (bVer) ndx=long(ndx0*nYFact);
-                aNeuPos1=aPnt1;
-                aNeuPos1.X()+=ndx;
-                aNeuPos1.Y()+=ndy;
-            }
-        }
-        if (nPnt2!=0xFFFF && !bNextIsControl) {
-            Point aPnt2=pID->aXP[nPnt2];
-            long ndx0=aPnt.X()-aPnt2.X();
-            long ndy0=aPnt.Y()-aPnt2.Y();
-            FASTBOOL bHLin=ndy0==0;
-            FASTBOOL bVLin=ndx0==0;
-            if (!bHLin || !bVLin) {
-                long ndx=aPos.X()-aPnt2.X();
-                long ndy=aPos.Y()-aPnt2.Y();
-                bPnt2=TRUE;
-                double nXFact=0; if (!bVLin) nXFact=(double)ndx/(double)ndx0;
-                double nYFact=0; if (!bHLin) nYFact=(double)ndy/(double)ndy0;
-                FASTBOOL bHor=bHLin || (!bVLin && (nXFact>nYFact) ==bBigOrtho);
-                FASTBOOL bVer=bVLin || (!bHLin && (nXFact<=nYFact)==bBigOrtho);
-                if (bHor) ndy=long(ndy0*nXFact);
-                if (bVer) ndx=long(ndx0*nYFact);
-                aNeuPos2=aPnt2;
-                aNeuPos2.X()+=ndx;
-                aNeuPos2.Y()+=ndy;
-            }
-        }
-        if (bPnt1 && bPnt2) { // beide Alternativen vorhanden (Konkurenz)
-            BigInt nX1(aNeuPos1.X()-aPos.X()); nX1*=nX1;
-            BigInt nY1(aNeuPos1.Y()-aPos.Y()); nY1*=nY1;
-            BigInt nX2(aNeuPos2.X()-aPos.X()); nX2*=nX2;
-            BigInt nY2(aNeuPos2.Y()-aPos.Y()); nY2*=nY2;
-            nX1+=nY1; // Korrekturabstand zum Quadrat
-            nX2+=nY2; // Korrekturabstand zum Quadrat
-            // Die Alternative mit dem geringeren Korrekturbedarf gewinnt
-            if (nX1<nX2) bPnt2=FALSE; else bPnt1=FALSE;
-        }
-        if (bPnt1) rDrag.Now()=aNeuPos1;
-        if (bPnt2) rDrag.Now()=aNeuPos2;
-    }
-    rDrag.SetActionRect(Rectangle(rDrag.GetNow(),rDrag.GetNow()));
-
-    // IBM Special: Punkte eliminieren, wenn die beiden angrenzenden
-    //              Linien eh' fast 180 deg sind.
-    if (!bControl && rDrag.GetView()!=NULL && rDrag.GetView()->IsEliminatePolyPoints() &&
-        !bBegPnt && !bEndPnt && !bPrevIsControl && !bNextIsControl)
+    if(pID->IsMultiPointDrag())
     {
-        Point aPt(pID->aXP[nNextPnt]);
-        aPt-=rDrag.GetNow();
-        long nWink1=GetAngle(aPt);
-        aPt=rDrag.GetNow();
-        aPt-=pID->aXP[nPrevPnt];
-        long nWink2=GetAngle(aPt);
-        long nDiff=nWink1-nWink2;
-        nDiff=Abs(nDiff);
-        pID->bEliminate=nDiff<=rDrag.GetView()->GetEliminatePolyPointLimitAngle();
-        if (pID->bEliminate) { // Position anpassen, damit Smooth an den Enden stimmt
-            aPt=pID->aXP[nNextPnt];
-            aPt+=pID->aXP[nPrevPnt];
-            aPt/=2;
-            rDrag.Now()=aPt;
+        Point aDelta(rDrag.GetNow() - rDrag.GetStart());
+
+        if(aDelta.X() || aDelta.Y())
+        {
+            for(sal_uInt32 a(0); a < pID->maHandles.Count(); a++)
+            {
+                SdrHdl* pHandle = (SdrHdl*)pID->maHandles.GetObject(a);
+                const sal_uInt16 nPolyIndex(pHandle->GetPolyNum());
+                const sal_uInt16 nPointIndex(pHandle->GetPointNum());
+                const XPolygon& rOrig = pID->mrOrig[nPolyIndex];
+                XPolygon& rMove = pID->maMove[nPolyIndex];
+                const sal_uInt16 nPointCount(rOrig.GetPointCount());
+                BOOL bClosed(rOrig[0] == rOrig[nPointCount-1]);
+
+                // move point itself
+                rMove[nPointIndex] = rOrig[nPointIndex] + aDelta;
+
+                // when point is first and poly closed, move close point, too.
+                if(nPointCount > 0 && !nPointIndex && bClosed)
+                {
+                    rMove[nPointCount - 1] = rOrig[nPointCount - 1] + aDelta;
+
+                    // when moving the last point it may be necessary to move the
+                    // control point in front of this one, too.
+                    if(nPointCount > 1 && rOrig.IsControl(nPointCount - 2))
+                        rMove[nPointCount - 2] = rOrig[nPointCount - 2] + aDelta;
+                }
+
+                // is a control point before this?
+                if(nPointIndex > 0 && rOrig.IsControl(nPointIndex - 1))
+                {
+                    // Yes, move it, too
+                    rMove[nPointIndex - 1] = rOrig[nPointIndex - 1] + aDelta;
+                }
+
+                // is a control point after this?
+                if(nPointIndex + 1 < nPointCount && rOrig.IsControl(nPointIndex + 1))
+                {
+                    // Yes, move it, too
+                    rMove[nPointIndex + 1] = rOrig[nPointIndex + 1] + aDelta;
+                }
+            }
         }
     }
+    else
+    {
+        pID->ResetPoly(*this);
 
-    // Um diese Entfernung wurde insgesamt gedraggd
-    Point aDiff(rDrag.GetNow()); aDiff-=pID->aXP[nPnt];
+        // Div. Daten lokal Kopieren fuer weniger Code und schnelleren Zugriff
+        FASTBOOL bClosed       =pID->bClosed       ; // geschlossenes Objekt?
+        USHORT   nPnt          =pID->nPnt          ; // Punktnummer innerhalb des obigen Polygons
+        FASTBOOL bBegPnt       =pID->bBegPnt       ; // Gedraggter Punkt ist der Anfangspunkt einer Polyline
+        FASTBOOL bEndPnt       =pID->bEndPnt       ; // Gedraggter Punkt ist der Endpunkt einer Polyline
+        USHORT   nPrevPnt      =pID->nPrevPnt      ; // Index des vorherigen Punkts
+        USHORT   nNextPnt      =pID->nNextPnt      ; // Index des naechsten Punkts
+        FASTBOOL bPrevIsBegPnt =pID->bPrevIsBegPnt ; // Vorheriger Punkt ist Anfangspunkt einer Polyline
+        FASTBOOL bNextIsEndPnt =pID->bNextIsEndPnt ; // Folgepunkt ist Endpunkt einer Polyline
+        USHORT   nPrevPrevPnt  =pID->nPrevPrevPnt  ; // Index des vorvorherigen Punkts
+        USHORT   nNextNextPnt  =pID->nNextNextPnt  ; // Index des uebernaechsten Punkts
+        FASTBOOL bControl      =pID->bControl      ; // Punkt ist ein Kontrollpunkt
+        FASTBOOL bIsPrevControl=pID->bIsPrevControl; // Punkt ist Kontrollpunkt vor einem Stuetzpunkt
+        FASTBOOL bIsNextControl=pID->bIsNextControl; // Punkt ist Kontrollpunkt hinter einem Stuetzpunkt
+        FASTBOOL bPrevIsControl=pID->bPrevIsControl; // Falls nPnt ein StPnt: Davor ist ein Kontrollpunkt
+        FASTBOOL bNextIsControl=pID->bNextIsControl; // Falls nPnt ein StPnt: Dahinter ist ein Kontrollpunkt
 
-    // Insgesamt sind 8 Faelle moeglich:
-    //    X      1. Weder rechts noch links Ctrl.
-    // o--X--o   2. Rechts und links Ctrl, gedraggd wird St.
-    // o--X      3. Nur links Ctrl, gedraggd wird St.
-    //    X--o   4. Nur rechts Ctrl, gedraggd wird St.
-    // x--O--o   5. Rechts und links Ctrl, gedraggd wird links.
-    // x--O      6. Nur links Ctrl, gedraggd wird links.
-    // o--O--x   7. Rechts und links Ctrl, gedraggd wird rechts.
-    //    O--x   8. Nur rechts Ctrl, gedraggd wird rechts.
-    // Zusaetzlich ist zu beachten, dass das Veraendern einer Linie (keine Kurve)
-    // eine evtl. Kurve am anderen Ende der Linie bewirkt, falls dort Smooth
-    // gesetzt ist (Kontrollpunktausrichtung an Gerade).
-
-    pID->aXP[nPnt]+=aDiff; // <<<<<<<<<<
-
-    // Nun symmetrische PlusHandles etc. checken
-    if (bControl) { // Faelle 5,6,7,8
-        USHORT   nSt=nPnt;   // der zugehoerige Stuetzpunkt
-        USHORT   nFix=nPnt;  // der gegenueberliegende Kontrollpunkt
-        if (bIsNextControl) { // Wenn der naechste ein Kontrollpunkt ist, muss der vorh. der Stuetzpunkt sein
-            nSt=nPrevPnt;
-            nFix=nPrevPrevPnt;
-        } else {
-            nSt=nNextPnt;
-            nFix=nNextNextPnt;
-        }
-        if (pID->aXP.IsSmooth(nSt)) {
-            pID->aXP.CalcSmoothJoin(nSt,nPnt,nFix); // <<<<<<<<<<
-        }
-    }
-
-    if (!bControl) { // Faelle 1,2,3,4 wobei bei 1 nix passiert und bei 3+4 unten noch mehr folgt
-        // die beiden Kontrollpunkte mit verschieben
-        if (bPrevIsControl) pID->aXP[nPrevPnt]+=aDiff; // <<<<<<<<<<
-        if (bNextIsControl) pID->aXP[nNextPnt]+=aDiff; // <<<<<<<<<<
-        // Kontrollpunkt ggf. an Gerade ausrichten
-        if (pID->aXP.IsSmooth(nPnt)) {
-            if (bPrevIsControl && !bNextIsControl && !bEndPnt) { // Fall 3
-                pID->aXP.CalcSmoothJoin(nPnt,nNextPnt,nPrevPnt); // <<<<<<<<<<
+        // Ortho bei Linien/Polygonen = Winkel beibehalten
+        if (!bControl && rDrag.GetView()!=NULL && rDrag.GetView()->IsOrtho()) {
+            FASTBOOL bBigOrtho=rDrag.GetView()->IsBigOrtho();
+            Point  aPos(rDrag.GetNow());      // die aktuelle Position
+            Point  aPnt(pID->aXP[nPnt]);      // der gedraggte Punkt
+            USHORT nPnt1=0xFFFF,nPnt2=0xFFFF; // seine Nachbarpunkte
+            Point  aNeuPos1,aNeuPos2;         // die neuen Alternativen fuer aPos
+            FASTBOOL bPnt1=FALSE,bPnt2=FALSE; // die neuen Alternativen gueltig?
+            if (!bClosed && pID->nPntAnz>=2) { // Mind. 2 Pt bei Linien
+                if (!bBegPnt) nPnt1=nPrevPnt;
+                if (!bEndPnt) nPnt2=nNextPnt;
             }
-            if (bNextIsControl && !bPrevIsControl && !bBegPnt) { // Fall 4
-                pID->aXP.CalcSmoothJoin(nPnt,nPrevPnt,nNextPnt); // <<<<<<<<<<
+            if (bClosed && pID->nPntAnz>=3) { // Mind. 3 Pt bei Polygon
+                nPnt1=nPrevPnt;
+                nPnt2=nNextPnt;
+            }
+            if (nPnt1!=0xFFFF && !bPrevIsControl) {
+                Point aPnt1=pID->aXP[nPnt1];
+                long ndx0=aPnt.X()-aPnt1.X();
+                long ndy0=aPnt.Y()-aPnt1.Y();
+                FASTBOOL bHLin=ndy0==0;
+                FASTBOOL bVLin=ndx0==0;
+                if (!bHLin || !bVLin) {
+                    long ndx=aPos.X()-aPnt1.X();
+                    long ndy=aPos.Y()-aPnt1.Y();
+                    bPnt1=TRUE;
+                    double nXFact=0; if (!bVLin) nXFact=(double)ndx/(double)ndx0;
+                    double nYFact=0; if (!bHLin) nYFact=(double)ndy/(double)ndy0;
+                    FASTBOOL bHor=bHLin || (!bVLin && (nXFact>nYFact) ==bBigOrtho);
+                    FASTBOOL bVer=bVLin || (!bHLin && (nXFact<=nYFact)==bBigOrtho);
+                    if (bHor) ndy=long(ndy0*nXFact);
+                    if (bVer) ndx=long(ndx0*nYFact);
+                    aNeuPos1=aPnt1;
+                    aNeuPos1.X()+=ndx;
+                    aNeuPos1.Y()+=ndy;
+                }
+            }
+            if (nPnt2!=0xFFFF && !bNextIsControl) {
+                Point aPnt2=pID->aXP[nPnt2];
+                long ndx0=aPnt.X()-aPnt2.X();
+                long ndy0=aPnt.Y()-aPnt2.Y();
+                FASTBOOL bHLin=ndy0==0;
+                FASTBOOL bVLin=ndx0==0;
+                if (!bHLin || !bVLin) {
+                    long ndx=aPos.X()-aPnt2.X();
+                    long ndy=aPos.Y()-aPnt2.Y();
+                    bPnt2=TRUE;
+                    double nXFact=0; if (!bVLin) nXFact=(double)ndx/(double)ndx0;
+                    double nYFact=0; if (!bHLin) nYFact=(double)ndy/(double)ndy0;
+                    FASTBOOL bHor=bHLin || (!bVLin && (nXFact>nYFact) ==bBigOrtho);
+                    FASTBOOL bVer=bVLin || (!bHLin && (nXFact<=nYFact)==bBigOrtho);
+                    if (bHor) ndy=long(ndy0*nXFact);
+                    if (bVer) ndx=long(ndx0*nYFact);
+                    aNeuPos2=aPnt2;
+                    aNeuPos2.X()+=ndx;
+                    aNeuPos2.Y()+=ndy;
+                }
+            }
+            if (bPnt1 && bPnt2) { // beide Alternativen vorhanden (Konkurenz)
+                BigInt nX1(aNeuPos1.X()-aPos.X()); nX1*=nX1;
+                BigInt nY1(aNeuPos1.Y()-aPos.Y()); nY1*=nY1;
+                BigInt nX2(aNeuPos2.X()-aPos.X()); nX2*=nX2;
+                BigInt nY2(aNeuPos2.Y()-aPos.Y()); nY2*=nY2;
+                nX1+=nY1; // Korrekturabstand zum Quadrat
+                nX2+=nY2; // Korrekturabstand zum Quadrat
+                // Die Alternative mit dem geringeren Korrekturbedarf gewinnt
+                if (nX1<nX2) bPnt2=FALSE; else bPnt1=FALSE;
+            }
+            if (bPnt1) rDrag.Now()=aNeuPos1;
+            if (bPnt2) rDrag.Now()=aNeuPos2;
+        }
+        rDrag.SetActionRect(Rectangle(rDrag.GetNow(),rDrag.GetNow()));
+
+        // IBM Special: Punkte eliminieren, wenn die beiden angrenzenden
+        //              Linien eh' fast 180 deg sind.
+        if (!bControl && rDrag.GetView()!=NULL && rDrag.GetView()->IsEliminatePolyPoints() &&
+            !bBegPnt && !bEndPnt && !bPrevIsControl && !bNextIsControl)
+        {
+            Point aPt(pID->aXP[nNextPnt]);
+            aPt-=rDrag.GetNow();
+            long nWink1=GetAngle(aPt);
+            aPt=rDrag.GetNow();
+            aPt-=pID->aXP[nPrevPnt];
+            long nWink2=GetAngle(aPt);
+            long nDiff=nWink1-nWink2;
+            nDiff=Abs(nDiff);
+            pID->bEliminate=nDiff<=rDrag.GetView()->GetEliminatePolyPointLimitAngle();
+            if (pID->bEliminate) { // Position anpassen, damit Smooth an den Enden stimmt
+                aPt=pID->aXP[nNextPnt];
+                aPt+=pID->aXP[nPrevPnt];
+                aPt/=2;
+                rDrag.Now()=aPt;
             }
         }
-        // Und nun noch die anderen Enden der Strecken ueberpruefen (nPnt+-1).
-        // Ist dort eine Kurve (IsControl(nPnt+-2)) mit SmoothJoin (nPnt+-1),
-        // so muss der entsprechende Kontrollpunkt (nPnt+-2) angepasst werden.
-        if (!bBegPnt && !bPrevIsControl && !bPrevIsBegPnt && pID->aXP.IsSmooth(nPrevPnt)) {
-            if (pID->aXP.IsControl(nPrevPrevPnt)) {
-                pID->aXP.CalcSmoothJoin(nPrevPnt,nPnt,nPrevPrevPnt); // <<<<<<<<<<
+
+        // Um diese Entfernung wurde insgesamt gedraggd
+        Point aDiff(rDrag.GetNow()); aDiff-=pID->aXP[nPnt];
+
+        // Insgesamt sind 8 Faelle moeglich:
+        //    X      1. Weder rechts noch links Ctrl.
+        // o--X--o   2. Rechts und links Ctrl, gedraggd wird St.
+        // o--X      3. Nur links Ctrl, gedraggd wird St.
+        //    X--o   4. Nur rechts Ctrl, gedraggd wird St.
+        // x--O--o   5. Rechts und links Ctrl, gedraggd wird links.
+        // x--O      6. Nur links Ctrl, gedraggd wird links.
+        // o--O--x   7. Rechts und links Ctrl, gedraggd wird rechts.
+        //    O--x   8. Nur rechts Ctrl, gedraggd wird rechts.
+        // Zusaetzlich ist zu beachten, dass das Veraendern einer Linie (keine Kurve)
+        // eine evtl. Kurve am anderen Ende der Linie bewirkt, falls dort Smooth
+        // gesetzt ist (Kontrollpunktausrichtung an Gerade).
+
+        pID->aXP[nPnt]+=aDiff; // <<<<<<<<<<
+
+        // Nun symmetrische PlusHandles etc. checken
+        if (bControl) { // Faelle 5,6,7,8
+            USHORT   nSt=nPnt;   // der zugehoerige Stuetzpunkt
+            USHORT   nFix=nPnt;  // der gegenueberliegende Kontrollpunkt
+            if (bIsNextControl) { // Wenn der naechste ein Kontrollpunkt ist, muss der vorh. der Stuetzpunkt sein
+                nSt=nPrevPnt;
+                nFix=nPrevPrevPnt;
+            } else {
+                nSt=nNextPnt;
+                nFix=nNextNextPnt;
+            }
+            if (pID->aXP.IsSmooth(nSt)) {
+                pID->aXP.CalcSmoothJoin(nSt,nPnt,nFix); // <<<<<<<<<<
             }
         }
-        if (!bEndPnt && !bNextIsControl && !bNextIsEndPnt && pID->aXP.IsSmooth(nNextPnt)) {
-            if (pID->aXP.IsControl(nNextNextPnt)) {
-                pID->aXP.CalcSmoothJoin(nNextPnt,nPnt,nNextNextPnt); // <<<<<<<<<<
+
+        if (!bControl) { // Faelle 1,2,3,4 wobei bei 1 nix passiert und bei 3+4 unten noch mehr folgt
+            // die beiden Kontrollpunkte mit verschieben
+            if (bPrevIsControl) pID->aXP[nPrevPnt]+=aDiff; // <<<<<<<<<<
+            if (bNextIsControl) pID->aXP[nNextPnt]+=aDiff; // <<<<<<<<<<
+            // Kontrollpunkt ggf. an Gerade ausrichten
+            if (pID->aXP.IsSmooth(nPnt)) {
+                if (bPrevIsControl && !bNextIsControl && !bEndPnt) { // Fall 3
+                    pID->aXP.CalcSmoothJoin(nPnt,nNextPnt,nPrevPnt); // <<<<<<<<<<
+                }
+                if (bNextIsControl && !bPrevIsControl && !bBegPnt) { // Fall 4
+                    pID->aXP.CalcSmoothJoin(nPnt,nPrevPnt,nNextPnt); // <<<<<<<<<<
+                }
+            }
+            // Und nun noch die anderen Enden der Strecken ueberpruefen (nPnt+-1).
+            // Ist dort eine Kurve (IsControl(nPnt+-2)) mit SmoothJoin (nPnt+-1),
+            // so muss der entsprechende Kontrollpunkt (nPnt+-2) angepasst werden.
+            if (!bBegPnt && !bPrevIsControl && !bPrevIsBegPnt && pID->aXP.IsSmooth(nPrevPnt)) {
+                if (pID->aXP.IsControl(nPrevPrevPnt)) {
+                    pID->aXP.CalcSmoothJoin(nPrevPnt,nPnt,nPrevPrevPnt); // <<<<<<<<<<
+                }
+            }
+            if (!bEndPnt && !bNextIsControl && !bNextIsEndPnt && pID->aXP.IsSmooth(nNextPnt)) {
+                if (pID->aXP.IsControl(nNextNextPnt)) {
+                    pID->aXP.CalcSmoothJoin(nNextPnt,nPnt,nNextNextPnt); // <<<<<<<<<<
+                }
             }
         }
     }
@@ -1264,56 +1379,66 @@ FASTBOOL SdrPathObj::EndDrag(SdrDragStat& rDrag)
         aLinePt2=rXP[1];
     }
     ImpSdrPathDragData* pID=(ImpSdrPathDragData*)rDrag.GetUser();
-    const SdrHdl* pHdl=rDrag.GetHdl();
-    if (pID==NULL || !pID->bValid) {
-        DBG_ERROR("SdrPathObj::EndDrag(): ImpSdrPathDragData ist ungueltig");
-        return FALSE;
-    }
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetBoundRect();
-    SendRepaintBroadcast();
-    // Referenz auf das Polygon
-    XPolygon& rXP=aPathPolygon[pHdl->GetPolyNum()];
 
-    // Die 5 Punkte die sich evtl. geaendert haben
-    if (!pID->bPrevIsBegPnt) rXP[pID->nPrevPrevPnt0]=pID->aXP[pID->nPrevPrevPnt];
-    if (!pID->bNextIsEndPnt) rXP[pID->nNextNextPnt0]=pID->aXP[pID->nNextNextPnt];
-    if (!pID->bBegPnt)       rXP[pID->nPrevPnt0]    =pID->aXP[pID->nPrevPnt];
-    if (!pID->bEndPnt)       rXP[pID->nNextPnt0]    =pID->aXP[pID->nNextPnt];
-                             rXP[pID->nPnt0]        =pID->aXP[pID->nPnt];
-
-    // Letzter Punkt muss beim Geschlossenen immer gleich dem Ersten sein
-    if (pID->bClosed) rXP[rXP.GetPointCount()-1]=rXP[0];
-    if (pID->bEliminate) {
-        NbcDelPoint(rDrag.GetHdl()->GetSourceHdlNum());
+    if(pID->IsMultiPointDrag())
+    {
+        SetPathPoly(pID->maMove);
     }
-    ImpForceKind(); // Wg. impliziter Punktloeschung evtl. von PolyLine nach Line
-    // Winkel anpassen fuer Text an einfacher Linie
-    SetRectsDirty();
-    if (bLineGlueMirror) { // #40549#
-        XPolygon& rXP=aPathPolygon[0];
-        Point aLinePt1_(rXP[0]);
-        Point aLinePt2_(rXP[1]);
-        FASTBOOL bXMirr=(aLinePt1_.X()>aLinePt2_.X())!=(aLinePt1.X()>aLinePt2.X());
-        FASTBOOL bYMirr=(aLinePt1_.Y()>aLinePt2_.Y())!=(aLinePt1.Y()>aLinePt2.Y());
-        if (bXMirr || bYMirr) {
-            Point aRef1(GetSnapRect().Center());
-            if (bXMirr) {
-                Point aRef2(aRef1);
-                aRef2.Y()++;
-                NbcMirrorGluePoints(aRef1,aRef2);
-            }
-            if (bYMirr) {
-                Point aRef2(aRef1);
-                aRef2.X()++;
-                NbcMirrorGluePoints(aRef1,aRef2);
+    else
+    {
+        const SdrHdl* pHdl=rDrag.GetHdl();
+        if (pID==NULL || !pID->bValid) {
+            DBG_ERROR("SdrPathObj::EndDrag(): ImpSdrPathDragData ist ungueltig");
+            return FALSE;
+        }
+        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetBoundRect();
+        SendRepaintBroadcast();
+        // Referenz auf das Polygon
+        XPolygon& rXP=aPathPolygon[pHdl->GetPolyNum()];
+
+        // Die 5 Punkte die sich evtl. geaendert haben
+        if (!pID->bPrevIsBegPnt) rXP[pID->nPrevPrevPnt0]=pID->aXP[pID->nPrevPrevPnt];
+        if (!pID->bNextIsEndPnt) rXP[pID->nNextNextPnt0]=pID->aXP[pID->nNextNextPnt];
+        if (!pID->bBegPnt)       rXP[pID->nPrevPnt0]    =pID->aXP[pID->nPrevPnt];
+        if (!pID->bEndPnt)       rXP[pID->nNextPnt0]    =pID->aXP[pID->nNextPnt];
+                                 rXP[pID->nPnt0]        =pID->aXP[pID->nPnt];
+
+        // Letzter Punkt muss beim Geschlossenen immer gleich dem Ersten sein
+        if (pID->bClosed) rXP[rXP.GetPointCount()-1]=rXP[0];
+        if (pID->bEliminate) {
+            NbcDelPoint(rDrag.GetHdl()->GetSourceHdlNum());
+        }
+        ImpForceKind(); // Wg. impliziter Punktloeschung evtl. von PolyLine nach Line
+        // Winkel anpassen fuer Text an einfacher Linie
+        SetRectsDirty();
+        if (bLineGlueMirror) { // #40549#
+            XPolygon& rXP=aPathPolygon[0];
+            Point aLinePt1_(rXP[0]);
+            Point aLinePt2_(rXP[1]);
+            FASTBOOL bXMirr=(aLinePt1_.X()>aLinePt2_.X())!=(aLinePt1.X()>aLinePt2.X());
+            FASTBOOL bYMirr=(aLinePt1_.Y()>aLinePt2_.Y())!=(aLinePt1.Y()>aLinePt2.Y());
+            if (bXMirr || bYMirr) {
+                Point aRef1(GetSnapRect().Center());
+                if (bXMirr) {
+                    Point aRef2(aRef1);
+                    aRef2.Y()++;
+                    NbcMirrorGluePoints(aRef1,aRef2);
+                }
+                if (bYMirr) {
+                    Point aRef2(aRef1);
+                    aRef2.X()++;
+                    NbcMirrorGluePoints(aRef1,aRef2);
+                }
             }
         }
+        SetChanged();
+        SendRepaintBroadcast();
+        SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
     }
-    SetChanged();
-    SendRepaintBroadcast();
-    SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+
     delete pID;
     rDrag.SetUser(NULL);
+
     return TRUE;
 }
 
@@ -1346,7 +1471,7 @@ XubString SdrPathObj::GetDragComment(const SdrDragStat& rDrag, FASTBOOL bUndoDra
         }
         else
         {
-            if(pID->bEliminate)
+            if(!pID->IsMultiPointDrag() && pID->bEliminate)
             {
                 // Punkt von ...
                 ImpTakeDescriptionStr(STR_ViewMarkedPoint, aStr);
@@ -1376,108 +1501,111 @@ XubString SdrPathObj::GetDragComment(const SdrDragStat& rDrag, FASTBOOL bUndoDra
             pModel->TakeMetricStr(aNow.Y() - aBeg.Y(), aMetr, TRUE);
             aStr += aMetr;
 
-            UINT16 nPntNum(pHdl->GetPointNum());
-            const XPolygon& rXPoly = aPathPolygon[rDrag.GetHdl()->GetPolyNum()];
-            UINT16 nPntAnz(rXPoly.GetPointCount());
-            BOOL bClose(IsClosed());
-
-            if(bClose)
-                nPntAnz--;
-
-            if(pHdl->IsPlusHdl())
+            if(!pID->IsMultiPointDrag())
             {
-                // Hebel
-                UINT16 nRef(nPntNum);
-
-                if(rXPoly.IsControl(nPntNum + 1))
-                    nRef--;
-                else
-                    nRef++;
-
-                aNow -= rXPoly[nRef];
-
-                INT32 nLen(GetLen(aNow));
-                aStr.AppendAscii("  l=");
-                pModel->TakeMetricStr(nLen, aMetr, TRUE);
-                aStr += aMetr;
-
-                INT32 nWink(GetAngle(aNow));
-                aStr += sal_Unicode(' ');
-                pModel->TakeWinkStr(nWink, aMetr);
-                aStr += aMetr;
-            }
-            else if(nPntAnz > 1)
-            {
-                UINT16 nPntMax(nPntAnz - 1);
-                Point aPt1,aPt2;
+                UINT16 nPntNum(pHdl->GetPointNum());
+                const XPolygon& rXPoly = aPathPolygon[rDrag.GetHdl()->GetPolyNum()];
+                UINT16 nPntAnz(rXPoly.GetPointCount());
                 BOOL bClose(IsClosed());
-                BOOL bPt1(nPntNum > 0);
-                BOOL bPt2(nPntNum < nPntMax);
 
-                if(bClose && nPntAnz > 2)
+                if(bClose)
+                    nPntAnz--;
+
+                if(pHdl->IsPlusHdl())
                 {
-                    bPt1 = TRUE;
-                    bPt2 = TRUE;
-                }
+                    // Hebel
+                    UINT16 nRef(nPntNum);
 
-                UINT16 nPt1,nPt2;
+                    if(rXPoly.IsControl(nPntNum + 1))
+                        nRef--;
+                    else
+                        nRef++;
 
-                if(nPntNum > 0)
-                    nPt1 = nPntNum - 1;
-                else
-                    nPt1 = nPntMax;
+                    aNow -= rXPoly[nRef];
 
-                if(nPntNum < nPntMax)
-                    nPt2 = nPntNum + 1;
-                else
-                    nPt2 = 0;
-
-                if(bPt1 && rXPoly.IsControl(nPt1))
-                    bPt1 = FALSE; // Keine Anzeige
-
-                if(bPt2 && rXPoly.IsControl(nPt2))
-                    bPt2 = FALSE; // von Bezierdaten
-
-                if(bPt1)
-                {
-                    Point aPt(aNow);
-                    aPt -= rXPoly[nPt1];
-
-                    INT32 nLen(GetLen(aPt));
+                    INT32 nLen(GetLen(aNow));
                     aStr.AppendAscii("  l=");
                     pModel->TakeMetricStr(nLen, aMetr, TRUE);
                     aStr += aMetr;
 
-                    INT32 nWink(GetAngle(aPt));
+                    INT32 nWink(GetAngle(aNow));
                     aStr += sal_Unicode(' ');
                     pModel->TakeWinkStr(nWink, aMetr);
                     aStr += aMetr;
                 }
-
-                if(bPt2)
+                else if(nPntAnz > 1)
                 {
-                    if(bPt1)
-                        aStr.AppendAscii(" / ");
+                    UINT16 nPntMax(nPntAnz - 1);
+                    Point aPt1,aPt2;
+                    BOOL bClose(IsClosed());
+                    BOOL bPt1(nPntNum > 0);
+                    BOOL bPt2(nPntNum < nPntMax);
+
+                    if(bClose && nPntAnz > 2)
+                    {
+                        bPt1 = TRUE;
+                        bPt2 = TRUE;
+                    }
+
+                    UINT16 nPt1,nPt2;
+
+                    if(nPntNum > 0)
+                        nPt1 = nPntNum - 1;
                     else
-                        aStr.AppendAscii("  ");
+                        nPt1 = nPntMax;
 
-                    Point aPt(aNow);
-                    aPt -= rXPoly[nPt2];
+                    if(nPntNum < nPntMax)
+                        nPt2 = nPntNum + 1;
+                    else
+                        nPt2 = 0;
 
-                    INT32 nLen(GetLen(aPt));
-                    aStr.AppendAscii("l=");
-                    pModel->TakeMetricStr(nLen, aMetr, TRUE);
-                    aStr += aMetr;
+                    if(bPt1 && rXPoly.IsControl(nPt1))
+                        bPt1 = FALSE; // Keine Anzeige
 
-                    INT32 nWink(GetAngle(aPt));
-                    aStr += sal_Unicode(' ');
-                    pModel->TakeWinkStr(nWink, aMetr);
-                    aStr += aMetr;
+                    if(bPt2 && rXPoly.IsControl(nPt2))
+                        bPt2 = FALSE; // von Bezierdaten
+
+                    if(bPt1)
+                    {
+                        Point aPt(aNow);
+                        aPt -= rXPoly[nPt1];
+
+                        INT32 nLen(GetLen(aPt));
+                        aStr.AppendAscii("  l=");
+                        pModel->TakeMetricStr(nLen, aMetr, TRUE);
+                        aStr += aMetr;
+
+                        INT32 nWink(GetAngle(aPt));
+                        aStr += sal_Unicode(' ');
+                        pModel->TakeWinkStr(nWink, aMetr);
+                        aStr += aMetr;
+                    }
+
+                    if(bPt2)
+                    {
+                        if(bPt1)
+                            aStr.AppendAscii(" / ");
+                        else
+                            aStr.AppendAscii("  ");
+
+                        Point aPt(aNow);
+                        aPt -= rXPoly[nPt2];
+
+                        INT32 nLen(GetLen(aPt));
+                        aStr.AppendAscii("l=");
+                        pModel->TakeMetricStr(nLen, aMetr, TRUE);
+                        aStr += aMetr;
+
+                        INT32 nWink(GetAngle(aPt));
+                        aStr += sal_Unicode(' ');
+                        pModel->TakeWinkStr(nWink, aMetr);
+                        aStr += aMetr;
+                    }
                 }
             }
         }
     }
-    else if(pModel)
+    else if(pModel && !pID->IsMultiPointDrag())
     {
         // Ansonsten CreateComment
         ImpPathCreateUser* pU = (ImpPathCreateUser*)rDrag.GetUser();
@@ -1531,6 +1659,7 @@ XubString SdrPathObj::GetDragComment(const SdrDragStat& rDrag, FASTBOOL bUndoDra
 
         aStr += sal_Unicode(')');
     }
+
     return aStr;
 }
 
@@ -1548,102 +1677,110 @@ void SdrPathObj::TakeDragPoly(const SdrDragStat& rDrag, XPolyPolygon& rXPP) cons
 {
     rXPP.Clear();
     ImpSdrPathDragData* pID=(ImpSdrPathDragData*)rDrag.GetUser();
-    const XPolygon& rXP=aPathPolygon[rDrag.GetHdl()->GetPolyNum()];
-    if (rXP.GetPointCount()<=2 /*|| rXPoly.GetFlags(1)==XPOLY_CONTROL && rXPoly.GetPointCount()<=4*/) {
-        XPolygon aXPoly(rXP);
-        aXPoly[rDrag.GetHdl()->GetPointNum()]=rDrag.GetNow();
-        rXPP.Insert(aXPoly);
-        return;
+
+    if(pID->IsMultiPointDrag())
+    {
+        rXPP.Insert(pID->maMove);
     }
-    // Div. Daten lokal Kopieren fuer weniger Code und schnelleren Zugriff
-    FASTBOOL bClosed       =pID->bClosed       ; // geschlossenes Objekt?
-    USHORT   nPntAnz       =pID->nPntAnz       ; // Punktanzahl
-    USHORT   nPnt          =pID->nPnt          ; // Punktnummer innerhalb des Polygons
-    FASTBOOL bBegPnt       =pID->bBegPnt       ; // Gedraggter Punkt ist der Anfangspunkt einer Polyline
-    FASTBOOL bEndPnt       =pID->bEndPnt       ; // Gedraggter Punkt ist der Endpunkt einer Polyline
-    USHORT   nPrevPnt      =pID->nPrevPnt      ; // Index des vorherigen Punkts
-    USHORT   nNextPnt      =pID->nNextPnt      ; // Index des naechsten Punkts
-    FASTBOOL bPrevIsBegPnt =pID->bPrevIsBegPnt ; // Vorheriger Punkt ist Anfangspunkt einer Polyline
-    FASTBOOL bNextIsEndPnt =pID->bNextIsEndPnt ; // Folgepunkt ist Endpunkt einer Polyline
-    USHORT   nPrevPrevPnt  =pID->nPrevPrevPnt  ; // Index des vorvorherigen Punkts
-    USHORT   nNextNextPnt  =pID->nNextNextPnt  ; // Index des uebernaechsten Punkts
-    FASTBOOL bControl      =pID->bControl      ; // Punkt ist ein Kontrollpunkt
-    FASTBOOL bIsPrevControl=pID->bIsPrevControl; // Punkt ist Kontrollpunkt vor einem Stuetzpunkt
-    FASTBOOL bIsNextControl=pID->bIsNextControl; // Punkt ist Kontrollpunkt hinter einem Stuetzpunkt
-    FASTBOOL bPrevIsControl=pID->bPrevIsControl; // Falls nPnt ein StPnt: Davor ist ein Kontrollpunkt
-    FASTBOOL bNextIsControl=pID->bNextIsControl; // Falls nPnt ein StPnt: Dahinter ist ein Kontrollpunkt
-    XPolygon aXPoly(pID->aXP);
-    XPolygon aLine1(2);
-    XPolygon aLine2(2);
-    XPolygon aLine3(2);
-    XPolygon aLine4(2);
-    if (bControl) {
-        aLine1[1]=pID->aXP[nPnt];
-        if (bIsNextControl) { // bin ich Kontrollpunkt hinter der Stuetzstelle?
-            aLine1[0]=pID->aXP[nPrevPnt];
-            aLine2[0]=pID->aXP[nNextNextPnt];
-            aLine2[1]=pID->aXP[nNextPnt];
-            if (pID->aXP.IsSmooth(nPrevPnt) && !bPrevIsBegPnt && pID->aXP.IsControl(nPrevPrevPnt)) {
+    else
+    {
+        const XPolygon& rXP=aPathPolygon[rDrag.GetHdl()->GetPolyNum()];
+        if (rXP.GetPointCount()<=2 /*|| rXPoly.GetFlags(1)==XPOLY_CONTROL && rXPoly.GetPointCount()<=4*/) {
+            XPolygon aXPoly(rXP);
+            aXPoly[rDrag.GetHdl()->GetPointNum()]=rDrag.GetNow();
+            rXPP.Insert(aXPoly);
+            return;
+        }
+        // Div. Daten lokal Kopieren fuer weniger Code und schnelleren Zugriff
+        FASTBOOL bClosed       =pID->bClosed       ; // geschlossenes Objekt?
+        USHORT   nPntAnz       =pID->nPntAnz       ; // Punktanzahl
+        USHORT   nPnt          =pID->nPnt          ; // Punktnummer innerhalb des Polygons
+        FASTBOOL bBegPnt       =pID->bBegPnt       ; // Gedraggter Punkt ist der Anfangspunkt einer Polyline
+        FASTBOOL bEndPnt       =pID->bEndPnt       ; // Gedraggter Punkt ist der Endpunkt einer Polyline
+        USHORT   nPrevPnt      =pID->nPrevPnt      ; // Index des vorherigen Punkts
+        USHORT   nNextPnt      =pID->nNextPnt      ; // Index des naechsten Punkts
+        FASTBOOL bPrevIsBegPnt =pID->bPrevIsBegPnt ; // Vorheriger Punkt ist Anfangspunkt einer Polyline
+        FASTBOOL bNextIsEndPnt =pID->bNextIsEndPnt ; // Folgepunkt ist Endpunkt einer Polyline
+        USHORT   nPrevPrevPnt  =pID->nPrevPrevPnt  ; // Index des vorvorherigen Punkts
+        USHORT   nNextNextPnt  =pID->nNextNextPnt  ; // Index des uebernaechsten Punkts
+        FASTBOOL bControl      =pID->bControl      ; // Punkt ist ein Kontrollpunkt
+        FASTBOOL bIsPrevControl=pID->bIsPrevControl; // Punkt ist Kontrollpunkt vor einem Stuetzpunkt
+        FASTBOOL bIsNextControl=pID->bIsNextControl; // Punkt ist Kontrollpunkt hinter einem Stuetzpunkt
+        FASTBOOL bPrevIsControl=pID->bPrevIsControl; // Falls nPnt ein StPnt: Davor ist ein Kontrollpunkt
+        FASTBOOL bNextIsControl=pID->bNextIsControl; // Falls nPnt ein StPnt: Dahinter ist ein Kontrollpunkt
+        XPolygon aXPoly(pID->aXP);
+        XPolygon aLine1(2);
+        XPolygon aLine2(2);
+        XPolygon aLine3(2);
+        XPolygon aLine4(2);
+        if (bControl) {
+            aLine1[1]=pID->aXP[nPnt];
+            if (bIsNextControl) { // bin ich Kontrollpunkt hinter der Stuetzstelle?
+                aLine1[0]=pID->aXP[nPrevPnt];
+                aLine2[0]=pID->aXP[nNextNextPnt];
+                aLine2[1]=pID->aXP[nNextPnt];
+                if (pID->aXP.IsSmooth(nPrevPnt) && !bPrevIsBegPnt && pID->aXP.IsControl(nPrevPrevPnt)) {
+                    aXPoly.Insert(0,rXP[pID->nPrevPrevPnt0-1],XPOLY_CONTROL);
+                    aXPoly.Insert(0,rXP[pID->nPrevPrevPnt0-2],XPOLY_NORMAL);
+                    // Hebellienien fuer das gegenueberliegende Kurvensegment
+                    aLine3[0]=pID->aXP[nPrevPnt];
+                    aLine3[1]=pID->aXP[nPrevPrevPnt];
+                    aLine4[0]=rXP[pID->nPrevPrevPnt0-2];
+                    aLine4[1]=rXP[pID->nPrevPrevPnt0-1];
+                } else {
+                    aXPoly.Remove(0,1);
+                }
+            } else { // ansonsten bin ich Kontrollpunkt vor der Stuetzstelle
+                aLine1[0]=pID->aXP[nNextPnt];
+                aLine2[0]=pID->aXP[nPrevPrevPnt];
+                aLine2[1]=pID->aXP[nPrevPnt];
+                if (pID->aXP.IsSmooth(nNextPnt) && !bNextIsEndPnt && pID->aXP.IsControl(nNextNextPnt)) {
+                    aXPoly.Insert(XPOLY_APPEND,rXP[pID->nNextNextPnt0+1],XPOLY_CONTROL);
+                    aXPoly.Insert(XPOLY_APPEND,rXP[pID->nNextNextPnt0+2],XPOLY_NORMAL);
+                    // Hebellinien fuer das gegenueberliegende Kurvensegment
+                    aLine3[0]=pID->aXP[nNextPnt];
+                    aLine3[1]=pID->aXP[nNextNextPnt];
+                    aLine4[0]=rXP[pID->nNextNextPnt0+2];
+                    aLine4[1]=rXP[pID->nNextNextPnt0+1];
+                } else {
+                    aXPoly.Remove(aXPoly.GetPointCount()-1,1);
+                }
+            }
+        } else { // ansonsten kein Kontrollpunkt
+            if (pID->bEliminate) {
+                aXPoly.Remove(2,1);
+            }
+            if (bPrevIsControl) aXPoly.Insert(0,rXP[pID->nPrevPrevPnt0-1],XPOLY_NORMAL);
+            else if (!bBegPnt && !bPrevIsBegPnt && pID->aXP.IsControl(nPrevPrevPnt)) {
                 aXPoly.Insert(0,rXP[pID->nPrevPrevPnt0-1],XPOLY_CONTROL);
                 aXPoly.Insert(0,rXP[pID->nPrevPrevPnt0-2],XPOLY_NORMAL);
-                // Hebellienien fuer das gegenueberliegende Kurvensegment
-                aLine3[0]=pID->aXP[nPrevPnt];
-                aLine3[1]=pID->aXP[nPrevPrevPnt];
-                aLine4[0]=rXP[pID->nPrevPrevPnt0-2];
-                aLine4[1]=rXP[pID->nPrevPrevPnt0-1];
             } else {
                 aXPoly.Remove(0,1);
+                if (bBegPnt) aXPoly.Remove(0,1);
             }
-        } else { // ansonsten bin ich Kontrollpunkt vor der Stuetzstelle
-            aLine1[0]=pID->aXP[nNextPnt];
-            aLine2[0]=pID->aXP[nPrevPrevPnt];
-            aLine2[1]=pID->aXP[nPrevPnt];
-            if (pID->aXP.IsSmooth(nNextPnt) && !bNextIsEndPnt && pID->aXP.IsControl(nNextNextPnt)) {
+            if (bNextIsControl) aXPoly.Insert(XPOLY_APPEND,rXP[pID->nNextNextPnt0+1],XPOLY_NORMAL);
+            else if (!bEndPnt && !bNextIsEndPnt && pID->aXP.IsControl(nNextNextPnt)) {
                 aXPoly.Insert(XPOLY_APPEND,rXP[pID->nNextNextPnt0+1],XPOLY_CONTROL);
                 aXPoly.Insert(XPOLY_APPEND,rXP[pID->nNextNextPnt0+2],XPOLY_NORMAL);
-                // Hebellinien fuer das gegenueberliegende Kurvensegment
-                aLine3[0]=pID->aXP[nNextPnt];
-                aLine3[1]=pID->aXP[nNextNextPnt];
-                aLine4[0]=rXP[pID->nNextNextPnt0+2];
-                aLine4[1]=rXP[pID->nNextNextPnt0+1];
             } else {
                 aXPoly.Remove(aXPoly.GetPointCount()-1,1);
+                if (bEndPnt) aXPoly.Remove(aXPoly.GetPointCount()-1,1);
+            }
+            if (bClosed) { // "Birnenproblem": 2 Linien, 1 Kurve, alles Smooth, Punkt zw. beiden Linien wird gedraggt
+                if (aXPoly.GetPointCount()>nPntAnz && aXPoly.IsControl(1)) {
+                    USHORT a=aXPoly.GetPointCount();
+                    aXPoly[a-2]=aXPoly[2]; aXPoly.SetFlags(a-2,aXPoly.GetFlags(2));
+                    aXPoly[a-1]=aXPoly[3]; aXPoly.SetFlags(a-1,aXPoly.GetFlags(3));
+                    aXPoly.Remove(0,3);
+                }
             }
         }
-    } else { // ansonsten kein Kontrollpunkt
-        if (pID->bEliminate) {
-            aXPoly.Remove(2,1);
-        }
-        if (bPrevIsControl) aXPoly.Insert(0,rXP[pID->nPrevPrevPnt0-1],XPOLY_NORMAL);
-        else if (!bBegPnt && !bPrevIsBegPnt && pID->aXP.IsControl(nPrevPrevPnt)) {
-            aXPoly.Insert(0,rXP[pID->nPrevPrevPnt0-1],XPOLY_CONTROL);
-            aXPoly.Insert(0,rXP[pID->nPrevPrevPnt0-2],XPOLY_NORMAL);
-        } else {
-            aXPoly.Remove(0,1);
-            if (bBegPnt) aXPoly.Remove(0,1);
-        }
-        if (bNextIsControl) aXPoly.Insert(XPOLY_APPEND,rXP[pID->nNextNextPnt0+1],XPOLY_NORMAL);
-        else if (!bEndPnt && !bNextIsEndPnt && pID->aXP.IsControl(nNextNextPnt)) {
-            aXPoly.Insert(XPOLY_APPEND,rXP[pID->nNextNextPnt0+1],XPOLY_CONTROL);
-            aXPoly.Insert(XPOLY_APPEND,rXP[pID->nNextNextPnt0+2],XPOLY_NORMAL);
-        } else {
-            aXPoly.Remove(aXPoly.GetPointCount()-1,1);
-            if (bEndPnt) aXPoly.Remove(aXPoly.GetPointCount()-1,1);
-        }
-        if (bClosed) { // "Birnenproblem": 2 Linien, 1 Kurve, alles Smooth, Punkt zw. beiden Linien wird gedraggt
-            if (aXPoly.GetPointCount()>nPntAnz && aXPoly.IsControl(1)) {
-                USHORT a=aXPoly.GetPointCount();
-                aXPoly[a-2]=aXPoly[2]; aXPoly.SetFlags(a-2,aXPoly.GetFlags(2));
-                aXPoly[a-1]=aXPoly[3]; aXPoly.SetFlags(a-1,aXPoly.GetFlags(3));
-                aXPoly.Remove(0,3);
-            }
-        }
+        rXPP.Insert(aXPoly);
+        if (aLine1.GetPointCount()>1) rXPP.Insert(aLine1);
+        if (aLine2.GetPointCount()>1) rXPP.Insert(aLine2);
+        if (aLine3.GetPointCount()>1) rXPP.Insert(aLine3);
+        if (aLine4.GetPointCount()>1) rXPP.Insert(aLine4);
     }
-    rXPP.Insert(aXPoly);
-    if (aLine1.GetPointCount()>1) rXPP.Insert(aLine1);
-    if (aLine2.GetPointCount()>1) rXPP.Insert(aLine2);
-    if (aLine3.GetPointCount()>1) rXPP.Insert(aLine3);
-    if (aLine4.GetPointCount()>1) rXPP.Insert(aLine4);
 }
 
 FASTBOOL SdrPathObj::BegCreate(SdrDragStat& rStat)
