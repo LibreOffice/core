@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:08:04 $
+ *  last change: $Author: vg $ $Date: 2003-05-02 15:27:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,7 +582,12 @@ void SwTabFrm::MakeAll()
     //verleibe ich mir das Teil ein.
     // OD 09.04.2003 #108698# - join all follows, which are placed on the
     // same page/column.
-    while ( GetNext() && GetNext() == GetFollow() )
+    // OD 29.04.2003 #109213# - join follow, only if join for the follow
+    // is not locked. Otherwise, join will not be performed and this loop
+    // will be endless.
+    while ( GetNext() && GetNext() == GetFollow() &&
+            !GetFollow()->IsJoinLocked()
+          )
     {
         aNotify.AddHeightOfst( Join() );
     }
