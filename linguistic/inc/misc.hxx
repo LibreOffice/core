@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misc.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 16:05:00 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,10 @@ inline ByteString OU2BS(const ::rtl::OUString &rText, rtl_TextEncoding nEnc)
 {
     return ByteString( rText.getStr(), nEnc );
 }
+
+///////////////////////////////////////////////////////////////////////////
+
+sal_Int32 LevDistance( const rtl::OUString &rTxt1, const rtl::OUString &rTxt2 );
 
 ///////////////////////////////////////////////////////////////////////////
 
