@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-07 15:36:03 $
+ *  last change: $Author: tl $ $Date: 2001-03-08 09:24:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,27 @@
 #endif
 #ifndef _SFX_DOCFILT_HACK_HXX
 #include <sfx2/docfilt.hxx>
+#endif
+#ifndef _SFXITEMPOOL_HXX
+#include <svtools/itempool.hxx>
+#endif
+#ifndef _MyEDITENG_HXX
+#include <svx/editeng.hxx>
+#endif
+#ifndef _EEITEM_HXX
+#include <svx/eeitem.hxx>
+#endif
+#ifndef _EDITSTAT_HXX
+#include <svx/editstat.hxx>
+#endif
+#ifndef _EEITEMID_HXX
+#include <svx/eeitemid.hxx>
+#endif
+#ifndef _SVX_FONTITEM_HXX
+#include <svx/fontitem.hxx>
+#endif
+#ifndef _SVX_FHGTITEM_HXX
+#include <svx/fhgtitem.hxx>
 #endif
 
 #ifndef STARMATH_HRC
@@ -364,6 +385,65 @@ void SmDocShell::ArrangeFormula()
 }
 
 
+EditEngine& SmDocShell::GetEditEngine()
+{
+    if (!pEditEngine)
+    {
+        pEditEngineItemPool = EditEngine::CreatePool();
+
+        Font aFont( Application::GetSettings().GetStyleSettings().GetAppFont() );
+
+        Size aFntSize( /*Application::GetDefaultDevice()->PixelToLogic( */
+                            aFont.GetSize()/*, MapMode( MAP_100MM ) )*/);
+
+        long nFntHeight = aFntSize.Height();
+
+        pEditEngineItemPool->SetPoolDefaultItem(
+                SvxFontItem( aFont.GetFamily(), aFont.GetName(),
+                    aFont.GetStyleName(), aFont.GetPitch(), aFont.GetCharSet(),
+                    EE_CHAR_FONTINFO ) );
+        pEditEngineItemPool->SetPoolDefaultItem(
+                SvxFontHeightItem( nFntHeight, 100, EE_CHAR_FONTHEIGHT ) );
+        pEditEngineItemPool->SetPoolDefaultItem(
+                SvxFontHeightItem( nFntHeight, 100, EE_CHAR_FONTHEIGHT_CJK ) );
+        pEditEngineItemPool->SetPoolDefaultItem(
+                SvxFontHeightItem( nFntHeight, 100, EE_CHAR_FONTHEIGHT_CTL ) );
+
+        pEditEngine = new EditEngine( pEditEngineItemPool );
+
+        pEditEngine->EnableUndo( TRUE );
+        pEditEngine->SetDefTab( USHORT(
+            Application::GetDefaultDevice()->GetTextWidth( C2S("XXXX") ) ) );
+
+        pEditEngine->SetControlWord(
+                (pEditEngine->GetControlWord() | EE_CNTRL_AUTOINDENTING) &
+                (~EE_CNTRL_UNDOATTRIBS) &
+                (~EE_CNTRL_PASTESPECIAL) );
+
+        pEditEngine->SetWordDelimiters( C2S(" .=+-*/(){}[];\"" ) );
+        pEditEngine->SetRefMapMode( MAP_PIXEL );
+
+        pEditEngine->SetPaperSize( Size( 800, 0 ) );
+
+        pEditEngine->EraseVirtualDevice();
+        pEditEngine->ClearModifyFlag();
+
+        // forces new settings to be used
+        //pEditEngine->Clear(); //#77957 incorrect font size
+    }
+    return *pEditEngine;
+}
+
+
+SfxItemPool& SmDocShell::GetEditEngineItemPool()
+{
+    if (!pEditEngineItemPool)
+        GetEditEngine();
+    DBG_ASSERT( pEditEngineItemPool, "EditEngineItemPool missing" );
+    return *pEditEngineItemPool;
+}
+
+
 void SmDocShell::Draw(OutputDevice &rDev, Point &rPosition)
 {
     if (!pTree)
@@ -535,11 +615,13 @@ void SmDocShell::Resize()
 SmDocShell::SmDocShell(SfxObjectCreateMode eMode) :
     SfxObjectShell(eMode),
     aDataTypeList(SvEmbeddedObject::GetStdFormatList()),
-    pTree( 0 ),
-    pPrinter( 0 ),
-    pTmpPrinter( 0 ),
-    nModifyCount( 0 ),
-    bIsFormulaArranged( FALSE )
+    pTree               ( 0 ),
+    pPrinter            ( 0 ),
+    pTmpPrinter         ( 0 ),
+    pEditEngineItemPool ( 0 ),
+    pEditEngine         ( 0 ),
+    nModifyCount        ( 0 ),
+    bIsFormulaArranged  ( FALSE )
 {
     SetPool(&SFX_APP()->GetPool());
 
@@ -554,7 +636,6 @@ SmDocShell::SmDocShell(SfxObjectCreateMode eMode) :
     SetModel( new SmModel(this) );  //! das hier mit new erzeugte Model brauch
                                     //! im Destruktor nicht explizit gelöscht werden.
                                     //! Dies erledigt das Sfx.
-    pUndoMgr = new SfxUndoManager;
     aDataTypeList.Append(SvDataType(FORMAT_STRING, MEDIUM_MEMORY));
 }
 
@@ -569,7 +650,8 @@ SmDocShell::~SmDocShell()
 
     SaveSymbols();
 
-    delete pUndoMgr;
+    delete pEditEngine;
+    delete pEditEngineItemPool;
     delete pTree;
     delete pPrinter;
 }
@@ -1122,7 +1204,9 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 SmFormat& rOldFormat  = GetFormat();
 
                 pFontTypeDialog->WriteTo(GetFormat());
-                GetUndoManager()->AddUndoAction(
+                SfxUndoManager *pUndoMgr = GetUndoManager();
+                if (pUndoMgr)
+                    pUndoMgr->AddUndoAction(
                         new SmFormatAction(this, rOldFormat, GetFormat()));
 
                 if (aText.Len ())
@@ -1149,7 +1233,9 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
                 pFontSizeDialog->WriteTo(GetFormat());
 
-                GetUndoManager()->AddUndoAction(
+                SfxUndoManager *pUndoMgr = GetUndoManager();
+                if (pUndoMgr)
+                    pUndoMgr->AddUndoAction(
                         new SmFormatAction(this, rOldFormat, GetFormat()));
 
                 if (aText.Len ())
@@ -1176,7 +1262,9 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
                 pDistanceDialog->WriteTo(GetFormat());
 
-                GetUndoManager()->AddUndoAction(
+                SfxUndoManager *pUndoMgr = GetUndoManager();
+                if (pUndoMgr)
+                    pUndoMgr->AddUndoAction(
                         new SmFormatAction(this, rOldFormat, GetFormat()));
 
                 if (aText.Len ())
@@ -1206,7 +1294,9 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 SmModule *pp = SM_MOD1();
                 pAlignDialog->WriteTo(pp->GetConfig()->GetFormat());
 
-                GetUndoManager()->AddUndoAction(
+                SfxUndoManager *pUndoMgr = GetUndoManager();
+                if (pUndoMgr)
+                    pUndoMgr->AddUndoAction(
                         new SmFormatAction(this, rOldFormat, GetFormat()));
 
                 if (aText.Len ())
@@ -1230,9 +1320,6 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
             if (GetText() != rItem.GetValue())
             {
-                GetUndoManager()->AddUndoAction(
-                         new SmEditAction(this, GetText(), rItem.GetValue()));
-
                 SetText(rItem.GetValue());
             }
             break;
@@ -1350,14 +1437,11 @@ void SmDocShell::FillRegInfo(SvEmbeddedRegistryInfo * pInfo)
 
 
 
-SfxUndoManager *SmDocShell::GetUndoManager ()
+SfxUndoManager *SmDocShell::GetUndoManager()
 {
-    if (! pUndoMgr)
-    {
-        pUndoMgr = new SfxUndoManager;
-        SetUndoManager(pUndoMgr);
-    }
-    return pUndoMgr;
+    if (!pEditEngine)
+        GetEditEngine();
+    return &pEditEngine->GetUndoManager();
 }
 
 
@@ -1645,7 +1729,6 @@ BOOL SmDocShell::Try2x (SvStorage *pStor,
 }
 
 
-
 void SmDocShell::UIActivate (BOOL bActivate)
 {
     if (bActivate)
@@ -1674,7 +1757,6 @@ void SmDocShell::UIActivate (BOOL bActivate)
         SfxInPlaceObject::UIActivate (bActivate);
     }
 }
-
 
 
 void SmDocShell::FillClass(SvGlobalName* pClassName,
