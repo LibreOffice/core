@@ -2,9 +2,9 @@
  *
  *  $RCSfile: checksingleton.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-08-17 13:05:32 $
+ *  last change: $Author: jsc $ $Date: 2001-09-26 14:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,9 +419,11 @@ static sal_Bool checkSingletons(RegistryKey& singletonKey, RegistryKey& typeKey)
     typeKey.openSubKeys(tmpName, subKeys);
 
     sal_uInt32 length = subKeys.getLength();
+    RegistryKey elementKey;
     for (sal_uInt32 i = 0; i < length; i++)
     {
-        if ( checkSingletons(singletonKey, subKeys.getElement(i)) )
+        elementKey = subKeys.getElement(i);
+        if ( checkSingletons(singletonKey, elementKey) )
         {
             bRet = sal_True;
         }
@@ -430,7 +432,7 @@ static sal_Bool checkSingletons(RegistryKey& singletonKey, RegistryKey& typeKey)
 }
 
 #if (defined UNX) || (defined OS2)
-void main( int argc, char * argv[] )
+int main( int argc, char * argv[] )
 #else
 
 void _cdecl main( int argc, char * argv[] )
