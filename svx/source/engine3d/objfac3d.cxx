@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objfac3d.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:15 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,9 +117,15 @@
 |*
 \************************************************************************/
 
+static BOOL bInit = FALSE;
+
 E3dObjFactory::E3dObjFactory()
 {
-    SdrObjFactory::InsertMakeObjectHdl(LINK(this, E3dObjFactory, MakeObject));
+    if ( !bInit )
+    {
+        SdrObjFactory::InsertMakeObjectHdl(LINK(this, E3dObjFactory, MakeObject));
+        bInit = TRUE;
+    }
 }
 
 /*************************************************************************
