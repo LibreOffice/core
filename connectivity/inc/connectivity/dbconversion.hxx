@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconversion.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-19 11:44:32 $
+ *  last change: $Author: obo $ $Date: 2000-10-24 08:54:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,8 @@
 #ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
 #include <com/sun/star/util/Date.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
-#include <com/sun/star/uno/Reference.h>
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include <com/sun/star/uno/Reference.hxx>
 #endif
 
 
@@ -93,10 +93,6 @@ namespace com
     {
         namespace star
         {
-            namespace uno
-            {
-                class Reference;
-            }
             namespace lang
             {
                 class IllegalArgumentException;
