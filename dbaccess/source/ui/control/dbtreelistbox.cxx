@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreelistbox.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:34:34 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:10:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,25 +329,34 @@ sal_Int8 DBTreeListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
     if ( m_pActionListener )
     {
         SvLBoxEntry* pDroppedEntry = GetEntry(_rEvt.maPosPixel);
-        if ( m_pDragedEntry && m_pDragedEntry != pDroppedEntry )
+        // check if drag is on child entry, which is not allowed
+        SvLBoxEntry* pParent = NULL;
+        if ( _rEvt.mnAction & DND_ACTION_MOVE )
         {
-            // check if drag is on child entry, which is not allowed
-            SvLBoxEntry* pParent = pDroppedEntry ? GetParent(pDroppedEntry) : NULL;
-            while ( pParent && pParent != m_pDragedEntry )
-                pParent = GetParent(pParent);
-
-            if ( !pParent )
+            if ( !m_pDragedEntry ) // no entry to move
             {
                 nDropOption = m_pActionListener->queryDrop( _rEvt, GetDataFlavorExVector() );
-                // check if move is allowed
-                if ( _rEvt.mnAction & DND_ACTION_MOVE && nDropOption & DND_ACTION_MOVE )
-                {
-                    if ( GetEntryPosByName(GetEntryText(m_pDragedEntry),pDroppedEntry) )
-                        nDropOption &= ~DND_ACTION_MOVE;
-                }
                 m_aMousePos = _rEvt.maPosPixel;
                 m_aScrollHelper.scroll(m_aMousePos,GetOutputSizePixel());
+                return nDropOption;
             }
+
+            pParent = pDroppedEntry ? GetParent(pDroppedEntry) : NULL;
+            while ( pParent && pParent != m_pDragedEntry )
+                pParent = GetParent(pParent);
+        }
+
+        if ( !pParent )
+        {
+            nDropOption = m_pActionListener->queryDrop( _rEvt, GetDataFlavorExVector() );
+            // check if move is allowed
+            if ( nDropOption & DND_ACTION_MOVE )
+            {
+                if ( m_pDragedEntry == pDroppedEntry || GetEntryPosByName(GetEntryText(m_pDragedEntry),pDroppedEntry) )
+                    nDropOption = DND_ACTION_NONE;
+            }
+            m_aMousePos = _rEvt.maPosPixel;
+            m_aScrollHelper.scroll(m_aMousePos,GetOutputSizePixel());
         }
     }
 
