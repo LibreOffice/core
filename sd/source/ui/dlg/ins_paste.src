@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ins_paste.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:41:19 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 18:00:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,7 @@ ModalDialog DLG_INSERT_PASTE
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 148 , 90 ) ;
     Moveable = TRUE ;
-    Text = "Dias einfügen" ;
-    Text [ ENGLISH ] = "Insert slides" ;
+    Text [ de ] = "Dias einfügen" ;
     OKButton BTN_OK
     {
         Pos = MAP_APPFONT ( 92 , 6 ) ;
@@ -93,138 +92,29 @@ ModalDialog DLG_INSERT_PASTE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text = "Position" ;
-        Text[ ENGLISH ] = "Position" ;
-        Text[ english_us ] = "Position";
-        Text[ portuguese ] = "Posição";
-        Text[ russian ] = "Ïîëîæåíèå";
-        Text[ greek ] = "start_num";
-        Text[ dutch ] = "Positie";
-        Text[ french ] = "Position";
-        Text[ spanish ] = "Posición";
-        Text[ finnish ] = "Sijainti";
-        Text[ italian ] = "Posizione";
-        Text[ danish ] = "Stilling";
-        Text[ swedish ] = "Placering";
-        Text[ polish ] = "Pozycja";
-        Text[ portuguese_brazilian ] = "Cargo";
-        Text[ japanese ] = "ä½ç½®";
-        Text[ korean ] = "ìœ„ì¹˜";
-        Text[ chinese_simplified ] = "ä½ç½®";
-        Text[ chinese_traditional ] = "ä½ç½®";
-        Text[ turkish ] = "Konum";
-        Text[ arabic ] = "Start_num";
-        Text[ catalan ] = "Mostra";
-        Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
-        Text[ czech ] = "UmÃ­stÄ›nÃ­";
-        Text[ hebrew ] = "â€®××™×§×•×â€¬";
-        Text[ hindi ] = "Position";
-        Text[ slovak ] = "Umiestnenie";
-        Text[ hungarian ] = "PozÃ­ciÃ³";
-        Text[ slovenian ] = "PoloÅ¾aj";
+        Text [ de ] = "Position" ;
+        Text [ en-US ] = "Position";
     };
     RadioButton RB_BEFORE
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 80, 10 ) ;
-        Text = "da~vor" ;
-        Text [ ENGLISH ] = "~before" ;
-        Text [ norwegian ] = "~før" ;
-        Text [ italian ] = "Davanti" ;
-        Text [ portuguese_brazilian ] = "~antes" ;
-        Text [ portuguese ] = "à ~frente" ;
-        Text [ finnish ] = "~Ennen" ;
-        Text [ danish ] = "~Foran" ;
-        Text [ french ] = "Avant" ;
-        Text [ swedish ] = "~framför" ;
-        Text [ dutch ] = "~ervoor" ;
-        Text [ spanish ] = "de~lante" ;
-        Text [ english_us ] = "~Before" ;
+        Text [ de ] = "da~vor" ;
+        Text [ en-US ] = "~Before" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ä¹‹å‰(~B)";
-        Text[ russian ] = "ïåğåä";
-        Text[ polish ] = "prze~d";
-        Text[ japanese ] = "å‰(~B)";
-        Text[ chinese_traditional ] = "ä¹‹å‰(~B)";
-        Text[ arabic ] = "ŞÈá";
-        Text[ greek ] = "Ğñéí áğü";
-        Text[ korean ] = "ì•(~B)";
-        Text[ turkish ] = "~Önce";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "A~bans de";
-        Text[ thai ] = "~à¸à¹ˆà¸­à¸™";
-        Text[ czech ] = "PÅ™ed";
-        Text[ hebrew ] = "da~vor";
-        Text[ hindi ] = "~Before";
-        Text[ slovak ] = "P~red";
-        Text[ hungarian ] = "~ElÃ©";
-        Text[ slovenian ] = "~Pred";
+        Text [ x-comment ] = " ";
     };
     RadioButton RB_AFTER
     {
         Pos = MAP_APPFONT ( 12, 27 ) ;
         Size = MAP_APPFONT ( 80, 10 ) ;
-        Text = "da~hinter" ;
-        Text [ ENGLISH ] = "~behind" ;
-        Text [ norwegian ] = "~bak" ;
-        Text [ italian ] = "Dietro" ;
-        Text [ portuguese_brazilian ] = "~atrás" ;
-        Text [ portuguese ] = "~atrás" ;
-        Text [ finnish ] = "~Jälkeen" ;
-        Text [ danish ] = "E~fter" ;
-        Text [ french ] = "Après" ;
-        Text [ swedish ] = "~bakom" ;
-        Text [ dutch ] = "e~rachter" ;
-        Text [ spanish ] = "de~trás" ;
-        Text [ english_us ] = "A~fter" ;
+        Text [ de ] = "da~hinter" ;
+        Text [ en-US ] = "A~fter" ;
         TabStop = TRUE ;
         Check = TRUE ;
-        Text[ chinese_simplified ] = "ä¹‹å(~F)";
-        Text[ russian ] = "ïîñëå";
-        Text[ polish ] = "za";
-        Text[ japanese ] = "å¾Œ(~F)";
-        Text[ chinese_traditional ] = "ä¹‹å¾Œ(~F)";
-        Text[ arabic ] = "ÈÚÏ";
-        Text[ greek ] = "ìåôÜ áğü";
-        Text[ korean ] = "ë’¤(~F)";
-        Text[ turkish ] = "~Sonra";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "da~rrera";
-        Text[ thai ] = "à¸«~à¸¥à¸±à¸‡à¸ˆà¸²à¸";
-        Text[ czech ] = "Za";
-        Text[ hebrew ] = "da~hinter";
-        Text[ hindi ] = "A~fter";
-        Text[ slovak ] = "~za";
-        Text[ hungarian ] = "~MÃ¶gÃ©";
-        Text[ slovenian ] = "Z~a";
+        Text [ x-comment ] = " ";
     };
-    Text[ swedish ] = "Infoga diabilder";
-    Text[ spanish ] = "Insertar diapositivas";
-    Text[ korean ] = "ìŠ¬ë¼ì´ë“œ ì‚½ì…";
-    Text[ chinese_traditional ] = "æ’å…¥æŠ•å½±ç‰‡";
-    Text[ english_us ] = "Insert Slides";
-    Text[ portuguese ] = "Insert Slides";
-    Text[ russian ] = "Insert Slides";
-    Text[ greek ] = "Insert Slides";
-    Text[ dutch ] = "Insert Slides";
-    Text[ french ] = "Insertion de diapos";
-    Text[ finnish ] = "Insert Slides";
-    Text[ italian ] = "Inserisci diapositiva";
-    Text[ danish ] = "Indsæt dias";
-    Text[ polish ] = "Insert Slides";
-    Text[ japanese ] = "ã‚¹ãƒ©ã‚¤ãƒ‰ã®æŒ¿å…¥";
-    Text[ chinese_simplified ] = "æ’å…¥å¹»ç¯ç‰‡";
-    Text[ turkish ] = "Slayt Ekle";
-    Text[ arabic ] = "Insert Slides";
-    Text[ czech ] = "VloÅ¾it snÃ­mky";
-    Text[ hebrew ] = "Dias einfÃ¼gen";
-    Text[ catalan ] = "Insert Slides";
-    Text[ portuguese_brazilian ] = "Inserir slides";
-    Text[ thai ] = "Insert Slides";
-    Text[ hindi ] = "Insert Slides";
-    Text[ slovak ] = "VloÅ¾iÅ¥ snÃ­mky";
-    Text[ hungarian ] = "Dia beszÃºrÃ¡sa";
-    Text[ slovenian ] = "Vstavi diapozitive";
+    Text [ en-US ] = "Insert Slides";
 };
 
 
