@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i_struct.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:12:59 $
+ *  last change: $Author: np $ $Date: 2002-11-29 10:20:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,13 @@ xref::Get_AsParameters( Dyn_CeIterator &    o_result,
                         const CodeEntity &  i_ce )
 {
     o_result = new SCI_Vector<Ce_id>(i_ce.Secondaries().List(struct_2s_AsParameters));
+}
+
+void
+xref::Get_AsDataTypes( Dyn_CeIterator &    o_result,
+                       const CodeEntity &  i_ce )
+{
+    o_result = new SCI_Vector<Ce_id>(i_ce.Secondaries().List(struct_2s_AsDataTypes));
 }
 
 } // namespace ifc_struct

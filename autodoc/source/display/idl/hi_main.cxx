@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hi_main.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-14 18:01:58 $
+ *  last change: $Author: np $ $Date: 2002-11-29 10:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -500,6 +500,11 @@ MainDisplay_Idl::do_Interface2s( const ary::idl::CodeEntity & i_ce )
         "Uses as Parameter",
         "#Parameters",
         *pXrefList );
+    ary::idl::ifc_interface::xref::Get_AsDataTypes(pXrefList,i_ce);
+    aUses.Produce_List(
+        "Uses as Data Type",
+        "#DataTypes",
+        *pXrefList );
     aUses.Write_ManualLinks(i_ce);
 }
 
@@ -571,6 +576,11 @@ MainDisplay_Idl::do_Struct2s( const ary::idl::CodeEntity & i_ce )
         "Uses as Parameter",
         "#Parameters",
         *pXrefList );
+    ary::idl::ifc_struct::xref::Get_AsDataTypes(pXrefList,i_ce);
+    aUses.Produce_List(
+        "Uses as Data Type",
+        "#DataTypes",
+        *pXrefList );
     aUses.Write_ManualLinks(i_ce);
 }
 
@@ -636,6 +646,11 @@ MainDisplay_Idl::do_Enum2s( const ary::idl::CodeEntity & i_ce )
         "Uses as Parameter",
         "#Parameters",
         *pXrefList );
+    ary::idl::ifc_enum::xref::Get_AsDataTypes(pXrefList,i_ce);
+    aUses.Produce_List(
+        "Uses as Data Type",
+        "#DataTypes",
+        *pXrefList );
     aUses.Write_ManualLinks(i_ce);
 }
 
@@ -671,5 +686,11 @@ MainDisplay_Idl::do_Typedef2s( const ary::idl::CodeEntity & i_ce )
         "Uses as Parameter",
         "#Parameters",
         *pXrefList );
+    ary::idl::ifc_typedef::xref::Get_AsDataTypes(pXrefList,i_ce);
+    aUses.Produce_List(
+        "Uses as Data Type",
+        "#DataTypes",
+        *pXrefList );
     aUses.Write_ManualLinks(i_ce);
 }
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ik_enum.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:11:51 $
+ *  last change: $Author: np $ $Date: 2002-11-29 10:20:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@ struct xref : public ifc_ce::xref
                             Dyn_CeIterator &    o_result,
                             const CodeEntity &  i_ce );
     static void         Get_AsParameters(
+                            Dyn_CeIterator &    o_result,
+                            const CodeEntity &  i_ce );
+    static void         Get_AsDataTypes(
                             Dyn_CeIterator &    o_result,
                             const CodeEntity &  i_ce );
 };
