@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: af $ $Date: 2001-02-09 14:08:58 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:22:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ TabPage RID_SVXPAGE_POSITION
         Text [ dutch ] = "Positie ~X" ;
         Text [ spanish ] = "Posición ~X" ;
         Text [ english_us ] = "Position ~X" ;
-        Text[ chinese_simplified ] = "Î»ÖÃ X(~X)";
+        Text[ chinese_simplified ] = "Î»ÖÃ ~X";
         Text[ russian ] = "Ïîçèöèÿ ~X";
         Text[ polish ] = "Pozycja X";
         Text[ japanese ] = "ˆÊ’u X(~X)";
@@ -156,7 +156,7 @@ TabPage RID_SVXPAGE_POSITION
         Text [ dutch ] = "Positie~Y" ;
         Text [ spanish ] = "Posición ~Y" ;
         Text [ english_us ] = "Position ~Y" ;
-        Text[ chinese_simplified ] = "Î»ÖÃ Y(~Y)";
+        Text[ chinese_simplified ] = "Î»ÖÃ ~Y";
         Text[ russian ] = "Ïîçèöèÿ ~Y";
         Text[ polish ] = "Pozycja Y";
         Text[ japanese ] = "ˆÊ’u Y(~Y)";
@@ -222,7 +222,7 @@ TabPage RID_SVXPAGE_POSITION
         QuickHelpText[ chinese_traditional ] = "°òÂI";
         QuickHelpText[ arabic ] = "äŞØÉ ÇáÇäØáÇŞ";
         QuickHelpText[ greek ] = "Óçìåßï âÜóçò";
-        QuickHelpText[ korean ] = "Base point";
+        QuickHelpText[ korean ] = "±âÁØÁ¡!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Basispunkt";
@@ -272,7 +272,7 @@ TabPage RID_SVXPAGE_POSITION
         Text [ swedish ] = "Förankring" ;
         Text [ danish ] = "Forankring" ;
         Text [ portuguese_brazilian ] = "Verankerung" ;
-        Text [ portuguese ] = "Ancorar" ;
+        Text [ portuguese ] = "Âncora" ;
         Text[ chinese_simplified ] = "Ëø¶¨";
         Text[ russian ] = "Ïğèâÿçêà";
         Text[ polish ] = "Zakotwiczenie";
@@ -357,7 +357,7 @@ TabPage RID_SVXPAGE_POSITION
             < "Till stycket" ; > ;
             < "Som tecken" ; > ;
             < "Till sidan" ; > ;
-            < "Till ramen" ; > ;
+            < "Vid ram" ; > ;
         };
         stringlist [ danish ] =
         {
@@ -427,7 +427,7 @@ TabPage RID_SVXPAGE_POSITION
                 < "¦b¬q¸¨¤W" ; > ;
             < "·í§@¦r¤¸" ; > ;
             < "¦b­¶­±¤W" ; > ;
-            < "¦b®Ø¤W" ; > ;
+            < "¦b®ØÃä" ; > ;
         };
         StringList [ arabic ] =
         {
@@ -454,7 +454,7 @@ TabPage RID_SVXPAGE_POSITION
     {
             < "Paragrafa" ; > ;
         < "Karakter olarak" ; > ;
-        < "Sayfaya" ; > ;
+        < "Sayfada" ; > ;
         < "Çerçeveye" ; > ;
     };
     StringList [ language_user1 ] =
@@ -682,9 +682,9 @@ TabPage RID_SVXPAGE_POSITION
             < "¦r¤¸¤W¤è" ; > ;
             < "¦r¤¸¸m¤¤" ; > ;
             < "¦r¤¸¤U¤è" ; > ;
-            < "Äæ¤W¤è" ; > ;
+            < "¦æ¤W¤è" ; > ;
             < "Äæ¸m¤¤" ; > ;
-            < "Äæ¤U¤è" ; > ;
+            < "¦æ¤U¤è" ; > ;
         };
         StringList [ arabic ] =
         {
@@ -921,7 +921,7 @@ TabPage RID_SVXPAGE_SIZE
         QuickHelpText[ chinese_traditional ] = "°òÂI";
         QuickHelpText[ arabic ] = "äŞØÉ ÇáÇäØáÇŞ";
         QuickHelpText[ greek ] = "Óçìåßï âÜóçò";
-        QuickHelpText[ korean ] = "Base point";
+        QuickHelpText[ korean ] = "±âÁØÁ¡!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Basispunkt";
@@ -1138,7 +1138,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text [ dutch ] = "Positie ~X" ;
         Text [ spanish ] = "Posición ~X" ;
         Text [ english_us ] = "Position ~X" ;
-        Text[ chinese_simplified ] = "Î»ÖÃ X(~X)";
+        Text[ chinese_simplified ] = "Î»ÖÃ ~X";
         Text[ russian ] = "Ïîçèöèÿ ~X";
         Text[ polish ] = "Pozycja X";
         Text[ japanese ] = "ˆÊ’u X(~X)";
@@ -1166,7 +1166,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text [ dutch ] = "Positie ~Y" ;
         Text [ spanish ] = "Posición ~Y" ;
         Text [ english_us ] = "Position ~Y" ;
-        Text[ chinese_simplified ] = "Î»ÖÃY(~Y)";
+        Text[ chinese_simplified ] = "Î»ÖÃ ~Y";
         Text[ russian ] = "Ïîçèöèÿ ~Y";
         Text[ polish ] = "Pozycja Y";
         Text[ japanese ] = "ˆÊ’u Y(~Y)";
@@ -1324,7 +1324,7 @@ TabPage RID_SVXPAGE_ANGLE
         QuickHelpText[ chinese_traditional ] = "±ÛÂàÂI";
         QuickHelpText[ arabic ] = "äŞØÉ ÇáÇÓÊÏÇÑÉ";
         QuickHelpText[ greek ] = "Óçìåßï ğåñéóôñïöŞò";
-        QuickHelpText[ korean ] = "Rotation point";
+        QuickHelpText[ korean ] = "È¸ÀüÁ¡!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Rotationspunkt";
@@ -1522,7 +1522,7 @@ TabPage RID_SVXPAGE_SLANT
         CustomUnitText[ turkish ] = "Derece";
         CustomUnitText[ language_user1 ] = " ";
     };
-    Text[ chinese_simplified ] = "ÇãĞ±/½Ç°ë¾¶";
+    Text[ chinese_simplified ] = "ÇãĞ±ºÍ½Ç°ë¾¶";
     Text[ russian ] = "Íàêëîí / Ğàäèóñ çàêğóãëåííîãî óãëà";
     Text[ polish ] = "Pochyl / Promieñ naro¿nika";
     Text[ japanese ] = "ŒXÎ‚³‚¹‚é/Šp‚Ì”¼Œa‚Ì’·‚³";
@@ -1659,7 +1659,7 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Text [ danish ] = "Hældning / hjørneradius" ;
                 Text [ portuguese_brazilian ] = "Schrägstellen / Eckenradius" ;
                 Text [ portuguese ] = "Inclinações / Raio do ângulo" ;
-                Text[ chinese_simplified ] = "ÇãĞ±/½Ç°ë¾¶";
+                Text[ chinese_simplified ] = "ÇãĞ±ºÍ½Ç°ë¾¶";
                 Text[ russian ] = "Íàêëîí / Ğàäèóñ çàêğóãëåííîãî óãëà";
                 Text[ polish ] = "Pochyl / Promieñ naro¿nika";
                 Text[ japanese ] = "ŒXÎ‚³‚¹‚é/Šp‚Ì”¼Œa‚Ì’·‚³";
