@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfilt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:57:51 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:53:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,12 @@
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
 
 #pragma hdrstop
 
@@ -105,6 +111,8 @@
 #include "sfxresid.hxx"
 #include "doc.hrc"
 #include "sfxuno.hxx"
+
+using namespace ::com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -358,4 +366,58 @@ String SfxFilter::GetTypeFromStorage( const SotStorage& rStg )
     }
 
     return pType ? String::CreateFromAscii(pType) : String();
+}
+
+String SfxFilter::GetTypeFromStorage( const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& xStorage,
+                                        String* pFilterName )
+        throw ( beans::UnknownPropertyException,
+                lang::WrappedTargetException,
+                uno::RuntimeException )
+{
+    const char* pType=0;
+    String aName;
+    if ( pFilterName )
+    {
+        aName = *pFilterName;
+        pFilterName->Erase();
+    }
+
+    com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xProps( xStorage, com::sun::star::uno::UNO_QUERY );
+    if ( xProps.is() )
+    {
+        ::rtl::OUString aMediaType;
+        xProps->getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) ) >>= aMediaType;
+        if ( aMediaType.getLength() )
+        {
+            ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
+            aDataFlavor.MimeType = aMediaType;
+            sal_uInt32 nClipId = SotExchange::GetFormat( aDataFlavor );
+            if ( nClipId )
+            {
+                const SfxFilter* pFilter = 0;
+                if ( aName.Len() )
+                    pFilter = SFX_APP()->GetFilterMatcher().GetFilter4FilterName( aName );
+                if ( !pFilter || pFilter->GetFormat() != nClipId )
+                    pFilter = SFX_APP()->GetFilterMatcher().GetFilter4ClipBoardId( nClipId );
+                if ( pFilter )
+                {
+                    if ( pFilterName )
+                        *pFilterName = pFilter->GetName();
+                    return pFilter->GetTypeName();
+                }
+            }
+        }
+    }
+
+    //TODO: do it without SfxFilter
+    //TODO/LATER: don't yield FilterName, should be done in FWK!
+    String aRet;
+    if ( pType )
+    {
+        aRet = String::CreateFromAscii(pType);
+        if ( pFilterName )
+            *pFilterName = SFX_APP()->GetFilterMatcher().GetFilter4EA( aRet )->GetName();
+    }
+
+    return aRet;
 }
