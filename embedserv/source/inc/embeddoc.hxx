@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embeddoc.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-05 15:49:20 $
+ *  last change: $Author: mav $ $Date: 2003-03-10 16:04:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,8 @@
 #include "common.h"
 #include <oleidl.h>
 
+#include <hash_map>
+
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
@@ -72,6 +74,8 @@
 #include <com/sun/star/uno/SEQUENCE.h>
 #endif
 
+typedef ::std::hash_map< DWORD, IAdviseSink* > AdviseSinkHashMap;
+typedef ::std::hash_map< DWORD, IAdviseSink* >::iterator AdviseSinkHashMapIterator;
 
 class GDIMetaFile;
 
@@ -158,6 +162,10 @@ protected:
     sal_Bool                            m_bIsDirty;
 
     CComPtr< IOleClientSite >           m_pClientSite;
+    CComPtr< IDataAdviseHolder >        m_pDAdviseHolder;
+
+    AdviseSinkHashMap                   m_aAdviseHashMap;
+    DWORD                               m_nAdviseNum;
 };
 
 #endif //_EMBEDDOC_HXX_
