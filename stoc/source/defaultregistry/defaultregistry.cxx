@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultregistry.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:20:56 $
+ *  last change: $Author: jsc $ $Date: 2001-07-04 13:10:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1276,7 +1276,9 @@ OUString SAL_CALL NestedRegistryImpl::getURL() throw(RuntimeException)
 void SAL_CALL NestedRegistryImpl::open( const OUString& rURL, sal_Bool bReadOnly, sal_Bool bCreate )
     throw(InvalidRegistryException, RuntimeException)
 {
-    throw InvalidRegistryException();
+    throw InvalidRegistryException(
+            OUString::createFromAscii("the 'open' method is not specified for a nested registry"),
+            Reference< XInterface >() );
 }
 
 //*************************************************************************
@@ -1300,14 +1302,29 @@ sal_Bool SAL_CALL NestedRegistryImpl::isValid(  ) throw(RuntimeException)
 void SAL_CALL NestedRegistryImpl::close(  )
     throw(InvalidRegistryException, RuntimeException)
 {
-    throw InvalidRegistryException();
+    Guard< Mutex > aGuard( m_mutex );
+    if ( m_localReg.is() && m_localReg->isValid() )
+    {
+        m_localReg->close();
+    }
+    if ( m_defaultReg.is() && m_defaultReg->isValid() )
+    {
+        m_defaultReg->close();
+    }
+/*
+    throw InvalidRegistryException(
+            OUString::createFromAscii("the 'close' method is not specified for a nested registry"),
+            Reference< XInterface >() );
+*/
 }
 
 //*************************************************************************
 void SAL_CALL NestedRegistryImpl::destroy(  )
     throw(InvalidRegistryException, RuntimeException)
 {
-    throw InvalidRegistryException();
+    throw InvalidRegistryException(
+            OUString::createFromAscii("the 'destroy' method is not specified for a nested registry"),
+            Reference< XInterface >() );
 }
 
 //*************************************************************************
