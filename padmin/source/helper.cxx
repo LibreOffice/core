@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-19 13:47:44 $
+ *  last change: $Author: pl $ $Date: 2001-06-26 19:27:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,17 +194,32 @@ long DelListBox::Notify( NotifyEvent& rEvent )
  *  QueryString
  */
 
-QueryString::QueryString( Window* pParent, String& rQuery, String& rRet ) :
+QueryString::QueryString( Window* pParent, String& rQuery, String& rRet, const ::std::list< String >& rChoices ) :
         m_rReturnValue( rRet ),
         ModalDialog( pParent, PaResId( RID_STRINGQUERYDLG ) ),
         m_aOKButton( this, PaResId( RID_STRQRY_BTN_OK ) ),
         m_aEdit( this, PaResId( RID_STRQRY_EDT_NEWNAME ) ),
+        m_aComboBox( this, PaResId( RID_STRQRY_BOX_NEWNAME ) ),
         m_aFixedText( this, PaResId( RID_STRQRY_TXT_RENAME ) ),
         m_aCancelButton( this, PaResId( RID_STRQRY_BTN_CANCEL ) )
 {
     m_aOKButton.SetClickHdl( LINK( this, QueryString, ClickBtnHdl ) );
     m_aFixedText.SetText( rQuery );
-    m_aEdit.SetText( m_rReturnValue );
+    if( rChoices.begin() != rChoices.end() )
+    {
+        m_aComboBox.SetText( m_rReturnValue );
+        m_aComboBox.InsertEntry( m_rReturnValue );
+        for( ::std::list<String>::const_iterator it = rChoices.begin(); it != rChoices.end(); ++it )
+            m_aComboBox.InsertEntry( *it );
+        m_aEdit.Show( FALSE );
+        m_bUseEdit = false;
+    }
+    else
+    {
+        m_aEdit.SetText( m_rReturnValue );
+        m_aComboBox.Show( FALSE );
+        m_bUseEdit = true;
+    }
     SetText( Application::GetDisplayName() );
     FreeResource();
 }
@@ -217,7 +232,7 @@ IMPL_LINK( QueryString, ClickBtnHdl, Button*, pButton )
 {
     if( pButton == &m_aOKButton )
     {
-        m_rReturnValue = m_aEdit.GetText();
+        m_rReturnValue = m_bUseEdit ? m_aEdit.GetText() : m_aComboBox.GetText();
         EndDialog( 1 );
     }
     else

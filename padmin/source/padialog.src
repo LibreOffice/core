@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-22 21:43:31 $
+ *  last change: $Author: pl $ $Date: 2001-06-26 19:27:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -951,6 +951,13 @@ ModalDialog RID_STRINGQUERYDLG
         Pos = MAP_APPFONT ( 6 , 23 ) ;
         Size = MAP_APPFONT ( 130 , 12 ) ;
     };
+    ComboBox RID_STRQRY_BOX_NEWNAME
+    {
+        Border = TRUE ;
+        DropDown = TRUE;
+        Pos = MAP_APPFONT ( 6 , 23 ) ;
+        Size = MAP_APPFONT ( 130 , 12 ) ;
+    };
     OKButton RID_STRQRY_BTN_OK
     {
         DefButton = TRUE ;
@@ -1236,6 +1243,13 @@ ModalDialog RID_FONTNAMEDIALOG
         Text[ finnish ] = "Close";
         Text[ catalan ] = "Cerrar";
     };
+    PushButton RID_FNTNM_BTN_RENAME
+    {
+        Pos = MAP_APPFONT( 196, 31 );
+        Size = MAP_APPFONT( 50, 12 );
+        Text = "~Umbenennen...";
+        Text [ English ] = "Re~name";
+    };
     PushButton RID_FNTNM_BTN_REMOVE
     {
         Pos = MAP_APPFONT ( 196 , 48 ) ;
@@ -1325,6 +1339,16 @@ ModalDialog RID_FONTNAMEDIALOG
         Text[ turkish ] = "The Xwindow name of the font is constructed\nfrom the properties";
         Text[ arabic ] = "Ì —ﬂ» «”„ ŒÿXwindow   \n „‰ «·Œ’«∆’";
         Text[ catalan ] = "De las propiedades se construir· el nombre\nXwindow de la fuente.";
+    };
+    String RID_FNTNM_STR_RENAME
+    {
+        Text = "~Neuer Schriftname";
+        Text [ English ] = "~New font name";
+    };
+    String RID_FNTNM_STR_TTCRENAME
+    {
+        Text = "~Neuer Schriftname (%d1 von %d2)";
+        Text [ English ] = "~New font name (%d1 of %d2)";
     };
     Text[ english_us ] = "Fonts";
     Text[ portuguese ] = "Tipos de letra";

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-21 12:59:43 $
+ *  last change: $Author: pl $ $Date: 2001-06-26 19:27:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #ifndef _SV_LISTBOX_HXX
 #include <vcl/lstbox.hxx>
 #endif
+#ifndef _SV_COMBOBOX_HXX
+#include <vcl/combobox.hxx>
+#endif
 
 class Config;
 
@@ -138,13 +141,15 @@ namespace padmin
         CancelButton m_aCancelButton;
         FixedText    m_aFixedText;
         Edit         m_aEdit;
+        ComboBox     m_aComboBox;
 
         String&      m_rReturnValue;
+        bool         m_bUseEdit;
 
         DECL_LINK( ClickBtnHdl, Button* );
 
     public:
-        QueryString( Window*, String &, String & );
+        QueryString( Window*, String &, String &, const ::std::list< String >& rChoices = ::std::list<String>() );
         // parent window, Query text, initial value
         ~QueryString();
     };

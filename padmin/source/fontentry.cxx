@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontentry.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-15 15:30:08 $
+ *  last change: $Author: pl $ $Date: 2001-06-26 19:27:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #endif
 #ifndef _CONFIG_HXX_
 #include <tools/config.hxx>
+#endif
+#ifndef _PSPRINT_STRHELPER_HXX_
+#include <psprint/strhelper.hxx>
 #endif
 
 #if 0
@@ -189,8 +192,11 @@ FontNameDlg::FontNameDlg( Window *pParent ) :
         m_aFixedText( this, PaResId( RID_FNTNM_FIXED ) ),
         m_aOKButton( this, PaResId( RID_FNTNM_BTN_OK ) ),
         m_aRemoveButton( this, PaResId( RID_FNTNM_BTN_REMOVE ) ),
+        m_aRenameButton( this, PaResId( RID_FNTNM_BTN_RENAME ) ),
         m_aFontBox( this, PaResId( RID_FNTNM_LB_FONTS ) ),
         m_aImportButton( this, PaResId( RID_FNTNM_BTN_IMPORT ) ),
+        m_aRenameString( PaResId( RID_FNTNM_STR_RENAME ) ),
+        m_aRenameTTCString( PaResId( RID_FNTNM_STR_TTCRENAME ) ),
         m_rFontManager( PrintFontManager::get() )
 {
     FreeResource();
@@ -198,6 +204,7 @@ FontNameDlg::FontNameDlg( Window *pParent ) :
     m_aFontBox.EnableMultiSelection( TRUE );
 
     m_aOKButton.SetClickHdl( LINK( this, FontNameDlg, ClickBtnHdl ) );
+    m_aRenameButton.SetClickHdl( LINK( this, FontNameDlg, ClickBtnHdl ) );
     m_aRemoveButton.SetClickHdl( LINK( this, FontNameDlg, ClickBtnHdl ) );
     m_aImportButton.SetClickHdl( LINK( this, FontNameDlg, ClickBtnHdl ) );
     m_aFontBox.setDelPressedLink( LINK( this, FontNameDlg, DelPressedHdl ) );
@@ -387,6 +394,53 @@ IMPL_LINK( FontNameDlg, ClickBtnHdl, Button*, pButton )
     {
         FontImportDialog aDialog( this );
         aDialog.Execute();
+        init();
+    }
+    else if( pButton == &m_aRenameButton )
+    {
+        for( i = 0; i < m_aFontBox.GetSelectEntryCount(); i++ )
+        {
+            fontID aFont = (fontID)m_aFontBox.GetEntryData( m_aFontBox.GetSelectEntryPos( i ) );
+            ::std::list< fontID > aDuplicates;
+            m_rFontManager.getFileDuplicates( aFont, aDuplicates );
+            aDuplicates.push_front( aFont );
+            int nFonts = aDuplicates.size();
+            for( int n = 0; n < nFonts; n++ )
+            {
+                aFont = aDuplicates.front();
+                aDuplicates.pop_front();
+                String aFamily( m_rFontManager.getFontFamily( aFont ) );
+                ::std::list< OUString > aAlternatives;
+                m_rFontManager.getAlternativeFamilyNames( aFont, aAlternatives );
+                ::std::list< String > aChoices;
+                while( aAlternatives.size() )
+                {
+                    aChoices.push_back( aAlternatives.front() );
+                    aAlternatives.pop_front();
+                }
+                String aQueryTxt( m_aRenameString );
+                if( nFonts > 1 )
+                {
+                    aQueryTxt = m_aRenameTTCString;
+                    aQueryTxt.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%d1" ) ), String::CreateFromInt32( n+1 ) );
+                    aQueryTxt.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%d2" ) ), String::CreateFromInt32( nFonts ) );
+                }
+                QueryString aQuery( this, aQueryTxt, aFamily, aChoices );
+                if( aQuery.Execute() )
+                {
+                    aFamily.SearchAndReplaceAll( '-', ' ' );
+                    aFamily.SearchAndReplaceAll( '?', ' ' );
+                    aFamily.SearchAndReplaceAll( '*', ' ' );
+                    aFamily = WhitespaceToSpace( aFamily );
+                    if( aFamily.Len() )
+                    {
+                        String aXLFD = m_rFontManager.getFontXLFD( aFont );
+                        aXLFD.SetToken( 2, '-', aFamily );
+                        m_rFontManager.changeFontProperties( aFont, aXLFD );
+                    }
+                }
+            }
+        }
         init();
     }
     return 0;
@@ -608,6 +662,7 @@ IMPL_LINK( FontImportDialog, ClickBtnHdl, Button*, pButton )
     if( pButton == &m_aFromBtn )
     {
         PathDialog aDlg( this );
+        aDlg.SetPath( m_aFromDirEdt.GetText() );
         if( aDlg.Execute() )
         {
             m_aFromDirEdt.SetText( aDlg.GetPath() );

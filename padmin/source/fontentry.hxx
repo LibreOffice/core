@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontentry.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-15 15:30:08 $
+ *  last change: $Author: pl $ $Date: 2001-06-26 19:27:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,12 +156,15 @@ namespace padmin {
     {
     private:
         OKButton                    m_aOKButton;
+        PushButton                  m_aRenameButton;
         PushButton                  m_aRemoveButton;
         PushButton                  m_aImportButton;
 
         DelListBox                  m_aFontBox;
         FixedText                   m_aFixedText;
 
+        String                      m_aRenameString;
+        String                      m_aRenameTTCString;
         ::psp::PrintFontManager&    m_rFontManager;
 
         // maps fontID to XLFD

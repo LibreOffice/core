@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-19 13:47:44 $
+ *  last change: $Author: pl $ $Date: 2001-06-26 19:27:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@
 #define RID_STRQRY_EDT_NEWNAME        2
 #define RID_STRQRY_BTN_OK             3
 #define RID_STRQRY_BTN_CANCEL         4
+#define RID_STRQRY_BOX_NEWNAME         5
 
 #define RID_PPDIMPORT_DLG          1004
 #define RID_PPDIMP_BTN_OK             1
@@ -129,11 +130,14 @@
 #define RID_METDLG_BTN_CORRECT        5
 
 #define RID_FONTNAMEDIALOG              1030
-#define RID_FNTNM_FIXED                     1
-#define RID_FNTNM_BTN_OK                    2
-#define RID_FNTNM_BTN_REMOVE                3
-#define RID_FNTNM_LB_FONTS                  4
-#define RID_FNTNM_BTN_IMPORT                5
+#define RID_FNTNM_FIXED                    1
+#define RID_FNTNM_BTN_OK                   2
+#define RID_FNTNM_BTN_REMOVE               3
+#define RID_FNTNM_LB_FONTS                 4
+#define RID_FNTNM_BTN_IMPORT               5
+#define RID_FNTNM_BTN_RENAME                6
+#define RID_FNTNM_STR_RENAME                7
+#define RID_FNTNM_STR_TTCRENAME         8
 
 #define RID_TXT_REFETCH            1031
 
