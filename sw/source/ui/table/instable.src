@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instable.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2002-06-25 15:45:33 $
+ *  last change: $Author: os $ $Date: 2002-07-03 13:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,7 +402,7 @@ ModalDialog DLG_INSERT_TABLE
     PushButton BT_AUTOFORMAT
     {
         Pos = MAP_APPFONT ( 12 , 130 ) ;
-        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Size = MAP_APPFONT ( 66 , 14 ) ;
         TabStop = TRUE ;
         Text = "~Autoformat..." ;
         Text [ ENGLISH ] = "Autoformat..." ;
