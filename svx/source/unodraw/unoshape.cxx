@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-02 09:43:02 $
+ *  last change: $Author: cl $ $Date: 2001-02-05 14:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,9 @@
 #ifndef _COM_SUN_STAR_DRAWING_CIRCLEKIND_HPP_
 #include <com/sun/star/drawing/CircleKind.hpp>
 #endif
-
+#ifndef _B2D_MATRIX3D_HXX
+#include <goodies/matrix3d.hxx>
+#endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
@@ -1034,6 +1036,23 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
 
         switch( pMap->nWID )
         {
+        case OWN_ATTR_TRANSFORMATION:
+        {
+            drawing::HomogenMatrix3 aMatrix;
+            if(rVal >>= aMatrix)
+            {
+                XPolyPolygon aEmptyPolygon;
+                Matrix3D aMatrix3D;
+                pObj->TRGetBaseGeometry(aMatrix3D, aEmptyPolygon);
+                aMatrix3D[0] = Point3D( aMatrix.Line1.Column1, aMatrix.Line1.Column2, aMatrix.Line1.Column3 );
+                aMatrix3D[1] = Point3D( aMatrix.Line2.Column1, aMatrix.Line2.Column2, aMatrix.Line2.Column3 );
+                aMatrix3D[2] = Point3D( aMatrix.Line3.Column1, aMatrix.Line3.Column2, aMatrix.Line3.Column3 );
+                pObj->TRSetBaseGeometry(aMatrix3D, aEmptyPolygon);
+                return;
+            }
+            break;
+        }
+
         case OWN_ATTR_ZORDER:
         {
             sal_Int32 nNewOrdNum;
@@ -1500,6 +1519,27 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
 
         switch( pMap->nWID )
         {
+            case OWN_ATTR_TRANSFORMATION:
+            {
+                Matrix3D aMatrix3D;
+                XPolyPolygon aPolyPolygon;
+                pObj->TRGetBaseGeometry( aMatrix3D, aPolyPolygon );
+
+                drawing::HomogenMatrix3 aMatrix;
+                aMatrix.Line1.Column1 = aMatrix3D[0].X;
+                aMatrix.Line1.Column2 = aMatrix3D[0].Y;
+                aMatrix.Line1.Column3 = aMatrix3D[0].W;
+
+                aMatrix.Line2.Column1 = aMatrix3D[1].X;
+                aMatrix.Line2.Column2 = aMatrix3D[1].Y;
+                aMatrix.Line2.Column3 = aMatrix3D[1].W;
+
+                aMatrix.Line3.Column1 = aMatrix3D[2].X;
+                aMatrix.Line3.Column2 = aMatrix3D[2].Y;
+                aMatrix.Line3.Column3 = aMatrix3D[2].W;
+                aAny <<= aMatrix;
+                break;
+            }
             case OWN_ATTR_ZORDER:
             {
                 aAny <<= (sal_Int32)pObj->GetOrdNum();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-25 14:15:20 $
+ *  last change: $Author: cl $ $Date: 2001-02-05 14:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,9 @@
 #ifndef _COM_SUN_STAR_DRAWING_POINTSEQUENCE_HPP_
 #include <com/sun/star/drawing/PointSequence.hpp>
 #endif
-
+#ifndef _B2D_MATRIX3D_HXX
+#include <goodies/matrix3d.hxx>
+#endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
@@ -797,6 +799,36 @@ SvxShapePolyPolygon::~SvxShapePolyPolygon() throw()
 {
 }
 
+void SAL_CALL ImplSvxPolyPolygonToPointSequenceSequence( const drawing::PointSequenceSequence* pOuterSequence, XPolyPolygon& rNewPolyPolygon ) throw()
+{
+    // Koordinaten in das PolyPolygon packen
+    sal_Int32 nOuterSequenceCount = pOuterSequence->getLength();
+
+    // Zeiger auf innere sequences holen
+    const drawing::PointSequence* pInnerSequence = pOuterSequence->getConstArray();
+
+    for(sal_Int32 a=0;a<nOuterSequenceCount;a++)
+    {
+        sal_Int32 nInnerSequenceCount = pInnerSequence->getLength();
+
+        // Neues XPolygon vorbereiten
+        XPolygon aNewPolygon((USHORT)nInnerSequenceCount);
+
+        // Zeiger auf Arrays holen
+        const awt::Point* pArray = pInnerSequence->getConstArray();
+
+        for(sal_Int32 b=0;b<nInnerSequenceCount;b++)
+        {
+            aNewPolygon[(USHORT)b] = Point( pArray->X, pArray->Y );
+            pArray++;
+        }
+        pInnerSequence++;
+
+        // Neues Teilpolygon einfuegen
+        rNewPolyPolygon.Insert(aNewPolygon);
+    }
+}
+
 //----------------------------------------------------------------------
 
 void SAL_CALL SvxShapePolyPolygon::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
@@ -806,43 +838,31 @@ void SAL_CALL SvxShapePolyPolygon::setPropertyValue( const OUString& aPropertyNa
 
     if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYPOLYGON)))
     {
-        drawing::PointSequenceSequence* pOuterSequence = (drawing::PointSequenceSequence*)aValue.getValue();
-
-        if( !pOuterSequence || aValue.getValueType() != ::getCppuType((const drawing::PointSequenceSequence*)0) )
+        if( !aValue.getValue() || aValue.getValueType() != ::getCppuType((const drawing::PointSequenceSequence*)0) )
             throw lang::IllegalArgumentException();
 
-        // Koordinaten in das PolyPolygon packen
-        sal_Int32 nOuterSequenceCount = pOuterSequence->getLength();
-
-        // Neues PolyPolygon vorbereiten
         XPolyPolygon aNewPolyPolygon;
 
-        // Zeiger auf innere sequences holen
-        drawing::PointSequence* pInnerSequence = pOuterSequence->getArray();
+        ImplSvxPolyPolygonToPointSequenceSequence( (drawing::PointSequenceSequence*)aValue.getValue(), aNewPolyPolygon );
 
-        for(sal_Int32 a=0;a<nOuterSequenceCount;a++)
-        {
-            sal_Int32 nInnerSequenceCount = pInnerSequence->getLength();
-
-            // Neues XPolygon vorbereiten
-            XPolygon aNewPolygon((USHORT)nInnerSequenceCount);
-
-            // Zeiger auf Arrays holen
-            awt::Point* pArray = pInnerSequence->getArray();
-
-            for(sal_Int32 b=0;b<nInnerSequenceCount;b++)
-            {
-                aNewPolygon[(USHORT)b] = Point( pArray->X, pArray->Y );
-                pArray++;
-            }
-            pInnerSequence++;
-
-            // Neues Teilpolygon einfuegen
-            aNewPolyPolygon.Insert(aNewPolygon);
-        }
-
-        // Polygon setzen
         SetPolygon(aNewPolyPolygon);
+    }
+    else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Geometry")))
+    {
+        if( !aValue.getValue() || aValue.getValueType() != ::getCppuType((const drawing::PointSequenceSequence*)0) )
+            throw lang::IllegalArgumentException();
+
+        if( pObj )
+        {
+            XPolyPolygon aNewPolyPolygon;
+            Matrix3D aMatrix3D;
+
+            pObj->TRGetBaseGeometry(aMatrix3D, aNewPolyPolygon);
+
+            ImplSvxPolyPolygonToPointSequenceSequence( (drawing::PointSequenceSequence*)aValue.getValue(), aNewPolyPolygon );
+
+            pObj->TRSetBaseGeometry(aMatrix3D, aNewPolyPolygon);
+        }
     }
     else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYGON)))
     {
@@ -884,6 +904,35 @@ void SAL_CALL SvxShapePolyPolygon::setPropertyValue( const OUString& aPropertyNa
         pModel->SetChanged();
 }
 
+void SAL_CALL ImplSvxPointSequenceSequenceToPolyPolygon( const XPolyPolygon& rPolyPoly, drawing::PointSequenceSequence& rRetval )
+{
+    if( rRetval.getLength() != rPolyPoly.Count() )
+        rRetval.realloc( rPolyPoly.Count() );
+
+    // Zeiger auf aeussere Arrays holen
+    drawing::PointSequence* pOuterSequence = rRetval.getArray();
+
+    for(sal_uInt16 a=0;a<rPolyPoly.Count();a++)
+    {
+        // Einzelpolygon holen
+        const XPolygon& rPoly = rPolyPoly[a];
+
+        // Platz in Arrays schaffen
+        pOuterSequence->realloc((sal_Int32)rPoly.GetPointCount());
+
+        // Pointer auf arrays holen
+        awt::Point* pInnerSequence = pOuterSequence->getArray();
+
+        for(sal_uInt16 b=0;b<rPoly.GetPointCount();b++)
+        {
+            *pInnerSequence = awt::Point( rPoly[b].X(), rPoly[b].Y() );
+            pInnerSequence++;
+        }
+
+        pOuterSequence++;
+    }
+}
+
 //----------------------------------------------------------------------
 
 uno::Any SAL_CALL SvxShapePolyPolygon::getPropertyValue( const OUString& aPropertyName )
@@ -897,28 +946,22 @@ uno::Any SAL_CALL SvxShapePolyPolygon::getPropertyValue( const OUString& aProper
         const XPolyPolygon& rPolyPoly = GetPolygon();
         drawing::PointSequenceSequence aRetval( rPolyPoly.Count() );
 
-        // Zeiger auf aeussere Arrays holen
-        drawing::PointSequence* pOuterSequence = aRetval.getArray();
+        ImplSvxPointSequenceSequenceToPolyPolygon( rPolyPoly, aRetval );
 
-        for(sal_uInt16 a=0;a<rPolyPoly.Count();a++)
-        {
-            // Einzelpolygon holen
-            const XPolygon& rPoly = rPolyPoly[a];
+        return uno::Any( &aRetval, ::getCppuType((const drawing::PointSequenceSequence*)0) );
+    }
+    else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Geometry")))
+    {
+        // PolyPolygon in eine struct PolyPolygon packen
+        XPolyPolygon aPolyPoly;
+        Matrix3D aMatrix3D;
+        if( pObj )
+            pObj->TRGetBaseGeometry( aMatrix3D, aPolyPoly );
 
-            // Platz in Arrays schaffen
-            pOuterSequence->realloc((sal_Int32)rPoly.GetPointCount());
+        drawing::PointSequenceSequence aRetval( aPolyPoly.Count() );
 
-            // Pointer auf arrays holen
-            awt::Point* pInnerSequence = pOuterSequence->getArray();
+        ImplSvxPointSequenceSequenceToPolyPolygon( aPolyPoly, aRetval );
 
-            for(sal_uInt16 b=0;b<rPoly.GetPointCount();b++)
-            {
-                *pInnerSequence = awt::Point( rPoly[b].X(), rPoly[b].Y() );
-                pInnerSequence++;
-            }
-
-            pOuterSequence++;
-        }
         return uno::Any( &aRetval, ::getCppuType((const drawing::PointSequenceSequence*)0) );
     }
     else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYGON)))
@@ -1010,6 +1053,46 @@ SvxShapePolyPolygonBezier::~SvxShapePolyPolygonBezier() throw()
 {
 }
 
+void SAL_CALL ImplSvxPolyPolygonBezierCoordsToPolyPolygon( drawing::PolyPolygonBezierCoords* pSourcePolyPolygon, XPolyPolygon& rNewPolyPolygon )
+    throw( IllegalArgumentException )
+{
+    sal_Int32 nOuterSequenceCount = pSourcePolyPolygon->Coordinates.getLength();
+    if(pSourcePolyPolygon->Flags.getLength() != nOuterSequenceCount)
+        throw IllegalArgumentException();
+
+    // Zeiger auf innere sequences holen
+    const drawing::PointSequence* pInnerSequence = pSourcePolyPolygon->Coordinates.getConstArray();
+    const drawing::FlagSequence* pInnerSequenceFlags = pSourcePolyPolygon->Flags.getConstArray();
+
+    for(sal_Int32 a=0;a<nOuterSequenceCount;a++)
+    {
+        sal_Int32 nInnerSequenceCount = pInnerSequence->getLength();
+
+        if(pInnerSequenceFlags->getLength() != nInnerSequenceCount)
+            throw IllegalArgumentException();
+
+        // Neues XPolygon vorbereiten
+        XPolygon aNewPolygon((USHORT)nInnerSequenceCount);
+
+        // Zeiger auf Arrays holen
+        const awt::Point* pArray = pInnerSequence->getConstArray();
+        const drawing::PolygonFlags* pArrayFlags = pInnerSequenceFlags->getConstArray();
+
+        for(sal_Int32 b=0;b<nInnerSequenceCount;b++)
+        {
+            aNewPolygon[(USHORT)b] = Point( pArray->X, pArray->Y );
+            pArray++;
+            aNewPolygon.SetFlags((USHORT)b, (XPolyFlags)((sal_uInt16)*pArrayFlags++));
+        }
+
+        pInnerSequence++;
+        pInnerSequenceFlags++;
+
+        // Neues Teilpolygon einfuegen
+        rNewPolyPolygon.Insert(aNewPolygon);
+    }
+}
+
 //----------------------------------------------------------------------
 void SAL_CALL SvxShapePolyPolygonBezier::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, com::sun::star::beans::PropertyVetoException, com::sun::star::lang::IllegalArgumentException )
@@ -1018,53 +1101,27 @@ void SAL_CALL SvxShapePolyPolygonBezier::setPropertyValue( const OUString& aProp
 
     if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYPOLYGONBEZIER)))
     {
-        // Koordinaten in das PolyPolygon packen
-        drawing::PolyPolygonBezierCoords* pSourcePolyPolygon = (drawing::PolyPolygonBezierCoords*)aValue.getValue();
-
-        if( !pSourcePolyPolygon || aValue.getValueType() != ::getCppuType((const drawing::PolyPolygonBezierCoords*)0) )
+        if( !aValue.getValue() || aValue.getValueType() != ::getCppuType((const drawing::PolyPolygonBezierCoords*)0) )
             throw IllegalArgumentException();
 
-        sal_Int32 nOuterSequenceCount = pSourcePolyPolygon->Coordinates.getLength();
-        if(pSourcePolyPolygon->Flags.getLength() != nOuterSequenceCount)
-            throw IllegalArgumentException();
-
-        // Neues PolyPolygon vorbereiten
         XPolyPolygon aNewPolyPolygon;
-
-        // Zeiger auf innere sequences holen
-        const drawing::PointSequence* pInnerSequence = pSourcePolyPolygon->Coordinates.getConstArray();
-        const drawing::FlagSequence* pInnerSequenceFlags = pSourcePolyPolygon->Flags.getConstArray();
-
-        for(sal_Int32 a=0;a<nOuterSequenceCount;a++)
-        {
-            sal_Int32 nInnerSequenceCount = pInnerSequence->getLength();
-
-            if(pInnerSequenceFlags->getLength() != nInnerSequenceCount)
-                throw IllegalArgumentException();
-
-            // Neues XPolygon vorbereiten
-            XPolygon aNewPolygon((USHORT)nInnerSequenceCount);
-
-            // Zeiger auf Arrays holen
-            const awt::Point* pArray = pInnerSequence->getConstArray();
-            const drawing::PolygonFlags* pArrayFlags = pInnerSequenceFlags->getConstArray();
-
-            for(sal_Int32 b=0;b<nInnerSequenceCount;b++)
-            {
-                aNewPolygon[(USHORT)b] = Point( pArray->X, pArray->Y );
-                pArray++;
-                aNewPolygon.SetFlags((USHORT)b, (XPolyFlags)((sal_uInt16)*pArrayFlags++));
-            }
-
-            pInnerSequence++;
-            pInnerSequenceFlags++;
-
-            // Neues Teilpolygon einfuegen
-            aNewPolyPolygon.Insert(aNewPolygon);
-
-        }
-        // Polygon setzen
+        ImplSvxPolyPolygonBezierCoordsToPolyPolygon( (drawing::PolyPolygonBezierCoords*)aValue.getValue(), aNewPolyPolygon );
         SetPolygon(aNewPolyPolygon);
+    }
+    else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Geometry")))
+    {
+        if( !aValue.getValue() || aValue.getValueType() != ::getCppuType((const drawing::PolyPolygonBezierCoords*)0) )
+            throw IllegalArgumentException();
+
+        if( pObj )
+        {
+            Matrix3D aMatrix3D;
+            XPolyPolygon aNewPolyPolygon;
+
+            pObj->TRGetBaseGeometry(aMatrix3D, aNewPolyPolygon);
+            ImplSvxPolyPolygonBezierCoordsToPolyPolygon( (drawing::PolyPolygonBezierCoords*)aValue.getValue(), aNewPolyPolygon );
+            pObj->TRSetBaseGeometry(aMatrix3D, aNewPolyPolygon);
+        }
     }
     else
     {
@@ -1073,6 +1130,40 @@ void SAL_CALL SvxShapePolyPolygonBezier::setPropertyValue( const OUString& aProp
 
     if( pModel )
         pModel->SetChanged();
+}
+
+void SAL_CALL ImplSvxPolyPolygonToPolyPolygonBezierCoords( const XPolyPolygon& rPolyPoly, drawing::PolyPolygonBezierCoords& rRetval )
+{
+    // Polygone innerhalb vrobereiten
+    rRetval.Coordinates.realloc((sal_Int32)rPolyPoly.Count());
+    rRetval.Flags.realloc((sal_Int32)rPolyPoly.Count());
+
+    // Zeiger auf aeussere Arrays holen
+    drawing::PointSequence* pOuterSequence = rRetval.Coordinates.getArray();
+    drawing::FlagSequence*  pOuterFlags = rRetval.Flags.getArray();
+
+    for(sal_uInt16 a=0;a<rPolyPoly.Count();a++)
+    {
+        // Einzelpolygon holen
+        const XPolygon& rPoly = rPolyPoly[a];
+
+        // Platz in Arrays schaffen
+        pOuterSequence->realloc((sal_Int32)rPoly.GetPointCount());
+        pOuterFlags->realloc((sal_Int32)rPoly.GetPointCount());
+
+        // Pointer auf arrays holen
+        awt::Point* pInnerSequence = pOuterSequence->getArray();
+        drawing::PolygonFlags* pInnerFlags = pOuterFlags->getArray();
+
+        for(sal_uInt16 b=0;b<rPoly.GetPointCount();b++)
+        {
+            *pInnerSequence++ = awt::Point( rPoly[b].X(), rPoly[b].Y() );
+            *pInnerFlags++ = (drawing::PolygonFlags)((sal_uInt16)rPoly.GetFlags(b));
+        }
+
+        pOuterSequence++;
+        pOuterFlags++;
+    }
 }
 
 //----------------------------------------------------------------------
@@ -1086,38 +1177,24 @@ uno::Any SAL_CALL SvxShapePolyPolygonBezier::getPropertyValue( const OUString& a
         // PolyPolygon in eine struct PolyPolygon packen
         const XPolyPolygon& rPolyPoly = GetPolygon();
         drawing::PolyPolygonBezierCoords aRetval;
+        ImplSvxPolyPolygonToPolyPolygonBezierCoords(rPolyPoly, aRetval );
 
-        // Polygone innerhalb vrobereiten
-        aRetval.Coordinates.realloc((sal_Int32)rPolyPoly.Count());
-        aRetval.Flags.realloc((sal_Int32)rPolyPoly.Count());
-
-        // Zeiger auf aeussere Arrays holen
-        drawing::PointSequence* pOuterSequence = aRetval.Coordinates.getArray();
-        drawing::FlagSequence*  pOuterFlags = aRetval.Flags.getArray();
-
-        for(sal_uInt16 a=0;a<rPolyPoly.Count();a++)
-        {
-            // Einzelpolygon holen
-            const XPolygon& rPoly = rPolyPoly[a];
-
-            // Platz in Arrays schaffen
-            pOuterSequence->realloc((sal_Int32)rPoly.GetPointCount());
-            pOuterFlags->realloc((sal_Int32)rPoly.GetPointCount());
-
-            // Pointer auf arrays holen
-            awt::Point* pInnerSequence = pOuterSequence->getArray();
-            drawing::PolygonFlags* pInnerFlags = pOuterFlags->getArray();
-
-            for(sal_uInt16 b=0;b<rPoly.GetPointCount();b++)
-            {
-                *pInnerSequence++ = awt::Point( rPoly[b].X(), rPoly[b].Y() );
-                *pInnerFlags++ = (drawing::PolygonFlags)((sal_uInt16)rPoly.GetFlags(b));
-            }
-
-            pOuterSequence++;
-            pOuterFlags++;
-        }
         return uno::Any( &aRetval, ::getCppuType((const drawing::PolyPolygonBezierCoords*)0));
+    }
+    else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYPOLYGONBEZIER)))
+    {
+        if( pObj )
+        {
+            // PolyPolygon in eine struct PolyPolygon packen
+            XPolyPolygon aPolyPoly;
+            Matrix3D aMatrix3D;
+            pObj->TRGetBaseGeometry( aMatrix3D, aPolyPoly );
+
+            drawing::PolyPolygonBezierCoords aRetval;
+            ImplSvxPolyPolygonToPolyPolygonBezierCoords(aPolyPoly, aRetval );
+
+            return uno::Any( &aRetval, ::getCppuType((const drawing::PolyPolygonBezierCoords*)0));
+        }
     }
     else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYGONKIND)))
     {

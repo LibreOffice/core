@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-23 13:31:08 $
+ *  last change: $Author: cl $ $Date: 2001-02-05 14:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,7 @@ SfxItemPropertyMap* ImplGetSvxPolyPolygonPropertyMap()
 {
     static SfxItemPropertyMap aPolyPolygonPropertyMap_Impl[] =
     {
+        { MAP_CHAR_LEN("Geometry"), OWN_ATTR_BASE_GEOMETRY, SEQTYPE(::getCppuType((const ::com::sun::star::drawing::PointSequenceSequence*)0)), 0, 0 },
         SPECIAL_POLYGON_PROPERTIES
         SPECIAL_POLYPOLYGON_PROPERTIES
         FILL_PROPERTIES
@@ -179,6 +180,7 @@ SfxItemPropertyMap* ImplGetSvxPolyPolygonBezierPropertyMap()
 {
     static SfxItemPropertyMap aPolyPolygonBezierPropertyMap_Impl[] =
     {
+        { MAP_CHAR_LEN("Geometry"), OWN_ATTR_BASE_GEOMETRY, &::getCppuType((const ::com::sun::star::drawing::PolyPolygonBezierCoords*)0), 0, 0 },
         SPECIAL_POLYGON_PROPERTIES
         SPECIAL_POLYPOLYGONBEZIER_PROPERTIES
         FILL_PROPERTIES
