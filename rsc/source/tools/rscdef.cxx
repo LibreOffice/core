@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdef.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:53:49 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 17:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1278,7 +1278,7 @@ BOOL RscFileTab::ChangeDef( const ByteString & rDefName,
 {
     RscDefine * pDef = FindDef( rDefName );
     RscFile   * pFile;
-    ULONG       lPos;
+    ULONG       lPos = 0;
 
     if( pDef ){
         pFile = GetFile( pDef->GetFileKey() );
