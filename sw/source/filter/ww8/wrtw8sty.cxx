@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:08 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,6 @@ public:
     USHORT Count() const                { return aPos.Count(); }
     void Append( ULONG nStartCpOrFc );
     void Write( SvStream& rStrm );
-    ULONG GetCP( USHORT n ) const       { return aPos[ n ]; }
 };
 
 //------------------------------------------------------------
