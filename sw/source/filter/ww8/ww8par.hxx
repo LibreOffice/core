@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:56:55 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:12:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1265,7 +1265,9 @@ private:
     //This converts MS Asian Typography information into OOo's
     void ImportDopTypography(const WW8DopTypography &rTypo);
 
-    ULONG LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss);
+    ULONG LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGloss);
+    ULONG SetSubStreams(SvStorageStreamRef &rTableStream, SvStorageStreamRef &rDataStream);
+    ULONG CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos);
 
     bool StartTable(WW8_CP nStartCp);
     bool InEqualApo(int nLvl) const;
