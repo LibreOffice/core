@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomailmerge.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:38:44 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:26:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,10 +187,11 @@ class SwXMailMerge :
     // disallow use of copy-constructor and assignment-operator for now
     SwXMailMerge( const SwXMailMerge & );
     SwXMailMerge & operator = ( const SwXMailMerge & );
-
+protected:
+    virtual ~SwXMailMerge();
 public:
     SwXMailMerge();
-    virtual ~SwXMailMerge();
+
 
     void LaunchMailMergeEvent( const com::sun::star::text::MailMergeEvent &rData ) const;
 
