@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-19 18:01:09 $
+ *  last change: $Author: mba $ $Date: 2001-12-20 12:29:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1516,22 +1516,26 @@ void SfxObjectShell::Invalidate( USHORT nId )
         Invalidate_Impl( pFrame->GetBindings(), nId );
 }
 
+// nMacroMode == 3 : uninitialized
+// nMacroMode == 4 : always execute, no warning
+// other values as in svtools/securityoptions.hxx
+
 void SfxObjectShell::AdjustMacroMode( const String& rScriptType )
 {
     SvtSecurityOptions aOpt;
 
     // eFROM_LIST is uninitialized default
-    if ( pImp->nMacroMode == eFROM_LIST )
+    if ( pImp->nMacroMode == 3 )
         // get setting from configuration
         pImp->nMacroMode = aOpt.GetBasicMode();
 
-    if ( pImp->nMacroMode == eFROM_LIST )
+    if ( pImp->nMacroMode == eFROM_LIST || pImp->nMacroMode == eALWAYS_EXECUTE )
     {
         // user was not asked before
         // ask one time and store result for all future calls
         sal_Bool bWarn = aOpt.IsWarningEnabled();
         sal_Bool bConfirm = aOpt.IsConfirmationEnabled();
-        sal_Bool bSecure = IsSecure();
+        sal_Bool bSecure = pImp->nMacroMode == eALWAYS_EXECUTE || IsSecure();
         if ( bSecure && bWarn || !bSecure && bConfirm )
         {
             QueryBox aBox( NULL, SfxResId( DLG_MACROQUERY ) );
@@ -1553,6 +1557,6 @@ void SfxObjectShell::AdjustMacroMode( const String& rScriptType )
             bSecure = ( aBox.Execute() == RET_OK );
         }
 
-        pImp->nMacroMode = bSecure ? eALWAYS_EXECUTE : eNEVER_EXECUTE;
+        pImp->nMacroMode = bSecure ? 4 : eNEVER_EXECUTE;
     }
 }

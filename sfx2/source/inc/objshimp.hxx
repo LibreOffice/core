@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-17 14:24:37 $
+ *  last change: $Author: mba $ $Date: 2001-12-20 12:29:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,7 @@ struct SfxObjectShell_Impl
         bInCloseEvent( sal_False ),
         bLoadingWindows( sal_False )
         , nStyleFilter( 0 )
-        , nMacroMode( eFROM_LIST )
+        , nMacroMode( 3 )
     {}
     ~SfxObjectShell_Impl();
 
