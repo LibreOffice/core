@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iniman.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 14:03:51 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:33:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ ErrorBox ERRBOX_CHECK_PLZ
     Message[ italian ] = "Il C.A.P. specificato non � valido.\nDeve iniziare con un numero o con una lettera e\npu� contenere soltanto numeri, lettere, spazi vuoti e trattini.";
     Message[ portuguese_brazilian ] = "O c�digo postal (CEP) especificado est� incorreto.\nEle deve come�ar por um algarismo ou uma letra e s� pode conter algarismos, letras, espa�os em branco e h�fens.";
     Message[ portuguese ] = "O c�digo postal especificado est� incorrecto.\nEste tem que come�ar por um algarismo ou uma letra e s� pode conter algarismos, letras, espa�os em branco e h�fens.";
-    Message[ danish ] = "Det angivne postnummer er ugyldigt.\nDet skal begynde med et tal eller bogstav og\nm� kun indeholde tal, bogstaver, mellemrum og bindestreger.";
+    Message[ danish ] = "Det angivne postnummer er ugyldigt.\nDet skal begynde med et tal (eller i nogle tilf�lde et bogstav) og\nm� kun indeholde tal, bogstaver, mellemrum og bindestreger.";
     Message[ french ] = "Le code postal indiqu� est incorrect.\nIl doit commencer par un chiffre ou une lettre et\ncontenir uniquement des chiffres, lettres, espaces ou tirets.";
     Message[ swedish ] = "Det angivna postnumret �r ogiltigt.\nDet m�ste b�rja med en siffra eller en bokstav och\nf�r bara inneh�lla siffror, bokst�ver, mellanslag och bindestreck.";
     Message[ dutch ] = "Deze postcode is ongeldig.\nDe code moet beginnen met een cijfer of een letter en\nmag alleen cijfers, letters, spaties en verbindingsstreepjes bevatten.";
@@ -92,7 +92,10 @@ ErrorBox ERRBOX_CHECK_PLZ
     Message[ hebrew ] = "‮המיקוד אינו חוקי.\nמיקוד חוקי חייב להתחיל עם מספר (או באות במקרים מסויימים)\nויכול לכלול רק מספרים, אותיות, רווחים ומקפים.‬";
     Message[ hindi ] = "निर्दिष्ट की हुयी ZIP कोड अमान्य है ।\nZIP कोड एक संख्या से शुरु होना चाहिए (कुछ केस में एक अक्षर) और\n संख्या, अक्षर, अंतर और डॉश को ही सम्मिलित कर सकता है ।";
     Message[ slovak ] = "Zadaný PSČ kód je neplatný.\nPSČ kód by mal začínať číslicou (alebo písmenom)\na môže obsahovať iba písmená, číslice, medzery\npomlčky.";
+    Message[ hungarian ] = "A megadott irányítószám helytelen. \nAz irányítószámot számmal kell kezdeni (vagy néha betűvel) \nés csak számot, betűt, szóközt és kötőjelet tartalmazhat.";
+    Message[ slovenian ] = "Vnešena poštna številka ni veljavna.\nPoštna številka se mora začeti s številko (ali v nekaterih primerih s črko) in\nlahko vsebuje samo številke, črke, presledke in črtice.";
 };
+
 
 
 
