@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 10:02:23 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,10 +94,6 @@
 #endif
 #ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
-#endif
-
-#ifndef _SVX_FMPROP_HXX
-#include "fmprop.hxx"
 #endif
 
 #ifndef _SVX_FMSERVS_HXX
