@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: mt $ $Date: 2001-11-29 17:14:23 $
+#   last change: $Author: tbe $ $Date: 2002-03-18 18:04:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -111,6 +111,10 @@ SHL1STDLIBS +=
 SHL1STDLIBS +=\
     -lX11
 .ENDIF
+
+RES1FILELIST=$(SRS)$/awt.srs
+RESLIB1NAME=$(TARGET)
+RESLIB1SRSFILES=$(RES1FILELIST)
 
 .INCLUDE :	target.mk
 
