@@ -18,6 +18,8 @@ fl  filter\source\mswordxml                 nmake   -   all fl_mswordxml        
 fl  filter\source\config\cache              nmake   -   all fl_config           NULL
 fl  filter\source\config\tools\utils        nmake   -   all fl_fcfg_utils       NULL
 fl  filter\source\config\tools\merge        nmake   -   all fl_fcfg_merge fl_fcfg_utils      NULL
+fl  filter\source\config\fragments\types    nmake   -   all fl_fcfg_fragments_types  NULL
+fl  filter\source\config\fragments\filters  nmake   -   all fl_fcfg_fragments_filters  NULL
 fl  filter\source\config\fragments          nmake   -   all fl_fcfg_fragments fl_fcfg_merge  NULL
-fl  filter\util                             nmake   -   all fl_util fl_flash fl_xsltdialog fl_pdf fl_config fl_fcfg_utils fl_fcfg_merge fl_fcfg_fragments NULL
+fl  filter\util                             nmake   -   all fl_util fl_flash fl_xsltdialog fl_pdf fl_config fl_fcfg_utils fl_fcfg_merge fl_fcfg_fragments fl_fcfg_fragments_types fl_fcfg_fragments_filters NULL
 
