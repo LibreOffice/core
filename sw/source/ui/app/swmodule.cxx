@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:31 $
+ *  last change: $Author: os $ $Date: 2000-10-12 06:30:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 
 #ifndef _SV_WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
+#endif
+#ifndef _SVX_GALBRWS_HXX_
+#include <svx/galbrws.hxx>
 #endif
 #ifndef _SVDOBJ_HXX //autogen
 #include <svx/svdobj.hxx>
@@ -333,13 +336,10 @@ SwModule::SwModule( SvFactory* pFact,
     OFF_APP()->RegisterEvent(SW_EVENT_MAIL_MERGE, SW_RES(STR_PRINT_MERGE_MACRO));
     OFF_APP()->RegisterEvent(SW_EVENT_PAGE_COUNT, SW_RES(STR_PAGE_COUNT_MACRO));
     pModuleConfig = new SwModuleOptions;
-    pModuleConfig->Initialize();
 
     //Die brauchen wie sowieso
     pToolbarConfig = new SwToolbarConfigItem( sal_False );
-    pToolbarConfig->Initialize();
     pWebToolbarConfig = new SwToolbarConfigItem( sal_True );
-    pWebToolbarConfig->Initialize();
 
     pStdFontConfig = new SwStdFontConfig;
 
@@ -538,6 +538,7 @@ void SwDLL::RegisterControls()
     SvxGrafGammaToolBoxControl::RegisterControl( SID_ATTR_GRAF_GAMMA, pMod );
     SvxGrafTransparenceToolBoxControl::RegisterControl( SID_ATTR_GRAF_TRANSPARENCE, pMod );
     SvxGrafModeToolBoxControl::RegisterControl( SID_ATTR_GRAF_MODE, pMod );
+    GalleryChildWindow::RegisterChildWindow(0, pMod);
 }
 
 
@@ -601,64 +602,5 @@ void    SwModule::RemoveAttrPool()
     SetPool(0);
     DELETEZ(pAttrPool);
 }
-
-
-/*-------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.75  2000/09/18 16:05:12  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.74  2000/09/08 15:11:56  os
-    use configuration service
-
-    Revision 1.73  2000/09/04 11:42:21  tbe
-    basicide, isetbrw, si, vcdlged moved from svx to basctl
-
-    Revision 1.72  2000/08/02 07:53:07  jp
-    register GrafToolboxControls with SlotId
-
-    Revision 1.71  2000/07/31 19:25:18  jp
-    new attributes for CJK/CTL and graphic
-
-    Revision 1.70  2000/06/08 09:40:08  os
-    ContentBroker not in SwModule
-
-    Revision 1.69  2000/06/07 13:17:07  os
-    using UCB
-
-    Revision 1.68  2000/05/29 08:03:59  os
-    new scanner interface
-
-    Revision 1.67  2000/05/26 07:21:28  os
-    old SW Basic API Slots removed
-
-    Revision 1.66  2000/05/16 09:15:11  os
-    project usr removed
-
-    Revision 1.65  2000/05/09 14:40:15  os
-    BASIC interface partially removed
-
-    Revision 1.64  2000/04/11 08:01:31  os
-    UNICODE
-
-    Revision 1.63  2000/03/30 10:48:58  os
-    UNO III
-
-    Revision 1.62  2000/03/21 15:47:51  os
-    UNOIII
-
-    Revision 1.61  2000/02/11 14:43:11  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.60  2000/02/01 09:51:46  os
-    #72282# SwWebBaseShell removed
-
-    Revision 1.59  2000/01/11 19:37:43  tl
-    #70735# xDicListEvtListener added
-
-    Revision 1.58  1999/11/23 11:20:12  os
-    header corrected
-
--------------------------------------------------------------------------*/
 
 
