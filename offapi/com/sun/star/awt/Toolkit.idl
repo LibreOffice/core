@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Toolkit.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:40 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:52:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,20 +65,22 @@
 #include <com/sun/star/awt/XToolkit.idl>
 #endif
 
+#ifndef __com_sun_star_awt_XDataTransferProviderAccess_idl__
+#include <com/sun/star/awt/XDataTransferProviderAccess.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XSystemChildFactory_idl__
+#include <com/sun/star/awt/XSystemChildFactory.idl>
+#endif
+
 
 //=============================================================================
 
 module com {  module sun {  module star {  module awt {
 
-interface XDataTransferProviderAccess;
-interface XSystemChildFactory;
-
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::awt::Toolkit
 /** describes a toolkit that creates windows on a screen.
-
-
 
     <p>The design of the interfaces for the toolkit implementation
     should be remote. This means that the calls to the interfaces
@@ -87,13 +89,12 @@ interface XSystemChildFactory;
  */
 service Toolkit
 {
-    // DocMerge: empty anyway
     interface XToolkit;
 
-    // interface for clipbaord access and drag-and-drop protocol
-    [optional] interface XDataTransferProviderAccess;
+    [optional] interface com::sun::star::awt::XDataTransferProviderAccess;
 
-    [optional] interface XSystemChildFactory;
+    [optional] interface com::sun::star::awt::XSystemChildFactory;
+
 };
 
 //=============================================================================
