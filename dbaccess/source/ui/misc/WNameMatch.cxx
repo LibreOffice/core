@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WNameMatch.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 14:31:35 $
+ *  last change: $Author: oj $ $Date: 2002-05-10 09:46:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,11 +220,11 @@ sal_Bool OWizNameMatching::LeavePage()
         {
             const ODatabaseExport::TColumnVector* pDestColumns          = m_pParent->getDestVector();
             ODatabaseExport::TColumnVector::const_iterator aDestIter    = pDestColumns->begin();
-            for(;aDestIter != pDestColumns->end();++aDestIter)
-                if((*aDestIter)->second == pDestField)
-                    break;
 
-            m_pParent->m_vColumnPos[nPos]   = pDestColumns->end() - aDestIter;
+            for(;aDestIter != pDestColumns->end() && (*aDestIter)->second != pDestField;++aDestIter)
+                ;
+
+            m_pParent->m_vColumnPos[nPos]   = ::std::distance(pDestColumns->begin(),aDestIter) + 1;
             const OTypeInfo* pTypeInfo = m_pParent->convertType((*aDestIter)->second->getTypeInfo());
             sal_Int32 nType = ::com::sun::star::sdbc::DataType::VARCHAR;
             if(pTypeInfo)
