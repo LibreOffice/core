@@ -2,9 +2,9 @@
  *
  *  $RCSfile: kernel9x.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-17 07:21:02 $
+ *  last change: $Author: hro $ $Date: 2001-07-30 14:34:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,19 @@ extern "C" {
 
 #ifdef SetCurrentDirectoryW
 #undef SetCurrentDirectoryW
+#endif
+
+#ifdef GetVolumeInformationW
+#undef GetVolumeInformationW
+#endif
+
+
+#ifdef GetDiskFreeSpaceExA
+#undef GetDiskFreeSpaceExA
+#endif
+
+#ifdef GetDiskFreeSpaceExW
+#undef GetDiskFreeSpaceExW
 #endif
 
 //------------------------------------------------------------------------
@@ -334,6 +347,34 @@ KERNEL9X_API BOOL ( WINAPI * lpfnSetCurrentDirectoryW )(
     LPCWSTR lpPathName  // new directory name
 );
 
+// GetVolumeInformation
+KERNEL9X_API BOOL ( WINAPI* lpfnGetVolumeInformationW )(
+    LPCWSTR lpRootPathName,             // root directory
+    LPWSTR  lpVolumeNameBuffer,         // volume name buffer
+    DWORD   nVolumeNameSize,            // length of name buffer
+    LPDWORD lpVolumeSerialNumber,       // volume serial number
+    LPDWORD lpMaximumComponentLength,   // maximum file name length
+    LPDWORD lpFileSystemFlags,          // file system options
+    LPWSTR  lpFileSystemName,           // file system name buffer
+    DWORD   nFileSystemNameSize         // length of file system name buffer
+);
+
+// GetDiskFreeSpaceExA
+KERNEL9X_API BOOL (WINAPI *lpfnGetDiskFreeSpaceExA)(
+  LPCSTR lpDirectoryName,                  // directory name
+  PULARGE_INTEGER lpFreeBytesAvailable,    // bytes available to caller
+  PULARGE_INTEGER lpTotalNumberOfBytes,    // bytes on disk
+  PULARGE_INTEGER lpTotalNumberOfFreeBytes // free bytes on disk
+);
+
+// GetDiskFreeSpaceExW
+KERNEL9X_API BOOL (WINAPI *lpfnGetDiskFreeSpaceExW)(
+  LPCWSTR lpDirectoryName,                 // directory name
+  PULARGE_INTEGER lpFreeBytesAvailable,    // bytes available to caller
+  PULARGE_INTEGER lpTotalNumberOfBytes,    // bytes on disk
+  PULARGE_INTEGER lpTotalNumberOfFreeBytes // free bytes on disk
+);
+
 //------------------------------------------------------------------------
 // redefine the above undefined macros so that the preprocessor replaces
 // all occurrences of this macros with our function pointer
@@ -364,6 +405,10 @@ KERNEL9X_API BOOL ( WINAPI * lpfnSetCurrentDirectoryW )(
 
 #define GetCurrentDirectoryW        lpfnGetCurrentDirectoryW
 #define SetCurrentDirectoryW        lpfnSetCurrentDirectoryW
+
+#define GetVolumeInformationW       lpfnGetVolumeInformationW
+#define GetDiskFreeSpaceExA         lpfnGetDiskFreeSpaceExA
+#define GetDiskFreeSpaceExW         lpfnGetDiskFreeSpaceExW
 
 #ifdef __cplusplus
 }
