@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-21 15:07:11 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 23:23:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,7 +322,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ polish ] = "Stan SQL";
         Text[ portuguese_brazilian ] = "SQL State";
         Text[ japanese ] = "SQL ½Ã°À½";
-        Text[ korean ] = "SQL ½ºÅ×ÀÌÅÍ½º";
+        Text[ korean ] = "SQL-»óÅÂ";
         Text[ chinese_simplified ] = "SQL ×´Ì¬";
         Text[ chinese_traditional ] = "SQL ª¬ºA";
         Text[ turkish ] = "SQL State";
@@ -361,6 +361,9 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.16  2001/06/21 15:07:11  fme
+ *  Fix #86988#: Redesign of dialogs
+ *
  *  Revision 1.15  2001/06/13 22:44:21  kz
  *  Merge SRC633: 14.06.01 - 00:44:36
  *
@@ -409,6 +412,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
  *
  *  Revision 1.0 02.10.00 12:43:18  fs
  ************************************************************************/
+
 
 
 
