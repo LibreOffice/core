@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscobj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-20 17:02:21 $
+ *  last change: $Author: mav $ $Date: 2003-12-02 15:33:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,7 @@ uno::Any SAL_CALL OCommonEmbeddedObject::queryInterface( const uno::Type& rType 
                                         static_cast< embed::XLinkageSupport* >( this ),
                                         static_cast< embed::XClassifiedObject* >( this ),
                                         static_cast< embed::XComponentSupplier* >( this ),
+                                        static_cast< util::XCloseable* >( this ),
                                         static_cast< document::XEventBroadcaster* >( this ) );
 
     if ( aReturn.hasValue() )
@@ -295,6 +296,7 @@ uno::Sequence< uno::Type > SAL_CALL OCommonEmbeddedObject::getTypes()
                                         ::getCppuType( (const uno::Reference< embed::XLinkageSupport >*)NULL ),
                                         ::getCppuType( (const uno::Reference< embed::XClassifiedObject >*)NULL ),
                                         ::getCppuType( (const uno::Reference< embed::XComponentSupplier >*)NULL ),
+                                        ::getCppuType( (const uno::Reference< util::XCloseable >*)NULL ),
                                         ::getCppuType( (const uno::Reference< document::XEventBroadcaster >*)NULL ) );
 
             pTypeCollection = &aTypeCollection ;
