@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: ghiggins $ $Date: 2002-08-12 10:59:30 $
+#   last change: $Author: fs $ $Date: 2002-09-03 08:15:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -133,24 +133,26 @@ SRCFILES =  \
     SRCFILES += optsso.src
 .ENDIF
 
-SLOFILES=	\
+EXCEPTIONSFILES= \
+        $(SLO)$/multifil.obj    \
+        $(SLO)$/optasian.obj \
+        $(SLO)$/optdict.obj \
+        $(SLO)$/optlingu.obj \
+        $(SLO)$/optaccessibility.obj \
+        $(SLO)$/optsave.obj \
+        $(SLO)$/optpath.obj
+
+SLOFILES=	$(EXCEPTIONSFILES) \
         $(SLO)$/asiancfg.obj	\
         $(SLO)$/colorcfg.obj    \
-        $(SLO)$/optasian.obj    \
         $(SLO)$/optcolor.obj    \
         $(SLO)$/optjsearch.obj  \
-        $(SLO)$/optpath.obj	\
-        $(SLO)$/optdict.obj	\
         $(SLO)$/optitems.obj	\
         $(SLO)$/optgenrl.obj	\
-        $(SLO)$/optaccessibility.obj \
-        $(SLO)$/optsave.obj	\
         $(SLO)$/adritem.obj	\
-        $(SLO)$/optlingu.obj \
         $(SLO)$/optgrid.obj	\
         $(SLO)$/optinet2.obj	\
         $(SLO)$/multipat.obj    \
-        $(SLO)$/multifil.obj    \
         $(SLO)$/optextbr.obj    \
         $(SLO)$/srchcfg.obj
 
@@ -166,14 +168,6 @@ SLOFILES+=	\
         $(SLO)$/optdll.obj
 .ENDIF
 .ENDIF
-
-EXCEPTIONSFILES= \
-        $(SLO)$/optasian.obj \
-        $(SLO)$/optdict.obj \
-        $(SLO)$/optlingu.obj \
-        $(SLO)$/optaccessibility.obj \
-        $(SLO)$/optsave.obj \
-        $(SLO)$/optpath.obj
 
 .IF "$(BUILD_SOSL)" == ""
     EXCEPTIONSFILES += $(SLO)$/optsso.obj
