@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-17 13:21:38 $
+ *  last change: $Author: mba $ $Date: 2001-05-21 13:59:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1082,10 +1082,6 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         // SID_OPENURL does the same as SID_OPENDOC!
         rReq.SetSlot( SID_OPENDOC );
         nSID = SID_OPENDOC;
-    }
-    else if ( nSID == SID_OPENTEMPLATE )
-    {
-        rReq.AppendItem( SfxBoolItem( SID_TEMPLATE, TRUE ) );
     }
 
     SFX_REQUEST_ARG(rReq, pFrmItem, SfxFrameItem, SID_DOCFRAME, FALSE);
