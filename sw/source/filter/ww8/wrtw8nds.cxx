@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:09:22 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:55:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1686,6 +1686,13 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                 pO->GetData() );
             pO->Remove( 0, pO->Count() );
 
+            const SwCharFmt *pSwCharFmt = rSwFmtDrop.GetCharFmt();
+            if(pSwCharFmt)
+            {
+                rWW8Wrt.InsUInt16( 0x4A30 );
+                rWW8Wrt.InsUInt16( rWW8Wrt.GetId( *pSwCharFmt ) );
+            }
+
             rWW8Wrt.InsUInt16( 0x4845 );            // Lower the chars
             rWW8Wrt.InsUInt16(-((nDropLines - 1)*rDropDescent) / 10 );
 
@@ -1802,10 +1809,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
     if( !bFlyInTable )
     {
         SfxItemSet* pTmpSet = 0;
-        const BYTE nPrvNxtNd =
-            ( WWFL_ULSPACE_LIKE_SWG & rWW8Wrt.GetIniFlags())
-                    ? pNd->HasPrevNextLayNode()
-                    : (ND_HAS_PREV_LAYNODE|ND_HAS_NEXT_LAYNODE);
+        const BYTE nPrvNxtNd = pNd->HasPrevNextLayNode();
 
         if( (ND_HAS_PREV_LAYNODE|ND_HAS_NEXT_LAYNODE ) != nPrvNxtNd )
         {
@@ -1826,6 +1830,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                 pTmpSet->Put( aUL );
             }
         }
+
 
         if( !pTmpSet )
             pTmpSet = pNd->GetpSwAttrSet();
