@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh3.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-11 14:07:15 $
+ *  last change: $Author: er $ $Date: 2002-04-15 11:22:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -710,13 +710,15 @@ void ScDocShell::CompareDocument( ScDocument& rOtherDoc )
 //
 //---------------------------------------------------------------------
 
-BOOL lcl_Equal( const ScChangeAction* pA, const ScChangeAction* pB )
+inline BOOL lcl_Equal( const ScChangeAction* pA, const ScChangeAction* pB, BOOL bIgnore100Sec )
 {
     return pA && pB &&
-            pA->GetUser()         == pB->GetUser() &&
-            pA->GetType()         == pB->GetType() &&
-            pA->GetActionNumber() == pB->GetActionNumber() &&
-            pA->GetDateTimeUTC()  == pB->GetDateTimeUTC();
+        pA->GetActionNumber() == pB->GetActionNumber() &&
+        pA->GetType()         == pB->GetType() &&
+        pA->GetUser()         == pB->GetUser() &&
+        (bIgnore100Sec ?
+         pA->GetDateTimeUTC().IsEqualIgnore100Sec( pB->GetDateTimeUTC() ) :
+         pA->GetDateTimeUTC() == pB->GetDateTimeUTC());
     //  State nicht vergleichen, falls eine alte Aenderung akzeptiert wurde
 }
 
@@ -743,11 +745,16 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc )
     }
 
 
+    // #97286# include 100th seconds in compare?
+    BOOL bIgnore100Sec = !pSourceTrack->IsTime100thSeconds() ||
+            !pThisTrack->IsTime100thSeconds();
+
     //  gemeinsame Ausgangsposition suchen
     ULONG nFirstNewNumber = 0;
     const ScChangeAction* pSourceAction = pSourceTrack->GetFirst();
     const ScChangeAction* pThisAction = pThisTrack->GetFirst();
-    while ( lcl_Equal( pSourceAction, pThisAction ) )       //  gleiche Aktionen ueberspringen
+    // skip identical actions
+    while ( lcl_Equal( pSourceAction, pThisAction, bIgnore100Sec ) )
     {
         nFirstNewNumber = pSourceAction->GetActionNumber() + 1;
         pSourceAction = pSourceAction->GetNext();
