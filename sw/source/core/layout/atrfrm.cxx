@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 15:46:48 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -437,10 +437,7 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
             pDoc->DeleteSection( pNode );
 
             if( bDoesUndo )
-            {
-                pDoc->DelAllUndoObj();
                 pDoc->DoUndo( sal_True );
-            }
         }
         delete pFmt;
     }
