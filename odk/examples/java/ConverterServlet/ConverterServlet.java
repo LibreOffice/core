@@ -20,12 +20,14 @@ import com.oreilly.servlet.ServletUtils;
 
 // UNO API
 import com.sun.star.bridge.XUnoUrlResolver;
-import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.frame.XComponentLoader;
-import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XStorable;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiComponentFactory;
 
 
 /** This class implements a http servlet in order to convert an incoming document
@@ -123,15 +125,23 @@ public class ConverterServlet extends HttpServlet {
       // Composing the URL
       String stringUrl = "file:///" + stringDocumentName;
 
-      /* Bootstraps a servicemanager with the jurt base components
-         registered */
-      XMultiServiceFactory xmultiservicefactory =
-      com.sun.star.comp.helper.Bootstrap.createSimpleServiceManager();
+      /* Bootstraps a component context with the jurt base components
+         registered. Component context to be granted to a component for running.
+         Arbitrary values can be retrieved from the context. */
+      XComponentContext xcomponentcontext =
+      com.sun.star.comp.helper.Bootstrap.createInitialComponentContext( null );
+
+      /* Gets the service manager instance to be used (or null). This method has
+         been added for convenience, because the service manager is a often used
+         object. */
+      XMultiComponentFactory xmulticomponentfactory =
+      xcomponentcontext.getServiceManager();
 
       /* Creates an instance of the component UnoUrlResolver which
          supports the services specified by the factory. */
-      Object objectUrlResolver = xmultiservicefactory.createInstance(
-      "com.sun.star.bridge.UnoUrlResolver" );
+      Object objectUrlResolver =
+      xmulticomponentfactory.createInstanceWithContext(
+      "com.sun.star.bridge.UnoUrlResolver", xcomponentcontext );
 
       // Create a new url resolver
       XUnoUrlResolver xurlresolver = ( XUnoUrlResolver )
@@ -141,12 +151,23 @@ public class ConverterServlet extends HttpServlet {
       // Resolves an object that is specified as follow:
       // uno:<connection description>;<protocol description>;<initial object name>
       Object objectInitial = xurlresolver.resolve(
-      "uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager" );
+      "uno:socket,host=localhost,port=8200;urp;StarOffice.ServiceManager" );
 
       // Create a service manager from the initial object
-      xmultiservicefactory = ( XMultiServiceFactory )
-      UnoRuntime.queryInterface( XMultiServiceFactory.class,
-      objectInitial );
+      xmulticomponentfactory = ( XMultiComponentFactory )
+      UnoRuntime.queryInterface( XMultiComponentFactory.class, objectInitial );
+
+      // Query for the XPropertySet interface.
+      XPropertySet xpropertysetMultiComponentFactory = ( XPropertySet )
+      UnoRuntime.queryInterface( XPropertySet.class, xmulticomponentfactory );
+
+      // Get the default context from the office server.
+      Object objectDefaultContext =
+      xpropertysetMultiComponentFactory.getPropertyValue( "DefaultContext" );
+
+      // Query for the interface XComponentContext.
+      xcomponentcontext = ( XComponentContext ) UnoRuntime.queryInterface(
+      XComponentContext.class, objectDefaultContext );
 
       /* A desktop environment contains tasks with one or more
          frames in which components can be loaded. Desktop is the
@@ -154,8 +175,8 @@ public class ConverterServlet extends HttpServlet {
          frames. */
       XComponentLoader xcomponentloader = ( XComponentLoader )
       UnoRuntime.queryInterface( XComponentLoader.class,
-      xmultiservicefactory.createInstance(
-      "com.sun.star.frame.Desktop" ) );
+      xmulticomponentfactory.createInstanceWithContext(
+      "com.sun.star.frame.Desktop", xcomponentcontext ) );
 
       // Preparing properties for loading the document
       PropertyValue propertyvalue[] = new PropertyValue[ 1 ];

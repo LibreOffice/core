@@ -38,5 +38,5 @@ $(CLASSFILES) : $(OUT) $(OUT_CLASS) $(JAVAFILES)
 
 converterservlet: $(CLASSFILES)
 	@echo --------------------------------------------------------------------------------
-	@echo Please make the resulting class to your web server
+	@echo Please make the resulting class known to your web server
 	@echo --------------------------------------------------------------------------------
