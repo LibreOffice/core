@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fumorph.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:39 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:04:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,10 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FUMORPH_HXX
-#define _SD_FUMORPH_HXX
+#ifndef SD_FU_MORPH_HXX
+#define SD_FU_MORPH_HXX
 
-#ifndef _SD_FUPOOR_HXX
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
 #endif
 
@@ -71,12 +71,28 @@
 /*************************************************************************
 |*
 \************************************************************************/
+class List;
 class PolyPolygon3D;
 class Polygon3D;
 class Vector3D;
 
-class FuMorph : public FuPoor
+namespace sd {
+
+class FuMorph
+    : public FuPoor
 {
+public:
+    TYPEINFO();
+
+    FuMorph (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuMorph (void) {}
+
+private:
     void ImpInsertPolygons(List& rPolyPolyList3D, BOOL bAttributeFade,
         const SdrObject* pObj1, const SdrObject* pObj2);
     PolyPolygon3D* ImpCreateMorphedPolygon(
@@ -89,15 +105,8 @@ class FuMorph : public FuPoor
     void ImpAddPolys(PolyPolygon3D& rSmaller, const PolyPolygon3D& rBigger);
     void ImpEqualizePolyPointCount(Polygon3D& rSmall, const Polygon3D& rBig);
     sal_uInt16 ImpGetNearestIndex(const Polygon3D& rPoly, const Vector3D& rPos);
-
-public:
-    TYPEINFO();
-
-    FuMorph(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-        SdDrawDocument* pDoc, SfxRequest& rReq);
-    ~FuMorph() {}
 };
 
-#endif // _SD_FUMORPH_HXX
+} // end of namespace sd
 
-
+#endif
