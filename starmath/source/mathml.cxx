@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-19 08:31:16 $
+ *  last change: $Author: cmc $ $Date: 2001-02-27 14:55:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -624,7 +624,7 @@ void SmXMLContext_Helper::RetrieveAttrs(const uno::Reference<
                     sXML_italic)));
                 break;
             case XML_TOK_FONTSIZE:
-                SvXMLUnitConverter::convertNumber(nFontSize,sValue);
+                SvXMLUnitConverter::convertDouble(nFontSize,sValue);
                 rContext.GetSmImport().GetMM100UnitConverter().
                     setXMLMeasureUnit(MAP_POINT);
                 if (-1 == sValue.indexOf(OUString(
@@ -794,7 +794,7 @@ void SmXMLStyleContext_Impl::StartElement(const uno::Reference<
                     sXML_italic)));
                 break;
             case XML_TOK_FONTSIZE:
-                SvXMLUnitConverter::convertNumber(nFontSize,sValue);
+                SvXMLUnitConverter::convertDouble(nFontSize,sValue);
                 GetSmImport().GetMM100UnitConverter().
                     setXMLMeasureUnit(MAP_POINT);
                 if (-1 == sValue.indexOf(OUString(
@@ -3208,17 +3208,17 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
             switch(pFontNode->GetSizeType())
             {
                 case FNTSIZ_MULTIPLY:
-                    SvXMLUnitConverter::convertNumber(sStrBuf,
+                    SvXMLUnitConverter::convertDouble(sStrBuf,
                         static_cast<double>(aFrac*Fraction(100.00)));
                     sStrBuf.append(static_cast<sal_Unicode>('%'));
                     break;
                 case FNTSIZ_DIVIDE:
-                    SvXMLUnitConverter::convertNumber(sStrBuf,
+                    SvXMLUnitConverter::convertDouble(sStrBuf,
                         static_cast<double>(Fraction(100.00)/aFrac));
                     sStrBuf.append(static_cast<sal_Unicode>('%'));
                     break;
                 case FNTSIZ_ABSOLUT:
-                    SvXMLUnitConverter::convertNumber(sStrBuf,
+                    SvXMLUnitConverter::convertDouble(sStrBuf,
                         static_cast<double>(aFrac));
                     sStrBuf.append(
                         OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_unit_pt)));
@@ -3242,7 +3242,7 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
                         double mytest = static_cast<double>(aTemp);
 
                         mytest = SolarMath::Round(mytest,1);
-                        SvXMLUnitConverter::convertNumber(sStrBuf,mytest);
+                        SvXMLUnitConverter::convertDouble(sStrBuf,mytest);
                         sStrBuf.append(OUString(
                             RTL_CONSTASCII_USTRINGPARAM(sXML_unit_pt)));
                     }
