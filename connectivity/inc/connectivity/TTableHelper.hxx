@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TTableHelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 08:52:20 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:49:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,6 @@
 
 #ifndef _CONNECTIVITY_SDBCX_TABLE_HXX_
 #include "connectivity/sdbcx/VTable.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
-#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #endif
 #ifndef CONNECTIVITY_STDTYPEDEFS_HXX
 #include "connectivity/StdTypeDefs.hxx"
@@ -128,7 +125,7 @@ namespace connectivity
                         const ::rtl::OUString& _CatalogName = ::rtl::OUString()
             );
 
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() const { return m_xMetaData; }
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() const;
         inline ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection() const { return m_xConnection; }
 
         virtual void SAL_CALL acquire() throw();
