@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-14 22:43:37 $
+ *  last change: $Author: jbu $ $Date: 2001-11-29 16:04:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1322,8 +1322,8 @@ void LibPage::DeleteCurrent()
     ::rtl::OUString aOULibName( aLibName );
     Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
     Reference< script::XLibraryContainer2 > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
-    if ( ( xModLibContainer.is() && xModLibContainer->isLibraryLink( aOULibName ) ) ||
-         ( xDlgLibContainer.is() && xDlgLibContainer->isLibraryLink( aOULibName ) ) )
+    if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryLink( aOULibName ) ) ||
+         ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryLink( aOULibName ) ) )
     {
         bIsLibraryLink = TRUE;
     }
