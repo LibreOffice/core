@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-02 15:44:59 $
+ *  last change: $Author: nn $ $Date: 2001-05-09 12:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,11 @@ ScEditShell::~ScEditShell()
 {
 }
 
+ScInputHandler* ScEditShell::GetMyInputHdl()
+{
+    return SC_MOD()->GetInputHdl( pViewData->GetViewShell() );
+}
+
 void ScEditShell::SetEditView(EditView* pView)
 {
     pEditView = pView;
@@ -158,7 +163,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
     USHORT              nSlot       = rReq.GetSlot();
     SfxBindings&        rBindings   = pViewData->GetBindings();
 
-    ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+    ScInputHandler* pHdl = GetMyInputHdl();
     DBG_ASSERT(pHdl,"kein ScInputHandler");
 
     EditView* pTopView   = pHdl->GetTopView();      // hat Eingabezeile den Focus?
@@ -487,7 +492,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
 void __EXPORT ScEditShell::GetState( SfxItemSet& rSet )
 {
-    ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+    ScInputHandler* pHdl = GetMyInputHdl();
     EditView* pActiveView = pHdl ? pHdl->GetActiveView() : pEditView;
 
     SfxWhichIter aIter( rSet );
@@ -545,7 +550,7 @@ void __EXPORT ScEditShell::GetState( SfxItemSet& rSet )
 
 const SvxURLField* ScEditShell::GetURLField()
 {
-    ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+    ScInputHandler* pHdl = GetMyInputHdl();
     EditView* pActiveView = pHdl ? pHdl->GetActiveView() : pEditView;
     if ( pActiveView )
     {
@@ -784,7 +789,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
     pEngine->SetUpdateMode(bOld);
     pEditView->Invalidate();
 
-    ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+    ScInputHandler* pHdl = GetMyInputHdl();
     pHdl->SetModified();
 
     rReq.Done();
@@ -836,7 +841,7 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
     }
 
     //! Testen, ob Klammer-Hervorhebung aktiv ist !!!!
-    ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+    ScInputHandler* pHdl = GetMyInputHdl();
     if ( pHdl && pHdl->IsFormulaMode() )
         rSet.ClearItem( EE_CHAR_WEIGHT );   // hervorgehobene Klammern hier nicht
 }
@@ -867,7 +872,7 @@ void ScEditShell::ExecuteUndo(SfxRequest& rReq)
 {
     //  #81733# Undo must be handled here because it's called for both EditViews
 
-    ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+    ScInputHandler* pHdl = GetMyInputHdl();
     DBG_ASSERT(pHdl,"no ScInputHandler");
     EditView* pTopView   = pHdl->GetTopView();
     EditView* pTableView = pHdl->GetTableView();
@@ -930,7 +935,7 @@ void ScEditShell::GetUndoState(SfxItemSet &rSet)
 
     //  disable if no action in input line EditView
 
-    ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+    ScInputHandler* pHdl = GetMyInputHdl();
     DBG_ASSERT(pHdl,"no ScInputHandler");
     EditView* pTopView = pHdl->GetTopView();
     if (pTopView)
@@ -948,7 +953,7 @@ void ScEditShell::ExecuteTrans( SfxRequest& rReq )
     sal_Int32 nType = ScViewUtil::GetTransliterationType( rReq.GetSlot() );
     if ( nType )
     {
-        ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+        ScInputHandler* pHdl = GetMyInputHdl();
         DBG_ASSERT( pHdl, "no ScInputHandler" );
 
         EditView* pTopView   = pHdl->GetTopView();

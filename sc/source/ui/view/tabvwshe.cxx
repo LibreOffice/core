@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshe.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:30:03 $
+ *  last change: $Author: nn $ $Date: 2001-05-09 12:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ void ScTabViewShell::InsertURLField( const String& rName, const String& rURL, co
     ScViewData*     pViewData   = GetViewData();
     ScTabView*      pView       = pViewData->GetView();
     ScModule*       pScMod      = SC_MOD();
-    ScInputHandler* pHdl        = pScMod->GetInputHdl();
+    ScInputHandler* pHdl        = pScMod->GetInputHdl( pViewData->GetViewShell() );
 
     BOOL bSelectFirst = FALSE;
     if ( !pScMod->IsEditMode() )

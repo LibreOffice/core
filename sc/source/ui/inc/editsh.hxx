@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-26 19:21:58 $
+ *  last change: $Author: nn $ $Date: 2001-05-09 12:51:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 
 class EditView;
 class ScViewData;
+class ScInputHandler;
 class SvxURLField;
 
 class ScEditShell : public SfxShell
@@ -83,6 +84,7 @@ private:
     BOOL        bIsInsertMode;
 
     const SvxURLField* GetURLField();
+    ScInputHandler* GetMyInputHdl();
 
 public:
     TYPEINFO();
