@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-13 14:55:50 $
+ *  last change: $Author: os $ $Date: 2000-10-17 10:08:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -536,4 +536,4 @@ const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_LEFT_BORDER_DISTANCE             
 const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_RIGHT_BORDER_DISTANCE            (MAP_CHAR_LEN("FooterRightBorderDistance"));
 const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_TOP_BORDER_DISTANCE              (MAP_CHAR_LEN("FooterTopBorderDistance"));
 const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_BOTTOM_BORDER_DISTANCE           (MAP_CHAR_LEN("FooterBottomBorderDistance"));
-
+const SwPropNameLen __FAR_DATA UNO_NAME_PARA_IS_NUMBERING_RESTART               (MAP_CHAR_LEN("ParaIsNumberingRestart"));

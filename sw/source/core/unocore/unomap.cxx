@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-13 14:57:39 $
+ *  last change: $Author: os $ $Date: 2000-10-17 10:08:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,6 +569,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_CHAR_USER_DEFINED_ATTRIBUTES),  RES_UNKNOWNATR_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NAME(UNO_NAME_PARA_CHAPTER_NUMBERING_LEVEL), FN_UNO_PARA_CHAPTER_NUMBERING_LEVEL,&::getCppuType((const sal_Int8*)0),   PropertyAttribute::READONLY, 0},
                     { SW_PROP_NAME(UNO_NAME_PARA_CONDITIONAL_STYLE_NAME),  FN_UNO_PARA_CONDITIONAL_STYLE_NAME, &::getCppuType((const OUString*)0),      PropertyAttribute::READONLY, 0},
+                    { SW_PROP_NAME(UNO_NAME_PARA_IS_NUMBERING_RESTART),     FN_NUMBER_NEWSTART,     &::getBooleanCppuType(),    PropertyAttribute::MAYBEVOID, 0 },
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aCharAndParaMap_Impl;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-10-16 11:42:55 $
+ *  last change: $Author: os $ $Date: 2000-10-17 10:08:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -949,6 +949,12 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
                 //PROPERTY_MAYBEVOID!
             }
             break;
+            case FN_NUMBER_NEWSTART :
+            {
+                sal_Bool bVal = *(sal_Bool*)aValue.getValue();
+                rPam.GetDoc()->SetNumRuleStart(*rPam.GetPoint(), bVal);
+            }
+            break;
             case FN_UNO_NUM_RULES:
                 lcl_setNumberingProperty(aValue, rPam);
                 rPut = sal_False;
@@ -1172,6 +1178,7 @@ sal_Bool lcl_getCrsrPropertyValue(const SfxItemPropertyMap* pMap
         break;
         case FN_UNO_NUM_LEVEL  :
         case FN_UNO_IS_NUMBER  :
+        case FN_NUMBER_NEWSTART:
         {
             const SwTxtNode* pTxtNd = rPam.GetNode()->GetTxtNode();
             const SwNumRule* pRule = pTxtNd->GetNumRule();
@@ -1180,10 +1187,15 @@ sal_Bool lcl_getCrsrPropertyValue(const SfxItemPropertyMap* pMap
             {
                 if(pMap->nWID == FN_UNO_NUM_LEVEL)
                     rAny <<= (sal_Int16)(pTxtNd->GetNum()->GetLevel()&~NO_NUMLEVEL);
-                else
+                else if(pMap->nWID == FN_UNO_IS_NUMBER)
                 {
                     BOOL bIsNumber = 0 == (pTxtNd->GetNum()->GetLevel() & NO_NUMLEVEL);
                     rAny.setValue(&bIsNumber, ::getBooleanCppuType());
+                }
+                else /*if(pMap->nWID == UNO_NAME_PARA_IS_NUMBERING_RESTART)*/
+                {
+                    BOOL bIsRestart = pTxtNd->GetNum()->IsStart();
+                    rAny.setValue(&bIsRestart, ::getBooleanCppuType());
                 }
             }
             else
