@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocfun.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:22:36 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 10:51:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -755,10 +755,13 @@ BOOL ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
             bKeepSub = TRUE;
     }
 
+    ScDocument* pUndoDoc = NULL;
+    ScDBCollection* pUndoDB = NULL;
+    const ScRange* pOld = NULL;
+
     if ( bRecord )
     {
-        const ScRange* pOld = 0;
-        ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+        pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         if (bCopy)
         {
             pUndoDoc->InitUndo( pDoc, nDestTab, nDestTab, FALSE, TRUE );
@@ -780,14 +783,11 @@ BOOL ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
                                         IDF_NONE, FALSE, pUndoDoc );
         }
 
-        ScDBCollection* pUndoDB = NULL;
         ScDBCollection* pDocDB = pDoc->GetDBCollection();
         if (pDocDB->GetCount())
             pUndoDB = new ScDBCollection( *pDocDB );
 
-        rDocShell.GetUndoManager()->AddUndoAction(
-                    new ScUndoQuery( &rDocShell, nTab, rQueryParam, pUndoDoc, pUndoDB,
-                                        pOld, bDoSize, pAdvSource ) );
+        pDoc->BeginDrawUndo();
     }
 
     ScDocument* pAttribDoc = NULL;
@@ -930,6 +930,15 @@ BOOL ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
     ScRange aDirtyRange( aLocalParam.nCol1, aLocalParam.nRow1, nDestTab,
         aLocalParam.nCol2, aLocalParam.nRow2, nDestTab );
     pDoc->SetDirty( aDirtyRange );
+
+    if ( bRecord )
+    {
+        // create undo action after executing, because of drawing layer undo
+        rDocShell.GetUndoManager()->AddUndoAction(
+                    new ScUndoQuery( &rDocShell, nTab, rQueryParam, pUndoDoc, pUndoDB,
+                                        pOld, bDoSize, pAdvSource ) );
+    }
+
 
     if (bCopy)
     {
