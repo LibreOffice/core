@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-07 17:49:55 $
+ *  last change: $Author: obo $ $Date: 2000-11-09 17:25:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,7 @@ protected:
 
 
 //------------------------------------------------------------------
-StandardFormatsSupplier::StandardFormatsSupplier(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+StandardFormatsSupplier::StandardFormatsSupplier(const com::sun::star::uno::Reference< starlang::XMultiServiceFactory > & _rxFactory)
     :SvNumberFormatsSupplierObj()
     ,m_pMyPrivateFormatter(new SvNumberFormatter(_rxFactory, Application::GetAppInternational().GetLanguage()))
 {
