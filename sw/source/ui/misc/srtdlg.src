@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:29:56 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,12 +212,12 @@ ModalDialog DLG_SORTING
         Text [ spanish ] = "Clave ~1" ;
         Text [ english_us ] = "Key ~1" ;
         Check = TRUE ;
-        Text[ chinese_simplified ] = "ÅÅĞò ~1";
+        Text[ chinese_simplified ] = "¹Ø¼ü×Ö ~1";
         Text[ russian ] = "Êëş÷ ~1";
         Text[ polish ] = "Klucz ~1";
         Text[ japanese ] = "·° 1";
         Text[ language_user1 ] = " ";
-        Text[ chinese_traditional ] = "±Æ§Ç ~1";
+        Text[ chinese_traditional ] = "ÃöÁä¦r ~1";
         Text[ arabic ] = "ãİÊÇÍ 1";
         Text[ greek ] = "Êëåéäß ~1";
         Text[ korean ] = "Å° 1";
@@ -258,7 +258,7 @@ ModalDialog DLG_SORTING
         Text[ polish ] = "numeryczny";
         Text[ portuguese_brazilian ] = "numeric";
         Text[ japanese ] = "”š";
-        Text[ korean ] = "numeric";
+        Text[ korean ] = "¹øÈ£";
         Text[ chinese_simplified ] = "Êı×Ö";
         Text[ chinese_traditional ] = "¼Æ¦r";
         Text[ turkish ] = "numeric";
@@ -294,11 +294,11 @@ ModalDialog DLG_SORTING
         Text [ english_us ] = "~Ascending" ;
         TabStop = TRUE ;
         Check = TRUE ;
-        Text[ chinese_simplified ] = "µİÔö(~A)";
+        Text[ chinese_simplified ] = "ÏòÉÏ(~A)";
         Text[ russian ] = "Ïî âîçğàñòàíèş";
         Text[ polish ] = "Rosn¹co";
         Text[ japanese ] = "¸‡(~A)";
-        Text[ chinese_traditional ] = "»¼¼W(~A)";
+        Text[ chinese_traditional ] = "¦V¤W(~A)";
         Text[ arabic ] = "ÊÕÇÚÏí";
         Text[ greek ] = "Áıîïõóá";
         Text[ korean ] = "¿À¸§Â÷¼ø(~A)";
@@ -324,11 +324,11 @@ ModalDialog DLG_SORTING
         Text [ spanish ] = "~Descendente" ;
         Text [ english_us ] = "~Descending" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "µİ¼õ(~D)";
+        Text[ chinese_simplified ] = "ÏòÏÂ(~D)";
         Text[ russian ] = "Ïî óáûâàíèş";
         Text[ polish ] = "Malej¹co";
         Text[ japanese ] = "~‡(~D)";
-        Text[ chinese_traditional ] = "»¼´î(~D)";
+        Text[ chinese_traditional ] = "¦V¤U(~D)";
         Text[ arabic ] = "ÊäÇÒáí";
         Text[ greek ] = "Öèßíïõóá";
         Text[ korean ] = "³»¸²Â÷¼ø(~D)";
@@ -354,12 +354,12 @@ ModalDialog DLG_SORTING
         Text [ dutch ] = "Sleutel ~2" ;
         Text [ spanish ] = "Clave ~2" ;
         Text [ english_us ] = "Key ~2" ;
-        Text[ chinese_simplified ] = "ÅÅĞò ~2";
+        Text[ chinese_simplified ] = "¹Ø¼ü×Ö ~2";
         Text[ russian ] = "Êëş÷ ~2";
         Text[ polish ] = "Klucz 2";
         Text[ japanese ] = "·° 2";
         Text[ language_user1 ] = " ";
-        Text[ chinese_traditional ] = "±Æ§Ç ~2";
+        Text[ chinese_traditional ] = "ÃöÁä¦r ~2";
         Text[ arabic ] = "ãİÊÇÍ 2";
         Text[ greek ] = "Êëåéäß ~2";
         Text[ korean ] = "Å° 2";
@@ -410,11 +410,11 @@ ModalDialog DLG_SORTING
         Text [ english_us ] = "Ascending" ;
         TabStop = TRUE ;
         Check = TRUE ;
-        Text[ chinese_simplified ] = "µİÔö";
+        Text[ chinese_simplified ] = "ÏòÉÏ";
         Text[ russian ] = "Ïî âîçğàñòàíèş";
         Text[ polish ] = "Rosn¹co";
         Text[ japanese ] = "¸‡";
-        Text[ chinese_traditional ] = "»¼¼W";
+        Text[ chinese_traditional ] = "¦V¤W";
         Text[ arabic ] = "ÊÕÇÚÏí";
         Text[ greek ] = "Áıîïõóá";
         Text[ korean ] = "¿À¸§Â÷¼ø";
@@ -440,11 +440,11 @@ ModalDialog DLG_SORTING
         Text [ spanish ] = "Desc~endente" ;
         Text [ english_us ] = "Descending" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "µİ¼õ";
+        Text[ chinese_simplified ] = "ÏòÏÂ";
         Text[ russian ] = "Ïî óáûâàíèş";
         Text[ polish ] = "Malej¹co";
         Text[ japanese ] = "~‡";
-        Text[ chinese_traditional ] = "»¼´î";
+        Text[ chinese_traditional ] = "¦V¤U";
         Text[ arabic ] = "ÊäÇÒáí";
         Text[ greek ] = "Öèßíïõóá";
         Text[ korean ] = "³»¸²Â÷¼ø";
@@ -470,12 +470,12 @@ ModalDialog DLG_SORTING
         Text [ dutch ] = "Sleutel ~3" ;
         Text [ spanish ] = "Clave ~3" ;
         Text [ english_us ] = "Key ~3" ;
-        Text[ chinese_simplified ] = "ÅÅĞò ~3";
+        Text[ chinese_simplified ] = "¹Ø¼ü×Ö ~3";
         Text[ russian ] = "Êëş÷ ~3";
         Text[ polish ] = "Klucz 3";
         Text[ japanese ] = "·° 3";
         Text[ language_user1 ] = " ";
-        Text[ chinese_traditional ] = "±Æ§Ç ~3";
+        Text[ chinese_traditional ] = "ÃöÁä¦r ~3";
         Text[ arabic ] = "ãİÊÇÍ 3";
         Text[ greek ] = "Êëåéäß ~3";
         Text[ korean ] = "Å° 3";
@@ -526,11 +526,11 @@ ModalDialog DLG_SORTING
         Text [ english_us ] = "Ascending" ;
         TabStop = TRUE ;
         Check = TRUE ;
-        Text[ chinese_simplified ] = "µİÔö";
+        Text[ chinese_simplified ] = "ÏòÉÏ";
         Text[ russian ] = "Ïî âîçğàñòàíèş";
         Text[ polish ] = "Rosn¹co";
         Text[ japanese ] = "¸‡";
-        Text[ chinese_traditional ] = "»¼¼W";
+        Text[ chinese_traditional ] = "¦V¤W";
         Text[ arabic ] = "ÊÕÇÚÏí";
         Text[ greek ] = "Áıîïõóá";
         Text[ korean ] = "¿À¸§Â÷¼ø";
@@ -556,11 +556,11 @@ ModalDialog DLG_SORTING
         Text [ spanish ] = "Des~cendente" ;
         Text [ english_us ] = "Descending" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "µİ¼õ";
+        Text[ chinese_simplified ] = "ÏòÏÂ";
         Text[ russian ] = "Ïî óáûâàíèş";
         Text[ polish ] = "Malej¹co";
         Text[ japanese ] = "~‡";
-        Text[ chinese_traditional ] = "»¼´î";
+        Text[ chinese_traditional ] = "¦V¤U";
         Text[ arabic ] = "ÊäÇÒáí";
         Text[ greek ] = "Öèßíïõóá";
         Text[ korean ] = "³»¸²Â÷¼ø";
@@ -730,7 +730,7 @@ ModalDialog DLG_SORTING
         Text [ portuguese ] = "~Caracteres" ;
         Text [ finnish ] = "~Merkki" ;
         Text [ danish ] = "Tegn" ;
-        Text [ french ] = "C~aractère" ;
+        Text [ french ] = "Caractère" ;
         Text [ swedish ] = "Te~cken" ;
         Text [ dutch ] = "~Teken" ;
         Text [ spanish ] = "Ca~rácter" ;
@@ -865,7 +865,7 @@ ModalDialog DLG_SORTING
         Text[ polish ] = "Jêzyk";
         Text[ portuguese_brazilian ] = "Language";
         Text[ japanese ] = "Œ¾Œê";
-        Text[ korean ] = "Language";
+        Text[ korean ] = "¾ğ¾î";
         Text[ chinese_simplified ] = "ÓïÑÔ";
         Text[ chinese_traditional ] = "»y¨¥";
         Text[ turkish ] = "Language";
@@ -900,7 +900,7 @@ ModalDialog DLG_SORTING
         Text[ polish ] = "Ustawienie";
         Text[ portuguese_brazilian ] = "Options";
         Text[ japanese ] = "Ú×İ’è";
-        Text[ korean ] = "Options";
+        Text[ korean ] = "¼³Á¤";
         Text[ chinese_simplified ] = "Éè¶¨";
         Text[ chinese_traditional ] = "³]©w";
         Text[ turkish ] = "Options";
@@ -928,7 +928,7 @@ ModalDialog DLG_SORTING
         Text[ polish ] = "Dok³adne porównanie";
         Text[ portuguese_brazilian ] = "Case sensitive";
         Text[ japanese ] = "‘å•¶š‚Æ¬•¶š‚ğ‹æ•Ê‚·‚é";
-        Text[ korean ] = "Case sensitive";
+        Text[ korean ] = "Á¤È®ÇÑ ºñ±³";
         Text[ chinese_simplified ] = "¾«È·Çø·Ö´óĞ¡Ğ´";
         Text[ chinese_traditional ] = "ºë½T°Ï¤À¤j¤p¼g";
         Text[ turkish ] = "Case sensitive";
@@ -978,6 +978,7 @@ InfoBox MSG_SRTERR
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ catalan ] = "No se pudo ordenar la selección";
 };
+
 
 
 
