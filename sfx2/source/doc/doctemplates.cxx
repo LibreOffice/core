@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:28:46 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 16:28:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ DECLARE_LIST( NameList_Impl, NamePair_Impl* );
 
 class Updater_Impl;
 class GroupList_Impl;
-class EntryData_Impl;
+class DocTemplates_EntryData_Impl;
 class GroupData_Impl;
 
 //=============================================================================
@@ -278,14 +278,14 @@ class SfxDocTplService_Impl
     void                        addFsysGroup( GroupList_Impl& rList,
                                               const OUString& rTitle,
                                               const OUString& rOwnURL );
-    void                        removeFromHierarchy( EntryData_Impl *pData );
+    void                        removeFromHierarchy( DocTemplates_EntryData_Impl *pData );
     void                        addToHierarchy( GroupData_Impl *pGroup,
-                                                EntryData_Impl *pData );
+                                                DocTemplates_EntryData_Impl *pData );
 
     void                        removeFromHierarchy( GroupData_Impl *pGroup );
     void                        addGroupToHierarchy( GroupData_Impl *pGroup );
 
-    void                        updateData( EntryData_Impl *pData );
+    void                        updateData( DocTemplates_EntryData_Impl *pData );
 
 public:
                                  SfxDocTplService_Impl( Reference< XMultiServiceFactory > xFactory );
@@ -337,7 +337,7 @@ public:
 
 //=============================================================================
 
-class EntryData_Impl
+class DocTemplates_EntryData_Impl
 {
     OUString            maTitle;
     OUString            maType;
@@ -350,7 +350,7 @@ class EntryData_Impl
     sal_Bool            mbUpdateLink    : 1;
 
 public:
-                        EntryData_Impl( const OUString& rTitle );
+                        DocTemplates_EntryData_Impl( const OUString& rTitle );
 
     void                setInUse() { mbInUse = sal_True; }
     void                setHierarchy( sal_Bool bInHierarchy ) { mbInHierarchy = bInHierarchy; }
@@ -372,7 +372,7 @@ public:
     void                setType( const OUString& rType ) { maType = rType; }
 };
 
-DECLARE_LIST( EntryList_Impl, EntryData_Impl* );
+DECLARE_LIST( EntryList_Impl, DocTemplates_EntryData_Impl* );
 
 //=============================================================================
 
@@ -400,12 +400,12 @@ public:
     const OUString&     getTargetURL() const { return maTargetURL; }
     const OUString&     getTitle() const { return maTitle; }
 
-    EntryData_Impl*     addEntry( const OUString& rTitle,
+    DocTemplates_EntryData_Impl*     addEntry( const OUString& rTitle,
                                   const OUString& rTargetURL,
                                   const OUString& rType,
                                   const OUString& rHierURL );
     ULONG               count() { return maEntries.Count(); }
-    EntryData_Impl*     getEntry( ULONG nPos ) { return maEntries.GetObject( nPos ); }
+    DocTemplates_EntryData_Impl*     getEntry( ULONG nPos ) { return maEntries.GetObject( nPos ); }
 };
 
 DECLARE_LIST( GroupList_Impl, GroupData_Impl* );
@@ -942,7 +942,7 @@ void SfxDocTplService_Impl::doUpdate()
                 ULONG nCount = pGroup->count();
                 for ( ULONG i=0; i<nCount; i++ )
                 {
-                    EntryData_Impl *pData = pGroup->getEntry( i );
+                    DocTemplates_EntryData_Impl *pData = pGroup->getEntry( i );
                     if ( ! pData->getInUse() )
                     {
                         if ( pData->getInHierarchy() )
@@ -1809,7 +1809,7 @@ void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
             while ( xResultSet->next() )
             {
                 BOOL             bUpdateType = sal_False;
-                EntryData_Impl  *pData;
+                DocTemplates_EntryData_Impl  *pData;
 
                 OUString aTitle( xRow->getString( 1 ) );
                 OUString aTargetDir( xRow->getString( 2 ) );
@@ -1953,7 +1953,7 @@ void SfxDocTplService_Impl::createFromContent( GroupList_Impl& rList,
 }
 
 //-----------------------------------------------------------------------------
-void SfxDocTplService_Impl::removeFromHierarchy( EntryData_Impl *pData )
+void SfxDocTplService_Impl::removeFromHierarchy( DocTemplates_EntryData_Impl *pData )
 {
     Content aTemplate;
 
@@ -1965,7 +1965,7 @@ void SfxDocTplService_Impl::removeFromHierarchy( EntryData_Impl *pData )
 
 //-----------------------------------------------------------------------------
 void SfxDocTplService_Impl::addToHierarchy( GroupData_Impl *pGroup,
-                                            EntryData_Impl *pData )
+                                            DocTemplates_EntryData_Impl *pData )
 {
     Content aGroup, aTemplate;
 
@@ -1991,7 +1991,7 @@ void SfxDocTplService_Impl::addToHierarchy( GroupData_Impl *pGroup,
 }
 
 //-----------------------------------------------------------------------------
-void SfxDocTplService_Impl::updateData( EntryData_Impl *pData )
+void SfxDocTplService_Impl::updateData( DocTemplates_EntryData_Impl *pData )
 {
     Content aTemplate;
 
@@ -2034,7 +2034,7 @@ void SfxDocTplService_Impl::addGroupToHierarchy( GroupData_Impl *pGroup )
         ULONG nCount = pGroup->count();
         for ( ULONG i=0; i<nCount; i++ )
         {
-            EntryData_Impl *pData = pGroup->getEntry( i );
+            DocTemplates_EntryData_Impl *pData = pGroup->getEntry( i );
             addToHierarchy( pGroup, pData ); // add entry to hierarchy
         }
     }
@@ -2064,7 +2064,7 @@ GroupData_Impl::GroupData_Impl( const OUString& rTitle )
 // -----------------------------------------------------------------------
 GroupData_Impl::~GroupData_Impl()
 {
-    EntryData_Impl *pData = maEntries.First();
+    DocTemplates_EntryData_Impl *pData = maEntries.First();
     while ( pData )
     {
         delete pData;
@@ -2073,19 +2073,19 @@ GroupData_Impl::~GroupData_Impl()
 }
 
 // -----------------------------------------------------------------------
-EntryData_Impl* GroupData_Impl::addEntry( const OUString& rTitle,
+DocTemplates_EntryData_Impl* GroupData_Impl::addEntry( const OUString& rTitle,
                                           const OUString& rTargetURL,
                                           const OUString& rType,
                                           const OUString& rHierURL )
 {
-    EntryData_Impl *pData = maEntries.First();
+    DocTemplates_EntryData_Impl *pData = maEntries.First();
 
     while ( pData && pData->getTitle() != rTitle )
         pData = maEntries.Next();
 
     if ( !pData )
     {
-        pData = new EntryData_Impl( rTitle );
+        pData = new DocTemplates_EntryData_Impl( rTitle );
         pData->setTargetURL( rTargetURL );
         pData->setType( rType );
         if ( rHierURL.getLength() )
@@ -2111,7 +2111,7 @@ EntryData_Impl* GroupData_Impl::addEntry( const OUString& rTitle,
 // -----------------------------------------------------------------------
 // -----------------------------------------------------------------------
 // -----------------------------------------------------------------------
-EntryData_Impl::EntryData_Impl( const OUString& rTitle )
+DocTemplates_EntryData_Impl::DocTemplates_EntryData_Impl( const OUString& rTitle )
 {
     maTitle         = rTitle;
     mbInUse         = sal_False;
