@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 17:41:11 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 10:48:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,11 +151,11 @@ TabPage TP_HELP_SEARCH
     HelpId = HID_HELP_TABPAGE_SEARCH;
     Hide = TRUE ;
     DialogControl = TRUE;
-    Size = MAP_APPFONT ( 120 , 122 ) ;
+    Size = MAP_APPFONT ( 140 , 122 ) ;
     FixedText FT_SEARCH
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Size = MAP_APPFONT ( 128 , 10 ) ;
         Text [ de ] = "S~uchbegriff" ;
         Text [ en-US ] = "S~earch term" ;
     };
@@ -164,11 +164,11 @@ TabPage TP_HELP_SEARCH
         Border = TRUE ;
         DropDown = TRUE;
         Pos = MAP_APPFONT ( 6 , 17 ) ;
-        Size = MAP_APPFONT ( 72 , 40 ) ;
+        Size = MAP_APPFONT ( 92 , 40 ) ;
     };
     PushButton PB_SEARCH
     {
-        Pos = MAP_APPFONT ( 81 , 17 ) ;
+        Pos = MAP_APPFONT ( 101 , 17 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ de ] = "~Suchen";
         Text [ en-US ] = "~Find";
@@ -176,14 +176,14 @@ TabPage TP_HELP_SEARCH
     CheckBox CB_FULLWORDS
     {
         Pos = MAP_APPFONT ( 6, 34 ) ;
-        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Size = MAP_APPFONT ( 128 , 10 ) ;
         Text [ de ] = "~Nur ganze Wörter" ;
         Text [ en-US ] = "~Complete words only";
     };
     CheckBox CB_SCOPE
     {
         Pos = MAP_APPFONT ( 6, 47 ) ;
-        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Size = MAP_APPFONT ( 128 , 10 ) ;
         Text [ de ] = "Nur in ~Titeln suchen" ;
         Text [ en-US ] = "Find in ~headings only";
     };
@@ -191,11 +191,11 @@ TabPage TP_HELP_SEARCH
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 60 ) ;
-        Size = MAP_APPFONT ( 108 , 30 ) ;
+        Size = MAP_APPFONT ( 128 , 30 ) ;
     };
     PushButton PB_OPEN_SEARCH
     {
-        Pos = MAP_APPFONT ( 64 , 182 ) ;
+        Pos = MAP_APPFONT ( 84 , 182 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ de ] = "~Anzeigen" ;
         Text [ en-US ] = "~Display" ;
