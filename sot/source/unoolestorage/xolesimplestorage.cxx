@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xolesimplestorage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:32:24 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -649,6 +649,38 @@ void SAL_CALL OLESimpleStorage::revert()
     }
 
     UpdateOriginal_Impl();
+}
+
+//____________________________________________________________________________________________________
+//  XClassifiedObject
+//____________________________________________________________________________________________________
+
+uno::Sequence< sal_Int8 > SAL_CALL OLESimpleStorage::getClassID()
+    throw ( uno::RuntimeException )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    if ( m_bDisposed )
+        throw lang::DisposedException();
+
+    if ( !m_pStorage )
+        throw uno::RuntimeException();
+
+    return m_pStorage->GetClassName().GetByteSequence();
+}
+
+::rtl::OUString SAL_CALL OLESimpleStorage::getClassName()
+    throw ( uno::RuntimeException )
+{
+    return ::rtl::OUString();
+}
+
+void SAL_CALL OLESimpleStorage::setClassInfo( const uno::Sequence< sal_Int8 >& aClassID,
+                            const ::rtl::OUString& sClassName )
+        throw ( lang::NoSupportException,
+                uno::RuntimeException )
+{
+    throw lang::NoSupportException();
 }
 
 //____________________________________________________________________________________________________

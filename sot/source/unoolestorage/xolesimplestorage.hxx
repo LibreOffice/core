@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xolesimplestorage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:32:34 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:16:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@
 #ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_XCLASSIFIEDOBJECT_HPP_
+#include <com/sun/star/embed/XClassifiedObject.hpp>
+#endif
+
 
 #ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -86,7 +90,7 @@
 
 
 #ifndef _CPPUHELPER_IMPLBASE5_HXX_
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase6.hxx>
 #endif
 
 #ifndef _CPPUHELPER_INTERFACECONTAINER_H_
@@ -98,11 +102,12 @@
 #include <stg.hxx>
 
 
-class OLESimpleStorage  : public ::cppu::WeakImplHelper5
+class OLESimpleStorage  : public ::cppu::WeakImplHelper6
                 < ::com::sun::star::container::XNameContainer
                 , ::com::sun::star::lang::XComponent
                 , ::com::sun::star::lang::XInitialization
                 , ::com::sun::star::embed::XTransactedObject
+                , ::com::sun::star::embed::XClassifiedObject
                 , ::com::sun::star::lang::XServiceInfo >
 {
     ::osl::Mutex m_aMutex;
@@ -206,6 +211,21 @@ public:
     virtual void SAL_CALL revert()
         throw ( ::com::sun::star::io::IOException,
                 ::com::sun::star::lang::WrappedTargetException,
+                ::com::sun::star::uno::RuntimeException );
+
+    //____________________________________________________________________________________________________
+    //  XClassifiedObject
+    //____________________________________________________________________________________________________
+
+    virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL getClassID()
+        throw ( ::com::sun::star::uno::RuntimeException );
+
+    virtual ::rtl::OUString SAL_CALL getClassName()
+        throw ( ::com::sun::star::uno::RuntimeException );
+
+    virtual void SAL_CALL setClassInfo( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aClassID,
+                                        const ::rtl::OUString& sClassName )
+        throw ( ::com::sun::star::lang::NoSupportException,
                 ::com::sun::star::uno::RuntimeException );
 
     //____________________________________________________________________________________________________
