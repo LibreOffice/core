@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ab $ $Date: 2002-07-30 13:10:28 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 12:39:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,7 +309,7 @@ public:
 
 // Helper functions
 SbModule* createModImpl( Window* pWin, SfxObjectShell* pShell, StarBASIC* pLib,
-    BasicTreeListBox& rBasicBox, const String& aLibName, String aModName );
+    BasicTreeListBox& rBasicBox, const String& aLibName, String aModName, bool bMain = false );
 void createLibImpl( Window* pWin, SfxObjectShell* pShell,
                     BasicCheckBox* pLibBox, BasicTreeListBox* pBasicBox );
 
