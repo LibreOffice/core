@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanner.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-17 09:43:07 $
+ *  last change: $Author: ab $ $Date: 2001-07-10 09:53:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,8 +182,6 @@ static SbxDataType GetSuffixType( sal_Unicode c )
 
 BOOL SbiScanner::NextSym()
 {
-    static International aEnglischIntn( LANGUAGE_ENGLISH_US, LANGUAGE_ENGLISH_US );
-
     // Fuer den EOLN-Fall merken
     USHORT nOldLine = nLine;
     USHORT nOldCol1 = nCol1;
@@ -321,8 +319,8 @@ BOOL SbiScanner::NextSym()
 
         // #57844 Lokalisierte Funktion benutzen
         int nErrno;
-        nVal = SolarMath::StringToDouble( buf, aEnglischIntn, nErrno );
-        // ATL: nVal = atof( buf );
+        nVal = SolarMath::StringToDouble( buf, ',', '.', nErrno );
+        // ALT: nVal = atof( buf );
 
         ndig -= comma;
         if( !comma && !exp )
