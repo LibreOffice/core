@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngconvex.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 14:59:12 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:30:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,7 +375,44 @@ void add_group_entries(
 //###########################################
 void read_ulf_file(const std::string& FileName, Substitutor& Substitutor)
 {
-    Config config(OStringToOUString(FileName.c_str()).getStr());
+    // work-around for #i32420#
+
+    // as the Config class is currently not able to deal correctly with
+    // UTF8 files starting with a byte-order-mark we create a copy of the
+    // original file without the byte-order-mark
+    rtl::OUString tmpfile_url;
+    oslFileError osl_error = osl_createTempFile(NULL, NULL, &tmpfile_url.pData);
+
+    rtl::OUString tmpfile_sys;
+    osl::FileBase::getSystemPathFromFileURL(tmpfile_url, tmpfile_sys);
+
+    std::ifstream in(FileName.c_str());
+    std::ofstream out(OUStringToOString(tmpfile_sys).getStr());
+
+    try
+    {
+        StreamExceptionsEnabler sexc_out(out);
+        StreamExceptionsEnabler sexc_in(in);
+
+        //skip the byte-order-mark 0xEF 0xBB 0xBF, identifying UTF8 files
+        char dummy;
+        in >> dummy; in >> dummy; in >> dummy;
+
+        std::string line;
+        while (std::getline(in, line))
+            out << line << std::endl;
+    }
+    catch (const std::ios::failure& ex)
+    {
+        if (!in.eof())
+            throw;
+    }
+
+    //Config config(OStringToOUString(FileName.c_str()).getStr());
+
+    // end work-around for #i32420#
+
+    Config config(tmpfile_url.getStr());
     size_t grpcnt = config.GetGroupCount();
     for (size_t i = 0; i < grpcnt; i++)
         add_group_entries(config, config.GetGroupName(i), Substitutor);
