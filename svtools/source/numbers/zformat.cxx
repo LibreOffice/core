@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: er $ $Date: 2000-12-04 07:19:38 $
+ *  last change: $Author: er $ $Date: 2000-12-06 17:18:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2182,10 +2182,34 @@ void SvNumberformat::SwitchToOtherCalendar( String& rOrgCalendar, double& fOrgDa
                     fOrgDateTime = rCal.getDateTime();
                     rCal.loadCalendar( xCals[j], rLoc().getLocale() );
                     rCal.setDateTime( fOrgDateTime );
+                    break;  // for
                 }
             }
         }
     }
+}
+
+
+void lcl_SvNumberformat_AppendEraG( String& OutString, const CalendarWrapper& rCal )
+{
+    using namespace ::com::sun::star::i18n;
+    sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );
+    if ( rCal.getUniqueID().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "gengou" ) ) )
+    {
+        sal_Unicode cEra;
+        switch ( nVal )
+        {
+            case 1 :    cEra = 'M'; break;
+            case 2 :    cEra = 'T'; break;
+            case 3 :    cEra = 'S'; break;
+            case 4 :    cEra = 'H'; break;
+            default:
+                cEra = '?';
+        }
+        OutString += cEra;
+    }
+    else
+        OutString += rCal.getDisplayName( CalendarDisplayIndex::ERA, nVal, 0 );
 }
 
 
@@ -2384,21 +2408,7 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
                     CalendarFieldIndex::WEEK_OF_YEAR ) );
             break;
             case NF_KEY_G:                  // G
-            {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );
-//! TODO: what if the calendar is not Japanese "gengou"?
-                sal_Unicode cEra;
-                switch ( nVal )
-                {
-                    case 1 :    cEra = 'M'; break;
-                    case 2 :    cEra = 'T'; break;
-                    case 3 :    cEra = 'S'; break;
-                    case 4 :    cEra = 'H'; break;
-                    default:
-                        cEra = '?';
-                }
-                OutString += cEra;
-            }
+                lcl_SvNumberformat_AppendEraG( OutString, rCal );
             break;
             case NF_KEY_GG:                 // GG
             {
@@ -2750,21 +2760,7 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                     CalendarFieldIndex::WEEK_OF_YEAR ) );
             break;
             case NF_KEY_G:                  // G
-            {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );
-//! TODO: what if the calendar is not Japanese "gengou"?
-                sal_Unicode cEra;
-                switch ( nVal )
-                {
-                    case 1 :    cEra = 'M'; break;
-                    case 2 :    cEra = 'T'; break;
-                    case 3 :    cEra = 'S'; break;
-                    case 4 :    cEra = 'H'; break;
-                    default:
-                        cEra = '?';
-                }
-                OutString += cEra;
-            }
+                lcl_SvNumberformat_AppendEraG( OutString, rCal );
             break;
             case NF_KEY_GG:                 // GG
             {
