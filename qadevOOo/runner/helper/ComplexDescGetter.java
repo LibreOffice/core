@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComplexDescGetter.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-11-18 16:14:20 $
+ *  last change:$Date: 2004-05-03 08:48:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,10 @@ public class ComplexDescGetter extends DescGetter {
         }
 
         return dEntry;
+    }
+
+    protected String[] createScenario(String descPath, String job, boolean debug) {
+        return new String[]{};
     }
 
 }
