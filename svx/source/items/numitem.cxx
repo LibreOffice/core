@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numitem.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 13:44:30 $
+ *  last change: $Author: os $ $Date: 2002-07-03 10:03:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,7 +389,7 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
         rStream << (USHORT)0;
     rStream << aGraphicSize;
 
-    rStream << nBulletColor;
+    rStream << (nBulletColor == COL_AUTO ? COL_BLACK : nBulletColor);
     rStream << nBulletRelSize;
     rStream << (USHORT)IsShowSymbol();
     return rStream;
