@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edfmt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:00:53 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:22:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,25 +228,7 @@ SwCharFmt* SwEditShell::FindCharFmtByName( const String& rName ) const
     return pDoc->FindCharFmtByName( rName );
 }
 
-SwFrmFmt* SwEditShell::FindFrmFmtByName( const String& rName ) const
-{
-    return pDoc->FindFrmFmtByName( rName );
-}
-
 SwTxtFmtColl* SwEditShell::FindTxtFmtCollByName( const String& rName ) const
 {
     return pDoc->FindTxtFmtCollByName( rName );
 }
-
-#ifdef USED
-
-SwGrfFmtColl* SwEditShell::FindGrfFmtCollByName( const String& rName ) const
-{
-    return pDoc->FindGrfFmtCollByName( rName );
-}
-#endif
-
-
-
-
-
