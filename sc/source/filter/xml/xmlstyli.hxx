@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-11 07:43:40 $
+ *  last change: $Author: sab $ $Date: 2001-06-07 10:07:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,6 +305,12 @@ namespace com { namespace sun { namespace star {
 
 class ScMasterPageContext : public XMLTextMasterPageContext
 {
+    com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xPropSet;
+    const rtl::OUString     sEmpty;
+    sal_Bool                bContainsRightHeader : 1;
+    sal_Bool                bContainsRightFooter : 1;
+
+    void ClearContent(const rtl::OUString& rContent);
 public:
 
     TYPEINFO();

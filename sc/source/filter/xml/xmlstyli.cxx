@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-11 07:43:40 $
+ *  last change: $Author: sab $ $Date: 2001-06-07 10:07:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1023,7 +1023,9 @@ ScMasterPageContext::ScMasterPageContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
         sal_Bool bOverwrite ) :
-    XMLTextMasterPageContext( rImport, nPrfx, rLName, xAttrList, bOverwrite )
+    XMLTextMasterPageContext( rImport, nPrfx, rLName, xAttrList, bOverwrite ),
+    bContainsRightHeader(sal_False),
+    bContainsRightFooter(sal_False)
 {
 }
 
@@ -1048,16 +1050,43 @@ SvXMLImportContext *ScMasterPageContext::CreateHeaderFooterContext(
             const sal_Bool bFooter,
             const sal_Bool bLeft )
 {
-    Reference < XPropertySet > xPropSet( GetStyle(), UNO_QUERY );
+    if (!bLeft)
+        if (bFooter)
+            bContainsRightFooter = sal_True;
+        else
+            bContainsRightHeader = sal_True;
+    if (!xPropSet.is())
+        xPropSet = Reference < XPropertySet > ( GetStyle(), UNO_QUERY );
     return new XMLTableHeaderFooterContext( GetImport(),
                                                 nPrefix, rLocalName,
                                                 xAttrList,
                                                 xPropSet,
                                                 bFooter, bLeft );
-    return NULL;
+}
+
+void ScMasterPageContext::ClearContent(const rtl::OUString& rContent)
+{
+    if (!xPropSet.is())
+        xPropSet = Reference < XPropertySet > ( GetStyle(), UNO_QUERY );
+
+    Any aAny;
+    aAny = xPropSet->getPropertyValue( rContent );
+    Reference < sheet::XHeaderFooterContent > xHeaderFooterContent;
+    if (aAny >>= xHeaderFooterContent)
+    {
+        xHeaderFooterContent->getLeftText()->setString(sEmpty);
+        xHeaderFooterContent->getCenterText()->setString(sEmpty);
+        xHeaderFooterContent->getRightText()->setString(sEmpty);
+        aAny <<= xHeaderFooterContent;
+        xPropSet->setPropertyValue( rContent, aAny );
+    }
 }
 
 void ScMasterPageContext::Finish( sal_Bool bOverwrite )
 {
     XMLTextMasterPageContext::Finish(bOverwrite);
+    if (!bContainsRightFooter)
+        ClearContent(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_PAGE_RIGHTFTRCON)));
+    if (!bContainsRightHeader)
+        ClearContent(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_PAGE_RIGHTHDRCON)));
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableHeaderFooterContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
+ *  last change: $Author: sab $ $Date: 2001-06-07 10:07:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,11 +93,15 @@ class XMLTableHeaderFooterContext: public SvXMLImportContext
     const ::rtl::OUString   sShareContent;
     const ::rtl::OUString   sContent;
     const ::rtl::OUString   sContentLeft;
+    const ::rtl::OUString   sEmpty;
     rtl::OUString           sCont;
 
     sal_Bool    bDisplay : 1;
     sal_Bool    bInsertContent : 1;
     sal_Bool    bLeft : 1;
+    sal_Bool    bContainsLeft : 1;
+    sal_Bool    bContainsRight : 1;
+    sal_Bool    bContainsCenter : 1;
 
 public:
     TYPEINFO();

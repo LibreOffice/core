@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableHeaderFooterContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
+ *  last change: $Author: sab $ $Date: 2001-06-07 10:07:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,10 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
     sContentLeft( OUString::createFromAscii( bFooter ? SC_UNO_PAGE_LEFTFTRCONT : SC_UNO_PAGE_LEFTHDRCONT ) ),
     bInsertContent( sal_True ),
     bLeft( bLft ),
-    bDisplay( sal_True )
+    bDisplay( sal_True ),
+    bContainsLeft(sal_False),
+    bContainsRight(sal_False),
+    bContainsCenter(sal_False)
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -199,11 +202,11 @@ SvXMLImportContext *XMLTableHeaderFooterContext::CreateChildContext(
             if( xHeaderFooterContent.is() )
             {
                 uno::Reference < text::XText > xText = xHeaderFooterContent->getCenterText();
-                rtl::OUString sEmpty;
                 xText->setString(sEmpty);
                 xTextCursor = xText->createTextCursor();
                 xOldTextCursor = GetImport().GetTextImport()->GetCursor();
                 GetImport().GetTextImport()->SetCursor( xTextCursor );
+                bContainsCenter = sal_True;
             }
         }
         pContext =
@@ -220,14 +223,22 @@ SvXMLImportContext *XMLTableHeaderFooterContext::CreateChildContext(
             {
                 uno::Reference < text::XText > xText;
                 if (rLocalName.compareToAscii( sXML_region_left ) == 0)
+                {
                     xText = xHeaderFooterContent->getLeftText();
+                    bContainsLeft = sal_True;
+                }
                 else if (rLocalName.compareToAscii( sXML_region_center ) == 0)
+                {
                     xText = xHeaderFooterContent->getCenterText();
+                    bContainsCenter = sal_True;
+                }
                 else if (rLocalName.compareToAscii( sXML_region_right ) == 0)
+                {
                     xText = xHeaderFooterContent->getRightText();
+                    bContainsRight = sal_True;
+                }
                 if (xText.is())
                 {
-                    rtl::OUString sEmpty;
                     xText->setString(sEmpty);
                     pContext = new XMLHeaderFooterRegionContext( GetImport(), nPrefix, rLocalName, xAttrList, xText->createTextCursor() );
                 }
@@ -247,7 +258,6 @@ void XMLTableHeaderFooterContext::EndElement()
         //GetImport().GetTextImport()->GetCursor()->gotoEnd(sal_False);
         if( GetImport().GetTextImport()->GetCursor()->goLeft( 1, sal_True ) )
         {
-            OUString sEmpty;
             GetImport().GetTextImport()->GetText()->insertString(
                 GetImport().GetTextImport()->GetCursorAsRange(), sEmpty,
                 sal_True );
@@ -258,6 +268,13 @@ void XMLTableHeaderFooterContext::EndElement()
         GetImport().GetTextImport()->SetCursor(xOldTextCursor);
     if (xHeaderFooterContent.is())
     {
+        if (!bContainsLeft)
+            xHeaderFooterContent->getLeftText()->setString(sEmpty);
+        if (!bContainsCenter)
+            xHeaderFooterContent->getCenterText()->setString(sEmpty);
+        if (!bContainsRight)
+            xHeaderFooterContent->getRightText()->setString(sEmpty);
+
         Any aAny;
         aAny <<= xHeaderFooterContent;
         xPropSet->setPropertyValue( sCont, aAny );
