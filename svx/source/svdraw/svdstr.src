@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-15 20:56:40 $
+ *  last change: $Author: rt $ $Date: 2000-11-24 16:36:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -16501,7 +16501,7 @@ String SIP_SA_GRAFCROP
     Text[ portuguese_brazilian ] = "Crop";
     Text[ japanese ] = "ÄØÐÝ¸Þ";
     Text[ korean ] = "Crop";
-    Text[ chinese_simplified ] = "¼ôÏÂ";
+    Text[ chinese_simplified ] = "¼ô²Ã";
     Text[ chinese_traditional ] = "µô°Å";
     Text[ turkish ] = "Crop";
     Text[ arabic ] = "ÇÞÊÕÇÕ";
