@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 10:10:30 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:26:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1510,8 +1510,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                                 break;
                         }
 
-                        bFoundObjNoLine = TRUE;
-                        bFoundObjNoArea = TRUE;
+                        // #i25616# bFoundObjNoLine = TRUE;
+                        // #i25616# bFoundObjNoArea = TRUE;
                         break;
                     default :
                         bFoundAny = TRUE;
@@ -1527,7 +1527,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         if (!bFoundAny)
         {
             // Disable menuitem for area-dialog
-            rSet.DisableItem( SID_ATTRIBUTES_AREA );
+            if( bFoundObjNoArea ) // #i25616#
+                rSet.DisableItem( SID_ATTRIBUTES_AREA );
 
             // Disable menuitem for line-dialog
             if( bFoundObjNoLine )
