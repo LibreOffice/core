@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utility.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-15 11:39:30 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 08:40:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,13 +97,6 @@ namespace configmgr
     };
 
     struct Refcounted
-    : virtual salhelper::SimpleReferenceObject
-    {
-    };
-
-    // helps to workaround some ambiguity problems
-    template <typename>
-    struct RefcountedAs
     : virtual salhelper::SimpleReferenceObject
     {
     };
