@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlplug.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:44:56 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:48:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,9 +549,9 @@ void SwHTMLParser::InsertEmbed()
 
 /*  */
 
+#ifdef SOLAR_JAVA
 void SwHTMLParser::NewObject()
 {
-#ifdef SOLAR_JAVA
     String aClassID, aName, aStandBy, aId, aStyle, aClass;
     Size aSize( USHRT_MAX, USHRT_MAX );
     Size aSpace( 0, 0 );
@@ -685,8 +685,8 @@ void SwHTMLParser::NewObject()
     SetFixSize( aSize, aDfltSz, bPrcWidth, bPrcHeight, aItemSet, aPropInfo,
                 rFrmSet );
     SetSpace( aSpace, aItemSet, aPropInfo, rFrmSet );
-#endif
 }
+#endif
 
 void SwHTMLParser::EndObject()
 {
@@ -716,9 +716,9 @@ void SwHTMLParser::EndObject()
 #endif
 }
 
+#ifdef SOLAR_JAVA
 void SwHTMLParser::InsertApplet()
 {
-#ifdef SOLAR_JAVA
     String aCodeBase, aCode, aName, aAlt, aId, aStyle, aClass;
     Size aSize( USHRT_MAX, USHRT_MAX );
     Size aSpace( 0, 0 );
@@ -813,8 +813,8 @@ void SwHTMLParser::InsertApplet()
     SetFixSize( aSize, aDfltSz, bPrcWidth, bPrcHeight, aItemSet, aPropInfo,
                 rFrmSet );
     SetSpace( aSpace, aItemSet, aPropInfo, rFrmSet );
-#endif
 }
+#endif
 
 void SwHTMLParser::EndApplet()
 {
