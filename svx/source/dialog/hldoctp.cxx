@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldoctp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-14 18:06:42 $
+ *  last change: $Author: pb $ $Date: 2001-06-22 10:53:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
+#endif
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
 #endif
 
 #include "hldoctp.hxx"
@@ -389,32 +392,26 @@ void SvxHyperlinkDocTp::SetInitFocus()
 IMPL_LINK ( SvxHyperlinkDocTp, ClickFileopenHdl_Impl, void *, EMPTYARG )
 {
     // Open Fileopen-Dialog
-    SfxFileDialog* pFileDlg = SFX_APP()->CreateDocFileDialog( ( WB_3DLOOK | WB_STDMODAL | WB_OPEN ),
-                                                                *(SfxObjectFactory*)NULL );
+       sfx2::FileDialogHelper aDlg( FILEOPEN_SIMPLE, 0 );
     String aOldURL( GetCurrentURL() );
     if( aOldURL.EqualsIgnoreCaseAscii( sFileScheme, 0, sizeof( sFileScheme ) - 1 ) ||
         aOldURL.EqualsIgnoreCaseAscii( sPortalFileScheme, 0, sizeof( sFileScheme ) - 1 ) )
     {
-        pFileDlg->SetPathURL( aOldURL );
+        aDlg.SetDisplayDirectory( aOldURL );
     }
 
-    if( pFileDlg )
+    if ( aDlg.Execute() == ERRCODE_NONE )
     {
-        if ( pFileDlg->Execute() == RET_OK )
-        {
-            String aURL( pFileDlg->GetPath() );
-            String aPath;
+        String aURL( aDlg.GetPath() );
+        String aPath;
 
-            utl::LocalFileHelper::ConvertURLToSystemPath( aURL, aPath );
+        utl::LocalFileHelper::ConvertURLToSystemPath( aURL, aPath );
 
-            maCbbPath.SetBaseURL( aURL );
-            maCbbPath.SetText( aPath );
+        maCbbPath.SetBaseURL( aURL );
+        maCbbPath.SetText( aPath );
 
-            if ( aOldURL != GetCurrentURL() )
-                ModifiedPathHdl_Impl (NULL);
-        }
-
-        delete pFileDlg;
+        if ( aOldURL != GetCurrentURL() )
+            ModifiedPathHdl_Impl (NULL);
     }
 
     return( 0L );

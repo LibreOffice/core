@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphatch.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-15 11:46:06 $
+ *  last change: $Author: pb $ $Date: 2001-06-22 10:52:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@
 #ifndef _SFXMODULE_HXX
 #include <sfx2/module.hxx>
 #endif
-#ifndef _SFXFILEDLG_HXX
-#include <sfx2/iodlg.hxx>
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
 #endif
 #pragma hdrstop
 
@@ -759,16 +759,15 @@ IMPL_LINK( SvxHatchTabPage, ClickLoadHdl_Impl, void *, p )
 
     if ( nReturn != RET_CANCEL )
     {
-        SfxFileDialog* pFileDlg = new SfxFileDialog( DLGWIN, WB_OPEN | WB_3DLOOK );
-
+        sfx2::FileDialogHelper aDlg( FILEOPEN_SIMPLE, 0 );
         String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.soh" ) );
-        pFileDlg->AddFilter( aStrFilterType, aStrFilterType );
-        String aFile( SvtPathOptions().GetPalettePath() );
-        pFileDlg->SetPath( aFile );
+        aDlg.AddFilter( aStrFilterType, aStrFilterType );
+        INetURLObject aFile( SvtPathOptions().GetPalettePath() );
+        aDlg.SetDisplayDirectory( aFile.GetMainURL() );
 
-        if( pFileDlg->Execute() == RET_OK )
+        if( aDlg.Execute() == ERRCODE_NONE )
         {
-            INetURLObject aURL( pFileDlg->GetPath() );
+            INetURLObject aURL( aDlg.GetPath() );
             INetURLObject aPathURL( aURL );
 
             aPathURL.removeSegment();
@@ -817,7 +816,6 @@ IMPL_LINK( SvxHatchTabPage, ClickLoadHdl_Impl, void *, p )
                 ErrorBox( DLGWIN, WinBits( WB_OK ),
                     String( ResId( RID_SVXSTR_READ_DATA_ERROR, pMgr ) ) ).Execute();
         }
-        delete( pFileDlg );
     }
 
     // Status der Buttons ermitteln
@@ -840,10 +838,9 @@ IMPL_LINK( SvxHatchTabPage, ClickLoadHdl_Impl, void *, p )
 
 IMPL_LINK( SvxHatchTabPage, ClickSaveHdl_Impl, void *, p )
 {
-    SfxFileDialog* pFileDlg = new SfxFileDialog( DLGWIN, WB_SAVEAS | WB_3DLOOK );
-
+       sfx2::FileDialogHelper aDlg( FILESAVE_SIMPLE, 0 );
     String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.soh" ) );
-    pFileDlg->AddFilter( aStrFilterType, aStrFilterType );
+    aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
     INetURLObject aFile( SvtPathOptions().GetPalettePath() );
     DBG_ASSERT( aFile.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
@@ -856,11 +853,10 @@ IMPL_LINK( SvxHatchTabPage, ClickSaveHdl_Impl, void *, p )
             aFile.SetExtension( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "soh" ) ) );
     }
 
-    pFileDlg->SetPath( aFile.GetMainURL() );
-
-    if( pFileDlg->Execute() == RET_OK )
+    aDlg.SetDisplayDirectory( aFile.GetMainURL() );
+    if ( aDlg.Execute() == ERRCODE_NONE )
     {
-        INetURLObject aURL( pFileDlg->GetPath() );
+        INetURLObject aURL( aDlg.GetPath() );
         INetURLObject aPathURL( aURL );
 
         aPathURL.removeSegment();
@@ -895,7 +891,7 @@ IMPL_LINK( SvxHatchTabPage, ClickSaveHdl_Impl, void *, p )
                 String( SVX_RES( RID_SVXSTR_WRITE_DATA_ERROR ) ) ).Execute();
         }
     }
-    delete pFileDlg;
+
     return 0L;
 }
 

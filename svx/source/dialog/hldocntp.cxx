@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldocntp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-29 14:56:53 $
+ *  last change: $Author: pb $ $Date: 2001-06-22 10:53:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,8 +100,30 @@
 #ifndef INCLUDED_SVTOOLS_DYNAMICMENUOPTIONS_HXX
 #include <svtools/dynamicmenuoptions.hxx>
 #endif
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
+#endif
 
 #include "hyperdlg.hrc"
+
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
+#ifndef  _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_XFOLDERPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_EXECUTABLEDIALOGRESULTS_HPP_
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#endif
+
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::ui::dialogs;
+using namespace ::com::sun::star::uno;
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -607,8 +629,9 @@ void SvxHyperlinkNewDocTp::Reset( const SfxItemSet& rItemSet)
 
 IMPL_LINK ( SvxHyperlinkNewDocTp, ClickNewHdl_Impl, void *, EMPTYARG )
 {
-    SfxFileDialog aDlg( SFX_APP()->GetTopWindow(), WB_3DLOOK | WB_OPEN |
-                        SFXWB_PATHDIALOG );
+    rtl::OUString aService( RTL_CONSTASCII_USTRINGPARAM( FOLDER_PICKER_SERVICE_NAME ) );
+    Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+    Reference < XFolderPicker > xFolderPicker( xFactory->createInstance( aService ), UNO_QUERY );
 
     String aStrURL( maCbbPath.GetText() );
     utl::LocalFileHelper::ConvertSystemPathToURL( aStrURL, maCbbPath.GetBaseURL(), aStrURL );
@@ -619,14 +642,14 @@ IMPL_LINK ( SvxHyperlinkNewDocTp, ClickNewHdl_Impl, void *, EMPTYARG )
     if ( aStrPath == aEmptyStr )
         aStrPath = SvtPathOptions().GetWorkPath();
 
-    aDlg.SetPath ( aStrPath );
+    xFolderPicker->setDisplayDirectory( aStrPath );
 
-    if ( aDlg.Execute() == RET_OK )
+    if ( xFolderPicker->execute() == ExecutableDialogResults::OK )
     {
         sal_Char const sSlash[] = "/";
 
-        maCbbPath.SetBaseURL( aDlg.GetPath() );
-        String aStrTmp( aDlg.GetPath() );
+        maCbbPath.SetBaseURL( xFolderPicker->getDirectory() );
+        String aStrTmp( xFolderPicker->getDirectory() );
 
         if( aStrTmp.GetChar( aStrTmp.Len() - 1 ) != sSlash[0] )
             aStrTmp.AppendAscii( sSlash );

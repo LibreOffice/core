@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 14:52:10 $
+ *  last change: $Author: pb $ $Date: 2001-06-22 10:53:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,16 +100,15 @@
 #ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
 #endif
-#ifndef _IODLG_HXX
-#include <sfx2/iodlg.hxx>
-#endif
 #ifndef _SFXMODULE_HXX
 #include <sfx2/module.hxx>
 #endif
 #ifndef _SFX_INETTBC_HXX
 #include <sfx2/inettbc.hxx>
 #endif
-
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
+#endif
 #pragma hdrstop
 
 #ifndef SVTOOLS_URIHELPER_HXX
@@ -647,7 +646,8 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
 
 void SvxIMapDlg::DoOpen()
 {
-    SfxFileDialog   aDlg( this, WB_3DLOOK | WB_OPEN );
+       sfx2::FileDialogHelper aDlg( FILEOPEN_SIMPLE, 0 );
+
     ImageMap        aLoadIMap;
     const String    aFilter( DEFINE_CONST_UNICODE( IMAP_ALL_FILTER ) );
 
@@ -656,11 +656,10 @@ void SvxIMapDlg::DoOpen()
     aDlg.AddFilter( DEFINE_CONST_UNICODE( IMAP_NCSA_FILTER ), DEFINE_CONST_UNICODE( IMAP_NCSA_TYPE ) );
     aDlg.AddFilter( DEFINE_CONST_UNICODE( IMAP_BINARY_FILTER ), DEFINE_CONST_UNICODE( IMAP_BINARY_TYPE ) );
 
-    aDlg.SetCurFilter( aFilter );
-    aDlg.SetPath( SvtPathOptions().GetWorkPath() );
-    aDlg.SetDefaultExt( DEFINE_CONST_UNICODE( IMAP_BINARY_EXT ) );
+    aDlg.SetCurrentFilter( aFilter );
+    aDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
 
-    if( aDlg.Execute() == RET_OK )
+    if( aDlg.Execute() == ERRCODE_NONE )
     {
         INetURLObject aURL( aDlg.GetPath() );
         DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
@@ -689,7 +688,8 @@ void SvxIMapDlg::DoOpen()
 
 BOOL SvxIMapDlg::DoSave()
 {
-    SfxFileDialog   aDlg( this, WB_3DLOOK | WB_SAVEAS );
+       sfx2::FileDialogHelper aDlg( FILEOPEN_SIMPLE, 0 );
+
     const String    aBinFilter( DEFINE_CONST_UNICODE( IMAP_BINARY_FILTER ) );
     const String    aCERNFilter( DEFINE_CONST_UNICODE( IMAP_CERN_FILTER ) );
     const String    aNCSAFilter( DEFINE_CONST_UNICODE( IMAP_NCSA_FILTER ) );
@@ -701,13 +701,12 @@ BOOL SvxIMapDlg::DoSave()
     aDlg.AddFilter( aNCSAFilter, DEFINE_CONST_UNICODE( IMAP_NCSA_TYPE ) );
     aDlg.AddFilter( aBinFilter, DEFINE_CONST_UNICODE( IMAP_BINARY_TYPE ) );
 
-    aDlg.SetCurFilter( aCERNFilter );
-    aDlg.SetPath( SvtPathOptions().GetWorkPath() );
-    aDlg.SetDefaultExt( DEFINE_CONST_UNICODE( IMAP_BINARY_EXT ) );
+    aDlg.SetCurrentFilter( aCERNFilter );
+    aDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
 
-    if( aDlg.Execute() == RET_OK )
+    if( aDlg.Execute() == ERRCODE_NONE )
     {
-        const String    aFilter( aDlg.GetCurFilter() );
+        const String    aFilter( aDlg.GetCurrentFilter() );
         String          aExt;
         ULONG           nFormat;
 
