@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydescriptor.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-05 16:37:09 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:57:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ namespace dbaccess
 DBG_NAME(OQueryDescriptor)
 //--------------------------------------------------------------------------
 OQueryDescriptor::OQueryDescriptor()
-    : ODataSettings(m_aBHelper)
+    : ODataSettings(m_aBHelper,sal_True)
     ,OQueryDescriptor_Base(m_aMutex,*this)
 {
     DBG_CTOR(OQueryDescriptor,NULL);
@@ -119,7 +119,7 @@ OQueryDescriptor::OQueryDescriptor()
 //--------------------------------------------------------------------------
 OQueryDescriptor::OQueryDescriptor(const Reference< XPropertySet >& _rxCommandDefinition)
     :OQueryDescriptor_Base(m_aMutex,*this)
-    ,ODataSettings(m_aBHelper)
+    ,ODataSettings(m_aBHelper,sal_True)
 {
     DBG_CTOR(OQueryDescriptor,NULL);
     registerProperties();
@@ -142,7 +142,7 @@ OQueryDescriptor::OQueryDescriptor(const Reference< XPropertySet >& _rxCommandDe
 //--------------------------------------------------------------------------
 OQueryDescriptor::OQueryDescriptor(const OQueryDescriptor_Base& _rSource)
     :OQueryDescriptor_Base(_rSource,*this)
-    ,ODataSettings(m_aBHelper)
+    ,ODataSettings(m_aBHelper,sal_True)
 {
     DBG_CTOR(OQueryDescriptor,NULL);
     registerProperties();
