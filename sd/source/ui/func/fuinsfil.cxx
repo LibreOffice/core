@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:14:05 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:11:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,10 +299,6 @@ FuInsertFile::FuInsertFile (
         {
             aFilterName = aFileDialog.GetCurrentFilter();
             aFile = aFileDialog.GetPath();
-            INetURLObject::SetBaseURL( aFile );
-            aFile = ::URIHelper::SmartRelToAbs( aFile, FALSE,
-                                                INetURLObject::WAS_ENCODED,
-                                                INetURLObject::DECODE_UNAMBIGUOUS );
         }
     }
     else
@@ -615,7 +611,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
         DBG_ASSERT( pStream, "Kein InStream!" );
         pStream->Seek( 0 );
 
-        ULONG nErr = pOutliner->Read( *pStream, nFormat, pDocSh->GetHeaderAttributes() );
+        ULONG nErr = pOutliner->Read( *pStream, pMedium->GetBaseURL(), nFormat, pDocSh->GetHeaderAttributes() );
 
         if (nErr || !pOutliner->GetEditEngine().GetText().Len())
         {
@@ -756,7 +752,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     DBG_ASSERT( pStream, "Kein InStream!" );
     pStream->Seek( 0 );
 
-    ULONG nErr = pOutliner->Read(*pStream, nFormat, pDocSh->GetHeaderAttributes());
+    ULONG nErr = pOutliner->Read(*pStream, pMedium->GetBaseURL(), nFormat, pDocSh->GetHeaderAttributes());
 
     if (nErr || !pOutliner->GetEditEngine().GetText().Len())
     {
