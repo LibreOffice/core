@@ -22443,3 +22443,4 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?LinkStubTipHelpHdl@SvxAccessibilityOptionsTabPage@@CAJPAX0@Z
 ?Reset@SvxAccessibilityOptionsTabPage@@UAEXABVSfxItemSet@@@Z
 ?TipHelpHdl@SvxAccessibilityOptionsTabPage@@AAEJPAVCheckBox@@@Z
+?setCheckBoxState@?%O:\SRC655\src\svx\source\fmcomp\gridcell.cxx586021527@@YAXABV?$Reference@VXColumn@sdb@star@sun@com@@@uno@star@sun@com@@PAVCheckBoxControl@svt@@@Z
