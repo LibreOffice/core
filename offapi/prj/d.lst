@@ -49,6 +49,7 @@ mkdir: %_DEST%\idl%_EXT%\com\sun\star\xml\sax
 ..\com\sun\star\configuration\*.idl %_DEST%\idl%_EXT%\com\sun\star\configuration\*.idl
 ..\com\sun\star\datatransfer\*.idl %_DEST%\idl%_EXT%\com\sun\star\datatransfer\*.idl
 ..\com\sun\star\datatransfer\clipboard\*.idl %_DEST%\idl%_EXT%\com\sun\star\datatransfer\clipboard\*.idl
+..\com\sun\star\datatransfer\dnd\*.idl %_DEST%\idl%_EXT%\com\sun\star\datatransfer\dnd\*.idl
 ..\com\sun\star\document\*.idl %_DEST%\idl%_EXT%\com\sun\star\document\*.idl
 ..\com\sun\star\drawing\*.idl %_DEST%\idl%_EXT%\com\sun\star\drawing\*.idl
 ..\com\sun\star\form\*.idl %_DEST%\idl%_EXT%\com\sun\star\form\*.idl
