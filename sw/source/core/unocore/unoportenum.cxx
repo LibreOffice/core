@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoportenum.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-08-07 12:30:52 $
+ *  last change: $Author: dvo $ $Date: 2001-08-16 12:37:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,7 @@ uno::Any SwXTextPortionEnumeration::nextElement(void)
 
  ---------------------------------------------------------------------------*/
 void lcl_InsertRefMarkPortion(
-    XTextRangeArr& rArr, SwUnoCrsr* pUnoCrsr, Reference<XText> xParent, SwTxtAttr* pAttr, BOOL bEnd)
+    XTextRangeArr& rArr, SwUnoCrsr* pUnoCrsr, Reference<XText>& rParent, SwTxtAttr* pAttr, BOOL bEnd)
 {
     SwDoc* pDoc = pUnoCrsr->GetDoc();
     SwFmtRefMark& rRefMark = ((SwFmtRefMark&)pAttr->GetAttr());
@@ -252,7 +252,7 @@ void lcl_InsertRefMarkPortion(
     if(!bEnd)
     {
         rArr.Insert(
-            new Reference< XTextRange >(pPortion = new SwXTextPortion(*pUnoCrsr, xParent, PORTION_REFMARK_START)),
+            new Reference< XTextRange >(pPortion = new SwXTextPortion(*pUnoCrsr, rParent, PORTION_REFMARK_START)),
             rArr.Count());
         pPortion->SetRefMark(xContent);
         pPortion->SetCollapsed(pAttr->GetEnd() ? FALSE : TRUE);
@@ -260,25 +260,25 @@ void lcl_InsertRefMarkPortion(
     else
     {
         rArr.Insert(
-            new Reference< XTextRange >(pPortion = new SwXTextPortion(*pUnoCrsr, xParent, PORTION_REFMARK_END)),
+            new Reference< XTextRange >(pPortion = new SwXTextPortion(*pUnoCrsr, rParent, PORTION_REFMARK_END)),
             rArr.Count());
         pPortion->SetRefMark(xContent);
     }
 }
 //-----------------------------------------------------------------------------
 void lcl_InsertRubyPortion( XTextRangeArr& rArr, SwUnoCrsr* pUnoCrsr,
-                        Reference<XText> xParent, SwTxtAttr* pAttr, BOOL bEnd)
+                        Reference<XText>& rParent, SwTxtAttr* pAttr, BOOL bEnd)
 {
     SwXRubyPortion* pPortion;
     rArr.Insert(
-        new Reference< XTextRange >(pPortion = new SwXRubyPortion(*pUnoCrsr, *(SwTxtRuby*)pAttr, xParent,
+        new Reference< XTextRange >(pPortion = new SwXRubyPortion(*pUnoCrsr, *(SwTxtRuby*)pAttr, rParent,
             bEnd)),
         rArr.Count());
     pPortion->SetCollapsed(pAttr->GetEnd() ? FALSE : TRUE);
 }
 //-----------------------------------------------------------------------------
 void lcl_InsertTOXMarkPortion(
-    XTextRangeArr& rArr, SwUnoCrsr* pUnoCrsr, Reference<XText> xParent, SwTxtAttr* pAttr, BOOL bEnd)
+    XTextRangeArr& rArr, SwUnoCrsr* pUnoCrsr, Reference<XText>& rParent, SwTxtAttr* pAttr, BOOL bEnd)
 {
     SwDoc* pDoc = pUnoCrsr->GetDoc();
     SwTOXMark& rTOXMark = ((SwTOXMark&)pAttr->GetAttr());
@@ -292,7 +292,7 @@ void lcl_InsertTOXMarkPortion(
     if(!bEnd)
     {
         rArr.Insert(
-            new Reference< XTextRange >(pPortion = new SwXTextPortion(*pUnoCrsr, xParent, PORTION_TOXMARK_START)),
+            new Reference< XTextRange >(pPortion = new SwXTextPortion(*pUnoCrsr, rParent, PORTION_TOXMARK_START)),
             rArr.Count());
         pPortion->SetTOXMark(xContent);
         pPortion->SetCollapsed(pAttr->GetEnd() ? FALSE : TRUE);
@@ -300,7 +300,7 @@ void lcl_InsertTOXMarkPortion(
     if(bEnd)
     {
         rArr.Insert(
-            new Reference< XTextRange >(pPortion = new SwXTextPortion(*pUnoCrsr, xParent, PORTION_TOXMARK_END)),
+            new Reference< XTextRange >(pPortion = new SwXTextPortion(*pUnoCrsr, rParent, PORTION_TOXMARK_END)),
             rArr.Count());
         pPortion->SetTOXMark(xContent);
     }
@@ -345,10 +345,8 @@ SV_IMPL_OP_PTRARR_SORT(SwXBookmarkPortionArr, SwXBookmarkPortion_ImplPtr)
 //-----------------------------------------------------------------------------
 void lcl_ExportBookmark(
     SwXBookmarkPortionArr& rBkmArr, ULONG nIndex,
-    SwUnoCrsr* pUnoCrsr, Reference<XText> xParent, XTextRangeArr& rPortionArr)
+    SwUnoCrsr* pUnoCrsr, Reference<XText> & rParent, XTextRangeArr& rPortionArr)
 {
-    if(!rBkmArr.Count())
-        return;
     SwXBookmarkPortion_ImplPtr pPtr;
     while(rBkmArr.Count() && nIndex == (pPtr = rBkmArr.GetObject(0))->nIndex)
     {
@@ -356,7 +354,7 @@ void lcl_ExportBookmark(
         if(BKM_TYPE_START == pPtr->nBkmType || BKM_TYPE_START_END == pPtr->nBkmType)
         {
             rPortionArr.Insert(
-                new Reference< XTextRange >(pPortion = new SwXTextPortion(*pUnoCrsr, xParent, PORTION_BOOKMARK_START)),
+                new Reference< XTextRange >(pPortion = new SwXTextPortion(*pUnoCrsr, rParent, PORTION_BOOKMARK_START)),
                 rPortionArr.Count());
             pPortion->SetBookmark(pPtr->xBookmark);
             pPortion->SetCollapsed(BKM_TYPE_START_END == pPtr->nBkmType ? TRUE : FALSE);
@@ -365,7 +363,7 @@ void lcl_ExportBookmark(
         if(BKM_TYPE_END == pPtr->nBkmType)
         {
             rPortionArr.Insert(
-                new Reference< XTextRange >(pPortion = new SwXTextPortion(*pUnoCrsr, xParent, PORTION_BOOKMARK_END)),
+                new Reference< XTextRange >(pPortion = new SwXTextPortion(*pUnoCrsr, rParent, PORTION_BOOKMARK_END)),
                 rPortionArr.Count());
             pPortion->SetBookmark(pPtr->xBookmark);
         }
@@ -420,7 +418,7 @@ SV_IMPL_OP_PTRARR_SORT(SwXRedlinePortionArr, SwXRedlinePortion_ImplPtr)
 Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
                                 XTextRangeArr& rPortionArr,
                                 SwUnoCrsr* pUnoCrsr,
-                                Reference<XText> xParent,
+                                Reference<XText> & rParent,
                                 const xub_StrLen nCurrentIndex,
                                 SwTextPortionType& ePortionType,
                                 const xub_StrLen& nFirstFrameIndex,
@@ -451,17 +449,17 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
                 {
                     case RES_TXTATR_TOXMARK:
                         lcl_InsertTOXMarkPortion(
-                            rPortionArr, pUnoCrsr, xParent, pAttr, TRUE);
+                            rPortionArr, pUnoCrsr, rParent, pAttr, TRUE);
                         ePortionType = PORTION_TEXT;
                     break;
                     case RES_TXTATR_REFMARK:
                         lcl_InsertRefMarkPortion(
-                            rPortionArr, pUnoCrsr, xParent, pAttr, TRUE);
+                            rPortionArr, pUnoCrsr, rParent, pAttr, TRUE);
                         ePortionType = PORTION_TEXT;
                     break;
                     case RES_TXTATR_CJK_RUBY:
                         lcl_InsertRubyPortion(
-                            rPortionArr, pUnoCrsr, xParent, pAttr, TRUE);
+                            rPortionArr, pUnoCrsr, rParent, pAttr, TRUE);
                         ePortionType = PORTION_TEXT;
                     break;
                 }
@@ -500,7 +498,7 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
                 {
                     pUnoCrsr->Right(1);
                     SwXTextPortion* pPortion;
-                    xRef =  pPortion = new SwXTextPortion(*pUnoCrsr, xParent, PORTION_FOOTNOTE);
+                    xRef =  pPortion = new SwXTextPortion(*pUnoCrsr, rParent, PORTION_FOOTNOTE);
                     Reference<XTextContent> xContent =
                         Reference<XTextContent>(
                         SwXFootnotes::GetObject(*pDoc, pAttr->SwTxtAttr::GetFtn()),
@@ -516,7 +514,7 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
                     rPortionArr.Insert(
                         new Reference< XTextRange >(
                             pPortion = new SwXTextPortion(
-                                *pUnoCrsr, xParent, PORTION_CONTROL_CHAR)),
+                                *pUnoCrsr, rParent, PORTION_CONTROL_CHAR)),
                         rPortionArr.Count());
                     pPortion->SetControlChar(3);
                     ePortionType = PORTION_TEXT;
@@ -529,7 +527,7 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
                     rPortionArr.Insert(
                         new Reference< XTextRange >(
                             pPortion = new SwXTextPortion(
-                                *pUnoCrsr, xParent, PORTION_CONTROL_CHAR)),
+                                *pUnoCrsr, rParent, PORTION_CONTROL_CHAR)),
                         rPortionArr.Count());
                     const SwFmtHardBlank& rFmt = pAttr->GetHardBlank();
                     if(rFmt.GetChar() == '-')
@@ -541,7 +539,7 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
                 break;
                 case RES_TXTATR_TOXMARK:
                     lcl_InsertTOXMarkPortion(
-                        rPortionArr, pUnoCrsr, xParent, pAttr, FALSE);
+                        rPortionArr, pUnoCrsr, rParent, pAttr, FALSE);
                     ePortionType = PORTION_TEXT;
                 break;
                 case RES_TXTATR_REFMARK:
@@ -551,7 +549,7 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
                         bAttrFound = sal_True;
                     }
                     lcl_InsertRefMarkPortion(
-                        rPortionArr, pUnoCrsr, xParent, pAttr, FALSE);
+                        rPortionArr, pUnoCrsr, rParent, pAttr, FALSE);
                     ePortionType = PORTION_TEXT;
                     if(!pAttr->GetEnd())
                     {
@@ -564,7 +562,7 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
                     if(pAttr->GetEnd())
                     {
                         lcl_InsertRubyPortion(
-                            rPortionArr, pUnoCrsr, xParent, pAttr, FALSE);
+                            rPortionArr, pUnoCrsr, rParent, pAttr, FALSE);
                         ePortionType = PORTION_TEXT;
                     }
                 break;
@@ -701,7 +699,7 @@ void lcl_FillRedlineArray(SwDoc& rDoc,SwUnoCrsr& rUnoCrsr, SwXRedlinePortionArr&
  ---------------------------------------------------------------------------*/
 void lcl_ExportRedline(
     SwXRedlinePortionArr& rRedlineArr, ULONG nIndex,
-    SwUnoCrsr* pUnoCrsr, Reference<XText> xParent, XTextRangeArr& rPortionArr)
+    SwUnoCrsr* pUnoCrsr, Reference<XText> & rParent, XTextRangeArr& rPortionArr)
 {
     SwXRedlinePortion_ImplPtr pPtr;
     while(rRedlineArr.Count() &&  0 != (pPtr = rRedlineArr.GetObject(0)) &&
@@ -711,7 +709,7 @@ void lcl_ExportRedline(
         SwXTextPortion* pPortion;
         rPortionArr.Insert(
             new Reference< XTextRange >(pPortion = new SwXRedlinePortion(
-                        pPtr->pRedline, *pUnoCrsr, xParent,
+                        pPtr->pRedline, *pUnoCrsr, rParent,
                         pPtr->bStart)),
             rPortionArr.Count());
         rRedlineArr.Remove((USHORT)0);
@@ -724,10 +722,13 @@ void lcl_ExportRedline(
 void lcl_ExportBkmAndRedline(
     SwXBookmarkPortionArr& rBkmArr,
     SwXRedlinePortionArr& rRedlineArr, ULONG nIndex,
-    SwUnoCrsr* pUnoCrsr, Reference<XText> xParent, XTextRangeArr& rPortionArr)
+    SwUnoCrsr* pUnoCrsr, Reference<XText> & rParent, XTextRangeArr& rPortionArr)
 {
-    lcl_ExportBookmark(rBkmArr, nIndex, pUnoCrsr, xParent, rPortionArr);
-    lcl_ExportRedline(rRedlineArr, nIndex, pUnoCrsr, xParent, rPortionArr);
+    if (rBkmArr.Count())
+        lcl_ExportBookmark(rBkmArr, nIndex, pUnoCrsr, rParent, rPortionArr);
+
+    if (rRedlineArr.Count())
+        lcl_ExportRedline(rRedlineArr, nIndex, pUnoCrsr, rParent, rPortionArr);
 }
 //-----------------------------------------------------------------------------
 sal_Int32 lcl_GetNextIndex(SwXBookmarkPortionArr& rBkmArr, SwXRedlinePortionArr& rRedlineArr)
