@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygoncutter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 11:40:01 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:37:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,11 +83,42 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #endif
 
+#include <algorithm>
+
 //////////////////////////////////////////////////////////////////////////////
-// B2DPolygonNode implementation
+// B2DPolygonNode
 
 namespace basegfx
 {
+    class B2DPolygonNode
+    {
+        B2DPoint                                maPosition;
+        B2DPolygonNode*                         mpPrevious;
+        B2DPolygonNode*                         mpNext;
+
+        B2DPolygonNode*                         mpListPrevious;
+        B2DPolygonNode*                         mpListNext;
+
+    public:
+        B2DPolygonNode(const B2DPoint& rPosition, B2DPolygonNode* pPrevious);
+        ~B2DPolygonNode();
+
+        B2DPolygonNode* getPrevious() const { return mpPrevious; }
+        B2DPolygonNode* getNext() const { return mpNext; }
+        const B2DPoint& getPosition() const { return maPosition; }
+
+        void calcMinMaxX(double& fMaxAX, double& fMinAX) const;
+        void calcMinMaxY(double& fMaxAY, double& fMinAY) const;
+
+        void swapPreviousNext() { B2DPolygonNode* pZwi = mpPrevious; mpPrevious = mpNext; mpNext = pZwi; }
+        void swapNextPointers(B2DPolygonNode* pCand);
+
+        void addToList(B2DPolygonNode*& rpList);
+        void remFromList(B2DPolygonNode*& rpList);
+
+        B2DRange getRange() const;
+    };
+
     B2DPolygonNode::B2DPolygonNode(const B2DPoint& rPosition, B2DPolygonNode* pPrevious)
     :   maPosition(rPosition)
     {
@@ -190,47 +221,6 @@ namespace basegfx
         }
     }
 
-    bool B2DPolygonNode::getOrientation() const
-    {
-        const B2DPolygonNode* pOutmost = this;
-        const B2DPolygonNode* pCurrent = this->getNext();
-
-        while(pCurrent != this)
-        {
-            if(fTools::more(pOutmost->getPosition().getX(), pCurrent->getPosition().getX()))
-            {
-                if(pCurrent->getPosition().getX() < pOutmost->getPosition().getX())
-                {
-                    pOutmost = pCurrent;
-                }
-                else
-                {
-                    if(pCurrent->getPosition().getY() < pOutmost->getPosition().getY())
-                    {
-                        pOutmost = pCurrent;
-                    }
-                }
-            }
-
-            // next node
-            pCurrent = pCurrent->getNext();
-        }
-
-        B2DVector aVec1(pOutmost->getPrevious()->getPosition() - pOutmost->getPosition());
-        B2DVector aVec2(pOutmost->getNext()->getPosition() - pOutmost->getPosition());
-        return bool(fTools::more(aVec1.getX() * aVec2.getY(), aVec1.getY() * aVec2.getX()));
-    }
-
-    void B2DPolygonNode::swapOrientation()
-    {
-        B2DPolygonNode* pCurrent = this;
-
-        do {
-            pCurrent->swapPreviousNext();
-            pCurrent = pCurrent->getPrevious();
-        } while(pCurrent != this);
-    }
-
     B2DRange B2DPolygonNode::getRange() const
     {
         B2DRange aRetval;
@@ -243,122 +233,38 @@ namespace basegfx
 
         return aRetval;
     }
-
-    bool B2DPolygonNode::isInside(const B2DPoint& rPoint, bool bWithBorder) const
-    {
-        bool bInside(false);
-        const B2DPolygonNode* pCurrent = this;
-
-        do
-        {
-            if(bWithBorder && pCurrent->getPosition().equal(rPoint))
-            {
-                return true;
-            }
-
-            B2DPolygonNode* pNext = pCurrent->getNext();
-            const bool bCompYA(fTools::more(pCurrent->getPosition().getY(), rPoint.getY()));
-            const bool bCompYB(fTools::more(pNext->getPosition().getY(), rPoint.getY()));
-
-            if(bCompYA != bCompYB)
-            {
-                const bool bCompXA(fTools::more(pCurrent->getPosition().getX(), rPoint.getX()));
-                const bool bCompXB(fTools::more(pNext->getPosition().getX(), rPoint.getX()));
-
-                if(bCompXA == bCompXB)
-                {
-                    if(bCompXA)
-                    {
-                        bInside = !bInside;
-                    }
-                }
-                else
-                {
-                    double fCmp =
-                        pNext->getPosition().getX() - (pNext->getPosition().getY() - rPoint.getY()) *
-                        (pCurrent->getPosition().getX() - pNext->getPosition().getX()) /
-                        (pCurrent->getPosition().getY() - pNext->getPosition().getY());
-
-                    if(bWithBorder && fTools::more(fCmp, rPoint.getX()))
-                    {
-                        bInside = !bInside;
-                    }
-                    else if(fTools::moreOrEqual(fCmp, rPoint.getX()))
-                    {
-                        bInside = !bInside;
-                    }
-                }
-            }
-
-            // next edge
-            pCurrent = pNext;
-
-        } while(pCurrent != this);
-
-        return bInside;
-    }
-
-    bool B2DPolygonNode::isPolygonInside(B2DPolygonNode* pPoly, bool bWithBorder) const
-    {
-        B2DPolygonNode* pTest = pPoly;
-        bool bAllAInside(true);
-
-        do {
-            bAllAInside = isInside(pTest->getPosition(), bWithBorder);
-            pTest = pTest->getNext();
-        } while(bAllAInside && pTest != pPoly);
-
-        return bAllAInside;
-    }
 } // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////
-// B2DSimpleCut implementation
+// B2DSimpleCut
 
 namespace basegfx
 {
-    void B2DSimpleCut::solve()
+    class B2DSimpleCut
     {
-        mpLeft->swapNextPointers(mpRight);
+        B2DPolygonNode*                         mpLeft;
+        B2DPolygonNode*                         mpRight;
 
-        if(mbCorrectOrientation)
+    public:
+        B2DSimpleCut(B2DPolygonNode* pL, B2DPolygonNode* pR)
+        :   mpLeft(pL),
+            mpRight(pR)
         {
-            if(mpLeft->getOrientation() != mbOrientation)
-            {
-                mpLeft->swapOrientation();
-            }
-
-            if(mpRight->getOrientation() != mbOrientation)
-            {
-                mpRight->swapOrientation();
-            }
         }
-    }
-} // end of namespace basegfx
 
-//////////////////////////////////////////////////////////////////////////////
-// B2DClipExtraPolygonInfo implementation
-
-namespace basegfx
-{
-    void B2DClipExtraPolygonInfo::init(B2DPolygonNode* pNew)
-    {
-        maRange = pNew->getRange();
-        mbOrientation = pNew->getOrientation();
-        mnDepth = (mbOrientation) ? 0L : -1L;
-    }
-
-    void B2DClipExtraPolygonInfo::changeDepth(bool bOrientation)
-    {
-        if(bOrientation)
+        void solve()
         {
-            mnDepth++;
+            mpLeft->swapNextPointers(mpRight);
         }
-        else
+
+        B2DPolygonNode* getLeft() const { return mpLeft; }
+        B2DPolygonNode* getRight() const { return mpRight; }
+
+        bool isSameCut(B2DPolygonNode* pA, B2DPolygonNode* pB) const
         {
-            mnDepth--;
+            return ((pA == mpLeft && pB == mpRight) || (pB == mpLeft && pA == mpRight));
         }
-    }
+    };
 } // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////
@@ -376,60 +282,60 @@ namespace basegfx
         maPolygonList.clear();
     }
 
-    void B2DPolyPolygonCutter::removeIncludedPolygons(bool bUseOr)
-    {
-        const sal_uInt32 aCount(maPolygonList.size());
-        B2DClipExtraPolygonInfo* pInfos = new B2DClipExtraPolygonInfo[aCount];
-        sal_uInt32 a, b;
-
-        // fill infos
-        for(a = 0L; a < aCount; a++)
-        {
-            pInfos[a].init(maPolygonList[a]);
-        }
-
-        // get all includes
-        for(a = 0L; a < aCount; a++)
-        {
-            B2DClipExtraPolygonInfo& rInfoA = pInfos[a];
-
-            for(b = 0L; b < aCount; b++)
-            {
-                B2DClipExtraPolygonInfo& rInfoB = pInfos[b];
-
-                if(a != b && doRangesInclude(rInfoA.getRange(), rInfoB.getRange()))
-                {
-                    // volume B in A, test pA, pB for inclusion, with border
-                    if(maPolygonList[a]->isPolygonInside(maPolygonList[b], true))
-                    {
-                        // pB is inside pA
-                        rInfoB.changeDepth(rInfoA.getOrientation());
-                    }
-                }
-            }
-        }
-
-        // delete removable
-        for(a = 0L, b = 0L; a < aCount; a++)
-        {
-            B2DClipExtraPolygonInfo& rInfo = pInfos[a];
-
-            if((bUseOr && rInfo.getDepth() != 0L) || (!bUseOr && rInfo.getDepth() < 1L))
-            {
-                B2DPolygonNodeVector::iterator aPosition(maPolygonList.begin() + b);
-                B2DPolygonNode* pCandidate = *aPosition;
-                maPolygonList.erase(aPosition);
-                deletePolygon(pCandidate);
-            }
-            else
-            {
-                b++;
-            }
-        }
-
-        // delete infos
-        delete[] pInfos;
-    }
+//BFS08 void B2DPolyPolygonCutter::removeIncludedPolygons(bool bUseOr)
+//BFS08 {
+//BFS08     const sal_uInt32 aCount(maPolygonList.size());
+//BFS08     B2DClipExtraPolygonInfo* pInfos = new B2DClipExtraPolygonInfo[aCount];
+//BFS08     sal_uInt32 a, b;
+//BFS08
+//BFS08     // fill infos
+//BFS08     for(a = 0L; a < aCount; a++)
+//BFS08     {
+//BFS08         pInfos[a].init(maPolygonList[a]);
+//BFS08     }
+//BFS08
+//BFS08     // get all includes
+//BFS08     for(a = 0L; a < aCount; a++)
+//BFS08     {
+//BFS08         B2DClipExtraPolygonInfo& rInfoA = pInfos[a];
+//BFS08
+//BFS08         for(b = 0L; b < aCount; b++)
+//BFS08         {
+//BFS08             B2DClipExtraPolygonInfo& rInfoB = pInfos[b];
+//BFS08
+//BFS08             if(a != b && doRangesInclude(rInfoA.getRange(), rInfoB.getRange()))
+//BFS08             {
+//BFS08                 // volume B in A, test pA, pB for inclusion, with border
+//BFS08                 if(maPolygonList[a]->isPolygonInside(maPolygonList[b], true))
+//BFS08                 {
+//BFS08                     // pB is inside pA
+//BFS08                     rInfoB.changeDepth(rInfoA.getOrientation());
+//BFS08                 }
+//BFS08             }
+//BFS08         }
+//BFS08     }
+//BFS08
+//BFS08     // delete removable
+//BFS08     for(a = 0L, b = 0L; a < aCount; a++)
+//BFS08     {
+//BFS08         B2DClipExtraPolygonInfo& rInfo = pInfos[a];
+//BFS08
+//BFS08         if((bUseOr && rInfo.getDepth() != 0L) || (!bUseOr && rInfo.getDepth() < 1L))
+//BFS08         {
+//BFS08             B2DPolygonNodeVector::iterator aPosition(maPolygonList.begin() + b);
+//BFS08             B2DPolygonNode* pCandidate = *aPosition;
+//BFS08             maPolygonList.erase(aPosition);
+//BFS08             deletePolygon(pCandidate);
+//BFS08         }
+//BFS08         else
+//BFS08         {
+//BFS08             b++;
+//BFS08         }
+//BFS08     }
+//BFS08
+//BFS08     // delete infos
+//BFS08     delete[] pInfos;
+//BFS08 }
 
     void B2DPolyPolygonCutter::solveAllCuts(B2DSimpleCutVector& rCuts)
     {
@@ -521,38 +427,27 @@ namespace basegfx
         } while(pAct != pPolygon);
     }
 
-    void B2DPolyPolygonCutter::addPolyPolygon(const B2DPolyPolygon& rPolyPolygon, bool bForceOrientation)
+    void B2DPolyPolygonCutter::addPolygon(const B2DPolygon& rPolygon)
+    {
+        if(rPolygon.isClosed() && rPolygon.count() > 2)
+        {
+            B2DPolygonNode* pNew = createNewPolygon(rPolygon);
+            maPolygonList.push_back(pNew);
+        }
+    }
+
+    void B2DPolyPolygonCutter::addPolyPolygon(const B2DPolyPolygon& rPolyPolygon)
     {
         for(sal_uInt32 a(0L); a < rPolyPolygon.count(); a++)
         {
             B2DPolygon aCandidate = rPolyPolygon.getB2DPolygon(a);
-            aCandidate.removeDoublePoints();
-
-            if(!aCandidate.isClosed() || aCandidate.count() < 3)
-            {
-                maNotClosedPolygons.append(aCandidate);
-            }
-            else
-            {
-                if(bForceOrientation)
-                {
-                    B2VectorOrientation aOrientation =
-                        tools::getOrientation(aCandidate);
-
-                    if(ORIENTATION_POSITIVE != aOrientation)
-                    {
-                        aCandidate.flip();
-                    }
-                }
-
-                B2DPolygonNode* pNew = createNewPolygon(aCandidate);
-                maPolygonList.push_back(pNew);
-            }
+            addPolygon(aCandidate);
         }
     }
 
-    void B2DPolyPolygonCutter::getPolyPolygon(B2DPolyPolygon& rPolyPolygon)
+    B2DPolyPolygon B2DPolyPolygonCutter::getPolyPolygon()
     {
+        B2DPolyPolygon aRetval;
         B2DPolygonNodeVector::iterator aCandidate(maPolygonList.begin());
 
         for(; aCandidate < maPolygonList.end(); aCandidate++)
@@ -576,7 +471,7 @@ namespace basegfx
                 } while(pAct != pCand);
 
                 aNewPolygon.setClosed(true);
-                rPolyPolygon.append(aNewPolygon);
+                aRetval.append(aNewPolygon);
             }
 
             deletePolygon(pCand);
@@ -584,11 +479,7 @@ namespace basegfx
 
         maPolygonList.clear();
 
-        while(maNotClosedPolygons.count())
-        {
-            rPolyPolygon.append(maNotClosedPolygons.getB2DPolygon(0L));
-            maNotClosedPolygons.remove(0L);
-        }
+        return aRetval;
     }
 
     B2DSimpleCut* B2DPolyPolygonCutter::getExistingCut(B2DSimpleCutVector& rTmpCuts, B2DPolygonNode* pA, B2DPolygonNode* pB)
@@ -654,9 +545,10 @@ namespace basegfx
                 pB = pA->getNext();
 
                 do {
-                    if(isSamePos(pA->getPosition(), pB->getPosition()))
+                    if(pA->getPosition().equal(pB->getPosition()))
                     {
-                        aNewCuts.push_back(new B2DSimpleCut(pA, pB, true, pCand->getOrientation()));
+//BFS08                     aNewCuts.push_back(new B2DSimpleCut(pA, pB, true, pCand->getOrientation()));
+                        aNewCuts.push_back(new B2DSimpleCut(pA, pB));
                     }
 
                     // next B
@@ -687,7 +579,7 @@ namespace basegfx
                         if(fTools::moreOrEqual(fMaxBY, fMinAY) // #116732#
                             && fTools::moreOrEqual(fMaxAY, fMinBY)) // #116732#
                         {
-                            if(!isSamePos(pA->getPosition(), pB->getPosition()))
+                            if(!pA->getPosition().equal(pB->getPosition()))
                             {
                                 const B2DVector aVectorA(pA->getNext()->getPosition() - pA->getPosition());
                                 const B2DVector aVectorB(pB->getNext()->getPosition() - pB->getPosition());
@@ -698,7 +590,8 @@ namespace basegfx
                                     B2DPoint aNewPos(interpolate(pA->getPosition(), pA->getNext()->getPosition(), fCut));
                                     B2DPolygonNode* pCutLo = new B2DPolygonNode(aNewPos, pA);
                                     B2DPolygonNode* pCutHi = new B2DPolygonNode(aNewPos, pB);
-                                    aNewCuts.push_back(new B2DSimpleCut(pCutLo, pCutHi, true, pCand->getOrientation()));
+//BFS08                                 aNewCuts.push_back(new B2DSimpleCut(pCutLo, pCutHi, true, pCand->getOrientation()));
+                                    aNewCuts.push_back(new B2DSimpleCut(pCutLo, pCutHi));
                                     pA->calcMinMaxX(fMaxAX, fMinAX);
                                     pA->calcMinMaxY(fMaxAY, fMinAY);
                                 }
@@ -708,13 +601,15 @@ namespace basegfx
                                     {
                                         // startpoint A at edge B, one new point
                                         B2DPolygonNode* pCutHi = new B2DPolygonNode(pA->getPosition(), pB);
-                                        aNewCuts.push_back(new B2DSimpleCut(pA, pCutHi, true, pCand->getOrientation()));
+//BFS08                                     aNewCuts.push_back(new B2DSimpleCut(pA, pCutHi, true, pCand->getOrientation()));
+                                        aNewCuts.push_back(new B2DSimpleCut(pA, pCutHi));
                                     }
                                     else if(tools::isPointOnEdge(pB->getPosition(), pA->getPosition(), aVectorA, &fCut))
                                     {
                                         // startpoint B at edge A, one new point
                                         B2DPolygonNode* pCutLo = new B2DPolygonNode(pB->getPosition(), pA);
-                                        aNewCuts.push_back(new B2DSimpleCut(pCutLo, pB, true, pCand->getOrientation()));
+//BFS08                                     aNewCuts.push_back(new B2DSimpleCut(pCutLo, pB, true, pCand->getOrientation()));
+                                        aNewCuts.push_back(new B2DSimpleCut(pCutLo, pB));
                                         pA->calcMinMaxX(fMaxAX, fMinAX);
                                         pA->calcMinMaxY(fMaxAY, fMinAY);
                                     }
@@ -863,6 +758,16 @@ namespace basegfx
         return (bA1BiggerB1 == bA2BiggerB2);
     }
 
+    bool B2DPolyPolygonCutter::isNextSamePos(B2DPolygonNode* pA, B2DPolygonNode* pB)
+    {
+        return pA->getNext()->getPosition().equal(pB->getNext()->getPosition());
+    }
+
+    bool B2DPolyPolygonCutter::isPrevSamePos(B2DPolygonNode* pA, B2DPolygonNode* pB)
+    {
+        return pA->getPrevious()->getPosition().equal(pB->getPrevious()->getPosition());
+    }
+
     void B2DPolyPolygonCutter::removeDoubleIntersections()
     {
         double fMaxAX, fMinAX, fMaxAY, fMinAY;
@@ -892,7 +797,7 @@ namespace basegfx
 
             for(sal_uInt32 b = a + 1L; b < maPolygonList.size(); b++)
             {
-                if(doRangesIntersect(pVolumes[a], pVolumes[b]))
+                if(pVolumes[a].overlaps(pVolumes[b]))
                 {
                     pCandB = maPolygonList[b];
                     pA = pCandA;
@@ -903,7 +808,7 @@ namespace basegfx
                         pB = pCandB;
 
                         do {
-                            if(isSamePos(pA->getPosition(), pB->getPosition()))
+                            if(pA->getPosition().equal(pB->getPosition()))
                             {
                                 aTmpCuts.push_back(new B2DSimpleCut(pA, pB));
                             }
@@ -936,7 +841,7 @@ namespace basegfx
                                 if(fTools::moreOrEqual(fMaxBY, fMinAY) // #116732#
                                     && fTools::moreOrEqual(fMaxAY, fMinBY)) // #116732#
                                 {
-                                    if(!isSamePos(pA->getPosition(), pB->getPosition()))
+                                    if(!pA->getPosition().equal(pB->getPosition()))
                                     {
                                         const B2DVector aVectorA(pA->getNext()->getPosition() - pA->getPosition());
                                         const B2DVector aVectorB(pB->getNext()->getPosition() - pB->getPosition());
