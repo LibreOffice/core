@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2001-09-27 20:43:55 $
+ *  last change: $Author: kz $ $Date: 2001-10-02 21:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,7 +543,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ portuguese ] = "Inserir tнtulo da tabela";
         Text[ russian ] = "¬ставить заголовок таблицы";
         Text[ greek ] = "≈несгпрпязуз";
-        Text[ dutch ] = "In~schakelen";
+        Text[ dutch ] = "Tabelopschrift invoegen";
         Text[ french ] = "Insйrer le titre de la table";
         Text[ spanish ] = "Insertar encabezado de tabla";
         Text[ finnish ] = "Lis?? taulukon otsikko";
@@ -572,7 +572,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ portuguese ] = "~Aplicar nomes das colunas";
         Text[ russian ] = "ѕрин€ть имена колонок";
         Text[ greek ] = "ѕньмбфб уфёлзт";
-        Text[ dutch ] = "K~olomnaam";
+        Text[ dutch ] = "K~olomnaam overnemen";
         Text[ french ] = "Appliquer les noms des colonnes";
         Text[ spanish ] = "Aplicar ~nombres de columnas";
         Text[ finnish ] = "~Hyv?ksy sarakkeen nimi";
@@ -600,7 +600,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ portuguese ] = "~Criar sу uma linha";
         Text[ russian ] = "—оздать только строку";
         Text[ greek ] = "кень";
-        Text[ dutch ] = "lee~g";
+        Text[ dutch ] = "Lege regel invoegen";
         Text[ french ] = "Crйer uniquement une ligne";
         Text[ spanish ] = "Crear sуlo fila";
         Text[ finnish ] = "Luo vain viiva";
@@ -728,6 +728,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     Text[ catalan ] = "Insertar columnas de la base de datos";
     Text[ finnish ] = "Lis?? tietokantasarakkeet";
 };
+
 
 
 
