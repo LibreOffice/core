@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-11 12:07:26 $
+ *  last change: $Author: dr $ $Date: 2002-04-16 09:28:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1167,6 +1167,14 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 }
             }
             break;
+            case 0x0026:
+            case 0x0027:
+            case 0x0028:
+            case 0x0029:
+                LINESTART();
+                ADDDOUBLE();
+                PRINT();
+            break;
             case 0x0031:        // FONT
             case 0x0231:
             {
@@ -1456,6 +1464,40 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 __AddDec( t, nN );
                 ADDTEXT( "/" );
                 __AddDec( t, nD );
+                PRINT();
+            }
+            break;
+            case 0x00A1:    // SETUP
+            {
+                LINESTART();
+                ADDTEXT( "paper size: " );          ADDDEC( 2 );
+                ADDTEXT( "   scaling: " );          ADDDEC( 2 );
+                ADDTEXT( "   start page: " );       ADDDEC( 2 );
+                PRINT();
+                LINESTART();
+                ADDTEXT( "fit to width: " );        ADDDEC( 2 );
+                ADDTEXT( "   fit to height: " );    ADDDEC( 2 );
+                PRINT();
+                LINESTART();
+                rIn >> __nFlags;
+                STARTFLAG();
+                ADDFLAG( 0x0001, " fLeftRight" );
+                ADDFLAG( 0x0002, " fPortrait" );
+                ADDFLAG( 0x0004, " fNoPrintSettings" );
+                ADDFLAG( 0x0008, " fMonochrom" );
+                ADDFLAG( 0x0010, " fDraft" );
+                ADDFLAG( 0x0020, " fNotes" );
+                ADDFLAG( 0x0040, " fNoOrientation" );
+                ADDFLAG( 0x0080, " fCustomNumber" );
+                PRINT();
+                LINESTART();
+                ADDTEXT( "Print res: " );           ADDDEC( 2 );
+                ADDTEXT( "   vert print res: " );   ADDDEC( 2 );
+                PRINT();
+                LINESTART();
+                ADDTEXT( "header margin: " );       ADDDOUBLE();
+                ADDTEXT( "   footer margin: " );    ADDDOUBLE();
+                ADDTEXT( "   copies: " );           ADDDEC( 2 );
                 PRINT();
             }
             break;
