@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viscrs.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 09:35:07 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:46:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1021,7 +1021,7 @@ FASTBOOL SwShellCrsr::IsAtValidPos( BOOL bPoint ) const
     if( GetShell() && ( GetShell()->IsAllProtect() ||
         GetShell()->GetViewOptions()->IsReadonly() ||
         ( GetShell()->Imp()->GetDrawView() &&
-          GetShell()->Imp()->GetDrawView()->GetMarkList().GetMarkCount() )))
+          GetShell()->Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() )))
         return TRUE;
 
     return SwCursor::IsAtValidPos( bPoint );
