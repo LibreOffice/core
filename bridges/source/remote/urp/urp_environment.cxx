@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_environment.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-16 08:47:31 $
+ *  last change: $Author: jbu $ $Date: 2001-05-02 14:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,9 +308,6 @@ void RemoteEnvironment::thisDispose( uno_Environment *pEnvRemote )
         pImpl->m_bDisposed = sal_True;
 
 
-        // from now on, no calls can be delivered via the bridge
-        uno_threadpool_disposeThreads( (sal_Int64) pEnvRemote );
-
         // close the connection
         urp_sendCloseConnection( pEnvRemote );
 
@@ -329,14 +326,10 @@ void RemoteEnvironment::thisDispose( uno_Environment *pEnvRemote )
             pImpl->m_pReader->join();
         }
 
+        // from now on, no calls can be delivered via the bridge
+        uno_threadpool_disposeThreads( (sal_Int64) pEnvRemote );
+
           pContext->m_pConnection->close( pContext->m_pConnection );
-#ifdef BRIDGES_URP_PROT
-        if( pImpl->m_pLogFile )
-        {
-            fclose( pImpl->m_pLogFile );
-            pImpl->m_pLogFile = 0;
-        }
-#endif
 
         // wait for the writer thread
         pImpl->m_pWriter->join();
@@ -356,6 +349,14 @@ void RemoteEnvironment::thisDispose( uno_Environment *pEnvRemote )
           {
               guard.clear();
           }
+#ifdef BRIDGES_URP_PROT
+        if( pImpl->m_pLogFile )
+        {
+            fclose( pImpl->m_pLogFile );
+            pImpl->m_pLogFile = 0;
+        }
+#endif
+        pImpl->dumpErrors( stderr );
 
         // destroy the threads
         delete pImpl->m_pWriter;
@@ -371,6 +372,7 @@ void RemoteEnvironment::thisDispose( uno_Environment *pEnvRemote )
 
         // delete the stubs
         releaseStubs( pEnvRemote );
+
     }
 }
 

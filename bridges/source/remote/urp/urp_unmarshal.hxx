@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_unmarshal.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2000-12-04 11:19:13 $
+ *  last change: $Author: jbu $ $Date: 2001-05-02 14:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ inline sal_Bool Unmarshal::setSize( sal_Int32 nSize )
 inline sal_Bool Unmarshal::checkOverflow( sal_Int32 nNextMem )
 {
     return nNextMem < 0 ||
-           (((sal_uInt32)( m_pos - m_base )) + nNextMem ) > m_nLength;
+           (((sal_Int32)( m_pos - m_base )) + nNextMem ) > m_nLength;
 }
 
 

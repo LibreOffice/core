@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_job.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2000-11-28 14:42:38 $
+ *  last change: $Author: jbu $ $Date: 2001-05-02 14:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,7 +354,7 @@ inline ClientJob::ClientJob(
         m_bReleaseForTypeDescriptionNecessary = sal_True;
         typelib_typedescription_complete( (typelib_TypeDescription ** ) &m_pInterfaceType );
     }
-    m_nMethodIndex = m_pInterfaceType->pMapMemberIndexToFunctionIndex[
+    m_nMethodIndex = (sal_uInt16) m_pInterfaceType->pMapMemberIndexToFunctionIndex[
         ((typelib_InterfaceMemberTypeDescription*)pMemberType)->nPosition ];
 
     if( m_pAttributeType && m_ppArgs )

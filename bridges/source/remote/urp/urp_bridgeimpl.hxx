@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_bridgeimpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-02-27 18:01:31 $
+ *  last change: $Author: jbu $ $Date: 2001-05-02 14:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,9 @@ struct urp_BridgeImpl :
 
     void startBlockBridge();
     void stopBlockBridge();
+    void addError( char *pError );
+    void addError( const ::rtl::OUString &anError );
+    void dumpErrors( FILE *f );
 
     ::osl::Mutex m_marshalingMutex;
     ::osl::Mutex m_disposingMutex;
@@ -145,7 +148,9 @@ struct urp_BridgeImpl :
 
     struct Properties m_properties;
     class PropertyObject *m_pPropertyObject;
+    ::std::list< ::rtl::OUString > m_lstErrors;
 };
+
 
 }
 #endif

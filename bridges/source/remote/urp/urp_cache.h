@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_cache.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:05 $
+ *  last change: $Author: jbu $ $Date: 2001-05-02 14:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ namespace bridges_urp
         inline sal_uInt16 seek( const t & );
 
         // resizes the cache, conserving overlapping values
-        inline void resize( sal_Int32 nNewMaxEntries );
+        inline void resize( sal_uInt16 nNewMaxEntries );
 
         // empties the cache
         inline void clear();

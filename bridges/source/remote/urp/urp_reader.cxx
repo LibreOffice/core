@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_reader.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jbu $ $Date: 2001-04-04 15:37:53 $
+ *  last change: $Author: jbu $ $Date: 2001-05-02 14:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,10 +209,12 @@ OReaderThread::OReaderThread( remote_Connection *pConnection,
     m_pEnvRemote( pEnvRemote ),
     m_pWriterThread( pWriterThread ),
     m_bDestroyMyself( sal_False ),
+    m_bContinue( sal_True ),
     m_pBridgeImpl((struct urp_BridgeImpl*)
                   ((remote_Context *)pEnvRemote->pContext)->m_pBridgeImpl ),
     m_unmarshal( m_pBridgeImpl, m_pEnvRemote, ::bridges_remote::remote_createStub )
 {
+    m_pEnvRemote->acquireWeak( m_pEnvRemote );
     m_pConnection->acquire( m_pConnection );
 #ifdef DEBUG
     thisCounter.acquire();
@@ -222,6 +224,7 @@ OReaderThread::OReaderThread( remote_Connection *pConnection,
 
 OReaderThread::~OReaderThread( )
 {
+    m_pEnvRemote->releaseWeak( m_pEnvRemote );
 #ifdef DEBUG
     thisCounter.release();
 #endif
@@ -234,6 +237,7 @@ void OReaderThread::destroyYourself()
     m_bDestroyMyself = sal_True;
     m_pConnection->release( m_pConnection );
     m_pConnection = 0;
+    m_bContinue = sal_False;
 }
 
 void OReaderThread::onTerminated()
@@ -249,15 +253,20 @@ void OReaderThread::disposeEnvironment()
 {
     struct remote_Context *pContext =
         ( struct remote_Context * ) m_pEnvRemote->pContext;
+    m_bContinue = sal_False;
     if( ! pContext->m_pBridgeImpl->m_bDisposed )
     {
-        // NOTE : This method may only be called by the run-method.
-        //        The remote-environment does not dispose, until the reader thread has gone.
-        //        So it is completly OK to hold the environment weakly, and only make a
-        //        hard reference during dispose call.
-        m_pEnvRemote->acquire( m_pEnvRemote );
-        m_pEnvRemote->dispose( m_pEnvRemote );
-        m_pEnvRemote->release( m_pEnvRemote );
+        uno_Environment *pEnvRemote = 0;
+        m_pEnvRemote->harden( &pEnvRemote , m_pEnvRemote );
+        if( pEnvRemote )
+        {
+            pEnvRemote->dispose( m_pEnvRemote );
+            pEnvRemote->release( m_pEnvRemote );
+        }
+        else
+        {
+            // environment has been disposed eitherway !
+        }
     }
 }
 
@@ -392,14 +401,12 @@ inline sal_Bool OReaderThread::readFlags( struct MessageFlags *pFlags )
 
 void OReaderThread::run()
 {
-    sal_Bool bContinue = sal_True;
-
     // This vars are needed to hold oid,tid and type information, which should not be cached.
     Type lastTypeNoCache;
     OUString lastOidNoCache;
     ByteSequence lastTidNoCache;
 
-    while( bContinue )
+    while( m_bContinue )
     {
         sal_Int32 nMessageCount;
         if( ! readBlock( &nMessageCount ) )
@@ -408,6 +415,13 @@ void OReaderThread::run()
             break;
         }
 
+        uno_Environment *pEnvRemote = 0;
+           m_pEnvRemote->harden( &pEnvRemote , m_pEnvRemote );
+        if( !pEnvRemote )
+        {
+            // environment has been disposed already, quit here
+            break;
+        }
         ServerMultiJob *pMultiJob = 0;
         remote_Interface *pLastRemoteI = 0;
         while( ! m_unmarshal.finished()  )
@@ -455,13 +469,13 @@ void OReaderThread::run()
                     typelib_typedescriptionreference_release( pTypeRef );
                     OSL_ENSURE( 0 , "urp-bridge : error during unpacking interface type, terminating connection" );
                     disposeEnvironment();
-                    return;
+                    break;
                 }
                 if( m_pBridgeImpl->m_lastInType.getTypeClass() != typelib_TypeClass_INTERFACE )
                 {
                     OSL_ENSURE( 0 , "urp-bridge : not an interface type" );
                     disposeEnvironment();
-                    return;
+                    break;
                 }
             }
             if( flags.bOid )
@@ -477,7 +491,7 @@ void OReaderThread::run()
                     rtl_uString_release( pOid );
                     OSL_ENSURE( 0 , "urp-bridge : error during unpacking cached data, terminating connection" );
                     disposeEnvironment();
-                    return;
+                    break;
                 }
             }
 
@@ -495,7 +509,7 @@ void OReaderThread::run()
 
                     OSL_ENSURE( 0 , "urp-bridge : error during unpacking cached data, terminating connection" );
                     disposeEnvironment();
-                    return;
+                    break;
                 }
             }
 
@@ -531,11 +545,10 @@ void OReaderThread::run()
                             pMultiJob = 0;
                             disposeEnvironment();
                             pLastRemoteI = 0; // stubs are released during dispose eitherway
-                            bContinue = sal_False;
                             break;
                         }
-                        m_pEnvRemote->pExtEnv->getRegisteredInterface(
-                            m_pEnvRemote->pExtEnv, ( void **  ) &pLastRemoteI,
+                        pEnvRemote->pExtEnv->getRegisteredInterface(
+                            pEnvRemote->pExtEnv, ( void **  ) &pLastRemoteI,
                             *ppLastOid, pInterfaceType );
                         TYPELIB_DANGER_RELEASE( (typelib_TypeDescription * )pInterfaceType );
 
@@ -577,20 +590,8 @@ void OReaderThread::run()
                             pMultiJob->initiate();
                         }
 
-                        // This is a quick hack to avoid reanimating the bridge in case this is a call
-                        // for an initial object (so no stub is there, that holds the bridge).
-                        // Please note, that this is not 100 % sure, it just reduces the propability,
-                        // that this occurs.
-                        if( m_pBridgeImpl->m_bDisposed )
-                        {
-                            if( pMethodType )
-                                typelib_typedescription_release( (typelib_TypeDescription * ) pMethodType );
-                            if( pAttributeType )
-                                typelib_typedescription_release( (typelib_TypeDescription * ) pAttributeType );
-                            return;
-                        }
                         pMultiJob = new ServerMultiJob(
-                            m_pEnvRemote, *ppLastTid,
+                            pEnvRemote, *ppLastTid,
                             m_pBridgeImpl, &m_unmarshal , nMessageCount );
                     }
 
@@ -622,7 +623,6 @@ void OReaderThread::run()
                     pMultiJob = 0;
                     pLastRemoteI = 0; // stubs are released during dispose eitherway
                     disposeEnvironment();
-                    bContinue = sal_False;
                     break;
                 }
 #ifdef BRIDGES_URP_PROT
@@ -639,7 +639,6 @@ void OReaderThread::run()
                     pMultiJob = 0;
                     pLastRemoteI = 0; // stubs are released during dispose eitherway
                     disposeEnvironment();
-                    bContinue = sal_False;
                     break;
                 }
 
@@ -693,7 +692,17 @@ void OReaderThread::run()
                 }
                 ClientJob *pClientJob =
                     m_pBridgeImpl->m_clientJobContainer.remove( *( ByteSequence * )ppLastTid );
-                OSL_ASSERT( pClientJob );
+
+                // Bridge MUST be already disposed, otherwise we got a wrong threadid
+                // from remote !
+                OSL_ASSERT( pClientJob || m_pBridgeImpl->m_bDisposed );
+                if( ! pClientJob )
+                {
+                    pLastRemoteI = 0;
+                    disposeEnvironment();
+                    break;
+                }
+
                 pClientJob->m_bExceptionOccured = flags.bException;
 
                 pClientJob->setUnmarshal( &m_unmarshal );
@@ -708,7 +717,6 @@ void OReaderThread::run()
                     // severe error during extracting, dispose
                     pLastRemoteI = 0; // stubs are released during dispose eitherway
                     disposeEnvironment();
-                    bContinue = sal_False;
                     break;
                 }
 #ifdef BRIDGES_URP_PROT
@@ -738,9 +746,10 @@ void OReaderThread::run()
             pLastRemoteI->release( pLastRemoteI );
 
         if( pMultiJob )
-        {
             pMultiJob->initiate();
-        }
+
+           if( pEnvRemote )
+               pEnvRemote->release( pEnvRemote );
     }
 
     if( m_pConnection )

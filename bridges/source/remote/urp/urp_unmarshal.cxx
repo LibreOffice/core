@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_unmarshal.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:21:08 $
+ *  last change: $Author: jbu $ $Date: 2001-05-02 14:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,11 @@ sal_Bool Unmarshal::unpackTid( sal_Sequence **ppThreadId )
             {
                 bReturn = sal_False;
                 rtl_byte_sequence_construct( ppThreadId , 0 );
-                OSL_ENSURE( 0 , "unknown thread id" );
+
+                OUString error( RTL_CONSTASCII_USTRINGPARAM( "cache index for tids out of range(" ));
+                error += OUString::valueOf( (sal_Int32) nIndex ,16 );
+                error += OUString::createFromAscii( ")" );
+                m_pBridgeImpl->addError( error );
             }
         }
         else
@@ -138,9 +142,16 @@ sal_Bool Unmarshal::unpackTid( sal_Sequence **ppThreadId )
             {
                 bReturn = sal_False;
                 rtl_byte_sequence_construct( ppThreadId , 0 );
-                OSL_ENSURE( 0 , "unknown thread id" );
+                OUString error( RTL_CONSTASCII_USTRINGPARAM( "cache index for tids out of range(" ));
+                error += OUString::valueOf( (sal_Int32) nIndex ,16 );
+                error += OUString::createFromAscii( ")" );
+                m_pBridgeImpl->addError( error );
             }
         }
+    }
+    else
+    {
+        m_pBridgeImpl->addError( "couldn't unpack thread id because of previous errors" );
     }
     return bReturn;
 }

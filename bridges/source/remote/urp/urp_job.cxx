@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_job.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-16 13:30:15 $
+ *  last change: $Author: jbu $ $Date: 2001-05-02 14:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #include "urp_log.hxx"
 #include "urp_marshal.hxx"
 #include "urp_propertyobject.hxx"
+#include "urp_reader.hxx"
 
 using namespace ::std;
 using namespace ::rtl;
@@ -378,11 +379,20 @@ namespace bridges_urp
 
             if( ! pData )
             {
-                OSL_VERIFY( this ==
-                            m_pBridgeImpl->m_clientJobContainer.remove( *(ByteSequence*) &m_pTid ) );
-
-                  prepareRuntimeExceptionClientSide(
-                      m_ppException, OUString( RTL_CONSTASCII_USTRINGPARAM( "URP_Bridge : disposed" ) ) );
+                // avoid leak due continous calling on a disposed reference.
+                if( m_pBridgeImpl->m_clientJobContainer.remove( *(ByteSequence*) &m_pTid ) )
+                {
+                    // OK, we retrieved the job from the container
+                    prepareRuntimeExceptionClientSide(
+                        m_ppException, OUString( RTL_CONSTASCII_USTRINGPARAM( "URP_Bridge : disposed" ) ) );
+                }
+                else
+                {
+                    // if pData == 0, the Job MUST BE still in the container,
+                    // because the threadpool is disposed after the reader thread
+                    // is in a known state.
+                    OSL_ASSERT( !"we should never be here" );
+                }
             }
         }
     }
@@ -480,30 +490,32 @@ namespace bridges_urp
 
                 if( ! pMTI->m_bIsReleaseCall && pRemoteC->m_pInstanceProvider )
                 {
+                    pSJE->m_pException = &(pSJE->m_exception);
+
                     pRemoteC->m_pInstanceProvider->getInstance(
                         pRemoteC->m_pInstanceProvider,
                         m_pEnvRemote,
                         &(pSJE->m_pRemoteI),
                         pSJE->m_pOid,
-                        pMTI->m_pInterfaceType );
+                        pMTI->m_pInterfaceType,
+                        &(pSJE->m_pException));
                 }
-
-                if( ! pSJE->m_pRemoteI )
+                else
                 {
-                    // Requested object could not be located in this environment,
-                    // throw a runtimeexception
-                    OUString sMessage( RTL_CONSTASCII_USTRINGPARAM( "urp-bridge: unknown object identifier : " ) );
-                    sMessage += pSJE->m_pOid;
-
-                    // prepare the exception
-                    prepareRuntimeException( sMessage , i );
-                    // no interface to call on, but unmarshaling must continue to update cache
+                    prepareRuntimeException(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM( "urp: No instance provider set")),i);
                 }
             }
 
             if( pSJE->m_pException )
             {
                 // errors during extracting, do nothing
+            }
+            else if( ! pSJE->m_pRemoteI )
+            {
+                // May only occur during the queryInterface call on the initial object !!!
+                // construct the return value
+                 uno_type_any_construct( (uno_Any*) pSJE->m_pReturn , 0 , 0 , 0 );
             }
             else
             {

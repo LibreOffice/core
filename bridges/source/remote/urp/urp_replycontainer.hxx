@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_replycontainer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:06 $
+ *  last change: $Author: jbu $ $Date: 2001-05-02 14:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,14 +88,17 @@ namespace bridges_urp
             ::osl::MutexGuard guard( m_mutex );
             Id2ClientJobStackMap::iterator ii = m_map.find( id );
 
-            OSL_ASSERT( ii != m_map.end() );
-
-            ClientJob *p = (*ii).second.back();
-            (*ii).second.pop_back();
-            if( (*ii).second.empty() )
+            ClientJob *p = 0;
+            if( ii != m_map.end() )
             {
-                m_map.erase( ii );
+                p = (*ii).second.back();
+                (*ii).second.pop_back();
+                if( (*ii).second.empty() )
+                {
+                    m_map.erase( ii );
+                }
             }
+
             return p;
         }
 

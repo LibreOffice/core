@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_bridgeimpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2000-11-28 14:45:18 $
+ *  last change: $Author: jbu $ $Date: 2001-05-02 14:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+#include <osl/thread.h>
+
 #include <bridges/remote/helper.hxx>
 
 #include "urp_bridgeimpl.hxx"
@@ -77,9 +79,9 @@ inline t mymin( const t & val1, const t & val2 )
  * urp_BridgeImpl
  ***********/
 urp_BridgeImpl::urp_BridgeImpl( sal_Int32 nCacheSize , sal_uInt32 nInitialMarshalerSize ) :
-    m_oidCacheOut( nCacheSize ),
-    m_tidCacheOut( nCacheSize ),
-    m_typeCacheOut( nCacheSize ),
+    m_oidCacheOut( (sal_uInt16)nCacheSize ),
+    m_tidCacheOut( (sal_uInt16)nCacheSize ),
+    m_typeCacheOut( (sal_uInt16)nCacheSize ),
     m_blockMarshaler( this , nInitialMarshalerSize , ::bridges_remote::remote_retrieveOidFromProxy),
     m_nMarshaledMessages( 0 )
 {
@@ -118,8 +120,9 @@ void urp_BridgeImpl::applyProtocolChanges( const Properties &props )
             delete [] m_pTypeIn;
             m_pTypeIn = pNew;
         }
+        OSL_ASSERT( props.nTypeCacheSize <= 0xffff );
         m_properties.nTypeCacheSize = props.nTypeCacheSize;
-        m_typeCacheOut.resize( props.nTypeCacheSize );
+        m_typeCacheOut.resize( (sal_uInt16)props.nTypeCacheSize );
     }
 
      if( m_properties.nOidCacheSize != props.nOidCacheSize )
@@ -141,7 +144,8 @@ void urp_BridgeImpl::applyProtocolChanges( const Properties &props )
              delete [] m_pOidIn;
              m_pOidIn = pNew;
          }
-         m_oidCacheOut.resize( props.nOidCacheSize );
+        OSL_ASSERT( props.nOidCacheSize <= 0xffff );
+         m_oidCacheOut.resize( (sal_uInt16)props.nOidCacheSize );
          m_properties.nOidCacheSize = props.nOidCacheSize;
      }
 
@@ -164,7 +168,8 @@ void urp_BridgeImpl::applyProtocolChanges( const Properties &props )
              delete [] m_pTidIn;
              m_pTidIn = pNew;
          }
-         m_tidCacheOut.resize( props.nTidCacheSize );
+        OSL_ASSERT( props.nTidCacheSize <= 0xffff );
+         m_tidCacheOut.resize( (sal_uInt16)props.nTidCacheSize );
          m_properties.nTidCacheSize = props.nTidCacheSize;
      }
 
@@ -225,4 +230,30 @@ void urp_BridgeImpl::applyProtocolChanges( const Properties &props )
 
 }
 
+void urp_BridgeImpl::addError( char *pError )
+{
+    OUString message = OUString::valueOf( (sal_Int32 ) osl_getThreadIdentifier( 0 ) );
+    message += OUString::createFromAscii( ": " );
+    message += OUString::createFromAscii( pError );
+    m_lstErrors.push_back( message );
+}
+
+void urp_BridgeImpl::addError( const OUString & error )
+{
+    OUString message = OUString::valueOf( (sal_Int32 ) osl_getThreadIdentifier( 0 ) );
+    message += OUString::createFromAscii( ": " );
+    message += error;
+    m_lstErrors.push_back( message );
+}
+
+void urp_BridgeImpl::dumpErrors( FILE * f)
+{
+    for( ::std::list< OUString >::iterator ii = m_lstErrors.begin() ;
+         ii != m_lstErrors.end() ;
+         ++ii )
+    {
+        OString o = OUStringToOString( *ii , RTL_TEXTENCODING_UTF8 );
+        fprintf( f,  "%s\n" , o.getStr() );
+    }
+}
 }
