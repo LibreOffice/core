@@ -1,4 +1,4 @@
-od	odk	:	offapi product vos NULL
+od	odk	:	offapi product vos unoil NULL
 od	odk										usr1	-	all	od_mkout NULL
 od	odk\examples\cpp\officeclient			nmake	-	all	od_offclient NULL
 od	odk\examples\java\com\sun\star\comp\demo nmake	-	all	od_javaDemoComp NULL
