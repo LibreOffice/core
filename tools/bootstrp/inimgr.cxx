@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inimgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2001-10-24 10:24:42 $
+ *  last change: $Author: nf $ $Date: 2002-01-24 14:16:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,7 @@ ByteString IniManager::ToLocal( ByteString &rPath )
 #endif
 #else
     sTmp.SearchAndReplace( sGlobalDir, sLocalPath );
+    sTmp.SearchAndReplace( sGlobalDir, _INIROOT );
 
     ByteString sOldGlobalDir( GetIniRootOld() );
     sTmp.SearchAndReplace( sOldGlobalDir, sLocalPath );
