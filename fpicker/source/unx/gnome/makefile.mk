@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-08 17:10:11 $
+#   last change: $Author: kz $ $Date: 2004-12-16 11:13:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,10 +80,21 @@ dummy:
 
 .ELSE # we build for GNOME
 
-#.INCLUDE : ..$/..$/cppumaker.mk
+PKGCONFIG_MODULES=gtk+-2.0
+.INCLUDE : pkg_config.mk
+
+GTK_TWO_FOUR:=$(shell +-$(PKGCONFIG) --exists 'gtk+-2.0 >= 2.4.0' && echo ok)
+
+.IF "$(GTK_TWO_FOUR)" != "ok"
+
+dummy:
+    @echo "Cannot build gtk filepicker because" 
+    @+-$(PKGCONFIG) --print-errors --exists 'gtk+-2.0 >= 2.4.0'
+
+.ELSE
 
 CFLAGS+= $(WIDGETSET_CFLAGS)
-CFLAGS+=`pkg-config --cflags gtk+-2.0`
+CFLAGS+= $(PKGCONFIG_CFLAGS)
 
 # --- Files --------------------------------------------------------
 
@@ -96,6 +107,7 @@ SLOFILES =\
         $(SLO)$/filepickereventnotification.obj \
         $(SLO)$/FPentry.obj
 
+.ENDIF #NOT_GTK_TWO_FOUR
 .ENDIF # "$(GUIBASE)" != "unx" || "$(WITH_WIDGETSET)" != "gnome"
 
 # --- Targets ------------------------------------------------------
