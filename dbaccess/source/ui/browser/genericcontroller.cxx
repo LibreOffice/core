@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:34:22 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:41:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,6 @@
 #ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
 #endif
-#ifndef _SV_TOOLBOX_HXX
-#include <vcl/toolbox.hxx>
-#endif
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
@@ -117,9 +114,6 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
-#endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
 #endif
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
@@ -201,15 +195,6 @@ sal_Bool OGenericUnoController::Construct(Window* pParent)
     {
         getView()->Construct();
         getView()->Show();
-    }
-
-    // want to have a toolbox ?
-    ToolBox* pTB = CreateToolBox(getView());
-    getView()->setToolBox(pTB);
-    if (pTB) // we want to handle the select
-    {
-        pTB->SetSelectHdl( LINK( this, OGenericUnoController, OnToolBoxSelected ) );
-        pTB->SetClickHdl( LINK( this, OGenericUnoController, OnToolBoxClicked ) );
     }
 
     AddSupportedFeatures();
@@ -392,35 +377,20 @@ void OGenericUnoController::attachFrame(const Reference< XFrame > & xFrame) thro
 void OGenericUnoController::updateTitle()
 {
 }
-// -----------------------------------------------------------------------
-sal_Bool OGenericUnoController::ImplInvalidateTBItem(sal_uInt16 nId, const FeatureState& rState)
+// -----------------------------------------------------------------------------
+struct DispatchCollector : public ::std::unary_function< SupportedFeatures::value_type, void>
 {
-    ToolBox* pTB = getView() ? getView()->getToolBox() : NULL;
-    if (!pTB || (pTB->GetItemPos(nId) == TOOLBOX_ITEM_NOTFOUND))
-        return sal_False;
+    DECLARE_STL_USTRINGACCESS_MAP(sal_Bool,TDispatches);
+    sal_uInt16 m_nFeature;
+    mutable TDispatches m_aFeatures;
+    DispatchCollector(sal_uInt16 _nFeature) : m_nFeature(_nFeature){}
 
-    pTB->EnableItem(nId, rState.bEnabled);
-    switch (rState.aState.getValueTypeClass())
+    void operator() (const SupportedFeatures::value_type& lhs) const
     {
-        case TypeClass_BOOLEAN:
-            pTB->CheckItem(nId, ::comphelper::getBOOL(rState.aState));
-            break;
-
-        case TypeClass_STRING:
-            if (pTB->GetItemWindow(nId))
-                pTB->GetItemWindow(nId)->SetText(::comphelper::getString(rState.aState));
-            else
-                pTB->SetQuickHelpText(nId,::comphelper::getString(rState.aState));
-            break;
-
-        case TypeClass_VOID:
-            break;
-
-        default:
-            DBG_WARNING("OGenericUnoController::ImplInvalidateTBItem : don't know what to do with the item state !");
+        if ( lhs.second == m_nFeature )
+            m_aFeatures.insert(TDispatches::value_type(lhs.first,sal_False));
     }
-    return sal_True;
-}
+};
 
 // -----------------------------------------------------------------------
 void OGenericUnoController::ImplBroadcastFeatureState(const ::rtl::OUString& _rFeature, const Reference< XStatusListener > & xListener, sal_Bool _bIgnoreCache)
@@ -482,20 +452,26 @@ void OGenericUnoController::ImplBroadcastFeatureState(const ::rtl::OUString& _rF
         xListener->statusChanged(aEvent);
     else
     {   // no -> iterate through all listeners responsible for the URL
+        DispatchCollector aDispatchCollector(nFeat);
+        aDispatchCollector = ::std::for_each(m_aSupportedFeatures.begin(),m_aSupportedFeatures.end(),aDispatchCollector);
+
         DispatchIterator iterSearch = m_arrStatusListener.begin();
         DispatchIterator iterEnd = m_arrStatusListener.end();
 
         while (iterSearch != iterEnd)
         {
             DispatchTarget& rCurrent = *iterSearch;
-            if (rCurrent.aURL.Complete.equals(_rFeature))
+            if ( aDispatchCollector.m_aFeatures.find(rCurrent.aURL.Complete) != aDispatchCollector.m_aFeatures.end() )
+            {
+                aEvent.FeatureURL.Complete = rCurrent.aURL.Complete;
+                if (m_xUrlTransformer.is())
+                    m_xUrlTransformer->parseStrict(aEvent.FeatureURL);
                 rCurrent.xListener->statusChanged(aEvent);
+            }
             ++iterSearch;
         }
     }
 
-    // give the TB a chance
-    ImplInvalidateTBItem(nFeat, aFeatState);
 }
 
 // -----------------------------------------------------------------------
@@ -538,10 +514,6 @@ void OGenericUnoController::InvalidateFeature_Impl()
             if ( m_aSupportedFeatures.end() != aFeaturePos )
                 // we really know this feature
                 ImplBroadcastFeatureState( aFeaturePos->first, aNextFeature.xListener, aNextFeature.bForceBroadcast );
-            else
-                // we don't know this feature -> at least give the TB a chance
-                ImplInvalidateTBItem((sal_uInt16)aNextFeature.nId, GetState((sal_uInt16)aNextFeature.nId));
-
         }
 
         ::osl::MutexGuard aGuard( m_aFeatureMutex);
@@ -590,27 +562,12 @@ void OGenericUnoController::InvalidateAll()
 // -----------------------------------------------------------------------------
 void OGenericUnoController::InvalidateAll_Impl()
 {
-    sal_uInt16 i;
     // ---------------------------------
     // invalidate all aupported features
     SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.begin();
     for(;aIter != m_aSupportedFeatures.end();++aIter)
     {
         ImplBroadcastFeatureState(aIter->first, Reference< XStatusListener > (), sal_True);
-    }
-
-    // ------------------------------
-    // invalidate all slots in the TB (if any)
-    ToolBox* pTB = getView() ? getView()->getToolBox() : NULL;
-    if (pTB)
-    {
-        sal_uInt16 nCount = pTB->GetItemCount();
-        for ( i = 0; i < nCount; ++i )
-        {
-            sal_uInt16 nId = pTB->GetItemId(i);
-            if ( nId )
-                InvalidateFeature( nId );
-        }
     }
 
     {
@@ -692,7 +649,7 @@ void OGenericUnoController::setMasterDispatchProvider(const Reference< XDispatch
 // -----------------------------------------------------------------------
 void OGenericUnoController::dispatch(const URL& _aURL, const Sequence< PropertyValue >& aArgs) throw(RuntimeException)
 {
-    executeUnChecked(_aURL);
+    executeUnChecked(_aURL,aArgs);
 }
 
 // -----------------------------------------------------------------------
@@ -796,12 +753,15 @@ void OGenericUnoController::frameAction(const FrameActionEvent& aEvent) throw( R
 void OGenericUnoController::AddSupportedFeatures()
 {
     // add all supported features
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Copy")] = ID_BROWSER_COPY;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Cut")] = ID_BROWSER_CUT;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Paste")] = ID_BROWSER_PASTE;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:ClipboardFormatItems")] = ID_BROWSER_CLIPBOARD_FORMAT_ITEMS;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Copy")]                    = ID_BROWSER_COPY;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Cut")]                     = ID_BROWSER_CUT;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Paste")]                   = ID_BROWSER_PASTE;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:ClipboardFormatItems")]    = ID_BROWSER_CLIPBOARD_FORMAT_ITEMS;
         // since
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBSlots/EditDoc")] = ID_BROWSER_EDITDOC;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DSBEditDoc")]              = ID_BROWSER_EDITDOC;
+
+    // TODO disable .uno:ConfigureDialog
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:ConfigureDialog")]         = 99;
 }
 
 //------------------------------------------------------------------------------
@@ -817,7 +777,10 @@ FeatureState OGenericUnoController::GetState(sal_uInt16 nId) const
             case ID_BROWSER_UNDO:
             case ID_BROWSER_SAVEDOC:
                 aReturn.bEnabled = sal_True;
-            break;
+                break;
+            case 99:
+                aReturn.bEnabled = sal_False;
+                break;
         }
     }
     catch(Exception& e)
@@ -837,30 +800,6 @@ FeatureState OGenericUnoController::GetState(sal_uInt16 nId) const
 }
 
 //------------------------------------------------------------------------------
-void OGenericUnoController::onToolBoxSelected( sal_uInt16 _nSelectedItem )
-{
-    Execute( _nSelectedItem );
-}
-
-//------------------------------------------------------------------------------
-void OGenericUnoController::onToolBoxClicked( sal_uInt16 _nClickedItem )
-{
-}
-
-//------------------------------------------------------------------------------
-IMPL_LINK(OGenericUnoController, OnToolBoxClicked, ToolBox*, pToolBox)
-{
-    onToolBoxClicked( pToolBox->GetCurItemId() );
-    return 0L;
-}
-
-//------------------------------------------------------------------------------
-IMPL_LINK(OGenericUnoController, OnToolBoxSelected, ToolBox*, pToolBox)
-{
-    onToolBoxSelected( pToolBox->GetCurItemId() );
-    return 0L;
-}
-// -------------------------------------------------------------------------
 URL OGenericUnoController::getURLForId(sal_Int32 _nId) const
 {
     URL aReturn;
@@ -958,9 +897,8 @@ void OGenericUnoController::showError(const SQLExceptionInfo& _rInfo)
 {
     ::dbaui::showError(_rInfo,getView(),getORB());
 }
-
 // -----------------------------------------------------------------------------
-void OGenericUnoController::loadMenu(const Reference< XFrame >& _xFrame)
+Reference< drafts::com::sun::star::frame::XLayoutManager > OGenericUnoController::getLayoutManager(const Reference< XFrame >& _xFrame) const
 {
     Reference< XPropertySet > xPropSet( _xFrame, UNO_QUERY );
     Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
@@ -974,9 +912,28 @@ void OGenericUnoController::loadMenu(const Reference< XFrame >& _xFrame)
         {
         }
     }
+    return xLayoutManager;
+}
+// -----------------------------------------------------------------------------
+void OGenericUnoController::loadMenu(const Reference< XFrame >& _xFrame)
+{
+
+    Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager = getLayoutManager(_xFrame);
+
 
     if ( xLayoutManager.is() )
+    {
+        xLayoutManager->lock();
         xLayoutManager->createElement( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/menubar/menubar" )));
+        xLayoutManager->createElement( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/toolbar" )));
+        loadSubToolbar(xLayoutManager);
+        xLayoutManager->unlock();
+        xLayoutManager->doLayout();
+    }
+}
+// -----------------------------------------------------------------------------
+void OGenericUnoController::loadSubToolbar(const Reference< drafts::com::sun::star::frame::XLayoutManager >& _xLayoutManager)
+{
 }
 // -----------------------------------------------------------------------------
 void OGenericUnoController::closeTask()
@@ -1030,21 +987,21 @@ sal_Bool SAL_CALL OGenericUnoController::attachModel(const Reference< XModel > &
     return sal_False;
 }
 // -----------------------------------------------------------------------------
-void OGenericUnoController::executeUnChecked(const ::com::sun::star::util::URL& _rCommand)
+void OGenericUnoController::executeUnChecked(const ::com::sun::star::util::URL& _rCommand, const Sequence< PropertyValue >& aArgs)
 {
     SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find(_rCommand.Complete);
     if (aIter != m_aSupportedFeatures.end())
-        Execute( static_cast<sal_uInt16>(aIter->second) );
+        Execute( static_cast<sal_uInt16>(aIter->second),aArgs );
 }
 // -----------------------------------------------------------------------------
-void OGenericUnoController::executeChecked(const ::com::sun::star::util::URL& _rCommand)
+void OGenericUnoController::executeChecked(const ::com::sun::star::util::URL& _rCommand, const Sequence< PropertyValue >& aArgs)
 {
     SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find(_rCommand.Complete);
     if (aIter != m_aSupportedFeatures.end())
     {
         sal_uInt16 nSlotId = static_cast<sal_uInt16>(aIter->second);
         if ( GetState( nSlotId ).bEnabled )
-            Execute( nSlotId );
+            Execute( nSlotId, aArgs );
     }
 }
 // -----------------------------------------------------------------------------
@@ -1216,10 +1173,10 @@ void OGenericUnoController::setTitle(const ::rtl::OUString& _sName)
     }
 }
 // -----------------------------------------------------------------------------
-void OGenericUnoController::executeChecked(sal_uInt16 _nCommandId)
+void OGenericUnoController::executeChecked(sal_uInt16 _nCommandId, const Sequence< PropertyValue >& aArgs)
 {
     if ( isCommandEnabled(_nCommandId) )
-        Execute(_nCommandId);
+        Execute(_nCommandId, aArgs);
 }
 // -----------------------------------------------------------------------------
 sal_Bool OGenericUnoController::isCommandEnabled(sal_uInt16 _nCommandId) const
@@ -1227,3 +1184,13 @@ sal_Bool OGenericUnoController::isCommandEnabled(sal_uInt16 _nCommandId) const
     return GetState( _nCommandId ).bEnabled;
 }
 // -----------------------------------------------------------------------------
+sal_Bool OGenericUnoController::isCommandEnabled(const ::com::sun::star::util::URL& _rCommand) const
+{
+    OSL_ENSURE(_rCommand.Complete.getLength(),"Empty command url!");
+    sal_Bool bIsEnabled = sal_False;
+    SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find(_rCommand.Complete);
+    if (aIter != m_aSupportedFeatures.end())
+        bIsEnabled = isCommandEnabled(static_cast<sal_uInt16>(aIter->second));
+
+    return bIsEnabled;
+}
