@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:32:12 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:46:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,17 +184,10 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
     if( !pFunc ) return;
     pXRenderFreeGlyphs              = (void(*)(Display*,GlyphSet,Glyph*,int))pFunc;
 
-#ifdef MACOSX
-    OUString compStringFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderCompositeString16"));
-    pFunc=osl_getSymbol(pRenderLib, compStringFuncName.pData);
-    if( !pFunc ) return;
-    pXRenderCompositeString16       = (void(*)(Display*,int,Picture,Picture,XRenderPictFormat*,GlyphSet,int,int,int,int,unsigned short*,int))pFunc;
-#else // MACOSX
     OUString compStringFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderCompositeString32"));
     pFunc=osl_getSymbol(pRenderLib, compStringFuncName.pData);
     if( !pFunc ) return;
     pXRenderCompositeString32       = (void(*)(Display*,int,Picture,Picture,XRenderPictFormat*,GlyphSet,int,int,int,int,unsigned*,int))pFunc;
-#endif // MACOSX
 
     OUString creatPicFuncName(RTL_CONSTASCII_USTRINGPARAM("XRenderCreatePicture"));
     pFunc=osl_getSymbol(pRenderLib, creatPicFuncName.pData);
