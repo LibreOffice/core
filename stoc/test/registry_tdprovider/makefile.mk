@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-30 16:17:17 $
+#   last change: $Author: obo $ $Date: 2004-06-04 02:34:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,7 +69,6 @@ ENABLE_EXCEPTIONS := TRUE
 .INCLUDE: settings.mk
 
 DLLPRE = # no leading "lib" on .so files
-INCPRE += $(MISC)$/$(TARGET)$/inc
 
 SLOFILES = $(SLO)$/testregistrytdprovider.obj
 
@@ -92,10 +91,8 @@ ALLTAR: test
 $(MISC)$/$(TARGET)$/all.rdb: types.idl
     - rm $@
     - $(MKDIR) $(MISC)$/$(TARGET)
-    - $(MKDIR) $(MISC)$/$(TARGET)$/inc
     idlc -O$(MISC)$/$(TARGET) -I$(SOLARIDLDIR) -C -cid -we $<
     regmerge $@ /UCR $(MISC)$/$(TARGET)$/types.urd
-    cppumaker -BUCR -O$(MISC)$/$(TARGET)$/inc $@ -X$(SOLARBINDIR)$/types.rdb
     regmerge $@ / $(SOLARBINDIR)$/types.rdb
 
 $(SLOFILES): $(MISC)$/$(TARGET)$/all.rdb
