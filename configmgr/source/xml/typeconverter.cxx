@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeconverter.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-16 17:37:28 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 12:36:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,13 +147,13 @@ namespace configmgr
                 }
                 catch (script::CannotConvertException&)
                 {
-                    OSL_ENSHURE(sal_False, "toAny : could not convert !");
+                    OSL_ENSURE(sal_False, "toAny : could not convert !");
                 }
             }
         }
         catch (lang::IllegalArgumentException&)
         {
-            OSL_ENSHURE(sal_False, "toAny : could not convert !");
+            OSL_ENSURE(sal_False, "toAny : could not convert !");
         }
         return aRes;
     }
@@ -175,7 +175,7 @@ namespace configmgr
         {
             ::rtl::OString aStr("Wrong typeclass! ");
             aStr += ::rtl::OString::valueOf((sal_Int32)_rTypeClass);
-            OSL_ENSHURE(0,aStr.getStr());
+            OSL_ENSURE(0,aStr.getStr());
         }
         }
         return aRet;
@@ -198,7 +198,7 @@ namespace configmgr
         {
             ::rtl::OString aStr("Wrong typeclass! ");
             aStr += rtl::OUStringToOString(_rType,RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSHURE(0,aStr.getStr());
+            OSL_ENSURE(0,aStr.getStr());
         }
 
         return aRet;
@@ -264,7 +264,7 @@ namespace configmgr
   {
   ::rtl::OString aStr("Wrong typeclass! ");
   aStr += ::rtl::OString::valueOf((sal_Int32)_rTypeClass);
-  OSL_ENSHURE(0,aStr.getStr());
+  OSL_ENSURE(0,aStr.getStr());
   }
   }
   return aRet;
@@ -295,7 +295,7 @@ namespace configmgr
         {
             ::rtl::OString aStr("Unknown type! ");
             aStr += rtl::OUStringToOString(_rType,RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSHURE(0,aStr.getStr());
+            OSL_ENSURE(0,aStr.getStr());
         }
 
         return aRet;
@@ -332,7 +332,7 @@ namespace configmgr
         {
             ::rtl::OString aStr("Unknown type! ");
             aStr += rtl::OUStringToOString(_rsElementType,RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSHURE(0,aStr.getStr());
+            OSL_ENSURE(0,aStr.getStr());
         }
 
         return aRet;
@@ -340,7 +340,7 @@ namespace configmgr
 
     uno::Type getSequenceElementType(uno::Type const& rSequenceType)
     {
-        OSL_ENSHURE(rSequenceType.getTypeClass() == uno::TypeClass_SEQUENCE,
+        OSL_ENSURE(rSequenceType.getTypeClass() == uno::TypeClass_SEQUENCE,
                     "getSequenceElementType() must be called with a  sequence type");
 
         if (!(rSequenceType.getTypeClass() == uno::TypeClass_SEQUENCE))

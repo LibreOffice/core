@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexport.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:13:43 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 12:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,20 +166,20 @@ namespace configmgr
         virtual void SAL_CALL disposing( const lang::EventObject& Source )
             throw(::com::sun::star::uno::RuntimeException)
             {
-                OSL_ENSHURE(0, "disposing");
+                OSL_ENSURE(0, "disposing");
             }
 
 
         virtual void SAL_CALL finished( const io::DataTransferEvent& aEvent )
             throw(uno::RuntimeException)
             {
-                OSL_ENSHURE(0, "finished");
+                OSL_ENSURE(0, "finished");
             }
 
         virtual void SAL_CALL cancelled( const io::DataTransferEvent& aEvent )
             throw(uno::RuntimeException)
             {
-                OSL_ENSHURE(0, "cancelled");
+                OSL_ENSURE(0, "cancelled");
             }
     };
 
@@ -188,18 +188,18 @@ namespace configmgr
         virtual void SAL_CALL dispose(  )
             throw(uno::RuntimeException)
             {
-                OSL_ENSHURE(0, "dispose");
+                OSL_ENSURE(0, "dispose");
 
             }
         virtual void SAL_CALL addEventListener( const uno::Reference< lang::XEventListener >& xListener )
             throw(uno::RuntimeException)
             {
-                OSL_ENSHURE(0, "addEventListener");
+                OSL_ENSURE(0, "addEventListener");
             }
         virtual void SAL_CALL removeEventListener( const uno::Reference< lang::XEventListener >& aListener )
             throw(uno::RuntimeException)
             {
-                OSL_ENSHURE(0, "removeEventListener");
+                OSL_ENSURE(0, "removeEventListener");
             }
     };
 
@@ -262,7 +262,7 @@ namespace configmgr
         {
             sError = ASCII("XMLExportTest:");
             rtl::OString aStr = rtl::OUStringToOString(sError,RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSHURE(0, aStr.getStr());
+            OSL_ENSURE(0, aStr.getStr());
             return;
         }
 

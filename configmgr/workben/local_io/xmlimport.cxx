@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: armin $ $Date: 2001-03-08 09:08:52 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 12:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,21 +215,21 @@ public:
     virtual void SAL_CALL disposing( const lang::EventObject& Source )
         throw(::com::sun::star::uno::RuntimeException)
         {
-            OSL_ENSHURE(0, "disposing");
+            OSL_ENSURE(0, "disposing");
             m_aCondition.set();              // will not block
         }
 
     virtual void SAL_CALL finished( const io::DataTransferEvent& aEvent )
         throw(uno::RuntimeException)
         {
-            OSL_ENSHURE(0, "finished");
+            OSL_ENSURE(0, "finished");
             m_aCondition.set();              // will not block
         }
 
     virtual void SAL_CALL cancelled( const io::DataTransferEvent& aEvent )
         throw(uno::RuntimeException)
         {
-            OSL_ENSHURE(0, "cancelled");
+            OSL_ENSURE(0, "cancelled");
             m_aCondition.set();              // will not block
         }
 public:
@@ -244,18 +244,18 @@ class Component: public ::cppu::WeakImplHelper1<lang::XComponent>
     virtual void SAL_CALL dispose(  )
         throw(uno::RuntimeException)
         {
-            OSL_ENSHURE(0, "dispose");
+            OSL_ENSURE(0, "dispose");
 
         }
     virtual void SAL_CALL addEventListener( const uno::Reference< lang::XEventListener >& xListener )
         throw(uno::RuntimeException)
         {
-            OSL_ENSHURE(0, "addEventListener");
+            OSL_ENSURE(0, "addEventListener");
         }
     virtual void SAL_CALL removeEventListener( const uno::Reference< lang::XEventListener >& aListener )
         throw(uno::RuntimeException)
         {
-            OSL_ENSHURE(0, "removeEventListener");
+            OSL_ENSURE(0, "removeEventListener");
         }
 };
 
@@ -314,7 +314,7 @@ namespace configmgr
         uno::Reference<io::XInputStream> xInputStream = new configmgr::OSLInputStreamWrapper(aFile);
 
         uno::Reference <uno::XInterface> xPump = xMSF->createInstance( L"com.sun.star.io.Pump" );
-        OSL_ENSHURE(xPump.is(), "there is no pump");
+        OSL_ENSURE(xPump.is(), "there is no pump");
 
         uno::Reference<io::XActiveDataSink> xPumpSink(xPump, uno::UNO_QUERY);
         xPumpSink->setInputStream(xInputStream);
@@ -391,7 +391,7 @@ void hierarchyTest()
 
     if (!xCfgProvider.is())
     {
-        OSL_ENSHURE(0, "No Configuration Provider");
+        OSL_ENSURE(0, "No Configuration Provider");
     }
 
     OUString sPath = ASCII("com.sun.star.ucb.Hierarchy");

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueconverter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-16 17:28:50 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 12:36:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,7 +276,7 @@ bool OValueConverter::convertScalarToAny(OUString const& aContent, uno::Any& rVa
     {
         if (m_aValueDesc.sType.equalsIgnoreCase(TYPE_STRING))
         {
-            OSL_ENSHURE(m_xTypeConverter.is(), "Warning: OValueConverter has no TypeConverter");
+            OSL_ENSURE(m_xTypeConverter.is(), "Warning: OValueConverter has no TypeConverter");
             rValue <<= aContent;
             bResult = true;
         }
@@ -289,7 +289,7 @@ bool OValueConverter::convertScalarToAny(OUString const& aContent, uno::Any& rVa
 
         else
         {
-            OSL_ENSHURE(m_xTypeConverter.is(), "ERROR: OValueConverter has no TypeConverter");
+            OSL_ENSURE(m_xTypeConverter.is(), "ERROR: OValueConverter has no TypeConverter");
 
             script::CannotConvertException aError;
             aError.Message = OUString::createFromAscii("No type converter available to translate value \"");

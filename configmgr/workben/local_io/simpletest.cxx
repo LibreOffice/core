@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpletest.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: armin $ $Date: 2001-03-08 09:08:21 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 12:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,19 +362,19 @@ namespace configmgr
             OUString aStr = ASCII("SAXParseException occured in ");
             sError = aStr + ASCII(" Line: (") + sLine + ASCII(")");
 
-            OSL_ENSHURE(0, rtl::OUStringToOString(sError,RTL_TEXTENCODING_ASCII_US).getStr());
+            OSL_ENSURE(0, rtl::OUStringToOString(sError,RTL_TEXTENCODING_ASCII_US).getStr());
             nRet = 3;
         }
         catch( SAXException &e )
         {
             sError = e.Message;
-            OSL_ENSHURE(0, rtl::OUStringToOString(sError,RTL_TEXTENCODING_ASCII_US).getStr());
+            OSL_ENSURE(0, rtl::OUStringToOString(sError,RTL_TEXTENCODING_ASCII_US).getStr());
             nRet = 4;
         }
         catch( IOException &e )
         {
             sError = e.Message;
-            OSL_ENSHURE(0, rtl::OUStringToOString(sError,RTL_TEXTENCODING_ASCII_US).getStr());
+            OSL_ENSURE(0, rtl::OUStringToOString(sError,RTL_TEXTENCODING_ASCII_US).getStr());
             nRet = 5;
         }
     }
@@ -401,12 +401,12 @@ public:
     void stop()
         {
             osl_getSystemTime(&m_aEndTime);
-            OSL_ENSHURE(m_bStarted, "Not Started.");
+            OSL_ENSURE(m_bStarted, "Not Started.");
             m_bStarted = false;
         }
     void  showTime(const rtl::OString & aWhatStr)
         {
-            OSL_ENSHURE(!m_bStarted, "Not Stopped.");
+            OSL_ENSURE(!m_bStarted, "Not Stopped.");
 
             sal_Int32 nSeconds = m_aEndTime.Seconds - m_aStartTime.Seconds;
             sal_Int32 nNanoSec = m_aEndTime.Nanosec - m_aStartTime.Nanosec;

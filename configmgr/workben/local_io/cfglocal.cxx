@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfglocal.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:13:43 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 12:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ OAsciiOutput::OAsciiOutput(const ::rtl::OUString& _rUnicodeChars)
 #endif
     for (sal_Int32 i=0; i<nLen; ++i, ++pFillPtr, ++pSourcePtr)
     {
-        OSL_ENSHURE(bAsserted || !(bAsserted = (*pSourcePtr >= 0x80)),
+        OSL_ENSURE(bAsserted || !(bAsserted = (*pSourcePtr >= 0x80)),
             "OAsciiOutput::OAsciiOutput : non-ascii character found !");
         *pFillPtr = *reinterpret_cast<const sal_Char*>(pSourcePtr);
     }
