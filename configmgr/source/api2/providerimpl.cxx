@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-23 10:22:48 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,7 @@ namespace configmgr
                   ,m_pNewProviders(NULL)
                   ,m_aTreeManagerMutex()
                   ,m_pTreeManager(NULL)
+                  ,m_bEnableAsync(true)
     {
         OSL_ENSURE(_xContext.is(), "OProviderImpl : NULL context !");
 
@@ -266,6 +267,9 @@ namespace configmgr
         setTreeManager( xNewTreeManager.get() );
         OSL_ASSERT( xNewTreeManager.get() );
 
+        //Forward enableAsync setting to TreeManager now that it has been initialised
+        m_pTreeManager->enableAsync(m_bEnableAsync );
+
         // put out of line to get rid of the order dependency (and to have a acquired configuration)
         m_pNewProviders   = new configapi::ApiProviderInstances(*this);
 
@@ -325,8 +329,11 @@ namespace configmgr
 
         if  (_rSettings.hasAsyncSetting())
         {
+
             m_aDefaultOptions.enableAsync( !!_rSettings.getAsyncSetting() );
+            m_bEnableAsync = _rSettings.getAsyncSetting();
         }
+
 
     // call the template method
         this->initFromSettings(_rSettings, rNeedProfile);
@@ -514,7 +521,21 @@ namespace configmgr
     {
         return getTreeManager()->fetchDefaultData(_aAccessToken, aSubtreePath, _aOptions);
     }
-
+    //-----------------------------------------------------------------------------------
+    void OProviderImpl::refreshAll()CFG_UNO_THROW_ALL(  )
+    {
+        m_pTreeManager->refreshAll();
+    }
+    //-----------------------------------------------------------------------------------
+    void OProviderImpl::flushAll()CFG_NOTHROW()
+    {
+        m_pTreeManager->flushAll();
+    }
+    //-----------------------------------------------------------------------------------
+    void OProviderImpl::enableAsync(const sal_Bool& bEnableAsync) CFG_NOTHROW()
+    {
+         m_pTreeManager->enableAsync(bEnableAsync);
+    }
     // IInterface
     //-----------------------------------------------------------------------------
     void SAL_CALL OProviderImpl::acquire(  ) throw ()
@@ -669,6 +690,7 @@ namespace configmgr
        "lazywrite", // ARG_ASYNC_DEPRECATED,    // lasy write data
        "enableasync",   // ARG_ASYNC,           // lasy write data
        "entity",    // ARG_ENTITY,              // name of the entity to be manipulated - only for admin
+       "reload",    //ARG_REFRESH            // refresh component
 
     };
 
@@ -782,6 +804,15 @@ namespace configmgr
                 sal_Bool bBoolVal;
                 if (aValue >>= bBoolVal)
                     _rOptions.enableAsync(!!bBoolVal);
+                else
+                    return false;
+            }
+            break;
+         case ARG_REFRESH:
+            {
+                sal_Bool bBoolVal;
+                if (aValue >>= bBoolVal)
+                    _rOptions.forceRefresh(!!bBoolVal);
                 else
                     return false;
             }
@@ -939,6 +970,8 @@ namespace configmgr
             throw   lang::IllegalArgumentException(sMessage,uno::Reference<uno::XInterface>(),0);
         }
     }
+//-----------------------------------------------------------------------------------
+
 
 } // namespace configmgr
 
