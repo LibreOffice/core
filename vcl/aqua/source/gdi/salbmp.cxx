@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pluby $ $Date: 2001-01-05 23:37:15 $
+ *  last change: $Author: pluby $ $Date: 2001-01-06 02:56:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,8 @@ BOOL SalBitmap::Create( const Size& rSize, USHORT nBitCount, const BitmapPalette
     ImplSVData* pSVData = ImplGetSVData();
     BOOL bRet = FALSE;
 
+    Destroy();
+
     if ( rSize.Width() && rSize.Height() )
     {
         // Create a SalVirtualDevice
@@ -136,19 +138,14 @@ BOOL SalBitmap::Create( const Size& rSize, USHORT nBitCount, const BitmapPalette
 
 BOOL SalBitmap::Create( const SalBitmap& rSalBmp )
 {
-    BOOL bRet = FALSE;
-
-    if ( Create( rSalBmp, rSalBmp.mnBitCount ) )
-        bRet = TRUE;
-
-    return bRet;
+    return Create( rSalBmp, rSalBmp.mnBitCount );
 }
 
 // ------------------------------------------------------------------
 
 BOOL SalBitmap::Create( const SalBitmap& rSalBmp, SalGraphics* pGraphics )
 {
-    return Create( rSalBmp );
+    return Create( rSalBmp, rSalBmp.mnBitCount );
 }
 
 // ------------------------------------------------------------------
@@ -159,9 +156,33 @@ BOOL SalBitmap::Create( const SalBitmap& rSalBmp, USHORT nNewBitCount )
 
     if ( Create( rSalBmp.maSize, nNewBitCount, BitmapPalette() ) )
     {
-        // Not yet implemented: Copy pixels from rSalBmp.mpVirDev to mpVirDev
+        // Copy pixels from rSalBmp.mpVirDev to mpVirDev
+        SalGraphics *pDstGraphics = GetGraphics();
 
-        bRet = TRUE;
+        if ( pDstGraphics )
+        {
+            SalGraphics *pSrcGraphics = rSalBmp.GetGraphics();
+
+            if ( pSrcGraphics && pSrcGraphics->maGraphicsData.mpCGrafPort )
+            {
+                SalTwoRect aTwoRect;
+
+                // Get size of graphics to copy from
+                aTwoRect.mnSrcX = aTwoRect.mnDestX = 0;
+                aTwoRect.mnSrcY = aTwoRect.mnDestY = 0;
+                aTwoRect.mnSrcWidth = aTwoRect.mnDestWidth = rSalBmp.GetSize().Width();
+                aTwoRect.mnSrcHeight = aTwoRect.mnDestHeight = rSalBmp.GetSize().Height();
+
+                // Copy bits from source graphics
+                pDstGraphics->CopyBits( &aTwoRect, pSrcGraphics );
+
+                rSalBmp.ReleaseGraphics( pSrcGraphics );
+
+                bRet = TRUE;
+            }
+
+            ReleaseGraphics( pDstGraphics );
+        }
     }
 
     return bRet;
