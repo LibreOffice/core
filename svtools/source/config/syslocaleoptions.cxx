@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syslocaleoptions.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:09:43 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:25:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
 #endif
@@ -120,8 +123,11 @@ using namespace com::sun::star::lang;
 
 SvtSysLocaleOptions_Impl*   SvtSysLocaleOptions::pOptions = NULL;
 sal_Int32                   SvtSysLocaleOptions::nRefCount = 0;
-Link                        SvtSysLocaleOptions::aCurrencyChangeLink;
-
+namespace
+{
+    struct CurrencyChangeLink
+        : public rtl::Static<Link, CurrencyChangeLink> {};
+}
 
 class SvtSysLocaleOptions_Impl : public utl::ConfigItem
 {
@@ -659,8 +665,8 @@ void SvtSysLocaleOptions::GetCurrencyAbbrevAndLanguage( String& rAbbrev,
 void SvtSysLocaleOptions::SetCurrencyChangeLink( const Link& rLink )
 {
     MutexGuard aGuard( GetMutex() );
-    DBG_ASSERT( !aCurrencyChangeLink.IsSet(), "SvtSysLocaleOptions::SetCurrencyChangeLink: already set" );
-    aCurrencyChangeLink = rLink;
+    DBG_ASSERT( !CurrencyChangeLink::get().IsSet(), "SvtSysLocaleOptions::SetCurrencyChangeLink: already set" );
+    CurrencyChangeLink::get() = rLink;
 }
 
 
@@ -668,6 +674,6 @@ void SvtSysLocaleOptions::SetCurrencyChangeLink( const Link& rLink )
 const Link& SvtSysLocaleOptions::GetCurrencyChangeLink()
 {
     MutexGuard aGuard( GetMutex() );
-    return aCurrencyChangeLink;
+    return CurrencyChangeLink::get();
 }
 
