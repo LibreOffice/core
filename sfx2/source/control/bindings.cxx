@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cd $ $Date: 2002-06-03 09:32:42 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 07:56:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,39 @@ static sal_uInt32 nCache2 = 0;
 DECL_PTRARRAY(SfxStateCacheArr_Impl, SfxStateCache*, 32, 16);
 
 //====================================================================
+
+class SfxAsyncExec_Impl
+{
+    ::com::sun::star::util::URL aCommand;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > xDisp;
+    Timer           aTimer;
+
+public:
+
+    SfxAsyncExec_Impl( const ::com::sun::star::util::URL& rCmd, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& rDisp )
+        : aCommand( rCmd )
+        , xDisp( rDisp )
+    {
+        aTimer.SetTimeoutHdl( LINK(this, SfxAsyncExec_Impl, TimerHdl) );
+        aTimer.SetTimeout( 0 );
+        aTimer.Start();
+    }
+
+    DECL_LINK( TimerHdl, Timer*);
+};
+
+IMPL_LINK(SfxAsyncExec_Impl, TimerHdl, Timer*, pTimer)
+{
+    aTimer.Stop();
+
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSeq(1);
+    aSeq[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Referer") );
+    aSeq[0].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("private:select") );
+    xDisp->dispatch( aCommand, aSeq );
+
+    delete this;
+    return 0L;
+}
 
 class SfxBindings_Impl
 
@@ -2773,10 +2806,7 @@ BOOL SfxBindings::ExecuteCommand_Impl( const String& rCommand )
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  xDisp = pImp->xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
     if ( xDisp.is() )
     {
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSeq(1);
-        aSeq[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Referer") );
-        aSeq[0].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("private:select") );
-        xDisp->dispatch( aURL, aSeq );
+        new SfxAsyncExec_Impl( aURL, xDisp );
         return TRUE;
     }
 
