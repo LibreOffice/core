@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:47:29 $
+ *  last change: $Author: rt $ $Date: 2003-05-27 16:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,10 @@
 
 #include "mdiexp.hxx"
 #include "statstr.hrc"
+// OD 21.05.2003 #108789#
+#ifndef _PARATR_HXX
+#include <paratr.hxx>
+#endif
 
 // ftnfrm.cxx:
 void lcl_RemoveFtns( SwFtnBossFrm* pBoss, BOOL bPageOnly, BOOL bEndNotes );
@@ -1679,6 +1683,10 @@ SwBorderAttrs::SwBorderAttrs( const SwModify *pMod, const SwFrm *pConstructor ) 
     bTop     = bBottom     = bLine   = TRUE;
 
     bCacheGetLine = bCachedGetTopLine = bCachedGetBottomLine = FALSE;
+    // OD 21.05.2003 #108789# - init cache status for values <bJoinedWithPrev>
+    // and <bJoinedWithNext>, which aren't initialized by default.
+    bCachedJoinedWithPrev = FALSE;
+    bCachedJoinedWithNext = FALSE;
 
     bBorderDist = 0 != (pConstructor->GetType() & (FRM_CELL));
 }
@@ -1850,19 +1858,113 @@ inline int CmpLines( const SvxBorderLine *pL1, const SvxBorderLine *pL2 )
     return ( ((pL1 && pL2) && (*pL1 == *pL2)) || (!pL1 && !pL2) );
 }
 
-BOOL SwBorderAttrs::CmpLeftRight( const SwBorderAttrs &rAttrs,
+// OD 21.05.2003 #108789# - change name of 1st parameter - "rAttrs" -> "rCmpAttrs"
+// OD 21.05.2003 #108789# - compare <CalcRight()> and <rCmpAttrs.CalcRight()>
+//          instead of only the right LR-spacing, because R2L-layout has to be
+//          considered.
+BOOL SwBorderAttrs::CmpLeftRight( const SwBorderAttrs &rCmpAttrs,
                                   const SwFrm *pCaller,
                                   const SwFrm *pCmp ) const
 {
-    return ( CmpLines( rAttrs.GetBox().GetLeft(), GetBox().GetLeft()  ) &&
-             CmpLines( rAttrs.GetBox().GetRight(),GetBox().GetRight() ) &&
-             CalcLeft( pCaller ) == rAttrs.CalcLeft( pCmp ) &&  //Bereucksichtigt TxtFrms ueber den Node
-             rLR.GetRight() == rAttrs.GetLRSpace().GetRight() );
+    return ( CmpLines( rCmpAttrs.GetBox().GetLeft(), GetBox().GetLeft()  ) &&
+             CmpLines( rCmpAttrs.GetBox().GetRight(),GetBox().GetRight() ) &&
+             CalcLeft( pCaller ) == rCmpAttrs.CalcLeft( pCmp ) &&
+             // OD 21.05.2003 #108789# - compare <CalcRight> with <rCmpAttrs.CalcRight>.
+             CalcRight( pCaller ) == rCmpAttrs.CalcRight( pCmp ) );
+}
+
+BOOL SwBorderAttrs::_JoinWithCmp( const SwFrm& _rCallerFrm,
+                                  const SwFrm& _rCmpFrm ) const
+{
+    BOOL bReturnVal = FALSE;
+
+    SwBorderAttrAccess aCmpAccess( SwFrm::GetCache(), &_rCmpFrm );
+    const SwBorderAttrs &rCmpAttrs = *aCmpAccess.Get();
+    if ( rShadow == rCmpAttrs.GetShadow() &&
+         CmpLines( rBox.GetTop(), rCmpAttrs.GetBox().GetTop() ) &&
+         CmpLines( rBox.GetBottom(), rCmpAttrs.GetBox().GetBottom() ) &&
+         CmpLeftRight( rCmpAttrs, &_rCallerFrm, &_rCmpFrm )
+       )
+    {
+        bReturnVal = TRUE;
+    }
+
+    return bReturnVal;
+}
+
+// OD 21.05.2003 #108789# - method to determine, if borders are joined with
+// previous frame. Calculated value saved in cached value <bJoinedWithPrev>
+void SwBorderAttrs::_CalcJoinedWithPrev( const SwFrm& _rFrm )
+{
+    // set default
+    bJoinedWithPrev = FALSE;
+
+    // text frame can potentially join with previous text frame, if
+    // corresponding attribute set is set at previous text frame.
+    if ( _rFrm.GetPrev() &&
+         _rFrm.IsTxtFrm() && _rFrm.GetPrev()->IsTxtFrm() &&
+         _rFrm.GetPrev()->GetAttrSet()->GetParaConnectBorder().GetValue()
+       )
+    {
+        bJoinedWithPrev = _JoinWithCmp( _rFrm, *(_rFrm.GetPrev()) );
+    }
+
+    // valid cache status, if demanded
+    bCachedJoinedWithPrev = bCacheGetLine;
+}
+
+// OD 21.05.2003 #108789# - method to determine, if borders are joined with
+// next frame. Calculated value saved in cached value <bJoinedWithNext>
+void SwBorderAttrs::_CalcJoinedWithNext( const SwFrm& _rFrm )
+{
+    // set default
+    bJoinedWithNext = FALSE;
+
+    // text frame can potentially join with next text frame, if
+    // corresponding attribute set is set at current text frame.
+    if ( _rFrm.GetNext() &&
+         _rFrm.IsTxtFrm() && _rFrm.GetNext()->IsTxtFrm() &&
+         _rFrm.GetAttrSet()->GetParaConnectBorder().GetValue()
+       )
+    {
+        bJoinedWithNext = _JoinWithCmp( _rFrm, *(_rFrm.GetNext()) );
+    }
+
+    // valid cache status, if demanded
+    bCachedJoinedWithNext = bCacheGetLine;
+}
+
+// OD 21.05.2003 #108789# - accessor for cached values <bJoinedWithPrev>
+BOOL SwBorderAttrs::JoinedWithPrev( const SwFrm& _rFrm ) const
+{
+    if ( !bCachedJoinedWithPrev )
+    {
+        const_cast<SwBorderAttrs*>(this)->_CalcJoinedWithPrev( _rFrm );
+    }
+
+    return bJoinedWithPrev;
+}
+
+BOOL SwBorderAttrs::JoinedWithNext( const SwFrm& _rFrm ) const
+{
+    if ( !bCachedJoinedWithNext )
+    {
+        const_cast<SwBorderAttrs*>(this)->_CalcJoinedWithNext( _rFrm );
+    }
+
+    return bJoinedWithNext;
 }
 
 void SwBorderAttrs::_GetTopLine( const SwFrm *pFrm )
 {
     USHORT nRet = CalcTopLine();
+
+    // OD 21.05.2003 #108789# - use new method <JoinWithPrev()>
+    if ( JoinedWithPrev( *(pFrm) ) )
+    {
+        nRet = 0;
+    }
+    /*
     if ( nRet && pFrm->GetPrev() && pFrm->IsCntntFrm() && pFrm->GetPrev()->IsCntntFrm() )
     {
         SwBorderAttrAccess aAccess( SwFrm::GetCache(), pFrm->GetPrev() );
@@ -1878,8 +1980,9 @@ void SwBorderAttrs::_GetTopLine( const SwFrm *pFrm )
             }
         }
     }
-    if ( bCacheGetLine )
-        bCachedGetTopLine = TRUE;
+    */
+
+    bCachedGetTopLine = bCacheGetLine;
 
     nGetTopLine = nRet;
 }
@@ -1887,6 +1990,13 @@ void SwBorderAttrs::_GetTopLine( const SwFrm *pFrm )
 void SwBorderAttrs::_GetBottomLine( const SwFrm *pFrm )
 {
     USHORT nRet = CalcBottomLine();
+
+    // OD 21.05.2003 #108789# - use new method <JoinWithPrev()>
+    if ( JoinedWithNext( *(pFrm) ) )
+    {
+        nRet = 0;
+    }
+    /*
     if ( nRet && pFrm->GetNext() && pFrm->IsCntntFrm() && pFrm->GetNext()->IsCntntFrm() )
     {
         SwBorderAttrAccess aAccess( SwFrm::GetCache(), pFrm->GetNext() );
@@ -1902,8 +2012,8 @@ void SwBorderAttrs::_GetBottomLine( const SwFrm *pFrm )
             }
         }
     }
-    if ( bCacheGetLine )
-        bCachedGetBottomLine = TRUE;
+    */
+    bCachedGetBottomLine = bCacheGetLine;
 
     nGetBottomLine = nRet;
 }
