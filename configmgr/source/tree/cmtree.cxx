@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dg $ $Date: 2000-10-24 11:07:56 $
+ *  last change: $Author: fs $ $Date: 2000-10-27 14:23:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,7 +671,7 @@ namespace configmgr
     }
 
 // -----------------------------------------------------------------------------
-    ISubtree* Tree::requestSubtree( OUString const& aComponentName, sal_Int16 nLevel )
+    ISubtree* Tree::requestSubtree( OUString const& aComponentName, sal_Int16 nLevel ) throw (container::NoSuchElementException)
     {
         // OLD:
         // INode* pResult = m_pRoot->getChild(aComponentName);
@@ -700,7 +700,7 @@ namespace configmgr
                 if (pNode)
                     pSubtree = pNode->asISubtree();
                 else
-                    return NULL;
+                    throw container::NoSuchElementException();
             }
             else
                 break;
@@ -711,7 +711,9 @@ namespace configmgr
         bCompleteForRequest = pSubtree && (ALL_LEVELS == pSubtree->getLevel() ||
                                           (ALL_LEVELS != nLevel && nLevel <= pSubtree->getLevel()));
 
-        return bCompleteForRequest ? pSubtree : NULL;
+        if (!pSubtree || !bCompleteForRequest)
+            throw container::NoSuchElementException();
+
     }
 
 // -----------------------------------------------------------------------------
@@ -905,8 +907,18 @@ namespace configmgr
     void Tree::updateTree( TreeChangeList& aTree) throw (starlang::WrappedTargetException, uno::RuntimeException)
     {
         ConfigurationName aSubtreeName(aTree.pathToRoot, aTree.root.getNodeName());
-        // request the subtree, atleast one level must exist!
-        ISubtree *pSubtree = requestSubtree(aSubtreeName.fullName(), 1);
+        ISubtree *pSubtree = NULL;
+        try
+        {
+            // request the subtree, atleast one level must exist!
+            pSubtree = requestSubtree(aSubtreeName.fullName(), 1);
+        }
+        catch(container::NoSuchElementException&e)
+        {
+            starlang::WrappedTargetException aError;
+            aError.TargetException <<= e;
+            throw starlang::WrappedTargetException(aError);
+        }
 
 #ifdef DEBUG
         ::rtl::OString aStr("Tree: there is no Subtree for name:=");
