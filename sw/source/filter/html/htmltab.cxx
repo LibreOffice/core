@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmltab.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:49 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -984,7 +984,7 @@ void HTMLTableRow::Shrink( sal_uInt16 nCells )
         else
             break;
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     for( i=nCells; i<nEnd; i++ )
     {
         HTMLTableCell *pCell = (*pCells)[i];
