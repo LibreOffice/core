@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-12 12:53:53 $
+ *  last change: $Author: sab $ $Date: 2001-09-04 08:04:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,9 +115,6 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     com::sun::star::uno::Reference<com::sun::star::document::XActionLockable> xLockable;
     rtl::OUString sEmpty;
     rtl::OUString sOUText;
-    rtl::OUString sOUDateValue;
-    rtl::OUString sOUTimeValue;
-    rtl::OUString sOUBooleanValue;
     rtl::OUString sOUTextValue;
     rtl::OUString sOUTextContent;
     rtl::OUString sOUFormula;
@@ -132,6 +129,7 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     sal_Int32   nMatrixRows, nMatrixCols;
     sal_Int32   nRepeatedRows;
     sal_Int32   nCellsRepeated;
+    ScXMLImport& rXMLImport;
     sal_Int16   nCellType;
     sal_Bool    bIsMerged : 1;
     sal_Bool    bIsMatrix : 1;
