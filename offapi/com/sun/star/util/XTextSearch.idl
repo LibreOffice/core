@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTextSearch.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 15:53:02 $
+ *  last change: $Author: jp $ $Date: 2001-02-01 20:12:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,12 @@ struct SearchOptions  {
 
     /// this many characters can be additional in the found word in a "Weight Levenshtein-Distance"
     long            insertedChars;
+
+    /** asian flags for the transliteration. Same meaning as the enum of TransliteratorModule
+
+        @see com/sun/star/i18n/XTransliteration.idl
+    */
+    long            transliterateFlags;
 };
 
 
