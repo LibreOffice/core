@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:09:36 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:59:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,7 +279,6 @@ protected:
 // </properties>
 
     ::cppu::OInterfaceContainerHelper                   m_aModifyListeners;
-    ::cppu::OInterfaceContainerHelper                   m_aEventListeners;
     ::cppu::OInterfaceContainerHelper                   m_aCloseListener;
     ::cppu::OInterfaceContainerHelper                   m_aFlushListeners;
 
