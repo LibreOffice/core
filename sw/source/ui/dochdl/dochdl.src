@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dochdl.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:46:19 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ String STR_NOGLOS1
     TEXT[ dutch ] = "AutoTekst voor afkortingen'";
     TEXT[ chinese_simplified ] = "ΧΤ¶―ΝΌΞΔΌ―µΔΛυΠ΄ '";
     TEXT[ greek ] = "ΑυτοΚείμενο για τα αρχικά '";
-    TEXT[ korean ] = "ΐΪµΏ ΕΨ½ΊΖ® ΉΩ·Ξ°΅±β  '";
+    TEXT[ korean ] = "ΐΪµΏΕΨ½ΊΖ® ΉΩ·Ξ°΅±β '";
     TEXT[ turkish ] = "Otomatik metin kύsaltmasύ '";
     TEXT[ language_user1 ] = " ";
 };
@@ -123,7 +123,7 @@ String STR_NOGLOS2
     TEXT[ dutch ] = "' niet gevonden.";
     TEXT[ chinese_simplified ] = "' Γ»ΣΠ±»ΥÒµ½΅£";
     TEXT[ greek ] = "' δεν βρέθηκε.";
-    TEXT[ korean ] = "' °΅ Ήί°ίµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
+    TEXT[ korean ] = "' ΐ»£¨Έ¦£©Γ£Αφ΅΅ΈψΗί½ΐ΄Ο΄Ω.";
     TEXT[ turkish ] = "' bulunamadύ.";
     TEXT[ language_user1 ] = " ";
 };
@@ -183,7 +183,7 @@ InfoBox MSG_ERR_INSERT_GLOS
     MESSAGE[ dutch ] = "AutoTekst kon niet worden gemaakt";
     MESSAGE[ chinese_simplified ] = "Ξή·¨½¨ΑΆΧΤ¶―ΝΌΞΔΌ―΅£";
     MESSAGE[ greek ] = "Δεν ήταν δυνατή η εισαγωγή ΑυτοΚείμενο.";
-    MESSAGE[ korean ] = "ΐΪµΏ ΕΨ½ΊΖ®Έ¦ »πΐΤΗÒ Όφ Ύψ½ΐ΄Ο΄Ω.";
+    MESSAGE[ korean ] = "ΐΪµΏΕΨ½ΊΖ®Έ¦ ΈΈµιΌφ Ύψ½ΐ΄Ο΄Ω.";
     MESSAGE[ turkish ] = "Otomatik metin oluώturulamadύ.";
     MESSAGE[ language_user1 ] = " ";
 };
@@ -200,7 +200,7 @@ InfoBox MSG_CLPBRD_FORMAT_ERROR
     MESSAGE [ finnish ] = "Pyydetty leikepφydδn muoto ei ole kδytettδvissδ." ;
     MESSAGE [ danish ] = "Det anmodede udskriftsholderformat er ikke tilgζngeligt." ;
     MESSAGE [ french ] = "Le format de presse-papiers souhaitι n'est pas disponible." ;
-    MESSAGE [ swedish ] = "Φnskat urklippformat stεr inte till fφrfogande." ;
+    MESSAGE [ swedish ] = "Φnskat urklippsformat δr inte tillgδngligt." ;
     MESSAGE [ dutch ] = "Gevraagd clipboardformaat is niet beschikbaar." ;
     MESSAGE [ spanish ] = "El formato deseado del portapapeles no estα disponible." ;
     MESSAGE [ english_us ] = "Requested clipboard format is not available." ;
@@ -213,7 +213,7 @@ InfoBox MSG_CLPBRD_FORMAT_ERROR
     MESSAGE[ dutch ] = "Gevraagd clipboardformaat is niet beschikbaar.";
     MESSAGE[ chinese_simplified ] = "ΛωΠθÒªµΔ²ΓΌτ°εΈρΚ½²»΄ζΤΪ΅£";
     MESSAGE[ greek ] = "Η ζητούμενη μορφή του πρόχειρου δεν είναι διαθέσιμη.";
-    MESSAGE[ korean ] = "ΏδΓ»µΘ Ε¬Έ³ΊΈµε Ό­½ΔΐΜ °΅΄ΙΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.";
+    MESSAGE[ korean ] = "ΏδΓ»µΘ Ε¬Έ³ΊΈµε Ό­½ΔΐΊ °΅΄ΙΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.";
     MESSAGE[ turkish ] = "έstenen pano formatύ mevcut deπil.";
     MESSAGE[ language_user1 ] = " ";
 };
@@ -372,7 +372,7 @@ String STR_RTFFORMAT
     Text[ polish ] = "Sformatowany tekst [RTF]";
     Text[ japanese ] = "‘®έ’θΟ‚έ‚ΜΓ·½Δ [RTF]";
     Text[ greek ] = "Μορφοποιημένο κείμενο [RTF]";
-    Text[ korean ] = "Ό­½ΔΐΦ΄Β ΕΨ½ΊΖ® [RTF]";
+    Text[ korean ] = "ΖχΈΛµΘ ΕΨ½ΊΖ® [RTF]";
     Text[ chinese_traditional ] = "¤wΈg®ζ¦΅¤ΖªΊ¤ε¦r [RTF]";
     Text[ arabic ] = "[RTF]δΥ γυδΣή ";
     Text[ turkish ] = "Formatlύ metin [RTF]";
@@ -401,7 +401,7 @@ String STR_TEXTFORMAT
     Text[ dutch ] = "Tekst zonder opmaak";
     Text[ chinese_simplified ] = "Ξ΄ΈρΚ½»―µΔΞΔ±Ύ";
     Text[ greek ] = "Κείμενο χωρίς μορφοποίηση";
-    Text[ korean ] = "Ό­½ΔΎψ΄Β ΕΨ½ΊΖ®";
+    Text[ korean ] = "ΖχΈΛµΗΑφΎΚΐΊ ΕΨ½ΊΖ®";
     Text[ turkish ] = "Formatlanmamύώ metin";
     Text[ language_user1 ] = " ";
 };
