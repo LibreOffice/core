@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-04 10:34:24 $
+ *  last change: $Author: cl $ $Date: 2000-12-06 10:15:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1971,52 +1971,3 @@ String STR_PRESOBJ_IMAGE
     Text[ language_user1 ] = " ";
 };
 #endif
-
-String STR_STAROFFICE_XML_DRAW
-{
-    Text = "%PRODUCTNAME XML (Draw)" ;
-    Text [ ENGLISH ] = "StarOffice XML (Draw)" ;
-    Text[ english_us ] = "%PRODUCTNAME XML (Draw)";
-    Text[ portuguese ] = "%PRODUCTNAME XML (Draw)";
-    Text[ russian ] = "%PRODUCTNAME XML (Draw)";
-    Text[ greek ] = "%PRODUCTNAME XML (Draw)";
-    Text[ dutch ] = "%PRODUCTNAME XML (Draw)";
-    Text[ french ] = "%PRODUCTNAME XML (Draw)";
-    Text[ spanish ] = "%PRODUCTNAME XML (Draw)";
-    Text[ italian ] = "%PRODUCTNAME XML (Draw)";
-    Text[ danish ] = "%PRODUCTNAME XML (Draw)";
-    Text[ swedish ] = "%PRODUCTNAME XML (Draw)";
-    Text[ polish ] = "%PRODUCTNAME XML (Draw)";
-    Text[ portuguese_brazilian ] = "%PRODUCTNAME XML (Draw)";
-    Text[ japanese ] = "%PRODUCTNAME XML (Draw)";
-    Text[ korean ] = "%PRODUCTNAME XML (Draw)";
-    Text[ chinese_simplified ] = "%PRODUCTNAME XML (Draw)";
-    Text[ chinese_traditional ] = "%PRODUCTNAME XML (Draw)";
-    Text[ turkish ] = "%PRODUCTNAME XML (Draw)";
-    Text[ arabic ] = "%PRODUCTNAME XML (Draw)";
-};
-
-String STR_STAROFFICE_XML_IMPRESS
-{
-    Text = "%PRODUCTNAME XML (Impress)" ;
-    Text [ ENGLISH ] = "StarOffice XML (Impress)" ;
-    Text[ english_us ] = "%PRODUCTNAME XML (Impress)";
-    Text[ portuguese ] = "%PRODUCTNAME XML (Impress)";
-    Text[ russian ] = "%PRODUCTNAME XML (Impress)";
-    Text[ greek ] = "%PRODUCTNAME XML (Impress)";
-    Text[ dutch ] = "%PRODUCTNAME XML (Impress)";
-    Text[ french ] = "%PRODUCTNAME XML (Impress)";
-    Text[ spanish ] = "%PRODUCTNAME XML (Impress)";
-    Text[ italian ] = "%PRODUCTNAME XML (Impress)";
-    Text[ danish ] = "%PRODUCTNAME XML (Impress)";
-    Text[ swedish ] = "%PRODUCTNAME XML (Impress)";
-    Text[ polish ] = "%PRODUCTNAME XML (Impress)";
-    Text[ portuguese_brazilian ] = "%PRODUCTNAME XML (Impress)";
-    Text[ japanese ] = "%PRODUCTNAME XML (Impress)";
-    Text[ korean ] = "%PRODUCTNAME XML (Impress)";
-    Text[ chinese_simplified ] = "%PRODUCTNAME XML (Impress)";
-    Text[ chinese_traditional ] = "%PRODUCTNAME XML (Impress)";
-    Text[ turkish ] = "%PRODUCTNAME XML (Impress)";
-    Text[ arabic ] = "%PRODUCTNAME XML (Impress)";
-};
-
