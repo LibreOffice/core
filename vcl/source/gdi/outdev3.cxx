@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.164 $
+ *  $Revision: 1.165 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:50:11 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,6 +264,7 @@ void OutputDevice::ImplUpdateFontData( BOOL bNewFontLists )
         mpFontCache->Release( mpFontEntry );
         mpFontEntry = NULL;
     }
+
     if ( bNewFontLists )
     {
         if ( mpGetDevFontList )
@@ -2613,10 +2614,10 @@ ImplFontEntry* ImplFontCache::GetFallback( ImplDevFontList* pFontList,
     {
         // TODO: implement dynamic lists or improve static lists
         #define FALLBACKFONT_NAMELIST \
-            "Arial Unicode MS;Andale Sans UI;Cyberbit;StarSymbol;Lucida TypeWriter;"  \
-            "FZMingTi;SunBatang;SunDotum;"                                           \
+            "Arial Unicode MS;Andale Sans UI;Tahoma;Cyberbit;StarSymbol;Lucida TypeWriter;"  \
+            "FZMingTi;SunBatang;SunDotum;"                                \
             "HGMinchoLightJ;MSungLightSC;MSungLightTC;HYMyeongJoLight K;" \
-            "Lucida Sans;Tahoma;"                       \
+            "Lucida Sans;"                              \
             "Shree;Mangal;Raavi;Shruti;Tunga;Latha;"    \
             "Shayyal MT;Nask MT;David;"                 \
             "Norasi;AngsanaUPC;"                                   \
@@ -2628,9 +2629,10 @@ ImplFontEntry* ImplFontCache::GetFallback( ImplDevFontList* pFontList,
         {
             String aTokenName = GetFontToken( aNameList, 0, nTokenPos );
             ImplGetEnglishSearchFontName( aTokenName );
+            // TODO: use font substitution lists for fallback? default is no
             //ImplFontSubstitute( aSearchName, nSubstFlags1, nSubstFlags2 );
             ImplDevFontListData* pFoundData = pFontList->ImplFind( aTokenName );
-            // TODO: check FontCharset and reject if it is already covered
+            // TODO: check FontCharset and reject if the charset is already covered
             if( pFoundData && (pFoundData->mpFirst->meType == TYPE_SCALABLE) )
             {
                 if( !pFallbackList )
@@ -2672,6 +2674,7 @@ void ImplFontCache::Release( ImplFontEntry* pEntry )
     static const int FONTCACHE_MIN = 5;
     static const int FONTCACHE_MAX = 50;
 
+    DBG_ASSERT( (pEntry->mnRefCount > 0), "ImplFontCache::Release() - font recount underflow" );
     if( --pEntry->mnRefCount > 0 )
         return;
 
@@ -2689,6 +2692,7 @@ void ImplFontCache::Release( ImplFontEntry* pEntry )
             *pNextPtr = pEntry->mpNext;
             delete pEntry;
             --mnRef0Count;
+            DBG_ASSERT( (mnRef0Count >= 0), "ImplFontCache::Release() - refcount0 underflow" );
         }
     }
 
@@ -2866,12 +2870,12 @@ int OutputDevice::ImplNewFont()
     DBG_TESTSOLARMUTEX();
 
     // get correct font list on the PDF writer if necessary
-    ImplSVData* pSVData = ImplGetSVData();
-    if( ( mpFontList == pSVData->maGDIData.mpScreenFontList ||
-        mpFontCache == pSVData->maGDIData.mpScreenFontCache  )
-        && mpPDFWriter )
+    if( mpPDFWriter )
     {
-        ImplUpdateFontData( TRUE );
+        const ImplSVData* pSVData = ImplGetSVData();
+        if( mpFontList == pSVData->maGDIData.mpScreenFontList
+        ||  mpFontCache == pSVData->maGDIData.mpScreenFontCache )
+            ImplUpdateFontData( TRUE );
     }
 
     if ( !mbNewFont )
@@ -5540,7 +5544,7 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         for( ; pStr < pEnd; ++pStr )
             if( ((*pStr >= 0x0580) && (*pStr < 0x0800))   // middle eastern scripts
             ||  ((*pStr >= 0xFB18) && (*pStr < 0xFE00))   // hebrew + arabic A presentation forms
-            ||  ((*pStr >= 0xFE70) && (*pStr < 0xFF00)) ) // arabic presentation forms B
+            ||  ((*pStr >= 0xFE70) && (*pStr < 0xFEFF)) ) // arabic presentation forms B
                 break;
         if( pStr >= pEnd )
             nLayoutFlags |= SAL_LAYOUT_BIDI_STRONG;
@@ -5564,9 +5568,10 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         const sal_Unicode* pEnd = aStr.GetBuffer() + nEndIndex;
         for( ; pStr < pEnd; ++pStr )
             if( ((*pStr >= 0x0590) && (*pStr < 0x10A0))
+            ||  ((*pStr >= 0x1100) && (*pStr < 0x1200))   // hangul jamo
             ||  ((*pStr >= 0x1700) && (*pStr < 0x1900))
             ||  ((*pStr >= 0xFB1D) && (*pStr < 0xFE00))   // middle east presentation
-            ||  ((*pStr >= 0xFE70) && (*pStr < 0xFF00)) ) // arabic presentation B
+            ||  ((*pStr >= 0xFE70) && (*pStr < 0xFEFF)) ) // arabic presentation B
                 break;
         if( pStr >= pEnd )
             nLayoutFlags |= SAL_LAYOUT_COMPLEX_DISABLED;
@@ -7405,4 +7410,3 @@ xub_StrLen OutputDevice::HasGlyphs( const Font& rTempFont, const String& rStr,
 }
 
 // -----------------------------------------------------------------------
-
