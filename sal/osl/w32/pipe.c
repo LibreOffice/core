@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:23 $
+ *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -994,70 +994,3 @@ oslPipeError SAL_CALL osl_getLastPipeError(oslPipe Pipe)
     return (Error);
 }
 
-/*************************************************************************
-*
-*    $Log: not supported by cvs2svn $
-*    Revision 1.21  2000/09/18 14:29:02  willem.vandorp
-*    OpenOffice header added.
-*
-*    Revision 1.20  2000/08/17 16:55:06  jbu
-*    #77354# WIN98 pipe runs now, NT acceptPipe changed, so that accept retuns a null pipe on closing accepting pipe
-*
-*    Revision 1.19  2000/05/29 16:35:50  hro
-*    SRC591: Explicite SAL_CALL calling convention
-*
-*    Revision 1.18  2000/05/22 15:29:08  obr
-*    unicode changes channel/pipe
-*
-*    Revision 1.17  2000/04/07 13:41:04  obr
-*    Unicode changes
-*
-*    Revision 1.16  1999/10/27 15:13:35  mfe
-*    Change of Copyright, removed compiler warnings, code clean up, ...
-*
-*    Revision 1.15  1999/04/29 10:09:11  ts
-*    #65460# osl_acceptPipe() warted auf des anlegen des Windows in der PipeWindowProc
-*
-*    Revision 1.14  1999/04/22 16:25:45  tlx
-*    #64892# Flush beim destroyPipe rausgenommen wg. Deadlock
-*
-*    Revision 1.13  1999/04/22 13:25:30  rh
-*    #64126# Implemented TIMER for alice checking, and releasing of receiving threads
-*
-*    Revision 1.12  1999/03/11 14:47:20  ts
-*    #58701# RefCounting an oslPipeImpl gerichtet, DestroyWindow() im richtigen Thread, nPipes geschuetzt
-*
-*    Revision 1.11  1999/03/04 10:01:23  rh
-*    #62429 code cleanup
-*
-*    Revision 1.10  1999/03/02 15:21:25  rh
-*    #62321 use "UNKNOWN" as user name, if it could not be determined
-*
-*    Revision 1.9  1999/02/09 09:34:32  rh
-*    #61503, #61593 Bugfix: receiving any message on pipe window -> acceptPipe fails
-*
-*    Revision 1.8  1999/01/20 19:09:49  jsc
-*    #61011# Typumstellung
-*
-*    Revision 1.7  1998/12/08 13:41:05  ts
-*    #52712# Pipe-Bugs unter NT behoben
-*
-*    Revision 1.6  1998/12/07 17:44:13  ts
-*    #52712# pipes unter NT
-*
-*    Revision 1.5  1998/12/07 16:04:09  rh
-*    #53351# added system pipes and emulation for pipes via messages
-*
-*    Revision 1.4  1998/12/07 14:07:01  ts
-*    #52712# systempipes
-*
-*    Revision 1.3  1998/12/04 15:11:51  ts
-*    #52712# pipes
-*
-*    Revision 1.2  1998/03/22 13:36:14  rh
-*    Chnages for Win16
-*
-*    Revision 1.1  1998/03/13 15:07:44  rh
-*    Cleanup of enum chaos and implemntation of pipes
-*
-*************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hro $ $Date: 2000-09-29 13:46:53 $
+ *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:37:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -808,107 +808,5 @@ rtl_TextEncoding SAL_CALL osl_setThreadTextEncoding( rtl_TextEncoding Encoding )
     return oldEncoding;
 }
 
-
-/*************************************************************************
-*
-*    $Log: not supported by cvs2svn $
-*    Revision 1.2  2000/09/29 10:56:58  hro
-*    osl_createThreadKeyData with callback function paramater, osl_setThreadKeyData works
-*
-*    Revision 1.1.1.1  2000/09/18 15:17:23  hr
-*    initial import
-*
-*    Revision 1.30  2000/09/18 14:29:03  willem.vandorp
-*    OpenOffice header added.
-*
-*    Revision 1.29  2000/06/09 13:26:45  hro
-*    No TLS allocation via runtime library
-*
-*    Revision 1.28  2000/04/03 09:44:54  hro
-*    Missing return statement in osl_CoInitializeEx
-*
-*    Revision 1.27  2000/03/31 16:44:52  rs
-*    tools.c
-*
-*    Revision 1.26  2000/03/27 09:13:26  hro
-*    UNICODE New osl_getThreadTextEncoding
-*
-*    Revision 1.25  2000/02/02 15:31:24  obr
-*    #70588# load CoInitialzeEx on call
-*
-*    Revision 1.24  1999/12/22 13:40:13  mfe
-*    #71232# : shared createthread code for normal and suspended threads
-*
-*    Revision 1.23  1999/10/27 15:13:37  mfe
-*    Change of Copyright, removed compiler warnings, code clean up, ...
-*
-*    Revision 1.22  1999/10/01 12:25:35  hro
-*    #68919# Nur noch CoInitialize rufen da Win95 kein DCOM hat
-*
-*    Revision 1.21  1999/09/16 14:58:19  hro
-*    Every thread must initialize COM
-*
-*    Revision 1.20  1999/03/19 09:06:38  jsc
-*    #60455# osl_isCurrentThresad entfernt
-*
-*    Revision 1.19  1999/01/20 19:09:50  jsc
-*    #61011# Typumstellung
-*
-*    Revision 1.18  1998/11/05 11:13:18  rh
-*    #59037# Thread local storage implementation
-*
-*    Revision 1.17  1998/07/22 10:57:11  rh
-*    #53540 destroyThread : don't wait for termination, because of hangup in Win95
-*
-*    Revision 1.16  1998/03/13 15:07:46  rh
-*    Cleanup of enum chaos and implemntation of pipes
-*
-*    Revision 1.15  1998/02/26 18:35:29  rh
-*    Avoid unix zombies and rename oslThreadHandle to oslThread
-*
-*    Revision 1.14  1998/02/16 19:35:01  rh
-*    Cleanup of ports, integration of Size_t, features for process
-*
-*    Revision 1.13  1997/10/16 16:25:50  rh
-*    *** empty log message ***
-*
-*    Revision 1.12  1997/10/13 18:41:04  rh
-*    BugFix
-*
-*    Revision 1.11  1997/08/22 14:47:48  rh
-*    TimeValue inserted
-*
-*    Revision 1.10  1997/07/25 11:37:15  rh
-*    new arrangment for terminating threads
-*
-*    Revision 1.9  1997/07/22 14:29:35  rh
-*    process added
-*
-*    Revision 1.8  1997/07/18 17:43:58  mhu
-*    Renamed "osl_freeThreadHandle()" into "osl_freeHandleOfThread()"
-*    (as declared in <osl/thread.h>).
-*
-*    Revision 1.7  1997/07/17 11:02:32  rh
-*    Header adapted and profile added
-*
-*    Revision 1.6  1997/07/15 19:02:06  rh
-*    system.h inserted
-*
-*    Revision 1.5  1997/07/14 16:12:07  rh
-*    *** empty log message ***
-*
-*    Revision 1.4  1997/07/14 09:09:15  rh
-*    Adaptions for killable sleeps
-*
-*    Revision 1.3  1997/07/13 11:29:49  mhu
-*    Corrected check for valid handle in osl_destroyThread.
-*
-*    Revision 1.2  1997/07/02 10:54:03  rh
-*    Anpassung fuer Diagnose Macros
-*
-*    Revision 1.1  1997/06/19 13:10:45  bho
-*    first version of OSL.
-*
-*************************************************************************/
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: secimpl.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:23 $
+ *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,31 +86,3 @@ typedef struct _oslSecurityImpl {
 
 #endif
 
-/*************************************************************************
-*
-*    $Log: not supported by cvs2svn $
-*    Revision 1.8  2000/09/18 14:29:02  willem.vandorp
-*    OpenOffice header added.
-*
-*    Revision 1.7  2000/03/31 16:29:19  rs
-*    UNICODE-Changes
-*
-*    Revision 1.6  1999/11/18 09:35:51  mfe
-*    loadUserprofile moved from process.c to security.c
-*
-*    Revision 1.5  1999/10/27 15:13:36  mfe
-*    Change of Copyright, removed compiler warnings, code clean up, ...
-*
-*    Revision 1.4  1999/01/20 19:09:50  jsc
-*    #61011# Typumstellung
-*
-*    Revision 1.3  1998/02/16 19:34:59  rh
-*    Cleanup of ports, integration of Size_t, features for process
-*
-*    Revision 1.2  1997/10/17 16:01:36  ts
-*    osl_logonUserOnFileServer hinzugefuegt
-*
-*    Revision 1.1  1997/07/22 14:56:04  rh
-*    added
-*
-*************************************************************************/

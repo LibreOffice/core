@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profile.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:12 $
+ *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:39:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,34 +243,3 @@ namespace osl {
 #endif  /* _OSL_PROFILE_HXX_ */
 
 
-/*************************************************************************
-*
-*    $Log: not supported by cvs2svn $
-*    Revision 1.9  2000/09/18 14:28:49  willem.vandorp
-*    OpenOffice header added.
-*
-*    Revision 1.8  2000/05/31 08:52:40  obr
-*    inline statement fixed
-*
-*    Revision 1.7  2000/05/17 14:50:15  mfe
-*    comments upgraded
-*
-*    Revision 1.6  2000/03/16 16:43:53  obr
-*    Unicode API changes
-*
-*    Revision 1.5  2000/03/06 14:15:08  mfe
-*    #73273# : added flush() method
-*
-*    Revision 1.4  1999/11/09 16:15:25  pl
-*    add: correct namespace
-*
-*    Revision 1.3  1999/10/27 15:02:08  mfe
-*    Change of Copyright, removed compiler warnings, code clean up, ...
-*
-*    Revision 1.2  1999/09/30 11:45:58  pl
-*    use OStrings to get rid of buffers
-*
-*    Revision 1.1  1999/09/30 08:26:57  kr
-*    profile header inline wrapper
-*
-*************************************************************************/

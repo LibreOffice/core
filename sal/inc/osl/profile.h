@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profile.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:13 $
+ *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:43:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,56 +150,4 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName,
 #endif
 
 #endif  /* _OSL_PROFILE_H_ */
-
-/*************************************************************************
-*
-*    $Log: not supported by cvs2svn $
-*    Revision 1.8  2000/09/18 14:28:49  willem.vandorp
-*    OpenOffice header added.
-*
-*    Revision 1.7  2000/05/17 14:50:15  mfe
-*    comments upgraded
-*
-*    Revision 1.6  2000/03/22 17:06:42  mfe
-*    #73273# #72225# : now a UniCode Version
-*
-*    Revision 1.5  2000/03/22 16:58:30  mfe
-*    #73273# #72225# : new Option for writing via flush without lock
-*
-*    Revision 1.3  2000/03/06 14:14:46  mfe
-*    #73273# : added osl_flushProfile
-*
-*    Revision 1.2  1999/10/27 15:02:08  mfe
-*    Change of Copyright, removed compiler warnings, code clean up, ...
-*
-*    Revision 1.1  1999/08/05 10:18:19  jsc
-*    verschoben aus osl
-*
-*    Revision 1.8  1999/08/05 11:14:39  jsc
-*    verschoben in root inc-Verzeichnis
-*
-*    Revision 1.7  1999/01/20 18:53:41  jsc
-*    #61011# Typumstellung
-*
-*    Revision 1.6  1998/05/04 10:44:01  rh
-*    Added osl_getProfileSections, minor changes on Unix signals,
-*    starting every process under unix in a separate thread,
-*    fix unix thread problem, when freeing a handle of a running thread
-*
-*    Revision 1.5  1998/03/13 15:07:32  rh
-*    Cleanup of enum chaos and implemntation of pipes
-*
-*    Revision 1.4  1998/02/16 19:34:51  rh
-*    Cleanup of ports, integration of Size_t, features for process
-*
-*    Revision 1.3  1997/12/12 14:15:21  rh
-*    Added CR/LF conversion, locking and system integration
-*
-*    Revision 1.2  1997/09/18 10:57:28  rh
-*    getProfileName added
-*
-*    Revision 1.1  1997/07/17 11:02:27  rh
-*    Header adapted and profile added
-*
-*************************************************************************/
 

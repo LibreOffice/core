@@ -2,9 +2,9 @@
  *
  *  $RCSfile: semaphor.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:13 $
+ *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,38 +109,4 @@ sal_Bool SAL_CALL osl_releaseSemaphore(oslSemaphore Semaphore);
 
 #endif  /* _OSL_SEMAPHORE_H_  */
 
-/*************************************************************************
-*
-*    $Log: not supported by cvs2svn $
-*    Revision 1.4  2000/09/18 14:28:49  willem.vandorp
-*    OpenOffice header added.
-*
-*    Revision 1.3  2000/05/17 14:50:15  mfe
-*    comments upgraded
-*
-*    Revision 1.2  1999/10/27 15:02:08  mfe
-*    Change of Copyright, removed compiler warnings, code clean up, ...
-*
-*    Revision 1.1  1999/08/05 10:18:20  jsc
-*    verschoben aus osl
-*
-*    Revision 1.6  1999/08/05 11:14:41  jsc
-*    verschoben in root inc-Verzeichnis
-*
-*    Revision 1.5  1999/01/20 18:53:41  jsc
-*    #61011# Typumstellung
-*
-*    Revision 1.4  1998/02/16 19:34:52  rh
-*    Cleanup of ports, integration of Size_t, features for process
-*
-*    Revision 1.3  1997/07/31 15:28:40  ts
-*    *** empty log message ***
-*
-*    Revision 1.2  1997/07/17 11:02:28  rh
-*    Header adapted and profile added
-*
-*    Revision 1.1  1997/06/19 13:10:10  bho
-*    first version of OSL.
-*
-*************************************************************************/
 

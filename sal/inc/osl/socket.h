@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:13 $
+ *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:45:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -902,100 +902,4 @@ void SAL_CALL osl_closeSocket(oslSocket Socket);
 #endif
 
 #endif  /* _OSL_SOCKET_H_ */
-
-/*************************************************************************
-*
-*    $Log: not supported by cvs2svn $
-*    Revision 1.8  2000/09/18 14:28:49  willem.vandorp
-*    OpenOffice header added.
-*
-*    Revision 1.7  2000/06/27 15:45:29  mhu
-*    Added function osl_createInetBroadcastAddr().
-*
-*    Revision 1.6  2000/05/17 14:50:15  mfe
-*    comments upgraded
-*
-*    Revision 1.5  2000/03/31 15:56:19  rs
-*    UNICODE-Changes
-*
-*    Revision 1.4  2000/03/20 08:56:22  obr
-*    Unicode API changes
-*
-*    Revision 1.3  2000/03/16 16:43:53  obr
-*    Unicode API changes
-*
-*    Revision 1.2  1999/10/27 15:02:08  mfe
-*    Change of Copyright, removed compiler warnings, code clean up, ...
-*
-*    Revision 1.1  1999/08/05 10:18:20  jsc
-*    verschoben aus osl
-*
-*    Revision 1.22  1999/08/05 11:14:43  jsc
-*    verschoben in root inc-Verzeichnis
-*
-*    Revision 1.21  1999/07/21 16:13:06  ts
-*    #67730# changed channel maneger api
-*
-*    Revision 1.20  1999/03/04 09:58:37  rh
-*    #62583 compare socketaddr
-*
-*    Revision 1.19  1999/01/20 18:53:41  jsc
-*    #61011# Typumstellung
-*
-*    Revision 1.18  1998/03/13 15:07:32  rh
-*    Cleanup of enum chaos and implemntation of pipes
-*
-*    Revision 1.17  1998/02/16 19:34:52  rh
-*    Cleanup of ports, integration of sal_uInt32, features for process
-*
-*    Revision 1.16  1997/12/09 10:55:40  mib
-*    AIX
-*
-*    Revision 1.15  1997/11/25 10:14:40  fm
-*    initial release for S/390
-*
-*    Revision 1.14  1997/10/16 16:12:04  rh
-*    *** empty log message ***
-*
-*    Revision 1.13  1997/10/15 10:26:02  mhu
-*    Added function: sal_Bool osl_getLocalHostname (sal_Char *pBuffer, int BufferSize)
-*
-*    Revision 1.12  1997/09/15 10:53:54  mhu
-*    Added function osl_copyHostAddr(const oslHostAddr Addr).
-*
-*    Revision 1.11  1997/09/09 12:03:29  fm
-*    *** empty log message ***
-*
-*    Revision 1.10  1997/09/08 17:17:53  mhu
-*    Added support for domain name resolution (oslHostAddr).
-*
-*    Revision 1.9  1997/09/04 09:51:44  rh
-*    Blockmode
-*
-*    Revision 1.8  1997/08/23 20:36:40  rh
-*    return value for name resolving
-*
-*    Revision 1.7  1997/08/22 14:47:36  rh
-*    TimeValue inserted
-*
-*    Revision 1.6  1997/07/31 18:28:54  rh
-*    Standard types adapted
-*
-*    Revision 1.5  1997/07/31 15:28:40  ts
-*    *** empty log message ***
-*
-*    Revision 1.4  1997/07/17 11:02:28  rh
-*    Header adapted and profile added
-*
-*    Revision 1.3  1997/06/25 13:16:31  rh
-*    Formatting
-*
-*    Revision 1.2  1997/06/25 08:44:40  bho
-*    !changed implementation of sems to SYS V, because POSIX Sems are not
-*    supported yet by solaris.
-*
-*    Revision 1.1  1997/06/19 13:10:11  bho
-*    first version of OSL.
-*
-*************************************************************************/
 

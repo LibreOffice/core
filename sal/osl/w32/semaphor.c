@@ -2,9 +2,9 @@
  *
  *  $RCSfile: semaphor.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:23 $
+ *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:33:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,37 +160,3 @@ sal_Bool SAL_CALL osl_releaseSemaphore(oslSemaphore Semaphore)
 
 
 
-/*************************************************************************
-*
-*     $Log: not supported by cvs2svn $
-*     Revision 1.10  2000/09/18 14:29:02  willem.vandorp
-*     OpenOffice header added.
-*
-*     Revision 1.9  1999/10/27 15:13:36  mfe
-*     Change of Copyright, removed compiler warnings, code clean up, ...
-*
-*     Revision 1.8  1999/10/13 10:42:54  rt
-*     undo last changes
-*
-*     Revision 1.7  1999/10/11 12:47:09  rt
-*     gcc for windows: syntax change
-*
-*     Revision 1.6  1999/01/20 19:09:50  jsc
-*     #61011# Typumstellung
-*
-*     Revision 1.5  1998/07/16 10:41:02  rh
-*     Beautify the source
-*
-*     Revision 1.4  1998/07/16 10:25:15  rh
-*     Change WaitForObject to MsgWaitForObject to process Messages while waiting
-*
-*     Revision 1.3  1997/07/15 19:02:04  rh
-*     system.h inserted
-*
-*     Revision 1.2  1997/07/02 10:54:01  rh
-*     Anpassung fuer Diagnose Macros
-*
-*     Revision 1.1  1997/06/19 13:10:43  bho
-*     first version of OSL.
-*
-*************************************************************************/

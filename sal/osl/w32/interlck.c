@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interlck.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:23 $
+ *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:25:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,26 +119,4 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
 }
 #endif
 
-/*************************************************************************
-*
-*    $Log: not supported by cvs2svn $
-*    Revision 1.6  2000/09/18 14:29:01  willem.vandorp
-*    OpenOffice header added.
-*
-*    Revision 1.5  1999/10/27 15:13:35  mfe
-*    Change of Copyright, removed compiler warnings, code clean up, ...
-*
-*    Revision 1.4  1999/03/02 15:23:11  rh
-*    #62469 MessageBox if Winsock failed, and new interlocked count in assembler
-*
-*    Revision 1.3  1999/02/15 15:36:06  mm
-*    #61896 W95 fix, mutex instead of sytem call
-*
-*    Revision 1.2  1999/01/20 19:09:49  jsc
-*    #61011# Typumstellung
-*
-*    Revision 1.1  1998/09/22 14:57:55  rh
-*    added interlock functions
-*
-*************************************************************************/
 

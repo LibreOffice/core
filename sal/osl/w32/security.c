@@ -2,9 +2,9 @@
  *
  *  $RCSfile: security.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:23 $
+ *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:32:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1056,100 +1056,4 @@ static sal_Bool SAL_CALL getUserNameImpl(oslSecurity Security, rtl_uString **str
 
     return sal_False;
 }
-
-/*************************************************************************
-*
-*     $Log: not supported by cvs2svn $
-*     Revision 1.30  2000/09/18 14:29:02  willem.vandorp
-*     OpenOffice header added.
-*
-*     Revision 1.29  2000/08/28 14:04:03  cd
-*     #78211# use correct malloc size for WNetGetUser call
-*
-*     Revision 1.28  2000/06/08 10:07:55  cd
-*     change LogonUserW call
-*
-*     Revision 1.27  2000/06/08 09:16:36  cd
-*     initialize string pointer with zero
-*
-*     Revision 1.26  2000/05/30 11:29:42  obr
-*     lstrcpyW, ... not functional in Win95
-*
-*     Revision 1.25  2000/05/22 15:30:35  obr
-*     moved some unicode wrapper for 9x to kernel9x.lib
-*
-*     Revision 1.24  2000/05/16 07:46:05  obr
-*     Unicode bugfixes
-*
-*     Revision 1.23  2000/05/15 15:14:11  mba
-*     first UniCode Bugfixes
-*
-*     Revision 1.22  2000/03/31 16:28:09  rs
-*     UNICODE-Changes
-*
-*     Revision 1.21  1999/12/09 14:21:01  ts
-*     #70662# m_hProfile not initialized
-*
-*     Revision 1.20  1999/11/19 15:22:38  ts
-*     load user profile before executing processes as user
-*
-*     Revision 1.19  1999/11/18 09:35:51  mfe
-*     loadUserprofile moved from process.c to security.c
-*
-*     Revision 1.18  1999/10/27 15:13:36  mfe
-*     Change of Copyright, removed compiler warnings, code clean up, ...
-*
-*     Revision 1.17  1999/04/26 12:01:41  jsc
-*     #65104# GetSpecialFolder angepasst
-*
-*     Revision 1.16  1999/03/19 10:32:24  ts
-*     #63572# Win95: logon user geht jetz immer, sdaemon hidden starten
-*
-*     Revision 1.15  1999/03/04 10:01:23  rh
-*     #62429 code cleanup
-*
-*     Revision 1.14  1999/02/15 13:32:32  ts
-*     #61287# unter W95 gilt jeder Benutzer als Administrator
-*
-*     Revision 1.13  1999/02/15 13:26:10  ts
-*     #61287# unter W95 gilt jeder Benutzer als Administrator
-*
-*     Revision 1.12  1999/02/11 16:16:40  rh
-*     #61556 Bugfix getUserIdent - convert SID to text string
-*
-*     Revision 1.11  1999/01/20 19:09:50  jsc
-*     #61011# Typumstellung
-*
-*     Revision 1.10  1998/12/08 13:41:05  ts
-*     #52712# Pipe-Bugs unter NT behoben
-*
-*     Revision 1.9  1998/09/21 09:28:47  rh
-*     #56688# Create special folder if not exists
-*
-*     Revision 1.8  1998/09/19 16:32:30  rh
-*     #56688# Inidateien suchen
-*
-*     Revision 1.7  1998/09/18 15:33:44  rh
-*     #56761# neue locations f?r cfg/ini files
-*
-*     Revision 1.6  1998/03/13 15:07:45  rh
-*     Cleanup of enum chaos and implemntation of pipes
-*
-*     Revision 1.5  1998/02/16 19:34:59  rh
-*     Cleanup of ports, integration of Size_t, features for process
-*
-*     Revision 1.4  1997/10/21 14:23:09  ts
-*     Abfrage, ob ein Benutzer Adminstratorrechte hat eingebaut
-*
-*     Revision 1.3  1997/10/17 16:01:37  ts
-*     osl_logonUserOnFileServer hinzugefuegt
-*
-*     Revision 1.2  1997/07/24 15:19:59  ts
-*     *** empty log message ***
-*
-*     Revision 1.1  1997/07/23 12:00:13  rh
-*     added
-*
-*************************************************************************/
-
 

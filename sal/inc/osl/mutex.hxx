@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mutex.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:13 $
+ *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:40:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,37 +196,3 @@ namespace osl
 #endif  /* __cplusplus */
 #endif  /* _OSL_MUTEX_HXX_ */
 
-/*************************************************************************
-*
-*    $Log: not supported by cvs2svn $
-*    Revision 1.10  2000/09/18 14:28:49  willem.vandorp
-*    OpenOffice header added.
-*
-*    Revision 1.9  2000/07/04 13:38:41  dbo
-*    mutex copy ctors make no sense
-*
-*    Revision 1.8  2000/05/17 14:30:14  mfe
-*    comments upgraded
-*
-*    Revision 1.7  2000/01/04 14:48:04  dbo
-*    #70396# corrected ClearableGuard
-*
-*    Revision 1.6  1999/10/27 15:02:07  mfe
-*    Change of Copyright, removed compiler warnings, code clean up, ...
-*
-*    Revision 1.5  1999/10/18 09:08:41  rt
-*    syntax change in template for gcc for windows
-*
-*    Revision 1.4  1999/10/05 10:23:31  obr
-*    changed OMutex to Mutex etc.
-*
-*    Revision 1.3  1999/09/28 15:13:08  kr
-*    Protection
-*
-*    Revision 1.2  1999/09/28 13:04:07  kr
-*    *** empty log message ***
-*
-*    Revision 1.1  1999/09/23 12:09:22  kr
-*    inline header wrapper for mutex semaphore guard
-*
-*************************************************************************/

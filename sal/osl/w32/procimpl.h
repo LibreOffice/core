@@ -2,9 +2,9 @@
  *
  *  $RCSfile: procimpl.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:23 $
+ *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:48:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,23 +78,4 @@ typedef struct _oslProcessImpl {
 #endif
 
 #endif
-
-/*************************************************************************
-*
-*    $Log: not supported by cvs2svn $
-*    Revision 1.4  2000/09/18 14:29:02  willem.vandorp
-*    OpenOffice header added.
-*
-*    Revision 1.3  1999/10/27 15:13:36  mfe
-*    Change of Copyright, removed compiler warnings, code clean up, ...
-*
-*    Revision 1.2  1998/02/16 19:34:59  rh
-*    Cleanup of ports, integration of Size_t, features for process
-*
-*    Revision 1.1  1997/07/22 14:56:03  rh
-*    added
-*
-*************************************************************************/
-
-
 

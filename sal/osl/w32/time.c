@@ -2,9 +2,9 @@
  *
  *  $RCSfile: time.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:24 $
+ *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:37:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,31 +226,3 @@ sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( TimeValue* pLocalTimeVal, Time
 }
 
 
-/*************************************************************************
-*
-*    $Log: not supported by cvs2svn $
-*    Revision 1.8  2000/09/18 14:29:03  willem.vandorp
-*    OpenOffice header added.
-*
-*    Revision 1.7  2000/08/18 14:03:25  rs
-*    new time functions
-*
-*    Revision 1.6  2000/07/26 15:12:35  rs
-*    DateTime functions
-*
-*    Revision 1.5  1999/10/27 15:13:37  mfe
-*    Change of Copyright, removed compiler warnings, code clean up, ...
-*
-*    Revision 1.4  1999/01/20 19:09:51  jsc
-*    #61011# Typumstellung
-*
-*    Revision 1.3  1997/08/22 14:47:49  rh
-*    TimeValue inserted
-*
-*    Revision 1.2  1997/07/23 07:29:10  rh
-*    micro to nanosecs
-*
-*    Revision 1.1  1997/07/21 19:13:15  rh
-*    getSystemTime added
-*
-*************************************************************************/

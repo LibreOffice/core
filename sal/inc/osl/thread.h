@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hro $ $Date: 2000-09-29 10:54:37 $
+ *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,85 +252,4 @@ rtl_TextEncoding SAL_CALL osl_setThreadTextEncoding(rtl_TextEncoding Encoding);
 #endif
 
 #endif  /* _OSL_THREAD_H_ */
-
-/*************************************************************************
-*
-*    $Log: not supported by cvs2svn $
-*    Revision 1.1.1.1  2000/09/18 15:17:13  hr
-*    initial import
-*
-*    Revision 1.9  2000/09/18 14:28:49  willem.vandorp
-*    OpenOffice header added.
-*
-*    Revision 1.8  2000/07/31 09:34:24  mfe
-*    changed declaration of setthreadtextenconding
-*
-*    Revision 1.7  2000/07/27 20:23:46  patrick.luby
-*    Set osl_setThreadTextEncoding prototype to match function definition in
-*    osl/unx/thread.c file.
-*
-*    Revision 1.6  2000/05/29 16:45:16  hro
-*    SRC591: Explicite SAL_CALL calling convention
-*
-*    Revision 1.5  2000/05/17 14:50:15  mfe
-*    comments upgraded
-*
-*    Revision 1.4  2000/03/27 09:16:51  hro
-*    UNICODE New osl_getThreadTextEncoding
-*
-*    Revision 1.3  1999/12/22 13:38:17  mfe
-*    some clean up
-*
-*    Revision 1.2  1999/10/27 15:02:08  mfe
-*    Change of Copyright, removed compiler warnings, code clean up, ...
-*
-*    Revision 1.1  1999/08/05 10:18:20  jsc
-*    verschoben aus osl
-*
-*    Revision 1.15  1999/08/05 11:14:44  jsc
-*    verschoben in root inc-Verzeichnis
-*
-*    Revision 1.14  1999/03/19 09:05:58  jsc
-*    #60455# osl_isCurrentThresad entfernt
-*
-*    Revision 1.13  1999/01/20 18:53:41  jsc
-*    #61011# Typumstellung
-*
-*    Revision 1.12  1998/11/05 11:13:16  rh
-*    #59037# Thread local storage implementation
-*
-*    Revision 1.11  1998/03/13 15:07:33  rh
-*    Cleanup of enum chaos and implemntation of pipes
-*
-*    Revision 1.10  1998/02/26 18:35:27  rh
-*    Avoid unix zombies and rename oslThreadHandle to oslThread
-*
-*    Revision 1.9  1998/02/16 19:34:52  rh
-*    Cleanup of ports, integration of Size_t, features for process
-*
-*    Revision 1.8  1997/10/16 16:35:51  rh
-*    *** empty log message ***
-*
-*    Revision 1.7  1997/10/16 16:26:08  rh
-*    *** empty log message ***
-*
-*    Revision 1.6  1997/09/09 12:03:30  fm
-*    *** empty log message ***
-*
-*    Revision 1.5  1997/08/22 14:47:38  rh
-*    TimeValue inserted
-*
-*    Revision 1.4  1997/07/22 14:29:30  rh
-*    process added
-*
-*    Revision 1.3  1997/07/17 11:02:29  rh
-*    Header adapted and profile added
-*
-*    Revision 1.2  1997/07/14 09:09:12  rh
-*    Adaptions for killable sleeps
-*
-*    Revision 1.1  1997/06/19 13:10:13  bho
-*    first version of OSL.
-*
-*************************************************************************/
 

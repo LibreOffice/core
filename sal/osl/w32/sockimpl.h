@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sockimpl.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:23 $
+ *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,37 +132,3 @@ static sal_Bool __osl_attemptSocketDialupImpl (void);
 #endif
 
 
-/*************************************************************************
-*
-*    $Log: not supported by cvs2svn $
-*    Revision 1.10  2000/09/18 14:29:02  willem.vandorp
-*    OpenOffice header added.
-*
-*    Revision 1.9  2000/05/29 16:34:15  hro
-*    SRC591: Explicite SAL_CALL calling convention
-*
-*    Revision 1.8  1999/10/27 15:13:37  mfe
-*    Change of Copyright, removed compiler warnings, code clean up, ...
-*
-*    Revision 1.7  1999/02/16 20:09:23  mhu
-*    Fixed WININET calling convention (WINAPI instead of __cdecl) (#49995#).
-*
-*    Revision 1.6  1999/02/13 18:18:17  mhu
-*    Added support for modem dialup handling (oslSocketDialupImpl) (#49995#).
-*
-*    Revision 1.5  1998/03/06 15:42:12  rh
-*    Added signal handling
-*
-*    Revision 1.4  1997/11/28 15:34:42  ts
-*    bugfix: bei weitergereichten Sockets wird der kindprozess solange blockiert, bis der vaterprozess diese Sockets closed
-*
-*    Revision 1.3  1997/09/04 09:51:47  rh
-*    Blockmode
-*
-*    Revision 1.2  1997/07/15 19:34:39  rh
-*    inserted #ifdefs
-*
-*    Revision 1.1  1997/07/15 19:24:13  rh
-*    *** empty log message ***
-*
-*************************************************************************/

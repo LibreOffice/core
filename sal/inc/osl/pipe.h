@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:13 $
+ *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:40:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,31 +118,3 @@ oslPipeError SAL_CALL osl_getLastPipeError(oslPipe Pipe);
 
 #endif  /* _OSL_PIPE_H_ */
 
-/*************************************************************************
-*
-*    $Log: not supported by cvs2svn $
-*    Revision 1.5  2000/09/18 14:28:49  willem.vandorp
-*    OpenOffice header added.
-*
-*    Revision 1.4  2000/05/17 14:30:14  mfe
-*    comments upgraded
-*
-*    Revision 1.3  2000/03/16 16:43:52  obr
-*    Unicode API changes
-*
-*    Revision 1.2  1999/10/27 15:02:07  mfe
-*    Change of Copyright, removed compiler warnings, code clean up, ...
-*
-*    Revision 1.1  1999/08/05 10:18:19  jsc
-*    verschoben aus osl
-*
-*    Revision 1.3  1999/08/05 11:14:37  jsc
-*    verschoben in root inc-Verzeichnis
-*
-*    Revision 1.2  1999/01/20 18:53:40  jsc
-*    #61011# Typumstellung
-*
-*    Revision 1.1  1998/03/13 15:07:31  rh
-*    Cleanup of enum chaos and implemntation of pipes
-*
-*************************************************************************/

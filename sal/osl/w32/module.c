@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:23 $
+ *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:26:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,41 +147,4 @@ void* SAL_CALL osl_getSymbolA(oslModule Module, const char *pszSymbolName)
     return (void*) GetProcAddress((HINSTANCE)Module, pszSymbolName);
 }
 
-/*************************************************************************
-*
-*    $Log: not supported by cvs2svn $
-*    Revision 1.11  2000/09/18 14:29:01  willem.vandorp
-*    OpenOffice header added.
-*
-*    Revision 1.10  2000/06/18 12:06:35  obr
-*    function names have to be ascii
-*
-*    Revision 1.9  2000/05/22 15:30:35  obr
-*    moved some unicode wrapper for 9x to kernel9x.lib
-*
-*    Revision 1.8  2000/03/31 15:55:14  rs
-*    UNICODE-Changes
-*
-*    Revision 1.7  2000/01/06 11:50:21  mfe
-*    #71540# : for incompatible z'en
-*
-*    Revision 1.6  2000/01/04 14:06:15  mfe
-*    osl_loadModule takes 2nd parameter
-*
-*    Revision 1.5  1999/10/27 15:13:35  mfe
-*    Change of Copyright, removed compiler warnings, code clean up, ...
-*
-*    Revision 1.4  1999/04/13 11:50:24  jsc
-*    #62178# Keine ErrorBox, wenn eine dynamisch angezogene DLL eines Modules nicht gefunden wird und das Module durch loadOnCall angezogen wird
-*
-*    Revision 1.3  1999/01/20 19:09:49  jsc
-*    #61011# Typumstellung
-*
-*    Revision 1.2  1997/07/15 19:02:03  rh
-*    system.h inserted
-*
-*    Revision 1.1  1997/07/03 10:04:32  rh
-*    Module handling added
-*
-*************************************************************************/
 

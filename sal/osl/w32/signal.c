@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:23 $
+ *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:34:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,34 +290,3 @@ oslSignalAction SAL_CALL osl_raiseSignal(sal_Int32 UserSignal, void* UserData)
     return (Action);
 }
 
-/*************************************************************************
-*
-*    $Log: not supported by cvs2svn $
-*    Revision 1.10  2000/09/18 14:29:02  willem.vandorp
-*    OpenOffice header added.
-*
-*    Revision 1.9  2000/04/18 09:49:32  hro
-*    #72428# Fixed wrong compare of osPlatformID
-*
-*    Revision 1.8  2000/04/06 10:24:28  hro
-*    #72428# On Win95A Build 4.00.950 abort before returning from sinal handler
-*
-*    Revision 1.6  1999/10/27 15:13:36  mfe
-*    Change of Copyright, removed compiler warnings, code clean up, ...
-*
-*    Revision 1.5  1999/04/22 07:52:49  rh
-*    #63033# Deliver breakpoints via signal TSignal_DebugBreak
-*
-*    Revision 1.4  1999/01/20 19:09:50  jsc
-*    #61011# Typumstellung
-*
-*    Revision 1.3  1998/03/13 15:07:45  rh
-*    Cleanup of enum chaos and implemntation of pipes
-*
-*    Revision 1.2  1998/03/06 16:36:27  rh
-*    Added signal.c for W16 and deinit-routines
-*
-*    Revision 1.1  1998/03/06 15:42:11  rh
-*    Added signal handling
-*
-*************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mutex.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:23 $
+ *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:27:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,35 +227,4 @@ sal_Bool SAL_CALL osl_releaseMutex(oslMutex Mutex)
     return sal_True;
 }
 
-/*************************************************************************
-*
-*    $Log: not supported by cvs2svn $
-*    Revision 1.9  2000/09/18 14:29:01  willem.vandorp
-*    OpenOffice header added.
-*
-*    Revision 1.8  1999/10/27 15:13:35  mfe
-*    Change of Copyright, removed compiler warnings, code clean up, ...
-*
-*    Revision 1.7  1999/01/20 19:09:49  jsc
-*    #61011# Typumstellung
-*
-*    Revision 1.6  1998/12/22 13:05:22  ts
-*    #60565# TryEnterCriticalSection() nicht unter W98
-*
-*    Revision 1.5  1998/12/10 12:49:54  th
-*    #55723# - tryToAquire sollte jetzt auch unter W95 funktionieren (Lock wird jetzt abgefragt)
-*
-*    Revision 1.4  1998/05/15 11:53:39  rh
-*    Fix for TryToAcquire
-*
-*    Revision 1.3  1998/04/22 07:01:54  rh
-*    Added internal mutex for TryToAcquire
-*
-*    Revision 1.2  1998/03/21 12:36:16  rh
-*    Implementation TryToAcquire for Windows 95
-*
-*    Revision 1.1  1998/02/16 19:34:58  rh
-*    Cleanup of ports, integration of Size_t, features for process
-*
-*************************************************************************/
 

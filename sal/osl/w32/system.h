@@ -2,9 +2,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:23 $
+ *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:50:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,34 +126,3 @@ extern DWORD GetPlatformId();
 #endif
 
 
-/*************************************************************************
-*
-*    $Log: not supported by cvs2svn $
-*    Revision 1.9  2000/09/18 14:29:02  willem.vandorp
-*    OpenOffice header added.
-*
-*    Revision 1.8  2000/05/22 15:29:08  obr
-*    unicode changes channel/pipe
-*
-*    Revision 1.7  1999/10/27 15:13:37  mfe
-*    Change of Copyright, removed compiler warnings, code clean up, ...
-*
-*    Revision 1.6  1999/10/11 12:57:57  rt
-*    gcc for windows: includes and defines
-*
-*    Revision 1.5  1998/09/18 15:33:44  rh
-*    #56761# neue locations f?r cfg/ini files
-*
-*    Revision 1.4  1998/07/21 07:36:21  mh
-*    dynamische C-Runtime
-*
-*    Revision 1.3  1998/02/16 19:35:00  rh
-*    Cleanup of ports, integration of Size_t, features for process
-*
-*    Revision 1.2  1997/12/16 14:16:59  rh
-*    Added locking and CR/LF conversion
-*
-*    Revision 1.1  1997/07/15 19:02:06  rh
-*    system.h inserted
-*
-*************************************************************************/

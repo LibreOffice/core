@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:13 $
+ *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:42:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,100 +276,3 @@ oslSocket SAL_CALL osl_receiveResourcePipe(oslPipe Pipe);
 
 #endif    /* _OSL_PROCESS_H_ */
 
-/*************************************************************************
-*
-*    $Log: not supported by cvs2svn $
-*    Revision 1.13  2000/09/18 14:28:49  willem.vandorp
-*    OpenOffice header added.
-*
-*    Revision 1.12  2000/07/31 17:41:51  mfe
-*    send and receive resource dummy implemented
-*
-*    Revision 1.11  2000/07/21 16:15:41  mfe
-*    IO resource funcs added
-*
-*    Revision 1.10  2000/06/18 12:18:57  obr
-*    enable inheritance of nspr file handles
-*
-*    Revision 1.9  2000/05/17 14:30:14  mfe
-*    comments upgraded
-*
-*    Revision 1.8  2000/03/31 17:02:04  rs
-*    UNICODE-Changes
-*
-*    Revision 1.7  2000/03/27 09:17:50  hro
-*    UNICODE New osl_getThreadTextEncoding
-*
-*    Revision 1.6  2000/03/20 15:23:15  obr
-*    Unicode API changes
-*
-*    Revision 1.5  2000/03/17 13:41:25  obr
-*    Fixed parameter/docu
-*
-*    Revision 1.4  2000/03/17 13:05:34  obr
-*    osl_getDefaulttextEncoding added.
-*
-*    Revision 1.3  2000/03/17 12:03:56  obr
-*    Unicode API changes
-*
-*    Revision 1.2  1999/10/27 15:02:08  mfe
-*    Change of Copyright, removed compiler warnings, code clean up, ...
-*
-*    Revision 1.1  1999/08/05 10:18:19  jsc
-*    verschoben aus osl
-*
-*    Revision 1.18  1999/08/05 11:14:38  jsc
-*    verschoben in root inc-Verzeichnis
-*
-*    Revision 1.17  1999/01/20 18:53:41  jsc
-*    #61011# Typumstellung
-*
-*    Revision 1.16  1998/07/20 17:17:33  rh
-*    #53072, #53073 Bugfixes for 5.0
-*
-*    Revision 1.15  1998/03/13 15:07:31  rh
-*    Cleanup of enum chaos and implemntation of pipes
-*
-*    Revision 1.14  1998/02/16 19:34:51  rh
-*    Cleanup of ports, integration of Size_t, features for process
-*
-*    Revision 1.13  1997/11/28 08:55:50  fm
-*    osl_PTSOCKETSEMAPHORE added
-*
-*    Revision 1.12  1997/09/22 16:36:15  rh
-*    terminate added
-*
-*    Revision 1.11  1997/07/31 15:28:39  ts
-*    *** empty log message ***
-*
-*    Revision 1.10  1997/07/25 10:01:07  fm
-*    *** empty log message ***
-*
-*    Revision 1.9  1997/07/22 14:29:29  rh
-*    process added
-*
-*    Revision 1.8  1997/07/18 08:45:13  ts
-*    *** empty log message ***
-*
-*    Revision 1.7  1997/07/17 19:01:44  ts
-*    *** empty log message ***
-*
-*    Revision 1.6  1997/07/17 11:20:54  ts
-*    *** empty log message ***
-*
-*    Revision 1.5  1997/07/17 11:02:27  rh
-*    Header adapted and profile added
-*
-*    Revision 1.4  1997/07/15 19:01:58  rh
-*    system.h inserted
-*
-*    Revision 1.3  1997/07/14 09:09:11  rh
-*    Adaptions for killable sleeps
-*
-*    Revision 1.2  1997/07/11 10:14:28  ts
-*    *** empty log message ***
-*
-*    Revision 1.1  1997/07/11 07:33:02  rh
-*    added
-*
-*************************************************************************/

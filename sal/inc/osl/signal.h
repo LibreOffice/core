@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:13 $
+ *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:45:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,46 +137,3 @@ oslSignalAction SAL_CALL osl_raiseSignal(sal_Int32 UserSignal, void* UserData);
 #endif  /* _OSL_SIGNAL_H_ */
 
 
-/*************************************************************************
-*
-*    $Log: not supported by cvs2svn $
-*    Revision 1.8  2000/09/18 14:28:49  willem.vandorp
-*    OpenOffice header added.
-*
-*    Revision 1.7  2000/08/11 16:46:28  pl
-*    #77400# #76899# corrected define
-*
-*    Revision 1.6  2000/08/11 16:31:40  pl
-*    #77400# add OSL_SIGNAL_USER_RVPCONNECTIONERROR
-*
-*    Revision 1.5  2000/05/29 16:45:16  hro
-*    SRC591: Explicite SAL_CALL calling convention
-*
-*    Revision 1.4  2000/05/17 14:50:15  mfe
-*    comments upgraded
-*
-*    Revision 1.3  1999/12/22 13:37:55  mfe
-*    #71232# : added Alarm Signal Type
-*
-*    Revision 1.2  1999/10/27 15:02:08  mfe
-*    Change of Copyright, removed compiler warnings, code clean up, ...
-*
-*    Revision 1.1  1999/08/05 10:18:20  jsc
-*    verschoben aus osl
-*
-*    Revision 1.5  1999/08/05 11:14:42  jsc
-*    verschoben in root inc-Verzeichnis
-*
-*    Revision 1.4  1999/04/22 07:54:04  rh
-*    #63033# Deliver breakpoints via signal TSignal_DebugBreak
-*
-*    Revision 1.3  1999/01/20 18:53:41  jsc
-*    #61011# Typumstellung
-*
-*    Revision 1.2  1998/03/13 15:07:32  rh
-*    Cleanup of enum chaos and implemntation of pipes
-*
-*    Revision 1.1  1998/03/06 15:42:09  rh
-*    Added signal handling
-*
-*************************************************************************/
