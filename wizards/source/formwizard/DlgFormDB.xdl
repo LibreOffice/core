@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
-<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="DlgFormDB" dlg:left="96" dlg:top="28" dlg:width="270" dlg:height="210" dlg:page="1" dlg:help-url="HID:34400">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="DlgFormDB" dlg:left="96" dlg:top="28" dlg:width="270" dlg:height="210" dlg:page="2" dlg:help-url="HID:34400">
  <dlg:bulletinboard>
   <dlg:text dlg:id="lblSelFields" dlg:tab-index="0" dlg:left="154" dlg:top="70" dlg:width="110" dlg:height="8" dlg:page="1" dlg:value="lblSelFields"/>
   <dlg:menulist dlg:id="lstDatabases" dlg:tab-index="1" dlg:left="6" dlg:top="51" dlg:width="110" dlg:height="12" dlg:page="1" dlg:help-url="HID:34410" dlg:spin="true">
@@ -16,7 +16,7 @@
   <dlg:button dlg:id="cmdHelp" dlg:tab-index="5" dlg:left="63" dlg:top="190" dlg:width="53" dlg:height="14" dlg:tag="34400" dlg:help-url="HiD:34400" dlg:value="cmdHelp">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="Tools.Recursive.ShowHelperDialog" script:language="StarBasic"/>
   </dlg:button>
-  <dlg:button dlg:id="cmdBack" dlg:tab-index="6" dlg:left="155" dlg:top="190" dlg:width="53" dlg:height="14" dlg:help-url="HID:34401" dlg:value="cmdBack">
+  <dlg:button dlg:id="cmdBack" dlg:tab-index="6" dlg:left="155" dlg:top="190" dlg:width="53" dlg:height="14" dlg:help-url="HID:34402" dlg:value="cmdBack">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="FormWizard.FormWizard.PreviousStep" script:language="StarBasic"/>
   </dlg:button>
   <dlg:button dlg:id="cmdGoOn" dlg:tab-index="7" dlg:left="211" dlg:top="190" dlg:width="53" dlg:height="14" dlg:help-url="HID:34403" dlg:value="cmdGoOn">
@@ -86,7 +86,7 @@
    <dlg:radio dlg:id="optTiled" dlg:tab-index="30" dlg:left="156" dlg:top="154" dlg:width="81" dlg:height="10" dlg:page="2" dlg:tag="11" dlg:help-url="HID:34444" dlg:value="optTiled">
     <script:event script:event-name="on-mouseup" script:location="application" script:macro-name="WebWizard.Common.SetBackGraphicStyle" script:language="StarBasic"/>
    </dlg:radio>
-   <dlg:radio dlg:id="optArea" dlg:tab-index="31" dlg:left="156" dlg:top="168" dlg:width="81" dlg:height="10" dlg:page="2" dlg:tag="10" dlg:help-url="HID:34443" dlg:value="optArea">
+   <dlg:radio dlg:id="optArea" dlg:tab-index="31" dlg:left="156" dlg:top="168" dlg:width="81" dlg:height="10" dlg:page="2" dlg:tag="10" dlg:help-url="HID:34445" dlg:value="optArea">
     <script:event script:event-name="on-mouseup" script:location="application" script:macro-name="WebWizard.Common.SetBackGraphicStyle" script:language="StarBasic"/>
    </dlg:radio>
   </dlg:radiogroup>

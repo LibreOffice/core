@@ -229,7 +229,7 @@ Dim a as Integer
 Dim LocCommandTypes(MaxTableIndex + MaxQueryIndex + 1) as Integer
 	For i = 0 To MaxTableIndex
 		LocCommandTypes(i) = com.sun.star.sdb.CommandType.TABLE
-	Next i  	
+	Next i
 	a = i
 	For i = 0 To MaxQueryIndex
 		LocCommandTypes(a) = com.sun.star.sdb.CommandType.QUERY
@@ -244,5 +244,5 @@ Sub GetCurrentMetaValues(Index as Integer)
 	CurControlType = FieldMetaValues(Index,2)
 	CurControlName = FieldMetaValues(Index,3)
     CurFieldName = FieldNames(Index)
-End Sub	    
+End Sub
 </script:module>

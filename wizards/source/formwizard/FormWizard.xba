@@ -276,6 +276,10 @@ Dim oMasterKey as Object
 Dim oFilters() as Object
 Dim sTargetPath as String
 Dim sBookmarkName as String
+Dim oDBBookmarks as Object		
+Dim bLinkExists as Boolean
+Dim i as Integer	
+Dim sBaseBookmarkName as String
 	oMasterKey = GetRegistryKeyContent(&quot;org.openoffice.Office.TypeDetection/&quot;)
 	oFilters() = oMasterKey.Types
 	FilterNames(0,0) = oFilters.GetByName(&quot;writer_StarOffice_XML_Writer&quot;).UIName
@@ -287,7 +291,18 @@ Dim sBookmarkName as String
 	sTargetPath = StoreDocument(oDocument, FilterNames(), &quot;Form_&quot; &amp; sDBName &amp; &quot;.&quot; &amp; TableName, WorkPath)
 	If sTargetPath &lt;&gt; &quot;&quot; Then
 		sBookmarkName = GetFileNamewithoutExtension(FileNameoutofPath(sTargetPath))
-		oDatasource.getBookmarks().insertByName(sBookmarkName, sTargetPath)
+		sBaseBookmarkName = sBookmarkName
+		oDBBookmarks = oDataSource.GetBookmarks()
+		i = 1
+		Do
+			bLinkExists = oDBBookmarks.HasbyName(sBookmarkName)
+			If bLinkExists Then
+				i = i + 1
+				sBookmarkName = sBaseBookmarkName &amp; &quot;_&quot; &amp; i
+			Else
+				oDBBookmarks.insertByName(sBookmarkName, sTargetPath)		
+			End If
+		Loop Until Not bLinkExists
 		bDisposeDoc = False
 		DlgFormDB.EndExecute()
 	End If
