@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:07:52 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:31:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ namespace vcl {
 class StatusWindow : public WorkWindow
 {
 protected:
-    StatusWindow( int nWinBits );
+    StatusWindow( WinBits nWinBits );
 public:
     virtual ~StatusWindow();
 
@@ -108,7 +108,7 @@ public:
 
 }
 
-StatusWindow::StatusWindow( int nWinBits ) :
+StatusWindow::StatusWindow( WinBits nWinBits ) :
         WorkWindow( NULL, nWinBits )
 {
 }
@@ -162,7 +162,7 @@ public:
 }
 
 XIMStatusWindow::XIMStatusWindow() :
-        StatusWindow( WB_BORDER ),
+        StatusWindow( WB_BORDER | WB_SYSTEMFLOATWIN | WB_TOOLTIPWIN ),
         m_aStatusText( this, 0 ),
         m_bAnchoredAtRight( false ),
         m_pLastParent( NULL ),
