@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastypes.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-20 09:27:37 $
+ *  last change: $Author: tbe $ $Date: 2001-06-26 08:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,21 +82,9 @@
 #include <sbxitem.hxx>
 #include <iderdll.hxx>
 
-#ifndef _SV_DRAG_HXX //autogen
-#include <vcl/drag.hxx>
-#endif
-
-#ifndef _SV_CLIP_HXX //autogen
-#include <vcl/clip.hxx>
-#endif
-
 #ifndef _PASSWD_HXX //autogen
 #include <sfx2/passwd.hxx>
 #endif
-
-
-
-
 
 
 DBG_NAME( IDEBaseWindow );
@@ -593,6 +581,7 @@ void __EXPORT BasicIDETabBar::Command( const CommandEvent& rCEvt )
             pDispatcher->Execute( aPopup.Execute( this, aPos ) );
         }
     }
+    /*
     else if ( ( rCEvt.GetCommand() == COMMAND_STARTDRAG ) && pCurrentLib && !IsInEditMode() )
     {
         Region aRegion;
@@ -609,8 +598,11 @@ void __EXPORT BasicIDETabBar::Command( const CommandEvent& rCEvt )
 
         }
     }
+    */
 }
 
+
+/*
 BOOL __EXPORT BasicIDETabBar::QueryDrop( DropEvent& rDEvt )
 {
     // ... pruefen, ob moeglich und ob gleiches Fenster..
@@ -649,7 +641,10 @@ BOOL __EXPORT BasicIDETabBar::QueryDrop( DropEvent& rDEvt )
 
     return FALSE;
 }
+*/
 
+
+/*
 BOOL __EXPORT BasicIDETabBar::Drop( const DropEvent& rDEvt )
 {
     USHORT nId = GetCurPageId();
@@ -704,6 +699,7 @@ BOOL __EXPORT BasicIDETabBar::Drop( const DropEvent& rDEvt )
     else
         return FALSE;
 }
+*/
 
 
 long BasicIDETabBar::AllowRenaming()
