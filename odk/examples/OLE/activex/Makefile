@@ -31,25 +31,24 @@ ALL : \
 
 include $(SETTINGS)/stdtarget.mk
 
-$(OUT_COMP_GEN) : $(OUT)
-	$(MKDIR) $(subst /,$(PS),$@)
-	$(MKDIR) $(subst /,$(PS),$(OUT_COMP_INC))
-	$(MKDIR) $(subst /,$(PS),$(OUT_COMP_SLO))
-
 # Attention: so_activex.idl is no UNOIDL file!
-$(OUT_COMP_INC)/so_activex.h : so_activex.idl $(OUT_COMP_GEN)
+$(OUT_COMP_INC)/so_activex.h : so_activex.idl
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	midl.exe /tlb $(OUT_COMP_GEN)/so_activex.tlb /h $(OUT_COMP_INC)/so_activex.h \
 	/iid $(OUT_COMP_INC)/so_activex_i.c /proxy $(OUT_COMP_INC)/so_activex_p.c /dlldata \
 	$(OUT_COMP_INC)/dlldata.c /Oicf $<
 
-$(OUT_COMP_GEN)/so_activex.res : so_activex.rc $(OUT_COMP_INC)/so_activex.h $(OUT_COMP_GEN)
+$(OUT_COMP_GEN)/so_activex.res : so_activex.rc $(OUT_COMP_INC)/so_activex.h
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	rc $(CC_INCLUDES) /R /FO$@ so_activex.rc			       
 
-$(OUT_COMP_SLO)/%.$(OBJ_EXT) : %.cpp $(OUT_COMP_GEN)
+$(OUT_COMP_SLO)/%.$(OBJ_EXT) : %.cpp
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_COMP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
 
-$(SHAREDLIB_OUT)/$(SHAREDLIB_PRE)%.$(SHAREDLIB_EXT) : $(SLOFILES) $(OUT_COMP_GEN)/so_activex.res so_activex.def $(OUT_COMP_GEN)
-	$(LINK) $(LIBRARY_LINK_FLAGS) /OUT:$@ /MAP:$(OUT_COMP_GEN)/$(COMPONENT_NAME).map \
+$(SHAREDLIB_OUT)/$(SHAREDLIB_PRE)%.$(SHAREDLIB_EXT) : $(SLOFILES) $(OUT_COMP_GEN)/so_activex.res so_activex.def
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	$(LINK) $(LIBRARY_LINK_FLAGS) /OUT:$@ /MAP:$(OUT_COMP_GEN)/$(subst $(SHAREDLIB_EXT),map,$(@F)) \
 	/DEF:so_activex.def /IMPLIB:$(OUT_LIB)/iso_activex.lib $(SLOFILES) \
 	msvcrt.lib kernel32.lib user32.lib uuid.lib advapi32.lib ole32.lib oleaut32.lib gdi32.lib \
 	urlmon.lib Shlwapi.lib oldnames.lib $(OUT_COMP_GEN)/so_activex.res
