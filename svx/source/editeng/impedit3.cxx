@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-29 16:44:17 $
+ *  last change: $Author: mt $ $Date: 2001-01-31 16:06:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1152,17 +1152,19 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
             }
         }
 
-        if ( !nLine )
-        {
-            long nBulletHeight = aBulletArea.GetHeight();
-            if ( nBulletHeight > (long)pLine->GetHeight() )
-            {
-                long nDiff =  nBulletHeight - (long)pLine->GetHeight();
-                // nDiff auf oben und unten verteilen.
-                pLine->SetMaxAscent( (sal_uInt16)(pLine->GetMaxAscent() + nDiff/2) );
-                pLine->SetHeight( (sal_uInt16)nBulletHeight );
-            }
-        }
+
+        // #80582# - Bullet should not influence line height
+//      if ( !nLine )
+//      {
+//          long nBulletHeight = aBulletArea.GetHeight();
+//          if ( nBulletHeight > (long)pLine->GetHeight() )
+//          {
+//              long nDiff =  nBulletHeight - (long)pLine->GetHeight();
+//              // nDiff auf oben und unten verteilen.
+//              pLine->SetMaxAscent( (sal_uInt16)(pLine->GetMaxAscent() + nDiff/2) );
+//              pLine->SetHeight( (sal_uInt16)nBulletHeight );
+//          }
+//      }
 
         // Zeilenhoehe auf Window-Pixel alignen?
         // Nein, waere Positionsabhaengig.
