@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provider.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:36 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 16:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XLOCALIZABLE_HPP_
+#include <com/sun/star/lang/XLocalizable.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
 #endif
@@ -80,8 +83,8 @@
 #ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
 #endif
 #ifndef _COMPHELPER_PROPERTYCONTAINER_HXX_
 #include <comphelper/propertycontainer.hxx>
@@ -92,6 +95,7 @@ namespace configmgr
     namespace css  = ::com::sun::star;
     namespace uno  = css::uno;
     namespace lang = css::lang;
+    namespace beans = css::beans;
     using ::rtl::OUString;
     using ::vos::ORef;
 
@@ -99,8 +103,8 @@ namespace configmgr
     class ContextReader;
     class OProviderImpl;
 
-    typedef ::cppu::ImplHelper1 <    lang::XMultiServiceFactory
-//                                  ,lang::XUnoTunnel
+    typedef ::cppu::ImplHelper2 <    lang::XMultiServiceFactory
+                                    ,lang::XLocalizable
                                 >   OProvider_Base;
 
     //==========================================================================
@@ -145,14 +149,14 @@ namespace configmgr
         virtual uno::Any SAL_CALL queryInterface(uno::Type const& rType) throw (uno::RuntimeException);
 
         // XPropertySet
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
+        virtual uno::Reference< beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(uno::RuntimeException);
 
         // OPropertSetHelper
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                                 sal_Int32 nHandle,
-                                const ::com::sun::star::uno::Any& rValue
+                                const uno::Any& rValue
                                                  )
-                                                 throw (::com::sun::star::uno::Exception)
+                                                 throw (uno::Exception)
         {
             OPropertyContainer::setFastPropertyValue_NoBroadcast(nHandle, rValue);
         }
@@ -166,15 +170,15 @@ namespace configmgr
     protected:
         /// Component Helper override
         virtual void SAL_CALL disposing();
-        virtual void SAL_CALL disposing(com::sun::star::lang::EventObject const& rEvt) throw();
+        virtual void SAL_CALL disposing(lang::EventObject const& rEvt) throw();
 
 
         // OPropertyContainer
-        void    registerProperty(const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
-                                 void* _pPointerToMember, const ::com::sun::star::uno::Type& _rMemberType)
+        void    registerProperty(const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
+                                 void* _pPointerToMember, const uno::Type& _rMemberType)
             { OPropertyContainer::registerProperty(_rName, _nHandle, _nAttributes, _pPointerToMember, _rMemberType);}
 
-        void    describeProperties(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps) const
+        void    describeProperties(uno::Sequence< beans::Property >& /* [out] */ _rProps) const
             { OPropertyContainer::describeProperties(_rProps);}
 
 
