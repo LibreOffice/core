@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterPropHdl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-16 14:37:07 $
+ *  last change: $Author: mib $ $Date: 2001-03-19 09:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,8 +187,9 @@ sal_Bool XMLPMPropHdl_NumFormat::importXML(
         const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Int16 nSync;
-    sal_Int16 nNumType = SvxXMLListStyleContext::GetNumType(
-                          rStrImpValue, OUString(), NumberingType::NUMBER_NONE, sal_True );
+    sal_Int16 nNumType = NumberingType::NUMBER_NONE;
+    rUnitConverter.convertNumFormat( nNumType, rStrImpValue, OUString(),
+                                     sal_True );
 
     if( !(rValue >>= nSync) )
         nSync = NumberingType::NUMBER_NONE;
@@ -223,12 +224,10 @@ sal_Bool XMLPMPropHdl_NumFormat::exportXML(
 
     if( rValue >>= nNumType )
     {
-        const char* pAsciiNumType = SvxXMLNumRuleExport::GetNumFormatValue( nNumType );
-        if( pAsciiNumType )
-        {
-            rStrExpValue = OUString::createFromAscii( pAsciiNumType );
-            bRet = sal_True;
-        }
+        OUStringBuffer aBuffer( 10 );
+        rUnitConverter.convertNumFormat( aBuffer, nNumType );
+        rStrExpValue = aBuffer.makeStringAndClear();
+        bRet = rStrExpValue.getLength() > 0;
     }
     return bRet;
 }
@@ -247,8 +246,10 @@ sal_Bool XMLPMPropHdl_NumLetterSync::importXML(
         const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Int16 nNumType;
-    sal_Int16 nSync = SvxXMLListStyleContext::GetNumType(
-                           OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_a ) ), rStrImpValue );
+    sal_Int16 nSync = NumberingType::NUMBER_NONE;
+    rUnitConverter.convertNumFormat( nSync, rStrImpValue,
+                OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_a ) ),
+                sal_True );
 
     if( !(rValue >>= nNumType) )
         nNumType = NumberingType::NUMBER_NONE;
@@ -280,12 +281,10 @@ sal_Bool XMLPMPropHdl_NumLetterSync::exportXML(
 
     if( rValue >>= nNumType )
     {
-        const char* pAsciiNumType = SvxXMLNumRuleExport::GetNumLetterSync( nNumType );
-        if( pAsciiNumType )
-        {
-            rStrExpValue = OUString::createFromAscii( pAsciiNumType );
-            bRet = sal_True;
-        }
+        OUStringBuffer aBuffer( 5 );
+        rUnitConverter.convertNumLetterSync( aBuffer, nNumType );
+        rStrExpValue = aBuffer.makeStringAndClear();
+        bRet = rStrExpValue.getLength() > 0;
     }
     return bRet;
 }

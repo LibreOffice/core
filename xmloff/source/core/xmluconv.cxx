@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-26 10:22:16 $
+ *  last change: $Author: mib $ $Date: 2001-03-19 09:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,20 @@
 #include <vcl/fldunit.hxx>
 #endif
 
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_STYLE_NUMBERINGTYPE_HPP_
+#include <com/sun/star/style/NumberingType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XNUMBERINGTYPEINFO_HPP_
+#include <com/sun/star/text/XNumberingTypeInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
 #ifndef _SVX_VECTOR3D_HXX
@@ -109,6 +121,10 @@
 
 using namespace rtl;
 using namespace com::sun::star;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::text;
+using namespace com::sun::star::style;
 
 const sal_Int8 XML_MAXDIGITSCOUNT_TIME = 11;
 const sal_Int8 XML_MAXDIGITSCOUNT_DATETIME = 6;
@@ -116,6 +132,30 @@ const sal_Int8 XML_MAXDIGITSCOUNT_DATETIME = 6;
 
 OUString SvXMLUnitConverter::msXML_true;
 OUString SvXMLUnitConverter::msXML_false;
+
+void SvXMLUnitConverter::initXMLStrings()
+{
+    if( msXML_true.getLength() == 0 )
+    {
+        msXML_true = OUString::createFromAscii( sXML_true );
+        msXML_false = OUString::createFromAscii( sXML_false );
+    }
+}
+
+void SvXMLUnitConverter::createNumTypeInfo() const
+{
+    Reference< lang::XMultiServiceFactory > xServiceFactory =
+            comphelper::getProcessServiceFactory();
+    OSL_ENSURE( xServiceFactory.is(),
+            "XMLUnitConverter: got no service factory" );
+    if( xServiceFactory.is() )
+    {
+        ((SvXMLUnitConverter *)this)->xNumTypeInfo =
+            Reference < XNumberingTypeInfo > (
+                xServiceFactory->createInstance(
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.DefaultNumberingProvider") ) ), UNO_QUERY );
+    }
+}
 
 /** constructs a SvXMLUnitConverter. The core measure unit is the
     default unit for numerical measures, the XML measure unit is
@@ -466,15 +506,6 @@ void SvXMLUnitConverter::convertPercent( OUStringBuffer& rBuffer,
     rBuffer.append( sal_Unicode('%' ) );
 }
 
-void SvXMLUnitConverter::initXMLStrings()
-{
-    if( msXML_true.getLength() == 0 )
-    {
-        msXML_true = OUString::createFromAscii( sXML_true );
-        msXML_false = OUString::createFromAscii( sXML_false );
-    }
-}
-
 /** convert string to enum using given enum map, if the enum is
     not found in the map, this method will return false
 */
@@ -679,7 +710,7 @@ sal_Bool SvXMLUnitConverter::convertDouble(double& rValue,
     }
     else
     {
-        SvXMLUnitConverter::convertDouble(rValue, rString);
+        return SvXMLUnitConverter::convertDouble(rValue, rString);
     }
 }
 
@@ -1597,4 +1628,136 @@ void SvXMLUnitConverter::decodeBase64(uno::Sequence<sal_Int8>& aBuffer, const rt
     aBuffer = uno::Sequence<sal_Int8>(pBuffer, nSecondLength);
     delete[] pBuffer;
 }
+
+
+sal_Bool SvXMLUnitConverter::convertNumFormat(
+        sal_Int16& rType,
+        const OUString& rNumFmt,
+        const OUString& rNumLetterSync,
+        sal_Bool bNumberNone ) const
+{
+    sal_Bool bRet = sal_True;
+    sal_Bool bExt = sal_False;
+
+    sal_Int32 nLen = rNumFmt.getLength();
+    if( 0 == nLen )
+    {
+        if( bNumberNone )
+            rType = NumberingType::NUMBER_NONE;
+        else
+            bRet = sal_False;
+    }
+    else if( 1 == nLen )
+    {
+        switch( rNumFmt[0] )
+        {
+        case sal_Unicode('1'):  rType = NumberingType::ARABIC;          break;
+        case sal_Unicode('a'):  rType = NumberingType::CHARS_LOWER_LETTER;  break;
+        case sal_Unicode('A'):  rType = NumberingType::CHARS_UPPER_LETTER;  break;
+        case sal_Unicode('i'):  rType = NumberingType::ROMAN_LOWER; break;
+        case sal_Unicode('I'):  rType = NumberingType::ROMAN_UPPER; break;
+        default:                bExt = sal_True; break;
+        }
+        if( !bExt && rNumLetterSync.equalsAsciiL( sXML_true, sizeof(sXML_true)-1 ) )
+        {
+            switch( rType )
+            {
+            case NumberingType::CHARS_LOWER_LETTER:
+                rType = NumberingType::CHARS_LOWER_LETTER_N;
+                break;
+            case NumberingType::CHARS_UPPER_LETTER:
+                rType = NumberingType::CHARS_UPPER_LETTER_N;
+                break;
+            }
+        }
+    }
+    else
+    {
+        bExt = sal_True;
+    }
+    if( bExt )
+    {
+        Reference < XNumberingTypeInfo > xInfo = getNumTypeInfo();
+        if( xInfo.is() && xInfo->hasNumberingType( rNumFmt ) )
+        {
+            rType = xInfo->getNumberingType( rNumFmt );
+        }
+        else
+        {
+            rType = NumberingType::ARABIC;
+        }
+    }
+
+    return bRet;
+}
+
+void SvXMLUnitConverter::convertNumFormat( OUStringBuffer& rBuffer,
+                           sal_Int16 nType ) const
+{
+    const sal_Char *pFormat = 0;
+    sal_Bool bExt = sal_False;
+    switch( nType )
+    {
+    case NumberingType::CHARS_UPPER_LETTER: pFormat = sXML_A; break;
+    case NumberingType::CHARS_LOWER_LETTER: pFormat = sXML_a; break;
+    case NumberingType::ROMAN_UPPER:            pFormat = sXML_I; break;
+    case NumberingType::ROMAN_LOWER:            pFormat = sXML_i; break;
+    case NumberingType::ARABIC:             pFormat = sXML_1; break;
+    case NumberingType::CHARS_UPPER_LETTER_N:   pFormat = sXML_A; break;
+    case NumberingType::CHARS_LOWER_LETTER_N:   pFormat = sXML_a; break;
+    case NumberingType::NUMBER_NONE:            pFormat = sXML__empty; break;
+
+    case NumberingType::CHAR_SPECIAL:
+    case NumberingType::PAGE_DESCRIPTOR:
+    case NumberingType::BITMAP:
+        DBG_ASSERT( pFormat, "invalid number format" );
+        break;
+    default:
+        bExt = sal_True;
+        break;
+    }
+
+    if( pFormat )
+    {
+        rBuffer.appendAscii( pFormat );
+    }
+    else
+    {
+        Reference < XNumberingTypeInfo > xInfo = getNumTypeInfo();
+        if( xInfo.is() )
+            rBuffer.append( xInfo->getNumberingIdentifier( nType ) );
+    }
+}
+
+void SvXMLUnitConverter::convertNumLetterSync( OUStringBuffer& rBuffer,
+                                  sal_Int16 nType ) const
+{
+    const sal_Char *pSync = 0;
+    switch( nType )
+    {
+    case NumberingType::CHARS_UPPER_LETTER:
+    case NumberingType::CHARS_LOWER_LETTER:
+    case NumberingType::ROMAN_UPPER:
+    case NumberingType::ROMAN_LOWER:
+    case NumberingType::ARABIC:
+    case NumberingType::NUMBER_NONE:
+        // default
+        // pSync = sXML_false;
+        break;
+
+    case NumberingType::CHARS_UPPER_LETTER_N:
+    case NumberingType::CHARS_LOWER_LETTER_N:
+        pSync = sXML_true;
+        break;
+
+    case NumberingType::CHAR_SPECIAL:
+    case NumberingType::PAGE_DESCRIPTOR:
+    case NumberingType::BITMAP:
+        DBG_ASSERT( pSync, "invalid number format" );
+        break;
+    }
+    if( pSync )
+        rBuffer.appendAscii( pSync );
+}
+
 

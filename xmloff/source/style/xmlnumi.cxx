@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumi.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-17 16:23:54 $
+ *  last change: $Author: mib $ $Date: 2001-03-19 09:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,8 +445,9 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
     }
     if( bNum )
     {
-        eType = SvxXMLListStyleContext::GetNumType( sNumFormat, sNumLetterSync,
-                    NumberingType::ARABIC, sal_True );
+        eType = NumberingType::ARABIC;
+        GetImport().GetMM100UnitConverter().convertNumFormat(
+                eType, sNumFormat, sNumLetterSync, sal_True );
         nCount = 10L;
     }
 
@@ -644,7 +645,7 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
     rListLevel( rLLevel )
 {
     SvXMLTokenMap aTokenMap( aStyleAttributesAttrTokenMap );
-    SvXMLUnitConverter aUnitConv( MAP_100TH_MM, MAP_100TH_MM);
+    SvXMLUnitConverter& rUnitConv = GetImport().GetMM100UnitConverter();
 
     OUString sFontName, sFontFamily, sFontStyleName, sFontFamilyGeneric,
              sFontPitch, sFontCharset;
@@ -664,15 +665,15 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
         switch( aTokenMap.Get( nPrefix, aLocalName ) )
         {
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_SPACE_BEFORE:
-            if( aUnitConv.convertMeasure( nVal, rValue, 0, USHRT_MAX ) )
+            if( rUnitConv.convertMeasure( nVal, rValue, 0, USHRT_MAX ) )
                 rListLevel.SetSpaceBefore( nVal );
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_MIN_LABEL_WIDTH:
-            if( aUnitConv.convertMeasure( nVal, rValue, 0, SHRT_MAX ) )
+            if( rUnitConv.convertMeasure( nVal, rValue, 0, SHRT_MAX ) )
                 rListLevel.SetMinLabelWidth( nVal );
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_MIN_LABEL_DIST:
-            if( aUnitConv.convertMeasure( nVal, rValue, 0, USHRT_MAX ) )
+            if( rUnitConv.convertMeasure( nVal, rValue, 0, USHRT_MAX ) )
                 rListLevel.SetMinLabelDist( nVal );
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_TEXT_ALIGN:
@@ -711,11 +712,11 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
             sVerticalRel = rValue;
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_WIDTH:
-            if( aUnitConv.convertMeasure( nVal, rValue, 0, LONG_MAX ) )
+            if( rUnitConv.convertMeasure( nVal, rValue, 0, LONG_MAX ) )
                 rListLevel.SetImageWidth( nVal );
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_HEIGHT:
-            if( aUnitConv.convertMeasure( nVal, rValue, 0, LONG_MAX ) )
+            if( rUnitConv.convertMeasure( nVal, rValue, 0, LONG_MAX ) )
                 rListLevel.SetImageHeight( nVal );
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_COLOR:
@@ -779,7 +780,7 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
         Any aAny;
 
         XMLFontFamilyNamePropHdl aFamilyNameHdl;
-        if( aFamilyNameHdl.importXML( sFontFamily, aAny, aUnitConv ) )
+        if( aFamilyNameHdl.importXML( sFontFamily, aAny, rUnitConv ) )
         {
             OUString sTmp;
             aAny >>= sTmp;
@@ -788,7 +789,7 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
 
         XMLFontFamilyPropHdl aFamilyHdl;
         if( sFontFamilyGeneric.getLength() &&
-            aFamilyHdl.importXML( sFontFamilyGeneric, aAny, aUnitConv  ) )
+            aFamilyHdl.importXML( sFontFamilyGeneric, aAny, rUnitConv  ) )
         {
             sal_Int16 nTmp;
             aAny >>= nTmp;
@@ -800,7 +801,7 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
 
         XMLFontPitchPropHdl aPitchHdl;
         if( sFontPitch.getLength() &&
-            aPitchHdl.importXML( sFontPitch, aAny, aUnitConv  ) )
+            aPitchHdl.importXML( sFontPitch, aAny, rUnitConv  ) )
         {
             sal_Int16 nTmp;
             aAny >>= nTmp;
@@ -809,7 +810,7 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
 
         XMLFontEncodingPropHdl aEncHdl;
         if( sFontCharset.getLength() &&
-            aEncHdl.importXML( sFontCharset, aAny, aUnitConv  ) )
+            aEncHdl.importXML( sFontCharset, aAny, rUnitConv  ) )
         {
             sal_Int16 nTmp;
             aAny >>= nTmp;

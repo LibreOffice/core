@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionFootnoteConfigImport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-16 16:39:27 $
+ *  last change: $Author: mib $ $Date: 2001-03-19 09:41:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #endif
+#ifndef _COM_SUN_STAR_STYLE_NUMBERINGTYPE_HPP_
+#include <com/sun/star/style/NumberingType.hpp>
+#endif
 
 #ifndef _XMLOFF_XMLIMP_HXX
 #include "xmlimp.hxx"
@@ -109,7 +112,7 @@
 
 #include <vector>
 
-
+using namespace ::com::sun::star::style;
 using ::rtl::OUString;
 using ::std::vector;
 using ::com::sun::star::uno::Any;
@@ -215,7 +218,11 @@ void XMLSectionFootnoteConfigImport::StartElement(
     XMLPropertyState aNumRestartAtState( nPropIndex-4, aAny );
     rProperties.push_back(aNumRestartAtState);
 
-    aAny <<= SvxXMLListStyleContext::GetNumType(sNumFormat, sNumLetterSync);
+    sal_Int16 nNumType = NumberingType::ARABIC;
+    GetImport().GetMM100UnitConverter().convertNumFormat( nNumType,
+                                                    sNumFormat,
+                                                    sNumLetterSync );
+    aAny <<= nNumType;
     XMLPropertyState aNumFormatState( nPropIndex-3, aAny);
     rProperties.push_back(aNumFormatState);
 

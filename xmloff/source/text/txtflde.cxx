@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-14 13:35:59 $
+ *  last change: $Author: mib $ $Date: 2001-03-19 09:41:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2297,20 +2297,22 @@ void XMLTextFieldExport::ProcessNumberingType(sal_Int16 nNumberingType)
     // process only if real format (not: like page descriptor)
     if (NumberingType::PAGE_DESCRIPTOR != nNumberingType)
     {
+        OUStringBuffer sTmp( 10 );
         // number type: num format
-        GetExport().AddAttributeASCII(XML_NAMESPACE_STYLE,
+        GetExport().GetMM100UnitConverter().convertNumFormat( sTmp,
+                                                              nNumberingType );
+        GetExport().AddAttribute(XML_NAMESPACE_STYLE,
                                       sXML_num_format,
-                                      SvxXMLNumRuleExport::GetNumFormatValue(
-                                          nNumberingType));
+                                      sTmp.makeStringAndClear() );
         // and letter sync, if applicable
-        const sal_Char* pLetterSync =
-            SvxXMLNumRuleExport::GetNumLetterSync(nNumberingType);
+        GetExport().GetMM100UnitConverter().convertNumLetterSync( sTmp,
+                                                              nNumberingType );
 
-        if (NULL != pLetterSync)
+        if (sTmp.getLength())
         {
-            GetExport().AddAttributeASCII(XML_NAMESPACE_STYLE,
+            GetExport().AddAttribute(XML_NAMESPACE_STYLE,
                                           sXML_num_letter_sync,
-                                          pLetterSync);
+                                      sTmp.makeStringAndClear() );
         }
     }
     // else: like page descriptor => ignore

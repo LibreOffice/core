@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftne.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-01 15:43:50 $
+ *  last change: $Author: mib $ $Date: 2001-03-19 09:41:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,25 +322,25 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
     Any aAny;
 
     // numbering style
+    OUStringBuffer sBuffer;
     aAny = rFootnoteConfig->getPropertyValue(sNumberingType);
     sal_Int16 nNumbering;
     aAny >>= nNumbering;
-    GetExport().AddAttributeASCII(XML_NAMESPACE_STYLE, sXML_num_format,
-                                  SvxXMLNumRuleExport::GetNumFormatValue(
-                                      nNumbering));
-    const sal_Char* pLetterSync =
-        SvxXMLNumRuleExport::GetNumLetterSync(nNumbering);
-    if (NULL != pLetterSync)
+    GetExport().GetMM100UnitConverter().convertNumFormat( sBuffer, nNumbering);
+    GetExport().AddAttribute(XML_NAMESPACE_STYLE, sXML_num_format,
+                             sBuffer.makeStringAndClear() );
+    GetExport().GetMM100UnitConverter().convertNumLetterSync( sBuffer, nNumbering);
+    if (sBuffer.getLength() )
     {
-        GetExport().AddAttributeASCII(XML_NAMESPACE_STYLE,
-                                      sXML_num_letter_sync, pLetterSync);
+        GetExport().AddAttribute(XML_NAMESPACE_STYLE,
+                                      sXML_num_letter_sync,
+                                      sBuffer.makeStringAndClear());
     }
 
     // StartAt / offset
     aAny = rFootnoteConfig->getPropertyValue(sStartAt);
     sal_Int16 nOffset;
     aAny >>= nOffset;
-    OUStringBuffer sBuffer;
     SvXMLUnitConverter::convertNumber(sBuffer, (sal_Int32)nOffset);
     GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_offset,
                              sBuffer.makeStringAndClear());

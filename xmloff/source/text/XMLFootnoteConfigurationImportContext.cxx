@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteConfigurationImportContext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-28 11:35:49 $
+ *  last change: $Author: mib $ $Date: 2001-03-19 09:41:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,14 +126,16 @@
 #ifndef _COM_SUN_STAR_TEXT_FOOTNOTENUMBERING_HPP_
 #include <com/sun/star/text/FootnoteNumbering.hpp>
 #endif
-
-
+#ifndef _COM_SUN_STAR_STYLE_NUMBERINGTYPE_HPP_
+#include <com/sun/star/style/NumberingType.hpp>
+#endif
 
 
 using namespace ::rtl;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::xml::sax;
 
 
@@ -478,7 +480,10 @@ void XMLFootnoteConfigurationImportContext::ProcessSettings(
     aAny <<= sSuffix;
     rConfig->setPropertyValue(sPropertySuffix, aAny);
 
-    aAny <<=  SvxXMLListStyleContext::GetNumType( sNumFormat, sNumSync );
+    sal_Int16 nNumType = NumberingType::ARABIC;
+    GetImport().GetMM100UnitConverter().convertNumFormat( nNumType, sNumFormat,
+                                                     sNumSync );
+    aAny <<=  nNumType;
     rConfig->setPropertyValue(sPropertyNumberingType, aAny);
 
     aAny <<= nOffset;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtvfldi.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-26 10:29:13 $
+ *  last change: $Author: mib $ $Date: 2001-03-19 09:41:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::text;
+using namespace com::sun::star::style;
 
 
 
@@ -485,8 +486,10 @@ void XMLSequenceFieldImportContext::PrepareField(
     XMLSetVarFieldImportContext::PrepareField(xPropertySet);
 
     // set format
+    sal_Int16 nNumType = NumberingType::ARABIC;nNumType;
+    GetImport().GetMM100UnitConverter().convertNumFormat( nNumType, sNumFormat, sNumFormatSync );
     Any aAny;
-    aAny <<= SvxXMLListStyleContext::GetNumType(sNumFormat, sNumFormatSync);
+    aAny <<= nNumType;
     xPropertySet->setPropertyValue(sPropertyNumberFormat, aAny);
 
     // handle reference name

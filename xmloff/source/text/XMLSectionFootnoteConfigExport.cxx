@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionFootnoteConfigExport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-19 11:25:11 $
+ *  last change: $Author: mib $ $Date: 2001-03-19 09:41:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,17 +230,17 @@ void XMLSectionFootnoteConfigExport::exportXML(
             }
 
             // number type: num format
-            rExport.AddAttributeASCII(XML_NAMESPACE_STYLE, sXML_num_format,
-                                      SvxXMLNumRuleExport::GetNumFormatValue(
-                                          nNumberingType));
+            rExport.GetMM100UnitConverter().convertNumFormat( sBuf, nNumberingType );
+            rExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_num_format,
+                                 sBuf.makeStringAndClear());
 
             // and letter sync, if applicable
-            const sal_Char* pLetterSync =
-                SvxXMLNumRuleExport::GetNumLetterSync(nNumberingType);
-            if (NULL != pLetterSync)
+            rExport.GetMM100UnitConverter().convertNumLetterSync( sBuf, nNumberingType );
+            if (sBuf.getLength())
             {
-                rExport.AddAttributeASCII(XML_NAMESPACE_STYLE,
-                                          sXML_num_letter_sync, pLetterSync);
+                rExport.AddAttribute(XML_NAMESPACE_STYLE,
+                                      sXML_num_letter_sync,
+                                      sBuf.makeStringAndClear());
             }
         }
 

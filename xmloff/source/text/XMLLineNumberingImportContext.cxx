@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLLineNumberingImportContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-25 11:35:25 $
+ *  last change: $Author: mib $ $Date: 2001-03-19 09:41:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #ifndef _COM_SUN_STAR_STYLE_LINENUMBERPOSITION_HPP_
 #include <com/sun/star/style/LineNumberPosition.hpp>
 #endif
+#ifndef _COM_SUN_STAR_STYLE_NUMBERINGTYPE_HPP_
+#include <com/sun/star/style/NumberingType.hpp>
+#endif
 
 #ifndef _XMLOFF_XMLIMP_HXX
 #include "xmlimp.hxx"
@@ -106,6 +109,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::style;
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::xml::sax::XAttributeList;
@@ -339,8 +343,11 @@ void XMLLineNumberingImportContext::CreateAndInsert(
             aAny.setValue(&bRestartNumbering, ::getBooleanCppuType());
             xLineNumbering->setPropertyValue(sRestartAtEachPage, aAny);
 
-            aAny <<= SvxXMLListStyleContext::GetNumType(sNumFormat,
-                                                        sNumLetterSync);
+            sal_Int16 nNumType = NumberingType::ARABIC;
+            GetImport().GetMM100UnitConverter().convertNumFormat( nNumType,
+                                                    sNumFormat,
+                                                    sNumLetterSync );
+            aAny <<= nNumType;
             xLineNumbering->setPropertyValue(sNumberingType, aAny);
         }
     }

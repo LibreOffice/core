@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLLineNumberingExport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-11 19:14:26 $
+ *  last change: $Author: mib $ $Date: 2001-03-19 09:41:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,24 +199,25 @@ void XMLLineNumberingExport::Export()
             }
 
             // NumeringType
+            OUStringBuffer sNumPosBuf;
             aAny = xLineNumbering->getPropertyValue(sNumberingType);
             sal_Int16 nFormat;
             aAny >>= nFormat;
-            rExport.AddAttributeASCII(XML_NAMESPACE_STYLE, sXML_num_format,
-                            SvxXMLNumRuleExport::GetNumFormatValue(nFormat));
-            const sal_Char* pLetterSync =
-                SvxXMLNumRuleExport::GetNumLetterSync(nFormat);
-            if (NULL != pLetterSync)
+            rExport.GetMM100UnitConverter().convertNumFormat( sNumPosBuf, nFormat );
+            rExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_num_format,
+                                 sNumPosBuf.makeStringAndClear());
+            rExport.GetMM100UnitConverter().convertNumLetterSync( sNumPosBuf, nFormat );
+            if( sNumPosBuf.getLength() )
             {
-                rExport.AddAttributeASCII(XML_NAMESPACE_STYLE,
-                                          sXML_num_letter_sync, pLetterSync);
+                rExport.AddAttribute(XML_NAMESPACE_STYLE,
+                                     sXML_num_letter_sync,
+                                     sNumPosBuf.makeStringAndClear() );
             }
 
             // number position
             aAny = xLineNumbering->getPropertyValue(sNumberPosition);
             sal_Int16 nPosition;
             aAny >>= nPosition;
-            OUStringBuffer sNumPosBuf;
             if (SvXMLUnitConverter::convertEnum(sNumPosBuf, nPosition,
                                                 aLineNumberPositionMap))
             {

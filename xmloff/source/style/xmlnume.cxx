@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnume.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-18 11:58:13 $
+ *  last change: $Author: mib $ $Date: 2001-03-19 09:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,13 +218,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
 
         if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_NUMBERINGTYPE, sizeof(XML_UNO_NAME_NRULE_NUMBERINGTYPE)-1 ) )
         {
-            sal_Int16 nType;
-            rProp.Value >>= nType;
-            if( nType >= NumberingType::CHARS_UPPER_LETTER &&
-                nType <= NumberingType::CHARS_LOWER_LETTER_N )
-            {
-                eType = nType;
-            }
+            rProp.Value >>= eType;
         }
         else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_PREFIX, sizeof(XML_UNO_NAME_NRULE_PREFIX)-1 ) )
         {
@@ -390,14 +384,14 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
         else
             pElem = sXML_list_level_style_number;
 
-        const char *pNumFormat = GetNumFormatValue( eType );
-        if( pNumFormat )
-            GetExport().AddAttributeASCII( XML_NAMESPACE_STYLE, sXML_num_format,
-                                 pNumFormat );
-        const char *pNumLetterSync = GetNumLetterSync( eType );
-        if( pNumLetterSync )
-            GetExport().AddAttributeASCII( XML_NAMESPACE_STYLE, sXML_num_letter_sync,
-                                 pNumLetterSync );
+        GetExport().GetMM100UnitConverter().convertNumFormat( sTmp, eType );
+        GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_num_format,
+                                       sTmp.makeStringAndClear() );
+        GetExport().GetMM100UnitConverter().convertNumLetterSync( sTmp, eType );
+        if( sTmp.getLength() )
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                      sXML_num_letter_sync,
+                                           sTmp.makeStringAndClear() );
 
         if( nStartValue > 1 )
         {

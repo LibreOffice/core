@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-01 19:07:14 $
+ *  last change: $Author: mib $ $Date: 2001-03-19 09:41:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1105,9 +1105,18 @@ void XMLPageNumberImportContext::PrepareField(
 
     if (xPropertySetInfo->hasPropertyByName(sPropertyNumberingType))
     {
-        aAny <<= sNumberFormatOK ?
-            SvxXMLListStyleContext::GetNumType(sNumberFormat, sNumberSync) :
-            style::NumberingType::PAGE_DESCRIPTOR;
+        sal_Int16 nNumType;
+        if( sNumberFormatOK )
+        {
+            nNumType= style::NumberingType::ARABIC;
+            GetImport().GetMM100UnitConverter().convertNumFormat( nNumType,
+                                                    sNumberFormat,
+                                                    sNumberSync );
+        }
+        else
+            nNumType = style::NumberingType::PAGE_DESCRIPTOR;
+
+        aAny <<= nNumType;
         xPropertySet->setPropertyValue(sPropertyNumberingType, aAny);
     }
 
@@ -1656,7 +1665,11 @@ void XMLDatabaseNumberImportContext::PrepareField(
 {
     Any aAny;
 
-    aAny <<= SvxXMLListStyleContext::GetNumType(sNumberFormat, sNumberSync);
+    sal_Int16 nNumType = style::NumberingType::ARABIC;
+    GetImport().GetMM100UnitConverter().convertNumFormat( nNumType,
+                                                    sNumberFormat,
+                                                    sNumberSync );
+    aAny <<= nNumType;
     xPropertySet->setPropertyValue(sPropertyNumberingType, aAny);
 
     if (bValueOK)
@@ -2434,9 +2447,17 @@ void XMLCountFieldImportContext::PrepareField(
     if (xPropertySet->getPropertySetInfo()->
         hasPropertyByName(sPropertyNumberingType))
     {
-        aAny <<= bNumberFormatOK ?
-            SvxXMLListStyleContext::GetNumType(sNumberFormat, sLetterSync) :
-            style::NumberingType::PAGE_DESCRIPTOR;
+        sal_Int16 nNumType;
+        if( bNumberFormatOK )
+        {
+            nNumType= style::NumberingType::ARABIC;
+            GetImport().GetMM100UnitConverter().convertNumFormat( nNumType,
+                                                    sNumberFormat,
+                                                    sLetterSync );
+        }
+        else
+            nNumType = style::NumberingType::PAGE_DESCRIPTOR;
+        aAny <<= nNumType;
         xPropertySet->setPropertyValue(sPropertyNumberingType, aAny);
     }
 }
@@ -2521,9 +2542,17 @@ void XMLPageVarGetFieldImportContext::PrepareField(
 {
     Any aAny;
 
-    aAny <<= bNumberFormatOK ?
-        SvxXMLListStyleContext::GetNumType(sNumberFormat, sLetterSync) :
-        style::NumberingType::PAGE_DESCRIPTOR;
+    sal_Int16 nNumType;
+    if( bNumberFormatOK )
+    {
+        nNumType= style::NumberingType::ARABIC;
+        GetImport().GetMM100UnitConverter().convertNumFormat( nNumType,
+                                                    sNumberFormat,
+                                                    sLetterSync );
+    }
+    else
+        nNumType = style::NumberingType::PAGE_DESCRIPTOR;
+    aAny <<= nNumType;
     xPropertySet->setPropertyValue(sPropertyNumberingType, aAny);
 }
 
