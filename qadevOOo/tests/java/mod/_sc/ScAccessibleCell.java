@@ -2,7 +2,7 @@
  *
  *  $RCSfile: ScAccessibleCell.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
  *  last change: $Author: vg $
  *
@@ -62,6 +62,7 @@
 package mod._sc;
 
 import com.sun.star.awt.XWindow;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XModel;
@@ -131,7 +132,7 @@ public class ScAccessibleCell extends TestCase {
         TestParameters Param, PrintWriter log) {
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
 
         try {
             log.println("creating a spreadsheetdocument");
@@ -150,7 +151,7 @@ public class ScAccessibleCell extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow(Param.getMSF(), aModel);
+        XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         oObj = at.getAccessibleObjectForRole
