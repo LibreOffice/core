@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syncbtn.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2002-12-05 12:40:34 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 15:26:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include "ui_pch.hxx"
-#endif
 
 #pragma hdrstop
 
@@ -100,8 +97,14 @@ SwSyncChildWin::SwSyncChildWin( Window* pParent,
 
     if (!pInfo->aSize.Width() || !pInfo->aSize.Height())
     {
-        const SwEditWin &rEditWin = ::GetActiveView()->GetEditWin();
-        pWindow->SetPosPixel(rEditWin.OutputToScreenPixel(Point(0, 0)));
+        SwView* pActiveView = ::GetActiveView();
+        if(pActiveView)
+        {
+            const SwEditWin &rEditWin = pActiveView->GetEditWin();
+            pWindow->SetPosPixel(rEditWin.OutputToScreenPixel(Point(0, 0)));
+        }
+        else
+            pWindow->SetPosPixel(pParent->OutputToScreenPixel(Point(0, 0)));
         pInfo->aPos = pWindow->GetPosPixel();
         pInfo->aSize = pWindow->GetSizePixel();
     }
