@@ -1,5 +1,5 @@
 <!--
-	$Id: table.mod,v 1.10 2000-10-26 09:02:30 dr Exp $
+	$Id: table.mod,v 1.11 2000-10-26 13:15:29 dr Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -212,7 +212,7 @@
 	xlink:actuate (onRequest) #FIXED "onRequest"
 	xlink:href %uriReference; #REQUIRED
 	table:filter-name %string; #REQUIRED
-	table:filter-options %string; #REQUIRED
+	table:filter-options %string; #IMPLIED
 	table:last-column-spanned %positiveInteger; #REQUIRED
 	table:last-row-spanned %positiveInteger; #REQUIRED
 >
