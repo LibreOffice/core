@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datwin.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:56 $
+ *  last change: $Author: fs $ $Date: 2001-03-08 14:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,20 +96,25 @@ class ButtonFrame
     BOOL        bPressed;
     BOOL        bCurs;
     BOOL        bAbbr;
+    BOOL        m_bDrawDisabled;
 
 public:
                ButtonFrame( const Point& rPt, const Size& rSz,
                             const String &rText,
-                            BOOL bPress = FALSE, BOOL bCursor = FALSE,
-                            BOOL bAbbreviate = TRUE ) :
-                aRect( rPt, rSz ),
-                aInnerRect( Point( aRect.Left()+1, aRect.Top()+1 ),
-                            Size( aRect.GetWidth()-2, aRect.GetHeight()-2 ) ),
-                aText(rText),
-                bPressed(bPress),
-                bCurs(bCursor),
-                bAbbr(bAbbreviate)
-            {}
+                            BOOL bPress = FALSE,
+                            BOOL bCursor = FALSE,
+                            BOOL bAbbreviate = TRUE,
+                            BOOL _bDrawDisabled = FALSE)
+                :aRect( rPt, rSz )
+                ,aInnerRect( Point( aRect.Left()+1, aRect.Top()+1 ),
+                            Size( aRect.GetWidth()-2, aRect.GetHeight()-2 ) )
+                ,aText(rText)
+                ,bPressed(bPress)
+                ,bCurs(bCursor)
+                ,bAbbr(bAbbreviate)
+                ,m_bDrawDisabled(_bDrawDisabled)
+            {
+            }
 
     void    Draw( OutputDevice& rDev );
 };
