@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlaccess.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:04:58 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:47:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,7 @@ CTRL_CLASS SAL_CALL GetCtrlClass( HWND hwndCtrl )
     CTRL_CLASS aCtrlClass = UNKNOWN;
     TCHAR aClassName[256];
 
-    int nRet = GetClassName(hwndCtrl,aClassName,sizeof(aClassName));
+    int nRet = GetClassName(hwndCtrl,aClassName,(sizeof(aClassName)/sizeof(TCHAR)));
     if (nRet)
     {
         if (0 == _tcsicmp(aClassName,TEXT("button")))
