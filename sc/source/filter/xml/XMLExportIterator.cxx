@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
+ *  last change: $Author: sab $ $Date: 2001-07-27 10:44:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,17 +178,17 @@ sal_Bool ScMyShapesContainer::GetFirstAddress( table::CellAddress& rCellAddress 
 
 void ScMyShapesContainer::SetCellData( ScMyCell& rMyCell )
 {
-    rMyCell.aShapeVec.clear();
+    rMyCell.aShapeList.clear();
     ScAddress aAddress;
     ScUnoConversion::FillScAddress( aAddress, rMyCell.aCellAddress );
 
     ScMyShapeList::iterator aItr = aShapeList.begin();
     while( (aItr != aShapeList.end()) && (aItr->aAddress == aAddress) )
     {
-        rMyCell.aShapeVec.push_back(*aItr);
+        rMyCell.aShapeList.push_back(*aItr);
         aItr = aShapeList.erase(aItr);
     }
-    rMyCell.bHasShape = (rMyCell.aShapeVec.size() != 0);
+    rMyCell.bHasShape = !rMyCell.aShapeList.empty();
 }
 
 void ScMyShapesContainer::Sort()
@@ -547,7 +547,7 @@ void ScMyDetectiveOpContainer::Sort()
 //==============================================================================
 
 ScMyCell::ScMyCell() :
-    aShapeVec(),
+    aShapeList(),
     aDetectiveObjVec(),
     bHasShape( sal_False ),
     bIsMergedBase( sal_False ),

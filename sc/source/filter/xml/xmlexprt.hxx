@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
+ *  last change: $Author: sab $ $Date: 2001-07-27 10:44:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,6 @@ class ScXMLExport : public SvXMLExport
     com::sun::star::uno::Reference <com::sun::star::frame::XModel> xModel;
     com::sun::star::uno::Reference <com::sun::star::util::XStringMapping> xChartExportMapper;
     com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheet> xCurrentTable;
-    com::sun::star::uno::Reference <com::sun::star::container::XIndexAccess> xCurrentShapes;
 
     UniReference < XMLPropertyHandlerFactory >  xScPropHdlFactory;
     UniReference < XMLPropertySetMapper >       xCellStylesPropertySetMapper;
@@ -129,7 +128,6 @@ class ScXMLExport : public SvXMLExport
     ScFormatRangeStyles*                pCellStyles;
     ScRowFormatRanges*                  pRowFormatRanges;
     std::vector<rtl::OUString>          aTableStyles;
-    ScMyXShapesVec                      aXShapesVec;
     com::sun::star::table::CellRangeAddress aRowHeaderRange;
     ScMyOpenCloseColumnRowGroup*        pGroupColumns;
     ScMyOpenCloseColumnRowGroup*        pGroupRows;
@@ -142,6 +140,7 @@ class ScXMLExport : public SvXMLExport
     ScMyNotEmptyCellsIterator*  pCellsItr;
     ScChangeTrackingExportHelper*   pChangeTrackingExportHelper;
     const rtl::OUString         sLayerID;
+    const rtl::OUString         sCaptionShape;
     sal_Int32                   nOpenRow;
     sal_uInt16                  nCurrentTable;
     sal_Bool                    bHasRowHeader : 1;
@@ -151,7 +150,7 @@ class ScXMLExport : public SvXMLExport
 
     sal_Bool        HasDrawPages(com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xDoc);
     void            CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCount, const sal_Int32 nCellCount);
-    void            CollectShapesAutoStyles(com::sun::star::uno::Reference<com::sun::star::sheet::XSpreadsheet>& xTable, const sal_Int32 nTable);
+    void            CollectShapesAutoStyles(const sal_Int32 nTableCount);
     void            WriteTablesView(const com::sun::star::uno::Any& aTableView);
     void            WriteView(const com::sun::star::uno::Any& aView);
     virtual void _ExportFontDecls();
@@ -169,7 +168,6 @@ class ScXMLExport : public SvXMLExport
 //  ScMyEmptyDatabaseRangesContainer GetEmptyDatabaseRanges();
     void GetAreaLinks( com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc, ScMyAreaLinksContainer& rAreaLinks );
     void GetDetectiveOpList( ScMyDetectiveOpContainer& rDetOp );
-    sal_Bool GetxCurrentShapes(com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess>& xShapes);
     void WriteSingleColumn(const sal_Int32 nRepeatColumns, const sal_Int32 nStyleIndex,
         const sal_Int32 nIndex, const sal_Bool bIsAutoStyle, const sal_Bool bIsVisible);
     void WriteColumn(const sal_Int32 nColumn, const sal_Int32 nRepeatColumns,

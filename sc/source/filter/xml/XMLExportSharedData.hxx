@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportSharedData.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-21 10:16:41 $
+ *  last change: $Author: sab $ $Date: 2001-07-27 10:44:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #ifndef __SGI_STL_VECTOR
 #include <vector>
 #endif
+#ifndef __SGI_STL_LIST
+#include <list>
+#endif
 
 struct ScMyDrawPage
 {
@@ -78,8 +81,8 @@ struct ScMyDrawPage
     ScMyDrawPage() : bHasForms(sal_False) {}
 };
 
-typedef std::vector<sal_Int32> ScMyTableShapeIndexes;
-typedef std::vector<ScMyTableShapeIndexes> ScMyTableShapes;
+typedef std::list< com::sun::star::uno::Reference<com::sun::star::drawing::XShape> > ScMyTableXShapes;
+typedef std::vector<ScMyTableXShapes> ScMyTableShapes;
 typedef std::vector<ScMyDrawPage> ScMyDrawPages;
 
 class ScMyShapesContainer;
@@ -102,11 +105,14 @@ public:
     sal_Int32 GetLastColumn(const sal_Int32 nTable);
     sal_Int32 GetLastRow(const sal_Int32 nTable);
     void AddDrawPage(const ScMyDrawPage& aDrawPage, const sal_Int32 nTable);
+    void SetDrawPageHasForms(const sal_Int32 nTable, sal_Bool bHasForms);
+    com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> GetDrawPage(const sal_Int32 nTable);
     sal_Bool HasForm(const sal_Int32 nTable, com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage>& xDrawPage);
     void AddNewShape(const ScMyShape& aMyShape);
     void SortShapesContainer();
     ScMyShapesContainer* GetShapesContainer() { return pShapesContainer; }
-    void AddTableShape(const sal_Int32 nTable, const sal_Int32 nShape);
+    sal_Bool HasShapes();
+    void AddTableShape(const sal_Int32 nTable, const com::sun::star::uno::Reference<com::sun::star::drawing::XShape>& xShape);
     ScMyTableShapes* GetTableShapes() { return pTableShapes; }
 };
 

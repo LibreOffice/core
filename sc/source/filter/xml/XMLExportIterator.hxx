@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-19 09:38:08 $
+ *  last change: $Author: sab $ $Date: 2001-07-27 10:44:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #ifndef _COM_SUN_STAR_SHEET_XSHEETANNOTATION_HPP_
 #include <com/sun/star/sheet/XSheetAnnotation.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
+#include <com/sun/star/drawing/XShape.hpp>
+#endif
 
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
@@ -127,14 +130,13 @@ struct ScMyShape
 {
     ScAddress   aAddress;
     ScAddress   aEndAddress;
-    sal_Int32   nIndex;
+    com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xShape;
     sal_Int16   nLayerID;
 
     sal_Bool operator<(const ScMyShape& aShape);
 };
 
 typedef std::list<ScMyShape>    ScMyShapeList;
-typedef std::vector<ScMyShape>  ScMyShapeVec;
 
 class ScMyShapesContainer : ScMyIteratorBase
 {
@@ -148,6 +150,8 @@ public:
 
                                 ScMyIteratorBase::UpdateAddress;
     void                        AddNewShape(const ScMyShape& aShape);
+    sal_Bool                    HasShapes() { return !aShapeList.empty(); }
+    const ScMyShapeList*        GetShapes() { return &aShapeList; }
     virtual void                SetCellData( ScMyCell& rMyCell );
     virtual void                Sort();
 };
@@ -327,7 +331,7 @@ struct ScMyCell
     rtl::OUString               sAnnotationText;
 
     ScMyAreaLink                aAreaLink;
-    ScMyShapeVec                aShapeVec;
+    ScMyShapeList               aShapeList;
     ScMyDetectiveObjVec         aDetectiveObjVec;
     ScMyDetectiveOpVec          aDetectiveOpVec;
 

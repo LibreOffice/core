@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportSharedData.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-21 10:16:41 $
+ *  last change: $Author: sab $ $Date: 2001-07-27 10:44:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 #include "XMLExportIterator.hxx"
 #endif
 
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+
 using namespace com::sun::star;
 
 ScMySharedData::ScMySharedData(const sal_Int32 nTempTableCount) :
@@ -122,6 +126,22 @@ void ScMySharedData::AddDrawPage(const ScMyDrawPage& aDrawPage, const sal_Int32 
     (*pDrawPages)[nTable] = aDrawPage;
 }
 
+void ScMySharedData::SetDrawPageHasForms(const sal_Int32 nTable, sal_Bool bHasForms)
+{
+    DBG_ASSERT(pDrawPages, "DrawPages not collected");
+    if (pDrawPages)
+        (*pDrawPages)[nTable].bHasForms = bHasForms;
+}
+
+uno::Reference<drawing::XDrawPage> ScMySharedData::GetDrawPage(const sal_Int32 nTable)
+{
+    DBG_ASSERT(pDrawPages, "DrawPages not collected");
+    if (pDrawPages)
+        return (*pDrawPages)[nTable].xDrawPage;
+    else
+        return uno::Reference<drawing::XDrawPage>();
+}
+
 sal_Bool ScMySharedData::HasForm(const sal_Int32 nTable, uno::Reference<drawing::XDrawPage>& xDrawPage)
 {
     sal_Bool bResult(sal_False);
@@ -149,9 +169,15 @@ void ScMySharedData::SortShapesContainer()
         pShapesContainer->Sort();
 }
 
-void ScMySharedData::AddTableShape(const sal_Int32 nTable, const sal_Int32 nShape)
+sal_Bool ScMySharedData::HasShapes()
+{
+    return ((pShapesContainer && pShapesContainer->HasShapes()) ||
+            (pTableShapes && !pTableShapes->empty()));
+}
+
+void ScMySharedData::AddTableShape(const sal_Int32 nTable, const uno::Reference<drawing::XShape>& xShape)
 {
     if (!pTableShapes)
         pTableShapes = new ScMyTableShapes(nTableCount);
-    (*pTableShapes)[nTable].push_back(nShape);
+    (*pTableShapes)[nTable].push_back(xShape);
 }

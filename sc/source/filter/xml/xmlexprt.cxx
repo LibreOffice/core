@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:43:00 $
+ *  last change: $Author: sab $ $Date: 2001-07-27 10:44:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,8 +432,8 @@ ScXMLExport::ScXMLExport(const sal_uInt16 nExportFlag) :
     aTableStyles(),
     bHasRowHeader(sal_False),
     bRowHeaderOpen(sal_False),
-    aXShapesVec(),
     sLayerID(RTL_CONSTASCII_USTRINGPARAM( SC_LAYERID )),
+    sCaptionShape(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CaptionShape")),
     pChartListener(NULL)
 {
     if (getExportFlags() & EXPORT_CONTENT)
@@ -538,9 +538,12 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
         if ( xIndex.is() )
         {
             nTableCount = xIndex->getCount();
+            if (!pSharedData)
+                CreateSharedData(nTableCount);
             pCellStyles->AddNewTable(nTableCount - 1);
             if (HasDrawPages(xSpreadDoc))
             {
+                rtl::OUString sCaptionPoint( RTL_CONSTASCII_USTRINGPARAM( "CaptionPoint" ));
                 for (sal_Int32 nTable = 0; nTable < nTableCount; nTable++)
                 {
                     uno::Any aTable = xIndex->getByIndex(nTable);
@@ -551,6 +554,10 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
                         if (xDrawPageSupplier.is())
                         {
                             uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+                            ScMyDrawPage aDrawPage;
+                            aDrawPage.bHasForms = sal_False;
+                            aDrawPage.xDrawPage = xDrawPage;
+                            pSharedData->AddDrawPage(aDrawPage, nTable);
                             uno::Reference<container::XIndexAccess> xShapesIndex (xDrawPage, uno::UNO_QUERY);
                             if (xShapesIndex.is())
                             {
@@ -566,8 +573,51 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
                                         {
                                             uno::Any aPropAny = xShapeProp->getPropertyValue(sLayerID);
                                             sal_Int16 nLayerID;
-                                            if( (aPropAny >>= nLayerID) && (nLayerID != SC_LAYER_INTERN) )
-                                                nShapesCount++;
+                                            if( aPropAny >>= nLayerID )
+                                            {
+                                                if( nLayerID == SC_LAYER_INTERN )
+                                                    CollectInternalShape( xShape );
+                                                else
+                                                {
+                                                    nShapesCount++;
+                                                    SvxShape* pShapeImp = SvxShape::getImplementation(xShape);
+                                                    if (pShapeImp)
+                                                    {
+                                                        SdrObject *pSdrObj = pShapeImp->GetSdrObject();
+                                                        if (pSdrObj)
+                                                        {
+                                                            if (ScDrawLayer::GetAnchor(pSdrObj) == SCA_CELL)
+                                                            {
+                                                                if (pDoc)
+                                                                {
+                                                                    awt::Point aPoint;
+                                                                    awt::Size aSize;
+                                                                    rtl::OUString sType(xShape->getShapeType());
+                                                                    if ( !sType.equals(sCaptionShape) )
+                                                                    {
+                                                                        aPoint = xShape->getPosition();
+                                                                        aSize = xShape->getSize();
+                                                                    }
+                                                                    else
+                                                                        xShapeProp->getPropertyValue( sCaptionPoint ) >>= aPoint;
+                                                                    Rectangle aRectangle(aPoint.X, aPoint.Y, aPoint.X + aSize.Width, aPoint.Y + aSize.Height);
+                                                                    ScRange aRange = pDoc->GetRange(static_cast<USHORT>(nTable), aRectangle);
+                                                                    ScMyShape aMyShape;
+                                                                    aMyShape.aAddress = aRange.aStart;
+                                                                    aMyShape.aEndAddress = aRange.aEnd;
+                                                                    aMyShape.xShape = xShape;
+                                                                    aMyShape.nLayerID = nLayerID;
+                                                                    pSharedData->AddNewShape(aMyShape);
+                                                                    pSharedData->SetLastColumn(nTable, aRange.aStart.Col());
+                                                                    pSharedData->SetLastRow(nTable, aRange.aStart.Row());
+                                                                }
+                                                            }
+                                                            else
+                                                                pSharedData->AddTableShape(nTable, xShape);
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -578,22 +628,25 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
             }
         }
     }
-    if (!pSharedData)
-        CreateSharedData(nTableCount);
 }
 
-void ScXMLExport::CollectShapesAutoStyles(uno::Reference<sheet::XSpreadsheet>& xTable, const sal_Int32 nTable)
+void ScXMLExport::CollectShapesAutoStyles(const sal_Int32 nTableCount)
 {
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xTable, uno::UNO_QUERY);
-    if (xDrawPageSupplier.is())
+    pSharedData->SortShapesContainer();
+    const ScMyShapeList* pShapeList = NULL;
+    ScMyShapeList::const_iterator aShapeItr;
+    if (pSharedData->GetShapesContainer())
     {
-        uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-        uno::Reference<container::XIndexAccess> xShapesIndex (xDrawPage, uno::UNO_QUERY);
+        pShapeList = pSharedData->GetShapesContainer()->GetShapes();
+        aShapeItr = pShapeList->begin();
+    }
+    for (sal_Int32 nTable = 0; nTable < nTableCount; nTable++)
+    {
+        uno::Reference<drawing::XDrawPage> xDrawPage(pSharedData->GetDrawPage(nTable));
         uno::Reference<drawing::XShapes> xShapes (xDrawPage, uno::UNO_QUERY);
-        if (xShapesIndex.is() && xShapes.is())
+        if (xShapes.is())
         {
             GetShapeExport()->seekShapes(xShapes);
-            aXShapesVec[nTable] = xShapes;
             uno::Reference< form::XFormsSupplier > xFormsSupplier( xDrawPage, uno::UNO_QUERY );
             if( xFormsSupplier.is() )
             {
@@ -601,73 +654,27 @@ void ScXMLExport::CollectShapesAutoStyles(uno::Reference<sheet::XSpreadsheet>& x
                 if( xForms.is() && xForms->hasElements() )
                 {
                     GetFormExport()->examineForms(xDrawPage);
-                    ScMyDrawPage aDrawPage;
-                    aDrawPage.bHasForms = sal_True;
-                    aDrawPage.xDrawPage = xDrawPage;
-                    pSharedData->AddDrawPage(aDrawPage, nTable);
+                    pSharedData->SetDrawPageHasForms(nTable, sal_True);
                 }
             }
-            rtl::OUString sCaptionShape(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CaptionShape"));
-            rtl::OUString sCaptionPoint( RTL_CONSTASCII_USTRINGPARAM( "CaptionPoint" ));
-            sal_Int32 nShapes = xShapesIndex->getCount();
-            for (sal_Int32 nShape = 0; nShape < nShapes; nShape++)
+            ScMyTableShapes* pTableShapes = pSharedData->GetTableShapes();
+            if (pTableShapes)
             {
-                uno::Any aShape = xShapesIndex->getByIndex(nShape);
-                uno::Reference<drawing::XShape> xShape;
-                if (aShape >>= xShape)
+                ScMyTableXShapes::iterator aItr = (*pTableShapes)[nTable].begin();
+                while (aItr != (*pTableShapes)[nTable].end())
                 {
-                    uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
-                    if( xShapeProp.is() )
-                    {
-                        uno::Any aPropAny = xShapeProp->getPropertyValue(sLayerID);
-                        sal_Int16 nLayerID;
-                        if( aPropAny >>= nLayerID )
-                        {
-                            if( nLayerID == SC_LAYER_INTERN )
-                                CollectInternalShape( xShape );
-                            else
-                            {
-                                SvxShape* pShapeImp = SvxShape::getImplementation(xShape);
-                                if (pShapeImp)
-                                {
-                                    SdrObject *pSdrObj = pShapeImp->GetSdrObject();
-                                    if (pSdrObj)
-                                    {
-                                        GetShapeExport()->collectShapeAutoStyles(xShape);
-                                        if (ScDrawLayer::GetAnchor(pSdrObj) == SCA_CELL)
-                                        {
-                                            if (pDoc)
-                                            {
-                                                awt::Point aPoint;
-                                                awt::Size aSize;
-                                                rtl::OUString sType(xShape->getShapeType());
-                                                if ( !sType.equals(sCaptionShape) )
-                                                {
-                                                    aPoint = xShape->getPosition();
-                                                    aSize = xShape->getSize();
-                                                }
-                                                else
-                                                    xShapeProp->getPropertyValue( sCaptionPoint ) >>= aPoint;
-                                                Rectangle aRectangle(aPoint.X, aPoint.Y, aPoint.X + aSize.Width, aPoint.Y + aSize.Height);
-                                                ScRange aRange = pDoc->GetRange(static_cast<USHORT>(nTable), aRectangle);
-                                                ScMyShape aMyShape;
-                                                aMyShape.aAddress = aRange.aStart;
-                                                aMyShape.aEndAddress = aRange.aEnd;
-                                                aMyShape.nIndex = nShape;
-                                                aMyShape.nLayerID = nLayerID;
-                                                pSharedData->AddNewShape(aMyShape);
-                                                pSharedData->SetLastColumn(nTable, aRange.aStart.Col());
-                                                pSharedData->SetLastRow(nTable, aRange.aStart.Row());
-                                            }
-                                        }
-                                        else
-                                            pSharedData->AddTableShape(nTable, nShape);
-                                        GetProgressBarHelper()->Increment();
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    GetShapeExport()->collectShapeAutoStyles(*aItr);
+                    GetProgressBarHelper()->Increment();
+                    aItr++;
+                }
+            }
+            if (pShapeList)
+            {
+                while (aShapeItr != pShapeList->end() && (static_cast<sal_Int32>(aShapeItr->aAddress.Tab()) == nTable))
+                {
+                    GetShapeExport()->collectShapeAutoStyles(aShapeItr->xShape);
+                    GetProgressBarHelper()->Increment();
+                    aShapeItr++;
                 }
             }
         }
@@ -789,25 +796,6 @@ void ScXMLExport::GetDetectiveOpList( ScMyDetectiveOpContainer& rDetOp )
         }
         rDetOp.Sort();
     }
-}
-
-sal_Bool ScXMLExport::GetxCurrentShapes(uno::Reference<container::XIndexAccess>& xShapes)
-{
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xCurrentTable, uno::UNO_QUERY);
-    if (xDrawPageSupplier.is())
-    {
-        uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-        if (xDrawPage.is())
-        {
-            uno::Reference<container::XIndexAccess> xShapesIndex (xDrawPage, uno::UNO_QUERY);
-            if (xShapesIndex.is())
-            {
-                xShapes = xShapesIndex;
-                return sal_True;
-            }
-        }
-    }
-    return sal_False;
 }
 
 void ScXMLExport::WriteSingleColumn(const sal_Int32 nRepeatColumns, const sal_Int32 nStyleIndex,
@@ -1379,7 +1367,6 @@ void ScXMLExport::_ExportContent()
             GetDetectiveOpList( aDetectiveOpContainer );
 
             pCellStyles->Sort();
-            pSharedData->SortShapesContainer();
             pMergedRangesContainer->Sort();
             pDetectiveObjContainer->Sort();
 
@@ -1434,8 +1421,7 @@ void ScXMLExport::_ExportContent()
                             sal_Bool bRet = GetFormExport()->seekPage( xDrawPage );
                             DBG_ASSERT( bRet, "OFormLayerXMLExport::seekPage failed!" );
                         }
-                        GetxCurrentShapes(xCurrentShapes);
-                        GetShapeExport()->seekShapes(aXShapesVec[nTable]);
+                        GetShapeExport()->seekShapes(uno::Reference<drawing::XShapes>(pSharedData->GetDrawPage(nTable), uno::UNO_QUERY));
                         WriteTableShapes();
                         table::CellRangeAddress aRange = GetEndAddress(xTable, nTable);
                         pSharedData->SetLastColumn(nTable, aRange.EndColumn);
@@ -1527,6 +1513,14 @@ void ScXMLExport::_ExportContent()
 void ScXMLExport::_ExportStyles( sal_Bool bUsed )
 {
     SvXMLExport::_ExportStyles(bUsed);
+    if (!pSharedData)
+    {
+        sal_Int32 nTableCount(0);
+        sal_Int32 nShapesCount(0);
+        sal_Int32 nCellCount(pDoc->GetCellCount());
+        CollectSharedData(nTableCount, nShapesCount, nCellCount);
+        //DBG_ERROR("no shared data setted");
+    }
     ScXMLStyleExport aStylesExp(*this, rtl::OUString(), GetAutoStylePool().get());
     uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
     if (xMultiServiceFactory.is())
@@ -1535,10 +1529,13 @@ void ScXMLExport::_ExportStyles( sal_Bool bUsed )
         uno::Reference <beans::XPropertySet> xProperties(xInterface, uno::UNO_QUERY);
         if (xProperties.is())
             aStylesExp.exportDefaultStyle(xProperties, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME)), xCellStylesExportPropertySetMapper);
-        xInterface = xMultiServiceFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Defaults")));
-        uno::Reference <beans::XPropertySet> xDrawProperties(xInterface, uno::UNO_QUERY);
-        if (xDrawProperties.is())
-            aStylesExp.exportDefaultStyle(xDrawProperties, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)), GetShapeExport()->CreateShapePropMapper(*this));
+        if (pSharedData->HasShapes())
+        {
+            xInterface = xMultiServiceFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Defaults")));
+            uno::Reference <beans::XPropertySet> xDrawProperties(xInterface, uno::UNO_QUERY);
+            if (xDrawProperties.is())
+                aStylesExp.exportDefaultStyle(xDrawProperties, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)), GetShapeExport()->CreateShapePropMapper(*this));
+        }
     }
     uno::Reference <style::XStyleFamiliesSupplier> xStyleFamiliesSupplier (xModel, uno::UNO_QUERY);
     if (xStyleFamiliesSupplier.is())
@@ -1599,15 +1596,13 @@ void ScXMLExport::_ExportAutoStyles()
                 GetChartExport()->setTableAddressMapper(xChartExportMapper);
                 sal_Int32 nTableCount = xIndex->getCount();
                 pCellStyles->AddNewTable(nTableCount - 1);
-                uno::Reference<drawing::XShapes> xShapes;
-                aXShapesVec.resize(nTableCount, xShapes);
+                CollectShapesAutoStyles(nTableCount);
                 for (sal_uInt16 nTable = 0; nTable < nTableCount; nTable++)
                 {
                     uno::Any aTable = xIndex->getByIndex(nTable);
                     uno::Reference<sheet::XSpreadsheet> xTable;
                     if (aTable>>=xTable)
                     {
-                        CollectShapesAutoStyles(xTable, nTable);
                         uno::Reference<beans::XPropertySet> xTableProperties(xTable, uno::UNO_QUERY);
                         if (xTableProperties.is())
                         {
@@ -2385,7 +2380,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
 
 void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
 {
-    if( rMyCell.bHasShape && xCurrentShapes.is() && rMyCell.aShapeVec.size() && pDoc )
+    if( rMyCell.bHasShape && !rMyCell.aShapeList.empty() && pDoc )
     {
         awt::Point aPoint;
         Rectangle aRec = pDoc->GetMMRect(static_cast<USHORT>(rMyCell.aCellAddress.Column), static_cast<USHORT>(rMyCell.aCellAddress.Row),
@@ -2393,15 +2388,12 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
         aPoint.X = aRec.Left();
         aPoint.Y = aRec.Top();
         awt::Point* pPoint = &aPoint;
-        ScMyShapeVec::const_iterator aItr = rMyCell.aShapeVec.begin();
-        rtl::OUString sCaptionShape(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CaptionShape"));
-        while (aItr != rMyCell.aShapeVec.end())
+        ScMyShapeList::const_iterator aItr = rMyCell.aShapeList.begin();
+        while (aItr != rMyCell.aShapeList.end())
         {
-            uno::Any aAny = xCurrentShapes->getByIndex(aItr->nIndex);
-            uno::Reference<drawing::XShape> xShape;
-            if (aAny >>= xShape)
+            if (aItr->xShape.is())
             {
-                if ( !xShape->getShapeType().equals(sCaptionShape) )
+                if ( !aItr->xShape->getShapeType().equals(sCaptionShape) )
                 {
                     awt::Point aEndPoint;
                     Rectangle aEndRec = pDoc->GetMMRect(aItr->aEndAddress.Col(), aItr->aEndAddress.Row(),
@@ -2411,8 +2403,8 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
                     AddAttribute(XML_NAMESPACE_TABLE, XML_END_CELL_ADDRESS, sEndAddress);
                     aEndPoint.X = aEndRec.Left();
                     aEndPoint.Y = aEndRec.Top();
-                    awt::Point aStartPoint = xShape->getPosition();
-                    awt::Size aSize = xShape->getSize();
+                    awt::Point aStartPoint = aItr->xShape->getPosition();
+                    awt::Size aSize = aItr->xShape->getSize();
                     sal_Int32 nEndX = aStartPoint.X + aSize.Width - aEndPoint.X;
                     sal_Int32 nEndY = aStartPoint.Y + aSize.Height - aEndPoint.Y;
                     rtl::OUStringBuffer sBuffer;
@@ -2421,13 +2413,13 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
                     GetMM100UnitConverter().convertMeasure(sBuffer, nEndY);
                     AddAttribute(XML_NAMESPACE_TABLE, XML_END_Y, sBuffer.makeStringAndClear());
                 }
-                uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
+                uno::Reference< beans::XPropertySet > xShapeProp( aItr->xShape, uno::UNO_QUERY );
                 if( xShapeProp.is() )
                 {
                     if(aItr->nLayerID == SC_LAYER_BACK)
                         AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE_BACKGROUND, XML_TRUE);
                 }
-                ExportShape(xShape, pPoint);
+                ExportShape(aItr->xShape, pPoint);
             }
             aItr++;
         }
@@ -2437,18 +2429,16 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
 void ScXMLExport::WriteTableShapes()
 {
     ScMyTableShapes* pTableShapes = pSharedData->GetTableShapes();
-    if (pTableShapes && (*pTableShapes)[nCurrentTable].size())
+    if (pTableShapes && !(*pTableShapes)[nCurrentTable].empty())
     {
         DBG_ASSERT(pTableShapes->size() > static_cast<sal_uInt32>(nCurrentTable), "wrong Table");
         SvXMLElementExport aShapesElem(*this, XML_NAMESPACE_TABLE, XML_SHAPES, sal_True, sal_False);
-        ScMyTableShapeIndexes::iterator aItr = (*pTableShapes)[nCurrentTable].begin();
+        ScMyTableXShapes::iterator aItr = (*pTableShapes)[nCurrentTable].begin();
         while (aItr != (*pTableShapes)[nCurrentTable].end())
         {
-            uno::Any aAny = xCurrentShapes->getByIndex(*aItr);
-            uno::Reference<drawing::XShape> xShape;
-            if (aAny >>= xShape)
+            if (aItr->is())
             {
-                uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
+                uno::Reference< beans::XPropertySet > xShapeProp( *aItr, uno::UNO_QUERY );
                 if( xShapeProp.is() )
                 {
                     uno::Any aPropAny = xShapeProp->getPropertyValue(sLayerID);
@@ -2456,7 +2446,7 @@ void ScXMLExport::WriteTableShapes()
                     if( (aPropAny >>= nLayerID) && (nLayerID == SC_LAYER_BACK) )
                         AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE_BACKGROUND, XML_TRUE);
                 }
-                ExportShape(xShape, NULL);
+                ExportShape(*aItr, NULL);
             }
             aItr = (*pTableShapes)[nCurrentTable].erase(aItr);
         }
