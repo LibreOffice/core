@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:21:02 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 11:03:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ namespace dbaui
     struct OJoinExchangeData;
     class OJoinDesignView;
     class OTableWindowData;
-    class IAccessibleHelper;
+    class OJoinDesignViewAccess;
 
     // this class conatins only the scrollbars to avoid that the tablewindows clip the scrollbars
     class OJoinTableView;
@@ -152,9 +152,9 @@ namespace dbaui
         DECL_LINK(OnDragScrollTimer, void*);
 
     protected:
-        OTableWindow*       m_pLastFocusTabWin;
-        OJoinDesignView*    m_pView;
-        IAccessibleHelper*      m_pAccessible;
+        OTableWindow*               m_pLastFocusTabWin;
+        OJoinDesignView*            m_pView;
+        OJoinDesignViewAccess*      m_pAccessible;
 
     public:
         TYPEINFO();
