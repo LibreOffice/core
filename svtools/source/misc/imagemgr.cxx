@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sj $ $Date: 2001-11-28 16:05:00 $
+ *  last change: $Author: pb $ $Date: 2001-12-05 18:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,22 @@
 
 static ImageList* _pSmallImageList = NULL;
 static ImageList* _pBigImageList = NULL;
+
+struct SvtVolumeInfo_Impl
+{
+    sal_Bool    m_bIsVolume;
+    sal_Bool    m_bIsRemote;
+    sal_Bool    m_bIsRemoveable;
+    sal_Bool    m_bIsFloppy;
+    sal_Bool    m_bIsCompactDisc;
+
+    SvtVolumeInfo_Impl() :
+        m_bIsVolume     ( sal_False ),
+        m_bIsRemote     ( sal_False ),
+        m_bIsRemoveable ( sal_False ),
+        m_bIsFloppy     ( sal_False ),
+        m_bIsCompactDisc( sal_False ) {}
+};
 
 struct SvtExtensionResIdMapping_Impl
 {
@@ -371,16 +387,17 @@ USHORT GetImageId_Impl( const String& rExtension )
     return nImage;
 }
 
-sal_Bool GetVolumeProperties_Impl( const String& rURL,
-                                   sal_Bool& rIsVolume, sal_Bool& rIsRemote, sal_Bool& rIsRemoveable )
+sal_Bool GetVolumeProperties_Impl( const String& rURL, SvtVolumeInfo_Impl& rVolumeInfo )
 {
     sal_Bool bRet = sal_False;
 
     try
     {
-        bRet = ( ( CONTENT_HELPER::GetProperty( rURL, ASCII_STRING("IsVolume") ) >>= rIsVolume ) &&
-                 ( CONTENT_HELPER::GetProperty( rURL, ASCII_STRING("IsRemote") ) >>= rIsRemote ) &&
-                 ( CONTENT_HELPER::GetProperty( rURL, ASCII_STRING("IsRemoveable") ) >>= rIsRemoveable ) );
+        bRet = ( ( CONTENT_HELPER::GetProperty( rURL, ASCII_STRING("IsVolume") ) >>= rVolumeInfo.m_bIsVolume ) &&
+                 ( CONTENT_HELPER::GetProperty( rURL, ASCII_STRING("IsRemote") ) >>= rVolumeInfo.m_bIsRemote ) &&
+                 ( CONTENT_HELPER::GetProperty( rURL, ASCII_STRING("IsRemoveable") ) >>= rVolumeInfo.m_bIsRemoveable ) &&
+                 ( CONTENT_HELPER::GetProperty( rURL, ASCII_STRING("IsFloppy") ) >>= rVolumeInfo.m_bIsFloppy ) &&
+                 ( CONTENT_HELPER::GetProperty( rURL, ASCII_STRING("IsCompactDisc") ) >>= rVolumeInfo.m_bIsCompactDisc ) );
     }
     catch( const ::com::sun::star::uno::Exception& )
     {
@@ -393,14 +410,16 @@ sal_Bool GetVolumeProperties_Impl( const String& rURL,
 USHORT GetFolderImageId_Impl( const String& rURL )
 {
     USHORT nRet = IMG_FOLDER;
-    sal_Bool bIsVolume = sal_False, bIsRemote = sal_False, bIsRemoveable = sal_False;
-    if ( GetVolumeProperties_Impl( rURL, bIsVolume, bIsRemote, bIsRemoveable ) )
+    SvtVolumeInfo_Impl aVolumeInfo;
+    if ( GetVolumeProperties_Impl( rURL, aVolumeInfo ) )
     {
-        if ( bIsRemote )
+        if ( aVolumeInfo.m_bIsRemote )
             nRet = IMG_NETWORKDEV;
-        else if ( bIsRemoveable )
+        else if ( aVolumeInfo.m_bIsCompactDisc )
+            nRet = IMG_CDROMDEV;
+        else if ( aVolumeInfo.m_bIsRemoveable )
             nRet = IMG_REMOVEABLEDEV;
-        else if ( bIsVolume )
+        else if ( aVolumeInfo.m_bIsVolume )
             nRet = IMG_FIXEDDEV;
     }
     return nRet;
@@ -516,12 +535,16 @@ String GetDescriptionByFactory_Impl( const String& rFactory )
 USHORT GetFolderDescriptionId_Impl( const String& rURL )
 {
     USHORT nRet = STR_DESCRIPTION_FOLDER;
-    sal_Bool bIsVolume = sal_False, bIsRemote = sal_False, bIsRemoveable = sal_False;
-    if ( GetVolumeProperties_Impl( rURL, bIsVolume, bIsRemote, bIsRemoveable ) )
+    SvtVolumeInfo_Impl aVolumeInfo;
+    if ( GetVolumeProperties_Impl( rURL, aVolumeInfo ) )
     {
-        if ( bIsRemote )
+        if ( aVolumeInfo.m_bIsRemote )
             nRet = STR_DESCRIPTION_REMOTE_VOLUME;
-        else if ( bIsRemoveable || bIsVolume )
+        else if ( aVolumeInfo.m_bIsFloppy )
+            nRet = STR_DESCRIPTION_FLOPPY_VOLUME;
+        else if ( aVolumeInfo.m_bIsCompactDisc )
+            nRet = STR_DESCRIPTION_CDROM_VOLUME;
+        else if ( aVolumeInfo.m_bIsRemoveable || aVolumeInfo.m_bIsVolume )
             nRet = STR_DESCRIPTION_LOCALE_VOLUME;
     }
     return nRet;
