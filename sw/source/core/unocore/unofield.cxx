@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-02 18:37:24 $
+ *  last change: $Author: mtg $ $Date: 2001-10-05 14:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3092,7 +3092,7 @@ OUString SwXTextFieldTypes::getImplementationName(void) throw( RuntimeException 
  ---------------------------------------------------------------------------*/
 BOOL SwXTextFieldTypes::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.text.TextFieldTypes") == rServiceName;
+    return C2U("com.sun.star.text.TextFields") == rServiceName;
 }
 /* -----------------------------06.04.00 13:24--------------------------------
 
@@ -3101,7 +3101,7 @@ Sequence< OUString > SwXTextFieldTypes::getSupportedServiceNames(void) throw( Ru
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.TextFieldTypes");
+    pArray[0] = C2U("com.sun.star.text.TextFields");
     return aRet;
 }
 /*-- 21.12.98 10:35:15---------------------------------------------------
