@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:52:37 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:20:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,10 +78,6 @@
 #endif
 #ifndef _SVTOOLS_STRINGTRANSFER_HXX_
 #include <svtools/stringtransfer.hxx>
-#endif
-
-#ifndef _SVX_FMPROP_HXX
-#include "fmprop.hxx"
 #endif
 
 #ifndef _SVX_FMPROP_HRC
