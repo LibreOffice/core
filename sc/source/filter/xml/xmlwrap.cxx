@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-20 08:07:16 $
+ *  last change: $Author: sab $ $Date: 2001-04-20 10:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,7 +466,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
         { MAP_LEN( "ProgressRange" ), 0, SEQTYPE(::getCppuType((sal_Int32*)0)), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
         { MAP_LEN( "ProgressMax" ), 0, SEQTYPE(::getCppuType((sal_Int32*)0)), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
         { MAP_LEN( "ProgressCurrent" ), 0, SEQTYPE(::getCppuType((sal_Int32*)0)), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-        { MAP_LEN( "WrittenNumberFormats" ), 0, SEQTYPE(::getCppuType((uno::Sequence<sal_Int32>*)0)), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { MAP_LEN( "WrittenNumberStyles" ), 0, SEQTYPE(::getCppuType((uno::Sequence<sal_Int32>*)0)), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
         { NULL, 0, 0, NULL, 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
