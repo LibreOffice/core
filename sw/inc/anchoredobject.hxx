@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobject.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:50:27 $
+ *  last change: $Author: rt $ $Date: 2005-04-01 16:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,6 +217,14 @@ class SwAnchoredObject
         void _CheckTopOfLine( const SwFmtAnchor& _rAnch,
                               const SwTxtFrm& _rAnchorCharFrm );
 
+        // --> OD 2005-03-30 #120729# - needed for the hotfix
+        // method <lcl_HideObj(..)> sets needed data structure values for the
+        // object positioning
+        friend bool lcl_HideObj( const SwTxtFrm& _rFrm,
+                                 const RndStdIds _eAnchorType,
+                                 const xub_StrLen _nObjAnchorPos,
+                                 SwAnchoredObject* _pAnchoredObj );
+        // <--
     protected:
         SwAnchoredObject();
 
