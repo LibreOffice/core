@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listenermultiplexer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-28 09:44:09 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:05:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _TOOLKIT_HELPER_LISTENERMULTIPLEXER_HXX_
 #define _TOOLKIT_HELPER_LISTENERMULTIPLEXER_HXX_
 
+#ifndef TOOLKIT_DLLAPI_H
+#include <toolkit/dllapi.h>
+#endif
 
 #ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
 #include <com/sun/star/lang/XEventListener.hpp>
@@ -136,7 +139,7 @@
 //  class ListenerMultiplexerBase
 //  ----------------------------------------------------
 
-class ListenerMultiplexerBase : public MutexHelper,
+class TOOLKIT_DLLPUBLIC ListenerMultiplexerBase : public MutexHelper,
                                 public ::cppu::OInterfaceContainerHelper,
                                 public ::com::sun::star::uno::XInterface
 {
@@ -240,7 +243,7 @@ DECL_LISTENERMULTIPLEXER_END
 //  ----------------------------------------------------
 //  class TextListenerMultiplexer
 //  ----------------------------------------------------
-DECL_LISTENERMULTIPLEXER_START( TextListenerMultiplexer, ::com::sun::star::awt::XTextListener )
+DECL_LISTENERMULTIPLEXER_START_DLLPUB( TextListenerMultiplexer, ::com::sun::star::awt::XTextListener )
     void SAL_CALL textChanged( const ::com::sun::star::awt::TextEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
 DECL_LISTENERMULTIPLEXER_END
 
@@ -254,7 +257,7 @@ DECL_LISTENERMULTIPLEXER_END
 //  ----------------------------------------------------
 //  class ItemListenerMultiplexer
 //  ----------------------------------------------------
-DECL_LISTENERMULTIPLEXER_START( ItemListenerMultiplexer, ::com::sun::star::awt::XItemListener )
+DECL_LISTENERMULTIPLEXER_START_DLLPUB( ItemListenerMultiplexer, ::com::sun::star::awt::XItemListener )
     void SAL_CALL itemStateChanged( const ::com::sun::star::awt::ItemEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
 DECL_LISTENERMULTIPLEXER_END
 
@@ -270,7 +273,7 @@ DECL_LISTENERMULTIPLEXER_END
 //  ----------------------------------------------------
 //  class SpinListenerMultiplexer
 //  ----------------------------------------------------
-DECL_LISTENERMULTIPLEXER_START( SpinListenerMultiplexer, ::com::sun::star::awt::XSpinListener )
+DECL_LISTENERMULTIPLEXER_START_DLLPUB( SpinListenerMultiplexer, ::com::sun::star::awt::XSpinListener )
     void SAL_CALL up( const ::com::sun::star::awt::SpinEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL down( const ::com::sun::star::awt::SpinEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL first( const ::com::sun::star::awt::SpinEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
