@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 20:32:38 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:09:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,14 +218,14 @@ Resource RID_SVXERRCTX
         Text [ danish ] = "$(ERR) under indlæsning af en grafik." ;
         Text [ portuguese ] = "$(ERR) ao carregar imagem." ;
         Text [ portuguese_brazilian ] = "$(ERR) beim Laden einer Grafik." ;
-        Text[ chinese_simplified ] = "$(ERR) ·¢ÉúÔÚ×°ÔØÒ»¸öÍ¼ĞÎÊ±¡£";
+        Text[ chinese_simplified ] = "$(ERR) ·¢ÉúÔÚ×°ÈëÒ»¸öÍ¼ĞÎÊ±¡£";
         Text[ russian ] = "$(ERR) ïğè çàãğóçêå ãğàôèêè.";
         Text[ polish ] = "$(ERR) przy ³adowaniu grafiki.";
         Text[ japanese ] = "$(ERR) ¸Ş×Ì¨¯¸‚ğÛ°ÄŞ’†‚É”­¶B";
-        Text[ chinese_traditional ] = "$(ERR)µo¥Í¦b¸Ë¸ü¤@­Ó¹Ï¤ù®É¡C";
+        Text[ chinese_traditional ] = "$(ERR)µo¥Í¦b¸ü¤J¤@­Ó¹Ï¤ù®É¡C";
         Text[ arabic ] = "$(ERR) ÃËäÇÁ ÊÍãíá ÇáÑÓã.";
         Text[ dutch ] = "$(ERR) bij het laden van een afbeelding";
-        Text[ chinese_simplified ] = "$(ERR) ·¢ÉúÔÚ×°ÔØÒ»¸öÍ¼ĞÎÊ±¡£";
+        Text[ chinese_simplified ] = "$(ERR) ·¢ÉúÔÚ×°ÈëÒ»¸öÍ¼ĞÎÊ±¡£";
         Text[ greek ] = "$(ERR) êáôÜ ôç öüñôùóç åíüò ãñáöéêïı.";
         Text[ korean ] = "±×·¡ÇÈ ·Îµå½Ã $(ERR)";
         Text[ turkish ] = "Grafik yükleme sırasında $(ERR).";
@@ -447,8 +447,8 @@ Resource RID_SVXERRCODE
         TEXT[ portuguese_brazilian ] = "An embedded graphic could not be read";
         TEXT[ japanese ] = "Øİ¸‚³‚ê‚Ä‚¢‚È‚¢}‚Í“Ç‚İ‚İ‚Å‚«‚Ü‚¹‚ñ";
         TEXT[ korean ] = "¿¬°áµÇÁö ¾ÊÀº ±×·¡ÇÈÀº ·ÎµåÇÏÁö ¸øÇß½À´Ï´Ù.";
-        TEXT[ chinese_simplified ] = "ÎŞ·¨×°ÔØÒ»¸öÉĞÎ´Á´½ÓµÄÍ¼ĞÎ";
-        TEXT[ chinese_traditional ] = "µLªk¸Ë¸ü¤@­Ó©|¥¼³sµ²ªº¹Ï§Î";
+        TEXT[ chinese_simplified ] = "ÎŞ·¨×°ÈëÒ»¸öÉĞÎ´Á´½ÓµÄÍ¼ĞÎ";
+        TEXT[ chinese_traditional ] = "µLªk¸ü¤J¤@­Ó©|¥¼³sµ²ªº¹Ï§Î";
         TEXT[ arabic ] = "ÊÚĞÑ ÊÍãíá ÅÍÏì ÇáÕæÑ ÇáÛíÑ ãÑÊÈØÉ";
         TEXT[ turkish ] = "Bağlantı oluşturulmamış bir grafik yüklenemedi";
     };
@@ -494,8 +494,8 @@ Resource RID_SVXERRCODE
         Text[ portuguese_brazilian ] = "The form layer wasn't loaded as neccessary io-services (stardiv.uno.io.*) could not be instantiated";
         Text[ japanese ] = "IO»°ËŞ½(stardiv.uno.io.*)‚ª²İ½Ä°Ù‚Å‚«‚È‚©‚Á‚½‚½‚ßAÌ«°Ñ‘w‚Í“Ç‚İ‚Ü‚ê‚Ü‚¹‚ñ‚Å‚µ‚½B";
         Text[ korean ] = "ÇÊ¿äÇÑ IO¼­ºñ½º(stardiv.uno.io.*)¸¦ ¿¹½ÃÇÏÁö ¸øÇß±â ¶§¹®¿¡ Æû °èÃşÀÌ ·ÎµåµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
-        Text[ chinese_simplified ] = "ÒòÎªÎŞ·¨°²×°ĞèÒªµÄ IO ·şÎñ(stardiv.uno.io.*)£¬ËùÒÔ²»ÄÜ×°ÔØ±íµ¥·Ö²ãĞÅÏ¢";
-        Text[ chinese_traditional ] = "¦]¬°¨S¦³¦w¸Ë¥²­nªº IO ªA°È(stardiv.uno.io.*)¦ÓµLªk¸Ë¸üªí³æ¼h¦¸¡C";
+        Text[ chinese_simplified ] = "ÒòÎªÎŞ·¨°²×°ĞèÒªµÄ IO ·şÎñ(stardiv.uno.io.*)£¬ËùÒÔ²»ÄÜ×°Èë±íµ¥·Ö²ãĞÅÏ¢";
+        Text[ chinese_traditional ] = "¦]¬°¨S¦³¦w¸Ë¥²­nªº IO ªA°È(stardiv.uno.io.*)¦ÓµLªk¸ü¤Jªí³æ¼h¦¸¡C";
         Text[ arabic ] = "áã íÊã ÊÍãíá ØÈŞÉ ÇáÇÓÊãÇÑÉ¡ ÅĞ ÊÚĞÑ ÅäÔÇÁ ÎÏãÇÊ IO ÇááÇÒãÉ (stardiv.uno.io.*)";
         Text[ turkish ] = "Gerekli IO hizmetleri (stardiv.uno.io.*) başlatılamadığı için, form düzeyi yüklenemedi.";
     };
@@ -540,8 +540,8 @@ Resource RID_SVXERRCODE
         Text[ portuguese_brazilian ] = "While reading the form controls an error occured. The form layer has not been loaded";
         Text[ japanese ] = "Ì«°Ñ‘w‚Ì“Ç‚İæ‚è’†‚ÉƒGƒ‰[”­¶B‚±‚ÌÌ«°Ñ‘w‚Í“Ç‚İ‚Ü‚ê‚Ä‚¢‚Ü‚¹‚ñB";
         Text[ korean ] = "¾ç½Ä ÄÁÆ®·ÑÀ» ÀĞÀ» ¶§ ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù. ¾ç½Ä °èÃşÀÌ ·ÎµåµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
-        Text[ chinese_simplified ] = "ÔÚ¶ÁÈ¡±íµ¥¿ØÖÆÇøÊ±·¢ÉúÒ»¸ö´íÎó¡£ÎŞ·¨×°ÔØ±íµ¥·Ö²ãĞÅÏ¢¡£";
-        Text[ chinese_traditional ] = "¦bÅª¨úªí³æ±±¨î¶µ®Éµo¥Í¿ù»~¡CµLªk¸Ë¸üªí³æ¼h¦¸¡C";
+        Text[ chinese_simplified ] = "ÔÚ¶ÁÈ¡±íµ¥¿ØÖÆÇøÊ±·¢ÉúÒ»¸ö´íÎó¡£ÎŞ·¨×°Èë±íµ¥·Ö²ãĞÅÏ¢¡£";
+        Text[ chinese_traditional ] = "¦bÅª¨úªí³æ±±¨î¶µ®Éµo¥Í¿ù»~¡CµLªk¸ü¤Jªí³æ¼h¦¸¡C";
         Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ŞÑÇÁÉ ÚäÇÕÑ ÊÍßã ÇáÇÓÊãÇÑÉ. áã íÊã ÊÍãíá ØÈŞÉ ÇáÇÓÊãÇÑÉ";
         Text[ turkish ] = "Form komut öğeleri okunurken bir hata oluştu. Form düzeyi yüklenemedi.";
     };
@@ -586,8 +586,8 @@ Resource RID_SVXERRCODE
         Text[ portuguese_brazilian ] = "There occurred an error during reading a bullet. Not all Bullets coud be read correctly";
         Text[ japanese ] = "‰Óğ‘‚«‚ğ“Ç‚İ‚ŞÛ‚É´×°‚ª”­¶‚µ‚Ü‚µ‚½B‚·‚×‚Ä‚Ì‰Óğ‘‚«‚ğ“Ç‚İ‚ß‚Ü‚¹‚ñ‚Å‚µ‚½B";
         Text[ korean ] = "±Û¸Ó¸®Ç¥¸¦ ÀĞÀ» ¶§ ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù. ±Û¸Ó¸®Ç¥¸¦ ¸ğµÎ ·ÎµåÇÏÁö´Â ¸øÇß½À´Ï´Ù.";
-        Text[ chinese_simplified ] = "ÔÚ¶ÁÈ¡Ò»¸öÍ¼±ê·ûºÅÊ±·¢Éú´íÎó¡£ÎŞ·¨×°ÔØÈ«²¿Í¼±ê·ûºÅ¡£";
-        Text[ chinese_traditional ] = "¦bÅª¨ú¤@­Ó¶µ¥Ø²Å¸¹®Éµo¥Í¿ù»~¡CµLªk¸Ë¸ü©Ò¦³ªº¶µ¥Ø²Å¸¹¡C";
+        Text[ chinese_simplified ] = "ÔÚ¶ÁÈ¡Ò»¸öÍ¼±ê·ûºÅÊ±·¢Éú´íÎó¡£ÎŞ·¨×°ÈëÈ«²¿Í¼±ê·ûºÅ¡£";
+        Text[ chinese_traditional ] = "¦bÅª¨ú¤@­Ó¶µ¥Ø²Å¸¹®Éµo¥Í¿ù»~¡CµLªk¸ü¤J©Ò¦³ªº¶µ¥Ø²Å¸¹¡C";
         Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ŞÑÇÁÉ ÅÍÏì ÚáÇãÇÊ ÇáÊÚÏÇÏ. ÊÚĞÑ ÊÍãíá ßá ÚáÇãÇÊ ÇáÊÚÏÇÏ.";
         Text[ turkish ] = "Madde işaretleri okunurken hata oluştu. Bu nedenle tüm madde işaretleri yüklenemedi.";
     };
