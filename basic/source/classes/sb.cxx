@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 11:50:25 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:28:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,10 @@
 #include "filefmt.hxx"
 #include "sb.hrc"
 #include <basrid.hxx>
+
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
 
 #pragma SW_SEGMENT_CLASS( SBASIC, SBASIC_CODE )
 
@@ -1118,6 +1122,8 @@ BOOL runsInSetup( void )
 
 void StarBASIC::MakeErrorText( SbError nId, const String& aMsg )
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
     if( bStaticSuppressSfxResource )
     {
         GetSbData()->aErrMsg = String( RTL_CONSTASCII_USTRINGPARAM("No resource: Error message not available") );
@@ -1157,6 +1163,8 @@ void StarBASIC::MakeErrorText( SbError nId, const String& aMsg )
 BOOL StarBASIC::CError
     ( SbError code, const String& rMsg, USHORT l, USHORT c1, USHORT c2 )
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
     // Compiler-Fehler waehrend der Laufzeit -> Programm anhalten
     if( IsRunning() )
     {
@@ -1197,6 +1205,8 @@ BOOL StarBASIC::RTError
 
 BOOL StarBASIC::RTError( SbError code, const String& rMsg, USHORT l, USHORT c1, USHORT c2 )
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
     SbError c = code;
     if( (c & ERRCODE_CLASS_MASK) == ERRCODE_CLASS_COMPILER )
         c = 0;
