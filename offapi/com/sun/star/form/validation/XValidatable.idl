@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XValidatable.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:40:08 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:44:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ interface XValidatable : com::sun::star::uno::XInterface
             the new validator which is to be used by the component. May be <NULL/>,
             in this case only the current validator is revoked.
 
-        @throws com::sun::star::util::VetoException
+        @throws <type scope="com::sun::star::util">VetoException</type>
             if changing the validator is not allowed in the current component state
      */
     void    setValidator( [in] XValidator Validator )
