@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-09 18:09:26 $
+ *  last change: $Author: mt $ $Date: 2001-03-21 12:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1519,10 +1519,9 @@ sal_Bool EditEngine::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder )
 
     sal_Bool bTextPos = sal_False;
 
-    Point aDocPos = GetDocPos( rPaperPos );
-
-    if ( ( aDocPos.Y() > 0  ) && ( aDocPos.Y() < (long)GetTextHeight() ) )
+    if ( ( rPaperPos.Y() > 0  ) && ( rPaperPos.Y() < (long)GetTextHeight() ) )
     {
+        Point aDocPos = GetDocPos( rPaperPos );
         EditPaM aPaM = pImpEditEngine->GetPaM( aDocPos, sal_False );
         if ( aPaM.GetNode() )
         {
