@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngs3904.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 18:10:13 $
+#   last change: $Author: rt $ $Date: 2004-03-02 11:34:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,12 +89,6 @@ CXX*=g++-3.2
 # name of C Compiler
 CC*=gcc-3.2
 
-# flags for C and C++ Compiler
-# do not use standard header search paths
-# if installed elsewhere
-.IF "$(BUILD_SOSL)"!=""
-CFLAGS= 
-.ENDIF
 CFLAGS+=-fsigned-char -fmessage-length=0 -c $(INCLUDE)
 
 # flags for the C++ Compiler
