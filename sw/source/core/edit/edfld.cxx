@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edfld.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:22:20 $
+ *  last change: $Author: rt $ $Date: 2004-09-24 16:10:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,6 +564,21 @@ SwNewDBMgr* SwEditShell::GetNewDBMgr() const
 SwFieldType* SwEditShell::InsertFldType(const SwFieldType& rFldType)
 {
     return GetDoc()->InsertFldType(rFldType);
+}
+
+void SwEditShell::LockExpFlds()
+{
+    GetDoc()->LockExpFlds();
+}
+
+void SwEditShell::UnlockExpFlds()
+{
+    GetDoc()->UnlockExpFlds();
+}
+
+BOOL SwEditShell::IsExpFldsLocked() const
+{
+    return GetDoc()->IsExpFldsLocked();
 }
 
 void SwEditShell::SetFldUpdateFlags( USHORT eFlags )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:02:40 $
+ *  last change: $Author: rt $ $Date: 2004-09-24 16:10:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,6 +409,10 @@ public:
     void UpdateExpFlds(BOOL bCloseDB = FALSE);// nur alle ExpressionFelder updaten
     void SetFixFields( BOOL bOnlyTimeDate = FALSE,
                         const DateTime* pNewDateTime = 0 );
+    void LockExpFlds();
+    void UnlockExpFlds();
+    BOOL IsExpFldsLocked() const;
+
     USHORT GetFldUpdateFlags(BOOL bDocSettings = FALSE) const;
     void SetFldUpdateFlags( USHORT eFlags );
 
