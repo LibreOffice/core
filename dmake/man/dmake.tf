@@ -19,7 +19,7 @@
 .IP "\\$1" \\n[dmake-indent]u
 .it 1 PD
 ..
-.TH DMAKE 1  "UW" "Version 4.10"
+.TH DMAKE 1  "UW" "Version 4.3"
 .SH NAME
 \fBdmake\fR \- maintain program groups, or interdependent files
 .SH SYNOPSIS
