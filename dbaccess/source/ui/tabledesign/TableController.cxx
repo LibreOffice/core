@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-10 08:48:02 $
+ *  last change: $Author: fs $ $Date: 2001-05-10 12:23:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,24 +270,6 @@ void OTableController::stopTableListening()
 }
 
 // -----------------------------------------------------------------------------
-void OTableController::startConnectionListening()
-{
-    // we have to remove ourself before dispoing the connection
-    Reference< XComponent >  xComponent(m_xConnection, UNO_QUERY);
-    if (xComponent.is())
-        xComponent->addEventListener(static_cast<XPropertyChangeListener*>(this));
-}
-
-// -----------------------------------------------------------------------------
-void OTableController::stopConnectionListening()
-{
-    // we have to remove ourself before dispoing the connection
-    Reference< XComponent >  xComponent(m_xConnection, UNO_QUERY);
-    if (xComponent.is())
-        xComponent->removeEventListener(static_cast<XPropertyChangeListener*>(this));
-}
-
-// -----------------------------------------------------------------------------
 void OTableController::disposing()
 {
     OGenericUnoController::disposing();
@@ -295,7 +277,7 @@ void OTableController::disposing()
     delete m_pView;
     m_pView     = NULL;
 
-    stopConnectionListening();
+    stopConnectionListening(m_xConnection);
     if(m_bOwnConnection)
         ::comphelper::disposeComponent(m_xConnection);
     m_xConnection = NULL;
@@ -675,7 +657,7 @@ void SAL_CALL OTableController::initialize( const Sequence< Any >& aArguments ) 
                 aValue.Value >>= m_xConnection;
                 OSL_ENSURE(m_xConnection.is(),"We need at least a connection!");
                 // get notified if connection is in disposing
-                startConnectionListening();
+                startConnectionListening(m_xConnection);
             }
             else if(aValue.Name == PROPERTY_DATASOURCENAME)
             {
@@ -874,14 +856,13 @@ void OTableController::Load(const Reference< XObjectInputStream>& _rxIn)
 // -----------------------------------------------------------------------------
 void OTableController::createNewConnection(sal_Bool _bUI)
 {
-    stopConnectionListening();
+    stopConnectionListening(m_xConnection);
     m_xConnection       = NULL;
     m_bOwnConnection    = sal_False;
 
     if (!_bUI || (RET_YES == QueryBox(getView(),ModuleRes(TABLE_QUERY_CONNECTION_LOST)).Execute()))
     {
-        m_xConnection = connect(m_sDataSourceName);
-        startConnectionListening();
+        m_xConnection = connect(m_sDataSourceName, sal_True);
         m_bOwnConnection = m_xConnection.is();
     }
     ToolBox* pToolBox = getView()->getToolBox();
