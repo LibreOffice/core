@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salplug.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 14:53:17 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 12:58:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,12 +79,28 @@
 
 #include <cstdio>
 #include <unistd.h>
+#include <dlfcn.h>
 
 using namespace rtl;
 
 typedef SalInstance*(*salFactoryProc)( oslModule pModule);
 
 static oslModule pCloseModule = NULL;
+
+#define DESKTOP_NONE 0
+#define DESKTOP_UNKNOWN 1
+#define DESKTOP_GNOME 2
+#define DESKTOP_KDE 3
+#define DESKTOP_CDE 4
+
+static const char * desktop_strings[5] = { "none", "unknown", "GNOME", "KDE", "CDE" };
+
+// NETBSD has no RTLD_GLOBAL
+#ifndef RTLD_GLOBAL
+#define DLOPEN_MODE (RTLD_LAZY)
+#else
+#define DLOPEN_MODE (RTLD_GLOBAL | RTLD_LAZY)
+#endif
 
 static SalInstance* tryInstance( const OUString& rModuleBase )
 {
@@ -132,9 +148,9 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
     return pInst;
 }
 
-static const char* autodetect_gnome( Display* pDisplay )
+static bool is_gnome_desktop( Display* pDisplay )
 {
-    const char* pRet = NULL;
+    bool ret = false;
 
     // warning: this check is coincidental, GNOME does not
     // explicitly advertise itself
@@ -150,12 +166,13 @@ static const char* autodetect_gnome( Display* pDisplay )
                 if( pProperties[ i ] == nAtom1 ||
                     pProperties[ i ] == nAtom2 )
                 {
-                    pRet = "gtk";
+                    ret = true;
                 }
             XFree( pProperties );
         }
     }
-    return pRet;
+
+    return ret;
 }
 
 static bool bWasXError = false;
@@ -174,6 +191,8 @@ extern "C"
         bWasXError = true;
         return 0;
     }
+
+    typedef int(* XErrorHandler)(Display*,XErrorEvent*);
 }
 
 static OUString getNetWMName( Display* pDisplay )
@@ -264,60 +283,102 @@ static OUString getNetWMName( Display* pDisplay )
     return aRet;
 }
 
-static const char* autodetect_kde( Display* pDisplay )
+static bool is_kde_desktop( Display* pDisplay )
 {
-    const char* pRet = NULL;
     // check for kwin
     rtl::OUString aWM = getNetWMName( pDisplay );
     if( aWM.equalsIgnoreAsciiCaseAscii( "KWin" ) )
-        pRet = "kde";
+        return true;
+
+    return false;
+}
+
+static bool is_cde_desktop( Display* pDisplay )
+{
+    void* pLibrary = NULL;
+
+    Atom nDtAtom = XInternAtom( pDisplay, "_DT_WM_READY", True );
+    if( nDtAtom && ( pLibrary = dlopen( "/usr/dt/lib/libDtSvc.so", DLOPEN_MODE ) ) )
+    {
+        dlclose( pLibrary );
+        return true;
+    }
+
+    return false;
+}
+
+
+static const char * get_desktop_environment()
+{
+    static const char *pRet = NULL;
+
+    if ( NULL == pRet )
+    {
+        // get display to connect to
+        const char* pDisplayStr = getenv( "DISPLAY" );
+        int nParams = osl_getCommandArgCount();
+        OUString aParam;
+        OString aBParm;
+        for( int i = 0; i < nParams-1; i++ )
+        {
+            osl_getCommandArg( i, &aParam.pData );
+            if( aParam.equalsAscii( "-display" ) || aParam.equalsAscii( "--display" ) )
+            {
+                osl_getCommandArg( i+1, &aParam.pData );
+                aBParm = OUStringToOString( aParam, osl_getThreadTextEncoding() );
+                pDisplayStr = aBParm.getStr();
+                break;
+            }
+        }
+
+        // no server at all
+        if( ! pDisplayStr || !*pDisplayStr )
+            pRet = desktop_strings[DESKTOP_NONE];
+        else
+        {
+            Display* pDisplay = XOpenDisplay( pDisplayStr );
+            if( pDisplay )
+            {
+                XErrorHandler pOldHdl = XSetErrorHandler( autodect_error_handler );
+
+                if ( is_gnome_desktop( pDisplay ) )
+                    pRet = desktop_strings[DESKTOP_GNOME];
+                else if ( is_kde_desktop( pDisplay ) )
+                    pRet = desktop_strings[DESKTOP_KDE];
+                else if ( is_cde_desktop( pDisplay ) )
+                    pRet = desktop_strings[DESKTOP_CDE];
+                else
+                    pRet = desktop_strings[DESKTOP_UNKNOWN];
+
+                // set the default handler again
+                XSetErrorHandler( pOldHdl );
+
+                XCloseDisplay( pDisplay );
+            }
+        }
+    }
 
     return pRet;
 }
 
+
 static const char* autodetect_plugin()
 {
-    // get display to connect to
-    static const char* pDisplayStr = getenv( "DISPLAY" );
-    int nParams = osl_getCommandArgCount();
-    OUString aParam;
-    OString aBParm;
-    for( int i = 0; i < nParams-1; i++ )
-    {
-        osl_getCommandArg( i, &aParam.pData );
-        if( aParam.equalsAscii( "-display" ) || aParam.equalsAscii( "--display" ) )
-        {
-            osl_getCommandArg( i+1, &aParam.pData );
-            aBParm = OUStringToOString( aParam, osl_getThreadTextEncoding() );
-            pDisplayStr = aBParm.getStr();
-            break;
-        }
-    }
+    const char * desktop = get_desktop_environment();
+    const char * pRet = NULL;
 
-    const char* pRet = NULL;
     // no server at all: dummy plugin
-    if( ! pDisplayStr || !*pDisplayStr )
+    if ( desktop == desktop_strings[DESKTOP_NONE] )
         pRet = "dummy";
-    else
-    {
-        Display* pDisplay = XOpenDisplay( pDisplayStr );
-        if( pDisplay )
-        {
-            int(*pOldHdl)(Display*,XErrorEvent*) = XSetErrorHandler( autodect_error_handler );
 #ifdef ENABLE_GTK_AUTODETECT
-            pRet = autodetect_gnome( pDisplay );
+    else if ( desktop == desktop_strings[DESKTOP_GNOME] )
+        pRet = "gtk";
 #endif
-            if( ! pRet )
-                pRet = autodetect_kde( pDisplay );
-            if( ! pRet )
-                pRet = "gen";
+    else if( desktop == desktop_strings[DESKTOP_KDE] )
+        pRet = "kde";
+    else
+        pRet = "gen";
 
-            // set the default handler again
-            XSetErrorHandler( pOldHdl );
-
-            XCloseDisplay( pDisplay );
-        }
-    }
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "plugin autodetection: %s\n", pRet );
 #endif
@@ -394,4 +455,10 @@ void SalAbort( const XubString& rErrorText )
     else
         fprintf( stderr, ByteString( rErrorText, gsl_getSystemTextEncoding() ).GetBuffer() );
     abort();
+}
+
+const OUString& SalGetDesktopEnvironment()
+{
+    static OUString aRet = OStringToOUString(OString(get_desktop_environment()), RTL_TEXTENCODING_ASCII_US);
+    return aRet;
 }
