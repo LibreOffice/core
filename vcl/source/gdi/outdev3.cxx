@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.144 $
+ *  $Revision: 1.145 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:28:50 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4705,7 +4705,7 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout, BOOL bTextLines )
     {
         if( ImplHasMirroredGraphics() )
         {
-            long w = mpGraphics->GetGraphicsWidth();
+            long w = meOutDevType == OUTDEV_VIRDEV ? mnOutWidth : mpGraphics->GetGraphicsWidth();
             long x = rSalLayout.DrawBase().X();
                rSalLayout.DrawBase().X() = w - 1 - x;
             if( !IsRTLEnabled() )
@@ -5052,6 +5052,23 @@ void OutputDevice::SetLayoutMode( ULONG nTextLayoutMode )
         mpMetaFile->AddAction( new MetaLayoutModeAction( nTextLayoutMode ) );
 
     mnTextLayoutMode = nTextLayoutMode;
+}
+
+// -----------------------------------------------------------------------
+
+void OutputDevice::SetDigitLanguage( LanguageType eTextLanguage )
+{
+    DBG_TRACE( "OutputDevice::SetTextLanguage()" );
+
+#if 0   // TODO: evaluate if we need to record it into a meta file
+    if( mpMetaFile )
+        mpMetaFile->AddAction( new MetaTextLanguageAction( eTextLanguage ) );
+#endif
+
+    if( eTextLanguage == LANGUAGE_SYSTEM )
+        eTextLanguage = Application::GetSettings().GetUILanguage();
+
+    meTextLanguage = eTextLanguage;
 }
 
 // -----------------------------------------------------------------------
@@ -5750,8 +5767,6 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         nLayoutFlags |= SAL_LAYOUT_KERNING_ASIAN;
     if( maFont.IsVertical() )
         nLayoutFlags |= SAL_LAYOUT_VERTICAL;
-    if( mnTextLayoutMode & TEXT_LAYOUT_SUBSTITUTE_DIGITS )
-        nLayoutFlags |= SAL_LAYOUT_SUBSTITUTE_DIGITS;
 
     if( mnTextLayoutMode & TEXT_LAYOUT_ENABLE_LIGATURES )
         nLayoutFlags |= SAL_LAYOUT_ENABLE_LIGATURES;
@@ -5770,6 +5785,25 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
                 break;
         if( pStr >= pEnd )
             nLayoutFlags |= SAL_LAYOUT_COMPLEX_DISABLED;
+    }
+
+    if( meTextLanguage ) //TODO: (mnTextLayoutMode & TEXT_LAYOUT_SUBSTITUTE_DIGITS)
+    {
+        // disable character localization when no digits used
+        const xub_Unicode* pBase = aStr.GetBuffer();
+        const xub_Unicode* pStr = pBase + nMinIndex;
+        const xub_Unicode* pEnd = pBase + nEndIndex;
+        for( ; pStr < pEnd; ++pStr )
+        {
+            // TODO: are there non-digit localizations?
+            if( (*pStr >= '0') && (*pStr <= '9') )
+            {
+                // translate characters to local preference
+                sal_Unicode cChar = GetLocalizedChar( *pStr, meTextLanguage );
+                if( cChar != *pStr )
+                    aStr.SetChar( (pStr - pBase), cChar );
+            }
+        }
     }
 
     // right align for RTL text, DRAWPOS_REVERSED, RTL window style
@@ -6169,8 +6203,6 @@ void OutputDevice::DrawText( const Rectangle& rRect,
             if ( eAlign == ALIGN_BOTTOM )
                 aPos.Y() += nTextHeight;
             else if ( eAlign == ALIGN_BASELINE )
-
-
                 aPos.Y() += GetFontMetric().GetAscent();
 
             // Alle Zeilen ausgeben, bis auf die letzte
