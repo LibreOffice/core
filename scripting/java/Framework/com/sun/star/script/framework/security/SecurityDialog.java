@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SecurityDialog.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-02-11 18:04:37 $
+ *  last change: $Author: dfoster $ $Date: 2003-02-12 16:20:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ XInitialization {
     {
         System.out.println("SecurityDialog init");
         // figure out if we need a checkbox
-        if ( args.length != 1)
+        if ( args.length == 1)
         {
             //check args is a path
             // set checkBoxPath with the arg
@@ -181,7 +181,7 @@ XInitialization {
         }
         else
         {
-            System.out.println("no checkbox");
+            System.out.println("no checkbox: # of args="+args.length);
             cbIncrW = 0;
             cbIncrH = 0;
             checkBoxDialog=false;
@@ -530,7 +530,6 @@ XInitialization {
             Object objectCheckBox = xControlCont.getControl( _checkBoxName );
             _xCheckBox = ( XCheckBox )UnoRuntime.queryInterface(
                 XCheckBox.class, objectCheckBox );
-          System.out.println("** never get here?");
         }
 
         // XEventListener
