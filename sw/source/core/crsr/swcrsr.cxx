@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-09 15:31:59 $
+ *  last change: $Author: jp $ $Date: 2001-05-15 14:21:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1133,6 +1133,7 @@ FASTBOOL SwCursor::IsEndWord() const
     const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
     if( pTxtNd && pBreakIt->xBreak.is() )
     {
+#if 0
         sal_Int32 nPtPos = GetPoint()->nContent.GetIndex(),
                   nEndPos = pBreakIt->xBreak->getWordBoundary(
                             pTxtNd->GetTxt(), nPtPos,
@@ -1141,14 +1142,17 @@ FASTBOOL SwCursor::IsEndWord() const
                             FALSE ).endPos;
 
         bRet = nPtPos == nEndPos;
-
+#else
 /* JP 9.5.2001:
 isEndWord doesn't work corret!
 In situation "ab  " and pos 2 it return false. Used for AutoText expansion
+*/
+        sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
         bRet = pBreakIt->xBreak->isEndWord( pTxtNd->GetTxt(), nPtPos,
                 pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
                                 WordType::ANY_WORD );//ANYWORD_IGNOREWHITESPACES
-*/
+
+#endif
     }
     return bRet;
 }
