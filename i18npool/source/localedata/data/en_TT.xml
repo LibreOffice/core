@@ -15,6 +15,7 @@
 <LC_FORMAT ref="en_US" replaceTo="[$TT$-2C09]"/>
 <LC_COLLATION ref="en_US"/>
 <LC_SEARCH ref="en_US"/>
+<LC_INDEX ref="en_US"/>
 <LC_CALENDAR ref="en_US"/>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
