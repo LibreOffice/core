@@ -1,0 +1,14 @@
+dn: cn=schema
+objectclasses: ( ooConfigObject-oid NAME 'ooConfigObject' DESC 'ooConfigObject objclass' SUP 'top' MAY (uid $)
+
+dn: cn=schema
+attributetypes: (oo-org-mapping-attr-oid NAME 'oo-org-mapping-attr' DESC 'organizational mapping' SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE_VALUE )
+
+dn: cn=schema
+attributetypes: (oo-ldap-attr-mapping-attr-oid NAME 'oo-ldap-attr-mapping-attr' DESC 'ldap attribute mapping' SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE_VALUE )
+
+dn: cn=schema
+attributetypes: (oo-component-mapping-attr-oid NAME 'oo-component-mapping-attr' DESC 'oo compoent mapping information' SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE_VALUE )
+
+dn: cn=schema
+objectclasses: (oo-registry-meta-class-oid NAME 'oo-registry-meta-class' DESC 'meta configuration of oo registry' SUP 'top' MAY (oo-org-mapping-attr $ oo-ldap-attr-mapping-attr $ oo-component-mapping-attr $))
