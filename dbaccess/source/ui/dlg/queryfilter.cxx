@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-09 14:54:26 $
+ *  last change: $Author: oj $ $Date: 2002-12-04 08:44:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,6 +255,9 @@ DlgFilterCrit::DlgFilterCrit(Window * pParent,
     aET_WHEREVALUE1.SetLoseFocusHdl( LINK( this, DlgFilterCrit, PredicateLoseFocus ) );
     aET_WHEREVALUE2.SetLoseFocusHdl( LINK( this, DlgFilterCrit, PredicateLoseFocus ) );
     aET_WHEREVALUE3.SetLoseFocusHdl( LINK( this, DlgFilterCrit, PredicateLoseFocus ) );
+
+    if ( aET_WHEREVALUE1.IsEnabled() )
+        aET_WHEREVALUE1.GrabFocus();
 
     FreeResource();
 }
