@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:49:50 $
+ *  last change: $Author: gh $ $Date: 2004-07-09 07:38:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1236,6 +1236,36 @@ Rectangle ToolBox::GetItemPosRect( USHORT nPos ) const
         return mpData->m_aItems[nPos].maRect;
     else
         return Rectangle();
+}
+
+// -----------------------------------------------------------------------
+Rectangle ToolBox::GetItemDropDownRect( USHORT nItemId ) const
+{
+    if ( mbCalc || mbFormat )
+        ((ToolBox*)this)->ImplFormat();
+
+    USHORT nPos = GetItemPos( nItemId );
+    return GetItemPosDropDownRect( nPos );
+}
+
+// -----------------------------------------------------------------------
+
+Rectangle ToolBox::GetItemPosDropDownRect( USHORT nPos ) const
+{
+    if ( mbCalc || mbFormat )
+        ((ToolBox*)this)->ImplFormat();
+
+    if ( nPos < mpData->m_aItems.size() )
+        return mpData->m_aItems[nPos].GetDropDownRect( mbHorz );
+    else
+        return Rectangle();
+}
+
+// -----------------------------------------------------------------------
+
+Rectangle ToolBox::GetMenubuttonRect() const
+{
+    return mpData->maMenubuttonItem.maRect;
 }
 
 // -----------------------------------------------------------------------
