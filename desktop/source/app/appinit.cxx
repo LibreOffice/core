@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-19 17:09:43 $
+ *  last change: $Author: mba $ $Date: 2002-03-20 12:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,9 +306,6 @@ void createTemporaryDirectory()
     {
         // remove old temporary directory
         ::utl::UCBContentHelper::Kill( aOldTempURL );
-
-        // remove old temporary base directory
-        ::utl::UCBContentHelper::Kill( aTempBaseURL );
     }
 
     // set new temporary base directory
