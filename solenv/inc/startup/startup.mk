@@ -17,7 +17,7 @@ __.silent !:= $(.SILENT)	# Preserve user's .SILENT flag
 .SILENT   !:= yes
 .NOTABS	  !:= yes
 .ERROR :
-    @echo ---* $(MKFILENAME) *---
+    @echo '---* $(MKFILENAME) *---'
 
 # Define the directory separator string.
 / *=  $(DIRSEPSTR)
