@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: gh $ $Date: 2001-10-15 08:19:59 $
+ *  last change: $Author: gh $ $Date: 2001-10-16 14:20:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,7 @@ ULONG TTUniqueId::GetULONG() const
     return nUId;
 };
 
-BOOL TTUniqueId::IsStrId() const
+BOOL TTUniqueId::IsStrId( UIdType aUIdType )
 {
     switch ( aUIdType )
     {
@@ -232,6 +232,11 @@ BOOL TTUniqueId::IsStrId() const
             DBG_ERROR( "UNKNOWN UIdType")
             return FALSE;
     }
+}
+
+BOOL TTUniqueId::IsStrId() const
+{
+    return IsStrId( aUIdType );
 }
 
 BasicApp aBasicApp;                     // Applikations-Instanz
