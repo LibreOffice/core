@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: os $ $Date: 2001-01-11 13:49:25 $
+#   last change: $Author: cl $ $Date: 2001-01-28 16:25:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,7 @@ PACKAGE=com$/sun$/star$/style
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    XDefaultsSupplier.idl\
     BreakType.idl\
     CaseMap.idl\
     CharacterProperties.idl\
