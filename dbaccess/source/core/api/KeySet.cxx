@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-18 13:59:43 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 06:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #ifndef _COM_SUN_STAR_SDBCxParameterS_HPP_
 #include <com/sun/star/sdbc/XParameters.hpp>
 #endif
+#include <com/sun/star/sdbc/XGeneratedResultSet.hpp>
 #ifndef _COM_SUN_STAR_SDBC_XCOLUMNLOCATE_HPP_
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
 #endif
@@ -104,9 +105,8 @@
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
 #endif
-#ifndef _LIST_
 #include <list>
-#endif
+#include <algorithm>
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
 #endif
@@ -549,10 +549,45 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
     }
 
     m_bInserted = xPrep->executeUpdate() > 0;
+    sal_Bool bAutoValuesFetched = sal_False;
+    if ( m_bInserted )
+    {
+        try
+        {
+            Reference< XGeneratedResultSet > xGRes(xPrep, UNO_QUERY);
+            if ( xGRes.is() )
+            {
+                Reference< XResultSet > xRes = xGRes->getGeneratedValues();
+                Reference< XRow > xRow(xRes,UNO_QUERY);
+                if ( xRow.is() && xRes->next() )
+                {
+                    Reference< XResultSetMetaDataSupplier > xMdSup(xRes,UNO_QUERY);
+                    Reference< XResultSetMetaData > xMd = xMdSup->getMetaData();
+                    sal_Int32 nColumnCount = xMd->getColumnCount();
+                    ::std::vector< ::rtl::OUString >::iterator aAutoIter = m_aAutoColumns.begin();
+                    ::std::vector< ::rtl::OUString >::iterator aAutoEnd = m_aAutoColumns.end();
+                    for (sal_Int32 i = 1;aAutoIter !=  aAutoEnd && i <= nColumnCount; ++aAutoIter,++i)
+                    {
+#ifdef _DEBUG
+                        ::rtl::OUString sColumnName( xMd->getColumnName(i) );
+#endif
+                        OColumnNamePos::iterator aFind = m_pKeyColumnNames->find(*aAutoIter);
+                        if(aFind != m_pKeyColumnNames->end())
+                            fetchValue(aFind->second,(*_rInsertRow)[aFind->second].getTypeKind(),xRow,(*_rInsertRow)[aFind->second]);
+                    }
+                    bAutoValuesFetched = sal_True;
+                }
+            }
+        }
+        catch(Exception&)
+        {
+            OSL_ENSURE(0,"Could not execute GeneratedKeys() stmt");
+        }
+    }
+
     ::comphelper::disposeComponent(xPrep);
 
-    //  OCacheSet::insertRow( _rInsertRow,_xTable);
-    if(m_bInserted)
+    if ( !bAutoValuesFetched )
     {
         // first check if all key column values were set
         ::rtl::OUString sQuote = m_xConnection->getMetaData()->getIdentifierQuoteString();
@@ -591,13 +626,18 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
                         if(aFind != m_pKeyColumnNames->end())
                             fetchValue(aFind->second,(*_rInsertRow)[aFind->second].getTypeKind(),xRow,(*_rInsertRow)[aFind->second]);
                     }
+                    bAutoValuesFetched = sal_True;
                 }
                 ::comphelper::disposeComponent(xStatement);
             }
             catch(SQLException&)
             {
+                OSL_ENSURE(0,"Could not fetch with MAX() ");
             }
         }
+    }
+    if ( m_bInserted && bAutoValuesFetched )
+    {
         ORowSetRow aKeyRow = new connectivity::ORowVector< ORowSetValue >((*m_pKeyColumnNames).size());
         connectivity::ORowVector< ORowSetValue >::iterator aIter = aKeyRow->begin();
         OColumnNamePos::const_iterator aPosIter = (*m_pKeyColumnNames).begin();
@@ -1354,6 +1394,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.32  2002/03/18 13:59:43  oj
+    #97987# append index columns only when not null
+
     Revision 1.31  2001/12/17 12:51:16  oj
     #96052# quote tablename
 
