@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:01:18 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,6 +285,48 @@ class SwXShape : public SwXShapeBaseClass,
         its position alignment areas.
     */
     void _AdjustPositionProperties( const ::com::sun::star::awt::Point _aPosition );
+
+    /** method to convert start and end position of the drawing object to the
+        Writer specific position, which is the attribute position in layout direction
+
+        OD 2004-10-28 #i36248#
+
+        @author OD
+    */
+    void __ConvertStartEndPosToLayoutDir(
+                                    ::com::sun::star::awt::Point& _rioStartPos,
+                                    ::com::sun::star::awt::Point& _rioEndPos );
+
+    /** method to convert start position of the drawing object to the
+        Writer specific position, which is the attribute position in layout direction
+
+        OD 2004-10-28 #i36248#
+
+        @author OD
+    */
+    ::com::sun::star::awt::Point _ConvertStartPosToLayoutDir(
+                                const ::com::sun::star::awt::Point& _aStartPos );
+
+    /** method to convert end position of the drawing object to the
+        Writer specific position, which is the attribute position in layout direction
+
+        OD 2004-10-28 #i36248#
+
+        @author OD
+    */
+    ::com::sun::star::awt::Point _ConvertEndPosToLayoutDir(
+                                const ::com::sun::star::awt::Point& _aEndPos );
+
+    /** method to get property from aggregation object
+
+        OD 2004-10-28 #i36248#
+
+        @author OD
+    */
+    ::com::sun::star::uno::Any _getPropAtAggrObj( const ::rtl::OUString& _rPropertyName )
+            throw( ::com::sun::star::beans::UnknownPropertyException,
+                   ::com::sun::star::lang::WrappedTargetException,
+                   ::com::sun::star::uno::RuntimeException);
 
 protected:
     virtual ~SwXShape();
