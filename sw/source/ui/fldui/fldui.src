@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:12:05 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 20:58:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -724,19 +724,19 @@ String STR_COMBINED_CHARS
     TEXT[ russian ] = "Êîìáèíèğîâàòü çíàêè";
     TEXT[ greek ] = "Óõíäõáóìüò ÷áñáêôŞñùí";
     TEXT[ dutch ] = "Combine characters";
-    TEXT[ french ] = "Combine characters";
-    TEXT[ spanish ] = "Combine characters";
+    TEXT[ french ] = "Combiner les caractères";
+    TEXT[ spanish ] = "Combinar caracteres";
     TEXT[ italian ] = "Combine characters";
     TEXT[ danish ] = "Combine characters";
     TEXT[ swedish ] = "Kombinera tecken";
     TEXT[ polish ] = "Kombinacja znaków";
     TEXT[ portuguese_brazilian ] = "Combine characters";
-    TEXT[ japanese ] = "Combine characters";
+    TEXT[ japanese ] = "‘g‚İ•¶š";
     TEXT[ korean ] = "Combine characters";
-    TEXT[ chinese_simplified ] = "Combine characters";
+    TEXT[ chinese_simplified ] = "×Ö·û×éºÏ";
     TEXT[ chinese_traditional ] = "¦r¤¸²Õ¦X";
     TEXT[ turkish ] = "Combine characters";
-    TEXT[ arabic ] = "Combine characters";
+    TEXT[ arabic ] = "Öã ÇáÃÍÑİ";
 };
 
  //
@@ -3193,16 +3193,16 @@ String STR_COMBCHRS_FT
     TEXT[ russian ] = "Çíàêè";
     TEXT[ greek ] = "×áñáêôŞñåò";
     TEXT[ dutch ] = "Ch~aracters";
-    TEXT[ french ] = "Ch~aracters";
-    TEXT[ spanish ] = "Ch~aracters";
+    TEXT[ french ] = "~Caractères";
+    TEXT[ spanish ] = "C~arácter";
     TEXT[ italian ] = "Ch~aracters";
     TEXT[ danish ] = "Ch~aracters";
     TEXT[ swedish ] = "Te~cken";
     TEXT[ polish ] = "Znaki";
     TEXT[ portuguese_brazilian ] = "Ch~aracters";
-    TEXT[ japanese ] = "Ch~aracters";
+    TEXT[ japanese ] = "•¶š";
     TEXT[ korean ] = "Ch~aracters";
-    TEXT[ chinese_simplified ] = "Ch~aracters";
+    TEXT[ chinese_simplified ] = "×Ö·û";
     TEXT[ chinese_traditional ] = "¦r¤¸";
     TEXT[ turkish ] = "Ch~aracters";
     TEXT[ arabic ] = "ÃÍÑİ";
@@ -3413,7 +3413,7 @@ PushButton PB_FLDEDT_ADDRESS
     Text [ danish ] = "Rediger" ;
     Text [ italian ] = "Modifica" ;
     Text [ spanish ] = "Editar" ;
-    Text [ french ] = "Modifier" ;
+    Text [ french ] = "Éditer" ;
     Text [ dutch ] = "Bewerken" ;
     Text [ portuguese ] = "Editar" ;
     Helpid = HID_DLG_FLDEDT_ADDRESS ;
