@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-21 14:46:31 $
+ *  last change: $Author: jp $ $Date: 2000-10-16 15:22:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,14 +489,16 @@ void LoadURL( const String& rURL, ViewShell* pVSh, USHORT nFilter,
     if( nFilter & URLLOAD_NEWVIEW )
         aTargetFrameName.SetValue( String::CreateFromAscii("_blank") );
 
-    pViewFrm->GetDispatcher()->Execute( SID_OPENDOC,
-            SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD,
-                            &aName,
-                            &aFilter,
-                            &aNewView, /*&aSilent,*/ &aReadOnly,
-                            &aReferer,
-                            &aView, &aTargetFrameName,
-                            0L );
+    const SfxPoolItem* aArr[] = {
+                &aName, &aFilter,
+                &aNewView, /*&aSilent,*/ &aReadOnly,
+                &aReferer,
+                &aView, &aTargetFrameName,
+                0L
+    };
+
+    pViewFrm->GetDispatcher()->GetBindings()->Execute( SID_OPENDOC, aArr,
+            SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD );
 }
 
 void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk, const DropEvent* pEvt )
