@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistyle.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:48:09 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,8 @@ public:
 
     /** Reads a FONT record for all BIFF versions. */
     void                ReadFont( XclImpStream& rStrm );
+    /** Reads an EFONT record (BIFF2 font color). */
+    void                ReadEfont( XclImpStream& rStrm );
     /** Reads the font block from a CF (conditional format) record. */
     void                ReadCFFontBlock( XclImpStream& rStrm );
 
@@ -216,6 +218,8 @@ public:
 
     /** Reads a FONT record. */
     void                ReadFont( XclImpStream& rStrm );
+    /** Reads an EFONT record (BIFF2 font color). */
+    void                ReadEfont( XclImpStream& rStrm );
 
     /** Fills all font properties from a FONT record to the item set.
         @param rItemSet  The destination item set.
