@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-23 16:22:09 $
+ *  last change: $Author: fme $ $Date: 2001-12-05 09:02:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -867,6 +867,10 @@ SwCntntFrm *SwTxtFrm::JoinFrm()
 
 SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
 {
+#ifdef VERTICAL_LAYOUT
+    SWAP_IF_SWAPPED( this )
+#endif
+
     // Durch das Paste wird ein Modify() an mich verschickt.
     // Damit meine Daten nicht verschwinden, locke ich mich.
     SwTxtFrmLocker aLock( this );
@@ -926,6 +930,10 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
 #endif
 
     pNew->ManipOfst( nTxtPos );
+
+#ifdef VERTICAL_LAYOUT
+    UNDO_SWAP( this )
+#endif
     return pNew;
 }
 
