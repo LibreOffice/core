@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.7 $
+#  $Revision: 1.8 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 17:15:55 $
+#  last change: $Author: rt $ $Date: 2005-03-29 12:17:54 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -192,16 +192,16 @@ $(EXAMPLE_NAME) : $(REGISTERFLAG) $(APP1_JAR) $(APP2_JAR) $(APP3_JAR)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use the following command to execute the examples!
 	@echo -
-	@echo make EuroAdaption.run
-	@echo make SCalc.run
-	@echo make ChartTypeChange.run
+	@echo $(MAKE) EuroAdaption.run
+	@echo $(MAKE) SCalc.run
+	@echo $(MAKE) ChartTypeChange.run
 	@echo --------------------------------------------------------------------------------
 	@echo The Calc add-in component was installed if SDK_AUTO_DEPLOYMENT = YES.
 	@echo You can use this component inside your office installation, see the example
 	@echo description. You can also load the "$(QM)CalcAddins.ods$(QM)" document to see 
 	@echo how the add-in functions works.
 	@echo -
-	@echo make CalcAddins.ods.load
+	@echo $(MAKE) CalcAddins.ods.load
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_COMP_CLASS)/%.jar
