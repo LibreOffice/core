@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-20 12:45:26 $
+ *  last change: $Author: mba $ $Date: 2001-03-21 17:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1045,6 +1045,7 @@ void SAL_CALL SfxBaseModel::setPrinter(const SEQUENCE< PROPERTYVALUE >& rPrinter
 
     // new Printer-Name available?
     sal_uInt16 nChangeFlags = 0;
+    sal_Int32 lDummy;
     for ( int n = 0; n < rPrinter.getLength(); ++n )
     {
         // get Property-Value from printer description
@@ -1053,15 +1054,12 @@ void SAL_CALL SfxBaseModel::setPrinter(const SEQUENCE< PROPERTYVALUE >& rPrinter
         // Name-Property?
         if ( rProp.Name.compareToAscii( "Name" ) == 0 )
         {
-            if ( rProp.Value.getValueType() != ::getCppuType((const OUSTRING*)0) )
+            OUSTRING sTemp;
+            if ( ( rProp.Value >>= sTemp ) == sal_False )
                 throw ILLEGALARGUMENTEXCEPTION();
 
-            OUSTRING sTemp;
-            rProp.Value >>= sTemp ;
             String aPrinterName( sTemp ) ;
-
-            pPrinter = new SfxPrinter( pPrinter->GetOptions().Clone(),
-                                       aPrinterName );
+            pPrinter = new SfxPrinter( pPrinter->GetOptions().Clone(), aPrinterName );
             nChangeFlags = SFX_PRINTER_PRINTER;
             break;
         }
@@ -1080,7 +1078,11 @@ void SAL_CALL SfxBaseModel::setPrinter(const SEQUENCE< PROPERTYVALUE >& rPrinter
         {
             PAPERORIENTATION eOrient;
             if ( ( rProp.Value >>= eOrient ) == sal_False )
-                throw ILLEGALARGUMENTEXCEPTION();
+            {
+                if ( ( rProp.Value >>= lDummy ) == sal_False )
+                    throw ILLEGALARGUMENTEXCEPTION();
+                eOrient = ( PAPERORIENTATION ) lDummy;
+            }
 
             pPrinter->SetOrientation( (Orientation) eOrient );
             nChangeFlags |= SFX_PRINTER_CHG_ORIENTATION;
@@ -1090,7 +1092,11 @@ void SAL_CALL SfxBaseModel::setPrinter(const SEQUENCE< PROPERTYVALUE >& rPrinter
         if ( rProp.Name.compareToAscii( "PaperFormat" ) == 0 )
         {
             if ( ( rProp.Value >>= nPaperFormat ) == sal_False )
-                throw ILLEGALARGUMENTEXCEPTION();
+            {
+                if ( ( rProp.Value >>= lDummy ) == sal_False )
+                    throw ILLEGALARGUMENTEXCEPTION();
+                nPaperFormat = ( PAPERFORMAT ) lDummy;
+            }
 
             pPrinter->SetPaper( (Paper) nPaperFormat );
             nChangeFlags |= SFX_PRINTER_CHG_SIZE;
