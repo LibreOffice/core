@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.2 $
+#*  $Revision: 1.3 $
 #*
-#*  last change: $Author: er $ $Date: 2002-03-26 16:59:03 $
+#*  last change: $Author: rt $ $Date: 2003-04-08 15:46:45 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -78,7 +78,6 @@ SLOFILES=   \
             $(SLO)$/characterclassificationImpl.obj \
             $(SLO)$/cclass_unicode.obj \
             $(SLO)$/cclass_unicode_parser.obj \
-            $(SLO)$/unicode.obj \
             $(SLO)$/scripttypedetector.obj
 
 # --- Targets ------------------------------------------------------
