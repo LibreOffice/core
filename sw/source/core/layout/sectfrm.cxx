@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:18:49 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:08:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2430,7 +2430,7 @@ SwFtnContFrm* SwSectionFrm::ContainsFtnCont( const SwFtnContFrm* pCont ) const
     const SwLayoutFrm* pLay;
     if( pCont )
     {
-        pLay = pCont->FindFtnBossFrm( NULL );
+        pLay = pCont->FindFtnBossFrm( 0 );
         ASSERT( IsAnLower( pLay ), "ConatainsFtnCont: Wrong FtnContainer" );
         pLay = (SwLayoutFrm*)pLay->GetNext();
     }
