@@ -54,34 +54,28 @@
  *
  *
  ************************************************************************/
-
 package org.openoffice.java.accessibility;
+
+import com.sun.star.accessibility.*;
+import com.sun.star.uno.*;
 
 import javax.accessibility.AccessibleState;
 import javax.accessibility.AccessibleStateSet;
 
 
-import com.sun.star.uno.*;
-import com.sun.star.accessibility.*;
-
 /**
  */
 public class Icon extends Component implements javax.accessibility.Accessible {
-
     protected Icon(XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
         super(xAccessible, xAccessibleContext);
     }
 
-    /** Returns the AccessibleContext associated with this object */
-    public javax.accessibility.AccessibleContext getAccessibleContext() {
-        if (accessibleContext == null) {
-            accessibleContext = new AccessibleIcon();
-        }
-        return accessibleContext;
+    /** Creates the AccessibleContext associated with this object */
+    public javax.accessibility.AccessibleContext createAccessibleContext() {
+        return new AccessibleIcon();
     }
 
     protected class AccessibleIcon extends AccessibleUNOComponent {
-
         /**
         * Though the class is abstract, this should be called by all sub-classes
         */
@@ -92,14 +86,19 @@ public class Icon extends Component implements javax.accessibility.Accessible {
         /** Gets the AccessibleText associated with this object presenting text on the display */
         public javax.accessibility.AccessibleIcon[] getAccessibleIcon() {
             try {
-                XAccessibleImage unoAccessibleImage = (XAccessibleImage)
-                    UnoRuntime.queryInterface(XAccessibleImage.class, unoAccessibleComponent);
+                XAccessibleImage unoAccessibleImage = (XAccessibleImage) UnoRuntime.queryInterface(XAccessibleImage.class,
+                        unoAccessibleComponent);
+
                 if (unoAccessibleImage != null) {
-                    javax.accessibility.AccessibleIcon[] icons = { new AccessibleIconImpl(unoAccessibleImage) };
+                    javax.accessibility.AccessibleIcon[] icons = {
+                        new AccessibleIconImpl(unoAccessibleImage)
+                    };
+
                     return icons;
                 }
             } catch (com.sun.star.uno.RuntimeException e) {
             }
+
             return null;
         }
 
@@ -110,13 +109,12 @@ public class Icon extends Component implements javax.accessibility.Accessible {
         * of the object
         * @see AccessibleState
         */
-/*
-        public AccessibleStateSet getAccessibleStateSet() {
-            AccessibleStateSet states = super.getAccessibleStateSet();
-            return states;
-        }
-*/
+
+        /*
+                        public AccessibleStateSet getAccessibleStateSet() {
+                                AccessibleStateSet states = super.getAccessibleStateSet();
+                                return states;
+                        }
+        */
     }
 }
-
-
