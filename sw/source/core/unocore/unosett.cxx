@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 15:07:14 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 15:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1459,19 +1459,22 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
                   lang::WrappedTargetException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+    if(nIndex < 0 || MAXLEVEL <= nIndex)
+        throw lang::IndexOutOfBoundsException();
+
     if(rElement.getValueType().getTypeClass() != uno::TypeClass_SEQUENCE)
         throw lang::IllegalArgumentException();
     const uno::Sequence<beans::PropertyValue>& rProperties =
                     *(const uno::Sequence<beans::PropertyValue>*)rElement.getValue();
     SwNumRule* pRule = 0;
     if(pNumRule)
-        SwXNumberingRules::setNumberingRuleByIndex( *pNumRule,
+        SwXNumberingRules::SetNumberingRuleByIndex( *pNumRule,
                             rProperties, nIndex);
     else if(pDocShell)
     {
         const SwNumRule* pNumRule = pDocShell->GetDoc()->GetOutlineNumRule();
         SwNumRule aNumRule(*pNumRule);
-        SwXNumberingRules::setNumberingRuleByIndex( aNumRule,
+        SwXNumberingRules::SetNumberingRuleByIndex( aNumRule,
                             rProperties, nIndex);
         //hier noch die Zeichenformate bei Bedarf setzen
         const SwCharFmts* pFmts = pDocShell->GetDoc()->GetCharFmts();
@@ -1513,7 +1516,7 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
     else if(!pNumRule && pDoc && sCreatedNumRuleName.Len() &&
         0 != (pRule = pDoc->FindNumRulePtr( sCreatedNumRuleName )))
     {
-        SwXNumberingRules::setNumberingRuleByIndex( *pRule,
+        SwXNumberingRules::SetNumberingRuleByIndex( *pRule,
                             rProperties, nIndex);
         sal_uInt16 nPos = pDoc->FindNumRule( sCreatedNumRuleName );
         pDoc->UpdateNumRule( sCreatedNumRuleName, nPos );
@@ -1537,22 +1540,23 @@ uno::Any SwXNumberingRules::getByIndex(sal_Int32 nIndex)
             uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    uno::Any aVal;
-    if(MAXLEVEL <= nIndex)
+    if(nIndex < 0 || MAXLEVEL <= nIndex)
         throw lang::IndexOutOfBoundsException();
+
+    uno::Any aVal;
     const SwNumRule* pRule = pNumRule;
     if(!pRule && pDoc && sCreatedNumRuleName.Len())
         pRule = pDoc->FindNumRulePtr( sCreatedNumRuleName );
     if(pRule)
     {
-        uno::Sequence<beans::PropertyValue> aRet = getNumberingRuleByIndex(
+        uno::Sequence<beans::PropertyValue> aRet = GetNumberingRuleByIndex(
                                         *pRule, nIndex);
         aVal.setValue(&aRet, ::getCppuType((uno::Sequence<beans::PropertyValue>*)0));
 
     }
     else if(pDocShell)
     {
-        uno::Sequence<beans::PropertyValue> aRet = getNumberingRuleByIndex(
+        uno::Sequence<beans::PropertyValue> aRet = GetNumberingRuleByIndex(
                 *pDocShell->GetDoc()->GetOutlineNumRule(), nIndex);
         aVal.setValue(&aRet, ::getCppuType((uno::Sequence<beans::PropertyValue>*)0));
     }
@@ -1578,10 +1582,12 @@ sal_Bool SwXNumberingRules::hasElements(void) throw( uno::RuntimeException )
 /*-- 14.12.98 14:57:59---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Sequence<beans::PropertyValue> SwXNumberingRules::getNumberingRuleByIndex(
+uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
                 const SwNumRule& rNumRule, sal_Int32 nIndex) const
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+    DBG_ASSERT( 0 <= nIndex && nIndex < MAXLEVEL, "index out of range" );
+
     const SwNumFmt& rFmt = rNumRule.Get( (sal_uInt16)nIndex );
 
     sal_Bool bChapterNum = pDocShell != 0;
@@ -1781,12 +1787,14 @@ PropValData* lcl_FindProperty(const char* cName, PropValDataArr&    rPropertyVal
 }
 //-----------------------------------------------------------------------
 
-void SwXNumberingRules::setNumberingRuleByIndex(
+void SwXNumberingRules::SetNumberingRuleByIndex(
             SwNumRule& rNumRule,
             const uno::Sequence<beans::PropertyValue>& rProperties, sal_Int32 nIndex)
     throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+    DBG_ASSERT( 0 <= nIndex && nIndex < MAXLEVEL, "index out of range" );
+
     // the order of the names is important!
     static const char* aNumPropertyNames[] =
     {
