@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bmahbod $ $Date: 2000-12-07 19:33:33 $
+ *  last change: $Author: bmahbod $ $Date: 2000-12-07 22:20:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,7 @@ struct SalGraphicsData
     BOOL            mbVirDev;       // Is a virtual device available?
     BOOL            mbWindow;       // Is a window availble?
     BOOL            mbScreen;       // Is this screen compatiable?
+    OSErr           mnMacOSErr;     // The current MacOS error
 };
 
 typedef struct SalGraphicsData   SalGraphicsData;

@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.20 $
- *  last change: $Author: bmahbod $ $Date: 2000-12-07 19:33:34 $
+ *  $Revision: 1.21 $
+ *  last change: $Author: bmahbod $ $Date: 2000-12-07 22:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,20 +309,78 @@ static RGBColor SALColor2RGBColor ( SalColor nSalColor )
 
 // =======================================================================
 
-SalGraphics::SalGraphics()
+static void OpenQDPort ( SalGraphicsDataPtr rSalGraphicsData )
+{
+    // Get the current graphic device
+
+    rSalGraphicsData->mhGDevice = GetGDevice();
+
+    rSalGraphicsData->mnMacOSErr = QDError();
+
+    if ( rSalGraphicsData->mnMacOSErr == noErr )
+    {
+        // Get the graph port and lock focus on it
+
+        rSalGraphicsData->mpCGrafPort = VCLGraphics_LockFocusCGrafPort( rSalGraphicsData->mhDC );
+
+        if ( rSalGraphicsData->mpCGrafPort != NULL )
+        {
+            // Set the to the current graph port
+
+            MacSetPort( rSalGraphicsData->mpCGrafPort );
+
+            // Now lock the current port pixels
+
+            rSalGraphicsData->mnMacOSErr = LockPortBits( rSalGraphicsData->mpCGrafPort );
+
+            // Set background and foreground colors on this graph port
+
+            SetWhiteBackColor();
+            SetBlackForeColor();
+        } // if
+    } // if
+} // OpenQDPort
+
+// -----------------------------------------------------------------------
+
+static void CloseQDPort ( SalGraphicsDataPtr rSalGraphicsData )
+{
+    if ( rSalGraphicsData->mnMacOSErr == noErr )
+    {
+        // Unlock the current graph port bits
+
+        rSalGraphicsData->mnMacOSErr = UnlockPortBits( rSalGraphicsData->mpCGrafPort );
+
+        if ( rSalGraphicsData->mnMacOSErr == noErr )
+        {
+            // Flush the QuickDraw buffer
+
+            QDFlushPortBuffer( rSalGraphicsData->mpCGrafPort, NULL );
+
+            // Unlock focus on the current NSView
+
+            VCLGraphics_UnLockFocusCGrafPort( rSalGraphicsData->mhDC );
+
+            SetQDError( rSalGraphicsData->mnMacOSErr );
+        } // if
+    } // if
+} // CloseQDPort
+
+// =======================================================================
+
+// =======================================================================
+
+static void InitBrush ( SalGraphicsDataPtr rSalGraphicsData )
+{
+    rSalGraphicsData->mhDefBrush         = NewPixPat();
+    rSalGraphicsData->mbTransparentBrush = FALSE;
+} // InitBrush
+
+// -----------------------------------------------------------------------
+
+static void InitColors ( SalGraphicsDataPtr rSalGraphicsData )
 {
     RGBColor aBlackColor;
-
-    // QuickDraw graph port and GWorld
-
-    maGraphicsData.mpCGrafPort = NULL;
-    maGraphicsData.mhGDevice   = NULL;
-
-    // Regions within a current port
-
-    maGraphicsData.mhClipRgn = NULL;
-    maGraphicsData.mhGrowRgn = NULL;
-    maGraphicsData.mhVisiRgn = NULL;
 
     // Set black color
 
@@ -332,45 +390,102 @@ SalGraphics::SalGraphics()
 
     // Set brush, pen, and text colors
 
-    maGraphicsData.maPenColor   = aBlackColor;
-    maGraphicsData.maBrushColor = aBlackColor;
-    maGraphicsData.maTextColor  = aBlackColor;
+    rSalGraphicsData->maPenColor   = aBlackColor;
+    rSalGraphicsData->maBrushColor = aBlackColor;
+    rSalGraphicsData->maTextColor  = aBlackColor;
+} // InitColors
+
+// -----------------------------------------------------------------------
+
+static void InitFont ( SalGraphicsDataPtr rSalGraphicsData )
+{
+    rSalGraphicsData->mnFontID    = kFontIDGeneva;
+    rSalGraphicsData->mnFontSize  = 10;
+    rSalGraphicsData->mnFontStyle = normal;
+} // InitFont
+
+// -----------------------------------------------------------------------
+
+static void InitPen ( SalGraphicsDataPtr rSalGraphicsData )
+{
+    rSalGraphicsData->mnPenMode        = patCopy;
+    rSalGraphicsData->mbTransparentPen = FALSE;
+} // InitPen
+
+// -----------------------------------------------------------------------
+
+static void InitRegions ( SalGraphicsDataPtr rSalGraphicsData )
+{
+    rSalGraphicsData->mhClipRgn = NewRgn();
+    rSalGraphicsData->mhGrowRgn = NewRgn();
+    rSalGraphicsData->mhVisiRgn = NewRgn();
+} // InitRegions
+
+// -----------------------------------------------------------------------
+
+static void InitStatusFlags ( SalGraphicsDataPtr rSalGraphicsData )
+{
+    rSalGraphicsData->mnCurrStatus   = 0;
+    rSalGraphicsData->meCurrDrawMode = eDrawNil;
+    rSalGraphicsData->mbPrinter      = FALSE;
+    rSalGraphicsData->mbVirDev       = TRUE;
+    rSalGraphicsData->mbWindow       = TRUE;
+    rSalGraphicsData->mbScreen       = TRUE;
+    rSalGraphicsData->mnMacOSErr     = noErr;
+} // InitStatusFlags
+
+// =======================================================================
+
+// =======================================================================
+
+SalGraphics::SalGraphics()
+{
+    // Regions within a current port
+
+    InitRegions( &maGraphicsData );
+
+    // Set brush, pen, and text colors
+
+    InitColors( &maGraphicsData );
 
     // Font attributes
 
-    maGraphicsData.mnFontID    = kFontIDGeneva;
-    maGraphicsData.mnFontSize  = 10;
-    maGraphicsData.mnFontStyle = normal;
+    InitFont(  &maGraphicsData );
 
     // Pen attributes and status
 
-    maGraphicsData.mnPenMode        = patCopy;
-    maGraphicsData.mbTransparentPen = FALSE;
+    InitPen( &maGraphicsData );
 
     // Brush attributes and status
 
-    maGraphicsData.mhDefBrush         = NULL;
-    maGraphicsData.mbTransparentBrush = FALSE;
+    InitBrush(  &maGraphicsData );
 
     // Miscellaneous status flags
 
-    maGraphicsData.mnCurrStatus   = 0;
-    maGraphicsData.meCurrDrawMode = eDrawNil;
-    maGraphicsData.mbPrinter      = FALSE;
-    maGraphicsData.mbVirDev       = TRUE;
-    maGraphicsData.mbWindow       = TRUE;
-    maGraphicsData.mbScreen       = TRUE;
+    InitStatusFlags(  &maGraphicsData );
 
-    // Set background and foreground colors
+    // Get the graph port and lock focus on it
 
-    SetWhiteBackColor();
-    SetBlackForeColor();
+    OpenQDPort( &maGraphicsData );
+
 } // SalGraphics Class Constructor
 
 // -----------------------------------------------------------------------
 
 SalGraphics::~SalGraphics()
 {
+    CloseQDPort( &maGraphicsData );
+
+    if ( maGraphicsData.mhGDevice != NULL )
+    {
+        DisposeGDevice( maGraphicsData.mhGDevice );
+    } // if
+
+    if ( maGraphicsData.mpCGrafPort != NULL )
+    {
+        DisposePort( maGraphicsData.mpCGrafPort );
+    } // if
+
     if ( maGraphicsData.mhClipRgn != NULL )
     {
         DisposeRgn( maGraphicsData.mhClipRgn );
