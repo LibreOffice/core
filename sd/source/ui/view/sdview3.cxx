@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: ka $ $Date: 2001-11-23 14:17:09 $
+ *  last change: $Author: ka $ $Date: 2001-12-06 18:20:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,10 +276,20 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
 
             if( pOwnData->HasPageBookmarks() )
             {
-                const List& rBookmarkList = pOwnData->GetPageBookmarks();
+                const List&         rBookmarkList = pOwnData->GetPageBookmarks();
+                const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                const BOOL          bWait = pWin && pWin->IsWait();
+
+                if( bWait )
+                    pWin->LeaveWait();
 
                 nInsertPgCnt = (USHORT) rBookmarkList.Count();
-                pDoc->InsertBookmarkAsPage( const_cast< List* >( &rBookmarkList ), NULL, FALSE, FALSE, nInsertPos, TRUE, pOwnData->GetPageDocShell(), TRUE, bMergeMasterPages );
+                pDoc->InsertBookmarkAsPage( const_cast< List* >( &rBookmarkList ), NULL, FALSE, FALSE, nInsertPos,
+                                            pOwnData == SD_MOD()->pTransferDrag,
+                                            pOwnData->GetPageDocShell(), TRUE, bMergeMasterPages );
+
+                if( bWait )
+                    pWin->EnterWait();
             }
             else
             {
@@ -289,8 +299,19 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
 
                 if( pDataDoc && pDataDoc->GetSdPageCount( PK_STANDARD ) )
                 {
+                    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                    const BOOL          bWait = pWin && pWin->IsWait();
+
+                    if( bWait )
+                        pWin->LeaveWait();
+
                     nInsertPgCnt = pDataDoc->GetSdPageCount( PK_STANDARD );
-                    pDoc->InsertBookmarkAsPage( NULL, NULL, FALSE, FALSE, nInsertPos, TRUE, pDataDocSh, TRUE, bMergeMasterPages );
+                    pDoc->InsertBookmarkAsPage( NULL, NULL, FALSE, FALSE, nInsertPos,
+                                                pOwnData == SD_MOD()->pTransferDrag,
+                                                pDataDocSh, TRUE, bMergeMasterPages );
+
+                    if( bWait )
+                        pWin->EnterWait();
                 }
             }
         }
