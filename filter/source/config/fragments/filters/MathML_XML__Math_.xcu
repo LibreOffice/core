@@ -7,7 +7,7 @@
         <prop oor:name="FilterService"/>
         <prop oor:name="TemplateName"/>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">MathML 1.01</value>
+            <value>MathML 1.01</value>
         </prop>
         <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE</value></prop>
     </node>
