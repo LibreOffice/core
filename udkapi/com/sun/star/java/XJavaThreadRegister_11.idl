@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XJavaThreadRegister_11.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 14:45:22 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:54:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ module com {  module sun {  module star {  module java {
     @incomplete
     @deprecated
  */
-interface XJavaThreadRegister_11: com::sun::star::uno::XInterface
+published interface XJavaThreadRegister_11: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
