@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.68 $
+#   $Revision: 1.69 $
 #
-#   last change: $Author: obo $ $Date: 2004-05-28 15:50:06 $
+#   last change: $Author: hr $ $Date: 2004-11-09 13:46:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -110,7 +110,7 @@ XMLLIST= \
 
 EXELIST = \
     $(DESTDIRBIN)$/cppumaker$(EXEPOSTFIX) 	\
-    $(DESTDIRBIN)$/regcomp$(EXEPOSTFIX) 	\
+    $(DESTDIRBIN)$/sp2bv$(EXEPOSTFIX) 	\
     $(DESTDIRBIN)$/regcompare$(EXEPOSTFIX) 	\
     $(DESTDIRBIN)$/regmerge$(EXEPOSTFIX) 	\
     $(DESTDIRBIN)$/regview$(EXEPOSTFIX) 	\
@@ -122,6 +122,15 @@ EXELIST = \
     $(DESTDIRBIN)$/uno$(EXEPOSTFIX) \
     $(DESTDIRBIN)$/autodoc$(EXEPOSTFIX) \
     $(DESTDIRBIN)$/unoapploader$(EXEPOSTFIX)
+
+.IF "$(GUI)"=="WNT"
+EXELIST += \
+    $(DESTDIRBIN)$/regcomp$(EXEPOSTFIX)
+.ELSE
+EXELIST += \
+    $(DESTDIRBIN)$/regcomp.bin 	\
+    $(DESTDIRBIN)$/regcomp
+.ENDIF
 
 .IF "$(GUI)"=="WNT"
 LIBLIST = \
@@ -244,7 +253,8 @@ INSTALLSCRIPT= \
 .ELSE
 INSTALLSCRIPT= \
     $(DESTDIR)$/configureWindows.bat \
-    $(DESTDIR)$/setsdkenv_windows.bat
+    $(DESTDIR)$/setsdkenv_windows.bat \
+    $(DESTDIR)$/cfgWin.js
 .ENDIF
 
 DIR_FILE_LIST=\
@@ -276,4 +286,3 @@ all : \
 # use global rules
 #--------------------------------------------------   
 .INCLUDE: $(PRJ)$/util$/odk_rules.pmk
-
