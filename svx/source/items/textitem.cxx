@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2001-03-12 16:21:12 $
+ *  last change: $Author: os $ $Date: 2001-03-14 11:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4188,7 +4188,7 @@ sal_Bool SvxCharRotateItem::PutValue( const com::sun::star::uno::Any& rVal,
     {
     case MID_ROTATE:
         rVal >>= nVal;
-        if(!nVal || 90 == nVal || 270 == nVal)
+        if(!nVal || 900 == nVal || 2700 == nVal)
             SetValue( (USHORT)nVal );
         else
             bRet = sal_False;
