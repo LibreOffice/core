@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldocntp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-11 17:27:28 $
+ *  last change: $Author: thb $ $Date: 2001-10-26 11:25:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -495,10 +495,6 @@ void SvxHyperlinkNewDocTp::DoApply ()
         // create Document
 
         aStrNewName = aURL.GetURLPath( INetURLObject::NO_DECODE );
-        sal_Char const sSlash[] = "/";
-        if( aStrNewName.SearchAscii( sSlash ) == 0 )
-            aStrNewName.Erase( 0, 1 );
-
         SfxViewFrame *pViewFrame = NULL;
         try
         {
@@ -645,9 +641,14 @@ IMPL_LINK ( SvxHyperlinkNewDocTp, ClickNewHdl_Impl, void *, EMPTYARG )
                                      maLbDocTypes.GetEntryData( nPos ) )->aStrExt );
         }
 
-        aStrTmp = aNewURL.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
-        if( aStrTmp.SearchAscii( sSlash ) == 0 )
-            aStrTmp.Erase( 0, 1 );
+        if( aNewURL.GetProtocol() == INET_PROT_FILE )
+        {
+            utl::LocalFileHelper::ConvertURLToSystemPath( aNewURL.GetMainURL( INetURLObject::NO_DECODE ), aStrTmp );
+        }
+        else
+        {
+            aStrTmp = aNewURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
+        }
 
         maCbbPath.SetText ( aStrTmp );
     }
@@ -711,16 +712,7 @@ void SvxHyperlinkNewDocTp::UpdateExtension()
     if( aStrURL.Len() == 0 || nDocTypePos == LISTBOX_ENTRY_NOTFOUND )
         return;
     INetURLObject aURL;
-    if ( ImplGetURLObject( aStrURL, maCbbPath.GetBaseURL(), aURL ) )
-    {
-        String aStrTmp( aURL.GetURLPath( INetURLObject::DECODE_UNAMBIGUOUS ) );
-        sal_Char const sSlash[] = "/";
-        if( aStrTmp.SearchAscii( sSlash ) == 0 )
-            aStrTmp.Erase( 0, 1 );
-        maCbbPath.SetText ( aStrTmp );
-        ModifiedPathHdl_Impl ( NULL );
-    }
-    else
+    if ( !ImplGetURLObject( aStrURL, maCbbPath.GetBaseURL(), aURL ) )
     {
         // since we have no valid url yet, maybe just a file name
         // we must add the extensions ourselfs
