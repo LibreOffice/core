@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentSaver.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:10:40 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 17:09:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,16 +38,7 @@
  *
  *************************************************************************/
 
-import com.sun.star.bridge.XUnoUrlResolver;
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.frame.XComponentLoader;
-import com.sun.star.frame.XStorable;
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.util.XCloseable;
 
 
 /** The purpose of this class is to open a specified text document and save this
@@ -56,137 +47,91 @@ import com.sun.star.util.XCloseable;
  */
 public class DocumentSaver {
     /** The main method of the application.
-     * @param args The program needs three arguments:
-     * - UNO URL for connection,
+     * @param args The program needs two arguments:
      * - full file name to open,
      * - full file name to save.
      */
-  public static void main(String args[]) {
-    try {
-      String sConnectionString = "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager";
+    public static void main(String args[]) {
+        if ( args.length < 2 ) {
+            System.out.println("usage: java -jar DocumentSaver.jar" +
+                               "\"<URL|path to load>\" \"<URL|path to save>\"");
+            System.out.println("\ne.g.:");
+            System.out.println("java -jar DocumentSaver " +
+                               "\"file:///f:/TestPrint.doc\"" +
+                               "\"file:///f:/TestPrint.odt\"");
+            System.exit(1);
+        }
 
-      if ( args.length < 2 ) {
-        System.out.println(
-        "usage: java -classpath .;<Office path>/program/classes/jurt.jar;" +
-        "<Office path>/program/classes/ridl.jar;" +
-        "<Office path>/program/classes/sandbox.jar;" +
-        "<Office path>/program/classes/unoil.jar;" +
-        "<Office path>/program/classes/juh.jar " +
-        "DocumentSaver \"<URL|path to load>\" \"<URL|path to save>\" \"<Connection>\"" );
-        System.out.println( "\ne.g.:" );
-        System.out.println( "java -classpath .;d:/office60/program/classes/jurt.jar;" +
-        "d:/office60/program/classes/ridl.jar;" +
-        "d:/office60/program/classes/sandbox.jar;" +
-        "d:/office60/program/classes/unoil.jar; " +
-        "d:/office60/program/classes/juh.jar " +
-        "DocumentSaver \"file:///f:/TestPrint.doc\" \"file:///f:/TestPrint.sxw\"" );
-        System.exit(1);
-      }
+        com.sun.star.uno.XComponentContext xContext = null;
 
-      // It is possible to use a different connection string, passed as argument
-      if ( args.length == 3 ) {
-            sConnectionString = args[2];
-      }
+        try {
+            // get the remote office component context
+            xContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
+            System.out.println("Connected to a running office ...");
 
-      /* Bootstraps a component context with the jurt base components
-         registered. Component context to be granted to a component for running.
-         Arbitrary values can be retrieved from the context. */
-      XComponentContext xcomponentcontext =
-      com.sun.star.comp.helper.Bootstrap.createInitialComponentContext( null );
+            // get the remote office service manager
+            com.sun.star.lang.XMultiComponentFactory xMCF =
+                xContext.getServiceManager();
 
-      /* Gets the service manager instance to be used (or null). This method has
-         been added for convenience, because the service manager is a often used
-         object. */
-      XMultiComponentFactory xmulticomponentfactory =
-      xcomponentcontext.getServiceManager();
+            Object oDesktop = xMCF.createInstanceWithContext(
+                "com.sun.star.frame.Desktop", xContext);
 
-      /* Creates an instance of the component UnoUrlResolver which
-         supports the services specified by the factory. */
-      Object objectUrlResolver =
-      xmulticomponentfactory.createInstanceWithContext(
-      "com.sun.star.bridge.UnoUrlResolver", xcomponentcontext );
+            com.sun.star.frame.XComponentLoader xCompLoader =
+                (com.sun.star.frame.XComponentLoader)
+                     UnoRuntime.queryInterface(
+                         com.sun.star.frame.XComponentLoader.class, oDesktop);
 
-      // Create a new url resolver
-      XUnoUrlResolver xurlresolver = ( XUnoUrlResolver )
-      UnoRuntime.queryInterface( XUnoUrlResolver.class,
-      objectUrlResolver );
+            java.io.File sourceFile = new java.io.File(args[0]);
+            StringBuffer sLoadUrl = new StringBuffer("file:///");
+            sLoadUrl.append(sourceFile.getCanonicalPath().replace('\\', '/'));
 
-      // Resolves an object that is specified as follow:
-      // uno:<connection description>;<protocol description>;<initial object name>
-      Object objectInitial = xurlresolver.resolve( sConnectionString );
+            sourceFile = new java.io.File(args[1]);
+            StringBuffer sSaveUrl = new StringBuffer("file:///");
+            sSaveUrl.append(sourceFile.getCanonicalPath().replace('\\', '/'));
 
-      // Create a service manager from the initial object
-      xmulticomponentfactory = ( XMultiComponentFactory )
-      UnoRuntime.queryInterface( XMultiComponentFactory.class, objectInitial );
+            com.sun.star.beans.PropertyValue[] propertyValue =
+                new com.sun.star.beans.PropertyValue[1];
+            propertyValue[0] = new com.sun.star.beans.PropertyValue();
+            propertyValue[0].Name = "Hidden";
+            propertyValue[0].Value = new Boolean(true);
 
-      // Query for the XPropertySet interface.
-      XPropertySet xpropertysetMultiComponentFactory = ( XPropertySet )
-      UnoRuntime.queryInterface( XPropertySet.class, xmulticomponentfactory );
+            Object oDocToStore = xCompLoader.loadComponentFromURL(
+                sLoadUrl.toString(), "_blank", 0, propertyValue );
+            com.sun.star.frame.XStorable xStorable =
+                (com.sun.star.frame.XStorable)UnoRuntime.queryInterface(
+                    com.sun.star.frame.XStorable.class, oDocToStore );
 
-      // Get the default context from the office server.
-      Object objectDefaultContext =
-      xpropertysetMultiComponentFactory.getPropertyValue( "DefaultContext" );
+            propertyValue = new com.sun.star.beans.PropertyValue[ 2 ];
+            propertyValue[0] = new com.sun.star.beans.PropertyValue();
+            propertyValue[0].Name = "Overwrite";
+            propertyValue[0].Value = new Boolean(true);
+            propertyValue[1] = new com.sun.star.beans.PropertyValue();
+            propertyValue[1].Name = "FilterName";
+            propertyValue[1].Value = "StarOffice XML (Writer)";
+            xStorable.storeAsURL( sSaveUrl.toString(), propertyValue );
 
-      // Query for the interface XComponentContext.
-      xcomponentcontext = ( XComponentContext ) UnoRuntime.queryInterface(
-      XComponentContext.class, objectDefaultContext );
+            System.out.println("\nDocument \"" + sLoadUrl + "\" saved under \"" +
+                               sSaveUrl + "\"\n");
 
-      /* A desktop environment contains tasks with one or more
-         frames in which components can be loaded. Desktop is the
-         environment for components which can instanciate within
-         frames. */
-      XComponentLoader xcomponentloader = ( XComponentLoader )
-      UnoRuntime.queryInterface( XComponentLoader.class,
-      xmulticomponentfactory.createInstanceWithContext(
-      "com.sun.star.frame.Desktop", xcomponentcontext ) );
+            com.sun.star.util.XCloseable xCloseable = (com.sun.star.util.XCloseable)
+                UnoRuntime.queryInterface(com.sun.star.util.XCloseable.class,
+                                          oDocToStore );
 
-      java.io.File sourceFile = new java.io.File(args[0]);
-      StringBuffer sLoadUrl = new StringBuffer("file:///");
-      sLoadUrl.append(sourceFile.getCanonicalPath().replace('\\', '/'));
-
-      sourceFile = new java.io.File(args[1]);
-      StringBuffer sSaveUrl = new StringBuffer("file:///");
-      sSaveUrl.append(sourceFile.getCanonicalPath().replace('\\', '/'));
-
-      PropertyValue[] propertyvalue = new PropertyValue[ 1 ];
-      propertyvalue[ 0 ] = new PropertyValue();
-      propertyvalue[ 0 ].Name = "Hidden";
-      propertyvalue[ 0 ].Value = new Boolean(true);
-
-      Object objectDocumentToStore = xcomponentloader.loadComponentFromURL(
-      sLoadUrl.toString(), "_blank", 0, propertyvalue );
-      XStorable xstorable =
-      ( XStorable ) UnoRuntime.queryInterface( XStorable.class,
-      objectDocumentToStore );
-
-      propertyvalue = new PropertyValue[ 2 ];
-      propertyvalue[ 0 ] = new PropertyValue();
-      propertyvalue[ 0 ].Name = "Overwrite";
-      propertyvalue[ 0 ].Value = new Boolean(true);
-      propertyvalue[ 1 ] = new PropertyValue();
-      propertyvalue[ 1 ].Name = "FilterName";
-      propertyvalue[ 1 ].Value = "swriter: StarOffice XML (Writer)";
-      xstorable.storeAsURL( sSaveUrl.toString(), propertyvalue );
-
-      System.out.println("\ndocument \"" + sLoadUrl + "\" saved under \"" + sSaveUrl + "\"\n");
-
-      XCloseable xCloseable = ( XCloseable ) UnoRuntime.queryInterface(
-          XCloseable.class, objectDocumentToStore );
-
-      if (xCloseable != null ) {
-          xCloseable.close(false);
-      } else
-      {
-          XComponent xComponent = ( XComponent ) UnoRuntime.queryInterface(
-              XComponent.class, objectDocumentToStore );
-          xComponent.dispose();
-      }
-      System.out.println("document closed!");
-
-      System.exit(0);
+            if (xCloseable != null ) {
+                xCloseable.close(false);
+            } else
+            {
+                com.sun.star.lang.XComponent xComp = (com.sun.star.lang.XComponent)
+                    UnoRuntime.queryInterface(
+                        com.sun.star.lang.XComponent.class, oDocToStore );
+                xComp.dispose();
+            }
+            System.out.println("document closed!");
+            System.exit(0);
+        }
+        catch( Exception e ) {
+            e.printStackTrace(System.err);
+            System.exit(1);
+        }
     }
-    catch( Exception exception ) {
-      System.err.println( exception );
-    }
-  }
 }
