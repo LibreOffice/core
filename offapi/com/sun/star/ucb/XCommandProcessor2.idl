@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCommandProcessor2.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:57:55 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ module com { module sun { module star { module ucb {
     <type scope="com::sun::star::ucb">XCommandProcessor</type> that helps avoid
     ever-increasing resource consumption.
  */
-interface XCommandProcessor2: com::sun::star::ucb::XCommandProcessor
+published interface XCommandProcessor2: com::sun::star::ucb::XCommandProcessor
 {
     //------------------------------------------------------------------------
     /** releases a command identifier obtainded through
