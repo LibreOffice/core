@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BIndex.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 07:32:12 $
+ *  last change: $Author: fs $ $Date: 2001-03-15 08:02:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@ namespace connectivity
         public:
             virtual void refreshColumns();
         public:
+            OAdabasIndex(OAdabasTable* _pTable);
             OAdabasIndex(   OAdabasTable* _pTable,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Catalog,

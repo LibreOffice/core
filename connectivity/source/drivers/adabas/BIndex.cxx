@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BIndex.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-08 13:14:50 $
+ *  last change: $Author: fs $ $Date: 2001-03-15 08:00:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,13 @@ OAdabasIndex::OAdabasIndex( OAdabasTable* _pTable,
     refreshColumns();
 }
 // -------------------------------------------------------------------------
+OAdabasIndex::OAdabasIndex(OAdabasTable* _pTable)
+    : connectivity::sdbcx::OIndex(sal_True)
+    ,m_pTable(_pTable)
+{
+    construct();
+}
+// -----------------------------------------------------------------------------
 
 void OAdabasIndex::refreshColumns()
 {
