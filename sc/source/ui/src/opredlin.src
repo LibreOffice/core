@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opredlin.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:44:01 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:21:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ japanese ] = "ζΏε…¥(~I)";
         Text[ chinese_traditional ] = "ζ’ε…¥(~I)";
         Text[ arabic ] = "ΕΟΡΗΜΗΚ";
-        Text[ greek ] = "Προσθήκες";
+        Text[ greek ] = "Εισαγωγές";
         Text[ korean ] = "μ‚½μ…(~I)";
         Text[ turkish ] = "~Eklemeler";
         Text[ language_user1 ] = " ";
@@ -293,6 +293,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text[ slovak ] = "Autor";
     };
 };
+
 
 
 
