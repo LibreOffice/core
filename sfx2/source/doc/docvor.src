@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:32 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 19:01:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ ModalDialog DLG_ORGANIZE
     Text [ portuguese ] = "Gerir modelos de documentos" ;
     Text [ finnish ] = "Muokkaa asiakirjamalleja" ;
     Text [ danish ] = "Administrer dokumentskabeloner" ;
-    Text [ french ] = "Gestion des modËles de documents" ;
+    Text [ french ] = "Gestion des modËles de document" ;
     Text [ swedish ] = "Fˆrvalta dokumentmallar" ;
     Text [ dutch ] = "Sjablonen beheren" ;
     Text [ spanish ] = "Administrar plantillas" ;
@@ -198,7 +198,7 @@ ModalDialog DLG_ORGANIZE
         };
         StringList [ danish ] =
         {
-            < "Dokumentskabelon" ; Default ; > ;
+            < "Dokumentskabeloner" ; Default ; > ;
             < "Dokumenter" ; Default ; > ;
         };
         StringList [ french ] =
@@ -549,7 +549,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ chinese_simplified ] = "±‡º≠(~E)";
                     Text[ russian ] = "~œ‡‚Í‡";
                     Text[ polish ] = "~Edytuj";
-                    Text[ japanese ] = "ï“èWÅi~ÇdÅj";
+                    Text[ japanese ] = "ï“èW(~E)";
                     Text[ chinese_traditional ] = "ΩsøË(~E)";
                     Text[ arabic ] = "~ Õ—Ì—";
                     Text[ greek ] = "~≈ÂÓÂÒ„·Ûﬂ·";
