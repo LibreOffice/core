@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2001-10-31 21:57:50 $
+ *  last change: $Author: kz $ $Date: 2001-11-13 23:15:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ korean ] = "Î°ú Îç∞Ïù¥ÌÑ∞ ÏÇΩÏûÖ:";
         Text[ turkish ] = "Eklenecek verilerin t¸r¸:";
         Text[ catalan ] = "Insertar datos como:";
-        Text[ finnish ] = "Lis?? tiedot muodossa:";
+        Text[ finnish ] = "Lis‰‰ tiedot muodossa:";
     };
     RadioButton RB_AS_TABLE
     {
@@ -162,7 +162,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ korean ] = "ÌïÑÎìú(~F)";
         Text[ turkish ] = "~Alanlar";
         Text[ catalan ] = "~Campos";
-        Text[ finnish ] = "~Kent?t";
+        Text[ finnish ] = "~Kent‰t";
     };
     RadioButton RB_AS_TEXT
     {
@@ -546,7 +546,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ dutch ] = "Tabelopschrift invoegen";
         Text[ french ] = "InsÈrer le titre de la table";
         Text[ spanish ] = "Insertar encabezado de tabla";
-        Text[ finnish ] = "Lis?? taulukon otsikko";
+        Text[ finnish ] = "Lis‰‰ taulukon otsikko";
         Text[ italian ] = "Inserisci intestazione tabella";
         Text[ danish ] = "Aktiver";
         Text[ swedish ] = "Infoga tabellˆverskrift";
@@ -575,7 +575,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ dutch ] = "K~olomnaam overnemen";
         Text[ french ] = "Appliquer les noms des colonnes";
         Text[ spanish ] = "Aplicar ~nombres de columnas";
-        Text[ finnish ] = "~Hyv?ksy sarakkeen nimi";
+        Text[ finnish ] = "~Hyv‰ksy sarakkeen nimi";
         Text[ italian ] = "Importa nomi colonne";
         Text[ danish ] = "Kolonnenavn";
         Text[ swedish ] = "Anv‰nd kolumn~namn";
@@ -703,7 +703,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ korean ] = "<ÏóÜÏùå>";
         Text[ turkish ] = "<yok>";
         Text[ catalan ] = "<ninguno>";
-        Text[ finnish ] = "<ei mit??n>";
+        Text[ finnish ] = "<ei mit‰‰n>";
     };
     Text [ english_us ] = "Insert Database Columns" ;
     Text [ portuguese_brazilian ] = "Datenbankspalten einf?en" ;
@@ -726,8 +726,9 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     Text[ korean ] = "Îç∞Ïù¥ÌÑ∞Î≤†Ïù¥Ïä§ Ïó¥ ÏÇΩÏûÖ";
     Text[ turkish ] = "Veritaban˝ s¸tunu ekle";
     Text[ catalan ] = "Insertar columnas de la base de datos";
-    Text[ finnish ] = "Lis?? tietokantasarakkeet";
+    Text[ finnish ] = "Lis‰‰ tietokantasarakkeet";
 };
+
 
 
 
