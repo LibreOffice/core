@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStaticTextBase.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-16 11:58:06 $
+ *  last change: $Author: thb $ $Date: 2002-09-24 10:29:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -711,10 +711,21 @@ namespace accessibility
 
         EPosition aPos( mpImpl->Range2Internal(nIndex) );
 
-        if( AccessibleTextType::PARAGRAPH == aTextType &&
-            aPos.nPara > 0 )
+        if( AccessibleTextType::PARAGRAPH == aTextType )
         {
-            return mpImpl->GetParagraph( aPos.nPara - 1 ).getText();
+            if( aPos.nIndex == mpImpl->GetParagraph( aPos.nPara ).getCharacterCount() )
+            {
+                // #103589# Special casing one behind the last paragraph
+                return mpImpl->GetParagraph( aPos.nPara ).getText();
+            }
+            else if( aPos.nPara > 0 )
+            {
+                return mpImpl->GetParagraph( aPos.nPara - 1 ).getText();
+            }
+            else
+            {
+                return ::rtl::OUString();
+            }
         }
         else
         {
@@ -728,10 +739,16 @@ namespace accessibility
 
         EPosition aPos( mpImpl->Range2Internal(nIndex) );
 
-        if( AccessibleTextType::PARAGRAPH == aTextType &&
-            aPos.nPara + 1 < mpImpl->GetParagraphCount() )
+        if( AccessibleTextType::PARAGRAPH == aTextType )
         {
-            return mpImpl->GetParagraph( aPos.nPara + 1 ).getText();
+            if( aPos.nPara + 1 < mpImpl->GetParagraphCount() )
+            {
+                return mpImpl->GetParagraph( aPos.nPara + 1 ).getText();
+            }
+            else
+            {
+                return ::rtl::OUString();
+            }
         }
         else
         {
