@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextColumns.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-05 19:33:20 $
+ *  last change: $Author: mtg $ $Date: 2001-07-26 14:25:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ service TextColumns
     /** determins whether the columns all have equal width. This flag is set if XTextColumns::setColumnCount() is called
      and it is reset if XTextColumns::setColumns() is called.
      */
-    [property]  boolean IsAutomatic;
+    [readonly, property]  boolean IsAutomatic;
     //------------------------------------------------------------------------
     /** contains the distance between the columns. It is valid if the property IsAutomatic is set.
      The half of this distance is set to the left and right margins of all columns except for the left margin
