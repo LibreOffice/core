@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-24 08:43:33 $
+ *  last change: $Author: ka $ $Date: 2001-04-24 09:50:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1100,6 +1100,7 @@ void SdrObjList::Load(SvStream& rIn, SdrPage& rPage)
             {
                 rIn >> *pObj;
 
+#ifndef SVX_LIGHT
                 if( ( pObj->GetObjIdentifier() == OBJ_OLE2 ) && ( pObj->GetObjInventor() == SdrInventor ) )
                 {
                     // convert StarImage OLE objects to normal graphic objects
@@ -1166,6 +1167,7 @@ void SdrObjList::Load(SvStream& rIn, SdrPage& rPage)
                         }
                     }
                 }
+#endif // SVX_LIGHT
 
                 InsertObject(pObj,CONTAINER_APPEND,&aReason);
             }
