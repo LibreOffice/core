@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pl $ $Date: 2001-12-11 11:52:15 $
+ *  last change: $Author: pl $ $Date: 2002-06-19 11:21:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
 
     // copy the whole context
     if( pJobSetup->mpDriverData )
-        delete pJobSetup->mpDriverData;
+        rtl_freeMemory( pJobSetup->mpDriverData );
 
     int nBytes;
     void* pBuffer = NULL;
@@ -571,7 +571,7 @@ BOOL SalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
 
     if( pSetupFunction( aInfo ) )
     {
-        delete pJobSetup->mpDriverData;
+        rtl_freeMemory( pJobSetup->mpDriverData );
         pJobSetup->mpDriverData = NULL;
 
         int nBytes;

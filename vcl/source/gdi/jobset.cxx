@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jobset.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-29 12:53:04 $
+ *  last change: $Author: pl $ $Date: 2002-06-19 11:20:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #endif
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
+#endif
+#ifndef _RTL_ALLOC_H
+#include <rtl/alloc.h>
 #endif
 
 #ifndef _SV_JOBSET_HXX
@@ -134,7 +137,7 @@ ImplJobSetup::ImplJobSetup( const ImplJobSetup& rJobSetup ) :
     mnDriverDataLen     = rJobSetup.mnDriverDataLen;
     if ( rJobSetup.mpDriverData )
     {
-        mpDriverData = new BYTE[mnDriverDataLen];
+        mpDriverData = (BYTE*)rtl_allocateMemory( mnDriverDataLen );
         memcpy( mpDriverData, rJobSetup.mpDriverData, mnDriverDataLen );
     }
     else
@@ -146,7 +149,7 @@ ImplJobSetup::ImplJobSetup( const ImplJobSetup& rJobSetup ) :
 
 ImplJobSetup::~ImplJobSetup()
 {
-    delete[] mpDriverData;
+    rtl_freeMemory( mpDriverData );
 }
 
 // =======================================================================
@@ -381,7 +384,7 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
                 if ( pJobData->mnDriverDataLen )
                 {
                     BYTE* pDriverData = ((BYTE*)pOldJobData) + nOldJobDataSize;
-                    pJobData->mpDriverData = new BYTE[pJobData->mnDriverDataLen];
+                    pJobData->mpDriverData = (BYTE*)rtl_allocateMemory( pJobData->mnDriverDataLen );
                     memcpy( pJobData->mpDriverData, pDriverData, pJobData->mnDriverDataLen );
                 }
                 if( nSystem == JOBSET_FILE605_SYSTEM )
