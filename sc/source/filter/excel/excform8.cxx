@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 08:59:13 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:27:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1312,7 +1312,8 @@ BOOL ExcelToSc8::GetAbsRefs( ScRangeList& r, UINT32 nLen )
 
                 goto _common;
     _common:
-                if( !(( nCol1 & 0xC000 ) || ( nCol2 & 0xC000 )) )
+                // do not check abs/rel flags, linked controls have set them!
+//               if( !(( nCol1 & 0xC000 ) || ( nCol2 & 0xC000 )) )
                     r.Insert( new ScRange( static_cast<SCCOL>(nCol1 & ~0xC000),
                                 static_cast<SCROW>(nRow1), nTab1,
                                 static_cast<SCCOL>(nCol2 & ~0xC000),
