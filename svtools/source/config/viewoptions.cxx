@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewoptions.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: as $ $Date: 2001-02-07 12:35:58 $
+ *  last change: $Author: as $ $Date: 2001-07-10 10:31:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -883,7 +883,7 @@ void SvtViewTabPageOptions_Impl::impl_ReadWholeList()
         sName += seqNodeNames[nNodeName];
         sName += PATHSEPERATOR          ;
         seqAllNames[nProperty] = sName + PROPERTYNAME_USERDATA;
-        //++nProperty;
+        ++nProperty;
     }
 
     Sequence< Any > seqAllValues = GetProperties( seqAllNames );
@@ -893,12 +893,12 @@ void SvtViewTabPageOptions_Impl::impl_ReadWholeList()
     // It's neccessary for next loop and our index using!
     DBG_ASSERT( !(seqAllNames.getLength()!=seqAllValues.getLength()), "SvtViewTabPageOptions_Impl::impl_ReadWholeList()\nMiss some configuration values for tab-page set!\n" );
 
-    //nProperty = 0;
+    nProperty = 0;
     for( nNodeName=0; nNodeName<nNodeCount; ++nNodeName )
     {
         sName = seqNodeNames[nNodeName].copy( SHORTNAME_ENDPOSITION, seqNodeNames[nNodeName].getLength()-SHORTNAME_ENDPOSITION );
         seqAllValues[nProperty] >>= m_aList[sName].sUserData;
-        //++nProperty;
+        ++nProperty;
     }
 }
 
