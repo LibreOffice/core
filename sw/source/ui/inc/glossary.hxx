@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:40 $
+ *  last change: $Author: os $ $Date: 2000-12-21 12:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,7 @@ class SwGlossaryDlg : public SvxStandardDialog
 
     GroupBox        aExampleGB;
     Window          aExampleWIN;
+    Window          aHideExampleWIN;
     CheckBox        aShowExampleCB;
 
     CheckBox        aInsertTipCB;
@@ -197,6 +198,12 @@ class SwGlossaryDlg : public SvxStandardDialog
 
     PopupMenu*      pMenu;
     SwGlossaryHdl*  pGlossaryHdl;
+
+    String          sResumeGroup;
+    String          sResumeShortName;
+    BOOL            bResume;
+
+
     const sal_Bool      bSelection : 1;
     sal_Bool            bReadOnly : 1;
     sal_Bool            bIsOld : 1;
@@ -223,7 +230,13 @@ class SwGlossaryDlg : public SvxStandardDialog
     void            Init();
     SvLBoxEntry*    DoesBlockExist(const String& sBlock, const String& rShort);
     void            ShowAutoText(const String& rGroup, const String& rShortName);
+    void            ResumeShowAutoText();
 
+    BOOL            GetResumeData(String& rGroup, String& rShortName)
+                        {rGroup = sResumeGroup; rShortName = sResumeShortName; return bResume;}
+    void            SetResumeData(const String& rGroup, const String& rShortName)
+                        {sResumeGroup = rGroup; sResumeShortName = rShortName; bResume = TRUE;}
+    void            ResetResumeData() {bResume = FALSE;}
 public:
     SwGlossaryDlg(SfxViewFrame* pViewFrame, SwGlossaryHdl* pGlosHdl, SwWrtShell *pWrtShell);
     ~SwGlossaryDlg();

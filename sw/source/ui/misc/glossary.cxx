@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-06 09:04:00 $
+ *  last change: $Author: os $ $Date: 2000-12-21 12:11:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,6 +330,7 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
     SvxStandardDialog(&pViewFrame->GetWindow(), SW_RES(DLG_GLOSSARY)),
     aExampleGB    (this, SW_RES(GB_EXAMPLE  )),
     aExampleWIN   (this, SW_RES(WIN_EXAMPLE )),
+    aHideExampleWIN(this, SW_RES(WIN_EXAMPLE    )),
     aShowExampleCB(this, SW_RES(CB_SHOW_EXAMPLE )),
     aInsertTipCB  (this, SW_RES(CB_INSERT_TIP)),
     aNameLbl      (this, SW_RES(FT_NAME)),
@@ -355,8 +356,11 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
     bSelection( pWrtShell->IsSelection() ),
     bReadOnly( sal_False ),
     bIsOld( sal_False ),
-    bIsDocReadOnly(sal_False)
+    bIsDocReadOnly(sal_False),
+    bResume(sal_False)
 {
+    aHideExampleWIN.SetBackground( Wallpaper(Color( COL_WHITE )) );
+    aHideExampleWIN.Show(FALSE);
     // Static-Pointer initialisieren
     if( !pCurrGlosGroup )
         pCurrGlosGroup = new String;//(SwGlossaries::GetDefName());
@@ -1298,9 +1302,8 @@ IMPL_LINK( SwGlossaryDlg, ShowPreviewHdl, CheckBox *, pBox )
  --------------------------------------------------*/
 IMPL_LINK( SwGlossaryDlg, PreviewLoadedHdl, void *, EMPTYARG )
 {
-    if(pCurrGlosGroup)
-        ShowAutoText(*pCurrGlosGroup, aShortNameEdit.GetText());
     aExampleWIN.Show(aShowExampleCB.IsChecked());
+    ResumeShowAutoText();
     return 0;
 };
 
@@ -1311,6 +1314,11 @@ void SwGlossaryDlg::ShowAutoText(const String& rGroup, const String& rShortName)
 {
     if(aExampleWIN.IsVisible())
     {
+        aHideExampleWIN.Show();
+        SetResumeData(rGroup, rShortName);
+        //try to make an Undo()
+        pExampleFrame->ExecUndo();
+
         if(!_xAutoText.is())
         {
             uno::Reference< lang::XMultiServiceFactory >
@@ -1321,8 +1329,6 @@ void SwGlossaryDlg::ShowAutoText(const String& rGroup, const String& rShortName)
             _xAutoText = uno::Reference< container::XNameAccess >(xAText, uno::UNO_QUERY);
         }
 
-        //try to make an Undo()
-        pExampleFrame->ExecUndo();
         uno::Reference< XTextCursor > & xCrsr = pExampleFrame->GetTextCursor();
         if(xCrsr.is())
         {
@@ -1341,6 +1347,45 @@ void SwGlossaryDlg::ShowAutoText(const String& rGroup, const String& rShortName)
             }
         }
     }
+}
+/* -----------------------------21.12.00 11:33--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void    SwGlossaryDlg::ResumeShowAutoText()
+{
+    String sGroup, sShortName;
+    if(GetResumeData(sGroup, sShortName) && aExampleWIN.IsVisible())
+    {
+        if(!_xAutoText.is())
+        {
+            uno::Reference< lang::XMultiServiceFactory >
+                                    xMgr = getProcessServiceFactory();
+            //now the AutoText ListBoxes have to be filled
+
+            uno::Reference< uno::XInterface >  xAText = xMgr->createInstance( C2U("com.sun.star.text.AutoTextContainer") );
+            _xAutoText = uno::Reference< container::XNameAccess >(xAText, uno::UNO_QUERY);
+        }
+
+        uno::Reference< XTextCursor > & xCrsr = pExampleFrame->GetTextCursor();
+        if(xCrsr.is())
+        {
+            if(sShortName.Len())
+            {
+                uno::Any aGroup = _xAutoText->getByName(sGroup);
+                uno::Reference< XAutoTextGroup >  xGroup = *(uno::Reference< XAutoTextGroup > *)aGroup.getValue();
+                OUString uShortName(sShortName);
+                if(xGroup->hasByName(uShortName))
+                {
+                    uno::Any aEntry(xGroup->getByName(uShortName));
+                    uno::Reference< XAutoTextEntry >  xEntry = *(uno::Reference< XAutoTextEntry > *)aEntry.getValue();
+                    uno::Reference< XTextRange >  xRange(xCrsr, uno::UNO_QUERY);
+                    xEntry->applyTo(xRange);
+                }
+            }
+        }
+        aHideExampleWIN.Hide();
+    }
+    ResetResumeData();
 }
 
 

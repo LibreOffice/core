@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:43 $
+ *  last change: $Author: os $ $Date: 2000-12-21 12:12:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,7 @@ class SwOneExampleFrame
     Link            aInitializedLink;
 
     MenuResource    aMenuRes;
+    String          sArgumentURL;
 
     SwView*         pModuleView;
 
@@ -193,6 +194,8 @@ class SwOneExampleFrame
     DECL_LINK( TimeoutHdl, Timer* );
     DECL_LINK( PopupHdl, Menu* );
 
+    void    CreateControl();
+    void    DisposeControl();
 public:
     SwOneExampleFrame(Window& rWin,
                     sal_uInt32 nStyleFlags = EX_SHOW_ONLINE_LAYOUT,

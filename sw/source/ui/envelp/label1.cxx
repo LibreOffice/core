@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label1.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-15 09:21:52 $
+ *  last change: $Author: os $ $Date: 2000-12-21 12:12:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1002,11 +1002,14 @@ SwVisitingCardPage::SwVisitingCardPage(Window* pParent, const SfxItemSet& rSet) 
     aAutoTextGroupLB(this,  ResId( LB_AUTO_TEXT_GROUP   )),
     aContentGB(this,        ResId( GB_CONTENT           )),
     aExampleWIN(this,       ResId( WIN_EXAMPLE          )),
+    aHideExampleWIN(this,   ResId( WIN_EXAMPLE          )),
     aExampleGB(this,        ResId( GB_EXAMPLE           )),
     sVisCardGroup(ResId(ST_VISCARD_GROUP)),
-    pExampleFrame(0)
+    pExampleFrame(0),
+    bResume(FALSE)
 {
     FreeResource();
+    aHideExampleWIN.SetBackground( Wallpaper(Color( COL_WHITE )) );
     aAutoTextLB.SetWindowBits( WB_HSCROLL );
     aAutoTextLB.SetSpaceBetweenEntries(0);
     aAutoTextLB.SetSelectionMode( SINGLE_SELECTION );
@@ -1211,7 +1214,7 @@ void SwVisitingCardPage::InitFrameControl()
  --------------------------------------------------*/
 IMPL_LINK( SwVisitingCardPage, FrameControlInitializedHdl, void*, EMPTYARG )
 {
-    AutoTextSelectHdl(&aAutoTextGroupLB);
+    ResumeShowAutoText();
     return 0;
 };
 /* -----------------22.07.99 11:06-------------------
@@ -1242,7 +1245,8 @@ IMPL_LINK( SwVisitingCardPage, AutoTextSelectHdl, void*, pBox )
         String sGroup(
             *(String*)aAutoTextGroupLB.GetEntryData(aAutoTextGroupLB.GetSelectEntryPos()));
         uno::Any aGroup = _xAutoText->getByName(sGroup);
-        uno::Reference< text::XAutoTextGroup >  xGroup = *(uno::Reference< text::XAutoTextGroup > *)aGroup.getValue();
+        uno::Reference< text::XAutoTextGroup >  xGroup;
+        aGroup >>= xGroup;
 
         if(bGroup)
         {
@@ -1266,13 +1270,32 @@ IMPL_LINK( SwVisitingCardPage, AutoTextSelectHdl, void*, pBox )
                 pEntry->SetUserData(new String(sBlock));
             }
         }
+        SetResume();
+        aHideExampleWIN.Show();
+        pExampleFrame->ExecUndo();
+    }
+    return 0;
+}
+/* -----------------------------21.12.00 12:16--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwVisitingCardPage::ResumeShowAutoText()
+{
+    if(IsResume())
+    {
         SvLBoxEntry* pSel = aAutoTextLB.FirstSelected();
         String sEntry;
         if(pSel)
             sEntry = *(String*)pSel->GetUserData();
-        pExampleFrame->ExecUndo();
         uno::Reference< text::XTextCursor > & xCrsr = pExampleFrame->GetTextCursor();
         OUString uEntry(sEntry);
+
+        String sGroup(
+            *(String*)aAutoTextGroupLB.GetEntryData(aAutoTextGroupLB.GetSelectEntryPos()));
+        uno::Any aGroup = _xAutoText->getByName(sGroup);
+        uno::Reference< text::XAutoTextGroup >  xGroup;
+        aGroup >>= xGroup;
+
         if(sEntry.Len() && xGroup->hasByName(uEntry))
         {
             uno::Any aEntry(xGroup->getByName(uEntry));
@@ -1284,8 +1307,8 @@ IMPL_LINK( SwVisitingCardPage, AutoTextSelectHdl, void*, pBox )
             }
             UpdateFields();
         }
+        aHideExampleWIN.Hide();
     }
-    return 0;
 }
 /* -----------------01.10.99 11:59-------------------
 

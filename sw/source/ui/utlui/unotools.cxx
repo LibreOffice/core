@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-20 14:18:07 $
+ *  last change: $Author: os $ $Date: 2000-12-21 12:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,9 +158,12 @@
 
 
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
+#define C2S(cChar) String::CreateFromAscii(cChar)
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
+const sal_Char cFrameControl[] = "com.sun.star.frame.FrameControl";
+const sal_Char cFactory[] = "private:factory/swriter";
 /* -----------------09.06.99 14:39-------------------
  *
  * --------------------------------------------------*/
@@ -252,6 +255,9 @@ SwOneExampleFrame::SwOneExampleFrame(Window& rWin,
     bIsInitialized(sal_False),
     bServiceAvailable(sal_False)
 {
+    if(pURL && pURL->Len())
+        sArgumentURL = *pURL;
+
     aTopWindow.SetPaintTransparent(sal_True);
     aTopWindow.SetPosSizePixel(rWin.GetPosPixel(), rWin.GetSizePixel());
     aTopWindow.SetZOrder( &rWin, WINDOW_ZORDER_FIRST );
@@ -260,6 +266,35 @@ SwOneExampleFrame::SwOneExampleFrame(Window& rWin,
         aInitializedLink = *pInitializedLink;
 
     rWin.Enable(sal_False);
+    CreateControl();
+}
+/* -----------------------------08.12.99 13:44--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwOneExampleFrame::CreateErrorMessage(Window* pParent)
+{
+    if(SwOneExampleFrame::bShowServiceNotAvailableMessage)
+    {
+        String sInfo(SW_RES(STR_SERVICE_UNAVAILABLE));
+        sInfo += C2S(cFrameControl);
+        InfoBox(pParent, sInfo).Execute();
+        SwOneExampleFrame::bShowServiceNotAvailableMessage = sal_False;
+    }
+}
+/* -----------------27.07.99 15:26-------------------
+
+ --------------------------------------------------*/
+SwOneExampleFrame::~SwOneExampleFrame()
+{
+    DisposeControl();
+}
+/* -----------------------------21.12.00 10:16--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void    SwOneExampleFrame::CreateControl()
+{
+    if(_xControl.is())
+        return ;
     uno::Reference< lang::XMultiServiceFactory >
                                     xMgr = comphelper::getProcessServiceFactory();
     uno::Reference< uno::XInterface >  xInst = xMgr->createInstance( C2U("com.sun.star.frame.FrameControl") );
@@ -276,9 +311,9 @@ SwOneExampleFrame::SwOneExampleFrame(Window& rWin,
             uno::Any aURL;
             //
             // create new doc
-            String sTempURL = String::CreateFromAscii("private:factory/swriter");
-            if(pURL && pURL->Len())
-                sTempURL = *pURL;
+            String sTempURL = C2S(cFactory);
+            if(sArgumentURL.Len())
+                sTempURL = sArgumentURL;
             aURL <<= OUString(sTempURL);
 
             uno::Sequence<beans::PropertyValue> aSeq(3);
@@ -312,23 +347,10 @@ SwOneExampleFrame::SwOneExampleFrame(Window& rWin,
         }
     }
 }
-/* -----------------------------08.12.99 13:44--------------------------------
+/* -----------------------------21.12.00 10:16--------------------------------
 
  ---------------------------------------------------------------------------*/
-void SwOneExampleFrame::CreateErrorMessage(Window* pParent)
-{
-    if(SwOneExampleFrame::bShowServiceNotAvailableMessage)
-    {
-        String sInfo(SW_RES(STR_SERVICE_UNAVAILABLE));
-        sInfo += String::CreateFromAscii("com.sun.star.frame.FrameControl");
-        InfoBox(pParent, sInfo).Execute();
-        SwOneExampleFrame::bShowServiceNotAvailableMessage = sal_False;
-    }
-}
-/* -----------------27.07.99 15:26-------------------
-
- --------------------------------------------------*/
-SwOneExampleFrame::~SwOneExampleFrame()
+void    SwOneExampleFrame::DisposeControl()
 {
     _xCursor = 0;
     if(_xControl.is())
@@ -447,25 +469,11 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
  ---------------------------------------------------------------------------*/
 void SwOneExampleFrame::ExecUndo()
 {
-    if(_xCursor.is())
+    DisposeControl();
+    CreateControl();
+    while(pTimer->IsActive())
     {
-        uno::Reference< lang::XUnoTunnel > xTunnel(_xCursor, uno::UNO_QUERY);
-        SwXTextCursor* pCrsr = xTunnel.is() ?
-            (SwXTextCursor*)xTunnel->getSomething(SwXTextCursor::getUnoTunnelId()) : 0;
-
-        if(pCrsr)
-        {
-            SwDoc* pDoc = pCrsr->GetCrsr()->GetDoc();
-            SwEditShell* pSh = pDoc->GetEditShell();
-            pSh->Undo();
-            pDoc->ResetAttr(*pCrsr->GetCrsr());
-        }
-        else
-        {
-            _xCursor->gotoStart(sal_False);
-            _xCursor->gotoEnd(sal_True);
-            _xCursor->setString(OUString());
-        }
+        wait();
     }
 }
 /* -----------------------------15.12.99 11:09--------------------------------
@@ -587,117 +595,4 @@ MenuResource::MenuResource(const ResId& rResId) :
 {
     FreeResource();
 }
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 17:14:50  hr
-    initial import
-
-    Revision 1.34  2000/09/18 16:06:19  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.33  2000/09/14 14:47:48  os
-    #78770# CreateFromInt32
-
-    Revision 1.32  2000/08/28 08:12:24  os
-    #78015# Referer
-
-    Revision 1.31  2000/07/20 15:05:48  kz
-    properties renamed
-
-    Revision 1.30  2000/07/03 08:55:07  jp
-    must changes for VCL
-
-    Revision 1.29  2000/06/07 13:19:19  os
-    using UCB
-
-    Revision 1.28  2000/05/19 13:03:45  os
-    check interface in dtor
-
-    Revision 1.27  2000/05/16 09:15:14  os
-    project usr removed
-
-    Revision 1.26  2000/04/18 15:14:09  os
-    UNICODE
-
-    Revision 1.25  2000/03/23 13:25:02  os
-    #74334# create sub-popup within the same block as the main popup
-
-    Revision 1.24  2000/03/23 07:51:11  os
-    UNO III
-
-    Revision 1.23  2000/03/06 15:47:51  os
-    #73802# preview improved
-
-    Revision 1.22  2000/03/03 15:17:05  os
-    StarView remainders removed
-
-    Revision 1.21  2000/02/11 15:01:13  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.20  2000/02/04 14:59:53  os
-    #72599# mark current zoom level
-
-    Revision 1.19  1999/12/29 07:52:04  os
-    #71262# set zoom type first
-
-    Revision 1.18  1999/12/27 10:46:07  os
-    #71262# Undo in SwOneExampleFrame
-
-    Revision 1.17  1999/12/17 14:50:57  os
-    #70986# SwView of Example resets Module's view pointer
-
-    Revision 1.16  1999/12/15 15:32:45  os
-    #70234# ExampleFrame: OnlineLayout, ContextMenu, disabled
-
-    Revision 1.15  1999/12/09 12:29:12  os
-    #70284# show Bitmaps in hyperlink insert dialog# content.cxx glbltree.cxx navipi.hrc navipi.src
-
-    Revision 1.14  1999/12/07 15:41:50  os
-    #70574# old service names removed
-
-    Revision 1.13  1999/11/29 15:53:21  os
-    #70181# call dispose in dtor
-
-    Revision 1.12  1999/11/25 15:47:10  os
-    headers corrected
-
-    Revision 1.11  1999/11/25 08:58:07  os
-    hori scrollbar enabled
-
-    Revision 1.10  1999/11/23 10:18:09  os
-    header corrected
-
-    Revision 1.9  1999/11/19 16:40:25  os
-    modules renamed
-
-    Revision 1.8  1999/11/10 14:58:55  os
-    vertical scrollbar on
-
-    Revision 1.7  1999/10/22 15:06:25  os
-    user factory URL
-
-    Revision 1.6  1999/10/01 12:02:27  os
-    set bIsInitialized before calling the link
-
-    Revision 1.5  1999/09/20 09:58:54  os
-    local resources separated
-
-    Revision 1.4  1999/07/28 11:07:38  OS
-    new: SwOneExampleFrame
-
-
-      Rev 1.3   28 Jul 1999 13:07:38   OS
-   new: SwOneExampleFrame
-
-      Rev 1.2   02 Jul 1999 11:10:08   OS
-   #63003# NameWarning also in StarOne rename dialog
-
-      Rev 1.1   25 Jun 1999 10:22:40   OS
-   #67190# Names must be unique forall frames
-
-      Rev 1.0   10 Jun 1999 09:51:46   OS
-   SwRenameXNamedDialog
-
-------------------------------------------------------------------------*/
 
