@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-13 14:34:05 $
+ *  last change: $Author: sj $ $Date: 2000-12-21 17:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -579,223 +579,6 @@ void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherProperty
 
 //  -----------------------------------------------------------------------
 
-void ImplEESdrWriter::ImplWriteAny( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt,
-                                    UINT32 nFlags, BOOL bBezier,
-                                    Polygon* pPolygon )
-{
-    PolyPolygon aPolyPolygon;
-    Polygon     aPolygon;
-
-    if ( pPolygon )
-        aPolyPolygon.Insert( *pPolygon, POLYPOLY_APPEND );
-    else
-    {
-        if ( bBezier )
-        {
-            if ( !rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("PolyPolygonBezier") ) )
-                return;
-        }
-        else if ( !rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("PolyPolygon") ) )
-                return;
-
-        if ( bBezier )
-        {
-            PolyPolygonBezierCoords* pSourcePolyPolygon =
-                    (PolyPolygonBezierCoords*)rObj.GetUsrAny().getValue();
-            INT32 nOuterSequenceCount = pSourcePolyPolygon->Coordinates.getLength();
-
-            // Zeiger auf innere sequences holen
-            PointSequence* pOuterSequence = pSourcePolyPolygon->Coordinates.getArray();
-            FlagSequence*  pOuterFlags = pSourcePolyPolygon->Flags.getArray();
-
-            if ( ! ( pOuterSequence && pOuterFlags ) )
-                return;
-
-            sal_uInt16 a, b, nInnerSequenceCount;
-            awt::Point* pArray;
-
-            // dies wird ein Polygon set
-            for ( a = 0; a < nOuterSequenceCount; a++ )
-            {
-                PointSequence* pInnerSequence = pOuterSequence++;
-                FlagSequence*  pInnerFlags = pOuterFlags++;
-
-                if ( ! ( pInnerSequence && pInnerFlags ) )
-                    return;
-
-                // Zeiger auf Arrays holen
-                pArray = pInnerSequence->getArray();
-                PolygonFlags* pFlags = pInnerFlags->getArray();
-
-                if ( pArray && pFlags )
-                {
-                    nInnerSequenceCount = (sal_uInt16)pInnerSequence->getLength();
-                    aPolygon = Polygon( nInnerSequenceCount );
-                    for( b = 0; b < nInnerSequenceCount; b++)
-                    {
-                        PolyFlags   ePolyFlags( *( (PolyFlags*)pFlags++ ) );
-                        aPolygon[ b ] = Point( pArray->X, pArray->Y );
-                        pArray++;
-                        aPolygon.SetFlags( b, ePolyFlags );
-
-                        if ( ePolyFlags == POLY_CONTROL )
-                            continue;
-                    }
-                    aPolyPolygon.Insert( aPolygon, POLYPOLY_APPEND );
-                }
-            }
-        }
-        else
-        {
-            PointSequenceSequence* pSourcePolyPolygon =
-                        (PointSequenceSequence*)rObj.GetUsrAny().getValue();
-            sal_uInt16 nOuterSequenceCount = (sal_uInt16)pSourcePolyPolygon->getLength();
-
-            // Zeiger auf innere sequences holen
-            PointSequence* pOuterSequence = pSourcePolyPolygon->getArray();
-            if ( !( pOuterSequence ) )
-                return;
-
-            // ist dies ein Polygon oder gar ein PolyPolygon ?
-            // sogar eine einfache Line wird als Polygon verpackt !!! ????
-
-            if ( nFlags & ANY_FLAGS_LINE )
-            {
-                PointSequence* pInnerSequence = pOuterSequence++;
-                if ( !( pInnerSequence ) )
-                    return;
-
-                awt::Point* pArray = pInnerSequence->getArray();
-                if ( pArray )
-                    rObj.SetRect( Rectangle( ImplMapPoint( Point( pArray[ 0 ].X, pArray[ 0 ].Y) ),
-                                            ImplMapPoint( Point( pArray[ 1 ].X, pArray[ 1 ].Y) ) ));
-                return;
-            }
-            sal_uInt16 a, b, nInnerSequenceCount;
-            awt::Point* pArray;
-
-            // dies wird ein Polygon set
-            for( a = 0; a < nOuterSequenceCount; a++ )
-            {
-                PointSequence* pInnerSequence = pOuterSequence++;
-                if ( !( pInnerSequence ) )
-                    return;
-
-                // Zeiger auf Arrays holen
-                if ( pArray = pInnerSequence->getArray() )
-                {
-                    nInnerSequenceCount = (sal_uInt16)pInnerSequence->getLength();
-                    aPolygon = Polygon( nInnerSequenceCount );
-                    for( b = 0; b < nInnerSequenceCount; b++)
-                        aPolygon[ b ] = Point( pArray->X, pArray->Y );
-                        pArray++;
-                    aPolyPolygon.Insert( aPolygon, POLYPOLY_APPEND );
-                }
-            }
-        }
-    }
-    sal_uInt16 i, j, k, nPoints, nBezPoints, nPolyCount = aPolyPolygon.Count();
-
-    Rectangle   aGeoRect( aPolyPolygon.GetBoundRect() );
-    rObj.SetRect( ImplMapPoint( aGeoRect.TopLeft() ),
-                  ImplMapSize( aGeoRect.GetSize() ) );
-
-    for ( nBezPoints = nPoints = i = 0; i < nPolyCount; i++ )
-    {
-        k = aPolyPolygon[ i ].GetSize();
-        nPoints += k;
-        for ( j = 0; j < k; j++ )
-        {
-            if ( aPolyPolygon[ i ].GetFlags( j ) != POLY_CONTROL )
-                nBezPoints++;
-        }
-    }
-    UINT32 nVerticesBufSize = ( nPoints << 2 ) + 6;
-    BYTE* pVerticesBuf = new BYTE[ nVerticesBufSize ];
-
-
-    UINT32 nSegmentBufSize = ( ( nBezPoints << 2 ) + 8 );
-    if ( nPolyCount > 1 )
-        nSegmentBufSize += ( nPolyCount << 1 );
-    BYTE* pSegmentBuf = new BYTE[ nSegmentBufSize ];
-
-    BYTE* pPtr = pVerticesBuf;
-    *pPtr++ = (BYTE)( nPoints );                    // Little endian // Little endian
-    *pPtr++ = (BYTE)( nPoints >> 8 );
-    *pPtr++ = (BYTE)( nPoints );
-    *pPtr++ = (BYTE)( nPoints >> 8 );
-    *pPtr++ = (BYTE)0xf0;
-    *pPtr++ = (BYTE)0xff;
-
-    for ( j = 0; j < nPolyCount; j++ )
-    {
-        aPolygon = aPolyPolygon[ j ];
-        nPoints = aPolygon.GetSize();
-        for ( i = 0; i < nPoints; i++ )             // Punkte aus Polygon in Buffer schreiben
-        {
-            Point aPoint = aPolygon[ i ];
-            aPoint.X() -= aGeoRect.Left();
-            aPoint.Y() -= aGeoRect.Top();
-
-            *pPtr++ = (BYTE)( aPoint.X() );
-            *pPtr++ = (BYTE)( aPoint.X() >> 8 );
-            *pPtr++ = (BYTE)( aPoint.Y() );
-            *pPtr++ = (BYTE)( aPoint.Y() >> 8 );
-        }
-    }
-
-    pPtr = pSegmentBuf;
-    *pPtr++ = (BYTE)( ( nSegmentBufSize - 6 ) >> 1 );
-    *pPtr++ = (BYTE)( ( nSegmentBufSize - 6 ) >> 9 );
-    *pPtr++ = (BYTE)( ( nSegmentBufSize - 6 ) >> 1 );
-    *pPtr++ = (BYTE)( ( nSegmentBufSize - 6 ) >> 9 );
-    *pPtr++ = (BYTE)2;
-    *pPtr++ = (BYTE)0;
-
-    for ( j = 0; j < nPolyCount; j++ )
-    {
-        *pPtr++ = 0x0;          // Polygon start
-        *pPtr++ = 0x40;
-        aPolygon = aPolyPolygon[ j ];
-        nPoints = aPolygon.GetSize();
-        for ( i = 0; i < nPoints; i++ )         // Polyflags in Buffer schreiben
-        {
-            *pPtr++ = 0;
-            if ( bBezier )
-                *pPtr++ = 0xb3;
-            else
-                *pPtr++ = 0xac;
-            if ( ( i + 1 ) != nPoints )
-            {
-                *pPtr++ = 1;
-                if ( aPolygon.GetFlags( i + 1 ) == POLY_CONTROL )
-                {
-                    *pPtr++ = 0x20;
-                    i += 2;
-                }
-                else
-                    *pPtr++ = 0;
-            }
-        }
-        if ( nPolyCount > 1 )
-        {
-            *pPtr++ = 1;                        // end of polygon
-            *pPtr++ = 0x60;
-        }
-    }
-    *pPtr++ = 0;
-    *pPtr++ = 0x80;
-
-    rPropOpt.AddOpt( ESCHER_Prop_geoRight, aGeoRect.GetSize().Width() );
-    rPropOpt.AddOpt( ESCHER_Prop_geoBottom, aGeoRect.GetSize().Height() );
-
-    rPropOpt.AddOpt( ESCHER_Prop_shapePath, ESCHER_ShapeComplex );
-    rPropOpt.AddOpt( ESCHER_Prop_pVertices, TRUE, nVerticesBufSize - 6, (BYTE*)pVerticesBuf, nVerticesBufSize );
-    rPropOpt.AddOpt( ESCHER_Prop_pSegmentInfo, TRUE, nSegmentBufSize, (BYTE*)pSegmentBuf, nSegmentBufSize );
-}
-
-//  -----------------------------------------------------------------------
-
 #define ADD_SHAPE( nType, nFlags )                              \
 {                                                               \
     nShapeType = nType;                                         \
@@ -946,11 +729,6 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                     break;
                 nEndAngle = *( (INT32*)rObj.GetUsrAny().getValue() );
 
-// warum??
-//              maPosition = mXShape->getPosition();
-//              maSize = mXShape->getSize();
-//              maRect = Rectangle( maPosition, maSize );
-
                 Point aStart, aEnd, aCenter;
                 aStart.X() = (INT32)( ( cos( (double)( nStartAngle *
                                                 F_PI18000 ) ) * 100.0 ) );
@@ -970,25 +748,26 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 Polygon aPolygon( rRect, aStart, aEnd, ePolyKind );
                 mpEscherEx->OpenContainer( ESCHER_SpContainer );
                 ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
+                ::com::sun::star::awt::Rectangle aNewRect;
                 switch ( ePolyKind )
                 {
                     case POLY_PIE :
                     case POLY_CHORD :
                     {
-                        ImplWriteAny( rObj, aPropOpt, ANY_FLAGS_POLYPOLYGON, FALSE,
-                                        &aPolygon );
+                        aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, sal_False, aNewRect, &aPolygon );
                         aPropOpt.CreateFillProperties( rObj.mXPropSet, sal_True  );
                     }
                     break;
 
                     case POLY_ARC :
                     {
-                        ImplWriteAny( rObj, aPropOpt, ANY_FLAGS_POLYLINE, FALSE,
-                                    &aPolygon );
+                        aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, sal_False, aNewRect, &aPolygon );
                         aPropOpt.CreateLineProperties( rObj.mXPropSet, sal_False );
                     }
                     break;
                 }
+                rObj.SetRect( Rectangle( ImplMapPoint( Point( aNewRect.X, aNewRect.Y ) ),
+                                            ImplMapSize( Size( aNewRect.Width, aNewRect.Height ) ) ) );
             }
             ImplWriteTextBundle( rObj, aPropOpt );
         }
@@ -1051,9 +830,11 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
 */
             rSolverContainer.AddConnector( rObj.GetShapeRef(), aStartPoint,
                                             aShapeA, aEndPoint, aShapeB );
-            rObj.SetRect( Rectangle( ImplMapPoint( aStartPoint ),
-                                     ImplMapPoint( aEndPoint ) ) );
-            ImplWriteAny( rObj, aPropOpt, ANY_FLAGS_LINE, FALSE );
+
+            ::com::sun::star::awt::Rectangle aNewRect;
+            aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_LINE, sal_False, aNewRect, NULL );
+            rObj.SetRect( Rectangle( ImplMapPoint( Point( aNewRect.X, aNewRect.Y ) ),
+                                        ImplMapSize( Size( aNewRect.Width, aNewRect.Height ) ) ) );
             const Rectangle& rRect = rObj.GetRect();
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             UINT32 nFlags = 0xa00;                  // Flags: Connector | HasSpt
@@ -1182,7 +963,10 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         }
         else if ( rObj.GetType().EqualsAscii( "drawing.Line" ))
         {
-            ImplWriteAny( rObj, aPropOpt, ANY_FLAGS_LINE, FALSE );
+            ::com::sun::star::awt::Rectangle aNewRect;
+            aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_LINE, sal_False, aNewRect, NULL );
+            rObj.SetRect( Rectangle( ImplMapPoint( Point( aNewRect.X, aNewRect.Y ) ),
+                                        ImplMapSize( Size( aNewRect.Width, aNewRect.Height ) ) ) );
             if( rObj.ImplHasText() )
             {
                 aTextRefPoint = rObj.GetRect().TopLeft();
@@ -1211,7 +995,10 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             }
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
-            ImplWriteAny( rObj, aPropOpt, ANY_FLAGS_POLYPOLYGON, FALSE );
+            ::com::sun::star::awt::Rectangle aNewRect;
+            aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, sal_False, aNewRect, NULL );
+            rObj.SetRect( Rectangle( ImplMapPoint( Point( aNewRect.X, aNewRect.Y ) ),
+                                        ImplMapSize( Size( aNewRect.Width, aNewRect.Height ) ) ) );
             aPropOpt.CreateFillProperties( rObj.mXPropSet, sal_True );
             rObj.SetAngle( 0 );
         }
@@ -1224,7 +1011,10 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             }
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
-            ImplWriteAny( rObj, aPropOpt, ANY_FLAGS_POLYLINE, FALSE );
+            ::com::sun::star::awt::Rectangle aNewRect;
+            aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, sal_False, aNewRect, NULL );
+            rObj.SetRect( Rectangle( ImplMapPoint( Point( aNewRect.X, aNewRect.Y ) ),
+                                        ImplMapSize( Size( aNewRect.Width, aNewRect.Height ) ) ) );
             aPropOpt.CreateLineProperties( rObj.mXPropSet, sal_False );
             rObj.SetAngle( 0 );
         }
@@ -1239,7 +1029,10 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             }
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
-            ImplWriteAny( rObj, aPropOpt, ANY_FLAGS_POLYLINE, TRUE );
+            ::com::sun::star::awt::Rectangle aNewRect;
+            aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, sal_True, aNewRect, NULL );
+            rObj.SetRect( Rectangle( ImplMapPoint( Point( aNewRect.X, aNewRect.Y ) ),
+                                        ImplMapSize( Size( aNewRect.Width, aNewRect.Height ) ) ) );
             aPropOpt.CreateLineProperties( rObj.mXPropSet, sal_False );
             rObj.SetAngle( 0 );
         }
@@ -1254,7 +1047,10 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             }
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
-            ImplWriteAny( rObj, aPropOpt, ANY_FLAGS_POLYPOLYGON, TRUE );
+            ::com::sun::star::awt::Rectangle aNewRect;
+            aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, sal_True, aNewRect, NULL );
+            rObj.SetRect( Rectangle( ImplMapPoint( Point( aNewRect.X, aNewRect.Y ) ),
+                                        ImplMapSize( Size( aNewRect.Width, aNewRect.Height ) ) ) );
             aPropOpt.CreateFillProperties( rObj.mXPropSet, sal_True );
             rObj.SetAngle( 0 );
         }
@@ -1879,9 +1675,7 @@ BOOL ImplEESdrObject::ImplGetPropertyValue( const Reference< XPropertySet >& rXP
 
 void ImplEESdrObject::SetRect( const Point& rPos, const Size& rSz )
 {
-    maPosition = rPos;
-    maSize = rSz;
-    maRect = Rectangle( maPosition, maSize );
+    maRect = Rectangle( rPos, rSz );
 }
 
 const SdrObject* ImplEESdrObject::GetSdrObject() const

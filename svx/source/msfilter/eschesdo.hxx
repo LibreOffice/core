@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-13 14:31:56 $
+ *  last change: $Author: sj $ $Date: 2000-12-21 17:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,8 +209,6 @@ class ImplEESdrObject
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >           mXShape;
 //  XTextRef            mXText; // TextRef des globalen Text
     ::com::sun::star::uno::Any              mAny;
-    Size                maSize;
-    Point               maPosition;
     Rectangle           maRect;
     String              mType;
     UINT32              mnShapeId;
@@ -238,8 +236,6 @@ public:
     const String&       GetType() const         { return mType; }
     void                SetType( const String& rS ) { mType = rS; }
 
-    const Size&         GetSize() const         { return maSize; }
-    const Point&        GetPos() const          { return maPosition; }
     const Rectangle&    GetRect() const         { return maRect; }
     void                SetRect( const Point& rPos, const Size& rSz );
     void                SetRect( const Rectangle& rRect )
@@ -331,9 +327,6 @@ protected:
                                                     const Point& rRefPoint );
             BOOL                ImplGetText( ImplEESdrObject& rObj );
             void                ImplWriteTextBundle( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt );
-            void                ImplWriteAny( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt,
-                                                UINT32 nFlags, BOOL bBezier,
-                                                Polygon* pPolygon = NULL );
             void                ImplWriteAdditionalText(
                                                 ImplEESdrObject& rObj,
                                                 const Point& rTextRefPoint );
