@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:24:38 $
+ *  last change: $Author: kz $ $Date: 2001-09-27 20:24:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,7 @@ String RID_STR_SAVE_CURRENT_RECORD
     Text[ russian ] = "Сохранить текущую запись";
     Text[ dutch ] = "Actuele record opslaan";
     Text[ french ] = "Enregistrer l'enregistrement actif";
-    Text[ spanish ] = "guardar registro actual";
+    Text[ spanish ] = "Guardar registro actual";
     Text[ italian ] = "Salva record di dati attuale";
     Text[ danish ] = "Gem aktuel datapost";
     Text[ swedish ] = "Spara aktuell datapost";
@@ -361,4 +361,5 @@ String STR_OBJECT_ALREADY_EXISTS
     Text = "Der Name # existiert bereits." ;
     Text [ ENGLISH ] = "The name # already exists." ;
 };
+
 
