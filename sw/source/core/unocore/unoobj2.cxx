@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:35:46 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 15:07:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1877,7 +1877,8 @@ uno::Reference< XTextRange >  SwXTextRange::CreateTextRangeFromPosition(SwDoc* p
             sal_uInt16 nPDescCount = pDoc->GetPageDescCnt();
             for(sal_uInt16 i = 0; i < nPDescCount; i++)
             {
-                const SwPageDesc& rDesc = pDoc->GetPageDesc( i );
+                const SwPageDesc& rDesc = const_cast<const SwDoc*>(pDoc)
+                    ->GetPageDesc( i );
                 const SwFrmFmt* pFrmFmtMaster = &rDesc.GetMaster();
                 const SwFrmFmt* pFrmFmtLeft = &rDesc.GetLeft();
 
