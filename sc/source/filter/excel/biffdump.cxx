@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-09 14:19:23 $
+ *  last change: $Author: dr $ $Date: 2002-04-10 14:57:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,6 +501,15 @@ static void AddRef( ByteString& t, UINT16 nRow, UINT16 nC, BOOL bName, UINT16 nT
     }
 }
 
+static void AddRangeRef( ByteString& t, UINT16 nRow1, UINT16 nC1, UINT16 nRow2, UINT16 nC2, BOOL bName, UINT16 nTab = 0xFFFF )
+{
+    AddRef( t, nRow1, nC1, bName, nTab );
+    if( (nRow1 != nRow2) || (nC1 != nC2) )
+    {
+        t += ':';
+        AddRef( t, nRow2, nC2, bName );
+    }
+}
 
 
 
@@ -2464,6 +2473,32 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ContDump( rIn.GetRecLeft() );
             }
             break;
+            case 0x015F:    // LABELRANGES
+            {
+                UINT16 nCnt, nR1, nR2, nC1, nC2;
+                rIn >> nCnt;
+                ADDTEXT( "row headers: " );     __AddDec( t, nCnt );
+                PRINT();
+                while( nCnt-- )
+                {
+                    rIn >> nR1 >> nR2 >> nC1 >> nC2;
+                    LINESTART();
+                    AddRangeRef( t, nR1, nC1 | 0xC000, nR2, nC2 | 0xC000, FALSE );
+                    PRINT();
+                }
+                rIn >> nCnt;
+                LINESTART();
+                ADDTEXT( "column headers: " );  __AddDec( t, nCnt );
+                PRINT();
+                while( nCnt-- )
+                {
+                    rIn >> nR1 >> nR2 >> nC1 >> nC2;
+                    LINESTART();
+                    AddRangeRef( t, nR1, nC1 | 0xC000, nR2, nC2 | 0xC000, FALSE );
+                    PRINT();
+                }
+            }
+            break;
             case 0x0193:
             {
                 ADDTEXT( "unknown: " );         ADDHEX( 4 );
@@ -2925,7 +2960,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 }
             }
             break;
-            case 0x01B2:
+            case 0x01B2:    // DVAL - header of DV recs
             {
                 PreDump( nL );
 
@@ -2956,7 +2991,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 PRINT();
             }
             break;
-            case 0x01BE:
+            case 0x01BE:    // DV - data validation record
             {
                 PreDump( nL );
                 UINT32  __nFlags;
@@ -3056,13 +3091,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                     UINT16  nR1, nR2, nC1, nC2;
                     rIn >> nR1 >> nR2 >> nC1 >> nC2;
                     LINESTART();
-                    ADDTEXT( "Cells: " );
-                    __AddRef( t, nC1, nR1 );
-                    if( nC1 != nC2 || nR1 != nR2 )
-                    {
-                        ADDTEXT( ":" );
-                        __AddRef( t, nC2, nR2 );
-                    }
+                    AddRangeRef( t, nR1, nC1 | 0xC000, nR2, nC2 | 0xC000, FALSE );
                     PRINT();
                 }
             }
@@ -5789,9 +5818,7 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
 
                 UINT16 nRowFirst, nRowLast, nColFirst, nColLast;
                 *pIn >> nRowFirst >> nRowLast >> nColFirst >> nColLast;
-                AddRef( aOperand, nRowFirst, nColFirst, bRangeName );
-                aOperand += ':';
-                AddRef( aOperand, nRowLast, nColLast, bRangeName );
+                AddRangeRef( aOperand, nRowFirst, nColFirst, nRowLast, nColLast, bRangeName );
                 t += "2D area ref   C/R:C/R=";  __AddHex( t, nColFirst );
                 t += '/';                       __AddHex( t, nRowFirst );
                 t += ':';                       __AddHex( t, nColLast );
@@ -5846,9 +5873,7 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                 STARTTOKENCLASS( "AreaN" );
                 UINT16 nRowFirst, nRowLast, nColFirst, nColLast;
                 *pIn >> nRowFirst >> nRowLast >> nColFirst >> nColLast;
-                AddRef( aOperand, nRowFirst, nColFirst, bRNorSF );
-                aOperand += ':';
-                AddRef( aOperand, nRowLast, nColLast, bRNorSF );
+                AddRangeRef( aOperand, nRowFirst, nColFirst, nRowLast, nColLast, bRNorSF );
                 t += "2D area ref in name   C/R:C/R";   __AddHex( t, nColFirst );
                 t += '/';                               __AddHex( t, nRowFirst );
                 t += ':';                               __AddHex( t, nColLast );
@@ -5923,9 +5948,7 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
 
                 UINT16 nXti, nRow1, nCol1, nRow2, nCol2;
                 *pIn >> nXti >> nRow1 >> nRow2 >> nCol1 >> nCol2;
-                AddRef( aOperand, nRow1, nCol1, bRangeName, nXti );
-                aOperand += ':';
-                AddRef( aOperand, nRow2, nCol2, bRangeName );
+                AddRangeRef( aOperand, nRow1, nCol1, nRow2, nCol2, bRangeName, nXti );
                 t += "3D area ref   Xti!C/R:C/R=";      __AddHex( t, nXti );
                 t += '!';                               __AddHex( t, nCol1 );
                 t += '/';                               __AddHex( t, nRow1 );
