@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstat.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:07:25 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:52:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,6 +457,14 @@ void SwView::GetState(SfxItemSet &rSet)
                     rSet.DisableItem(nWhich);
             }
             break;
+            case FN_MAILMERGE_SENDMAIL_CHILDWINDOW:
+            break;
+            case FN_MAILMERGE_CHILDWINDOW:
+            {
+                if(!GetMailMergeConfigItem())
+                    rSet.DisableItem(nWhich);
+            }
+            break;
             case SID_ALIGN_ANY_LEFT :
             case SID_ALIGN_ANY_HCENTER  :
             case SID_ALIGN_ANY_RIGHT    :
@@ -578,6 +586,12 @@ void SwView::GetDrawState(SfxItemSet &rSet)
 
 sal_Bool SwView::HasUIFeature( sal_uInt32 nFeature )
 {
-    return pWrtShell->IsLabelDoc();
+    sal_Bool bRet = sal_False;
+    switch(nFeature)
+    {
+        case CHILDWIN_LABEL     : bRet = pWrtShell->IsLabelDoc(); break;
+        case CHILDWIN_MAILMERGE : bRet = 0 != GetMailMergeConfigItem(); break;
+    }
+    return bRet;
 }
 
