@@ -352,7 +352,7 @@ Dim lDate&amp;
 	CalInsertBankholiday(DateSerial(YearInt, 5, 4), &quot;国民の休日&quot;, cHolidayType_Full)
 	CalInsertBankholiday(DateSerial(YearInt, 5, 5), &quot;こどもの日&quot;, cHolidayType_Full)
 	CalInsertBankholiday(DateSerial(YearInt, 9, 23), &quot;秋分の日&quot;, cHolidayType_Full)
-	CalInsertBankholiday(DateSerial(YearInt, 10, 2), &quot;体育の日&quot;, cHolidayType_Full)
+	CalInsertBankholiday(GetMonthDate(YearInt, 10, 2, 7), &quot;体育の日&quot;, cHolidayType_Full)
 	CalInsertBankholiday(DateSerial(YearInt, 11, 3), &quot;文化の日&quot;, cHolidayType_Full)
 	CalInsertBankholiday(DateSerial(YearInt, 11, 23), &quot;勤労感謝の日&quot;, cHolidayType_Full)
 	CalInsertBankholiday(DateSerial(YearInt, 12, 23), &quot;天皇誕生日&quot;, cHolidayType_Full)
