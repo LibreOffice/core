@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmfmt.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:14:48 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 12:30:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,10 @@ protected:
           meLayoutDir( SwFrmFmt::HORI_L2R ),
           // <--
           // --> OD 2004-08-06 #i28749#
-          mnPositionLayoutDir( com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor ),
+          // --> OD 2004-10-25 #i36010# - change default value of <mnPositionLayoutDir>
+          // in order to force an setting of the positioning attributes at the
+          // first time the drawing object is positioned.
+          mnPositionLayoutDir( com::sun::star::text::PositionLayoutDir::PositionInHoriL2R ),
           // <--
           pSdrObjCached(NULL)
     {}
@@ -278,7 +281,10 @@ protected:
           meLayoutDir( SwFrmFmt::HORI_L2R ),
           // <--
           // --> OD 2004-08-06 #i28749#
-          mnPositionLayoutDir( com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor ),
+          // --> OD 2004-10-25 #i36010# - change default value of <mnPositionLayoutDir>
+          // in order to force an setting of the positioning attributes at the
+          // first time the drawing object is positioned.
+          mnPositionLayoutDir( com::sun::star::text::PositionLayoutDir::PositionInHoriL2R ),
           // <--
           pSdrObjCached(NULL)
     {}
