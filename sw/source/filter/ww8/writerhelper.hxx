@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writerhelper.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 12:48:13 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -849,6 +849,18 @@ namespace sw
         */
         Polygon PolygonFromPolyPolygon(const PolyPolygon &rPolyPoly);
 
+        /** Determine if the font is the special Star|Open Symbol font
+
+            @param rFontName
+            The FontName to test for being Star|Open Symbol
+
+            @return true if this is Star|Open Symbol
+
+            @author
+            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+        */
+        bool IsStarSymbol(const String &rFontName);
+
         /** Make setting a drawing object's layer in a Writer document easy
 
 
@@ -1045,7 +1057,6 @@ namespace sw
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         const OutlinerParaObject* GetOutlinerParaObject(const SdrTextObj &rObj);
-
 
 #ifdef DEBUGDUMP
         /** Create a SvStream to dump data to during debugging
