@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtdd.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-11 17:20:34 $
+ *  last change: $Author: ama $ $Date: 2002-04-09 14:20:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ void SwEditWin::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
                 OBJCNT_NONE != rSh.GetObjCntType( aDocPos, pObj ))
         {
             rSh.LockPaint();
-            if( rSh.SelectObj( aDocPos, FALSE, FALSE, pObj ))
+            if( rSh.SelectObj( aDocPos, 0, pObj ))
                 bStart = bDelSelect = TRUE;
             else
                 rSh.UnlockPaint();
@@ -579,6 +579,9 @@ IMPL_LINK( SwEditWin, DDHandler, Timer *, EMPTYARG )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.9  2001/10/11 17:20:34  jp
+    Bug #93007#: StartDrag - ask DrawView if they will handle the DragEvent
+
     Revision 1.8  2001/09/11 15:10:28  jp
     Task #91678#: 'selection clipbord' implemented
 

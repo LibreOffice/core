@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2002-04-09 10:03:02 $
+ *  last change: $Author: ama $ $Date: 2002-04-09 14:17:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,9 @@ struct SwGetCurColNumPara
 #define SW_PASTESDR_REPLACE     2
 #define SW_PASTESDR_SETATTR     3
 
+#define SW_ADD_SELECT   1
+#define SW_ENTER_GROUP  2
+#define SW_LEAVE_FRAME  4
 
 class SwFEShell : public SwEditShell
 {
@@ -243,8 +246,7 @@ public:
 
     //Wenn ein Objekt angegeben wurde, so wird genau diese Markiert (anstatt
     //ueber die Position zu suchen.
-    BOOL SelectObj( const Point& rSelPt, BOOL bAddSelect = FALSE,
-                    BOOL bEnterGroup = FALSE, SdrObject *pObj = 0 );
+    BOOL SelectObj( const Point& rSelPt, BYTE nFlag = 0, SdrObject *pObj = 0 );
     void DelSelectedObj();
 
     //Selektion nach oben unten bewegen (Z-Order).

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-21 12:56:20 $
+ *  last change: $Author: ama $ $Date: 2002-04-09 14:21:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2031,7 +2031,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& rMEvt)
                             BOOL bUnLockView = !rSh.IsViewLocked();
                             rSh.LockView( TRUE );
                             BOOL bSelObj = rSh.SelectObj( aDocPos,
-                                                    FALSE, rMEvt.IsMod1() );
+                                           rMEvt.IsMod1() ? SW_ENTER_GROUP : 0);
                             if( bUnLockView )
                                 rSh.LockView( FALSE );
 
@@ -2082,8 +2082,10 @@ void SwEditWin::MouseButtonDown(const MouseEvent& rMEvt)
                             {
                                 BOOL bUnLockView = !rSh.IsViewLocked();
                                 rSh.LockView( TRUE );
-                                BOOL bSelObj = rSh.SelectObj( aDocPos,
-                                        rMEvt.IsShift(), rMEvt.IsMod1() );
+                                BYTE nFlag = rMEvt.IsShift() ? SW_ADD_SELECT :0;
+                                if( rMEvt.IsMod1() )
+                                    nFlag = nFlag | SW_ENTER_GROUP;
+                                BOOL bSelObj = rSh.SelectObj( aDocPos, nFlag );
                                 if( bUnLockView )
                                     rSh.LockView( FALSE );
 
@@ -2258,9 +2260,9 @@ void SwEditWin::MouseButtonDown(const MouseEvent& rMEvt)
                             rView.NoRotate();
                             rSh.HideCrsr();
                             if ( rSh.IsSelFrmMode() )
-                                rSh.SelectObj(aDocPos, TRUE, TRUE);
+                                rSh.SelectObj(aDocPos, SW_ADD_SELECT | SW_ENTER_GROUP);
                             else
-                            {   if ( rSh.SelectObj( aDocPos, TRUE, TRUE ) )
+                            {   if ( rSh.SelectObj( aDocPos, SW_ADD_SELECT | SW_ENTER_GROUP ) )
                                 {
                                     rSh.EnterSelFrmMode( &aDocPos );
                                     SwEditWin::nDDStartPosY = aDocPos.Y();
@@ -2287,9 +2289,9 @@ void SwEditWin::MouseButtonDown(const MouseEvent& rMEvt)
                             rView.NoRotate();
                             rSh.HideCrsr();
                             if ( rSh.IsSelFrmMode() )
-                                rSh.SelectObj(aDocPos, FALSE, TRUE);
+                                rSh.SelectObj(aDocPos, SW_ENTER_GROUP);
                             else
-                            {   if ( rSh.SelectObj( aDocPos, FALSE, TRUE ) )
+                            {   if ( rSh.SelectObj( aDocPos, SW_ENTER_GROUP ) )
                                 {
                                     rSh.EnterSelFrmMode( &aDocPos );
                                     SwEditWin::nDDStartPosY = aDocPos.Y();
@@ -2332,7 +2334,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& rMEvt)
                             rSh.HideCrsr();
                             if ( rSh.IsSelFrmMode() )
                             {
-                                rSh.SelectObj(aDocPos, TRUE);
+                                rSh.SelectObj(aDocPos, SW_ADD_SELECT);
 
                                 const SdrMarkList& rMarkList = pSdrView->GetMarkList();
                                 if (rMarkList.GetMark(0) == NULL)

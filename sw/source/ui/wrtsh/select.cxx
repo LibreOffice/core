@@ -2,9 +2,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-08 15:05:05 $
+ *  last change: $Author: ama $ $Date: 2002-04-09 14:21:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,7 +360,7 @@ void SwWrtShell::UnSelectFrm()
 {
         // Rahmenselektion aufheben mit garantiert ungueltiger Position
     Point aPt(LONG_MIN, LONG_MIN);
-    SelectObj(aPt);
+    SelectObj(aPt,SW_LEAVE_FRAME);
     SwTransferable::ClearSelection( *this );
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawbase.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-04-03 12:38:06 $
+ *  last change: $Author: ama $ $Date: 2002-04-09 14:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,7 +422,8 @@ BOOL SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
 
                 if (aPnt == aStartPos && pSh->IsObjSelectable(aPnt))
                 {
-                    pSh->SelectObj(aPnt, rMEvt.IsShift() && pSh->IsSelFrmMode());
+                    pSh->SelectObj(aPnt, ( rMEvt.IsShift() &&
+                                   pSh->IsSelFrmMode()) ? SW_ADD_SELECT : 0);
 
                     if (!pSh->IsObjSelected())
                     {
@@ -440,7 +441,8 @@ BOOL SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                 else if (!pSh->IsObjSelected() && !pWin->IsDrawAction())
                 {
                     if (pSh->IsObjSelectable(aPnt))
-                        pSh->SelectObj(aPnt, rMEvt.IsShift() && pSh->IsSelFrmMode());
+                        pSh->SelectObj(aPnt, ( rMEvt.IsShift() &&
+                            pSh->IsSelFrmMode() ) ? SW_ADD_SELECT : 0 );
                     else
                     {
                         pView->LeaveDrawCreate();
@@ -479,7 +481,8 @@ BOOL SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                     {
                         if (!rMEvt.IsShift())
                             pSdrView->UnmarkAllPoints();
-                        pSh->SelectObj(aPnt, rMEvt.IsShift() && pSh->IsSelFrmMode());
+                        pSh->SelectObj(aPnt, (rMEvt.IsShift() &&
+                                       pSh->IsSelFrmMode()) ? SW_ADD_SELECT :0);
                     }
 
                     if (!pSh->IsObjSelected())

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2002-04-09 10:15:04 $
+ *  last change: $Author: ama $ $Date: 2002-04-09 14:19:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,8 +218,7 @@ extern BOOL bNoInterrupt;       // in swapp.cxx
 |*
 *************************************************************************/
 
-BOOL SwFEShell::SelectObj( const Point& rPt, BOOL bAddSelect,
-                           BOOL bEnterGroup, SdrObject *pObj )
+BOOL SwFEShell::SelectObj( const Point& rPt, BYTE nFlag, SdrObject *pObj )
 {
     SET_CURR_SHELL( this );
     StartAction();          //Aktion ist Notwendig, damit nicht mehrere
@@ -230,6 +229,8 @@ BOOL SwFEShell::SelectObj( const Point& rPt, BOOL bAddSelect,
     SwDrawView *pDView = Imp()->GetDrawView();
     const SdrMarkList &rMrkList = pDView->GetMarkList();
     const BOOL bHadSelection = rMrkList.GetMarkCount() ? TRUE : FALSE;
+    const BOOL bAddSelect = 0 != (SW_ADD_SELECT & nFlag);
+    const BOOL bEnterGroup = 0 != (SW_ENTER_GROUP & nFlag);
     SwFlyFrm* pOldSelFly = 0;
     const Point aOldPos( pDView->GetAllMarkedRect().TopLeft() );
 
@@ -245,7 +246,7 @@ BOOL SwFEShell::SelectObj( const Point& rPt, BOOL bAddSelect,
             if ( pOldSelFly )
             {
                 const USHORT nType = GetCntType();
-                if( nType != CNT_TXT ||
+                if( nType != CNT_TXT || (SW_LEAVE_FRAME & nFlag) ||
                     ( pOldSelFly->GetFmt()->GetProtect().IsCntntProtected()
                      && !IsReadOnlyAvailable() ))
                 {
@@ -1160,13 +1161,13 @@ BOOL SwFEShell::GotoObj( BOOL bNext, GotoObjType eType )
             {
                 SwVirtFlyDrawObj *pO = (SwVirtFlyDrawObj*)pBest;
                 const SwRect& rFrm = pO->GetFlyFrm()->Frm();
-                SelectObj( rFrm.Pos(), FALSE, FALSE, (SdrObject*)pBest );
+                SelectObj( rFrm.Pos(), 0, (SdrObject*)pBest );
                 if( !ActionPend() )
                     MakeVisible( rFrm );
             }
             else
             {
-                SelectObj( Point(), FALSE, FALSE, (SdrObject*)pBest );
+                SelectObj( Point(), 0, (SdrObject*)pBest );
                 if( !ActionPend() )
                     MakeVisible( pBest->GetBoundRect() );
             }
@@ -1216,7 +1217,7 @@ BOOL SwFEShell::GotoControl( ULONG nIndex )
             {
                 if ( nIdx == nIndex )
                 {
-                    SelectObj( Point(), FALSE, FALSE, pObj );
+                    SelectObj( Point(), 0, pObj );
                     if( !ActionPend() )
                         MakeVisible( pObj->GetBoundRect() );
                     CallChgLnk();
@@ -2077,7 +2078,7 @@ static BYTE __READONLY_DATA aChkArr[ 4 ] = {
             ASSERT( pFrm->IsFlyFrm(), "Wrong FrmType" );
             if( bSelFrm )
             {
-                SelectObj( pFrm->Frm().Pos(), FALSE, FALSE, ((SwFlyFrm*)pFrm)->GetVirtDrawObj() );
+                SelectObj( pFrm->Frm().Pos(), 0, ((SwFlyFrm*)pFrm)->GetVirtDrawObj() );
                 if( !ActionPend() )
                     MakeVisible( pFrm->Frm() );
             }
