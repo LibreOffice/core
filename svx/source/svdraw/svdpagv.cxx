@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: aw $ $Date: 2002-05-31 11:28:28 $
+ *  last change: $Author: cl $ $Date: 2002-06-14 10:20:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1431,13 +1431,10 @@ void SdrPageView::DrawPaper(OutputDevice& rOut)
 
     svx::ColorConfig aColorConfig;
     svx::ColorConfigValue aDocColor( aColorConfig.GetColorValue( svx::DOCCOLOR ) );
-    svx::ColorConfigValue aBorderColor( aColorConfig.GetColorValue( svx::DOCBOUNDARIES ) );
+    Color aBorderColor( Application::GetSettings().GetStyleSettings().GetWindowTextColor() );
 
     rOut.SetFillColor( aDocColor.nColor );
-    if( aBorderColor.bIsVisible )
-        rOut.SetLineColor( aBorderColor.nColor );
-    else
-        rOut.SetLineColor();
+    rOut.SetLineColor( aBorderColor );
 
     Rectangle aRect(GetPageRect());
     rOut.DrawRect(aRect);
@@ -1447,6 +1444,9 @@ void SdrPageView::DrawPaper(OutputDevice& rOut)
 void SdrPageView::DrawBorder(OutputDevice& rOut)
 {
     if (pPage==NULL)
+        return;
+
+    if( (pPage->GetLftBorder() == 0) && (pPage->GetUppBorder() == 0) && ( pPage->GetRgtBorder() == 0) && ( pPage->GetLwrBorder() == 0) )
         return;
 
     svx::ColorConfig aColorConfig;
