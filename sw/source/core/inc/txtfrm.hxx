@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-19 15:09:52 $
+ *  last change: $Author: fme $ $Date: 2002-02-28 12:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,14 +233,12 @@ public:
     // Wird vom CollectAutoCmplWords gerufen
     void CollectAutoCmplWrds( SwCntntNode* , USHORT , sal_Bool bIsVisArea );
 
-    //Liefert in pPoint den X- und Y-Offset der linken, oberen
-    //Ecke eines Characters innerhalb der SSize des
-    //Paragraph-Layout (nicht absolut oder Window-relativ)
-    //zurueck. Wenn nOffset groesser ist als die Anzahl der
-    //Character im Textbuffer, liefert die Funktion sal_False, sal_True
-    //sonst.
-    virtual sal_Bool   GetCharRect( SwRect &, const SwPosition&,
-                                SwCrsrMoveState* = 0) const;
+    // Returns the screen position of rPos. The values are relative to the upper
+    // left position of the page frame.
+    // Additional information can be obtained by passing an SwCrsrMoveState object.
+    // Returns sal_False if rPos > number of character is string
+    virtual sal_Bool   GetCharRect( SwRect& rRect, const SwPosition& rPos,
+                                SwCrsrMoveState* pCMS = 0 ) const;
     // Eine etwas abgespeckte GetCharRect-Version fuer autopositionierte Rahmen
     sal_Bool GetAutoPos( SwRect &, const SwPosition& ) const;
 
@@ -499,6 +497,21 @@ public:
     // Calculates the a limit value when switching from
     // vertical to horizontal layout.
     long SwitchVerticalToHorizontal( long nLimit ) const;
+#endif
+
+#ifdef BIDI
+    // Calculates the coordinates of a rectangle when switching from
+    // RTL to LTR layout
+    void SwitchRTLtoLTR( SwRect& rRect ) const;
+    // Calculates the coordinates of a rectangle when switching from
+    // LTR to RTL layout
+    void SwitchLTRtoRTL( SwRect& rRect ) const;
+    // Calculates the coordinates of a point when switching from
+    // LTR to RTL layout.
+    void SwitchLTRtoRTL( Point& rPoint ) const;
+    // Calculates the coordinates of a point when switching from
+    // RTL to LTR layout.
+    void SwitchRTLtoLTR( Point& rPoint ) const;
 #endif
 
 };
