@@ -3,9 +3,9 @@
  *
  *  $RCSfile: ImpressWindowState.xcu,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 14:37:51 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:15:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,9 @@
                     <value>true</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="NoClose" oor:type="xs:boolean">
                     <value>true</value>
                 </prop>
             </node>
@@ -719,6 +722,9 @@
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
                     <value>false</value>
                 </prop>
+                <prop oor:name="NoClose" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
             </node>
             <node oor:name="private:resource/toolbar/mediaobjectbar" oor:op="replace">
                 <prop oor:name="DockPos" oor:type="xs:string">
@@ -778,6 +784,9 @@
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
                     <value>false</value>
+                </prop>
+                <prop oor:name="NoClose" oor:type="xs:boolean">
+                    <value>true</value>
                 </prop>
            </node>
         </node>
