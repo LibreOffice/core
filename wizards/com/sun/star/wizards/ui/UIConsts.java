@@ -32,6 +32,7 @@ public interface UIConsts {
     public static final Integer INTEGER_14 = new Integer(14);
     public static final Integer INTEGER_16 = new Integer(16);
     public static final Integer INTEGER_40 = new Integer(40);
+    public static final Integer INTEGER_50 = new Integer(50);
 
     /**Steps of the QueryWizard
      *
