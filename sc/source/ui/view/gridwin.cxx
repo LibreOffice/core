@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-05 10:52:34 $
+ *  last change: $Author: nn $ $Date: 2001-04-20 12:40:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1101,7 +1101,10 @@ BOOL ScGridWindow::TestMouse( const MouseEvent& rMEvt, BOOL bAction )
 
     BOOL bNewPointer = FALSE;
 
-    if (pViewData->IsActive())
+    SfxInPlaceClient* pClient = pViewData->GetViewShell()->GetIPClient();
+    BOOL bOleActive = ( pClient && pClient->IsInPlaceActive() );
+
+    if ( pViewData->IsActive() && !bOleActive )
     {
         //  Auto-Fill
 
