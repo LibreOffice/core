@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffly.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-16 11:36:11 $
+ *  last change: $Author: cmc $ $Date: 2002-07-18 09:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -626,8 +626,15 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
 
     // dann sammel mal alle Attribute zusammen
     int bWeiter = TRUE;
+    int nAppliedProps=0;
     do {
         USHORT nVal = USHORT(nTokenValue);
+        /*
+        #i5263#
+        Assume that a property genuinely contributes towards creating a frame,
+        and if turns out to be a non contributing one reduce the count.
+        */
+        ++nAppliedProps;
         switch( nToken )
         {
         case RTF_ABSW:
@@ -726,9 +733,15 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
         case RTF_PVPARA:    aVert.SetRelationOrient( FRAME ); break;
 
         case RTF_POSYIL:
+            break;
         case RTF_ABSLOCK:
-                                break;
-
+            /*
+            #i5263#
+            Not sufficient to make a frame at least word won't do it with just
+            an abslock
+            */
+            --nAppliedProps;
+            break;
         case RTF_FRMTXLRTB:
             aFrmDir.SetValue( FRMDIR_HORI_LEFT_TOP );
             break;
@@ -964,6 +977,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
             break;
 
         default:
+            --nAppliedProps; //Not sufficient to make a frame
             bWeiter = FALSE;
         }
 
@@ -1028,20 +1042,28 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
     // (teste ob es die selben Attribute besitzt!)
     SwFlySave* pFlySave;
     USHORT nFlyArrCnt = aFlyArr.Count();
-    if( !nFlyArrCnt ||
-        !( pFlySave = aFlyArr[ nFlyArrCnt-1 ])->IsEqualFly( *pPam, aSet ))
+    /*
+    #i5263#
+    There were not enough frame properties found to actually justify creating
+    an absolutely positioned frame.
+    */
+    if (nAppliedProps)
     {
-        pFlySave = new SwFlySave( *pPam, aSet );
-        Size aPgSize;
-        GetPageSize( aPgSize );
-        pFlySave->nPageWidth = aPgSize.Width();
-
-        if( nDropCapAnchor )
+        if( !nFlyArrCnt ||
+            !( pFlySave = aFlyArr[ nFlyArrCnt-1 ])->IsEqualFly( *pPam, aSet ))
         {
-            pFlySave->nDropAnchor = nDropCapAnchor;
-            pFlySave->nDropLines = nDropCapLines;
+            pFlySave = new SwFlySave( *pPam, aSet );
+            Size aPgSize;
+            GetPageSize( aPgSize );
+            pFlySave->nPageWidth = aPgSize.Width();
+
+            if( nDropCapAnchor )
+            {
+                pFlySave->nDropAnchor = nDropCapAnchor;
+                pFlySave->nDropLines = nDropCapLines;
+            }
+            aFlyArr.Insert(  pFlySave, nFlyArrCnt++ );
         }
-        aFlyArr.Insert(  pFlySave, nFlyArrCnt++ );
     }
 
     SetPardTokenRead( FALSE );
@@ -1076,10 +1098,22 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                 else
                     SkipToken( 1 );
 
-                ReadFly( nToken, &pFlySave->aFlySet );
+                ReadFly( nToken, pFlySave ? &pFlySave->aFlySet : 0);
                 nToken = GetNextToken();
             }
         }
+    }
+
+    /*
+    #i5263#
+    There were enough frame properties found to actually justify creating
+    an absolutely positioned frame.
+    */
+    if (!nAppliedProps)
+    {
+        bReadSwFly = FALSE;
+        SkipToken( -1 );
+        return;
     }
 
     if( pTblNd && !pPam->GetPoint()->nContent.GetIndex() &&
