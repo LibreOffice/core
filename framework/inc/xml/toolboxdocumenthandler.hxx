@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolboxdocumenthandler.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 14:10:56 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:52:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,7 +237,7 @@ class OWriteToolBoxDocumentHandler : private ThreadHelpBase // Struct for right 
 
     protected:
         virtual void WriteToolBoxItem( const rtl::OUString& aCommandURL, const rtl::OUString& aLabel, const rtl::OUString& aHelpURL,
-                                       sal_Bool bVisible ) throw
+                                       sal_Int16 nWidth, sal_Bool bVisible ) throw
             ( ::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException );
 
