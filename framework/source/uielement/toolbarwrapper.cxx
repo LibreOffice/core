@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarwrapper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:56:46 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,8 +120,8 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_UIELEMENTTYPE_HPP_
-#include <drafts/com/sun/star/ui/UIElementType.hpp>
+#ifndef _COM_SUN_STAR_UI_UIELEMENTTYPE_HPP_
+#include <com/sun/star/ui/UIElementType.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -151,7 +151,7 @@ using namespace com::sun::star::frame;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace com::sun::star::awt;
-using namespace drafts::com::sun::star::ui;
+using namespace ::com::sun::star::ui;
 
 namespace framework
 {
@@ -364,15 +364,15 @@ void SAL_CALL ToolBarWrapper::setSettings( const ::com::sun::star::uno::Referenc
 }
 
 //  XUIConfigurationListener
-void SAL_CALL ToolBarWrapper::elementInserted( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL ToolBarWrapper::elementInserted( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
-void SAL_CALL ToolBarWrapper::elementRemoved( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL ToolBarWrapper::elementRemoved( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
-void SAL_CALL ToolBarWrapper::elementReplaced( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL ToolBarWrapper::elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
