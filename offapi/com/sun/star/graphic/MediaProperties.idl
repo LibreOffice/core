@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MediaProperties.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 09:35:50 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 17:44:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ module com { module sun { module star { module graphic
 /** This service describes the properties that are used
     when using the <type>XGraphicProvider</type> interface methods
 */
-service MediaProperties
+published service MediaProperties
 {
     /** Property that describes the location of the source or target
         of the graphic as URL.
