@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTabBarPage.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2004-02-04 11:23:57 $
+ *  last change:$Date: 2004-11-02 12:06:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ public class AccessibleTabBarPage extends TestCase {
             UnoRuntime.queryInterface(XWindow.class,tk.getActiveTopWindow());
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
-        at.printAccessibleTree(log,xRoot);
+        at.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
         oObj = at.getAccessibleObjectForRole(xRoot, (short) 30);
             //AccessibleRole.PAGETAB), "Sheet1");
 
