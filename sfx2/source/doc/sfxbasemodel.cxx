@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: as $ $Date: 2004-12-07 13:37:14 $
+ *  last change: $Author: kz $ $Date: 2004-12-09 16:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3700,8 +3700,20 @@ void SAL_CALL SfxBaseModel::storeToStorage( const REFERENCE< XSTORAGE >& xStorag
             nVersion = pFilter->GetVersion();
     }
 
-    m_pData->m_pObjectShell->SetupStorage( xStorage, nVersion );
-    if ( !m_pData->m_pObjectShell->DoSaveAs( xStorage, &aSet ) )
+    sal_Bool bSuccess = sal_False;
+    if ( xStorage == m_pData->m_pObjectShell->GetStorage() )
+    {
+        // storing to the own storage
+        bSuccess = m_pData->m_pObjectShell->DoSave();
+    }
+    else
+    {
+        m_pData->m_pObjectShell->SetupStorage( xStorage, nVersion );
+        bSuccess = m_pData->m_pObjectShell->DoSaveAs( xStorage, &aSet );
+        m_pData->m_pObjectShell->DoSaveCompleted( NULL );
+    }
+
+    if ( !bSuccess )
     {
         sal_uInt32 nError = m_pData->m_pObjectShell->GetErrorCode();
         throw task::ErrorCodeIOException( ::rtl::OUString(),
