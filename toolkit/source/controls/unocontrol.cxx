@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 15:10:35 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:55:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,12 @@
 #ifndef _TOOLKIT_HELPER_SERVICENAMES_HXX_
 #include <toolkit/helper/servicenames.hxx>
 #endif
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/helper/vclunohelper.hxx>
+#endif
+#ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
+#include <toolkit/awt/vclxwindow.hxx>
+#endif
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -186,6 +192,30 @@ static Sequence< ::rtl::OUString> lcl_ImplGetPropertyNames( const Reference< XMu
     }
     return aNames;
 }
+
+//  ====================================================
+class VclListenerLock
+{
+private:
+    VCLXWindow*  m_pLockWindow;
+
+public:
+    inline VclListenerLock( VCLXWindow* _pLockWindow )
+        :m_pLockWindow( _pLockWindow )
+    {
+        DBG_ASSERT( m_pLockWindow, "VclListenerLock::VclListenerLock: invalid window!" );
+        m_pLockWindow->suspendVclEventListening( );
+    }
+    inline ~VclListenerLock( )
+    {
+        m_pLockWindow->resumeVclEventListening( );
+    }
+
+private:
+    VclListenerLock();                                          // never implemented
+    VclListenerLock( const VclListenerLock& );              // never implemented
+    VclListenerLock& operator=( const VclListenerLock& );   // never implemented
+};
 
 //  ----------------------------------------------------
 //  class UnoControl
@@ -440,14 +470,14 @@ void UnoControl::propertiesChange( const Sequence< PropertyChangeEvent >& rEvent
 
         aGuard.clear();
         // clear the guard before creating a new peer - as usual, our peer implementations use the SolarMutex
-        // 82300 - 12/21/00 - FS
+        // #82300# - 2000-12-21 - fs@openoffice.org
         if (bNeedNewPeer && xParent.is())
         {
             NAMESPACE_VOS(OGuard) aVclGuard( Application::GetSolarMutex() );
                 // and now this is the final withdrawal:
                 // With 83561, I have no other idea than locking the SolarMutex here ....
                 // I really hate the fact that VCL is not theadsafe ....
-                // 01.03.2001 - FS
+                // #83561# - 2001-03-01 - fs@openoffice.org
 
             // Funktioniert beim Container nicht!
             getPeer()->dispose();
@@ -460,10 +490,20 @@ void UnoControl::propertiesChange( const Sequence< PropertyChangeEvent >& rEvent
             aPeerPropertiesToSet.clear();
         }
 
+        // lock the multiplexing of VCL events to our UNO listeners
+        // this is for compatibility reasons: in OOo 1.0.x, changes which were done at the
+        // model did not cause the listeners of the controls/peers to be called
+        // Since the implementations for the listeners changed a lot towards 1.1, this
+        // would not be the case anymore, if we would not do this listener-lock below
+        // #i14703# - 2003-05-23 - fs@openoffice.org
+        Window* pVclPeer = VCLUnoHelper::GetWindow( getPeer() );
+        VCLXWindow* pPeer = pVclPeer ? pVclPeer->GetWindowPeer() : NULL;
+        VclListenerLock aNoVclEventMultiplexing( pPeer );
+
         // setting peer properties may result in an attemp to acquire the solar mutex, 'cause the peers
         // usually don't have an own mutex but use the SolarMutex instead.
         // To prevent deadlocks resulting from this, we do this without our own mutex locked
-        // FS - 11/03/2000
+        // 2000-11-03 - fs@openoffice.org
         PropertyValueVectorIterator aEnd = aPeerPropertiesToSet.end();
         for (   PropertyValueVectorIterator aLoop = aPeerPropertiesToSet.begin();
                 aLoop != aEnd;
