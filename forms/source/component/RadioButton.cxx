@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RadioButton.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 12:47:10 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:40:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,25 +160,21 @@ InterfaceRef SAL_CALL ORadioButtonModel_CreateInstance(const Reference<XMultiSer
 DBG_NAME( ORadioButtonModel )
 //------------------------------------------------------------------
 ORadioButtonModel::ORadioButtonModel(const Reference<XMultiServiceFactory>& _rxFactory)
-    :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_RADIOBUTTON, FRM_SUN_CONTROL_RADIOBUTTON, sal_False, sal_True, sal_True )
+    :OReferenceValueComponent( _rxFactory, VCL_CONTROLMODEL_RADIOBUTTON, FRM_SUN_CONTROL_RADIOBUTTON )
                     // use the old control name for compytibility reasons
 {
     DBG_CTOR( ORadioButtonModel, NULL );
 
     m_nClassId = FormComponentType::RADIOBUTTON;
-    m_nDefaultChecked = RB_NOCHECK;
     m_aLabelServiceName = FRM_SUN_COMPONENT_GROUPBOX;
     initValueProperty( PROPERTY_STATE, PROPERTY_ID_STATE );
 }
 
 //------------------------------------------------------------------
 ORadioButtonModel::ORadioButtonModel( const ORadioButtonModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
-    :OBoundControlModel( _pOriginal, _rxFactory )
+    :OReferenceValueComponent( _pOriginal, _rxFactory )
 {
     DBG_CTOR( ORadioButtonModel, NULL );
-
-    m_nDefaultChecked = _pOriginal->m_nDefaultChecked;
-    m_sReferenceValue = _pOriginal->m_sReferenceValue;
 }
 
 //------------------------------------------------------------------------------
@@ -195,7 +191,7 @@ IMPLEMENT_DEFAULT_CLONING( ORadioButtonModel )
 //------------------------------------------------------------------------------
 StringSequence SAL_CALL ORadioButtonModel::getSupportedServiceNames() throw(RuntimeException)
 {
-    StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
+    StringSequence aSupported = OReferenceValueComponent::getSupportedServiceNames();
 
     sal_Int32 nOldLen = aSupported.getLength();
     aSupported.realloc( nOldLen + 8 );
@@ -213,18 +209,6 @@ StringSequence SAL_CALL ORadioButtonModel::getSupportedServiceNames() throw(Runt
     *pStoreTo++ = BINDABLE_DATABASE_RADIO_BUTTON;
 
     return aSupported;
-}
-
-//------------------------------------------------------------------------------
-void ORadioButtonModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const
-{
-    switch (nHandle)
-    {
-        case PROPERTY_ID_REFVALUE : rValue <<= m_sReferenceValue; break;
-        case PROPERTY_ID_DEFAULTCHECKED : rValue <<= m_nDefaultChecked; break;
-        default:
-            OBoundControlModel::getFastPropertyValue(rValue, nHandle);
-    }
 }
 
 //------------------------------------------------------------------------------
@@ -267,22 +251,7 @@ void ORadioButtonModel::SetSiblingPropsTo(const ::rtl::OUString& rPropName, cons
 //------------------------------------------------------------------------------
 void ORadioButtonModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue) throw (Exception)
 {
-    switch (nHandle)
-    {
-        case PROPERTY_ID_REFVALUE :
-            DBG_ASSERT(rValue.getValueType().getTypeClass() == TypeClass_STRING, "ORadioButtonModel::setFastPropertyValue_NoBroadcast : invalid type !" );
-            rValue >>= m_sReferenceValue;
-            break;
-
-        case PROPERTY_ID_DEFAULTCHECKED :
-            DBG_ASSERT(rValue.getValueType().getTypeClass() == TypeClass_SHORT, "ORadioButtonModel::setFastPropertyValue_NoBroadcast : invalid type !" );
-            rValue >>= m_nDefaultChecked;
-            resetNoBroadcast();
-            break;
-
-        default:
-            OBoundControlModel::setFastPropertyValue_NoBroadcast(nHandle, rValue);
-    }
+    OReferenceValueComponent::setFastPropertyValue_NoBroadcast( nHandle, rValue );
 
     // if the label control changed ...
     if (nHandle == PROPERTY_ID_CONTROLLABEL)
@@ -352,27 +321,6 @@ void ORadioButtonModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, cons
 }
 
 //------------------------------------------------------------------------------
-sal_Bool ORadioButtonModel::convertFastPropertyValue(
-            Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
-            throw (IllegalArgumentException)
-{
-    sal_Bool bModified(sal_False);
-    switch (_nHandle)
-    {
-        case PROPERTY_ID_REFVALUE :
-            bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_sReferenceValue);
-            break;
-        case PROPERTY_ID_DEFAULTCHECKED :
-            bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_nDefaultChecked);
-            break;
-        default:
-            bModified = OBoundControlModel::convertFastPropertyValue(_rConvertedValue, _rOldValue, _nHandle, _rValue);
-            break;
-    }
-    return bModified;
-}
-
-//------------------------------------------------------------------------------
 Reference<XPropertySetInfo> SAL_CALL ORadioButtonModel::getPropertySetInfo() throw(RuntimeException)
 {
     Reference<XPropertySetInfo> xInfo( createPropertySetInfo( getInfoHelper() ) );
@@ -390,9 +338,7 @@ void ORadioButtonModel::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    BEGIN_DESCRIBE_PROPERTIES( 3, OBoundControlModel )
-        DECL_PROP1(REFVALUE,            ::rtl::OUString,            BOUND);
-        DECL_PROP1(DEFAULTCHECKED,      sal_Int16,                  BOUND);
+    BEGIN_DESCRIBE_PROPERTIES( 1, OReferenceValueComponent )
         DECL_PROP1(TABINDEX,            sal_Int16,                  BOUND);
     END_DESCRIBE_PROPERTIES();
 }
@@ -407,14 +353,14 @@ void ORadioButtonModel::fillProperties(
 void SAL_CALL ORadioButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
     throw(IOException, RuntimeException)
 {
-    OBoundControlModel::write(_rxOutStream);
+    OReferenceValueComponent::write(_rxOutStream);
 
     // Version
     _rxOutStream->writeShort(0x0003);
 
     // Properties
-    _rxOutStream << m_sReferenceValue;
-    _rxOutStream << (sal_Int16)m_nDefaultChecked;
+    _rxOutStream << getReferenceValue();
+    _rxOutStream << (sal_Int16)getDefaultChecked();
     writeHelpTextCompatibly(_rxOutStream);
 
     // from version 0x0003 : common properties
@@ -424,35 +370,42 @@ void SAL_CALL ORadioButtonModel::write(const Reference<XObjectOutputStream>& _rx
 //------------------------------------------------------------------------------
 void SAL_CALL ORadioButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw(IOException, RuntimeException)
 {
-    OBoundControlModel::read(_rxInStream);
+    OReferenceValueComponent::read(_rxInStream);
     ::osl::MutexGuard aGuard(m_aMutex);
 
     // Version
     UINT16 nVersion = _rxInStream->readShort();
 
+    ::rtl::OUString sReferenceValue;
+    sal_Int16 nDefaultChecked( 0 );
     switch (nVersion)
     {
-        case 0x0001 : _rxInStream >> m_sReferenceValue; _rxInStream >> m_nDefaultChecked; break;
+        case 0x0001 :
+            _rxInStream >> sReferenceValue;
+            _rxInStream >> nDefaultChecked;
+            break;
         case 0x0002 :
-            _rxInStream >> m_sReferenceValue;
-            _rxInStream >> m_nDefaultChecked;
+            _rxInStream >> sReferenceValue;
+            _rxInStream >> nDefaultChecked;
             readHelpTextCompatibly(_rxInStream);
             break;
         case 0x0003 :
-            _rxInStream >> m_sReferenceValue;
-            _rxInStream >> m_nDefaultChecked;
+            _rxInStream >> sReferenceValue;
+            _rxInStream >> nDefaultChecked;
             readHelpTextCompatibly(_rxInStream);
             readCommonProperties(_rxInStream);
             break;
         default :
             DBG_ERROR("ORadioButtonModel::read : unknown version !");
-            m_sReferenceValue = ::rtl::OUString();
-            m_nDefaultChecked = 0;
             defaultCommonProperties();
             break;
     }
+
+    setReferenceValue( sReferenceValue );
+    setDefaultChecked( nDefaultChecked );
+
     // Nach dem Lesen die Defaultwerte anzeigen
-    if (m_aControlSource.getLength())
+    if ( getControlSource().getLength() )
         // (not if we don't have a control source - the "State" property acts like it is persistent, then
         resetNoBroadcast();
 }
@@ -472,28 +425,26 @@ void ORadioButtonModel::_propertyChanged(const PropertyChangeEvent& _rEvent) thr
         }
     }
 
-    OBoundControlModel::_propertyChanged( _rEvent );
+    OReferenceValueComponent::_propertyChanged( _rEvent );
 }
 
 //------------------------------------------------------------------------------
 Any ORadioButtonModel::translateDbColumnToControlValue()
 {
     return makeAny( (sal_Int16)
-        ( ( m_xColumn->getString() == m_sReferenceValue ) ? RB_CHECK : RB_NOCHECK )
+        ( ( m_xColumn->getString() == getReferenceValue() ) ? STATE_CHECK : STATE_NOCHECK )
     );
 }
 
 //------------------------------------------------------------------------------
-sal_Int16 ORadioButtonModel::getState( const Any& rValue )
+Any ORadioButtonModel::translateExternalValueToControlValue( )
 {
-    //::rtl::OUString aStrValue = DBTypeConversion::toString( rValue );
-    return RB_NOCHECK;
-}
-
-//------------------------------------------------------------------------------
-Any ORadioButtonModel::getDefaultForReset() const
-{
-    return makeAny( (sal_Int16)m_nDefaultChecked );
+    Any aControlValue = OReferenceValueComponent::translateExternalValueToControlValue();
+    sal_Int16 nState = STATE_NOCHECK;
+    if ( ( aControlValue >>= nState ) && ( nState == STATE_DONTKNOW ) )
+        // radio buttons do not have the DONTKNOW state
+        aControlValue <<= (sal_Int16)STATE_NOCHECK;
+    return aControlValue;
 }
 
 //-----------------------------------------------------------------------------
@@ -508,7 +459,7 @@ sal_Bool ORadioButtonModel::commitControlValueToDbColumn( bool _bPostReset )
             sal_Int16 nValue;
             m_xAggregateSet->getPropertyValue( PROPERTY_STATE ) >>= nValue;
             if ( nValue == 1 )
-                xField->setPropertyValue( PROPERTY_VALUE, makeAny( m_sReferenceValue ) );
+                xField->setPropertyValue( PROPERTY_VALUE, makeAny( getReferenceValue() ) );
         }
         catch(Exception&)
         {
@@ -516,65 +467,6 @@ sal_Bool ORadioButtonModel::commitControlValueToDbColumn( bool _bPostReset )
         }
     }
     return sal_True;
-}
-
-//-----------------------------------------------------------------------------
-sal_Bool ORadioButtonModel::approveValueBinding( const Reference< XValueBinding >& _rxBinding )
-{
-    OSL_PRECOND( _rxBinding.is(), "ORadioButtonModel::approveValueBinding: invalid binding!" );
-
-    // only strings are accepted for simplicity
-    return  _rxBinding.is()
-        &&  _rxBinding->supportsType( ::getCppuType( static_cast< sal_Bool* >( NULL ) ) );
-}
-
-//-----------------------------------------------------------------------------
-Any ORadioButtonModel::translateExternalValueToControlValue( )
-{
-    OSL_PRECOND( m_xExternalBinding.is(), "ORadioButtonModel::commitControlValueToExternalBinding: no active binding!" );
-
-    sal_Int16 nState = RB_DONTKNOW;
-    if ( m_xExternalBinding.is() )
-    {
-        Any aExternalValue;
-        try
-        {
-            aExternalValue = m_xExternalBinding->getValue( ::getCppuType( static_cast< sal_Bool* >( NULL ) ) );
-        }
-        catch( const IncompatibleTypesException& )
-        {
-            OSL_ENSURE( sal_False, "ORadioButtonModel::translateExternalValueToControlValue: caught an exception!" );
-        }
-
-        sal_Bool bState = sal_False;
-        if ( aExternalValue >>= bState )
-            nState = bState ? RB_CHECK : RB_NOCHECK;
-    }
-
-    return makeAny( nState );
-}
-
-//-----------------------------------------------------------------------------
-Any ORadioButtonModel::translateControlValueToExternalValue( )
-{
-    // translate the control value into a value appropriate for the external binding
-    // Basically, this means translating the INT16-State into a boolean
-    Any aControlValue( m_xAggregateSet->getPropertyValue( PROPERTY_STATE ) );
-    Any aExternalValue;
-
-    sal_Int16 nControlValue = RB_DONTKNOW;
-    aControlValue >>= nControlValue;
-
-    switch( nControlValue )
-    {
-        case RB_CHECK:
-            aExternalValue <<= (sal_Bool)sal_True;
-            break;
-        case RB_NOCHECK:
-            aExternalValue <<= (sal_Bool)sal_False;
-            break;
-    }
-    return aExternalValue;
 }
 
 //.........................................................................
