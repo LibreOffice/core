@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-08-06 16:00:48 $
+ *  last change: $Author: jb $ $Date: 2001-08-09 12:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,68 +371,79 @@ void readPathFromINI(Bootstrap::Impl::PathData & _rResult, osl::Profile & _rIniF
         _rResult.status = Bootstrap::DATA_INVALID;
 }
 // ---------------------------------------------------------------------------------------
+// Error reporting
 
+static char const IS_MISSING[] = "is missing";
+static char const IS_INVALID[] = "is corrupt";
+static char const PERIOD[] = ". ";
+
+// ---------------------------------------------------------------------------------------
 static void addFileError(OUStringBuffer& _rBuf, OUString const& _aPath, AsciiString _sWhat)
 {
     OUString sSimpleFileName = _aPath.copy(1 +_aPath.lastIndexOf(cURLSeparator));
 
-    _rBuf.appendAscii("A main configuration file ").appendAscii(_sWhat);
-    _rBuf.appendAscii(". (").append(sSimpleFileName).appendAscii(") ");
+    _rBuf.appendAscii("The configuration file");
+    _rBuf.appendAscii(" '").append(sSimpleFileName).appendAscii("' ");
+    _rBuf.appendAscii(_sWhat).appendAscii(PERIOD);
 }
 // ---------------------------------------------------------------------------------------
 
-static void addDirectoryError(OUStringBuffer& _rBuf, OUString const& _aPath, AsciiString _sWhat)
+static void addMissingDirectoryError(OUStringBuffer& _rBuf, OUString const& _aPath)
 {
-    _rBuf.appendAscii("A configuration directory ").appendAscii(_sWhat);
-    _rBuf.appendAscii(". (").append(_aPath).appendAscii(") ");
+    _rBuf.appendAscii("The configuration directory");
+    _rBuf.appendAscii(" '").append(_aPath).appendAscii("' ");
+    _rBuf.appendAscii(IS_MISSING).appendAscii(PERIOD);
 }
 // ---------------------------------------------------------------------------------------
 
-static void addUnexpectedError(OUStringBuffer& _rBuf, AsciiString _sExtraInfo)
+static void addUnexpectedError(OUStringBuffer& _rBuf, AsciiString _sExtraInfo = NULL)
 {
-    _rBuf.appendAscii("An unexpected bootstrap problem occurred");
-    _rBuf.appendAscii(". (").appendAscii(_sExtraInfo).appendAscii(") ");
+    if (NULL == _sExtraInfo)
+        _sExtraInfo = "An internal failure occurred";
+
+    _rBuf.appendAscii(_sExtraInfo).appendAscii(PERIOD);
 }
 // ---------------------------------------------------------------------------------------
 
 static void describeError(OUStringBuffer& _rBuf, Bootstrap::Impl const& _rData)
 {
+    _rBuf.appendAscii("The program cannot be started. ");
     switch (_rData.aUserInstall_.status)
     {
     case Bootstrap::PATH_EXISTS:
         switch (_rData.aBaseInstall_.status)
         {
         case Bootstrap::PATH_VALID:
-            addDirectoryError(_rBuf, _rData.aBaseInstall_.path, "cannot be found");
+            addMissingDirectoryError(_rBuf, _rData.aBaseInstall_.path);
             break;
 
         case Bootstrap::DATA_INVALID:
-            addUnexpectedError(_rBuf,"Installation path invalid");
+            addUnexpectedError(_rBuf,"The installation path is invalid");
             break;
 
         case Bootstrap::DATA_MISSING:
-            addUnexpectedError(_rBuf,"Installation path not available");
+            addUnexpectedError(_rBuf,"The installation path is not available");
             break;
 
         case Bootstrap::PATH_EXISTS: // seems to be all fine (?)
-            addUnexpectedError(_rBuf,"Data OK");
+            addUnexpectedError(_rBuf,"");
             break;
 
         default: OSL_ASSERT(false);
-            addUnexpectedError(_rBuf,"Internal failure");
+            addUnexpectedError(_rBuf);
             break;
         }
         break;
 
     case Bootstrap::PATH_VALID:
-        addDirectoryError(_rBuf, _rData.aUserInstall_.path, "is missing");
+        addMissingDirectoryError(_rBuf, _rData.aUserInstall_.path);
         break;
 
         // else fall through
     case Bootstrap::DATA_INVALID:
         if (_rData.aVersionINI_.status == Bootstrap::PATH_EXISTS)
         {
-            addFileError(_rBuf, _rData.aVersionINI_.path, "is corrupt");
+            addFileError(_rBuf, _rData.aVersionINI_.path, IS_INVALID);
             break;
         }
         // else fall through
@@ -441,27 +452,27 @@ static void describeError(OUStringBuffer& _rBuf, Bootstrap::Impl const& _rData)
         switch (_rData.aVersionINI_.status)
         {
         case Bootstrap::PATH_EXISTS:
-            addFileError(_rBuf, _rData.aVersionINI_.path, "has no data for this version");
+            addFileError(_rBuf, _rData.aVersionINI_.path, "does not support the current version");
             break;
 
         case Bootstrap::PATH_VALID:
-            addFileError(_rBuf, _rData.aVersionINI_.path, "is missing");
+            addFileError(_rBuf, _rData.aVersionINI_.path, IS_MISSING);
             break;
 
         default:
             switch (_rData.aBootstrapINI_.status)
             {
             case Bootstrap::PATH_EXISTS:
-                addFileError(_rBuf, _rData.aBootstrapINI_.path, "is corrupt");
+                addFileError(_rBuf, _rData.aBootstrapINI_.path, IS_INVALID);
                 break;
 
             case Bootstrap::DATA_INVALID: OSL_ASSERT(false);
             case Bootstrap::PATH_VALID:
-                addFileError(_rBuf, _rData.aBootstrapINI_.path, "is missing");
+                addFileError(_rBuf, _rData.aBootstrapINI_.path, IS_MISSING);
                 break;
 
             default:
-                addUnexpectedError(_rBuf,"No data");
+                addUnexpectedError(_rBuf);
                 break;
             }
             break;
@@ -469,7 +480,7 @@ static void describeError(OUStringBuffer& _rBuf, Bootstrap::Impl const& _rData)
         break;
 
     default: OSL_ASSERT(false);
-        addUnexpectedError(_rBuf,"Internal Failure");
+        addUnexpectedError(_rBuf);
         break;
     }
 }
