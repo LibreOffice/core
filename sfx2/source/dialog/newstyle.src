@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newstyle.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:15:48 $
+ *  last change: $Author: pb $ $Date: 2001-06-28 07:54:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,19 +58,17 @@
  *
  *
  ************************************************************************/
- // include ---------------------------------------------------------------
+
 #include "sfx.hrc"
 #include "dialog.hrc"
 #include "newstyle.hrc"
- // pragma ----------------------------------------------------------------
 
- // DLG_NEW_STYLE_BY_EXAMPLE ----------------------------------------------
 ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
 {
     HelpId = SID_STYLE_NEW_BY_EXAMPLE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 177 , 118 ) ;
+    Size = MAP_APPFONT ( 177 , 112 ) ;
     Text = "Vorlage erzeugen" ;
     Text [ ENGLISH ] = "Create template" ;
     Text [ norwegian ] = "Lag mal" ;
@@ -84,31 +82,22 @@ ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
     Text [ dutch ] = "Opmaakprofiel maken" ;
     Text [ spanish ] = "Crear estilo" ;
     Text [ english_us ] = "Create Style" ;
+    Text[ chinese_simplified ] = "…˙≥…—˘ Ω";
+    Text[ russian ] = "—ÓÁ‰‡Ú¸ ÒÚËÎ¸";
+    Text[ polish ] = "UtwÛrz styl";
+    Text[ japanese ] = "Ω¿≤ŸÇÃçÏê¨";
+    Text[ chinese_traditional ] = "≤£•ÕºÀ¶°";
+    Text[ arabic ] = "≈‰‘«¡ ‰„ÿ";
+    Text[ greek ] = "ƒÁÏÈÔıÒ„ﬂ· ÒÔÙ˝Ôı";
+    Text[ korean ] = "º≠Ωƒ∆ƒ¿œ ¿€º∫";
+    Text[ turkish ] = "BiÁim olu˛tur";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Crear estilo";
     Moveable = TRUE ;
-    OKButton BT_OK
-    {
-        Disable = TRUE ;
-        Pos = MAP_APPFONT ( 121 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-    CancelButton BT_CANCEL
-    {
-        Pos = MAP_APPFONT ( 121 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    ComboBox LB_COL
-    {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 94 , 92 ) ;
-        TabStop = TRUE ;
-    };
-    GroupBox GB_COL
+    FixedLine FL_COL
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 109 , 109 ) ;
+        Size = MAP_APPFONT ( 109 , 8 ) ;
         Text = "Vorlagenname" ;
         Text [ ENGLISH ] = "Template name" ;
         Text [ norwegian ] = "Navn pÂ mal" ;
@@ -134,12 +123,30 @@ ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nombre del estilo";
     };
+    ComboBox LB_COL
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 94 , 92 ) ;
+        TabStop = TRUE ;
+    };
+    OKButton BT_OK
+    {
+        Disable = TRUE ;
+        Pos = MAP_APPFONT ( 121 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( 121 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
     QueryBox MSG_OVERWRITE
     {
         Buttons = WB_YES_NO ;
         DefButton = WB_DEF_NO ;
-        /* ### ACHTUNG: Neuer Text in Resource? Vorlage existiert bereits. ‹berschreiben? : Vorlage existiert bereits. öberschreiben? */
-        /* ### ACHTUNG: Neuer Text in Resource? Vorlage existiert bereits. ‹berschreiben? : Vorlage existiert bereits. öberschreiben? */
         Message = "Vorlage existiert bereits. ‹berschreiben?" ;
         Message [ ENGLISH ] = "Template already exists. Overwrite?" ;
         Message [ norwegian ] = "Malen finnes allerede. Skriv over?" ;
@@ -165,18 +172,5 @@ ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
         Message[ language_user1 ] = " ";
         Message[ catalan ] = "El estilo ya existe. øDesea sobrescribirlo?";
     };
-    Text[ chinese_simplified ] = "…˙≥…—˘ Ω";
-    Text[ russian ] = "—ÓÁ‰‡Ú¸ ÒÚËÎ¸";
-    Text[ polish ] = "UtwÛrz styl";
-    Text[ japanese ] = "Ω¿≤ŸÇÃçÏê¨";
-    Text[ chinese_traditional ] = "≤£•ÕºÀ¶°";
-    Text[ arabic ] = "≈‰‘«¡ ‰„ÿ";
-    Text[ greek ] = "ƒÁÏÈÔıÒ„ﬂ· ÒÔÙ˝Ôı";
-    Text[ korean ] = "º≠Ωƒ∆ƒ¿œ ¿€º∫";
-    Text[ turkish ] = "BiÁim olu˛tur";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Crear estilo";
 };
- // ********************************************************************** EOF
-
 

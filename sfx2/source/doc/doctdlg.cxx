@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:32 $
+ *  last change: $Author: pb $ $Date: 2001-06-28 07:53:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,24 +80,30 @@
 
 //=========================================================================
 
-SfxDocumentTemplateDlg::SfxDocumentTemplateDlg(
-    Window * pParent, SfxDocumentTemplates* pTempl )
-:   ModalDialog( pParent, SfxResId(DLG_DOC_TEMPLATE) ),
-    aRegionFt( this, ResId( FT_SECTION ) ),
-    aRegionLb( this, ResId( LB_SECTION ) ),
-    aTemplateFt( this, ResId( FT_STYLESHEETS ) ),
-    aTemplateLb( this, ResId( LB_STYLESHEETS ) ),
-    aNameEd( this, ResId( ED_NAME ) ),
-    aTemplateGb( this, ResId( GB_STYLESHEETS ) ),
-    aEditGb( this, ResId( GB_EDIT ) ),
-    aOkBt( this, ResId( BT_OK ) ),
-    aEditBt( this, ResId( BT_EDIT ) ),
-    aCancelBt( this, ResId( BT_CANCEL ) ),
-    aOrganizeBt( this, ResId( BT_ORGANIZE ) ),
-    aHelpBt( this, ResId( BT_HELP ) ),
-    pTemplates( pTempl )
+SfxDocumentTemplateDlg::SfxDocumentTemplateDlg( Window * pParent, SfxDocumentTemplates* pTempl ) :
+
+    ModalDialog( pParent, SfxResId( DLG_DOC_TEMPLATE ) ),
+
+    aEditFL     ( this, ResId( FL_EDIT ) ),
+    aNameEd     ( this, ResId( ED_NAME ) ),
+    aTemplateFL ( this, ResId( FL_STYLESHEETS ) ),
+    aRegionFt   ( this, ResId( FT_SECTION ) ),
+    aRegionLb   ( this, ResId( LB_SECTION ) ),
+    aTemplateFt ( this, ResId( FT_STYLESHEETS ) ),
+    aTemplateLb ( this, ResId( LB_STYLESHEETS ) ),
+
+    aOkBt       ( this, ResId( BT_OK ) ),
+    aCancelBt   ( this, ResId( BT_CANCEL ) ),
+    aHelpBt     ( this, ResId( BT_HELP ) ),
+    aEditBt     ( this, ResId( BT_EDIT ) ),
+    aOrganizeBt ( this, ResId( BT_ORGANIZE ) ),
+
+    pTemplates  ( pTempl ),
+    pHelper     ( NULL )
+
 {
     FreeResource();
+
     pHelper = new SfxModalDefParentHelper( this );
     aOrganizeBt.SetClickHdl(LINK(this, SfxDocumentTemplateDlg, OrganizeHdl));
     aNameEd.SetModifyHdl(LINK(this, SfxDocumentTemplateDlg, NameModify));
@@ -258,5 +264,4 @@ void SfxDocumentTemplateDlg::NewTemplate(const String &rPath)
     pTemplates->NewTemplate(
         aRegionLb.GetSelectEntryPos(), GetTemplateName(), rPath);
 }
-
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctdlg.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:32 $
+ *  last change: $Author: pb $ $Date: 2001-06-28 07:53:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #define LB_STYLESHEETS 4
 #define BT_ORGANIZE 20
 #define BT_HELP 21
-#define GB_EDIT 5
+#define FL_EDIT 5
 #define FT_NAME 6
 #define ED_NAME 7
 #define BT_OK 10
@@ -73,4 +73,4 @@
 #define BT_NEW 13
 #define BT_DELETE 15
 #define BT_CANCEL 16
-#define GB_STYLESHEETS 17
+#define FL_STYLESHEETS 17

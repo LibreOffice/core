@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newstyle.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:31 $
+ *  last change: $Author: pb $ $Date: 2001-06-28 07:54:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,26 +70,27 @@
 #include "dialog.hrc"
 #include "newstyle.hrc"
 #include "sfxresid.hxx"
-#include "segmentc.hxx"
 
 // PRIVATE METHODES ------------------------------------------------------
 
 IMPL_LINK( SfxNewStyleDlg, OKHdl, Control *, pControl )
 {
-    const String aName(aColBox.GetText());
-    SfxStyleSheetBase *pStyle = rPool.Find(aName, rPool.GetSearchFamily(), SFXSTYLEBIT_ALL);
-    if(pStyle) {
-        if(!pStyle->IsUserDefined()) {
-            InfoBox(this, SfxResId(MSG_POOL_STYLE_NAME)).Execute();
+    const String aName( aColBox.GetText() );
+    SfxStyleSheetBase* pStyle = rPool.Find( aName, rPool.GetSearchFamily(), SFXSTYLEBIT_ALL );
+    if ( pStyle )
+    {
+        if ( !pStyle->IsUserDefined() )
+        {
+            InfoBox( this, SfxResId( MSG_POOL_STYLE_NAME ) ).Execute();
             return 0;
         }
-        if(RET_YES == aQueryOverwriteBox.Execute()) {
-            EndDialog(RET_OK);
-        }
+
+        if ( RET_YES == aQueryOverwriteBox.Execute() )
+            EndDialog( RET_OK );
     }
-    else {
-        EndDialog(RET_OK);
-    }
+    else
+        EndDialog( RET_OK );
+
     return 0;
 }
 
@@ -104,22 +105,28 @@ IMPL_LINK_INLINE_END( SfxNewStyleDlg, ModifyHdl, ComboBox *, pBox )
 
 // CTOR / DTOR -----------------------------------------------------------
 
-SfxNewStyleDlg::SfxNewStyleDlg(Window *pParent, SfxStyleSheetBasePool &pool)
-    : ModalDialog(pParent, SfxResId(DLG_NEW_STYLE_BY_EXAMPLE)),
-    aColBox(this, ResId(LB_COL)),
-    aColGrp(this, ResId(GB_COL)),
-    aOKBtn(this, ResId(BT_OK)),
-    aCancelBtn(this, ResId(BT_CANCEL)),
-    aQueryOverwriteBox(this, ResId(MSG_OVERWRITE)),
-    rPool(pool)
+SfxNewStyleDlg::SfxNewStyleDlg( Window* pParent, SfxStyleSheetBasePool& rInPool ) :
+
+    ModalDialog( pParent, SfxResId( DLG_NEW_STYLE_BY_EXAMPLE ) ),
+
+    aColFL              ( this, ResId( FL_COL ) ),
+    aColBox             ( this, ResId( LB_COL ) ),
+    aOKBtn              ( this, ResId( BT_OK ) ),
+    aCancelBtn          ( this, ResId( BT_CANCEL ) ),
+    aQueryOverwriteBox  ( this, ResId( MSG_OVERWRITE ) ),
+
+    rPool( rInPool )
+
 {
     FreeResource();
+
     aOKBtn.SetClickHdl(LINK(this, SfxNewStyleDlg, OKHdl));
     aColBox.SetModifyHdl(LINK(this, SfxNewStyleDlg, ModifyHdl));
     aColBox.SetDoubleClickHdl(LINK(this, SfxNewStyleDlg, OKHdl));
 
     SfxStyleSheetBase *pStyle = rPool.First();
-    while(pStyle) {
+    while ( pStyle )
+    {
         aColBox.InsertEntry(pStyle->GetName());
         pStyle = rPool.Next();
     }
@@ -130,5 +137,4 @@ SfxNewStyleDlg::SfxNewStyleDlg(Window *pParent, SfxStyleSheetBasePool &pool)
 __EXPORT SfxNewStyleDlg::~SfxNewStyleDlg()
 {
 }
-
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctdlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 21:56:40 $
+ *  last change: $Author: pb $ $Date: 2001-06-28 07:53:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,19 +58,17 @@
  *
  *
  ************************************************************************/
- // include --------------------------------------------------------------
+
 #include "sfx.hrc"
 #include "doc.hrc"
 #include "doctdlg.hrc"
- // pragma ---------------------------------------------------------------
 
- // DLG_DOC_TEMPLATE -----------------------------------------------------
 ModalDialog DLG_DOC_TEMPLATE
 {
     HelpId = SID_DOCTEMPLATE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 280 , 140 ) ;
+    Size = MAP_APPFONT ( 280 , 128 ) ;
     Text = "Dokumentvorlagen" ;
     Text [ ENGLISH ] = "document templates" ;
     Text [ norwegian ] = "Rediger dokumetmal" ;
@@ -84,17 +82,22 @@ ModalDialog DLG_DOC_TEMPLATE
     Text [ dutch ] = "Sjablonen" ;
     Text [ spanish ] = "Plantilla de documento" ;
     Text [ english_us ] = "Templates" ;
+    Text[ chinese_simplified ] = "ÎÄµµÑùÊ½";
+    Text[ russian ] = "Øàáëîíû äîêóìåíòà";
+    Text[ polish ] = "Szablony dokumentu";
+    Text[ japanese ] = "ŽÄŽÞŽ·Ž­ŽÒŽÝŽÄŽÃŽÝŽÌŽßŽÚŽ°ŽÄ";
+    Text[ chinese_traditional ] = "¤å¥ó¼Ë¦¡";
+    Text[ arabic ] = "ÞæÇáÈ ãÓÊäÏ";
+    Text[ greek ] = "Ðñüôõðá åããñÜöïõ";
+    Text[ korean ] = "¹®¼­ ¼­½ÄÆÄÀÏ";
+    Text[ turkish ] = "Belge þablonu";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Plantilla de documento";
     Moveable = TRUE ;
-    Edit ED_NAME
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 200 , 12 ) ;
-    };
-    GroupBox GB_EDIT
+    FixedLine FL_EDIT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 212 , 29 ) ;
+        Size = MAP_APPFONT ( 212 , 8 ) ;
         Text = "Neue Dokumentvorlage" ;
         Text [ English ] = "New Template" ;
         Text [ dutch ] = "Nieuw sjabloon" ;
@@ -119,9 +122,44 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ catalan ] = "Nueva plantilla";
         Text[ finnish ] = "Uusi mallipohja";
     };
+    Edit ED_NAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 200 , 12 ) ;
+    };
+    FixedLine FL_STYLESHEETS
+    {
+        Pos = MAP_APPFONT ( 6 , 32 ) ;
+        Size = MAP_APPFONT ( 212 , 8 ) ;
+        Text = "Vorlagen" ;
+        Text [ ENGLISH ] = "Templates" ;
+        Text [ norwegian ] = "Maler" ;
+        Text [ italian ] = "Modelli" ;
+        Text [ portuguese_brazilian ] = "Modelos" ;
+        Text [ portuguese ] = "Modelos" ;
+        Text [ finnish ] = "Mallipohjat" ;
+        Text [ danish ] = "Skabeloner" ;
+        Text [ french ] = "Modèles" ;
+        Text [ swedish ] = "Mallar" ;
+        Text [ dutch ] = "Sjablonen" ;
+        Text [ spanish ] = "Plantillas" ;
+        Text [ english_us ] = "Templates" ;
+        Text[ chinese_simplified ] = "ÑùÊ½";
+        Text[ russian ] = "Øàáëîíû";
+        Text[ polish ] = "Szablony";
+        Text[ japanese ] = "ÃÝÌßÚ°Ä";
+        Text[ chinese_traditional ] = "¼Ë¦¡";
+        Text[ arabic ] = "ÞæÇáÈ";
+        Text[ greek ] = "Ðñüôõðá";
+        Text[ korean ] = "¼­½Ä ÆÄÀÏ";
+        Text[ turkish ] = "Þablon";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Plantillas";
+    };
     FixedText FT_SECTION
     {
-        Pos = MAP_APPFONT ( 12 , 49 ) ;
+        Pos = MAP_APPFONT ( 12 , 43 ) ;
         Size = MAP_APPFONT ( 97 , 10 ) ;
         Text = "~Bereiche" ;
         Text [ ENGLISH ] = "~Groups" ;
@@ -151,12 +189,12 @@ ModalDialog DLG_DOC_TEMPLATE
     ListBox LB_SECTION
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 62 ) ;
+        Pos = MAP_APPFONT ( 12 , 56 ) ;
         Size = MAP_APPFONT ( 97 , 66 ) ;
     };
     FixedText FT_STYLESHEETS
     {
-        Pos = MAP_APPFONT ( 115 , 49 ) ;
+        Pos = MAP_APPFONT ( 115 , 43 ) ;
         Size = MAP_APPFONT ( 97 , 10 ) ;
         Text = "~Vorlagen" ;
         Text [ ENGLISH ] = "~Templates" ;
@@ -186,37 +224,8 @@ ModalDialog DLG_DOC_TEMPLATE
     ListBox LB_STYLESHEETS
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 115 , 62 ) ;
+        Pos = MAP_APPFONT ( 115 , 56 ) ;
         Size = MAP_APPFONT ( 97 , 66 ) ;
-    };
-    GroupBox GB_STYLESHEETS
-    {
-        Pos = MAP_APPFONT ( 6 , 38 ) ;
-        Size = MAP_APPFONT ( 212 , 96 ) ;
-        Text = "Vorlagen" ;
-        Text [ ENGLISH ] = "Templates" ;
-        Text [ norwegian ] = "Maler" ;
-        Text [ italian ] = "Modelli" ;
-        Text [ portuguese_brazilian ] = "Modelos" ;
-        Text [ portuguese ] = "Modelos" ;
-        Text [ finnish ] = "Mallipohjat" ;
-        Text [ danish ] = "Skabeloner" ;
-        Text [ french ] = "Modèles" ;
-        Text [ swedish ] = "Mallar" ;
-        Text [ dutch ] = "Sjablonen" ;
-        Text [ spanish ] = "Plantillas" ;
-        Text [ english_us ] = "Templates" ;
-        Text[ chinese_simplified ] = "ÑùÊ½";
-        Text[ russian ] = "Øàáëîíû";
-        Text[ polish ] = "Szablony";
-        Text[ japanese ] = "ÃÝÌßÚ°Ä";
-        Text[ chinese_traditional ] = "¼Ë¦¡";
-        Text[ arabic ] = "ÞæÇáÈ";
-        Text[ greek ] = "Ðñüôõðá";
-        Text[ korean ] = "¼­½Ä ÆÄÀÏ";
-        Text[ turkish ] = "Þablon";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Plantillas";
     };
     OKButton BT_OK
     {
@@ -292,18 +301,5 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Administrar...";
     };
-    Text[ chinese_simplified ] = "ÎÄµµÑùÊ½";
-    Text[ russian ] = "Øàáëîíû äîêóìåíòà";
-    Text[ polish ] = "Szablony dokumentu";
-    Text[ japanese ] = "ŽÄŽÞŽ·Ž­ŽÒŽÝŽÄŽÃŽÝŽÌŽßŽÚŽ°ŽÄ";
-    Text[ chinese_traditional ] = "¤å¥ó¼Ë¦¡";
-    Text[ arabic ] = "ÞæÇáÈ ãÓÊäÏ";
-    Text[ greek ] = "Ðñüôõðá åããñÜöïõ";
-    Text[ korean ] = "¹®¼­ ¼­½ÄÆÄÀÏ";
-    Text[ turkish ] = "Belge þablonu";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Plantilla de documento";
 };
- // ********************************************************************** EOF
-
 
