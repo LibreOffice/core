@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uinums.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-12 08:26:40 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:08:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,6 @@ public:
     virtual ~SwBaseNumRules();
 
     inline const SwNumRulesWithName*    GetRules(USHORT nIdx) const;
-    const SwNumRulesWithName*           GetRules(const String &rName) const;
     virtual void                        ApplyNumRules(
                                                 const SwNumRulesWithName &rCopy,
                                                 USHORT nIdx);
