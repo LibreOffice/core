@@ -116,7 +116,7 @@ sub check_system_path
 
     foreach $onefile ( @needed_files_in_path )
     {
-        print "...... seaching $onefile ...";
+        print "...... searching $onefile ...";
 
         my $fileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$onefile, $patharrayref , 0);
 
