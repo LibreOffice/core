@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 08:03:25 $
+ *  last change: $Author: vg $ $Date: 2003-07-24 11:56:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,43 +258,54 @@ public:
 
 // ----------------------------------------------------------------------------
 
-/** Helper to insert a string list from a Calc document into a listbox form control. */
-class XclImpListBoxHelper
+/** Helper to manage controls linked to the sheet. */
+class XclImpCtrlLinkHelper
 {
 public:
-    /** Reads the cell range formula from the current position of the stream. */
-    void                        ReadFormula( XclImpStream& rStrm );
+    explicit                    XclImpCtrlLinkHelper( ScDocument& rDoc );
+
+    /** Reads the formula for the linked cell from the current position of the stream. */
+    void                        ReadCellLinkFormula( XclImpStream& rStrm );
+    /** Reads the formula for the source range from the current position of the stream. */
+    void                        ReadSrcRangeFormula( XclImpStream& rStrm );
 
     /** Inserts a string list property from the document to the property set. */
     void                        InsertStringList(
                                     ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::beans::XPropertySet >& rxPropSet,
-                                    ScDocument& rDoc ) const;
+                                        ::com::sun::star::beans::XPropertySet >& rxPropSet ) const;
+    /** Inserts a tag property containing the link range address to the property set. */
+    void                        InsertLinkTag(
+                                    ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::beans::XPropertySet >& rxPropSet ) const;
 
     /** Returns the string from the document, which appears at the passed position in the listbox. */
-    String                      GetString( ScDocument& rDoc, sal_Int16 nPos ) const;
+    String                      GetString( sal_Int16 nPos ) const;
 
 private:
-    ::std::auto_ptr< ScRange >  mpDataRange;    /// Source data range in the Calc document.
+    ScDocument&                 mrDoc;          /// Source Calc document.
+    ::std::auto_ptr< ScAddress > mpCellLink;    /// Linked cell in the Calc document.
+    ::std::auto_ptr< ScRange >  mpSrcRange;     /// Source data range in the Calc document.
 };
 
 
 // ----------------------------------------------------------------------------
 
 /** An old form control object (does not use the OLE mechanism, but is a "simple" drawing object). */
-class XclImpEscherCtrl : public XclImpEscherTxo
+class XclImpEscherTbxCtrl : public XclImpEscherTxo
 {
 public:
     TYPEINFO();
 
     /** Constructor takes ownership of the members of rSrcObj, which will be invalidated. */
-    explicit                    XclImpEscherCtrl( XclImpEscherObj& rSrcObj, sal_uInt16 nCtrlType );
+    explicit                    XclImpEscherTbxCtrl( XclImpEscherObj& rSrcObj, sal_uInt16 nCtrlType );
 
     /** Returns the type of the control, which is the object type from the OBJ record. */
     inline sal_uInt16           GetType() const { return mnCtrlType; }
 
     /** Reads the contents of the ftCbls sub structure in an OBJ record. */
     void                        ReadCbls( XclImpStream& rStrm );
+    /** Reads the contents of the ftCblsFmla sub structure in an OBJ record. */
+    void                        ReadCblsFmla( XclImpStream& rStrm );
     /** Reads the contents of the ftLbsData sub structure in an OBJ record. */
     void                        ReadLbsData( XclImpStream& rStrm );
 
@@ -312,7 +323,7 @@ public:
 
 private:
     ScfInt16Vec                 maMultiSel;     /// Indexes of all selected entries in a multi selection.
-    XclImpListBoxHelper         maListbHelper;  /// Helper for listbox string contents.
+    XclImpCtrlLinkHelper        maLinkHelper;   /// Helper for linked ranges.
     sal_Int32                   mnProgressSeg;  /// Progress bar segment identifier.
     sal_uInt16                  mnCtrlType;     /// Type of the control from OBJ record.
     sal_uInt16                  mnState;        /// Checked/unchecked state.
@@ -365,7 +376,7 @@ public:
 
 private:
     String                      maStorageName;  /// Name of the OLE storage for this object.
-    XclImpListBoxHelper         maListbHelper;  /// Helper for listbox string contents.
+    XclImpCtrlLinkHelper        maLinkHelper;   /// Helper for linked ranges.
     sal_uInt32                  mnBlipId;       /// The BLIP identifier (meta file).
     sal_uInt32                  mnCtrlStrmPos;  /// Position in Ctrl stream for controls.
     sal_Int32                   mnProgressSeg;  /// Progress bar segment identifier.
@@ -373,7 +384,6 @@ private:
     bool                        mbLinked;       /// true = Linked; false = Embedded.
     bool                        mbControl;      /// true = Form control, false = OLE object.
 };
-
 
 // ----------------------------------------------------------------------------
 
@@ -636,7 +646,7 @@ public:
         control formatting data from the 'Ctls' stream. */
     bool                        CreateSdrObj( XclImpEscherOle& rOleObj );
     /** Creates the SdrObj for an old-fashioned Escher control object. */
-    bool                        CreateSdrObj( XclImpEscherCtrl& rCtrlObj );
+    bool                        CreateSdrObj( XclImpEscherTbxCtrl& rCtrlObj );
 
 // *** Read Excel records *** -------------------------------------------------
 
@@ -681,10 +691,9 @@ private:
     void                        ReadObjFtPioGrbit( XclImpStream& rStrm );
     /** Reads the ftPictFmla sub structure (OLE link formula) in an OBJ record. */
     void                        ReadObjFtPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize );
-    /** Reads the ftCbls sub structure (Check box/radio button data) in an OBJ record. */
-    void                        ReadObjFtCbls( XclImpStream& rStrm );
-    /** Reads the ftLbsData sub structure (List box data) in an OBJ record. */
-    void                        ReadObjFtLbsData( XclImpStream& rStrm );
+
+    /** Reads a sub record for TBX form controls in an OBJ record. */
+    void                        ReadObjTbxSubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId );
 
     /** Returns the solver container (for connector rules). */
     SvxMSDffSolverContainer&    GetSolverContainer();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlescher.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 08:04:34 $
+ *  last change: $Author: vg $ $Date: 2003-07-24 11:56:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,17 @@ const sal_uInt16 EXC_OBJ_INVALID_ID         = 0x0000;
 
 // sub records
 const sal_uInt16 EXC_ID_OBJ_FTEND           = 0x0000;   /// End of OBJ.
+const sal_uInt16 EXC_ID_OBJ_FTGMO           = 0x0006;   /// Group marker.
+const sal_uInt16 EXC_ID_OBJ_FTCF            = 0x0007;   /// Clipboard format.
 const sal_uInt16 EXC_ID_OBJ_FTPIOGRBIT      = 0x0008;   /// Option flags.
 const sal_uInt16 EXC_ID_OBJ_FTPICTFMLA      = 0x0009;   /// OLE link formula.
 const sal_uInt16 EXC_ID_OBJ_FTCBLS          = 0x000A;   /// Check box/radio button data.
+const sal_uInt16 EXC_ID_OBJ_FTSBS           = 0x000C;   /// Scroll bar data.
+const sal_uInt16 EXC_ID_OBJ_FTSBSFMLA       = 0x000E;   /// Scroll bar/list box/combo box cell link.
 const sal_uInt16 EXC_ID_OBJ_FTLBSDATA       = 0x0013;   /// List box/combo box data.
+const sal_uInt16 EXC_ID_OBJ_FTCBLSFMLA      = 0x0014;   /// Check box/radio button cell link.
 const sal_uInt16 EXC_ID_OBJ_FTCMO           = 0x0015;   /// Common object settings.
+const sal_uInt16 EXC_ID_OBJ_FTUNKNOWN       = 0xFFFF;   /// For internal use only.
 
 // ftCmo: object types
 const sal_uInt16 EXC_OBJ_CMO_GROUP          = 0x0000;
@@ -105,6 +111,7 @@ const sal_uInt16 EXC_OBJ_CMO_GROUPBOX       = 0x0013;
 const sal_uInt16 EXC_OBJ_CMO_COMBOBOX       = 0x0014;
 const sal_uInt16 EXC_OBJ_CMO_NOTE           = 0x0019;
 const sal_uInt16 EXC_OBJ_CMO_DRAWING        = 0x001E;
+const sal_uInt16 EXC_OBJ_CMO_UNKNOWN        = 0xFFFF;   /// For internal use only.
 
 // ftPioGrbit: flags
 const sal_uInt16 EXC_OBJ_PIO_LINKED         = 0x0002;
