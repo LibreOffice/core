@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-29 08:36:12 $
+ *  last change: $Author: sab $ $Date: 2001-04-06 14:27:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2120,14 +2120,17 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
             {
                 for (USHORT nTab=0; nTab<nTabCount; nTab++)
                 {
-                    uno::Sequence <beans::PropertyValue> aTableViewSettings;
-                    pTabData[nTab]->WriteUserDataSequence(aTableViewSettings);
-                    String sName;
-                    GetDocument()->GetName( nTab, sName );
-                    rtl::OUString sOUName(sName);
-                    uno::Any aAny;
-                    aAny <<= aTableViewSettings;
-                    xNameContainer->insertByName(sName, aAny);
+                    if (pTabData[nTab])
+                    {
+                        uno::Sequence <beans::PropertyValue> aTableViewSettings;
+                        pTabData[nTab]->WriteUserDataSequence(aTableViewSettings);
+                        String sName;
+                        GetDocument()->GetName( nTab, sName );
+                        rtl::OUString sOUName(sName);
+                        uno::Any aAny;
+                        aAny <<= aTableViewSettings;
+                        xNameContainer->insertByName(sName, aAny);
+                    }
                 }
                 pSettings[SC_TABLE_VIEWSETTINGS].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_TABLES));
                 pSettings[SC_TABLE_VIEWSETTINGS].Value <<= xNameContainer;
@@ -2181,7 +2184,10 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
                         uno::Any aAny = xNameContainer->getByName(aNames[i]);
                         uno::Sequence<beans::PropertyValue> aTabSettings;
                         if (aAny >>= aTabSettings)
+                        {
+                            pTabData[nTab] = new ScViewDataTable;
                             pTabData[nTab]->ReadUserDataSequence(aTabSettings);
+                        }
                     }
                 }
             }
