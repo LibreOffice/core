@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: jp $ $Date: 2001-05-11 13:00:52 $
+#   last change: $Author: mtg $ $Date: 2001-05-16 11:55:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -131,6 +131,16 @@ LIB2ARCHIV =    $(LB)$/libysm.a
 LIB2OBJFILES  =    $(SLO)$/smlib.obj
 
 DEPOBJFILES = $(SLO)$/smlib.obj
+# --- UNO stuff ---------------------------------------------------
+
+CPPUMAKERFLAGS=
+UNOUCRDEP=  $(SOLARBINDIR)$/offapi.rdb
+UNOUCRRDB=  $(SOLARBINDIR)$/offapi.rdb
+
+UNOTYPES=\
+    com.sun.star.formula.SymbolDescriptor
+
+
 # --- Targets -------------------------------------------------------
 
 .IF "$(depend)" == ""
