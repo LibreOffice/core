@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitools.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-25 12:49:45 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 14:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,91 +112,6 @@ public:
 protected:
     virtual void SAL_CALL disposing();
 };
-
-//************************************************************
-//  OIdPropertyArrayUsageHelper
-//************************************************************
-namespace cppu { class IPropertyArrayHelper; }
-
-typedef std::map< sal_Int32, ::cppu::IPropertyArrayHelper*, std::less< sal_Int32 > > OIdPropertyArrayMap;
-template <class TYPE>
-class OIdPropertyArrayUsageHelper
-{
-protected:
-    static sal_Int32                        s_nRefCount;
-    static OIdPropertyArrayMap*             s_pMap;
-    static ::osl::Mutex                     s_aMutex;
-
-public:
-    OIdPropertyArrayUsageHelper();
-    virtual ~OIdPropertyArrayUsageHelper()
-    {
-        ::osl::MutexGuard aGuard(s_aMutex);
-        OSL_ENSHURE(s_nRefCount > 0, "OIdPropertyArrayUsageHelper::~OIdPropertyArrayUsageHelper : suspicious call : have a refcount of 0 !");
-        if (!--s_nRefCount)
-        {
-            // delete the element
-            for (OIdPropertyArrayMap::iterator i = s_pMap->begin(); i != s_pMap->end(); ++i)
-                delete (*i).second;
-            delete s_pMap;
-            s_pMap = NULL;
-        }
-    }
-
-    /** call this in the getInfoHelper method of your derived class. The method returns the array helper of the
-        class, which is created if neccessary.
-    */
-    ::cppu::IPropertyArrayHelper* getArrayHelper(sal_Int32 nId);
-
-protected:
-    /** used to implement the creation of the array helper which is shared amongst all instances of the class.
-        This method needs to be implemented in derived classes.
-        <BR>
-        The method gets called with s_aMutex acquired.
-        <BR>
-        as long as IPropertyArrayHelper has no virtual destructor, the implementation of ~OPropertyArrayUsageHelper
-        assumes that you created an ::cppu::OPropertyArrayHelper when deleting s_pProps.
-        @return                         an pointer to the newly created array helper. Must not be NULL.
-    */
-    virtual ::cppu::IPropertyArrayHelper* createArrayHelper(sal_Int32 nId) const = 0;
-};
-
-//------------------------------------------------------------------
-template<class TYPE>
-sal_Int32                       OIdPropertyArrayUsageHelper< TYPE >::s_nRefCount    = 0;
-
-template<class TYPE>
-OIdPropertyArrayMap*            OIdPropertyArrayUsageHelper< TYPE >::s_pMap = NULL;
-
-template<class TYPE>
-::osl::Mutex                    OIdPropertyArrayUsageHelper< TYPE >::s_aMutex;
-
-//------------------------------------------------------------------
-template <class TYPE>
-OIdPropertyArrayUsageHelper<TYPE>::OIdPropertyArrayUsageHelper()
-{
-    ::osl::MutexGuard aGuard(s_aMutex);
-    // create the map if necessary
-    if (s_pMap == NULL)
-        s_pMap = new OIdPropertyArrayMap();
-    ++s_nRefCount;
-}
-
-//------------------------------------------------------------------
-template <class TYPE>
-::cppu::IPropertyArrayHelper* OIdPropertyArrayUsageHelper<TYPE>::getArrayHelper(sal_Int32 nId)
-{
-    OSL_ENSHURE(s_nRefCount, "OIdPropertyArrayUsageHelper::getArrayHelper : suspicious call : have a refcount of 0 !");
-    ::osl::MutexGuard aGuard(s_aMutex);
-    // do we have the array already?
-    if (! (*s_pMap)[nId] )
-    {
-        (*s_pMap)[nId] = createArrayHelper(nId);
-        OSL_ENSHURE((*s_pMap)[nId], "OIdPropertyArrayUsageHelper::getArrayHelper : createArrayHelper returned nonsense !");
-    }
-    return (*s_pMap)[nId];
-}
-
 
 //==================================================================================
 //= helper for implementing the XServiceInfo interface
