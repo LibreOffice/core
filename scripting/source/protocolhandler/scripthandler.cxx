@@ -2,9 +2,9 @@
 *
 *  $RCSfile: scripthandler.cxx,v $
 *
-*  $Revision: 1.19 $
+*  $Revision: 1.20 $
 *
-*  last change: $Author: rt $ $Date: 2004-10-22 14:04:56 $
+*  last change: $Author: rt $ $Date: 2004-12-07 10:53:49 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -487,9 +487,7 @@ throw ( RuntimeException )
             Reference< provider::XScriptProviderFactory > xFac(
                 xCtx->getValueByName( tmspf ), UNO_QUERY_THROW );
 
-            Any aContext =
-                makeAny( ::rtl::OUString::createFromAscii("share") );
-
+            Any aContext;
             m_xScriptProvider = Reference< provider::XScriptProvider > (
                 xFac->createScriptProvider( aContext ), UNO_QUERY_THROW );
         }
