@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2000-11-20 12:23:38 $
+ *  last change: $Author: os $ $Date: 2000-11-27 08:11:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1493,14 +1493,18 @@ Reference< awt::XControlModel >  BibDataManager::loadGridModel(const rtl::OUStri
 //------------------------------------------------------------------------
 Reference< XPropertySet >   BibDataManager::createGlobalProperties()
 {
+    Reference< XPropertySet >   xRet;
     try
     {
         Reference< registry::XRegistryKey >  xRoot = xRegistry->getRootKey();
-        Reference< registry::XRegistryKey >  xKey = xRoot->openKey(gGlobalName);
-        if(!xKey.is())
-            xKey = xRoot->createKey(gGlobalName);
+        if(xRoot.is())
+        {
+            Reference< registry::XRegistryKey >  xKey = xRoot->openKey(gGlobalName);
+            if(!xKey.is())
+                xKey = xRoot->createKey(gGlobalName);
+            xRet = Reference< XPropertySet > (xKey, UNO_QUERY);
+        }
 
-        return Reference< XPropertySet > (xKey, UNO_QUERY);
     }
 
 #ifdef DBG_UTIL
@@ -1512,7 +1516,7 @@ Reference< XPropertySet >   BibDataManager::createGlobalProperties()
         DBG_ERROR("::getViewProperties: something went wrong !");
     }
 
-    return Reference< XPropertySet > ();
+    return xRet;
 }
 //------------------------------------------------------------------------
 void BibDataManager::setViewSize(long nSize)
