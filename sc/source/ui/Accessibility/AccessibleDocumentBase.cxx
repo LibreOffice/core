@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentBase.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-20 13:49:21 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:11:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,12 +64,12 @@
 #include "AccessibleDocumentBase.hxx"
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
     //=====  internal  ========================================================
 
