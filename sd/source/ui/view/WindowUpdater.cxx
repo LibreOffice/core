@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WindowUpdater.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-02 14:30:51 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:17:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,12 +247,13 @@ void WindowUpdater::Notify (SfxBroadcaster& rBC, const SfxHint& rHint)
     if (rSimpleHint.GetId() == SFX_HINT_CTL_SETTINGS_CHANGED)
     {
         // Clear the master page cache so that master pages will be redrawn.
-        if (mpViewShell != NULL)
-        {
-            SdView* pView = mpViewShell->GetView();
-            if (pView != NULL)
-                pView->ReleaseMasterPagePaintCache ();
-        }
+        // #110094#-7
+        //if (mpViewShell != NULL)
+        //{
+        //    SdView* pView = mpViewShell->GetView();
+        //    if (pView != NULL)
+        //        pView->ReleaseMasterPagePaintCache ();
+        //}
         // Set the current state at all registered output devices.
         tWindowList::iterator aWindowIterator (maWindowList.begin());
         while (aWindowIterator != maWindowList.end())
