@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-11 17:29:42 $
+#   last change: $Author: vg $ $Date: 2004-01-06 14:01:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,11 +77,8 @@ TARGET=helper
 
 SLOFILES=\
     $(SLO)$/evntpost.obj		\
+    $(SLO)$/xconnection.obj		\
     $(SLO)$/threadex.obj
-
-.IF "$(remote)" == ""
-SLOFILES+=$(SLO)$/xconnection.obj
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 
