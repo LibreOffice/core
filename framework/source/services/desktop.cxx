@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: as $ $Date: 2001-08-02 13:33:18 $
+ *  last change: $Author: as $ $Date: 2001-08-10 11:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 
 #ifndef __FRAMEWORK_DISPATCH_DISPATCHPROVIDER_HXX_
 #include <dispatch/dispatchprovider.hxx>
+#endif
+
+#ifndef __FRAMEWORK_CLASSES_TASKCREATOR_HXX_
+#include <classes/taskcreator.hxx>
 #endif
 
 #ifndef __FRAMEWORK_CLASSES_TARGETFINDER_HXX_
@@ -350,7 +354,6 @@ Desktop::Desktop( const css::uno::Reference< css::lang::XMultiServiceFactory >& 
         ,   m_aChildTaskContainer   (                                               )
         ,   m_aListenerContainer    ( m_aLock.getShareableOslMutex()                )
         ,   m_eLoadState            ( E_NOTSET                                      )
-        ,   m_aTaskCreator          ( xFactory                                      )
         // Init Properties
         /*OBSOLETE
         ,   m_bHasBeamer            ( sal_True                                      )
@@ -810,8 +813,7 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
         ( &sURL                              == NULL ) ||
         ( sURL.getLength()                   <  1    ) ||
         ( sURL.compareToAscii( ".uno"  , 4 ) == 0    ) ||
-        ( sURL.compareToAscii( "slot:" , 5 ) == 0    ) ||
-        ( sURL.compareToAscii( "macro:", 6 ) == 0    )
+        ( sURL.compareToAscii( "slot:" , 5 ) == 0    )
       )
     {
         throw css::lang::IllegalArgumentException( DECLARE_ASCII("Null pointer, empty AND not loadable URL's are not allowed!"), static_cast< ::cppu::OWeakObject* >(this), 1 );
@@ -1245,13 +1247,25 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const ::r
     // Set default return value if method failed.
     css::uno::Reference< css::frame::XFrame > xSearchedFrame;
 
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ReadGuard aReadLock( m_aLock );
+
+    css::uno::Reference< css::lang::XMultiServiceFactory > xFactory = m_xFactory;
+    css::uno::Reference< css::frame::XFrame >              xThis    ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+
+    aReadLock.unlock();
+    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+
     // Ask helper for right decision for given parameter.
     TargetInfo   aInfo   ( sTargetFrameName, nSearchFlags, E_DESKTOP, m_aChildTaskContainer.hasElements(), sal_False, ::rtl::OUString(), ::rtl::OUString() );
     ETargetClass eResult = TargetFinder::classifyFindFrame( aInfo );
     switch( eResult )
     {
         case E_CREATETASK   :   {
-                                    xSearchedFrame = m_aTaskCreator.createNewSystemTask( sTargetFrameName );
+                                    // Set visible state to FALSE - because; we cant support headless office otherwise!
+                                    // No additional informations are available ... so we should use a compromise ...
+                                    TaskInfo aCreateInfo( xFactory, xThis, sTargetFrameName, sal_False );
+                                    xSearchedFrame = TaskCreator::createSystemTask( aCreateInfo );
                                 }
                                 break;
         case E_TASKS        :   {
@@ -1283,7 +1297,8 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const ::r
             ( aInfo.bCreationAllowed ==  sal_True  )
         )
     {
-        xSearchedFrame = m_aTaskCreator.createNewSystemTask( sTargetFrameName );
+        TaskInfo aCreateInfo( xFactory, xThis, sTargetFrameName, sal_False );
+        xSearchedFrame = TaskCreator::createSystemTask( aCreateInfo );
     }
 
     LOG_RESULT_FINDFRAME( "Desktop", m_sName, xSearchedFrame )

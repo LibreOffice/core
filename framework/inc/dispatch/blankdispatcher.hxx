@@ -2,9 +2,9 @@
  *
  *  $RCSfile: blankdispatcher.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2001-07-20 08:08:21 $
+ *  last change: $Author: as $ $Date: 2001-08-10 11:54:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,6 @@
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
-
-#ifndef __FRAMEWORK_CLASSES_TASKCREATOR_HXX_
-#include <classes/taskcreator.hxx>
-#endif
 
 #ifndef __FRAMEWORK_DISPATCH_BASEDISPATCHER_HXX_
 #include <dispatch/basedispatcher.hxx>
@@ -157,7 +153,6 @@ class BlankDispatcher   :   // -interfaces  ... are supported by our BaseDispatc
     //  (should be private everyway!)
     //-------------------------------------------------------------------------------------------------------------
     private:
-        TaskCreator     m_aTaskCreator  ;   /// we need it to create new tasks
 
 };      //  class BlankDispatcher
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: as $ $Date: 2001-08-01 11:12:40 $
+ *  last change: $Author: as $ $Date: 2001-08-10 11:54:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,6 @@
 
 #ifndef __FRAMEWORK_CLASSES_FRAMECONTAINER_HXX_
 #include <classes/framecontainer.hxx>
-#endif
-
-#ifndef __FRAMEWORK_CLASSES_TASKCREATOR_HXX_
-#include <classes/taskcreator.hxx>
 #endif
 
 #ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
@@ -424,7 +420,6 @@ class Desktop   :   // interfaces
         css::uno::Reference< css::frame::XFrames >                      m_xFramesHelper             ;   /// helper for XFrames, XIndexAccess, XElementAccess and implementation of a childcontainer!
         css::uno::Reference< css::frame::XDispatchProvider >            m_xDispatchHelper           ;   /// helper to dispatch something for new tasks, created by "_blank"!
         ELoadState                                                      m_eLoadState                ;   /// hold information about state of asynchron loading of component for loadComponentFromURL()!
-        TaskCreator                                                     m_aTaskCreator              ;   /// Helper to create new tasks or plugin frames!
         css::uno::Reference< css::frame::XFrame >                       m_xLastFrame                ;   /// last target of "loadComponentFromURL()"!
         css::uno::Reference< css::frame::XTerminateListener >           m_xPipeTerminator           ;   /// special terminate listener to close pipe and block external requests during/after terminate
         css::uno::Reference< css::frame::XTerminateListener >           m_xQuickLauncher            ;   /// special terminate listener to block terminate if tray-icon is active

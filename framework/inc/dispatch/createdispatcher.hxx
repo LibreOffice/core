@@ -2,9 +2,9 @@
  *
  *  $RCSfile: createdispatcher.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-07-20 08:07:31 $
+ *  last change: $Author: as $ $Date: 2001-08-10 11:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,6 @@
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
-
-#ifndef __FRAMEWORK_CLASSES_TASKCREATOR_HXX_
-#include <classes/taskcreator.hxx>
-#endif
 
 #ifndef __FRAMEWORK_DISPATCH_BASEDISPATCHER_HXX_
 #include <dispatch/basedispatcher.hxx>
@@ -167,7 +163,6 @@ class CreateDispatcher  :   // -interfaces  ... are supported by our BaseDispatc
     //  (should be private everyway!)
     //-------------------------------------------------------------------------------------------------------------
     private:
-        TaskCreator                                     m_aTaskCreator  ;   /// we need it to create new tasks on demand
         css::uno::WeakReference< css::frame::XFrame >   m_xTarget       ;   /// new created frame (Don't hold hard reference ... target frame couldn't die then!)
         ::rtl::OUString                                 m_sTargetName   ;   /// name of new created frame
 
