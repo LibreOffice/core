@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:58:07 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -745,11 +745,8 @@ BOOL SdView::IsMorphingAllowed() const
             SfxItemSet      aSet1( pDoc->GetPool(), XATTR_FILLSTYLE, XATTR_FILLSTYLE );
             SfxItemSet      aSet2( pDoc->GetPool(), XATTR_FILLSTYLE, XATTR_FILLSTYLE );
 
-//-/            pObj1->TakeAttributes( aSet1, TRUE, FALSE );
-            aSet1.Put(pObj1->GetItemSet());
-
-//-/            pObj2->TakeAttributes( aSet2, TRUE, FALSE );
-            aSet2.Put(pObj2->GetItemSet());
+            aSet1.Put(pObj1->GetMergedItemSet());
+            aSet2.Put(pObj2->GetMergedItemSet());
 
             const XFillStyle    eFillStyle1 = ( (const XFillStyleItem&) aSet1.Get( XATTR_FILLSTYLE ) ).GetValue();
             const XFillStyle    eFillStyle2 = ( (const XFillStyleItem&) aSet2.Get( XATTR_FILLSTYLE ) ).GetValue();
