@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hd_docu.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:32:40 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 08:53:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,7 +415,7 @@ Docu_Display::Write_TagTitle( const char *        i_sText,
     {
         CurOut()
             >> *new html::DefListTerm
-                << new html::StyleAttr("color:#dd0000;")
+                << new html::ClassAttr("attention")
                 << i_sText;
     }
     else
