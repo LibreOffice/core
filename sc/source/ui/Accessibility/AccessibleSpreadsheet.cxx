@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 13:45:01 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 15:08:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,7 +279,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                     CommitChange(aEvent);
                 }
 
-                if ((aNewCell != maActiveCell) && (aNewCell.Tab() == maActiveCell.Tab()))
+                if ((aNewCell != maActiveCell) && (aNewCell.Tab() == maActiveCell.Tab()) && IsFocused())
                 {
                     AccessibleEventObject aEvent;
                     aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
