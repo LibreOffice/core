@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xsecparser.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:22 $
+ *  last change: $Author: mmi $ $Date: 2004-07-28 02:26:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,10 @@ void SAL_CALL XSecParser::startElement(
     if ( aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNATURE)) )
     {
         m_pXSecController->addSignature();
+        if (ouIdAttr != NULL)
+        {
+            m_pXSecController->setId( ouIdAttr );
+        }
     }
     else if ( aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_REFERENCE)) )
     {
@@ -199,6 +203,13 @@ void SAL_CALL XSecParser::startElement(
         m_ouDigestValue = rtl::OUString::createFromAscii("");
             m_bInDigestValue = true;
         }
+        else if ( aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNATUREPROPERTY)) )
+    {
+        if (ouIdAttr != NULL)
+        {
+            m_pXSecController->setPropertyId( ouIdAttr );
+        }
+    }
         else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_DATE)))
         {
         m_ouDate = rtl::OUString::createFromAscii("");

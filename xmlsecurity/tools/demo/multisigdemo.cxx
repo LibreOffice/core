@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multisigdemo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-26 07:29:34 $
+ *  last change: $Author: mmi $ $Date: 2004-07-28 02:27:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,8 @@
 
 #include <xmlsecurity/biginteger.hxx>
 
+#include <tools/date.hxx>
+#include <tools/time.hxx>
 
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
@@ -165,17 +167,20 @@ int SAL_CALL main( int argc, char **argv )
 
     aSignatureHelper.AddForSigning( nSecurityId, aXMLFileName, aXMLFileName, sal_False );
     aSignatureHelper.AddForSigning( nSecurityId, aBINFileName, aBINFileName, sal_True );
+    aSignatureHelper.SetDateTime( nSecurityId, Date(), Time());
+
 
     /*
-     * creates another signature on the xml stream, use no.4 certificate
+     * creates another signature on the xml stream, use no.1 certificate
      */
     nSecurityId = aSignatureHelper.GetNewSecurityId();
 
     aSignatureHelper.SetX509Certificate(
         nSecurityId,
-        xPersonalCerts[3]->getIssuerName(),
-        bigIntegerToNumericString( xPersonalCerts[3]->getSerialNumber()));
+        xPersonalCerts[0]->getIssuerName(),
+        bigIntegerToNumericString( xPersonalCerts[0]->getSerialNumber()));
     aSignatureHelper.AddForSigning( nSecurityId, aXMLFileName, aXMLFileName, sal_False );
+    aSignatureHelper.SetDateTime( nSecurityId, Date(), Time());
 
     /*
      * creates the output stream
@@ -260,10 +265,11 @@ int SAL_CALL main( int argc, char **argv )
      */
     aSignatureHelper.SetX509Certificate(
         nSecurityId,
-        xPersonalCerts[4]->getIssuerName(),
-        bigIntegerToNumericString( xPersonalCerts[4]->getSerialNumber()));
+        xPersonalCerts[1]->getIssuerName(),
+        bigIntegerToNumericString( xPersonalCerts[1]->getSerialNumber()));
 
     aSignatureHelper.AddForSigning( nSecurityId, aBINFileName, aBINFileName, sal_True );
+    aSignatureHelper.SetDateTime( nSecurityId, Date(), Time());
 
     pStream = new SvFileStream( aSIGFileName, STREAM_WRITE );
     xLockBytes = new SvLockBytes( pStream, TRUE );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xsecverify.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-15 08:12:09 $
+ *  last change: $Author: mmi $ $Date: 2004-07-28 02:26:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,6 +255,18 @@ void XSecController::setTime( rtl::OUString& ouTime )
 {
     InternalSignatureInformation &isi = m_vInternalSignatureInformations[m_vInternalSignatureInformations.size()-1];
     isi.signatureInfor.ouTime = ouTime;
+}
+
+void XSecController::setId( rtl::OUString& ouId )
+{
+    InternalSignatureInformation &isi = m_vInternalSignatureInformations[m_vInternalSignatureInformations.size()-1];
+    isi.signatureInfor.ouSignatureId = ouId;
+}
+
+void XSecController::setPropertyId( rtl::OUString& ouPropertyId )
+{
+    InternalSignatureInformation &isi = m_vInternalSignatureInformations[m_vInternalSignatureInformations.size()-1];
+    isi.signatureInfor.ouPropertyId = ouPropertyId;
 }
 
 /* public: for signature verify */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: x509certificate_nssimpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-15 08:12:09 $
+ *  last change: $Author: mmi $ $Date: 2004-07-28 02:27:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,7 +381,7 @@ X509Certificate_NssImpl* X509Certificate_NssImpl :: getImplementation( const Ref
     if( pCert != NULL )
     {
         unsigned char fingerprint[20];
-        char *fpStr = NULL;
+        //char *fpStr = NULL;
         SECItem fpItem;
         int length = ((id == SEC_OID_MD5)?MD5_LENGTH:SHA1_LENGTH);
 
@@ -389,7 +389,7 @@ X509Certificate_NssImpl* X509Certificate_NssImpl :: getImplementation( const Ref
         PK11_HashBuf(id, fingerprint, pCert->derCert.data, pCert->derCert.len);
         fpItem.data = fingerprint;
         fpItem.len = length;
-        fpStr = CERT_Hexify(&fpItem, 1);
+        //fpStr = CERT_Hexify(&fpItem, 1);
 
         Sequence< sal_Int8 > thumbprint( length ) ;
         for( int i = 0 ; i < length ; i ++ )
@@ -397,7 +397,7 @@ X509Certificate_NssImpl* X509Certificate_NssImpl :: getImplementation( const Ref
             thumbprint[i] = fingerprint[i];
         }
 
-        PORT_Free(fpStr);
+        //PORT_Free(fpStr);
         return thumbprint;
     }
     else
