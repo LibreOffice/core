@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:47:39 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:32:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-// ============================================================================
-
 #ifndef SC_XIESCHER_HXX
 #define SC_XIESCHER_HXX
 
@@ -85,42 +83,40 @@
 class ScfProgressBar;
 class XclImpStream;
 
-
 // Escher stream consumer =====================================================
 
 struct XclImpStreamNode
 {
-    sal_uInt32                  nPos;
-    sal_uInt32                  nSize;
-    XclImpStreamNode*           pPrev;
+    ULONG               mnPos;
+    ULONG               mnSize;
+    XclImpStreamNode*   mpPrev;
 };
-
 
 // ----------------------------------------------------------------------------
 
 class XclImpStreamConsumer : ScfNoCopy
 {
-private:
-    SvMemoryStream              aStrm;
-    DffRecordHeader             aHd;
-    XclImpStreamNode*           pNode;
-    sal_uInt32                  nBytesLeft;
-
-    void                        UpdateNode( const DffRecordHeader& rHd );
-    void                        RemoveNode();
-
 public:
-                                XclImpStreamConsumer();
-                                ~XclImpStreamConsumer();
+    explicit            XclImpStreamConsumer();
+                        ~XclImpStreamConsumer();
 
-    const DffRecordHeader*      ConsumeRecord( XclImpStream& rSrcStrm );
-    bool                        AppendData( sal_Char* pBuf, sal_uInt32 nLen );
+    const DffRecordHeader* ConsumeRecord( XclImpStream& rSrcStrm );
+    bool                AppendData( sal_Char* pBuf, ULONG nLen );
 
-    inline bool                 HasData() const { return aStrm.Tell() > 0; }
-    inline sal_uInt32           Tell() const    { return aStrm.Tell(); }
-    inline SvStream&            GetStream()     { return aStrm; }
+    inline bool         HasData() const { return maStrm.Tell() > 0; }
+    inline ULONG        Tell() const { return maStrm.Tell(); }
+    inline SvStream&    GetStream() { return maStrm; }
+
+private:
+    void                UpdateNode( const DffRecordHeader& rHd );
+    void                RemoveNode();
+
+private:
+    SvMemoryStream      maStrm;
+    DffRecordHeader     maHd;
+    XclImpStreamNode*   mpNode;
+    ULONG               mnBytesLeft;
 };
-
 
 // Escher objects =============================================================
 
@@ -131,69 +127,73 @@ public:
     TYPEINFO();
 
     /** Constructs a dummy Escher object with an invalid Escher stream position. */
-    explicit                    XclImpEscherObj( const XclImpRoot& rRoot );
+    explicit            XclImpEscherObj( const XclImpRoot& rRoot );
     /** Constructs a new Escher object at the specified Escher stream position. */
-    explicit                    XclImpEscherObj(
-                                    const XclImpRoot& rRoot,
-                                    sal_uInt32 nStrmBegin, sal_uInt32 nStrmEnd );
+    explicit            XclImpEscherObj(
+                            const XclImpRoot& rRoot,
+                            ULONG nStrmBegin, ULONG nStrmEnd );
     /** Constructor takes ownership of the members of rSrcObj, which will be invalidated. */
-    explicit                    XclImpEscherObj( XclImpEscherObj& rSrcObj );
+    explicit            XclImpEscherObj( XclImpEscherObj& rSrcObj );
 
-    virtual                     ~XclImpEscherObj();
+    virtual             ~XclImpEscherObj();
 
     /** Returns the SdrObj of this Escher object. */
-    inline const SdrObject*     GetSdrObj() const       { return mpSdrObj.get(); }
+    inline const SdrObject* GetSdrObj() const { return mxSdrObj.get(); }
     /** Returns the position of the object in the draw page. */
-    inline const Rectangle&     GetAnchor() const       { return maAnchorRect; }
+    inline const Rectangle& GetAnchor() const { return maAnchorRect; }
     /** Returns the start position in the Escher stream of this object. */
-    inline sal_uInt32           GetStrmBegin() const    { return mnStrmBegin; }
+    inline ULONG        GetStrmBegin() const { return mnStrmBegin; }
     /** Returns the end position in the Escher stream of this object (last position + 1). */
-    inline sal_uInt32           GetStrmEnd() const      { return mnStrmEnd; }
+    inline ULONG        GetStrmEnd() const { return mnStrmEnd; }
     /** Returns the Calc sheet index of this object. */
-    inline SCTAB                GetScTab() const        { return mnScTab; }
+    inline SCTAB        GetScTab() const { return mnScTab; }
     /** Returns the Excel object identifier. */
-    inline sal_uInt16           GetObjId() const        { return mnObjId; }
+    inline sal_uInt16   GetObjId() const { return mnObjId; }
+    /** Returns true, if Escher object will be skipped on creating the draw page. */
+    inline bool         GetIsSkip() const { return mbSkip; }
     /** Returns true, if Escher object is printable. */
-    inline bool                 GetIsSkip() const       { return mbSkip; }
-    /** Returns true, if Escher object is printable. */
-    inline bool                 GetPrintable() const    { return mbPrintable; }
+    inline bool         GetPrintable() const { return mbPrintable; }
 
-    /** Returns true, if width and height of the anchor rectangle are greater than 1. */
-    bool                        IsVisibleArea() const;
+    /** Returns true, if the passed width and height would be valid for this object. */
+    bool                IsValidSize( const Rectangle& rRect ) const;
+
+    /** Returns true, if the width and height of the object are valid. */
+    bool                IsValidSize() const;
     /** Returns true, if this Escher object contains an SdrObj and a valid anchor position. */
-    bool                        IsValid() const;
+    bool                IsValid() const;
 
     /** Sets the position of this object in the draw page. */
-    inline void                 SetAnchor( const Rectangle& rRect ) { maAnchorRect = rRect; }
+    inline void         SetAnchor( const Rectangle& rRect ) { maAnchorRect = rRect; }
     /** Sets the Excel object identifier (unique per sheet). */
-    inline void                 SetObjId( sal_uInt16 nObjId ) { mnObjId = nObjId; }
+    inline void         SetObjId( sal_uInt16 nObjId ) { mnObjId = nObjId; }
+    /** Sets whether this is an area object (then its width and height must be greater than 0). */
+    inline void         SetAreaObj( bool bAreaObj ) { mbAreaObj = bAreaObj; }
     /** Marks this Esher object to be skipped on export. */
-    inline void                 SetSkip() { mbSkip = true; }
+    inline void         SetSkip() { mbSkip = true; }
 
     /** Sets a new SdrObj for this Escher object. This object owns the passed SdrObj. */
-    virtual void                SetSdrObj( SdrObject* pSdrObj );
+    virtual void        SetSdrObj( SdrObject* pSdrObj );
     /** Set true if Escher object is printable. */
-    inline void                 SetPrintable(bool bPrint) { mbPrintable = bPrint; }
+    inline void         SetPrintable( bool bPrint ) { mbPrintable = bPrint; }
 
-    /** Initializes the progress bar according to the current object type and size.
-        @descr  Currently used by charts and OLE objects. */
-    virtual void                InitProgress( ScfProgressBar& rProgress );
+    /** Returns the needed size on the progress bar. */
+    virtual sal_uInt32  GetProgressSize() const;
     /** Inserts the contained SdrObj into the draw page. */
-    virtual void                Apply( ScfProgressBar& rProgress );
+    virtual void        Apply( ScfProgressBar& rProgress );
 
 protected:
     typedef ::std::auto_ptr< SdrObject > SdrObjectPtr;
 
-    Rectangle                   maAnchorRect;   /// Location of the object in the draw page.
-    SdrObjectPtr                mpSdrObj;       /// SdrObj representing this Escher object.
-    sal_uInt32                  mnStrmBegin;    /// Start position in Escher stream.
-    sal_uInt32                  mnStrmEnd;      /// End position in Escher stream (last + 1).
-    SCTAB                       mnScTab;        /// Calc sheet index of the object.
-    sal_uInt16                  mnObjId;        /// The Excel object identifier (from OBJ record).
-    bool                        mbSkip;         /// true = Skip creation (ignore this object).
-    bool                        mbPrintable;    /// true = Print this object.
+    Rectangle           maAnchorRect;   /// Location of the object in the draw page.
+    SdrObjectPtr        mxSdrObj;       /// SdrObj representing this Escher object.
+    ULONG               mnStrmBegin;    /// Start position in Escher stream.
+    ULONG               mnStrmEnd;      /// End position in Escher stream (last + 1).
+    SCTAB               mnScTab;        /// Calc sheet index of the object.
+    sal_uInt16          mnObjId;        /// The Excel object identifier (from OBJ record).
+    bool                mbAreaObj;      /// true = Width and height must be greater than 0.
+    bool                mbSkip;         /// true = Skip creation (ignore this object).
+    bool                mbPrintable;    /// true = Print this object.
 };
-
 
 // ----------------------------------------------------------------------------
 
@@ -203,10 +203,10 @@ class XclImpEscherDrawing : public XclImpEscherObj
 public:
     TYPEINFO();
 
-    /** Constructor takes ownership of the members of rSrcObj, which will be invalidated. */
-    explicit                    XclImpEscherDrawing( XclImpEscherObj& rSrcObj );
+    /** Constructor takes ownership of the members of rSrcObj, which will be invalidated.
+        @param bAreaObj  true = Width and height of the object must be greater than 0. */
+    explicit            XclImpEscherDrawing( XclImpEscherObj& rSrcObj, bool bAreaObj );
 };
-
 
 // ----------------------------------------------------------------------------
 
@@ -217,34 +217,33 @@ public:
     TYPEINFO();
 
     /** Constructor takes ownership of the members of rSrcObj, which will be invalidated. */
-    explicit                    XclImpEscherTxo( XclImpEscherObj& rSrcObj );
+    explicit            XclImpEscherTxo( XclImpEscherObj& rSrcObj );
 
     /** Returns the string data, if there is any. */
-    inline const XclImpString*  GetString() const { return mpString.get(); }
+    inline const XclImpString* GetString() const { return mxString.get(); }
     /** Sets a new plain or rich string. This object will own the string. */
-    inline void                 SetString( XclImpString* pString ) { mpString.reset( pString ); }
+    inline void         SetString( XclImpString* pString ) { mxString.reset( pString ); }
 
     /** Sets the horizontal and vertical text alignment from the passed Excel TXO flags. */
-    void                        SetAlignment( sal_uInt16 nAlign );
+    void                SetAlignment( sal_uInt16 nAlign );
 
     /** Sets the text of this Escher text object to the passed SdrObj, if it can take text. */
-    void                        ApplyTextOnSdrObj( SdrObject& rSdrObj ) const;
+    void                ApplyTextOnSdrObj( SdrObject& rSdrObj ) const;
 
     /** Sets a new SdrObj for this Escher object. This object owns the passed SdrObj. */
-    virtual void                SetSdrObj( SdrObject* pSdrObj );
+    virtual void        SetSdrObj( SdrObject* pSdrObj );
 
 private:
     /** Sets the text of this Escher object to the own SdrObj. */
-    void                        ApplyText();
+    void                ApplyText();
 
 private:
     typedef ::std::auto_ptr< XclImpString > XclImpStringPtr;
 
-    XclImpStringPtr             mpString;       /// Plain or rich string.
-    XclTxoHorAlign              meHorAlign;     /// Horizontal alignment.
-    XclTxoVerAlign              meVerAlign;     /// Vertical alignment.
+    XclImpStringPtr     mxString;       /// Plain or rich string.
+    XclTxoHorAlign      meHorAlign;     /// Horizontal alignment.
+    XclTxoVerAlign      meVerAlign;     /// Vertical alignment.
 };
-
 
 // ----------------------------------------------------------------------------
 
@@ -255,7 +254,7 @@ public:
     TYPEINFO();
 
     /** Constructor takes ownership of the members of rSrcObj, which will be invalidated. */
-    explicit                    XclImpEscherNote( XclImpEscherObj& rSrcObj );
+    explicit            XclImpEscherNote( XclImpEscherObj& rSrcObj );
 
     virtual void                Apply( ScfProgressBar& rProgress );
 
@@ -269,34 +268,32 @@ private:
     SCROW                  mnRow;        /// Row source column index of the cell note.
 };
 
-
 // ----------------------------------------------------------------------------
 
 /** Helper to manage controls linked to the sheet. */
 class XclImpCtrlLinkHelper
 {
 public:
-    explicit                    XclImpCtrlLinkHelper( XclCtrlBindMode eBindMode );
+    explicit            XclImpCtrlLinkHelper( XclCtrlBindMode eBindMode );
 
     /** Returns the linked cell address, or 0, if not present. */
-    inline const ScAddress*     GetCellLink() const { return mpCellLink.get(); }
+    inline const ScAddress* GetCellLink() const { return mxCellLink.get(); }
     /** Returns the value binding mode for linked cells. */
-    inline XclCtrlBindMode      GetBindingMode() const { return meBindMode; }
+    inline XclCtrlBindMode GetBindingMode() const { return meBindMode; }
     /** Returns the linked source cell range, or 0, if not present. */
-    inline const ScRange*       GetSourceRange() const { return mpSrcRange.get(); }
+    inline const ScRange* GetSourceRange() const { return mxSrcRange.get(); }
 
 protected:
     /** Reads the formula for the linked cell from the current position of the stream. */
-    void                        ReadCellLinkFormula( XclImpStream& rStrm );
+    void                ReadCellLinkFormula( XclImpStream& rStrm );
     /** Reads the formula for the source range from the current position of the stream. */
-    void                        ReadSrcRangeFormula( XclImpStream& rStrm );
+    void                ReadSrcRangeFormula( XclImpStream& rStrm );
 
 private:
-    ::std::auto_ptr< ScAddress > mpCellLink;    /// Linked cell in the Calc document.
-    ::std::auto_ptr< ScRange >  mpSrcRange;     /// Source data range in the Calc document.
-    XclCtrlBindMode             meBindMode;     /// Value binding mode.
+    ::std::auto_ptr< ScAddress > mxCellLink;    /// Linked cell in the Calc document.
+    ::std::auto_ptr< ScRange >  mxSrcRange;     /// Source data range in the Calc document.
+    XclCtrlBindMode     meBindMode;             /// Value binding mode.
 };
-
 
 // ----------------------------------------------------------------------------
 
@@ -307,49 +304,45 @@ public:
     TYPEINFO();
 
     /** Constructor takes ownership of the members of rSrcObj, which will be invalidated. */
-    explicit                    XclImpEscherTbxCtrl( XclImpEscherObj& rSrcObj, sal_uInt16 nCtrlType );
+    explicit            XclImpEscherTbxCtrl( XclImpEscherObj& rSrcObj, sal_uInt16 nCtrlType );
 
     /** Returns the type of the control, which is the object type from the OBJ record. */
-    inline sal_uInt16           GetType() const { return mnCtrlType; }
+    inline sal_uInt16   GetType() const { return mnCtrlType; }
 
     /** Reads the contents of the ftCbls sub structure in an OBJ record. */
-    void                        ReadCbls( XclImpStream& rStrm );
+    void                ReadCbls( XclImpStream& rStrm );
     /** Reads the contents of the ftCblsFmla sub structure in an OBJ record. */
-    void                        ReadCblsFmla( XclImpStream& rStrm );
+    void                ReadCblsFmla( XclImpStream& rStrm );
     /** Reads the contents of the ftLbsData sub structure in an OBJ record. */
-    void                        ReadLbsData( XclImpStream& rStrm );
+    void                ReadLbsData( XclImpStream& rStrm );
     /** Reads the contents of the ftSbs sub structure in an OBJ record. */
-    void                        ReadSbs( XclImpStream& rStrm );
+    void                ReadSbs( XclImpStream& rStrm );
 
     /** Returns the complete component service name for this control. */
-    ::rtl::OUString             GetServiceName() const;
+    ::rtl::OUString     GetServiceName() const;
 
     /** Sets form control specific properties. */
-    void                        SetProperties( ::com::sun::star::uno::Reference<
-                                    ::com::sun::star::beans::XPropertySet >& rxPropSet ) const;
+    void                SetProperties( ::com::sun::star::uno::Reference<
+                            ::com::sun::star::beans::XPropertySet >& rxPropSet ) const;
 
-    /** Adds a segment to the progress bar. */
-    virtual void                InitProgress( ScfProgressBar& rProgress );
     /** Inserts the contained SdrObj into the draw page. */
-    virtual void                Apply( ScfProgressBar& rProgress );
+    virtual void        Apply( ScfProgressBar& rProgress );
 
 private:
-    ScfInt16Vec                 maMultiSel;     /// Indexes of all selected entries in a multi selection.
-    sal_Int32                   mnProgressSeg;  /// Progress bar segment identifier.
-    sal_uInt16                  mnCtrlType;     /// Type of the control from OBJ record.
-    sal_uInt16                  mnState;        /// Checked/unchecked state.
-    sal_Int16                   mnSelEntry;     /// Index of selected entry (1-based).
-    sal_Int16                   mnSelType;      /// Selection type.
-    sal_Int16                   mnLineCount;    /// Combobox dropdown line count.
-    sal_Int16                   mnScrollValue;  /// Scrollbar: Current value.
-    sal_Int16                   mnScrollMin;    /// Scrollbar: Minimum value.
-    sal_Int16                   mnScrollMax;    /// Scrollbar: Maximum value.
-    sal_Int16                   mnScrollStep;   /// Scrollbar: Single step.
-    sal_Int16                   mnScrollPage;   /// Scrollbar: Page step.
-    bool                        mb3DStyle;      /// true = 3D style.
-    bool                        mbScrollHor;    /// Scrollbar: true = horizontal.
+    ScfInt16Vec         maMultiSel;     /// Indexes of all selected entries in a multi selection.
+    sal_uInt16          mnCtrlType;     /// Type of the control from OBJ record.
+    sal_uInt16          mnState;        /// Checked/unchecked state.
+    sal_Int16           mnSelEntry;     /// Index of selected entry (1-based).
+    sal_Int16           mnSelType;      /// Selection type.
+    sal_Int16           mnLineCount;    /// Combobox dropdown line count.
+    sal_Int16           mnScrollValue;  /// Scrollbar: Current value.
+    sal_Int16           mnScrollMin;    /// Scrollbar: Minimum value.
+    sal_Int16           mnScrollMax;    /// Scrollbar: Maximum value.
+    sal_Int16           mnScrollStep;   /// Scrollbar: Single step.
+    sal_Int16           mnScrollPage;   /// Scrollbar: Page step.
+    bool                mb3DStyle;      /// true = 3D style.
+    bool                mbScrollHor;    /// Scrollbar: true = horizontal.
 };
-
 
 // ----------------------------------------------------------------------------
 
@@ -362,39 +355,40 @@ public:
     TYPEINFO();
 
     /** Constructor takes ownership of the members of rSrcObj, which will be invalidated. */
-    explicit                    XclImpEscherOle( XclImpEscherObj& rSrcObj );
+    explicit            XclImpEscherOle( XclImpEscherObj& rSrcObj );
 
     /** Returns true, if this object is a form control, and false, if it is a common OLE object. */
-    inline bool                 IsControl() const { return mbControl; }
+    inline bool         IsControl() const { return mbControl; }
 
     /** Returns the OLE storage name used in the Excel document. */
-    inline const String&        GetStorageName() const { return maStorageName; }
+    inline const String& GetStorageName() const { return maStorageName; }
     /** Returns the BLIP identifier for the meta file. */
-    inline sal_uInt32           GetBlipId() const { return mnBlipId; }
+    inline sal_uInt32   GetBlipId() const { return mnBlipId; }
     /** Returns the position in Ctrl stream for additional form control data. */
-    inline sal_uInt32           GetCtrlStreamPos() const { return mnCtrlStrmPos; }
+    inline sal_uInt32   GetCtrlStreamPos() const { return mnCtrlStrmPos; }
 
     /** Sets the BLIP identifier for the meta file. */
-    inline void                 SetBlipId( sal_uInt32 nBlipId ) { mnBlipId = nBlipId; }
+    inline void         SetBlipId( sal_uInt32 nBlipId ) { mnBlipId = nBlipId; }
 
     /** Reads the contents of the ftPioGrbit sub structure in an OBJ record. */
-    void                        ReadPioGrbit( XclImpStream& rStrm );
+    void                ReadPioGrbit( XclImpStream& rStrm );
     /** Reads the contents of the ftPictFmla sub structure in an OBJ record. */
-    void                        ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize );
+    void                ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize );
 
-    /** Adds a segment to the progress bar. */
-    virtual void                InitProgress( ScfProgressBar& rProgress );
+    /** Sets form control specific properties. */
+    void                SetProperties( ::com::sun::star::uno::Reference<
+                            ::com::sun::star::beans::XPropertySet >& rxPropSet ) const;
+
     /** Inserts the contained SdrObj into the draw page. */
-    virtual void                Apply( ScfProgressBar& rProgress );
+    virtual void        Apply( ScfProgressBar& rProgress );
 
 private:
-    String                      maStorageName;  /// Name of the OLE storage for this object.
-    sal_uInt32                  mnBlipId;       /// The BLIP identifier (meta file).
-    sal_uInt32                  mnCtrlStrmPos;  /// Position in Ctrl stream for controls.
-    sal_Int32                   mnProgressSeg;  /// Progress bar segment identifier.
-    bool                        mbAsSymbol;     /// true = Show as symbol.
-    bool                        mbLinked;       /// true = Linked; false = Embedded.
-    bool                        mbControl;      /// true = Form control, false = OLE object.
+    String              maStorageName;  /// Name of the OLE storage for this object.
+    sal_uInt32          mnBlipId;       /// The BLIP identifier (meta file).
+    sal_uInt32          mnCtrlStrmPos;  /// Position in Ctrl stream for controls.
+    bool                mbAsSymbol;     /// true = Show as symbol.
+    bool                mbLinked;       /// true = Linked; false = Embedded.
+    bool                mbControl;      /// true = Form control, false = OLE object.
 };
 
 // ----------------------------------------------------------------------------
@@ -408,46 +402,44 @@ public:
     TYPEINFO();
 
     /** Constructor takes ownership of the members of rSrcObj, which will be invalidated. */
-    explicit                    XclImpEscherChart( XclImpEscherObj& rSrcObj );
+    explicit            XclImpEscherChart( XclImpEscherObj& rSrcObj );
 
     /** Returns the chart this object contains. */
-    inline XclImpChart*         GetChartData() { return mpChart.get(); }
+    inline XclImpChart* GetChartData() { return mxChart.get(); }
     /** Sets a new chart at this object. */
-    void                        SetChartData( XclImpChart* pChart );
+    void                SetChartData( XclImpChart* pChart );
 
-    /** Adds a segment to the progress bar according to the current chart data. */
-    virtual void                InitProgress( ScfProgressBar& rProgress );
+    /** Returns the needed size on the progress bar. */
+    virtual sal_uInt32  GetProgressSize() const;
     /** Inserts the contained chart into the document. */
-    virtual void                Apply( ScfProgressBar& rProgress );
+    virtual void        Apply( ScfProgressBar& rProgress );
 
 private:
     typedef ::std::auto_ptr< XclImpChart > XclImpChartPtr;
 
-    XclImpChartPtr              mpChart;        /// The chart itself.
+    XclImpChartPtr      mxChart;        /// The chart itself.
 };
-
 
 // Escher object data =========================================================
 
 /** Represents the position (anchor) of an Escher object in the Calc document. */
 struct XclImpEscherAnchor
 {
-    SCTAB                       mnScTab;    /// Calc sheet index of the object.
+    SCTAB               mnScTab;    /// Calc sheet index of the object.
 
-    sal_uInt16                  mnLCol;     /// Left column index.
-    sal_uInt16                  mnLX;       /// X offset in left column (1/1024 of column width).
-    sal_uInt16                  mnTRow;     /// Top row index.
-    sal_uInt16                  mnTY;       /// Y offset in top row (1/256 of row height).
-    sal_uInt16                  mnRCol;     /// Right column index.
-    sal_uInt16                  mnRX;       /// X offset in right column (1/1024 of column width).
-    sal_uInt16                  mnBRow;     /// Bottom row index.
-    sal_uInt16                  mnBY;       /// Y offset in bottom row (1/256 of row height).
+    sal_uInt16          mnLCol;     /// Left column index.
+    sal_uInt16          mnLX;       /// X offset in left column (1/1024 of column width).
+    sal_uInt16          mnTRow;     /// Top row index.
+    sal_uInt16          mnTY;       /// Y offset in top row (1/256 of row height).
+    sal_uInt16          mnRCol;     /// Right column index.
+    sal_uInt16          mnRX;       /// X offset in right column (1/1024 of column width).
+    sal_uInt16          mnBRow;     /// Bottom row index.
+    sal_uInt16          mnBY;       /// Y offset in bottom row (1/256 of row height).
 
-    explicit                    XclImpEscherAnchor( SCTAB  nScTab );
+    explicit            XclImpEscherAnchor( SCTAB nScTab );
 };
 
 SvStream& operator>>( SvStream& rStrm, XclImpEscherAnchor& rAnchor );
-
 
 // ----------------------------------------------------------------------------
 
@@ -458,26 +450,25 @@ class XclImpObjData
 {
 public:
     /** Takes ownership of pObj. */
-    explicit                    XclImpObjData( XclImpEscherObj* pEscherObj );
+    explicit            XclImpObjData( XclImpEscherObj* pEscherObj );
 
     /** Sets the passed Escher object, deletes the old. */
-    void                        SetObj( XclImpEscherObj* pEscherObj );
+    void                SetObj( XclImpEscherObj* pEscherObj );
 
     /** Returns the Escher object, if present. */
-    inline XclImpEscherObj*     GetObj() { return mpEscherObj.get(); }
+    inline XclImpEscherObj* GetObj() { return mxEscherObj.get(); }
     /** Returns the anchor data. */
-    inline XclEscherAnchor&     GetAnchor() { return maAnchor; }
+    inline XclEscherAnchor& GetAnchor() { return maAnchor; }
 
     /** Returns true, if the passed stream position is part of the current object. */
-    bool                        ContainsStrmPos( sal_uInt32 nStrmPos ) const;
+    bool                ContainsStrmPos( ULONG nStrmPos ) const;
 
 private:
     typedef ::std::auto_ptr< XclImpEscherObj > XclImpEscherObjPtr;
 
-    XclEscherAnchor             maAnchor;       /// The sheet position of the object.
-    XclImpEscherObjPtr          mpEscherObj;    /// The Escher object itself.
+    XclEscherAnchor     maAnchor;       /// The sheet position of the object.
+    XclImpEscherObjPtr  mxEscherObj;    /// The Escher object itself.
 };
-
 
 // ----------------------------------------------------------------------------
 
@@ -486,53 +477,50 @@ class XclImpEscherObjList : ScfNoCopy
 {
 public:
     /** Returns the number of contained objects. */
-    inline sal_uInt32           GetObjCount() const { return maObjDataList.Count(); }
+    inline ULONG        GetObjCount() const { return maObjDataList.Count(); }
 
     /** Appends the passed object to the list. Takes ownership of the object. */
-    void                        AppendObj( XclImpEscherObj* pEscherObj );
+    void                AppendObj( XclImpEscherObj* pEscherObj );
     /** Appends the passed object as dummy (does not use it later). Takes ownership of the object. */
-    void                        AppendDummyObj( XclImpEscherObj* pEscherObj );
+    void                AppendDummyObj( XclImpEscherObj* pEscherObj );
     /** Replaces the Escher object of the last inserted object data (or appends, if list is empty). */
-    void                        ReplaceLastObj( XclImpEscherObj* pEscherObj );
+    void                ReplaceLastObj( XclImpEscherObj* pEscherObj );
 
     /** Returns the object in the specified sheet by Excel object identifier. */
-    XclImpEscherObj*            GetObj( SCTAB  nScTab, sal_uInt16 nObjId ) const;
+    XclImpEscherObj*    GetObj( SCTAB nScTab, sal_uInt16 nObjId ) const;
     /** Returns the object at the specified Escher stream position. */
-    XclImpEscherObj*            GetObj( sal_uInt32 nStrmPos ) const;
+    XclImpEscherObj*    GetObj( ULONG nStrmPos ) const;
     /** Returns the last inserted Escher object in the list. */
-    XclImpEscherObj*            GetLastObj() const;
+    XclImpEscherObj*    GetLastObj() const;
 
     /** Returns the anchor of the object at the passed Escher stream position. */
-    XclEscherAnchor*            GetAnchor( sal_uInt32 nStrmPos ) const;
+    XclEscherAnchor*    GetAnchor( ULONG nStrmPos ) const;
 
-    /** Initializes the progress bar for all objects. */
-    void                        InitProgress( ScfProgressBar& rProgress );
     /** Inserts all objects into the Calc document. */
-    void                        Apply( ScfProgressBar& rProgress );
+    void                Apply( ScfProgressBar& rProgress );
 
 private:
     /** Updates the cache data with the last inserted object for searching. */
-    void                        UpdateCache();
+    void                UpdateCache();
     /** Returns the object data of the Escher object at the specified Escher stream position. */
-    XclImpObjData*              FindObjData( sal_uInt32 nStrmPos ) const;
+    XclImpObjData*      FindObjData( ULONG nStrmPos ) const;
 
 private:
     /** Stores data for each sheet to speed up the search for objects. */
     struct XclCacheEntry
     {
-        sal_uInt32                  mnListIndex;    /// List index of first object in the sheet.
-        sal_uInt32                  mnStrmPos;      /// First Escher stream position of the objects in the sheet.
-        inline explicit             XclCacheEntry( sal_uInt32 nListIndex, sal_uInt32 nStrmPos ) :
-                                        mnListIndex( nListIndex ), mnStrmPos( nStrmPos ) {}
+        ULONG               mnListIdx;      /// List index of first object in the sheet.
+        ULONG               mnStrmPos;      /// First Escher stream position of the objects in the sheet.
+        inline explicit     XclCacheEntry( ULONG nListIdx, ULONG nStrmPos ) :
+                                mnListIdx( nListIdx ), mnStrmPos( nStrmPos ) {}
     };
 
     typedef ScfDelList< XclImpObjData >     XclImpObjDataList;
     typedef ::std::vector< XclCacheEntry >  XclCacheVec;
 
-    XclImpObjDataList           maObjDataList;      /// The list of all object data structs.
-    XclCacheVec                 maObjCache;         /// Caches data to speed up object search.
+    XclImpObjDataList   maObjDataList;      /// The list of all object data structs.
+    XclCacheVec         maObjCache;         /// Caches data to speed up object search.
 };
-
 
 // Escher stream conversion ===================================================
 
@@ -542,43 +530,42 @@ class XclImpObjectManager;
 class XclImpDffManager : public SvxMSDffManager, protected XclImpRoot
 {
 public:
-    explicit                    XclImpDffManager(
-                                    const XclImpRoot& rRoot, XclImpObjectManager& rObjManager,
-                                    sal_Int32 nOffsDgg, SvStream* pStData, SdrModel* pSdrModel,
-                                    sal_Int32 nApplicationScale );
+    explicit            XclImpDffManager(
+                            const XclImpRoot& rRoot, XclImpObjectManager& rObjManager,
+                            long nOffsDgg, SvStream* pStData, SdrModel* pSdrModel,
+                            long nApplicationScale );
 
     /** Converts an Escher object and creates and attaches the corresponding SdrObj. */
-    void                        SetSdrObject(
-                                    XclImpEscherObj* pEscherObj,
-                                    sal_uInt32 nId,
-                                    SvxMSDffImportData& rData );
+    void                SetSdrObject(
+                            XclImpEscherObj* pEscherObj,
+                            ULONG nId,
+                            SvxMSDffImportData& rData );
 
     /** Creates the SdrOle2Obj for the passed Escher OLE object from the OLE storage in the Excel file.
         @return  true = SdrOle2Obj successfully created. */
-    bool                        CreateSdrOleObj( XclImpEscherOle& rOleObj );
+    bool                CreateSdrOleObj( XclImpEscherOle& rOleObj );
 
 protected:
     /** Reads the client anchor from the Escher stream and sets it at the correct Escher object. */
-    virtual void                ProcessClientAnchor2( SvStream& rStrm, DffRecordHeader&, void*, DffObjData& rObjData );
+    virtual void        ProcessClientAnchor2( SvStream& rStrm, DffRecordHeader&, void*, DffObjData& rObjData );
     /** Processes an Escher object, reads properties from Escher stream. */
-    virtual SdrObject*          ProcessObj(
-                                    SvStream&,
-                                    DffObjData& rObjData,
-                                    void* pData,
-                                    Rectangle& rTextRect,
-                                    SdrObject* pRetSdrObj = NULL );
+    virtual SdrObject*  ProcessObj(
+                            SvStream&,
+                            DffObjData& rObjData,
+                            void* pData,
+                            Rectangle& rTextRect,
+                            SdrObject* pRetSdrObj = 0 );
     /** Returns the BLIP stream position, based on the passed Escher stream position. */
-    virtual sal_uInt32          Calc_nBLIPPos( sal_uInt32 nOrgVal, sal_uInt32 nStreamPos ) const;
+    virtual ULONG       Calc_nBLIPPos( ULONG nOrgVal, ULONG nStreamPos ) const;
     /** Returns a color from the Excel color palette. */
-    virtual FASTBOOL            GetColorFromPalette( sal_uInt16 nIndex, Color& rColor ) const;
+    virtual FASTBOOL    GetColorFromPalette( USHORT nIndex, Color& rColor ) const;
     /** Returns true, if the object with the passed shape ID contains any text data. */
-    virtual sal_Bool            ShapeHasText( sal_uInt32 nShapeId, sal_uInt32 nFilePos ) const;
+    virtual sal_Bool    ShapeHasText( ULONG nShapeId, ULONG nFilePos ) const;
 
 private:
-    XclImpObjectManager&        mrObjManager;   /// The Excel object manager.
-    sal_uInt32                  mnOleImpFlags;  /// Application OLE import settings.
+    XclImpObjectManager& mrObjManager;  /// The Excel object manager.
+    sal_uInt32          mnOleImpFlags;  /// Application OLE import settings.
 };
-
 
 // The object manager =========================================================
 
@@ -588,67 +575,67 @@ class XclImpOcxConverter;
 class XclImpObjectManager : protected XclImpRoot
 {
 public:
-    explicit                    XclImpObjectManager( const XclImpRoot& rRoot );
-                                ~XclImpObjectManager();
+    explicit            XclImpObjectManager( const XclImpRoot& rRoot );
+    virtual             ~XclImpObjectManager();
 
     // *** Escher stream *** --------------------------------------------------
 
     /** Returns true, if the Escher stream contains any data. */
-    inline bool                 HasEscherStream()   { return maStreamConsumer.HasData(); }
+    inline bool         HasEscherStream() { return maStreamConsumer.HasData(); }
     /** Returns the Escher stream. */
-    inline SvStream&            GetEscherStream()   { return maStreamConsumer.GetStream(); }
+    inline SvStream&    GetEscherStream() { return maStreamConsumer.GetStream(); }
 
     // *** Escher objects *** -------------------------------------------------
 
     /** Returns the number of contained objects. */
-    inline sal_uInt32           GetEscherObjCount() const { return maEscherObjList.GetObjCount(); }
+    inline ULONG        GetEscherObjCount() const { return maEscherObjList.GetObjCount(); }
 
     /** Returns the object in the specified sheet by Excel object identifier. */
-    const XclImpEscherObj*      GetEscherObj( SCTAB  nScTab, sal_uInt16 nObjId ) const;
+    const XclImpEscherObj* GetEscherObj( SCTAB nScTab, sal_uInt16 nObjId ) const;
     /** Returns access to the object in the specified sheet by Excel object identifier. */
-    XclImpEscherObj*            GetEscherObjAcc( SCTAB  nScTab, sal_uInt16 nObjId );
+    XclImpEscherObj*    GetEscherObjAcc( SCTAB nScTab, sal_uInt16 nObjId );
 
     /** Returns the object at the specified Escher stream position. */
-    const XclImpEscherObj*      GetEscherObj( sal_uInt32 nStrmPos ) const;
+    const XclImpEscherObj* GetEscherObj( ULONG nStrmPos ) const;
     /** Returns access to the object at the specified Escher stream position. */
-    XclImpEscherObj*            GetEscherObjAcc( sal_uInt32 nStrmPos );
+    XclImpEscherObj*    GetEscherObjAcc( ULONG nStrmPos );
 
     /** Returns the last inserted object in the list. */
-    const XclImpEscherObj*      GetLastEscherObj() const;
+    const XclImpEscherObj* GetLastEscherObj() const;
     /** Returns access to the last inserted object in the list. */
-    XclImpEscherObj*            GetLastEscherObjAcc();
+    XclImpEscherObj*    GetLastEscherObjAcc();
 
     /** Returns the anchor of the object at the passed Escher stream position. */
-    const XclEscherAnchor*      GetEscherAnchor( sal_uInt32 nStrmPos ) const;
+    const XclEscherAnchor* GetEscherAnchor( ULONG nStrmPos ) const;
     /** Returns access to the anchor of the object at the passed Escher stream position. */
-    XclEscherAnchor*            GetEscherAnchorAcc( sal_uInt32 nStrmPos );
+    XclEscherAnchor*    GetEscherAnchorAcc( ULONG nStrmPos );
 
     // *** Text boxes *** -----------------------------------------------------
 
     /** Returns the textbox object at the specified Escher stream position. */
-    const XclImpEscherTxo*      GetEscherTxo( sal_uInt32 nStrmPos ) const;
+    const XclImpEscherTxo* GetEscherTxo( ULONG nStrmPos ) const;
     /** Returns access to the textbox object at the specified Escher stream position. */
-    XclImpEscherTxo*            GetEscherTxoAcc( sal_uInt32 nStrmPos );
+    XclImpEscherTxo*    GetEscherTxoAcc( ULONG nStrmPos );
 
     /** Returns the note object in the specified sheet by Excel object identifier. */
-    const XclImpEscherNote*     GetEscherNote( SCTAB  nScTab, sal_uInt16 nObjId ) const;
+    const XclImpEscherNote* GetEscherNote( SCTAB nScTab, sal_uInt16 nObjId ) const;
 
     // *** Chart *** ----------------------------------------------------------
 
     /** Returns true, if the current object is a chart. */
-    bool                        IsCurrObjChart() const;
+    bool                IsCurrObjChart() const;
 
     /** Returns the chart data of the current chart object, or 0, if there is no chart. */
-    XclImpChart*                GetCurrChartData();
+    XclImpChart*        GetCurrChartData();
     /** Sets a new chart data (with the passed chart type) at the current object.
         @descr  Reads additional properies of the chart type from stream.
         @return  The new chart data. The old chart data, returned by GetCurrChartData(),
         is no longer valid. */
-    XclImpChart*                ReplaceChartData( XclImpStream& rStrm, XclChartType eNewType );
+    XclImpChart*        ReplaceChartData( XclImpStream& rStrm, XclChartType eNewType );
 
     /** Inserts a new chart object.
         @descr  Used to import sheet charts, which do not have a corresponding OBJ record. */
-    void                        StartNewChartObj();
+    void                StartNewChartObj();
 
     // *** OLE / controls *** -------------------------------------------------
 
@@ -656,75 +643,75 @@ public:
         @descr  The passed object may be a common OLE object, then this function creates
         the internal OLE stream. Or it is a form control, then this function reads the
         control formatting data from the 'Ctls' stream. */
-    bool                        CreateSdrObj( XclImpEscherOle& rOleObj );
+    bool                CreateSdrObj( XclImpEscherOle& rOleObj );
     /** Creates the SdrObj for an old-fashioned Escher control object. */
-    bool                        CreateSdrObj( XclImpEscherTbxCtrl& rCtrlObj );
+    bool                CreateSdrObj( XclImpEscherTbxCtrl& rCtrlObj );
 
     // *** Read Excel records *** ---------------------------------------------
 
     /** Reads the MSODRAWINGGROUP record. */
-    void                        ReadMsodrawinggroup( XclImpStream& rStrm );
+    void                ReadMsodrawinggroup( XclImpStream& rStrm );
     /** Reads the MSODRAWING record. */
-    void                        ReadMsodrawing( XclImpStream& rStrm );
+    void                ReadMsodrawing( XclImpStream& rStrm );
     /** Reads the MSODRAWINGSELECTION record. */
-    void                        ReadMsodrawingselection( XclImpStream& rStrm );
+    void                ReadMsodrawingselection( XclImpStream& rStrm );
 
     /** Reads the OBJ record. */
-    void                        ReadObj( XclImpStream& rStrm );
+    void                ReadObj( XclImpStream& rStrm );
     /** Reads the TXO record. */
-    void                        ReadTxo( XclImpStream& rStrm );
+    void                ReadTxo( XclImpStream& rStrm );
 
     // *** Misc *** -----------------------------------------------------------
 
     /** Lets the object manager add a dummy object, before the next object is read. */
-    inline void                 InsertDummyObj() { mbStartWithDummy = true; }
+    inline void         InsertDummyObj() { mbStartWithDummy = true; }
 
     /** Returns the DFF manager (Escher stream converter). Don't call before the Escher stream is read. */
-    XclImpDffManager&           GetDffManager();
+    XclImpDffManager&   GetDffManager();
     /** Updates the connector rules of the passed object in the solver container. */
-    void                        UpdateConnectorRules( const DffObjData& rObjData, SdrObject& rSdrObj );
+    void                UpdateConnectorRules( const DffObjData& rObjData, SdrObject& rSdrObj );
 
     /** Sets the object with the passed identification to be ignored on import. */
-    void                        SetSkipObj( SCTAB  nScTab, sal_uInt16 nObjId );
+    void                SetSkipObj( SCTAB nScTab, sal_uInt16 nObjId );
 
     /** Inserts all objects into the Calc document. */
-    void                        Apply();
+    void                Apply( ScfProgressBar& rProgress );
 
     // ------------------------------------------------------------------------
 private:
     /** Appends the passed object to the list. */
-    void                        AppendEscherObj( XclImpEscherObj* pEscherObj );
+    void                AppendEscherObj( XclImpEscherObj* pEscherObj );
     /** Replaces the last object in the list with the passed object. */
-    void                        ReplaceEscherObj( XclImpEscherObj* pEscherObj );
+    void                ReplaceEscherObj( XclImpEscherObj* pEscherObj );
 
     /** Reads the ftCmo sub structure (common object data) in an OBJ record.
         @return  The new Escher object. */
-    void                        ReadObjFtCmo( XclImpStream& rStrm );
+    void                ReadObjFtCmo( XclImpStream& rStrm );
     /** Reads the ftPioGrbit sub structure (object option flags) in an OBJ record. */
-    void                        ReadObjFtPioGrbit( XclImpStream& rStrm );
+    void                ReadObjFtPioGrbit( XclImpStream& rStrm );
     /** Reads the ftPictFmla sub structure (OLE link formula) in an OBJ record. */
-    void                        ReadObjFtPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize );
+    void                ReadObjFtPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize );
 
     /** Reads a sub record for TBX form controls in an OBJ record. */
-    void                        ReadObjTbxSubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId );
+    void                ReadObjTbxSubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId );
 
     /** Returns the OCX converter (OCX form controls converter). */
-    XclImpOcxConverter&         GetOcxConverter();
+    XclImpOcxConverter& GetOcxConverter();
 
     /** Returns the solver container (for connector rules). */
-    SvxMSDffSolverContainer&    GetSolverContainer();
+    SvxMSDffSolverContainer& GetSolverContainer();
     /** Returns the first connector rule from the solver container. */
-    SvxMSDffConnectorRule*      GetFirstConnectorRule();
+    SvxMSDffConnectorRule* GetFirstConnectorRule();
     /** Returns the next connector rule from the solver container. */
-    SvxMSDffConnectorRule*      GetNextConnectorRule();
+    SvxMSDffConnectorRule* GetNextConnectorRule();
 
     /** Identifies an Escher object to skip on import (will not be inserted into the Calc document). */
     struct XclSkipObj
     {
-        SCTAB                       mnScTab;        /// Calc sheet index.
-        sal_uInt16                  mnObjId;        /// Excel object identifier.
-        inline explicit             XclSkipObj( SCTAB  nScTab, sal_uInt16 nObjId ) :
-                                        mnScTab( nScTab ), mnObjId( nObjId ) {}
+        SCTAB               mnScTab;        /// Calc sheet index.
+        sal_uInt16          mnObjId;        /// Excel object identifier.
+        inline explicit     XclSkipObj( SCTAB nScTab, sal_uInt16 nObjId ) :
+                                mnScTab( nScTab ), mnObjId( nObjId ) {}
     };
 
     typedef ::std::auto_ptr< XclImpDffManager >         XclImpDffManagerPtr;
@@ -732,17 +719,15 @@ private:
     typedef ::std::auto_ptr< XclImpOcxConverter >       XclImpOcxConverterPtr;
     typedef ::std::vector< XclSkipObj >                 XclSkipObjVec;
 
-    XclImpStreamConsumer        maStreamConsumer;   /// Collects the entire Escher stream.
-    XclImpEscherObjList         maEscherObjList;    /// Contains all Escher objects.
-    SolverContainerPtr          mpSolverContainer;  /// The solver container for connector rules.
-    XclImpDffManagerPtr         mpDffManager;       /// The Escher stream converter.
-    XclImpOcxConverterPtr       mpOcxConverter;     /// The form controls converter.
-    XclSkipObjVec               maSkipObjVec;       /// All Escher objects to skip.
+    XclImpStreamConsumer maStreamConsumer;  /// Collects the entire Escher stream.
+    XclImpEscherObjList maEscherObjList;    /// Contains all Escher objects.
+    SolverContainerPtr  mxSolverContainer;  /// The solver container for connector rules.
+    XclImpDffManagerPtr mxDffManager;       /// The Escher stream converter.
+    XclImpOcxConverterPtr mxOcxConverter;   /// The form controls converter.
+    XclSkipObjVec       maSkipObjVec;       /// All Escher objects to skip.
 
-    bool                        mbStartWithDummy;   /// true = Insert a dummy object before the next Escher object.
-
+    bool                mbStartWithDummy;   /// true = Insert a dummy object before the next Escher object.
 };
-
 
 // Escher property set helper =================================================
 
@@ -752,27 +737,26 @@ private:
 class XclImpEscherPropSet
 {
 public:
-    explicit                    XclImpEscherPropSet( const XclImpDffManager& rDffManager );
+    explicit            XclImpEscherPropSet( const XclImpDffManager& rDffManager );
 
     /** Reads an Escher property set from the stream.
         @descr  The stream must point to the start of an Escher record containing properties. */
-    void                        Read( XclImpStream& rStrm );
+    void                Read( XclImpStream& rStrm );
 
     /** Returns the specified property or the default value, if not extant. */
-    sal_uInt32                  GetPropertyValue( sal_uInt16 nPropId, sal_uInt32 nDefault = 0 ) const;
+    sal_uInt32          GetPropertyValue( sal_uInt16 nPropId, sal_uInt32 nDefault = 0 ) const;
 
     /** Translates the properties and fills the item set. */
-    void                        FillToItemSet( SfxItemSet& rItemSet ) const;
+    void                FillToItemSet( SfxItemSet& rItemSet ) const;
 
 private:
     typedef ::std::auto_ptr< SvMemoryStream > SvMemoryStreamPtr;
 
-    DffPropertyReader           maPropReader;   /// Reads the properties from an SvStream.
-    SvMemoryStreamPtr           mpMemStrm;      /// Helper stream.
+    DffPropertyReader   maPropReader;   /// Reads the properties from an SvStream.
+    SvMemoryStreamPtr   mxMemStrm;      /// Helper stream.
 };
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclImpEscherPropSet& rPropSet );
-
 
 // ============================================================================
 
