@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:50:12 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:40:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ namespace connectivity
         // the class OCollection is base class for collections :-)
         // all elements <strong> must </strong> support the XNamed interface
 
-        typedef ::cppu::WeakImplHelper10< ::com::sun::star::container::XNameAccess,
+        typedef ::cppu::ImplHelper10< ::com::sun::star::container::XNameAccess,
                                          ::com::sun::star::container::XIndexAccess,
                                          ::com::sun::star::container::XEnumerationAccess,
                                          ::com::sun::star::container::XContainer,
