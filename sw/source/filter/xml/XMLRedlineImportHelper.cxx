@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineImportHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-24 11:46:13 $
+ *  last change: $Author: dvo $ $Date: 2001-03-09 14:42:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,7 +353,8 @@ XMLRedlineImportHelper::~XMLRedlineImportHelper()
     if (NULL != pSaveDoc)
     {
         // TODO: get "real" Redline mode from the saved document
-        sal_uInt16 nRedlineMode = REDLINE_ON | REDLINE_SHOW_MASK;
+        // sal_uInt16 nRedlineMode = REDLINE_ON | REDLINE_SHOW_MASK;
+        sal_uInt16 nRedlineMode = REDLINE_NONE | REDLINE_SHOW_MASK;
         pSaveDoc->SetRedlineMode_intern(~nRedlineMode);
         pSaveDoc->SetRedlineMode(nRedlineMode);
     }
