@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dynamicresultsetwrapper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:52:35 $
+ *  last change: $Author: kso $ $Date: 2000-10-17 10:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,12 +65,12 @@
 #include <ucbhelper/macros.hxx>
 #endif
 
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
 #endif
 
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
 
 #ifndef  _COM_SUN_STAR_UCB_LISTACTIONTYPE_HPP_
@@ -129,7 +129,7 @@ void SAL_CALL DynamicResultSetWrapper::impl_init()
 
     Reference< XDynamicResultSet > xSource = NULL;
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         xSource = m_xSource;
         m_xSource = NULL;
     }
@@ -155,7 +155,7 @@ void SAL_CALL DynamicResultSetWrapper
 ::impl_EnsureNotDisposed()
     throw( DisposedException, RuntimeException )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     if( m_bDisposed )
         throw DisposedException();
 }
@@ -164,8 +164,8 @@ void SAL_CALL DynamicResultSetWrapper
 void SAL_CALL DynamicResultSetWrapper
 ::impl_InitResultSetOne( const Reference< XResultSet >& xResultSet )
 {
-    vos::OGuard aGuard( m_aMutex );
-    DBG_ASSERT( !m_xSourceResultOne.is(), "Source ResultSet One is set already" );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    OSL_ENSURE( !m_xSourceResultOne.is(), "Source ResultSet One is set already" );
     m_xSourceResultOne = xResultSet;
     m_xMyResultOne = xResultSet;
 }
@@ -174,8 +174,8 @@ void SAL_CALL DynamicResultSetWrapper
 void SAL_CALL DynamicResultSetWrapper
 ::impl_InitResultSetTwo( const Reference< XResultSet >& xResultSet )
 {
-    vos::OGuard aGuard( m_aMutex );
-    DBG_ASSERT( !m_xSourceResultTwo.is(), "Source ResultSet Two is set already" );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    OSL_ENSURE( !m_xSourceResultTwo.is(), "Source ResultSet Two is set already" );
     m_xSourceResultTwo = xResultSet;
     m_xMyResultTwo = xResultSet;
 }
@@ -201,7 +201,7 @@ void SAL_CALL DynamicResultSetWrapper
 
     Reference< XComponent > xSourceComponent;
     {
-        vos::OClearableGuard aGuard( m_aMutex );
+        osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
         if( m_bInDispose || m_bDisposed )
             return;
         m_bInDispose = sal_True;
@@ -223,7 +223,7 @@ void SAL_CALL DynamicResultSetWrapper
         xSourceComponent->dispose();
     */
 
-    vos::OGuard aGuard( m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     m_bDisposed = sal_True;
     m_bInDispose = sal_False;
 }
@@ -235,7 +235,7 @@ void SAL_CALL DynamicResultSetWrapper
     throw( RuntimeException )
 {
     impl_EnsureNotDisposed();
-    vos::OGuard aGuard( m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     if ( !m_pDisposeEventListeners )
         m_pDisposeEventListeners =
@@ -251,7 +251,7 @@ void SAL_CALL DynamicResultSetWrapper
     throw( RuntimeException )
 {
     impl_EnsureNotDisposed();
-    vos::OGuard aGuard( m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     if ( m_pDisposeEventListeners )
         m_pDisposeEventListeners->removeInterface( Listener );
@@ -268,7 +268,7 @@ void SAL_CALL DynamicResultSetWrapper
 {
     impl_EnsureNotDisposed();
 
-    vos::OGuard aGuard( m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     if( !m_xSource.is() )
         return;
@@ -301,7 +301,7 @@ void SAL_CALL DynamicResultSetWrapper
     aNewEvent.Changes = Changes.Changes;
 
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         for( long i=0; !m_bGotWelcome && i<Changes.Changes.getLength(); i++ )
         {
             ListAction& rAction = aNewEvent.Changes[i];
@@ -314,7 +314,7 @@ void SAL_CALL DynamicResultSetWrapper
                     {
                         impl_InitResultSetOne( aWelcome.Old );
                         impl_InitResultSetTwo( aWelcome.New );
-                        m_bGotWelcome = TRUE;
+                        m_bGotWelcome = sal_True;
 
                         aWelcome.Old = m_xMyResultOne;
                         aWelcome.New = m_xMyResultTwo;
@@ -323,14 +323,14 @@ void SAL_CALL DynamicResultSetWrapper
                     }
                     else
                     {
-                        DBG_ERROR( "ListActionType was WELCOME but ActionInfo didn't contain a WelcomeDynamicResultSetStruct" );
+                        OSL_ENSURE( sal_False, "ListActionType was WELCOME but ActionInfo didn't contain a WelcomeDynamicResultSetStruct" );
                         //throw RuntimeException();
                     }
                     break;
                 }
             }
         }
-        DBG_ASSERT( m_bGotWelcome, "first notification was without WELCOME" );
+        OSL_ENSURE( m_bGotWelcome, "first notification was without WELCOME" );
     }
 
     if( !m_xListener.is() )
@@ -356,7 +356,7 @@ void SAL_CALL DynamicResultSetWrapper
 {
     impl_EnsureNotDisposed();
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         if( m_xSource.is() )
         {
             throw AlreadyInitializedException();
@@ -364,15 +364,15 @@ void SAL_CALL DynamicResultSetWrapper
     }
 
     Reference< XDynamicResultSet > xSourceDynamic( Source, UNO_QUERY );
-    DBG_ASSERT( xSourceDynamic.is(),
+    OSL_ENSURE( xSourceDynamic.is(),
         "the given source is not of required type XDynamicResultSet" );
 
     Reference< XDynamicResultSetListener > xListener = NULL;
     Reference< XDynamicResultSetListener > xMyListenerImpl = NULL;
 
-    BOOL bStatic = FALSE;
+    sal_Bool bStatic = sal_False;
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         m_xSource = xSourceDynamic;
         xListener = m_xListener;
         bStatic = m_bStatic;
@@ -401,7 +401,7 @@ Reference< XResultSet > SAL_CALL DynamicResultSetWrapper
     Reference< XDynamicResultSet > xSource = NULL;
     Reference< XEventListener > xMyListenerImpl = NULL;
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         if( m_xListener.is() )
             throw ListenerAlreadySetException();
 
@@ -435,7 +435,7 @@ void SAL_CALL DynamicResultSetWrapper
     Reference< XDynamicResultSet > xSource = NULL;
     Reference< XDynamicResultSetListener > xMyListenerImpl = NULL;
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         if( m_xListener.is() )
             throw ListenerAlreadySetException();
         if( m_bStatic )
@@ -466,7 +466,7 @@ void SAL_CALL DynamicResultSetWrapper
         throw ListenerAlreadySetException();
 
     Reference< XSourceInitialization > xTarget( xCache, UNO_QUERY );
-    DBG_ASSERT( xTarget.is(), "The given Target dosn't have the required interface 'XSourceInitialization'" );
+    OSL_ENSURE( xTarget.is(), "The given Target dosn't have the required interface 'XSourceInitialization'" );
     if( xTarget.is() && m_xSMgr.is() )
     {
         //@todo m_aSourceSet.wait();?
@@ -480,7 +480,7 @@ void SAL_CALL DynamicResultSetWrapper
             return;
         }
     }
-    DBG_ERROR( "could not connect to cache" );
+    OSL_ENSURE( sal_False, "could not connect to cache" );
     throw ServiceNotFoundException();
 }
 
@@ -494,7 +494,7 @@ sal_Int16 SAL_CALL DynamicResultSetWrapper
     m_aSourceSet.wait();
     Reference< XDynamicResultSet > xSource = NULL;
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         xSource = m_xSource;
     }
     return xSource->getCapabilities();
@@ -535,7 +535,7 @@ void SAL_CALL DynamicResultSetWrapperListener
     ::disposing( const EventObject& rEventObject )
     throw( RuntimeException )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     if( m_pOwner )
         m_pOwner->impl_disposing( rEventObject );
@@ -546,7 +546,7 @@ void SAL_CALL DynamicResultSetWrapperListener
     ::notify( const ListEvent& Changes )
     throw( RuntimeException )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     if( m_pOwner )
         m_pOwner->impl_notify( Changes );
@@ -559,7 +559,7 @@ void SAL_CALL DynamicResultSetWrapperListener
 void SAL_CALL DynamicResultSetWrapperListener
     ::impl_OwnerDies()
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     m_pOwner = NULL;
 }

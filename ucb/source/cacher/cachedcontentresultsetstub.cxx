@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachedcontentresultsetstub.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:52:35 $
+ *  last change: $Author: kso $ $Date: 2000-10-17 10:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #include <com/sun/star/ucb/FetchError.hpp>
 #endif
 
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
 #endif
 
 using namespace com::sun::star::beans;
@@ -167,7 +167,7 @@ XSERVICEINFO_NOFACTORY_IMPL_1( CachedContentResultSetStub,
 impl_EnsureNotDisposed(); \
 if( !m_xResultSetOrigin.is() ) \
 { \
-    DBG_ERROR( "broadcaster was disposed already" ); \
+    OSL_ENSURE( sal_False, "broadcaster was disposed already" ); \
     throw RuntimeException(); \
 } \
 FetchResult aRet; \
@@ -289,7 +289,7 @@ sal_Int32 SAL_CALL CachedContentResultSetStub
     sal_Int32 nCount;
     sal_Bool bCached;
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         nCount = m_nColumnCount;
         bCached = m_bColumnCountCached;
     }
@@ -303,11 +303,11 @@ sal_Int32 SAL_CALL CachedContentResultSetStub
         }
         catch( SQLException& )
         {
-            DBG_ERROR( "couldn't determine the column count" );
+            OSL_ENSURE( sal_False, "couldn't determine the column count" );
             nCount = 0;
         }
     }
-    vos::OGuard aGuard( m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     m_nColumnCount = nCount;
     m_bColumnCountCached = sal_True;
     return m_nColumnCount;

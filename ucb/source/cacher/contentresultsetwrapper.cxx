@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contentresultsetwrapper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:52:35 $
+ *  last change: $Author: kso $ $Date: 2000-10-17 10:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,8 @@
 #include <rtl/ustring.hxx>
 #endif
 
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
 #endif
 
 using namespace com::sun::star::beans;
@@ -125,16 +125,16 @@ ContentResultSetWrapper::ContentResultSetWrapper(
     m_pMyListenerImpl = new ContentResultSetWrapperListener( this );
     m_xMyListenerImpl = Reference< XPropertyChangeListener >( m_pMyListenerImpl );
 
-    DBG_ASSERT( m_xResultSetOrigin.is(), "XResultSet is required" );
+    OSL_ENSURE( m_xResultSetOrigin.is(), "XResultSet is required" );
 
     m_xRowOrigin = Reference< XRow >( m_xResultSetOrigin, UNO_QUERY );
-    DBG_ASSERT( m_xRowOrigin.is(), "interface XRow is required" );
+    OSL_ENSURE( m_xRowOrigin.is(), "interface XRow is required" );
 
     m_xContentAccessOrigin = Reference< XContentAccess >( m_xResultSetOrigin, UNO_QUERY );
-    DBG_ASSERT( m_xContentAccessOrigin.is(), "interface XContentAccess is required" );
+    OSL_ENSURE( m_xContentAccessOrigin.is(), "interface XContentAccess is required" );
 
     m_xPropertySetOrigin = Reference< XPropertySet >( m_xResultSetOrigin, UNO_QUERY );
-    DBG_ASSERT( m_xPropertySetOrigin.is(), "interface XPropertySet is required" );
+    OSL_ENSURE( m_xPropertySetOrigin.is(), "interface XPropertySet is required" );
 
     //call impl_init() at the end of constructor of derived class
 };
@@ -146,7 +146,7 @@ void SAL_CALL ContentResultSetWrapper::impl_init()
 
     //listen to disposing from Origin:
     Reference< XComponent > xComponentOrigin( m_xResultSetOrigin, UNO_QUERY );
-    DBG_ASSERT( xComponentOrigin.is(), "interface XComponent is required" );
+    OSL_ENSURE( xComponentOrigin.is(), "interface XComponent is required" );
     xComponentOrigin->addEventListener( static_cast< XPropertyChangeListener * >( m_pMyListenerImpl ) );
 }
 
@@ -171,7 +171,7 @@ void SAL_CALL ContentResultSetWrapper
     ::impl_initPropertySetInfo()
 {
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         if( m_xPropertySetInfo.is() )
             return;
 
@@ -183,7 +183,7 @@ void SAL_CALL ContentResultSetWrapper
             m_xPropertySetOrigin->getPropertySetInfo();
 
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         m_xPropertySetInfo = xOrig;
     }
 }
@@ -192,7 +192,7 @@ void SAL_CALL ContentResultSetWrapper
 ::impl_EnsureNotDisposed()
     throw( DisposedException, RuntimeException )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     if( m_bDisposed )
         throw DisposedException();
 }
@@ -201,7 +201,7 @@ ContentResultSetWrapper::PropertyChangeListenerContainer_Impl* SAL_CALL
     ContentResultSetWrapper
     ::impl_getPropertyChangeListenerContainer()
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     if ( !m_pPropertyChangeListeners )
         m_pPropertyChangeListeners =
             new PropertyChangeListenerContainer_Impl( m_aContainerMutex );
@@ -212,7 +212,7 @@ ContentResultSetWrapper::PropertyChangeListenerContainer_Impl* SAL_CALL
     ContentResultSetWrapper
     ::impl_getVetoableChangeListenerContainer()
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     if ( !m_pVetoableChangeListeners )
         m_pVetoableChangeListeners =
             new PropertyChangeListenerContainer_Impl( m_aContainerMutex );
@@ -224,7 +224,7 @@ void SAL_CALL ContentResultSetWrapper
                     const PropertyChangeEvent& rEvt )
 {
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         if( !m_pPropertyChangeListeners )
             return;
     }
@@ -265,7 +265,7 @@ void SAL_CALL ContentResultSetWrapper
            RuntimeException )
 {
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         if( !m_pVetoableChangeListeners )
             return;
     }
@@ -308,7 +308,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
     //m_nForwardOnly == 0 -> NO
 
     //@todo replace this with lines in comment
-    vos::OGuard aGuard( m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     m_nForwardOnly = 0;
     return m_nForwardOnly;
 
@@ -331,7 +331,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 
         if( !m_xPropertySetOrigin.is() )
         {
-            DBG_ERROR( "broadcaster was disposed already" );
+            OSL_ENSURE( sal_False, "broadcaster was disposed already" );
             m_nForwardOnly = 0;
             return m_nForwardOnly;
         }
@@ -392,7 +392,7 @@ void SAL_CALL ContentResultSetWrapper
         }
         catch( Exception& )
         {
-            DBG_ERROR( "could not remove PropertyChangeListener" );
+            OSL_ENSURE( sal_False, "could not remove PropertyChangeListener" );
         }
         try
         {
@@ -401,11 +401,11 @@ void SAL_CALL ContentResultSetWrapper
         }
         catch( Exception& )
         {
-            DBG_ERROR( "could not remove VetoableChangeListener" );
+            OSL_ENSURE( sal_False, "could not remove VetoableChangeListener" );
         }
 
         Reference< XComponent > xComponentOrigin( m_xResultSetOrigin, UNO_QUERY );
-        DBG_ASSERT( xComponentOrigin.is(), "interface XComponent is required" );
+        OSL_ENSURE( xComponentOrigin.is(), "interface XComponent is required" );
         xComponentOrigin->removeEventListener( static_cast< XPropertyChangeListener * >( m_pMyListenerImpl ) );
     }
 
@@ -451,7 +451,7 @@ void SAL_CALL ContentResultSetWrapper
     throw( RuntimeException )
 {
     impl_EnsureNotDisposed();
-    vos::OGuard aGuard( m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     if ( !m_pDisposeEventListeners )
         m_pDisposeEventListeners =
@@ -467,7 +467,7 @@ void SAL_CALL ContentResultSetWrapper
     throw( RuntimeException )
 {
     impl_EnsureNotDisposed();
-    vos::OGuard aGuard( m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     if ( m_pDisposeEventListeners )
         m_pDisposeEventListeners->removeInterface( Listener );
@@ -528,7 +528,7 @@ Reference< XPropertySetInfo > SAL_CALL ContentResultSetWrapper
 {
     impl_EnsureNotDisposed();
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         if( m_xPropertySetInfo.is() )
             return m_xPropertySetInfo;
     }
@@ -549,7 +549,7 @@ void SAL_CALL ContentResultSetWrapper
 
     if( !m_xPropertySetOrigin.is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         throw UnknownPropertyException();
     }
     m_xPropertySetOrigin->setPropertyValue( rPropertyName, rValue );
@@ -567,7 +567,7 @@ Any SAL_CALL ContentResultSetWrapper
 
     if( !m_xPropertySetOrigin.is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         throw UnknownPropertyException();
     }
     return m_xPropertySetOrigin->getPropertyValue( rPropertyName );
@@ -587,7 +587,7 @@ void SAL_CALL ContentResultSetWrapper
 
     if( !getPropertySetInfo().is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         throw UnknownPropertyException();
     }
 
@@ -598,16 +598,16 @@ void SAL_CALL ContentResultSetWrapper
     }
 
     impl_getPropertyChangeListenerContainer();
-    BOOL bNeedRegister = !m_pPropertyChangeListeners->
+    sal_Bool bNeedRegister = !m_pPropertyChangeListeners->
                         getContainedTypes().getLength();
     m_pPropertyChangeListeners->addInterface( aPropertyName, xListener );
     if( bNeedRegister )
     {
         {
-            vos::OGuard aGuard( m_aMutex );
+            osl::Guard< osl::Mutex > aGuard( m_aMutex );
             if( !m_xPropertySetOrigin.is() )
             {
-                DBG_ERROR( "broadcaster was disposed already" );
+                OSL_ENSURE( sal_False, "broadcaster was disposed already" );
                 return;
             }
         }
@@ -638,7 +638,7 @@ void SAL_CALL ContentResultSetWrapper
 
     if( !getPropertySetInfo().is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         throw UnknownPropertyException();
     }
     if( rPropertyName.getLength() )
@@ -648,16 +648,16 @@ void SAL_CALL ContentResultSetWrapper
     }
 
     impl_getVetoableChangeListenerContainer();
-    BOOL bNeedRegister = !m_pVetoableChangeListeners->
+    sal_Bool bNeedRegister = !m_pVetoableChangeListeners->
                         getContainedTypes().getLength();
     m_pVetoableChangeListeners->addInterface( rPropertyName, xListener );
     if( bNeedRegister )
     {
         {
-            vos::OGuard aGuard( m_aMutex );
+            osl::Guard< osl::Mutex > aGuard( m_aMutex );
             if( !m_xPropertySetOrigin.is() )
             {
-                DBG_ERROR( "broadcaster was disposed already" );
+                OSL_ENSURE( sal_False, "broadcaster was disposed already" );
                 return;
             }
         }
@@ -688,7 +688,7 @@ void SAL_CALL ContentResultSetWrapper
 
     {
         //noop, if no listener registered
-        vos::OGuard aGuard( m_aMutex );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         if( !m_pPropertyChangeListeners )
             return;
     }
@@ -713,10 +713,10 @@ void SAL_CALL ContentResultSetWrapper
     if( !m_pPropertyChangeListeners->getContainedTypes().getLength() )
     {
         {
-            vos::OGuard aGuard( m_aMutex );
+            osl::Guard< osl::Mutex > aGuard( m_aMutex );
             if( !m_xPropertySetOrigin.is() )
             {
-                DBG_ERROR( "broadcaster was disposed already" );
+                OSL_ENSURE( sal_False, "broadcaster was disposed already" );
                 return;
             }
         }
@@ -727,7 +727,7 @@ void SAL_CALL ContentResultSetWrapper
         }
         catch( Exception& )
         {
-            DBG_ERROR( "could not remove PropertyChangeListener" );
+            OSL_ENSURE( sal_False, "could not remove PropertyChangeListener" );
         }
     }
 }
@@ -746,7 +746,7 @@ void SAL_CALL ContentResultSetWrapper
 
     {
         //noop, if no listener registered
-        vos::OGuard aGuard( m_aMutex );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         if( !m_pVetoableChangeListeners )
             return;
     }
@@ -771,10 +771,10 @@ void SAL_CALL ContentResultSetWrapper
     if( !m_pVetoableChangeListeners->getContainedTypes().getLength() )
     {
         {
-            vos::OGuard aGuard( m_aMutex );
+            osl::Guard< osl::Mutex > aGuard( m_aMutex );
             if( !m_xPropertySetOrigin.is() )
             {
-                DBG_ERROR( "broadcaster was disposed already" );
+                OSL_ENSURE( sal_False, "broadcaster was disposed already" );
                 return;
             }
         }
@@ -785,7 +785,7 @@ void SAL_CALL ContentResultSetWrapper
         }
         catch( Exception& )
         {
-            DBG_ERROR( "could not remove VetoableChangeListener" );
+            OSL_ENSURE( sal_False, "could not remove VetoableChangeListener" );
         }
     }
 }
@@ -801,7 +801,7 @@ void SAL_CALL ContentResultSetWrapper
 {
     impl_EnsureNotDisposed();
 
-    vos::OGuard aGuard( m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     if( !m_xResultSetOrigin.is() )
         return;
@@ -824,7 +824,7 @@ void SAL_CALL ContentResultSetWrapper
 
     PropertyChangeEvent aEvt( rEvt );
     aEvt.Source = static_cast< XPropertySet * >( this );
-    aEvt.Further = FALSE;
+    aEvt.Further = sal_False;
     impl_notifyPropertyChangeListeners( aEvt );
 }
 
@@ -838,7 +838,7 @@ void SAL_CALL ContentResultSetWrapper
 
     PropertyChangeEvent aEvt( rEvt );
     aEvt.Source = static_cast< XPropertySet * >( this );
-    aEvt.Further = FALSE;
+    aEvt.Further = sal_False;
 
     impl_notifyVetoableChangeListeners( aEvt );
 }
@@ -856,7 +856,7 @@ OUString SAL_CALL ContentResultSetWrapper
 
     if( !m_xContentAccessOrigin.is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         throw RuntimeException();
     }
     return m_xContentAccessOrigin->queryContentIdentfierString();
@@ -872,7 +872,7 @@ Reference< XContentIdentifier > SAL_CALL ContentResultSetWrapper
 
     if( !m_xContentAccessOrigin.is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         throw RuntimeException();
     }
     return m_xContentAccessOrigin->queryContentIdentifier();
@@ -888,7 +888,7 @@ Reference< XContent > SAL_CALL ContentResultSetWrapper
 
     if( !m_xContentAccessOrigin.is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         throw RuntimeException();
     }
     return m_xContentAccessOrigin->queryContent();
@@ -908,7 +908,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 
     if( !m_xResultSetOrigin.is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         throw RuntimeException();
     }
     return m_xResultSetOrigin->next();
@@ -924,7 +924,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 
     if( !m_xResultSetOrigin.is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         throw RuntimeException();
     }
     return m_xResultSetOrigin->previous();
@@ -940,7 +940,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 
     if( !m_xResultSetOrigin.is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         throw RuntimeException();
     }
     return m_xResultSetOrigin->absolute( row );
@@ -956,7 +956,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 
     if( !m_xResultSetOrigin.is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         throw RuntimeException();
     }
     return m_xResultSetOrigin->relative( rows );
@@ -973,7 +973,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 
     if( !m_xResultSetOrigin.is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         throw RuntimeException();
     }
     return m_xResultSetOrigin->first();
@@ -989,7 +989,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 
     if( !m_xResultSetOrigin.is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         throw RuntimeException();
     }
     return m_xResultSetOrigin->last();
@@ -1005,7 +1005,7 @@ void SAL_CALL ContentResultSetWrapper
 
     if( !m_xResultSetOrigin.is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         throw RuntimeException();
     }
     m_xResultSetOrigin->beforeFirst();
@@ -1021,7 +1021,7 @@ void SAL_CALL ContentResultSetWrapper
 
     if( !m_xResultSetOrigin.is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         throw RuntimeException();
     }
     m_xResultSetOrigin->afterLast();
@@ -1037,7 +1037,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 
     if( !m_xResultSetOrigin.is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         throw RuntimeException();
     }
     return m_xResultSetOrigin->isAfterLast();
@@ -1053,7 +1053,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 
     if( !m_xResultSetOrigin.is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         throw RuntimeException();
     }
     return m_xResultSetOrigin->isBeforeFirst();
@@ -1069,7 +1069,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 
     if( !m_xResultSetOrigin.is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         throw RuntimeException();
     }
     return m_xResultSetOrigin->isFirst();
@@ -1085,7 +1085,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 
     if( !m_xResultSetOrigin.is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         throw RuntimeException();
     }
     return m_xResultSetOrigin->isLast();
@@ -1102,7 +1102,7 @@ sal_Int32 SAL_CALL ContentResultSetWrapper
 
     if( !m_xResultSetOrigin.is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         throw RuntimeException();
     }
     return m_xResultSetOrigin->getRow();
@@ -1118,7 +1118,7 @@ void SAL_CALL ContentResultSetWrapper
 
     if( !m_xResultSetOrigin.is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         throw RuntimeException();
     }
     m_xResultSetOrigin->refreshRow();
@@ -1134,7 +1134,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 
     if( !m_xResultSetOrigin.is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         throw RuntimeException();
     }
     return m_xResultSetOrigin->rowUpdated();
@@ -1149,7 +1149,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 
     if( !m_xResultSetOrigin.is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         throw RuntimeException();
     }
     return m_xResultSetOrigin->rowInserted();
@@ -1165,7 +1165,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 
     if( !m_xResultSetOrigin.is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         throw RuntimeException();
     }
     return m_xResultSetOrigin->rowDeleted();
@@ -1186,13 +1186,13 @@ Reference< XInterface > SAL_CALL ContentResultSetWrapper
 // XRow methods.
 //-----------------------------------------------------------------
 
-#define XROW_GETXXX( getXXX )                       \
-impl_EnsureNotDisposed();                               \
-if( !m_xRowOrigin.is() )                            \
-{                                                   \
-    DBG_ERROR( "broadcaster was disposed already" );\
-    throw RuntimeException();                       \
-}                                                   \
+#define XROW_GETXXX( getXXX )                                   \
+impl_EnsureNotDisposed();                                       \
+if( !m_xRowOrigin.is() )                                        \
+{                                                               \
+    OSL_ENSURE( sal_False, "broadcaster was disposed already" );\
+    throw RuntimeException();                                   \
+}                                                               \
 return m_xRowOrigin->getXXX( columnIndex );
 
 //virtual
@@ -1204,7 +1204,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
     impl_EnsureNotDisposed();
     if( !m_xRowOrigin.is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         throw RuntimeException();
     }
     return m_xRowOrigin->wasNull();
@@ -1352,7 +1352,7 @@ Any SAL_CALL ContentResultSetWrapper
     impl_EnsureNotDisposed();
     if( !m_xRowOrigin.is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         throw RuntimeException();
     }
     return m_xRowOrigin->getObject( columnIndex, typeMap );

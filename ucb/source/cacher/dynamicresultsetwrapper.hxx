@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dynamicresultsetwrapper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:52:35 $
+ *  last change: $Author: kso $ $Date: 2000-10-17 10:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,12 @@
 #ifndef _DYNAMIC_RESULTSET_WRAPPER_HXX
 #define _DYNAMIC_RESULTSET_WRAPPER_HXX
 
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
 #endif
 
-#ifndef _VOS_CONDITN_HXX_
-#include <vos/conditn.hxx>
+#ifndef _OSL_CONDITN_HXX_
+#include <osl/conditn.hxx>
 #endif
 
 #ifndef _UCBHELPER_MACROS_HXX
@@ -137,7 +137,7 @@ protected:
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
                             m_xSMgr;
 
-    vos::OMutex             m_aMutex;
+    osl::Mutex              m_aMutex;
     sal_Bool                m_bStatic;
     sal_Bool                m_bGotWelcome;
 
@@ -160,8 +160,8 @@ protected:
     com::sun::star::uno::Reference< com::sun::star::ucb::XDynamicResultSetListener >
                             m_xListener;
 
-    vos::OCondition         m_aSourceSet;
-    vos::OCondition         m_aListenerSet;
+    osl::Condition          m_aSourceSet;
+    osl::Condition          m_aListenerSet;
 
 protected:
     void SAL_CALL impl_init();
@@ -261,7 +261,7 @@ class DynamicResultSetWrapperListener
 {
 protected:
     DynamicResultSetWrapper*    m_pOwner;
-    ::vos::OMutex               m_aMutex;
+    osl::Mutex                  m_aMutex;
 
 public:
     DynamicResultSetWrapperListener( DynamicResultSetWrapper* pOwner );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachedcontentresultset.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:52:35 $
+ *  last change: $Author: kso $ $Date: 2000-10-17 10:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,8 @@
 #include <rtl/ustring.hxx>
 #endif
 
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
 #endif
 
 using namespace com::sun::star::beans;
@@ -107,7 +107,7 @@ using namespace rtl;
 //function ::getObject, where this is similar implemented
 
 #define XROW_GETXXX( getXXX, Type )                     \
-impl_EnsureNotDisposed();                                   \
+impl_EnsureNotDisposed();                               \
 ReacquireableGuard aGuard( m_aMutex );                  \
 sal_Int32 nRow = m_nRow;                                \
 sal_Int32 nFetchSize = m_nFetchSize;                    \
@@ -118,7 +118,7 @@ if( !m_aCache.hasRow( nRow ) )                          \
 {                                                       \
         if( !m_xFetchProvider.is() )                    \
         {                                               \
-            DBG_ERROR( "broadcaster was disposed already" );    \
+            OSL_ENSURE( sal_False, "broadcaster was disposed already" );    \
             throw SQLException();                       \
         }                                               \
         aGuard.clear();                                 \
@@ -183,7 +183,7 @@ sal_Bool SAL_CALL CachedContentResultSet::CCRS_Cache
     ::hasRow( sal_Int32 row )
 {
     if( !m_pResult )
-        return FALSE;
+        return sal_False;
     long nStart = m_pResult->StartIndex;
     long nEnd = nStart;
     if( m_pResult->Orientation )
@@ -224,9 +224,9 @@ sal_Bool SAL_CALL CachedContentResultSet::CCRS_Cache
     ::hasCausedException( sal_Int32 nRow )
 {
     if( !m_pResult )
-        return FALSE;
+        return sal_False;
     if( !( m_pResult->FetchError & FetchError::EXCEPTION ) )
-        return FALSE;
+        return sal_False;
 
     long nEnd = m_pResult->StartIndex;
     if( m_pResult->Orientation )
@@ -489,7 +489,7 @@ CCRS_PropertySetInfo::CCRS_PropertySetInfo(
     }
     else
     {
-        DBG_ERROR( "The received XPropertySetInfo doesn't contain required properties" );
+        OSL_ENSURE( sal_False, "The received XPropertySetInfo doesn't contain required properties" );
         m_pProperties = new Sequence<Property>;
     }
 
@@ -650,18 +650,18 @@ sal_Int32 SAL_CALL CCRS_PropertySetInfo
 
     if( !m_pProperties )
     {
-        DBG_ERROR( "Properties not initialized yet" );
+        OSL_ENSURE( sal_False, "Properties not initialized yet" );
         return nHandle;
     }
-    sal_Bool bFound = TRUE;
+    sal_Bool bFound = sal_True;
     while( bFound )
     {
-        bFound = FALSE;
+        bFound = sal_False;
         for( sal_Int32 nN = m_pProperties->getLength(); nN--; )
         {
             if( nHandle == (*m_pProperties)[nN].Handle )
             {
-                bFound = TRUE;
+                bFound = sal_True;
                 nHandle++;
                 break;
             }
@@ -707,10 +707,10 @@ CachedContentResultSet::CachedContentResultSet( Reference< XResultSet > xOrigin
                 , m_aCacheContent( m_xContentIdentifierMapping )
 {
     m_xFetchProvider = Reference< XFetchProvider >( m_xResultSetOrigin, UNO_QUERY );
-    DBG_ASSERT( m_xFetchProvider.is(), "interface XFetchProvider is required" );
+    OSL_ENSURE( m_xFetchProvider.is(), "interface XFetchProvider is required" );
 
     m_xFetchProviderForContentAccess = Reference< XFetchProviderForContentAccess >( m_xResultSetOrigin, UNO_QUERY );
-    DBG_ASSERT( m_xFetchProviderForContentAccess.is(), "interface XFetchProviderForContentAccess is required" );
+    OSL_ENSURE( m_xFetchProviderForContentAccess.is(), "interface XFetchProviderForContentAccess is required" );
 
     impl_init();
 };
@@ -739,13 +739,13 @@ sal_Bool SAL_CALL CachedContentResultSet
     */
 
     ReacquireableGuard aGuard( m_aMutex );
-    DBG_ASSERT( nRow >= 0, "only positive values supported" );
+    OSL_ENSURE( nRow >= 0, "only positive values supported" );
     if( !m_xResultSetOrigin.is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         return sal_False;
     }
-//  DBG_ASSERT( nRow <= m_nKnownCount, "don't step into regions you don't know with this method" );
+//  OSL_ENSURE( nRow <= m_nKnownCount, "don't step into regions you don't know with this method" );
 
     sal_Int32 nLastAppliedPos = m_nLastAppliedPos;
     sal_Bool bAfterLastApplied = m_bAfterLastApplied;
@@ -839,7 +839,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 
     sal_Int32 nRow;
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         if( m_bAfterLast )
             throw SQLException();
         nRow = m_nRow;
@@ -860,7 +860,7 @@ sal_Bool bDirection = !!(                                           \
     nFetchDirection != FetchDirection::REVERSE );                   \
 FetchResult aResult =                                               \
     fetchInterface->fetchMethod( nRow, nFetchSize, bDirection );    \
-vos::OClearableGuard aGuard( m_aMutex );                            \
+osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );               \
 aCache.loadData( aResult );                                         \
 sal_Int32 nMax = aCache.getMaxRow();                                \
 sal_Int32 nCurCount = m_nKnownCount;                                \
@@ -883,16 +883,16 @@ void SAL_CALL CachedContentResultSet
 void SAL_CALL CachedContentResultSet
     ::impl_changeRowCount( sal_Int32 nOld, sal_Int32 nNew )
 {
-    DBG_ASSERT( nNew > nOld, "RowCount only can grow" );
+    OSL_ENSURE( nNew > nOld, "RowCount only can grow" );
     if( nNew <= nOld )
         return;
 
     //create PropertyChangeEvent and set value
     PropertyChangeEvent aEvt;
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         aEvt.Source =  static_cast< XPropertySet * >( this );
-        aEvt.Further = FALSE;
+        aEvt.Further = sal_False;
         aEvt.OldValue <<= nOld;
         aEvt.NewValue <<= nNew;
 
@@ -906,16 +906,16 @@ void SAL_CALL CachedContentResultSet
 void SAL_CALL CachedContentResultSet
     ::impl_changeIsRowCountFinal( sal_Bool bOld, sal_Bool bNew )
 {
-    DBG_ASSERT( !bOld && bNew, "This change is not allowed for IsRowCountFinal" );
+    OSL_ENSURE( !bOld && bNew, "This change is not allowed for IsRowCountFinal" );
     if( ! (!bOld && bNew ) )
         return;
 
     //create PropertyChangeEvent and set value
     PropertyChangeEvent aEvt;
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         aEvt.Source =  static_cast< XPropertySet * >( this );
-        aEvt.Further = FALSE;
+        aEvt.Further = sal_False;
         aEvt.OldValue <<= bOld;
         aEvt.NewValue <<= bNew;
 
@@ -950,7 +950,7 @@ void SAL_CALL CachedContentResultSet
 {
     ContentResultSetWrapper::impl_initPropertySetInfo();
 
-    vos::OGuard aGuard( m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     if( m_pMyPropSetInfo )
         return;
     m_pMyPropSetInfo = new CCRS_PropertySetInfo( m_xPropertySetInfo );
@@ -1025,7 +1025,7 @@ void SAL_CALL CachedContentResultSet
 
     if( !getPropertySetInfo().is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         throw UnknownPropertyException();
     }
 
@@ -1061,10 +1061,10 @@ void SAL_CALL CachedContentResultSet
         //create PropertyChangeEvent and set value
         PropertyChangeEvent aEvt;
         {
-            vos::OGuard aGuard( m_aMutex );
+            osl::Guard< osl::Mutex > aGuard( m_aMutex );
             aEvt.Source =  static_cast< XPropertySet * >( this );
             aEvt.PropertyName = aPropertyName;
-            aEvt.Further = FALSE;
+            aEvt.Further = sal_False;
             aEvt.PropertyHandle = m_pMyPropSetInfo->
                                     m_nFetchDirectionPropertyHandle;
             aEvt.OldValue <<= m_nFetchDirection;
@@ -1094,10 +1094,10 @@ void SAL_CALL CachedContentResultSet
         //create PropertyChangeEvent and set value
         PropertyChangeEvent aEvt;
         {
-            vos::OGuard aGuard( m_aMutex );
+            osl::Guard< osl::Mutex > aGuard( m_aMutex );
             aEvt.Source =  static_cast< XPropertySet * >( this );
             aEvt.PropertyName = aPropertyName;
-            aEvt.Further = FALSE;
+            aEvt.Further = sal_False;
             aEvt.PropertyHandle = m_pMyPropSetInfo->
                                     m_nFetchSizePropertyHandle;
             aEvt.OldValue <<= m_nFetchSize;
@@ -1111,10 +1111,10 @@ void SAL_CALL CachedContentResultSet
     }
     else
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         if( !m_xPropertySetOrigin.is() )
         {
-            DBG_ERROR( "broadcaster was disposed already" );
+            OSL_ENSURE( sal_False, "broadcaster was disposed already" );
             return;
         }
         m_xPropertySetOrigin->setPropertyValue( aPropertyName, aValue );
@@ -1133,7 +1133,7 @@ Any SAL_CALL CachedContentResultSet
 
     if( !getPropertySetInfo().is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         throw UnknownPropertyException();
     }
 
@@ -1144,34 +1144,34 @@ Any SAL_CALL CachedContentResultSet
     if( rPropertyName == CCRS_PropertySetInfo
                         ::m_aPropertyNameForCount )
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         aValue <<= m_nKnownCount;
     }
     else if( rPropertyName == CCRS_PropertySetInfo
                             ::m_aPropertyNameForFinalCount )
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         aValue <<= m_bFinalCount;
     }
     else if( rPropertyName == CCRS_PropertySetInfo
                             ::m_aPropertyNameForFetchSize )
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         aValue <<= m_nFetchSize;
     }
     else if( rPropertyName == CCRS_PropertySetInfo
                             ::m_aPropertyNameForFetchDirection )
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         aValue <<= m_nFetchDirection;
     }
     else
     {
         {
-            vos::OGuard aGuard( m_aMutex );
+            osl::Guard< osl::Mutex > aGuard( m_aMutex );
             if( !m_xPropertySetOrigin.is() )
             {
-                DBG_ERROR( "broadcaster was disposed already" );
+                OSL_ENSURE( sal_False, "broadcaster was disposed already" );
                 throw UnknownPropertyException();
             }
         }
@@ -1191,7 +1191,7 @@ void SAL_CALL CachedContentResultSet
 {
     {
         impl_EnsureNotDisposed();
-        vos::OGuard aGuard( m_aMutex );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         //release all references to the broadcaster:
         m_xFetchProvider.clear();
         m_xFetchProviderForContentAccess.clear();
@@ -1208,7 +1208,7 @@ void SAL_CALL CachedContentResultSet
 
     PropertyChangeEvent aEvt( rEvt );
     aEvt.Source = static_cast< XPropertySet * >( this );
-    aEvt.Further = FALSE;
+    aEvt.Further = sal_False;
     //---------
 
     if( CCRS_PropertySetInfo
@@ -1230,7 +1230,7 @@ void SAL_CALL CachedContentResultSet
             sal_Int32 nNew;
             if( !( aEvt.NewValue >>= nNew ) )
             {
-                DBG_ERROR( "PropertyChangeEvent contains wrong data" );
+                OSL_ENSURE( sal_False, "PropertyChangeEvent contains wrong data" );
                 return;
             }
 
@@ -1244,7 +1244,7 @@ void SAL_CALL CachedContentResultSet
             sal_Bool bNew;
             if( !( aEvt.NewValue >>= bNew ) )
             {
-                DBG_ERROR( "PropertyChangeEvent contains wrong data" );
+                OSL_ENSURE( sal_False, "PropertyChangeEvent contains wrong data" );
                 return;
             }
             impl_changeIsRowCountFinal( m_bFinalCount, bNew );
@@ -1275,7 +1275,7 @@ void SAL_CALL CachedContentResultSet
 
     PropertyChangeEvent aEvt( rEvt );
     aEvt.Source = static_cast< XPropertySet * >( this );
-    aEvt.Further = FALSE;
+    aEvt.Further = sal_False;
 
     impl_notifyVetoableChangeListeners( aEvt );
 }
@@ -1296,7 +1296,7 @@ if( !m_aCache##XXX.hasRow( nRow ) )                         \
 {                                                           \
         if( !m_xFetchProviderForContentAccess.is() )        \
         {                                                   \
-            DBG_ERROR( "broadcaster was disposed already" );\
+            OSL_ENSURE( sal_False, "broadcaster was disposed already" );\
             throw RuntimeException();                       \
         }                                                   \
         aGuard.clear();                                     \
@@ -1449,7 +1449,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 
     if( !m_xResultSetOrigin.is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         return sal_False;
     }
     if( row < 0 )
@@ -1650,7 +1650,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     //unknown position
     if( !m_xResultSetOrigin.is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         return sal_False;
     }
     aGuard.clear();
@@ -1672,7 +1672,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     aGuard.reacquire();
     m_nLastAppliedPos = nCurRow;
     m_nRow = nCurRow;
-    DBG_ASSERT( nCurRow >= m_nKnownCount, "position of last row < known Count, that could not be" );
+    OSL_ENSURE( nCurRow >= m_nKnownCount, "position of last row < known Count, that could not be" );
     m_nKnownCount = nCurRow;
     m_bFinalCount = sal_True;
     return nCurRow;
@@ -1689,7 +1689,7 @@ void SAL_CALL CachedContentResultSet
     if( impl_isForwardOnly() )
         throw SQLException();
 
-    vos::OGuard aGuard( m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     m_nRow = 0;
     m_bAfterLast = sal_False;
 }
@@ -1705,7 +1705,7 @@ void SAL_CALL CachedContentResultSet
     if( impl_isForwardOnly() )
         throw SQLException();
 
-    vos::OGuard aGuard( m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     m_nRow = 1;
     m_bAfterLast = sal_True;
 }
@@ -1728,7 +1728,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 
     if( !m_xResultSetOrigin.is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         return sal_False;
     }
     aGuard.clear();
@@ -1763,7 +1763,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 
     if( !m_xResultSetOrigin.is() )
     {
-        DBG_ERROR( "broadcaster was disposed already" );
+        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
         return sal_False;
     }
     aGuard.clear();
@@ -1791,7 +1791,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     Reference< XResultSet > xResultSetOrigin;
 
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         if( m_bAfterLast )
             return sal_False;
         if( m_nRow != 1 )
@@ -1825,7 +1825,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     sal_Int32 nRow;
     Reference< XResultSet > xResultSetOrigin;
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         if( m_bAfterLast )
             return sal_False;
         if( m_nRow < m_nKnownCount )
@@ -1855,7 +1855,7 @@ sal_Int32 SAL_CALL CachedContentResultSet
 {
     impl_EnsureNotDisposed();
 
-    vos::OGuard aGuard( m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     if( m_bAfterLast )
         return 0;
     return m_nRow;
@@ -1932,12 +1932,12 @@ sal_Bool SAL_CALL CachedContentResultSet
     impl_EnsureNotDisposed();
 
     {
-        vos::OGuard aGuard( m_aMutex );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         if( m_bLastReadWasFromCache )
             return m_bLastCachedReadWasNull;
         if( !m_xRowOrigin.is() )
         {
-            DBG_ERROR( "broadcaster was disposed already" );
+            OSL_ENSURE( sal_False, "broadcaster was disposed already" );
             return sal_False;
         }
     }
@@ -2093,7 +2093,7 @@ Any SAL_CALL CachedContentResultSet
         {
             if( !m_xFetchProvider.is() )
             {
-                DBG_ERROR( "broadcaster was disposed already" );
+                OSL_ENSURE( sal_False, "broadcaster was disposed already" );
                 return Any();
             }
             aGuard.clear();
@@ -2110,7 +2110,6 @@ Any SAL_CALL CachedContentResultSet
         }
     }
     //@todo: pay attention to typeMap
-    DBG_ASSERTWARNING( !typeMap.is(), "special TypeMaps are not supported" );
     const Any& rValue = m_aCache.getAny( nRow, columnIndex );
     Any aRet;
     m_bLastReadWasFromCache = sal_True;

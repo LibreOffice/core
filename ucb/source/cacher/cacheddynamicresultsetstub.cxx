@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheddynamicresultsetstub.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:52:35 $
+ *  last change: $Author: kso $ $Date: 2000-10-17 10:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,8 @@
 #include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>
 #endif
 
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
 #endif
 
 using namespace com::sun::star::lang;
@@ -92,7 +92,7 @@ CachedDynamicResultSetStub::CachedDynamicResultSetStub(
         , const Reference< XMultiServiceFactory > & xSMgr )
         : DynamicResultSetWrapper( xOrigin, xSMgr )
 {
-    DBG_ASSERT( m_xSMgr.is(), "need Multiservicefactory to create stub" );
+    OSL_ENSURE( m_xSMgr.is(), "need Multiservicefactory to create stub" );
     impl_init();
 }
 
@@ -106,12 +106,12 @@ void SAL_CALL CachedDynamicResultSetStub
     ::impl_InitResultSetOne( const Reference< XResultSet >& xResultSet )
 {
     DynamicResultSetWrapper::impl_InitResultSetOne( xResultSet );
-    DBG_ASSERT( m_xSourceResultOne.is(), "need source resultset" )
+    OSL_ENSURE( m_xSourceResultOne.is(), "need source resultset" );
 
     Reference< XResultSet > xStub(
         new CachedContentResultSetStub( m_xSourceResultOne ) );
 
-    vos::OGuard aGuard( m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     m_xMyResultOne = xStub;
 }
 
@@ -120,12 +120,12 @@ void SAL_CALL CachedDynamicResultSetStub
     ::impl_InitResultSetTwo( const Reference< XResultSet >& xResultSet )
 {
     DynamicResultSetWrapper::impl_InitResultSetTwo( xResultSet );
-    DBG_ASSERT( m_xSourceResultTwo.is(), "need source resultset" )
+    OSL_ENSURE( m_xSourceResultTwo.is(), "need source resultset" );
 
     Reference< XResultSet > xStub(
         new CachedContentResultSetStub( m_xSourceResultTwo ) );
 
-    vos::OGuard aGuard( m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     m_xMyResultTwo = xStub;
 }
 
@@ -246,8 +246,8 @@ void SAL_CALL CachedDynamicResultSetStubFactory
             , AlreadyInitializedException
             , RuntimeException )
 {
-    DBG_ASSERT( Source.is(), "a Source is needed" );
-    DBG_ASSERT( TargetCache.is(), "a TargetCache is needed" );
+    OSL_ENSURE( Source.is(), "a Source is needed" );
+    OSL_ENSURE( TargetCache.is(), "a TargetCache is needed" );
 
     Reference< XDynamicResultSet > xSource( Source );
     if( SortingInfo.getLength() &&
@@ -271,7 +271,7 @@ void SAL_CALL CachedDynamicResultSetStubFactory
         new CachedDynamicResultSetStub( xSource, m_xSMgr ) );
 
     Reference< XSourceInitialization > xTarget( TargetCache, UNO_QUERY );
-    DBG_ASSERT( xTarget.is(), "Target must have interface XSourceInitialization" );
+    OSL_ENSURE( xTarget.is(), "Target must have interface XSourceInitialization" );
 
     xTarget->setSource( xStub );
 }

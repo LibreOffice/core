@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contentresultsetwrapper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:52:35 $
+ *  last change: $Author: kso $ $Date: 2000-10-17 10:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #include <ucbhelper/macros.hxx>
 #endif
 
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
 #endif
 
 #ifndef _CPPUHELPER_WEAK_HXX_
@@ -157,15 +157,15 @@ protected:
     class ReacquireableGuard
     {
     protected:
-        vos::OMutex* pT;
+        osl::Mutex* pT;
     public:
 
-        ReacquireableGuard(vos::OMutex * pT) : pT(pT)
+        ReacquireableGuard(osl::Mutex * pT) : pT(pT)
         {
             pT->acquire();
         }
 
-        ReacquireableGuard(vos::OMutex& t) : pT(&t)
+        ReacquireableGuard(osl::Mutex& t) : pT(&t)
         {
             pT->acquire();
         }
@@ -201,7 +201,7 @@ protected:
     //members
 
     //my Mutex
-    vos::OMutex             m_aMutex;
+    osl::Mutex              m_aMutex;
 
     //different Interfaces from Origin:
     com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSet >

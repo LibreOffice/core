@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheddynamicresultset.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:52:35 $
+ *  last change: $Author: kso $ $Date: 2000-10-17 10:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #include <cachedcontentresultset.hxx>
 #endif
 
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
 #endif
 
 using namespace com::sun::star::lang;
@@ -99,12 +99,12 @@ void SAL_CALL CachedDynamicResultSet
     ::impl_InitResultSetOne( const Reference< XResultSet >& xResultSet )
 {
     DynamicResultSetWrapper::impl_InitResultSetOne( xResultSet );
-    DBG_ASSERT( m_xSourceResultOne.is(), "need source resultset" )
+    OSL_ENSURE( m_xSourceResultOne.is(), "need source resultset" );
 
     Reference< XResultSet > xCache(
         new CachedContentResultSet( m_xSourceResultOne, m_xContentIdentifierMapping ) );
 
-    vos::OGuard aGuard( m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     m_xMyResultOne = xCache;
 }
 
@@ -113,12 +113,12 @@ void SAL_CALL CachedDynamicResultSet
     ::impl_InitResultSetTwo( const Reference< XResultSet >& xResultSet )
 {
     DynamicResultSetWrapper::impl_InitResultSetTwo( xResultSet );
-    DBG_ASSERT( m_xSourceResultTwo.is(), "need source resultset" )
+    OSL_ENSURE( m_xSourceResultTwo.is(), "need source resultset" );
 
     Reference< XResultSet > xCache(
         new CachedContentResultSet( m_xSourceResultTwo, m_xContentIdentifierMapping ) );
 
-    vos::OGuard aGuard( m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     m_xMyResultTwo = xCache;
 }
 
