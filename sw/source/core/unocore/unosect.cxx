@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 15:43:25 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:14:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,10 +80,10 @@
 #include <svx/xmlcnitm.hxx>
 #endif
 #ifndef _LINKMGR_HXX
-#include <so3/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #endif
 #ifndef _LNKBASE_HXX
-#include <so3/lnkbase.hxx>
+#include <sfx2/lnkbase.hxx>
 #endif
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
@@ -392,9 +392,9 @@ void SwXTextSection::attachToRange(const uno::Reference< text::XTextRange > & xT
         SwSection aSect(eType, pDoc->GetUniqueSectionName(&m_sName));
         aSect.SetCondition(pProps->sCondition);
         String sLinkName(pProps->sLinkFileName);
-        sLinkName += so3::cTokenSeperator;
+        sLinkName += sfx2::cTokenSeperator;
         sLinkName += pProps->sSectionFilter;
-        sLinkName += so3::cTokenSeperator;
+        sLinkName += sfx2::cTokenSeperator;
         sLinkName += pProps->sSectionRegion;
         aSect.SetLinkFileName(sLinkName);
 
@@ -444,8 +444,8 @@ void SwXTextSection::attachToRange(const uno::Reference< text::XTextRange > & xT
             {
                 pRet->CreateLink(CREATE_CONNECT);
             }
-            pRet->SetUpdateType(pProps->bUpdateType ? so3::LINKUPDATE_ALWAYS :
-                                so3::LINKUPDATE_ONCALL);
+            pRet->SetUpdateType(pProps->bUpdateType ? sfx2::LINKUPDATE_ALWAYS :
+                                sfx2::LINKUPDATE_ONCALL);
         }
 
         // Undo-Klammerung hier beenden
@@ -600,22 +600,22 @@ void SAL_CALL SwXTextSection::SetPropertyValues_Impl(
                         {
                             if(!pProps->bDDE)
                             {
-                                pProps->sLinkFileName = so3::cTokenSeperator;
-                                pProps->sLinkFileName += so3::cTokenSeperator;
+                                pProps->sLinkFileName = sfx2::cTokenSeperator;
+                                pProps->sLinkFileName += sfx2::cTokenSeperator;
                                 pProps->bDDE = sal_True;
                             }
-                            pProps->sLinkFileName.SetToken(pMap->nWID - WID_SECT_DDE_TYPE,so3::cTokenSeperator,sTmp);
+                            pProps->sLinkFileName.SetToken(pMap->nWID - WID_SECT_DDE_TYPE,sfx2::cTokenSeperator,sTmp);
                         }
                         else
                         {
                             String sLinkFileName(aSection.GetLinkFileName());
                             if(aSection.GetType() != DDE_LINK_SECTION)
                             {
-                                sLinkFileName = so3::cTokenSeperator;
-                                sLinkFileName += so3::cTokenSeperator;
+                                sLinkFileName = sfx2::cTokenSeperator;
+                                sLinkFileName += sfx2::cTokenSeperator;
                                 aSection.SetType(DDE_LINK_SECTION);
                             }
-                            sLinkFileName.SetToken(pMap->nWID - WID_SECT_DDE_TYPE,so3::cTokenSeperator, sTmp);
+                            sLinkFileName.SetToken(pMap->nWID - WID_SECT_DDE_TYPE,sfx2::cTokenSeperator, sTmp);
                             aSection.SetLinkFileName(sLinkFileName);
                         }
                     }
@@ -653,10 +653,10 @@ void SAL_CALL SwXTextSection::SetPropertyValues_Impl(
                                 String sFileName;
                                 if(aLink.FileURL.getLength())
                                     sFileName += URIHelper::SmartRelToAbs( aLink.FileURL);
-                                sFileName += so3::cTokenSeperator;
+                                sFileName += sfx2::cTokenSeperator;
                                 sFileName += String(aLink.FilterName);
-                                sFileName += so3::cTokenSeperator;
-                                sFileName += aSection.GetLinkFileName().GetToken( 2, so3::cTokenSeperator );
+                                sFileName += sfx2::cTokenSeperator;
+                                sFileName += aSection.GetLinkFileName().GetToken( 2, sfx2::cTokenSeperator );
                                 aSection.SetLinkFileName(sFileName);
                                 if(sFileName.Len() < 3)
                                     aSection.SetType(CONTENT_SECTION);
@@ -682,11 +682,11 @@ void SAL_CALL SwXTextSection::SetPropertyValues_Impl(
                                     sLink.Len())
                                     aSection.SetType(FILE_LINK_SECTION);
                             String sSectLink(aSection.GetLinkFileName());
-                            while( 3 < sSectLink.GetTokenCount( so3::cTokenSeperator ))
+                            while( 3 < sSectLink.GetTokenCount( sfx2::cTokenSeperator ))
                             {
-                                sSectLink += so3::cTokenSeperator;
+                                sSectLink += sfx2::cTokenSeperator;
                             }
-                            sSectLink.SetToken(2, so3::cTokenSeperator, sLink);
+                            sSectLink.SetToken(2, sfx2::cTokenSeperator, sLink);
                             aSection.SetLinkFileName(sSectLink);
                             if(sSectLink.Len() < 3)
                                 aSection.SetType(CONTENT_SECTION);
@@ -822,8 +822,8 @@ void SAL_CALL SwXTextSection::SetPropertyValues_Impl(
                         {
                             pSect->CreateLink(CREATE_CONNECT);
                         }
-                        pSect->SetUpdateType(bLinkMode ? so3::LINKUPDATE_ALWAYS
-                                                : so3::LINKUPDATE_ONCALL);
+                        pSect->SetUpdateType(bLinkMode ? sfx2::LINKUPDATE_ALWAYS
+                                                : sfx2::LINKUPDATE_ONCALL);
                     }
                     // section found and processed: break from loop
                     break;
@@ -916,7 +916,7 @@ uno::Sequence< Any > SAL_CALL SwXTextSection::GetPropertyValues_Impl(
                         {
                             sRet = pSect->GetLinkFileName();
                         }
-                        sRet = sRet.GetToken(pMap->nWID - WID_SECT_DDE_TYPE, so3::cTokenSeperator);
+                        sRet = sRet.GetToken(pMap->nWID - WID_SECT_DDE_TYPE, sfx2::cTokenSeperator);
                         pRet[nProperty] <<= OUString(sRet);
                     }
                     break;
@@ -926,7 +926,7 @@ uno::Sequence< Any > SAL_CALL SwXTextSection::GetPropertyValues_Impl(
                         if ( pSect->IsLinkType() && pSect->IsConnected() )
                         {
                             sal_Bool bTemp =
-                                (pSect->GetUpdateType() == so3::LINKUPDATE_ALWAYS);
+                                (pSect->GetUpdateType() == sfx2::LINKUPDATE_ALWAYS);
                             pRet[nProperty].setValue( &bTemp, ::getCppuBooleanType());
                         }
                     }
@@ -945,8 +945,8 @@ uno::Sequence< Any > SAL_CALL SwXTextSection::GetPropertyValues_Impl(
                         else if( FILE_LINK_SECTION == pSect->GetType() )
                         {
                             String sRet( pSect->GetLinkFileName() );
-                            aLink.FileURL = sRet.GetToken(0, so3::cTokenSeperator );
-                            aLink.FilterName = sRet.GetToken(1, so3::cTokenSeperator );
+                            aLink.FileURL = sRet.GetToken(0, sfx2::cTokenSeperator );
+                            aLink.FilterName = sRet.GetToken(1, sfx2::cTokenSeperator );
                         }
                         pRet[nProperty].setValue(&aLink, ::getCppuType((text::SectionFileLink*)0));
                     }
@@ -959,7 +959,7 @@ uno::Sequence< Any > SAL_CALL SwXTextSection::GetPropertyValues_Impl(
                             sRet = pProps->sSectionRegion;
                         }
                         else if( FILE_LINK_SECTION == pSect->GetType() )
-                            sRet = pSect->GetLinkFileName().GetToken(2, so3::cTokenSeperator);
+                            sRet = pSect->GetLinkFileName().GetToken(2, sfx2::cTokenSeperator);
                         pRet[nProperty] <<= OUString(sRet);
                     }
                     break;
@@ -1328,7 +1328,7 @@ void SwXTextSection::setPropertyToDefault( const OUString& rPropertyName )
                 aSection.SetType(CONTENT_SECTION);
             break;
             case WID_SECT_DDE_AUTOUPDATE:
-                aSection.SetUpdateType(so3::LINKUPDATE_ALWAYS);
+                aSection.SetUpdateType(sfx2::LINKUPDATE_ALWAYS);
             break;
             case WID_SECT_VISIBLE   :
             {
