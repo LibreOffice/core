@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:11:11 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 13:20:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -469,15 +469,15 @@ BOOL SwDocShell::ConvertFrom( SfxMedium& rMedium )
 
     pRdr->GetDoc()->SetHTMLMode( ISA(SwWebDocShell) );
 
+    /* #106748# Restore the pool default if reading a saved document. */
+    pDoc->RemoveAllFmtLanguageDependencies();
+
     ULONG nErr = pRdr->Read( *pRead );
 
     // Evtl. ein altes Doc weg
     if( pDoc )
         RemoveLink();
     pDoc = pRdr->GetDoc();
-
-    /* #106748# Restore the pool default if reading a saved document. */
-    pDoc->GetAttrPool().ResetPoolDefaultItem(RES_PARATR_ADJUST);
 
     // die DocInfo vom Doc am DocShell-Medium setzen
     if( GetMedium()->GetFilter() &&
