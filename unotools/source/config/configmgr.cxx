@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sb $ $Date: 2000-12-14 08:07:50 $
+ *  last change: $Author: mba $ $Date: 2000-12-18 08:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ const char* cConfigBaseURL = "/org.openoffice.";
 const char* cAccessSrvc = "com.sun.star.configuration.ConfigurationUpdateAccess";
 
 static ::rtl::OUString aBrandName;
+static ::rtl::OUString aProductVersion;
 
 //-----------------------------------------------------------------------------
 struct ConfigItemListEntry_Impl
@@ -370,6 +371,12 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         return aRet;
     }
 
+    if ( eProp == PRODUCTVERSION && aProductVersion.getLength() )
+    {
+        aRet <<= aProductVersion;
+        return aRet;
+    }
+
     OUString sPath = C2U(cConfigBaseURL);
     switch(eProp)
     {
@@ -377,7 +384,8 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         case USERINSTALLURL:
             sPath += C2U("UserProfile/Office"); break;
         case LOCALE:            sPath += C2U("UserProfile/International"); break;
-        case PRODUCTNAME:            sPath += C2U("Setup/Product"); break;
+        case PRODUCTNAME:
+        case PRODUCTVERSION:            sPath += C2U("Setup/Product"); break;
         case OFFICEINSTALL:
         case OFFICEINSTALLURL:
             sPath += C2U("Office.Common/Path/Current"); break;
@@ -405,6 +413,7 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
             case INSTALLPATH:   sProperty = C2U("InstallPath"); break;
             case LOCALE:        sProperty = C2U("Locale"); break;
             case PRODUCTNAME:        sProperty = C2U("Name"); break;
+            case PRODUCTVERSION:        sProperty = C2U("Version"); break;
             case OFFICEINSTALL: sProperty = C2U("OfficeInstall"); break;
             case USERINSTALLURL:   sProperty = C2U("InstallURL"); break;
             case OFFICEINSTALLURL: sProperty = C2U("OfficeInstallURL"); break;
@@ -420,6 +429,9 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
 
     if ( eProp == PRODUCTNAME )
         aRet >>= aBrandName;
+
+    if ( eProp == PRODUCTVERSION )
+        aRet >>= aProductVersion;
 
     return aRet;
 }
