@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ab $ $Date: 2001-11-23 17:35:38 $
+ *  last change: $Author: ab $ $Date: 2001-11-26 13:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,7 @@ struct BasicManagerImpl
 
 BasicManagerImpl::~BasicManagerImpl()
 {
+    delete mpInfo;
     delete mpManagerStream;
     if( mppLibStreams )
     {
