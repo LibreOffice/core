@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setup.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 22:29:35 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 13:36:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,8 +125,9 @@ class SetupAppX : public SetupApp
 
     FILE       *m_pLogFile;
 
-    long             m_nLanguageCount;
-    LanguageDataX**  m_ppLanguageList;
+    long            m_nLanguageID;
+    long            m_nLanguageCount;
+    LanguageDataX** m_ppLanguageList;
 
 private:
 
