@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmresids.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-05 10:48:13 $
+ *  last change: $Author: fs $ $Date: 2001-07-25 13:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@
 #define RID_SVX_PROPBRW                             (RID_FORMS_START + 8)
 #define RID_SVXDLG_SETFORM                          (RID_FORMS_START + 9)
 #define RID_SVX_FMEXPLORER                          (RID_FORMS_START + 10)
-#define RID_SVXDLG_DBINFO                           (RID_FORMS_START + 11)
+// --------- free id -----------------
 #define RID_SVXDLG_FMMACRO                          (RID_FORMS_START + 12)
 #define RID_SVXDLG_FMFONT                           (RID_FORMS_START + 13)
 #define RID_SVXDLG_SEARCHFORM                       (RID_FORMS_START + 14)
@@ -130,7 +130,6 @@
 #define RID_SVX_DLG_SHOWGRIDCOLUMNS                 (RID_FORMS_START + 18)
 // --------- free id -----------------
 #define RID_SVX_DLG_LABELCONTROL                    (RID_FORMS_START + 20)
-#define RID_SVX_DLG_SQLEXCEPTIONDETAILS             (RID_FORMS_START + 21)
 
 // Menu-Id's -----------------------------------------------------------
 #define RID_FMEXPLORER_POPUPMENU                    (RID_FORMS_START + 0)
@@ -477,7 +476,7 @@
 // Ueberlaufpruefung -----------------------------------------------------
 
 // Dialog-Id's
-#define ACTFRM_RID_END RID_SVXDLG_DBINFO
+#define ACTFRM_RID_END RID_SVX_DLG_LABELCONTROL
 #if ACTFRM_RID_END > RID_FORMS_END
 #error Resource-Ueberlauf in #line, #file
 #endif
