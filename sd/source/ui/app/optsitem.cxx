@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-14 16:36:27 $
+ *  last change: $Author: cl $ $Date: 2000-11-17 16:53:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,13 +284,13 @@ void SdOptionsLayout::GetPropNameArray( const char**& ppNames, ULONG& rCount ) c
 
 BOOL SdOptionsLayout::ReadData( const Any* pValues )
 {
-    SetRulerVisible( *(sal_Bool*) pValues[ 0 ].getValue() );
-    SetHandlesBezier( *(sal_Bool*) pValues[ 1 ].getValue() );
-    SetMoveOutline( *(sal_Bool*) pValues[ 2 ].getValue() );
-    SetDragStripes( *(sal_Bool*) pValues[ 3 ].getValue() );
-    SetHelplines( *(sal_Bool*) pValues[ 4 ].getValue() );
-    SetMetric( *(sal_Int32*) pValues[ 5 ].getValue() );
-    SetDefTab( *(sal_Int32*) pValues[ 6 ].getValue() );
+    if( pValues[0].hasValue() ) SetRulerVisible( *(sal_Bool*) pValues[ 0 ].getValue() );
+    if( pValues[1].hasValue() ) SetHandlesBezier( *(sal_Bool*) pValues[ 1 ].getValue() );
+    if( pValues[2].hasValue() ) SetMoveOutline( *(sal_Bool*) pValues[ 2 ].getValue() );
+    if( pValues[3].hasValue() ) SetDragStripes( *(sal_Bool*) pValues[ 3 ].getValue() );
+    if( pValues[4].hasValue() ) SetHelplines( *(sal_Bool*) pValues[ 4 ].getValue() );
+    if( pValues[5].hasValue() ) SetMetric( *(sal_Int32*) pValues[ 5 ].getValue() );
+    if( pValues[6].hasValue() ) SetDefTab( *(sal_Int32*) pValues[ 6 ].getValue() );
 
     return TRUE;
 }
@@ -436,10 +436,10 @@ void SdOptionsContents::GetPropNameArray( const char**& ppNames, ULONG& rCount )
 
 BOOL SdOptionsContents::ReadData( const Any* pValues )
 {
-    SetExternGraphic( *(sal_Bool*) pValues[ 0 ].getValue() );
-    SetOutlineMode( *(sal_Bool*)pValues[ 1 ].getValue() );
-    SetHairlineMode( *(sal_Bool*) pValues[ 2 ].getValue() );
-    SetNoText( *(sal_Bool*) pValues[ 3 ].getValue() );
+    if( pValues[0].hasValue() ) SetExternGraphic( *(sal_Bool*) pValues[ 0 ].getValue() );
+    if( pValues[1].hasValue() ) SetOutlineMode( *(sal_Bool*)pValues[ 1 ].getValue() );
+    if( pValues[2].hasValue() ) SetHairlineMode( *(sal_Bool*) pValues[ 2 ].getValue() );
+    if( pValues[3].hasValue() ) SetNoText( *(sal_Bool*) pValues[ 3 ].getValue() );
 
     return TRUE;
 }
@@ -607,24 +607,24 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, ULONG& rCount ) con
 
 BOOL SdOptionsMisc::ReadData( const Any* pValues )
 {
-    SetMarkedHitMovesAlways( *(sal_Bool*) pValues[ 0 ].getValue() );
-    SetCrookNoContortion( *(sal_Bool*) pValues[ 1 ].getValue() );
-    SetQuickEdit( *(sal_Bool*)pValues[ 2 ].getValue() );
-    SetMasterPagePaintCaching( *(sal_Bool*) pValues[ 3 ].getValue() );
-    SetDragWithCopy( *(sal_Bool*) pValues[ 4 ].getValue() );
-    SetPickThrough( *(sal_Bool*) pValues[ 5 ].getValue() );
-    SetBigHandles( *(sal_Bool*) pValues[ 6 ].getValue() );
-    SetDoubleClickTextEdit( *(sal_Bool*) pValues[ 7 ].getValue() );
-    SetClickChangeRotation( *(sal_Bool*) pValues[ 8 ].getValue() );
-    SetPreviewQuality( *(sal_Int32*) pValues[ 9 ].getValue() );
-    SetSolidDragging( *(sal_Bool*) pValues[ 10 ].getValue() );
-    SetSolidMarkHdl( *(sal_Bool*) pValues[ 11 ].getValue() );
+    if( pValues[0].hasValue() ) SetMarkedHitMovesAlways( *(sal_Bool*) pValues[ 0 ].getValue() );
+    if( pValues[1].hasValue() ) SetCrookNoContortion( *(sal_Bool*) pValues[ 1 ].getValue() );
+    if( pValues[2].hasValue() ) SetQuickEdit( *(sal_Bool*)pValues[ 2 ].getValue() );
+    if( pValues[3].hasValue() ) SetMasterPagePaintCaching( *(sal_Bool*) pValues[ 3 ].getValue() );
+    if( pValues[4].hasValue() ) SetDragWithCopy( *(sal_Bool*) pValues[ 4 ].getValue() );
+    if( pValues[5].hasValue() ) SetPickThrough( *(sal_Bool*) pValues[ 5 ].getValue() );
+    if( pValues[6].hasValue() ) SetBigHandles( *(sal_Bool*) pValues[ 6 ].getValue() );
+    if( pValues[7].hasValue() ) SetDoubleClickTextEdit( *(sal_Bool*) pValues[ 7 ].getValue() );
+    if( pValues[8].hasValue() ) SetClickChangeRotation( *(sal_Bool*) pValues[ 8 ].getValue() );
+    if( pValues[9].hasValue() ) SetPreviewQuality( *(sal_Int32*) pValues[ 9 ].getValue() );
+    if( pValues[10].hasValue() ) SetSolidDragging( *(sal_Bool*) pValues[ 10 ].getValue() );
+    if( pValues[11].hasValue() ) SetSolidMarkHdl( *(sal_Bool*) pValues[ 11 ].getValue() );
 
     // just for Impress
     if( GetConfigId() == SDCFG_IMPRESS )
     {
-        SetStartWithTemplate( *(sal_Bool*) pValues[ 12 ].getValue() );
-        SetStartWithActualPage( *(sal_Bool*) pValues[ 13 ].getValue() );
+        if( pValues[12].hasValue() ) SetStartWithTemplate( *(sal_Bool*) pValues[ 12 ].getValue() );
+        if( pValues[13].hasValue() ) SetStartWithActualPage( *(sal_Bool*) pValues[ 13 ].getValue() );
     }
 
     return TRUE;
@@ -825,16 +825,16 @@ void SdOptionsSnap::GetPropNameArray( const char**& ppNames, ULONG& rCount ) con
 
 BOOL SdOptionsSnap::ReadData( const Any* pValues )
 {
-    SetSnapHelplines( *(sal_Bool*) pValues[ 0 ].getValue() );
-    SetSnapBorder( *(sal_Bool*)pValues[ 1 ].getValue() );
-    SetSnapFrame( *(sal_Bool*) pValues[ 2 ].getValue() );
-    SetSnapPoints( *(sal_Bool*) pValues[ 3 ].getValue() );
-    SetOrtho( *(sal_Bool*) pValues[ 4 ].getValue() );
-    SetBigOrtho( *(sal_Bool*) pValues[ 5 ].getValue() );
-    SetRotate( *(sal_Bool*) pValues[ 6 ].getValue() );
-    SetSnapArea( *(sal_Int32*) pValues[ 7 ].getValue() );
-    SetAngle( *(sal_Int32*) pValues[ 8 ].getValue() );
-    SetEliminatePolyPointLimitAngle( *(sal_Int32*) pValues[ 9 ].getValue() );
+    if( pValues[0].hasValue() ) SetSnapHelplines( *(sal_Bool*) pValues[ 0 ].getValue() );
+    if( pValues[1].hasValue() ) SetSnapBorder( *(sal_Bool*)pValues[ 1 ].getValue() );
+    if( pValues[2].hasValue() ) SetSnapFrame( *(sal_Bool*) pValues[ 2 ].getValue() );
+    if( pValues[3].hasValue() ) SetSnapPoints( *(sal_Bool*) pValues[ 3 ].getValue() );
+    if( pValues[4].hasValue() ) SetOrtho( *(sal_Bool*) pValues[ 4 ].getValue() );
+    if( pValues[5].hasValue() ) SetBigOrtho( *(sal_Bool*) pValues[ 5 ].getValue() );
+    if( pValues[6].hasValue() ) SetRotate( *(sal_Bool*) pValues[ 6 ].getValue() );
+    if( pValues[7].hasValue() ) SetSnapArea( *(sal_Int32*) pValues[ 7 ].getValue() );
+    if( pValues[8].hasValue() ) SetAngle( *(sal_Int32*) pValues[ 8 ].getValue() );
+    if( pValues[9].hasValue() ) SetEliminatePolyPointLimitAngle( *(sal_Int32*) pValues[ 9 ].getValue() );
 
     return TRUE;
 }
@@ -989,10 +989,10 @@ void SdOptionsZoom::GetPropNameArray( const char**& ppNames, ULONG& rCount ) con
 
 BOOL SdOptionsZoom::ReadData( const Any* pValues )
 {
-    INT32 nX, nY;
+    INT32 nX = 1, nY = 1;
 
-    nX = ( *(sal_Int32*) pValues[ 0 ].getValue() );
-    nY = ( *(sal_Int32*) pValues[ 1 ].getValue() );
+    if( pValues[0].hasValue() ) nX = ( *(sal_Int32*) pValues[ 0 ].getValue() );
+    if( pValues[1].hasValue() ) nY = ( *(sal_Int32*) pValues[ 1 ].getValue() );
 
     SetScale( nX, nY );
 
@@ -1147,16 +1147,16 @@ void SdOptionsGrid::GetPropNameArray( const char**& ppNames, ULONG& rCount ) con
 
 BOOL SdOptionsGrid::ReadData( const Any* pValues )
 {
-    SetFldDrawX( *(sal_Int32*) pValues[ 0 ].getValue() );
-    SetFldDivisionX( *(sal_Int32*) pValues[ 1 ].getValue() );
-    SetFldDrawY( *(sal_Int32*) pValues[ 2 ].getValue() );
-    SetFldDivisionY( *(sal_Int32*) pValues[ 3 ].getValue() );
-    SetFldSnapX( *(sal_Int32*) pValues[ 4 ].getValue() );
-    SetFldSnapY( *(sal_Int32*) pValues[ 5 ].getValue() );
-    SetUseGridSnap( *(sal_Bool*) pValues[ 6 ].getValue() );
-    SetSynchronize( *(sal_Bool*) pValues[ 7 ].getValue() );
-    SetGridVisible( *(sal_Bool*) pValues[ 8 ].getValue() );
-    SetEqualGrid( *(sal_Bool*) pValues[ 9 ].getValue() );
+    if( pValues[0].hasValue() ) SetFldDrawX( *(sal_Int32*) pValues[ 0 ].getValue() );
+    if( pValues[1].hasValue() ) SetFldDivisionX( *(sal_Int32*) pValues[ 1 ].getValue() );
+    if( pValues[2].hasValue() ) SetFldDrawY( *(sal_Int32*) pValues[ 2 ].getValue() );
+    if( pValues[3].hasValue() ) SetFldDivisionY( *(sal_Int32*) pValues[ 3 ].getValue() );
+    if( pValues[4].hasValue() ) SetFldSnapX( *(sal_Int32*) pValues[ 4 ].getValue() );
+    if( pValues[5].hasValue() ) SetFldSnapY( *(sal_Int32*) pValues[ 5 ].getValue() );
+    if( pValues[6].hasValue() ) SetUseGridSnap( *(sal_Bool*) pValues[ 6 ].getValue() );
+    if( pValues[7].hasValue() ) SetSynchronize( *(sal_Bool*) pValues[ 7 ].getValue() );
+    if( pValues[8].hasValue() ) SetGridVisible( *(sal_Bool*) pValues[ 8 ].getValue() );
+    if( pValues[9].hasValue() ) SetEqualGrid( *(sal_Bool*) pValues[ 9 ].getValue() );
 
     return TRUE;
 }
@@ -1343,25 +1343,25 @@ void SdOptionsPrint::GetPropNameArray( const char**& ppNames, ULONG& rCount ) co
 
 BOOL SdOptionsPrint::ReadData( const Any* pValues )
 {
-    SetDraw( *(sal_Bool*) pValues[ 0 ].getValue() );
-    SetDate( *(sal_Bool*) pValues[ 1 ].getValue() );
-    SetTime( *(sal_Bool*) pValues[ 2 ].getValue() );
-    SetPagename( *(sal_Bool*) pValues[ 3 ].getValue() );
-    SetHiddenPages( *(sal_Bool*) pValues[ 4 ].getValue() );
-    SetPagesize( *(sal_Bool*) pValues[ 5 ].getValue() );
-    SetPagetile( *(sal_Bool*) pValues[ 6 ].getValue() );
-    SetBooklet( *(sal_Bool*) pValues[ 7 ].getValue() );
-    SetFrontPage( *(sal_Bool*) pValues[ 8 ].getValue() );
-    SetBackPage( *(sal_Bool*) pValues[ 9 ].getValue() );
-    SetPaperbin( *(sal_Bool*) pValues[ 10 ].getValue() );
-    SetOutputQuality( *(sal_Int32*) pValues[ 11 ].getValue() );
+    if( pValues[0].hasValue() ) SetDraw( *(sal_Bool*) pValues[ 0 ].getValue() );
+    if( pValues[1].hasValue() ) SetDate( *(sal_Bool*) pValues[ 1 ].getValue() );
+    if( pValues[2].hasValue() ) SetTime( *(sal_Bool*) pValues[ 2 ].getValue() );
+    if( pValues[3].hasValue() ) SetPagename( *(sal_Bool*) pValues[ 3 ].getValue() );
+    if( pValues[4].hasValue() ) SetHiddenPages( *(sal_Bool*) pValues[ 4 ].getValue() );
+    if( pValues[5].hasValue() ) SetPagesize( *(sal_Bool*) pValues[ 5 ].getValue() );
+    if( pValues[6].hasValue() ) SetPagetile( *(sal_Bool*) pValues[ 6 ].getValue() );
+    if( pValues[7].hasValue() ) SetBooklet( *(sal_Bool*) pValues[ 7 ].getValue() );
+    if( pValues[8].hasValue() ) SetFrontPage( *(sal_Bool*) pValues[ 8 ].getValue() );
+    if( pValues[9].hasValue() ) SetBackPage( *(sal_Bool*) pValues[ 9 ].getValue() );
+    if( pValues[10].hasValue() ) SetPaperbin( *(sal_Bool*) pValues[ 10 ].getValue() );
+    if( pValues[11].hasValue() ) SetOutputQuality( *(sal_Int32*) pValues[ 11 ].getValue() );
 
     // just for impress
     if( GetConfigId() == SDCFG_IMPRESS )
     {
-        SetNotes( *(sal_Bool*) pValues[ 12 ].getValue() );
-        SetHandout( *(sal_Bool*) pValues[ 13 ].getValue() );
-        SetOutline( *(sal_Bool*) pValues[ 14 ].getValue() );
+        if( pValues[12].hasValue() ) SetNotes( *(sal_Bool*) pValues[ 12 ].getValue() );
+        if( pValues[13].hasValue() ) SetHandout( *(sal_Bool*) pValues[ 13 ].getValue() );
+        if( pValues[14].hasValue() ) SetOutline( *(sal_Bool*) pValues[ 14 ].getValue() );
     }
 
     return TRUE;
