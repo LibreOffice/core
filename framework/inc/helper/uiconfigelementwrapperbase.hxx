@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiconfigelementwrapperbase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 16:49:43 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:24:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,20 +86,20 @@
 //  interface includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUIELEMENT_HPP_
-#include <drafts/com/sun/star/ui/XUIElement.hpp>
+#ifndef _COM_SUN_STAR_UI_XUIELEMENT_HPP_
+#include <com/sun/star/ui/XUIElement.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUIELEMENTSETTINGS_HPP_
-#include <drafts/com/sun/star/ui/XUIElementSettings.hpp>
+#ifndef _COM_SUN_STAR_UI_XUIELEMENTSETTINGS_HPP_
+#include <com/sun/star/ui/XUIElementSettings.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGER_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationManager.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGER_HPP_
+#include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONLISTENER_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationListener.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONLISTENER_HPP_
+#include <com/sun/star/ui/XUIConfigurationListener.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
@@ -146,12 +146,12 @@ namespace framework
 {
 
 class UIConfigElementWrapperBase : public ::com::sun::star::lang::XTypeProvider                  ,
-                                   public ::drafts::com::sun::star::ui::XUIElement               ,
-                                   public ::drafts::com::sun::star::ui::XUIElementSettings       ,
+                                   public ::com::sun::star::ui::XUIElement               ,
+                                   public ::com::sun::star::ui::XUIElementSettings       ,
                                    public ::com::sun::star::lang::XInitialization                ,
                                    public ::com::sun::star::lang::XComponent                     ,
                                    public ::com::sun::star::util::XUpdatable                     ,
-                                   public ::drafts::com::sun::star::ui::XUIConfigurationListener ,
+                                   public ::com::sun::star::ui::XUIConfigurationListener ,
                                    protected ThreadHelpBase                                      ,
                                    public ::cppu::OBroadcastHelper                               ,
                                    public ::cppu::OPropertySetHelper                             ,
@@ -190,9 +190,9 @@ class UIConfigElementWrapperBase : public ::com::sun::star::lang::XTypeProvider 
         virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException);
 
         //  XUIConfigurationListener
-        virtual void SAL_CALL elementInserted( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL elementRemoved( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL elementReplaced( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL elementInserted( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL elementRemoved( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
 
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw(::com::sun::star::uno::RuntimeException);
@@ -223,7 +223,7 @@ class UIConfigElementWrapperBase : public ::com::sun::star::lang::XTypeProvider 
                                                                                                 m_bConfigListening : 1,
                                                                                                 m_bDisposed : 1;
         rtl::OUString                                                                           m_aResourceURL;
-        com::sun::star::uno::Reference< drafts::com::sun::star::ui::XUIConfigurationManager >   m_xConfigSource;
+        com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >   m_xConfigSource;
         com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >               m_xConfigData;
         com::sun::star::uno::WeakReference< com::sun::star::frame::XFrame >                     m_xWeakFrame;
         com::sun::star::uno::Reference< com::sun::star::awt::XMenuBar >                         m_xMenuBar;

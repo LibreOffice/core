@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uielementwrapperbase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 16:49:57 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,8 @@
 //  interface includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUIELEMENT_HPP_
-#include <drafts/com/sun/star/ui/XUIElement.hpp>
+#ifndef _COM_SUN_STAR_UI_XUIELEMENT_HPP_
+#include <com/sun/star/ui/XUIElement.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
@@ -130,7 +130,7 @@ namespace framework
 {
 
 class UIElementWrapperBase : public ::com::sun::star::lang::XTypeProvider       ,
-                             public ::drafts::com::sun::star::ui::XUIElement    ,
+                             public ::com::sun::star::ui::XUIElement    ,
                              public ::com::sun::star::lang::XInitialization     ,
                              public ::com::sun::star::lang::XComponent          ,
                              public ::com::sun::star::util::XUpdatable          ,
