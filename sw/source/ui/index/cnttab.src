@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:56:26 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:46:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2943,7 +2943,7 @@ TabPage TP_TOX_ENTRY
         Text[ portuguese_brazilian ] = "All levels";
         Text[ japanese ] = "‚·‚×‚Ä‚ÌÚÍŞÙ(~A)";
         Text[ korean ] = "¸ğµç ¼öÁØ(~A)";
-        Text[ chinese_simplified ] = "ËùÓĞµÈ¼¶(~A)";
+        Text[ chinese_simplified ] = "È«²¿µÄ¼¶(~A)";
         Text[ chinese_traditional ] = "©Ò¦³ªº¯Å(~A)";
         Text[ arabic ] = "ßá ÇáãÓÊæíÇÊ";
         Text[ turkish ] = "Tüm düzeyler";
@@ -3521,7 +3521,7 @@ TabPage TP_TOX_ENTRY
         Text[ japanese ] = "‰E‘µ‚¦(~O)";
         Text[ korean ] = "¿À¸¥ÂÊ ¸ÂÃã";
         Text[ chinese_simplified ] = "ÓÒ¶ÔÆë";
-        Text[ chinese_traditional ] = "¾a¥k¹ï»ô";
+        Text[ chinese_traditional ] = "¦V¥k¹ï»ô";
         Text[ turkish ] = "Sağ kenar";
         Text[ arabic ] = "Úáì ÇáåÇãÔ ÇáÃíãä";
         Text[ catalan ] = "Al bor~de derecho";
@@ -3714,7 +3714,7 @@ TabPage TP_TOX_ENTRY
         Text[ russian ] = "Ïîëîæåíèå äîêóìåíòà  ";
         Text[ greek ] = "Èİóç åããñÜöïõ ";
         Text[ dutch ] = "Document~positie  ";
-        Text[ french ] = "~Emplacement ds le document   ";
+        Text[ french ] = "~Emplacement dans le document ";
         Text[ spanish ] = "P~osición del documento ";
         Text[ italian ] = "~Posizione del documento  ";
         Text[ danish ] = "Dokumentets placering ";
@@ -4804,6 +4804,7 @@ ModalDialog DLG_CREATE_AUTOMARK
     Text[ catalan ] = "Editar archivo de concordancia";
     Text[ finnish ] = "Muokkaa vastaavuustiedostoa";
 };
+
 
 
 
