@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:18:38 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 19:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,7 @@ ModelessDialog RID_SCDLG_AREAS
         Text [ SWEDISH ] = "Upprepningsrad" ;
         Text [ PORTUGUESE ] = "Linha a repetir" ;
         Text[ chinese_simplified ] = "ЦШёґµДРР";
-        Text[ russian ] = "Повтор строки";
+        Text[ russian ] = "Строка повтора";
         Text[ polish ] = "Powtarzaj wiersz";
         Text[ japanese ] = "ЊJ‚и•Ф‚·Ќs";
         Text[ chinese_traditional ] = "­«ЅЖ¦C";
@@ -495,7 +495,7 @@ ModelessDialog RID_SCDLG_AREAS
         Text [ SWEDISH ] = "Upprepningskolumn" ;
         Text [ PORTUGUESE ] = "Coluna a repetir" ;
         Text[ chinese_simplified ] = "ЦШёґБР";
-        Text[ russian ] = "Повтор столбца";
+        Text[ russian ] = "Колонка повтора";
         Text[ polish ] = "Powtarzaj kolumny";
         Text[ japanese ] = "ЊJ‚и•Ф‚·—с";
         Text[ chinese_traditional ] = "­«ЅЖДж";
