@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: pl $ $Date: 2002-06-10 17:27:28 $
+ *  last change: $Author: pl $ $Date: 2002-06-19 11:58:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 #include <unistd.h>
 #include <ctype.h>
 #include <string.h>
+
+#ifdef SOLARIS
+#include <alloca.h>
+#endif
 
 #ifdef __SunOS_5_5_1
 extern "C" { int gethostname(char*,int); }
@@ -602,7 +606,7 @@ BOOL SalDisplay::BestVisual( Display     *pDisplay,
                                            &aVI, &nVisuals );
     // pVInfos should contain at least one visual, otherwise
     // we're in trouble
-    int* pWeight = new int[ nVisuals ];
+    int* pWeight = (int*)alloca( sizeof(int)*nVisuals );
     int i;
     for( i = 0; i < nVisuals; i++ )
     {
@@ -2366,7 +2370,7 @@ void SalDisplay::AddFontPath( const ByteString &rPath ) const
         int     nPaths          = 0;
         char  **pOldFontPath    = XGetFontPath( pDisp_, &nPaths );
         int     nOriginalPaths  = nPaths;
-        char  **pNewFontPath    = new char*[nPaths+nCount];
+        char  **pNewFontPath    = (char**)alloca(sizeof(char*)*(nPaths+nCount));
         BOOL    bOld            = pXLib_->GetIgnoreXErrors();
 
         for( i = 0; i < nPaths; i++ )
@@ -2385,22 +2389,20 @@ void SalDisplay::AddFontPath( const ByteString &rPath ) const
                 if (   (i == nPaths)
                     && sal_IsValidFontpath(aPathName, GetServerVendor()) )
                 {
-                    pNewFontPath[nPaths] = new char[aPathName.Len()+1];
-                    strcpy( pNewFontPath[nPaths++], aPathName.GetBuffer() );
+                    pNewFontPath[nPaths++] = strdup( aPathName.GetBuffer() );
                     pXLib_->SetIgnoreXErrors( TRUE ); // reset WasXError
 
                     XSetFontPath( pDisp_, pNewFontPath, nPaths );
                     XSync( pDisp_, False );
                     if( pXLib_->WasXError() )
-                        delete pNewFontPath[--nPaths];
+                        free( pNewFontPath[--nPaths] );
                 }
             }
         }
 
         while( nPaths-- > nOriginalPaths )
-            delete pNewFontPath[ nPaths ];
+            free( pNewFontPath[ nPaths ] );
 
-        delete pNewFontPath;
         XFreeFontPath( pOldFontPath );
 
 
@@ -3335,8 +3337,8 @@ SalColormap::~SalColormap()
         && pDisplay_->IsDisplay()
         && hColormap_ != DefaultColormap( GetXDisplay(), pDisplay_->GetScreenNumber() ) )
         XFreeColormap( GetXDisplay(), hColormap_ );
-    delete pPalette_;
-    delete pLookupTable_;
+    delete [] pPalette_;
+    delete [] pLookupTable_;
     if( pVisual_ != pDisplay_->GetVisual() )
         delete pVisual_;
 
@@ -3362,7 +3364,7 @@ void SalColormap::SetPalette( const BitmapPalette &rPalette )
     {
         nBlackPixel_ = 0xFFFFFFFF;
         nWhitePixel_ = 0xFFFFFFFF;
-        delete pPalette_;
+        delete [] pPalette_;
         pPalette_ = new SalColor[rPalette.GetEntryCount()];
         nUsed_ = rPalette.GetEntryCount();
     }
@@ -3403,7 +3405,7 @@ void SalColormap::GetPalette()
                                       aColor[i].blue  >> 8 );
     }
 
-    delete aColor;
+    delete [] aColor;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
