@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:51:00 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:55:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,10 +107,10 @@ struct ScMyImportAnnotation
     rtl::OUString sAuthor;
     rtl::OUString sCreateDate;
     rtl::OUString sText;
+    sal_Bool bDisplay;
     Rectangle* pRect;
     SfxItemSet* pItemSet;
     OutlinerParaObject* pOPO;
-    sal_Bool bDisplay;
 
     ScMyImportAnnotation() : pItemSet(NULL), pOPO(NULL), pRect(NULL) {}
     ~ScMyImportAnnotation();
@@ -134,15 +134,15 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     sal_Int32   nCellsRepeated;
     ScXMLImport& rXMLImport;
     sal_Int16   nCellType;
-    sal_Bool    bIsMerged : 1;
-    sal_Bool    bIsMatrix : 1;
-    sal_Bool    bHasSubTable : 1;
-    sal_Bool    bIsCovered : 1;
-    sal_Bool    bIsEmpty : 1;
-    sal_Bool    bHasTextImport : 1;
-    sal_Bool    bIsFirstTextImport : 1;
-    sal_Bool    bSolarMutexLocked : 1;
-    sal_Bool    bFormulaTextResult : 1;
+    sal_Bool    bIsMerged;
+    sal_Bool    bIsMatrix;
+    sal_Bool    bHasSubTable;
+    sal_Bool    bIsCovered;
+    sal_Bool    bIsEmpty;
+    sal_Bool    bHasTextImport;
+    sal_Bool    bIsFirstTextImport;
+    sal_Bool    bSolarMutexLocked;
+    sal_Bool    bFormulaTextResult;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
