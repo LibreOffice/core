@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: dr $ $Date: 2001-11-08 14:00:52 $
+#   last change: $Author: hjs $ $Date: 2003-08-18 14:42:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -144,6 +144,11 @@ EXCEPTIONSFILES= \
 .IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCPOWERPC"
 NOOPTFILES= \
                 $(SLO)$/subtotal.obj
+.ENDIF
+
+.IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCSPARC"
+NOOPTFILES= \
+        $(SLO)$/interpr4.obj
 .ENDIF
 
 .IF "$(GUI)"=="OS2"
