@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-24 11:45:01 $
+ *  last change: $Author: cl $ $Date: 2002-05-23 07:49:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,9 @@
 #endif
 #ifndef _WMF_HXX
 #include <svtools/wmf.hxx>
+#endif
+#ifndef _SVDOOLE2_HXX
+#include <svx/svdoole2.hxx>
 #endif
 
 #include <svx/svdview.hxx>
@@ -1437,6 +1440,8 @@ sal_Bool SAL_CALL SdPageLinkTargets::hasElements()
         {
             SdrObject* pObj = aIter.Next();
             String aStr( pObj->GetName() );
+            if( !aStr.Len() && pObj->ISA( SdrOle2Obj ) )
+                aStr = static_cast< const SdrOle2Obj* >( pObj )->GetPersistName();
             if( aStr.Len() )
                 return sal_True;
         }
@@ -1482,6 +1487,8 @@ uno::Sequence< OUString > SAL_CALL SdPageLinkTargets::getElementNames()
         {
             SdrObject* pObj = aIter.Next();
             String aStr( pObj->GetName() );
+            if( !aStr.Len() && pObj->ISA( SdrOle2Obj ) )
+                aStr = static_cast< const SdrOle2Obj* >( pObj )->GetPersistName();
             if( aStr.Len() )
                 nObjCount++;
         }
@@ -1497,6 +1504,8 @@ uno::Sequence< OUString > SAL_CALL SdPageLinkTargets::getElementNames()
         {
             SdrObject* pObj = aIter.Next();
             String aStr( pObj->GetName() );
+            if( !aStr.Len() && pObj->ISA( SdrOle2Obj ) )
+                aStr = static_cast< const SdrOle2Obj* >( pObj )->GetPersistName();
             if( aStr.Len() )
                 *pStr++ = aStr;
         }
@@ -1528,6 +1537,8 @@ SdrObject* SdPageLinkTargets::FindObject( const String& rName ) const throw()
     {
         SdrObject* pObj = aIter.Next();
         String aStr( pObj->GetName() );
+        if( !aStr.Len() && pObj->ISA( SdrOle2Obj ) )
+            aStr = static_cast< const SdrOle2Obj* >( pObj )->GetPersistName();
         if( aStr.Len() && (aStr == rName) )
             return pObj;
     }
