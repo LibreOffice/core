@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:11:23 $
+ *  last change: $Author: obo $ $Date: 2004-02-16 11:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,8 @@ SwPageFrm * MA_FASTCALL InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
 void RegistFlys( SwPageFrm*, const SwLayoutFrm* );
 
 //Benachrichtung des Fly Hintergrundes wenn Notwendig.
-void Notify( SwFlyFrm *pFly, SwPageFrm *pOld, const SwRect &rOld );
+void Notify( SwFlyFrm *pFly, SwPageFrm *pOld, const SwRect &rOld,
+             const SwRect* pOldRect = 0 );
 
 void Notify_Background( SdrObject *pObj, SwPageFrm *pPage, const SwRect& rRect,
                         const PrepareHint eHint, const BOOL bInva );
