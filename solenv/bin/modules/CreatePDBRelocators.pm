@@ -2,9 +2,9 @@
 #
 #   $RCSfile: CreatePDBRelocators.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2003-08-07 11:43:52 $
+#   last change: $Author: rt $ $Date: 2004-08-23 08:44:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -116,34 +116,8 @@ sub create_pdb_relocators
     }
 
     # collect files
-    my $template = "$o/*/$inpath";
     my @pdb_files;
-    if ( $^O eq 'MSWin32' ) {
-        # collect all pdb files on o:
-        # regular glob does not work with two wildcard on WNT
-        my @bin    = glob("$template/bin/*.pdb");
-        my @bin_so = glob("$template/bin/so/*.pdb");
-        # we are only interested in pdb files which are accompanied by
-        # .exe or .dll which the same name
-        foreach (@bin, @bin_so) {
-            my $dir  = dirname($_);
-            my $base = basename($_, ".pdb");
-            my $exe = "$dir/$base.exe";
-            my $dll = "$dir/$base.dll";
-            if ( -e $exe || -e $dll ) {
-                push(@pdb_files, $_);
-            }
-        }
-    }
-    else {
-        # collect all shared libraries on o:
-        my @lib = glob("$template/lib/*.so*");
-        my @lib_so = glob("$template/lib/so/*.so*");
-        # collect all binary executables on o:
-        my @bin = find_binary_execs("$template/bin");
-        my @bin_so = find_binary_execs("$template/bin/so");
-        @pdb_files = (@lib, @lib_so, @bin, @bin_so);
-    }
+    collect_files( $o, $inpath, \@pdb_files);
 
     foreach (@pdb_files) {
         my $relocator = basename($_) . ".location";
@@ -170,6 +144,39 @@ sub create_pdb_relocators
         }
         print RELOCATOR "$location\n";
         close(RELOCATOR);
+    }
+    return 1;
+}
+
+sub collect_files
+{
+    my ($srcdir, $platform, $filesref) = @_;
+    my $template = "$srcdir/*/$platform";
+    if ( $^O eq 'MSWin32' ) {
+        # collect all pdb files on o:
+        # regular glob does not work with two wildcard on WNT
+        my @bin    = glob("$template/bin/*.pdb");
+        my @bin_so = glob("$template/bin/so/*.pdb");
+        # we are only interested in pdb files which are accompanied by
+        # .exe or .dll which the same name
+        foreach (@bin, @bin_so) {
+            my $dir  = dirname($_);
+            my $base = basename($_, ".pdb");
+            my $exe = "$dir/$base.exe";
+            my $dll = "$dir/$base.dll";
+            if ( -e $exe || -e $dll ) {
+                push(@$filesref, $_);
+            }
+        }
+    }
+    else {
+        # collect all shared libraries on o:
+        my @lib = glob("$template/lib/*.so*");
+        my @lib_so = glob("$template/lib/so/*.so*");
+        # collect all binary executables on o:
+        my @bin = find_binary_execs("$template/bin");
+        my @bin_so = find_binary_execs("$template/bin/so");
+        @$filesref = (@lib, @lib_so, @bin, @bin_so);
     }
     return 1;
 }
