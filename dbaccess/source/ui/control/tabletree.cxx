@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:16:28 $
+ *  last change: $Author: oj $ $Date: 2001-03-29 07:09:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,17 +392,17 @@ void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _r
         SvLBoxEntry* pSchema = NULL;
         SvLBoxEntry* pParent = pAllObjects;
 
-        // loop through both sequences
-        const ::rtl::OUString* pSwitchSequences = (pTables && pViews) ? pTables + _rTables.getLength() - 1 : NULL;
+        // loop through both sequences  first the vies and than the tables
+        const ::rtl::OUString* pSwitchSequences = (pTables && pViews) ? pViews + _rViews.getLength() - 1 : NULL;
 
         sal_Int32 nOverallLen = _rTables.getLength() + _rViews.getLength();
-        const ::rtl::OUString* pCurrentTable = pTables ? pTables : pViews;  // currently handled table or view name
-        sal_Bool bIsView = pTables ? sal_False : sal_True;  // pCurrentTable points to a view name ?
+        const ::rtl::OUString* pCurrentTable = pViews ? pViews : pTables;   // currently handled view or table name
+        sal_Bool bIsView = pViews ? sal_True : sal_False;   // pCurrentTable points to a view name ?
         for (   sal_Int32 i = 0;
                 i < nOverallLen;
                 ++i                                                                 // inc the counter
                 ,   (   pSwitchSequences == pCurrentTable                           // did we reached the last table ?
-                    ?   bIsView = ((pCurrentTable = pViews) != NULL)                    // yes -> continue with the views, and set bIsView to sal_True
+                    ?   bIsView = !((pCurrentTable = pTables) != NULL)                  // yes -> continue with the views, and set bIsView to sal_True
                     :   ++pCurrentTable != NULL                                         // no -> next table
                     )                                                                   //  (!= NULL is to make this a boolean expression, so it should work under SUNPRO5, too)
             )
@@ -431,7 +431,8 @@ void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _r
                 pParent = pSchema;
             }
 
-            InsertEntry(sName, aImage, aImage, pParent);
+            if(!GetEntryPosByName(sName,pParent)) // only insert a table once
+                InsertEntry(sName, aImage, aImage, pParent);
         }
     }
     catch(RuntimeException&)
@@ -439,7 +440,6 @@ void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _r
         DBG_ERROR("OTableTreeListBox::UpdateTableList : caught a RuntimeException!");
     }
 }
-
 //------------------------------------------------------------------------
 sal_Bool OTableTreeListBox::isWildcardChecked(SvLBoxEntry* _pEntry) const
 {
@@ -526,6 +526,9 @@ void OTableTreeListBox::InitEntry(SvLBoxEntry* _pEntry, const XubString& _rStrin
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/02/23 15:16:28  oj
+ *  use namespace
+ *
  *  Revision 1.8  2001/02/05 14:44:53  oj
  *  new member for hiding first entry
  *

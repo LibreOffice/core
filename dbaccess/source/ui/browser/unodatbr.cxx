@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-23 10:57:10 $
+ *  last change: $Author: oj $ $Date: 2001-03-29 07:09:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1430,7 +1430,7 @@ void SbaTableQueryBrowser::initializeTreeModel()
 sal_Bool SbaTableQueryBrowser::populateTree(const Reference<XNameAccess>& _xNameAccess, SvLBoxEntry* _pParent, const Image& _rImage)
 {
     DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(_pParent->GetUserData());
-    if(pData)
+    if(pData) // don't ask if the nameaccess is already set see OnExpandEntry views and tables
         pData->xObject = _xNameAccess;
 
     try
@@ -1439,7 +1439,8 @@ sal_Bool SbaTableQueryBrowser::populateTree(const Reference<XNameAccess>& _xName
         const ::rtl::OUString* pBegin   = aNames.getConstArray();
         const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
         for (; pBegin != pEnd; ++pBegin)
-            m_pTreeView->getListBox()->InsertEntry(*pBegin, _rImage, _rImage, _pParent, sal_False);
+            if(!m_pTreeView->getListBox()->GetEntryPosByName(*pBegin,_pParent))
+                m_pTreeView->getListBox()->InsertEntry(*pBegin, _rImage, _rImage, _pParent, sal_False);
     }
     catch(Exception&)
     {
@@ -1482,17 +1483,9 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
             if (xWarnings.is())
                 xWarnings->clearWarnings();
 
-            Reference<XTablesSupplier> xTabSup(xConnection,UNO_QUERY);
-            if(xTabSup.is())
-            {
-                Image aImage(ModuleRes(TABLE_TREE_ICON));
-                populateTree(xTabSup->getTables(),_pParent,aImage);
-                Reference<XContainer> xCont(xTabSup->getTables(),UNO_QUERY);
-                if(xCont.is())
-                    // add as listener to know when elements are inserted or removed
-                    xCont->addContainerListener(this);
-            }
-
+            // first insert the views because the tables can also include
+            // views but that time the bitmap is the wrong one
+            // the nameaccess will be overwriten in populateTree
             Reference<XViewsSupplier> xViewSup(xConnection,UNO_QUERY);
             if(xViewSup.is())
             {
@@ -1501,6 +1494,17 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
                 Reference<XContainer> xCont(xViewSup->getViews(),UNO_QUERY);
                 if(xCont.is())
                     // add as listener to get notified if elements are inserted or removed
+                    xCont->addContainerListener(this);
+            }
+
+            Reference<XTablesSupplier> xTabSup(xConnection,UNO_QUERY);
+            if(xTabSup.is())
+            {
+                Image aImage(ModuleRes(TABLE_TREE_ICON));
+                populateTree(xTabSup->getTables(),_pParent,aImage);
+                Reference<XContainer> xCont(xTabSup->getTables(),UNO_QUERY);
+                if(xCont.is())
+                    // add as listener to know when elements are inserted or removed
                     xCont->addContainerListener(this);
             }
 
@@ -2626,11 +2630,11 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
         aPosition = _rEvent.GetMousePosPixel();
         // ensure that the entry which the user clicked at is selected
         pEntry = m_pTreeView->getListBox()->GetEntry(aPosition);
-        if (!pEntry)
-            // no context menu of no entry was hit ....
-            return sal_False;
-
-        OSL_ENSURE(pEntry,"No current entry!");
+//      if (!pEntry)
+//          // no context menu of no entry was hit ....
+//          return sal_False;
+//
+//      OSL_ENSURE(pEntry,"No current entry!");
         if (pEntry && !m_pTreeView->getListBox()->IsSelected(pEntry))
         {
             pOldSelection = m_pTreeView->getListBox()->FirstSelected();
@@ -2652,11 +2656,15 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
     // disable entries according to the currently selected entry
 
     // does the datasource which the selected entry belongs to has an open connection ?
-    SvLBoxEntry* pDSEntry = m_pTreeView->getListBox()->GetRootLevelParent(pEntry);
-    DBTreeListModel::DBTreeListUserData* pDSData =
-                pDSEntry
-            ?   static_cast<DBTreeListModel::DBTreeListUserData*>(pDSEntry->GetUserData())
-            :   NULL;
+    SvLBoxEntry* pDSEntry = NULL;
+    DBTreeListModel::DBTreeListUserData* pDSData = NULL;
+    if(pEntry)
+    {
+        pDSEntry = m_pTreeView->getListBox()->GetRootLevelParent(pEntry);
+        pDSData =   pDSEntry
+                ?   static_cast<DBTreeListModel::DBTreeListUserData*>(pDSEntry->GetUserData())
+                :   NULL;
+    }
     if (!pDSData || !pDSData->xObject.is())
     {   // no -> disable the connection-related menu entries
         aContextMenu.EnableItem(ID_TREE_CLOSE_CONN, sal_False);
@@ -2702,6 +2710,31 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
         aContextMenu.EnableItem(ID_TREE_QUERY_EDIT,     ET_QUERY == eType);
         aContextMenu.EnableItem(ID_TREE_QUERY_DELETE,   ET_QUERY == eType);
         aContextMenu.EnableItem(ID_TREE_QUERY_COPY,     ET_QUERY == eType);
+    }
+    else
+    {
+        // 1.1 new table / edit relations - available if a table or a table container is selected
+        aContextMenu.EnableItem(ID_TREE_TABLE_CREATE_DESIGN, FALSE);
+        aContextMenu.EnableItem(ID_TREE_RELATION_DESIGN,     FALSE);
+
+        // 1.2 pasting tables
+        aContextMenu.EnableItem(ID_TREE_TABLE_PASTE, FALSE);
+
+        // 1.3 actions on existing tables
+        aContextMenu.EnableItem(ID_TREE_TABLE_EDIT,     FALSE);
+        aContextMenu.EnableItem(ID_TREE_TABLE_DELETE,   FALSE);
+        aContextMenu.EnableItem(ID_TREE_TABLE_COPY,     FALSE);
+
+        // 2. for queries
+
+        // 2.1 creating new queries
+        aContextMenu.EnableItem(ID_TREE_QUERY_CREATE_DESIGN, FALSE);
+        aContextMenu.EnableItem(ID_TREE_QUERY_CREATE_TEXT, FALSE);
+
+        // 2.2 actions on existing queries
+        aContextMenu.EnableItem(ID_TREE_QUERY_EDIT,     FALSE);
+        aContextMenu.EnableItem(ID_TREE_QUERY_DELETE,   FALSE);
+        aContextMenu.EnableItem(ID_TREE_QUERY_COPY,     FALSE);
     }
 
     // rebuild conn not implemented yet
