@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interceptionhelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:12:43 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 14:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,6 @@
 #include <threadhelp/threadhelpbase.hxx>
 #endif
 
-#ifndef __FRAMEWORK_CLASSES_WILDCARD_HXX_
-#include <classes/wildcard.hxx>
-#endif
-
 #ifndef __FRAMEWORK_MACROS_XINTERFACE_HXX_
 #include <macros/xinterface.hxx>
 #endif
@@ -129,6 +125,10 @@
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
+
+#ifndef _WLDCRD_HXX
+#include <tools/wldcrd.hxx>
+#endif
 
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
@@ -240,9 +240,11 @@ class InterceptionHelper : public  css::frame::XDispatchProvider
                 {
                     sal_Int32              c        = pIt->lURLPattern.getLength();
                     const ::rtl::OUString* pPattern = pIt->lURLPattern.getConstArray();
+
                     for (sal_Int32 i=0; i<c; ++i)
                     {
-                        if (Wildcard::match(sURL, pPattern[i]))
+                        WildCard aPattern(pPattern[i]);
+                        if (aPattern.Matches(sURL))
                             return pIt;
                     }
                 }
