@@ -2,9 +2,9 @@
  *
  *  $RCSfile: closedispatcher.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:33:23 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 16:55:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -765,6 +765,13 @@ sal_Bool CloseDispatcher::impl_establishBackingMode()
 
 sal_Bool CloseDispatcher::impl_exitApp( css::uno::Reference< css::frame::XFrame >& xTarget )
 {
+    // Attention: The calli of this method must hold this instance alive till this call
+    // will be finished. Because we destroy our direct owner m_xTarget here, which may be
+    // holds the last reference to us.
+
+    if (!impl_closeFrame(xTarget, sal_True))
+        return sal_False;
+
     // SAFE {
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::frame::XDesktop > xDesktop(m_xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY);
