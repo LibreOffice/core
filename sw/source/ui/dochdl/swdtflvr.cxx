@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 15:27:40 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:26:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,11 +74,18 @@
 #ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
 #include <com/sun/star/embed/Aspects.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDOBJECTCLIPBOARDCREATOR_HPP_
+#include <com/sun/star/embed/XEmbedObjectClipboardCreator.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
+#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
+#endif
 
 #include <svtools/embedtransfer.hxx>
 #include <svtools/insdlg.hxx>
 #include <unotools/tempfile.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/processfactory.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <sot/filelist.hxx>
 #include <svx/svxdlg.hxx>
@@ -1895,13 +1902,6 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
 
         nFmt = nId;
     }
-    else
-    {
-        // try other formats
-        if( rData.HasFormat( nFmt = SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE ) && rData.GetTransferableObjectDescriptor( nFmt, aObjDesc ) )
-            if ( !rData.GetInputStream( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, xStrm ) )
-                rData.GetInputStream( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, xStrm );
-    }
 
     if( pRead )
     {
@@ -1912,13 +1912,52 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
         else if( bMsg )
             InfoBox( 0, SW_RES(ERR_CLPBRD_READ) ).Execute();
     }
-    else if ( xStrm.is() )
+    else
     {
-        // temporary storage until the object is inserted
-        comphelper::EmbeddedObjectContainer aCnt;
+           // temporary storage until the object is inserted
+        uno::Reference< embed::XStorage > xTmpStor;
         com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > xObj;
         ::rtl::OUString aName;
-        xObj = aCnt.InsertEmbeddedObject( xStrm, aName );
+
+        if ( !xStrm.is() )
+        {
+            // try other formats
+            if( rData.HasFormat( nFmt = SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE ) && rData.GetTransferableObjectDescriptor( nFmt, aObjDesc ) )
+            {
+                if ( !rData.GetInputStream( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, xStrm ) )
+                    rData.GetInputStream( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, xStrm );
+
+                if ( !xStrm.is() )
+                {
+                    // This is MSOLE object that should be created by direct using of system clipboard
+                    try
+                    {
+                        xTmpStor = ::comphelper::OStorageHelper::GetTemporaryStorage();
+                        uno::Reference < embed::XEmbedObjectClipboardCreator > xClipboardCreator(
+                            ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString(
+                                            RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.MSOLEObjectSystemCreator")) ),
+                            uno::UNO_QUERY_THROW );
+
+                        embed::InsertedObjectInfo aInfo = xClipboardCreator->createInstanceInitFromClipboard(
+                                                            xTmpStor,
+                                                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "DummyName" ) ),
+                                                            uno::Sequence< beans::PropertyValue >() );
+
+                        // TODO/LATER: in future InsertedObjectInfo will be used to get container related information
+                        // for example whether the object should be an iconified one
+                        xObj = aInfo.Object;
+                    }
+                    catch( uno::Exception& )
+                    {}
+                }
+            }
+        }
+
+           // temporary storage until the object is inserted
+           comphelper::EmbeddedObjectContainer aCnt;
+        if ( xStrm.is() && !xObj.is() )
+            xObj = aCnt.InsertEmbeddedObject( xStrm, aName );
+
         if( xObj.is() )
         {
             //Size einstellen. Ist ein Hack wg. Auslieferung, die Size sollte
@@ -1929,9 +1968,21 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
                 MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( aObjDesc.mnViewAspect ) );
                 aSize = OutputDevice::LogicToLogic( aSize, MAP_100TH_MM, aUnit );
                 awt::Size aSz;
-                aSz.Width = aSize.Width();
-                aSz.Height = aSize.Height();
-                xObj->setVisualAreaSize( aObjDesc.mnViewAspect, aSz );
+                try
+                {
+                    aSz = xObj->getVisualAreaSize( aObjDesc.mnViewAspect );
+                }
+                catch( embed::NoVisualAreaSizeException& )
+                {
+                    // in this case the provided size is used
+                }
+
+                if ( aSz.Width != aSize.Width() || aSz.Height != aSize.Height() )
+                {
+                    aSz.Width = aSize.Width();
+                    aSz.Height = aSize.Height();
+                    xObj->setVisualAreaSize( aObjDesc.mnViewAspect, aSz );
+                }
             }
             //Ende mit Hack!
 
