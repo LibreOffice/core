@@ -2,9 +2,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2001-04-10 07:52:07 $
+ *  last change: $Author: pb $ $Date: 2001-07-03 12:03:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,8 +376,23 @@ void AboutDialog::Paint( const Rectangle& rRect )
     Point aPnt( nW - ( aSize.Width() / 2 ), nPos );
     long nPos1 = aPnt.Y(), nPos2 = nPos1 + aSize.Height(), nTop = rRect.Top();
 
+#if SUPD == 633
+    String aExtraText( DEFINE_CONST_UNICODE("Early Access 3") );
+    Size aExtraSize = Size( GetTextWidth( aExtraText ), GetTextHeight() );
+    long nDelta = aExtraSize.Height() + 3;
+    nPos2 += nDelta;
+#endif
+
     if ( nPos1 <= nTop && nTop < nPos2 )
+    {
         DrawText( aPnt, aDevVersionStr );
+#if SUPD == 633
+        aPnt.X() = nW - ( aExtraSize.Width() / 2 );
+        aPnt.Y() += nDelta;
+        nPos += nDelta;
+        DrawText( aPnt, aExtraText );
+#endif
+    }
 
     nPos += aSize.Height() + 3;
     USHORT nDevCnt = aDeveloperAry.Count();
