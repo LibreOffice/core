@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 11:24:32 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,11 +82,11 @@
 #include <vcl/taskpanelist.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUIELEMENT_HPP_
-#include <drafts/com/sun/star/ui/XUIElement.hpp>
+#ifndef _COM_SUN_STAR_UI_XUIELEMENT_HPP_
+#include <com/sun/star/ui/XUIElement.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -627,7 +627,7 @@ void SfxWorkWindow::DeleteControllers_Impl()
     SfxBindings& rBindings = GetBindings();
     Reference< com::sun::star::frame::XFrame > xFrame = rBindings.GetActiveFrame();
     Reference< com::sun::star::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
-    Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+    Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
     if ( xPropSet.is() )
     {
         try
@@ -1265,7 +1265,7 @@ void SfxIPWorkWin_Impl::UpdateObjectBars_Impl()
 Reference< ::com::sun::star::task::XStatusIndicator > SfxWorkWindow::GetStatusIndicator()
 {
     Reference< com::sun::star::beans::XPropertySet > xPropSet( GetBindings().GetActiveFrame(), UNO_QUERY );
-    Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+    Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
     Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
     if ( xPropSet.is() )
@@ -1277,7 +1277,7 @@ Reference< ::com::sun::star::task::XStatusIndicator > SfxWorkWindow::GetStatusIn
             xLayoutManager->createElement( m_aProgressBarResName );
             xLayoutManager->showElement( m_aProgressBarResName );
 
-            Reference< drafts::com::sun::star::ui::XUIElement > xProgressBar =
+            Reference< ::com::sun::star::ui::XUIElement > xProgressBar =
                 xLayoutManager->getElement( m_aProgressBarResName );
             if ( xProgressBar.is() )
             {
@@ -1308,7 +1308,7 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
     SFX_APP();
 
     Reference< com::sun::star::beans::XPropertySet > xPropSet( GetBindings().GetActiveFrame(), UNO_QUERY );
-    Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+    Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
 
     if ( xPropSet.is() )
     {
@@ -1637,7 +1637,7 @@ void SfxWorkWindow::SetTempStatusBar_Impl( BOOL bSet )
 void SfxWorkWindow::UpdateStatusBar_Impl()
 {
     Reference< com::sun::star::beans::XPropertySet > xPropSet( GetBindings().GetActiveFrame(), UNO_QUERY );
-    Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+    Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
     Any aValue = xPropSet->getPropertyValue( m_aLayoutManagerPropName );
     aValue >>= xLayoutManager;
 
