@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 07:56:58 $
+ *  last change: $Author: mba $ $Date: 2002-07-23 13:48:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1898,7 +1898,7 @@ SfxItemSet* SfxBindings::CreateSet_Impl
     }
     pRanges[j] = 0; // terminierende NULL
     SfxItemSet *pSet = new SfxItemSet(rPool, pRanges);
-    delete pRanges;
+    delete [] pRanges;
     DBG_PROFSTOP(SfxBindingsCreateSet);
     return pSet;
 }

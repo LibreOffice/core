@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitset.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:28 $
+ *  last change: $Author: mba $ $Date: 2002-07-23 13:47:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ BitSet BitSet::operator<<( USHORT nOffset ) const
     {
         ULONG* pNewMap = new ULONG[nTarget];
         memcpy( pNewMap, aSet.pBitmap, 4 * nTarget );
-        delete aSet.pBitmap;
+        delete [] aSet.pBitmap;
         aSet.pBitmap = pNewMap;
         aSet.nBlocks = nTarget;
     }
@@ -221,7 +221,7 @@ BitSet::BitSet( USHORT* pArray, USHORT nSize ):
 BitSet::~BitSet()
 {
     DBG_MEMTEST();
-    delete pBitmap;
+    delete [] pBitmap;
 }
 
 //--------------------------------------------------------------------
@@ -243,7 +243,7 @@ BitSet& BitSet::operator=( const BitSet& rOrig )
     DBG_MEMTEST();
     if ( this != &rOrig )
     {
-        delete pBitmap;
+        delete [] pBitmap;
         CopyFrom(rOrig);
     }
     return *this;
@@ -256,7 +256,7 @@ BitSet& BitSet::operator=( const BitSet& rOrig )
 BitSet& BitSet::operator=( USHORT nBit )
 {
     DBG_MEMTEST();
-    delete pBitmap;
+    delete [] pBitmap;
 
     USHORT nBlocks = nBit / 32;
     ULONG nBitVal = 1L << (nBit % 32);
@@ -310,7 +310,7 @@ BitSet& BitSet::operator|=( const BitSet& rSet )
         if ( pBitmap )
         {
             memcpy( pNewMap, pBitmap, 4 * nBlocks );
-            delete pBitmap;
+            delete [] pBitmap;
         }
         pBitmap = pNewMap;
         nBlocks = rSet.nBlocks;
@@ -347,7 +347,7 @@ BitSet& BitSet::operator|=( USHORT nBit )
         if ( pBitmap )
         {
             memcpy( pNewMap, pBitmap, 4 * nBlocks );
-            delete pBitmap;
+            delete [] pBitmap;
         }
         pBitmap = pNewMap;
         nBlocks = nBlock+1;
