@@ -1,3 +1,5 @@
+"AccessibleListItem";"com::sun::star::accessibility::XAccessibleEventBroadcaster#optional";"addEventListener()"
+"AccessibleListItem";"com::sun::star::accessibility::XAccessibleEventBroadcaster#optional";"removeEventListener()"
 "AccessibleListItem";"com::sun::star::accessibility::XAccessibleComponent";"containsPoint()"
 "AccessibleListItem";"com::sun::star::accessibility::XAccessibleComponent";"getAccessibleAtPoint()"
 "AccessibleListItem";"com::sun::star::accessibility::XAccessibleComponent";"getBounds()"
@@ -34,5 +36,3 @@
 "AccessibleListItem";"com::sun::star::accessibility::XAccessibleContext";"getAccessibleRelationSet()"
 "AccessibleListItem";"com::sun::star::accessibility::XAccessibleContext";"getAccessibleStateSet()"
 "AccessibleListItem";"com::sun::star::accessibility::XAccessibleContext";"getLocale()"
-"AccessibleListItem";"com::sun::star::accessibility::XAccessibleEventBroadcaster#optional";"addEventListener()"
-"AccessibleListItem";"com::sun::star::accessibility::XAccessibleEventBroadcaster#optional";"removeEventListener()"
