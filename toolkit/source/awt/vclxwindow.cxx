@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 08:20:37 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #ifndef _COM_SUN_STAR_AWT_ENDPOPUPMODEEVENT_HPP_
 #include <com/sun/star/awt/EndPopupModeEvent.hpp>
 #endif
+#ifndef _COM_SUN_STAR_STYLE_VERTICALALIGNMENT_HPP_
+#include <com/sun/star/style/VerticalAlignment.hpp>
+#endif
 
 #ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
 #include <toolkit/awt/vclxwindow.hxx>
@@ -148,6 +151,12 @@
 #ifndef _SV_DOCKWIN_HXX
 #include <vcl/dockwin.hxx>
 #endif
+
+using ::com::sun::star::style::VerticalAlignment;
+using ::com::sun::star::style::VerticalAlignment_TOP;
+using ::com::sun::star::style::VerticalAlignment_MIDDLE;
+using ::com::sun::star::style::VerticalAlignment_BOTTOM;
+using ::com::sun::star::style::VerticalAlignment_MAKE_FIXED_SIZE;
 
 // Mit Out-Parameter besser als Rueckgabewert, wegen Ref-Objekt...
 
@@ -1393,6 +1402,28 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                 pWindow->SetStyle( nStyle );
             }
             break;
+            case BASEPROPERTY_VERTICALALIGN:
+            {
+                VerticalAlignment eAlign = VerticalAlignment_MAKE_FIXED_SIZE;
+                WinBits nStyle = pWindow->GetStyle();
+                nStyle &= ~(WB_TOP|WB_VCENTER|WB_BOTTOM);
+                if ( !bVoid )
+                    Value >>= eAlign;
+                switch ( eAlign )
+                {
+                case VerticalAlignment_TOP:
+                    nStyle |= WB_TOP;
+                    break;
+                case VerticalAlignment_MIDDLE:
+                    nStyle |= WB_VCENTER;
+                    break;
+                case VerticalAlignment_BOTTOM:
+                    nStyle |= WB_BOTTOM;
+                    break;
+                }
+                pWindow->SetStyle( nStyle );
+            }
+            break;
             case BASEPROPERTY_ALIGN:
             {
                 sal_Int16 nAlign = PROPERTY_ALIGN_LEFT;
@@ -1617,6 +1648,17 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             case BASEPROPERTY_TABSTOP:
                 aProp <<= (sal_Bool) ( GetWindow()->GetStyle() & WB_TABSTOP ) ? sal_True : sal_False;
             break;
+            case BASEPROPERTY_VERTICALALIGN:
+            {
+                WinBits nStyle = GetWindow()->GetStyle();
+                if ( nStyle & WB_TOP )
+                    aProp <<= VerticalAlignment_TOP;
+                else if ( nStyle & WB_VCENTER )
+                    aProp <<= VerticalAlignment_MIDDLE;
+                else if ( nStyle & WB_BOTTOM )
+                    aProp <<= VerticalAlignment_BOTTOM;
+            }
+            break;
             case BASEPROPERTY_ALIGN:
             {
                 switch ( eWinType )
@@ -1813,10 +1855,17 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
         if ( !pDev )
             pDev = pWindow->GetParent();
 
-        if ( pWindow->GetParent() && !pWindow->IsVisible()
-                && !pWindow->IsSystemWindow() && ( pWindow->GetParent() == pDev ) )
+        if ( pWindow->GetParent() && !pWindow->IsSystemWindow() && ( pWindow->GetParent() == pDev ) )
         {
+            BOOL bWasVisible = pWindow->IsVisible();
             Point aOldPos( pWindow->GetPosPixel() );
+
+            if ( bWasVisible && aOldPos == aPos )
+            {
+                pWindow->Update();
+                return;
+            }
+
             pWindow->SetPosPixel( aPos );
 
             // Erstmal ein Update auf den Parent, damit nicht beim Update
@@ -1832,6 +1881,8 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
             pWindow->SetParentUpdateMode( sal_True );
 
             pWindow->SetPosPixel( aOldPos );
+            if ( bWasVisible )
+                pWindow->Show( TRUE );
         }
         else if ( pDev )
         {
@@ -1839,13 +1890,16 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
             aSz = pDev->PixelToLogic( aSz );
             Point aP = pDev->PixelToLogic( aPos );
 
-            ULONG nFlags = WINDOW_DRAW_NOCONTROLS;
-
-            // #80064# Why only Mono?
-            // if ( pDev->GetOutDevType() == OUTDEV_PRINTER )
-            //  nFlags |= WINDOW_DRAW_MONO;
-
-            pWindow->Draw( pDev, aP, aSz, nFlags );
+            bool bDrawSimple = ( pDev->GetOutDevType() == OUTDEV_PRINTER ) || ( pDev->GetOutDevViewType() == OUTDEV_VIEWTYPE_PRINTPREVIEW );
+            if ( bDrawSimple )
+            {
+                ULONG nFlags = WINDOW_DRAW_NOCONTROLS;
+                pWindow->Draw( pDev, aP, aSz, nFlags );
+            }
+            else
+            {
+                pWindow->PaintToDevice( pDev, aP, aSz );
+            }
         }
     }
 }
