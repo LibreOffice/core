@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-11 11:38:10 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:42:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,14 @@
  *
  ************************************************************************/
 
-// includes --------------------------------------------------------------
+#ifndef _SAL_CONFIG_H_
+#include "sal/config.h"
+#endif
+
+#ifndef INCLUDED_SFX2_DLLAPI_H
+#include "sfx2/dllapi.h"
+#endif
+
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
 #endif
@@ -70,4 +77,4 @@
 #include <rtl/ustring.hxx>
 #include <vcl/image.hxx>
 
-Image SAL_CALL GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, BOOL bBig, BOOL bHiContrast );
+SFX2_DLLPUBLIC Image SAL_CALL GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, BOOL bBig, BOOL bHiContrast );
