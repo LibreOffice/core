@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 21:39:10 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:28:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,11 +494,11 @@
                 };\
             };\
         };\
-        Text[ chinese_simplified ] = "·´Ó³(~F)";\
+        Text[ chinese_simplified ] = "·­×ª(~F)";\
         Text[ russian ] = "~Îòğàçèòü";\
         Text[ polish ] = "~Przerzuæ";\
         Text[ japanese ] = "”½“](~F)";\
-        Text[ chinese_traditional ] = "¤Ï¬M(~F)";\
+        Text[ chinese_traditional ] = "Â½Âà(~F)";\
         Text[ arabic ] = "ÇäÚßÇ~Ó";\
         Text[ greek ] = "Êáôüğôñ~éóç";\
         Text[ korean ] = "´ëÄª(~F)";\
@@ -550,11 +550,11 @@
                     Text [ dutch ] = "Verder naar ~voren" ; \
                     Text [ spanish ] = "Traer más a~delante" ; \
                     Text [ english_us ] = "Bring ~Forward" ; \
-                    Text[ chinese_simplified ] = "ÔÙÇ°ÖÃ(~F)";\
+                    Text[ chinese_simplified ] = "ÉÏÒÆÒ»²ã(~F)";\
                     Text[ russian ] = "Ïåğåìåñòèòü ~âïåğåä";\
                     Text[ polish ] = "Przesuñ do przodu";\
                     Text[ japanese ] = "‘O–Ê‚ÖˆÚ“®(~F)";\
-                    Text[ chinese_traditional ] = "¦A«e¸m(~F)";\
+                    Text[ chinese_traditional ] = "¤W²¾¤@¼h(~F)";\
                     Text[ arabic ] = "ÅÍÖÇÑ ÃãÇãÇğ";\
                     Text[ greek ] = "Ì~åôáöïñÜ İíá åğßğåäï åìğñüò";\
                     Text[ korean ] = "¾ÕÀ¸·Î °¡Á®¿À±â(~ F)";\
@@ -579,11 +579,11 @@
                     Text [ dutch ] = "Verder naar ~achteren" ; \
                     Text [ spanish ] = "Enviar hacia a~trás" ; \
                     Text [ english_us ] = "Send Back~ward" ; \
-                    Text[ chinese_simplified ] = "ÔÙºóÖÃ(~W)";\
+                    Text[ chinese_simplified ] = "ÏÂÒÆÒ»²ã(~W)";\
                     Text[ russian ] = "Ïåğåìåñòèòü ~íàçàä";\
                     Text[ polish ] = "Przesuñ do ty³u";\
                     Text[ japanese ] = "”w–Ê‚ÉˆÚ“®(~W)";\
-                    Text[ chinese_traditional ] = "¦A«á¸m(~W)";\
+                    Text[ chinese_traditional ] = "¤U²¾¤@¼h(~W)";\
                     Text[ arabic ] = "ÅÑÓÇá ÎáİÇğ";\
                     Text[ greek ] = "~ÌåôáöïñÜ ğßóù";\
                     Text[ korean ] = "µÚ·Î º¸³»±â(~W)";\
