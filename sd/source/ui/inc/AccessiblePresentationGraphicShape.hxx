@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePresentationGraphicShape.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: af $ $Date: 2002-04-18 17:00:10 $
+ *  last change: $Author: af $ $Date: 2002-05-06 09:38:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,12 +76,9 @@ class AccessiblePresentationGraphicShape
 {
 public:
     //=====  internal  ========================================================
-    AccessiblePresentationGraphicShape (const ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShape>& rxShape,
-        const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
-        const AccessibleShapeTreeInfo& rShapeTreeInfo,
-        long nIndex = -1);
+    AccessiblePresentationGraphicShape (
+        const AccessibleShapeInfo& rShapeInfo,
+        const AccessibleShapeTreeInfo& rShapeTreeInfo);
     virtual ~AccessiblePresentationGraphicShape (void);
 
     //=====  XServiceInfo  ====================================================
