@@ -1,0 +1,221 @@
+#*************************************************************************
+#*
+#*    $Workfile:$
+#*
+#*    generated recursive makefile
+#*    last change       $Author: jmarmion $ $Date: 2000-10-11 09:51:20 $
+#*    $Revision: 1.1 $
+#*
+#*    $Logfile:$
+#*
+#*
+#*************************************************************************
+
+
+# 
+# mark this makefile as a recursive one
+# 
+
+MAKEFILERC=yes
+
+# 
+# implementation of cvs checkout
+# 
+
+.IF "$(checkout)"==""
+all_target: ALLTAR
+.ELSE	# "$(checkout)"==""
+.IF "$(checkout)"=="true"
+% : $(NULL)
+	_cvs co $@
+.ELSE	# "$(checkout)"=="true"
+% : $(NULL)
+	_cvs co -r$(checkout) $@
+.ENDIF	# "$(checkout)"=="true"
+all_subdirs : $(RC_SUBDIRS)
+.ENDIF	# "$(checkout)"==""
+
+# 
+# macro RC_SUBDIRS handles iteration over
+# all mandatory sub directories
+# 
+
+RC_SUBDIRS =  \
+	DocumentProperties \
+	UnoControls \
+	api \
+	automation \
+	basctl \
+	basic \
+	bridges \
+	chaos \
+	codemaker \
+	configmgr \
+	connectivity \
+	cppu \
+	cppuhelper \
+	cpputools \
+	dbaccess \
+	desktop \
+	eventattacher \
+	extensions \
+	external \
+	extras \
+	fileaccess \
+	forms \
+	framework \
+	goodies \
+	i18n \
+	idl \
+	ie \
+	inet \
+	io \
+	javaunohelper \
+	jtools \
+	jurt \
+	ldapber \
+	lingu \
+	officecfg \
+	offmgr \
+	offuh \
+	rdbmaker \
+	readlicense \
+	registry \
+	remotebridges \
+	res \
+	rsc \
+	sal \
+	sandbox \
+	sax \
+	sc \
+	scaddins \
+	sch \
+	scp \
+	scptools \
+	sd \
+	sdb \
+	setup2 \
+	sfx2 \
+	sim2 \
+	sj2 \
+	so3 \
+	sot \
+	starmath \
+	std2 \
+	stoc \
+	store \
+	svtools \
+	svx \
+	sw \
+	toolkit \
+	tools \
+	transex3 \
+	ucbhelper \
+	unoidl \
+	unoil \
+	unotools \
+	unzip \
+	uui \
+	vcl \
+	vos \
+	wizards \
+	xml2cmp \
+	xmlhelp \
+	xmloff \
+	xprinter 
+
+# 
+# bootstrap target
+# 
+
+bootstrap .PHONY :
+	@config_office/bootstrap
+
+install : instsetoo 
+	cd $?; dmake subdmake=true  product="full"
+ 
+
+# 
+# single directory targets for
+# dependency handling between directories
+# 
+
+DocumentProperties : svtools
+UnoControls : cppuhelper
+api : unoidl
+automation : basic
+basctl : svx
+basic : goodies idl
+bridges : cppuhelper jurt offuh
+chaos : inet svtools unzip
+codemaker : api
+configmgr : unotools
+connectivity : svtools
+cppu : codemaker offuh
+cppuhelper : cppu
+cpputools : cppuhelper
+dbaccess : svx
+desktop : sc sd sw
+eventattacher : cppuhelper
+extensions : offmgr rdbmaker xml2cmp 
+external : std2
+forms : svx
+framework : svtools
+goodies : so3
+i18n : bridges stoc unotools sax
+idl : tools
+ie : svx
+inet : tools ldapber
+io : ucbhelper
+javaunohelper : cppuhelper unoil
+jurt : codemaker sandbox
+lingu : sfx2
+offmgr : sch sdb sim2 starmath uui
+rdbmaker : cppuhelper
+registry : store
+remotebridges : bridges
+rsc : tools
+sal : std2 external 
+sax : cppuhelper
+sc : offmgr
+scaddins : cppuhelper
+sch : svx
+scp : scptools
+scptools : setup2 
+sd : offmgr sc
+sdb : sfx2
+setup2 : basic transex3 unzip automation
+sfx2 : setup2
+sim2 : svx
+sj2 : svtools sandbox
+so3 : inet sj2
+sot : tools
+starmath : svx
+stoc : bridges rdbmaker
+store : vos
+svtools : toolkit ucbhelper
+svx : lingu sfx2 xmloff
+sw : offmgr sd
+toolkit : vcl
+tools : external vos
+transex3 : tools
+ucbhelper : cppuhelper offuh
+unoidl : registry tools
+unotools : cppuhelper offuh
+uui : svtools
+vcl : rsc sot ucbhelper unotools xprinter
+vos : sal 
+wizards : offmgr
+xmloff : lingu
+#install : instsetoo
+
+# 
+# central target makefile
+# 
+
+.IF "$(checkout)"==""
+.INCLUDE : target.mk
+.ENDIF	#"$(checkout)"==""
+
+#*************************************************************************
+
