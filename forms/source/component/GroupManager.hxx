@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupManager.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 12:34:57 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:05:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ namespace frm
     template <class ELEMENT, class LESS_COMPARE>
     sal_Bool seek_entry(const ::std::vector<ELEMENT>& _rArray, const ELEMENT& _rNewElement, sal_Int32& nPos, const LESS_COMPARE& _rCompareOp)
     {
-        typename ::std::vector<ELEMENT>::const_iterator aExistentPos = ::std::lower_bound(
+        typename ::std::vector<ELEMENT>::const_iterator aExistentPos = lower_bound(
             _rArray.begin(),
             _rArray.end(),
             _rNewElement,
