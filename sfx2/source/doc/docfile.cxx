@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.138 $
+ *  $Revision: 1.139 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:17:27 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 14:40:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include "docfile.hxx"
 
 #include <uno/mapping.hxx>
@@ -191,7 +190,9 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include <comphelper/processfactory.hxx>
 #include <so3/transbnd.hxx> // SvKeyValueIterator
@@ -233,8 +234,8 @@ class SfxLockBytesHandler_Impl : public ::utl::UcbLockBytesHandler
     ::vos::OMutex   m_aMutex;
 public:
                     SfxLockBytesHandler_Impl( SfxMedium* pMedium )
-                        : m_pMedium( pMedium )
-                        , m_nAcquireCount( 0 )
+                        : m_nAcquireCount( 0 )
+                        , m_pMedium( pMedium )
                     {}
 
     virtual void    Handle( ::utl::UcbLockBytesHandler::LoadHandlerItem nWhich, ::utl::UcbLockBytesRef xLockBytes );
@@ -522,14 +523,16 @@ SfxMedium_Impl::~SfxMedium_Impl()
 
 //================================================================
 
-#define IMPL_CTOR()                         \
+#define IMPL_CTOR(rootVal,URLVal)           \
      eError( SVSTREAM_OK ),                 \
                                             \
      bDirect( sal_False ),                  \
-     bTriedStorage( sal_False ),            \
+     bRoot( rootVal ),                      \
      bSetFilter( sal_False ),               \
+     bTriedStorage( sal_False ),            \
                                             \
      nStorOpenMode( SFX_STREAM_READWRITE ), \
+     pURLObj( URLVal ),                     \
      pInStream(0),                          \
      pOutStream( 0 )
 
@@ -2017,22 +2020,19 @@ void SfxMedium::Init_Impl()
 
 //------------------------------------------------------------------
 SfxMedium::SfxMedium()
-:   IMPL_CTOR(),
-    bRoot( sal_False ),
-    pURLObj(0),
+:   IMPL_CTOR( sal_False, 0 ),  // bRoot, pURLObj
 
+    pFilter(0),
     pSet(0),
-    pImp(new SfxMedium_Impl( this )),
-    pFilter(0)
+    pImp(new SfxMedium_Impl( this ))
 {
     Init_Impl();
 }
 //------------------------------------------------------------------
 
 SfxMedium::SfxMedium( const SfxMedium& rMedium, sal_Bool bTemporary )
-:   IMPL_CTOR(),
-    bRoot(sal_True),
-    pURLObj( rMedium.pURLObj ? new INetURLObject(*rMedium.pURLObj) : 0 ),
+:   IMPL_CTOR( sal_True,    // bRoot, pURLObj
+        rMedium.pURLObj ? new INetURLObject(*rMedium.pURLObj) : 0 ),
     pImp(new SfxMedium_Impl( this ))
 {
     bDirect       = rMedium.IsDirect();
@@ -2303,12 +2303,10 @@ SfxMedium::SfxMedium
     const String &rName, StreamMode nOpenMode,  sal_Bool bDirectP,
     const SfxFilter *pFlt, SfxItemSet *pInSet
 )
-:   IMPL_CTOR(),
-    bRoot( sal_False ),
+:   IMPL_CTOR( sal_False, 0 ),  // bRoot, pURLObj
     pFilter(pFlt),
-    pURLObj(0),
-    pImp(new SfxMedium_Impl( this )),
-    pSet( pInSet )
+    pSet( pInSet ),
+    pImp(new SfxMedium_Impl( this ))
 {
     aLogicName = rName;
     nStorOpenMode = nOpenMode;
@@ -2318,12 +2316,10 @@ SfxMedium::SfxMedium
 //------------------------------------------------------------------
 
 SfxMedium::SfxMedium( SvStorage *pStorage, sal_Bool bRootP )
-:   IMPL_CTOR(),
-    bRoot( bRootP ),
+:   IMPL_CTOR( bRootP, 0 ), // bRoot, pURLObj
     aStorage(pStorage),
-    pURLObj(0),
-    pImp( new SfxMedium_Impl( this )),
-    pSet(0)
+    pSet(0),
+    pImp( new SfxMedium_Impl( this ))
 {
     String aType = SfxFilter::GetTypeFromStorage( *pStorage );
     pFilter = SFX_APP()->GetFilterMatcher().GetFilter4EA( aType );
