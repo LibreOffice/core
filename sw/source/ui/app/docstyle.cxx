@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstyle.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-31 15:58:32 $
+ *  last change: $Author: os $ $Date: 2001-08-03 14:09:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,9 @@
 #endif
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
+#endif
+#ifndef _SVTOOLS_CJKOPTIONS_HXX
+#include <svtools/cjkoptions.hxx>
 #endif
 
 // MD 06.02.95: Die Formatnamen in der Liste aller Namen haben als
@@ -724,6 +727,9 @@ String  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
         const SfxPoolItem* pItem = aIter.FirstItem();
 
         String sPageNum, sModel, sBreak;
+        BOOL bHasWesternFontPrefix = FALSE;
+        BOOL bHasCJKFontPrefix = FALSE;
+        SvtCJKOptions aCJKOptions;
 
         while ( pItem )
         {
@@ -733,6 +739,12 @@ String  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
                     case SID_ATTR_AUTO_STYLE_UPDATE:
                     case SID_PARA_BACKGRND_DESTINATION:
                     case RES_PAGEDESC:
+                    //CTL no yet supported
+                    case RES_CHRATR_CTL_FONT:
+                    case RES_CHRATR_CTL_FONTSIZE:
+                    case RES_CHRATR_CTL_LANGUAGE:
+                    case RES_CHRATR_CTL_POSTURE:
+                    case RES_CHRATR_CTL_WEIGHT:
                         break;
                     default:
                     {
@@ -742,7 +754,7 @@ String  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
                                 *pItem, SFX_ITEM_PRESENTATION_COMPLETE,
                                 eUnit, aItemPresentation ) )
                         {
-
+                            BOOL bIsDefault = FALSE;
                             switch ( pItem->Which() )
                             {
                                 case SID_ATTR_PARA_PAGENUM:
@@ -754,7 +766,36 @@ String  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
                                 case RES_BREAK:
                                     sBreak = aItemPresentation;
                                     break;
+                                case RES_CHRATR_CJK_FONT:
+                                case RES_CHRATR_CJK_FONTSIZE:
+                                case RES_CHRATR_CJK_LANGUAGE:
+                                case RES_CHRATR_CJK_POSTURE:
+                                case RES_CHRATR_CJK_WEIGHT:
+                                if(aCJKOptions.IsCJKFontEnabled())
+                                    bIsDefault = TRUE;
+                                if(!bHasCJKFontPrefix)
+                                {
+                                    aItemPresentation.Insert(SW_RESSTR(STR_CJK_FONT), 0);
+                                    bHasCJKFontPrefix = TRUE;
+                                }
+                                break;
+                                case RES_CHRATR_FONT:
+                                case RES_CHRATR_FONTSIZE:
+                                case RES_CHRATR_LANGUAGE:
+                                case RES_CHRATR_POSTURE:
+                                case RES_CHRATR_WEIGHT:
+                                if(!bHasWesternFontPrefix)
+                                {
+                                    aItemPresentation.Insert(SW_RESSTR(STR_WESTERN_FONT), 0);
+                                    bHasWesternFontPrefix = TRUE;
+                                    bIsDefault = TRUE;
+                                }
+                                // no break;
                                 default:
+                                    bIsDefault = TRUE;
+                            }
+                            if(bIsDefault)
+                            {
                                 if ( aDesc.Len() && aItemPresentation.Len() )
                                     aDesc += sPlus;
                                 aDesc += aItemPresentation;
