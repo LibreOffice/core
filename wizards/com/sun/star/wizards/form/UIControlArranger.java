@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UIControlArranger.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $  $Date: 2005-03-08 15:39:18 $
+ *  last change: $Author: kz $  $Date: 2005-03-18 16:18:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,6 @@ public class UIControlArranger {
     XRadioButton optAlignLeft;
     XRadioButton optAlignRight;
     XControl flnLabelPlacement;
-    String sBitmapPath;
     int Index = 1;
     String[] HelpTexts = new String[4];
     String[] sArrangementHeader = new String[2];
@@ -126,7 +125,6 @@ public class UIControlArranger {
           new String[] {"Height", "HelpURL", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
           new Object[] {UIConsts.INTEGERS[10],"HID:34452",sAlignRight, Boolean.TRUE, new Integer(107), new Integer(50), IControlStep, new Short(curtabindex++), new Integer(171)}
         );
-        sBitmapPath = FileAccess.getOfficePath(CurUnoDialog.xMSF, "Template","share") + "/wizard/bitmap";
 
         DefaultListModel imageModel = new DefaultListModel();
         for (int i = 0; i< HelpTexts.length; i++)
@@ -144,10 +142,13 @@ public class UIControlArranger {
 
 
     private class LayoutRenderer implements ImageList.ImageRenderer {
-        public String getImageUrl(Object listitem) {
-            String s = sBitmapPath + "/Arrange_" + (((Integer)listitem).intValue() + 1) + ".gif";
+        public Object[] getImageUrls(Object listitem) {
+
+            int ResId = UIConsts.RID_IMG_FORM + (2 * ((Integer)listitem).intValue());
             Index++;
-            return s;
+            return new Integer[]{new Integer(ResId), new Integer(ResId + 1)};
+//          String s = CurUnoDialog.getWizardImageUrl(ResId, ResId + 1); //((Integer)listitem).intValue(), )sBitmapPath + "/Arrange_" + (((Integer)listitem).intValue() + 1) + ".gif";
+//          return s;
         }
 
         public String render(Object listItem) {
