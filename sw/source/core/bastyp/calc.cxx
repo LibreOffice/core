@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:15:55 $
+ *  last change: $Author: jp $ $Date: 2000-11-21 13:22:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1550,7 +1550,7 @@ FASTBOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
     if( !pLclD )
         pLclD = &GetAppLocaleData();
 
-    const xub_Unicode* pEnd;
+    const xub_Unicode *pEnd, nCurrCmdPos = rCommandPos;
     int nErrno;
     rVal = SolarMath::StringToDouble( rCommand.GetBuffer() + rCommandPos,
                                         pLclD->getNumThousandSep().GetChar(0),
@@ -1561,7 +1561,7 @@ FASTBOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
     if( !pLclData && pLclD != &GetAppLocaleData() )
         delete (LocaleDataWrapper*)pLclD;
 
-    return 0 == nErrno;
+    return 0 == nErrno && nCurrCmdPos != rCommandPos;
 }
 
 //------------------------------------------------------------------------------
