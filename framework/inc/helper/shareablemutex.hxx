@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shareablemutex.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-11 11:05:24 $
+ *  last change: $Author: hr $ $Date: 2004-07-20 16:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ class ShareableMutex
     private:
         struct MutexRef
         {
+            MutexRef() : m_refCount(0) {}
             void acquire()
             {
                 osl_incrementInterlockedCount( &m_refCount );
