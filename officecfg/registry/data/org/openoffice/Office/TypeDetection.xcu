@@ -3,9 +3,9 @@
  *
  *  $RCSfile: TypeDetection.xcu,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-05 12:56:44 $
+ *  last change: $Author: jb $ $Date: 2002-11-20 15:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:node SYSTEM "../../../../component-update.dtd">
-<oor:node oor:name="TypeDetection" oor:context="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<oor:node oor:name="TypeDetection" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <node oor:name="Types">
     <node oor:name="writer_AportisDoc_PalmDB_File" oor:op="replace">
       <prop oor:name="UIName">
