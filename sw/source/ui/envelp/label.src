@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:45:38 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,7 +564,7 @@ TabPage TP_LAB_LAB
         Text[ chinese_simplified ] = "±êÇ©";
         Text[ russian ] = "Ìàğêà";
         Text[ polish ] = "Znacznik";
-        Text[ japanese ] = "»•i–¼";
+        Text[ japanese ] = "»‘¢Œ³";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "¶K¼Ğ";
         Text[ arabic ] = "ÇáãÇÑßÉ";
@@ -1129,10 +1129,10 @@ TabPage TP_PRIVATE_DATA
         Text[ portuguese ] = "Phone/Mobile";
         Text[ russian ] = "Òåëåôîí/ìîáèëüíûé";
         Text[ greek ] = "Ôçëİöùíï/Êéíçôü";
-        Text[ dutch ] = "Phone/Mobile";
+        Text[ dutch ] = "Telefoon/mobile";
         Text[ french ] = "Téléphone/Portable";
         Text[ spanish ] = "Teléfono/Móvil";
-        Text[ italian ] = "Phone/Mobile";
+        Text[ italian ] = "Tel./Cell.";
         Text[ danish ] = "Phone/Mobile";
         Text[ swedish ] = "Telefon/Mobil";
         Text[ polish ] = "Telefon/Komórka";
@@ -1504,10 +1504,10 @@ TabPage TP_BUSINESS_DATA
         Text[ portuguese ] = "Phone/Mobile";
         Text[ russian ] = "Òåëåôîí/ìîáèëüíûé";
         Text[ greek ] = "Ôçëİöùíï/Êéíçôü";
-        Text[ dutch ] = "Phone/Mobile";
+        Text[ dutch ] = "Telefoon/mobile";
         Text[ french ] = "Téléphone/Portable";
         Text[ spanish ] = "Teléfono/Móvil";
-        Text[ italian ] = "Phone/Mobile";
+        Text[ italian ] = "Tel./Cell.";
         Text[ danish ] = "Phone/Mobile";
         Text[ swedish ] = "Telefon/Mobil";
         Text[ polish ] = "Telefon/Komórka";
@@ -1544,7 +1544,7 @@ TabPage TP_BUSINESS_DATA
         Text[ dutch ] = "Fax";
         Text[ french ] = "Fax";
         Text[ spanish ] = "Fax";
-        Text[ italian ] = "Fax";
+        Text[ italian ] = "FAX";
         Text[ danish ] = "Fax";
         Text[ swedish ] = "Fax";
         Text[ polish ] = "Faks";
