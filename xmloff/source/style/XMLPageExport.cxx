@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLPageExport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-19 13:42:08 $
+ *  last change: $Author: sab $ $Date: 2000-10-20 05:36:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 #ifndef _XMLOFF_PAGEMASTEREXPORTPROPMAPPER_HXX
 #include "PageMasterExportPropMapper.hxx"
 #endif
+#ifndef _XMLOFF_PAGEMASTEREXPORTPROPMAPPER_HXX
+#include "PageMasterExportPropMapper.hxx"
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -139,11 +142,10 @@ void XMLPageExport::collectPageMasterAutoStyle(
         const Reference < XPropertySet > & rPropSet,
         OUString& rPageMasterName )
 {
-    XMLPageMasterPropSetMapper* pPropSetMapper = GetPageMasterPropSetMapper();
-    DBG_ASSERT( pPropSetMapper, "page master family/XMLPageMasterPropSetMapper not found" );
-    if( pPropSetMapper )
+    DBG_ASSERT( pPageMasterPropSetMapper, "page master family/XMLPageMasterPropSetMapper not found" );
+    if( pPageMasterPropSetMapper )
     {
-        ::std::vector<XMLPropertyState> xPropStates = pPropSetMapper->Filter( rPropSet );
+        ::std::vector<XMLPropertyState> xPropStates = pPageMasterPropSetMapper->Filter( rPropSet );
         if(xPropStates.size())
         {
             OUString sParent;
@@ -226,6 +228,7 @@ XMLPageExport::XMLPageExport( SvXMLExport& rExp ) :
     rExport( rExp ),
     pPageMasterPropHdlFactory( NULL ),
     pPageMasterPropSetMapper( NULL ),
+    pPageMasterExportPropMapper( NULL ),
     sIsPhysical( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ) ),
     sFollowStyle( RTL_CONSTASCII_USTRINGPARAM( "FollowStyle" ) )
 {
@@ -239,6 +242,8 @@ XMLPageExport::XMLPageExport( SvXMLExport& rExp ) :
         if(pPageMasterPropSetMapper)
             pPageMasterPropSetMapper->acquire();
     }
+    const UniReference< XMLPropertySetMapper > aPageMasterMapperRef = pPageMasterPropSetMapper;
+    pPageMasterExportPropMapper = new XMLPageMasterExportPropMapper(aPageMasterMapperRef);
 
     rExport.GetAutoStylePool()->AddFamily( XML_STYLE_FAMILY_PAGE_MASTER, OUString( RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_PAGE_MASTER_NAME ) ),
         pPageMasterPropSetMapper, OUString( RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_PAGE_MASTER_PREFIX ) ), sal_False );
@@ -284,6 +289,7 @@ XMLPageExport::~XMLPageExport()
         pPageMasterPropSetMapper->release();
         pPageMasterPropSetMapper = NULL;
     }
+    delete pPageMasterExportPropMapper;
 }
 
 void XMLPageExport::exportStyles( sal_Bool bUsed, sal_Bool bAutoStyles )
@@ -303,3 +309,9 @@ void XMLPageExport::exportStyles( sal_Bool bUsed, sal_Bool bAutoStyles )
     }
 }
 
+void XMLPageExport::exportAutoStyles()
+{
+    rExport.GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_PAGE_MASTER,
+        *pPageMasterExportPropMapper, rExport.GetDocHandler(), rExport.GetMM100UnitConverter(),
+        rExport.GetNamespaceMap());
+}
