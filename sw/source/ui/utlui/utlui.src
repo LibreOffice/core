@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:54:26 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 17:00:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ russian ] = "Çàìåíÿòü \"ïğÿìûå\" êàâû÷êè %1òèïîãğàôñêèìè %2";
         Text[ polish ] = "Zamieniaj cudzys³owy \"proste\" na %1 \"drukarskie\" %2";
         Text[ japanese ] = "\"ºİËß­°À—p\"¸«°Ã°¼®İÏ°¸‚ğ%1ˆóü—p%2‚É’uŠ·";
-        Text[ chinese_traditional ] = "\"ª½«¬¤Ş¸¹\"¥Ñ%1­Ó¤H¤Ş¸¹%2 ´À¥N";
+        Text[ chinese_traditional ] = "¡uª½«¬¤Ş¸¹¡v¥Ñ%1­Ó¤H¤Ş¸¹%2 ´À¥N";
         Text[ arabic ] = "ÇÓÊÈÏÇá ÚáÇãÇÊ ÊäÕíÕ \"ÚÇÏíÉ\" ÈÜÚáÇãÇÊ ÊäÕíÕ%1ØÈæÛÑÇİíøÉ%2";
         Text[ greek ] = "ÁíôéêáôÜóôáóç \"ßóùí\" åéóáãùãéêşí ìå %1ôõğïãñáöéêÜ%2";
         Text[ korean ] = "\"Á÷¼±\" ÀÎ¿ëºÎÈ£¸¦ %1ÀÎ¼âÃ¼%2 ÀÎ¿ëºÎÈ£·Î ´ëÃ¼";
@@ -428,7 +428,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ russian ] = "Óñòàíîâèòü ñòèëü \"Îñíîâíîé òåêñò\"";
         Text[ polish ] = "U?yj szablonu \"Obszar tekstowy\"";
         Text[ japanese ] = "u–{•¶v‚Ì½À²Ùİ’è";
-        Text[ chinese_traditional ] = "³]©w¼Ë¦¡¡§¤º¤å¡¨";
+        Text[ chinese_traditional ] = "³]©w¼Ë¦¡¡u¤º¤å¡v";
         Text[ arabic ] = "ÊÚííä ÇáäãØ \"ÌÓã ÇáäÕ\"";
         Text[ greek ] = "Ïñéóìüò ğñïôığïõ \"Óşìá êåéìİíïõ\"";
         Text[ korean ] = "À¯Çü \"º»¹®\" ¼³Á¤";
@@ -452,7 +452,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ russian ] = "Óñòàíîâèòü ñòèëü \"Ïåğâàÿ ñòğîêà ñ îòñòóïîì\"";
         Text[ polish ] = "U¿yj szablonu \"Wciêcie obszaru tekstowego\"";
         Text[ japanese ] = "u–{•¶²İÃŞİÄv‚Ì½À²Ùİ’è";
-        Text[ chinese_traditional ] = "³]©w¼Ë¦¡¡§¤º¤åÁY±Æ¡¨";
+        Text[ chinese_traditional ] = "³]©w¼Ë¦¡¡u¤º¤åÁY±Æ¡v";
         Text[ arabic ] = "ÊÚííä ÇáäãØ \"ÅÒÇÍÉ ÌÓã ÇáäÕ\"";
         Text[ greek ] = "Ïñéóìüò ğñïôığïõ \"Åóï÷Ş ğñşôçò ãñáììŞò\"";
         Text[ korean ] = "À¯Çü \"º»¹® µé¿©¾²±â\" ¼³Á¤";
@@ -476,7 +476,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ russian ] = "Óñòàíîâèòü ñòèëü \"Îáğàòíûé îòñòóï\"";
         Text[ polish ] = "U¿yj szablonu \"Neg. wciêcie obszaru tekstu\"";
         Text[ japanese ] = "u–{•¶Ï²Å½²İÃŞİÄv‚Ì½À²Ùİ’è";
-        Text[ chinese_traditional ] = "³]©w¼Ë¦¡¡§¤º¤å­tÁY±Æ¡¨";
+        Text[ chinese_traditional ] = "³]©w¼Ë¦¡¡u¤º¤å­tÁY±Æ¡v";
         Text[ arabic ] = "ÊÚííä ÇáäãØ \"ÅÒÇÍÉ ÌÓã äÕ ÓáÈíÉ\"";
         Text[ greek ] = "Ïñéóìüò ğñïôığïõ \"ÁñíçôéêŞ åóï÷Ş óşìáôïò êåéìİíïõ\"";
         Text[ korean ] = "À¯Çü \"º»¹® ³»¾î¾²±â\" ¼³Á¤";
@@ -500,7 +500,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ russian ] = "Óñòàíîâèòü ñòèëü \"Îñíîâíîé òåêñò ñ îòñòóïîì\"";
         Text[ polish ] = "U?yj szablonu \"Wysuniecie obszaru tekst.\"";
         Text[ japanese ] = "u–{•¶²İÃŞİÄv‚Ì½À²Ùİ’è";
-        Text[ chinese_traditional ] = "³]©w¼Ë¦¡¡§¤º¤åÁY±Æ¡¨";
+        Text[ chinese_traditional ] = "³]©w¼Ë¦¡¡u¤º¤åÁY±Æ¡v";
         Text[ arabic ] = "ÊÚííä ÇáäãØ \"ÅÒÇÍÉ ÌÓã ÇáäÕ (ÇáÓØÑ ÇáÃæá)\"";
         Text[ greek ] = "Ïñéóìüò ğñïôığïõ \"Åóï÷Ş óşìáôïò êåéìİíïõ\"";
         Text[ korean ] = "À¯Çü \"º»¹® µé¿©¾²±â\" ¼³Á¤";
@@ -524,7 +524,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ russian ] = "Óñòàíîâèòü ñòèëü \"Çàãîëîâîê $(ARG1)\"";
         Text[ polish ] = "U¿yj szablonu \"Tytu³ $(ARG1)\"";
         Text[ japanese ] = "uŒ©o‚µ $(ARG1)v‚Ì½À²Ùİ’è";
-        Text[ chinese_traditional ] = "³]©w¼Ë¦¡¡§¼ĞÃD $(ARG1)¡¨";
+        Text[ chinese_traditional ] = "³]©w¼Ë¦¡¡u¼ĞÃD $(ARG1)¡v";
         Text[ arabic ] = "ÊÚííä ÇáäãØ \"ÚäæÇä $(ARG1)\"";
         Text[ greek ] = "Ïñéóìüò ğñïôığïõ \"Åğéêåöáëßäá $(ARG1)\"";
         Text[ korean ] = "À¯Çü \"¸Ó¸®±Û $(ARG1)\" ¼³Á¤";
@@ -548,7 +548,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ russian ] = "Óñòàíîâèòü ñòèëü \"Ñïèñîê\" èëè \"Íóìåğàöèÿ\"";
         Text[ polish ] = "U¿yj szablonu \"Wypunktowanie\" lub \"Numerowanie\"";
         Text[ japanese ] = "u‰Óğ‘‚«v‚Ü‚½‚Íu”Ô†•t‚¯v‚Ì½À²Ùİ’è";
-        Text[ chinese_traditional ] = "³]©w¼Ë¦¡¡§¶µ¥Ø²Å¸¹¡¨©M¡§½s¸¹¡¨";
+        Text[ chinese_traditional ] = "³]©w¼Ë¦¡¡u¶µ¥Ø²Å¸¹¡v©M¡u½s¸¹¡v";
         Text[ arabic ] = "ÊÚííä ÇáäãØ \"ÊÚÏÇÏ\" Ãæ \"ÊÑŞíã\"";
         Text[ greek ] = "Ïñéóìüò óôõë \"Êïõêßäá\" Ş \"Áñßèìçóç\"";
         Text[ korean ] = "À¯Çü \"±Û¸Ó¸®Ç¥\" ¶Ç´Â \"¹øÈ£ ¸Å±â±â\" ¼³Á¤";
@@ -748,7 +748,7 @@ String STR_EVENT_IMAGE_LOAD
     Text [ french ] = "Chargement de l'image terminé" ;
     Text [ portuguese ] = "Carregar imagem concluído" ;
     Text [ portuguese_brazilian ] = "Grafik laden erfolgreich" ;
-    Text[ chinese_simplified ] = "×°ÔØÍ¼ĞÎ³É¹¦";
+    Text[ chinese_simplified ] = "×°ÈëÍ¼ĞÎ³É¹¦";
     Text[ russian ] = "Çàãğóçêà ãğàôèêè óñïåøíà";
     Text[ polish ] = "Pomyœlne za³adowanie grafiki";
     Text[ japanese ] = "¸Ş×Ì¨¯¸‚Ì“Ç‚İ‚İŠ®—¹";
@@ -772,7 +772,7 @@ String STR_EVENT_IMAGE_ABORT
     Text [ french ] = "Chargement de l'image interrompu" ;
     Text [ portuguese ] = "Carregar imagem cancelado" ;
     Text [ portuguese_brazilian ] = "Grafik laden abgebrochen" ;
-    Text[ chinese_simplified ] = "ÖĞ¶Ï×°ÔØÍ¼ĞÎ";
+    Text[ chinese_simplified ] = "ÖĞ¶Ï×°ÈëÍ¼ĞÎ";
     Text[ russian ] = "Çàãğóçêà ãğàôèêè ïğåğâàíà";
     Text[ polish ] = "Przerwane ³adowanie grafiki";
     Text[ japanese ] = "¸Ş×Ì¨¯¸‚Ì“Ç‚İ‚İ’†~";
@@ -796,7 +796,7 @@ String STR_EVENT_IMAGE_ERROR
     Text [ french ] = "Erreur lors du chargement de l'image" ;
     Text [ portuguese ] = "Erro ao carregar imagem" ;
     Text [ portuguese_brazilian ] = "Grafik laden fehlerhaft" ;
-    Text[ chinese_simplified ] = "×°ÔØµÄÍ¼ĞÎ²»ÍêÕû";
+    Text[ chinese_simplified ] = "×°ÈëµÄÍ¼ĞÎ²»ÍêÕû";
     Text[ russian ] = "Íåïğàâèëüíàÿ çàãğóçêà ãğàôèêè";
     Text[ polish ] = "B³¹d w ³adowaniu grafiki";
     Text[ japanese ] = "¸Ş×Ì¨¯¸‚Ì“Ç‚İ‚İ´×°";
