@@ -2,9 +2,9 @@
  *
  *  $RCSfile: split.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ssa $ $Date: 2002-05-21 11:59:38 $
+ *  last change: $Author: ssa $ $Date: 2002-05-21 12:44:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,9 @@
 #ifndef _SV_TASKPANELIST_HXX
 #include <taskpanelist.hxx>
 #endif
-
+#ifndef _SV_GRADIENT_HXX
+#include <gradient.hxx>
+#endif
 #pragma hdrstop
 
 // =======================================================================
@@ -380,7 +382,10 @@ void Splitter::StartDrag()
 
 void Splitter::GetFocus()
 {
-    //SetBackground( Wallpaper( Color( COL_RED ) ) );
+    //SetBackground( Wallpaper( Color( COL_WHITE ) ) );
+    //Gradient aGrad( GRADIENT_RECT, Color( COL_WHITE ), Color( COL_BLACK ) );
+    //aGrad.SetSteps(3);
+    //SetBackground( Wallpaper( aGrad ) );
     //Invalidate();
 }
 
@@ -405,3 +410,9 @@ long Splitter::Notify( NotifyEvent& rNEvt )
     return Window::Notify( rNEvt );
 }
 
+// -----------------------------------------------------------------------
+
+void Splitter::Paint( const Rectangle& rPaintRect )
+{
+    Window::Paint( rPaintRect );
+}
