@@ -2,9 +2,6 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
-#
-#   last change: $Author: obo $ $Date: 2004-10-18 14:05:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,6 +58,7 @@ ULFFILES = \
     Control.ulf  \
     Error.ulf    \
     Langpack.ulf \
+    LaunchCo.ulf \
     Property.ulf \
     RadioBut.ulf \
     SIS.ulf      \
