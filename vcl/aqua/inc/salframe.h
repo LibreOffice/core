@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-01 22:12:26 $
+ *  last change: $Author: pluby $ $Date: 2000-11-15 21:49:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 #include <VCLWindow.h>
 #endif
 
-#ifdef __cplusplus
+#if SUPD >= 612
 
 #ifndef _SV_SYSDATA_HXX
 #include <sysdata.hxx>
@@ -82,14 +82,13 @@
 
 struct SalFrameData
 {
-public:
     VCLWINDOW               mhWnd;                  // Window handle
     SalGraphics*            mpGraphics;             // current frame graphics
     SalFrame*               mpNextFrame;            // pointer to next frame
     void*                   mpInst;                 // instance handle for callback
     SALFRAMEPROC            mpProc;                 // callback proc
-    SystemEnvData           maSysData;              // system data
-    SalFrameState           maState;                // frame state
+    struct SystemEnvData    maSysData;              // system data
+    struct SalFrameState    maState;                // frame state
     int                     mnShowState;            // show state
     long                    mnWidth;                // client width in pixeln
     long                    mnHeight;               // client height in pixeln
@@ -117,6 +116,6 @@ public:
     BOOL                    mbCompositionMode;      // TRUE: Wir befinden uns im Composition-Modus
     BOOL                    mbCandidateMode;        // TRUE: Wir befinden uns im Candidate-Modus
 };
-#endif // __cplusplus
+#endif // SUPD >= 612
 
 #endif // _SV_SALFRAME_H

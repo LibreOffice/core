@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-01 22:12:27 $
+ *  last change: $Author: pluby $ $Date: 2000-11-15 21:49:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,9 @@
 #include <VCLWindow.h>
 #endif
 
-#ifdef __cplusplus
+#if SUPD >= 612
+
+#ifdef  __cplusplus
 
 #ifdef _VOS_NO_NAMESPACE
 class OMutex;
@@ -81,6 +83,16 @@ class SalYieldMutex;
 class SalInstance;
 class SalFrame;
 class SalObject;
+
+#else // __cplusplus
+
+#define OMutex void
+#define SalYieldMutex void
+#define SalInstance void
+#define SalFrame void
+#define SalObject void
+
+#endif // __cplusplus
 
 // -------------------
 // - SalInstanceData -
@@ -101,6 +113,6 @@ public:
     USHORT              mnYieldWaitCount;       // Wait-Count
 };
 
-#endif // __cplusplus
+#endif // SUPD >= 612
 
 #endif // _SV_SALINST_H
