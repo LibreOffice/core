@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:31:33 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 09:20:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,29 +233,8 @@ BOOL FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
             }
         }
 
-        if (bRestricted &&
-            (nSlotId == SID_DRAW_XLINE               ||
-             nSlotId == SID_DRAW_CIRCLEARC           ||
-             nSlotId == SID_DRAW_SQUARE              ||
-             nSlotId == SID_DRAW_SQUARE_NOFILL       ||
-             nSlotId == SID_DRAW_SQUARE_ROUND        ||
-             nSlotId == SID_DRAW_SQUARE_ROUND_NOFILL ||
-             nSlotId == SID_DRAW_CIRCLE              ||
-             nSlotId == SID_DRAW_CIRCLE_NOFILL       ||
-             nSlotId == SID_DRAW_CIRCLEPIE           ||
-             nSlotId == SID_DRAW_CIRCLEPIE_NOFILL    ||
-             nSlotId == SID_DRAW_CIRCLECUT           ||
-             nSlotId == SID_DRAW_CIRCLECUT_NOFILL    ||
-             nSlotId == SID_DRAW_XPOLYGON            ||
-             nSlotId == SID_DRAW_XPOLYGON_NOFILL     ||
-             nSlotId == SID_3D_CUBE                  ||
-             nSlotId == SID_3D_SPHERE                ||
-             nSlotId == SID_3D_SHELL                 ||
-             nSlotId == SID_3D_HALF_SPHERE           ||
-             nSlotId == SID_3D_TORUS                 ||
-             nSlotId == SID_3D_CYLINDER              ||
-             nSlotId == SID_3D_CONE                  ||
-             nSlotId == SID_3D_PYRAMID ))
+        // #i33136#
+        if(bRestricted && doConstructOrthogonal())
         {
             // Restrict movement:
             // rectangle->quadrat, ellipse->circle etc.
@@ -378,30 +357,8 @@ BOOL FuDraw::MouseMove(const MouseEvent& rMEvt)
 
     if (pView->IsAction())
     {
-        if (bRestricted &&
-            (nSlotId == SID_DRAW_XLINE               ||
-             nSlotId == SID_DRAW_CIRCLEARC           ||
-             nSlotId == SID_DRAW_SQUARE              ||
-             nSlotId == SID_DRAW_SQUARE_NOFILL       ||
-             nSlotId == SID_DRAW_SQUARE_ROUND        ||
-             nSlotId == SID_DRAW_SQUARE_ROUND_NOFILL ||
-             nSlotId == SID_DRAW_CIRCLE              ||
-             nSlotId == SID_DRAW_CIRCLE_NOFILL       ||
-             nSlotId == SID_DRAW_CIRCLEPIE           ||
-             nSlotId == SID_DRAW_CIRCLEPIE_NOFILL    ||
-             nSlotId == SID_DRAW_CIRCLECUT           ||
-             nSlotId == SID_DRAW_CIRCLECUT_NOFILL    ||
-             nSlotId == SID_DRAW_XPOLYGON            ||
-             nSlotId == SID_DRAW_XPOLYGON_NOFILL     ||
-             nSlotId == SID_3D_CUBE                  ||
-             nSlotId == SID_3D_SPHERE                ||
-             nSlotId == SID_3D_SHELL                 ||
-             nSlotId == SID_3D_HALF_SPHERE           ||
-             nSlotId == SID_3D_TORUS                 ||
-             nSlotId == SID_3D_CYLINDER              ||
-             nSlotId == SID_3D_CONE                  ||
-             nSlotId == SID_3D_PYRAMID ))
-
+        // #i33136#
+        if(bRestricted && doConstructOrthogonal())
         {
             // Restrict movement:
             // rectangle->quadrat, ellipse->circle etc.
