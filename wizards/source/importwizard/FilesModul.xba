@@ -168,7 +168,7 @@ Dim iOverwrite as Integer
 			End If
 
 			If Not IsNull(oDocument) Then
-				CheckIfMacroExists(oDocument, sComment)
+				CheckIfMacroExists(oDocument.BasicLibraries, sComment)
 				Select Case sExtension
 					Case &quot;sxw&quot;, &quot;sxc&quot;, &quot;sxi&quot;, &quot;sxd&quot;, &quot;sxs&quot;, &quot;sxm&quot;
 						SourceStemDir = RTrimStr(Applications(ApplIndex,SBDOCSOURCE), &quot;/&quot;)
@@ -446,36 +446,40 @@ Dim MaxRowIndex as Integer
 End Sub
 
 
-&apos; This macro has to be reworked out again as it works with deprecated interfaces
-&apos; It can be completed as soon as Bug #93295 will be fixed because right now it
-&apos; is not possible to access BasicLibraries and DialogLibraries from outside the 
-&apos; document
-Function CheckIfMacroExists(oDocument as Object, sComment as String) as Boolean
+
+Function CheckIfMacroExists(oBasicLibraries as Object, sComment as String) as Boolean
 Dim ModuleNames() as String
-Dim MaxIndex as Integer
-Dim oLibraryContainer as Object
+Dim ModuleName as String
+Dim MaxLibIndex as Integer
+Dim MaxModuleIndex as Integer
 Dim bMacroExists as Boolean
+Dim n as Integer
+Dim m as Integer
+Dim LibName as String
+Dim sBasicCode as String
+Dim oLibrary as Object
 	bMacroExists = False
-&apos;	oLibraryContainer = oDocument.LibraryContainer
-&apos;	If oLibraryContainer.hasElements Then
-&apos;		ModuleNames = oDocument.LibraryContainer.ElementNames
-&apos;		MaxIndex = Ubound(ModuleNames())
-&apos;		For i = 0 To MaxIndex
-&apos;			oLibrary = oLibraryContainer.getByName(ModuleNames(i))
-&apos;			If Not IsNull(oLibrary.getDialogContainer) Then
-&apos;				bMacroExists = True
-&apos;				Exit Function
-&apos;			End If
-&apos;			If oLibrary.ModuleContainer.HasElements Then
-&apos;				bMacroExists = True
-&apos;				Exit Function
-&apos;			End If
-&apos;		Next i
-&apos;	End If
-	If bMacroExists = True Then
-		ConcatComment(sComment, sReeditMacro)
+	bMacroExists = oBasicLibraries.hasElements
+	If bMacroExists Then
+		MaxLibIndex = Ubound(oBasicLibraries.ElementNames())
+		For n = 0 To MaxLibIndex
+			LibName = oBasicLibraries.ElementNames(n)
+			oLibrary = oBasicLibraries.getbyName(LibName)
+			If oLibrary.hasElements() Then
+				MaxModuleIndex = Ubound(oLibrary.ElementNames())
+				For m = 0 To MaxModuleIndex
+					ModuleName = oLibrary.ElementNames(m)
+					sBasicCode = oLibrary.getbyName(ModuleName)
+					If sBasicCode &lt;&gt; &quot;&quot; Then
+						ConcatComment(sComment, sReeditMacro)
+						CheckIfMacroExists() = True
+						Exit Function
+					End If
+				Next m
+			End If
+		Next n
 	End If
-	CheckIfMacroExists() = bMacroExists
+	CheckIfMacroExists() = False
 End Function
 
 

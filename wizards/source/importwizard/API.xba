@@ -82,6 +82,7 @@ Dim Index as Integer
 				sPath = &quot;&quot;
 			End If
 			If sPath = &quot;&quot; Then
+&apos; Todo: das User/Work Verzeichnis kann man hier wohl kaum nehmen!!
 				sPath = SOWorkPath
 			End If
 			GetDefaultPath = sPath
