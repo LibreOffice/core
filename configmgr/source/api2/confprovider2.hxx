@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confprovider2.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-06-18 15:46:02 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:34:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ namespace configmgr
     {
         OConfigurationProviderImpl*         m_pImpl;
         uno::Sequence< ::rtl::OUString >    m_aPrefetchNodes;
+        sal_Bool                            m_bEnableAsync;
 
     public:
         OConfigurationProvider(CreationContext const & xContext, ServiceImplementationInfo const* pServices);
