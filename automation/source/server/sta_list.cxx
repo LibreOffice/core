@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sta_list.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 17:08:29 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ BOOL StatementList::IsError = FALSE;
 BOOL StatementList::bDying = FALSE;
 BOOL StatementList::bExecuting = FALSE;
 StatementList *StatementList::pCurrentProfileStatement = NULL;
-USHORT StatementList::nControlType = CONST_CTTreeListBox;
+USHORT StatementList::nControlType = CONST_CTBrowseBox;
 #if OSL_DEBUG_LEVEL > 1
 EditWindow *StatementList::m_pDbgWin;
 #endif
@@ -137,7 +137,7 @@ USHORT StatementList::nMinTypeKeysDelay = 0;    // Verzögerung der einzelnen Ans
 USHORT StatementList::nMaxTypeKeysDelay = 0;
 BOOL StatementList::bDoTypeKeysDelay = FALSE;
 
-Window* StatementList::pFirstDocWin = NULL;
+Window* StatementList::pFirstDocFrame = NULL;
 
 #define IS_WINP_CLOSING(pWin) (pWin->GetHelpId() == 4321 && pWin->GetUniqueId() == 1234)
 
@@ -258,6 +258,20 @@ Window* StatementList::GetDocWin( USHORT nNr )
     return NULL;
 }
 
+USHORT StatementList::GetDocFrameCount()
+{
+    Window* pBase = Application::GetFirstTopLevelWindow();
+    USHORT nCount = 0;
+
+    while ( pBase )
+    {
+        if ( IsDocFrame( pBase ) )
+            nCount++;
+        pBase = Application::GetNextTopLevelWindow( pBase );
+    }
+    return nCount;
+}
+
 USHORT StatementList::GetDocWinCount()
 {
     Window* pBase = Application::GetFirstTopLevelWindow();
@@ -290,7 +304,7 @@ Window* StatementList::SearchAllWin( Window *pBase, Search &aSearch, BOOL MaybeB
                 Window *pPParent = pBase;
                 while ( pPParent->GET_REAL_PARENT() )
                     pPParent = pPParent->GET_REAL_PARENT();
-                if ( !IsFirstDocWin( pPParent ) )
+                if ( !IsFirstDocFrame( pPParent ) )
                 {
                     // get overlap window. Will be dialog else document itself
                     pBase = pBase->GetWindow( WINDOW_OVERLAP );
@@ -316,8 +330,8 @@ Window* StatementList::SearchAllWin( Window *pBase, Search &aSearch, BOOL MaybeB
 
         pBase = Application::GetFirstTopLevelWindow();
 
-        // Skip FirstDocWin
-        if ( bSearchFocusFirst && IsFirstDocWin( pBase ) )
+        // Skip FirstDocFrame
+        if ( bSearchFocusFirst && IsFirstDocFrame( pBase ) )
             pBase = Application::GetNextTopLevelWindow( pBase );
 
         while ( pBase )
@@ -327,8 +341,8 @@ Window* StatementList::SearchAllWin( Window *pBase, Search &aSearch, BOOL MaybeB
                 return pControl;
 
             pBase = Application::GetNextTopLevelWindow( pBase );
-            // Skip FirstDocWin
-            if ( bSearchFocusFirst && IsFirstDocWin( pBase ) )
+            // Skip FirstDocFrame
+            if ( bSearchFocusFirst && IsFirstDocFrame( pBase ) )
                 pBase = Application::GetNextTopLevelWindow( pBase );
         }
         return NULL;
@@ -659,27 +673,29 @@ Window* StatementList::GetAnyActive( BOOL MaybeBase )
     return pControl;
 }
 
-void StatementList::SetFirstDocWin( Window* pWin )
+void StatementList::SetFirstDocFrame( Window* pWin )
 {
-    DBG_ASSERT( IsDocWin( pWin ), "Non Document Window set as first Document Window" )
-    pFirstDocWin = pWin;
+    DBG_ASSERT( IsDocFrame( pWin ), "Non Document Frame set as first Document Frame" )
+    pFirstDocFrame = pWin;
 }
 
-Window* StatementList::GetFirstDocWin()
+Window* StatementList::GetFirstDocFrame()
 {
 
-    if ( pFirstDocWin && !WinPtrValid( pFirstDocWin ) )
-        pFirstDocWin = NULL;
-    if ( pFirstDocWin && !pFirstDocWin->IsVisible() )
-        pFirstDocWin = NULL;
-    if ( !pFirstDocWin )
+    if ( pFirstDocFrame && !WinPtrValid( pFirstDocFrame ) )
+        pFirstDocFrame = NULL;
+    if ( pFirstDocFrame && !pFirstDocFrame->IsVisible() )
+        pFirstDocFrame = NULL;
+    if ( pFirstDocFrame && !IsDocFrame( pFirstDocFrame ) )
+        pFirstDocFrame = NULL;
+    if ( !pFirstDocFrame )
     {
         Window* pBase = Application::GetFirstTopLevelWindow();
-        while ( pBase && !IsDocWin( pBase ) )
+        while ( pBase && !IsDocFrame( pBase ) )
             pBase = Application::GetNextTopLevelWindow( pBase );
 
         if ( pBase )
-            SetFirstDocWin( pBase );
+            SetFirstDocFrame( pBase );
 
         if ( !pBase )   // find just something
         {
@@ -690,15 +706,30 @@ Window* StatementList::GetFirstDocWin()
             return pBase;   // just for now, later we will hopefully have a Window
         }
     }
-    return pFirstDocWin;
+    return pFirstDocFrame;
 }
 
-BOOL StatementList::IsFirstDocWin( Window* pWin )
+BOOL StatementList::IsFirstDocFrame( Window* pWin )
 {
-    return pWin && ( pWin == GetFirstDocWin() || ( GetFirstDocWin() && pWin == GetFirstDocWin()->GetWindow( WINDOW_CLIENT ) ) ) && ( GetFirstDocWin() && IsDocWin( GetFirstDocWin() ) );
+    return pWin && ( pWin == GetFirstDocFrame() || ( GetFirstDocFrame() && pWin == GetFirstDocFrame()->GetWindow( WINDOW_CLIENT ) ) ) && ( GetFirstDocFrame() && IsDocFrame( GetFirstDocFrame() ) );
 }
 
-BOOL StatementList::IsDocWin( Window* pWin )
+MenuBar* StatementList::GetDocFrameMenuBar( Window* pWin )
+{
+    if ( pWin && pWin->IsVisible() && pWin->GetType() == WINDOW_BORDERWINDOW )
+    {
+        USHORT nCount;
+        for ( nCount = 0 ; nCount < pWin->GetChildCount() ; nCount++ )
+        {
+            if ( pWin->GetChild( nCount )->GetType() == WINDOW_WORKWINDOW )
+                return ((WorkWindow*)(pWin->GetChild( nCount )))->GetMenuBar();
+        }
+    }
+    return NULL;
+}
+
+// a Doc Frame is a Document or the Backing Window
+BOOL StatementList::IsDocFrame( Window* pWin )
 {
     if ( pWin && pWin->IsVisible() && pWin->GetType() == WINDOW_BORDERWINDOW )
     {
@@ -716,6 +747,23 @@ BOOL StatementList::IsDocWin( Window* pWin )
                 bHasMenuBar = TRUE;
         }
         return bHasWorkWindow && bHasMenuBar;
+    }
+    return FALSE;
+}
+
+// a Doc Win is a real document (not the Backing Window)
+BOOL StatementList::IsDocWin( Window* pWin )
+{
+    if ( pWin && IsDocFrame( pWin ) )
+    {
+        if ( GetDocFrameCount() != 1 )
+            return TRUE;
+        else
+        {
+            // check for the close button to see if we are the last one or only the backing Window
+            if ( GetDocFrameMenuBar( pWin ) )
+                return GetDocFrameMenuBar( pWin )->HasCloser();
+        }
     }
     return FALSE;
 }
