@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ednumber.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:05:25 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:22:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,7 +341,10 @@ void SwEditShell::NumIndent(short nIndent, int nLevel, BOOL bRelative)
 
     SwNumRule aRule(*GetCurNumRule());
 
-    aRule.Indent(nIndent, nLevel, bRelative);
+    // --> OD 2005-02-18 #i42921# - correction:
+    // consider change of synopsis: 3rd parameter has to be -1
+    aRule.Indent(nIndent, nLevel, -1, bRelative);
+    // <--
 
     SetCurNumRule(aRule);
 
@@ -368,7 +371,10 @@ void SwEditShell::NumIndent(short nIndent, const SwPosition & rPos)
         SwNumRule aRule(*pCurNumRule);
         aRule.Indent(nIndent, nLevel, nReferenceLevel, FALSE);
 
-        GetDoc()->SetNumRule(aPaM, aRule, sal_False );
+        // --> OD 2005-02-18 #i42921# - 3rd parameter = false in order to
+        // suppress setting of num rule at <aPaM>.
+        GetDoc()->SetNumRule( aPaM, aRule, sal_False );
+        // <--
     }
 
     EndAllAction();
@@ -749,14 +755,11 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule )
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
         for( USHORT n = 0; n < aRangeArr.Count(); ++n )
-            /* #109308# adapt to new signature of SetNumRule */
-            GetDoc()->SetNumRule( aRangeArr.SetPam( n, aPam ), rRule,
-                                  sal_False );
+            GetDoc()->SetNumRule( aRangeArr.SetPam( n, aPam ), rRule );
         GetDoc()->EndUndo( UNDO_END );
     }
     else
-        /* #109308# adapt to new signature of SetNumRule */
-        GetDoc()->SetNumRule( *pCrsr, rRule, sal_False );
+        GetDoc()->SetNumRule( *pCrsr, rRule );
 
     EndAllAction();
 }
