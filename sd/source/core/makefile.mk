@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:14:07 $
+#   last change: $Author: obo $ $Date: 2004-01-20 10:27:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,7 +93,8 @@ SLOFILES = $(SLO)$/stlsheet.obj  \
            $(SLO)$/sdpage2.obj	\
            $(SLO)$/typemap.obj	\
            $(SLO)$/pglink.obj   \
-           $(SLO)$/cusshow.obj
+           $(SLO)$/cusshow.obj  \
+           $(SLO)$/PageListWatcher.obj
 
 EXCEPTIONSFILES= \
            $(SLO)$/drawdoc.obj
@@ -117,7 +118,8 @@ SVXLIGHTOBJFILES = \
            $(OBJ)$/sdiocmpt.obj	\
            $(OBJ)$/sdpage2.obj	\
            $(OBJ)$/typemap.obj	\
-           $(OBJ)$/cusshow.obj
+           $(OBJ)$/cusshow.obj  \
+           $(OBJ)$/PageListWatcher.obj
 
 # --- Tagets -------------------------------------------------------
 
