@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-26 07:18:02 $
+ *  last change: $Author: cmc $ $Date: 2002-10-16 09:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2851,8 +2851,6 @@ Sequence< Any > SAL_CALL SwXStyle::getPropertyDefaults( const Sequence< OUString
 
                     if ( !pMap )
                         throw UnknownPropertyException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pNames[i], static_cast < cppu::OWeakObject * > ( this ) );
-                    if ( pMap->nFlags & PropertyAttribute::READONLY )
-                        throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pNames[i], static_cast < cppu::OWeakObject * > ( this ) );
 
                     if( pParentSet )
                         pRet[i] = aSwMapProvider.GetPropertySet(nPropSetId).getPropertyValue(pNames[i], *pParentSet);

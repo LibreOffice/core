@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-16 08:58:31 $
+ *  last change: $Author: cmc $ $Date: 2002-10-16 09:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2114,8 +2114,6 @@ Any SwXTextCursor::GetPropertyDefault(
                             rPropSet.getPropertyMap(), rPropertyName);
     if(pMap)
     {
-        if ( pMap->nFlags & PropertyAttribute::READONLY)
-            throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( 0 ) );
         if(pMap->nWID < RES_FRMATR_END)
         {
             const SfxPoolItem& rDefItem = pDoc->GetAttrPool().GetDefaultItem(pMap->nWID);
@@ -2376,8 +2374,6 @@ Sequence< Any > SAL_CALL SwXTextCursor::getPropertyDefaults( const Sequence< OUS
                     else
                         throw UnknownPropertyException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pNames[i], static_cast < cppu::OWeakObject * > ( 0 ) );
                 }
-                if ( pMap->nFlags & PropertyAttribute::READONLY)
-                    throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pNames[i], static_cast < cppu::OWeakObject * > ( 0 ) );
                 if(pMap->nWID < RES_FRMATR_END)
                 {
                     const SfxPoolItem& rDefItem = pDoc->GetAttrPool().GetDefaultItem(pMap->nWID);

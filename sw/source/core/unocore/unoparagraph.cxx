@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoparagraph.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-26 07:17:29 $
+ *  last change: $Author: cmc $ $Date: 2002-10-16 09:19:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -652,8 +652,6 @@ uno::Any SwXParagraph::getPropertyDefault(const OUString& rPropertyName)
                                 aPropSet.getPropertyMap(), rPropertyName);
         if(pMap)
         {
-            if ( pMap->nFlags & PropertyAttribute::READONLY)
-                throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only:" ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             if(pMap->nWID < RES_FRMATR_END)
             {
                 const SfxPoolItem& rDefItem =

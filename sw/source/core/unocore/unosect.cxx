@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-24 14:40:51 $
+ *  last change: $Author: cmc $ $Date: 2002-10-16 09:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1328,8 +1328,6 @@ Any SwXTextSection::getPropertyDefault( const OUString& rPropertyName )
                                             aPropSet.getPropertyMap(), rPropertyName);
     if (!pMap)
         throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-    if ( pMap->nFlags & PropertyAttribute::READONLY)
-        throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
     switch(pMap->nWID)
     {

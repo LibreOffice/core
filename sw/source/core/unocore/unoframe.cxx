@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-24 14:54:04 $
+ *  last change: $Author: cmc $ $Date: 2002-10-16 09:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1781,8 +1781,6 @@ Any SwXFrame::getPropertyDefault( const OUString& rPropertyName )
         const SfxItemPropertyMap* pCur = SfxItemPropertyMap::GetByName(_pMap, rPropertyName);
         if(pCur)
         {
-            if ( pCur->nFlags & PropertyAttribute::READONLY )
-                throw RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             if ( pCur->nWID < RES_FRMATR_END )
             {
                 const SfxPoolItem& rDefItem =

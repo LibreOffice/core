@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextDefaults.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-16 08:56:04 $
+ *  last change: $Author: cmc $ $Date: 2002-10-16 09:19:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,8 +244,6 @@ PropertyState SAL_CALL SwXTextDefaults::getPropertyState( const OUString& rPrope
     const SfxItemPropertyMap *pMap = SfxItemPropertyMap::GetByName( aPropSet.getPropertyMap(), rPropertyName);
     if (!pMap)
         throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-    if ( pMap->nFlags & PropertyAttribute::READONLY)
-        throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
     const SfxPoolItem& rItem = pDoc->GetDefault(pMap->nWID);
     if (IsStaticDefaultItem ( &rItem ) )
@@ -292,8 +290,6 @@ Any SAL_CALL SwXTextDefaults::getPropertyDefault( const OUString& rPropertyName 
     const SfxItemPropertyMap *pMap = SfxItemPropertyMap::GetByName( aPropSet.getPropertyMap(), rPropertyName);
     if (!pMap)
         throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-    if ( pMap->nFlags & PropertyAttribute::READONLY)
-        throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     Any aRet;
     SfxItemPool rSet (pDoc->GetAttrPool());
     const SfxPoolItem *pItem = rSet.GetPoolDefaultItem ( pMap->nWID );
