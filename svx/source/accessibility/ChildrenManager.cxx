@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: af $ $Date: 2002-04-11 12:55:11 $
+ *  last change: $Author: af $ $Date: 2002-04-18 16:35:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ namespace accessibility {
 ChildrenManager::ChildrenManager (
     const uno::Reference<XAccessible>& rxParent,
     const uno::Reference<drawing::XShapes>& rxShapeList,
-    AccessibleShapeTreeInfo& rShapeTreeInfo,
+    const AccessibleShapeTreeInfo& rShapeTreeInfo,
     AccessibleContextBase& rContext)
     : mpImpl (NULL)
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: af $ $Date: 2002-04-15 15:14:29 $
+ *  last change: $Author: af $ $Date: 2002-04-18 16:38:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ static AccessibleShapeTreeInfo aEmptyShapeTreeInfo;
 ChildrenManagerImpl::ChildrenManagerImpl (
     const uno::Reference<XAccessible>& rxParent,
     const uno::Reference<drawing::XShapes>& rxShapeList,
-    AccessibleShapeTreeInfo& rShapeTreeInfo,
+    const AccessibleShapeTreeInfo& rShapeTreeInfo,
     AccessibleContextBase& rContext)
     : mxShapeList (rxShapeList),
       mxParent (rxParent),

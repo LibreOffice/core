@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: af $ $Date: 2002-04-15 15:12:22 $
+ *  last change: $Author: af $ $Date: 2002-04-18 16:37:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ public:
             ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::XShapes>& rxShapeList,
-        AccessibleShapeTreeInfo& rShapeTreeInfo,
+        const AccessibleShapeTreeInfo& rShapeTreeInfo,
         AccessibleContextBase& rContext);
 
     /** If there still are managed children these are marked as DEFUNC and
@@ -242,6 +242,7 @@ public:
     */
     void SetInfo (AccessibleShapeTreeInfo& rShapeTreeInfo);
 
+
     //=====  lang::XEventListener  ============================================
 
     virtual void SAL_CALL
@@ -308,7 +309,7 @@ protected:
 
     /** Bundel of information passed down the shape tree.
     */
-    AccessibleShapeTreeInfo& mrShapeTreeInfo;
+    const AccessibleShapeTreeInfo& mrShapeTreeInfo;
 
     /** Reference to an accessible context object that is used to inform its
         listeners of new and remved children.
