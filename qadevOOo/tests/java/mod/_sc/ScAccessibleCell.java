@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessibleCell.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $
+ *  last change: $Author: kz $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,11 +95,11 @@ import com.sun.star.uno.XInterface;
  * a cell in the spreadsheet. <p>
  * Object implements the following interfaces :
  * <ul>
- *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleSelection</code></li>
- *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster</code></li>
- *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleComponent</code></li>
- *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleTable</code></li>
- *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleContext</code></li>
+ *  <li> <code>::com::sun::star::accessibility::XAccessibleSelection</code></li>
+ *  <li> <code>::com::sun::star::accessibility::XAccessibleEventBroadcaster</code></li>
+ *  <li> <code>::com::sun::star::accessibility::XAccessibleComponent</code></li>
+ *  <li> <code>::com::sun::star::accessibility::XAccessibleTable</code></li>
+ *  <li> <code>::com::sun::star::accessibility::XAccessibleContext</code></li>
  * </ul> <p>
  *
  * @see com.sun.star.accessibility.XAccessibleSelection
