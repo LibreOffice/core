@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleIconChoiceCtrlEntry.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:57 $
+ *  last change:$Date: 2003-04-28 12:17:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,9 @@ import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.URL;
-import drafts.com.sun.star.accessibility.AccessibleRole;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.awt.XExtendedToolkit;
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.awt.XExtendedToolkit;
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -86,8 +86,8 @@ import util.AccessibilityTools;
 import util.DesktopTools;
 import util.SOfficeFactory;
 import com.sun.star.util.XURLTransformer;
-import drafts.com.sun.star.accessibility.XAccessibleAction;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleAction;
+import com.sun.star.accessibility.XAccessibleContext;
 
 /**
  * Test for object that implements the following interfaces :
@@ -103,10 +103,10 @@ import drafts.com.sun.star.accessibility.XAccessibleContext;
  *  drafts::com::sun::star::accessibility::XAccessibleText</code></li>
  * </ul> <p>
  *
- * @see drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster
- * @see drafts.com.sun.star.accessibility.XAccessibleContext
- * @see drafts.com.sun.star.accessibility.XAccessibleComponent
- * @see drafts.com.sun.star.accessibility.XAccessibleText
+ * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
+ * @see com.sun.star.accessibility.XAccessibleContext
+ * @see com.sun.star.accessibility.XAccessibleComponent
+ * @see com.sun.star.accessibility.XAccessibleText
  * @see ifc.accessibility._XAccessibleEventBroadcaster
  * @see ifc.accessibility._XAccessibleContext
  * @see ifc.accessibility._XAccessibleComponent
@@ -173,9 +173,9 @@ public class AccessibleIconChoiceCtrlEntry extends TestCase {
      * @param log writer to log information while testing
      *
      * @see com.sun.star.awt.Toolkit
-     * @see drafts.com.sun.star.accessibility.AccessibleRole
+     * @see com.sun.star.accessibility.AccessibleRole
      * @see ifc.accessibility._XAccessibleEventBroadcaster
-     * @see drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster
+     * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
      */
     protected TestEnvironment createTestEnvironment(
         TestParameters tParam, PrintWriter log) {
@@ -256,7 +256,7 @@ public class AccessibleIconChoiceCtrlEntry extends TestCase {
             AccessibleRole.LABEL, "Internet");
 
         XAccessibleContext closeButton = at.getAccessibleObjectForRole(xRoot,
-            AccessibleRole.PUSHBUTTON, "Close");
+            AccessibleRole.PUSH_BUTTON, "Close");
 
         accCloseButton = (XAccessibleAction)
             UnoRuntime.queryInterface(XAccessibleAction.class, closeButton);
@@ -277,6 +277,9 @@ public class AccessibleIconChoiceCtrlEntry extends TestCase {
 
         tEnv.addObjRelation("EditOnly",
                     "This method isn't supported in this dialog");
+
+        tEnv.addObjRelation("LimitedBounds",
+                    "only delivers senseful values for getCharacterBounds(0,length-1)");
 
         return tEnv;
     }

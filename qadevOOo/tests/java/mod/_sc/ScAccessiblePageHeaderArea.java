@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessiblePageHeaderArea.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2003-01-31 13:38:48 $
+ *  last change: $Date: 2003-04-28 12:25:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,11 +76,11 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
-import drafts.com.sun.star.accessibility.AccessibleRole;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleAction;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleAction;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleComponent;
 import java.io.PrintWriter;
 import lib.Status;
 import lib.StatusException;
@@ -103,7 +103,7 @@ import com.sun.star.text.XText;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.AnyConverter;
 
-import drafts.com.sun.star.accessibility.XAccessibleStateSet;
+import com.sun.star.accessibility.XAccessibleStateSet;
 
 /**
  * Test for object which is represented by accessible component of
@@ -115,8 +115,8 @@ import drafts.com.sun.star.accessibility.XAccessibleStateSet;
  *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleContext</code></li>
  * </ul> <p>
  *
- * @see drafts.com.sun.star.accessibility.XAccessibleComponent
- * @see drafts.com.sun.star.accessibility.XAccessibleContext
+ * @see com.sun.star.accessibility.XAccessibleComponent
+ * @see com.sun.star.accessibility.XAccessibleContext
  * @see ifc.n.star.accessibility._XAccessibleComponent
  * @see ifc.n.star.accessibility._XAccessibleContext
  */
@@ -242,12 +242,11 @@ public class ScAccessiblePageHeaderArea extends TestCase {
         XAccessible zoomIn = null;
         try {
             XAccessibleContext mainWin =
-                at.getAccessibleObjectForRole(xRoot,AccessibleRole.LAYEREDPANE);
+                at.getAccessibleObjectForRole(xRoot,AccessibleRole.TOOL_BAR,"Page");
 
-            XAccessible PageViewObjectBar = mainWin.getAccessibleChild(2);
+            System.out.println("TOOLBAR: "+mainWin.getAccessibleName());
 
-            zoomIn =
-                PageViewObjectBar.getAccessibleContext().getAccessibleChild(5);
+            zoomIn = mainWin.getAccessibleChild(5);
             log.println("Getting "+
                             zoomIn.getAccessibleContext().getAccessibleName());
         } catch (com.sun.star.lang.IndexOutOfBoundsException ibe) {}

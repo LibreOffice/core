@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessiblePreviewHeaderCell.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-01-31 13:47:14 $
+ *  last change:$Date: 2003-04-28 12:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,9 @@ import com.sun.star.awt.XWindow;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.util.XURLTransformer;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
-import drafts.com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.style.XStyleFamiliesSupplier;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.beans.XPropertySet;
@@ -113,11 +113,11 @@ import com.sun.star.uno.Type;
  *  <li><code>drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster
  *  </code></li>
  * </ul>
- * @see drafts.com.sun.star.accessibility.XAccessibleComponent
- * @see drafts.com.sun.star.accessibility.XAccessibleContext
- * @see drafts.com.sun.star.accessibility.XAccessibleSelection
- * @see drafts.com.sun.star.accessibility.XAccessibleValue
- * @see drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster
+ * @see com.sun.star.accessibility.XAccessibleComponent
+ * @see com.sun.star.accessibility.XAccessibleContext
+ * @see com.sun.star.accessibility.XAccessibleSelection
+ * @see com.sun.star.accessibility.XAccessibleValue
+ * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
  * @see ifc.accessibility._XAccessibleEventBroadcaster
  * @see ifc.accessibility._XAccessibleComponent
  * @see ifc.accessibility._XAccessibleContext

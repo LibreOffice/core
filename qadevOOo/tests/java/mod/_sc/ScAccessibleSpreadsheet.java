@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessibleSpreadsheet.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-01-31 13:54:01 $
+ *  last change:$Date: 2003-04-28 12:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.frame.XModel;
 import com.sun.star.awt.XWindow;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.sheet.XSpreadsheets;
 import com.sun.star.sheet.XSpreadsheet;
@@ -98,10 +98,10 @@ import com.sun.star.uno.Type;
  *  <li><code>drafts::com::sun::star::accessibility::XAccessibleTable</code>
  *  </li>
  * </ul>
- * @see drafts.com.sun.star.accessibility.XAccessibleComponent
- * @see drafts.com.sun.star.accessibility.XAccessibleContext
- * @see drafts.com.sun.star.accessibility.XAccessibleSelection
- * @see drafts.com.sun.star.accessibility.XAccessibleTable
+ * @see com.sun.star.accessibility.XAccessibleComponent
+ * @see com.sun.star.accessibility.XAccessibleContext
+ * @see com.sun.star.accessibility.XAccessibleSelection
+ * @see com.sun.star.accessibility.XAccessibleTable
  * @see ifc.accessibility._XAccessibleComponent
  * @see ifc.accessibility._XAccessibleContext
  * @see ifc.accessibility._XAccessibleSelection

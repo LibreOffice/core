@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleEditableText.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:07:24 $
+ *  last change:$Date: 2003-04-28 12:22:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 package ifc.accessibility;
 
 import lib.MultiMethodTest;
-import drafts.com.sun.star.accessibility.XAccessibleEditableText;
+import com.sun.star.accessibility.XAccessibleEditableText;
 import com.sun.star.beans.PropertyValue;
 import util.ValueComparer;
 import util.ValueChanger;
@@ -96,11 +96,11 @@ import util.ValueChanger;
  */
 public class _XAccessibleEditableText extends MultiMethodTest {
     private static final String className =
-        "drafts.com.sun.star.accessibility.XAccessibleEditableText" ;
+        "com.sun.star.accessibility.XAccessibleEditableText" ;
 
     public XAccessibleEditableText oObj = null;
 
-    // temporary while accessibility package is in drafts.com.sun.star
+    // temporary while accessibility package is in com.sun.star
     protected String getTestedClassName() {
         return className;
     }
@@ -483,7 +483,7 @@ public class _XAccessibleEditableText extends MultiMethodTest {
         PropertyValue[] attrs = null;
 
         try {
-            attrs = oObj.getCharacterAttributes(0);
+            attrs = oObj.getCharacterAttributes(0, new String[]{""});
             log.print("setAttributes(-1," + (length - 1) + "):");
             locRes = oObj.setAttributes(-1, length - 1, attrs);
             log.println(locRes);
@@ -520,7 +520,7 @@ public class _XAccessibleEditableText extends MultiMethodTest {
                 || (!changeableAttr && !locRes);
             if (changeableAttr) {
                 log.print("checking that new attributes was set...");
-                PropertyValue[] newAttrs = oObj.getCharacterAttributes(0);
+                PropertyValue[] newAttrs = oObj.getCharacterAttributes(0, new String[]{""});
                 locRes = ValueComparer.equalValue(attrs, newAttrs);
                 log.println(locRes);
                 res &= locRes;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SbaXGridControl.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-02-27 12:49:07 $
+ *  last change:$Date: 2003-04-28 12:24:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,11 +64,11 @@ package mod._dbaccess;
 import java.io.PrintWriter;
 import java.util.Comparator;
 
-import drafts.com.sun.star.accessibility.AccessibleRole;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleAction;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
-import drafts.com.sun.star.awt.XExtendedToolkit;
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleAction;
+import com.sun.star.accessibility.XAccessibleComponent;
+import com.sun.star.awt.XExtendedToolkit;
 import util.AccessibilityTools;
 
 import com.sun.star.awt.Point;
@@ -212,7 +212,7 @@ public class SbaXGridControl extends TestCase {
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         XInterface button = at.getAccessibleObjectForRole
-            (xRoot, AccessibleRole.PUSHBUTTON);
+            (xRoot, AccessibleRole.PUSH_BUTTON);
 
         XAccessibleAction action = (XAccessibleAction)
                     UnoRuntime.queryInterface(XAccessibleAction.class, button);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SmEditAccessible.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-03-26 14:55:00 $
+ *  last change:$Date: 2003-04-28 12:31:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,11 +75,11 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.frame.XController;
 import util.AccessibilityTools;
 import com.sun.star.awt.XWindow;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.AccessibleRole;
 import util.utils;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleComponent;
+import com.sun.star.accessibility.XAccessibleContext;
 
 /**
  * Object implements the following interfaces :
@@ -91,11 +91,11 @@ import drafts.com.sun.star.accessibility.XAccessibleContext;
  *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleText</code></li>
  * </ul> <p>
  *
- * @see drafts.com.sun.star.accessibility.XAccessible
- * @see drafts.com.sun.star.accessibility.XAccessibleComponent
- * @see drafts.com.sun.star.accessibility.XAccessibleContext
- * @see drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster
- * @see drafts.com.sun.star.accessibility.XAccessibleText
+ * @see com.sun.star.accessibility.XAccessible
+ * @see com.sun.star.accessibility.XAccessibleComponent
+ * @see com.sun.star.accessibility.XAccessibleContext
+ * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
+ * @see com.sun.star.accessibility.XAccessibleText
  * @see ifc.accessibility._XAccessible
  * @see ifc.accessibility._XAccessibleComponent
  * @see ifc.accessibility._XAccessibleContext
@@ -109,9 +109,7 @@ public class SmEditAccessible extends TestCase {
      * Creates a <code>StarMath</code> document and obtains an accessibility
      * component with the role <code>AccessibleRole.PANEL</code>.
      */
-    public synchronized TestEnvironment createTestEnvironment
-            ( TestParameters Param, PrintWriter log )
-            throws StatusException {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
         try {
@@ -160,11 +158,14 @@ public class SmEditAccessible extends TestCase {
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         oObj = at.getAccessibleObjectForRole
-            (xRoot, AccessibleRole.PANEL, "Commands");
+            (xRoot, AccessibleRole.PANEL, "", "SmEditAccessible");
 
         log.println("ImplementationName " + utils.getImplName(oObj));
-
+        //at.printAccessibleTree(log,xRoot);
         TestEnvironment tEnv = new TestEnvironment(oObj);
+
+        tEnv.addObjRelation("Destroy", new Boolean(true));
+
         final XAccessibleContext con = (XAccessibleContext) UnoRuntime.queryInterface(XAccessibleContext.class, oObj);
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){

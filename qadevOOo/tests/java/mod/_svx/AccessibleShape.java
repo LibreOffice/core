@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:11 $
+ *  last change:$Date: 2003-04-28 12:16:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@ import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import drafts.com.sun.star.accessibility.AccessibleRole;
-import drafts.com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
 import java.io.PrintWriter;
 import lib.StatusException;
 import lib.TestCase;
@@ -130,6 +130,7 @@ public class AccessibleShape extends TestCase {
         XWindow xWindow = at.getCurrentWindow (tParam.getMSF(),aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
+        //at.printAccessibleTree(log,xRoot);
 
         oObj = at.getAccessibleObjectForRole
             (xRoot, AccessibleRole.SHAPE, "Rectangle");

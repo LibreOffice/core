@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessible.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:07:26 $
+ *  last change:$Date: 2003-04-28 12:22:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 
 package ifc.accessibility;
 
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleContext;
 import lib.MultiMethodTest;
 
 /**
@@ -76,11 +76,11 @@ import lib.MultiMethodTest;
 public class _XAccessible extends MultiMethodTest {
 
     private static final String className =
-        "drafts.com.sun.star.accessibility.XAccessible" ;
+        "com.sun.star.accessibility.XAccessible" ;
 
     public XAccessible oObj = null;
 
-    // temporary while accessibility package is in drafts.com.sun.star
+    // temporary while accessibility package is in com.sun.star
     protected String getTestedClassName() {
         return className;
     }

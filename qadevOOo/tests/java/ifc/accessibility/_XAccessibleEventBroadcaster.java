@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleEventBroadcaster.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-03-26 14:54:56 $
+ *  last change:$Date: 2003-04-28 12:22:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,11 @@
 package ifc.accessibility;
 
 import com.sun.star.lang.EventObject;
-import drafts.com.sun.star.accessibility.AccessibleEventObject;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster;
-import drafts.com.sun.star.accessibility.XAccessibleEventListener;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.AccessibleEventObject;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleEventBroadcaster;
+import com.sun.star.accessibility.XAccessibleEventListener;
+import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.uno.UnoRuntime;
 import lib.MultiMethodTest;
 import lib.Status;
@@ -74,7 +74,7 @@ import lib.StatusException;
 
 /**
  * Testing <code>
- * drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster</code>
+ * com.sun.star.accessibility.XAccessibleEventBroadcaster</code>
  * interface methods :
  * <ul>
  *  <li><code> addEventListener()</code></li>
@@ -89,7 +89,7 @@ import lib.StatusException;
  *   some actions for generating any kind of <code>AccessibleEvent</code></li>
  * <ul> <p>
  *
- * @see drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster
+ * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
  */
 public class _XAccessibleEventBroadcaster extends MultiMethodTest {
 
@@ -98,12 +98,13 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
     }
 
     private static final String className =
-    "drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster" ;
+    "com.sun.star.accessibility.XAccessibleEventBroadcaster" ;
 
     public XAccessibleEventBroadcaster oObj = null;
     public String EventMsg = "";
+    public boolean destroy = false;
 
-    // temporary while accessibility package is in drafts.com.sun.star
+    // temporary while accessibility package is in com.sun.star
     protected String getTestedClassName() {
         return className;
     }
@@ -117,12 +118,12 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
             log.println("Listener, Event : " + ev.EventId);
             System.out.println("EventID: " + ev.EventId);
             Object old=ev.OldValue;
-            if (old instanceof drafts.com.sun.star.accessibility.XAccessible) {
+            if (old instanceof com.sun.star.accessibility.XAccessible) {
                 System.out.println("Old: "+((XAccessible)old).getAccessibleContext().getAccessibleName());
             }
 
             Object nev=ev.NewValue;
-            if (nev instanceof drafts.com.sun.star.accessibility.XAccessible) {
+            if (nev instanceof com.sun.star.accessibility.XAccessible) {
                 System.out.println("New: "+((XAccessible)nev).getAccessibleContext().getAccessibleName());
             }
             notifiedEvent = ev;
@@ -141,6 +142,10 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
             throw new StatusException(Status.failed("Relation missed."));
         }
         EventMsg = (String) tEnv.getObjRelation("EventMsg");
+        Object dp = tEnv.getObjRelation("Destroy");
+        if (dp != null) {
+            destroy=true;
+        }
     }
 
     EventProducer prod = null ;
@@ -151,14 +156,14 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
      * Has <b> OK </b> status if both listeners were called
      */
     public void _addEventListener() {
-        log.println("adding two listeners");
+        log.println("adding listener");
         oObj.addEventListener(list);
         boolean isTransient = chkTransient(tEnv.getTestObject());
         log.println("fire event");
         prod.fireEvent() ;
 
         try {
-            Thread.sleep(1500);
+            Thread.sleep(3000);
         }
         catch (InterruptedException ex) {
         }
@@ -200,7 +205,7 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
 
         list.notifiedEvent = null;
 
-        log.println("remove first listener");
+        log.println("remove listener");
         oObj.removeEventListener(list);
 
         log.println("fire event");
@@ -225,9 +230,9 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
         XAccessibleContext accCon = (XAccessibleContext)
                     UnoRuntime.queryInterface(XAccessibleContext.class,Testcase);
         if (accCon.getAccessibleStateSet().contains(
-            drafts.com.sun.star.accessibility.AccessibleStateType.TRANSIENT)){
+            com.sun.star.accessibility.AccessibleStateType.TRANSIENT)){
             if (!accCon.getAccessibleParent().getAccessibleContext().getAccessibleStateSet().contains(
-                drafts.com.sun.star.accessibility.AccessibleStateType.MANAGES_DESCENDANT)) {
+                com.sun.star.accessibility.AccessibleStateType.MANAGES_DESCENDANTS)) {
                 throw new lib.StatusException(lib.Status.failed("Parent doesn't manage descendents"));
             }
             ret=true;
@@ -239,7 +244,7 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
     * Forces environment recreation.
     */
     protected void after() {
-        disposeEnvironment();
+        if (destroy) disposeEnvironment();
     }
 
 

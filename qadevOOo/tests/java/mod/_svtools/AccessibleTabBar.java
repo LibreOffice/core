@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTabBar.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:57 $
+ *  last change:$Date: 2003-04-28 12:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,9 +69,9 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import drafts.com.sun.star.accessibility.AccessibleRole;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.awt.XExtendedToolkit;
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.awt.XExtendedToolkit;
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -79,8 +79,8 @@ import lib.TestParameters;
 import util.AccessibilityTools;
 import util.DesktopTools;
 import util.SOfficeFactory;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleComponent;
+import com.sun.star.accessibility.XAccessibleContext;
 
 
 public class AccessibleTabBar extends TestCase {
@@ -114,9 +114,9 @@ public class AccessibleTabBar extends TestCase {
      * @param log writer to log information while testing
      *
      * @see com.sun.star.awt.Toolkit
-     * @see drafts.com.sun.star.accessibility.AccessibleRole
+     * @see com.sun.star.accessibility.AccessibleRole
      * @see ifc.accessibility._XAccessibleEventBroadcaster
-     * @see drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster
+     * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
      */
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
         PrintWriter log) {

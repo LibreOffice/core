@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleSelection.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-03-26 14:54:56 $
+ *  last change:$Date: 2003-04-28 12:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,12 @@
 package ifc.accessibility;
 
 import lib.MultiMethodTest;
-import drafts.com.sun.star.accessibility.XAccessibleSelection;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleSelection;
+import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.uno.UnoRuntime;
 import lib.Status;
 import lib.StatusException;
-import drafts.com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessible;
 
 /**
  * Testing <code>com.sun.star.accessibility.XAccessibleSelection</code>
@@ -79,7 +79,7 @@ import drafts.com.sun.star.accessibility.XAccessible;
  *  <li><code>selectAllAccessible()</code></li>
  *  <li><code>getSelectedAccessibleChildCount()</code></li>
  *  <li><code>getSelectedAccessibleChild()</code></li>
- *  <li><code>deselectSelectedAccessibleChild()</code></li>
+ *  <li><code>deselectAccessibleChild()</code></li>
  * </ul> <p>
  *
  * This test needs the following object relations :
@@ -95,9 +95,9 @@ import drafts.com.sun.star.accessibility.XAccessible;
  */
 public class _XAccessibleSelection extends MultiMethodTest {
     private static final String className =
-        "drafts.com.sun.star.accessibility.XAccessibleSelection";
+        "com.sun.star.accessibility.XAccessibleSelection";
 
-    // temporary while accessibility package is in drafts.com.sun.star
+    // temporary while accessibility package is in com.sun.star
     protected String getTestedClassName() {
         return className;
     }
@@ -111,7 +111,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
     /**
      * Retrieves the interface <code>XAccessibleContext</code>
      * and object relation.
-     * @see drafts.com.sun.star.accessibility.XAccessibleContext
+     * @see com.sun.star.accessibility.XAccessibleContext
      * @see ifc.accessibility.XAccessibleContext
      */
     protected void before() {
@@ -161,10 +161,23 @@ public class _XAccessibleSelection extends MultiMethodTest {
             res &= true;
         }
 
-        if (childCount > 0) {
+        log.println("ChildCount: "+childCount);
+        int usedChilds = childCount;
+
+        if (childCount > 500) {
+            log.println("Restricting to 500");
+            usedChilds = 500;
+        }
+
+        if (usedChilds > 0) {
             try {
-                log.println("Select child with index " + (childCount-1));
-                oObj.selectAccessibleChild(childCount - 1);
+                for (int i=0;i<usedChilds;i++) {
+                    log.println("Trying to select child with index " + (i));
+                    if (isSelectable(tEnv.getTestObject(),i)) {
+                        oObj.selectAccessibleChild(i);
+                        log.println("OK");
+                    } else log.println("Child isn't selectable");
+                }
                 res &= true;
             } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
                 log.println("Unexpected exception");
@@ -209,9 +222,14 @@ public class _XAccessibleSelection extends MultiMethodTest {
             res &= true;
         }
 
-        if (childCount > 0) {
+        int SelectableChildCount = chkSelectable(tEnv.getTestObject());
+
+        log.println("SelectableChildCount: "+SelectableChildCount);
+
+        if (SelectableChildCount > 0) {
             try {
-                log.print("isAccessibleChildSelected(" + (childCount-1)+ ")? ");
+                oObj.selectAllAccessible();
+                log.println("isAccessibleChildSelected(" + (childCount-1)+ ")? ");
                 isSelected = oObj.isAccessibleChildSelected(childCount - 1);
                 log.println(isSelected);
                 res &= isSelected;
@@ -276,7 +294,9 @@ public class _XAccessibleSelection extends MultiMethodTest {
         boolean res = true;
         boolean isSelected = true;
 
-        if (childCount > 0 && multiSelection) {
+        int SelectableChildCount = chkSelectable(tEnv.getTestObject());
+
+        if (SelectableChildCount > 0 && multiSelection) {
             try {
                 log.print("isAccessibleChildSelected(1)? ");
                 isSelected = oObj.isAccessibleChildSelected(1);
@@ -364,7 +384,9 @@ public class _XAccessibleSelection extends MultiMethodTest {
             res &= true;
         }
 
-        if (childCount > 0) {
+        int SelectableChildCount = chkSelectable(tEnv.getTestObject());
+
+        if (SelectableChildCount > 0) {
             try {
                 log.println("selectAccessibleChild(" + (childCount-1) + ")");
                 oObj.selectAccessibleChild(childCount - 1);
@@ -388,7 +410,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
      * with correct index and if number of selected child was
      * decreased after the correct call.
      */
-    public void _deselectSelectedAccessibleChild() {
+    public void _deselectAccessibleChild() {
         executeMethod("getSelectedAccessibleChild()");
 
         boolean res = true;
@@ -396,8 +418,8 @@ public class _XAccessibleSelection extends MultiMethodTest {
         log.println("getSelectedAccessibleChildCount():" + selCount);
 
         try {
-            log.println("deselectSelectedAccessibleChild(-1)");
-            oObj.deselectSelectedAccessibleChild(-1);
+            log.println("deselectAccessibleChild(-1)");
+            oObj.deselectAccessibleChild(-1);
             log.println("Exception was expected");
             res = false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
@@ -406,8 +428,8 @@ public class _XAccessibleSelection extends MultiMethodTest {
         }
 
         try {
-            log.println("deselectSelectedAccessibleChild(" +(childCount+1) + ")");
-            oObj.deselectSelectedAccessibleChild(childCount + 1);
+            log.println("deselectAccessibleChild(" +(childCount+1) + ")");
+            oObj.deselectAccessibleChild(childCount + 1);
             log.println("Exception was expected");
             res = false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
@@ -421,8 +443,8 @@ public class _XAccessibleSelection extends MultiMethodTest {
 
         if (childCount > 0 && selCount > 0) {
             try {
-                log.println("deselectSelectedAccessibleChild(" +(selCount-1) + ")");
-                oObj.deselectSelectedAccessibleChild(selCount-1);
+                log.println("deselectAccessibleChild(" +(selCount-1) + ")");
+                oObj.deselectAccessibleChild(selCount-1);
                 int newSelCount = oObj.getSelectedAccessibleChildCount();
                 log.println("getSelectedAccessibleChildCount():" + newSelCount);
                 res &= (selCount > newSelCount);
@@ -433,7 +455,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
             }
         }
 
-        tRes.tested("deselectSelectedAccessibleChild()", res);
+        tRes.tested("deselectAccessibleChild()", res);
     }
 
     protected static int chkSelectable(Object Testcase) {
@@ -445,12 +467,27 @@ public class _XAccessibleSelection extends MultiMethodTest {
         for (int i=0;i<cc;i++) {
             try {
                 if (accCon.getAccessibleChild(i).getAccessibleContext().getAccessibleStateSet().contains(
-                    drafts.com.sun.star.accessibility.AccessibleStateType.SELECTABLE)){
+                    com.sun.star.accessibility.AccessibleStateType.SELECTABLE)){
                     ret = ret + 1;
                 }
             } catch (com.sun.star.lang.IndexOutOfBoundsException iab) {}
         }
         return ret;
+    }
+
+    protected static boolean isSelectable(Object Testcase, int index) {
+        XAccessibleContext accCon = (XAccessibleContext)
+                    UnoRuntime.queryInterface(XAccessibleContext.class,Testcase);
+        boolean res = false;
+        try {
+            if (accCon.getAccessibleChild(index).getAccessibleContext().getAccessibleStateSet().contains(
+                com.sun.star.accessibility.AccessibleStateType.SELECTABLE)){
+                res=true;
+            }
+        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            System.out.println("Exception while checking for selectability");
+        }
+        return res;
     }
 
     private void shortWait() {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessiblePreviewTable.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-02-28 13:07:37 $
+ *  last change:$Date: 2003-04-28 12:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,10 +81,10 @@ import com.sun.star.awt.XWindow;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.util.XURLTransformer;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.AccessibleRole;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
-import drafts.com.sun.star.accessibility.XAccessibleAction;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleAction;
 import com.sun.star.sheet.XSpreadsheets;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.sheet.XSpreadsheet;
@@ -107,11 +107,11 @@ import com.sun.star.uno.Type;
  *  <li><code>drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster
  *  </code></li>
  * </ul>
- * @see drafts.com.sun.star.accessibility.XAccessibleComponent
- * @see drafts.com.sun.star.accessibility.XAccessibleContext
- * @see drafts.com.sun.star.accessibility.XAccessibleSelection
- * @see drafts.com.sun.star.accessibility.XAccessibleTable
- * @see drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster
+ * @see com.sun.star.accessibility.XAccessibleComponent
+ * @see com.sun.star.accessibility.XAccessibleContext
+ * @see com.sun.star.accessibility.XAccessibleSelection
+ * @see com.sun.star.accessibility.XAccessibleTable
+ * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
  * @see ifc.accessibility._XAccessibleEventBroadcaster
  * @see ifc.accessibility._XAccessibleComponent
  * @see ifc.accessibility._XAccessibleContext
@@ -225,12 +225,9 @@ public class ScAccessiblePreviewTable extends TestCase {
         XAccessible zoomIn = null;
         try {
             XAccessibleContext mainWin =
-                at.getAccessibleObjectForRole(xRoot,AccessibleRole.LAYEREDPANE);
+                at.getAccessibleObjectForRole(xRoot,AccessibleRole.TOOL_BAR, "Page");
 
-            XAccessible PageViewObjectBar = mainWin.getAccessibleChild(2);
-
-            zoomIn =
-                PageViewObjectBar.getAccessibleContext().getAccessibleChild(5);
+            zoomIn = mainWin.getAccessibleChild(5);
             log.println("Getting "+
                             zoomIn.getAccessibleContext().getAccessibleName());
         } catch (com.sun.star.lang.IndexOutOfBoundsException ibe) {}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SmGraphicAccessible.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-03-31 09:48:34 $
+ *  last change:$Date: 2003-04-28 12:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@ import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import drafts.com.sun.star.accessibility.AccessibleRole;
-import drafts.com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -92,11 +92,11 @@ import util.utils;
  *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleText</code></li>
  * </ul> <p>
  *
- * @see drafts.com.sun.star.accessibility.XAccessible
- * @see drafts.com.sun.star.accessibility.XAccessibleComponent
- * @see drafts.com.sun.star.accessibility.XAccessibleContext
- * @see drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster
- * @see drafts.com.sun.star.accessibility.XAccessibleText
+ * @see com.sun.star.accessibility.XAccessible
+ * @see com.sun.star.accessibility.XAccessibleComponent
+ * @see com.sun.star.accessibility.XAccessibleContext
+ * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
+ * @see com.sun.star.accessibility.XAccessibleText
  * @see ifc.accessibility._XAccessible
  * @see ifc.accessibility._XAccessibleComponent
  * @see ifc.accessibility._XAccessibleContext
@@ -166,7 +166,10 @@ public class SmGraphicAccessible extends TestCase {
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         tEnv.addObjRelation("EditOnly",
-                    "This method isn't supported in this component");
+                    "This method isn't supported in this dialog");
+
+        tEnv.addObjRelation("LimitedBounds",
+                    "only delivers senseful values for getCharacterBounds(0,length-1)");
 
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){

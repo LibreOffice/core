@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTabBarPageList.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:56 $
+ *  last change:$Date: 2003-04-28 12:17:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,9 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import drafts.com.sun.star.accessibility.AccessibleRole;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.awt.XExtendedToolkit;
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.awt.XExtendedToolkit;
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -94,11 +94,11 @@ import util.SOfficeFactory;
  *  </code></li>
  * </ul> <p>
  *
- * @see drafts.com.sun.star.accessibility.XAccessibleSelection
- * @see drafts.com.sun.star.accessibility.XAccessibleExtendedComponent
- * @see drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster
- * @see drafts.com.sun.star.accessibility.XAccessibleContext
- * @see drafts.com.sun.star.accessibility.XAccessibleComponent
+ * @see com.sun.star.accessibility.XAccessibleSelection
+ * @see com.sun.star.accessibility.XAccessibleExtendedComponent
+ * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
+ * @see com.sun.star.accessibility.XAccessibleContext
+ * @see com.sun.star.accessibility.XAccessibleComponent
  * @see ifc.accessibility._XAccessibleSelection
  * @see ifc.accessibility._XAccessibleComponent
  * @see ifc.accessibility._XAccessibleExtendedComponent
@@ -136,9 +136,9 @@ public class AccessibleTabBarPageList extends TestCase {
      * @param log writer to log information while testing
      *
      * @see com.sun.star.awt.Toolkit
-     * @see drafts.com.sun.star.accessibility.AccessibleRole
+     * @see com.sun.star.accessibility.AccessibleRole
      * @see ifc.accessibility._XAccessibleEventBroadcaster
-     * @see drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster
+     * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
      */
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
         PrintWriter log) {
@@ -187,7 +187,7 @@ public class AccessibleTabBarPageList extends TestCase {
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         oObj = at.getAccessibleObjectForRole(xRoot,
-            AccessibleRole.PAGETABLIST);
+            AccessibleRole.PAGE_TAB_LIST);
 
         log.println("ImplementationName: " + util.utils.getImplName(oObj));
 

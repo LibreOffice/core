@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleBrowseBoxTableCell.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:58 $
+ *  last change:$Date: 2003-04-28 12:17:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,12 +89,12 @@ import util.FormTools;
 import util.SOfficeFactory;
 import util.WriterTools;
 import util.AccessibilityTools;
-import drafts.com.sun.star.accessibility.AccessibleRole;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
-import drafts.com.sun.star.accessibility.XAccessibleAction;
-import drafts.com.sun.star.awt.XExtendedToolkit;
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleComponent;
+import com.sun.star.accessibility.XAccessibleAction;
+import com.sun.star.awt.XExtendedToolkit;
 import com.sun.star.awt.Rectangle;
 
 /**
@@ -108,8 +108,8 @@ import com.sun.star.awt.Rectangle;
  *  </code></li>
  * </ul> <p>
  *
- * @see drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster
- * @see drafts.com.sun.star.accessibility.XAccessibleContext
+ * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
+ * @see com.sun.star.accessibility.XAccessibleContext
  * @see ifc.accessibility._XAccessibleEventBroadcaster
  * @see ifc.accessibility._XAccessibleContext
  */
@@ -157,9 +157,9 @@ public class AccessibleBrowseBoxTableCell extends TestCase {
      * @param log writer to log information while testing
      *
      * @see com.sun.star.awt.Toolkit
-     * @see drafts.com.sun.star.accessibility.AccessibleRole
+     * @see com.sun.star.accessibility.AccessibleRole
      * @see ifc.accessibility._XAccessibleEventBroadcaster
-     * @see drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster
+     * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
      */
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
 

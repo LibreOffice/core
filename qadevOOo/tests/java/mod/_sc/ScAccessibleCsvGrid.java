@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessibleCsvGrid.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sw $
+ *  last change: $Author: vg $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,11 +72,11 @@ import com.sun.star.sheet.XSpreadsheets;
 import com.sun.star.table.XCell;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import drafts.com.sun.star.accessibility.AccessibleRole;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
-import drafts.com.sun.star.accessibility.XAccessibleAction;
-import drafts.com.sun.star.awt.XExtendedToolkit;
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleComponent;
+import com.sun.star.accessibility.XAccessibleAction;
+import com.sun.star.awt.XExtendedToolkit;
 import java.io.PrintWriter;
 import lib.StatusException;
 import lib.TestCase;
@@ -134,7 +134,7 @@ public class ScAccessibleCsvGrid extends TestCase {
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         oObj = at.getAccessibleObjectForRole
-            (xRoot, AccessibleRole.PUSHBUTTON, "Cancel");
+            (xRoot, AccessibleRole.PUSH_BUTTON, "Cancel");
 
         accAction = (XAccessibleAction) UnoRuntime.queryInterface(XAccessibleAction.class, oObj);
 

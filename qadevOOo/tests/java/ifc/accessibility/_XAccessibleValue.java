@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleValue.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:07:21 $
+ *  last change:$Date: 2003-04-28 12:22:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,13 +62,13 @@
 package ifc.accessibility;
 
 
-import drafts.com.sun.star.accessibility.XAccessibleValue;
+import com.sun.star.accessibility.XAccessibleValue;
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
 
 /**
- * Testing <code>drafts.com.sun.star.accessibility.XAccessibleValue</code>
+ * Testing <code>com.sun.star.accessibility.XAccessibleValue</code>
  * interface methods :
  * <ul>
  *  <li><code> getCurrentValue()</code></li>
@@ -83,7 +83,7 @@ import lib.StatusException;
  *  (of type <code>XAccessibleValue</code>) <b> optional </b>:
  *   another component from the group(e.g. radio button group)</li>
  *  </ul><p>
- * @see drafts.com.sun.star.accessibility.XAccessibleValue
+ * @see com.sun.star.accessibility.XAccessibleValue
  */
 public class _XAccessibleValue extends MultiMethodTest {
 
@@ -96,7 +96,7 @@ public class _XAccessibleValue extends MultiMethodTest {
     XAccessibleValue anotherFromGroup = null;
 
     private static final String className =
-        "drafts.com.sun.star.accessibility.XAccessibleValue" ;
+        "com.sun.star.accessibility.XAccessibleValue" ;
 
     /**
      * Walkaround for current interface naming ('drafts' prefix)

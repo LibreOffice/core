@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessibleDocumentPagePreview.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sw $
+ *  last change: $Author: vg $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,10 +78,10 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
-import drafts.com.sun.star.accessibility.AccessibleRole;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
-import drafts.com.sun.star.accessibility.XAccessibleAction;
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleAction;
 import java.io.PrintWriter;
 import lib.Status;
 import lib.StatusException;
@@ -104,8 +104,8 @@ import com.sun.star.uno.AnyConverter;
  *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleContext</code></li>
  * </ul> <p>
  *
- * @see drafts.com.sun.star.accessibility.XAccessibleComponent
- * @see drafts.com.sun.star.accessibility.XAccessibleContext
+ * @see com.sun.star.accessibility.XAccessibleComponent
+ * @see com.sun.star.accessibility.XAccessibleContext
  * @see ifc.n.star.accessibility._XAccessibleComponent
  * @see ifc.n.star.accessibility._XAccessibleContext
  */
@@ -204,17 +204,14 @@ public class ScAccessibleDocumentPagePreview extends TestCase {
 
         XWindow xWindow = at.getCurrentWindow(Param.getMSF(), aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
-
-        XAccessibleContext mainWin = at.getAccessibleObjectForRole(xRoot,AccessibleRole.LAYEREDPANE);
+        //at.printAccessibleTree(log,xRoot);
+        XAccessibleContext mainWin = at.getAccessibleObjectForRole(xRoot,AccessibleRole.TOOL_BAR,"Page View");
         //Jump to last page and back to first to verify that #
         try {
-            XAccessible PageViewObjectBar = mainWin.getAccessibleChild(2);
-            XAccessible FirstPage =
-                PageViewObjectBar.getAccessibleContext().getAccessibleChild(2);
+            XAccessible FirstPage = mainWin.getAccessibleChild(2);
             log.println("Getting: "+
                             FirstPage.getAccessibleContext().getAccessibleName());
-            XAccessible LastPage =
-                PageViewObjectBar.getAccessibleContext().getAccessibleChild(3);
+            XAccessible LastPage = mainWin.getAccessibleChild(3);
             log.println("Getting "+
                             LastPage.getAccessibleContext().getAccessibleName());
             XAccessibleAction pressLast = (XAccessibleAction)
@@ -248,8 +245,8 @@ public class ScAccessibleDocumentPagePreview extends TestCase {
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
                 public void fireEvent() {
                     Rectangle rec = win.getPosSize();
-                    win.setPosSize(rec.X,rec.Y,rec.Height-1,rec.Width-1, (short) 15);
-                    win.setPosSize(rec.X,rec.Y,rec.Height,rec.Width, (short) 15);
+                    win.setPosSize(rec.X,rec.Y,rec.Height-10,rec.Width, com.sun.star.awt.PosSize.POSSIZE);
+                    win.setPosSize(rec.X,rec.Y,rec.Height,rec.Width,com.sun.star.awt.PosSize.POSSIZE );
                 }
             });
 
@@ -291,6 +288,9 @@ public class ScAccessibleDocumentPagePreview extends TestCase {
             log.println("loading document "+url);
             xSpreadsheetDoc = (XSpreadsheetDocument)UnoRuntime.queryInterface(
                             XSpreadsheetDocument.class,SOF.loadDocument(url));
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ex) {}
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace( log );
             throw new StatusException( "Couldn't create document ", e );

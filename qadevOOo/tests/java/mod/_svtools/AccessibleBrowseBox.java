@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleBrowseBox.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:00 $
+ *  last change:$Date: 2003-04-28 12:17:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,12 +89,12 @@ import util.FormTools;
 import util.SOfficeFactory;
 import util.WriterTools;
 import util.AccessibilityTools;
-import drafts.com.sun.star.accessibility.AccessibleRole;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
-import drafts.com.sun.star.accessibility.XAccessibleAction;
-import drafts.com.sun.star.awt.XExtendedToolkit;
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleComponent;
+import com.sun.star.accessibility.XAccessibleAction;
+import com.sun.star.awt.XExtendedToolkit;
 import com.sun.star.awt.Rectangle;
 
 public class AccessibleBrowseBox extends TestCase {
@@ -233,7 +233,7 @@ public class AccessibleBrowseBox extends TestCase {
         //at.printAccessibleTree(log,xRoot);
 
         oObj = at.getAccessibleObjectForRole
-            (xRoot, AccessibleRole.PANEL);
+            (xRoot, AccessibleRole.PANEL, "", "AccessibleBrowseBox");
 
         log.println("ImplementationName: "+util.utils.getImplName(oObj));
 

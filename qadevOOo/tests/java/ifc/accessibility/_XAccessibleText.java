@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleText.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change:$Date: 2003-03-31 14:26:41 $
+ *  last change:$Date: 2003-04-28 12:22:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 
 package ifc.accessibility;
 
-import drafts.com.sun.star.accessibility.XAccessibleText;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
+import com.sun.star.accessibility.XAccessibleText;
+import com.sun.star.accessibility.XAccessibleComponent;
 import lib.MultiMethodTest;
 import lib.StatusException;
 import lib.Status;
@@ -70,7 +70,7 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.Point;
 import com.sun.star.uno.UnoRuntime;
-import drafts.com.sun.star.accessibility.AccessibleTextType;
+import com.sun.star.accessibility.AccessibleTextType;
 
 /**
  * Testing <code>com.sun.star.accessibility.XAccessibleText</code>
@@ -108,18 +108,19 @@ import drafts.com.sun.star.accessibility.AccessibleTextType;
 public class _XAccessibleText extends MultiMethodTest {
 
     private static final String className =
-        "drafts.com.sun.star.accessibility.XAccessibleText" ;
+        "com.sun.star.accessibility.XAccessibleText" ;
 
     public XAccessibleText oObj = null;
     protected com.sun.star.awt.Rectangle bounds = null;
 
-    // temporary while accessibility package is in drafts.com.sun.star
+    // temporary while accessibility package is in com.sun.star
     protected String getTestedClassName() {
         return className;
     }
 
     String text = null;
     String editOnly = null;
+    String LimitedBounds = null;
 
     /**
      * Retrieves a string representation of the component's text.
@@ -147,6 +148,7 @@ public class _XAccessibleText extends MultiMethodTest {
         }
 
         editOnly = (String)tEnv.getObjRelation("EditOnly");
+        LimitedBounds = (String)tEnv.getObjRelation("LimitedBounds");
 
         if (component == null) {
             component = (XAccessibleComponent)
@@ -312,10 +314,11 @@ public class _XAccessibleText extends MultiMethodTest {
     public void _getCharacterAttributes() {
         requiredMethod("getCharacterCount()");
         boolean res = true;
+        String[] attr = new String[] {""};
 
         try {
             log.println("getCharacterAttributes(-1)");
-            oObj.getCharacterAttributes(-1);
+            oObj.getCharacterAttributes(-1,attr);
             log.println("Exception was expected");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
@@ -325,7 +328,7 @@ public class _XAccessibleText extends MultiMethodTest {
 
         try {
             log.println("getCharacterAttributes(chCount)");
-            oObj.getCharacterAttributes(chCount);
+            oObj.getCharacterAttributes(chCount,attr);
             log.println("Exception was expected");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
@@ -335,7 +338,7 @@ public class _XAccessibleText extends MultiMethodTest {
 
         try {
             log.println("getCharacterAttributes(chCount-1)");
-            PropertyValue[] props = oObj.getCharacterAttributes(chCount - 1);
+            PropertyValue[] props = oObj.getCharacterAttributes(chCount - 1,attr);
             res &= props != null;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
             log.println("Unexpected exception");
@@ -363,6 +366,14 @@ public class _XAccessibleText extends MultiMethodTest {
         requiredMethod("getCharacterCount()");
         boolean res = true;
 
+        int lastIndex = chCount;
+
+        if (LimitedBounds != null) {
+            lastIndex = chCount - 1;
+            log.println(LimitedBounds);
+        }
+
+
         try {
             log.println("getCharacterBounds(-1)");
             oObj.getCharacterBounds(-1);
@@ -374,8 +385,8 @@ public class _XAccessibleText extends MultiMethodTest {
         }
 
         try {
-            log.println("getCharacterBounds(chCount)");
-            oObj.getCharacterBounds(chCount);
+            log.println("getCharacterBounds("+(lastIndex+1)+")");
+            oObj.getCharacterBounds(lastIndex+1);
             log.println("Exception was expected");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
@@ -384,7 +395,7 @@ public class _XAccessibleText extends MultiMethodTest {
         }
 
         try {
-            for ( int i = 0; i < chCount ; i++ ) {
+            for ( int i = 0; i < lastIndex+1 ; i++ ) {
                 log.println("getCharacterBounds("+i+")");
                 chBounds = oObj.getCharacterBounds(i);
                 boolean localres = true;
@@ -455,6 +466,8 @@ public class _XAccessibleText extends MultiMethodTest {
                 aRect = oObj.getCharacterBounds( i );
                 text = oObj.getTextAtIndex(i,(short)1);
             } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
+
+            } catch(com.sun.star.lang.IllegalArgumentException e) {
 
             }
             int x = aRect.X+aRect.Width/2;
@@ -804,6 +817,9 @@ public class _XAccessibleText extends MultiMethodTest {
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
             log.println("Expected exception");
             res &= true;
+        } catch(com.sun.star.lang.IllegalArgumentException e) {
+            log.println("UnExpected exception");
+            res &= false;
         }
 
         try {
@@ -816,6 +832,9 @@ public class _XAccessibleText extends MultiMethodTest {
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
             log.println("Expected exception");
             res &= true;
+        } catch(com.sun.star.lang.IllegalArgumentException e) {
+            log.println("UnExpected exception");
+            res &= false;
         }
 
         try {
@@ -833,6 +852,10 @@ public class _XAccessibleText extends MultiMethodTest {
             log.println("'" + txt + "'");
             res &= txt.equals(text);
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
+            log.println("Unexpected exception");
+            e.printStackTrace(log);
+            res &= false;
+        } catch(com.sun.star.lang.IllegalArgumentException e) {
             log.println("Unexpected exception");
             e.printStackTrace(log);
             res &= false;
@@ -865,6 +888,9 @@ public class _XAccessibleText extends MultiMethodTest {
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
             log.println("Expected exception");
             res &= true;
+        } catch(com.sun.star.lang.IllegalArgumentException e) {
+            log.println("UnExpected exception");
+            res &= false;
         }
 
         try {
@@ -876,6 +902,9 @@ public class _XAccessibleText extends MultiMethodTest {
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
             log.println("Expected exception");
+            res &= true;
+        } catch(com.sun.star.lang.IllegalArgumentException e) {
+            log.println("UnExpected exception");
             res &= true;
         }
 
@@ -913,7 +942,12 @@ public class _XAccessibleText extends MultiMethodTest {
             log.println("Unexpected exception");
             e.printStackTrace(log);
             res &= false;
+        } catch(com.sun.star.lang.IllegalArgumentException e) {
+            log.println("Unexpected exception");
+            e.printStackTrace(log);
+            res &= false;
         }
+
 
         tRes.tested("getTextBeforeIndex()", res);
     }
@@ -942,6 +976,9 @@ public class _XAccessibleText extends MultiMethodTest {
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
             log.println("Expected exception");
             res &= true;
+        } catch(com.sun.star.lang.IllegalArgumentException e) {
+            log.println("UnExpected exception");
+            res &= true;
         }
 
         try {
@@ -953,6 +990,9 @@ public class _XAccessibleText extends MultiMethodTest {
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
             log.println("Expected exception");
+            res &= true;
+        } catch(com.sun.star.lang.IllegalArgumentException e) {
+            log.println("UnExpected exception");
             res &= true;
         }
 
@@ -987,6 +1027,10 @@ public class _XAccessibleText extends MultiMethodTest {
                 res &= txt.equals(text.substring(chCount - 1, chCount));
             }
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
+            log.println("Unexpected exception");
+            e.printStackTrace(log);
+            res &= false;
+        } catch(com.sun.star.lang.IllegalArgumentException e) {
             log.println("Unexpected exception");
             e.printStackTrace(log);
             res &= false;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccAxis.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Date: 2003-01-27 18:17:21 $
+ *  last change: $Date: 2003-04-28 12:29:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,15 +69,15 @@ import util.SOfficeFactory;
 import lib.StatusException;
 import com.sun.star.frame.XController;
 import util.AccessibilityTools;
-import drafts.com.sun.star.accessibility.AccessibleRole;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
-import drafts.com.sun.star.accessibility.XAccessibleValue;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleValue;
+import com.sun.star.accessibility.XAccessibleComponent;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.frame.XModel;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.awt.XWindow;
-import drafts.com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessible;
 import util.utils;
 import util.SOfficeFactory;
 import com.sun.star.chart.XChartDocument;

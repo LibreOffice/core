@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleBrowseBoxTable.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:59 $
+ *  last change:$Date: 2003-04-28 12:17:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,10 +58,8 @@
  *
  *
  ************************************************************************/
-
 package mod._svtools;
 
-import java.io.PrintWriter;
 import com.sun.star.awt.XWindow;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XController;
@@ -75,16 +73,22 @@ import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.URL;
-import drafts.com.sun.star.accessibility.AccessibleRole;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.awt.XExtendedToolkit;
+
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.awt.XExtendedToolkit;
+
+import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
+
 import util.AccessibilityTools;
 import util.DesktopTools;
 import util.SOfficeFactory;
+
 
 /**
  * Test for object that implements the following interfaces :
@@ -97,13 +101,12 @@ import util.SOfficeFactory;
  *  </code></li>
  * </ul> <p>
  *
- * @see drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster
- * @see drafts.com.sun.star.accessibility.XAccessibleContext
+ * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
+ * @see com.sun.star.accessibility.XAccessibleContext
  * @see ifc.accessibility._XAccessibleEventBroadcaster
  * @see ifc.accessibility._XAccessibleContext
  */
 public class AccessibleBrowseBoxTable extends TestCase {
-
     XDesktop the_Desk;
     XTextDocument xTextDoc;
 
@@ -111,16 +114,16 @@ public class AccessibleBrowseBoxTable extends TestCase {
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = (XDesktop) UnoRuntime.queryInterface(
-                    XDesktop.class, DesktopTools.createDesktop(Param.getMSF()));
+        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
+                                                        DesktopTools.createDesktop(
+                                                                Param.getMSF()));
     }
 
     /**
      * Disposes the document, if exists, created in
      * <code>createTestEnvironment</code> method.
      */
-    protected void cleanup( TestParameters Param, PrintWriter log) {
-
+    protected void cleanup(TestParameters Param, PrintWriter log) {
         log.println("disposing xTextDoc");
 
         if (xTextDoc != null) {
@@ -147,45 +150,49 @@ public class AccessibleBrowseBoxTable extends TestCase {
      * @param log writer to log information while testing
      *
      * @see com.sun.star.awt.Toolkit
-     * @see drafts.com.sun.star.accessibility.AccessibleRole
+     * @see com.sun.star.accessibility.AccessibleRole
      * @see ifc.accessibility._XAccessibleEventBroadcaster
-     * @see drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster
+     * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
      */
-    protected TestEnvironment createTestEnvironment(
-        TestParameters tParam, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam,
+                                                    PrintWriter log) {
+        log.println("creating a test environment");
 
-        log.println( "creating a test environment" );
-
-        if (xTextDoc != null) xTextDoc.dispose();
+        if (xTextDoc != null) {
+            xTextDoc.dispose();
+        }
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(tParam.getMSF());
 
         try {
-            log.println( "creating a text document" );
+            log.println("creating a text document");
             xTextDoc = SOF.createTextDoc(null);
-        } catch ( com.sun.star.uno.Exception e ) {
+        } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't create document", e);
         }
 
         shortWait();
 
-        XModel aModel1 = (XModel)
-                    UnoRuntime.queryInterface(XModel.class, xTextDoc);
+        XModel aModel1 = (XModel) UnoRuntime.queryInterface(XModel.class,
+                                                            xTextDoc);
 
         XController secondController = aModel1.getCurrentController();
 
-        XDispatchProvider aProv = (XDispatchProvider)UnoRuntime.
-            queryInterface(XDispatchProvider.class, secondController);
+        XDispatchProvider aProv = (XDispatchProvider) UnoRuntime.queryInterface(
+                                          XDispatchProvider.class,
+                                          secondController);
 
         XDispatch getting = null;
 
-        log.println( "opening DatasourceBrowser" );
+        log.println("opening DatasourceBrowser");
+
         URL the_url = new URL();
         the_url.Complete = ".component:DB/DataSourceBrowser";
         getting = aProv.queryDispatch(the_url, "_beamer", 12);
+
         PropertyValue[] noArgs = new PropertyValue[0];
         getting.dispatch(the_url, noArgs);
 
@@ -201,39 +208,65 @@ public class AccessibleBrowseBoxTable extends TestCase {
 
         the_frame2.setName("DatasourceBrowser");
 
+        final XInitialization xInit = (XInitialization) UnoRuntime.queryInterface(
+                                              XInitialization.class,
+                                              the_frame2.getController());
+
+        Object[] params = new Object[3];
+        PropertyValue param1 = new PropertyValue();
+        param1.Name = "DataSourceName";
+        param1.Value = "Bibliography";
+        params[0] = param1;
+
+        PropertyValue param2 = new PropertyValue();
+        param2.Name = "CommandType";
+        param2.Value = new Integer(com.sun.star.sdb.CommandType.TABLE);
+        params[1] = param2;
+
+        PropertyValue param3 = new PropertyValue();
+        param3.Name = "Command";
+        param3.Value = "biblio";
+        params[2] = param3;
+
+        final Object[] initArgs = params;
+
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface) tParam.getMSF().createInstance
-                ("com.sun.star.awt.Toolkit") ;
+            oObj = (XInterface) tParam.getMSF()
+                                      .createInstance("com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
             e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e );
+            throw new StatusException("Couldn't get toolkit", e);
         }
 
-        XExtendedToolkit tk = (XExtendedToolkit)
-            UnoRuntime.queryInterface(XExtendedToolkit.class, oObj);
+        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
+                                      XExtendedToolkit.class, oObj);
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = (XWindow)
-            UnoRuntime.queryInterface(XWindow.class, tk.getActiveTopWindow());
+        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+                                                              tk.getActiveTopWindow());
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        oObj = at.getAccessibleObjectForRole(xRoot,
-            AccessibleRole.TABLE, "Table");
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE,
+                                             "Table");
 
-        log.println("ImplementationName: "+ util.utils.getImplName(oObj));
+        log.println("ImplementationName: " + util.utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         tEnv.addObjRelation("EventProducer",
-            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
-                public void fireEvent() {
+                            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
+            public void fireEvent() {
+                try {
+                    xInit.initialize(initArgs);
+                } catch (Exception e) {
                 }
-            });
+            }
+        });
 
         return tEnv;
     }
@@ -244,10 +277,9 @@ public class AccessibleBrowseBoxTable extends TestCase {
     */
     private void shortWait() {
         try {
-            Thread.currentThread().sleep(500) ;
+            Thread.currentThread().sleep(500);
         } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e) ;
+            System.out.println("While waiting :" + e);
         }
     }
-
 }

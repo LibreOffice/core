@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-05 13:25:37 $
+ *  last change:$Date: 2003-04-28 12:30:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 package mod._sd;
 
+import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.awt.XWindow;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.drawing.XDrawPage;
@@ -72,7 +73,7 @@ import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import drafts.com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessible;
 import java.io.PrintWriter;
 import lib.StatusException;
 import lib.TestCase;
@@ -145,13 +146,12 @@ public class AccessibleDrawDocumentView extends TestCase {
         XWindow xWindow = at.getCurrentWindow (Param.getMSF(),aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        //Role 100 for documents, see
-        //drafts.com.sun.star.accessibility.AccessibleRole
-        at.getAccessibleObjectForRole(xRoot, (short) 100);
+        //com.sun.star.accessibility.AccessibleRole
+        at.getAccessibleObjectForRole(xRoot, AccessibleRole.DOCUMENT);
 
         oObj = at.SearchedContext;
 
-        System.out.println("ImplementationName "+utils.getImplName(oObj));
+        log.println("ImplementationName "+utils.getImplName(oObj));
 
         //at.printAccessibleTree(log, xRoot);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleContext.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-01-30 14:07:53 $
+ *  last change:$Date: 2003-04-28 12:22:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,17 +62,17 @@
 package ifc.accessibility;
 
 import com.sun.star.lang.Locale;
-import drafts.com.sun.star.accessibility.IllegalAccessibleComponentStateException;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
-import drafts.com.sun.star.accessibility.XAccessibleRelationSet;
-import drafts.com.sun.star.accessibility.XAccessibleStateSet;
-import drafts.com.sun.star.accessibility.AccessibleRelationType;
+import com.sun.star.accessibility.IllegalAccessibleComponentStateException;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleRelationSet;
+import com.sun.star.accessibility.XAccessibleStateSet;
+import com.sun.star.accessibility.AccessibleRelationType;
 import lib.MultiMethodTest;
 import util.AccessibilityTools;
 
 /**
- * Testing <code>drafts.com.sun.star.accessibility.XAccessibleContext</code>
+ * Testing <code>com.sun.star.accessibility.XAccessibleContext</code>
  * interface methods :
  * <ul>
  *  <li><code> getAccessibleChildCount()</code></li>
@@ -87,16 +87,16 @@ import util.AccessibilityTools;
  *  <li><code> getLocale()</code></li>
  * </ul> <p>
  *
- * @see drafts.com.sun.star.accessibility.XAccessibleContext
+ * @see com.sun.star.accessibility.XAccessibleContext
  */
 public class _XAccessibleContext extends MultiMethodTest {
 
     private static final String className =
-        "drafts.com.sun.star.accessibility.XAccessibleContext" ;
+        "com.sun.star.accessibility.XAccessibleContext" ;
 
     public XAccessibleContext oObj = null;
 
-    // temporary while accessibility package is in drafts.com.sun.star
+    // temporary while accessibility package is in com.sun.star
     protected String getTestedClassName() {
         return className;
     }
