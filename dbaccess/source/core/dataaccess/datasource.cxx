@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 14:50:17 $
+ *  last change: $Author: fs $ $Date: 2001-10-09 15:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1063,8 +1063,10 @@ void ODatabaseSource::initializeFromConfiguration()
 //------------------------------------------------------------------------------
 void ODatabaseSource::flushDocuments()
 {
-    m_aBookmarks.flush();
-    m_aCommandDefinitions.flush();
+    if ( m_aBookmarks.hasValidLocation() )
+        m_aBookmarks.flush();
+    if ( m_aCommandDefinitions.hasValidLocation() )
+        m_aCommandDefinitions.flush();
 }
 // -----------------------------------------------------------------------------
 void ODatabaseSource::flushTables()
