@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:31 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -668,8 +668,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
                             aPool   << ocDde << ocOpen << nPar1 << ocSep << nPar2 << ocSep
                                     << nMerk0 << ocClose;
                             aPool >> aStack;
-
-                            pExcRoot->pDoc->CreateDdeLink( aAppl, aExtDoc, pExtName->GetName() );
+                            pExtName->CreateDdeData(*(pExcRoot->pDoc), aAppl, aExtDoc);
                         }
                         else if( (pExtName->GetType() == xlExtName) && pSupbook->IsAddIn() )
                             aStack << aPool.Store( ocNoName, pExtName->GetAddInName() );
@@ -1361,6 +1360,9 @@ BOOL ExcelToSc8::GetAbsRefs( ScRangeList& r, UINT32 nLen )
             case 0x5C:
             case 0x7C:
             case 0x3C: // Deleted 3-D Cell Reference            [    277]
+            case 0x59:
+            case 0x79:
+            case 0x39: // Name or External Name                 [    275]
                 nSeek = 6;
                 break;
             case 0x40:
@@ -1378,11 +1380,6 @@ BOOL ExcelToSc8::GetAbsRefs( ScRangeList& r, UINT32 nLen )
             case 0x7D:
             case 0x3D: // Deleted 3-D Area Reference            [    277]
                 nSeek = 10;
-                break;
-            case 0x59:
-            case 0x79:
-            case 0x39: // Name or External Name                 [    275]
-                nSeek = 24;
                 break;
             case 0x17: // String Constant                       [314 266]
             {
