@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-26 13:10:16 $
+ *  last change: $Author: oj $ $Date: 2001-11-22 13:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -776,13 +776,19 @@ void OGenericUnoController::frameAction(const ::com::sun::star::frame::FrameActi
 void OGenericUnoController::EmptyWindow()
 {
     // dispatch en empty ::com::sun::star::util::URL so we will be cleaned up
-    Reference< ::com::sun::star::frame::XDispatchProvider >  xProvider(m_xCurrentFrame, UNO_QUERY);
-    if (xProvider.is())
+//  Reference< ::com::sun::star::frame::XDispatchProvider >  xProvider(m_xCurrentFrame, UNO_QUERY);
+//  if (xProvider.is())
+//  {
+//      Reference< ::com::sun::star::frame::XDispatch >  xDispatcher = xProvider->queryDispatch(::com::sun::star::util::URL(), m_xCurrentFrame->getName(), 0);
+//      if (xDispatcher.is())
+//          xDispatcher->dispatch(::com::sun::star::util::URL(), Sequence< PropertyValue >());
+//  }
+    if(m_xCurrentFrame.is())
     {
-        Reference< ::com::sun::star::frame::XDispatch >  xDispatcher = xProvider->queryDispatch(::com::sun::star::util::URL(), m_xCurrentFrame->getName(), 0);
-        if (xDispatcher.is())
-            xDispatcher->dispatch(::com::sun::star::util::URL(), Sequence< PropertyValue >());
+        m_xCurrentFrame->setComponent(NULL,NULL);
+        ::comphelper::disposeComponent(m_xCurrentFrame);
     }
+
 }
 
 //------------------------------------------------------------------------------
