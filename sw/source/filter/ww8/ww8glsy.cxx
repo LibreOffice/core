@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8glsy.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:10:45 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:18:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ WW8Glossary::WW8Glossary(SvStorageStreamRef &refStrm, BYTE nVersion,
 
     if (aWwFib.nFibBack >= 0x6A)   //Word97
     {
-        xTableStream = pStg->OpenStream(String::CreateFromAscii(
+        xTableStream = pStg->OpenSotStream(String::CreateFromAscii(
             aWwFib.fWhichTblStm ? SL::a1Table : SL::a0Table), STREAM_STD_READ);
 
         if (xTableStream.Is() && SVSTREAM_OK == xTableStream->GetError())
