@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_reader.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2000-12-04 11:19:13 $
+ *  last change: $Author: jbu $ $Date: 2001-04-04 15:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -577,6 +577,18 @@ void OReaderThread::run()
                             pMultiJob->initiate();
                         }
 
+                        // This is a quick hack to avoid reanimating the bridge in case this is a call
+                        // for an initial object (so no stub is there, that holds the bridge).
+                        // Please note, that this is not 100 % sure, it just reduces the propability,
+                        // that this occurs.
+                        if( m_pBridgeImpl->m_bDisposed )
+                        {
+                            if( pMethodType )
+                                typelib_typedescription_release( (typelib_TypeDescription * ) pMethodType );
+                            if( pAttributeType )
+                                typelib_typedescription_release( (typelib_TypeDescription * ) pAttributeType );
+                            return;
+                        }
                         pMultiJob = new ServerMultiJob(
                             m_pEnvRemote, *ppLastTid,
                             m_pBridgeImpl, &m_unmarshal , nMessageCount );
