@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfly.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-02-10 14:54:54 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:48:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1097,13 +1097,13 @@ int SwDoc::Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest )
         aSet.Put( aChain );
 
         SwFmtFrmSize aSize( rSource.GetFrmSize() );
-        if ( aSize.GetSizeType() != ATT_FIX_SIZE )
+        if ( aSize.GetHeightSizeType() != ATT_FIX_SIZE )
         {
             SwClientIter aIter( rSource );
             SwFlyFrm *pFly = (SwFlyFrm*)aIter.First( TYPE(SwFlyFrm) );
             if ( pFly )
                 aSize.SetHeight( pFly->Frm().Height() );
-            aSize.SetSizeType( ATT_FIX_SIZE );
+            aSize.SetHeightSizeType( ATT_FIX_SIZE );
             aSet.Put( aSize );
         }
         SetAttr( aSet, rSource );
