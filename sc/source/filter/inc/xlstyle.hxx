@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlstyle.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:43:32 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:28:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,27 @@
 
 
 // Constants and Enumerations =================================================
+
+// Line styles ----------------------------------------------------------------
+
+const sal_uInt8 EXC_LINE_NONE               = 0x00;
+const sal_uInt8 EXC_LINE_THIN               = 0x01;
+const sal_uInt8 EXC_LINE_MEDIUM             = 0x02;
+const sal_uInt8 EXC_LINE_THICK              = 0x05;
+const sal_uInt8 EXC_LINE_DOUBLE             = 0x06;
+const sal_uInt8 EXC_LINE_HAIR               = 0x07;
+
+
+// Background patterns --------------------------------------------------------
+
+const sal_uInt8 EXC_PATT_NONE               = 0x00;
+const sal_uInt8 EXC_PATT_SOLID              = 0x01;
+const sal_uInt8 EXC_PATT_50_PERC            = 0x02;
+const sal_uInt8 EXC_PATT_75_PERC            = 0x03;
+const sal_uInt8 EXC_PATT_25_PERC            = 0x04;
+const sal_uInt8 EXC_PATT_12_5_PERC          = 0x11;
+const sal_uInt8 EXC_PATT_6_25_PERC          = 0x12;
+
 
 // (0x001E, 0x041E) FORMAT ----------------------------------------------------
 
