@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 08:49:36 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:13:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2170,8 +2170,9 @@ void Edit::Modify()
         if ( mpUpdateDataTimer )
             mpUpdateDataTimer->Start();
 
-        ImplCallEventListeners( VCLEVENT_EDIT_MODIFY );
-        maModifyHdl.Call( this );
+        if ( ImplCallEventListenersAndHandler( VCLEVENT_EDIT_MODIFY, maModifyHdl, this ) )
+            // have been destroyed while calling into the handlers
+            return;
 
         // #i13677# notify edit listeners about caret position change
         ImplCallEventListeners( VCLEVENT_EDIT_SELECTIONCHANGED );
