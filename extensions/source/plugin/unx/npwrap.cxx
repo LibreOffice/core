@@ -2,9 +2,9 @@
  *
  *  $RCSfile: npwrap.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:18:02 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 #include <errno.h>
 #include <dlfcn.h>
+#include <unistd.h>
 
 #include <plugin/unx/plugcon.hxx>
 
@@ -195,8 +196,55 @@ static void CheckPlugin( const char* pPath )
     dlclose( pLib );
 }
 
+static void LoadAdditionalLibs( const char* pPluginLib )
+{
+    void *pLib;
+#if 0 // defined GCC
+#define OPEN_FLAGS (RTLD_LAZY | RTLD_GLOBAL)
+    medDebug( 1, "LoadAdditionalLibs %s\n", pPluginLib );
+    if( ! strncmp( pPluginLib, "rpnp.so", 7 ) ||
+        ! strncmp( pPluginLib, "libflashplayer.so", 17 )
+        )
+    {
+        pLib = dlopen( "libg++.so.2.7.2", OPEN_FLAGS );
+        medDebug( !pLib, "dlopen of libg++.so.2.7.2 failed because of:\n\t%s\n", dlerror() );
+    }
+#endif
+}
+
+#if OSL_DEBUG_LEVEL > 1
+#ifdef LINUX
+#include <execinfo.h>
+#include <signal.h>
+void signal_handler( int nSig )
+{
+    void* pStack[64];
+    fprintf( stderr, "caught signal %d, exiting\n", nSig );
+    int nStackLevels = backtrace( pStack, sizeof(pStack)/sizeof(pStack[0]) );
+    backtrace_symbols_fd( pStack, nStackLevels, STDERR_FILENO );
+    _exit(nSig);
+}
+#endif
+#endif
+
 main( int argc, char **argv)
 {
+#if OSL_DEBUG_LEVEL > 1
+#ifdef LINUX
+    struct sigaction aSigAction;
+    aSigAction.sa_handler = signal_handler;
+    sigemptyset( &aSigAction.sa_mask );
+    aSigAction.sa_flags = SA_NOCLDSTOP;
+    sigaction( SIGSEGV, &aSigAction, NULL );
+#endif
+#endif
+
+    int nArg = (argc < 3) ? 1 : 2;
+    char* pBaseName = argv[nArg] + strlen(argv[nArg]);
+    while( pBaseName > argv[nArg] && pBaseName[-1] != '/' )
+        pBaseName--;
+    LoadAdditionalLibs( pBaseName );
+
     if( argc < 3 )
     {
         CheckPlugin(argv[1]);
@@ -265,8 +313,39 @@ main( int argc, char **argv)
     aNPSetWindowCallbackStruct.depth        =
         DefaultDepth( pAppDisplay, XDefaultScreen( pAppDisplay ) );
 
+#if OSL_DEBUG_LEVEL > 3
+    int nPID = getpid();
+    int nChild = fork();
+    if( nChild == 0 )
+    {
+        char pidbuf[16];
+        const char* pArgs[] = { "xterm", "-sl", "2000", "-sb", "-e", "gdb53", "pluginapp.bin", pidbuf, NULL };
+        sprintf( pidbuf, "%d", nPID );
+        execvp( pArgs[0], pArgs );
+        _exit(255);
+    }
+    else
+        sleep( 10 );
+#endif
+
     /*
      *  Loop for events.
      */
     XtAppMainLoop(app_context);
 }
+
+#ifdef GCC
+extern "C" {
+    void __pure_virtual()
+    {}
+
+    void* __builtin_new( int nBytes )
+    { return malloc(nBytes); }
+    void* __builtin_vec_new( int nBytes )
+    { return malloc(nBytes); }
+    void __builtin_delete( char* pMem )
+    { free(pMem); }
+    void __builtin_vec_delete( char* pMem )
+    { free(pMem); }
+}
+#endif
