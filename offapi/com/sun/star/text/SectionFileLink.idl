@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SectionFileLink.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:51 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@
     <member>SectionFileLink::FilterName</member>. It will be automatically
     assigned.</p>
  */
-struct SectionFileLink
+published struct SectionFileLink
 {
     // DocMerge from xml: field com::sun::star::text::SectionFileLink::FileURL
     /** contains the URL of the linked file.
