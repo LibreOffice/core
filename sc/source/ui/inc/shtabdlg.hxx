@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shtabdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2002-05-22 07:19:45 $
+ *  last change: $Author: dr $ $Date: 2002-10-02 14:59:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
 #endif
-#ifndef _LSTBOX_HXX //autogen
-#include <vcl/lstbox.hxx>
+#ifndef SVTOOLS_TOOLTIPLBOX_HXX
+#include <svtools/tooltiplbox.hxx>
 #endif
 #ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
@@ -80,11 +80,11 @@
 class ScShowTabDlg : public ModalDialog
 {
 private:
-    MultiListBox    aLb;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
-    FixedText       aFtLbTitle;
+    ::svtools::ToolTipMultiListBox  aLb;
+    OKButton                        aBtnOk;
+    CancelButton                    aBtnCancel;
+    HelpButton                      aBtnHelp;
+    FixedText                       aFtLbTitle;
 
     DECL_LINK( DblClkHdl, void * );
 
