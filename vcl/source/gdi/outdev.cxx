@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:00:22 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:20:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,7 +303,7 @@ void OutputDevice::ImplDrawPolyPolygon( USHORT nPoly, const PolyPolygon& rPolyPo
     ULONG*              pPointAry;
     PCONSTSALPOINT*     pPointAryAry;
     const BYTE**        pFlagAryAry;
-    USHORT              i = 0, last = 0;
+    USHORT              i = 0, j = 0, last = 0;
     BOOL                bHaveBezier = sal_False;
     if ( nPoly > OUTDEV_POLYPOLY_STACKBUF )
     {
@@ -323,22 +323,22 @@ void OutputDevice::ImplDrawPolyPolygon( USHORT nPoly, const PolyPolygon& rPolyPo
         USHORT          nSize = rPoly.GetSize();
         if ( nSize )
         {
-            pPointAry[i]    = nSize;
-            pPointAryAry[i] = (PCONSTSALPOINT)rPoly.GetConstPointAry();
-            pFlagAryAry[i]  = rPoly.GetConstFlagAry();
+            pPointAry[j]    = nSize;
+            pPointAryAry[j] = (PCONSTSALPOINT)rPoly.GetConstPointAry();
+            pFlagAryAry[j]  = rPoly.GetConstFlagAry();
             last            = i;
 
-            if( pFlagAryAry[i] )
+            if( pFlagAryAry[j] )
                 bHaveBezier = sal_True;
 
-            i++;
+            ++j;
         }
-        else
-            nPoly--;
+
+        ++i;
     }
     while ( i < nPoly );
 
-    if ( nPoly == 1 )
+    if ( j == 1 )
     {
         // #100127# Forward beziers to sal, if any
         if( bHaveBezier )
@@ -359,7 +359,7 @@ void OutputDevice::ImplDrawPolyPolygon( USHORT nPoly, const PolyPolygon& rPolyPo
         // #100127# Forward beziers to sal, if any
         if( bHaveBezier )
         {
-            if( !mpGraphics->DrawPolyPolygonBezier( nPoly, pPointAry, pPointAryAry, pFlagAryAry, this ) )
+            if( !mpGraphics->DrawPolyPolygonBezier( j, pPointAry, pPointAryAry, pFlagAryAry, this ) )
             {
                 PolyPolygon aPolyPoly = ImplSubdivideBezier( rPolyPoly );
                 ImplDrawPolyPolygon( aPolyPoly.Count(), aPolyPoly );
@@ -367,7 +367,7 @@ void OutputDevice::ImplDrawPolyPolygon( USHORT nPoly, const PolyPolygon& rPolyPo
         }
         else
         {
-            mpGraphics->DrawPolyPolygon( nPoly, pPointAry, pPointAryAry, this );
+            mpGraphics->DrawPolyPolygon( j, pPointAry, pPointAryAry, this );
         }
     }
 
