@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-27 17:28:34 $
+ *  last change: $Author: hro $ $Date: 2001-10-19 14:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6937,20 +6937,22 @@ Reference< XClipboard > Window::GetSelection()
                     mpFrame->GetFrameInterface()->GetClipboardAndSelection( mpFrameData->mxClipboard, mpFrameData->mxSelection );
 #else
 
-#ifdef UNX      // FIXME: primary selection only supported on unix yet
                 Reference< XMultiServiceFactory > xFactory( vcl::unohelper::GetMultiServiceFactory() );
 
                 if( xFactory.is() )
                 {
+#   ifdef UNX
                     Sequence< Any > aArgumentList( 2 );
                       aArgumentList[ 0 ] = makeAny( Application::GetDisplayConnection() );
                     aArgumentList[ 1 ] = makeAny( OUString::createFromAscii( "PRIMARY" ) );
 
                     mpFrameData->mxSelection = Reference< XClipboard >( xFactory->createInstanceWithArguments(
                     OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ), aArgumentList ), UNO_QUERY );
-
+#   else
+                    mpFrameData->mxSelection = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.GenericClipboard" ) ), UNO_QUERY );
+#   endif
                 }
-#endif
+
 #endif
             }
 
