@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-25 13:07:37 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:57:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,8 @@
 #ifndef _COM_SUN_STAR_UTIL_CloseVetoException_HPP_
 #include <com/sun/star/util/CloseVetoException.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
@@ -631,7 +631,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 xFrame = xDesktop->getActiveFrame();
 
                 Reference< com::sun::star::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
-                Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+                Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
                 if ( xPropSet.is() )
                 {
                     try
