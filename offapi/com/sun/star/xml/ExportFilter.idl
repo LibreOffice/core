@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ExportFilter.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:58:26 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 10:22:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,8 @@ module com { module sun { module star { module xml {
    interface.  Error conditions must be signalled by throwing
    a <type scope="com::sun::star::xml::sax">SAXException</type> in the
    <type scope="com::sun::star::xml::sax">XDocumentHandler</type> calls.
+
+    @since #107627#
  */
 service ExportFilter
 {
