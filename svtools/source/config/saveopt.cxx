@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saveopt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-07-02 07:45:12 $
+ *  last change: $Author: fs $ $Date: 2001-10-19 10:22:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,8 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
                                         bSaveDocView,
                                         bSaveRelINet,
                                         bSaveRelFSys,
-                                        bSaveUnpacked;
+                                        bSaveUnpacked,
+                                        bDoPrettyPrinting;
 public:
                             SvtSaveOptions_Impl();
                             ~SvtSaveOptions_Impl();
@@ -141,21 +142,25 @@ public:
     BOOL                    IsSaveRelFSys() const               { return bSaveRelFSys; }
     void                    SetSaveUnpacked( BOOL b )           { bSaveUnpacked = b; SetModified();}
     BOOL                    IsSaveUnpacked() const              { return bSaveUnpacked; }
+
+    void                    EnablePrettyPrinting( sal_Bool _bDoPP ) { bDoPrettyPrinting = _bDoPP; SetModified(); }
+    sal_Bool                IsPrettyPrintingEnabled( ) const        { return bDoPrettyPrinting; }
 };
 
-#define FORMAT 0
-#define TIMEINTERVALL 1
-#define USEUSERDATA 2
-#define CREATEBACKUP 3
-#define AUTOSAVE 4
-#define PROMPT 5
-#define EDITPROPERTY 6
-#define SAVEDOCWINS 7
-#define SAVEVIEWINFO 8
-#define UNPACKED 9
-#define FILESYSTEM 10
-#define INTERNET 11
-#define SAVEWORKINGSET 12
+#define FORMAT           0
+#define TIMEINTERVALL    1
+#define USEUSERDATA      2
+#define CREATEBACKUP     3
+#define AUTOSAVE         4
+#define PROMPT           5
+#define EDITPROPERTY     6
+#define SAVEDOCWINS      7
+#define SAVEVIEWINFO     8
+#define UNPACKED         9
+#define PRETTYPRINTING  10
+#define FILESYSTEM      11
+#define INTERNET        12
+#define SAVEWORKINGSET  13
 
 Sequence< OUString > GetPropertyNames()
 {
@@ -171,9 +176,10 @@ Sequence< OUString > GetPropertyNames()
         "Document/DocumentWindows",
         "Document/ViewInfo",
         "Document/Unpacked",
+        "Document/PrettyPrinting",
         "URL/FileSystem",
         "URL/Internet",
-        "WorkingSet"
+        "WorkingSet",
     };
 
     const int nCount = sizeof( aPropNames ) / sizeof( const char* );
@@ -202,6 +208,7 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     , bSaveRelINet( sal_False )
     , bSaveRelFSys( sal_False )
     , bSaveUnpacked( sal_False )
+    , bDoPrettyPrinting( sal_False )
 {
     Sequence< OUString > aNames = GetPropertyNames();
     Sequence< Any > aValues = GetProperties( aNames );
@@ -273,6 +280,10 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                                     bSaveUnpacked = bTemp;
                                     break;
 
+                                case PRETTYPRINTING:
+                                    bDoPrettyPrinting = bTemp;
+                                    break;
+
                                 default :
                                     DBG_ERRORFILE( "invalid index to load a path" );
                             }
@@ -294,51 +305,60 @@ void SvtSaveOptions_Impl::Commit()
 {
     Sequence< OUString > aNames = GetPropertyNames();
     OUString* pNames = aNames.getArray();
+
     Sequence< Any > aValues( aNames.getLength() );
-    Any* pValues = aValues.getArray();
-    for ( int nProp = 0; nProp < aNames.getLength(); nProp++ )
+    Any* pValues    =               aValues.getArray();
+    Any* pValuesEnd = pValues   +   aValues.getLength();
+
+    sal_Int32 nWhich = 0;
+    for ( ; pValues < pValuesEnd; ++pValues, ++nWhich )
     {
-        switch ( nProp )
+        switch ( nWhich )
         {
             case TIMEINTERVALL :
-                pValues[nProp] <<= nAutoSaveTime;
+                *pValues <<= nAutoSaveTime;
                 break;
             case FORMAT :
-                pValues[nProp] <<= (sal_Int16 ) eSaveGraphics;
+                *pValues <<= (sal_Int16 ) eSaveGraphics;
                 break;
             case USEUSERDATA :
-                pValues[nProp] <<= bUseUserData;
+                *pValues <<= bUseUserData;
                 break;
             case CREATEBACKUP :
-                pValues[nProp] <<= bBackup;
+                *pValues <<= bBackup;
                 break;
             case AUTOSAVE :
-                pValues[nProp] <<= bAutoSave;
+                *pValues <<= bAutoSave;
                 break;
             case PROMPT :
-                pValues[nProp] <<= bAutoSavePrompt;
+                *pValues <<= bAutoSavePrompt;
                 break;
             case EDITPROPERTY :
-                pValues[nProp] <<= bDocInfSave;
+                *pValues <<= bDocInfSave;
                 break;
             case SAVEWORKINGSET :
-                pValues[nProp] <<= bSaveWorkingSet;
+                *pValues <<= bSaveWorkingSet;
                 break;
             case SAVEDOCWINS :
-                pValues[nProp] <<= bSaveDocWins;
+                *pValues <<= bSaveDocWins;
                 break;
             case SAVEVIEWINFO :
-                pValues[nProp] <<= bSaveDocView;
+                *pValues <<= bSaveDocView;
                 break;
             case FILESYSTEM :
-                pValues[nProp] <<= bSaveRelFSys;
+                *pValues <<= bSaveRelFSys;
                 break;
             case INTERNET :
-                pValues[nProp] <<= bSaveRelINet;
+                *pValues <<= bSaveRelINet;
                 break;
             case UNPACKED :
-                pValues[nProp] <<= bSaveUnpacked;
+                *pValues <<= bSaveUnpacked;
                 break;
+
+            case PRETTYPRINTING:
+                *pValues <<= bDoPrettyPrinting;
+                break;
+
             default:
                 DBG_ERRORFILE( "invalid index to save a path" );
         }
@@ -569,7 +589,7 @@ void SvtSaveOptions::SetSaveGraphicsMode( SvtSaveOptions::SaveGraphicsMode eMode
     // pImp->pSaveOpt->SetSaveGraphicsMode( eMode );
 }
 
-void       SvtSaveOptions::SetLoadUserSettings(sal_Bool b)
+void SvtSaveOptions::SetLoadUserSettings(sal_Bool b)
 {
     pImp->pLoadOpt->SetLoadUserSettings(b);
 }
@@ -577,5 +597,15 @@ void       SvtSaveOptions::SetLoadUserSettings(sal_Bool b)
 sal_Bool   SvtSaveOptions::IsLoadUserSettings() const
 {
     return pImp->pLoadOpt->IsLoadUserSettings();
+}
+
+void SvtSaveOptions::SetPrettyPrinting( sal_Bool _bEnable )
+{
+    pImp->pSaveOpt->EnablePrettyPrinting( _bEnable );
+}
+
+sal_Bool SvtSaveOptions::IsPrettyPrinting() const
+{
+    return pImp->pSaveOpt->IsPrettyPrintingEnabled();
 }
 
