@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envprt.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:58:45 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,35 +73,8 @@ TabPage TP_ENV_PRT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Umschlageinzug" ;
-        Text[ ENGLISH ] = "Envelope orientation" ;
-        Text[ english_us ] = "Envelope orientation";
-        Text[ portuguese ] = "Orientação do envelope";
-        Text[ russian ] = "Îğèåíòàöèÿ êîíâåğòà";
-        Text[ greek ] = "Ğñïóáíáôïëéóìüò öáêİëïõ";
-        Text[ dutch ] = "Envelopinvoer";
-        Text[ french ] = "Orientation de l'enveloppe";
-        Text[ spanish ] = "Orientación del sobre";
-        Text[ finnish ] = "Kirjekuorisuunta";
-        Text[ italian ] = "Caricamento busta";
-        Text[ danish ] = "Konvolutretning";
-        Text[ swedish ] = "Kuvertmatning";
-        Text[ polish ] = "Orientacja koperty";
-        Text[ portuguese_brazilian ] = "Orientação do envelope";
-        Text[ japanese ] = "å°ç­’ã®å‘ã";
-        Text[ korean ] = "ë´‰íˆ¬ ë°©í–¥";
-        Text[ chinese_simplified ] = "ä¿¡å°æ–¹å‘";
-        Text[ chinese_traditional ] = "ä¿¡å°æ–¹å‘";
-        Text[ turkish ] = "Zarf metin yönü";
-        Text[ arabic ] = "Envelope orientation";
-        Text[ catalan ] = "Orientació del sobre";
-        Text[ thai ] = "à¸§à¸²à¸‡à¹à¸™à¸§à¸‹à¸­à¸‡à¸ˆà¸”à¸«à¸¡à¸²à¸¢";
-        Text[ czech ] = "Orientace obÃ¡lky";
-        Text[ hebrew ] = "Umschlageinzug";
-        Text[ hindi ] = "à¤²à¤¿à¤«à¤¾à¤«à¤¾ à¤•à¤¾ à¤…à¤¨à¥à¤¸à¥à¤¥à¤¾à¤ªà¤¨";
-        Text[ slovak ] = "OrientÃ¡cia obÃ¡lky";
-        Text[ hungarian ] = "BorÃ­tÃ©k tÃ¡jolÃ¡sa";
-        Text[ slovenian ] = "Usmerjenost ovojnice";
+        Text [ de ] = "Umschlageinzug" ;
+        Text [ en-US ] = "Envelope orientation";
     };
     ToolBox BOX_ALIGN
     {
@@ -144,114 +117,30 @@ TabPage TP_ENV_PRT
     {
         Pos = MAP_APPFONT ( 18 , 42 ) ;
         Size = MAP_APPFONT ( 179 , 10 ) ;
-        Text = "Von ~oben bedrucken" ;
-        Text [ ENGLISH ] = "Print upper side" ;
-        Text [ NORWEGIAN ] = "Print upper side" ;
-        Text [ DANISH ] = "~Udskriv første side først" ;
-        Text [ ENGLISH_US ] = "~Print from top" ;
-        Text [ SPANISH ] = "Imprimir r~everso" ;
-        Text [ FINNISH ] = "Tulosta ~alusta" ;
-        Text [ FRENCH ] = "Imprimer à partir du haut" ;
-        Text [ ITALIAN ] = "Stampa da sopra" ;
-        Text [ DUTCH ] = "B~ovenkant bedrukken" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "~Imprimir a partir cima" ;
-        Text [ SWEDISH ] = "Skriv ut u~ppifrån" ;
-        Text [ PORTUGUESE ] = "Imprimir a partir de cima" ;
+        Text [ de ] = "Von ~oben bedrucken" ;
+        Text [ en-US ] = "~Print from top" ;
         TabStop = TRUE ;
         Group = TRUE ;
         Check = TRUE ;
-        Text[ chinese_simplified ] = "ä»ä¸Šæ–¹å¼€å§‹æ‰“å°(~P)";
-        Text[ russian ] = "Ïå~÷àòàòü ñâåğõó";
-        Text[ polish ] = "~Drukuj od góry";
-        Text[ japanese ] = "å°ç­’ã®è¡¨ã‚’ä¸Šã«ã™ã‚‹(~P)";
-        Text[ chinese_traditional ] = "å¾ä¸Šæ–¹é–‹å§‹åˆ—å°(~P)";
-        Text[ arabic ] = "ÇáØÈÇÚÉ ãä ÃÚáì";
-        Text[ greek ] = "Åêôığùóç áğü ğÜíù";
-        Text[ korean ] = "ìœ„ì—ì„œë¶€í„° ì¸ì‡„(~P)";
-        Text[ turkish ] = "Üstten yazdır";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Imprimeix des de la part superior";
-        Text[ thai ] = "~à¸à¸´à¸¡à¸à¹Œà¸ˆà¸²à¸à¸”à¹‰à¸²à¸™à¸šà¸™";
-        Text[ czech ] = "Tisk od hornÃ­ho okraje";
-        Text[ hebrew ] = "Von ~oben bedrucken";
-        Text[ hindi ] = "~à¤Šà¤ªà¤° à¤¸à¥‡ à¤›à¤ªà¤¾à¤ˆ";
-        Text[ slovak ] = "~TlaÄ od hornÃ©ho okraja";
-        Text[ hungarian ] = "NyomtatÃ¡s a ~tetejÃ©tÅ‘l";
-        Text[ slovenian ] = "~Natisni z vrha";
+        Text [ x-comment ] = " ";
     };
     RadioButton BTN_BOTTOM
     {
         Pos = MAP_APPFONT ( 18 , 56 ) ;
         Size = MAP_APPFONT ( 179 , 10 ) ;
-        Text = "Von ~unten bedrucken" ;
-        Text [ ENGLISH ] = "Print lower side" ;
-        Text [ NORWEGIAN ] = "Print lower side" ;
-        Text [ DANISH ] = "Udskriv ~sidste side først" ;
-        Text [ ENGLISH_US ] = "Print from ~bottom" ;
-        Text [ SPANISH ] = "Imprimir ~anverso" ;
-        Text [ FINNISH ] = "Tulosta ~lopusta" ;
-        Text [ FRENCH ] = "Imprimer à partir du bas" ;
-        Text [ ITALIAN ] = "Stampa da sotto" ;
-        Text [ DUTCH ] = "~Onderkant bedrukken" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Imprimir a partir de ~baixo" ;
-        Text [ SWEDISH ] = "Skriv ~ut nedifrån" ;
-        Text [ PORTUGUESE ] = "Imprimir a partir de baixo" ;
+        Text [ de ] = "Von ~unten bedrucken" ;
+        Text [ en-US ] = "Print from ~bottom" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ä»ä¸‹æ–¹å¼€å§‹æ‰“å°(~B)";
-        Text[ russian ] = "Ïå÷àòàòü ñíèçó";
-        Text[ polish ] = "Drukuj od do³~u";
-        Text[ japanese ] = "å°ç­’ã®è¡¨ã‚’ä¸‹ã«ã™ã‚‹(~B)";
-        Text[ chinese_traditional ] = "å¾ä¸‹æ–¹é–‹å§‹åˆ—å°(~B)";
-        Text[ arabic ] = "ÇáØÈÇÚÉ ãä ÃÓİá";
-        Text[ greek ] = "Åêôığùóç áğü êÜôù";
-        Text[ korean ] = "ì•„ë˜ì—ì„œë¶€í„° ì¸ì‡„(~B)";
-        Text[ turkish ] = "Alttan yazdır";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Imprimeix des de la ~part inferior";
-        Text[ thai ] = "à¸à¸´à¸¡à¸à¹Œà¸ˆà¸²à¸à¸”à¹‰à¸²à¸™~à¸¥à¹ˆà¸²à¸‡";
-        Text[ czech ] = "Tisk od spodnÃ­ho okraje";
-        Text[ hebrew ] = "Von ~unten bedrucken";
-        Text[ hindi ] = "~à¤¨à¥€à¤šà¥‡ à¤¸à¥‡ à¤›à¤ªà¤¾à¤ˆ";
-        Text[ slovak ] = "TlaÄ od ~spodnÃ©ho okraja";
-        Text[ hungarian ] = "Ny~omtatÃ¡s az aljÃ¡tÃ³l";
-        Text[ slovenian ] = "N~atisni z dna";
+        Text [ x-comment ] = " ";
     };
     FixedText TXT_RIGHT
     {
         Pos = MAP_APPFONT ( 12 , 74 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text = "Nach ~rechts" ;
-        Text [ ENGLISH ] = "Shift right" ;
-        Text [ NORWEGIAN ] = "Shift right" ;
-        Text [ DANISH ] = "~Mod højre" ;
-        Text [ ENGLISH_US ] = "~Shift right" ;
-        Text [ SPANISH ] = "Hacia la ~derecha" ;
-        Text [ FINNISH ] = "Siirrä ~oikealle" ;
-        Text [ FRENCH ] = "Vers la droite" ;
-        Text [ ITALIAN ] = "Sposta a destra" ;
-        Text [ DUTCH ] = "Naar re~chts" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Deslocar para a ~direita" ;
-        Text [ SWEDISH ] = "Åt höger" ;
-        Text [ PORTUGUESE ] = "À direita" ;
+        Text [ de ] = "Nach ~rechts" ;
+        Text [ en-US ] = "~Shift right" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "å‘å³(~S)";
-        Text[ russian ] = "Ñ~äâèã âïğàâî";
-        Text[ polish ] = "Przesuñ w ~prawo";
-        Text[ japanese ] = "å³ã«(~S)";
-        Text[ chinese_traditional ] = "å‘å³(~S)";
-        Text[ arabic ] = "Åáì Çáíãíä";
-        Text[ greek ] = "Ğñïò ôá äåîéÜ";
-        Text[ korean ] = "ì˜¤ë¥¸ìª½ìœ¼ë¡œ ì´ë™(~S)";
-        Text[ turkish ] = "S~ağa";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Cap a la ~dreta";
-        Text[ thai ] = "à¹€~à¸¥à¸·à¹ˆà¸­à¸™à¸—à¸²à¸‡à¸‚à¸§à¸²";
-        Text[ czech ] = "Posunout doprava";
-        Text[ hebrew ] = "Nach ~rechts";
-        Text[ hindi ] = "~à¤¦à¤¾à¤¹à¤¿à¤¨à¥€ à¤“à¤° à¤¸à¥à¤¥à¤¾à¤¨ à¤¬à¤¦à¤²à¥‹";
-        Text[ slovak ] = "Po~sunÃºÅ¥ doprava";
-        Text[ hungarian ] = "~CsÃºsztatÃ¡s jobbra";
-        Text[ slovenian ] = "~Premakni na desno";
+        Text [ x-comment ] = " ";
     };
     MetricField FLD_RIGHT
     {
@@ -274,38 +163,10 @@ TabPage TP_ENV_PRT
     {
         Pos = MAP_APPFONT ( 12 , 90 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text = "~Nach unten" ;
-        Text [ ENGLISH ] = "Shift down" ;
-        Text [ NORWEGIAN ] = "Shift down" ;
-        Text [ DANISH ] = "~Nedad" ;
-        Text [ ENGLISH_US ] = "Shift ~down" ;
-        Text [ SPANISH ] = "Hacia a~bajo" ;
-        Text [ FINNISH ] = "Siirrä ~alas" ;
-        Text [ FRENCH ] = "Vers le bas" ;
-        Text [ ITALIAN ] = "Sposta in basso" ;
-        Text [ DUTCH ] = "~Naar beneden" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Deslocar para ~baixo" ;
-        Text [ SWEDISH ] = "~Nedåt" ;
-        Text [ PORTUGUESE ] = "Para baixo" ;
+        Text [ de ] = "~Nach unten" ;
+        Text [ en-US ] = "Shift ~down" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "å‘ä¸‹(~D)";
-        Text[ russian ] = "Ñäâèã âíè~ç";
-        Text[ polish ] = "Pr~zesuñ w dó³";
-        Text[ japanese ] = "ä¸‹ã«(~D)";
-        Text[ chinese_traditional ] = "å‘ä¸‹(~D)";
-        Text[ arabic ] = "Åáì ÃÓİá";
-        Text[ greek ] = "Ğñïò ôá êÜôù";
-        Text[ korean ] = "ì•„ë˜ë¡œ(~D)";
-        Text[ turkish ] = "~Aşağı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Cap a a~vall";
-        Text[ thai ] = "à¹€à¸¥à¸·à¹ˆà¸­à¸™ ~à¸¥à¸‡";
-        Text[ czech ] = "Posunout dolÅ¯";
-        Text[ hebrew ] = "~Nach unten";
-        Text[ hindi ] = "~à¤¨à¥€à¤šà¥‡ à¤•à¥€ à¤“à¤° à¤¸à¥à¤¥à¤¾à¤¨ à¤¬à¤¦à¤²à¥‹";
-        Text[ slovak ] = "PosunÃºÅ¥ ~dolu";
-        Text[ hungarian ] = "CsÃºsztatÃ¡s ~lefelÃ©";
-        Text[ slovenian ] = "Premakni navzd~ol";
+        Text [ x-comment ] = " ";
     };
     MetricField FLD_DOWN
     {
@@ -328,108 +189,26 @@ TabPage TP_ENV_PRT
     {
         Pos = MAP_APPFONT ( 3 , 103 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Aktueller Drucker" ;
-        Text[ ENGLISH ] = "Current printer" ;
-        Text[ english_us ] = "Current printer";
-        Text[ portuguese ] = "Impressora activa";
-        Text[ russian ] = "Òåêóùèé ïğèíòåğ";
-        Text[ greek ] = "Ôñİ÷ùí åêôõğùôŞò";
-        Text[ dutch ] = "Huidige printer";
-        Text[ french ] = "Imprimante active";
-        Text[ spanish ] = "Impresora actual";
-        Text[ finnish ] = "Nykyinen tulostin";
-        Text[ italian ] = "Stampante attuale";
-        Text[ danish ] = "Aktuel printer";
-        Text[ swedish ] = "Aktuell skrivare";
-        Text[ polish ] = "Bie¿¹ca drukarka";
-        Text[ portuguese_brazilian ] = "Impressora atual";
-        Text[ japanese ] = "ç¾åœ¨ã®ãƒ—ãƒªãƒ³ã‚¿";
-        Text[ korean ] = "í˜„ì¬ í”„ë¦°í„°";
-        Text[ chinese_simplified ] = "å½“å‰çš„æ‰“å°æœº";
-        Text[ chinese_traditional ] = "ç›®å‰çš„å°è¡¨æ©Ÿ";
-        Text[ turkish ] = "Yürürlükteki yazıcı";
-        Text[ arabic ] = "Current printer";
-        Text[ catalan ] = "Impressora activa";
-        Text[ thai ] = "à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸à¸´à¸¡à¸à¹Œà¸›à¸±à¸ˆà¸ˆà¸¸à¸šà¸±à¸™";
-        Text[ czech ] = "AktuÃ¡lnÃ­ tiskÃ¡rna";
-        Text[ hebrew ] = "Aktueller Drucker";
-        Text[ hindi ] = "à¤µà¤°à¥à¤¤à¤®à¤¾à¤¨ à¤®à¥à¤¦à¥à¤°à¤•";
-        Text[ slovak ] = "AktuÃ¡lna tlaÄiareÅˆ";
-        Text[ hungarian ] = "AktuÃ¡lis nyomtatÃ³";
-        Text[ slovenian ] = "Trenutni tiskalnik";
+        Text [ de ] = "Aktueller Drucker" ;
+        Text [ en-US ] = "Current printer";
     };
     FixedText TXT_PRINTER
     {
         Pos = MAP_APPFONT ( 12 , 116 ) ;
         Size = MAP_APPFONT ( 179 , 8 ) ;
-        Text = "- Kein Drucker installiert -" ;
-        Text [ ENGLISH ] = "- No printer installed -" ;
-        Text [ NORWEGIAN ] = "- No printer installed -" ;
-        Text [ DANISH ] = "- Ingen printer installeret -" ;
-        Text [ ENGLISH_US ] = "- No printer installed -" ;
-        Text [ SPANISH ] = "- No hay instalada ninguna impresora -" ;
-        Text [ FINNISH ] = "- Tulostinta ei ole asennettu -" ;
-        Text [ FRENCH ] = "- Aucune imprimante installée -" ;
-        Text [ ITALIAN ] = "- Nessuna stampante installata -." ;
-        Text [ DUTCH ] = "- Geen printer geïnstalleerd -" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "- Nenhuma impressora instalada -" ;
-        Text [ SWEDISH ] = "- Ingen skrivare installerad -" ;
-        Text [ PORTUGUESE ] = "- Nenhuma impressora instalada -" ;
+        Text [ de ] = "- Kein Drucker installiert -" ;
+        Text [ en-US ] = "- No printer installed -" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "- æ²¡æœ‰å®‰è£…æ‰“å°æœº -";
-        Text[ russian ] = "- Ïğèíòåğ íå óñòàíîâëåí -";
-        Text[ polish ] = "- Drukarka nie jest zainstalowana -";
-        Text[ japanese ] = "- ãƒ—ãƒªãƒ³ã‚¿ãŒã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã•ã‚Œã¦ã„ã¾ã›ã‚“ -";
-        Text[ chinese_traditional ] = "- æ²’æœ‰å®‰è£å°è¡¨æ©Ÿ -";
-        Text[ arabic ] = "- áÇ íæÌÏ ØÇÈÚÉ ãËÈÊÉ -";
-        Text[ greek ] = "- Äåí İ÷åé åãêáôáóôáèåß åêôõğùôŞò -";
-        Text[ korean ] = "- í”„ë¦°í„°ê°€ ì„¤ì¹˜ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤. -";
-        Text[ turkish ] = "- Kurulu yazıcı yok -";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "- No hi ha cap impressora instal.lada -";
-        Text[ thai ] = "- à¹„à¸¡à¹ˆà¹„à¸”à¹‰à¸•à¸´à¸”à¸•à¸±à¹‰à¸‡à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸à¸´à¸¡à¸à¹Œ -";
-        Text[ czech ] = "- NenÃ­ nainstalovÃ¡na tiskÃ¡rna -";
-        Text[ hebrew ] = "- Kein Drucker installiert -";
-        Text[ hindi ] = "- à¤•à¥‹à¤ˆ à¤®à¥à¤¦à¥à¤°à¤• à¤ªà¥à¤°à¤¤à¤¿à¤·à¥à¤ à¤¾à¤ªà¤¿à¤¤ à¤¨à¤¹à¥€à¤‚ -";
-        Text[ slovak ] = "- TlaÄiareÅˆ nie je nainÅ¡talovanÃ¡ -";
-        Text[ hungarian ] = "- Nincs telepÃ­tett nyomtatÃ³ -";
-        Text[ slovenian ] = "- Noben tiskalnik ni nameÅ¡Äen -";
+        Text [ x-comment ] = " ";
     };
     PushButton BTN_PRTSETUP
     {
         Pos = MAP_APPFONT ( 198 , 114 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "~Einrichten..." ;
-        Text [ ENGLISH ] = "Setup..." ;
+        Text [ de ] = "~Einrichten..." ;
         TabStop = TRUE ;
-        Text [ english_us ] = "Setup..." ;
-        Text [ italian ] = "Imposta..." ;
-        Text [ spanish ] = "Configurar..." ;
-        Text [ french ] = "Paramétrer..." ;
-        Text [ dutch ] = "~Configureren..." ;
-        Text [ swedish ] = "Ställ ~in..." ;
-        Text [ danish ] = "Indstil..." ;
-        Text [ portuguese_brazilian ] = "Configurar..." ;
-        Text [ portuguese ] = "~Configurar..." ;
-        Text[ chinese_simplified ] = "è®¾ç½®...";
-        Text[ russian ] = "Óñòàíîâèòü...";
-        Text[ polish ] = "Konfiguruj...";
-        Text[ japanese ] = "è¨­å®š...";
-        Text[ language_user1 ] = " ";
-        Text[ chinese_traditional ] = "è¨­ç½®...";
-        Text[ arabic ] = "...ÅÚÏÇÏ";
-        Text[ greek ] = "~ÅãêáôÜóôáóç...";
-        Text[ korean ] = "ì„¤ì¹˜...";
-        Text[ turkish ] = "Kurulum...";
-        Text[ catalan ] = "Configura...";
-        Text[ finnish ] = "Asennus...";
-        Text[ thai ] = "à¸•à¸´à¸”à¸•à¸±à¹‰à¸‡...";
-        Text[ czech ] = "NastavenÃ­...";
-        Text[ hebrew ] = "~Einrichten...";
-        Text[ hindi ] = "à¤¸à¥‡à¤Ÿà¤ª...";
-        Text[ slovak ] = "Nastavenie...";
-        Text[ hungarian ] = "BeÃ¡llÃ­tÃ¡s...";
-        Text[ slovenian ] = "Nastavi...";
+        Text [ en-US ] = "Setup..." ;
+        Text [ x-comment ] = " ";
     };
 };
  // Bitmaps ******************************************************************
