@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-28 20:15:50 $
+ *  last change: $Author: kz $ $Date: 2002-06-10 20:14:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ ModalDialog DLG_QRY_JOIN
             Text[ swedish ] = "inkluderade tabeller";
             Text[ polish ] = "implikowane tabele";
             Text[ portuguese_brazilian ] = "involved tables";
-            Text[ japanese ] = "関連ﾃｰﾌﾞﾙ";
+            Text[ japanese ] = "関連テーブル";
             Text[ korean ] = "관련 테이블";
             Text[ chinese_simplified ] = "有关联的表格";
             Text[ chinese_traditional ] = "相關的表格";
@@ -152,7 +152,7 @@ ModalDialog DLG_QRY_JOIN
             Text[ swedish ] = "inkluderade f�lt";
             Text[ polish ] = "implikowane pola";
             Text[ portuguese_brazilian ] = "involved fields";
-            Text[ japanese ] = "関連ﾌｨｰﾙﾄﾞ";
+            Text[ japanese ] = "関連フィールド";
             Text[ korean ] = "관련 필드";
             Text[ chinese_simplified ] = "有关联的字段";
             Text[ chinese_traditional ] = "相關的欄位";
@@ -208,15 +208,15 @@ ModalDialog DLG_QRY_JOIN
         Text[ russian ] = "~Type";
         Text[ greek ] = "~Type";
         Text[ dutch ] = "~Type";
-        Text[ french ] = "~Type";
+        Text[ french ] = "Type";
         Text[ spanish ] = "~Tipo";
         Text[ finnish ] = "~Type";
-        Text[ italian ] = "~Type";
+        Text[ italian ] = "~Tipo";
         Text[ danish ] = "~Type";
         Text[ swedish ] = "~Typ";
         Text[ polish ] = "~Type";
         Text[ portuguese_brazilian ] = "~Type";
-        Text[ japanese ] = "~Type";
+        Text[ japanese ] = "種類(~T)";
         Text[ korean ] = "유형(~T)";
         Text[ chinese_simplified ] = "类型(~T)";
         Text[ chinese_traditional ] = "類型(~T)";
@@ -292,17 +292,17 @@ ModalDialog DLG_QRY_JOIN
     };
     StringList [ french ] =
     {
-         < "Innerer" ; Default; > ;
-        < "Linker" ; Default; > ;
-        < "Rechter" ; Default; > ;
-        < "Vollst�ndiger"  ; Default; > ;
+         < "Interne" ; Default; > ;
+        < "Gauche" ; Default; > ;
+        < "Droite" ; Default; > ;
+        < "Compl�te"  ; Default; > ;
     };
     StringList [ spanish ] =
     {
-         < "Innerer" ; Default; > ;
-        < "Linker" ; Default; > ;
-        < "Rechter" ; Default; > ;
-        < "Vollst�ndiger"  ; Default; > ;
+         < "Interna" ; Default; > ;
+        < "Izquierda" ; Default; > ;
+        < "Derecha" ; Default; > ;
+        < "Completa"  ; Default; > ;
     };
     StringList [ finnish ] =
     {
@@ -313,10 +313,10 @@ ModalDialog DLG_QRY_JOIN
     };
     StringList [ italian ] =
     {
-         < "Innerer" ; Default; > ;
-        < "Linker" ; Default; > ;
-        < "Rechter" ; Default; > ;
-        < "Vollst�ndiger"  ; Default; > ;
+         < "Relazione interna" ; Default; > ;
+        < "Relazione sinistra" ; Default; > ;
+        < "Relazione destra" ; Default; > ;
+        < "Relazione completa"  ; Default; > ;
     };
     StringList [ danish ] =
     {
@@ -348,17 +348,17 @@ ModalDialog DLG_QRY_JOIN
     };
     StringList [ japanese ] =
     {
-         < "Innerer" ; Default; > ;
-        < "Linker" ; Default; > ;
-        < "Rechter" ; Default; > ;
-        < "Vollst�ndiger"  ; Default; > ;
+         < "内部結合(I)" ; Default; > ;
+        < "左結合(L)" ; Default; > ;
+        < "右結合(R)" ; Default; > ;
+        < "完全外部結合"  ; Default; > ;
     };
     StringList [ korean ] =
     {
          < "내부 결합" ; Default; > ;
-        < "왼쪽 결합" ; Default; > ;
-        < "오른쪽 결합" ; Default; > ;
-        < "완전 결합"  ; Default; > ;
+        < "좌측 결합" ; Default; > ;
+        < "우측 결합" ; Default; > ;
+        < "완전 외부 결합"  ; Default; > ;
     };
     StringList [ chinese_simplified ] =
     {
