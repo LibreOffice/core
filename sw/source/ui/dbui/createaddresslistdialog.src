@@ -2,9 +2,9 @@
  *
  *  $RCSfile: createaddresslistdialog.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 13:57:21 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:27:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,25 +135,25 @@ ModalDialog DLG_MM_CREATEADDRESSLIST
     FixedText               FI_VIEWENTRIES
     {
         Pos = MAP_APPFONT ( 6 , 183 ) ;
-        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Size = MAP_APPFONT ( 92 , 8 ) ;
         Text [ de ] = "Eintragsnummer anzeigen";
         Text [ en-US ] = "Sho~w entry number";
     };
     PushButton              PB_START
     {
-        Pos = MAP_APPFONT ( 60 , 180 ) ;
+        Pos = MAP_APPFONT ( 100 , 180 ) ;
         Size = MAP_APPFONT ( 20 , 14 ) ;
         Text = "|<";
     };
     PushButton              PB_PREV
     {
-        Pos = MAP_APPFONT ( 83 , 180 ) ;
+        Pos = MAP_APPFONT ( 123 , 180 ) ;
         Size = MAP_APPFONT ( 20 , 14 ) ;
         Text = "<";
     };
     NumericField            NF_SETNO
     {
-        Pos = MAP_APPFONT ( 106 , 180 ) ;
+        Pos = MAP_APPFONT ( 146 , 180 ) ;
         Size = MAP_APPFONT ( 20 , 14 ) ;
         Border = TRUE;
         Left = TRUE ;
@@ -166,13 +166,13 @@ ModalDialog DLG_MM_CREATEADDRESSLIST
     };
     PushButton              PB_NEXT
     {
-        Pos = MAP_APPFONT ( 129 , 180 ) ;
+        Pos = MAP_APPFONT ( 169 , 180 ) ;
         Size = MAP_APPFONT ( 20 , 14 ) ;
         Text = ">";
     };
     PushButton              PB_END
     {
-        Pos = MAP_APPFONT ( 152 , 180 ) ;
+        Pos = MAP_APPFONT ( 192 , 180 ) ;
         Size = MAP_APPFONT ( 20 , 14 ) ;
         Text = ">|";
     };
