@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabwin.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 13:43:36 $
+ *  last change: $Author: fs $ $Date: 2001-08-02 12:21:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,46 +356,13 @@ sal_Bool FmFieldWin::Update(const ::com::sun::star::uno::Reference< ::com::sun::
     m_aDatabaseName = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_DATASOURCE));
     m_nObjectType   = ::comphelper::getINT32(xSet->getPropertyValue(FM_PROP_COMMANDTYPE));
 
-    // maybe the database name is empty. this is allowed by the service definition
-    // (the form will use a connection it finds in it's parent hierarchy as it's datasource,
-    // so it does not need a data source description)
-    // of course we want to have a data source name anyway (if such a connection exists)
-    // FS - 74645 - 07.04.00
-    if (!m_aDatabaseName.getLength())
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > xConnection = findConnection(xSet);
-        if (xConnection.is())
-        {
-            ::rtl::OUString sDisplayName;
-            try
-            {
-                // first find somebody who can give us an URL the connection is build upon
-                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xTitleSupplier(xConnection, ::com::sun::star::uno::UNO_QUERY);
-                if (!xTitleSupplier.is() || !::comphelper::hasProperty(FM_PROP_URL, xTitleSupplier))
-                {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild > xConnAsChild(xConnection, ::com::sun::star::uno::UNO_QUERY);
-                    if (xConnAsChild.is())
-                        xTitleSupplier = ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >::query(xConnAsChild->getParent());
-                }
-
-                if (xTitleSupplier.is() && ::comphelper::hasProperty(FM_PROP_URL, xTitleSupplier))
-                    xTitleSupplier->getPropertyValue(FM_PROP_URL) >>= sDisplayName;
-            }
-            catch(SQLException&)
-            {
-            }
-            m_aDatabaseName = sDisplayName;
-        }
-    }
-
     // Festellen des Feldes
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >  xFields;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xField;
     try
     {
         // get the connection of the form
-        Reference< XConnection > xConnection;
-        OStaticDataAccessTools().calcConnection(Reference< XRowSet >(xForm, UNO_QUERY), ::comphelper::getProcessServiceFactory());
+        Reference< XConnection > xConnection = OStaticDataAccessTools().calcConnection(Reference< XRowSet >(xForm, UNO_QUERY), ::comphelper::getProcessServiceFactory());
 
         if (!xConnection.is())
             return sal_True;
