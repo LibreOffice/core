@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:19:06 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 14:48:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1565,12 +1565,16 @@ SfxAppToolBoxControl_Impl::~SfxAppToolBoxControl_Impl()
                 contains the fallback URL in case we return FALSE
                 Must point to valid memory!
 
+    @param  pImage
+                contains the image of the menu for the URL.
+
     @return TRUE - if URL could be located as an item of the popup menu.
             FALSE - otherwhise.
 */
 BOOL Impl_ExistURLInMenu( const PopupMenu *pMenu     ,
                           const String    &sURL      ,
-                                String    *pFallback )
+                                String    *pFallback ,
+                                Image     *pImage    )
 {
     BOOL bValidFallback = FALSE;
     if (pMenu && sURL.Len())
@@ -1588,7 +1592,10 @@ BOOL Impl_ExistURLInMenu( const PopupMenu *pMenu     ,
             }
 
             if (sURL.Equals(aCmd))
+            {
+                *pImage = pMenu->GetItemImage( nId );
                 return TRUE;
+            }
         }
     }
 
@@ -1663,15 +1670,18 @@ void SfxAppToolBoxControl_Impl::SetImage( const String &rURL )
        All other ones will be ignored and a fallback is used ... */
     String aURL = rURL;
     String sFallback;
-    BOOL bValid = Impl_ExistURLInMenu(pMenu,aURL,&sFallback);
+    Image aMenuImage;
+    BOOL bValid = Impl_ExistURLInMenu(pMenu,aURL,&sFallback,&aMenuImage);
     if (!bValid)
         aURL = sFallback;
 
     BOOL bBig = ( GetCurrentSymbolSet() == SFX_SYMBOLS_LARGE );
-    GetToolBox().SetItemImage( GetId(),
-                               SvFileInformationManager::GetImage( INetURLObject( aURL ),
-                               bBig,
-                                GetToolBox().GetBackground().GetColor().IsDark() ) );
+    BOOL bHC = GetToolBox().GetBackground().GetColor().IsDark();
+    Image aImage = SvFileInformationManager::GetImageNoDefault( INetURLObject( aURL ), bBig, bHC );
+    if ( !aImage )
+        aImage = !!aMenuImage ? aMenuImage :
+            SvFileInformationManager::GetImage( INetURLObject( aURL ), bBig, bHC );
+    GetToolBox().SetItemImage( GetId(), aImage );
     aLastURL = aURL;
 }
 
