@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:15:45 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,8 @@
 #endif
 #include <svtools/miscopt.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/docfile.hxx>
 
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
@@ -701,7 +703,7 @@ void SvxIMapDlg::DoOpen()
 
         if( pIStm )
         {
-            aLoadIMap.Read( *pIStm, IMAP_FORMAT_DETECT );
+            aLoadIMap.Read( *pIStm, IMAP_FORMAT_DETECT, String() );
 
             if( pIStm->GetError() )
                 ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
@@ -775,10 +777,9 @@ BOOL SvxIMapDlg::DoSave()
                 aURL.setExtension( aExt );
 
             SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC );
-
             if( pOStm )
             {
-                pIMapWnd->GetImageMap().Write( *pOStm, nFormat );
+                pIMapWnd->GetImageMap().Write( *pOStm, nFormat, String() );
 
                 if( pOStm->GetError() )
                     ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
@@ -952,7 +953,8 @@ IMPL_LINK( SvxIMapDlg, URLLoseFocusHdl, void*, p )
 
     if ( aURLText.Len() )
     {
-        aNewInfo.aMarkURL = ::URIHelper::SmartRelToAbs( aURLText, FALSE,
+        String aBase = GetBindings().GetDispatcher()->GetFrame()->GetObjectShell()->GetMedium()->GetBaseURL();
+        aNewInfo.aMarkURL = ::URIHelper::SmartRel2Abs( INetURLObject(aBase), aURLText, URIHelper::GetMaybeFileHdl(), true, false,
                                                         INetURLObject::WAS_ENCODED,
                                                         INetURLObject::DECODE_UNAMBIGUOUS );
     }
