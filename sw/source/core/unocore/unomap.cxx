@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-24 17:43:42 $
+ *  last change: $Author: jp $ $Date: 2001-10-24 18:59:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,37 +65,43 @@
 
 #pragma hdrstop
 
-#include <swtypes.hxx>
+#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#include <cmdid.h>
+#endif
 
-
-#ifndef _SVX_SVXIDS_HRC //autogen
+#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#ifndef _SFXPOOLITEM_HXX //autogen
-#include <svtools/poolitem.hxx>
+#ifndef _SVX_UNOMID_HXX
+#include <svx/unomid.hxx>
+#endif
+#ifndef _COMPHELPER_TYPEGENERATION_HXX
+#include <comphelper/TypeGeneration.hxx>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_PAGENUMBERTYPE_HPP_
+#include <com/sun/star/text/PageNumberType.hpp>
+#endif
+
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
 #endif
 #ifndef _UNOMAP_HXX
 #include <unomap.hxx>
 #endif
-
 #ifndef _UNOPRNMS_HXX
 #include <unoprnms.hxx>
 #endif
 #ifndef SW_UNOMID_HXX
 #include <unomid.h>
 #endif
-#ifndef _SVX_UNOMID_HXX
-#include <svx/unomid.hxx>
+#ifndef _CMDID_H
+#include <cmdid.h>
 #endif
-//undef to prevent error (from sfx2/docfile.cxx)
-#undef SEQUENCE
-#ifndef _COMPHELPER_TYPEGENERATION_HXX
-#include <comphelper/TypeGeneration.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
-#include <com/sun/star/beans/PropertyAttribute.hpp>
+#ifndef _UNOFLDMID_H
+#include <unofldmid.h>
 #endif
 
 using namespace ::com::sun::star;
@@ -214,7 +220,11 @@ void SwUnoPropertyMapProvider::Sort( sal_uInt16 nId )
         p->pName = rPropNm.pName;
         p->nNameLen = rPropNm.nNameLen;
         // get the cppu type from the comphelper
-        GenerateCppuType ( (sal_uInt16) (long) p->pType, p->pType );
+#ifdef DBG_UTIL
+        sal_uInt16 nTyp = (sal_uInt16) (long) p->pType;
+#endif
+        GenerateCppuType( nTyp, p->pType );
+        DBG_ASSERT( nTyp != (sal_uInt16) (long) p->pType, "unknown type" );
     }
     qsort( aMapArr[nId], i, sizeof(SfxItemPropertyMap), lcl_CompareMap );
 }
@@ -1641,583 +1651,567 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     pMap->nFlags &= ~PropertyAttribute::MAYBEVOID;
             }
             break;
-
-//!!
-#if 0
-            case  SW_SERVICE_FIELDTYPE_DATETIME:
+//!!!
+            case  PROPERTY_MAP_FLDTYP_DATETIME:
             {
                 static SfxItemPropertyMap aDateTimeFieldPropMap[] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_ADJUST), FIELD_PROP_SUBTYPE,     CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE,    0},
-                    {SW_PROP_NAME(UNO_NAME_DATE_TIME_VALUE), FIELD_PROP_DATE_TIME,  CPPU_E2T(CPPUTYPE_DATETIME), PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_IS_FIXED),       FIELD_PROP_BOOL1,   CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,0},
-                    {SW_PROP_NAME(UNO_NAME_IS_DATE),    FIELD_PROP_BOOL2,   CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,0},
-                    {SW_PROP_NAME(UNO_NAME_NUMBER_FORMAT), FIELD_PROP_FORMAT,   CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE,    0},
+                    {SW_PROP_NMID(UNO_NAME_ADJUST), FIELD_PROP_SUBTYPE,     CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE,    0},
+                    {SW_PROP_NMID(UNO_NAME_DATE_TIME_VALUE), FIELD_PROP_DATE_TIME,  CPPU_E2T(CPPUTYPE_DATETIME), PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_IS_FIXED),       FIELD_PROP_BOOL1,   CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,0},
+                    {SW_PROP_NMID(UNO_NAME_IS_DATE),    FIELD_PROP_BOOL2,   CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,0},
+                    {SW_PROP_NMID(UNO_NAME_NUMBER_FORMAT), FIELD_PROP_FORMAT,   CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE,    0},
                     {0,0,0,0}
                 };
-                pRet = aDateTimeFieldPropMap;
+                aMapArr[nPropertyId] = aDateTimeFieldPropMap;
             }
             break;
             case  PROPERTY_MAP_FLDTYP_USER     :
             {
                 static SfxItemPropertyMap aUserFieldPropMap[] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_IS_SHOW_FORMULA), FIELD_PROP_BOOL2,  CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,  0},
-                    {SW_PROP_NAME(UNO_NAME_IS_VISIBLE),     FIELD_PROP_BOOL1,   CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,  0},
-                    {SW_PROP_NAME(UNO_NAME_NUMBER_FORMAT),  FIELD_PROP_FORMAT,  CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE,    0},
+                    {SW_PROP_NMID(UNO_NAME_IS_SHOW_FORMULA), FIELD_PROP_BOOL2,  CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,  0},
+                    {SW_PROP_NMID(UNO_NAME_IS_VISIBLE),     FIELD_PROP_BOOL1,   CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,  0},
+                    {SW_PROP_NMID(UNO_NAME_NUMBER_FORMAT),  FIELD_PROP_FORMAT,  CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE,    0},
                     {0,0,0,0}
                 };
 
-                pRet = aUserFieldPropMap;
+                aMapArr[nPropertyId] = aUserFieldPropMap;
             }
             break;
             case  PROPERTY_MAP_FLDTYP_SET_EXP  :
             {
                 static SfxItemPropertyMap aSetExpFieldPropMap       [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_CONTENT),            FIELD_PROP_PAR2,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR4, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_HINT),               FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_NUMBER_FORMAT),      FIELD_PROP_FORMAT,  CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE,    0},
-                    {SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE),     FIELD_PROP_USHORT2, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
-                    {SW_PROP_NAME(UNO_NAME_IS_INPUT),       FIELD_PROP_BOOL1,   CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_IS_SHOW_FORMULA), FIELD_PROP_BOOL3,  CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,  0},
-                    {SW_PROP_NAME(UNO_NAME_IS_VISIBLE),       FIELD_PROP_BOOL2,   CPPU_E2T(CPPUTYPE_BOOLEAN),    PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_CONTENT),            FIELD_PROP_PAR2,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR4, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_HINT),               FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_NUMBER_FORMAT),      FIELD_PROP_FORMAT,  CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE,    0},
+                    {SW_PROP_NMID(UNO_NAME_NUMBERING_TYPE),     FIELD_PROP_USHORT2, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
+                    {SW_PROP_NMID(UNO_NAME_IS_INPUT),       FIELD_PROP_BOOL1,   CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_IS_SHOW_FORMULA), FIELD_PROP_BOOL3,  CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,  0},
+                    {SW_PROP_NMID(UNO_NAME_IS_VISIBLE),       FIELD_PROP_BOOL2,   CPPU_E2T(CPPUTYPE_BOOLEAN),    PROPERTY_NONE, 0},
                     //TODO: UNO_NAME_VARIABLE_NAME gibt es das wirklich?
-                    {SW_PROP_NAME(UNO_NAME_SEQUENCE_VALUE), FIELD_PROP_USHORT1, CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE,  0},
-                    {SW_PROP_NAME(UNO_NAME_SUB_TYPE),           FIELD_PROP_SUBTYPE, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
-                    {SW_PROP_NAME(UNO_NAME_VALUE),          FIELD_PROP_DOUBLE,  CPPU_E2T(CPPUTYPE_DOUBLE),  PROPERTY_NONE,  0},
-                    {SW_PROP_NAME(UNO_NAME_VARIABLE_NAME),  FIELD_PROP_PAR1,    CPPU_E2T(CPPUTYPE_OUSTRING),   PropertyAttribute::READONLY, 0},
+                    {SW_PROP_NMID(UNO_NAME_SEQUENCE_VALUE), FIELD_PROP_USHORT1, CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE,  0},
+                    {SW_PROP_NMID(UNO_NAME_SUB_TYPE),           FIELD_PROP_SUBTYPE, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
+                    {SW_PROP_NMID(UNO_NAME_VALUE),          FIELD_PROP_DOUBLE,  CPPU_E2T(CPPUTYPE_DOUBLE),  PROPERTY_NONE,  0},
+                    {SW_PROP_NMID(UNO_NAME_VARIABLE_NAME),  FIELD_PROP_PAR1,    CPPU_E2T(CPPUTYPE_OUSTRING),   PropertyAttribute::READONLY, 0},
                     {0,0,0,0}
                 };
-                pRet = aSetExpFieldPropMap;
+                aMapArr[nPropertyId] = aSetExpFieldPropMap;
             }
             break;
             case  PROPERTY_MAP_FLDTYP_GET_EXP  :
             {
                 static SfxItemPropertyMap aGetExpFieldPropMap       [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_CONTENT),            FIELD_PROP_PAR1,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR4, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_IS_SHOW_FORMULA), FIELD_PROP_BOOL2,  CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,  0},
-                    {SW_PROP_NAME(UNO_NAME_NUMBER_FORMAT),  FIELD_PROP_FORMAT,  CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE,    0},
-                    {SW_PROP_NAME(UNO_NAME_SUB_TYPE),           FIELD_PROP_SUBTYPE, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
-                    {SW_PROP_NAME(UNO_NAME_VALUE),          FIELD_PROP_DOUBLE,  CPPU_E2T(CPPUTYPE_DOUBLE), PropertyAttribute::READONLY, 0},
-                    {SW_PROP_NAME(UNO_NAME_VARIABLE_SUBTYPE),   FIELD_PROP_USHORT1, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
+                    {SW_PROP_NMID(UNO_NAME_CONTENT),            FIELD_PROP_PAR1,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR4, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_IS_SHOW_FORMULA), FIELD_PROP_BOOL2,  CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,  0},
+                    {SW_PROP_NMID(UNO_NAME_NUMBER_FORMAT),  FIELD_PROP_FORMAT,  CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE,    0},
+                    {SW_PROP_NMID(UNO_NAME_SUB_TYPE),           FIELD_PROP_SUBTYPE, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
+                    {SW_PROP_NMID(UNO_NAME_VALUE),          FIELD_PROP_DOUBLE,  CPPU_E2T(CPPUTYPE_DOUBLE), PropertyAttribute::READONLY, 0},
+                    {SW_PROP_NMID(UNO_NAME_VARIABLE_SUBTYPE),   FIELD_PROP_USHORT1, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
                     {0,0,0,0}
                 };
-                pRet = aGetExpFieldPropMap;
+                aMapArr[nPropertyId] = aGetExpFieldPropMap;
             }
             break;
             case  PROPERTY_MAP_FLDTYP_FILE_NAME:
             {
                 static SfxItemPropertyMap aFileNameFieldPropMap [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_FILE_FORMAT), FIELD_PROP_FORMAT, CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE,    0},
-                    {SW_PROP_NAME(UNO_NAME_IS_FIXED),   FIELD_PROP_BOOL2, CPPU_E2T(CPPUTYPE_BOOLEAN),       PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_FILE_FORMAT), FIELD_PROP_FORMAT, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
+                    {SW_PROP_NMID(UNO_NAME_IS_FIXED),   FIELD_PROP_BOOL2, CPPU_E2T(CPPUTYPE_BOOLEAN),       PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
-                pRet = aFileNameFieldPropMap;
+                aMapArr[nPropertyId] = aFileNameFieldPropMap;
             }
             break;
             case  PROPERTY_MAP_FLDTYP_PAGE_NUM :
             {
                 static SfxItemPropertyMap aPageNumFieldPropMap      [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE),     FIELD_PROP_FORMAT,  CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
-                    {SW_PROP_NAME(UNO_NAME_OFFSET),             FIELD_PROP_USHORT1, CPPU_E2T(CPPUTYPE_INT16),  PROPERTY_NONE,   0},
-                    {SW_PROP_NAME(UNO_NAME_SUB_TYPE),           FIELD_PROP_SUBTYPE, CPPU_E2T(CPPUTYPE_PAGENUMTYPE), PROPERTY_NONE,  0},
-                    {SW_PROP_NAME(UNO_NAME_USERTEXT),           FIELD_PROP_PAR1,    CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_NUMBERING_TYPE),     FIELD_PROP_FORMAT,  CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
+                    {SW_PROP_NMID(UNO_NAME_OFFSET),             FIELD_PROP_USHORT1, CPPU_E2T(CPPUTYPE_INT16),  PROPERTY_NONE,   0},
+                    {SW_PROP_NMID(UNO_NAME_SUB_TYPE),           FIELD_PROP_SUBTYPE, CPPU_E2T(CPPUTYPE_PAGENUMTYPE), PROPERTY_NONE,  0},
+                    {SW_PROP_NMID(UNO_NAME_USERTEXT),           FIELD_PROP_PAR1,    CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
-                pRet = aPageNumFieldPropMap;
+                aMapArr[nPropertyId] = aPageNumFieldPropMap;
             }
             break;
             case  PROPERTY_MAP_FLDTYP_AUTHOR   :
             {
                 static SfxItemPropertyMap aAuthorFieldPropMap       [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_CONTENT),    FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_IS_FIXED),   FIELD_PROP_BOOL2, CPPU_E2T(CPPUTYPE_BOOLEAN),       PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_FULL_NAME),FIELD_PROP_BOOL1, CPPU_E2T(CPPUTYPE_BOOLEAN),     PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_CONTENT),    FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_IS_FIXED),   FIELD_PROP_BOOL2, CPPU_E2T(CPPUTYPE_BOOLEAN),       PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_FULL_NAME),FIELD_PROP_BOOL1, CPPU_E2T(CPPUTYPE_BOOLEAN),     PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
-                pRet = aAuthorFieldPropMap;
+                aMapArr[nPropertyId] = aAuthorFieldPropMap;
             }
             break;
             case  PROPERTY_MAP_FLDTYP_CHAPTER  :
             {
                 static SfxItemPropertyMap aChapterFieldPropMap      [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_CHAPTER_FORMAT),FIELD_PROP_USHORT1,  CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_LEVEL        ),FIELD_PROP_BYTE1,         CPPU_E2T(CPPUTYPE_INT8),    PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_CHAPTER_FORMAT),FIELD_PROP_USHORT1,  CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_LEVEL        ),FIELD_PROP_BYTE1,         CPPU_E2T(CPPUTYPE_INT8),    PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
-                pRet = aChapterFieldPropMap;
+                aMapArr[nPropertyId] = aChapterFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_GET_REFERENCE          :
             {
                 static SfxItemPropertyMap aGetRefFieldPropMap       [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_REFERENCE_FIELD_PART),FIELD_PROP_USHORT1, CPPU_E2T(CPPUTYPE_INT16),  PROPERTY_NONE,  0},
-                    {SW_PROP_NAME(UNO_NAME_REFERENCE_FIELD_SOURCE),FIELD_PROP_USHORT2, CPPU_E2T(CPPUTYPE_INT16),    PROPERTY_NONE,  0},
-                    {SW_PROP_NAME(UNO_NAME_SEQUENCE_NUMBER),    FIELD_PROP_SHORT1,  CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_SOURCE_NAME),        FIELD_PROP_PAR1,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_REFERENCE_FIELD_PART),FIELD_PROP_USHORT1, CPPU_E2T(CPPUTYPE_INT16),  PROPERTY_NONE,  0},
+                    {SW_PROP_NMID(UNO_NAME_REFERENCE_FIELD_SOURCE),FIELD_PROP_USHORT2, CPPU_E2T(CPPUTYPE_INT16),    PROPERTY_NONE,  0},
+                    {SW_PROP_NMID(UNO_NAME_SEQUENCE_NUMBER),    FIELD_PROP_SHORT1,  CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_SOURCE_NAME),        FIELD_PROP_PAR1,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
-                pRet = aGetRefFieldPropMap;
+                aMapArr[nPropertyId] = aGetRefFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_CONDITIONED_TEXT      :
             {
                 static SfxItemPropertyMap aConditionedTxtFieldPropMap   [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_CONDITION),      FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_FALSE_CONTENT),  FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_IS_CONDITION_TRUE) ,  FIELD_PROP_BOOL1, CPPU_E2T(CPPUTYPE_BOOLEAN),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_TRUE_CONTENT) ,  FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_CONDITION),      FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_FALSE_CONTENT),  FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_IS_CONDITION_TRUE) ,  FIELD_PROP_BOOL1, CPPU_E2T(CPPUTYPE_BOOLEAN),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_TRUE_CONTENT) ,  FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
-                pRet = aConditionedTxtFieldPropMap;
+                aMapArr[nPropertyId] = aConditionedTxtFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_HIDDEN_TEXT :
             {
                 static SfxItemPropertyMap aHiddenTxtFieldPropMap    [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_CONDITION),      FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_CONTENT) ,       FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_IS_HIDDEN) ,     FIELD_PROP_BOOL1, CPPU_E2T(CPPUTYPE_BOOLEAN),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_CONDITION),      FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_CONTENT) ,       FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_IS_HIDDEN) ,     FIELD_PROP_BOOL1, CPPU_E2T(CPPUTYPE_BOOLEAN),   PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
-                pRet = aHiddenTxtFieldPropMap;
+                aMapArr[nPropertyId] = aHiddenTxtFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_ANNOTATION            :
             {
                 static SfxItemPropertyMap aAnnotationFieldPropMap   [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_AUTHOR), FIELD_PROP_PAR1,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_CONTENT),    FIELD_PROP_PAR2,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_DATE),   FIELD_PROP_DATE,    CPPU_E2T(CPPUTYPE_DATE),    PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_AUTHOR), FIELD_PROP_PAR1,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_CONTENT),    FIELD_PROP_PAR2,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_DATE),   FIELD_PROP_DATE,    CPPU_E2T(CPPUTYPE_DATE),    PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
-                pRet = aAnnotationFieldPropMap;
+                aMapArr[nPropertyId] = aAnnotationFieldPropMap;
             }
             break;
-            case PROPERTY_MAP_FLDTYP_INPUT_USER:
-            case PROPERTY_MAP_FLDTYP_INPUT                 :
+            case PROPERTY_MAP_FLDTYP_INPUT:
             {
                 static SfxItemPropertyMap aInputFieldPropMap        [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_CONTENT),    FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_HINT),       FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_CONTENT),    FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_HINT),       FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
-                pRet = aInputFieldPropMap;
+                aMapArr[nPropertyId] = aInputFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_MACRO                 :
             {
                 static SfxItemPropertyMap aMacroFieldPropMap        [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_HINT), FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_MACRO_NAME),FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_MACRO_LIBRARY),FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_HINT), FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_MACRO_NAME),FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_MACRO_LIBRARY),FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
-                pRet = aMacroFieldPropMap;
+                aMapArr[nPropertyId] = aMacroFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DDE                   :
             {
-                static SfxItemPropertyMap aDDEFieldPropMap          [] = {{0,0,0,0}};
-                pRet = aDDEFieldPropMap;
+                static SfxItemPropertyMap aDDEFieldPropMap          [] =
+                {
+                    {0,0,0,0}
+                };
+                aMapArr[nPropertyId] = aDDEFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_HIDDEN_PARA           :
             {
                 static SfxItemPropertyMap aHiddenParaFieldPropMap   [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_CONDITION),FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_IS_HIDDEN) ,  FIELD_PROP_BOOL1, CPPU_E2T(CPPUTYPE_BOOLEAN),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_CONDITION),FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_IS_HIDDEN) ,  FIELD_PROP_BOOL1, CPPU_E2T(CPPUTYPE_BOOLEAN),   PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
-                pRet = aHiddenParaFieldPropMap;
+                aMapArr[nPropertyId] = aHiddenParaFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DOC_INFO              :
             {
                 static SfxItemPropertyMap aDocInfoFieldPropMap      [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_IS_FIXED),       FIELD_PROP_BOOL1,   CPPU_E2T(CPPUTYPE_BOOLEAN),     PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_INFO_FORMAT),    FIELD_PROP_USHORT2, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
-                    {SW_PROP_NAME(UNO_NAME_INFO_TYPE),  FIELD_PROP_USHORT1, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
+                    {SW_PROP_NMID(UNO_NAME_IS_FIXED),       FIELD_PROP_BOOL1,   CPPU_E2T(CPPUTYPE_BOOLEAN),     PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_INFO_FORMAT),    FIELD_PROP_USHORT2, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
+                    {SW_PROP_NMID(UNO_NAME_INFO_TYPE),  FIELD_PROP_USHORT1, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
                     {0,0,0,0}
                 };
-                pRet = aDocInfoFieldPropMap;
+                aMapArr[nPropertyId] = aDocInfoFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_TEMPLATE_NAME         :
             {
                 static SfxItemPropertyMap aTmplNameFieldPropMap [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_FILE_FORMAT), FIELD_PROP_FORMAT, CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE,    0},
+                    {SW_PROP_NMID(UNO_NAME_FILE_FORMAT), FIELD_PROP_FORMAT, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
                     {0,0,0,0}
                 };
-                pRet = aTmplNameFieldPropMap;
+                aMapArr[nPropertyId] = aTmplNameFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_USER_EXT              :
             {
                 static SfxItemPropertyMap aUsrExtFieldPropMap       [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_CONTENT),            FIELD_PROP_PAR1,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_IS_FIXED),           FIELD_PROP_BOOL1,   CPPU_E2T(CPPUTYPE_BOOLEAN),     PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_USER_DATA_TYPE), FIELD_PROP_USHORT1, CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_CONTENT),            FIELD_PROP_PAR1,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_IS_FIXED),           FIELD_PROP_BOOL1,   CPPU_E2T(CPPUTYPE_BOOLEAN),     PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_USER_DATA_TYPE), FIELD_PROP_USHORT1, CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
-                pRet = aUsrExtFieldPropMap;
+                aMapArr[nPropertyId]= aUsrExtFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_REF_PAGE_SET          :
             {
                 static SfxItemPropertyMap aRefPgSetFieldPropMap [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_OFFSET),     FIELD_PROP_USHORT1, CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE,  0},
-                    {SW_PROP_NAME(UNO_NAME_ON),     FIELD_PROP_BOOL1,   CPPU_E2T(CPPUTYPE_BOOLEAN),     PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_OFFSET),     FIELD_PROP_USHORT1, CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE,  0},
+                    {SW_PROP_NMID(UNO_NAME_ON),     FIELD_PROP_BOOL1,   CPPU_E2T(CPPUTYPE_BOOLEAN),     PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
-                pRet = aRefPgSetFieldPropMap;
+                aMapArr[nPropertyId] = aRefPgSetFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_REF_PAGE_GET          :
             {
                 static SfxItemPropertyMap aRefPgGetFieldPropMap [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE),     FIELD_PROP_USHORT1, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
+                    {SW_PROP_NMID(UNO_NAME_NUMBERING_TYPE),     FIELD_PROP_USHORT1, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
                     {0,0,0,0}
                 };
-                pRet = aRefPgGetFieldPropMap;
+                aMapArr[nPropertyId] = aRefPgGetFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_JUMP_EDIT             :
             {
                 static SfxItemPropertyMap aJumpEdtFieldPropMap      [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_HINT),               FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_PLACEHOLDER),        FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_PLACEHOLDER_TYPE), FIELD_PROP_USHORT1, CPPU_E2T(CPPUTYPE_INT16),     PROPERTY_NONE,  0},
+                    {SW_PROP_NMID(UNO_NAME_HINT),               FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_PLACEHOLDER),        FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_PLACEHOLDER_TYPE), FIELD_PROP_USHORT1, CPPU_E2T(CPPUTYPE_INT16),     PROPERTY_NONE,  0},
                     {0,0,0,0}
                 };
-                pRet = aJumpEdtFieldPropMap;
+                aMapArr[nPropertyId] = aJumpEdtFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_SCRIPT                :
             {
                 static SfxItemPropertyMap aScriptFieldPropMap       [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_CONTENT),        FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_SCRIPT_TYPE),    FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_URL_CONTENT),    FIELD_PROP_BOOL1, CPPU_E2T(CPPUTYPE_BOOLEAN),       PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_CONTENT),        FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_SCRIPT_TYPE),    FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_URL_CONTENT),    FIELD_PROP_BOOL1, CPPU_E2T(CPPUTYPE_BOOLEAN),       PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
-                pRet = aScriptFieldPropMap;
+                aMapArr[nPropertyId] = aScriptFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DATABASE_NEXT_SET     :
             {
                 static SfxItemPropertyMap aDBNextSetFieldPropMap    [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_CONDITION)   ,     FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME ) , FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME) , FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_CONDITION)   ,     FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_DATA_BASE_NAME ) , FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_DATA_TABLE_NAME) , FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
-                pRet = aDBNextSetFieldPropMap;
+                aMapArr[nPropertyId] = aDBNextSetFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DATABASE_NUM_SET      :
             {
                 static SfxItemPropertyMap aDBNumSetFieldPropMap [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_CONDITION),        FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME   ), FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME  ), FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_SET_NUMBER       ), FIELD_PROP_FORMAT, CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE,  0},
+                    {SW_PROP_NMID(UNO_NAME_CONDITION),        FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_DATA_BASE_NAME   ), FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_DATA_TABLE_NAME  ), FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_SET_NUMBER       ), FIELD_PROP_FORMAT, CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE,  0},
                     {0,0,0,0}
                 };
-                pRet = aDBNumSetFieldPropMap;
+                aMapArr[nPropertyId] = aDBNumSetFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DATABASE_SET_NUM      :
             {
                 static SfxItemPropertyMap aDBSetNumFieldPropMap [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME ) , FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME) , FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE),       FIELD_PROP_USHORT1, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,  0},
-                    {SW_PROP_NAME(UNO_NAME_SET_NUMBER       ), FIELD_PROP_FORMAT, CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE,  0},
+                    {SW_PROP_NMID(UNO_NAME_DATA_BASE_NAME ) , FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_DATA_TABLE_NAME) , FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_NUMBERING_TYPE),       FIELD_PROP_USHORT1, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,  0},
+                    {SW_PROP_NMID(UNO_NAME_SET_NUMBER       ), FIELD_PROP_FORMAT, CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE,  0},
                     {0,0,0,0}
                 };
-                pRet = aDBSetNumFieldPropMap;
+                aMapArr[nPropertyId] = aDBSetNumFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DATABASE              :
             {
                 static SfxItemPropertyMap aDBFieldPropMap           [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_CONTENT),            FIELD_PROP_PAR1,    CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_IS_DATA_BASE_FORMAT),FIELD_PROP_BOOL1, CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,0},
-                    {SW_PROP_NAME(UNO_NAME_NUMBER_FORMAT),      FIELD_PROP_FORMAT, CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_CONTENT),            FIELD_PROP_PAR1,    CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_IS_DATA_BASE_FORMAT),FIELD_PROP_BOOL1, CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,0},
+                    {SW_PROP_NMID(UNO_NAME_NUMBER_FORMAT),      FIELD_PROP_FORMAT, CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
-                pRet = aDBFieldPropMap;
+                aMapArr[nPropertyId] = aDBFieldPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DATABASE_NAME         :
             {
                 static SfxItemPropertyMap aDBNameFieldPropMap       [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME ) , FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME) , FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_DATA_BASE_NAME ) , FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_DATA_TABLE_NAME) , FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
-                pRet = aDBNameFieldPropMap;
+                aMapArr[nPropertyId] = aDBNameFieldPropMap;
             }
             break;
-            case PROPERTY_MAP_FLDTYP_PAGE_COUNT            :
-            case PROPERTY_MAP_FLDTYP_PARAGRAPH_COUNT       :
-            case PROPERTY_MAP_FLDTYP_WORD_COUNT            :
-            case PROPERTY_MAP_FLDTYP_CHARACTER_COUNT       :
-            case PROPERTY_MAP_FLDTYP_TABLE_COUNT           :
-            case PROPERTY_MAP_FLDTYP_GRAPHIC_OBJECT_COUNT  :
-            case PROPERTY_MAP_FLDTYP_EMBEDDED_OBJECT_COUNT :
+            case PROPERTY_MAP_FLDTYP_DOCSTAT:
             {
                 static SfxItemPropertyMap aDocstatFieldPropMap      [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_NUMBERING_TYPE),     FIELD_PROP_USHORT2, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
+                    {SW_PROP_NMID(UNO_NAME_NUMBERING_TYPE),     FIELD_PROP_USHORT2, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
                 //  {UNO_NAME_STATISTIC_TYPE_ID,FIELD_PROP_USHORT1, CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE,  0},
                     {0,0,0,0}
                 };
-                pRet = aDocstatFieldPropMap;
+                aMapArr[nPropertyId] = aDocstatFieldPropMap;
             }
             break;
-            case PROPERTY_MAP_FLDTYP_DOCINFO_CHANGE_AUTHOR :
-            case PROPERTY_MAP_FLDTYP_DOCINFO_CREATE_AUTHOR :
-            case PROPERTY_MAP_FLDTYP_DOCINFO_PRINT_AUTHOR       :
+            case PROPERTY_MAP_FLDTYP_DOCINFO_AUTHOR:
             {
                 static SfxItemPropertyMap aDocInfoAuthorPropMap         [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_AUTHOR), FIELD_PROP_PAR1,    CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_IS_FIXED),   FIELD_PROP_BOOL1,   CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,0},
+                    {SW_PROP_NMID(UNO_NAME_AUTHOR), FIELD_PROP_PAR1,    CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_IS_FIXED),   FIELD_PROP_BOOL1,   CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,0},
                     {0,0,0,0}
                 };
-                pRet = aDocInfoAuthorPropMap;
+                aMapArr[nPropertyId] = aDocInfoAuthorPropMap;
             }
             break;
-            case PROPERTY_MAP_FLDTYP_DOCINFO_PRINT_DATE_TIME   :
-            case PROPERTY_MAP_FLDTYP_DOCINFO_CHANGE_DATE_TIME:
-            case PROPERTY_MAP_FLDTYP_DOCINFO_CREATE_DATE_TIME:
+            case PROPERTY_MAP_FLDTYP_DOCINFO_DATE_TIME:
             {
                 static SfxItemPropertyMap aDocInfoDateTimePropMap           [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_DATE_TIME_VALUE),        FIELD_PROP_DOUBLE,  CPPU_E2T(CPPUTYPE_DOUBLE), PropertyAttribute::READONLY, 0},
-                    {SW_PROP_NAME(UNO_NAME_IS_DATE),    FIELD_PROP_BOOL2,   CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,0},
-                    {SW_PROP_NAME(UNO_NAME_NUMBER_FORMAT),FIELD_PROP_FORMAT,    CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE,    0},
-                    {SW_PROP_NAME(UNO_NAME_IS_FIXED),       FIELD_PROP_BOOL1,   CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,    0},
+                    {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_DATE_TIME_VALUE),        FIELD_PROP_DOUBLE,  CPPU_E2T(CPPUTYPE_DOUBLE), PropertyAttribute::READONLY, 0},
+                    {SW_PROP_NMID(UNO_NAME_IS_DATE),    FIELD_PROP_BOOL2,   CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,0},
+                    {SW_PROP_NMID(UNO_NAME_NUMBER_FORMAT),FIELD_PROP_FORMAT,    CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE,    0},
+                    {SW_PROP_NMID(UNO_NAME_IS_FIXED),       FIELD_PROP_BOOL1,   CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,    0},
                     {0,0,0,0}
                 };
-                pRet = aDocInfoDateTimePropMap;
+                aMapArr[nPropertyId] = aDocInfoDateTimePropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DOCINFO_EDIT_TIME     :
             {
                 static SfxItemPropertyMap aDocInfoEditTimePropMap           [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_DATE_TIME_VALUE),        FIELD_PROP_DOUBLE,  CPPU_E2T(CPPUTYPE_DOUBLE), PropertyAttribute::READONLY, 0},
-                    {SW_PROP_NAME(UNO_NAME_NUMBER_FORMAT),FIELD_PROP_FORMAT,    CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE,    0},
-                    {SW_PROP_NAME(UNO_NAME_IS_FIXED),       FIELD_PROP_BOOL1,   CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,    0},
+                    {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_DATE_TIME_VALUE),        FIELD_PROP_DOUBLE,  CPPU_E2T(CPPUTYPE_DOUBLE), PropertyAttribute::READONLY, 0},
+                    {SW_PROP_NMID(UNO_NAME_NUMBER_FORMAT),FIELD_PROP_FORMAT,    CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE,    0},
+                    {SW_PROP_NMID(UNO_NAME_IS_FIXED),       FIELD_PROP_BOOL1,   CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,    0},
                     {0,0,0,0}
                 };
-                pRet = aDocInfoEditTimePropMap;
+                aMapArr[nPropertyId] = aDocInfoEditTimePropMap;
             }
             break;
-            case PROPERTY_MAP_FLDTYP_DOCINFO_DESCRIPTION   :
-            case PROPERTY_MAP_FLDTYP_DOCINFO_INFO_0:
-            case PROPERTY_MAP_FLDTYP_DOCINFO_INFO_1:
-            case PROPERTY_MAP_FLDTYP_DOCINFO_INFO_2:
-            case PROPERTY_MAP_FLDTYP_DOCINFO_INFO_3:
-            case PROPERTY_MAP_FLDTYP_DOCINFO_KEY_WORDS         :
-            case PROPERTY_MAP_FLDTYP_DOCINFO_SUBJECT           :
-            case PROPERTY_MAP_FLDTYP_DOCINFO_TITLE             :
+            case PROPERTY_MAP_FLDTYP_DOCINFO_MISC:
             {
                 static SfxItemPropertyMap aDocInfoStringContentPropMap          [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_CONTENT),    FIELD_PROP_PAR1,    CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_IS_FIXED),   FIELD_PROP_BOOL1,   CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,0},
+                    {SW_PROP_NMID(UNO_NAME_CONTENT),    FIELD_PROP_PAR1,    CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_IS_FIXED),   FIELD_PROP_BOOL1,   CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,0},
                     {0,0,0,0}
                 };
-                pRet = aDocInfoStringContentPropMap;
+                aMapArr[nPropertyId] = aDocInfoStringContentPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DOCINFO_REVISION          :
             {
                 static SfxItemPropertyMap aDocInfoRevisionPropMap   [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_REVISION),   FIELD_PROP_USHORT1, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
-                    {SW_PROP_NAME(UNO_NAME_IS_FIXED),   FIELD_PROP_BOOL1,   CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,0},
+                    {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_REVISION),   FIELD_PROP_USHORT1, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
+                    {SW_PROP_NMID(UNO_NAME_IS_FIXED),   FIELD_PROP_BOOL1,   CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,0},
                     {0,0,0,0}
                 };
-                pRet = aDocInfoRevisionPropMap;
+                aMapArr[nPropertyId] = aDocInfoRevisionPropMap;
             }
             break;
-            case PROPERTY_MAP_FLDTYP_DUMMY_0 :
             case PROPERTY_MAP_FLDTYP_COMBINED_CHARACTERS:
             {
                 static SfxItemPropertyMap aCombinedCharactersPropMap[] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_CONTENT), FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_CONTENT), FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
-                pRet = aCombinedCharactersPropMap;
+                aMapArr[nPropertyId] = aCombinedCharactersPropMap;
             }
             break;
-            case PROPERTY_MAP_FLDTYP_DUMMY_3:
-            case PROPERTY_MAP_FLDTYP_DUMMY_4:
-            case PROPERTY_MAP_FLDTYP_DUMMY_5:
-            case PROPERTY_MAP_FLDTYP_DUMMY_6:
-            case PROPERTY_MAP_FLDTYP_DUMMY_7:
-            case PROPERTY_MAP_FLDTYP_DUMMY_8:
-            case PROPERTY_MAP_FLDTYP_TABLEFIELD            :
+            case PROPERTY_MAP_FLDTYP_TABLE_FORMULA:
+            {
+                static SfxItemPropertyMap aTableFormulaPropMap[] =
+                {
+                    {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_FORMULA), FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_IS_SHOW_FORMULA), FIELD_PROP_BOOL1,  CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_NUMBER_FORMAT), FIELD_PROP_FORMAT,   CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE, 0},
+                    {0,0,0,0}
+                };
+                aMapArr[nPropertyId] = aTableFormulaPropMap;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_DUMMY_0:
             {
                 static SfxItemPropertyMap aEmptyPropMap         [] =
                 {
                     {0,0,0,0}
                 };
-                pRet = aEmptyPropMap;
+                aMapArr[nPropertyId] = aEmptyPropMap;
             }
             break;
             case PROPERTY_MAP_FLDMSTR_USER :
             {
                 static SfxItemPropertyMap aUserFieldTypePropMap[] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS),  0,  CPPU_E2T(CPPUTYPE_SEQDEPTXTFLD), PropertyAttribute::READONLY, 0},
-                    {SW_PROP_NAME(UNO_NAME_IS_EXPRESSION),      0,  CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,  0},
-                    {SW_PROP_NAME(UNO_NAME_NAME),               0,  CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::MAYBEVOID, 0},
-                    {SW_PROP_NAME(UNO_NAME_VALUE),          0,  CPPU_E2T(CPPUTYPE_DOUBLE), PROPERTY_NONE,   0},
-                    {SW_PROP_NAME(UNO_NAME_CONTENT),            0,  CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_INSTANCE_NAME),      0,  CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
+                    {SW_PROP_NMID(UNO_NAME_DEPENDENT_TEXT_FIELDS),  FIELD_PROP_PROP_SEQ,    CPPU_E2T(CPPUTYPE_SEQDEPTXTFLD), PropertyAttribute::READONLY, 0},
+                    {SW_PROP_NMID(UNO_NAME_IS_EXPRESSION),      FIELD_PROP_BOOL1,  CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,   0},
+                    {SW_PROP_NMID(UNO_NAME_NAME),               FIELD_PROP_PAR1,  CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::MAYBEVOID, 0},
+                    {SW_PROP_NMID(UNO_NAME_VALUE),          FIELD_PROP_DOUBLE,  CPPU_E2T(CPPUTYPE_DOUBLE), PROPERTY_NONE,   0},
+                    {SW_PROP_NMID(UNO_NAME_CONTENT),            FIELD_PROP_PAR2,    CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_INSTANCE_NAME),      FIELD_PROP_PAR3,    CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
                     {0,0,0,0}
                 };
-                pRet = aUserFieldTypePropMap;
+                aMapArr[nPropertyId] = aUserFieldTypePropMap;
             }
             break;
             case PROPERTY_MAP_FLDMSTR_DDE       :
             {
                 static SfxItemPropertyMap aDDEFieldTypePropMap[] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_DDE_COMMAND_ELEMENT ), 0,    CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_DDE_COMMAND_FILE    ), 0,    CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_DDE_COMMAND_TYPE    ), 0,    CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS),  0,  CPPU_E2T(CPPUTYPE_SEQDEPTXTFLD), PropertyAttribute::READONLY, 0},
-                    {SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC_UPDATE), 0,  CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,    0},
-                    {SW_PROP_NAME(UNO_NAME_NAME),               0,  CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::MAYBEVOID, 0},
-                    {SW_PROP_NAME(UNO_NAME_INSTANCE_NAME),      0,  CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
+                    {SW_PROP_NMID(UNO_NAME_DDE_COMMAND_ELEMENT ), FIELD_PROP_PAR2,  CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_DDE_COMMAND_FILE    ), FIELD_PROP_PAR4,  CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_DDE_COMMAND_TYPE    ), FIELD_PROP_SUBTYPE,   CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_DEPENDENT_TEXT_FIELDS),  FIELD_PROP_PROP_SEQ,    CPPU_E2T(CPPUTYPE_SEQDEPTXTFLD), PropertyAttribute::READONLY, 0},
+                    {SW_PROP_NMID(UNO_NAME_IS_AUTOMATIC_UPDATE), FIELD_PROP_BOOL1,  CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,    0},
+                    {SW_PROP_NMID(UNO_NAME_NAME),               FIELD_PROP_PAR1,  CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_INSTANCE_NAME),      FIELD_PROP_PAR3,    CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
                     {0,0,0,0}
                 };
-                pRet = aDDEFieldTypePropMap;
+                aMapArr[nPropertyId] = aDDEFieldTypePropMap;
             }
             break;
             case PROPERTY_MAP_FLDMSTR_SET_EXP     :
             {
                 static SfxItemPropertyMap aSetExpFieldTypePropMap[] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_CHAPTER_NUMBERING_LEVEL),0,  CPPU_E2T(CPPUTYPE_INT8), PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS),  0,  CPPU_E2T(CPPUTYPE_SEQDEPTXTFLD), PropertyAttribute::READONLY, 0},
-                    {SW_PROP_NAME(UNO_NAME_NAME),               0,  CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::MAYBEVOID, 0},
-                    {SW_PROP_NAME(UNO_NAME_NUMBERING_SEPARATOR), 0, CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_SUB_TYPE),           0,  CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
-                    {SW_PROP_NAME(UNO_NAME_INSTANCE_NAME),      0,  CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
+                    {SW_PROP_NMID(UNO_NAME_CHAPTER_NUMBERING_LEVEL),FIELD_PROP_SHORT1,  CPPU_E2T(CPPUTYPE_INT8), PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_DEPENDENT_TEXT_FIELDS),  FIELD_PROP_PROP_SEQ,    CPPU_E2T(CPPUTYPE_SEQDEPTXTFLD), PropertyAttribute::READONLY, 0},
+                    {SW_PROP_NMID(UNO_NAME_NAME),               FIELD_PROP_PAR1,  CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_NUMBERING_SEPARATOR), FIELD_PROP_PAR2,   CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_SUB_TYPE),           FIELD_PROP_SUBTYPE, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
+                    {SW_PROP_NMID(UNO_NAME_INSTANCE_NAME),      FIELD_PROP_PAR3,    CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
                     {0,0,0,0}
                 };
-                pRet = aSetExpFieldTypePropMap;
+                aMapArr[nPropertyId] = aSetExpFieldTypePropMap;
             }
             break;
             case PROPERTY_MAP_FLDMSTR_DATABASE    :
             {
                 static SfxItemPropertyMap aDBFieldTypePropMap           [] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME   ), 0, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_DATA_COMMAND_TYPE), 0, CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME  ), 0, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_DATA_COLUMN_NAME ), 0, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS),  0,  CPPU_E2T(CPPUTYPE_SEQDEPTXTFLD), PropertyAttribute::READONLY, 0},
-                    {SW_PROP_NAME(UNO_NAME_INSTANCE_NAME),      0,  CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
+                    {SW_PROP_NMID(UNO_NAME_DATA_BASE_NAME   ), FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, CPPU_E2T(CPPUTYPE_INT16),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_DATA_TABLE_NAME  ), FIELD_PROP_PAR4, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_DATA_COLUMN_NAME ), FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_DEPENDENT_TEXT_FIELDS),  FIELD_PROP_PROP_SEQ,    CPPU_E2T(CPPUTYPE_SEQDEPTXTFLD), PropertyAttribute::READONLY, 0},
+                    {SW_PROP_NMID(UNO_NAME_INSTANCE_NAME),      FIELD_PROP_PAR3,    CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
                     {0,0,0,0}
                 };
-                pRet = aDBFieldTypePropMap;
+                aMapArr[nPropertyId] = aDBFieldTypePropMap;
             }
             break;
-            case PROPERTY_MAP_FLDMSTR_DUMMY2      :
-            case PROPERTY_MAP_FLDMSTR_DUMMY3      :
-            case PROPERTY_MAP_FLDMSTR_DUMMY4      :
-            case PROPERTY_MAP_FLDMSTR_DUMMY5      :
+            case PROPERTY_MAP_FLDMSTR_DUMMY0      :
             {
                 static SfxItemPropertyMap aStandardFieldMasterMap[] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS),  0,  CPPU_E2T(CPPUTYPE_SEQDEPTXTFLD), PropertyAttribute::READONLY, 0},
-                    {SW_PROP_NAME(UNO_NAME_NAME),               0,  CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::MAYBEVOID, 0},
-                    {SW_PROP_NAME(UNO_NAME_INSTANCE_NAME),      0,  CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
+                    {SW_PROP_NMID(UNO_NAME_DEPENDENT_TEXT_FIELDS),  0,  CPPU_E2T(CPPUTYPE_SEQDEPTXTFLD), PropertyAttribute::READONLY, 0},
+                    {SW_PROP_NMID(UNO_NAME_NAME),               0,  CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_INSTANCE_NAME),      0,  CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
                     {0,0,0,0}
                 };
-                pRet = aStandardFieldMasterMap;
+                aMapArr[nPropertyId] = aStandardFieldMasterMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_BIBLIOGRAPHY:
             {
                 static SfxItemPropertyMap aBibliographyFieldMap[] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_FIELDS  )    , FIELD_PROP_PROP_SEQ, CPPU_E2T(CPPUTYPE_PROPERTYVALUE),PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_FIELDS  )    , FIELD_PROP_PROP_SEQ, CPPU_E2T(CPPUTYPE_PROPERTYVALUE),PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
-                pRet = aBibliographyFieldMap;
+                aMapArr[nPropertyId] = aBibliographyFieldMap;
             }
             break;
             case PROPERTY_MAP_FLDMSTR_BIBLIOGRAPHY:
             {
                 static SfxItemPropertyMap aBibliographyFieldMasterMap[] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_BRACKET_BEFORE     ) , 0, CPPU_E2T(CPPUTYPE_OUSTRING),               PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_BRACKET_AFTER      ) , 0, CPPU_E2T(CPPUTYPE_OUSTRING),               PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_IS_NUMBER_ENTRIES  ) , 0, CPPU_E2T(CPPUTYPE_BOOLEAN),                    PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_IS_SORT_BY_POSITION) , 0, CPPU_E2T(CPPUTYPE_BOOLEAN),                    PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_LOCALE),            0,  CPPU_E2T(CPPUTYPE_LOCALE)  , PROPERTY_NONE,     0},
-                    {SW_PROP_NAME(UNO_NAME_SORT_ALGORITHM),    0,  CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE,     0},
-                    {SW_PROP_NAME(UNO_NAME_SORT_KEYS          ) , 0, CPPU_E2T(CPPUTYPE_PROPERTYVALUES), PROPERTY_NONE, 0},
-                    {SW_PROP_NAME(UNO_NAME_INSTANCE_NAME),      0,  CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
+                    {SW_PROP_NMID(UNO_NAME_BRACKET_BEFORE     ) , FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),               PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_BRACKET_AFTER      ) , FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),               PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_IS_NUMBER_ENTRIES  ) , FIELD_PROP_BOOL1, CPPU_E2T(CPPUTYPE_BOOLEAN),                    PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_IS_SORT_BY_POSITION) , FIELD_PROP_BOOL2, CPPU_E2T(CPPUTYPE_BOOLEAN),                    PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_LOCALE),            FIELD_PROP_LOCALE,  CPPU_E2T(CPPUTYPE_LOCALE)  , PROPERTY_NONE,     0},
+                    {SW_PROP_NMID(UNO_NAME_SORT_ALGORITHM),    FIELD_PROP_PAR3,  CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE,     0},
+                    {SW_PROP_NMID(UNO_NAME_SORT_KEYS          ) , FIELD_PROP_PROP_SEQ, CPPU_E2T(CPPUTYPE_PROPERTYVALUES),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_INSTANCE_NAME),      FIELD_PROP_PAR4,    CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
                     {0,0,0,0}
                 };
-                pRet = aBibliographyFieldMasterMap;
+                aMapArr[nPropertyId] = aBibliographyFieldMasterMap;
             }
             break;
-//!!
-#endif
         }
         Sort(nPropertyId);
     }
