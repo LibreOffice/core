@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hf_funcdecl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-02 13:49:59 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:36:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,130 @@
 // NOT FULLY DEFINED SERVICES
 
 const String C_sValignTop("top");
+const String C_sValignBottom("bottom");
 
 
+
+HF_FunctionDeclaration::HF_FunctionDeclaration( Xml::Element & o_rParent,
+                                                const String & i_sRaisesText )
+    :   HtmlMaker(o_rParent),
+        sRaisesText(i_sRaisesText),
+        pTable(0),
+        pReturnCell(0),
+        pNameCell(0),
+        pParameterLine(0),
+        pLastParameterCell(0),
+        pExceptionCell(0)
+{
+    pTable = new Html::Table;
+    CurOut()
+        >> *pTable
+            << new Xml::AnAttribute("border","0");
+}
+
+HF_FunctionDeclaration::~HF_FunctionDeclaration()
+{
+}
+
+Xml::Element &
+HF_FunctionDeclaration::ReturnCell()
+{
+    if (pReturnCell != 0)
+        return *pReturnCell;
+
+    pReturnCell = &( *pTable
+                        >> *new Html::TableRow
+                            >> *new Html::TableCell
+                                << new Html::VAlignAttr(C_sValignTop)
+                                << new Xml::AnAttribute("colspan", "3")
+                    );
+    return *pReturnCell;
+}
+
+Xml::Element &
+HF_FunctionDeclaration::NameCell()
+{
+    if (pNameCell != 0)
+        return *pNameCell;
+
+    pNameCell = &( ParameterLine()
+                    >> *new Html::TableCell
+                        << new Html::VAlignAttr(C_sValignTop)
+                 );
+    pLastParameterCell = pNameCell;
+
+    return *pNameCell;
+}
+
+Xml::Element &
+HF_FunctionDeclaration::NewParamTypeCell()
+{
+    if (pLastParameterCell != pNameCell)
+    {
+        pParameterLine = 0;
+        ParameterLine()
+            >> *new Html::TableCell;
+    }
+
+    Xml::Element &
+        rParamType = ParameterLine()
+                        >> *new Html::TableCell
+                            << new Html::VAlignAttr(C_sValignTop);
+    pLastParameterCell
+                   = &( ParameterLine()
+                            >> *new Html::TableCell
+                                << new Html::VAlignAttr(C_sValignBottom)
+                                << new Xml::XmlCode("&nbsp;")
+                      );
+    return rParamType;
+}
+
+Xml::Element &
+HF_FunctionDeclaration::ParamNameCell()
+{
+    csv_assert(pLastParameterCell != pNameCell);
+    return *pLastParameterCell;
+}
+
+Xml::Element &
+HF_FunctionDeclaration::ExceptionCell()
+{
+    if (pExceptionCell != 0)
+        return *pExceptionCell;
+
+    Xml::Element &
+        rExceptionRow = *pTable
+                            >> *new Html::TableRow;
+    rExceptionRow
+        >> *new Html::TableCell
+            << new Html::VAlignAttr(C_sValignTop)
+            << new Xml::AnAttribute("align", "right")
+            << sRaisesText
+            << "( ";
+
+    pExceptionCell = &( rExceptionRow
+                            >> *new Html::TableCell
+                                << new Html::VAlignAttr(C_sValignTop)
+                                << new Xml::AnAttribute("colspan", "2")
+                      );
+    return *pExceptionCell;
+}
+
+Html::TableRow &
+HF_FunctionDeclaration::ParameterLine()
+{
+    if (pParameterLine != 0)
+        return *pParameterLine;
+
+    pParameterLine = new Html::TableRow;
+    *pTable
+        >> *pParameterLine;
+
+    return *pParameterLine;
+}
+
+
+#if 0   // old
 HF_FunctionDeclaration::HF_FunctionDeclaration( Xml::Element & o_rParent )
     :   HtmlMaker(o_rParent),
         pFront(0),
@@ -112,3 +234,4 @@ HF_FunctionDeclaration::Add_RaisesLine( const char * i_sRaisesText,
         << new Xml::XmlCode("( </p>\n");
     return *pNames;
 }
+#endif // 0    old
