@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndhints.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-11 15:07:28 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:23:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,13 +157,13 @@ class SwpHints: public SwpHintsArr
 private:
     SwRegHistory* pHistory;
     // Numerierung
-    BOOL    bVis    :1;  // HiddenParaFld
+    BOOL    bHasHiddenParaField    :1;  // HiddenParaFld
     BOOL    bFntChg :1;  // Fontwechsel
     BOOL    bFtn    :1;  // Fussnoten
     BOOL    bInSplitNode: 1;    // TRUE: der Node ist im Split und die Frames
                                 // werden verschoben!
     BOOL    bDDEFlds : 1;       // es sind DDE-Felder am TextNode vorhanden
-    BOOL    bCalcVis : 1; // bVis ist invalid, CalcVisibleFlag() rufen
+    BOOL    bCalcHiddenParaField : 1; // bHasHiddenParaField ist invalid, CalcHiddenParaField() rufen
 
     BOOL Resort( const USHORT nPos );
     // loescht Hints, die keinen Zustaendigkeitsbereich mehr haben
@@ -188,6 +188,11 @@ private:
     // Ist er nicht im Array, so gibt es ein ASSERT !!
     void Delete( SwTxtAttr* pTxtHt );
 
+    inline void SetCalcHiddenParaField(){ bCalcHiddenParaField = TRUE; }
+    inline void SetHiddenParaField( const BOOL bNew )  { bHasHiddenParaField = bNew; }
+    inline BOOL HasHiddenParaField() const
+        { if( bCalcHiddenParaField ) ((SwpHints*)this)->CalcHiddenParaField(); return bHasHiddenParaField; }
+
 public:
     inline BOOL CanBeDeleted() const { return !Count(); }
 
@@ -205,10 +210,6 @@ public:
                  const USHORT i, const USHORT nWhich,
                  const xub_StrLen nStrt, const xub_StrLen nEnd );
 
-    inline void SetCalcVisible(){ bCalcVis = TRUE; }
-    inline void SetVisible( const BOOL bNew )  { bVis = bNew; }
-    inline BOOL IsVisible() const
-        { if( bCalcVis ) ((SwpHints*)this)->CalcVisibleFlag(); return bVis; }
     inline BOOL HasFntChg() const { return bFntChg; }
     inline BOOL HasFtn() const { return bFtn; }
     inline BOOL IsInSplitNode() const { return bInSplitNode; }
@@ -218,12 +219,12 @@ public:
     SwpHints()
     {
         pHistory = 0;
-        bFntChg = bVis = TRUE;
-        bDDEFlds = bFtn = bInSplitNode = bCalcVis = FALSE;
+        bFntChg = TRUE;
+        bDDEFlds = bFtn = bInSplitNode = bCalcHiddenParaField = bHasHiddenParaField = FALSE;
     }
 
-    // Berechnung von bVis, return-Wert TRUE bei Aenderung
-    BOOL CalcVisibleFlag();
+    // Berechnung von bHasHiddenParaField, return-Wert TRUE bei Aenderung
+    BOOL CalcHiddenParaField();
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwpHints)
 };
