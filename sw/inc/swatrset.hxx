@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swatrset.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-10 09:40:47 $
+ *  last change: $Author: rt $ $Date: 2003-05-27 16:10:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,7 @@ class SvxHangingPunctuationItem;
 class SvxForbiddenRuleItem;
 class SvxParaVertAlignItem;
 class SvxParaGridItem;
+class SwParaConnectBorderItem;
 
 // TabellenBox-Attribute
 class SwTblBoxNumFormat;
@@ -361,6 +362,7 @@ public:
     inline const SvxForbiddenRuleItem   &GetForbiddenRule(BOOL = TRUE) const;
     inline const SvxParaVertAlignItem   &GetParaVertAlign(BOOL = TRUE) const;
     inline const SvxParaGridItem        &GetParaGrid(BOOL = TRUE) const;
+    inline const SwParaConnectBorderItem &GetParaConnectBorder(BOOL = TRUE ) const;
 
     // TabellenBox-Attribute    - impl. steht im cellatr.hxx
     INLINE  const SwTblBoxNumFormat     &GetTblBoxNumFmt( BOOL = TRUE ) const;
