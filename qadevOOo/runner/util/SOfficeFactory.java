@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SOfficeFactory.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2003-05-14 13:22:02 $
+ *  last change:$Date: 2005-02-02 14:00:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,9 +144,29 @@ public class SOfficeFactory {
         else {
             return null;
         }
+
+    } // finished createTextDoc
+    /**
+     * method which opens a new TextDocument
+     *
+     * @see XTextDocument
+     */
+
+    public XTextDocument createTextDoc( String frameName, PropertyValue[] mediaDescriptor )
+                                        throws com.sun.star.uno.Exception {
+
+        XComponent oDoc = openDoc("swriter", frameName, mediaDescriptor);
+
+        if ( oDoc != null) {
+            return (XTextDocument) UnoRuntime.queryInterface( XTextDocument.class, oDoc );
+        }
+        else {
+            return null;
+        }
     } // finished createTextDoc
 
-    /**
+
+        /**
      * method which opens a new SpreadsheetDocument
      *
      * @see XSpreadsheetDocument
@@ -156,6 +176,26 @@ public class SOfficeFactory {
                                         throws com.sun.star.uno.Exception {
 
         XComponent oDoc = openDoc("scalc",frameName);
+
+        if ( oDoc != null) {
+            return (XSpreadsheetDocument)
+                UnoRuntime.queryInterface( XSpreadsheetDocument.class, oDoc );
+        }
+        else {
+            return null;
+        }
+    } // finished createCalcDoc
+
+        /**
+     * method which opens a new SpreadsheetDocument
+     *
+     * @see XSpreadsheetDocument
+     */
+
+    public XSpreadsheetDocument createCalcDoc( String frameName, PropertyValue[] mediaDescriptor )
+                                        throws com.sun.star.uno.Exception {
+
+        XComponent oDoc = openDoc("scalc",frameName, mediaDescriptor);
 
         if ( oDoc != null) {
             return (XSpreadsheetDocument)
@@ -180,10 +220,34 @@ public class SOfficeFactory {
      * method which opens a new ImpressDocument
      */
 
+    /**
+     * method which opens a new DrawDocument
+     */
+
+    public XComponent createDrawDoc( String frameName, PropertyValue[] mediaDescriptor )
+                                        throws com.sun.star.uno.Exception {
+
+        return openDoc("sdraw",frameName, mediaDescriptor );
+    } // finished createDrawDoc
+
+    /**
+     * method which opens a new ImpressDocument
+     */
+
     public XComponent createImpressDoc( String frameName )
                                         throws com.sun.star.uno.Exception {
 
         return openDoc("simpress",frameName);
+    } // finished createImpressDoc
+
+    /**
+     * method which opens a new ImpressDocument
+     */
+
+    public XComponent createImpressDoc( String frameName, PropertyValue[] mediaDescriptor )
+                                        throws com.sun.star.uno.Exception {
+
+        return openDoc("simpress",frameName, mediaDescriptor);
     } // finished createImpressDoc
 
 
@@ -195,6 +259,16 @@ public class SOfficeFactory {
                                         throws com.sun.star.uno.Exception {
 
         return openDoc("smath",frameName);
+    } // finished createMathDoc
+
+    /**
+     * method which opens a new MathDocument
+     */
+
+    public XComponent createMathDoc( String frameName, PropertyValue[] mediaDescriptor )
+                                        throws com.sun.star.uno.Exception {
+
+        return openDoc("smath",frameName, mediaDescriptor);
     } // finished createMathDoc
 
     /**
@@ -574,9 +648,27 @@ public class SOfficeFactory {
         }
         // load a blank a doc
         XComponent oDoc = oCLoader.loadComponentFromURL(
-                "private:factory/"+kind, frameName, 0, Args );
+                "private:factory/"+kind, frameName, 40, Args );
 
         return oDoc;
+
+    } // finished openDoc
+
+
+
+    public XComponent openDoc(String kind, String frameName, PropertyValue[] mediaDescriptor)
+                throws com.sun.star.lang.IllegalArgumentException,
+                       com.sun.star.io.IOException,
+                       com.sun.star.uno.Exception {
+
+            if ( frameName == null ) {
+                    frameName = "_blank";
+            }
+            // load a blank a doc
+            XComponent oDoc = oCLoader.loadComponentFromURL(
+                            "private:factory/"+kind, frameName, 40, mediaDescriptor );
+
+    return oDoc;
 
     } // finished openDoc
 
