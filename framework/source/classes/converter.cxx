@@ -2,9 +2,9 @@
  *
  *  $RCSfile: converter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:21:29 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:03:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,56 @@ OUStringList Converter::convert_seqOUString2OUStringList( const css::uno::Sequen
         lDestination.push_back(lSource[nItem]);
     }
 
+    return lDestination;
+}
+
+//-----------------------------------------------------------------------------
+/**
+ * converts a vector of unicode strings into a sequence of such items
+ */
+css::uno::Sequence< ::rtl::OUString > Converter::convert_OUStringList2seqOUString( const OUStringList& lSource )
+{
+    css::uno::Sequence< ::rtl::OUString > lDestination(lSource.size());
+    sal_uInt32 nItem = 0;
+    for (OUStringList::const_iterator pIterator=lSource.begin(); pIterator!=lSource.end(); ++pIterator)
+    {
+        lDestination[nItem] = *pIterator;
+        ++nItem;
+    }
+    return lDestination;
+}
+
+//-----------------------------------------------------------------------------
+/**
+ * converts an unicode string hash to a sequence<PropertyValue>, where names and values match to key and values.
+ */
+css::uno::Sequence< css::beans::PropertyValue > Converter::convert_OUStringHash2seqProp( const OUStringHash& lSource )
+{
+    css::uno::Sequence< css::beans::PropertyValue > lDestination (lSource.size());
+    css::beans::PropertyValue*                      pDestination = lDestination.getArray();
+    sal_Int32 nItem = 0;
+    for (OUStringHash::const_iterator pItem=lSource.begin(); pItem!=lSource.end(); ++pItem)
+    {
+        pDestination[nItem].Name  =   pItem->first ;
+        pDestination[nItem].Value <<= pItem->second;
+        ++nItem;
+    }
+    return lDestination;
+}
+
+//-----------------------------------------------------------------------------
+/**
+ * converts a sequence<PropertyValue> to an unicode string hash, where keys and values match to names and values.
+ */
+OUStringHash Converter::convert_seqProp2OUStringHash( const css::uno::Sequence< css::beans::PropertyValue >& lSource )
+{
+    OUStringHash lDestination;
+    sal_Int32                        nCount  = lSource.getLength();
+    const css::beans::PropertyValue* pSource = lSource.getConstArray();
+    for (sal_Int32 nItem=0; nItem<nCount; ++nItem)
+    {
+        pSource[nItem].Value >>= lDestination[pSource[nItem].Name];
+    }
     return lDestination;
 }
 
