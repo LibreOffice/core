@@ -2,8 +2,8 @@
  *
  *  $RCSfile: backendaccess.cxx,v $
  *
- *  $Revision: 1.19 $
- *  last change: $Author: kz $ $Date: 2004-08-31 15:23:10 $
+ *  $Revision: 1.20 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:27:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,11 @@
 #define INCLUDED_VECTOR
 #endif //INCLUDED_VECTOR
 
+#ifndef INCLUDED_ALGORITHM
+#include <algorithm>
+#define INCLUDED_ALGORITHM
+#endif //INCLUDED_ALGORITHM
+
 #define OU2A(rtlOUString)   (::rtl::OUStringToOString((rtlOUString), RTL_TEXTENCODING_ASCII_US).getStr())
 #define RTL_LOGFILE_OU2A(rtlOUString)   OU2A(rtlOUString)
 
@@ -195,34 +200,109 @@ BackendAccess::BackendAccess(
 
 BackendAccess::~BackendAccess() {}
 //------------------------------------------------------------------------------
+namespace
+{
+    using localehelper::Locale;
+    using localehelper::LocaleSequence;
+//------------------------------------------------------------------------------
 
-static rtl::OUString findBestLocale(
-        const uno::Sequence<rtl::OUString>& aLocales,
-        const rtl::OUString& aWanted) {
-    rtl::OUString fallback ;
+    static inline
+    bool findLocale(LocaleSequence const & seq, Locale const & loc)
+    {
+        LocaleSequence::const_iterator first = seq.begin();
+        LocaleSequence::const_iterator last  = seq.end();
+        for ( ; first != last; ++first)
+            if (localehelper::equalLocale(*first, loc))
+                return true;
+        return false;
+    }
+//------------------------------------------------------------------------------
 
-    for (sal_Int32 i = 0 ; i < aLocales.getLength() ; ++ i) {
-        if (aLocales [i].equals(aWanted)) { return aWanted ; }
-        if (fallback.getLength() == 0) {
-            sal_Int32 compLength = aWanted.getLength() ;
+    static inline
+    void addLocale( Locale const & aLocale, LocaleSequence & inoutLocales)
+    {
+        if (!findLocale(inoutLocales,aLocale))
+            inoutLocales.push_back(aLocale);
+    }
+//------------------------------------------------------------------------------
 
-            if (aLocales [i].getLength() < compLength) {
-                compLength = aLocales [i].getLength() ;
+    static OUString toString(uno::Sequence< OUString > const & seq, sal_Unicode separator = ',')
+    {
+        rtl::OUStringBuffer buf;
+
+        if (sal_Int32 const nCount = seq.getLength())
+        {
+            buf.append(seq[0]);
+            for (sal_Int32 ix=1; ix < nCount; ++ix)
+                buf.append(separator).append(seq[ix]);
+        }
+        else
+            buf.appendAscii("<none>");
+
+        return buf.makeStringAndClear();
+    }
+//------------------------------------------------------------------------------
+
+    static
+    uno::Sequence< OUString > intersect(uno::Sequence< OUString > const & seq1, uno::Sequence< OUString > const & seq2)
+    {
+        sal_Int32 const len1 = seq1.getLength();
+        uno::Sequence< OUString > aResult(len1);
+
+        OUString const * const beg2 = seq2.getConstArray();
+        OUString const * const end2 = beg2 + seq2.getLength();
+
+        sal_Int32 ix = 0;
+        for (sal_Int32 i1 = 0; i1 < len1; ++i1)
+        {
+            if (std::find(beg2,end2,seq1[i1]) != end2)
+                aResult[ix++] = seq1[i1];
+        }
+        aResult.realloc(ix);
+        return aResult;
+    }
+//------------------------------------------------------------------------------
+} // anonymous namespace
+//------------------------------------------------------------------------------
+
+// helper used by the binary cache
+uno::Sequence< rtl::OUString >
+    getAvailableLocales(const uno::Reference<backenduno::XLayer> * pLayers, sal_Int32 nNumLayers)
+{
+    uno::Sequence< rtl::OUString > aResult;
+
+    for (sal_Int32 i = 0 ; i < nNumLayers ; ++ i)
+    {
+        uno::Reference<backenduno::XCompositeLayer> compositeLayer(
+             pLayers [i], uno::UNO_QUERY) ;
+
+        if (compositeLayer.is())
+        {
+            uno::Sequence<rtl::OUString> aLocales = compositeLayer->listSubLayerIds();
+
+            if (aResult.getLength() == 0)
+            {
+                aResult = aLocales;
             }
-            if (aLocales [i].compareTo(aWanted, compLength) == 0) {
-                fallback = aLocales [i] ;
+            else
+            {
+                OSL_TRACE("Warning: multiple composite layers found. Detection of available locales is inaccurate.");
+                // be defensive: only locales present in all composite layers are 'available'
+                aResult= intersect(aResult,aLocales);
             }
         }
     }
-    return fallback ;
+    return aResult;
 }
 //------------------------------------------------------------------------------
+static OUString getLayerURL(const uno::Reference<backenduno::XLayer> & aLayer);
 
 void BackendAccess::merge(
         MergedComponentData& aData,
         const uno::Reference<backenduno::XLayer> * pLayers,
         sal_Int32 aNumLayers,
-        RequestOptions const & aOptions,
+        localehelper::Locale const & aRequestedLocale,
+        localehelper::LocaleSequence & inoutMergedLocales,
         ITemplateDataProvider *aTemplateProvider,
         sal_Int32 * pLayersMerged)
     CFG_UNO_THROW_ALL()
@@ -230,16 +310,43 @@ void BackendAccess::merge(
     LayerMergeHandler * pMerger = new LayerMergeHandler(mContext, aData, aTemplateProvider );
     uno::Reference<backenduno::XLayerHandler> xLayerMerger(pMerger);
 
+    Logger logger(mContext);
+
     RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::backend::BackendAccess", "jb99855", "configmgr: BackendAccess::merge()");
     RTL_LOGFILE_CONTEXT_TRACE1(aLog, "merging %d layers", int(aNumLayers) );
 
-    OUString const aLocale = aOptions.getLocale();
-    bool const needLocalizedData = aLocale.getLength() && !localehelper::isDefaultLanguage(aLocale);
+    OUString const & aLanguage = aRequestedLocale.Language;
+    bool const needAllLanguages = localehelper::isAnyLanguage(aLanguage);
+
+    if (aLanguage.getLength() && !needAllLanguages)
+    {
+        if (!localehelper::isDefaultLanguage(aLanguage))
+            addLocale(aRequestedLocale,inoutMergedLocales);
+    }
+    bool const needLocalizedData = needAllLanguages || !inoutMergedLocales.empty();
+
+    if (logger.isLogging(LogLevel::FINEST))
+    {
+        if (!needLocalizedData)
+            logger.finest("Starting merge with NO locales", "merge()","configmgr::Backend");
+
+        else if (needAllLanguages)
+            logger.finest("Starting merge for ALL locales", "merge()","configmgr::Backend");
+
+        else
+            logger.finest(OUSTR("Starting merge for locale(s): ") +
+                                toString(localehelper::makeIsoSequence(inoutMergedLocales)),
+                                "merge()","configmgr::Backend");
+    }
 
     if (pLayersMerged) *pLayersMerged = 0;
 
     for (sal_Int32 i = 0 ; i < aNumLayers ; ++ i)
     {
+        if (logger.isLogging(LogLevel::FINEST))
+            logger.finest(OUSTR("+ Merging layer: ") + getLayerURL(pLayers[i]),
+                                "merge()","configmgr::Backend");
+
         pMerger->prepareLayer() ;
         pLayers [i]->readData(xLayerMerger) ;
 
@@ -251,24 +358,27 @@ void BackendAccess::merge(
             if (compositeLayer.is())
             {
                 uno::Sequence<rtl::OUString> aSubLayerIds = compositeLayer->listSubLayerIds();
-                if(localehelper::isAnyLanguage(aLocale))
-                {
-                    //Loop thru layers
-                    for (sal_Int32 j = 0; j < aSubLayerIds.getLength(); ++j)
-                    {
-                        if(pMerger->prepareSublayer(aSubLayerIds[j]))
-                        {
-                            compositeLayer->readSubLayerData(xLayerMerger,aSubLayerIds[j]) ;
-                        }
-                    }
-                }
-                else
-                {
-                    rtl::OUString bestLocale = findBestLocale(aSubLayerIds, aLocale) ;
+                logger.finest(OUSTR("++ Found locales: ") + toString(aSubLayerIds),
+                                    "merge()","configmgr::Backend");
 
-                    if (pMerger->prepareSublayer(bestLocale) )
+                for (sal_Int32 j = 0; j < aSubLayerIds.getLength(); ++j)
+                {
+                    OUString const & aLocaleIso = aSubLayerIds[j];
+                    Locale aLocale = localehelper::makeLocale(aLocaleIso);
+
+                    // requesting de-CH, we accept de-CH and de, but not de-DE
+                    const localehelper::MatchQuality kMatchAccept = localehelper::MATCH_LANGUAGE_PLAIN;
+
+                    if (needAllLanguages || localehelper::isMatch(aLocale,inoutMergedLocales,kMatchAccept))
                     {
-                        compositeLayer->readSubLayerData(xLayerMerger, bestLocale) ;
+                        if(pMerger->prepareSublayer(aLocaleIso))
+                        {
+                            logger.finest(OUSTR("++ Merging sublayer for locale: ") + aLocaleIso,
+                                                "merge()","configmgr::Backend");
+                            compositeLayer->readSubLayerData(xLayerMerger,aLocaleIso) ;
+                            addLocale(aLocale,inoutMergedLocales);
+                        }
+                        // else dropLocale(aLocale,inoutMergedLocales); ?
                     }
                 }
             }
@@ -294,13 +404,17 @@ bool BackendAccess::readDefaultData( MergedComponentData & aComponentData,
     const Logger::Level detail = LogLevel::FINER;
     bool const bLogDetail = logger.isLogging(detail);
 
-    if (bLogDetail)
-        logger.log( detail, OUString::createFromAscii("Reading data for component ") + aComponent,
+    if (logger.isLogging(LogLevel::FINE))
+        logger.fine( OUString::createFromAscii("Reading data for component ") + aComponent,
                     "readDefaultData()","configmgr::Backend");
+
+    localehelper::Locale const aRequestedLocale = localehelper::makeLocale(aOptions.getLocale());
+    localehelper::LocaleSequence aKnownLocales;
 
     if (bLogDetail) logger.log(detail, "... attempt to read from binary cache", "readDefaultData()","configmgr::Backend");
     bool bCacheHit = mBinaryCache.readComponentData(aComponentData, getServiceFactory(),
-                                                    aComponent, aOptions.getEntity(), aOptions.getLocale(),
+                                                    aComponent, aOptions.getEntity(),
+                                                    aRequestedLocale, aKnownLocales,
                                                     pLayers, nNumLayers, bIncludeTemplates);
 
     if (!bCacheHit)
@@ -318,14 +432,14 @@ bool BackendAccess::readDefaultData( MergedComponentData & aComponentData,
         }
 
         if (bLogDetail) logger.log(detail, "... merging layers", "readDefaultData()","configmgr::Backend");
-        this->merge(aComponentData, pLayers, nNumLayers, aOptions, aTemplateProvider, pLayersMerged );
+        this->merge(aComponentData, pLayers, nNumLayers, aRequestedLocale, aKnownLocales, aTemplateProvider, pLayersMerged );
         promoteToDefault(aComponentData);
 
         if (mBinaryCache.isCacheEnabled(aOptions.getEntity()))
         {
             if (bLogDetail) logger.log(detail, "... creating binary cache", "readDefaultData()","configmgr::Backend");
             bool bWriteSuccess = mBinaryCache.writeComponentData( aComponentData, getServiceFactory(),
-                                                                  aComponent, aOptions.getEntity(), aOptions.getLocale(),
+                                                                  aComponent, aOptions.getEntity(), aKnownLocales,
                                                                   pLayers, nNumLayers );
 
             if (!bWriteSuccess)
@@ -499,11 +613,13 @@ ComponentResult BackendAccess::getNodeData(const ComponentRequest& aRequest,
         sal_Int32 const nNumUserLayers = layers.getLength() - nNumDefaultLayers;
         if (nNumUserLayers > 0)
         {
-            //Merge User layer
+            //Merge User layer (with all locales)
             logger.finer("... merging user layer", "getNodeData()","configmgr::Backend");
+
+            localehelper::LocaleSequence aLocales;
             merge(aComponentData,
                     layers.getConstArray()+nNumDefaultLayers, nNumUserLayers,
-                    aRequest.getOptions(), aTemplateProvider );
+                    localehelper::getAnyLocale(), aLocales, aTemplateProvider );
 
             // mark this one as done
             ++nCurrentLayer;
