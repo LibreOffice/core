@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:02 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:32:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,6 @@
 #include <svx/scripttypeitem.hxx>
 #include <svx/shdditem.hxx>
 #include <svx/srchitem.hxx>
-#include <svx/textanim.hxx>
 #include <svx/udlnitem.hxx>
 #include <svx/wghtitem.hxx>
 #ifndef _SVX_WRITINGMODEITEM_HXX
@@ -108,6 +107,9 @@
 #include <svtools/languageoptions.hxx>
 #endif
 #include <vcl/msgbox.hxx>
+
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 
 #include "sc.hrc"
 #include "globstr.hrc"
@@ -795,10 +797,8 @@ void __EXPORT ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
 
             case SID_DRAWTEXT_ATTR_DLG:
                 {
-                    SvxTextTabDialog* pDlg =
-                        new SvxTextTabDialog( pViewData->GetDialogParent(),
-                                               &aEditAttr,
-                                               pView );
+                    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                    SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog( pViewData->GetDialogParent(), &aEditAttr, ResId( RID_SVXDLG_TEXT ), pView );
 
                     bDone = ( RET_OK == pDlg->Execute() );
 
