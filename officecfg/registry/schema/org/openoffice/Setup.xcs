@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-24 13:12:05 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 17:49:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,8 @@
 				<desc xml:lang="hi-IN">Describes an application module (a document factory, such as Writer).</desc>
 				<desc xml:lang="x-comment">; Describes an application module (a document factory, such as Writer).</desc>
 				<desc xml:lang="sk">Describes an application module (a document factory, such as Writer).</desc>
+				<desc xml:lang="hu">Describes an application module (a document factory, such as Writer).</desc>
+				<desc xml:lang="sl">Describes an application module (a document factory, such as Writer).</desc>
 			</info>
 			<!--The default must be written by the setup.-->
 			<prop oor:name="ooSetupFactoryShortName" oor:type="xs:string">
@@ -124,6 +126,8 @@
 					<desc xml:lang="hi-IN">Specifies the short name of the factory.</desc>
 					<desc xml:lang="x-comment">; Specifies the short name of the factory.</desc>
 					<desc xml:lang="sk">Specifies the short name of the factory.</desc>
+					<desc xml:lang="hu">Specifies the short name of the factory.</desc>
+					<desc xml:lang="sl">Specifies the short name of the factory.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupFactoryTemplateFile" oor:type="xs:string">
@@ -155,6 +159,8 @@
 					<desc xml:lang="hi-IN">Specifies the name of the standard template file for the factory.</desc>
 					<desc xml:lang="x-comment">; Specifies the name of the standard template file for the factory.</desc>
 					<desc xml:lang="sk">Specifies the name of the standard template file for the factory.</desc>
+					<desc xml:lang="hu">Specifies the name of the standard template file for the factory.</desc>
+					<desc xml:lang="sl">Specifies the name of the standard template file for the factory.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupFactoryWindowAttributes" oor:type="xs:string">
@@ -186,6 +192,8 @@
 					<desc xml:lang="hi-IN">Specifies the attributes of the factory window</desc>
 					<desc xml:lang="x-comment">; Specifies the attributes of the factory window</desc>
 					<desc xml:lang="sk">Specifies the attributes of the factory window</desc>
+					<desc xml:lang="hu">Specifies the attributes of the factory window</desc>
+					<desc xml:lang="sl">Specifies the attributes of the factory window</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:type="xs:string">
@@ -217,6 +225,8 @@
 					<desc xml:lang="hi-IN">Specifies the URL for opening an empty document in the factory.</desc>
 					<desc xml:lang="x-comment">; Specifies the URL for opening an empty document in the factory.</desc>
 					<desc xml:lang="sk">Specifies the URL for opening an empty document in the factory.</desc>
+					<desc xml:lang="hu">Specifies the URL for opening an empty document in the factory.</desc>
+					<desc xml:lang="sl">Specifies the URL for opening an empty document in the factory.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupFactoryIcon" oor:type="xs:int">
@@ -248,6 +258,8 @@
 					<desc xml:lang="hi-IN">Specifies the ID of the icon for the factory</desc>
 					<desc xml:lang="x-comment">; Specifies the ID of the icon for the factory</desc>
 					<desc xml:lang="sk">Specifies the ID of the icon for the factory</desc>
+					<desc xml:lang="hu">Specifies the ID of the icon for the factory</desc>
+					<desc xml:lang="sl">Specifies the ID of the icon for the factory</desc>
 				</info>
 			</prop>
 		</group>
@@ -282,6 +294,8 @@
 				<desc xml:lang="hi-IN">Contains common product and version information</desc>
 				<desc xml:lang="x-comment">; Contains common product and version information</desc>
 				<desc xml:lang="sk">Contains common product and version information</desc>
+				<desc xml:lang="hu">Contains common product and version information</desc>
+				<desc xml:lang="sl">Contains common product and version information</desc>
 			</info>
 			<!--The default must be written by the setup.-->
 			<prop oor:name="ooName" oor:type="xs:string">
@@ -312,6 +326,8 @@
 					<desc xml:lang="hi-IN">Specifies the name of a product.</desc>
 					<desc xml:lang="x-comment">; Specifies the name of a product.</desc>
 					<desc xml:lang="sk">Specifies the name of a product.</desc>
+					<desc xml:lang="hu">Specifies the name of a product.</desc>
+					<desc xml:lang="sl">Specifies the name of a product.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -344,6 +360,8 @@
 					<desc xml:lang="hi-IN">Specifies the version of the xml file format of our documents</desc>
 					<desc xml:lang="x-comment">; Specifies the version of the xml file format of our documents</desc>
 					<desc xml:lang="sk">Specifies the version of the xml file format of our documents</desc>
+					<desc xml:lang="hu">Specifies the version of the xml file format of our documents</desc>
+					<desc xml:lang="sl">Specifies the version of the xml file format of our documents</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -376,6 +394,8 @@
 					<desc xml:lang="hi-IN">Specifies the version number of the product that appears on the user interface.</desc>
 					<desc xml:lang="x-comment">; Specifies the version number of the product that appears on the user interface.</desc>
 					<desc xml:lang="sk">Specifies the version number of the product that appears on the user interface.</desc>
+					<desc xml:lang="hu">Specifies the version number of the product that appears on the user interface.</desc>
+					<desc xml:lang="sl">Specifies the version number of the product that appears on the user interface.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -408,6 +428,8 @@
 					<desc xml:lang="hi-IN">Specifies the version number that appears on the user interface.</desc>
 					<desc xml:lang="x-comment">; Specifies the version number that appears on the user interface.</desc>
 					<desc xml:lang="sk">Specifies the version number that appears on the user interface.</desc>
+					<desc xml:lang="hu">Specifies the version number that appears on the user interface.</desc>
+					<desc xml:lang="sl">Specifies the version number that appears on the user interface.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -443,6 +465,8 @@
 				<desc xml:lang="hi-IN">Specifies the installation location, locales and the available factories for creating documents.</desc>
 				<desc xml:lang="x-comment">; Specifies the installation location, locales and the available factories for creating documents.</desc>
 				<desc xml:lang="sk">Specifies the installation location, locales and the available factories for creating documents.</desc>
+				<desc xml:lang="hu">Specifies the installation location, locales and the available factories for creating documents.</desc>
+				<desc xml:lang="sl">Specifies the installation location, locales and the available factories for creating documents.</desc>
 			</info>
 			<prop oor:name="ooSetupInstallPath" oor:type="xs:string">
 				<!-- OldPath: Service User/[username] -->
@@ -476,6 +500,8 @@
 					<desc xml:lang="hi-IN">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
 					<desc xml:lang="x-comment">; Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
 					<desc xml:lang="sk">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
+					<desc xml:lang="hu">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
+					<desc xml:lang="sl">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -512,6 +538,8 @@
 					<desc xml:lang="hi-IN">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
 					<desc xml:lang="x-comment">; Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
 					<desc xml:lang="sk">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
+					<desc xml:lang="hu">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
+					<desc xml:lang="sl">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -548,6 +576,8 @@
 					<desc xml:lang="hi-IN">Indicates if the user data is copied successfully.</desc>
 					<desc xml:lang="x-comment">; Indicates if the user data is copied successfully.</desc>
 					<desc xml:lang="sk">Indicates if the user data is copied successfully.</desc>
+					<desc xml:lang="hu">Indicates if the user data is copied successfully.</desc>
+					<desc xml:lang="sl">Indicates if the user data is copied successfully.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupLocales" oor:type="oor:string-list">
@@ -582,6 +612,8 @@
 					<desc xml:lang="hi-IN">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
 					<desc xml:lang="x-comment">; Specifies the application language offered by the setup, if a multilingual version is used.</desc>
 					<desc xml:lang="sk">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
+					<desc xml:lang="hu">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
+					<desc xml:lang="sl">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
 				</info>
 				<constraints>
 					<enumeration oor:value="en-US">
@@ -612,6 +644,8 @@
 							<desc xml:lang="hi-IN">US locale</desc>
 							<desc xml:lang="x-comment">; US locale</desc>
 							<desc xml:lang="sk">US locale</desc>
+							<desc xml:lang="hu">US locale</desc>
+							<desc xml:lang="sl">US locale</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="de-DE">
@@ -642,6 +676,8 @@
 							<desc xml:lang="hi-IN">German locale</desc>
 							<desc xml:lang="x-comment">; German locale</desc>
 							<desc xml:lang="sk">German locale</desc>
+							<desc xml:lang="hu">German locale</desc>
+							<desc xml:lang="sl">German locale</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -679,6 +715,8 @@
 					<desc xml:lang="hi-IN">Specifies whether the splash screen is displayed during startup.</desc>
 					<desc xml:lang="x-comment">; Specifies whether the splash screen is displayed during startup.</desc>
 					<desc xml:lang="sk">Specifies whether the splash screen is displayed during startup.</desc>
+					<desc xml:lang="hu">Specifies whether the splash screen is displayed during startup.</desc>
+					<desc xml:lang="sl">Specifies whether the splash screen is displayed during startup.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupConnectionURL" oor:type="xs:string">
@@ -712,6 +750,8 @@
 					<desc xml:lang="hi-IN">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
 					<desc xml:lang="x-comment">; Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
 					<desc xml:lang="sk">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
+					<desc xml:lang="hu">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
+					<desc xml:lang="sl">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -745,6 +785,8 @@
 					<desc xml:lang="hi-IN">Contains all of the document factories that were installed during setup.</desc>
 					<desc xml:lang="x-comment">; Contains all of the document factories that were installed during setup.</desc>
 					<desc xml:lang="sk">Contains all of the document factories that were installed during setup.</desc>
+					<desc xml:lang="hu">Contains all of the document factories that were installed during setup.</desc>
+					<desc xml:lang="sl">Contains all of the document factories that were installed during setup.</desc>
 				</info>
 			</set>
 		</group>
@@ -777,6 +819,8 @@
 				<desc xml:lang="hi-IN">Specifies the installation locales.</desc>
 				<desc xml:lang="x-comment">; Specifies the installation locales.</desc>
 				<desc xml:lang="sk">Specifies the installation locales.</desc>
+				<desc xml:lang="hu">Specifies the installation locales.</desc>
+				<desc xml:lang="sl">Specifies the installation locales.</desc>
 			</info>
 			<!--The default must be written by the setup.-->
 			<prop oor:name="ooLocale" oor:type="xs:string">
@@ -812,6 +856,8 @@
 						<desc xml:lang="hi-IN">Indicates the Office language selected by the user.</desc>
 						<desc xml:lang="x-comment">; Indicates the Office language selected by the user.</desc>
 						<desc xml:lang="sk">Indicates the Office language selected by the user.</desc>
+						<desc xml:lang="hu">Indicates the Office language selected by the user.</desc>
+						<desc xml:lang="sl">Indicates the Office language selected by the user.</desc>
 					<label xml:lang="en-US">Locale</label>
 					<label xml:lang="el">Locale</label>
 					<label xml:lang="nl">Locale</label>
@@ -838,6 +884,8 @@
 					<label xml:lang="hi-IN">Locale</label>
 					<label xml:lang="x-comment">; Locale</label>
 					<label xml:lang="sk">Locale</label>
+					<label xml:lang="hu">Locale</label>
+					<label xml:lang="sl">Locale</label>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -872,6 +920,8 @@
 					<desc xml:lang="hi-IN">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
 					<desc xml:lang="x-comment">; Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
 					<desc xml:lang="sk">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
+					<desc xml:lang="hu">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
+					<desc xml:lang="sl">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -906,6 +956,8 @@
 					<desc xml:lang="hi-IN">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
 					<desc xml:lang="x-comment">; Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
 					<desc xml:lang="sk">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
+					<desc xml:lang="hu">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
+					<desc xml:lang="sl">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -940,6 +992,8 @@
 				<desc xml:lang="hi-IN">Contains settings that control configuration data access.</desc>
 				<desc xml:lang="x-comment">; Contains settings that control configuration data access.</desc>
 				<desc xml:lang="sk">Contains settings that control configuration data access.</desc>
+				<desc xml:lang="hu">Contains settings that control configuration data access.</desc>
+				<desc xml:lang="sl">Contains settings that control configuration data access.</desc>
 			</info>
 			<prop oor:name="TransferUserSettingsOnce" oor:type="xs:boolean" oor:nillable="false">
 				<info>
@@ -970,6 +1024,8 @@
 						<desc xml:lang="tr">Indicates that user settings should be imported, if the backend does not yet contain data for this user. This only takes effect, if the source of the import is configured locally. </desc>
 						<desc xml:lang="th">Indicates that user settings should be imported, if the backend does not yet contain data for this user. This only takes effect, if the source of the import is configured locally. </desc>
 						<desc xml:lang="x-comment">Indicates that user settings should be imported, if the backend does not yet contain data for this user. This only takes effect, if the source of the import is configured locally. </desc>
+						<desc xml:lang="hu">Indicates that user settings should be imported, if the backend does not yet contain data for this user. This only takes effect, if the source of the import is configured locally. </desc>
+						<desc xml:lang="sl">Indicates that user settings should be imported, if the backend does not yet contain data for this user. This only takes effect, if the source of the import is configured locally. </desc>
 					<label xml:lang="en-US">Transfer User Settings Once on First Start</label>
 					<label xml:lang="el">Transfer User Settings Once on First Start</label>
 					<label xml:lang="nl">Transfer User Settings Once on First Start</label>
@@ -996,11 +1052,15 @@
 					<label xml:lang="tr">Transfer User Settings Once on First Start</label>
 					<label xml:lang="th">Transfer User Settings Once on First Start</label>
 					<label xml:lang="x-comment">Transfer User Settings Once on First Start</label>
+					<label xml:lang="hu">Transfer User Settings Once on First Start</label>
+					<label xml:lang="sl">Transfer User Settings Once on First Start</label>
 				</info>
 			</prop>
 		</group>
 	</component>
 </oor:component-schema>
+
+
 
 
 
