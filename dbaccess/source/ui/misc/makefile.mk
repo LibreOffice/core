@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:03:16 $
+#   last change: $Author: hr $ $Date: 2004-08-02 16:11:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,6 @@ EXCEPTIONSFILES=	\
         $(SLO)$/componentclientmonitor.obj		\
         $(SLO)$/singledoccontroller.obj		\
         $(SLO)$/datasourceconnector.obj		\
-        $(SLO)$/documentautolinker.obj		\
         $(SLO)$/linkeddocuments.obj			\
         $(SLO)$/indexcollection.obj			\
         $(SLO)$/UITools.obj					\
@@ -106,7 +105,6 @@ EXCEPTIONSFILES=	\
 SLOFILES=	\
         $(EXCEPTIONSFILES)					\
         $(SLO)$/ToolBoxHelper.obj			\
-        $(SLO)$/filenotation.obj			\
         $(SLO)$/WExtendPages.obj			\
         $(SLO)$/WNameMatch.obj				\
         $(SLO)$/WColumnSelect.obj			\
