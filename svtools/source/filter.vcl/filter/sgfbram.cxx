@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sgfbram.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:19:06 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:02:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,10 +327,10 @@ BOOL SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
     USHORT         nWdtOut;            // Breite der Output-Bitmap in Bytes
     USHORT         nColors;            // Anzahl der Farben     (1,16,256)
     USHORT         nColBits;           // Anzahl der Bits/Pixel (2, 4,  8)
-    USHORT         i,j,k;              // SpaltenzÑhler, ZeilenzÑhler, PlanezÑhler
+    USHORT         i,j,k;              // Spaltenzaehler, Zeilenzaehler, Planezaehler
     USHORT         a,b;                // Hilfsvariable
-    BYTE           pl1 = 0,pl2= 0;     // Masken fÅr die Planes
-    BYTE*          pBuf=NULL;          // Buffer fÅr eine Pixelzeile
+    BYTE           pl1 = 0,pl2= 0;     // Masken fuer die Planes
+    BYTE*          pBuf=NULL;          // Buffer fuer eine Pixelzeile
     PcxExpand      aPcx;
     ULONG          nOfs;
     BYTE           cRGB[4];
@@ -357,7 +357,7 @@ BOOL SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
     pBuf=new BYTE[nWdtOut];
     if (!pBuf) return FALSE;       // Fehler: kein Speichel da
     rOut<<aBmpHead<<aBmpInfo;
-    memset(pBuf,0,nWdtOut);        // Buffer mit Nullen fÅllen
+    memset(pBuf,0,nWdtOut);        // Buffer mit Nullen fuellen
 
     if (nColors==2)
     {
@@ -366,13 +366,13 @@ BOOL SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
         rOut<<RGBQuad(0xFF,0xFF,0xFF); // Weiss
         nOfs=rOut.Tell();
         for (j=0;j<rHead.Ysize;j++)
-            rOut.Write((char*)pBuf,nWdtOut);  // Datei erstmal komplett mit Nullen fÅllen
+            rOut.Write((char*)pBuf,nWdtOut);  // Datei erstmal komplett mit Nullen fuellen
         for (j=0;j<rHead.Ysize;j++) {
             for(i=0;i<nWdtInp;i++) {
                 pBuf[i]=aPcx.GetByte(rInp);
             }
             for(i=nWdtInp;i<nWdtOut;i++) pBuf[i]=0;     // noch bis zu 3 Bytes
-            rOut.Seek(nOfs+((ULONG)rHead.Ysize-j-1L)*(ULONG)nWdtOut); // rÅckwÑrts schreiben!
+            rOut.Seek(nOfs+((ULONG)rHead.Ysize-j-1L)*(ULONG)nWdtOut); // rueckwaerts schreiben!
             rOut.Write((char*)pBuf,nWdtOut);
         }
     } else if (nColors==16) {
@@ -395,7 +395,7 @@ BOOL SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
 
         nOfs=rOut.Tell();
         for (j=0;j<rHead.Ysize;j++)
-            rOut.Write((char*)pBuf,nWdtOut);  // Datei erstmal komplett mit Nullen fÅllen
+            rOut.Write((char*)pBuf,nWdtOut);  // Datei erstmal komplett mit Nullen fuellen
         for (j=0;j<rHead.Ysize;j++) {
             memset(pBuf,0,nWdtOut);
             for(k=0;k<4;k++) {
@@ -418,11 +418,11 @@ BOOL SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
                 }
             }
             for(i=nWdtInp*4;i<nWdtOut;i++) pBuf[i]=0;            // noch bis zu 3 Bytes
-            rOut.Seek(nOfs+((ULONG)rHead.Ysize-j-1L)*(ULONG)nWdtOut); // rÅckwÑrts schreiben!
+            rOut.Seek(nOfs+((ULONG)rHead.Ysize-j-1L)*(ULONG)nWdtOut); // rueckwaerts schreiben!
             rOut.Write((char*)pBuf,nWdtOut);
         }
     } else if (nColors==256) {
-        cRGB[3]=0;                      // der 4. Paletteneintrag fÅr BMP
+        cRGB[3]=0;                      // der 4. Paletteneintrag fuer BMP
         for (i=0;i<256;i++) {           // Palette kopieren
             rInp.Read((char*)cRGB,3);
             pl1=cRGB[0];                // Rot mit Blau tauschen
@@ -433,12 +433,12 @@ BOOL SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
 
         nOfs=rOut.Tell();
         for (j=0;j<rHead.Ysize;j++)
-            rOut.Write((char*)pBuf,nWdtOut);  // Datei erstmal komplett mit Nullen fÅllen
+            rOut.Write((char*)pBuf,nWdtOut);  // Datei erstmal komplett mit Nullen fuellen
         for (j=0;j<rHead.Ysize;j++) {
             for(i=0;i<rHead.Xsize;i++)
                 pBuf[i]=aPcx.GetByte(rInp);
             for(i=rHead.Xsize;i<nWdtOut;i++) pBuf[i]=0;          // noch bis zu 3 Bytes
-            rOut.Seek(nOfs+((ULONG)rHead.Ysize-j-1L)*(ULONG)nWdtOut); // rÅckwÑrts schreiben!
+            rOut.Seek(nOfs+((ULONG)rHead.Ysize-j-1L)*(ULONG)nWdtOut); // rueckwaerts schreiben!
             rOut.Write((char*)pBuf,nWdtOut);
         }
     }
@@ -494,7 +494,7 @@ BOOL SgfBMapFilter(SvStream& rInp, SvStream& rOut)
 // SgfVectFilter ///////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// FÅr StarDraw Embedded SGF-Vector
+// Fuer StarDraw Embedded SGF-Vector
 long SgfVectXofs=0;
 long SgfVectYofs=0;
 long SgfVectXmul=0;
