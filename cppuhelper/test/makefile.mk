@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-23 16:25:15 $
+#   last change: $Author: kz $ $Date: 2004-03-25 15:02:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -177,7 +177,7 @@ $(BIN)$/cpputest.rdb: $(ALLIDLFILES)
     +idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?
     +regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
     +regmerge $@ / $(UNOUCRRDB)
-    +regcomp -register -r $@ -c corereflection.uno$(DLLPOST)
+    +regcomp -register -r $@ -c reflection.uno$(DLLPOST)
     touch $@
     +$(COPY) $(UNO_PATH)$/servicemgr.uno* $(UNO_OUT)
     +$(COPY) $(UNO_PATH)$/shlibloader.uno* $(UNO_OUT)
