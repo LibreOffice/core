@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-02 10:07:32 $
+ *  last change: $Author: pb $ $Date: 2001-05-04 09:08:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@ private:
     String      m_aModule;
     Db*         m_pDB;
     sal_Bool    m_bIsDebug;
+    sal_Bool    m_bIsOpen;
 
 public:
     SfxHelpDB_Impl( const String& rPath, sal_Bool bDebug );
@@ -148,14 +149,16 @@ SfxHelpDB_Impl::SfxHelpDB_Impl( const String& rPath, sal_Bool bDebug ) :
 
     m_aDBPath   ( rPath ),
     m_pDB       ( NULL ),
-    m_bIsDebug  ( bDebug )
+    m_bIsDebug  ( bDebug ),
+    m_bIsOpen   ( sal_False )
 
 {
 }
 
 SfxHelpDB_Impl::~SfxHelpDB_Impl()
 {
-    m_pDB->close(0);
+    if ( m_bIsOpen )
+        m_pDB->close(0);
     delete m_pDB;
 }
 
@@ -189,6 +192,8 @@ String SfxHelpDB_Impl::GetHelpText( ULONG nHelpId, const String& rModule )
                     aHelpText += String::CreateFromInt32( nError );
                 }
             }
+            else if ( !m_bIsOpen )
+                m_bIsOpen = sal_True;
         }
         catch( DbException& eDb )
         {
