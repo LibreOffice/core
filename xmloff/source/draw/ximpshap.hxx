@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:54:01 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:53:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,15 +108,18 @@
 
 #include <vector>
 
+#ifndef _XMLOFF_SHAPEIMPORT_HXX_
+#include "shapeimport.hxx"
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 // common shape context
 
-class SdXMLShapeContext : public SvXMLImportContext
+class SdXMLShapeContext : public SvXMLShapeContext
 {
 protected:
     // the shape group this object should be created inside
     com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >  mxShapes;
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShape >   mxShape;
     com::sun::star::uno::Reference< com::sun::star::text::XTextCursor > mxCursor;
     com::sun::star::uno::Reference< com::sun::star::text::XTextCursor > mxOldCursor;
     com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList> mxAttrList;
@@ -172,6 +175,7 @@ public:
     virtual ~SdXMLShapeContext();
 
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
+    virtual void EndElement();
 
     virtual SvXMLImportContext * CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
