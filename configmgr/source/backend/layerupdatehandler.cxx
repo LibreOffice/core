@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdatehandler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-31 13:59:15 $
+ *  last change: $Author: jb $ $Date: 2002-06-07 12:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,7 @@ void SAL_CALL
 // -----------------------------------------------------------------------------
 
 void SAL_CALL
-    LayerUpdateHandler::resetPropertyValue( const uno::Any& aValue )
+    LayerUpdateHandler::resetPropertyValue( )
         throw (MalformedDataException, uno::RuntimeException)
 {
     checkBuilder(true); // already checks for open property
@@ -280,7 +280,7 @@ void SAL_CALL
 // -----------------------------------------------------------------------------
 
 void SAL_CALL
-    LayerUpdateHandler::resetPropertyValueForLocale( const uno::Any& aValue, const OUString& aLocale )
+    LayerUpdateHandler::resetPropertyValueForLocale( const OUString& aLocale )
         throw (MalformedDataException, lang::IllegalArgumentException, uno::RuntimeException)
 {
     checkBuilder(true); // already checks for open property

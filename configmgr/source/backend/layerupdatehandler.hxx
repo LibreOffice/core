@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdatehandler.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-31 13:59:15 $
+ *  last change: $Author: jb $ $Date: 2002-06-07 12:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,11 +144,11 @@ namespace configmgr
                     throw (MalformedDataException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                resetPropertyValue( const uno::Any& aValue )
+                resetPropertyValue( )
                     throw (MalformedDataException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                resetPropertyValueForLocale( const uno::Any& aValue, const OUString& aLocale )
+                resetPropertyValueForLocale( const OUString& aLocale )
                     throw (MalformedDataException, lang::IllegalArgumentException, uno::RuntimeException);
 
             virtual void SAL_CALL
