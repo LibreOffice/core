@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-21 09:27:52 $
+ *  last change: $Author: jp $ $Date: 2001-01-19 16:45:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,7 @@ class SwFmt;
 class SwFmtCol;
 class SwFmtINetFmt;
 class SwFmtRefMark;
+class SwForbiddenCharacterTable;
 class SwFrmFmt;
 class SwFrmFmts;
 class SwFtnIdxs;
@@ -218,6 +219,10 @@ struct SwDocStat;
 struct SwHash;
 struct SwSortOptions;
 struct SwDefTOXBase_Impl;
+
+namespace com { namespace sun { namespace star { namespace i18n {
+    struct ForbiddenCharacters;    // comes from the I18N UNO interface
+}}}};
 
 namespace utl {
     class TransliterationWrapper;
@@ -351,6 +356,9 @@ class SwDoc
                                     // like footnote/endnote in sections
 
     SwUnoCallBack   *pUnoCallBack;
+
+    SwForbiddenCharacterTable* pForbiddenCharsTbl;  // table of forbidden
+                                                // characters of this document
     // -------------------------------------------------------------------
     // sonstige
     sal_uInt16  nUndoPos;               // akt. Undo-InsertPosition (fuers Redo!)
@@ -1732,6 +1740,16 @@ public:
 
     sal_Bool ContainsMSVBasic() const           { return bContains_MSVBasic; }
     void SetContainsMSVBasic( sal_Bool bFlag )  { bContains_MSVBasic = bFlag; }
+
+    // Interface for the forbidden characters of any asian/.. languages
+    const com::sun::star::i18n::
+        ForbiddenCharacters* GetForbiddenCharacters( ULONG nLang,
+                                                    BOOL bLocaleData ) const;
+    void SetForbiddenCharacters( ULONG nLang,
+            const com::sun::star::i18n::ForbiddenCharacters& );
+    void ClearForbiddenCharacters( ULONG nLang );
+    const SwForbiddenCharacterTable* GetForbiddenCharacterTbl() const
+            { return pForbiddenCharsTbl; }
 
     // ------------------- Zugriff auf Dummy-Member --------------------
 

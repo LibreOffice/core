@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-06 12:24:14 $
+ *  last change: $Author: jp $ $Date: 2001-01-19 16:45:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #pragma hdrstop
 
 #define ROLBCK_HISTORY_ONLY     // Der Kampf gegen die CLOOK's
+
+#ifndef _COM_SUN_STAR_I18N_FORBIDDENCHARACTERS_HDL_
+#include <com/sun/star/i18n/ForbiddenCharacters.hdl>
+#endif
 
 #ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
@@ -193,6 +197,9 @@
 #ifndef _UNOCLBCK_HXX
 #include <unoclbck.hxx>
 #endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
+#endif
 
 #ifndef _CMDID_H
 #include <cmdid.h>              // fuer den dflt - Printer in SetJob
@@ -288,6 +295,7 @@ SwDoc::SwDoc() :
     pPgPViewPrtData( 0 ),
     pAutoFmtRedlnComment( 0 ),
     pUnoCallBack(new SwUnoCallBack(0)),
+    pForbiddenCharsTbl( 0 ),
     nAutoFmtRedlnCommentNo( 0 ),
     nLatin_CJK( 0 ), nLatin_CTL( 0 ), nCJK_CTL( 0 ),
     n32Dummy1( 0 ), n32Dummy2( 0 ), n8Dummy1( 0 ), n8Dummy2( 0 ),
@@ -574,6 +582,8 @@ SwDoc::~SwDoc()
     //          dieser immer gesetzt ist.
     DELETEZ( pLinkMgr );
 
+    delete pForbiddenCharsTbl;
+
     //Tables vor dem loeschen der Defaults leeren, sonst GPF wegen Def-Abhaengigen.
     //Die Arrays sollten (wegen includes) bei Gelegenheit auch zu Pointern werden.
     delete pFrmFmtTbl;
@@ -790,6 +800,7 @@ void SwDoc::ClearDoc()
     pCharFmtTbl->DeleteAndDestroy( 1, pCharFmtTbl->Count()-1 );
 
     ReleaseDrawModel();
+    delete pForbiddenCharsTbl, pForbiddenCharsTbl = 0;
 
     pFldTypes->DeleteAndDestroy( INIT_FLDTYPES,
                                 pFldTypes->Count() - INIT_FLDTYPES );
@@ -821,6 +832,51 @@ SwModify*   SwDoc::GetUnoCallBack() const
     return pUnoCallBack;
 }
 
+/* ------------------------------------------------------------------------*/
 
+const com::sun::star::i18n::
+    ForbiddenCharacters* SwDoc::GetForbiddenCharacters( ULONG nLang,
+                            BOOL bLocaleData ) const
+{
+    const com::sun::star::i18n::ForbiddenCharacters*  pRet = 0;
+    if( pForbiddenCharsTbl )
+        pRet = pForbiddenCharsTbl->Get( nLang );
+    if( bLocaleData && !pRet && pBreakIt )
+        pRet = &pBreakIt->GetForbidden( (LanguageType)nLang );
+    return pRet;
+}
 
+void SwDoc::SetForbiddenCharacters( ULONG nLang,
+                const com::sun::star::i18n::ForbiddenCharacters& rFChars )
+{
+    if( !pForbiddenCharsTbl )
+        pForbiddenCharsTbl = new SwForbiddenCharacterTable;
+    com::sun::star::i18n::ForbiddenCharacters* pOld =
+                                            pForbiddenCharsTbl->Get( nLang );
+    if( !pOld )
+        pForbiddenCharsTbl->Insert( nLang,
+                new com::sun::star::i18n::ForbiddenCharacters( rFChars ) );
+    else
+        *pOld = rFChars;
+}
+
+void SwDoc::ClearForbiddenCharacters( ULONG nLang )
+{
+    if( pForbiddenCharsTbl )
+    {
+        com::sun::star::i18n::ForbiddenCharacters* pDel =
+                                        pForbiddenCharsTbl->Remove( nLang );
+        if( pDel )
+            delete pDel;
+        if( !pForbiddenCharsTbl->Count() )
+            delete pForbiddenCharsTbl, pForbiddenCharsTbl = 0;
+    }
+}
+
+SwForbiddenCharacterTable::~SwForbiddenCharacterTable()
+{
+    for( com::sun::star::i18n::ForbiddenCharacters* pDel = First();
+            pDel; pDel = Next() )
+        delete pDel;
+}
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docary.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:25 $
+ *  last change: $Author: jp $ $Date: 2001-01-19 16:45:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,14 @@ class SwNumRule;
 class SwRedline;
 class SwUnoCrsr;
 class SwOLENode;
+
+namespace com { namespace sun { namespace star { namespace i18n {
+    struct ForbiddenCharacters;    // comes from the I18N UNO interface
+}}}};
+
+#ifndef _TABLE_HXX //autogen
+#include <tools/table.hxx>
+#endif
 
 #ifndef _SWTYPES_HXX //autogen
 #include <swtypes.hxx>
@@ -162,5 +170,17 @@ SV_DECL_PTRARR_DEL( SwUnoCrsrTbl, SwUnoCrsrPtr, 0, 4 )
 typedef SwOLENode* SwOLENodePtr;
 SV_DECL_PTRARR(SwOLENodes,SwOLENodePtr,16,16)
 
+
+DECLARE_TABLE( _SwForbiddenCharacterTable_Impl,
+                com::sun::star::i18n::ForbiddenCharacters* )
+
+class SwForbiddenCharacterTable : public _SwForbiddenCharacterTable_Impl
+{
+public:
+    SwForbiddenCharacterTable( USHORT nISize = 4, USHORT nGrow = 4 )
+        : _SwForbiddenCharacterTable_Impl( nISize, nGrow )
+    {}
+    ~SwForbiddenCharacterTable();
+};
 
 #endif  //_DOCARY_HXX
