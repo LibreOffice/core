@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:02:15 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:13:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,8 @@ FloatingWindow RID_INSERT_CTRL
     Text[ hebrew ] = "‮הוספה‬";
     Text[ hindi ] = "जोड़ो";
     Text[ slovak ] = "Vložiť";
+    Text[ hungarian ] = "Beszúrás";
+    Text[ slovenian ] = "Vstavi";
 };
 FloatingWindow RID_INSERT_OBJ_CTRL
 {
@@ -251,6 +253,8 @@ FloatingWindow RID_INSERT_OBJ_CTRL
     Text[ hebrew ] = "‮הוספת אוביקט‬";
     Text[ hindi ] = "वस्तु जोड़ो";
     Text[ slovak ] = "Vložiť objekt";
+    Text[ hungarian ] = "Objektum beszúrása";
+    Text[ slovenian ] = "Vstavi predmet";
 };
 Menu RID_INSERT_FIELD_CTRL
 {
@@ -288,6 +292,8 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ hebrew ] = "‮תאריך‬";
             Text[ hindi ] = "दिनांक";
             Text[ slovak ] = "Dátum";
+            Text[ hungarian ] = "Dátum";
+            Text[ slovenian ] = "Datum";
         };
         MenuItem
         {
@@ -321,6 +327,8 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ hebrew ] = "‮שעה‬";
             Text[ hindi ] = "समय";
             Text[ slovak ] = "Čas";
+            Text[ hungarian ] = "Idő";
+            Text[ slovenian ] = "Čas";
         };
          //#ifndef MN_SW_WEB
         MenuItem
@@ -355,6 +363,8 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ hebrew ] = "Seitennummer";
             Text[ hindi ] = "पृष्ठ संख्या";
             Text[ slovak ] = "Čísla stránok";
+            Text[ hungarian ] = "Oldalszám";
+            Text[ slovenian ] = "Številka strani";
         };
         MenuItem
         {
@@ -388,6 +398,8 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ hebrew ] = "‮סך הכול עמודים‬";
             Text[ hindi ] = "पृष्ठ गिनती";
             Text[ slovak ] = "Počet stránok";
+            Text[ hungarian ] = "Oldalak száma";
+            Text[ slovenian ] = "Število strani";
         };
         MenuItem
         {
@@ -421,6 +433,8 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ hebrew ] = "‮נושא‬";
             Text[ hindi ] = "विषय";
             Text[ slovak ] = "Predmet";
+            Text[ hungarian ] = "Tárgy";
+            Text[ slovenian ] = "Zadeva";
         };
         MenuItem
         {
@@ -454,6 +468,8 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ hebrew ] = "‮כותרת‬";
             Text[ hindi ] = "उपाधि";
             Text[ slovak ] = "Titul";
+            Text[ hungarian ] = "Cím";
+            Text[ slovenian ] = "Naslov";
         };
          //#endif
         MenuItem
@@ -488,6 +504,8 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ hebrew ] = "‮מחבר‬";
             Text[ hindi ] = "लेखक";
             Text[ slovak ] = "Autor";
+            Text[ hungarian ] = "Szerző";
+            Text[ slovenian ] = "Avtor";
         };
         MenuItem
         {
@@ -525,6 +543,8 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ hebrew ] = "Andere...";
             Text[ hindi ] = "अन्य ...";
             Text[ slovak ] = "Iné...";
+            Text[ hungarian ] = "Egyéb...";
+            Text[ slovenian ] = "Drugo...";
         };
     };
 };
@@ -616,6 +636,8 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ hebrew ] = "‮טבלה‬";
         Text[ hindi ] = "सारणी";
         Text[ slovak ] = "Tabuľka";
+        Text[ hungarian ] = "Táblázatra";
+        Text[ slovenian ] = "Tabela";
     };
     String ST_FRM
     {
@@ -624,7 +646,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text [ english_us ] = "Text Frame" ;
         Text [ portuguese_brazilian ] = "Moldura de Texto" ;
         Text [ swedish ] = "Textram" ;
-        Text [ danish ] = "Tekstboks" ;
+        Text [ danish ] = "Tekstramme" ;
         Text [ italian ] = "Cornici" ;
         Text [ spanish ] = "Marco de texto" ;
         Text [ french ] = "Cadre texte" ;
@@ -647,6 +669,8 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ hebrew ] = "Textrahmen";
         Text[ hindi ] = "टेक्स्ट् फ्रेम ";
         Text[ slovak ] = "Textový rámec";
+        Text[ hungarian ] = "Szövegkeretre";
+        Text[ slovenian ] = "Okvir besedila";
     };
     String ST_PGE
     {
@@ -678,6 +702,8 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ hebrew ] = "‮דף‬";
         Text[ hindi ] = "पृष्ठ";
         Text[ slovak ] = "Stránka";
+        Text[ hungarian ] = "Oldalra";
+        Text[ slovenian ] = "Stran";
     };
     String ST_DRW
     {
@@ -686,7 +712,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text [ english_us ] = "Drawing" ;
         Text [ portuguese_brazilian ] = "Desenho" ;
         Text [ swedish ] = "Ritobjekt" ;
-        Text [ danish ] = "Tegneobjekt" ;
+        Text [ danish ] = "Tegning" ;
         Text [ italian ] = "Oggetto di disegno" ;
         Text [ spanish ] = "Objeto de dibujo" ;
         Text [ french ] = "Objet de dessin" ;
@@ -703,7 +729,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
     Text[ french ] = "Objet de dessin";
     Text[ spanish ] = "Objeto de dibujo";
     Text[ italian ] = "Oggetto di disegno";
-    Text[ danish ] = "Tegneobjekt";
+    Text[ danish ] = "Tegning";
     Text[ swedish ] = "Ritobjekt";
     Text[ polish ] = "Rysunek";
     Text[ portuguese_brazilian ] = "Desenho";
@@ -722,6 +748,8 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ hebrew ] = "‮ציור‬";
         Text[ hindi ] = "रेखाचित्र";
         Text[ slovak ] = "Kresba";
+        Text[ hungarian ] = "Rajzra";
+        Text[ slovenian ] = "Risba";
     };
     String ST_CTRL
     {
@@ -753,6 +781,8 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ hebrew ] = "Kontrollfeld";
         Text[ hindi ] = "नियंत्रण";
         Text[ slovak ] = "Ovládací prvok";
+        Text[ hungarian ] = "Vezérlőelemre";
+        Text[ slovenian ] = "Kontrolnik";
     };
     String ST_REG
     {
@@ -761,7 +791,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text [ english_us ] = "Section" ;
         Text [ portuguese_brazilian ] = "Se��o" ;
         Text [ swedish ] = "Omr�de" ;
-        Text [ danish ] = "Omr�de" ;
+        Text [ danish ] = "Sektion" ;
         Text [ italian ] = "Sezione" ;
         Text [ spanish ] = "Secci�n" ;
         Text [ french ] = "Section" ;
@@ -784,6 +814,8 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ hebrew ] = "‮מיקטע‬";
         Text[ hindi ] = "विभाग";
         Text[ slovak ] = "Sekcia";
+        Text[ hungarian ] = "Szakaszra";
+        Text[ slovenian ] = "Odsek";
     };
     String ST_BKM
     {
@@ -792,7 +824,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text [ english_us ] = "Bookmark" ;
         Text [ portuguese_brazilian ] = "Marcador" ;
         Text [ swedish ] = "Bokm�rke" ;
-        Text [ danish ] = "Tekstmarkering" ;
+        Text [ danish ] = "Bogm�rke" ;
         Text [ italian ] = "Segnalibro" ;
         Text [ spanish ] = "Marca de texto" ;
         Text [ french ] = "Rep�re de texte" ;
@@ -815,6 +847,8 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ hebrew ] = "‮סימניה‬";
         Text[ hindi ] = "पृष्ठसंकेत";
         Text[ slovak ] = "Záložka";
+        Text[ hungarian ] = "Könyvjelzőre";
+        Text[ slovenian ] = "Zaznamek";
     };
     String ST_GRF
     {
@@ -846,6 +880,8 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ hebrew ] = "‮גרפיקה‬";
         Text[ hindi ] = "सुचित्र";
         Text[ slovak ] = "Obrázky";
+        Text[ hungarian ] = "Képre";
+        Text[ slovenian ] = "Grafika";
     };
     String ST_OLE
     {
@@ -877,6 +913,8 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ hebrew ] = "OLE‮אוביקט ‬";
         Text[ hindi ] = "OLE वस्तु";
         Text[ slovak ] = "Objekt OLE";
+        Text[ hungarian ] = "OLE-objektumra";
+        Text[ slovenian ] = "OLE predmet";
     };
     String ST_OUTL
     {
@@ -886,7 +924,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text [ english_us ] = "Headings" ;
         Text [ portuguese_brazilian ] = "T�tulos" ;
         Text [ swedish ] = "�verskrift" ;
-        Text [ danish ] = "Overskrift" ;
+        Text [ danish ] = "Overskrifter" ;
         Text [ italian ] = "Intestazione" ;
         Text [ spanish ] = "Encabezado" ;
         Text [ french ] = "Titre" ;
@@ -909,6 +947,8 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ hebrew ] = "Überschrift";
         Text[ hindi ] = "शीर्षकें";
         Text[ slovak ] = "Nadpisy";
+        Text[ hungarian ] = "Címsorra";
+        Text[ slovenian ] = "Naslovi";
     };
     String ST_SEL
     {
@@ -940,6 +980,8 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ hebrew ] = "‮מבחר‬";
         Text[ hindi ] = "चुनाव";
         Text[ slovak ] = "Výber";
+        Text[ hungarian ] = "Kijelölésre";
+        Text[ slovenian ] = "Izbor";
     };
     String ST_FTN
     {
@@ -972,6 +1014,8 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ hebrew ] = "‮הערת שוליים‬";
         Text[ hindi ] = "पृष्ठ के नीचे की टीका";
         Text[ slovak ] = "Poznámka pod čiarou";
+        Text[ hungarian ] = "Lábjegyzetre";
+        Text[ slovenian ] = "Sprotna opomba";
     };
     String ST_MARK
     {
@@ -980,7 +1024,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text [ english_us ] = "Reminder" ;
         Text [ portuguese_brazilian ] = "Lembrete" ;
         Text [ swedish ] = "Tempor�rt bokm�rke" ;
-        Text [ danish ] = "Bogm�rke" ;
+        Text [ danish ] = "P�mindelse" ;
         Text [ italian ] = "Contrassegno" ;
         Text [ spanish ] = "Marca" ;
         Text [ french ] = "Pense-b�te" ;
@@ -1003,6 +1047,8 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ hebrew ] = "Merker";
         Text[ hindi ] = "याद दिलानेवाला";
         Text[ slovak ] = "Pripomienka";
+        Text[ hungarian ] = "Emlékeztetőre";
+        Text[ slovenian ] = "Opomnik";
     };
     String ST_POSTIT
     {
@@ -1034,6 +1080,8 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ hebrew ] = "‮הערה‬";
         Text[ hindi ] = "सूचना";
         Text[ slovak ] = "Poznámka";
+        Text[ hungarian ] = "Jegyzetre";
+        Text[ slovenian ] = "Opomba";
     };
     String ST_SRCH_REP
     {
@@ -1065,6 +1113,8 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ hebrew ] = "‮חזרה על חיפוש‬";
         Text[ hindi ] = "खोज दुहराना";
         Text[ slovak ] = "Opakovať hľadanie";
+        Text[ hungarian ] = "Keresés ismétlése";
+        Text[ slovenian ] = "Ponovi iskanje";
     };
     String ST_INDEX_ENTRY
     {
@@ -1096,6 +1146,8 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ hebrew ] = "‮ערך מפתח‬";
         Text[ hindi ] = "अनुक्रमणिका प्रविष्टि";
         Text[ slovak ] = "Položka obsahu";
+        Text[ hungarian ] = "Jegyzékbejegyzésre";
+        Text[ slovenian ] = "Vnos v kazalo";
     };
     String ST_TABLE_FORMULA
     {
@@ -1127,6 +1179,8 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ hebrew ] = "Tabellenformel";
         Text[ hindi ] = "सारणी सूत्र";
         Text[ slovak ] = "Vzorec tabuľky";
+        Text[ hungarian ] = "Képletre";
+        Text[ slovenian ] = "Formula tabele";
     };
     String ST_TABLE_FORMULA_ERROR
     {
@@ -1158,6 +1212,8 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ hebrew ] = "Fehlerhafte Tabellenformel";
         Text[ hindi ] = "गलत सारणी सूत्र";
         Text[ slovak ] = "Chybný vzorec v tabuľke";
+        Text[ hungarian ] = "Hibás képletre";
+        Text[ slovenian ] = "Napačna formula tabele";
     };
     Text [ portuguese ] = "Navega��o" ;
     Text [ english_us ] = "Navigation" ;
@@ -1185,6 +1241,8 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
     Text[ hebrew ] = "Navigation";
     Text[ hindi ] = "नाविगेशन्";
     Text[ slovak ] = "Navigácia";
+    Text[ hungarian ] = "Navigálás";
+    Text[ slovenian ] = "Krmarjenje";
 };
 /*
 Noch ein paar Reserven
@@ -1255,6 +1313,8 @@ String STR_IMGBTN_TBL_DOWN
     Text[ hebrew ] = "Nächste Tabelle";
     Text[ hindi ] = "अगला सारणी";
     Text[ slovak ] = "Ďalšia tabuľka";
+    Text[ hungarian ] = "Következő táblázat";
+    Text[ slovenian ] = "Naslednja tabela";
 };
 String STR_IMGBTN_FRM_DOWN
 {
@@ -1264,7 +1324,7 @@ String STR_IMGBTN_FRM_DOWN
     Text [ english_us ] = "Next text frame" ;
     Text [ portuguese_brazilian ] = "Pr�xima moldura de texto" ;
     Text [ swedish ] = "N�sta textram" ;
-    Text [ danish ] = "N�ste tekstboks" ;
+    Text [ danish ] = "N�ste tekstramme" ;
     Text [ italian ] = "Cornice successiva" ;
     Text [ spanish ] = "Marco de texto siguiente" ;
     Text [ french ] = "Cadre texte suivant" ;
@@ -1287,6 +1347,8 @@ String STR_IMGBTN_FRM_DOWN
     Text[ hebrew ] = "Nächster Textrahmen";
     Text[ hindi ] = "अगला टेक्स्ट् फ्रेम ";
     Text[ slovak ] = "Ďalší textový rámec";
+    Text[ hungarian ] = "Következő szövegkeret";
+    Text[ slovenian ] = "Naslednji okvir besedila";
 };
 String STR_IMGBTN_PGE_DOWN
 {
@@ -1319,6 +1381,8 @@ String STR_IMGBTN_PGE_DOWN
     Text[ hebrew ] = "Nächste Seite";
     Text[ hindi ] = "अगला पृष्ठ";
     Text[ slovak ] = "Ďalšia stránka";
+    Text[ hungarian ] = "Következő oldal";
+    Text[ slovenian ] = "Naslednja stran";
 };
 String STR_IMGBTN_DRW_DOWN
 {
@@ -1328,7 +1392,7 @@ String STR_IMGBTN_DRW_DOWN
     Text [ english_us ] = "Next drawing" ;
     Text [ portuguese_brazilian ] = "Pr�ximo desenho" ;
     Text [ swedish ] = "N�sta ritobjekt" ;
-    Text [ danish ] = "N�ste tegneobjekt" ;
+    Text [ danish ] = "N�ste tegning" ;
     Text [ italian ] = "Oggetto di disegno successivo" ;
     Text [ spanish ] = "Objeto de dibujo siguiente" ;
     Text [ french ] = "Objet de dessin suivant" ;
@@ -1351,6 +1415,8 @@ String STR_IMGBTN_DRW_DOWN
     Text[ hebrew ] = "Nächstes Zeichenobjekt";
     Text[ hindi ] = "अगला रेखाचित्र";
     Text[ slovak ] = "Ďalšia kresba";
+    Text[ hungarian ] = "Következő rajz";
+    Text[ slovenian ] = "Naslednja slika";
 };
 String STR_IMGBTN_CTRL_DOWN
 {
@@ -1383,6 +1449,8 @@ String STR_IMGBTN_CTRL_DOWN
     Text[ hebrew ] = "Nächstes Kontrollfeld";
     Text[ hindi ] = "अगला नियंत्रण";
     Text[ slovak ] = "Ďalší ovládací prvok";
+    Text[ hungarian ] = "Következő vezérlőelem";
+    Text[ slovenian ] = "Naslednji kontrolnik";
 };
 String STR_IMGBTN_REG_DOWN
 {
@@ -1392,7 +1460,7 @@ String STR_IMGBTN_REG_DOWN
     Text [ english_us ] = "Next section" ;
     Text [ portuguese_brazilian ] = "Pr�xima se��o" ;
     Text [ swedish ] = "N�sta omr�de" ;
-    Text [ danish ] = "N�ste omr�de" ;
+    Text [ danish ] = "N�ste sektion" ;
     Text [ italian ] = "Area successiva" ;
     Text [ spanish ] = "Secci�n siguiente" ;
     Text [ french ] = "Section suivante" ;
@@ -1415,6 +1483,8 @@ String STR_IMGBTN_REG_DOWN
     Text[ hebrew ] = "Nächster Bereich";
     Text[ hindi ] = "अगला विभाग";
     Text[ slovak ] = "Ďalšia sekcia";
+    Text[ hungarian ] = "Következő szakasz";
+    Text[ slovenian ] = "Naslednji odsek";
 };
 String STR_IMGBTN_BKM_DOWN
 {
@@ -1424,7 +1494,7 @@ String STR_IMGBTN_BKM_DOWN
     Text [ english_us ] = "Next bookmark" ;
     Text [ portuguese_brazilian ] = "Pr�ximo marcador" ;
     Text [ swedish ] = "N�sta bokm�rke" ;
-    Text [ danish ] = "N�ste tekstmarkering" ;
+    Text [ danish ] = "N�ste bogm�rke" ;
     Text [ italian ] = "Segnalibro successivo" ;
     Text [ spanish ] = "Marca de texto siguiente" ;
     Text [ french ] = "Rep�re de texte suivant" ;
@@ -1447,6 +1517,8 @@ String STR_IMGBTN_BKM_DOWN
     Text[ hebrew ] = "Nächste Textmarke";
     Text[ hindi ] = "अगला पृष्ठसंकेत";
     Text[ slovak ] = "Ďalšia záložka";
+    Text[ hungarian ] = "Következő könyvjelző";
+    Text[ slovenian ] = "Naslednji zaznamek";
 };
 String STR_IMGBTN_GRF_DOWN
 {
@@ -1479,6 +1551,8 @@ String STR_IMGBTN_GRF_DOWN
     Text[ hebrew ] = "Nächste Grafik";
     Text[ hindi ] = "अगला चित्र";
     Text[ slovak ] = "Ďalší obrázok";
+    Text[ hungarian ] = "Következő kép";
+    Text[ slovenian ] = "Naslednja slika";
 };
 String STR_IMGBTN_OLE_DOWN
 {
@@ -1512,6 +1586,8 @@ String STR_IMGBTN_OLE_DOWN
     Text[ hebrew ] = "Nächstes OLE-Objekt";
     Text[ hindi ] = "अगला OLE वस्तु";
     Text[ slovak ] = "Ďalší OLE objekt";
+    Text[ hungarian ] = "Következő OLE-objektum";
+    Text[ slovenian ] = "Naslednji OLE predmet";
 };
 String STR_IMGBTN_OUTL_DOWN
 {
@@ -1544,6 +1620,8 @@ String STR_IMGBTN_OUTL_DOWN
     Text[ hebrew ] = "Nächste Überschrift";
     Text[ hindi ] = "अगला शीर्षक";
     Text[ slovak ] = "Ďalší nadpis";
+    Text[ hungarian ] = "Következő címsor";
+    Text[ slovenian ] = "Naslednji naslov";
 };
 String STR_IMGBTN_SEL_DOWN
 {
@@ -1576,6 +1654,8 @@ String STR_IMGBTN_SEL_DOWN
     Text[ hebrew ] = "Nächste Markierung";
     Text[ hindi ] = "अगला चुनाव";
     Text[ slovak ] = "Ďalší výber";
+    Text[ hungarian ] = "Következő kijelölés";
+    Text[ slovenian ] = "Naslednji izbor";
 };
 String STR_IMGBTN_FTN_DOWN
 {
@@ -1608,6 +1688,8 @@ String STR_IMGBTN_FTN_DOWN
     Text[ hebrew ] = "Nächste Fußnote";
     Text[ hindi ] = "अगला पृष्ठ के नीचे की टीका";
     Text[ slovak ] = "Ďalšia poznámka pod čiarou";
+    Text[ hungarian ] = "Következő lábjegyzet";
+    Text[ slovenian ] = "Naslednja sprotna opomba";
 };
 String STR_IMGBTN_MARK_DOWN
 {
@@ -1617,7 +1699,7 @@ String STR_IMGBTN_MARK_DOWN
     Text [ english_us ] = "Next Reminder" ;
     Text [ portuguese_brazilian ] = "Pr�ximo Lembrete" ;
     Text [ swedish ] = "N�sta tempor�ra bokm�rke" ;
-    Text [ danish ] = "N�ste bogm�rke" ;
+    Text [ danish ] = "N�ste p�mindelse" ;
     Text [ italian ] = "Contrassegno successivo" ;
     Text [ spanish ] = "Marca siguiente" ;
     Text [ french ] = "Pense-b�te suivant" ;
@@ -1640,6 +1722,8 @@ String STR_IMGBTN_MARK_DOWN
     Text[ hebrew ] = "Nächster Merker";
     Text[ hindi ] = "अगला याद दिलानेवाला";
     Text[ slovak ] = "Ďalšia pripomienka";
+    Text[ hungarian ] = "Következő emlékeztető";
+    Text[ slovenian ] = "Naslednji opomnik";
 };
 String STR_IMGBTN_POSTIT_DOWN
 {
@@ -1672,6 +1756,8 @@ String STR_IMGBTN_POSTIT_DOWN
     Text[ hebrew ] = "Nächste Notiz";
     Text[ hindi ] = "अगला सूचना";
     Text[ slovak ] = "Ďalšia poznámka";
+    Text[ hungarian ] = "Következő jegyzet";
+    Text[ slovenian ] = "Naslednja opomba";
 };
 String STR_IMGBTN_SRCH_REP_DOWN
 {
@@ -1703,6 +1789,8 @@ String STR_IMGBTN_SRCH_REP_DOWN
     Text[ hebrew ] = "Vorwärts weitersuchen";
     Text[ hindi ] = "आगे की ओर खोज जारी रखो";
     Text[ slovak ] = "Pokračovať v hľadaní dopredu";
+    Text[ hungarian ] = "Keresés folytatása előre";
+    Text[ slovenian ] = "Nadaljuj iskanje naprej";
 };
 String STR_IMGBTN_INDEX_ENTRY_DOWN
 {
@@ -1734,6 +1822,8 @@ String STR_IMGBTN_INDEX_ENTRY_DOWN
     Text[ hebrew ] = "Nächster Verzeichniseintrag";
     Text[ hindi ] = "अगला अनुक्रमणिका प्रविष्टि";
     Text[ slovak ] = "Ďalšia položka indexu";
+    Text[ hungarian ] = "Következő jegyzékbejegyzés";
+    Text[ slovenian ] = "Naslednji vnos v kazalo";
 };
 String STR_IMGBTN_NEXT_UP
 {
@@ -1773,6 +1863,8 @@ String STR_IMGBTN_TBL_UP
     Text[ hebrew ] = "Vorige Tabelle";
     Text[ hindi ] = "पिछला सारणी";
     Text[ slovak ] = "Predchádzajúca tabuľka";
+    Text[ hungarian ] = "Előző táblázat";
+    Text[ slovenian ] = "Prejšnja tabela";
 };
 String STR_IMGBTN_FRM_UP
 {
@@ -1781,7 +1873,7 @@ String STR_IMGBTN_FRM_UP
     Text [ english_us ] = "Previous text frame" ;
     Text [ portuguese_brazilian ] = "Moldura de texto anterior" ;
     Text [ swedish ] = "F�reg�ende textram" ;
-    Text [ danish ] = "Forrige tekstboks" ;
+    Text [ danish ] = "Forrige tekstramme" ;
     Text [ italian ] = "Cornice di testo precedente" ;
     Text [ spanish ] = "Marco de texto anterior" ;
     Text [ french ] = "Cadre texte pr�c�dent" ;
@@ -1804,6 +1896,8 @@ String STR_IMGBTN_FRM_UP
     Text[ hebrew ] = "Voriger Textrahmen";
     Text[ hindi ] = "पिछला टेक्स्ट् फ्रेम ";
     Text[ slovak ] = "Predchádzajúci textový rámec";
+    Text[ hungarian ] = "Előző szövegkeret";
+    Text[ slovenian ] = "Prejšnji okvir besedila";
 };
 String STR_IMGBTN_PGE_UP
 {
@@ -1835,6 +1929,8 @@ String STR_IMGBTN_PGE_UP
     Text[ hebrew ] = "Vorige Seite";
     Text[ hindi ] = "पिछला पृष्ठ";
     Text[ slovak ] = "Predchádzajúca strana";
+    Text[ hungarian ] = "Előző oldal";
+    Text[ slovenian ] = "Prejšnja stran";
 };
 String STR_IMGBTN_DRW_UP
 {
@@ -1843,7 +1939,7 @@ String STR_IMGBTN_DRW_UP
     Text [ english_us ] = "Previous drawing" ;
     Text [ portuguese_brazilian ] = "Desenho anterior" ;
     Text [ swedish ] = "F�reg�ende ritobjekt" ;
-    Text [ danish ] = "Forrige tegneobjekt" ;
+    Text [ danish ] = "Forrige tegning" ;
     Text [ italian ] = "Oggetto di disegno precedente" ;
     Text [ spanish ] = "Objeto de dibujo anterior" ;
     Text [ french ] = "Objet de dessin pr�c�dent" ;
@@ -1866,6 +1962,8 @@ String STR_IMGBTN_DRW_UP
     Text[ hebrew ] = "Voriges Zeichenobjekt";
     Text[ hindi ] = "पिछला रेखाचित्र";
     Text[ slovak ] = "Predchádzajúca kresba";
+    Text[ hungarian ] = "Előző rajz";
+    Text[ slovenian ] = "Prejšnja risba";
 };
 String STR_IMGBTN_CTRL_UP
 {
@@ -1897,6 +1995,8 @@ String STR_IMGBTN_CTRL_UP
     Text[ hebrew ] = "Voriges Kontrollfeld";
     Text[ hindi ] = "पिछला नियंत्रण";
     Text[ slovak ] = "Predchádzajúci ovládací­ prvok";
+    Text[ hungarian ] = "Előző vezérlőelem";
+    Text[ slovenian ] = "Prejšnji kontrolnik";
 };
 String STR_IMGBTN_REG_UP
 {
@@ -1905,7 +2005,7 @@ String STR_IMGBTN_REG_UP
     Text [ english_us ] = "Previous section" ;
     Text [ portuguese_brazilian ] = "Se��o anterior" ;
     Text [ swedish ] = "F�reg�ende omr�de" ;
-    Text [ danish ] = "Forrige omr�de" ;
+    Text [ danish ] = "Forrige sektion" ;
     Text [ italian ] = "Area precedente" ;
     Text [ spanish ] = "Secci�n anterior" ;
     Text [ french ] = "Section pr�c�dente" ;
@@ -1928,6 +2028,8 @@ String STR_IMGBTN_REG_UP
     Text[ hebrew ] = "Voriger Bereich";
     Text[ hindi ] = "पिछला विभाग";
     Text[ slovak ] = "Predchádzajúca sekcia";
+    Text[ hungarian ] = "Előző szakasz";
+    Text[ slovenian ] = "Prejšnji odsek";
 };
 String STR_IMGBTN_BKM_UP
 {
@@ -1936,7 +2038,7 @@ String STR_IMGBTN_BKM_UP
     Text [ english_us ] = "Previous bookmark" ;
     Text [ portuguese_brazilian ] = "Marcador anterior" ;
     Text [ swedish ] = "F�reg�ende bokm�rke" ;
-    Text [ danish ] = "Forrige tekstmarkering" ;
+    Text [ danish ] = "Forrige bogm�rke" ;
     Text [ italian ] = "Segnalibro precedente" ;
     Text [ spanish ] = "Marca de texto anterior" ;
     Text [ french ] = "Rep�re de texte pr�c�dent" ;
@@ -1959,6 +2061,8 @@ String STR_IMGBTN_BKM_UP
     Text[ hebrew ] = "Vorige Textmarke";
     Text[ hindi ] = "पिछला पृष्ठसंकेत";
     Text[ slovak ] = "Predchádzajúca záložka";
+    Text[ hungarian ] = "Előző könyvjelző";
+    Text[ slovenian ] = "Prejšni zaznamek";
 };
 String STR_IMGBTN_GRF_UP
 {
@@ -1990,6 +2094,8 @@ String STR_IMGBTN_GRF_UP
     Text[ hebrew ] = "Vorige Grafik";
     Text[ hindi ] = "पिछला चित्र";
     Text[ slovak ] = "Predchádzajúci obrázok";
+    Text[ hungarian ] = "Előző kép";
+    Text[ slovenian ] = "Prejšnja slika";
 };
 String STR_IMGBTN_OLE_UP
 {
@@ -2022,6 +2128,8 @@ String STR_IMGBTN_OLE_UP
     Text[ hebrew ] = "Voriges OLE-Objekt";
     Text[ hindi ] = "पिछला OLE वस्तु";
     Text[ slovak ] = "Predchádzajúci OLE objekt";
+    Text[ hungarian ] = "Előző OLE-objektum";
+    Text[ slovenian ] = "Prejšnji OLE predmet";
 };
 String STR_IMGBTN_OUTL_UP
 {
@@ -2054,6 +2162,8 @@ String STR_IMGBTN_OUTL_UP
     Text[ hebrew ] = "Vorige Überschrift";
     Text[ hindi ] = "पिछला शीर्षक";
     Text[ slovak ] = "Predchádzajúci nadpis";
+    Text[ hungarian ] = "Előző címsor";
+    Text[ slovenian ] = "Prejšnji naslov";
 };
 String STR_IMGBTN_SEL_UP
 {
@@ -2085,6 +2195,8 @@ String STR_IMGBTN_SEL_UP
     Text[ hebrew ] = "Vorige Markierung";
     Text[ hindi ] = "पिछला चुनाव";
     Text[ slovak ] = "Predchádzajúci výber";
+    Text[ hungarian ] = "Előző kijelölés";
+    Text[ slovenian ] = "Prejšnji izbor";
 };
 String STR_IMGBTN_FTN_UP
 {
@@ -2117,6 +2229,8 @@ String STR_IMGBTN_FTN_UP
     Text[ hebrew ] = "Vorige Fußnote";
     Text[ hindi ] = "पिछला पृष्ठ के नीचे की टीका";
     Text[ slovak ] = "Predchádzajúca poznámka pod čiarou";
+    Text[ hungarian ] = "Előző lábjegyzet";
+    Text[ slovenian ] = "Prejšnja sprotna opomba";
 };
 String STR_IMGBTN_MARK_UP
 {
@@ -2125,7 +2239,7 @@ String STR_IMGBTN_MARK_UP
     Text [ english_us ] = "Previous Reminder" ;
     Text [ portuguese_brazilian ] = "Lembrete anterior" ;
     Text [ swedish ] = "F�reg�ende tempor�ra bokm�rke" ;
-    Text [ danish ] = "Forrige bogm�rke" ;
+    Text [ danish ] = "Forrige p�mindelse" ;
     Text [ italian ] = "Contrassegno precedente" ;
     Text [ spanish ] = "Marca anterior" ;
     Text [ french ] = "Pense-b�te pr�c�dent" ;
@@ -2148,6 +2262,8 @@ String STR_IMGBTN_MARK_UP
     Text[ hebrew ] = "Voriger Merker";
     Text[ hindi ] = "पिछला याद दिलानेवाला";
     Text[ slovak ] = "Predchádzajúca pripomienka";
+    Text[ hungarian ] = "Előző emlékeztető";
+    Text[ slovenian ] = "Prejšnji opomnik";
 };
 String STR_IMGBTN_POSTIT_UP
 {
@@ -2179,6 +2295,8 @@ String STR_IMGBTN_POSTIT_UP
     Text[ hebrew ] = "Vorige Notiz";
     Text[ hindi ] = "पिछला सूचना";
     Text[ slovak ] = "Predchádzajúca poznámka";
+    Text[ hungarian ] = "Előző jegyzet";
+    Text[ slovenian ] = "Prejšnja opomba";
 };
 String STR_IMGBTN_SRCH_REP_UP
 {
@@ -2187,7 +2305,7 @@ String STR_IMGBTN_SRCH_REP_UP
     Text [ english_us ] = "Continue search backwards" ;
     Text [ portuguese_brazilian ] = "Continuar a pesquisa para tr�s" ;
     Text [ swedish ] = "S�k vidare bak�t" ;
-    Text [ danish ] = "Forts�t s�gning tilbage" ;
+    Text [ danish ] = "Forts�t s�gning bagl�ns" ;
     Text [ italian ] = "Cerca all'indietro" ;
     Text [ spanish ] = "Continuar b�squeda en sentido inverso" ;
     Text [ french ] = "Continuer la recherche vers le haut" ;
@@ -2210,6 +2328,8 @@ String STR_IMGBTN_SRCH_REP_UP
     Text[ hebrew ] = "Rückwärts weitersuchen";
     Text[ hindi ] = "पिछली ओर खोज जारी रखो";
     Text[ slovak ] = "Pokračovať v hľadaní naspäť";
+    Text[ hungarian ] = "Keresés folytatása visszafelé";
+    Text[ slovenian ] = "Nadaljuj iskanje nazaj";
 };
 String STR_IMGBTN_INDEX_ENTRY_UP
 {
@@ -2241,6 +2361,8 @@ String STR_IMGBTN_INDEX_ENTRY_UP
     Text[ hebrew ] = "Voriger Verzeichniseintrag";
     Text[ hindi ] = "पिछला अनुक्रमणिका प्रविष्टि";
     Text[ slovak ] = "Predchádzajúca položka registra";
+    Text[ hungarian ] = "Előző jegyzékbejegyzés";
+    Text[ slovenian ] = "Prejšnji vnos v kazalo";
 };
 String STR_IMGBTN_TBLFML_UP
 {
@@ -2272,6 +2394,8 @@ String STR_IMGBTN_TBLFML_UP
     Text[ hebrew ] = "Vorige Tabellenformel";
     Text[ hindi ] = "पिछला सारणी सूत्र";
     Text[ slovak ] = "Predchádzajúci vzorec v tabuľke";
+    Text[ hungarian ] = "Előző képlet";
+    Text[ slovenian ] = "Prejšnja formula tabele";
 };
 String STR_IMGBTN_TBLFML_DOWN
 {
@@ -2303,6 +2427,8 @@ String STR_IMGBTN_TBLFML_DOWN
     Text[ hebrew ] = "Nächste Tabellenformel";
     Text[ hindi ] = "अगला सारणी सूत्र";
     Text[ slovak ] = "Ďalší vzorec v tabuľke";
+    Text[ hungarian ] = "Következő képlet";
+    Text[ slovenian ] = "Naslednja formula tabele";
 };
 String STR_IMGBTN_TBLFML_ERR_UP
 {
@@ -2334,6 +2460,8 @@ String STR_IMGBTN_TBLFML_ERR_UP
     Text[ hebrew ] = "Vorige fehlerhafte Tabellenformel";
     Text[ hindi ] = "पिछला दोषयुक्त सारणी सूत्र";
     Text[ slovak ] = "Predchádzajúca chybný vzorec v tabuľke";
+    Text[ hungarian ] = "Előző hibás képlet";
+    Text[ slovenian ] = "Prejšnja napačna formula tabele";
 };
 String STR_IMGBTN_TBLFML_ERR_DOWN
 {
@@ -2365,6 +2493,8 @@ String STR_IMGBTN_TBLFML_ERR_DOWN
     Text[ hebrew ] = "Nächste fehlerhafte Tabellenformel";
     Text[ hindi ] = "अगला दोषयुक्त सारणी सूत्र";
     Text[ slovak ] = "Ďalší chybný vzorec v tabuľke";
+    Text[ hungarian ] = "Következő hibás képlet";
+    Text[ slovenian ] = "Naslednja napačna formula tabele";
 };
 ImageButton BTN_NAVI
 {
@@ -2412,6 +2542,8 @@ ImageButton BTN_NAVI
         Text[ hebrew ] = "Navigation";
         Text[ hindi ] = "नाविगेशन";
         Text[ slovak ] = "Navigácia";
+        Text[ hungarian ] = "Navigálás";
+        Text[ slovenian ] = "Krmarjenje";
     };
 };
 ComboBox RID_PVIEW_ZOOM_LB
@@ -2424,31 +2556,3 @@ ComboBox RID_PVIEW_ZOOM_LB
     Border = TRUE ;
     Hide = TRUE ;
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
