@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.59 $
+#   $Revision: 1.60 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-20 10:18:17 $
+#   last change: $Author: rt $ $Date: 2003-06-20 13:11:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -135,7 +135,7 @@ UNOIDLDBFILES= \
     $(UCR)$/cssuidialogs.db \
     $(UCR)$/cssui.db \
     $(UCR)$/cssaccessibility.db\
-    $(UCR)$/dcssframe.db \
+    $(UCR)$/cssframe.db \
 
 
 REFERENCE_SO_60_RDB=$(SOLARROOT)$/odk_reference$/SO-6.0$/applicat.rdb
