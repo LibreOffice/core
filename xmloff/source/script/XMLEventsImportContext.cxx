@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEventsImportContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-02 18:51:34 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-11-19 13:03:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,10 @@
 #include "xmltoken.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLERROR_HXX
+#include "xmlerror.hxx"
+#endif // _XMLOFF_XMLERROR_HXX
+
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
@@ -99,7 +103,7 @@ using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::container::XNameReplace;
 using ::com::sun::star::document::XEventsSupplier;
-
+using ::com::sun::star::lang::IllegalArgumentException;
 
 TYPEINIT1(XMLEventsImportContext,  SvXMLImportContext);
 
@@ -268,7 +272,20 @@ void XMLEventsImportContext::AddEventValues(
         {
             Any aAny;
             aAny <<= rValues;
-            xEvents->replaceByName(rEventName, aAny);
+
+            try
+            {
+                xEvents->replaceByName(rEventName, aAny);
+            } catch ( const IllegalArgumentException & rException )
+            {
+                Sequence<OUString> aMsgParams(1);
+
+                aMsgParams[0] = rEventName;
+
+                GetImport().SetError(XMLERROR_FLAG_ERROR |
+                                     XMLERROR_ILLEGAL_EVENT,
+                                     aMsgParams, rException.Message, 0);
+            }
         }
     }
     else
