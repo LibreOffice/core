@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-22 12:43:05 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,111 @@ Resource RID_LOCALIZED_NAMES
             < "Greek" ; > ;
             < "Special" ; > ;
         };
+    ItemList [ language_user1 ] =
+    {
+             < "Griechisch" ; > ;
+        < "Spezial" ; > ;
+    };
+    ItemList [ english_us ] =
+    {
+             < "Greek" ; > ;
+        < "Special" ; > ;
+    };
+    ItemList [ portuguese ] =
+    {
+             < "Grego" ; > ;
+        < "Especial" ; > ;
+    };
+    ItemList [ russian ] =
+    {
+             < "Griechisch" ; > ;
+        < "Spezial" ; > ;
+    };
+    ItemList [ greek ] =
+    {
+             < "Griechisch" ; > ;
+        < "Spezial" ; > ;
+    };
+    ItemList [ dutch ] =
+    {
+             < "Grieks" ; > ;
+        < "Speciaal" ; > ;
+    };
+    ItemList [ french ] =
+    {
+             < "Griechisch" ; > ;
+        < "Spezial" ; > ;
+    };
+    ItemList [ spanish ] =
+    {
+             < "Griechisch" ; > ;
+        < "Spezial" ; > ;
+    };
+    ItemList [ finnish ] =
+    {
+             < "Griechisch" ; > ;
+        < "Spezial" ; > ;
+    };
+    ItemList [ italian ] =
+    {
+             < "Griechisch" ; > ;
+        < "Spezial" ; > ;
+    };
+    ItemList [ danish ] =
+    {
+             < "Griechisch" ; > ;
+        < "Spezial" ; > ;
+    };
+    ItemList [ swedish ] =
+    {
+             < "grekiska" ; > ;
+        < "special" ; > ;
+    };
+    ItemList [ polish ] =
+    {
+             < "Grecki" ; > ;
+        < "Spezial" ; > ;
+    };
+    ItemList [ portuguese_brazilian ] =
+    {
+             < "Griechisch" ; > ;
+        < "Spezial" ; > ;
+    };
+    ItemList [ japanese ] =
+    {
+             < "·ÞØ¼¬•¶Žš" ; > ;
+        < "“ÁŽê‹L†" ; > ;
+    };
+    ItemList [ korean ] =
+    {
+             < "Griechisch" ; > ;
+        < "Spezial" ; > ;
+    };
+    ItemList [ chinese_simplified ] =
+    {
+             < "Ï£À°ÎÄ" ; > ;
+        < "ÌØÊâ×Ö·û" ; > ;
+    };
+    ItemList [ chinese_traditional ] =
+    {
+             < "§ÆÃ¾¤å" ; > ;
+        < "¯S®í¦r¤¸" ; > ;
+    };
+    ItemList [ turkish ] =
+    {
+             < "Griechisch" ; > ;
+        < "Spezial" ; > ;
+    };
+    ItemList [ arabic ] =
+    {
+             < "Griechisch" ; > ;
+        < "Spezial" ; > ;
+    };
+    ItemList [ catalan ] =
+    {
+             < "Griechisch" ; > ;
+        < "Spezial" ; > ;
+    };
     };
 
     StringArray RID_EXPORT_SYMBOL_NAMES
@@ -447,49 +552,49 @@ Resource RID_LOCALIZED_NAMES
         < "ALFA" ; > ;
         < "beta" ; > ;
         < "BETA" ; > ;
-        < "gamma" ; > ;
-        < "GAMMA" ; > ;
+        < "gama" ; > ;
+        < "GAMA" ; > ;
         < "delta" ; > ;
         < "DELTA" ; > ;
-        < "epsilon" ; > ;
+        < "epsílon" ; > ;
         < "EPSILON" ; > ;
         < "zeta" ; > ;
         < "ZETA" ; > ;
         < "eta" ; > ;
         < "ETA" ; > ;
-        < "theta" ; > ;
-        < "THETA" ; > ;
+        < "teta" ; > ;
+        < "TETA" ; > ;
         < "jota" ; > ;
         < "JOTA" ; > ;
-        < "kappa" ; > ;
-        < "KAPPA" ; > ;
+        < "capa" ; > ;
+        < "CAPA" ; > ;
         < "lambda" ; > ;
         < "LAMBDA" ; > ;
-        < "my" ; > ;
-        < "MY" ; > ;
-        < "ny" ; > ;
-        < "NY" ; > ;
-        < "xi" ; > ;
-        < "XI" ; > ;
-        < "omikron" ; > ;
-        < "OMIKRON" ; > ;
+        < "mi" ; > ;
+        < "MI" ; > ;
+        < "ni" ; > ;
+        < "NI" ; > ;
+        < "csi" ; > ;
+        < "CSI" ; > ;
+        < "ómicron" ; > ;
+        < "ÓMICRON" ; > ;
         < "pi" ; > ;
         < "PI" ; > ;
-        < "rho" ; > ;
-        < "RHO" ; > ;
+        < "ró" ; > ;
+        < "RÓ" ; > ;
         < "sigma" ; > ;
         < "SIGMA" ; > ;
         < "tau" ; > ;
         < "TAU" ; > ;
-        < "ypsilon" ; > ;
-        < "YPSILON" ; > ;
-        < "phi" ; > ;
-        < "PHI" ; > ;
+        < "ípsilon" ; > ;
+        < "ÍPSILON" ; > ;
+        < "fi" ; > ;
+        < "FI" ; > ;
         < "chi" ; > ;
         < "CHI" ; > ;
         < "psi" ; > ;
         < "PSI" ; > ;
-        < "omega" ; > ;
+        < "ómega" ; > ;
         < "OMEGA" ; > ;
         < "varepsilon" ; > ;
         < "vartheta" ; > ;
@@ -650,10 +755,10 @@ Resource RID_LOCALIZED_NAMES
     };
     ItemList [ dutch ] =
     {
-            < "Alfa" ; > ;
-        < "Alfa" ; > ;
-        < "beta" ; > ;
-        < "BETA" ; > ;
+            < "alfa" ; > ;
+        < "ALFA" ; > ;
+        < "bèta" ; > ;
+        < "BÈTA" ; > ;
         < "gamma" ; > ;
         < "GAMMA" ; > ;
         < "delta" ; > ;
@@ -705,17 +810,17 @@ Resource RID_LOCALIZED_NAMES
         < "varsigma" ; > ;
         < "varphi" ; > ;
         < "element" ; > ;
-        < "keinelement" ; > ;
-        < "kleingegen" ; > ;
-        < "großgegen" ; > ;
+        < "geenelement" ; > ;
+        < "kleiner dan" ; > ;
+        < "groter dan" ; > ;
         < "niet gelijk aan" ; > ;
-        < "GELIJK" ; > ;
-        < "strebt" ; > ;
+        < "gelijk aan" ; > ;
+        < "streeft" ; > ;
         < "oneindig" ; > ;
-        < "Hoek" ; > ;
+        < "hoek" ; > ;
         < "promille" ; > ;
         < "en" ; > ;
-        < "OF" ; > ;
+        < "of" ; > ;
     };
     ItemList [ french ] =
     {
@@ -1011,8 +1116,8 @@ Resource RID_LOCALIZED_NAMES
         < "ETA" ; > ;
         < "theta" ; > ;
         < "THETA" ; > ;
-        < "iota" ; > ;
-        < "IOTA" ; > ;
+        < "jota" ; > ;
+        < "JOTA" ; > ;
         < "kappa" ; > ;
         < "KAPPA" ; > ;
         < "lambda" ; > ;
@@ -1021,14 +1126,14 @@ Resource RID_LOCALIZED_NAMES
         < "MY" ; > ;
         < "ny" ; > ;
         < "NY" ; > ;
-        < "xi" ; > ;
-        < "XI" ; > ;
+        < "ksi" ; > ;
+        < "KSI" ; > ;
         < "omikron" ; > ;
         < "OMIKRON" ; > ;
         < "pi" ; > ;
         < "PI" ; > ;
-        < "rho" ; > ;
-        < "RHO" ; > ;
+        < "ro" ; > ;
+        < "RO" ; > ;
         < "sigma" ; > ;
         < "SIGMA" ; > ;
         < "tau" ; > ;
@@ -1046,13 +1151,13 @@ Resource RID_LOCALIZED_NAMES
         < "varepsilon" ; > ;
         < "vartheta" ; > ;
         < "varpi" ; > ;
-        < "varrho" ; > ;
+        < "varro" ; > ;
         < "varsigma" ; > ;
         < "varfi" ; > ;
         < "element" ; > ;
-        < "ingetelement" ; > ;
-        < "kleingegen" ; > ;
-        < "großgegen" ; > ;
+        < "inget element" ; > ;
+        < "mindre än" ; > ;
+        < "större än" ; > ;
         < "inte lika med" ; > ;
         < "identisk" ; > ;
         < "går mot" ; > ;
@@ -1125,7 +1230,7 @@ Resource RID_LOCALIZED_NAMES
         < "nierówny" ; > ;
         < "identyczny" ; > ;
         < "d¹¿y" ; > ;
-        < "nieskoñczono?æ" ; > ;
+        < "nieskoñczonoœæ" ; > ;
         < "k¹t" ; > ;
         < "promil" ; > ;
         < "oraz" ; > ;
@@ -1262,7 +1367,7 @@ Resource RID_LOCALIZED_NAMES
         < "”ñí‚É‘å‚«‚¢" ; > ;
         < "“™†”Û’è" ; > ;
         < "‡“¯" ; > ;
-        < "‰E–îˆó" ; > ;
+        < "‰EŒü–îˆó" ; > ;
         < "–³ŒÀ‘å" ; > ;
         < "Šp" ; > ;
         < "Êß°ÐÙ" ; > ;
@@ -1341,7 +1446,7 @@ Resource RID_LOCALIZED_NAMES
     ItemList [ chinese_simplified ] =
     {
             < "alpha" ; > ;
-        < "alpha" ; > ;
+        < "ALPHA" ; > ;
         < "beta" ; > ;
         < "BETA" ; > ;
         < "gamma" ; > ;
@@ -1362,8 +1467,8 @@ Resource RID_LOCALIZED_NAMES
         < "KAPPA" ; > ;
         < "lambda" ; > ;
         < "LAMBDA" ; > ;
-        < "mu" ; > ;
-        < "MU" ; > ;
+        < "my" ; > ;
+        < "MY" ; > ;
         < "ny" ; > ;
         < "NY" ; > ;
         < "xi" ; > ;
@@ -1431,8 +1536,8 @@ Resource RID_LOCALIZED_NAMES
         < "KAPPA" ; > ;
         < "lambda" ; > ;
         < "LAMBDA" ; > ;
-        < "mu" ; > ;
-        < "MU" ; > ;
+        < "my" ; > ;
+        < "MY" ; > ;
         < "ny" ; > ;
         < "NY" ; > ;
         < "xi" ; > ;
@@ -1754,5 +1859,6 @@ Resource RID_LOCALIZED_NAMES
     };
     };
 };
+
 
 
