@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hjs $ $Date: 2001-02-20 14:49:12 $
+#   last change: $Author: hjs $ $Date: 2001-02-20 14:55:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -461,7 +461,8 @@ VCLLIB=$(SVLIB)
 TKLIB=$(LIBPRE) itk.lib
 SVLIBDEPEND=$(L)$/ivcl.lib
 SVXLLIB=$(LIBPRE) svxl.lib
-FREETYPELIB=freetype.lib
+#FREETYPELIB=freetype.lib
+FREETYPELIBST=freetype.lib
 
 .IF "$(BIG_TOOLS)"!=""
 SALLIB=
