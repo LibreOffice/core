@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-04 18:56:27 $
+ *  last change: $Author: kz $ $Date: 2001-12-14 16:46:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ FloatingWindow RID_TBXCONTROLS
         Text[ chinese_simplified ] = "ζ§ε¶";
         Text[ russian ] = "έλεμενςϋ σοπΰβλενθÿ";
         Text[ polish ] = "Pola kontrolne";
-        Text[ japanese ] = "ο½ΊοΎοΎ„οΎ›ο½°οΎ™";
+        Text[ japanese ] = "γ‚³γƒ³γƒγƒ­γƒΌγƒ«";
         Text[ chinese_traditional ] = "ζ§ε¶ι …";
         Text[ arabic ] = "ΪδΗΥΡ ΚΝίγ";
         Text[ greek ] = "Πεδία ελέγχου";
@@ -109,7 +109,7 @@ FloatingWindow RID_TBXCONTROLS
     Text[ chinese_simplified ] = "ζ§ε¶";
     Text[ russian ] = "έλεμενςϋ σοπΰβλενθÿ";
     Text[ polish ] = "Pola kontrolne";
-    Text[ japanese ] = "ο½ΊοΎοΎ„οΎ›ο½°οΎ™";
+    Text[ japanese ] = "γ‚³γƒ³γƒγƒ­γƒΌγƒ«";
     Text[ chinese_traditional ] = "ζ§ε¶ι …";
     Text[ arabic ] = "ΪδΗΥΡ ΚΝίγ";
     Text[ greek ] = "Πεδία ελέγχου";
@@ -146,7 +146,7 @@ ToolBox RID_TOOLBOX
             Text[ chinese_simplified ] = "ε‘½δ»¤ζ‰ι’®";
             Text[ russian ] = "Κνξοκΰ";
             Text[ polish ] = "Przycisk";
-            Text[ japanese ] = "οΎοΎοΎ€οΎ";
+            Text[ japanese ] = "γƒγ‚Ώγƒ³";
             Text[ chinese_traditional ] = "ζ‡δ»¤ζ‰ι•";
             Text[ arabic ] = "ÒΡ";
             Text[ greek ] = "Πεδίο επιλογής";
@@ -176,7 +176,7 @@ ToolBox RID_TOOLBOX
             Text[ chinese_simplified ] = "ε¤ι€‰ζ΅†";
             Text[ russian ] = "Ξκνξ τλΰζκΰ";
             Text[ polish ] = "Pole wyboru";
-            Text[ japanese ] = "οΎο½ªο½―ο½ΈοΎοΎο½―ο½Έο½½";
+            Text[ japanese ] = "γƒγ‚§γƒƒγ‚―γƒγƒƒγ‚―γ‚Ή";
             Text[ chinese_traditional ] = "ζ Έε–ζ–Ήε΅";
             Text[ arabic ] = "ΞΗδΙ ΗΞΚνΗΡ";
             Text[ greek ] = "Πεδίο σήμανσης";
@@ -206,7 +206,7 @@ ToolBox RID_TOOLBOX
             Text[ chinese_simplified ] = "ζ ‡η­Ύε­—ζ®µ";
             Text[ russian ] = "Νΰδοθρό";
             Text[ polish ] = "Pole etykiety";
-            Text[ japanese ] = "ε›³θ΅¨η•ªε·οΎοΎο½―ο½Έο½½";
+            Text[ japanese ] = "ε›³θ΅¨η•ªε·γƒγƒƒγ‚―γ‚Ή";
             Text[ chinese_traditional ] = "ζ¨™η±¤ζ¬„δ½";
             Text[ arabic ] = "ΘΨΗήΙ ΪδζδΙ";
             Text[ greek ] = "Πεδίο επιγραφής";
@@ -236,7 +236,7 @@ ToolBox RID_TOOLBOX
             Text[ chinese_simplified ] = "ε—θ΅¨ζ΅†";
             Text[ russian ] = "Οξλε ροθρκΰ";
             Text[ polish ] = "Pole listy";
-            Text[ japanese ] = "οΎο½½οΎ„οΎοΎο½―ο½Έο½½";
+            Text[ japanese ] = "γƒªγ‚Ήγƒγƒγƒƒγ‚―γ‚Ή";
             Text[ chinese_traditional ] = "ζΈ…ε–®ζ–Ήε΅";
             Text[ arabic ] = "γΡΘΪ ήΗΖγΙ";
             Text[ greek ] = "Πεδίο λίστας";
@@ -266,7 +266,7 @@ ToolBox RID_TOOLBOX
             Text[ chinese_simplified ] = "ζ°΄εΉ³ε‘ζ»ε¨ζ ";
             Text[ russian ] = "Γξπθη. οξλξρΰ οπξκπσςκθ";
             Text[ polish ] = "Poziomy pasek przewijania";
-            Text[ japanese ] = "ζ°΄εΉ³ο½½ο½ΈοΎ›ο½°οΎ™οΎοΎο½°";
+            Text[ japanese ] = "ζ°΄εΉ³γ‚Ήγ‚―γƒ­γƒΌγƒ«γƒγƒΌ";
             Text[ chinese_traditional ] = "ζ°΄εΉ³ε‘ζ²θ»Έ";
             Text[ arabic ] = "ΤΡνΨ ΚΝΡνί ΗαΥέΝΙ ΓέήνΗπ";
             Text[ greek ] = "Οριζόντια γραμμή κύλισης";
@@ -296,7 +296,7 @@ ToolBox RID_TOOLBOX
             Text[ chinese_simplified ] = "ε°η»„ζ΅†";
             Text[ russian ] = "Γπσοοξβΰÿ πΰμκΰ";
             Text[ polish ] = "Ramka grupy";
-            Text[ japanese ] = "ο½ΈοΎοΎ™ο½°οΎοΎζ ";
+            Text[ japanese ] = "γ‚°γƒ«γƒΌγƒ—ζ ";
             Text[ chinese_traditional ] = "ηΎ¤ηµ„ζ–Ήε΅";
             Text[ arabic ] = "FrameControl";
             Text[ greek ] = "Πλαίσιο ομαδοποίησης";
@@ -354,7 +354,7 @@ ToolBox RID_TOOLBOX
             Text[ swedish ] = "Datumfδlt";
             Text[ polish ] = "Pole daty";
             Text[ portuguese_brazilian ] = "DateField";
-            Text[ japanese ] = "ζ—¥δ»οΎο½¨ο½°οΎ™οΎ„οΎ";
+            Text[ japanese ] = "ζ—¥δ»γƒ•γ‚£γƒΌγƒ«γƒ‰";
             Text[ korean ] = "λ°μ΄ν„° ν•„λ“";
             Text[ chinese_simplified ] = "ζ—¥ζε­—ζ®µ";
             Text[ chinese_traditional ] = "ζ—¥ζζ¬„δ½";
@@ -382,7 +382,7 @@ ToolBox RID_TOOLBOX
             Text[ swedish ] = "Numeriskt fδlt";
             Text[ polish ] = "Pole numeryczne";
             Text[ portuguese_brazilian ] = "NumericField";
-            Text[ japanese ] = "η•ªε·οΎο½¨ο½°οΎ™οΎ„οΎ";
+            Text[ japanese ] = "η•ªε·γƒ•γ‚£γƒΌγƒ«γƒ‰";
             Text[ korean ] = "μμΉ ν•„λ“";
             Text[ chinese_simplified ] = "ζ•°ε­—ε­—ζ®µ";
             Text[ chinese_traditional ] = "ζ•Έε­—ζ¬„δ½";
@@ -410,7 +410,7 @@ ToolBox RID_TOOLBOX
             Text[ swedish ] = "Formaterat fδlt";
             Text[ polish ] = "Pole sformatowane";
             Text[ portuguese_brazilian ] = "FormattedField";
-            Text[ japanese ] = "ζ›ΈεΌθ¨­ε®γ•γ‚γοΎο½¨ο½°οΎ™οΎ„οΎ";
+            Text[ japanese ] = "ζ›ΈεΌθ¨­ε®γ•γ‚γγƒ•γ‚£γƒΌγƒ«γƒ‰";
             Text[ korean ] = "μ„μ‹ μ§€μ •λ ν•„λ“";
             Text[ chinese_simplified ] = "ζ ΌεΌε–η„ε­—ζ®µ";
             Text[ chinese_traditional ] = "ζ ΌεΌε–η„ε­—ζ®µ";
@@ -438,7 +438,7 @@ ToolBox RID_TOOLBOX
             Text[ swedish ] = "Filurval";
             Text[ polish ] = "Wybσr plikσw";
             Text[ portuguese_brazilian ] = "FileControl";
-            Text[ japanese ] = "οΎο½§ο½²οΎ™γ®ιΈζ";
+            Text[ japanese ] = "γƒ•γ‚΅γ‚¤γƒ«γ®ιΈζ";
             Text[ korean ] = "νμΌ μ»¨νΈλ΅¤";
             Text[ chinese_simplified ] = "ι€‰ζ‹©ζ–‡δ»¶";
             Text[ chinese_traditional ] = "ιΈε–ζª”ζ΅";
@@ -467,7 +467,7 @@ ToolBox RID_TOOLBOX
             Text[ chinese_simplified ] = "ε±ζ€§";
             Text[ russian ] = "Ρβξιρςβΰ";
             Text[ polish ] = "W³aciwoci";
-            Text[ japanese ] = "οΎοΎοΎ›οΎοΎοΎƒο½¨";
+            Text[ japanese ] = "γƒ—γƒ­γƒ‘γƒ†γ‚£";
             Text[ chinese_traditional ] = "ε±¬ζ€§";
             Text[ arabic ] = "ΞΥΗΖΥ";
             Text[ greek ] = "Ιδιότητες";
@@ -497,7 +497,7 @@ ToolBox RID_TOOLBOX
             Text[ swedish ] = "Grafiskt kontrollfδlt";
             Text[ polish ] = "Graficzne pole kontrolne";
             Text[ portuguese_brazilian ] = "ImageControl";
-            Text[ japanese ] = "ο½²οΎ’ο½°ο½ΌοΎο½ΊοΎοΎ„οΎ›ο½°οΎ™";
+            Text[ japanese ] = "γ‚¤γƒ΅γƒΌγ‚Έγ‚³γƒ³γƒγƒ­γƒΌγƒ«";
             Text[ korean ] = "κ·Έλν”½ μ»¨νΈλ΅¤ ν•„λ“";
             Text[ chinese_simplified ] = "ε›Ύε½Άζ§ε¶";
             Text[ chinese_traditional ] = "ε–εΌζ§ε¶ι …";
@@ -525,7 +525,7 @@ ToolBox RID_TOOLBOX
             Text[ chinese_simplified ] = "ι€‰ι΅Ήε­—ζ®µ";
             Text[ russian ] = "Οεπεκλώχΰςελό";
             Text[ polish ] = "Pole opcji";
-            Text[ japanese ] = "ο½µοΎοΎο½Όο½®οΎοΎοΎο½―ο½Έο½½";
+            Text[ japanese ] = "γ‚ªγƒ—γ‚·γƒ§γƒ³γƒγƒƒγ‚―γ‚Ή";
             Text[ chinese_traditional ] = "ιΈι …ζ¬„δ½";
             Text[ arabic ] = "ÒΡ ΞνΗΡ";
             Text[ greek ] = "Πεδίο επιλογών";
@@ -555,7 +555,7 @@ ToolBox RID_TOOLBOX
             Text[ chinese_simplified ] = "ζ–‡ζ¬ζ΅†";
             Text[ russian ] = "Òεκρςξβξε οξλε";
             Text[ polish ] = "Pole tekstowe";
-            Text[ japanese ] = "οΎƒο½·ο½½οΎ„οΎοΎο½―ο½Έο½½";
+            Text[ japanese ] = "γƒ†γ‚­γ‚Ήγƒγƒγƒƒγ‚―γ‚Ή";
             Text[ chinese_traditional ] = "ζ–‡ε­—ζ–Ήε΅";
             Text[ arabic ] = "γΡΘΪ δΥ";
             Text[ greek ] = "Πλαίσιο κειμένου";
@@ -585,7 +585,7 @@ ToolBox RID_TOOLBOX
             Text[ chinese_simplified ] = "η»„εζ΅†";
             Text[ russian ] = "Οξλε ρξ ροθρκξμ";
             Text[ polish ] = "Pole kombi";
-            Text[ japanese ] = "ο½ΊοΎοΎοΎοΎοΎο½―ο½Έο½½";
+            Text[ japanese ] = "γ‚³γƒ³γƒγƒγƒƒγ‚―γ‚Ή";
             Text[ chinese_traditional ] = "ηµ„εζ–Ήε΅";
             Text[ arabic ] = "γΡΘΪ ΚΝΡνΡ ζΣΡΟ";
             Text[ greek ] = "Πεδίο συνδυασμού";
@@ -615,7 +615,7 @@ ToolBox RID_TOOLBOX
             Text[ chinese_simplified ] = "ε‚η›΄ζ»ε¨ζ ";
             Text[ russian ] = "Βεπς. οξλξρΰ οπξκπσςκθ";
             Text[ polish ] = "Pionowy pasek przewijania";
-            Text[ japanese ] = "ε‚η›΄ο½½ο½ΈοΎ›ο½°οΎ™οΎοΎο½°";
+            Text[ japanese ] = "ε‚η›΄γ‚Ήγ‚―γƒ­γƒΌγƒ«γƒγƒΌ";
             Text[ chinese_traditional ] = "ε‚η›΄ε‘ζ²θ»Έ";
             Text[ arabic ] = "ΤΡνΨ ΚΝΡνί ΗαΥέΝΙ ΡΓΣνΗπ";
             Text[ greek ] = "Κατακόρυφη γραμμή κύλισης";
@@ -645,7 +645,7 @@ ToolBox RID_TOOLBOX
             Text[ swedish ] = "Fφrloppsindikator";
             Text[ polish ] = "Pasek postκpu";
             Text[ portuguese_brazilian ] = "ProgressBar";
-            Text[ japanese ] = "ι€²θ΅ο½ΈοΎοΎ—οΎ";
+            Text[ japanese ] = "ι€²θ΅γ‚°γƒ©γƒ•";
             Text[ korean ] = "μ§„ν–‰ν‘μ‹μ¤„";
             Text[ chinese_simplified ] = "θΏ›ε±•ζ–Ήζ΅†";
             Text[ chinese_traditional ] = "ι€²ε±•ζ–Ήε΅";
@@ -701,7 +701,7 @@ ToolBox RID_TOOLBOX
             Text[ swedish ] = "Tidsfδlt";
             Text[ polish ] = "Pole godziny";
             Text[ portuguese_brazilian ] = "TimeField";
-            Text[ japanese ] = "ζ™‚ε»οΎο½¨ο½°οΎ™οΎ„οΎ";
+            Text[ japanese ] = "ζ™‚ε»γƒ•γ‚£γƒΌγƒ«γƒ‰";
             Text[ korean ] = "μ‹κ°„ ν•„λ“";
             Text[ chinese_simplified ] = "ζ—¶ι—΄ε­—ζ®µ";
             Text[ chinese_traditional ] = "ζ™‚ι–“ζ¬„δ½";
@@ -729,7 +729,7 @@ ToolBox RID_TOOLBOX
             Text[ swedish ] = "Valutafδlt";
             Text[ polish ] = "Pole waluty";
             Text[ portuguese_brazilian ] = "CurrencyField";
-            Text[ japanese ] = "ι€θ²¨οΎο½¨ο½°οΎ™οΎ„οΎ";
+            Text[ japanese ] = "ι€θ²¨γƒ•γ‚£γƒΌγƒ«γƒ‰";
             Text[ korean ] = "ν†µν™” ν•„λ“";
             Text[ chinese_simplified ] = "θ΄§εΈε­—ζ®µ";
             Text[ chinese_traditional ] = "θ²¨εΉ£ζ¬„δ½";
@@ -757,7 +757,7 @@ ToolBox RID_TOOLBOX
             Text[ swedish ] = "Maskerat fδlt";
             Text[ polish ] = "Pole maski";
             Text[ portuguese_brazilian ] = "PatternField";
-            Text[ japanese ] = "οΎοΎοΎ€ο½°οΎοΎο½¨ο½°οΎ™οΎ„οΎ";
+            Text[ japanese ] = "γƒ‘γ‚ΏγƒΌγƒ³γƒ•γ‚£γƒΌγƒ«γƒ‰";
             Text[ korean ] = "ν¨ν„΄ ν•„λ“";
             Text[ chinese_simplified ] = "ζ©η ε­—ζ®µ";
             Text[ chinese_traditional ] = "ι®η½©ζ¬„δ½";
@@ -816,7 +816,7 @@ ToolBox RID_TOOLBOX
             Text[ chinese_simplified ] = "ε―ε¨θ―•ιªζ¨΅εΌ";
             Text[ russian ] = "ΐκςθβθπξβΰςό πεζθμ ςερςΰ";
             Text[ polish ] = "Uaktywnij tryb sprawdzania";
-            Text[ japanese ] = "οΎƒο½½οΎ„οΎ“ο½°οΎ„οΎγ‚’ο½±ο½ΈοΎƒο½¨οΎοΎγ«γ™γ‚‹";
+            Text[ japanese ] = "γƒ†γ‚ΉγƒγƒΆγƒΌγƒ‰γ‚’γ‚Άγ‚―γƒ†γ‚£γƒ–γ«γ™γ‚‹";
             Text[ chinese_traditional ] = "ε•ε‹•θ©¦ι©—ζ¨΅εΌ";
             Text[ arabic ] = "ΚδΤνΨ ζΦΪ ΗαΗΞΚΘΗΡ";
             Text[ greek ] = "Ενεργοποίηση κατάστασης δοκιμής";
@@ -827,6 +827,7 @@ ToolBox RID_TOOLBOX
         };
     };
 };
+
 
 
 
