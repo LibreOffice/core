@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-12 09:41:31 $
+ *  last change: $Author: mba $ $Date: 2002-07-18 11:05:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,6 +499,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     pBindings->Invalidate( FID_AUTO_CALC );
 //                  pBindings->Invalidate( FID_RECALC );        // jetzt immer enabled
                 }
+                rReq.AppendItem( SfxBoolItem( FID_AUTO_CALC, bNewVal ) );
                 rReq.Done();
             }
             break;
