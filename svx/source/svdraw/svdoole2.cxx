@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-30 15:50:46 $
+ *  last change: $Author: aw $ $Date: 2001-04-11 09:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,7 @@ TYPEINIT1(SdrOle2Obj,SdrRectObj);
 
 SdrOle2Obj::SdrOle2Obj(FASTBOOL bFrame_)
 {
+    bInDestruction = FALSE;
     Init();
 
     ppObjRef=new SvInPlaceObjectRef;
@@ -169,6 +170,7 @@ SdrOle2Obj::SdrOle2Obj(FASTBOOL bFrame_)
 
 SdrOle2Obj::SdrOle2Obj(const SvInPlaceObjectRef& rNewObjRef, FASTBOOL bFrame_)
 {
+    bInDestruction = FALSE;
     Init();
 #ifndef SVX_LIGHT
     ppObjRef=new SvInPlaceObjectRef(rNewObjRef);
@@ -190,6 +192,7 @@ SdrOle2Obj::SdrOle2Obj(const SvInPlaceObjectRef& rNewObjRef, FASTBOOL bFrame_)
 
 SdrOle2Obj::SdrOle2Obj(const SvInPlaceObjectRef& rNewObjRef, const XubString& rNewObjName, FASTBOOL bFrame_)
 {
+    bInDestruction = FALSE;
     Init();
 
 #ifndef SVX_LIGHT
@@ -213,6 +216,7 @@ SdrOle2Obj::SdrOle2Obj(const SvInPlaceObjectRef& rNewObjRef, const XubString& rN
 SdrOle2Obj::SdrOle2Obj(const SvInPlaceObjectRef& rNewObjRef, const XubString& rNewObjName, const Rectangle& rNewRect, FASTBOOL bFrame_):
     SdrRectObj(rNewRect)
 {
+    bInDestruction = FALSE;
     Init();
 
 #ifndef SVX_LIGHT
@@ -242,6 +246,7 @@ void SdrOle2Obj::Init()
 
 SdrOle2Obj::~SdrOle2Obj()
 {
+    bInDestruction = TRUE;
 #ifndef SVX_LIGHT
     // Aus Cache entfernen
     GetSdrGlobalData().GetOLEObjCache().RemoveObj(this);
@@ -1006,11 +1011,14 @@ const SvInPlaceObjectRef& SdrOle2Obj::GetObjRef() const
                 if (pModel && pModel->GetRefDevice() &&
                     pModel->GetRefDevice()->GetOutDevType() == OUTDEV_PRINTER)
                 {
-                    // Kein RefDevice oder RefDevice kein Printer
-                    BOOL bModified = (*ppObjRef)->IsModified();
-                    Printer* pPrinter = (Printer*) pModel->GetRefDevice();
-                    (*ppObjRef)->OnDocumentPrinterChanged( pPrinter );
-                    (*ppObjRef)->SetModified( bModified );
+                    if(!bInDestruction)
+                    {
+                        // Kein RefDevice oder RefDevice kein Printer
+                        BOOL bModified = (*ppObjRef)->IsModified();
+                        Printer* pPrinter = (Printer*) pModel->GetRefDevice();
+                        (*ppObjRef)->OnDocumentPrinterChanged( pPrinter );
+                        (*ppObjRef)->SetModified( bModified );
+                    }
                 }
             }
 
