@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:42:10 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:05:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,9 @@
 
 #ifndef _SD_STLSHEET_HXX
 #include "stlsheet.hxx"
+#endif
+#ifndef SD_WINDOW_UPDATER_HXX
+#include "WindowUpdater.hxx"
 #endif
 
 #include "sdattr.hxx"
@@ -702,6 +705,10 @@ ErrCode SdViewShell::DoPrint( SfxPrinter *pPrinter, PrintDialog *pPrintDialog, B
     }
 
     FuSlideShow *pShow = pFuSlideShow;
+
+    // Tell the printer which digit language to use.
+    if (mpWindowUpdater.get() != NULL)
+        mpWindowUpdater->Update (pPrinter, pDoc);
 
     //  SfxViewShell::DoPrint calls Print (after StartJob etc.)
     ErrCode nRet = SfxViewShell::DoPrint( pPrinter, pPrintDialog, bSilent );
@@ -1925,7 +1932,11 @@ void SdViewShell::SetPreview( bool bVisible )
 
     if( GetViewFrame() && pWindow )
     {
+        if ( ! bVisible)
+            mpWindowUpdater->UnregisterPreview ();
         GetViewFrame()->SetChildWindow(SdPreviewChildWindow::GetChildWindowId(), bVisible,false);
+        if (bVisible)
+            mpWindowUpdater->RegisterPreview ();
 
         const StyleSettings& rStyleSettings = pWindow->GetSettings().GetStyleSettings();
 
