@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: gt $ $Date: 2002-11-05 09:33:33 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:37:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,6 @@ hidspecial HID_TEMPLATEDLG_FILEVIEW             { HelpID = HID_TEMPLATEDLG_FILEV
 
 hidspecial HID_ADDRTEMPL_FIELD_ASSIGNMENT       { HelpID = HID_ADDRTEMPL_FIELD_ASSIGNMENT; };
 
-hidspecial HID_FILESAVE_LOCALSYSTEM             { HelpID = HID_FILESAVE_LOCALSYSTEM; };
 hidspecial HID_FILESAVE_LEVELUP                 { HelpID = HID_FILESAVE_LEVELUP; };
 hidspecial HID_FILESAVE_CREATEDIRECTORY         { HelpID = HID_FILESAVE_CREATEDIRECTORY; };
 hidspecial HID_FILESAVE_DEFAULTDIRECTORY        { HelpID = HID_FILESAVE_DEFAULTDIRECTORY; };
