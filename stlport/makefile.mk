@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-12 18:34:19 $
+#   last change: $Author: hjs $ $Date: 2001-10-19 16:22:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -127,9 +127,9 @@ OUT2LIB= \
 .INCLUDE :	tg_ext.mk
 
 .IF "$(GUI)"=="WNT"
-$(MISC)$/so_custom_patch :  $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
-    +win32_custom.bat $(ROUT) $(TARFILE_NAME) src && $(TOUCH) $@
+$(PACKAGE_DIR)$/so_custom_patch :  $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
+    +win32_custom.bat $(PACKAGE_DIR) "$(BACK_PATH)" && $(TOUCH) $@
     
-$(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(MISC)$/so_custom_patch
+$(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/so_custom_patch
 .ENDIF          # "$(GUI)"=="WNT"
 

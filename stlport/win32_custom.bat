@@ -1,11 +1,10 @@
 rem parameters in order of their apearance:
-rem - name of subdirectory in "build"
-rem - name of tarball root directory
-rem - path to desired directory (seen from tarball root dir)
+rem - path to unpacked tarball
+rem - relative path back to module root
 
 setlocal
 
-cd build\%1
+cd %1
 
-type  ..\..\dos_lineends.patch | patch -b -p2
+type %2\dos_lineends.patch | patch -b -p2
 
