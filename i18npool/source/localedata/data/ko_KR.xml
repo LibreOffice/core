@@ -577,9 +577,9 @@
 </LC_MISC>
 
 <LC_NumberingLevel>
-<NumberingLevel Prefix=" " NumType="11" Suffix="." Transliteration="NumToTextHangulSyllable_ko" />
-<NumberingLevel Prefix=" " NumType="11" Suffix="." Transliteration="NumToTextHangulJamo_ko" />
-<NumberingLevel Prefix=" " NumType="11" Suffix=" " Transliteration="NumToTextCircledNumber" />
+<NumberingLevel Prefix=" " NumType="28" Suffix="." />
+<NumberingLevel Prefix=" " NumType="27" Suffix="." />
+<NumberingLevel Prefix=" " NumType="14" Suffix=" " />
 <NumberingLevel Prefix=" " NumType="4" Suffix="." />
 <NumberingLevel Prefix=" " NumType="0" Suffix="." />
 <NumberingLevel Prefix=" " NumType="1" Suffix="." />
@@ -591,18 +591,18 @@
 
 <OutlineStyle>
 <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="11" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="1" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" Transliteration="NumToTextHangulSyllable_ko" />
-<OutLineNumberingLevel Prefix=" " NumType="11" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" Transliteration="NumToTextCircledHangulSyllable_ko"/>
+<OutLineNumberingLevel Prefix=" " NumType="28" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="1" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="30" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
 <OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
 <OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2043"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
 </OutlineStyle>
 
 <OutlineStyle>
 <OutLineNumberingLevel Prefix="(" NumType="4" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix="(" NumType="11" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" Transliteration="NumToTextHangulSyllable_ko" />
+<OutLineNumberingLevel Prefix="(" NumType="28" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
 <OutLineNumberingLevel Prefix="(" NumType="1" Suffix=")" BulletChar="0020"  BulletFontName=""  ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
 <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=")" BulletChar="0020"  BulletFontName=""  ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="11" Suffix=")" BulletChar="0020"  BulletFontName=""  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" Transliteration="NumToTextHangulSyllable_ko"/>
+<OutLineNumberingLevel Prefix=" " NumType="28" Suffix=")" BulletChar="0020"  BulletFontName=""  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
 </OutlineStyle>
 
 <OutlineStyle>
@@ -615,9 +615,9 @@
 
 <OutlineStyle>
 <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="11" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" Transliteration="NumToTextCircledHangulSyllable_ko" />
+<OutLineNumberingLevel Prefix=" " NumType="30" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
 <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="11" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" Transliteration="NumToTextCircledHangulJamo_ko" />
+<OutLineNumberingLevel Prefix=" " NumType="29" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
 <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
 </OutlineStyle>
 

@@ -368,9 +368,9 @@
 </ReservedWords>
 </LC_MISC>
 <LC_NumberingLevel>
-<NumberingLevel Prefix=" " NumType="12" Suffix=")" NatNum="1"/>
-<NumberingLevel Prefix=" " NumType="12" Suffix="." NatNum="1"/>
-<NumberingLevel Prefix="(" NumType="12" Suffix=")" NatNum="1"/>
+<NumberingLevel Prefix=" " NumType="12" Suffix=")" />
+<NumberingLevel Prefix=" " NumType="12" Suffix="." />
+<NumberingLevel Prefix="(" NumType="12" Suffix=")" />
 <NumberingLevel Prefix=" " NumType="2" Suffix="." />
 <NumberingLevel Prefix=" " NumType="0" Suffix=")" />
 <NumberingLevel Prefix=" " NumType="1" Suffix=")" />
