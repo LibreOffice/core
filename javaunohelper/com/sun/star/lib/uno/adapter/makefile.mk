@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-23 15:16:16 $
+#   last change: $Author: hr $ $Date: 2004-11-09 11:19:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,10 @@ JAVAFILES=	\
     XInputStreamToInputStreamAdapter.java	\
     XOutputStreamToOutputStreamAdapter.java	\
     InputStreamToXInputStreamAdapter.java	\
-    OutputStreamToXOutputStreamAdapter.java	
+    OutputStreamToXOutputStreamAdapter.java	\
+    ByteArrayToXInputStreamAdapter.java \
+    XOutputStreamToByteArrayAdapter.java
+
 
 JAVACLASSFILES=	$(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
