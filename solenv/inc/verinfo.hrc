@@ -1,0 +1,243 @@
+/*************************************************************************
+#*
+#*    $Workfile:   verinfo.hrc  $
+#*
+#*    Ersterstellung  PB  06.09.93
+#*    Letzte Aenderung  $Author: hr $
+#*    $Revision: 1.1.1.1 $
+#*
+#*    $Logfile:   T:/solar/inc/verinfo.hrv  $
+#*
+#*    Copyright (c) 1990 - 1993, STAR DIVISION
+#*
+#************************************************************************/
+#ifndef _VERINFO_HRC
+#define _VERINFO_HRC
+
+// include ---------------------------------------------------------------
+
+#ifndef WIN32
+#include <ver.h>
+#else
+#include <winver.h>
+#endif
+
+// general preprocessor string management --------------------------------
+
+#ifndef PPSX
+#define PPSX(s) #s
+#endif
+#ifndef PPS
+#define PPS(s) PPSX(s)
+#endif
+
+#ifndef PPCX
+#define PPCX(s1, s2) s1##s2
+#endif
+#ifndef PPCAT
+#define PPCAT(s1, s2) PPCX(s1, s2)
+#endif
+
+// define order of date parts --------------------------------------------
+
+#if defined(LG_D)
+  #define VER_DMY
+#else
+  #define VER_YMD
+#endif
+
+// set VERVARIANT to 0 if not defined ------------------------------------
+
+#if !defined(VERVARIANT)
+  #define VERVARIANT 0
+#endif
+
+// define pre release state ----------------------------------------------
+
+#ifdef VER_CONCEPT
+  #define VER_PREL 1
+  #define VER_COUNT (0+VER_CONCEPT)
+  #define VER1 Concept (Level VER_CONCEPT)
+#endif
+
+#ifdef VER_ALPHA
+  #define VER_PREL 1
+  #define VER_COUNT (100+VER_ALPHA)
+  #define VER1 Alpha (Level VER_ALPHA)
+#endif
+
+#ifdef VER_BETA
+  #define VER_PREL 1
+  #define VER_COUNT (200+VER_BETA)
+  #define VER1 Beta (Level VER_BETA)
+#endif
+
+#ifdef VER_GAMMA
+  #define VER_PREL 1
+  #define VER_COUNT (300+VER_GAMMA)
+  #define VER1 Gamma (Level VER_GAMMA)
+#endif
+
+#ifdef VER_FINAL
+  #define VER_COUNT (500+VER_FINAL)
+  #if VER_FINAL==0
+    #undef VER1
+  #elif VER_FINAL==1
+    #define VER1 1
+  #elif VER_FINAL==2
+    #define VER1 2
+  #elif VER_FINAL==3
+    #define VER1 3
+  #elif VER_FINAL==4
+    #define VER1 4
+  #elif VER_FINAL==5
+    #define VER1 5
+  #elif VER_FINAL==6
+    #define VER1 6
+  #elif VER_FINAL==7
+    #define VER1 7
+  #elif VER_FINAL==8
+    #define VER1 8
+  #elif VER_FINAL==9
+    #define VER1 9
+  #elif VER_FINAL==10
+    #define VER1 a
+  #elif VER_FINAL==11
+    #define VER1 b
+  #elif VER_FINAL==12
+    #define VER1 c
+  #endif
+#endif
+
+#if SUBVERSION < 10
+  #define VER4 PPCAT(0, SUBVERSION)
+#else
+  #define VER4 SUBVERSION
+#endif
+
+#ifndef VER1
+#if VERVARIANT > 0
+  #define VER_LEVEL VERSION.VER4.VERVARIANT
+#else
+  #define VER_LEVEL VERSION.VER4
+#endif
+#else
+  #define VERC1(a, b, c) a.b##c
+  #define VERC2(a, b, c) VERC1(a, b, c)
+  #define VER_LEVEL VERC2(VERSION, VER4, VER1)
+#endif
+
+#if !defined(VER_DMY) && VER_DAY < 10
+  #define VER5 PPCAT(0, VER_DAY)
+#else
+  #define VER5 VER_DAY
+#endif
+
+// define month strings --------------------------------------------------
+
+#if VER_MONTH==1
+  #define VER2 Jan
+#elif VER_MONTH==2
+  #define VER2 Feb
+#elif VER_MONTH==3
+  #ifdef LG_D
+    #define VER2 M\344r
+  #else
+    #define VER2 Mar
+  #endif
+#elif VER_MONTH==4
+  #define VER2 Apr
+#elif VER_MONTH==5
+  #ifdef LG_D
+    #define VER2 Mai
+  #else
+    #define VER2 May
+  #endif
+#elif VER_MONTH==6
+  #define VER2 Jun
+#elif VER_MONTH==7
+  #define VER2 Jul
+#elif VER_MONTH==8
+  #define VER2 Aug
+#elif VER_MONTH==9
+  #define VER2 Sep
+#elif VER_MONTH==10
+  #ifdef LG_D
+    #define VER2 Okt
+  #else
+    #define VER2 Oct
+  #endif
+#elif VER_MONTH==11
+  #define VER2 Nov
+#elif VER_MONTH==12
+  #ifdef LG_D
+    #define VER2 Dez
+  #else
+    #define VER2 Dec
+  #endif
+#endif
+
+#ifdef LG_D
+  #define VERC3(a, b, c) a.b.c
+#else
+  #define VERC3(a, b, c) c-b-a
+#endif
+#define VERC4(a, b, c) VERC3(a, b, c)
+#define VER_DATE VERC4(VER5, VER2, VER_YEAR)
+
+#if VER_FIRSTYEAR==VER_YEAR
+  #define VER_YEARRANGE VER_FIRSTYEAR
+#else
+  #define VER_YEARRANGE VER_FIRSTYEAR-VER_YEAR
+#endif
+
+#if VER_FIRSTYEAR > 100
+#define VERC5(a) Copyright \251 a by
+#define VERC6(a) VERC5(a)
+#else
+#define VERC5(a) Copyright \251 19##a by
+#define VERC6(a) VERC5(a)
+#endif
+
+#define S_CRIGHT PPS(VERC6(VER_YEARRANGE))
+
+#ifdef LG_D
+#define S_VERSION PPS(Version VER_LEVEL vom VER_DATE)
+#else
+#define S_VERSION PPS(Version VER_LEVEL of VER_DATE)
+#endif
+
+#endif  // _VERINFO_HRC
+
+/*************************************************************************
+
+      Source Code Control System - Update
+
+      $Log: not supported by cvs2svn $
+      Revision 1.3  2000/06/29 17:24:48  hjs
+      year 2000 bug
+
+      Revision 1.2  2000/06/29 16:02:40  hjs
+      use VERVARIANT
+
+      Revision 1.1  2000/02/10 12:22:20  hjs
+      versioninfo resources
+
+
+      Rev 1.4   21 Dec 1995 14:32:38   HJS
+   umstellung von ver_final; 1=1,  10=a etc.
+
+      Rev 1.3   25 Sep 1995 14:50:58   ER
+   moved to t:/solar/inc (s:\solenv\inc)
+
+      Rev 1.2   16 Mar 1995 16:10:20   ER
+   kurz vor der dritten Auslieferung befinden wir uns
+   nicht mehr in der Test/UI Phase..
+
+      Rev 1.1   11 Oct 1993 18:14:00   ER
+   VerInfo auch unter WNT
+
+      Rev 1.0   07 Sep 1993 17:26:52   ER
+   Initial revision.
+
+*************************************************************************/

@@ -1,0 +1,131 @@
+#!/usr/solar/bin/perl -w
+#
+# langwrap - language wrapper for building resources
+#
+# $Id: langwrap,v 1.1.1.1 2000-09-20 14:43:11 hr Exp $
+
+use Getopt::Std;
+
+###### globals ######
+
+$is_debug = 0;
+$nfield   = 0;
+@LoL 	  = ();
+@command  = ();
+
+###### main ######
+
+# Version
+$idStr = ' $Revision: 1.1.1.1 $ ';
+$idStr =~ /Revision:\s+(\S+)\s+\$/
+    ? ($langwrapRev = $1) : ($langwrapRev = "-");
+
+print "langwrap -- Version: $langwrapRev\n";
+
+# Options
+&check_options();
+
+# parse command file
+&parse_commandfile($opt_c);
+
+# create list with command lines
+&create_commands();
+
+# finally execute commands
+foreach $cmd (@command) {
+    if ($is_debug) {
+	print $cmd . "\n";
+    } else {
+	system($cmd);
+	$res = $? >> 8;
+	if ($res) {
+	    print "langwrap: command execution failed with exitcode $res.\n";
+	    exit($res);
+	}
+    }
+}
+
+exit(0);
+ 
+###### routines ######
+
+### parse_commandfile()
+sub parse_commandfile {
+    my($file) = shift;
+    my(@field);
+    
+    open(COMMAND, "<$file") or die "can´t open $file";
+
+    while (<COMMAND>) {
+	$line = $_;
+	chomp($line);
+	if ( ($line =~ //) || ($line =~ /^\r/) || ($line =~ /^#/) ) {
+	    next;
+	}
+						   
+	@field = split " ", $line;
+	push @LoL, [@field];
+	if (!$nfield) {
+	    $nfield = $#field + 1;
+	} else {
+	    if ( $nfield != ($#field + 1) ) {
+		print "langwrap: error in <cmdfile>: every row must ";
+		print "have the same # of columns.\n";
+		exit(3);
+	    }
+	}
+    }
+    
+    close(COMMAND);
+}
+
+### create_command()
+sub create_commands() {
+    my($cmd, $cmdline, $arg_string, $ntempl);
+
+    $cmd = shift @ARGV;
+    $arg_string = join(" ", @ARGV);
+    # just count the number of templates
+    $ntempl = ($arg_string =~ s/@\d+@/$&/eg);
+    if ( $ntempl >= $nfield ) {
+	print "lnagwrap: # of templates > # of fields in <cmdfile>.\n";
+	exit(4);
+    }
+
+    # create command lines
+    for $i (0..$#LoL) {
+	$cmdline = $arg_string;
+	$cmdline =~ s/@(\d+)@/$LoL[$i][$1]/eg;
+	push @command, $cmd . " " . $cmdline;
+    }
+}
+    
+### check_options()
+sub check_options {
+
+    if ( !getopts('c:') ) {
+	&usage();
+    }
+
+    if ( !$opt_c ) {
+	&usage();
+    }
+
+    if ( ! -r $opt_c ) {
+	print "langwrap: $opt_c is not a readable file.\n";
+	exit(2);
+    }
+
+    if ( $#ARGV < 1 ) {
+	print "langwrap: empty <template_string>.\n";
+	&usage();
+    }
+}
+
+### usage()
+sub usage {
+    print "Usage: langwrap -c cmdfile tool <template_string>\n";
+    print "<template_string> is of form: ...\@1\@ .... \@2\@...\n";
+    print "with \@<n>\@ template #n\n";
+    exit(1);
+}

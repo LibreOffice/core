@@ -1,0 +1,170 @@
+/*************************************************************************
+#*
+#*    $Workfile:   verinfo.rc  $
+#*
+#*    Ersterstellung  PB  03.09.93
+#*    Letzte Aenderung  $Author: hr $ $Date: 2000-09-20 14:43:17 $
+#*    $Revision: 1.1.1.1 $
+#*
+#*    $Logfile:   T:/desktop/util/verinfo.rcv  $
+#*
+#*    Copyright (c) 1998 - 2000, Star Office Software Entw. GmbH, Hamburg, Germany
+#*
+#************************************************************************/
+
+#define VERSION			5
+#define SUBVERSION		20
+//#define VERVARIANT		0
+
+// .0 + VER_CONCEPT
+// .100 + VER_ALPHA
+// .200 + VER_BETA
+// .300 + VER_GAMMA
+// .500 + VER_FINAL
+//#define VER_CONCEPT		0
+//#define VER_BETA		6
+#define VER_FINAL		0
+
+#define VER_DAY			9
+#define VER_MONTH		5
+#define VER_YEAR		2000
+
+// -----------------------------------------------------------------------
+
+#if !defined(ENGLISH)
+#define LG_D 					// generate always german version
+#endif
+
+#define VER_FIRSTYEAR	VER_YEAR
+
+#include <windows.h>
+#include "verinfo.hrc"
+
+#ifdef WIN32
+#define FOR_WIN_X " (32 Bit)"
+#else
+#define FOR_WIN_X ""
+#endif
+
+// -----------------------------------------------------------------------
+// 				language/character set specification table
+// -----------------------------------------------------------------------
+
+RCD_LANGUAGE rcdata
+{
+#ifdef LG_D
+	"040704B0", 	// Germany -> Unicode
+	"040704E4", 	// Germany -> Windows, Multilingual
+#else
+	"040904B0", 	// Germany -> Unicode
+	"040904E4", 	// USA -> Windows, Multilingual
+#endif
+	"04090000", 	// USA -> 7-Bit-ASCII
+	0				// end of table
+}
+
+// -----------------------------------------------------------------------
+// 				version information
+// -----------------------------------------------------------------------
+
+VS_VERSION_INFO versioninfo
+	fileversion    VERSION, SUBVERSION, VERVARIANT, VER_COUNT
+	productversion VERSION, SUBVERSION, VERVARIANT, VER_COUNT
+	fileflagsmask 0x3F
+	fileflags
+#if defined(DEBUG)
+	VS_FF_DEBUG |
+#endif
+#ifdef VER_PREL
+	VS_FF_PRERELEASE |
+#endif
+	0
+#ifndef WIN32
+	fileos VOS_DOS_WINDOWS16
+#else
+	fileos VOS_NT_WINDOWS32
+#endif
+	filetype VFT_APP
+	{
+		block "StringFileInfo"
+		{
+#ifdef LG_D
+			block "040704E4"
+			{
+				// German StringTable
+				value "CompanyName",		"Sun Microsystems, Inc.\0"
+				value "FileVersion",		PPS(VER_LEVEL) "\0"
+				value "OriginalFilename",	PPS(ORG_NAME) "\0"
+				value "InternalName", 		PPS(INTERNAL_NAME) "\0"
+				value "LegalCopyright",		S_CRIGHT " Sun Microsystems, Inc.\0"
+			}
+#else
+			block "040904E4"
+			{
+				// International StringTable
+				value "CompanyName", 		"Sun Microsystems, Inc.\0"
+				value "FileVersion",		PPS(VER_LEVEL) "\0"
+				value "OriginalFilename",	PPS(ORG_NAME) "\0"
+				value "InternalName", 		PPS(INTERNAL_NAME) "\0"
+				value "LegalCopyright", 	S_CRIGHT " Sun Microsystems, Inc.\0"
+			}
+#endif
+		}
+
+		block "VarFileInfo"
+		{
+#ifdef LG_D
+			value "Translation", 0x0407, 1252
+#else
+			value "Translation", 0x0409, 1252
+#endif
+		}
+	}
+
+// version binary entry
+VS_VERSION_INFO rcdata
+{
+	0xF0, "sw", 0x0F, VER_YEAR, VER_MONTH, VER_DAY,
+	VERSION, SUBVERSION, VERVARIANT, VER_COUNT
+};
+
+/*************************************************************************
+
+	  Source Code Control System - Update
+
+	  $Log: not supported by cvs2svn $
+	  Revision 1.2  2000/06/29 17:25:44  hjs
+	  disable year range
+	
+	  Revision 1.1  2000/06/29 16:00:23  hjs
+	  generic versioninfo for shared libs
+	
+	  Revision 1.13  2000/05/08 17:52:51  hjs
+	  release date
+	
+	  Revision 1.12  2000/04/28 11:32:03  hjs
+	  5.2 beta6
+	
+	  Revision 1.11  2000/01/17 10:50:29  hro
+	  #70553# New icons
+	
+	  Revision 1.10  2000/01/12 10:56:45  hro
+	  #70553# Added system icon to Executable Resource
+	
+	  Revision 1.9  1999/08/05 11:52:34  pb
+	  fix: #68039# StarDiv -> Sun
+	
+	  Revision 1.8  1999/04/29 19:16:10  HRO
+	  #65573# New icon resource
+
+	  Rev 1.7   29 Apr 1999 21:16:10   HRO
+   #65573# New icon resource
+
+	  Rev 1.6   28 Apr 1999 13:59:40   OS
+   #56844# Icons fuer HTML und Frameset eingebaut
+
+	  Rev 1.5   15 Feb 1999 15:32:12   MH
+   chg: Reihenfolge
+
+*************************************************************************/
+

@@ -1,0 +1,9 @@
+
+here are some hints about our use of the startup directory.
+
+because our variable "OS" was already in use, we don't use the default 
+subtrees of startup. for example "wntmsci3" uses the subtree "WNT".
+
+the .INCLUDEDIRS line in startup.mk gives you the oportunity of switching
+to your own set of central makefiles.
+

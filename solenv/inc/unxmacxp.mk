@@ -1,0 +1,90 @@
+# mk file fuer unxmacxp
+ASM=
+AFLAGS=
+
+LINKOUTPUT_FILTER=
+
+# _PTHREADS is needed for the stl
+CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNO_PTHREAD_PRIORITY -DSTLPORT_VERSION=321 -D_USE_NAMESPACE=1
+
+.IF "$(SOLAR_JAVA)"!=""
+JAVADEF=-DSOLAR_JAVA
+JAVAFLAGSDEBUG=-g
+JAVA_RUNTIME=-framework JavaVM
+.ENDIF
+
+CC=cc
+cc=cc
+objc=cc
+CFLAGS=-c $(INCLUDE)
+CFLAGSCC=-pipe
+
+OBJCFLAGS=
+
+CFLAGSEXCEPTIONS=-fexceptions
+CFLAGS_NO_EXCEPTIONS=-fno-exceptions
+
+CFLAGSCXX=-pipe -fno-for-scope -fpermissive
+
+CFLAGSOBJGUIST=-fPIC
+CFLAGSOBJCUIST=-fPIC
+CFLAGSOBJGUIMT=-fPIC
+CFLAGSOBJCUIMT=-fPIC
+CFLAGSSLOGUIMT=-fPIC
+CFLAGSSLOCUIMT=-fPIC
+CFLAGSPROF=
+CFLAGSDEBUG=-g
+CFLAGSDBGUTIL=
+CFLAGSOPT=-O2
+CFLAGSNOOPT=-O
+CFLAGSOUTOBJ=-o
+
+SOLARVERSHLLIBS=$(shell find $(SOLARVERSION)$/$(INPATH)$/lib -name $(DLLPRE)\*$(DLLPOST))
+LINK=cc
+LINKFLAGS=-dynamic -framework System -framework Cocoa -lcc_dynamic \
+  -lstdc++ $(foreach,i,$(SOLARVERSHLLIBS) '-dylib_file @executable_path$/..$/lib$/$(i:f):$i')
+LINKFLAGSAPPGUI=
+LINKFLAGSSHLGUI=-dynamiclib -install_name '@executable_path$/..$/lib$/$(@:f)' \
+  -Wl,-U,___progname -Wl,-U,_environ
+LINKFLAGSAPPCUI=
+LINKFLAGSSHLCUI=-dynamiclib -install_name '@executable_path$/..$/lib$/$(@:f)' \
+  -Wl,-U,___progname -Wl,-U,_environ
+LINKFLAGSTACK=
+LINKFLAGSPROF=
+LINKFLAGSDEBUG=-g
+LINKFLAGSOPT=
+
+LINKVERSIONMAPFLAG=
+
+# Reihenfolge der libs NICHT egal!
+
+STDOBJGUI=
+STDSLOGUI=
+STDOBJCUI=
+STDSLOCUI=
+
+STDLIBGUIST=
+STDLIBCUIST=
+STDLIBGUIMT=
+STDLIBCUIMT=
+STDSHLGUIMT=
+STDSHLCUIMT=
+
+LIBMGR=libtool
+LIBFLAGS=-o
+
+IMPLIB=
+IMPLIBFLAGS=
+
+MAPSYM=
+MAPSYMFLAGS=
+
+RC=irc
+RCFLAGS=-fo$@ $(RCFILES)
+RCLINK=
+RCLINKFLAGS=
+RCSETVERSION=
+
+DLLPOSTFIX=mxp
+DLLPRE=lib
+DLLPOST=.dylib

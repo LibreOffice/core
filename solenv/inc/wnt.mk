@@ -1,0 +1,905 @@
+#*******************************************************************
+#*
+#*    $Workfile:   WNT.MK  $
+#*
+#*    Beschreibung      Compiler und Systemabhaengige
+#*                      Entwicklungtools-Definitionen
+#*						Fuer WindowsNT-Envrionments
+#*
+#*    Ersterstellung    MH 9.2.96
+#*    Letzte Aenderung  $Author: hr $ $Date: 2000-09-20 14:43:18 $
+#*    $Revision: 1.1.1.1 $
+#*
+#*    $Logfile:   T:/solar/inc/wnt.mkv  $
+#*
+#*    Copyright (c) 1990-1996, STAR DIVISION
+#*
+#*******************************************************************
+
+SOLAR_JAVA=TRUE
+FULL_DESK=TRUE
+JAVAFLAGSDEBUG=-g
+
+# --- Windows-NT-Environment ---------------------------------------
+
+.IF "$(GUI)" == "WNT"
+
+# --- Ole2 Behandlung -------------
+
+.IF "$(DONT_USE_OLE2)"!=""
+OLE2=
+OLE2DEF=
+.ELSE
+OLE2=true
+OLE2DEF=-DOLE2
+.ENDIF
+
+# --- C/C++ defines fuer nt ----------------------------------------
+
+.IF "$(HBTOOLKIT)"!=""
+CDEFS+=-DHB_DEBUG
+.ENDIF
+
+# --- Base fuer WNT setzen -----------------------------------------
+
+.IF "$(GUI)"=="WNT"
+BASE=0x1100000
+RESBASE=0x1100000
+.IF "$(PRJNAME)"=="OSL" || "$(PRJNAME)"=="osl"
+BASE=0x1c000000
+.ENDIF
+.IF "$(PRJNAME)"=="RTL" || "$(PRJNAME)"=="rtl"
+BASE=0x1c100000
+.ENDIF
+.IF "$(PRJNAME)"=="VOS" || "$(PRJNAME)"=="vos"
+BASE=0x1c200000
+.ENDIF
+.IF "$(PRJNAME)"=="UCR" || "$(PRJNAME)"=="ucr"
+BASE=0x1c300000
+.ENDIF
+.IF "$(PRJNAME)"=="USR" || "$(PRJNAME)"=="usr"
+BASE=0x1c400000
+.ENDIF
+.IF "$(PRJNAME)"=="UNO" || "$(PRJNAME)"=="uno"
+BASE=0x1c500000
+.ENDIF
+.IF "$(PRJNAME)"=="SOT" || "$(PRJNAME)"=="sot"
+BASE=0x1c900000
+.ENDIF
+.IF "$(PRJNAME)"=="TOOLS" || "$(PRJNAME)"=="tools"
+BASE=0x1c800000
+.ENDIF
+.IF "$(PRJNAME)"=="VCL" || "$(PRJNAME)"=="vcl"
+BASE=0x1c600000
+.ENDIF
+.IF "$(PRJNAME)"=="TOOLKIT" || "$(PRJNAME)"=="toolkit"
+BASE=0x1ca00000
+.ENDIF
+.IF "$(PRJNAME)"=="TKT" || "$(PRJNAME)"=="tkt"
+BASE=0x1cd00000
+.ENDIF
+.IF "$(PRJNAME)"=="SJ" || "$(PRJNAME)"=="sj"
+BASE=0x1d000000
+.ENDIF
+.IF "$(PRJNAME)"=="STARONE" || "$(PRJNAME)"=="starone" || "$(PRJNAME)"=="ONE" || "$(PRJNAME)"=="one" 
+BASE=0x1ce00000
+.ENDIF
+.IF "$(PRJNAME)"=="CHAOS" || "$(PRJNAME)"=="chaos" 
+BASE=0x1d100000
+.ENDIF
+.IF "$(PRJNAME)"=="SVTOOLS" || "$(PRJNAME)"=="svtools"
+BASE=0x1cb00000
+.ENDIF
+.IF "$(PRJNAME)"=="SO3" || "$(PRJNAME)"=="so3"
+BASE=0x1d400000
+.ENDIF
+.IF "$(PRJNAME)"=="GOODIES" || "$(PRJNAME)"=="goodies"
+BASE=0x1d290000
+.ENDIF
+.IF "$(PRJNAME)"=="BASIC" || "$(PRJNAME)"=="basic"
+BASE=0x1d380000
+.ENDIF
+.IF "$(PRJNAME)"=="HM2" || "$(PRJNAME)"=="hm2"
+BASE=0x1c700000
+.ENDIF
+.IF "$(PRJNAME)"=="SFX2" || "$(PRJNAME)"=="sfx2"
+BASE=0x1d500000
+RESBASE=0x1a00000
+.ENDIF
+.IF "$(PRJNAME)"=="SVX" || "$(PRJNAME)"=="svx"
+RESBASE=0x1d70000
+.ENDIF
+.IF "$(PRJNAME)"=="OFFMGR" || "$(PRJNAME)"=="offmgr"
+BASE=0x1dc00000
+RESBASE=0x1a20000
+.ENDIF
+.IF "$(PRJNAME)"=="SIM" || "$(PRJNAME)"=="sim" || "$(PRJNAME)"=="simage3"
+BASE=0x1cd00000
+RESBASE=0x1a30000
+.ENDIF
+.IF "$(PRJNAME)"=="SCH" || "$(PRJNAME)"=="sch" || "$(PRJNAME)"=="schart3"
+BASE=0x1ce00000
+RESBASE=0x1a40000
+.ENDIF
+.IF "$(PRJNAME)"=="SM" || "$(PRJNAME)"=="sm" || "$(PRJNAME)"=="smath3"
+BASE=0x1cf00000
+RESBASE=0x1a50000
+.ENDIF
+.IF "$(PRJNAME)"=="SDB" || "$(PRJNAME)"=="sdb"
+BASE=0x1d000000
+.ENDIF
+.IF "$(PRJNAME)"=="INET" || "$(PRJNAME)"=="inet"
+BASE=0x1d800000
+.ENDIF
+.IF "$(PRJNAME)"=="SW" || "$(PRJNAME)"=="sw" || "$(PRJNAME)"=="swriter3"
+BASE=0x1e000000
+RESBASE=0x1a60000
+.ENDIF
+.IF "$(PRJNAME)"=="SC" || "$(PRJNAME)"=="sc" || "$(PRJNAME)"=="scalc3"
+BASE=0x1e800000
+RESBASE=0x1a70000
+.ENDIF
+.IF "$(PRJNAME)"=="SD" || "$(PRJNAME)"=="sd" || "$(PRJNAME)"=="sdraw3"
+BASE=0x1eb00000
+RESBASE=0x1a80000
+.ENDIF
+.IF "$(PRJNAME)"=="OFF" || "$(PRJNAME)"=="off" || "$(PRJNAME)"=="offmgr"
+BASE=0x1b900000
+RESBASE=0x1a90000
+.ENDIF
+.ENDIF
+
+.IF "$(GUI)"=="WNT"
+.IF "$(profile)" != ""
+.IF "$(WST)"!=""
+CAPLIB=$(LIBPRE) wst.lib
+.ELSE
+CAPLIB=$(LIBPRE) cap.lib
+.ENDIF
+.ENDIF
+.ENDIF
+
+# --- IBM Visual Age 3.5 Compiler ---
+.IF "$(COM)" == "ICC"
+.IF "$(CPU)" == "I"
+.IF "$(COMEX)"==""
+!INCLUDE <wnticci.mak>
+.ENDIF
+.ENDIF
+.ENDIF
+
+# --- IBM Visual Age 3.5 Compiler ---
+.IF "$(COM)" == "ICC"
+.IF "$(CPU)" == "I"
+.IF "$(COMEX)"=="a"
+!INCLUDE <wnticcia.mak>
+.ENDIF
+.ENDIF
+.ENDIF
+
+# --- Borland ---
+.IF "$(COM)" == "BLC"
+.IF "$(CPU)" == "I"
+
+ASM=tasm
+AFLAGS=/ml
+
+CC=bcc32
+CFLAGS=-c -H- -d -wbbf -weas -wucp -X $(MINUS_I)$(INCLUDE) $(OLE2DEF)
+CFLAGSCXX=-Pcxx -RT- -x-
+CFLAGSOBJGUIST=
+CFLAGSOBJCUIST=
+CFLAGSOBJGUIMT=
+CFLAGSOBJCUIMT=
+CFLAGSSLOGUIMT=
+CFLAGSSLOCUIMT=
+CFLAGSPROF=-v
+CFLAGSDEBUG=-v
+CFLAGSDBGUTIL=
+CFLAGSOPT=-Ox
+CFLAGSNOOPT=-Od
+CFLAGSOUTOBJ=-o
+
+LINK=tlink32
+LINKFLAGS=/n /m /L$(LIB)
+LINKFLAGSAPPGUI=
+LINKFLAGSSHLGUI=
+LINKFLAGSAPPCUI=
+LINKFLAGSSHLCUI=
+LINKFLAGSTACK=
+LINKFLAGSPROF=
+LINKFLAGSDEBUG=/v
+LINKFLAGSOPT=/f
+
+STDOBJVCL=$(L)$/salmain.obj
+STDOBJGUI=c0w32.obj
+STDSLOGUI=c0d32.obj
+STDOBJCUI=c0x32.obj
+STDSLOCUI=
+STDLIBGUIST=cw32.lib import32.lib
+STDLIBCUIST=import32.lib cw32.lib
+STDLIBGUIMT=cw32.lib import32.lib
+STDLIBCUIMT=import32.lib
+STDSHLGUIMT=cw32.lib import32.lib
+STDSHLCUIMT=
+
+LIBMGR=tlib
+LIBFLAGS=/C /P32
+
+IMPLIB=implib
+IMPLIBFLAGS=/c /i
+
+MAPSYM=tmapsym
+MAPSYMFLAGS=
+
+RC=brcc32
+RCFLAGS=-fo$@ -31 $(RCFILES)
+RCLINK=
+RCLINKFLAGS=
+RCSETVERSION=
+
+DLLPOSTFIX=bn
+
+.ENDIF
+.ENDIF          # "$(COM)" == "BLC"
+
+
+# --- Microsoft Intel ---
+.IF "$(COM)"=="MSC"
+.IF "$(CPU)"=="I"
+
+.IF "$(WORK_STAMP)"=="SRC395x"
+debug=t
+.ENDIF
+
+# SOLAR JAva Unterstuetzung nur fuer wntmsci
+
+ASM=masm386
+AFLAGS=/ml
+OLE2ANSI=TRUE
+
+.IF "$(bndchk)" != ""
+CC=$(DEVROOT)\bcheck6\nmcl
+.ELSE
+.IF "$(truetime)" != ""
+CC=$(DEVROOT)\truetime\nmcl /NMttOn
+.ELSE
+.IF "$(syntax)"!=""
+CC=$(SOLARROOT)\gcc\h-i386-cygwin32\bin\i386-cygwin32-gcc
+.ELSE
+CC=cl
+.ENDIF
+.ENDIF
+.ENDIF
+
+.IF "$(stoponerror)" != ""
+CC+= /NMstoponerror
+.ENDIF
+
+.IF "$(nmpass)" != ""
+CC+= /NMpass
+.ENDIF
+
+.IF "$(ttinlines)" != ""
+CC+= /NMttInlines	
+.ENDIF
+
+.IF "$(ttnolines)" != ""
+CC+= /NMttNoLines
+.ENDIF
+
+#.IF"$(bndchk)"==""
+.IF "$(COMEX)"=="3"
+CFLAGS+=-Zm200
+.ENDIF
+#.ENDIF
+
+#.IF defined ( product ) && !defined ( seg ) && !defined ( demo )
+.IF "$(product)" != ""
+.IF "$(seg)" == ""
+.IF "$(demo)" == ""
+CFLAGS+=-c -nologo -W3 -Gs -Gy -D_X86_=1 $(OLE2DEF) $(NOLOGO) $(MINUS_I)$(INCLUDE)
+.IF "$(bndchk)" == ""
+CFLAGS+= -Ob1
+.ENDIF
+.ENDIF
+.ENDIF
+.ELSE	# ist keine product...
+CFLAGS+=-c -nologo -W3 -Gs -D_X86_=1 $(OLE2DEF) $(NOLOGO) $(MINUS_I)$(INCLUDE)
+.IF "$(bndchk)" == ""
+CFLAGS+= -Ob1
+.ENDIF
+.ENDIF
+
+.IF "$(bndchk)" != ""
+.IF "$(debug)" == ""
+CFLAGS+= -Z7
+.ENDIF
+.ENDIF
+
+.IF "$(truetime)" != ""
+.IF "$(debug)" == ""
+CFLAGS+= -Z7
+.ENDIF
+.ENDIF
+
+.IF "$(FULL_DESK)"!=""
+CFLAGS+=-DFULL_DESK
+RSCDEFS+=-DFULL_DESK
+.ENDIF
+
+#.IF DEFINED compinc
+#CFLAGS+= -Gi -Zi
+#.ENDIF
+
+#.IF DEFINED chkhxx
+#CFLAGS+= -DHEADER_WARNING
+#.ENDIF
+#.IF "$(UPD)"=="368"
+#.IF !DEFINED nocheck
+#CFLAGS+= -DHEADER_WARNING
+#.ENDIF
+#.ENDIF
+
+CFLAGSEXCEPTIONS=-GX
+CFLAGS_NO_EXCEPTIONS=
+
+CFLAGSCALL=-Gz
+
+CFLAGSCC=
+.IF "$(DYNAMIC_CRT)"!=""
+CFLAGSSLOGUIMT=-DWIN32 -D_MT -D_DLL
+CFLAGSSLOCUIMT=-DWIN32 -D_MT -D_DLL
+.IF "$(NO_DYNAMIC_OBJ)"==""
+CFLAGSOBJGUIST=-DWIN32 -D_DLL
+CFLAGSOBJCUIST=-DWIN32 -D_DLL
+CFLAGSOBJGUIMT=-DWIN32 -D_MT -D_DLL
+CFLAGSOBJCUIMT=-DWIN32 -D_MT -D_DLL
+.ELSE
+CFLAGSOBJGUIST=-DWIN32
+CFLAGSOBJCUIST=-DWIN32
+CFLAGSOBJGUIMT=-DWIN32 -D_MT
+CFLAGSOBJCUIMT=-DWIN32 -D_MT
+.ENDIF
+.ELSE
+CFLAGSSLOGUIMT=-DWIN32 -D_MT 
+CFLAGSSLOCUIMT=-DWIN32 -D_MT 
+CFLAGSOBJGUIST=-DWIN32
+CFLAGSOBJCUIST=-DWIN32
+CFLAGSOBJGUIMT=-DWIN32 -D_MT
+CFLAGSOBJCUIMT=-DWIN32 -D_MT
+.ENDIF
+CFLAGSPROF=-Gh -Zd -Fd$(MISC)\$(TARGET).PDB
+.IF "$(PDBTARGET)"!=""
+CFLAGSDEBUG=-Zi -Fd$(MISC)\$(PDBTARGET).PDB
+.ELSE
+CFLAGSDEBUG=-Zi -Fd$(MISC)\$(TARGET).PDB
+.ENDIF
+CFLAGSDBGUTIL=
+CFLAGSOPT=-Ox
+CFLAGSNOOPT=-Od
+CFLAGSOUTOBJ=-Fo
+
+.IF "$(syntax)"!=""
+CFLAGS=-v -fsyntax-only -Wall $(INCLUDE) 
+# -I$(SOLARROOT)$/H-i386-cygwin32$/i386-cygwin32/include
+#plattform hart setzen - macht sonst ms cl.exe
+CDEFS+=-D_M_IX86
+# -D_MSC_VER=1100
+
+CDEFS+=-D_STD_NO_NAMESPACE -D_VOS_NO_NAMESPACE -D_UNO_NO_NAMESPACE -D_cdecl=
+CFLAGSOUTOBJ=-o
+CFLAGSCALL=
+CFLAGSCXX=
+CFLAGSOPT=
+CFLAGSNOOPT=
+CFLAGSPROF=
+CFLAGSDEBUG=
+.ENDIF			# "$(syntax)"!=""
+.IF "$(COMEX)"=="3"
+CDEFS+=-D__STL_NO_NEW_IOSTREAMS -DSTLPORT_VERSION=321 -D__STL_USE_ABBREVS -D_USE_NAMESPACE=1
+CDEFS+=-D_MT
+.ENDIF
+
+COMMENTFLAG=/COMMENT:"$(PRJNAME)_$(UPD)_$(DESTINATION_MINOR)_$(FUNCORD)_$(__DATE)_$(__TIME)_$(VCSID)_"
+
+
+LINK=link $(COMMENTFLAG) $(NOLOGO) /MACHINE:IX86
+
+.IF "$(PRODUCT)"!="full"
+.IF "$(PRODUCT)"!="demo"
+.IF "$(PRODUCT)"!="compact"
+#.IF !defined(DEBUG)
+.IF "$(debug)" == ""
+LINKFLAGS=/PDB:NONE
+.ENDIF
+.ENDIF
+.ENDIF
+.ELSE
+LINKFLAGS=/MAP /NODEFAULTLIB /ORDER:@$(FUNCORD) /OPT:NOREF
+#LINKFLAGS=/MAP /NODEFAULTLIB
+.ENDIF
+
+.IF "$(linkinc)" != ""
+LINKFLAGS=/NODEFAULTLIB /DEBUG:notmapped,full /DEBUGTYPE:cv /INCREMENTAL:YES
+MAPFILE=
+.ELSE
+.IF "$(PRODUCT)"!="full"
+.IF "$(PRODUCT)"!="demo"
+.IF "$(PRODUCT)"!="compact"
+LINKFLAGS+= /NODEFAULTLIB /DEBUG:notmapped,full /DEBUGTYPE:cv
+.ENDIF
+.ENDIF
+.ELSE # ist keine product...
+.IF "$(COMEX)"!="3"
+LINKFLAGS+= /RELEASE
+.ENDIF
+.ENDIF
+MAPFILE=-out:$$@
+.ENDIF
+
+.IF "$(bndchk)" != ""
+LINK=$(DEVROOT)\bcheck6\nmlink $(COMMENTFLAG) $(NOLOGO) /MACHINE:IX86
+#LINKFLAGS=/NODEFAULTLIB /DEBUG:notmapped,full /DEBUGTYPE:cv /PDB:NONE
+LINKFLAGS=/NODEFAULTLIB /DEBUG:notmapped,full /DEBUGTYPE:cv
+.ENDIF
+
+.IF "$(truetime)" != ""
+LINK=$(DEVROOT)\truetime\nmlink /NMttOn $(COMMENTFLAG) $(NOLOGO) /MACHINE:IX86
+#LINKFLAGS=/NODEFAULTLIB /DEBUG:notmapped,full /DEBUGTYPE:cv 
+LINKFLAGS=/NODEFAULTLIB /DEBUG:notmapped,full /DEBUGTYPE:cv /PDB:NONE
+.ENDIF
+
+LINKFLAGSAPPGUI=/SUBSYSTEM:WINDOWS,4.0
+LINKFLAGSSHLGUI=/SUBSYSTEM:WINDOWS,4.0 /DLL
+LINKFLAGSAPPCUI=/SUBSYSTEM:CONSOLE /BASE:0x1b000000
+LINKFLAGSSHLCUI=/SUBSYSTEM:CONSOLE /DLL
+LINKFLAGSTACK=/STACK:
+LINKFLAGSPROF=/DEBUG:mapped,partial /DEBUGTYPE:coff cap.lib
+LINKFLAGSWST=/DEBUG:mapped,partial /DEBUGTYPE:coff wst.lib /NODEFAULTLIB
+LINKFLAGSDEBUG=/DEBUG:notmapped,full /DEBUGTYPE:cv
+LINKFLAGSOPT=
+
+.IF "$(DYNAMIC_CRT)"!=""
+LIBCMT=msvcrt.lib
+LIBCIMT=msvcirt.lib
+OLDNAMES=oldnames.lib
+.ELSE
+.IF "$(PRODUCT)"==""
+LIBCMT=libcmt.lib
+LIBCIMT=libcimt.lib
+OLDNAMES=oldnames.lib
+.ELSE
+LIBCMT=libcmt.lib
+LIBCIMT=libcimt.lib
+OLDNAMES=oldnames.lib
+.ENDIF
+.ENDIF
+
+STDOBJVCL=$(L)$/salmain.obj
+STDOBJGUI=
+STDSLOGUI=
+STDOBJCUI=
+STDSLOCUI=
+.IF "$(DYNAMIC_CRT)"!=""
+STDLIBGUIST=$(LIBCMT) kernel32.lib user32.lib oldnames.lib
+STDLIBCUIST=$(LIBCMT) kernel32.lib oldnames.lib
+STDLIBGUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
+STDLIBCUIMT=$(LIBCMT) kernel32.lib $(OLDNAMES)
+STDSHLGUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
+STDSHLCUIMT=$(LIBCMT) kernel32.lib $(OLDNAMES)
+.ELSE
+STDLIBGUIST=libc.lib kernel32.lib user32.lib oldnames.lib
+STDLIBCUIST=libc.lib kernel32.lib oldnames.lib
+STDLIBGUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
+STDLIBCUIMT=$(LIBCMT) kernel32.lib $(OLDNAMES)
+STDSHLGUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
+STDSHLCUIMT=$(LIBCMT) kernel32.lib $(OLDNAMES)
+.ENDIF
+
+LIBMGR=lib $(NOLOGO)
+LIBFLAGS=
+
+IMPLIB=lib
+IMPLIBFLAGS=-machine:IX86
+
+MAPSYM=
+MAPSYMFLAGS=
+
+RC=rc
+RCFLAGS=-r -DWIN32 -fo$@ $(RCFILES)
+RCLINK=rc
+RCLINKFLAGS=
+RCSETVERSION=
+
+
+.IF "$(WORK_STAMP)"=="CVT364"
+DLLPOSTFIX=nj
+.ELSE
+DLLPOSTFIX=mi
+.ENDIF
+
+.ENDIF
+.ENDIF              # "$(COM)"=="MSC"
+
+# --- Microsoft Alpha ---
+.IF "$(COM)" == "MSC"
+.IF "$(CPU)" == "A"
+
+ASM=masm386
+AFLAGS=/ml
+
+CC=claxp
+CFLAGS=-c -W3 -Gz -Gs -D_ALPHA_=1 $(OLE2DEF)
+CFLAGSCXX=-GX-
+CFLAGSOBJGUIST=-DWIN32
+CFLAGSOBJCUIST=
+CFLAGSOBJGUIMT=-DWIN32
+CFLAGSOBJCUIMT=
+CFLAGSSLOGUIMT=-DWIN32
+CFLAGSSLOCUIMT=
+CFLAGSPROF=-Zi -Fd$(MISC)\$(TARGET).PDB
+CFLAGSDEBUG=-Zi -Fd$(MISC)\$(TARGET).PDB
+CFLAGSDBGUTIL=
+CFLAGSOPT=-Ox
+CFLAGSNOOPT=-Od
+CFLAGSOUTOBJ=-Fo
+
+LINK=link
+LINKFLAGS=/MAP /NODEFAULTLIB /MACHINE:alpha
+.IF "$(seg)" != ""
+LINKFLAGS=$(LINKFLAGS) /ORDER:@$(FUNCORD)
+.ENDIF
+LINKFLAGSAPPGUI=/SUBSYSTEM:WINDOWS /BASE:0x1c000000
+LINKFLAGSSHLGUI=/SUBSYSTEM:WINDOWS /DLL
+LINKFLAGSAPPCUI=/SUBSYSTEM:CONSOLE /BASE:0x1c000000
+LINKFLAGSSHLCUI=/SUBSYSTEM:CONSOLE /DLL
+LINKFLAGSTACK=/STACK:
+LINKFLAGSPROF=/DEBUG:partial /DEBUGTYPE:coff
+LINKFLAGSDEBUG=/DEBUG:notmapped,full /DEBUGTYPE:cv
+LINKFLAGSOPT=
+
+STDOBJVCL=$(L)$/salmain.obj
+STDOBJGUI=
+STDSLOGUI=
+STDOBJCUI=
+STDSLOCUI=
+STDLIBGUIST=libc.lib kernel32.lib user32.lib
+STDLIBCUIST=libc.lib kernel32.lib
+STDLIBGUIMT=libcmt.lib kernel32.lib user32.lib
+STDLIBCUIMT=libcmt.lib kernel32.lib
+STDSHLGUIMT=libcmt.lib kernel32.lib user32.lib
+STDSHLCUIMT=libcmt.lib kernel32.lib
+
+LIBMGR=lib
+LIBFLAGS=
+
+IMPLIB=lib
+IMPLIBFLAGS=-machine:Alpha_AXP
+
+MAPSYM=
+MAPSYMFLAGS=
+
+RC=rc
+RCFLAGS=-r -DWIN32 -fo$@ $(RCFILES)
+RCLINK=rc
+RCLINKFLAGS=
+RCSETVERSION=
+
+DLLPOSTFIX=ma
+
+.ENDIF
+.ENDIF
+
+
+# --- Microsoft PowerPC ---
+.IF "$(COM)" == "MSC"
+.IF "$(CPU)" == "P"
+
+ASM=masm386
+AFLAGS=/ml
+
+CC=cl
+CFLAGS=-c -D_PPC_=1 -DPPC $(OLE2DEF)
+CFLAGSCXX=-GX-
+CFLAGSOBJGUIST=-DWIN32
+CFLAGSOBJCUIST=
+CFLAGSOBJGUIMT=-DWIN32
+CFLAGSOBJCUIMT=
+CFLAGSSLOGUIMT=-DWIN32 -D_MT
+CFLAGSSLOCUIMT= -D_MT
+CFLAGSPROF=-Zi -Fd$(MISC)\$(TARGET).PDB
+CFLAGSDEBUG=-Zi -Fd$(MISC)\$(TARGET).PDB
+CFLAGSDBGUTIL=
+CFLAGSOPT=-Ox
+CFLAGSNOOPT=-Od
+CFLAGSOUTOBJ=-Fo
+
+LINK=link
+LINKFLAGS=/MAP /NODEFAULTLIB /MACHINE:PPC /FORCE:MULTIPLE
+.IF "$(seg)" != ""      # hier fehlten die schliessenden "          RT
+LINKFLAGS=$(LINKFLAGS) /ORDER:@$(FUNCORD)
+.ENDIF
+LINKFLAGSAPPGUI=/SUBSYSTEM:WINDOWS /BASE:0x1c000000
+LINKFLAGSSHLGUI=/SUBSYSTEM:WINDOWS /DLL
+LINKFLAGSAPPCUI=/SUBSYSTEM:CONSOLE /BASE:0x1c000000
+LINKFLAGSSHLCUI=/SUBSYSTEM:CONSOLE /DLL
+LINKFLAGSTACK=/STACK:
+LINKFLAGSPROF=/DEBUG:partial /DEBUGTYPE:coff
+LINKFLAGSDEBUG=/DEBUG:notmapped,full /DEBUGTYPE:cv
+LINKFLAGSOPT=
+
+STDOBJVCL=$(L)$/salmain.obj
+STDOBJGUI=
+STDSLOGUI=
+STDOBJCUI=
+STDSLOCUI=
+STDLIBGUIST=libc.lib kernel32.lib user32.lib oldnames.lib
+STDLIBCUIST=libc.lib kernel32.lib oldnames.lib
+STDLIBGUIMT=libcmt.lib kernel32.lib user32.lib oldnames.lib
+STDLIBCUIMT=libcmt.lib kernel32.lib oldnames.lib
+STDSHLGUIMT=libcmt.lib kernel32.lib user32.lib oldnames.lib
+STDSHLCUIMT=libcmt.lib kernel32.lib oldnames.lib
+
+LIBMGR=lib
+LIBFLAGS=
+
+IMPLIB=lib
+IMPLIBFLAGS=-machine:PPC
+
+MAPSYM=
+MAPSYMFLAGS=
+
+RC=rc
+RCFLAGS=-r -DWIN32 -fo$@ $(RCFILES)
+RCLINK=rc
+RCLINKFLAGS=
+RCSETVERSION=
+
+DLLPOSTFIX=mp
+
+.ENDIF
+.ENDIF                   # "$(COM)" == "MSC"
+
+# --- Microsoft Mips ---
+.IF "$(COM)" == "MSC"
+.IF "$(CPU)" == "M"
+
+ASM=masm386
+AFLAGS=/ml
+
+CC=cl
+CFLAGS=-c -D_MIPS_=1 -I$(COMPATH)\inc $(OLE2DEF)
+CFLAGSCXX=-GX-
+CFLAGSOBJGUIST=-DWIN32
+CFLAGSOBJCUIST=
+CFLAGSOBJGUIMT=-DWIN32
+CFLAGSOBJCUIMT=
+CFLAGSSLOGUIMT=-DWIN32 -D_MT
+CFLAGSSLOCUIMT= -D_MT
+CFLAGSPROF=-Zi -Fd$(MISC)\$(TARGET).PDB
+CFLAGSDEBUG=-Zi -Fd$(MISC)\$(TARGET).PDB
+CFLAGSDBGUTIL=
+CFLAGSOPT=-Ox
+CFLAGSNOOPT=-Od
+CFLAGSOUTOBJ=-Fo
+
+LINK=link
+LINKFLAGS=/MAP /NODEFAULTLIB /MACHINE:mips /FORCE:MULTIPLE
+.IF "$(seg)" != ""
+LINKFLAGS=$(LINKFLAGS) /ORDER:@$(FUNCORD)
+.ENDIF
+LINKFLAGSAPPGUI=/SUBSYSTEM:WINDOWS /BASE:0x1c000000
+LINKFLAGSSHLGUI=/SUBSYSTEM:WINDOWS /DLL
+LINKFLAGSAPPCUI=/SUBSYSTEM:CONSOLE /BASE:0x1c000000
+LINKFLAGSSHLCUI=/SUBSYSTEM:CONSOLE /DLL
+LINKFLAGSTACK=/STACK:
+LINKFLAGSPROF=/DEBUG:partial /DEBUGTYPE:coff
+LINKFLAGSDEBUG=/DEBUG:notmapped,full /DEBUGTYPE:cv
+LINKFLAGSOPT=
+
+STDOBJVCL=$(L)$/salmain.obj
+STDOBJGUI=
+STDSLOGUI=
+STDOBJCUI=
+STDSLOCUI=
+STDLIBGUIST=libc.lib kernel32.lib user32.lib oldnames.lib
+STDLIBCUIST=libc.lib kernel32.lib oldnames.lib
+STDLIBGUIMT=libcmt.lib kernel32.lib user32.lib oldnames.lib
+STDLIBCUIMT=libcmt.lib kernel32.lib oldnames.lib
+STDSHLGUIMT=libcmt.lib kernel32.lib user32.lib oldnames.lib
+STDSHLCUIMT=libcmt.lib kernel32.lib oldnames.lib
+
+LIBMGR=lib
+LIBFLAGS=
+
+IMPLIB=lib
+IMPLIBFLAGS=-machine:MIPS
+
+MAPSYM=
+MAPSYMFLAGS=
+
+RC=rc
+RCFLAGS=-r -DWIN32 -fo$@ $(RCFILES)
+RCLINK=rc
+RCLINKFLAGS=
+RCSETVERSION=
+
+DLLPOSTFIX=mm
+
+.ENDIF
+.ENDIF
+
+# --- Watcom ---
+.IF "$(COM)" == "WTC"
+
+ASM=wasm
+AFLAGS=/ml /p4r
+
+CC=wcl386
+CFLAGS=-c -Zp4 -W3 -Zl -Zld $(MINUS_I)$(INCLUDE) -bt=nt -zq -s
+CFLAGSCXX=-cc++ -xst
+CFLAGSOBJGUIST=          #-Alfd -GA -GEfs
+CFLAGSOBJCUIST=-
+CFLAGSOBJGUIMT=-bm           #-Alfw -GA -GEd
+CFLAGSOBJCUIMT=-bm
+CFLAGSSLOGUIMT=-bm -bd              #-Alfw -GD -GEfd
+CFLAGSSLOCUIMT=-bm -bd
+CFLAGSPROF=
+CFLAGSDEBUG=/d3
+CFLAGSDBGUTIL=
+CFLAGSOPT=-otexan -4r
+CFLAGSNOOPT=-od -4r
+CFLAGSOUTOBJ=-Fo
+
+LINK=wlink
+LINKFLAGS=op symf op caseexact op eliminate op map
+LINKFLAGSAPPGUI=sys nt_win
+LINKFLAGSSHLGUI=sys nt_dll INITINSTANCE TERMINSTANCE
+LINKFLAGSAPPCUI=sys nt
+LINKFLAGSSHLCUI=sys nt_dll
+LINKFLAGSTACK=op stack=
+LINKFLAGSPROF=
+LINKFLAGSDEBUG=debug all
+LINKFLAGSOPT=
+
+STDOBJGUI=
+STDSLOGUI=
+STDOBJCUI=
+STDSLOCUI=
+STDLIBGUIST=libr clib3r.lib libr plib3r.lib
+STDLIBCUIST=libr clib3r.lib libr plib3r.lib
+STDLIBGUIMT=libr clib3r.lib libr plib3r.lib
+STDLIBCUIMT=libr clib3r.lib libr plib3r.lib
+STDSHLGUIMT=libr clib3r.lib libr plibmt3r.lib libr math387r.lib
+STDSHLCUIMT=libr clib3r.lib libr plibmt3r.lib libr matg387r.lib
+
+LIBMGR=wlib
+LIBFLAGS=/p=64 /c /m
+
+IMPLIB=echo
+IMPLIBFLAGS=
+
+MAPSYM=mapsym
+MAPSYMFLAGS=
+
+RC=wrc
+RCFLAGS=-r -fo$@ $(RCFILES)
+RCLINK=wrc
+RCLINKFLAGS=-k -t -31
+RCSETVERSION=wrc -k -t -31 $@
+
+DLLPOSTFIX=wn
+
+.ENDIF
+
+# --- Cygnus Gnu Compiler ---
+.IF "$(COM)" == "GCC"
+.IF "$(CPU)" == "I"
+
+ASM=
+AFLAGS=
+
+CC=gcc
+### Der gcc vertraegt kein Semikolon im Include-Pfad         RT
+# old:
+#CFLAGS=-c -Wall -I$(INCLUDE) $(OLE2DEF) 
+# new:
+CYGINC=$(INCLUDE:s/-I /-I/:+"  ":s/;/ -I/:s/-I  //:s/   / /)
+CFLAGS=-c -Wall -I$(CYGINC) $(OLE2DEF)
+### 
+CFLAGS+=-nostdinc -fPIC
+CFLAGSCC=-pipe -mpentium
+CFLAGSCXX=-pipe -mpentium -fguiding-decls
+CFLAGSEXCEPTIONS=-fexceptions
+CFLAGS_NO_EXCEPTIONS=-fno-exceptions
+
+CFLAGSOBJGUIST=-DWIN32
+CFLAGSOBJCUIST=-DWIN32
+CFLAGSOBJGUIMT=-DWIN32
+CFLAGSOBJCUIMT=-DWIN32
+CFLAGSSLOGUIMT=-DWIN32 -fPIC
+CFLAGSSLOCUIMT=-DWIN32 -fPIC
+CFLAGSPROF=
+CFLAGSDEBUG=-g
+CFLAGSDBGUTIL=
+CFLAGSOPT=-O3
+CFLAGSNOOPT=-O
+CFLAGSOUTOBJ=-o
+#plattform hart setzen 
+CDEFS+=-D_M_IX86 
+
+STATIC= -static
+DYNAMIC= -dynamic
+
+LINK=ld
+CYGLIB=$(LIB:s/;/ -L/)
+LINKFLAGS=-nodefaultlibs -L$(CYGLIB)
+LINKFLAGSAPPGUI=$(COMPATH)$/i386-mingw32$/lib$/crt1.o
+LINKFLAGSSHLGUI=--warn-once
+LINKFLAGSAPPCUI=$(COMPATH)$/i386-mingw32$/lib$/crt1.o
+LINKFLAGSSHLCUI=--warn-once
+LINKFLAGSTACK=
+LINKFLAGSPROF=
+LINKFLAGSDEBUG=-g
+LINKFLAGSOPT=
+
+STDLIBCPP=-lstdc++
+
+STDOBJVCL=$(L)$/salmain.obj
+STDOBJGUI=
+STDSLOGUI=
+STDOBJCUI=
+STDSLOCUI=
+STDLIBGUIST=-lmingw32 -lgcc -lmoldname -dynamic -ldl -lm -lkernel32 -luser32
+STDLIBCUIST=-lmingw32 -lgcc -lmoldname -dynamic -ldl -lm -lkernel32
+STDLIBGUIMT=-dynamic -ldl -lm -lmingw32 -lkernel32 -luser32 -lgcc -lmoldname
+STDLIBGUIMT+= -lmsvcrt -lcrtdll
+STDLIBCUIMT=-lmingw32 -lgcc -lmoldname -dynamic -ldl -lpthread -lm -lkernel32
+STDSHLGUIMT=-dynamic -ldl -lm -lkernel32 -luser32 -lmingw32 -lgcc
+STDSHLGUIMT+= -lmoldname -lmsvcrt -lcrtdll
+STDSHLCUIMT=-dynamic -ldl -lm -lkernel32
+
+LIBMGR=ar
+LIBFLAGS=-rsu
+
+IMPLIB=ld
+IMPLIBFLAGS=
+
+MAPSYM=tmapsym
+MAPSYMFLAGS=
+
+RC=rc
+RCFLAGS=-DWIN32 -fo$@ $(RCFILES)
+RCLINK=
+RCLINKFLAGS=
+RCSETVERSION=
+
+DLLPOSTFIX=gi
+
+.ENDIF
+.ENDIF
+# --- Windows-NT Allgemein ---
+HC=hc
+HCFLAGS=
+PATH_SEPERATOR*=;
+DLLPRE=
+DLLPOST=.dll
+EXECPOST=.exe
+SCPPOST=.inf
+DLLDEST=$(BIN)
+
+.IF "$(SOLAR_JAVA)"!=""
+JAVADEF=-DSOLAR_JAVA
+.IF "$(debug)"==""
+JAVA_RUNTIME=javai.lib
+.ELSE
+JAVA_RUNTIME=javai_g.lib
+.ENDIF
+.ENDIF
+
+.ENDIF
+
+.IF "$(TFDEF)"!=""
+CFLAGS+=-D$(TFDEF)
+.ENDIF
