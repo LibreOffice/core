@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:51:11 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 07:50:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,13 +546,11 @@ namespace
     static const sal_Char* getDirectXRendererAsciiName()
     {
         return "com.sun.star.rendering.DXCanvas";
-//        return "drafts.com.sun.star.rendering.DXCanvas";
     }
     // ...................................................................
     static const sal_Char* getVCLRendererAsciiName()
     {
         return "com.sun.star.rendering.VCLCanvas";
-//        return "drafts.com.sun.star.rendering.VCLCanvas";
     }
 
     // ...................................................................
