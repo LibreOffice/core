@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scroll.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:48:49 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:12:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,16 +131,6 @@ void SwScrollbar::ViewPortChgd( const Rectangle &rRect )
         AutoShow();
 }
 
-void SwScrollbar::EnableThumbPos( BOOL bEnable, const SwRect &rVisArea )
-{
-    bThumbEnabled = bEnable;
-    if ( bEnable )
-    {
-        long nThumb = bHori ? rVisArea.Left() : rVisArea.Top();
-        SetThumbPos( nThumb );
-    }
-}
-
 /*-----------------10/21/97 02:48pm-----------------
 
 --------------------------------------------------*/
@@ -163,21 +153,7 @@ void SwScrollbar::SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
 
 }
 
-/*-----------------10/21/97 04:47pm-----------------
 
---------------------------------------------------*/
-void SwScrollbar::SetUpdateMode( BOOL bUpdate )
-{
-    ScrollBar::SetUpdateMode( bUpdate );
-    if(bUpdate &&
-        bVisible != ScrollBar::IsVisible())
-    {
-        if(bAuto)
-            AutoShow();
-        else
-            ScrollBar::Show(bVisible);
-    }
-}
 /*-----------------14.04.98 11:38-------------------
 
 --------------------------------------------------*/
