@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-01 20:09:25 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 20:08:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ String STR_SVT_COLLATE_ALPHANUMERIC
     Text[ chinese_traditional ] = "字母數字式";
     Text[ turkish ] = "Alphanumeric";
     Text[ arabic ] = "Alphanumeric";
-    Text[ catalan ] = "Alphanumeric";
+    Text[ catalan ] = "Alfanum�ric";
     Text[ thai ] = "รูปตัวเลขหนังสือ";
 };
 
@@ -211,7 +211,7 @@ String STR_SVT_COLLATE_CHARSET
     Text[ chinese_traditional ] = "字型";
     Text[ turkish ] = "Character Set";
     Text[ arabic ] = "������ ����";
-    Text[ catalan ] = "Joc de car�cters";
+    Text[ catalan ] = "Conjunt de car�cters";
     Text[ finnish ] = "Merkist�";
     Text[ thai ] = "ชุดตัวอักขระ";
 };
@@ -239,7 +239,7 @@ String STR_SVT_COLLATE_DICTIONARY
     Text[ chinese_traditional ] = "字典";
     Text[ turkish ] = "Dictionary";
     Text[ arabic ] = "Dictionary";
-    Text[ catalan ] = "Dictionary";
+    Text[ catalan ] = "Diccionari";
     Text[ finnish ] = "Sanasto";
     Text[ thai ] = "พจนานุกรม";
 };
@@ -295,7 +295,7 @@ String STR_SVT_COLLATE_STROKE
     Text[ chinese_traditional ] = "筆畫";
     Text[ turkish ] = "Stroke";
     Text[ arabic ] = "Stroke";
-    Text[ catalan ] = "Stroke";
+    Text[ catalan ] = "Cop";
     Text[ finnish ] = "Viiva";
     Text[ thai ] = "ขีดลง";
 };
