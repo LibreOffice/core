@@ -2,9 +2,9 @@
  *
  *  $RCSfile: historyoptions.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:51:19 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 17:20:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #ifndef __SGI_STL_ALGORITHM
 #include <algorithm>
 #endif
+
+#include <rtl/logfile.hxx>
+#include "itemholder1.hxx"
 
 //_________________________________________________________________________________________________________________
 //  namespaces
@@ -699,7 +702,7 @@ Sequence< OUString > SvtHistoryOptions_Impl::impl_GetPropertyNames( sal_uInt32& 
                                                                     sal_uInt32& nHelpBookmarkCount )
 {
     /* TODO
-        Index basiert einfügen !!! => p0 => 0 p1 => 1 ...
+        Index basiert einfï¿½gen !!! => p0 => 0 p1 => 1 ...
     */
 
     // First get ALL names of current existing list items in configuration!
@@ -851,7 +854,11 @@ SvtHistoryOptions::SvtHistoryOptions()
     // ... and initialize ouer data container only if it not already exist!
     if( m_pDataContainer == NULL )
     {
+        RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtHistoryOptions_Impl::ctor()");
         m_pDataContainer = new SvtHistoryOptions_Impl;
+
+        ItemHolder1* pHolder = ItemHolder1::getGlobalItemHolder();
+        pHolder->holdConfigItem(E_HISTORYOPTIONS);
     }
 }
 
