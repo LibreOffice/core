@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.70 $
+#   $Revision: 1.71 $
 #
-#   last change: $Author: kz $ $Date: 2004-12-16 11:40:34 $
+#   last change: $Author: hr $ $Date: 2005-02-11 15:32:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -454,7 +454,8 @@ CXX*=gcc
 CYGINC=$(INCLUDE:s/-I /-I/:+"  ":s/;/ -I/:s/-I  //:s/   / /)
 CFLAGS=-c -Wall -I$(CYGINC) $(OLE2DEF)
 ###
-CFLAGS+=-nostdinc -fPIC
+PICSWITCH:=-fPIC
+CFLAGS+=-nostdinc $(PICSWITCH)
 CFLAGSCC=-pipe -mpentium
 CFLAGSCXX=-pipe -mpentium -fguiding-decls
 CFLAGSEXCEPTIONS=-fexceptions
@@ -464,8 +465,8 @@ CFLAGSOBJGUIST=-DWIN32
 CFLAGSOBJCUIST=-DWIN32
 CFLAGSOBJGUIMT=-DWIN32
 CFLAGSOBJCUIMT=-DWIN32
-CFLAGSSLOGUIMT=-DWIN32 -fPIC
-CFLAGSSLOCUIMT=-DWIN32 -fPIC
+CFLAGSSLOGUIMT=-DWIN32 $(PICSWITCH)
+CFLAGSSLOCUIMT=-DWIN32 $(PICSWITCH)
 CFLAGSPROF=
 CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
