@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtex.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-24 11:53:58 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 12:26:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,8 +180,8 @@
 
 #include "doc.hxx"
 
-#ifndef _COM_SUN_STAR_LINGUISTIC_XTHESAURUS_HPP_
-#include <com/sun/star/linguistic/XThesaurus.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XTHESAURUS_HPP_
+#include <com/sun/star/linguistic2/XThesaurus.hpp>
 #endif
 
 #include "wview.hxx"
@@ -550,7 +550,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
     const SfxPoolItem &rItem = GetShell().GetDoc()->GetDefault(RES_CHRATR_LANGUAGE);
     LanguageType nLang = ((const SvxLanguageItem &) rItem).GetLanguage();
     //
-    uno::Reference< linguistic::XThesaurus >  xThes( ::GetThesaurus() );
+    uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
     if (!xThes.is() || nLang == LANGUAGE_NONE ||
         !xThes->hasLocale( SvxCreateLocale( nLang ) ))
         rSet.DisableItem( FN_THESAURUS_DLG );

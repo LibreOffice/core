@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdraw.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2000-10-23 10:53:45 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 12:27:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,7 +419,7 @@ sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin, 
     SwWrtShell *pSh = &GetWrtShell();
     SdrView *pSdrView = pSh->GetDrawView();
     SdrOutliner* pOutliner = ::SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, pSdrView->GetModel());
-    uno::Reference< linguistic::XSpellChecker1 >  xSpell( ::GetSpellChecker() );
+    uno::Reference< linguistic2::XSpellChecker1 >  xSpell( ::GetSpellChecker() );
     if (pOutliner)
     {
         SwWrtShell *pSh = &GetWrtShell();
