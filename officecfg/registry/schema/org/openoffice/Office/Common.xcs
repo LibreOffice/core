@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: os $ $Date: 2002-08-28 12:18:32 $
+ *  last change: $Author: os $ $Date: 2002-08-30 09:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -575,7 +575,7 @@
 				<desc xml:lang="en-US">Contains settings for the font replacement.</desc>
 			</info>
 		</group>
-		<group oor:name="GraphicSize">
+        <group oor:name="GraphicSize">
 			<!-- Responsible: SJ -->
 			<prop oor:name="Width" oor:type="xs:int">
 				<value>10000</value>
@@ -1513,7 +1513,28 @@
 					<desc xml:lang="en-US">Settings for the font selection box in the object bar.</desc>
 				</info>
 			</group>
-		</group>
+            <group oor:name="SourceViewFont">
+                <!-- Responsible: OS -->
+                <prop oor:name="FontName" oor:type="xs:string">
+                    <value xsi:nil="true"/>
+                    <info>
+                        <desc xml:lang="en-US">Specifies the name of the font that is used in source views (HTML source view or BASIC IDE)</desc>
+                    </info>
+                </prop>
+                <prop oor:name="FontHeight" oor:type="xs:short">
+                    <value>10</value>
+                    <info>
+                        <desc xml:lang="en-US">Specifies the height in point of the font that is used in source views (HTML source view or BASIC IDE)</desc>
+                    </info>
+                </prop>
+                <prop oor:name="NonProportionalFontsOnly" oor:type="xs:boolean">
+                    <value>true</value>
+                    <info>
+                        <desc xml:lang="en-US">Specifies whether only non-proportional font should be presented on the dialog page.</desc>
+                    </info>
+                </prop>
+            </group>
+        </group>
 		<group oor:name="Gallery">
 			<!-- Responsible: AF -->
 			<prop oor:name="ID_Dialog" oor:type="xs:boolean">

@@ -3,9 +3,9 @@
  *
  *  $RCSfile: WriterWeb.xcs,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2002-07-26 09:29:10 $
+ *  last change: $Author: os $ $Date: 2002-08-30 09:48:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1026,38 +1026,6 @@
           <value>-1</value>
           <info>
             <desc xml:lang="en-US">Specifies, wether the Bezier Object Bar or the Draw Object Bar should be the visible toolbar with Bezier object in edit mode</desc>
-          </info>
-        </prop>
-      </group>
-    </group>
-    <group oor:name="SourceText">
-      <info>
-        <desc xml:lang="en-US">Contains settings for the source code.</desc>
-      </info>
-      <group oor:name="Font">
-        <info>
-          <desc xml:lang="en-US">Contains font specific settings for the source code.</desc>
-        </info>
-        <prop oor:name="Name" oor:type="xs:string">
-          <!-- OldPath: HTML_Editor/SourceText/Font -->
-          <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: OS -->
-          <!-- UIHints: - -->
-          <value>Courier New</value>
-          <info>
-            <desc xml:lang="en-US">Name of the font used by the Source code editor</desc>
-            <label xml:lang="en-US">Name</label>
-          </info>
-        </prop>
-        <prop oor:name="Height" oor:type="xs:int">
-          <!-- OldPath: HTML_Editor/SourceText/Font -->
-          <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: OS -->
-          <!-- UIHints: - Notice:Old Twip Value = 200 -->
-          <value>353</value>
-          <info>
-            <desc xml:lang="en-US">Height of the font used by the Source code editor  [UNIT=1/100 mm]</desc>
-            <label xml:lang="en-US">Height</label>
           </info>
         </prop>
       </group>
