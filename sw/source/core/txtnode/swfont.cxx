@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-14 06:43:49 $
+ *  last change: $Author: fme $ $Date: 2002-10-22 07:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1027,28 +1027,24 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
 
 #ifdef VERTICAL_LAYOUT
             const SwScriptInfo* pSI = rInf.GetScriptInfo();
-            ASSERT( pSI, "No script info available" )
-#endif
 
-#ifdef VERTICAL_LAYOUT
             const sal_Bool bAsianFont =
                 ( rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() );
             for( xub_StrLen nTmp = nOldIdx; nTmp < nTmpEnd; ++nTmp )
                 if( CH_BLANK == rOldStr.GetChar( nTmp ) || bAsianFont ||
-                    ( nTmp + 1 < rOldStr.Len() &&
+                    ( nTmp + 1 < rOldStr.Len() && pSI &&
                       ASIAN == pSI->ScriptType( nTmp + 1 ) ) )
+
+            // if next portion if a hole portion we do not consider any
+            // extra space added because the last character was ASIAN
+            if ( nSpace && rInf.IsSpaceStop() && bAsianFont )
+                 --nSpace;
+
 #else
             for( xub_StrLen nTmp = nOldIdx; nTmp < nTmpEnd; ++nTmp )
                 if( CH_BLANK == rOldStr.GetChar( nTmp ) )
 #endif
                     ++nSpace;
-
-#ifdef VERTICAL_LAYOUT
-            // if next portion if a hole portion we do not consider any
-            // extra space added because the last character was ASIAN
-            if ( nSpace && rInf.IsSpaceStop() && bAsianFont )
-                 --nSpace;
-#endif
 
             nSpace *= rInf.GetSpace();
         }
