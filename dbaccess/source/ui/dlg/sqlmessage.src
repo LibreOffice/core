@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 10:00:39 $
+ *  last change: $Author: fs $ $Date: 2000-12-05 11:37:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ ModalDialog DLG_SQLMESSAGE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 238 , 101 ) ;
+    HelpId = HID_GENERIC_SQL_ERROR;
     Text = "Text" ;
     Text [ ENGLISH ] = "Text" ;
     Text [ norwegian ] = "Text" ;
@@ -418,6 +419,9 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/11/29 10:00:39  kz
+ *  Merge SRC614: 29.11.00 - 10:59:47 (NoBranch)
+ *
  *  Revision 1.3  2000/10/27 15:18:12  kz
  *  Merge SRC610: 27.10.00 - 17:17:50 (NoBranch)
  *
