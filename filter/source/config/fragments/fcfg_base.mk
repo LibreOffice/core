@@ -14,6 +14,11 @@ T4_BASE = \
 F4_BASE = \
     writer_web_HTML_help \
     StarOffice_XML__Base_
+    
+# -----------------------------------------------
+# count = 1
+F4_UI_BASE = \
+    StarOffice_XML__Base__ui
 
 # -----------------------------------------------
 # count = 3
@@ -28,15 +33,21 @@ C4_BASE = \
     com_sun_star_comp_framework_SoundHandler
 
 # -----------------------------------------------
-TYPES_4fcfg_base           = $(foreach,i,$(T4_BASE) types$/$i.xcu          )
-FILTERS_4fcfg_base         = $(foreach,i,$(F4_BASE) filters$/$i.xcu        )
-FRAMELOADERS_4fcfg_base    = $(foreach,i,$(L4_BASE) frameloaders$/$i.xcu   )
-CONTENTHANDLERS_4fcfg_base = $(foreach,i,$(C4_BASE) contenthandlers$/$i.xcu)
+TYPES_4fcfg_base           = $(foreach,i,$(T4_BASE)    types$/$i.xcu                     )
+FILTERS_4fcfg_base         = $(foreach,i,$(F4_BASE)    filters$/$i.xcu                   )
+UI_FILTERS_4fcfg_base      = $(foreach,i,$(F4_UI_BASE) $(DIR_LOCFRAG)$/filters$/$i.xcu   )
+FRAMELOADERS_4fcfg_base    = $(foreach,i,$(L4_BASE)    frameloaders$/$i.xcu              )
+CONTENTHANDLERS_4fcfg_base = $(foreach,i,$(C4_BASE)    contenthandlers$/$i.xcu           )
 
 # -----------------------------------------------
 # needed to get dependencies inside global makefile work!
 ALL_4fcfg_base = \
     $(TYPES_4fcfg_base) \
-    $(foreach,i,$(FILTERS_4fcfg_base) $(MISC)$/$i) \
+    $(FILTERS_4fcfg_base) \
+    $(UI_FILTERS_4fcfg_base) \
     $(FRAMELOADERS_4fcfg_base) \
     $(CONTENTHANDLERS_4fcfg_base)
+    
+ALL_UI_FILTERS+=$(UI_FILTERS_4fcfg_base)
+
+ALL_PACKAGES+=base
