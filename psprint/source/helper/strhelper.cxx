@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strhelper.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:46:02 $
+ *  last change: $Author: pl $ $Date: 2001-12-12 14:39:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -673,6 +673,14 @@ int getValueOfDouble( char* pBuffer, double f, int nPrecision )
 
     int nInt = f;
     f -= nInt;
+    // f should really not be 1.0 after this, but some
+    // hardware implementations seem to round at this point
+    // this should take care of *.9999999999...
+    if( f == 1.0 || log10( 1.0 - f ) <= -nPrecision )
+    {
+        nInt++;
+        f = 0.0;
+    }
 
     char pReverseBuffer[12];
     int nRev = 0;
@@ -692,6 +700,14 @@ int getValueOfDouble( char* pBuffer, double f, int nPrecision )
             f *= 10;
             nInt = f;
             f -= nInt;
+            // f should really not be 1.0 after this, but some
+            // hardware implementations seem to round at this point
+            // this should take care of *.*9999999...
+            if( f == 1.0 || log10( 1.0 - f ) <= -nPrecision )
+            {
+                nInt++;
+                f = 0.0;
+            }
             *pBuffer++ = nInt + '0';
             nPrecision--;
         } while( f && nPrecision != 0);
