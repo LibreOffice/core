@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.136 $
+#   $Revision: 1.137 $
 #
-#   last change: $Author: hjs $ $Date: 2003-08-18 14:48:49 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:46:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -189,13 +189,6 @@ CDEFSDBGUTIL=
 CDEFSOPT=
 HDEFS=
 
-#CC=
-.IF "$(add_cflags)"!=""
-ENVCFLAGS+=$(add_cflags)
-.ENDIF
-.IF "$(add_cflagscxx)"!=""
-ENVCFLAGSCXX+=$(add_cflagscxx)
-.ENDIF
 CFLAGS=
 CFLAGSCALL=
 CFLAGSCXX=
@@ -214,16 +207,9 @@ CFLAGSDBGUTIL=
 CFLAGSOPT=
 CFLAGSNOOPT=
 CFLAGSOUTOBJ=
-CFLAGSPCHC=
-
-PCHOBJFLAGSC=
-PCHSLOFLAGSC=
-PCHOBJFLAGSU=
-PCHSLOFLAGSU=
 
 CFLAGSINCXX=
 
-#LINK=
 LINKFLAGS=
 LINKFLAGSAPPGUI=
 LINKFLAGSSHLGUI=
@@ -278,17 +264,11 @@ HC=
 HCFLAGS=
 
 MKDEP=
-MKDEPFLAGS=
-MKDEPALLINC=
-MKDEPSOLENV=
-MKDEPSOLVER=
-MKDEPPREPATH=
 
 AS=
 BC=
 COBOL=
 CPP=
-#CXX=
 FOR=
 PASCAL=
 
@@ -312,6 +292,12 @@ MAKELANGDIR=
 E2P=
 CAP=
 cap=
+
+# not to reset because possibly taken from environment
+#CC=
+#CXX=
+#LINK=
+
 
 # avoid confusion with CUE PROFILE variable...
 PROFILE=
@@ -360,10 +346,6 @@ optimize=$(OPTIMIZE)
 nopt*=$(NOPT)
 .ENDIF
 
-.IF "$(ADDOPT)"!=""
-addopt*=$(ADDOPT)
-.ENDIF
-
 .IF "$(GROUP)"!=""
 group*=$(GROUP)
 .ENDIF
@@ -387,14 +369,6 @@ HBTOOLKIT=$(hbtoolkit)
 
 .IF "$(REMOTE)"!=""
 remote=$(REMOTE)
-.ENDIF
-
-.IF "$(PRJPCH)"!=""
-prjpch*=$(PRJPCH)
-.ENDIF
-
-.IF "$(prjpch)"!=""
-PRJPCH*=$(prjpch)
 .ENDIF
 
 .IF "$(PRODUCT)"!=""
@@ -530,20 +504,6 @@ optimize=
 OPTIMIZE=
 .ENDIF
 
-
-.IF "$(addopt)"!=""
-OLD_EXEPTIONS=TRUE
-add_opt=
-ADD_OPT=
-.ENDIF
-
-
-#.IF "$(delopt)"!=""
-#del_opt=
-#DEL_OPT=
-#.ENDIF
-
-
 # Optimierung bei FinalCheck funktioniert nicht!
 .IF "$(bndchk)" != ""
 optimize=
@@ -571,7 +531,7 @@ TARGETTYPE=CUI
 .ENDIF
 
 .IF "$(TARGETTHREAD)"==""
-.IF "$(GUI)" == "UNX" || "$(GUI)"=="OS2"
+.IF "$(GUI)" == "UNX"
 TARGETTHREAD=MT
 .ELSE
 .IF "$(MULTITHREAD_OBJ)"!=""
@@ -580,10 +540,6 @@ TARGETTHREAD=MT
 TARGETTHREAD=ST
 .ENDIF
 .ENDIF
-.ENDIF
-
-.IF "$(GUIBASE)" == "DOS"
-TARGETTYPE=CUI
 .ENDIF
 
 # Neues Enironment setzen
@@ -714,24 +670,10 @@ IDLPACKAGENAME=$(PRJNAME)
 .ENDIF
 
 # Objekt-Pfad
-.IF "$(debug)"!=""
-.IF "$(GROUP)"!="WRITER"
 OBJ=$(OUT)$/obj
 SLO=$(OUT)$/slo
 ROBJ=$(ROUT)$/obj
 RSLO=$(ROUT)$/slo
-.ELSE
-OBJ=$(OUT)$/dbo
-SLO=$(OUT)$/dso
-ROBJ=$(ROUT)$/dbo
-RSLO=$(ROUT)$/dso
-.ENDIF
-.ELSE
-OBJ=$(OUT)$/obj
-SLO=$(OUT)$/slo
-ROBJ=$(ROUT)$/obj
-RSLO=$(ROUT)$/slo
-.ENDIF
 
 # Particle Path
 PAR=$(OUT)$/par
@@ -791,20 +733,6 @@ WINVERSIONNAMES=$(UNIXVERSIONNAMES)
 
 .IF "$(GUI)"=="WNT"
 SHELLLIB=$(LIBPRE) gdi32.lib $(LIBPRE) shell32.lib $(LIBPRE) advapi32.lib $(LIBPRE) comdlg32.lib
-.ENDIF
-.IF "$(GUI)"=="WIN"
-SHELLLIB=$(LIBPRE) shell.lib
-.ENDIF
-
-.IF "$(GUI)"=="WIN"
-DDEMLLIB=$(LIBPRE) ddeml.lib
-.ENDIF
-
-.IF "$(GUI)"=="WIN"
-QELIB=$(LIBPRE) qelib.lib
-.ENDIF
-.IF "$(GUI)"=="OS2"
-QELIB=$(LIBPRE) qelib32.lib
 .ENDIF
 
 .IF "$(GUI)" != "MAC"
@@ -959,19 +887,6 @@ SOLARCOMMONBINDIR=$(SOLARBINDIR)
 .ENDIF
 
 
-# Full-Debug Pfade
-.IF "$(debug)" != ""
-.IF "$(FULLDEBUG)" != ""
-OBJ=$(OUT)$/dbo
-SLO=$(OUT)$/dso
-ROBJ=$(INPATH)$/dbo
-RSLO=$(INPATH)$/dso
-SLB=$(OUT)$/dlb
-LB=$(OUT)$/dib
-BIN=$(BIN)$/dbg
-.ENDIF
-.ENDIF
-
 .IF "$(PRE)"==""
 #JARDIR=$(CLASSDIR)
 JARDIR=$(OUT)$/class
@@ -1054,6 +969,10 @@ CDEFS= -D$(OS) -D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -D$(CPUNAME) -D$(REMOTEDEF)
 CDEFS= -D$(OS) -D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -D$(CPUNAME)
 .ENDIF
 
+.IF "$(CDEFS_PRESET)" != ""
+CDEFS+=$(CDEFS_PRESET)
+.ENDIF
+
 .IF "$(TIMELOG)" != ""
 CDEFS+=-DTIMELOG
 .ENDIF
@@ -1070,11 +989,7 @@ CDEFS+=-D_USE_NAMESPACE
 
 CDEFSCXX=
 CDEFSOBJ=
-.IF "$(GUI)"=="DOS"
-CDEFSSLO=
-.ELSE
 CDEFSSLO=-DSHAREDLIB -D_DLL_
-.ENDIF
 CDEFSGUI=-DGUI
 CDEFSCUI=-DCUI
 CDEFSST=-DSINGLETHREAD
@@ -1107,18 +1022,12 @@ SVIDL=svidl.exe
 .ENDIF
 .ENDIF
 
-.IF "$(GUI)"=="WIN"
-.IF "$(product)"=="full"
-LDUMP=ldump -Gy
-.ENDIF
-.ELSE
 .IF "$(USE_SHELL)"!="4nt"
 LDUMP=guw.pl ldump4
 LDUMP2=guw.pl ldump4
 .ELSE
 LDUMP=ldump4
 LDUMP2=ldump4
-.ENDIF
 .ENDIF
 
 .IF "$(MKDEPENDALL)"!=""
@@ -1169,6 +1078,8 @@ RSC=guw.pl rsc
 .ENDIF
 
 RSCUPDVER=$(UPD)$(UPDMINOR)
+RSCUPDVERDEF=-DUPDVER="$(RSCUPDVER)"
+
 RSCFLAGS=-s
 .IF "$(remote)" != ""
 RSCDEFS=-D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -DSUPD=$(UPD) -DBUILD=$(BUILD) -D$(REMOTEDEF) $(JAVADEF)
@@ -1215,14 +1126,6 @@ SFXLIBS=sfx so2 basic
 SVXLIBS=svxitems dialogs editeng svrtf svdraw outliner xout si basicide \
         tbxctrls
 
-.IF "$(GUI)" == "DOS"
-.INCLUDE : dos.mk
-.ENDIF
-
-.IF "$(GUI)" == "WIN"
-.INCLUDE : win.mk
-.ENDIF
-
 .IF "$(GUI)"=="WNT"
 .INCLUDE : wnt.mk
 .ENDIF
@@ -1231,16 +1134,8 @@ SVXLIBS=svxitems dialogs editeng svrtf svdraw outliner xout si basicide \
 .INCLUDE : as4.mk
 .ENDIF
 
-.IF "$(GUI)" == "OS2"
-.INCLUDE : os2.mk
-.ENDIF
-
 .IF "$(GUI)" == "UNX"
 .INCLUDE : unx.mk
-.ENDIF
-
-.IF "$(GUI)" == "MAC"
-.INCLUDE : mac.mk
 .ENDIF
 
 IDLC*=idlc
@@ -1340,40 +1235,6 @@ CDEFS+=-DEXCEPTIONS_ON
 .ENDIF
 .ENDIF
 
-.IF "$(PRJPCH)"!=""
-.IF "$(PROJECTPCH)"==""
-PROJECTPCH=$(TARGET)
-.ENDIF
-.IF "$(PROJECTPCHSOURCE)"==""
-PROJECTPCHSOURCE=$(PROJECTPCH)
-.ENDIF
-.IF "$(debug)"!=""
-.IF "$(PDBTARGET)"==""
-PROJECTPCHTARGET=$(MISC)$/$(TARGET).pcd
-.ELSE
-PROJECTPCHTARGET=$(MISC)$/$(PROJECTPCH).pcd
-.ENDIF
-.ELSE
-PROJECTPCHTARGET=$(MISC)$/$(PROJECTPCH).pch
-.ENDIF
-.IF "$(EXCEPTIONS_FLAG)"!=""
-PROJECTPCHTARGET!:=$(PROJECTPCHTARGET:s/.pc/.xc/)
-.ENDIF
-.IF "$(COM)"=="MSC"
-.IF "$(PROJECTPCH4DLL)"!=""
-PCHOBJFLAGSC=
-PCHOBJFLAGSU=
-PCHSLOFLAGSC=-Yc -Yd -Fp$(PROJECTPCHTARGET)
-PCHSLOFLAGSU=-Yu -Yd -Fp$(PROJECTPCHTARGET)
-.ELSE
-PCHSLOFLAGSC=
-PCHSLOFLAGSU=
-PCHOBJFLAGSC=-Yc -Yd -Fp$(PROJECTPCHTARGET)
-PCHOBJFLAGSU=-Yu -Yd -Fp$(PROJECTPCHTARGET)
-.ENDIF
-.ENDIF
-.ENDIF		# "$(PRJPCH)"!=""
-#
 # Zusammenbau der Flags und CDefs fuer GUI
 .IF "$(TARGETTYPE)"=="GUI"
 CDEFS+= $(CDEFSGUI)
@@ -1513,7 +1374,6 @@ CDEFS+= -DTF_NEWEX
 UNOUCRBASE*=UCR
 UNOUCROUT*=$(OUT)$/inc
 UNOUCRRDB*=$(SOLARBINDIR)$/types.rdb
-UNOUCRDEP*=$(SOLARBINDIR)$/types.rdb
 
 # --- Compiler -----------------------------------------------------
 .INCLUDE : rules.mk
