@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyeditor.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:56 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 09:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,6 +362,18 @@ namespace pcr
         if(pPage)
             nVal=pPage->getListBox()->GetPropertyPos( rEntryName );
         return nVal;
+    }
+
+    //------------------------------------------------------------------
+    void OPropertyEditor::EnablePropertyLine( const ::rtl::OUString& _rEntryName, bool _bEnable )
+    {
+        for ( USHORT i = 0; i < m_aTabControl.GetPageCount(); ++i )
+        {
+            OBrowserPage* pPage = static_cast< OBrowserPage* >( m_aTabControl.GetTabPage( m_aTabControl.GetPageId( i ) ) );
+            if ( pPage )
+                pPage->getListBox()->EnablePropertyLine( _rEntryName, _bEnable );
+        }
+
     }
 
     //------------------------------------------------------------------
