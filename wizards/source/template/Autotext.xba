@@ -3,7 +3,7 @@
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Autotext" script:language="StarBasic">Option Explicit
 
 Public UserfieldDataType(14) as String
-Public oDocument as Object
+Public oDocAuto as Object
 Public BulletList(7) as Integer
 
 Sub Main()
@@ -46,15 +46,15 @@ Sub Main()
 	BulletList(6) = 79
 	BulletList(7) = 58
 
-	oDocument = StarDesktop.ActiveFrame.Controller.Model
-	oStyles = oDocument.Stylefamilies.NumberingStyles
+	oDocAuto = StarDesktop.ActiveFrame.Controller.Model
+	oStyles = oDocAuto.Stylefamilies.NumberingStyles
 
 	&apos; Prepare the Search-Descriptor
-	oSearchDesc = oDocument.createsearchDescriptor()
+	oSearchDesc = oDocAuto.createsearchDescriptor()
 	oSearchDesc.SearchRegularExpression = True
 	oSearchDesc.SearchWords = True
 	oSearchDesc.SearchString  = &quot;&lt;[^&gt;]+&gt;&quot;
-	oFoundall = oDocument.FindAll(oSearchDesc)
+	oFoundall = oDocAuto.FindAll(oSearchDesc)
 
 	&apos;Loop over the foundings
 	For i = 0 To oFoundAll.Count - 1
@@ -92,7 +92,7 @@ Sub	CreateUserDatafield(oCursor, sFoundContent as String)
 	Dim UserInfo as String
 	Dim UserIndex as Integer
 	
-	oUserfield = oDocument.CreateInstance(&quot;com.sun.star.text.TextField.ExtendedUser&quot;)
+	oUserfield = oDocAuto.CreateInstance(&quot;com.sun.star.text.TextField.ExtendedUser&quot;)
 	sFoundList() = ArrayoutofString(sFoundContent,&quot;:&quot;,MaxIndex)
 	UserInfo = UCase(LTrim(sFoundList(1)))
 	UserIndex = IndexinArray(UserInfo, UserfieldDatatype())
@@ -151,7 +151,7 @@ Sub	CreatePlaceholder(oCursor as Object, sFoundContent as String)
 	Dim oPlaceholder as Object
 	Dim MaxIndex as Integer
 	Dim sFoundList(3)
-	oPlaceholder = oDocument.CreateInstance(&quot;com.sun.star.text.TextField.JumpEdit&quot;)
+	oPlaceholder = oDocAuto.CreateInstance(&quot;com.sun.star.text.TextField.JumpEdit&quot;)
 	sFoundList() = ArrayoutofString(sFoundContent, &quot;:&quot; &amp; chr(34),MaxIndex)
 	&apos; Delete The Double-quotes
 	oPlaceholder.Hint = DeleteStr(sFoundList(2),chr(34))
