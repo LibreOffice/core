@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellImplementation.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-04 09:00:53 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:33:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@
 #include <vcl/msgbox.hxx>
 #include <basic/sbstar.hxx>
 
+
 namespace {
 class ImpUndoDeleteWarning : public ModalDialog
 {
@@ -133,7 +134,8 @@ namespace sd {
 ViewShell::Implementation::Implementation (ViewShell& rViewShell)
     : mbIsShowingUIControls(false),
       mbIsMainViewShell(false),
-      mrViewShell (rViewShell)
+      mrViewShell (rViewShell),
+      mbIsInitialized(false)
 {
 }
 
@@ -158,7 +160,7 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
     SdrLayerAdmin& rLayerAdmin = pDocument->GetLayerAdmin();
     BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
     BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
-    SetOfByte aVisibleLayers = pCurrentPage->TRG_GetMasterPageVisibleLayers();
+    SetOfByte aVisibleLayers;
     BOOL bHandoutMode = FALSE;
     SdPage* pHandoutMPage = NULL;
     String aNewName;
@@ -174,6 +176,11 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
     BOOL bBVisible;
     BOOL bBObjsVisible;
     const SfxItemSet* pArgs = rRequest.GetArgs();
+
+    if (pCurrentPage->TRG_HasMasterPage())
+        aVisibleLayers = pCurrentPage->TRG_GetMasterPageVisibleLayers();
+    else
+        aVisibleLayers.SetAll();
 
     do
     {
@@ -420,5 +427,6 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
     mrViewShell.Cancel();
     rRequest.Done ();
 }
+
 
 } // end of namespace sd
