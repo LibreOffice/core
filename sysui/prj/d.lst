@@ -25,5 +25,3 @@ mkdir: %_DEST%\inc%_EXT%\icons
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\bin\01\quickstart.exe %_DEST%\bin%_EXT%\quickstart.exe
 
-..\source\win32\filepicker\fps.xml %_DEST%\xml%_EXT%\fps.xml
-..\source\win32\folderpicker\fop.xml %_DEST%\xml%_EXT%\fop.xml
