@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filrset.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-29 15:00:12 $
+ *  last change: $Author: kso $ $Date: 2001-07-23 13:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,15 +205,16 @@ XResultSet_impl::queryInterface(
     throw( RuntimeException )
 {
     Any aRet = cppu::queryInterface( rType,
-                                          SAL_STATIC_CAST( lang::XComponent*, this),
-                                          SAL_STATIC_CAST( lang::XEventListener*, this),
-                                          SAL_STATIC_CAST( sdbc::XRow*, this),
-                                          SAL_STATIC_CAST( sdbc::XResultSet*, this),
-                                          SAL_STATIC_CAST( sdbc::XCloseable*, this),
-                                          SAL_STATIC_CAST( sdbc::XResultSetMetaDataSupplier*, this),
-                                          SAL_STATIC_CAST( beans::XPropertySet*, this ),
-                                          SAL_STATIC_CAST( XContentAccess*, this),
-                                          SAL_STATIC_CAST( XDynamicResultSet*,this) );
+                                     SAL_STATIC_CAST( lang::XComponent*, this),
+                                     SAL_STATIC_CAST( lang::XTypeProvider*, this),
+                                     SAL_STATIC_CAST( lang::XEventListener*, this),
+                                     SAL_STATIC_CAST( sdbc::XRow*, this),
+                                     SAL_STATIC_CAST( sdbc::XResultSet*, this),
+                                     SAL_STATIC_CAST( sdbc::XCloseable*, this),
+                                     SAL_STATIC_CAST( sdbc::XResultSetMetaDataSupplier*, this),
+                                     SAL_STATIC_CAST( beans::XPropertySet*, this ),
+                                     SAL_STATIC_CAST( XContentAccess*, this),
+                                     SAL_STATIC_CAST( XDynamicResultSet*,this) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 

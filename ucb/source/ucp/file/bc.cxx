@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: abi $ $Date: 2001-07-10 11:04:06 $
+ *  last change: $Author: kso $ $Date: 2001-07-23 13:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,15 +241,16 @@ BaseContent::queryInterface( const Type& rType )
     throw( RuntimeException )
 {
     Any aRet = cppu::queryInterface( rType,
-                                          SAL_STATIC_CAST( lang::XComponent*, this ),
-                                          SAL_STATIC_CAST( lang::XServiceInfo*, this ),
-                                          SAL_STATIC_CAST( XCommandProcessor*, this ),
-                                          SAL_STATIC_CAST( container::XChild*, this ),
-                                          SAL_STATIC_CAST( beans::XPropertiesChangeNotifier*, this ),
-                                          SAL_STATIC_CAST( beans::XPropertyContainer*, this ),
-                                          SAL_STATIC_CAST( XContentCreator*,this ),
-                                          SAL_STATIC_CAST( beans::XPropertySetInfoChangeNotifier*, this ),
-                                          SAL_STATIC_CAST( XContent*,this) );
+                                     SAL_STATIC_CAST( lang::XComponent*, this ),
+                                     SAL_STATIC_CAST( lang::XTypeProvider*, this ),
+                                     SAL_STATIC_CAST( lang::XServiceInfo*, this ),
+                                     SAL_STATIC_CAST( XCommandProcessor*, this ),
+                                     SAL_STATIC_CAST( container::XChild*, this ),
+                                     SAL_STATIC_CAST( beans::XPropertiesChangeNotifier*, this ),
+                                     SAL_STATIC_CAST( beans::XPropertyContainer*, this ),
+                                     SAL_STATIC_CAST( XContentCreator*,this ),
+                                     SAL_STATIC_CAST( beans::XPropertySetInfoChangeNotifier*, this ),
+                                     SAL_STATIC_CAST( XContent*,this) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 

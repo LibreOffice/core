@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filprp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-22 12:23:38 $
+ *  last change: $Author: kso $ $Date: 2001-07-23 13:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,7 @@ XPropertySetInfo_impl::queryInterface(
   throw( RuntimeException )
 {
   Any aRet = cppu::queryInterface( rType,
+                    SAL_STATIC_CAST( lang::XTypeProvider*,this),
                     SAL_STATIC_CAST( beans::XPropertySetInfo*,this) );
   return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
