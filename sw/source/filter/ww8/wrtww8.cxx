@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:12:34 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 15:11:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2363,7 +2363,8 @@ ULONG SwWW8Writer::StoreDoc()
     pStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
     const SwSectionFmt *pFmt=0;
-    pAktPageDesc = &pDoc->GetPageDesc( 0 );     // Default: "Standard"
+    // Default: "Standard"
+    pAktPageDesc = &const_cast<const SwDoc *>(pDoc)->GetPageDesc( 0 );
     pSepx = new WW8_WrPlcSepx;      // Sepx
     {
         const SfxPoolItem* pI;
