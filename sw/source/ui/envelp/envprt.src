@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envprt.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 22:59:09 $
+ *  last change: $Author: kz $ $Date: 2001-07-04 15:01:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,16 +77,16 @@ TabPage TP_ENV_PRT
         Text[ ENGLISH ] = "Envelope orientation" ;
         Text[ english_us ] = "Envelope orientation";
         Text[ portuguese ] = "Envelope orientation";
-        Text[ russian ] = "Envelope orientation";
+        Text[ russian ] = "Способ подачи конверта";
         Text[ greek ] = "Envelope orientation";
         Text[ dutch ] = "Envelope orientation";
         Text[ french ] = "Envelope orientation";
         Text[ spanish ] = "Envelope orientation";
         Text[ finnish ] = "Envelope orientation";
-        Text[ italian ] = "Envelope orientation";
+        Text[ italian ] = "Caricamento busta";
         Text[ danish ] = "Envelope orientation";
         Text[ swedish ] = "Kuvertindrag";
-        Text[ polish ] = "Envelope orientation";
+        Text[ polish ] = "Orientacja koperty";
         Text[ portuguese_brazilian ] = "Envelope orientation";
         Text[ japanese ] = "Envelope orientation";
         Text[ korean ] = "Envelope orientation";
@@ -297,13 +297,13 @@ TabPage TP_ENV_PRT
         Text[ ENGLISH ] = "Current printer" ;
         Text[ english_us ] = "Current printer";
         Text[ portuguese ] = "Current printer";
-        Text[ russian ] = "Current printer";
+        Text[ russian ] = "Текущий принтер";
         Text[ greek ] = "Current printer";
         Text[ dutch ] = "Current printer";
         Text[ french ] = "Current printer";
         Text[ spanish ] = "Current printer";
         Text[ finnish ] = "Current printer";
-        Text[ italian ] = "Current printer";
+        Text[ italian ] = "Stampante attuale";
         Text[ danish ] = "Current printer";
         Text[ swedish ] = "Aktuell skrivare";
         Text[ polish ] = "Aktualna drukarka";
@@ -425,6 +425,7 @@ Bitmap BMP_VER_RGHT_UPPER
 {
     File = "envvr_u.bmp" ;
 };
+
 
 
 
