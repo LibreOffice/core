@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoparagraph.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-05-09 09:27:51 $
+ *  last change: $Author: dvo $ $Date: 2001-05-11 15:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,7 +335,6 @@ Sequence< Any > SwXParagraph::getPropertyValues(
         Any* pValues = aValues.getArray();
         const OUString* pPropertyNames = rPropertyNames.getConstArray();
         const SfxItemPropertyMap*   pMap = aPropSet.getPropertyMap();
-        SwParaSelection aParaSel(pUnoCrsr);
         SwNode& rTxtNode = pUnoCrsr->GetPoint()->nNode.GetNode();
         SwAttrSet& rAttrSet = ((SwTxtNode&)rTxtNode).GetSwAttrSet();
         for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
