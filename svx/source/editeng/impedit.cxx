@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 15:46:53 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -919,6 +919,12 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, US
             GetCursor()->SetPos( aCursorRect.TopRight() );
             GetCursor()->SetOrientation( 2700 );
         }
+        else
+            // --> FME 2004-10-18 #i32593#
+            // Reset correct orientation in horizontal layout
+            GetCursor()->SetOrientation( 0 );
+            // <--
+
         GetCursor()->SetSize( aCursorSz );
 
         unsigned char nCursorDir = CURSOR_DIRECTION_NONE;
