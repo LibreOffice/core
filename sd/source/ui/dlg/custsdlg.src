@@ -2,9 +2,9 @@
  *
  *  $RCSfile: custsdlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:13:18 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 20:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,7 +475,7 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
     Text [ portuguese ] = "Definir apresentação personalizada" ;
     Text[ chinese_simplified ] = "¶¨Òå×Ô¶¨µÄÑİÊ¾ÎÄ¸å";
     Text[ russian ] = "Îïğåäåëèòü ïğîèçâîëüíóş äåìîíñòğàöèş";
-    Text[ polish ] = "Okre?l indywidualne pokazy slajdów";
+    Text[ polish ] = "Okreœl indywidualne pokazy slajdów";
     Text[ japanese ] = "–Ú“I•Ê½×²ÄŞ¼®°‚Ì’è‹`•t‚¯";
     Text[ chinese_traditional ] = "©w¸q­Ó¤HÂ²³ø";
     Text[ arabic ] = "ÊÚÑíİ ÇáÚÑÖ ÇáÊŞÏíãí ÇáãÎÕÕ";
