@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-12 17:30:28 $
+ *  last change: $Author: mib $ $Date: 2000-10-20 11:19:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ class SvXMLNumFmtExport;
 class XMLTextFieldExport;
 #endif
 class XMLPropertySetMapper;
-class XMLTextMasterPageExport;
+//class XMLTextMasterPageExport;
 class SwXMLTextParagraphExport;
 
 class SwXMLExport : public SvXMLExport
@@ -138,7 +138,7 @@ class SwXMLExport : public SvXMLExport
     SvXMLItemMapEntriesRef      xTableRowItemMap;
     SvXMLItemMapEntriesRef      xTableCellItemMap;
     UniReference < XMLPropertySetMapper > xParaPropMapper;
-    UniReference < XMLTextMasterPageExport> xMasterPageExport;
+//  UniReference < XMLTextMasterPageExport> xMasterPageExport;
 
     sal_Bool                    bExportWholeDoc : 1;// export whole document?
     sal_Bool                    bExportFirstTableOnly : 1;
@@ -208,6 +208,7 @@ protected:
 #ifndef XML_CORE_API
     virtual XMLTextParagraphExport* CreateTextParagraphExport();
     virtual SvXMLAutoStylePoolP* CreateAutoStylePool();
+    virtual XMLPageExport* CreatePageExport();
 #endif
 
 public:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-18 11:20:44 $
+ *  last change: $Author: mib $ $Date: 2000-10-20 11:19:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -702,17 +702,23 @@ void SwXMLExport::_ExportAutoStyles()
 
     GetTextParagraphExport()->collectFrameBoundToPageAutoStyles();
     GetTextParagraphExport()->collectTextAutoStyles( xText );
-    xMasterPageExport->collectAutoStyles( sal_False );
+    GetPageExport()->collectAutoStyles( sal_False );
     GetTextParagraphExport()->exportTextAutoStyles();
+    GetPageExport()->exportAutoStyles();
     exportAutoDataStyles();
 
 #endif
 
 }
 
+XMLPageExport* SwXMLExport::CreatePageExport()
+{
+    return new XMLTextMasterPageExport( *this );
+}
+
 void SwXMLExport::_ExportMasterStyles()
 {
-    xMasterPageExport->exportMasterStyles( sal_False );
+    GetPageExport()->exportMasterStyles( sal_False );
 }
 
 // ---------------------------------------------------------------------
@@ -836,11 +842,14 @@ SvXMLAutoStylePoolP* SwXMLExport::CreateAutoStylePool()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmlfmte.cxx,v 1.4 2000-10-18 11:20:44 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmlfmte.cxx,v 1.5 2000-10-20 11:19:43 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2000/10/18 11:20:44  mib
+      master page import and export continued
+
       Revision 1.3  2000/10/12 17:30:28  mib
       export of master pages
 
