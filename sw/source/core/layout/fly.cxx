@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:45:06 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -1211,7 +1210,7 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
     {
         SwFrmFmt *pFmt = GetFmt();
         SWRECTFN( GetAnchorFrm() )
-        SwTwips nNewY = bVert ? rNewPos.X() : rNewPos.Y();
+        const SwTwips nNewY = bVert ? rNewPos.X() : rNewPos.Y();
         SwTwips nTmpY = nNewY == LONG_MAX ? 0 : nNewY;
         if( bVert )
             nTmpY = -nTmpY;
@@ -1220,7 +1219,21 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
 
         SwFmtVertOrient aVert( pFmt->GetVertOrient() );
         SwTxtFrm *pAutoFrm = NULL;
-        if( IsFlyAtCntFrm() || VERT_NONE != aVert.GetVertOrient() )
+        // --> OD 2004-11-12 #i34948# - handle also at-page and at-fly anchored
+        // Writer fly frames
+        const RndStdIds eAnchorType = GetFrmFmt().GetAnchor().GetAnchorId();
+        if ( eAnchorType == FLY_PAGE )
+        {
+            aVert.SetVertOrient( VERT_NONE );
+            aVert.SetRelationOrient( REL_PG_FRAME );
+        }
+        else if ( eAnchorType == FLY_AT_FLY )
+        {
+            aVert.SetVertOrient( VERT_NONE );
+            aVert.SetRelationOrient( FRAME );
+        }
+        // <--
+        else if ( IsFlyAtCntFrm() || VERT_NONE != aVert.GetVertOrient() )
         {
             if( REL_CHAR == aVert.GetRelationOrient() && IsAutoPos() )
             {
@@ -1257,10 +1270,25 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
         //den sie ist stets 0.
         if ( !IsFlyInCntFrm() )
         {
-            SwTwips nNewX = bVert ? rNewPos.Y() : rNewPos.X();
+            const SwTwips nNewX = bVert ? rNewPos.Y() : rNewPos.X();
             SwTwips nTmpX = nNewX == LONG_MAX ? 0 : nNewX;
             SwFmtHoriOrient aHori( pFmt->GetHoriOrient() );
-            if( IsFlyAtCntFrm() || HORI_NONE != aHori.GetHoriOrient() )
+            // --> OD 2004-11-12 #i34948# - handle also at-page and at-fly anchored
+            // Writer fly frames
+            if ( eAnchorType == FLY_PAGE )
+            {
+                aHori.SetHoriOrient( HORI_NONE );
+                aHori.SetRelationOrient( REL_PG_FRAME );
+                aHori.SetPosToggle( FALSE );
+            }
+            else if ( eAnchorType == FLY_AT_FLY )
+            {
+                aHori.SetHoriOrient( HORI_NONE );
+                aHori.SetRelationOrient( FRAME );
+                aHori.SetPosToggle( FALSE );
+            }
+            // <--
+            else if ( IsFlyAtCntFrm() || HORI_NONE != aHori.GetHoriOrient() )
             {
                 aHori.SetHoriOrient( HORI_NONE );
                 if( REL_CHAR == aHori.GetRelationOrient() && IsAutoPos() )
@@ -1831,16 +1859,16 @@ SwTwips SwFlyFrm::_Grow( SwTwips nDist, BOOL bTst )
             Unlock();
             if ( IsFlyFreeFrm() )
             {
-                // --> OD 2004-10-29 #i36347# - no format of position here
-                // and prevent call of <CheckClip(..)>.
+                // --> OD 2004-11-12 #i37068# - no format of position here
+                // and prevent move in method <CheckClip(..)>.
                 // This is needed to prevent layout loop caused by nested
                 // Writer fly frames - inner Writer fly frames format its
                 // anchor, which grows/shrinks the outer Writer fly frame.
                 // Note: position will be invalidated below.
                 bValidPos = TRUE;
-                static_cast<SwFlyFreeFrm*>(this)->SetNoCheckClip( true );
+                static_cast<SwFlyFreeFrm*>(this)->SetNoMoveOnCheckClip( true );
                 ((SwFlyFreeFrm*)this)->SwFlyFreeFrm::MakeAll();
-                static_cast<SwFlyFreeFrm*>(this)->SetNoCheckClip( false );
+                static_cast<SwFlyFreeFrm*>(this)->SetNoMoveOnCheckClip( false );
                 // <--
             }
             else
@@ -1907,16 +1935,16 @@ SwTwips SwFlyFrm::_Shrink( SwTwips nDist, BOOL bTst )
             Unlock();
             if ( IsFlyFreeFrm() )
             {
-                // --> OD 2004-10-29 #i36347# - no format of position here
-                // and prevent call of <CheckClip(..)>
+                // --> OD 2004-11-12 #i37068# - no format of position here
+                // and prevent move in method <CheckClip(..)>.
                 // This is needed to prevent layout loop caused by nested
                 // Writer fly frames - inner Writer fly frames format its
                 // anchor, which grows/shrinks the outer Writer fly frame.
                 // Note: position will be invalidated below.
                 bValidPos = TRUE;
-                static_cast<SwFlyFreeFrm*>(this)->SetNoCheckClip( true );
+                static_cast<SwFlyFreeFrm*>(this)->SetNoMoveOnCheckClip( true );
                 ((SwFlyFreeFrm*)this)->SwFlyFreeFrm::MakeAll();
-                static_cast<SwFlyFreeFrm*>(this)->SetNoCheckClip( false );
+                static_cast<SwFlyFreeFrm*>(this)->SetNoMoveOnCheckClip( false );
                 // <--
             }
             else
@@ -2107,16 +2135,6 @@ void SwFrm::AppendDrawObj( SwAnchoredObject& _rNewObj )
     // no direct positioning needed, but invalidate the drawing object position
     _rNewObj.InvalidateObjPos();
 
-    // move 'master' drawing object to visible layer
-    if ( !_rNewObj.GetDrawObj()->ISA(SwDrawVirtObj) )
-    {
-        if ( _rNewObj.GetFrmFmt().GetDoc() )
-        {
-            ::GetUserCall( _rNewObj.GetDrawObj() )->
-                                    MoveObjToVisibleLayer( _rNewObj.DrawObj() );
-        }
-    }
-
     // register at page frame
     SwPageFrm* pPage = FindPageFrm();
     if ( pPage )
@@ -2194,6 +2212,15 @@ void SwFrm::InvalidateObjs( const bool _bInvaPosOnly,
                 {
                     continue;
                 }
+                // --> OD 2004-11-24 #115759# - unlock its position, if anchored
+                // object isn't registered at the page, where its anchor
+                // character text frame is on, respectively if it has no
+                // anchor character text frame.
+                else
+                {
+                    pAnchoredObj->UnlockPosition();
+                }
+                // <--
             }
             // <--
             // distinguish between writer fly frames and drawing objects
