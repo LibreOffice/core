@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-06 12:50:23 $
+ *  last change: $Author: cl $ $Date: 2000-10-09 09:26:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,9 +169,9 @@
 #include "../ui/inc/dragserv.hxx"
 #include "../ui/inc/viewshel.hxx"
 #include "../ui/inc/grdocsh.hxx"
+#include "../ui/inc/optsitem.hxx"
 #endif //!SVX_LIGHT
 #include "../ui/inc/frmview.hxx"
-#include "../ui/inc/optsitem.hxx"
 #else
 #ifndef SVX_LIGHT
 #include "docshell.hxx"
@@ -180,9 +180,9 @@
 #include "dragserv.hxx"
 #include "viewshel.hxx"
 #include "grdocsh.hxx"
+#include "optsitem.hxx"
 #endif //!SVX_LIGHT
 #include "frmview.hxx"
-#include "optsitem.hxx"
 #endif
 
 using namespace ::com::sun::star;
@@ -897,26 +897,22 @@ SvStream& operator >> (SvStream& rIn, SdDrawDocument& rDoc)
                         ATTR_OPTIONS_PRINT,         ATTR_OPTIONS_PRINT,
                         0 );
         // PrintOptionsSet setzen
-        SdOptionsPrintItem aPrintItem(ATTR_OPTIONS_PRINT
 #ifndef SVX_LIGHT
+        SdOptionsPrintItem aPrintItem(ATTR_OPTIONS_PRINT
                                       ,SD_MOD()->GetSdOptions(rDoc.eDocType)
-#endif // !SVX_LIGHT
                                       );
 
         SfxFlagItem aFlagItem( SID_PRINTER_CHANGESTODOC );
         USHORT      nFlags = 0;
 
-#ifndef SVX_LIGHT
         nFlags =  (aPrintItem.IsWarningSize() ? SFX_PRINTER_CHG_SIZE : 0) |
                 (aPrintItem.IsWarningOrientation() ? SFX_PRINTER_CHG_ORIENTATION : 0);
         aFlagItem.SetValue( nFlags );
-#endif
 
         pSet->Put( aPrintItem );
         pSet->Put( SfxBoolItem( SID_PRINTER_NOTFOUND_WARN, aPrintItem.IsWarningPrinter() ) );
         pSet->Put( aFlagItem );
 
-#ifndef SVX_LIGHT
         SfxPrinter* pPrinter = SfxPrinter::Create(rIn, pSet);
 
         MapMode aMM (pPrinter->GetMapMode());
