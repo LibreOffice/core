@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:58:22 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:43:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,20 @@ SwFrmFmt *FindFrmFmt( SdrObject *pObj )
         SwDrawContact *pContact = (SwDrawContact*)GetUserCall( pObj );
         return pContact ? pContact->GetFmt() : NULL;
     }
+}
+
+sal_Bool HasWrap( const SdrObject* pObj )
+{
+    if ( pObj )
+    {
+        const SwFrmFmt* pFmt = ::FindFrmFmt( pObj );
+        if ( pFmt )
+        {
+            return SURROUND_THROUGHT != pFmt->GetSurround().GetSurround();
+        }
+    }
+
+    return sal_False;
 }
 
 /*****************************************************************************
@@ -766,7 +780,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor *pAnch )
     if ( GetAnchor() )
     {
         if( bSetAnchorPos )
-            GetMaster()->SetAnchorPos( GetAnchor()->GetAnchorPos() );
+            GetMaster()->SetAnchorPos( GetAnchor()->GetFrmAnchorPos( ::HasWrap( GetMaster() ) ) );
 
         //verankerte Objekte gehoeren immer auch in die Page,
         if ( !GetMaster()->IsInserted() )
@@ -824,7 +838,7 @@ void SwDrawContact::ChangeMasterObject( SdrObject *pNewMaster )
     SetMaster( pNewMaster );
     GetMaster()->SetUserCall( this );
 
-    Point aNewAnchor( pAnch->GetAnchorPos() );
+    Point aNewAnchor( pAnch->GetFrmAnchorPos( ::HasWrap( GetMaster() ) ) );
     GetMaster()->NbcSetRelativePos( GetMaster()->GetSnapRect().TopLeft() -
                                     aNewAnchor );
     GetMaster()->NbcSetAnchorPos( aNewAnchor );
