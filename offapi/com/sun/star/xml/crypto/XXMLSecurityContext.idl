@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XXMLSecurityContext.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 09:55:11 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 17:53:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,23 +82,37 @@ module com { module sun { module star { module xml { module crypto {
 interface XXMLSecurityContext : com::sun::star::uno::XInterface
 {
     /**
-     * Load personal security environment
-     *
-     * Notes: XSecurityEnvironment is an virtual interface, which has not
-     * defined.
+     * Add personal security environment , and return the index of the added env.
      */
-    void setSecurityEnvironment(
-        [in] XSecurityEnvironment aSecurityEnvironment
+    long addSecurityEnvironment( [in] XSecurityEnvironment aSecurityEnvironment
     ) raises( com::sun::star::security::SecurityInfrastructureException ) ;
 
     /**
-     * Get personal security environment
-     *
-     * Notes: XSecurityEnvironment is an virtual interface, which has not
-     * defined.
+     * Get the number of security environments
      */
-    com::sun::star::xml::crypto::XSecurityEnvironment getSecurityEnvironment(
-    ) ;
+    long getSecurityEnvironmentNumber( ) ;
+
+    /**
+     * Get personal security environment
+     */
+    com::sun::star::xml::crypto::XSecurityEnvironment getSecurityEnvironmentByIndex([in] long index ) ;
+
+    /**
+     * An handy method to get the first personal security environment.
+     * In xmlsec/nss, the first personal security environment should be the "internal slot"
+     */
+    com::sun::star::xml::crypto::XSecurityEnvironment getSecurityEnvironment( ) ;
+
+    /**
+     * Get the ID of the internal security environment
+     */
+    long getDefaultSecurityEnvironmentIndex( ) ;
+
+    /**
+     * set the ID of the internal security environment
+     */
+    void setDefaultSecurityEnvironmentIndex([in] long index ) ;
+
 } ;
 
 } ; } ; } ; } ; } ;
