@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Date: 2004-03-09 12:25:05 $
+#   last change: $Date: 2004-06-16 10:42:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -123,8 +123,13 @@ INTERNALFILTERPACKAGES  =   \
 
 .INCLUDE: target.mk
 
-.IF "$(SOLAR_JAVA)"!=""
 ALLTAR: $(REALFILTERPACKAGES) $(INTERNALFILTERPACKAGES)
+
+.IF "$(SOLAR_JAVA)"==""
+#cmc, hack to workaround the java build requirement
+MERGE:=python ../tools/merge/pyAltFCFGMerge
+.ELSE
+MERGE:=$(JAVA) -jar $(CLASSDIR)$/FCFGMerge.jar
 .ENDIF
 
 # -----------------------------------------------------------------------------
@@ -133,10 +138,11 @@ ALLTAR: $(REALFILTERPACKAGES) $(INTERNALFILTERPACKAGES)
 
 $(REALFILTERPACKAGES) : $$(ALL_4$$(@:b))
      +@echo -------------------------------------------------------------------
-     +@echo Building package $@
-     +@$(JAVA) -jar $(CLASSDIR)$/FCFGMerge.jar fragmentsdir=. tempdir=$(TEMP) outdir=$(MISC) pkg=$(MISC)$/$(@:b)_types.xcu   xmlpackage=Types  tcfg=$(mktmp items=$(TYPES_4$(@:b):b:t",":s/.xcu/))
-     +@$(JAVA) -jar $(CLASSDIR)$/FCFGMerge.jar fragmentsdir=. tempdir=$(TEMP) outdir=$(MISC) pkg=$(MISC)$/$(@:b)_filters.xcu xmlpackage=Filter fcfg=$(mktmp items=$(FILTERS_4$(@:b):b:t",":s/.xcu/))
-     +@$(JAVA) -jar $(CLASSDIR)$/FCFGMerge.jar fragmentsdir=. tempdir=$(TEMP) outdir=$(MISC) pkg=$(MISC)$/$(@:b)_others.xcu  xmlpackage=Misc   lcfg=$(mktmp items=$(FRAMELOADERS_4$(@:b):b:t",":s/.xcu/)) ccfg=$(mktmp items=$(CONTENTHANDLERS_4$(@:b):b:t",":s/.xcu/))
+     +@echo Building package $@ with $(MERGE)
+     +@echo TEMP is $(TEMP)
+     $(MERGE) fragmentsdir=. tempdir=$(TEMP) outdir=$(MISC) pkg=$(MISC)$/$(@:b)_types.xcu   xmlpackage=Types  tcfg=$(mktmp items=$(TYPES_4$(@:b):b:t",":s/.xcu/))
+     $(MERGE) fragmentsdir=. tempdir=$(TEMP) outdir=$(MISC) pkg=$(MISC)$/$(@:b)_filters.xcu xmlpackage=Filter fcfg=$(mktmp items=$(FILTERS_4$(@:b):b:t",":s/.xcu/))
+     $(MERGE) fragmentsdir=. tempdir=$(TEMP) outdir=$(MISC) pkg=$(MISC)$/$(@:b)_others.xcu  xmlpackage=Misc   lcfg=$(mktmp items=$(FRAMELOADERS_4$(@:b):b:t",":s/.xcu/)) ccfg=$(mktmp items=$(CONTENTHANDLERS_4$(@:b):b:t",":s/.xcu/))
      +-@$(RM) $(BIN)$/$(@:b)_$(INPATH).zip
      +@zip -j $(BIN)$/$(@:b)_$(INPATH).zip $(MISC)$/$(@:b)_*.xcu
      +@$(RM) $(MISC)$/$(@:b)_*.xcu
@@ -146,8 +152,8 @@ $(REALFILTERPACKAGES) : $$(ALL_4$$(@:b))
 $(INTERNALFILTERPACKAGES) : $$(ALL_4$$(@:b))
      +@echo -------------------------------------------------------------------
      +@echo Building special packages $@
-     +@$(JAVA) -jar $(CLASSDIR)$/FCFGMerge.jar fragmentsdir=. tempdir=$(TEMP) outdir=$(MISC) pkg=$(MISC)$/$(@:b)_types.xcu   xmlpackage=Types  tcfg=$(mktmp items=$(TYPES_4$(@:b):b:t",":s/.xcu/))
-     +@$(JAVA) -jar $(CLASSDIR)$/FCFGMerge.jar fragmentsdir=. tempdir=$(TEMP) outdir=$(MISC) pkg=$(MISC)$/$(@:b)_filters.xcu xmlpackage=GraphicFilter fcfg=$(mktmp items=$(FILTERS_4$(@:b):b:t",":s/.xcu/)) subdir_filters=internalgraphicfilters
+     $(MERGE) fragmentsdir=. tempdir=$(TEMP) outdir=$(MISC) pkg=$(MISC)$/$(@:b)_types.xcu   xmlpackage=Types  tcfg=$(mktmp items=$(TYPES_4$(@:b):b:t",":s/.xcu/))
+     $(MERGE) fragmentsdir=. tempdir=$(TEMP) outdir=$(MISC) pkg=$(MISC)$/$(@:b)_filters.xcu xmlpackage=GraphicFilter fcfg=$(mktmp items=$(FILTERS_4$(@:b):b:t",":s/.xcu/)) subdir_filters=internalgraphicfilters
      +-@$(RM) $(BIN)$/$(@:b)_$(INPATH).zip
      +@zip -j $(BIN)$/$(@:b)_$(INPATH).zip $(MISC)$/$(@:b)_*.xcu
      +@$(RM) $(MISC)$/$(@:b)_*.xcu
