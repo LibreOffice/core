@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABDriver.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: wvd $ $Date: 2001-07-18 12:12:46 $
+ *  last change: $Author: oj $ $Date: 2001-09-19 09:34:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ namespace connectivity
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
             & getMSFactory(void) const
                     { return m_xMSFactory; }
+            static sal_Bool acceptsURL_Stat( const ::rtl::OUString& url );
         private:
             const ::com::sun::star::uno::Reference<
                                                 ::com::sun::star::lang::XMultiServiceFactory > m_xMSFactory;

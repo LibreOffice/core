@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABConnection.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 05:58:07 $
+ *  last change: $Author: oj $ $Date: 2001-09-19 09:34:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,8 +124,14 @@ namespace connectivity
             sal_Bool    isOutlookExpress() const { return m_bOutlookExpress;}
             sal_Int32   getNextAnonymousAB()    { return (++m_nAnonABCount); }
             sal_Int32   getMaxResultRecords() const { return m_nMaxResultRecords; }
-        const OMozabColumnAlias & getColumnAlias() const
+            const OMozabColumnAlias & getColumnAlias() const
                           { return (m_aColumnAlias); }
+
+            // static methods to return the names of the uri
+            static const sal_Char*    getSDBC_SCHEME_MOZILLA();
+            static const sal_Char*    getSDBC_SCHEME_LDAP();
+            static const sal_Char*    getSDBC_SCHEME_OUTLOOK_MAPI();
+            static const sal_Char*    getSDBC_SCHEME_OUTLOOK_EXPRESS();
         };
     }
 }
