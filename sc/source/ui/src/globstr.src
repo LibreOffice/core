@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:06:55 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:37:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "»ğÀÔ";
         Text[ turkish ] = "Ekle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Insertar";
     };
     String STR_UNDO_DELETECELLS
     {
@@ -118,6 +119,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "»èÁ¦";
         Text[ turkish ] = "Sil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Eliminar";
     };
     String STR_UNDO_CUT
     {
@@ -144,6 +146,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Àß¶ó³»±â";
         Text[ turkish ] = "Kes";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Cortar";
     };
     String STR_UNDO_PASTE
     {
@@ -171,6 +174,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "»ğÀÔ";
         Text[ turkish ] = "Ekle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Insertar";
     };
     String STR_UNDO_DRAGDROP
     {
@@ -197,6 +201,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "µå·¡±×&µå·Ó";
         Text[ turkish ] = "Sürükle ve bırak";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Arrastrar y colocar";
     };
     String STR_UNDO_MOVE
     {
@@ -223,6 +228,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÀÌµ¿";
         Text[ turkish ] = "Taşı";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Desplazar";
     };
     String STR_UNDO_COPY
     {
@@ -249,6 +255,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "º¹»ç";
         Text[ turkish ] = "Kopyala";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Copiar";
     };
     String STR_UNDO_DELETECONTENTS
     {
@@ -276,6 +283,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "»èÁ¦";
         Text[ turkish ] = "Sil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Eliminar";
     };
     String STR_UNDO_SELATTR
     {
@@ -302,6 +310,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¼Ó¼º";
         Text[ turkish ] = "Öznitelikler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Atributos";
     };
     String STR_UNDO_SELATTRLINES
     {
@@ -328,6 +337,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¼Ó¼º/¼±";
         Text[ turkish ] = "Öznitelikler/Çizgiler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Atributos/Líneas";
     };
     String STR_UNDO_COLWIDTH
     {
@@ -354,6 +364,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¿­ ³Êºñ";
         Text[ turkish ] = "Sütun genişliği";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ancho de columna";
     };
     String STR_UNDO_OPTCOLWIDTH
     {
@@ -380,6 +391,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÃÖÀûÀÇ ¿­ ³Êºñ";
         Text[ turkish ] = "Optimum Sütun genişliği";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ancho de columna óptimo";
     };
     String STR_UNDO_ROWHEIGHT
     {
@@ -407,6 +419,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Çà ³ôÀÌ";
         Text[ turkish ] = "Satır yüksekliği";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Altura de fila";
     };
     String STR_UNDO_OPTROWHEIGHT
     {
@@ -434,6 +447,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÃÖÀûÀÇ Çà ³ôÀÌ";
         Text[ turkish ] = "Optimum satır yüksekliği";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Altura de fila óptima";
     };
     String STR_UNDO_AUTOFILL
     {
@@ -461,6 +475,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Ã¤¿ì±â";
         Text[ turkish ] = "Doldur";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Rellenar";
     };
     String STR_UNDO_MERGE
     {
@@ -487,6 +502,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "º´ÇÕ";
         Text[ turkish ] = "Birleştir";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Unir";
     };
     String STR_UNDO_REMERGE
     {
@@ -513,6 +529,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÅëÇÕ¡¡ÇØÁ¦";
         Text[ turkish ] = "Böl";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Dividir";
     };
     String STR_UNDO_AUTOFORMAT
     {
@@ -540,6 +557,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÀÚµ¿¼­½Ä";
         Text[ turkish ] = "Otomatik formatlama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "AutoFormato";
     };
     String STR_UNDO_REPLACE
     {
@@ -566,6 +584,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¹Ù²Ù±â";
         Text[ turkish ] = "Değiştir";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Reemplazar";
     };
     String STR_UNDO_CURSORATTR
     {
@@ -592,6 +611,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¼Ó¼º";
         Text[ turkish ] = "Öznitelikler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Atributos";
     };
     String STR_UNDO_ENTERDATA
     {
@@ -618,6 +638,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÀÔ·Â";
         Text[ turkish ] = "Giriş";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Entrada";
     };
     String STR_UNDO_INSCOLBREAK
     {
@@ -645,6 +666,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¿­ ³ª´©±â »ğÀÔ";
         Text[ turkish ] = "Sütun sonu ekle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Insertar salto de columna";
     };
     String STR_UNDO_DELCOLBREAK
     {
@@ -672,6 +694,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¿­ ³ª´©±â »èÁ¦";
         Text[ turkish ] = "Sütun sonunu sil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Eliminar salto de columna";
     };
     String STR_UNDO_INSROWBREAK
     {
@@ -699,6 +722,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "°³Çà »ğÀÔ";
         Text[ turkish ] = "Satır sonu ekle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Insertar salto de fila";
     };
     String STR_UNDO_DELROWBREAK
     {
@@ -726,6 +750,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "°³Çà »èÁ¦";
         Text[ turkish ] = "Satır sonunu sil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Eliminar salto de fila";
     };
     String STR_UNDO_DOOUTLINE
     {
@@ -752,6 +777,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "»ó¼¼ º¸ÀÌ±â";
         Text[ turkish ] = "Ayrıntıları görüntüle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Mostrar detalles";
     };
     String STR_UNDO_REDOOUTLINE
     {
@@ -778,6 +804,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "»ó¼¼ ¼û±â±â";
         Text[ turkish ] = "Ayrıntıları gizle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ocultar detalles";
     };
     String STR_UNDO_MAKEOUTLINE
     {
@@ -804,6 +831,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "±×·ì";
         Text[ turkish ] = "Gruplama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Agrupar";
     };
     String STR_UNDO_REMAKEOUTLINE
     {
@@ -830,6 +858,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "±×·ìÈ­¡¡ÇØÁ¦";
         Text[ turkish ] = "Grubu çöz";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Desagrupar";
     };
     String STR_UNDO_OUTLINELEVEL
     {
@@ -857,6 +886,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "´Ù´Ü°è´Ü°è  ¼±ÅÃ";
         Text[ turkish ] = "Anahat düzeyini seç";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Seleccionar nivel del esquema";
     };
     String STR_UNDO_DOOUTLINEBLK
     {
@@ -883,6 +913,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "»ó¼¼¡¡º¸ÀÌ±â";
         Text[ turkish ] = "Ayrıntıları görüntüle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Mostrar detalles";
     };
     String STR_UNDO_REDOOUTLINEBLK
     {
@@ -909,6 +940,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "»ó¼¼ ¼û±â±â";
         Text[ turkish ] = "Ayrıntıları gizle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ocultar detalles";
     };
     String STR_UNDO_REMOVEALLOTLNS
     {
@@ -935,6 +967,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "´Ù´Ü°è¡¡Á¦°Å";
         Text[ turkish ] = "Anahatı kaldır";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Eliminar el esquema";
     };
     String STR_UNDO_AUTOOUTLINE
     {
@@ -962,6 +995,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÀÚµ¿´Ù´Ü°è";
         Text[ turkish ] = "Otomatik anahat";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Esquema automático";
     };
     String STR_UNDO_SUBTOTALS
     {
@@ -988,6 +1022,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¼Ò°è";
         Text[ turkish ] = "Ara toplamlar";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Subtotales";
     };
     String STR_UNDO_SORT
     {
@@ -1014,6 +1049,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Á¤·Ä";
         Text[ turkish ] = "Sırala";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ordenar";
     };
     String STR_UNDO_QUERY
     {
@@ -1040,6 +1076,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÇÊÅÍ";
         Text[ turkish ] = "Filtrele";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Filtrar";
     };
     String STR_UNDO_DBDATA
     {
@@ -1067,6 +1104,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ¿µ¿ª ¼öÁ¤";
         Text[ turkish ] = "Veritabanı aralıklarını değiştir";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Modificar área de base de datos";
     };
     String STR_UNDO_IMPORTDATA
     {
@@ -1093,6 +1131,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "°¡Á®¿À±â";
         Text[ turkish ] = "İçe aktar";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Importar";
     };
     String STR_UNDO_REPEATDB
     {
@@ -1117,6 +1156,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¹üÀ§ °»½Å";
         Text[ turkish ] = "Aralığı güncelle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Actualizar área";
     };
     String STR_UNDO_GRAFEDIT
     {
@@ -1141,6 +1181,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "±×·¡ÇÈ ÆíÁı";
         Text[ turkish ] = "Grafik düzenle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Editar imagen";
     };
     String STR_UNDO_LISTNAMES
     {
@@ -1165,6 +1206,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÀÌ¸§ ¸ñ·ÏÀÛ¼º";
         Text[ turkish ] = "Adları sırala";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Alistar nombres";
     };
     String STR_UNDO_PIVOT_NEW
     {
@@ -1189,6 +1231,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "µ¥ÀÌÅÍÆÄÀÏ·µ Ç¥ ¸¸µé±â";
         Text[ turkish ] = "Veri pilotu tablosu oluştur";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Crear tabla del Piloto de Datos";
     };
     String STR_UNDO_PIVOT_MODIFY
     {
@@ -1213,6 +1256,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "µ¥ÀÌÅÍÆÄÀÏ·µ Ç¥ ÆíÁı";
         Text[ turkish ] = "Veri pilotu tablosunu düzenle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Modificar tabla del Piloto de Datos";
     };
     String STR_UNDO_PIVOT_DELETE
     {
@@ -1238,6 +1282,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "µ¥ÀÌÅÍÆÄÀÏ·µ Ç¥ »èÁ¦";
         Text[ turkish ] = "Veri pilotu tablosunu sil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Eliminar tabla del Piloto de Datos";
     };
     String STR_UNDO_CONSOLIDATE
     {
@@ -1262,6 +1307,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÅëÇÕ";
         Text[ turkish ] = "Birleştir";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Consolidar";
     };
     String STR_UNDO_USESCENARIO
     {
@@ -1286,6 +1332,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "½Ã³ª¸®¿À Àû¿ë";
         Text[ turkish ] = "Senaryoyu uygula";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Aplicar escenario";
     };
     String STR_UNDO_MAKESCENARIO
     {
@@ -1310,6 +1357,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "½Ã³ª¸®¿À ¸¸µé±â";
         Text[ turkish ] = "Senaryo oluştur";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Crear escenario";
     };
     String STR_UNDO_EDITSCENARIO
     {
@@ -1334,6 +1382,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "½Ã³ª¸®¿À ÆíÁı";
         Text[ turkish ] = "Senaryoyu düzenle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Editar escenario";
     };
     String STR_UNDO_APPLYCELLSTYLE
     {
@@ -1358,6 +1407,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¼¿ À¯Çü Àû¿ë";
         Text[ turkish ] = "Hücre biçimini uygula";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Aplicar estilo de celda";
     };
     String STR_UNDO_EDITCELLSTYLE
     {
@@ -1381,6 +1431,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "½s¿èÀx¦s®æ¼Ë¦¡";
         Text[ turkish ] = "Edit cell style";
         Text[ arabic ] = "ÊÍÑíÑ äãØ ÇáÎáíÉ";
+        Text[ catalan ] = "Editar estilo de celda";
     };
     String STR_UNDO_APPLYPAGESTYLE
     {
@@ -1404,6 +1455,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "®M¥Î­¶­±¼Ë¦¡";
         Text[ turkish ] = "Apply page style";
         Text[ arabic ] = "ÊÚííä äãØ ÇáÕİÍÉ";
+        Text[ catalan ] = "Aplicar estilo de página";
     };
     String STR_UNDO_EDITPAGESTYLE
     {
@@ -1427,6 +1479,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "½s¿è­¶­±¼Ë¦¡";
         Text[ turkish ] = "Edit page style";
         Text[ arabic ] = "ÊÍÑíÑ äãØ ÇáÕİÍÉ";
+        Text[ catalan ] = "Editar estilo de página";
     };
     String STR_UNDO_DETADDPRED
     {
@@ -1452,6 +1505,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¼±·Ê ÃßÀû";
         Text[ turkish ] = "Öncekini izle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Rastro a los precedentes";
     };
     String STR_UNDO_DETDELPRED
     {
@@ -1477,6 +1531,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¼±·Ê ÃßÀû Á¦°Å";
         Text[ turkish ] = "Öncekinin izini sil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Rastro al precedente";
     };
     String STR_UNDO_DETADDSUCC
     {
@@ -1501,6 +1556,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Á¾¼Ó ÃßÀû";
         Text[ turkish ] = "Sonrakini izle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Rastro al sucesor";
     };
     String STR_UNDO_DETDELSUCC
     {
@@ -1525,6 +1581,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Á¾¼Ó ÃßÀû Á¦°Å";
         Text[ turkish ] = "Sonrakinin izini sil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Eliminar rastro al sucesor";
     };
     String STR_UNDO_DETADDERROR
     {
@@ -1549,6 +1606,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¿À·ù¡¡ÃßÀû";
         Text[ turkish ] = "Hatayı izle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Rastro al error";
     };
     String STR_UNDO_DETDELALL
     {
@@ -1573,6 +1631,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¸ğµç ÃßÀû Á¦°Å";
         Text[ turkish ] = "Tüm izleri sil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Eliminar todos los rastros";
     };
     String STR_UNDO_DETINVALID
     {
@@ -1598,6 +1657,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº µ¥ÀÌÅÍ  Ç¥½Ã";
         Text[ turkish ] = "Geçersiz verileri işaretle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Marcar los datos no válidos";
     };
     String STR_UNDO_DETREFRESH
     {
@@ -1622,6 +1682,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÃßÀû »õ·Î°íÄ§";
         Text[ turkish ] = "İzleri güncelle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Actualizar rastros";
     };
     String STR_UNDO_CHARTDATA
     {
@@ -1647,6 +1708,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Â÷Æ® µ¥ÀÌÅÍ ¹üÀ§ ¼öÁ¤";
         Text[ turkish ] = "Şemanın veri aralığını değiştir";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Modificar área de datos del diagrama";
     };
     String STR_UNDO_ORIGINALSIZE
     {
@@ -1674,6 +1736,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¿ø·¡ Å©±â";
         Text[ turkish ] = "Gerçek boyut";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tamaño original";
     };
     String STR_UNDO_UPDATELINK
     {
@@ -1699,6 +1762,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¿¬°á »õ·Î°íÄ§";
         Text[ turkish ] = "Bağlantıyı güncelle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Actualizar vínculo";
     };
     String STR_UNDO_REMOVELINK
     {
@@ -1724,6 +1788,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¿¬°á »èÁ¦";
         Text[ turkish ] = "Bağlantıyı kaldır";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Eliminar vínculo";
     };
     String STR_UNDO_INSERTAREALINK
     {
@@ -1749,6 +1814,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¿¬°á »ğÀÔ";
         Text[ turkish ] = "Bağlantı ekle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Insertar vínculo";
     };
     String STR_UNDO_ENTERMATRIX
     {
@@ -1774,6 +1840,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Çà·Ä ¼ö½Ä »ğÀÔ";
         Text[ turkish ] = "Matris formulü ekle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Insertar fórmula matriz";
     };
     String STR_UNDO_SHOWNOTE
     {
@@ -1798,6 +1865,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¸Ş¸ğ º¸ÀÌ±â";
         Text[ turkish ] = "Notu görüntüle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Mostrar nota";
     };
     String STR_UNDO_HIDENOTE
     {
@@ -1822,6 +1890,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¸Ş¸ğ ¼û±â±â";
         Text[ turkish ] = "Notu gizle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ocultar nota";
     };
     String STR_UNDO_EDITNOTE
     {
@@ -1846,6 +1915,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¸Ş¸ğ  ÆíÁı";
         Text[ turkish ] = "Notu düzenle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Editar nota";
     };
     String STR_UNDO_DEC_INDENT
     {
@@ -1870,6 +1940,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "µé¿©¾²±â£¬ÁÙÀÓ";
         Text[ turkish ] = "Girintiyi küçült";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Reducir sangría";
     };
     String STR_UNDO_INC_INDENT
     {
@@ -1895,6 +1966,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "µé¿©¾²±â£¬´ÃÀÓ";
         Text[ turkish ] = "Girintiyi büyüt";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Aumentar sangría";
     };
     String STR_UNDO_PROTECT_TAB
     {
@@ -1920,6 +1992,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "½ÃÆ® º¸È£";
         Text[ turkish ] = "Tabloyu koru";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Proteger hoja";
     };
     String STR_UNDO_UNPROTECT_TAB
     {
@@ -1944,6 +2017,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "½ÃÆ® º¸È£ ÇØÁ¦";
         Text[ turkish ] = "Tablo korumasını kaldır";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Desproteger hoja";
     };
     String STR_UNDO_PROTECT_DOC
     {
@@ -1969,6 +2043,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¹®¼­ º¸È£";
         Text[ turkish ] = "Belgeyi koru";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Proteger documento";
     };
     String STR_UNDO_UNPROTECT_DOC
     {
@@ -1993,6 +2068,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¹®¼­º¸È£  ÇØÁ¦";
         Text[ turkish ] = "Belge korumasını kaldır";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Desproteger documento";
     };
     String STR_UNDO_PRINTRANGES
     {
@@ -2017,6 +2093,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÀÎ¼â¹üÀ§";
         Text[ turkish ] = "Yazdırma aralığı";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Áreas de impresión";
     };
     String STR_UNDO_REMOVEBREAKS
     {
@@ -2042,6 +2119,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÂÊ ³ª´©±â »èÁ¦";
         Text[ turkish ] = "Sayfa sonlarını sil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Eliminar saltos de página";
     };
     String STR_UNDO_PRINTSCALE
     {
@@ -2067,6 +2145,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¹èÀ² º¯°æ";
         Text[ turkish ] = "Ölçeği değiştir";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Modificar escala";
     };
     String STR_UNDO_DRAG_BREAK
     {
@@ -2091,6 +2170,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÂÊ³ª´©±â ÀÌµ¿";
         Text[ turkish ] = "Sayfa sonunu taşı";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Desplazar salto de página";
     };
     String STR_UNDO_RANGENAMES
     {
@@ -2115,6 +2195,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "±¸¿ªÀÌ¸§  ÆíÁı";
         Text[ turkish ] = "Aralık adlarını düzenle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Editar nombres de área";
     };
     String STR_UNDO_TRANSLITERATE
     {
@@ -2139,6 +2220,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Change case";
         Text[ arabic ] = "ÇáßÊÇÈÉ ÈÃÍÑİ ßÈíÑÉ Ãæ ÕÛíÑÉ";
         Text[ language_user1 ] = "nk03.04.01: hier passt Englisch Uebesetzung besser.";
+        Text[ catalan ] = "Change case";
     };
     String STR_DB_NONAME
     {
@@ -2165,6 +2247,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÀÌ¸§ ¾øÀ½";
         Text[ turkish ] = "adsız";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Sin nombre";
     };
     String STR_DBNAME_IMPORT
     {
@@ -2189,6 +2272,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "°¡Á®¿À±â";
         Text[ turkish ] = "İçe aktar";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Importación";
     };
     String STR_MSSG_DOSUBTOTALS_0
     {
@@ -2215,6 +2299,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "%PRODUCTNAME Calc";
         Text[ turkish ] = "%PRODUCTNAME Calc";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "%PRODUCTNAME Calc";
     };
     String STR_MSSG_DOSUBTOTALS_1
     {
@@ -2242,6 +2327,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "µ¥ÀÌÅÍ¸¦ »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
         Text[ turkish ] = "Verileri sil?";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "¿Desea eliminar los datos?";
     };
     String STR_MSSG_DOSUBTOTALS_2
     {
@@ -2269,6 +2355,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Çà »ğÀÔÀÌ ºÒ°¡´É";
         Text[ turkish ] = "Satır eklenemiyor";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No puede insertar filas";
     };
     String STR_MSSG_REPEATDB_0
     {
@@ -2296,6 +2383,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÀÛ¾÷¡¡½ÇÇà¡¡¾ÊÀ½.";
         Text[ turkish ] = "Yürütülecek işlem yok";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ninguna operación por hacer";
     };
     String STR_MSSG_MAKEAUTOFILTER_0
     {
@@ -2323,6 +2411,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÀÌ ¹üÀ§¿¡´Â ¿­ ¸Ó¸®±ÛÀÌ Æ÷ÇÔµÇ¾î ÀÖÁö ¾Ê½À´Ï´Ù.\nÃ¹¹øÂ° ÇàÀ» ¿­ ¸Ó¸®±Û·Î¼­ »ç¿ëÇÏ½Ã°Ú½À´Ï±î?";
         Text[ turkish ] = "Bu aralık, sütun başlıkları içermiyor.\nİlk satır sütun başlığı olarak kullanılsın mı?";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "El área no contiene encabezamientos de columnas.\n¿Desea utilizar la primera línea como encabezamiento?";
     };
     String STR_MSSG_IMPORTDATA_0
     {
@@ -2349,6 +2438,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "µ¥ÀÌÅÍ¸¦ °¡Á®¿À´Â µ¿¾È ¿À·ù!";
         Text[ turkish ] = "İçe aktarımda hata!";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "¡Error al importar datos!";
     };
     String STR_DATABASE_NOTFOUND
     {
@@ -2373,6 +2463,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "'#' µ¥ÀÌÅÍº£ÀÌ½º¸¦ ¿­Áö ¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "'#' veritabanı açılamadı.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No se pudo abrir la base de datos '#'.";
     };
     String STR_QUERY_NOTFOUND
     {
@@ -2397,6 +2488,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÁúÀÇ  '#' À»£¨¸¦£©Àº ¿­¼ö ¾ø¾ú½À´Ï´Ù.";
         Text[ turkish ] = "'#' sorgusu açılamadı.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "La consulta '#' no se pudo abrir.";
     };
     String STR_DATABASE_ABORTED
     {
@@ -2421,6 +2513,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º °¡Á®¿À±â Áß´Ü";
         Text[ turkish ] = "Veritabanı içe aktarımı iptal edildi.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "La importación de la base de datos ha sido cancelada.";
     };
     String STR_PROGRESS_IMPORT
     {
@@ -2446,6 +2539,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "# ·¹ÄÚµå¸¦ °¡Á®¿Ô½À´Ï´Ù ...";
         Text[ turkish ] = "# veri kümesi içe aktarıldı...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "# registros importados...";
     };
     String STR_MSSG_MAKEOUTLINE_0
     {
@@ -2473,6 +2567,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "±×·ì¸¸µé±â ºÒ°¡´É";
         Text[ turkish ] = "Gruplama yapılamaz";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No es posible agrupar";
     };
     String STR_MSSG_REMOVEOUTLINE_0
     {
@@ -2500,6 +2595,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÇØÃ¼ ºÒ°¡´É";
         Text[ turkish ] = "Grup çözülemiyor";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No es posible deshacer la agrupación";
     };
     String STR_MSSG_PASTEFROMCLIP_0
     {
@@ -2527,6 +2623,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "´ÙÁß ¼±ÅÃ¿¡ »ğÀÔÀº ºÒ°¡´É";
         Text[ turkish ] = "Çoklu seçimlerde ekleme yapılamaz";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No es posible insertar en selección múltiple";
     };
     String STR_MSSG_PASTEFROMCLIP_1
     {
@@ -2553,6 +2650,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "º´ÇÕ½Ã¿¡¡¡°ãÄ¡Áö¡¡¾Ê°Ô!";
         Text[ turkish ] = "Özetlenmiş hücreler özetlenemez!";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "¡No es posible insertar celdas fusionadas en celdas fusionadas!";
     };
     String STR_MSSG_MOVEBLOCKTO_0
     {
@@ -2579,6 +2677,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "º´ÇÕ½Ã¿¡¡¡°ãÄ¡Áö¡¡¾Ê°Ô!";
         Text[ turkish ] = "Özetlenmiş hücreler özetlenemez!";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "¡No es posible insertar celdas fusionadas en celdas fusionadas!";
     };
     String STR_MSSG_APPLYPATTLINES_0
     {
@@ -2605,6 +2704,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "°æ°è¼±¿¡ ´ÙÁß ¼±ÅÃÀÌ Àû¿ë µÉ ¼ö ¾ø½À´Ï´Ù.";
         Text[ turkish ] = "Çoklu hücre seçimi için kenarlık oluşturulamıyor";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Marco incompatible con selección múltiple";
     };
     String STR_MSSG_INSERTCELLS_0
     {
@@ -2632,6 +2732,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "º´ÇÕµÈ ¿µ¿ª¿¡ »ğÀÔÀÌ ºÒ°¡´ÉÇÕ´Ï´Ù.";
         Text[ turkish ] = "Birleştirilmiş aralıklara ekleme yapılamaz";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No es posible insertar en áreas fusionadas";
     };
     String STR_MSSG_DELETECELLS_0
     {
@@ -2659,6 +2760,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "º´ÇÕµÈ ¿µ¿ª¿¡¼­ »èÁ¦°¡ ºÒ°¡´ÉÇÕ´Ï´Ù.";
         Text[ turkish ] = "Birleştirilmiş aralıklarda silme yapılamaz";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No se puede eliminar en áreas fusionadas";
     };
     String STR_MSSG_MERGECELLS_0
     {
@@ -2685,6 +2787,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "º´ÇÕ½Ã¿¡¡¡°ãÄ¡Áö¡¡¾Ê°Ô!";
         Text[ turkish ] = "Özetlenmiş hücreler özetlenemez!";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "¡No es posible insertar celdas fusionadas en celdas fusionadas!";
     };
     String STR_SORT_ERR_MERGED
     {
@@ -2710,6 +2813,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "º´ÇÕµÈ ¼¿À» Æ÷ÇÔÇÏ°í ÀÖ´Â ¿µ¿ªÀº ¼­½Ä ¾øÀÌ¸¸ Á¤·ÄµÉ ¼ö ÀÖ½À´Ï´Ù.";
         Text[ turkish ] = "Birleştirilmiş hücre içeren aralıklar yalnızca formatsız olarak sıralanabilir.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Áreas con celdas fusionadas solo se pueden ordenar sin formato.";
     };
     String STR_MSSG_SEARCHANDREPLACE_0
     {
@@ -2734,6 +2838,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "°Ë»ö¿ë¾î¸¦¡¡Ã£Áö¡¡¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Aranan terim bulunamadı.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No se encontró la expresión buscada.";
     };
     String STR_MSSG_SOLVE_0
     {
@@ -2760,6 +2865,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¸ñÇ¥°ª  Ã£±â°¡ ¼º°øÀûÀ¸·Î ¼öÇàµÇ¾ú½À´Ï´Ù.\n";
         Text[ turkish ] = "Hedef değer arama başarılı oldu.\n";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "La búsqueda del valor pretendido ha finalizado con éxito.\n";
     };
     String STR_MSSG_SOLVE_1
     {
@@ -2786,6 +2892,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "°á°ú »ğÀÔ (";
         Text[ turkish ] = "Sonuç (";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "¿Desea insertar el resultado (";
     };
     String STR_MSSG_SOLVE_2
     {
@@ -2813,6 +2920,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = ") ÇöÀçÀÇ ¼¿·Î?";
         Text[ turkish ] = ") seçili hücreye eklensin mi?";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = ") en la celda actual?";
     };
     String STR_MSSG_SOLVE_3
     {
@@ -2839,6 +2947,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¸ñÇ¥°ª Ã£±â°¡ ¼º°øÀûÀ¸·Î ¼öÇàµÇÁö ¾Ê¾Ò½À´Ï´Ù.\n";
         Text[ turkish ] = "Hedef değer arama başarısız oldu.\n";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No se pudo encontrar el valor pretendido.\n";
     };
     String STR_MSSG_SOLVE_4
     {
@@ -2865,6 +2974,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Á¤È®ÇÑ °ªÀ»¡¡Ã£Áö¡¡¸øÇß½À´Ï´Ù. \n";
         Text[ turkish ] = "Özdeş değer bulunamadı.\n";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No se pudo encontrar ningún valor exacto.\n";
     };
     String STR_MSSG_SOLVE_5
     {
@@ -2892,6 +3002,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "±Ù»ç °ªÀ» (";
         Text[ turkish ] = "En yakın değer (";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "¿Desea insertar el valor más cercano (";
     };
     String STR_MSSG_SOLVE_6
     {
@@ -2919,6 +3030,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = ")Àû¿ëÇÒ±î¿ä?";
         Text[ turkish ] = ") alınsın mı?";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = ")?";
     };
     String STR_TABLE_GESAMTERGEBNIS
     {
@@ -2945,6 +3057,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÃÑ ÇÕ°è";
         Text[ turkish ] = "Genel toplam";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Total";
     };
     String STR_TABLE_ERGEBNIS
     {
@@ -2971,6 +3084,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "°á°ú";
         Text[ turkish ] = "Sonuç";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Resultado";
     };
     String STR_UNDO_SPELLING
     {
@@ -2995,6 +3109,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¸ÂÃã¹ı";
         Text[ turkish ] = "Yazım denetimi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ortografía";
     };
     String STR_TABLE_UND
     {
@@ -3021,6 +3136,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "±×¸®°í";
         Text[ turkish ] = "VE";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Y";
     };
     String STR_TABLE_ODER
     {
@@ -3047,6 +3163,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¶Ç´Â";
         Text[ turkish ] = "VEYA";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "O";
     };
     String STR_TABLE_DEF
     {
@@ -3073,6 +3190,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "½ÃÆ®";
         Text[ turkish ] = "Tablo";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Hoja";
     };
     String STR_MOVE_TO_END
     {
@@ -3099,6 +3217,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "- ¸¶Áö¸· ÁöÁ¡À¸·Î ÀÌµ¿ -";
         Text[ turkish ] = "- sona taşı -";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "- desplazar a la última posición -";
     };
     String STR_BOX_YNI
     {
@@ -3125,6 +3244,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "±¸ÇöµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
         Text[ turkish ] = "Bu derlemede gerçekleştirilmedi.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No implementado en esta versión";
     };
     String STR_NO_REF_TABLE
     {
@@ -3151,6 +3271,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "#REF!";
         Text[ turkish ] = "#REF!";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "#REF!";
     };
     String STR_PIVOT_INVALID_DBAREA
     {
@@ -3178,6 +3299,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "µ¥ÀÌÅÍ ¿µ¿ª¿¡´Â ÃÖ¼ÒÇÑ ÇÏ³ªÀÇ µ¥ÀÌÅÍ£­ÇàÀÌ ÀÖ¾î¾ß ÇÕ´Ï´Ù.";
         Text[ turkish ] = "Veri aralığında en az bir satır bulunmalıdır.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "El área de datos tiene que tener al menos una fila de datos.";
     };
     String STR_PIVOT_NODATA
     {
@@ -3205,6 +3327,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "µ¥ÀÌÅÍÆÄÀÏ·µÀº ÃÖ¼ÒÇÑ ÇÏ³ªÀÇ Ç×¸ñÀ» Æ÷ÇÔÇÏ°í ÀÖ¾î¾ß ÇÕ´Ï´Ù.";
         Text[ turkish ] = "Veri pilotu tablosu en az bir giriş içermelidir.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "La tabla del Piloto de Datos debe contener al menos una entrada.";
     };
     String STR_PIVOT_MOVENOTALLOWED
     {
@@ -3232,6 +3355,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "µ¥ÀÌÅÍ ¿µ¿ªÀº »èÁ¦ÇÒ ¼ö ¾ø½À´Ï´Ù.";
         Text[ turkish ] = "Veri aralığı silinemiyor.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No se puede eliminar el área de datos.";
     };
     String STR_PIVOT_ERROR
     {
@@ -3256,6 +3380,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "µ¥ÀÌÅÍÆÄÀÏ·µÇ¥ ¸¸µé±â¿À·ù.";
         Text[ turkish ] = "Veri pilotu tablosu oluşturma hatası";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Error al crear la tabla del Piloto de Datos.";
     };
     String STR_PIVOT_OVERLAP
     {
@@ -3281,6 +3406,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "µ¥ÀÌÅÍÆÄÀÏ·µ Ç¥°¡ °ãÃÄÁ®¼­´Â¡¡¾ÈµË´Ï´Ù.";
         Text[ turkish ] = "Veri pilotu tabloları basamaklanamaz.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Las tablas del Piloto de Datos no se deben superponer.";
     };
     String STR_PIVOT_NOTEMPTY
     {
@@ -3306,6 +3432,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¸ñÇ¥ ¿µ¿ªÀÌ ºñ¾îÀÖÁö ¾Ê½À´Ï´Ù. ±âÁ¸ÀÇ ³»¿ë¿¡ µ¤¾î¾º¿ì½Ã°Ú½À´Ï±î?";
         Text[ turkish ] = "Hedef aralığı boş değil. Mevcut içeriğin üzerine yazılsın mı?";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "El área destino no está vacía. ¿Desea sobrescribirlo?";
     };
     String STR_DATAPILOT_SUBTOTAL
     {
@@ -3329,6 +3456,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "³o­Ó·½°Ï°ì§t¦³¤@¨Ç¥i¯à·|¼vÅT¨ì­pºâµ²ªGªº¤p­p¤½¦¡¡CÁÙ¬O­n¨Ï¥Î¥¦¡H";
         Text[ turkish ] = "The source range contains subtotals which may distort the results. Use it anyway?";
         Text[ arabic ] = "íÍÊæí ÇáäØÇŞ ÇáãÕÏÑí Úáì ãÌÇãíÚ İÑÚíÉ ŞÏ ÊÍÑİ ÇáäÊíÌÉ. åá ÊÑíÏ ÇÓÊÎÏÇãå Úáì ÇáÑÛã ãä Ğáß¿";
+        Text[ catalan ] = "El área fuente contiene resultados parciales que pueden falsificar los resultados. ¿Desea usarlo de todas formas?";
     };
     String STR_PIVOT_PROGRESS
     {
@@ -3353,6 +3481,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "µ¥ÀÌÅÍÆÄÀÏ·µ Ç¥ ¸¸µé±â";
         Text[ turkish ] = "Veri pilotu tablosu oluştur";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Crear tabla del Piloto de Datos";
     };
     String STR_PIVOT_TOTAL
     {
@@ -3379,6 +3508,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÀüÃ¼";
         Text[ turkish ] = "Toplam";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Total";
     };
     String STR_PIVOT_DATA
     {
@@ -3405,6 +3535,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "µ¥ÀÌÅÍ";
         Text[ turkish ] = "Veri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Datos";
     };
     String STR_PIVOTFUNC_SUM
     {
@@ -3431,6 +3562,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÇÕ°è";
         Text[ turkish ] = "SUM";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "SUMA";
     };
     String STR_PIVOTFUNC_COUNT
     {
@@ -3457,6 +3589,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¼ö";
         Text[ turkish ] = "COUNT";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "CANTIDAD";
     };
     String STR_PIVOTFUNC_AVG
     {
@@ -3483,6 +3616,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Æò±Õ";
         Text[ turkish ] = "AVERAGE";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "PROMEDIO";
     };
     String STR_PIVOTFUNC_MAX
     {
@@ -3509,6 +3643,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÃÖ´ë";
         Text[ turkish ] = "MAX";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "MAX";
     };
     String STR_PIVOTFUNC_MIN
     {
@@ -3535,6 +3670,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÃÖ¼Ò";
         Text[ turkish ] = "MIN";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "MIN";
     };
     String STR_PIVOTFUNC_PROD
     {
@@ -3561,6 +3697,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Á¦Ç°";
         Text[ turkish ] = "PRODUCT";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "PRODUCTO";
     };
     String STR_PIVOTFUNC_COUNT2
     {
@@ -3587,6 +3724,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Ä«¿îÆ®2";
         Text[ turkish ] = "COUNT2";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "CONTARA";
     };
     String STR_PIVOTFUNC_STDDEV
     {
@@ -3613,6 +3751,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "STDEV";
         Text[ turkish ] = "STDEV";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "DevNorm";
     };
     String STR_PIVOTFUNC_STDDEV2
     {
@@ -3639,6 +3778,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "STDEVP";
         Text[ turkish ] = "STDEVP";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "DESVESTP";
     };
     String STR_PIVOTFUNC_VAR
     {
@@ -3665,6 +3805,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ºĞ»ê";
         Text[ turkish ] = "VAR";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "VAR";
     };
     String STR_PIVOTFUNC_VAR2
     {
@@ -3691,6 +3832,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "VARP";
         Text[ turkish ] = "VARP";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "VARP";
     };
     String STR_TABLE
     {
@@ -3717,6 +3859,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "½ÃÆ®";
         Text[ turkish ] = "Tablo";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Hoja";
     };
     String STR_COLUMN
     {
@@ -3743,6 +3886,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¿­";
         Text[ turkish ] = "Sütun";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Columna";
     };
     String STR_ROW
     {
@@ -3769,6 +3913,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Çà";
         Text[ turkish ] = "Satır";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Fila";
     };
     String STR_PAGE
     {
@@ -3795,6 +3940,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÂÊ";
         Text[ turkish ] = "Sayfa";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Página";
     };
     String STR_LOAD_DOC
     {
@@ -3821,6 +3967,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¹®¼­ ·Îµå";
         Text[ turkish ] = "Belgeyi yükle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Cargar documento";
     };
     String STR_SAVE_DOC
     {
@@ -3847,6 +3994,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¹®¼­ ÀúÀå";
         Text[ turkish ] = "Belgeyi kaydet";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Guardar documento";
     };
     String STR_ERR_INVALID_TABREF
     {
@@ -3873,6 +4021,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "<¾Ë·ÁÁöÁö ¾ÊÀº Å×ÀÌºí ÂüÁ¶>";
         Text[ turkish ] = "<bilinmeyen tablo referansı>";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "<referencia desconocida a tabla>";
     };
     String STR_AREA_ALREADY_INSERTED
     {
@@ -3900,6 +4049,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÀÌ ¹üÀ§´Â ÀÌ¹Ì »ğÀÔµÇ¾ú½À´Ï´Ù.";
         Text[ turkish ] = "Bu aralık daha önce eklendi.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Este área ya ha sido insertada.";
     };
     String STR_INVALID_TABREF
     {
@@ -3927,6 +4077,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº ½ÃÆ® ÂüÁ¶.";
         Text[ turkish ] = "Geçersiz tablo referansı.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Referencia a hoja no válida.";
     };
     String STR_INVALID_QUERYAREA
     {
@@ -3954,6 +4105,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÀÌ ¹üÀ§¿¡´Â À¯È¿ÇÑ ÁúÀÇ°¡ Æ÷ÇÔµÇ¾î ÀÖÁö ¾Ê½À´Ï´Ù .";
         Text[ turkish ] = "Bu aralık geçerli bir sorgu içermiyor.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Este área no contiene ninguna consulta válida.";
     };
     String STR_REIMPORT_EMPTY
     {
@@ -3981,6 +4133,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÀÌ ¹üÀ§¿¡´Â °¡Á®¿Â µ¥ÀÌÅÍ°¡ Æ÷ÇÔµÇ¾î ÀÖÁö ¾Ê½À´Ï´Ù.";
         Text[ turkish ] = "Bu bölüm içe aktarılmış veri içermiyor.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Este área no contiene datos importados.";
     };
     String STR_NOMULTISELECT
     {
@@ -4008,6 +4161,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÀÌ¡¡±â´ÉÀº ´ÙÁß ¼±ÅÃÀ¸·Î »ç¿ëµÉ ¼ö ¾ø½À´Ï´Ù.";
         Text[ turkish ] = "Bu işlev, çoklu seçimler için kullanılamamaktadır.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Esta función no se puede aplicar con selecciones múltiples.";
     };
     String STR_FILL_SERIES_PROGRESS
     {
@@ -4035,6 +4189,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Çà Ã¤¿ì±â...";
         Text[ turkish ] = "Satırı doldur...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Rellenar serie...";
     };
     String STR_UNKNOWN_FILTER
     {
@@ -4061,6 +4216,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¾Ë·ÁÁ®¡¡ÀÖÁö ¾ÊÀº ÇÊÅÍ: ";
         Text[ turkish ] = "Bilinmeyen filtre: ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Filtro desconocido:  ";
     };
     String STR_NO_NAME_REF
     {
@@ -4087,6 +4243,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "#ÀÌ¸§?";
         Text[ turkish ] = "#AD?";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "#NOMBRE?";
     };
     String STR_UNDO_THESAURUS
     {
@@ -4111,6 +4268,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "µ¿ÀÇ¾î »çÀü";
         Text[ turkish ] = "Eşanlamlılar sözlüğü";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Sinónimos";
     };
     String STR_FILL_TAB
     {
@@ -4138,6 +4296,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "½ÃÆ® Ã¤¿ì±â";
         Text[ turkish ] = "Tablo doldur";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Rellenar hojas";
     };
     String STR_NO_VALUE
     {
@@ -4164,6 +4323,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "#VALUE!";
         Text[ turkish ] = "#DEĞER!";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "#VALOR!";
     };
     String STR_UPDATE_SCENARIO
     {
@@ -4190,6 +4350,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "½Ã³ª¸®¿À¸¦ ¸¶Å·µÈ ¹üÀ§¸¸Å­ È®ÀåÇÒ±î¿ä?";
         Text[ turkish ] = "Seçili aralıklar, senaryoya eklensin mi?";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "¿Desea añadir las áreas seleccionadas al escenario actual?";
     };
     String STR_ERR_NEWSCENARIO
     {
@@ -4217,6 +4378,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "»õ·Î¿î ½Ã³ª¸®¿À¸¦ ¸¸µé¼ö ÀÖµµ·Ï ÇÏ±â À§ÇØ¼­´Â½Ã³ª¸®¿À ¹üÀ§°¡ ¸¶Å·µÇ¾î¾ß ÇÕ´Ï´Ù.";
         Text[ turkish ] = "Senaryonun oluşturulabilmesi için senaryo aralıkları işaretlenmelidir.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Para crear un escenario hay que seleccionar las áreas de escenario.";
     };
     String STR_NOAREASELECTED
     {
@@ -4243,6 +4405,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¹üÀ§°¡ ¼±ÅÃÇ¥½ÃµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
         Text[ turkish ] = "Aralık seçilmedi.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ninguna área seleccionada.";
     };
     String STR_NEWTABNAMENOTUNIQUE
     {
@@ -4269,6 +4432,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "±× ÀÌ¸§Àº ÀÌ¹Ì Á¸ÀçÇÕ´Ï´Ù..";
         Text[ turkish ] = "Bu tablo adı şu an kullanılıyor.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Este nombre ya existe.";
     };
     String STR_INVALIDTABNAME
     {
@@ -4296,6 +4460,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº ½ÃÆ® ÀÌ¸§.";
         Text[ turkish ] = "Geçersiz tablo adı.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nombre de la hoja no válido.";
     };
     String STR_SCENARIO
     {
@@ -4322,6 +4487,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "½Ã³ª¸®¿À";
         Text[ turkish ] = "Senaryo";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Escenario";
     };
     String STR_PIVOT_TABLE
     {
@@ -4348,6 +4514,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "µ¥ÀÌÅÍÆÄÀÏ·µ";
         Text[ turkish ] = "Veri pilotu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Piloto de datos";
     };
      //                      Texte fuer Ueberschriften bei Teilergebnis etc.
     String STR_FUN_TEXT_SUM
@@ -4375,6 +4542,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÇÕ°è";
         Text[ turkish ] = "Toplam";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Suma";
     };
     String STR_FUN_TEXT_COUNT
     {
@@ -4401,6 +4569,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¼ö";
         Text[ turkish ] = "Anzahl";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Cantidad";
     };
     String STR_FUN_TEXT_COUNT2
     {
@@ -4425,6 +4594,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Ä«¿îÆ®2";
         Text[ turkish ] = "CountA";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Cantidad2";
     };
     String STR_FUN_TEXT_AVG
     {
@@ -4451,6 +4621,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Æò±Õ";
         Text[ turkish ] = "Average";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Promedio";
     };
     String STR_FUN_TEXT_MAX
     {
@@ -4477,6 +4648,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÃÖ´ë";
         Text[ turkish ] = "Max";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Máx";
     };
     String STR_FUN_TEXT_MIN
     {
@@ -4503,6 +4675,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÃÖ¼Ò";
         Text[ turkish ] = "Min";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Mín";
     };
     String STR_FUN_TEXT_PRODUCT
     {
@@ -4529,6 +4702,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Á¦Ç°";
         Text[ turkish ] = "Çarpım";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Producto";
     };
     String STR_FUN_TEXT_STDDEV
     {
@@ -4555,6 +4729,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "StDev";
         Text[ turkish ] = "StDev";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "DevNorm";
     };
     String STR_FUN_TEXT_VAR
     {
@@ -4581,6 +4756,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ºĞ»ê";
         Text[ turkish ] = "Var";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "VAR";
     };
     /*  String STR_GOALSEEK
     {
@@ -4624,6 +4800,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÀÌ À§Ä¡¿¡¼­ Â÷Æ®¸¦¡¡Ã£Áö¡¡¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Bu konumda şema bulunamadı.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No se ha encontrado ningún diagrama en esta posición.";
     };
     String STR_PIVOT_NOTFOUND
     {
@@ -4650,6 +4827,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÀÌ À§Ä¡¿¡¼­ µ¥ÀÌÅÍÆÄÀÏ·µ Ç¥¸¦¡¡Ã£Áö¡¡¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Bu konumda Veri pilotu tablosu bulunamadı.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No se ha encontrado ninguna tabla del Piloto de Datos en esta posición.";
     };
     String STR_ERROR_STR
     {
@@ -4676,6 +4854,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¿À·ù:";
         Text[ turkish ] = "Hata:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Err:";
     };
     String STR_NV_STR
     {
@@ -4703,6 +4882,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "#N/A";
         Text[ turkish ] = "#YOK";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "#N/A";
     };
     String STR_NOREF_STR
     {
@@ -4730,6 +4910,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "#REF!";
         Text[ turkish ] = "#REF!";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "#REF!";
     };
     String STR_EMPTYDATA
     {
@@ -4756,6 +4937,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "(°ø¹é)";
         Text[ turkish ] = "(boş)";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "(vacío)";
     };
     String STR_PRINT_INVALID_AREA
     {
@@ -4783,6 +4965,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº ÀÎ¼â ¹üÀ§";
         Text[ turkish ] = "Geçersiz yazdırma aralığı";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Área de impresión no válida";
     };
     String STR_PAGESTYLE
     {
@@ -4809,6 +4992,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÂÊ À¯Çü";
         Text[ turkish ] = "Sayfa biçimi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Estilo de hoja";
     };
     String STR_HEADER
     {
@@ -4835,6 +5019,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¸Ó¸®±Û";
         Text[ turkish ] = "Üstbilgi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Encabezamiento";
     };
     String STR_FOOTER
     {
@@ -4862,6 +5047,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¹Ù´Ú±Û";
         Text[ turkish ] = "Altbilgi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Pie de página";
     };
     String STR_TEXTATTRS
     {
@@ -4888,6 +5074,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÅØ½ºÆ® ¼Ó¼º";
         Text[ turkish ] = "Metin öznitelikleri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Atributos de texto";
     };
     String STR_HFCMD_DELIMITER
     {
@@ -4914,6 +5101,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "\\";
         Text[ turkish ] = "\\";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "\\";
     };
     String STR_HFCMD_PAGE
     {
@@ -4940,6 +5128,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÂÊ";
         Text[ turkish ] = "SAYFA";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "PÁGINA";
     };
     String STR_HFCMD_PAGES
     {
@@ -4966,6 +5155,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÂÊµé";
         Text[ turkish ] = "SAYFA";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "PÁGINAS";
     };
     String STR_HFCMD_DATE
     {
@@ -4992,6 +5182,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÀÏÀÚ";
         Text[ turkish ] = "DATE";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "FECHA";
     };
     String STR_HFCMD_TIME
     {
@@ -5018,6 +5209,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "½Ã°£";
         Text[ turkish ] = "TIME";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "HORA";
     };
     String STR_HFCMD_FILE
     {
@@ -5044,6 +5236,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÆÄÀÏ";
         Text[ turkish ] = "DOSYA";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "ARCHIVO";
     };
     String STR_HFCMD_TABLE
     {
@@ -5070,6 +5263,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "½ÃÆ®";
         Text[ turkish ] = "TABLO";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "HOJA";
     };
     String STR_PROTECTIONERR
     {
@@ -5097,6 +5291,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Àá±äµÈ ¼¿Àº º¯°æÇÒ ¼ö ¾ø½À´Ï´Ù.";
         Text[ turkish ] = "Korumalı hücreler değiştirilemez.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Las celdas protegidas no pueden ser modificadas.";
     };
     String STR_READONLYERR
     {
@@ -5121,6 +5316,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¹®¼­´Â ÀĞ±âÀü¿ë ¸ğµå·Î ¿­·È½À´Ï´Ù.";
         Text[ turkish ] = "Belge salt okunur kipte açıldı.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "El archivo abierto es solo de lectura.";
     };
     String STR_MATRIXFRAGMENTERR
     {
@@ -5156,6 +5352,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Çà·ÄÀÇ ÀÏºÎ¸¦ º¯°æÇÒ ¼ö ¾ø½À´Ï´Ù.";
         Text[ turkish ] = "Matrislerin bir kısmı değiştirilemiyor.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No se puede modificar parte de la matriz.";
     };
     String STR_PAGEHEADER
     {
@@ -5182,6 +5379,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¸Ó¸®±Û";
         Text[ turkish ] = "Üstbilgi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Encabezamiento";
     };
     String STR_PAGEFOOTER
     {
@@ -5209,6 +5407,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¹Ù´Ú±Û";
         Text[ turkish ] = "Altbilgi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Pie de página";
     };
     String STR_LONG_ERR_ILL_ARG
     {
@@ -5236,6 +5435,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¿À·ù: À¯È¿ÇÏÁö ¾ÊÀº µ¶¸³ º¯¼ö";
         Text[ turkish ] = "Hata: Geçersiz değişken";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Error: Argumento no válido";
     };
     String STR_LONG_ERR_ILL_PAR
     {
@@ -5262,6 +5462,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÆÄ¶ó¹ÌÅÍ ¸ñ·Ï»óÀÇ ¿À·ù";
         Text[ turkish ] = "Parametre listesinde hata";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Error en la lista de parámetros";
     };
     String STR_LONG_ERR_ILL_FPO
     {
@@ -5289,6 +5490,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¿À·ù: À¯È¿ÇÏÁö ¾ÊÀº ºÎµ¿¼Ò¼öÁ¡ ÀÛµ¿";
         Text[ turkish ] = "Hata: Geçersiz kayan nokta işlemi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Error: Operación en punto flotante no válida";
     };
     String STR_LONG_ERR_ILL_CHAR
     {
@@ -5316,6 +5518,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¿À·ù: À¯È¿ÇÏÁö ¾ÊÀº ¹®ÀÚ";
         Text[ turkish ] = "Hata: Geçersiz karakter";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Error: Carácter no válido";
     };
     String STR_LONG_ERR_ILL_SEP
     {
@@ -5343,6 +5546,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¿À·ù:À¯È¿ÇÏÁö ¾ÊÀº ¼¼¹ÌÄİ·Ğ";
         Text[ turkish ] = "Hata: Geçersiz noktalı virgül";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Error: Punto y coma no válido";
     };
     String STR_LONG_ERR_PAIR
     {
@@ -5369,6 +5573,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¿À·ù: °ıÈ£";
         Text[ turkish ] = "Ayraçlarda hata";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Error: Error de paréntesis";
     };
     String STR_LONG_ERR_OP_EXP
     {
@@ -5395,6 +5600,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¿À·ù: ¿¬»êÀÚ°¡ ºüÁ³½À´Ï´Ù.";
         Text[ turkish ] = "Hata: Eksik işleç";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Error: Falta un operador";
     };
     String STR_LONG_ERR_VAR_EXP
     {
@@ -5421,6 +5627,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¿À·ù: º¯¼ö°¡ ¾ø½À´Ï´Ù.";
         Text[ turkish ] = "Hata: Eksik değişken";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Error: Falta una variable";
     };
     String STR_LONG_ERR_CODE_OVF
     {
@@ -5447,6 +5654,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¿À·ù: ¼ö½ÄÀÌ ³Ê¹« ±é´Ï´Ù.";
         Text[ turkish ] = "Hata: Formül çok uzun";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Error: Fórmula demasiado larga";
     };
     String STR_LONG_ERR_STR_OVF
     {
@@ -5473,6 +5681,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¿À·ù: ¹®ÀÚ¿­ÀÌ ³Ê¹« ±é´Ï´Ù.";
         Text[ turkish ] = "Hata: Karakter zinciri çok uzun";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Error: Cadena de caracteres demasiado larga";
     };
     String STR_LONG_ERR_STACK_OVF
     {
@@ -5500,6 +5709,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¿À·ù: ³»ºÎ ¿À¹öÇÃ·Î";
         Text[ turkish ] = "Hata: İç taşma";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Error: Desbordamiento interno";
     };
     String STR_LONG_ERR_SYNTAX
     {
@@ -5526,6 +5736,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "³»ºÎÀû ±¸¹® ¿À·ù";
         Text[ turkish ] = "İç söz dizimi hatası";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Error interno de sintaxis";
     };
     String STR_LONG_ERR_CIRC_REF
     {
@@ -5553,6 +5764,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¿À·ù: ¼øÈ¯ ÂüÁ¶";
         Text[ turkish ] = "Hata: Döngüsel referans";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Error: Referencia circular";
     };
     String STR_LONG_ERR_NO_NAME
     {
@@ -5580,6 +5792,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¿À·ù: À¯È¿ÇÏÁö ¾ÊÀº ÀÌ¸§";
         Text[ turkish ] = "Hata: Geçersiz ad";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Error: Nombre no válido";
     };
     String STR_LONG_ERR_NO_REF
     {
@@ -5617,6 +5830,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¿À·ù: À¯È¿ÇÏÁö ¾ÊÀº ÂüÁ¶";
         Text[ turkish ] = "Hata: Geçersiz referans";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Error: Referencia no válida";
     };
     String STR_LONG_ERR_NO_CONV
     {
@@ -5643,6 +5857,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¿À·ù:°è»ê¹ıÀÌ ¼ö·ÅÇÏÁö ¾Ê½À´Ï´Ù.";
         Text[ turkish ] = "Hata: Hesaplama işlemi yakınsamıyor";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Error: El proceso de cálculo no converge";
     };
     String STR_LONG_ERR_NO_VALUE
     {
@@ -5669,6 +5884,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¿À·ù:°á°ú°¡ ¾ø½À´Ï´Ù.";
         Text[ turkish ] = "Hata: Sonuç yok";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Error: Sin resultado";
     };
     String STR_LONG_ERR_NV
     {
@@ -5696,6 +5912,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¿À·ù:°ªÀÌÀ¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.";
         Text[ turkish ] = "Hata: Değer mevcut değil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Error: Valor no disponible";
     };
     String STR_ODER_SO
     {
@@ -5722,6 +5939,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "%s ¶Ç´Â À¯»ç";
         Text[ turkish ] = "%s ya da benzer";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "%s o similar";
     };
     String STR_GRIDCOLOR
     {
@@ -5748,6 +5966,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "´«±İ¼± »ö»ó";
         Text[ turkish ] = "Kılavuz çizgileri rengi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Color de la cuadrícula";
     };
     String STR_MERGE_NOTEMPTY
     {
@@ -5774,6 +5993,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¼û°ÜÁø ¼¿ÀÇ ³»¿ëÀÌ Ã¹¹øÂ° ¼¿·Î ÀÌµ¿µÇ¾î¾ß ÇÕ´Ï±î?";
         Text[ turkish ] = "Gizli hücrelerin içeriği birinci hücreye taşınsın mı?";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "¿Desea desplazar el contenido de las filas ocultas a la primera fila?";
     };
     String STR_CELL_FILTER
     {
@@ -5800,6 +6020,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÇÊÅÍ";
         Text[ turkish ] = "Filtre";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Filtro";
     };
     String STR_TARGETNOTFOUND
     {
@@ -5826,6 +6047,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¸ñÇ¥ µ¥ÀÌÅÍº£ÀÌ½º ¿µ¿ªÀº Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.";
         Text[ turkish ] = "Hedef veritabanı aralığı mevcut değil.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No existe el área de la base de datos destino.";
     };
     String STR_INVALID_EPS
     {
@@ -5853,6 +6075,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº Áõ°¡Æø";
         Text[ turkish ] = "Geçersiz aşama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Incremento no válido";
     };
     String STR_TABLE_OP
     {
@@ -5879,6 +6102,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "´ÙÁß.¿¬»ê";
         Text[ turkish ] = "ÇOKLU İŞLEM";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "OPERACIÓN.MÚLTIPLE";
     };
     String STR_UNDO_TABOP
     {
@@ -5905,6 +6129,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "´ÙÁß ¿¬»ê";
         Text[ turkish ] = "Çoklu işlemler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Operación múltiple";
     };
     String STR_INVALID_AFNAME
     {
@@ -5934,6 +6159,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "»ç¿ëÀÚ´Â À¯È¿ÇÏÁö ¾ÊÀº ÀÌ¸§À» ÀÔ·ÂÇÏ¼Ì½À´Ï´Ù .\nµû¶ó¼­ ÀÚµ¿¼­½ÄÀº ¸¸µé¾îÁöÁö ¾Ê½À´Ï´Ù. \n´Ù¸¥ ÀÌ¸§À» ¼±ÅÃÇÏ½Ê½Ã¿À.";
         Text[ turkish ] = "Girilen ad geçersiz.\nOtomatik formatlama yapılamadı.\nBaşka bir ad ile yeniden deneyin.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ha escrito un nombre no válido,\npor lo que no se pudo crear el AutoFormato.\nSeleccione otro nombre por favor.";
     };
     String STR_AREA
     {
@@ -5960,6 +6186,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¹üÀ§";
         Text[ turkish ] = "Aralık";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Área";
     };
     String STR_YES
     {
@@ -5986,6 +6213,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¿¹";
         Text[ turkish ] = "Evet";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Sí";
     };
     String STR_NO
     {
@@ -6012,6 +6240,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¾Æ´Ï¿À";
         Text[ turkish ] = "Hayır";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No";
     };
     String STR_PROTECTION
     {
@@ -6038,6 +6267,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "º¸È£";
         Text[ turkish ] = "Koruma";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Protección";
     };
     String STR_FORMULAS
     {
@@ -6064,6 +6294,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¼ö½Ä";
         Text[ turkish ] = "Formül";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Fórmulas";
     };
     String STR_HIDE
     {
@@ -6090,6 +6321,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¼û±â±â";
         Text[ turkish ] = "Gizle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ocultar";
     };
     String STR_PRINT
     {
@@ -6116,6 +6348,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÀÎ¼â";
         Text[ turkish ] = "Yazdır";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Imprimir";
     };
     String STR_INVALID_AFAREA
     {
@@ -6145,6 +6378,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÀÚµ¿¼­½ÄÀ» Àû¿ëÇÒ ¼ö ÀÖµµ·Ï ÇÏ±â À§ÇØ¼­´Â,\nÃÖ¼ÒÇÑ \n 3x3¼¿ÀÇ µµÇ¥ ¿µ¿ªÀÌ ¸¶Å·µÇ¾î¾ß ÇÕ´Ï´Ù.";
         Text[ turkish ] = "otomatik formatlamayı kullanabilmek için\n en az 3x3 hücre büyüklüğünde bir tablo aralığı seçilmiş olmalıdır.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Para poder aplicar el AutoFormato\nes necesario marcar un área en la tabla\nde por lo menos 3x3 celdas.";
     };
     String STR_CASCADE
     {
@@ -6171,6 +6405,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "(°ãÄ¡°Ô)";
         Text[ turkish ] = "(yuvalanmış)";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "(en cascada)";
     };
     String STR_OPTIONAL
     {
@@ -6197,6 +6432,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "(¼±ÅÃÀûÀÎ)";
         Text[ turkish ] = "(isteğe bağlı)";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "(opcional)";
     };
     String STR_REQUIRED
     {
@@ -6223,6 +6459,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "(¿ä±¸µÊ)";
         Text[ turkish ] = "(isteniyor)";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "(necesario)";
     };
     String STR_INVALID
     {
@@ -6250,6 +6487,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀ½";
         Text[ turkish ] = "geçersiz";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "incorrecto";
     };
     String STR_EDITFUNCTION
     {
@@ -6276,6 +6514,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÇÔ¼ö ÆíÁı";
         Text[ turkish ] = "Fonksiyonu düzenle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Editar función";
     };
     String STR_NOTES
     {
@@ -6302,6 +6541,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¸Ş¸ğ";
         Text[ turkish ] = "Not";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Notas";
     };
     String STR_QUERY_DELTAB
     {
@@ -6327,6 +6567,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÇöÀçÀÇ ½ÃÆ®¸¦ ¿µ±¸È÷ »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
         Text[ turkish ] = "Seçilen tabloları silmek istiyor musunuz?";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "¿Desea eliminar las hojas seleccionadas?";
     };
     String STR_QUERY_DELSCENARIO
     {
@@ -6351,6 +6592,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¼±ÅÃµÈ ½Ã³ª¸®¿À¸¦ »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
         Text[ turkish ] = "Seçilen senaryoyu silmek istiyor musunuz?";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "¿Está seguro de querer eliminar el escenario seleccionado?";
     };
     String STR_EXPORT_ASCII_WARNING
     {
@@ -6376,6 +6618,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "µ¿ÀÇ¾î »çÀüÀÌ ºÒ°¡´ÉÇÕ´Ï´Ù.";
         Text[ turkish ] = "Eşanlamlar sözlüğü mevcut değil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "El diccionario de sinónimos no está disponible";
     };
     String STR_IMPORT_ERROR
     {
@@ -6401,6 +6644,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¸ÂÃã¹ı °Ë»ç°¡ ºÒ°¡´ÉÇÕ´Ï´Ù.";
         Text[ turkish ] = "Yazı denetimi mevcut değil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "La revisión de ortografía no está disponible";
     };
     String STR_IMPORT_ASCII
     {
@@ -6425,6 +6669,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÅØ½ºÆ® ÆÄÀÏ °¡Á®¿À±â";
         Text[ turkish ] = "Metin içe aktarımı";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Importar texto";
     };
     String STR_EXPORT_ASCII
     {
@@ -6449,6 +6694,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÅØ½ºÆ® ³»º¸³»±â";
         Text[ turkish ] = "Dışa aktar (metin)";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Exportación de texto";
     };
     String STR_IMPORT_LOTUS
     {
@@ -6473,6 +6719,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "LotusÆÄÀÏ °¡Á®¿À±â";
         Text[ turkish ] = "Lotus içe aktarımı";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Importación Lotus";
     };
     String STR_IMPORT_DBF
     {
@@ -6497,6 +6744,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "DBase ÆÄÀÏ °¡Á®¿À±â";
         Text[ turkish ] = "DBase içe aktarımı";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Importación DBase";
     };
     String STR_EXPORT_DBF
     {
@@ -6520,6 +6768,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "DBase ¿é¥X";
         Text[ arabic ] = "ÊÕÏíÑDBase ";
         Text[ turkish ] = "Dışa aktar (DBase)";
+        Text[ catalan ] = "Exportación DBase";
     };
     String STR_EXPORT_DIF
     {
@@ -6544,6 +6793,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Dif  ³»º¸³»±â";
         Text[ turkish ] = "Dışa aktar (Dif)";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Exportar Dif";
     };
     String STR_IMPORT_DIF
     {
@@ -6568,6 +6818,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Dif °¡Á®¿À±â";
         Text[ turkish ] = "Dif içe aktarımı";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Importar Dif";
     };
     String STR_STYLENAME_STANDARD
     {
@@ -6592,6 +6843,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "±âº»°ª";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Predeterminado";
     };
     String STR_STYLENAME_RESULT
     {
@@ -6618,6 +6870,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "°á°ú";
         Text[ turkish ] = "Sonuç";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Resultado";
     };
     String STR_STYLENAME_RESULT1
     {
@@ -6644,6 +6897,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "°á°ú2";
         Text[ turkish ] = "Sonuç2";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Resultado2";
     };
     String STR_STYLENAME_HEADLINE
     {
@@ -6669,6 +6923,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "±Û ¸Ó¸®";
         Text[ turkish ] = "Başlık";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Encabezado";
     };
     String STR_STYLENAME_HEADLINE1
     {
@@ -6694,6 +6949,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "±Û ¸Ó¸®1";
         Text[ turkish ] = "Başlık1";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Encabezado1";
     };
     String STR_STYLENAME_REPORT
     {
@@ -6718,6 +6974,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "º¸°í¼­";
         Text[ turkish ] = "Rapor";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Informe";
     };
     String STR_STYLENAME_REPORT1
     {
@@ -6742,6 +6999,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "º¸°í¼­1";
         Text[ turkish ] = "Rapor1";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Informe1";
     };
     String STR_IMPORT_EXCEL_WARNING
     {
@@ -6767,6 +7025,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = " ¸ÂÃã¹ı °Ë»ç°¡ ºÒ°¡´ÉÇÕ´Ï´Ù.\n»ç¿ëÀÚÀÇ ¼³Ä¡¸¦ È®ÀÎÇÑ ´ÙÀ½ \nÇÊ¿ä½Ã ¿ä±¸µÇ´Â ¾ğ¾î¸¦ ¼³Ä¡ÇÏ½Ê½Ã¿À.";
         Text[ turkish ] = "denetim için mevcut değil.\nKurulumu kontrol edip\ngerekirse istenen dili yükleyin";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "no está disponible para la verificación.\nRevise por favor su instalación\ne instale, si es necesario, el idioma deseado.";
     };
     String STR_THESAURUS_NO_STRING
     {
@@ -6792,6 +7051,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "µ¿ÀÇ¾î »çÀüÀº ÅØ½ºÆ® ¼¿ ¾È¿¡¼­¸¸ »ç¿ë °¡´ÉÇÕ´Ï´Ù!";
         Text[ turkish ] = "Eşanlamlılar sözlüğü yalnızca metin hücrelerinde kullanılabilir!";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "¡Búsqueda de sinónimos solo posible en celdas de texto!";
     };
     String STR_SPELLING_BEGIN_TAB
     {
@@ -6817,6 +7077,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÇöÀç ½ÃÆ®ÀÇ ½ÃÀÛºÎºĞ¿¡¼­ ¸ÂÃã¹ı °Ë»ç¸¦ °è¼ÓÇÏ½Ã°Ú½À´Ï±î?";
         Text[ turkish ] = "Yazım denetimi tablo başından devam ettirilsin mi?";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "¿Desea que se continúe la revisión ortográfica al comienzo de la hoja?";
     };
     String STR_SPELLING_NO_LANG
     {
@@ -6842,6 +7103,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = " µ¿ÀÇ¾î »çÀüÀÇ »ç¿ëÀÌ ºÒ°¡´ÉÇÕ´Ï´Ù.\n»ç¿ëÀÚÀÇ¼³Ä¡¸¦ È®ÀÎÇÏ½Ã°í \nÇÊ¿äÇÏ´Ù¸é ¿ä±¸µÈ ¾ğ¾î¸¦ ¼³Ä¡ÇÏ½Ê½Ã¿À.";
         Text[ turkish ] = "eşanlamlılar sözlüğü için mevcut değil. \nKurulumu kontrol edip  \ngerekirse istenilen dili yükleyin.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "no está disponible para el diccionario de sinónimos.\n Verifique por favor su instalación e instale en caso \nnecesario el idioma deseado.";
     };
     String STR_SPELLING_STOP_OK
     {
@@ -6867,6 +7129,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÀÌ ½ÃÆ®¿¡ ´ëÇÑ ¸ÂÃã¹ı °Ë»ç°¡ ¿Ï·áµÇ¾ú½À´Ï´Ù.";
         Text[ turkish ] = "Bu tablonun yazım denetimi tamamlandı!";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "¡Se ha finalizado la revisión ortográfica de esta hoja!";
     };
     String STR_NOLANGERR
     {
@@ -6891,6 +7154,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¾ğ¾î ¼¼Æ®°¡ ¾ø½À´Ï´Ù.";
         Text[ turkish ] = "Dil seçilmedi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ningún idioma especificado";
     };
     String STR_UNDO_INSERT_TAB
     {
@@ -6916,6 +7180,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "½ÃÆ® »ğÀÔ";
         Text[ turkish ] = "Tablo ekle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Insertar hoja";
     };
     String STR_UNDO_DELETE_TAB
     {
@@ -6941,6 +7206,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "½ÃÆ® »èÁ¦";
         Text[ turkish ] = "Tabloyu sil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Eliminar hoja";
     };
     String STR_UNDO_RENAME_TAB
     {
@@ -6965,6 +7231,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "½ÃÆ® ÀÌ¸§ ¹Ù²Ù±â";
         Text[ turkish ] = "Tabloyu yeniden adlandır";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Cambiar nombre a la hoja";
     };
     String STR_UNDO_MOVE_TAB
     {
@@ -6989,6 +7256,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "½ÃÆ® ÀÌµ¿";
         Text[ turkish ] = "Tabloları taşı";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Desplazar hojas";
     };
     String STR_UNDO_COPY_TAB
     {
@@ -7013,6 +7281,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "½ÃÆ® º¹»ç";
         Text[ turkish ] = "Tabloyu kopyala";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Copiar hoja";
     };
     String STR_UNDO_APPEND_TAB
     {
@@ -7038,6 +7307,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "½ÃÆ® Ã·ºÎ";
         Text[ turkish ] = "Tablo ekle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Añadir hoja";
     };
     String STR_UNDO_SHOWTAB
     {
@@ -7062,6 +7332,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "½ÃÆ® º¸ÀÌ±â";
         Text[ turkish ] = "Tabloyu görüntüle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Mostrar hoja";
     };
     String STR_UNDO_HIDETAB
     {
@@ -7086,6 +7357,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "½ÃÆ® ¼û±â±â";
         Text[ turkish ] = "Tabloyu gizle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ocultar hoja";
     };
     String STR_CHART_MAINTITLE
     {
@@ -7110,6 +7382,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÁÖ Á¦¸ñ";
         Text[ turkish ] = "Ana başlık";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Título principal";
     };
     String STR_CHART_SUBTITLE
     {
@@ -7134,6 +7407,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ºÎÁ¦";
         Text[ turkish ] = "Alt başlık";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Subtítulo";
     };
     String STR_CHART_XTITLE
     {
@@ -7158,6 +7432,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "XÃà Á¦¸ñ";
         Text[ turkish ] = "X-Eksen değeri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Título del eje X";
     };
     String STR_CHART_YTITLE
     {
@@ -7182,6 +7457,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Y Ãà Á¦¸ñ";
         Text[ turkish ] = "Y-Eksen değeri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Título del eje Y";
     };
     String STR_CHART_ZTITLE
     {
@@ -7206,6 +7482,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ZÃà Á¦¸ñ";
         Text[ turkish ] = "Z-Eksen değeri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Título del eje Z";
     };
     String STR_ABSREFLOST
     {
@@ -7231,6 +7508,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "»õ·Î¿î Ç¥´Â¡¡´Ù¸¥ Ç¥¿¡¡¡´ëÇÑ£¬ ¹İµå½Ã¡¡ÀÏÄ¡ÇÒ¡¡ÇÊ¿ä´Â¾ø´Â¡¡ÂüÁ¶¸¦ Æ÷ÇÔÇÏ°í ÀÖ½À´Ï´Ù !";
         Text[ turkish ] = "Yeni tabloda bulunan diğer tablolar ile ilgili mutlak referanslar doğru olmayabilir!";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "La nueva tabla contiene referencias absolutas a otras tablas que posiblemente no son correctas.";
     };
     String STR_NAMECONFLICT
     {
@@ -7256,6 +7534,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "°°Àº ÀÌ¸§À¸·Î ÀÎÇØ,¸ñÇ¥ ¹®¼­ÀÇ ±âÁ¸ ¿µ¿ª ÀÌ¸§ÀÌ º¯°æµÇ¾ú½À´Ï´Ù!";
         Text[ turkish ] = "Ad eşleşmesi nedeniyle hedef belgede mevcut bir aralık adı değiştirildi!";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "¡Debido a la igualdad de nombres se ha alterado el nombre existente de un área del documento!";
     };
     String STR_ERR_AUTOFILTER
     {
@@ -7281,6 +7560,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÀÚµ¿ÇÊÅÍ ºÒ°¡´É";
         Text[ turkish ] = "Otomatik filtre kullanılamaz";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "El AutoFiltro no es posible";
     };
     String STR_MSSG_SEARCHANDREPLACE_1
     {
@@ -7306,6 +7586,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "%PRODUCTNAME Calc ´Â ½ÃÆ®ÀÇ ½ÃÀÛºÎºĞÀ» °Ë»öÇß½À´Ï´Ù. ¸¶Áö¸· ±îÁö °è¼Ó ÇÏ½Ã°Ú½À´Ï±î?";
         Text[ turkish ] = "%PRODUCTNAME Calc tablonun başına kadar aradı. Aramaya tablo sonunda devam etmek istiyor musunuz?";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "%PRODUCTNAME Calc ha buscado hasta el comienzo de la hoja. ¿Desea continuar la búsqueda por el final?";
     };
     String STR_MSSG_SEARCHANDREPLACE_2
     {
@@ -7331,6 +7612,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "%PRODUCTNAME Calc ´Â ½ÃÆ®ÀÇ ¸¶Áö¸· ºÎºĞÀ» °Ë»öÇß½À´Ï´Ù. Ã³À½ ºÎÅÍ °è¼Ó ÇÏ½Ã°Ú½À´Ï±î?";
         Text[ turkish ] = "%PRODUCTNAME Calc tablonun sonuna kadar aradı. Aramaya tablo başından devam etmek istiyor musunuz?";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "%PRODUCTNAME Calc ha buscado hasta el final de la hoja. ¿Desea continuar la búsqueda desde el comienzo?";
     };
     String STR_MSSG_SEARCHANDREPLACE_3
     {
@@ -7355,6 +7637,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Ã£±â & ¹Ù²Ù±â";
         Text[ turkish ] = "Ara ve değiştir";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Buscar y reemplazar";
     };
     String STR_MSSG_SEARCHANDREPLACE_4
     {
@@ -7379,6 +7662,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "%PRODUCTNAME Calc ´Â¹®¼­ÀÇ ½ÃÀÛºÎºĞÀ» °Ë»öÇß½À´Ï´Ù.  ¸¶Áö¸·±îÁö °è¼Ó ÇÏ½Ã°Ú½À´Ï±î?";
         Text[ turkish ] = "%PRODUCTNAME Calc belgenin başına kadar aradı. Aramaya belge sonunda devam etmek istiyor musunuz?";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "%PRODUCTNAME Calc ha buscado hasta el principio del documento.¿Desea continuar la búsqueda por el final del documento?";
     };
     String STR_MSSG_SEARCHANDREPLACE_5
     {
@@ -7403,6 +7687,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "%PRODUCTNAME Calc ´Â ¹®¼­ÀÇ ¸¶Áö¸· ºÎºĞÀ» °Ë»öÇß½À´Ï´Ù. Ã³À½ ºÎÅÍ °è¼Ó ÇÏ½Ã°Ú½À´Ï±î?";
         Text[ turkish ] = "%PRODUCTNAME Calc belgenin sonuna kadar aradı. Aramaya belge başından devam etmek istiyor musunuz?";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "%PRODUCTNAME Calc ha buscado hasta el final del documento. ¿Desea continuar la búsqueda desde el principio del documento?";
     };
     String STR_CREATENAME_REPLACE
     {
@@ -7427,6 +7712,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "#ÀÇ ±âÁ¸ Á¤ÀÇ¸¦ ¹Ù²Ù½Ã°Ú½À´Ï±î?";
         Text[ turkish ] = "Mevcut # tanımı değiştirilsin mi?";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "¿Reemplazar la presente definición de #?";
     };
     String STR_CREATENAME_MARKERR
     {
@@ -7452,6 +7738,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¹üÀ§ ÀÌ¸§¿¡ ´ëÇÑ À¯È¿ÇÏÁö ¾ÊÀº ¸¶Å·";
         Text[ turkish ] = "Aralık adları için geçersiz seçim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Selección incorrecta para nombre de área";
     };
     String STR_CONSOLIDATE_ERR1
     {
@@ -7477,6 +7764,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¿¬°áÀº ¼Ò½ºµ¥ÀÌÅÍ À§·Î »ğÀÔÇÒ ¼ö ¾ø½À´Ï´Ù.";
         Text[ turkish ] = "Referanslar, kaynak verilerinin üstünde eklenemez.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Referencias no pueden ser insertadas encima de los datos fuente.";
     };
     String STR_SCENARIO_NOTFOUND
     {
@@ -7501,6 +7789,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "½Ã³ª¸®¿À¸¦¡¡Ã£Áö¡¡¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Senaryo bulunamadı";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No se ha encontrado el escenario";
     };
     String STR_QUERY_DELENTRY
     {
@@ -7526,6 +7815,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Ç×¸ñ #À»£¨¸¦£© »èÁ¦ ÇÏ½Ã°Ú½À´Ï±î?";
         Text[ turkish ] = "# girişini gerçekten silmek istiyor musunuz?";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "¿Desea realmente eliminar la entrada #?";
     };
     String STR_VOBJ_OBJECT
     {
@@ -7550,6 +7840,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "°³Ã¼/±×·¡ÇÈ";
         Text[ turkish ] = "Nesne/Grafik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Objetos/Imágenes";
     };
     String STR_VOBJ_CHART
     {
@@ -7574,6 +7865,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Â÷Æ®";
         Text[ turkish ] = "Şema";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Diagramas";
     };
     String STR_VOBJ_DRAWINGS
     {
@@ -7598,6 +7890,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "±×¸®±â °³Ã¼";
         Text[ turkish ] = "Çizim nesnesi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Objetos de dibujo";
     };
     String STR_VOBJ_MODE_SHOW
     {
@@ -7622,6 +7915,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "º¸ÀÌ±â";
         Text[ turkish ] = "Görüntüle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Mostrar";
     };
     String STR_VOBJ_MODE_HIDE
     {
@@ -7646,6 +7940,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¼û±â±â";
         Text[ turkish ] = "Gizle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ocultar";
     };
     String STR_VOBJ_MODE_DUMMY
     {
@@ -7670,6 +7965,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÇÃ·¹ÀÌ½ºÈ¦´õ";
         Text[ turkish ] = "Genel arama karakteri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Comodín";
     };
     String STR_SCATTR_PAGE_TOPDOWN
     {
@@ -7694,6 +7990,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "À§¿¡¼­ ¾Æ·¡·Î";
         Text[ turkish ] = "Yukardan aşağı";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "De arriba hacia abajo";
     };
     String STR_SCATTR_PAGE_LEFTRIGHT
     {
@@ -7718,6 +8015,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¿ŞÂÊ¿¡¼­ ¿À¸¥ÂÊÀ¸·Î";
         Text[ turkish ] = "Soldan sağa";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "De izquierda a derecha";
     };
     String STR_SCATTR_PAGE_NOTES
     {
@@ -7742,6 +8040,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¸Ş¸ğ";
         Text[ turkish ] = "Not";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Notas";
     };
     String STR_SCATTR_PAGE_GRID
     {
@@ -7766,6 +8065,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "±×¸®µå";
         Text[ turkish ] = "Kılavuz çizgiler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Cuadrícula";
     };
     String STR_SCATTR_PAGE_HEADERS
     {
@@ -7791,6 +8091,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Çà & ¿­ ¸Ó¸®±Û";
         Text[ turkish ] = "Satır ve sütun başlıkları";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Títulos de filas/columnas";
     };
     String STR_SCATTR_PAGE_FORMULAS
     {
@@ -7815,6 +8116,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¼ö½Ä";
         Text[ turkish ] = "Formül";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Fórmulas";
     };
     String STR_SCATTR_PAGE_NULLVALS
     {
@@ -7839,6 +8141,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "0 °ª";
         Text[ turkish ] = "Sıfır değeri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Valores cero";
     };
     String STR_SCATTR_PAGE_PRINTDIR
     {
@@ -7863,6 +8166,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÀÎ¼â ¹æÇâ";
         Text[ turkish ] = "Yazdırma yönü";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Dirección de impresión";
     };
     String STR_SCATTR_PAGE_FIRSTPAGENO
     {
@@ -7887,6 +8191,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Ã¹ ÂÊ ¹øÈ£";
         Text[ turkish ] = "İlk sayfa numarası";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Primer número de página";
     };
     String STR_SCATTR_PAGE_SCALE
     {
@@ -7910,6 +8215,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¥ş³¡±Ä¥Î[%]";
         Text[ arabic ] = "Çáßá Åáì  [%]";
         Text[ turkish ] = "Tümünü [%]";
+        Text[ catalan ] = "Todo en [%]";
     };
     String STR_SCATTR_PAGE_SCALETOPAGES
     {
@@ -7934,6 +8240,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÃÖ´ë ÂÊ ¼ö";
         Text[ turkish ] = "Azm. sayfa sayısı";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Núm. máx. de páginas";
     };
     String STR_DOC_STAT
     {
@@ -7960,6 +8267,7 @@ Resource RID_GLOBSTR
         TEXT[ korean ] = "Åë°è";
         TEXT[ turkish ] = "İstatistik";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Estadística";
     };
     String STR_LINKERROR
     {
@@ -7985,6 +8293,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÀÌ ¿¬°áÀº ¾÷µ¥ÀÌÆ®µÉ ¼ö ¾ø½À´Ï´Ù.";
         Text[ turkish ] = "Bağlantı güncellenemedi.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No se pudo actualizar el vínculo.";
     };
     String STR_LINKERRORFILE
     {
@@ -8009,6 +8318,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÆÄÀÏ:";
         Text[ turkish ] = "Dosya:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Archivo:";
     };
     String STR_LINKERRORTAB
     {
@@ -8033,6 +8343,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "½ÃÆ®:";
         Text[ turkish ] = "Tablo:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Hoja:";
     };
     String STR_OVERVIEW
     {
@@ -8058,6 +8369,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¹Ì¸®º¸±â";
         Text[ turkish ] = "Genel bakış";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Resumen";
     };
     String STR_DOC_INFO
     {
@@ -8082,6 +8394,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¹®¼­ Á¤º¸";
         Text[ turkish ] = "Belge bilgileri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Información del documento";
     };
     String STR_DOC_CREATED
     {
@@ -8106,6 +8419,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¸¸µé¾îÁ³À½";
         Text[ turkish ] = "Oluşturuldu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Creado el";
     };
     String STR_DOC_MODIFIED
     {
@@ -8131,6 +8445,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¼öÁ¤µÊ";
         Text[ turkish ] = "Değiştirilen";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Modificado";
     };
     String STR_DOC_PRINTED
     {
@@ -8155,6 +8470,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÀÎ¼âµÊ";
         Text[ turkish ] = "Yazdırılan";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Impreso";
     };
     String STR_DOC_THEME
     {
@@ -8179,6 +8495,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÁÖÁ¦";
         Text[ turkish ] = "Konu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tema";
     };
     String STR_DOC_KEYWORDS
     {
@@ -8204,6 +8521,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Å° ¿öµå";
         Text[ turkish ] = "Anahtar sözcükler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Palabras clave";
     };
     String STR_DOC_COMMENT
     {
@@ -8228,6 +8546,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÁÖ";
         Text[ turkish ] = "Açıklamalar";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Observaciones";
     };
     String STR_BY
     {
@@ -8252,6 +8571,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "·Î";
         Text[ turkish ] = "Yazdıran";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "de";
     };
     String STR_ON
     {
@@ -8276,6 +8596,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÀÛµ¿";
         Text[ turkish ] = "tarih";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "en";
     };
     String STR_RELOAD_TABLES
     {
@@ -8302,6 +8623,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÀÌ ÆÄÀÏÀº ´Ù¸¥ ÆÄÀÏ¿¡ ¿¬°áµÇ¾î ÀÖ½À´Ï´Ù.\n±×°ÍµéÀ» ¾÷µ¥ÀÌÆ® ÇÏ½Ã°Ú½À´Ï±î?";
         Text[ turkish ] = "Bu dosyada başka dosyalara bağlantılar mevcut.\nBağlantılar güncellensin mi?";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Este archivo está vinculado a otros archivos.\n¿Desea usted actualizarlos?";
     };
     String STR_REIMPORT_AFTER_LOAD
     {
@@ -8327,6 +8649,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÆÄÀÏÀº ÁúÀÇ¸¦ Æ÷ÇÔÇÏ°í ÀÖ½À´Ï´Ù. ÀÌ ÁúÀÇ ÀÌ °á°úµéÀº ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù .\nÀÌ ÁúÀÇ¸¦ ¹İº¹ ÇÏ½Ã°Ú½À´Ï±î?";
         Text[ turkish ] = "Bu dosya, sonuçları kaydedilmeyen sorgular içeriyor.\nBU sorgular yinelensin mi?";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Este archivo contiene consultas cuyos resultados no se guardaron.\n¿Desea repetir las consultas?";
     };
     String STR_FILTER_TOOMANY
     {
@@ -8351,6 +8674,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Á¶°ÇÀÌ ³Ê¹« ¸¹½À´Ï´Ù.";
         Text[ turkish ] = "Koşul sayısı çok fazla";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Demasiadas condiciones";
     };
     String STR_INSERT_FULL
     {
@@ -8376,6 +8700,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Ã¤¿öÁø ¼¿Àº½ÃÆ® ³Ñ¾î·Î \n¹Ğ¸®Áö ¾Ê½À´Ï´Ù.";
         Text[ turkish ] = "Dolu hücreler, sayfa dışına\ntaşınamaz.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No es posible desplazar celdas llenas\nfuera de la hoja.";
     };
     String STR_TABINSERT_ERROR
     {
@@ -8401,6 +8726,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Ç¥¸¦ »ğÀÔÇÏÁö¡¡¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Tablo eklenemedi.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No se pudo insertar la tabla.";
     };
     String STR_TABREMOVE_ERROR
     {
@@ -8425,6 +8751,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "½ÃÆ®¸¦ »èÁ¦ÇÏÁö¡¡¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Tablolar silinemedi.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No se pudieron eliminar las hojas de cálculo";
     };
     String STR_PASTE_ERROR
     {
@@ -8450,6 +8777,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Å¬¸³º¸µåÀÇ ³»¿ëÀÌ »ğÀÔµÉ ¼ö¾ø½À´Ï´Ù .";
         Text[ turkish ] = "Pano içeriği eklenemedi.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No se pudo pegar el contenido del portapapeles.";
     };
     String STR_PASTE_FULL
     {
@@ -8475,6 +8803,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "½ÃÆ®¿¡ »ğÀÔµÉ °ø°£ÀÌ ºÎÁ·ÇÕ´Ï´Ù. .";
         Text[ turkish ] = "Sayfada ekleme için yeterli alan yok.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No se puede insertar más allá de la página.";
     };
     String STR_PASTE_BIGGER
     {
@@ -8499,6 +8828,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Å¬¸³º¸µåÀÇ ³»¿ëÀÌ ¼±ÅÃµÈ ±¸¿ªÀÇ ³»¿ëº¸´Ù  Å©±â°¡ ´õ Å®´Ï´Ù.\n±×·¡µµ »ğÀÔÇÏ½Ã°Ú½À´Ï±î?";
         Text[ turkish ] = "Pano içeriği, seçilen alandan daha büyük.\nYine de eklemek istiyor musunuz?";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "El contenido del portapapeles es mayor que el área seleccionada.\n¿Desea insertarla de todas formas?";
     };
     String STR_ERR_NOREF
     {
@@ -8523,6 +8853,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÂüÁ¶¸¦¡¡Ã£Áö¡¡¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Referans bulunamadı.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No se encontraron referencias.";
     };
     String STR_ERR_LINKOVERLAP
     {
@@ -8548,6 +8879,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¼Ò½º±¸¿ª°ú¡¡Å¸°Ù±¸¿ªÀÌ °ãÃÄÁ®¼­´Â ¾ÈµË´Ï´Ù..";
         Text[ turkish ] = "Kaynak ve hedef aralığı örtüşmemelidir.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Área de origen y de destino no deben superponerse.";
     };
     String STR_GRAPHICNAME
     {
@@ -8572,6 +8904,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "±×·¡ÇÈ";
         Text[ turkish ] = "Grafik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Imagen";
     };
     String STR_INVALIDNAME
     {
@@ -8597,6 +8930,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº ÀÌ¸§.";
         Text[ turkish ] = "Geçersiz ad.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nombre no válido.";
     };
     String STR_VALID_MACRONOTFOUND
     {
@@ -8621,6 +8955,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¼³Á¤µÈ ¸ÅÅ©·Î¸¦¡¡Ã£Áö¡¡¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Seçilen makro bulunamadı.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "La macro seleccionada no se encontró.";
     };
     String STR_VALID_DEFERROR
     {
@@ -8646,6 +8981,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÀÔ·ÂµÈ°ªÀº¡¡À¯È¿ÇÏÁö ¾ÊÀ½.";
         Text[ turkish ] = "Girilen değer geçerli değil.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Valor no válido.";
     };
     String STR_PROGRESS_CALCULATING
     {
@@ -8670,6 +9006,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "°è»ê";
         Text[ turkish ] = "hesaplanıyor";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "calcular";
     };
     String STR_PROGRESS_SORTING
     {
@@ -8694,6 +9031,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Á¤·Ä";
         Text[ turkish ] = "sıralanıyor";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "ordenar";
     };
     String STR_PROGRESS_HEIGHTING
     {
@@ -8719,6 +9057,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "»õ·Î¿î ³ôÀÌ Á¶Á¤";
         Text[ turkish ] = "Satır yüksekliklerini ayarla";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ajustar altura de filas";
     };
     String STR_PROGRESS_COMPARING
     {
@@ -8743,6 +9082,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ºñ±³ #";
         Text[ turkish ] = "Karşılaştır #";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Comparar #";
     };
     String STR_DETINVALID_OVERFLOW
     {
@@ -8768,6 +9108,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº ¼¿ÀÇ ÃÖ´ë °³¼ö°¡ ÃÊ°ú µÇ¾ú½À´Ï´Ù. \nÀ¯È¿ÇÏÁö ¾ÊÀº ¼¿ÀÌ ¸ğµÎ ¸¶Å·µÇÁö´Â  ¾Ê¾Ò½À´Ï´Ù.";
         Text[ turkish ] = "Azami geçersiz hücre sayısı aşıldı.\nGeçersiz hücrelerin tümüü seçilmedi.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "El número máximo de celdas no válidas se ha excedido.\nNo se marcaron todas las celdas no válidas.";
     };
     String STR_QUICKHELP_DELETE
     {
@@ -8793,6 +9134,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "³»¿ë Áö¿ì±â";
         Text[ turkish ] = "İçerikleri sil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Eliminar contenidos";
     };
     String STR_QUICKHELP_REF
     {
@@ -8817,6 +9159,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "%1 R  x %2 C";
         Text[ turkish ] = "%1 Sa x %2 Sü";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "%1 F x %2 C";
     };
     String STR_FUNCTIONLIST_MORE
     {
@@ -8841,6 +9184,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÀÚ¼¼È÷...";
         Text[ turkish ] = "Diğer...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Otros...";
     };
     String STR_ERR_INVALID_AREA
     {
@@ -8866,6 +9210,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº ±¸¿ª";
         Text[ turkish ] = "Geçersiz aralık";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Referencia no válida";
     };
      // Vorlagen fuer Pivottabellen
     String STR_PIVOT_STYLE_INNER
@@ -8891,6 +9236,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "µ¥ÀÌÅÍÆÄÀÏ·µ °ª";
         Text[ turkish ] = "Veri pilotu değeri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Piloto de Datos Valor";
     };
     String STR_PIVOT_STYLE_RESULT
     {
@@ -8915,6 +9261,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "µ¥ÀÌÅÍÆÄÀÏ·µ °á°ú";
         Text[ turkish ] = "Veri pilotu sonucu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Piloto de Datos Resultado";
     };
     String STR_PIVOT_STYLE_CATEGORY
     {
@@ -8939,6 +9286,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "µ¥ÀÌÅÍÆÄÀÏ·µ ¹üÁÖ";
         Text[ turkish ] = "Veri pilotu kategorisi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Categoría del Piloto de Datos";
     };
     String STR_PIVOT_STYLE_TITLE
     {
@@ -8963,6 +9311,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "µ¥ÀÌÅÍÆÄÀÏ·µ Á¦¸ñ";
         Text[ turkish ] = "Veri pilotu başlığı";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Piloto de Datos Título";
     };
     String STR_PIVOT_STYLE_FIELDNAME
     {
@@ -8987,6 +9336,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "µ¥ÀÌÅÍÆÄÀÏ·µ ÇÊµå";
         Text[ turkish ] = "Veri pilotu alanı";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Piloto de Datos Campo";
     };
     String STR_PIVOT_STYLE_TOP
     {
@@ -9011,6 +9361,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "µ¥ÀÌÅÍÆÄÀÏ·µ ÄÚ³Ê";
         Text[ turkish ] = "Veri pilotu köşesi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Piloto de Datos Ángulo";
     };
     String STR_OPERATION_FILTER
     {
@@ -9035,6 +9386,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÇÊÅÍ";
         Text[ turkish ] = "Filtre";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Filtro";
     };
     String STR_OPERATION_SORT
     {
@@ -9059,6 +9411,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Á¤¿­";
         Text[ turkish ] = "Sıralama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ordenar";
     };
     String STR_OPERATION_SUBTOTAL
     {
@@ -9083,6 +9436,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¼Ò°è";
         Text[ turkish ] = "Ara toplam";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Subtotales";
     };
     String STR_OPERATION_NONE
     {
@@ -9107,6 +9461,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¾øÀ½";
         Text[ turkish ] = "Yok";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "ninguno";
     };
     String STR_IMPORT_REPLACE
     {
@@ -9131,6 +9486,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "#ÀÇ ³»¿ëÀ» ¹Ù²Ù½Ã°Ú½À´Ï±î?";
         Text[ turkish ] = "# içeriğini değiştirmek istiyor musunuz?";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "¿Desea reemplazar el contenido de #?";
     };
     String STR_TIP_WIDTH
     {
@@ -9155,6 +9511,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "³Êºñ:";
         Text[ turkish ] = "Genişlik:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ancho:";
     };
     String STR_TIP_HEIGHT
     {
@@ -9180,6 +9537,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "³ôÀÌ:";
         Text[ turkish ] = "Yükseklik:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Altura:";
     };
     String STR_TIP_HIDE
     {
@@ -9204,6 +9562,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¼û±â±â";
         Text[ turkish ] = "Gizle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ocultar";
     };
     String STR_ERR_INSERTOBJ
     {
@@ -9228,6 +9587,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "°³Ã¼¸¦ »ğÀÔÇÏÁö ¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Nesne eklenemedi.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No se pudo insertar el objeto.";
     };
     String STR_CHANGED_BLANK
     {
@@ -9252,6 +9612,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "<ºí·©Å©>";
         Text[ turkish ] = "<boş>";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "<vacío>";
     };
     String STR_CHANGED_CELL
     {
@@ -9276,6 +9637,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¼¿ #1 Àº£¨´Â£© '#2'¿¡¼­ '#3'·Î º¯°æµÊ";
         Text[ turkish ] = "#1 hücresi, '#2' iken '#3' olarak değiştirildi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Celda #1 cambiada de '#2' a '#3' ";
     };
     String STR_CHANGED_INSERT
     {
@@ -9300,6 +9662,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "#1 »ğÀÔ";
         Text[ turkish ] = "#1 eklendi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "#1 insertada";
     };
     String STR_CHANGED_DELETE
     {
@@ -9324,6 +9687,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "#1 »èÁ¦µÊ";
         Text[ turkish ] = "#1 silindi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "#1 eliminada";
     };
     String STR_CHANGED_MOVE
     {
@@ -9348,6 +9712,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "#1 ¿¡¼­ #2·Î ¹üÀ§ ÀÌµ¿";
         Text[ turkish ] = "Aralık taşındı; eski konum #1 yeni konum #2";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Área desplazada de #1 a #2";
     };
     String STR_END_REDLINING_TITLE
     {
@@ -9363,8 +9728,8 @@ Resource RID_GLOBSTR
         Text [ french ] = "Quitter l'enregistrement" ;
         Text [ dutch ] = "Notering beëindigen" ;
         Text[ chinese_simplified ] = "½áÊø¼ÇÂ¼";
-        Text[ russian ] = "Çàêîí÷èòü çàïèñü èñïğàâëåíèé";
-        Text[ polish ] = "Zakoñcz rejestracjê";
+        Text[ russian ] = "Çàêîí÷èòü çàïèñü";
+        Text[ polish ] = "Zakoñcz nagrywanie";
         Text[ japanese ] = "‹L˜^‚ÌI—¹";
         Text[ chinese_traditional ] = "µ²§ô­×§ï";
         Text[ arabic ] = "ÅäåÇÁ ÇáÊÓÌíá";
@@ -9372,6 +9737,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "±â·Ï¡¡Á¾·á";
         Text[ turkish ] = "Kaydı durdur";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Finalizar registro";
     };
     String STR_END_REDLINING
     {
@@ -9388,7 +9754,7 @@ Resource RID_GLOBSTR
         Text [ dutch ] = "Door deze activiteit wordt het noteren  van wijzigingen beëindigd.\\ nDe informatie over wijzigingen gaat hierdoor verloren.\n\nNoteren beëindigen?\n\n" ;
         Text[ chinese_simplified ] = "Õâ¸ö²Ù×÷»áÖĞ¶Ï¸ü¸Ä¼ÇÂ¼¡£\n¸ü¸ÄÄÚÈİ¾Í»áÒÅÊ§¡£\n\nÄú»¹ÊÇÒªÖĞ¶Ï¼ÇÂ¼Âğ£¿\n\n";
         Text[ russian ] = "İòèì äåéñòâèåì çàêîí÷èòñÿ çàïèñü èñïğàâëåíèé.\nËşáàÿ èíôîğìàöèÿ î ïğåäûäóùèõ èñïğàâëåíèÿõ áóäåò óòåğÿíà.\n\nÇàêîí÷èòü çàïèñü èñïğàâëåíèé?\n\n";
-        Text[ polish ] = "Ta akcja koñczy rejestracjê modyfikacji.\nInformacje o zmianach zostan¹ usuniête.\n\nZakoñczyæ rejestracjê?\n\n";
+        Text[ polish ] = "Akcja ta koñczy nagrywanie zmian.\nInformacje o zmianach zostan¹ usuniête.\n\nZakoñczyæ nagrywanie?\n\n";
         Text[ japanese ] = "•ÏX‚Ì‹L˜^‚ğ‚±‚Ì±¸¼®İ‚ÅI—¹‚µ‚Ü‚·B\n“¯‚É•ÏX‚µ‚½î•ñ‚àŠ®‘S‚É¸‚í‚ê‚Ü‚·B\n\n‹L˜^‚ğI—¹‚µ‚Ü‚·‚©B\n\n";
         Text[ chinese_traditional ] = "³o­Ó°Ê§@·|µ²§ô­×§ï¡C\n­×§ï¤º®e´N·|¬y¥¢¡C\n\n±zÁÙ¬O­nÄ~Äò¡H\n\n";
         Text[ arabic ] = "åĞÇ ÇáÅÌÑÇÁ Óæİ íÄÏí Åáì ÅäåÇÁ ÚãáíÉ ÊÓÌíá ÇáÊÛííÑÇÊ.\nÓæİ íÄÏí åĞÇ ÈÏæÑå Åáì ÖíÇÚ ÇáãÚáæãÇÊ ÇáÎÇÕÉ ÈÇáÊÛííÑÇÊ.\n\nåá ÊÑíÏ ÅäåÇÁ ÇáÊÓÌíá¿\n\n";
@@ -9396,6 +9762,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÀÌ¡¡µ¿ÀÛ°ú¡¡´õºÒ¾î¡¡º¯°æ¡¡±â·ÏÀº¡¡Á¾·áµË´Ï´Ù.\nÀÌ¿Í¡¡´õºÒ¾î¡¡ÀÌÀü º¯°æ¿¡´ëÇÑ  Á¤º¸´Â »ó½Ç µÉ°ÍÀÔ´Ï´Ù .\n\n±â·ÏÀ»¡¡Á¾·áÇÏ½Ã°Ú½À´Ï±î?\n\n";
         Text[ turkish ] = "Bu işlem ile değişikliklerin izlenmesi sona erdirilecek.\nDaha önceki değişiklikler ile ilgili tüm bilgiler kaybolacak.\n\nKayıt durdurulsun mu?\n\n";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Esta acción finalizará la grabación de modificaciones.\nCualquier información sobre modificaciones se perderá.\n\n¿Desea finalizar la grabación?\n\n";
     };
     String STR_CLOSE_ERROR_LINK
     {
@@ -9420,6 +9787,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "¿¬°áÀÌ ¾÷µ¥ÀÌÆ®µÇ´Âµ¿¾È¿¡´Â¡¡¹®¼­¸¦ ´İÀ» ¼ö ¾ø½À´Ï´Ù .";
         Text[ turkish ] = "Belge, bağlantı güncellemesi yapılırken kapatılamaz.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "El documento no se puede cerrar mientras se esté actualizando un vínculo.";
     };
     String STR_UNDO_RESIZEMATRIX
     {
@@ -9444,6 +9812,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Çà·Ä¹üÀ§ Á¶Á¤";
         Text[ turkish ] = "Matri alanını ayarla";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Hacer coincidir área de matriz";
     };
     String STR_TIP_RESIZEMATRIX
     {
@@ -9468,6 +9837,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "Çà·Ä¡¡¼ö½Ä  %1 R x %2 C";
         Text[ turkish ] = "Matris formulü %1 Sa x %2 Sü";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Fórmula matriz %1 F x %2 C";
     };
     String STR_MACRO_WARNING
     {
@@ -9492,6 +9862,7 @@ Resource RID_GLOBSTR
         Text[ korean ] = "ÀÌ ¹®¼­´Â ¸ÅÅ©·Î ÇÔ¼ö È£ÃâÀ» Æ÷ÇÔÇÏ°í ÀÖ½À´Ï´Ù .\n±×°ÍµéÀ» ½ÇÇà ½ÃÅ°½Ã°Ú½À´Ï±î?";
         Text[ turkish ] = "Belgede makro işlev çağrıları içeriyor.\nMakrolar çalıştırılsın mı?";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "El documento contiene llamadas de macro.\n¿Desea ejecutarlas?";
     };
     /*
     String STR_
