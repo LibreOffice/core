@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaFop.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-10-09 08:07:04 $
+ *  last change: $Author: hro $ $Date: 2002-01-30 09:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -586,13 +586,16 @@ void SAL_CALL CMtaFolderPicker::onInitialized( )
 {
     LPITEMIDLIST lpiidDisplayDir = getItemIdListFromPath( m_displayDir );
 
-    SendMessageA(
-        m_hwnd,
-        BFFM_SETSELECTION,
-        (WPARAM)FALSE,
-        (LPARAM) lpiidDisplayDir );
+    if ( lpiidDisplayDir )
+    {
+        SendMessageA(
+            m_hwnd,
+            BFFM_SETSELECTION,
+            (WPARAM)FALSE,
+            (LPARAM) lpiidDisplayDir );
 
-    releaseItemIdList( lpiidDisplayDir );
+        releaseItemIdList( lpiidDisplayDir );
+    }
 }
 
 //--------------------------------------------------------------------
