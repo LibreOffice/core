@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: gt $ $Date: 2002-08-22 13:02:21 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 11:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,26 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text = "Zugewiesenes Makro";
         Text[ english ] = "Assigned macro";
         Text[ english_us ] = "Assigned macro";
+        Text[ portuguese ] = "Assigned macro";
+        Text[ russian ] = "Assigned macro";
+        Text[ greek ] = "Assigned macro";
+        Text[ dutch ] = "Assigned macro";
+        Text[ french ] = "Assigned macro";
+        Text[ spanish ] = "Assigned macro";
+        Text[ finnish ] = "Assigned macro";
+        Text[ italian ] = "Assigned macro";
+        Text[ danish ] = "Assigned macro";
+        Text[ swedish ] = "Assigned macro";
+        Text[ polish ] = "Assigned macro";
+        Text[ portuguese_brazilian ] = "Assigned macro";
+        Text[ japanese ] = "Assigned macro";
+        Text[ korean ] = "Assigned macro";
+        Text[ chinese_simplified ] = "Assigned macro";
+        Text[ chinese_traditional ] = "指定的巨集";
+        Text[ turkish ] = "Assigned macro";
+        Text[ arabic ] = "Assigned macro";
+        Text[ catalan ] = "Assigned macro";
+        Text[ thai ] = "Assigned macro";
     };
     Control LB_EVENT
     {
@@ -147,6 +167,26 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text = "~Vorhandene Makros in:\n" ;
         Text [ english ] = "~Existing macros in:\n" ;
         Text [ english_us ] = "~Existing macros in:\n" ;
+        Text[ portuguese ] = "~Existing macros in:\n";
+        Text[ russian ] = "~Existing macros in:\n";
+        Text[ greek ] = "~Existing macros in:\n";
+        Text[ dutch ] = "~Existing macros in:\n";
+        Text[ french ] = "~Existing macros in:\n";
+        Text[ spanish ] = "~Existing macros in:\n";
+        Text[ finnish ] = "~Existing macros in:\n";
+        Text[ italian ] = "~Existing macros in:\n";
+        Text[ danish ] = "~Existing macros in:\n";
+        Text[ swedish ] = "~Existing macros in:\n";
+        Text[ polish ] = "~Existing macros in:\n";
+        Text[ portuguese_brazilian ] = "~Existing macros in:\n";
+        Text[ japanese ] = "~Existing macros in:\n";
+        Text[ korean ] = "~Existing macros in:\n";
+        Text[ chinese_simplified ] = "~Existing macros in:\n";
+        Text[ chinese_traditional ] = "現有的巨集位置：\n";
+        Text[ turkish ] = "~Existing macros in:\n";
+        Text[ arabic ] = "~Existing macros in:\n";
+        Text[ catalan ] = "~Existing macros in:\n";
+        Text[ thai ] = "~Existing macros in:\n";
     };
     Control LB_MACROS
     {
