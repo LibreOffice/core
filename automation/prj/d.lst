@@ -6,7 +6,7 @@ mkdir: %_DEST%\inc%_EXT%\automation
 ..\%__SRC%\lib\libsts* %_DEST%\lib%_EXT%\*
 ..\%__SRC%\lib\ists.lib %_DEST%\lib%_EXT%\ists.lib
 
-hedabu: ..\inc\automation.hxx %_DEST%\inc%_EXT%\automation\automation.hxx
+..\inc\automation.hxx %_DEST%\inc%_EXT%\automation\automation.hxx
 
 ..\%__SRC%\bin\testtool.exe %_DEST%\bin%_EXT%\testtool.exe
 ..\%__SRC%\bin\testtool %_DEST%\bin%_EXT%\testtool.bin
