@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 09:51:32 $
+ *  last change: $Author: rt $ $Date: 2004-11-03 16:00:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -823,6 +823,15 @@ SwDrawContact::SwDrawContact( SwFrmFmt* pToRegisterIn, SdrObject* pObj ) :
 {
     // clear vector containing 'virtual' drawing objects.
     maDrawVirtObjs.clear();
+
+    // --> OD 2004-09-22 #i33909# - assure, that drawing object is inserted
+    // in the drawing page.
+    if ( !pObj->IsInserted() )
+    {
+        pToRegisterIn->GetDoc()->GetDrawModel()->GetPage(0)->
+                                InsertObject( pObj, pObj->GetOrdNumDirect() );
+    }
+    // <--
 
     //Controls muessen immer im Control-Layer liegen. Das gilt auch fuer
     //Gruppenobjekte, wenn diese Controls enthalten.
@@ -1740,6 +1749,15 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
         return;
     }
 
+    // --> OD 2004-09-22 #i33909# - *no* connect to layout, if 'master' drawing
+    // object isn't inserted in the drawing page
+    if ( !GetMaster()->IsInserted() )
+    {
+        ASSERT( false, "<SwDrawContact::ConnectToLayout(..)> - master drawing object not inserted -> no connect to layout. Please inform od@openoffice.org" );
+        return;
+    }
+    // <--
+
     SwFrmFmt* pDrawFrmFmt = (SwFrmFmt*)pRegisteredIn;
 
     SwRootFrm* pRoot = pDrawFrmFmt->GetDoc()->GetRootFrm();
@@ -1870,17 +1888,6 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
 
                         if ( !pAnchorFrmOfMaster )
                         {
-                            // OD 02.07.2003 #108784# - check, if 'master' drawing
-                            // objects is inserted into drawing page. If not,
-                            // assert and insert 'master' drawing object.
-                            if ( !GetMaster()->IsInserted() )
-                            {
-                                // OD 25.06.2003 #108784# - debug assert
-                                ASSERT( false, "<SwDrawContact::ConnectToLayout(..)> - master drawing object not inserted!?" );
-
-                                pDrawFrmFmt->GetDoc()->GetDrawModel()->GetPage(0)->
-                                    InsertObject( GetMaster(), GetMaster()->GetOrdNumDirect() );
-                            }
                             // append 'master' drawing object
                             pAnchorFrmOfMaster = pFrm;
                             pFrm->AppendDrawObj( maAnchoredDrawObj );
