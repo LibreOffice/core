@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextDocument.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mi $ $Date: 2002-11-21 11:12:12 $
+ *  last change: $Author: vg $ $Date: 2002-11-25 14:18:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,23 +126,23 @@
 #endif
 
 #ifndef __com_sun_star_text_XBookmarksSupplier_idl__
-#include <com::sun::star::text::XBookmarksSupplier.idl>
+#include <com/sun/star/text/XBookmarksSupplier.idl>
 #endif
 
 #ifndef __com_sun_star_text_XDocumentIndexesSupplier_idl__
-#include <com::sun::star::text::XDocumentIndexesSupplier.idl>
+#include <com/sun/star/text/XDocumentIndexesSupplier.idl>
 #endif
 
 #ifndef __com_sun_star_text_XTextFieldsSupplier_idl__
-#include <com::sun::star::text::XTextFieldsSupplier.idl>
+#include <com/sun/star/text/XTextFieldsSupplier.idl>
 #endif
 
 #ifndef __com_sun_star_text_XTextFramesSupplier_idl__
-#include <com::sun::star::text::XTextFramesSupplier.idl>
+#include <com/sun/star/text/XTextFramesSupplier.idl>
 #endif
 
 #ifndef __com_sun_star_text_XTextSectionsSupplier_idl__
-#include <com::sun::star::text::XTextSectionsSupplier.idl>
+#include <com/sun/star/text/XTextSectionsSupplier.idl>
 #endif
 
 #ifndef __com_sun_star_lang_Locale_idl__
@@ -197,15 +197,15 @@ service TextDocument
 
     [optional] interface com::sun::star::style::XStyleFamiliesSupplier;
 
-    [optional] interface com::sun::star::text::XBookmarksSupplier.idl;
+    [optional] interface com::sun::star::text::XBookmarksSupplier;
 
-    [optional] interface com::sun::star::text::XDocumentIndexesSupplier.idl;
+    [optional] interface com::sun::star::text::XDocumentIndexesSupplier;
 
-    [optional] interface com::sun::star::text::XTextFieldsSupplier.idl;
+    [optional] interface com::sun::star::text::XTextFieldsSupplier;
 
-    [optional] interface com::sun::star::text::XTextFramesSupplier.idl;
+    [optional] interface com::sun::star::text::XTextFramesSupplier;
 
-    [optional] interface com::sun::star::text::XTextSectionsSupplier.idl;
+    [optional] interface com::sun::star::text::XTextSectionsSupplier;
 
     interface com::sun::star::util::XNumberFormatsSupplier;
     //-------------------------------------------------------------------------
