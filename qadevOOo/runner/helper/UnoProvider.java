@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoProvider.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-10-06 12:39:22 $
+ *  last change:$Date: 2005-02-02 13:56:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import java.util.Hashtable;
 import lib.TestParameters;
+import util.PropertyName;
 import util.utils;
 
 /**
@@ -88,6 +89,10 @@ import util.utils;
  * </ol>
  */
 public class UnoProvider implements AppProvider {
+
+    public UnoProvider(){
+
+    }
 
     /**
      * Close existing office: calls disposeManager()
@@ -137,8 +142,9 @@ public class UnoProvider implements AppProvider {
                 xContext = Bootstrap.defaultBootstrap_InitialComponentContext(
                                                                  unorcName, env);
             }
-            catch(java.lang.Exception e) {
+            catch(Exception e) {
                 e.printStackTrace();
+                System.out.println("Could not get XComponentContext. Maybe you must add program folder to LD_LIBRARY_PATH");
                 return null;
             }
             XMultiComponentFactory xMCF = xContext.getServiceManager();
@@ -153,8 +159,8 @@ public class UnoProvider implements AppProvider {
         if (unorcName == null) {
             String office = (String)param.get("AppExecutionCommand");
             // determine unorc name: unorc or uno.ini on windows
-            String opSystem = (String)param.get("OS");
-            if ( opSystem != null && opSystem.equalsIgnoreCase("wntmsci")) {
+            String opSystem = (String)param.get(PropertyName.OPERATING_SYSTEM);
+            if ( opSystem != null && opSystem.equalsIgnoreCase(PropertyName.WNTMSCI)) {
                 unorcName = "uno.ini";
             }
             else {
