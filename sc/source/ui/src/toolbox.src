@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:30:14 $
+ *  last change: $Author: obo $ $Date: 2003-04-08 17:14:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: hr $ $Date: 2003-04-04 17:30:14 $ $Revision: 1.49 $
+ // $Author: obo $ $Date: 2003-04-08 17:14:48 $ $Revision: 1.50 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -1886,6 +1886,7 @@ ImageList RID_DEFAULTIMAGELIST_SC
         File [ greek ] = "sc_out30.bmp" ;
         File [ japanese ] = "sc_out81.bmp" ;
         File [ portuguese ] = "sc_out03.bmp" ;
+        File [ portuguese_brazilian ] = "sc_out55.bmp" ;
         File [ turkish ] = "sc_out90.bmp" ;
         File [ chinese_simplified ] = "sc_out86.bmp" ;
         File [ chinese_traditional ] = "sc_out88.bmp" ;
