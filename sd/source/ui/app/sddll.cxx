@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:15:58 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:35:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,12 @@
 #pragma hdrstop
 
 #include "sddll.hxx"
-#include "docshell.hxx"
-#include "grdocsh.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "DrawDocShell.hxx"
+#endif
+#ifndef SD_GRAPHIC_DOC_SHELL_HXX
+#include "GraphicDocShell.hxx"
+#endif
 #include "sdresid.hxx"
 #include "sdobjfac.hxx"
 #include "cfgids.hxx"
@@ -118,10 +122,10 @@ void SdDLL::Init()
     SfxObjectFactory* pImpressFact = NULL;
 
     if (SvtModuleOptions().IsImpress())
-        pImpressFact = &SdDrawDocShell::Factory();
+        pImpressFact = &::sd::DrawDocShell::Factory();
 
     if (SvtModuleOptions().IsDraw())
-        pDrawFact = &SdGraphicDocShell::Factory();
+        pDrawFact = &::sd::GraphicDocShell::Factory();
 
     // the SdModule must be created
      SdModule** ppShlPtr = (SdModule**) GetAppData(SHL_DRAW);
@@ -129,13 +133,15 @@ void SdDLL::Init()
 
     if (SvtModuleOptions().IsImpress())
     {
-        // Register the Impress shape types in order to make the shapes accessible.
-        SdDrawDocShell::RegisterFactory( SDT_SD_DOCFACTPRIO );
-        ::accessibility::RegisterImpressShapeTypes ();
+        ::sd::DrawDocShell::RegisterFactory( SDT_SD_DOCFACTPRIO );
+
+                // Register the Impress shape types in order to make the shapes
+                // accessible.
+                ::accessibility::RegisterImpressShapeTypes ();
     }
 
     if (SvtModuleOptions().IsDraw())
-        SdGraphicDocShell::RegisterFactory( SDT_SD_DOCFACTPRIO );
+        ::sd::GraphicDocShell::RegisterFactory( SDT_SD_DOCFACTPRIO );
 
     // register your view-factories here
     RegisterFactorys();
