@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:17:25 $
+ *  last change: $Author: kz $ $Date: 2004-11-26 21:09:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -982,7 +982,8 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
         {
             case SID_EDITDOC:
             {
-                if ( !pSh || !pSh->HasName() || !( pSh->Get_Impl()->nLoadedFlags &  SFX_LOADED_MAINDOCUMENT ) )
+                if ( !pSh || !pSh->HasName() || !( pSh->Get_Impl()->nLoadedFlags &  SFX_LOADED_MAINDOCUMENT )
+                  || pSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
                     rSet.DisableItem( SID_EDITDOC );
                 else
                 {
@@ -1008,28 +1009,30 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
                     break;
                 }
 
-                // Wenn irgendein ChildFrame reloadable ist, wird der Slot
-                // enabled, damit man CTRL-Reload machen kann
-                sal_Bool bReloadAvailable = sal_False;
-                SfxFrameIterator aIter( *pFrame, sal_True );
-                for( SfxFrame* pNextFrame = aIter.FirstFrame();
-                        pFrame;
-                        pNextFrame = pNextFrame ?
-                            aIter.NextFrame( *pNextFrame ) : 0 )
-                {
-                    SfxObjectShell *pShell = pFrame->GetCurrentDocument();
-                    if( pShell && pShell->Get_Impl()->bReloadAvailable )
-                    {
-                        bReloadAvailable = sal_True;
-                        break;
-                    }
-                    pFrame = pNextFrame;
-                }
-
-                if ( !pSh || !pSh->CanReload_Impl() )
+                if ( !pSh || !pSh->CanReload_Impl() || pSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
                     rSet.DisableItem(nWhich);
                 else
+                {
+                    // Wenn irgendein ChildFrame reloadable ist, wird der Slot
+                    // enabled, damit man CTRL-Reload machen kann
+                    sal_Bool bReloadAvailable = sal_False;
+                    SfxFrameIterator aIter( *pFrame, sal_True );
+                    for( SfxFrame* pNextFrame = aIter.FirstFrame();
+                            pFrame;
+                            pNextFrame = pNextFrame ?
+                                aIter.NextFrame( *pNextFrame ) : 0 )
+                    {
+                        SfxObjectShell *pShell = pFrame->GetCurrentDocument();
+                        if( pShell && pShell->Get_Impl()->bReloadAvailable )
+                        {
+                            bReloadAvailable = sal_True;
+                            break;
+                        }
+                        pFrame = pNextFrame;
+                    }
+
                     rSet.Put( SfxBoolItem( nWhich, bReloadAvailable));
+                }
 
                 break;
             }
