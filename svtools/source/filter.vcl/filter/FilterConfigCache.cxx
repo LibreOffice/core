@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigCache.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 19:46:43 $
+ *  last change: $Author: sj $ $Date: 2001-05-28 17:22:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,6 @@ sal_Bool FilterConfigCache::ImplAddFilterEntry( const Sequence< PropertyValue >&
 
     sal_Bool bFilterEntryCreated = sal_False;
     FilterConfigCacheEntry  aEntry;
-    OUString sFilterType;
 
     try
     {
@@ -202,7 +201,7 @@ sal_Bool FilterConfigCache::ImplAddFilterEntry( const Sequence< PropertyValue >&
         {
             PropertyValue aPropValue( rFilterProperties[ i ] );
             if ( aPropValue.Name.equals( sType ) )
-                aPropValue.Value >>= sFilterType;
+                aPropValue.Value >>= aEntry.sFilterType;
             else if ( aPropValue.Name.equals( sUIName ) )
                 aPropValue.Value >>= aEntry.sUIName;
             else if ( aPropValue.Name.equals( sDocumentService ) )
@@ -230,9 +229,9 @@ sal_Bool FilterConfigCache::ImplAddFilterEntry( const Sequence< PropertyValue >&
         if ( aEntry.IsValid() )
         {
             // trying to get the corresponding type for this filter
-            if ( xTypeAccess->hasByName( sFilterType ) )
+            if ( xTypeAccess->hasByName( aEntry.sFilterType ) )
             {
-                Any aTypePropertySet = xTypeAccess->getByName( sFilterType );
+                Any aTypePropertySet = xTypeAccess->getByName( aEntry.sFilterType );
                 Sequence< PropertyValue > lProperties;
                 aTypePropertySet >>= lProperties;
                 sal_Int32 j, nCount = lProperties.getLength();
@@ -474,6 +473,15 @@ String FilterConfigCache::GetImportFormatExtension( sal_uInt16 nFormat )
     if ( aIter < aImport.end() )
         aExtension = aIter->sExtension;
     return aExtension;
+}
+
+String FilterConfigCache::GetImportFilterTypeName( sal_uInt16 nFormat )
+{
+    CacheVector::iterator aIter( aImport.begin() + nFormat );
+    String aFilterType;
+    if ( aIter < aImport.end() )
+        aFilterType = aIter->sFilterType;
+    return aFilterType;
 }
 
 String FilterConfigCache::GetImportWildcard( sal_uInt16 nFormat )

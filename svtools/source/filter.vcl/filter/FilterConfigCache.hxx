@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigCache.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-03 13:22:57 $
+ *  last change: $Author: sj $ $Date: 2001-05-28 17:22:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ class FilterConfigCache
             ::rtl::OUString sTemplateName;
 
             ::rtl::OUString sMediaType;
+            ::rtl::OUString sFilterType;
 
             sal_Int32       nFlags;
             sal_Int32       nFileFormatVersion;
@@ -143,6 +144,7 @@ class FilterConfigCache
         String      GetImportFormatMediaType( sal_uInt16 nFormat );
         String      GetImportFormatShortName( sal_uInt16 nFormat );
         String      GetImportWildcard( sal_uInt16 nFormat );
+        String      GetImportFilterTypeName( sal_uInt16 nFormat );
 
         sal_Bool    IsImportInternalFilter( sal_uInt16 nFormat );
         sal_Bool    IsImportPixelFormat( sal_uInt16 nFormat );
