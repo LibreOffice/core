@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:27:56 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 12:31:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,9 @@
 #ifndef SW_MS_MSFILTER_HXX
 #include <msfilter.hxx>
 #endif
-
+#ifndef WW_WWSTYLES_HXX
+#include "../inc/wwstyles.hxx"
+#endif
 // einige Hilfs-Funktionen
 // char
 inline const SvxFontHeightItem& GetSize(const SfxItemSet& rSet,BOOL bInP=TRUE)
@@ -303,20 +305,14 @@ ULONG RtfReader::Read( SwDoc &rDoc,SwPaM &rPam, const String &)
 }
 
 SwRTFParser::SwRTFParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
-    int bReadNewDoc )
-    : SvxRTFParser( pD->GetAttrPool(), rIn, bReadNewDoc ),
-    maSegments(*this),
-    pDoc( pD ),
-    pTableNode( 0 ), pOldTblNd( 0 ), nAktBox( 0 ), nNewNumSectDef( USHRT_MAX ),
-    nAktPageDesc( 0 ), nAktFirstPageDesc( 0 ),
-    pGrfAttrSet( 0 ),
-    aMergeBoxes( 0, 5 ),
-    nInsTblRow( USHRT_MAX ),
-    pSttNdIdx( 0 ),
-    pRegionEndIdx( 0 ),
-    pRelNumRule( new SwRelNumRuleSpaces( *pD, bReadNewDoc )),
-    aTblFmts( 0, 10 ),
-    mpBookmarkStart(0)
+    int bReadNewDoc)
+    : SvxRTFParser(pD->GetAttrPool(), rIn, bReadNewDoc),
+    maParaStyleMapper(*pD), maCharStyleMapper(*pD), maSegments(*this),
+    pDoc(pD), pTableNode(0), pOldTblNd(0), nAktBox(0),
+    nNewNumSectDef(USHRT_MAX), nAktPageDesc(0), nAktFirstPageDesc(0),
+    pGrfAttrSet(0), aMergeBoxes(0, 5), nInsTblRow( USHRT_MAX ), pSttNdIdx(0),
+    pRegionEndIdx(0), pRelNumRule(new SwRelNumRuleSpaces(*pD, bReadNewDoc)),
+    aTblFmts(0, 10), mpBookmarkStart(0)
 {
     mbIsFootnote = mbReadNoTbl = bReadSwFly = bSwPageDesc = bStyleTabValid =
     bInPgDscTbl = bNewNumList = false;
@@ -1555,6 +1551,30 @@ int SwRTFParser::IsEndPara( SvxNodeIdx* pNd, xub_StrLen nCnt ) const
     return pNode && pNode->Len() == nCnt;
 }
 
+bool SwRTFParser::UncompressableStackEntry(const SvxRTFItemStackType &rSet)
+    const
+{
+    /*
+    #i21961#
+    Seeing as CHARFMT sets all the properties of the charfmt itself, its not
+    good enough to just see it as a single property from the point of
+    compressing property sets. If bold and charfmt are in a child, and bold is
+    in the parent, removing bold from the child will not result in the same
+    thing, if the charfmt removes bold itself for example
+    */
+    bool bRet = false;
+    if (rSet.GetAttrSet().Count())
+    {
+
+        if (SFX_ITEM_SET ==
+                rSet.GetAttrSet().GetItemState(RES_TXTATR_CHARFMT, FALSE))
+        {
+            bRet = true;
+        }
+    }
+    return bRet;
+}
+
 void SwRTFParser::SetEndPrevPara( SvxNodeIdx*& rpNodePos, xub_StrLen& rCntPos )
 {
     SwNodeIndex aIdx( pPam->GetPoint()->nNode );
@@ -1606,17 +1626,18 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     }
 
     const SfxPoolItem* pItem;
-    if( rSet.GetAttrSet().Count() )
+    const SfxPoolItem* pCharFmt;
+    if (rSet.GetAttrSet().Count() )
     {
 
         // falls eine Zeichenvorlage im Set steht, deren Attribute
         // aus dem Set loeschen. Sonst sind diese doppelt, was man ja
         // nicht will.
         if( SFX_ITEM_SET == rSet.GetAttrSet().GetItemState(
-            RES_TXTATR_CHARFMT, FALSE, &pItem ) &&
-            ((SwFmtCharFmt*)pItem)->GetCharFmt() )
+            RES_TXTATR_CHARFMT, FALSE, &pCharFmt ) &&
+            ((SwFmtCharFmt*)pCharFmt)->GetCharFmt() )
         {
-            const String& rName = ((SwFmtCharFmt*)pItem)->GetCharFmt()->GetName();
+            const String& rName = ((SwFmtCharFmt*)pCharFmt)->GetCharFmt()->GetName();
             SvxRTFStyleType* pStyle = GetStyleTbl().First();
             do {
                 if( pStyle->bIsCharFmt && pStyle->sName == rName )
@@ -1629,6 +1650,7 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
                     USHORT nWhich = aIter.GetCurItem()->Which();
                     while( TRUE )
                     {
+                        const SfxPoolItem* pItem;
                         if( SFX_ITEM_SET == rStyleSet.GetItemState(
                             nWhich, FALSE, &pItem ) && *pItem == *aIter.GetCurItem())
                             rAttrSet.ClearItem( nWhich );       // loeschen
@@ -1640,11 +1662,16 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
                     break;
                 }
             } while( 0 != (pStyle = GetStyleTbl().Next()) );
-        }
-        // dann setze ueber diesen Bereich die Attrbiute
-        SetSwgValues( rSet.GetAttrSet() );
 
-        pDoc->Insert( aPam, rSet.GetAttrSet(), SETATTR_DONTCHGNUMRULE );
+            pDoc->Insert(aPam, *pCharFmt);
+            rSet.GetAttrSet().ClearItem(RES_TXTATR_CHARFMT);     //test hack
+        }
+        if (rSet.GetAttrSet().Count())
+        {
+            // dann setze ueber diesen Bereich die Attrbiute
+            SetSwgValues(rSet.GetAttrSet());
+            pDoc->Insert(aPam, rSet.GetAttrSet(), SETATTR_DONTCHGNUMRULE);
+        }
     }
 
     if( SFX_ITEM_SET == rSet.GetAttrSet().GetItemState(
@@ -1768,17 +1795,11 @@ void rtfSections::push_back(const rtfSection &rSect)
 // lese alle Dokument-Controls ein
 void SwRTFParser::SetPageInformationAsDefault(const DocPageInformation &rInfo)
 {
-    SectPageInformation aSect(rInfo);
-
     //If we are at the beginning of the document then start the document with
     //a segment with these properties. See #i14982# for this requirement
-    if (
-         maSegments.empty() ||
-         (maSegments.back().maStart == pPam->GetPoint()->nNode)
-       )
-    {
-        maSegments.push_back(rtfSection(*pPam->GetPoint(), aSect));
-    }
+    rtfSection aSect(*pPam->GetPoint(), SectPageInformation(rInfo));
+    if (maSegments.empty() || (maSegments.back().maStart == aSect.maStart))
+        maSegments.push_back(aSect);
 
     if (!bSwPageDesc && IsNewDoc())
     {
@@ -3345,17 +3366,18 @@ void SwRTFParser::SetSwgValues( SfxItemSet& rSet )
 }
 
 
-SwTxtFmtColl* SwRTFParser::MakeColl( const String& rName, USHORT nPos,
-                                        BYTE nOutlineLevel, int& rbCollExist )
+SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, USHORT nPos,
+    BYTE nOutlineLevel, bool& rbCollExist)
 {
     if( BYTE(-1) == nOutlineLevel )
         nOutlineLevel = NO_NUMBERING;
 
-    rbCollExist = FALSE;
+    rbCollExist = false;
     SwTxtFmtColl* pColl;
     String aNm( rName );
     if( !aNm.Len() )
     {
+        ASSERT(!this, "not a bug, but I (cmc) want to see an example of this");
         if( !nPos )
         {
             pColl = pDoc->GetTxtCollFromPoolSimple( RES_POOLCOLL_STANDARD,
@@ -3364,73 +3386,52 @@ SwTxtFmtColl* SwRTFParser::MakeColl( const String& rName, USHORT nPos,
             return pColl;
         }
 
-        aNm.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "NoName(" ));      // erzeuge einen Namen
+        // erzeuge einen Namen
+        aNm.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "NoName(" ));
         aNm += String::CreateFromInt32( nPos );
         aNm += ')';
     }
 
-    // suche jetzt nach einem Style mit dem gleichen Namen (0=dflt. FmtColl)
-    if( 0 != (pColl = pDoc->FindTxtFmtCollByName( aNm ) ) )
+    ww::sti eSti = ww::GetCanonicalStiFromEnglishName(rName);
+    sw::util::ParaStyleMapper::StyleResult aResult =
+        maParaStyleMapper.GetStyle(rName, eSti);
+    pColl = aResult.first;
+    rbCollExist = aResult.second;
+    if (IsNewDoc() && rbCollExist)
     {
-        // neues Doc: keine alten Attribute behalten !!
-        if( IsNewDoc() )
-        {
-            pColl->ResetAllAttr();
-            pColl->SetOutlineLevel( nOutlineLevel );
-        }
-        else
-            rbCollExist = TRUE;
-        return pColl;
+        pColl->ResetAllAttr();
+        rbCollExist = false;
     }
 
-    // Collection neu erzeugen
-    pColl = pDoc->MakeTxtFmtColl( aNm,
-                    pDoc->GetTxtCollFromPoolSimple( RES_POOLCOLL_STANDARD,
-                                                    FALSE ) );
-
-    // sollte es eine Vorlage aus dem Pool sein ??
-    USHORT n = SwStyleNameMapper::GetPoolIdFromUIName( aNm, GET_POOLID_TXTCOLL );
-    if( USHRT_MAX != n )
-        // dann setze bei der Neuen die entsp. PoolId
-        pColl->SetPoolFmtId( n );
-
-    pColl->SetOutlineLevel( nOutlineLevel );
+    if (!rbCollExist)
+        pColl->SetOutlineLevel(nOutlineLevel);
     return pColl;
 }
 
-SwCharFmt* SwRTFParser::MakeCharFmt( const String& rName, USHORT nPos,
-                                    int& rbCollExist )
+SwCharFmt* SwRTFParser::MakeCharFmt(const String& rName, USHORT nPos,
+                                    int& rbCollExist)
 {
     rbCollExist = FALSE;
     SwCharFmt* pFmt;
     String aNm( rName );
     if( !aNm.Len() )
     {
+        ASSERT(!this, "not a bug, but I (cmc) want to see an example of this");
         aNm.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "NoName(" ));
         aNm += String::CreateFromInt32( nPos );
         aNm += ')';
     }
 
-    // suche jetzt nach einem Style mit dem gleichen Namen (0=dflt. FmtColl)
-    if( 0 != (pFmt = pDoc->FindCharFmtByName( aNm ) ) )
+    ww::sti eSti = ww::GetCanonicalStiFromEnglishName(rName);
+    sw::util::CharStyleMapper::StyleResult aResult =
+        maCharStyleMapper.GetStyle(rName, eSti);
+    pFmt = aResult.first;
+    rbCollExist = aResult.second;
+    if (IsNewDoc() && rbCollExist)
     {
-        // neues Doc: keine alten Attribute behalten !!
-        if( IsNewDoc() )
-            pFmt->ResetAllAttr();
-        else
-            rbCollExist = TRUE;
-        return pFmt;
+        pFmt->ResetAllAttr();
+        rbCollExist = false;
     }
-
-    // Format neu erzeugen
-    pFmt = pDoc->MakeCharFmt( aNm, pDoc->GetDfltCharFmt() );
-
-    // sollte es eine Vorlage aus dem Pool sein ??
-    USHORT n = SwStyleNameMapper::GetPoolIdFromUIName( aNm, GET_POOLID_CHRFMT );
-    if( USHRT_MAX != n )
-        // dann setze bei der Neuen die entsp. PoolId
-        pFmt->SetPoolFmtId( n );
-
     return pFmt;
 }
 
@@ -3470,162 +3471,11 @@ void SwRTFParser::SetStyleAttr( SfxItemSet& rCollSet,
     SetSwgValues( rCollSet );
 }
 
-//Takashi Ono for CJK
-String SwRTFParser::XlateFmtColName(const String &rName) const
+SwTxtFmtColl* SwRTFParser::MakeStyle( USHORT nNo, const SvxRTFStyleType& rStyle)
 {
-#define RES_NONE RES_POOLCOLL_DOC_END
-
-    static const RES_POOL_COLLFMT_TYPE aArr[]={
-        RES_POOLCOLL_STANDARD, RES_POOLCOLL_HEADLINE1, RES_POOLCOLL_HEADLINE2,
-        RES_POOLCOLL_HEADLINE3, RES_POOLCOLL_HEADLINE4, RES_POOLCOLL_HEADLINE5,
-        RES_POOLCOLL_HEADLINE6, RES_POOLCOLL_HEADLINE7, RES_POOLCOLL_HEADLINE8,
-        RES_POOLCOLL_HEADLINE9,
-
-        RES_POOLCOLL_TOX_IDX1, RES_POOLCOLL_TOX_IDX2, RES_POOLCOLL_TOX_IDX3,
-        RES_NONE, RES_NONE, RES_NONE, RES_NONE, RES_NONE, RES_NONE,
-        RES_POOLCOLL_TOX_CNTNT1,
-
-        RES_POOLCOLL_TOX_CNTNT2, RES_POOLCOLL_TOX_CNTNT3, RES_POOLCOLL_TOX_CNTNT4,
-        RES_POOLCOLL_TOX_CNTNT5, RES_POOLCOLL_TOX_CNTNT6, RES_POOLCOLL_TOX_CNTNT7,
-        RES_POOLCOLL_TOX_CNTNT8, RES_POOLCOLL_TOX_CNTNT9,
-        RES_NONE, RES_POOLCOLL_FOOTNOTE,
-
-        RES_NONE, RES_POOLCOLL_HEADER, RES_POOLCOLL_FOOTER, RES_POOLCOLL_TOX_IDXH,
-        RES_NONE, RES_NONE, RES_POOLCOLL_JAKETADRESS, RES_POOLCOLL_SENDADRESS,
-        RES_NONE, RES_NONE,
-
-        RES_NONE, RES_NONE, RES_NONE, RES_POOLCOLL_ENDNOTE, RES_NONE, RES_NONE, RES_NONE,
-        RES_POOLCOLL_LISTS_BEGIN, RES_NONE, RES_NONE,
-
-        RES_NONE, RES_NONE, RES_NONE, RES_NONE, RES_NONE,
-        RES_NONE, RES_NONE, RES_NONE, RES_NONE, RES_NONE,
-
-        RES_NONE,RES_NONE, RES_POOLCOLL_DOC_TITEL, RES_NONE, RES_POOLCOLL_SIGNATURE, RES_NONE,
-        RES_POOLCOLL_TEXT, RES_POOLCOLL_TEXT_MOVE, RES_NONE, RES_NONE,
-
-        RES_NONE, RES_NONE, RES_NONE, RES_NONE, RES_POOLCOLL_DOC_SUBTITEL };
-    static const sal_Char *stiName[] = {
-        "Normal",
-        "heading 1",
-        "heading 2",
-        "heading 3",
-        "heading 4",
-        "heading 5",
-        "heading 6",
-        "heading 7",
-        "heading 8",
-        "heading 9",
-        "index 1",
-        "index 2",
-        "index 3",
-        "index 4",
-        "index 5",
-        "index 6",
-        "index 7",
-        "index 8",
-        "index 9",
-        "toc 1",
-        "toc 2",
-        "toc 3",
-        "toc 4",
-        "toc 5",
-        "toc 6",
-        "toc 7",
-        "toc 8",
-        "toc 9",
-        "Normal Indent",
-        "footnote text",
-        "annotation text",
-        "header",
-        "footer",
-        "index heading",
-        "caption",
-        "table of figures",
-        "envelope address",
-        "envelope return",
-        "footnote reference",
-        "annotation reference",
-        "line number",
-        "page number",
-        "endnote reference",
-        "endnote text",
-        "table of authorities",
-        "macro",
-        "toa heading",
-        "List",
-        "List Bullet",
-        "List Number",
-        "List 2",
-        "List 3",
-        "List 4",
-        "List 5",
-        "List Bullet 2",
-        "List Bullet 3",
-        "List Bullet 4",
-        "List Bullet 5",
-        "List Number 2",
-        "List Number 3",
-        "List Number 4",
-        "List Number 5",
-        "Title",
-        "Closing",
-        "Signature",
-        "Default Paragraph Font",
-        "Body Text",
-        "Body Text Indent",
-        "List Continue",
-        "List Continue 2",
-        "List Continue 3",
-        "List Continue 4",
-        "List Continue 5",
-        "Message Header",
-        "Subtitle",
-    };
-
-
-    ASSERT( ( sizeof( aArr ) / sizeof( RES_POOL_COLLFMT_TYPE ) == 75 ),
-            "Style-UEbersetzungstabelle hat falsche Groesse" );
-    ASSERT( ( sizeof( stiName ) / sizeof( *stiName ) == 75 ),
-            "Style-UEbersetzungstabelle hat falsche Groesse" );
-
-    RES_POOL_COLLFMT_TYPE nId = RES_NONE;
-    size_t nSize = sizeof(stiName) / sizeof(*stiName);
-    size_t i;
-
-    for ( i = 0; i < nSize; ++i)
-    {
-        if ( rName == String( stiName[i], RTL_TEXTENCODING_MS_1252 ) )
-        {
-            nId = aArr[i];
-            break;
-        }
-    }
-
-    if (i >= nSize)
-        return rName;
-
-    USHORT nResId;
-    if( RES_POOLCOLL_TEXT_BEGIN <= nId && nId < RES_POOLCOLL_TEXT_END )
-        nResId = RC_POOLCOLL_TEXT_BEGIN - RES_POOLCOLL_TEXT_BEGIN;
-    else if (RES_POOLCOLL_LISTS_BEGIN <= nId && nId < RES_POOLCOLL_LISTS_END)
-        nResId = RC_POOLCOLL_LISTS_BEGIN - RES_POOLCOLL_LISTS_BEGIN;
-    else if (RES_POOLCOLL_EXTRA_BEGIN <= nId && nId < RES_POOLCOLL_EXTRA_END)
-        nResId = RC_POOLCOLL_EXTRA_BEGIN - RES_POOLCOLL_EXTRA_BEGIN;
-    else if (RES_POOLCOLL_REGISTER_BEGIN <= nId && nId < RES_POOLCOLL_REGISTER_END)
-        nResId = RC_POOLCOLL_REGISTER_BEGIN - RES_POOLCOLL_REGISTER_BEGIN;
-    else if (RES_POOLCOLL_DOC_BEGIN <= nId && nId < RES_POOLCOLL_DOC_END)
-        nResId = RC_POOLCOLL_DOC_BEGIN - RES_POOLCOLL_DOC_BEGIN;
-    else if (RES_POOLCOLL_HTML_BEGIN <= nId && nId < RES_POOLCOLL_HTML_END)
-        nResId = RC_POOLCOLL_HTML_BEGIN - RES_POOLCOLL_HTML_BEGIN;
-    return String( ResId( nResId + nId, pSwResMgr ) );
-}
-
-SwTxtFmtColl* SwRTFParser::MakeStyle( USHORT nNo, const SvxRTFStyleType& rStyle )
-{
-     int bCollExist;
-    SwTxtFmtColl* pColl = MakeColl( XlateFmtColName( rStyle.sName ),
-                                    USHORT(nNo),
-                                    rStyle.nOutlineNo, bCollExist );
+     bool bCollExist;
+        SwTxtFmtColl* pColl = MakeColl(rStyle.sName, USHORT(nNo),
+        rStyle.nOutlineNo, bCollExist);
     aTxtCollTbl.Insert( nNo, pColl );
 
     // in bestehendes Dok einfuegen, dann keine Ableitung usw. setzen
