@@ -2,9 +2,9 @@
  *
  *  $RCSfile: classfactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 10:59:00 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:30:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 
 #ifndef COLUMNINFO_HXX_INCLUDED
 #include "internal/columninfo.hxx"
+#endif
+
+#ifndef THUMBVIEWER_HXX_INCLUDED
+#include "internal/thumbviewer.hxx"
 #endif
 
 #ifndef SHLXTHDL_HXX_INCLUDED
@@ -174,6 +178,9 @@ HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
     else if (CLSID_COLUMN_HANDLER == m_Clsid)
         pUnk = static_cast<IColumnProvider*>(new CColumnInfo());
 
+    else if (CLSID_THUMBVIEWER_HANDLER == m_Clsid)
+        pUnk = static_cast<IExtractImage*>(new CThumbviewer());
+
     POST_CONDITION(pUnk != 0, "Could not create COM object");
 
     if (0 == pUnk)
@@ -181,8 +188,7 @@ HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
 
     HRESULT hr = pUnk->QueryInterface(riid, ppvObject);
 
-    // if QueryInterface failed the component
-    // will destroy itself
+    // if QueryInterface failed the component will destroy itself
     pUnk->Release();
 
     return hr;
