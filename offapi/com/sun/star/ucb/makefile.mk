@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: abi $ $Date: 2002-04-26 12:51:08 $
+#   last change: $Author: kso $ $Date: 2002-08-09 12:59:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,7 @@ IDLFILES=\
     ChaosContentProvider.idl\
     Command.idl\
     CommandAbortedException.idl\
-        CommandFailedException.idl\
+    CommandFailedException.idl\
     CommandInfo.idl\
     CommandInfoChange.idl\
     CommandInfoChangeEvent.idl\
@@ -113,10 +113,10 @@ IDLFILES=\
     CookieRequest.idl\
     CrossReference.idl\
     DataContainer.idl\
-        DefaultHierarchyDataSource.idl\
+    DefaultHierarchyDataSource.idl\
     DocumentHeaderField.idl\
     DocumentStoreMode.idl\
-        DuplicateCommandIdentifierException.idl\
+    DuplicateCommandIdentifierException.idl\
     DuplicateProviderException.idl\
     DynamicResultSet.idl\
     Error.idl\
@@ -134,15 +134,15 @@ IDLFILES=\
     HelpContentProvider.idl\
     HelpContent.idl\
     HierarchyContentProvider.idl\
-        HierarchyDataSource.idl\
-        HierarchyDataReadAccess.idl\
-        HierarchyDataReadWriteAccess.idl\
+    HierarchyDataSource.idl\
+    HierarchyDataReadAccess.idl\
+    HierarchyDataReadWriteAccess.idl\
     HierarchyFolderContent.idl\
     HierarchyLinkContent.idl\
     HierarchyRootFolderContent.idl\
     IllegalIdentifierException.idl\
     InsertCommandArgument.idl\
-        InteractiveAugmentedIOException.idl\
+    InteractiveAugmentedIOException.idl\
     InteractiveBadTransferURLException.idl\
     InteractiveCHAOSException.idl\
     InteractiveIOException.idl\
@@ -166,12 +166,14 @@ IDLFILES=\
     LockEntry.idl\
     LockScope.idl\
     LockType.idl\
-        MissingInputStreamException.idl\
-        MissingPropertiesException.idl\
+    MissingInputStreamException.idl\
+    MissingPropertiesException.idl\
     NameClash.idl\
-        NameClashException.idl\
-        NameClashResolveRequest.idl\
+    NameClashException.idl\
+    NameClashResolveRequest.idl\
     NumberedSortingInfo.idl\
+    ODMAContent.idl\
+    ODMAContentProvider.idl\
     OpenCommandArgument.idl\
     OpenCommandArgument2.idl\
     OpenMode.idl\
@@ -181,7 +183,7 @@ IDLFILES=\
     PackageStreamContent.idl\
     PersistentPropertySet.idl\
     PostCommandArgument.idl\
-        PostCommandArgument2.idl\
+    PostCommandArgument2.idl\
     Priority.idl\
     PropertiesManager.idl\
     PropertyMatcherFactory.idl\
@@ -218,9 +220,9 @@ IDLFILES=\
     TransferResult.idl\
     UniversalContentBroker.idl\
     UnsupportedCommandException.idl\
-        UnsupportedDataSinkException.idl\
-        UnsupportedNameClashException.idl\
-        UnsupportedOpenModeException.idl\
+    UnsupportedDataSinkException.idl\
+    UnsupportedNameClashException.idl\
+    UnsupportedOpenModeException.idl\
     VerificationMode.idl\
     WebDAVContentProvider.idl\
     WebDAVDocumentContent.idl\
@@ -237,7 +239,7 @@ IDLFILES=\
     XCommandInfoChangeListener.idl\
     XCommandInfoChangeNotifier.idl\
     XCommandProcessor.idl\
-        XCommandProcessor2.idl\
+    XCommandProcessor2.idl\
     XContent.idl\
     XContentAccess.idl\
     XContentCreator.idl\
@@ -258,9 +260,9 @@ IDLFILES=\
     XFileIdentifierConverter.idl\
     XInteractionCookieHandling.idl\
     XInteractionHandlerSupplier.idl\
-        XInteractionReplaceExistingData.idl\
+    XInteractionReplaceExistingData.idl\
     XInteractionSupplyAuthentication.idl\
-        XInteractionSupplyName.idl\
+    XInteractionSupplyName.idl\
     XParameterizedContentProvider.idl\
     XPersistentPropertySet.idl\
     XProgressHandler.idl\
@@ -278,7 +280,7 @@ IDLFILES=\
     XRemoteContentProviderDoneListener.idl\
     XRemoteContentProviderSupplier.idl\
     XSimpleFileAccess.idl\
-        XSimpleFileAccess2.idl\
+    XSimpleFileAccess2.idl\
     XSortedDynamicResultSetFactory.idl\
     XSourceInitialization.idl
 
