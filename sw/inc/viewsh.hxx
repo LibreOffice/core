@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 16:58:59 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:13:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,11 +461,6 @@ public:
 
     //Damit in der UI nicht ueberall das dochxx includet werden muss
     sal_Bool IsBrowseMode() const;
-
-    sal_Bool IsHeadInBrowse() const;
-    void SetHeadInBrowse( sal_Bool bOn = sal_True );
-    sal_Bool IsFootInBrowse() const;
-    void SetFootInBrowse( sal_Bool bOn = sal_True );
 
     const Size& GetBrowseBorder() const{ return aBrowseBorder; }
     void SetBrowseBorder( const Size& rNew );
