@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msocximex.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cmc $ $Date: 2000-12-20 10:03:42 $
+ *  last change: $Author: cmc $ $Date: 2000-12-20 10:18:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2907,6 +2907,7 @@ sal_Bool OCX_FontData::Read(SvStorageStream *pS)
         pFontName[nFontNameLen]=0;
     }
 
+    Align(pS,4);
     return(TRUE);
 }
 
