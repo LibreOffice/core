@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fieldwnd.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-24 13:06:15 $
+ *  last change: $Author: sab $ $Date: 2002-11-05 07:55:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,6 +238,9 @@ public:
 
     /** Grabs focus and sets new selection. */
     void                    GrabFocusWithSel( long nIndex );
+
+    /** @return The type of the FieldWindow. */
+    ScDPFieldType           GetType() const { return eType; }
 };
 
 //===================================================================
