@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-22 18:46:18 $
+ *  last change: $Author: jp $ $Date: 2002-01-30 12:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,6 +386,8 @@ SwTransferable::SwTransferable( SwWrtShell& rSh )
 
 SwTransferable::~SwTransferable()
 {
+    Application::GetSolarMutex().acquire();
+
 #ifdef DDE_AVAILABLE
     // der DDELink braucht noch die WrtShell!
     if( refDdeLink.Is() )
@@ -424,6 +426,8 @@ SwTransferable::~SwTransferable()
     delete pBkmk;
 
     eBufferType = TRNSFR_NONE;
+
+    Application::GetSolarMutex().release();
 }
 
 // -----------------------------------------------------------------------
