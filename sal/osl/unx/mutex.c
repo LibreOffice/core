@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mutex.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jbu $ $Date: 2001-10-17 16:01:30 $
+ *  last change: $Author: jbu $ $Date: 2001-10-17 16:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,6 +259,10 @@ oslMutex * SAL_CALL osl_getGlobalMutex()
  *       some more time. Note also, that solaris 2.6 does not support
  *       them at all.
  */
+
+#ifdef PTHREAD_NONE_INIT
+static pthread_t _pthread_none_ = PTHREAD_NONE_INIT;
+#endif
 
 typedef struct _oslMutexImpl
 {
