@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:14:13 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -654,7 +654,10 @@ public:
     SwMSDffManager( SwWW8ImplReader& rRdr );
     void DisableFallbackStream();
     void EnableFallbackStream();
+protected:
+    virtual SdrObject* ProcessObj( SvStream& rSt, DffObjData& rObjData, void* pData, Rectangle& rTextRect, SdrObject* pObj );
 };
+
 
 class wwSection
 {
