@@ -2,9 +2,9 @@
  *
  *  $RCSfile: soicon.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:40 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:32:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,9 +121,6 @@ static void ConvertXpm( SalDisplay* pDisplay, char *xpm[], Pixmap& aPixmap, Pixm
 
     sscanf( xpm[ nElement++ ], "%d%d%d%d", &nWidth, &nHeight,
             &nColors, &nCharsPerPixel );
-#if defined DBG_UTIL || defined DEBUG
-    fprintf( stderr, "ConvertXpm: converting width = %d height = %d ncolors = %d chars_per_pixel = %d\n", nWidth, nHeight, nColors, nCharsPerPixel );
-#endif
     nColor  = 0;
     pColors = new XColor[ nColors ];
     pColorAlias = new char[ nColors * nCharsPerPixel ];
@@ -136,9 +133,6 @@ static void ConvertXpm( SalDisplay* pDisplay, char *xpm[], Pixmap& aPixmap, Pixm
         if( *pStart )
         {
             sscanf( pStart,"c %s", pColorString);
-#ifdef DEBUG
-            fprintf(stderr, "pColorString=\"%s\"\n", pColorString );
-#endif
             if( strncasecmp( pColorString, "None", 4 ) )
             {
                 XAllocNamedColor( pDisplay->GetDisplay(),
@@ -224,9 +218,6 @@ static void ConvertXpm( SalDisplay* pDisplay, char *xpm[], Pixmap& aPixmap, Pixm
 
     if( ! bTransparent )
     {
-#if defined DBG_UTIL || defined DEBUG
-        fprintf( stderr, "ConvertXpm: keine Transparenz -> keine Maske\n" );
-#endif
         XFreePixmap( pDisplay->GetDisplay(), aMask );
         aMask = 0;
     }
