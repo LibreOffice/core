@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 14:49:34 $
+#   last change: $Author: kz $ $Date: 2004-10-04 19:15:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,9 @@ SLOFILES =  \
         $(SLO)$/fltini.obj \
         $(SLO)$/shellio.obj \
         $(SLO)$/w4wflt.obj
+
+EXCEPTIONSFILES = \
+                $(SLO)$/fltini.obj
 
 OBJFILES = $(OBJ)$/w4wflt.obj
 
