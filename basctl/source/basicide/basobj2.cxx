@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-25 14:51:32 $
+ *  last change: $Author: tbe $ $Date: 2001-08-03 15:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,12 +77,15 @@
 #include <macrodlg.hxx>
 #include <moduldlg.hxx>
 #include <basidesh.hxx>
+#include <basidesh.hrc>
 #include <baside2.hxx>
 #include <basicmod.hxx>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
+
 
 //----------------------------------------------------------------------------
 
@@ -90,11 +93,11 @@ extern "C" {
     rtl_uString* basicide_choose_macro( BOOL bExecute, BOOL bChooseOnly, rtl_uString* pMacroDesc )
     {
         ::rtl::OUString aMacroDesc( pMacroDesc );
-        ::rtl::OUString aMacroURL = BasicIDE::ChooseMacro( bExecute, bChooseOnly, aMacroDesc );
-        rtl_uString* pMacroURL = aMacroURL.pData;
-        rtl_uString_acquire( pMacroURL );
+        ::rtl::OUString aScriptURL = BasicIDE::ChooseMacro( bExecute, bChooseOnly, aMacroDesc );
+        rtl_uString* pScriptURL = aScriptURL.pData;
+        rtl_uString_acquire( pScriptURL );
 
-        return pMacroURL;
+        return pScriptURL;
     }
 }
 
@@ -195,7 +198,8 @@ void BasicIDE::DecBasicDialogCount()
     IDE_DLL()->GetExtraData()->ChoosingMacro() = TRUE;
     SFX_APP()->EnterBasicCall();
 
-    String aMacroURL;
+    String aScriptURL;
+    BOOL bError = FALSE;
     SbMethod* pMethod = NULL;
 
     Window* pParent = Application::GetDefDialogParent();
@@ -228,44 +232,52 @@ void BasicIDE::DecBasicDialogCount()
                         DBG_ASSERT(pBasMgr, "BasicIDE::ChooseMacro: No BasicManager found!");
                         if ( pBasMgr )
                         {
+                            // language
+                            String aLanguage = String::CreateFromAscii("StarBasic");
+
+                            // macro
+                            String aMacro;
+                            aMacro += pBasic->GetName();
+                            aMacro += '.';
+                            aMacro += pModule->GetName();
+                            aMacro += '.';
+                            aMacro += pMethod->GetName();
+
+                            // location
+                            String aLocation;
                             SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
-                            aMacroURL = String::CreateFromAscii("macro://");
                             if ( pShell )
-                                aMacroURL += pShell->GetTitle( SFX_TITLE_APINAME );
-                            aMacroURL += '/';
-                            aMacroURL += pBasic->GetName();
-                            aMacroURL += '.';
-                            aMacroURL += pModule->GetName();
-                            aMacroURL += '.';
-                            aMacroURL += pMethod->GetName();
-                            aMacroURL += String::CreateFromAscii("()");
-
-                            /*
-                            if ( bChooseOnly )  // !bExecute ?
                             {
-                                //if ( pShell )
-                                //{
-                                //  String aBasMgrName = pShell->GetTitle( SFX_TITLE_APINAME );
-
-                                sal_uInt16 nHashPos = aMacroURL.Search( '/', 8 );
-                                String aBasMgrName( INetURLObject::decode(aMacroURL.Copy( 8, nHashPos-8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET) );
-
-                                if ( aBasMgrName.Len() )
+                                // document basic
+                                SfxObjectShell* pCurrShell = SfxObjectShell::Current();
+                                if ( pShell == pCurrShell )
                                 {
-                                    String aCurrentName = SfxObjectShell::Current()->GetTitle(SFX_TITLE_APINAME);
-
-                                    if ( aBasMgrName == aCurrentName )
-                                    {
-                                        aMacroURL.SearchAndReplace( aBasMgrName , '.' );
-                                    }
-                                    else
-                                    {
-                                        aMacroURL = String();
-                                        ErrorBox( NULL, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_ERRORSELECTMACRO ) ) ).Execute();
-                                    }
+                                    aLocation = String::CreateFromAscii("document");
+                                }
+                                else
+                                {
+                                    // error
+                                    bError = TRUE;
+                                    ErrorBox( NULL, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_ERRORCHOOSEMACRO ) ) ).Execute();
                                 }
                             }
-                            */
+                            else
+                            {
+                                // application basic
+                                aLocation = String::CreateFromAscii("application");
+                            }
+
+                            // script URL
+                            if ( !bError )
+                            {
+                                aScriptURL = String::CreateFromAscii("vnd.sun.star.script:");
+                                aScriptURL += String::CreateFromAscii("language=");
+                                aScriptURL += aLanguage;
+                                aScriptURL += String::CreateFromAscii(",macro=");
+                                aScriptURL += aMacro;
+                                aScriptURL += String::CreateFromAscii(",location=");
+                                aScriptURL += aLocation;
+                            }
                         }
                     }
                 }
@@ -284,7 +296,7 @@ void BasicIDE::DecBasicDialogCount()
 
     SFX_APP()->LeaveBasicCall();
 
-    return ::rtl::OUString( aMacroURL );
+    return ::rtl::OUString( aScriptURL );
 }
 
 //----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 00:08:22 $
+ *  last change: $Author: tbe $ $Date: 2001-08-03 15:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,6 +369,11 @@ String RID_STR_LIBNAMETOLONG
     Text[ turkish ] = "Kitaplýk adý en fazla 30 karakter uzunluðunda olmalý.";
     Text[ catalan ] = "El nombre de la biblioteca no debe contener más de 30 caracteres.";
     Text[ finnish ] = "Kirjaston nimessä voi olla 30 merkkiä.";
+};
+String RID_STR_ERRORCHOOSEMACRO
+{
+    Text = "Auf Makros anderer Dokumente kann nicht zugegriffen werden.";
+    Text [ English ] = "Macros from other documents are not accessible." ;
 };
 String RID_STR_SBXNAMEALLREADYUSED
 {
