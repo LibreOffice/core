@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-15 07:32:58 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1279,57 +1279,6 @@ BOOL __EXPORT ScTabOpParam::operator==( const ScTabOpParam& r ) const
                  && (aRefColCell     == r.aRefColCell)
                  && (nMode           == r.nMode) );
 }
-
-
-//========================================================================
-// class ScPostIt
-//========================================================================
-
-ScPostIt::ScPostIt()
-{
-    bShown = FALSE;
-}
-
-ScPostIt::ScPostIt( const String& rText )
-{
-    AutoSetText( rText );
-    bShown = FALSE;
-}
-
-ScPostIt::ScPostIt( const String& rText, const String& rDate, const String& rAuthor )
-    :   aStrText    ( rText ),
-        aStrDate    ( rDate ),
-        aStrAuthor  ( rAuthor )
-{
-    bShown = FALSE;
-}
-
-ScPostIt::ScPostIt( const ScPostIt& rCpy )
-    :   aStrText    ( rCpy.aStrText ),
-        aStrDate    ( rCpy.aStrDate ),
-        aStrAuthor  ( rCpy.aStrAuthor )
-{
-    bShown = rCpy.bShown;
-}
-
-__EXPORT ScPostIt::~ScPostIt()
-{
-}
-
-void ScPostIt::AutoSetText( const String& rNewText )
-{
-    aStrText   = rNewText;
-    aStrDate   = ScGlobal::pLocaleData->getDate( Date() );
-
-    //  Der Einheitlichkeit halber das Datum immer ohne Uhrzeit (wie im Writer)
-//  aStrDate  += ", ";
-//  aStrDate  += ScGlobal::pLocaleData->getTime( Time() );
-
-    SvtUserOptions aUserOpt;
-    aStrAuthor = aUserOpt.GetID();
-}
-
-//========================================================================
 
 String ScGlobal::GetAbsDocName( const String& rFileName,
                                 SfxObjectShell* pShell )
