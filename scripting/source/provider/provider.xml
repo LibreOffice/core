@@ -20,6 +20,9 @@
         <type>  drafts.com.sun.star.script.provider.XScriptProvider </type>
         <type>  drafts.com.sun.star.script.browse.XBrowseNode </type>
         <type>  drafts.com.sun.star.script.browse.BrowseNodeTypes </type>
+        <type>  com.sun.star.uri.XUriReference </type>
+        <type>  com.sun.star.uri.XUriReferenceFactory </type>
+        <type>  com.sun.star.uri.XVndSunStarScriptUrl </type>
 
     </component-description>
     <project-build-dependency>  cppuhelper  </project-build-dependency>
