@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:21:40 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:38:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -689,8 +689,10 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                 break;
 
             case SID_DATA_SELECT:
-                //  ab 506f wird die ganze Spalte angesehen
-                if ( !pDoc->HasSelectionData( nPosX, nPosY, nTab ) )
+                // HasSelectionData includes column content and validity,
+                // page fields have to be checked separately.
+                if ( !pDoc->HasSelectionData( nPosX, nPosY, nTab ) &&
+                     !pTabViewShell->HasPageFieldDataAtCursor() )
                     rSet.DisableItem( nWhich );
                 break;
 
