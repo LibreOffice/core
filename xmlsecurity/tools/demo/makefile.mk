@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mt $ $Date: 2004-07-26 07:29:34 $
+#   last change: $Author: rt $ $Date: 2004-11-26 15:00:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,7 +92,11 @@ SHARE_LIBS =	\
 
         
 .IF "$(GUI)"=="WNT"
-SHARE_LIBS+= "ixml2.lib" "nss3.lib" "nspr4.lib" "xmlsec.lib" "xmlsec-nss.lib" "helper.lib" "xsec_xmlsec.lib"
+.IF "$(CRYPTO_ENGINE)" == "mscrypto"
+SHARE_LIBS+= "libxml2.lib" "nss3.lib" "nspr4.lib" "xmlsec.lib" "xmlsec-mscrypto.lib" "helper.lib" "xsec_xmlsec.lib"
+.ELSE
+SHARE_LIBS+= "libxml2.lib" "nss3.lib" "nspr4.lib" "xmlsec.lib" "xmlsec-nss.lib" "helper.lib" "xsec_xmlsec.lib"
+.ENDIF
 .ELSE
 SHARE_LIBS+= "-lxml2" "-lnss3" "-lnspr4" "-lxmlsec" "-lxmlsec-nss" "helper.lib" "-lxsec_xmlsec"
 .ENDIF
