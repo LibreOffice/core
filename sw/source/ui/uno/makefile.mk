@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mib $ $Date: 2001-01-17 10:54:44 $
+#   last change: $Author: os $ $Date: 2001-03-13 14:43:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,7 @@ PROJECTPCHSOURCE=..$/ui_1st$/ui_pch
 
 
 CXXFILES = \
+        unodefaults.cxx  \
         unodispatch.cxx  \
         unotxdoc.cxx  \
         unoatxt.cxx  \
@@ -91,6 +92,7 @@ CXXFILES = \
 
 
 SLOFILES =  \
+        $(SLO)$/unodefaults.obj\
         $(SLO)$/unodispatch.obj\
         $(SLO)$/unotxdoc.obj\
         $(SLO)$/unoatxt.obj \
