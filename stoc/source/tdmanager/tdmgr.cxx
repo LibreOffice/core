@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdmgr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jl $ $Date: 2001-07-31 14:52:57 $
+ *  last change: $Author: dbo $ $Date: 2001-10-11 14:53:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
-#include <cppuhelper/compbase3.hxx>
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#include <cppuhelper/compbase4.hxx>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
@@ -86,6 +86,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
@@ -184,7 +185,7 @@ EventListenerImpl::~EventListenerImpl()
 
 //==================================================================================================
 class ManagerImpl
-    : public WeakComponentImplHelper3< XServiceInfo, XSet, XHierarchicalNameAccess >
+    : public WeakComponentImplHelper4< XServiceInfo, XSet, XHierarchicalNameAccess, XInitialization >
 {
     friend EnumerationImpl;
     friend EventListenerImpl;
@@ -209,6 +210,9 @@ protected:
 public:
     ManagerImpl( Reference< XComponentContext > const & xContext, sal_Int32 nCacheSize );
     virtual ~ManagerImpl();
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const Sequence< Any > & args ) throw (Exception, RuntimeException);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
@@ -312,7 +316,8 @@ Any EnumerationImpl::nextElement()
 //__________________________________________________________________________________________________
 ManagerImpl::ManagerImpl(
     Reference< XComponentContext > const & xContext, sal_Int32 nCacheSize )
-    : WeakComponentImplHelper3< XServiceInfo, XSet, XHierarchicalNameAccess >( _aComponentMutex )
+    : WeakComponentImplHelper4<
+        XServiceInfo, XSet, XHierarchicalNameAccess, XInitialization >( _aComponentMutex )
     , _xContext( xContext )
     , _aEventListener( this )
     , _bCaching( sal_True )
@@ -340,66 +345,63 @@ void ManagerImpl::disposing()
 //__________________________________________________________________________________________________
 inline void ManagerImpl::initProviders()
 {
-    // looking up service manager for all known provider implementations
-    Reference< XContentEnumerationAccess > xEnumAccess( _xContext->getServiceManager(), UNO_QUERY );
-    OSL_ENSURE( xEnumAccess.is(), "### service manager must export XContentEnumerationAccess!" );
-
-    Reference< XEnumeration > xEnum( xEnumAccess->createContentEnumeration(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.TypeDescriptionProvider") ) ) );
-    OSL_ENSURE( xEnum.is(), "### no TypeDescriptionProviders available!" );
-
-    if (xEnum.is())
+    // looking up context for additional providers
+    Sequence< OUString > add_providers;
+    if (_xContext->getValueByName( OUString(
+        RTL_CONSTASCII_USTRINGPARAM("/services/" SERVICENAME "/providers") ) ) >>= add_providers)
     {
-        while (xEnum->hasMoreElements())
+        Reference< XMultiComponentFactory > xMgr( _xContext->getServiceManager() );
+        OUString const * pNames = add_providers.getConstArray();
+        for ( sal_Int32 nPos = add_providers.getLength(); nPos--; )
         {
-            Any aAny( xEnum->nextElement() );
-            if (aAny.getValueTypeClass() == TypeClass_INTERFACE)
+            Reference< XHierarchicalNameAccess > xHA(
+                xMgr->createInstanceWithContext( pNames[ nPos ], _xContext ), UNO_QUERY );
+            OSL_ENSURE( xHA.is(), "### no td provider!" );
+
+            if (xHA.is())
             {
-                Reference< XServiceInfo > xInfo(
-                    *(const Reference< XInterface > *)aAny.getValue(), UNO_QUERY );
-                if (xInfo.is() &&
-                    !xInfo->getImplementationName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(IMPLNAME) )) // no self insertion
+                try
                 {
-                    Reference< XInterface > x;
-
-                    Reference< XSingleComponentFactory > xCompFac;
-                    Reference< XSingleServiceFactory > xDeprFac;
-
-                    if (aAny >>= xCompFac)
-                    {
-                        x = xCompFac->createInstanceWithContext( _xContext );
-                    }
-                    // deprecated factory
-                    else if (aAny >>= xDeprFac)
-                    {
-                        x = xDeprFac->createInstance();
-                    }
-                    else
-                    {
-                        continue;
-                    }
-
-                    Reference< XHierarchicalNameAccess > xHA( x, UNO_QUERY );
-                    OSL_ENSURE( xHA.is(), "### no proper factory found for td provider !" );
-
-                    if (xHA.is())
-                    {
-                        try
-                        {
-                            insert( makeAny( xHA ) );
-                        }
-                        catch (IllegalArgumentException &)
-                        {
-                        }
-                        catch (ElementExistException &)
-                        {
-                        }
-                    }
+                    insert( makeAny( xHA ) );
+                }
+                catch (IllegalArgumentException &)
+                {
+                }
+                catch (ElementExistException &)
+                {
                 }
             }
         }
     }
-    OSL_ENSURE( !_aProviders.empty(), "### no typedescription providers found!" );
+}
+
+// XInitialization
+//__________________________________________________________________________________________________
+void ManagerImpl::initialize(
+    const Sequence< Any > & args )
+    throw (Exception, RuntimeException)
+{
+    // additional providers
+    Any const * pProviders = args.getConstArray();
+    for ( sal_Int32 nPos = 0; nPos < args.getLength(); ++nPos )
+    {
+        Reference< XHierarchicalNameAccess > xHA( pProviders[ nPos ], UNO_QUERY );
+        OSL_ENSURE( xHA.is(), "### no td provider!" );
+
+        if (xHA.is())
+        {
+            try
+            {
+                insert( makeAny( xHA ) );
+            }
+            catch (IllegalArgumentException &)
+            {
+            }
+            catch (ElementExistException &)
+            {
+            }
+        }
+    }
 }
 
 // XServiceInfo
@@ -882,7 +884,7 @@ static Reference< XInterface > SAL_CALL ManagerImpl_create(
 {
     sal_Int32 nCacheSize;
     if (!xContext.is() || !(xContext->getValueByName( OUString(
-        RTL_CONSTASCII_USTRINGPARAM(IMPLNAME ".CacheSize") ) ) >>= nCacheSize))
+        RTL_CONSTASCII_USTRINGPARAM("/implementations/" IMPLNAME "/CacheSize") ) ) >>= nCacheSize))
     {
         nCacheSize = CACHE_SIZE;
     }

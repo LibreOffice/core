@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdprovider.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-25 14:13:13 $
+ *  last change: $Author: dbo $ $Date: 2001-10-11 14:53:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,8 @@
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
 #endif
-#ifndef _CPPUHELPER_COMPBASE2_HXX_
-#include <cppuhelper/compbase2.hxx>
+#ifndef _CPPUHELPER_COMPBASE3_HXX_
+#include <cppuhelper/compbase3.hxx>
 #endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
@@ -86,6 +86,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -144,10 +145,11 @@ struct MutexHolder
 //==================================================================================================
 class ProviderImpl
     : public MutexHolder
-    , public WeakComponentImplHelper2< XServiceInfo, XHierarchicalNameAccess >
+    , public WeakComponentImplHelper3< XServiceInfo, XHierarchicalNameAccess, XInitialization >
 {
     Reference< XComponentContext >              _xContext;
     Reference< XHierarchicalNameAccess >        _xTDMgr;
+    Reference< XHierarchicalNameAccess > getTDMgr() SAL_THROW( () );
 
     RegistryKeyList                             _aBaseKeys;
     RegistryTypeReaderLoader                    _aLoader;
@@ -158,6 +160,9 @@ protected:
 public:
     ProviderImpl( const Reference< XComponentContext > & xContext );
     virtual ~ProviderImpl();
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const Sequence< Any > & args ) throw (Exception, RuntimeException);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
@@ -170,38 +175,37 @@ public:
 };
 //__________________________________________________________________________________________________
 ProviderImpl::ProviderImpl( const Reference< XComponentContext > & xContext )
-    : WeakComponentImplHelper2< XServiceInfo, XHierarchicalNameAccess >( _aComponentMutex )
+    : WeakComponentImplHelper3<
+        XServiceInfo, XHierarchicalNameAccess, XInitialization >( _aComponentMutex )
     , _xContext( xContext )
 {
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-    xContext->getValueByName(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.theTypeDescriptionManager") ) ) >>= _xTDMgr;
-    OSL_ENSURE( _xTDMgr.is(), "### cannot get single instance \"TypeDescriptionManager\" from context!" );
-
-    // registries to read from
-    Sequence< Reference< XSimpleRegistry > > registries;
-    _xContext->getValueByName( OUString( RTL_CONSTASCII_USTRINGPARAM(
-        IMPLNAME ".Registries") ) ) >>= registries;
-
-    Reference< XSimpleRegistry > const * pRegistries = registries.getConstArray();
-    for ( sal_Int32 nPos = registries.getLength(); nPos--; )
-    {
-        Reference< XSimpleRegistry > const & xRegistry = pRegistries[ nPos ];
-        if (xRegistry.is() && xRegistry->isValid())
-        {
-            Reference< XRegistryKey > xKey( xRegistry->getRootKey()->openKey(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("/UCR") ) ) );
-            if (xKey.is() && xKey->isValid())
-            {
-                _aBaseKeys.push_back( xKey );
-            }
-        }
-    }
 }
 //__________________________________________________________________________________________________
 ProviderImpl::~ProviderImpl()
 {
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
+}
+//__________________________________________________________________________________________________
+Reference< XHierarchicalNameAccess > ProviderImpl::getTDMgr()
+    SAL_THROW( () )
+{
+    if (! _xTDMgr.is())
+    {
+        Reference< XHierarchicalNameAccess > xTDMgr;
+        _xContext->getValueByName( OUString( RTL_CONSTASCII_USTRINGPARAM(
+            "/singletons/com.sun.star.reflection.theTypeDescriptionManager") ) ) >>= xTDMgr;
+        OSL_ENSURE( xTDMgr.is(), "### cannot get singleton \"TypeDescriptionManager\" from context!" );
+
+        {
+        MutexGuard guard( _aComponentMutex );
+        if (! _xTDMgr.is())
+        {
+            _xTDMgr = xTDMgr;
+        }
+        }
+    }
+    return _xTDMgr;
 }
 
 //__________________________________________________________________________________________________
@@ -216,6 +220,29 @@ void ProviderImpl::disposing()
         (*iPos)->closeKey();
     }
     _aBaseKeys.clear();
+}
+
+// XInitialization
+//__________________________________________________________________________________________________
+void ProviderImpl::initialize(
+    const Sequence< Any > & args )
+    throw (Exception, RuntimeException)
+{
+    // registries to read from
+    Any const * pRegistries = args.getConstArray();
+    for ( sal_Int32 nPos = 0; nPos < args.getLength(); ++nPos )
+    {
+        Reference< XSimpleRegistry > xRegistry( pRegistries[ nPos ], UNO_QUERY );
+        if (xRegistry.is() && xRegistry->isValid())
+        {
+            Reference< XRegistryKey > xKey( xRegistry->getRootKey()->openKey(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("/UCR") ) ) );
+            if (xKey.is() && xKey->isValid())
+            {
+                _aBaseKeys.push_back( xKey );
+            }
+        }
+    }
 }
 
 // XServiceInfo
@@ -278,32 +305,32 @@ Any SAL_CALL ProviderImpl::getByHierarchicalName( const OUString & rName )
                         RTUik aUik;
                         aReader.getUik( aUik );
                         aRet <<= Reference< XTypeDescription >( new InterfaceTypeDescriptionImpl(
-                            _xTDMgr, aName,
+                            getTDMgr(), aName,
                             aReader.getSuperTypeName().replace( '/', '.' ),
                             aUik, aBytes ) );
                         break;
                     }
                     case RT_TYPE_EXCEPTION:
                         aRet <<= Reference< XTypeDescription >( new CompoundTypeDescriptionImpl(
-                            _xTDMgr, TypeClass_EXCEPTION, aName,
+                            getTDMgr(), TypeClass_EXCEPTION, aName,
                             aReader.getSuperTypeName().replace( '/', '.' ),
                             aBytes ) );
                         break;
                     case RT_TYPE_STRUCT:
                         aRet <<= Reference< XTypeDescription >( new CompoundTypeDescriptionImpl(
-                            _xTDMgr, TypeClass_STRUCT, aName,
+                            getTDMgr(), TypeClass_STRUCT, aName,
                             aReader.getSuperTypeName().replace( '/', '.' ),
                             aBytes ) );
                         break;
                     case RT_TYPE_ENUM:
                         aRet <<= Reference< XTypeDescription >( new EnumTypeDescriptionImpl(
-                            _xTDMgr, aName,
+                            getTDMgr(), aName,
                             getRTValueAsInt32( aReader.getFieldConstValue( 0 ) ),
                             aBytes ) );
                         break;
                     case RT_TYPE_TYPEDEF:
                         aRet <<= Reference< XTypeDescription >( new TypedefTypeDescriptionImpl(
-                            _xTDMgr, aName,
+                            getTDMgr(), aName,
                             aReader.getSuperTypeName().replace( '/', '.' ) ) );
                         break;
 
