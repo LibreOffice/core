@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hffrm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-08-14 13:21:15 $
+ *  last change: $Author: ama $ $Date: 2002-08-19 15:30:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,17 @@ void SwFooterFrm::Format( const SwBorderAttrs *pAttrs )
                     {
                         ColUnlock();
                         if ( nDiff > 0 )
+                        {
+                            pFrm = Lower();
+                            while ( pFrm )
+                            {
+                                if( pFrm->IsTxtFrm() &&
+                                    ((SwTxtFrm*)pFrm)->IsUndersized() )
+                                    pFrm->_InvalidateSize();
+                                pFrm = pFrm->GetNext();
+                            }
                             Grow( nDiff PHEIGHT );
+                        }
                         else
                             Shrink( -nDiff PHEIGHT );
                         //Schnell auf dem kurzen Dienstweg die Position updaten.
