@@ -2,9 +2,9 @@
 #
 #   $RCSfile: check.pl,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2004-11-09 11:30:23 $
+#   last change: $Author: hr $ $Date: 2004-11-09 13:46:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,7 @@ if (-d "$StartDir") {
     # check binaries
     print "check binaries: ";
     if (-d "$StartDir/$OperatingSystem/bin") {
-    my @binarylist = ( "idlc","idlcpp","cppumaker","javamaker","rdbmaker","regcomp",
+    my @binarylist = ( "idlc","idlcpp","cppumaker","javamaker","rdbmaker","sp2bv",
                 "regcompare","regmerge","regview","autodoc", "uno", "xml2cmp", "unoapploader" );
 
     foreach $i (@binarylist)
@@ -86,6 +86,28 @@ if (-d "$StartDir") {
         if (! -e "$StartDir/$OperatingSystem/bin/$i$ExePrefix") {
         $return++;
         print "\nERROR: \"$StartDir/$OperatingSystem/bin/$i$ExePrefix\" is missing\n";
+        } else {
+        print "+";
+        }
+    }
+
+    if ($OperatingSystem eq "windows") {
+        if (! -e "$StartDir/$OperatingSystem/bin/regcomp.exe") {
+        $return++;
+        print "\nERROR: \"$StartDir/$OperatingSystem/bin/regcomp.exe\" is missing\n";
+        } else {
+        print "+";
+        }
+    } else {
+        if (! -e "$StartDir/$OperatingSystem/bin/regcomp.bin") {
+        $return++;
+        print "\nERROR: \"$StartDir/$OperatingSystem/bin/regcomp.bin\" is missing\n";
+        } else {
+        print "+";
+        }
+        if (! -e "$StartDir/$OperatingSystem/bin/regcomp") {
+        $return++;
+        print "\nERROR: \"$StartDir/$OperatingSystem/bin/regcomp\" is missing\n";
         } else {
         print "+";
         }
@@ -137,6 +159,10 @@ if (-d "$StartDir") {
     }
     if (! -e "$StartDir/setsdkenv_windows.bat") {
         print "\nERROR: \"$StartDir/setsdkenv_windows.bat\" is missing\n";
+        $return++;
+    }
+    if (! -e "$StartDir/cfgWin.js") {
+        print "\nERROR: \"$StartDir/cfgWin.js\" is missing\n";
         $return++;
     }
     } else {
