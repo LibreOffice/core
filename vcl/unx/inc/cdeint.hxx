@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cdeint.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2002-06-10 17:27:27 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:35:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,9 @@
 
 class CDEIntegrator : public DtIntegrator
 {
-    friend DtIntegrator* DtIntegrator::CreateDtIntegrator( SalFrame* );
+    friend DtIntegrator* DtIntegrator::CreateDtIntegrator();
 private:
-    CDEIntegrator( SalFrame* );
+    CDEIntegrator();
 
 public:
     virtual ~CDEIntegrator();
