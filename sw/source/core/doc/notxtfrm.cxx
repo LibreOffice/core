@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notxtfrm.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 09:51:23 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:36:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -941,7 +941,8 @@ void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 
     case RES_ATTRSET_CHG:
         {
-            for( USHORT n = RES_GRFATR_BEGIN; n < RES_GRFATR_END; ++n )
+            USHORT n;
+            for( n = RES_GRFATR_BEGIN; n < RES_GRFATR_END; ++n )
                 if( SFX_ITEM_SET == ((SwAttrSetChg*)pOld)->GetChgSet()->
                                 GetItemState( n, FALSE ))
                 {
