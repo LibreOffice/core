@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:40:00 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 13:06:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,6 +358,7 @@ static __FAR_DATA SvXMLTokenMapEntry aGroupShapeElemTokenMap[] =
     { XML_NAMESPACE_DR3D,           XML_SCENE,          XML_TOK_GROUP_3DSCENE       },
 
     { XML_NAMESPACE_DRAW,           XML_FRAME,          XML_TOK_GROUP_FRAME         },
+    { XML_NAMESPACE_DRAW,           XML_CUSTOM_SHAPE,   XML_TOK_GROUP_CUSTOM_SHAPE  },
 
     { XML_NAMESPACE_OFFICE,         XML_ANNOTATION,     XML_TOK_GROUP_ANNOTATION    },
 
@@ -373,9 +374,6 @@ static __FAR_DATA SvXMLTokenMapEntry aFrameShapeElemTokenMap[] =
     { XML_NAMESPACE_DRAW,           XML_PLUGIN,         XML_TOK_FRAME_PLUGIN        },
     { XML_NAMESPACE_DRAW,           XML_FLOATING_FRAME, XML_TOK_FRAME_FLOATING_FRAME},
     { XML_NAMESPACE_DRAW,           XML_APPLET,         XML_TOK_FRAME_APPLET        },
-
-    { XML_NAMESPACE_DRAW,           XML_CUSTOM_SHAPE,       XML_TOK_GROUP_CUSTOM_SHAPE  },
-
     XML_TOKEN_MAP_END
 };
 
@@ -894,6 +892,12 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
             pContext = new SdXMLChartShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
             break;
         }
+        case XML_TOK_GROUP_CUSTOM_SHAPE:
+        {
+            // draw:customshape
+            pContext = new SdXMLCustomShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
+            break;
+        }
         // add other shapes here...
         default:
             return new SvXMLShapeContext( rImport, nPrefix, rLocalName );
@@ -968,12 +972,6 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateFrameChildContext(
         {
             // draw:applet
             pContext = new SdXMLAppletShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
-            break;
-        }
-        case XML_TOK_GROUP_CUSTOM_SHAPE:
-        {
-            // draw:customshape
-            pContext = new SdXMLCustomShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
             break;
         }
         // add other shapes here...
