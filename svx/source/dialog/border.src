@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-12 07:23:39 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 19:36:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ TabPage RID_SVXPAGE_BORDER
         Text [ norwegian ] = "Border" ;
         Text [ italian ] = "Cornice" ;
         Text [ portuguese_brazilian ] = "Borda" ;
-        Text [ portuguese ] = "Moldura" ;
+        Text [ portuguese ] = "Disposição de linhas" ;
         Text [ finnish ] = "Reunaviiva" ;
         Text [ danish ] = "Ramme" ;
         Text [ french ] = "Disposition des lignes" ;
@@ -356,7 +356,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ dutch ] = "S~ynchroniseren";
         Text[ french ] = "S~ynchroniser";
         Text[ spanish ] = "~Sincronizar";
-        Text[ italian ] = "~Sicronizza";
+        Text[ italian ] = "~Sincronizza";
         Text[ danish ] = "Synkroniser";
         Text[ swedish ] = "S~ynkronisera";
         Text[ polish ] = "Synchronizuj";
@@ -376,13 +376,13 @@ TabPage RID_SVXPAGE_BORDER
         Text = "Abstand zum Inhalt" ;
         Text [ ENGLISH ] = "Distance to Content" ;
         Text[ english_us ] = "Spacing to contents";
-        Text[ portuguese ] = "Predefinições";
+        Text[ portuguese ] = "Espaço até ao texto";
         Text[ russian ] = "Ðàññòîÿíèå îò ñîäåðæèìîãî";
         Text[ greek ] = "Áðüóôáóç áðü ðåñéå÷üìåíá";
         Text[ dutch ] = "Afstand tot de inhoud";
         Text[ french ] = "Écart avec le contenu";
         Text[ spanish ] = "Distancia al texto";
-        Text[ italian ] = "Impostazioni";
+        Text[ italian ] = "Distanza dal contenuto";
         Text[ danish ] = "Indstillinger";
         Text[ swedish ] = "Avstånd till innehåll";
         Text[ polish ] = "Odstêp od zawartoœci";
