@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-12 07:47:48 $
+ *  last change: $Author: fme $ $Date: 2001-04-23 08:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,6 +311,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     sal_Bool bFirst = sal_True;
 
     SwArrowPortion *pArrow = NULL;
+    SwLinePortion* pLastPor = NULL;
 
     while( pPor )
     {
@@ -321,7 +322,10 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         const SwTwips nOldY = GetInfo().Y();
 
         if ( GetLineInfo().HasSpecialAlign() )
+        {
             GetInfo().Y( GetInfo().GetPos().Y() + AdjustBaseLine( *pCurr, *pPor ) );
+            pLastPor = pPor;
+        }
 
         // Ein Sonderfall sind GluePortions, die Blanks ausgeben.
 
@@ -403,15 +407,24 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             GetInfo().GetOpt().IsParagraph() && !GetTxtFrm()->GetFollow() &&
             GetInfo().GetIdx() >= GetInfo().GetTxt().Len() )
         {
-            SwTmpEndPortion aEnd( *pCurr->GetFirstPortion() );
-            const SwTwips nOldY = GetInfo().Y();
+            // if special vertical alignment is enabled, we take the last
+            // portion as a reference for the adjustment of the paragraph
+            // end symbol, otherwise we take the first portion
             if ( GetLineInfo().HasSpecialAlign() )
+            {
+                SwTmpEndPortion aEnd( *pLastPor );
+                const SwTwips nOldY = GetInfo().Y();
                 GetInfo().Y( GetInfo().GetPos().Y()
                            + AdjustBaseLine( *pCurr, aEnd ) );
-            aEnd.Paint( GetInfo() );
-            GetInfo().Y( nOldY );
+                aEnd.Paint( GetInfo() );
+                GetInfo().Y( nOldY );
+            }
+            else
+            {
+                SwTmpEndPortion aEnd( *pCurr->GetFirstPortion() );
+                aEnd.Paint( GetInfo() );
+            }
         }
-
         if( bUnderSz )
         {
             if( GetInfo().GetVsh() && !GetInfo().GetVsh()->IsPreView() )
