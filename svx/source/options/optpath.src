@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpath.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 22:37:02 $
+ *  last change: $Author: os $ $Date: 2002-12-03 16:27:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include "helpid.hrc"
 
  // RID_SFXPAGE_PATH -----------------------------------------------------
+#define STD_MASKCOLOR Color { Red=0xffff; Green=0x0000; Blue=0xffff; }
 TabPage RID_SFXPAGE_PATH
 {
     HelpId = HID_OPTIONS_PATH ;
@@ -90,7 +91,7 @@ TabPage RID_SFXPAGE_PATH
     Text[ chinese_simplified ] = "è·¯å¾„";
     Text[ russian ] = "Ïóòè";
     Text[ polish ] = "Œcie¿ki";
-    Text[ japanese ] = "ï¾Šï¾Ÿï½½";
+    Text[ japanese ] = "ãƒ‘ã‚¹";
     FixedText FT_TYPE
     {
         Hide = TRUE;
@@ -119,7 +120,8 @@ TabPage RID_SFXPAGE_PATH
         Text[ korean ] = "ìœ í˜•";
         Text[ turkish ] = "Tip";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tipo";
+        Text[ catalan ] = "Tipus";
+        Text[ thai ] = "à¸Šà¸™à¸´à¸”";
     };
     FixedText FT_PATH
     {
@@ -142,14 +144,15 @@ TabPage RID_SFXPAGE_PATH
         Text[ chinese_simplified ] = "è·¯å¾„";
         Text[ russian ] = "Ïóòü";
         Text[ polish ] = "Œcie¿ka";
-        Text[ japanese ] = "ï¾Šï¾Ÿï½½";
+        Text[ japanese ] = "ãƒ‘ã‚¹";
         Text[ chinese_traditional ] = "è·¯å¾‘";
         Text[ arabic ] = "ÇáãÓÇÑ";
         Text[ greek ] = "ÄéáäñïìŞ";
         Text[ korean ] = "ê²½ë¡œ";
         Text[ turkish ] = "Veri yolu";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ruta";
+        Text[ catalan ] = "Camí";
+        Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸—à¸²à¸‡";
     };
     Control LB_PATH
     {
@@ -168,9 +171,9 @@ TabPage RID_SFXPAGE_PATH
         Text [ italian ] = "~Modifica..." ;
         Text [ portuguese_brazilian ] = "~Editar..." ;
         Text [ portuguese ] = "~Editar..." ;
-        Text [ finnish ] = "~Muokkaa" ;
+        Text [ finnish ] = "~Muokkaa..." ;
         Text [ danish ] = "Rediger..." ;
-        Text [ french ] = "~Personnaliser..." ;
+        Text [ french ] = "~Éditer..." ;
         Text [ swedish ] = "~Redigera..." ;
         Text [ dutch ] = "Be~werken..." ;
         Text [ spanish ] = "~Editar..." ;
@@ -185,7 +188,8 @@ TabPage RID_SFXPAGE_PATH
         Text[ korean ] = "í¸ì§‘(~E)...";
         Text[ turkish ] = "Düzenle...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Editar...";
+        Text[ catalan ] = "~Edita...";
+        Text[ thai ] = "à¹~à¸à¹‰à¹„à¸‚...";
     };
     PushButton BTN_STANDARD
     {
@@ -196,24 +200,25 @@ TabPage RID_SFXPAGE_PATH
         Text [ english_us ] = "~Default" ;
         Text [ italian ] = "~Standard" ;
         Text [ spanish ] = "~Predeterminado" ;
-        Text [ french ] = "Par ~défaut" ;
+        Text [ french ] = "Par défaut" ;
         Text [ dutch ] = "~Standaard" ;
         Text [ swedish ] = "~Standard" ;
         Text [ danish ] = "Standard" ;
         Text [ portuguese_brazilian ] = "~Standard" ;
         Text [ portuguese ] = "~Padrão" ;
         Text[ chinese_simplified ] = "æ ‡å‡†(~D)";
-        Text[ russian ] = "Ñòàíäàğò";
+        Text[ russian ] = "~Ïî óìîë÷àíèş";
         Text[ polish ] = "Domyœlnie";
         Text[ japanese ] = "æ¨™æº–(~D)";
         Text[ chinese_traditional ] = "æ¨™æº–(~D)";
         Text[ arabic ] = "ÇİÊÑÇÖí";
         Text[ greek ] = "ĞñïåğéëïãŞ";
-        Text[ korean ] = "ê¸°ë³¸(~D)";
+        Text[ korean ] = "ê¸°ë³¸ ê°’(~D)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Predeterminado";
-        Text[ finnish ] = "~Oletusarvo";
+        Text[ catalan ] = "~Per defecte";
+        Text[ finnish ] = "Oletus";
+        Text[ thai ] = "~à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
     };
     FixedLine GB_STD
     {
@@ -225,8 +230,8 @@ TabPage RID_SFXPAGE_PATH
         Text [ italian ] = "Standard" ;
         Text [ portuguese_brazilian ] = "Padr?o" ;
         Text [ portuguese ] = "Padrão" ;
-        Text [ finnish ] = "Säännöllinen" ;
-        Text [ danish ] = "Normal" ;
+        Text [ finnish ] = "Oletus" ;
+        Text [ danish ] = "Standard" ;
         Text [ french ] = "Liste des chemins" ;
         Text [ swedish ] = "Standard" ;
         Text [ dutch ] = "Standaard" ;
@@ -242,7 +247,18 @@ TabPage RID_SFXPAGE_PATH
         Text[ korean ] = "ê¸°ë³¸";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Predeterminado";
+        Text[ catalan ] = "Per defecte";
+        Text[ thai ] = "à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
+    };
+    Image IMG_LOCK
+    {
+        ImageBitmap = Bitmap { File = "lock.bmp"; };
+        MaskColor = STD_MASKCOLOR;
+    };
+    Image IMG_LOCK_HC
+    {
+        ImageBitmap = Bitmap { File = "lock_hc.bmp"; };
+        MaskColor = STD_MASKCOLOR;
     };
     Text[ chinese_traditional ] = "è·¯å¾‘";
     Text[ arabic ] = "ÇáãÓÇÑÇÊ";
@@ -250,7 +266,8 @@ TabPage RID_SFXPAGE_PATH
     Text[ korean ] = "ê²½ë¡œ";
     Text[ turkish ] = "Veri yolları";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Rutas";
+    Text[ catalan ] = "Camins";
+    Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸—à¸²à¸‡";
 };
 ErrorBox RID_SVXERR_OPT_DOUBLEPATHS
 {
@@ -265,29 +282,22 @@ ErrorBox RID_SVXERR_OPT_DOUBLEPATHS
     Message [ italian ] = "La cartella della configurazione deve essere diversa da quella per il salvataggio \ndei messaggi.\nScegliere un nuovo percorso." ;
     Message [ spanish ] = "La configuración y los directorios de correo electrónico\ndeben especificarse como directorios separados.\nPor favor elija una nueva ruta." ;
     Message [ french ] = "Les répertoires pour la configuration et l'enregistrement des messages\ndoivent être différents.\nSélectionnez un nouveau chemin." ;
-    Message [ dutch ] = "De mappen voor de configuratie en  voor het opslaan van berichten\nmogen niet hetzelfde zijn.\nSelecteer een nieuw pad." ;
+    Message [ dutch ] = "De mappen voor de configuratie en voor het opslaan van berichten\nmogen niet hetzelfde zijn.\nSelecteer een nieuw pad." ;
     Message [ portuguese ] = "Especifique os directórios de configuração e de correio como directórios separados.\nSeleccione um novo atalho." ;
     Message[ chinese_simplified ] = "é…ç½®å’Œä¿å­˜é‚®ä»¶çš„ç›®å½•ä¸èƒ½ç›¸åŒã€‚\nè¯·æ‚¨é€‰æ‹©ä¸€ä¸ªæ–°çš„ç›®å½•ã€‚";
-    Message[ russian ] = "Êîíôèãóğàöèè è ñîõğàíåíèå ñîîáùåíèé äîëæíû íàõîäèòüñÿ\nâ ğàçíûõ êàòàëîãàõ.\nÂûáåğèòå, ïîæàëóéñòà, íîâûé ïóòü.";
+    Message[ russian ] = "Êîíôèãóğàöèè è ïî÷òîâûå êàòàëîãè äîëæíû íàõîäèòüñÿ\nâ ğàçíûõ êàòàëîãàõ.\nÂûáåğèòå íîâûé ïóòü.";
     Message[ polish ] = "Katalogi dla konfiguracji i dla zapisu wiadomoœci \nmusz¹ byæ ró¿ne.\nProszê wybraæ now¹ œcie¿kê.";
-    Message[ japanese ] = "è¨­å®šç”¨ã¨ï¾’ï½°ï¾™ä¿å­˜ç”¨ã®ï¾ƒï¾ï½¨ï¾šï½¸ï¾„ï¾˜ã¯\nåˆ¥ã€…ã§ãªã‘ã‚Œã°ãªã‚Šã¾ã›ã‚“ã€‚\næ–°ã—ã„ï¾Šï¾Ÿï½½ã‚’é¸æŠã—ã¦ãã ã•ã„ã€‚";
+    Message[ japanese ] = "è¨­å®šç”¨ã¨ãƒ¡ãƒ¼ãƒ«ä¿å­˜ç”¨ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã¯\nåˆ¥ã€…ã§ãªã‘ã‚Œã°ãªã‚Šã¾ã›ã‚“ã€‚\næ–°ã—ã„ãƒ‘ã‚¹ã‚’é¸æŠã—ã¦ãã ã•ã„ã€‚";
     Message[ chinese_traditional ] = "é…ç½®å’Œå„²å­˜éƒµä»¶çš„ç›®éŒ„ä¸èƒ½ç›¸åŒã€‚\nè«‹æ‚¨é¸æ“‡ä¸€å€‹æ–°çš„ç›®éŒ„ã€‚";
     Message[ arabic ] = "íÌÈ Ãä Êßæä ÏáÇÆá ÇáÊßæíä æÇáÈÑíÏ ãÎÊáİÉ.\nÇáÑÌÇÁ ÇÎÊíÇÑ ãÓÇÑ ÌÏíÏ.";
     Message[ greek ] = "Ïé êáôÜëïãïé ãéá ôçí äéáìüñöùóç êáé ôçí áğïèŞêåõóç ôùí ìçíõìÜôùí\nğñİğåé íá åßíáé äéáöïñåôéêïß.\nĞáñáêáëş åëİãîôå ìéá íİá äéáäñïìŞ.";
     Message[ korean ] = "êµ¬ì„±ìš© ë””ë ‰í† ë¦¬ì™€ ë©”ì¼ì €ì¥ ë””ë ‰í† ë¦¬ëŠ” êµ¬ë¶„ë˜ì–´ì•¼ í•©ë‹ˆë‹¤.\nìƒˆ ê²½ë¡œë¥¼ ì„ íƒí•˜ì‹­ì‹œì˜¤.";
     Message[ turkish ] = "Konfigürasyon ve ileti dizinlerinin ayrı dizinler olarak\nbelirlenmesi gerekir.\nLütfen yeni bir veri yolu seçin.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "La configuración y los directorios de correo electrónico\ndeben especificarse como directorios separados.\nPor favor elija una nueva ruta.";
-    Message[ finnish ] = "Kokoonpano- ja postihakemistot on m??ritett?v? eri hakemistoiksi.\nValitse uusi polku.";
+    Message[ catalan ] = "La configuració i els directoris de correu electrònic\ns'han d'especificar com a directoris separats.\nEscolliu un nou camí.";
+    Message[ finnish ] = "Kokoonpano- ja postihakemistot on määritettävä eri hakemistoiksi.\nValitse uusi polku.";
+    Message[ thai ] = "à¸•à¹‰à¸­à¸‡à¸£à¸°à¸šà¸¸à¸à¸²à¸£à¸à¸³à¸«à¸™à¸”à¸„à¹ˆà¸²à¹à¸¥à¸°à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¹€à¸¡à¸¥à¹Œà¹€à¸›à¹‡à¸™à¸ªà¸²à¸£à¸šà¸šà¸—à¸µà¹ˆà¹à¸¢à¸à¸­à¸­à¸à¸¡à¸²\nà¸à¸£à¸¸à¸“à¸²à¹€à¸¥à¸·à¸­à¸à¹€à¸ªà¹‰à¸™à¸—à¸²à¸‡à¹ƒà¸«à¸¡à¹ˆ";
 };
  // ******************************************************************* EOF
-
-
-
-
-
-
-
-
 
 
