@@ -7,7 +7,7 @@
         <prop oor:name="FilterService"/>
         <prop oor:name="TemplateName"/>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">StarWriter 3.0 (%productname% Writer/Web)</value>
+            <value>StarWriter 3.0 (%productname% Writer/Web)</value>
         </prop>
         <prop oor:name="Flags"><value>EXPORT TEMPLATE ALIEN</value></prop>
     </node>
