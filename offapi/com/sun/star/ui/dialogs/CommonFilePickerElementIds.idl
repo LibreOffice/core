@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonFilePickerElementIds.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2002-10-30 14:50:07 $
+ *  last change: $Author: fs $ $Date: 2002-11-01 09:17:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ constants CommonFilePickerElementIds
     //---------------------------------------------------------------------
     /** The label of the file name listbox of a FilePicker dialog.
     */
-    const short LISTBOX_FILE_NAME_LABEL = 7;
+    const short EDIT_FILEURL_LABEL = 7;
 };
 
 //=============================================================================
