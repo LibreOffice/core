@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-17 13:55:31 $
+ *  last change: $Author: jl $ $Date: 2004-05-18 12:49:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,13 +375,17 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
     {
         rtl::OUString sOO_USE_JRE(RTL_CONSTASCII_USTRINGPARAM(ENVIRONMENT_VAR_JRE_PATH));
 
-        rtl_uString * psOO_USE_JRE = 0;
-        if (osl_getEnvironment(sOO_USE_JRE.pData, & psOO_USE_JRE) != osl_Process_E_None)
+        //get JAVA_HOME
+        rtl_uString * psJAVA_HOME = 0;
+        if (osl_getEnvironment(sOO_USE_JRE.pData, & psJAVA_HOME) != osl_Process_E_None)
             return JFW_E_ERROR;
-
-        rtl::OUString sOO_USE_JRE_VALUE(psOO_USE_JRE, SAL_NO_ACQUIRE);
-
-        if ((errcode = jfw_getJavaInfoByPath(sOO_USE_JRE_VALUE.pData, & aInfo))
+        rtl::OUString sJAVA_HOME(psJAVA_HOME, SAL_NO_ACQUIRE);
+        //convert to file URL
+        rtl_uString * pJavaUrl = 0;
+        if (osl_getFileURLFromSystemPath(sJAVA_HOME.pData, & pJavaUrl) != osl_File_E_None)
+            return JFW_E_ERROR;
+        rtl::OUString sJavaUrl(pJavaUrl, SAL_NO_ACQUIRE);
+        if ((errcode = jfw_getJavaInfoByPath(sJavaUrl.pData, & aInfo))
             != JFW_E_NONE)
             return errcode;
     }
@@ -389,6 +393,7 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
     rtl::OUString sLibPath;
     if ((errcode = jfw::getPluginLibrary(aInfo.getVendor(), sLibPath)) != JFW_E_NONE)
         return errcode;
+
     osl::Module modulePlugin(sLibPath);
     if ( ! modulePlugin)
         return JFW_E_NO_PLUGIN;
@@ -773,7 +778,6 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
     errcode = jfw::getVendorPluginURLs(doc, context, & vecPlugins);
     if (errcode != JFW_E_NONE)
         return errcode;
-
     //Use every plug-in library to determine if the path represents a
     //JRE. If a plugin recognized it then the loop will break
     typedef std::vector<jfw::PluginLibrary>::const_iterator ci_pl;
@@ -786,6 +790,7 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
         if (errcode != JFW_E_NONE)
             return JFW_E_CONFIG_READWRITE;
         osl::Module pluginLib(library.sPath);
+
         if (pluginLib.is() == sal_False)
             return JFW_E_NO_PLUGIN;
 

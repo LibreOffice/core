@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkutil.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-18 09:03:37 $
+ *  last change: $Author: jl $ $Date: 2004-05-18 12:50:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,11 +253,32 @@ javaFrameworkError getPluginLibrary(
         xmlNodeListGetString(
             docVendor,pathObjVendor->nodesetval->nodeTab[0], 1);
 
-    //make an absolute file url from the relativ plugin URL
-    rtl::OUString sLibPath = getBaseInstallation()  +
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + xmlCharPlugin;
 
-    sLibUrl = sLibPath;
+
+    JFW_MODE mode = getMode();
+    if (mode == JFW_MODE_OFFICE)
+    {
+        //make an absolute file url from the relativ plugin URL
+        sLibUrl = getBaseInstallation()  +
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + xmlCharPlugin;
+    }
+    else if (mode == JFW_MODE_ENV_SIMPLE)
+    {
+        rtl::OUString sPlugin = getFileFromURL(xmlCharPlugin);
+        //search next to this library
+        rtl::OUString sLib = searchFileNextToThisLib(sPlugin);
+        if (sLib.getLength() == 0)
+            errcode = JFW_E_ERROR;
+        else
+            sLibUrl = sLib;
+    }
+    else
+    {
+        OSL_ASSERT(0);
+        errcode = JFW_E_ERROR;
+    }
+
+
     return errcode;
 }
 
@@ -281,6 +302,7 @@ javaFrameworkError getVendorPluginURLs(
 
     //get the values of the library elements + vendor attribute
     xmlNode* cur = result->nodesetval->nodeTab[0];
+    JFW_MODE mode = getMode();
     while (cur != NULL)
     {
         //between library elements are also text elements
@@ -291,11 +313,26 @@ javaFrameworkError getVendorPluginURLs(
                 xmlNodeListGetString(doc, cur->xmlChildrenNode, 1));
             PluginLibrary plugin;
             plugin.sVendor = rtl::OString((sal_Char*)(xmlChar*) sAttrVendor);
-            //create the file URL to the library
 
-            rtl::OUString sBase = getBaseInstallation();
-            plugin.sPath = sBase +
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + sTextLibrary;
+            if (mode == JFW_MODE_OFFICE)
+            {
+                //create the file URL to the library
+                rtl::OUString sBase = getBaseInstallation();
+                plugin.sPath = sBase +
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + sTextLibrary;
+            }
+            else if (mode == JFW_MODE_ENV_SIMPLE)
+            {
+                rtl::OUString sPlugin = getFileFromURL(sTextLibrary);
+                //search next to this library
+                plugin.sPath = searchFileNextToThisLib(sPlugin);
+                OSL_ASSERT(plugin.sPath.getLength() > 0);
+            }
+            else
+            {
+                OSL_ASSERT(0);
+                return JFW_E_ERROR;
+            }
 
             vecPlugins->push_back(plugin);
         }
@@ -451,26 +488,11 @@ rtl::OUString getVendorSettingsURL()
     if (fileError == osl::FileBase::E_None)
         return sVendor;
 
-
     //try next to the jvmfwk.dll
-    rtl::OUString sLib;
-    if (osl_getModuleURLFromAddress((void *) & getVendorSettingsURL,
-                                    & sLib.pData) == sal_True)
-    {
-        sLib = getDirFromFile(sLib);
-        rtl::OUStringBuffer sBufVendor(256);
-        sBufVendor.append(sLib);
-        sBufVendor.appendAscii("/");
-        sBufVendor.appendAscii(VENDORSETTINGS);
-        rtl::OUString sVendor = sBufVendor.makeStringAndClear();
-        //check if the file exists
-        osl::DirectoryItem vendorItem;
-        osl::File::RC fileError = osl::DirectoryItem::get(sVendor, vendorItem);
-        if (fileError == osl::FileBase::E_None)
-            return sVendor;
-    }
+    rtl::OUString sLib = searchFileNextToThisLib(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(VENDORSETTINGS)));
 
-    OSL_ASSERT(0);
+    OSL_ASSERT(sLib.getLength()> 0 );
     return rtl::OUString();
 }
 
@@ -819,6 +841,36 @@ rtl::OUString getDirFromFile(const rtl::OUString& usFilePath)
 {
     sal_Int32 index= usFilePath.lastIndexOf('/');
     return rtl::OUString(usFilePath.getStr(), index);
+}
+
+rtl::OUString getFileFromURL(const rtl::OUString& sFileURL)
+{
+    sal_Int32 index= sFileURL.lastIndexOf('/');
+    if (index == -1)
+        return sFileURL;
+    return sFileURL.copy(index + 1);
+}
+
+rtl::OUString searchFileNextToThisLib(const rtl::OUString & sFile)
+{
+    rtl::OUString ret;
+    rtl::OUString sLib;
+    if (osl_getModuleURLFromAddress((void *) & searchFileNextToThisLib,
+                                    & sLib.pData) == sal_True)
+    {
+        sLib = getDirFromFile(sLib);
+        rtl::OUStringBuffer sBufVendor(256);
+        sBufVendor.append(sLib);
+        sBufVendor.appendAscii("/");
+        sBufVendor.append(sFile);
+        sLib =  sBufVendor.makeStringAndClear();
+        //check if the file exists
+        osl::DirectoryItem item;
+        osl::File::RC fileError = osl::DirectoryItem::get(sLib, item);
+        if (fileError == osl::FileBase::E_None)
+            ret = sLib;
+    }
+    return ret;
 }
 
 //todo !!!

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkutil.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-17 15:53:49 $
+ *  last change: $Author: jl $ $Date: 2004-05-18 12:50:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,9 @@ rtl::OString getVendorSettingsPath();
 
 rtl::OUString getDirFromFile(const rtl::OUString& usFilePath);
 
+rtl::OUString getFileFromURL(const rtl::OUString& sFileURL);
+
+rtl::OUString searchFileNextToThisLib(const rtl::OUString & sFile);
 class CNodeJava;
 /** creates the -Djava.class.path option with the complete classpath.
     If param mode is JFW_MODE_ENV_SIMPLE then the param javaSettings is ignored.
