@@ -1,0 +1,349 @@
+/*************************************************************************
+ *
+ *  $RCSfile: printopt.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: ka $ $Date: 2001-04-26 19:51:18 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+// include ---------------------------------------------------------------
+
+#include "sfx.hrc"
+#include "printopt.hrc"
+#include "dialog.hrc"
+#include "helpid.hrc"
+
+//****************************************************************************
+//
+// TabPage
+//
+//****************************************************************************
+
+TabPage TP_COMMONPRINTOPTIONS
+{
+    HelpID = HID_TP_COMMONPRINTOPTIONS;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Hide = TRUE ;
+
+    FixedLine GB_REDUCE
+    {
+        Pos = MAP_APPFONT ( 6, 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Druckdaten reduzieren" ;
+        Text [ English ] = "Reduce printing data" ;
+    };
+    FixedText FT_OUTPUTTYPE
+    {
+        TabStop = TRUE;
+        Pos = MAP_APPFONT ( 12, 14 ) ;
+        Size = MAP_APPFONT ( 60, 10 ) ;
+        Text = "Einstellungen f¸r" ;
+        Text [ ENGLISH ] = "Settings for" ;
+    };
+    RadioButton RB_PRINTEROUTPUT
+    {
+        TabStop = TRUE;
+        Pos = MAP_APPFONT ( 81, 14 ) ;
+        Size = MAP_APPFONT ( 60, 10 ) ;
+        Text = "~Drucker" ;
+        Text [ ENGLISH ] = "~Printer" ;
+    };
+    RadioButton RB_PRINTFILEOUTPUT
+    {
+        TabStop = TRUE;
+        Pos = MAP_APPFONT ( 142, 14 ) ;
+        Size = MAP_APPFONT ( 100, 10 ) ;
+        Text = "Drucken ~in Datei" ;
+        Text [ ENGLISH ] = "Print to ~file" ;
+    };
+
+    // -----------
+
+    CheckBox CB_REDUCETRANSPARENCY
+    {
+        TabStop = TRUE;
+        Pos = MAP_APPFONT ( 12, 30 ) ;
+        Size = MAP_APPFONT ( 121, 10 ) ;
+        Text = "Transparenz ~reduzieren" ;
+        Text [ ENGLISH ] = "~Reduce transparency" ;
+    };
+    RadioButton RB_REDUCETRANSPARENCY_AUTO
+    {
+        TabStop = TRUE;
+        Pos = MAP_APPFONT ( 18, 43 ) ;
+        Size = MAP_APPFONT ( 115, 10 ) ;
+        Text = "Auto~matisch" ;
+        Text [ ENGLISH ] = "Auto~matic" ;
+    };
+    RadioButton RB_REDUCETRANSPARENCY_NONE
+    {
+        TabStop = TRUE;
+        Pos = MAP_APPFONT ( 18, 56 ) ;
+        Size = MAP_APPFONT ( 115, 10 ) ;
+        Text = "~Keine Transparenz" ;
+        Text [ ENGLISH ] = "~No transparency" ;
+    };
+
+    // -----------
+
+    CheckBox CB_REDUCEGRADIENTS
+    {
+        TabStop = TRUE;
+        Pos = MAP_APPFONT ( 136, 30 ) ;
+        Size = MAP_APPFONT ( 121, 10 ) ;
+        Text = "Farb~verl‰ufe reduzieren" ;
+        Text [ ENGLISH ] = "Reduce ~gradients" ;
+    };
+    RadioButton RB_REDUCEGRADIENTS_STRIPES
+    {
+        TabStop = TRUE;
+        Pos = MAP_APPFONT ( 142, 43 ) ;
+        Size = MAP_APPFONT ( 79, 10 ) ;
+        Text = "Fabverlauf~sstreifen" ;
+        Text [ ENGLISH ] = "Gradient ~stripes" ;
+    };
+    NumericField NF_REDUCEGRADIENTS_STEPCOUNT
+    {
+        TabStop = TRUE;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 224, 43 ) ;
+        Size = MAP_APPFONT ( 24, 12 ) ;
+        Minimum = 2;
+        Maximum = 256;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+    };
+    RadioButton RB_REDUCEGRADIENTS_COLOR
+    {
+        TabStop = TRUE;
+        Pos = MAP_APPFONT ( 142, 56 ) ;
+        Size = MAP_APPFONT ( 112, 10 ) ;
+        Text = "~Zwischenfarbe" ;
+        Text [ ENGLISH ] = "Medium ~color" ;
+    };
+
+    // -----------
+
+    CheckBox CB_REDUCEBITMAPS
+    {
+        TabStop = TRUE;
+        Pos = MAP_APPFONT ( 12, 72 ) ;
+        Size = MAP_APPFONT ( 242, 10 ) ;
+        Text = "~Bitmaps reduzieren" ;
+        Text [ ENGLISH ] = "Reduce ~bitmaps" ;
+    };
+    RadioButton RB_REDUCEBITMAPS_OPTIMAL
+    {
+        TabStop = TRUE;
+        Pos = MAP_APPFONT ( 18, 85 ) ;
+        Size = MAP_APPFONT ( 236, 10 ) ;
+        Text = "~Gute Druckqualit‰t" ;
+        Text [ ENGLISH ] = "~Good quality" ;
+    };
+    RadioButton RB_REDUCEBITMAPS_NORMAL
+    {
+        TabStop = TRUE;
+        Pos = MAP_APPFONT ( 18, 98 ) ;
+        Size = MAP_APPFONT ( 236, 10 ) ;
+        Text = "N~ormale Druckqualit‰t" ;
+        Text [ ENGLISH ] = "N~ormal quality" ;
+    };
+    RadioButton RB_REDUCEBITMAPS_RESOLUTION
+    {
+        TabStop = TRUE;
+        Pos = MAP_APPFONT ( 18, 111 ) ;
+        Size = MAP_APPFONT ( 60, 10 ) ;
+        Text = "Aufl~ˆsung" ;
+        Text [ ENGLISH ] = "Reso~lution" ;
+    };
+    ListBox LB_REDUCEBITMAPS_RESOLUTION
+    {
+        TabStop = TRUE;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 81, 111 ) ;
+        Size = MAP_APPFONT ( 40, 100 ) ;
+        DropDown = TRUE;
+
+        StringList =
+        {
+            < "72 DPI"; 0; > ;
+            < "96 DPI"; 0;  > ;
+            < "150 DPI (Fax)"; 0; > ;
+            < "200 DPI (Voreinstellung)"; 0; > ;
+            < "300 DPI"; 0; > ;
+            < "600 DPI"; 0; > ;
+        };
+        StringList [English] =
+        {
+            < "72 DPI"; 0; > ;
+            < "96 DPI"; 0;  > ;
+            < "150 DPI (Fax)"; 0; > ;
+            < "200 DPI (Default)"; 0; > ;
+            < "300 DPI"; 0; > ;
+            < "600 DPI"; 0; > ;
+        };
+    };
+    CheckBox CB_REDUCEBITMAPS_TRANSPARENCY
+    {
+        TabStop = TRUE;
+        Pos = MAP_APPFONT ( 18, 124 ) ;
+        Size = MAP_APPFONT ( 236, 10 ) ;
+        Text = "Transparente Ob~jekte einschlieﬂen" ;
+        Text [ ENGLISH ] = "Include transparent ob~jects" ;
+    };
+
+    // -----------
+
+    CheckBox CB_CONVERTTOGREYSCALES
+    {
+        TabStop = TRUE;
+        Pos = MAP_APPFONT ( 136, 30 ) ;
+        Size = MAP_APPFONT ( 123, 10 ) ;
+        Text = "Transparente Ob~jekte einschlieﬂen" ;
+        Text [ ENGLISH ] = "Include transparent ob~jects" ;
+    };
+
+    // -----------
+
+    FixedLine GB_PRINT_WARN
+    {
+        Pos = MAP_APPFONT ( 6, 140 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Drucker-Warnungen" ;
+        Text [ English ] = "Printer Warnings" ;
+        Text [ norwegian ] = "Warnings" ;
+        Text [ italian ] = "Avvertenze di stampa" ;
+        Text [ portuguese_brazilian ] = "AdvertÍncias" ;
+        Text [ portuguese ] = "AdvertÍncias" ;
+        Text [ finnish ] = "Varoitukset" ;
+        Text [ danish ] = "Advarsler" ;
+        Text [ french ] = "Avertissements" ;
+        Text [ swedish ] = "Skrivarvarningar" ;
+        Text [ dutch ] = "Printer-waarschuwingen" ;
+        Text [ spanish ] = "Advertencias de impresora" ;
+        Text [ english_us ] = "Printer warnings" ;
+        Text[ chinese_simplified ] = "¥Ú”°ª˙µƒæØ∏Ê";
+        Text[ russian ] = "œÂ‰ÛÔÂÊ‰ÂÌËˇ Ò ÔËÌÚÂ‡";
+        Text[ polish ] = "Ostrzeøenia wydawane przez drukarkÍ";
+        Text[ japanese ] = "Ãﬂÿ›¿ÇÃåxçê";
+        Text[ chinese_traditional ] = "¶L™Ìæ˜™∫ƒµßi";
+        Text[ arabic ] = " Õ–Ì—«  «·ÿ«»⁄…";
+        Text[ greek ] = "–ÒÔÂÈ‰ÔÔÈﬁÛÂÈÚ ÂÍÙı˘Ùﬁ";
+        Text[ korean ] = "«¡∏∞≈Õ-∞Ê∞Ì";
+        Text[ turkish ] = "Uyar˝lar";
+    };
+    CheckBox CB_PAPERSIZE
+    {
+        TabStop = TRUE;
+        Pos = MAP_APPFONT ( 12, 151 ) ;
+        Size = MAP_APPFONT ( 123, 10 ) ;
+        Text = "P~apiergrˆﬂe" ;
+        Text [ ENGLISH ] = "P~aper size" ;
+        Text [ english_us ] = "P~aper size" ;
+        Text [ italian ] = "~Dimensione carta" ;
+        Text [ spanish ] = "~TamaÒo del papel" ;
+        Text [ french ] = "~Taille du papier" ;
+        Text [ dutch ] = "Papiergr~ootte" ;
+        Text [ swedish ] = "~Pappersstorlek" ;
+        Text [ danish ] = "Papirst¯rrelse" ;
+        Text [ portuguese_brazilian ] = "Papiergr~ˆﬂe" ;
+        Text [ portuguese ] = "~Tamanho do papel" ;
+        Text[ chinese_simplified ] = "÷Ω’≈¥Û–°(~S)";
+        Text[ russian ] = "–‡ÁÏÂ ·ÛÏ‡„Ë";
+        Text[ polish ] = "Rozmiar papieru";
+        Text[ japanese ] = "ópéÜª≤Ωﬁ(~S)";
+        Text[ chinese_traditional ] = "Ø»±i§j§p(~S)";
+        Text[ arabic ] = "ÕÃ„ «·Ê—ﬁ";
+        Text[ greek ] = "Ã›„ÂËÔÚ ˜·ÒÙÈÔ˝";
+        Text[ korean ] = "øÎ¡ˆ ≈©±‚(~S)";
+        Text[ turkish ] = "Sayfa boyutu";
+    };
+    CheckBox CB_PAPERORIENTATION
+    {
+        TabStop = TRUE;
+        Pos = MAP_APPFONT ( 12, 164 ) ;
+        Size = MAP_APPFONT ( 123 , 10 ) ;
+        Text = "Papi~erorientierung" ;
+        Text [ ENGLISH ] = "Pap~er orientation" ;
+        Text [ dutch ] = "Papi~eroriÎntering" ;
+        Text [ english_us ] = "Pap~er orientation" ;
+        Text [ italian ] = "~Orientamento carta" ;
+        Text [ spanish ] = "~OrientaciÛn del papel" ;
+        Text [ french ] = "~Orientation du papier" ;
+        Text [ swedish ] = "Papp~ersorientering" ;
+        Text [ danish ] = "Papirretning" ;
+        Text [ portuguese_brazilian ] = "~Papierorientierung" ;
+        Text [ portuguese ] = "~OrientaÁ„o do papel" ;
+        Text[ chinese_simplified ] = "Ω¯÷Ω∑ΩœÚ(~O)";
+        Text[ russian ] = "ŒËÂÌÚ‡ˆËˇ ·ÛÏ‡„Ë";
+        Text[ polish ] = "Orientacja papieru";
+        Text[ japanese ] = "àÛç¸ï˚å¸(~O)";
+        Text[ chinese_traditional ] = "Ø»±i§Ë¶V(~O)";
+        Text[ arabic ] = "« Ã«Â «·Ê—ﬁ";
+        Text[ greek ] = "–ÒÔÛ·Ì·ÙÔÎÈÛÏ¸Ú ˜·ÒÙÈÔ˝";
+        Text[ korean ] = "øÎ¡ˆ πÊ«‚(~O)";
+        Text[ turkish ] = "Sayfa duru˛u";
+    };
+    CheckBox CB_TRANSPARENCY
+    {
+        TabStop = TRUE;
+        Pos = MAP_APPFONT ( 136, 151 ) ;
+        Size = MAP_APPFONT ( 123, 10 ) ;
+        Text = "~Transparenz" ;
+        Text [ ENGLISH ] = "~Transparency" ;
+    };
+};
