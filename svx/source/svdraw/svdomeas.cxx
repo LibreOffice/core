@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdomeas.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-09 17:54:43 $
+ *  last change: $Author: aw $ $Date: 2001-02-15 16:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,6 +353,7 @@ void SdrMeasureObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bTransparenceAllowed = FALSE;
     rInfo.bGradientAllowed = FALSE;
     rInfo.bShearAllowed     =TRUE;
+    rInfo.bEdgeRadiusAllowed=FALSE;
     rInfo.bNoOrthoDesired   =TRUE;
     rInfo.bNoContortion     =FALSE;
     rInfo.bCanConvToPath    =FALSE;

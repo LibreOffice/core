@@ -2,9 +2,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-09 17:53:12 $
+ *  last change: $Author: aw $ $Date: 2001-02-15 16:10:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,6 +443,7 @@ void E3dObject::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bMirror45Allowed      = FALSE;
     rInfo.bMirror90Allowed      = FALSE;
     rInfo.bShearAllowed         = FALSE;
+    rInfo.bEdgeRadiusAllowed    = FALSE;
     rInfo.bCanConvToPath        = FALSE;
 
     // no transparence for 3d objects

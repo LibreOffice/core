@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
+ *  last change: $Author: aw $ $Date: 2001-02-15 16:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,12 +122,13 @@ void SdrEditView::ImpResetPossibilityFlags()
     bMirrorFreeAllowed      =FALSE;
     bMirror45Allowed        =FALSE;
     bMirror90Allowed        =FALSE;
-    bTransparenceAllowed = FALSE;
-    bGradientAllowed = FALSE;
+    bTransparenceAllowed    =FALSE;
+    bGradientAllowed        =FALSE;
     bShearAllowed           =FALSE;
+    bEdgeRadiusAllowed      =FALSE;
     bCanConvToPath          =FALSE;
     bCanConvToPoly          =FALSE;
-    bCanConvToContour = FALSE;
+    bCanConvToContour       =FALSE;
     bCanConvToPathLineToArea=FALSE;
     bCanConvToPolyLineToArea=FALSE;
     bMoveProtect            =FALSE;
@@ -370,6 +371,12 @@ BOOL SdrEditView::IsShearAllowed() const
     return bShearAllowed;
 }
 
+BOOL SdrEditView::IsEdgeRadiusAllowed() const
+{
+    ForcePossibilities();
+    return bEdgeRadiusAllowed;
+}
+
 BOOL SdrEditView::IsCrookAllowed(BOOL bNoContortion) const
 {
     // CrookMode fehlt hier (weil kein Rotate bei Shear ...)
@@ -454,6 +461,7 @@ void SdrEditView::CheckPossibilities()
             bMirror45Allowed  =TRUE;
             bMirror90Allowed  =TRUE;
             bShearAllowed     =TRUE;
+            bEdgeRadiusAllowed=FALSE;
             bContortionPossible=TRUE;
             bCanConvToContour = TRUE;
 
@@ -507,6 +515,7 @@ void SdrEditView::CheckPossibilities()
                 if (!aInfo.bMirror45Allowed  ) bMirror45Allowed  =FALSE;
                 if (!aInfo.bMirror90Allowed  ) bMirror90Allowed  =FALSE;
                 if (!aInfo.bShearAllowed     ) bShearAllowed     =FALSE;
+                if (aInfo.bEdgeRadiusAllowed) bEdgeRadiusAllowed=TRUE;
                 if (aInfo.bNoContortion      ) bContortionPossible=FALSE;
                 // Fuer Crook mit Contortion: Alle Objekte muessen
                 // Movable und Rotatable sein, ausser maximal 1

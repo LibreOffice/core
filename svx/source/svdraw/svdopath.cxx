@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-05 11:38:42 $
+ *  last change: $Author: aw $ $Date: 2001-02-15 16:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,6 +270,7 @@ void SdrPathObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     FASTBOOL bCanConv = !HasText() || ImpCanConvTextToCurve();
     FASTBOOL bIsPath = IsBezier() || IsSpline();
 
+    rInfo.bEdgeRadiusAllowed    = FALSE;
     rInfo.bCanConvToPath = bCanConv && !bIsPath;
     rInfo.bCanConvToPoly = bCanConv && bIsPath;
     rInfo.bCanConvToContour = !IsFontwork() && (rInfo.bCanConvToPoly || LineGeometryUsageIsNecessary());

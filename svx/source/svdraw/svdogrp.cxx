@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdogrp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-15 14:04:27 $
+ *  last change: $Author: aw $ $Date: 2001-02-15 16:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,6 +621,7 @@ void SdrObjGroup::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
         if (!aInfo.bMirror45Allowed        ) rInfo.bMirror45Allowed        =FALSE;
         if (!aInfo.bMirror90Allowed        ) rInfo.bMirror90Allowed        =FALSE;
         if (!aInfo.bShearAllowed           ) rInfo.bShearAllowed           =FALSE;
+        if (!aInfo.bEdgeRadiusAllowed      ) rInfo.bEdgeRadiusAllowed      =FALSE;
         if (!aInfo.bNoOrthoDesired         ) rInfo.bNoOrthoDesired         =FALSE;
         if (aInfo.bNoContortion            ) rInfo.bNoContortion           =TRUE;
         if (!aInfo.bCanConvToPath          ) rInfo.bCanConvToPath          =FALSE;
@@ -641,6 +642,7 @@ void SdrObjGroup::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
         rInfo.bTransparenceAllowed = FALSE;
         rInfo.bGradientAllowed = FALSE;
         rInfo.bShearAllowed     =FALSE;
+        rInfo.bEdgeRadiusAllowed=FALSE;
         rInfo.bNoContortion     =TRUE;
     }
     if(nObjAnz != 1)
@@ -664,6 +666,7 @@ void SdrObjGroup::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
             rInfo.bMirrorFreeAllowed=FALSE;
             rInfo.bMirror45Allowed=FALSE;
             rInfo.bMirror90Allowed=FALSE;
+            rInfo.bShearAllowed=FALSE;
             rInfo.bShearAllowed=FALSE;
             rInfo.bNoContortion=TRUE;
             // default: Proportionen beibehalten

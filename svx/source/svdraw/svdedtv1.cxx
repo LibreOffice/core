@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-15 14:04:27 $
+ *  last change: $Author: aw $ $Date: 2001-02-15 16:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1133,7 +1133,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     }
 
     // Eckenradius
-    if (SFX_ITEM_SET==rAttr.GetItemState(SDRATTR_ECKENRADIUS,TRUE,&pPoolItem)) {
+    if (bEdgeRadiusAllowed && SFX_ITEM_SET==rAttr.GetItemState(SDRATTR_ECKENRADIUS,TRUE,&pPoolItem)) {
         long nRadius=((SdrEckenradiusItem*)pPoolItem)->GetValue();
         aSetAttr.Put(SdrEckenradiusItem(nRadius));
         bSetAttr=TRUE;

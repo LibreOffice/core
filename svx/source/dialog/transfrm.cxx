@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-17 12:23:45 $
+ *  last change: $Author: aw $ $Date: 2001-02-15 16:09:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1930,7 +1930,9 @@ void SvxSlantTabPage::Reset( const SfxItemSet& rAttrs )
     const SfxPoolItem* pItem;
 
     // Eckenradius
-    if( bMarkedObj && SFX_ITEM_DEFAULT == rAttrs.GetItemState( SDRATTR_ECKENRADIUS ) )
+//A if( bMarkedObj && SFX_ITEM_DEFAULT == rAttrs.GetItemState( SDRATTR_ECKENRADIUS ) )
+//A {
+    if( !pView->IsEdgeRadiusAllowed() )
     {
         aFtRadius.Disable();
         aMtrRadius.Disable();
