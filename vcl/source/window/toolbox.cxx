@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-24 12:12:05 $
+ *  last change: $Author: mba $ $Date: 2002-04-30 15:10:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4346,18 +4346,32 @@ BOOL ToolBox::Docking( const Point& rPos, Rectangle& rRect )
 
     // Befindet sich die Maus ausserhalb des Bereichs befindet, kann es nur ein
     // FloatWindow werden
-    Rectangle aIntersect = maOutDockRect.GetIntersection( rRect );
+    Rectangle aDockingRect( rRect );
+    if ( !IsFloatingMode() )
+    {
+        // don't use tracking rectangle for alignment check, because it will be too large
+        // to get a floating mode as result - switch to floating size
+        // so the calculation only depends on the position of the rectangle, not the current
+        // docking state of the window
+        USHORT nTemp = 0;
+        aDockingRect.SetSize( ImplCalcFloatSize( this, nTemp ) );
+
+        // in this mode docking is never done by keyboard, so it's OK to use the mouse position
+        aDockingRect.SetPos( ImplGetFrameWindow()->GetPointerPosPixel() );
+    }
+
+    Rectangle aIntersect = maOutDockRect.GetIntersection( aDockingRect );
     if ( !aIntersect.IsEmpty() && !IsDockingPrevented() )
     {
         Rectangle   aInRect = maInDockRect;
-        Size        aDockSize;
+        Size aDockSize;
         aDockSize.Width()  = ImplCalcSize( this, mnLines, TB_CALCMODE_VERT ).Width();
         aDockSize.Height() = ImplCalcSize( this, mnLines, TB_CALCMODE_HORZ ).Height();
         aInRect.Left()   += aDockSize.Width()/2;
         aInRect.Top()    += aDockSize.Height()/2;
         aInRect.Right()  -= aDockSize.Width()/2;
         aInRect.Bottom() -= aDockSize.Height()/2;
-
+/*
         // Auf den Dockbereich eine halbe Breite der ToolBox dazurechnen
         if ( !IsFloatingMode() )
         {
@@ -4370,7 +4384,7 @@ BOOL ToolBox::Docking( const Point& rPos, Rectangle& rRect )
             else
                 aInRect.Bottom() += aDockSize.Height()/2;
         }
-
+*/
         // Wenn Fenster zu klein, wird das gesammte InDock-Rect genommen
         if ( aInRect.Left() >= aInRect.Right() )
         {
@@ -4385,104 +4399,56 @@ BOOL ToolBox::Docking( const Point& rPos, Rectangle& rRect )
 
         // Wenn Maus nicht im Dock-Bereich, dann kann es nur zum
         // FloatWindow werden
-        Rectangle aIntersect = aInRect.GetIntersection( rRect );
-        if ( aIntersect == rRect )
+        Rectangle aIntersect = aInRect.GetIntersection( aDockingRect );
+        if ( aIntersect == aDockingRect )
             bFloatMode = TRUE;
         else
         {
-            // Wird befinden uns im Dock-Bereich. Jetzt muessen wir
-            // feststellen, an welcher Kante angedockt werden soll
-            Point aInPos( (rRect.Left()+rRect.Right())/2, (rRect.Top()+rRect.Bottom())/2 );
-            //Point           aInPos( rPos.X()-aInRect.Left(), rPos.Y()-aInRect.Top() );
-            Size            aInSize  = aInRect.GetSize();
-            Size            aOutSize = maOutDockRect.GetSize();
-            USHORT          nQuadrant = 0;
+            // docking rectangle is in the "sensible area"
+            Point aPos = aDockingRect.TopLeft();
+            Point aInPosTL( aPos.X()-aInRect.Left(), aPos.Y()-aInRect.Top() );
+            Point aInPosBR( aPos.X()-aInRect.Left() + aDockingRect.GetWidth(), aPos.Y()-aInRect.Top() + aDockingRect.GetHeight() );
+            Size  aInSize = aInRect.GetSize();
 
-            if ( aInPos.Y() > aInSize.Height()/2 )
-                nQuadrant += 2;
-            if ( aInPos.X() > aInSize.Width()/2 )
-                nQuadrant++;
-
-            if ( nQuadrant == 0 )
-            {
-                Point aPosTL( rRect.TopLeft() );
-                if ( aPosTL.X() >= aPosTL.Y() )
-                    meDockAlign = WINDOWALIGN_TOP;
-                else
-                    meDockAlign = WINDOWALIGN_LEFT;
-            }
-            else if ( nQuadrant == 1 )
-            {
-                Point aPosTR( rRect.TopRight() );
-                if ( aInSize.Width()-aPosTR.X() >= aPosTR.Y() )
-                    meDockAlign = WINDOWALIGN_TOP;
-                else
-                    meDockAlign = WINDOWALIGN_RIGHT;
-            }
-            else if ( nQuadrant == 2 )
-            {
-                Point aPosBL( rRect.BottomLeft() );
-                if ( aPosBL.X() <= aInSize.Height()-aPosBL.Y() )
-                    meDockAlign = WINDOWALIGN_LEFT;
-                else
-                    meDockAlign = WINDOWALIGN_BOTTOM;
-            }
-            else
-            {
-                Point aPosBR( rRect.BottomRight() );
-                if ( aInSize.Width()-aPosBR.X() >= aInSize.Height()-aPosBR.Y() )
-                    meDockAlign = WINDOWALIGN_BOTTOM;
-                else
-                    meDockAlign = WINDOWALIGN_RIGHT;
-/*
-                if ( (rPos.X() >= aInRect.Right()) &&
-                     (rPos.Y() >= aInRect.Bottom()) )
-                {
-                    if ( aInSize.Height()-aInPos.Y() <
-                         aInSize.Width()-aInPos.X() )
-                        meDockAlign = WINDOWALIGN_RIGHT;
-                    else
-                        meDockAlign = WINDOWALIGN_BOTTOM;
-                }
-                else
-                {
-                    if ( rPos.X() >= aInRect.Right() )
-                        meDockAlign = WINDOWALIGN_RIGHT;
-                    else
-                        meDockAlign = WINDOWALIGN_BOTTOM;
-                }
- */
-            }
+            if ( aInPosTL.X() <= 0 )
+                meDockAlign = WINDOWALIGN_LEFT;
+            else if ( aInPosTL.Y() <= 0)
+                meDockAlign = WINDOWALIGN_TOP;
+            else if ( aInPosBR.X() >= aInSize.Width() )
+                meDockAlign = WINDOWALIGN_RIGHT;
+            else if ( aInPosBR.Y() >= aInSize.Height() )
+                meDockAlign = WINDOWALIGN_BOTTOM;
 
             // Wenn sich Dock-Align geaendert hat, muessen wir die
             // neue Dock-Groesse setzen
             if ( (meDockAlign == WINDOWALIGN_TOP) || (meDockAlign == WINDOWALIGN_BOTTOM) )
-                aDockSize.Width() = aOutSize.Width();
+                aDockSize.Width() = maInDockRect.GetWidth();
             else
-                aDockSize.Height() = aOutSize.Height();
-            rRect.SetSize( aDockSize );
+                aDockSize.Height() = maInDockRect.GetHeight();
+
+            aDockingRect.SetSize( aDockSize );
 
             Point aPosTL( maInDockRect.TopLeft() );
             switch ( meDockAlign )
             {
                 case WINDOWALIGN_TOP :
-                    rRect.SetPos( aPosTL );
+                    aDockingRect.SetPos( aPosTL );
                     break;
                 case WINDOWALIGN_LEFT :
-                    rRect.SetPos( aPosTL );
+                    aDockingRect.SetPos( aPosTL );
                     break;
                 case WINDOWALIGN_BOTTOM :
                 {
                     Point aPosBL( maInDockRect.BottomLeft() );
-                    aPosBL.Y() -= rRect.GetHeight();
-                    rRect.SetPos( aPosBL );
+                    aPosBL.Y() -= aDockingRect.GetHeight();
+                    aDockingRect.SetPos( aPosBL );
                     break;
                 }
                 case WINDOWALIGN_RIGHT :
                 {
                     Point aPosTR( maInDockRect.TopRight() );
-                    aPosTR.X() -= rRect.GetWidth();
-                    rRect.SetPos( aPosTR );
+                    aPosTR.X() -= aDockingRect.GetWidth();
+                    aDockingRect.SetPos( aPosTR );
                     break;
                 }
             }
@@ -4497,7 +4463,7 @@ BOOL ToolBox::Docking( const Point& rPos, Rectangle& rRect )
         if ( !mbLastFloatMode )
         {
             USHORT nTemp = 0;
-            rRect.SetSize( ImplCalcFloatSize( this, nTemp ) );
+            aDockingRect.SetSize( ImplCalcFloatSize( this, nTemp ) );
         }
     }
 /*
@@ -4520,6 +4486,7 @@ BOOL ToolBox::Docking( const Point& rPos, Rectangle& rRect )
         }
     }
 */
+    rRect = aDockingRect;
     mbLastFloatMode = bFloatMode;
 
     return bFloatMode;
