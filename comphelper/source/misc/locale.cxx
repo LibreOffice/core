@@ -2,9 +2,9 @@
  *
  *  $RCSfile: locale.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:17:22 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:30:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,15 @@ const Locale Locale::X_DEFAULT()
     static Locale aLocale(
                     ::rtl::OUString::createFromAscii("x"),
                     ::rtl::OUString::createFromAscii("default"));
+    return aLocale;
+}
+
+//-----------------------------------------------
+const Locale Locale::EN()
+{
+    static Locale aLocale(
+                    ::rtl::OUString::createFromAscii("en"),
+                    ::rtl::OUString());
     return aLocale;
 }
 
@@ -614,7 +623,31 @@ sal_Bool Locale::similar(const Locale& aComparable) const
 //-----------------------------------------------
 sal_Bool Locale::getFallback(Locale& aLocale)
 {
-    // a) remove country from incoming locale
+    // a)
+    // this was our last fallback!
+    // break any further calls to this method ...
+    if (aLocale.equals(X_NOTRANSLATE()))
+        return sal_False;
+
+    // b)
+    // switch from X_DEFAULT to X_NOTRANSLATE
+    // next time we will go to a)
+    if (aLocale.equals(X_DEFAULT()))
+    {
+        aLocale = X_NOTRANSLATE();
+        return sal_True;
+    }
+
+    // c)
+    // switch from EN to X_DEFAULT
+    // next time we will go to b)
+    if (aLocale.equals(EN()))
+    {
+        aLocale = X_DEFAULT();
+        return sal_True;
+    }
+
+    // d) remove country from incoming locale
     //    e.g. "de-DE" => "de" or "en-US" => "en"!
     if (aLocale.getCountry().getLength())
     {
@@ -622,29 +655,10 @@ sal_Bool Locale::getFallback(Locale& aLocale)
         return sal_True;
     }
 
-    // b) "en-US" possible?
+    // e) "en-US" possible?
     if (!aLocale.equals(EN_US()))
     {
         aLocale = EN_US();
-        return sal_True;
-    }
-
-    // c) locale = "en-US"
-    //    but "en-US" => "en" was already handled by a)!
-
-    // d) locale = "en"
-    //    next possible fallback is "x-default"
-    if (!aLocale.equals(X_DEFAULT()))
-    {
-        aLocale = X_DEFAULT();
-        return sal_True;
-    }
-
-    // e) locale = "x-default"
-    //    next possible fallback is "x-notranslate"
-    if (!aLocale.equals(X_NOTRANSLATE()))
-    {
-        aLocale = X_NOTRANSLATE();
         return sal_True;
     }
 
