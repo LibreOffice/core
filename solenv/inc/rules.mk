@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.51 $
+#   $Revision: 1.52 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:46:25 $
+#   last change: $Author: obo $ $Date: 2004-01-21 17:43:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -550,9 +550,14 @@ $(MISC)$/%.dpz :
     @echo ------------------------------
 .IF "$(nodep)"==""
     @echo Making: $@
-    @+-$(RM) $@ >& $(NULLDEV)
+    @+-$(RM) $@  >& $(NULLDEV)
+# line too long on 4nt
+.IF "$(USE_SHELL)"!="4nt"
     +dmake $(MFLAGS) $(MAKEFILE) $(CALLMACROS) make_zip_deps=true $(ZIPDEPFILES)
-    $(TYPE) $(ZIPDEPFILES) | grep -v "CVS" >> $@
+.ELSE			# "$(USE_SHELL)"!="4nt"
+    +$(TYPE) $(mktmp $(ZIPDEPFILES:s/\/\\/)) | xargs -n 20 dmake $(MFLAGS) $(MAKEFILE) $(CALLMACROS) make_zip_deps=true
+.ENDIF			# "$(USE_SHELL)"!="4nt"
+    +$(TYPE) $(ZIPDEPFILES) | grep -v "CVS" >> $@
     +echo zipdep_langs=$(alllangext) >> $@
     @+-$(RM) $(ZIPDEPFILES) >& $(NULLDEV)
 .ENDIF			# "$(nodep)"==""
