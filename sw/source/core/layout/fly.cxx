@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 14:23:03 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:50:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,10 @@
 #ifndef _LAYHELP_HXX
 #include <layhelp.hxx>
 #endif
+#ifndef _NDTXT_HXX
+#include <ndtxt.hxx>
+#endif
+
 // OD 16.04.2003 #i13147# - for <SwFlyFrm::GetContour(..)>
 #ifndef _NDGRF_HXX
 #include <ndgrf.hxx>
@@ -138,6 +142,10 @@
 // OD 06.11.2003 #i22305#
 #ifndef _FMTFOLLOWTEXTFLOW_HXX
 #include <fmtfollowtextflow.hxx>
+#endif
+
+#ifndef _SWTABLE_HXX
+#include <swtable.hxx>
 #endif
 
 #include "doc.hxx"
@@ -231,12 +239,12 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
     }
 
     Frm().Width( rFrmSize.GetWidth() );
-    Frm().Height( rFrmSize.GetHeight() );
+    Frm().Height( rFrmSize.GetHeightSizeType() == ATT_VAR_SIZE ? MINFLY : rFrmSize.GetHeight() );
 
     //Hoehe Fix oder Variabel oder was?
-    if ( rFrmSize.GetSizeType() == ATT_MIN_SIZE )
+    if ( rFrmSize.GetHeightSizeType() == ATT_MIN_SIZE )
         bMinHeight = TRUE;
-    else if ( rFrmSize.GetSizeType() == ATT_FIX_SIZE )
+    else if ( rFrmSize.GetHeightSizeType() == ATT_FIX_SIZE )
         bFixSize = TRUE;
 
     // OD 2004-02-12 #110582#-2 - insert columns, if necessary
@@ -714,15 +722,15 @@ BOOL SwFlyFrm::FrmSizeChg( const SwFmtFrmSize &rFrmSize )
 {
     BOOL bRet = FALSE;
     SwTwips nDiffHeight = Frm().Height();
-    if ( rFrmSize.GetSizeType() == ATT_VAR_SIZE )
+    if ( rFrmSize.GetHeightSizeType() == ATT_VAR_SIZE )
         BFIXHEIGHT = bMinHeight = FALSE;
     else
     {
-        if ( rFrmSize.GetSizeType() == ATT_FIX_SIZE )
+        if ( rFrmSize.GetHeightSizeType() == ATT_FIX_SIZE )
         {   BFIXHEIGHT = TRUE;
             bMinHeight = FALSE;
         }
-        else if ( rFrmSize.GetSizeType() == ATT_MIN_SIZE )
+        else if ( rFrmSize.GetHeightSizeType() == ATT_MIN_SIZE )
         {   BFIXHEIGHT = FALSE;
             bMinHeight = TRUE;
         }
@@ -1265,10 +1273,11 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
 
         bValidSize = TRUE;
 
-        const SwTwips nUL  = pAttrs->CalcTopLine() + pAttrs->CalcBottomLine();
-        const SwTwips nLR  = pAttrs->CalcLeftLine()+ pAttrs->CalcRightLine();
-        const Size    &rSz = pAttrs->GetSize();
+        const SwTwips nUL = pAttrs->CalcTopLine()  + pAttrs->CalcBottomLine();
+        const SwTwips nLR = pAttrs->CalcLeftLine() + pAttrs->CalcRightLine();
+        const Size   &rSz = pAttrs->GetSize();
         const SwFmtFrmSize &rFrmSz = GetFmt()->GetFrmSize();
+              Size aRelSize( CalcRel( rFrmSz ) );
 
         ASSERT( rSz.Height() != 0 || rFrmSz.GetHeightPercent(), "Hoehe des RahmenAttr ist 0." );
         ASSERT( rSz.Width()  != 0 || rFrmSz.GetWidthPercent(), "Breite des RahmenAttr ist 0." );
@@ -1278,12 +1287,11 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
         {
             SwTwips nRemaining = 0;
             SwTwips nOldHeight = (Frm().*fnRect->fnGetHeight)();
+
             long nMinHeight = 0;
             if( IsMinHeight() )
-            {
-                Size aSz( CalcRel( rFrmSz ) );
-                nMinHeight = bVert ? aSz.Width() : aSz.Height();
-            }
+                nMinHeight = bVert ? aRelSize.Width() : aRelSize.Height();
+
             if ( Lower() )
             {
                 if ( Lower()->IsColumnFrm() )
@@ -1295,7 +1303,8 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
                 {
                     SwFrm *pFrm = Lower();
                     while ( pFrm )
-                    {   nRemaining += (pFrm->Frm().*fnRect->fnGetHeight)();
+                    {
+                        nRemaining += (pFrm->Frm().*fnRect->fnGetHeight)();
                         if( pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->IsUndersized() )
                             // Dieser TxtFrm waere gern ein bisschen groesser
                             nRemaining += ((SwTxtFrm*)pFrm)->GetParHeight()
@@ -1334,14 +1343,7 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
                     }
                 }
             }
-#ifndef PRODUCT
-            if ( IsMinHeight() )
-            {
-                const Size aSizeII = CalcRel( rFrmSz );
-                ASSERT( nMinHeight==(bVert? aSizeII.Width() : aSizeII.Height()),
-                        "FlyFrm::Format: Changed MinHeight" );
-            }
-#endif
+
             if( IsMinHeight() && (nRemaining + nUL) < nMinHeight )
                 nRemaining = nMinHeight - nUL;
             //Weil das Grow/Shrink der Flys die Groessen nicht direkt
@@ -1361,8 +1363,7 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
         {
             bValidSize = TRUE;  //Fixe Frms formatieren sich nicht.
                                 //Flys stellen ihre Groesse anhand des Attr ein.
-            Size aSz( CalcRel( rFrmSz ) );
-            SwTwips nNewSize = bVert ? aSz.Width() : aSz.Height();
+            SwTwips nNewSize = bVert ? aRelSize.Width() : aRelSize.Height();
             nNewSize -= nUL;
             if( nNewSize < MINFLY )
                 nNewSize = MINFLY;
@@ -1370,11 +1371,27 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
             nNewSize += nUL - (Frm().*fnRect->fnGetHeight)();
             (Frm().*fnRect->fnAddBottom)( nNewSize );
         }
+
         if ( !bFormatHeightOnly )
         {
-            Size aSz( CalcRel( rFrmSz ) );
-            SwTwips nNewSize = bVert ? aSz.Height() : aSz.Width();
-            nNewSize -= nLR;
+            ASSERT( aRelSize == CalcRel( rFrmSz ), "SwFlyFrm::Format CalcRel problem" )
+            SwTwips nNewSize = bVert ? aRelSize.Height() : aRelSize.Width();
+
+            if ( rFrmSz.GetWidthSizeType() != ATT_FIX_SIZE )
+            {
+                // #i9046# Autowidth for fly frames
+                const SwTwips nAutoWidth = CalcAutoWidth();
+                if ( nAutoWidth )
+                {
+                    if( ATT_MIN_SIZE == rFrmSz.GetWidthSizeType() )
+                        nNewSize = Max( nNewSize - nLR, nAutoWidth );
+                    else
+                        nNewSize = nAutoWidth;
+                }
+            }
+            else
+                nNewSize -= nLR;
+
             if( nNewSize < MINFLY )
                 nNewSize = MINFLY;
             (Prt().*fnRect->fnSetWidth)( nNewSize );
@@ -2393,7 +2410,7 @@ void SwFlyFrm::NotifyDrawObj()
 
 /*************************************************************************
 |*
-|*  SwLayoutFrm::CalcRel()
+|*  SwFlyFrm::CalcRel()
 |*
 |*  Ersterstellung      MA 13. Jun. 96
 |*  Letzte Aenderung    MA 10. Oct. 96
@@ -2454,6 +2471,67 @@ Size SwFlyFrm::CalcRel( const SwFmtFrmSize &rSz ) const
         }
     }
     return aRet;
+}
+
+/*************************************************************************
+|*
+|*  SwFlyFrm::CalcAutoWidth()
+|*
+|*************************************************************************/
+
+SwTwips lcl_CalcAutoWidth( const SwLayoutFrm& rFrm )
+{
+    SwTwips nRet = 0;
+    SwTwips nMin = 0;
+    const SwFrm* pFrm = rFrm.Lower();
+
+    // No autowidth defined for columned frames
+    if ( !pFrm || pFrm->IsColumnFrm() )
+        return nRet;
+
+    while ( pFrm )
+    {
+        if ( pFrm->IsSctFrm() )
+        {
+            nMin = lcl_CalcAutoWidth( *(SwSectionFrm*)pFrm );
+        }
+        if ( pFrm->IsTxtFrm() )
+        {
+            nMin = ((SwTxtFrm*)pFrm)->CalcFitToContent();
+            const SvxLRSpaceItem &rSpace =
+                ((SwTxtFrm*)pFrm)->GetTxtNode()->GetSwAttrSet().GetLRSpace();
+            nMin += rSpace.GetRight() + rSpace.GetTxtLeft() + rSpace.GetTxtFirstLineOfst();
+        }
+        else if ( pFrm->IsTabFrm() )
+        {
+            const SwFmtFrmSize& rTblFmtSz = ((SwTabFrm*)pFrm)->GetTable()->GetFrmFmt()->GetFrmSize();
+            if ( USHRT_MAX == rTblFmtSz.GetSize().Width() ||
+                 HORI_NONE == ((SwTabFrm*)pFrm)->GetFmt()->GetHoriOrient().GetHoriOrient() )
+            {
+                const SwPageFrm* pPage = rFrm.FindPageFrm();
+                // auto width table
+                nMin = pFrm->GetUpper()->IsVertical() ?
+                    pPage->Prt().Height() :
+                    pPage->Prt().Width();
+            }
+            else
+            {
+                nMin = rTblFmtSz.GetSize().Width();
+            }
+        }
+
+        if ( nMin > nRet )
+            nRet = nMin;
+
+        pFrm = pFrm->GetNext();
+    }
+
+    return nRet;
+}
+
+SwTwips SwFlyFrm::CalcAutoWidth() const
+{
+    return lcl_CalcAutoWidth( *this );
 }
 
 /*************************************************************************
