@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2000-12-04 15:34:19 $
+ *  last change: $Author: pb $ $Date: 2000-12-12 09:07:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4404,8 +4404,7 @@ BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
         rSet.Put( SvxCrossedOutItem( eStrike, nWhich ) );
         bModified |= TRUE;
     }
-
-    if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
         rSet.ClearItem( nWhich );
 
     bChanged = TRUE;
