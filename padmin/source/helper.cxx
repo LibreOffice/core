@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-03 13:33:00 $
+ *  last change: $Author: pl $ $Date: 2002-09-11 15:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,12 +161,15 @@ void padmin::FindFiles( const String& rDirectory, ::std::list< String >& rResult
             while( nToken-- )
             {
                 String aSuffix = rSuffixes.GetToken( nToken, ';' );
-                String aExtension = aFileName.Copy( aFileName.Len()-aSuffix.Len() );
-                if( aFileName.GetChar( aFileName.Len()-aSuffix.Len()-1 ) == '.' &&
-                    aExtension.EqualsIgnoreCaseAscii( aSuffix ) )
+                if( aFileName.Len() > aSuffix.Len()+1 )
                 {
-                    rResult.push_back( aFileName );
-                    break;
+                    String aExtension = aFileName.Copy( aFileName.Len()-aSuffix.Len() );
+                    if( aFileName.GetChar( aFileName.Len()-aSuffix.Len()-1 ) == '.' &&
+                        aExtension.EqualsIgnoreCaseAscii( aSuffix ) )
+                    {
+                        rResult.push_back( aFileName );
+                        break;
+                    }
                 }
             }
         }
