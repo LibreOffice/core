@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocoll.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-02 14:36:32 $
+ *  last change: $Author: mtg $ $Date: 2001-03-21 14:58:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,9 @@
 #ifndef _AUTHFLD_HXX
 #include <authfld.hxx>
 #endif
+#ifndef _SW_XTEXT_DEFAULTS_HXX
+#include <SwXTextDefaults.hxx>
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -277,7 +280,8 @@ const char* __FAR_DATA aProvNames[] =
         "com.sun.star.style.ConditionalParagraphStyle", //SW_SERVICE_STYLE_CONDITIONAL_PARAGRAPH_STYLE
         "com.sun.star.text.NumberingRules",             //SW_SERVICE_NUMBERING_RULES
         "com.sun.star.text.TextColumns",                //SW_SERVICE_TEXT_COLUMNS,
-        "com.sun.star.text.IndexHeaderSection"      //SW_SERVICE_INDEX_HEADER_SECTION
+        "com.sun.star.text.IndexHeaderSection",     //SW_SERVICE_INDEX_HEADER_SECTION
+        "com.sun.star.text.Defaults"                //SW_SERVICE_DEFAULTS
     };
 /******************************************************************
  * SwXServiceProvider
@@ -561,6 +565,9 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         break;
         case SW_SERVICE_TEXT_COLUMNS :
             xRet = (cppu::OWeakObject*)new SwXTextColumns(0);
+        break;
+        case SW_SERVICE_DEFAULTS:
+            xRet = (cppu::OWeakObject*)new SwXTextDefaults( pDoc );
         break;
 //      case SW_SERVICE_FIELDTYPE_TABLEFIELD:
         default:
