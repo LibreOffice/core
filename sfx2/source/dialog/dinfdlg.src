@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: pb $ $Date: 2002-01-10 11:09:01 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 10:46:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -845,7 +845,7 @@ TabPage TP_DOCINFORELOAD
         Text = "~URL" ;
         Text [ English ] = "~URL" ;
         Text [ english_us ] = "~URL" ;
-        Text [ italian ] = "~URL" ;
+        Text [ italian ] = "URL" ;
         Text [ spanish ] = "~URL" ;
         Text [ french ] = "~URL" ;
         Text [ dutch ] = "~URL" ;
