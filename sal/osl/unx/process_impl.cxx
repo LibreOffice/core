@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process_impl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:22:17 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:27:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ oslProcessError SAL_CALL osl_getExecutableFile(rtl_uString** ppustrFile)
 
     if (p_cmdline != 0)
     {
-        rtl::OUString cmdline(p_cmdline, strlen(p_cmdline), osl_getThreadTextEncoding());
+        rtl::OUString cmdline(p_cmdline, (sal_Int32)(strlen(p_cmdline)), osl_getThreadTextEncoding());
 
         free(p_cmdline);
 
@@ -221,7 +221,7 @@ char* osl_impl_getExecutableName(char * buffer, size_t n)
 
     if (p_cmdline != 0)
     {
-        rtl::OUString cmdline(p_cmdline, strlen(p_cmdline), osl_getThreadTextEncoding());
+        rtl::OUString cmdline(p_cmdline, (sal_Int32)(strlen(p_cmdline)), osl_getThreadTextEncoding());
 
         free(p_cmdline);
 
