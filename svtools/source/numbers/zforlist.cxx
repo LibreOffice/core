@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2000-10-17 18:46:13 $
+ *  last change: $Author: er $ $Date: 2000-10-20 18:42:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1430,7 +1430,7 @@ inline ULONG SetIndexTable( NfIndexTableOffset nTabOff, ULONG nIndOff )
 
 // quasi static
 sal_Int32 lcl_SvNumberFormatter_GetFormatCodeIndex(
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::lang::NumberFormatCode >& rSeq,
+            ::com::sun::star::uno::Sequence< ::com::sun::star::lang::NumberFormatCode >& rSeq,
             const sal_Int16 nIndex )
 {
     const sal_Int32 nLen = rSeq.getLength();
@@ -1439,7 +1439,16 @@ sal_Int32 lcl_SvNumberFormatter_GetFormatCodeIndex(
         if ( rSeq[j].Index == nIndex )
             return j;
     }
-    DBG_ERRORFILE( "lcl_SvNumberFormatter_GetFormatCodeIndex: not found" );
+#ifndef PRODUCT
+    ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "lcl_SvNumberFormatter_GetFormatCodeIndex: not found: " ) );
+    aMsg += ByteString::CreateFromInt32( nIndex );
+    DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
+    if ( !nLen )
+    {
+        rSeq.realloc(1);
+        rSeq[0] = ::com::sun::star::lang::NumberFormatCode();
+    }
     return 0;
 }
 
@@ -1465,8 +1474,6 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
     SvNumberformat* pNewFormat = NULL;
     String aFormatCode;
     sal_Int32 nIdx;
-    String aSystem( RTL_CONSTASCII_USTRINGPARAM( "System" ) );          // comment field
-    String aDefSystem( RTL_CONSTASCII_USTRINGPARAM( "def/System" ) );   // comment field
 
     // Counter for additional builtin formats not fitting into the first 10
     // of a category (TLOT:=The Legacy Of Templin), altogether about 20 formats.
