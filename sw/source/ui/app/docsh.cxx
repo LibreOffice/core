@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-31 16:49:50 $
+ *  last change: $Author: jp $ $Date: 2001-08-23 14:47:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1241,14 +1241,21 @@ void SwDocShell::GetState(SfxItemSet& rSet)
                 if (bDisable)
                     rSet.DisableItem( nWhich );
                 else
-                    rSet.Put( SfxBoolItem( SID_BROWSER_MODE, GetDoc()->IsBrowseMode()));
+                    rSet.Put( SfxBoolItem( nWhich, GetDoc()->IsBrowseMode()));
                 break;
             }
         case FN_PRINT_LAYOUT:
             {
-                rSet.Put( SfxBoolItem( FN_PRINT_LAYOUT, !GetDoc()->IsBrowseMode()));
-                break;
+                SfxViewShell* pViewShell = SfxViewShell::Current();
+                BOOL bDisable = 0 != PTR_CAST(SwPagePreView, pViewShell) ||
+                                0 != PTR_CAST(SwSrcView, pViewShell);
+                if (bDisable)
+                    rSet.DisableItem( nWhich );
+                else
+                    rSet.Put( SfxBoolItem( nWhich, !GetDoc()->IsBrowseMode()));
             }
+            break;
+
         case FN_NEW_GLOBAL_DOC:
             if ( ISA(SwGlobalDocShell) )
                 rSet.DisableItem( nWhich );
