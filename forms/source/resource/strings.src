@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-13 23:38:40 $
+ *  last change: $Author: obo $ $Date: 2001-11-23 00:10:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ String RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN
     Text[ japanese ] = "このｺﾝﾄﾛｰﾙの読み込み中にｴﾗｰが発生しました。それが原因でﾜｲﾙﾄﾞｶｰﾄﾞに置換されました。";
     Text[ korean ] = "이 컨트롤 로드시에 오류가 발생하였습니다. 그러므로 플레이스홀더로 변경되었습니다.";
     Text[ chinese_simplified ] = "装入这个字段时出现了一个错误，因此用通配符代替字段。";
-    Text[ chinese_traditional ] = "載入這個控製項時發生一個錯誤。但已經用一個通配符替代它。";
+    Text[ chinese_traditional ] = "載入這個控制項時發生一個錯誤。但已經用一個通配符替代它。";
     Text[ arabic ] = "��� ��� ����� ����� ���� ������ ���. ���� �� �������� ����� ����.";
     Text[ turkish ] = "While loading this control an error occured. Therefore, it was replaced with a placeholder.";
     Text[ catalan ] = "S'ha produ�t un error mentre aquest control es carregava. Per tant, s'ha reempla�at per un marcador.";
@@ -455,6 +455,7 @@ String RID_STR_CLEAR_GRAPHICS
     Text[ arabic ] = "Remove graphics";
     Text[ catalan ] = "Remove graphics";
 };
+
 
 
 
