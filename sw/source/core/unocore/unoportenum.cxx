@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoportenum.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:36:02 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:55:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -918,6 +918,12 @@ void SwXTextPortionEnumeration::CreatePortions()
                         else
                         {
                             sal_Int32 nNextIndex = lcl_GetNextIndex(aBkmArr, aRedArr);
+                            DBG_ASSERT( nNextIndex <= pCNd->Len(), "illegal next index" );
+                            if( nNextIndex > pCNd->Len() )
+                            {
+                                nNextIndex = pCNd->Len();
+                                bAtEnd = sal_True;
+                            }
                             if(nEndPos >= 0 && (nNextIndex > nEndPos || nNextIndex < 0))
                             {
                                 nNextIndex = nEndPos;
