@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jp $ $Date: 2002-03-18 14:59:22 $
+ *  last change: $Author: mib $ $Date: 2002-07-24 13:11:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,7 +396,7 @@ void SwEditShell::SetAlternateText( const String& rTxt )
     SwPaM* pCrsr = GetCrsr();
     SwNoTxtNode* pNd;
     if( !pCrsr->HasMark() && 0 != ( pNd = pCrsr->GetNode()->GetNoTxtNode()) )
-        pNd->SetAlternateText( rTxt );
+        pNd->SetAlternateText( rTxt, sal_True );
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accnotextframe.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-18 11:27:43 $
+ *  last change: $Author: mib $ $Date: 2002-07-24 13:14:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#endif
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
 #include <unotools/accessiblestatesethelper.hxx>
@@ -124,12 +127,76 @@ const SwNoTxtNode *SwAccessibleNoTextFrame::GetNoTxtNode() const
 SwAccessibleNoTextFrame::SwAccessibleNoTextFrame(
         SwAccessibleMap *pMap, sal_Int16 nRole,
         const SwFlyFrm *pFlyFrm ) :
-    SwAccessibleFrameBase( pMap, nRole, pFlyFrm )
+    SwAccessibleFrameBase( pMap, nRole, pFlyFrm ),
+    aDepend( this, const_cast < SwNoTxtNode * >( GetNoTxtNode() ) )
 {
+    const SwNoTxtNode *pNd = GetNoTxtNode();
+    if( pNd )
+        sDesc = OUString( pNd->GetAlternateText() );
+    if( !sDesc.getLength() )
+        sDesc = GetName();
 }
 
 SwAccessibleNoTextFrame::~SwAccessibleNoTextFrame()
 {
+}
+
+void SwAccessibleNoTextFrame::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+{
+    SwAccessibleFrameBase::Modify( pOld, pNew );
+
+    sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
+    const SwNoTxtNode *pNd = GetNoTxtNode();
+    ASSERT( pNd == aDepend.GetRegisteredIn(), "invalid frame" );
+    switch( nWhich )
+    {
+    case RES_NAME_CHANGED:
+        if( pNd->GetAlternateText().Len() )
+            break;
+    case RES_ALT_TEXT_CHANGED:
+        if( pNd && GetFrm() )
+        {
+            OUString sOldDesc( sDesc );
+
+            const String& rDesc = pNd->GetAlternateText();
+            sDesc = rDesc;
+            if( !sDesc.getLength() )
+                sDesc = GetName();
+
+            if( sDesc != sOldDesc )
+            {
+                AccessibleEventObject aEvent;
+                aEvent.EventId = AccessibleEventId::ACCESSIBLE_DESCRIPTION_EVENT;
+                aEvent.OldValue <<= sOldDesc;
+                aEvent.NewValue <<= sDesc;
+                FireAccessibleEvent( aEvent );
+            }
+        }
+        break;
+        /*
+    case RES_OBJECTDYING:
+        if( aDepend.GetRegisteredIn() ==
+                static_cast< SwModify *>( static_cast< SwPtrMsgPoolItem * >( pOld )->pObject ) )
+            const_cast < SwModify *>( aDepend.GetRegisteredIn()->Remove( aDepend );
+        break;
+
+    case RES_FMT_CHG:
+        if( static_cast< SwFmtChg * >(pNew)->pChangedFmt == GetRegisteredIn() &&
+            static_cast< SwFmtChg * >(pOld)->pChangedFmt->IsFmtInDTOR() )
+            pRegisteredIn->Remove( this );
+        break;
+    */
+    }
+}
+
+void SwAccessibleNoTextFrame::Dispose( sal_Bool bRecursive )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    if( aDepend.GetRegisteredIn() )
+        const_cast < SwModify *>( aDepend.GetRegisteredIn() )->Remove( &aDepend );
+
+    SwAccessibleFrameBase::Dispose( bRecursive );
 }
 
 OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleDescription (void)
@@ -138,18 +205,6 @@ OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleDescription (void)
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
-
-    OUString sDesc;
-
-    const SwNoTxtNode *pNd = GetNoTxtNode();
-    if( pNd )
-        sDesc = OUString( pNd->GetAlternateText() );
-    if( !sDesc.getLength() )
-    {
-        const SwFlyFrm *pFlyFrm = static_cast< const SwFlyFrm *>( GetFrm() );
-        const SwFrmFmt *pFrmFmt = pFlyFrm->GetFmt();
-        sDesc = OUString( pFrmFmt->GetName() );
-    }
 
     return sDesc;
 }
@@ -161,7 +216,7 @@ OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleDescription (void)
 //
 
 Any SAL_CALL SwAccessibleNoTextFrame::queryInterface(
-    const Type& aType )
+    const ::com::sun::star::uno::Type& aType )
     throw (RuntimeException)
 {
     if( aType ==

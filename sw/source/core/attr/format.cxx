@@ -2,9 +2,9 @@
  *
  *  $RCSfile: format.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:15 $
+ *  last change: $Author: mib $ $Date: 2002-07-24 13:13:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,22 @@ SwFmt &SwFmt::operator=(const SwFmt& rFmt)
     bAutoFmt = rFmt.bAutoFmt;
     bAutoUpdateFmt = rFmt.bAutoUpdateFmt;
     return *this;
+}
+
+void SwFmt::SetName( const String& rNewName, sal_Bool bBroadcast )
+{
+    ASSERT(!IsDefault(), "SetName: Defaultformat" );
+    if( bBroadcast )
+    {
+        SwStringMsgPoolItem aOld( RES_NAME_CHANGED, aFmtName );
+        SwStringMsgPoolItem aNew( RES_NAME_CHANGED, rNewName );
+        aFmtName = rNewName;
+        Modify( &aOld, &aNew );
+    }
+    else
+    {
+        aFmtName = rNewName;
+    }
 }
 
 /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

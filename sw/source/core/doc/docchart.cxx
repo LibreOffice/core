@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docchart.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-05 10:11:52 $
+ *  last change: $Author: mib $ $Date: 2002-07-24 13:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,9 +449,9 @@ void SwDoc::SetTableName( SwFrmFmt& rTblFmt, const String &rNewName )
     }
 
     if( !bNameFound )
-        rTblFmt.SetName( rNewName );
+        rTblFmt.SetName( rNewName, sal_True );
     else
-        rTblFmt.SetName( GetUniqueTblName() );
+        rTblFmt.SetName( GetUniqueTblName(), sal_True );
 
     SwStartNode *pStNd;
     SwNodeIndex aIdx( *GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );

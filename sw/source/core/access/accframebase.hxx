@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframebase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-16 08:17:47 $
+ *  last change: $Author: mib $ $Date: 2002-07-24 13:14:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 class SwFlyFrm;
 class SwNoTxtNode;
 
-class SwAccessibleFrameBase : public    SwAccessibleContext
+class SwAccessibleFrameBase : public SwAccessibleContext, public SwClient
 {
     sal_Bool    bIsSelected;    // protected by base class mutex
 
@@ -97,7 +97,12 @@ public:
 
     virtual sal_Bool HasCursor();   // required by map to remember that object
 
+    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+
     static sal_uInt8 GetNodeType( const SwFlyFrm *pFlyFrm );
+
+    // The object is not visible an longer and should be destroyed
+    virtual void Dispose( sal_Bool bRecursive = sal_False );
 };
 
 

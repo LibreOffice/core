@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframebase.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-10 16:53:33 $
+ *  last change: $Author: mib $ $Date: 2002-07-24 13:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,9 @@
 #ifndef _FESH_HXX
 #include "fesh.hxx"
 #endif
+#ifndef _HINTS_HXX
+#include <hints.hxx>
+#endif
 
 #ifndef _ACCMAP_HXX
 #include "accmap.hxx"
@@ -208,6 +211,8 @@ SwAccessibleFrameBase::SwAccessibleFrameBase(
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     const SwFrmFmt *pFrmFmt = pFlyFrm->GetFmt();
+    const_cast< SwFrmFmt * >( pFrmFmt )->Add( this );
+
     SetName( pFrmFmt->GetName() );
 
     bIsSelected = IsSelected();
@@ -281,4 +286,64 @@ sal_Bool SwAccessibleFrameBase::HasCursor()
 
 SwAccessibleFrameBase::~SwAccessibleFrameBase()
 {
+}
+
+void SwAccessibleFrameBase::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+{
+    sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
+    const SwFlyFrm *pFlyFrm = static_cast< const SwFlyFrm * >( GetFrm() );
+    switch( nWhich )
+    {
+    case RES_NAME_CHANGED:
+        if(  pFlyFrm )
+        {
+            const SwFrmFmt *pFrmFmt = pFlyFrm->GetFmt();
+            ASSERT( pFrmFmt == GetRegisteredIn(), "invalid frame" );
+
+            OUString sOldName( GetName() );
+            ASSERT( !pOld ||
+                    static_cast < SwStringMsgPoolItem * >( pOld )->GetString() == String( sOldName ),
+                    "invalid old name" );
+
+            const String& rNewName = pFrmFmt->GetName();
+            SetName( rNewName );
+            ASSERT( !pNew ||
+                    static_cast < SwStringMsgPoolItem * >( pNew )->GetString() == rNewName,
+                    "invalid new name" );
+
+            if( sOldName != GetName() )
+            {
+                AccessibleEventObject aEvent;
+                aEvent.EventId = AccessibleEventId::ACCESSIBLE_NAME_EVENT;
+                aEvent.OldValue <<= sOldName;
+                aEvent.NewValue <<= GetName();
+                FireAccessibleEvent( aEvent );
+            }
+        }
+        break;
+    case RES_OBJECTDYING:
+        if( GetRegisteredIn() ==
+                static_cast< SwModify *>( static_cast< SwPtrMsgPoolItem * >( pOld )->pObject ) )
+            pRegisteredIn->Remove( this );
+        break;
+
+    case RES_FMT_CHG:
+        if( static_cast< SwFmtChg * >(pNew)->pChangedFmt == GetRegisteredIn() &&
+            static_cast< SwFmtChg * >(pOld)->pChangedFmt->IsFmtInDTOR() )
+            pRegisteredIn->Remove( this );
+        break;
+    default:
+        SwClient::Modify( pOld, pNew );
+        break;
+    }
+}
+
+void SwAccessibleFrameBase::Dispose( sal_Bool bRecursive )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    if( GetRegisteredIn() )
+        pRegisteredIn->Remove( this );
+
+    SwAccessibleContext::Dispose( bRecursive );
 }

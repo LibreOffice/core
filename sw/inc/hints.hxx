@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hints.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:26 $
+ *  last change: $Author: mib $ $Date: 2002-07-24 13:07:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,5 +324,16 @@ public:
     const SwNode* GetFoundNode() const      { return pFnd; }
 };
 
+class SwStringMsgPoolItem : public SwMsgPoolItem
+{
+    String sStr;
+public:
+
+    const String& GetString() const { return sStr; }
+
+    SwStringMsgPoolItem( USHORT nId, const String& rStr )
+        : SwMsgPoolItem( nId ), sStr( rStr )
+    {}
+};
 
 #endif

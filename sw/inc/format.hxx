@@ -2,9 +2,9 @@
  *
  *  $RCSfile: format.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-06 16:04:40 $
+ *  last change: $Author: mib $ $Date: 2002-07-24 13:07:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,8 +157,9 @@ public:
     inline BOOL IsDefault() const { return DerivedFrom() == 0; }
 
     inline const String& GetName() const        { return aFmtName; }
-    inline void SetName( const String& rNewName );
-    inline void SetName( const sal_Char* pNewName );
+    void SetName( const String& rNewName, sal_Bool bBroadcast=sal_False );
+    inline void SetName( const sal_Char* pNewName,
+                         sal_Bool bBroadcast=sal_False);
 
     // zur Abfrage des Attribute Arrays
     inline const SwAttrSet& GetAttrSet() const { return aSet; }
@@ -327,15 +328,11 @@ inline const SfxPoolItem& SwFmt::GetAttr( USHORT nWhich,
     return aSet.Get( nWhich, bInParents );
 }
 
-inline void SwFmt::SetName( const String& rNewName )
+inline void SwFmt::SetName( const sal_Char* pNewName,
+                             sal_Bool bBroadcast )
 {
-    ASSERT(!IsDefault(), "SetName: Defaultformat" );
-    aFmtName = rNewName;
-}
-inline void SwFmt::SetName( const sal_Char* pNewName )
-{
-    ASSERT(!IsDefault(), "SetName: Defaultformat" );
-    aFmtName.AssignAscii( pNewName );
+    String aTmp( String::CreateFromAscii( pNewName ) );
+    SetName( aTmp, bBroadcast );
 }
 
 inline SfxItemState SwFmt::GetItemState( USHORT nWhich, BOOL bSrchInParent,

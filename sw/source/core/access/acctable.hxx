@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctable.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-10 16:53:35 $
+ *  last change: $Author: mib $ $Date: 2002-07-24 13:14:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,11 +83,13 @@ class SwAccessibleTableEventList_Impl;
 class SwTableBox;
 
 class SwAccessibleTable :
-        public  SwAccessibleContext,
-        public  ::drafts::com::sun::star::accessibility::XAccessibleTable,
-        public  ::drafts::com::sun::star::accessibility::XAccessibleSelection
+        public SwAccessibleContext,
+        public ::drafts::com::sun::star::accessibility::XAccessibleTable,
+        public ::drafts::com::sun::star::accessibility::XAccessibleSelection,
+        public SwClient
 {
     SwAccessibleTableData_Impl *mpTableData;    // the table's data, prot by Sol-Mutex
+    ::rtl::OUString sDesc;
     const SwSelBoxes *GetSelBoxes() const;
 
     void FireTableChangeEvent( const SwAccessibleTableData_Impl& rTableData );
@@ -118,6 +120,8 @@ protected:
 public:
 
     SwAccessibleTable( SwAccessibleMap *pMap, const SwTabFrm *pTableFrm );
+
+    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     //=====  XInterface  ======================================================
 
@@ -237,6 +241,9 @@ public:
 
     // The object has been moved by the layout
     virtual void InvalidatePosOrSize( const SwRect& rOldBox );
+
+    // The object is not visible an longer and should be destroyed
+    virtual void Dispose( sal_Bool bRecursive = sal_False );
 
     virtual void DisposeChild( const SwFrmOrObj& rFrmOrObj, sal_Bool bRecursive );
     virtual void InvalidateChildPosOrSize( const SwFrmOrObj& rFrmOrObj,

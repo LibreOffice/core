@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctable.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-10 16:53:35 $
+ *  last change: $Author: mib $ $Date: 2002-07-24 13:14:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@
 #endif
 #ifndef _VISCRS_HXX
 #include "viscrs.hxx"
+#endif
+#ifndef _HINTS_HXX
+#include <hints.hxx>
 #endif
 #ifndef _ACCFRMOBJSLIST_HXX
 #include <accfrmobjslist.hxx>
@@ -746,7 +749,9 @@ SwAccessibleTable::SwAccessibleTable(
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    const String& rName = pTabFrm->GetFmt()->GetName();
+    const SwFrmFmt *pFrmFmt = pTabFrm->GetFmt();
+    const_cast< SwFrmFmt * >( pFrmFmt )->Add( this );
+    const String& rName = pFrmFmt->GetName();
 
     OUStringBuffer aBuffer( rName.Len() + 4 );
     aBuffer.append( OUString(rName) );
@@ -754,6 +759,12 @@ SwAccessibleTable::SwAccessibleTable(
     aBuffer.append( static_cast<sal_Int32>( pTabFrm->GetPhyPageNum() ) );
 
     SetName( aBuffer.makeStringAndClear() );
+
+    OUString sArg1( static_cast< const SwTabFrm * >( GetFrm() )
+                                        ->GetFmt()->GetName() );
+    OUString sArg2( GetFormattedPageNumber() );
+
+    sDesc = GetResource( STR_ACCESS_TABLE_DESC, &sArg1, &sArg2 );
 }
 
 SwAccessibleTable::~SwAccessibleTable()
@@ -763,7 +774,65 @@ SwAccessibleTable::~SwAccessibleTable()
     delete mpTableData;
 }
 
-Any SwAccessibleTable::queryInterface( const Type& rType )
+void SwAccessibleTable::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+{
+    sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
+    const SwTabFrm *pTabFrm = static_cast< const SwTabFrm * >( GetFrm() );
+    switch( nWhich )
+    {
+    case RES_NAME_CHANGED:
+        if( pTabFrm )
+        {
+            const SwFrmFmt *pFrmFmt = pTabFrm->GetFmt();
+            ASSERT( pFrmFmt == GetRegisteredIn(), "invalid frame" );
+
+            OUString sOldName( GetName() );
+
+            const String& rNewTabName = pFrmFmt->GetName();
+            OUStringBuffer aBuffer( rNewTabName.Len() + 4 );
+            aBuffer.append( OUString(rNewTabName) );
+            aBuffer.append( static_cast<sal_Unicode>( '-' ) );
+            aBuffer.append( static_cast<sal_Int32>( pTabFrm->GetPhyPageNum() ) );
+
+            SetName( aBuffer.makeStringAndClear() );
+            if( sOldName != GetName() )
+            {
+                AccessibleEventObject aEvent;
+                aEvent.EventId = AccessibleEventId::ACCESSIBLE_NAME_EVENT;
+                aEvent.OldValue <<= sOldName;
+                aEvent.NewValue <<= GetName();
+                FireAccessibleEvent( aEvent );
+            }
+
+            OUString sOldDesc( sDesc );
+            OUString sArg1( rNewTabName );
+            OUString sArg2( GetFormattedPageNumber() );
+
+            sDesc = GetResource( STR_ACCESS_TABLE_DESC, &sArg1, &sArg2 );
+            if( sDesc != sOldDesc )
+            {
+                AccessibleEventObject aEvent;
+                aEvent.EventId = AccessibleEventId::ACCESSIBLE_DESCRIPTION_EVENT;
+                aEvent.OldValue <<= sOldDesc;
+                aEvent.NewValue <<= sDesc;
+                FireAccessibleEvent( aEvent );
+            }
+        }
+        break;
+
+    case RES_OBJECTDYING:
+        if( GetRegisteredIn() ==
+                static_cast< SwModify *>( static_cast< SwPtrMsgPoolItem * >( pOld )->pObject ) )
+            pRegisteredIn->Remove( this );
+        break;
+
+    default:
+        SwClient::Modify( pOld, pNew );
+        break;
+    }
+}
+
+Any SwAccessibleTable::queryInterface( const ::com::sun::star::uno::Type& rType )
     throw (RuntimeException)
 {
     Any aRet;
@@ -806,11 +875,7 @@ OUString SAL_CALL SwAccessibleTable::getAccessibleDescription (void)
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
-    OUString sArg1( static_cast< const SwTabFrm * >( GetFrm() )
-                                        ->GetFmt()->GetName() );
-    OUString sArg2( GetFormattedPageNumber() );
-
-    return GetResource( STR_ACCESS_TABLE_DESC, &sArg1, &sArg2 );
+    return sDesc;
 }
 
 sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRowCount()
@@ -1194,6 +1259,16 @@ void SwAccessibleTable::InvalidatePosOrSize( const SwRect& rOldBox )
         GetTableData().SetTablePos( GetFrm()->Frm().Pos() );
 
     SwAccessibleContext::InvalidatePosOrSize( rOldBox );
+}
+
+void SwAccessibleTable::Dispose( sal_Bool bRecursive )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    if( GetRegisteredIn() )
+        pRegisteredIn->Remove( this );
+
+    SwAccessibleContext::Dispose( bRecursive );
 }
 
 void SwAccessibleTable::DisposeChild( const SwFrmOrObj& rChildFrmOrObj,

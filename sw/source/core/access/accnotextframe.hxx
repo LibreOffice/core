@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accnotextframe.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-18 11:27:43 $
+ *  last change: $Author: mib $ $Date: 2002-07-24 13:14:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,8 @@ class SwNoTxtNode;
 class SwAccessibleNoTextFrame : public  SwAccessibleFrameBase,
                                 public ::drafts::com::sun::star::accessibility::XAccessibleImage
 {
+    SwDepend        aDepend;
+    ::rtl::OUString sDesc;
 
 protected:
 
@@ -90,6 +92,8 @@ public:
 
     SwAccessibleNoTextFrame( SwAccessibleMap *pMap, sal_Int16 nRole,
                              const SwFlyFrm *pFlyFrm );
+
+    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     //=====  XAccessibleContext  ==============================================
 
@@ -127,6 +131,9 @@ public:
     virtual sal_Int32 SAL_CALL
         getAccessibleImageWidth(  )
         throw ( ::com::sun::star::uno::RuntimeException );
+
+    // The object is not visible an longer and should be destroyed
+    virtual void Dispose( sal_Bool bRecursive = sal_False );
 };
 
 

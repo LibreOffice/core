@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctextframe.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-24 15:27:21 $
+ *  last change: $Author: mib $ $Date: 2002-07-24 13:14:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,8 @@ protected:
 public:
 
     SwAccessibleTextFrame( SwAccessibleMap *pMap, const SwFlyFrm *pFlyFrm );
+
+    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
 
     //=====  XAccessibleContext  ==============================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-18 08:19:36 $
+ *  last change: $Author: mib $ $Date: 2002-07-24 13:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1802,7 +1802,7 @@ void SwDoc::SetFlyName( SwFlyFrmFmt& rFmt, const String& rName )
             }
         sName = ::lcl_GetUniqueFlyName( this, nTyp );
     }
-    rFmt.SetName( sName );
+    rFmt.SetName( sName, sal_True );
 }
 
 void SwDoc::SetAllUniqueFlyNames()

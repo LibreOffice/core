@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctextframe.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-09 12:51:33 $
+ *  last change: $Author: mib $ $Date: 2002-07-24 13:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLERELATIONSET_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#endif
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
 #include <unotools/accessiblestatesethelper.hxx>
@@ -132,6 +135,34 @@ SwAccessibleTextFrame::~SwAccessibleTextFrame()
 {
 }
 
+void SwAccessibleTextFrame::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+{
+    sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
+    const SwFlyFrm *pFlyFrm = static_cast< const SwFlyFrm * >( GetFrm() );
+    switch( nWhich )
+    {
+    case RES_NAME_CHANGED:
+        if( pFlyFrm )
+        {
+            OUString sOldDesc( GetName() );
+            SwAccessibleFrameBase::Modify( pOld, pNew );
+
+            if( sOldDesc != GetName() )
+            {
+                AccessibleEventObject aEvent;
+                aEvent.EventId = AccessibleEventId::ACCESSIBLE_DESCRIPTION_EVENT;
+                aEvent.OldValue <<= sOldDesc;
+                aEvent.NewValue <<= GetName();
+                FireAccessibleEvent( aEvent );
+            }
+        }
+        break;
+    default:
+        SwAccessibleFrameBase::Modify( pOld, pNew );
+        break;
+    }
+}
+
 OUString SAL_CALL SwAccessibleTextFrame::getAccessibleDescription (void)
         throw (::com::sun::star::uno::RuntimeException)
 {
@@ -139,10 +170,7 @@ OUString SAL_CALL SwAccessibleTextFrame::getAccessibleDescription (void)
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
-    const SwFlyFrm *pFlyFrm = static_cast< const SwFlyFrm *>( GetFrm() );
-    const SwFrmFmt *pFrmFmt = pFlyFrm->GetFmt();
-
-    return OUString( pFrmFmt->GetName() );
+    return GetName();
 
 }
 
