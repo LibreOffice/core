@@ -2,9 +2,9 @@
  *
  *  $RCSfile: useroptions.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:48:13 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 using namespace utl;
 using namespace rtl;
 using namespace com::sun::star::uno;
@@ -94,8 +97,6 @@ using namespace com::sun::star::uno;
 class SvtUserOptions_Impl : public utl::ConfigItem, public SfxBroadcaster
 {
 private:
-    static Sequence< rtl::OUString > m_aPropertyNames;
-
     String          m_aCompany;
     String          m_aFirstName;
     String          m_aLastName;
@@ -227,6 +228,14 @@ static sal_Int32            nRefCount = 0;
 
 // functions -------------------------------------------------------------
 
+namespace
+{
+    struct PropertyNames
+        : public rtl::Static< Sequence< rtl::OUString >, PropertyNames> {};
+}
+
+// -----------------------------------------------------------------------
+
 void SvtUserOptions_Impl::InitUserPropertyNames()
 {
     static const char* aPropNames[] =
@@ -250,8 +259,9 @@ void SvtUserOptions_Impl::InitUserPropertyNames()
 //      "Data/apartment"                //USER_OPT_APARTMENT
     };
     const int nCount = sizeof( aPropNames ) / sizeof( const char* );
-    m_aPropertyNames.realloc(nCount);
-    OUString* pNames = m_aPropertyNames.getArray();
+    Sequence< rtl::OUString > &rPropertyNames = PropertyNames::get();
+    rPropertyNames.realloc(nCount);
+    OUString* pNames = rPropertyNames.getArray();
     for ( int i = 0; i < nCount; i++ )
         pNames[i] = OUString::createFromAscii( aPropNames[i] );
 }
@@ -277,8 +287,6 @@ void SvtUserOptions_Impl::InitFullName()
 }
 
 // -----------------------------------------------------------------------
-Sequence< rtl::OUString > SvtUserOptions_Impl::m_aPropertyNames;
-// -----------------------------------------------------------------------
 SvtUserOptions_Impl::SvtUserOptions_Impl() :
 
     ConfigItem( OUString::createFromAscii("UserProfile") ),
@@ -303,7 +311,7 @@ SvtUserOptions_Impl::SvtUserOptions_Impl() :
     m_bIsROApartment( READONLY_DEFAULT )
 {
     InitUserPropertyNames();
-    EnableNotification( m_aPropertyNames );
+    EnableNotification( PropertyNames::get() );
     Load();
     Any aAny = ConfigManager::GetConfigManager()->GetDirectConfigProperty( ConfigManager::LOCALE );
     OUString aLocale;
@@ -323,15 +331,16 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
 // -----------------------------------------------------------------------
 void SvtUserOptions_Impl::Load()
 {
-    Sequence< Any > seqValues = GetProperties( m_aPropertyNames );
-    Sequence< sal_Bool > seqRO = GetReadOnlyStates( m_aPropertyNames );
+    Sequence< rtl::OUString > &rPropertyNames = PropertyNames::get();
+    Sequence< Any > seqValues = GetProperties( rPropertyNames );
+    Sequence< sal_Bool > seqRO = GetReadOnlyStates( rPropertyNames );
     const Any* pValues = seqValues.getConstArray();
-    DBG_ASSERT( seqValues.getLength() == m_aPropertyNames.getLength(), "GetProperties failed" );
-    if ( seqValues.getLength() == m_aPropertyNames.getLength() )
+    DBG_ASSERT( seqValues.getLength() == rPropertyNames.getLength(), "GetProperties failed" );
+    if ( seqValues.getLength() == rPropertyNames.getLength() )
     {
         OUString aTempStr;
 
-        for ( int nProp = 0; nProp < m_aPropertyNames.getLength(); nProp++ )
+        for ( int nProp = 0; nProp < rPropertyNames.getLength(); nProp++ )
         {
             if ( pValues[nProp].hasValue() )
             {
@@ -398,7 +407,8 @@ void SvtUserOptions_Impl::Load()
 
 void SvtUserOptions_Impl::Commit()
 {
-    sal_Int32 nOrgCount = m_aPropertyNames.getLength();
+    Sequence< rtl::OUString > &rPropertyNames = PropertyNames::get();
+    sal_Int32 nOrgCount = rPropertyNames.getLength();
 
     Sequence< OUString > seqNames( nOrgCount );
     Sequence< Any > seqValues( nOrgCount );
@@ -453,7 +463,7 @@ void SvtUserOptions_Impl::Commit()
         if ( pbReadonly && !(*pbReadonly) )
         {
             seqValues[nRealCount] <<= aTempStr;
-            seqNames[nRealCount] = m_aPropertyNames[nProp];
+            seqNames[nRealCount] = rPropertyNames[nProp];
             ++nRealCount;
         }
     }
