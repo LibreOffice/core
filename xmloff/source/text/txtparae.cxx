@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-10 17:57:26 $
+ *  last change: $Author: cl $ $Date: 2001-07-24 09:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,7 +337,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                 aAny = rPropSet->getPropertyValue( sNumberingRules );
                 Reference < XIndexReplace > xNumRule;
                 aAny >>= xNumRule;
-                if( xNumRule.is() )
+                if( xNumRule.is() && xNumRule->getCount() )
                 {
                     Reference < XNamed > xNamed( xNumRule, UNO_QUERY );
                     OUString sName;
