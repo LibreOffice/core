@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibletexthelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 13:33:54 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,11 +286,12 @@ namespace comphelper
     void OCommonAccessibleText::implGetLineBoundary( i18n::Boundary& rBoundary, sal_Int32 nIndex )
     {
         ::rtl::OUString sText( implGetText() );
+        sal_Int32 nLength = sText.getLength();
 
-        if ( implIsValidIndex( nIndex, sText.getLength() ) )
+        if ( implIsValidIndex( nIndex, nLength ) || nIndex == nLength )
         {
             rBoundary.startPos = 0;
-            rBoundary.endPos = implGetText().getLength();
+            rBoundary.endPos = nLength;
         }
         else
         {
@@ -387,7 +388,7 @@ namespace comphelper
 
     // -----------------------------------------------------------------------------
 
-    ::com::sun::star::accessibility::TextSegment OCommonAccessibleText::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+    TextSegment OCommonAccessibleText::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException)
     {
         ::rtl::OUString sText( implGetText() );
         sal_Int32 nLength = sText.getLength();
@@ -396,7 +397,7 @@ namespace comphelper
             throw IndexOutOfBoundsException();
 
         i18n::Boundary aBoundary;
-        ::com::sun::star::accessibility::TextSegment aResult;
+        TextSegment aResult;
         aResult.SegmentStart = -1;
         aResult.SegmentEnd = -1;
 
@@ -472,6 +473,15 @@ namespace comphelper
                 }
             }
             break;
+            case AccessibleTextType::ATTRIBUTE_RUN:
+            {
+                // TODO: implGetAttributeRunBoundary() (incompatible!)
+
+                aResult.SegmentText = sText;
+                aResult.SegmentStart = 0;
+                aResult.SegmentEnd = nLength;
+            }
+            break;
             default:
             {
                 // unknown text type
@@ -483,7 +493,7 @@ namespace comphelper
 
     // -----------------------------------------------------------------------------
 
-    ::com::sun::star::accessibility::TextSegment OCommonAccessibleText::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+    TextSegment OCommonAccessibleText::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException)
     {
         ::rtl::OUString sText( implGetText() );
         sal_Int32 nLength = sText.getLength();
@@ -492,7 +502,7 @@ namespace comphelper
             throw IndexOutOfBoundsException();
 
         i18n::Boundary aBoundary;
-        ::com::sun::star::accessibility::TextSegment aResult;
+        TextSegment aResult;
         aResult.SegmentStart = -1;
         aResult.SegmentEnd = -1;
 
@@ -592,6 +602,11 @@ namespace comphelper
                 }
             }
             break;
+            case AccessibleTextType::ATTRIBUTE_RUN:
+            {
+                // TODO: implGetAttributeRunBoundary() (incompatible!)
+            }
+            break;
             default:
             {
                 // unknown text type
@@ -603,7 +618,7 @@ namespace comphelper
 
     // -----------------------------------------------------------------------------
 
-    ::com::sun::star::accessibility::TextSegment OCommonAccessibleText::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+    TextSegment OCommonAccessibleText::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException)
     {
         ::rtl::OUString sText( implGetText() );
         sal_Int32 nLength = sText.getLength();
@@ -612,7 +627,7 @@ namespace comphelper
             throw IndexOutOfBoundsException();
 
         i18n::Boundary aBoundary;
-        ::com::sun::star::accessibility::TextSegment aResult;
+        TextSegment aResult;
         aResult.SegmentStart = -1;
         aResult.SegmentEnd = -1;
 
@@ -716,6 +731,11 @@ namespace comphelper
                 }
             }
             break;
+            case AccessibleTextType::ATTRIBUTE_RUN:
+            {
+                // TODO: implGetAttributeRunBoundary() (incompatible!)
+            }
+            break;
             default:
             {
                 // unknown text type
@@ -739,8 +759,8 @@ namespace comphelper
         if ((0 == nLenOld) && (0 == nLenNew))
             return false;
 
-        ::com::sun::star::accessibility::TextSegment aDeletedText;
-        ::com::sun::star::accessibility::TextSegment aInsertedText;
+        TextSegment aDeletedText;
+        TextSegment aInsertedText;
 
         aDeletedText.SegmentStart = -1;
         aDeletedText.SegmentEnd = -1;
@@ -910,7 +930,7 @@ namespace comphelper
 
     // -----------------------------------------------------------------------------
 
-    ::com::sun::star::accessibility::TextSegment OAccessibleTextHelper::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+    TextSegment OAccessibleTextHelper::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException)
     {
         OExternalLockGuard aGuard( this );
 
@@ -919,7 +939,7 @@ namespace comphelper
 
     // -----------------------------------------------------------------------------
 
-    ::com::sun::star::accessibility::TextSegment OAccessibleTextHelper::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+    TextSegment OAccessibleTextHelper::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException)
     {
         OExternalLockGuard aGuard( this );
 
@@ -928,7 +948,7 @@ namespace comphelper
 
     // -----------------------------------------------------------------------------
 
-    ::com::sun::star::accessibility::TextSegment OAccessibleTextHelper::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+    TextSegment OAccessibleTextHelper::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException)
     {
         OExternalLockGuard aGuard( this );
 
