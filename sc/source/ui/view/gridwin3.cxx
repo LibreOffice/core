@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin3.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:01:31 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:31:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,12 +195,12 @@ BOOL ScGridWindow::DrawKeyInput(const KeyEvent& rKEvt)
     if (pDrView && pDraw && !pViewData->IsRefMode())
     {
         pDraw->SetWindow( this );
-        BOOL bOldMarked = pDrView->HasMarkedObj();
+        BOOL bOldMarked = pDrView->AreObjectsMarked();
         if (pDraw->KeyInput( rKEvt ))
         {
             BOOL bLeaveDraw = FALSE;
             BOOL bUsed = TRUE;
-            BOOL bNewMarked = pDrView->HasMarkedObj();
+            BOOL bNewMarked = pDrView->AreObjectsMarked();
             if ( !pViewData->GetView()->IsDrawSelMode() )
                 if ( !bNewMarked )
                 {
@@ -381,7 +381,7 @@ void ScGridWindow::DrawMarks()
 BOOL ScGridWindow::NeedDrawMarks()
 {
     ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
-    return pDrView && pDrView->IsMarkHdlShown() && pDrView->HasMarkedObj();
+    return pDrView && pDrView->IsMarkHdlShown() && pDrView->AreObjectsMarked();
 }
 
 void ScGridWindow::CreateAnchorHandle(SdrHdlList& rHdl, const ScAddress& rAddress)
@@ -445,7 +445,7 @@ void ScGridWindow::OutlinerViewPaint( const Rectangle& rRect )
                             DrawRect( aEffRect );
                         }
 
-                        //  InitRedraw mit dem Text-Rechteck zeichnet nur die Outliner-View
+                        //  DrawLayer mit dem Text-Rechteck zeichnet nur die Outliner-View
                         //  und den Text-Rahmen (an den kommt man sonst von aussen nicht heran).
 
                         SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
@@ -453,7 +453,7 @@ void ScGridWindow::OutlinerViewPaint( const Rectangle& rRect )
                         if (pPV)
                         {
                             SdrLayerID nLayer = pEditObj ? pEditObj->GetLayer() : SC_LAYER_FRONT;
-                            pPV->InitRedraw( nLayer, aEffRect, this );
+                            pPV->DrawLayer( nLayer, aEffRect, this );
                         }
                     }
                     else
@@ -513,7 +513,7 @@ void ScGridWindow::UpdateStatusPosSize()
     }
     if ( !bActionItem )
     {
-        if ( pDrView->HasMarkedObj() )      // selected objects
+        if ( pDrView->AreObjectsMarked() )      // selected objects
         {
             Rectangle aRect = pDrView->GetAllMarkedRect();
             pDrView->GetPageViewPvNum(0)->LogicToPagePos(aRect);
@@ -536,7 +536,7 @@ void ScGridWindow::UpdateStatusPosSize()
 BOOL ScGridWindow::DrawHasMarkedObj()
 {
     ScDrawView* p = pViewData->GetScDrawView();
-    return p ? p->HasMarkedObj() : FALSE;
+    return p ? p->AreObjectsMarked() : FALSE;
 }
 
 void ScGridWindow::DrawStartTimer()
