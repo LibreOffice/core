@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathexpression.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:55:06 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,6 @@
 #include "unohelper.hxx"
 #include "evaluationcontext.hxx"
 #include "NameContainer.hxx"
-#include "xmlhelper.hxx"
 
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
@@ -163,12 +162,6 @@ bool PathExpression::evaluate( const EvaluationContext& rContext )
     }
 
     return bResult;
-}
-
-
-bool PathExpression::isElementName() const
-{
-    return isValidQName( getExpression(), getNamespaces() );
 }
 
 
