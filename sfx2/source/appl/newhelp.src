@@ -33,6 +33,24 @@ Window WIN_HELP_INDEX
                 PageResID = 1 ;
                 Text = "Inhalte" ;
                 Text [ ENGLISH ] = "Contents" ;
+                Text[ english_us ] = "Contents";
+                Text[ portuguese ] = "Contents";
+                Text[ russian ] = "Contents";
+                Text[ greek ] = "Contents";
+                Text[ dutch ] = "Contents";
+                Text[ french ] = "Contents";
+                Text[ spanish ] = "Contents";
+                Text[ italian ] = "Contents";
+                Text[ danish ] = "Contents";
+                Text[ swedish ] = "Innehåll";
+                Text[ polish ] = "Contents";
+                Text[ portuguese_brazilian ] = "Contents";
+                Text[ japanese ] = "Contents";
+                Text[ korean ] = "Contents";
+                Text[ chinese_simplified ] = "ÄÚÈÝ";
+                Text[ chinese_traditional ] = "Contents";
+                Text[ turkish ] = "Contents";
+                Text[ arabic ] = "ÇáãÍÊæíÇÊ";
             };
             PageItem
             {
@@ -40,6 +58,24 @@ Window WIN_HELP_INDEX
                 PageResID = 3 ;
                 Text = "Index" ;
                 Text [ ENGLISH ] = "Index" ;
+                Text[ english_us ] = "Index";
+                Text[ portuguese ] = "Index";
+                Text[ russian ] = "Index";
+                Text[ greek ] = "Index";
+                Text[ dutch ] = "Index";
+                Text[ french ] = "Index";
+                Text[ spanish ] = "Index";
+                Text[ italian ] = "Index";
+                Text[ danish ] = "Index";
+                Text[ swedish ] = "Index";
+                Text[ polish ] = "Index";
+                Text[ portuguese_brazilian ] = "Index";
+                Text[ japanese ] = "Index";
+                Text[ korean ] = "Index";
+                Text[ chinese_simplified ] = "Ë÷Òý";
+                Text[ chinese_traditional ] = "Index";
+                Text[ turkish ] = "Index";
+                Text[ arabic ] = "ÝåÑÓ";
             };
             PageItem
             {
@@ -47,6 +83,24 @@ Window WIN_HELP_INDEX
                 PageResID = 3 ;
                 Text = "Suchen" ;
                 Text [ ENGLISH ] = "Search" ;
+                Text[ english_us ] = "Search";
+                Text[ portuguese ] = "Search";
+                Text[ russian ] = "Search";
+                Text[ greek ] = "Search";
+                Text[ dutch ] = "Search";
+                Text[ french ] = "Search";
+                Text[ spanish ] = "Search";
+                Text[ italian ] = "Search";
+                Text[ danish ] = "Search";
+                Text[ swedish ] = "Sök";
+                Text[ polish ] = "Search";
+                Text[ portuguese_brazilian ] = "Search";
+                Text[ japanese ] = "Search";
+                Text[ korean ] = "Search";
+                Text[ chinese_simplified ] = "ËÑÑ°";
+                Text[ chinese_traditional ] = "Search";
+                Text[ turkish ] = "Search";
+                Text[ arabic ] = "ÈÍË";
             };
         };
     };
