@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:30:38 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
                                       const sal_Int32 nSpannedCols) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     bStartFormPage(sal_False),
-    bAutomaticPrintRange(sal_True)
+    bPrintEntireSheet(sal_True)
 {
     if (!bTempIsSubTable)
     {
@@ -153,16 +153,10 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
                 case XML_TOK_TABLE_PASSWORD:
                         sPassword = sValue;
                     break;
-                case XML_TOK_TABLE_AUTOMATIC_PRINT_RANGE:
-                    {
-                        if (IsXMLToken(sValue, XML_FALSE))
-                            bAutomaticPrintRange = sal_False;
-                    }
-                    break;
                 case XML_TOK_TABLE_PRINT:
                     {
                         if (IsXMLToken(sValue, XML_FALSE))
-                            bAutomaticPrintRange = sal_False;
+                            bPrintEntireSheet = sal_False;
                     }
                     break;
             }
@@ -274,7 +268,7 @@ void ScXMLTableContext::EndElement()
                 }
             }
         }
-        else if (bAutomaticPrintRange) pDoc->SetPrintEntireSheet(static_cast<SCTAB>(GetScImport().GetTables().GetCurrentSheet()));
+        else if (bPrintEntireSheet) pDoc->SetPrintEntireSheet(static_cast<SCTAB>(GetScImport().GetTables().GetCurrentSheet()));
 
         ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable(static_cast<SCTAB>(GetScImport().GetTables().GetCurrentSheet()), sal_False);
         if (pOutlineTable)
