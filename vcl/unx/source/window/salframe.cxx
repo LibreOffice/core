@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-20 11:10:28 $
+ *  last change: $Author: cd $ $Date: 2001-08-22 15:43:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,8 +277,10 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
         fprintf( stderr, "created new FLOAT style shell\n" );
 #endif
     }
-    else if( nSalFrameStyle & SAL_FRAME_STYLE_CHILD && pParentData )
+    else if( pParentData )
     {
+        nStyle_ |= SAL_FRAME_STYLE_CHILD;
+
         int x_ret, y_ret;
         unsigned int w, h, bw, d;
         XLIB_Window aRoot;
@@ -487,7 +489,7 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
     if( hComposite_ )
         XSetWindowBackgroundPixmap( pDisplay_->GetDisplay(), XtWindow( hComposite_ ), None );
 
-    if( ! ( (nSalFrameStyle & SAL_FRAME_STYLE_CHILD)  && pParentData ) )
+    if( ! ( (nStyle_ & SAL_FRAME_STYLE_CHILD)  && pParentData ) )
     {
         XSetWMHints( GetXDisplay(), XtWindow( hShell_ ), &Hints );
 
