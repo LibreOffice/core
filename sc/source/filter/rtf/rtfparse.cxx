@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfparse.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:19:20 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,7 +325,7 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
     ScEEParseEntry* pE;
     switch ( pInfo->nToken )
     {
-        case RTF_TROWD:         // TableROWDefault, vor erstem RTF_CELLX
+        case RTF_TROWD:         // denotes table row defauls, before RTF_CELLX
         {
             if ( pD = pDefaultList->Last() )
                 nLastWidth = pD->nTwips;
@@ -337,13 +337,13 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
             nLastToken = pInfo->nToken;
         }
         break;
-        case RTF_CLMGF:         // CeLlMerGeFirst, die MergeCell
+        case RTF_CLMGF:         // The first cell of cells to be merged
         {
             pDefMerge = pInsDefault;
             nLastToken = pInfo->nToken;
         }
         break;
-        case RTF_CLMRG:         // CeLlMeRGe, Zelle mit vorheriger merged
+        case RTF_CLMRG:         // A cell to be merged with the preceding cell
         {
             if ( !pDefMerge )
                 pDefMerge = pDefaultList->Last();
@@ -354,7 +354,7 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
             nLastToken = pInfo->nToken;
         }
         break;
-        case RTF_CELLX:         // schliesst Zelldefault
+        case RTF_CELLX:         // closes cell default
         {
             bNewDef = TRUE;
             pInsDefault->nCol = nColCnt;
@@ -367,18 +367,18 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
             nLastToken = pInfo->nToken;
         }
         break;
-        case RTF_INTBL:         // vor erstem RTF_CELL
+        case RTF_INTBL:         // before the first RTF_CELL
         {
             // einmal ueber NextToken und einmal ueber UnknownAttrToken
             // oder z.B. \intbl ... \cell \pard \intbl ... \cell
-            if ( nLastToken != RTF_INTBL && nLastToken != RTF_CELL )
+            if ( nLastToken != RTF_INTBL && nLastToken != RTF_CELL && nLastToken != RTF_PAR )
             {
                 NewCellRow( pInfo );
                 nLastToken = pInfo->nToken;
             }
         }
         break;
-        case RTF_CELL:          // schliesst Zelle
+        case RTF_CELL:          // denotes the end of a cell.
         {
             DBG_ASSERT( pActDefault, "RTF_CELL: pActDefault==0" );
             if ( bNewDef || !pActDefault )
@@ -412,7 +412,7 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
             nLastToken = pInfo->nToken;
         }
         break;
-        case RTF_ROW:           // nach letzter Zelle in Row
+        case RTF_ROW:           // means the end of a row
         {
             NextRow();
             nLastToken = pInfo->nToken;
@@ -421,20 +421,20 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
         case RTF_PAR:           // Paragraph
         {
             if ( !pActDefault )
-            {   // Text nicht in Tabelle
-                ColAdjust();    // bisherige Tabelle beenden
+            {   // text not in table
+                ColAdjust();    // close the processing table
                 pActEntry->nCol = 0;
                 pActEntry->nRow = nRowCnt;
                 EntryEnd( pActEntry, pInfo->aSelection );
                 pList->Insert( pActEntry, LIST_APPEND );
-                NewActEntry( pActEntry );   // neuer freifliegender pActEntry
+                NewActEntry( pActEntry );   // new pActEntry
                 NextRow();
             }
             nLastToken = pInfo->nToken;
         }
         break;
         default:
-        {   // nLastToken nicht setzen!
+        {   // do not set nLastToken
             switch ( pInfo->nToken & ~(0xff | RTF_TABLEDEF) )
             {
                 case RTF_SHADINGDEF:
