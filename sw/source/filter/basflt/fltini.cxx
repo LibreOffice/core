@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-26 06:37:56 $
+ *  last change: $Author: jp $ $Date: 2001-10-30 14:38:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ void _InitFilter()
     _SetFltPtr( nCnt, ReadSwg, FILTER_SWGV );
     _SetFltPtr( nCnt, (ReadRtf = new RtfReader), FILTER_RTF );
     _SetFltPtr( nCnt, new Sw6Reader, sSwDos );
-    _SetFltPtr( nCnt, (ReadAscii = new AsciiReader), STEXT );
+    _SetFltPtr( nCnt, (ReadAscii = new AsciiReader), FILTER_TEXT );
     _SetFltPtr( nCnt, ReadAscii, FILTER_BAS );
     _SetFltPtr( nCnt, pWW8Rd, sWW6 );
     _SetFltPtr( nCnt, pWW8Rd, FILTER_WW8 );
@@ -1571,73 +1571,4 @@ Color ConvertBrushStyle(const Color& rCol, const Color& rFillCol, BYTE nStyle)
 
     return aColor;
 }
-
-/*************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.10  2001/05/28 10:56:55  jp
-      Bug #82963#: set correct paragraph indent
-
-      Revision 1.9  2001/04/06 19:32:17  jp
-      Bug #85813#: no GPF and no ASSERT by reading/writing with the W4W filters
-
-      Revision 1.8  2001/02/26 08:24:19  mib
-      xml filters for templates and global docs
-
-      Revision 1.7  2001/02/05 16:31:12  cmc
-      #83154# Negative Indent Number Style buglet
-
-      Revision 1.6  2000/12/12 15:35:03  khz
-      #80856# take into account negative indentation in SetNumLSpace()
-
-      Revision 1.5  2000/12/02 11:03:48  mib
-      #80795#: XML package filter
-
-      Revision 1.4  2000/11/20 14:17:21  jp
-      ReadFilterFlags removed, use new class SwFilterOptions
-
-      Revision 1.3  2000/11/13 10:46:09  jp
-      remove IniManager
-
-      Revision 1.2  2000/10/06 13:08:02  jp
-      should changes: don't use IniManager
-
-      Revision 1.1.1.1  2000/09/19 10:59:15  hr
-      initial import
-
-      Revision 1.175  2000/09/18 16:04:39  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.174  2000/08/04 16:26:25  jp
-      read/write unicode ascii files
-
-      Revision 1.173  2000/06/30 13:44:04  tl
-      old lingu header removed
-
-      Revision 1.172  2000/05/16 16:12:44  jp
-      Changes for Unicode
-
-      Revision 1.171  2000/05/15 16:35:27  jp
-      Changes for Unicode
-
-      Revision 1.170  2000/05/08 16:42:32  jp
-      Changes for Unicode
-
-      Revision 1.169  2000/04/17 09:09:10  khz
-      Task #70451# use CalculateFlySize() for WW frames with 'auto'width
-
-      Revision 1.168  2000/03/03 16:21:41  pl
-      #73771# workaround for c50 intel compiler
-
-      Revision 1.167  2000/03/03 16:18:43  pl
-      #73771# workaround for c50 intel compiler
-
-      Revision 1.166  2000/03/03 15:20:59  os
-      StarView remainders removed
-
-      Revision 1.165  2000/02/11 14:36:30  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-*************************************************************************/
-
 

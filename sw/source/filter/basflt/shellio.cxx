@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-31 13:49:22 $
+ *  last change: $Author: jp $ $Date: 2001-10-30 14:38:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1143,110 +1143,5 @@ BOOL SetHTMLTemplate( SwDoc & rDoc )
 
     return bRet;
 }
-
-/*************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.10  2001/04/05 15:01:03  jp
-      access the html.vor only at used time, not in startup
-
-      Revision 1.9  2001/03/07 08:05:56  mib
-      #84201#: 6.0 template support
-
-      Revision 1.8  2001/03/06 11:08:40  mib
-      organizer support for XML file format
-
-      Revision 1.7  2001/02/08 12:48:41  jp
-      remove using statements
-
-      Revision 1.6  2001/01/22 13:42:57  mib
-      Block mode for Readers added
-
-      Revision 1.5  2000/12/21 13:50:00  jp
-      remove function GetTmpFileName
-
-      Revision 1.4  2000/11/06 09:27:12  jp
-      must changes: tempfile
-
-      Revision 1.3  2000/10/25 12:04:22  jp
-      Spellchecker/Hyphenator are not longer member of the shells
-
-      Revision 1.2  2000/09/27 09:46:57  jp
-      use the new FileStatHelper class
-
-      Revision 1.1.1.1  2000/09/19 10:59:15  hr
-      initial import
-
-      Revision 1.361  2000/09/18 16:04:40  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.360  2000/06/26 12:52:39  os
-      INetURLObject::SmartRelToAbs removed
-
-      Revision 1.359  2000/06/13 09:42:56  os
-      using UCB
-
-      Revision 1.358  2000/05/11 11:51:49  tl
-      if[n]def ONE_LINGU entfernt
-
-      Revision 1.357  2000/05/08 16:42:38  jp
-      Changes for Unicode
-
-      Revision 1.356  2000/04/04 15:37:42  jp
-      Bug #74638#: dont unload OLE-Objects in a save call
-
-      Revision 1.355  2000/02/11 14:36:34  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.354  2000/02/09 11:59:21  jp
-      Task #72579#: WW8Reader can import glossaries
-
-      Revision 1.353  2000/02/02 16:59:06  jp
-      Task #72579#: interface of SwReader is changed
-
-      Revision 1.352  2000/01/20 12:53:35  jp
-      Bug #72119#: HTML-Template is moved into an other directory
-
-      Revision 1.351  2000/01/20 12:17:45  jp
-      Bug #72119#: HTML-Template is moved into an other directory
-
-      Revision 1.350  1999/10/25 19:34:19  tl
-      ongoing ONE_LINGU implementation
-
-      Revision 1.349  1999/10/21 17:49:54  jp
-      have to change - SearchFile with SfxIniManager, dont use SwFinder for this
-
-      Revision 1.348  1999/09/08 13:49:52  jp
-      Bug #68593#: Read - no nulti read if formatsonlyflag set
-
-      Revision 1.347  1999/08/31 08:53:26  TL
-      #if[n]def ONE_LINGU inserted (for transition of lingu to StarOne)
-
-
-      Rev 1.346   31 Aug 1999 10:53:26   TL
-   #if[n]def ONE_LINGU inserted (for transition of lingu to StarOne)
-
-      Rev 1.345   26 Aug 1999 15:45:52   OS
-   double methods in PathFinder removed
-
-      Rev 1.344   16 Jun 1999 19:53:14   JP
-   Change interface of base class Writer
-
-      Rev 1.343   04 May 1999 14:59:28   JP
-   FilterExportklasse Writer von SvRef abgeleitet, damit sie immer zerstoert wird
-
-      Rev 1.342   11 Mar 1999 23:54:40   JP
-   Task #63171#: Optionen fuer Feld-/LinkUpdate Doc oder Modul lokal
-
-      Rev 1.341   10 Mar 1999 10:40:28   JP
-   Bug #63040#: bei normalem Lesen Felder als aktuell kennzeichnen
-
-      Rev 1.340   04 Feb 1999 21:19:06   JP
-   Bug #61404#/#61014#: neu: SetFixFields statt zweier Methoden
-
-      Rev 1.339   02 Feb 1999 13:24:34   JP
-   Bug #61014#: UpdateAllLinks nur rufen, wenn Liks vorhanden sind (erspart eine temp. ViewSh!)
-
-*************************************************************************/
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edglss.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-09-21 14:02:25 $
+ *  last change: $Author: jp $ $Date: 2001-10-30 14:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,7 +384,7 @@ BOOL SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
     {
         SvCacheStream aStream(20480);
         WriterRef xWrt;
-        SwIoSystem::GetWriter( String::CreateFromAscii( FILTER_ANSI ), xWrt );
+        SwIoSystem::GetWriter( String::CreateFromAscii( FILTER_TEXT ), xWrt );
         if( xWrt.Is() )
         {
                 // Selektierte Bereiche in ein ASCII Dokument schreiben

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-19 18:01:51 $
+ *  last change: $Author: jp $ $Date: 2001-10-30 14:36:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,8 +328,6 @@ class AsciiReader: public Reader
     virtual ULONG Read( SwDoc &,SwPaM &,const String &);
 public:
     AsciiReader(): Reader() {}
-
-    virtual void SetFltName( const String& rFltNm );
 };
 
 class SwgReader: public Reader
@@ -693,7 +691,7 @@ public:
 
 extern sal_Char __FAR_DATA FILTER_SWG[];    // SWG-Filter
 extern sal_Char __FAR_DATA FILTER_RTF[];    // RTF-Filter
-extern sal_Char*           FILTER_ANSI;     // Ascii-Filter mit Default-CodeSet
+extern sal_Char __FAR_DATA FILTER_TEXT[];   // Text-Filter mit Default-CodeSet
 extern sal_Char __FAR_DATA FILTER_BAS[];    // StarBasic (identisch mit ANSI)
 extern sal_Char __FAR_DATA FILTER_W4W[];    // W4W-Filter
 extern sal_Char __FAR_DATA FILTER_WW8[];    // WinWord 97-Filter

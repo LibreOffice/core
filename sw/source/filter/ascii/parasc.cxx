@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parasc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 08:00:34 $
+ *  last change: $Author: jp $ $Date: 2001-10-30 14:40:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #ifndef _SVX_BRKITEM_HXX //autogen
 #include <svx/brkitem.hxx>
 #endif
+#ifndef _SVX_SCRIPTTYPEITEM_HXX
+#include <svx/scripttypeitem.hxx>
+#endif
 
 #ifndef _SHELLIO_HXX
 #include <shellio.hxx>
@@ -112,6 +115,9 @@
 #endif
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
+#endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
 #endif
 
 #ifndef _SWSWERROR_H
@@ -538,9 +544,11 @@ class SwASCIIParser
     const SwAsciiOptions& rOpt;
     SfxItemSet* pItemSet;
     long nFileSize;
+    USHORT nScript;
     BOOL bNewDoc;
 
     ULONG ReadChars();
+    void InsertText( const String& rStr );
 
 public:
     SwASCIIParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
@@ -576,70 +584,15 @@ ULONG AsciiReader::Read( SwDoc &rDoc, SwPaM &rPam, const String & )
     return nRet;
 }
 
-void AsciiReader::SetFltName( const String& rFltNm )
-{
-    if( 5 <= rFltNm.Len() )
-    {
-        SwAsciiOptions aNewOpts;
-        switch( rFltNm.GetChar( 4 ) )
-        {
-        case 'D':
-#if !defined(PM2)
-                    aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_850 );
-                    aNewOpts.SetParaFlags( LINEEND_CRLF );
-#endif
-                    if( 5 < rFltNm.Len() )
-                        switch( rFltNm.Copy( 5 ).ToInt32() )
-                        {
-                        case 437: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_437 );  break;
-                        case 850: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_850 );  break;
-                        case 860: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_860 );  break;
-                        case 861: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_861 );  break;
-                        case 863: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_863 );  break;
-                        case 865: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_865 );  break;
-                        }
-                    break;
-
-        case 'A':
-#if !defined(WIN) && !defined(WNT)
-                    aNewOpts.SetCharSet( RTL_TEXTENCODING_MS_1252 );
-                    aNewOpts.SetParaFlags( LINEEND_CRLF );
-#endif
-                    break;
-        case 'M':
-#if !defined(MAC)
-                    aNewOpts.SetCharSet( RTL_TEXTENCODING_APPLE_ROMAN );
-                    aNewOpts.SetParaFlags( LINEEND_CR );
-#endif
-                    break;
-        case 'X':
-#if !defined(UNX)
-                    aNewOpts.SetCharSet( RTL_TEXTENCODING_MS_1252 );
-                    aNewOpts.SetParaFlags( LINEEND_LF );
-#endif
-                    break;
-
-        default:
-            if( rFltNm.Copy( 4 ).EqualsAscii( "_DLG" ))
-            {
-                // use the options
-                aNewOpts = aOpt.GetASCIIOpts();
-            }
-        }
-        aOpt.SetASCIIOpts( aNewOpts );
-    }
-}
-
-
 SwASCIIParser::SwASCIIParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
                             int bReadNewDoc, const SwAsciiOptions& rOpts )
     : pDoc( pD ), rInput( rIn ), rOpt( rOpts ), bNewDoc( bReadNewDoc ),
-    pItemSet( 0 )
+    nScript( 0 )
 {
     pPam = new SwPaM( *rCrsr.GetPoint() );
     pArr = new sal_Char [ ASC_BUFFLEN + 1 ];
 
-    SfxItemSet aDfltSet( pDoc->GetAttrPool(),
+    pItemSet = new SfxItemSet( pDoc->GetAttrPool(),
                 RES_CHRATR_FONT,        RES_CHRATR_LANGUAGE,
                 RES_CHRATR_CJK_FONT,    RES_CHRATR_CJK_LANGUAGE,
                 RES_CHRATR_CTL_FONT,    RES_CHRATR_CTL_LANGUAGE,
@@ -650,11 +603,9 @@ SwASCIIParser::SwASCIIParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     {
         SvxLanguageItem aLang( (LanguageType)rOpt.GetLanguage(),
                                  RES_CHRATR_LANGUAGE );
-        aDfltSet.Put( aLang );
-//!!!!!!!!!!!!!!!
-//JP 19.9.2001: must exit defines for CJK and CTL
-//      aDfltSet.Put( aLang, RES_CHRATR_CJK_LANGUAGE );
-//      aDfltSet.Put( aLang, RES_CHRATR_CTL_LANGUAGE );
+        pItemSet->Put( aLang );
+        pItemSet->Put( aLang, RES_CHRATR_CJK_LANGUAGE );
+        pItemSet->Put( aLang, RES_CHRATR_CTL_LANGUAGE );
     }
     if( rOpt.GetFontName().Len() )
     {
@@ -670,23 +621,12 @@ SwASCIIParser::SwASCIIParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
         }
         SvxFontItem aFont( pFnt->GetFamily(), pFnt->GetName(),
                         aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet() );
-        aDfltSet.Put( aFont );
-//!!!!!!!!!!!!!!!
-//JP 19.9.2001: must exit defines for CJK and CTL
-//      aDfltSet.Put( aFont, RES_CHRATR_CJK_FONT );
-//      aDfltSet.Put( aFont, RES_CHRATR_CTL_FONT );
-
+        pItemSet->Put( aFont );
+        pItemSet->Put( aFont, RES_CHRATR_CJK_FONT );
+        pItemSet->Put( aFont, RES_CHRATR_CTL_FONT );
 
         if( bDelete )
             delete (SfxFont*)pFnt;
-    }
-
-    if( aDfltSet.Count() )
-    {
-        if( bNewDoc )
-            pDoc->SetDefault( aDfltSet );
-        else
-            pItemSet = new SfxItemSet( aDfltSet );
     }
 }
 
@@ -721,28 +661,46 @@ ULONG SwASCIIParser::CallParser()
 
     ULONG nError = ReadChars();
 
-    if( pInsPam )
+    if( pItemSet )
     {
-        if( pItemSet )
+        // set only the attribute, for scanned scripts.
+        if( !( SCRIPTTYPE_LATIN & nScript ))
         {
-            // then set over the insert range the defined attributes
-            *pInsPam->GetMark() = *pPam->GetPoint();
-            pInsPam->GetPoint()->nNode++;
-            SwNode* pNd = pInsPam->GetNode();
-            if( pNd->IsCntntNode() )
-                pInsPam->GetPoint()->nContent.Assign(
-                                    (SwCntntNode*)pNd, nSttCntnt );
-            else
-                pInsPam->GetPoint()->nContent.Assign( 0, 0 );
-
-            // !!!!!
-            ASSERT( !this, "Have to change - hard attr. to para. style" );
-            pDoc->Insert( *pInsPam, *pItemSet );
-
-            delete pItemSet, pItemSet = 0;
+            pItemSet->ClearItem( RES_CHRATR_FONT );
+            pItemSet->ClearItem( RES_CHRATR_LANGUAGE );
         }
-        delete pInsPam;
+        if( !( SCRIPTTYPE_ASIAN & nScript ))
+        {
+            pItemSet->ClearItem( RES_CHRATR_CJK_FONT );
+            pItemSet->ClearItem( RES_CHRATR_CJK_LANGUAGE );
+        }
+        if( !( SCRIPTTYPE_COMPLEX & nScript ))
+        {
+            pItemSet->ClearItem( RES_CHRATR_CTL_FONT );
+            pItemSet->ClearItem( RES_CHRATR_CTL_LANGUAGE );
+        }
+        if( pItemSet->Count() )
+        {
+            if( bNewDoc )
+                pDoc->SetDefault( *pItemSet );
+            else if( pInsPam )
+            {
+                // then set over the insert range the defined attributes
+                *pInsPam->GetMark() = *pPam->GetPoint();
+                pInsPam->GetPoint()->nNode++;
+                pInsPam->GetPoint()->nContent.Assign(
+                                    pInsPam->GetCntntNode(), nSttCntnt );
+
+                // !!!!!
+                ASSERT( !this, "Have to change - hard attr. to para. style" );
+                pDoc->Insert( *pInsPam, *pItemSet );
+            }
+        }
+        delete pItemSet, pItemSet = 0;
     }
+
+    if( pInsPam )
+        delete pInsPam;
 
     ::EndProgress( pDoc->GetDocShell() );
     return nError;
@@ -778,7 +736,7 @@ ULONG SwASCIIParser::ReadChars()
         if( pStt >= pEnd )
         {
             if( pLastStt != pStt )
-                pDoc->Insert( *pPam, String( pLastStt ));
+                InsertText( String( pLastStt ));
 
             // lese einen neuen Block ein
             ULONG lGCount;
@@ -900,7 +858,7 @@ ULONG SwASCIIParser::ReadChars()
                         {
                             // Change to charset system!!!!
                             //rOpt.GetCharSet();
-                            pDoc->Insert( *pPam, String( pLastStt ));
+                            InsertText( String( pLastStt ));
                         }
                         pDoc->SplitNode( *pPam->GetPoint() );
                         pDoc->Insert( *pPam, SvxFmtBreakItem(
@@ -934,7 +892,7 @@ ULONG SwASCIIParser::ReadChars()
             {
                 sal_Unicode c = *pStt;
                 *pStt = 0;
-                pDoc->Insert( *pPam, String( pLastStt ));
+                InsertText( String( pLastStt ));
                 pDoc->SplitNode( *pPam->GetPoint() );
                 pLastStt = pStt;
                 nLineLen = 0;
@@ -947,7 +905,7 @@ ULONG SwASCIIParser::ReadChars()
         {
             // es wurde ein CR/LF erkannt, also speichere den Text
 
-            pDoc->Insert( *pPam, String( pLastStt ));
+            InsertText( String( pLastStt ));
             pDoc->SplitNode( *pPam->GetPoint() );
             pLastStt = pStt;
             nLineLen = 0;
@@ -958,6 +916,15 @@ ULONG SwASCIIParser::ReadChars()
         rtl_destroyTextToUnicodeConverter( hConverter );
 
     return 0;
+}
+
+void SwASCIIParser::InsertText( const String& rStr )
+{
+    pDoc->Insert( *pPam, rStr );
+    if( pItemSet && pBreakIt && nScript != ( SCRIPTTYPE_LATIN |
+                                             SCRIPTTYPE_ASIAN |
+                                             SCRIPTTYPE_COMPLEX ) )
+        nScript |= pBreakIt->GetAllScriptsOfText( rStr );
 }
 
 
