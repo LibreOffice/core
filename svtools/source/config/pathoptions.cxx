@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-10 12:44:09 $
+ *  last change: $Author: mba $ $Date: 2000-11-13 11:54:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,6 @@ private:
     String          m_aPalettePath;
     String          m_aPluginPath;
     String          m_aStoragePath;
-    String          m_aSubIniPath;
     String          m_aTempPath;
     String          m_aTemplatePath;
     String          m_aTrashPath;
@@ -245,7 +244,6 @@ public:
     const String&   GetPalettePath() { return GetPath( &SvtPathOptions_Impl::m_aPalettePath); }
     const String&   GetPluginPath() { return GetPath( &SvtPathOptions_Impl::m_aPluginPath); }
     const String&   GetStoragePath() { return GetPath( &SvtPathOptions_Impl::m_aStoragePath); }
-    const String&   GetSubIniPath() { return GetPath( &SvtPathOptions_Impl::m_aSubIniPath); }
     const String&   GetTempPath() { return GetPath( &SvtPathOptions_Impl::m_aTempPath); }
     const String&   GetTemplatePath() { return GetPath( &SvtPathOptions_Impl::m_aTemplatePath); }
     const String&   GetTrashPath() { return GetPath( &SvtPathOptions_Impl::m_aTrashPath); }
@@ -275,7 +273,6 @@ public:
     void            SetPalettePath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aPalettePath, rPath ); }
     void            SetPluginPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aPluginPath, rPath ); }
     void            SetStoragePath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aStoragePath, rPath ); }
-    void            SetSubIniPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aSubIniPath, rPath ); }
     void            SetTempPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aTempPath, rPath ); }
     void            SetTemplatePath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aTemplatePath, rPath ); }
     void            SetTrashPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aTrashPath, rPath ); }
@@ -318,7 +315,6 @@ Sequence< OUString > GetPathPropertyNames()
         "Palette",          // PATH_PALETTE
         "Plugin",           // PATH_PLUGIN
         "Storage",          // PATH_STORAGE
-        "SubIni",           // PATH_SUBINI
         "Temp",             // PATH_TEMP
         "Template",         // PATH_TEMPLATE
         "Trash",            // PATH_TRASH
@@ -823,7 +819,6 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
                     case SvtPathOptions::PATH_PALETTE:      m_aPalettePath = String( aFullPath );       break;
                     case SvtPathOptions::PATH_PLUGIN:       m_aPluginPath = String( aFullPath );        break;
                     case SvtPathOptions::PATH_STORAGE:      m_aStoragePath = String( aFullPath );       break;
-                    case SvtPathOptions::PATH_SUBINI:       m_aSubIniPath = String( aFullPath );        break;
                     case SvtPathOptions::PATH_TEMP:         m_aTempPath = String( aFullPath );          break;
                     case SvtPathOptions::PATH_TEMPLATE:     m_aTemplatePath = String( aFullPath );      break;
                     case SvtPathOptions::PATH_TRASH:        m_aTrashPath = String( aFullPath );         break;
@@ -882,7 +877,6 @@ void SvtPathOptions_Impl::Commit()
             case SvtPathOptions::PATH_NEWMENU:          aTempStr = OUString( m_aNewMenuPath );          break;
             case SvtPathOptions::PATH_PALETTE:          aTempStr = OUString( m_aPalettePath );          break;
             case SvtPathOptions::PATH_STORAGE:          aTempStr = OUString( m_aStoragePath );          break;
-            case SvtPathOptions::PATH_SUBINI:           aTempStr = OUString( m_aSubIniPath );           break;
             case SvtPathOptions::PATH_TEMP:             aTempStr = OUString( m_aTempPath );             break;
             case SvtPathOptions::PATH_TRASH:            aTempStr = OUString( m_aTrashPath );            break;
             case SvtPathOptions::PATH_USERCONFIG:       aTempStr = OUString( m_aUserConfigPath );       break;
@@ -1034,13 +1028,6 @@ const String& SvtPathOptions::GetGalleryPath() const
 }
 
 // -----------------------------------------------------------------------
-#if SUPD < 612
-const String& SvtPathOptions::GetGlossaryPath() const
-{
-    return pImp->GetAutoTextPath();
-}
-#endif
-// -----------------------------------------------------------------------
 
 const String& SvtPathOptions::GetGraphicPath() const
 {
@@ -1094,13 +1081,6 @@ const String& SvtPathOptions::GetPluginPath() const
 const String& SvtPathOptions::GetStoragePath() const
 {
     return pImp->GetStoragePath();
-}
-
-// -----------------------------------------------------------------------
-
-const String& SvtPathOptions::GetSubIniPath() const
-{
-    return pImp->GetSubIniPath();
 }
 
 // -----------------------------------------------------------------------
@@ -1237,13 +1217,6 @@ void SvtPathOptions::SetGalleryPath( const String& rPath )
 }
 
 // -----------------------------------------------------------------------
-#if SUPD < 612
-void SvtPathOptions::SetGlossaryPath( const String& rPath )
-{
-    pImp->SetAutoTextPath( rPath );
-}
-#endif
-// -----------------------------------------------------------------------
 
 void SvtPathOptions::SetGraphicPath( const String& rPath )
 {
@@ -1297,13 +1270,6 @@ void SvtPathOptions::SetPluginPath( const String& rPath )
 void SvtPathOptions::SetStoragePath( const String& rPath )
 {
     pImp->SetStoragePath( rPath );
-}
-
-// -----------------------------------------------------------------------
-
-void SvtPathOptions::SetSubIniPath( const String& rPath )
-{
-    pImp->SetSubIniPath( rPath );
 }
 
 // -----------------------------------------------------------------------
@@ -1435,7 +1401,6 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
                 case PATH_PALETTE:      aPath = GetPalettePath();       break;
                 case PATH_PLUGIN:       aPath = GetPluginPath();        break;
                 case PATH_STORAGE:      aPath = GetStoragePath();       break;
-                case PATH_SUBINI:       aPath = GetSubIniPath();        break;
                 case PATH_TEMP:         aPath = GetTempPath();          break;
                 case PATH_TEMPLATE:     aPath = GetTemplatePath();      break;
                 case PATH_TRASH:        aPath = GetTrashPath();         break;
