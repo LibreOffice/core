@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dv $ $Date: 2001-04-09 08:02:14 $
+ *  last change: $Author: pb $ $Date: 2001-04-12 08:00:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -808,6 +808,29 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         }
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        case SID_HELPTIPS:
+        {
+            // Parameter aus werten
+            SFX_REQUEST_ARG(rReq, pOnItem, SfxBoolItem, SID_HELPTIPS, FALSE);
+            FASTBOOL bOn = pOnItem
+                            ? ((SfxBoolItem*)pOnItem)->GetValue()
+                            : !Help::IsQuickHelpEnabled();
+
+            // ausf"uhren
+            if ( bOn )
+                Help::EnableQuickHelp();
+            else
+                Help::DisableQuickHelp();
+            SvtHelpOptions().SetHelpTips( bOn );
+            Invalidate(SID_HELPTIPS);
+            bDone = TRUE;
+
+            // ggf. recorden
+            if ( !rReq.IsAPI() )
+                rReq.AppendItem( SfxBoolItem( SID_HELPTIPS, bOn) );
+            break;
+        }
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_HELPBALLOONS:
         {
             // Parameter auswerten
@@ -958,10 +981,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
 
                 case SID_HELPTIPS:
                 {
-/*! (pb) what about help?
                     rSet.Put( SfxBoolItem( SID_HELPTIPS, Help::IsQuickHelpEnabled() ) );
-*/
-                    rSet.DisableItem( SID_HELPTIPS );
                 }
                 break;
                 case SID_HELPBALLOONS:

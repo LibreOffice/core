@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-19 09:17:09 $
+ *  last change: $Author: pb $ $Date: 2001-04-12 08:00:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,7 +252,6 @@ FASTBOOL SfxApplication::Initialize_Impl()
     // SV-Look
     Help::EnableContextHelp();
     Help::EnableExtHelp();
-    Help::EnableQuickHelp();
 #ifdef ENABLE_INIMANAGER//MUSTINI
     // falls der IniManager nicht schon durch CreateResManager erzeugt wurde
     if ( !pAppIniMgr )
