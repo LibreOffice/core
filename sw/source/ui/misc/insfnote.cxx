@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insfnote.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:47:16 $
+ *  last change: $Author: mba $ $Date: 2002-07-01 08:59:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,7 @@ void __EXPORT SwInsFootNoteDlg::Apply()
     }
     else
     {
+/*
         rSh.StartUndo( UIUNDO_INSERT_FOOTNOTE );
         rSh.InsertFootnote( aStr, aEndNoteBtn.IsChecked(), !bExtCharAvailable );
 
@@ -175,6 +176,7 @@ void __EXPORT SwInsFootNoteDlg::Apply()
             rSh.GotoFtnTxt();
         }
         rSh.EndUndo( UIUNDO_INSERT_FOOTNOTE );
+*/
     }
 
     bFootnote = aFtnBtn.IsChecked();
