@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-12 10:08:48 $
+ *  last change: $Author: rt $ $Date: 2002-09-13 14:35:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,17 +140,17 @@ String RID_STR_WRONGPASSWORD
     Text [ swedish ] = "Felaktigt lφsenord." ;
     Text [ dutch ] = "Wachtwoord is niet correct." ;
     Text [ spanish ] = "Contraseρa errσnea" ;
-    Text [ english_us ] = "Incorrect Password." ;
+    Text [ english_us ] = "Incorrect Password" ;
     Text[ chinese_simplified ] = "ε―†η ζ— ζ•γ€‚";
     Text[ russian ] = "Νεοπΰβθλόνϋι οΰπξλό.";
     Text[ polish ] = "Nieprawid³owe has³o.";
-    Text[ japanese ] = "γƒ‘γ‚Ήγƒ―γƒΌγƒ‰γζ­£γ—γγ‚γ‚γΎγ›γ‚“γ€‚";
+    Text[ japanese ] = "γƒ‘γ‚Ήγƒ―γƒΌγƒ‰γι–“ι•γ£γ¦γ„γΎγ™γ€‚";
     Text[ chinese_traditional ] = "ε―†ηΆΌη„΅ζ•γ€‚";
     Text[ arabic ] = "ίαγΙ ΗαΣΡ ΫνΡ ΥΝνΝΙ.";
     Text[ dutch ] = "Wachtwoord is niet correct.";
     Text[ chinese_simplified ] = "ε―†η ζ— ζ•γ€‚";
     Text[ greek ] = "Εσφαλμένος κωδικός πρόσβασης.";
-    Text[ korean ] = "ν¨μ¤μ›λ“κ°€ ν‹€λ¦½λ‹λ‹¤.";
+    Text[ korean ] = "μ•”νΈκ°€ μ³μ§€ μ•μµλ‹λ‹¤.";
     Text[ turkish ] = "Yanlύώ ώifre";
     Text[ catalan ] = "Contrasenya incorrecta.";
     Text[ thai ] = "ΰΈ£ΰΈ«ΰΈ±ΰΈªΰΈΰΉΰΈ²ΰΈ™ΰΉ„ΰΈ΅ΰΉΰΈ–ΰΈΉΰΈΰΈ•ΰΉ‰ΰΈ­ΰΈ‡";
