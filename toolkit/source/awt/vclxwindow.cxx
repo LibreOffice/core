@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 15:12:47 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:20:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1182,6 +1182,14 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {
+            case BASEPROPERTY_NATIVE_WIDGET_LOOK:
+            {
+                sal_Bool bEnable( sal_True );
+                OSL_VERIFY( Value >>= bEnable );
+                pWindow->EnableNativeWidget( bEnable );
+            }
+            break;
+
              case BASEPROPERTY_PLUGINPARENT:
              {
                 // correct data type?
@@ -1540,6 +1548,10 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {
+            case BASEPROPERTY_NATIVE_WIDGET_LOOK:
+                aProp <<= (sal_Bool) GetWindow()->IsNativeWidgetEnabled();
+            break;
+
             case BASEPROPERTY_ENABLED:
                 aProp <<= (sal_Bool) GetWindow()->IsEnabled();
             break;
