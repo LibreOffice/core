@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-25 15:12:21 $
+ *  last change: $Author: oj $ $Date: 2002-12-04 14:21:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -924,6 +924,7 @@ ToolBox RID_BRW_TABLEDESIGN_TOOLBOX
         {
             Identifier = ID_BROWSER_EDITDOC ;
             HelpId = SID_EDITDOC ;
+            Checkable = TRUE;
             Text = "Bearbeiten" ;
             Text [ ENGLISH ] = "Bearbeiten" ;
             Text[ english_us ] = "Edit";
