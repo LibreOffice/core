@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hjs $ $Date: 2001-01-11 12:25:24 $
+#   last change: $Author: vg $ $Date: 2001-01-12 11:27:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,7 +113,6 @@ LIB2OBJFILES=\
     $(SLO)$/inettype.obj \
     $(SLO)$/iniadrtk.obj \
     $(SLO)$/loginerr.obj \
-    $(SLO)$/staticmbmisc.obj \
     $(SLO)$/strcrypt.obj \
     $(SLO)$/strmadpt.obj
 
@@ -132,6 +131,7 @@ LIB3OBJFILES=\
     $(SLO)$/imap3.obj \
     $(SLO)$/iniman.obj \
     $(SLO)$/iniprop.obj \
+    $(SLO)$/lngmisc.obj \
     $(SLO)$/ownlist.obj \
     $(SLO)$/pver.obj \
     $(SLO)$/urihelper.obj \
@@ -146,6 +146,7 @@ EXCEPTIONSFILES=\
 # SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
 .IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
 LIB1OBJFILES+=$(SLO)$/staticmbmisc.obj
+LIB2OBJFILES+=$(SLO)$/staticmbmisc.obj
 .ENDIF
 
 UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
