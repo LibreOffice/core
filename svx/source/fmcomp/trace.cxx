@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trace.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:16 $
+ *  last change: $Author: fs $ $Date: 2001-03-15 07:58:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ Tracer::Tracer(const char* _pBlockDescription)
     sMessage += sIndent;
     sMessage += "=>\t";
     sMessage += m_sBlockDescription;
-    DBG_TRACE(sMessage);
+    DBG_TRACE(sMessage.GetBuffer());
 }
 
 //------------------------------------------------------------------------------
@@ -113,7 +113,7 @@ Tracer::~Tracer()
     sMessage += sIndent;
     sMessage += "<=\t";
     sMessage += m_sBlockDescription;
-    DBG_TRACE(sMessage);
+    DBG_TRACE(sMessage.GetBuffer());
 }
 
 //------------------------------------------------------------------------------
@@ -134,7 +134,7 @@ void Tracer::TraceString(const char* _pMessage)
     sMessage += m_sBlockDescription;
     sMessage += ": ";
     sMessage += _pMessage;
-    DBG_TRACE(sMessage);
+    DBG_TRACE(sMessage.GetBuffer());
 }
 
 //------------------------------------------------------------------------------
@@ -155,6 +155,6 @@ void Tracer::TraceString1StringParam(const char* _pMessage, const char* _pParam)
     sMessage += m_sBlockDescription;
     sMessage += ": ";
     sMessage += _pMessage;
-    DBG_TRACE1(sMessage, _pParam);
+    DBG_TRACE1(sMessage.GetBuffer(), _pParam);
 }
 #endif
