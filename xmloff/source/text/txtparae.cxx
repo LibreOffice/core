@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-11 16:28:14 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 14:31:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,6 +442,9 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                       nIgnoreProps < 2 && i != xPropStates.end();
                       i++ )
                 {
+                    if( i->mnIndex == -1 )
+                        continue;
+
                     switch( xPM->GetEntryContextId(i->mnIndex) )
                     {
                     case CTF_CHAR_STYLE_NAME:
@@ -632,6 +635,9 @@ OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
          nIgnoreProps < 2 && i != xPropStates.end();
          i++ )
     {
+        if( i->mnIndex )
+            continue;
+
         switch( xPM->GetEntryContextId(i->mnIndex) )
         {
         case CTF_CHAR_STYLE_NAME:
