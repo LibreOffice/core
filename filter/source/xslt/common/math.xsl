@@ -49,11 +49,11 @@
    All Rights Reserved.
 
    Contributor(s): _______________________________________
-   
+
  -->
 <!--
      xslt math lib by Wind Li
-Public Functions 
+Public Functions
     sin(x,rounding-factor=100)
     cos(x,rounding-factor=100)
     tan(x,rounding-factor=100)
@@ -71,7 +71,7 @@ Public Functions
     convert2degree(x,rounding-factor=100)
     convert2fd(x,rounding-factor=100)
  -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:draw="http://openoffice.org/2000/drawing" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:svg="http://www.w3.org/2000/svg" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:text="http://openoffice.org/2000/text" xmlns:style="http://openoffice.org/2000/style" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:office="http://openoffice.org/2000/office" exclude-result-prefixes="draw svg style office fo text">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:draw="http://openoffice.org/2000/drawing" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:text="http://openoffice.org/2000/text" xmlns:style="http://openoffice.org/2000/style" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:office="http://openoffice.org/2000/office" exclude-result-prefixes="draw svg style office fo text">
     <xsl:variable name="pi" select="3.1416"/>
     <xsl:template name="math-test">
         sin(34.8)
@@ -84,17 +84,17 @@ Public Functions
             <xsl:with-param name="x" select="34.8"/>
             <xsl:with-param name="rounding-factor" select="100000"/>
         </xsl:call-template>
-        atan(2.74) 
+        atan(2.74)
         <xsl:call-template name="atan">
             <xsl:with-param name="x" select="2.74"/>
             <xsl:with-param name="rounding-factor" select="100000"/>
         </xsl:call-template>
-        acos(0.5) 
+        acos(0.5)
         <xsl:call-template name="acos">
             <xsl:with-param name="x" select="0.5"/>
             <xsl:with-param name="rounding-factor" select="100000"/>
         </xsl:call-template>
-        asin(0.5) 
+        asin(0.5)
         <xsl:call-template name="asin">
             <xsl:with-param name="x" select="0.5"/>
             <xsl:with-param name="rounding-factor" select="100000"/>
@@ -353,7 +353,7 @@ Public Functions
         </xsl:choose>
     </xsl:template>
     <!-- public functions end -->
-    <!-- 
+    <!--
 Private functions:
 sin-private
 cos-private
@@ -579,7 +579,7 @@ Sqrt-GetOneDigit
             <xsl:otherwise>
                 <xsl:value-of select="round($rounding-factor * number($x) div 180 * $pi) div $rounding-factor"/>
             </xsl:otherwise>
-        </xsl:choose> 
+        </xsl:choose>
     </xsl:template>
     <xsl:template name="convert2degree">
         <xsl:param name="x" select="'0'"/>
@@ -594,7 +594,7 @@ Sqrt-GetOneDigit
             <xsl:otherwise>
                 <xsl:value-of select="round($rounding-factor * number($x) * 180 div $pi) div $rounding-factor"/>
             </xsl:otherwise>
-        </xsl:choose> 
+        </xsl:choose>
     </xsl:template>
     <xsl:template name="convert2fd">
         <xsl:param name="x" select="'0'"/>
@@ -609,7 +609,7 @@ Sqrt-GetOneDigit
             <xsl:otherwise>
                 <xsl:value-of select="round($rounding-factor * number($x) * 180 div $pi * 65535) div $rounding-factor"/>
             </xsl:otherwise>
-        </xsl:choose> 
+        </xsl:choose>
     </xsl:template>
 
 </xsl:stylesheet>
