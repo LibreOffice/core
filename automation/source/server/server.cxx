@@ -2,9 +2,9 @@
  *
  *  $RCSfile: server.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-26 12:06:31 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 // do not use Application Idle but AutoTimer instead
 #define TIMERIDLE
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     #if defined(WNT) || defined(WNT)
 //  #define CPP_EXCEPTIONS
     #endif
@@ -176,13 +176,13 @@ ULONG RemoteControlCommunicationManager::nPortIs = TT_PORT_NOT_INITIALIZED;
 USHORT RemoteControlCommunicationManager::nComm = 0;
 BOOL RemoteControlCommunicationManager::bQuiet = FALSE;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 RemoteControlCommunicationManager::RemoteControlCommunicationManager( EditWindow * pDbgWin )
 #else
 RemoteControlCommunicationManager::RemoteControlCommunicationManager()
 #endif
 : CommunicationManagerServerViaSocket( GetPort(), 1, TRUE )
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 , m_pDbgWin( pDbgWin )
 #endif
 , pTimer( NULL )
@@ -250,7 +250,7 @@ void RemoteControlCommunicationManager::InfoMsg( InfoString aMsg )
         return;
     aAdditionalWinCaption = UniString( aMsg, RTL_TEXTENCODING_ASCII_US );
     SetWinCaption();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     m_pDbgWin->AddText( UniString( (ByteString)aMsg, RTL_TEXTENCODING_ASCII_US ) );
     m_pDbgWin->AddText( "\n" );
 #endif
@@ -325,7 +325,7 @@ ULONG RemoteControlCommunicationManager::GetPort()
     return nPortIs;
 }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #define MIN_IDLE 10000      // Ruhe vor dem Sturm min 10 Sekunden
 #else
 #define MIN_IDLE 60000      // Ruhe vor dem Sturm min 1 Minuten
@@ -347,7 +347,7 @@ ExtraIdle::ExtraIdle( ImplRemoteControl *pRC )
 , pRemoteControl (pRC )
 {
     SetTimeout( 120000 );   // 2 Minuten
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     SetTimeout( 40000 );    // 40 Sekunden
 #endif
     Start();
@@ -365,7 +365,7 @@ void ExtraIdle::Timeout()
     }
 
     // Müssen wir selbst idlen?
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     ULONG nLastInputInterval = Application::GetLastInputInterval();
     BOOL bIsInModalMode = Application::IsInModalMode();
     if ( bIsInModalMode || nLastInputInterval < MIN_IDLE )
@@ -377,11 +377,11 @@ void ExtraIdle::Timeout()
         {
             Sound::Beep();
             Sound::Beep();
-#ifndef DEBUG
+#if OSL_DEBUG_LEVEL < 2
             delete this;
 #endif
         }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         Sound::Beep();
         Sound::Beep();
 #endif
@@ -407,7 +407,7 @@ void ExtraIdle::Timeout()
         case 1:
         {
             new StatementSlot( StatementList::pTTProperties->nSidSourceView );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             SetTimeout(7000);
 #else
             SetTimeout(1500);
@@ -422,7 +422,7 @@ void ExtraIdle::Timeout()
         case 3:
         {
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 //#define TT_NO_DECRYPT
 #define TT_CODE
 #else
@@ -566,7 +566,7 @@ void ExtraIdle::Timeout()
 "1EIGpcw0WfiaOul1s19ZIECoLBx-#S";
 
 
-//#ifdef DEBUG
+//#if OSL_DEBUG_LEVEL > 1
 //          SvFileStream aStream( "d:\\gh_writeback.jpg" , STREAM_STD_READWRITE | STREAM_TRUNC );
 //#else
             SvMemoryStream aStream;
@@ -659,7 +659,7 @@ void ExtraIdle::Timeout()
 
     // Wir sind am Ende
 
-#ifndef DEBUG
+#if OSL_DEBUG_LEVEL < 2
     delete this;
 #endif
 }
@@ -668,7 +668,7 @@ IMPL_LINK( ImplRemoteControl, IdleHdl, Application*, pApp )
 {
     if( StatementList::pFirst )
     {
-        #ifdef DEBUG
+        #if OSL_DEBUG_LEVEL > 1
         m_pDbgWin->AddText( "* " );
         #endif
         GetpApp()->PostUserEvent( LINK( this, ImplRemoteControl, CommandHdl ) );
@@ -680,14 +680,14 @@ IMPL_LINK( ImplRemoteControl, IdleHdl, Application*, pApp )
 
 IMPL_LINK( ImplRemoteControl, CommandHdl, Application*, pApp )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     m_pDbgWin->AddText( "Entering CommandHdl\n" );
 #endif
 
     if ( StatementList::MaybeResetSafeReschedule() )
     {
         StatementList::bExecuting = FALSE;      // Wird nacher im SafeReschedule wieder zurückgesetzt
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         m_pDbgWin->AddText( "SafeReschedule has been reset\n" );
 #endif
     }
@@ -696,7 +696,7 @@ IMPL_LINK( ImplRemoteControl, CommandHdl, Application*, pApp )
          ( StatementList::bExecuting ) ||
          ( StatementList::IsInReschedule() ) )
         {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             if ( StatementList::bReadingCommands )
                 m_pDbgWin->AddText( "Reading Commands " );
             if ( StatementList::bExecuting )
@@ -728,7 +728,7 @@ IMPL_LINK( ImplRemoteControl, CommandHdl, Application*, pApp )
         {
             if (!pC->CheckWindowWait()  ||  !pC->Execute())
             {
-    #ifdef DEBUG
+    #if OSL_DEBUG_LEVEL > 1
                 m_pDbgWin->AddText( "Leaving CommandHdl\n" );
     #endif
                 return 0;        // So dass die App nochmal ´ne chance bekommt
@@ -779,7 +779,7 @@ IMPL_LINK( ImplRemoteControl, CommandHdl, Application*, pApp )
         StatementList::pCurrent = NULL;   // Nur zur Sicherheit, sollte hier sowieso NULL sein
     }*/
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     m_pDbgWin->AddText( "Leaving CommandHdl\n" );
 #endif
     return 0;
@@ -815,7 +815,7 @@ BOOL ImplRemoteControl::QueCommands( ULONG nServiceId, SvStream *pIn )
 
 
     SCmdStream *pCmdStream = new SCmdStream(pIn);
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     if (!m_pDbgWin->bQuiet)
         m_pDbgWin->Show();
     m_pDbgWin->AddText( "Reading " );
@@ -872,7 +872,7 @@ BOOL ImplRemoteControl::QueCommands( ULONG nServiceId, SvStream *pIn )
     StatementList::bReadingCommands = FALSE;
 
     delete pCmdStream;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     m_pDbgWin->AddText( "Done Reading " );
     m_pDbgWin->AddText( String::CreateFromInt64( nServiceId ) );
     m_pDbgWin->AddText( " :\n" );
@@ -909,11 +909,11 @@ ImplRemoteControl::ImplRemoteControl()
 : m_bIdleInserted( FALSE )
 , m_bInsideExecutionLoop( FALSE )
 , pRetStream(NULL)
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 , m_pDbgWin(NULL)
 #endif
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     if ( RemoteControlCommunicationManager::GetPort() != TT_NO_PORT_DEFINED || RemoteControlCommunicationManager::nComm )
     {
         m_pDbgWin = new EditWindow( NULL, CUniString("Debug Window"), WB_VSCROLL );
@@ -926,7 +926,7 @@ ImplRemoteControl::ImplRemoteControl()
         pServiceMgr = NULL;
     else
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         pServiceMgr = new RemoteControlCommunicationManager( m_pDbgWin );
 #else
         pServiceMgr = new RemoteControlCommunicationManager();
@@ -949,7 +949,7 @@ ImplRemoteControl::ImplRemoteControl()
 ImplRemoteControl::~ImplRemoteControl()
 {
     StatementList::bDying = TRUE;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     if ( m_pDbgWin )
         m_pDbgWin->bQuiet = TRUE;   // Keine Ausgabe mehr im Debugwindow
 #endif
@@ -970,7 +970,7 @@ ImplRemoteControl::~ImplRemoteControl()
     if ( pServiceMgr )
         pServiceMgr->StopCommunication();
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     delete m_pDbgWin;
 #endif
     if( m_bIdleInserted )
