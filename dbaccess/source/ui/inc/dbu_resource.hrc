@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:59:28 $
+ *  last change: $Author: fs $ $Date: 2001-05-16 15:33:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,7 @@
 #define QUERY_SAVE_TABLE_EDIT_INDEXES   RID_QUERYBOX_START +  8
 #define RELATION_DESIGN_SAVEMODIFIED    RID_QUERYBOX_START +  9
 #define QUERY_NEED_TO_SAVE_FILTER       RID_QUERYBOX_START + 10
+#define QUERY_VIEW_DESIGN_SAVEMODIFIED  RID_QUERYBOX_START + 11
 
 //========================================================================
 // warning boxes
@@ -430,6 +431,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.44  2001/05/14 11:59:28  oj
+ *  #86744# some changes for entries and views
+ *
  *  Revision 1.43  2001/05/10 12:13:54  fs
  *  #86223# +STR_MISSING_TABLES_XDROP / +STR_BUTTON_TEXT_ALL / +QUERY_NEED_TO_SAVE_FILTER / +ERR_CANTDOTABLEACTION
  *
