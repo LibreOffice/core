@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pattern.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:31:17 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:27:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,11 @@
 
 #pragma hdrstop
 
-#ifndef _SVX_BACKGRND_HXX //autogen
-#include <svx/backgrnd.hxx>
-#endif
-
-
+//CHINA001 #ifndef _SVX_BACKGRND_HXX //autogen
+//CHINA001 #include <svx/backgrnd.hxx>
+//CHINA001 #endif
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 #include "swtypes.hxx"
 #include "pattern.hxx"
 #include "frmui.hrc"
@@ -84,7 +84,16 @@ SwBackgroundDlg::SwBackgroundDlg(Window* pParent, const SfxItemSet& rSet) :
 
 {
     SetText(SW_RESSTR(STR_FRMUI_PATTERN));
-    SetTabPage(SvxBackgroundTabPage::Create(this, rSet));
+    //CHINA001 SetTabPage(SvxBackgroundTabPage::Create(this, rSet));
+    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+    ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND );
+    if ( fnCreatePage )
+    {
+        SfxTabPage* pPage = (*fnCreatePage)( this, rSet );
+        SetTabPage(pPage);
+    }
+
 }
 
 /****************************************************************************

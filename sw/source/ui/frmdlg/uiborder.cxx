@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiborder.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:31:29 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,18 @@
 
 #pragma hdrstop
 
-#ifndef _SVX_BORDER_HXX //autogen
-#include <svx/border.hxx>
-#endif
-
+//CHINA001 #ifndef _SVX_BORDER_HXX //autogen
+//CHINA001 #include <svx/border.hxx>
+//CHINA001 #endif
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/svxids.hrc> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
+#include <svtools/itemset.hxx> //CHINA001
+#include <svx/flagsdef.hxx> //CHINA001
+#include <sfx2/tabdlg.hxx> //CHINA001
+#ifndef _SFXINTITEM_HXX //CHINA001
+#include <svtools/intitem.hxx> //CHINA001
+#endif //CHINA001
 
 #include "swtypes.hxx"
 #include "uiborder.hxx"
@@ -82,11 +90,24 @@ SwBorderDlg::SwBorderDlg(Window* pParent, SfxItemSet& rSet, USHORT nType) :
     SetText(SW_RESSTR(STR_FRMUI_BORDER));
 
     // TabPage erzeugen
-    SvxBorderTabPage* pPage = (SvxBorderTabPage*) SvxBorderTabPage::Create(this, rSet);
-    pPage->SetSWMode(nType);
-    if(SW_BORDER_MODE_TABLE == nType)
-        pPage->HideShadowControls();
-    SetTabPage(pPage);
+    //CHINA001 SvxBorderTabPage* pPage = (SvxBorderTabPage*) SvxBorderTabPage::Create(this, rSet);
+    //CHINA001 pPage->SetSWMode(nType);
+    //CHINA001 if(SW_BORDER_MODE_TABLE == nType)
+        //CHINA001 pPage->HideShadowControls();
+    //CHINA001 SetTabPage(pPage);
+    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+    ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER );
+    if ( fnCreatePage )
+    {
+        SfxTabPage* pPage = (*fnCreatePage)( this, rSet );
+        SfxAllItemSet aSet(*(rSet.GetPool()));
+        aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,nType));
+        if(SW_BORDER_MODE_TABLE == nType)
+            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_HIDESHADOWCTL));
+        pPage->PageCreated(aSet);
+        SetTabPage(pPage);
+    }
 }
 
 
