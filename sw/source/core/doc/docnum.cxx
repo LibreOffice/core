@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 15:46:59 $
+ *  last change: $Author: kz $ $Date: 2004-06-16 08:15:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1662,6 +1662,7 @@ BOOL SwDoc::GotoNextNum( SwPosition& rPos, BOOL bOverUpper,
 const SwNumRule *  SwDoc::SearchNumRule(SwPosition & rPos,
                                         BOOL bForward,
                                         BOOL bNum,
+                                        BOOL bOutline,
                                         int nNonEmptyAllowed)
 {
     const SwNumRule * pResult = NULL;

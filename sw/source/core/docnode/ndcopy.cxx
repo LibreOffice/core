@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndcopy.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 07:41:59 $
+ *  last change: $Author: kz $ $Date: 2004-06-16 08:16:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -853,7 +853,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
     BOOL bStartIsTxtNode = 0 != pSttNd;
 
     const SwNumRule * pNumRuleToPropagate =
-        pDoc->SearchNumRule(rPos, FALSE, TRUE, 0);
+        pDoc->SearchNumRule(rPos, FALSE, FALSE, TRUE, 0);
 
     // Block, damit aus diesem gesprungen werden kann !!
     do {

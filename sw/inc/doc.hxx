@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 15:20:31 $
+ *  last change: $Author: kz $ $Date: 2004-06-16 08:14:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1617,7 +1617,9 @@ public:
        \param rPos         position to start search
        \param bForward     - TRUE:  search forward
                            - FALSE: search backward
-       \param bNum         - TRUE:  search for non-outline numbering rule
+       \param bNum         - TRUE:  search for enumeration
+                           - FALSE: search for itemize
+       \param bOutline     - TRUE:  search for non-outline numbering rule
                            - FALSE: search for outline numbering rule
        \param nNonEmptyAllowed   number of non-empty paragraphs allowed between
                                  rPos and found paragraph
@@ -1625,6 +1627,7 @@ public:
     const SwNumRule * SearchNumRule(SwPosition & rPos,
                                     BOOL bForward,
                                     BOOL bNum,
+                                    BOOL bOutline,
                                     int nNonEmptyAllowed);
 
         // Absaetze ohne Numerierung, aber mit Einzuegen
