@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: hjs $ $Date: 2001-02-07 16:13:58 $
+#   last change: $Author: hjs $ $Date: 2001-02-07 19:32:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2090,8 +2090,12 @@ TARGETDEPS+=$(EXCEPTIONSTARGET)
 TARGETDEPS+=$(ADDOPTTARGET)
 .ENDIF
 
-.IF "$(ADDOPT_FLAG)$(EXCEPTIONSNOOPT_FLAG)$(EXCEPTIONS_FLAG)$(NOOPT_FLAG)"==""
-.TARGETS .SEQUENTIAL :- $(TARGETDEPS) ALLTAR
+#don't override .TARGETS when called with targets
+.IF "$(MAKETARGETS)$(TNR)$(ADDOPT_FLAG)$(EXCEPTIONSNOOPT_FLAG)$(EXCEPTIONS_FLAG)$(NOOPT_FLAG)"==""
+.IF "$(TARGETDEPS)"!=""
+#.TARGETS .SEQUENTIAL :- $(TARGETDEPS) ALLTAR
+.INIT .SEQUENTIAL : $(TARGETDEPS)
+.ENDIF
 .ENDIF
 
 .IF "$(NO_REC_RES)"==""
