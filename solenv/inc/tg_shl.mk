@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.87 $
+#   $Revision: 1.88 $
 #
-#   last change: $Author: hjs $ $Date: 2004-11-08 10:46:23 $
+#   last change: $Author: hr $ $Date: 2004-12-10 18:04:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -325,9 +325,9 @@ $(SHL$(TNR)TARGETN) : \
 .IF "$(SHL$(TNR)ADD_VERINFO)"!=""
      @-+echo \#include \"$(SHL$(TNR)ADD_VERINFO)\" >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
 .ELSE			# "$(SHL$(TNR)ADD_VERINFO)"!=""
-    @-+echo \#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-    @-+echo \#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-    @-+echo \#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc	
+    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL$(TNR)ADD_VERINFO)"!=""
     @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
     @-+echo \#define ORG_NAME	$(SHL$(TNR)TARGET)$(DLLPOST) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
