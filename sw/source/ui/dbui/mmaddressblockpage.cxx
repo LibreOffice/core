@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmaddressblockpage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:58:24 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:45:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -580,6 +580,7 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
     m_eType(eType),
     m_rConfigItem(rConfig)
 {
+    m_aDragED.SetStyle(m_aDragED.GetStyle() |WB_NOHIDESELECTION);
     if( eType != ADDRESSBLOCK  )
     {
         m_aFieldFT.Show();
@@ -1441,6 +1442,11 @@ void AddressMultiLineEdit::InsertNewEntryAtPosition( const String& rStr, ULONG n
 
     //restore the attributes
     SetText( GetAddress() );
+    //select the newly inserted/moved element
+    TextSelection aEntrySel(aInsertPos);
+    ExtTextView* pTextView = GetTextView();
+    pTextView->SetSelection(aEntrySel);
+    m_aSelectionLink.Call(this);
 }
 /*-- 25.06.2004 12:32:41---------------------------------------------------
 
