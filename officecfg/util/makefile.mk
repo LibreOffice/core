@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: dg $ $Date: 2002-05-16 17:50:31 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 15:33:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,12 +71,13 @@ TARGET=util
 # --- Targets ------------------------------------------------------
 
 $(MISC)$/$(TARGET)_delzip :
-    +-$(RM) $(BIN)$/registry{$(alllangext)}.zip	
-    +-$(RM) $(COMMON_OUTPUT)$/bin$/registry{$(alllangext)}.zip
+    +-$(RM) $(BIN)$/registry{$(alllangiso)}.zip	
+    +-$(RM) $(COMMON_OUTPUT)$/bin$/registry_{$(alllangiso)}.zip
 
-$(BIN)$/registry{$(alllangext)}.zip : $(MISC)$/$(TARGET)_delzip
-    +cd $(MISC)$/registry$/res$/$(iso_$(@:b:s/registry//)) && zip -ru ..$/..$/..$/..$/bin$/registry$(@:b:s/registry//).zip org/*
+$(BIN)$/registry_{$(alllangiso)}.zip : $(MISC)$/$(TARGET)_delzip
+    +cd $(MISC)$/registry$/res$/$(@:b:s/registry_//) && zip -ru ..$/..$/..$/..$/bin$/registry_$(@:b:s/registry_//).zip org/*
 
 ALLTAR: \
     $(MISC)$/$(TARGET)_delzip \
-    $(BIN)$/registry{$(alllangext)}.zip
+    $(BIN)$/registry_{$(alllangiso)}.zip
+
