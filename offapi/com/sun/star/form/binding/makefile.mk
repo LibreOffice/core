@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-16 11:08:12 $
+#   last change: $Author: vg $ $Date: 2005-03-23 11:43:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,6 +96,7 @@ IDLFILES=\
     BindableDatabaseTimeField.idl   \
     \
     IncompatibleTypesException.idl   \
+    InvalidBindingStateException.idl   \
 
 # ------------------------------------------------------------------
 
