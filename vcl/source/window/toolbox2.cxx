@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:02:07 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 16:53:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2246,4 +2246,25 @@ void ToolBox::SetHelpIdAsString( const XubString& rHelpIdString )
 const XubString& ToolBox::GetHelpIdAsString() const
 {
     return mpData->maHelpIdStr;
+}
+
+
+// -----------------------------------------------------------------------
+
+void ToolBox::Lock( BOOL bLock )
+{
+    ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
+    if( !pWrapper )
+        return;
+    if( mpData->mbIsLocked != bLock )
+    {
+        mpData->mbIsLocked = bLock;
+        if( !ImplIsFloatingMode() )
+        {
+            mbCalc = TRUE;
+            mbFormat = TRUE;
+            SetSizePixel( CalcWindowSizePixel(1) );
+            Invalidate();
+        }
+    }
 }
