@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:33:41 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:58:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2808,7 +2808,7 @@ uno::Any SwXFieldEnumeration::nextElement(void)
     if (!(nNextIndex < aItems.getLength()))
         throw NoSuchElementException();
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     uno::Reference< XTextField > *pItems = aItems.getArray();
 #endif
     uno::Reference< XTextField >  &rxFld = aItems.getArray()[ nNextIndex++ ];
