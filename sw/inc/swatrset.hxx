@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swatrset.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:06:46 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:04:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,11 +178,7 @@ class SwTblBoxNumFormat;
 class SwTblBoxFormula;
 class SwTblBoxValue;
 
-#if defined(MACOSX) && ( __GNUC__ < 3 )
-#define INLINE /* GrP revisit with gcc3 */
-#else
 #define INLINE inline
-#endif
 
 class SwAttrPool : public SfxItemPool
 {
