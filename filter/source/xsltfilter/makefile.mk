@@ -2,9 +2,9 @@
 # 
 #   $RCSfile: makefile.mk,v $ 
 # 
-#   $Revision: 1.8 $ 
+#   $Revision: 1.9 $ 
 #
-#   last change: $Author: obo $ $Date: 2005-01-25 15:13:22 $ 
+#   last change: $Author: obo $ $Date: 2005-03-15 09:09:27 $ 
 # 
 #   The Contents of this file are made available subject to the terms of 
 #   either of the following licenses 
@@ -93,7 +93,6 @@ SHL1STDLIBS= \
     $(SALLIB)
 
 .IF "$(SOLAR_JAVA)"!=""
-.IF "$(JDK)"!="gcj"
 
 #USE_UDK_EXTENDED_MANIFESTFILE=TRUE
 #USE_EXTENDED_MANIFESTFILE=TRUE
@@ -112,18 +111,12 @@ JARTARGET		= $(TARGET).jar
 # --- Files --------------------------------------------------------  
 JAVACLASSFILES=$(CLASSDIR)$/XSLTFilter.class  $(CLASSDIR)$/XSLTransformer.class     
 .ENDIF
-.ENDIF
     
 # --- Targets ------------------------------------------------------  
 .INCLUDE :  target.mk 
 .IF "$(SOLAR_JAVA)"!=""
-.IF "$(JDK)"=="gcj"
-all:
-    @echo This dir cannot be build with gcj because of ‘StreamSource’ not found in the declaration of the local variable ‘stylesource’
-.ELSE
 $(JAVACLASSFILES) : $(CLASSDIR)
 
 $(CLASSDIR) :
     $(MKDIR) $(CLASSDIR)
-.ENDIF
 .ENDIF
