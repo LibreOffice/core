@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.69 $
+#   $Revision: 1.70 $
 #
-#   last change: $Author: vg $ $Date: 2002-11-28 16:30:34 $
+#   last change: $Author: vg $ $Date: 2002-12-05 15:06:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,12 +70,19 @@ eval 'exec perl -S $0 ${1+"$@"}'
 use Config;
 use POSIX;
 use Cwd;
+use File::Path;
+#use Thread 'yield';    # Should be uncommented if you have Thread.pm (untested)
+
+use lib ("$ENV{SOLARENV}/bin/modules", "$ENV{COMMON_ENV_TOOLS}/modules");
+use Cws;
+use CvsModule;
+use GenInfoParser;
 
 #### script id #####
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.69 $ ';
+$id_str = ' $Revision: 1.70 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -127,6 +134,7 @@ $child = 0;
 $locked = 0; # lock for signal handler
 
 &get_options;
+&provide_consistency if (defined $ENV{CWS_WORK_STAMP});
 
 $deliver_commando = $ENV{DELIVER};
 $deliver_commando .= ' '. $dlv_switch if ($dlv_switch);
@@ -188,7 +196,7 @@ exit(0);
 # Get dependencies hash of the current and all parent projects
 #
 sub GetParentDeps {
-    my ($ParentsString, @DepsArray, $Prj, $parent);
+    my ($ParentsString, @DepsArray, $Prj, $parent, $prj_link);
     my $prj_dir = shift;
     my $deps_hash = shift;
     $ParentsString = &GetParentsString($prj_dir);
@@ -196,7 +204,15 @@ sub GetParentDeps {
     @UnresolvedParents = @DepsArray;
     $$deps_hash{$prj_dir} = [@DepsArray];
     while ($Prj = pop(@UnresolvedParents)) {
-        my (@DepsArray);
+        $prj_link = $Prj . '.lnk';
+        if (!-d $StandDir.$Prj) {
+            if (-d $StandDir.$prj_link) {
+                $Prj = $prj_link;
+            } elsif (defined $ENV{CWS_WORK_STAMP}) {
+                &checkout_module($Prj, 'image');
+            };
+        };
+        my @DepsArray;
         if (!($ParentsString = &GetParentsString($StandDir.$Prj))) {
             $DeadParents{$Prj}++;
             $$deps_hash{$Prj} = [];
@@ -239,6 +255,7 @@ sub BuildAll {
                     $build_from_opt = '';
                 };
             };
+            &ensure_clear_module($Prj) if ($incompartible);
             if ($build_since) {
                 if ($build_since ne $Prj) {
                     &RemoveFromDependencies($Prj, \%ParentDepsHash);
@@ -249,18 +266,22 @@ sub BuildAll {
                 next;
             };
             print $new_line;
-            print $echo.    "=============\n";
-            print $echo.    "Building project $Prj\n";
-            print $echo.    "=============\n";
-            $PrjDir = &CorrectPath($StandDir.$Prj);
-            &get_deps_hash($PrjDir, \%LocalDepsHash);
-            &BuildDependent(\%LocalDepsHash);
-            if ($cmd_file) {
-                print "$deliver_commando\n";
-            } else {
-                system ("$deliver_commando") if (!$show && ($Prj ne $CurrentPrj) && !$deliver);
+            my $module_type = &module_classify($Prj);
+
+            &print_annonce($Prj) if ($module_type eq 'lnk');
+            &print_annonce($Prj . '.incomp') if ($module_type eq 'ing');
+            if ($module_type eq 'mod') {
+                &print_annonce($Prj);
+                $PrjDir = &CorrectPath($StandDir.$Prj);
+                 &get_deps_hash($PrjDir, \%LocalDepsHash);
+                 &BuildDependent(\%LocalDepsHash);
+                 if ($cmd_file) {
+                     print "$deliver_commando\n";
+                 } else {
+                     system ("$deliver_commando") if (!$show && ($Prj ne $CurrentPrj) && !$deliver);
+                 };
+                 print $check_error_string;
             };
-            print $check_error_string;
             &RemoveFromDependencies($Prj, \%ParentDepsHash);
             $no_projects = 0;
         };
@@ -292,8 +313,8 @@ sub dmake_dir {
         chdir $BuildDir;
         cwd();
         $error_code = system ("$dmake");
-        &print_error("dmake - " . lc($!)) if ($error_code);
-        if ($? && ($? != -1) && (!$child)) {
+        print STDERR "dmake - " . lc($!) . "\n" if ($error_code);
+        if ($error_code && ($error_code != -1) && (!$child)) {
             &print_error("Error $? occurred while making $BuildDir");
         };
     };
@@ -580,10 +601,14 @@ sub CheckPlatform {
 sub RemoveFromDependencies {
     my ($ExclPrj, $i, $Prj, $Dependencies);
     $ExclPrj = shift;
+    my $ExclPrj_orig = '';
+    $ExclPrj_orig = $` if ($ExclPrj =~ /\.lnk$/o);
     $Dependencies = shift;
     foreach $Prj (keys %$Dependencies) {
         foreach $i (0 .. $#{$$Dependencies{$Prj}}) {
-            if (${$$Dependencies{$Prj}}[$i] eq $ExclPrj) {
+            if ((${$$Dependencies{$Prj}}[$i] eq $ExclPrj) ||
+                (${$$Dependencies{$Prj}}[$i] eq $ExclPrj_orig))
+            {
                 splice (@{$$Dependencies{$Prj}}, $i, 1);
                 $i = 0;
                 last;
@@ -703,7 +728,7 @@ sub print_error {
 
 sub usage {
     print STDERR "\nbuild\n";
-    print STDERR "Syntax:   build [--help|-all|-from|-from_opt|since prj_name|-file file_name|-PP processes|-dlv[_switch] dlvswitch] \n";
+    print STDERR "Syntax:   build [--help|-all|-from|-from_opt|since prj_name|-incomp_from prj_name|-file file_name|-PP processes|-dlv[_switch] dlvswitch] \n";
     print STDERR "Example:  build -from sfx2\n";
     print STDERR "              - build all projects including current one from sfx2\n";
     print STDERR "Example:  build -from_opt sfx2\n";
@@ -711,6 +736,7 @@ sub usage {
     print STDERR "Keys:     -all        - build all projects from very beginning till current one\n";
     print STDERR "      -from       - build all projects beginning from the specified till current one\n";
     print STDERR "      -from_opt   - build all projects beginning from the specified till current one (optimized version)\n";
+    print STDERR "      -incomp_from- build all projects incompartible beginning from the specified till current one (cws version)\n";
     print STDERR "      -since      - build all projects beginning from the specified till current one (optimized version, skips specified project)\n";
     print STDERR "      -show       - show what is going to be built\n";
     print STDERR "      -file       - generate command file file_name\n";
@@ -739,6 +765,8 @@ sub get_options {
         $arg =~ /^-from$/       and $BuildAllParents = 1
                                 and $build_from = shift @ARGV       and next;
         $arg =~ /^-from_opt$/   and $BuildAllParents = 1
+                                and $build_from_opt = shift @ARGV   and next;
+        $arg =~ /^-incomp_from$/and $BuildAllParents = 1 and $incompartible = 1
                                 and $build_from_opt = shift @ARGV   and next;
 
         $arg =~ /^-since$/      and $BuildAllParents = 1
@@ -801,12 +829,8 @@ sub store_error {
 # child handler (clears (or stores info about) the terminated child)
 #
 sub handle_dead_child {
-    if ($locked) {
-        while ($locked) {sleep(1)};
-        $locked = 1;
-    } else {
-        $locked = 1;
-    }
+    lock $locked;
+#    yield;      # Should be uncommented if you have Thread.pm (untested)
     my $pid = 0;
     foreach (keys %processes_hash) {
         if (($pid = waitpid($_, &WNOHANG)) > 0) {
@@ -814,7 +838,6 @@ sub handle_dead_child {
             &clear_from_child($pid);
         };
     };
-    $locked = 0;
 };
 
 sub clear_from_child {
@@ -917,6 +940,19 @@ sub build_multiprocessing {
                 };
                 next;
             };
+            my $module_type = &module_classify($Prj);
+
+            if ($module_type eq 'lnk') {
+                &print_annonce($Prj);
+                &RemoveFromDependencies($Prj, \%ParentDepsHash);
+                next;
+            };
+
+            if ($module_type eq 'img') {
+                &print_annonce($Prj . '.incomp');
+                &RemoveFromDependencies($Prj, \%ParentDepsHash);
+                next;
+            }
             push @build_queue, $Prj;
             $projects_deps_hash{$Prj} = {};
             &get_deps_hash(&CorrectPath($StandDir.$Prj), $projects_deps_hash{$Prj});
@@ -964,10 +1000,27 @@ sub build_actual_queue {
 #
 sub annonce_module {
     my $Prj = shift;
+    &print_annonce($Prj);
+    $module_annonced{$Prj}++;
+};
+
+sub print_annonce {
+    my $Prj = shift;
+    if ($Prj =~ /\.lnk$/o) {
+        print $echo.    "=============\n";
+        print $echo.    "Skipping link to $`\n";
+        print $echo.    "=============\n";
+        return;
+    };
+    if ($Prj =~ /\.incomp$/o) {
+        print $echo.    "=============\n";
+        print $echo.    "Skipping incomplete $`\n";
+        print $echo.    "=============\n";
+        return;
+    };
     print $echo.    "=============\n";
     print $echo.    "Building project $Prj\n";
     print $echo.    "=============\n";
-    $module_annonced{$Prj}++;
 };
 
 sub are_all_dependent {
@@ -980,3 +1033,187 @@ sub are_all_dependent {
     return '1';
 };
 
+#
+# Procedure checks out $prj_name/prj (concised image of a project)
+#
+sub checkout_module {
+    my $prj_name = shift;
+    my $image = shift;
+    my $cws = Cws->new();
+    $cws->child($ENV{CWS_WORK_STAMP});
+    $cws->master($ENV{WORK_STAMP});
+    my $cvs_module = &get_cvs_module($cws, $prj_name);
+    &print_error("Cannot get cvs_module!!") if (!$cvs_module);
+    my $parent_work_stamp = $ENV{WORK_STAMP};
+    $parent_work_stamp .= '_' . $ENV{UPDMINOR} if (defined $ENV{UPDMINOR});
+
+    $cvs_module->verbose(2);
+    $cvs_module->{MODULE} .= '/prj' if ($image);
+    #print cwd, "\n";
+    $cvs_module->checkout($StandDir, $parent_work_stamp, '');
+};
+
+#
+# Procedure defines if the local directory is a
+# complete module, an image or a link
+# return values: lnk link
+#                img incomplete (image)
+#                mod complete (module)
+#
+sub module_classify {
+    my $Prj = shift;
+    return 'lnk' if ($Prj =~ /\.lnk$/o);
+    opendir DIRHANDLE, $StandDir.$Prj;
+    my @dir_content = readdir(DIRHANDLE);
+    closedir(DIRHANDLE);
+    # Check if there only 2 entries: CVS & prj
+    # dirty, but must work
+    if (scalar(@dir_content) <= 4) {
+        foreach (@dir_content) {
+            return 'mod' if ( ($_ ne 'CVS') &&
+                            ($_ ne 'prj') &&
+                            (!(/^\.+$/o))   );
+        };
+        return 'img';
+    };
+    return 'mod';
+};
+
+#
+# This procedure provides consistency for cws
+# for optimized build (ie in case of from, from_opt
+# and since switches)
+#
+sub provide_consistency {
+    foreach $var_ref (\$build_from, \$build_from_opt, \$build_since) {
+        if ($$var_ref) {
+            return if (-d $StandDir.$$var_ref);
+            $$var_ref .= '.lnk' and return if (-d $StandDir.$$var_ref.'.lnk');
+            my $current_dir = cwd();
+            &checkout_module($$var_ref, 'image');
+            chdir $current_dir;
+            cwd();
+            return;
+        };
+    };
+};
+
+#
+# Retrieve CvsModule object for passed module.
+# (Heiner's proprietary :)
+#
+sub get_cvs_module
+{
+    my $cws    = shift;
+    my $module = shift;
+
+    my $cvs_module = CvsModule->new();
+    my ($method, $vcsid, $server, $repository) = get_cvs_root($cws, $module);
+
+    return undef if  !($method && $vcsid && $server && $repository);
+
+    $cvs_module->module($module);
+    $cvs_module->cvs_method($method);
+    $cvs_module->vcsid($vcsid);
+    $cvs_module->cvs_server($server);
+    $cvs_module->cvs_repository($repository);
+
+    return $cvs_module;
+};
+
+#
+# Find out which CVS server holds the module, returns
+# the elements of CVSROOT.
+# (Heiner's proprietary :)
+#
+sub get_cvs_root
+{
+    my $cws    = shift;
+    my $module = shift;
+
+    my $master = $cws->master();
+
+    my $vcsid = $ENV{VCSID};
+    if ( !$vcsid ) {
+        print_error("Can't determine VCSID. Please use setsolar.", 5);
+    }
+
+    my $workspace_lst = get_workspace_lst();
+    my $workspace_db = GenInfoParser->new();
+    my $success = $workspace_db->load_list($workspace_lst);
+    if ( !$success ) {
+        print_error("Can't load workspace list '$workspace_lst'.", 4);
+    }
+
+    my $key = "$master/drives/o:/projects/$module/scs";
+    my $cvsroot = $workspace_db->get_value($key);
+
+    if ( !$cvsroot  ) {
+        print_error("No such module '$module' for '$master' in workspace database.", 0);
+        return (undef, undef, undef, undef);
+    }
+
+    my ($dummy1, $method, $user_at_server, $repository) = split(/:/, $cvsroot);
+    my ($dummy2, $server) = split(/@/, $user_at_server);
+
+    if ( ! ($method && $server && $repository ) ) {
+        print_error("Can't determine CVS server for module '$module'.", 0);
+        return (undef, undef, undef, undef);
+    }
+
+    return ($method, $vcsid, $server, $repository);
+};
+
+#
+# Get the workspace list ('stand.lst'), either from 'localini'
+# or, if this is not possible, from 'globalini.
+# (Heiner's proprietary :)
+#
+sub get_workspace_lst
+{
+    my $home;
+    if ( $^O eq 'MSWin32' ) {
+        $home = $ENV{TEMP};
+    }
+    else {
+        $home = $ENV{HOME};
+    }
+    my $localini = "$home/localini";
+    if ( ! -f "$localini/stand.lst" ) {
+        my $globalini = get_globalini();
+        return "$globalini/stand.lst";
+    }
+    return "$localini/stand.lst";
+}
+
+#
+# Procedure clears up module for incompartible build
+#
+sub ensure_clear_module {
+    my $Prj = shift;
+    my $module_type = &module_classify($Prj);
+    &clear_module and return if ($module_type eq 'mod');
+    if ($module_type eq 'lnk') {
+        $Prj =~ /\.lnk$/;
+        # In case of windows we need a workaround
+        # for handling links, so I move
+        # prj.lnk to prj.oldlink
+        if ($ENV{GUI} eq 'WNT') {
+            rename $StandDir.$Prj, $StandDir . $` . '.oldlink';
+        } else {
+            unlink $StandDir.$Prj;
+        };
+        $Prj = $`;
+    } else {
+        rmtree($StandDir.$Prj, 1, 1);
+    };
+    checkout_module($Prj);
+};
+
+#
+# Procedure removes output tree from the module (without common trees)
+#
+sub clear_module {
+    my $Prj = shift;
+    rmtree($StandDir.$Prj.'/'. $ENV{INPATH}, 1, 1);
+};
