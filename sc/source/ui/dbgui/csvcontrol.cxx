@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvcontrol.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-11 15:39:46 $
+ *  last change: $Author: dr $ $Date: 2002-08-01 12:48:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,9 +94,9 @@ ScCsvLayoutData::ScCsvLayoutData() :
 {
 }
 
-sal_uInt32 ScCsvLayoutData::GetDiff( const ScCsvLayoutData& rData ) const
+ScCsvDiff ScCsvLayoutData::GetDiff( const ScCsvLayoutData& rData ) const
 {
-    sal_uInt32 nRet = 0;
+    ScCsvDiff nRet = CSV_DIFF_EQUAL;
     if( mnPosCount != rData.mnPosCount )        nRet |= CSV_DIFF_POSCOUNT;
     if( mnPosOffset != rData.mnPosOffset )      nRet |= CSV_DIFF_POSOFFSET;
     if( mnOffsetX != rData.mnOffsetX )          nRet |= CSV_DIFF_OFFSETX;
@@ -135,14 +135,14 @@ ScCsvControl::ScCsvControl( Window* pParent, const ScCsvLayoutData& rData, const
 }
 
 
-// drawing --------------------------------------------------------------------
+// repaint helpers ------------------------------------------------------------
 
 void ScCsvControl::Repaint( bool bInvalidate )
 {
     if( bInvalidate )
         InvalidateGfx();
     if( !IsNoRepaint() )
-        CommitRequest( CSVREQ_REPAINT );
+        Execute( CSVCMD_REPAINT );
 }
 
 void ScCsvControl::DisableRepaint()
@@ -157,28 +157,15 @@ void ScCsvControl::EnableRepaint( bool bInvalidate )
     Repaint( bInvalidate );
 }
 
-void ScCsvControl::ImplInvertRect( OutputDevice& rOutDev, const Rectangle& rRect )
+
+// command handling -----------------------------------------------------------
+
+void ScCsvControl::Execute( ScCsvCmdType eType, sal_Int32 nParam1, sal_Int32 nParam2 )
 {
-    RasterOp eOldOp = rOutDev.GetRasterOp();
-    rOutDev.SetRasterOp( ROP_INVERT );
-    rOutDev.DrawRect( rRect );
-    rOutDev.SetRasterOp( eOldOp );
+    maCmd.Set( eType, nParam1, nParam2 );
+    maCmdHdl.Call( this );
 }
 
-
-// event handling -------------------------------------------------------------
-
-void ScCsvControl::CommitRequest( ScCsvRequestType eType, sal_Int32 nData )
-{
-    maRequest.Set( eType, nData );
-    maRequestHdl.Call( this );
-}
-
-void ScCsvControl::CommitEvent( ScCsvEventType eType, sal_Int32 nPos, sal_Int32 nOldPos )
-{
-    maEvent.Set( eType, nPos, nOldPos );
-    maEventHdl.Call( this );
-}
 
 // layout helpers -------------------------------------------------------------
 
@@ -243,7 +230,15 @@ sal_Int32 ScCsvControl::GetY( sal_Int32 nLine ) const
 }
 
 
-// keyboard helpers -----------------------------------------------------------
+// static helpers -------------------------------------------------------------
+
+void ScCsvControl::ImplInvertRect( OutputDevice& rOutDev, const Rectangle& rRect )
+{
+    RasterOp eOldOp = rOutDev.GetRasterOp();
+    rOutDev.SetRasterOp( ROP_INVERT );
+    rOutDev.DrawRect( rRect );
+    rOutDev.SetRasterOp( eOldOp );
+}
 
 ScMoveMode ScCsvControl::GetHorzDirection( sal_uInt16 nCode, bool bHomeEnd )
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-05 15:42:20 $
+ *  last change: $Author: dr $ $Date: 2002-08-01 12:47:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,11 +228,12 @@ private:
     void                        UpdateVertical( bool bSwitchToFromUnicode = false );
 
                                 DECL_LINK( CharSetHdl, SvxTextEncodingBox* );
+                                DECL_LINK( FirstRowHdl, NumericField* );
                                 DECL_LINK( RbSepFixHdl, RadioButton* );
                                 DECL_LINK( SeparatorHdl, Control* );
                                 DECL_LINK( LbColTypeHdl, ListBox* );
                                 DECL_LINK( UpdateTextHdl, ScCsvTableBox* );
-                                DECL_LINK( ColSelectHdl, ScCsvTableBox* );
+                                DECL_LINK( ColTypeHdl, ScCsvTableBox* );
 };
 
 

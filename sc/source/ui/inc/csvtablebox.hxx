@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvtablebox.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-11 15:38:28 $
+ *  last change: $Author: dr $ $Date: 2002-08-01 12:47:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,12 +109,11 @@ private:
     ScrollBarBox                maScrollBox;        /// For the bottom right edge.
 
     Link                        maUpdateTextHdl;    /// Updates all cell texts.
-    Link                        maColSelectHdl;     /// Handler for changed column selection.
+    Link                        maColTypeHdl;       /// Handler for exporting the column type.
 
-    ScCsvColTypeVec             maFixColTypes;      /// Column data types in fixed width mode.
-    ScCsvColTypeVec             maSepColTypes;      /// Column data types in separators mode.
+    ScCsvColStateVec            maFixColStates;     /// Column states in fixed width mode.
+    ScCsvColStateVec            maSepColStates;     /// Column states in separators mode.
 
-    sal_Int32                   mnSelColType;       /// Cached data type of selected columns.
     sal_Int32                   mnFixedWidth;       /// Cached total width for fixed width mode.
 
     bool                        mbFixedMode;        /// false = Separators, true = Fixed width.
@@ -134,9 +133,9 @@ public:
     /** Returns the handler for "update cell texts" requests. */
     inline const Link&          GetUpdateTextHdl() const { return maUpdateTextHdl; }
     /** Sets a new handler for "column selection changed" events. */
-    inline void                 SetColSelectHdl( const Link& rHdl ) { maColSelectHdl = rHdl; }
+    inline void                 SetColTypeHdl( const Link& rHdl ) { maColTypeHdl = rHdl; }
     /** Returns the handler for "column selection changed" events. */
-    inline const Link&          GetColSelectHdl() const { return maColSelectHdl; }
+    inline const Link&          GetColTypeHdl() const { return maColTypeHdl; }
 
     // control handling -------------------------------------------------------
 
@@ -145,8 +144,8 @@ public:
     /** Sets the control to fixed width mode. */
     void                        SetFixedWidthMode();
 
-    /** Returns the data type of the selected columns (or -1, if different types are selected). */
-    inline sal_Int32            GetSelColumnType() const { return mnSelColType; }
+    /** Returns the data type of the selected columns. */
+    inline sal_Int32            GetSelColumnType() const { return maGrid.GetSelColumnType(); }
 
     /** Fills all cells of all lines with the passed texts (Unicode strings). */
     void                        SetUniStrings(
@@ -189,9 +188,7 @@ private:
 
     // event handling ---------------------------------------------------------
 
-                                DECL_LINK( CsvEventHdl, ScCsvControl* );
-                                DECL_LINK( CsvRequestHdl, ScCsvControl* );
-
+                                DECL_LINK( CsvCmdHdl, ScCsvControl* );
                                 DECL_LINK( ScrollHdl, ScrollBar* );
                                 DECL_LINK( ScrollEndHdl, ScrollBar* );
 };

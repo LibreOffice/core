@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvgrid.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-11 15:38:26 $
+ *  last change: $Author: dr $ $Date: 2002-08-01 12:47:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,45 @@ class ScAsciiOptions;
 
 // ============================================================================
 
+const sal_uInt8 CSV_COLFLAG_NONE    = 0x00;         /// Nothing set.
+const sal_uInt8 CSV_COLFLAG_SELECT  = 0x01;         /// Column is selected.
+
+
+// ----------------------------------------------------------------------------
+
+/** This struct contains the state of one table column. */
+struct ScCsvColState
+{
+    sal_Int32                   mnType;             /// Data type.
+    sal_uInt8                   mnFlags;            /// Flags (i.e. selection state).
+
+    inline explicit             ScCsvColState(
+                                        sal_Int32 nType = CSV_TYPE_DEFAULT,
+                                        sal_uInt8 nFlags = CSV_COLFLAG_NONE ) :
+                                    mnType( nType ), mnFlags( nFlags ) {}
+
+    inline bool                 IsSelected() const;
+    inline void                 Select( bool bSel );
+};
+
+inline bool ScCsvColState::IsSelected() const
+{
+    return (mnFlags & CSV_COLFLAG_SELECT) != 0;
+}
+
+inline void ScCsvColState::Select( bool bSel )
+{
+    if( bSel ) mnFlags |= CSV_COLFLAG_SELECT; else mnFlags &= ~CSV_COLFLAG_SELECT;
+}
+
+
+// ----------------------------------------------------------------------------
+
+typedef ::std::vector< ScCsvColState > ScCsvColStateVec;
+
+
+// ============================================================================
+
 /** A data grid control for the CSV import dialog. The design of this control
     simulates a Calc spreadsheet with row and column headers. */
 class ScCsvGrid : public ScCsvControl, public SfxListener
@@ -101,7 +140,6 @@ class ScCsvGrid : public ScCsvControl, public SfxListener
 private:
     typedef ::std::auto_ptr< ScEditEngineDefaulter >    ScEditEnginePtr;
 
-private:
     VirtualDevice               maBackgrDev;        /// Grid background, headers, cell texts.
     VirtualDevice               maGridDev;          /// Data grid with selection and cursor.
     PopupMenu                   maPopup;            /// Popup menu for column types.
@@ -109,6 +147,7 @@ private:
     ::svx::ColorConfig&         mrColorConfig;      /// Application color configuration.
     Color                       maBackColor;        /// Cell background color.
     Color                       maGridColor;        /// Table grid color.
+    Color                       maGridPBColor;      /// Grid color for "first imported line" delimiter.
     Color                       maAppBackColor;     /// Background color for unused area.
     Color                       maTextColor;        /// Text color for headers and data.
     Color                       maHeaderBackColor;  /// Background color for headers.
@@ -121,11 +160,11 @@ private:
     Size                        maWinSize;          /// Size of the control.
 
     ScCsvSplits                 maSplits;           /// Vector with split positions.
-    ScCsvColTypeVec             maColTypes;         /// Data type of each column.
-    ScCsvColFlagsVec            maColFlags;         /// Flags for each column.
+    ScCsvColStateVec            maColStates;        /// State of each column.
     ScCsvStringVec              maTypeNames;        /// UI names of data types.
     ScCsvStringVecVec           maTexts;            /// 2D-vector for cell texts.
 
+    sal_Int32                   mnFirstImpLine;     /// First imported line (0-based).
     sal_uInt32                  mnRecentSelCol;     /// Index of most recently selected column.
     sal_uInt32                  mnMTCurrCol;        /// Current column of mouse tracking.
     bool                        mbMTSelecting;      /// Mouse tracking: true = select, false = deselect.
@@ -146,6 +185,8 @@ public:
     void                        UpdateOffsetX();
     /** Apply current layout data to the grid control. */
     void                        ApplyLayout( const ScCsvLayoutData& rOldData );
+    /** Sets the number of the first imported line (for visual feedback). nLine is 0-based! */
+    void                        SetFirstImportedLine( sal_Int32 nLine );
 
     /** Finds a column position nearest to nPos which does not cause scrolling the visible area. */
     sal_Int32                   GetNoScrollCol( sal_Int32 nPos ) const;
@@ -154,17 +195,17 @@ public:
     void                        InsertSplit( sal_Int32 nPos );
     /** Removes a split. */
     void                        RemoveSplit( sal_Int32 nPos );
-    /** Moves a split from nPos to nNewPos. */
+    /** Inserts a new or removes an existing split. */
     void                        MoveSplit( sal_Int32 nPos, sal_Int32 nNewPos );
     /** Removes all splits. */
     void                        RemoveAllSplits();
     /** Removes all splits and inserts the splits from rSplits. */
     void                        SetSplits( const ScCsvSplits& rSplits );
 
-    /** Returns the vector with the data types of all columns. */
-    inline const ScCsvColTypeVec& GetColumnTypes() const { return maColTypes; }
-    /** Sets all column data types to the values in the passed vector. */
-    void                        SetColumnTypes( const ScCsvColTypeVec& rColTypes );
+    /** Returns the vector with the states of all columns. */
+    inline const ScCsvColStateVec& GetColumnStates() const { return maColStates; }
+    /** Sets all column states to the values in the passed vector. */
+    void                        SetColumnStates( const ScCsvColStateVec& rColStates );
     /** Returns the data type of the selected columns (or -1, if different types are selected). */
     sal_Int32                   GetSelColumnType() const;
     /** Changes the data type of all selected columns. */
@@ -217,7 +258,7 @@ private:
     void                        ImplClearSplits();
 
     /** Returns the number of columns. */
-    inline sal_uInt32           GetColumnCount() const { return maColTypes.size(); }
+    inline sal_uInt32           GetColumnCount() const { return maColStates.size(); }
     /** Returns start position of the column with the specified index. */
     inline sal_Int32            GetColumnPos( sal_uInt32 nColIndex ) const { return maSplits[ nColIndex ]; }
     /** Returns the character width of the column with the specified index. */
@@ -238,6 +279,8 @@ private:
     sal_Int32                   GetColumnX( sal_uInt32 nColIndex ) const;
     /** Returns column index from output coordinate. */
     sal_uInt32                  GetColumnFromX( sal_Int32 nX ) const;
+    /** Returns column index from output coordinate, jumps to previous/next column, if nX is out of bounds. */
+    sal_uInt32                  GetTrackingColumnFromX( sal_Int32 nX ) const;
 
     /** Returns the data type of the specified column. */
     sal_Int32                   GetColumnType( sal_uInt32 nColIndex ) const;
@@ -279,7 +322,7 @@ private:
     /** Selects or deselects the specified column range. */
     void                        SelectRange( sal_uInt32 nColIndex1, sal_uInt32 nColIndex2, bool bSelect = true );
     /** Selects all columns. */
-    void                        SelectAll();
+    inline void                 SelectAll() { SelectRange( 0, GetColumnCount() - 1 ); }
 
     /** Executes selection action for a specific column. */
     void                        DoSelectAction( sal_uInt32 nColIndex, sal_uInt16 nModifier );
@@ -299,6 +342,10 @@ private:
     /** Draws the header of the specified column to the specified output device. */
     void                        ImplDrawColumnHeader( OutputDevice& rOutDev, sal_uInt32 nColIndex, Color aFillColor );
 
+    /** Draws the text at the specified position to maBackgrDev. */
+    void                        ImplDrawCellText( const Point& rPos, const String& rText );
+    /** Draws the "first imported line" separator to maBackgrDev (or erases, if bSet is false). */
+    void                        ImplDrawFirstLineSep( bool bSet );
     /** Draws the column with index nColIndex to maBackgrDev. */
     void                        ImplDrawColumnBackgr( sal_uInt32 nColIndex );
     /** Draws the row headers column to maBackgrDev. */
@@ -317,10 +364,8 @@ private:
     /** Optimized drawing: Scrolls horizontally and redraws only missing parts. */
     void                        ImplDrawHorzScrolled( sal_Int32 nOldPos );
 
-    /** Draws the cursor bar to the specified position to maGridDev. */
-    void                        ImplDrawCursor( sal_Int32 nPos );
-    /** Erases the cursor bar from the specified position from maGridDev. */
-    inline void                 ImplEraseCursor( sal_Int32 nPos ) { ImplDrawCursor( nPos ); }
+    /** Inverts the cursor bar at the specified position in maGridDev. */
+    void                        ImplInvertCursor( sal_Int32 nPos );
 
     /** Draws directly tracking rectangle to the column with the specified index. */
     void                        ImplDrawTrackingRect( sal_uInt32 nColIndex );

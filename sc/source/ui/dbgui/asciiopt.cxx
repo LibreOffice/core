@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: er $ $Date: 2002-07-29 15:14:54 $
+ *  last change: $Author: dr $ $Date: 2002-08-01 12:48:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -610,7 +610,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
             if(!pDatStream->ReadLine( aPreviewLine[j] ))
             {
                 bVFlag=TRUE;
-                maTableBox.CommitRequest( CSVREQ_LINECOUNT, j );
+                maTableBox.Execute( CSVCMD_SETLINECOUNT, j );
                 break;
             }
         }
@@ -655,6 +655,8 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
         nStreamPosUnicode = pDatStream->Tell();
     }
 
+    aNfRow.SetModifyHdl( LINK( this, ScImportAsciiDlg, FirstRowHdl ) );
+
     // *** Separator characters ***
     lcl_FillCombo( aCbTextSep, aTextSepList, 34 );      // Default "
 
@@ -692,11 +694,10 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     // *** table box preview ***
     maTableBox.SetUpdateTextHdl( LINK( this, ScImportAsciiDlg, UpdateTextHdl ) );
     maTableBox.InitTypes( aLbType );
-    maTableBox.SetColSelectHdl( LINK( this, ScImportAsciiDlg, ColSelectHdl ) );
+    maTableBox.SetColTypeHdl( LINK( this, ScImportAsciiDlg, ColTypeHdl ) );
 
     if(!bVFlag)
-        maTableBox.CommitRequest( CSVREQ_LINECOUNT, ASCIIDLG_MAXROWS );
-
+        maTableBox.Execute( CSVCMD_SETLINECOUNT, ASCIIDLG_MAXROWS );
 
     aRbSeparated.SetClickHdl( LINK( this, ScImportAsciiDlg, RbSepFixHdl ) );
     aRbFixed.SetClickHdl( LINK( this, ScImportAsciiDlg, RbSepFixHdl ) );
@@ -704,7 +705,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     SetupSeparatorCtrls();
     RbSepFixHdl( &aRbFixed );
 
-    UpdateTextHdl( &maTableBox );
+    maTableBox.Execute( CSVCMD_NEWCELLTEXTS );
 }
 
 
@@ -762,7 +763,7 @@ void ScImportAsciiDlg::SetupSeparatorCtrls()
     aCkbComma.Enable( bEnable );
     aCkbSpace.Enable( bEnable );
     aCkbOther.Enable( bEnable );
-    aEdOther.Enable( bEnable );
+    aEdOther.Enable( bEnable && aCkbOther.IsChecked() );
     aCkbAsOnce.Enable( bEnable );
     aFtTextSep.Enable( bEnable );
     aCbTextSep.Enable( bEnable );
@@ -773,13 +774,12 @@ void ScImportAsciiDlg::UpdateVertical( bool bSwitchToFromUnicode )
     if ( bSwitchToFromUnicode )
     {
         bVFlag = FALSE;
-        maTableBox.CommitRequest( CSVREQ_LINECOUNT, ASCIIDLG_MAXROWS );
+        maTableBox.Execute( CSVCMD_SETLINECOUNT, ASCIIDLG_MAXROWS );
     }
     ULONG nNew = 0;
     if(!bVFlag)
     {
         // dragging the scrollbar -> read entire file
-        SetPointer( Pointer( POINTER_WAIT ) );
         bVFlag=TRUE;
         ULONG nRows = 0;
 
@@ -814,8 +814,7 @@ void ScImportAsciiDlg::UpdateVertical( bool bSwitchToFromUnicode )
             nStreamPos = pDatStream->Tell();
         }
 
-        maTableBox.CommitRequest( CSVREQ_LINECOUNT, nRows );
-        SetPointer( Pointer( POINTER_ARROW ) );
+        maTableBox.Execute( CSVCMD_SETLINECOUNT, nRows );
     }
 
     nNew = maTableBox.GetFirstVisLine();
@@ -841,7 +840,7 @@ void ScImportAsciiDlg::UpdateVertical( bool bSwitchToFromUnicode )
                  !bVFlag )
             {
                 bVFlag = TRUE;
-                maTableBox.CommitRequest( CSVREQ_LINECOUNT, nArrayEndPosUnicode );
+                maTableBox.Execute( CSVCMD_SETLINECOUNT, nArrayEndPosUnicode );
             }
         }
         nStreamPosUnicode = pDatStream->Tell();
@@ -862,7 +861,7 @@ void ScImportAsciiDlg::UpdateVertical( bool bSwitchToFromUnicode )
             if( !pDatStream->ReadLine( aPreviewLine[j] ) && !bVFlag )
             {
                 bVFlag = TRUE;
-                maTableBox.CommitRequest( CSVREQ_LINECOUNT, nArrayEndPos );
+                maTableBox.Execute( CSVCMD_SETLINECOUNT, nArrayEndPos );
             }
         }
         nStreamPos = pDatStream->Tell();
@@ -878,12 +877,13 @@ IMPL_LINK( ScImportAsciiDlg, RbSepFixHdl, RadioButton*, pButton )
 
     if( (pButton == &aRbFixed) || (pButton == &aRbSeparated) )
     {
+        SetPointer( Pointer( POINTER_WAIT ) );
         if( aRbFixed.IsChecked() )
             maTableBox.SetFixedWidthMode();
         else
             maTableBox.SetSeparatorsMode();
+        SetPointer( Pointer( POINTER_ARROW ) );
 
-        aLbType.SelectEntryPos( 0 );
         SetupSeparatorCtrls();
     }
     return 0;
@@ -894,8 +894,10 @@ IMPL_LINK( ScImportAsciiDlg, SeparatorHdl, Control*, pCtrl )
     DBG_ASSERT( pCtrl, "ScImportAsciiDlg::SeparatorHdl - missing sender" );
     DBG_ASSERT( !aRbFixed.IsChecked(), "ScImportAsciiDlg::SeparatorHdl - not allowed in fixed width" );
 
-    aCkbOther.Check( aEdOther.GetText().Len() > 0 );
-    maTableBox.CommitRequest( CSVREQ_NEWCELLTEXTS );
+    aEdOther.Enable( aCkbOther.IsChecked() );
+    if( (pCtrl == static_cast< Control* >( &aCkbOther )) && aEdOther.IsEnabled() )
+        aEdOther.GrabFocus();
+    maTableBox.Execute( CSVCMD_NEWCELLTEXTS );
     return 0;
 }
 
@@ -905,6 +907,7 @@ IMPL_LINK( ScImportAsciiDlg, CharSetHdl, SvxTextEncodingBox*, pCharSetBox )
 
     if( (pCharSetBox == &aLbCharSet) && (pCharSetBox->GetSelectEntryCount() == 1) )
     {
+        SetPointer( Pointer( POINTER_WAIT ) );
         CharSet eOldCharSet = meCharSet;
         SetSelectedCharSet();
         if( (meCharSet == RTL_TEXTENCODING_UNICODE) != (eOldCharSet == RTL_TEXTENCODING_UNICODE) )
@@ -913,9 +916,16 @@ IMPL_LINK( ScImportAsciiDlg, CharSetHdl, SvxTextEncodingBox*, pCharSetBox )
             if( pDatStream )
                 UpdateVertical( TRUE );
         }
-
-        maTableBox.CommitRequest( CSVREQ_NEWCELLTEXTS );
+        maTableBox.Execute( CSVCMD_NEWCELLTEXTS );
+        SetPointer( Pointer( POINTER_ARROW ) );
     }
+    return 0;
+}
+
+IMPL_LINK( ScImportAsciiDlg, FirstRowHdl, NumericField*, pNumField )
+{
+    DBG_ASSERT( pNumField, "ScImportAsciiDlg::FirstRowHdl - missing sender" );
+    maTableBox.Execute( CSVCMD_SETFIRSTIMPORTLINE, pNumField->GetValue() - 1 );
     return 0;
 }
 
@@ -923,7 +933,7 @@ IMPL_LINK( ScImportAsciiDlg, LbColTypeHdl, ListBox*, pListBox )
 {
     DBG_ASSERT( pListBox, "ScImportAsciiDlg::LbColTypeHdl - missing sender" );
     if( pListBox == &aLbType )
-        maTableBox.CommitRequest( CSVREQ_COLUMNTYPE, pListBox->GetSelectEntryPos() );
+        maTableBox.Execute( CSVCMD_SETCOLUMNTYPE, pListBox->GetSelectEntryPos() );
     return 0;
 }
 
@@ -948,24 +958,26 @@ IMPL_LINK( ScImportAsciiDlg, UpdateTextHdl, ScCsvTableBox*, pTableBox )
     return 0;
 }
 
-IMPL_LINK( ScImportAsciiDlg, ColSelectHdl, ScCsvTableBox*, pTableBox )
+IMPL_LINK( ScImportAsciiDlg, ColTypeHdl, ScCsvTableBox*, pTableBox )
 {
-    DBG_ASSERT( pTableBox, "ScImportAsciiDlg::ColSelectHdl - missing sender" );
-    Link aSelHdl = aLbType.GetSelectHdl();
-    aLbType.SetSelectHdl( Link() );
+    DBG_ASSERT( pTableBox, "ScImportAsciiDlg::ColTypeHdl - missing sender" );
 
     sal_Int32 nType = pTableBox->GetSelColumnType();
+    sal_Int32 nTypeCount = aLbType.GetEntryCount();
     bool bEmpty = (nType == CSV_TYPE_MULTI);
-    bool bEnable = ((0 <= nType) && (nType < aLbType.GetEntryCount())) || bEmpty;
+    bool bEnable = ((0 <= nType) && (nType < nTypeCount)) || bEmpty;
 
     aFtType.Enable( bEnable );
     aLbType.Enable( bEnable );
+
+    Link aSelHdl = aLbType.GetSelectHdl();
+    aLbType.SetSelectHdl( Link() );
     if( bEmpty )
         aLbType.SetNoSelection();
     else if( bEnable )
         aLbType.SelectEntryPos( static_cast< sal_uInt16 >( nType ) );
-
     aLbType.SetSelectHdl( aSelHdl );
+
     return 0;
 }
 

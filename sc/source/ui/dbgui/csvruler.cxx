@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvruler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-12 09:05:16 $
+ *  last change: $Author: dr $ $Date: 2002-08-01 12:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ void ScCsvRuler::InitSizeData()
 
 void ScCsvRuler::ApplyLayout( const ScCsvLayoutData& rOldData )
 {
-    sal_uInt32 nDiff = GetLayoutData().GetDiff( rOldData );
+    ScCsvDiff nDiff = GetLayoutData().GetDiff( rOldData );
 
     if( nDiff & (CSV_DIFF_HORIZONTAL | CSV_DIFF_RULERCURSOR) )
     {
@@ -130,8 +130,8 @@ void ScCsvRuler::ApplyLayout( const ScCsvLayoutData& rOldData )
         }
         if( nDiff & CSV_DIFF_RULERCURSOR )
         {
-            ImplEraseCursor( rOldData.mnPosCursor );
-            ImplDrawCursor( GetRulerCursorPos() );
+            ImplInvertCursor( rOldData.mnPosCursor );
+            ImplInvertCursor( GetRulerCursorPos() );
         }
         EnableRepaint();
     }
@@ -165,8 +165,8 @@ void ScCsvRuler::MoveCursor( sal_Int32 nPos, bool bScroll )
 {
     DisableRepaint();
     if( bScroll )
-        CommitRequest( CSVREQ_MAKEPOSVISIBLE, nPos );
-    CommitRequest( CSVREQ_MOVERULERCURSOR, IsVisibleSplitPos( nPos ) ? nPos : POS_INVALID );
+        Execute( CSVCMD_MAKEPOSVISIBLE, nPos );
+    Execute( CSVCMD_MOVERULERCURSOR, IsVisibleSplitPos( nPos ) ? nPos : POS_INVALID );
     EnableRepaint();
 }
 
@@ -241,7 +241,7 @@ void ScCsvRuler::ScrollVertRel( ScMoveMode eDir )
         case MOVE_PREVPAGE: nLine -= GetVisLineCount() - 1; break;
         case MOVE_NEXTPAGE: nLine += GetVisLineCount() - 1; break;
     }
-    CommitRequest( CSVREQ_LINEOFFSET, nLine );
+    Execute( CSVCMD_SETLINEOFFSET, nLine );
 }
 
 void ScCsvRuler::InsertSplit( sal_Int32 nPos )
@@ -250,7 +250,6 @@ void ScCsvRuler::InsertSplit( sal_Int32 nPos )
     {
         ImplDrawSplit( nPos );
         Repaint();
-        CommitEvent( RULEREVENT_INSERT, nPos );
     }
 }
 
@@ -260,16 +259,7 @@ void ScCsvRuler::RemoveSplit( sal_Int32 nPos )
     {
         ImplEraseSplit( nPos );
         Repaint();
-        CommitEvent( RULEREVENT_REMOVE, nPos );
     }
-}
-
-void ScCsvRuler::ToggleSplit( sal_Int32 nPos )
-{
-    if( HasSplit( nPos ) )
-        RemoveSplit( nPos );
-    else
-        InsertSplit( nPos );
 }
 
 void ScCsvRuler::MoveSplit( sal_Int32 nPos, sal_Int32 nNewPos )
@@ -281,7 +271,6 @@ void ScCsvRuler::MoveSplit( sal_Int32 nPos, sal_Int32 nNewPos )
         ImplEraseSplit( nPos );
         ImplDrawSplit( nNewPos );
         Repaint();
-        CommitEvent( RULEREVENT_MOVE, nNewPos, nPos );
     }
 }
 
@@ -291,7 +280,7 @@ void ScCsvRuler::MoveSplitRel( sal_Int32 nPos, ScMoveMode eDir )
     {
         sal_Int32 nNewPos = FindEmptyPos( nPos, eDir );
         if( nNewPos != POS_INVALID )
-            MoveSplit( nPos, nNewPos );
+            Execute( CSVCMD_MOVESPLIT, nPos, nNewPos );
     }
 }
 
@@ -299,13 +288,12 @@ void ScCsvRuler::RemoveAllSplits()
 {
     maSplits.Clear();
     Repaint( true );
-    CommitEvent( RULEREVENT_REMOVEALL );
 }
 
 void ScCsvRuler::MoveCurrSplit( sal_Int32 nNewPos )
 {
     DisableRepaint();
-    MoveSplit( GetRulerCursorPos(), nNewPos );
+    Execute( CSVCMD_MOVESPLIT, GetRulerCursorPos(), nNewPos );
     MoveCursor( nNewPos );
     EnableRepaint();
 }
@@ -325,8 +313,9 @@ void ScCsvRuler::StartMouseTracking( sal_Int32 nPos )
     mnPosMTStart = mnPosMTCurr = nPos;
     mbPosMTMoved = false;
     maOldSplits = maSplits;
-    InsertSplit( nPos );
-    StartTracking( STARTTRACK_BUTTONREPEAT );
+    Execute( CSVCMD_INSERTSPLIT, nPos );
+    if( HasSplit( nPos ) )
+        StartTracking( STARTTRACK_BUTTONREPEAT );
 }
 
 void ScCsvRuler::MoveMouseTracking( sal_Int32 nPos )
@@ -336,9 +325,9 @@ void ScCsvRuler::MoveMouseTracking( sal_Int32 nPos )
         DisableRepaint();
         MoveCursor( nPos );
         if( (mnPosMTCurr != mnPosMTStart) && maOldSplits.HasSplit( mnPosMTCurr ) )
-            InsertSplit( nPos );
+            Execute( CSVCMD_INSERTSPLIT, nPos );
         else
-            MoveSplit( mnPosMTCurr, nPos );
+            Execute( CSVCMD_MOVESPLIT, mnPosMTCurr, nPos );
         mnPosMTCurr = nPos;
         mbPosMTMoved = true;
         EnableRepaint();
@@ -351,7 +340,7 @@ void ScCsvRuler::EndMouseTracking( bool bApply )
     {
         // remove on simple click on an existing split
         if( (mnPosMTCurr == mnPosMTStart) && maOldSplits.HasSplit( mnPosMTCurr ) && !mbPosMTMoved )
-            RemoveSplit( mnPosMTCurr );
+            Execute( CSVCMD_REMOVESPLIT, mnPosMTCurr );
     }
     else            // tracking cancelled
     {
@@ -361,7 +350,7 @@ void ScCsvRuler::EndMouseTracking( bool bApply )
             MoveMouseTracking( mnPosMTStart );
         // remove temporarily inserted split
         else if( !maOldSplits.HasSplit( mnPosMTCurr ) )
-            RemoveSplit( mnPosMTCurr );
+            Execute( CSVCMD_REMOVESPLIT, mnPosMTCurr );
     }
     mnPosMTStart = POS_INVALID;
 }
@@ -477,9 +466,9 @@ void ScCsvRuler::KeyInput( const KeyEvent& rKEvt )
             ScrollVertRel( eVDir );
         else switch( nCode )
         {
-            case KEY_SPACE:     ToggleSplit( GetRulerCursorPos() ); break;
-            case KEY_INSERT:    InsertSplit( GetRulerCursorPos() ); break;
-            case KEY_DELETE:    RemoveSplit( GetRulerCursorPos() ); break;
+            case KEY_SPACE:     Execute( CSVCMD_TOGGLESPLIT, GetRulerCursorPos() ); break;
+            case KEY_INSERT:    Execute( CSVCMD_INSERTSPLIT, GetRulerCursorPos() ); break;
+            case KEY_DELETE:    Execute( CSVCMD_REMOVESPLIT, GetRulerCursorPos() ); break;
         }
     }
     else if( bJump && (eHDir != MOVE_NONE) )
@@ -487,7 +476,7 @@ void ScCsvRuler::KeyInput( const KeyEvent& rKEvt )
     else if( bMove && (eHDir != MOVE_NONE) )
         MoveCurrSplitRel( eHDir );
     else if( bShift && (nCode == KEY_DELETE) )
-        RemoveAllSplits();
+        Execute( CSVCMD_REMOVEALLSPLITS );
 
     if( rKCode.GetGroup() != KEYGROUP_CURSOR )
         ScCsvControl::KeyInput( rKEvt );
@@ -575,11 +564,12 @@ void ScCsvRuler::ImplDrawSplit( sal_Int32 nPos )
 {
     if( IsVisibleSplitPos( nPos ) )
     {
-        Point aPos( GetX( nPos ) - mnSplitSize / 2, GetHeight() - mnSplitSize - 1 );
+        Point aPos( GetX( nPos ) - mnSplitSize / 2, GetHeight() - mnSplitSize - 2 );
         Size aSize( mnSplitSize, mnSplitSize );
         maRulerDev.SetLineColor( maTextColor );
         maRulerDev.SetFillColor( maSplitColor );
         maRulerDev.DrawEllipse( Rectangle( aPos, aSize ) );
+        maRulerDev.DrawPixel( Point( GetX( nPos ), GetHeight() - 2 ) );
     }
 }
 
@@ -587,18 +577,18 @@ void ScCsvRuler::ImplEraseSplit( sal_Int32 nPos )
 {
     if( IsVisibleSplitPos( nPos ) )
     {
-        ImplEraseCursor( GetRulerCursorPos() );
+        ImplInvertCursor( GetRulerCursorPos() );
         Point aPos( GetX( nPos ) - mnSplitSize / 2, 0 );
         Size aSize( mnSplitSize, GetHeight() );
         maRulerDev.DrawOutDev( aPos, aSize, aPos, aSize, maBackgrDev );
-        ImplDrawCursor( GetRulerCursorPos() );
+        ImplInvertCursor( GetRulerCursorPos() );
     }
 }
 
 void ScCsvRuler::ImplDrawRulerDev()
 {
     maRulerDev.DrawOutDev( Point(), maWinSize, Point(), maWinSize, maBackgrDev );
-    ImplDrawCursor( GetRulerCursorPos() );
+    ImplInvertCursor( GetRulerCursorPos() );
 
     sal_uInt32 nFirst = maSplits.LowerBound( GetFirstVisPos() );
     sal_uInt32 nLast = maSplits.UpperBound( GetLastVisPos() );
@@ -607,14 +597,13 @@ void ScCsvRuler::ImplDrawRulerDev()
             ImplDrawSplit( GetSplitPos( nIndex ) );
 }
 
-void ScCsvRuler::ImplDrawCursor( sal_Int32 nPos )
+void ScCsvRuler::ImplInvertCursor( sal_Int32 nPos )
 {
     if( IsVisibleSplitPos( nPos ) )
     {
-        sal_Int32 nHt = GetHeight() - 1;
+        ImplInvertRect( maRulerDev, Rectangle( Point( GetX( nPos ) - 1, 0 ), Size( 3, GetHeight() - 1 ) ) );
         if( HasSplit( nPos ) )
-            nHt -= mnSplitSize;
-        ImplInvertRect( maRulerDev, Rectangle( Point( GetX( nPos ) - 1, 0 ), Size( 3, nHt ) ) );
+            ImplDrawSplit( nPos );
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvruler.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-05 15:42:16 $
+ *  last change: $Author: dr $ $Date: 2002-08-01 12:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,17 +134,15 @@ public:
 
     /** Returns true if at position nPos is a split. */
     inline bool                 HasSplit( sal_Int32 nPos ) const { return maSplits.HasSplit( nPos ); }
-    /** Inserts a split and commits event. */
+    /** Inserts a split. */
     void                        InsertSplit( sal_Int32 nPos );
-    /** Removes a split and commits event. */
+    /** Removes a split. */
     void                        RemoveSplit( sal_Int32 nPos );
-    /** Inserts a new or removes an existing split and commits event. */
-    void                        ToggleSplit( sal_Int32 nPos );
-    /** Moves a split from nPos to nNewPos and commits event. */
+    /** Moves a split from nPos to nNewPos. */
     void                        MoveSplit( sal_Int32 nPos, sal_Int32 nNewPos );
-    /** Moves the split from nPos to the given direction and commits event. */
+    /** Moves the split from nPos to the given direction. */
     void                        MoveSplitRel( sal_Int32 nPos, ScMoveMode eDir );
-    /** Removes all splits of the ruler and commits event. */
+    /** Removes all splits of the ruler. */
     void                        RemoveAllSplits();
 
     // event handling ---------------------------------------------------------
@@ -220,10 +218,8 @@ private:
     /** Draws the ruler background, all splits and the cursor to maRulerDev. */
     void                        ImplDrawRulerDev();
 
-    /** Draws the cursor bar to the specified position to maRulerDev. */
-    void                        ImplDrawCursor( sal_Int32 nPos );
-    /** Erases the cursor bar from the specified position from maRulerDev. */
-    inline void                 ImplEraseCursor( sal_Int32 nPos ) { ImplDrawCursor( nPos ); }
+    /** Inverts the cursor bar at the specified position in maRulerDev. */
+    void                        ImplInvertCursor( sal_Int32 nPos );
     /** Draws directly tracking rectangle to the column with the specified index. */
     void                        ImplDrawTrackingRect();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvcontrol.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-23 15:21:58 $
+ *  last change: $Author: dr $ $Date: 2002-08-01 12:47:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #include <vcl/ctrl.hxx>
 #endif
 
+#ifndef SC_SCGLOB_HXX
+#include "global.hxx"
+#endif
 #ifndef _SC_CSVSPLITS_HXX
 #include "csvsplits.hxx"
 #endif
@@ -77,9 +80,8 @@
 
 typedef ::std::vector< String >             ScCsvStringVec;
 typedef ::std::vector< ScCsvStringVec >     ScCsvStringVecVec;
-typedef ::std::vector< sal_Int32 >          ScCsvColTypeVec;
-typedef ::std::vector< sal_uInt8 >          ScCsvColFlagsVec;
 
+// types for exported data
 typedef ::std::vector< xub_StrLen >         ScCsvExtColPosVec;
 typedef ::std::vector< sal_uInt8 >          ScCsvExtColTypeVec;
 
@@ -97,6 +99,8 @@ const sal_Int32 CSV_SCROLL_DIST         = 3;
 
 //! TODO make string array dynamic
 const sal_Int32 CSV_PREVIEW_LINES       = 32; // maximum count of preview lines
+/** Maximum count of columns. */
+const sal_Int32 CSV_MAXCOLCOUNT         = MAXCOL + 1;
 
 /** Default column data type. */
 const sal_Int32 CSV_TYPE_DEFAULT        = 0;
@@ -132,21 +136,24 @@ enum ScMoveMode
 
 // ============================================================================
 
-// flags for comparison.
-const sal_uInt32 CSV_DIFF_POSCOUNT      = 0x00000001;
-const sal_uInt32 CSV_DIFF_POSOFFSET     = 0x00000002;
-const sal_uInt32 CSV_DIFF_OFFSETX       = 0x00000004;
-const sal_uInt32 CSV_DIFF_CHARWIDTH     = 0x00000008;
-const sal_uInt32 CSV_DIFF_LINECOUNT     = 0x00000010;
-const sal_uInt32 CSV_DIFF_LINEOFFSET    = 0x00000020;
-const sal_uInt32 CSV_DIFF_OFFSETY       = 0x00000040;
-const sal_uInt32 CSV_DIFF_LINEHEIGHT    = 0x00000080;
-const sal_uInt32 CSV_DIFF_RULERCURSOR   = 0x00000100;
-const sal_uInt32 CSV_DIFF_GRIDCURSOR    = 0x00000200;
+/** Flags for comparison of old and new control layout data. */
+typedef sal_uInt32 ScCsvDiff;
 
-const sal_uInt32 CSV_DIFF_HORIZONTAL    = CSV_DIFF_POSCOUNT | CSV_DIFF_POSOFFSET | CSV_DIFF_OFFSETX | CSV_DIFF_CHARWIDTH;
-const sal_uInt32 CSV_DIFF_VERTICAL      = CSV_DIFF_LINECOUNT | CSV_DIFF_LINEOFFSET | CSV_DIFF_OFFSETY | CSV_DIFF_LINEHEIGHT;
-const sal_uInt32 CSV_DIFF_CURSOR        = CSV_DIFF_RULERCURSOR | CSV_DIFF_GRIDCURSOR;
+const ScCsvDiff CSV_DIFF_EQUAL         = 0x00000000;
+const ScCsvDiff CSV_DIFF_POSCOUNT      = 0x00000001;
+const ScCsvDiff CSV_DIFF_POSOFFSET     = 0x00000002;
+const ScCsvDiff CSV_DIFF_OFFSETX       = 0x00000004;
+const ScCsvDiff CSV_DIFF_CHARWIDTH     = 0x00000008;
+const ScCsvDiff CSV_DIFF_LINECOUNT     = 0x00000010;
+const ScCsvDiff CSV_DIFF_LINEOFFSET    = 0x00000020;
+const ScCsvDiff CSV_DIFF_OFFSETY       = 0x00000040;
+const ScCsvDiff CSV_DIFF_LINEHEIGHT    = 0x00000080;
+const ScCsvDiff CSV_DIFF_RULERCURSOR   = 0x00000100;
+const ScCsvDiff CSV_DIFF_GRIDCURSOR    = 0x00000200;
+
+const ScCsvDiff CSV_DIFF_HORIZONTAL    = CSV_DIFF_POSCOUNT | CSV_DIFF_POSOFFSET | CSV_DIFF_OFFSETX | CSV_DIFF_CHARWIDTH;
+const ScCsvDiff CSV_DIFF_VERTICAL      = CSV_DIFF_LINECOUNT | CSV_DIFF_LINEOFFSET | CSV_DIFF_OFFSETY | CSV_DIFF_LINEHEIGHT;
+const ScCsvDiff CSV_DIFF_CURSOR        = CSV_DIFF_RULERCURSOR | CSV_DIFF_GRIDCURSOR;
 
 
 // ----------------------------------------------------------------------------
@@ -181,12 +188,12 @@ struct ScCsvLayoutData
 
     /** Returns differences to rData.
         @descr  For each difference the appropriate bit is set in the returned value. */
-    sal_uInt32                  GetDiff( const ScCsvLayoutData& rData ) const;
+    ScCsvDiff                   GetDiff( const ScCsvLayoutData& rData ) const;
 };
 
 inline bool operator==( const ScCsvLayoutData& rData1, const ScCsvLayoutData& rData2 )
 {
-    return rData1.GetDiff( rData2 ) == 0;
+    return rData1.GetDiff( rData2 ) == CSV_DIFF_EQUAL;
 }
 
 inline bool operator!=( const ScCsvLayoutData& rData1, const ScCsvLayoutData& rData2 )
@@ -197,123 +204,86 @@ inline bool operator!=( const ScCsvLayoutData& rData1, const ScCsvLayoutData& rD
 
 // ============================================================================
 
-/** Enumeration of possible requests of the controls.
-    @descr  Controls have to send requests to be able to change the tablebox global settings. */
-enum ScCsvRequestType
+/** Enumeration of possible commands to change any settings of the CSV controls.
+    @descr  Controls have to send commands instead of changing their settings directly.
+    This helps to keep the different controls consistent to each other.
+    A command can contain 0 to 2 sal_Int32 parameters. In the description of each
+    command the required parameters are swown in brackets. [-] means no parameter. */
+enum ScCsvCmdType
 {
-    CSVREQ_NONE,                /// No request.
-
     // misc
-    CSVREQ_REPAINT,             /// Repaint all controls.
-    CSVREQ_NEWCELLTEXTS,        /// Recalculate splits and cell texts.
-    CSVREQ_UPDATECELLTEXTS,     /// Update cell texts with current split settings.
-    CSVREQ_COLUMNTYPE,          /// Change data type of selected columns.
+    CSVCMD_NONE,                /// No command. [-]
+    CSVCMD_REPAINT,             /// Repaint all controls. [-]
 
     // modify horizontal dimensions
-    CSVREQ_POSCOUNT,            /// Change position/column count.
-    CSVREQ_POSOFFSET,           /// Change position offset (scroll pos).
-    CSVREQ_OFFSETX,             /// Change X coordinate of first visible position.
-    CSVREQ_CHARWIDTH,           /// Change character pixel width.
+    CSVCMD_SETPOSCOUNT,         /// Change position/column count. [character count]
+    CSVCMD_SETPOSOFFSET,        /// Change position offset (scroll pos). [position]
+    CSVCMD_SETOFFSETX,          /// Change X coordinate of first visible position. [X in pixel]
+    CSVCMD_SETCHARWIDTH,        /// Change character pixel width. [width in pixel]
 
     // modify vertical dimensions
-    CSVREQ_LINECOUNT,           /// Change number of data lines.
-    CSVREQ_LINEOFFSET,          /// Change first visible line.
-    CSVREQ_OFFSETY,             /// Change Y coordinate of first visible line.
-    CSVREQ_LINEHEIGHT,          /// Change data line pixel height.
+    CSVCMD_SETLINECOUNT,        /// Change number of data lines. [line count]
+    CSVCMD_SETLINEOFFSET,       /// Change first visible line. [line index]
+    CSVCMD_SETOFFSETY,          /// Change Y coordinate of first visible line. [Y in pixel]
+    CSVCMD_SETLINEHEIGHT,       /// Change data line pixel height. [height in pixel}
 
     // cursors/positions
-    CSVREQ_MOVERULERCURSOR,     /// Move ruler cursor to new position.
-    CSVREQ_MOVEGRIDCURSOR,      /// Move data grid cursor to new column.
-    CSVREQ_MAKEPOSVISIBLE       /// Move to make passed position visible (for mouse tracking).
+    CSVCMD_MOVERULERCURSOR,     /// Move ruler cursor to new position. [position]
+    CSVCMD_MOVEGRIDCURSOR,      /// Move data grid cursor to new column. [position]
+    CSVCMD_MAKEPOSVISIBLE,      /// Move to make passed position visible (for mouse tracking). [position]
+
+    // table contents
+    CSVCMD_NEWCELLTEXTS,        /// Recalculate splits and cell texts. [-]
+    CSVCMD_UPDATECELLTEXTS,     /// Update cell texts with current split settings. [-]
+    CSVCMD_SETCOLUMNTYPE,       /// Change data type of selected columns. [column type]
+    CSVCMD_EXPORTCOLUMNTYPE,    /// Send selected column type to external controls. [-]
+    CSVCMD_SETFIRSTIMPORTLINE,  /// Set number of first imported line. [line index]
+
+    // splits
+    CSVCMD_INSERTSPLIT,         /// Insert a split. [position]
+    CSVCMD_REMOVESPLIT,         /// Remove a split. [position]
+    CSVCMD_TOGGLESPLIT,         /// Inserts or removes a split. [position]
+    CSVCMD_MOVESPLIT,           /// Move a split. [old position, new position]
+    CSVCMD_REMOVEALLSPLITS      /// Remove all splits. [-]
 };
 
 
 // ----------------------------------------------------------------------------
 
-/** Data for a CSV control request. */
-class ScCsvRequest
+/** Data for a CSV control command. The stored position data is aways character based,
+    it's never a column index (required for internal consistency). */
+class ScCsvCmd
 {
 private:
-    ScCsvRequestType            meType;         /// Type of the request.
-    sal_Int32                   mnData;         /// Signed position data.
+    ScCsvCmdType                meType;         /// The command.
+    sal_Int32                   mnParam1;       /// First parameter.
+    sal_Int32                   mnParam2;       /// Second parameter.
 
 public:
-    inline                      ScCsvRequest() : meType( CSVREQ_NONE ), mnData( POS_INVALID ) {}
+    inline                      ScCsvCmd() : meType( CSVCMD_NONE ),
+                                    mnParam1( POS_INVALID ), mnParam2( POS_INVALID ) {}
 
-    inline void                 Set( ScCsvRequestType eType, sal_Int32 nData );
+    inline void                 Set( ScCsvCmdType eType, sal_Int32 nParam1, sal_Int32 nParam2 );
 
-    inline ScCsvRequestType     GetType() const     { return meType; }
-    inline sal_Int32            GetData() const     { return mnData; }
+    inline ScCsvCmdType         GetType() const     { return meType; }
+    inline sal_Int32            GetParam1() const   { return mnParam1; }
+    inline sal_Int32            GetParam2() const   { return mnParam2; }
 };
 
-inline void ScCsvRequest::Set( ScCsvRequestType eType, sal_Int32 nData )
+inline void ScCsvCmd::Set( ScCsvCmdType eType, sal_Int32 nParam1, sal_Int32 nParam2 )
 {
-    meType = eType;
-    mnData = nData;
+    meType = eType; mnParam1 = nParam1; mnParam2 = nParam2;
 }
 
 
 // ============================================================================
 
-/** Enumeration of possible events of the controls.
-    @descr  Controls send events after they have changed their own data. */
-enum ScCsvEventType
-{
-    CSVEVENT_NONE,              /// No action.
-
-    // ruler events
-    RULEREVENT_INSERT,          /// Split inserted.
-    RULEREVENT_REMOVE,          /// Split removed.
-    RULEREVENT_MOVE,            /// Split moved.
-    RULEREVENT_REMOVEALL,       /// All splits removed.
-
-    // grid events
-    GRIDEVENT_SELECTION,        /// Column selection changed.
-    GRIDEVENT_COLUMNTYPE        /// Column type changed.
-};
-
-
-// ----------------------------------------------------------------------------
-
-/** Data for a CSV control event. */
-class ScCsvEvent
-{
-private:
-    ScCsvEventType              meType;         /// Type of the event.
-    sal_Int32                   mnPos;          /// Reference position of the event.
-    sal_Int32                   mnOldPos;       /// Old position (i.e. for split move).
-
-public:
-    inline                      ScCsvEvent() : meType( CSVEVENT_NONE ),
-                                    mnPos( POS_INVALID ), mnOldPos( POS_INVALID ) {}
-
-    inline void                 Set( ScCsvEventType eType, sal_Int32 nPos, sal_Int32 nOldPos );
-
-    inline ScCsvEventType       GetType() const     { return meType; }
-    inline sal_Int32            GetPos() const      { return mnPos; }
-    inline sal_Int32            GetOldPos() const   { return mnOldPos; }
-};
-
-inline void ScCsvEvent::Set( ScCsvEventType eType, sal_Int32 nPos, sal_Int32 nOldPos )
-{
-    meType = eType;
-    mnPos = nPos;
-    mnOldPos = nOldPos;
-}
-
-
-// ============================================================================
-
-
-/** Base class for the CSV ruler and the data grid control. Implements event handling. */
+/** Base class for the CSV ruler and the data grid control. Implements command handling. */
 class ScCsvControl : public Control
 {
 private:
-    Link                        maRequestHdl;       /// External request handler.
-    Link                        maEventHdl;         /// External event handler.
-
-    ScCsvRequest                maRequest;          /// Data of last request.
-    ScCsvEvent                  maEvent;            /// Data of last event.
+    Link                        maCmdHdl;           /// External command handler.
+    ScCsvCmd                    maCmd;              /// Data of last command.
 
     const ScCsvLayoutData&      mrData;             /// Shared layout data.
 
@@ -325,7 +295,7 @@ public:
                                 ScCsvControl( Window* pParent, const ScCsvLayoutData& rData, WinBits nStyle = 0 );
                                 ScCsvControl( Window* pParent, const ScCsvLayoutData& rData, const ResId& rResId );
 
-    // drawing ----------------------------------------------------------------
+    // repaint helpers --------------------------------------------------------
 
     /** Sets the graphic invalid (next Redraw() will not use cached graphic). */
     inline void                 InvalidateGfx() { mbValidGfx = false; }
@@ -334,44 +304,31 @@ public:
     /** Returns true, if cached graphic is valid. */
     inline bool                 IsValidGfx() const { return mbValidGfx; }
 
-    /** Commits repaint request.
-        @param bInvalidate  true = invalidates graphics of this control. */
+    /** Repaints all controls.
+        @param bInvalidate  true = invalidates graphics of this control (not all). */
     void                        Repaint( bool bInvalidate = false );
-    /** Increases no-repaint counter (control does not repaint until the last EnableRepaint()). */
+    /** Increases no-repaint counter (controls do not repaint until the last EnableRepaint()). */
     void                        DisableRepaint();
     /** Decreases no-repaint counter and repaints if counter reaches 0.
-        @param bInvalidate  true = invalidates graphics of this control. */
+        @param bInvalidate  true = invalidates graphics of this control (not all). */
     void                        EnableRepaint( bool bInvalidate = false );
-    /** Returns true, if control will not repaint. */
+    /** Returns true, if controls will not repaint. */
     inline bool                 IsNoRepaint() const { return mrData.mnNoRepaint > 0; }
 
-    /** Inverts a rectangle in the specified output device. */
-    void                        ImplInvertRect( OutputDevice& rOutDev, const Rectangle& rRect );
+    // command handling -------------------------------------------------------
 
-    // event handling ---------------------------------------------------------
+    /** Sets a new command handler. */
+    inline void                 SetCmdHdl( const Link& rHdl ) { maCmdHdl = rHdl; }
+    /** Returns the current command handler. */
+    inline const Link&          GetCmdHdl() const { return maCmdHdl; }
+    /** Returns data of the last command. */
+    inline const ScCsvCmd&      GetCmd() const { return maCmd; }
 
-    /** Sets a new request handler. */
-    inline void                 SetRequestHdl( const Link& rHdl ) { maRequestHdl = rHdl; }
-    /** Returns the current request handler. */
-    inline const Link&          GetRequestHdl() const { return maRequestHdl; }
-    /** Returns data of the last request. */
-    inline const ScCsvRequest&  GetRequest() const { return maRequest; }
-    /** Sets a request with position data and calls request handler. */
-    void                        CommitRequest(
-                                    ScCsvRequestType eType,
-                                    sal_Int32 nData = POS_INVALID );
-
-    /** Sets a new event handler. */
-    inline void                 SetEventHdl( const Link& rHdl ) { maEventHdl = rHdl; }
-    /** Returns the current event handler. */
-    inline const Link&          GetEventHdl() const { return maEventHdl; }
-    /** Returns data of the last event. */
-    inline const ScCsvEvent&    GetEvent() const { return maEvent; }
-    /** Sets the data of the last event and calls event handler. */
-    void                        CommitEvent(
-                                    ScCsvEventType eType,
-                                    sal_Int32 nPos = POS_INVALID,
-                                    sal_Int32 nOldPos = POS_INVALID );
+    /** Executes a command by calling command handler. */
+    void                        Execute(
+                                    ScCsvCmdType eType,
+                                    sal_Int32 nParam1 = POS_INVALID,
+                                    sal_Int32 nParam2 = POS_INVALID );
 
     // layout helpers ---------------------------------------------------------
 
@@ -431,14 +388,17 @@ public:
     /** Returns the data grid cursor position (not column index!). */
     inline sal_Int32            GetGridCursorPos() const { return mrData.mnColCursor; }
 
-    // keyboard helpers -------------------------------------------------------
+    // static helpers ---------------------------------------------------------
+
+    /** Inverts a rectangle in the specified output device. */
+    static void                 ImplInvertRect( OutputDevice& rOutDev, const Rectangle& rRect );
 
     /** Returns direction code for the keys LEFT, RIGHT, HOME, END.
-        @return  bHomeEnd  true = Evaluate HOME and END key. */
-    ScMoveMode                  GetHorzDirection( sal_uInt16 nCode, bool bHomeEnd );
+        @param bHomeEnd  false = ignore HOME and END key. */
+    static ScMoveMode           GetHorzDirection( sal_uInt16 nCode, bool bHomeEnd );
     /** Returns direction code for the keys UP, DOWN, HOME, END, PAGE UP, PAGE DOWN.
-        @return  bHomeEnd  true = Evaluate HOME and END key. */
-    ScMoveMode                  GetVertDirection( sal_uInt16 nCode, bool bHomeEnd );
+        @param bHomeEnd  false = ignore HOME and END key. */
+    static ScMoveMode           GetVertDirection( sal_uInt16 nCode, bool bHomeEnd );
 };
 
 
