@@ -7,7 +7,7 @@
         <prop oor:name="FilterService"/>
         <prop oor:name="TemplateName"/>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">EMF - Enhanced Metafile</value>
+            <value>EMF - Enhanced Metafile</value>
         </prop>
         <prop oor:name="Flags"><value>EXPORT ALIEN SUPPORTSSELECTION</value></prop>
     </node>
