@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:11:03 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:19:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -584,7 +584,25 @@ public:
     // returns upper left frame position for LTR and
     // upper right frame position for Asian / RTL frames
     Point   GetFrmAnchorPos( sal_Bool bIgnoreFlysAnchoredAtThisFrame ) const;
-    BOOL IsMoveable() const;
+
+    /** determine, if frame is moveable in given environment
+
+        OD 08.08.2003 #110978#
+        method replaced 'old' method <BOOL IsMoveable() const>.
+        Determines, if frame is moveable in given environment. if no environment
+        is given (parameter _pLayoutFrm == 0L), the movability in the actual
+        environment (<this->GetUpper()) is checked.
+
+        @author OD
+
+        @param _pLayoutFrm
+        input parameter - given environment (layout frame), in which the movability
+        will be checked. If not set ( == 0L ), actual environment is taken.
+
+        @return boolean, indicating, if frame is moveable in given environment
+    */
+//    BOOL IsMoveable() const;
+    bool IsMoveable( const SwLayoutFrm* _pLayoutFrm = 0L ) const;
 
     //Ist es fuer den (Txt)Frm in der aktuellen Umgebung erlaubt eine
     //Fussnote einzufuegen (nicht z.B. in wiederholten TabellenHeadlines).
