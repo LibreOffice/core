@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfflt.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 21:19:06 $
+ *  last change: $Author: kz $ $Date: 2001-01-19 20:33:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,7 +525,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
         Text = "Vorschau" ;
         Text[ ENGLISH ] = "Preview" ;
         Text[ english_us ] = "Preview" ;
-        Text[ portuguese ] = "Preview";
+        Text[ portuguese ] = "Previsualizar";
         Text[ russian ] = "Предв. просмотр";
         Text[ greek ] = "Рсперйукьрзуз";
         Text[ dutch ] = "Voorbeeld";
@@ -684,7 +684,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
         Text = "Vorschau" ;
         Text[ ENGLISH ] = "Preview" ;
         Text[ english_us ] = "Preview" ;
-        Text[ portuguese ] = "Preview";
+        Text[ portuguese ] = "Previsualizar";
         Text[ russian ] = "Предв. просмотр";
         Text[ greek ] = "Рсперйукьрзуз";
         Text[ dutch ] = "Voorbeeld";
@@ -714,7 +714,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
         Text = "Parameter";
         Text[ ENGLISH ] = "Parameter";
         Text[ english_us ] = "Parameters";
-        Text[ portuguese ] = "Parвmetro";
+        Text[ portuguese ] = "Parвmetros";
         Text[ russian ] = "Параметры";
         Text[ greek ] = "РбсЬмефспт";
         Text[ dutch ] = "Parameter";
@@ -845,7 +845,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
         Text = "Vorschau" ;
         Text[ ENGLISH ] = "Preview" ;
         Text[ english_us ] = "Preview" ;
-        Text[ portuguese ] = "Preview";
+        Text[ portuguese ] = "Previsualizar";
         Text[ russian ] = "Предв. просмотр";
         Text[ greek ] = "Рсперйукьрзуз";
         Text[ dutch ] = "Voorbeeld";
