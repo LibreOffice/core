@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellfml.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 16:35:25 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:45:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1026,24 +1026,27 @@ void SwTableFormula::GetBoxes( const SwTableBox& rSttBox,
     const SwTable* pTbl = pStt->FindTabFrm()->GetTable();
 
     // filter die Kopfzeilen-Boxen heraus:
-    if( pTbl->IsHeadlineRepeat() )
+    if( pTbl->GetRowsToRepeat() > 0 )
+    {
         do {    // middle-check loop
-            const SwTableLine* pHeadLine = pTbl->GetTabLines()[0];
             const SwTableLine* pLine = rSttBox.GetUpper();
             while( pLine->GetUpper() )
                 pLine = pLine->GetUpper()->GetUpper();
 
-            if( pLine == pHeadLine )
+            if( pTbl->IsHeadline( *pLine ) )
                 break;      // Headline mit im Bereich !
+
             // vielleicht ist ja Start und Ende vertauscht
             pLine = rEndBox.GetUpper();
             while ( pLine->GetUpper() )
                 pLine = pLine->GetUpper()->GetUpper();
-            if( pLine == pHeadLine )
+
+            if( pTbl->IsHeadline( *pLine ) )
                 break;      // Headline mit im Bereich !
 
             const SwTabFrm *pTable = pStt->FindTabFrm();
             const SwTabFrm *pEndTable = pEnd->FindTabFrm();
+
             if( pTable == pEndTable )       // keine gespl. Tabelle
                 break;
 
@@ -1054,10 +1057,11 @@ void SwTableFormula::GetBoxes( const SwTableBox& rSttBox,
                 while( pLine->GetUpper() )
                     pLine = pLine->GetUpper()->GetUpper();
 
-                if( pLine == pHeadLine )
+                if( pTbl->IsHeadline( *pLine ) )
                     rBoxes.Remove( n--, 1 );
             }
         } while( FALSE );
+    }
 }
 
     // sind alle Boxen gueltig, auf die sich die Formel bezieht?
