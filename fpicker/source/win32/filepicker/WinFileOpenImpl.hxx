@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tra $ $Date: 2001-10-09 06:57:38 $
+ *  last change: $Author: tra $ $Date: 2001-10-16 14:03:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 
 #ifndef _COM_SUN_STAR_UI_DIALOGS_FILEPICKEREVENT_HPP_
 #include <com/sun/star/ui/dialogs/FilePickerEvent.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERGROUPMANAGER_HPP_
+#include <com/sun/star/ui/dialogs/XFilterGroupManager.hpp>
 #endif
 
 #ifndef _FILTER_CONTAINER_HXX_
@@ -156,6 +160,13 @@ public:
         throw( ::com::sun::star::uno::RuntimeException );
 
     //-----------------------------------------------------------------------------------------
+    // XFilterGroupManager
+    //-----------------------------------------------------------------------------------------
+
+    virtual void SAL_CALL appendFilterGroup( const ::rtl::OUString& sGroupTitle, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair >& aFilters )
+        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+
+    //-----------------------------------------------------------------------------------------
     // XFilePickerControlAccess
     //-----------------------------------------------------------------------------------------
 
@@ -221,6 +232,8 @@ protected:
     virtual sal_uInt32 SAL_CALL onCtrlCommand( HWND hwndDlg, sal_uInt16 ctrlId, sal_uInt16 notifyCode );
 
 private:
+    inline void SAL_CALL appendFilterGroupSeparator( );
+
     // initialize all controls from cache
     void SAL_CALL InitControlLabel( HWND hWnd );
 

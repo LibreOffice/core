@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tra $ $Date: 2001-10-09 06:57:38 $
+ *  last change: $Author: tra $ $Date: 2001-10-16 14:03:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,8 @@ using ::com::sun::star::ui::dialogs::FilePickerEvent;
 using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::ui::dialogs::XFilePicker;
 
+using ::com::sun::star::beans::StringPair;
+
 using namespace ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds;
 using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 using namespace ::com::sun::star::ui::dialogs::ListboxControlActions;
@@ -186,6 +188,9 @@ struct EnumParam
 //-------------------------------------------------------------------------
 
 const OUString BACKSLASH = OUString::createFromAscii( "\\" );
+const OUString FILTER_SEPARATOR = OUString::createFromAscii( "------------------------------------------" );
+const OUString ALL_FILES_WILDCARD = OUString::createFromAscii( "*.*" );
+const sal_Bool ALLOW_DUPLICATES = sal_True;
 
 //-------------------------------------------------------------------------
 // ctor
@@ -364,6 +369,40 @@ OUString SAL_CALL CWinFileOpenImpl::getCurrentFilter(  ) throw(RuntimeException)
     }
 
     return currentFilter;
+}
+
+//-----------------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------------
+
+inline void SAL_CALL CWinFileOpenImpl::appendFilterGroupSeparator( )
+{
+    m_filterContainer->addFilter( FILTER_SEPARATOR, ALL_FILES_WILDCARD, ALLOW_DUPLICATES );
+}
+
+//-----------------------------------------------------------------------------------------
+// XFilterGroupManager
+//-----------------------------------------------------------------------------------------
+
+void SAL_CALL CWinFileOpenImpl::appendFilterGroup( const OUString& sGroupTitle, const Sequence< StringPair >& aFilters )
+    throw (IllegalArgumentException, RuntimeException)
+{
+    OSL_ENSURE( 0 == sGroupTitle.getLength( ), "appendFilterGroup: Parameter 'GroupTitle' currently ignored" );
+
+    sal_Int32 nFilters = aFilters.getLength( );
+
+    OSL_PRECOND( nFilters > 0, "Empty filter list" );
+
+    if ( nFilters > 0 )
+    {
+        // append a separator before the next group if
+        // there is already a group of filters
+        if ( m_filterContainer->numFilter( ) > 0 )
+            appendFilterGroupSeparator( );
+
+        for ( int i = 0; i < nFilters; i++ )
+            appendFilter( aFilters[i].First, aFilters[i].Second );
+    }
 }
 
 //=================================================================================================================

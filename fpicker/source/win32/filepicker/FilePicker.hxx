@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePicker.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-10-09 06:57:38 $
+ *  last change: $Author: tra $ $Date: 2001-10-16 14:03:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 //_______________________________________________________________________________________________________________________
 
 
-#ifndef _CPPUHELPER_COMPBASE8_HXX_
-#include <cppuhelper/compbase8.hxx>
+#ifndef _CPPUHELPER_COMPBASE9_HXX_
+#include <cppuhelper/compbase9.hxx>
 #endif
 
 #ifndef _OSL_MUTEX_HXX_
@@ -83,12 +83,16 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_UI_XFILEPICKERNOTIFIER_HPP_
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERNOTIFIER_HPP_
 #include <com/sun/star/ui/dialogs/XFilePickerNotifier.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_UI_XFILTERMANAGER_HPP_
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERMANAGER_HPP_
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERGROUPMANAGER_HPP_
+#include <com/sun/star/ui/dialogs/XFilterGroupManager.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
@@ -133,8 +137,9 @@ protected:
 
 class CFilePicker :
     public CFilePickerDummy,
-    public cppu::WeakComponentImplHelper8<
+    public cppu::WeakComponentImplHelper9<
         ::com::sun::star::ui::dialogs::XFilterManager,
+        ::com::sun::star::ui::dialogs::XFilterGroupManager,
         ::com::sun::star::ui::dialogs::XFilePickerControlAccess,
         ::com::sun::star::ui::dialogs::XFilePickerNotifier,
         ::com::sun::star::ui::dialogs::XFilePreview,
@@ -198,6 +203,13 @@ public:
 
     virtual ::rtl::OUString SAL_CALL getCurrentFilter(  )
         throw( ::com::sun::star::uno::RuntimeException );
+
+    //------------------------------------------------------------------------------------
+    // XFilterGroupManager functions
+    //------------------------------------------------------------------------------------
+
+    virtual void SAL_CALL appendFilterGroup( const ::rtl::OUString& sGroupTitle, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair >& aFilters )
+        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------------------------------------------
     // XFilePickerControlAccess functions

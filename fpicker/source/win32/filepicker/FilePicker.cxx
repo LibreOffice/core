@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePicker.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tra $ $Date: 2001-10-09 06:57:38 $
+ *  last change: $Author: tra $ $Date: 2001-10-16 14:03:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,9 +109,11 @@ using ::com::sun::star::uno::Sequence;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::ui::dialogs::TemplateDescription;
 
-using ::cppu::WeakComponentImplHelper8;
+using ::cppu::WeakComponentImplHelper9;
 using ::rtl::OUString;
 using ::osl::MutexGuard;
+
+using ::com::sun::star::beans::StringPair;
 
 //------------------------------------------------------------------------
 // defines
@@ -139,8 +141,9 @@ namespace
 //-----------------------------------------------------------------------------------------
 
 CFilePicker::CFilePicker( const Reference< XMultiServiceFactory >& xServiceMgr ) :
-    WeakComponentImplHelper8<
+    WeakComponentImplHelper9<
         XFilterManager,
+        XFilterGroupManager,
         XFilePickerControlAccess,
         XFilePickerNotifier,
         XFilePreview,
@@ -405,6 +408,18 @@ OUString SAL_CALL CFilePicker::getCurrentFilter( ) throw(RuntimeException)
     OSL_ASSERT( 0 != m_pImpl.get( ) );
     MutexGuard aGuard( m_aMutex );
     return m_pImpl->getCurrentFilter( );
+}
+
+//-----------------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------------
+
+void SAL_CALL CFilePicker::appendFilterGroup( const OUString& sGroupTitle, const Sequence< StringPair >& aFilters )
+    throw (IllegalArgumentException, RuntimeException)
+{
+    OSL_ASSERT( 0 != m_pImpl.get( ) );
+    MutexGuard aGuard( m_aMutex );
+    m_pImpl->appendFilterGroup( sGroupTitle, aFilters );
 }
 
 //-----------------------------------------------------------------------------------------
