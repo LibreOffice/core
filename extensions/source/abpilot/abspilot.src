@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-10 11:46:17 $
+ *  last change: $Author: fs $ $Date: 2001-08-10 14:14:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,7 +350,7 @@ TabPage RID_PAGE_ADMININVOKATION
         WordBreak = TRUE;
 
         Text = "Um die neue Datenquelle einzurichten, sind noch weitergehende Angaben notwendig.\n\n"
-            "Dafür wird, sobald Sie auf die unten befindlichen Schaltfläche drücken, ein weiterer Dialog geöffnet. "
+            "Dafür wird, sobald Sie die unten befindlichen Schaltfläche betätigen, ein weiterer Dialog geöffnet. "
             "Nehmen Sie dort bitte die fehlenden Einstellungen vor.";
         Text [ english ] = "To set up the new data source, some additional information is needed.\n\n"
             "For this, another dialog will be opened, as soon as you press the button below. "
@@ -532,8 +532,8 @@ TabPage RID_PAGE_FIELDMAPPING
 
         Text = "Um die Adress-Daten in Ihren Vorlagen-Dokumenten benutzen zu können, muss %PRODUCTNAME wissen, welche Felder welche "
             "konkreten Daten enthalten.\n\n"
-            "Zum Beispiel könnten Sie die E-Mail-Adressen in einem Feld namens \"E-Mail\" oder \"E-Mail\" oder \"EM\" - oder unter völlig anderem Namen - gespeichert haben.\n\n"
-            "Sobald sie den unten stehenden Button drücken, wird ein weiterer Dialog geöffnet, in dem sie diese Einstellungen "
+            "Zum Beispiel könnten Sie die E-Mail-Adressen in einem Feld namens \"E-Mail\" oder \"Email\" oder \"EM\" - oder unter völlig anderem Namen - gespeichert haben.\n\n"
+            "Sobald sie die unten befindliche schaltfläche betätigen, wird ein weiterer Dialog geöffnet, in dem sie diese Einstellungen "
             "für Ihre Datenquelle vornehmen können.";
         Text [ english ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields "
             "do contain which concrete data.\n\n"
@@ -567,7 +567,7 @@ TabPage RID_PAGE_FIELDMAPPING
         Pos     = MAP_APPFONT ( ( WINDOW_SIZE_X - BUTTON_SIZE_X ) / 2, 84 ) ;
         Size    = MAP_APPFONT ( BUTTON_SIZE_X, BUTTON_SIZE_Y ) ;
 
-        Text = "Feld-Zuordnung";
+        Text = "Feldzuordnung";
         Text [ english ] = "Field assignment";
         Text [ english_us ] = "Field assignment";
         Text[ portuguese ] = "Field assignment";
@@ -974,8 +974,8 @@ String RID_STR_NOFIELDSASSIGNED
 
 String RID_STR_ABP_SUCCESS
 {
-    Text = "Ihr externes Adreßbuch wurde erfolgreich in %PRODUCTNAME registriert.\n"
-        "Sie können jetzt Ihre Adreßdaten wie jede beliebige andere Datenquelle benutzen.";
+    Text = "Ihr externes Adressbuch wurde erfolgreich in %PRODUCTNAME registriert.\n"
+        "Sie können jetzt Ihre Adressdaten wie jede beliebige andere Datenquelle benutzen.";
     Text [ english ] = "Your external address book was successully registered in %PRODUCTNAME.\n"
         "You now can access your address data like any other data source.";
     Text [ english_us ] = "Your external address book was successully registered in %PRODUCTNAME.\n"
@@ -992,6 +992,9 @@ Bitmap BMP_HEADERIMAGE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/08/10 11:46:17  fs
+ *  #90480# small changes to the text on the second page
+ *
  *  Revision 1.4  2001/08/08 14:55:20  fs
  *  #90716# layout changes
  *
