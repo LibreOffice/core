@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: od $ $Date: 2002-08-28 12:44:17 $
+ *  last change: $Author: od $ $Date: 2002-08-30 12:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -683,16 +683,15 @@ sal_Bool lcl_IsDarkBackground( const SwTxtPaintInfo& rInf )
         /// OD 21.08.2002 #99657#
         ///     There is a background color, if there is a background brush and
         ///     its color is *not* "no fill"/"auto fill".
-        ///     Because [GetBackgroundBrush(...)] does *not* return a brush (pItem)
-        ///     with color "no fill"/"auto fill" respectively a color (pCol)
-        ///     that is "no fill"/"auto fill", it is not checked, but asserted.
         if( rInf.GetTxtFrm()->GetBackgroundBrush( pItem, pCol, aOrigBackRect, FALSE ) )
         {
             if ( !pCol )
-            {
                 pCol = &pItem->GetColor();
-            }
-            ASSERT ( pCol->GetColor() != COL_TRANSPARENT, "Get 'no fill'/'auto fill' color from SwFrm::GetBackgroundBrush(...)");
+
+            /// OD 30.08.2002 #99657#
+            /// determined color <pCol> can be <COL_TRANSPARENT>. Thus, check it.
+            if ( pCol->GetColor() == COL_TRANSPARENT)
+                pCol = NULL;
         }
         else
             pCol = NULL;
