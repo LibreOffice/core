@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DataAccess.xcs,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:08:51 $
+ *  last change: $Author: obo $ $Date: 2004-11-24 10:53:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@
 		</group>
 		<group oor:name="EmbeddedDatabaseSetting">
 			<info>
-				<desc xml:lang="en-US">Describes a setting for an embedded database.</desc>
+				<desc>Describes a setting for an embedded database.</desc>
 			</info>
 			<prop oor:name="Value" oor:type="oor:any">
 				<info>
@@ -96,16 +96,16 @@
 		</group>
 		<group oor:name="EmbeddedDatabaseName">
 			<info>
-				<desc xml:lang="en-US">Describes the URL schema for an embedded database. They must start with sdbc:embedded:.</desc>
+				<desc>Describes the URL schema for an embedded database. They must start with sdbc:embedded:.</desc>
 			</info>
 			<prop oor:name="URL" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Specifies the URL for the embedded database.</desc>
+					<desc>Specifies the URL for the embedded database.</desc>
 				</info>
 			</prop>
 			<prop oor:name="UIName" oor:type="xs:string" oor:localized="true">
 				<info>
-					<desc xml:lang="en-US">Specifies the name of the embedded database which will be diaplyed in the statusbar of the database application.</desc>
+					<desc>Specifies the name of the embedded database which will be diaplyed in the statusbar of the database application.</desc>
 				</info>
 			</prop>
 			<set oor:name="EmbeddedDatabaseSettings" oor:node-type="EmbeddedDatabaseSetting">
@@ -214,7 +214,7 @@
 			</prop>
 			<set oor:name="EmbeddedDatabaseNames" oor:node-type="EmbeddedDatabaseName">
 				<info>
-					<desc xml:lang="en-US">Specifies all embedded database names which are registered.</desc>
+					<desc>Specifies all embedded database names which are registered.</desc>
 				</info>
 			</set>
 		</group>
