@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-29 14:58:09 $
+ *  last change: $Author: mib $ $Date: 2002-05-30 12:40:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,6 +236,7 @@ public:
     virtual void SAL_CALL removeEventListener( const Reference< XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    void Dispose();
 };
 
 SwDrawModellListener_Impl::SwDrawModellListener_Impl( SdrModel *pDrawModel ) :
@@ -267,6 +268,10 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& rBC,
     if( !pSdrHint )
         return;
 
+    ASSERT( mpDrawModel, "draw model listener is disposed" );
+    if( !mpDrawModel )
+        return;
+
     EventObject aEvent;
     if( !SvxUnoDrawMSFactory::createEvent( mpDrawModel, pSdrHint, aEvent ) )
         return;
@@ -289,6 +294,11 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& rBC,
 #endif
         }
     }
+}
+
+void SwDrawModellListener_Impl::Dispose()
+{
+    mpDrawModel = 0;
 }
 
 //------------------------------------------------------------------------------
@@ -327,12 +337,21 @@ public:
         maInfo.SetControllerBroadcaster( xModelBroadcaster );
     }
 
+    ~SwAccessibleShapeMap_Impl();
+
     const accessibility::AccessibleShapeTreeInfo& GetInfo() const { return maInfo; }
 
     SwAccessibleObjShape_Impl *Copy( size_t& rSize,
         const SwFEShell *pFESh = 0,
         SwAccessibleObjShape_Impl  **pSelShape = 0 ) const;
 };
+
+SwAccessibleShapeMap_Impl::~SwAccessibleShapeMap_Impl()
+{
+    Reference < XEventBroadcaster > xBrd( maInfo.GetControllerBroadcaster() );
+    if( xBrd.is() )
+        static_cast < SwDrawModellListener_Impl * >( xBrd.get() )->Dispose();
+}
 
 SwAccessibleObjShape_Impl
     *SwAccessibleShapeMap_Impl::Copy(
