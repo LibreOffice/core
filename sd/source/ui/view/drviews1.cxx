@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: thb $ $Date: 2001-11-06 12:38:24 $
+ *  last change: $Author: thb $ $Date: 2001-11-13 12:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,13 @@ void SdDrawViewShell::Activate(BOOL bIsMDIActivate)
         GetViewFrame()->GetDispatcher()->Execute(
             SID_PREVIEW_WIN, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L);
     }
+
+    // #94252# Enable own controls
+    aTabControl.Enable();
+    aLayerTab.Enable();
+    aPageBtn.Enable();
+    aMasterPageBtn.Enable();
+    aLayerBtn.Enable();
 }
 
 /*************************************************************************
@@ -202,6 +209,13 @@ void SdDrawViewShell::Activate(BOOL bIsMDIActivate)
 
 void SdDrawViewShell::Deactivate(BOOL bIsMDIActivate)
 {
+    // #94252# Disable own controls
+    aTabControl.Disable();
+    aLayerTab.Disable();
+    aPageBtn.Disable();
+    aMasterPageBtn.Disable();
+    aLayerBtn.Disable();
+
     SdViewShell::Deactivate(bIsMDIActivate);
 }
 
@@ -267,18 +281,6 @@ void SdDrawViewShell::SelectionHasChanged()
             SFX_APP()->SetViewFrame( GetViewFrame() );
             SetVerbs(0);
             pDrView->ShowMarkHdl(NULL);
-
-            aTabControl.Enable();
-            aLayerTab.Enable();
-            aPageBtn.Enable();
-            aMasterPageBtn.Enable();
-            aLayerBtn.Enable();
-            aDrawBtn.Enable();
-            aNotesBtn.Enable();
-            aHandoutBtn.Enable();
-            aOutlineBtn.Enable();
-            aSlideBtn.Enable();
-            aPresentationBtn.Enable();
         }
         else
         {
@@ -954,21 +956,6 @@ BOOL SdDrawViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
         if (pClient)
         {
             pClient->SetSdrGrafObj(NULL);
-        }
-
-        if (bActivated)
-        {
-            aTabControl.Disable();
-            aLayerTab.Disable();
-            aPageBtn.Disable();
-            aMasterPageBtn.Disable();
-            aLayerBtn.Disable();
-            aDrawBtn.Disable();
-            aNotesBtn.Disable();
-            aHandoutBtn.Disable();
-            aOutlineBtn.Disable();
-            aSlideBtn.Disable();
-            aPresentationBtn.Disable();
         }
     }
 

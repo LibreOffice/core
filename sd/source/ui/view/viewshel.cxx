@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:57 $
+ *  last change: $Author: thb $ $Date: 2001-11-13 12:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,6 +449,14 @@ void SdViewShell::Activate(BOOL bIsMDIActivate)
     ReadFrameViewData( pFrameView );
 
     pDocSh->Connect(this);
+
+    // #94252# Enable draw view controls when going active
+    aDrawBtn.Enable();
+    aOutlineBtn.Enable();
+    aSlideBtn.Enable();
+    aNotesBtn.Enable();
+    aHandoutBtn.Enable();
+    aPresentationBtn.Enable();
 }
 
 /*************************************************************************
@@ -500,6 +508,14 @@ void SdViewShell::Deactivate(BOOL bIsMDIActivate)
     for (short nY = 0; nY < MAX_VSPLIT_CNT; nY++)
         if ( pVRulerArray[nY] )
             pVRulerArray[nY]->SetActive(FALSE);
+
+    // #94252# Disable draw view controls when going inactive
+    aDrawBtn.Disable();
+    aOutlineBtn.Disable();
+    aSlideBtn.Disable();
+    aNotesBtn.Disable();
+    aHandoutBtn.Disable();
+    aPresentationBtn.Disable();
 
     SfxViewShell::Deactivate(bIsMDIActivate);
 }
