@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-30 09:54:10 $
+ *  last change: $Author: oj $ $Date: 2001-11-02 14:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3946,13 +3946,32 @@ void SbaTableQueryBrowser::ensureObjectExists(SvLBoxEntry* _pApplyTo)
         DBTreeListModel::DBTreeListUserData* pParentData = static_cast<DBTreeListModel::DBTreeListUserData*>(pEntryParent->GetUserData());
         if(pParentData && pParentData->xObject.is())
         {
-            Reference<XNameAccess> xNameAccess(pParentData->xObject,UNO_QUERY);
+            Reference<XNameAccess> xNameAccess;
+            if(pParentData->eType == etQueryContainer)
+            {// special handling for queries because otherwise we got commanddefinition instead of query object
+                ::rtl::OUString sDataSourceName;
+                SvLBoxEntry* pRootEntry = m_pTreeView->getListBox()->GetRootLevelParent(_pApplyTo);
+                DBTreeListModel::DBTreeListUserData* pConData = NULL;
+                if (pRootEntry)
+                {
+                    pConData = static_cast<DBTreeListModel::DBTreeListUserData*>(pRootEntry->GetUserData());
+
+                    SvLBoxItem* pTextItem = pRootEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
+                    if (pTextItem)
+                        sDataSourceName = static_cast<SvLBoxString*>(pTextItem)->GetText();
+                }
+                Reference<XConnection> xConnection = connectWithStatus( sDataSourceName, pConData );
+                Reference<XQueriesSupplier> xSup(xConnection,UNO_QUERY);
+                if(xSup.is())
+                    xNameAccess = xSup->getQueries();
+            }
+            else
+                xNameAccess = Reference<XNameAccess>(pParentData->xObject,UNO_QUERY);
 
             ::rtl::OUString sCurrentObject;
             SvLBoxItem* pTextItem = _pApplyTo->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
             if (pTextItem)
                 sCurrentObject = static_cast<SvLBoxString*>(pTextItem)->GetText();
-
             if(xNameAccess.is() && xNameAccess->hasByName(sCurrentObject))  // remember the table or query object
                 xNameAccess->getByName(sCurrentObject) >>= pData->xObject;
         }
