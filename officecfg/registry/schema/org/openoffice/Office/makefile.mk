@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-06 14:26:35 $
+#   last change: $Author: kz $ $Date: 2004-10-04 17:34:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,7 @@ XCSFILES= \
     DataAccess.xcs \
     Draw.xcs \
     Events.xcs \
+    Embedding.xcs \
     Impress.xcs \
     Java.xcs \
     Jobs.xcs \
