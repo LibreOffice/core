@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-22 15:46:23 $
+ *  last change: $Author: sj $ $Date: 2001-06-25 13:52:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2623,17 +2623,35 @@ FASTBOOL SdrPowerPointImport::GetColorFromPalette( USHORT nNum, Color& rColor ) 
             if ( ! ( nSlideFlags & 2 ) )
                 ((SdrPowerPointImport*)this)->aPageColors = pE->aColorScheme;
         }
-        if ( nSlideFlags & 2 )
+        if ( nSlideFlags & 2 )      // follow master colorscheme ?
         {
-            if ( HasMasterPage( nAktPageNum, eAktPageKind ) )
+            PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
+            if ( pPageList )
             {
-                UINT16 nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
-                PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
-                if ( pPageList && ( nMasterNum < pPageList->Count() ) )
+                PptSlidePersistEntry* pMasterPersist = NULL;
+                if ( eAktPageKind == PPT_MASTERPAGE )
+                    pMasterPersist = (*pPageList)[ nAktPageNum ];
+                else
                 {
-                    PptSlidePersistEntry* pE = (*pPageList)[ nMasterNum ];
-                    if ( pE )
-                        ((SdrPowerPointImport*)this)->aPageColors = pE->aColorScheme;
+                    if ( HasMasterPage( nAktPageNum, eAktPageKind ) )
+                    {
+                        sal_uInt16 nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
+                        if ( nMasterNum < pPageList->Count() )
+                            pMasterPersist = (*pPageList)[ nMasterNum ];
+                    }
+                }
+                if ( pMasterPersist )
+                {
+                    while( ( pMasterPersist && pMasterPersist->aSlideAtom.nFlags & 2 )  // it is possible that a masterpage
+                        && pMasterPersist->aSlideAtom.nMasterId )                       // itself is following a master colorscheme
+                    {
+                        sal_uInt16 nNextMaster = pMasterPages->FindPage( pMasterPersist->aSlideAtom.nMasterId );
+                        if ( nNextMaster == PPTSLIDEPERSIST_ENTRY_NOTFOUND )
+                            break;
+                        else
+                            pMasterPersist = (*pPageList)[ nNextMaster ];
+                    }
+                    ((SdrPowerPointImport*)this)->aPageColors = pMasterPersist->aColorScheme;
                 }
             }
         }
@@ -3098,23 +3116,27 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                     SdrObject* pBackGroundObj = NULL;
                                     if ( rSlidePersist.aSlideAtom.nFlags & 4 )          // follow master background ?
                                     {
-                                        if ( ! ( rSlidePersist.aSlideAtom.nFlags & 2 ) )// do not follow master colorscheme ?
+                                        if ( HasMasterPage( nAktPageNum, eAktPageKind ) )
                                         {
-                                            if ( HasMasterPage( nAktPageNum, eAktPageKind ) )
+                                            sal_uInt16 nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
+                                            PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
+                                            PptSlidePersistEntry* pE = (*pPageList)[ nMasterNum ];
+                                            while( ( pE->aSlideAtom.nFlags & 4 ) && pE->aSlideAtom.nMasterId )
                                             {
-                                                UINT16 nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
-                                                PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
-                                                if ( pPageList && ( nMasterNum < pPageList->Count() ) )
+                                                sal_uInt16 nNextMaster = pMasterPages->FindPage( pE->aSlideAtom.nMasterId );
+                                                if ( nNextMaster == PPTSLIDEPERSIST_ENTRY_NOTFOUND )
+                                                    break;
+                                                else
+                                                    pE = (*pPageList)[ nNextMaster ];
+                                            }
+                                            if ( ! ( pE->aSlideAtom.nFlags & 2 ) )  // do not follow master colorscheme ?
+                                            {
+                                                if ( pE->nBackgroundOffset )
                                                 {
-                                                    PptSlidePersistEntry* pE = (*pPageList)[ nMasterNum ];
-                                                    if ( pE && pE->nBackgroundOffset )
-                                                    {
-                                                        sal_uInt32 nPos = rStCtrl.Tell();
-                                                        rStCtrl.Seek( pE->nBackgroundOffset );
-                                                        pBackGroundObj = ImportObj( rStCtrl, (void*)&aProcessData, NULL );
-                                                        rStCtrl.Seek( nPos );
-                                                    }
-
+                                                    sal_uInt32 nPos = rStCtrl.Tell();
+                                                    rStCtrl.Seek( pE->nBackgroundOffset );
+                                                    pBackGroundObj = ImportObj( rStCtrl, (void*)&aProcessData, NULL );
+                                                    rStCtrl.Seek( nPos );
                                                 }
                                             }
                                         }
