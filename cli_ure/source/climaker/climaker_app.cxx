@@ -2,9 +2,9 @@
  *
  *  $RCSfile: climaker_app.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2003-06-05 13:17:58 $
+ *  last change: $Author: dbo $ $Date: 2003-07-16 10:42:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,12 +107,20 @@ static bool read_option(
     if (2 == len && copt == arg[ 1 ])
     {
         ++(*pIndex);
+#if OSL_DEBUG_LEVEL > 1
+        OSL_TRACE( __FILE__": identified option \'%c\'\n", copt );
+#endif
         return true;
     }
     if ('-' == arg[ 1 ] &&
         0 == rtl_ustr_compare( arg.pData->buffer + 2, opt.pData->buffer ))
     {
         ++(*pIndex);
+#if OSL_DEBUG_LEVEL > 1
+        OString cstr_opt(
+            OUStringToOString( opt, osl_getThreadTextEncoding() ) );
+        OSL_TRACE( __FILE__": identified option \'%s\'\n", cstr_opt.getStr() );
+#endif
         return true;
     }
     return false;
@@ -129,6 +137,11 @@ static bool read_argument(
         {
             osl_getCommandArg( *pIndex, &pValue->pData );
             ++(*pIndex);
+#if OSL_DEBUG_LEVEL > 1
+            OString cstr_val(
+                OUStringToOString( *pValue, osl_getThreadTextEncoding() ) );
+            OSL_TRACE( __FILE__": argument value: %s\n", cstr_val.getStr() );
+#endif
             return true;
         }
         --(*pIndex);
@@ -332,6 +345,7 @@ extern "C" int SAL_CALL main( int argc, char const * argv [] )
                     osl_Process_E_None == osl_getCommandArg(
                         nPos, &cmd_arg.pData ) );
                 ++nPos;
+                cmd_arg = cmd_arg.trim();
                 if (cmd_arg.getLength() && '-' != cmd_arg[ 0 ]) // no option
                 {
                     mandatory_registries.push_back(
