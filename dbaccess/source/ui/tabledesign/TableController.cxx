@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 15:21:13 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 15:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -597,6 +597,8 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool bSuspend) throw( RuntimeExc
         {
             case RET_YES:
                 Execute(ID_BROWSER_SAVEDOC);
+                if(isModified())
+                    return sal_False; // when we save the table this must be false else some press cancel
                 break;
             case RET_CANCEL:
                 return sal_False;
