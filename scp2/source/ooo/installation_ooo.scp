@@ -2,9 +2,9 @@
 *
 *  $RCSfile: installation_ooo.scp,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: kz $ $Date: 2004-06-11 17:53:54 $
+*  last change: $Author: hr $ $Date: 2004-11-26 21:53:13 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -65,6 +65,7 @@ Installation gid_Installation
     ProductName = "${PRODUCTNAME}";
     ProductVersion = "${PRODUCTVERSION}";
     ProductExtension = "${PRODUCTEXTENSION}";
+    SxwFormatVersion = "1.1";
     VendorName = "OpenOffice.org";
     Bitmap = "oo_product.bmp";
   #ifdef WNT
