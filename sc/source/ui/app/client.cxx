@@ -2,9 +2,9 @@
  *
  *  $RCSfile: client.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:12:30 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:22:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdograf.hxx>
+#include <svtools/embedhlp.hxx>
 
 #include "client.hxx"
 #include "tabvwsh.hxx"
@@ -216,6 +217,10 @@ void __EXPORT ScClient::ObjectAreaChanged()
 void __EXPORT ScClient::ViewChanged()
 {
     uno::Reference < embed::XEmbeddedObject > xObj = GetObject();
+
+    // TODO/LEAN: working with Visual Area needs running state
+    svt::EmbeddedObjectRef::TryRunningState( xObj );
+
     awt::Size aSz = xObj->getVisualAreaSize( GetAspect() );
     MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( GetAspect() ) );
     Size aVisSize = OutputDevice::LogicToLogic( Size( aSz.Width, aSz.Height ), aMapUnit, MAP_100TH_MM );
