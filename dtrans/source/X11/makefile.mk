@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: pl $ $Date: 2001-02-09 16:37:26 $
+#   last change: $Author: pluby $ $Date: 2001-03-13 06:22:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,13 @@ LIBTARGET=NO
 
 # ------------------------------------------------------------------
 
+.IF "$(OS)"=="MACOSX"
+
+dummy:
+    @echo "Nothing to build for Mac OS X"
+ 
+.ELSE		# "$(OS)"=="MACOSX"
+
 SLOFILES=\
     $(SLO)$/X11_dndcontext.obj		\
     $(SLO)$/X11_transferable.obj	\
@@ -105,7 +112,7 @@ APP1STDLIBS=\
         $(CPPUHELPERLIB)	\
         $(SALLIB)
 
-
+.ENDIF		# "$(OS)"=="MACOSX"
 
 # --- Targets ------------------------------------------------------
 
