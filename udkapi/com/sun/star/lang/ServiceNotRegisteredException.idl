@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ServiceNotRegisteredException.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:53 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ module com {  module sun {  module star {  module lang {
     <p>Applications should throw instances of this class to indicate
     that a needed service is not registered.  </p>
  */
-exception ServiceNotRegisteredException: com::sun::star::uno::Exception
+published exception ServiceNotRegisteredException: com::sun::star::uno::Exception
 {
 };
 
