@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sunjavaplugin.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-10 14:34:19 $
+ *  last change: $Author: jl $ $Date: 2004-05-14 11:00:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -437,12 +437,12 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     {
 #ifdef UNX
     // Until java 1.5 we need to put a plugin.jar or javaplugin.jar (<1.4.2)
-    // in the class path in orderto have applet support.
+    // in the class path in order to have applet support.
         rtl::OString sClassPath = arOptions[i].optionString;
         if (sClassPath.match(sClassPathProp, 0) == sal_True)
         {
-//            char sep[] =  {SAL_PATHSEPARATOR, 0};
-            sClassPathOption = sClassPath + //rtl::OString(sep) +
+            char sep[] =  {SAL_PATHSEPARATOR, 0};
+            sClassPathOption = sClassPath + rtl::OString(sep) +
                 getPluginJarPath(pInfo->sLocation,pInfo->sVersion);
             options[i+1].optionString = (char *) sClassPathOption.getStr();
             options[i+1].extraInfo = arOptions[i].extraInfo;
