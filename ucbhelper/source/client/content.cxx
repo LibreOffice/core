@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-10 14:18:47 $
+ *  last change: $Author: kso $ $Date: 2000-10-30 10:03:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,10 +424,14 @@ Sequence< Any > Content::getPropertyValues(
 
     sal_Int32 nCount = rPropertyNames.getLength();
     Sequence< Any > aValues( nCount );
-    Any* pValues = aValues.getArray();
 
-    for ( sal_Int32 n = 0; n < nCount; ++n )
-        pValues[ n ] = xRow->getObject( n + 1, Reference< XNameAccess >() );
+    if ( xRow.is() )
+    {
+        Any* pValues = aValues.getArray();
+
+        for ( sal_Int32 n = 0; n < nCount; ++n )
+            pValues[ n ] = xRow->getObject( n + 1, Reference< XNameAccess >() );
+    }
 
     return aValues;
 }
@@ -441,11 +445,14 @@ Sequence< Any > Content::getPropertyValues(
 
     sal_Int32 nCount = nPropertyHandles.getLength();
     Sequence< Any > aValues( nCount );
-    Any* pValues = aValues.getArray();
 
-    for ( sal_Int32 n = 0; n < nCount; ++n )
-        pValues[ n ] = xRow->getObject( n + 1, Reference< XNameAccess >() );
+    if ( xRow.is() )
+    {
+        Any* pValues = aValues.getArray();
 
+        for ( sal_Int32 n = 0; n < nCount; ++n )
+            pValues[ n ] = xRow->getObject( n + 1, Reference< XNameAccess >() );
+    }
     return aValues;
 }
 
