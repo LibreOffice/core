@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ab $ $Date: 2002-06-06 14:59:05 $
+ *  last change: $Author: ab $ $Date: 2002-08-07 13:11:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1960,6 +1960,9 @@ RTLFUNC(IsObject)
     {
         SbxVariable* pVar = rPar.Get(1);
         SbxBase* pObj = (SbxBase*)pVar->GetObject();
+
+        // #100385: GetObject can result in an error, so reset it
+        SbxBase::ResetError();
 
         SbUnoClass* pUnoClass;
         BOOL bObject;
