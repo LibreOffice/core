@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-01 21:33:36 $
+ *  last change: $Author: kz $ $Date: 2001-11-13 22:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ String RID_GALLERYSTR_THEME_3D
     Text[ turkish ] = "3B";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Efectos 3D";
-    Text[ finnish ] = "3D";
+    Text[ finnish ] = "Kolmiulotteiset tehosteet";
 };
 
 // -----------------------------------------------------------------------------
@@ -174,7 +174,7 @@ String RID_GALLERYSTR_THEME_OFFICE
     Text[ turkish ] = "Clipart";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Oficina";
-    Text[ finnish ] = "Büro";
+    Text[ finnish ] = "Office";
 };
 
 // -----------------------------------------------------------------------------
@@ -232,7 +232,7 @@ String RID_GALLERYSTR_THEME_FLOWCHARTS
     Text[ turkish ] = "Akýþ þemalarý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Diagramas de flujo";
-    Text[ finnish ] = "Flow Charts";
+    Text[ finnish ] = "Vuokaaviot";
 };
 
 // -----------------------------------------------------------------------------
@@ -261,7 +261,7 @@ String RID_GALLERYSTR_THEME_EMOTICONS
     Text[ turkish ] = "Þekiller";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Emoticon";
-    Text[ finnish ] = "Emoticons";
+    Text[ finnish ] = "Hymiöt";
 };
 
 // -----------------------------------------------------------------------------
@@ -435,7 +435,7 @@ String RID_GALLERYSTR_THEME_PEOPLE
     Text[ turkish ] = "Eþyalar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Personas";
-    Text[ finnish ] = "Personen";
+    Text[ finnish ] = "Henkilöt";
 };
 
 // -----------------------------------------------------------------------------
@@ -631,7 +631,7 @@ String RID_GALLERYSTR_THEME_ARROWS
     Text[ turkish ] = "Kullanýcý konusu";
     Text[ arabic ] = "ÃÓåã";
     Text[ catalan ] = "Flechas";
-    Text[ finnish ] = "Pfeile";
+    Text[ finnish ] = "Nuolet";
 };
 
 // -----------------------------------------------------------------------------
@@ -659,7 +659,7 @@ String RID_GALLERYSTR_THEME_BALLOONS
     Text[ turkish ] = "Kullanýcý konusu";
     Text[ arabic ] = "ÊÚáíÞ ÊÝÓíÑí";
     Text[ catalan ] = "Llamadas";
-    Text[ finnish ] = "Sprechblasen";
+    Text[ finnish ] = "Puhekuplat";
 };
 
 // -----------------------------------------------------------------------------
@@ -827,7 +827,7 @@ String RID_GALLERYSTR_THEME_COMMUNICATION
     Text[ turkish ] = "Kullanýcý konusu";
     Text[ arabic ] = "ÇÊÕÇá";
     Text[ catalan ] = "Comunicación";
-    Text[ finnish ] = "Kommunikation";
+    Text[ finnish ] = "Yhteydenpito";
 };
 
 // -----------------------------------------------------------------------------
@@ -883,7 +883,7 @@ String RID_GALLERYSTR_THEME_COMPUTER
     Text[ turkish ] = "Kullanýcý konusu";
     Text[ arabic ] = "ßãÈíæÊÑ";
     Text[ catalan ] = "Ordenador";
-    Text[ finnish ] = "Computer";
+    Text[ finnish ] = "Tietokoneet";
 };
 
 // -----------------------------------------------------------------------------
@@ -911,7 +911,7 @@ String RID_GALLERYSTR_THEME_CLIMA
     Text[ turkish ] = "Climate";
     Text[ arabic ] = "Climate";
     Text[ catalan ] = "Climate";
-    Text[ finnish ] = "Climate";
+    Text[ finnish ] = "Ympäristö";
 };
 
 // -----------------------------------------------------------------------------
@@ -939,7 +939,7 @@ String RID_GALLERYSTR_THEME_EDUCATION
     Text[ turkish ] = "School & University";
     Text[ arabic ] = "School & University";
     Text[ catalan ] = "School & University";
-    Text[ finnish ] = "School & University";
+    Text[ finnish ] = "Koulu ja yliopisto";
 };
 
 // -----------------------------------------------------------------------------
@@ -967,7 +967,7 @@ String RID_GALLERYSTR_THEME_TROUBLE
     Text[ turkish ] = "Problem Solving";
     Text[ arabic ] = "Problem Solving";
     Text[ catalan ] = "Problem Solving";
-    Text[ finnish ] = "Problem Solving";
+    Text[ finnish ] = "Ongelmien ratkaisu";
 };
 
 // -----------------------------------------------------------------------------
@@ -1006,6 +1006,7 @@ String RID_GALLERYSTR_THEME_DUMMY5
     // !!! Don't translate, please !!!
     Text = "Dummy 5";
 };
+
 
 
 
