@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:20:46 $
+ *  last change: $Author: pb $ $Date: 2001-08-08 08:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #include "app.hrc"
 #include "newhelp.hrc"
 #include "helpid.hrc"
@@ -449,60 +450,71 @@ TabPage TP_HELP_BOOKMARKS
     };
 };
 
+#define MASKCOLOR_GREY \
+    MaskColor = Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; };
+
+#define MASKCOLOR_MAGENTA \
+    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+
 Image IMG_HELP_TOOLBOX_INDEX_ON
 {
     ImageBitmap = Bitmap { File = "indexon_small.bmp" ; };
-    MaskColor = Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; };
+    MASKCOLOR_GREY
 };
 Image IMG_HELP_TOOLBOX_INDEX_OFF
 {
     ImageBitmap = Bitmap { File = "indexoff_small.bmp" ; };
-    MaskColor = Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; };
+    MASKCOLOR_GREY
 };
 Image IMG_HELP_TOOLBOX_START
 {
     ImageBitmap = Bitmap { File = "sc06303.bmp" ; };
-    MaskColor = Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; };
+    MASKCOLOR_GREY
 };
 Image IMG_HELP_TOOLBOX_PREV
 {
     ImageBitmap = Bitmap { File = "sc06301.bmp" ; };
-    MaskColor = Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; };
+    MASKCOLOR_GREY
 };
 Image IMG_HELP_TOOLBOX_NEXT
 {
     ImageBitmap = Bitmap { File = "sc06300.bmp" ; };
-    MaskColor = Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; };
+    MASKCOLOR_GREY
 };
 Image IMG_HELP_TOOLBOX_PRINT
 {
     ImageBitmap = Bitmap { File = "sc05504.bmp" ; };
-    MaskColor = Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; };
+    MASKCOLOR_GREY
 };
 Image IMG_HELP_TOOLBOX_BOOKMARKS
 {
     ImageBitmap = Bitmap { File = "favourite.bmp" ; };
-    MaskColor = Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; };
+    MASKCOLOR_GREY
 };
 Image IMG_HELP_CONTENT_BOOK_OPEN
 {
-    ImageBitmap = Bitmap { File = "fldopen.bmp" ; };
+    ImageBitmap = Bitmap { File = "hlpbookopen.bmp" ; };
+    MASKCOLOR_MAGENTA
 };
 Image IMG_HELP_CONTENT_BOOK_CLOSED
 {
-    ImageBitmap = Bitmap { File = "fldclose.bmp" ; };
+    ImageBitmap = Bitmap { File = "hlpbookclosed.bmp" ; };
+    MASKCOLOR_MAGENTA
 };
 Image IMG_HELP_CONTENT_CHAPTER_OPEN
 {
-    ImageBitmap = Bitmap { File = "fldopen.bmp" ; };
+    ImageBitmap = Bitmap { File = "hlpbookopen.bmp" ; };
+    MASKCOLOR_MAGENTA
 };
 Image IMG_HELP_CONTENT_CHAPTER_CLOSED
 {
-    ImageBitmap = Bitmap { File = "fldclose.bmp" ; };
+    ImageBitmap = Bitmap { File = "hlpbookclosed.bmp" ; };
+    MASKCOLOR_MAGENTA
 };
 Image IMG_HELP_CONTENT_DOC
 {
-    ImageBitmap = Bitmap { File = "doccl.bmp" ; };
+    ImageBitmap = Bitmap { File = "hlpdoc.bmp" ; };
+    MASKCOLOR_MAGENTA
 };
 
 String STR_HELP_WINDOW_TITLE
@@ -959,8 +971,11 @@ Menu MENU_HELP_BOOKMARKS
     };
 };
 
-
-
-
-
+InfoBox RID_INFO_NOSEARCHRESULTS
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    MESSAGE = "Keine Themen gefunden." ;
+    MESSAGE [ English ] = "No themes found." ;
+};
 
