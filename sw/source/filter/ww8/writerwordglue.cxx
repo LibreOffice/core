@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writerwordglue.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 12:48:24 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #ifndef _RTL_TENCINFO_H
 #   include <rtl/tencinfo.h>        //rtl_getBestWindowsCharsetFromTextEncoding
 #endif
+#ifndef SV_FONTCVT_HXX
+#   include <vcl/fontcvt.hxx>   //GetSubsFontName
+#endif
 #ifndef _HINTIDS_HXX
 #   include <hintids.hxx>           //ITEMID_LRSPACE...
 #endif
@@ -140,6 +143,8 @@
 #ifndef _BREAKIT_HXX
 #   include <breakit.hxx>           //pBreakIt
 #endif
+
+#define ASSIGN_CONST_ASC(s) AssignAscii(RTL_CONSTASCII_STRINGPARAM(s))
 
 namespace
 {
@@ -421,6 +426,16 @@ namespace
         return pColl ? 0 : maHelper.MakeStyle(aName);
     }
 
+    String FindBestMSSubstituteFont(const String &rFont)
+    {
+        String sRet;
+        if (sw::util::IsStarSymbol(rFont))
+            sRet.ASSIGN_CONST_ASC("Arial Unicode MS");
+        else
+            sRet = GetSubsFontName(rFont, SUBSFONT_ONLYONE | SUBSFONT_MS);
+        return sRet;
+    }
+
     /*
      Utility to categorize unicode characters into the best fit windows charset
      range for exporting to ww6, or as a hint to non \u unicode token aware rtf
@@ -600,6 +615,21 @@ namespace sw
             const String& rName, ww::sti eSti)
         {
             return mpImpl->GetStyle(rName, eSti);
+        }
+
+        FontMapExport::FontMapExport(const String &rFamilyName)
+        {
+            msPrimary = GetFontToken(rFamilyName, 0);
+            msSecondary = FindBestMSSubstituteFont(msPrimary);
+            if (!msSecondary.Len())
+                msSecondary = GetFontToken(rFamilyName, 1);
+        }
+
+        bool FontMapExport::HasDistinctSecondary() const
+        {
+            if (msSecondary.Len() && msSecondary != msPrimary)
+                return true;
+            return false;
         }
 
         bool ItemSort::operator()(sal_uInt16 nA, sal_uInt16 nB) const
