@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDispatchProviderInterceptor.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:05:23 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:19:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 
     @see XDispatchProviderInterception
  */
-interface XDispatchProviderInterceptor: XDispatchProvider
+published interface XDispatchProviderInterceptor: XDispatchProvider
 {
     //-------------------------------------------------------------------------
     /** access to the slave <type>XDispatchProvider</type> of this interceptor
