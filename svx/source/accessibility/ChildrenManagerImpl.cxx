@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-23 09:01:26 $
+ *  last change: $Author: fs $ $Date: 2002-09-23 09:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -701,6 +701,9 @@ sal_Bool ChildrenManagerImpl::ReplaceChild (
         AccessibleShapeInfo ( _rxShape, pCurrentChild->getAccessibleParent(), this, _nIndex ),
         _rShapeTreeInfo
     );
+    Reference< XAccessible > xNewChild( pNewChild );    // keep this alive (do this before calling Init!)
+    if ( pNewChild )
+        pNewChild->Init();
 
     sal_Bool bResult = sal_False;
 
