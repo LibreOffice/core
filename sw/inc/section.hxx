@@ -2,9 +2,9 @@
  *
  *  $RCSfile: section.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:59:31 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,9 @@ class SW_DLLPUBLIC SwSection : public SwClient
     BOOL bProtectFlag : 1;      // Flags fuer schnelle Abfragen, wird ueber
                                 // Attribut im Format gesetzt
     BOOL bHiddenFlag : 1;       // Flag: Absaetze versteckt ?
+    // --> FME 2004-06-22 #114856# edit in readonly sections
+    BOOL bEditInReadonlyFlag : 1;
+    // <--
     BOOL bHidden : 1;           // alle Absaetze nicht sichtbar ?
     BOOL bCondHiddenFlag : 1;   // Hiddenflag fuer die Bedingung ?
     BOOL bConnectFlag : 1;      // Flag: "Verbindung zum Server" vorhanden?
@@ -144,8 +147,12 @@ class SW_DLLPUBLIC SwSection : public SwClient
 
     SW_DLLPRIVATE void _SetHiddenFlag( int bHidden, int bCondition );
     SW_DLLPRIVATE void _SetProtectFlag( int bFlag ) { bProtectFlag = bFlag; }
-
     /* SW_DLLPUBLIC */ int _IsProtect() const;
+
+    // --> FME 2004-06-22 #114856# edit in readonly sections
+    void _SetEditInReadonlyFlag( int bFlag ) { bEditInReadonlyFlag = bFlag; }
+    int _IsEditInReadonly() const;
+    // <--
 
 public:
     TYPEINFO();     // rtti
@@ -175,6 +182,11 @@ public:
     int IsProtect() const { return GetFmt() ? _IsProtect()
                                             : IsProtectFlag(); }
 
+    // --> FME 2004-06-22 #114856# edit in readonly sections
+    int IsEditInReadonly()const { return GetFmt() ? _IsEditInReadonly() : IsEditInReadonlyFlag(); }
+    void SetEditInReadonly( int bFlag = TRUE );
+    // <--
+
     void SetHidden( int bFlag = TRUE );
     void SetProtect( int bFlag = TRUE );
 
@@ -182,6 +194,9 @@ public:
     // aktuell an der Section gesetzt ist!!)
     int IsHiddenFlag() const { return bHiddenFlag; }
     int IsProtectFlag() const { return bProtectFlag; }
+    // --> FME 2004-06-22 #114856# edit in readonly sections
+    int IsEditInReadonlyFlag() const { return bEditInReadonlyFlag; }
+    // <--
 
     void SetCondHidden( int bFlag = TRUE );
     int IsCondHidden() const { return bCondHiddenFlag; }
