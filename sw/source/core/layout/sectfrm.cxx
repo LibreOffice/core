@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:15:25 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:07:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1350,7 +1350,7 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
         {
             if( !GetNext() )
                 SetRetouche(); // Dann muessen wir die Retusche selbst uebernehmen
-            if( GetUpper() )
+            if( GetUpper() && !GetUpper()->IsFooterFrm() )
                 GetUpper()->Shrink( nDiff PHEIGHT );
         }
         if( IsUndersized() )
@@ -1680,10 +1680,24 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType eMakeFtn )
             // If there is a pLayLeaf has a lower pLayLeaf is the frame we are looking for.
             // Exception: pLayLeaf->Lower() is a zombie section frame
             const SwFrm* pTmp = pLayLeaf->Lower();
+            // OD 11.04.2003 #108824# - consider, that the zombie section frame
+            // can have frame below it in the found layout leaf.
+            // Thus, skipping zombie section frame, if possible.
+            while ( pTmp && pTmp->IsSctFrm() &&
+                    !( static_cast<const SwSectionFrm*>(pTmp)->GetSection() ) &&
+                    pTmp->GetNext()
+                  )
+            {
+                pTmp = pTmp->GetNext();
+            }
             if ( pTmp &&
-                    ( ! pTmp->IsSctFrm() ||
-                    ((SwSectionFrm*)pTmp)->GetSection() ) )
+                 ( !pTmp->IsSctFrm() ||
+                   ( static_cast<const SwSectionFrm*>(pTmp)->GetSection() )
+                 )
+               )
+            {
                 break;
+            }
             pPrevLeaf = pLayLeaf;
             pLayLeaf = pLayLeaf->GetPrevLayoutLeaf();
             if ( pLayLeaf )
@@ -1858,8 +1872,7 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, BOOL bTst )
                         SetCompletePaint();
                         InvalidatePage();
                     }
-                    if( GetUpper() && ( GetUpper()->IsHeaderFrm() ||
-                                        GetUpper()->IsFooterFrm() ) )
+                    if( GetUpper() && GetUpper()->IsHeaderFrm() )
                         GetUpper()->InvalidateSize();
                 }
                 (Frm().*fnRect->fnAddBottom)( nGrow );
@@ -1939,7 +1952,24 @@ SwTwips SwSectionFrm::_Shrink( SwTwips nDist, BOOL bTst )
                 (Frm().*fnRect->fnAddBottom)( -nDist );
                 long nPrtHeight = (Prt().*fnRect->fnGetHeight)() - nDist;
                 (Prt().*fnRect->fnSetHeight)( nPrtHeight );
-                const SwTwips nReal = GetUpper()->Shrink( nDist, bTst );
+
+                SwTwips nReal = 0;
+                // We do not allow a section frame to shrink the its upper
+                // footer frame. This is because in the calculation of a
+                // footer frame, the content of the section frame is _not_
+                // calculated. If there is a fly frame overlapping with the
+                // footer frame, the section frame is not affected by this
+                // during the calculation of the footer frame size.
+                // The footer frame does not grow in its FormatSize function
+                // but during the calculation of the content of the section
+                // frame. The section frame grows until some of its text is
+                // located on top of the fly frame. The next call of CalcCntnt
+                // tries to shrink the section and here it would also shrink
+                // the footer. This may not happen, because shrinking the footer
+                // would cause the top of the section frame to overlap with the
+                // fly frame again, this would result in a perfect loop.
+                if( !GetUpper()->IsFooterFrm() )
+                    nReal = GetUpper()->Shrink( nDist, bTst );
 
                 if( Lower() && Lower()->IsColumnFrm() && Lower()->GetNext() )
                 {
@@ -2426,6 +2456,11 @@ long SwSectionFrm::Undersize( BOOL bOverSize )
     return nRet;
 }
 
+/// OD 01.04.2003 #108446# - determine next frame for footnote/endnote formatting
+/// before format of current one, because current one can move backward.
+/// After moving backward to a previous page method <FindNext()> will return
+/// the text frame presenting the first page footnote, if it exists. Thus, the
+/// rest of the footnote/endnote container would not be formatted.
 void SwSectionFrm::CalcFtnCntnt()
 {
     SwFtnContFrm* pCont = ContainsFtnCont();
@@ -2439,17 +2474,20 @@ void SwSectionFrm::CalcFtnCntnt()
             SwFtnFrm* pFtn = pFrm->FindFtnFrm();
             if( pFtn )
                 pFtn->Calc();
-            pFrm->Calc();
-            if( pFrm->IsSctFrm() )
+            // OD 01.04.2003 #108446# - determine next frame before format current frame.
+            SwFrm* pNextFrm = 0;
             {
-                SwFrm *pTmp = ((SwSectionFrm*)pFrm)->ContainsAny();
-                if( pTmp )
+                if( pFrm->IsSctFrm() )
                 {
-                    pFrm = pTmp;
-                    continue;
+                    pNextFrm = static_cast<SwSectionFrm*>(pFrm)->ContainsAny();
+                }
+                if( !pNextFrm )
+                {
+                    pNextFrm = pFrm->FindNext();
                 }
             }
-            pFrm = pFrm->FindNext();
+            pFrm->Calc();
+            pFrm = pNextFrm;
         }
     }
 }
