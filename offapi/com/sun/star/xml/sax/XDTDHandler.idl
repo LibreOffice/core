@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDTDHandler.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:11:19 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ module com {  module sun {  module star {  module xml {  module sax {
     and/or notation that corresponds with the attribute value.
     </p>
  */
-interface XDTDHandler: com::sun::star::uno::XInterface
+published interface XDTDHandler: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
