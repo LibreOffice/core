@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-14 16:28:31 $
+ *  last change: $Author: jbu $ $Date: 2001-03-19 16:54:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,9 +186,10 @@ namespace osl
     inline StreamPipe::StreamPipe(){}
 
     //______________________________________________________________________________
-    inline StreamPipe::StreamPipe(oslPipe Pipe)
-        : Pipe( Pipe )
-    {}
+    inline StreamPipe::StreamPipe(oslPipe hPipe)
+        : Pipe( hPipe )
+    {
+    }
 
     //______________________________________________________________________________
     inline StreamPipe::StreamPipe(const ::rtl::OUString& strName, oslPipeOptions Options, const Security &rSec )
@@ -201,8 +202,8 @@ namespace osl
     {}
 
     //______________________________________________________________________________
-    inline StreamPipe::StreamPipe(const StreamPipe& Pipe)
-        : Pipe( Pipe )
+    inline StreamPipe::StreamPipe(const StreamPipe& aPipe)
+        : Pipe( aPipe )
     {}
     //______________________________________________________________________________
     inline StreamPipe::StreamPipe( oslPipe pipe, __sal_NoAcquire noacquire )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-15 11:07:36 $
+ *  last change: $Author: jbu $ $Date: 2001-03-19 16:54:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,7 @@ namespace osl
     inline SocketAddr & SAL_CALL SocketAddr::operator= (const SocketAddr& Addr)
     {
         *this = (Addr.getHandle());
+        return *this;
     }
 
     inline SocketAddr & SAL_CALL SocketAddr::assign( oslSocketAddr Addr, __osl_socket_NoCopy nocopy )
