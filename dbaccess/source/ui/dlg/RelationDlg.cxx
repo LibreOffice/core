@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationDlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-04 10:53:10 $
+ *  last change: $Author: oj $ $Date: 2001-05-04 11:19:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,8 +427,10 @@ void ORelationControl::SetDef(const Reference< XPropertySet>& xDest,sal_Int32 _n
 
     for(;aIter != pLines->end();++aIter)
     {
-        (*aIter)->SetSourceFieldName(String());
-        (*aIter)->SetDestFieldName(String());
+        if(_nPos == 1)
+            (*aIter)->SetSourceFieldName(String());
+        else
+            (*aIter)->SetDestFieldName(String());
     }
     // neu zeichnen
     Invalidate();
