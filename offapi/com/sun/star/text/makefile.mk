@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: cl $ $Date: 2000-11-14 13:45:16 $
+#   last change: $Author: os $ $Date: 2000-11-17 09:28:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,6 +90,7 @@ IDLFILES=\
     ControlCharacter.idl\
     DependentTextField.idl\
     DocumentIndex.idl\
+    DocumentIndexes.idl\
     DocumentIndexLevelFormat.idl\
     DocumentIndexParagraphStyles.idl\
     DocumentIndexMark.idl\
@@ -141,15 +142,18 @@ IDLFILES=\
     TextDocument.idl\
     TextDocumentView.idl\
     TextEmbeddedObject.idl\
-    TextEmbeddObjects.idl\
+    TextEmbeddedObjects.idl\
     TextField.idl\
+    TextFieldEnumeration.idl\
     TextFieldMaster.idl\
     TextFieldMasters.idl\
     TextFields.idl\
     TextFrame.idl\
     TextFrames.idl\
     TextGraphicObject.idl\
+    TextGraphicObjects.idl\
     TextPortion.idl\
+    TextPortionEnumeration.idl\
     TextLayoutCursor.idl\
     TextRange.idl\
     TextRanges.idl\
