@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescription_Test.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:26:25 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:38:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,16 +111,15 @@ public final class TypeDescription_Test extends ComplexTestCase {
             new ITypeDescription[1], interfaceTD);
 
         TypeSignature emptyTypeSig = new TypeSignature(
-            null, new String[0], new MethodSignature[0], new String[0],
-            new TypeSignature[0]);
+            null, new String[0], null, new String[0], null);
         TypeSignature interfaceTypeSig = new TypeSignature(
             null, new String[] { "queryInterface", "acquire", "release" },
             new MethodSignature[] { sigBuildinSyncTypeToAny,
                                     sigBuildinAsyncToVoid,
                                     sigBuildinAsyncToVoid },
-            new String[0], new TypeSignature[0]);
+            new String[0], null);
         TypeSignature exceptionTypeSig = new TypeSignature(
-            null, new String[0], new MethodSignature[0],
+            null, new String[0], null,
             new String[]{"Context"}, new TypeSignature[] { interfaceTypeSig });
             // com.sun.star.uno.Exception.idl says that Exception (a) has no
             // base exception, and (b) has two fields, Message and Context; the
@@ -134,7 +133,7 @@ public final class TypeDescription_Test extends ComplexTestCase {
             new MethodSignature[] { sigAddonSyncStringToInterface,
                                     sigAddonSyncStringInterfaceToVoid,
                                     sigAddonSyncStringToVoid },
-            new String[0], new TypeSignature[0]);
+            new String[0], null);
 
         Object[] byteData = new Object[] {
             "byte", "[B", byte.class, TypeClass.BYTE };
@@ -279,12 +278,17 @@ public final class TypeDescription_Test extends ComplexTestCase {
                    description.getComponentType() == null);
 
             IMethodDescription[] mds = description.getMethodDescriptions();
-            assure(prefix + "; getMethodDescriptions",
-                   mds.length == methodSignatures.length);
-            for (int i = 0; i < methodSignatures.length; ++i) {
-                methodSignatures[i].test(
-                    prefix + "; getMethodDescriptions " + i,
-                    i + methodOffset, mds[i]);
+            assure(
+                prefix + "; getMethodDescriptions",
+                mds == null
+                    ? methodSignatures == null
+                    : mds.length == methodSignatures.length);
+            if (methodSignatures != null) {
+                for (int i = 0; i < methodSignatures.length; ++i) {
+                    methodSignatures[i].test(
+                        prefix + "; getMethodDescriptions " + i,
+                        i + methodOffset, mds[i]);
+                }
             }
             for (int i = 0; i < methodNames.length; ++i) {
                 IMethodDescription md = description.getMethodDescription(
@@ -306,13 +310,18 @@ public final class TypeDescription_Test extends ComplexTestCase {
             }
 
             IFieldDescription[] fds = description.getFieldDescriptions();
-            assure(prefix + "; getFieldDescriptions",
-                   fds.length == fieldSignatures.length);
-            for (int i = 0; i < fieldSignatures.length; ++i) {
-                fieldSignatures[i].test(
-                    prefix + "; getFieldDescriptions " + i,
-                    (Object[]) ((Object[]) data[4])[i],
-                    fds[i].getTypeDescription());
+            assure(
+                prefix + "; getFieldDescriptions",
+                fds == null
+                    ? fieldSignatures == null
+                    : fds.length == fieldSignatures.length);
+            if (fieldSignatures != null) {
+                for (int i = 0; i < fieldSignatures.length; ++i) {
+                    fieldSignatures[i].test(
+                        prefix + "; getFieldDescriptions " + i,
+                        (Object[]) ((Object[]) data[4])[i],
+                        fds[i].getTypeDescription());
+                }
             }
 
             ITypeDescription supert = description.getSuperType();
