@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbased.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gh $ $Date: 2001-06-08 13:44:14 $
+ *  last change: $Author: gh $ $Date: 2002-10-21 08:44:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ AppBasEd::AppBasEd( BasicFrame* pParent, SbModule* p )
 
     ((TextEdit*)pDataEdit)->GetTextEditImp().pTextView->SetAutoIndentMode( TRUE );
     ((TextEdit*)pDataEdit)->GetTextEditImp().pTextEngine->SetMaxTextLen( STRING_MAXLEN );
-    ((TextEdit*)pDataEdit)->GetTextEditImp().pTextEngine->SetWordDelimiters( CUniString(" ,.;:(){}[]\"'+-*/<>^\\") );
+//  ((TextEdit*)pDataEdit)->GetTextEditImp().pTextEngine->SetWordDelimiters( CUniString(" ,.;:(){}[]\"'+-*/<>^\\") );
     ((TextEdit*)pDataEdit)->GetTextEditImp().SyntaxHighlight( TRUE );
     ((TextEdit*)pDataEdit)->SaveAsUTF8( TRUE );
 

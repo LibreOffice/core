@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: jbu $ $Date: 2002-10-18 09:20:25 $
+ *  last change: $Author: gh $ $Date: 2002-10-21 08:44:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,8 +271,11 @@ static const char * const components[] =
     SAL_MODULENAME( "ucb1" )    // KSO, ABI
     , SAL_MODULENAME( "ucpfile1" )
     , SAL_MODULENAME( "fileacc" )
-    , SAL_MODULENAME( "mcnttype" )
+    , SAL_MODULENAME( "mcnttype" )          //Clipboard   Ask Oliver Braun
     , SVLIBRARY( "i18n" )
+    , SVLIBRARY( "i18npool" )
+        // Reading of files in specific encodings like UTF-8 using
+        // createUnoService( "com.sun.star.io.TextInputStream" ) and such
     , SAL_MODULENAME( "tinstrm" )
 #ifdef SAL_UNX
     , SVLIBRARY( "dtransX11" )        // OBR
