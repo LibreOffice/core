@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-15 15:20:20 $
+ *  last change: $Author: os $ $Date: 2001-11-28 12:50:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -935,7 +935,10 @@ Sequence< Any > SwXTextSection::getPropertyValues(
                             const SwNode* pRedMarkNode = pRedline->GetNode(FALSE);
                             if(pRedPointNode == pSectNode || pRedMarkNode == pSectNode)
                             {
-                                pRet[nProperty] <<= SwXRedlinePortion::CreateRedlineProperties(*pRedline);
+                                const SwNode* pStartOfRedline = SwNodeIndex(*pRedPointNode) <= SwNodeIndex(*pRedMarkNode) ?
+                                    pRedPointNode : pRedMarkNode;
+                                BOOL bIsStart = pStartOfRedline == pSectNode;
+                                pRet[nProperty] <<= SwXRedlinePortion::CreateRedlineProperties(*pRedline, bIsStart);
                                 break;
                             }
                         }

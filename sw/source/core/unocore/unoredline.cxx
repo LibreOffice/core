@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoredline.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2001-11-20 12:04:44 $
+ *  last change: $Author: os $ $Date: 2001-11-28 12:50:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -455,31 +455,52 @@ Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, const S
 /* -----------------------------11.01.01 11:22--------------------------------
 
  ---------------------------------------------------------------------------*/
-Sequence< PropertyValue > SwXRedlinePortion::CreateRedlineProperties( const SwRedline& rRedline ) throw()
+Sequence< PropertyValue > SwXRedlinePortion::CreateRedlineProperties(
+    const SwRedline& rRedline, sal_Bool bIsStart ) throw()
 {
-    Sequence< PropertyValue > aRet;
+    Sequence< PropertyValue > aRet(10);
     const SwRedlineData* pNext = rRedline.GetRedlineData().Next();
-    aRet.realloc( pNext ? 6 : 5 );
     PropertyValue* pRet = aRet.getArray();
 
     OUStringBuffer sRedlineIdBuf;
     sRedlineIdBuf.append((sal_Int64)&rRedline);
 
-    pRet[0].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_AUTHOR));
-    pRet[0].Value <<= OUString(rRedline.GetAuthorString());
-    pRet[1].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_DATE_TIME));
-    pRet[1].Value <<= lcl_DateTimeToUno(rRedline.GetTimeStamp());
-    pRet[2].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_COMMENT));
-    pRet[2].Value <<= OUString(rRedline.GetComment());
-    pRet[3].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_TYPE));
-    pRet[3].Value <<= lcl_RedlineTypeToOUString(rRedline.GetType());
-    pRet[4].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_IDENTIFIER));
-    pRet[4].Value <<= sRedlineIdBuf.makeStringAndClear();
+    sal_Int32 nPropIdx  = 0;
+    pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_AUTHOR));
+    pRet[nPropIdx++].Value <<= OUString(rRedline.GetAuthorString());
+    pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_DATE_TIME));
+    pRet[nPropIdx++].Value <<= lcl_DateTimeToUno(rRedline.GetTimeStamp());
+    pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_COMMENT));
+    pRet[nPropIdx++].Value <<= OUString(rRedline.GetComment());
+    pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_TYPE));
+    pRet[nPropIdx++].Value <<= lcl_RedlineTypeToOUString(rRedline.GetType());
+    pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_IDENTIFIER));
+    pRet[nPropIdx++].Value <<= sRedlineIdBuf.makeStringAndClear();
+    pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_IS_COLLAPSED));
+    sal_Bool bTmp = !rRedline.HasMark();
+    pRet[nPropIdx++].Value.setValue(&bTmp, ::getBooleanCppuType()) ;
+
+    pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_IS_START));
+    pRet[nPropIdx++].Value.setValue(&bIsStart, ::getBooleanCppuType()) ;
+
+    SwNodeIndex* pNodeIdx = rRedline.GetContentIdx();
+    if(pNodeIdx )
+    {
+        if ( 1 < ( pNodeIdx->GetNode().EndOfSectionIndex() - pNodeIdx->GetNode().GetIndex() ) )
+        {
+            Reference<XText> xRet = new SwXRedlineText(rRedline.GetDoc(), *pNodeIdx);
+            pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_TEXT));
+            pRet[nPropIdx++].Value <<= xRet;
+        }
+        else
+            DBG_ASSERT(0, "Empty section in redline portion! (end node immediately follows start node)");
+    }
     if(pNext)
     {
-        pRet[5].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_SUCCESSOR_DATA));
-        pRet[5].Value <<= lcl_GetSuccessorProperties(rRedline);
+        pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_SUCCESSOR_DATA));
+        pRet[nPropIdx++].Value <<= lcl_GetSuccessorProperties(rRedline);
     }
+    aRet.realloc(nPropIdx);
     return aRet;
 }
 /*-- 11.01.01 17:06:07---------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2001-11-20 14:42:32 $
+ *  last change: $Author: os $ $Date: 2001-11-28 12:50:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,7 +447,10 @@ uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertyMap* pMap )
                 const SwNode* pRedMarkNode = pRedline->GetNode(FALSE);
                 if(pRedPointNode == pTblNode || pRedMarkNode == pTblNode)
                 {
-                    aRet <<= SwXRedlinePortion::CreateRedlineProperties(*pRedline);
+                    const SwNode* pStartOfRedline = SwNodeIndex(*pRedPointNode) <= SwNodeIndex(*pRedMarkNode) ?
+                        pRedPointNode : pRedMarkNode;
+                    BOOL bIsStart = pStartOfRedline == pTblNode;
+                    aRet <<= SwXRedlinePortion::CreateRedlineProperties(*pRedline, bIsStart);
                     break;
                 }
             }
