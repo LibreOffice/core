@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 15:39:14 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:19:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,7 +524,8 @@ OUString GetModuleName( const OUString& aModuleId )
     {
         return OUString::createFromAscii("Math");
     }
-    return OUString();
+    DBG_ERROR( "GetModuleName: unknown module Id!" );
+    return ::rtl::OUString();
 }
 
 bool GetMenuItemData(
