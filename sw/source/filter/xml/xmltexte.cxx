@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-02-10 14:57:41 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:09:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,6 +258,7 @@ void SwXMLTextParagraphExport::exportStyleContent(
                                     aString,
                                     GET_POOLID_TXTCOLL,
                                     sal_True);
+                    aString = GetExport().EncodeStyleName( aString );
                     GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                 XML_APPLY_STYLE_NAME, aString );
                     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
@@ -296,7 +297,7 @@ void SwXMLTextParagraphExport::setTextEmbeddedGraphicURL(
     if( !pGrfNd->IsGrfLink() )
     {
         String aNewURL( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.Package:") );
-        aNewURL += String(rURL.copy( 1 ) );
+        aNewURL += String(rURL);
         pGrfNd->SetNewStreamName( aNewURL );
 
         // #i15411# save-as will swap all graphics in; we need to swap
@@ -528,6 +529,9 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE_NAME, sAutoStyle );
     addTextFrameAttributes( rPropSet, sal_False );
 
+    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
+                              XML_FRAME, sal_False, sal_True );
+
     switch (nType)
     {
     case SV_EMBEDDED_OUTPLACE:
@@ -639,51 +643,53 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         ASSERT( !this, "unknown object type! Base class should have been called!" );
     }
 
-    SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, eElementName,
-                                  sal_False, sal_True );
-    switch( nType )
     {
-    case SV_EMBEDDED_OWN:
-        if( (rExport.getExportFlags() & EXPORT_EMBEDDED) != 0 )
+        SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, eElementName,
+                                      sal_False, sal_True );
+        switch( nType )
         {
-            Reference < XEmbeddedObjectSupplier > xEOS( rPropSet, UNO_QUERY );
-            ASSERT( xEOS.is(), "no embedded object supplier for own object" );
-            Reference < XComponent > xComp = xEOS->getEmbeddedObject();
-            rExport.ExportEmbeddedOwnObject( xComp );
-        }
-        break;
-    case SV_EMBEDDED_OUTPLACE:
-        if( (rExport.getExportFlags() & EXPORT_EMBEDDED) != 0 )
-        {
-            OUString sURL( sEmbeddedObjectProtocol );
-            sURL += rOLEObj.GetName();
-            GetExport().AddEmbeddedObjectAsBase64( sURL );
-        }
-        break;
-    case SV_EMBEDDED_APPLET:
-        {
-            const SvCommandList& rCommands = xApplet->GetCommandList();
-            USHORT ii = aParams.Count();
-            while ( ii > 0 )
+        case SV_EMBEDDED_OWN:
+            if( (rExport.getExportFlags() & EXPORT_EMBEDDED) != 0 )
             {
-                const SvCommand& rCommand = rCommands [ aParams [ --ii] ];
-                lcl_addParam (rExport, rCommand );
+                Reference < XEmbeddedObjectSupplier > xEOS( rPropSet, UNO_QUERY );
+                ASSERT( xEOS.is(), "no embedded object supplier for own object" );
+                Reference < XComponent > xComp = xEOS->getEmbeddedObject();
+                rExport.ExportEmbeddedOwnObject( xComp );
             }
-        }
-        break;
-    case SV_EMBEDDED_PLUGIN:
-        {
-            const SvCommandList& rCommands = xPlugin->GetCommandList();
-            ULONG nCommands = rCommands.Count();
-            for ( ULONG i = 0; i < nCommands; i++)
+            break;
+        case SV_EMBEDDED_OUTPLACE:
+            if( (rExport.getExportFlags() & EXPORT_EMBEDDED) != 0 )
             {
-                const SvCommand& rCommand = rCommands [ i ];
-                const String& rName = rCommand.GetCommand();
-                if (SwApplet_Impl::GetOptionType( rName, FALSE ) == SWHTML_OPTTYPE_TAG )
+                OUString sURL( sEmbeddedObjectProtocol );
+                sURL += rOLEObj.GetName();
+                GetExport().AddEmbeddedObjectAsBase64( sURL );
+            }
+            break;
+        case SV_EMBEDDED_APPLET:
+            {
+                const SvCommandList& rCommands = xApplet->GetCommandList();
+                USHORT ii = aParams.Count();
+                while ( ii > 0 )
+                {
+                    const SvCommand& rCommand = rCommands [ aParams [ --ii] ];
                     lcl_addParam (rExport, rCommand );
+                }
             }
+            break;
+        case SV_EMBEDDED_PLUGIN:
+            {
+                const SvCommandList& rCommands = xPlugin->GetCommandList();
+                ULONG nCommands = rCommands.Count();
+                for ( ULONG i = 0; i < nCommands; i++)
+                {
+                    const SvCommand& rCommand = rCommands [ i ];
+                    const String& rName = rCommand.GetCommand();
+                    if (SwApplet_Impl::GetOptionType( rName, FALSE ) == SWHTML_OPTTYPE_TAG )
+                        lcl_addParam (rExport, rCommand );
+                }
+            }
+            break;
         }
-        break;
     }
 
     // Lastly the stuff common to each of Applet/Plugin/Floating Frame
