@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: os $ $Date: 2001-04-27 06:42:08 $
+ *  last change: $Author: mib $ $Date: 2001-05-04 08:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,10 +392,12 @@ const SfxItemPropertyMap* GetGraphicDescMap()
         { SW_PROP_NAME(UNO_NAME_TRANSPARENCY),  RES_GRFATR_TRANSPARENCY, &::getCppuType((sal_Int16*)0), 0,   0},
         { SW_PROP_NAME(UNO_NAME_GRAPHIC_URL),               0,                      &::getCppuType((const OUString*)0), 0, 0 },
         { SW_PROP_NAME(UNO_NAME_CONTOUR_POLY_POLYGON), FN_PARAM_COUNTOUR_PP, &::getCppuType((PointSequenceSequence*)0), PropertyAttribute::MAYBEVOID, 0 },
+        { SW_PROP_NAME(UNO_NAME_IS_PIXEL_CONTOUR), FN_UNO_IS_PIXEL_CONTOUR, &::getBooleanCppuType(), PROPERTY_NONE, 0 },
+        { SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC_CONTOUR), FN_UNO_IS_AUTOMATIC_CONTOUR , &::getBooleanCppuType(), PROPERTY_NONE, 0 },
         { SW_PROP_NAME(UNO_NAME_Z_ORDER),               FN_UNO_Z_ORDER,         &::getCppuType((const sal_Int32*)0),        PROPERTY_NONE, 0},
         {0,0,0,0}
     };
-    #define GRPH_PROP_COUNT 70
+    #define GRPH_PROP_COUNT 72
     return aGraphicDescPropertyMap_Impl;
 }
 
@@ -1219,7 +1221,9 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     (pCur &&
                     ((pCur->nWID >=  RES_GRFATR_BEGIN &&
                         pCur->nWID < RES_GRFATR_END )||
-                            pCur->nWID == FN_PARAM_COUNTOUR_PP))))
+                            pCur->nWID == FN_PARAM_COUNTOUR_PP ||
+                            pCur->nWID == FN_UNO_IS_AUTOMATIC_CONTOUR ||
+                              pCur->nWID == FN_UNO_IS_PIXEL_CONTOUR))))
         {
             const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
             if(pIdx)
@@ -1239,21 +1243,40 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                         pNoTxt->SetContour(0);
                     else if(aValue >>= aParam)
                     {
-                        PolyPolygon aPoly(aParam.getLength());
+                        PolyPolygon aPoly((USHORT)aParam.getLength());
                         for(sal_Int32 i = 0; i < aParam.getLength(); i++)
                         {
                             const PointSequence* pPointSeq = aParam.getConstArray();
-                            Polygon aSet(pPointSeq[i].getLength());
-                            for(sal_Int32 j = 0; j < pPointSeq[i].getLength(); j++)
+                            sal_Int32 nPoints = pPointSeq[i].getLength();
+                            const awt::Point* pPoints = pPointSeq[i].getConstArray();
+                            Polygon aSet( (USHORT)nPoints );
+                            for(sal_Int32 j = 0; j < nPoints; j++)
                             {
-                                const awt::Point* pPoints = pPointSeq[i].getConstArray();
-                                Point aPoint(MM100_TO_TWIP(pPoints[j].X), MM100_TO_TWIP(pPoints[j].Y));
-                                aSet.SetPoint(aPoint, j);
+                                Point aPoint(pPoints[j].X, pPoints[j].Y);
+                                aSet.SetPoint(aPoint, (USHORT)j);
                             }
+                            // Close polygon if it isn't closed already.
+                            aSet.Optimize( POLY_OPTIMIZE_CLOSE );
                             aPoly.Insert( aSet );
                         }
-                        pNoTxt->SetContour(&aPoly);
+                        pNoTxt->SetContourAPI( &aPoly );
                     }
+                    else
+                        throw IllegalArgumentException();
+                }
+                else if(pCur->nWID == FN_UNO_IS_AUTOMATIC_CONTOUR )
+                {
+                    pNoTxt->SetAutomaticContour( *(sal_Bool *)aValue.getValue() );
+                }
+                else if(pCur->nWID == FN_UNO_IS_PIXEL_CONTOUR )
+                {
+                    // The IsPixelContour property can only be set if there
+                    // is no contour, or if the contour has been set by the
+                    // API itself (or in other words, if the contour isn't
+                    // used already).
+                    if( !pNoTxt->_HasContour() ||
+                        !pNoTxt->IsContourMapModeValid() )
+                        pNoTxt->SetPixelContour( *(sal_Bool *)aValue.getValue() );
                     else
                         throw IllegalArgumentException();
                 }
@@ -1484,7 +1507,9 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                 pCur &&
                 ((pCur->nWID >=  RES_GRFATR_BEGIN &&
                     pCur->nWID < RES_GRFATR_END )||
-                        pCur->nWID == FN_PARAM_COUNTOUR_PP ))
+                        pCur->nWID == FN_PARAM_COUNTOUR_PP ||
+                        pCur->nWID == FN_UNO_IS_AUTOMATIC_CONTOUR ||
+                        pCur->nWID == FN_UNO_IS_PIXEL_CONTOUR ))
         {
             const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
             if(pIdx)
@@ -1493,25 +1518,35 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                 SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
                 if(pCur->nWID == FN_PARAM_COUNTOUR_PP)
                 {
-                    const PolyPolygon* pContour = pNoTxt->HasContour();
-                    if(pContour)
+                    PolyPolygon aContour;
+                    if( pNoTxt->GetContourAPI( aContour ) )
                     {
-                        PointSequenceSequence aPtSeq(pContour->Count());
+                        PointSequenceSequence aPtSeq(aContour.Count());
                         PointSequence* pPSeq = aPtSeq.getArray();
-                        for(USHORT i = 0; i < pContour->Count(); i++)
+                        for(USHORT i = 0; i < aContour.Count(); i++)
                         {
-                            const Polygon& rPoly = pContour->GetObject(i);
+                            const Polygon& rPoly = aContour.GetObject(i);
                             pPSeq[i].realloc(rPoly.GetSize());
                             awt::Point* pPoints = pPSeq[i].getArray();
                             for(USHORT j = 0; j < rPoly.GetSize(); j++)
                             {
                                 const Point& rPoint = rPoly.GetPoint(j);
-                                pPoints[j].X = TWIP_TO_MM100(rPoint.X());
-                                pPoints[j].Y = TWIP_TO_MM100(rPoint.Y());
+                                pPoints[j].X = rPoint.X();
+                                pPoints[j].Y = rPoint.Y();
                             }
                         }
                         aAny <<= aPtSeq;
                     }
+                }
+                else if(pCur->nWID == FN_UNO_IS_AUTOMATIC_CONTOUR )
+                {
+                    BOOL bValue = pNoTxt->HasAutomaticContour();
+                    aAny.setValue( &bValue, ::getBooleanCppuType() );
+                }
+                else if(pCur->nWID == FN_UNO_IS_PIXEL_CONTOUR )
+                {
+                    BOOL bValue = pNoTxt->IsPixelContour();
+                    aAny.setValue( &bValue, ::getBooleanCppuType() );
                 }
                 else
                 {
@@ -2054,6 +2089,12 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
             uno::Any* pContourPoly;
             if(pProps->GetProperty(C2S(UNO_NAME_CONTOUR_POLY_POLYGON), pContourPoly))
                 setPropertyValue(C2U(UNO_NAME_CONTOUR_POLY_POLYGON), *pContourPoly);
+            uno::Any* pPixelContour;
+            if(pProps->GetProperty(C2S(UNO_NAME_IS_PIXEL_CONTOUR), pContourPoly))
+                setPropertyValue(C2U(UNO_NAME_IS_PIXEL_CONTOUR), *pPixelContour);
+            uno::Any* pAutoContour;
+            if(pProps->GetProperty(C2S(UNO_NAME_IS_AUTOMATIC_CONTOUR), pContourPoly))
+                setPropertyValue(C2U(UNO_NAME_IS_AUTOMATIC_CONTOUR), *pAutoContour);
             uno::Any* pAltText;
             if(pProps->GetProperty(C2S(UNO_NAME_ALTERNATIVE_TEXT), pAltText))
                 setPropertyValue(C2U(UNO_NAME_ALTERNATIVE_TEXT), *pAltText);

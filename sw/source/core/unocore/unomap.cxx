@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-03 20:05:11 $
+ *  last change: $Author: mib $ $Date: 2001-05-04 08:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1342,6 +1342,8 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_ACTUAL_SIZE),           0,                      &::getCppuType((const awt::Size*)0),    PropertyAttribute::READONLY, CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_ALTERNATIVE_TEXT),      0,                      &::getCppuType((const OUString*)0),         PROPERTY_NONE , 0   },
                     { SW_PROP_NAME(UNO_NAME_CONTOUR_POLY_POLYGON), FN_PARAM_COUNTOUR_PP, &::getCppuType((PointSequenceSequence*)0), PropertyAttribute::MAYBEVOID, 0 },
+                    { SW_PROP_NAME(UNO_NAME_IS_PIXEL_CONTOUR), FN_UNO_IS_PIXEL_CONTOUR, &::getBooleanCppuType(), PROPERTY_NONE, 0 },
+                    { SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC_CONTOUR), FN_UNO_IS_AUTOMATIC_CONTOUR , &::getBooleanCppuType(), PROPERTY_NONE, 0 },
                     { SW_PROP_NAME(UNO_NAME_GRAPHIC_ROTATION),      RES_GRFATR_ROTATION,     &::getCppuType((sal_Int16*)0), 0,   0},
                     { SW_PROP_NAME(UNO_NAME_ADJUST_LUMINANCE),      RES_GRFATR_LUMINANCE,    &::getCppuType((sal_Int16*)0), 0,   0},
                     { SW_PROP_NAME(UNO_NAME_ADJUST_CONTRAST),       RES_GRFATR_CONTRAST,     &::getCppuType((sal_Int16*)0), 0,   0},
@@ -1362,6 +1364,9 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                 static SfxItemPropertyMap aEmbeddedPropertyMap_Impl[] =
                 {
                     COMMON_FRAME_PROPERTIES
+                    { SW_PROP_NAME(UNO_NAME_CONTOUR_POLY_POLYGON), FN_PARAM_COUNTOUR_PP, &::getCppuType((PointSequenceSequence*)0), PropertyAttribute::MAYBEVOID, 0 },
+                    { SW_PROP_NAME(UNO_NAME_IS_PIXEL_CONTOUR), FN_UNO_IS_PIXEL_CONTOUR, &::getBooleanCppuType(), PROPERTY_NONE, 0 },
+                    { SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC_CONTOUR), FN_UNO_IS_AUTOMATIC_CONTOUR , &::getBooleanCppuType(), PROPERTY_NONE, 0 },
                     {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aEmbeddedPropertyMap_Impl;

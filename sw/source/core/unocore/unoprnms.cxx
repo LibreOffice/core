@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-03 20:05:42 $
+ *  last change: $Author: mib $ $Date: 2001-05-04 08:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,9 +112,9 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_IS_AUTO_FIRST_LINE_INDENT         
 const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_FIRST_LINE_INDENT                 (MAP_CHAR_LEN("ParaFirstLineIndent"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_FIRST_LINE_INDENT_RELATIVE        (MAP_CHAR_LEN("ParaFirstLineIndentRelative"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_IS_HYPHENATION                    (MAP_CHAR_LEN("ParaIsHyphenation"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_HYPHENATION_MAX_LEADING_CHARS     (MAP_CHAR_LEN("HyphenationMaxLeadingChars"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_HYPHENATION_MAX_TRAILING_CHARS    (MAP_CHAR_LEN("HyphenationMaxTrailingChars"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_HYPHENATION_MAX_HYPHENS           (MAP_CHAR_LEN("HyphenationMaxHyphens"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_HYPHENATION_MAX_LEADING_CHARS     (MAP_CHAR_LEN("ParaHyphenationMaxLeadingChars"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_HYPHENATION_MAX_TRAILING_CHARS    (MAP_CHAR_LEN("ParaHyphenationMaxTrailingChars"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_HYPHENATION_MAX_HYPHENS           (MAP_CHAR_LEN("ParaHyphenationMaxHyphens"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_LEFT_MARGIN                            (MAP_CHAR_LEN("LeftMargin"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_RIGHT_MARGIN                           (MAP_CHAR_LEN("RightMargin"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_HEADER_LEFT_MARGIN                     (MAP_CHAR_LEN("HeaderLeftMargin"));
@@ -592,6 +592,8 @@ const SwPropNameLen __FAR_DATA UNO_NAME_HIDE_FIELD_TIPS                         
 const SwPropNameLen __FAR_DATA UNO_NAME_PARA_SHADOW_FORMAT                      (MAP_CHAR_LEN("ParaShadowFormat"));
 
 const SwPropNameLen __FAR_DATA UNO_NAME_CONTOUR_POLY_POLYGON                    (MAP_CHAR_LEN("ContourPolyPolygon"));
+const SwPropNameLen __FAR_DATA UNO_NAME_IS_PIXEL_CONTOUR                        (MAP_CHAR_LEN("IsPixelContour"));
+const SwPropNameLen __FAR_DATA UNO_NAME_IS_AUTOMATIC_CONTOUR                        (MAP_CHAR_LEN("IsAutomaticContour"));
 
 const SwPropNameLen __FAR_DATA UNO_NAME_SEPARATOR_LINE_WIDTH                    (MAP_CHAR_LEN("SeparatorLineWidth"));
 const SwPropNameLen __FAR_DATA UNO_NAME_SEPARATOR_LINE_COLOR                    (MAP_CHAR_LEN("SeparatorLineColor"));
