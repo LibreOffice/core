@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-25 21:40:25 $
+ *  last change: $Author: kz $ $Date: 2001-10-11 20:47:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,7 +285,7 @@ Resource RID_SVXERRCODE
         TEXT[ portuguese ] = "$(ARG1) nγo tem suporte para verificaηγo ortogrαfica ou encontra-se desactivado. \nConfira a sua instalaηγo e, se necessαrio, instale o mσdulo linguνstico desejado\nou entγo active-o em 'Ferramentas - Opηυes - Configuraηγo da lνngua - Linguνstica'.";
         TEXT[ russian ] = "$(ARG1) νε οξδδεπζθβΰεςρÿ οπξβεπκξι οπΰβξοθρΰνθÿ θλθ β νΰρςξÿωθι μξμενς νεδξρςσοεν.\nΟπξβεπόςε Βΰψσ θνρςΰλλÿφθώ θ, β ρλσχΰε νεξαυξδθμξρςθ, θνρςΰλλθπσιςε ςπεασεμϋι ÿηϋκξβξι μξδσλό\nθλθ βκλώχθςε δΰννϋι ÿηϋκξβξι μξδσλό β 'Ρεπβθρ - Οΰπΰμεςπϋ - Νΰρςπξικθ ÿηϋκΰ - Λθνγβθρςθκΰ'.";
         TEXT[ greek ] = "$(ARG1) δεν είναι διαθέσιμο για τον ορθογραφικό έλεγχο.\nΠαρακαλώ ελέγξτε την εγκατάσταση και εγκαταστήστε αν χρειαστεί την γλώσσα που επιθυμ? ";
-        TEXT[ dutch ] = "$(ARG1) voor de controle is niet beschikbaar.\nControleer uw installatie en installeer de gewenste taal";
+        TEXT[ dutch ] = "$(ARG1) wordt niet ondersteund door de controle, resp. is momenteel niet geactiveerd. \nControleer uw installatie en installeer eventueel de gewenste taalmodule\nresp. activeer de betreffende taalmodule onder 'Extra - Opties - Taalinstellingen - Linguοstiek' ";
         TEXT[ french ] = "$(ARG1) n'est pas supportι par la vιrification ou n'est actuellement pas actif.\nVιrifiez l'installation et installez le cas ιchιant le module de langue requis, ou activez-le sous 'Outils - Options - Paramθtres linguistiques - Linguistique'.";
         TEXT[ spanish ] = "$(ARG1) no estα disponible para la revisiσn ortogrαfica o esta no lo apoya.\n Examine su instalaciσn e instale en caso dado el idioma deseado\no active el mσdulo correspondiente en 'Herramientas - Opciones - Configuraciσn de idiomas - Lingόνstica'.";
         TEXT[ finnish ] = "$(ARG1) ei ole k?ytett?viss? oikeinkirjoituksen tarkistusta varten.\nTarkista asennetut osat ja asenna haluttu kieli.\n";
@@ -294,7 +294,7 @@ Resource RID_SVXERRCODE
         TEXT[ swedish ] = "$(ARG1) understφds inte av kontrollen resp., δr inte aktiverat fφr nδrvarande.\nKontrollera installationen och installera eventuellt den nφdvδndiga sprεkmodulen\nresp. aktivera motsvarande sprεkmodul i \"Verktyg - Alternativ - Sprεkinstδllningar - Lingvistik\".";
         TEXT[ polish ] = "$(ARG1) nie jest obs³ugiwany przez funkcjκ sprawdzania pisowni lub nie zosta³ uaktywniony.\nNaleΏy sprawdziζ instalacjκ i zainstalowaζ ewentualnie wymagany modu³ jκzyka\nlub uaktywniζ go po wybraniu sekwencji 'Narzκdzia - Opcje - Konfiguracja jκzykσw - Pisownia'.";
         TEXT[ portuguese_brazilian ] = "$(ARG1) ist f? die Pr?ung nicht verf?bar.\n?berpr?en Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gew?schte Sprache.";
-        TEXT[ japanese ] = "$(ARG1)γ―ο½½οΎοΎοΎ™οΎο½ªο½―ο½Έγ§ζ”―ζ΄γ•γ‚γΎγ›γ‚“γ€‚γ¤γΎγ‚ηΎε¨ο½±ο½ΈοΎƒο½¨οΎοΎγ§γ―γ‚γ‚γΎγ›γ‚“γ€‚\nδ½Ώη”¨δΈ­γ®οΎοΎοΎ›ο½ΈοΎοΎ—οΎ‘γ®ο½²οΎο½½οΎ„ο½°οΎ™γ‚’οΎο½ªο½―ο½Έγ—γ¦ιΈζγ•γ‚γ¦γ„γªγ‘γ‚γ°γ€γγ“γ§ο½½οΎοΎοΎ™οΎο½ªο½―ο½Έγ«εΏ…θ¦γªθ¨€θªγ‚’ο½²οΎο½½οΎ„-οΎ™γ—γΎγ™γ€‚\nγ‚γ‚‹γ„γ―οΎ’οΎ†ο½­ο½°γ®οΎ‚ο½°οΎ™ β†’ ο½µοΎοΎο½Όο½®οΎ β†’ θ¨€θªθ¨­ε® β†’ ζ–‡η« ζ ΅ζ­£γ§εΏ…θ¦γªθ¨€θªοΎ“ο½ΌοΎο½­ο½°οΎ™γ‚’ο½²οΎο½½οΎ„ο½°οΎ™γ—γΎγ™γ€‚";
+        TEXT[ japanese ] = "$(ARG1)γ®ο½½οΎοΎοΎ™οΎο½ªο½―ο½Έγ―ζ”―ζ΄γ•γ‚γ¦γ„γΎγ›γ‚“γ€‚γ‚γ‚‹γ„γ―ηΎε¨ο½±ο½ΈοΎƒο½¨οΎοΎγ§γ―γ‚γ‚γΎγ›γ‚“γ€‚\nο½²οΎο½½οΎ„ο½°οΎ™γ•γ‚γ¦γ„γ‚‹οΎοΎοΎ›ο½ΈοΎοΎ—οΎ‘γ‚’οΎο½ªο½―ο½Έγ—γ¦γ€εΏ…θ¦γ«εΏγγ¦ο½½οΎοΎοΎ™οΎο½ªο½―ο½Έγ«εΏ…θ¦γªθ¨€θªγ‚’ο½²οΎο½½οΎ„-οΎ™γ™γ‚‹γ‹γ€\nοΎ’οΎ†ο½­ο½° οΎ‚ο½°οΎ™ β†’ ο½µοΎοΎο½Όο½®οΎ β†’ θ¨€θªθ¨­ε® β†’ ζ–‡η« ζ ΅ζ­£γ§εΏ…θ¦γªθ¨€θªοΎ“ο½ΌοΎο½­ο½°οΎ™γ‚’ο½µοΎγ«γ—γΎγ™γ€‚";
         TEXT[ korean ] = "$(ARG1)μ„(λ¥Ό) λ§μ¶¤λ²• κ²€μ‚¬μ— μ΄μ©ν•  μ μ—†μµλ‹λ‹¤.\n μ‚¬μ©μμ μ„¤μΉλ¥Ό μ κ²€ν• λ‹¤μ, ν•„μ”μ‹ μ”κµ¬λλ”  μ–Έμ–΄λ¥Ό μ„¤μΉν•μ‹­μ‹μ¤.";
         TEXT[ chinese_simplified ] = "$(ARG1)δΈζ”―ζζ‹Όε†™ζ£€ζ¥εθƒ½ζ–θ€…η›®ε‰ζªε―η”¨θ―¥εθƒ½γ€‚\nθ―·ζ‚¨ζ£€ζ¥ε®‰θ£…οΌε¦‚ζ‰εΏ…θ¦θ―·ε®‰θ£…ζ‰€ι€η„θ―­θ¨€ζ¨΅ε—\nζ–θ€…ε€ε©θε•ε‘½δ»¤β€ε·¥ε…· - ι€‰ι΅Ή... - θ―­θ¨€θ®Ύε® - θ―­θ¨€θ§„ε™β€ε―η”¨η›ΈεΊ”η„θ―­θ¨€ζ¨΅ε—γ€‚";
         TEXT[ chinese_traditional ] = "$(ARG1) δΈε—ζ”―ζ΄ζ–ζ²’ζ‰θΆ«ε•“ε‹•γ€‚\nθ«‹ζªΆζ¥η¨‹εΌη„ε®‰θ£γ€‚θ‹¥ζ‰εΏ…θ¦θ«‹ε®‰θ£ζ‰€ι€η„θªθ¨€ζ¨΅ε΅ζ–ζ‰εθƒ½θ΅¨<ε·¥ε…·> - <ιΈι …> οΌε¨<θªθ¨€θ¦ε‰‡>θ™•θ¨­ε®θ¦η”¨η„θªθ¨€ζ¨΅ε΅γ€‚";
@@ -682,6 +682,7 @@ Resource RID_SVXERRCODE
     };
 };
  // ********************************************************************** EOF
+
 
 
 
