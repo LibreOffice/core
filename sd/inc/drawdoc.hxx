@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-27 13:29:14 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:07:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,7 +310,7 @@ public:
     virtual const SdrModel* LoadModel(const String& rFileName);
     virtual void        DisposeLoadedModels();
     virtual FASTBOOL    IsReadOnly() const;
-    virtual void        SetChanged(FASTBOOL bFlag = TRUE);
+    virtual void        SetChanged(sal_Bool bFlag = sal_True);
     virtual SvStream*   GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const;
     virtual void        HandsOff();
 
@@ -514,7 +514,7 @@ public:
     void                SetCustomShow(BOOL bCustShow) { bCustomShow = bCustShow; }
     BOOL                IsCustomShow() const { return bCustomShow; }
 
-    void                NbcSetChanged(FASTBOOL bFlag = TRUE);
+    void                NbcSetChanged(sal_Bool bFlag = sal_True);
 
     void                SetTextDefaults() const;
 
