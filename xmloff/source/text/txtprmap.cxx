@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-21 20:32:24 $
+ *  last change: $Author: sab $ $Date: 2001-02-27 16:39:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,7 +346,7 @@ XMLPropertyMapEntry aXMLTextPropMap[] =
     M_E( "CharCaseMap",     FO,     font_variant,       XML_TYPE_TEXT_CASEMAP_VAR,  0 ),
     M_E( "CharCaseMap",     FO,     text_transform,     XML_TYPE_TEXT_CASEMAP,  0 ),
     // RES_CHRATR_COLOR
-    M_E( "CharColor",       FO,     color,              XML_TYPE_COLOR, 0 ),
+    M_ED( "CharColor",      FO,     color,              XML_TYPE_COLOR, 0 ),
     // RES_CHRATR_CONTOUR
     M_E( "CharContoured",   STYLE,  text_outline,       XML_TYPE_BOOL,  0 ),
     // RES_CHRATR_CROSSEDOUT
@@ -355,21 +355,21 @@ XMLPropertyMapEntry aXMLTextPropMap[] =
     M_E( "CharEscapement",       STYLE, text_position,  XML_TYPE_TEXT_ESCAPEMENT|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 ),
     M_E( "CharEscapementHeight", STYLE, text_position,  XML_TYPE_TEXT_ESCAPEMENT_HEIGHT|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 ),
     // RES_CHRATR_FONT
-    M_E( "CharFontName",    STYLE,  font_name,          XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTNAME ),
-    M_E( "CharFontName",    FO,     font_family,        XML_TYPE_TEXT_FONTFAMILYNAME, CTF_FONTFAMILYNAME ),
-    M_E( "CharFontStyleName",STYLE, font_style_name,    XML_TYPE_STRING, CTF_FONTSTYLENAME ),
-    M_E( "CharFontFamily",  STYLE,  font_family_generic,XML_TYPE_TEXT_FONTFAMILY, CTF_FONTFAMILY ),
-    M_E( "CharFontPitch",   STYLE,  font_pitch,         XML_TYPE_TEXT_FONTPITCH, CTF_FONTPITCH ),
-    M_E( "CharFontCharSet", STYLE,  font_charset,       XML_TYPE_TEXT_FONTENCODING, CTF_FONTCHARSET ),
+    M_ED( "CharFontName",   STYLE,  font_name,          XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTNAME ),
+    M_ED( "CharFontName",   FO,     font_family,        XML_TYPE_TEXT_FONTFAMILYNAME, CTF_FONTFAMILYNAME ),
+    M_ED( "CharFontStyleName",STYLE,    font_style_name,    XML_TYPE_STRING, CTF_FONTSTYLENAME ),
+    M_ED( "CharFontFamily", STYLE,  font_family_generic,XML_TYPE_TEXT_FONTFAMILY, CTF_FONTFAMILY ),
+    M_ED( "CharFontPitch",  STYLE,  font_pitch,         XML_TYPE_TEXT_FONTPITCH, CTF_FONTPITCH ),
+    M_ED( "CharFontCharSet",    STYLE,  font_charset,       XML_TYPE_TEXT_FONTENCODING, CTF_FONTCHARSET ),
     // RES_CHRATR_FONTSIZE
-    M_E( "CharHeight",        FO,   font_size,          XML_TYPE_CHAR_HEIGHT|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT ),
-    M_E( "CharPropHeight",FO,   font_size,          XML_TYPE_CHAR_HEIGHT_PROP|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT_REL ),
-    M_E( "CharDiffHeight",STYLE,font_size_rel,      XML_TYPE_CHAR_HEIGHT_DIFF, CTF_CHARHEIGHT_DIFF ),
+    M_ED( "CharHeight",       FO,   font_size,          XML_TYPE_CHAR_HEIGHT|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT ),
+    M_ED( "CharPropHeight",FO,  font_size,          XML_TYPE_CHAR_HEIGHT_PROP|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT_REL ),
+    M_ED( "CharDiffHeight",STYLE,font_size_rel,     XML_TYPE_CHAR_HEIGHT_DIFF, CTF_CHARHEIGHT_DIFF ),
     // RES_CHRATR_KERNING
     M_E( "CharKerning",     FO,     letter_spacing,     XML_TYPE_TEXT_KERNING, 0 ),
     // RES_CHRATR_LANGUAGE
-    M_E( "CharLocale",      FO,     language,           XML_TYPE_CHAR_LANGUAGE|MID_FLAG_MERGE_PROPERTY, 0 ),
-    M_E( "CharLocale",      FO,     country,            XML_TYPE_CHAR_COUNTRY|MID_FLAG_MERGE_PROPERTY, 0 ),
+    M_ED( "CharLocale",     FO,     language,           XML_TYPE_CHAR_LANGUAGE|MID_FLAG_MERGE_PROPERTY, 0 ),
+    M_ED( "CharLocale",     FO,     country,            XML_TYPE_CHAR_COUNTRY|MID_FLAG_MERGE_PROPERTY, 0 ),
     // RES_CHRATR_POSTURE
     M_E( "CharPosture",     FO,     font_style,         XML_TYPE_TEXT_POSTURE, 0 ),
     // RES_CHRATR_PROPORTIONALFONTSIZE
@@ -398,37 +398,37 @@ XMLPropertyMapEntry aXMLTextPropMap[] =
     M_E( "CharBackTransparent", STYLE,  text_background_color, XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
     M_E( "CharBackColor",   FO, text_background_color, XML_TYPE_COLOR|MID_FLAG_SPECIAL_ITEM_EXPORT, CTF_OLDTEXTBACKGROUND ),
     // RES_CHRATR_CJK_FONT
-    M_E( "CharFontNameAsian",   STYLE,  font_name_asian,            XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTNAME_CJK ),
-    M_E( "CharFontNameAsian",   STYLE,      font_family_asian,      XML_TYPE_TEXT_FONTFAMILYNAME, CTF_FONTFAMILYNAME_CJK ),
-    M_E( "CharFontStyleNameAsian",STYLE,    font_style_name_asian,  XML_TYPE_STRING, CTF_FONTSTYLENAME_CJK ),
-    M_E( "CharFontFamilyAsian", STYLE,  font_family_generic_asian,XML_TYPE_TEXT_FONTFAMILY, CTF_FONTFAMILY_CJK ),
-    M_E( "CharFontPitchAsian",  STYLE,  font_pitch_asian,           XML_TYPE_TEXT_FONTPITCH, CTF_FONTPITCH_CJK ),
-    M_E( "CharFontCharSetAsian",    STYLE,  font_charset_asian,     XML_TYPE_TEXT_FONTENCODING, CTF_FONTCHARSET_CJK ),
+    M_ED( "CharFontNameAsian",  STYLE,  font_name_asian,            XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTNAME_CJK ),
+    M_ED( "CharFontNameAsian",  STYLE,      font_family_asian,      XML_TYPE_TEXT_FONTFAMILYNAME, CTF_FONTFAMILYNAME_CJK ),
+    M_ED( "CharFontStyleNameAsian",STYLE,   font_style_name_asian,  XML_TYPE_STRING, CTF_FONTSTYLENAME_CJK ),
+    M_ED( "CharFontFamilyAsian",    STYLE,  font_family_generic_asian,XML_TYPE_TEXT_FONTFAMILY, CTF_FONTFAMILY_CJK ),
+    M_ED( "CharFontPitchAsian", STYLE,  font_pitch_asian,           XML_TYPE_TEXT_FONTPITCH, CTF_FONTPITCH_CJK ),
+    M_ED( "CharFontCharSetAsian",   STYLE,  font_charset_asian,     XML_TYPE_TEXT_FONTENCODING, CTF_FONTCHARSET_CJK ),
     // RES_CHRATR_CJK_FONTSIZE
-    M_E( "CharHeightAsian",       STYLE,    font_size_asian,            XML_TYPE_CHAR_HEIGHT|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT_CJK ),
-    M_E( "CharPropHeightAsian",STYLE,   font_size_asian,            XML_TYPE_CHAR_HEIGHT_PROP|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT_REL_CJK ),
-    M_E( "CharDiffHeightAsian",STYLE,font_size_rel_asian,       XML_TYPE_CHAR_HEIGHT_DIFF, CTF_CHARHEIGHT_DIFF_CJK ),
+    M_ED( "CharHeightAsian",          STYLE,    font_size_asian,            XML_TYPE_CHAR_HEIGHT|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT_CJK ),
+    M_ED( "CharPropHeightAsian",STYLE,  font_size_asian,            XML_TYPE_CHAR_HEIGHT_PROP|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT_REL_CJK ),
+    M_ED( "CharDiffHeightAsian",STYLE,font_size_rel_asian,      XML_TYPE_CHAR_HEIGHT_DIFF, CTF_CHARHEIGHT_DIFF_CJK ),
     // RES_CHRATR_CJK_LANGUAGE
-    M_E( "CharLocaleAsian",     STYLE,      language_asian,             XML_TYPE_CHAR_LANGUAGE|MID_FLAG_MERGE_PROPERTY, 0 ),
-    M_E( "CharLocaleAsian",     STYLE,      country_asian,          XML_TYPE_CHAR_COUNTRY|MID_FLAG_MERGE_PROPERTY, 0 ),
+    M_ED( "CharLocaleAsian",        STYLE,      language_asian,             XML_TYPE_CHAR_LANGUAGE|MID_FLAG_MERGE_PROPERTY, 0 ),
+    M_ED( "CharLocaleAsian",        STYLE,      country_asian,          XML_TYPE_CHAR_COUNTRY|MID_FLAG_MERGE_PROPERTY, 0 ),
     // RES_CHRATR_CJK_POSTURE
     M_E( "CharPostureAsian",        STYLE,      font_style_asian,           XML_TYPE_TEXT_POSTURE, 0 ),
     // RES_CHRATR_CJK_WEIGHT
     M_E( "CharWeightAsian",     STYLE,      font_weight_asian,      XML_TYPE_TEXT_WEIGHT, 0 ),
     // RES_CHRATR_CTL_FONT
-    M_E( "CharFontNameComplex", STYLE,  font_name_complex,          XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTNAME_CTL ),
-    M_E( "CharFontNameComplex", STYLE,      font_family_complex,        XML_TYPE_TEXT_FONTFAMILYNAME, CTF_FONTFAMILYNAME_CTL ),
-    M_E( "CharFontStyleNameComplex",STYLE,  font_style_name_complex,    XML_TYPE_STRING, CTF_FONTSTYLENAME_CTL ),
-    M_E( "CharFontFamilyComplex",   STYLE,  font_family_generic_complex,XML_TYPE_TEXT_FONTFAMILY, CTF_FONTFAMILY_CTL ),
-    M_E( "CharFontPitchComplex",    STYLE,  font_pitch_complex,         XML_TYPE_TEXT_FONTPITCH, CTF_FONTPITCH_CTL ),
-    M_E( "CharFontCharSetComplex",  STYLE,  font_charset_complex,       XML_TYPE_TEXT_FONTENCODING, CTF_FONTCHARSET_CTL ),
+    M_ED( "CharFontNameComplex",    STYLE,  font_name_complex,          XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTNAME_CTL ),
+    M_ED( "CharFontNameComplex",    STYLE,      font_family_complex,        XML_TYPE_TEXT_FONTFAMILYNAME, CTF_FONTFAMILYNAME_CTL ),
+    M_ED( "CharFontStyleNameComplex",STYLE, font_style_name_complex,    XML_TYPE_STRING, CTF_FONTSTYLENAME_CTL ),
+    M_ED( "CharFontFamilyComplex",  STYLE,  font_family_generic_complex,XML_TYPE_TEXT_FONTFAMILY, CTF_FONTFAMILY_CTL ),
+    M_ED( "CharFontPitchComplex",   STYLE,  font_pitch_complex,         XML_TYPE_TEXT_FONTPITCH, CTF_FONTPITCH_CTL ),
+    M_ED( "CharFontCharSetComplex", STYLE,  font_charset_complex,       XML_TYPE_TEXT_FONTENCODING, CTF_FONTCHARSET_CTL ),
     // RES_CHRATR_CTL_FONTSIZE
-    M_E( "CharHeightComplex",         STYLE,    font_size_complex,          XML_TYPE_CHAR_HEIGHT|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT_CTL ),
-    M_E( "CharPropHeightComplex",STYLE, font_size_complex,          XML_TYPE_CHAR_HEIGHT_PROP|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT_REL_CTL ),
-    M_E( "CharDiffHeightComplex",STYLE,font_size_rel_complex,       XML_TYPE_CHAR_HEIGHT_DIFF, CTF_CHARHEIGHT_DIFF_CTL ),
+    M_ED( "CharHeightComplex",        STYLE,    font_size_complex,          XML_TYPE_CHAR_HEIGHT|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT_CTL ),
+    M_ED( "CharPropHeightComplex",STYLE,    font_size_complex,          XML_TYPE_CHAR_HEIGHT_PROP|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT_REL_CTL ),
+    M_ED( "CharDiffHeightComplex",STYLE,font_size_rel_complex,      XML_TYPE_CHAR_HEIGHT_DIFF, CTF_CHARHEIGHT_DIFF_CTL ),
     // RES_CHRATR_CTL_LANGUAGE
-    M_E( "CharLocaleComplex",       STYLE,      language_complex,           XML_TYPE_CHAR_LANGUAGE|MID_FLAG_MERGE_PROPERTY, 0 ),
-    M_E( "CharLocaleComplex",       STYLE,      country_complex,            XML_TYPE_CHAR_COUNTRY|MID_FLAG_MERGE_PROPERTY, 0 ),
+    M_ED( "CharLocaleComplex",      STYLE,      language_complex,           XML_TYPE_CHAR_LANGUAGE|MID_FLAG_MERGE_PROPERTY, 0 ),
+    M_ED( "CharLocaleComplex",      STYLE,      country_complex,            XML_TYPE_CHAR_COUNTRY|MID_FLAG_MERGE_PROPERTY, 0 ),
     // RES_CHRATR_CTL_POSTURE
     M_E( "CharPostureComplex",      STYLE,      font_style_complex,         XML_TYPE_TEXT_POSTURE, 0 ),
     // RES_CHRATR_CTL_WEIGHT
@@ -466,9 +466,9 @@ XMLPropertyMapEntry aXMLTextPropMap[] =
     // TODO
     // RES_UNKNOWNATR_CONTAINER
     M_E( "UserDefinedAttributes", TEXT, xmlns, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
-    M_E( "ParaIsCharacterDistance", STYLE, text_autospace, XML_TYPE_TEXT_AUTOSPACE, 0 ),
-    M_E( "ParaIsHangingPunctuation", STYLE, punctuation_wrap, XML_TYPE_TEXT_PUNCTUATION_WRAP, 0 ),
-    M_E( "ParaIsForbiddenRules", STYLE, line_break, XML_TYPE_TEXT_LINE_BREAK, 0 ),
+    M_ED( "ParaIsCharacterDistance", STYLE, text_autospace, XML_TYPE_TEXT_AUTOSPACE, 0 ),
+    M_ED( "ParaIsHangingPunctuation", STYLE, punctuation_wrap, XML_TYPE_TEXT_PUNCTUATION_WRAP, 0 ),
+    M_ED( "ParaIsForbiddenRules", STYLE, line_break, XML_TYPE_TEXT_LINE_BREAK, 0 ),
     { 0, 0, 0, 0 }
 };
 

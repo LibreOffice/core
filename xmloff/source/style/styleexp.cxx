@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleexp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-30 13:09:59 $
+ *  last change: $Author: sab $ $Date: 2001-02-27 16:38:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,11 +294,10 @@ sal_Bool XMLStyleExport::exportStyle(
 }
 
 sal_Bool XMLStyleExport::exportDefaultStyle(
-        const Reference< XStyle >& rStyle,
+        const Reference< XPropertySet >& xPropSet,
           const sal_Char *pXMLFamily,
         const UniReference < SvXMLExportPropertyMapper >& rPropMapper )
 {
-    Reference< XPropertySet > xPropSet( rStyle, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo =
             xPropSet->getPropertySetInfo();
 
@@ -307,38 +306,18 @@ sal_Bool XMLStyleExport::exportDefaultStyle(
     // <style:default-style ...>
     GetExport().CheckAttrList();
 
-    // style:family="..."
-    if( pXMLFamily )
-        GetExport().AddAttributeASCII( XML_NAMESPACE_STYLE, sXML_family,
-                                         pXMLFamily );
-
-#if 0
-    // style:list-style-name="..." (SW paragarph styles only)
-    if( xPropSetInfo->hasPropertyByName( sNumberingStyleName ) )
     {
-        Reference< XPropertyState > xPropState( xPropSet, uno::UNO_QUERY );
-        aAny = xPropState->getPropertyDefault( sNumberingStyleName );
-        if( aAny.hasValue() )
-        {
-            OUString sListName;
-            aAny >>= sListName;
-            if( sListName.getLength() )
-                GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                          sXML_list_style_name, sListName );
-        }
-    }
-#endif
-
-    // style:pool-id="..." is not required any longer since we use
-    // english style names only
-//  exportStyleAttributes( rStyle );
-
-    {
+        // style:family="..."
+        if( pXMLFamily )
+            GetExport().AddAttributeASCII( XML_NAMESPACE_STYLE, sXML_family,
+                                             pXMLFamily );
         // <style:style>
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
                                   sXML_default_style,
                                   sal_True, sal_True );
         // <style:properties>
+        //::std::vector< XMLPropertyState > xPropStates =
+        //  rPropMapper->FilterDefaults( xPropSet );
         ::std::vector< XMLPropertyState > xPropStates =
             rPropMapper->FilterDefaults( xPropSet );
         rPropMapper->exportXML( GetExport().GetDocHandler(), xPropStates,
@@ -380,19 +359,17 @@ void XMLStyleExport::exportStyleFamily(
     const sal_Char *pFamily,
     const sal_Char *pXMLFamily,
     const UniReference < SvXMLExportPropertyMapper >& rPropMapper,
-    sal_Bool bUsed, sal_uInt16 nFamily, const OUString* pPrefix,
-    sal_Bool bExportDefault )
+    sal_Bool bUsed, sal_uInt16 nFamily, const OUString* pPrefix)
 {
     const OUString sFamily(OUString::createFromAscii(pFamily ));
     exportStyleFamily( sFamily, pXMLFamily, rPropMapper, bUsed, nFamily,
-                       pPrefix, bExportDefault );
+                       pPrefix);
 }
 
 void XMLStyleExport::exportStyleFamily(
     const OUString& rFamily, const sal_Char *pXMLFamily,
     const UniReference < SvXMLExportPropertyMapper >& rPropMapper,
-    sal_Bool bUsed, sal_uInt16 nFamily, const OUString* pPrefix,
-    sal_Bool bExportDefault )
+    sal_Bool bUsed, sal_uInt16 nFamily, const OUString* pPrefix)
 {
     DBG_ASSERT( GetExport().GetModel().is(), "There is the model?" );
     Reference< XStyleFamiliesSupplier > xFamiliesSupp( GetExport().GetModel(),
@@ -434,12 +411,6 @@ void XMLStyleExport::exportStyleFamily(
         DBG_ASSERT( xStyle.is(), "Style not found for export!" );
         if( xStyle.is() )
         {
-            if( bExportDefault && !xStyle->getParentStyle().getLength() )
-            {
-                Reference< XPropertySet > xPropSet( xStyle, UNO_QUERY );
-                exportDefaultStyle( xStyle, pXMLFamily, rPropMapper );
-                bExportDefault = sal_False;
-            }
             if( !bUsed || xStyle->isInUse() )
             {
                 BOOL bExported = exportStyle( xStyle, pXMLFamily, rPropMapper,

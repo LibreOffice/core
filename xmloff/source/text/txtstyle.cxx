@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyle.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-18 11:59:42 $
+ *  last change: $Author: sab $ $Date: 2001-02-27 16:39:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,13 +187,13 @@ void XMLTextParagraphExport::exportNumStyles( sal_Bool bUsed )
 void XMLTextParagraphExport::exportTextStyles( sal_Bool bUsed )
 {
     exportStyleFamily( "ParagraphStyles", sXML_paragraph, GetParaPropMapper(),
-                       bUsed, XML_STYLE_FAMILY_TEXT_PARAGRAPH, 0, sal_True );
+                       bUsed, XML_STYLE_FAMILY_TEXT_PARAGRAPH, 0);
     exportStyleFamily( "CharacterStyles", sXML_text, GetTextPropMapper(),
                        bUsed, XML_STYLE_FAMILY_TEXT_TEXT );
     // get shape export to make sure the the frame family is added correctly.
     GetExport().GetShapeExport();
     exportStyleFamily( "FrameStyles", XML_STYLE_FAMILY_SD_GRAPHICS_NAME, GetFramePropMapper(),
-                       bUsed, XML_STYLE_FAMILY_TEXT_FRAME, 0, sal_True );
+                       bUsed, XML_STYLE_FAMILY_TEXT_FRAME, 0);
     exportNumStyles( bUsed );
     if( !IsBlockMode() )
     {
