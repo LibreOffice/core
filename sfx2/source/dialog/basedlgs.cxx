@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basedlgs.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-10 11:30:02 $
+ *  last change: $Author: mba $ $Date: 2001-09-06 13:57:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,6 +444,8 @@ SfxModelessDialog::~SfxModelessDialog()
 */
 
 {
+    if ( pMgr->GetFrame() == pBindings->GetActiveFrame() )
+        pBindings->SetActiveFrame( NULL );
 }
 
 //-------------------------------------------------------------------------
@@ -621,6 +623,8 @@ SfxFloatingWindow::~SfxFloatingWindow()
 */
 
 {
+    if ( pMgr->GetFrame() == pBindings->GetActiveFrame() )
+        pBindings->SetActiveFrame( NULL );
 }
 
 //-------------------------------------------------------------------------

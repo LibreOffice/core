@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-06 07:45:26 $
+ *  last change: $Author: mba $ $Date: 2001-09-06 13:57:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -899,6 +899,9 @@ void SfxDockingWindow::FillInfo(SfxChildWinInfo& rInfo) const
 
 SfxDockingWindow::~SfxDockingWindow()
 {
+    if ( pMgr && pMgr->GetFrame() == pBindings->GetActiveFrame() )
+        pBindings->SetActiveFrame( NULL );
+
     if ( pMgr && pImp->pSplitWin && pImp->pSplitWin->IsItemValid( GetType() ) )
         pImp->pSplitWin->RemoveWindow(this);
     delete pImp;
