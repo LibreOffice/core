@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:18:58 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 12:11:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1094,16 +1094,19 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         {
             case FLD_OK:
                 return aF.nLen;                     // alles OK
+            case FLD_TAGTXT:
+                if ((nFieldTagBad[nI] & nMask)) // Flag: Tag bad
+                    return Read_F_Tag(&aF);       // Taggen
+                //fall through...
             case FLD_TEXT:
                 // so viele ueberlesen, das Resultfeld wird wie Haupttext
                 // eingelesen
                 // JP 15.07.99: attributes can start at char 0x14 so skip one
                 // char more back == "-2"
-                return aF.nLen - aF.nLRes - 2;
-            case FLD_TAGTXT:
-                if(  ( nFieldTagBad[nI] & nMask ) ) // Flag: Tag bad
-                    return Read_F_Tag( &aF );       // Taggen
-                return aF.nLen - aF.nLRes - 2;  // oder Text-Resultat
+                if (aF.nLRes)
+                    return aF.nLen - aF.nLRes - 2;
+                else
+                    return aF.nLen;
             case FLD_TAGIGN:
                 if(  ( nFieldTagBad[nI] & nMask ) ) // Flag: Tag bad
                     return Read_F_Tag( &aF );       // Taggen
@@ -1685,7 +1688,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
                     }
                 }
                 if( !bFldFound )
-                    return FLD_TAGTXT; // Error: show field as string
+                    return FLD_TEXT; // Error: give up
             }
         }
     }
@@ -2093,50 +2096,39 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, String& rStr )
         }
     }
 
-    if ( SwFltGetFlag( nFieldFlags, SwFltControlStack::HYPO ) )
+    String sBkmName(GetMappedBookmark(sOrigBkmName));
+
+    if (!bAboveBelow || bChapterNr)
     {
-        SwGetExpField aFld( (SwGetExpFieldType*)
-            rDoc.GetSysFldType( RES_GETEXPFLD ),sOrigBkmName, GSE_STRING,
-            VVF_SYS );
-        rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
-        pRefStck->SetBookRef(sOrigBkmName, false);
+        if (bChapterNr)
+        {
+            SwGetRefField aFld(
+                (SwGetRefFieldType*)rDoc.GetSysFldType( RES_GETREFFLD ),
+                sBkmName,REF_BOOKMARK,0,REF_CHAPTER);
+            rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
+        }
+        else
+        {
+            /*
+            If we are just inserting the contents of the bookmark, then it
+            is possible that the bookmark is actually a variable, so we
+            must store it until the end of the document to see if it was,
+            in which case we'll turn it into a show variable
+            */
+            SwGetRefField aFld(
+                (SwGetRefFieldType*)rDoc.GetSysFldType( RES_GETREFFLD ),
+                sOrigBkmName,REF_BOOKMARK,0,REF_CONTENT);
+            pRefStck->NewAttr( *pPaM->GetPoint(), SwFmtFld(aFld) );
+            pRefStck->SetAttr( *pPaM->GetPoint(), RES_TXTATR_FIELD);
+        }
     }
-    else
+
+    if( bAboveBelow )
     {
-        String sBkmName(GetMappedBookmark(sOrigBkmName));
-
-        if (!bAboveBelow || bChapterNr)
-        {
-            if (bChapterNr)
-            {
-                SwGetRefField aFld(
-                    (SwGetRefFieldType*)rDoc.GetSysFldType( RES_GETREFFLD ),
-                    sBkmName,REF_BOOKMARK,0,REF_CHAPTER);
-                rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
-            }
-            else
-            {
-                /*
-                If we are just inserting the contents of the bookmark, then it
-                is possible that the bookmark is actually a variable, so we
-                must store it until the end of the document to see if it was,
-                in which case we'll turn it into a show variable
-                */
-                SwGetRefField aFld(
-                    (SwGetRefFieldType*)rDoc.GetSysFldType( RES_GETREFFLD ),
-                    sOrigBkmName,REF_BOOKMARK,0,REF_CONTENT);
-                pRefStck->NewAttr( *pPaM->GetPoint(), SwFmtFld(aFld) );
-                pRefStck->SetAttr( *pPaM->GetPoint(), RES_TXTATR_FIELD);
-            }
-        }
-
-        if( bAboveBelow )
-        {
-            SwGetRefField aFld( (SwGetRefFieldType*)
-                rDoc.GetSysFldType( RES_GETREFFLD ), sBkmName, REF_BOOKMARK, 0,
-                REF_UPDOWN );
-            rDoc.Insert(*pPaM, SwFmtFld(aFld));
-        }
+        SwGetRefField aFld( (SwGetRefFieldType*)
+            rDoc.GetSysFldType( RES_GETREFFLD ), sBkmName, REF_BOOKMARK, 0,
+            REF_UPDOWN );
+        rDoc.Insert(*pPaM, SwFmtFld(aFld));
     }
     return FLD_OK;
 }
@@ -2172,27 +2164,20 @@ eF_ResT SwWW8ImplReader::Read_F_NoteReference( WW8FieldDesc*, String& rStr )
         }
     }
 
-    if ( SwFltGetFlag( nFieldFlags, SwFltControlStack::HYPO ) )
+    // set Sequence No of corresponding Foot-/Endnote to Zero
+    // (will be corrected in
+    SwGetRefField aFld( (SwGetRefFieldType*)
+        rDoc.GetSysFldType( RES_GETREFFLD ), aBkmName, REF_FOOTNOTE, 0,
+        REF_ONLYNUMBER );
+    pRefStck->NewAttr(*pPaM->GetPoint(), SwFmtFld(aFld));
+    pRefStck->SetAttr(*pPaM->GetPoint(), RES_TXTATR_FIELD);
+    if (bAboveBelow)
     {
-        SwGetExpField aFld( (SwGetExpFieldType*)
-            rDoc.GetSysFldType( RES_GETEXPFLD ), aBkmName, GSE_STRING, VVF_SYS);
-        rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
-        pRefStck->SetBookRef(aBkmName, false);
-    }
-    else
-    {   // set Sequence No of corresponding Foot-/Endnote to Zero
-        // (will be corrected in
-        SwGetRefField aFld( (SwGetRefFieldType*)
-            rDoc.GetSysFldType( RES_GETREFFLD ), aBkmName, REF_FOOTNOTE, 0,
-            REF_ONLYNUMBER );
-        pRefStck->NewAttr(*pPaM->GetPoint(), SwFmtFld( aFld ));
-        if( bAboveBelow )
-        {
-            SwGetRefField aFld2( (SwGetRefFieldType*)
-                rDoc.GetSysFldType( RES_GETREFFLD ),aBkmName, REF_FOOTNOTE, 0,
-                REF_UPDOWN );
-            pRefStck->NewAttr(*pPaM->GetPoint(), SwFmtFld( aFld2 ));
-        }
+        SwGetRefField aFld2( (SwGetRefFieldType*)
+            rDoc.GetSysFldType( RES_GETREFFLD ),aBkmName, REF_FOOTNOTE, 0,
+            REF_UPDOWN );
+        pRefStck->NewAttr(*pPaM->GetPoint(), SwFmtFld(aFld2));
+        pRefStck->SetAttr(*pPaM->GetPoint(), RES_TXTATR_FIELD);
     }
     return FLD_OK;
 }
@@ -2213,24 +2198,14 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, String& rStr )
             break;
         }
     }
-    if ( SwFltGetFlag( nFieldFlags, SwFltControlStack::HYPO ) )
-    {
-        SwGetRefField aFld( (SwGetRefFieldType*)
-                        rDoc.GetSysFldType( RES_GETREFFLD ), sOrigName, 0, 0,
-                        REF_PAGE );
-        rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
-        pRefStck->SetBookRef(sOrigName, true);
-    }
-    else
-    {
-        String sName(GetMappedBookmark(sOrigName));
 
-        SwGetRefField aFld(
-            (SwGetRefFieldType*)rDoc.GetSysFldType( RES_GETREFFLD ), sName,
-            REF_BOOKMARK, 0, REF_PAGE );
+    String sName(GetMappedBookmark(sOrigName));
 
-        rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
-    }
+    SwGetRefField aFld(
+        (SwGetRefFieldType*)rDoc.GetSysFldType( RES_GETREFFLD ), sName,
+        REF_BOOKMARK, 0, REF_PAGE );
+
+    rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
     return FLD_OK;
 }
 
@@ -2846,8 +2821,6 @@ bool wwSectionManager::WillHavePageDescHere(SwNodeIndex aIdx) const
 
 eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
 {
-    if( nIniFlags & WW8FL_NO_TOX )
-        return FLD_OK;          // abgeschaltet -> ignorieren
     if( ( pF->nLRes < 3 ) )
         return FLD_TAGIGN;      // Nur Stuss -> ignorieren
 
@@ -2998,31 +2971,13 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                 */
                 }
             }
-            /*
-            const TOXTypes eType = pBase->GetTOXType()->GetType();
-            switch( eType )
-            {
-                case TOX_CONTENT:
-                    if( eCreateFrom )
-                        pBase->SetCreate( eCreateFrom );
-                    break;
-                case TOX_ILLUSTRATIONS:
-                    if( !eCreateFrom )
-                        eCreateFrom = TOX_SEQUENCE;
-                    pBase->SetCreate( eCreateFrom );
-                    break;
-            }
-            */
             pBase->SetOptions( eOptions );
         }
         break;
 
-
-
-
-
     case TOX_CONTENT:
         {
+            bool bIsHyperlink = false;
             // TOX_OUTLINELEVEL setzen wir genau dann, wenn
             // die Parameter \o in 1 bis 9 liegen
             // oder der Parameter \f existiert
@@ -3035,6 +2990,9 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
             {
                 switch( nRet )
                 {
+                case 'h':
+                    bIsHyperlink = true;
+                    break;
                 case 'a':
                 case 'c':
                     lcl_toxMatchACSwitch(*this, rDoc, *pBase, aReadParam,
@@ -3189,9 +3147,32 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                 */
                 }
             }
-            if( !nMaxLevel )
+
+            if (bIsHyperlink)
+            {
+                SwForm aForm(pBase->GetTOXForm());
+                USHORT nEnd = aForm.GetFormMax()-1;
+                SwFormToken aLinkStart(TOKEN_LINK_START);
+                SwFormToken aLinkEnd(TOKEN_LINK_END);
+
+                for(USHORT nLevel = 1; nLevel <= nEnd; ++nLevel)
+                {
+                    SwFormTokenEnumerator aEnumer(
+                        aForm.CreateTokenEnumerator(nLevel));
+
+                    aEnumer.InsertToken(aLinkStart);
+                    while (TOKEN_END != aEnumer.GetNextTokenType());
+                    aEnumer.InsertToken(aLinkEnd);
+
+                    aForm.SetPattern(nLevel, aEnumer.GetPattern());
+
+                }
+                pBase->SetTOXForm(aForm);
+            }
+
+            if (!nMaxLevel)
                 nMaxLevel = MAXLEVEL;
-            pBase->SetLevel( nMaxLevel );
+            pBase->SetLevel(nMaxLevel);
 
             const TOXTypes eType = pBase->GetTOXType()->GetType();
             switch( eType )
