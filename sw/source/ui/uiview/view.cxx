@@ -1,10 +1,10 @@
-/*************************************************************************
+ /*************************************************************************
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:42:59 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:05:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -924,6 +924,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     nNewPage(USHRT_MAX),
     bInMailMerge(FALSE),
     bInDtor(FALSE),
+    bOldShellWasPagePreView(FALSE),
     pNumRuleNodeFromDoc(0) // #i23726#
 {
     // OD 18.12.2002 #103492# - According to discussion with MBA and further
@@ -969,8 +970,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     aUsrPref.SetOnlineSpell( aLinguOpt.bIsSpellAuto );
     aUsrPref.SetHideSpell( aLinguOpt.bIsSpellHideMarkings );
 
-    sal_Bool bOldShellWasPagePreView = FALSE,
-             bOldShellWasSrcView = FALSE;
+    sal_Bool bOldShellWasSrcView = FALSE;
 
     // OD 18.12.2002 #103492# - determine, if there is an existing view for
     // document
@@ -1349,26 +1349,34 @@ void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
             // OD 11.02.2003 #100556# - set flag value to avoid macro execution.
             bool bSavedFlagValue = pWrtShell->IsMacroExecAllowed();
             pWrtShell->SetMacroExecAllowed( false );
-/*!!! pb (11.08.2004): #i32536#
-            pWrtShell->SwCrsrShell::SetCrsr( aCrsrPos, !bSelectObj );
-            if( bSelectObj )
+//!!! pb (11.08.2004): #i32536#
+// os: changed: The user data has to be read if the view is switched back from page preview
+            if(bOldShellWasPagePreView)
             {
-                pWrtShell->SelectObj( aCrsrPos );
-                pWrtShell->EnterSelFrmMode( &aCrsrPos );
+                pWrtShell->SwCrsrShell::SetCrsr( aCrsrPos, !bSelectObj );
+                if( bSelectObj )
+                {
+                    pWrtShell->SelectObj( aCrsrPos );
+                    pWrtShell->EnterSelFrmMode( &aCrsrPos );
+                }
             }
-*/
+
             // OD 11.02.2003 #100556# - reset flag value
             pWrtShell->SetMacroExecAllowed( bSavedFlagValue );
 
             // OD 08.04.2003 #108693# - set visible area before applying
             // information from print preview. Otherwise, the applied information
             // is lost.
-/*!!! pb (11.08.2004): #i32536#
-            if ( bBrowse )
-                SetVisArea( aVis.TopLeft() );
-            else
-                SetVisArea( aVis );
-*/
+//!!! pb (11.08.2004): #i32536#
+// os: changed: The user data has to be read if the view is switched back from page preview
+            if(bOldShellWasPagePreView)
+            {
+                if ( bBrowse )
+                    SetVisArea( aVis.TopLeft() );
+                else
+                    SetVisArea( aVis );
+            }
+
             //apply information from print preview - if available
             if( sNewCrsrPos.Len() )
             {
@@ -1376,14 +1384,14 @@ void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
                       nY = sNewCrsrPos.GetToken( 1, ';' ).ToInt32();
                 Point aCrsrPos( nX, nY );
                 bSelectObj = pWrtShell->IsObjSelectable( aCrsrPos );
-/*!!! pb (11.08.2004): #i32536#
+
                 pWrtShell->SwCrsrShell::SetCrsr( aCrsrPos, FALSE );
                 if( bSelectObj )
                 {
                     pWrtShell->SelectObj( aCrsrPos );
                     pWrtShell->EnterSelFrmMode( &aCrsrPos );
                 }
-*/
+                pWrtShell->MakeSelVisible();
                 sNewCrsrPos.Erase();
             }
             else if(USHRT_MAX != nNewPage)
@@ -1510,14 +1518,18 @@ void SwView::ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::s
                     // OD 11.02.2003 #100556# - set flag value to avoid macro execution.
                     bool bSavedFlagValue = pWrtShell->IsMacroExecAllowed();
                     pWrtShell->SetMacroExecAllowed( false );
-/*!!! pb (11.08.2004): #i32536#
-                    pWrtShell->SwCrsrShell::SetCrsr( aCrsrPos, !bSelectObj );
-                    if( bSelectObj )
+//!!! pb (11.08.2004): #i32536#
+// os: changed: The user data has to be read if the view is switched back from page preview
+                    if(bOldShellWasPagePreView)
                     {
-                        pWrtShell->SelectObj( aCrsrPos );
-                        pWrtShell->EnterSelFrmMode( &aCrsrPos );
+                        pWrtShell->SwCrsrShell::SetCrsr( aCrsrPos, !bSelectObj );
+                        if( bSelectObj )
+                        {
+                            pWrtShell->SelectObj( aCrsrPos );
+                            pWrtShell->EnterSelFrmMode( &aCrsrPos );
+                        }
                     }
-*/
+
                     // OD 11.02.2003 #100556# - reset flag value
                     pWrtShell->SetMacroExecAllowed( bSavedFlagValue );
                 }
@@ -1528,19 +1540,22 @@ void SwView::ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::s
                 if ( bGotZoomType && bGotZoomFactor &&
                    ( pVOpt->GetZoom() != nZoomFactor || pVOpt->GetZoomType() != eZoom ) )
                     SetZoom( eZoom, nZoomFactor, sal_True );
-/*!!! pb (11.08.2004): #i32536#
-                if ( bBrowse && bGotVisibleLeft && bGotVisibleTop )
+//!!! pb (11.08.2004): #i32536#
+// os: changed: The user data has to be read if the view is switched back from page preview
+                if(bOldShellWasPagePreView)
                 {
-                    Point aTopLeft(aVis.TopLeft());
-                    //check if the values are possible
-                    long nXMax = pHScrollbar->GetRangeMax() - pHScrollbar->GetVisibleSize();
-                    if( aTopLeft.X() > nXMax )
-                        aTopLeft.X() = nXMax < 0 ? 0 : nXMax;
-                    SetVisArea( aTopLeft );
+                    if ( bBrowse && bGotVisibleLeft && bGotVisibleTop )
+                    {
+                        Point aTopLeft(aVis.TopLeft());
+                        //check if the values are possible
+                        long nXMax = pHScrollbar->GetRangeMax() - pHScrollbar->GetVisibleSize();
+                        if( aTopLeft.X() > nXMax )
+                            aTopLeft.X() = nXMax < 0 ? 0 : nXMax;
+                        SetVisArea( aTopLeft );
+                    }
+                    else if (bGotVisibleLeft && bGotVisibleTop && bGotVisibleRight && bGotVisibleBottom )
+                        SetVisArea( aVis );
                 }
-                else if (bGotVisibleLeft && bGotVisibleTop && bGotVisibleRight && bGotVisibleBottom )
-                    SetVisArea( aVis );
-*/
 
                 pWrtShell->LockView( sal_True );
                 pWrtShell->EndAction();
