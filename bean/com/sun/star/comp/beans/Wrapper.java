@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Wrapper.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2004-09-06 15:11:37 $
+ *  last change: $Author: mi $ $Date: 2004-10-14 10:37:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@ import com.sun.star.uno.UnoRuntime;
 
     This wrapper will only work for UNO objects via a bridge, not for
     direct Java objects.
+
+    @since OOo 2.0.0
  */
 class Wrapper
     implements

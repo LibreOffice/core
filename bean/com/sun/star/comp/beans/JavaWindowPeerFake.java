@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JavaWindowPeerFake.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2004-09-06 15:11:32 $
+ *  last change: $Author: mi $ $Date: 2004-10-14 10:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@ import com.sun.star.beans.*;
 import com.sun.star.container.*;
 
 /** <p>Class to pass the system window handle to the OpenOffice.org toolkit.</p>
+ *
+ * @since OOo 2.0.0
  */
 /* package */ class JavaWindowPeerFake
     implements XSystemDependentWindowPeer, XWindowPeer

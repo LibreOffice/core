@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocalOfficeWindow.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2004-09-06 15:11:33 $
+ *  last change: $Author: mi $ $Date: 2004-10-14 10:37:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,8 @@ import com.sun.star.uno.Exception;
 
 /**
  * This class represents a local office window.
+ *
+ * @since OOo 2.0.0
  */
 public class LocalOfficeWindow
     extends java.awt.Canvas
@@ -100,7 +102,7 @@ public class LocalOfficeWindow
      * @param connection The office connection object the window
      *  belongs to.
      */
-    /* package */ LocalOfficeWindow(OfficeConnection connection)
+    protected LocalOfficeWindow(OfficeConnection connection)
     {
         mConnection = connection;
         mConnection.addEventListener((XEventListener)this);

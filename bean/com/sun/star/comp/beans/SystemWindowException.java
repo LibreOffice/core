@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SystemWindowException.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2004-09-06 15:11:36 $
+ *  last change: $Author: mi $ $Date: 2004-10-14 10:37:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,13 @@
 
 package com.sun.star.comp.beans;
 
+/** indicates that an operation needed a system window,
+    but no system window was aquired yet.
+
+    @see com.sun.star.comp.beans.OOoBean.aquireSystemWindow
+
+    @since OOo 2.0.0
+*/
 public class SystemWindowException extends Exception
 {
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OOoBean.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2004-09-27 14:17:46 $
+ *  last change: $Author: mi $ $Date: 2004-10-14 10:37:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,8 @@ import com.sun.star.uno.UnoRuntime;
 
     @requirement FUNC.RES.OTH/0.2
         No other resources are needed yet.
+
+    @since OOo 2.0.0
  */
 public class OOoBean
 
@@ -127,7 +129,7 @@ public class OOoBean
     // debugging method
     private void dbgPrint( String aMessage )
     {
-        // System.err.println( aMessage );
+        // System.err.println( "OOoBean: " + aMessage );
     }
 
     //-------------------------------------------------------------------------
@@ -219,9 +221,8 @@ public class OOoBean
 
         // get notified when connection dies
         if ( xConnectionListener != null )
-            xConnectionListener.stop();
+            xConnectionListener.end();
         xConnectionListener = this.new EventListener("setOOoConnection");
-        dbgPrint( "new EventListener()" );
     }
 
     //-------------------------------------------------------------------------
@@ -265,7 +266,10 @@ public class OOoBean
         OfficeConnection iExConnection = iConnection;
         if ( iConnection != null )
         {
-            xConnectionListener = null;
+            if ( xConnectionListener != null )
+            {
+                xConnectionListener.end();
+            }
             iConnection = null;
             iExConnection.dispose();
         }
@@ -380,6 +384,8 @@ public class OOoBean
     public synchronized void clear()
         throws java.lang.InterruptedException
     {
+        dbgPrint( "clear()" );
+
         CallWatchThread aCallWatchThread =
             new CallWatchThread( nOOoCallTimeOut, "clear" );
         aDocument = null;
@@ -589,7 +595,12 @@ public class OOoBean
                     {
                         if ( aFrame != null && xOldController != null )
                             xOldController.suspend(true);
-                        aDocument.setModified(false);
+                        if ( aDocument != null )
+                            try {
+                                // can be disposed if user closed document via UI
+                                aDocument.setModified(false);
+                            }
+                            catch (  com.sun.star.lang.DisposedException aExc ) {}
                     }
                     catch (java.lang.IllegalStateException exp)
                     {}
@@ -601,8 +612,9 @@ public class OOoBean
                         "MacroExecutionMode", -1,
                         new Short( com.sun.star.document.MacroExecMode.USE_CONFIG ),
                         com.sun.star.beans.PropertyState.DIRECT_VALUE ) );
+                                //String fn = aFRame.getName();
                 com.sun.star.lang.XComponent xComponent = xLoader.loadComponentFromURL(
-                    aURL, aFrame.getName(), com.sun.star.frame.FrameSearchFlag.ALL, aArgs );
+                    aURL, /*aFrame.getName()*/"_self", com.sun.star.frame.FrameSearchFlag.ALL, aArgs );
 
                 // nothing loaded?
                 if ( xComponent == null && aDocument != null )
@@ -672,9 +684,32 @@ public class OOoBean
 
     {
         // wrap Java stream into UNO stream
+                /*
         com.sun.star.io.XInputStream xStream =
                 new com.sun.star.lib.uno.adapter.InputStreamToXInputStreamAdapter(
                     iInStream );
+                 */
+                 // copy stream....
+
+                 int s = 4096;
+                 int r=0 ,n = 0;
+                 byte[] buffer = new byte[s];
+                 byte[] newBuffer = null;
+                 while ((r = iInStream.read(buffer, n, buffer.length-n))>0) {
+                     n += r;
+                     if (iInStream.available() > buffer.length - n) {
+                         newBuffer = new byte[buffer.length*2];
+                         System.arraycopy(buffer, 0, newBuffer, 0, n);
+                         buffer = newBuffer;
+                     }
+                }
+                if (buffer.length != n) {
+                    newBuffer = new byte[n];
+                    System.arraycopy(buffer, 0, newBuffer, 0, n);
+                    buffer = newBuffer;
+                }
+                com.sun.star.io.XInputStream xStream =
+                    new com.sun.star.lib.uno.adapter.ByteArrayToXInputStreamAdapter(buffer);
 
         // add stream to arguments
         com.sun.star.beans.PropertyValue[] aExtendedArguments =
@@ -993,18 +1028,6 @@ public class OOoBean
                         xLayoutManager.showElement( aResourceURL );
                     else
                         xLayoutManager.hideElement( aResourceURL );
-/*
-        System.err.println( "ResourceURLs:" );
-        for ( int n = 0; n < xLayoutManager.getElements().length; ++n )
-        {
-            com.sun.star.beans.XPropertySet xElementPropSet =
-                    (com.sun.star.beans.XPropertySet) UnoRuntime.queryInterface(
-                            com.sun.star.beans.XPropertySet.class,
-                            xLayoutManager.getElements()[n] );
-            System.err.println( xElementPropSet.getPropertyValue("ResourceURL") );
-        }
-        System.err.println( "" );
-*/
                 }
                 catch (  com.sun.star.beans.UnknownPropertyException aExc )
                 {
@@ -1253,12 +1276,30 @@ public class OOoBean
             // listen on a dying connection
             iConnection.addEventListener( this );
 
-            // listen on a dying OOo
+            // listen on a terminating OOo
             getOOoDesktop().addTerminateListener( this );
 
             // start this thread as a daemon
             setDaemon( true );
             start();
+        }
+
+        public void end()
+        {
+            // do not listen on a dying connection anymore
+            try {
+                iConnection.removeEventListener( this );
+            }
+            catch ( Throwable aExc ) {};
+
+            // do not listen on a terminating OOo anymore
+            try {
+                getOOoDesktop().removeTerminateListener( this );
+            }
+            catch ( Throwable aExc ) {};
+
+            // stop thread
+            super.stop();
         }
 
         /// gets called when the connection dies

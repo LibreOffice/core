@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NativeService.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2004-09-06 15:11:33 $
+ *  last change: $Author: mi $ $Date: 2004-10-14 10:37:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,9 @@
 
 package com.sun.star.comp.beans;
 
-
+/*
+ * @since OOo 2.0.0
+ */
 /* package */ interface NativeService {
     public String getIdentifier();
     public void startupService() throws java.io.IOException;

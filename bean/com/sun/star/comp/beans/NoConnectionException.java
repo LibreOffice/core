@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NoConnectionException.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2004-09-06 15:11:33 $
+ *  last change: $Author: mi $ $Date: 2004-10-14 10:37:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@ package com.sun.star.comp.beans;
 /** This exception is called when a method is called which
      needs an established connection but no connection is
     established yet or anymore.
+
+    @since OOo 2.0.0
  */
 public class NoConnectionException extends Exception
 {

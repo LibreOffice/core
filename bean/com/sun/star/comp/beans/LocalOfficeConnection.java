@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocalOfficeConnection.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2004-09-14 15:07:23 $
+ *  last change: $Author: mi $ $Date: 2004-10-14 10:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,8 @@ import com.sun.star.lib.util.NativeLibraryLoader;
 
 /**
  * This class reprecents a connection to the local office application.
+ *
+ * @since OOo 2.0.0
  */
 public class LocalOfficeConnection
     implements OfficeConnection
@@ -595,14 +597,32 @@ dbgPrint( "xUrlResolver.resolve() - done" );
             mPipe = pipe;
     }
 
+    /* replaces each substring aSearch in aString by aReplace.
+
+        StringBuffer.replaceAll() is not avaialable in Java 1.3.x.
+     */
+    private static String replaceAll(String aString, String aSearch, String aReplace )
+    {
+        StringBuffer aBuffer = new StringBuffer(aString);
+
+        int nPos = aString.length();
+        int nOfs = aSearch.length();
+
+        while ( ( nPos = aString.lastIndexOf( aSearch, nPos - 1 ) ) > -1 )
+            aBuffer.replace( nPos, nPos+nOfs, aReplace );
+
+        return aBuffer.toString();
+    }
+
+
     /** creates a unique pipe name.
     */
     static String getPipeName()
     {
         // turn user name into a URL and file system safe name (% chars will not work)
         String aPipeName = System.getProperty("user.name") + OFFICE_ID_SUFFIX;
-        aPipeName = aPipeName.replaceAll( "_", "%B7" );
-        return java.net.URLEncoder.encode(aPipeName).replaceAll( "\\+", "%20" ).replaceAll( "%", "_" );
+        aPipeName = replaceAll( aPipeName, "_", "%B7" );
+        return replaceAll( replaceAll( java.net.URLEncoder.encode(aPipeName), "\\+", "%20" ), "%", "_" );
     }
 
     /**

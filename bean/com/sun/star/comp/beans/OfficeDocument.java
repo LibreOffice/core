@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeDocument.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2004-09-06 15:11:35 $
+ *  last change: $Author: mi $ $Date: 2004-10-14 10:37:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,10 @@ import com.sun.star.uno.UnoRuntime;
 
     See further information on the wrapping and compatibility limitations
     in the base class Wrapper.
+
+    @since OOo 2.0.0
  */
-class OfficeDocument extends Wrapper
+public class OfficeDocument extends Wrapper
     implements
         com.sun.star.frame.XModel,
         com.sun.star.util.XModifiable,

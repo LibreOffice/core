@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HasConnectionException.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2004-09-06 15:11:31 $
+ *  last change: $Author: mi $ $Date: 2004-10-14 10:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@ package com.sun.star.comp.beans;
 /** This expception is thrown when a method is called which
     is only defined for not already having an established
     connection.
+
+    @since OOo 2.0.0
  */
 public class HasConnectionException extends Exception
 {

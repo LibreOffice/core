@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mi $ $Date: 2004-09-23 14:56:58 $
+#   last change: $Author: mi $ $Date: 2004-10-14 10:37:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,7 @@
 
 PRJ	= ..$/..$/..$/..$/..
 PRJNAME = beans
-TARGET  = officebean
+TARGET  = com_sun_star_comp_beans
 PACKAGE = com$/sun$/star$/comp$/beans
 
 # --- Settings -----------------------------------------------------
@@ -76,33 +76,30 @@ dummy:
 .ELSE		# "$(OS)"=="MACOSX"
 
 JARFILES 		= sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar
-JAVAFILES		= $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES)))
 
-JARCLASSDIRS	= $(PACKAGE)
-JARTARGET		= $(TARGET).jar
-JARCOMPRESS 	= TRUE
+# --- Sources --------------------------------------------------------
 
-# --- Files --------------------------------------------------------
+JAVAFILES=  \
+    ContainerFactory.java \
+    Controller.java \
+    Frame.java \
+    HasConnectionException.java \
+    InvalidArgumentException.java \
+    JavaWindowPeerFake.java \
+    LocalOfficeConnection.java \
+    LocalOfficeWindow.java \
+    NativeConnection.java \
+    NativeService.java \
+    NoConnectionException.java \
+    NoDocumentException.java \
+    OfficeConnection.java \
+    OfficeDocument.java \
+    OfficeWindow.java \
+    OOoBean.java \
+    SystemWindowException.java \
+    Wrapper.java
 
-JAVACLASSFILES=\
-    $(CLASSDIR)$/$(PACKAGE)$/OfficeConnection.class \
-    $(CLASSDIR)$/$(PACKAGE)$/OfficeWindow.class \
-    $(CLASSDIR)$/$(PACKAGE)$/ContainerFactory.class \
-    $(CLASSDIR)$/$(PACKAGE)$/JavaWindowPeerFake.class \
-    $(CLASSDIR)$/$(PACKAGE)$/NativeConnection.class \
-    $(CLASSDIR)$/$(PACKAGE)$/NativeService.class \
-    $(CLASSDIR)$/$(PACKAGE)$/LocalOfficeConnection.class \
-    $(CLASSDIR)$/$(PACKAGE)$/LocalOfficeWindow.class \
-    $(CLASSDIR)$/$(PACKAGE)$/InvalidArgumentException.class \
-    $(CLASSDIR)$/$(PACKAGE)$/HasConnectionException.class \
-    $(CLASSDIR)$/$(PACKAGE)$/NoConnectionException.class \
-    $(CLASSDIR)$/$(PACKAGE)$/SystemWindowException.class \
-    $(CLASSDIR)$/$(PACKAGE)$/NoDocumentException.class \
-    $(CLASSDIR)$/$(PACKAGE)$/OfficeDocument.class \
-    $(CLASSDIR)$/$(PACKAGE)$/Controller.class \
-    $(CLASSDIR)$/$(PACKAGE)$/Frame.class \
-    $(CLASSDIR)$/$(PACKAGE)$/Wrapper.class \
-    $(CLASSDIR)$/$(PACKAGE)$/OOoBean.class 
+JAVACLASSFILES= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
 .ENDIF
 
