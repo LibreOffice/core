@@ -2,9 +2,9 @@
  *
  *  $RCSfile: web.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 07:23:01 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:29:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -531,7 +531,7 @@ String RID_WEBGRAPHIC_TOOLBOX
     Text [ English ] = "Graphic objectbar/Web" ;
     Text [ norwegian ] = "Graphic/Web" ;
     Text [ italian ] = "Barra degli oggetti grafici/Web" ;
-    Text [ portuguese_brazilian ] = "Gr fico/Web" ;
+    Text [ portuguese_brazilian ] = "Gr?fico/Web" ;
     Text [ portuguese ] = "Barra de objectos gráficos/Web" ;
     Text [ finnish ] = "Grafiikkaobjektipalkki/Web" ;
     Text [ danish ] = "Grafikobjektlinje/Web" ;
