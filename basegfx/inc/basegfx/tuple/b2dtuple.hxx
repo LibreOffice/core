@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dtuple.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:36:23 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:36:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #endif
 
 #ifndef _INC_MATH
+#ifndef  _USE_MATH_DEFINES
+#define  _USE_MATH_DEFINES  // needed by Visual C++ for math constants
+#endif
 #include <math.h>
 #endif
 
@@ -129,7 +132,7 @@ namespace basegfx
             @param rTup
             The 2D Tuple which will be copied.
         */
-        B2DTuple(const B2ITuple& rTup);
+        explicit B2DTuple(const B2ITuple& rTup);
 
         ~B2DTuple()
         {}
