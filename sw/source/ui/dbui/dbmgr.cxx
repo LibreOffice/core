@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:20:28 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,10 +58,6 @@
  *
  *
  ************************************************************************/
-
-
-
-#pragma hdrstop
 
 #if STLPORT_VERSION>=321
 #include <cstdarg>
@@ -1992,17 +1988,7 @@ sal_Bool SwNewDBMgr::ToRecordId(sal_Int32 nSet)
     }
     return bRet;
 }
-/* -----------------------------17.07.00 14:50--------------------------------
 
- ---------------------------------------------------------------------------*/
-void lcl_ExtractMembers(const String& rDBName, String& sSource, String& sTable, String& sStatement)
-{
-    sSource = rDBName.GetToken(0, DB_DELIM);
-    sTable = rDBName.GetToken(0).GetToken(1, DB_DELIM);
-    sal_uInt16 nPos;
-    if ((nPos = rDBName.Search(';')) != STRING_NOTFOUND)
-        sStatement = rDBName.Copy(nPos + 1);
-}
 /* -----------------------------17.07.00 14:17--------------------------------
 
  ---------------------------------------------------------------------------*/
