@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-11 15:30:12 $
+ *  last change: $Author: cmc $ $Date: 2002-04-29 10:09:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,10 +238,6 @@
 #define WW8_DFLT_CHECKBOX_WIDTH 320
 #define WW8_DFLT_CHECKBOX_HEIGHT 320
 
-static sal_Char sWW8_form[] = "WW-Standard";
-static sal_Char sWW8_edit[] = "TextBox";
-static sal_Char sWW8_checkbox[] = "CheckBox";
-
 using namespace com::sun::star;
 //-----------------------------------------
 //            UNO-Controls
@@ -273,13 +269,13 @@ void SwWW8ImplReader::BuildInputField(sal_uInt16 nType)
     switch( (SwWw8ControlType)nType )
     {
         case WW8_CT_CHECKBOX:
-            sType = C2U("CheckBox");
+            sType = C2U(SL::aCheckBox);
             break;
     //  case WW8_CT_EDIT:
         default:
             // see change in ../html/htmlform.cxx as of 1999/11/25 11:20:16
             // made by O.Specht
-            sType = C2U("TextField");
+            sType = C2U(SL::aTextField);
             break;
     }
 
@@ -302,14 +298,14 @@ void SwWW8ImplReader::BuildInputField(sal_uInt16 nType)
         case WW8_CT_CHECKBOX:
             aSz.Width = WW8_DFLT_CHECKBOX_WIDTH;
             aSz.Height = WW8_DFLT_CHECKBOX_HEIGHT;
-            sName = C2U(sWW8_checkbox);
+            sName = C2U(SL::aCheckBox);
             nControl = pFormImpl->GetCheckboxNum();
             break;
 //      case WW8_CT_EDIT:
         default:
             aSz.Width = WW8_DFLT_EDIT_WIDTH; // etwas 20 Zeichen
             aSz.Height = WW8_DFLT_EDIT_HEIGHT;
-            sName = C2U(sWW8_edit);
+            sName = C2U(SL::aTextBox);
             nControl = pFormImpl->GetEditNum();
             break;
     }
@@ -1952,7 +1948,7 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
 }
 
 WW8FormulaCheckBox::WW8FormulaCheckBox(SwWW8ImplReader &rR)
-    : WW8FormulaControl( CREATE_CONST_ASC( "CheckBox" ), rR)
+    : WW8FormulaControl( CREATE_CONST_ASC(SL::aCheckBox), rR)
 {
 }
 
@@ -2128,7 +2124,7 @@ void WW8FormulaControl::SetOthersFromDoc(awt::Size &rSz,
 }
 
 WW8FormulaEditBox::WW8FormulaEditBox(SwWW8ImplReader &rR)
-    : WW8FormulaControl( CREATE_CONST_ASC( "TextField" ) ,rR)
+    : WW8FormulaControl( CREATE_CONST_ASC(SL::aTextField) ,rR)
 {
 }
 
