@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsrc.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-04 14:48:51 $
+ *  last change: $Author: sab $ $Date: 2002-03-21 06:27:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ class ScDocShell;
 class ScHeaderFooterContentObj;
 class ScCellTextData;
 class ScHeaderFooterTextData;
-class ScAccessibleCellTextData;
+class ScAccessibleTextData;
 
 
 class ScHeaderFooterChangedHint : public SfxHint
@@ -215,10 +215,10 @@ public:
 class ScAccessibilityEditSource : public SvxEditSource
 {
 private:
-    ::std::auto_ptr < ScAccessibleCellTextData > mpAccessibleCellTextData;
+    ::std::auto_ptr < ScAccessibleTextData > mpAccessibleTextData;
 
 public:
-                        ScAccessibilityEditSource( ::std::auto_ptr < ScAccessibleCellTextData > pAccessibleCellTextData );
+                        ScAccessibilityEditSource( ::std::auto_ptr < ScAccessibleTextData > pAccessibleCellTextData );
     virtual             ~ScAccessibilityEditSource();
 
     virtual SvxEditSource*      Clone() const;
