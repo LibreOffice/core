@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormDocument.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $  $Date: 2005-02-21 13:56:56 $
+ *  last change: $Author: kz $  $Date: 2005-03-18 16:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,6 +294,7 @@ public class FormDocument extends TextDocument {
 
     public boolean finalizeForms(DataEntrySetter _curDataEntrySetter, FieldLinker _curFieldLinker, FormConfiguration _curFormConfiguration){
         try {
+            this.xTextDocument.lockControllers();
             PropertyValue[] aFormProperties = _curDataEntrySetter.getFormProperties();
             ControlForm oMasterControlForm = getControlFormByName(SOMAINFORM);
             oMasterControlForm.setFormProperties(aFormProperties, oMainFormDBMetaData);
@@ -320,6 +321,9 @@ public class FormDocument extends TextDocument {
         } catch (Exception e) {
             e.printStackTrace(System.out);
             return false;
+        }
+        finally{
+            unlockallControllers();
         }
     }
 
@@ -367,8 +371,9 @@ public class FormDocument extends TextDocument {
                 oFormController = new FormControlArranger(oFormHandler, xFormContainer, oDBMetaData, xProgressBar, aStartPoint, aFormSize);
             else{
                 if (curArrangement == FormWizard.SOGRID){
-                    oFormHandler.moveShapesToNirwana(getLabelControls());
-                    oFormHandler.moveShapesToNirwana(getDatabaseControls());
+//                  oFormHandler.moveShapesToNirwana(getLabelControls());
+//                  oFormHandler.moveShapesToNirwana(getDatabaseControls());
+                    oFormHandler.moveShapesToNirwana();
                 }
             }
             if (curArrangement == FormWizard.SOGRID){
