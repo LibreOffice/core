@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-10 11:02:17 $
+ *  last change: $Author: vg $ $Date: 2001-04-10 16:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,7 +350,7 @@ SfxPopupWindow* SvxUndoControl::CreatePopupWindow()
 {
     DBG_ASSERT( SID_UNDO == GetId(), "mismatching ids" );
 
-    SfxPoolItem* pState = 0;
+    const SfxPoolItem* pState = 0;
     SfxBindings &rBindings = GetBindings();
     SfxDispatcher &rDispatch = *GetBindings().GetDispatcher();
     SfxItemState eState = rDispatch.QueryState( SID_GETUNDOSTRINGS, pState );
@@ -422,7 +422,7 @@ SfxPopupWindow* SvxRedoControl::CreatePopupWindow()
 {
     DBG_ASSERT( SID_REDO == GetId(), "mismatching ids" );
 
-    SfxPoolItem* pState = 0;
+    const SfxPoolItem* pState = 0;
     SfxBindings &rBindings = GetBindings();
     SfxDispatcher &rDispatch = *GetBindings().GetDispatcher();
     SfxItemState eState = rDispatch.QueryState( SID_GETREDOSTRINGS, pState );
