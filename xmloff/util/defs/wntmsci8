@@ -12360,3 +12360,15 @@ _real@bff0000000000000
 ?resize@?$vector@UPropertyValue@beans@star@sun@com@@V?$allocator@UPropertyValue@beans@star@sun@com@@@_STL@@@_STL@@QAEXIABUPropertyValue@beans@star@sun@com@@@Z
 ?uninitialized_fill_n@_STL@@YAPAUPropertyValue@beans@star@sun@com@@PAU23456@IABU23456@@Z
 ?PROPERTY_RICH_TEXT@xmloff@@3UConstAsciiString@1@B
+??0StringCompare@?A0x482f843d@xmloff@@QAE@ABU012@@Z
+??0StringCompare@?A0x482f843d@xmloff@@QAE@ABVOUString@rtl@@@Z
+??1StringCompare@?A0x482f843d@xmloff@@QAE@XZ
+??RStringCompare@?A0x482f843d@xmloff@@QAE_NABVOUString@rtl@@@Z
+?__find_if@_STL@@YAPBVOUString@rtl@@PBV23@0UStringCompare@?A0x482f843d@xmloff@@ABUrandom_access_iterator_tag@1@@Z
+?find_if@_STL@@YAPBVOUString@rtl@@PBV23@0UStringCompare@?A0x482f843d@xmloff@@@Z
+?getDocument@?A0x482f843d@xmloff@@YA?AV?$Reference@VXModel@frame@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXInterface@uno@star@sun@com@@@4567@@Z
+?getDrawPage@?A0x482f843d@xmloff@@YA?AV?$Reference@VXDrawPage@drawing@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXInterface@uno@star@sun@com@@@4567@@Z
+?getTypedModelNode@?$@VXDrawPage@drawing@star@sun@com@@@?A0x482f843d@xmloff@@YA?AV?$Reference@VXDrawPage@drawing@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXInterface@uno@star@sun@com@@@4567@@Z
+?getTypedModelNode@?$@VXModel@frame@star@sun@com@@@?A0x482f843d@xmloff@@YA?AV?$Reference@VXModel@frame@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXInterface@uno@star@sun@com@@@4567@@Z
+?isAsciiLetter@?A0x482f843d@xmloff@@YA_NG@Z
+?toUpperAscii@?A0x482f843d@xmloff@@YAGG@Z
