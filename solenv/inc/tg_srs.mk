@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_srs.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-19 11:42:59 $
+#   last change: $Author: obo $ $Date: 2005-03-18 10:14:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -139,7 +139,7 @@ HIDSRS$(TNR)PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))$/$(SRS$(TNR)NAM
 $(HIDSRS$(TNR)PARTICLE) : $(HID$(TNR)FILES)
         @echo ------------------------------
         @echo Making: $@
-        @+if exist $@ rm $@
+        @$(IFEXIST) $@ $(THEN) $(RM) $@
         +$(TYPE) $(HID$(TNR)FILES) > $@.$(ROUT).tmp
         @+$(RENAME) $@.$(ROUT).tmp $@
 
