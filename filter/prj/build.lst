@@ -5,7 +5,7 @@ fl	filter\source\jars						nmake	-	all	fl_javafilter_binaries	NULL
 fl	filter\source\xmlfilteradaptor			nmake	-	all	fl_xmlfilteradaptor	NULL
 fl	filter\source\xmlfilterdetect			nmake	-	all	fl_xmlfilterdetect	NULL
 fl	filter\source\msfilter\powerpoint		nmake	-	all	fl_powerpoint		NULL
-fl	filter\source\pdf						nmake	-	all	fl_pdf				NULL
+fl	filter\source\pdf						nmake	-	all	fl_pdf fl_svg		NULL
 fl	filter\source\svg						nmake	-	all	fl_svg				NULL
 fl	filter\source\placeware					nmake	-	all	fl_placeware		NULL
 fl	filter\source\flash						nmake	-	all	fl_flash fl_pdf			NULL
