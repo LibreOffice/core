@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crstate.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 12:41:46 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:09:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,11 @@ struct SwSpecialPos
     xub_StrLen nCharOfst;
     USHORT nLineOfst;
     BYTE nExtendRange;
+
+    // #i27615#
+    SwSpecialPos() : nCharOfst(0), nLineOfst(0),
+                     nExtendRange(SP_EXTEND_RANGE_NONE)
+    {}
 };
 
 // CrsrTravelling-Staties (fuer GetCrsrOfst)
@@ -189,6 +194,11 @@ struct SwCrsrMoveState
     BOOL bPosMatchesBounds :1;  // GetCrsrOfst should not return the next
                                 // position if screen position is inside second
                                 // have of bound rect
+    // #i27615#
+    /**
+       cursor in front of label
+     */
+    BOOL bInFrontOfLabel :1;
     BOOL bInNumPortion   :1;     // point is in number portion #i23726#
     int nInNumPostionOffset;     // distance from number portion's start
 
@@ -209,6 +219,7 @@ struct SwCrsrMoveState
         b2Lines( FALSE ),
         bNoScroll( FALSE ),
         bPosMatchesBounds( FALSE ),
+        bInFrontOfLabel( FALSE ), // #i27615#
         bInNumPortion(FALSE), // #i26726#
         nInNumPostionOffset(0) // #i26726#
     {}
@@ -228,6 +239,7 @@ struct SwCrsrMoveState
         b2Lines( FALSE ),
         bNoScroll( FALSE ),
         bPosMatchesBounds( FALSE ),
+        bInFrontOfLabel( FALSE ), // #i27615#
         bInNumPortion(FALSE), // #i23726#
         nInNumPostionOffset(0) // #i23726#
     {}
