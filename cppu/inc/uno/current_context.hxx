@@ -2,9 +2,9 @@
  *
  *  $RCSfile: current_context.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-22 09:32:59 $
+ *  last change: $Author: dbo $ $Date: 2001-08-22 11:03:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ public:
 
         @return the previously set context
     */
-    Reference< XCurrentContext > SAL_CALL getPreviousContext() SAL_THROW( () )
+    inline Reference< XCurrentContext > SAL_CALL getPreviousContext() SAL_THROW( () )
         { return m_xPreviousContext; }
 };
 //__________________________________________________________________________________________________

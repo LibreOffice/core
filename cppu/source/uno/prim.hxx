@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prim.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-29 11:06:54 $
+ *  last change: $Author: dbo $ $Date: 2001-08-22 11:03:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,10 +102,9 @@
 namespace cppu
 {
 
-extern uno_Sequence * s_pSeq;
-extern uno_Sequence s_seq;
-extern typelib_TypeDescriptionReference * s_pVoidType;
-extern typelib_TypeDescription * s_pQITD;
+extern uno_Sequence g_emptySeq;
+extern typelib_TypeDescriptionReference * g_pVoidType;
+extern typelib_TypeDescription * g_pQITD;
 
 //--------------------------------------------------------------------------------------------------
 inline void * __map(
@@ -168,33 +167,19 @@ inline void __releaseRef( void ** pRef, uno_ReleaseFunc release )
 //--------------------------------------------------------------------------------------------------
 inline uno_Sequence * __getEmptySequence() SAL_THROW( () )
 {
-    if (! s_pSeq)
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (! s_pSeq)
-        {
-            s_seq.nRefCount = 1;
-            s_seq.nElements = 0;
-            s_pSeq = &s_seq;
-        }
-    }
-    ::osl_incrementInterlockedCount( &s_pSeq->nRefCount );
-    return s_pSeq;
+    ::osl_incrementInterlockedCount( &g_emptySeq.nRefCount );
+    return &g_emptySeq;
 }
 //--------------------------------------------------------------------------------------------------
 inline typelib_TypeDescriptionReference * __getVoidType()
     SAL_THROW( () )
 {
-    if (! s_pVoidType)
+    if (! g_pVoidType)
     {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (! s_pVoidType)
-        {
-            s_pVoidType = * ::typelib_static_type_getByTypeClass( typelib_TypeClass_VOID );
-        }
+        g_pVoidType = * ::typelib_static_type_getByTypeClass( typelib_TypeClass_VOID );
     }
-    ::typelib_typedescriptionreference_acquire( s_pVoidType );
-    return s_pVoidType;
+    ::typelib_typedescriptionreference_acquire( g_pVoidType );
+    return g_pVoidType;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -216,23 +201,24 @@ inline typelib_TypeDescriptionReference * __getVoidType()
 inline typelib_TypeDescription * __getQueryInterfaceTypeDescr()
     SAL_THROW( () )
 {
-    if (! s_pQITD)
+    if (! g_pQITD)
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (! s_pQITD)
+        if (! g_pQITD)
         {
             typelib_InterfaceTypeDescription * pTXInterfaceDescr = 0;
-            const com::sun::star::uno::Type & rXIType =
-                ::getCppuType( (const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > *)0 );
-            TYPELIB_DANGER_GET( (typelib_TypeDescription **)&pTXInterfaceDescr, rXIType.getTypeLibType() );
+            const com::sun::star::uno::Type & rXIType = ::getCppuType(
+                (const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > *)0 );
+            TYPELIB_DANGER_GET(
+                (typelib_TypeDescription **)&pTXInterfaceDescr, rXIType.getTypeLibType() );
             OSL_ASSERT( pTXInterfaceDescr->ppAllMembers );
             ::typelib_typedescriptionreference_getDescription(
-                &s_pQITD, pTXInterfaceDescr->ppAllMembers[0] );
+                &g_pQITD, pTXInterfaceDescr->ppAllMembers[0] );
             TYPELIB_DANGER_RELEASE( (typelib_TypeDescription *)pTXInterfaceDescr );
         }
     }
-    ::typelib_typedescription_acquire( s_pQITD );
-    return s_pQITD;
+    ::typelib_typedescription_acquire( g_pQITD );
+    return g_pQITD;
 }
 
 //--------------------------------------------------------------------------------------------------
