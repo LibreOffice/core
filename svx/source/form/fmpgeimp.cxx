@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpgeimp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-21 11:42:57 $
+ *  last change: $Author: fs $ $Date: 2002-05-28 15:52:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,8 +553,9 @@ Reference< XForm >  FmFormPageImpl::FindForm(
             Any aValue = xSet->getPropertyValue(FM_PROP_CLASSID);
             sal_Int16 nClassId(::com::sun::star::form::FormComponentType::CONTROL);
             aValue >>= nClassId;
+            Reference< XServiceInfo > xSI( xSet, UNO_QUERY );
 
-            ::rtl::OUString sDefaultName = getDefaultName(nClassId, xControls);
+            ::rtl::OUString sDefaultName = getDefaultName( nClassId, xControls, xSI );
             // bei Radiobuttons, die einen Namen haben, diesen nicht ueberschreiben!
             if (!sName.getLength() || nClassId != ::com::sun::star::form::FormComponentType::RADIOBUTTON)
             {
@@ -582,7 +583,7 @@ Reference< XForm >  FmFormPageImpl::FindForm(
                 aValue >>= aText;
                 if (!aText.getLength())
                 {
-                    aLabel.SearchAndReplace( getDefaultName(nClassId), ::rtl::OUString(SVX_RES(nResId)) );
+                    aLabel.SearchAndReplace( getDefaultName( nClassId, xSI ), ::rtl::OUString(SVX_RES(nResId)) );
                     xSet->setPropertyValue( FM_PROP_LABEL, makeAny(::rtl::OUString(aLabel)) );
                 }
             }
@@ -594,33 +595,37 @@ Reference< XForm >  FmFormPageImpl::FindForm(
 }
 
 
-UniString FmFormPageImpl::getDefaultName(sal_Int16 nClassId)
+UniString FmFormPageImpl::getDefaultName( sal_Int16 _nClassId, const Reference< XServiceInfo >& _rxObject )
 {
     sal_uInt16 nResId;
 
-    switch (nClassId)
+    switch (_nClassId)
     {
-        case ::com::sun::star::form::FormComponentType::TEXTFIELD:      nResId = RID_STR_EDIT_CLASSNAME;        break;
-        case ::com::sun::star::form::FormComponentType::COMMANDBUTTON:  nResId = RID_STR_BUTTON_CLASSNAME;      break;
-        case ::com::sun::star::form::FormComponentType::RADIOBUTTON:    nResId = RID_STR_RADIOBUTTON_CLASSNAME; break;
-        case ::com::sun::star::form::FormComponentType::CHECKBOX:       nResId = RID_STR_CHECKBOX_CLASSNAME;    break;
-        case ::com::sun::star::form::FormComponentType::LISTBOX:        nResId = RID_STR_LISTBOX_CLASSNAME;     break;
-        case ::com::sun::star::form::FormComponentType::COMBOBOX:       nResId = RID_STR_COMBOBOX_CLASSNAME;    break;
-        case ::com::sun::star::form::FormComponentType::GROUPBOX:       nResId = RID_STR_GROUPBOX_CLASSNAME;    break;
-        case ::com::sun::star::form::FormComponentType::IMAGEBUTTON:    nResId = RID_STR_IMAGE_CLASSNAME;       break;
-        case ::com::sun::star::form::FormComponentType::FIXEDTEXT:      nResId = RID_STR_FIXEDTEXT_CLASSNAME;   break;
-        case ::com::sun::star::form::FormComponentType::GRIDCONTROL:    nResId = RID_STR_GRID_CLASSNAME;        break;
-        case ::com::sun::star::form::FormComponentType::FILECONTROL:    nResId = RID_STR_FILECONTROL_CLASSNAME; break;
+        case FormComponentType::COMMANDBUTTON:  nResId = RID_STR_BUTTON_CLASSNAME;      break;
+        case FormComponentType::RADIOBUTTON:    nResId = RID_STR_RADIOBUTTON_CLASSNAME; break;
+        case FormComponentType::CHECKBOX:       nResId = RID_STR_CHECKBOX_CLASSNAME;    break;
+        case FormComponentType::LISTBOX:        nResId = RID_STR_LISTBOX_CLASSNAME;     break;
+        case FormComponentType::COMBOBOX:       nResId = RID_STR_COMBOBOX_CLASSNAME;    break;
+        case FormComponentType::GROUPBOX:       nResId = RID_STR_GROUPBOX_CLASSNAME;    break;
+        case FormComponentType::IMAGEBUTTON:    nResId = RID_STR_IMAGE_CLASSNAME;       break;
+        case FormComponentType::FIXEDTEXT:      nResId = RID_STR_FIXEDTEXT_CLASSNAME;   break;
+        case FormComponentType::GRIDCONTROL:    nResId = RID_STR_GRID_CLASSNAME;        break;
+        case FormComponentType::FILECONTROL:    nResId = RID_STR_FILECONTROL_CLASSNAME; break;
+        case FormComponentType::DATEFIELD:      nResId = RID_STR_DATEFIELD_CLASSNAME;   break;
+        case FormComponentType::TIMEFIELD:      nResId = RID_STR_TIMEFIELD_CLASSNAME;   break;
+        case FormComponentType::NUMERICFIELD:   nResId = RID_STR_NUMERICFIELD_CLASSNAME;    break;
+        case FormComponentType::CURRENCYFIELD:  nResId = RID_STR_CURRENCYFIELD_CLASSNAME;   break;
+        case FormComponentType::PATTERNFIELD:   nResId = RID_STR_PATTERNFIELD_CLASSNAME;    break;
+        case FormComponentType::IMAGECONTROL:   nResId = RID_STR_IMAGECONTROL_CLASSNAME;    break;
+        case FormComponentType::HIDDENCONTROL:  nResId = RID_STR_HIDDEN_CLASSNAME;      break;
 
-        case ::com::sun::star::form::FormComponentType::DATEFIELD:      nResId = RID_STR_DATEFIELD_CLASSNAME;   break;
-        case ::com::sun::star::form::FormComponentType::TIMEFIELD:      nResId = RID_STR_TIMEFIELD_CLASSNAME;   break;
-        case ::com::sun::star::form::FormComponentType::NUMERICFIELD:   nResId = RID_STR_NUMERICFIELD_CLASSNAME;    break;
-        case ::com::sun::star::form::FormComponentType::CURRENCYFIELD:  nResId = RID_STR_CURRENCYFIELD_CLASSNAME;   break;
-        case ::com::sun::star::form::FormComponentType::PATTERNFIELD:   nResId = RID_STR_PATTERNFIELD_CLASSNAME;    break;
-        case ::com::sun::star::form::FormComponentType::IMAGECONTROL:   nResId = RID_STR_IMAGECONTROL_CLASSNAME;    break;
-        case ::com::sun::star::form::FormComponentType::HIDDENCONTROL:  nResId = RID_STR_HIDDEN_CLASSNAME;      break;
+        case FormComponentType::TEXTFIELD:
+            nResId = RID_STR_EDIT_CLASSNAME;
+            if ( _rxObject.is() && _rxObject->supportsService( FM_SUN_COMPONENT_FORMATTEDFIELD ) )
+                nResId = RID_STR_FORMATTED_CLASSNAME;
+            break;
 
-        case ::com::sun::star::form::FormComponentType::CONTROL:
+        case FormComponentType::CONTROL:
         default:
             nResId = RID_STR_CONTROL_CLASSNAME;     break;
     }
@@ -629,11 +634,12 @@ UniString FmFormPageImpl::getDefaultName(sal_Int16 nClassId)
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString FmFormPageImpl::getDefaultName(sal_Int16 nClassId, const Reference< ::com::sun::star::form::XForm > & xControls) const
+::rtl::OUString FmFormPageImpl::getDefaultName(
+    sal_Int16 _nClassId, const Reference< XForm >& _rxControls, const Reference< XServiceInfo >& _rxObject ) const
 {
-    ::rtl::OUString aClassName=getDefaultName(nClassId);
+    ::rtl::OUString aClassName=getDefaultName( _nClassId, _rxObject );
 
-    Reference< ::com::sun::star::container::XNameAccess >  xNamedSet(xControls, UNO_QUERY);
+    Reference< ::com::sun::star::container::XNameAccess >  xNamedSet( _rxControls, UNO_QUERY );
     return getUniqueName(aClassName, xNamedSet);
 }
 

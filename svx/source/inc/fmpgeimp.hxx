@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpgeimp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-21 11:41:14 $
+ *  last change: $Author: fs $ $Date: 2002-05-28 15:51:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
 
@@ -161,18 +164,22 @@ protected:
                       const ::rtl::OUString& rCursorSource,
                       sal_Int32 nCommandType);
 
-    ::rtl::OUString getDefaultName(sal_Int16 nClassId, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& xControls) const;
+    ::rtl::OUString getDefaultName(
+                        sal_Int16 _nClassId,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& _rxControls,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo >& _rxObject
+                    ) const;
 
 public:
 
-    static UniString getDefaultName(sal_Int16 nClassId);
+    static UniString getDefaultName(
+                        sal_Int16 nClassId,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo >& _rxObject
+                    );
 
     ::rtl::OUString setUniqueName(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent>& xFormComponent, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& xControls);
     ::rtl::OUString getUniqueName(const ::rtl::OUString& rName, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& xNamedSet) const;
 };
-
-#define GET_DEFNAME(Id)     \
-    FmFormPageImpl::getDefaultName(Id)
 
 
 #endif // _SVX_FMUNOPGE_HXX
