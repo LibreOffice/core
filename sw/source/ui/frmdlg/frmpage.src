@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: avy $ $Date: 2001-03-09 21:06:53 $
+ *  last change: $Author: obo $ $Date: 2001-03-21 20:57:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,7 +317,7 @@ TabDialog DLG_FRM_GRF
     Text [ norwegian ] = "Graphic" ;
     Text [ italian ] = "Immagine" ;
     Text [ portuguese_brazilian ] = "Gráfico" ;
-    Text [ portuguese ] = "Imagens" ;
+    Text [ portuguese ] = "Imagem" ;
     Text [ finnish ] = "Kuva" ;
     Text [ danish ] = "Grafik" ;
     Text [ french ] = "Image" ;
@@ -975,17 +975,17 @@ TabPage TP_FRM_STD
         Text [ italian ] = "Proporz." ;
         Text [ spanish ] = "Prop~orcional" ;
         Text [ french ] = "~Proportionnel" ;
-        Text [ swedish ] = "~proportionellt" ;
+        Text [ swedish ] = "pr~oportionellt" ;
         Text [ danish ] = "Proport." ;
         Text [ portuguese_brazilian ] = "Abgle~ich" ;
         Text [ portuguese ] = "Pr~oporcional" ;
-        Text[ chinese_simplified ] = "Í¬²½»¯(~K)";
-        Text[ russian ] = "Ïğîïîğöèîíàëüíî";
-        Text[ polish ] = "Dopas~uj";
+        Text[ chinese_simplified ] = "Í¬²½»¯";
+        Text[ russian ] = "Ñèíõğîíèçèğîâàòü";
+        Text[ polish ] = "Synchronizacja";
         Text[ japanese ] = "”ä—¦‚ğ•Û‚Â(~K)";
-        Text[ chinese_traditional ] = "¦P¨B¤Æ(~K)";
+        Text[ chinese_traditional ] = "¦P¨B¤Æ";
         Text[ arabic ] = "ÊÒÇãä";
-        Text[ greek ] = "Áíáëïã~éêÜ";
+        Text[ greek ] = "ÁíáëïãéêÜ";
         Text[ korean ] = "ºñÀ² À¯Áö";
         Text[ turkish ] = "Orant~ı";
     };
@@ -1084,16 +1084,16 @@ TabPage TP_FRM_STD
         Text[ russian ] = "Ê ñòğàíèöå";
         Text[ greek ] = "Óôç óåëßäá";
         Text[ dutch ] = "At page";
-        Text[ french ] = "At page";
-        Text[ spanish ] = "At page";
+        Text[ french ] = "À la ~page";
+        Text[ spanish ] = "A la pá~gina";
         Text[ italian ] = "Alla pagina";
         Text[ danish ] = "At page";
-        Text[ swedish ] = "At page";
+        Text[ swedish ] = "Vid si~dan";
         Text[ polish ] = "Przy stronie";
         Text[ portuguese_brazilian ] = "At page";
-        Text[ japanese ] = "At page";
+        Text[ japanese ] = "Íß°¼Ş‚É";
         Text[ korean ] = "At page";
-        Text[ chinese_simplified ] = "At page";
+        Text[ chinese_simplified ] = "ÔÚÒ³ÃæÉÏ";
         Text[ chinese_traditional ] = "¦b­¶­±¤W";
         Text[ turkish ] = "At page";
         Text[ arabic ] = "Úáì ÇáÕİÍÉ";
@@ -1109,16 +1109,16 @@ TabPage TP_FRM_STD
         Text[ russian ] = "Ê àáçàöó";
         Text[ greek ] = "~Óôç ğáñÜãñáöï";
         Text[ dutch ] = "At paragraph";
-        Text[ french ] = "At paragraph";
-        Text[ spanish ] = "At paragraph";
+        Text[ french ] = "Au para~graphe";
+        Text[ spanish ] = "Al ~párrafo";
         Text[ italian ] = "At paragraph";
         Text[ danish ] = "At paragraph";
-        Text[ swedish ] = "At paragraph";
+        Text[ swedish ] = "Vid ~stycke";
         Text[ polish ] = "Przy akapicie";
         Text[ portuguese_brazilian ] = "At paragraph";
-        Text[ japanese ] = "At paragraph";
+        Text[ japanese ] = "’i—‚É";
         Text[ korean ] = "At paragraph";
-        Text[ chinese_simplified ] = "At paragraph";
+        Text[ chinese_simplified ] = "ÔÚ¶ÎÂäÉÏ";
         Text[ chinese_traditional ] = "¦b¬q¸¨¤W";
         Text[ turkish ] = "At paragraph";
         Text[ arabic ] = "Úáì ÇáİŞÑÉ";
@@ -1134,16 +1134,16 @@ TabPage TP_FRM_STD
         Text[ russian ] = "Ê çíàêó";
         Text[ greek ] = "Óôï~í ÷áñáêôŞñá";
         Text[ dutch ] = "At character";
-        Text[ french ] = "At character";
-        Text[ spanish ] = "At character";
+        Text[ french ] = "Au ~caractère";
+        Text[ spanish ] = "Al cará~cter";
         Text[ italian ] = "At character";
         Text[ danish ] = "At character";
-        Text[ swedish ] = "At character";
+        Text[ swedish ] = "Vid tecke~n";
         Text[ polish ] = "Przy znaku";
         Text[ portuguese_brazilian ] = "At character";
-        Text[ japanese ] = "At character";
+        Text[ japanese ] = "•¶š‚É";
         Text[ korean ] = "At character";
-        Text[ chinese_simplified ] = "At character";
+        Text[ chinese_simplified ] = "ÔÚ×Ö·ûÉÏ";
         Text[ chinese_traditional ] = "¦b¦r¤¸¤W";
         Text[ turkish ] = "At character";
         Text[ arabic ] = "Úáì ÇáÍÑİ";
@@ -1156,14 +1156,14 @@ TabPage TP_FRM_STD
         Text [ ENGLISH ] = "~As character" ;
         Text [ english_us ] = "~As character" ;
         Text [ portuguese_brazilian ] = "als Zei~chen" ;
-        Text [ swedish ] = "som te~cken" ;
+        Text [ swedish ] = "Som te~cken" ;
         Text [ danish ] = "som tegn" ;
         Text [ italian ] = "quale ~carattere" ;
         Text [ spanish ] = "Como ~carácter" ;
         Text [ french ] = "Comme c~aractère" ;
         Text [ dutch ] = "als te~ken" ;
         Text [ portuguese ] = "como ~carácter" ;
-        Text[ chinese_simplified ] = "µ±×÷×Ö·û(~H)";
+        Text[ chinese_simplified ] = "µ±×÷×Ö·û";
         Text[ russian ] = "Êàê çíàê";
         Text[ polish ] = "Jako znak";
         Text[ japanese ] = "•¶š‚Æ‚µ‚Ä(~H)";
@@ -1185,16 +1185,16 @@ TabPage TP_FRM_STD
         Text[ russian ] = "Ê ğàìêå";
         Text[ greek ] = "Óôï ğë~áßóéï";
         Text[ dutch ] = "At frame";
-        Text[ french ] = "At frame";
-        Text[ spanish ] = "At frame";
+        Text[ french ] = "Au ca~dre";
+        Text[ spanish ] = "~Al marco";
         Text[ italian ] = "At frame";
         Text[ danish ] = "At frame";
-        Text[ swedish ] = "At frame";
+        Text[ swedish ] = "Vid r~am";
         Text[ polish ] = "Przy ramce";
         Text[ portuguese_brazilian ] = "At frame";
-        Text[ japanese ] = "At frame";
+        Text[ japanese ] = "˜g‚É";
         Text[ korean ] = "At frame";
-        Text[ chinese_simplified ] = "At frame";
+        Text[ chinese_simplified ] = "ÔÚ¿ò±ß";
         Text[ chinese_traditional ] = "¦b®ØÃä";
         Text[ turkish ] = "At frame";
         Text[ arabic ] = "Úáì ÇáßÇÏÑ";
@@ -1354,20 +1354,20 @@ TabPage TP_FRM_STD
         Text [ ENGLISH ] = "Switch position on even page numbers" ;
         Text [ english_us ] = "~Mirror on even pages" ;
         Text [ portuguese_brazilian ] = "Auf geraden Seiten ~spiegeln" ;
-        Text [ swedish ] = "~spegelvänd på jämna sidor" ;
+        Text [ swedish ] = "s~pegelvänt på jämna sidor" ;
         Text [ danish ] = "Spejlvend på lige sider" ;
         Text [ italian ] = "Rispecchia su pagine ~pari" ;
         Text [ spanish ] = "Reflejar en ~páginas pares" ;
         Text [ french ] = "~En vis-à-vis sur les pages paires" ;
         Text [ dutch ] = "Op even pagina's ~spiegelen" ;
         Text [ portuguese ] = "Inverter em páginas ~pares" ;
-        Text[ chinese_simplified ] = "·­×ªµ½Å¼ÊıÒ³Ãæ(~E)";
+        Text[ chinese_simplified ] = "·­×ªµ½Å¼ÊıÒ³Ãæ";
         Text[ russian ] = "Îòğàçèòü íà ÷åòíûõ ñòğàíèöàõ";
         Text[ polish ] = "Przerzu~æ na parzystych stronach";
         Text[ japanese ] = "‹ô”Íß°¼Ş‚É”½“](~E)";
-        Text[ chinese_traditional ] = "Â½Âà¨ì°¸¼Æ­¶­±(~E)";
+        Text[ chinese_traditional ] = "Â½Âà¨ì°¸¼Æ­¶­±";
         Text[ arabic ] = "ÇäÚßÇÓ Úáì ÇáÕİÍÇÊ ÇáÒæÌíÉ";
-        Text[ greek ] = "Êáèñåğôé~óìüò óôéò Üñôéåò óåëßäåò";
+        Text[ greek ] = "Êáèñå~ğôéóìüò óôéò Üñôéåò óåëßäåò";
         Text[ korean ] = "Â¦¼ö ÂÊ ¸¶ÁÖº¸±â";
         Text[ turkish ] = "Çift numaralı sayfalarda ya~nsıt";
     };
