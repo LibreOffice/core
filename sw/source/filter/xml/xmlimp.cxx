@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-30 09:33:13 $
+ *  last change: $Author: dvo $ $Date: 2001-06-12 15:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,7 @@ SwXMLDocContext_Impl::SwXMLDocContext_Impl( SwXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
     // process document class
-    // global-text, online are handled via document shell;
+    // global-text is handled via document shell;
     // we only handle label documents
     sal_Int16 nLength = xAttrList->getLength();
     for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)

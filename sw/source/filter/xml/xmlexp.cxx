@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-29 14:38:16 $
+ *  last change: $Author: dvo $ $Date: 2001-06-12 15:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,10 +406,6 @@ sal_uInt32 SwXMLExport::exportDoc( const sal_Char *pClass )
     else if (pDoc->IsLabelDoc())
     {
         pClass = sXML_label;
-    }
-    else if (pDoc->IsHTMLMode())
-    {
-        pClass = sXML_online;
     }
     // else: keep default pClass that we received
 
