@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:11:20 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:13:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,24 @@
 #ifndef _SDPAGE_HXX
 #include "sdpage.hxx"
 #endif
+
+namespace com
+{
+    namespace sun
+    {
+        namespace star
+        {
+            namespace embed
+            {
+                class XStorage;
+            }
+            namespace io
+            {
+                class XStream;
+            }
+        }
+    }
+}
 
 namespace sd {
 class FrameView;
@@ -239,9 +257,6 @@ private:
     BOOL                bAllocDocSh;        // => AllocModel()
     DocumentType        eDocType;
     UINT16              nFileFormatVersion;
-    SotStorage*         pDocStor;
-    SotStorageRef       xPictureStorage;
-    SotStorageStreamRef xDocStream;
     International*      mpInternational;
     CharClass*          mpCharClass;
     ::com::sun::star::lang::Locale* mpLocale;
@@ -279,7 +294,6 @@ public:
     virtual FASTBOOL    IsReadOnly() const;
     virtual void        SetChanged(sal_Bool bFlag = sal_True);
     virtual SvStream*   GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const;
-    virtual void        HandsOff();
 
     SfxItemPool&        GetPool() { return( *pItemPool ); }
 
