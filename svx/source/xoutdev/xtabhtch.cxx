@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtabhtch.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-19 17:20:45 $
+ *  last change: $Author: cl $ $Date: 2001-02-23 21:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,19 @@
 
 // include ---------------------------------------------------------------
 
-#pragma hdrstop
+#ifndef SVX_LIGHT
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
+#endif
+#ifndef _SVX_XPROPERTYTABLE_HXX
+#include "XPropertyTable.hxx"
+#endif
+
+#include "xmlxtexp.hxx"
+#include "xmlxtimp.hxx"
+
+#endif
 
 #include <tools/urlobj.hxx>
 #include <vcl/virdev.hxx>
@@ -89,11 +101,14 @@
 #define GLOBALOVERFLOW
 #include <segmentc.hxx>
 
+using namespace ::com::sun::star;
+using namespace ::rtl;
+
 sal_Unicode const pszExtHatch[]  = {'s','o','h'};
-sal_Unicode const pszChckHatch[] = {'S','O','H','L'};
-// Neuer Key, damit alte Version (3.00) nicht bei dem
-// Versuch abstuerzt, eine neue Tabelle zu laden.
-sal_Unicode const pszChckHatch0[] = {'S','O','H','0'};
+
+char const aChckHatch[]  = { 0x04, 0x00, 'S','O','H','L'};  // < 5.2
+char const aChckHatch0[] = { 0x04, 0x00, 'S','O','H','0'};  // = 5.2
+char const aChckXML[]    = { '<', '?', 'x', 'm', 'l' };     // = 6.0
 
 // ------------------
 // class XHatchTable
@@ -335,25 +350,31 @@ BOOL XHatchList::Load()
         if( !aURL.getExtension().Len() )
             aURL.setExtension( String( pszExtHatch, 3 ) );
 
-        SfxMedium aMedium( aURL.GetMainURL(), STREAM_READ | STREAM_NOCREATE, TRUE );
-        SvStream* pStream = aMedium.GetInStream();
-        if( !pStream )
-            return( FALSE );
-
-        String aCheck;
-        // UNICODE: *pStream >> aCheck;
-        pStream->ReadByteString(aCheck);
-
-        // Handelt es sich um die gew"unschte Tabelle?
-        if( aCheck == String(pszChckHatch, 4) ||
-            aCheck == String(pszChckHatch0, 4) )
         {
-            ImpRead( *pStream );
-        }
-        else
-            return( FALSE );
+            SfxMedium aMedium( aURL.GetMainURL(), STREAM_READ | STREAM_NOCREATE, TRUE );
+            SvStream* pStream = aMedium.GetInStream();
+            if( !pStream )
+                return( FALSE );
 
-        return( pStream->GetError() == SVSTREAM_OK );
+            char aCheck[6];
+            pStream->Read( aCheck, 6 );
+
+            // Handelt es sich um die gew"unschte Tabelle?
+            if( memcmp( aCheck, aChckHatch, sizeof( aChckHatch ) ) == 0 ||
+                memcmp( aCheck, aChckHatch0, sizeof( aChckHatch0 ) ) == 0 )
+            {
+                ImpRead( *pStream );
+                return( pStream->GetError() == SVSTREAM_OK );
+            }
+            else if( memcmp( aCheck, aChckXML, sizeof( aChckXML ) ) != 0 )
+            {
+                return FALSE;
+            }
+
+        }
+
+        uno::Reference< container::XNameContainer > xTable( SvxUnoXHatchTable_createInstance( this ), uno::UNO_QUERY );
+        return SvxXMLXTableImport::load( aURL.GetMainURL(), xTable );
     }
 #endif
     return( FALSE );
@@ -377,6 +398,10 @@ BOOL XHatchList::Save()
     if( !aURL.getExtension().Len() )
         aURL.setExtension( String( pszExtHatch, 3 ) );
 
+    uno::Reference< container::XNameContainer > xTable( SvxUnoXHatchTable_createInstance( this ), uno::UNO_QUERY );
+    return SvxXMLXTableExportComponent::save( aURL.GetMainURL(), xTable );
+
+/*
     SfxMedium aMedium( aURL.GetMainURL(), STREAM_WRITE | STREAM_TRUNC, TRUE );
     aMedium.IsRemote();
 
@@ -393,6 +418,7 @@ BOOL XHatchList::Save()
     aMedium.Commit();
 
     return( aMedium.GetError() == 0 );
+*/
 #else
     return FALSE;
 #endif

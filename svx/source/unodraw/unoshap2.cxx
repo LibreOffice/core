@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-19 16:07:06 $
+ *  last change: $Author: cl $ $Date: 2001-02-23 21:33:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1462,3 +1462,55 @@ uno::Sequence< OUString > SAL_CALL SvxGraphicObject::getSupportedServiceNames()
 }
 
 
+void ImplSvxConvertPolyPolygonBezierToXPolygon( const drawing::PolyPolygonBezierCoords* pSourcePolyPolygon, XPolygon& rNewPolygon )
+    throw( lang::IllegalArgumentException )
+{
+    sal_Int32 nOuterSequenceCount = pSourcePolyPolygon->Coordinates.getLength();
+    if( nOuterSequenceCount != 1 || pSourcePolyPolygon->Flags.getLength() != nOuterSequenceCount)
+        throw lang::IllegalArgumentException();
+
+    // Zeiger auf innere sequences holen
+    const drawing::PointSequence* pInnerSequence = pSourcePolyPolygon->Coordinates.getConstArray();
+    const drawing::FlagSequence* pInnerSequenceFlags = pSourcePolyPolygon->Flags.getConstArray();
+
+    sal_Int32 nInnerSequenceCount = pInnerSequence->getLength();
+
+    if(pInnerSequenceFlags->getLength() != nInnerSequenceCount)
+        throw lang::IllegalArgumentException();
+
+    // Zeiger auf Arrays holen
+    const awt::Point* pArray = pInnerSequence->getConstArray();
+    const drawing::PolygonFlags* pArrayFlags = pInnerSequenceFlags->getConstArray();
+
+    for(sal_Int32 b=0;b<nInnerSequenceCount;b++)
+    {
+        rNewPolygon[(USHORT)b] = Point( pArray->X, pArray->Y );
+        pArray++;
+        rNewPolygon.SetFlags((USHORT)b, (XPolyFlags)((sal_uInt16)*pArrayFlags++));
+    }
+}
+
+void ImplSvxConvertXPolygonToPolyPolygonBezier( const XPolygon& rPolygon, drawing::PolyPolygonBezierCoords& rRetval )
+{
+    // Polygone innerhalb vrobereiten
+    rRetval.Coordinates.realloc(1);
+    rRetval.Flags.realloc(1);
+
+    // Zeiger auf aeussere Arrays holen
+    drawing::PointSequence* pOuterSequence = rRetval.Coordinates.getArray();
+    drawing::FlagSequence*  pOuterFlags = rRetval.Flags.getArray();
+
+    // Platz in Arrays schaffen
+    pOuterSequence->realloc((sal_Int32)rPolygon.GetPointCount());
+    pOuterFlags->realloc((sal_Int32)rPolygon.GetPointCount());
+
+    // Pointer auf arrays holen
+    awt::Point* pInnerSequence = pOuterSequence->getArray();
+    drawing::PolygonFlags* pInnerFlags = pOuterFlags->getArray();
+
+    for(sal_uInt16 b=0;b<rPolygon.GetPointCount();b++)
+    {
+        *pInnerSequence++ = awt::Point( rPolygon[b].X(), rPolygon[b].Y() );
+        *pInnerFlags++ = (drawing::PolygonFlags)((sal_uInt16)rPolygon.GetFlags(b));
+    }
+}

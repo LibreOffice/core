@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtabdash.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-19 17:19:57 $
+ *  last change: $Author: cl $ $Date: 2001-02-23 21:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,19 @@
 
 // include ---------------------------------------------------------------
 
-#pragma hdrstop
+#ifndef SVX_LIGHT
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
+#endif
+#ifndef _SVX_XPROPERTYTABLE_HXX
+#include "XPropertyTable.hxx"
+#endif
+
+#include "xmlxtexp.hxx"
+#include "xmlxtimp.hxx"
+
+#endif
 
 #include <tools/urlobj.hxx>
 #include <vcl/virdev.hxx>
@@ -91,13 +103,15 @@
 #include <xlndsit.hxx>
 #endif
 
+using namespace com::sun::star;
+using namespace rtl;
+
 #define GLOBALOVERFLOW
 
 sal_Unicode const pszExtDash[]  = {'s','o','d'};
-sal_Unicode const pszChckDash[] = {'S','O','D','L'};
-// Neuer Key, damit alte Version (3.00) nicht bei dem
-// Versuch abstuerzt, eine neue Tabelle zu laden.
-sal_Unicode const pszChckDash0[]    = {'S','O','D','0'};
+char const aChckDash[]  = { 0x04, 0x00, 'S','O','D','L'};   // < 5.2
+char const aChckDash0[] = { 0x04, 0x00, 'S','O','D','0'};   // = 5.2
+char const aChckXML[]   = { '<', '?', 'x', 'm', 'l' };      // = 6.0
 
 // -----------------
 // class XDashTable
@@ -341,26 +355,30 @@ BOOL XDashList::Load()
         if( !aURL.getExtension().Len() )
             aURL.setExtension( String( pszExtDash, 3 ) );
 
-        SfxMedium aMedium( aURL.GetMainURL(), STREAM_READ | STREAM_NOCREATE, TRUE );
-        SvStream* pStream = aMedium.GetInStream();
-        if( !pStream )
-            return( FALSE );
-
-        String aCheck;
-
-        // UNICODE: *pStream >> aCheck;
-        pStream->ReadByteString(aCheck);
-
-        // Handelt es sich um die gew"unschte Tabelle?
-        if( aCheck == String(pszChckDash, 4) ||
-            aCheck == String(pszChckDash0, 4) )
         {
-            ImpRead( *pStream );
-        }
-        else
-            return( FALSE );
+            SfxMedium aMedium( aURL.GetMainURL(), STREAM_READ | STREAM_NOCREATE, TRUE );
+            SvStream* pStream = aMedium.GetInStream();
+            if( !pStream )
+                return( FALSE );
 
-        return( pStream->GetError() == SVSTREAM_OK );
+            char aCheck[6];
+            pStream->Read( aCheck, 6 );
+
+            // Handelt es sich um die gew"unschte Tabelle?
+            if( memcmp( aCheck, aChckDash, sizeof( aChckDash ) ) == 0 ||
+                memcmp( aCheck, aChckDash0, sizeof( aChckDash0 ) ) == 0 )
+            {
+                ImpRead( *pStream );
+                return( pStream->GetError() == SVSTREAM_OK );
+            }
+            else if( memcmp( aCheck, aChckXML, sizeof( aChckXML ) ) != 0 )
+            {
+                return FALSE;
+            }
+        }
+
+        uno::Reference< container::XNameContainer > xTable( SvxUnoXDashTable_createInstance( this ), uno::UNO_QUERY );
+        return SvxXMLXTableImport::load( aURL.GetMainURL(), xTable );
     }
 #endif
     return( FALSE );
@@ -370,7 +388,6 @@ BOOL XDashList::Load()
 
 BOOL XDashList::Save()
 {
-#ifndef SVX_LIGHT
     INetURLObject aURL( aPath );
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
@@ -383,6 +400,14 @@ BOOL XDashList::Save()
 
     if( !aURL.getExtension().Len() )
         aURL.setExtension( String( pszExtDash, 3 ) );
+
+    uno::Reference< container::XNameContainer > xTable( SvxUnoXDashTable_createInstance( this ), uno::UNO_QUERY );
+    return SvxXMLXTableExportComponent::save( aURL.GetMainURL(), xTable );
+
+
+/*
+#ifndef SVX_LIGHT
+
 
     SfxMedium aMedium( aURL.GetMainURL(), STREAM_WRITE | STREAM_TRUNC, TRUE );
     aMedium.IsRemote();
@@ -403,6 +428,7 @@ BOOL XDashList::Save()
 #else
     return FALSE;
 #endif
+*/
 }
 
 /************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-28 16:20:50 $
+ *  last change: $Author: cl $ $Date: 2001-02-23 21:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@
 
 #include <tools/bigint.hxx>
 #include <svtools/itemset.hxx>
+#include "unoapi.hxx"
 #include "dialogs.hrc"
 #include "xattr.hxx"
 #include "xtable.hxx"
@@ -824,8 +825,9 @@ sal_Bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemb
 {
     if( nMemberId == MID_NAME )
     {
-        rtl::OUString aName( GetName() );
-        rVal <<= aName;
+        rtl::OUString aApiName;
+        SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
+        rVal <<= aApiName;
     }
     else
     {
@@ -1317,7 +1319,9 @@ sal_Bool XLineStartItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMem
 {
     if( nMemberId == MID_NAME )
     {
-        rVal <<= ::rtl::OUString( GetName() );
+        rtl::OUString aApiName;
+        SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
+        rVal <<= aApiName;
     }
     else
     {
@@ -1354,14 +1358,14 @@ sal_Bool XLineStartItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
         if(!(rVal >>= aLinePolygon))
             return sal_False;
 
-        sal_Int32 nPointCount = aLinePolygon.getLength();
+        UINT32 nPointCount = (UINT32)aLinePolygon.getLength();
 
         aXPolygon.SetSize((UINT16)nPointCount);
         ::com::sun::star::awt::Point* pMemAddr = aLinePolygon.getArray();
 
         for(UINT32 a=0;a<nPointCount;a++)
         {
-            aXPolygon[a] = Point( pMemAddr->X, pMemAddr->Y );
+            aXPolygon[(USHORT)a] = Point( pMemAddr->X, pMemAddr->Y );
             pMemAddr++;
         }
     }
@@ -1586,7 +1590,9 @@ sal_Bool XLineEndItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMembe
 {
     if( nMemberId == MID_NAME )
     {
-        rVal <<= ::rtl::OUString( GetName() );
+        rtl::OUString aApiName;
+        SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
+        rVal <<= aApiName;
     }
     else
     {
@@ -1624,14 +1630,14 @@ sal_Bool XLineEndItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nM
         if(!(rVal >>= aLinePolygon))
             return sal_False;
 
-        sal_Int32 nPointCount = aLinePolygon.getLength();
+        UINT32 nPointCount = (UINT32)aLinePolygon.getLength();
 
         aXPolygon.SetSize((UINT16)nPointCount);
         ::com::sun::star::awt::Point* pMemAddr = aLinePolygon.getArray();
 
         for(UINT32 a=0;a<nPointCount;a++)
         {
-            aXPolygon[a] = Point( pMemAddr->X, pMemAddr->Y );
+            aXPolygon[(USHORT)a] = Point( pMemAddr->X, pMemAddr->Y );
             pMemAddr++;
         }
     }
@@ -2693,7 +2699,9 @@ sal_Bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE n
 {
     if( nMemberId == MID_NAME )
     {
-        rVal <<= ::rtl::OUString( GetName() );
+        rtl::OUString aApiName;
+        SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
+        rVal <<= aApiName;
     }
     else
     {
@@ -2703,7 +2711,7 @@ sal_Bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE n
         aGradient.Style = (::com::sun::star::awt::GradientStyle) aXGradient.GetGradientStyle();
         aGradient.StartColor = (INT32)aXGradient.GetStartColor().GetColor();
         aGradient.EndColor = (INT32)aXGradient.GetEndColor().GetColor();
-        aGradient.Angle = aXGradient.GetAngle();
+        aGradient.Angle = (short)aXGradient.GetAngle();
         aGradient.Border = aXGradient.GetBorder();
         aGradient.XOffset = aXGradient.GetXOffset();
         aGradient.YOffset = aXGradient.GetYOffset();
@@ -3171,7 +3179,9 @@ sal_Bool XFillHatchItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMem
 {
     if( nMemberId == MID_NAME )
     {
-        rVal <<= ::rtl::OUString( GetName() );
+        rtl::OUString aApiName;
+        SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
+        rVal <<= aApiName;
     }
     else
     {

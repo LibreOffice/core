@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-21 13:07:03 $
+ *  last change: $Author: cl $ $Date: 2001-02-23 21:33:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,10 +73,19 @@
 #include <vcl/fldunit.hxx>
 #endif
 
+#ifndef _SHL_HXX
+#include <tools/shl.hxx>
+#endif
+
+#ifndef _SVX_DIALMGR_HXX
+#include "dialmgr.hxx"
+#endif
+
 #include "unotext.hxx"
 #include "unoshprp.hxx"
 #include "svdobj.hxx"
 #include "globl3d.hxx"
+#include "dialogs.hrc"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -758,4 +767,213 @@ sal_Bool SvxFieldUnitToMeasureUnit( const short eVcl, short& eApi ) throw()
     }
 
     return sal_True;
+}
+
+bool SvxUnoGetResourceRanges( const short nWhich, int& nApiResIds, int& nIntResIds, int& nCount ) throw()
+{
+    switch( nWhich )
+    {
+    case XATTR_FILLBITMAP:
+        nApiResIds = RID_SVXSTR_BMP_DEF_START;
+        nIntResIds = RID_SVXSTR_BMP_START;
+        nCount = RID_SVXSTR_BMP_DEF_END - RID_SVXSTR_BMP_DEF_START + 1;
+        break;
+
+    case XATTR_LINEDASH:
+        nApiResIds = RID_SVXSTR_DASH0_DEF;
+        nIntResIds = RID_SVXSTR_DASH0;
+        nCount = RID_SVXSTR_DASH10_DEF - RID_SVXSTR_DASH0_DEF + 1;
+        break;
+
+    case XATTR_LINESTART:
+    case XATTR_LINEEND:
+        nApiResIds = RID_SVXSTR_LEND_DEF_START;
+        nIntResIds = RID_SVXSTR_LEND_START;
+        nCount = RID_SVXSTR_LEND_DEF_END - RID_SVXSTR_LEND_DEF_START + 1;
+        break;
+
+    case XATTR_FILLGRADIENT:
+        nApiResIds = RID_SVXSTR_GRDT_DEF_START;
+        nIntResIds = RID_SVXSTR_GRDT_START;
+        nCount = RID_SVXSTR_GRDT_DEF_END - RID_SVXSTR_GRDT_DEF_START + 1;
+        break;
+
+    case XATTR_FILLHATCH:
+        nApiResIds = RID_SVXSTR_HATCH_DEF_START;
+        nIntResIds = RID_SVXSTR_HATCH_START;
+        nCount = RID_SVXSTR_HATCH_DEF_END - RID_SVXSTR_HATCH_DEF_START + 1;
+        break;
+
+    case XATTR_LINECOLOR:
+        nApiResIds = RID_SVXSTR_HATCH_DEF_START;
+        nIntResIds = RID_SVXSTR_HATCH_START;
+        nCount = RID_SVXSTR_HATCH_DEF_END - RID_SVXSTR_HATCH_DEF_START + 1;
+        break;
+
+    default:
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount, String& rString ) throw()
+{
+    int i;
+    for( i = 0; i < nCount; i++ )
+    {
+        const String aCompare( SVX_RESSTR( nSourceResIds + i ) );
+        if( rString.Search( aCompare ) == 0 )
+        {
+            rString.Replace( 0, aCompare.Len(), String( SVX_RESSTR( nDestResIds + i ) ) );
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
+static USHORT __READONLY_DATA SvxUnoColorNameDefResId[] =
+{
+    RID_SVXSTR_BLUEGREY_DEF,
+    RID_SVXSTR_BLACK_DEF,
+    RID_SVXSTR_BLUE_DEF,
+    RID_SVXSTR_GREEN_DEF,
+    RID_SVXSTR_CYAN_DEF,
+    RID_SVXSTR_RED_DEF,
+    RID_SVXSTR_MAGENTA_DEF,
+    RID_SVXSTR_BROWN_DEF,
+    RID_SVXSTR_GREY_DEF,
+    RID_SVXSTR_LIGHTGREY_DEF,
+    RID_SVXSTR_LIGHTBLUE_DEF,
+    RID_SVXSTR_LIGHTGREEN_DEF,
+    RID_SVXSTR_LIGHTCYAN_DEF,
+    RID_SVXSTR_LIGHTRED_DEF,
+    RID_SVXSTR_LIGHTMAGENTA_DEF,
+    RID_SVXSTR_YELLOW_DEF,
+    RID_SVXSTR_WHITE_DEF,
+    RID_SVXSTR_ORANGE_DEF,
+    RID_SVXSTR_VIOLET_DEF,
+    RID_SVXSTR_BORDEAUX_DEF,
+    RID_SVXSTR_PALE_YELLOW_DEF,
+    RID_SVXSTR_PALE_GREEN_DEF,
+    RID_SVXSTR_DKVIOLET_DEF,
+    RID_SVXSTR_SALMON_DEF,
+    RID_SVXSTR_SEABLUE_DEF,
+    RID_SVXSTR_COLOR_SUN_DEF
+};
+
+static USHORT __READONLY_DATA SvxUnoColorNameResId[] =
+{
+    RID_SVXSTR_BLUEGREY,
+    RID_SVXSTR_BLACK,
+    RID_SVXSTR_BLUE,
+    RID_SVXSTR_GREEN,
+    RID_SVXSTR_CYAN,
+    RID_SVXSTR_RED,
+    RID_SVXSTR_MAGENTA,
+    RID_SVXSTR_BROWN,
+    RID_SVXSTR_GREY,
+    RID_SVXSTR_LIGHTGREY,
+    RID_SVXSTR_LIGHTBLUE,
+    RID_SVXSTR_LIGHTGREEN,
+    RID_SVXSTR_LIGHTCYAN,
+    RID_SVXSTR_LIGHTRED,
+    RID_SVXSTR_LIGHTMAGENTA,
+    RID_SVXSTR_YELLOW,
+    RID_SVXSTR_WHITE,
+    RID_SVXSTR_ORANGE,
+    RID_SVXSTR_VIOLET,
+    RID_SVXSTR_BORDEAUX,
+    RID_SVXSTR_PALE_YELLOW,
+    RID_SVXSTR_PALE_GREEN,
+    RID_SVXSTR_DKVIOLET,
+    RID_SVXSTR_SALMON,
+    RID_SVXSTR_SEABLUE,
+    RID_SVXSTR_COLOR_SUN
+};
+
+bool SvxUnoConvertResourceString( USHORT* pSourceResIds, USHORT* pDestResIds, int nCount, String& rString ) throw()
+{
+    int i = 0;
+
+    for( i = 0; i < nCount; i++ )
+    {
+        String aStrDefName( SVX_RESSTR( pSourceResIds[i] ) );
+        if( rString.Search( aStrDefName ) == 0 )
+        {
+            rString.Replace( 0, aStrDefName.Len(), SVX_RESSTR( pDestResIds[i] ) );
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/** if the given name is a predefined name for the current language it is replaced by
+    the corresponding api name.
+*/
+void SvxUnogetApiNameForItem( const sal_Int16 nWhich, const String& rInternalName, rtl::OUString& rApiName ) throw()
+{
+    String aNew = rInternalName;
+
+    if( nWhich == XATTR_LINECOLOR )
+    {
+        if( SvxUnoConvertResourceString( (USHORT*)SvxUnoColorNameResId, (USHORT*)SvxUnoColorNameDefResId, sizeof( SvxUnoColorNameResId ) / sizeof( USHORT ), aNew ) )
+        {
+            rApiName = aNew;
+            return;
+        }
+    }
+    else
+    {
+        int nApiResIds;
+        int nIntResIds;
+        int nCount;
+
+        if( SvxUnoGetResourceRanges( nWhich, nApiResIds, nIntResIds, nCount ) )
+        {
+            if(SvxUnoConvertResourceString( nIntResIds, nApiResIds, nCount, aNew ) )
+            {
+                rApiName = aNew;
+                return;
+            }
+        }
+    }
+
+    rApiName = rInternalName;
+}
+
+/** if the given name is a predefined api name it is replaced by the predefined name
+    for the current language.
+*/
+void SvxUnogetInternalNameForItem( const sal_Int16 nWhich, const rtl::OUString& rApiName, String& rInternalName ) throw()
+{
+    String aNew = rApiName;
+
+    if( nWhich == XATTR_LINECOLOR )
+    {
+        if( SvxUnoConvertResourceString( (USHORT*)SvxUnoColorNameDefResId, (USHORT*)SvxUnoColorNameResId, sizeof( SvxUnoColorNameResId ) / sizeof( USHORT ), aNew ) )
+        {
+            rInternalName = aNew;
+            return;
+        }
+    }
+    else
+    {
+        int nApiResIds;
+        int nIntResIds;
+        int nCount;
+
+        if( SvxUnoGetResourceRanges( nWhich, nApiResIds, nIntResIds, nCount ) )
+        {
+            if(SvxUnoConvertResourceString( nApiResIds, nIntResIds, nCount, aNew ) )
+            {
+                rInternalName = aNew;
+                return;
+            }
+        }
+    }
+
+    rInternalName = rApiName;
 }

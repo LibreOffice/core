@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtabbtmp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-19 17:19:57 $
+ *  last change: $Author: cl $ $Date: 2001-02-23 21:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,19 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+#ifndef SVX_LIGHT
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
+#endif
+#ifndef _SVX_XPROPERTYTABLE_HXX
+#include "XPropertyTable.hxx"
+#endif
+
+#include "xmlxtexp.hxx"
+#include "xmlxtimp.hxx"
+
+#endif
 
 #include <tools/urlobj.hxx>
 #include <vcl/virdev.hxx>
@@ -74,12 +86,15 @@
 
 #define GLOBALOVERFLOW
 
+using namespace com::sun::star;
+using namespace rtl;
+
 sal_Unicode const pszExtBitmap[]  = {'s','o','b'};
-sal_Unicode const pszChckBitmap[] = {'S','O','B','L'};
-// Neuer Key, damit alte Version (3.00) nicht bei dem
-// Versuch abstuerzt, eine neue Tabelle zu laden.
-sal_Unicode const pszChckBitmap0[] = {'S','O','B','0'};
-sal_Unicode const pszChckBitmap1[] = {'S','O','B','1'};
+
+static char const aChckBitmap[]  = { 0x04, 0x00, 'S','O','B','L'};  // very old
+static char const aChckBitmap0[] = { 0x04, 0x00, 'S','O','B','0'};  // old
+static char const aChckBitmap1[] = { 0x04, 0x00, 'S','O','B','1'};  // = 5.2
+static char const aChckXML[]     = { 'P', 'K', 0x03, 0x04 };        // = 6.0
 
 // -------------------
 // class XBitmapTable
@@ -325,27 +340,32 @@ BOOL XBitmapList::Load()
         if( !aURL.getExtension().Len() )
             aURL.setExtension( String( pszExtBitmap, 3 ) );
 
-        SfxMedium aMedium( aURL.GetMainURL(), STREAM_READ | STREAM_NOCREATE, TRUE );
-
-        SvStream* pStream = aMedium.GetInStream();
-        if( !pStream )
-            return( FALSE );
-
-        String aCheck;
-        // UNICODE: *pStream >> aCheck;
-        pStream->ReadByteString(aCheck);
-
-        // Handelt es sich um die gew"unschte Tabelle?
-        if( aCheck == String(pszChckBitmap, 4) ||
-            aCheck == String(pszChckBitmap0, 4) ||
-            aCheck == String(pszChckBitmap1, 4) )
         {
-            ImpRead( *pStream );
-        }
-        else
-            return( FALSE );
+            SfxMedium aMedium( aURL.GetMainURL(), STREAM_READ | STREAM_NOCREATE, TRUE );
 
-        return( pStream->GetError() == SVSTREAM_OK );
+            SvStream* pStream = aMedium.GetInStream();
+            if( !pStream )
+                return( FALSE );
+
+            char aCheck[6];
+            pStream->Read( aCheck, 6 );
+
+            // Handelt es sich um die gew"unschte Tabelle?
+            if( memcmp( aCheck, aChckBitmap, sizeof( aChckBitmap ) ) == 0 ||
+                memcmp( aCheck, aChckBitmap0, sizeof( aChckBitmap0 ) ) == 0 ||
+                memcmp( aCheck, aChckBitmap1, sizeof( aChckBitmap1 ) ) == 0 )
+            {
+                ImpRead( *pStream );
+                return( pStream->GetError() == SVSTREAM_OK );
+            }
+            else if( memcmp( aCheck, aChckXML, sizeof( aChckXML ) ) != 0 )
+            {
+                return FALSE;
+            }
+        }
+
+        uno::Reference< container::XNameContainer > xTable( SvxUnoXBitmapTable_createInstance( this ), uno::UNO_QUERY );
+        return SvxXMLXTableImport::load( aURL.GetMainURL(), xTable );
     }
 #endif
     return( FALSE );
@@ -370,6 +390,10 @@ BOOL XBitmapList::Save()
     if( !aURL.getExtension().Len() )
         aURL.setExtension( String( pszExtBitmap, 3 ) );
 
+    uno::Reference< container::XNameContainer > xTable( SvxUnoXBitmapTable_createInstance( this ), uno::UNO_QUERY );
+    return SvxXMLXTableExportComponent::save( aURL.GetMainURL(), xTable );
+
+/*
     SfxMedium aMedium( aURL.GetMainURL(), STREAM_WRITE | STREAM_TRUNC, TRUE );
     aMedium.IsRemote();
 
@@ -385,6 +409,7 @@ BOOL XBitmapList::Save()
     aMedium.Commit();
 
     return( aMedium.GetError() == 0 );
+*/
 #else
     return FALSE;
 #endif

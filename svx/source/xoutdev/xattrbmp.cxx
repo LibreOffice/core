@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattrbmp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-28 16:20:50 $
+ *  last change: $Author: cl $ $Date: 2001-02-23 21:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -739,7 +739,9 @@ sal_Bool XFillBitmapItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMe
 {
     if( nMemberId == MID_NAME )
     {
-        rVal <<= ::rtl::OUString( GetName() );
+        rtl::OUString aApiName;
+        SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
+        rVal <<= aApiName;
     }
     else if( nMemberId == MID_GRAFURL )
     {

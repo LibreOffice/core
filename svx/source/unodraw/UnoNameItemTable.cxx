@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoNameItemTable.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-02 12:00:27 $
+ *  last change: $Author: cl $ $Date: 2001-02-23 21:33:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,8 @@
 #include "UnoNameItemTable.hxx"
 #endif
 
+#include "unoapi.hxx"
+
 using namespace ::com::sun::star;
 using namespace ::rtl;
 using namespace ::cppu;
@@ -114,11 +116,14 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::supportsService( const  OUString& Service
 }
 
 // XNameContainer
-void SAL_CALL SvxUnoNameItemTable::insertByName( const OUString& aName, const uno::Any& aElement )
+void SAL_CALL SvxUnoNameItemTable::insertByName( const OUString& aApiName, const uno::Any& aElement )
     throw( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    if( hasByName( aName ) )
+    if( hasByName( aApiName ) )
         throw container::ElementExistException();
+
+    String aName;
+    SvxUnogetInternalNameForItem( mnWhich, aApiName, aName );
 
     SfxItemSet* mpInSet1 = new SfxItemSet( *mpModelPool, mnWhich, mnWhich );
     SfxItemSet* mpInSet2 = mpStylePool ? new SfxItemSet( *mpStylePool, mnWhich, mnWhich ) : NULL;
@@ -136,9 +141,12 @@ void SAL_CALL SvxUnoNameItemTable::insertByName( const OUString& aName, const un
 
 
 
-void SAL_CALL SvxUnoNameItemTable::removeByName( const OUString& Name )
+void SAL_CALL SvxUnoNameItemTable::removeByName( const OUString& aApiName )
     throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
+    String Name;
+    SvxUnogetInternalNameForItem( mnWhich, aApiName, Name );
+
     ItemPoolVector::iterator aIter = maItemSetVector.begin();
     const ItemPoolVector::iterator aEnd = maItemSetVector.end();
 
@@ -163,9 +171,12 @@ void SAL_CALL SvxUnoNameItemTable::removeByName( const OUString& Name )
 }
 
 // XNameReplace
-void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aName, const uno::Any& aElement )
+void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, const uno::Any& aElement )
     throw( lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
 {
+    String aName;
+    SvxUnogetInternalNameForItem( mnWhich, aApiName, aName );
+
     ItemPoolVector::iterator aIter = maItemSetVector.begin();
     const ItemPoolVector::iterator aEnd = maItemSetVector.end();
 
@@ -195,12 +206,15 @@ void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aName, const u
 }
 
 // XNameAccess
-uno::Any SAL_CALL SvxUnoNameItemTable::getByName( const  OUString& aName )
+uno::Any SAL_CALL SvxUnoNameItemTable::getByName( const OUString& aApiName )
     throw( container::NoSuchElementException,  lang::WrappedTargetException, uno::RuntimeException)
 {
+    String aName;
+    SvxUnogetInternalNameForItem( mnWhich, aApiName, aName );
+
     uno::Any aAny;
 
-    if( mpModelPool && aName.getLength() != 0 )
+    if( mpModelPool && aName.Len() != 0 )
     {
         const String aSearchName( aName );
         NameOrIndex *pItem;
@@ -273,7 +287,8 @@ uno::Sequence< OUString > SAL_CALL SvxUnoNameItemTable::getElementNames(  )
         {
             nCount++;
 
-            *pStrings++ = pItem->GetName();
+            SvxUnogetApiNameForItem( mnWhich, pItem->GetName(), *pStrings );
+            pStrings++;
         }
     }
 
@@ -301,7 +316,8 @@ uno::Sequence< OUString > SAL_CALL SvxUnoNameItemTable::getElementNames(  )
         {
             nCount++;
 
-            *pStrings++ = pItem->GetName();
+            SvxUnogetApiNameForItem( mnWhich, pItem->GetName(), *pStrings );
+            pStrings++;
         }
     }
 
@@ -311,10 +327,13 @@ uno::Sequence< OUString > SAL_CALL SvxUnoNameItemTable::getElementNames(  )
     return aSeq;
 }
 
-sal_Bool SAL_CALL SvxUnoNameItemTable::hasByName( const OUString& aName )
+sal_Bool SAL_CALL SvxUnoNameItemTable::hasByName( const OUString& aApiName )
     throw( uno::RuntimeException )
 {
-    if( aName.getLength() == 0 )
+    String aName;
+    SvxUnogetInternalNameForItem( mnWhich, aApiName, aName );
+
+    if( aName.Len() == 0 )
         return sal_False;
 
     const String aSearchName( aName );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtabcolr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-19 17:19:57 $
+ *  last change: $Author: cl $ $Date: 2001-02-23 21:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,19 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+#ifndef SVX_LIGHT
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
+#endif
+#ifndef _SVX_XPROPERTYTABLE_HXX
+#include "XPropertyTable.hxx"
+#endif
+
+#include "xmlxtexp.hxx"
+#include "xmlxtimp.hxx"
+
+#endif
 
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
@@ -72,11 +84,14 @@
 
 #define GLOBALOVERFLOW
 
+using namespace com::sun::star;
+using namespace rtl;
+
 sal_Unicode const pszExtColor[]  = {'s','o','c'};
-sal_Unicode const pszChckColor[] = {'S','O','C','L'};
-// Neuer Key, damit alte Version (3.00) nicht bei dem
-// Versuch abstuerzt, eine neue Tabelle zu laden.
-sal_Unicode const pszChckColor0[] = {'S','O','C','0'};
+
+static char const aChckColor[]  = { 0x04, 0x00, 'S','O','C','L'};   // < 5.2
+static char const aChckColor0[] = { 0x04, 0x00, 'S','O','C','0'};   // = 5.2
+static char const aChckXML[]    = { '<', '?', 'x', 'm', 'l' };      // = 6.0
 
 // ------------------
 // class XColorTable
@@ -146,26 +161,30 @@ BOOL XColorTable::Load()
         if( !aURL.getExtension().Len() )
             aURL.setExtension( String( pszExtColor, 3 ) );
 
-        SfxMedium aMedium( aURL.GetMainURL(), STREAM_READ | STREAM_NOCREATE, TRUE );
-        SvStream* pStream = aMedium.GetInStream();
-        if( !pStream )
-            return( FALSE );
-
-        String aCheck;
-
-        // UNICODE: *pStream >> aCheck;
-        pStream->ReadByteString(aCheck);
-
-        // Handelt es sich um die gew"unschte Tabelle?
-        if( aCheck == String(pszChckColor, 4) ||
-            aCheck == String(pszChckColor0, 4)  )
         {
-            ImpRead( *pStream );
-        }
-        else
-            return( FALSE );
+            SfxMedium aMedium( aURL.GetMainURL(), STREAM_READ | STREAM_NOCREATE, TRUE );
+            SvStream* pStream = aMedium.GetInStream();
+            if( !pStream )
+                return( FALSE );
 
-        return( pStream->GetError() == SVSTREAM_OK );
+            char aCheck[6];
+            pStream->Read( aCheck, 6 );
+
+            // Handelt es sich um die gew"unschte Tabelle?
+            if( memcmp( aCheck, aChckColor, sizeof( aChckColor ) ) == 0 ||
+                memcmp( aCheck, aChckColor0, sizeof( aChckColor0 ) ) == 0 )
+            {
+                ImpRead( *pStream );
+                return( pStream->GetError() == SVSTREAM_OK );
+            }
+            else if( memcmp( aCheck, aChckXML, sizeof( aChckXML ) ) != 0 )
+            {
+                return FALSE;
+            }
+        }
+
+        uno::Reference< container::XNameContainer > xTable( SvxUnoXColorTable_createInstance( this ), uno::UNO_QUERY );
+        return SvxXMLXTableImport::load( aURL.GetMainURL(), xTable );
     }
 #endif
     return( FALSE );
@@ -189,6 +208,10 @@ BOOL XColorTable::Save()
     if( !aURL.getExtension().Len() )
         aURL.setExtension( String( pszExtColor, 3 ) );
 
+    uno::Reference< container::XNameContainer > xTable( SvxUnoXColorTable_createInstance( this ), uno::UNO_QUERY );
+    return SvxXMLXTableExportComponent::save( aURL.GetMainURL(), xTable );
+
+/*
     SfxMedium aMedium( aURL.GetMainURL(), STREAM_WRITE | STREAM_TRUNC, TRUE );
     aMedium.IsRemote();
 
@@ -206,6 +229,7 @@ BOOL XColorTable::Save()
     aMedium.Commit();
 
     return( aMedium.GetError() == 0 );
+*/
 #else
     return FALSE;
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomtabl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: armin $ $Date: 2001-02-15 12:16:20 $
+ *  last change: $Author: cl $ $Date: 2001-02-23 21:33:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,8 @@
 #include <vector>
 #endif
 
+#include "unoapi.hxx"
+
 using namespace ::com::sun::star;
 using namespace ::rtl;
 using namespace ::cppu;
@@ -183,11 +185,14 @@ uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getSupportedServiceNames( 
 }
 
 // XNameContainer
-void SAL_CALL SvxUnoMarkerTable::insertByName( const OUString& aName, const uno::Any& aElement )
+void SAL_CALL SvxUnoMarkerTable::insertByName( const OUString& aApiName, const uno::Any& aElement )
     throw( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    if( hasByName( aName ) )
+    if( hasByName( aApiName ) )
         throw container::ElementExistException();
+
+    String aName;
+    SvxUnogetInternalNameForItem( XATTR_LINEEND, aApiName, aName );
 
     SfxItemSet* mpInSet1 = new SfxItemSet( *mpModelPool, XATTR_LINESTART, XATTR_LINEEND );
     SfxItemSet* mpInSet2 = mpStylePool ? new SfxItemSet( *mpStylePool, XATTR_LINESTART, XATTR_LINEEND ) : NULL;
@@ -211,9 +216,12 @@ void SAL_CALL SvxUnoMarkerTable::insertByName( const OUString& aName, const uno:
         mpInSet2->Put( aStartMarker, XATTR_LINESTART );
 }
 
-void SAL_CALL SvxUnoMarkerTable::removeByName( const OUString& Name )
+void SAL_CALL SvxUnoMarkerTable::removeByName( const OUString& aApiName )
     throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
+    String Name;
+    SvxUnogetInternalNameForItem( XATTR_LINEEND, aApiName, Name );
+
     ItemPoolVector::iterator aIter = maItemSetVector.begin();
     const ItemPoolVector::iterator aEnd = maItemSetVector.end();
 
@@ -238,9 +246,12 @@ void SAL_CALL SvxUnoMarkerTable::removeByName( const OUString& Name )
 }
 
 // XNameReplace
-void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aName, const uno::Any& aElement )
+void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const uno::Any& aElement )
     throw( lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
 {
+    String aName;
+    SvxUnogetInternalNameForItem( XATTR_LINEEND, aApiName, aName );
+
     ItemPoolVector::iterator aIter = maItemSetVector.begin();
     const ItemPoolVector::iterator aEnd = maItemSetVector.end();
 
@@ -296,12 +307,15 @@ static sal_Bool getByNameFromPool( const String& rSearchName, SfxItemPool* pPool
 }
 
 // XNameAccess
-uno::Any SAL_CALL SvxUnoMarkerTable::getByName( const  OUString& aName )
+uno::Any SAL_CALL SvxUnoMarkerTable::getByName( const OUString& aApiName )
     throw( container::NoSuchElementException,  lang::WrappedTargetException, uno::RuntimeException)
 {
+    String aName;
+    SvxUnogetInternalNameForItem( XATTR_LINEEND, aApiName, aName );
+
     uno::Any aAny;
 
-    if( mpModelPool && aName.getLength() != 0 )
+    if( mpModelPool && aName.Len() != 0 )
     {
         do
         {
@@ -352,12 +366,14 @@ static void createNamesForPool( SfxItemPool* pPool, USHORT nWhich, sal_Int32 nSu
         if( !bFound )
         {
             rCount++;
-            *rpWritePos++ = aSearchName;
+
+            SvxUnogetApiNameForItem( XATTR_LINEEND, pItem->GetName(), *rpWritePos );
+            *rpWritePos++;
         }
     }
 }
 
-uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getElementNames(  )
+uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getElementNames()
     throw( uno::RuntimeException )
 {
     const sal_Int32 nStartCount1 = mpModelPool ? (sal_Int32)mpModelPool->GetItemCount( XATTR_LINESTART ) : 0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-19 16:07:43 $
+ *  last change: $Author: cl $ $Date: 2001-02-23 21:33:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -974,7 +974,10 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
 
 sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemSet& rSet )
 {
-    if( rName.getLength() == 0 )
+    String aName;
+    SvxUnogetInternalNameForItem( (sal_Int16)nWID, rName, aName );
+
+    if( aName.Len() == 0 )
     {
         switch( nWID )
         {
@@ -998,7 +1001,7 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
 
     const SfxItemPool* pPool = rSet.GetPool();
 
-    const String aSearchName( rName );
+    const String aSearchName( aName );
     const USHORT nCount = pPool->GetItemCount((USHORT)nWID);
     const NameOrIndex *pItem;
 
@@ -1383,10 +1386,12 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
         {
             if( pMap->nMemberId == MID_NAME )
             {
-                OUString aStr;
-                if( rVal >>= aStr )
-                    if( SetFillAttribute( pMap->nWID, aStr ) )
+                OUString aApiName;
+                if( rVal >>= aApiName )
+                {
+                    if( SetFillAttribute( pMap->nWID, aApiName ) )
                         return;
+                }
                 break;
             }
 
