@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SharedLibraryLoader.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2002-12-06 16:40:53 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 17:12:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ public class SharedLibraryLoader {
     /**
      * The default library which contains the SharedLibraryLoader component
      */
-    public static final String DEFAULT_LIBRARY = "cpld";
+    public static final String DEFAULT_LIBRARY = "shlibloader.uno";
 
     /**
      * The default implementation name
@@ -100,7 +100,8 @@ public class SharedLibraryLoader {
 
     /**
      * Supplies the ServiceFactory of the default SharedLibraryLoader.
-     * The defaults are "cpld" for the library and "com.sun.star.comp.stoc.DLLComponentLoader"
+     * The defaults are "shlibloader.uno"
+     * for the library and "com.sun.star.comp.stoc.DLLComponentLoader"
      * for the component name.
      * <p>
      * @return  the factory for the "com.sun.star.comp.stoc.DLLComponentLoader" component.
