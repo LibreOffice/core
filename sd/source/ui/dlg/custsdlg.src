@@ -2,9 +2,9 @@
  *
  *  $RCSfile: custsdlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:27:21 $
+ *  last change: $Author: rt $ $Date: 2001-07-24 20:44:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,11 +300,11 @@ ModalDialog DLG_CUSTOMSHOW
     Text [ french ] = "Présentations à l'écran personnalisées" ;
     Text [ dutch ] = "Individuele schermpresentaties" ;
     Text [ portuguese ] = "Apresentações personalizadas" ;
-    Text[ chinese_simplified ] = "×Ô¶¨µÄÑİÊ¾ÎÄ¸å·ÅÓ³";
+    Text[ chinese_simplified ] = "·ÅÓ³×Ô¶¨µÄÑİÊ¾ÎÄ¸å";
     Text[ russian ] = "Ïğîèçâîëüíàÿ äåìîíñòğàöèÿ";
     Text[ polish ] = "Indywidualne pokazy slajdów";
     Text[ japanese ] = "–Ú“I•Ê½×²ÄŞ¼®°";
-    Text[ chinese_traditional ] = "¨Ï¥ÎªÌªº©ñ¬MÂ²³ø§ë¼v¤ù";
+    Text[ chinese_traditional ] = "©ñ¬M¨Ï¥ÎªÌªºÂ²³ø§ë¼v¤ù";
     Text[ arabic ] = "ÚÑæÖ ÊŞÏíãíÉ ãÎÕÕÉ";
     Text[ greek ] = "Ğñïóáñìïóìİíç ğáñïõóßáóç ïèüíçò";
     Text[ korean ] = "°³ÀÎÀû ½½¶óÀÌµå ¼î";
@@ -473,7 +473,7 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
     Text [ french ] = "Définir une présentation à l'écran personnalisée" ;
     Text [ dutch ] = "Individuele schermpresentatie definiëren" ;
     Text [ portuguese ] = "Definir apresentação personalizada" ;
-    Text[ chinese_simplified ] = "¶¨Òå×Ô¶¨µÄÑİÊ¾ÎÄ¸å";
+    Text[ chinese_simplified ] = "Éè¶¨×Ô¶¨µÄÑİÊ¾ÎÄ¸å";
     Text[ russian ] = "Îïğåäåëèòü ïğîèçâîëüíóş äåìîíñòğàöèş";
     Text[ polish ] = "Okreœl indywidualne pokazy slajdów";
     Text[ japanese ] = "–Ú“I•Ê½×²ÄŞ¼®°‚Ì’è‹`•t‚¯";
@@ -486,6 +486,7 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
     Text[ catalan ] = "Definir presentación personalizada";
     Text[ finnish ] = "Määritä mukautettu diaesitys";
 };
+
 
 
 
