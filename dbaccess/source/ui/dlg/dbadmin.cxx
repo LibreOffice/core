@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-12 16:20:42 $
+ *  last change: $Author: fs $ $Date: 2000-10-13 16:06:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #ifndef _SVTOOLS_LOGINDLG_HXX_
 #include <svtools/logindlg.hxx>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UNO_XNAMINGSERVICE_HPP_
 #include <com/sun/star/uno/XNamingService.hpp>
 #endif
@@ -112,6 +115,15 @@
 #endif
 #ifndef _DBAUI_STRINGLISTITEM_HXX_
 #include "stringlistitem.hxx"
+#endif
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
+#endif
+#ifndef _TYPELIB_TYPEDESCRIPTION_HXX_
+#include <typelib/typedescription.hxx>
+#endif
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
 #endif
 
 //.........................................................................
@@ -602,6 +614,26 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent, SfxItemSet* _pItems, const Refe
     // no local resources needed anymore
     FreeResource();
 
+    /// initialize the property translation map
+    // direct properties of a data source
+    m_aDirectPropTranslator.insert(MapInt2String::value_type(DSID_CONNECTURL, PROPERTY_URL));
+    m_aDirectPropTranslator.insert(MapInt2String::value_type(DSID_NAME, PROPERTY_NAME));
+    m_aDirectPropTranslator.insert(MapInt2String::value_type(DSID_USER, PROPERTY_USER));
+    m_aDirectPropTranslator.insert(MapInt2String::value_type(DSID_PASSWORD, PROPERTY_PASSWORD));
+    m_aDirectPropTranslator.insert(MapInt2String::value_type(DSID_PASSWORDREQUIRED, PROPERTY_ISPASSWORDREQUIRED));
+    m_aDirectPropTranslator.insert(MapInt2String::value_type(DSID_TABLEFILTER, PROPERTY_TABLEFILTER));
+    m_aDirectPropTranslator.insert(MapInt2String::value_type(DSID_READONLY, PROPERTY_ISREADONLY));
+    // implicit properties, to be found in the direct property "Info"
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_JDBCDRIVERCLASS, ::rtl::OUString::createFromAscii("JDBCDRV")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_TEXTFILEEXTENSION, ::rtl::OUString::createFromAscii("Extension")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CHARSET, ::rtl::OUString::createFromAscii("CharSet")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_TEXTFILEHEADER, ::rtl::OUString::createFromAscii("HeaderLine")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_FIELDDELIMITER, ::rtl::OUString::createFromAscii("FieldDelimiter")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_TEXTDELIMITER, ::rtl::OUString::createFromAscii("StringDelimiter")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_DECIMALDELIMITER, ::rtl::OUString::createFromAscii("DecimalDelimiter")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_SHOWDELETEDROWS, ::rtl::OUString::createFromAscii("ShowDeleted")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_ALLOWLONGTABLENAMES, ::rtl::OUString::createFromAscii("NoNameLengthLimit")));
+
     // register the view window
     SetViewWindow(&m_aSelector);
     SetViewAlign(WINDOWALIGN_LEFT);
@@ -967,10 +999,10 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     *pCounter++ = new SfxBoolItem(DSID_SHOWDELETEDROWS, sal_False);
     *pCounter++ = new SfxBoolItem(DSID_ALLOWLONGTABLENAMES, sal_False);
     *pCounter++ = new SfxStringItem(DSID_JDBCDRIVERCLASS, String());
-    *pCounter++ = new SfxUInt16Item(DSID_FIELDDELIMITER, ';');
-    *pCounter++ = new SfxUInt16Item(DSID_TEXTDELIMITER, '"');
-    *pCounter++ = new SfxUInt16Item(DSID_DECIMALDELIMITER, '.');
-    *pCounter++ = new SfxUInt16Item(DSID_THOUSANDSDELIMITER, ',');
+    *pCounter++ = new SfxStringItem(DSID_FIELDDELIMITER, ';');
+    *pCounter++ = new SfxStringItem(DSID_TEXTDELIMITER, '"');
+    *pCounter++ = new SfxStringItem(DSID_DECIMALDELIMITER, '.');
+    *pCounter++ = new SfxStringItem(DSID_THOUSANDSDELIMITER, ',');
     *pCounter++ = new SfxStringItem(DSID_TEXTFILEEXTENSION, String::CreateFromAscii("txt"));
     *pCounter++ = new SfxBoolItem(DSID_TEXTFILEHEADER, sal_True);
     *pCounter++ = new SfxBoolItem(DSID_NEWDATASOURCE, sal_False);
@@ -1279,70 +1311,273 @@ void ODbAdminDialog::resetPages(const Reference< XPropertySet >& _rxDatasource, 
 }
 
 //-------------------------------------------------------------------------
+Any ODbAdminDialog::implTranslateProperty(const SfxPoolItem* _pItem)
+{
+    // translate the SfxPoolItem
+    Any aValue;
+    if (_pItem->ISA(SfxStringItem))
+        aValue <<= ::rtl::OUString(PTR_CAST(SfxStringItem, _pItem)->GetValue().GetBuffer());
+    else if (_pItem->ISA(SfxBoolItem))
+        aValue = ::cppu::bool2any(PTR_CAST(SfxBoolItem, _pItem)->GetValue());
+    else if (_pItem->ISA(OStringListItem))
+        aValue <<= PTR_CAST(OStringListItem, _pItem)->getList();
+    else
+    {
+        DBG_ERROR("ODbAdminDialog::implTranslateProperty: unsupported item type!");
+        return aValue;
+    }
+
+    return aValue;
+}
+
+//-------------------------------------------------------------------------
+void ODbAdminDialog::implTranslateProperty(const Reference< XPropertySet >& _rxSet, const ::rtl::OUString& _rName, const SfxPoolItem* _pItem)
+{
+    Any aValue = implTranslateProperty(_pItem);
+    try
+    {
+        _rxSet->setPropertyValue(_rName, aValue);
+    }
+    catch(Exception&)
+    {
+#ifdef DBG_UTIL
+        ::rtl::OString sMessage("ODbAdminDialog::implTranslateProperty: could not set the property ");
+        sMessage += ::rtl::OString(_rName.getStr(), _rName.getLength(), RTL_TEXTENCODING_ASCII_US);
+        sMessage += ::rtl::OString("!");
+        DBG_ERROR(sMessage.getStr());
+#endif
+    }
+}
+
+//-------------------------------------------------------------------------
+void ODbAdminDialog::implTranslateProperty(SfxItemSet& _rSet, sal_Int32  _nId, const Any& _rValue)
+{
+    switch (_rValue.getValueType().getTypeClass())
+    {
+        case TypeClass_STRING:
+        {
+            ::rtl::OUString sValue;
+            _rValue >>= sValue;
+            _rSet.Put(SfxStringItem(_nId, sValue.getStr()));
+        }
+        break;
+        case TypeClass_BOOLEAN:
+            _rSet.Put(SfxBoolItem(_nId, ::cppu::any2bool(_rValue)));
+            break;
+        case TypeClass_SEQUENCE:
+        {
+            // determine the element type
+            TypeDescription aTD(_rValue.getValueType());
+            typelib_IndirectTypeDescription* pSequenceTD =
+                reinterpret_cast< typelib_IndirectTypeDescription* >(aTD.get());
+            DBG_ASSERT(pSequenceTD && pSequenceTD->pType, "ODbAdminDialog::implTranslateProperty: invalid sequence type!");
+
+            Type aElementType(pSequenceTD->pType);
+            switch (aElementType.getTypeClass())
+            {
+                case TypeClass_STRING:
+                {
+                    Sequence< ::rtl::OUString > aStringList;
+                    _rValue >>= aStringList;
+                    _rSet.Put(OStringListItem(_nId, aStringList));
+                }
+                break;
+                default:
+                    DBG_ERROR("ODbAdminDialog::implTranslateProperty: unsupported property value type!");
+            }
+        }
+        break;
+        case TypeClass_VOID:
+            _rSet.ClearItem(_nId);
+            break;
+        default:
+            DBG_ERROR("ODbAdminDialog::implTranslateProperty: unsupported property value type!");
+    }
+}
+
+//-------------------------------------------------------------------------
+struct PropertyValueLess
+{
+    bool operator() (const PropertyValue& x, const PropertyValue& y) const
+        { return x.Name < y.Name ? true : false; }      // construct prevents a MSVC6 warning
+};
+DECLARE_STL_SET( PropertyValue, PropertyValueLess, PropertyValueSet);
+
+//........................................................................
 void ODbAdminDialog::translateProperties(const Reference< XPropertySet >& _rxSource, SfxItemSet& _rDest)
 {
     ::rtl::OUString sNewConnectURL, sName, sUid, sPwd;
     Sequence< ::rtl::OUString > aTableFitler;
     sal_Bool bPasswordRequired = sal_False;
     sal_Bool bReadOnly = sal_True;
-    try
+
+    if (_rxSource.is())
     {
-        if (_rxSource.is())
+        for (   ConstMapInt2StringIterator aDirect = m_aDirectPropTranslator.begin();
+                aDirect != m_aDirectPropTranslator.end();
+                ++aDirect
+            )
         {
-            _rxSource->getPropertyValue(PROPERTY_URL) >>= sNewConnectURL;
-            _rxSource->getPropertyValue(PROPERTY_NAME) >>= sName;
-            _rxSource->getPropertyValue(PROPERTY_USER) >>= sUid;
-            _rxSource->getPropertyValue(PROPERTY_PASSWORD) >>= sPwd;
-            _rxSource->getPropertyValue(PROPERTY_TABLEFILTER) >>= aTableFitler;
-            _rxSource->getPropertyValue(PROPERTY_ISPASSWORDREQUIRED) >>= bPasswordRequired;
-            _rxSource->getPropertyValue(PROPERTY_ISREADONLY) >>= bReadOnly;
+            // get the property value
+            Any aValue;
+            try
+            {
+                aValue = _rxSource->getPropertyValue(aDirect->second);
+            }
+            catch(Exception&)
+            {
+#if DBG_UTIL
+                ::rtl::OString aMessage("ODbAdminDialog::translateProperties: could not extract the property ");
+                aMessage += ::rtl::OString(aDirect->second.getStr(), aDirect->second.getLength(), RTL_TEXTENCODING_ASCII_US);
+                aMessage += ::rtl::OString("!");
+                DBG_ERROR(aMessage.getStr());
+#endif
+            }
+            // transfer it into an item
+            implTranslateProperty(_rDest, aDirect->first, aValue);
+        }
+
+        // get the additional informations
+        Sequence< PropertyValue > aAdditionalInfo;
+        try
+        {
+            _rxSource->getPropertyValue(PROPERTY_INFO) >>= aAdditionalInfo;
+        }
+        catch(Exception&) { }
+
+        // collect the names of the additional settings
+        const PropertyValue* pAdditionalInfo = aAdditionalInfo.getConstArray();
+        PropertyValueSet aInfos;
+        for (sal_Int32 i=0; i<aAdditionalInfo.getLength(); ++i, ++pAdditionalInfo)
+            aInfos.insert(*pAdditionalInfo);
+
+        // go through all known translations and check if we have such a setting
+        PropertyValue aSearchFor;
+        for (   ConstMapInt2StringIterator aIndirect = m_aIndirectPropTranslator.begin();
+                aIndirect != m_aIndirectPropTranslator.end();
+                ++aIndirect
+            )
+        {
+            aSearchFor.Name = aIndirect->second;
+            ConstPropertyValueSetIterator aInfoPos = aInfos.find(aSearchFor);
+            if (aInfos.end() != aInfoPos)
+                // the property is contained in the info sequence
+                // -> transfer it into an item
+                implTranslateProperty(_rDest, aIndirect->first, aInfoPos->Value);
         }
     }
-    catch(Exception&)
-    {
-        DBG_ERROR("ODbAdminDialog::translateProperties : could not extract all the relevant datasource properties!");
-    }
-
-    _rDest.Put(SfxStringItem(DSID_CONNECTURL, sNewConnectURL));
-    _rDest.Put(SfxStringItem(DSID_NAME, sName));
-    _rDest.Put(SfxStringItem(DSID_USER, sUid));
-    _rDest.Put(SfxStringItem(DSID_PASSWORD, sPwd));
-    _rDest.Put(OStringListItem(DSID_TABLEFILTER, aTableFitler));
-    _rDest.Put(SfxBoolItem(DSID_PASSWORDREQUIRED, bPasswordRequired));
-    _rDest.Put(SfxBoolItem(DSID_READONLY, bReadOnly));
 }
 
 //-------------------------------------------------------------------------
 void ODbAdminDialog::translateProperties(const SfxItemSet& _rSource, const Reference< XPropertySet >& _rxDest)
 {
-    DBG_ASSERT(_rxDest.is(), "ODbAdminDialog::translateProperties : invalid property set!");
+    DBG_ASSERT(_rxDest.is(), "ODbAdminDialog::translateProperties: invalid property set!");
     if (!_rxDest.is())
         return;
 
-    // get the items
-    SFX_ITEMSET_GET(_rSource, pConnectURL, SfxStringItem, DSID_CONNECTURL, sal_True);
-    SFX_ITEMSET_GET(_rSource, pUser, SfxStringItem, DSID_USER, sal_True);
-    SFX_ITEMSET_GET(_rSource, pPassword, SfxStringItem, DSID_PASSWORD, sal_True);
-    SFX_ITEMSET_GET(_rSource, pTableFilter, OStringListItem, DSID_TABLEFILTER, sal_True);
-    SFX_ITEMSET_GET(_rSource, pPasswordRequired, SfxBoolItem, DSID_PASSWORDREQUIRED, sal_True);
+    // the property set info
+    Reference< XPropertySetInfo > xInfo;
+    try { xInfo = _rxDest->getPropertySetInfo(); }
+    catch(Exception&) { }
 
-    // set the values
+    // -----------------------------
+    // transfer the direct propertis
+    for (   ConstMapInt2StringIterator aDirect = m_aDirectPropTranslator.begin();
+            aDirect != m_aDirectPropTranslator.end();
+            ++aDirect
+        )
+    {
+        const SfxPoolItem* pCurrentItem = _rSource.GetItem(aDirect->first);
+        if (pCurrentItem)
+        {
+            sal_Int16 nAttributes = PropertyAttribute::READONLY;
+            if (xInfo.is())
+            {
+                try { nAttributes = xInfo->getPropertyByName(aDirect->second).Attributes; }
+                catch(Exception&) { }
+            }
+            if ((nAttributes & PropertyAttribute::READONLY) == 0)
+                implTranslateProperty(_rxDest, aDirect->second, pCurrentItem);
+        }
+    }
+
+    // -------------------------------
+    // now for the indirect properties
+
+    // first determine which of all the items are relevant for the data source (depends on the connection url)
+    sal_Int32* pRelevantItems = NULL;
+
+    SFX_ITEMSET_GET(_rSource, pConnectURL, SfxStringItem, DSID_CONNECTURL, sal_True);
+    SFX_ITEMSET_GET(_rSource, pTypeCollection, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
+    DBG_ASSERT(pConnectURL && pTypeCollection, "ODbAdminDialog::translateProperties: invalid items in the source set!");
+    String sConnectURL = pConnectURL->GetValue();
+    ODsnTypeCollection* pCollection = pTypeCollection->getCollection();
+    DBG_ASSERT(pCollection, "ODbAdminDialog::translateProperties: invalid type collection!");
+    DATASOURCE_TYPE eType = pCollection->getType(sConnectURL);
+    switch (eType)
+    {
+        case DST_ADABAS: pRelevantItems = OAdabasDetailsPage::getDetailIds(); break;
+        case DST_JDBC: pRelevantItems = OJdbcDetailsPage::getDetailIds(); break;
+        case DST_ODBC: pRelevantItems = OOdbcDetailsPage::getDetailIds(); break;
+        case DST_DBASE: pRelevantItems = ODbaseDetailsPage::getDetailIds(); break;
+        case DST_TEXT: pRelevantItems = OTextDetailsPage::getDetailIds(); break;
+    }
+    DBG_ASSERT(pRelevantItems, "ODbAdminDialog::translateProperties: invalid item ids got from the page!");
+
+    // collect the translated property values
+    PropertyValueSet aRelevantSettings;
+    ConstMapInt2StringIterator aTranslation;
+    while (*pRelevantItems)
+    {
+        const SfxPoolItem* pCurrent = _rSource.GetItem(*pRelevantItems);
+        aTranslation = m_aIndirectPropTranslator.find(*pRelevantItems);
+        if (pCurrent && (m_aIndirectPropTranslator.end() != aTranslation))
+            aRelevantSettings.insert(PropertyValue(aTranslation->second, 0, implTranslateProperty(pCurrent), PropertyState_DIRECT_VALUE));
+
+        ++pRelevantItems;
+    }
+
+    // within the current "Info" sequence, replace the ones we
+    // (we don't just fill a completely new sequence with our own items, but we preserve any properties unknown to
+    // us)
+    Sequence< PropertyValue > aInfo;
     try
     {
-        if (pConnectURL)
-            _rxDest->setPropertyValue(PROPERTY_URL, makeAny(::rtl::OUString(pConnectURL->GetValue().GetBuffer())));
-        if (pUser)
-            _rxDest->setPropertyValue(PROPERTY_USER, makeAny(::rtl::OUString(pUser->GetValue().GetBuffer())));
-        if (pPassword)
-            _rxDest->setPropertyValue(PROPERTY_PASSWORD, makeAny(::rtl::OUString(pPassword->GetValue().GetBuffer())));
-        if (pTableFilter)
-            _rxDest->setPropertyValue(PROPERTY_TABLEFILTER, makeAny(pTableFilter->getList()));
-        if (pPasswordRequired)
-            _rxDest->setPropertyValue(PROPERTY_ISPASSWORDREQUIRED, makeAny(pPasswordRequired->GetValue()));
+        _rxDest->getPropertyValue(PROPERTY_INFO) >>= aInfo;
+    }
+    catch(Exception&) { }
+    PropertyValue* pInfo = aInfo.getArray();
+    PropertyValue aSearchFor;
+    for (sal_Int32 i=0; i<aInfo.getLength(); ++i, ++pInfo)
+    {
+        aSearchFor.Name = pInfo->Name;
+        PropertyValueSetIterator aOverwrittenSetting = aRelevantSettings.find(aSearchFor);
+        if (aRelevantSettings.end() != aOverwrittenSetting)
+        {   // the setting was present in the original sequence, and it is to be overwritten -> replace it
+            *pInfo = *aOverwrittenSetting;
+            aRelevantSettings.erase(aOverwrittenSetting);
+        }
+    }
+    // check which settings are still left ('cause they were not present in the original sequence, but are to be set)
+    sal_Int32 nOldLength = aInfo.getLength();
+    aInfo.realloc(nOldLength + aRelevantSettings.size());
+    PropertyValue* pAppendValues = aInfo.getArray() + nOldLength;
+    for (   ConstPropertyValueSetIterator aLoop = aRelevantSettings.begin();
+            aLoop != aRelevantSettings.end();
+            ++aLoop, ++pAppendValues
+        )
+    {
+        *pAppendValues = *aLoop;
+    }
+
+    // and propagate the (newly composed) sequence to the set
+    try
+    {
+        _rxDest->setPropertyValue(PROPERTY_INFO, makeAny(aInfo));
     }
     catch(Exception&)
     {
-        DBG_ERROR("ODbAdminDialog::translateProperties : could not set all the relevant datasource properties!");
+        DBG_ERROR("ODbAdminDialog::translateProperties: could not propagate the composed info sequence to the property set!");
     }
 }
 
@@ -1690,52 +1925,74 @@ long ODatasourceSelector::Notify(NotifyEvent& _rNEvt)
 {
     sal_Bool bHandled = sal_False;
 
-    if (EVENT_COMMAND == _rNEvt.GetType())
+    switch (_rNEvt.GetType())
     {
-        const CommandEvent* pCommand = _rNEvt.GetCommandEvent();
-        if (COMMAND_CONTEXTMENU == pCommand->GetCommand())
+        case EVENT_COMMAND:
         {
-            // check if the context menu request occured in the listbox
-            if  (m_aDatasourceList.IsChild(_rNEvt.GetWindow()))
+            const CommandEvent* pCommand = _rNEvt.GetCommandEvent();
+            if (COMMAND_CONTEXTMENU == pCommand->GetCommand())
             {
-                // calc the pos where to open the menu
-                Point aWhere;
-                if (pCommand->IsMouseEvent())
+                // check if the context menu request occured in the listbox
+                if  (m_aDatasourceList.IsChild(_rNEvt.GetWindow()))
                 {
-                    aWhere = pCommand->GetMousePosPixel();
-                }
-                else
-                {   // context menu via keyboard -> assume the center of the currently selected data source
-                    // TODO: use another class instead of the listbox (e.g. a SvTreeListBox). We have no change
-                    // to get an item rect or the item height or something like that from a listbox ...
-                    aWhere = Point(0, 0);
-                }
-                PopupMenu aMenu(ModuleRes(MENU_DATASOURCELIST_POPUP));
-                aMenu.SetMenuFlags(aMenu.GetMenuFlags() | MENU_FLAG_HIDEDISABLEDENTRIES);
+                    // calc the pos where to open the menu
+                    Point aWhere;
+                    if (pCommand->IsMouseEvent())
+                    {
+                        aWhere = pCommand->GetMousePosPixel();
+                    }
+                    else
+                    {   // context menu via keyboard -> assume the center of the currently selected data source
+                        // TODO: use another class instead of the listbox (e.g. a SvTreeListBox). We have no change
+                        // to get an item rect or the item height or something like that from a listbox ...
+                        aWhere = Point(0, 0);
+                    }
+                    PopupMenu aMenu(ModuleRes(MENU_DATASOURCELIST_POPUP));
+                    aMenu.SetMenuFlags(aMenu.GetMenuFlags() | MENU_FLAG_HIDEDISABLEDENTRIES);
 
-                // we don't really know if adding datasources is allowed currently. But an other instance does
-                // (the dialog), and this instance en- or disables our "new datasource" button
-                aMenu.EnableItem(MID_NEW_DATASOURCE, m_aNewDatasource.IsEnabled());
+                    // we don't really know if adding datasources is allowed currently. But an other instance does
+                    // (the dialog), and this instance en- or disables our "new datasource" button
+                    aMenu.EnableItem(MID_NEW_DATASOURCE, m_aNewDatasource.IsEnabled());
 
-                DatasourceState eState = getEntryState(m_aDatasourceList.GetSelectEntryPos());
-                aMenu.EnableItem(MID_DELETE_DATASOURCE, DELETED != eState);
-                aMenu.EnableItem(MID_RESTORE_DATASOURCE, DELETED == eState);
+                    DatasourceState eState = getEntryState(m_aDatasourceList.GetSelectEntryPos());
+                    aMenu.EnableItem(MID_DELETE_DATASOURCE, DELETED != eState);
+                    aMenu.EnableItem(MID_RESTORE_DATASOURCE, DELETED == eState);
 
-                switch (aMenu.Execute(_rNEvt.GetWindow(), aWhere))
-                {
-                    case MID_NEW_DATASOURCE:
-                        m_aNewHandler.Call(this);
-                        break;
-                    case MID_DELETE_DATASOURCE:
-                        m_aDeleteHandler.Call(this);
-                        break;
-                    case MID_RESTORE_DATASOURCE:
-                        m_aRestoreHandler.Call(this);
-                        break;
+                    switch (aMenu.Execute(_rNEvt.GetWindow(), aWhere))
+                    {
+                        case MID_NEW_DATASOURCE:
+                            m_aNewHandler.Call(this);
+                            break;
+                        case MID_DELETE_DATASOURCE:
+                            m_aDeleteHandler.Call(this);
+                            break;
+                        case MID_RESTORE_DATASOURCE:
+                            m_aRestoreHandler.Call(this);
+                            break;
+                    }
+                    bHandled = sal_True;
                 }
-                bHandled = sal_True;
             }
         }
+        break;
+        case EVENT_KEYINPUT:
+        {
+            const KeyEvent* pKeyEvent = _rNEvt.GetKeyEvent();
+            const KeyCode& rKeyCode = pKeyEvent->GetKeyCode();
+            if ((0 == rKeyCode.GetAllModifier()) && ((sal_uInt16)-1 != m_aDatasourceList.GetSelectEntryPos()))
+                switch (rKeyCode.GetCode())
+                {
+                    case KEY_DELETE:
+                        m_aDeleteHandler.Call(this);
+                        bHandled = sal_True;
+                        break;
+                    case KEY_INSERT:
+                        m_aNewHandler.Call(this);
+                        bHandled = sal_True;
+                        break;
+                }
+        }
+        break;
     }
 
     return bHandled ? 1 : Window::Notify(_rNEvt);
@@ -1769,6 +2026,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/10/12 16:20:42  fs
+ *  new implementations ... still under construction
+ *
  *  Revision 1.3  2000/10/11 11:31:03  fs
  *  new implementations - still under construction
  *
