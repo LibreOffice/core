@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:13:47 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:21:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,13 @@ public:
     static ScRange      MakeScRange(
                             sal_uInt16 nStartXclCol, sal_uInt16 nStartXclRow, SCTAB nStartScTab,
                             sal_uInt16 nEndXclCol, sal_uInt16 nEndXclRow, SCTAB nEndScTab );
+
+    /** Writes a cell range list using an index and count.
+        @descr The list has the following format (all values 16 bit):
+        (range count); n * (first row; last row; first column; last column).
+        @param nFirstRange is the index to the start of the list.
+        @param nRangeCount is the cell range count to be written.  */
+    static void WriteRangeList( XclExpStream& rStrm, const ScRangeList& rRanges, ULONG nFirstRange, ULONG nRangeCount);
 
 // text encoding --------------------------------------------------------------
 
