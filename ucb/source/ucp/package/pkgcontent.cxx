@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-31 13:55:48 $
+ *  last change: $Author: kso $ $Date: 2001-02-22 10:57:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,36 @@ using namespace rtl;
 
 using namespace package_ucp;
 
+#define NONE_MODIFIED           sal_uInt32( 0x00 )
+#define MEDIATYPE_MODIFIED      sal_uInt32( 0x01 )
+#define COMPRESSED_MODIFIED     sal_uInt32( 0x02 )
+
+//=========================================================================
+//=========================================================================
+//
+// ContentProperties Implementation.
+//
+//=========================================================================
+//=========================================================================
+
+ContentProperties::ContentProperties( const OUString& rContentType )
+: aContentType( rContentType ),
+#if SUPD>616
+  nSize( 0 ),
+  bCompressed( sal_True )
+#else
+  nSize( 0 )
+#endif
+{
+    bIsFolder = ( rContentType.compareToAscii(
+                                    PACKAGE_FOLDER_CONTENT_TYPE ) == 0 );
+    bIsDocument = !bIsFolder;
+
+    VOS_ENSURE( bIsFolder || ( rContentType.compareToAscii(
+                                PACKAGE_STREAM_CONTENT_TYPE ) == 0 ),
+                "ContentProperties::ContentProperties - Unknown type!" );
+}
+
 //=========================================================================
 //=========================================================================
 //
@@ -262,7 +292,8 @@ Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
   m_aUri( rUri ),
   m_aProps( rProps ),
   m_eState( PERSISTENT ),
-  m_pProvider( pProvider )
+  m_pProvider( pProvider ),
+  m_nModifiedProps( NONE_MODIFIED )
 {
 }
 
@@ -276,39 +307,11 @@ Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
 : ContentImplHelper( rxSMgr, pProvider, Identifier, sal_False ),
   m_xPackage( Package ),
   m_aUri( rUri ),
+  m_aProps( Info.Type ),
   m_eState( TRANSIENT ),
-  m_pProvider( pProvider )
+  m_pProvider( pProvider ),
+  m_nModifiedProps( NONE_MODIFIED )
 {
-    if ( Info.Type.compareToAscii( PACKAGE_FOLDER_CONTENT_TYPE ) == 0 )
-    {
-        // New folder...
-        m_aProps.aContentType = Info.Type;
-//      m_aProps.aTitle       =
-//      m_aProps.aMediaType   =
-        m_aProps.bIsFolder    = sal_True;
-        m_aProps.bIsDocument  = sal_False;
-        m_aProps.nSize        = 0;
-#if SUPD>616
-        m_aProps.bCompressed  = sal_False;
-#endif
-    }
-    else
-    {
-//      VOS_ENSURE(
-//          Info.Type.compareToAscii( PACKAGE_STREAM_CONTENT_TYPE ) == 0,
-//          "Content::Content - Wrong content info!" );
-
-        // New stream...
-        m_aProps.aContentType = Info.Type;
-//      m_aProps.aTitle       =
-//      m_aProps.aMediaType   =
-        m_aProps.bIsFolder    = sal_False;
-        m_aProps.bIsDocument  = sal_True;
-        m_aProps.nSize        = 0;
-#if SUPD>616
-        m_aProps.bCompressed  = sal_False;
-#endif
-    }
 }
 
 //=========================================================================
@@ -602,11 +605,10 @@ Any SAL_CALL Content::execute( const Command& aCommand,
     else
     {
         //////////////////////////////////////////////////////////////////
-        // Unknown command
+        // Unsupported command
         //////////////////////////////////////////////////////////////////
 
-        VOS_ENSURE( sal_False,
-                    "Content::execute - unknown command!" );
+        VOS_ENSURE( sal_False, "Content::execute - unsupported command!" );
         throw CommandAbortedException();
     }
 
@@ -971,20 +973,19 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues )
             {
                 if ( aNewValue != m_aProps.aTitle )
                 {
-                    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
-                    m_aProps.aTitle = aNewValue;
+                    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
                     // modified title -> modified URL -> exchange !
                     if ( m_eState == PERSISTENT )
                         bExchange = sal_True;
-
-                    aGuard.clear();
 
                     aEvent.PropertyName = rValue.Name;
                     aEvent.OldValue     = makeAny( m_aProps.aTitle );
                     aEvent.NewValue     = makeAny( aNewValue );
 
                     aChanges.getArray()[ nChanged ] = aEvent;
+
+                    m_aProps.aTitle = aNewValue;
                     nChanged++;
                 }
             }
@@ -997,9 +998,15 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues )
                 if ( aNewValue != m_aProps.aMediaType )
                 {
                     osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
+                    aEvent.PropertyName = rValue.Name;
+                    aEvent.OldValue     = makeAny( m_aProps.aMediaType );
+                    aEvent.NewValue     = makeAny( aNewValue );
+
                     m_aProps.aMediaType = aNewValue;
                       nChanged++;
                     bStore = sal_True;
+                    m_nModifiedProps |= MEDIATYPE_MODIFIED;
                 }
             }
         }
@@ -1019,9 +1026,15 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues )
                     if ( bNewValue != m_aProps.bCompressed )
                     {
                         osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
+                        aEvent.PropertyName = rValue.Name;
+                        aEvent.OldValue     = makeAny( m_aProps.bCompressed );
+                        aEvent.NewValue     = makeAny( bNewValue );
+
                         m_aProps.bCompressed = bNewValue;
                           nChanged++;
                         bStore = sal_True;
+                        m_nModifiedProps |= COMPRESSED_MODIFIED;
                     }
                 }
             }
@@ -1043,11 +1056,11 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues )
                 {
                     Any aOldValue = xAdditionalPropSet->getPropertyValue(
                                                                 rValue.Name );
-                    xAdditionalPropSet->setPropertyValue(
-                                                rValue.Name, rValue.Value );
-
                     if ( aOldValue != rValue.Value )
                     {
+                        xAdditionalPropSet->setPropertyValue(
+                                                rValue.Name, rValue.Value );
+
                         aEvent.PropertyName = rValue.Name;
                         aEvent.OldValue     = aOldValue;
                         aEvent.NewValue     = rValue.Value;
@@ -1301,6 +1314,12 @@ void Content::insert(
     if ( m_eState == TRANSIENT )
     {
         m_eState = PERSISTENT;
+
+        // Take over correct default values from underlying packager...
+        loadData( m_pProvider,
+                  m_aUri,
+                  m_aProps,
+                  Reference< XHierarchicalNameAccess >() );
 
         aGuard.clear();
         inserted();
@@ -1643,7 +1662,7 @@ sal_Bool Content::exchangeIdentity(
     }
 
     VOS_ENSURE( sal_False,
-                "Content::exchangeIdentity - Panic! Cannot exchange identity!" );
+            "Content::exchangeIdentity - Panic! Cannot exchange identity!" );
     return sal_False;
 }
 
@@ -1770,7 +1789,7 @@ sal_Bool Content::loadData( ContentProvider* pProvider,
             if ( !xPropSet.is() )
             {
                 VOS_ENSURE( sal_False,
-                            "Content::loadData - Got no XPropertySet interface!" );
+                        "Content::loadData - Got no XPropertySet interface!" );
                 return sal_False;
             }
 
@@ -1856,15 +1875,9 @@ sal_Bool Content::loadData( ContentProvider* pProvider,
             {
                 try
                 {
-#if SUPD>617
                     Any aCompressed
                         = xPropSet->getPropertyValue(
                             OUString::createFromAscii( "Compressed" ) );
-#else
-                    Any aCompressed
-                        = xPropSet->getPropertyValue(
-                            OUString::createFromAscii( "Compress" ) ); // Not Compressed !!!
-#endif
                     if ( !( aCompressed >>= rProps.bCompressed ) )
                     {
                         VOS_ENSURE( sal_False,
@@ -2000,25 +2013,29 @@ sal_Bool Content::storeData( const Reference< XInputStream >& xStream )
         catch ( IllegalArgumentException & )
         {
             // insertByName
-            VOS_ENSURE( sal_False, "Content::storeData - insertByName failed!" );
+            VOS_ENSURE( sal_False,
+                        "Content::storeData - insertByName failed!" );
             return sal_False;
         }
         catch ( ElementExistException & )
         {
             // insertByName
-            VOS_ENSURE( sal_False, "Content::storeData - insertByName failed!" );
+            VOS_ENSURE( sal_False,
+                        "Content::storeData - insertByName failed!" );
             return sal_False;
         }
         catch ( WrappedTargetException & )
         {
             // insertByName
-            VOS_ENSURE( sal_False, "Content::storeData - insertByName failed!" );
+            VOS_ENSURE( sal_False,
+                        "Content::storeData - insertByName failed!" );
             return sal_False;
         }
         catch ( NoSuchElementException & )
         {
             // getByHierarchicalName
-            VOS_ENSURE( sal_False, "Content::storeData - getByHierarchicalName failed!" );
+            VOS_ENSURE( sal_False,
+                        "Content::storeData - getByHierarchicalName failed!" );
             return sal_False;
         }
         catch ( Exception & )
@@ -2049,19 +2066,24 @@ sal_Bool Content::storeData( const Reference< XInputStream >& xStream )
         // Store property values...
         //////////////////////////////////////////////////////////////////
 
-        xPropSet->setPropertyValue( OUString::createFromAscii( "MediaType" ),
-                                    makeAny( m_aProps.aMediaType ) );
+        if ( m_nModifiedProps & MEDIATYPE_MODIFIED )
+        {
+            xPropSet->setPropertyValue(
+                                OUString::createFromAscii( "MediaType" ),
+                                makeAny( m_aProps.aMediaType ) );
+            m_nModifiedProps &= ~MEDIATYPE_MODIFIED;
+        }
 
 #if SUPD>616
-#if SUPD>617
-        if ( !isFolder() )
-            xPropSet->setPropertyValue( OUString::createFromAscii( "Compressed" ),
-                                        makeAny( m_aProps.bCompressed ) );
-#else
-        if ( !isFolder() )
-            xPropSet->setPropertyValue( OUString::createFromAscii( "Compress" ), // Not Compressed !!!
-                                        makeAny( m_aProps.bCompressed ) );
-#endif
+        if ( m_nModifiedProps & COMPRESSED_MODIFIED )
+        {
+            if ( !isFolder() )
+                xPropSet->setPropertyValue(
+                                OUString::createFromAscii( "Compressed" ),
+                                makeAny( m_aProps.bCompressed ) );
+
+            m_nModifiedProps &= ~COMPRESSED_MODIFIED;
+        }
 #endif
 
         //////////////////////////////////////////////////////////////////

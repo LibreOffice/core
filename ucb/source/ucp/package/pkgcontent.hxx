@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-24 12:42:16 $
+ *  last change: $Author: kso $ $Date: 2001-02-22 10:57:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,8 +130,16 @@ struct ContentProperties
     sal_Bool         bCompressed;  // Compressed
 #endif
 
+#if SUPD>616
     ContentProperties()
-    : bIsDocument( sal_True ), bIsFolder( sal_False ) {}
+    : bIsDocument( sal_True ), bIsFolder( sal_False ), nSize( 0 ),
+      bCompressed( sal_True ) {}
+#else
+    ContentProperties()
+    : bIsDocument( sal_True ), bIsFolder( sal_False ), nSize( 0 ) {}
+#endif
+
+    ContentProperties( const ::rtl::OUString& rContentType );
 };
 
 //=========================================================================
@@ -153,6 +161,7 @@ class Content : public ::ucb::ContentImplHelper,
     com::sun::star::uno::Reference<
         com::sun::star::container::XHierarchicalNameAccess >    m_xPackage;
     ContentProvider*        m_pProvider;
+    sal_uInt32              m_nModifiedProps;
 
 private:
     Content( const com::sun::star::uno::Reference<

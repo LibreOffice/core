@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-20 16:20:44 $
+ *  last change: $Author: kso $ $Date: 2001-02-22 10:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -939,11 +939,10 @@ Any SAL_CALL Content::execute( const Command& aCommand,
   else
     {
       //////////////////////////////////////////////////////////////////
-      // Unknown command
+      // Unsupported command
       //////////////////////////////////////////////////////////////////
 
-      VOS_ENSURE( sal_False,
-          "Content::execute - unknown command!" );
+      VOS_ENSURE( sal_False, "Content::execute - unsupported command!" );
       throw CommandAbortedException();
     }
 
@@ -1452,23 +1451,21 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues,
             {
                 if ( aNewValue != m_aProps.aTitle )
                   {
-                    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
-
-                    m_aProps.aTitle = aNewValue;
-                    m_aProps.aEscapedTitle
-                        = NeonUri::escapeSegment( aNewValue );
+                    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
                     // modified title -> modified URL -> exchange !
                     if ( !_transient )
                         bExchange = sal_True;
-
-                    aGuard.clear();
 
                     aEvent.PropertyName = rValue.Name;
                     aEvent.OldValue     = makeAny( m_aProps.aTitle );
                     aEvent.NewValue     = makeAny( aNewValue );
 
                     aChanges.getArray()[ nChanged ] = aEvent;
+
+                    m_aProps.aTitle = aNewValue;
+                    m_aProps.aEscapedTitle
+                        = NeonUri::escapeSegment( aNewValue );
                     nChanged++;
                   }
             }
@@ -1477,6 +1474,49 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues,
       else if ( rValue.Name.compareToAscii( "MediaType" ) == 0 )
     {
       // Read-only property!
+    }
+    else
+    {
+        // Not a Core Property! Maybe it's an Additional Core Property?!
+
+        if ( !bTriedToGetAdditonalPropSet && !xAdditionalPropSet.is() )
+        {
+            xAdditionalPropSet = getAdditionalPropertySet( sal_False );
+            bTriedToGetAdditonalPropSet = sal_True;
+        }
+
+        if ( xAdditionalPropSet.is() )
+        {
+            try
+            {
+                Any aOldValue = xAdditionalPropSet->getPropertyValue(
+                                                            rValue.Name );
+                if ( aOldValue != rValue.Value )
+                {
+                    xAdditionalPropSet->setPropertyValue(
+                                            rValue.Name, rValue.Value );
+
+                    aEvent.PropertyName = rValue.Name;
+                    aEvent.OldValue     = aOldValue;
+                    aEvent.NewValue     = rValue.Value;
+
+                    aChanges.getArray()[ nChanged ] = aEvent;
+                    nChanged++;
+                }
+            }
+            catch ( UnknownPropertyException )
+            {
+            }
+            catch ( WrappedTargetException )
+            {
+            }
+            catch ( PropertyVetoException )
+            {
+            }
+            catch ( IllegalArgumentException )
+            {
+            }
+        }
     }
   }
 
