@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mt $ $Date: 2002-06-14 08:46:50 $
+ *  last change: $Author: obr $ $Date: 2002-08-23 10:07:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,9 @@
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_BRIDGE_XACCESSIBLETOPWINDOWMAP_HPP_
 #include <drafts/com/sun/star/accessibility/bridge/XAccessibleTopWindowMap.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_XEXTENDEDTOOLKIT_HPP_
+#include <drafts/com/sun/star/awt/XExtendedToolkit.hpp>
+#endif
 
 #include <com/sun/star/lang/XComponent.hpp>
 
@@ -124,6 +127,7 @@
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
+using namespace drafts::com::sun::star::awt;
 using namespace drafts::com::sun::star::accessibility::bridge;
 using namespace rtl;
 
@@ -277,8 +281,18 @@ bool ImplInitAccessBridge()
 
             if(xFactory.is())
             {
-                pSVData->mxAccessBridge = Reference< XAccessibleTopWindowMap >( xFactory->createInstance(
-                                                                                                         OUString::createFromAscii( "drafts.com.sun.star.accessibility.bridge.AccessBridge" ) ), UNO_QUERY );
+                Reference< XExtendedToolkit > xToolkit =
+                    Reference< XExtendedToolkit >(Application::GetVCLToolkit(), UNO_QUERY);
+
+                Sequence< Any > arguments(1);
+                arguments[0] = makeAny(xToolkit);
+
+                pSVData->mxAccessBridge = Reference< XAccessibleTopWindowMap >(
+                    xFactory->createInstanceWithArguments(
+                        OUString::createFromAscii( "drafts.com.sun.star.accessibility.bridge.AccessBridge" ),
+                        arguments
+                    ), UNO_QUERY );
+
                 if( !pSVData->mxAccessBridge.is() )
                     bSuccess = false;
             }
