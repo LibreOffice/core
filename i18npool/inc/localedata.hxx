@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedata.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-11-12 16:23:40 $
+ *  last change: $Author: bustamam $ $Date: 2002-03-16 18:38:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/string.hxx>
 #include <tools/list.hxx>
-#include <tableelement.h>
-#include <osl/module.h>
+#include <osl/module.hxx>
 
 //
 #ifndef _I18N_DEFAULT_NUMBERING_PROVIDER_HXX_
@@ -113,62 +112,67 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
+using namespace com::sun::star::i18n;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+using namespace com::sun::star;
+using namespace rtl;
+
+namespace com { namespace sun { namespace star { namespace i18n {
+
 class LocaleData : public cppu::WeakImplHelper2
 <
-    ::com::sun::star::i18n::XLocaleData,
-    ::com::sun::star::lang::XServiceInfo
+    XLocaleData,
+    XServiceInfo
 >
 {
-
-
 public:
     LocaleData(){
+        cachedItem = NULL;
     }
     ~LocaleData();
 
-    virtual ::com::sun::star::i18n::LanguageCountryInfo SAL_CALL getLanguageCountryInfo( const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::i18n::LocaleDataItem SAL_CALL getLocaleItem( const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Calendar > SAL_CALL getAllCalendars( const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency > SAL_CALL getAllCurrencies( const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::FormatElement > SAL_CALL getAllFormats( const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Implementation > SAL_CALL getCollatorImplementations( const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getTransliterations( const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::i18n::ForbiddenCharacters SAL_CALL getForbiddenCharacters( const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getReservedWord( const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException) ;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > SAL_CALL getAllInstalledLocaleNames() throw(::com::sun::star::uno::RuntimeException);
+    virtual LanguageCountryInfo SAL_CALL getLanguageCountryInfo( const lang::Locale& rLocale ) throw(RuntimeException);
+    virtual LocaleDataItem SAL_CALL getLocaleItem( const lang::Locale& rLocale ) throw(RuntimeException);
+    virtual Sequence< i18n::Calendar > SAL_CALL getAllCalendars( const lang::Locale& rLocale ) throw(RuntimeException);
+    virtual Sequence< Currency > SAL_CALL getAllCurrencies( const lang::Locale& rLocale ) throw(RuntimeException);
+    virtual Sequence< FormatElement > SAL_CALL getAllFormats( const lang::Locale& rLocale ) throw(RuntimeException);
+    virtual Sequence< Implementation > SAL_CALL getCollatorImplementations( const lang::Locale& rLocale ) throw(RuntimeException);
+    virtual Sequence< OUString > SAL_CALL getTransliterations( const lang::Locale& rLocale ) throw(RuntimeException);
+    virtual ForbiddenCharacters SAL_CALL getForbiddenCharacters( const lang::Locale& rLocale ) throw(RuntimeException);
+    virtual Sequence< OUString > SAL_CALL getReservedWord( const lang::Locale& rLocale ) throw(RuntimeException) ;
+    virtual Sequence< lang::Locale > SAL_CALL getAllInstalledLocaleNames() throw(RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSearchOptions( const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getCollationOptions( const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > SAL_CALL getContinuousNumberingLevels( const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > > SAL_CALL getOutlineNumberingLevels( const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException);
+    virtual Sequence< OUString > SAL_CALL getSearchOptions( const lang::Locale& rLocale ) throw(RuntimeException);
+    virtual Sequence< OUString > SAL_CALL getCollationOptions( const lang::Locale& rLocale ) throw(RuntimeException);
+    virtual Sequence< Sequence< beans::PropertyValue > > SAL_CALL getContinuousNumberingLevels( const lang::Locale& rLocale ) throw(RuntimeException);
+    virtual Sequence< Reference< container::XIndexAccess > > SAL_CALL getOutlineNumberingLevels( const lang::Locale& rLocale ) throw(RuntimeException);
 
     //XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName(void)
-                throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName)
-                throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void)
-                throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getImplementationName() throw( RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( RuntimeException );
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( RuntimeException );
 
 private :
     struct lookupTableItem {
-        ::rtl::OUString adllName;
-        oslModule dllHandle;
+        lookupTableItem(const sal_Char *name, osl::Module* m) : dllName(name), module(m) {}
+        const sal_Char* dllName;
+        const sal_Char* localeName;
+        lang::Locale aLocale;
+        osl::Module *module;
+        sal_Bool equals(const lang::Locale& rLocale) {
+        return ((rLocale.Language == aLocale.Language &&
+            rLocale.Country == aLocale.Country &&
+            rLocale.Variant == aLocale.Variant) ? sal_True : sal_False);
+        }
     };
-
     List lookupTable;
+    lookupTableItem *cachedItem;
 
-//  static const TableElement  dllsTable[];
-    static const sal_Int16 nbOfLocales;
-    void* getFunctionSymbol( const ::com::sun::star::lang::Locale& rLocale,
-            const sal_Char* pFunction, sal_Bool bFallBack = sal_True );
-    void setFunctionName( const ::com::sun::star::lang::Locale& rLocale,
-            const ::rtl::OUString& function, ::rtl::OUString& dllName,
-            ::rtl::OUString& functionName, sal_Bool bFallBack );
-    sal_Bool  SAL_CALL lookupDLLName(const ::rtl::OUString& localeName, TableElement& element);
-    TableElement SAL_CALL getDLLName( const ::com::sun::star::lang::Locale& rLocale,
-            sal_Bool bFallBack );
-    oslModule getModuleHandle(const ::rtl::OUString& dllName);
+    void* SAL_CALL getFunctionSymbol( const lang::Locale& rLocale, const sal_Char* pFunction ) throw( RuntimeException );
+    void* SAL_CALL getFunctionSymbolByName( const OUString& localeName, const sal_Char* pFunction );
 };
+
+} } } }
 
 #endif // _I18N_LOCALEDATA_HXX_
