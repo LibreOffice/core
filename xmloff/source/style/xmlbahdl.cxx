@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbahdl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:52:30 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:26:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,6 +392,45 @@ sal_Bool XMLPercentPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+// class XMLNegPercentPropHdl
+//
+
+XMLNegPercentPropHdl::~XMLNegPercentPropHdl()
+{
+    // nothing to do
+}
+
+sal_Bool XMLNegPercentPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRet = sal_False;
+
+    sal_Int32 nValue = 0;
+    bRet = rUnitConverter.convertPercent( nValue, rStrImpValue );
+    lcl_xmloff_setAny( rValue, 100-nValue, nBytes );
+
+    return bRet;
+}
+
+sal_Bool XMLNegPercentPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRet = sal_False;
+    sal_Int32 nValue;
+      OUStringBuffer aOut;
+
+    if( lcl_xmloff_getAny( rValue, nValue, nBytes ) )
+    {
+         rUnitConverter.convertPercent( aOut, 100-nValue );
+        rStrExpValue = aOut.makeStringAndClear();
+
+        bRet = sal_True;
+    }
+
+    return bRet;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
 // class XMLMeasurePxPropHdl
 //
 
@@ -498,6 +537,30 @@ sal_Bool XMLStringPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue,
 
     return bRet;
 }
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// class XMLStyleNamePropHdl
+//
+
+XMLStyleNamePropHdl::~XMLStyleNamePropHdl()
+{
+    // Nothing to do
+}
+
+sal_Bool XMLStyleNamePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRet = sal_False;
+
+    if( rValue >>= rStrExpValue )
+    {
+        rStrExpValue = rUnitConverter.encodeStyleName( rStrExpValue );
+        bRet = sal_True;
+    }
+
+    return bRet;
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////
 //
