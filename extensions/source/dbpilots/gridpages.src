@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridpages.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 07:45:14 $
+ *  last change: $Author: fs $ $Date: 2001-05-30 16:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,13 +93,16 @@ TabPage RID_PAGE_GW_FIELDSELECTION
 
     FixedLine FL_FRAME
     {
-        Pos = MAP_APPFONT ( 4 , 3  ) ;
+        Pos = MAP_APPFONT ( 4 , 40  ) ;
         Size = MAP_APPFONT ( WINDOW_SIZE_X - 8 , 8 ) ;
+        Text = "Tabellenelement";
+        Text [ english ] = "Table Control";
+        Text [ english_us ] = "Table Element";
     };
 
     FixedText FT_EXISTING_FIELDS
     {
-        Pos = MAP_APPFONT ( 7, 15 );
+        Pos = MAP_APPFONT ( 7, 52 );
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 13, 8 );
         Text = "Vorhandene Felder";
         Text [ english ] = "Existing fields";
@@ -128,8 +131,8 @@ TabPage RID_PAGE_GW_FIELDSELECTION
     };
     ListBox LB_EXISTING_FIELDS
     {
-        Pos = MAP_APPFONT ( 7 , 26  ) ;
-        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 13, WINDOW_SIZE_Y - 26 - 6 ) ;
+        Pos = MAP_APPFONT ( 7 , 63  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 13, WINDOW_SIZE_Y - 63 - 6 ) ;
         SVLook = TRUE ;
         Border = TRUE ;
         AutoHScroll = TRUE ;
@@ -138,31 +141,31 @@ TabPage RID_PAGE_GW_FIELDSELECTION
     };
     PushButton PB_FIELDRIGHT
     {
-        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2, 26 );
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2, 63 );
         Size = MAP_APPFONT ( ITEM_BUTTON_SIZE_X, ITEM_BUTTON_SIZE_Y );
         Text = "->";
     };
     PushButton PB_ALLFIELDSRIGHT
     {
-        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2, 26 + ITEM_BUTTON_SIZE_Y + 3 );
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2, 63 + ITEM_BUTTON_SIZE_Y + 3 );
         Size = MAP_APPFONT ( ITEM_BUTTON_SIZE_X, ITEM_BUTTON_SIZE_Y );
         Text = "=>>";
     };
     PushButton PB_FIELDLEFT
     {
-        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2, 26 + ITEM_BUTTON_SIZE_Y + 3 + ITEM_BUTTON_SIZE_Y + 12 );
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2, 63 + ITEM_BUTTON_SIZE_Y + 3 + ITEM_BUTTON_SIZE_Y + 12 );
         Size = MAP_APPFONT ( ITEM_BUTTON_SIZE_X, ITEM_BUTTON_SIZE_Y );
         Text = "<-";
     };
     PushButton PB_ALLFIELDSLEFT
     {
-        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2, 26 + ITEM_BUTTON_SIZE_Y + 3 + ITEM_BUTTON_SIZE_Y + 12 + ITEM_BUTTON_SIZE_Y + 3 );
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2, 63 + ITEM_BUTTON_SIZE_Y + 3 + ITEM_BUTTON_SIZE_Y + 12 + ITEM_BUTTON_SIZE_Y + 3 );
         Size = MAP_APPFONT ( ITEM_BUTTON_SIZE_X, ITEM_BUTTON_SIZE_Y );
         Text = "<<=";
     };
     FixedText FT_SELECTED_FIELDS
     {
-        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + ITEM_BUTTON_SIZE_X / 2 + 6, 15 );
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + ITEM_BUTTON_SIZE_X / 2 + 6, 52 );
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 13, 8 );
         Text = "Ausgewählte Felder";
         Text [ english ] = "Selected fields";
@@ -191,8 +194,8 @@ TabPage RID_PAGE_GW_FIELDSELECTION
     };
     ListBox LB_SELECTED_FIELDS
     {
-        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + ITEM_BUTTON_SIZE_X / 2 + 6 , 26  ) ;
-        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 13, WINDOW_SIZE_Y - 26 - 6 ) ;
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + ITEM_BUTTON_SIZE_X / 2 + 6 , 63  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 13, WINDOW_SIZE_Y - 63 - 6 ) ;
         SVLook = TRUE ;
         Border = TRUE ;
         AutoHScroll = TRUE ;
@@ -262,6 +265,9 @@ String RID_STR_TIMEPOSTFIX
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/05/17 07:45:14  kz
+ *  Merge SRC632: 17.05.01 - 09:45:37 (NoBranch)
+ *
  *  Revision 1.6  2001/05/12 06:51:34  rt
  *  Merge SRC631: 12.05.01 - 08:51:55 (NoBranch)
  *

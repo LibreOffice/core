@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombopages.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-30 15:32:13 $
+ *  last change: $Author: fs $ $Date: 2001-05-30 16:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,13 +94,16 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_TABLE
 
     FixedLine FL_FRAME
     {
-        Pos = MAP_APPFONT ( 4 , 3  ) ;
+        Pos = MAP_APPFONT ( 4 , 40  ) ;
         Size = MAP_APPFONT ( WINDOW_SIZE_X - 8 , 8 ) ;
+        Text = "Kontrollfeld";
+        Text [ english ] = "Control";
+        Text [ english_us ] = "Control";
     };
 
     FixedText FT_SELECTTABLE_LABEL
     {
-        Pos = MAP_APPFONT ( 7 , 15  ) ;
+        Pos = MAP_APPFONT ( 7 , 52  ) ;
         Size = MAP_APPFONT ( 120, WINDOW_SIZE_Y - 21 ) ;
         WordBreak = TRUE;
         Group = TRUE;
@@ -131,8 +134,8 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_TABLE
     };
     ListBox LB_SELECTTABLE
     {
-        Pos = MAP_APPFONT ( 130 , 15  ) ;
-        Size = MAP_APPFONT ( WINDOW_SIZE_X - 130 - 7, WINDOW_SIZE_Y - 21 ) ;
+        Pos = MAP_APPFONT ( 130 , 52  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 130 - 7, WINDOW_SIZE_Y - 52 - 6 ) ;
         SVLook = TRUE ;
         Border = TRUE ;
         AutoHScroll = TRUE ;
@@ -493,42 +496,6 @@ String RID_STR_COMBOWIZ_DBFIELD
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
- *  Revision 1.12  2001/05/17 07:48:36  kz
- *  Merge SRC632: 17.05.01 - 09:48:55 (NoBranch)
- *
- *  Revision 1.11  2001/05/12 06:54:26  rt
- *  Merge SRC631: 12.05.01 - 08:54:43 (NoBranch)
- *
- *  Revision 1.10  2001/05/10 06:11:39  kz
- *  Merge SRC631: 05/10/01 - 08:11:52 (NoBranch)
- *
- *  Revision 1.9  2001/05/04 20:17:58  kz
- *  Merge SRC630: 05/04/01 - 22:17:57 (NoBranch)
- *
- *  Revision 1.8  2001/04/26 19:54:16  kz
- *  Merge SRC630: 26.04.01 - 21:53:44 (NoBranch)
- *
- *  Revision 1.7  2001/03/30 13:15:43  fs
- *  added a description to the laste page of the list box wizard
- *
- *  Revision 1.6  2001/03/21 20:33:32  kz
- *  Merge SRC626: 21.03.01 - 21:33:27 (NoBranch)
- *
- *  Revision 1.5  2001/03/19 11:49:09  kz
- *  Merge SRC625: 19.03.01 - 12:49:04 (NoBranch)
- *
- *  Revision 1.4  2001/03/14 13:29:20  fs
- *  & -> ~
- *
- *  Revision 1.3  2001/03/09 20:50:09  kz
- *  Merge SRC624: 09.03.01 - 21:50:15 (NoBranch)
- *
- *  Revision 1.2  2001/02/28 09:18:30  fs
- *  finalized the list/combo wizard
- *
- *  Revision 1.1  2001/02/23 15:19:54  fs
- *  initial checkin - list-/combobox wizard (not comlpletely finished yet)
- *
  *
  *  Revision 1.0 21.02.01 16:16:18  fs
  ************************************************************************/

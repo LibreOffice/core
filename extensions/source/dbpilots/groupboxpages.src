@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupboxpages.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 07:46:44 $
+ *  last change: $Author: fs $ $Date: 2001-05-30 16:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,12 +73,12 @@ TabPage RID_PAGE_GROUPRADIOSELECTION
 
     FixedLine FL_DATA
     {
-        Pos = MAP_APPFONT ( 4 , 3  ) ;
+        Pos = MAP_APPFONT ( 4 , 40  ) ;
         Size = MAP_APPFONT ( WINDOW_SIZE_X - 8 , 8 ) ;
     };
     FixedText FT_RADIOLABELS
     {
-        Pos = MAP_APPFONT ( 7 , 15  ) ;
+        Pos = MAP_APPFONT ( 7 , 52  ) ;
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 13, 24 ) ;
         WordBreak = TRUE;
         Group = TRUE;
@@ -107,26 +107,26 @@ TabPage RID_PAGE_GROUPRADIOSELECTION
     };
     Edit ET_RADIOLABELS
     {
-        Pos = MAP_APPFONT ( 7 , 42  ) ;
+        Pos = MAP_APPFONT ( 7 , 79  ) ;
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 13, 12 ) ;
         SVLook = TRUE ;
         Border = TRUE ;
     };
     PushButton PB_MOVETORIGHT
     {
-        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 , 42  ) ;
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 , 79  ) ;
         Size = MAP_APPFONT ( ITEM_BUTTON_SIZE_X , ITEM_BUTTON_SIZE_Y ) ;
         Text = "~>>";
     };
     PushButton PB_MOVETOLEFT
     {
-        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 , 42 + ITEM_BUTTON_SIZE_Y + 3 ) ;
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 , 79 + ITEM_BUTTON_SIZE_Y + 3 ) ;
         Size = MAP_APPFONT ( ITEM_BUTTON_SIZE_X , ITEM_BUTTON_SIZE_Y ) ;
         Text = "~<<";
     };
     FixedText FT_RADIOBUTTONS
     {
-        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + ITEM_BUTTON_SIZE_X / 2 + 6 , 15  ) ;
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + ITEM_BUTTON_SIZE_X / 2 + 6 , 52  ) ;
         Size = MAP_APPFONT ( WINDOW_SIZE_X - WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 6 - 7, 8 ) ;
         Group = TRUE;
         Text = "~Optionsfelder";
@@ -154,8 +154,8 @@ TabPage RID_PAGE_GROUPRADIOSELECTION
     };
     ListBox LB_RADIOBUTTONS
     {
-        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + ITEM_BUTTON_SIZE_X / 2 + 6 , 42  ) ;
-        Size = MAP_APPFONT ( WINDOW_SIZE_X - WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 6 - 7, WINDOW_SIZE_Y - 42 - 6 ) ;
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + ITEM_BUTTON_SIZE_X / 2 + 6 , 79  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 6 - 7, WINDOW_SIZE_Y - 79 - 6 ) ;
         SVLook = TRUE ;
         Border = TRUE ;
         AutoHScroll = TRUE ;
@@ -589,6 +589,9 @@ String RID_STR_GROUPWIZ_DBFIELD
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/05/17 07:46:44  kz
+ *  Merge SRC632: 17.05.01 - 09:47:03 (NoBranch)
+ *
  *  Revision 1.8  2001/05/12 06:53:05  rt
  *  Merge SRC631: 12.05.01 - 08:53:23 (NoBranch)
  *
