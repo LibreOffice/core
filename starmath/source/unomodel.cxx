@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-16 12:00:25 $
+ *  last change: $Author: tl $ $Date: 2001-05-17 10:02:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,6 +621,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                         SmSym aSymbol ( pDescriptor->sName, aFont, static_cast < sal_Unicode > (pDescriptor->nCharacter),
                                         pDescriptor->sSymbolSet );
                         aSymbol.SetExportName ( pDescriptor->sExportName );
+                        aSymbol.SetDocSymbol( TRUE );
                         rManager.AddReplaceSymbol ( aSymbol );
                     }
                 }
