@@ -2,9 +2,9 @@
  *
  *  $RCSfile: widorp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2003-09-25 10:50:08 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 11:26:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,18 +100,8 @@ public:
     // Es wird dabei davon ausgegangen, dass rLine auf der letzten Zeile
     // steht, die nicht mehr passt.
 
-#ifdef VERTICAL_LAYOUT
-    void SetRstHeight( const SwTxtMargin &rLine )
-    {
-        if ( pFrm->IsVertical() )
-            nRstHeight = nOrigin - pFrm->SwitchHorizontalToVertical( rLine.Y() );
-        else
-            nRstHeight = rLine.Y() - nOrigin;
-    }
-#else
-    void SetRstHeight( const SwTxtMargin &rLine ) { nRstHeight = rLine.Y() - nOrigin; }
-#endif
-
+    // OD 2004-02-27 #106629# - no longer inline
+    void SetRstHeight( const SwTxtMargin &rLine );
     SwTwips GetRstHeight() const { return nRstHeight; }
 };
 
