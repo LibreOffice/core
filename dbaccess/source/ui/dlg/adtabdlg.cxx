@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:39:26 $
+ *  last change: $Author: oj $ $Date: 2002-02-11 13:02:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,17 +200,12 @@ void OAddTableDlg::AddTable()
 //------------------------------------------------------------------------------
 IMPL_LINK( OAddTableDlg, AddClickHdl, Button*, pButton )
 {
-    if (IsAddAllowed())
-        AddTable();
-
-    if (!IsAddAllowed())
-        Close();
-
+    TableListDoubleClickHdl(NULL);
     return 0;
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK( OAddTableDlg, TableListDoubleClickHdl, ListBox *, pListBox )
+IMPL_LINK( OAddTableDlg, TableListDoubleClickHdl, ListBox *, EMPTY_ARG )
 {
     if (IsAddAllowed())
         AddTable();

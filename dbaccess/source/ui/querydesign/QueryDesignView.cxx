@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 08:08:30 $
+ *  last change: $Author: oj $ $Date: 2002-02-11 12:55:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2204,6 +2204,7 @@ OQueryDesignView::OQueryDesignView( OQueryContainerWindow* _pParent,
     :OQueryView(_pParent,_pController,_rFactory)
     ,m_aSplitter( this )
     ,m_eChildFocus(NONE)
+    ,m_bInKeyEvent(sal_False)
 {
     try
     {
@@ -2493,37 +2494,30 @@ long OQueryDesignView::PreNotify(NotifyEvent& rNEvt)
     switch (rNEvt.GetType())
     {
         case EVENT_KEYINPUT:
-        {
-            const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
-            const KeyCode& rCode = pKeyEvent->GetKeyCode();
-            if (rCode.IsMod1() || rCode.IsMod2())
-                break;
-            if (rCode.GetCode() != KEY_F6)
-                break;
-
-            if (m_pTableView && m_pTableView->HasChildPathFocus())
             {
-                if (m_pSelectionBox)
+                const KeyCode& rCode = rNEvt.GetKeyEvent()->GetKeyCode();
+                if (!rCode.IsMod1() && !rCode.IsMod2() && rCode.GetCode() == KEY_F6)
                 {
-                    m_pSelectionBox->GrabFocus();
-                    bHandled = TRUE;
+                    if ( m_pSelectionBox && m_pTableView && m_pTableView->HasChildPathFocus() && !rCode.IsShift() )
+                    {
+                        m_pSelectionBox->GrabFocus();
+                        m_eChildFocus = SELECTION;
+                        bHandled = sal_True;
+                    }
+                    else if ( m_pTableView && m_pSelectionBox && m_pSelectionBox->HasChildPathFocus() && rCode.IsShift() )
+                    {
+                        m_pTableView->GrabTabWinFocus();
+                        m_eChildFocus = TABLEVIEW;
+                        bHandled = sal_True;
+                    }
+                    else
+                        m_bInKeyEvent = sal_True;
                 }
             }
-            else if (m_pSelectionBox && m_pSelectionBox->HasChildPathFocus())
-            {
-                if (m_pTableView)
-                {
-                    m_pTableView->GrabTabWinFocus();
-                    bHandled = TRUE;
-                }
-            }
-        }
-        break;
+            break;
     }
 
-    if (!bHandled)
-        return OQueryView::PreNotify(rNEvt);
-    return 1L;
+    return bHandled ? 1L : OQueryView::PreNotify(rNEvt);
 }
 //------------------------------------------------------------------------------
 
@@ -2754,6 +2748,20 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(OTableFieldDescRef pE
 // -----------------------------------------------------------------------------
 void OQueryDesignView::GetFocus()
 {
+    // if true then we come from a PreNotify with KeyEvent F6
+    if ( m_bInKeyEvent )
+    {
+        switch( m_eChildFocus )
+        {
+            case TABLEVIEW:
+                m_pSelectionBox->GrabFocus();
+                break;
+            default:
+                m_pTableView->GrabTabWinFocus();
+        }
+        m_bInKeyEvent = sal_False;
+    }
+
     // set focus if no one has the focus
     if (m_pTableView && !m_pTableView->HasChildPathFocus() &&
         m_pSelectionBox && !m_pSelectionBox->HasChildPathFocus())

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinDesignView.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:57:11 $
+ *  last change: $Author: oj $ $Date: 2002-02-11 12:52:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@
 #ifndef DBAUI_JOINTABLEVIEW_HXX
 #include "JoinTableView.hxx"
 #endif
+//  #include <com/sun/star/util/URL.hdl>
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
@@ -132,9 +133,10 @@ using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::util;
 
 OJoinDesignView::OJoinDesignView(Window* _pParent, OJoinController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
-    :ODataView(_pParent,_rFactory)
+    :ODataView(_pParent,_pController,_rFactory)
     ,m_pController(_pController)
     ,m_pTableView(NULL)
     ,m_pAddTabDlg(NULL)
@@ -212,9 +214,3 @@ void OJoinDesignView::KeyInput( const KeyEvent& rEvt )
         m_pTableView->KeyInput( rEvt );
 }
 // -----------------------------------------------------------------------------
-
-
-
-
-
-

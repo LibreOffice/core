@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-08 09:09:36 $
+ *  last change: $Author: oj $ $Date: 2002-02-11 12:53:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1658,7 +1658,7 @@ void OJoinTableView::childCountChanged(sal_Int32 _nOldCount)
     pController->InvalidateFeature(ID_BROWSER_ADDTABLE);
     pController->InvalidateFeature(ID_RELATION_ADD_RELATION);
     if ( m_pAccessible )
-        m_pAccessible->notifyAccesibleEvent(3/* AccessibleEventId::ACCESSIBLE_CHILD_EVENT */,makeAny(_nOldCount),makeAny(GetTabWinCount() + getTableConnections()->size()));
+        m_pAccessible->notifyAccessibleEvent(3/* AccessibleEventId::ACCESSIBLE_CHILD_EVENT */,makeAny(_nOldCount),makeAny(GetTabWinCount() + getTableConnections()->size()));
 }
 // -----------------------------------------------------------------------------
 void OJoinTableView::addConnection(OTableConnection* _pConnection)

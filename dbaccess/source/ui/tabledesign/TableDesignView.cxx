@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignView.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-19 12:46:24 $
+ *  last change: $Author: oj $ $Date: 2002-02-11 13:01:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@ OTableDesignView::OTableDesignView( Window* pParent,
                                     const Reference< XMultiServiceFactory >& _rxOrb,
                                     OTableController* _pController
                                    ) :
-    ODataView( pParent ,_rxOrb )
+    ODataView( pParent ,_pController,_rxOrb )
     ,m_pController(_pController)
     ,m_eChildFocus(NONE)
 {

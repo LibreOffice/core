@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryViewSwitch.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 11:35:20 $
+ *  last change: $Author: oj $ $Date: 2002-02-11 12:56:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,23 @@ void OQueryViewSwitch::GetFocus()
         m_pTextView->GetFocus();
     else if ( m_pDesignView && m_pDesignView->IsVisible() )
         m_pDesignView->GetFocus();
+}
+// -----------------------------------------------------------------------------
+void OQueryViewSwitch::GrabFocus()
+{
+    if ( m_pTextView && m_pTextView->IsVisible() )
+        m_pTextView->GrabFocus();
+    else if ( m_pDesignView && m_pDesignView->IsVisible() )
+        m_pDesignView->GrabFocus();
+}
+// -----------------------------------------------------------------------------
+Window* OQueryViewSwitch::getActive() const
+{
+    Window* pRet = m_pDesignView;
+    if ( m_pTextView && m_pTextView->IsVisible() )
+        pRet = m_pTextView;
+
+    return pRet;
 }
 // -----------------------------------------------------------------------------
 void OQueryViewSwitch::setStatement(const ::rtl::OUString& _rsStatement)

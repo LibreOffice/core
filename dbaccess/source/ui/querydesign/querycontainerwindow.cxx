@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainerwindow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 12:56:16 $
+ *  last change: $Author: oj $ $Date: 2002-02-11 12:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ namespace dbaui
     //=====================================================================
     DBG_NAME(OQueryContainerWindow)
     OQueryContainerWindow::OQueryContainerWindow(Window* pParent, OQueryController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
-        :ODataView(pParent, _rFactory)
+        :ODataView(pParent,_pController, _rFactory)
         ,m_pBeamerSeparator( NULL )
         ,m_pBeamer(NULL)
         ,m_pViewSwitch(NULL)
@@ -224,13 +224,50 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     long OQueryContainerWindow::PreNotify( NotifyEvent& rNEvt )
     {
-        if(rNEvt.GetType() == EVENT_GETFOCUS && m_pViewSwitch)
+        BOOL bHandled = FALSE;
+        switch (rNEvt.GetType())
         {
-            m_pViewSwitch->getDesignView()->getController()->InvalidateFeature(SID_CUT);
-            m_pViewSwitch->getDesignView()->getController()->InvalidateFeature(SID_COPY);
-            m_pViewSwitch->getDesignView()->getController()->InvalidateFeature(SID_PASTE);
+            case EVENT_KEYINPUT:
+                {
+                    const KeyCode& rCode = rNEvt.GetKeyEvent()->GetKeyCode();
+                    if (    m_pViewSwitch
+                        &&  !rCode.IsMod1()
+                        &&  !rCode.IsMod2()
+                        &&  rCode.GetCode() == KEY_F6)
+                    {
+                        Window* pLeft = m_pViewSwitch->getActive();
+                        //  if ( !rCode.IsShift() )
+                        {
+                            if ( m_pBeamer && pLeft && pLeft->HasChildPathFocus() )
+                            {
+                                m_pBeamer->GrabFocus();
+                                bHandled = sal_True;
+                            }
+                            else if ( m_pBeamer && pLeft && m_pBeamer->HasChildPathFocus() )
+                            {
+                                pLeft->GrabFocus();
+                                bHandled = sal_True;
+                            }
+                            else if ( pLeft )
+                            {
+                                pLeft->GrabFocus();
+                                bHandled = sal_True;
+                            }
+                        }
+                    }
+                }
+
+                break;
+            case  EVENT_GETFOCUS:
+                if ( m_pViewSwitch )
+                {
+                    OJoinController* pController = m_pViewSwitch->getDesignView()->getController();
+                    pController->InvalidateFeature(SID_CUT);
+                    pController->InvalidateFeature(SID_COPY);
+                    pController->InvalidateFeature(SID_PASTE);
+                }
         }
-        return ODataView::PreNotify(rNEvt);
+        return bHandled ? 1L : ODataView::PreNotify(rNEvt);
     }
     // -----------------------------------------------------------------------------
     void OQueryContainerWindow::showPreview(const Reference<XFrame>& _xFrame)
@@ -273,6 +310,8 @@ namespace dbaui
             Resize();
         }
     }
+    // -----------------------------------------------------------------------------
+
 
 //.........................................................................
 }   // namespace dbaui
@@ -281,6 +320,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/09/20 12:56:16  oj
+ *  #92232# fixes for BIGINT type and new property HELPTEXT
+ *
  *  Revision 1.2  2001/09/07 10:05:58  fs
  *  #65293# syntax
  *
