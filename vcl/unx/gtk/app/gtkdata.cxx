@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkdata.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 13:36:06 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 16:41:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -700,8 +700,16 @@ void GtkXLib::Yield( BOOL bWait )
 
         if( bDispatchThread )
             g_main_context_iteration( NULL, bWait );
-        else
-            osl_waitCondition( m_aDispatchCondition, NULL );
+        else {
+            /* #i41693# in case the dispatch thread hangs in join
+             * for this thread the condition will never be set
+             * workaround: timeout of 1 second a emergency exit
+             */
+            TimeValue aValue;
+            aValue.Seconds = 1;
+            aValue.Nanosec = 0;
+            osl_waitCondition( m_aDispatchCondition, &aValue );
+        }
     }
 
     if( bDispatchThread )
