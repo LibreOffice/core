@@ -2,9 +2,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-24 14:55:12 $
+ *  last change: $Author: ab $ $Date: 2001-02-21 17:31:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,8 @@
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
 #endif
+#include "toolkit/controls/eventcontainer.hxx"
+
 
 #define GCM_PROPERTY_ID_POS_X       1
 #define GCM_PROPERTY_ID_POS_Y       2
@@ -96,6 +98,7 @@
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
+    using namespace ::com::sun::star::container;
     using namespace ::comphelper;
 
     //====================================================================
@@ -141,6 +144,12 @@
         if (!aReturn.hasValue() && m_xAggregate.is())
             aReturn = m_xAggregate->queryAggregation(_rType);
             // the interfaces our aggregate can provide
+
+        if (!aReturn.hasValue() && m_xAggregate.is())
+        {
+            aReturn = ::cppu::queryInterface( _rType,
+                static_cast< ::com::sun::star::script::XScriptEventsSupplier* >( this ) );
+        }
 
         return aReturn;
     }
@@ -204,6 +213,14 @@
         return OPropertySetAggregationHelper::createPropertySetInfo(getInfoHelper());
     }
 
+    //--------------------------------------------------------------------
+    Reference< XNameContainer > SAL_CALL OGeometryControlModel_Base::getEvents() throw(RuntimeException)
+    {
+        if( !mxEventContainer.is() )
+            mxEventContainer = (XNameContainer*)new ScriptEventContainer();
+        return mxEventContainer;
+    }
+
 //........................................................................
 // }    // namespace toolkit
 //........................................................................
@@ -211,6 +228,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/01/24 14:55:12  mt
+ *  model for dialog controls (weith pos/size)
+ *
  *
  *  Revision 1.0 17.01.01 11:35:20  fs
  ************************************************************************/
