@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocutl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-26 18:56:19 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:06:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef SC_DBDOCUTL_HXX
 #define SC_DBDOCUTL_HXX
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
@@ -80,7 +84,7 @@ namespace com { namespace sun { namespace star { namespace sdbc {
 class ScDatabaseDocUtil
 {
 public:
-    static void PutData( ScDocument* pDoc, USHORT nCol, USHORT nRow, USHORT nTab,
+    static void PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
                         const ::com::sun::star::uno::Reference<
                             ::com::sun::star::sdbc::XRow>& xRow, long nRowPos,
                         long nType, BOOL bCurrency, BOOL* pSimpleFlag = NULL );
