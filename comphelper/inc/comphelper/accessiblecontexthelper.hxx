@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecontexthelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-23 11:07:38 $
+ *  last change: $Author: fs $ $Date: 2002-04-26 05:51:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ namespace comphelper
     /** helper class for implementing an AccessibleContext
     */
     class OAccessibleContextHelper
-                :public ::comphelper::OMutexAndBroadcastHelper
+                :public ::comphelper::OBaseMutex
                 ,public OAccessibleContextHelper_Base
     {
     private:
@@ -152,7 +152,8 @@ namespace comphelper
         struct OAccessControl { friend class OContextEntryGuard; };
 
         // ensures that the object is alive
-        void ensureAlive( const OAccessControl& _rAccessControl ) const SAL_THROW( ( ::com::sun::star::lang::DisposedException ) );
+        inline  void            ensureAlive( const OAccessControl& _rAccessControl ) const SAL_THROW( ( ::com::sun::star::lang::DisposedException ) );
+        inline  ::osl::Mutex&   GetMutex( const OAccessControl& _rAccessControl );
 
     protected:
         // OComponentHelper
@@ -193,7 +194,23 @@ namespace comphelper
         ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext >
                     implGetParentContext() SAL_THROW( ( ::com::sun::star::uno::RuntimeException ) );
 
+        // access to the base class' broadcast helper/mutex
+        ::cppu::OBroadcastHelper&       GetBroadcastHelper()        { return rBHelper; }
+        const ::cppu::OBroadcastHelper& GetBroadcastHelper() const  { return rBHelper; }
+        ::osl::Mutex&                   GetMutex()                  { return m_aMutex; }
     };
+
+    //---------------------------------------------------------------------
+    inline  void OAccessibleContextHelper::ensureAlive( const OAccessControl& _rAccessControl ) const SAL_THROW( ( ::com::sun::star::lang::DisposedException ) )
+    {
+        ensureAlive();
+    }
+
+    //---------------------------------------------------------------------
+    inline  ::osl::Mutex& OAccessibleContextHelper::GetMutex( const OAccessControl& _rAccessControl )
+    {
+        return GetMutex();
+    }
 
     //=====================================================================
     //= OContextEntryGuard
@@ -233,7 +250,7 @@ namespace comphelper
 
     //.....................................................................
     inline OContextEntryGuard::OContextEntryGuard( OAccessibleContextHelper* _pContext  )
-        :OContextEntryGuard_Base( _pContext->GetMutex() )
+        :OContextEntryGuard_Base( _pContext->GetMutex( OAccessibleContextHelper::OAccessControl() ) )
     {
         _pContext->ensureAlive( OAccessibleContextHelper::OAccessControl() );
     }
@@ -253,6 +270,9 @@ namespace comphelper
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2002/04/23 11:07:38  fs
+ *  initial checkin - helper for implementing an XAccessibleContext
+ *
  *
  *  Revision 1.0 17.04.2002 15:47:54  fs
  ************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecontexthelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-23 11:10:30 $
+ *  last change: $Author: fs $ $Date: 2002-04-26 05:52:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ namespace comphelper
     ::cppu::OInterfaceContainerHelper* OContextHelper_Impl::getListenerContainer( sal_Bool _bCreate )
     {
         if ( !m_pEventListeners && _bCreate )
-            m_pEventListeners = new ::cppu::OInterfaceContainerHelper( m_pAntiImpl->GetMutex() );
+            m_pEventListeners = new ::cppu::OInterfaceContainerHelper( m_pAntiImpl->GetMutex( OAccessibleContextHelper::OAccessControl() ) );
         return m_pEventListeners;
     }
 
@@ -255,12 +255,6 @@ namespace comphelper
     }
 
     //---------------------------------------------------------------------
-    void OAccessibleContextHelper::ensureAlive( const OAccessControl& _rAccessControl ) const SAL_THROW( ( DisposedException ) )
-    {
-        ensureAlive();
-    }
-
-    //---------------------------------------------------------------------
     void OAccessibleContextHelper::ensureDisposed( )
     {
         if ( !GetBroadcastHelper().bDisposed )
@@ -355,6 +349,9 @@ namespace comphelper
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2002/04/23 11:10:30  fs
+ *  initial checkin - helper for implementing an XAccessibleContext
+ *
  *
  *  Revision 1.0 17.04.2002 16:06:46  fs
  ************************************************************************/
