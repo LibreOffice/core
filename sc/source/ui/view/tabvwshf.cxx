@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshf.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2002-05-22 07:22:30 $
+ *  last change: $Author: nn $ $Date: 2002-07-19 17:13:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,7 +307,13 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                             if(pDlg->IsTableBefore())
                             {
                                 if(nCount==1 && pDlg->GetFirstTable()->Len()>0)
+                                {
+                                    rReq.AppendItem( SfxStringItem( FID_INS_TABLE, *pDlg->GetFirstTable() ) );
+                                    rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, nTabNr + 1 ) );     // 1-based
+                                    rReq.Done();
+
                                     InsertTable( *pDlg->GetFirstTable(), nTabNr );
+                                }
                                 else
                                     InsertTables( NULL, nTabNr,nCount );
                             }
@@ -335,6 +341,10 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                                 if(nCount==1 && pDlg->GetFirstTable()->Len()>0)
                                 {
+                                    rReq.AppendItem( SfxStringItem( FID_INS_TABLE, *pDlg->GetFirstTable() ) );
+                                    rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, nTabAfter + 1 ) );      // 1-based
+                                    rReq.Done();
+
                                     InsertTable( *pDlg->GetFirstTable(), nTabAfter);
                                 }
                                 else
