@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CGDesign.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $  $Date: 2004-05-19 13:16:46 $
+ *  last change: $Author: obo $  $Date: 2004-09-08 14:17:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ public class CGDesign extends ConfigGroup implements XMLProvider {
 
     public short[] getStyle() {
         CGStyle style = ((CGStyle) ((CGSettings)root).cp_Styles.getElement(cp_Style));
-          return new short[] { (short) style.cp_Index };
+          return new short[] { (short) ((CGSettings)root).cp_Styles.getIndexOf(style)};
     }
 
     public void setStyle(short[] newStyle) {
