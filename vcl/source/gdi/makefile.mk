@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-18 16:18:17 $
+#   last change: $Author: rt $ $Date: 2005-01-31 13:22:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -124,12 +124,12 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/outdev4.obj 	\
             $(SLO)$/outdev5.obj 	\
             $(SLO)$/outdev6.obj 	\
+            $(SLO)$/virdev.obj      \
             $(SLO)$/fontcvt.obj		\
             $(SLO)$/print.obj		\
             $(SLO)$/print2.obj		\
             $(SLO)$/regband.obj 	\
             $(SLO)$/region.obj		\
-            $(SLO)$/virdev.obj		\
             $(SLO)$/wall.obj		\
             $(SLO)$/opengl.obj		\
             $(SLO)$/fontcfg.obj		\
@@ -151,7 +151,9 @@ EXCEPTIONSFILES=	$(SLO)$/outdev.obj		\
                     $(SLO)$/impgraph.obj	\
                     $(SLO)$/bmpconv.obj		\
                     $(SLO)$/pdfextoutdevdata.obj	\
-                    $(SLO)$/impimagetree.obj		
+                    $(SLO)$/impimagetree.obj		\
+                    $(SLO)$/virdev.obj
+                    
 
 # --- Targets ------------------------------------------------------
 
