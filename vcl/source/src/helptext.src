@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helptext.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2001-08-24 13:10:47 $
+ *  last change: $Author: rt $ $Date: 2001-08-29 08:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ String SV_HELPTEXT_MINIMIZE
     TEXT[ turkish ] = "Simge durumuna küçült";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Minimizar";
-    TEXT[ finnish ] = "Pienennä";
+    TEXT[ finnish ] = "Pienenn?";
 };
 
 String SV_HELPTEXT_MAXIMIZE
@@ -224,7 +224,7 @@ String SV_HELPTEXT_ROLLUP
     TEXT[ arabic ] = "Øí";
     TEXT[ turkish ] = "Kapat";
     TEXT[ catalan ] = "Ocultar";
-    TEXT[ finnish ] = "Vieritä ylös";
+    TEXT[ finnish ] = "Vierit? yl?";
 };
 
 String SV_HELPTEXT_HELP
@@ -278,7 +278,7 @@ String SV_HELPTEXT_ALWAYSVISIBLE
     TEXT[ turkish ] = "Daima görünür";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Siempre visible";
-    TEXT[ finnish ] = "Aina näkyvissä";
+    TEXT[ finnish ] = "Aina n?kyviss?";
 };
 
 String SV_HELPTEXT_FADEIN
@@ -305,7 +305,7 @@ String SV_HELPTEXT_FADEIN
     TEXT[ turkish ] = "Göster";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Mostrar";
-    TEXT[ finnish ] = "Näytä";
+    TEXT[ finnish ] = "N?yt?";
 };
 
 String SV_HELPTEXT_FADEOUT
@@ -386,8 +386,9 @@ String SV_HELPTEXT_SPLITFIXED
     TEXT[ turkish ] = "Sabitle";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Fijar";
-    TEXT[ finnish ] = "Stick";
+    TEXT[ finnish ] = "Kiinnitetty";
 };
+
 
 
 
