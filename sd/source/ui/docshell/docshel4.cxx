@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-15 09:25:06 $
+ *  last change: $Author: ka $ $Date: 2001-02-20 11:21:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -566,11 +566,14 @@ BOOL SdDrawDocShell::SaveAs( SvStorage* pStore )
 
     if( bRet )
     {
-        SdFilter*   pFilter = NULL;
-        SfxMedium   aMedium( pStore );
+        SdFilter* pFilter = NULL;
 
         if( pStore->GetVersion() >= SOFFICE_FILEFORMAT_60 )
+        {
+            SfxMedium aMedium( pStore );
             pFilter = new SdXMLFilter( aMedium, *this, sal_True );
+            bRet = pFilter->Export();
+        }
         else
         {
             OfficeApplication*  pApplication = OFF_APP();
@@ -583,10 +586,11 @@ BOOL SdDrawDocShell::SaveAs( SvStorage* pStore )
                     nVBWarning = SvxImportMSVBasic::GetSaveWarningOfMSVBAStorage( *this );
             }
 
+            SfxMedium aMedium( pStore );
             pFilter = new SdBINFilter( aMedium, *this, sal_True );
+            bRet = pFilter->Export();
         }
 
-        bRet = pFilter ? pFilter->Export() : FALSE;
         delete pFilter;
     }
 
