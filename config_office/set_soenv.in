@@ -86,7 +86,8 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $SHELL, $GCC_HOME,
      $SOLARINC, $LOCALINI, $MAC_LIB, $PATHEXTRA, $FRAMEWORKSHOME, $COMEX, $MULTITHREAD_OBJ, $PERL, 
      $COMP_ENV, $IENV, $ILIB, $WIN_INCLUDE, $JAVAHOME, $WIN_LIB, $PSDK_HOME, $USE_NEW_SDK, $NO_HIDS,
      $TEMP, $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
-     $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $USE_GCC3, $ENABLE_DEBUG, $ENABLE_STATIC_GTK );
+     $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $USE_GCC3, $ENABLE_DEBUG, $ENABLE_STATIC_GTK,
+     $PYTHONPATH, $PYTHONHOME );
 #
 #-------------------------------------------
 # IId. Declaring the aliases.
@@ -1041,15 +1042,29 @@ elsif ($platform eq "$Winnt")
           $PATH .= $ps.'$COMPATH';
        }
    }
-if ( $COM eq "MSC" && $COMEX eq "7" )
-{  # No solution for .NET yet!
-   # for MS-Visual Studio 6.0 to find mspdb60.dll (need by CL.EXE C/C++ Compiler) 
-   # and rcdll.dll (need by RC.EXE -- 32 bit Resource Compiler) location.
-   $COMPATH_ROOT      = $COMPATH;
-   $COMPATH_ROOT      =~ s/\/vc98$//i;
-   if ( $noldPATH !~ /[^\/]*\b$COMPATH_ROOT\/Common\/MSDev98\/Bin\b[^\/]*/ )
-   {   # In non-standard installations this directory might not exist.
-       $PATH .= $ps.$COMPATH_ROOT.'/Common/MSDev98/Bin' if -d $COMPATH_ROOT.'/Common/MSDev98/Bin';
+if ( $COM eq "MSC" )
+{  $COMPATH_ROOT      = $COMPATH;
+   if ( $COMEX ne "8" )
+   {  # for MS-Visual Studio 6.0 to find mspdb60.dll (needed by CL.EXE C/C++ Compiler) 
+      # and rcdll.dll (need by RC.EXE -- 32 bit Resource Compiler) location.
+      $COMPATH_ROOT      =~ s/\/vc98$//i;
+      if ( $noldPATH !~ /[^\/]*\b$COMPATH_ROOT\/Common\/MSDev98\/Bin\b[^\/]*/ )
+      {  # In non-standard installations this directory might not exist.
+         $PATH .= $ps.$COMPATH_ROOT.'/Common/MSDev98/Bin' if -d $COMPATH_ROOT.'/Common/MSDev98/Bin';
+      }
+   }
+   else
+   {  # for .NET to find mspdb70.dll (needed by CL.EXE C/C++ Compiler)
+      $COMPATH_ROOT      =~ s/\/vc7$//i;
+      if ( $noldPATH !~ /[^\/]*\b$COMPATH_ROOT\/Common7\/IDE\b[^\/]*/ )
+      {  # In non-standard installations this directory might not exist.
+         $PATH .= $ps.$COMPATH_ROOT.'/Common7/IDE' if -d $COMPATH_ROOT.'/Common7/IDE';
+      }
+      # .NET needs midl.exe
+      if ( $noldPATH !~ /[^\/]*\b$COMPATH_ROOT\/Common7\/Tools\/Bin\b[^\/]*/ )
+      {  # In non-standard installations this directory might not exist.
+         $PATH .= $ps.$COMPATH_ROOT.'/Common7/Tools/Bin' if -d $COMPATH_ROOT.'/Common7/Tools/Bin';
+      }
    }
 }
 
@@ -1216,7 +1231,7 @@ elsif ($platform eq "$Tru64")
                         $I.$USR.$INCLUDE;
 }
 elsif (($platform eq "$Irix") or ($platform eq "$Irix64"))
-{  $SOLARINC         .= $I.$XINC;
+{#  $SOLARINC         .= $I.$XINC;
 }
 }
 elsif ($platform eq "$Winnt")
@@ -1238,7 +1253,9 @@ elsif ($platform eq "$Macosx")
                         $I.$XINC.$ds."freetype2";
    }
 }
-                        
+
+$PYTHONPATH           = '.'.$ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$ds.'lib'.$ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$ds.'lib'.$ds.'python'.$ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$ds.'lib'.$ds.'python'.$ds.'lib-dynload';
+$PYTHONHOME           = '$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH';
 
 #
 print "done\n";
@@ -1637,6 +1654,7 @@ if ( $COM ne "MSC" ) {
   ToFile( "LINK",			 $CC,				 "e" );
 }
 ToFile( "ENVCFLAGSCXX",      "@ENVCFLAGSCXX@",    "e" );
+ToFile( "WITH_GPC",          "@WITH_GPC@",      "e" );
 ToFile( "GXX_INCLUDE_PATH",  "@GXX_INCLUDE_PATH@","e" );
 ToFile( "COMMON_BUILD_TOOLS",$COMMON_BUILD_TOOLS, "e" );
 if ($platform ne "$Winnt")
@@ -1685,6 +1703,8 @@ if (( $platform eq "$Winnt" ) and ( '@USE_SHELL@' eq "4nt" )) {
   ToFile( "GCCINSTLIB",        "gccinstlib.pl",    "e" );
 }
 ToFile( "USE_SHELL",         '@USE_SHELL@',         "e" );
+ToFile( "PYTHONPATH",        $PYTHONPATH,        "j" );
+ToFile( "PYTHONHOME",        $PYTHONHOME,        "j" );
 #
 # Writing the aliases to file.
 # (c = comment, e = environment variable, a = alias )
