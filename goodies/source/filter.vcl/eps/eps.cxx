@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eps.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:11 $
+ *  last change: $Author: sj $ $Date: 2001-03-07 20:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,6 @@
 #include <tools/bigint.hxx>
 #include <vcl/poly.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/config.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
@@ -78,6 +77,7 @@
 #include <vcl/gradient.hxx>
 #include <svtools/solar.hrc>
 #include <svtools/fltcall.hxx>
+#include <svtools/FilterConfigItem.hxx>
 #include "strings.hrc"
 #include "dlgeps.hrc"
 #include "dlgeps.hxx"
@@ -270,7 +270,7 @@ private:
 
 public:
     BOOL                WritePS( const Graphic& rGraphic, SvStream& rTargetStream,
-                                    PFilterCallback, void*, Config* );
+                                    PFilterCallback, void*, FilterConfigItem* );
     PSWriter();
     ~PSWriter();
 };
@@ -307,7 +307,7 @@ PSWriter::~PSWriter()
 //---------------------------------------------------------------------------------
 
 BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream,
-                          PFilterCallback pcallback, void* pcallerdata, Config* pOptionsConfig )
+                          PFilterCallback pcallback, void* pcallerdata, FilterConfigItem* pConfigItem )
 {
     UINT32 nStreamPosition, nPSPosition;
 
@@ -328,7 +328,7 @@ BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream,
     mbCompression = TRUE;
 
     // try to get the dialog selection
-    if ( pOptionsConfig )
+    if ( pConfigItem )
     {
         ByteString  aResMgrName( "eps" );
         ResMgr*     pResMgr;
@@ -343,12 +343,12 @@ BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream,
             String aColorStr( ResId( KEY_COLOR, pResMgr ) );
             String aComprStr( ResId( KEY_COMPR, pResMgr ) );
 
-            mnPreview = pOptionsConfig->ReadKey( ByteString( aPreviewStr, RTL_TEXTENCODING_UTF8 ), "1" ).ToInt32();
-            mnLevel = pOptionsConfig->ReadKey( ByteString( aVersionStr, RTL_TEXTENCODING_UTF8 ), "2" ).ToInt32();
+            mnPreview = pConfigItem->ReadInt32( aPreviewStr, 1 );
+            mnLevel = pConfigItem->ReadInt32( aVersionStr, 2 );
             if ( mnLevel != 1 )
                 mnLevel = 2;
-            mbGrayScale = pOptionsConfig->ReadKey( ByteString( aColorStr, RTL_TEXTENCODING_UTF8 ), "1" ).ToInt32() == 2;
-            mbCompression = pOptionsConfig->ReadKey( ByteString( aComprStr,  RTL_TEXTENCODING_UTF8 ), "1" ).ToInt32() == 1;
+            mbGrayScale = pConfigItem->ReadInt32( aColorStr, 1 ) == 2;
+            mbCompression = pConfigItem->ReadInt32( aComprStr, 1 ) == 1;
             delete pResMgr;
         }
     }
@@ -451,7 +451,7 @@ BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream,
     else
         mbStatus = FALSE;
 
-    if ( mbStatus && mnLevelWarning && pOptionsConfig )
+    if ( mbStatus && mnLevelWarning && pConfigItem )
     {
         ByteString  aResMgrName( "eps" );
         ResMgr* pResMgr;
@@ -2026,7 +2026,7 @@ void PSWriter::ImplWriteDouble( double fNumber, ULONG nMode )
     sal_Int32 n, nLen;
 
     sal_Int32   nPTemp = (sal_Int32)fNumber;
-    sal_Int32   nATemp = abs( ( fNumber - nPTemp ) * 100000 );
+    sal_Int32   nATemp = (sal_Int32)abs( ( fNumber - nPTemp ) * 100000 );
 
     if ( !nPTemp && nATemp && ( fNumber < 0.0 ) )
         *mpPS << (sal_Char)'-';
@@ -2035,7 +2035,7 @@ void PSWriter::ImplWriteDouble( double fNumber, ULONG nMode )
     nLen = aNumber1.Len();
     mnCursorPos += nLen;
     for ( n = 0; n < nLen; n++ )
-        *mpPS << aNumber1.GetChar( n );
+        *mpPS << aNumber1.GetChar( (sal_uInt16)n );
 
     int zCount = 0;
     if ( nATemp )
@@ -2345,15 +2345,15 @@ BOOL PSWriter::ImplGetBoundingBox( double* nNumb, BYTE* pSource, ULONG nSize )
 #ifdef WNT
 extern "C" BOOL _cdecl GraphicExport(SvStream & rStream, Graphic & rGraphic,
                               PFilterCallback pCallback, void * pCallerData,
-                              Config* pOptionsConfig, BOOL)
+                              FilterConfigItem* pConfigItem, BOOL)
 #else
 extern "C" BOOL GraphicExport(SvStream & rStream, Graphic & rGraphic,
                               PFilterCallback pCallback, void * pCallerData,
-                              Config* pOptionsConfig, BOOL)
+                              FilterConfigItem* pConfigItem, BOOL)
 #endif
 {
     PSWriter aPSWriter;
-    return aPSWriter.WritePS( rGraphic, rStream, pCallback, pCallerData, pOptionsConfig );
+    return aPSWriter.WritePS( rGraphic, rStream, pCallback, pCallerData, pConfigItem );
 }
 
 //---------------------------------------------------------------------------------
@@ -2362,7 +2362,7 @@ extern "C" BOOL __LOADONCALLAPI DoExportDialog( FltCallDialogParameter& rPara )
 {
     BOOL bRet = FALSE;
 
-    if ( rPara.pWindow && rPara.pCfg )
+    if ( rPara.pWindow )
     {
         ByteString  aResMgrName( "eps" );
         ResMgr* pResMgr;

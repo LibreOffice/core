@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:11 $
+ *  last change: $Author: sj $ $Date: 2001-03-07 20:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 |*
 \************************************************************************/
 
-class Config;
+class FilterConfigItem;
 class ResMgr;
 
 class DlgExportEPS : public ModalDialog
@@ -97,7 +97,7 @@ private:
     CancelButton        aBtnCancel;
     HelpButton          aBtnHelp;
 
-    Config*             pConfig;
+    FilterConfigItem*   pConfigItem;
     ResMgr*             pMgr;
 
     DECL_LINK( OK, void * );
@@ -106,6 +106,7 @@ private:
 
 public:
             DlgExportEPS( FltCallDialogParameter& rPara );
+            ~DlgExportEPS();
 };
 
 #endif // _DLGEPS_HXX_

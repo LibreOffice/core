@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:11 $
+ *  last change: $Author: sj $ $Date: 2001-03-07 20:13:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 
 #pragma hdrstop
 #include <tools/ref.hxx>
-#include <vcl/config.hxx>
 #include <vcl/msgbox.hxx>
+#include <svtools/FilterConfigItem.hxx>
 #include "dlgeps.hxx"
 #include "dlgeps.hrc"
 #include "strings.hrc"
@@ -90,10 +90,12 @@ DlgExportEPS::DlgExportEPS( FltCallDialogParameter& rPara ) :
                 aBtnOK              ( this, ResId( BTN_OK ) ),
                 aBtnCancel          ( this, ResId( BTN_CANCEL ) ),
                 aBtnHelp            ( this, ResId( BTN_HELP ) ),
-                pConfig             ( rPara.pCfg ),
                 pMgr                ( rPara.pResMgr )
 {
     FreeResource();
+
+    String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/EPS" ) );
+    pConfigItem = new FilterConfigItem( aFilterConfigPath );
 
     // Config-Parameter lesen
     String aPrevStr( ResId( KEY_PREVIEW, pMgr ) );
@@ -101,10 +103,10 @@ DlgExportEPS::DlgExportEPS( FltCallDialogParameter& rPara ) :
     String aColorStr( ResId( KEY_COLOR, pMgr ) );
     String aComprStr( ResId( KEY_COMPR, pMgr ) );
 
-    sal_Int32   nPreview = pConfig->ReadKey( ByteString( aPrevStr, RTL_TEXTENCODING_UTF8 ) ).ToInt32();
-    sal_Int32   nVersion = pConfig->ReadKey( ByteString( aVersionStr, RTL_TEXTENCODING_UTF8 ) ).ToInt32();
-    sal_Int32   nColor = pConfig->ReadKey( ByteString( aColorStr, RTL_TEXTENCODING_UTF8 ) ).ToInt32();
-    sal_Int32   nCompr = pConfig->ReadKey( ByteString( aComprStr, RTL_TEXTENCODING_UTF8 ) ).ToInt32();
+    sal_Int32   nPreview = pConfigItem->ReadInt32( aPrevStr, 0 );
+    sal_Int32   nVersion = pConfigItem->ReadInt32( aVersionStr, 2 );
+    sal_Int32   nColor = pConfigItem->ReadInt32( aColorStr, 0 );
+    sal_Int32   nCompr = pConfigItem->ReadInt32( aComprStr, 2 );
 
     BOOL bCheck = FALSE;
     if ( nPreview & 1 )
@@ -149,6 +151,11 @@ DlgExportEPS::DlgExportEPS( FltCallDialogParameter& rPara ) :
     aRBLevel2.SetClickHdl( LINK( this, DlgExportEPS, LEVEL2 ) );
 }
 
+DlgExportEPS::~DlgExportEPS()
+{
+    delete pConfigItem;
+}
+
 /*************************************************************************
 |*
 |* Speichert eingestellte Werte in ini-Datei
@@ -166,25 +173,25 @@ IMPL_LINK( DlgExportEPS, OK, void *, EMPTYARG )
         nCheck += 2;
 
     String aPrevStr( ResId( KEY_PREVIEW, pMgr ) );
-    pConfig->WriteKey( ByteString( aPrevStr, RTL_TEXTENCODING_UTF8 ), ByteString::CreateFromInt32( nCheck ) );
+    pConfigItem->WriteInt32( aPrevStr, nCheck );
 
     nCheck = 1;
     if ( aRBLevel2.IsChecked() )
         nCheck++;
     String aVersionStr( ResId( KEY_VERSION, pMgr ) );
-    pConfig->WriteKey( ByteString( aVersionStr, RTL_TEXTENCODING_UTF8 ), ByteString::CreateFromInt32( nCheck ) );
+    pConfigItem->WriteInt32( aVersionStr, nCheck );
 
     nCheck = 1;
     if ( aRBGrayscale.IsChecked() )
         nCheck++;
     String aColorStr( ResId( KEY_COLOR, pMgr ) );
-    pConfig->WriteKey( ByteString( aColorStr, RTL_TEXTENCODING_UTF8 ), ByteString::CreateFromInt32( nCheck ) );
+    pConfigItem->WriteInt32( aColorStr, nCheck );
 
     nCheck = 1;
     if ( aRBCompressionNone.IsChecked() )
         nCheck++;
     String aComprStr( ResId( KEY_COMPR, pMgr ) );
-    pConfig->WriteKey( ByteString( aComprStr, RTL_TEXTENCODING_UTF8 ), ByteString::CreateFromInt32( nCheck ) );
+    pConfigItem->WriteInt32( aComprStr, nCheck );
 
     EndDialog( RET_OK );
 
