@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-31 18:19:10 $
+ *  last change: $Author: oj $ $Date: 2002-10-25 09:00:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,8 +128,8 @@
 #ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
 #endif
-#ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
-#include <connectivity/sdbcx/VCollection.hxx>
+#ifndef CONNECTIVITY_COLUMNSHELPER_HXX
+#include <connectivity/TColumnsHelper.hxx>
 #endif
 #ifndef _CONNECTIVITY_FILE_VALUE_HXX_
 #include <connectivity/FValue.hxx>
@@ -309,7 +309,7 @@ namespace dbaccess
     typedef ::std::vector<OColumn*> OColumnArray;
 
     class ODBTable;
-    typedef connectivity::sdbcx::OCollection OColumns_BASE;
+    typedef connectivity::OColumnsHelper OColumns_BASE;
     //------------------------------------------------------------
     class OColumns : public OColumns_BASE
     {
@@ -319,8 +319,6 @@ namespace dbaccess
             // inserted
 
     protected:
-        ODBTable*                   m_pTable;       // in some cases this is the parent
-
         // configuration
         ::utl::OConfigurationNode   m_aConfigurationNode;
         // comes from the driver can be null
@@ -344,8 +342,6 @@ namespace dbaccess
         */
         sal_Bool    isInitialized() const { return m_bInitialized; }
         void        setInitialized() {m_bInitialized = sal_True;}
-
-        void setParent(ODBTable* _pTable) { m_pTable = _pTable;}
 
     public:
         /** constructs an empty container without configuration location.

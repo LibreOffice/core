@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-31 18:19:10 $
+ *  last change: $Author: oj $ $Date: 2002-10-25 09:00:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,11 +105,14 @@
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include <connectivity/CommonTools.hxx>
 #endif
-#ifndef _CONNECTIVITY_SDBCX_TABLE_HXX_
-#include <connectivity/sdbcx/VTable.hxx>
+#ifndef CONNECTIVITY_TABLEHELPER_HXX
+#include <connectivity/TTableHelper.hxx>
 #endif
 #ifndef _DBA_CORE_CONFIGURATIONFLUSHABLE_HXX_
 #include "configurationflushable.hxx"
+#endif
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
 #endif
 
 namespace dbaccess
@@ -121,7 +124,7 @@ namespace dbaccess
     //==========================================================================
     class ODBTable;
     typedef ::comphelper::OIdPropertyArrayUsageHelper< ODBTable >   ODBTable_PROP;
-    typedef connectivity::sdbcx::OTable                             OTable_Base;
+    typedef ::connectivity::OTableHelper                            OTable_Base;
 
     class ODBTable  :public ODataSettings_Base
                     ,public ODBTable_PROP
@@ -130,16 +133,11 @@ namespace dbaccess
                     ,public IColumnFactory
     {
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xConnection;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xDriverColumns;
 
     // <properties>
         sal_Int32                                                                       m_nPrivileges;
     // </properties>
-
-        void refreshPrimaryKeys(std::vector< ::rtl::OUString>& _rKeys);
-        void refreshForgeinKeys(std::vector< ::rtl::OUString>& _rKeys);
 
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const;
         virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
@@ -149,6 +147,27 @@ namespace dbaccess
         // IColumnFactory
         virtual OColumn*    createColumn(const ::rtl::OUString& _rName) const;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject();
+
+        /** creates the column collection for the table
+            @param  _rNames
+                The column names.
+        */
+        virtual ::connectivity::sdbcx::OCollection* createColumns(const ::connectivity::TStringVector& _rNames);
+
+        /** creates the key collection for the table
+            @param  _rNames
+                The key names.
+        */
+        virtual ::connectivity::sdbcx::OCollection* createKeys(const ::connectivity::TStringVector& _rNames);
+
+        /** creates the index collection for the table
+            @param  _rNames
+                The index names.
+        */
+        virtual ::connectivity::sdbcx::OCollection* createIndexes(const ::connectivity::TStringVector& _rNames);
+
+        // OComponentHelper
+        virtual void SAL_CALL disposing(void);
     public:
         /** constructs a wrapper supporting the com.sun.star.sdb.Table service.<BR>
             @param          _rxConn         the connection the table belongs to
@@ -173,18 +192,11 @@ namespace dbaccess
         virtual void construct();
 
         //XInterface
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+        DECLARE_XINTERFACE()
         //XTypeProvider
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException);
         static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
-
-    // com::sun::star::uno::XInterface
-        virtual void SAL_CALL acquire() throw();
-        virtual void SAL_CALL release() throw();
-
-    // OComponentHelper
-        virtual void SAL_CALL disposing(void);
 
     // ::com::sun::star::lang::XServiceInfo
         DECLARE_SERVICE_INFO();
@@ -198,19 +210,11 @@ namespace dbaccess
 
     // ::com::sun::star::sdbcx::XAlterTable,
         virtual void SAL_CALL alterColumnByName( const ::rtl::OUString& _rName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDescriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL alterColumnByIndex( sal_Int32 _nIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDescriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
-        // XNamed
-        virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
         // com::sun::star::lang::XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() const { return m_xMetaData; }
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection() const { return m_xMetaData->getConnection(); }
-
         virtual void refreshColumns();
-        virtual void refreshKeys();
-        virtual void refreshIndexes();
     };
 }
 #endif // _DBA_CORE_TABLE_HXX_
