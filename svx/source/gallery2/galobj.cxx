@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galobj.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:19 $
+ *  last change: $Author: ka $ $Date: 2000-10-25 14:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,12 +70,6 @@
 #include "galmisc.hxx"
 #include "galobj.hxx"
 
-// -----------
-// - Defines -
-// -----------
-
-#define S_THUMB 80
-
 // -------------
 // - SgaObject -
 // -------------
@@ -95,17 +89,25 @@ BOOL SgaObject::CreateThumb( const Bitmap& rBitmap )
 
     if( aBmpSize.Width() && aBmpSize.Height() )
     {
-        const float fFactor  = (float) aBmpSize.Width() / aBmpSize.Height();
-        const Size  aNewSize( Max( (long) (fFactor < 1. ? S_THUMB * fFactor : S_THUMB), 8L ),
-                              Max( (long) (fFactor < 1. ? S_THUMB : S_THUMB / fFactor), 8L ) );
-
         aThumbBmp = rBitmap;
 
-        if( aThumbBmp.Scale( (double) aNewSize.Width() / aBmpSize.Width(),
-                             (double) aNewSize.Height() / aBmpSize.Height(), BMP_SCALE_INTERPOLATE ) )
+        if( ( aBmpSize.Width() <= S_THUMB ) && ( aBmpSize.Height() <= S_THUMB ) )
         {
             aThumbBmp.Dither( BMP_DITHER_FLOYD );
             bRet = TRUE;
+        }
+        else
+        {
+            const float fFactor  = (float) aBmpSize.Width() / aBmpSize.Height();
+            const Size  aNewSize( Max( (long) (fFactor < 1. ? S_THUMB * fFactor : S_THUMB), 8L ),
+                                  Max( (long) (fFactor < 1. ? S_THUMB : S_THUMB / fFactor), 8L ) );
+
+            if( aThumbBmp.Scale( (double) aNewSize.Width() / aBmpSize.Width(),
+                                 (double) aNewSize.Height() / aBmpSize.Height(), BMP_SCALE_INTERPOLATE ) )
+            {
+                aThumbBmp.Dither( BMP_DITHER_FLOYD );
+                bRet = TRUE;
+            }
         }
     }
 

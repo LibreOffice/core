@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws1.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:18 $
+ *  last change: $Author: ka $ $Date: 2000-10-25 14:46:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,9 +153,11 @@ GalleryBrowser1::~GalleryBrowser1()
 
 ULONG GalleryBrowser1::ImplInsertThemeEntry( const GalleryThemeEntry* pEntry )
 {
+    static const BOOL bShowHiddenThemes = ( getenv( "GALLERY_SHOW_HIDDEN_THEMES" ) != NULL );
+
     ULONG nRet = LISTBOX_ENTRY_NOTFOUND;
 
-    if( pEntry && !pEntry->IsHidden() )
+    if( pEntry && ( !pEntry->IsHidden() || bShowHiddenThemes ) )
     {
         Bitmap aBMP( GAL_RESID( RID_SVXBMP_THEME_NORMAL ) );
         static const Image aImgNormal( BitmapEx( aBMP, COL_LIGHTMAGENTA ) );
@@ -304,7 +306,35 @@ void GalleryBrowser1::ShowContextMenu()
 
 IMPL_LINK( GalleryBrowser1, ShowContextMenuHdl, void*, p )
 {
-    PopupMenu aMenu( GAL_RESID( RID_SVXMN_GALLERY1 ) );
+    PopupMenu           aMenu( GAL_RESID( RID_SVXMN_GALLERY1 ) );
+    GalleryTheme*       pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
+    BOOL                bUpdateAllowed, bRenameAllowed, bRemoveAllowed;
+    static const BOOL   bIdDialog = ( getenv( "GALLERY_ENABLE_ID_DIALOG" ) != NULL );
+
+
+    if( pTheme->IsReadOnly() )
+    {
+        bUpdateAllowed = bRenameAllowed = bRemoveAllowed = FALSE;
+    }
+    else if( pTheme->IsImported() )
+    {
+        bUpdateAllowed = FALSE;
+        bRenameAllowed = bRemoveAllowed = TRUE;
+    }
+    else if( pTheme->IsDefault() )
+    {
+        bUpdateAllowed = bRenameAllowed = TRUE;
+        bRemoveAllowed = FALSE;
+    }
+    else
+        bUpdateAllowed = bRenameAllowed = bRemoveAllowed = TRUE;
+
+    aMenu.EnableItem( MN_ACTUALIZE, bUpdateAllowed );
+    aMenu.EnableItem( MN_RENAME, bRenameAllowed );
+    aMenu.EnableItem( MN_DELETE, bRemoveAllowed );
+    aMenu.EnableItem( MN_ASSIGN_ID, bIdDialog && !pTheme->IsReadOnly() && !pTheme->IsImported() );
+
+    mpGallery->ReleaseTheme( pTheme, *this );
 
     aMenu.SetSelectHdl( LINK( this, GalleryBrowser1, PopupMenuHdl ) );
     aMenu.RemoveDisabledEntries();
@@ -362,6 +392,22 @@ IMPL_LINK( GalleryBrowser1, PopupMenuHdl, Menu*, pMenu )
 
                     mpGallery->RenameTheme( aOldName, aName );
                 }
+            }
+
+            mpGallery->ReleaseTheme( pTheme, *this );
+        }
+        break;
+
+        case( MN_ASSIGN_ID ):
+        {
+            GalleryTheme* pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
+
+            if( pTheme && !pTheme->IsReadOnly() && !pTheme->IsImported() )
+            {
+                GalleryIdDialog aDlg( this, pTheme );
+
+                if( aDlg.Execute() == RET_OK )
+                    pTheme->SetId( aDlg.GetId(), TRUE );
             }
 
             mpGallery->ReleaseTheme( pTheme, *this );

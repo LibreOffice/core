@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:19 $
+ *  last change: $Author: ka $ $Date: 2000-10-25 14:49:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,6 @@
 
 String RID_GALLERYSTR_THEME_3D
 {
-    // !!! zunaechst bitte nicht uebersetzen
     Text = "3D";
     Text[ENGLISH] = "3D";
     Text[english_us] = "3D";
@@ -81,23 +80,6 @@ String RID_GALLERYSTR_THEME_3D
     Text[ portuguese_brazilian ] = "3D";
     Text[ japanese ] = "3D";
     Text[ chinese_simplified ] = "3 Œ¨";
-/*
-    Text = "3D";
-    Text[ENGLISH] = "3D";
-    Text[english_us] = "3-D";
-    Text[ portuguese ] = "3D";
-    Text[ russian ] = "3D";
-    Text[ dutch ] = "3D";
-    Text[ french ] = "3D";
-    Text[ spanish ] = "3D";
-    Text[ italian ] = "3D";
-    Text[ danish ] = "3D";
-    Text[ swedish ] = "3D";
-    Text[ polish ] = "3-W";
-    Text[ portuguese_brazilian ] = "3D";
-    Text[ japanese ] = "3D";
-    Text[ chinese_simplified ] = "3 Œ¨Õº–Œ";
-*/
     Text[ chinese_traditional ] = "3 ∫˚";
     Text[ arabic ] = "√‘ﬂ«· À·«ÀÌ… «·√»⁄«œ";
     Text[ greek ] = "3ƒ";
@@ -137,7 +119,6 @@ String RID_GALLERYSTR_THEME_ANIMATIONS
 
 String RID_GALLERYSTR_THEME_BULLETS
 {
-    // !!! zunaechst bitte nicht uebersetzen
     Text = "Bullets";
     Text[ENGLISH] = "Bullets";
     Text[english_us] = "Bullets";
@@ -153,24 +134,6 @@ String RID_GALLERYSTR_THEME_BULLETS
     Text[ portuguese_brazilian ] = "Bullets";
     Text[ japanese ] = "â”èèëÇ´º›ŒﬁŸ";
     Text[ chinese_simplified ] = "∏˜ ΩÕº±Í";
-
-/*
-    Text = "Bullets";
-    Text[ENGLISH] = "Bullets";
-    Text[english_us] = "Bullets";
-    Text[ portuguese ] = "Marcas";
-    Text[ russian ] = "Bullets";
-    Text[ dutch ] = "Opsommingstekens";
-    Text[ french ] = "Bullets";
-    Text[ spanish ] = "ViÒetas";
-    Text[ italian ] = "Bullets";
-    Text[ danish ] = "Bullets";
-    Text[ swedish ] = "Bullets";
-    Text[ polish ] = "Bullets";
-    Text[ portuguese_brazilian ] = "Bullets";
-    Text[ japanese ] = "Bullets";
-    Text[ chinese_simplified ] = "∏˜ ΩÕº±Í";
-*/
     Text[ chinese_traditional ] = "¶U¶°πœº–";
     Text[ arabic ] = "⁄·«„«   ⁄œ«œ";
     Text[ greek ] = " ÔıÍﬂ‰ÂÚ";
@@ -480,7 +443,7 @@ String RID_GALLERYSTR_THEME_SURFACES
 
 String RID_GALLERYSTR_THEME_HTMLBUTTONS
 {
-    // !!! bitte nicht uebersetzen
+    // !!! Don't translate, please !!!
     Text = "private://gallery/hidden/HtmlExportButtons";
 };
 
@@ -488,7 +451,7 @@ String RID_GALLERYSTR_THEME_HTMLBUTTONS
 
 String RID_GALLERYSTR_THEME_POWERPOINT
 {
-    // !!! bitte nicht uebersetzen
+    // !!! Don't translate, please !!!
     Text = "private://gallery/hidden/imgppt";
 };
 
@@ -496,8 +459,7 @@ String RID_GALLERYSTR_THEME_POWERPOINT
 
 String RID_GALLERYSTR_THEME_RULERS
 {
-    // !!! zunaechst bitte nicht uebersetzen
-    Text = "Rulers";
+    Text = "Begrenzungen";
     Text[ENGLISH] = "Rulers";
     Text[english_us] = "Rulers";
     Text[ portuguese ] = "RÈguas";
@@ -512,24 +474,6 @@ String RID_GALLERYSTR_THEME_RULERS
     Text[ portuguese_brazilian ] = "Rulers";
     Text[ japanese ] = "Ÿ∞◊∞";
     Text[ chinese_simplified ] = "≤ …´œﬂÃı";
-
-/*
-    Text = "Begrenzungen";
-    Text[ENGLISH] = "Rulers";
-    Text[english_us] = "Rulers";
-    Text[ portuguese ] = "RÈguas";
-    Text[ russian ] = "Rulers";
-    Text[ dutch ] = "Begrenzingen";
-    Text[ french ] = "RËgles";
-    Text[ spanish ] = "LÌmites";
-    Text[ italian ] = "Delimitazioni";
-    Text[ danish ] = "Rulers";
-    Text[ swedish ] = "Linjer";
-    Text[ polish ] = "Rulers";
-    Text[ portuguese_brazilian ] = "Rulers";
-    Text[ japanese ] = "Rulers";
-    Text[ chinese_simplified ] = "≤ …´œﬂÃı";
-*/
     Text[ chinese_traditional ] = "±m¶‚Ωu±¯";
     Text[ arabic ] = "„”«ÿ—";
     Text[ greek ] = "◊‹Ò·ÍÂÚ";
@@ -542,8 +486,7 @@ String RID_GALLERYSTR_THEME_RULERS
 
 String RID_GALLERYSTR_THEME_SOUNDS
 {
-    // !!! zunaechst bitte nicht uebersetzen
-    Text = "Sounds";
+    Text = "Kl‰nge";
     Text[ENGLISH] = "Sounds";
     Text[english_us] = "Sounds";
     Text[ portuguese ] = "Sons";
@@ -558,23 +501,6 @@ String RID_GALLERYSTR_THEME_SOUNDS
     Text[ portuguese_brazilian ] = "Sounds";
     Text[ japanese ] = "ª≥›ƒﬁ";
     Text[ chinese_simplified ] = "…˘“ÙÕº±Í";
-/*
-    Text = "Kl‰nge";
-    Text[ENGLISH] = "Sounds";
-    Text[english_us] = "Sounds";
-    Text[ portuguese ] = "Sons";
-    Text[ russian ] = "Sounds";
-    Text[ dutch ] = "Geluiden";
-    Text[ french ] = "Sons";
-    Text[ spanish ] = "Sonidos";
-    Text[ italian ] = "Suoni";
-    Text[ danish ] = "Sounds";
-    Text[ swedish ] = "Ljud";
-    Text[ polish ] = "DüwiÍki";
-    Text[ portuguese_brazilian ] = "Sounds";
-    Text[ japanese ] = "Sounds";
-    Text[ chinese_simplified ] = "…˘“ÙÕº±Í";
-*/
     Text[ chinese_traditional ] = "¡n≠µπœ•‹";
     Text[ arabic ] = "√’Ê« ";
     Text[ greek ] = "π˜ÔÚ";
@@ -638,17 +564,17 @@ String RID_GALLERYSTR_THEME_MYTHEME
 
 // -----------------------------------------------------------------------------
 
-String RID_GALLERYSTR_THEME_DUMMY2
+String RID_GALLERYSTR_THEME_USERSOUNDS
 {
-    // !!! bitte nicht uebersetzen
-    Text = "Dummy 2";
+    // !!! Don't translate, please !!!
+    Text = "private://gallery/hidden/usersounds";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_DUMMY3
 {
-    // !!! bitte nicht uebersetzen
+    // !!! Don't translate, please !!!
     Text = "Dummy 3";
 };
 
@@ -656,7 +582,7 @@ String RID_GALLERYSTR_THEME_DUMMY3
 
 String RID_GALLERYSTR_THEME_DUMMY4
 {
-    // !!! bitte nicht uebersetzen
+    // !!! Don't translate, please !!!
     Text = "Dummy 4";
 };
 
@@ -664,6 +590,6 @@ String RID_GALLERYSTR_THEME_DUMMY4
 
 String RID_GALLERYSTR_THEME_DUMMY5
 {
-    // !!! bitte nicht uebersetzen
+    // !!! Don't translate, please !!!
     Text = "Dummy 5";
 };

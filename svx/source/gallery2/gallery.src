@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 19:22:47 $
+ *  last change: $Author: ka $ $Date: 2000-10-25 14:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2065,6 +2065,37 @@ Menu RID_SVXMN_GALLERY1
             Text[ greek ] = "Ìåôïíïìáóßá";
             Text[ korean ] = "ÀÌ¸§ º¯°æ(~R)";
             Text[ turkish ] = "Ye~niden adlandır";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = MN_ASSIGN_ID;
+            Text = "~ID vergeben" ;
+            Text [ English ] = "Assign ~ID" ;
+            Text [ english_us ] = "Assign ~ID" ;
+            Text[ portuguese ] = "Atribuir ~ID";
+            Text[ russian ] = "Íàçíà÷èòü ~ID";
+            Text[ dutch ] = "~ID bezet";
+            Text[ french ] = "Attribuer un ~ID";
+            Text[ spanish ] = "Asignar ~ID";
+            Text[ italian ] = "Attribuisci ~ID";
+            Text[ danish ] = "Tildel ~ID";
+            Text[ swedish ] = "Tilldela ~ID";
+            Text[ polish ] = "Przypisz ~identyfikator";
+            Text[ portuguese_brazilian ] = "Assign ~ID";
+            Text[ japanese ] = "~ID ‚ÌŠ„‚è“–‚Ä";
+            Text[ chinese_simplified ] = "·ÖÅä ~ID";
+            Text[ chinese_traditional ] = "¤À°t ~ID";
+            Text[ arabic ] = "ÊÚííä ÇáÊÚÑíİ";
+            Text[ dutch ] = "~ID bezet";
+            Text[ chinese_simplified ] = "·ÖÅä ~ID";
+            Text[ greek ] = "ÁğïíïìŞ ôáõôüôçôáò (~ID)";
+            Text[ korean ] = "~ID ÁöÁ¤";
+            Text[ turkish ] = "Tanıtıcı ata";
             Text[ language_user1 ] = " ";
         };
         MenuItem

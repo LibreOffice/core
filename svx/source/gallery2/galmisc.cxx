@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-23 12:08:49 $
+ *  last change: $Author: ka $ $Date: 2000-10-25 14:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#include <comphelper/processfactory.hxx>
+#include <unotools/processfactory.hxx>
 #include <ucbhelper/content.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/intn.hxx>
@@ -389,13 +389,16 @@ BOOL CreateDir( const INetURLObject& rURL )
             INetURLObject                           aNewFolderURL( rURL );
             INetURLObject                           aParentURL( aNewFolderURL ); aParentURL.removeSegment();
             Content                                 aParent( aParentURL.GetMainURL(), aCmdEnv );
-            uno::Sequence< OUString >               aProps( 1 );
-            uno::Sequence< uno::Any >               aValues( 1 );
+            uno::Sequence< OUString >               aProps( 2 );
+            uno::Sequence< uno::Any >               aValues( 2 );
 
             aProps.getArray()[ 0 ] = OUString::createFromAscii( "Title" );
             aValues.getArray()[ 0 ] = uno::makeAny( OUString( aNewFolderURL.GetName() ) );
 
-            bRet = aParent.insertNewContent( OUString::createFromAscii( "application/vnd.sun.staroffice.fsys-folder" ), aProps, aValues,
+            aProps.getArray()[ 1 ] = OUString::createFromAscii( "IsFolder" );
+            aValues.getArray()[ 1 ] = uno::makeAny( sal_Bool( sal_True ) );
+
+            bRet = aParent.insertNewContent( OUString::createFromAscii( "FSysFolder" ), aProps, aValues,
                                              Content( aNewFolderURL.GetMainURL(), aCmdEnv ) );
         }
         catch( ... )
@@ -460,7 +463,7 @@ BOOL KillFile( const INetURLObject& rURL )
 GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
     mpFilter( pFilter )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMgr( ::utl::getProcessServiceFactory() );
 
     if( xMgr.is() )
     {

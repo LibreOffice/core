@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery1.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:18 $
+ *  last change: $Author: ka $ $Date: 2000-10-25 14:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -634,9 +634,9 @@ BOOL Gallery::CreateImportTheme( const String& rPath, const String& rImportName 
             }
             else
             {
-                ByteString                      aTmpStr;
-                String                          aThemeName; aInStm >> aTmpStr; aThemeName = String( aTmpStr, RTL_TEXTENCODING_UTF8 );
-                String                          aNumberStr( aPath.GetBase() );
+                ByteString              aTmpStr;
+                String                  aThemeName; aInStm >> aTmpStr; aThemeName = String( aTmpStr, RTL_TEXTENCODING_UTF8 );
+                String                  aNumberStr( aPath.GetBase() );
                 GalleryThemeEntry*      pThemeEntry = new GalleryThemeEntry( aPath.GetPath(), rImportName,
                                                                          aNumberStr.Erase( 0, 2 ).Erase( 6 ).ToInt32(),
                                                                          TRUE, TRUE, TRUE, 0, FALSE );
@@ -864,7 +864,19 @@ GalleryTheme* Gallery::AcquireTheme( const String& rThemeName, SfxListener& rLis
     GalleryThemeEntry*      pThemeEntry = ImplGetThemeEntry( rThemeName );
 
     if( pThemeEntry && ( ( pTheme = ImplGetCachedTheme( pThemeEntry ) ) != NULL ) )
+    {
+#ifdef DBG_UTIL
+        for( USHORT i = 0; i < pTheme->GetListenerCount(); i++ )
+        {
+            if( pTheme->GetListener( i ) == &rListener )
+            {
+                DBG_ERROR( "Theme is already registered at this listener" );
+            }
+        }
+
+#endif
         rListener.StartListening( *pTheme );
+    }
 
     return pTheme;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-17 13:56:59 $
+ *  last change: $Author: ka $ $Date: 2000-10-25 14:46:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,20 +152,23 @@ void GalleryValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
             if ( aSize.Width() && aSize.Height() )
             {
-                Point           aNewPos;
-                const double    fBmpWH  = (double) aSize.Width() / aSize.Height();
-                const double    fThmpWH = (double) rRect.GetWidth() / rRect.GetHeight();
+                if( ( aSize.Width() > rRect.GetWidth() ) || ( aSize.Height() > rRect.GetHeight() ) )
+                {
+                    Point           aNewPos;
+                    const double    fBmpWH  = (double) aSize.Width() / aSize.Height();
+                    const double    fThmpWH = (double) rRect.GetWidth() / rRect.GetHeight();
 
-                // Bitmap an Thumbgroesse anpassen
-                if ( fBmpWH < fThmpWH )
-                {
-                    aSize.Width() = (long) ( rRect.GetHeight() * fBmpWH );
-                    aSize.Height()= rRect.GetHeight();
-                }
-                else
-                {
-                    aSize.Width() = rRect.GetWidth();
-                    aSize.Height()= (long) ( rRect.GetWidth() / fBmpWH );
+                    // Bitmap an Thumbgroesse anpassen
+                    if ( fBmpWH < fThmpWH )
+                    {
+                        aSize.Width() = (long) ( rRect.GetHeight() * fBmpWH );
+                        aSize.Height()= rRect.GetHeight();
+                    }
+                    else
+                    {
+                        aSize.Width() = rRect.GetWidth();
+                        aSize.Height()= (long) ( rRect.GetWidth() / fBmpWH );
+                    }
                 }
 
                 const Point aPos( ( ( rRect.GetWidth() - aSize.Width() ) >> 1 ) + rRect.Left(),
@@ -440,34 +443,16 @@ void GalleryBrowser2::Resize()
     // Valueset und Preview-Fenster in der Groesse anpassen
     if( mbIsPreview )
         mpPreview->Hide();
-    else if( nColCount )
-    {
-        nSelectId = mpValueSet->GetSelectItemId();
-        nSelLine = (nSelectId - 1) / nColCount - mpValueSet->GetFirstLine();
-        mpValueSet->Hide();
-    }
     else
         mpValueSet->Hide();
 
-    mpValueSet->SetColCount( nColCount = Max( (USHORT) ( aOutSize.Width() / 80 ), (USHORT) 1 ) );
-    mpValueSet->SetLineCount( Max( (USHORT) ( aOutSize.Height() / 70 ), (USHORT) 1 ) );
     mpValueSet->SetSizePixel( aOutSize );
     mpPreview->SetSizePixel( aOutSize );
 
     if( mbIsPreview )
         mpPreview->Show();
     else
-    {
-        USHORT nFirstLine = ( nSelectId - 1 ) / nColCount;
-
-        nSelLine = Min( (USHORT) nSelLine, (USHORT) ( mpValueSet->GetLineCount() - 1 ) );
-
-        if( nFirstLine > nSelLine )
-            nFirstLine -= nSelLine;
-
-        mpValueSet->SetFirstLine( nFirstLine );
         mpValueSet->Show();
-    }
 }
 
 // -----------------------------------------------------------------------------
@@ -595,14 +580,20 @@ void GalleryBrowser2::SelectTheme( const String& rThemeName )
 
     mpCurTheme = mpGallery->AcquireTheme( rThemeName, *this );
 
-    mpValueSet = new GalleryValueSet( this, mpCurTheme, WB_3DLOOK | WB_BORDER | WB_ITEMBORDER | WB_DOUBLEBORDER | WB_NAMEFIELD | WB_VSCROLL );
+    mpValueSet = new GalleryValueSet( this, mpCurTheme, WB_3DLOOK | WB_BORDER |
+                                                        WB_ITEMBORDER | WB_DOUBLEBORDER |
+                                                        WB_NAMEFIELD | WB_VSCROLL |
+                                                        WB_FLATVALUESET );
+    mpValueSet->SetBackground( Wallpaper( COL_WHITE ) );
+    mpValueSet->SetControlBackground( COL_WHITE );
+    mpValueSet->SetColor( COL_WHITE );
     mpValueSet->SetHelpId( HID_GALLERY_WINDOW );
     mpValueSet->SetPosSizePixel( Point(), GetOutputSizePixel() );
     mpValueSet->SetSelectHdl( LINK( this, GalleryBrowser2, SelectObjectHdl ) );
     mpValueSet->SetDoubleClickHdl( LINK( this, GalleryBrowser2, DoubleClickObjectHdl ) );
-    mpValueSet->SetColCount( 3 );
-    mpValueSet->SetLineCount( 3 );
     mpValueSet->SetExtraSpacing( 2 );
+    mpValueSet->SetItemWidth( S_THUMB + 6 );
+    mpValueSet->SetItemHeight( S_THUMB + 6 );
 
     mpPreview = new GalleryPreview( this, WB_BORDER ),
     mpPreview->SetHelpId( HID_GALLERY_WINDOW );
@@ -655,8 +646,7 @@ void GalleryBrowser2::ShowPreview( BOOL bShow )
 
 void GalleryBrowser2::ImplUpdateValueSet( USHORT nSelectionId )
 {
-    USHORT  nCurItemId = mpValueSet->GetSelectItemId();
-    USHORT  nItem = ( ( nSelectionId > mpValueSet->GetItemCount() ) ? mpValueSet->GetItemCount() : nSelectionId );
+    USHORT nCurItemId = mpValueSet->GetSelectItemId();
 
     mpValueSet->Clear();
     mpPreview->Show( FALSE);
@@ -667,7 +657,7 @@ void GalleryBrowser2::ImplUpdateValueSet( USHORT nSelectionId )
             mpValueSet->InsertItem( ++i );
     }
 
-    mpValueSet->SelectItem( nItem );
+    mpValueSet->SelectItem( ( ( nSelectionId > mpValueSet->GetItemCount() ) ? mpValueSet->GetItemCount() : nSelectionId ) );
 }
 
 // -----------------------------------------------------------------------------

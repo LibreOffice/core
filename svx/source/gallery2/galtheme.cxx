@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:19 $
+ *  last change: $Author: ka $ $Date: 2000-10-25 14:49:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,6 +235,9 @@ SgaObject* GalleryTheme::ImplReadSgaObject( GalleryObject* pEntry )
         }
     }
 
+    if( pSgaObj )
+        pSgaObj->ImplUpdatePath( pEntry->aPath );
+
     return pSgaObj;
 }
 
@@ -301,7 +304,12 @@ String GalleryTheme::ImplGetPathToFile( const GalleryObject* pObject ) const
 void GalleryTheme::ImplBroadcast( ULONG nUpdatePos )
 {
     if( !IsBroadcasterLocked() )
+    {
+        if( GetObjectCount() && ( nUpdatePos >= GetObjectCount() ) )
+            nUpdatePos = GetObjectCount() - 1;
+
         Broadcast( GalleryHint( GALLERY_HINT_THEME_UPDATEVIEW, GetName(), nUpdatePos ) );
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -398,7 +406,7 @@ BOOL GalleryTheme::ChangeObjectPos( ULONG nOldPos, ULONG nNewPos )
 
             aObjectList.Remove( nOldPos );
             ImplSetModified( bRet = TRUE );
-            ImplBroadcast( nNewPos );
+            ImplBroadcast( ( nNewPos < nOldPos ) ? nNewPos : ( nNewPos - 1 ) );
         }
     }
 
@@ -788,7 +796,10 @@ BOOL GalleryTheme::GetGraphic( ULONG nPos, Graphic& rGraphic, BOOL bProgress )
 
                 if( pObj )
                 {
-                    rGraphic = BitmapEx( pObj->GetThumbBmp(), COL_LIGHTMAGENTA );
+                    Bitmap aBmp( pObj->GetThumbBmp() );
+
+                    aBmp.Replace( COL_LIGHTMAGENTA, COL_WHITE );
+                    rGraphic = aBmp;
                     ReleaseObject( pObj );
                     bRet = TRUE;
                 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:18 $
+ *  last change: $Author: ka $ $Date: 2000-10-25 14:46:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ GalleryChildWindow::GalleryChildWindow( Window* pParent, USHORT nId, SfxBindings
     SfxChildWindow( pParent, nId )
 {
     pWindow = new GalleryBrowser( pBindings, this, pParent, GAL_RESID( RID_SVXDLG_GALLERYBROWSER ) );
-    eChildAlignment = SFX_ALIGN_NOALIGNMENT;
+    eChildAlignment = SFX_ALIGN_TOP;
     ( (GalleryBrowser*) pWindow )->Initialize( pInfo );
 };
 
