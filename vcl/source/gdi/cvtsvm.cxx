@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cvtsvm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:57:56 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:35:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_CVTSVM_CXX
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 
 #include <algorithm>
@@ -731,7 +730,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     {
                         INT32 nStrLen( aStr.Len() );
 
-                        pDXAry = new long[ ::std::max( nAryLen, nStrLen ) ];
+                        pDXAry = new long[ Max( nAryLen, nStrLen ) ];
 
                         for( long i = 0L; i < nAryLen; i++ )
                             rIStm >> nTmp, pDXAry[ i ] = nTmp;
@@ -1195,7 +1194,6 @@ void SVMConverter::ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf )
     ULONG               nPos;
     ULONG               nCountPos;
     Font                aSaveFont;
-    const ULONG         nActionCount = rMtf.GetActionCount();
     const USHORT        nOldFormat = rOStm.GetNumberFormatInt();
     rtl_TextEncoding    eActualCharSet = gsl_getSystemTextEncoding();
     const Size          aPrefSize( rMtf.GetPrefSize() );
