@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-15 20:08:10 $
+ *  last change: $Author: cmc $ $Date: 2001-02-19 13:01:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5364,11 +5364,18 @@ void WW8DopTypography::WriteToMem(BYTE *&pData) const
 ULONG WW8DopTypography::GetConvertedLang() const
 {
     ULONG nLang;
+    //I have assumed peoples republic/taiwan == simplified/traditional
+
     //This isn't a documented issue, so we might have it all wrong,
     //i.e. i.e. whats with the powers of two ?
-    //
-    //I have assumed peoples republic/taiwan == simplified/traditional
-    switch(reserved1)
+
+    /*
+    #84082#
+    One example of 3 for reserved1 which was really Japanese, perhaps last bit
+    is for some other use ?, or redundant. If more examples trigger the assert
+    we might be able to figure it out.
+    */
+    switch(reserved1&0xE)
     {
         case 2:     //Japan
             nLang = LANGUAGE_JAPANESE;
@@ -6093,11 +6100,14 @@ BYTE WW8SprmDataOfs( USHORT nId )
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.9 2001-02-15 20:08:10 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.10 2001-02-19 13:01:19 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.9  2001/02/15 20:08:10  jp
+      im-/export the Rotate-/ScaleWidth-Character attribut
+
       Revision 1.8  2001/02/06 17:28:21  cmc
       #83581# CJK Two Lines in One {Im|Ex}port for Word
 
