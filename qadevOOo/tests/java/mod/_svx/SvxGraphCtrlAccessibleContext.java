@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxGraphCtrlAccessibleContext.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Date: 2004-01-05 19:46:41 $
+ *  last change: $Date: 2004-11-02 12:09:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,7 @@ public class SvxGraphCtrlAccessibleContext extends TestCase{
             XDispatch xDispatcher = xDispProv.queryDispatch( aURL,"",0);
             if( xDispatcher != null )
                     xDispatcher.dispatch( aURL, null );
+            utils.shortWait(Param.getInt(util.PropertyName.SHORT_WAIT));
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't change mode");
         }
@@ -193,7 +194,7 @@ public class SvxGraphCtrlAccessibleContext extends TestCase{
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        //at.printAccessibleTree(log, xRoot);
+        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
         oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL);
 
