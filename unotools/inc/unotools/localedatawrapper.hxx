@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-19 10:20:18 $
+ *  last change: $Author: er $ $Date: 2001-03-28 10:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ namespace com { namespace sun { namespace star {
 class LocaleDataWrapper
 {
     static ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > xInstalledLocales;
+    static ::com::sun::star::uno::Sequence< sal_uInt16 > xInstalledLanguageTypes;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData > xLD;
@@ -178,6 +179,14 @@ public:
     /// same as the wrapper implementation but static
     static ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > getInstalledLocaleNames();
 
+    /** Get LanguageTypes for all installed locales which are unambiguous
+        convertible back and forth between locale ISO strings and MS-LCID
+        LanguageType. Upon the first time the function is called in a
+        non-PRODUCT version debug messages are shown for locales not matching,
+        excluding already known problems.
+        (e.g. used in number formatter dialog init)
+     */
+    static ::com::sun::star::uno::Sequence< sal_uInt16 > getInstalledLanguageTypes();
 
     /// maps the LocaleData string to the International enum
             MeasurementSystem   mapMeasurementStringToEnum( const String& rMS ) const;

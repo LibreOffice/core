@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2001-03-08 17:12:18 $
+ *  last change: $Author: er $ $Date: 2001-03-28 10:32:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef _ISOLANG_HXX
+#include <tools/isolang.hxx>
+#endif
 
 #ifndef _COMPHELPER_COMPONENTFACTORY_HXX_
 #include <comphelper/componentfactory.hxx>
@@ -111,6 +114,8 @@ using namespace ::com::sun::star::uno;
 
 uno::Sequence< lang::Locale > LocaleDataWrapper::xInstalledLocales =
     uno::Sequence< lang::Locale >(0);
+uno::Sequence< sal_uInt16 > LocaleDataWrapper::xInstalledLanguageTypes =
+    uno::Sequence< sal_uInt16 >(0);
 
 
 LocaleDataWrapper::LocaleDataWrapper(
@@ -409,6 +414,100 @@ void LocaleDataWrapper::invalidateData()
         aLDW.getAllInstalledLocaleNames();
     }
     return xInstalledLocales;
+}
+
+
+// static
+::com::sun::star::uno::Sequence< sal_uInt16 > LocaleDataWrapper::getInstalledLanguageTypes()
+{
+    if ( xInstalledLanguageTypes.getLength() )
+        return xInstalledLanguageTypes;
+
+    ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > xLoc =
+        getInstalledLocaleNames();
+    sal_Int32 nCount = xLoc.getLength();
+    ::com::sun::star::uno::Sequence< sal_uInt16 > xLang( nCount );
+    sal_Int32 nLanguages = 0;
+    for ( sal_Int32 i=0; i<nCount; i++ )
+    {
+#ifndef PRODUCT
+        String aDebugLocale( xLoc[i].Language );
+        if ( xLoc[i].Country.getLength() )
+        {
+            aDebugLocale += '_';
+            aDebugLocale += String( xLoc[i].Country );
+            if ( xLoc[i].Variant.getLength() )
+            {
+                aDebugLocale += '_';
+                aDebugLocale += String( xLoc[i].Variant );
+            }
+        }
+#endif
+        if ( xLoc[i].Variant.getLength() )
+        {
+#ifndef PRODUCT
+            ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "ConvertIsoNamesToLanguage: Variants not supported, locale\n" ) );
+            aMsg += ByteString( aDebugLocale, RTL_TEXTENCODING_UTF8  );
+            DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
+            continue;
+        }
+        LanguageType eLang = ConvertIsoNamesToLanguage( xLoc[i].Language,
+            xLoc[i].Country );
+
+#ifndef PRODUCT
+        // Exclude known problems because no MS-LCID defined
+        if ( eLang == LANGUAGE_DONTKNOW
+//              && !aDebugLocale.EqualsAscii( "br_AE" ) // ?!? Breton in United Arabic Emirates
+            )
+        {
+            ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "ConvertIsoNamesToLanguage: unknown MS-LCID for locale\n" ) );
+            aMsg += ByteString( aDebugLocale, RTL_TEXTENCODING_UTF8  );
+            DBG_ERRORFILE( aMsg.GetBuffer() );
+        }
+#endif
+        if ( eLang != LANGUAGE_DONTKNOW )
+        {
+            String aLanguage, aCountry;
+            ConvertLanguageToIsoNames( eLang, aLanguage, aCountry );
+            if ( String( xLoc[i].Language ) != aLanguage ||
+                    String( xLoc[i].Country ) != aCountry )
+            {
+#ifndef PRODUCT
+                // Exclude known problems because no MS-LCID defined and
+                // default for Language found.
+                if ( TRUE
+                        && !aDebugLocale.EqualsAscii( "ar_SD" ) // Sudan/ar
+                        && !aDebugLocale.EqualsAscii( "ca_ES" ) // Spain/Andorra
+//                      && !aDebugLocale.EqualsAscii( "en_BG" ) // ?!? Bulgaria/en
+//                      && !aDebugLocale.EqualsAscii( "es_BR" ) // ?!? Brazil/es
+                    )
+                {
+                    ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "ConvertIsoNamesToLanguage/ConvertLanguageToIsoNames: ambiguous locale (MS-LCID?)\n" ) );
+                    aMsg += ByteString( aDebugLocale, RTL_TEXTENCODING_UTF8  );
+                    aMsg.Append( RTL_CONSTASCII_STRINGPARAM( "  ->  0x" ) );
+                    aMsg += ByteString::CreateFromInt32( eLang, 16 );
+                    aMsg.Append( RTL_CONSTASCII_STRINGPARAM( "  ->  " ) );
+                    aMsg += ByteString( aLanguage, RTL_TEXTENCODING_UTF8  );
+                    if ( aCountry.Len() )
+                    {
+                        aMsg += '_';
+                        aMsg += ByteString( aCountry, RTL_TEXTENCODING_UTF8  );
+                    }
+                    DBG_ERRORFILE( aMsg.GetBuffer() );
+                }
+#endif
+                eLang = LANGUAGE_DONTKNOW;
+            }
+        }
+        if ( eLang != LANGUAGE_DONTKNOW )
+            xLang[ nLanguages++ ] = eLang;
+    }
+    if ( nLanguages < nCount )
+        xLang.realloc( nLanguages );
+    xInstalledLanguageTypes = xLang;
+
+    return xInstalledLanguageTypes;
 }
 
 
