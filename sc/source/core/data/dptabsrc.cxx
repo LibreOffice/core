@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dptabsrc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 13:58:03 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 11:32:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -684,6 +684,19 @@ void ScDPSource::CreateRes_Impl()
 
         BOOL bHasAutoShow = FALSE;
 
+        ScDPInitState aInitState;
+
+        // Page field selections restrict the members shown in related fields
+        // (both in column and row fields). aInitState is filled with the page
+        // field selections, they are kept across the data iterator loop.
+
+        for (i=0; i<nPageDimCount; i++)
+        {
+            ScDPDimension* pDim = GetDimensionsObject()->getByIndex( nPageDims[i] );
+            if ( pDim->HasSelectedPage() )
+                aInitState.AddMember( nPageDims[i], pDim->GetSelectedData() );
+        }
+
         pColResRoot = new ScDPResultMember( pResData, NULL, NULL, NULL, bColumnGrand );
         pRowResRoot = new ScDPResultMember( pResData, NULL, NULL, NULL, bRowGrand );
 
@@ -715,13 +728,14 @@ void ScDPSource::CreateRes_Impl()
                 nColLevelDims[nColLevelCount] = nColDims[i];
                 ppColDim[nColLevelCount] = pDim;
                 ppColLevel[nColLevelCount] = pLevel;
+                pLevel->GetMembersObject();                 // initialize for groups
                 ++nColLevelCount;
             }
         }
         ppColDim[nColLevelCount] = NULL;
         ppColLevel[nColLevelCount] = NULL;
 
-        pColResRoot->InitFrom( ppColDim, ppColLevel );
+        pColResRoot->InitFrom( ppColDim, ppColLevel, aInitState );
         pColResRoot->SetHasElements();
 
         ScDPDimension* ppRowDim[SC_DAPI_MAXFIELDS];     //! Ref?
@@ -752,6 +766,7 @@ void ScDPSource::CreateRes_Impl()
                 nRowLevelDims[nRowLevelCount] = nRowDims[i];
                 ppRowDim[nRowLevelCount] = pDim;
                 ppRowLevel[nRowLevelCount] = pLevel;
+                pLevel->GetMembersObject();                 // initialize for groups
                 ++nRowLevelCount;
             }
         }
@@ -764,8 +779,21 @@ void ScDPSource::CreateRes_Impl()
             ppRowLevel[nRowLevelCount-1]->SetEnableLayout( FALSE );
         }
 
-        pRowResRoot->InitFrom( ppRowDim, ppRowLevel );
+        pRowResRoot->InitFrom( ppRowDim, ppRowLevel, aInitState );
         pRowResRoot->SetHasElements();
+
+        // initialize members object also for all page dimensions (needed for numeric groups)
+        for (i=0; i<nPageDimCount; i++)
+        {
+            ScDPDimension* pDim = GetDimensionsObject()->getByIndex( nPageDims[i] );
+            long nHierarchy = pDim->getUsedHierarchy();
+            if ( nHierarchy >= pDim->GetHierarchiesObject()->getCount() )
+                nHierarchy = 0;
+            ScDPLevels* pLevels = pDim->GetHierarchiesObject()->getByIndex(nHierarchy)->GetLevelsObject();
+            long nCount = pLevels->getCount();
+            for (long j=0; j<nCount; j++)
+                pLevels->getByIndex(j)->GetMembersObject();             // initialize for groups
+        }
 
         //  pre-check: calculate minimum number of result columns / rows from
         //  levels that have the "show all" flag set
@@ -807,8 +835,9 @@ void ScDPSource::CreateRes_Impl()
 
                 if ( bValidPage )
                 {
-                    pColResRoot->LateInitFrom( ppColDim, ppColLevel, aColData );
-                    pRowResRoot->LateInitFrom( ppRowDim, ppRowLevel, aRowData );
+                    //! move LateInit outside of bValidPage test?
+                    pColResRoot->LateInitFrom( ppColDim, ppColLevel, aColData, aInitState );
+                    pRowResRoot->LateInitFrom( ppRowDim, ppRowLevel, aRowData, aInitState );
 
                     //  test for filtered entries
                     //! test child dimensions for null !!!
@@ -1339,44 +1368,48 @@ const sheet::DataPilotFieldReference& ScDPDimension::GetReferenceValue() const
     return aReferenceValue;
 }
 
+const ScDPItemData& ScDPDimension::GetSelectedData()
+{
+    if ( !pSelectedData )
+    {
+        // find the named member to initialize pSelectedData from it, with name and value
+
+        long nLevel = 0;        // same as in ScDPObject::FillPageList
+
+        long nHierarchy = getUsedHierarchy();
+        if ( nHierarchy >= GetHierarchiesObject()->getCount() )
+            nHierarchy = 0;
+        ScDPLevels* pLevels = GetHierarchiesObject()->getByIndex(nHierarchy)->GetLevelsObject();
+        long nLevCount = pLevels->getCount();
+        if ( nLevel < nLevCount )
+        {
+            ScDPMembers* pMembers = pLevels->getByIndex(nLevel)->GetMembersObject();
+
+            //! merge with ScDPMembers::getByName
+            long nCount = pMembers->getCount();
+            for (long i=0; i<nCount && !pSelectedData; i++)
+            {
+                ScDPMember* pMember = pMembers->getByIndex(i);
+                if ( pMember->GetNameStr() == aSelectedPage )
+                {
+                    pSelectedData = new ScDPItemData();
+                    pMember->FillItemData( *pSelectedData );
+                }
+            }
+        }
+
+        if ( !pSelectedData )
+            pSelectedData = new ScDPItemData( aSelectedPage, 0.0, FALSE );      // default - name only
+    }
+
+    return *pSelectedData;
+}
+
 BOOL ScDPDimension::IsValidPage( const ScDPItemData& rData )
 {
     if ( bHasSelectedPage )
-    {
-        if ( !pSelectedData )
-        {
-            // find the named member to initialize pSelectedData from it, with name and value
+        return rData.IsCaseInsEqual( GetSelectedData() );
 
-            long nLevel = 0;        // same as in ScDPObject::FillPageList
-
-            long nHierarchy = getUsedHierarchy();
-            if ( nHierarchy >= GetHierarchiesObject()->getCount() )
-                nHierarchy = 0;
-            ScDPLevels* pLevels = GetHierarchiesObject()->getByIndex(nHierarchy)->GetLevelsObject();
-            long nLevCount = pLevels->getCount();
-            if ( nLevel < nLevCount )
-            {
-                ScDPMembers* pMembers = pLevels->getByIndex(nLevel)->GetMembersObject();
-
-                //! merge with ScDPMembers::getByName
-                long nCount = pMembers->getCount();
-                for (long i=0; i<nCount && !pSelectedData; i++)
-                {
-                    ScDPMember* pMember = pMembers->getByIndex(i);
-                    if ( pMember->GetNameStr() == aSelectedPage )
-                    {
-                        pSelectedData = new ScDPItemData();
-                        pMember->FillItemData( *pSelectedData );
-                    }
-                }
-            }
-
-            if ( !pSelectedData )
-                pSelectedData = new ScDPItemData( aSelectedPage, 0.0, FALSE );      // default - name only
-        }
-
-        return rData.IsCaseInsEqual( *pSelectedData );
-    }
     return TRUE;        // no selection -> all data
 }
 
