@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:48:43 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 13:47:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,8 @@ private:            // private methods
     bool            writeFeatureList( osl::File* pFile, const JobData&, bool bDocumentSetup );
     bool            writeSetup( osl::File* pFile, const JobData& );
     bool            writePageSetup( osl::File* pFile, const JobData& );
-    bool            writeProlog (osl::File* pFile);
+    void            writeJobPatch( osl::File* File, const JobData& );
+    bool            writeProlog (osl::File* pFile, const JobData& );
 
 public:             // for usage in PrinterGfx
 
