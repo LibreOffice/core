@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-26 11:20:33 $
+ *  last change: $Author: jl $ $Date: 2004-05-04 08:43:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,8 +449,9 @@ javaFrameworkError SAL_CALL jfw_setSelectedJRE(JavaInfo const *pInfo);
 
 
 /** provides information about the JRE that is to be used.
-
     <p>
+    If no JRE is currently selected then <code>ppInfo</code> will contain
+    NULL on return.</br>
     If the value of the element <updated> in the javavendors.xml file was
     changed since the time when the last Java was selected then this
     function returns <code>JFW_E_INVALID_SETTINGS</code>. This could happen during
@@ -470,8 +471,6 @@ javaFrameworkError SAL_CALL jfw_setSelectedJRE(JavaInfo const *pInfo);
     the internally used data store. <br/>
     JFW_E_FORMAT_STORE the internally used data store has not the
     expected format<br/>
-
-    JFW_E_NO_SELECT there is no Java selected yet.<br/>
     JFW_E_INVALID_SETTINGS the javavendors.xml has been changed and no
     JRE has been selected afterwards. <br/>
  */

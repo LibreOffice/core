@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-28 10:13:23 $
+ *  last change: $Author: jl $ $Date: 2004-05-04 08:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -676,7 +676,10 @@ javaFrameworkError SAL_CALL jfw_getSelectedJRE(JavaInfo **ppInfo)
     {
         jfw::CJavaInfo aInfo(aSettings.getJavaInfo());
         if (aInfo == NULL)
-            return JFW_E_NO_SELECT;
+        {
+            *ppInfo = NULL;
+            return JFW_E_NONE;
+        }
         //If the javavendors.xml has changed, then the current selected
         //Java is not valid anymore
         // /java/javaInfo/@vendorUpdate != javaSelection/updated (javavendors.xml)

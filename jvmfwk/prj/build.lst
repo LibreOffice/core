@@ -2,3 +2,4 @@ jv jvmfwk : cppu sal libxml2 NULL
 jv jvmfwk\source nmake - all jv_framework NULL
 jv jvmfwk\plugins\sunmajor\pluginlib nmake - all jf_sunmajorlib NULL
 jv jvmfwk\plugins\sunmajor\javaenvsetup nmake - u jf_sunjavaldx NULL
+jv jvmfwk\distributions\StarOffice nmake - all jf_staroffice NULL
