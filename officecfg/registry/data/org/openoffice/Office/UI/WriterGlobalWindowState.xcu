@@ -3,9 +3,9 @@
  *
  *  $RCSfile: WriterGlobalWindowState.xcu,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 08:57:18 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:19:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,58 +255,16 @@
                     <value>false</value>
                 </prop>
             </node>
-            <node oor:name="private:resource/toolbar/xformcontrols" oor:op="replace">
-                <prop oor:name="UIName" oor:type="xs:string">
-                    <value xml:lang="en-US">XML Form Controls</value>
-                    <value xml:lang="de">XML Formular-Steuerelemente</value>
-                </prop>
-                <prop oor:name="Docked" oor:type="xs:boolean">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="Visible" oor:type="xs:boolean">
-                    <value>false</value>
-                </prop>
-            </node>
             <node oor:name="private:resource/toolbar/formcontrols" oor:op="replace">
                 <prop oor:name="UIName" oor:type="xs:string">
-                    <value xml:lang="en-US">Controls</value>
-                    <value xml:lang="de">Steuerelemente</value>
+                    <value xml:lang="en-US">Form Controls</value>
+                    <value xml:lang="de">Formular Steuerelemente</value>
                 </prop>
                 <prop oor:name="Docked" oor:type="xs:boolean">
                     <value>false</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>false</value>
-                </prop>
-            </node>
-            <node oor:name="private:resource/toolbar/moredatabasecontrols" oor:op="replace">
-                <prop oor:name="UIName" oor:type="xs:string">
-                    <value xml:lang="en-US">More Database Controls</value>
-                    <value xml:lang="de">Weitere Datenbank-Steuerelemente</value>
-                </prop>
-                <prop oor:name="Docked" oor:type="xs:boolean">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="Visible" oor:type="xs:boolean">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
-                    <value>true</value>
-                </prop>
-            </node>
-            <node oor:name="private:resource/toolbar/morexformcontrols" oor:op="replace">
-                <prop oor:name="UIName" oor:type="xs:string">
-                    <value xml:lang="en-US">More XML Form Controls</value>
-                    <value xml:lang="de">Weitere XML Formular-Steuerelemente</value>
-                </prop>
-                <prop oor:name="Docked" oor:type="xs:boolean">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="Visible" oor:type="xs:boolean">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
-                    <value>true</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/moreformcontrols" oor:op="replace">
@@ -322,30 +280,6 @@
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
                     <value>true</value>
-                </prop>
-            </node>
-            <node oor:name="private:resource/toolbar/databaseformdesign" oor:op="replace">
-                <prop oor:name="UIName" oor:type="xs:string">
-                    <value xml:lang="en-US">Database Form Design</value>
-                    <value xml:lang="de">Datenbank Formularentwurf</value>
-                </prop>
-                <prop oor:name="Docked" oor:type="xs:boolean">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="Visible" oor:type="xs:boolean">
-                    <value>false</value>
-                </prop>
-            </node>
-            <node oor:name="private:resource/toolbar/xformdesign" oor:op="replace">
-                <prop oor:name="UIName" oor:type="xs:string">
-                    <value xml:lang="en-US">XML Form Design</value>
-                    <value xml:lang="de">XML Formularentwurf</value>
-                </prop>
-                <prop oor:name="Docked" oor:type="xs:boolean">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="Visible" oor:type="xs:boolean">
-                    <value>false</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/formdesign" oor:op="replace">
