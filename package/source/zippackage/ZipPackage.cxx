@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: mtg $ $Date: 2001-12-11 15:39:48 $
+ *  last change: $Author: mav $ $Date: 2002-02-19 17:00:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,18 @@
 #ifndef _COM_SUN_STAR_UCB_NAMECLASH_HPP_
 #include <com/sun/star/ucb/NameClash.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT2_HPP_
+#include <com/sun/star/ucb/OpenCommandArgument2.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_OPENMODE_HPP_
+#include <com/sun/star/ucb/OpenMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XACTIVEDATASTREAMER_HPP_
+#include <com/sun/star/io/XActiveDataStreamer.hpp>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
 #ifndef _CONTENT_INFO_HXX_
 #include <ContentInfo.hxx>
 #endif
@@ -174,6 +186,39 @@ using namespace com::sun::star::packages::manifest;
 using namespace com::sun::star::packages::zip::ZipConstants;
 
 #define LOGFILE_AUTHOR "mg115289"
+
+//===========================================================================
+
+class ActiveDataStreamer : public ::cppu::WeakImplHelper1< XActiveDataStreamer >
+{
+    Reference< XStream > mStream;
+public:
+
+    virtual Reference< XStream > SAL_CALL getStream() { return mStream; }
+
+    virtual void SAL_CALL setStream( const Reference< XStream >& stream ) { mStream = stream; }
+};
+
+//===========================================================================
+
+static void copyInputToOutput( Reference< XInputStream >& aIn, Reference< XOutputStream >& aOut )
+{
+    sal_Int32 nRead;
+    Sequence < sal_Int8 > aSequence ( n_ConstBufferSize );
+
+    do
+    {
+        nRead = aIn->readBytes ( aSequence, n_ConstBufferSize );
+        if ( nRead < n_ConstBufferSize )
+        {
+            Sequence < sal_Int8 > aTempBuf ( aSequence.getConstArray(), nRead );
+            aOut->writeBytes ( aTempBuf );
+        }
+        else
+            aOut->writeBytes ( aSequence );
+    }
+    while ( nRead == n_ConstBufferSize );
+}
 
 ZipPackage::ZipPackage (const Reference < XMultiServiceFactory > &xNewFactory)
 : pZipFile( NULL )
@@ -376,9 +421,18 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
             try
             {
                 Content aContent (sURL, Reference < XCommandEnvironment >() );
-                Reference < XActiveDataSink > xSink = new ZipPackageSink;
-                if (aContent.openStream ( xSink ) )
-                    xContentStream = xSink->getInputStream();
+                Any aAny = aContent.getPropertyValue( OUString::createFromAscii( "Size" ) );
+                sal_uInt64 aSize;
+                // kind of optimisation: treat empty files as nonexistent files
+                // and write to such files directly
+                if( ( aAny >>= aSize ) && aSize )
+                {
+                    Reference < XActiveDataSink > xSink = new ZipPackageSink;
+                    if (aContent.openStream ( xSink ) )
+                        xContentStream = xSink->getInputStream();
+                }
+                else
+                    bHaveZipFile = sal_False;
             }
             catch (com::sun::star::uno::Exception&)
             {
@@ -628,11 +682,25 @@ Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( const 
     return xRef;
 }
 
-void ZipPackage::writeTempFile()
+sal_Bool ZipPackage::writeFileIsTemp( Reference< XOutputStream >& aOrigStream )
 {
-    // First, create a temporary file to write to:
-    const OUString sServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.io.TempFile" ) );
-    Reference < XOutputStream > xTempOut = Reference < XOutputStream > ( xFactory->createInstance ( sServiceName ), UNO_QUERY );
+    // In case the target local file does not exist or empty
+    // write directly to it otherwize create a temporary file to write to
+
+    sal_Bool aUseTemp = sal_True;
+    Reference < XOutputStream > xTempOut;
+
+    if ( eMode == e_IMode_URL && !pZipFile && aOrigStream.is() )
+    {
+        xTempOut = aOrigStream;
+        aUseTemp = sal_False;
+    }
+    else
+    {
+        // create temporary file
+        const OUString sServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.io.TempFile" ) );
+        xTempOut = Reference < XOutputStream > ( xFactory->createInstance ( sServiceName ), UNO_QUERY );
+    }
 
     // Hand it to the ZipOutputStream:
     ZipOutputStream aZipOut ( xTempOut );
@@ -745,22 +813,9 @@ void ZipPackage::writeTempFile()
         Reference < XInputStream > xTempIn ( xTempOut, UNO_QUERY );
         Reference < XSeekable > xTempSeek ( xTempOut, UNO_QUERY );
         xTempSeek->seek ( 0 );
-        sal_Int32 nRead;
-        Sequence < sal_Int8 > aSequence ( n_ConstBufferSize );
 
         // then copy the contents of the tempfile to our output stream
-        do
-        {
-            nRead = xTempIn->readBytes ( aSequence, n_ConstBufferSize );
-            if ( nRead < n_ConstBufferSize )
-            {
-                Sequence < sal_Int8 > aTempBuf ( aSequence.getConstArray(), nRead );
-                xOutputStream->writeBytes ( aTempBuf );
-            }
-            else
-                xOutputStream->writeBytes ( aSequence );
-        }
-        while ( nRead == n_ConstBufferSize );
+        copyInputToOutput( xTempIn, xTempOut );
     }
 
     // Update our References to point to the new temp file
@@ -773,6 +828,8 @@ void ZipPackage::writeTempFile()
         pZipFile->setInputStream ( xContentStream );
     else
         pZipFile = new ZipFile ( xContentStream, xFactory, sal_False );
+
+    return aUseTemp;
 }
 
 // XChangesBatch
@@ -785,54 +842,101 @@ void SAL_CALL ZipPackage::commitChanges(  )
         throw WrappedTargetException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "This package is read only!" ) ),
                 static_cast < OWeakObject * > ( this ), makeAny ( aException ) );
     }
-    RTL_LOGFILE_TRACE_AUTHOR ( "package", LOGFILE_AUTHOR, "{ ZipPackage::commitChanges" );
-    // First we write the entire package to a temporary file. After writeTempFile,
-    // xContentSeek and xContentStream will reference the new temporary file.
-    writeTempFile();
+
+    Content aOriginalContent (sURL, Reference < XCommandEnvironment >() );
+    Reference< XOutputStream > aOrigFileStream;
 
     if ( eMode == e_IMode_URL )
     {
-        Reference < XPropertySet > xPropSet ( xContentStream, UNO_QUERY );
-        OUString sTargetFolder = sURL.copy ( 0, sURL.lastIndexOf ( static_cast < sal_Unicode > ( '/' ) ) );
-        Content aContent ( sTargetFolder, Reference < XCommandEnvironment > () );
-        if ( xPropSet.is() )
+        // local file can be written directly if it empty or does not exist
+
+        Reference< XActiveDataStreamer > xSink = new ActiveDataStreamer;
+
+        try
         {
-            OUString sTempURL;
-            Any aAny = xPropSet->getPropertyValue ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Uri" ) ) );
-            aAny >>= sTempURL;
-            TransferInfo aInfo;
-            aInfo.NameClash = NameClash::OVERWRITE;
-            aInfo.MoveData = sal_False;
-            aInfo.SourceURL = sTempURL;
-            aInfo.NewTitle = rtl::Uri::decode ( sURL.copy ( 1 + sURL.lastIndexOf ( static_cast < sal_Unicode > ( '/' ) ) ),
-                                                rtl_UriDecodeWithCharset,
-                                                RTL_TEXTENCODING_UTF8 );
-            aAny <<= aInfo;
-            try
-            {
-                aContent.executeCommand ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "transfer" ) ), aAny );
-            }
-            catch (::com::sun::star::uno::Exception& r)
-            {
-                throw WrappedTargetException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Unable to write Zip File to disk!" ) ),
-                        static_cast < OWeakObject * > ( this ), makeAny( r ) );
-            }
+            // to be sure that the file exists
+            if( !pZipFile )
+                aOriginalContent.writeStream( Reference< XInputStream >(), sal_False );
+
+            OpenCommandArgument2 aArg;
+               aArg.Mode        = OpenMode::DOCUMENT;
+               aArg.Priority    = 0; // unused
+               aArg.Sink       = xSink;
+               aArg.Properties = Sequence< Property >( 0 ); // unused
+
+            aOriginalContent.executeCommand( OUString::createFromAscii( "open" ), makeAny( aArg ) );
+
+            aOrigFileStream = xSink->getStream()->getOutputStream();
+        }
+        catch( Exception& )
+        {
+            // seems to be nonlocal file
+            // temporary file mechanics should be used
+        }
+    }
+
+    RTL_LOGFILE_TRACE_AUTHOR ( "package", LOGFILE_AUTHOR, "{ ZipPackage::commitChanges" );
+    // First we write the entire package to a temporary file. After writeTempFile,
+    // xContentSeek and xContentStream will reference the new temporary file.
+    // Exception - empty or nonexistent local file that is written directly
+
+    if ( writeFileIsTemp( aOrigFileStream ) && eMode == e_IMode_URL )
+    {
+        if( aOrigFileStream.is() )
+        {
+            // write directly in case of local file
+            copyInputToOutput( xContentStream, aOrigFileStream );
+            aOrigFileStream->closeOutput();
+            xContentSeek->seek ( 0 );
         }
         else
         {
-            // not quite sure how it could happen that xContentStream WOULDN'T support
-            // XPropertySet, but just in case... :)
-            try
+            Reference < XPropertySet > xPropSet ( xContentStream, UNO_QUERY );
+            if ( xPropSet.is() )
             {
-                aContent.writeStream ( xContentStream, sal_True );
+                OUString sTargetFolder = sURL.copy ( 0, sURL.lastIndexOf ( static_cast < sal_Unicode > ( '/' ) ) );
+                Content aContent ( sTargetFolder, Reference < XCommandEnvironment > () );
+
+                OUString sTempURL;
+                Any aAny = xPropSet->getPropertyValue ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Uri" ) ) );
+                aAny >>= sTempURL;
+
+                TransferInfo aInfo;
+                aInfo.NameClash = NameClash::OVERWRITE;
+                aInfo.MoveData = sal_False;
+                aInfo.SourceURL = sTempURL;
+                aInfo.NewTitle = rtl::Uri::decode ( sURL.copy ( 1 + sURL.lastIndexOf ( static_cast < sal_Unicode > ( '/' ) ) ),
+                                                    rtl_UriDecodeWithCharset,
+                                                    RTL_TEXTENCODING_UTF8 );
+                aAny <<= aInfo;
+                try
+                {
+                    aContent.executeCommand ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "transfer" ) ), aAny );
+                }
+                catch (::com::sun::star::uno::Exception& r)
+                {
+                    throw WrappedTargetException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Unable to write Zip File to disk!" ) ),
+                            static_cast < OWeakObject * > ( this ), makeAny( r ) );
+                }
             }
-            catch (::com::sun::star::uno::Exception& r)
+            else
             {
-                throw WrappedTargetException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Unable to write Zip File to disk!" ) ),
-                        static_cast < OWeakObject * > ( this ), makeAny( r ) );
+                // not quite sure how it could happen that xContentStream WOULDN'T support
+                // XPropertySet, but just in case... :)
+
+                try
+                {
+                    aOriginalContent.writeStream ( xContentStream, sal_True );
+                }
+                catch (::com::sun::star::uno::Exception& r)
+                {
+                    throw WrappedTargetException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Unable to write Zip File to disk!" ) ),
+                            static_cast < OWeakObject * > ( this ), makeAny( r ) );
+                }
             }
         }
     }
+
     RTL_LOGFILE_TRACE_AUTHOR ( "package", LOGFILE_AUTHOR, "} ZipPackage::commitChanges" );
 }
 

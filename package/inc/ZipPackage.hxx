@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-29 13:39:22 $
+ *  last change: $Author: mav $ $Date: 2002-02-19 17:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ protected:
     ZipFile          *pZipFile;
 
     void getZipFileContents();
-    void writeTempFile();
+    sal_Bool writeFileIsTemp( ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& );
 
 public:
     ZipPackage (const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > &xNewFactory);
