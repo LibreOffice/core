@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-31 14:39:20 $
+ *  last change: $Author: hr $ $Date: 2001-11-06 16:58:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include <stdio.h>
 #include <dlfcn.h>
+#include <cxxabi.h>
 #include <hash_map>
 
 #include <rtl/strbuf.hxx>
@@ -134,6 +135,7 @@ class RTTI
 
     Mutex m_mutex;
     t_rtti_map m_rttis;
+    t_rtti_map m_generatedRttis;
 
     void * m_hApp;
 
@@ -141,7 +143,9 @@ public:
     RTTI() SAL_THROW( () );
     ~RTTI() SAL_THROW( () );
 
-    type_info * getRTTI( OUString const & unoName ) SAL_THROW( () );
+    type_info * getRTTI( typelib_CompoundTypeDescription * ) SAL_THROW( () );
+private:
+    type_info * generateRTTI( typelib_CompoundTypeDescription *, const char *pRttiName) SAL_THROW( () );
 };
 //__________________________________________________________________________________________________
 RTTI::RTTI() SAL_THROW( () )
@@ -154,9 +158,31 @@ RTTI::~RTTI() SAL_THROW( () )
     dlclose( m_hApp );
 }
 //__________________________________________________________________________________________________
-type_info * RTTI::getRTTI( OUString const & unoName ) SAL_THROW( () )
+type_info * RTTI::generateRTTI( typelib_CompoundTypeDescription * pTypeDescr, const char *pRttiName )
+{
+    type_info *rtti = 0;
+
+    if( ! pTypeDescr->pBaseTypeDescription )
+    {
+        // this class has no base class
+        rtti = new __class_type_info( strdup(pRttiName) );
+    }
+    else
+    {
+        // ensure availability of base
+        type_info *baseRtti = getRTTI(
+            (typelib_CompoundTypeDescription*) pTypeDescr->pBaseTypeDescription );
+        rtti = new __si_class_type_info( strdup( pRttiName ), (__class_type_info *) baseRtti );
+    }
+    return rtti;
+}
+
+//__________________________________________________________________________________________________
+type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THROW( () )
 {
     type_info * rtti;
+
+    OUString const & unoName = *(OUString const *)&pTypeDescr->aBase.pTypeName;
 
     MutexGuard guard( m_mutex );
     t_rtti_map::const_iterator iFind( m_rttis.find( unoName ) );
@@ -178,7 +204,8 @@ type_info * RTTI::getRTTI( OUString const & unoName ) SAL_THROW( () )
 
         OString rttiName( buf.makeStringAndClear() );
         rtti = (type_info *)dlsym( m_hApp, rttiName.getStr() );
-        if (rtti)
+
+        if( rtti )
         {
             pair< t_rtti_map::iterator, bool > insertion(
                 m_rttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
@@ -186,14 +213,23 @@ type_info * RTTI::getRTTI( OUString const & unoName ) SAL_THROW( () )
         }
         else
         {
-#ifdef _DEBUG
-            OStringBuffer buf( 64 );
-            buf.append( "rtti symbol not found: " );
-            buf.append( rttiName );
-            OString msg( buf.makeStringAndClear() );
-            OSL_ENSURE( 0, msg.getStr() );
-#endif
-            rtti = 0;
+            // try to lookup the symbol in the generated rtti map
+            t_rtti_map::const_iterator iFind( m_generatedRttis.find( unoName ) );
+            if (iFind == m_generatedRttis.end())
+            {
+                // we must generate it !
+                // symbol and rtti-name is nearly identical,
+                // the symbol is prefixed with _ZTI
+                fprintf( stderr,"generated rtti for %s\n" , rttiName.getStr()+4 );
+                rtti = generateRTTI( pTypeDescr , rttiName+4 );
+                pair< t_rtti_map::iterator, bool > insertion(
+                    m_generatedRttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
+                OSL_ENSURE( insertion.second, "### inserting new rtti failed?!" );
+            }
+            else
+            {
+                rtti = iFind->second;
+            }
         }
     }
     else
@@ -239,7 +275,6 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     // destruct uno exception
     ::uno_any_destruct( pUnoExc, 0 );
     // avoiding locked counts
-    OUString const & unoName = *(OUString const *)&pTypeDescr->pTypeName;
     static RTTI * s_rtti = 0;
     if (! s_rtti)
     {
@@ -254,7 +289,7 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
 #endif
         }
     }
-    rtti = (type_info *)s_rtti->getRTTI( unoName );
+    rtti = (type_info *)s_rtti->getRTTI( (typelib_CompoundTypeDescription *) pTypeDescr );
     TYPELIB_DANGER_RELEASE( pTypeDescr );
     OSL_ENSURE( rtti, "### no rtti for throwing exception!" );
     if (! rtti)
