@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-20 09:56:59 $
+ *  last change: $Author: pl $ $Date: 2001-07-26 11:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.c,v 1.7 2001-07-20 09:56:59 pl Exp $
+/* $Id: sft.c,v 1.8 2001-07-26 11:43:05 pl Exp $
  * Sun Font Tools
  *
  * Author: Alexander Gelfenbain
@@ -2425,7 +2425,10 @@ TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont *ttf, uint16 *glyphAr
             res[i].sb  = XUnits(UPEm, GetInt16(table, 4 * glyphID + 2, 1));
         } else {
             res[i].adv = XUnits(UPEm, GetUInt16(table, 4 * (n - 1), 1));
-            res[i].sb  = XUnits(UPEm, GetInt16(table + n * 4, (glyphID - n) * 2, 1));
+            if( glyphID-n < ttf->nglyphs )
+                res[i].sb = XUnits(UPEm, GetInt16(table + n * 4, (glyphID - n) * 2, 1));
+            else /* font is broken */
+                res[i].sb = XUnits(UPEm, GetInt16(table, 4*(n-1) + 2, 1));
         }
     }
 
