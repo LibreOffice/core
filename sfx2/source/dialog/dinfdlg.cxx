@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:33:50 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 15:06:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@
 #include "helper.hxx"
 #include "objsh.hxx"
 #include "docfile.hxx"
-#include "../doc/storagehelper.hxx"
+#include <comphelper/storagehelper.hxx>
 
 #include "sfx.hrc"
 #include "dinfdlg.hrc"
@@ -549,27 +549,6 @@ void SfxDocumentDescPage::Reset(const SfxItemSet &rSet)
 
 namespace
 {
-    uno::Reference < embed::XStorage > GetCurrentStorage( bool* _pReadOnly = NULL )
-    {
-        uno::Reference < embed::XStorage > xStore;
-
-        SfxObjectShell* pDoc = SfxObjectShell::Current();
-        if( pDoc )
-        {
-            SfxMedium*  pMedium = pDoc->GetMedium();
-            if( pMedium && pMedium->GetName().Len() )
-            {
-                // HACK: No Storage API befoer CWS MAV09
-                rtl::OUString aDocFileNameURL = pMedium->GetName();
-                xStore = ::comphelper::OStorageHelper::GetStorageFromURL(
-                        aDocFileNameURL, embed::ElementModes::READ, comphelper::getProcessServiceFactory() );
-                if( _pReadOnly )
-                    *_pReadOnly = pMedium->IsReadOnly();
-            }
-        }
-        return xStore;
-    }
-
     String GetDateTimeString( sal_Int32 _nDate, sal_Int32 _nTime )
     {
         LocaleDataWrapper aWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
@@ -691,30 +670,34 @@ IMPL_LINK( SfxDocumentPage, SignatureHdl, PushButton*, EMPTYARG )
 
 void SfxDocumentPage::ImplUpdateSignatures()
 {
-    Reference < embed::XStorage > xStore = GetCurrentStorage();
-    if( xStore.is() )
+    SfxObjectShell* pDoc = SfxObjectShell::Current();
+    if( pDoc )
     {
-        Reference< security::XDocumentDigitalSignatures > xD(
-            comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), uno::UNO_QUERY );
-
-        if( xD.is() )
+        SfxMedium* pMedium = pDoc->GetMedium();
+        if ( pMedium && pMedium->GetName().Len() && pMedium->GetStorage().is() )
         {
-            String s;
-            Sequence< security::DocumentSignaturesInformation > aInfos;
-            aInfos = xD->VerifyDocumentContentSignatures( xStore );
-            if( aInfos.getLength() > 1 )
+            Reference< security::XDocumentDigitalSignatures > xD(
+                comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), uno::UNO_QUERY );
+
+            if( xD.is() )
             {
-                s = aMultiSignedStr;
+                String s;
+                Sequence< security::DocumentSignaturesInformation > aInfos;
+                aInfos = xD->VerifyDocumentContentSignatures( pMedium->GetStorage() );
+                if( aInfos.getLength() > 1 )
+                {
+                    s = aMultiSignedStr;
+                }
+                else if( aInfos.getLength() == 1 )
+                {
+                    String aCN_Id( String::CreateFromAscii( "CN" ) );
+                    const security::DocumentSignaturesInformation& rInfo = aInfos[ 0 ];
+                    s = GetDateTimeString( rInfo.SignatureDate, rInfo.SignatureTime );
+                    s.AppendAscii( ", " );
+                    s += GetContentPart( rInfo.Signer->getSubjectName(), aCN_Id );
+                }
+                aSignedValFt.SetText( s );
             }
-            else if( aInfos.getLength() == 1 )
-            {
-                String aCN_Id( String::CreateFromAscii( "CN" ) );
-                const security::DocumentSignaturesInformation& rInfo = aInfos[ 0 ];
-                s = GetDateTimeString( rInfo.SignatureDate, rInfo.SignatureTime );
-                s.AppendAscii( ", " );
-                s += GetContentPart( rInfo.Signer->getSubjectName(), aCN_Id );
-            }
-            aSignedValFt.SetText( s );
         }
     }
 }
