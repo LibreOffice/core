@@ -2,9 +2,9 @@
   *
   *  $RCSfile: text_gfx.cxx,v $
   *
-  *  $Revision: 1.20 $
+  *  $Revision: 1.21 $
   *
-  *  last change: $Author: hr $ $Date: 2003-06-30 14:26:57 $
+  *  last change: $Author: kz $ $Date: 2003-08-25 13:59:45 $
   *
   *  The Contents of this file are made available subject to the terms of
   *  either of the following licenses
@@ -176,7 +176,9 @@ PrinterGfx::SetFont(
                     sal_Int32 nHeight,
                     sal_Int32 nWidth,
                     sal_Int32 nAngle,
-                    bool bVertical
+                    bool bVertical,
+                    bool bArtItalic,
+                    bool bArtBold
                     )
 {
     // font and encoding will be set by drawText again immediately
@@ -186,6 +188,8 @@ PrinterGfx::SetFont(
     maVirtualStatus.maEncoding        = RTL_TEXTENCODING_DONTKNOW;
     maVirtualStatus.mnTextHeight      = nHeight;
     maVirtualStatus.mnTextWidth       = nWidth;
+    maVirtualStatus.mbArtItalic       = bArtItalic;
+    maVirtualStatus.mbArtBold         = bArtBold;
     mnTextAngle                       = nAngle;
     mbTextVertical                    = bVertical;
 
@@ -455,8 +459,13 @@ PrinterGfx::DrawText (
             nTo++ ;
         }
 
-        SetFont( nFont, maVirtualStatus.mnTextHeight, maVirtualStatus.mnTextWidth,
-                mnTextAngle, mbTextVertical );
+        SetFont( nFont,
+                 maVirtualStatus.mnTextHeight, maVirtualStatus.mnTextWidth,
+                 mnTextAngle,
+                 mbTextVertical,
+                 maVirtualStatus.mbArtItalic,
+                 maVirtualStatus.mbArtBold
+                 );
 
         if (mbTextVertical)
         {
@@ -483,8 +492,12 @@ PrinterGfx::DrawText (
     }
 
     // restore the original font settings
-    SetFont( nRestoreFont, maVirtualStatus.mnTextHeight, maVirtualStatus.mnTextWidth,
-            mnTextAngle, mbTextVertical );
+    SetFont( nRestoreFont,
+             maVirtualStatus.mnTextHeight, maVirtualStatus.mnTextWidth,
+             mnTextAngle, mbTextVertical,
+             maVirtualStatus.mbArtItalic,
+             maVirtualStatus.mbArtBold
+             );
 }
 
 void PrinterGfx::drawVerticalizedText(
@@ -521,7 +534,11 @@ void PrinterGfx::drawVerticalizedText(
             for( int n = nLastPos; n < i; n++ )
                 pDelta[n] = pDeltaArray[n] - (aPoint.X() - rPoint.X() );
 
-            SetFont( mnFontID, maVirtualStatus.mnTextHeight, maVirtualStatus.mnTextWidth, nNormalAngle, mbTextVertical );
+            SetFont( mnFontID,
+                     maVirtualStatus.mnTextHeight, maVirtualStatus.mnTextWidth,
+                     nNormalAngle, mbTextVertical,
+                     maVirtualStatus.mbArtItalic,
+                     maVirtualStatus.mbArtBold );
             drawText( aPoint, pStr + nLastPos, i - nLastPos, pDelta + nLastPos );
 
             aPoint.X() = rPoint.X() + ((double)pDeltaArray[i-1] * fCos);
@@ -531,10 +548,13 @@ void PrinterGfx::drawVerticalizedText(
         {
             int nOldWidth   = maVirtualStatus.mnTextWidth;
             int nOldHeight  = maVirtualStatus.mnTextHeight;
-            SetFont( mnFontID, nTextScale,
+            SetFont( mnFontID,
+                     nTextScale,
                      maVirtualStatus.mnTextHeight,
                      nNormalAngle + nDeltaAngle,
-                     mbTextVertical );
+                     mbTextVertical,
+                     maVirtualStatus.mbArtItalic,
+                     maVirtualStatus.mbArtBold );
 
             double nA = nTextScale * aInfo.m_nAscend / 1000.0;
             double nD = nTextScale * aInfo.m_nDescend / 1000.0;
@@ -566,7 +586,9 @@ void PrinterGfx::drawVerticalizedText(
                      nOldHeight,
                      nOldWidth,
                      nNormalAngle,
-                     mbTextVertical );
+                     mbTextVertical,
+                     maVirtualStatus.mbArtItalic,
+                     maVirtualStatus.mbArtBold );
         }
         i++;
         nLastPos = i;
