@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlFileControlModel.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 16:01:21 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:45:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ published service UnoControlFileControlModel
         <p>Not every border style (see <member>Border</member>) may support coloring.
         For instance, usually a border with 3D effect will ignore the BorderColor setting.</p>
 
-        @since #i24694#
+        @since OOo 2.0.0
      */
     [optional, property] long BorderColor;
 
@@ -163,7 +163,7 @@ published service UnoControlFileControlModel
 
     /** specifies that the content of the control cannot be modified by the user.
 
-        @since #100115#
+        @since OOo 1.1.2
      */
     [optional, property] boolean ReadOnly;
 
