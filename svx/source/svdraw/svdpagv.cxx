@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 11:04:10 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:34:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1795,20 +1795,30 @@ sal_Bool SdrPageView::IsObjMarkable(SdrObject* pObj) const
             // If object is a Group object, visibility depends evtl. on
             // multiple layers. If one object is markable, Group is markable.
             SdrObjList* pObjList = ((SdrObjGroup*)pObj)->GetSubList();
-            sal_Bool bGroupIsMarkable(sal_False);
 
-            for(sal_uInt32 a(0L); !bGroupIsMarkable && a < pObjList->GetObjCount(); a++)
+            if(pObjList && pObjList->GetObjCount())
             {
-                SdrObject* pCandidate = pObjList->GetObj(a);
+                sal_Bool bGroupIsMarkable(sal_False);
 
-                // call recursively
-                if(IsObjMarkable(pCandidate))
+                for(sal_uInt32 a(0L); !bGroupIsMarkable && a < pObjList->GetObjCount(); a++)
                 {
-                    bGroupIsMarkable = sal_True;
-                }
-            }
+                    SdrObject* pCandidate = pObjList->GetObj(a);
 
-            return bGroupIsMarkable;
+                    // call recursively
+                    if(IsObjMarkable(pCandidate))
+                    {
+                        bGroupIsMarkable = sal_True;
+                    }
+                }
+
+                return bGroupIsMarkable;
+            }
+            else
+            {
+                // #i43302#
+                // Allow empty groups to be selected to be able to delete them
+                return sal_True;
+            }
         }
         else
         {
