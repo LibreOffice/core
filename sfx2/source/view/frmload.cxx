@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-02 16:56:26 $
+ *  last change: $Author: as $ $Date: 2001-02-06 11:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -586,6 +586,7 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
     // Extract URL from given descriptor.
     String aURL;
     ::rtl::OUString sTemp;
+    rtl::OUString aTypeName;
 
     sal_uInt32 nPropertyCount = lDescriptor.getLength();
     for( sal_uInt32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
@@ -595,10 +596,11 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
             lDescriptor[nProperty].Value >>= sTemp;
             aURL = sTemp;
         }
-        if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName")) )
+        if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("TypeName")) )
         {
             lDescriptor[nProperty].Value >>= sTemp;
             // Convert new filtername to old format!
+            aTypeName = sTemp;
             aFilterName = SfxFilterContainer::ConvertToOldFilterName( sTemp );
         }
     }
@@ -614,8 +616,7 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
     else if ( !aFilterName.Len() )
     {
         // generic detector will not be called for new types except when this type does not support deep detection
-        // in this case it is correct to use the result of the shallow detection
-        aFilterName = sTemp;
+        // in this case it is correct to use the result of the shallow detection ( that may be empty also! )
     }
     else
     {
@@ -699,7 +700,6 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
             aFilterName = SfxFilterContainer::ConvertToNewFilterName( pFilter->GetName() );
     }
 
-    rtl::OUString aTypeName;
     if ( aFilterName.Len() )
     {
         ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >  xMan = ::comphelper::getProcessServiceFactory();
