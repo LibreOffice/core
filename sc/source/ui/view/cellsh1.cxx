@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:53:31 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:54:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,10 @@
 
 //------------------------------------------------------------------
 
+#ifndef _COM_SUN_STAR_I18N_TEXTCONVERSIONOPTION_HPP_
+#include <com/sun/star/i18n/TextConversionOption.hpp>
+#endif
+
 #include "scitems.hxx"
 #include <sfx2/viewfrm.hxx>
 
@@ -145,6 +149,18 @@
 #include "scabstdlg.hxx" //CHINA001
 #define IS_AVAILABLE(WhichId,ppItem) \
     (pReqArgs->GetItemState((WhichId), TRUE, ppItem ) == SFX_ITEM_SET)
+
+#define C2U(cChar)  rtl::OUString::createFromAscii(cChar)
+
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <cppuhelper/bootstrap.hxx>
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::uno;
 
 //------------------------------------------------------------------
 void ScCellShell::ExecuteEdit( SfxRequest& rReq )
@@ -1599,6 +1615,77 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_HANGUL_HANJA_CONVERSION:
             pTabViewShell->DoHangulHanjaConversion();
+            break;
+
+        case SID_CHINESE_CONVERSION:
+            {
+                //open ChineseTranslationDialog
+                Reference< XComponentContext > xContext(
+                    ::cppu::defaultBootstrap_InitialComponentContext() ); //@todo get context from calc if that has one
+                if(xContext.is())
+                {
+                    Reference< lang::XMultiComponentFactory > xMCF( xContext->getServiceManager() );
+                    if(xMCF.is())
+                    {
+                        Reference< ui::dialogs::XExecutableDialog > xDialog(
+                                xMCF->createInstanceWithContext(
+                                    rtl::OUString::createFromAscii("com.sun.star.linguistic2.ChineseTranslationDialog")
+                                    , xContext), UNO_QUERY);
+                        Reference< lang::XInitialization > xInit( xDialog, UNO_QUERY );
+                        if( xInit.is() )
+                        {
+                            //  initialize dialog
+                            Reference< awt::XWindow > xDialogParentWindow(0);
+                            Sequence<Any> aSeq(1);
+                            Any* pArray = aSeq.getArray();
+                            PropertyValue aParam;
+                            aParam.Name = rtl::OUString::createFromAscii("ParentWindow");
+                            aParam.Value <<= makeAny(xDialogParentWindow);
+                            pArray[0] <<= makeAny(aParam);
+                            xInit->initialize( aSeq );
+
+                            //execute dialog
+                            sal_Int16 nDialogRet = xDialog->execute();
+                            if( RET_OK == nDialogRet )
+                            {
+                                //get some parameters from the dialog
+                                sal_Bool bToSimplified = sal_True;
+                                sal_Bool bUseVariants = sal_True;
+                                sal_Bool bCommonTerms = sal_True;
+                                Reference< beans::XPropertySet >  xProp( xDialog, UNO_QUERY );
+                                if( xProp.is() )
+                                {
+                                    try
+                                    {
+                                        xProp->getPropertyValue( C2U("IsDirectionToSimplified") ) >>= bToSimplified;
+                                        xProp->getPropertyValue( C2U("IsUseCharacterVariants") ) >>= bUseVariants;
+                                        xProp->getPropertyValue( C2U("IsTranslateCommonTerms") ) >>= bCommonTerms;
+                                    }
+                                    catch( Exception& )
+                                    {
+                                    }
+                                }
+
+                                //execute translation
+                                sal_Int16 nSourceLang = bToSimplified ? LANGUAGE_CHINESE_TRADITIONAL : LANGUAGE_CHINESE_SIMPLIFIED;
+                                sal_Int16 nTargetLang = bToSimplified ? LANGUAGE_CHINESE_SIMPLIFIED : LANGUAGE_CHINESE_TRADITIONAL;
+                                sal_Int32 nOptions    = bUseVariants ? i18n::TextConversionOption::USE_CHARACTER_VARIANTS : 0;
+                                if( !bCommonTerms )
+                                    nOptions = nOptions | i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
+
+                                Font aTargetFont = GetViewData()->GetActiveWin()->GetDefaultFont(
+                                                    DEFAULTFONT_CJK_SPREADSHEET,
+                                                    nTargetLang, DEFAULTFONT_FLAGS_ONLYONE );
+                                ChineseTranslationParams aParams( nSourceLang, nTargetLang, aTargetFont, nOptions );
+                                pTabViewShell->DoChineseTranslation( aParams );
+                            }
+                        }
+                        Reference< lang::XComponent > xComponent( xDialog, UNO_QUERY );
+                        if( xComponent.is() )
+                            xComponent->dispose();
+                    }
+                }
+            }
             break;
 
         case SID_THESAURUS:
