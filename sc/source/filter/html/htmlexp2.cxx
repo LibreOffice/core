@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-07-17 17:53:24 $
+ *  last change: $Author: er $ $Date: 2001-08-06 12:11:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,12 @@ void ScHTMLExport::FillGraphList( const SdrPage* pPage, USHORT nTab,
                     }
                     break;
                     default:
-                        DBG_ERRORFILE( "FillGraphList: kein OBJ_GRAF, kein OBJ_OLE2, unnu?" );
+                        DBG_ERRORFILE( "FillGraphList: no OBJ_GRAF, no OBJ_OLE2, can't write" );
+                        // #90610# need enhancement from drawing layer group to
+                        // get a metafile for any object.
+                        // Then do the above also for all drawing objects and
+                        // in WriteGraphEntry get metafile of drawing object
+                        // and write image.
                 }
             }
             pObject = aIter.Next();
@@ -229,14 +234,18 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
         case OBJ_OLE2:
         {
             const SvInPlaceObjectRef& rRef = ((SdrOle2Obj*)pObject)->GetObjRef();
-            TransferableDataHelper aOleData( rRef->CreateTransferableSnapshot() );
-            GDIMetaFile aMtf;
-            if( aOleData.GetGDIMetaFile( FORMAT_GDIMETAFILE, aMtf ) )
+            DBG_ASSERT( rRef.Is(), "WriteGraphEntry: no OLE ObjRef" );
+            if ( rRef.Is() )
             {
-                Graphic aGraph( aMtf );
-                String aLinkName;
-                WriteImage( aLinkName, aGraph, aOpt );
-                pE->bWritten = TRUE;
+                TransferableDataHelper aOleData( rRef->CreateTransferableSnapshot() );
+                GDIMetaFile aMtf;
+                if( aOleData.GetGDIMetaFile( FORMAT_GDIMETAFILE, aMtf ) )
+                {
+                    Graphic aGraph( aMtf );
+                    String aLinkName;
+                    WriteImage( aLinkName, aGraph, aOpt );
+                    pE->bWritten = TRUE;
+                }
             }
         }
         break;
