@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.58 2001-06-11 14:28:58 cl Exp $
+	$Id: drawing.mod,v 1.59 2001-06-12 15:44:20 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -803,7 +803,7 @@
 <!-- Paramaters -->
 <!ELEMENT draw:param EMPTY>
 <!ATTLIST draw:param draw:name CDATA #IMPLIED>
-<!ATTLIST draw:param draw:name CDATA #IMPLIED>
+<!ATTLIST draw:param draw:value CDATA #IMPLIED>
 
 <!-- Floating Frames -->
 <!ELEMENT draw:floating-frame (svg:desc?)>
