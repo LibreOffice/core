@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-28 11:37:51 $
+ *  last change: $Author: mba $ $Date: 2001-09-04 10:31:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -888,8 +888,12 @@ SvEmbeddedInfoObject* SfxObjectShell::InsertObject
 
 SfxConfigManager* SfxObjectShell::GetConfigManager( BOOL bForceCreation )
 {
-    if ( !pImp->pCfgMgr && ( bForceCreation || SfxConfigManager::HasConfiguration( *GetStorage() ) ) )
-        pImp->pCfgMgr = new SfxConfigManager( *this );
+    if ( !pImp->pCfgMgr )
+    {
+        if ( bForceCreation || HasName() && SfxConfigManager::HasConfiguration( *GetStorage() ) )
+            pImp->pCfgMgr = new SfxConfigManager( *this );
+    }
+
     return pImp->pCfgMgr;
 }
 
