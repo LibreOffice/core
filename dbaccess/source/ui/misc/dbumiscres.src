@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-03 08:36:06 $
+ *  last change: $Author: rt $ $Date: 2002-06-10 20:12:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,7 +421,7 @@ Resource RSC_CHARSETS
         Text[ greek ] = "Big5-HKSCS";
         Text[ dutch ] = "Big5-HKSCS";
         Text[ french ] = "Big5-HKSCS";
-        Text[ spanish ] = "Big5-HKSCS";
+        Text[ spanish ] = "Big5 HKSCS";
         Text[ finnish ] = "Big5-HKSCS";
         Text[ italian ] = "Big5-HKSCS";
         Text[ danish ] = "Big5-HKSCS";
@@ -607,6 +607,9 @@ String STR_BUTTON_TEXT_ALL
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.43  2002/05/03 08:36:06  kz
+ *  Merge SRX642: 03.05.02 - 10:35:45
+ *
  *  Revision 1.42  2002/04/29 08:01:21  oj
  *  #98772# new bitmaps
  *
