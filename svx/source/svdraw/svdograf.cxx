@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sj $ $Date: 2001-02-27 10:49:42 $
+ *  last change: $Author: sj $ $Date: 2001-03-08 16:36:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,20 +246,7 @@ GraphicFilter* SVX_LIGHT_pGrapicFilter = NULL;
 GraphicFilter* SVX_LIGHT_GetGrfFilter_Impl()
 {
     if( !SVX_LIGHT_pGrapicFilter )
-    {
-        String aURLStr;
-
-        if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( GetpApp()->GetAppFileName(), aURLStr ) )
-        {
-            INetURLObject aFilterURL( aURLStr );
-
-            aFilterURL.removeSegment();
-            aFilterURL.removeFinalSlash();
-            SVX_LIGHT_pGrapicFilter = new GraphicFilter;
-            SVX_LIGHT_pGrapicFilter->SetFilterPath( aFilterURL );
-        }
-    }
-
+        SVX_LIGHT_pGrapicFilter = new GraphicFilter;
     return SVX_LIGHT_pGrapicFilter;
 }
 
