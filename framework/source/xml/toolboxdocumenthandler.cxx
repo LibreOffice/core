@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolboxdocumenthandler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 17:04:15 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:57:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,36 +132,30 @@ static const char ITEM_DESCRIPTOR_LABEL[]       = "Label";
 static const char ITEM_DESCRIPTOR_TYPE[]        = "Type";
 static const char ITEM_DESCRIPTOR_STYLE[]       = "Style";
 static const char ITEM_DESCRIPTOR_VISIBLE[]     = "IsVisible";
+static const char ITEM_DESCRIPTOR_WIDTH[]       = "Width";
 
 static void ExtractToolbarParameters( const Sequence< PropertyValue > rProp,
                                       OUString&                       rCommandURL,
                                       OUString&                       rLabel,
                                       OUString&                       rHelpURL,
+                                      sal_Int16&                      rWidth,
                                       sal_Bool&                       rVisible,
                                       sal_Int16&                      rType )
 {
     for ( sal_Int32 i = 0; i < rProp.getLength(); i++ )
     {
         if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_COMMANDURL ))
-        {
             rProp[i].Value >>= rCommandURL;
-        }
         else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_HELPURL ))
-        {
             rProp[i].Value >>= rHelpURL;
-        }
         else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_LABEL ))
-        {
             rProp[i].Value >>= rLabel;
-        }
         else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_TYPE ))
-        {
             rProp[i].Value >>= rType;
-        }
         else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_VISIBLE ))
-        {
             rProp[i].Value >>= rVisible;
-        }
+        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_WIDTH ))
+            rProp[i].Value >>= rWidth;
     }
 }
 
@@ -766,24 +760,17 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument() throw
             OUString    aHelpURL;
             sal_Bool    bVisible( sal_True );
             sal_Int16   nType( drafts::com::sun::star::ui::ItemType::DEFAULT );
+            sal_Int16   nWidth( 0 );
 
-            ExtractToolbarParameters( aProps, aCommandURL, aLabel, aHelpURL, bVisible, nType );
+            ExtractToolbarParameters( aProps, aCommandURL, aLabel, aHelpURL, nWidth, bVisible, nType );
             if ( nType == drafts::com::sun::star::ui::ItemType::DEFAULT )
-            {
-                WriteToolBoxItem( aCommandURL, aLabel, aHelpURL, bVisible );
-            }
+                WriteToolBoxItem( aCommandURL, aLabel, aHelpURL, nWidth, bVisible );
             else if ( nType == drafts::com::sun::star::ui::ItemType::SEPARATOR_SPACE )
-            {
                 WriteToolBoxSpace();
-            }
             else if ( nType == drafts::com::sun::star::ui::ItemType::SEPARATOR_LINE )
-            {
                 WriteToolBoxSeparator();
-            }
             else if ( nType == drafts::com::sun::star::ui::ItemType::SEPARATOR_LINEBREAK )
-            {
                 WriteToolBoxBreak();
-            }
         }
     }
 
@@ -801,6 +788,7 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxItem(
     const OUString& rCommandURL,
     const OUString& rLabel,
     const OUString& rHelpURL,
+    sal_Int16       nWidth,
     sal_Bool        bVisible )
 throw ( SAXException, RuntimeException )
 {
@@ -835,6 +823,13 @@ throw ( SAXException, RuntimeException )
         pList->addAttribute( m_aXMLToolbarNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_HELPID )),
                              m_aAttributeType,
                              rHelpURL );
+    }
+
+    if ( nWidth > 0 )
+    {
+        pList->addAttribute( m_aXMLToolbarNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_WIDTH )),
+                             m_aAttributeType,
+                             OUString::valueOf( sal_Int32( nWidth )) );
     }
 
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
