@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accdoc.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-15 10:25:07 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #include "acccontext.hxx"
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESELECTION_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleSelection.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESELECTION_HPP_
+#include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #endif
 
 #ifndef _ACCSELECTIONHELPER_HXX_
@@ -85,7 +85,7 @@ class VclSimpleEvent;
 class SwAccessibleDocumentBase : public SwAccessibleContext
 {
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible> xParent;
+        ::com::sun::star::accessibility::XAccessible> xParent;
 
     Window *pChildWin;  // protected by solar mutext
 
@@ -110,13 +110,13 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the specified child or NULL if index is invalid.
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible> SAL_CALL
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (long nIndex)
         throw (::com::sun::star::uno::RuntimeException,
                 ::com::sun::star::lang::IndexOutOfBoundsException);
 
     /// Return a reference to the parent.
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible> SAL_CALL
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleParent (void)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -130,12 +130,12 @@ public:
         getAccessibleDescription (void) throw (com::sun::star::uno::RuntimeException);
 
     //=====  XAccessibleComponent  ==============================================
-    virtual sal_Bool SAL_CALL contains(
+    virtual sal_Bool SAL_CALL containsPoint(
             const ::com::sun::star::awt::Point& aPoint )
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleAt(
+        ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint(
                 const ::com::sun::star::awt::Point& aPoint )
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -158,7 +158,7 @@ public:
  * access to an accessible Writer document
  */
 class SwAccessibleDocument : public SwAccessibleDocumentBase,
-                             public drafts::com::sun::star::accessibility::XAccessibleSelection
+                             public com::sun::star::accessibility::XAccessibleSelection
 {
     // Implementation for XAccessibleSelection interface
     SwAccessibleSelectionHelper aSelectionHelper;
@@ -236,12 +236,12 @@ public:
         throw ( ::com::sun::star::uno::RuntimeException );
     virtual sal_Int32 SAL_CALL getSelectedAccessibleChildCount(  )
         throw ( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild(
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild(
         sal_Int32 nSelectedChildIndex )
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL deselectSelectedAccessibleChild(
+    virtual void SAL_CALL deselectAccessibleChild(
         sal_Int32 nSelectedChildIndex )
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException );
