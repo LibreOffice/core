@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: svesik $ $Date: 2000-12-06 11:12:34 $
+ *  last change: $Author: jl $ $Date: 2001-03-27 11:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,15 +72,6 @@ extern "C" {
 }
 #endif
 
-
-/** The define _USE_NO_NAMEPSACE disable the use of namespaces.
-    default is that namespaces were used.
-*/
-#ifndef _USE_NO_NAMESPACE
-#if defined(USE_NAMESPACE) || !defined(_USE_NAMESPACE)
-#   define _USE_NAMESPACE
-#endif
-#endif
 
 #ifdef WIN32
 #define SAL_W32
