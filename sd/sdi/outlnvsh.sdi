@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.sdi,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: af $ $Date: 2002-11-19 15:24:50 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:23:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-interface OutlineView : View
+interface OutlineView : Object
 [
     uuid ( "92E2F580-2FB4-11CF-89CA-008029E4B0B1" ) ;
 ]
@@ -539,8 +539,8 @@ interface OutlineView : View
     ]
 }
 
-shell SdOutlineViewShell : SfxViewShell
+shell OutlineViewShell
 {
-                                                                                                                                                            import OutlineView[Automation];
+    import OutlineView[Automation];
 }
 
