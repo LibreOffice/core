@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventimport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-04 10:19:41 $
+ *  last change: $Author: fs $ $Date: 2001-12-17 12:47:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,9 +136,12 @@ namespace xmloff
                 if ( 0 == sLibrary.compareToAscii( EVENT_STAROFFICE ) )
                     sLibrary = EVENT_APPLICATION;
 
-                // for StarBasic, the library is prepended
-                sal_Unicode cLibSeparator = ':';
-                sLibrary += ::rtl::OUString( &cLibSeparator, 1 );
+                if ( sLibrary.getLength() )
+                {
+                    // for StarBasic, the library is prepended
+                    sal_Unicode cLibSeparator = ':';
+                    sLibrary += ::rtl::OUString( &cLibSeparator, 1 );
+                }
                 sLibrary += pTranslated->ScriptCode;
                 pTranslated->ScriptCode = sLibrary;
             }
@@ -196,6 +199,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/09/04 10:19:41  fs
+ *  #91865# correctly im- and export application events
+ *
  *  Revision 1.3  2001/08/27 16:55:44  fs
  *  #91537# recognize the library attribute when reading events
  *
