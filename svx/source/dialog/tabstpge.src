@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-18 12:01:33 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 20:52:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Check = TRUE ;
         Text[ chinese_simplified ] = "Ïò×ó(~L)";
         Text[ russian ] = "Ñëåâà";
-        Text[ polish ] = "Z l~ewej";
+        Text[ polish ] = "Lewy";
         Text[ japanese ] = "¶‘µ‚¦(~L)";
         Text[ chinese_traditional ] = "¦V¥ª(~L)";
         Text[ arabic ] = "íÓÇÑ";
@@ -180,7 +180,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ english_us ] = "Righ~t" ;
         Text[ chinese_simplified ] = "ÏòÓÒ(~T)";
         Text[ russian ] = "Ñïğàâà";
-        Text[ polish ] = "Z p~rawej";
+        Text[ polish ] = "Prawy";
         Text[ japanese ] = "‰E‘µ‚¦(~T)";
         Text[ chinese_traditional ] = "¦V¥k(~T)";
         Text[ arabic ] = "íãíä";
@@ -214,7 +214,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ english_us ] = "C~entered" ;
         Text[ chinese_simplified ] = "¾ÓÖĞ(~E)";
         Text[ russian ] = "Ïî öåíòğó";
-        Text[ polish ] = "Wy?rodk.";
+        Text[ polish ] = "Wyœrodk.";
         Text[ japanese ] = "’†‰›‘µ‚¦(~E)";
         Text[ chinese_traditional ] = "¸m¤¤(~E)";
         Text[ arabic ] = "ÊæÓíØ";
@@ -311,14 +311,14 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ portuguese ] = "Tipo" ;
         Text [ finnish ] = "Tyyppi" ;
         Text [ danish ] = "Type" ;
-        Text [ french ] = "Ca~ractères" ;
+        Text [ french ] = "Type" ;
         Text [ swedish ] = "Typ" ;
         Text [ dutch ] = "Type" ;
         Text [ spanish ] = "Tipo" ;
         Text [ english_us ] = "Type" ;
         Text[ chinese_simplified ] = "ÀàĞÍ";
         Text[ russian ] = "Òèï";
-        Text[ polish ] = "Typ";
+        Text[ polish ] = "Rodzaj";
         Text[ japanese ] = "í—Ş";
         Text[ chinese_traditional ] = "Ãş«¬";
         Text[ arabic ] = "ÇáäæÚ";
@@ -436,7 +436,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ english_us ] = "Fill character" ;
         Text[ chinese_simplified ] = "³äÌî×Ö·û";
         Text[ russian ] = "Çàïîëíèòåëü";
-        Text[ polish ] = "Znaki wiod¹ce";
+        Text[ polish ] = "Symbol wieloznaczny";
         Text[ japanese ] = "Ø°ÀŞ°";
         Text[ chinese_traditional ] = "¥R¶ñ¦r¤¸";
         Text[ arabic ] = "ÍÑİ ÓÇÈŞ";
@@ -494,7 +494,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ english_us ] = "Delete ~All" ;
         Text[ chinese_simplified ] = "È«²¿É¾³ı(~A)";
         Text[ russian ] = "Óäàëèòü âñå";
-        Text[ polish ] = "Wyczy?æ w~szyst.";
+        Text[ polish ] = "Wyczyœæ w~szyst.";
         Text[ japanese ] = "‚·‚×‚Äíœ(~A)";
         Text[ chinese_traditional ] = "¥ş³¡§R°£(~A)";
         Text[ arabic ] = "ÍĞİ Çáßá";
@@ -513,7 +513,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ norwegian ] = "~Slett" ;
         Text [ italian ] = "~Elimina" ;
         Text [ portuguese_brazilian ] = "~Apagar" ;
-        Text [ portuguese ] = "~Apagar" ;
+        Text [ portuguese ] = "~Eliminar" ;
         Text [ finnish ] = "~Poista" ;
         Text [ danish ] = "Slet" ;
         Text [ french ] = "~Supprimer" ;
