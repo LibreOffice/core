@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-05 10:53:05 $
+ *  last change: $Author: os $ $Date: 2002-08-26 09:30:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1245,15 +1245,18 @@ BOOL SwFmtCol::PutValue( const uno::Any& rVal, BYTE nMemberId )
             sal_uInt16 nCount = Min( (sal_uInt16)aSetColumns.getLength(),
                                      (sal_uInt16) 0x3fff );
             sal_uInt16 nWidthSum = 0;
-            for(sal_uInt16 i = 0; i < nCount; i++)
-            {
-                SwColumn* pCol = new SwColumn;
-                pCol->SetWishWidth( pArray[i].Width );
-                nWidthSum += pArray[i].Width;
-                pCol->SetLeft ( MM100_TO_TWIP(pArray[i].LeftMargin) );
-                pCol->SetRight( MM100_TO_TWIP(pArray[i].RightMargin) );
-                aColumns.Insert(pCol, i);
-            }
+            // #101224# one column is no column
+            //
+            if(nCount > 1)
+                for(sal_uInt16 i = 0; i < nCount; i++)
+                {
+                    SwColumn* pCol = new SwColumn;
+                    pCol->SetWishWidth( pArray[i].Width );
+                    nWidthSum += pArray[i].Width;
+                    pCol->SetLeft ( MM100_TO_TWIP(pArray[i].LeftMargin) );
+                    pCol->SetRight( MM100_TO_TWIP(pArray[i].RightMargin) );
+                    aColumns.Insert(pCol, i);
+                }
             bRet = sal_True;
             nWidth = nWidthSum;
             bOrtho = sal_False;
