@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:59:22 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:36:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,34 @@
 #ifndef _SV_JOBSET_H
 #include <jobset.h>
 #endif
+
+#include <tools/urlobj.hxx>
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_EXECUTABLEDIALOGRESULTS_HPP_
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILTERMANAGER_HPP_
+#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::ui::dialogs;
+using namespace rtl;
 
 // =======================================================================
 
@@ -1290,6 +1318,7 @@ BOOL SalPrinter::StartJob( const XubString* pFileName,
     // #95347 some buggy drivers (eg, OKI) write to those buffers in CreateDC, although declared const - so provide some space
     ByteString aDriver ( ImplSalGetWinAnsiString( maPrinterData.mpInfoPrinter->maPrinterData.maDriverName, TRUE ) );
     ByteString aDevice ( ImplSalGetWinAnsiString( maPrinterData.mpInfoPrinter->maPrinterData.maDeviceName, TRUE ) );
+    ByteString aPort   ( ImplSalGetWinAnsiString( maPrinterData.mpInfoPrinter->maPrinterData.maPortName, TRUE ) );
     int n = aDriver.Len() > aDevice.Len() ? aDriver.Len() : aDevice.Len();
     n += 2048;
     char *lpszDriverName = new char[n];
@@ -1370,7 +1399,44 @@ BOOL SalPrinter::StartJob( const XubString* pFileName,
     // make sure mhDC is set before the printer driver may call our abortproc
     maPrinterData.mhDC = hDC;
 
-    // Job starten
+    // bring up a file choser if printing to file port but no file name given
+    OString aOutFileName;
+    if( aPort.EqualsIgnoreCaseAscii( "FILE:" ) && !aInfo.lpszOutput )
+    {
+
+        Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+        if( xFactory.is() )
+        {
+            Reference< XFilePicker > xFilePicker( xFactory->createInstance(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ) ) ),
+                UNO_QUERY );
+            DBG_ASSERT( xFilePicker.is(), "could not get FilePicker service" );
+
+            Reference< XInitialization > xInit( xFilePicker, UNO_QUERY );
+            Reference< XFilterManager > xFilterMgr( xFilePicker, UNO_QUERY );
+            if( xInit.is() && xFilePicker.is() && xFilterMgr.is() )
+            {
+                Sequence< Any > aServiceType( 1 );
+                aServiceType[0] <<= TemplateDescription::FILESAVE_SIMPLE;
+                xInit->initialize( aServiceType );
+                if( xFilePicker->execute() == ExecutableDialogResults::OK )
+                {
+                    Sequence< OUString > aPathSeq( xFilePicker->getFiles() );
+                    INetURLObject aObj( aPathSeq[0] );
+                    // we're using ansi calls (StartDocA) so convert the string
+                    aOutFileName = OUStringToOString( aObj.PathToFileName(), osl_getThreadTextEncoding() );
+                    aInfo.lpszOutput = aOutFileName.getStr();
+                }
+                else
+                {
+                    maPrinterData.mnError = SAL_PRINTER_ERROR_ABORT;
+                    return FALSE;
+                }
+            }
+        }
+    }
+
+    // start Job
     int nRet = ::StartDocA( hDC, &aInfo );
     if ( nRet <= 0 )
     {
