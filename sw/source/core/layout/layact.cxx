@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:39:57 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:18:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,8 +264,9 @@ BOOL SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwCntntFrm *pCnt,
     SwRegionRects aTmp( rRect );
     const SwSortDrawObjs &rObjs = *pPage->GetSortedObjs();
     const SwFlyFrm *pSelfFly = pCnt->FindFlyFrm();
+    USHORT i;
 
-    for ( USHORT i = 0; i < rObjs.Count() && aTmp.Count(); ++i )
+    for ( i = 0; i < rObjs.Count() && aTmp.Count(); ++i )
     {
         SdrObject *pO = rObjs[i];
         if ( !pO->ISA(SwVirtFlyDrawObj) )
@@ -1567,9 +1568,9 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
             if ( pLay->IsPageFrm() )
             {
                 SwPageFrm* pPageFrm = static_cast<SwPageFrm*>(pLay);
-                const nBorderWidth =
+                const int nBorderWidth =
                         pImp->GetShell()->GetOut()->PixelToLogic( Size( pPageFrm->BorderPxWidth(), 0 ) ).Width();
-                const nShadowWidth =
+                const int nShadowWidth =
                         pImp->GetShell()->GetOut()->PixelToLogic( Size( pPageFrm->ShadowPxWidth(), 0 ) ).Width();
                 aPaint.Left( aPaint.Left() - nBorderWidth );
                 aPaint.Top( aPaint.Top() - nBorderWidth );
@@ -1589,9 +1590,11 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
                 }
                 else
                 {
+                    USHORT i;
+
                     SwRegionRects aRegion( aOldRect );
                     aRegion -= aPaint;
-                    for ( USHORT i = 0; i < aRegion.Count(); ++i )
+                    for ( i = 0; i < aRegion.Count(); ++i )
                         pImp->GetShell()->AddPaintRect( aRegion[i] );
                     aRegion.ChangeOrigin( aPaint );
                     aRegion.Remove( 0, aRegion.Count() );
