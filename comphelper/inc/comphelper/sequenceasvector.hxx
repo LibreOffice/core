@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sequenceasvector.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:07:14 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:35:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ class SequenceAsVector : public ::std::vector< TElementType >
          */
         void operator<<(const ::com::sun::star::uno::Sequence< TElementType >& lSource)
         {
-            clear();
+            this->clear();
 
                   sal_Int32     c       = lSource.getLength();
             const TElementType* pSource = lSource.getConstArray();
@@ -194,7 +194,7 @@ class SequenceAsVector : public ::std::vector< TElementType >
             // An empty Any reset this instance!
             if (!aSource.hasValue())
             {
-                clear();
+                this->clear();
                 return;
             }
 
@@ -215,14 +215,14 @@ class SequenceAsVector : public ::std::vector< TElementType >
          */
         void operator>>(::com::sun::star::uno::Sequence< TElementType >& lDestination) const
         {
-            sal_Int32 c = (sal_Int32)size();
+            sal_Int32 c = (sal_Int32)this->size();
             lDestination.realloc(c);
             TElementType* pDestination = lDestination.getArray();
 
             sal_Int32 i = 0;
-            for (const_iterator pThis  = begin();
-                                pThis != end()  ;
-                              ++pThis           )
+            for (typename std::vector<TElementType>::const_iterator pThis  = this->begin();
+                                                                    pThis != this->end()  ;
+                                                                    ++pThis           )
             {
                 pDestination[i] = *pThis;
                 ++i;
@@ -239,14 +239,14 @@ class SequenceAsVector : public ::std::vector< TElementType >
          */
         void operator>>(::com::sun::star::uno::Any& aDestination) const
         {
-            sal_Int32                                       c            = (sal_Int32)size();
+            sal_Int32                                       c            = (sal_Int32)this->size();
             ::com::sun::star::uno::Sequence< TElementType > lDestination(c);
             TElementType*                                   pDestination = lDestination.getArray();
 
             sal_Int32 i = 0;
-            for (const_iterator pThis  = begin();
-                                pThis != end()  ;
-                              ++pThis           )
+            for (typename std::vector<TElementType>::const_iterator pThis  = this->begin();
+                                                                    pThis != this->end()  ;
+                                                                    ++pThis           )
             {
                 pDestination[i] = *pThis;
                 ++i;
