@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-11 15:49:52 $
+ *  last change: $Author: sab $ $Date: 2002-10-22 15:36:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ class EditView;
 struct ESelection;
 class ScInputHandler;
 class ScAccessibleEditLineTextData;
+struct EENotify;
 
 //========================================================================
 
@@ -116,6 +117,8 @@ public:
 
     void            SetAccessibleTextData(ScAccessibleEditLineTextData* pTextData) {pAccTextData = pTextData;}
 
+    DECL_LINK( NotifyHdl, EENotify* );
+
 protected:
     virtual void    Paint( const Rectangle& rRec );
     virtual void    Resize();
@@ -144,6 +147,10 @@ private:
     ScAccessibleEditLineTextData* pAccTextData;
     BOOL        bIsInsertMode;
     BOOL        bFormulaMode;
+
+    // #102710#; this flag should be true if a key input or a command is handled
+    // it prevents the call of InputChanged in the ModifyHandler of the EditEngine
+    BOOL        bInputMode;
 };
 
 //========================================================================

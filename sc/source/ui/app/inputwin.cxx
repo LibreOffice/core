@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-09 13:58:54 $
+ *  last change: $Author: sab $ $Date: 2002-10-22 15:36:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -661,7 +661,8 @@ ScTextWnd::ScTextWnd( Window* pParent )
         pEditView    ( NULL ),
         pAccTextData ( NULL ),
         bIsInsertMode( TRUE ),
-        bFormulaMode ( FALSE )
+        bFormulaMode ( FALSE ),
+        bInputMode   ( FALSE )
 {
     //  #79096# always use application font, so a font with cjk chars can be installed
     Font aAppFont = GetFont();
@@ -772,6 +773,7 @@ void __EXPORT ScTextWnd::MouseButtonUp( const MouseEvent& rMEvt )
 
 void __EXPORT ScTextWnd::Command( const CommandEvent& rCEvt )
 {
+    bInputMode = TRUE;
     USHORT nCommand = rCEvt.GetCommand();
     if ( pEditView /* && ( nCommand == COMMAND_STARTDRAG || nCommand == COMMAND_VOICE ) */ )
     {
@@ -820,6 +822,8 @@ void __EXPORT ScTextWnd::Command( const CommandEvent& rCEvt )
     }
     else
         Window::Command(rCEvt);     //  sonst soll sich die Basisklasse drum kuemmern...
+
+    bInputMode = FALSE;
 }
 
 void ScTextWnd::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
@@ -836,6 +840,7 @@ void ScTextWnd::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 
 void __EXPORT ScTextWnd::KeyInput(const KeyEvent& rKEvt)
 {
+    bInputMode = TRUE;
     if (!SC_MOD()->InputKeyEvent( rKEvt ))
     {
         BOOL bUsed = FALSE;
@@ -845,6 +850,7 @@ void __EXPORT ScTextWnd::KeyInput(const KeyEvent& rKEvt)
         if (!bUsed)
             Window::KeyInput( rKEvt );
     }
+    bInputMode = FALSE;
 }
 
 void __EXPORT ScTextWnd::GetFocus()
@@ -972,6 +978,8 @@ void ScTextWnd::StartEditEngine()
 
         Resize();
 
+        pEditEngine->SetModifyHdl(LINK(this, ScTextWnd, NotifyHdl));
+
         if (pAccTextData)
             pAccTextData->StartEdit();
     }
@@ -981,6 +989,14 @@ void ScTextWnd::StartEditEngine()
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     if (pViewFrm)
         pViewFrm->GetBindings().Invalidate( SID_ATTR_INSERT );
+}
+
+IMPL_LINK(ScTextWnd, NotifyHdl, EENotify*, aNotify)
+{
+    if (pEditView && !bInputMode)
+        SC_MOD()->InputChanged(pEditView);
+
+    return 0;
 }
 
 void ScTextWnd::StopEditEngine( BOOL bAll )
@@ -997,6 +1013,7 @@ void ScTextWnd::StopEditEngine( BOOL bAll )
         aString = pEditEngine->GetText();
         bIsInsertMode = pEditView->IsInsertMode();
         BOOL bSelection = pEditView->HasSelection();
+        pEditEngine->SetModifyHdl(Link());
         DELETEZ(pEditView);
         DELETEZ(pEditEngine);
 
