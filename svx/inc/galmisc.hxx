@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 17:24:54 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 08:58:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,6 @@ class Gallery;
 ResMgr*         GetGalleryResMgr();
 USHORT          GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic, String& rFilterName, BOOL bShowProgress = FALSE );
 BOOL            GallerySvDrawImport( SvStream& rIStm, FmFormModel& rModel );
-BOOL            GalleryIsSoundFile( const INetURLObject& rURL );
 BOOL            CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& rImageMap );
 String          GetReducedString( const INetURLObject& rURL, ULONG nMaxLen );
 String          GetSvDrawStreamNameFromURL( const INetURLObject& rSvDrawObjURL );
