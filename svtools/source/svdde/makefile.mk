@@ -1,10 +1,10 @@
-#*************************************************************************
+*************************************************************************
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2001-06-20 14:50:33 $
+#   last change: $Author: hjs $ $Date: 2002-03-07 14:51:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,11 +84,12 @@ SLOFILES=	$(SLO)$/ddecli.obj	\
 
 # --- Targets -------------------------------------------------------
 
-.INCLUDE :  target.mk
-
 .ELSE
 dummy:
     @echo GUI == "$(GUI)"  -  nothing to do
 
 .ENDIF
+
+.INCLUDE :  target.mk
+
 
