@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliteration_Ignore.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 17:57:44 $
+ *  last change: $Author: khong $ $Date: 2002-07-25 04:53:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,8 +111,8 @@ public:
 class ignore##name : public transliteration_Ignore {\
 public:\
     ignore##name () {\
-        transliterationName = "ignore##name";\
-        implementationName = "com.sun.star.i18n.Transliteration.ignore##name";\
+        transliterationName = "ignore"#name;\
+        implementationName = "com.sun.star.i18n.Transliteration.ignore"#name;\
     };\
     rtl::OUString SAL_CALL folding( const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, \
         com::sun::star::uno::Sequence< sal_Int32 >& offset) throw(com::sun::star::uno::RuntimeException); \
@@ -169,8 +169,8 @@ TRANSLITERATION_IGNORE(ZiZu_ja_JP)
 class ignore##name : public transliteration_Ignore {\
 public:\
     ignore##name () {\
-        transliterationName = "ignore##name";\
-        implementationName = "com.sun.star.i18n.Transliteration.ignore##name";\
+        transliterationName = "ignore"#name;\
+        implementationName = "com.sun.star.i18n.Transliteration.ignore"#name;\
     };\
     rtl::OUString SAL_CALL folding( const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, \
         com::sun::star::uno::Sequence< sal_Int32 >& offset) throw(com::sun::star::uno::RuntimeException); \
