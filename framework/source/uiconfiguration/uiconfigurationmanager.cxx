@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiconfigurationmanager.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:12:30 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 17:10:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@
 
 #ifndef __FRAMEWORK_XML_TOOLBOXCONFIGURATION_HXX_
 #include <xml/toolboxconfiguration.hxx>
+#endif
+
+#ifndef __FRAMEWORK_XML_STATUSBARCONFIGURATION_HXX_
+#include <xml/statusbarconfiguration.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -191,7 +195,8 @@ static const char* UIELEMENTTYPENAMES[] =
     UIELEMENTTYPE_POPUPMENU_NAME,
     UIELEMENTTYPE_TOOLBAR_NAME,
     UIELEMENTTYPE_STATUSBAR_NAME,
-    UIELEMENTTYPE_FLOATINGWINDOW_NAME
+    UIELEMENTTYPE_FLOATINGWINDOW_NAME,
+    UIELEMENTTYPE_PROGRESSBAR_NAME
 };
 
 static const char       RESOURCEURL_PREFIX[] = "private:resource/";
@@ -372,6 +377,18 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
 
                     case drafts::com::sun::star::ui::UIElementType::STATUSBAR:
                     {
+                        try
+                        {
+                            Reference< XIndexContainer > xIndexContainer( static_cast< OWeakObject * >( new RootItemContainer() ), UNO_QUERY );
+                            StatusBarConfiguration::LoadStatusBar( m_xServiceManager, xInputStream, xIndexContainer );
+                            RootItemContainer* pRootItemContainer = RootItemContainer::GetImplementation( xIndexContainer );
+                            aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, sal_True ) ), UNO_QUERY );
+                            return;
+                        }
+                        catch ( ::com::sun::star::lang::WrappedTargetException& )
+                        {
+                        }
+
                         break;
                     }
 
@@ -465,6 +482,18 @@ void UIConfigurationManager::impl_storeElementTypeData( Reference< XStorage >& x
                             try
                             {
                                 ToolBoxConfiguration::StoreToolBox( m_xServiceManager, xOutputStream, rElement.xSettings );
+                            }
+                            catch ( ::com::sun::star::lang::WrappedTargetException& )
+                            {
+                            }
+                        }
+                        break;
+
+                        case drafts::com::sun::star::ui::UIElementType::STATUSBAR:
+                        {
+                            try
+                            {
+                                StatusBarConfiguration::StoreStatusBar( m_xServiceManager, xOutputStream, rElement.xSettings );
                             }
                             catch ( ::com::sun::star::lang::WrappedTargetException& )
                             {
