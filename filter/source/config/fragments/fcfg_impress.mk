@@ -1,3 +1,5 @@
+all_fragments+=impress
+
 # -----------------------------------------------
 # count = 18
 T4_IMPRESS = \
@@ -61,6 +63,6 @@ CONTENTHANDLERS_4fcfg_impress = $(foreach,i,$(C4_IMPRESS) contenthandlers$/$i.xc
 # needed to get dependencies inside global makefile work!
 ALL_4fcfg_impress = \
     $(TYPES_4fcfg_impress) \
-    $(FILTERS_4fcfg_impress) \
+    $(foreach,i,$(FILTERS_4fcfg_base) $(MISC)$/$i) \
     $(FRAMELOADERS_4fcfg_impress) \
     $(CONTENTHANDLERS_4fcfg_impress)
