@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namecrea.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:03 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 10:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ ScNameCreateDlg::ScNameCreateDlg( Window * pParent, USHORT nFlags )
     aOKButton       ( this, ScResId( BTN_OK ) ),
     aCancelButton   ( this, ScResId( BTN_CANCEL ) ),
     aHelpButton     ( this, ScResId( BTN_HELP ) ),
-    aGroupBox       ( this, ScResId( GB_FRAME ) )
+    aFixedLine      ( this, ScResId( FL_FRAME ) )
 {
     aTopBox.Check   ( (nFlags & NAME_TOP)   ? TRUE : FALSE );
     aLeftBox.Check  ( (nFlags & NAME_LEFT)  ? TRUE : FALSE );

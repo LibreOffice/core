@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-17 15:14:44 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 10:48:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ ModalDialog RID_SCDLG_DELCELL
     OutputSize = TRUE ;
     HelpId = FID_DELETE_CELL ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 191 , 75 ) ;
+    Size = MAP_APPFONT ( 191 , 70 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Zellen löschen : Zellen l÷schen */
     Text = "Zellen löschen" ;
     Text [ ENGLISH ] = "Delete Cells" ;
@@ -105,7 +105,7 @@ ModalDialog RID_SCDLG_DELCELL
     };
     RadioButton BTN_DELCOLS
     {
-        Pos = MAP_APPFONT ( 12 , 53 ) ;
+        Pos = MAP_APPFONT ( 12 , 56 ) ;
         Size = MAP_APPFONT ( 114 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Ganze ~Spalten löschen : Ganze ~Spalten l÷schen */
         Text = "Ganze ~Spalten löschen" ;
@@ -136,7 +136,7 @@ ModalDialog RID_SCDLG_DELCELL
     };
     RadioButton BTN_DELROWS
     {
-        Pos = MAP_APPFONT ( 12 , 40 ) ;
+        Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 114 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Ganze ~Zeilen löschen : Ganze ~Zeilen l÷schen */
         Text = "Ganze ~Zeilen löschen" ;
@@ -167,7 +167,7 @@ ModalDialog RID_SCDLG_DELCELL
     };
     RadioButton BTN_CELLSLEFT
     {
-        Pos = MAP_APPFONT ( 12 , 27 ) ;
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 114 , 10 ) ;
         Text = "Zellen nach ~links verschieben" ;
         Text [ ENGLISH ] = "Move cells ~left" ;
@@ -225,10 +225,10 @@ ModalDialog RID_SCDLG_DELCELL
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Desplazar celdas hacia arriba";
     };
-    GroupBox GB_FRAME
+    FixedLine FL_FRAME
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 123 , 66 ) ;
+        Size = MAP_APPFONT ( 123 , 8 ) ;
         Text = "Auswahl" ;
         Text [ ENGLISH ] = "Options" ;
         Text [ norwegian ] = "Options" ;
@@ -271,7 +271,7 @@ ModalDialog RID_SCDLG_INSCELL
     OutputSize = TRUE ;
     HelpId = FID_INS_CELL ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 191 , 75 ) ;
+    Size = MAP_APPFONT ( 191 , 70 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Zellen einfügen : Zellen einf³gen */
     Text = "Zellen einfügen" ;
     Text [ ENGLISH ] = "Insert Cells" ;
@@ -309,7 +309,7 @@ ModalDialog RID_SCDLG_INSCELL
     };
     RadioButton BTN_INSCOLS
     {
-        Pos = MAP_APPFONT ( 12 , 53 ) ;
+        Pos = MAP_APPFONT ( 12 , 56 ) ;
         Size = MAP_APPFONT ( 114 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Ganze ~Spalten einfügen : Ganze ~Spalten einf³gen */
         Text = "Ganze ~Spalten einfügen" ;
@@ -340,7 +340,7 @@ ModalDialog RID_SCDLG_INSCELL
     };
     RadioButton BTN_INSROWS
     {
-        Pos = MAP_APPFONT ( 12 , 40 ) ;
+        Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 114 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Ganze ~Zeilen einfügen : Ganze ~Zeilen einf³gen */
         Text = "Ganze ~Zeilen einfügen" ;
@@ -371,7 +371,7 @@ ModalDialog RID_SCDLG_INSCELL
     };
     RadioButton BTN_CELLSRIGHT
     {
-        Pos = MAP_APPFONT ( 12 , 27 ) ;
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 114 , 10 ) ;
         Text = "Zellen nach ~rechts verschieben" ;
         Text [ ENGLISH ] = "Move cells ri~ght" ;
@@ -429,10 +429,10 @@ ModalDialog RID_SCDLG_INSCELL
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Desplazar celdas hacia a~bajo";
     };
-    GroupBox GB_FRAME
+    FixedLine FL_FRAME
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 123 , 69 ) ;
+        Size = MAP_APPFONT ( 123 , 8 ) ;
         Text = "Auswahl" ;
         Text [ ENGLISH ] = "Options" ;
         Text [ norwegian ] = "Options" ;
@@ -481,7 +481,7 @@ ModalDialog RID_SCDLG_DELCONT
     OutputSize = TRUE ;
     HelpId = SID_DELETE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 148 , 131 ) ;
+    Size = MAP_APPFONT ( 161 , 130 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Inhalte löschen : Inhalte l÷schen */
     Text = "Inhalte löschen" ;
     Text [ ENGLISH ] = "Delete Contents" ;
@@ -500,27 +500,27 @@ ModalDialog RID_SCDLG_DELCONT
     Closeable = FALSE ;
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 92 , 6 ) ;
+        Pos = MAP_APPFONT ( 105 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 92 , 23 ) ;
+        Pos = MAP_APPFONT ( 105 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 92 , 43 ) ;
+        Pos = MAP_APPFONT ( 105 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     CheckBox BTN_DELALL
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Size = MAP_APPFONT ( 83 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Alles löschen : ~Alles l÷schen */
         Text = "~Alles löschen" ;
         Text [ ENGLISH ] = "Delete ~All" ;
@@ -551,7 +551,7 @@ ModalDialog RID_SCDLG_DELCONT
     CheckBox BTN_DELSTRINGS
     {
         Pos = MAP_APPFONT ( 12 , 30 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Size = MAP_APPFONT ( 83 , 10 ) ;
         Text = "Zeichen~ketten" ;
         Text [ ENGLISH ] = "~Strings" ;
         Text [ norwegian ] = "~Strings" ;
@@ -580,8 +580,8 @@ ModalDialog RID_SCDLG_DELCONT
     };
     CheckBox BTN_DELNUMBERS
     {
-        Pos = MAP_APPFONT ( 12 , 43 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 44 ) ;
+        Size = MAP_APPFONT ( 83 , 10 ) ;
         Text = "~Zahlen" ;
         Text [ ENGLISH ] = "~Numbers" ;
         Text [ norwegian ] = "~Numbers" ;
@@ -610,8 +610,8 @@ ModalDialog RID_SCDLG_DELCONT
     };
     CheckBox BTN_DELDATETIME
     {
-        Pos = MAP_APPFONT ( 12 , 56 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 58 ) ;
+        Size = MAP_APPFONT ( 83 , 10 ) ;
         Text = "~Datum & Zeit" ;
         Text [ ENGLISH ] = "~Date & Time" ;
         Text [ norwegian ] = "~Date & Time" ;
@@ -640,8 +640,8 @@ ModalDialog RID_SCDLG_DELCONT
     };
     CheckBox BTN_DELFORMULAS
     {
-        Pos = MAP_APPFONT ( 12 , 69 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 72 ) ;
+        Size = MAP_APPFONT ( 83 , 10 ) ;
         Text = "~Formeln" ;
         Text [ ENGLISH ] = "~Formulas" ;
         Text [ norwegian ] = "~Formulas" ;
@@ -670,8 +670,8 @@ ModalDialog RID_SCDLG_DELCONT
     };
     CheckBox BTN_DELATTRS
     {
-        Pos = MAP_APPFONT ( 12 , 95 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 100 ) ;
+        Size = MAP_APPFONT ( 83 , 10 ) ;
         Text = "Forma~te" ;
         Text [ ENGLISH ] = "Forma~ts" ;
         Text [ norwegian ] = "Forma~ts" ;
@@ -700,8 +700,8 @@ ModalDialog RID_SCDLG_DELCONT
     };
     CheckBox BTN_DELNOTES
     {
-        Pos = MAP_APPFONT ( 12 , 82 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 86 ) ;
+        Size = MAP_APPFONT ( 83 , 10 ) ;
         Text = "~Notizen" ;
         Text [ ENGLISH ] = "N~otes" ;
         Text [ norwegian ] = "N~otes" ;
@@ -730,8 +730,8 @@ ModalDialog RID_SCDLG_DELCONT
     };
     CheckBox BTN_DELOBJECTS
     {
-        Pos = MAP_APPFONT ( 12 , 108 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 114 ) ;
+        Size = MAP_APPFONT ( 83 , 10 ) ;
         Text = "~Objekte" ;
         Text [ ENGLISH ] = "~Objects" ;
         Text [ english_us ] = "~Objects" ;
@@ -757,10 +757,10 @@ ModalDialog RID_SCDLG_DELCONT
         Text[ catalan ] = "Objeto~s";
         Text[ finnish ] = "~Objektit";
     };
-    GroupBox GB_FRAME
+    FixedLine FL_FRAME
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 80 , 122 ) ;
+        Size = MAP_APPFONT ( 93 , 8 ) ;
         Text = "Auswahl" ;
         Text [ ENGLISH ] = "Options" ;
         Text [ norwegian ] = "Options" ;
@@ -805,7 +805,7 @@ ModalDialog RID_SCDLG_INSCONT
     OutputSize = TRUE ;
     HelpId = FID_INS_CELL_CONTENTS ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 244 , 178 ) ;
+    Size = MAP_APPFONT ( 260 , 173 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Inhalte einfügen : Inhalte einf³gen */
     Text = "Inhalte einfügen" ;
     Text [ ENGLISH ] = "Insert Contents" ;
@@ -824,27 +824,27 @@ ModalDialog RID_SCDLG_INSCONT
     Closeable = FALSE ;
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 188 , 6 ) ;
+        Pos = MAP_APPFONT ( 204 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 188 , 23 ) ;
+        Pos = MAP_APPFONT ( 204 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 188 , 43 ) ;
+        Pos = MAP_APPFONT ( 204 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     CheckBox BTN_INSALL
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 82 , 10 ) ;
+        Size = MAP_APPFONT ( 84 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Alles einfügen : ~Alles einf³gen */
         Text = "~Alles einfügen" ;
         Text [ ENGLISH ] = "Insert a~ll" ;
@@ -875,7 +875,7 @@ ModalDialog RID_SCDLG_INSCONT
     CheckBox BTN_INSSTRINGS
     {
         Pos = MAP_APPFONT ( 12 , 30 ) ;
-        Size = MAP_APPFONT ( 82 , 10 ) ;
+        Size = MAP_APPFONT ( 84 , 10 ) ;
         Text = "Zeichen~ketten" ;
         Text [ ENGLISH ] = "~Strings" ;
         Text [ norwegian ] = "~Strings" ;
@@ -904,8 +904,8 @@ ModalDialog RID_SCDLG_INSCONT
     };
     CheckBox BTN_INSNUMBERS
     {
-        Pos = MAP_APPFONT ( 12 , 43 ) ;
-        Size = MAP_APPFONT ( 82 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 44 ) ;
+        Size = MAP_APPFONT ( 84 , 10 ) ;
         Text = "~Zahlen" ;
         Text [ ENGLISH ] = "~Numbers" ;
         Text [ norwegian ] = "~Numbers" ;
@@ -934,8 +934,8 @@ ModalDialog RID_SCDLG_INSCONT
     };
     CheckBox BTN_INSDATETIME
     {
-        Pos = MAP_APPFONT ( 12 , 56 ) ;
-        Size = MAP_APPFONT ( 82 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 58 ) ;
+        Size = MAP_APPFONT ( 84 , 10 ) ;
         Text = "~Datum & Zeit" ;
         Text [ ENGLISH ] = "~Date & Time" ;
         Text [ norwegian ] = "~Date & Time" ;
@@ -964,8 +964,8 @@ ModalDialog RID_SCDLG_INSCONT
     };
     CheckBox BTN_INSFORMULAS
     {
-        Pos = MAP_APPFONT ( 12 , 69 ) ;
-        Size = MAP_APPFONT ( 82 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 72 ) ;
+        Size = MAP_APPFONT ( 84 , 10 ) ;
         Text = "~Formeln" ;
         Text [ ENGLISH ] = "~Formulas" ;
         Text [ norwegian ] = "~Formulas" ;
@@ -994,8 +994,8 @@ ModalDialog RID_SCDLG_INSCONT
     };
     CheckBox BTN_INSATTRS
     {
-        Pos = MAP_APPFONT ( 12 , 95 ) ;
-        Size = MAP_APPFONT ( 82 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 100 ) ;
+        Size = MAP_APPFONT ( 84 , 10 ) ;
         Text = "Forma~te" ;
         Text [ ENGLISH ] = "Forma~ts" ;
         Text [ norwegian ] = "Forma~ts" ;
@@ -1024,8 +1024,8 @@ ModalDialog RID_SCDLG_INSCONT
     };
     CheckBox BTN_INSNOTES
     {
-        Pos = MAP_APPFONT ( 12 , 82 ) ;
-        Size = MAP_APPFONT ( 82 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 86 ) ;
+        Size = MAP_APPFONT ( 84 , 10 ) ;
         Text = "~Notizen" ;
         Text [ ENGLISH ] = "N~otes" ;
         Text [ norwegian ] = "N~otes" ;
@@ -1052,10 +1052,10 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "N~otas";
     };
-    GroupBox GB_FRAME
+    FixedLine FL_FRAME
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 90 , 109 ) ;
+        Size = MAP_APPFONT ( 93 , 8 ) ;
         Text = "Auswahl" ;
         Text [ ENGLISH ] = "Options" ;
         Text [ norwegian ] = "Options" ;
@@ -1083,8 +1083,8 @@ ModalDialog RID_SCDLG_INSCONT
     };
     RadioButton BTN_OP_NOOP
     {
-        Pos = MAP_APPFONT ( 108 , 14 ) ;
-        Size = MAP_APPFONT ( 69 , 10 ) ;
+        Pos = MAP_APPFONT ( 111 , 14 ) ;
+        Size = MAP_APPFONT ( 83 , 10 ) ;
         Text = "K~eine" ;
         Text [ ENGLISH ] = "~None" ;
         Text [ dutch ] = "~Geen" ;
@@ -1111,8 +1111,8 @@ ModalDialog RID_SCDLG_INSCONT
     };
     RadioButton BTN_OP_ADD
     {
-        Pos = MAP_APPFONT ( 108 , 30 ) ;
-        Size = MAP_APPFONT ( 69 , 10 ) ;
+        Pos = MAP_APPFONT ( 111 , 30 ) ;
+        Size = MAP_APPFONT ( 83 , 10 ) ;
         Text = "Addie~ren" ;
         Text [ ENGLISH ] = "A~dd" ;
         Text [ dutch ] = "O~ptellen" ;
@@ -1139,8 +1139,8 @@ ModalDialog RID_SCDLG_INSCONT
     };
     RadioButton BTN_OP_SUB
     {
-        Pos = MAP_APPFONT ( 108 , 43 ) ;
-        Size = MAP_APPFONT ( 69 , 10 ) ;
+        Pos = MAP_APPFONT ( 111 , 44 ) ;
+        Size = MAP_APPFONT ( 83 , 10 ) ;
         Text = "~Subtrahieren" ;
         Text [ ENGLISH ] = "~Subtract" ;
         Text [ dutch ] = "~Aftrekken" ;
@@ -1167,8 +1167,8 @@ ModalDialog RID_SCDLG_INSCONT
     };
     RadioButton BTN_OP_MUL
     {
-        Pos = MAP_APPFONT ( 108 , 56 ) ;
-        Size = MAP_APPFONT ( 69 , 10 ) ;
+        Pos = MAP_APPFONT ( 111 , 58 ) ;
+        Size = MAP_APPFONT ( 83 , 10 ) ;
         Text = "~Multiplizieren" ;
         Text [ ENGLISH ] = "~Multiply" ;
         Text [ dutch ] = "~Vermenigvuldigen" ;
@@ -1195,8 +1195,8 @@ ModalDialog RID_SCDLG_INSCONT
     };
     RadioButton BTN_OP_DIV
     {
-        Pos = MAP_APPFONT ( 108 , 69 ) ;
-        Size = MAP_APPFONT ( 69 , 10 ) ;
+        Pos = MAP_APPFONT ( 111 , 72 ) ;
+        Size = MAP_APPFONT ( 83 , 10 ) ;
         Text = "D~ividieren" ;
         Text [ ENGLISH ] = "D~ivide" ;
         Text [ dutch ] = "~Delen" ;
@@ -1221,10 +1221,10 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ catalan ] = "~Dividir";
         Text[ finnish ] = "J~aa";
     };
-    GroupBox GB_OPERATION
+    FixedLine FL_OPERATION
     {
-        Pos = MAP_APPFONT ( 102 , 3 ) ;
-        Size = MAP_APPFONT ( 77 , 109 ) ;
+        Pos = MAP_APPFONT ( 105 , 3 ) ;
+        Size = MAP_APPFONT ( 93 , 8 ) ;
         Text = "Rechenoperationen" ;
         Text [ ENGLISH ] = "???" ;
         Text [ dutch ] = "Rekenoperaties" ;
@@ -1251,8 +1251,8 @@ ModalDialog RID_SCDLG_INSCONT
     };
     CheckBox BTN_SKIP_EMPTY
     {
-        Pos = MAP_APPFONT ( 12 , 129 ) ;
-        Size = MAP_APPFONT ( 82 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 127 ) ;
+        Size = MAP_APPFONT ( 84 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Leerzellen überspringen : ~Leerzellen ³berspringen */
         Text = "~Leerzellen überspringen" ;
         Text [ ENGLISH ] = "~Skip empty cells" ;
@@ -1280,8 +1280,8 @@ ModalDialog RID_SCDLG_INSCONT
     };
     CheckBox BTN_TRANSPOSE
     {
-        Pos = MAP_APPFONT ( 12 , 142 ) ;
-        Size = MAP_APPFONT ( 82 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 141 ) ;
+        Size = MAP_APPFONT ( 84 , 10 ) ;
         Text = "Transp~onieren" ;
         Text [ ENGLISH ] = "~Tranpose" ;
         Text [ english_us ] = "~Transpose" ;
@@ -1309,7 +1309,7 @@ ModalDialog RID_SCDLG_INSCONT
     CheckBox BTN_LINK
     {
         Pos = MAP_APPFONT ( 12 , 155 ) ;
-        Size = MAP_APPFONT ( 82 , 10 ) ;
+        Size = MAP_APPFONT ( 84 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Verknü~pfen : Verkn³~pfen */
         Text = "Verknü~pfen" ;
         Text [ ENGLISH ] = "Lin~k" ;
@@ -1335,10 +1335,10 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ catalan ] = "~Vincular";
         Text[ finnish ] = "~Linkki";
     };
-    GroupBox GB_OPTIONS
+    FixedLine FL_OPTIONS
     {
-        Pos = MAP_APPFONT ( 6 , 118 ) ;
-        Size = MAP_APPFONT ( 90 , 54 ) ;
+        Pos = MAP_APPFONT ( 6 , 116 ) ;
+        Size = MAP_APPFONT ( 93 , 8 ) ;
         Text = "Optionen" ;
         Text [ ENGLISH ] = "Options" ;
         Text [ english_us ] = "Options" ;
@@ -1365,8 +1365,8 @@ ModalDialog RID_SCDLG_INSCONT
     };
     RadioButton BTN_MV_NONE
     {
-        Pos = MAP_APPFONT ( 108 , 129 ) ;
-        Size = MAP_APPFONT ( 69 , 10 ) ;
+        Pos = MAP_APPFONT ( 111 , 127 ) ;
+        Size = MAP_APPFONT ( 83 , 10 ) ;
         Text = "Nicht ~verschieben" ;
         Text [ ENGLISH ] = "~None" ;
         Text [ english_us ] = "Don't sh~ift" ;
@@ -1393,8 +1393,8 @@ ModalDialog RID_SCDLG_INSCONT
     };
     RadioButton BTN_MV_DOWN
     {
-        Pos = MAP_APPFONT ( 108 , 142 ) ;
-        Size = MAP_APPFONT ( 69 , 10 ) ;
+        Pos = MAP_APPFONT ( 111 , 141 ) ;
+        Size = MAP_APPFONT ( 83 , 10 ) ;
         Text = "Nach ~unten" ;
         Text [ ENGLISH ] = "~Down" ;
         Text [ english_us ] = "Do~wn" ;
@@ -1421,8 +1421,8 @@ ModalDialog RID_SCDLG_INSCONT
     };
     RadioButton BTN_MV_RIGHT
     {
-        Pos = MAP_APPFONT ( 108 , 155 ) ;
-        Size = MAP_APPFONT ( 69 , 10 ) ;
+        Pos = MAP_APPFONT ( 111 , 155 ) ;
+        Size = MAP_APPFONT ( 83 , 10 ) ;
         Text = "Nach re~chts" ;
         Text [ ENGLISH ] = "~Right" ;
         Text [ english_us ] = "~Right" ;
@@ -1447,10 +1447,10 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ catalan ] = "Hacia la de~recha";
         Text[ finnish ] = "~Oikea";
     };
-    GroupBox GB_MOVE
+    FixedLine FL_MOVE
     {
-        Pos = MAP_APPFONT ( 102 , 118 ) ;
-        Size = MAP_APPFONT ( 77 , 54 ) ;
+        Pos = MAP_APPFONT ( 105 , 116 ) ;
+        Size = MAP_APPFONT ( 93 , 8 ) ;
         Text = "Zellen verschieben" ;
         Text [ ENGLISH ] = "Move cells" ;
         Text [ english_us ] = "Shift cells" ;
@@ -1474,6 +1474,16 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ turkish ] = "Hücreleri taþý";
         Text[ catalan ] = "Desplazar celdas";
         Text[ finnish ] = "Shift cells";
+    };
+    FixedLine FL_SEP1
+    {
+        Pos = MAP_APPFONT( 102 , 14 ) ;
+        Size = MAP_APPFONT( 1 , 96 ) ;
+    };
+    FixedLine FL_SEP2
+    {
+        Pos = MAP_APPFONT( 102 , 127 ) ;
+        Size = MAP_APPFONT( 1 , 38 ) ;
     };
     Text[ chinese_simplified ] = "²åÈëÄÚÈÝ";
     Text[ russian ] = "Ñïåöèàëüíàÿ âñòàâêà";
@@ -1530,7 +1540,7 @@ ModalDialog RID_SCDLG_MOVETAB
     FixedText FT_DEST
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
         Text = "~Ins Dokument" ;
         Text [ ENGLISH ] = "~To Document" ;
         Text [ norwegian ] = "~To Document" ;
@@ -1559,15 +1569,15 @@ ModalDialog RID_SCDLG_MOVETAB
     ListBox LB_DEST
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 18 ) ;
-        Size = MAP_APPFONT ( 80 , 60 ) ;
+        Pos = MAP_APPFONT ( 6 , 17 ) ;
+        Size = MAP_APPFONT ( 100 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedText FT_INSERT
     {
-        Pos = MAP_APPFONT ( 6 , 38 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 35 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Ei~nfügen vor : Ei~nf³gen vor */
         Text = "Ei~nfügen vor" ;
         Text [ ENGLISH ] = "I~nsert before" ;
@@ -1597,14 +1607,14 @@ ModalDialog RID_SCDLG_MOVETAB
     ListBox LB_INSERT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 50 ) ;
-        Size = MAP_APPFONT ( 100 , 58 ) ;
+        Pos = MAP_APPFONT ( 6 , 46 ) ;
+        Size = MAP_APPFONT ( 100 , 62 ) ;
         TabStop = TRUE ;
     };
     CheckBox BTN_COPY
     {
         Pos = MAP_APPFONT ( 6 , 114 ) ;
-        Size = MAP_APPFONT ( 54 , 10 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~kopieren" ;
         Text [ ENGLISH ] = "~Copy" ;
         Text [ norwegian ] = "~Kopier" ;
@@ -1699,14 +1709,14 @@ ModalDialog RID_SCDLG_STRINPUT
     Edit ED_INPUT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 18 ) ;
+        Pos = MAP_APPFONT ( 6 , 17 ) ;
         Size = MAP_APPFONT ( 110 , 12 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_LABEL
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Size = MAP_APPFONT ( 110 , 8 ) ;
     };
 };
 /*
@@ -3318,11 +3328,11 @@ ModalDialog RID_SCDLG_NAMES_CREATE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     HelpID = FID_USE_NAME ;
-    Size = MAP_APPFONT ( 174 , 71 ) ;
+    Size = MAP_APPFONT ( 174 , 72 ) ;
     Moveable = TRUE ;
     CheckBox BTN_TOP
     {
-        Pos = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 93 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Kopfzeile" ;
@@ -3351,7 +3361,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
     };
     CheckBox BTN_LEFT
     {
-        Pos = MAP_APPFONT ( 12 , 25 ) ;
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 93 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Linker Spalte" ;
@@ -3380,7 +3390,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
     };
     CheckBox BTN_BOTTOM
     {
-        Pos = MAP_APPFONT ( 12 , 38 ) ;
+        Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 93 , 10 ) ;
         TabStop = TRUE ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Fußzeile : ~Fu˜zeile */
@@ -3410,7 +3420,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
     };
     CheckBox BTN_RIGHT
     {
-        Pos = MAP_APPFONT ( 12 , 51 ) ;
+        Pos = MAP_APPFONT ( 12 , 56 ) ;
         Size = MAP_APPFONT ( 93 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Rechter Spalte" ;
@@ -3456,10 +3466,10 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    GroupBox GB_FRAME
+    FixedLine FL_FRAME
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 104 , 62 ) ;
+        Size = MAP_APPFONT ( 104 , 8 ) ;
         Text = "Namen erzeugen aus" ;
         Text [ ENGLISH ] = "Create names from" ;
         Text [ english_us ] = "Create name from" ;
@@ -3637,8 +3647,8 @@ FloatingWindow RID_SCDLG_TEAM
     Closeable = TRUE ;
     Zoomable = TRUE ;
     FixedBitmap 1 { Pos = MAP_APPFONT ( 1 , 1 ) ; };
-    Text = "Das StarCalc Team" ;
-    Text [ ENGLISH ] = "The StarCalc Team" ;
+    Text = "Das %PRODUCTNAME Calc Team" ;
+    Text [ ENGLISH ] = "The %PRODUCTNAME Calc Team" ;
     Text [ ENGLISH_US ] = "The %PRODUCTNAME Calc Team" ;
     Text [ italian ] = "Entwickleri di %PRODUCTNAME Calci (sansi QS)" ;
     Text [ spanish ] = "El equipo de %PRODUCTNAME Calc" ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: delcodlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:02 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 10:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ ScDeleteContentsDlg::ScDeleteContentsDlg( Window* pParent,
     aBtnDelNotes    ( this, ScResId( BTN_DELNOTES ) ),
     aBtnDelAttrs    ( this, ScResId( BTN_DELATTRS ) ),
     aBtnDelObjects  ( this, ScResId( BTN_DELOBJECTS ) ),
-    aGbFrame        ( this, ScResId( GB_FRAME ) ),
+    aFlFrame        ( this, ScResId( FL_FRAME ) ),
     bObjectsDisabled( FALSE )
 {
     if ( nCheckDefaults != 0 )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crnrdlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 07:57:38 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 10:48:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,10 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     HelpId = HID_COLROWNAMERANGES ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dieser Dialog hat einen Cancel-Button !
-    GroupBox GB_ASSIGN
+    FixedLine FL_ASSIGN
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 188 , 175 ) ;
+        Size = MAP_APPFONT ( 188 , 8 ) ;
         Text = "Bereich" ;
         Text [ ENGLISH ] = "Refers to" ;
         Text [ norwegian ] = "Refers to" ;
@@ -103,22 +103,23 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     ListBox LB_RANGE
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 176 , 85 ) ;
+        Size = MAP_APPFONT ( 179 , 85 ) ;
         TabStop = TRUE ;
         VScroll = TRUE ;
+        Border = TRUE ;
     };
     Edit ED_AREA
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 107 ) ;
-        Size = MAP_APPFONT ( 106 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 105 ) ;
+        Size = MAP_APPFONT ( 163 , 12 ) ;
         TabStop = TRUE ;
     };
     ImageButton RB_AREA
     {
         QuickHelpText = "Verkleinern" ;
         QuickHelpText [ ENGLISH ] = "Shrink" ;
-        Pos = MAP_APPFONT ( 120 , 107 ) ;
+        Pos = MAP_APPFONT ( 179 , 105 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ english_us ] = "Shrink" ;
@@ -130,7 +131,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         QuickHelpText [ french ] = "RÈduire" ;
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
-    QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
+        QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
         QuickHelpText[ polish ] = "Pomniejsz";
         QuickHelpText[ japanese ] = "èkè¨!";
         QuickHelpText[ chinese_simplified ] = "Àı–°/∑≈¥Û";
@@ -145,8 +146,8 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     };
     RadioButton BTN_COLHEAD
     {
-        Pos = MAP_APPFONT ( 12 , 120 ) ;
-        Size = MAP_APPFONT ( 100 , 12 ) ;
+        Pos = MAP_APPFONT ( 20 , 121 ) ;
+        Size = MAP_APPFONT ( 171 , 10 ) ;
         TabStop = TRUE ;
         Text = "enth‰lt ~Spaltenkˆpfe" ;
         Text [ ENGLISH ] = "contains column headers" ;
@@ -175,8 +176,8 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     };
     RadioButton BTN_ROWHEAD
     {
-        Pos = MAP_APPFONT ( 12 , 133 ) ;
-        Size = MAP_APPFONT ( 100 , 12 ) ;
+        Pos = MAP_APPFONT ( 20 , 135 ) ;
+        Size = MAP_APPFONT ( 171 , 10 ) ;
         TabStop = TRUE ;
         Text = "enth‰lt ~Zeilenkˆpfe" ;
         Text [ ENGLISH ] = "contains row headers" ;
@@ -204,10 +205,10 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     };
     FixedText FT_DATA_LABEL
     {
-        Pos = MAP_APPFONT ( 12 , 146 ) ;
-        Size = MAP_APPFONT ( 106 , 12 ) ;
-        Text = "f¸r Datenbereich" ;
-        Text [ ENGLISH ] = "for data range" ;
+        Pos = MAP_APPFONT ( 12 , 151 ) ;
+        Size = MAP_APPFONT ( 179 , 8 ) ;
+        Text = "f¸r ~Datenbereich" ;
+        Text [ ENGLISH ] = "~for data range" ;
         Text [ english_us ] = "For data range" ;
         Text [ portuguese_brazilian ] = "f? Datenbereich" ;
         Text [ swedish ] = "fˆr dataomrÂde" ;
@@ -233,15 +234,15 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     Edit ED_DATA
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 159 ) ;
-        Size = MAP_APPFONT ( 106 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 162 ) ;
+        Size = MAP_APPFONT ( 163 , 12 ) ;
         TabStop = TRUE ;
     };
     ImageButton RB_DATA
     {
         QuickHelpText = "Verkleinern" ;
         QuickHelpText [ ENGLISH ] = "Shrink" ;
-        Pos = MAP_APPFONT ( 120 , 159 ) ;
+        Pos = MAP_APPFONT ( 179 , 162 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ english_us ] = "Shrink" ;
@@ -253,7 +254,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         QuickHelpText [ french ] = "RÈduire" ;
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
-    QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
+        QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
         QuickHelpText[ polish ] = "Pomniejsz";
         QuickHelpText[ japanese ] = "èkè¨!";
         QuickHelpText[ chinese_simplified ] = "Àı–°";
@@ -280,7 +281,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     };
     PushButton BTN_ADD
     {
-        Pos = MAP_APPFONT ( 138 , 107 ) ;
+        Pos = MAP_APPFONT ( 200 , 104 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "Hinzu~f¸gen" ;
         Text [ ENGLISH ] = "~Add" ;
@@ -311,7 +312,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     };
     PushButton BTN_REMOVE
     {
-        Pos = MAP_APPFONT ( 138 , 124 ) ;
+        Pos = MAP_APPFONT ( 200 , 121 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Lˆschen" ;
         Text [ ENGLISH ] = "~Remove" ;

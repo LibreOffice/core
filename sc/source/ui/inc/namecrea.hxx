@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namecrea.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:59 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 10:52:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #include <vcl/imagebtn.hxx>
 #endif
 
-#ifndef _SV_GROUP_HXX //autogen
-#include <vcl/group.hxx>
+#ifndef _SV_FIXED_HXX //autogen
+#include <vcl/fixed.hxx>
 #endif
 
 
@@ -83,6 +83,7 @@
 class ScNameCreateDlg : public ModalDialog
 {
 protected:
+    FixedLine       aFixedLine;
     CheckBox        aTopBox;
     CheckBox        aLeftBox;
     CheckBox        aBottomBox;
@@ -90,7 +91,6 @@ protected:
     OKButton        aOKButton;
     CancelButton    aCancelButton;
     HelpButton      aHelpButton;
-    GroupBox        aGroupBox;
 public:
     ScNameCreateDlg( Window * pParent, USHORT nFlags );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crnrdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 14:46:47 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 10:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,9 +127,9 @@ ScColRowNameRangesDlg::ScColRowNameRangesDlg( SfxBindings* pB,
 
     :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_COLROWNAMERANGES ),
         //
+        aFlAssign       ( this, ScResId( FL_ASSIGN ) ),
         aLbRange        ( this, ScResId( LB_RANGE ) ),
 
-        aGbAssign       ( this, ScResId( GB_ASSIGN ) ),
         aEdAssign       ( this, ScResId( ED_AREA ) ),
         aRbAssign       ( this, ScResId( RB_AREA ), &aEdAssign ),
         aBtnColHead     ( this, ScResId( BTN_COLHEAD ) ),
@@ -235,6 +235,7 @@ void ScColRowNameRangesDlg::Init()
         aEdAssign2.SetText( EMPTY_STRING );
     }
 
+    aLbRange.SetBorderStyle( WINDOW_BORDER_MONO );
     aBtnColHead.Enable();
     aBtnRowHead.Enable();
     aEdAssign.Enable();
@@ -1015,7 +1016,6 @@ IMPL_LINK( ScColRowNameRangesDlg, Range1SelectHdl, void *, EMPTYARG )
         aEdAssign.GrabFocus();
     }
 
-    aGbAssign.Enable();
     aEdAssign.Enable();
     aRbAssign.Enable();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mvtabdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:03 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 10:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,10 +83,10 @@ ScMoveTableDlg::ScMoveTableDlg( Window* pParent )
 
     :   ModalDialog ( pParent, ScResId( RID_SCDLG_MOVETAB ) ),
         //
-        aLbDoc      ( this, ScResId( LB_DEST ) ),
-        aLbTable    ( this, ScResId( LB_INSERT ) ),
         aFtDoc      ( this, ScResId( FT_DEST ) ),
+        aLbDoc      ( this, ScResId( LB_DEST ) ),
         aFtTable    ( this, ScResId( FT_INSERT ) ),
+        aLbTable    ( this, ScResId( LB_INSERT ) ),
         aBtnCopy    ( this, ScResId( BTN_COPY ) ),
         aBtnOk      ( this, ScResId( BTN_OK ) ),
         aBtnCancel  ( this, ScResId( BTN_CANCEL ) ),

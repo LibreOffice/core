@@ -2,9 +2,9 @@
  *
  *  $RCSfile: delcodlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:58 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 10:52:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include <vcl/dialog.hxx>
 #endif
 
-#ifndef _SV_GROUP_HXX //autogen
-#include <vcl/group.hxx>
+#ifndef _SV_FIXED_HXX //autogen
+#include <vcl/fixed.hxx>
 #endif
 
 #ifndef _SV_BUTTON_HXX //autogen
@@ -83,6 +83,7 @@
 class ScDeleteContentsDlg : public ModalDialog
 {
 private:
+    FixedLine       aFlFrame;
     CheckBox        aBtnDelAll;
     CheckBox        aBtnDelStrings;
     CheckBox        aBtnDelNumbers;
@@ -91,7 +92,6 @@ private:
     CheckBox        aBtnDelNotes;
     CheckBox        aBtnDelAttrs;
     CheckBox        aBtnDelObjects;
-    GroupBox        aGbFrame;
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;

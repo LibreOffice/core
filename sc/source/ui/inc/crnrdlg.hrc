@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crnrdlg.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:58 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 10:52:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 //
 #define LB_RANGE        11
 //
-#define GB_ASSIGN       12
+#define FL_ASSIGN       12
 #define ED_AREA         13
 #define RB_AREA         14
 #define BTN_COLHEAD     15

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-17 15:18:39 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 10:52:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
 #define BTN_REMOVE      106
 #define FT_LABEL        110
 #define GB_FRAME        111
+#define FL_FRAME        112
 #define STR_BTN_CLOSE   200
 
 // Zellen loeschen/einfuegen Dialog
@@ -121,20 +122,22 @@
 #define BTN_INSFORMULAS 24
 #define BTN_INSATTRS    25
 #define BTN_INSNOTES    26
-#define BTN_OP_NOOP 27
-#define BTN_OP_ADD  28
+#define BTN_OP_NOOP     27
+#define BTN_OP_ADD      28
 #define BTN_OP_SUB      29
 #define BTN_OP_MUL      30
 #define BTN_OP_DIV      31
-#define GB_OPERATION    32
+#define FL_OPERATION    32
 #define BTN_SKIP_EMPTY  33
-#define BTN_TRANSPOSE 34
+#define BTN_TRANSPOSE   34
 #define BTN_LINK        35
-#define GB_OPTIONS      36
+#define FL_OPTIONS      36
 #define BTN_MV_NONE     37
 #define BTN_MV_DOWN     38
 #define BTN_MV_RIGHT    39
-#define GB_MOVE         40
+#define FL_MOVE         40
+#define FL_SEP1         51
+#define FL_SEP2         52
 
 // Tabelle einfügen/löschen
 #define FT_DEST         1

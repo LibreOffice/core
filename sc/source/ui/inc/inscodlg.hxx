@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inscodlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:59 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 10:52:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #include <vcl/imagebtn.hxx>
 #endif
 
-#ifndef _SV_GROUP_HXX //autogen
-#include <vcl/group.hxx>
+#ifndef _SV_FIXED_HXX //autogen
+#include <vcl/fixed.hxx>
 #endif
 
 #ifndef SC_SCGLOB_HXX
@@ -107,6 +107,7 @@ public:
     void    SetCellShiftDisabled( int nDisable );
 
 private:
+    FixedLine       aFlFrame;
     CheckBox        aBtnInsAll;
     CheckBox        aBtnInsStrings;
     CheckBox        aBtnInsNumbers;
@@ -114,24 +115,25 @@ private:
     CheckBox        aBtnInsFormulas;
     CheckBox        aBtnInsNotes;
     CheckBox        aBtnInsAttrs;
-    GroupBox        aGbFrame;
 
+    FixedLine       aFlSep1;
+    FixedLine       aFlOptions;
     CheckBox        aBtnSkipEmptyCells;
     CheckBox        aBtnTranspose;
     CheckBox        aBtnLink;
-    GroupBox        aGbOptions;
 
+    FixedLine       aFlOperation;
     RadioButton     aRbNoOp;
     RadioButton     aRbAdd;
     RadioButton     aRbSub;
     RadioButton     aRbMul;
     RadioButton     aRbDiv;
-    GroupBox        aGbOperation;
 
+    FixedLine       aFlSep2;
+    FixedLine       aFlMove;
     RadioButton     aRbMoveNone;
     RadioButton     aRbMoveDown;
     RadioButton     aRbMoveRight;
-    GroupBox        aGbMove;
 
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;

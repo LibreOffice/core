@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mvtabdlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:59 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 10:52:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,10 +94,10 @@ public:
     void    EnableCopyTable         (BOOL bFlag=TRUE);
 
 private:
-    ListBox         aLbDoc;
-    ListBox         aLbTable;
     FixedText       aFtDoc;
+    ListBox         aLbDoc;
     FixedText       aFtTable;
+    ListBox         aLbTable;
     CheckBox        aBtnCopy;
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;

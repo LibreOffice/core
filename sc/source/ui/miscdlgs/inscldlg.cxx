@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inscldlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:02 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 10:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ ScInsertCellDlg::ScInsertCellDlg( Window* pParent,BOOL bDisallowCellMove) :
     aBtnCellsRight  ( this, ScResId( BTN_CELLSRIGHT ) ),
     aBtnInsRows     ( this, ScResId( BTN_INSROWS ) ),
     aBtnInsCols     ( this, ScResId( BTN_INSCOLS ) ),
-    aGbFrame        ( this, ScResId( GB_FRAME ) )
+    aFlFrame        ( this, ScResId( FL_FRAME ) )
 {
     if (bDisallowCellMove)
     {

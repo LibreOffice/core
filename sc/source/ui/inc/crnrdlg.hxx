@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crnrdlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:58 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 10:52:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,10 +78,6 @@
 #include <vcl/lstbox.hxx>
 #endif
 
-#ifndef _SV_GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
-
 
 class ScViewData;
 class ScDocument;
@@ -103,9 +99,9 @@ public:
     virtual BOOL    Close();
 
 private:
+    FixedLine       aFlAssign;
     ListBox         aLbRange;
 
-    GroupBox        aGbAssign;
     ScRefEdit       aEdAssign;
     ScRefButton     aRbAssign;
     RadioButton     aBtnColHead;

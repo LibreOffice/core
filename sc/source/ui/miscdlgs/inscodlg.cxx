@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inscodlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:02 $
+ *  last change: $Author: dr $ $Date: 2001-05-23 10:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,21 +100,23 @@ ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
     aBtnInsFormulas ( this, ScResId( BTN_INSFORMULAS ) ),
     aBtnInsNotes    ( this, ScResId( BTN_INSNOTES ) ),
     aBtnInsAttrs    ( this, ScResId( BTN_INSATTRS ) ),
-    aGbFrame        ( this, ScResId( GB_FRAME ) ),
+    aFlFrame        ( this, ScResId( FL_FRAME ) ),
     aBtnSkipEmptyCells( this, ScResId(BTN_SKIP_EMPTY ) ),
     aBtnTranspose   ( this, ScResId( BTN_TRANSPOSE ) ),
     aBtnLink        ( this, ScResId( BTN_LINK ) ),
-    aGbOptions      ( this, ScResId( GB_OPTIONS ) ),
+    aFlOptions      ( this, ScResId( FL_OPTIONS ) ),
     aRbNoOp         ( this, ScResId( BTN_OP_NOOP ) ),
     aRbAdd          ( this, ScResId( BTN_OP_ADD ) ),
     aRbSub          ( this, ScResId( BTN_OP_SUB  ) ),
     aRbMul          ( this, ScResId( BTN_OP_MUL  ) ),
     aRbDiv          ( this, ScResId( BTN_OP_DIV  ) ),
-    aGbOperation    ( this, ScResId( GB_OPERATION ) ),
+    aFlOperation    ( this, ScResId( FL_OPERATION ) ),
     aRbMoveNone     ( this, ScResId( BTN_MV_NONE ) ),
     aRbMoveDown     ( this, ScResId( BTN_MV_DOWN ) ),
     aRbMoveRight    ( this, ScResId( BTN_MV_RIGHT ) ),
-    aGbMove         ( this, ScResId( GB_MOVE ) ),
+    aFlMove         ( this, ScResId( FL_MOVE ) ),
+    aFlSep1         ( this, ScResId( FL_SEP1 ) ),
+    aFlSep2         ( this, ScResId( FL_SEP2 ) ),
     bOtherDoc       ( FALSE ),
     bFillMode       ( FALSE ),
     bChangeTrack    ( FALSE ),
@@ -166,6 +168,9 @@ ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
     aBtnLink.Check( ( ScInsertContentsDlg::nPreviousChecks2             & INS_CONT_LINK  ) != 0);
 
     DisableChecks( aBtnInsAll.IsChecked() );
+
+    aFlSep1.SetStyle( aFlSep1.GetStyle() | WB_VERT );
+    aFlSep2.SetStyle( aFlSep2.GetStyle() | WB_VERT );
 
     aBtnInsAll.SetClickHdl( LINK( this, ScInsertContentsDlg, InsAllHdl ) );
     aBtnLink.SetClickHdl( LINK( this, ScInsertContentsDlg, LinkBtnHdl ) );
@@ -249,14 +254,14 @@ void ScInsertContentsDlg::TestModes()
         aRbSub.Disable();
         aRbMul.Disable();
         aRbDiv.Disable();
-        aGbOperation.Disable();
+        aFlOperation.Disable();
 
         aRbMoveNone.Disable();
         aRbMoveDown.Disable();
         aRbMoveRight.Disable();
-        aGbMove.Disable();
+        aFlMove.Disable();
 
-        aGbFrame.Disable();
+        aFlFrame.Disable();
         aBtnInsAll.Disable();
         DisableChecks(TRUE);
     }
@@ -269,14 +274,14 @@ void ScInsertContentsDlg::TestModes()
         aRbSub.Enable();
         aRbMul.Enable();
         aRbDiv.Enable();
-        aGbOperation.Enable();
+        aFlOperation.Enable();
 
         aRbMoveNone.Enable(!bFillMode && !bChangeTrack && !(bMoveDownDisabled && bMoveRightDisabled));
         aRbMoveDown.Enable(!bFillMode && !bChangeTrack && !bMoveDownDisabled);
         aRbMoveRight.Enable(!bFillMode && !bChangeTrack && !bMoveRightDisabled);
-        aGbMove.Enable(!bFillMode && !bChangeTrack && !(bMoveDownDisabled && bMoveRightDisabled));
+        aFlMove.Enable(!bFillMode && !bChangeTrack && !(bMoveDownDisabled && bMoveRightDisabled));
 
-        aGbFrame.Enable();
+        aFlFrame.Enable();
         aBtnInsAll.Enable();
         DisableChecks( aBtnInsAll.IsChecked() );
     }
