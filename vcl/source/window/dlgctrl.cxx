@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ssa $ $Date: 2001-12-06 11:37:06 $
+ *  last change: $Author: pl $ $Date: 2002-04-17 18:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -964,4 +964,142 @@ Window* Window::ImplFindDlgCtrlWindow( Window* pWindow )
 
     // Focus-Fenster in der Child-Liste suchen und zurueckgeben
     return ::ImplFindDlgCtrlWindow( this, pWindow, nIndex, nFormStart, nFormEnd );
+}
+
+
+// -----------------------------------------------------------------------
+
+static sal_Unicode getAccel( const String& rStr )
+{
+    sal_Unicode nChar = 0;
+    USHORT nPos = 0;
+    do
+    {
+        nPos = rStr.Search( '~', nPos );
+        if( nPos != STRING_NOTFOUND && nPos < rStr.Len() )
+            nChar = rStr.GetChar( ++nPos );
+        else
+            nChar = 0;
+    } while( nChar == '~' );
+    return nChar;
+}
+
+Window* Window::GetLabelFor() const
+{
+    Window* pWindow = NULL;
+
+    WinBits nFrameStyle = ImplGetFrameWindow()->GetStyle();
+    if( ! ( nFrameStyle & WB_DIALOGCONTROL )
+        || ( nFrameStyle & WB_NODIALOGCONTROL )
+        )
+        return NULL;
+
+    sal_Unicode nAccel = getAccel( GetText() );
+    if( GetType() == WINDOW_FIXEDTEXT       ||
+        GetType() == WINDOW_FIXEDLINE       ||
+        GetType() == WINDOW_GROUPBOX )
+    {
+        if( nAccel )
+        {
+            // get index, form start and form end
+            USHORT nIndex, nFormStart, nFormEnd;
+            pWindow = ::ImplFindDlgCtrlWindow( ImplGetFrameWindow(),
+                                               const_cast<Window*>(this),
+                                               nIndex,
+                                               nFormStart,
+                                               nFormEnd );
+            // find the accelerated window
+            pWindow = ::ImplFindAccelWindow( ImplGetFrameWindow(),
+                                             nIndex,
+                                             nAccel,
+                                             nFormStart,
+                                             nFormEnd );
+        }
+    }
+    else
+    {
+        pWindow = nAccel ? const_cast<Window*>(this) : NULL;
+    }
+    return pWindow;
+}
+
+// -----------------------------------------------------------------------
+
+Window* Window::GetLabeledBy() const
+{
+    Window* pWindow = NULL;
+
+    WinBits nFrameStyle = ImplGetFrameWindow()->GetStyle();
+    if( ! ( nFrameStyle & WB_DIALOGCONTROL )
+        || ( nFrameStyle & WB_NODIALOGCONTROL )
+        )
+        return NULL;
+
+    if( ! ( GetType() == WINDOW_FIXEDTEXT       ||
+            GetType() == WINDOW_FIXEDLINE       ||
+            GetType() == WINDOW_GROUPBOX ) )
+    {
+        sal_Unicode nAccel = getAccel( GetText() );
+        if( nAccel )
+            pWindow = const_cast<Window*>(this);
+        else
+        {
+            // search for a control that labels this window
+            // get form start and form end
+            USHORT nIndex, nFormStart, nFormEnd;
+            Window* pSWindow = ::ImplFindDlgCtrlWindow( ImplGetFrameWindow(),
+                                                        const_cast<Window*>(this),
+                                                        nIndex,
+                                                        nFormStart,
+                                                        nFormEnd );
+            for( nIndex = nFormStart; nIndex < nFormEnd; nIndex++ )
+            {
+                USHORT i = nIndex;
+                pSWindow = ::ImplGetChildWindow( ImplGetFrameWindow(),
+                                                i,
+                                                i,
+                                                FALSE );
+                if( pSWindow->GetType() == WINDOW_FIXEDTEXT ||
+                    pSWindow->GetType() == WINDOW_FIXEDLINE ||
+                    pSWindow->GetType() == WINDOW_GROUPBOX )
+                {
+                    nAccel = getAccel( pSWindow->GetText() );
+                    if( nAccel &&
+                        this == ::ImplFindAccelWindow( ImplGetFrameWindow(),
+                                                       i,
+                                                       nAccel,
+                                                       nFormStart,
+                                                       nFormEnd ) )
+                    {
+                        pWindow = pSWindow;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    return pWindow;
+}
+
+// -----------------------------------------------------------------------
+
+KeyEvent Window::GetActivationKey() const
+{
+    KeyEvent aKeyEvent;
+
+    Window* pWindow = GetLabeledBy();
+    if( pWindow )
+    {
+        sal_Unicode nAccel = getAccel( pWindow->GetText() );
+        USHORT nCode = 0;
+        if( nAccel >= 'a' && nAccel <= 'z' )
+            nCode = KEY_A + (nAccel-'a');
+        else if( nAccel >= 'A' && nAccel <= 'Z' )
+            nCode = KEY_A + (nAccel-'A');
+        else if( nAccel >= '0' && nAccel <= '9' )
+            nCode = KEY_0 + (nAccel-'0');
+        KeyCode aKeyCode( nCode, FALSE, FALSE, TRUE );
+        aKeyEvent = KeyEvent( nAccel, aKeyCode );
+    }
+    return aKeyEvent;
 }
