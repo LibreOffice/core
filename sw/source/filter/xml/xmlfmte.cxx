@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-16 12:46:40 $
+ *  last change: $Author: dvo $ $Date: 2001-10-25 21:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,12 +370,17 @@ class SwXMLAutoStylePoolP : public SvXMLAutoStylePoolP
 protected:
 
     virtual void exportStyleAttributes(
+#if SUPD < 650
             SvXMLAttributeList& rAttrList,
+#endif
             sal_Int32 nFamily,
             const ::std::vector< XMLPropertyState >& rProperties,
-            const SvXMLExportPropertyMapper& rPropExp,
-            const SvXMLUnitConverter& rUnitConverter,
-            const SvXMLNamespaceMap& rNamespaceMap) const;
+            const SvXMLExportPropertyMapper& rPropExp
+#if SUPD < 650
+            , const SvXMLUnitConverter& rUnitConverter,
+            const SvXMLNamespaceMap& rNamespaceMap
+#endif
+            ) const;
 public:
 
     SwXMLAutoStylePoolP( SvXMLExport& rExport );
@@ -383,14 +388,23 @@ public:
 };
 
 void SwXMLAutoStylePoolP::exportStyleAttributes(
+#if SUPD < 650
             SvXMLAttributeList& rAttrList,
+#endif
             sal_Int32 nFamily,
             const ::std::vector< XMLPropertyState >& rProperties,
-            const SvXMLExportPropertyMapper& rPropExp,
-            const SvXMLUnitConverter& rUnitConverter,
-            const SvXMLNamespaceMap& rNamespaceMap) const
+            const SvXMLExportPropertyMapper& rPropExp
+#if SUPD < 650
+            , const SvXMLUnitConverter& rUnitConverter,
+            const SvXMLNamespaceMap& rNamespaceMap
+#endif
+            ) const
 {
+#if SUPD < 650
     SvXMLAutoStylePoolP::exportStyleAttributes( rAttrList, nFamily, rProperties, rPropExp, rUnitConverter, rNamespaceMap);
+#else
+    SvXMLAutoStylePoolP::exportStyleAttributes( nFamily, rProperties, rPropExp );
+#endif
 
     if( XML_STYLE_FAMILY_TEXT_PARAGRAPH == nFamily )
     {
@@ -411,9 +425,8 @@ void SwXMLAutoStylePoolP::exportStyleAttributes(
                         OUString sTmp = rExport.GetTextParagraphExport()->GetListAutoStylePool().Find( sStyleName );
                         if( sTmp.getLength() )
                             sStyleName = sTmp;
-                        OUString sName( rNamespaceMap.GetQNameByKey(
-                                XML_NAMESPACE_STYLE, sListStyleName ) );
-                        rAttrList.AddAttribute( sName, sCDATA, sStyleName );
+                        GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                                  sListStyleName, sStyleName );
                     }
                 }
                 break;
@@ -421,9 +434,8 @@ void SwXMLAutoStylePoolP::exportStyleAttributes(
                 {
                     OUString sStyleName;
                     aProperty->maValue >>= sStyleName;
-                    OUString sName( rNamespaceMap.GetQNameByKey(
-                                XML_NAMESPACE_STYLE, sMasterPageName ) );
-                    rAttrList.AddAttribute( sName, sCDATA, sStyleName );
+                    GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                              sMasterPageName, sStyleName );
                 }
                 break;
             }
@@ -432,7 +444,7 @@ void SwXMLAutoStylePoolP::exportStyleAttributes(
 }
 
 SwXMLAutoStylePoolP::SwXMLAutoStylePoolP(SvXMLExport& rExp ) :
-    SvXMLAutoStylePoolP(),
+    SvXMLAutoStylePoolP( rExp ),
     rExport( rExp ),
     sListStyleName( GetXMLToken( XML_LIST_STYLE_NAME ) ),
     sMasterPageName( GetXMLToken( XML_MASTER_PAGE_NAME ) ),
