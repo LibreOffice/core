@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-01 11:52:05 $
+ *  last change: $Author: ab $ $Date: 2001-03-02 15:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1058,12 +1058,14 @@ void MenuListElement::endElement()
                              OUString( RTL_CONSTASCII_USTRINGPARAM("linecount") ),
                              _xAttributes );
 
-    MenuPopupElement * p = static_cast< MenuPopupElement * >( _popup.get() );
-    xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("StringItemList") ),
-                                     makeAny( p->getItemValues() ) );
-    xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("SelectedItems") ),
-                                     makeAny( p->getSelectedItems() ) );
-
+    if (_popup.is())
+    {
+        MenuPopupElement * p = static_cast< MenuPopupElement * >( _popup.get() );
+        xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("StringItemList") ),
+                                         makeAny( p->getItemValues() ) );
+        xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("SelectedItems") ),
+                                         makeAny( p->getSelectedItems() ) );
+    }
     ctx.importEvents( _events );
 }
 
@@ -1139,14 +1141,16 @@ void ComboBoxElement::endElement()
                              OUString( RTL_CONSTASCII_USTRINGPARAM("linecount") ),
                              _xAttributes );
 
-    MenuPopupElement * p = static_cast< MenuPopupElement * >( _popup.get() );
-    xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("StringItemList") ),
-                                     makeAny( p->getItemValues() ) );
+    if (_popup.is())
+    {
+        MenuPopupElement * p = static_cast< MenuPopupElement * >( _popup.get() );
+        xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("StringItemList") ),
+                                         makeAny( p->getItemValues() ) );
 
-    ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Text") ),
-                              OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
-                              _xAttributes );
-
+        ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Text") ),
+                                  OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
+                                  _xAttributes );
+    }
     ctx.importEvents( _events );
 }
 
