@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-05 14:16:55 $
+ *  last change: $Author: nn $ $Date: 2001-07-20 09:36:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,7 @@ private:
     ScArea*                 pPivotSource;
     ScDPObject*             pDialogDPObject;
 
+    String                  aPendingUserData;           // used in first Activate
     BOOL                    bFirstActivate;
 
     BOOL                    bActiveDrawSh;

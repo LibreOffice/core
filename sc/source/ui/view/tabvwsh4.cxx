@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-09 16:33:00 $
+ *  last change: $Author: nn $ $Date: 2001-07-20 09:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,6 +198,13 @@ void __EXPORT ScTabViewShell::Activate(BOOL bMDI)
         {
             SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_NAVIGATOR_UPDATEALL ) );
             bFirstActivate = FALSE;
+
+            if ( aPendingUserData.Len() )
+            {
+                //  #89897# read user data from print preview now, after ctor
+                DoReadUserData( aPendingUserData );
+                aPendingUserData.Erase();
+            }
         }
 
         pScActiveViewShell = this;
@@ -1700,17 +1707,11 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
 
     //  if switching back from print preview,
     //  restore the view settings that were active when creating the preview
+    //  #89897# ReadUserData must not happen from ctor, because the view's edit window
+    //  has to be shown by the sfx. ReadUserData is deferred until the first Activate call.
 
     if ( pOldSh && pOldSh->ISA( ScPreviewShell ) )
-    {
-        String aOldData = ((ScPreviewShell*)pOldSh)->GetSourceData();
-        if ( aOldData.Len() )
-        {
-            //  restore old view settings
-            //  (DoReadUserData also sets SubShell, current Window etc.)
-            DoReadUserData( aOldData );
-        }
-    }
+        aPendingUserData = ((ScPreviewShell*)pOldSh)->GetSourceData();      // used in Activate
 }
 
 #undef __INIT_ScTabViewShell
