@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collect.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-22 16:27:15 $
+ *  last change: $Author: nn $ $Date: 2001-06-28 17:13:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,6 +482,14 @@ BOOL TypedStrCollection::FindText( const String& rStart, String& rResult,
     xub_StrLen nCmpLen = rStart.Len();
     BOOL bFound = FALSE;
 
+    String aOldResult;
+    if ( rPos != SCPOS_INVALID && rPos < nCount )
+    {
+        TypedStrData* pData = (TypedStrData*) pItems[rPos];
+        if (pData->nStrType)
+            aOldResult = pData->aStrValue;
+    }
+
     if ( bBack )                                    // rueckwaerts
     {
         USHORT nStartPos = nCount;
@@ -498,10 +506,16 @@ BOOL TypedStrCollection::FindText( const String& rStart, String& rResult,
                 if ( ScGlobal::pCollator->compareString( aCmp, rStart )
                         == COMPARE_EQUAL )
                 {
-                    rResult = pData->aStrValue;
-                    rPos = i;
-                    bFound = TRUE;
-                    break;
+                    //  If the collection is case sensitive, it may contain several entries
+                    //  that are equal when compared case-insensitive. They are skipped here.
+                    if ( !bCaseSensitive || !aOldResult.Len() ||
+                            ScGlobal::pCollator->compareString( pData->aStrValue, aOldResult ) != COMPARE_EQUAL )
+                    {
+                        rResult = pData->aStrValue;
+                        rPos = i;
+                        bFound = TRUE;
+                        break;
+                    }
                 }
             }
         }
@@ -521,10 +535,16 @@ BOOL TypedStrCollection::FindText( const String& rStart, String& rResult,
                 if ( ScGlobal::pCollator->compareString( aCmp, rStart )
                         == COMPARE_EQUAL )
                 {
-                    rResult = pData->aStrValue;
-                    rPos = i;
-                    bFound = TRUE;
-                    break;
+                    //  If the collection is case sensitive, it may contain several entries
+                    //  that are equal when compared case-insensitive. They are skipped here.
+                    if ( !bCaseSensitive || !aOldResult.Len() ||
+                            ScGlobal::pCollator->compareString( pData->aStrValue, aOldResult ) != COMPARE_EQUAL )
+                    {
+                        rResult = pData->aStrValue;
+                        rPos = i;
+                        bFound = TRUE;
+                        break;
+                    }
                 }
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-25 20:20:00 $
+ *  last change: $Author: nn $ $Date: 2001-06-28 17:11:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -950,7 +950,10 @@ void ScInputHandler::GetColData()
         if ( pColumnData )
             pColumnData->FreeAll();
         else
+        {
             pColumnData = new TypedStrCollection;
+            pColumnData->SetCaseSensitive( TRUE );      // equal strings are handled in FindText
+        }
 
         pDoc->GetDataEntries( aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab(),
                                 *pColumnData, TRUE );
