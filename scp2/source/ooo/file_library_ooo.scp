@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.94 $
+*  $Revision: 1.95 $
 *
-*  last change: $Author: rt $ $Date: 2005-03-29 14:58:34 $
+*  last change: $Author: rt $ $Date: 2005-03-30 08:42:22 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -434,9 +434,9 @@ File gid_File_Lib_Db31
     Styles = (PACKED);
     Dir = gid_Dir_Program;
   #ifdef UNX
-    Name = STRING(CONCAT2(libdb-3.2,UNXSUFFIX));
+    Name = STRING(CONCAT2(libdb-4.2,UNXSUFFIX));
   #else
-    Name = "libdb32.dll";
+    Name = "libdb42.dll";
   #endif
 End
 
@@ -445,7 +445,7 @@ File gid_File_Lib_Db_Cxx
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Program;
-    Name = STRING(CONCAT2(libdb_cxx-3.2,UNXSUFFIX));
+    Name = STRING(CONCAT2(libdb_cxx-4.2,UNXSUFFIX));
 End
 #endif
 
@@ -466,9 +466,9 @@ File gid_File_Lib_Dbjava31
     Styles = (PACKED);
     Dir = gid_Dir_Program;
   #ifdef UNX
-    Name = STRING(CONCAT2(libdb_java-3.2,UNXSUFFIX));
+    Name = STRING(CONCAT2(libdb_java-4.2,UNXSUFFIX));
   #else
-    Name = "libdb_java32.dll";
+    Name = "libdb_java42.dll";
   #endif
 End
 
