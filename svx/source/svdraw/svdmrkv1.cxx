@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmrkv1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:47:11 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:08:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,7 +480,18 @@ BOOL SdrMarkView::HasMarkableGluePoints() const
             const SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
             const SdrObject* pObj=pM->GetObj();
             const SdrGluePointList* pGPL=pObj->GetGluePointList();
-            bRet=pGPL!=NULL && pGPL->GetCount()!=0;
+
+            // #i38892#
+            if(pGPL && pGPL->GetCount())
+            {
+                for(sal_uInt16 a(0); !bRet && a < pGPL->GetCount(); a++)
+                {
+                    if((*pGPL)[a].IsUserDefined())
+                    {
+                        bRet = TRUE;
+                    }
+                }
+            }
         }
     }
     return bRet;
@@ -496,8 +507,17 @@ ULONG SdrMarkView::GetMarkableGluePointCount() const
             const SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
             const SdrObject* pObj=pM->GetObj();
             const SdrGluePointList* pGPL=pObj->GetGluePointList();
-            if (pGPL!=NULL) {
-                nAnz+=pGPL->GetCount();
+
+            // #i38892#
+            if(pGPL && pGPL->GetCount())
+            {
+                for(sal_uInt16 a(0); a < pGPL->GetCount(); a++)
+                {
+                    if((*pGPL)[a].IsUserDefined())
+                    {
+                        nAnz++;
+                    }
+                }
             }
         }
     }
@@ -553,19 +573,24 @@ BOOL SdrMarkView::MarkGluePoints(const Rectangle* pRect, BOOL bUnmark)
                 USHORT nGPAnz=pGPL->GetCount();
                 for (USHORT nGPNum=0; nGPNum<nGPAnz; nGPNum++) {
                     const SdrGluePoint& rGP=(*pGPL)[nGPNum];
-                    Point aPos(rGP.GetAbsolutePos(*pObj));
-                    aPos+=pPV->GetOffset();
-                    if (pRect==NULL || pRect->IsInside(aPos)) {
-                        if (pPts==NULL) pPts=pM->ForceMarkedGluePoints();
-                        else pPts->ForceSort();
-                        ULONG nPos=pPts->GetPos(rGP.GetId());
-                        if (!bUnmark && nPos==CONTAINER_ENTRY_NOTFOUND) {
-                            bChgd=TRUE;
-                            pPts->Insert(rGP.GetId());
-                        }
-                        if (bUnmark && nPos!=CONTAINER_ENTRY_NOTFOUND) {
-                            bChgd=TRUE;
-                            pPts->Remove(nPos);
+
+                    // #i38892#
+                    if(rGP.IsUserDefined())
+                    {
+                        Point aPos(rGP.GetAbsolutePos(*pObj));
+                        aPos+=pPV->GetOffset();
+                        if (pRect==NULL || pRect->IsInside(aPos)) {
+                            if (pPts==NULL) pPts=pM->ForceMarkedGluePoints();
+                            else pPts->ForceSort();
+                            ULONG nPos=pPts->GetPos(rGP.GetId());
+                            if (!bUnmark && nPos==CONTAINER_ENTRY_NOTFOUND) {
+                                bChgd=TRUE;
+                                pPts->Insert(rGP.GetId());
+                            }
+                            if (bUnmark && nPos!=CONTAINER_ENTRY_NOTFOUND) {
+                                bChgd=TRUE;
+                                pPts->Remove(nPos);
+                            }
                         }
                     }
                 }
@@ -609,11 +634,18 @@ BOOL SdrMarkView::PickGluePoint(const Point& rPnt, SdrObject*& rpObj, USHORT& rn
             Point aPnt(rPnt);
             aPnt-=pPV->GetOffset();
             USHORT nNum=pGPL->HitTest(aPnt,*pOut,pObj,bBack,bNext,nId0);
-            if (nNum!=SDRGLUEPOINT_NOTFOUND) {
-                rpObj=pObj;
-                rnId=(*pGPL)[nNum].GetId();
-                rpPV=pPV;
-                return TRUE;
+            if (nNum!=SDRGLUEPOINT_NOTFOUND)
+            {
+                // #i38892#
+                const SdrGluePoint& rCandidate = (*pGPL)[nNum];
+
+                if(rCandidate.IsUserDefined())
+                {
+                    rpObj=pObj;
+                    rnId=(*pGPL)[nNum].GetId();
+                    rpPV=pPV;
+                    return TRUE;
+                }
             }
         }
         bNext=FALSE; // HitNextGluePoint nur beim ersten Obj
