@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignaturehelper2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-26 15:45:15 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,14 +86,14 @@ void ImplXMLSignatureListener::setNextHandler(
     m_xNextHandler = xNextHandler;
 }
 
-void SAL_CALL ImplXMLSignatureListener::signatureCreated( sal_Int32 securityId, com::sun::star::xml::crypto::sax::SignatureCreationResult nResult )
+void SAL_CALL ImplXMLSignatureListener::signatureCreated( sal_Int32 securityId, com::sun::star::xml::crypto::SecurityOperationStatus nResult )
         throw (com::sun::star::uno::RuntimeException)
 {
     XMLSignatureCreationResult aResult( securityId, nResult );
     maCreationResultListenerListener.Call( &aResult );
 }
 
-void SAL_CALL ImplXMLSignatureListener::signatureVerified( sal_Int32 securityId, com::sun::star::xml::crypto::sax::SignatureVerifyResult nResult )
+void SAL_CALL ImplXMLSignatureListener::signatureVerified( sal_Int32 securityId, com::sun::star::xml::crypto::SecurityOperationStatus nResult )
         throw (com::sun::star::uno::RuntimeException)
 {
     XMLSignatureVerifyResult aResult( securityId, nResult );
