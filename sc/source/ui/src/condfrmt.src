@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condfrmt.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-23 15:02:30 $
+ *  last change: $Author: vg $ $Date: 2001-05-30 19:59:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,27 +78,27 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text = "Bedingung ~1" ;
         Text [ ENGLISH ] = "Condition ~1" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "Condition ~1" ;
-        Text [ italian ] = "Condizione ~1" ;
-        Text [ spanish ] = "Condición ~1" ;
-        Text [ french ] = "Condition ~1" ;
-        Text [ dutch ] = "Voorwaarde ~1" ;
+        Text [ english_us ] = "Condition 1" ;
+        Text [ italian ] = "Condizione 1" ;
+        Text [ spanish ] = "Condición 1" ;
+        Text [ french ] = "Condition 1" ;
+        Text [ dutch ] = "Voorwaarde 1" ;
         Text [ swedish ] = "Villkor ~1" ;
-        Text [ danish ] = "Betingelse ~1" ;
-        Text [ portuguese_brazilian ] = "Bedingung ~1" ;
-        Text [ portuguese ] = "Condição ~1" ;
-        Text[ chinese_simplified ] = "Ìõ¼ş ~1";
-        Text[ russian ] = "Óñëîâèå ~1";
-        Text[ polish ] = "Warunek ~1";
-        Text[ japanese ] = "ğŒ ~1";
-        Text[ chinese_traditional ] = "±ø¥ó ~1";
-        Text[ arabic ] = "ÇáÔÑØ ~1";
-        Text[ greek ] = "ÓõíèŞêç ~1";
-        Text[ korean ] = "Á¶°Ç ~1";
-        Text[ turkish ] = "Koşul ~1";
+        Text [ danish ] = "Betingelse 1" ;
+        Text [ portuguese_brazilian ] = "Bedingung 1" ;
+        Text [ portuguese ] = "Condição 1" ;
+        Text[ chinese_simplified ] = "Ìõ¼ş 1";
+        Text[ russian ] = "Óñëîâèå 1";
+        Text[ polish ] = "Warunek 1";
+        Text[ japanese ] = "ğŒ 1";
+        Text[ chinese_traditional ] = "±ø¥ó 1";
+        Text[ arabic ] = "ÇáÔÑØ 1";
+        Text[ greek ] = "ÓõíèŞêç 1";
+        Text[ korean ] = "Á¶°Ç 1";
+        Text[ turkish ] = "Koşul 1";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Condición ~1";
-        Text[ finnish ] = "Ehto ~1";
+        Text[ catalan ] = "Condición 1";
+        Text[ finnish ] = "Ehto 1";
     };
     ListBox LB_COND1_1
     {
@@ -499,7 +499,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ polish ] = "Pomniejsz!";
         QuickHelpText[ japanese ] = "k¬!";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
@@ -565,7 +565,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ polish ] = "Pomniejsz!";
         QuickHelpText[ japanese ] = "k¬!";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
@@ -590,7 +590,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text [ spanish ] = "Estilo de celda" ;
         Text [ french ] = "Style de cellule" ;
         Text [ dutch ] = "Celopmaak" ;
-        Text [ swedish ] = "Cellformatmall" ;
+        Text [ swedish ] = "~Cellformatmall" ;
         Text [ danish ] = "Celletypografi" ;
         Text [ portuguese_brazilian ] = "Zellvorlage" ;
         Text [ portuguese ] = "Estilo da célula" ;
@@ -627,27 +627,27 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text = "Bedingung ~2" ;
         Text [ ENGLISH ] = "Condition ~2" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "Condition ~2" ;
-        Text [ italian ] = "Condizione ~2" ;
-        Text [ spanish ] = "Condición ~2" ;
-        Text [ french ] = "Condition ~2" ;
-        Text [ dutch ] = "Voorwaarde ~2" ;
+        Text [ english_us ] = "Condition 2" ;
+        Text [ italian ] = "Condizione 2" ;
+        Text [ spanish ] = "Condición 2" ;
+        Text [ french ] = "Condition 2" ;
+        Text [ dutch ] = "Voorwaarde 2" ;
         Text [ swedish ] = "Villkor ~2" ;
-        Text [ danish ] = "Betingelse ~2" ;
-        Text [ portuguese_brazilian ] = "Bedingung ~2" ;
-        Text [ portuguese ] = "Condição ~2" ;
-        Text[ chinese_simplified ] = "Ìõ¼ş ~2";
-        Text[ russian ] = "Óñëîâèå ~2";
-        Text[ polish ] = "Warunek ~2";
-        Text[ japanese ] = "ğŒ ~2";
-        Text[ chinese_traditional ] = "±ø¥ó ~2";
-        Text[ arabic ] = "ÇáÔÑØ ~2";
-        Text[ greek ] = "ÓõíèŞêç ~2";
-        Text[ korean ] = "Á¶°Ç ~2";
-        Text[ turkish ] = "Koşul ~2";
+        Text [ danish ] = "Betingelse 2" ;
+        Text [ portuguese_brazilian ] = "Bedingung 2" ;
+        Text [ portuguese ] = "Condição 2" ;
+        Text[ chinese_simplified ] = "Ìõ¼ş 2";
+        Text[ russian ] = "Óñëîâèå 2";
+        Text[ polish ] = "Warunek 2";
+        Text[ japanese ] = "ğŒ 2";
+        Text[ chinese_traditional ] = "±ø¥ó 2";
+        Text[ arabic ] = "ÇáÔÑØ 2";
+        Text[ greek ] = "ÓõíèŞêç 2";
+        Text[ korean ] = "Á¶°Ç 2";
+        Text[ turkish ] = "Koşul 2";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Condición ~2";
-        Text[ finnish ] = "Ehto ~2";
+        Text[ catalan ] = "Condición 2";
+        Text[ finnish ] = "Ehto 2";
     };
     ListBox LB_COND2_1
     {
@@ -1048,7 +1048,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
     QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ polish ] = "Pomniejsz!";
         QuickHelpText[ japanese ] = "k¬!";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
@@ -1114,7 +1114,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ polish ] = "Pomniejsz!";
         QuickHelpText[ japanese ] = "k¬!";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
@@ -1139,7 +1139,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text [ spanish ] = "Estilo de celda" ;
         Text [ french ] = "Style de cellule" ;
         Text [ dutch ] = "Celopmaak" ;
-        Text [ swedish ] = "Cellformatmall" ;
+        Text [ swedish ] = "C~ellformatmall" ;
         Text [ danish ] = "Celletypografi" ;
         Text [ portuguese_brazilian ] = "Zellvorlage" ;
         Text [ portuguese ] = "Estilo da célula" ;
@@ -1176,27 +1176,27 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text = "Bedingung ~3" ;
         Text [ ENGLISH ] = "Condition ~3" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "Condition ~3" ;
-        Text [ italian ] = "Condizione ~3" ;
-        Text [ spanish ] = "Condición ~3" ;
-        Text [ french ] = "Condition ~3" ;
-        Text [ dutch ] = "Voorwaarde ~3" ;
+        Text [ english_us ] = "Condition 3" ;
+        Text [ italian ] = "Condizione 3" ;
+        Text [ spanish ] = "Condición 3" ;
+        Text [ french ] = "Condition 3" ;
+        Text [ dutch ] = "Voorwaarde 3" ;
         Text [ swedish ] = "Villkor ~3" ;
-        Text [ danish ] = "Betingelse ~3" ;
-        Text [ portuguese_brazilian ] = "Bedingung ~3" ;
-        Text [ portuguese ] = "Condição ~3" ;
-        Text[ chinese_simplified ] = "Ìõ¼ş ~3";
-        Text[ russian ] = "Óñëîâèå ~3";
-        Text[ polish ] = "Warunek ~3";
-        Text[ japanese ] = "ğŒ ~3";
-        Text[ chinese_traditional ] = "±ø¥ó ~3";
-        Text[ arabic ] = "ÇáÔÑØ ~3";
-        Text[ greek ] = "ÓõíèŞêç ~3";
-        Text[ korean ] = "Á¶°Ç ~3";
-        Text[ turkish ] = "Koşul ~3";
+        Text [ danish ] = "Betingelse 3" ;
+        Text [ portuguese_brazilian ] = "Bedingung 3" ;
+        Text [ portuguese ] = "Condição 3" ;
+        Text[ chinese_simplified ] = "Ìõ¼ş 3";
+        Text[ russian ] = "Óñëîâèå 3";
+        Text[ polish ] = "Warunek 3";
+        Text[ japanese ] = "ğŒ 3";
+        Text[ chinese_traditional ] = "±ø¥ó 3";
+        Text[ arabic ] = "ÇáÔÑØ 3";
+        Text[ greek ] = "ÓõíèŞêç 3";
+        Text[ korean ] = "Á¶°Ç 3";
+        Text[ turkish ] = "Koşul 3";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Condición ~3";
-        Text[ finnish ] = "Ehto ~3";
+        Text[ catalan ] = "Condición 3";
+        Text[ finnish ] = "Ehto 3";
     };
     ListBox LB_COND3_1
     {
@@ -1597,7 +1597,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
     QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ polish ] = "Pomniejsz!";
         QuickHelpText[ japanese ] = "k¬!";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
@@ -1663,7 +1663,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
     QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ polish ] = "Pomniejsz!";
         QuickHelpText[ japanese ] = "k¬!";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
@@ -1688,7 +1688,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text [ spanish ] = "Estilo de celda" ;
         Text [ french ] = "Style de cellule" ;
         Text [ dutch ] = "Celopmaak" ;
-        Text [ swedish ] = "Cellformatmall" ;
+        Text [ swedish ] = "Ce~llformatmall" ;
         Text [ danish ] = "Celletypografi" ;
         Text [ portuguese_brazilian ] = "Zellvorlage" ;
         Text [ portuguese ] = "Estilo da célula" ;
