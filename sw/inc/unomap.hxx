@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:38:44 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:50:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,8 @@
 #define PROPERTY_MAP_TEXT                               87
 #define PROPERTY_MAP_REDLINE_PORTION                    88
 #define PROPERTY_MAP_MAILMERGE                          89
-#define PROPERTY_MAP_END                                90
+#define PROPERTY_MAP_FLDTYP_DROPDOWN                    90
+#define PROPERTY_MAP_END                                91
 
 #define PROPERTY_SET_CHAR_STYLE             1
 #define PROPERTY_SET_PARA_STYLE             2
