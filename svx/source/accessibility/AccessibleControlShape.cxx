@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleControlShape.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-11 09:49:15 $
+ *  last change: $Author: fs $ $Date: 2002-09-20 10:50:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,7 +358,7 @@ uno::Any SAL_CALL AccessibleControlShape::queryInterface( const uno::Type& _rTyp
     if ( !aReturn.hasValue() )
     {
         aReturn = AccessibleControlShape_Base::queryInterface( _rType );
-        if ( !aReturn.hasValue() )
+        if ( !aReturn.hasValue() && m_xControlContextProxy.is() )
             aReturn = m_xControlContextProxy->queryAggregation( _rType );
     }
     return aReturn;
@@ -375,7 +375,24 @@ uno::Sequence< uno::Type > SAL_CALL AccessibleControlShape::getTypes() throw (un
     if ( ::comphelper::query_aggregation( m_xControlContextProxy, xAggTypes ) )
         aAggregateTypes = xAggTypes->getTypes();
 
-    return ::comphelper::concatSequences( aShapeTypes, aOwnTypes, aAggregateTypes );
+    uno::Sequence< uno::Type > aAllTypes = ::comphelper::concatSequences( aShapeTypes, aOwnTypes, aAggregateTypes );
+
+    // remove duplicates
+    uno::Type* pBegin = aAllTypes.getArray();
+    uno::Type* pEnd = pBegin + aAllTypes.getLength();
+    while ( pBegin != pEnd )
+    {
+        uno::Type aThisRoundType = *pBegin;
+        if ( ++pBegin != pEnd )
+        {
+            pEnd = ::std::remove( pBegin, pEnd, aThisRoundType );
+            // now all types between begin and (the old) end which equal aThisRoundType
+            // are moved behind the new end
+        }
+    }
+    aAllTypes.realloc( pEnd - aAllTypes.getArray() );
+
+    return aAllTypes;
 }
 
 //--------------------------------------------------------------------
@@ -395,12 +412,14 @@ void SAL_CALL AccessibleControlShape::modeChanged( const util::ModeChangeEvent& 
                 AccessibleShapeInfo (
                     mxShape, getAccessibleParent(), mpParent, mnIndex),
                 maShapeTreeInfo);
-        Reference<XAccessible> xShape (pShape);
+
+        Reference<XAccessible> xShape( pShape );
+        pShape->Init();
         // Now that there is a reference to the new accessible shape we
         // can safely call its Init() method.  The following call transfers
         // owenership to our parent so that at the end of the scope we can
         // safely release the reference.
-        mpParent->ReplaceChild (this, pShape);
+        OSL_VERIFY( mpParent->ReplaceChild ( this, pShape ) );
     }
 #ifdef _DEBUG
     else
