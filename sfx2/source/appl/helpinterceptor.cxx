@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpinterceptor.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: gt $ $Date: 2001-11-01 16:02:22 $
+ *  last change: $Author: pb $ $Date: 2001-11-30 14:34:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XNOTIFYINGDISPATCH_HPP_
+#include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #endif
 #ifndef _CPPUHELPER_INTERFACECONTAINER_H_
 #include <cppuhelper/interfacecontainer.h>
@@ -346,18 +349,21 @@ void SAL_CALL HelpInterceptor_Impl::dispatch(
                     Reference < XDispatch > xDisp = m_xSlaveDispatcher->queryDispatch( aURL, String(), 0 );
                     if ( xDisp.is() )
                     {
-                        if ( m_pOpenListener && m_pWindow )
-                        {
-                            if ( !m_pWindow->IsWait() )
-                                m_pWindow->EnterWait();
-                            m_pOpenListener->AddListener( xDisp, aURL );
-                        }
-                        m_aCurrentURL = aURL.Complete;
+                        if ( m_pWindow && !m_pWindow->IsWait() )
+                            m_pWindow->EnterWait();
 
+                        m_aCurrentURL = aURL.Complete;
                         Sequence< PropertyValue > aPropSeq( 1 );
                         aPropSeq[ 0 ].Name = ::rtl::OUString::createFromAscii( "ViewData" );
                         aPropSeq[ 0 ].Value = pEntry->aViewData;
-                        xDisp->dispatch( aURL, aPropSeq );
+                        Reference < XNotifyingDispatch > xNotifyingDisp( xDisp, UNO_QUERY );
+                        if ( xNotifyingDisp.is() )
+                        {
+                            OpenStatusListener_Impl* pListener = (OpenStatusListener_Impl*)m_pWindow->getOpenListener().get();
+                            DBG_ASSERT( pListener, "invalid XDispatchResultListener" );
+                            pListener->SetURL( aURL.Complete );
+                            xNotifyingDisp->dispatchWithNotification( aURL, aPropSeq, pListener );
+                        }
                     }
                 }
             }
