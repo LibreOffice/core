@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngi4.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-01 13:34:56 $
+#   last change: $Author: vg $ $Date: 2003-04-15 14:33:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -148,8 +148,9 @@ DYNAMIC		= -Wl,-Bdynamic
 LINK*=$(CC)
 
 # default linker flags
-# LINKFLAGSRUNPATH*=-Wl,-rpath\''$$ORIGIN'\'
-LINKFLAGS=-z combreloc $(LINKFLAGSRUNPATH)
+LINKFLAGSDEFS*=-z defs
+LINKFLAGSRUNPATH*=-Wl,-rpath,\''$$ORIGIN'\'
+LINKFLAGS=-z combreloc $(LINKFLAGSDEFS) $(LINKFLAGSRUNPATH)
 
 # linker flags for linking applications
 LINKFLAGSAPPGUI= -Wl,-export-dynamic -Wl,--noinhibit-exec
@@ -164,14 +165,10 @@ LINKFLAGSPROF=
 LINKFLAGSDEBUG=-g
 LINKFLAGSOPT=
 
-.IF "$(NO_BSYMBOLIC)"==""
-.IF "$(PRJNAME)" != "envtest"
-LINKFLAGSSHLGUI+=-Wl,-Bsymbolic
-LINKFLAGSSHLCUI+=-Wl,-Bsymbolic
-.ENDIF
-.ENDIF				# "$(NO_BSYMBOLIC)"==""
-
-LINKVERSIONMAPFLAG=-Wl,--version-script
+# linker flags for optimization (symbol hashtable)
+# for now, applied to symbol scoped libraries, only
+LINKFLAGSOPTIMIZE*=-Wl,-O1
+LINKVERSIONMAPFLAG=$(LINKFLAGSOPTIMIZE) -Wl,--version-script
 
 SONAME_SWITCH=-Wl,-h
 
