@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: mav $ $Date: 2002-04-26 11:46:59 $
+ *  last change: $Author: mba $ $Date: 2002-05-27 14:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,7 +527,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         }
     }
 
-    if ( bHasStorage )
+    if ( bHasStorage && !( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) )
     {
         SvStorageRef xStor( pMed->GetStorage() );
         DBG_ASSERT( pFilter, "No filter for storage found!" );
@@ -808,7 +808,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     Lock_Impl( this, sal_True );
 
     sal_Bool bOk = sal_False;
-    if( IsOwnStorageFormat_Impl(rMedium) )
+    if( IsOwnStorageFormat_Impl(rMedium) && !(pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER))
     {
         SvStorageRef aMedRef = rMedium.GetStorage();
         if ( !aMedRef.Is() )
@@ -1395,7 +1395,7 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium )
         if ( !bHasInputStream )
         {
             pNewValue[i].Name = sInputStream;
-            pNewValue[i].Value <<= Reference < com::sun::star::io::XInputStream > ( new utl::OInputStreamWrapper ( *rMedium.GetInStream() ) );
+            pNewValue[i].Value <<= Reference < com::sun::star::io::XInputStream > ( new utl::OSeekableInputStreamWrapper ( *rMedium.GetInStream() ) );
         }
         else
             aArgs.realloc ( i-1 );
