@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:31 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,10 +326,14 @@ void SdModule::Execute(SfxRequest& rReq)
                             SfxStringItem aReferer( SID_REFERER, UniString() );
                             SfxStringItem aPassword( SID_PASSWORD, aPasswrd );
 
-                            const SfxObjectShellItem* pRet = (SfxObjectShellItem*)
-                                                              SFX_DISPATCHER().Execute( SID_OPENDOC,
-                                                                                SFX_CALLMODE_SYNCHRON,
-                                                                                &aFile, &aReferer, &aPassword, 0L );
+                            SdDrawDocShell*             pDocShell = PTR_CAST(SdDrawDocShell, SfxObjectShell::Current());
+                            SdViewShell*                pViewShell = pDocShell ? pDocShell->GetViewShell() : NULL;
+                            const SfxObjectShellItem*   pRet = (SfxObjectShellItem*)
+                                                                 ( ( pViewShell && pViewShell->GetViewFrame() ) ?
+                                                                  pViewShell->GetViewFrame() :
+                                                                  SfxViewFrame::Current() )->
+                                                                GetDispatcher()->Execute( SID_OPENDOC,
+                                                                SFX_CALLMODE_SYNCHRON, &aFile, &aReferer, &aPassword, 0L );
                         }
 
                         pOpt->SetStartWithTemplate(bStartWithTemplate);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconbez.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:35 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:11:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,7 +374,7 @@ void FuConstBezPoly::SetEditMode(USHORT nMode)
     nEditMode = nMode;
     ForcePointer();
 
-    SfxBindings& rBindings = SFX_BINDINGS();
+    SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
     rBindings.Invalidate(SID_BEZIER_MOVE);
     rBindings.Invalidate(SID_BEZIER_INSERT);
 }

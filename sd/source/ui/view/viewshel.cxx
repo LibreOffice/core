@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:45 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,11 +417,12 @@ void __EXPORT SdViewShell::Activate(BOOL bIsMDIActivate)
     {
         // Damit der Navigator auch einen aktuellen Status bekommt
         SfxBoolItem aItem( SID_NAVIGATOR_INIT, TRUE );
-        SFX_DISPATCHER().Execute( SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON |
-                                    SFX_CALLMODE_RECORD, &aItem, 0L );
+        GetViewFrame()->GetDispatcher()->Execute(
+            SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 
-        SFX_BINDINGS().Invalidate( SID_EFFECT_STATE, TRUE, FALSE );
-        SFX_BINDINGS().Invalidate( SID_3D_STATE, TRUE, FALSE );
+        SfxBindings& rBindings = GetViewFrame()->GetBindings();
+        rBindings.Invalidate( SID_EFFECT_STATE, TRUE, FALSE );
+        rBindings.Invalidate( SID_3D_STATE, TRUE, FALSE );
 
         if (pFuSlideShow && !pFuSlideShow->IsTerminated() )
         {
@@ -673,7 +674,7 @@ void SdViewShell::Command(const CommandEvent& rCEvt, SdWindow* pWin)
                     nNewZoom = Min( (long) pWin->GetMaxZoom(), (long)(nOldZoom + DELTA_ZOOM) );
 
                 SetZoom( nNewZoom );
-                SFX_BINDINGS().Invalidate( SID_ATTR_ZOOM );
+                GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
                 bDone = TRUE;
             }
             else

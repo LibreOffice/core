@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsf.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:44 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:12:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,9 +404,6 @@ void __EXPORT SdDrawViewShell::GetAttrState( SfxItemSet& rSet )
                             }
                         }
                     }
-                    // Invalidieren mit ClearCache. Sollte (so bald verfuegbar) auf
-                    // 2 Parameter umgestellt werden (letzten einfach entfernen)
-                    //SFX_BINDINGS().Invalidate( nSlotId, TRUE, FALSE );
                 }
                 else
                 {   SfxTemplateItem aItem( nWhich, String() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:43 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:12:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,8 +198,8 @@ void __EXPORT SdDrawViewShell::Activate(BOOL bIsMDIActivate)
             bPreview = pFrameView->IsShowPreviewInMasterPageMode();
 
         SfxBoolItem aItem(SID_PREVIEW_WIN, bPreview);
-        SFX_DISPATCHER().Execute(SID_PREVIEW_WIN, SFX_CALLMODE_ASYNCHRON |
-                                 SFX_CALLMODE_RECORD, &aItem, 0L);
+        GetViewFrame()->GetDispatcher()->Execute(
+            SID_PREVIEW_WIN, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L);
     }
 }
 
@@ -227,13 +227,12 @@ void SdDrawViewShell::SelectionHasChanged()
     Invalidate();
 
     // Damit das Effekte-Window auch einen aktuellen Status bekommt
-    //SFX_BINDINGS().Invalidate( SID_EFFECT_STATE, TRUE, FALSE );
     UpdateEffectWindow();
 
     //Update3DWindow(); // 3D-Controller
     SfxBoolItem aItem( SID_3D_STATE, TRUE );
-    SFX_DISPATCHER().Execute( SID_3D_STATE, SFX_CALLMODE_ASYNCHRON |
-                                SFX_CALLMODE_RECORD, &aItem, 0L );
+    GetViewFrame()->GetDispatcher()->Execute(
+        SID_3D_STATE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 
     SdrOle2Obj* pOleObj = NULL;
     SdrGrafObj* pGrafObj = NULL;
@@ -375,7 +374,7 @@ void SdDrawViewShell::SelectionHasChanged()
 void SdDrawViewShell::SetZoom( long nZoom )
 {
     SdViewShell::SetZoom( nZoom );
-    SFX_BINDINGS().Invalidate( SID_ATTR_ZOOM );
+    GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
 }
 
 /*************************************************************************
@@ -387,7 +386,7 @@ void SdDrawViewShell::SetZoom( long nZoom )
 void SdDrawViewShell::SetZoomRect( const Rectangle& rZoomRect )
 {
     SdViewShell::SetZoomRect( rZoomRect );
-    SFX_BINDINGS().Invalidate( SID_ATTR_ZOOM );
+    GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
 }
 
 /*************************************************************************
@@ -577,8 +576,8 @@ void SdDrawViewShell::ChangeEditMode(EditMode eEMode, BOOL bLMode)
             SwitchPage(nActualPageNum);
 
             SfxBoolItem aItem(SID_PREVIEW_WIN, pFrameView->IsShowPreviewInPageMode());
-            SFX_DISPATCHER().Execute(SID_PREVIEW_WIN, SFX_CALLMODE_ASYNCHRON |
-                                     SFX_CALLMODE_RECORD, &aItem, 0L);
+            GetViewFrame()->GetDispatcher()->Execute(
+                SID_PREVIEW_WIN, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
         }
         else
         {
@@ -620,8 +619,8 @@ void SdDrawViewShell::ChangeEditMode(EditMode eEMode, BOOL bLMode)
             SwitchPage(nActualMasterPageNum);
 
             SfxBoolItem aItem(SID_PREVIEW_WIN, pFrameView->IsShowPreviewInMasterPageMode());
-            SFX_DISPATCHER().Execute(SID_PREVIEW_WIN, SFX_CALLMODE_ASYNCHRON |
-                                     SFX_CALLMODE_RECORD, &aItem, 0L);
+            GetViewFrame()->GetDispatcher()->Execute(
+                SID_PREVIEW_WIN, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
         }
 
         if (bLayerMode)
@@ -1261,8 +1260,9 @@ BOOL SdDrawViewShell::SwitchPage(USHORT nSelectedPage)
         pDrView->VisAreaChanged(pWindow);
 
         // Damit der Navigator (und das Effekte-Window) das mitbekommt (/-men)
-        SFX_BINDINGS().Invalidate(SID_NAVIGATOR_PAGENAME, TRUE, FALSE);
-        SFX_BINDINGS().Invalidate(SID_EFFECT_STATE, TRUE, FALSE);
+        SfxBindings& rBindings = GetViewFrame()->GetBindings();
+        rBindings.Invalidate(SID_NAVIGATOR_PAGENAME, TRUE, FALSE);
+        rBindings.Invalidate(SID_EFFECT_STATE, TRUE, FALSE);
         UpdateSlideChangeWindow();
 
         // ggfs. Preview den neuen Kontext mitteilen
@@ -1397,7 +1397,7 @@ void SdDrawViewShell::ResetActualLayer()
     }
 
     aLayerTab.SetCurPageId(nActiveLayer + 1);
-    SFX_BINDINGS().Invalidate( SID_MODIFYLAYER );
+    GetViewFrame()->GetBindings().Invalidate( SID_MODIFYLAYER );
 }
 
 /*************************************************************************

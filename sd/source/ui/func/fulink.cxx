@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fulink.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:35 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:11:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
 #endif
+#ifndef _SFXVIEWFRM_HXX
+#include <sfx2/viewfrm.hxx>
+#endif
 
 #include "fulink.hxx"
 #include "sdwindow.hxx"
@@ -98,8 +101,7 @@ FuLink::FuLink( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
     SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
     SvBaseLinksDialog aLinkDlg( NULL, pLinkManager );
     aLinkDlg.Execute();
-
-    SFX_BINDINGS().Invalidate( SID_MANAGE_LINKS );
+    pViewShell->GetViewFrame()->GetBindings().Invalidate( SID_MANAGE_LINKS );
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:44 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,7 +235,7 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
         delete pFuActual;
         pFuActual = NULL;
 
-        SfxBindings& rBind = SFX_BINDINGS();
+        SfxBindings& rBind = GetViewFrame()->GetBindings();
         rBind.Invalidate(nOldSId);
         rBind.Update(nOldSId);
     }
@@ -253,8 +253,9 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
             ( (FuText*) pFuActual)->DoExecute();
             // Das Setzen des Permanent-Status erfolgt weiter oben!
 
-            SFX_BINDINGS().Invalidate( SID_ATTR_CHAR );
-            SFX_BINDINGS().Invalidate( SID_TEXT_FITTOSIZE );
+            SfxBindings& rBindings = GetViewFrame()->GetBindings();
+            rBindings.Invalidate( SID_ATTR_CHAR );
+            rBindings.Invalidate( SID_TEXT_FITTOSIZE );
             rReq.Done();
         }
         break;
@@ -483,7 +484,7 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
         delete pFuOld;
         pFuOld = NULL;
 
-        SfxBindings& rBind = SFX_BINDINGS();
+        SfxBindings& rBind = GetViewFrame()->GetBindings();
         rBind.Invalidate( nSId );
         rBind.Update( nSId );
     }
@@ -620,7 +621,7 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
             rReq.Ignore ();
 
             // sonst bleiben alle Draw-Slots disabled
-            SFX_BINDINGS().InvalidateAll( TRUE );
+            GetViewFrame()->GetBindings().InvalidateAll( TRUE );
         }
         break;
 

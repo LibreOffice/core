@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsi.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:44 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -714,7 +714,7 @@ void SdDrawViewShell::AssignFromEffectWindow()
     SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( nId );
     if( pWindow )
     {
-        SFX_BINDINGS().InvalidateAll( TRUE );
+        GetViewFrame()->GetBindings().InvalidateAll( TRUE );
 
         SdEffectWin* pEffectWin = (SdEffectWin*) pWindow->GetWindow();
         const SdrMarkList& rMarkList = pDrView->GetMarkList();
@@ -1185,7 +1185,7 @@ void SdDrawViewShell::AssignFromEffectWindow()
     }
 
     bInEffectAssignment = FALSE;
-    SFX_BINDINGS().InvalidateAll( TRUE );
+    GetViewFrame()->GetBindings().InvalidateAll( TRUE );
 }
 
 /*************************************************************************
@@ -1243,8 +1243,8 @@ void SdDrawViewShell::AssignFrom3DWindow()
                     // Text in 3D umwandeln
                     USHORT nSId = SID_CONVERT_TO_3D;
                     SfxBoolItem aItem( nSId, TRUE );
-                    SFX_DISPATCHER().Execute( nSId, SFX_CALLMODE_SYNCHRON |
-                                                SFX_CALLMODE_RECORD, &aItem, 0L );
+                    GetViewFrame()->GetDispatcher()->Execute(
+                        nSId, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 
                     // Feststellen, ob ein FILL_Attribut gesetzt ist.
                     // Falls nicht, Fuellattribut hart setzen

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gluectrl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:32 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #ifndef _SV_TOOLBOX_HXX //autogen
 #include <vcl/toolbox.hxx>
 #endif
+#ifndef _SFXVIEWFRM_HXX
+#include <sfx2/viewfrm.hxx>
+#endif
 
 #include "strings.hrc"
 #include "gluectrl.hxx"
@@ -147,8 +150,8 @@ void __EXPORT GlueEscDirLB::Select()
     SfxUInt16Item aItem( SID_GLUE_ESCDIR, aEscDirArray[ nPos ] );
 
 
-    SFX_DISPATCHER().Execute( SID_GLUE_ESCDIR, SFX_CALLMODE_ASYNCHRON |
-                SFX_CALLMODE_RECORD, &aItem, (void*) NULL, 0L );
+    SfxViewFrame::Current()->GetDispatcher()->Execute( SID_GLUE_ESCDIR, SFX_CALLMODE_ASYNCHRON |
+                                                       SFX_CALLMODE_RECORD, &aItem, (void*) NULL, 0L );
 }
 
 /*************************************************************************
@@ -264,6 +267,9 @@ UINT16 SdTbxCtlGlueEscDir::GetEscDirPos( UINT16 nEscDir )
       Source Code Control System - History
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 16:48:32  hr
+      initial import
+
       Revision 1.12  2000/09/17 15:23:35  willem.vandorp
       OpenOffice header added.
 
@@ -398,6 +404,4 @@ UINT16 SdTbxCtlGlueEscDir::GetEscDirPos( UINT16 nEscDir )
    Initial revision.
 
 *************************************************************************/
-
-#pragma SEG_EOFMODULE
 

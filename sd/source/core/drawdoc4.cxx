@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:46 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:11:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,9 @@
 #ifndef _OUTLOBJ_HXX
 #include <svx/outlobj.hxx>
 #endif
-
+#ifndef _SFXVIEWFRM_HXX
+#include <sfx2/viewfrm.hxx>
+#endif
 
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
@@ -957,7 +959,7 @@ IMPL_LINK(SdDrawDocument, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
     }
     else if (nCommand == SPELLCMD_STARTSPELLDLG)
     {
-        SFX_DISPATCHER().Execute(SID_SPELLING, SFX_CALLMODE_ASYNCHRON);
+        SfxViewFrame::Current()->GetDispatcher()->Execute( SID_SPELLING, SFX_CALLMODE_ASYNCHRON );
     }
 
     return(0);

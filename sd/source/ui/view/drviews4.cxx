@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews4.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:43 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,7 +426,7 @@ void SdDrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, SdWindow* pWin)
                 pDrView->EndAction();
 
                 if (bIsSetPageOrg)
-                    SFX_BINDINGS().Invalidate(SID_RULER_NULL_OFFSET);
+                    GetViewFrame()->GetBindings().Invalidate(SID_RULER_NULL_OFFSET);
             }
             else if (rMEvt.IsLeft() && bIsSetPageOrg)
             {
@@ -434,7 +434,7 @@ void SdDrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, SdWindow* pWin)
                 SdPage* pPage = (SdPage*) pDrView->GetPageViewPvNum(0)->GetPage();
                 Point aOrg(pPage->GetLftBorder(), pPage->GetUppBorder());
                 pDrView->GetPageViewPvNum(0)->SetPageOrigin(aOrg);
-                SFX_BINDINGS().Invalidate(SID_RULER_NULL_OFFSET);
+                GetViewFrame()->GetBindings().Invalidate(SID_RULER_NULL_OFFSET);
             }
             else
             {
@@ -778,10 +778,12 @@ void SdDrawViewShell::ShowMousePosInfo(const Rectangle& rRect, SdWindow* pWin)
 //        GetStatusBarState(aSet);  nicht performant bei gedrueckter Modifiertaste!!
 
         aSet.Put( SfxStringItem( SID_CONTEXT, pDrView->GetStatusText() ) );
-        SFX_BINDINGS().SetState(aSet);
-        SFX_BINDINGS().Invalidate(SID_CONTEXT);
-        SFX_BINDINGS().Invalidate(SID_ATTR_POSITION);
-        SFX_BINDINGS().Invalidate(SID_ATTR_SIZE);
+
+        SfxBindings& rBindings = GetViewFrame()->GetBindings();
+        rBindings.SetState(aSet);
+        rBindings.Invalidate(SID_CONTEXT);
+        rBindings.Invalidate(SID_ATTR_POSITION);
+        rBindings.Invalidate(SID_ATTR_SIZE);
     }
 }
 

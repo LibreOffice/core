@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews9.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:43 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,10 +373,11 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
     if (pFuActual && pFuActual->    GetSlotID() == SID_PRESENTATION)
         return;
 
-
     CheckLineTo (rReq);
 
-    SfxItemSet* pAttr = new SfxItemSet ( pDoc->GetPool() );
+    SfxBindings&    rBindings = GetViewFrame()->GetBindings();
+    SfxItemSet*     pAttr = new SfxItemSet ( pDoc->GetPool() );
+
     pView->GetAttributes( *pAttr );
     const SfxItemSet* pArgs = rReq.GetArgs();
 
@@ -392,7 +393,7 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
                     {
                         pAttr->ClearItem (XATTR_FILLSTYLE);
                         pAttr->Put (XFillStyleItem ((XFillStyle) pFillStyle->GetValue ()), XATTR_FILLSTYLE);
-                        SFX_BINDINGS ().Invalidate (SID_ATTR_FILL_STYLE);
+                        rBindings.Invalidate (SID_ATTR_FILL_STYLE);
                     }
                     else StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
 
@@ -412,7 +413,7 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
                     {
                         pAttr->ClearItem (XATTR_LINESTYLE);
                         pAttr->Put (XLineStyleItem ((XLineStyle) pLineStyle->GetValue ()), XATTR_LINESTYLE);
-                        SFX_BINDINGS ().Invalidate (SID_ATTR_LINE_STYLE);
+                        rBindings.Invalidate (SID_ATTR_LINE_STYLE);
                     }
                     else StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
 
@@ -430,7 +431,7 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
                     SFX_REQUEST_ARG (rReq, pLineWidth, SfxUInt32Item, ID_VAL_WIDTH, FALSE);
                     pAttr->ClearItem (XATTR_LINEWIDTH);
                     pAttr->Put (XLineWidthItem (pLineWidth->GetValue ()), XATTR_LINEWIDTH);
-                    SFX_BINDINGS ().Invalidate (SID_ATTR_LINE_WIDTH);
+                    rBindings.Invalidate (SID_ATTR_LINE_WIDTH);
                     break;
                 }
 
@@ -451,8 +452,8 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
                                                            (short) pBlue->GetValue ())),
                                 XATTR_FILLCOLOR);
                     pAttr->Put (XFillStyleItem (XFILL_SOLID), XATTR_FILLSTYLE);
-                    SFX_BINDINGS ().Invalidate (SID_ATTR_FILL_COLOR);
-                    SFX_BINDINGS ().Invalidate (SID_ATTR_FILL_STYLE);
+                    rBindings.Invalidate (SID_ATTR_FILL_COLOR);
+                    rBindings.Invalidate (SID_ATTR_FILL_STYLE);
                     break;
                 }
 
@@ -471,7 +472,7 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
                     pAttr->Put (XLineColorItem (-1, Color ((short) pRed->GetValue (), (short) pGreen->GetValue (),
                                                            (short) pBlue->GetValue ())),
                                 XATTR_LINECOLOR);
-                    SFX_BINDINGS ().Invalidate (SID_ATTR_LINE_COLOR);
+                    rBindings.Invalidate (SID_ATTR_LINE_COLOR);
                     break;
                 }
 
@@ -531,8 +532,8 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
                         pAttr->Put (XFillGradientItem (pName->GetValue (), aGradient), XATTR_FILLGRADIENT);
                     }
 
-                    SFX_BINDINGS ().Invalidate (SID_ATTR_FILL_STYLE);
-                    SFX_BINDINGS ().Invalidate (SID_ATTR_FILL_GRADIENT);
+                    rBindings.Invalidate (SID_ATTR_FILL_STYLE);
+                    rBindings.Invalidate (SID_ATTR_FILL_GRADIENT);
                     break;
                 }
 
@@ -584,8 +585,8 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
                         pAttr->Put (XFillHatchItem (pName->GetValue (), aHatch), XATTR_FILLHATCH);
                     }
 
-                    SFX_BINDINGS ().Invalidate (SID_ATTR_FILL_HATCH);
-                    SFX_BINDINGS ().Invalidate (SID_ATTR_FILL_STYLE);
+                    rBindings.Invalidate (SID_ATTR_FILL_HATCH);
+                    rBindings.Invalidate (SID_ATTR_FILL_STYLE);
                     break;
                 }
 
@@ -627,8 +628,8 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
 
                         pAttr->Put (XLineDashItem (pName->GetValue (), aNewDash), XATTR_LINEDASH);
                         pAttr->Put (XLineStyleItem (XLINE_DASH), XATTR_LINESTYLE);
-                        SFX_BINDINGS ().Invalidate (SID_ATTR_LINE_DASH);
-                        SFX_BINDINGS ().Invalidate (SID_ATTR_FILL_STYLE);
+                        rBindings.Invalidate (SID_ATTR_LINE_DASH);
+                        rBindings.Invalidate (SID_ATTR_FILL_STYLE);
                     }
                     else StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
 
@@ -703,8 +704,8 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
                             pAttr->Put (XFillGradientItem (pName->GetValue (), aGradient), XATTR_FILLGRADIENT);
                         }
 
-                        SFX_BINDINGS ().Invalidate (SID_ATTR_FILL_GRADIENT);
-                        SFX_BINDINGS ().Invalidate (SID_ATTR_FILL_STYLE);
+                        rBindings.Invalidate (SID_ATTR_FILL_GRADIENT);
+                        rBindings.Invalidate (SID_ATTR_FILL_STYLE);
                     }
                     else StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
 
@@ -764,8 +765,8 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
                             pAttr->Put (XFillHatchItem (pName->GetValue (), aHatch), XATTR_FILLHATCH);
                         }
 
-                        SFX_BINDINGS ().Invalidate (SID_ATTR_FILL_HATCH);
-                        SFX_BINDINGS ().Invalidate (SID_ATTR_FILL_STYLE);
+                        rBindings.Invalidate (SID_ATTR_FILL_HATCH);
+                        rBindings.Invalidate (SID_ATTR_FILL_STYLE);
                     }
                     else StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
 
@@ -797,8 +798,8 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
                             pAttr->Put (XFillStyleItem (XFILL_GRADIENT), XATTR_FILLSTYLE);
                             pAttr->Put (XFillGradientItem (pName->GetValue (), pEntry->GetGradient ()), XATTR_FILLGRADIENT);
 
-                            SFX_BINDINGS ().Invalidate (SID_ATTR_FILL_GRADIENT);
-                            SFX_BINDINGS ().Invalidate (SID_ATTR_FILL_STYLE);
+                            rBindings.Invalidate (SID_ATTR_FILL_GRADIENT);
+                            rBindings.Invalidate (SID_ATTR_FILL_STYLE);
                             break;
                         }
                     }
@@ -831,8 +832,8 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
                             pAttr->Put (XFillStyleItem (XFILL_HATCH), XATTR_FILLSTYLE);
                             pAttr->Put (XFillHatchItem (pName->GetValue (), pEntry->GetHatch ()), XATTR_FILLHATCH);
 
-                            SFX_BINDINGS ().Invalidate (SID_ATTR_FILL_HATCH);
-                            SFX_BINDINGS ().Invalidate (SID_ATTR_FILL_STYLE);
+                            rBindings.Invalidate (SID_ATTR_FILL_HATCH);
+                            rBindings.Invalidate (SID_ATTR_FILL_STYLE);
                             break;
                         }
                     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:45 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,15 +162,11 @@
 #include "slidvish.hxx"
 #include "sdoutl.hxx"
 
-#include <segmentc.hxx>
-
 #ifndef _B3D_BASE3D_HXX
 #include "goodies/base3d.hxx"
 #endif
 
 using namespace ::com::sun::star;
-
-SEG_EOFGLOBALS()
 
 /*************************************************************************
 |*
@@ -434,7 +430,7 @@ void SdViewShell::AssignFromSlideChangeWindow()
                             SID_DIA_TIME,
                             0 };
 
-            SFX_BINDINGS().Invalidate( SidArray );
+            GetViewFrame()->GetBindings().Invalidate( SidArray );
 
             // Model geaendert
             pDoc->SetChanged();

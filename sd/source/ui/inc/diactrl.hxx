@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diactrl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:37 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,13 +106,17 @@
 
 class DiaTimeControl : public TimeField
 {
+private:
+
+    SfxBindings&    rBindings;
+
 protected:
     virtual void    Up();
     virtual void    Down();
 
 public:
-                DiaTimeControl( Window* pParent, WinBits nStyle = 0 );
-                DiaTimeControl( Window* pParent, ResId nRId );
+                DiaTimeControl( Window* pParent, SfxBindings& rBindings, WinBits nStyle = 0 );
+                DiaTimeControl( Window* pParent, SfxBindings& rBindings, ResId nRId );
                 ~DiaTimeControl();
 
     DECL_LINK( ModifyDiaTimeHdl, void * );
@@ -127,12 +131,13 @@ public:
 class DiaEffectControl : public Window
 {
 private:
+    SfxBindings&    rBindings;
     FixedText       aFtDescr;
 public:
     FadeEffectLB    aLbEffect;
 
 public:
-                DiaEffectControl( Window* pParent, WinBits nStyle = 0 );
+                DiaEffectControl( Window* pParent, SfxBindings& rBindings, WinBits nStyle = 0 );
                 ~DiaEffectControl();
 
     DECL_LINK( SelectDiaEffectHdl, void * );
@@ -143,11 +148,14 @@ public:
 
 class DiaSpeedControl : public Window
 {
+private:
+    SfxBindings&    rBindings;
+
 public:
     ListBox         aLbSpeed;
 
 public:
-                DiaSpeedControl( Window* pParent, WinBits nStyle = 0 );
+                DiaSpeedControl( Window* pParent, SfxBindings& rBindings, WinBits nStyle = 0 );
                 ~DiaSpeedControl();
 
     DECL_LINK( SelectDiaSpeedHdl, void * );
@@ -159,12 +167,13 @@ public:
 class DiaAutoControl : public Window
 {
 private:
+    SfxBindings&    rBindings;
     FixedText       aFtDescr;
 public:
     ListBox         aLbAuto;
 
 public:
-                DiaAutoControl( Window* pParent, WinBits nStyle = 0 );
+                DiaAutoControl( Window* pParent, SfxBindings& rBindings, WinBits nStyle = 0 );
                 ~DiaAutoControl();
 
     DECL_LINK( SelectDiaAutoHdl, void * );
@@ -175,6 +184,8 @@ public:
 
 class SdPagesField : public SvxMetricField
 {
+private:
+    SfxBindings&    rBindings;
 protected:
     virtual void    Modify();
 

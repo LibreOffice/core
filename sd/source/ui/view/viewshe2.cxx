@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:45 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -900,7 +900,7 @@ void SdViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
         pView->GetPageViewPvNum(0)->SetPageOrigin(aNewOrigin);
     }
 
-    SFX_BINDINGS().Invalidate(SID_RULER_NULL_OFFSET);
+    GetViewFrame()->GetBindings().Invalidate(SID_RULER_NULL_OFFSET);
 
     // auf (neue) Seitengroesse zoomen
     GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_PAGE,
@@ -1234,7 +1234,7 @@ BOOL SdViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
             aErrCode = rIPObjRef->DoVerb(nVerb);
         }
 
-        SFX_BINDINGS().Invalidate( SID_NAVIGATOR_STATE, TRUE, FALSE );
+        GetViewFrame()->GetBindings().Invalidate( SID_NAVIGATOR_STATE, TRUE, FALSE );
     }
 
     pDocSh->SetWaitCursor( FALSE );

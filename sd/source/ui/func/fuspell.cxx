@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuspell.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:36 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:11:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ FuSpell::FuSpell( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
     pSdOutliner(NULL),
     bOwnOutliner(FALSE)
 {
-    SFX_BINDINGS().Invalidate( SidArraySpell );
+    pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArraySpell );
 
     if ( pViewShell->ISA(SdDrawViewShell) )
     {
@@ -129,7 +129,7 @@ FuSpell::FuSpell( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 
 FuSpell::~FuSpell()
 {
-    SFX_BINDINGS().Invalidate( SidArraySpell );
+    pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArraySpell );
 
     if (pSdOutliner)
         pSdOutliner->EndSpelling();

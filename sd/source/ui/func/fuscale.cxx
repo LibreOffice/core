@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuscale.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:36 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:11:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ FuScale::FuScale(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 
                 pViewShell->SetZoom( nValue );
 
-                SFX_BINDINGS().Invalidate( SidArrayZoom );
+                pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArrayZoom );
             }
             break;
 
@@ -234,7 +234,7 @@ FuScale::FuScale(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
         SFX_REQUEST_ARG (rReq, pScale, SfxUInt32Item, ID_VAL_ZOOM, FALSE);
         pViewShell->SetZoom (pScale->GetValue ());
 
-        SFX_BINDINGS().Invalidate( SidArrayZoom );
+        pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArrayZoom );
     }
 
 }

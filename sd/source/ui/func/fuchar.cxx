@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuchar.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:35 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ FuChar::FuChar(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                     SID_SET_SUB_SCRIPT,
                     0 };
 
-    SFX_BINDINGS().Invalidate( SidArray );
+    pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:34 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:11:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,9 +270,15 @@ __EXPORT  SdDrawDocShell::~SdDrawDocShell()
     delete pDoc;
 
     // damit der Navigator das Verschwinden des Dokuments mitbekommt
-    SfxBoolItem aItem(SID_NAVIGATOR_INIT, TRUE);
-    SFX_DISPATCHER().Execute(SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON |
-                             SFX_CALLMODE_RECORD, &aItem, 0L);
+    SfxBoolItem     aItem(SID_NAVIGATOR_INIT, TRUE);
+    SfxViewFrame*   pFrame = pViewShell ? pViewShell->GetFrame() : GetFrame();
+
+    if( !pFrame )
+        pFrame = SfxViewFrame::GetFirst( this );
+
+    if( pFrame )
+        pFrame->GetDispatcher()->Execute(
+            SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L);
 }
 
 /*************************************************************************
@@ -481,7 +487,8 @@ void SdDrawDocShell::ApplySlotFilter() const
     else
         pDispatcher->SetSlotFilter();
 
-    SFX_BINDINGS().InvalidateAll(TRUE);
+    if( pFrame )
+        pFrame->GetBindings().InvalidateAll(TRUE);
 }
 
 

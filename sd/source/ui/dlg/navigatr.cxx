@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:33 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,8 +158,8 @@ __EXPORT SdNavigatorWin::SdNavigatorWin( Window* pParent,
 
     // InitTlb; Wird ueber Slot initiiert
     SfxBoolItem aItem( SID_NAVIGATOR_INIT, TRUE );
-    SFX_DISPATCHER().Execute( SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON |
-                              SFX_CALLMODE_RECORD, &aItem, 0L );
+    pBindings->GetDispatcher()->Execute(
+        SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 }
 
 // -----------------------------------------------------------------------
@@ -209,7 +209,10 @@ void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
         }
     }
 
-    SFX_BINDINGS().Invalidate(SID_NAVIGATOR_PAGENAME, TRUE, TRUE);
+    SdViewShell* pViewShell = pDocShell->GetViewShell();
+
+    ( ( pViewShell && pViewShell->GetViewFrame() ) ? pViewShell->GetViewFrame() : SfxViewFrame::Current() )->
+        GetBindings().Invalidate(SID_NAVIGATOR_PAGENAME, TRUE, TRUE);
 }
 
 /*************************************************************************
@@ -265,8 +268,8 @@ IMPL_LINK( SdNavigatorWin, SelectToolboxHdl, void *, EMPTYARG )
             if( nSId > 0 )
             {
                 SfxBoolItem aItem( nSId, TRUE );
-                SFX_DISPATCHER().Execute( nSId, SFX_CALLMODE_SLOT |
-                                          SFX_CALLMODE_RECORD, &aItem, 0L );
+                pBindings->GetDispatcher()->Execute(
+                    nSId, SFX_CALLMODE_SLOT |SFX_CALLMODE_RECORD, &aItem, 0L );
             }
         }
         break;
@@ -288,8 +291,8 @@ IMPL_LINK( SdNavigatorWin, SelectToolboxHdl, void *, EMPTYARG )
             if( ePage != PAGE_NONE )
             {
                 SfxUInt16Item aItem( SID_NAVIGATOR_PAGE, ePage );
-                SFX_DISPATCHER().Execute( SID_NAVIGATOR_PAGE, SFX_CALLMODE_SLOT |
-                                          SFX_CALLMODE_RECORD, &aItem, 0L );
+                pBindings->GetDispatcher()->Execute(
+                    SID_NAVIGATOR_PAGE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aItem, 0L );
             }
         }
         break;
@@ -366,8 +369,8 @@ IMPL_LINK( SdNavigatorWin, ClickObjectHdl, void *, p )
             if( aStr.Len() > 0 )
             {
                 SfxStringItem aItem( SID_NAVIGATOR_OBJECT, aStr );
-                SFX_DISPATCHER().Execute( SID_NAVIGATOR_OBJECT, SFX_CALLMODE_SLOT |
-                                            SFX_CALLMODE_RECORD, &aItem, 0L );
+                pBindings->GetDispatcher()->Execute(
+                    SID_NAVIGATOR_OBJECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aItem, 0L );
             }
         }
     }
@@ -894,8 +897,8 @@ void __EXPORT SdNavigatorControllerItem::StateChanged( USHORT nSId,
             {
                 // InitTlb; Wird ueber Slot initiiert
                 SfxBoolItem aItem( SID_NAVIGATOR_INIT, TRUE );
-                SFX_DISPATCHER().Execute( SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON |
-                                                SFX_CALLMODE_RECORD, &aItem, 0L );
+                GetBindings().GetDispatcher()->Execute(
+                    SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
             }
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:34 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:11:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -830,7 +830,9 @@ BOOL SdDrawDocShell::SaveCompleted( SvStorage * pStor )
         bRet = TRUE;
 
         // Damit der Navigator nach dem Speichern updaten kann!
-        SFX_BINDINGS().Invalidate( SID_NAVIGATOR_STATE, TRUE, FALSE );
+        ( ( pViewShell && pViewShell->GetViewFrame() ) ?
+          pViewShell->GetViewFrame() : SfxViewFrame::Current() )->
+          GetBindings().Invalidate( SID_NAVIGATOR_STATE, TRUE, FALSE );
     }
     return bRet;
 }
@@ -968,9 +970,9 @@ BOOL SdDrawDocShell::GotoBookmark(const String& rBookmark)
             {
                 // Arbeitsbereich wechseln
                 GetFrameView()->SetPageKind(eNewPageKind);
-                SFX_DISPATCHER().Execute(SID_VIEWSHELL0,
-                                         SFX_CALLMODE_SYNCHRON |
-                                         SFX_CALLMODE_RECORD);
+                ( ( pViewShell && pViewShell->GetViewFrame() ) ?
+                  pViewShell->GetViewFrame() : SfxViewFrame::Current() )->
+                  GetDispatcher()->Execute( SID_VIEWSHELL0, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
 
                 // Die aktuelle ViewShell hat sich geaendert!
                 pDrViewSh = (SdDrawViewShell*) pViewShell;
@@ -1003,8 +1005,11 @@ BOOL SdDrawDocShell::GotoBookmark(const String& rBookmark)
             }
         }
 
-        SFX_BINDINGS().Invalidate(SID_NAVIGATOR_STATE, TRUE, FALSE);
-        SFX_BINDINGS().Invalidate(SID_NAVIGATOR_PAGENAME);
+        SfxBindings& rBindings = ( ( pViewShell && pViewShell->GetViewFrame() ) ?
+                                 pViewShell->GetViewFrame() : SfxViewFrame::Current() )->GetBindings();
+
+        rBindings.Invalidate(SID_NAVIGATOR_STATE, TRUE, FALSE);
+        rBindings.Invalidate(SID_NAVIGATOR_PAGENAME);
     }
 
     return (bFound);

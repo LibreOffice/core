@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fucushow.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:35 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:11:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,9 @@
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
-
+#ifndef _SFXVIEWFRM_HXX
+#include <sfx2/viewfrm.hxx>
+#endif
 
 TYPEINIT1( FuCustomShowDlg, FuPoor );
 
@@ -112,7 +114,7 @@ FuCustomShowDlg::FuCustomShowDlg( SdViewShell* pViewSh, SdWindow*    pWin,
         {
             pViewSh->SetStartShowWithDialog();
 
-            SFX_DISPATCHER().Execute( SID_PRESENTATION,
+            pViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_PRESENTATION,
                     SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
         }
     }

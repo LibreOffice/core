@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:42 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,23 +78,19 @@
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
-
 #ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
 #endif
 #ifndef _SFXSTYLE_HXX
 #include <svtools/style.hxx>
 #endif
-
 #ifndef _SFX_BINDINGS_HXX
 #include <sfx2/bindings.hxx>
 #endif
 #ifndef _SFXSIDS_HRC
 #include <sfx2/sfxsids.hrc>
 #endif
-
 #include <cppuhelper/extract.hxx>
-
 #include <svx/unoprov.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/svditer.hxx>
@@ -109,11 +105,14 @@
 #include "unomodel.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
+#include "viewshel.hxx"
 #include "unokywds.hxx"
 #include "unostyls.hxx"
 #include "unopsfm.hxx"
 #include "unogsfm.hxx"
 #include "unopstyl.hxx"
+#include "viewshel.hxx"
+#include "docshell.hxx"
 #include "helpids.h"
 #include "glob.hxx"
 
@@ -907,7 +906,17 @@ void SdXShape::SetStyleSheet( const uno::Any& rAny ) throw( lang::IllegalArgumen
         throw lang::IllegalArgumentException();
 
     pObj->SetStyleSheet( (SfxStyleSheet*)pStyleSheet->getStyleSheet(), sal_False );
-    SFX_BINDINGS().Invalidate( SID_STYLE_FAMILY2 );
+
+    SdDrawDocument* pDoc = mpModel? mpModel->GetDoc() : NULL;
+
+    if( pDoc )
+    {
+        SdDrawDocShell* pDocSh = pDoc->GetDocSh();
+        SdViewShell*    pViewSh = pDocSh ? pDocSh->GetViewShell() : NULL;
+
+        if( pViewSh )
+            pViewSh->GetViewFrame()->GetBindings().Invalidate( SID_STYLE_FAMILY2 );
+    }
 }
 
 uno::Any SdXShape::GetStyleSheet() const throw( beans::UnknownPropertyException  )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuline.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:35 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:11:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,9 @@
 #ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
 #endif
-
+#ifndef _SFXVIEWFRM_HXX
+#include <sfx2/viewfrm.hxx>
+#endif
 #ifndef _SD_VIEWSHEL_HXX
 #include "viewshel.hxx"
 #endif
@@ -169,7 +171,7 @@ FuLine::FuLine(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                         SID_ATTR_LINE_COLOR,
                         0 };
 
-        SFX_BINDINGS().Invalidate( SidArray );
+        pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
 
         delete pDlg;
         delete pNewAttr;

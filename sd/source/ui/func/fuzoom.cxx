@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuzoom.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:36 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,9 @@
 #ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
 #endif
-
+#ifndef _SFXVIEWFRM_HXX
+#include <sfx2/viewfrm.hxx>
+#endif
 #include "app.hrc"
 
 #ifndef _SVDPAGV_HXX //autogen
@@ -115,7 +117,6 @@ FuZoom::FuZoom(SdViewShell*     pViewSh,
 |* Destruktor
 |*
 \************************************************************************/
-#pragma SEG_FUNCDEF(fuzoom_02)
 
 FuZoom::~FuZoom()
 {
@@ -134,7 +135,6 @@ FuZoom::~FuZoom()
 |* MouseButtonDown-event
 |*
 \************************************************************************/
-#pragma SEG_FUNCDEF(fuzoom_03)
 
 BOOL FuZoom::MouseButtonDown(const MouseEvent& rMEvt)
 {
@@ -168,7 +168,6 @@ BOOL FuZoom::MouseButtonDown(const MouseEvent& rMEvt)
 |* MouseMove-event
 |*
 \************************************************************************/
-#pragma SEG_FUNCDEF(fuzoom_04)
 
 BOOL FuZoom::MouseMove(const MouseEvent& rMEvt)
 {
@@ -233,7 +232,6 @@ BOOL FuZoom::MouseMove(const MouseEvent& rMEvt)
 |* MouseButtonUp-event
 |*
 \************************************************************************/
-#pragma SEG_FUNCDEF(fuzoom_05)
 
 BOOL FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
 {
@@ -293,7 +291,6 @@ BOOL FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
 |* Function aktivieren
 |*
 \************************************************************************/
-#pragma SEG_FUNCDEF(fuzoom_06)
 
 void FuZoom::Activate()
 {
@@ -314,13 +311,9 @@ void FuZoom::Activate()
 |* Function deaktivieren
 |*
 \************************************************************************/
-#pragma SEG_FUNCDEF(fuzoom_07)
 
 void FuZoom::Deactivate()
 {
     pWindow->SetPointer( aPtr );
-    // Updaten der StatusBar
-    SFX_BINDINGS().Invalidate( SidArrayZoom );
+    pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArrayZoom );
 }
-
-

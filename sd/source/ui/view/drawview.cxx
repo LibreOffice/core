@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:43 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1183,7 +1183,7 @@ void SdDrawView::SetPixelMode(BOOL bOn)
         Point aPageOrg = Point(aPageSize.Width(), aPageSize.Height() / 2);
         Size aViewSize = Size(aPageSize.Width() * 3, aPageSize.Height() * 2);
         pViewSh->InitWindows(aPageOrg, aViewSize, Point(-1, -1));
-        SFX_DISPATCHER().Execute(SID_SIZE_PAGE);
+        pViewSh->GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_PAGE);
     }
 }
 

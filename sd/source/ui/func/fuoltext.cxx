@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuoltext.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:35 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:11:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ BOOL FuOutlineText::MouseButtonDown(const MouseEvent& rMEvt)
     if (bReturn)
     {
         // Attributierung der akt. Textstelle kann jetzt anders sein
-        SFX_BINDINGS().Invalidate( SidArray );
+        pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
     }
     else
     {
@@ -257,7 +257,7 @@ BOOL FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
     if (bReturn)
     {
         // Attributierung der akt. Textstelle kann jetzt anders sein
-        SFX_BINDINGS().Invalidate( SidArray );
+        pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
     }
     else
     {
@@ -321,7 +321,7 @@ BOOL FuOutlineText::KeyInput(const KeyEvent& rKEvt)
         if (bReturn)
         {
             // Attributierung der akt. Textstelle kann jetzt anders sein
-            SFX_BINDINGS().Invalidate( SidArray );
+            pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
         }
         else
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews6.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:43 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,7 +560,7 @@ void SdDrawViewShell::FuTemp04(SfxRequest& rReq)
                 GetViewFrame()->ToggleChildWindow( SvxFontWorkChildWindow::GetChildWindowId() );
             }
 
-            SFX_BINDINGS().Invalidate(SID_FONTWORK);
+            GetViewFrame()->GetBindings().Invalidate(SID_FONTWORK);
             Cancel();
             rReq.Ignore ();
         }
@@ -575,7 +575,7 @@ void SdDrawViewShell::FuTemp04(SfxRequest& rReq)
             else
                 GetViewFrame()->ToggleChildWindow(SvxColorChildWindow::GetChildWindowId() );
 
-            SFX_BINDINGS().Invalidate(SID_COLOR_CONTROL);
+            GetViewFrame()->GetBindings().Invalidate(SID_COLOR_CONTROL);
             Cancel();
             rReq.Ignore ();
         }
@@ -584,7 +584,7 @@ void SdDrawViewShell::FuTemp04(SfxRequest& rReq)
         case SID_BMPMASK:
         {
             GetViewFrame()->ToggleChildWindow( SvxBmpMaskChildWindow::GetChildWindowId() );
-            SFX_BINDINGS().Invalidate( SID_BMPMASK );
+            GetViewFrame()->GetBindings().Invalidate( SID_BMPMASK );
 
             Cancel();
             rReq.Ignore ();
@@ -594,7 +594,7 @@ void SdDrawViewShell::FuTemp04(SfxRequest& rReq)
         case SID_GALLERY:
         {
             GetViewFrame()->ToggleChildWindow( GalleryChildWindow::GetChildWindowId() );
-            SFX_BINDINGS().Invalidate( SID_GALLERY );
+            GetViewFrame()->GetBindings().Invalidate( SID_GALLERY );
 
             Cancel();
             rReq.Ignore ();
@@ -610,7 +610,7 @@ void SdDrawViewShell::FuTemp04(SfxRequest& rReq)
             else
                 GetViewFrame()->ToggleChildWindow( SID_NAVIGATOR );
 
-            SFX_BINDINGS().Invalidate(SID_NAVIGATOR);
+            GetViewFrame()->GetBindings().Invalidate(SID_NAVIGATOR);
             Cancel();
             rReq.Ignore ();
         }
@@ -625,7 +625,7 @@ void SdDrawViewShell::FuTemp04(SfxRequest& rReq)
             else
                 GetViewFrame()->ToggleChildWindow(SdAnimationChildWindow::GetChildWindowId() );
 
-            SFX_BINDINGS().Invalidate(SID_ANIMATION_OBJECTS);
+            GetViewFrame()->GetBindings().Invalidate(SID_ANIMATION_OBJECTS);
             Cancel();
             rReq.Ignore ();
         }
@@ -654,10 +654,11 @@ void SdDrawViewShell::FuTemp04(SfxRequest& rReq)
             else
                 pFrameView->SetShowPreviewInMasterPageMode(bPreview);
 
-            SFX_BINDINGS().Invalidate(SID_PREVIEW_WIN);
-            SFX_BINDINGS().Invalidate(SID_PREVIEW_QUALITY_COLOR);
-            SFX_BINDINGS().Invalidate(SID_PREVIEW_QUALITY_GRAYSCALE);
-            SFX_BINDINGS().Invalidate(SID_PREVIEW_QUALITY_BLACKWHITE);
+            SfxBindings& rBindings = GetViewFrame()->GetBindings();
+            rBindings.Invalidate(SID_PREVIEW_WIN);
+            rBindings.Invalidate(SID_PREVIEW_QUALITY_COLOR);
+            rBindings.Invalidate(SID_PREVIEW_QUALITY_GRAYSCALE);
+            rBindings.Invalidate(SID_PREVIEW_QUALITY_BLACKWHITE);
 
             Cancel();
             rReq.Ignore ();
@@ -673,7 +674,7 @@ void SdDrawViewShell::FuTemp04(SfxRequest& rReq)
             else
                 GetViewFrame()->ToggleChildWindow(SdEffectChildWindow::GetChildWindowId() );
 
-            SFX_BINDINGS().Invalidate(SID_EFFECT_WIN);
+            GetViewFrame()->GetBindings().Invalidate(SID_EFFECT_WIN);
             Cancel();
             rReq.Ignore ();
         }
@@ -688,7 +689,7 @@ void SdDrawViewShell::FuTemp04(SfxRequest& rReq)
             else
                 GetViewFrame()->ToggleChildWindow(SdSlideChangeChildWindow::GetChildWindowId() );
 
-            SFX_BINDINGS().Invalidate(SID_SLIDE_CHANGE_WIN);
+            GetViewFrame()->GetBindings().Invalidate(SID_SLIDE_CHANGE_WIN);
             Cancel();
             rReq.Ignore ();
         }
@@ -703,7 +704,7 @@ void SdDrawViewShell::FuTemp04(SfxRequest& rReq)
             else
                 GetViewFrame()->ToggleChildWindow( Svx3DChildWindow::GetChildWindowId() );
 
-            SFX_BINDINGS().Invalidate( SID_3D_WIN );
+            GetViewFrame()->GetBindings().Invalidate( SID_3D_WIN );
             Cancel();
             rReq.Ignore ();
         }

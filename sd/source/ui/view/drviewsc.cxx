@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:44 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,8 +216,10 @@ void SdDrawViewShell::FuTemp03(SfxRequest& rReq)
             }
 
             // In der Hoffnung, dass Dieter die nachfolgende Zeile stehen laesst
-            SFX_BINDINGS().Invalidate( SID_NAVIGATOR_STATE, TRUE, FALSE );
-            SFX_BINDINGS().Invalidate( SID_CONTEXT );
+            SfxBindings& rBindings = GetViewFrame()->GetBindings();
+            rBindings.Invalidate( SID_NAVIGATOR_STATE, TRUE, FALSE );
+            rBindings.Invalidate( SID_CONTEXT );
+
             Cancel();
             rReq.Ignore ();
         }
@@ -639,7 +641,7 @@ void SdDrawViewShell::FuTemp03(SfxRequest& rReq)
             {
                 pFuActual = new FuTemplate( this, pWindow, pDrView, pDoc, rReq );
                 if( rReq.GetSlot() == SID_STYLE_APPLY )
-                    SFX_BINDINGS().Invalidate( SID_STYLE_APPLY );
+                    GetViewFrame()->GetBindings().Invalidate( SID_STYLE_APPLY );
                 Cancel();
             }
             else if( rReq.GetSlot() == SID_STYLE_APPLY )
@@ -654,7 +656,7 @@ void SdDrawViewShell::FuTemp03(SfxRequest& rReq)
             USHORT      nId = SvxIMapDlgChildWindow::GetChildWindowId();
 
             GetViewFrame()->ToggleChildWindow( nId );
-            SFX_BINDINGS().Invalidate( SID_IMAP );
+            GetViewFrame()->GetBindings().Invalidate( SID_IMAP );
 
             if ( GetViewFrame()->HasChildWindow( nId ) && ( ( pDlg = SVXIMAPDLG() ) != NULL ) )
             {

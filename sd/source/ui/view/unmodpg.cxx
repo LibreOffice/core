@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unmodpg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:45 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:12:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #endif
 #ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
+#endif
+#ifndef _SFXVIEWFRM_HXX
+#include <sfx2/viewfrm.hxx>
 #endif
 
 #pragma hdrstop
@@ -157,8 +160,8 @@ void __EXPORT ModifyPageUndoAction::Undo()
     }
 
     // Redisplay
-    SFX_DISPATCHER().Execute(SID_SWITCHPAGE,
-        SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+    SfxViewFrame::Current()->GetDispatcher()->Execute(
+        SID_SWITCHPAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
 }
 
 /*************************************************************************
@@ -197,8 +200,8 @@ void __EXPORT ModifyPageUndoAction::Redo()
     }
 
     // Redisplay
-    SFX_DISPATCHER().Execute(SID_SWITCHPAGE,
-            SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+    SfxViewFrame::Current()->GetDispatcher()->Execute(
+        SID_SWITCHPAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
 }
 
 /*************************************************************************

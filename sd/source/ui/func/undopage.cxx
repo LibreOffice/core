@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undopage.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:37 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:11:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
+#ifndef _SFXVIEWFRM_HXX
+#include <sfx2/viewfrm.hxx>
+#endif
 
 #include "sdpage.hxx"
 #include "drviewsh.hxx"
@@ -127,10 +130,8 @@ void __EXPORT SdPageFormatUndoAction::Undo()
 
         pDrViewShell->UpdateScrollBars();
         pDrViewShell->GetView()->GetPageViewPvNum(0)->SetPageOrigin(Point(0,0));
-        SFX_BINDINGS().Invalidate(SID_RULER_NULL_OFFSET);
-
-        // auf (neue) Seitengroesse zoomen
-        SFX_DISPATCHER().Execute(SID_SIZE_PAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+        pViewShell->GetViewFrame()->GetBindings().Invalidate(SID_RULER_NULL_OFFSET);
+        pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_PAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
     }
 }
 
@@ -167,10 +168,8 @@ void __EXPORT SdPageFormatUndoAction::Redo()
 
         pDrViewShell->UpdateScrollBars();
         pDrViewShell->GetView()->GetPageViewPvNum(0)->SetPageOrigin(Point(0,0));
-        SFX_BINDINGS().Invalidate(SID_RULER_NULL_OFFSET);
-
-        // auf (neue) Seitengroesse zoomen
-        SFX_DISPATCHER().Execute(SID_SIZE_PAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+        pViewShell->GetViewFrame()->GetBindings().Invalidate(SID_RULER_NULL_OFFSET);
+        pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_PAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
     }
 }
 

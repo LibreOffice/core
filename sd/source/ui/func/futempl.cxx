@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futempl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:36 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:11:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ FuTemplate::FuTemplate( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                 {
                     pView->SetStyleSheet( (SfxStyleSheet*) pStyleSheet);
                     pDoc->SetChanged(TRUE);
-                    SFX_BINDINGS().Invalidate( SID_STYLE_FAMILY2 );
+                    pViewShell->GetViewFrame()->GetBindings().Invalidate( SID_STYLE_FAMILY2 );
                 }
             }
             pWin->GrabFocus();
@@ -514,7 +514,7 @@ FuTemplate::FuTemplate( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                     ( (SfxStyleSheet*) pStyleSheet )->Broadcast( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
                     pDoc->SetChanged(TRUE);
 
-                    SFX_BINDINGS().Invalidate( SID_STYLE_FAMILY2 );
+                    pViewShell->GetViewFrame()->GetBindings().Invalidate( SID_STYLE_FAMILY2 );
                 }
             }
         }
@@ -541,7 +541,7 @@ FuTemplate::FuTemplate( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 
                     ( (SfxStyleSheet*) pStyleSheet )->Broadcast( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
                     pDoc->SetChanged(TRUE);
-                    SFX_BINDINGS().Invalidate( SID_STYLE_FAMILY2 );
+                    pViewShell->GetViewFrame()->GetBindings().Invalidate( SID_STYLE_FAMILY2 );
                 }
             }
         }

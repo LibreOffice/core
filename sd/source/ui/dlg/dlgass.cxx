@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:32 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1658,10 +1658,8 @@ void AssistentDlgImpl::UpdatePreview( BOOL bDocPreview )
             SfxObjectShell* pShell = NULL;
 
             const SfxObjectShellItem* pRet = (SfxObjectShellItem*)
-                                      SFX_DISPATCHER().Execute( SID_OPENDOC,
-                                                                SFX_CALLMODE_SYNCHRON,
-                                                                &aFile, &aReferer,
-                                                                &aView, &aPreview, 0L );
+                                      SfxViewFrame::Current()->GetDispatcher()->Execute(
+                                        SID_OPENDOC, SFX_CALLMODE_SYNCHRON, &aFile, &aReferer, &aView, &aPreview, 0L );
 
             if( pRet && pRet->GetObjectShell() )
                 xDocShell = pRet->GetObjectShell();
@@ -1706,10 +1704,8 @@ void AssistentDlgImpl::UpdatePreview( BOOL bDocPreview )
             SfxObjectShell* pShell = NULL;
 
             const SfxObjectShellItem* pRet = (SfxObjectShellItem*)
-                                      SFX_DISPATCHER().Execute( SID_OPENDOC,
-                                                                SFX_CALLMODE_SYNCHRON,
-                                                                &aFile, &aReferer,
-                                                                &aView, &aPreview, 0L );
+                                      SfxViewFrame::Current()->GetDispatcher()->Execute(
+                                        SID_OPENDOC, SFX_CALLMODE_SYNCHRON, &aFile, &aReferer, &aView, &aPreview, 0L );
 
             if( pRet && pRet->GetObjectShell() )
                 xDocShell = pRet->GetObjectShell();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:43 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:12:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,16 +121,15 @@ void SdDrawViewShell::ModelHasChanged()
 {
     Invalidate();
     // Damit der Navigator auch einen aktuellen Status bekommt
-    SFX_BINDINGS().Invalidate( SID_NAVIGATOR_STATE, TRUE, FALSE );
+    GetViewFrame()->GetBindings().Invalidate( SID_NAVIGATOR_STATE, TRUE, FALSE );
 
     // Damit das Effekte-Window die Reihenfolge updaten kann
-    //SFX_BINDINGS().Invalidate( SID_EFFECT_STATE, TRUE, FALSE );
     UpdateEffectWindow();
 
     //Update3DWindow();
     SfxBoolItem aItem( SID_3D_STATE, TRUE );
-    SFX_DISPATCHER().Execute( SID_3D_STATE, SFX_CALLMODE_ASYNCHRON |
-                                SFX_CALLMODE_RECORD, &aItem, 0L );
+    GetViewFrame()->GetDispatcher()->Execute(
+        SID_3D_STATE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 
     // jetzt den von der Drawing Engine neu erzeugten TextEditOutliner
     // initialisieren

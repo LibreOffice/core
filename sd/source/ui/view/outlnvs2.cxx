@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvs2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:44 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,8 +334,8 @@ void SdOutlineViewShell::FuTemporary(SfxRequest &rReq)
             pFrameView->SetPresentationViewShellId(SID_VIEWSHELL2);
             pFrameView->SetSlotId(SID_PRESENTATION);
             pFrameView->SetPageKind(PK_STANDARD);
-            SFX_DISPATCHER().Execute(SID_VIEWSHELL0,
-                        SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+            GetViewFrame()->GetDispatcher()->Execute(
+                SID_VIEWSHELL0, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
             rReq.Done();
         }
         break;
@@ -382,10 +382,11 @@ void SdOutlineViewShell::FuTemporary(SfxRequest &rReq)
 
             pFrameView->SetShowPreviewInOutlineMode(bPreview);
 
-            SFX_BINDINGS().Invalidate(SID_PREVIEW_WIN);
-            SFX_BINDINGS().Invalidate(SID_PREVIEW_QUALITY_COLOR);
-            SFX_BINDINGS().Invalidate(SID_PREVIEW_QUALITY_GRAYSCALE);
-            SFX_BINDINGS().Invalidate(SID_PREVIEW_QUALITY_BLACKWHITE);
+            SfxBindings& rBindings = GetViewFrame()->GetBindings();
+            rBindings.Invalidate(SID_PREVIEW_WIN);
+            rBindings.Invalidate(SID_PREVIEW_QUALITY_COLOR);
+            rBindings.Invalidate(SID_PREVIEW_QUALITY_GRAYSCALE);
+            rBindings.Invalidate(SID_PREVIEW_QUALITY_BLACKWHITE);
 
             Cancel();
             rReq.Ignore ();
@@ -641,10 +642,13 @@ void SdOutlineViewShell::FuTemporary(SfxRequest &rReq)
     Invalidate( SID_OUTLINE_COLLAPSE );
     Invalidate( SID_OUTLINE_EXPAND_ALL );
     Invalidate( SID_OUTLINE_EXPAND );
-    SFX_BINDINGS().Invalidate( SID_OUTLINE_LEFT );
-    SFX_BINDINGS().Invalidate( SID_OUTLINE_RIGHT );
-    SFX_BINDINGS().Invalidate( SID_OUTLINE_UP );
-    SFX_BINDINGS().Invalidate( SID_OUTLINE_DOWN );
+
+    SfxBindings& rBindings = GetViewFrame()->GetBindings();
+    rBindings.Invalidate( SID_OUTLINE_LEFT );
+    rBindings.Invalidate( SID_OUTLINE_RIGHT );
+    rBindings.Invalidate( SID_OUTLINE_UP );
+    rBindings.Invalidate( SID_OUTLINE_DOWN );
+
     Invalidate( SID_OUTLINE_FORMAT );
     Invalidate( SID_COLORVIEW );
     Invalidate(SID_CUT);

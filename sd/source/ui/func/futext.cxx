@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:36 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:11:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,8 +496,7 @@ BOOL FuText::MouseButtonDown(const MouseEvent& rMEvt)
     if (!bIsInDragMode)
     {
         ForcePointer(&rMEvt);
-
-        SFX_BINDINGS().Invalidate(SidArray);
+        pViewShell->GetViewFrame()->GetBindings().Invalidate(SidArray);
     }
 
     return (bReturn);
@@ -551,7 +550,7 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
         bIsInDragMode = FALSE;
     }
 
-    SFX_BINDINGS().Invalidate( SidArray );
+    pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
 
     Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
@@ -803,7 +802,7 @@ BOOL FuText::KeyInput(const KeyEvent& rKEvt)
     {
         bReturn = TRUE;
 
-        SFX_BINDINGS().Invalidate( SidArray );
+        pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
 
         if ( pTextObj )
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diactrl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:32 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
+#ifndef _SFXVIEWFRM_HXX
+#include <sfx2/viewfrm.hxx>
+#endif
 
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
@@ -94,8 +97,9 @@ SFX_IMPL_TOOLBOX_CONTROL( SdTbxCtlDiaPages,  SfxUInt16Item )
 |*
 \************************************************************************/
 
-DiaEffectControl::DiaEffectControl( Window* pParent, WinBits nStyle ) :
+DiaEffectControl::DiaEffectControl( Window* pParent, SfxBindings& rBdx, WinBits nStyle ) :
         Window          ( pParent, nStyle ),
+        rBindings       ( rBdx ),
         aFtDescr        ( this, 0 ),
         aLbEffect       ( this, WinBits( WB_BORDER | WB_DROPDOWN ) )
 {
@@ -159,8 +163,8 @@ IMPL_LINK( DiaEffectControl, SelectDiaEffectHdl, void *, p )
  */
 
     if( p )
-        SFX_DISPATCHER().Execute( SID_DIA, SFX_CALLMODE_ASYNCHRON |
-                    SFX_CALLMODE_RECORD, &aDiaEffectItem, (void*) NULL, 0L );
+        rBindings.GetDispatcher()->Execute(
+            SID_DIA, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aDiaEffectItem, (void*) NULL, 0L );
     return( 0L );
 }
 
@@ -172,8 +176,9 @@ SFX_IMPL_TOOLBOX_CONTROL( SdTbxCtlDiaSpeed, DiaSpeedItem )
 |*
 \************************************************************************/
 
-DiaSpeedControl::DiaSpeedControl( Window* pParent, WinBits nStyle ) :
+DiaSpeedControl::DiaSpeedControl( Window* pParent, SfxBindings& rBdx, WinBits nStyle ) :
         Window          ( pParent, nStyle ),
+        rBindings       ( rBdx ),
         aLbSpeed        ( this, WinBits( WB_BORDER | WB_DROPDOWN ) )
 {
     String  aStrSlow( SdResId( STR_SLOW ) );
@@ -219,8 +224,8 @@ IMPL_LINK( DiaSpeedControl, SelectDiaSpeedHdl, void *, p )
     DiaSpeedItem aDiaSpeedItem( eFS );
 
     if( p )
-        SFX_DISPATCHER().Execute( SID_DIA, SFX_CALLMODE_ASYNCHRON |
-                    SFX_CALLMODE_RECORD, &aDiaSpeedItem, (void*) NULL, 0L );
+        rBindings.GetDispatcher()->Execute(
+            SID_DIA, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aDiaSpeedItem, (void*) NULL, 0L );
     return( 0L );
 }
 
@@ -232,8 +237,9 @@ SFX_IMPL_TOOLBOX_CONTROL( SdTbxCtlDiaAuto, DiaAutoItem )
 |*
 \************************************************************************/
 
-DiaAutoControl::DiaAutoControl( Window* pParent, WinBits nStyle ) :
+DiaAutoControl::DiaAutoControl( Window* pParent, SfxBindings& rBdx, WinBits nStyle ) :
         Window          ( pParent, nStyle ),
+        rBindings       ( rBdx ),
         aFtDescr        ( this, 0 ),
         aLbAuto         ( this, WinBits( WB_BORDER | WB_DROPDOWN ) )
 {
@@ -314,8 +320,8 @@ IMPL_LINK( DiaAutoControl, SelectDiaAutoHdl, void *, p )
 */
 
     if( p )
-        SFX_DISPATCHER().Execute( SID_DIA, SFX_CALLMODE_ASYNCHRON |
-                    SFX_CALLMODE_RECORD, &aDiaAutoItem, (void*) NULL, 0L );
+        rBindings.GetDispatcher()->Execute(
+            SID_DIA, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aDiaAutoItem, (void*) NULL, 0L );
     return( 0L );
 }
 
@@ -327,8 +333,9 @@ SFX_IMPL_TOOLBOX_CONTROL( SdTbxCtlDiaTime, DiaTimeItem )
 |*
 \************************************************************************/
 
-DiaTimeControl::DiaTimeControl( Window* pParent, WinBits nStyle ) :
-        TimeField       ( pParent, nStyle )
+DiaTimeControl::DiaTimeControl( Window* pParent, SfxBindings& rBdx, WinBits nStyle ) :
+        TimeField   ( pParent, nStyle ),
+        rBindings   ( rBdx )
 {
     SetModifyHdl( LINK( this, DiaTimeControl, ModifyDiaTimeHdl ) );
     SetGetFocusHdl( LINK( this, DiaTimeControl, GetFocusHdl ) );
@@ -353,8 +360,9 @@ DiaTimeControl::DiaTimeControl( Window* pParent, WinBits nStyle ) :
 |*
 \************************************************************************/
 
-DiaTimeControl::DiaTimeControl( Window* pParent, ResId nRId ) :
-        TimeField       ( pParent, nRId )
+DiaTimeControl::DiaTimeControl( Window* pParent, SfxBindings& rBdx, ResId nRId ) :
+        TimeField       ( pParent, nRId ),
+        rBindings       ( rBdx )
 {
     SetGetFocusHdl( LINK( this, DiaTimeControl, GetFocusHdl ) );
 }
@@ -374,8 +382,8 @@ IMPL_LINK( DiaTimeControl, ModifyDiaTimeHdl, void *, p )
     DiaTimeItem aDiaTimeItem( lTime );
 
     if( p )
-        SFX_DISPATCHER().Execute( SID_DIA, SFX_CALLMODE_ASYNCHRON |
-                    SFX_CALLMODE_RECORD, &aDiaTimeItem, (void*) NULL, 0L );
+        rBindings.GetDispatcher()->Execute(
+            SID_DIA, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aDiaTimeItem, (void*) NULL, 0L );
     return( 0L );
 }
 
@@ -421,8 +429,9 @@ void DiaTimeControl::Up()
 // SdPagesField
 //========================================================================
 
-SdPagesField::SdPagesField( Window* pParent, SfxBindings& rBindings, WinBits nBits ) :
-    SvxMetricField( pParent, rBindings, nBits )
+SdPagesField::SdPagesField( Window* pParent, SfxBindings& rBdx, WinBits nBits ) :
+    SvxMetricField  ( pParent, rBdx, nBits ),
+    rBindings       ( rBdx )
 {
     String aStr( SdResId( STR_SLIDE_PLURAL ) );
     SetCustomUnitText( aStr );
@@ -473,8 +482,8 @@ void __EXPORT SdPagesField::Update( const SfxUInt16Item* pItem )
 void __EXPORT SdPagesField::Modify()
 {
     SfxUInt16Item aItem( SID_PAGES_PER_ROW, (UINT16) GetValue() );
-    SFX_DISPATCHER().Execute( SID_PAGES_PER_ROW, SFX_CALLMODE_SLOT |
-                                SFX_CALLMODE_RECORD, &aItem, 0L, 0L );
+    rBindings.GetDispatcher()->Execute(
+        SID_PAGES_PER_ROW, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aItem, 0L, 0L );
 }
 
 /*************************************************************************
@@ -529,7 +538,7 @@ Window* __EXPORT SdTbxCtlDiaEffect::CreateItemWindow( Window *pParent )
 {
     if( GetId() == SID_DIA_EFFECT )
     {
-        return( new DiaEffectControl( pParent ) );
+        return( new DiaEffectControl( pParent, GetBindings() ) );
     }
 
     return( NULL );
@@ -580,7 +589,7 @@ Window* __EXPORT SdTbxCtlDiaSpeed::CreateItemWindow( Window *pParent )
 {
     if( GetId() == SID_DIA_SPEED )
     {
-        return( new DiaSpeedControl( pParent ) );
+        return( new DiaSpeedControl( pParent, GetBindings() ) );
     }
 
     return( NULL );
@@ -637,7 +646,7 @@ Window* __EXPORT SdTbxCtlDiaAuto::CreateItemWindow( Window *pParent )
 {
     if( GetId() == SID_DIA_AUTO )
     {
-        return( new DiaAutoControl( pParent ) );
+        return( new DiaAutoControl( pParent, GetBindings() ) );
     }
 
     return( NULL );
@@ -702,7 +711,7 @@ Window* __EXPORT SdTbxCtlDiaTime::CreateItemWindow( Window *pParent )
 {
     if( GetId() == SID_DIA_TIME )
     {
-        return( new DiaTimeControl( pParent,
+        return( new DiaTimeControl( pParent, GetBindings(),
                 WinBits( WB_BORDER | WB_SPIN | WB_REPEAT ) ) );
     }
 

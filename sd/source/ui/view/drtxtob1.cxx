@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:43 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
                     delete pFuActual;
 
                     if( rReq.GetSlot() == SID_STYLE_APPLY )
-                        SFX_BINDINGS().Invalidate( SID_STYLE_APPLY );
+                        pViewShell->GetViewFrame()->GetBindings().Invalidate( SID_STYLE_APPLY );
                 }
             }
             else
@@ -288,7 +288,7 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
             Invalidate();
             // Um die Preview (im Gliederungsmodus) zu aktualisieren muss
             // der Slot invalidiert werden:
-            SFX_BINDINGS().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
+            pViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
         }
         break;
 
@@ -528,7 +528,7 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
 
             // Um die Preview (im Gliederungsmodus) zu aktualisieren muss
             // der Slot invalidiert werden:
-            SFX_BINDINGS().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
+            pViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
         }
         break;
     }

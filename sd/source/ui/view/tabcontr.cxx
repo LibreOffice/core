@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabcontr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:45 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,8 +408,8 @@ void SdTabControl::EndRenaming()
 
         // Damit der Navigator das mitbekommt
         SfxBoolItem aItem(SID_NAVIGATOR_INIT, TRUE);
-        SFX_DISPATCHER().Execute(SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON |
-                                    SFX_CALLMODE_RECORD, &aItem, 0L);
+        pDrViewSh->GetViewFrame()->GetDispatcher()->Execute(
+            SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
     }
 }
 

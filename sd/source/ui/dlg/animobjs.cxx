@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:31 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,8 +234,8 @@ __EXPORT SdAnimationWin::SdAnimationWin( SfxBindings* pInBindings,
 
     // Initiierung der Initialisierung der ColorLB
     SfxBoolItem aItem( SID_ANIMATOR_INIT, TRUE );
-    SFX_DISPATCHER().Execute( SID_ANIMATOR_INIT, SFX_CALLMODE_ASYNCHRON |
-                                SFX_CALLMODE_RECORD, &aItem, 0L );
+    GetBindings().GetDispatcher()->Execute(
+        SID_ANIMATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 }
 
 // -----------------------------------------------------------------------
@@ -448,8 +448,8 @@ IMPL_LINK( SdAnimationWin, ClickGetObjectHdl, void *, pBtn )
     // Code jetzt in AddObj()
     SfxBoolItem aItem( SID_ANIMATOR_ADD, TRUE );
 
-    SFX_DISPATCHER().Execute( SID_ANIMATOR_ADD, SFX_CALLMODE_SLOT |
-                              SFX_CALLMODE_RECORD, &aItem, 0L );
+    GetBindings().GetDispatcher()->Execute(
+        SID_ANIMATOR_ADD, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aItem, 0L );
     return( 0L );
 }
 
@@ -551,8 +551,8 @@ IMPL_LINK( SdAnimationWin, ClickCreateGroupHdl, void *, EMPTYARG )
     // Code jetzt in CreatePresObj()
     SfxBoolItem aItem( SID_ANIMATOR_CREATE, TRUE );
 
-    SFX_DISPATCHER().Execute( SID_ANIMATOR_CREATE, SFX_CALLMODE_SLOT |
-                              SFX_CALLMODE_RECORD, &aItem, 0L );
+    GetBindings().GetDispatcher()->Execute(
+        SID_ANIMATOR_CREATE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aItem, 0L );
     return( 0L );
 }
 
@@ -851,8 +851,8 @@ BOOL __EXPORT SdAnimationWin::Close()
 {
     SfxBoolItem aItem( SID_ANIMATION_OBJECTS, FALSE );
 
-    SFX_DISPATCHER().Execute( SID_ANIMATION_OBJECTS, SFX_CALLMODE_ASYNCHRON |
-                                SFX_CALLMODE_RECORD, &aItem, 0L );
+    GetBindings().GetDispatcher()->Execute(
+        SID_ANIMATION_OBJECTS, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 
     SfxDockingWindow::Close();
 

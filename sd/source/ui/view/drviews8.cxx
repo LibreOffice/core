@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews8.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:43 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #endif
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
+#endif
+#ifndef _SFXVIEWFRM_HXX
+#include <sfx2/viewfrm.hxx>
 #endif
 #pragma hdrstop
 
@@ -455,8 +458,9 @@ void SdDrawViewShell::FuTemp01(SfxRequest& rReq)
             }
             else
             {
-                SFX_BINDINGS().Invalidate( SID_TWAIN_SELECT );
-                SFX_BINDINGS().Invalidate( SID_TWAIN_TRANSFER );
+                SfxBindings& rBindings = GetViewFrame()->GetBindings();
+                rBindings.Invalidate( SID_TWAIN_SELECT );
+                rBindings.Invalidate( SID_TWAIN_TRANSFER );
             }
         }
         break;
@@ -519,8 +523,9 @@ void SdDrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& r
         }
     }
 
-    SFX_BINDINGS().Invalidate( SID_TWAIN_SELECT );
-    SFX_BINDINGS().Invalidate( SID_TWAIN_TRANSFER );
+    SfxBindings& rBindings = GetViewFrame()->GetBindings();
+    rBindings.Invalidate( SID_TWAIN_SELECT );
+    rBindings.Invalidate( SID_TWAIN_TRANSFER );
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dl $ $Date: 2000-09-20 15:54:01 $
+ *  last change: $Author: ka $ $Date: 2000-09-21 16:12:21 $
  *
  *  Copyright according the GNU Public License.
  *
@@ -506,8 +506,8 @@ void SdOutlineViewShell::Activate( BOOL bIsMDIActivate )
         pOutl->UpdateFields();
 
         SfxBoolItem aItem(SID_PREVIEW_WIN, pFrameView->IsShowPreviewInOutlineMode());
-        SFX_DISPATCHER().Execute(SID_PREVIEW_WIN, SFX_CALLMODE_ASYNCHRON |
-                                 SFX_CALLMODE_RECORD, &aItem, 0L);
+        GetViewFrame()->GetDispatcher()->Execute(
+            SID_PREVIEW_WIN, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L);
     }
 }
 
@@ -1562,8 +1562,6 @@ BOOL SdOutlineViewShell::KeyInput(const KeyEvent& rKEvt, SdWindow* pWin)
     if( aKeyGroup != KEYGROUP_CURSOR && aKeyGroup != KEYGROUP_FKEYS ||
         GetActualPage() != pLastPage )
     {
-        //UpdatePreview();
-        //SFX_BINDINGS().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
         Invalidate( SID_PREVIEW_STATE );
     }
 
@@ -1699,10 +1697,6 @@ void __EXPORT SdOutlineViewShell::GetAttrState( SfxItemSet& rSet )
                     {
                         SfxTemplateItem aItem( nWhich, pStyleSheet->GetName() );
                         aAllSet.Put( aItem, aItem.Which()  );
-
-                        // Invalidieren mit ClearCache. Sollte (so bald verfuegbar) auf
-                        // 2 Parameter umgestellt werden (letzten einfach entfernen)
-                        // SFX_BINDINGS().Invalidate( nSlotId, TRUE, FALSE );
                     }
                 }
 
