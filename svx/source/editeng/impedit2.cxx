@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: mt $ $Date: 2002-01-29 08:50:52 $
+ *  last change: $Author: vg $ $Date: 2002-01-30 14:09:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
 #else
     bUndoEnabled        = FALSE;
 #endif
-    bCallParaInsertedOrDeleted = TRUE;
+    bCallParaInsertedOrDeleted = FALSE;
 
     eDefLanguage        = LANGUAGE_DONTKNOW;
     maBackgroundColor   = COL_AUTO;
@@ -239,6 +239,8 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     // Ab hier wird schon auf Daten zugegriffen!
     SetRefDevice( pRefDev );
     InitDoc( FALSE );
+
+    bCallParaInsertedOrDeleted = TRUE;
 }
 
 ImpEditEngine::~ImpEditEngine()
