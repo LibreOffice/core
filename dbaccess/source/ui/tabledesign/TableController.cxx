@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-12 10:00:27 $
+ *  last change: $Author: fs $ $Date: 2001-06-12 13:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -650,18 +650,18 @@ void SAL_CALL OTableController::initialize( const Sequence< Any >& aArguments ) 
 
         for(;pBegin != pEnd;++pBegin)
         {
-            if((*pBegin >>= aValue) && aValue.Name == PROPERTY_ACTIVECONNECTION)
+            if((*pBegin >>= aValue) && (0 == aValue.Name.compareToAscii(PROPERTY_ACTIVECONNECTION)))
             {
                 aValue.Value >>= m_xConnection;
                 OSL_ENSURE(m_xConnection.is(),"We need at least a connection!");
                 // get notified if connection is in disposing
                 startConnectionListening(m_xConnection);
             }
-            else if(aValue.Name == PROPERTY_DATASOURCENAME)
+            else if (0 == aValue.Name.compareToAscii(PROPERTY_DATASOURCENAME))
             {
                 aValue.Value >>= m_sDataSourceName;
             }
-            else if(aValue.Name == PROPERTY_CURRENTTABLE)
+            else if (0 == aValue.Name.compareToAscii(PROPERTY_CURRENTTABLE))
             {
                 aValue.Value >>= m_sName;
             }

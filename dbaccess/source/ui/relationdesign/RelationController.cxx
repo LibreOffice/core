@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-22 11:10:48 $
+ *  last change: $Author: fs $ $Date: 2001-06-12 13:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,7 +325,7 @@ void SAL_CALL ORelationController::initialize( const Sequence< Any >& aArguments
 
     for(;pBegin != pEnd;++pBegin)
     {
-        if((*pBegin >>= aValue) && aValue.Name == PROPERTY_ACTIVECONNECTION)
+        if((*pBegin >>= aValue) && (0 == aValue.Name.compareToAscii(PROPERTY_ACTIVECONNECTION)))
         {
             aValue.Value >>= m_xConnection;
             OSL_ENSURE(m_xConnection.is(),"We need at least a connection!");
@@ -337,7 +337,7 @@ void SAL_CALL ORelationController::initialize( const Sequence< Any >& aArguments
                 xComponent->addEventListener(xEvtL);
             }
         }
-        else if(aValue.Name == PROPERTY_DATASOURCENAME)
+        else if(0 == aValue.Name.compareToAscii(PROPERTY_DATASOURCENAME))
         {
             aValue.Value >>= m_sDataSourceName;
         }
