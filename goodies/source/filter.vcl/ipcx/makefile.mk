@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 14:12:53 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 12:37:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,7 @@ SLOFILES =  $(SLO)$/ipcx.obj
 
 SHL1TARGET=     ipx$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB=     ipcx
-SHL1STDLIBS=    $(VCLLIB) $(TOOLSLIB)
+SHL1STDLIBS=    $(VCLLIB) $(TOOLSLIB) $(SALLIB)
 SHL1DEPN=       $(LB)$/ipcx.lib
 SHL1LIBS=       $(SLB)$/ipcx.lib
 
