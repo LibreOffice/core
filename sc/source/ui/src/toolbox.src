@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:06 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:54:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: hr $ $Date: 2000-09-18 16:45:06 $ $Revision: 1.1.1.1 $
+ // $Author: nf $ $Date: 2000-09-27 20:54:41 $ $Revision: 1.2 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -140,7 +140,7 @@ String SCSTR_QHELP_POSWND
     Text [ portuguese ] = "Área da folha" ;
     Text [ finnish ] = "Taulukkoalue" ;
     Text [ danish ] = "Regnearksområde" ;
-    Text [ french ] = "Zone de la feuille" ;
+    Text [ french ] = "Plage de la feuille" ;
     Text [ swedish ] = "Tabellområde" ;
     Text [ dutch ] = "Werkbladbereik" ;
     Text [ spanish ] = "Área de hoja" ;
@@ -529,7 +529,7 @@ String RID_PLUGINTOOLBOX
     Text[ japanese ] = "Ìß×¸Ş²İ—pÌ§İ¸¼®İÊŞ°";
     Text[ chinese_traditional ] = "Plug-In ¥\\¯à¦C";
     Text[ arabic ] = "ÔÑíØ æÙíİÉ Plug-Ins";
-    Text[ greek ] = "ÃñáììŞ ëåéôïõñãéşí ãéá Plug-Ins";
+    Text[ greek ] = "ÃñáììŞ ëåéôïõñãéşí ãéá óõíäåüìåíåò õğïìïíÜäåò";
     Text[ korean ] = "ÇÃ·¯±×ÀÎÀ» À§ÇÑ ±â´É ¸ğÀ½";
     Text[ turkish ] = "PlugIn işlev çubuğu";
     Text[ language_user1 ] = " ";
@@ -926,12 +926,12 @@ String RID_OBJECTBAR_PREVIEW
     Text [ portuguese_brazilian ] = "Examinar Página" ;
     Text [ portuguese ] = "Previsualização" ;
     Text [ finnish ] = "Page Preview" ;
-    Text [ danish ] = "Vis udskrift objektlinje" ;
+    Text [ danish ] = "Sidevisningobjektlinje" ;
     Text [ french ] = "Barre d'objets d'aperçu" ;
     Text [ swedish ] = "Förhandsgranskningobjektlist" ;
     Text [ dutch ] = "Afdrukvoorbeeld" ;
     Text [ spanish ] = "Barra de vista preliminar" ;
-    Text [ english_us ] = "Page Preview Object Bar" ;
+    Text [ english_us ] = "Page View Object Bar" ;
     Text[ chinese_simplified ] = "Ò³Ãæ¶ÔÏóÀ¸";
     Text[ russian ] = "Ïàíåëü îáúåêòîâ ïğîñìîòğà ñòğàíèöû";
     Text[ polish ] = "Pasek obiektów podgl¹du strony";
