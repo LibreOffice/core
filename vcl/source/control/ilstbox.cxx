@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-29 14:13:20 $
+ *  last change: $Author: ssa $ $Date: 2001-10-31 19:32:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2444,7 +2444,7 @@ void ImplBtn::MouseButtonDown( const MouseEvent& rMEvt )
 // =======================================================================
 
 ImplListBoxFloatingWindow::ImplListBoxFloatingWindow( Window* pParent ) :
-    FloatingWindow( pParent, WB_NOBORDER )
+    FloatingWindow( pParent, WB_BORDER | WB_SYSTEMWINDOW )
 {
     mpImplLB = NULL;
     mnDDLineCount = 0;
