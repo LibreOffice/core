@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:01:51 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 21:04:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,6 +396,8 @@ public:
     inline void         EnableCellFocus() { bIsCellFocusEnabled = TRUE; }
     bool                SetCurrentTabPos( USHORT _nNewPos );
     inline USHORT       GetCurrentTabPos() const { return nCurTabPos; }
+
+    bool                IsSelectable( const SvLBoxEntry* pEntry );
 };
 
 inline Image& SvImpLBox::implGetImageLocation( const ImageType _eType, BmpColorMode _eMode )
