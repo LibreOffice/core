@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_info.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:37:23 $
+ *  last change: $Author: vg $ $Date: 2003-12-18 17:17:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,24 +377,12 @@ JNI_type_info const * JNI_info::create_type_info(
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
     {
-#if defined SOLARIS
-        css::uno::TypeDescription rtd( td );
-#else
-        css::uno::TypeDescription const & rtd =
-            *reinterpret_cast< css::uno::TypeDescription const * >( &td );
-#endif
-        new_info = new JNI_compound_type_info( jni, rtd );
+        new_info = new JNI_compound_type_info( jni, td );
         break;
     }
     case typelib_TypeClass_INTERFACE:
     {
-#if defined SOLARIS
-        css::uno::TypeDescription rtd( td );
-#else
-        css::uno::TypeDescription const & rtd =
-            *reinterpret_cast< css::uno::TypeDescription const * >( &td );
-#endif
-        new_info = new JNI_interface_type_info( jni, rtd );
+        new_info = new JNI_interface_type_info( jni, td );
         break;
     }
     default:
