@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: th $ $Date: 2001-08-07 12:49:02 $
+ *  last change: $Author: ssa $ $Date: 2001-11-06 10:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,19 @@
 #ifndef _SV_WINCOMP_HXX
 #include <wincomp.hxx>
 #endif
+
+// as long as we're using the old skd header files, define some of the new XP constants here
+
+#ifndef SPI_GETFLATMENU
+#define SPI_GETFLATMENU     0x1022
+#endif
+#ifndef COLOR_MENUBAR
+#define COLOR_MENUBAR       30
+#endif
+#ifndef COLOR_MENUHILIGHT
+#define COLOR_MENUHILIGHT   29
+#endif
+
 
 class AutoTimer;
 class SalInstance;
@@ -167,6 +180,7 @@ struct SalShlData
     WORD                    mnVersion;              // System-Version (311 == 3.11)
     WIN_BOOL                mbWNT;                  // kein W16/W95/W98 sondern ein NT
     WIN_BOOL                mbW40;                  // Is System-Version >= 4.0
+    WIN_BOOL                mbWXP;                  // Windows XP
 };
 
 extern SalShlData aSalShlData;
