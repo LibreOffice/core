@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-07-10 06:28:08 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 10:13:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@ private:
     MetricField aTabMF;
 
     FixedLine   aCompatFL;
+    CheckBox    aPrinterMetricsCB;
     CheckBox    aMergeDistCB;
     CheckBox    aMergeDistPageStartCB;
     CheckBox    aTabAlignment;
