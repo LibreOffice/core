@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-08 12:09:00 $
+ *  last change: $Author: fs $ $Date: 2001-05-10 12:13:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,7 @@
 #define ERR_NEED_INDEX_FIELDS           RID_ERRORBOX_START + 16
 #define ERR_QRY_NOSTATEMENT             RID_ERRORBOX_START + 17
 #define ERR_QRY_NOCRITERIA              RID_ERRORBOX_START + 18
+#define ERR_CANTDOTABLEACTION           RID_ERRORBOX_START + 19
 
 
 //========================================================================
@@ -162,6 +163,7 @@
 #define QUERY_SAVE_CURRENT_INDEX        RID_QUERYBOX_START +  7
 #define QUERY_SAVE_TABLE_EDIT_INDEXES   RID_QUERYBOX_START +  8
 #define RELATION_DESIGN_SAVEMODIFIED    RID_QUERYBOX_START +  9
+#define QUERY_NEED_TO_SAVE_FILTER       RID_QUERYBOX_START + 10
 
 //========================================================================
 // warning boxes
@@ -410,6 +412,8 @@
 #define STR_INDEX_NAME_ALREADY_USED         RID_STRING_START + 160
 #define STR_ASK_FOR_DIRECTORY_CREATION      RID_STRING_START + 161
 #define STR_COULD_NOT_CREATE_DIRECTORY      RID_STRING_START + 162
+#define STR_MISSING_TABLES_XDROP            RID_STRING_START + 163
+#define STR_BUTTON_TEXT_ALL                 RID_STRING_START + 164
 
 //========================================================================
 // untyped resources
@@ -424,6 +428,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.42  2001/05/08 12:09:00  fs
+ *  #86224# new strings
+ *
  *  Revision 1.41  2001/05/02 11:43:55  fs
  *  #86434# +STR_INDEX_NAME_ALREADY_USED
  *
