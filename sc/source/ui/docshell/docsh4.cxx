@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:48:53 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 16:28:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2024,6 +2024,9 @@ Rectangle __EXPORT ScDocShell::GetVisArea( USHORT nAspect ) const
     {
 //      Rectangle aArea( 0,0, 3175,3175 );                          //  120x120 Pixel in 1:1
         Rectangle aArea( 0,0, SC_PREVIEW_SIZE_X,SC_PREVIEW_SIZE_Y );
+        BOOL bNegativePage = aDocument.IsNegativePage( aDocument.GetVisibleTab() );
+        if ( bNegativePage )
+            ScDrawLayer::MirrorRectRTL( aArea );
         aDocument.SnapVisArea( aArea );
         return aArea;
     }
