@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-03 10:36:00 $
+ *  last change: $Author: mt $ $Date: 2002-07-17 10:56:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,7 @@ Impl_IMEInfos::Impl_IMEInfos( xub_StrLen nP, const String& rOldTextAfterStartPos
 
 Impl_IMEInfos::~Impl_IMEInfos()
 {
-    delete pAttribs;
+    delete[] pAttribs;
 }
 
 // -----------------------------------------------------------------------
@@ -262,7 +262,7 @@ Impl_IMEInfos::~Impl_IMEInfos()
 void Impl_IMEInfos::CopyAttribs( const xub_StrLen* pA, xub_StrLen nL )
 {
     nLen = nL;
-    delete pAttribs;
+    delete[] pAttribs;
     pAttribs = new USHORT[ nL ];
     rtl_copyMemory( pAttribs, pA, nL*sizeof(USHORT) );
 }
@@ -271,7 +271,7 @@ void Impl_IMEInfos::CopyAttribs( const xub_StrLen* pA, xub_StrLen nL )
 
 void Impl_IMEInfos::DestroyAttribs()
 {
-    delete pAttribs;
+    delete[] pAttribs;
     pAttribs = NULL;
     nLen = 0;
 }
