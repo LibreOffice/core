@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormShellManager.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:54:35 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:00:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,8 +93,17 @@ private:
 
     enum StackPosition {SP_BELOW_VIEW_SHELL, SP_ABOVE_VIEW_SHELL, SP_UNKNOWN};
 
-    void RegisterAtCenterPane (ViewShell* pShell);
-    void UnregisterAtCenterPane (ViewShell* pShell);
+    /** Register at window of center pane and at the form shell that
+        represents the form tool bar.  The former informs this manager about
+        the deselection of the form shell.  The later informs about its
+        selection.
+    */
+    void RegisterAtCenterPane (void);
+
+    /** Unregister the listeners that were registered in
+        RegisterAtCenterPane().
+    */
+    void UnregisterAtCenterPane (void);
 
     /** Remember whether the form shell is currently at the top of the shell
         stack or below the view shell.  Until one of the event handlers is
