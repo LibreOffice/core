@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbui.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-08-15 08:20:00 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 17:00:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,33 @@ public:
     CancelButton    aCancel;
 
     PrintMonitor( Window *pParent, BOOL bEMail = FALSE );
+};
+
+class CreateMonitor : public ModelessDialog
+{
+public:
+    CreateMonitor( Window *pParent );
+
+    void SetTotalCount( sal_Int32 nTotal );
+    void SetCurrentPosition( sal_Int32 nCurrent );
+
+    void SetCancelHdl( const Link& rLink );
+
+private: //methods
+    void UpdateCountingText();
+
+private: //member
+    FixedText       m_aStatus;
+    FixedText       m_aProgress;
+    FixedText       m_aCreateDocuments;
+    FixedText       m_aCounting;
+    CancelButton    m_aCancelButton;
+
+    String          m_sCountingPattern;
+    String          m_sVariable_Total;
+    String          m_sVariable_Position;
+    sal_Int32       m_nTotalCount;
+    sal_Int32       m_nCurrentPosition;
 };
 
 #endif
