@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2000-11-27 17:37:52 $
+ *  last change: $Author: bm $ $Date: 2000-11-29 12:33:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,7 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
     awt::Size aChartSize;
 
     rtl::OUString aServiceName;
+    rtl::OUString sAutoStyleName;
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
@@ -262,11 +263,12 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
                 break;
 
             case XML_TOK_CHART_STYLE_NAME:
-                msAutoStyleName = aValue;
+                sAutoStyleName = aValue;
                 break;
 
             case XML_TOK_CHART_ADDIN_NAME:
                 aServiceName = aValue;
+                break;
         }
     }
 
@@ -304,6 +306,21 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
             {
                 DBG_ERROR( "Cannot set page size" );
             }
+        }
+    }
+
+    // set auto-styles for chart document
+    uno::Reference< beans::XPropertySet > xProp( mrImportHelper.GetChartDocument(), uno::UNO_QUERY );
+    if( xProp.is())
+    {
+        const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
+        if( pStylesCtxt )
+        {
+            const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
+                mrImportHelper.GetChartFamilyID(), sAutoStyleName );
+
+            if( pStyle && pStyle->ISA( XMLPropStyleContext ))
+                (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
         }
     }
 
