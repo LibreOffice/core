@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thesdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-30 16:10:48 $
+ *  last change: $Author: tl $ $Date: 2001-06-21 09:53:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ SvxThesaurusLanguageDlg_Impl::SvxThesaurusLanguageDlg_Impl( Window* pParent ) :
 {
     FreeResource();
 
-    aLangLB.SetLanguageList( LANG_LIST_THES_AVAIL, FALSE, FALSE );
+    aLangLB.SetLanguageList( LANG_LIST_THES_USED, FALSE, FALSE );
     aLangLB.SetDoubleClickHdl(
         LINK( this, SvxThesaurusLanguageDlg_Impl, DoubleClickHdl_Impl ) );
 }
