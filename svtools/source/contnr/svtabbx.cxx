@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtabbx.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2002-09-20 10:54:16 $
+ *  last change: $Author: fs $ $Date: 2002-10-31 12:14:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -783,6 +783,13 @@ void SvHeaderTabListBox::SelectAll()
 {
     SvLBox::SelectAll( TRUE );
 }
+// -----------------------------------------------------------------------
+void SvHeaderTabListBox::SelectAll( BOOL bSelect, BOOL bPaint )
+{
+    // overwritten just to disambiguate the SelectAll() from the base' class SelectAll( BOOl, BOOL )
+    SvTabListBox::SelectAll( bSelect, bPaint );
+}
+
 // -----------------------------------------------------------------------
 void SvHeaderTabListBox::SelectRow( long _nRow, BOOL _bSelect, BOOL _bExpand )
 {
