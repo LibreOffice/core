@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-21 11:07:26 $
+ *  last change: $Author: mib $ $Date: 2002-03-21 12:50:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,6 +366,8 @@ public:
     void CheckStates( sal_uInt8 nStates );
 
     const ::rtl::OUString& GetName() const { return sName; }
+
+    virtual sal_Bool HasFocus();    // required by map to remember that object
 };
 
 // some heaviliy used exception support

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-21 11:07:26 $
+ *  last change: $Author: mib $ $Date: 2002-03-21 12:50:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -624,6 +624,11 @@ Window *SwAccessibleContext::GetWindow()
     }
 
     return pWin;
+}
+
+sal_Bool SwAccessibleContext::HasFocus()
+{
+    return sal_False;
 }
 
 void SwAccessibleContext::InitStates()

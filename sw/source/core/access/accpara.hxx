@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-20 10:02:26 $
+ *  last change: $Author: mib $ $Date: 2002-03-21 12:50:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,8 @@ public:
     SwAccessibleParagraph( SwAccessibleMap *pMap, sal_Int32 nPara,
                            const SwTxtFrm *pTxtFrm );
 
+    sal_Bool HasFocus();    // required by map to remember that object
+
     //=====  XAccessibleContext  ==============================================
 
     /// Return this object's description.
@@ -227,6 +229,14 @@ public:
         getLocale (void)
         throw (::drafts::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException);
 
+
+    //=====  XAccessibleComponent  ============================================
+
+    virtual sal_Bool SAL_CALL isFocusTraversable()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL grabFocus()
+        throw (::com::sun::star::uno::RuntimeException);
 
     //=====  XServiceInfo  ====================================================
 

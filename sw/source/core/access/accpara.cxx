@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-21 11:07:26 $
+ *  last change: $Author: mib $ $Date: 2002-03-21 12:50:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,6 +357,21 @@ void SwAccessibleParagraph::GetStates(
     // SELECTABLE
     rStateSet.AddState( AccessibleStateType::SELECTABLE );
 
+    // FOCUSABLE
+    rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+
+    // FOCUSED (simulates node index of cursor)
+    SwPaM* pCaret = GetCrsr();
+    const SwTxtNode* pTxtNd = GetTxtNode();
+    if( pCaret != 0 && pTxtNd != 0 &&
+        pTxtNd->GetIndex() == pCaret->GetPoint()->nNode.GetIndex() )
+    {
+        rStateSet.AddState( AccessibleStateType::FOCUSED );
+        ASSERT( -1 != nOldCaretPos, "caret pos invalid" );
+        ::vos::ORef < SwAccessibleContext > xThis( this );
+        GetMap()->SetCaretContext( xThis );
+    }
+
     // TODO: SELECTED
 }
 
@@ -427,18 +442,27 @@ void SwAccessibleParagraph::_InvalidateCaretPos()
     }
     if( -1 != nNew )
     {
+        // remember that object as the one that has the caret. This is
+        // neccessary to notify that object if the cursor leaves it.
         ::vos::ORef < SwAccessibleContext > xThis( this );
         GetMap()->SetCaretContext( xThis );
     }
 
     if( nOld != nNew )
     {
+        // The cursor's node position is sumilated by the focus!
+        if( -1 == nOld )
+            FireStateChangedEvent( AccessibleStateType::FOCUSED, sal_True );
+
         AccessibleEventObject aEvent;
         aEvent.EventId = AccessibleEventId::ACCESSIBLE_CARET_EVENT;
         aEvent.OldValue <<= nOld;
         aEvent.NewValue <<= nNew;
 
         FireAccessibleEvent( aEvent );
+
+        if( -1 == nNew )
+            FireStateChangedEvent( AccessibleStateType::FOCUSED, sal_False );
     }
 }
 
@@ -457,6 +481,9 @@ SwAccessibleParagraph::SwAccessibleParagraph(
                                    : STR_ACCESS_PARAGRAPH_NAME;
     OUString sArg( OUString::valueOf( nPara ) );
     SetName( GetResource( nResId, &sArg ) );
+
+    // If this object has the focus, then it is remembered by the map itself.
+    nOldCaretPos = GetCaretPos();
 }
 
 SwAccessibleParagraph::~SwAccessibleParagraph()
@@ -464,6 +491,12 @@ SwAccessibleParagraph::~SwAccessibleParagraph()
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     delete pPortionData;
+}
+
+sal_Bool SwAccessibleParagraph::HasFocus()
+{
+    vos::OGuard aGuard( aMutex );
+    return nOldCaretPos != 1;
 }
 
 void SwAccessibleParagraph::UpdatePortionData()
@@ -707,6 +740,37 @@ Locale SAL_CALL SwAccessibleParagraph::getLocale (void)
     return aLoc;
 }
 
+sal_Bool SAL_CALL SwAccessibleParagraph::isFocusTraversable()
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    return sal_True;
+}
+
+void SAL_CALL SwAccessibleParagraph::grabFocus()
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    CHECK_FOR_DEFUNC( XAccessibleContext );
+
+    // get cursor shell
+    SwCrsrShell *pCrsrSh = GetCrsrShell();
+    SwPaM *pCrsr = pCrsrSh ? pCrsrSh->GetCrsr( sal_False ) : 0;
+    SwTxtNode* pTxtNd = const_cast<SwTxtNode*>( GetTxtNode() );
+    if( pCrsrSh != 0 && pCrsr != 0 && pTxtNd != 0 &&
+         pCrsr->GetPoint()->nNode.GetIndex() != pTxtNd->GetIndex() )
+    {
+        // create pam for selection
+        SwIndex aIndex( pTxtNd, 0 );
+        SwPosition aStartPos( *pTxtNd, aIndex );
+        SwPaM aPaM( aStartPos );
+
+        // set PaM at cursor shell
+        pCrsrSh->KillPams();
+        pCrsrSh->SetSelection( aPaM );
+    }
+}
+
 OUString SAL_CALL SwAccessibleParagraph::getImplementationName()
         throw( RuntimeException )
 {
@@ -770,6 +834,7 @@ sal_Int32 SwAccessibleParagraph::getCaretPosition()
     sal_Int32 nRet = GetCaretPos();
     {
         vos::OGuard aGuard( aMutex );
+        ASSERT( nRet == nOldCaretPos, "caret pos out of sync" );
         nOldCaretPos = nRet;
     }
     if( -1 != nRet )
