@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtypes.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-09-27 17:34:01 $
+ *  last change: $Author: os $ $Date: 2000-10-20 14:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,8 @@
 #ifndef _SFXINIMGR_HXX
 #include <svtools/iniman.hxx>
 #endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 #ifndef _COM_SUN_STAR_LINGUISTIC_XSPELLCHECKER1_HPP_
 #include <com/sun/star/linguistic/XSpellChecker1.hpp>
@@ -162,7 +162,7 @@
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::utl;
+using namespace ::comphelper;
 
 #ifndef PROFILE
 // Code zum Initialisieren von Statics im eigenen Code-Segment

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-20 11:34:43 $
+ *  last change: $Author: os $ $Date: 2000-10-20 14:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,8 +190,8 @@ SO2_DECL_REF(SvLinkName)
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 
 using namespace ::com::sun::star::lang;
@@ -2062,7 +2062,7 @@ void SwDoc::_CreateNumberFormatter()
 /*              ((const SvxLanguageItem&)GetAttrPool().
                     GetDefaultItem( RES_CHRATR_LANGUAGE )).GetLanguage();
 */
-    Reference< XMultiServiceFactory > xMSF = ::utl::getProcessServiceFactory();
+    Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
     pNumberFormatter = new SvNumberFormatter( xMSF, eLang );
     pNumberFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_FORMAT_INTL );
     pNumberFormatter->SetYear2000(SFX_APP()->GetMiscConfig()->GetYear2000());

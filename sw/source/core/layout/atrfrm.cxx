@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:21 $
+ *  last change: $Author: os $ $Date: 2000-10-20 14:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,8 @@
 #include <unosett.hxx>
 #endif
 
-#ifndef _UTL_TYPES_HXX_
-#include <unotools/types.hxx>
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
 #endif
 #ifndef _FMTCLDS_HXX //autogen
 #include <fmtclds.hxx>
@@ -1258,7 +1258,7 @@ BOOL SwFmtSurround::PutValue( const uno::Any& rVal, BYTE nMemberId )
             sal_Int32 eVal;
             try
             {
-                eVal = utl::getEnumAsINT32(rVal);
+                eVal = comphelper::getEnumAsINT32(rVal);
             }
             catch(...) {}
 
@@ -1682,7 +1682,7 @@ BOOL SwFmtAnchor::PutValue( const uno::Any& rVal, BYTE nMemberId )
             sal_Int32 eVal;
             try
             {
-                eVal = utl::getEnumAsINT32(rVal);
+                eVal = comphelper::getEnumAsINT32(rVal);
             }
             catch(...) {}
             switch(eVal)
