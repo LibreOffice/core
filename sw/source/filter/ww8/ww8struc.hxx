@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 12:15:14 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:33:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -873,6 +873,28 @@ struct WW8_TXBXS
     SVBT32 reserved;
     SVBT32 ShapeId;
     SVBT32 txidUndo;
+};
+
+struct WW8_STRINGID
+{
+    // M.M. This is the extra data stored in the SttbfFnm
+    // For now I only need the String Id
+    SVBT16 nStringId;
+    SVBT16 reserved1;
+    SVBT16 reserved2;
+    SVBT16 reserved3;
+};
+
+struct WW8_WKB
+{
+    // M.M. This is the WkbPLCF struct
+    // For now I only need the Link Id
+    SVBT16 reserved1;
+    SVBT16 reserved2;
+    SVBT16 reserved3;
+    SVBT16 nLinkId;
+    SVBT16 reserved4;
+    SVBT16 reserved5;
 };
 
 #ifdef SAL_W32
