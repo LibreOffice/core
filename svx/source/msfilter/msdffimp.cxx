@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-02 10:23:16 $
+ *  last change: $Author: sj $ $Date: 2001-05-04 15:09:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5062,4 +5062,42 @@ SdrObject* SvxMSDffManager::GetAutoForm( MSO_SPT eTyp ) const
     }
     return pRet;
 }
+
+sal_Bool SvxMSDffManager::SetPropValue(
+    const ::com::sun::star::uno::Any& rAny,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+            const String& rPropName,
+                sal_Bool bTestPropertyAvailability )
+{
+    sal_Bool bRetValue = sal_True;
+    if ( bTestPropertyAvailability )
+    {
+        bRetValue = sal_False;
+        try
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
+                aXPropSetInfo( rXPropSet->getPropertySetInfo() );
+            if ( aXPropSetInfo.is() )
+                bRetValue = aXPropSetInfo->hasPropertyByName( rPropName );
+        }
+        catch( ::com::sun::star::uno::Exception& )
+        {
+            bRetValue = sal_False;
+        }
+    }
+    if ( bRetValue )
+    {
+        try
+        {
+            rXPropSet->setPropertyValue( rPropName, rAny );
+            bRetValue = sal_True;
+        }
+        catch( ::com::sun::star::uno::Exception& )
+        {
+            bRetValue = sal_False;
+        }
+    }
+    return bRetValue;
+}
+
 
