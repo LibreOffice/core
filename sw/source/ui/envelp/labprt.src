@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labprt.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-03 20:16:41 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 20:50:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ TabPage TP_LAB_PRT
         Text[ greek ] = "�������� ������";
         Text[ korean ] = "전체 페이지(~E)";
         Text[ turkish ] = "~Tam sayfa";
-        Text[ catalan ] = "~Toda la p�gina";
+        Text[ catalan ] = "~Tota la p�gina";
         Text[ thai ] = "~ทั้งหน้า";
     };
     RadioButton BTN_SINGLE
@@ -156,7 +156,7 @@ TabPage TP_LAB_PRT
         Text[ greek ] = "�����";
         Text[ korean ] = "열(~M)";
         Text[ turkish ] = "~S�tun";
-        Text[ catalan ] = "C~olumna";
+        Text[ catalan ] = "Colu~mna";
         Text[ thai ] = "คอลัม~น์";
     };
     NumericField FLD_COL
@@ -198,7 +198,7 @@ TabPage TP_LAB_PRT
         Text[ greek ] = "������";
         Text[ korean ] = "행()(~W)";
         Text[ turkish ] = "S~at�r";
-        Text[ catalan ] = "~Fila";
+        Text[ catalan ] = "Fi~la";
         Text[ thai ] = "แถ~ว";
     };
     NumericField FLD_ROW
@@ -239,7 +239,7 @@ TabPage TP_LAB_PRT
         Text[ korean ] = "내용 동기화(~Z)";
         Text[ turkish ] = "��eri�i �o�alt";
         Text[ finnish ] = "~Synkronoi sis�lt�";
-        Text[ catalan ] = "~Sincronizar contenidos";
+        Text[ catalan ] = "Sincroni~tza els continguts";
         Text[ thai ] = "เนื้อหาที่ตร~งกัน";
     };
     FixedLine FL_DONTKNOW
@@ -267,7 +267,7 @@ TabPage TP_LAB_PRT
         Text[ chinese_traditional ] = "分布";
         Text[ turkish ] = "Divide";
         Text[ arabic ] = "Divide";
-        Text[ catalan ] = "Divide";
+        Text[ catalan ] = "Divideix";
         Text[ thai ] = "แบ่ง";
     };
     FixedText INF_PRINTER
@@ -296,7 +296,7 @@ TabPage TP_LAB_PRT
         Text[ korean ] = "프린터 이름";
         Text[ turkish ] = "Yaz�c� ad�";
         Text[ finnish ] = "Tulostimen nimi";
-        Text[ catalan ] = "Nombre de la impresora";
+        Text[ catalan ] = "Nom de la impressora";
         Text[ thai ] = "ชื่อเครื่องพิมพ์";
     };
     PushButton BTN_PRTSETUP
@@ -325,7 +325,7 @@ TabPage TP_LAB_PRT
         Text[ korean ] = "설치...";
         Text[ turkish ] = "Ayarlar...";
         Text[ finnish ] = "Asennus";
-        Text[ catalan ] = "Configurar...";
+        Text[ catalan ] = "Configura...";
         Text[ thai ] = "ติดตั้ง...";
     };
     FixedLine FL_PRINTER
@@ -353,7 +353,7 @@ TabPage TP_LAB_PRT
         Text[ korean ] = "프린터 ";
         Text[ turkish ] = "Yaz�c� ";
         Text[ finnish ] = " Tulostin";
-        Text[ catalan ] = "Impresora  ";
+        Text[ catalan ] = "Impressora  ";
         Text[ thai ] = " เครื่องพิมพ์ ";
     };
 };
