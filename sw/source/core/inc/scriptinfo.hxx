@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptinfo.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 13:42:22 $
+ *  last change: $Author: kz $ $Date: 2004-06-29 08:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,10 @@ public:
 
     BYTE CompType( const xub_StrLen nPos ) const;
 
+    //
+    // HIDDEN TEXT STUFF START
+    //
+
 /** Hidden text range information - static and non-version
 
     @descr  Determines if a given position is inside a hidden text range. The
@@ -224,7 +228,7 @@ public:
 
     static bool IsInHiddenRange( const SwTxtNode& rNode, xub_StrLen nPos );
 
-/** Hidden text range information
+/** Hidden text attribute handling
 
     @descr  Takes a string and either deletes the hidden ranges or sets
             a given character in place of the hidden characters.
@@ -235,10 +239,25 @@ public:
                 The string to modify.
     @param  cChar
                 The character that should replace the hidden characters.
+    @param  bDel
+                If set, the hidden ranges will be deleted from the text node.
  */
     static USHORT MaskHiddenRanges( const SwTxtNode& rNode, XubString& rText,
                                     const xub_StrLen nStt, const xub_StrLen nEnd,
                                     const xub_Unicode cChar );
+
+/** Hidden text attribute handling
+
+    @descr  Takes a SwTxtNode and deletes the hidden ranges from the node.
+
+    @param  rNode
+                The text node.
+ */
+    static void DeleteHiddenRanges( SwTxtNode& rNode );
+
+    //
+    // HIDDEN TEXT STUFF END
+    //
 
     // examines the range [ nStart, nStart + nEnd ] if there are kanas
     // returns start index of kana entry in array, otherwise USHRT_MAX
