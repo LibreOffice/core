@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:01:56 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 12:29:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,8 @@ public:
 
     // Mischen von Datensaetzen in Felder
     BOOL            MergeNew(USHORT nOpt, SwWrtShell& rSh,
-                             const ::svx::ODataAccessDescriptor& _rDescriptor);
+                             const ::svx::ODataAccessDescriptor& _rDescriptor,
+                             sal_Bool bPrintAsync = sal_True);
     BOOL            Merge(SwWrtShell* pSh);
     // Mischen von Datensaetzen in Felder, dann drucken
     BOOL            MergePrint( SwView& rView,
