@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: os $ $Date: 2001-06-28 07:46:53 $
+ *  last change: $Author: mtg $ $Date: 2001-07-24 21:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,358 +89,23 @@
 #ifndef _SVX_UNOMID_HXX
 #include <svx/unomid.hxx>
 #endif
-#ifndef _COM_SUN_STAR_STYLE_LINESPACINGMODE_HPP_
-#include <com/sun/star/style/LineSpacingMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_PARAGRAPHADJUST_HPP_
-#include <com/sun/star/style/ParagraphAdjust.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_DROPCAPFORMAT_HPP_
-#include <com/sun/star/style/DropCapFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_LINESPACING_HPP_
-#include <com/sun/star/style/LineSpacing.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_TABSTOP_HPP_
-#include <com/sun/star/style/TabStop.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_TABALIGN_HPP_
-#include <com/sun/star/style/TabAlign.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_PAGESTYLELAYOUT_HPP_
-#include <com/sun/star/style/PageStyleLayout.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_BREAKTYPE_HPP_
-#include <com/sun/star/style/BreakType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XMODULE_HPP_
-#include <com/sun/star/text/XModule.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTRANGEMOVER_HPP_
-#include <com/sun/star/text/XTextRangeMover.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XFOOTNOTESSETTINGSSUPPLIER_HPP_
-#include <com/sun/star/text/XFootnotesSettingsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XFOOTNOTE_HPP_
-#include <com/sun/star/text/XFootnote.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XFOOTNOTESSUPPLIER_HPP_
-#include <com/sun/star/text/XFootnotesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XENDNOTESSUPPLIER_HPP_
-#include <com/sun/star/text/XEndnotesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XENDNOTESSETTINGSSUPPLIER_HPP_
-#include <com/sun/star/text/XEndnotesSettingsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_FOOTNOTENUMBERING_HPP_
-#include <com/sun/star/text/FootnoteNumbering.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTSECTIONSSUPPLIER_HPP_
-#include <com/sun/star/text/XTextSectionsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTSECTION_HPP_
-#include <com/sun/star/text/XTextSection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_SECTIONFILELINK_HPP_
-#include <com/sun/star/text/SectionFileLink.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_RELORIENTATION_HPP_
-#include <com/sun/star/text/RelOrientation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_VERTORIENTATION_HPP_
-#include <com/sun/star/text/VertOrientation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_HORIZONTALADJUST_HPP_
-#include <com/sun/star/text/HorizontalAdjust.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_DOCUMENTSTATISTIC_HPP_
-#include <com/sun/star/text/DocumentStatistic.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_HORIORIENTATION_HPP_
-#include <com/sun/star/text/HoriOrientation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_HORIORIENTATIONFORMAT_HPP_
-#include <com/sun/star/text/HoriOrientationFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_NOTEPRINTMODE_HPP_
-#include <com/sun/star/text/NotePrintMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_SIZETYPE_HPP_
-#include <com/sun/star/text/SizeType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_VERTORIENTATIONFORMAT_HPP_
-#include <com/sun/star/text/VertOrientationFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_WRAPTEXTMODE_HPP_
-#include <com/sun/star/text/WrapTextMode.hpp>
-#endif
 //undef to prevent error (from sfx2/docfile.cxx)
 #undef SEQUENCE
-#ifndef _COM_SUN_STAR_TEXT_SETVARIABLETYPE_HPP_
-#include <com/sun/star/text/SetVariableType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTFIELDSSUPPLIER_HPP_
-#include <com/sun/star/text/XTextFieldsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_USERDATAPART_HPP_
-#include <com/sun/star/text/UserDataPart.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_CHAPTERFORMAT_HPP_
-#include <com/sun/star/text/ChapterFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTFIELD_HPP_
-#include <com/sun/star/text/XTextField.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_PLACEHOLDERTYPE_HPP_
-#include <com/sun/star/text/PlaceholderType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_TEMPLATEDISPLAYFORMAT_HPP_
-#include <com/sun/star/text/TemplateDisplayFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_USERFIELDFORMAT_HPP_
-#include <com/sun/star/text/UserFieldFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_PAGENUMBERTYPE_HPP_
-#include <com/sun/star/text/PageNumberType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_REFERENCEFIELDPART_HPP_
-#include <com/sun/star/text/ReferenceFieldPart.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_FILENAMEDISPLAYFORMAT_HPP_
-#include <com/sun/star/text/FilenameDisplayFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XDEPENDENTTEXTFIELD_HPP_
-#include <com/sun/star/text/XDependentTextField.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_GRAPHICCROP_HPP_
-#include <com/sun/star/text/GraphicCrop.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTGRAPHICOBJECTSSUPPLIER_HPP_
-#include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTTABLECURSOR_HPP_
-#include <com/sun/star/text/XTextTableCursor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTTABLESSUPPLIER_HPP_
-#include <com/sun/star/text/XTextTablesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_TABLECOLUMNSEPARATOR_HPP_
-#include <com/sun/star/text/TableColumnSeparator.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTTABLE_HPP_
-#include <com/sun/star/text/XTextTable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XDOCUMENTINDEXMARK_HPP_
-#include <com/sun/star/text/XDocumentIndexMark.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XDOCUMENTINDEXESSUPPLIER_HPP_
-#include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XDOCUMENTINDEX_HPP_
-#include <com/sun/star/text/XDocumentIndex.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTCOLUMNS_HPP_
-#include <com/sun/star/text/XTextColumns.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_TEXTCOLUMNSEQUENCE_HPP_
-#include <com/sun/star/text/TextColumnSequence.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTFRAMESSUPPLIER_HPP_
-#include <com/sun/star/text/XTextFramesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTFRAME_HPP_
-#include <com/sun/star/text/XTextFrame.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HPP_
-#include <com/sun/star/beans/PropertyValues.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
-#include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
-#include <com/sun/star/beans/PropertyState.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XFASTPROPERTYSET_HPP_
-#include <com/sun/star/beans/XFastPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XVETOABLECHANGELISTENER_HPP_
-#include <com/sun/star/beans/XVetoableChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
-#include <com/sun/star/beans/XPropertyState.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATECHANGELISTENER_HPP_
-#include <com/sun/star/beans/XPropertyStateChangeListener.hpp>
+#ifndef _COMPHELPER_TYPEGENERATION_HXX
+#include <comphelper/TypeGeneration.hxx>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTIESCHANGELISTENER_HPP_
-#include <com/sun/star/beans/XPropertiesChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
-#include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYACCESS_HPP_
-#include <com/sun/star/beans/XPropertyAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCONTAINER_HPP_
-#include <com/sun/star/beans/XPropertyContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATECHANGEEVENT_HPP_
-#include <com/sun/star/beans/PropertyStateChangeEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYCHANGEEVENT_HPP_
-#include <com/sun/star/beans/PropertyChangeEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_TEXTCONTENTANCHORTYPE_HPP_
-#include <com/sun/star/text/TextContentAnchorType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTSLANT_HPP_
-#include <com/sun/star/awt/FontSlant.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
-#include <com/sun/star/awt/Size.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XBITMAP_HPP_
-#include <com/sun/star/awt/XBitmap.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_GRAPHICLOCATION_HPP_
-#include <com/sun/star/style/GraphicLocation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_VERTICALALIGNMENT_HPP_
-#include <com/sun/star/style/VerticalAlignment.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXREPLACE_HPP_
-#include <com/sun/star/container/XIndexReplace.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
-#include <com/sun/star/container/XIndexContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_SHADOWFORMAT_HPP_
-#include <com/sun/star/table/ShadowFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
-#include <com/sun/star/table/BorderLine.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_TABLEBORDER_HPP_
-#include <com/sun/star/table/TableBorder.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
-#include <com/sun/star/container/XNameContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
-#include <com/sun/star/lang/Locale.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_POINTSEQUENCESEQUENCE_HPP_
-#include <com/sun/star/drawing/PointSequenceSequence.hpp>
-#endif
-#ifndef _COM_SUN_STAR_I18N_XFORBIDDENCHARACTERS_HPP_
-#include <com/sun/star/i18n/XForbiddenCharacters.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_COLORMODE_HPP_
-#include <com/sun/star/drawing/ColorMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
-#include <com/sun/star/util/DateTime.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
-#include <com/sun/star/util/Date.hpp>
-#endif
-#ifndef _SVX_PBINITEM_HXX //autogen
-#include <svx/pbinitem.hxx>
-#endif
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::awt;
-using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::i18n;
 using namespace ::rtl;
-
-enum CppuTypes {
-    CPPUTYPE_UNKNOWN,           // 0 == unknown == error!!!!
-
-    CPPUTYPE_BOOLEAN,           //getBooleanCppuType()
-    CPPUTYPE_INT8,              //getCppuType( (sal_Int8*)0 )
-    CPPUTYPE_INT16,             //getCppuType( (sal_Int16*)0 )
-    CPPUTYPE_INT32,             //getCppuType( (sal_Int32*)0 )
-    CPPUTYPE_DOUBLE,            //getCppuType( (double*)0 )
-    CPPUTYPE_FLOAT,             //getCppuType( (float*)0 )
-    CPPUTYPE_OUSTRING,          //getCppuType( (OUString*)0 )
-
-    CPPUTYPE_FONTSLANT,         //getCppuType( (FontSlant*)0 )
-    CPPUTYPE_LOCALE,            //getCppuType( (Locale*)0 )
-    CPPUTYPE_PROPERTYVALUE,     //getCppuType( (Sequence<PropertyValue>*)0 )
-    CPPUTYPE_PROPERTYVALUES,    //getCppuType( (Sequence<PropertyValues>*)0 )
-    CPPUTYPE_BORDERLINE,        //getCppuType( (table::BorderLine*)0 )
-    CPPUTYPE_BREAK,             //getCppuType( (style::BreakType*)0 )
-    CPPUTYPE_GRAPHICLOC,        //getCppuType( (style::GraphicLocation*)0 )
-    CPPUTYPE_DROPCAPFMT,        //getCppuType( (style::DropCapFormat*)0 )
-    CPPUTYPE_LINESPACE,         //getCppuType( (style::LineSpacing*)0 )
-    CPPUTYPE_AWTSIZE,           //getCppuType( (awt::Size*)0 )
-    CPPUTYPE_SHADOWFMT,         //getCppuType( (table::ShadowFormat*)0 )
-    CPPUTYPE_TBLCOLSEP,         //getCppuType( (Sequence<text::TableColumnSeparator>*)0 )
-    CPPUTYPE_PNTSEQSEQ,         //getCppuType( (PointSequenceSequence*)0 )
-    CPPUTYPE_DOCIDXMRK,         //getCppuType( (Sequence< Reference< XDocumentIndexMark > >*)0 )
-    CPPUTYPE_SEQINT8,           //getCppuType( (Sequence<sal_Int8>*)0 )
-    CPPUTYPE_SEQTABSTOP,        //getCppuType( (Sequence<style::TabStop>*)0 )
-    CPPUTYPE_SEQANCHORTYPE,     //getCppuType( (Sequence<text::TextContentAnchorType>*)0 )
-    CPPUTYPE_SEQDEPTXTFLD,      //getCppuType( (Sequence<Reference<XDependentTextField> >*)0 )
-    CPPUTYPE_TXTCNTANCHOR,      //getCppuType( (text::TextContentAnchorType*)0 )
-    CPPUTYPE_WRAPTXTMODE,       //getCppuType( (text::WrapTextMode*)0 )
-    CPPUTYPE_COLORMODE,         //getCppuType( (drawing::ColorMode*)0 )
-    CPPUTYPE_PAGESTYLELAY,      //getCppuType( (style::PageStyleLayout*)0 )
-    CPPUTYPE_VERTALIGN,         //getCppuType( (style::VerticalAlignment*)0 )
-    CPPUTYPE_TABLEBORDER,       //getCppuType( (table::TableBorder*)0 )
-    CPPUTYPE_GRFCROP,           //getCppuType( (text::GraphicCrop*)0 )
-    CPPUTYPE_SECTFILELNK,       //getCppuType( (text::SectionFileLink*)0 )
-    CPPUTYPE_PAGENUMTYPE,       //getCppuType( (const PageNumberType*)0 )
-    CPPUTYPE_DATETIME,          //getCppuType( (util::DateTime*)0 )
-    CPPUTYPE_DATE,              //getCppuType( (util::Date*)0 )
-
-    CPPUTYPE_REFINTERFACE,      //getCppuType( (Reference<XInterface>*)0 )
-    CPPUTYPE_REFIDXREPL,        //getCppuType( (Reference<container::XIndexReplace>*)0 )
-    CPPUTYPE_REFNAMECNT,        //getCppuType( (Reference<container::XNameContainer>*)0 )
-    CPPUTYPE_REFTEXTFRAME,      //getCppuType( (Reference<text::XTextFrame>*)0 )
-    CPPUTYPE_REFTEXTSECTION,    //getCppuType( (Reference<text::XTextSection>*)0 )
-    CPPUTYPE_REFFOOTNOTE,       //getCppuType( (Reference<text::XFootnote>*)0 )
-    CPPUTYPE_REFTEXT,           //getCppuType( (Reference<text::XText>*)0 )
-    CPPUTYPE_REFTEXTCOL,        //getCppuType( (Reference<text::XTextColumns>*)0 )
-
-    CPPUTYPE_REFFORBCHARS,      //getCppuType( (Reference<XForbiddenCharacters>*)0)
-    CPPUTYPE_REFIDXCNTNR,       //getCppuType( (Reference<XIndexContainer>*)0)
-    CPPUTYPE_REFTEXTCNTNT,      //getCppuType( (Reference<XTextContent>*)0)
-    CPPUTYPE_REFBITMAP,         //getCppuType( (Reference<awt::XBitmap>*)0)
-    CPPUTYPE_REFNMREPLACE,      //getCppuType( (Reference<container::XNameReplace>*)0)
-    CPPUTYPE_REFCELL,           //getCppuType( (Reference<table::XCell>*)0)
-    CPPUTYPE_REFDOCINDEX,       //getCppuType( (Reference<text::XDocumentIndex>*)0)
-    CPPUTYPE_REFDOCIDXMRK,      //getCppuType( (Reference<text::XDocumentIndexMark>*)0)
-    CPPUTYPE_REFTXTFIELD,       //getCppuType( (Reference<text::XTextField>*)0)
-    CPPUTYPE_REFTXTRANGE,       //getCppuType( (Reference<text::XTextRange>*)0)
-    CPPUTYPE_REFTXTTABLE,       //getCppuType( (Reference<text::XTextTable>*)0)
-
-    CPPUTYPE_END
-};
-#define CPPU_E2T(type)      ((com::sun::star::uno::Type*)type)
+using namespace ::comphelper;
 
 #define SW_PROP_NMID(id)    ((const char*)id), 0
-
 
 #ifndef MID_TXT_LMARGIN
 #define MID_TXT_LMARGIN 11
@@ -548,73 +213,8 @@ void SwUnoPropertyMapProvider::Sort( sal_uInt16 nId )
         const SwPropNameLen& rPropNm = GetPropName( (USHORT)(long)p->pName );
         p->pName = rPropNm.pName;
         p->nNameLen = rPropNm.nNameLen;
-
-        // set the cppu tpye
-        const com::sun::star::uno::Type** ppType = &p->pType;
-        switch( (USHORT)(long)p->pType )
-        {
-        case CPPUTYPE_BOOLEAN:      *ppType = &::getBooleanCppuType();  break;
-        case CPPUTYPE_INT8:         *ppType = &::getCppuType( (sal_Int8*)0 );   break;
-        case CPPUTYPE_INT16:        *ppType = &::getCppuType( (sal_Int16*)0 );  break;
-        case CPPUTYPE_INT32:        *ppType = &::getCppuType( (sal_Int32*)0 );  break;
-
-        case CPPUTYPE_DOUBLE:       *ppType = &::getCppuType( (double*)0 ); break;
-        case CPPUTYPE_FLOAT:        *ppType = &::getCppuType( (float*)0 );  break;
-        case CPPUTYPE_OUSTRING:     *ppType = &::getCppuType( (OUString*)0 );   break;
-        case CPPUTYPE_FONTSLANT:    *ppType = &::getCppuType( (FontSlant*)0 );  break;
-        case CPPUTYPE_LOCALE:       *ppType = &::getCppuType( (Locale*)0 ); break;
-        case CPPUTYPE_PROPERTYVALUE:*ppType = &::getCppuType( (Sequence<PropertyValue>*)0 );    break;
-        case CPPUTYPE_PROPERTYVALUES:   *ppType = &::getCppuType( (Sequence<PropertyValues>*)0 );   break;
-        case CPPUTYPE_BORDERLINE:   *ppType = &::getCppuType( (table::BorderLine*)0 );  break;
-        case CPPUTYPE_BREAK:        *ppType = &::getCppuType( (style::BreakType*)0 );   break;
-        case CPPUTYPE_GRAPHICLOC:   *ppType = &::getCppuType( (style::GraphicLocation*)0 ); break;
-        case CPPUTYPE_DROPCAPFMT:   *ppType = &::getCppuType( (style::DropCapFormat*)0 );   break;
-        case CPPUTYPE_LINESPACE:    *ppType = &::getCppuType( (style::LineSpacing*)0 ); break;
-
-        case CPPUTYPE_AWTSIZE:      *ppType = &::getCppuType( (awt::Size*)0 );  break;
-        case CPPUTYPE_SHADOWFMT:    *ppType = &::getCppuType( (table::ShadowFormat*)0 );    break;
-        case CPPUTYPE_TBLCOLSEP:    *ppType = &::getCppuType( (Sequence<text::TableColumnSeparator>*)0 );   break;
-        case CPPUTYPE_PNTSEQSEQ:    *ppType = &::getCppuType( (PointSequenceSequence*)0 );  break;
-        case CPPUTYPE_DOCIDXMRK:    *ppType = &::getCppuType( (Sequence< Reference< XDocumentIndexMark > >*)0 );    break;
-        case CPPUTYPE_SEQINT8:      *ppType = &::getCppuType( (Sequence<sal_Int8>*)0 ); break;
-        case CPPUTYPE_SEQTABSTOP:   *ppType = &::getCppuType( (Sequence<style::TabStop>*)0 ); break;
-        case CPPUTYPE_SEQANCHORTYPE:*ppType = &::getCppuType( (Sequence<text::TextContentAnchorType>*)0 ); break;
-        case CPPUTYPE_SEQDEPTXTFLD: *ppType = &::getCppuType( (Sequence<Reference<XDependentTextField> >*)0); break;
-        case CPPUTYPE_TXTCNTANCHOR: *ppType = &::getCppuType( (text::TextContentAnchorType*)0 );    break;
-        case CPPUTYPE_WRAPTXTMODE:  *ppType = &::getCppuType( (text::WrapTextMode*)0 ); break;
-
-        case CPPUTYPE_COLORMODE:    *ppType = &::getCppuType( (drawing::ColorMode*)0 ); break;
-        case CPPUTYPE_PAGESTYLELAY: *ppType = &::getCppuType( (style::PageStyleLayout*)0 ); break;
-        case CPPUTYPE_VERTALIGN:    *ppType = &::getCppuType( (style::VerticalAlignment*)0 ); break;
-        case CPPUTYPE_TABLEBORDER:  *ppType = &::getCppuType( (table::TableBorder*)0 ); break;
-        case CPPUTYPE_GRFCROP:      *ppType = &::getCppuType( (text::GraphicCrop*)0 ); break;
-        case CPPUTYPE_SECTFILELNK:  *ppType = &::getCppuType( (text::SectionFileLink*)0 ); break;
-        case CPPUTYPE_DATETIME:     *ppType = &::getCppuType( (util::DateTime*)0 ); break;
-        case CPPUTYPE_DATE:         *ppType = &::getCppuType( (util::Date*)0 ); break;
-
-        case CPPUTYPE_REFINTERFACE: *ppType = &::getCppuType( (Reference<XInterface>*)0 );  break;
-        case CPPUTYPE_REFIDXREPL:   *ppType = &::getCppuType( (Reference<container::XIndexReplace>*)0 );    break;
-        case CPPUTYPE_REFNAMECNT:   *ppType = &::getCppuType( (Reference<container::XNameContainer>*)0 );   break;
-        case CPPUTYPE_REFTEXTFRAME: *ppType = &::getCppuType( (Reference<text::XTextFrame>*)0 );    break;
-        case CPPUTYPE_REFTEXTSECTION:   *ppType = &::getCppuType( (Reference<text::XTextSection>*)0 );  break;
-        case CPPUTYPE_REFFOOTNOTE:  *ppType = &::getCppuType( (Reference<text::XFootnote>*)0 ); break;
-        case CPPUTYPE_REFTEXT:      *ppType = &::getCppuType( (Reference<text::XText>*)0 ); break;
-        case CPPUTYPE_REFTEXTCOL:   *ppType = &::getCppuType( (Reference<text::XTextColumns>*)0 );  break;
-        case CPPUTYPE_REFFORBCHARS: *ppType = &::getCppuType( (Reference<XForbiddenCharacters>*)0 ); break;
-        case CPPUTYPE_REFIDXCNTNR:  *ppType = &::getCppuType( (Reference<XIndexContainer>*)0 ); break;
-        case CPPUTYPE_REFTEXTCNTNT: *ppType = &::getCppuType( (Reference<XTextContent>*)0 ); break;
-        case CPPUTYPE_REFBITMAP:    *ppType = &::getCppuType( (Reference<awt::XBitmap>*)0 ); break;
-        case CPPUTYPE_REFNMREPLACE: *ppType = &::getCppuType( (Reference<container::XNameReplace>*)0 ); break;
-        case CPPUTYPE_REFCELL:      *ppType = &::getCppuType( (Reference<table::XCell>*)0 ); break;
-        case CPPUTYPE_REFDOCINDEX:  *ppType = &::getCppuType( (Reference<text::XDocumentIndex>*)0 ); break;
-        case CPPUTYPE_REFDOCIDXMRK: *ppType = &::getCppuType( (Reference<text::XDocumentIndexMark>*)0 ); break;
-        case CPPUTYPE_REFTXTFIELD:  *ppType = &::getCppuType( (Reference<text::XTextField>*)0 ); break;
-        case CPPUTYPE_REFTXTRANGE:  *ppType = &::getCppuType( (Reference<text::XTextRange>*)0 ); break;
-        case CPPUTYPE_REFTXTTABLE:  *ppType = &::getCppuType( (Reference<text::XTextTable>*)0 ); break;
-
-        default:
-            DBG_ASSERT( !p, "wrong CPPU-Type" );
-        }
+        // get the cppu type from the comphelper
+        GenerateCppuType ( (sal_uInt16) (long) p->pType, p->pType );
     }
     qsort( aMapArr[nId], i, sizeof(SfxItemPropertyMap), lcl_CompareMap );
 }
@@ -1970,65 +1570,6 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                 aMapArr[nPropertyId] = aAutoTextGroupMap_Impl;
             }
             break;
-            case  PROPERTY_MAP_PRINT_SETTINGS:
-            {
-                static SfxItemPropertyMap aPrintSettingsMap_Impl[] =
-                {
-                    {SW_PROP_NMID(UNO_NAME_PRINT_ANNOTATION_MODE), WID_PRTSET_ANNOTATION_MODE   , CPPU_E2T(CPPUTYPE_INT16),  PROPERTY_NONE, 0},
-                    {SW_PROP_NMID(UNO_NAME_PRINT_BLACK_FONTS), WID_PRTSET_BLACK_FONTS       , CPPU_E2T(CPPUTYPE_BOOLEAN),   PROPERTY_NONE,  0},
-                    {SW_PROP_NMID(UNO_NAME_PRINT_CONTROLS), WID_PRTSET_CONTROLS         , CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,    0},
-                    {SW_PROP_NMID(UNO_NAME_PRINT_DRAWINGS), WID_PRTSET_DRAWINGS         , CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,    0},
-                    {SW_PROP_NMID(UNO_NAME_PRINT_GRAPHICS), WID_PRTSET_GRAPHICS         , CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,    0},
-                    {SW_PROP_NMID(UNO_NAME_PRINT_LEFT_PAGES), WID_PRTSET_LEFT_PAGES     , CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,    0},
-                    {SW_PROP_NMID(UNO_NAME_PRINT_PAGE_BACKGROUND), WID_PRTSET_PAGE_BACKGROUND   , CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,    0},
-                    {SW_PROP_NMID(UNO_NAME_PRINT_PROSPECT), WID_PRTSET_PROSPECT         , CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,    0},
-                    {SW_PROP_NMID(UNO_NAME_PRINT_REVERSED), WID_PRTSET_REVERSED         , CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,    0},
-                    {SW_PROP_NMID(UNO_NAME_PRINT_RIGHT_PAGES), WID_PRTSET_RIGHT_PAGES       , CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,    0},
-                    {SW_PROP_NMID(UNO_NAME_PRINT_LEFT_PAGES), WID_PRTSET_LEFT_PAGES     , CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,    0},
-                    {SW_PROP_NMID(UNO_NAME_PRINT_FAX_NAME), WID_PRTSET_FAX_NAME         , CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE,   0},
-                    {SW_PROP_NMID(UNO_NAME_PRINT_PAPER_FROM_SETUP), WID_PRTSET_PAPER_FROM_SETUP , CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,    0},
-                    {SW_PROP_NMID(UNO_NAME_PRINT_TABLES), WID_PRTSET_TABLES         , CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,    0},
-                    {0,0,0,0,0}
-                };
-                aMapArr[nPropertyId] = aPrintSettingsMap_Impl;
-            }
-            break;
-            case  PROPERTY_MAP_VIEW_SETTINGS:
-            {
-                static SfxItemPropertyMap aViewSettingsMap_Impl[] =
-                {
-                    {SW_PROP_NMID(UNO_NAME_SHOW_ANNOTATIONS), WID_VIEWSET_ANNOTATIONS          , CPPU_E2T(CPPUTYPE_BOOLEAN),PROPERTY_NONE,  0},
-                    {SW_PROP_NMID(UNO_NAME_SHOW_BREAKS), WID_VIEWSET_BREAKS               , CPPU_E2T(CPPUTYPE_BOOLEAN),PROPERTY_NONE,   0},
-                    {SW_PROP_NMID(UNO_NAME_SHOW_DRAWINGS), WID_VIEWSET_DRAWINGS             , CPPU_E2T(CPPUTYPE_BOOLEAN),PROPERTY_NONE, 0},
-                    {SW_PROP_NMID(UNO_NAME_SHOW_FIELD_COMMANDS), WID_VIEWSET_FIELD_COMMANDS       , CPPU_E2T(CPPUTYPE_BOOLEAN),PROPERTY_NONE,   0},
-                    {SW_PROP_NMID(UNO_NAME_SHOW_FOOTNOTE_BACKGROUND), WID_VIEWSET_FOOTNOTE_BACKGROUND  , CPPU_E2T(CPPUTYPE_BOOLEAN),PROPERTY_NONE,  0},
-                    {SW_PROP_NMID(UNO_NAME_SHOW_GRAPHICS), WID_VIEWSET_GRAPHICS             , CPPU_E2T(CPPUTYPE_BOOLEAN),PROPERTY_NONE, 0},
-                    {SW_PROP_NMID(UNO_NAME_SHOW_HIDDEN_PARAGRAPHS), WID_VIEWSET_HIDDEN_PARAGRAPHS    , CPPU_E2T(CPPUTYPE_BOOLEAN),PROPERTY_NONE,    0},
-                    {SW_PROP_NMID(UNO_NAME_SHOW_HIDDEN_TEXT), WID_VIEWSET_HIDDEN_TEXT          , CPPU_E2T(CPPUTYPE_BOOLEAN),PROPERTY_NONE,  0},
-                    {SW_PROP_NMID(UNO_NAME_SHOW_HORI_RULER), WID_VIEWSET_HRULER               , CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,  0},
-                    {SW_PROP_NMID(UNO_NAME_SHOW_HORI_SCROLL_BAR), WID_VIEWSET_HSCROLL             , CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,  0},
-                    {SW_PROP_NMID(UNO_NAME_SHOW_INDEX_MARK_BACKGROUND), WID_VIEWSET_INDEX_MARK_BACKGROUND, CPPU_E2T(CPPUTYPE_BOOLEAN),PROPERTY_NONE,    0},
-                    {SW_PROP_NMID(UNO_NAME_SHOW_ONLINE_LAYOUT), WID_VIEWSET_ONLINE_LAYOUT         , CPPU_E2T(CPPUTYPE_BOOLEAN),PropertyAttribute::MAYBEVOID,    0},
-                    {SW_PROP_NMID(UNO_NAME_SHOW_PARA_BREAKS), WID_VIEWSET_PARA_BREAKS          , CPPU_E2T(CPPUTYPE_BOOLEAN),PROPERTY_NONE,  0},
-                    {SW_PROP_NMID(UNO_NAME_SHOW_PROTECTED_SPACES), WID_VIEWSET_PROTECTED_SPACES     , CPPU_E2T(CPPUTYPE_BOOLEAN),PROPERTY_NONE, 0},
-                    {SW_PROP_NMID(UNO_NAME_SHOW_SOFT_HYPHENS), WID_VIEWSET_SOFT_HYPHENS         , CPPU_E2T(CPPUTYPE_BOOLEAN),PROPERTY_NONE, 0},
-                    {SW_PROP_NMID(UNO_NAME_SHOW_SPACES), WID_VIEWSET_SPACES               , CPPU_E2T(CPPUTYPE_BOOLEAN),PROPERTY_NONE,   0},
-                    {SW_PROP_NMID(UNO_NAME_SHOW_TABLE_BOUNDARIES), WID_VIEWSET_TABLE_BOUNDARIES     , CPPU_E2T(CPPUTYPE_BOOLEAN),PROPERTY_NONE, 0},
-                    {SW_PROP_NMID(UNO_NAME_SHOW_TABLES), WID_VIEWSET_TABLES               , CPPU_E2T(CPPUTYPE_BOOLEAN),PROPERTY_NONE,   0},
-                    {SW_PROP_NMID(UNO_NAME_SHOW_TABSTOPS), WID_VIEWSET_TABSTOPS             , CPPU_E2T(CPPUTYPE_BOOLEAN),PROPERTY_NONE, 0},
-                    {SW_PROP_NMID(UNO_NAME_SHOW_TEXT_BOUNDARIES), WID_VIEWSET_TEXT_BOUNDARIES      , CPPU_E2T(CPPUTYPE_BOOLEAN),PROPERTY_NONE,  0},
-                    {SW_PROP_NMID(UNO_NAME_SHOW_TEXT_FIELD_BACKGROUND), WID_VIEWSET_TEXT_FIELD_BACKGROUND, CPPU_E2T(CPPUTYPE_BOOLEAN),PROPERTY_NONE,    0},
-                    {SW_PROP_NMID(UNO_NAME_SHOW_VERT_RULER), WID_VIEWSET_VRULER ,   CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,  0},
-                    {SW_PROP_NMID(UNO_NAME_SHOW_VERT_SCROLL_BAR), WID_VIEWSET_VSCROLL,  CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,  0},
-                    {SW_PROP_NMID(UNO_NAME_SMOOTH_SCROLLING), WID_VIEWSET_SMOOTH_SCROLLING     , CPPU_E2T(CPPUTYPE_BOOLEAN),PROPERTY_NONE,  0},
-                    {SW_PROP_NMID(UNO_NAME_SOLID_MARK_HANDLES), WID_VIEWSET_SOLID_MARK_HANDLES    , CPPU_E2T(CPPUTYPE_BOOLEAN),PROPERTY_NONE, 0},
-                    {SW_PROP_NMID(UNO_NAME_ZOOM_TYPE), WID_VIEWSET_ZOOM_TYPE            , CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE, 0},
-                    {SW_PROP_NMID(UNO_NAME_ZOOM_VALUE), WID_VIEWSET_ZOOM                , CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE, 0},
-                    {0,0,0,0,0}
-                };
-                aMapArr[nPropertyId] = aViewSettingsMap_Impl;
-            }
-            break;
             case PROPERTY_MAP_TEXTPORTION_EXTENSIONS:
             {
                 static SfxItemPropertyMap aTextPortionExtensionMap_Impl[] =
@@ -2691,5 +2232,3 @@ sal_Bool SwItemPropertySet::FillItem(SfxItemSet& rSet, sal_uInt16 nWhich, sal_Bo
     }*/
     return bRet;
 }
-
-
