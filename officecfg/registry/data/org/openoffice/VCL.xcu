@@ -3,9 +3,9 @@
  *
  *  $RCSfile: VCL.xcu,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 11:36:53 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:40:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,7 +237,7 @@
         <value>FZSongTi;MSung Light SC;Cumberland;Courier New;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
       <prop oor:name="CJK_HEADING" oor:type="xs:string" oor:op="replace">
-        <value>FZSongTi;MSung Light SC;SimSun;Song;FZSongYi;FZShuSong;NSimSun;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>FZHeiTi;MSung Light SC;SimSun;Song;FZSongYi;FZShuSong;NSimSun;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="CJK_PRESENTATION" oor:type="xs:string" oor:op="replace">
         <value>FZSongTi;MSung Light SC;SimSun;Song;FZSongYi;FZShuSong;NSimSun;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
@@ -263,7 +263,7 @@
         <value>FZMingTi;MSung Light TC;MingLiU;Ming;PMingLiU;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="CJK_HEADING" oor:type="xs:string" oor:op="replace">
-        <value>FZMingTi;MSung Light TC;MingLiU;Ming;PMingLiU;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>FZHeiTi;MSung Light TC;MingLiU;Ming;PMingLiU;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="CJK_PRESENTATION" oor:type="xs:string" oor:op="replace">
         <value>FZMingTi;MSung Light TC;MingLiU;Ming;PMingLiU;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
@@ -289,7 +289,7 @@
         <value>FZMingTi;MSung Light TC;MingLiU;Ming;PMingLiU;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="CJK_HEADING" oor:type="xs:string" oor:op="replace">
-        <value>FZMingTi;MSung Light TC;MingLiU;Ming;PMingLiU;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>FZHeiTi;MSung Light TC;MingLiU;Ming;PMingLiU;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="CJK_PRESENTATION" oor:type="xs:string" oor:op="replace">
         <value>FZMingTi;MSung Light TC;MingLiU;Ming;PMingLiU;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
@@ -705,7 +705,7 @@
           <value>Normal</value>
         </prop>
         <prop oor:name="FontType">
-          <value>CJK,CJK_KR</value>
+          <value>Standard,CJK,CJK_KR</value>
         </prop>
       </node>
       <node oor:name="sunbatang" oor:op="replace">
@@ -728,7 +728,7 @@
           <value>Normal</value>
         </prop>
         <prop oor:name="FontType">
-          <value>CJK,CJK_KR</value>
+          <value>Default,Standard,CJK,CJK_KR</value>
         </prop>
       </node>
       <node oor:name="batangche" oor:op="replace">
@@ -1556,7 +1556,7 @@
           <value>Normal</value>
         </prop>
         <prop oor:name="FontType">
-          <value>CJK,CJK_KR</value>
+          <value>Standard,CJK,CJK_KR</value>
         </prop>
       </node>
       <node oor:name="sundotum" oor:op="replace">
@@ -1579,7 +1579,7 @@
           <value>Normal</value>
         </prop>
         <prop oor:name="FontType">
-          <value>CJK,CJK_KR</value>
+          <value>Standard,CJK,CJK_KR</value>
         </prop>
       </node>
       <node oor:name="dotumche" oor:op="replace">
@@ -2200,7 +2200,7 @@
           <value>Normal</value>
         </prop>
         <prop oor:name="FontType">
-          <value>CJK,CJK_KR</value>
+          <value>Standard,CJK,CJK_KR</value>
         </prop>
       </node>
       <node oor:name="gulimche" oor:op="replace">
@@ -2798,7 +2798,7 @@
           <value>Normal</value>
         </prop>
         <prop oor:name="FontType">
-          <value>CJK,CJK_KR</value>
+          <value>Standard,CJK,CJK_KR</value>
         </prop>
       </node>
       <node oor:name="sungungseo" oor:op="replace">
