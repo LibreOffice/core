@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-12 09:49:41 $
+ *  last change: $Author: mt $ $Date: 2001-04-20 07:34:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4370,7 +4370,7 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
 
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
-                pHelp->Start( nStartHelpId );
+                pHelp->Start( nStartHelpId, this );
         }
     }
 }

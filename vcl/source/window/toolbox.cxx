@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2001-03-20 17:46:36 $
+ *  last change: $Author: mt $ $Date: 2001-04-20 07:34:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3726,7 +3726,7 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
                 // Wenn eine Hilfe existiert, dann ausloesen
                 Help* pHelp = Application::GetHelp();
                 if ( pHelp )
-                    pHelp->Start( nHelpId );
+                    pHelp->Start( nHelpId, this );
                 return;
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabctrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-12 10:01:31 $
+ *  last change: $Author: mt $ $Date: 2001-04-20 07:33:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1233,7 +1233,7 @@ void TabControl::RequestHelp( const HelpEvent& rHEvt )
                 // Wenn eine Hilfe existiert, dann ausloesen
                 Help* pHelp = Application::GetHelp();
                 if ( pHelp )
-                    pHelp->Start( nHelpId );
+                    pHelp->Start( nHelpId, this );
                 return;
             }
         }

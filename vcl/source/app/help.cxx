@@ -2,9 +2,9 @@
  *
  *  $RCSfile: help.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-12 09:45:49 $
+ *  last change: $Author: mt $ $Date: 2001-04-20 07:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,25 +108,17 @@ Help::Help()
 
 // -----------------------------------------------------------------------
 
-BOOL Help::Start( ULONG )
+BOOL Help::Start( ULONG, const Window* )
 {
     return FALSE;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL Help::Start( const XubString& )
+BOOL Help::Start( const XubString&, const Window* )
 {
     return FALSE;
 }
-
-// -----------------------------------------------------------------------
-#if SUPD <= 627
-XubString Help::GetHelpText( ULONG nHelpId )
-{
-    return ImplGetSVEmptyStr();
-}
-#endif
 
 // -----------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskstat.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:57 $
+ *  last change: $Author: mt $ $Date: 2001-04-20 07:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -636,7 +636,7 @@ void TaskStatusBar::RequestHelp( const HelpEvent& rHEvt )
                     // Wenn eine Hilfe existiert, dann ausloesen
                     Help* pHelp = Application::GetHelp();
                     if ( pHelp )
-                        pHelp->Start( nHelpId );
+                        pHelp->Start( nHelpId, this );
                     return;
                 }
             }

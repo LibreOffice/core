@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-12 09:49:41 $
+ *  last change: $Author: mt $ $Date: 2001-04-20 07:34:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,9 +491,9 @@ static BOOL ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, USHORT nHighl
             // den Hilfe-Index
             ULONG nHelpId = pMenu->GetHelpId( nId );
             if ( nHelpId )
-                pHelp->Start( nHelpId );
+                pHelp->Start( nHelpId, NULL );
             else
-                pHelp->Start( HELP_INDEX );
+                pHelp->Start( HELP_INDEX, NULL );
         }
         bDone = TRUE;
     }
