@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-12 14:26:25 $
+ *  last change: $Author: cl $ $Date: 2002-08-06 13:40:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,21 +417,16 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectang
 
 Color SdrObjEditView::ImpGetTextEditBackgroundColor() const
 {
-    Color aBackground(COL_WHITE);
+    svx::ColorConfig aColorConfig;
+    Color aBackground(aColorConfig.GetColorValue(svx::DOCCOLOR).nColor);
 
     // #98988# test if we are in High contrast mode; if yes, take
     // application background color
+    // #10049# wrong, always use svx::DOCCOLOR as default and use document settings if
+    //         not hc mode
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
-    if(rStyleSettings.GetHighContrastMode())
-    {
-        svx::ColorConfig aColorConfig;
-        svx::ColorConfigValue aColor(aColorConfig.GetColorValue(svx::DOCCOLOR));
-
-        // use document color
-        aBackground = Color(aColor.nColor);
-    }
-    else
+    if(!rStyleSettings.GetHighContrastMode())
     {
         // original non-contrast code here
         BOOL bFound=FALSE;
