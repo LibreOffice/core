@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: mav $ $Date: 2002-02-27 15:47:38 $
+ *  last change: $Author: mav $ $Date: 2002-04-11 14:29:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,9 +726,13 @@ sal_Bool ZipPackage::writeFileIsTemp()
         xSink = openOriginalForOutput();
         if( xSink.is() )
         {
-            xTempOut = xSink->getStream()->getOutputStream();
-            if( xTempOut.is() )
-                aUseTemp = sal_False;
+            Reference< XStream > xStr = xSink->getStream();
+            if( xStr.is() )
+            {
+                xTempOut = xStr->getOutputStream();
+                if( xTempOut.is() )
+                    aUseTemp = sal_False;
+            }
         }
     }
 
@@ -900,12 +904,21 @@ Reference< XActiveDataStreamer > ZipPackage::openOriginalForOutput()
     {
         try
         {
+            sal_Bool bTruncSuccess = sal_False;
+
             try
             {
+                Exception aDetect;
                 sal_Int64 aSize = 0;
-                aOriginalContent.setPropertyValue( OUString::createFromAscii( "Size" ), makeAny( aSize ) );
+                Any aAny = aOriginalContent.setPropertyValue( OUString::createFromAscii( "Size" ), makeAny( aSize ) );
+                if( !( aAny >>= aDetect ) )
+                    bTruncSuccess = sal_True;
             }
             catch( Exception& )
+            {
+            }
+
+            if( !bTruncSuccess )
             {
                 // the file is not accessible
                 // just try to write an empty stream to it
@@ -959,12 +972,16 @@ void SAL_CALL ZipPackage::commitChanges(  )
 
             if( xSink.is() )
             {
-                aOrigFileStream = xSink->getStream()->getOutputStream();
-                if( aOrigFileStream.is() )
+                Reference< XStream > xStr = xSink->getStream();
+                if( xStr.is() )
                 {
-                    copyInputToOutput( xContentStream, aOrigFileStream );
-                    aOrigFileStream->closeOutput();
-                    xContentSeek->seek ( 0 );
+                    aOrigFileStream = xStr->getOutputStream();
+                    if( aOrigFileStream.is() )
+                    {
+                        copyInputToOutput( xContentStream, aOrigFileStream );
+                        aOrigFileStream->closeOutput();
+                        xContentSeek->seek ( 0 );
+                    }
                 }
             }
         }
