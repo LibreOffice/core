@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pl $ $Date: 2000-12-01 13:37:48 $
+ *  last change: $Author: pl $ $Date: 2000-12-01 19:54:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,55 +463,56 @@ inline SalFrameData::SalFrameData( SalFrame *pFrame )
     SalData* pSalData = GetSalData();
 
     // insert frame in framelist
-    pNextFrame_         = pSalData->pFirstFrame_;
-    pSalData->pFirstFrame_ = pFrame;
-    pFrame_             = pFrame;
+    pNextFrame_                 = pSalData->pFirstFrame_;
+    pSalData->pFirstFrame_      = pFrame;
+    pFrame_                     = pFrame;
 
-    pProc_              = sal_CallbackDummy;
-    pInst_              = (void*)ILLEGAL_POINTER;
+    pProc_                      = sal_CallbackDummy;
+    pInst_                      = (void*)ILLEGAL_POINTER;
 
-    pDisplay_           = pSalData->GetCurDisp();
-    hShell_             = NULL;
-    hComposite_         = NULL;
-    hForeignParent_     = None;
-    hNoFullscreenShell_ = NULL;
-    hNoFullscreenComposite_ = NULL;
+    pDisplay_                   = pSalData->GetCurDisp();
+    hShell_                     = NULL;
+    hComposite_                 = NULL;
+    hForeignParent_             = None;
+    hForeignTopLevelWindow_     = None;
+    hNoFullscreenShell_         = NULL;
+    hNoFullscreenComposite_     = NULL;
 
-    pGraphics_          = NULL;
-    pFreeGraphics_      = NULL;
-    pPaintRegion_       = NULL;
+    pGraphics_                  = NULL;
+    pFreeGraphics_              = NULL;
+    pPaintRegion_               = NULL;
 
-    hCursor_            = None;
-    nCaptured_          = 0;
+    hCursor_                    = None;
+    nCaptured_                  = 0;
 
-     nReleaseTime_      = 0;
-    nKeyCode_           = 0;
-    nKeyState_          = 0;
-    nCompose_           = -1;
+     nReleaseTime_              = 0;
+    nKeyCode_                   = 0;
+    nKeyState_                  = 0;
+    nCompose_                   = -1;
 
-    nShowState_         = SHOWSTATE_UNKNOWN;
-    nLeft_              = 0;
-    nTop_               = 0;
-    nRight_             = 0;
-    nBottom_            = 0;
-    nMaxWidth_          = 0;
-    nMaxHeight_         = 0;
-    nWidth_             = 0;
-    nHeight_            = 0;
-    nStyle_             = 0;
-    bAlwaysOnTop_       = FALSE;
+    nShowState_                 = SHOWSTATE_UNKNOWN;
+    nLeft_                      = 0;
+    nTop_                       = 0;
+    nRight_                     = 0;
+    nBottom_                    = 0;
+    nMaxWidth_                  = 0;
+    nMaxHeight_                 = 0;
+    nWidth_                     = 0;
+    nHeight_                    = 0;
+    nStyle_                     = 0;
+    bAlwaysOnTop_               = FALSE;
     // #58928# fake to be mapped on startup, because the sclient may be
     // resized before mapping and the
     // SetPosSize / call(salevent_resize) / GetClientSize
     // stuff will not work in that (unmapped) case
-    bViewable_          = TRUE;
-    bMapped_            = FALSE;
-    bDefaultPosition_   = TRUE;
-    nVisibility_        = VisibilityFullyObscured;
+    bViewable_                  = TRUE;
+    bMapped_                    = FALSE;
+    bDefaultPosition_           = TRUE;
+    nVisibility_                = VisibilityFullyObscured;
 
-    nScreenSaversTimeout_   = 0;
+    nScreenSaversTimeout_       = 0;
 
-    mpInputContext      = NULL;
+    mpInputContext              = NULL;
 }
 
 SalFrame::SalFrame() : maFrameData( this ) {}
@@ -815,10 +816,26 @@ void SalFrame::SetClientSize( long nWidth, long nHeight )
             pFrame = pFrame->maFrameData.mpParent;
         if( pFrame->maFrameData.aPosSize_.IsEmpty() )
             pFrame->maFrameData.GetPosSize( pFrame->maFrameData.aPosSize_ );
-        nScreenX        = pFrame->maFrameData.aPosSize_.Left();
-        nScreenY        = pFrame->maFrameData.aPosSize_.Top();
-        nScreenWidth    = pFrame->maFrameData.aPosSize_.GetWidth();
-        nScreenHeight   = pFrame->maFrameData.aPosSize_.GetHeight();
+
+        if( pFrame->maFrameData.hForeignTopLevelWindow_ )
+        {
+            XLIB_Window aRoot;
+            unsigned int bw, depth;
+            XGetGeometry( maFrameData.GetXDisplay(),
+                          pFrame->maFrameData.hForeignTopLevelWindow_,
+                          &aRoot,
+                          &nScreenX, &nScreenY,
+                          (unsigned int*)&nScreenWidth,
+                          (unsigned int*)&nScreenHeight,
+                          &bw, &depth );
+        }
+        else
+        {
+            nScreenX        = pFrame->maFrameData.aPosSize_.Left();
+            nScreenY        = pFrame->maFrameData.aPosSize_.Top();
+            nScreenWidth    = pFrame->maFrameData.aPosSize_.GetWidth();
+            nScreenHeight   = pFrame->maFrameData.aPosSize_.GetHeight();
+        }
     }
 
     nX = maFrameData.aPosSize_.Left();
@@ -826,31 +843,43 @@ void SalFrame::SetClientSize( long nWidth, long nHeight )
 
     if ( maFrameData.bDefaultPosition_ )
     {
-        // center the window to its parent
-        nX = (nScreenWidth  - nWidth ) / 2 + nScreenX;
-        nY = (nScreenHeight - nHeight) / 2 + nScreenY;
-        SalFrame* pFrame = maFrameData.mpParent;
-        while( pFrame && pFrame->maFrameData.mpParent )
+        SalFrameData* pParentData = maFrameData.mpParent ? &maFrameData.mpParent->maFrameData : NULL;
+        if( pParentData && pParentData->nShowState_ == SHOWSTATE_NORMAL )
         {
-            pFrame = pFrame->maFrameData.mpParent;
-            nX += 40;
-            nY += 40;
+            if( nWidth >= pParentData->aPosSize_.GetWidth() &&
+                nHeight >= pParentData->aPosSize_.GetHeight() )
+            {
+                nX = pParentData->aPosSize_.Left()+40;
+                nY = pParentData->aPosSize_.Top()+40;
+            }
+            else
+            {
+                // center the window relative to the top level frame
+                nX = (nScreenWidth  - nWidth ) / 2 + nScreenX;
+                nY = (nScreenHeight - nHeight) / 2 + nScreenY;
+            }
         }
-
-        maFrameData.bDefaultPosition_ = False;
+        else
+        {
+            // center the window relative to screen
+            nX = (nRealScreenWidth  - nWidth ) / 2;
+            nY = (nRealScreenHeight - nHeight) / 2;
+        }
+        if( maFrameData.nShowState_ == SHOWSTATE_NORMAL)
+            maFrameData.bDefaultPosition_ = False;
     }
 
     // once centered, we leave the window where it is with new size
     // but only if it does not run out of screen (unless user placed it there)
 
-    if( nWidth != maFrameData.aPosSize_.GetWidth() )
+    if( nWidth > maFrameData.aPosSize_.GetWidth() )
     {
         if ( nX + nWidth  > nRealScreenWidth  )
             nX = nRealScreenWidth  - nWidth;
         if ( nX <  0 )
             nX = 0;
     }
-    if( nHeight != maFrameData.aPosSize_.GetHeight() )
+    if( nHeight > maFrameData.aPosSize_.GetHeight() )
     {
         if ( nY + nHeight > nRealScreenHeight )
             nY = nRealScreenHeight - nHeight;
