@@ -9,7 +9,6 @@ dt	desktop\source\offacc					nmake	-	all	dt_offac NULL
 dt	desktop\source\splash					nmake	-	all	dt_spl NULL
 dt	desktop\win32\source					nmake	-	w	dt_wrapper NULL
 dt	desktop\win32\source\setup				nmake	-	w	dt_setup NULL
-dt	desktop\source\javaldx					nmake	-	u	dt_javaldx NULL
 dt	desktop\source\pagein					nmake	-	u	dt_pagein NULL
 dt	desktop\source\pkgchk					nmake	-	all	dt_pkgchk NULL
 dt	desktop\source\deployment				nmake	-	all	dt_deployment dt_dp_manager dt_dp_registry dt_dp_registry_package dt_dp_registry_script dt_dp_registry_component dt_dp_registry_configuration NULL
