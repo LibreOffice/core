@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphCtlAccessibleContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-09 07:01:11 $
+ *  last change: $Author: vg $ $Date: 2002-04-10 09:45:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -616,3 +616,4 @@ private:
 };
 
 #endif
+
