@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: as $ $Date: 2000-11-23 14:52:10 $
+#   last change: $Author: as $ $Date: 2000-12-12 10:19:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,13 +89,10 @@ SLOFILES=			\
                     $(SLO)$/mediatypedetectionhelper.obj
 .ELSE
 SLOFILES=			\
-                    $(SLO)$/desktop.obj								\
-                    $(SLO)$/pluginframe.obj							\
                     $(SLO)$/task.obj								\
                     $(SLO)$/frame.obj								\
                     $(SLO)$/frameloaderfactory.obj					\
-                    $(SLO)$/urltransformer.obj						\
-                    $(SLO)$/mediatypedetectionhelper.obj
+                    $(SLO)$/documentproperties.obj
 .ENDIF
 
 # --- Targets ------------------------------------------------------
