@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:11:59 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -503,7 +503,7 @@ void SwWW8Writer::Out_WwNumLvl( BYTE nWwLevel )
 
 void SwWW8Writer::Out_SwNumLvl( BYTE nSwLevel )
 {
-    ASSERT(nSwLevel != NO_NUM, "NO_NUM?");
+    ASSERT(IsNum(nSwLevel), "numbered?");
     Out_WwNumLvl( nSwLevel + 1 );
 }
 
@@ -756,8 +756,8 @@ bool SwWW8Writer::Out_SwNum(const SwTxtNode* pNd)
 
     bool bNoNum = false;
 
-    ASSERT(NO_NUM != nSwLevel, "NO_NUM?");
-    if( ! IsNum(nSwLevel))
+    ASSERT(IsNum(nSwLevel), "NO_NUM?");
+    if( IsNum(nSwLevel))
     {
         SetNoNum(&nSwLevel, FALSE);     // 0..WW8ListManager::nMaxLevel
         bNoNum = true;
