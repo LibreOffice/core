@@ -2,9 +2,9 @@
  *
  *  $RCSfile: showcols.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:38:08 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 14:36:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,10 +91,10 @@ ModalDialog RID_SVX_DLG_SHOWGRIDCOLUMNS
         Text[ swedish ] = "Följande kolumner är dolda för närvarande. Markera kolumnerna som skall visas igen och välj OK.";
         Text[ polish ] = "Nastêpuj¹ce kolumny s¹ na razie ukryte. Nale¿y zaznaczyæ kolumny, które maj¹ zostaæ wyœwietlone i nacisn¹æ nastêpnie przycisk OK.";
         Text[ portuguese_brazilian ] = "The following columns are hidden currently. Please mark the fields you want to show and chosse OK";
-        Text[ japanese ] = "Ÿ‚Ì—ñ‚ÍŒ»İ‰B‚³‚ê‚Ä‚¢‚Ü‚·B•\\¦‚·‚×‚«—ñ‚ğ‘I‘ğ‚µ‚ÄOK‚ğ‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B";
-        Text[ korean ] = "´ÙÀ½ ¿­µéÀº ÇöÀç ¼û°ÜÁø »óÅÂÀÔ´Ï´Ù. ´Ù½Ã ³ªÅ¸³»°íÀÚ ÇÏ´Â ¿­À» ¼±ÅÃ Ç¥½ÃÇÑ ´ÙÀ½ OK (È®ÀÎ) ¹öÆ°À» Å¬¸¯ÇÏ½Ê½Ã¿À.";
-        Text[ chinese_simplified ] = "ÒÑ¾­ÒşÈëÒÔÏÂµÄÁĞ¡£ÇëÑ¡ÖĞÒªÏÔÊ¾µÄÁĞÇøÓò,È»ºóµã»÷È·¶¨¡£";
-        Text[ chinese_traditional ] = "¥H¤UªºÄæ¬OÁô¤Jªº¡C½Ğ±z¿ï¨ú­nÅã¥ÜªºÄæ¡AµM¦Z«ö¤@¤U½T©w¡C";
+        Text[ japanese ] = "æ¬¡ã®åˆ—ã¯ç¾åœ¨éš ã•ã‚Œã¦ã„ã¾ã™ã€‚è¡¨ç¤ºã™ã¹ãåˆ—ã‚’é¸æŠã—ã¦OKã‚’æŠ¼ã—ã¦ãã ã•ã„ã€‚";
+        Text[ korean ] = "ë‹¤ìŒ ì—´ë“¤ì€ í˜„ì¬ ìˆ¨ê²¨ì§„ ìƒíƒœì…ë‹ˆë‹¤. ë‹¤ì‹œ ë‚˜íƒ€ë‚´ê³ ì í•˜ëŠ” ì—´ì„ ì„ íƒ í‘œì‹œí•œ ë‹¤ìŒ OK (í™•ì¸) ë²„íŠ¼ì„ í´ë¦­í•˜ì‹­ì‹œì˜¤.";
+        Text[ chinese_simplified ] = "å·²ç»éšå…¥ä»¥ä¸‹çš„åˆ—ã€‚è¯·é€‰ä¸­è¦æ˜¾ç¤ºçš„åˆ—åŒºåŸŸ,ç„¶åç‚¹å‡»ç¡®å®šã€‚";
+        Text[ chinese_traditional ] = "ä»¥ä¸‹çš„æ¬„æ˜¯éš±å…¥çš„ã€‚è«‹æ‚¨é¸å–è¦é¡¯ç¤ºçš„æ¬„ï¼Œç„¶åæŒ‰ä¸€ä¸‹ç¢ºå®šã€‚";
         Text[ arabic ] = "åĞå ÇáÃÚãÏÉ ãÎİíÉ ÍÇáíÇğ. ÇáÑÌÇÁ ÊÍÏíÏ ÇáÃÚãÏÉ ÇáÊí ÊÑíÏ ÅÙåÇÑåÇ¡ Ëã ÇáäŞÑ İæŞ \"ÍÓäÇğ\"";
         Text[ turkish ] = "Şu sütunlar şu an gizlenmiş durumda. Tekrar görüntülemek istediklerinizi seçin ve \"Tamam\" düğmesini tıklayın.";
         Text[ catalan ] = "Las siguientes columnas están por ahora ocultas. Seleccione las que deban mostrarse y pulse sobre Aceptar.";
@@ -138,16 +138,17 @@ ModalDialog RID_SVX_DLG_SHOWGRIDCOLUMNS
     Text[ swedish ] = "Visa kolumner";
     Text[ polish ] = "Wyœwietl kolumny";
     Text[ portuguese_brazilian ] = "Spalten anzeigen";
-    Text[ japanese ] = "—ñ‚ğ•\\¦‚·‚é";
-    Text[ korean ] = "¿­ Ç¥½Ã";
-    Text[ chinese_simplified ] = "ÏÔÊ¾ÁĞ";
-    Text[ chinese_traditional ] = "Åã¥ÜÄæ";
+    Text[ japanese ] = "åˆ—ã‚’è¡¨ç¤ºã™ã‚‹";
+    Text[ korean ] = "ì—´ í‘œì‹œ";
+    Text[ chinese_simplified ] = "æ˜¾ç¤ºåˆ—";
+    Text[ chinese_traditional ] = "é¡¯ç¤ºæ¬„";
     Text[ arabic ] = "ÅÙåÇÑ ÇáÃÚãÏÉ";
     Text[ turkish ] = "Sütunları görüntüle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Mostrar columnas";
     Text[ finnish ] = "Näytä sarakkeet";
 };
+
 
 
 
