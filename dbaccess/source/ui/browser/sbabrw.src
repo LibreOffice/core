@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-11 09:19:28 $
+ *  last change: $Author: fs $ $Date: 2001-01-29 12:56:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1373,7 +1373,7 @@ Menu MENU_BROWSERTREE_CONTEXT
         {
             Identifier = ID_TREE_ADMINISTRATE ;
             HelpId = HID_BROWSER_DSADMINISTRATE ;
-            Text = "~Datenquellen administrieren ..." ;
+            Text = "~Datenquellen verwalten ..." ;
             Text [ english ] = "administrate ~data sources ..." ;
             Text [ english_us ] = "administrate ~data sources ..." ;
         };
