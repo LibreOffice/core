@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MConnection.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-12-13 09:34:19 $
+ *  last change: $Author: jmarmion $ $Date: 2002-08-08 15:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,10 +190,6 @@ OConnection::~OConnection()
     if(!isClosed())
         close();
 
-    if ( m_aNameMapper ) {
-        MQuery::FreeNameMapper( m_aNameMapper );
-        m_aNameMapper = NULL;
-    }
 
     m_pDriver->release();
     m_pDriver = NULL;
@@ -534,6 +530,11 @@ void OConnection::disposing()
     m_aStatements.clear();
 
     m_xMetaData = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData>();
+
+    if ( m_aNameMapper ) {
+        MQuery::FreeNameMapper( m_aNameMapper );
+        m_aNameMapper = NULL;
+    }
 
     dispose_ChildImpl();
     OConnection_BASE::disposing();
