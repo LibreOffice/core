@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: hr $ $Date: 2001-09-25 12:51:29 $
+#   last change: $Author: hr $ $Date: 2001-11-28 18:18:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.15 $ ';
+$id_str = ' $Revision: 1.16 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -290,7 +290,6 @@ sub parse_options {
 }
 
 sub init_globals {
-    my ($dllsuffix, $gui, $inpath, $offenv, $outpath, $solarversion, $upd, $updminor);
     my $ext;
     ($module, $base_dir, $dlst_file) =  get_base();
     print "Module=$module, Base_Diri=$base_dir, d.lst=$dlst_file\n" if $is_debug;
@@ -300,15 +299,31 @@ sub init_globals {
         $umask = 22;
     }
 
-    $common_outdir  = $ENV{COMMON_OUTDIR};
-    $dllsuffix      = $ENV{DLLSUFFIX};
-    $gui            = lc($ENV{GUI});
-    $inpath         = $ENV{INPATH};
-    $offenv         = $ENV{OFFENV_PATH};
-    $outpath        = $ENV{OUTPATH};
-    $solarversion   = $ENV{SOLARVERSION};
-    $upd            = $ENV{UPD};
-    $updminor       = $ENV{UPDMINOR};
+    my $build_sosl    = $ENV{'BUILD_SOSL'};
+    my $common_outdir = $ENV{'COMMON_OUTDIR'};
+    my $dllsuffix     = $ENV{'DLLSUFFIX'};
+    my $gui           = lc($ENV{'GUI'});
+    my $inpath        = $ENV{'INPATH'};
+    my $offenv        = $ENV{'OFFENV_PATH'};
+    my $outpath       = $ENV{'OUTPATH'};
+    my $solarversion  = $ENV{'SOLARVERSION'};
+    my $updater       = $ENV{'UPDATER'};
+    my $upd           = $ENV{'UPD'};
+    my $updminor      = $ENV{'UPDMINOR'};
+    my $work_stamp    = $ENV{'WORK_STAMP'};
+
+    # special security check for release engineers
+    if ( $updater = 'TRUE' && !defined($build_sosl) && !$opt_force) {
+        my $path = cwd();
+        if ( $path !~ /$work_stamp/o ) {
+            print_error("can't deliver from local directory to SOLARVERSION");
+            print STDERR "\nDANGER! Release Engineer:\n";
+            print STDERR "do you really want to deliver from $path to SOLARVERSION?\n";
+            print STDERR "If so, please use the -force switch\n\n";
+            exit(7);
+        }
+    }
+
 
     # do we have a valid environment?
     if ( !defined($inpath) ) {
