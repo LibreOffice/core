@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumi.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-19 15:21:16 $
+ *  last change: $Author: cl $ $Date: 2001-06-29 12:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,8 +363,7 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
             sTextStyleName = rValue;
             break;
         case XML_TOK_TEXT_LEVEL_ATTR_BULLET_CHAR:
-            if( rValue.getLength() > 0 )
-                cBullet = rValue[0];
+            cBullet = rValue[0];
             break;
         case XML_TOK_TEXT_LEVEL_ATTR_HREF:
             if( bImage )
@@ -460,7 +459,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
     sal_Int16 eType;
 
     sal_Int32 nCount = 0L;
-    if( bBullet && 0 != cBullet )
+    if( bBullet )
     {
         eType = NumberingType::CHAR_SPECIAL;
         nCount = 10L;
@@ -561,12 +560,14 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
 #endif
             }
 
-            OUStringBuffer sTmp(1);
-            sTmp.append( cBullet );
-            pProps[nPos].Name =
-                    OUString::createFromAscii( XML_UNO_NAME_NRULE_BULLET_CHAR );
-            pProps[nPos++].Value <<= sTmp.makeStringAndClear();
-
+            if( cBullet )
+            {
+                OUStringBuffer sTmp(1);
+                sTmp.append( cBullet );
+                pProps[nPos].Name =
+                        OUString::createFromAscii( XML_UNO_NAME_NRULE_BULLET_CHAR );
+                pProps[nPos++].Value <<= sTmp.makeStringAndClear();
+            }
 
             pProps[nPos].Name =
                     OUString::createFromAscii( XML_UNO_NAME_NRULE_BULLET_FONT );

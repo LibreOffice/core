@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnume.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-19 15:08:23 $
+ *  last change: $Author: cl $ $Date: 2001-06-29 12:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,10 +234,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
             rProp.Value >>= sValue;
             if( sValue.getLength() > 0 )
             {
-                // HACK
-                // DBG_ASSERT( (sal_Unicode)sValue[0] != 0, "WARNING: don't know how to handle zero bullet chars?" );
-                if( (sal_Unicode)sValue[0] != 0 )
-                    cBullet = (sal_Unicode)sValue[0];
+                cBullet = (sal_Unicode)sValue[0];
             }
         }
         else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_BULLET_RELSIZE, sizeof(XML_UNO_NAME_NRULE_BULLET_RELSIZE)-1 ) )
@@ -345,10 +342,13 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
         // <text:list-level-style-bullet>
         pElem = sXML_list_level_style_bullet;
 
-        // text:bullet-char="..."
-        sTmp.append( cBullet );
-        GetExport().AddAttribute( XML_NAMESPACE_TEXT, sXML_bullet_char,
-                      sTmp.makeStringAndClear() );
+        if( cBullet )
+        {
+            // text:bullet-char="..."
+            sTmp.append( cBullet );
+            GetExport().AddAttribute( XML_NAMESPACE_TEXT, sXML_bullet_char,
+                          sTmp.makeStringAndClear() );
+        }
 
     }
     else if( NumberingType::BITMAP == eType )
