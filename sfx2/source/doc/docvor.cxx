@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:53:58 $
+ *  last change: $Author: kz $ $Date: 2004-12-09 16:46:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1571,12 +1571,11 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( BOOL bOpen, const String& rFileName )
                         DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
     // add template filter
     String sFilterName( SfxResId( STR_TEMPLATE_FILTER ) );
-    String sFilterExt( DEFINE_CONST_UNICODE( "*.vor;*.stw;*.stc;*.std;*.sti" ) );
+    String sFilterExt( DEFINE_CONST_UNICODE( "*.ott;*.ots;*.otg;*.otp;*.oth;*.stw;*.stc;*.std;*.sti;*.vor" ) );
     sFilterName += DEFINE_CONST_UNICODE( " (" );
     sFilterName += sFilterExt;
     sFilterName += ')';
     aFileDlg.AddFilter( sFilterName, sFilterExt );
-
     aFileDlg.SetCurrentFilter( sFilterName );
 
     if ( aLastDir.Len() || rFileName.Len() )
