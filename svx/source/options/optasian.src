@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optasian.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2001-11-01 21:41:32 $
+ *  last change: $Author: kz $ $Date: 2001-11-06 11:07:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ portuguese ] = "~Texto ocidental e pontuação";
         Text[ russian ] = "Çàïàäíûå çíàêè è àçèàòñêàÿ ïóíêòóàöèÿ";
         Text[ greek ] = "Äõôéêü êåßìåíï êáé óçìåßá óôßîçò";
-        Text[ dutch ] = "~Westerse tekst en interpunctie";
+        Text[ dutch ] = "~Westerse tekst en Asiatische interpunctie";
         Text[ french ] = "Caractères ~occidentaux et ponctuation asiatique";
         Text[ spanish ] = "Texto occidental y puntuación asiática";
         Text[ finnish ] = "~Westlicher Text und Interpunktion";
@@ -466,6 +466,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     Text[ catalan ] = "Proxy";
     Text[ finnish ] = "Välityspalvelin";
 };
+
 
 
 
