@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: abi $ $Date: 2001-07-09 11:50:39 $
+ *  last change: $Author: mhu $ $Date: 2001-08-15 16:43:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,7 +440,8 @@ namespace fileaccess {
         sal_Bool SAL_CALL
         remove( sal_Int32 CommandId,
                 const rtl::OUString& aUnqPath,
-                sal_Int32 TypeToMove = RemoveUnknown )
+                sal_Int32 TypeToMove = RemoveUnknown,
+                sal_Bool  MustExist  = sal_True )
             throw();
 
 #undef RemoveUnknown

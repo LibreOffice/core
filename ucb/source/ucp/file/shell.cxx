@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hro $ $Date: 2001-07-27 07:54:21 $
+ *  last change: $Author: mhu $ $Date: 2001-08-15 16:43:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1085,11 +1085,18 @@ shell::move( sal_Int32 CommandId,
         }
         case NameClash::OVERWRITE:
         {
-//           don't call shell::remove because that function will send a deleted hint
-//           for dstUnqPath which isn't right. dstUnqPath will exist again after the
-//           call to osl::File::move. call osl::File::remove() instead.
-//           remove( CommandId,dstUnqPath,IsWhat );
-            osl::File::remove( dstUnqPath );    // Will do nothing if file does not exist
+#if 0
+            // don't call shell::remove because that function will send
+            // a deleted hint for dstUnqPath which isn't right.
+            // dstUnqPath will exist again after the call to osl::File::move.
+            // call osl::File::remove() instead.
+
+            remove( CommandId,dstUnqPath,IsWhat );
+#else
+            // Will do nothing if file does not exist.
+            osl::File::remove( dstUnqPath );
+#endif
+
             nError = osl_File_move( srcUnqPath,dstUnqPath );
             if( nError != osl::FileBase::E_None )
             {
@@ -1279,7 +1286,10 @@ shell::copy(
         }
         case NameClash::OVERWRITE:
         {
-            remove( CommandId,dstUnqPath,IsWhat );
+            // remove (..., MustExist = sal_False).
+            remove( CommandId, dstUnqPath, IsWhat, sal_False );
+
+            // copy.
             nError = copy_recursive( srcUnqPath,dstUnqPath,IsWhat,false );
             if( nError != osl::FileBase::E_None )
             {
@@ -1391,7 +1401,8 @@ shell::copy(
 sal_Bool SAL_CALL
 shell::remove( sal_Int32 CommandId,
                const rtl::OUString& aUnqPath,
-               sal_Int32 IsWhat )
+               sal_Int32 IsWhat,
+               sal_Bool  MustExist )
     throw()
 {
     sal_Int32 nMask = FileStatusMask_Type | FileStatusMask_FileURL;
@@ -1400,16 +1411,18 @@ shell::remove( sal_Int32 CommandId,
     osl::FileStatus aStatus( nMask );
     osl::FileBase::RC nError;
 
-    if( IsWhat == 0 )     // Determine whether we are removing a diretory or a file
+    if( IsWhat == 0 ) // Determine whether we are removing a directory or a file
     {
         nError = osl::DirectoryItem::get( aUnqPath, aItem );
-
         if( nError != osl::FileBase::E_None )
         {
-            installError( CommandId,
-                          TASKHANDLING_NOSUCHFILEORDIR_FOR_REMOVE,
-                          nError );
-            return false;
+            if (MustExist)
+            {
+                installError( CommandId,
+                              TASKHANDLING_NOSUCHFILEORDIR_FOR_REMOVE,
+                              nError );
+            }
+            return (!MustExist);
         }
 
         nError = aItem.getFileStatus( aStatus );
@@ -1418,7 +1431,7 @@ shell::remove( sal_Int32 CommandId,
             installError( CommandId,
                           TASKHANDLING_VALIDFILESTATUS_FOR_REMOVE,
                           nError != osl::FileBase::E_None ? nError : TASKHANDLER_NO_ERROR );
-            return false;
+            return sal_False;
         }
 
         if( aStatus.getFileType() == osl::FileStatus::Regular ||
@@ -1433,36 +1446,43 @@ shell::remove( sal_Int32 CommandId,
     if( IsWhat == -1 )    // Removing a file
     {
         nError = osl::File::remove( aUnqPath );
-
         if( nError != osl::FileBase::E_None )
         {
-            installError( CommandId,
-                          TASKHANDLING_DELETEFILE_FOR_REMOVE,
-                          nError );
-            return false;
+            if (MustExist)
+            {
+                installError( CommandId,
+                              TASKHANDLING_DELETEFILE_FOR_REMOVE,
+                              nError );
+            }
+            return (!MustExist);
         }
         else
         {
             notifyContentDeleted( getContentDeletedEventListeners(aUnqPath) );
-            erasePersistentSet( aUnqPath );      // Removes from XPersistentPropertySet
+            erasePersistentSet( aUnqPath ); // Removes from XPersistentPropertySet
         }
     }
     else if( IsWhat == +1 )    // Removing a directory
     {
         osl::Directory aDirectory( aUnqPath );
-        if( ( nError = aDirectory.open() ) != osl::FileBase::E_None )
+
+        nError = aDirectory.open();
+        if( nError != osl::FileBase::E_None )
         {
-            installError( CommandId,
-                          TASKHANDLING_OPENDIRECTORY_FOR_REMOVE,
-                          nError );
-            return false;
+            if (MustExist)
+            {
+                installError( CommandId,
+                              TASKHANDLING_OPENDIRECTORY_FOR_REMOVE,
+                              nError );
+            }
+            return (!MustExist);
         }
 
-        sal_Bool whileSuccess = true;
+        sal_Bool whileSuccess = sal_True;
         sal_Int32 recurse;
         rtl::OUString name;
-        nError = aDirectory.getNextItem( aItem );
 
+        nError = aDirectory.getNextItem( aItem );
         while( nError == osl::FileBase::E_None )
         {
               nError = aItem.getFileStatus( aStatus );
@@ -1471,7 +1491,7 @@ shell::remove( sal_Int32 CommandId,
                 installError( CommandId,
                               TASKHANDLING_VALIDFILESTATUSWHILE_FOR_REMOVE,
                               nError != osl::FileBase::E_None ? nError : TASKHANDLER_NO_ERROR );
-                whileSuccess = false;
+                whileSuccess = sal_False;
                 break;
             }
 
@@ -1483,12 +1503,11 @@ shell::remove( sal_Int32 CommandId,
                 recurse = +1;
 
             name = aStatus.getFileURL();
-
             if( ! ( whileSuccess = remove( CommandId,
                                            name,
-                                           recurse ) ) )
+                                           recurse,
+                                           MustExist ) ) )
                 break;
-
 
             nError = aDirectory.getNextItem( aItem );
         }
@@ -1496,24 +1515,26 @@ shell::remove( sal_Int32 CommandId,
           aDirectory.close();
 
         if( ! whileSuccess )
-            return false;     // error code is installed
+            return sal_False;     // error code is installed
 
         if( nError != osl::FileBase::E_NOENT )
         {
             installError( CommandId,
                           TASKHANDLING_DIRECTORYEXHAUSTED_FOR_REMOVE,
                           nError );
-            return false;
+            return sal_False;
         }
 
         nError = osl::Directory::remove( aUnqPath );
-
         if( nError != osl::FileBase::E_None )
         {
-            installError( CommandId,
-                          TASKHANDLING_DELETEDIRECTORY_FOR_REMOVE,
-                          nError );
-            return false;
+            if (MustExist)
+            {
+                installError( CommandId,
+                              TASKHANDLING_DELETEDIRECTORY_FOR_REMOVE,
+                              nError );
+            }
+            return (!MustExist);
         }
         else
         {
@@ -1525,10 +1546,10 @@ shell::remove( sal_Int32 CommandId,
     {
         installError( CommandId,
                       TASKHANDLING_FILETYPE_FOR_REMOVE );
-        return false;
+        return sal_False;
     }
 
-    return true;
+    return sal_True;
 }
 
 
