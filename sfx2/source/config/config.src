@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-14 17:51:10 $
+ *  last change: $Author: kz $ $Date: 2002-01-07 15:07:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,6 +277,7 @@ QueryBox DLG_MACROQUERY
     Message[ arabic ] = "Es wurde ein Ereignis ausgelöst, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
     Message[ catalan ] = "Es wurde ein Ereignis ausgelöst, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
 };
+
 
 
 
