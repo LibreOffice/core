@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePopupMenu.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 13:01:10 $
+ *  last change:$Date: 2004-01-05 20:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,18 +60,6 @@
  ************************************************************************/
 package mod._toolkit;
 
-import java.awt.Robot;
-import java.awt.event.InputEvent;
-import java.io.PrintWriter;
-
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.AccessibilityTools;
-import util.DesktopTools;
-import util.SOfficeFactory;
-
 import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleComponent;
@@ -88,6 +76,20 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.XCloseable;
 
+import java.awt.Robot;
+import java.awt.event.InputEvent;
+
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
+import util.AccessibilityTools;
+import util.DesktopTools;
+import util.SOfficeFactory;
+
 
 public class AccessiblePopupMenu extends TestCase {
     XDesktop the_Desk;
@@ -99,7 +101,7 @@ public class AccessiblePopupMenu extends TestCase {
     protected void initialize(TestParameters Param, PrintWriter log) {
         the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
                                                         DesktopTools.createDesktop(
-        (XMultiServiceFactory) Param.getMSF()));
+                                                                (XMultiServiceFactory) Param.getMSF()));
     }
 
     /**
@@ -146,15 +148,16 @@ public class AccessiblePopupMenu extends TestCase {
         }
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory) tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                     (XMultiServiceFactory) tParam.getMSF());
 
         XInterface toolkit = null;
 
         try {
             log.println("creating a text document");
             xTextDoc = SOF.createTextDoc(null);
-            toolkit = (XInterface) ( (XMultiServiceFactory) tParam.getMSF())
-                                         .createInstance("com.sun.star.awt.Toolkit");
+            toolkit = (XInterface) ((XMultiServiceFactory) tParam.getMSF()).createInstance(
+                              "com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
             e.printStackTrace(log);
@@ -166,12 +169,13 @@ public class AccessiblePopupMenu extends TestCase {
         XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class,
                                                            xTextDoc);
 
-
         XInterface oObj = null;
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow( (XMultiServiceFactory) tParam.getMSF(), aModel);
+        XWindow xWindow = at.getCurrentWindow(
+                                  (XMultiServiceFactory) tParam.getMSF(),
+                                  aModel);
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
@@ -216,35 +220,29 @@ public class AccessiblePopupMenu extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        tEnv.addObjRelation("XAccessibleSelection.multiSelection", new Boolean(false));
+        tEnv.addObjRelation("XAccessibleSelection.multiSelection",
+                            new Boolean(false));
 
-        final XAccessibleSelection sel = (XAccessibleSelection) UnoRuntime.queryInterface(XAccessibleSelection.class, oObj);
+        final XAccessibleSelection sel = (XAccessibleSelection) UnoRuntime.queryInterface(
+                                                 XAccessibleSelection.class,
+                                                 oObj);
 
         tEnv.addObjRelation("EventProducer",
-            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
-                public void fireEvent() {
-                    try {
-                        sel.selectAccessibleChild(2);
-                    } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-                        System.out.println("Couldn't fire event");
-                    }
+                            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
+            public void fireEvent() {
+                try {
+                    sel.selectAccessibleChild(2);
+                } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                    System.out.println("Couldn't fire event");
                 }
-            });
+            }
+        });
 
         return tEnv;
     }
 
     protected void closeDoc() {
-        XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
-                                    XCloseable.class, xTextDoc);
-
-        try {
-            closer.close(true);
-        } catch (com.sun.star.util.CloseVetoException e) {
-            log.println("Couldn't close document " + e.getMessage());
-        } catch (com.sun.star.lang.DisposedException e) {
-            log.println("Couldn't close document " + e.getMessage());
-        }
+        util.DesktopTools.closeDoc(xTextDoc);
     }
 
     private void shortWait() {
