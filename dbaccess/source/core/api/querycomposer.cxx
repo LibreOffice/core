@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-10 06:47:57 $
+ *  last change: $Author: oj $ $Date: 2002-05-06 13:45:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,9 @@
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <svtools/syslocale.hxx>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
+#endif
 
 
 using namespace dbaccess;
@@ -150,18 +153,18 @@ using namespace ::cppu;
 using namespace ::osl;
 using namespace ::utl;
 
-#define STR_SELECT      ::rtl::OUString::createFromAscii("SELECT ")
-#define STR_FROM        ::rtl::OUString::createFromAscii(" FROM ")
-#define STR_WHERE       ::rtl::OUString::createFromAscii(" WHERE ")
-#define STR_GROUP_BY    ::rtl::OUString::createFromAscii(" GROUP BY ")
-#define STR_HAVING      ::rtl::OUString::createFromAscii(" HAVING ")
-#define STR_ORDER_BY    ::rtl::OUString::createFromAscii(" ORDER BY ")
-#define STR_AND         ::rtl::OUString::createFromAscii(" AND ")
-#define STR_LIKE        ::rtl::OUString::createFromAscii(" LIKE ")
-#define STR_EQUAL       ::rtl::OUString::createFromAscii(" = ")
-#define L_BRACKET       ::rtl::OUString::createFromAscii("(")
-#define R_BRACKET       ::rtl::OUString::createFromAscii(")")
-#define COMMA           ::rtl::OUString::createFromAscii(",")
+#define STR_SELECT      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT "))
+#define STR_FROM        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM "))
+#define STR_WHERE       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" WHERE "))
+#define STR_GROUP_BY    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" GROUP BY "))
+#define STR_HAVING      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" HAVING "))
+#define STR_ORDER_BY    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ORDER BY "))
+#define STR_AND         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" AND "))
+#define STR_LIKE        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" LIKE "))
+#define STR_EQUAL       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" = "))
+#define L_BRACKET       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("("))
+#define R_BRACKET       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"))
+#define COMMA           ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","))
 
 namespace dbaccess
 {
@@ -275,6 +278,7 @@ OQueryComposer::OQueryComposer(const Reference< XNameAccess>& _xTableSupplier,
  ,m_pColumns(NULL)
  ,m_pTables(NULL)
  ,m_pParameters(NULL)
+ ,m_nBoolCompareMode(BOOL_COMPARISON_DEFAULT)
 {
     DBG_CTOR(OQueryComposer,NULL);
     OSL_ENSURE(_xServiceFactory.is()," ServiceFactory cant be null!");
@@ -283,10 +287,35 @@ OQueryComposer::OQueryComposer(const Reference< XNameAccess>& _xTableSupplier,
 
     m_aLocale = SvtSysLocale().GetLocaleData().getLocale();
     m_xNumberFormatsSupplier = dbtools::getNumberFormats(m_xConnection,sal_True,m_xServiceFactory);
-    Reference< XLocaleData> xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.LocaleData")),UNO_QUERY);
+    Reference< XLocaleData> xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.LocaleData"))),UNO_QUERY);
     LocaleDataItem aData = xLocaleData->getLocaleItem(m_aLocale);
     m_sDecimalSep = aData.decimalSeparator;
     OSL_ENSURE(m_sDecimalSep.getLength() == 1,"OQueryComposer::OQueryComposer decimal separator is not 1 length");
+    try
+    {
+        Reference< XChild> xChild(_xConnection, UNO_QUERY);
+        if(xChild.is())
+        {
+            Reference< XPropertySet> xProp(xChild->getParent(),UNO_QUERY);
+            if ( xProp.is() )
+            {
+                Sequence< ::com::sun::star::beans::PropertyValue > aInfo;
+                xProp->getPropertyValue(PROPERTY_INFO) >>= aInfo;
+                const ::com::sun::star::beans::PropertyValue* pBegin = aInfo.getConstArray();
+                const ::com::sun::star::beans::PropertyValue* pEnd = pBegin + aInfo.getLength();
+                for (; pBegin != pEnd; ++pBegin)
+                {
+                    if ( pBegin->Name == PROPERTY_BOOLEANCOMPARISONMODE )
+                    {
+                        pBegin->Value >>= m_nBoolCompareMode;
+                    }
+                }
+            }
+        }
+    }
+    catch(Exception&)
+    {
+    }
 }
 // -------------------------------------------------------------------------
 OQueryComposer::~OQueryComposer()
@@ -360,7 +389,7 @@ Any SAL_CALL OQueryComposer::queryInterface( const Type & rType ) throw(RuntimeE
 //------------------------------------------------------------------------------
 rtl::OUString OQueryComposer::getImplementationName(  ) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.sdb.dbaccess.OQueryComposer");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.dbaccess.OQueryComposer"));
 }
 //------------------------------------------------------------------------------
 sal_Bool OQueryComposer::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
@@ -396,17 +425,18 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
     m_pSqlParseNode = m_aSqlParser.parseTree(aErrorMsg,m_aQuery);
     if(!m_pSqlParseNode)
     {
-        SQLException aError2(aErrorMsg,*this,::rtl::OUString::createFromAscii("HY000"),1000,Any());
-        SQLException aError1(command,*this,::rtl::OUString::createFromAscii("HY000"),1000,makeAny(aError2));
-        throw SQLException(m_aSqlParser.getContext().getErrorMessage(OParseContext::ERROR_GENERAL),*this,::rtl::OUString::createFromAscii("HY000"),1000,makeAny(aError1));
+        SQLException aError2(aErrorMsg,*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
+        SQLException aError1(command,*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,makeAny(aError2));
+        throw SQLException(m_aSqlParser.getContext().getErrorMessage(OParseContext::ERROR_GENERAL),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,makeAny(aError1));
     }
 
     m_aSqlIterator.setParseTree(m_pSqlParseNode);
     m_aSqlIterator.traverseAll();
     if( m_aSqlIterator.getStatementType() != SQL_STATEMENT_SELECT && m_aSqlIterator.getStatementType() != SQL_STATEMENT_SELECT_COUNT)
     {
-        SQLException aError1(command,*this,::rtl::OUString::createFromAscii("HY000"),1000,Any());
-        throw SQLException(::rtl::OUString::createFromAscii("No select statement!"),*this,::rtl::OUString::createFromAscii("HY000"),1000,makeAny(aError1));
+        SQLException aError1(command,*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
+        throw SQLException(::rtl::OUString::createFromAscii("No select statement!"),*this,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,makeAny(aError1));
     }
 
     m_aWorkSql = STR_SELECT;
@@ -443,7 +473,7 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
         }
         else
             sSql += STR_WHERE;
-        sSql += ::rtl::OUString::createFromAscii(" 0 = 1");
+        sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" 0 = 1"));
 
         Reference<XResultSetMetaDataSupplier> xResMetaDataSup;
         xResMetaDataSup = Reference<XResultSetMetaDataSupplier>(xStmt->executeQuery(sSql),UNO_QUERY);
@@ -573,7 +603,7 @@ Sequence< Sequence< PropertyValue > > SAL_CALL OQueryComposer::getStructuredFilt
             {
                 ::std::vector< ::std::vector < PropertyValue > > aFilters;
                 Reference< ::com::sun::star::util::XNumberFormatter >  xFormatter(m_xServiceFactory
-                                ->createInstance(rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")), UNO_QUERY);
+                                ->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter"))), UNO_QUERY);
                 xFormatter->attachNumberFormatsSupplier(m_xNumberFormatsSupplier);
 
                 if (setORCriteria(pCondition, aFilters, xFormatter))
@@ -621,13 +651,15 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
     if(!column.is() || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_VALUE))
-        throw SQLException(::rtl::OUString::createFromAscii("Column doesn't support the property 'Value'!"),*this,::rtl::OUString::createFromAscii("HY000"),1000,Any());
+        throw SQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")),
+        *this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
 
     sal_Int32 nType = 0;
     column->getPropertyValue(PROPERTY_TYPE) >>= nType;
     sal_Int32 nSearchable = dbtools::getSearchColumnFlag(m_xConnection,nType);
     if(nSearchable == ColumnSearch::NONE)
-        throw SQLException(::rtl::OUString::createFromAscii("Column not searchable!"),*this,::rtl::OUString::createFromAscii("HY000"),1000,Any());
+        throw SQLException(::rtl::OUString::createFromAscii("Column not searchable!"),
+        *this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
 
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -660,7 +692,7 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
             sTableName = ::dbtools::quoteName(aQuote,sTableName);
 
         aSql =  sTableName;
-        aSql += ::rtl::OUString::createFromAscii(".");
+        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
         aSql += ::dbtools::quoteName(aQuote,sRealName);
     }
     else
@@ -670,7 +702,7 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
     if(aValue.hasValue())
     {
         if(!m_xTypeConverter.is())
-            m_xTypeConverter = Reference< XTypeConverter >(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.script.Converter")),UNO_QUERY);
+            m_xTypeConverter = Reference< XTypeConverter >(m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"))),UNO_QUERY);
         OSL_ENSURE(m_xTypeConverter.is(),"NO typeconverter!");
 
         switch(nType)
@@ -691,11 +723,11 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
                         if(nSearchable == ColumnSearch::CHAR)
                         {
                             aSql += STR_LIKE;
-                            aSql += ::rtl::OUString::createFromAscii("\'");
+                            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\'"));
                         }
                         else
                             aSql += STR_EQUAL;
-                        aSql += ::rtl::OUString::createFromAscii("0x");
+                        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0x"));
                         const sal_Int8* pBegin  = aSeq.getConstArray();
                         const sal_Int8* pEnd    = pBegin + aSeq.getLength();
                         for(;pBegin != pEnd;++pBegin)
@@ -703,10 +735,11 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
                             aSql += ::rtl::OUString::valueOf((sal_Int32)*pBegin,16).getStr();
                         }
                         if(nSearchable == ColumnSearch::NONE)
-                            aSql += ::rtl::OUString::createFromAscii("\'");
+                            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\'"));
                     }
                     else
-                        throw SQLException(::rtl::OUString::createFromAscii("Column value isn't from type Sequence<sal_Int8>!"),*this,::rtl::OUString::createFromAscii("HY000"),1000,Any());
+                        throw SQLException(::rtl::OUString::createFromAscii("Column value isn't from type Sequence<sal_Int8>!"),
+                        *this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
                 }
                 break;
             case DataType::BIT:
@@ -716,17 +749,51 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
 
                     sal_Bool bValue = sal_False;
                     m_xTypeConverter->convertToSimpleType(aValue, TypeClass_BOOLEAN) >>= bValue;
-                    if ( bValue )
+                    switch ( m_nBoolCompareMode )
                     {
-                        aSql = ::rtl::OUString::createFromAscii(" NOT ( ");
-                        aSql += sTmpName;
-                        aSql += STR_EQUAL;
-                        aSql += ::rtl::OUString::createFromAscii("0");
-                        aSql += ::rtl::OUString::createFromAscii(" OR ");
-                        aSql += sTmpName;
-                        aSql += ::rtl::OUString::createFromAscii(" IS NULL )") ;
-                        break;
-                    } // else run through
+                        case BOOL_COMPARISON_SQL:
+                            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" IS "));
+                            if ( bValue )
+                                aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" TRUE "));
+                            else
+                                aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FALSE "));
+                            break;
+                        case BOOL_COMPARISON_MISC:
+                            aSql += STR_EQUAL;
+                            if ( bValue )
+                                aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" TRUE "));
+                            else
+                                aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FALSE "));
+                            break;
+                            break;
+                        case BOOL_COMPARISON_ACCESS:
+                            if ( bValue )
+                            {
+                                aSql = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" NOT ( "));
+                                aSql += sTmpName;
+                                aSql += STR_EQUAL;
+                                aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"));
+                                aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" OR "));
+                                aSql += sTmpName;
+                                aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" IS NULL )")) ;
+                            }
+                            else
+                            {
+                                aSql += STR_EQUAL;
+                                aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"));
+                            }
+                            break;
+                        case BOOL_COMPARISON_DEFAULT: // fall through
+                        default:
+                            aSql += STR_EQUAL;
+                            if ( bValue )
+                                aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1"));
+                            else
+                                aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"));
+
+
+                    }
+                    break;
                 }
             default:
                 aSql += STR_EQUAL;
@@ -734,7 +801,7 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
         }
     }
     else
-        aSql += ::rtl::OUString::createFromAscii(" IS NULL") ;
+        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" IS NULL")) ;
 
 
     // filter anhaengen
@@ -764,7 +831,8 @@ void SAL_CALL OQueryComposer::appendOrderByColumn( const Reference< XPropertySet
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
     if(!column.is() || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_VALUE))
-        throw SQLException(::rtl::OUString::createFromAscii("Column doesn't support the property 'Value'!"),*this,::rtl::OUString::createFromAscii("HY000"),1000,Any());
+        throw SQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")),
+        *this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
 
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -772,7 +840,8 @@ void SAL_CALL OQueryComposer::appendOrderByColumn( const Reference< XPropertySet
     column->getPropertyValue(PROPERTY_NAME)         >>= aName;
 
     if(!m_xMetaData->supportsOrderByUnrelated() && !m_pColumns->hasByName(aName))
-        throw SQLException(::rtl::OUString::createFromAscii("Column not in select clause!"),*this,::rtl::OUString::createFromAscii("HY000"),1000,Any());
+        throw SQLException(::rtl::OUString::createFromAscii("Column not in select clause!"),
+            *this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
 
     // filter anhaengen
     // select ohne where und order by aufbauen
@@ -798,7 +867,7 @@ void SAL_CALL OQueryComposer::appendOrderByColumn( const Reference< XPropertySet
             sTableName = ::dbtools::quoteName(aQuote,sTableName);
 
         aAppendOrder =  sTableName;
-        aAppendOrder += ::rtl::OUString::createFromAscii(".");
+        aAppendOrder += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
         aAppendOrder += ::dbtools::quoteName(aQuote,sRealName);
     }
     else
@@ -808,7 +877,7 @@ void SAL_CALL OQueryComposer::appendOrderByColumn( const Reference< XPropertySet
         m_aOrder += COMMA;
     m_aOrder += aAppendOrder;
     if(!ascending && aAppendOrder.getLength())
-        m_aOrder += ::rtl::OUString::createFromAscii(" DESC ");
+        m_aOrder += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DESC "));
 
     // add the filter and the sort order
     aSql += getComposedFilter();
@@ -1071,25 +1140,25 @@ sal_Bool OQueryComposer::setComparsionPredicate(OSQLParseNode * pCondition,
                 case SQL_NODE_LESS:
                     // take the opposite as we change the order
                     i--;
-                    aValue = ::rtl::OUString::createFromAscii(">=");
+                    aValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">="));
                     aItem.Handle = SQL_PRED_GREATEROREQUAL;
                     break;
                 case SQL_NODE_LESSEQ:
                     // take the opposite as we change the order
                     i--;
-                    aValue = ::rtl::OUString::createFromAscii(">");
+                    aValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">"));
                     aItem.Handle = SQL_PRED_GREATER;
                     break;
                 case SQL_NODE_GREAT:
                     // take the opposite as we change the order
                     i--;
-                    aValue = ::rtl::OUString::createFromAscii("<=");
+                    aValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<="));
                     aItem.Handle = SQL_PRED_LESSOREQUAL;
                     break;
                 case SQL_NODE_GREATEQ:
                     // take the opposite as we change the order
                     i--;
-                    aValue = ::rtl::OUString::createFromAscii("<");
+                    aValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<"));
                     aItem.Handle = SQL_PRED_LESS;
                     break;
             }
@@ -1275,7 +1344,7 @@ void OQueryComposer::resetIterator(const ::rtl::OUString& aSql)
         if(pBegin != pEnd)
         {
             ::dbtools::composeTableName(m_xMetaData,aCatalog,aSchema,aTable,sReturn,sal_True);
-            sReturn += ::rtl::OUString::createFromAscii(".");
+            sReturn += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
         }
     }
     return sReturn;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-31 18:19:10 $
+ *  last change: $Author: oj $ $Date: 2002-05-06 13:49:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,7 @@ namespace dbaccess
         ::rtl::OUString                         m_aOrgOrder;
         ::rtl::OUString                         m_sDecimalSep;
         ::com::sun::star::lang::Locale          m_aLocale;
+        sal_Int32                               m_nBoolCompareMode; // how to compare bool values
 
 
         sal_Bool setORCriteria(::connectivity::OSQLParseNode* pCondition,
@@ -170,13 +171,23 @@ namespace dbaccess
         ::rtl::OUString getTableAlias(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column ) const;
         // clears all Columns,Parameters and tables and insert it to their vectors
         void clearCurrentCollections();
+
+    protected:
+        virtual ~OQueryComposer();
     public:
 
         OQueryComposer( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xTableSupplier,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceFactory);
 
-        ~OQueryComposer();
+
+        enum BoolComparison
+        {
+            BOOL_COMPARISON_DEFAULT = 0, // column = 0, column = 1
+            BOOL_COMPARISON_SQL     = 1, // column Is true, column Is false
+            BOOL_COMPARISON_MISC    = 2, // column = false, column = true
+            BOOL_COMPARISON_ACCESS  = 3, // column = 0, column = -1
+        };
 
         void SAL_CALL disposing(void);
         // ::com::sun::star::lang::XTypeProvider
