@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-04 15:56:11 $
+ *  last change: $Author: th $ $Date: 2001-05-11 09:58:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,7 +402,7 @@ sal_Bool PPTWriter::ImplCreateSummaryInformation()
                 {
                     if ( ImplGetPropertyValue( aXDocInfoPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Author" ) ) ) )
                     {
-                        if ( (*(::rtl::OUString*)mAny.getValue() ).len() )
+                        if ( (*(::rtl::OUString*)mAny.getValue() ).getLength() )
                         {
                             aPropItem.Clear();
                             aPropItem.Write( String( *(::rtl::OUString*)mAny.getValue() ) );
@@ -411,7 +411,7 @@ sal_Bool PPTWriter::ImplCreateSummaryInformation()
                     }
                     if ( ImplGetPropertyValue( aXDocInfoPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "ModifiedBy" ) ) ) )
                     {
-                        if ( (*(::rtl::OUString*)mAny.getValue() ).len() )
+                        if ( (*(::rtl::OUString*)mAny.getValue() ).getLength() )
                         {
                             aPropItem.Clear();
                             aPropItem.Write( String( *(::rtl::OUString*)mAny.getValue() ) );
@@ -420,7 +420,7 @@ sal_Bool PPTWriter::ImplCreateSummaryInformation()
                     }
                     if ( ImplGetPropertyValue( aXDocInfoPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Theme" ) ) ) )
                     {
-                        if ( (*(::rtl::OUString*)mAny.getValue() ).len() )
+                        if ( (*(::rtl::OUString*)mAny.getValue() ).getLength() )
                         {
                             aPropItem.Clear();
                             aPropItem.Write( String( *(::rtl::OUString*)mAny.getValue() ) );
@@ -429,7 +429,7 @@ sal_Bool PPTWriter::ImplCreateSummaryInformation()
                     }
                     if ( ImplGetPropertyValue( aXDocInfoPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ) ) )
                     {
-                        if ( (*(::rtl::OUString*)mAny.getValue() ).len() )
+                        if ( (*(::rtl::OUString*)mAny.getValue() ).getLength() )
                         {
                             aPropItem.Clear();
                             aPropItem.Write( String( *(::rtl::OUString*)mAny.getValue() ) );
@@ -438,7 +438,7 @@ sal_Bool PPTWriter::ImplCreateSummaryInformation()
                     }
                     if ( ImplGetPropertyValue( aXDocInfoPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Keywords" ) ) ) )
                     {
-                        if ( (*(::rtl::OUString*)mAny.getValue() ).len() )
+                        if ( (*(::rtl::OUString*)mAny.getValue() ).getLength() )
                         {
                             aPropItem.Clear();
                             aPropItem.Write( String( *(::rtl::OUString*)mAny.getValue() ) );
@@ -447,7 +447,7 @@ sal_Bool PPTWriter::ImplCreateSummaryInformation()
                     }
                     if ( ImplGetPropertyValue( aXDocInfoPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Description" ) ) ) )
                     {
-                        if ( (*(::rtl::OUString*)mAny.getValue() ).len() )
+                        if ( (*(::rtl::OUString*)mAny.getValue() ).getLength() )
                         {
                             aPropItem.Clear();
                             aPropItem.Write( String( *(::rtl::OUString*)mAny.getValue() ) );
@@ -597,7 +597,7 @@ sal_Bool PPTWriter::ImplCreateDocumentSummaryInformation()
                 {
                     aPropItem.Clear();
                     ::rtl::OUString aUValue( aXDocumentInfo->getUserFieldValue( i ) );
-                    if ( aUValue.len() )
+                    if ( aUValue.getLength() )
                     {
                         aPropItem.Write( String( aUValue ) );
                         aDict.AddProperty( nNextId, aXDocumentInfo->getUserFieldName( i ) );
@@ -849,7 +849,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
                 if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CustomShow" ) ) ) )
                 {
                     aCustomShow = ( *(::rtl::OUString*)mAny.getValue() );
-                    if ( aCustomShow.len() )
+                    if ( aCustomShow.getLength() )
                     {
                         nFlags |= 8;
                     }
@@ -921,7 +921,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
                 mpPptEscherEx->AddAtom( 80, EPP_SSDocInfoAtom, 1 );
                 *mpStrm << nPenColor << nRestartTime << nStartSlide << nEndSlide;
 
-                sal_uInt32 nCustomShowNameLen = aCustomShow.len();
+                sal_uInt32 nCustomShowNameLen = aCustomShow.getLength();
                 if ( nCustomShowNameLen > 31 )
                     nCustomShowNameLen = 31;
                 if ( nCustomShowNameLen )       // named show identifier
@@ -952,11 +952,11 @@ sal_Bool PPTWriter::ImplCreateDocument()
                             sal_uInt32 nCustomShowIndex = 0;
                             for ( sal_Int16 i = 0; i < nCount; i++ )        // Anzahl der Custom Shows
                             {
-                                if ( pUString[ i ].len() )
+                                if ( pUString[ i ].getLength() )
                                 {
                                     mpPptEscherEx->OpenContainer( EPP_NamedShow, nCustomShowIndex++ );
 
-                                    sal_uInt32 nNamedShowLen = pUString[ i ].len();
+                                    sal_uInt32 nNamedShowLen = pUString[ i ].getLength();
                                     if ( nNamedShowLen > 31 )
                                         nNamedShowLen = 31;
                                     mpPptEscherEx->AddAtom( nNamedShowLen << 1, EPP_CString );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-06 12:20:15 $
+ *  last change: $Author: th $ $Date: 2001-05-11 09:59:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1283,7 +1283,7 @@ void PPTWriter::ImplWriteTextBundle( EscherPropertyContainer& rPropOpt, sal_Bool
             switch ( eHA )
             {
                 case ::com::sun::star::drawing::TextHorizontalAdjust_LEFT :
-                     eAnchor = ESCHER_AnchorBottom;
+                    eAnchor = ESCHER_AnchorBottom;
                 break;
                 case ::com::sun::star::drawing::TextVerticalAdjust_CENTER :
                     eAnchor = ESCHER_AnchorMiddle;
@@ -1734,7 +1734,7 @@ sal_Bool PPTWriter::ImplGetText()
             ( mXShape, ::com::sun::star::uno::UNO_QUERY );
 
     if ( mXText.is() )
-        mnTextSize = mXText->getString().len();
+        mnTextSize = mXText->getString().getLength();
     return ( mnTextSize != 0 );
 }
 
@@ -2472,7 +2472,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
 
                     case SVX_NUM_CHAR_SPECIAL :                           // Bullet
                     {
-                        if ( aFontDesc.Name.len() )
+                        if ( aFontDesc.Name.getLength() )
                         {
                             if ( aFontDesc.CharSet != ::com::sun::star::awt::CharSet::SYMBOL )
                             {
@@ -4382,7 +4382,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         }
                     }
                     if ( aControlName.Len() )
-                         ImplWriteCString( *mpExEmbed, aControlName, 1 );
+                        ImplWriteCString( *mpExEmbed, aControlName, 1 );
                     if ( aOleIdentifier.Len() )
                         ImplWriteCString( *mpExEmbed, aOleIdentifier, 2 );
                     if ( aUserName.Len() )
@@ -4560,7 +4560,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                             ( mXShape, ::com::sun::star::uno::UNO_QUERY );
 
                     if ( mXText.is() )
-                        mnTextSize = mXText->getString().len();
+                        mnTextSize = mXText->getString().getLength();
 
                     if ( mnTextSize )                                       // graphic object oder Flachenfuellung
                     {
