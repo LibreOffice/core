@@ -65,6 +65,7 @@ public class AccessibilityTree
         addMouseListener (new MouseListener (this));
 
         // Listen to expansions and collapses to change the mouse cursor.
+        mnExpandLevel = 0;
         addTreeWillExpandListener (this);
         addTreeExpansionListener (this);
     }
@@ -73,19 +74,39 @@ public class AccessibilityTree
     // lengthy operation.
     public void treeWillExpand (TreeExpansionEvent e)
     {
-        setCursor (new Cursor (Cursor.WAIT_CURSOR));
+        if (mnExpandLevel == 0)
+        {
+            setCursor (new Cursor (Cursor.WAIT_CURSOR));
+            message ("expanding node ");
+        }
+        mnExpandLevel += 1;
     }
     public void treeWillCollapse (TreeExpansionEvent e)
     {
-        setCursor (new Cursor (Cursor.WAIT_CURSOR));
+        if (mnExpandLevel == 0)
+        {
+            message ("collapsing node ");
+            setCursor (new Cursor (Cursor.WAIT_CURSOR));
+        }
+        mnExpandLevel += 1;
     }
     public void treeExpanded (TreeExpansionEvent e)
     {
-        setCursor (new Cursor (Cursor.DEFAULT_CURSOR));
+        mnExpandLevel -= 1;
+        if (mnExpandLevel == 0)
+        {
+            message ("");
+            setCursor (new Cursor (Cursor.DEFAULT_CURSOR));
+        }
     }
     public void treeCollapsed (TreeExpansionEvent e)
     {
-        setCursor (new Cursor (Cursor.DEFAULT_CURSOR));
+        mnExpandLevel -= 1;
+        if (mnExpandLevel == 0)
+        {
+            message ("");
+            setCursor (new Cursor (Cursor.DEFAULT_CURSOR));
+        }
     }
 
 
@@ -129,9 +150,13 @@ public class AccessibilityTree
     */
     protected void expandTree (AccessibleTreeNode aNode, Expander aExpander)
     {
-        message ("Expanding tree");
+        if (mnExpandLevel == 0)
+        {
+            message ("Expanding tree");
+            setEnabled (false);
+        }
+        mnExpandLevel += 1;
 
-        setEnabled (false);
         ((AccessibilityTreeModel)getModel()).lock ();
 
         try
@@ -143,9 +168,13 @@ public class AccessibilityTree
             // Ignore
         }
 
-        setEnabled (true);
-        ((AccessibilityTreeModel)getModel()).unlock (aNode);
-        message ("");
+        mnExpandLevel -= 1;
+        if (mnExpandLevel == 0)
+        {
+            setEnabled (true);
+            ((AccessibilityTreeModel)getModel()).unlock (aNode);
+            message ("");
+        }
     }
 
     private TreePath expandTree( TreePath aPath, Expander aExpander )
@@ -497,4 +526,6 @@ public class AccessibilityTree
         maCanvas;
     private boolean
         mbFirstShapeSeen;
+    private int
+        mnExpandLevel;
 }
