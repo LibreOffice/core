@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:10:36 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:08:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,31 +82,33 @@ class ScIMapInfo;
 class IMapObject;
 class ScMarkData;
 class SdrOle2Obj;
+class ScRange;
+class ScAddress;
 
 // -----------------------------------------------------------------------
 
 class ScTabDeletedHint : public SfxHint
 {
 private:
-    USHORT  nTab;
+    SCTAB   nTab;
 public:
             TYPEINFO();
-            ScTabDeletedHint( USHORT nTabNo = USHRT_MAX );
+            ScTabDeletedHint( SCTAB nTabNo = SCTAB_MAX );
     virtual ~ScTabDeletedHint();
 
-    USHORT  GetTab()    { return nTab; }
+    SCTAB   GetTab()    { return nTab; }
 };
 
 class ScTabSizeChangedHint : public SfxHint
 {
 private:
-    USHORT  nTab;
+    SCTAB   nTab;
 public:
             TYPEINFO();
-            ScTabSizeChangedHint( USHORT nTabNo = USHRT_MAX );
+            ScTabSizeChangedHint( SCTAB nTabNo = SCTAB_MAX );
     virtual ~ScTabSizeChangedHint();
 
-    USHORT  GetTab()    { return nTab; }
+    SCTAB   GetTab()    { return nTab; }
 };
 
 // -----------------------------------------------------------------------
@@ -124,10 +126,10 @@ private:
     BOOL            bHyphenatorSet;
 
 private:
-    void            MoveAreaTwips( USHORT nTab, const Rectangle& rArea, const Point& rMove,
+    void            MoveAreaTwips( SCTAB nTab, const Rectangle& rArea, const Point& rMove,
                                 const Point& rTopLeft );
-    void            MoveCells( USHORT nTab, USHORT nCol1,USHORT nRow1, USHORT nCol2,USHORT nRow2,
-                                short nDx,short nDy );
+    void            MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
+                                SCsCOL nDx,SCsROW nDy );
     void            RecalcPos( SdrObject* pObj, ScDrawObjData* pData, BOOL bNegativePage );
 
 public:
@@ -147,9 +149,9 @@ public:
 
     BOOL            HasObjects() const;
 
-    void            ScAddPage( USHORT nTab );
-    void            ScRemovePage( USHORT nTab );
-    void            ScRenamePage( USHORT nTab, const String& rNewName );
+    void            ScAddPage( SCTAB nTab );
+    void            ScRemovePage( SCTAB nTab );
+    void            ScRenamePage( SCTAB nTab, const String& rNewName );
     void            ScMovePage( USHORT nOldPos, USHORT nNewPos );
                     // inkl. Inhalt, bAlloc=FALSE -> nur Inhalt
     void            ScCopyPage( USHORT nOldPos, USHORT nNewPos, BOOL bAlloc );
@@ -173,21 +175,21 @@ public:
     BOOL            IsRecording()           { return bRecording; }
     void            AddCalcUndo( SdrUndoAction* pUndo );
 
-    void            MoveArea( USHORT nTab, USHORT nCol1,USHORT nRow1, USHORT nCol2,USHORT nRow2,
-                                short nDx,short nDy, BOOL bInsDel );
-    void            WidthChanged( USHORT nTab, USHORT nCol, long nDifTwips );
-    void            HeightChanged( USHORT nTab, USHORT nRow, long nDifTwips );
+    void            MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
+                                SCsCOL nDx,SCsROW nDy, BOOL bInsDel );
+    void            WidthChanged( SCTAB nTab, SCCOL nCol, long nDifTwips );
+    void            HeightChanged( SCTAB nTab, SCROW nRow, long nDifTwips );
 
-    BOOL            HasObjectsInRows( USHORT nTab, USHORT nStartRow, USHORT nEndRow );
+    BOOL            HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow );
 
-    void            DeleteObjectsInArea( USHORT nTab, USHORT nCol1,USHORT nRow1,
-                                            USHORT nCol2,USHORT nRow2 );
+    void            DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
+                                            SCCOL nCol2,SCROW nRow2 );
     void            DeleteObjectsInSelection( const ScMarkData& rMark );
-    void            DeleteObjects( USHORT nTab );
+    void            DeleteObjects( SCTAB nTab );
 
-    void            CopyToClip( ScDocument* pClipDoc, USHORT nTab, const Rectangle& rRange );
+    void            CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const Rectangle& rRange );
     void            CopyFromClip( ScDrawLayer* pClipModel,
-                                    USHORT nSourceTab, const Rectangle& rSourceRange,
+                                    SCTAB nSourceTab, const Rectangle& rSourceRange,
                                     const ScAddress& rDestPos, const Rectangle& rDestRange );
 
     void            SetPageSize( USHORT nPageNo, const Size& rSize );
@@ -201,7 +203,7 @@ public:
                     //  (ChartListenerCollection etc. must use GetPersistName directly)
     static String   GetVisibleName( SdrObject* pObj );
 
-    SdrObject*      GetNamedObject( const String& rName, USHORT nId, USHORT& rFoundTab ) const;
+    SdrObject*      GetNamedObject( const String& rName, USHORT nId, SCTAB& rFoundTab ) const;
                     // if pnCounter != NULL, the search for a name starts with this index + 1,
                     // and the index really used is returned.
     String          GetNewGraphicName( long* pnCounter = NULL ) const;
