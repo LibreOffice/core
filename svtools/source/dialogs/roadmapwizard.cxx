@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roadmapwizard.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 14:01:33 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:37:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,7 @@ namespace svt
         while ( nState != WZS_INVALID_STATE )
         {
             aNewPath.push_back( nState );
-            nState = va_arg( aStateList, WizardState );
+            nState = va_arg( aStateList, int );
         }
         va_end( aStateList );
 
