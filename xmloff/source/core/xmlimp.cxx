@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:08:15 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:37:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -575,6 +575,11 @@ void SAL_CALL SvXMLImport::endDocument( void )
         ((SvXMLStylesContext *)&xAutoStyles)->Clear();
     if( xMasterStyles.Is() )
         ((SvXMLStylesContext *)&xMasterStyles)->Clear();
+
+    // possible form-layer related knittings which can only be done when
+    // the whole document exists
+    if ( mxFormImport.is() )
+        mxFormImport->documentDone();
 
     //  The shape import helper does the z-order sorting in the dtor,
     //  so it must be deleted here, too.
