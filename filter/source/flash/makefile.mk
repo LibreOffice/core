@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2003-07-09 10:14:43 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:39:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,7 +96,8 @@ UNOTYPES=\
     com.sun.star.container.XIndexAccess
 # --- Files -------------------------------------
 
-SRCFILES =	impswfdialog.src				
+SRS1NAME=$(TARGET)
+SRC1FILES =	impswfdialog.src				
 
 SLOFILES=	$(SLO)$/swffilter.obj								\
             $(SLO)$/swfwriter.obj								\
