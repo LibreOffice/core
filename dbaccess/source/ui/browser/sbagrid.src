@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-02 07:55:25 $
+ *  last change: $Author: vg $ $Date: 2001-10-11 20:50:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text[ greek ] = "Ìïñ~öïğïßçóç óôŞëçò...";
             Text[ korean ] = "ì—´ í¬ë§·íŒ…(~F)...";
             Text[ turkish ] = "Sütun formatı...";
-            Text[ catalan ] = "Formateado de ~columnas...";
+            Text[ catalan ] = "~Format de la columna...";
         };
         MenuItem
         {
@@ -126,7 +126,7 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text[ greek ] = "ĞëÜôïò óôŞëçò...";
             Text[ korean ] = "ì—´ ë„ˆë¹„(~W)...";
             Text[ turkish ] = "Sütun genişliği...";
-            Text[ catalan ] = "Anc~ho de columna...";
+            Text[ catalan ] = "~Amplada de la columna...";
         };
         MenuItem
         {
@@ -152,7 +152,7 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text[ chinese_traditional ] = "è¤‡è£½åˆ—æ¨™é¡Œ(~E)";
             Text[ turkish ] = "Copy column d~escription";
             Text[ arabic ] = "äÓÎ æÕİ ÇáÚãæÏ";
-            Text[ catalan ] = "Copy column d~escription";
+            Text[ catalan ] = "Copia la d~escripció de la columna";
             Text[ finnish ] = "Spaltenb~eschreibung kopieren";
         };
     };
@@ -186,7 +186,7 @@ Menu RID_SBA_GRID_ROWCTXMENU
             Text[ greek ] = "Ìïñöïğïßçóç ğßíáêá...";
             Text[ korean ] = "í‘œ í¬ë§·íŒ…...";
             Text[ turkish ] = "Tablo formatı...";
-            Text[ catalan ] = "Formateado de tabla...";
+            Text[ catalan ] = "Format de la taula...";
             Text[ finnish ] = "~Taulukon muotoilu";
         };
         MenuItem
@@ -215,7 +215,7 @@ Menu RID_SBA_GRID_ROWCTXMENU
             Text[ greek ] = "¾øïò ãñáììŞò...";
             Text[ korean ] = "í–‰ ë†’ì´...";
             Text[ turkish ] = "Satır yüksekliği...";
-            Text[ catalan ] = "Altura de fila...";
+            Text[ catalan ] = "Alçada de la fila...";
         };
     };
 };
@@ -242,7 +242,7 @@ String RID_STR_UNDO_MODIFY_RECORD
     Text[ chinese_traditional ] = "å¾©åŸï¼šè¼¸å…¥è³‡æ–™";
     Text[ arabic ] = "ÊÑÇÌÚ: ÅÏÎÇá ÈíÇäÇÊ";
     Text[ turkish ] = "Geri al: Veri girişi";
-    Text[ catalan ] = "Deshacer: Entrada de datos";
+    Text[ catalan ] = "Desfés: entrada de dades";
     Text[ finnish ] = "Peruuta: tietojen syöttö";
 };
 
@@ -270,7 +270,7 @@ String RID_STR_SAVE_CURRENT_RECORD
     Text[ greek ] = "ÁğïèŞêåõóç ôñİ÷ïõóáò åããñáöŞò";
     Text[ korean ] = "í˜„ì¬ì˜  ë ˆì½”ë“œ ì €ì¥";
     Text[ turkish ] = "Yürürlükteki verileri kaydet";
-    Text[ catalan ] = "guardar registro actual";
+    Text[ catalan ] = "Desa el registre actual";
     Text[ finnish ] = "Tallenna nykyinen tietue";
 };
 
@@ -327,7 +327,7 @@ String STR_TBL_TITLE
     Text[ arabic ] = "ÇáÌÏæá #";
     Text[ turkish ] = "Tablo #";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Tabla #";
+    Text[ catalan ] = "Taula #";
     Text[ finnish ] = "Taulukko ";
 };
 String STR_VIEW_TITLE
@@ -352,7 +352,7 @@ String STR_VIEW_TITLE
     Text[ chinese_traditional ] = "æª¢è¦– #";
     Text[ turkish ] = "View #";
     Text[ arabic ] = "View #";
-    Text[ catalan ] = "View #";
+    Text[ catalan ] = "Vista #";
     Text[ finnish ] = "Ansicht #";
 };
 
@@ -360,6 +360,26 @@ String STR_OBJECT_ALREADY_EXISTS
 {
     Text = "Der Name # existiert bereits." ;
     Text [ ENGLISH ] = "The name # already exists." ;
+    Text[ english_us ] = "The name # already exists.";
+    Text[ portuguese ] = "O nome # já existe.";
+    Text[ russian ] = "The name # already exists.";
+    Text[ greek ] = "The name # already exists.";
+    Text[ dutch ] = "The name # already exists.";
+    Text[ french ] = "Le nom # existe déjà.";
+    Text[ spanish ] = "Ya existe el nombre #.";
+    Text[ finnish ] = "The name # already exists.";
+    Text[ italian ] = "Il nome # esiste già.";
+    Text[ danish ] = "The name # already exists.";
+    Text[ swedish ] = "Namnet # finns redan.";
+    Text[ polish ] = "Nazwa # ju¿ istnieje.";
+    Text[ portuguese_brazilian ] = "The name # already exists.";
+    Text[ japanese ] = "The name # already exists.";
+    Text[ korean ] = "The name # already exists.";
+    Text[ chinese_simplified ] = "åç§° # å·²ç»å­˜åœ¨ã€‚";
+    Text[ chinese_traditional ] = "åç¨± # å·²ç¶“å­˜åœ¨ã€‚";
+    Text[ turkish ] = "The name # already exists.";
+    Text[ arabic ] = "The name # already exists.";
+    Text[ catalan ] = "The name # already exists.";
 };
 
 
@@ -367,12 +387,53 @@ String STR_NO_COLUMNNAME_MATCHING
 {
     Text = "Es konnten keine übereinstimmenden Spaltennamen gefunden werden!" ;
     Text [ ENGLISH ] = "No matching column names found." ;
+    Text[ english_us ] = "No matching column names were found.";
+    Text[ portuguese ] = "No matching column names found.";
+    Text[ russian ] = "No matching column names found.";
+    Text[ greek ] = "No matching column names found.";
+    Text[ dutch ] = "No matching column names found.";
+    Text[ french ] = "Impossible de détecter les noms de colonnes correspondants !";
+    Text[ spanish ] = "No se encontraron nombres de columna idénticos.";
+    Text[ finnish ] = "No matching column names found.";
+    Text[ italian ] = "Non è stato trovato alcun nome di colonna corrispondente.";
+    Text[ danish ] = "No matching column names found.";
+    Text[ swedish ] = "Det gick inte att hitta några kolumnnamn som stämmer överens.";
+    Text[ polish ] = "No matching column names found.";
+    Text[ portuguese_brazilian ] = "No matching column names found.";
+    Text[ japanese ] = "No matching column names found.";
+    Text[ korean ] = "No matching column names found.";
+    Text[ chinese_simplified ] = "æ— æ³•æ‰¾åˆ°ç›¸ç¬¦çš„åˆ—åç§°ï¼";
+    Text[ chinese_traditional ] = "æ²’æœ‰æ‰¾åˆ°ç¬¦åˆæ¢ä»¶çš„æ¬„åç¨±ï¼";
+    Text[ turkish ] = "No matching column names found.";
+    Text[ arabic ] = "No matching column names found.";
+    Text[ catalan ] = "No matching column names found.";
 };
 
 String STR_ERROR_OCCURED_WHILE_COPYING
 {
     Text = "Es ist ein Fehler aufgetreten! Wollen Sie den Kopiervorgang fortsetzen?" ;
     Text [ ENGLISH ] = "A error occured. Would you like to continue the copying?" ;
+    Text[ english_us ] = "An error occurred. Do you want to continue copying?";
+    Text[ portuguese ] = "A error occured. Would you like to continue the copying?";
+    Text[ russian ] = "A error occured. Would you like to continue the copying?";
+    Text[ greek ] = "A error occured. Would you like to continue the copying?";
+    Text[ dutch ] = "A error occured. Would you like to continue the copying?";
+    Text[ french ] = "Une erreur est survenue ! Continuer le processus de copie ?";
+    Text[ spanish ] = "¡Ha ocurrido un error! ¿Desea continuar el proceso de copia?";
+    Text[ finnish ] = "A error occured. Would you like to continue the copying?";
+    Text[ italian ] = "Si è verificato un errore. Volete proseguire il processo di copia?";
+    Text[ danish ] = "A error occured. Would you like to continue the copying?";
+    Text[ swedish ] = "Det har uppstått ett fel. Vill du fortsätta att kopiera?";
+    Text[ polish ] = "A error occured. Would you like to continue the copying?";
+    Text[ portuguese_brazilian ] = "A error occured. Would you like to continue the copying?";
+    Text[ japanese ] = "A error occured. Would you like to continue the copying?";
+    Text[ korean ] = "A error occured. Would you like to continue the copying?";
+    Text[ chinese_simplified ] = "å‡ºç°ä¸€ä¸ªé”™è¯¯ï¼è¿˜æ˜¯è¦ç»§ç»­å¤åˆ¶ï¼Ÿ";
+    Text[ chinese_traditional ] = "å·²ç¶“ç™¼ç”Ÿä¸€å€‹éŒ¯èª¤ã€‚è¦ç¹¼çºŒè¤‡è£½ï¼Ÿ";
+    Text[ turkish ] = "A error occured. Would you like to continue the copying?";
+    Text[ arabic ] = "A error occured. Would you like to continue the copying?";
+    Text[ catalan ] = "A error occured. Would you like to continue the copying?";
 };
+
 
 
