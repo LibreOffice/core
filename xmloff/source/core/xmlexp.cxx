@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:32:28 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 12:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1740,8 +1740,10 @@ sal_Bool SvXMLExport::AddEmbeddedGraphicObjectAsBase64( const OUString& rGraphic
 OUString SvXMLExport::AddEmbeddedObject( const OUString& rEmbeddedObjectURL )
 {
     OUString sRet;
-    if( 0 == rEmbeddedObjectURL.compareTo( sEmbeddedObjectProtocol,
-                sEmbeddedObjectProtocol.getLength() ) &&
+    if( (0 == rEmbeddedObjectURL.compareTo( sEmbeddedObjectProtocol,
+                sEmbeddedObjectProtocol.getLength() ) ||
+         0 == rEmbeddedObjectURL.compareTo( sGraphicObjectProtocol,
+                sGraphicObjectProtocol.getLength() ) ) &&
         xEmbeddedResolver.is() )
     {
         sRet =
@@ -1754,8 +1756,10 @@ OUString SvXMLExport::AddEmbeddedObject( const OUString& rEmbeddedObjectURL )
 sal_Bool SvXMLExport::AddEmbeddedObjectAsBase64( const OUString& rEmbeddedObjectURL )
 {
     sal_Bool bRet = sal_False;
-    if( 0 == rEmbeddedObjectURL.compareTo( sEmbeddedObjectProtocol,
-                sEmbeddedObjectProtocol.getLength() ) &&
+    if( (0 == rEmbeddedObjectURL.compareTo( sEmbeddedObjectProtocol,
+                sEmbeddedObjectProtocol.getLength() ) ||
+         0 == rEmbeddedObjectURL.compareTo( sGraphicObjectProtocol,
+                sGraphicObjectProtocol.getLength() ) ) &&
         xEmbeddedResolver.is() )
     {
         Reference < XNameAccess > xNA( xEmbeddedResolver, UNO_QUERY );
