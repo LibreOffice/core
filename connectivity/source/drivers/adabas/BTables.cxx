@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTables.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:56:17 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:41:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ void OTables::appendObject( const Reference< XPropertySet >& descriptor )
 {
     ::rtl::OUString aName = getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
     if(!aName.getLength())
-        ::dbtools::throwFunctionSequenceException(*this);
+        ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(this));
 
     createTable(descriptor);
 }
@@ -303,7 +303,7 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
     Any aTypeName;
     sal_Int32 nCount = xColumns->getCount();
     if(!nCount)
-        ::dbtools::throwFunctionSequenceException(*this);
+        ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(this));
 
     for(sal_Int32 i=0;i<nCount;++i)
     {
