@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-29 13:05:04 $
+ *  last change: $Author: sab $ $Date: 2002-08-29 13:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,15 +398,18 @@ sal_Int16 SAL_CALL
         OUString sDescription(createAccessibleDescription());
 //      DBG_ASSERT(sDescription.getLength(), "We should give always a descripition.");
 
-        AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::ACCESSIBLE_DESCRIPTION_EVENT;
-        aEvent.Source = uno::Reference< XAccessible >(this);
-        aEvent.OldValue <<= msDescription;
-        aEvent.NewValue <<= sDescription;
+        if (msDescription != sDescription)
+        {
+            AccessibleEventObject aEvent;
+            aEvent.EventId = AccessibleEventId::ACCESSIBLE_DESCRIPTION_EVENT;
+            aEvent.Source = uno::Reference< XAccessible >(this);
+            aEvent.OldValue <<= msDescription;
+            aEvent.NewValue <<= sDescription;
 
-        msDescription = sDescription;
+            msDescription = sDescription;
 
-        CommitChange(aEvent);
+            CommitChange(aEvent);
+        }
     }
     return msDescription;
 }
@@ -422,15 +425,18 @@ OUString SAL_CALL
         OUString sName(createAccessibleName());
         DBG_ASSERT(sName.getLength(), "We should give always a name.");
 
-        AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::ACCESSIBLE_NAME_EVENT;
-        aEvent.Source = uno::Reference< XAccessible >(this);
-        aEvent.OldValue <<= msName;
-        aEvent.NewValue <<= sName;
+        if (msName != sName)
+        {
+            AccessibleEventObject aEvent;
+            aEvent.EventId = AccessibleEventId::ACCESSIBLE_NAME_EVENT;
+            aEvent.Source = uno::Reference< XAccessible >(this);
+            aEvent.OldValue <<= msName;
+            aEvent.NewValue <<= sName;
 
-        msName = sName;
+            msName = sName;
 
-        CommitChange(aEvent);
+            CommitChange(aEvent);
+        }
     }
     return msName;
 }
