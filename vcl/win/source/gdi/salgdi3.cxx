@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 13:47:43 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:20:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1012,6 +1012,11 @@ USHORT WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
     HFONT hNewFont = 0;
     HFONT hOldFont;
 
+    HDC hdcScreen = 0;
+    if( mbVirDev )
+        // only required for virtual devices, see below for details
+        hdcScreen = GetDC(0);
+
     if( aSalShlData.mbWNT )
     {
         LOGFONTW aLogFont;
@@ -1030,6 +1035,13 @@ USHORT WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
             lstrcpynW( aLogFont.lfFaceName, L"Courier New", 11 );
 
         hNewFont = CreateFontIndirectW( &aLogFont );
+        if( hdcScreen )
+        {
+            // select font into screen hdc first to get an antialiased font
+            // see knowledge base article 305290:
+            // "PRB: Fonts Not Drawn Antialiased on Device Context for DirectDraw Surface"
+            SelectFont( hdcScreen, SelectFont( hdcScreen , hNewFont ) );
+        }
         hOldFont = SelectFont( mhDC, hNewFont );
 
         TEXTMETRICW aTextMetricW;
@@ -1067,6 +1079,13 @@ USHORT WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
             strncpy( aLogFont.lfFaceName, "Courier New", 11 );
 
         hNewFont = CreateFontIndirectA( &aLogFont );
+        if( hdcScreen )
+        {
+            // select font into screen hdc first to get an antialiased font
+            // see knowledge base article 305290:
+            // "PRB: Fonts Not Drawn Antialiased on Device Context for DirectDraw Surface"
+            SelectFont( hdcScreen, SelectFont( hdcScreen , hNewFont ) );
+        }
         hOldFont = SelectFont( mhDC, hNewFont );
 
         TEXTMETRICA aTextMetricA;
@@ -1084,6 +1103,9 @@ USHORT WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
             hNewFont = hNewFont2;
         }
     }
+
+    if( hdcScreen )
+        ReleaseDC( NULL, hdcScreen );
 
     if( !mhDefFont )
     {
