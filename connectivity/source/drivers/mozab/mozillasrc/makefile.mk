@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mmaher $ $Date: 2001-11-07 16:55:18 $
+#   last change: $Author: dkenny $ $Date: 2001-11-23 11:39:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -139,7 +139,7 @@ CFLAGS +=   -Zi -GR- -W3 -Gy -MDd -UNDEBUG
 .ENDIF
 .ENDIF
 .IF "$(GUI)" == "UNX"
-INCPRE += . -I.. -I$(MOZ_INC)  -I$(MOZ_INC)$/nspr -I$(MOZ_INC)$/xpcom \
+INCPOST += . -I.. -I$(MOZ_INC)  -I$(MOZ_INC)$/nspr -I$(MOZ_INC)$/xpcom \
         -I$(MOZ_INC)$/string -I$(MOZ_INC)$/rdf -I$(MOZ_INC)$/msgbase \
         -I$(MOZ_INC)$/addrbook -I$(MOZ_INC)$/mork -I$(MOZ_INC)$/locale \
         -I$(MOZ_INC)$/pref -I$(MOZ_INC)$/mime -I$(MOZ_INC)$/chrome \
