@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-19 15:56:12 $
+ *  last change: $Author: nn $ $Date: 2001-10-24 09:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,7 @@
 #define SC_UNONAME_FORMRT           "FormulaResultType"
 
 #define SC_UNONAME_USERDEF          "UserDefinedAttributes"
+#define SC_UNONAME_TEXTUSER         "TextUserDefinedAttributes"
 
 //  auto format
 #define SC_UNONAME_INCBACK          "IncludeBackground"
