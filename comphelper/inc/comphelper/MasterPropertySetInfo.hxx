@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPropertySetInfo.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-24 20:32:15 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,10 +73,13 @@
 #ifndef _COMPHELPER_TYPEGENERATION_HXX_
 #include <comphelper/TypeGeneration.hxx>
 #endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 namespace comphelper
 {
-    class MasterPropertySetInfo : public ::com::sun::star::beans::XPropertySetInfo,
+    class COMPHELPER_DLLPUBLIC MasterPropertySetInfo : public ::com::sun::star::beans::XPropertySetInfo,
                                   public ::cppu::OWeakObject
     {
         friend class MasterPropertySet;
