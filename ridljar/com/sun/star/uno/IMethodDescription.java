@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IMethodDescription.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-08 09:34:18 $
+ *  last change: $Author: jbu $ $Date: 2001-10-26 11:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ import java.lang.reflect.Method;
  * The <code>IMethodDescription</code> allows to examine a method
  * in detail. It gives a view to java methods from a UNO point.
  * <p>
- * @version     $Revision: 1.1 $ $ $Date: 2001-05-08 09:34:18 $
+ * @version     $Revision: 1.2 $ $ $Date: 2001-10-26 11:43:05 $
  * @author      Kay Ramme
  * @since       UDK3.0
  */
@@ -81,14 +81,6 @@ public interface IMethodDescription extends IMemberDescription {
      * @return  true means may execute asynchronously .
      */
     boolean isOneway();
-
-    /**
-     * Gives the relative index of this method in the declaring
-     * interface.
-     * <p>
-     * @return  the realtive index of this method
-     */
-    int getIndex();
 
     /**
      * Indicates if this method is const.

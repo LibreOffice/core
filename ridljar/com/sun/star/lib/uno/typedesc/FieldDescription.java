@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescription.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-08 09:34:17 $
+ *  last change: $Author: jbu $ $Date: 2001-10-26 11:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@ public class FieldDescription extends MemberTypeInfo implements IFieldDescriptio
     ITypeDescription _iTypeDescription;
     Field _field;
 
-    FieldDescription(MemberTypeInfo memberTypeInfo, Field field) {
-        super(memberTypeInfo.getName(), memberTypeInfo.getFlags());
+    FieldDescription(String memberName, int memberIndex, int flags, Field field) {
+        super(memberName, memberIndex, flags);
 
         _field = field;
     }

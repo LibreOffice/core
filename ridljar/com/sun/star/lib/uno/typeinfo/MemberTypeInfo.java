@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MemberTypeInfo.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2000-11-08 15:38:23 $
+ *  last change: $Author: jbu $ $Date: 2001-10-26 11:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,17 @@ package com.sun.star.lib.uno.typeinfo;
 
 public class MemberTypeInfo extends TypeInfo
 {
-    public MemberTypeInfo(String name, int flags)
+    int m_index;
+
+    public MemberTypeInfo(String name, int index, int flags )
     {
         super(name, flags);
+        m_index = index;
+    }
+
+    public int getIndex()
+    {
+        return m_index;
     }
 }
 

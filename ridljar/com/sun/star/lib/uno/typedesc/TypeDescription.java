@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescription.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kr $ $Date: 2001-09-11 15:57:18 $
+ *  last change: $Author: jbu $ $Date: 2001-10-26 11:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ import com.sun.star.lib.uno.typeinfo.TypeInfo;
  * methods, which may be changed or moved in the furture, so please
  * do not use these methods.
  * <p>
- * @version     $Revision: 1.12 $ $ $Date: 2001-09-11 15:57:18 $
+ * @version     $Revision: 1.13 $ $ $Date: 2001-10-26 11:43:05 $
  * @author      Kay Ramme
  * @since       UDK2.0
  */
@@ -773,12 +773,16 @@ public class TypeDescription implements ITypeDescription {
         TypeInfo typeInfos[] = __getTypeInfos(_class);
         Field fields[] = _class.getFields();
         int index = 0;
+        int superTypeMemberCount = 0;
+        if( _superType != null )
+            superTypeMemberCount = _superType.getFieldDescriptions().length;
+
         IFieldDescription tmp_iFieldDescriptions[] = new IFieldDescription[fields.length];
 
         Hashtable iFieldDescriptionsByName = new Hashtable();
 
-
-        for(int i = 0; i < fields.length; ++ i) {
+        int i;
+        for( i = 0; i < fields.length; ++ i) {
             if((fields[i].getModifiers() & (Modifier.STATIC | Modifier.TRANSIENT)) == 0) { // neither static nor transient ?
 
                 IFieldDescription iFieldDescription = null;
@@ -789,11 +793,15 @@ public class TypeDescription implements ITypeDescription {
                 if(iFieldDescription == null) {
                     MemberTypeInfo memberTypeInfo = __findMemberTypeInfo(typeInfos, fields[i].getName());
 
-                    if(memberTypeInfo == null)
-                        memberTypeInfo = new MemberTypeInfo(fields[i].getName(), 0);
+                    if( memberTypeInfo == null )
+                        throw new com.sun.star.uno.RuntimeException(
+                            TypeDescription.class.getName() + "no membertype info for field " + fields[i].getName(),null );
 
-
-                    iFieldDescription = new FieldDescription(memberTypeInfo, fields[i]);
+                    iFieldDescription = new FieldDescription(
+                        memberTypeInfo.getName(),
+                        memberTypeInfo.getIndex() + superTypeMemberCount,
+                        memberTypeInfo.getFlags(),
+                        fields[i]);
                 }
 
                 iFieldDescriptionsByName.put(iFieldDescription.getName(), iFieldDescription);
@@ -802,7 +810,10 @@ public class TypeDescription implements ITypeDescription {
         }
 
         IFieldDescription iFieldDescriptions[] = new IFieldDescription[index];
-        System.arraycopy(tmp_iFieldDescriptions, 0, iFieldDescriptions, 0, index);
+        for( i = 0; i < index ; i ++ )
+        {
+            iFieldDescriptions[tmp_iFieldDescriptions[i].getIndex()] = tmp_iFieldDescriptions[i];
+        }
 
         // transactional assignment
         _iFieldDescriptions = iFieldDescriptions;

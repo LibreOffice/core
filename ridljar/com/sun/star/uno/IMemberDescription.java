@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IMemberDescription.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-08 09:34:18 $
+ *  last change: $Author: jbu $ $Date: 2001-10-26 11:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@ package com.sun.star.uno;
  * The <code>IMemberDescription</code> is the base interface
  * for members of UNO types <code>ITypeDescriptions</code>.
  * <p>
- * @version     $Revision: 1.1 $ $ $Date: 2001-05-08 09:34:18 $
+ * @version     $Revision: 1.2 $ $ $Date: 2001-10-26 11:43:05 $
  * @author      Kay Ramme
  * @since       UDK3.0
  */
@@ -97,4 +97,12 @@ public interface IMemberDescription {
      * @return  the interface state
      */
     boolean isInterface();
+
+    /**
+     * Gives the relative index of this member in the declaring
+     * interface.
+     * <p>
+     * @return  the realtive index of this member
+     */
+    int getIndex();
 }
