@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apiaccessobj.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: dg $ $Date: 2000-11-13 12:14:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,7 @@
  *
  *
  ************************************************************************/
-
+#include <stdio.h>
 #include "apiaccessobj.hxx"
 #include "confsvccomponent.hxx"
 
@@ -70,7 +70,7 @@ namespace configmgr
 //========================================================================
 //= service infos
 //========================================================================
-
+/*
 const AsciiServiceName c_aUserContainerServices[] =
 {
     "com.sun.star.configuration.UserAdministration",
@@ -200,7 +200,7 @@ ServiceInfo const aRootElementAdminAccessSI =
 {
     "com.sun.star.configuration.configmgr.ORootElementUserAdminAccess",
     c_aUserContainerServices
-};
+};*/
 
 //========================================================================
 //= service info static members

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: dg $ $Date: 2000-11-10 22:43:58 $
+#   last change: $Author: dg $ $Date: 2000-11-13 12:14:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,7 @@ SLOFILES=	\
         $(SLO)$/confproviderimpl2.obj \
         $(SLO)$/accessimpl.obj		\
         $(SLO)$/apiaccessobj.obj	\
+       $(SLO)$/apiserviceinfo.obj	\
         $(SLO)$/apifactory.obj	\
         $(SLO)$/apifactoryimpl.obj	\
         $(SLO)$/apinodeaccess.obj	\
