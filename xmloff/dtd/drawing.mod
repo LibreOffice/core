@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.56 2001-06-10 09:34:01 cl Exp $
+	$Id: drawing.mod,v 1.57 2001-06-10 10:04:09 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -59,7 +59,7 @@
 <!ENTITY % draw-position "svg:x %coordinate; #IMPLIED svg:y %coordinate; #IMPLIED">
 <!ENTITY % draw-end-position "table:end-cell-address %cell-address; #IMPLIED table:end-x %coordinate; #IMPLIED table:end-y %coordinate; #IMPLIED">
 <!ENTITY % draw-size "svg:width %coordinate; #IMPLIED svg:height %coordinate; #IMPLIED">
-<!ENTITY % draw-transform "svg:transform CDATA #IMPLIED">
+<!ENTITY % draw-transform "draw:transform CDATA #IMPLIED">
 <!ENTITY % draw-viewbox "svg:viewBox CDATA #REQUIRED">
 <!ENTITY % draw-style-name "draw:style-name %styleName; #IMPLIED presentation:style-name %styleName; #IMPLIED draw:text-style-name %styleName; #IMPLIED">
 <!ENTITY % shapeId "CDATA" >
@@ -603,6 +603,7 @@
 
 <!-- one of the elements is allowed only, but this cannot be expressed by DTDs -->
 <!ELEMENT draw:object-ole (#PCDATA|office:events|draw:image-map|svg:desc|draw:contour-polygon|draw:contour-path)*>
+<!ATTLIST draw:object-ole draw:class-id CDATA #IMPLIED>
 <!ATTLIST draw:object-ole %draw-style-name;>
 <!ATTLIST draw:object-ole draw:name %string; #IMPLIED>
 <!ATTLIST draw:object-ole xlink:href %uriReference; #IMPLIED>
