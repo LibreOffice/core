@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-10 06:03:31 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:47:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,7 @@ Menu RID_MAIN_MENU
                         Text[ italian ] = "Sorgente ~dati...";
                         Text[ danish ] = "Datakilde...";
                         Text[ swedish ] = "~Datak‰lla...";
-                        Text[ polish ] = "èrÛd≥o danych...";
+                        Text[ polish ] = "?rÛd≥o danych...";
                         Text[ portuguese_brazilian ] = "~Data source...";
                         Text[ japanese ] = "√ﬁ∞¿ø∞Ω(~D)...";
                         Text[ korean ] = "µ•¿Ã≈Õ º“Ω∫(~D)...";
@@ -316,7 +316,7 @@ Menu RID_MAIN_MENU
                         Text[ turkish ] = "~Filtrele...";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "~Filter...";
-                        Text[ finnish ] = "~Filtern...";
+                        Text[ finnish ] = "~Suodatin";
                     };
              MenuItem
             {
