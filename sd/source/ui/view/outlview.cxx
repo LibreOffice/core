@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cl $ $Date: 2002-08-29 12:23:36 $
+ *  last change: $Author: af $ $Date: 2002-11-04 16:40:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,7 @@
 #include "sdpage.hxx"
 #include "pres.hxx"
 #include "outlnvsh.hxx"
+#include "app.hrc"
 #include "glob.hrc"
 #include "sdresid.hxx"
 #include "sdoutl.hxx"
@@ -1573,6 +1574,8 @@ BOOL SdOutlineView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
         pOlView->SetAttribs(rSet);
         bOk = TRUE;
     }
+
+    pOutlineViewShell->Invalidate (SID_PREVIEW_STATE);
 
     return (bOk);
 }
