@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Configuration.xcu,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-08 16:50:28 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 11:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  *
  ************************************************************************ -->
-<!DOCTYPE oor:node SYSTEM "../../../../component-update.dtd">
-<oor:node oor:name="Configuration" oor:package="org.openoffice.ucb" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
+<oor:component-data oor:name="Configuration" oor:package="org.openoffice.ucb" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <node oor:name="ContentProviders">
     <node oor:name="Local" oor:op="replace">
       <node oor:name="SecondaryKeys">
@@ -159,4 +159,4 @@
       </node>
     </node>
   </node>
-</oor:node>
+</oor:component-data>
