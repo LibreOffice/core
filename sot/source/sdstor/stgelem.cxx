@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgelem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-16 14:08:34 $
+ *  last change: $Author: mm $ $Date: 2000-10-24 08:16:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #include <string.h> // memset(), memcpy()
-#include <tools/intn.hxx>
+#include <rtl/ustring.hxx>
 #include "stg.hxx"
 #include "stgelem.hxx"
 #include "stgcache.hxx"
@@ -288,21 +288,12 @@ BOOL StgEntry::Init()
     return TRUE;
 }
 
-static International* pInter = 0;
-
-inline International& GetInternational()
-{
-    return pInter ? *pInter : *(pInter = new International);
-}
-
 BOOL StgEntry::SetName( const String& rName )
 {
-    const International& aInter = GetInternational();
     // make upper case character in current language
     aName = rName;
+    aName = rtl::OUString( aName ).toUpperCase();
     aName.Erase( 31 );
-    aInter.ToUpper( aName );
-    //ToUnicode_Impl( aNameStr );
 
     int i;
     for( i = 0; i < aName.Len() && i < 32; i++ )
@@ -410,8 +401,9 @@ BOOL StgEntry::Load( const void* pFrom )
         return FALSE;
 
     aName = String( nName, n );
-    const International& aInter = GetInternational();
-    aInter.ToUpper( aName );
+    // make upper case character in current language
+    aName = rtl::OUString( aName ).toUpperCase();
+    aName.Erase( 31 );
     return TRUE;
 }
 
