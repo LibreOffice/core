@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoforou.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-22 14:30:53 $
+ *  last change: $Author: cl $ $Date: 2001-11-05 13:55:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,13 +87,15 @@
 //------------------------------------------------------------------------
 
 SvxOutlinerForwarder::SvxOutlinerForwarder( Outliner& rOutl ) :
-    rOutliner( rOutl )
+    rOutliner( rOutl ),
+        mpAttribsCache( NULL ),
+        mpParaAttribsCache( NULL )
 {
 }
 
 SvxOutlinerForwarder::~SvxOutlinerForwarder()
 {
-    //  der Outliner muss ggf. von aussen geloescht werden
+    flushCache();
 }
 
 USHORT SvxOutlinerForwarder::GetParagraphCount() const
@@ -116,11 +118,33 @@ String SvxOutlinerForwarder::GetText( const ESelection& rSel ) const
 
 SfxItemSet SvxOutlinerForwarder::GetAttribs( const ESelection& rSel, BOOL bOnlyHardAttrib ) const
 {
+    if( mpAttribsCache && ( 0 == bOnlyHardAttrib ) )
+    {
+        // have we the correct set in cache?
+        if( ((SvxOutlinerForwarder*)this)->maAttribCacheSelection.IsEqual(rSel) )
+        {
+            // yes! just return the cache
+            return *mpAttribsCache;
+        }
+        else
+        {
+            // no, we need delete the old cache
+            delete mpAttribsCache;
+            mpAttribsCache = NULL;
+        }
+    }
+
     //! gibt's das nicht am Outliner ???
     //! und warum ist GetAttribs an der EditEngine nicht const?
     EditEngine& rEditEngine = (EditEngine&)rOutliner.GetEditEngine();
 
     SfxItemSet aSet( rEditEngine.GetAttribs( rSel, bOnlyHardAttrib ) );
+
+    if( 0 == bOnlyHardAttrib )
+    {
+        mpAttribsCache = new SfxItemSet( aSet );
+        maAttribCacheSelection = rSel;
+    }
 
     SfxStyleSheet* pStyle = rEditEngine.GetStyleSheet( rSel.nStartPara );
     if( pStyle )
@@ -131,19 +155,38 @@ SfxItemSet SvxOutlinerForwarder::GetAttribs( const ESelection& rSel, BOOL bOnlyH
 
 SfxItemSet SvxOutlinerForwarder::GetParaAttribs( USHORT nPara ) const
 {
-    SfxItemSet aSet( rOutliner.GetParaAttribs( nPara ) );
+    if( mpParaAttribsCache )
+    {
+        // have we the correct set in cache?
+        if( nPara == mnParaAttribsCache )
+        {
+            // yes! just return the cache
+            return *mpParaAttribsCache;
+        }
+        else
+        {
+            // no, we need delete the old cache
+            delete mpParaAttribsCache;
+            mpParaAttribsCache = NULL;
+        }
+    }
+
+    mpParaAttribsCache = new SfxItemSet( rOutliner.GetParaAttribs( nPara ) );
+    mnParaAttribsCache = nPara;
 
     EditEngine& rEditEngine = (EditEngine&)rOutliner.GetEditEngine();
 
     SfxStyleSheet* pStyle = rEditEngine.GetStyleSheet( nPara );
     if( pStyle )
-        aSet.SetParent( &(pStyle->GetItemSet() ) );
+        mpParaAttribsCache->SetParent( &(pStyle->GetItemSet() ) );
 
-    return aSet;
+    return *mpParaAttribsCache;
 }
 
 void SvxOutlinerForwarder::SetParaAttribs( USHORT nPara, const SfxItemSet& rSet )
 {
+    flushCache();
+
     const SfxItemSet* pOldParent = rSet.GetParent();
     if( pOldParent )
         ((SfxItemSet*)&rSet)->SetParent( NULL );
@@ -166,6 +209,7 @@ void SvxOutlinerForwarder::GetPortions( USHORT nPara, SvUShorts& rList ) const
 
 void SvxOutlinerForwarder::QuickInsertText( const String& rText, const ESelection& rSel )
 {
+    flushCache();
     if( rText.Len() == 0 )
     {
         rOutliner.QuickDelete( rSel );
@@ -178,16 +222,19 @@ void SvxOutlinerForwarder::QuickInsertText( const String& rText, const ESelectio
 
 void SvxOutlinerForwarder::QuickInsertLineBreak( const ESelection& rSel )
 {
+    flushCache();
     rOutliner.QuickInsertLineBreak( rSel );
 }
 
 void SvxOutlinerForwarder::QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel )
 {
+    flushCache();
     rOutliner.QuickInsertField( rFld, rSel );
 }
 
 void SvxOutlinerForwarder::QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel )
 {
+    flushCache();
     rOutliner.QuickSetAttribs( rSet, rSel );
 }
 
@@ -207,6 +254,22 @@ USHORT SvxOutlinerForwarder::GetItemState( USHORT nPara, USHORT nWhich ) const
 {
     const SfxItemSet& rSet = rOutliner.GetParaAttribs( nPara );
     return rSet.GetItemState( nWhich );
+}
+
+
+void SvxOutlinerForwarder::flushCache()
+{
+    if( mpAttribsCache )
+    {
+        delete mpAttribsCache;
+        mpAttribsCache = NULL;
+    }
+
+    if( mpParaAttribsCache )
+    {
+        delete mpParaAttribsCache;
+        mpParaAttribsCache = NULL;
+    }
 }
 
 //------------------------------------------------------------------------
