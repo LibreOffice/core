@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:39 $
+ *  last change: $Author: ma $ $Date: 2001-03-23 16:17:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ class SwColumnPage : public SfxTabPage
     ColumnValueSet  aDefaultVS;
     ImageList       aPreColsIL;
     CheckBox        aBalanceColsCB;
-    GroupBox        aCLGroup;
+    FixedLine       aFLGroup;
 
     ImageButton     aBtnUp;
     FixedText       aWidthFT;
@@ -192,7 +192,7 @@ class SwColumnPage : public SfxTabPage
     ImageButton     aBtnDown;
     CheckBox        aAutoWidthBox;
 
-    GroupBox        aLayoutGrp;
+    FixedLine       aFLLayout;
 
     FixedText       aLineTypeLbl;
     LineListBox     aLineTypeDLB;
@@ -200,12 +200,12 @@ class SwColumnPage : public SfxTabPage
     MetricField     aLineHeightEdit;
     FixedText       aLinePosLbl;
     ListBox         aLinePosDLB;
-    GroupBox        aLineTypeGrp;
+    FixedLine       aFLLineType;
 
     // Example
     SwColExample        aPgeExampleWN;
     SwColumnOnlyExample aFrmExampleWN;
-    GroupBox        aExampleGB;
+    FixedLine        aFLExample;
 
     SwColMgr*       pColMgr;
 

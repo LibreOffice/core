@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: avy $ $Date: 2001-03-09 21:04:40 $
+ *  last change: $Author: ma $ $Date: 2001-03-23 16:17:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 TabPage TP_COLUMN
 {
     HelpID = HID_COLUMN ;
-        Hide = TRUE;
+    Hide = TRUE;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Text = "Spalten" ;          // Dieser Text ist fuer den SingleTabDialog bestimmt!
     Text [ ENGLISH ] = "Columns" ;
@@ -85,7 +85,7 @@ TabPage TP_COLUMN
     Text [ english_us ] = "Columns" ;
     FixedText FT_NUMBER
     {
-        Pos = MAP_APPFONT ( 12 , 19 ) ;
+        Pos = MAP_APPFONT ( 7 , 19 ) ;
         Size = MAP_APPFONT ( 28 , 8 ) ;
         Text = "~Anzahl" ;
         Text [ ENGLISH ] = "~Num." ;
@@ -117,7 +117,7 @@ TabPage TP_COLUMN
     NumericField ED_NUMBER
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 11 , 30 ) ;
+        Pos = MAP_APPFONT ( 7 , 30 ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -138,9 +138,9 @@ TabPage TP_COLUMN
     };
     CheckBox CB_BALANCECOLS
     {
-        Pos = MAP_APPFONT ( 11 , 46 ) ;
+        Pos = MAP_APPFONT ( 7 , 46 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
-        Text = "~Spalten ausgleichen" ;
+        Text = "Inhalt über alle ~Spalten gleichmäßig verteilen" ;
         Text [ ENGLISH ] = "Balance columns" ;
         Hide = TRUE;
         Text[ english_us ] = "~Balance columns";
@@ -162,10 +162,10 @@ TabPage TP_COLUMN
         Text[ arabic ] = "ÃÚãÏÉ ãÊÓÇæíÉ";
         Text[ turkish ] = "S~ütunlarý dengele";
     };
-    GroupBox GB_COLUMNS
+    FixedLine FL_COLUMNS
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 157 , 56 ) ;
+        Pos = MAP_APPFONT ( 4 , 3 ) ;
+        Size = MAP_APPFONT ( 157 , 8 ) ;
         Text = "Spalten" ;
         Text [ ENGLISH ] = "Columns" ;
         Text [ norwegian ] = "Kolonner" ;
@@ -192,15 +192,16 @@ TabPage TP_COLUMN
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Sütun";
     };
+
     Window WN_BSP
     {
         Pos = MAP_APPFONT ( 176 , 12 ) ;
         Size = MAP_APPFONT ( 72 , 41 ) ;
     };
-    GroupBox GB_BSP
+    FixedLine FL_BSP
     {
         Pos = MAP_APPFONT ( 171 , 3 ) ;
-        Size = MAP_APPFONT ( 83 , 56 ) ;
+        Size = MAP_APPFONT ( 83 , 8 ) ;
         Text = "Vorschau" ;
         Text [ ENGLISH ] = "Example" ;
         Text [ norwegian ] = "Eksempel" ;
@@ -227,31 +228,32 @@ TabPage TP_COLUMN
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Önizleme";
     };
+
     ImageButton BTN_DOWN
     {
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 59 , 73 ) ;
+        Pos = MAP_APPFONT ( 59 , 69 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
         TabStop = TRUE ;
         SYMBOL = IMAGEBUTTON_ARROW_LEFT ;
     };
     FixedText FT_1
     {
-        Pos = MAP_APPFONT ( 101 , 75 ) ;
+        Pos = MAP_APPFONT ( 101 , 71 ) ;
         Size = MAP_APPFONT ( 10 , 8 ) ;
         Text = "~1" ;
         Center = TRUE ;
     };
     FixedText FT_2
     {
-        Pos = MAP_APPFONT ( 150 , 75 ) ;
+        Pos = MAP_APPFONT ( 150 , 71 ) ;
         Size = MAP_APPFONT ( 10 , 8 ) ;
         Text = "~2" ;
         Center = TRUE ;
     };
     FixedText FT_3
     {
-        Pos = MAP_APPFONT ( 200 , 75 ) ;
+        Pos = MAP_APPFONT ( 200 , 71 ) ;
         Size = MAP_APPFONT ( 10 , 8 ) ;
         Text = "~3" ;
         Center = TRUE ;
@@ -259,14 +261,14 @@ TabPage TP_COLUMN
     ImageButton BTN_UP
     {
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 241 , 73 ) ;
+        Pos = MAP_APPFONT ( 241 , 71 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
         TabStop = TRUE ;
         SYMBOL = IMAGEBUTTON_ARROW_RIGHT ;
     };
     FixedText FT_WIDTH
     {
-        Pos = MAP_APPFONT ( 12 , 89 ) ;
+        Pos = MAP_APPFONT ( 7 , 85 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "Breite" ;
         Text [ English ] = "Width" ;
@@ -297,7 +299,7 @@ TabPage TP_COLUMN
     {
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 89 , 87 ) ;
+        Pos = MAP_APPFONT ( 89 , 83 ) ;
         Size = MAP_APPFONT ( 35 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -315,7 +317,7 @@ TabPage TP_COLUMN
     {
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 138 , 87 ) ;
+        Pos = MAP_APPFONT ( 138 , 83 ) ;
         Size = MAP_APPFONT ( 35 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -333,7 +335,7 @@ TabPage TP_COLUMN
     {
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 187 , 87 ) ;
+        Pos = MAP_APPFONT ( 187 , 83 ) ;
         Size = MAP_APPFONT ( 35 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -349,7 +351,7 @@ TabPage TP_COLUMN
     };
     FixedText FT_DIST
     {
-        Pos = MAP_APPFONT ( 12 , 105 ) ;
+        Pos = MAP_APPFONT ( 7 , 101 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "Abstand" ;
         Text [ English ] = "Distance" ;
@@ -380,7 +382,7 @@ TabPage TP_COLUMN
     {
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 113 , 103 ) ;
+        Pos = MAP_APPFONT ( 113 , 99 ) ;
         Size = MAP_APPFONT ( 35 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -398,7 +400,7 @@ TabPage TP_COLUMN
     {
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 162 , 103 ) ;
+        Pos = MAP_APPFONT ( 162 , 99 ) ;
         Size = MAP_APPFONT ( 35 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -414,7 +416,7 @@ TabPage TP_COLUMN
     };
     CheckBox CB_AUTO_WIDTH
     {
-        Pos = MAP_APPFONT ( 12 , 119 ) ;
+        Pos = MAP_APPFONT ( 7 , 115 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "A~utomatische Breite" ;
         Text [ ENGLISH ] = "Automatic ~width" ;
@@ -443,10 +445,10 @@ TabPage TP_COLUMN
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "O~tomatik geniþlik";
     };
-    GroupBox GB_LAYOUT
+    FixedLine FL_LAYOUT
     {
-        Pos = MAP_APPFONT ( 6 , 62 ) ;
-        Size = MAP_APPFONT ( 248 , 70 ) ;
+        Pos = MAP_APPFONT ( 4 , 58 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Spaltenbreite" ;
         Text [ ENGLISH ] = "Column width" ;
         Text [ norwegian ] = "Bredde på kolonne " ;
@@ -473,9 +475,10 @@ TabPage TP_COLUMN
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Sütun geniþliði";
     };
+
     FixedText FT_STYLE
     {
-        Pos = MAP_APPFONT ( 12 , 148 ) ;
+        Pos = MAP_APPFONT ( 7 , 140 ) ;
         Size = MAP_APPFONT ( 28 , 8 ) ;
         Text = "A~rt" ;
         Text [ ENGLISH ] = "~Style" ;
@@ -506,8 +509,8 @@ TabPage TP_COLUMN
     };
     ListBox LB_STYLE
     {
-        Pos = MAP_APPFONT ( 46 , 146 ) ;
-        Size = MAP_APPFONT ( 40 , 66 ) ;
+        Pos = MAP_APPFONT ( 45 , 138 ) ;
+        Size = MAP_APPFONT ( 60 , 66 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         StringList =
@@ -613,7 +616,7 @@ TabPage TP_COLUMN
     };
     FixedText FT_HEIGHT
     {
-        Pos = MAP_APPFONT ( 92 , 148 ) ;
+        Pos = MAP_APPFONT ( 7 , 156 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
         Text = "Höh~e" ;
         Text [ ENGLISH ] = "Hei~ght" ;
@@ -645,8 +648,8 @@ TabPage TP_COLUMN
     MetricField ED_HEIGHT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 132 , 146 ) ;
-        Size = MAP_APPFONT ( 36 , 12 ) ;
+        Pos = MAP_APPFONT ( 45 , 154 ) ;
+        Size = MAP_APPFONT ( 60 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -661,7 +664,7 @@ TabPage TP_COLUMN
     };
     FixedText FT_POSITION
     {
-        Pos = MAP_APPFONT ( 174 , 148 ) ;
+        Pos = MAP_APPFONT ( 7 , 172 ) ;
         Size = MAP_APPFONT ( 32 , 8 ) ;
         Text = "~Position" ;
         Text [ English ] = "~Position" ;
@@ -690,8 +693,8 @@ TabPage TP_COLUMN
     };
     ListBox LB_POSITION
     {
-        Pos = MAP_APPFONT ( 208 , 146 ) ;
-        Size = MAP_APPFONT ( 40 , 40 ) ;
+        Pos = MAP_APPFONT ( 45 , 170 ) ;
+        Size = MAP_APPFONT ( 60 , 40 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         StringList =
@@ -845,10 +848,10 @@ TabPage TP_COLUMN
         < "Alt" ; Default ; > ;
     };
     };
-    GroupBox GB_LINETYPE
+    FixedLine FL_LINETYPE
     {
-        Pos = MAP_APPFONT ( 6 , 135 ) ;
-        Size = MAP_APPFONT ( 248 , 26 ) ;
+        Pos = MAP_APPFONT ( 4 , 127 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Trennlinie" ;
         Text [ ENGLISH ] = "Lines between" ;
         Text [ norwegian ] = "Lines between" ;

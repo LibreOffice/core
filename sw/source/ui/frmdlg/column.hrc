@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:37 $
+ *  last change: $Author: ma $ $Date: 2001-03-23 16:17:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #define FT_DISTANCE     3
 #define ED_DISTANCE     4
 #define CB_AUTO_WIDTH   4
-#define GB_COLUMNS      6
+#define FL_COLUMNS      6
 
 #define FT_1            20
 #define FT_2            21
@@ -77,7 +77,7 @@
 
 #define BTN_UP          30
 #define BTN_DOWN        31
-#define GB_LAYOUT       32
+#define FL_LAYOUT       32
 
 #define FT_STYLE        33
 #define LB_STYLE        34
@@ -85,10 +85,10 @@
 #define ED_HEIGHT       36
 #define FT_POSITION     37
 #define LB_POSITION     38
-#define GB_LINETYPE     39
+#define FL_LINETYPE     39
 
 
-#define GB_BSP          40
+#define FL_BSP          40
 #define WN_BSP          41
 #define LB_REFERENCE        42
 #define CB_REGISTER             43

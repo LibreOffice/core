@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-03-15 10:44:53 $
+ *  last change: $Author: ma $ $Date: 2001-03-23 16:17:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,7 +482,7 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     aAutoWidthBox(this,     ResId(CB_AUTO_WIDTH)),
     aDefaultVS(this,        ResId(VS_DEFAULTS)),
     aBalanceColsCB(this,    ResId(CB_BALANCECOLS)),
-    aCLGroup(this,          ResId(GB_COLUMNS )),
+    aFLGroup(this,          ResId(FL_COLUMNS )),
 
     aLineTypeLbl(this,      ResId(FT_STYLE)),
     aLineTypeDLB(this,      ResId(LB_STYLE)),
@@ -490,7 +490,7 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     aLineHeightEdit(this,   ResId(ED_HEIGHT)),
     aLinePosLbl(this,       ResId(FT_POSITION)),
     aLinePosDLB(this,       ResId(LB_POSITION)),
-    aLineTypeGrp(this,      ResId(GB_LINETYPE)),
+    aFLLineType(this,       ResId(FL_LINETYPE)),
     aBtnUp(this,            ResId(BTN_DOWN)),
     aBtnDown(this,          ResId(BTN_UP)),
 
@@ -504,11 +504,11 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     aDistEd2(this,          ResId(ED_DIST2)),
     aLbl3(this,             ResId(FT_3)),
     aEd3(this,              ResId(ED_3)),
-    aLayoutGrp(this,        ResId(GB_LAYOUT)),
+    aFLLayout(this,         ResId(FL_LAYOUT)),
 
     aPgeExampleWN(this,     ResId(WN_BSP)),
     aFrmExampleWN(this,     ResId(WN_BSP)),
-    aExampleGB(this,        ResId(GB_BSP)),
+    aFLExample(this,        ResId(FL_BSP)),
 
     nFirstVis(0),
     bFrm(FALSE),
