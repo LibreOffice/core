@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: af $ $Date: 2002-04-29 12:40:37 $
+ *  last change: $Author: hr $ $Date: 2002-04-30 15:50:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
+
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYCHANGEEVENT_HPP_
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
@@ -664,7 +665,7 @@ void AccessibleContextBase::FireEvent (const AccessibleEventObject& aEvent)
 
 
 void AccessibleContextBase::CheckDisposedState (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::lang::DisposedException)
 {
     if (rBHelper.bDisposed)
     {
