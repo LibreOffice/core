@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap3.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-04 15:58:02 $
+ *  last change: $Author: aw $ $Date: 2002-11-14 15:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -867,8 +867,21 @@ void SAL_CALL Svx3DLatheObject::setPropertyValue( const OUString& aPropertyName,
         // Polygondefinition in das Objekt packen
         POLYPOLYGONSHAPE3D_TO_POLYPOLYGON3D
 
+        // #105127# SetPolyPoly3D sets the Svx3DVerticalSegmentsItem to the number
+        // of points of the polygon. Thus, value gets lost. To avoid this, rescue
+        // item here and re-set after setting the polygon.
+        const sal_uInt32 nPrevVerticalSegs(((E3dLatheObj*)pObj)->GetVerticalSegments());
+
         // Polygon setzen
         ((E3dLatheObj*)pObj)->SetPolyPoly3D(aNewPolyPolygon);
+
+        const sal_uInt32 nPostVerticalSegs(((E3dLatheObj*)pObj)->GetVerticalSegments());
+
+        if(nPrevVerticalSegs != nPostVerticalSegs)
+        {
+            // restore the vertical segment count
+            ((E3dLatheObj*)pObj)->SetItem(Svx3DVerticalSegmentsItem(nPrevVerticalSegs));
+        }
     }
     else
     {
