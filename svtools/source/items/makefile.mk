@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: mba $ $Date: 2002-07-12 13:50:37 $
+#   last change: $Author: jbu $ $Date: 2002-10-01 12:53:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,8 +76,6 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
 
-UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
 # Every source directory generates headers in a own output directory to
 # enable parallel building of the source directories within a project!
 UNOUCROUT=$(OUT)$/inc$/$(PRJNAME)$/$(TARGET)

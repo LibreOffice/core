@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: cl $ $Date: 2001-03-14 16:07:12 $
+#   last change: $Author: jbu $ $Date: 2002-10-01 12:54:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,10 +75,6 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 .IF "$(header)" == ""
-
-UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
-UNOUCROUT=$(OUT)$/inc
 
 #not all needed...
 

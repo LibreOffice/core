@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2002-09-12 16:41:56 $
+#   last change: $Author: jbu $ $Date: 2002-10-01 12:56:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,8 +73,6 @@ VERSION=$(UPD)
 
 # --- UNOTypes -----------------------------------------------------
 
-UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
 UNOUCROUT=$(OUT)$/inc$/$(PRJNAME)$/$(TARGET)
 INCPRE+=$(UNOUCROUT)
 UNOTYPES=	com.sun.star.beans.PropertyValue					\

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: sb $ $Date: 2002-07-23 13:03:09 $
+#   last change: $Author: jbu $ $Date: 2002-10-01 12:56:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,9 +74,6 @@ LIBTARGET=NO
 
 .IF "$(header)" == ""
 
-UNOUCRDEP = $(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB = $(SOLARBINDIR)$/applicat.rdb
-UNOUCROUT = $(OUT)$/inc
 UNOTYPES = \
     com.sun.star.awt.FontWeight \
     com.sun.star.awt.XTextArea \

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: thb $ $Date: 2002-08-22 09:28:53 $
+#   last change: $Author: jbu $ $Date: 2002-10-01 12:55:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -150,9 +150,6 @@ EXCEPTIONSFILES=\
     $(SLO)$/stringtransfer.obj		\
     $(SLO)$/imagemgr.obj
 
-UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
-UNOUCROUT=$(OUT)$/inc
 UNOTYPES=\
     com.sun.star.io.XInputStream						\
     com.sun.star.io.XOutputStream						\
