@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layouter.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:21 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:05:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@ class SwSectionFrm;
 class SwFtnFrm;
 class SwPageFrm;
 class SwLooping;
+// --> OD 2004-06-23 #i28701#
+class SwMovedFwdFrmsByObjPos;
+class SwTxtFrm;
+// <--
 
 #define LOOP_PAGE 1
 
@@ -78,6 +82,10 @@ class SwLayouter
     SwLooping* pLooping;
     void _CollectEndnotes( SwSectionFrm* pSect );
     BOOL StartLooping( SwPageFrm* pPage );
+
+    // --> OD 2004-06-23 #i28701#
+    SwMovedFwdFrmsByObjPos* mpMovedFwdFrms;
+
 public:
     SwLayouter();
     ~SwLayouter();
@@ -91,6 +99,16 @@ public:
     static void CollectEndnotes( SwDoc* pDoc, SwSectionFrm* pSect );
     static BOOL Collecting( SwDoc* pDoc, SwSectionFrm* pSect, SwFtnFrm* pFtn );
     static BOOL StartLoopControl( SwDoc* pDoc, SwPageFrm *pPage );
+
+    // --> OD 2004-06-23 #i28701#
+    static void ClearMovedFwdFrms( const SwDoc& _rDoc );
+    static void InsertMovedFwdFrm( const SwDoc& _rDoc,
+                                   const SwTxtFrm& _rMovedFwdFrmByObjPos,
+                                   const sal_uInt32 _nToPageNum );
+    static bool FrmMovedFwdByObjPos( const SwDoc& _rDoc,
+                                     const SwTxtFrm& _rTxtFrm,
+                                     sal_uInt32& _ornToPageNum );
+    // <--
 };
 
 #endif  //_LAYOUTER_HXX
