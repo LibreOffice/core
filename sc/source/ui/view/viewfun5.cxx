@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: er $ $Date: 2001-10-25 17:46:44 $
+ *  last change: $Author: nn $ $Date: 2001-10-26 18:16:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ using namespace com::sun::star;
 
 BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                     const uno::Reference<datatransfer::XTransferable>& rxTransferable,
-                    USHORT nPosX, USHORT nPosY, Point* pLogicPos )
+                    USHORT nPosX, USHORT nPosY, Point* pLogicPos, BOOL bLink )
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
     pDoc->SetPastingDrawFromOtherDoc( TRUE );
@@ -511,7 +511,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
         {
             String aFile;
             if ( aDataHelper.GetString( nFormatId, aFile ) )
-                bRet = PasteFile( aPos, aFile );
+                bRet = PasteFile( aPos, aFile, bLink );
         }
 #if 0
         else        // use multiple items from drag server

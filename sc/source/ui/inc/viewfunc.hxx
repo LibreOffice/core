@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2001-10-25 17:43:22 $
+ *  last change: $Author: nn $ $Date: 2001-10-26 18:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,8 @@ public:
     BOOL            PasteDataFormat( ULONG nFormatId,
                                         const ::com::sun::star::uno::Reference<
                                             ::com::sun::star::datatransfer::XTransferable >& rxTransferable,
-                                        USHORT nPosX, USHORT nPosY, Point* pLogicPos = NULL );
+                                        USHORT nPosX, USHORT nPosY, Point* pLogicPos = NULL,
+                                        BOOL bLink = FALSE );
 
     BOOL            PasteFile( const Point&, const String&, BOOL bLink=FALSE );
     BOOL            PasteObject( const Point&, SvInPlaceObject*, const Size* = NULL );
