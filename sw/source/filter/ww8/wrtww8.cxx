@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 10:00:52 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 12:59:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2276,6 +2276,7 @@ ULONG SwWW8Writer::StoreDoc()
     USHORT nRedlineMode = pDoc->GetRedlineMode();
     pDop->fRevMarking = 0 != (REDLINE_ON & nRedlineMode);
     pDop->fRMView = 0 != ( REDLINE_SHOW_DELETE & nRedlineMode );
+    pDop->fRMPrint = pDop->fRMView;
     if (pDoc->GetRedlineTbl().Count())
     {
         pDoc->SetRedlineMode(nRedlineMode | REDLINE_SHOW_DELETE |
