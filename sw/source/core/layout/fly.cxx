@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-23 14:25:58 $
+ *  last change: $Author: ama $ $Date: 2001-08-24 12:46:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1127,6 +1127,7 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
             //Die Groesse in der VarSize wird durch den Inhalt plus den
             //Raendern bestimmt.
             SwTwips nRemaining = 0;
+            SwTwips nOldHeight = Frm().Height();
             const long nMinHeight = IsMinHeight() ?
                 CalcRel( rFrmSz ).Height() : 0;
             if ( Lower() )
@@ -1149,6 +1150,8 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
                             nRemaining += ((SwSectionFrm*)pFrm)->Undersize();
                         pFrm = pFrm->GetNext();
                     }
+                    if( !nRemaining )
+                        nRemaining = nOldHeight - nUL;
                 }
                 if ( GetDrawObjs() )
                 {
