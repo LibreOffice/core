@@ -2,9 +2,9 @@
   *
   *  $RCSfile: text_gfx.cxx,v $
   *
-  *  $Revision: 1.12 $
+  *  $Revision: 1.13 $
   *
-  *  last change: $Author: pl $ $Date: 2001-11-16 12:52:11 $
+  *  last change: $Author: hdu $ $Date: 2001-11-23 11:45:09 $
   *
   *  The Contents of this file are made available subject to the terms of
   *  either of the following licenses
@@ -251,12 +251,11 @@ PrinterGfx::DrawText (
     fontID    *pFontMap   = (fontID*)    alloca(nLen * sizeof(fontID));
     sal_Int32 *pCharWidth = (sal_Int32*) alloca(nLen * sizeof(sal_Int32));
 
-    int nScale = maVirtualStatus.mnTextWidth ? maVirtualStatus.mnTextWidth : maVirtualStatus.mnTextHeight;
     for( int n = 0; n < nLen; n++ )
     {
         CharacterMetric aBBox;
         pFontMap[n]   = getCharMetric (aFont, pEffectiveStr[n], &aBBox);
-        pCharWidth[n] = getCharWidth  (mbTextVertical, pEffectiveStr[n], &aBBox) * nScale;
+        pCharWidth[n] = getCharWidth  (mbTextVertical, pEffectiveStr[n], &aBBox);
     }
 
     // setup a new delta array, use virtual resolution of 1000
@@ -503,7 +502,9 @@ int
 PrinterGfx::getCharWidth (sal_Bool b_vert, sal_Unicode n_char, CharacterMetric *p_bbox)
 {
     b_vert = b_vert && (getVerticalDeltaAngle(n_char) != 0);
-    return b_vert ? p_bbox->height : p_bbox->width;
+    int w = b_vert ? p_bbox->height : p_bbox->width;
+    w *= maVirtualStatus.mnTextWidth ? maVirtualStatus.mnTextWidth : maVirtualStatus.mnTextHeight;
+    return w;
 }
 
 fontID
@@ -550,12 +551,11 @@ PrinterGfx::GetCharWidth (sal_Unicode nFrom, sal_Unicode nTo, long *pWidthArray)
         nTo   += 0xF000;
     }
 
-    int nScale = maVirtualStatus.mnTextWidth ? maVirtualStatus.mnTextWidth : maVirtualStatus.mnTextHeight;
     for( int n = 0; n < (nTo - nFrom + 1); n++ )
     {
         CharacterMetric aBBox;
         getCharMetric (aFont, n + nFrom, &aBBox);
-        pWidthArray[n] = getCharWidth (mbTextVertical, n + nFrom, &aBBox) * nScale;
+        pWidthArray[n] = getCharWidth (mbTextVertical, n + nFrom, &aBBox);
     }
 
     // returned metrics have postscript precision
