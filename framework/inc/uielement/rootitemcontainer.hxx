@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rootitemcontainer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-11 11:05:25 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 16:53:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,14 @@
 #include <cppuhelper/weak.hxx>
 #endif
 
+#ifndef _CPPUHELPER_PROPSHLP_HXX
+#include <cppuhelper/propshlp.hxx>
+#endif
+
+#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
+#include <cppuhelper/interfacecontainer.hxx>
+#endif
+
 #include <vector>
 
 namespace framework
@@ -132,6 +140,9 @@ class RootItemContainer :   public ::com::sun::star::lang::XTypeProvider        
                             public ::com::sun::star::container::XIndexContainer     ,
                             public ::com::sun::star::lang::XSingleComponentFactory  ,
                             public ::com::sun::star::lang::XUnoTunnel               ,
+                            protected ThreadHelpBase                                ,
+                            public ::cppu::OBroadcastHelper                         ,
+                            public ::cppu::OPropertySetHelper                       ,
                             public ::cppu::OWeakObject
 {
     friend class ConstItemContainer;
@@ -185,6 +196,21 @@ class RootItemContainer :   public ::com::sun::star::lang::XTypeProvider        
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithContext( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& Context ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArgumentsAndContext( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& Context ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
+    protected:
+        //  OPropertySetHelper
+        virtual sal_Bool                                            SAL_CALL convertFastPropertyValue        ( com::sun::star::uno::Any&        aConvertedValue ,
+                                                                                                               com::sun::star::uno::Any&        aOldValue       ,
+                                                                                                               sal_Int32                        nHandle         ,
+                                                                                                               const com::sun::star::uno::Any&  aValue          ) throw( com::sun::star::lang::IllegalArgumentException );
+        virtual void                                                SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32                        nHandle         ,
+                                                                                                               const com::sun::star::uno::Any&  aValue          ) throw( com::sun::star::uno::Exception                 );
+        virtual void                                                SAL_CALL getFastPropertyValue( com::sun::star::uno::Any&    aValue          ,
+                                                                                                   sal_Int32                    nHandle         ) const;
+        virtual ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper();
+        virtual ::com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw (::com::sun::star::uno::RuntimeException);
+
+        static const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > impl_getStaticPropertyDescriptor();
+
     private:
         RootItemContainer& operator=( const RootItemContainer& );
         RootItemContainer( const RootItemContainer& );
@@ -194,6 +220,7 @@ class RootItemContainer :   public ::com::sun::star::lang::XTypeProvider        
 
         mutable ShareableMutex                                                                  m_aShareMutex;
         std::vector< com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > >    m_aItemVector;
+        rtl::OUString                                                                           m_aUIName;
 };
 
 }
