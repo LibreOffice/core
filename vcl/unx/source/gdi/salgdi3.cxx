@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:07:17 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 10:58:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1235,6 +1235,7 @@ void X11SalGraphics::GetDevFontList( ImplDevFontList *pList )
     ::std::list< psp::fontID > aList;
     ::std::list< psp::fontID >::iterator it;
     rMgr.getFontList( aList );
+    unicodeKernMap aKernTab;
     for( it = aList.begin(); it != aList.end(); ++it )
     {
         psp::FastPrintFontInfo aInfo;
@@ -1254,9 +1255,25 @@ void X11SalGraphics::GetDevFontList( ImplDevFontList *pList )
                 aFontData.maName = aFontData.maName.Copy( 4 );
             if( nFaceNum < 0 )
                 nFaceNum = 0;
+
+
+            const unicodeKernMap* pKernTab = NULL;
+            if( aInfo.m_eType == psp::fonttype::Type1 )
+            {
+                const std::list< psp::KernPair >& rKernPairs = rMgr.getKernPairs( *it );
+                if( rKernPairs.size() )
+                {
+                    aKernTab.clear();
+                    for( std::list< psp::KernPair >::const_iterator it = rKernPairs.begin();
+                         it != rKernPairs.end(); ++it )
+                        aKernTab[ it->first ][ it->second ] = it->kern_x;
+                    pKernTab = & aKernTab;
+                }
+            }
+
             // handling of alias names is done by GlyphCache::FetchFontList
             rGC.AddFontFile( rMgr.getFontFileSysPath( aInfo.m_nID ), nFaceNum,
-                             aInfo.m_nID, &aFontData );
+                             aInfo.m_nID, &aFontData, pKernTab );
         }
     }
 
