@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preload.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-12-17 08:33:04 $
+ *  last change: $Author: iha $ $Date: 2002-11-25 19:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,5 +80,13 @@
 #define ML_LICENSE          11
 #define ST_LICENSE_AGREEMENT    12
 #define ST_INSERT_USER_DATA     13
+#define IMG_ARROW           14
+#define FT_INFO2_1          15
+#define FT_INFO3_1          16
+#define FT_INFO3            17
+#define PB_PAGEDOWN         18
+#define CB_ACCEPT           19
+#define LICENCE_ACCEPT      20
+#define LICENCE_NOTACCEPT   21
 
 #endif

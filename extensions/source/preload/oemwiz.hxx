@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oemwiz.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-12-17 08:33:04 $
+ *  last change: $Author: iha $ $Date: 2002-11-25 19:55:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,12 @@
 #ifndef _SVEDIT_HXX
 #include <svtools/svmedit.hxx>
 #endif
+#ifndef _SFXLSTNER_HXX
+#include <svtools/lstner.hxx>
+#endif
+#ifndef _SV_SCRBAR_HXX
+#include <vcl/scrbar.hxx>
+#endif
 
 //.........................................................................
 namespace preload
@@ -124,6 +130,7 @@ namespace preload
 
         const String&   GetAcceptString()const {return aAcceptST;}
         const String    GetCancelString() const {return aCancelPB.GetText();}
+        void            SetCancelString( const String& rText );
 
         static sal_Bool LoadFromLocalFile(const String& rFileName, String& rContent);
     };
@@ -134,13 +141,57 @@ namespace preload
             OEMWelcomeTabPage(Window* pParent);
             ~OEMWelcomeTabPage();
     };
+    class LicenceView : public MultiLineEdit, public SfxListener
+    {
+        BOOL            mbEndReached;
+        Link            maEndReachedHdl;
+        Link            maScrolledHdl;
+
+    public:
+                        LicenceView( Window* pParent, const ResId& rResId );
+                       ~LicenceView();
+
+        void            ScrollDown( ScrollType eScroll );
+
+        BOOL            IsEndReached() const;
+        BOOL            EndReached() const { return mbEndReached; }
+        void            SetEndReached( BOOL bEnd ) { mbEndReached = bEnd; }
+
+        void            SetEndReachedHdl( const Link& rHdl )  { maEndReachedHdl = rHdl; }
+        const Link&     GetAutocompleteHdl() const { return maEndReachedHdl; }
+
+        void            SetScrolledHdl( const Link& rHdl )  { maScrolledHdl = rHdl; }
+        const Link&     GetScrolledHdl() const { return maScrolledHdl; }
+
+        virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    };
     class OEMLicenseTabPage : public TabPage
     {
+        LicenceView     aLicenseML;
         FixedText       aInfo1FT;
-        MultiLineEdit   aLicenseML;
         FixedText       aInfo2FT;
+        FixedText       aInfo3FT;
+        FixedText       aInfo2_1FT;
+        FixedText       aInfo3_1FT;
+        CheckBox        aCBAccept;
+        PushButton      aPBPageDown;
+        FixedImage      aArrow;
+        String          aStrAccept;
+        String          aStrNotAccept;
+        String          aOldCancelText;
+        BOOL            bEndReached;
+
+        OEMPreloadDialog* pPreloadDialog;
+
+        void                EnableControls();
+
+        DECL_LINK(          AcceptHdl, CheckBox * );
+        DECL_LINK(          PageDownHdl, PushButton * );
+        DECL_LINK(          EndReachedHdl, LicenceView * );
+        DECL_LINK(          ScrolledHdl, LicenceView * );
+
         public:
-            OEMLicenseTabPage(Window* pParent);
+            OEMLicenseTabPage(OEMPreloadDialog* pParent);
             ~OEMLicenseTabPage();
 
             virtual void ActivatePage();

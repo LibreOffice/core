@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oemwiz.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2002-03-27 17:07:04 $
+ *  last change: $Author: iha $ $Date: 2002-11-25 19:54:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,9 @@
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
 #endif
+#ifndef _XTEXTEDT_HXX
+#include <svtools/xtextedt.hxx>
+#endif
 //.........................................................................
 namespace preload
 {
@@ -122,7 +125,7 @@ namespace preload
         TabPage* pLicensePage;
         TabPage* pUserDataPage;
 
-        OEMPreloadDialog_Impl(Window* pDialog);
+        OEMPreloadDialog_Impl(OEMPreloadDialog* pDialog);
         ~OEMPreloadDialog_Impl()
         {
             delete pWelcomePage;
@@ -135,7 +138,7 @@ namespace preload
 /* -----------------------------14.11.2001 11:33------------------------------
 
  ---------------------------------------------------------------------------*/
-    OEMPreloadDialog_Impl::OEMPreloadDialog_Impl(Window* pDialog)
+    OEMPreloadDialog_Impl::OEMPreloadDialog_Impl(OEMPreloadDialog* pDialog)
         {
             SfxItemPool& rPool = SFX_APP()->GetPool();
             pSet = new SfxItemSet(rPool, SID_ATTR_ADDRESS, SID_ATTR_ADDRESS);
@@ -243,7 +246,7 @@ namespace preload
             if(GetCurLevel())
                 ShowPage(GetCurLevel() - 1);
         }
-        else if(OEM_USERDATA > GetCurLevel())
+           else if(OEM_USERDATA > GetCurLevel())
             ShowPage(GetCurLevel() + 1);
         else
         {
@@ -257,10 +260,11 @@ namespace preload
         {
             case OEM_WELCOME:
                 aNextPB.SetText(aNextST);
+                aNextPB.Enable(TRUE);
             break;
             case OEM_LICENSE:
                 sTitle += aLicense;
-                aNextPB.SetText(aAcceptST);
+                aNextPB.SetText(aNextST);
                 aCancelPB.GrabFocus();
             break;
             case OEM_USERDATA:
@@ -298,6 +302,12 @@ namespace preload
         return sal_True;
     }
 
+
+    void OEMPreloadDialog::SetCancelString( const String& rText )
+    {
+        aCancelPB.SetText(rText);
+    }
+
 /* -----------------------------13.11.2001 12:29------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -316,18 +326,41 @@ namespace preload
 /* -----------------------------13.11.2001 12:29------------------------------
 
  ---------------------------------------------------------------------------*/
-    OEMLicenseTabPage::OEMLicenseTabPage(Window* pParent) :
+    OEMLicenseTabPage::OEMLicenseTabPage(OEMPreloadDialog* pParent) :
         TabPage(pParent, ModuleRes(RID_TP_LICENSE)),
-        aInfo1FT(this, ResId(FT_INFO1)),
         aLicenseML(this, ResId(ML_LICENSE)),
-        aInfo2FT(this, ResId(FT_INFO2))
+        aInfo1FT(this, ResId(FT_INFO1)),
+        aInfo2FT(this, ResId(FT_INFO2)),
+        aInfo3FT(this, ResId(FT_INFO3)),
+        aInfo2_1FT(this, ResId(FT_INFO2_1)),
+        aInfo3_1FT(this, ResId(FT_INFO3_1)),
+        aCBAccept(this, ResId(CB_ACCEPT)),
+        aPBPageDown(this, ResId(PB_PAGEDOWN)),
+        aArrow(this, ResId(IMG_ARROW)),
+        aStrAccept( ResId(LICENCE_ACCEPT) ),
+        aStrNotAccept( ResId(LICENCE_NOTACCEPT) ),
+        bEndReached(FALSE),
+        pPreloadDialog(pParent)
     {
         FreeResource();
-        String sTmp(aInfo2FT.GetText());
-        sTmp.SearchAndReplaceAscii("%1", ((OEMPreloadDialog*)pParent)->GetAcceptString());
-        sTmp.SearchAndReplaceAscii("%2", ((OEMPreloadDialog*)pParent)->GetCancelString());
 
-        aInfo2FT.SetText(sTmp);
+        aLicenseML.SetEndReachedHdl( LINK(this, OEMLicenseTabPage, EndReachedHdl) );
+        aLicenseML.SetScrolledHdl( LINK(this, OEMLicenseTabPage, ScrolledHdl) );
+
+        aPBPageDown.SetClickHdl( LINK(this, OEMLicenseTabPage, PageDownHdl) );
+        aCBAccept.SetClickHdl( LINK(this, OEMLicenseTabPage, AcceptHdl) );
+
+        // We want a automatic repeating page down button
+        WinBits aStyle = aPBPageDown.GetStyle();
+        aStyle |= WB_REPEAT;
+        aPBPageDown.SetStyle( aStyle );
+
+        aOldCancelText = pPreloadDialog->GetCancelString();
+        pPreloadDialog->SetCancelString( aStrNotAccept );
+
+        String aText = aInfo2FT.GetText();
+        aText.SearchAndReplaceAll( UniString::CreateFromAscii("%PAGEDOWN"), aPBPageDown.GetText() );
+        aInfo2FT.SetText( aText );
     }
 /* -----------------------------13.11.2001 12:30------------------------------
 
@@ -340,8 +373,8 @@ namespace preload
     -----------------------------------------------------------------------*/
     void OEMLicenseTabPage::ActivatePage()
     {
-        if(aLicenseML.GetText().Len())
-            return;
+        if(!aLicenseML.GetText().Len())
+        {
         aLicenseML.SetLeftMargin( 5 );
         String sLicense;
 #ifdef UNX
@@ -350,7 +383,163 @@ namespace preload
         OEMPreloadDialog::LoadFromLocalFile(String::CreateFromAscii("license.txt"), sLicense);
 #endif
         aLicenseML.SetText( sLicense );
+        }
+
+        EnableControls();
     }
+
+    //------------------------------------------------------------------------
+    IMPL_LINK( OEMLicenseTabPage, AcceptHdl, CheckBox *, EMPTYARG )
+    {
+        EnableControls();
+        return 0;
+    }
+
+    //------------------------------------------------------------------------
+    IMPL_LINK( OEMLicenseTabPage, PageDownHdl, PushButton *, EMPTYARG )
+    {
+        aLicenseML.ScrollDown( SCROLL_PAGEDOWN );
+        return 0;
+    }
+
+    //------------------------------------------------------------------------
+    IMPL_LINK( OEMLicenseTabPage, EndReachedHdl, LicenceView *, EMPTYARG )
+    {
+        bEndReached = TRUE;
+
+        EnableControls();
+        aCBAccept.GrabFocus();
+
+        return 0;
+    }
+
+    //------------------------------------------------------------------------
+    IMPL_LINK( OEMLicenseTabPage, ScrolledHdl, LicenceView *, EMPTYARG )
+    {
+        EnableControls();
+
+        return 0;
+    }
+
+    //------------------------------------------------------------------------
+    void OEMLicenseTabPage::EnableControls()
+    {
+        if ( bEndReached )
+        {
+            Point aPos( 0, aInfo3_1FT.GetPosPixel().Y() );
+            aArrow.SetPosPixel( aPos );
+            aCBAccept.Enable();
+        }
+        else
+        {
+            Point aPos( 0, aInfo2_1FT.GetPosPixel().Y() );
+            aArrow.SetPosPixel( aPos );
+            aCBAccept.Disable();
+        }
+
+        if ( aLicenseML.IsEndReached() )
+            aPBPageDown.Disable();
+        else
+            aPBPageDown.Enable();
+
+        if ( aCBAccept.IsChecked() )
+        {
+            PushButton *pNext = pPreloadDialog->GetNextButton();
+            if ( ! pNext->IsEnabled() )
+            {
+                pPreloadDialog->SetCancelString( aOldCancelText );
+                pNext->Enable(TRUE);
+            }
+        }
+        else
+        {
+            PushButton *pNext = pPreloadDialog->GetNextButton();
+            if ( pNext->IsEnabled() )
+            {
+                pPreloadDialog->SetCancelString( aStrNotAccept );
+                pNext->Enable(FALSE);
+            }
+        }
+    }
+
+    //------------------------------------------------------------------------
+    //------------------------------------------------------------------------
+    //------------------------------------------------------------------------
+    LicenceView::LicenceView( Window* pParent, const ResId& rResId )
+        : MultiLineEdit( pParent, rResId )
+    {
+        SetLeftMargin( 5 );
+
+        mbEndReached = IsEndReached();
+
+        StartListening( *GetTextEngine() );
+    }
+
+    //------------------------------------------------------------------------
+    LicenceView::~LicenceView()
+    {
+        maEndReachedHdl = Link();
+        maScrolledHdl   = Link();
+
+        EndListeningAll();
+    }
+
+    //------------------------------------------------------------------------
+    void LicenceView::ScrollDown( ScrollType eScroll )
+    {
+        ScrollBar*  pScroll = GetVScrollBar();
+
+        if ( pScroll )
+            pScroll->DoScrollAction( eScroll );
+    }
+
+    //------------------------------------------------------------------------
+    BOOL LicenceView::IsEndReached() const
+    {
+        BOOL bEndReached;
+
+        ExtTextView*    pView = GetTextView();
+        ExtTextEngine*  pEdit = GetTextEngine();
+        ULONG           nHeight = pEdit->GetTextHeight();
+        Size            aOutSize = pView->GetWindow()->GetOutputSizePixel();
+        Point           aBottom( 0, aOutSize.Height() );
+
+        if ( (ULONG) pView->GetDocPos( aBottom ).Y() >= nHeight - 1 )
+            bEndReached = TRUE;
+        else
+            bEndReached = FALSE;
+
+        return bEndReached;
+    }
+
+    //------------------------------------------------------------------------
+    void LicenceView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+    {
+        if ( rHint.IsA( TYPE(TextHint) ) )
+        {
+            BOOL    bLastVal = EndReached();
+            ULONG   nId = ((const TextHint&)rHint).GetId();
+
+            if ( nId == TEXT_HINT_PARAINSERTED )
+            {
+                if ( bLastVal )
+                    mbEndReached = IsEndReached();
+            }
+            else if ( nId == TEXT_HINT_VIEWSCROLLED )
+            {
+                if ( ! mbEndReached )
+                    mbEndReached = IsEndReached();
+                maScrolledHdl.Call( this );
+            }
+
+            if ( EndReached() && !bLastVal )
+            {
+                maEndReachedHdl.Call( this );
+            }
+        }
+    }
+
+    //------------------------------------------------------------------------
 
 //.........................................................................
 }   // namespace preload
