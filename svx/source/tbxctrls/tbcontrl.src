@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:37:22 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 06:26:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,13 +295,13 @@ String RID_SVXSTR_AUTOMATIC
     Text[ polish ] = "Automatycznie";
     Text[ portuguese_brazilian ] = "Automatic";
     Text[ japanese ] = "Ž©“®";
-    Text[ korean ] = "Automatic";
+    Text[ korean ] = "ÀÚµ¿";
     Text[ chinese_simplified ] = "×Ô¶¯";
     Text[ chinese_traditional ] = "¦Û°Ê";
     Text[ turkish ] = "Automatic";
     Text[ arabic ] = "ÊáÞÇÆí";
     Text[ catalan ] = "Automatic";
-    Text[ finnish ] = "Automatisch";
+    Text[ finnish ] = "Automaattisesti";
 };
 Image RID_SVXIMG_GRAF_RED
 {
