@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instbdlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 22:38:13 $
+ *  last change: $Author: nn $ $Date: 2001-07-09 17:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,6 +352,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     };
     MultiListBox LB_TABLES
     {
+        SimpleMode = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 20 , 113 ) ;
         Size = MAP_APPFONT ( 123 , 59 ) ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkarea.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-29 21:58:58 $
+ *  last change: $Author: nn $ $Date: 2001-07-09 17:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,7 @@ ModalDialog RID_SCDLG_LINKAREA
     };
     MultiListBox LB_RANGES
     {
+        SimpleMode = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 74 ) ;
         Size = MAP_APPFONT ( 174 , 80 ) ;
