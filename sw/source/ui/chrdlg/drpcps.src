@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:05:13 $
+ *  last change: $Author: obo $ $Date: 2001-06-16 21:44:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,5 +468,6 @@ TabPage TP_DROPCAPS
     };
 };
  // ********************************************************************** EOF
+
 
 
