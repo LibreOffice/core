@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unowrapper.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:45:29 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:08:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@
 #ifndef _TOOLKIT_AWT_VCLXACCESSIBLEPOPUPMENU_HXX_
 #include <toolkit/awt/vclxaccessiblepopupmenu.hxx>
 #endif
+#include "toolkit/dllapi.h"
 
 #include <vcl/svapp.hxx>
 
@@ -169,7 +170,7 @@
 
 extern "C" {
 
-UnoWrapperBase* CreateUnoWrapper()
+TOOLKIT_DLLPUBLIC UnoWrapperBase* CreateUnoWrapper()
 {
     return new UnoWrapper( NULL );
 }
