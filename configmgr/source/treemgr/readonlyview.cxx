@@ -2,9 +2,9 @@
  *
  *  $RCSfile: readonlyview.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 14:55:53 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ void ReadOnlyViewStrategy::doMarkChanged(Node const& )
 node::Attributes ReadOnlyViewStrategy::doAdjustAttributes(node::Attributes const& _aAttributes) const
 {
     node::Attributes aAttributes = _aAttributes;
-    aAttributes.bWritable = false;
+    aAttributes.markReadonly();
     return aAttributes;
 }
 //-----------------------------------------------------------------------------
