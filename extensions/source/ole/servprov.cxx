@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servprov.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:40 $
+ *  last change: $Author: jl $ $Date: 2000-10-12 13:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,6 @@
 #include "ole2uno.hxx"
 #include "unoconversionutilities.hxx"
 #include "servprov.hxx"
-    //#include <vos/xception.hxx>
 #include "unoobjw.hxx"
 #include "oleobjw.hxx"
 
@@ -79,7 +78,6 @@ using namespace com::sun::star::bridge;
 using namespace com::sun::star::bridge::ModelDependent;
 
 
-//#define INVOCATION_SERVICE L"com.sun.star.script.Invocation"
 
 namespace ole_adapter
 {
