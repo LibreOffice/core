@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScenarioSelector.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: pjunck $ $Date: 2004-10-27 13:38:48 $
+*  last change: $Author: vg $ $Date: 2005-02-21 14:01:44 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -57,10 +57,10 @@
 *  Contributor(s): _______________________________________
 *
 */
-
 package com.sun.star.wizards.table;
 
 import java.util.Hashtable;
+import java.util.Vector;
 
 import com.sun.star.awt.ItemEvent;
 import com.sun.star.awt.XButton;
@@ -73,6 +73,7 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.EventObject;
 //import com.sun.star.uno.Exception;
+import com.sun.star.sdbc.SQLException;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Configuration;
 import com.sun.star.wizards.common.Desktop;
@@ -108,11 +109,8 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
     private String[] fieldnames;
     String smytable;
 
-    /**
-     *
-     */
     public ScenarioSelector(TableWizard _CurUnoDialog, TableDescriptor _curtabledescriptor, String _reslblFields, String _reslblSelFields) {
-        super(_CurUnoDialog, TableWizard.SOMAINPAGE, 95, 98, 210, 80, _reslblFields, _reslblSelFields, 41209, true );
+        super(_CurUnoDialog, TableWizard.SOMAINPAGE, 91, 108, 210, 72, _reslblFields, _reslblSelFields, 41209, true );
         CurUnoDialog = (TableWizard) _CurUnoDialog;
         curtabledescriptor = _curtabledescriptor;
         int imaxcolumnchars = this.curtabledescriptor.getMaxColumnNameLength();
@@ -130,32 +128,32 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         oCGTable = new CGTable(CurUnoDialog.xMSF);
         lblExplanation = CurUnoDialog.insertLabel("lblScenarioExplanation",
           new String[] {"Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-          new Object[] {new Integer(20), sExplanation, Boolean.TRUE, new Integer(95), new Integer(27), IMAINSTEP, new Short(pretabindex++), new Integer(209)}
+          new Object[] {new Integer(32), sExplanation, Boolean.TRUE, new Integer(91), new Integer(27), IMAINSTEP, new Short(pretabindex++), new Integer(213)}
         );
 
         lblCategories = CurUnoDialog.insertLabel("lblCategories",
           new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-          new Object[] {new Integer(8), sCategories, new Integer(95), new Integer(47), IMAINSTEP, new Short(pretabindex++), new Integer(100)}
+          new Object[] {new Integer(8), sCategories, new Integer(91), new Integer(60), IMAINSTEP, new Short(pretabindex++), new Integer(100)}
         );
 
         optBusiness = CurUnoDialog.insertRadioButton("optBusiness", SELECTCATEGORY, this,
             new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
-            new Object[] { UIConsts.INTEGERS[8], "HID:41205", sBusiness, new Integer(98), new Integer(57), new Short((short)1),IMAINSTEP, new Short(pretabindex++), new Integer(78)}
+            new Object[] { UIConsts.INTEGERS[8], "HID:41206", sBusiness, new Integer(98), new Integer(70), new Short((short)1),IMAINSTEP, new Short(pretabindex++), new Integer(78)}
         );
 
         optPrivate = CurUnoDialog.insertRadioButton("optPrivate", SELECTCATEGORY, this,
             new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-            new Object[] { UIConsts.INTEGERS[8], "HID:41206", sPrivate, new Integer(182), new Integer(57),IMAINSTEP, new Short(pretabindex++), new Integer(90)}
+            new Object[] { UIConsts.INTEGERS[8], "HID:41207", sPrivate, new Integer(182), new Integer(70),IMAINSTEP, new Short(pretabindex++), new Integer(90)}
         );
 
         CurUnoDialog.insertLabel("lblTableNames",
                     new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                    new Object[] {new Integer(8), sTableNames, new Integer(95), new Integer(68), IMAINSTEP, new Short(pretabindex++), new Integer(80) });
+                    new Object[] {new Integer(8), sTableNames, new Integer(91), new Integer(82), IMAINSTEP, new Short(pretabindex++), new Integer(80) });
 
         try {
             xTableListBox = CurUnoDialog.insertListBox("lstTableNames", 3, null, this,
                         new String[] { "Dropdown", "Height", "HelpURL", "LineCount", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                        new Object[] { Boolean.TRUE, new Integer(12), "HID:41208", new Short("7"), new Integer(95), new Integer(78), IMAINSTEP, new Short(pretabindex++), getListboxWidth()});
+                        new Object[] { Boolean.TRUE, new Integer(12), "HID:41208", new Short("7"), new Integer(91), new Integer(92), IMAINSTEP, new Short(pretabindex++), getListboxWidth()});
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }
@@ -201,12 +199,27 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
 
     public String[] getSelectedFieldNames(){
         String[] displayfieldnames = super.getSelectedFieldNames();
-        fieldnames = new String[displayfieldnames.length];
+        Vector afieldnameVector = new Vector();
+        int a = 0;
         for (int i = 0; i < displayfieldnames.length; i++){
-            FieldDescription ofielddescription = (FieldDescription) CurUnoDialog.fielditems.get(displayfieldnames[i]);
-            fieldnames[i] = ofielddescription.getName();
+            try {
+                FieldDescription ofielddescription = (FieldDescription) CurUnoDialog.fielditems.get(displayfieldnames[i]);
+                if (ofielddescription != null){
+                    afieldnameVector.addElement(ofielddescription.getName());
+                    a++;
+                }
+            } catch (RuntimeException e) {
+                e.printStackTrace(System.out);
+            }
         }
+        fieldnames = new String[a];
+        afieldnameVector.toArray(fieldnames);
         return fieldnames;
+    }
+
+
+    public boolean iscompleted(){
+        return getSelectedFieldNames().length > 0;
     }
 
 
@@ -214,28 +227,15 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         XNameAccess xNameAccessFieldNode;
         String[] fieldnames = getSelectedFieldNames();
         for (int i = 0; i < fieldnames.length; i++){
-            FieldDescription curfielddescription = (FieldDescription) CurUnoDialog.fielditems.get(fieldnames[i]);
-            PropertyValue[] aProperties = curfielddescription.getPropertyValues();
-            this.curtabledescriptor.addColumn(aProperties);
-//          this.curtabledescriptor.addColumnToTempColumnContainer(aProperties);
+            try {
+                FieldDescription curfielddescription = (FieldDescription) CurUnoDialog.fielditems.get(fieldnames[i]);
+                PropertyValue[] aProperties = curfielddescription.getPropertyValues();
+                this.curtabledescriptor.addColumn(aProperties);
+            } catch (RuntimeException e) {
+                e.printStackTrace(System.out);
+            }
         }
     }
-
-
-/*  public void getProperties(){
-    try {
-        String[] spropnames = Configuration.getNodeDisplayNames(xNameAccessPropertiesNode);
-        for (int i = 0; i < spropnames.length; i++){
-            XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xNameAccessPropertiesNode);
-            String sname = (String) xPropertySet.getPropertyValue("Name");
-            String svalue = (String) xPropertySet.getPropertyValue("Value");
-        }
-        int i = 0;
-    } catch (Exception e) {
-        e.printStackTrace(System.out);
-//      return null;
-    }} */
-
 
 
     public String getTableName(){
@@ -247,8 +247,13 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         String[] fieldnames = super.getSelectedFieldNames();
         if ((fieldnames.length) > 0){
             for (int i = 0; i < CurUnoDialog.fielditems.size(); i++){
-                FieldDescription ofielddescription = (FieldDescription) CurUnoDialog.fielditems.get(fieldnames[i]);
-                String stablename = ofielddescription.gettablename();
+                String stablename = "";
+                try {
+                    FieldDescription ofielddescription = (FieldDescription) CurUnoDialog.fielditems.get(fieldnames[i]);
+                    stablename = ofielddescription.gettablename();
+                } catch (RuntimeException e) {
+                    e.printStackTrace(System.out);
+                }
                 if (!stablename.equals(""))
                     return stablename;
             }
@@ -277,8 +282,6 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
      * @see com.sun.star.lang.XEventListener#disposing(com.sun.star.lang.EventObject)
      */
     public void disposing(EventObject arg0) {
-        // TODO Auto-generated method stub
-
     }
 
 
@@ -293,35 +296,47 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
 
 
      public void shiftFromLeftToRight(String[] SelItems, String[] NewItems) {
-        CurUnoDialog.enablefromStep(TableWizard.SOFIELDSFORMATPAGE, true);
-        for (int i = 0; i < NewItems.length; i++){
-            int iduplicate;
-            if (CurUnoDialog.fielditems.containsKey(NewItems[i])){
-                iduplicate = JavaTools.getDuplicateFieldIndex(NewItems, NewItems[i]);
-                if (iduplicate != -1){
-                    XNameAccess xNameAccessFieldNode;
-                    String sdisplayname = Desktop.getUniqueName(NewItems, NewItems[iduplicate]);
-                    FieldDescription curfielddescription = new FieldDescription(this, sdisplayname, NewItems[iduplicate]);
-                    CurUnoDialog.fielditems.put(sdisplayname, curfielddescription);
-                    NewItems[iduplicate] = sdisplayname;
-                    setSelectedFieldNames(NewItems);
-                }
+        if (!CurUnoDialog.verifyfieldcount(NewItems.length)){
+            for (int i = 0; i < SelItems.length; i++){
+                int selindex = JavaTools.FieldInList(NewItems, SelItems[i]);
+                super.xSelFieldsListBox.removeItems((short) selindex, (short) 1);
+                /**TODO In this context the items should be better placed at their original position.
+                 * but how is this position retrieved?
+                 */
+                super.xFieldsListBox.addItem(SelItems[i], xFieldsListBox.getItemCount());
             }
-            else
-                CurUnoDialog.fielditems.put(NewItems[i], new FieldDescription(this, NewItems[i], NewItems[i]));
-         }
+        }
+        else{
+            for (int i = 0; i < NewItems.length; i++){
+                int iduplicate;
+                if (CurUnoDialog.fielditems.containsKey(NewItems[i])){
+                    iduplicate = JavaTools.getDuplicateFieldIndex(NewItems, NewItems[i]);
+                    if (iduplicate != -1){
+                        XNameAccess xNameAccessFieldNode;
+                        String sdisplayname = Desktop.getUniqueName(NewItems, NewItems[iduplicate], "");
+                        FieldDescription curfielddescription = new FieldDescription(this, sdisplayname, NewItems[iduplicate]);
+                        CurUnoDialog.fielditems.put(sdisplayname, curfielddescription);
+                        NewItems[iduplicate] = sdisplayname;
+                        setSelectedFieldNames(NewItems);
+                    }
+                }
+                else
+                    CurUnoDialog.fielditems.put(NewItems[i], new FieldDescription(this, NewItems[i], NewItems[i]));
+             }
+        }
+        CurUnoDialog.setcompleted(TableWizard.SOMAINPAGE, NewItems.length > 0);
      }
 
 
+
      public void shiftFromRightToLeft(String[] SelItems, String[] NewItems ) {
-        if (NewItems.length == 0)
-            CurUnoDialog.enablefromStep(TableWizard.SOFIELDSFORMATPAGE, false);
         for (int i = 0; i < SelItems.length; i++){
             if (CurUnoDialog.fielditems.containsKey(SelItems[i])){
                 CurUnoDialog.fielditems.remove(SelItems[i]);
                 this.curtabledescriptor.dropColumnbyName(SelItems[i]);
             }
         }
+        CurUnoDialog.setcompleted(TableWizard.SOMAINPAGE, NewItems.length > 0);
      }
 
      public void moveItemDown(String item){
