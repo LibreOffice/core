@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:49:45 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 21:28:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4618,7 +4618,7 @@ SfxSlotInfo FN_NUM_BULLET_DOWN
     SlotName[ italian ] = "Un livello più in alto";
     SlotName[ danish ] = "Et niveau ned";
     SlotName[ swedish ] = "En nivå nedåt";
-    SlotName[ polish ] = "W dó³ jeden poziom";
+    SlotName[ polish ] = "Jeden poziom w dó³";
     SlotName[ portuguese_brazilian ] = "BulletsAndNumberLevelDown";
     SlotName[ japanese ] = "1ÚÍŞÙ‰º‚Ö";
     SlotName[ chinese_simplified ] = "ÏòÏÂÒ»¼¶";
@@ -4904,7 +4904,7 @@ SfxSlotInfo FN_NUM_BULLET_UP
     SlotName[ italian ] = "Un livello più in alto";
     SlotName[ danish ] = "Et niveau op";
     SlotName[ swedish ] = "En nivå uppåt";
-    SlotName[ polish ] = "Do góry jeden poziom";
+    SlotName[ polish ] = "Jeden poziom do góry";
     SlotName[ portuguese_brazilian ] = "BuletsAndNumberLevelUp";
     SlotName[ japanese ] = "1ÚÍŞÙ ã‚Ö";
     SlotName[ chinese_simplified ] = "ÏòÉÏÒ»¼¶";
@@ -6516,11 +6516,11 @@ SfxSlotInfo FN_SPELLING_DLG
     SlotName[ polish ] = "Pisownia";
     SlotName[ portuguese_brazilian ] = "Spelling";
     SlotName[ japanese ] = "•¶ÍZ³";
-    SlotName[ chinese_simplified ] = "Õı×Ö·¨";
+    SlotName[ chinese_simplified ] = "Æ´Ğ´¼ì²é";
     SlotName[ chinese_traditional ] = "«÷¦r";
     SlotName[ arabic ] = "ÊÏŞíŞ ÅãáÇÆí";
     SlotName[ dutch ] = "Spelling";
-    SlotName[ chinese_simplified ] = "Õı×Ö·¨";
+    SlotName[ chinese_simplified ] = "Æ´Ğ´¼ì²é";
     SlotName[ greek ] = "Ïñèïãñáößá";
     SlotName[ korean ] = "¸ÂÃã¹ı";
     SlotName[ turkish ] = "Yazım";
