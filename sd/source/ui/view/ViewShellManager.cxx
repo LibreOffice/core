@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellManager.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-04 14:18:29 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:08:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #endif
 
 #include <sfx2/dispatch.hxx>
+#include <svx/svxids.hrc>
 
 #include <hash_map>
 
@@ -94,25 +95,23 @@ public:
     ShellId mnId;
 };
 
-class IsShell
+class IsShell : public ::std::unary_function<ActiveShellDescriptor,bool>
 {
 public:
     IsShell (const ::sd::ViewShell* pShell) : mpShell(pShell) {}
     bool operator() (const ActiveShellDescriptor& rDescriptor)
-    {
-        return rDescriptor.mpViewShell == mpShell;
-    }
+    { return rDescriptor.mpViewShell == mpShell; }
+private:
     const ViewShell* mpShell;
 };
 
-class IsId
+class IsId : public ::std::unary_function<ActiveShellDescriptor,bool>
 {
 public:
     IsId (ShellId nId) : mnId(nId) {}
     bool operator() (const ActiveShellDescriptor& rDescriptor)
-    {
-        return rDescriptor.mnId == mnId;
-    }
+    { return rDescriptor.mnId == mnId; }
+private:
     ShellId mnId;
 };
 
@@ -217,6 +216,13 @@ private:
     void DumpSfxShellStack (void);
 
     void UpdateShellStack (ShellStack& rRequestedStack);
+
+    /** To be called before a shell is taken fom the SFX shell stack.  This
+        method deactivates an active text editing to avoid problems with
+        undo managers.
+        Afterwards the Deactivate() of the shell is called.
+    */
+    void Deactivate (SfxShell* pShell);
 };
 
 
@@ -755,7 +761,7 @@ void ViewShellManager::Implementation::TakeShellsFromStack (const SfxShell* pShe
         for (USHORT nIndex=0; true; nIndex++)
         {
             SfxShell* pShellOnStack = mrBase.GetSubShell(nIndex);
-            pShellOnStack->Deactivate(TRUE);
+            Deactivate(pShellOnStack);
             if (pShellOnStack == pShell)
                 break;
         }
@@ -932,6 +938,34 @@ void ViewShellManager::Implementation::DumpSfxShellStack (void)
             ::rtl::OUStringToOString(pShell->GetName(),RTL_TEXTENCODING_UTF8).getStr());
     }
 }
+
+
+
+
+void ViewShellManager::Implementation::Deactivate (SfxShell* pShell)
+{
+    OSL_ASSERT(pShell!=NULL);
+
+    // We have to end a text edit for view shells that are to be taken from
+    // the shell stack.
+    ViewShell* pViewShell = dynamic_cast<ViewShell*>(pShell);
+    if (pViewShell != NULL)
+    {
+        SdrView* pView = pViewShell->GetView();
+        if (pView!=NULL && pView->IsTextEdit())
+        {
+            pView->EndTextEdit();
+            pView->UnmarkAll();
+            pViewShell->GetViewFrame()->GetDispatcher()->Execute(
+                SID_OBJECT_SELECT,
+                SFX_CALLMODE_ASYNCHRON);
+        }
+    }
+
+    // Now we can deactivate the shell.
+    pShell->Deactivate(TRUE);
+}
+
 
 
 
