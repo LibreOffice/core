@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: hdu $ $Date: 2002-09-20 14:11:42 $
+ *  last change: $Author: ssa $ $Date: 2002-09-20 15:51:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6160,6 +6160,7 @@ Rectangle OutputDevice::GetTextRect( const Rectangle& rRect,
     else
         aRect.Bottom() = aRect.Top()+(nTextHeight*nLines)-1;
 
+    aRect.Right()++; // #99188# get rid of rounding problems when using this rect later
     return aRect;
 }
 
