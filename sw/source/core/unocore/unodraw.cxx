@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-16 09:19:01 $
+ *  last change: $Author: tl $ $Date: 2002-10-30 13:03:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,7 +435,7 @@ OUString SwXDrawPage::getImplementationName(void) throw( RuntimeException )
  ---------------------------------------------------------------------------*/
 BOOL SwXDrawPage::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.drawing.DrawPage") == rServiceName;
+    return C2U("com.sun.star.drawing.GenericDrawPage") == rServiceName;
 }
 /* -----------------------------06.04.00 13:14--------------------------------
 
@@ -444,7 +444,7 @@ Sequence< OUString > SwXDrawPage::getSupportedServiceNames(void) throw( RuntimeE
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.drawing.DrawPage");
+    pArray[0] = C2U("com.sun.star.drawing.GenericDrawPage");
     return aRet;
 }
 /*-- 22.01.99 11:22:25---------------------------------------------------
