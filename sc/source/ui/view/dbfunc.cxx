@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfunc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-27 13:13:07 $
+ *  last change: $Author: nn $ $Date: 2000-11-10 19:07:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,27 +68,19 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <offmgr/app.hxx>
+#include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/msgbox.hxx>
 
 #include "dbfunc.hxx"
-#include "tabvwsh.hxx"
 #include "docsh.hxx"
 #include "attrib.hxx"
-#include "patattr.hxx"
 #include "sc.hrc"
 #include "undodat.hxx"
 #include "dbcolect.hxx"
 #include "globstr.hrc"
 #include "global.hxx"
 #include "dbdocfun.hxx"
-
-#ifndef _SV_WAITOBJ_HXX //autogen
-#include <vcl/waitobj.hxx>
-#endif
-
-// STATIC DATA -----------------------------------------------------------
 
 //==================================================================
 
@@ -299,7 +291,7 @@ void ScDBFunc::Query( const ScQueryParam& rQueryParam, const ScRange* pAdvSource
         if (!bCopy)
             UpdateScrollBars();
 
-        GetViewData()->GetViewShell()->GetViewFrame()->GetBindings().Invalidate( SID_UNFILTER );
+        GetViewData()->GetBindings().Invalidate( SID_UNFILTER );
     }
 }
 
@@ -402,8 +394,7 @@ void ScDBFunc::ToggleAutoFilter()
     {
         aModificator.SetDocumentModified();
 
-        SfxBindings& rBindings = GetViewData()->GetViewShell()->
-                                    GetViewFrame()->GetBindings();
+        SfxBindings& rBindings = GetViewData()->GetBindings();
         rBindings.Invalidate( SID_AUTO_FILTER );
         rBindings.Invalidate( SID_AUTOFILTER_HIDE );
     }
@@ -435,18 +426,6 @@ void ScDBFunc::HideAutoFilter()
     SfxBindings& rBindings = GetViewData()->GetBindings();
     rBindings.Invalidate( SID_AUTO_FILTER );
     rBindings.Invalidate( SID_AUTOFILTER_HIDE );
-}
-
-//
-//      Datenbank - Import
-//
-
-void ScDBFunc::StartQuerySh( const ScImportParam& rParam )
-{
-    //! show the database beamer, with the database from rParam if one is set
-    //! this will be handled by a uno service in the future
-
-    DBG_ERROR("Database beamer integration is not implemented yet");
 }
 
 //      Re-Import
