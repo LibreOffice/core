@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:32:28 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 09:47:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,6 +286,7 @@
 #include "commitlistener.hxx"
 #include "openflag.hxx"
 #include "brokenpackageint.hxx"
+#include "graphhelp.hxx"
 
 //________________________________________________________________________________________________________
 //  defines
@@ -410,11 +411,6 @@ Size impl_Size_Struct2Object( const SIZE& aSize )
 
     return aReturnValue ;
 }
-
-extern void* getEnhMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta );
-extern void* getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, const Size& aMetaSize );
-extern SvMemoryStream* getFormatStrFromGDI_Impl( const GDIMetaFile* pGDIMeta, sal_uInt32 nFormat );
-extern sal_Bool supportsMetaFileHandle_Impl();
 
 class SfxPrintJob_Impl : public cppu::WeakImplHelper1
 <
@@ -2303,7 +2299,7 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
 
                 if ( pMetaFile )
                 {
-                    SvMemoryStream* pStream = getFormatStrFromGDI_Impl( pMetaFile, CVT_EMF );
+                    SvMemoryStream* pStream = GraphicHelper::getFormatStrFromGDI_Impl( pMetaFile, CVT_EMF );
                     delete pMetaFile;
                     if ( pStream )
                     {
@@ -2313,14 +2309,14 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
                     }
                 }
             }
-            else if ( supportsMetaFileHandle_Impl()
+            else if ( GraphicHelper::supportsMetaFileHandle_Impl()
               && aFlavor.DataType == getCppuType( (const sal_uInt64*) 0 ) )
             {
                 GDIMetaFile* pMetaFile = m_pData->m_pObjectShell->GetPreviewMetaFile( sal_True );
 
                 if ( pMetaFile )
                 {
-                    aAny <<= reinterpret_cast< const sal_uInt64 >( getEnhMetaFileFromGDI_Impl( pMetaFile ) );
+                    aAny <<= reinterpret_cast< const sal_uInt64 >( GraphicHelper::getEnhMetaFileFromGDI_Impl( pMetaFile ) );
                     delete pMetaFile;
                 }
             }
@@ -2335,7 +2331,7 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
 
                 if ( pMetaFile )
                 {
-                    SvMemoryStream* pStream = getFormatStrFromGDI_Impl( pMetaFile, CVT_WMF );
+                    SvMemoryStream* pStream = GraphicHelper::getFormatStrFromGDI_Impl( pMetaFile, CVT_WMF );
                     delete pMetaFile;
 
                     if ( pStream )
@@ -2346,7 +2342,7 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
                     }
                 }
             }
-            else if ( supportsMetaFileHandle_Impl()
+            else if ( GraphicHelper::supportsMetaFileHandle_Impl()
               && aFlavor.DataType == getCppuType( (const sal_uInt64*) 0 ) )
             {
                 // means HGLOBAL handler to memory storage containing METAFILEPICT structure
@@ -2356,7 +2352,7 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
                 if ( pMetaFile )
                 {
                     Size aMetaSize = pMetaFile->GetPrefSize();
-                    aAny <<= reinterpret_cast< const sal_uInt64 >( getWinMetaFileFromGDI_Impl( pMetaFile, aMetaSize ) );
+                    aAny <<= reinterpret_cast< const sal_uInt64 >( GraphicHelper::getWinMetaFileFromGDI_Impl( pMetaFile, aMetaSize ) );
 
                     delete pMetaFile;
                 }
@@ -2372,7 +2368,7 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
 
                 if ( pMetaFile )
                 {
-                    SvMemoryStream* pStream = getFormatStrFromGDI_Impl( pMetaFile, CVT_PNG );
+                    SvMemoryStream* pStream = GraphicHelper::getFormatStrFromGDI_Impl( pMetaFile, CVT_PNG );
                     delete pMetaFile;
 
                     if ( pStream )
@@ -2406,7 +2402,7 @@ SEQUENCE< DATAFLAVOR > SAL_CALL SfxBaseModel::getTransferDataFlavors()
     if ( impl_isDisposed() )
         throw DISPOSEDEXCEPTION();
 
-    sal_Int32 nSuppFlavors = supportsMetaFileHandle_Impl() ? 5 : 3;
+    sal_Int32 nSuppFlavors = GraphicHelper::supportsMetaFileHandle_Impl() ? 5 : 3;
     SEQUENCE< DATAFLAVOR > aFlavorSeq( nSuppFlavors );
 
     aFlavorSeq[0].MimeType =
@@ -2462,7 +2458,7 @@ sal_Bool SAL_CALL SfxBaseModel::isDataFlavorSupported( const DATAFLAVOR& aFlavor
     {
         if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             return sal_True;
-        else if ( supportsMetaFileHandle_Impl()
+        else if ( GraphicHelper::supportsMetaFileHandle_Impl()
           && aFlavor.DataType == getCppuType( (const sal_uInt64*) 0 ) )
             return sal_True;
     }
@@ -2470,7 +2466,7 @@ sal_Bool SAL_CALL SfxBaseModel::isDataFlavorSupported( const DATAFLAVOR& aFlavor
     {
         if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             return sal_True;
-        else if ( supportsMetaFileHandle_Impl()
+        else if ( GraphicHelper::supportsMetaFileHandle_Impl()
           && aFlavor.DataType == getCppuType( (const sal_uInt64*) 0 ) )
             return sal_True;
     }
@@ -3053,7 +3049,7 @@ Sequence< ::rtl::OUString > SAL_CALL SfxBaseModel::getDocumentSubStoragesNames()
         {
             SvStorageInfoList aSubStorInfoList;
             rStorage->FillInfoList( &aSubStorInfoList );
-            for ( sal_Int32 nInd = 0; nInd < aSubStorInfoList.Count(); nInd++ )
+            for ( sal_uInt32 nInd = 0; nInd < aSubStorInfoList.Count(); nInd++ )
             {
                 if ( aSubStorInfoList[nInd].IsStorage() )
                 {
