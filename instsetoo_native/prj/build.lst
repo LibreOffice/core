@@ -2,4 +2,5 @@ oon	instsetoo_native	:	UnoControls basctl chaos configmgr cpputools dbaccess des
 oon	instsetoo_native						usr1	-	all	oon_mkout NULL
 oon	instsetoo_native\packimages				nmake	-	all	oon_pack NULL
 oon	instsetoo_native\packconfig				nmake	-	all	oon_config NULL
-oon	instsetoo_native\util					nmake	-	all	oon_util oon_pack oon_config NULL
+oon	instsetoo_native\inc_openoffice\windows\msi_languages	nmake	-	all	oon_msilang NULL
+oon	instsetoo_native\util					nmake	-	all	oon_util oon_pack oon_config oon_msilang NULL
