@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocoll.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:41:59 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:52:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -646,7 +646,7 @@ uno::Any SAL_CALL SwXTextTables::getByIndex(sal_Int32 nIndex)
     uno::Any aRet;
     if(IsValid())
     {
-        if(GetDoc()->GetTblFrmFmtCount(sal_True) > nIndex)
+        if(0 <= nIndex && GetDoc()->GetTblFrmFmtCount(sal_True) > nIndex)
         {
             SwFrmFmt& rFmt = GetDoc()->GetTblFrmFmt( nIndex, sal_True);
             uno::Reference< XTextTable >  xTbl = SwXTextTables::GetObject(rFmt);
@@ -863,7 +863,7 @@ uno::Any SwXFrames::getByIndex(sal_Int32 nIndex)
     if(IsValid())
     {
         sal_uInt16 nCount = GetDoc()->GetFlyCount(eType);
-        if( nIndex < USHRT_MAX && nCount > nIndex)
+        if( 0 <= nIndex && nIndex < USHRT_MAX && nCount > nIndex)
         {
             SwFrmFmt* pFmt = GetDoc()->GetFlyNum((sal_uInt16) nIndex, eType);
             SwXFrame* pFrm = SwXFrames::GetObject(*pFmt, eType);
@@ -1517,7 +1517,7 @@ uno::Any SwXBookmarks::getByIndex(sal_Int32 nIndex)
     uno::Any aRet;
     if(IsValid())
     {
-        if(GetDoc()->GetBookmarkCnt(sal_True) > nIndex)
+        if(nIndex <= 0 && GetDoc()->GetBookmarkCnt(sal_True) > nIndex)
         {
             SwBookmark& rBkm = GetDoc()->GetBookmark((sal_uInt16) nIndex, sal_True);
             uno::Reference< XTextContent >  xRef = GetObject(rBkm, GetDoc());
