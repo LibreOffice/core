@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphicproperties.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 15:06:04 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:19:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,6 +211,10 @@ namespace sdr
             mpItemSet->Put( SdrGrafInvertItem( FALSE ) );
             mpItemSet->Put( SdrGrafModeItem( GRAPHICDRAWMODE_STANDARD ) );
             mpItemSet->Put( SdrGrafCropItem( 0, 0, 0, 0 ) );
+
+            // #i25616#
+            mpItemSet->Put( XFillStyleItem(XFILL_NONE) );
+            mpItemSet->Put( XLineStyleItem(XLINE_NONE) );
         }
     } // end of namespace properties
 } // end of namespace sdr
