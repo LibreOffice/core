@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:19:51 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 14:22:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,7 +395,6 @@ class Desktop   :   // interfaces
         static const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor(                                                                   );
         void                                                    impl_sendQueryTerminationEvent  (                                                                   ) throw( css::frame::TerminationVetoException );
         void                                                    impl_sendNotifyTerminationEvent (                                                                   );
-        sal_Bool                                                impl_checkPlugInState           (                                                                   ) const;
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods
