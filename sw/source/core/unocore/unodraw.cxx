@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-03-28 10:11:01 $
+ *  last change: $Author: os $ $Date: 2001-04-04 12:29:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,9 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
+#endif
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -146,6 +149,10 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::drawing;
 using namespace ::rtl;
+
+DECLARE_STL_USTRINGACCESS_MAP( Sequence< sal_Int8 > *,  SwShapeImplementationIdMap );
+
+static SwShapeImplementationIdMap aImplementationIdMap;
 
 /* -----------------22.01.99 13:19-------------------
  *
@@ -790,6 +797,7 @@ SwXShape::SwXShape(uno::Reference< uno::XInterface > & xShape) :
     aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_SHAPE)),
     _pMap(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_SHAPE)),
     pImpl(new SwShapeDescriptor_Impl),
+    pImplementationId(0),
     m_bDescriptor(sal_True)
 {
     if(xShape.is())  // default Ctor
@@ -847,7 +855,7 @@ Any SwXShape::queryInterface( const uno::Type& aType ) throw(RuntimeException)
 /* -----------------------------16.06.00 12:21--------------------------------
 
  ---------------------------------------------------------------------------*/
-Sequence< Type > SAL_CALL SwXShape::getTypes(  ) throw(RuntimeException)
+Sequence< Type > SwXShape::getTypes(  ) throw(RuntimeException)
 {
     Sequence< uno::Type > aRet = SwXShapeBaseClass::getTypes();
     if(xShapeAgg.is())
@@ -869,6 +877,50 @@ Sequence< Type > SAL_CALL SwXShape::getTypes(  ) throw(RuntimeException)
         }
     }
     return aRet;
+}
+/* -----------------------------04.04.01 07:37--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Sequence< sal_Int8 > SwXShape::getImplementationId(  ) throw(RuntimeException)
+{
+    vos::OGuard aGuard( Application::GetSolarMutex() );
+    // do we need to compute the implementation id for this instance?
+    if( !pImplementationId && xShapeAgg.is())
+    {
+        Reference< XShape > xAggShape;
+        xShapeAgg->queryAggregation( ::getCppuType((Reference< XShape >*)0) ) >>= xAggShape;
+
+        if( xAggShape.is() )
+        {
+            const OUString aShapeType( xAggShape->getShapeType() );
+            // did we already compute an implementation id for the agregated shape type?
+            SwShapeImplementationIdMap::iterator aIter( aImplementationIdMap.find(aShapeType ) );
+            if( aIter == aImplementationIdMap.end() )
+            {
+                // we need to create a new implementation id for this
+                // note: this memory is not free'd until application exists
+                //       but since we have a fixed set of shapetypes and the
+                //       memory will be reused this is ok.
+                pImplementationId = new uno::Sequence< sal_Int8 >( 16 );
+                rtl_createUuid( (sal_uInt8 *) pImplementationId->getArray(), 0, sal_True );
+                aImplementationIdMap[ aShapeType ] = pImplementationId;
+            }
+            else
+            {
+                // use the already computed implementation id
+                pImplementationId = (*aIter).second;
+            }
+        }
+    }
+    if( NULL == pImplementationId )
+    {
+        DBG_ERROR( "Could not create an implementation id for a SwXShape!" );
+        return Sequence< sal_Int8 > ();
+    }
+    else
+    {
+        return *pImplementationId;
+    }
 }
 /*-- 22.01.99 11:42:26---------------------------------------------------
 
