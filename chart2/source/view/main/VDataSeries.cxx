@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDataSeries.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-05 17:06:55 $
+ *  last change: $Author: iha $ $Date: 2004-01-06 19:39:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,6 +412,14 @@ DataPointLabel* VDataSeries::getDataPointLabel( sal_Int32 index ) const
     return pRet;
 }
 
+DataPointLabel* VDataSeries::getDataPointLabelIfLabel( sal_Int32 index ) const
+{
+    DataPointLabel* pLabel = this->getDataPointLabel( index );
+    if( !pLabel || (!pLabel->ShowNumber && !pLabel->ShowNumberInPercent
+        && !pLabel->ShowCategoryName && !pLabel->ShowLegendSymbol ) )
+        return 0;
+    return pLabel;
+}
 
 void createTextLabelMultiPropertyListsFromPropertySet(
             const uno::Reference< beans::XPropertySet >& xSourceProp

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDataSeries.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-15 19:19:15 $
+ *  last change: $Author: iha $ $Date: 2004-01-06 19:39:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,12 +161,14 @@ public:
     rtl::OUString       getDataCurveCID( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xDataCurveModelProp ) const;
 
     ::drafts::com::sun::star::chart2::DataPointLabel*
-                        getDataPointLabel( sal_Int32 index ) const;
+                        getDataPointLabelIfLabel( sal_Int32 index ) const;
     bool    getTextLabelMultiPropertyLists( sal_Int32 index, tNameSequence*& pPropNames, tAnySequence*& pPropValues ) const;
 
 private: //methods
     VDataSeries();
     bool    isAttributedDataPoint( sal_Int32 index ) const;
+    ::drafts::com::sun::star::chart2::DataPointLabel*
+                        getDataPointLabel( sal_Int32 index ) const;
 
 private: //member
 
