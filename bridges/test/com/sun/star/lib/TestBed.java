@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestBed.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:37:42 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 14:57:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,30 +145,33 @@ public final class TestBed {
     }
 
     public static abstract class Client {
+        protected abstract boolean run(XBridge bridge) throws Throwable;
+
+        protected final XBridge getBridge() throws com.sun.star.uno.Exception {
+            XMultiComponentFactory factory = context.getServiceManager();
+            XConnector connector = (XConnector) UnoRuntime.queryInterface(
+                XConnector.class,
+                factory.createInstanceWithContext(
+                    "com.sun.star.connection.Connector", context));
+            XBridgeFactory bridgeFactory
+                = (XBridgeFactory) UnoRuntime.queryInterface(
+                    XBridgeFactory.class,
+                    factory.createInstanceWithContext(
+                        "com.sun.star.bridge.BridgeFactory", context));
+            System.out.println("Client: Connecting...");
+            XConnection connection = connector.connect(connectionDescription);
+            System.out.println("Client: ...connected...");
+            XBridge bridge = bridgeFactory.createBridge(
+                "", protocolDescription, connection, null);
+            System.out.println("Client: ...bridged.");
+            return bridge;
+        }
+
         protected final void execute() {
             int status = CLIENT_FAILED;
             try {
-                XComponentContext context
-                    = Bootstrap.createInitialComponentContext(null);
-                XMultiComponentFactory factory = context.getServiceManager();
-                XBridgeFactory bridgeFactory
-                    = (XBridgeFactory) UnoRuntime.queryInterface(
-                        XBridgeFactory.class,
-                        factory.createInstanceWithContext(
-                            "com.sun.star.bridge.BridgeFactory", context));
-                XConnector connector = (XConnector) UnoRuntime.queryInterface(
-                    XConnector.class,
-                    factory.createInstanceWithContext(
-                        "com.sun.star.connection.Connector", context));
-                System.out.println("Client: Connecting...");
-                XConnection connection
-                    = connector.connect(connectionDescription);
-                System.out.println("Client: ...connected...");
-                XBridge bridge = bridgeFactory.createBridge("",
-                                                            protocolDescription,
-                                                            connection, null);
-                System.out.println("Client: ...bridged.");
-                if (run(bridge)) {
+                context = Bootstrap.createInitialComponentContext(null);
+                if (run(getBridge())) {
                     status = CLIENT_DONE;
                 }
             } catch (Throwable e) {
@@ -177,7 +180,7 @@ public final class TestBed {
             System.exit(status);
         }
 
-        protected abstract boolean run(XBridge bridge) throws Throwable;
+        private XComponentContext context;
     }
 
     private static final class Server extends Thread {
@@ -206,13 +209,14 @@ public final class TestBed {
                     state = ACCEPTING;
                     notifyAll();
                 }
-                XConnection connection = acceptor.accept(connectionDescription);
-                System.out.println("Server: ...connected...");
-                XBridge bridge = bridgeFactory.createBridge("",
-                                                            protocolDescription,
-                                                            connection,
-                                                            provider);
-                System.out.println("Server: ...bridged.");
+                for (;;) {
+                    XConnection connection = acceptor.accept(
+                        connectionDescription);
+                    System.out.println("Server: ...connected...");
+                    XBridge bridge = bridgeFactory.createBridge(
+                        "", protocolDescription, connection, provider);
+                    System.out.println("Server: ...bridged.");
+                }
             } catch (Throwable e) {
                 e.printStackTrace(System.err);
             }
