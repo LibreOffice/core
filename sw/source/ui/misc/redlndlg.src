@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlndlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:33:19 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:27:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ ModelessDialog DLG_REDLINE_ACCEPT
     Text [ portuguese_brazilian ] = "Redlining" ;
     Text [ swedish ] = "Acceptera eller avslå ändringar" ;
     Text [ danish ] = "Accepter eller forkast ændringer" ;
-    Text [ italian ] = "Accetta o rifiuta le modifiche" ;
+    Text [ italian ] = "Accetta o annulla le modifiche" ;
     Text [ spanish ] = "Aceptar o rechazar modificaciones" ;
     Text [ french ] = "Accepter ou rejeter les modifications" ;
     Text [ dutch ] = "Wijzigingen accepteren of verwerpen" ;
@@ -363,5 +363,6 @@ Bitmap BMP_ROOT_OPENED
 {
     File = "minus.bmp" ;
 };
+
 
 
