@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:53:00 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -993,7 +993,12 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                             {
                                 eShapeType = XmlShapeTypeDrawChartShape;
                             }
-                            else if (sCLSID.equals(rtl::OUString( SvGlobalName( SO3_SC_CLASSID ).GetHexName())))
+                            else if (
+                                sCLSID.equals(rtl::OUString( SvGlobalName( SO3_SC_CLASSID ).GetHexName()))
+                                // #110680#
+                                // same reaction for binfilter
+                                || sCLSID.equals(rtl::OUString( SvGlobalName( BF_SO3_SC_CLASSID ).GetHexName()))
+                                )
                             {
                                 eShapeType = XmlShapeTypeDrawTableShape;
                             }
