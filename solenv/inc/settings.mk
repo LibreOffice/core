@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: hjs $ $Date: 2001-02-12 13:59:46 $
+#   last change: $Author: mh $ $Date: 2001-03-12 16:43:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1180,6 +1180,10 @@ RSCDEFS+=-DTF_UCB
 
 
 UNOIDL=unoidl
+
+# settings for mozilla idl compiler
+XPIDL=xpidl
+XPIDL_LINK=xpt_link
 
 # alle bisher verwendeten Linker benutzen + um LIBs auf der naechsten Zeile
 # weiter zu schreiben, wenn es da eine Ausnahme geben sollte, muss
