@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:14:22 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:00:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1014,11 +1014,11 @@ XclExpCachedMatrix::XclExpCachedMatrix( const ScMatrix& rMatrix, XclStrFlags nFl
         for( SCSIZE nScCol = 0; nScCol < mnScCols; ++nScCol )
         {
             XclExpCachedValue* pNewVal = 0;
-            BOOL bIsString = FALSE;
-            const MatValue* pMatVal = rMatrix.Get( nScCol, nScRow, bIsString );
+            ScMatValType nMatValType = SC_MATVAL_VALUE;
+            const ScMatrixValue* pMatVal = rMatrix.Get( nScCol, nScRow, nMatValType );
             if( !pMatVal )
                 pNewVal = new XclExpCachedString( EMPTY_STRING, nFlags );
-            else if( bIsString )
+            else if( nMatValType != SC_MATVAL_VALUE )
                 pNewVal = new XclExpCachedString( pMatVal->GetString(), nFlags );
             else if( USHORT nScError = pMatVal->GetError() )
                 pNewVal = new XclExpCachedError( nScError );
