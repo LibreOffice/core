@@ -1,5 +1,5 @@
 <!--
-	$Id: table.mod,v 1.39 2001-07-31 14:47:55 dvo Exp $
+	$Id: table.mod,v 1.40 2001-08-10 19:03:30 nn Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -325,7 +325,7 @@
 >
 
 <!ELEMENT table:content-validations (table:content-validation)+>
-<!ELEMENT table:content-validation (table:help-message?, (table:error-message | table:error-macro)?)>
+<!ELEMENT table:content-validation (table:help-message?, (table:error-message | (table:error-macro, office:events?))?)>
 <!ATTLIST table:content-validation
 	table:name CDATA #REQUIRED
 	table:condition CDATA #IMPLIED
