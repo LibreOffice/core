@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-11 11:22:25 $
+ *  last change: $Author: ka $ $Date: 2000-10-11 15:19:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,7 +409,7 @@ Graphic SdrGrafObj::GetTransformedGraphic( ULONG nTransformFlags ) const
         if( ( nTransformFlags & SDRGRAFOBJ_TRANSFORMATTR_ROTATE ) &&
             ( aGeo.nDrehWink && aGeo.nDrehWink != 18000 ) && ( GRAPHIC_BITMAP == eType ) && !IsAnimated() )
         {
-            aActAttr.SetRotation( aGeo.nDrehWink / 10, GetLogicRect().GetSize() );
+            aActAttr.SetRotation( aGeo.nDrehWink / 10 );
         }
 
         aTransGraphic = pGraphic->GetTransformedGraphic( &aActAttr );
@@ -935,6 +935,9 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
 
     if( !bEmptyPresObj && !bDraft )
     {
+        Point   aLogPos( aRect.TopLeft() );
+        Size    aLogSize( aRect.GetSize() );
+
 #ifdef GRAFATTR
         GraphicAttr aAttr( aGrafInfo );
 #else // GRAFATTR
@@ -945,10 +948,6 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
 
         if( bBmp )
         {
-            Rectangle   aDrawRect( ImpGetOutputRect( pOutDev ) );
-            Point       aTopLeft( aDrawRect.TopLeft() );
-            Size        aDrawSize( aDrawRect.GetSize() );
-
             if( pGraphic->IsAnimated() )
             {
                 SdrAnimationMode    eAnimMode = SDR_ANIMATION_ANIMATE;
@@ -965,31 +964,29 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
                     if( eAnimMode == SDR_ANIMATION_ANIMATE )
                     {
                         pGraphic->SetAnimationNotifyHdl( LINK( this, SdrGrafObj, ImpAnimationHdl ) );
-                        pGraphic->StartAnimation( pOutDev, aTopLeft, aDrawSize, 0, &aAttr );
+                        pGraphic->StartAnimation( pOutDev, aLogPos, aLogSize, 0, &aAttr );
                     }
                     else if( eAnimMode == SDR_ANIMATION_DONT_ANIMATE )
-                        pGraphic->Draw( pOutDev, aTopLeft, aDrawSize, &aAttr );
+                        pGraphic->Draw( pOutDev, aLogPos, aLogSize, &aAttr );
                 }
             }
             else
             {
                 if( bRotate && !bRota180 )
-                    aAttr.SetRotation( nDrehWink / 10, GetLogicRect().GetSize() );
+                    aAttr.SetRotation( nDrehWink / 10 );
 
-                pGraphic->Draw( pOutDev, aTopLeft, aDrawSize, &aAttr );
+                pGraphic->Draw( pOutDev, aLogPos, aLogSize, &aAttr );
             }
         }
         else
         {
             // MetaFiles
-            Point       aOutPos( aRect.TopLeft() );
-            const Size  aOutSiz( aRect.GetSize() );
             const ULONG nOldDrawMode = pOutDev->GetDrawMode();
 
             if( bRota180 )
             {
-                aOutPos.X() -= ( aRect.GetWidth() - 1L );
-                aOutPos.Y() -= ( aRect.GetHeight() - 1L );
+                aLogPos.X() -= ( aLogSize.Width() - 1L );
+                aLogPos.Y() -= ( aLogSize.Height() - 1L );
             }
 
             // Falls Modus GRAYBITMAP, wollen wir auch Mtf's als Graustufen darstellen
@@ -1000,7 +997,7 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
                 pOutDev->SetDrawMode( nNewDrawMode |= DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL  );
             }
 
-            pGraphic->Draw( pOutDev, aOutPos, aOutSiz, &aAttr );
+            pGraphic->Draw( pOutDev, aLogPos, aLogSize, &aAttr );
             pOutDev->SetDrawMode( nOldDrawMode );
         }
     }
@@ -1620,9 +1617,7 @@ void SdrGrafObj::ReadData( const SdrObjIOHeader& rHead, SvStream& rIn )
 
 Rectangle SdrGrafObj::ImpGetOutputRect( const OutputDevice* pOutDev ) const
 {
-    const Rectangle aSnapRect( GetSnapRect() );
-
-    return aSnapRect;
+    return GetSnapRect();
 }
 
 // -----------------------------------------------------------------------------
@@ -2122,7 +2117,7 @@ IMPL_LINK( SdrGrafObj, ImpAnimationHdl, Animation*, pAnimation )
 
                                 if( pOut->GetOutDevType()==OUTDEV_WINDOW )
                                 {
-                                    Rectangle   aDrawRect( ImpGetOutputRect( pOut ) );
+                                    Rectangle   aDrawRect( GetAnimationRect( pOut ) );
                                     const Point aOffset( pPV->GetOffset() );
                                     FASTBOOL    bFound = FALSE;
 
