@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-16 13:06:28 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 #include <tools/link.hxx>
 #endif
 
-class SvxNameDialog;
+class AbstractSvxNameDialog; //CHINA001 class SvxNameDialog;
 class ScViewData;
 
 
@@ -86,7 +86,7 @@ class ScDrawShell : public SfxShell
 {
     ScViewData* pViewData;
 
-    DECL_LINK( NameObjectHdl, SvxNameDialog* );
+    DECL_LINK( NameObjectHdl, AbstractSvxNameDialog* );
 
 protected:
     ScViewData* GetViewData()   { return pViewData; }
