@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_javav.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-21 18:21:53 $
+#   last change: $Author: hjs $ $Date: 2002-08-06 18:49:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,7 @@ JFLAGSNUMVERSION_CMD=-version |& $(AWK_HERE) -v num=true -f $(SOLARENV)$/bin$/ge
 
 # that's the version known by the specific
 # java version
-JAVAVER:=$(shell -java $(JFLAGSVERSION_CMD))
+JAVAVER:=$(shell -$(JAVA_HOME)$/bin$/java $(JFLAGSVERSION_CMD))
 
 # and a computed integer for comparing
 # each point seperated token blown up to 4 digits
