@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pb $ $Date: 2001-02-27 13:42:38 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:26:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ QueryBox MSG_QUERY_LOAD_TEMPLATE
     MESSAGE[ japanese ] = "‚±‚ΜΔή·­ÒέΔ‚Μ‘®½ΐ²Ω‚Ν»έ‚Μ½ΐ²Ω‚Ζκ’v‚µ‚ά‚Ή‚ρB\n»έ‚Μ½ΐ²Ω‚π‚±‚ΜΔή·­ÒέΔ‚Ι“K—p‚µ‚ά‚·‚©H";
     MESSAGE[ chinese_simplified ] = "ΥβΈφΞΔµµµΔΈρΚ½ΡωΚ½ÒΡΎ­±»ΈόΈΔ΅£\nΔϊÒªΣΓµ±Η°µΔΠΒΡωΚ½ΐ΄Έ²Π΄ΥβΈφΞΔµµΒπ£Ώ";
     MESSAGE[ chinese_traditional ] = "³o­ΣΐΙ®ΧΌΛ¦΅¤wΈgΕά§σ΅C\n±z­n§σ·s³o­ΣΌΛ¦΅΅H";
-    MESSAGE[ arabic ] = "αΗ ΚΚΨΗΘή ήζΗαΘ ΚδΣνή εΠΗ ΗαγΣΚδΟ γΪ ΗαήζΗαΘ ΗαΝΗανΙ ΗαΞΗΥΙ Θί. εα ΚΡνΟ ΚΨΘνή ΗαήζΗαΘ ΗαΝΗανΙ ΗαΞΗΥΙ Θί Ϊαμ εΠΗ ΗαγΣΚδΟΏ";
+    MESSAGE[ arabic ] = "αΗ ΚΚΨΗΘή ΓδγΗΨ ΚδΣνή εΠΗ ΗαγΣΚδΟ γΪ ΗαΓδγΗΨ ΗαΝΗανΙ ΗαΞΗΥΙ Θί. εα ΚΡνΟ ΚΨΘνή ΗαΓδγΗΨ ΗαΝΗανΙ ΗαΞΗΥΙ Θί Ϊαμ εΠΗ ΗαγΣΚδΟΏ";
     MESSAGE[ dutch ] = "De sjablonen bij dit document komen niet overeen met uw actuele sjablonen. Wilt u dat uw actuele sjablonen op dit documentworden toegepast?";
     MESSAGE[ chinese_simplified ] = "ΥβΈφΞΔµµµΔΈρΚ½ΡωΚ½ÒΡΎ­±»ΈόΈΔ΅£\nΔϊÒªΣΓµ±Η°µΔΠΒΡωΚ½ΐ΄Έ²Π΄ΥβΈφΞΔµµΒπ£Ώ";
     MESSAGE[ greek ] = "Τα πρότυπα μορφοποίησης αυτού του εγγράφου δεν συμπίπτουν με τα τρέχοντα πρότυπα. Να εφαρμοστούν τα πρότυπα αυτά στο έγγραφο;";
@@ -370,7 +370,7 @@ String STR_PRINT_STYLES_HEADER
     Text[ polish ] = "Style formatu w   ";
     Text[ japanese ] = "‘®½ΐ²Ω ";
     Text[ chinese_traditional ] = "®ζ¦΅ΌΛ¦΅¦b ";
-    Text[ arabic ] = "δγΗΠΜ ααΚδΣνή έν ";
+    Text[ arabic ] = "ΓδγΗΨ ΗαΚδΣνή έν ";
     Text[ dutch ] = "Opmaakprofielen in  ";
     Text[ chinese_simplified ] = "ΈρΚ½ΡωΚ½ΤΪ ";
     Text[ greek ] = "Πρότυπα μορφοποίησης στο  ";
@@ -398,10 +398,10 @@ String STR_PRINT_STYLES
     Text[ polish ] = "Drukuj style formatu";
     Text[ japanese ] = "σό‘®½ΐ²Ω";
     Text[ chinese_traditional ] = "¦C¦L®ζ¦΅ΌΛ¦΅";
-    Text[ arabic ] = "ΨΘΗΪΙ δγΗΠΜ ΗαΚδΣνή";
+    Text[ arabic ] = "ΨΘΗΪΙ ΓδγΗΨ ΗαΚδΣνή";
     Text[ dutch ] = "Opmaakprofielen afdrukken";
     Text[ chinese_simplified ] = "΄ςΣ΅ΈρΚ½ΡωΚ½";
-    Text[ greek ] = "Εκτύπωση προτύπων μορφοποίησης";
+    Text[ greek ] = "Εκτύπωση των προτύπων μορφοποίησης";
     Text[ korean ] = "Ό­½Δ ΐ―Ηόΐ» ΐΞΌβΓβ·Β";
     Text[ turkish ] = "Biηimler yazdύrύlύyor";
     Text[ language_user1 ] = " ";
@@ -953,7 +953,7 @@ InfoBox MSG_TEMPLATE_DIR_NOT_EXIST
     Message[ arabic ] = "Οανα ΗαήζΗαΘ \n$(DIR)\nΫνΡ γζΜζΟ.";
     Message[ dutch ] = "De sjablonenmap\n$(DIR)\nbestaat niet.";
     Message[ chinese_simplified ] = "ΥβΈφΡωΚ½ΔΏΒΌ\n$(DIR)\n²»΄ζΤΪ΅£";
-    Message[ greek ] = "Ο κατάλογος προτύπων\n$(DIR)\nδεν υπάρχει.";
+    Message[ greek ] = "Ο κατάλογος των προτύπων\n$(DIR)\nδεν υπάρχει.";
     Message[ korean ] = "Ό­½ΔΖΔΐΟ µπ·ΊΕδΈ®\n$(DIR)\nΐΜ£¨°΅£© Ύψ½ΐ΄Ο΄Ω.";
     Message[ turkish ] = "\n$(DIR)\nώablon dizini mevcut deπil.";
     Message[ language_user1 ] = " ";
@@ -1293,11 +1293,11 @@ String RID_STR_FILTBASIC
     Text[ polish ] = "Biblioteki w %PRODUCTNAME Basic";
     Text[ japanese ] = "%PRODUCTNAME Basic Χ²ΜήΧΨ";
     Text[ chinese_traditional ] = "%PRODUCTNAME Basic µ{¦΅®w";
-    Text[ arabic ] = "γίΗΚΘ %PRODUCTNAME Basic";
+    Text[ arabic ] = "γίΚΘΗΚ %PRODUCTNAME Basic";
     Text[ dutch ] = "%PRODUCTNAME Basic Bibliotheken";
     Text[ chinese_simplified ] = "%PRODUCTNAME Basic Ώβ";
     Text[ greek ] = "Βιβλιοθήκες %PRODUCTNAME Basic";
-    Text[ korean ] = "%PRODUCTNAME Basic ¶σΐΜΊκ·―Έ®";
+    Text[ korean ] = "StarBasic ¶σΐΜΊκ·―Έ®";
     Text[ turkish ] = "%PRODUCTNAME Basic kitaplύklarύ";
     Text[ language_user1 ] = " ";
 };
@@ -1425,7 +1425,7 @@ Resource RID_DLSTATUS
         Text[ polish ] = "£adowanie: $(TARGET) z $(HOST). Za³adowano: $(BYTE)";
         Text[ japanese ] = "“]‘—‚·‚ι:$(HOST)‚Μ$(TARGET)B “Η‚έζ‚θ: $(BYTE)";
         Text[ chinese_traditional ] = "¶Η»Ό΅G$(HOST)ªΊ$(TARGET)΅C¤wΈgΎ\\Εª΅G $(BYTE)";
-        Text[ arabic ] = "νΚγ δήα: $(TARGET) γδ $(HOST). ΚγΚ ήΡΗΑΙ: $(BYTE)";
+        Text[ arabic ] = "ΜΗΡν ΚΝγνα: $(TARGET) γδ $(HOST). ΚγΚ ήΡΗΑΙ: $(BYTE)";
         Text[ dutch ] = "Geladen wordt: $(TARGET) van $(HOST). Gelezen: $(BYTE)";
         Text[ chinese_simplified ] = "΄«µέ£Ί$(HOST)µΔ$(TARGET)΅£ÒΡΎ­ΤΔ¶Α£Ί$(BYTE)";
         Text[ greek ] = "Μετάδοση: $(TARGET) από $(HOST). Έγινε ανάγνωση: $(BYTE)";
@@ -1676,7 +1676,7 @@ String STR_TEMPL_RESET
     Text[ russian ] = "Ψΰαλξν \"$(TEMPLATE)\" νε νΰιδεν. Θρκΰςό εγξ β ασδσωεμ?";
     Text[ polish ] = "Szablonu \"$(TEMPLATE)\" nie znaleziono. Czy szukaζ go nadal?";
     Text[ japanese ] = "ΓέΜίΪ°Δ\"$(TEMPLATE)\"‚Ν©‚Β‚©‚θ‚ά‚Ή‚ρ‚Ε‚µ‚½B‚±‚κ‚©‚η‚ΰ‘±‚―‚Δυ‚µ‚ά‚·‚©?";
-    Text[ chinese_traditional ] = "µLªk§δ¨μ³o­ΣΌΛ¦΅ $(TEMPLATE) ΅C¤µ«α­nΔ~Δς΄M§δ¥¦΅H";
+    Text[ chinese_traditional ] = "µLªk§δ¨μ³o­ΣΌΛ¦΅ $(TEMPLATE) ΅C¤µ«α­nΔ~Δς·j΄M¥¦΅H";
     Text[ arabic ] = "ΚΪΠΡ ΗαΪΛζΡ Ϊαμ ΗαήΗαΘ \"$(TEMPLATE)\". εα ΚΡνΟ γΚΗΘΪΙ ΗαΘΝΛ Ϊδε έν ΗαγΣΚήΘαΏ";
     Text[ dutch ] = "De sjabloon \"$(TEMPLATE)\" werd niet gevonden. Wilt u dat er ook in de toekomst naar wordt gezocht?";
     Text[ chinese_simplified ] = "Ξή·¨ΥÒµ½ΡωΚ½΅°$(TEMPLATE)΅±΅£Δϊ½ρΊσÒªΌΜΠψΡ°ΥÒΛόΒπ£Ώ";
@@ -1776,7 +1776,7 @@ String STR_DOCTYPENAME_SWGLOB
     Text[ swedish ] = "Samlingsdokument";
     Text[ polish ] = "Dokument g³σwny";
     Text[ portuguese_brazilian ] = "Master Document";
-    Text[ japanese ] = "Ο½ΐ° Δή·­ÒέΔ";
+    Text[ japanese ] = "Ο½ΐ°Δή·­ÒέΔ";
     Text[ korean ] = "Έ¶½ΊΕΝ Ή®Ό­";
     Text[ chinese_simplified ] = "ΦχΏΨΞΔµµ";
     Text[ chinese_traditional ] = "¥D±±¤ε¥σ";
