@@ -400,6 +400,7 @@ hedabu: ..\inc\vcattr.hxx %_DEST%\inc%_EXT%\svx\vcattr.hxx
 hedabu: ..\inc\vcbrwwrp.hxx %_DEST%\inc%_EXT%\svx\vcbrwwrp.hxx
 hedabu: ..\inc\vcsbxdef.hxx %_DEST%\inc%_EXT%\svx\vcsbxdef.hxx
 hedabu: ..\inc\vector3d.hxx %_DEST%\inc%_EXT%\svx\vector3d.hxx
+hedabu: ..\inc\verttexttbxctrl.hxx %_DEST%\inc%_EXT%\svx\verttexttbxctrl.hxx
 hedabu: ..\inc\view3d.hxx %_DEST%\inc%_EXT%\svx\view3d.hxx
 hedabu: ..\inc\viewpt3d.hxx %_DEST%\inc%_EXT%\svx\viewpt3d.hxx
 hedabu: ..\inc\viewpt3d.hxx %_DEST%\inc%_EXT%\svx\viewpt3d.hxx

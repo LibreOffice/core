@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: tl $ $Date: 2001-04-09 07:50:31 $
+#   last change: $Author: os $ $Date: 2001-05-02 12:17:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,7 +101,8 @@ SLOFILES=	\
         $(SLO)$/tbcontrl.obj	\
         $(SLO)$/tbxalign.obj	\
         $(SLO)$/tbxdraw.obj		\
-        $(SLO)$/tbxdrctl.obj
+        $(SLO)$/tbxdrctl.obj    \
+        $(SLO)$/verttexttbxctrl.obj
 
 SRCFILES = \
         colrctrl.src			\
@@ -109,7 +110,7 @@ SRCFILES = \
         linectrl.src			\
         tbcontrl.src			\
         tbxdraw.src				\
-        grafctrl.src			
+        grafctrl.src
 
 .ENDIF
 
