@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mh $ $Date: 2002-11-20 10:40:15 $
+#   last change: $Author: hr $ $Date: 2003-03-27 18:13:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,11 +94,4 @@ OUT2INC= \
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
 
-
-TG_DELIVER : $(INPATH)$/misc$/build$/so_predeliver
-        $(DELIVER)
-
-.IF "$(BUILD_PREDELIVER)"!=""
-ALLTAR : TG_DELIVER
-.ENDIF			# "$(BUILD_PREDELIVER)"!=""
 
