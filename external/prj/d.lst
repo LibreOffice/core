@@ -71,10 +71,12 @@ mkdir: %_DEST%\inc%_EXT%\X11\extensions
 ..\neon\rtufiles\hip_xml.h %_DEST%\inc%_EXT%\external\neon\hip_xml.h
 ..\neon\rtufiles\http_basic.h %_DEST%\inc%_EXT%\external\neon\http_basic.h
 ..\neon\rtufiles\http_cookies.h %_DEST%\inc%_EXT%\external\neon\http_cookies.h
+..\neon\rtufiles\http_redirect.h %_DEST%\inc%_EXT%\external\neon\http_redirect.h
 ..\neon\rtufiles\http_request.h %_DEST%\inc%_EXT%\external\neon\http_request.h
 ..\neon\rtufiles\http_utils.h %_DEST%\inc%_EXT%\external\neon\http_utils.h
 ..\neon\rtufiles\neon_config.h %_DEST%\inc%_EXT%\external\neon\neon_config.h
 ..\neon\rtufiles\neon_defs.h %_DEST%\inc%_EXT%\external\neon\neon_defs.h
+..\neon\rtufiles\nsocket.h %_DEST%\inc%_EXT%\external\neon\nsocket.h
 ..\neon\rtufiles\socket.h %_DEST%\inc%_EXT%\external\neon\socket.h
 ..\neon\rtufiles\string_utils.h %_DEST%\inc%_EXT%\external\neon\string_utils.h
 ..\neon\rtufiles\uri.h %_DEST%\inc%_EXT%\external\neon\uri.h
