@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldvar.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-17 08:34:02 $
+ *  last change: $Author: obo $ $Date: 2001-05-30 20:21:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,7 +476,7 @@ TabPage TP_FLD_VAR
         Left = TRUE ;
         Text[ chinese_simplified ] = "ÊýÖµ(~V)";
         Text[ russian ] = "Çíà÷åíèå";
-        Text[ polish ] = "Warto?æ";
+        Text[ polish ] = "Wartoœæ";
         Text[ japanese ] = "’l(~V)";
         Text[ chinese_traditional ] = "¼Æ­È(~V)";
         Text[ arabic ] = "ÞíãÉ";
