@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtopwindow.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-01 10:22:50 $
+ *  last change: $Author: mt $ $Date: 2001-07-17 13:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,14 +123,16 @@ void VCLXTopWindow::toFront(  ) throw(::com::sun::star::uno::RuntimeException)
 
 void VCLXTopWindow::toBack(  ) throw(::com::sun::star::uno::RuntimeException)
 {
+/* Not possible in VCL...
+
     ::vos::OGuard aGuard( GetMutex() );
 
     Window* pWindow = GetWindow();
     if ( pWindow )
     {
-        // ((WorkWindow*)pWindow)->ToBack();
-        DBG_ERROR( "toBack niy" );
+        ((WorkWindow*)pWindow)->ToBack();
     }
+*/
 }
 
 void VCLXTopWindow::setMenuBar( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar >& rxMenu ) throw(::com::sun::star::uno::RuntimeException)
