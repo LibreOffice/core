@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2001-11-23 23:05:34 $
+ *  last change: $Author: kz $ $Date: 2001-12-14 18:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ String STR_PAGE_COUNT_MACRO
     Text[ chinese_simplified ] = "æ›´æ”¹é¡µæ•°";
     Text[ russian ] = "Èçìåíåíèå êîëè÷åñòâà ñòğàíèö";
     Text[ polish ] = "Zmiana liczby stron";
-    Text[ japanese ] = "ï¾ï¾Ÿï½°ï½¼ï¾æ•°ã®å¤‰æ›´";
+    Text[ japanese ] = "ãƒšãƒ¼ã‚¸æ•°ã®å¤‰æ›´";
     Text[ chinese_traditional ] = "è®Šæ›´é æ•¸";
     Text[ arabic ] = "ÊÛííÑ ÚÏÏ ÇáÕİÍÇÊ";
     Text[ dutch ] = "Wijziging van het aantal pagina's";
@@ -405,7 +405,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text[ language_user1 ] = " ";
             Text[ russian ] = "Ñòèëè àáçàöà";
             Text[ polish ] = "Style akapitu";
-            Text[ japanese ] = "æ®µè½ï½½ï¾€ï½²ï¾™";
+            Text[ japanese ] = "æ®µè½ã‚¹ã‚¿ã‚¤ãƒ«";
             Text[ chinese_traditional ] = "æ®µè½æ¨£å¼";
             Text[ arabic ] = "ÃäãÇØ İŞÑÉ";
             Text[ greek ] = "Ğñüôõğá ğáñáãñÜöùí";
@@ -625,17 +625,17 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         };
         FilterList [ japanese ] =
         {
-         < "ã™ã¹ã¦ã®ï½½ï¾€ï½²ï¾™" ; SFXSTYLEBIT_ALL ; > ;
-            < "ä½¿ç”¨ã—ãŸï½½ï¾€ï½²ï¾™" ; SFXSTYLEBIT_USED ; > ;
-            < "ï¾•ï½°ï½»ï¾ï½°å®šç¾©ã®ï½½ï¾€ï½²ï¾™" ; SFXSTYLEBIT_USERDEF ; > ;
+         < "ã™ã¹ã¦ã®ã‚¹ã‚¿ã‚¤ãƒ«" ; SFXSTYLEBIT_ALL ; > ;
+            < "ä½¿ç”¨ã—ãŸã‚¹ã‚¿ã‚¤ãƒ«" ; SFXSTYLEBIT_USED ; > ;
+            < "ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã®ã‚¹ã‚¿ã‚¤ãƒ«" ; SFXSTYLEBIT_USERDEF ; > ;
             < "è‡ªå‹•" ; SFXSTYLEBIT_AUTO ; > ;
-            < "æ–‡æ›¸ç”¨ï½½ï¾€ï½²ï¾™" ; SWSTYLEBIT_TEXT ; > ;
-            < "ç« ã®ï½½ï¾€ï½²ï¾™" ; SWSTYLEBIT_CHAPTER ; > ;
-            < "ï¾˜ï½½ï¾„ã®ï½½ï¾€ï½²ï¾™" ; SWSTYLEBIT_LIST ; > ;
-            < "ç´¢å¼•ï½½ï¾€ï½²ï¾™" ; SWSTYLEBIT_IDX ; > ;
-            < "ç‰¹åˆ¥ç¯„å›²ã®ï½½ï¾€ï½²ï¾™" ; SWSTYLEBIT_EXTRA ; > ;
-            < "HTML å½¢å¼ï½½ï¾€ï½²ï¾™" ; SWSTYLEBIT_HTML ; > ;
-            < "æ¡ä»¶ä»˜ãï½½ï¾€ï½²ï¾™" ; SWSTYLEBIT_CONDCOLL ; > ;
+            < "æ–‡æ›¸ç”¨ã‚¹ã‚¿ã‚¤ãƒ«" ; SWSTYLEBIT_TEXT ; > ;
+            < "ç« ã®ã‚¹ã‚¿ã‚¤ãƒ«" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "ãƒªã‚¹ãƒˆã®ã‚¹ã‚¿ã‚¤ãƒ«" ; SWSTYLEBIT_LIST ; > ;
+            < "ç´¢å¼•ã‚¹ã‚¿ã‚¤ãƒ«" ; SWSTYLEBIT_IDX ; > ;
+            < "ç‰¹åˆ¥ç¯„å›²ã®ã‚¹ã‚¿ã‚¤ãƒ«" ; SWSTYLEBIT_EXTRA ; > ;
+            < "HTML å½¢å¼ã‚¹ã‚¿ã‚¤ãƒ«" ; SWSTYLEBIT_HTML ; > ;
+            < "æ¡ä»¶ä»˜ãã‚¹ã‚¿ã‚¤ãƒ«" ; SWSTYLEBIT_CONDCOLL ; > ;
         };
         FilterList [ korean ] =
         {
@@ -845,7 +845,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         Text[ language_user1 ] = " ";
             Text[ russian ] = "Ñòèëè çíàêîâ";
             Text[ polish ] = "Style znaku";
-            Text[ japanese ] = "æ–‡å­—ï½½ï¾€ï½²ï¾™";
+            Text[ japanese ] = "æ–‡å­—ã‚¹ã‚¿ã‚¤ãƒ«";
             FilterList [ russian ] =
         {
             < "Âñå" ; SFXSTYLEBIT_ALL ; > ;
@@ -861,8 +861,8 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         FilterList [ japanese ] =
         {
             < "ã™ã¹ã¦" ; SFXSTYLEBIT_ALL ; > ;
-            < "ä½¿ç”¨ã—ãŸï½½ï¾€ï½²ï¾™" ; SFXSTYLEBIT_USED ; > ;
-            < "ï¾•ï½°ï½»ï¾ï½°å®šç¾©ã®ï½½ï¾€ï½²ï¾™" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "ä½¿ç”¨ã—ãŸã‚¹ã‚¿ã‚¤ãƒ«" ; SFXSTYLEBIT_USED ; > ;
+            < "ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã®ã‚¹ã‚¿ã‚¤ãƒ«" ; SFXSTYLEBIT_USERDEF ; > ;
         };
         Text[ chinese_traditional ] = "å­—å…ƒæ¨£å¼";
             FilterList [ chinese_traditional ] =
@@ -1036,7 +1036,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         Text[ language_user1 ] = " ";
             Text[ russian ] = "Ñòèëè ğàìîê";
             Text[ polish ] = "Style ramek";
-            Text[ japanese ] = "æ ï½½ï¾€ï½²ï¾™";
+            Text[ japanese ] = "æ ã‚¹ã‚¿ã‚¤ãƒ«";
             FilterList [ russian ] =
         {
             < "Âñå" ; SFXSTYLEBIT_ALL ; > ;
@@ -1052,8 +1052,8 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         FilterList [ japanese ] =
         {
             < "ã™ã¹ã¦" ; SFXSTYLEBIT_ALL ; > ;
-            < "ä½¿ç”¨ã—ãŸï½½ï¾€ï½²ï¾™" ; SFXSTYLEBIT_USED ; > ;
-            < "ï¾•ï½°ï½»ï¾ï½°å®šç¾©ã®ï½½ï¾€ï½²ï¾™" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "ä½¿ç”¨ã—ãŸã‚¹ã‚¿ã‚¤ãƒ«" ; SFXSTYLEBIT_USED ; > ;
+            < "ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã®ã‚¹ã‚¿ã‚¤ãƒ«" ; SFXSTYLEBIT_USERDEF ; > ;
         };
         Text[ chinese_traditional ] = "æ¡†æ¨£å¼";
             FilterList [ chinese_traditional ] =
@@ -1238,8 +1238,8 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         FilterList [ japanese ] =
         {
             < "ã™ã¹ã¦" ; SFXSTYLEBIT_ALL ; > ;
-            < "ä½¿ç”¨ã—ãŸï½½ï¾€ï½²ï¾™" ; SFXSTYLEBIT_USED ; > ;
-            < "ï¾•ï½°ï½»ï¾ï½°å®šç¾©ã®ï½½ï¾€ï½²ï¾™" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "ä½¿ç”¨ã—ãŸã‚¹ã‚¿ã‚¤ãƒ«" ; SFXSTYLEBIT_USED ; > ;
+            < "ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã®ã‚¹ã‚¿ã‚¤ãƒ«" ; SFXSTYLEBIT_USERDEF ; > ;
         };
         FilterList [ chinese_traditional ] =
         {
@@ -1249,7 +1249,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         };
         Text[ russian ] = "Ñòèëè ñòğàíèöû";
             Text[ polish ] = "Style strony";
-            Text[ japanese ] = "ï¾ï¾Ÿï½°ï½¼ï¾ï½½ï¾€ï½²ï¾™";
+            Text[ japanese ] = "ãƒšãƒ¼ã‚¸ã‚¹ã‚¿ã‚¤ãƒ«";
             Text[ chinese_simplified ] = "é¡µé¢æ ·å¼";
             Text[ chinese_traditional ] = "é é¢æ¨£å¼";
             Text[ arabic ] = "ÃäãÇØ ÕİÍÉ";
@@ -1416,7 +1416,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         Text[ language_user1 ] = "èë? ñòèë? òèE";
             Text[ russian ] = "Ñòèëè íóìåğàöèè";
             Text[ polish ] = "Style numeracji";
-            Text[ japanese ] = "ç•ªå·ä»˜ã‘ï½½ï¾€ï½²ï¾™";
+            Text[ japanese ] = "ç•ªå·ä»˜ã‘ã‚¹ã‚¿ã‚¤ãƒ«";
             FilterList [ russian ] =
         {
             < "Âñå" ; SFXSTYLEBIT_ALL ; > ;
@@ -1432,8 +1432,8 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         FilterList [ japanese ] =
         {
             < "ã™ã¹ã¦" ; SFXSTYLEBIT_ALL ; > ;
-            < "ä½¿ç”¨ã—ãŸï½½ï¾€ï½²ï¾™" ; SFXSTYLEBIT_USED ; > ;
-            < "ï¾•ï½°ï½»ï¾ï½°å®šç¾©ã®ï½½ï¾€ï½²ï¾™" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "ä½¿ç”¨ã—ãŸã‚¹ã‚¿ã‚¤ãƒ«" ; SFXSTYLEBIT_USED ; > ;
+            < "ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã®ã‚¹ã‚¿ã‚¤ãƒ«" ; SFXSTYLEBIT_USERDEF ; > ;
         };
         Text[ chinese_traditional ] = "ç·¨è™Ÿæ¨£å¼";
             FilterList [ chinese_traditional ] =
@@ -1557,7 +1557,7 @@ String STR_LAB_TITLE
     Text[ chinese_simplified ] = "æ ‡ç­¾";
     Text[ russian ] = "Íàêëåéêè";
     Text[ polish ] = "Etykiety";
-    Text[ japanese ] = "ï¾—ï¾ï¾ï¾™æ›¸ã";
+    Text[ japanese ] = "ãƒ©ãƒ™ãƒ«æ›¸ã";
     Text[ chinese_traditional ] = "è²¼æ¨™";
     Text[ arabic ] = "ÈØÇŞÇÊ ÚäæäÉ";
     Text[ dutch ] = "Etiketten";
@@ -1587,7 +1587,7 @@ String STR_HUMAN_SWDOC_NAME
     Text[ chinese_simplified ] = "æ–‡å­—";
     Text[ russian ] = "Òåêñò";
     Text[ polish ] = "Tekst";
-    Text[ japanese ] = "ï¾ƒï½·ï½½ï¾„";
+    Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆ";
     Text[ chinese_traditional ] = "æ–‡å­—";
     Text[ arabic ] = "ÇáäÕ";
     Text[ dutch ] = "Tekst";
@@ -1616,7 +1616,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE_31
     Text[ chinese_simplified ] = "%PRODUCTNAME 3.0 æ–‡æœ¬";
     Text[ russian ] = "Òåêñò â %PRODUCTNAME 3.0";
     Text[ polish ] = "Tekst %PRODUCTNAME 3.0";
-    Text[ japanese ] = "%PRODUCTNAME 3.0 ï¾ƒï½·ï½½ï¾„";
+    Text[ japanese ] = "%PRODUCTNAME 3.0 ãƒ†ã‚­ã‚¹ãƒˆ";
     Text[ chinese_traditional ] = "%PRODUCTNAME 3.0 æ–‡å­—æ–‡ä»¶";
     Text[ arabic ] = "äÕ ãä %PRODUCTNAME 3.0";
     Text[ dutch ] = "%PRODUCTNAME 3.0 Tekst";
@@ -1646,7 +1646,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE_40
     Text[ language_user1 ] = " ";
     Text[ russian ] = "Òåêñò â %PRODUCTNAME 4.0";
     Text[ polish ] = "Tekst %PRODUCTNAME 4.0";
-    Text[ japanese ] = "%PRODUCTNAME 4.0 ï¾ƒï½·ï½½ï¾„";
+    Text[ japanese ] = "%PRODUCTNAME 4.0 ãƒ†ã‚­ã‚¹ãƒˆ";
     Text[ chinese_traditional ] = "%PRODUCTNAME 4.0 æ–‡å­—æ–‡ä»¶";
     Text[ arabic ] = "äÕ ãä %PRODUCTNAME 4.0";
     Text[ dutch ] = "%PRODUCTNAME 4.0 Tekst";
@@ -1702,7 +1702,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE
     Text[ swedish ] = "Textdokument %PRODUCTNAME 6.0";
     Text[ polish ] = "%PRODUCTNAME 6.0 - Dokument tekstowy";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Text";
-    Text[ japanese ] = "%PRODUCTNAME 6.0 æ–‡æ›¸ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„";
+    Text[ japanese ] = "%PRODUCTNAME 6.0 æ–‡æ›¸ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ";
     Text[ korean ] = "%PRODUCTNAME 6.0 í…ìŠ¤íŠ¸ ë¬¸ì„œ";
     Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 æ–‡æœ¬æ–‡æ¡£";
     Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 æ–‡å­—æ–‡ä»¶";
@@ -1732,7 +1732,7 @@ String STR_CANTOPEN
     TEXT[ chinese_simplified ] = "æ— æ³•æ‰“å¼€è¿™ä¸ªæ–‡æ¡£ã€‚";
     TEXT[ russian ] = "Îòêğûòü äîêóìåíò íåâîçìîæíî.";
     TEXT[ polish ] = "Nie mo¿e otworzyæ dokumentu.";
-    TEXT[ japanese ] = "ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ã‚’é–‹ãã“ã¨ãŒã§ãã¾ã›ã‚“";
+    TEXT[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’é–‹ãã“ã¨ãŒã§ãã¾ã›ã‚“";
     TEXT[ chinese_traditional ] = "ç„¡æ³•é–‹å•Ÿé€™å€‹æ–‡ä»¶ã€‚";
     TEXT[ arabic ] = "áÇ íÓÊØíÚ İÊÍ ÇáãÓÊäÏ.";
     TEXT[ dutch ] = "Document kan niet worden geopend.";
@@ -1760,7 +1760,7 @@ String STR_CANTCREATE
     TEXT[ chinese_simplified ] = "æ— æ³•ç”Ÿæˆæ–‡æ¡£";
     TEXT[ russian ] = "İòîò äîêóìåíò ñîçäàòü íåâîçìîæíî.";
     TEXT[ polish ] = "Dokument nie móg³ zostaæ utworzony.";
-    TEXT[ japanese ] = "ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ã‚’ä½œæˆã§ãã¾ã›ã‚“ã€‚";
+    TEXT[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’ä½œæˆã§ãã¾ã›ã‚“ã€‚";
     TEXT[ chinese_traditional ] = "ç„¡æ³•å»ºç«‹é€™å€‹æ–‡ä»¶";
     TEXT[ arabic ] = "ÊÚĞÑ ÅäÔÇÁ ÇáãÓÊäÏ.";
     TEXT[ dutch ] = "Het document kon niet worden gemaakt.";
@@ -1790,7 +1790,7 @@ String STR_DLLNOTFOUND
     TEXT[ chinese_simplified ] = "æ²¡æœ‰æ‰¾åˆ°ç­›é€‰ã€‚";
     TEXT[ russian ] = "Ôèëüòğ íåíàéäåí.";
     TEXT[ polish ] = "Filtru nie znaleziono.";
-    TEXT[ japanese ] = "ï¾Œï½¨ï¾™ï¾€ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“";
+    TEXT[ japanese ] = "ãƒ•ã‚£ãƒ«ã‚¿ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“";
     TEXT[ chinese_traditional ] = "æ²’æœ‰æ‰¾åˆ°ç¯©é¸ã€‚";
     TEXT[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ÇáİáÊÑ.";
     TEXT[ dutch ] = "Filter niet gevonden.";
@@ -1850,7 +1850,7 @@ String STR_LOAD_GLOBAL_DOC
     Text[ chinese_simplified ] = "ä¸»æ§æ–‡æ¡£çš„åç§°å’Œè·¯å¾„";
     Text[ russian ] = "Èìÿ è ïóòü ãëàâíîãî äîêóìåíòà";
     Text[ polish ] = "Nazwa i œcie¿ka dokumentu g³ównego";
-    Text[ japanese ] = "ï¾ï½½ï¾€ï½°ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ã®åå‰ã¨ï¾Šï¾Ÿï½½";
+    Text[ japanese ] = "ãƒã‚¹ã‚¿ãƒ¼ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã®åå‰ã¨ãƒ‘ã‚¹";
     Text[ chinese_traditional ] = "ä¸»æ§æ–‡ä»¶çš„åç¨±å’Œè·¯å¾‘";
     Text[ arabic ] = "ÇÓã æãÓÇÑ ÇáãÓÊäÏ ÇáÔÇãá";
     Text[ dutch ] = "Naam en pad van het master-document";
@@ -1879,7 +1879,7 @@ String STR_LOAD_HTML_DOC
     Text[ chinese_simplified ] = "HTML æ–‡æ¡£åç§°å’Œè·¯å¾„";
     Text[ russian ] = "Èìÿ è ïóòü äîêóìåíòà HTML";
     Text[ polish ] = "Nazwa i œcie¿ka dokumentu HTML";
-    Text[ japanese ] = "HTML å½¢å¼ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ã®åå‰ã¨ï¾Šï¾Ÿï½½";
+    Text[ japanese ] = "HTML å½¢å¼ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã®åå‰ã¨ãƒ‘ã‚¹";
     Text[ chinese_traditional ] = "HTML æ–‡ä»¶åç¨±å’Œè·¯å¾‘";
     Text[ arabic ] = "ÇÓã æãÓÇÑ ãÓÊäÏ   HTML";
     Text[ dutch ] = "Naam en pad van het HTML document";
@@ -1913,7 +1913,7 @@ InfoBox MSG_ERROR_SEND_MAIL
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ russian ] = "Îøèáêà ïğè îòïğàâëåíèè ñîîáùåíèÿ.";
     MESSAGE[ polish ] = "B³¹d przy wysy³aniu wiadomoœci.";
-    MESSAGE[ japanese ] = "ï¾’ï½°ï¾™é€ä¿¡ã®éš›ã®ï½´ï¾—ï½°";
+    MESSAGE[ japanese ] = "ãƒ¡ãƒ¼ãƒ«é€ä¿¡ã®éš›ã®ã‚¨ãƒ©ãƒ¼";
     MESSAGE[ chinese_traditional ] = "åœ¨å¯„ç™¼é›»å­éƒµä»¶æ™‚ç™¼ç”ŸéŒ¯èª¤ã€‚";
     MESSAGE[ arabic ] = "ÎØÃ ÃËäÇÁ ÅÑÓÇá ÇáÑÓÇáÉ.";
     MESSAGE[ dutch ] = "Fout bij verzenden van bericht.";
@@ -1943,7 +1943,7 @@ InfoBox MSG_ERROR_PASSWD
     MESSAGE[ chinese_simplified ] = "å¯†ç æ— æ•ˆã€‚";
     MESSAGE[ russian ] = "Îøèáêà â ïàğîëå.";
     MESSAGE[ polish ] = "Nieprawid³owe has³o.";
-    MESSAGE[ japanese ] = "ï¾Šï¾Ÿï½½ï¾œï½°ï¾„ï¾ãŒæ­£ã—ãã‚ã‚Šã¾ã›ã‚“ã€‚";
+    MESSAGE[ japanese ] = "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒæ­£ã—ãã‚ã‚Šã¾ã›ã‚“ã€‚";
     MESSAGE[ chinese_traditional ] = "å¯†ç¢¼ç„¡æ•ˆã€‚";
     MESSAGE[ arabic ] = "ßáãÉ ÓÑ ÛíÑ ÕÇáÍÉ.";
     MESSAGE[ dutch ] = "Wachtwoord niet correct.";
@@ -2122,7 +2122,7 @@ String STR_STATSTR_W4WREAD
     Text[ chinese_simplified ] = "è¾“å…¥æ–‡æ¡£...";
     Text[ russian ] = "Èìïîğò äîêóìåíòà...";
     Text[ polish ] = "Importowanie dokumentu...";
-    Text[ japanese ] = "æ–‡æ›¸ã®ï½²ï¾ï¾ï¾Ÿï½°ï¾„...";
+    Text[ japanese ] = "æ–‡æ›¸ã®ã‚¤ãƒ³ãƒãƒ¼ãƒˆ...";
     Text[ chinese_traditional ] = "åŒ¯å…¥æ–‡ä»¶...";
     Text[ arabic ] = "ÌÇÑí ÇÓÊíÑÇÏ ÇáãÓÊäÏ...";
     Text[ dutch ] = "Document wordt geïmporteerd...";
@@ -2152,7 +2152,7 @@ String STR_STATSTR_W4WWRITE
     Text[ chinese_simplified ] = "è¾“å‡ºæ–‡æ¡£...";
     Text[ russian ] = "İêñïîğò äîêóìåíòà...";
     Text[ polish ] = "Eksportowanie dokumentu...";
-    Text[ japanese ] = "æ–‡æ›¸ã®ï½´ï½¸ï½½ï¾ï¾Ÿï½°ï¾„...";
+    Text[ japanese ] = "æ–‡æ›¸ã®ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ...";
     Text[ chinese_traditional ] = "åŒ¯å‡ºæ–‡ä»¶...";
     Text[ arabic ] = "ÌÇÑí ÊÕÏíÑ ÇáãÓÊäÏ...";
     Text[ dutch ] = "Document wordt geëxporteerd...";
@@ -2183,7 +2183,7 @@ String STR_STATSTR_SWGREAD
     Text[ language_user1 ] = " ";
     Text[ russian ] = "Äîêóìåíò çàãğóæàåòñÿ...";
     Text[ polish ] = "£adowanie dokumentu...";
-    Text[ japanese ] = "ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ã‚’èª­ã¿è¾¼ã‚“ã§ã„ã¾ã™...";
+    Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’èª­ã¿è¾¼ã‚“ã§ã„ã¾ã™...";
     Text[ chinese_traditional ] = "è¼‰å…¥æ–‡ä»¶...";
     Text[ arabic ] = "ÌÇÑí ÊÍãíá ÇáãÓÊäÏ...";
     Text[ dutch ] = "Document wordt gemaakt...";
@@ -2213,7 +2213,7 @@ String STR_STATSTR_SWGWRITE
     Text[ chinese_simplified ] = "å­˜ç›˜æ–‡æ¡£...";
     Text[ russian ] = "Äîêóìåíò ñîõğàíÿåòñÿ...";
     Text[ polish ] = "Zapisywanie dokumentu...";
-    Text[ japanese ] = "ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ã‚’ä¿å­˜ã—ã¦ã„ã¾ã™...";
+    Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’ä¿å­˜ã—ã¦ã„ã¾ã™...";
     Text[ chinese_traditional ] = "æ­£åœ¨å„²å­˜æ–‡ä»¶...";
     Text[ arabic ] = "ÌÇÑí ÍİÙ ÇáãÓÊäÏ...";
     Text[ dutch ] = "Document wordt opgeslagen...";
@@ -2244,7 +2244,7 @@ String STR_STATSTR_REFORMAT
     TEXT[ language_user1 ] = " ";
     TEXT[ russian ] = "Íîâîå ôîğìàòèğîâàíèå äîêóìåíòà...";
     TEXT[ polish ] = "Ponowne formatowanie dokumentu...";
-    TEXT[ japanese ] = "ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ã®æ–°è¦æ›¸å¼è¨­å®š...";
+    TEXT[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã®æ–°è¦æ›¸å¼è¨­å®š...";
     TEXT[ chinese_traditional ] = "é‡æ–°è£½ä½œæ–‡ä»¶æ ¼å¼...";
     TEXT[ arabic ] = "ÅÚÇÏÉ ÊäÓíŞ ÇáãÓÊäÏ...";
     TEXT[ dutch ] = "Bezig met nieuwe opmaak...";
@@ -2274,7 +2274,7 @@ String STR_STATSTR_AUTOFORMAT
     TEXT[ language_user1 ] = " ";
     TEXT[ russian ] = "Àâòîôîğìàòèğîâàíèå äîêóìåíòà...";
     TEXT[ polish ] = "Automatycze formatowanie dokumentu...";
-    TEXT[ japanese ] = "ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ã®ï½µï½°ï¾„ï¾Œï½«ï½°ï¾ï½¯ï¾„...";
+    TEXT[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã®ã‚ªãƒ¼ãƒˆãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ...";
     TEXT[ chinese_traditional ] = "ç‰©ä»¶è‡ªå‹•æ ¼å¼åŒ–...";
     TEXT[ arabic ] = "ÊäÓíŞ ÊáŞÇÆí ááãÓÊäÏ...";
     TEXT[ dutch ] = "Bezig met automatisch opmaken...";
@@ -2303,7 +2303,7 @@ String STR_STATSTR_IMPGRF
     Text[ chinese_simplified ] = "è¾“å…¥å›¾å½¢...";
     Text[ russian ] = "Èìïîğò ãğàôèêè...";
     Text[ polish ] = "Importowanie grafiki...";
-    Text[ japanese ] = "å›³ã®ï½²ï¾ï¾ï¾Ÿï½°ï¾„ä¸­...";
+    Text[ japanese ] = "å›³ã®ã‚¤ãƒ³ãƒãƒ¼ãƒˆä¸­...";
     Text[ chinese_traditional ] = "æ­£åœ¨åŒ¯å…¥åœ–å½¢...";
     Text[ arabic ] = "ÌÇÑí ÇÓÊíÑÇÏ ÇáÑÓã...";
     Text[ dutch ] = "Afbeelding wordt geïmporteerd...";
@@ -2451,7 +2451,7 @@ String STR_STATSTR_LETTER
     Text[ chinese_simplified ] = "ä¿¡å‡½";
     Text[ russian ] = "Ïèñüìî";
     Text[ polish ] = "List";
-    Text[ japanese ] = "ï¾šï¾€ï½°";
+    Text[ japanese ] = "ãƒ¬ã‚¿ãƒ¼";
     Text[ chinese_traditional ] = "ä¿¡å‡½";
     Text[ arabic ] = "ÎØÇÈ";
     Text[ dutch ] = "Brief";
@@ -2509,7 +2509,7 @@ String STR_STATSTR_HYPHEN
     Text[ chinese_simplified ] = "è¿å­—ç¬¦...";
     Text[ russian ] = "Ğàññòàíîâêà ïåğåíîñîâ...";
     Text[ polish ] = "Dzielenie wyrazów";
-    Text[ japanese ] = "ï¾Šï½²ï¾Œï¾ˆï½°ï½¼ï½®ï¾...";
+    Text[ japanese ] = "ãƒã‚¤ãƒ•ãƒãƒ¼ã‚·ãƒ§ãƒ³...";
     Text[ chinese_traditional ] = "é€£å­—ç¬¦...";
     Text[ arabic ] = "İÕá ÇáãŞÇØÚ...";
     Text[ dutch ] = "Woordafbreking...";
@@ -2624,7 +2624,7 @@ String STR_STATSTR_SWGPRTOLENOTIFY
     Text[ swedish ] = "Anpassa objekt...";
     Text[ polish ] = "Dopasuj obiekty...";
     Text[ portuguese_brazilian ] = "Adjust Objects...";
-    Text[ japanese ] = "ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„ã®èª¿æ•´...";
+    Text[ japanese ] = "ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®èª¿æ•´...";
     Text[ chinese_simplified ] = "è°ƒæ•´å¯¹è±¡...";
     Text[ chinese_traditional ] = "èª¿æ•´ç‰©ä»¶...";
     Text[ arabic ] = "ÖÈØ ßÇÆäÇÊ...";
@@ -2659,7 +2659,7 @@ QueryBox MSG_COMCORE_ASKSEARCH
     Message[ chinese_simplified ] = "æ’¤æ¶ˆå‘½ä»¤åŠŸèƒ½éœ€è¦å¾ˆå¤šçš„å†…å­˜ã€‚\nè¦å–æ¶ˆæ’¤æ¶ˆå‘½ä»¤åŠŸèƒ½ï¼Ÿ";
     Message[ russian ] = "İòîìó äåéñòâèş íåîáõîäèìî äëÿ îòìåíû ñëèøêîì ìíîãî ïàìÿòè.\nÂû õîòèòå îòêëş÷èòü îòìåíó?";
     Message[ polish ] = "Cofniêcie tej akcji wymaga du¿ej iloœci pamiêci.\nCzy chcesz przerwaæ cofniêcie?";
-    Message[ japanese ] = "ã“ã®ä½œæ¥­ã¯ï½¤å…ƒã«æˆ»ã™ãŸã‚ã«éå¸¸ã«å¤šãã®ï¾ƒï¾ï½¨ï½½ï½¸å®¹é‡ãŒå¿…è¦ã§ã™ã€‚\nã€Œå…ƒã«æˆ»ã™ã€ã‚’ï½µï¾Œã«ã—ã¾ã™ã‹?";
+    Message[ japanese ] = "ã“ã®ä½œæ¥­ã¯ï½¤å…ƒã«æˆ»ã™ãŸã‚ã«éå¸¸ã«å¤šãã®ãƒ‡ã‚£ã‚¹ã‚¯å®¹é‡ãŒå¿…è¦ã§ã™ã€‚\nã€Œå…ƒã«æˆ»ã™ã€ã‚’ã‚ªãƒ•ã«ã—ã¾ã™ã‹?";
     Message[ chinese_traditional ] = "å¾©åŸåŠŸèƒ½éœ€è¦å¾ˆå¤šçš„è¨˜æ†¶é«”ã€‚\nè¦é—œé–‰å¾©åŸåŠŸèƒ½ï¼Ÿ";
     Message[ arabic ] = "ÇáÊÑÇÌÚ Úä åĞÇ ÇáÅÌÑÇÁ íÊØáÈ ĞÇßÑÉ ßÈíÑÉ ÌÏÇğ.\nåá ÊÑíÏ ÅáÛÇÁ ÇáÊÑÇÌÚ¿";
     Message[ dutch ] = "Het ongedaan maken van deze bewerking beslaat veel geheugen.\nWilt U \"Ongedaan maken\" opheffen ?";
@@ -2759,7 +2759,7 @@ String STR_OBJECT_DEFNAME
     TEXT[ chinese_simplified ] = "å¯¹è±¡";
     TEXT[ russian ] = "Îáúåêò";
     TEXT[ polish ] = "Obiekt";
-    TEXT[ japanese ] = "ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„";
+    TEXT[ japanese ] = "ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
     TEXT[ chinese_traditional ] = "ç‰©ä»¶";
     TEXT[ arabic ] = "ßÇÆä";
     TEXT[ dutch ] = "Object";
@@ -2874,7 +2874,7 @@ String STR_EMPTYPAGE
     Text[ chinese_simplified ] = "ç©ºç™½é¡µé¢";
     Text[ russian ] = "Ïóñòàÿ ñòğàíèöà";
     Text[ polish ] = "Pusta strona";
-    Text[ japanese ] = "ç©ºç™½ï¾ï¾Ÿï½°ï½¼ï¾";
+    Text[ japanese ] = "ç©ºç™½ãƒšãƒ¼ã‚¸";
     Text[ chinese_traditional ] = "ç©ºç™½é é¢";
     Text[ arabic ] = "ÕİÍÉ İÇÑÛÉ";
     Text[ dutch ] = "Lege pagina";
@@ -2908,7 +2908,7 @@ QueryBox MSG_CLPBRD_CLEAR
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ russian ] = "Âû ñîõğàíèëè áîëüøåå êîëè÷åñòâî äàííûõ â áóôåğå îáìåíà.\nÄîëæíî ëè ñîäåğæèìîå áóôåğà îáìåíà áûòü äîñòóïíûì äëÿ äğóãèõ ïğèëîæåíèé?";
     MESSAGE[ polish ] = "W schowku zosta³y umieszczone wiêksze iloœci danych.\nCzy treœæ tych danych ma zostaæ udostêpniona innym aplikacjom?";
-    MESSAGE[ japanese ] = "ï½¸ï¾˜ï½¯ï¾Œï¾Ÿï¾ï¾ï½°ï¾„ï¾ã«å¤§é‡ã®ï¾ƒï¾ï½°ï¾€ãŒä¿å­˜ã•ã‚Œã¦ã„ã¾ã™ã€‚\nï½¸ï¾˜ï½¯ï¾Œï¾Ÿï¾ï¾ï½°ï¾„ï¾ã®å†…å®¹ã‚’ä»–ã®ï½±ï¾Œï¾Ÿï¾˜ï½¹ï½°ï½¼ï½®ï¾ã«ä½¿ç”¨ã—ã¾ã™ã‹?";
+    MESSAGE[ japanese ] = "ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã«å¤§é‡ã®ãƒ‡ãƒ¼ã‚¿ãŒä¿å­˜ã•ã‚Œã¦ã„ã¾ã™ã€‚\nã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã®å†…å®¹ã‚’ä»–ã®ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã«ä½¿ç”¨ã—ã¾ã™ã‹?";
     MESSAGE[ chinese_traditional ] = "æ‚¨å·²ç¶“å°‡ä¸€å€‹è¼ƒå¤§çš„è³‡æ–™è¤‡è£½åˆ°å‰ªè²¼ç°¿ã€‚\næ‚¨æƒ³è¦è®“å…¶ä»–çš„æ‡‰ç”¨ç¨‹åºä¹Ÿèƒ½å¤ ä½¿ç”¨é€™å€‹è³‡æ–™ï¼Ÿ";
     MESSAGE[ arabic ] = "áŞÏ ŞãÊ ÈÍİÙ ßãíÇÊ ßÈíÑÉ ãä ÇáÈíÇäÇÊ İí ÇáÍÇİÙÉ.\nåá ÊÑíÏ æÖÚ ãÍÊæíÇÊ ÇáÍÇİÙÉ ÊÍÊ ÊÕÑİ ÊØÈíŞÇÊ ÃÎÑì¿";
     MESSAGE[ dutch ] = "U hebt een groot aantal gegevens op het Klembord geplaatst.\nWilt u dat de inhoud van het Klembord beschikbaar blijft voor andere toepassingen?";
@@ -2969,7 +2969,7 @@ QueryBox MSG_SAVEAS_HTML_QUERY
     MESSAGE[ swedish ] = "Källtextvyn går inte att visa när dokumentet har sparats i HTML-format.\nVill du spara dokumentet i HTML-format nu?";
     MESSAGE[ polish ] = "Widok tekstu Ÿród³owego wyœwietlony zostanie dopiero po zapisaniu dokumentu w formacie HTML.\nZapisaæ dokument w formacie HTML?";
     MESSAGE[ portuguese_brazilian ] = "The HTML source can only be shown if the document is saved in HTML format.\nWould you like to save the document as HTML?";
-    MESSAGE[ japanese ] = "HTML ï½¿ï½°ï½½ã¯ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ãŒ HTML å½¢å¼ã§ä¿å­˜ã•ã‚Œã¦ã„ã‚‹ã¨ãã—ã‹è¡¨ç¤ºã•ã‚Œã¾ã›ã‚“ã€‚\nï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ã‚’ HTML å½¢å¼ã§ä¿å­˜ã—ã¾ã™ã‹ã€‚";
+    MESSAGE[ japanese ] = "HTML ã‚½ãƒ¼ã‚¹ã¯ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆãŒ HTML å½¢å¼ã§ä¿å­˜ã•ã‚Œã¦ã„ã‚‹ã¨ãã—ã‹è¡¨ç¤ºã•ã‚Œã¾ã›ã‚“ã€‚\nãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’ HTML å½¢å¼ã§ä¿å­˜ã—ã¾ã™ã‹ã€‚";
     MESSAGE[ korean ] = "ì†ŒìŠ¤ í…ìŠ¤íŠ¸ ë³´ê¸°ëŠ” ë¬¸ì„œê°€ HTML-í˜•ì‹ìœ¼ë¡œ ì €ì¥ë˜ì—ˆì„ ê²½ìš°ì—ë§Œ í‘œì‹œë  ìˆ˜ ìˆìŠµë‹ˆë‹¤.\në¬¸ì„œë¥¼ ì§€ê¸ˆ HTML-í˜•ì‹ìœ¼ë¡œ ì €ì¥í•˜ê² ìŠµë‹ˆê¹Œ?";
     MESSAGE[ chinese_simplified ] = "åªæœ‰å½“æ–‡æ¡£å­˜ç›˜æˆ HTML æ ¼å¼æ—¶ï¼Œæ‰èƒ½å¤ŸæŸ¥çœ‹ HTML çš„æºæ–‡ä»¶ã€‚\næ–‡æ¡£è¦å­˜ç›˜æˆ HTML æ ¼å¼?";
     MESSAGE[ chinese_traditional ] = "åªæœ‰ç•¶æª”æ¡ˆå„²å­˜HTMLæ ¼å¼æ™‚ï¼Œæ‰èƒ½æª¢è¦–HTMLåŸå§‹æª”ã€‚\nè¦å„²å­˜æˆHTMLæ ¼å¼?";
@@ -3022,7 +3022,7 @@ String STR_FDLG_TEMPLATE_BUTTON
     Text[ chinese_simplified ] = "æ ·å¼";
     Text[ russian ] = "Øàáëîí";
     Text[ polish ] = "Szablon";
-    Text[ japanese ] = "ï½½ï¾€ï½²ï¾™";
+    Text[ japanese ] = "ã‚¹ã‚¿ã‚¤ãƒ«";
     Text[ chinese_traditional ] = "æ¨£å¼";
     Text[ arabic ] = "äãØ";
     Text[ dutch ] = "Sjabloon";
@@ -3051,8 +3051,8 @@ String STR_FDLG_TEMPLATE_NAME
     Text[ chinese_simplified ] = "å½“å‰çš„æ ·å¼ï¼š ";
     Text[ russian ] = "Òåêóùèé øàáëîí:  ";
     Text[ polish ] = "Aktualny szablon  ";
-    Text[ japanese ] = "ç¾åœ¨ã®ï½½ï¾€ï½²ï¾™ï¼š ";
-    Text[ chinese_traditional ] = "ç•¶å‰çš„æ¨£å¼ï¼š ";
+    Text[ japanese ] = "ç¾åœ¨ã®ã‚¹ã‚¿ã‚¤ãƒ«ï¼š ";
+    Text[ chinese_traditional ] = "ç›®å‰çš„æ¨£å¼ï¼š ";
     Text[ arabic ] = "ÇáäãØ ÇáÍÇáí: ";
     Text[ dutch ] = "Actuele sjabloon  ";
     Text[ chinese_simplified ] = "å½“å‰çš„æ ·å¼ï¼š ";
@@ -3080,7 +3080,7 @@ String STR_PAGEOFFSET
     Text[ chinese_simplified ] = "é¡µç ï¼š ";
     Text[ russian ] = "Íîìåğ ñòğàíèöû:  ";
     Text[ polish ] = "Numer strony:  ";
-    Text[ japanese ] = "ï¾ï¾Ÿï½°ï½¼ï¾ç•ªå·: ";
+    Text[ japanese ] = "ãƒšãƒ¼ã‚¸ç•ªå·: ";
     Text[ chinese_traditional ] = "é ç¢¼ï¼š ";
     Text[ arabic ] = "ÑŞã ÇáÕİÍÉ: ";
     Text[ dutch ] = "Paginanummer  ";
@@ -3110,7 +3110,7 @@ String STR_PAGEBREAK
     Text[ chinese_simplified ] = "åœ¨æ–°ä¸€é¡µä¹‹å‰æ¢é¡µ";
     Text[ russian ] = "Ğàçğûâ ïåğåä íîâîé ñòğàíèöåé";
     Text[ polish ] = "Podzia³ przed now¹ stron¹";
-    Text[ japanese ] = "æ–°ã—ã„ï¾ï¾Ÿï½°ï½¼ï¾ã®å‰ã§åŒºåˆ‡ã‚‹";
+    Text[ japanese ] = "æ–°ã—ã„ãƒšãƒ¼ã‚¸ã®å‰ã§åŒºåˆ‡ã‚‹";
     Text[ chinese_traditional ] = "åœ¨æ–°ä¸€é ä¹‹å‰æ›é ";
     Text[ arabic ] = "İÇÕá ŞÈá ÇáÕİÍÉ ÇáÌÏíÏÉ";
     Text[ dutch ] = "Einde voor nieuwe pagina";
@@ -3196,6 +3196,7 @@ String STR_REDLINE_UNKNOWN_AUTHOR
     Text[ catalan ] = "desconocido";
     Text[ finnish ] = "tuntematon";
 };
+
 
 
 
