@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:20:26 $
+#   last change: $Author: hr $ $Date: 2004-05-10 15:59:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,7 @@ PRJ=..$/..$/..
 
 PRJNAME=sc
 TARGET=docshell
-
+LIBTARGET=no
 PROJECTPCH4DLL=TRUE
 PROJECTPCH=ui_pch
 PDBTARGET=ui_pch
@@ -139,6 +139,32 @@ EXCEPTIONSFILES= \
 
 SRS1NAME=$(TARGET)
 SRC1FILES =  tpstat.src
+
+LIB1TARGET = $(SLB)$/$(TARGET).lib
+
+LIB1OBJFILES =  \
+        $(SLO)$/docsh.obj	\
+        $(SLO)$/docsh2.obj	\
+        $(SLO)$/docsh3.obj	\
+        $(SLO)$/docsh4.obj   	\
+        $(SLO)$/docsh5.obj   	\
+        $(SLO)$/docsh6.obj   	\
+        $(SLO)$/docsh7.obj   	\
+        $(SLO)$/docsh8.obj   	\
+        $(SLO)$/tablink.obj   	\
+        $(SLO)$/arealink.obj   	\
+        $(SLO)$/dbdocfun.obj 	\
+        $(SLO)$/dbdocimp.obj 	\
+        $(SLO)$/impex.obj	\
+        $(SLO)$/docfunc.obj	\
+        $(SLO)$/olinefun.obj	\
+        $(SLO)$/servobj.obj	\
+        $(SLO)$/autostyl.obj	\
+        $(SLO)$/pagedata.obj \
+        $(SLO)$/hiranges.obj \
+        $(SLO)$/pntlock.obj \
+        $(SLO)$/sizedev.obj \
+        $(SLO)$/editable.obj
 
 # --- Tagets -------------------------------------------------------
 
