@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conncleanup.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:14 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:35:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,7 @@ namespace dbtools
                 // 94407 - 08.11.2001 - fs@openoffice.org
                 if ( xNewConnection.get() != m_xOriginalConnection.get() )
                 {
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
                     Reference< XConnection > xOldConnection;
                     _rEvent.OldValue >>= xOldConnection;
                     OSL_ENSURE( xOldConnection.get() == m_xOriginalConnection.get(), "OAutoConnectionDisposer::propertyChange: unexpected (original) property value!" );
