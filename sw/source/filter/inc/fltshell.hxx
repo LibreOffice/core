@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltshell.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-04 09:48:56 $
+ *  last change: $Author: cmc $ $Date: 2002-08-19 10:43:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,8 +227,8 @@ public:
                  SwRedlineType   eTypePrev_    = REDLINE_INSERT,
                  USHORT          nAutorNoPrev_ = USHRT_MAX,
                  const DateTime* pStampPrev_   = 0)
-        : eType( eType_ ), nAutorNo( nAutorNo_ ), aStamp( rStamp_ ),
-        eTypePrev( eTypePrev_ ), nAutorNoPrev( nAutorNoPrev_ )
+        : SfxPoolItem(RES_FLTR_REDLINE), eType(eType_), nAutorNo(nAutorNo_),
+        aStamp(rStamp_), eTypePrev(eTypePrev_), nAutorNoPrev(nAutorNoPrev_)
     {
             if( pStampPrev_ )
                 aStampPrev = *pStampPrev_;
