@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizsetup.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:18:56 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,14 @@ public:
     virtual sal_Bool saveDatasource();
     virtual String  getStateDisplayName( WizardState _nState );
     virtual short Execute();
+
+    /** returns <TRUE/> if the database should be opened, otherwise <FALSE/>.
+    */
+    sal_Bool IsDatabaseDocumentToBeOpened();
+
+    /** returns <TRUE/> if the table wizard should be opened, otherwise <FALSE/>.
+    */
+    sal_Bool IsTableWizardToBeStarted();
 
 protected:
     /// to override to create new pages
