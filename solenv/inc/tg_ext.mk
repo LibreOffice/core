@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hjs $ $Date: 2001-06-25 11:00:45 $
+#   last change: $Author: armin $ $Date: 2001-06-27 12:28:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -146,24 +146,16 @@ $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE) : $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE)
 
 $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
 .IF "$(OUT2LIB)"!=""
-    +$(COPY) $(foreach,i,$(OUT2LIB) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(LB)
-.ENDIF			# "$(OUT2LIB)"!=""
+        $(foreach,i,$(OUT2LIB) $(shell $(GNUCOPY) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i $(LB)$/$(shell echo $i | sed "s/.*\\//")))
+.ENDIF                  # "$(OUT2LIB)"!=""
 .IF "$(OUT2INC)"!=""
-    +$(COPY) $(foreach,i,$(OUT2INC) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(INCCOM)
-.ENDIF			# "$(OUT2INC)"!=""
-.IF "$(OUTDIR2INC)"!=""
-.IF "$(GUI)"=="WNT"
-    @$(MKDIR) $(foreach,i,$(OUTDIR2INC) $(INCCOM)$/$(i:b))
-    @+echo copied $(foreach,i,$(OUTDIR2INC) $(shell +$(COPY) $(COPYRECURSE) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i $(INCCOM)$/$(i:b) >& $(NULLDEV) && echo $i))
-.ELSE			# "$(GUI)"=="WNT"
-    $(COPY) $(COPYRECURSE) $(foreach,i,$(OUTDIR2INC) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(INCCOM)
-.ENDIF			# "$(GUI)"=="WNT"
-.ENDIF			# "$(OUTDIR2INC)"!=""
+        $(foreach,i,$(OUT2INC) $(shell $(GNUCOPY) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i $(INCCOM)$/$(shell echo $i | sed "s/.*\\//")))
+.ENDIF                  # "$(OUT2INC)"!=""
 .IF "$(OUT2BIN)"!=""
-    $(COPY) $(foreach,i,$(OUT2BIN) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(BIN)
-.ENDIF			# "$(OUT2BIN)"!=""
+        $(foreach,i,$(OUT2BIN) $(shell $(GNUCOPY) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i $(BIN)$/$(shell echo $i | sed "s/.*\\//")))
+.ENDIF                  # "$(OUT2BIN)"!=""
 .IF "$(OUT2CLASS)"!=""
-    $(COPY) $(foreach,i,$(OUT2CLASS) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(CLASSDIR)
+        $(foreach,i,$(OUT2CLASS) $(shell $(GNUCOPY) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i $(CLASSDIR)$/$(shell echo $i | sed "s/.*\\//")))
 .ENDIF			# "$(OUT2BIN)"!=""
     +$(TOUCH) $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
 
