@@ -62,4 +62,4 @@ public:
     String              GetName() const { return aEdtName.GetText(); }
 };
 
-#endif 
+#endif

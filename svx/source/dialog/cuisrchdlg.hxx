@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cuisrchdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:23:39 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
