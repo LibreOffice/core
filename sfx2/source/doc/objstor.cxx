@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.135 $
+ *  $Revision: 1.136 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 15:14:01 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:13:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -921,14 +921,6 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         }
 
         INetURLObject::SetBaseURL( aOldURL );
-
-        // closing the streams on loading should be under control of SFX!
-        DBG_ASSERT( pMedium->IsOpen(), "Don't close the medium when loading documents!" );
-#if 0 // the code below had to be removed since it caused problems with html documents loading ( asynchronous approach is used there )
-        if( !(pMedium->GetOpenMode() & STREAM_WRITE) )
-            // don't lock file opened read only
-            pMedium->CloseInStream();
-#endif
     }
 
     if ( bOk )
@@ -2454,6 +2446,7 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
     pMergedParams->ClearItem( SID_INPUTSTREAM );
     pMergedParams->ClearItem( SID_STREAM );
     pMergedParams->ClearItem( SID_CONTENT );
+    pMergedParams->ClearItem( SID_DOC_READONLY );
 
     pMergedParams->ClearItem( SID_REPAIRPACKAGE );
 
