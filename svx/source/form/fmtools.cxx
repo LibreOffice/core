@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-15 14:53:28 $
+ *  last change: $Author: fs $ $Date: 2000-11-16 15:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1388,9 +1388,23 @@ Sequence< ::rtl::OUString> getEventMethods(const Type& type)
 
     Sequence< ::rtl::OUString> aNames(pType->nMembers);
     ::rtl::OUString* pNames = aNames.getArray();
+#if (SUPD<615) || defined(DBG_UTIL)
+    static const ::rtl::OUString sInterfaceSeparator(RTL_CONSTASCII_USTRINGPARAM("::"));
+#endif
     for(sal_Int32 i=0;i<pType->nMembers;i++,++pNames)
     {
         *pNames = pType->ppMembers[i]->pTypeName;
+        // currently, there may be method names which are fully qualified, though I think this is wrong. I hope
+        // for a fix in the type lib which will give us unqualified method names, again (like it was at least in
+        // 569).
+        // But perhaps this code here has to become permanent if MM states that qualified names are correct ...
+        // 80066 - 00/11/16 - FS
+#if SUPD<615
+        if (sal_Int32 nSeparatorPos = pNames->indexOf(sInterfaceSeparator))
+            *pNames = pNames->copy(nSeparatorPos + sInterfaceSeparator.getLength());
+#else
+        DBG_ASSERT(0 == pNames->indexOf(sInterfaceSeparator), "getEventMethods: detected a qualified event name!");
+#endif
     }
 
     typelib_typedescription_release( (typelib_TypeDescription *)pType );
