@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 09:33:30 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 12:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1557,10 +1557,10 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
             aTmpState.nCursorBidiLevel = pCurCrsr->GetCrsrBidiLevel();
 
             // #i27615#
+            SwSpecialPos aSpecialPos;
+            aSpecialPos.nExtendRange = SP_EXTEND_RANGE_BEFORE;
             if (pCurCrsr->IsInFrontOfLabel())
             {
-                SwSpecialPos aSpecialPos;
-                aSpecialPos.nExtendRange = SP_EXTEND_RANGE_BEFORE;
                 aTmpState.pSpecialPos = &aSpecialPos;
             }
 
