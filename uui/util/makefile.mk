@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: as $ $Date: 2001-11-08 12:08:11 $
+#   last change: $Author: vg $ $Date: 2003-04-15 14:43:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,9 +64,9 @@ PRJ = ..
 PRJNAME = uui
 TARGET = uui
 RESTARGET = $(TARGET)
+
 GEN_HID = true
 NO_BSYMBOLIC = true
-USE_DEFFILE = true
 
 .INCLUDE: svpre.mk
 .INCLUDE: settings.mk
@@ -74,22 +74,23 @@ USE_DEFFILE = true
 
 SHL1TARGET = $(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB = i$(TARGET)
+
+SHL1VERSIONMAP = exports.map
 SHL1DEF = $(MISC)$/$(SHL1TARGET).def
+DEF1NAME = $(SHL1TARGET)
+
 SHL1LIBS = \
     $(SLB)$/source.lib
+
 SHL1STDLIBS = \
-    $(CPPUHELPERLIB) \
-    $(CPPULIB) \
-    $(SALLIB) \
-    $(UNOTOOLSLIB) \
     $(SVTOOLLIB) \
     $(TKLIB) \
+    $(VCLLIB) \
+    $(UNOTOOLSLIB) \
     $(TOOLSLIB) \
-    $(VCLLIB)
-
-DEF1NAME = $(SHL1TARGET)
-DEF1DES = Universal Content Broker User Interface
-DEF1EXPORTFILE = exports.dxp
+    $(CPPUHELPERLIB) \
+    $(CPPULIB) \
+    $(SALLIB)
 
 RESLIB1NAME = $(RESTARGET)
 RESLIB1SRSFILES = \
