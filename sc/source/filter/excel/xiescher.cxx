@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:05:33 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:20:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,8 +460,6 @@ void XclImpEscherTxo::ApplyTextOnSdrObj( SdrObject& rSdrObj ) const
         }
 
         // horizontal text alignment (#i12188# not stored in Escher stream, but in TXO)
-        // #i37794# always default to "full width" regardless of alignment.
-        SdrTextHorzAdjust eSdrHorAlign = SDRTEXTHORZADJUST_BLOCK;
         SvxAdjust eEEHorAlign = SVX_ADJUST_LEFT;
         switch( meHorAlign )
         {
@@ -470,7 +468,6 @@ void XclImpEscherTxo::ApplyTextOnSdrObj( SdrObject& rSdrObj ) const
             case xlTxoHAlignRight:     eEEHorAlign = SVX_ADJUST_RIGHT;    break;
             case xlTxoHAlignJustify:   eEEHorAlign = SVX_ADJUST_BLOCK;    break;
         }
-        pTextObj->SetMergedItem( SdrTextHorzAdjustItem( eSdrHorAlign ) );
         pTextObj->SetMergedItem( SvxAdjustItem( eEEHorAlign, EE_PARA_JUST ) );
 
         // vertical text alignment (#i12188# not stored in Escher stream, but in TXO)
@@ -1516,6 +1513,9 @@ SdrObject* XclImpDffManager::ProcessObj(
                 pRetSdrObj->SetMergedItem( SdrTextUpperDistItem( nMargin ) );
                 pRetSdrObj->SetMergedItem( SdrTextLowerDistItem( nMargin ) );
             }
+            // #i39167# always default to "full width" for text & textless
+            // objects regardless of alignment.
+            pRetSdrObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
 
             // text data and text alignment properties
             // #98132# don't ask for a text-ID, Escher export doesn't set one
