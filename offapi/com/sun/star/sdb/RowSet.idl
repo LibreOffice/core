@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:55:06 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:15:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,21 +323,15 @@ service RowSet
 
     /** is the name of the table which should be updated, this is usually used
         for queries which relate to more than one table.
-
-        @optional
      */
     [optional, property] string UpdateTableName;
 
     /** is the name of the table catalog
-
-        @optional
      */
     [optional, property] string UpdateCatalogName;
 
 
     /** is the name of the table schema.
-
-        @optional
      */
     [optional, property] string UpdateSchemaName;
 };
