@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier_default.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 14:39:34 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 10:08:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include <indexentrysupplier_default.hxx>
 #include <localedata.hxx>
 #include <i18nutil/unicode.hxx>
@@ -250,10 +249,10 @@ void Index::init(const lang::Locale &rLocale, const OUString& algorithm) throw (
         throw RuntimeException();
 
     collator->loadCollatorAlgorithm(algorithm, rLocale, CollatorOptions::CollatorOptions_IGNORE_CASE);
-    sal_Int16 i, j=0;
-    sal_Unicode start = unicode::getUnicodeScriptStart(scriptList[0]);
-    sal_Unicode end = unicode::getUnicodeScriptEnd(scriptList[0]);
-    for (i=1; i< scriptList.getLength(); i++) {
+    sal_Int16 j=0;
+    sal_Unicode start = unicode::getUnicodeScriptStart((UnicodeScript)0);
+    sal_Unicode end = unicode::getUnicodeScriptEnd((UnicodeScript)0);
+    for (sal_Int16 i= (scriptList[0] == (UnicodeScript)0) ? 1 : 0; i< scriptList.getLength(); i++) {
         if (unicode::getUnicodeScriptStart(scriptList[i]) != end+1) {
             tables[j++].init(start, end, keys, key_count, this);
             start = unicode::getUnicodeScriptStart(scriptList[i]);
