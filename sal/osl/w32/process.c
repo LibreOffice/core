@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mhu $ $Date: 2004-11-03 14:37:35 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:35:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,43 @@ oslProcessError SAL_CALL osl_joinProcessWithTimeout(oslProcess Process, const Ti
         osl_error = osl_Process_E_TimedOut;
 
     return osl_error;
+}
+
+/***************************************************************************
+ * osl_bootstrap_getExecutableFile_Impl().
+ *
+ * @internal
+ * @see rtl_bootstrap
+ * @see #i37371#
+ *
+ ***************************************************************************/
+
+oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
+    rtl_uString ** ppFileURL
+) SAL_THROW_EXTERN_C()
+{
+    oslProcessError result = osl_Process_E_NotFound;
+
+    TCHAR buffer[MAX_PATH];
+    DWORD buflen;
+
+    if ((buflen = GetModuleFileNameW (0, buffer, MAX_PATH)) > 0)
+    {
+        rtl_uString * pAbsPath = 0;
+        rtl_uString_newFromStr_WithLength (&(pAbsPath), buffer, buflen);
+        if (pAbsPath)
+        {
+            /* Convert from path to url. */
+            if (osl_getFileURLFromSystemPath (pAbsPath, ppFileURL) == osl_File_E_None)
+            {
+                /* Success. */
+                result = osl_Process_E_None;
+            }
+            rtl_uString_release (pAbsPath);
+        }
+    }
+
+    return (result);
 }
 
 /***************************************************************************
