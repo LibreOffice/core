@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 10:11:57 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 12:45:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ void BasicIDEShell::Init()
     GetViewFrame()->GetWindow().SetBackground();
 
     pCurWin = 0;
-    pCurBasic = 0;
+    m_pCurShell = 0;
     pObjectCatalog = 0;
     bCreatingWindow = FALSE;
 
@@ -229,8 +229,7 @@ void BasicIDEShell::Init()
     InitScrollBars();
     InitTabBar();
 
-    // Nicht 0, wird sonst beim naechsten Request nicht auf das entspr. Basic gesetzt.
-    SetCurBasic( SFX_APP()->GetBasicManager()->GetStdLib(), FALSE );
+    SetCurLib( 0, String::CreateFromAscii( "Standard" ), false, false );
 
     IDE_DLL()->pShell = this;
     IDE_DLL()->GetExtraData()->ShellInCriticalSection() = FALSE;
@@ -330,8 +329,8 @@ USHORT __EXPORT BasicIDEShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
             IDEBaseWindow* pWin = aIDEWindowTable.GetObject( nWin );
             if ( /* !pWin->IsSuspended() && */ !pWin->CanClose() )
             {
-                if ( pCurBasic && ( pWin->GetBasic() != pCurBasic ) )
-                    SetCurBasic( 0, FALSE );
+                if ( m_aCurLibName.Len() && ( pWin->GetShell() != m_pCurShell || pWin->GetLibName() != m_aCurLibName ) )
+                    SetCurLib( 0, String(), false );
                 SetCurWindow( pWin, TRUE );
                 bCanClose = FALSE;
             }
@@ -398,7 +397,6 @@ IMPL_LINK( BasicIDEShell, TabBarHdl, TabBar *, pCurTabBar )
     IDEBaseWindow* pWin = aIDEWindowTable.Get( nCurId );
     DBG_ASSERT( pWin, "Eintrag in TabBar passt zu keinem Fenster!" );
     SetCurWindow( pWin );
-    ((BasicIDETabBar*)pCurTabBar)->SetCurrentLib( pWin->GetBasic() );
 
     return 0;
 }
@@ -419,7 +417,6 @@ BOOL BasicIDEShell::NextPage( BOOL bPrev )
     {
         IDEBaseWindow* pWin = aIDEWindowTable.Get( pTabBar->GetPageId( nPos ) );
         SetCurWindow( pWin, TRUE );
-        pTabBar->SetCurrentLib( pWin->GetBasic() );
         bRet = TRUE;
     }
 
@@ -465,7 +462,15 @@ void BasicIDEShell::ShowObjectDialog( BOOL bShow, BOOL bCreateOrDestroy )
         {
             pObjectCatalog = new ObjectCatalog( &GetViewFrame()->GetWindow() );
             // Position wird in BasicIDEData gemerkt und vom Dlg eingestellt
-            pObjectCatalog->SetCancelHdl( LINK( this, BasicIDEShell, ObjectDialogCancelHdl ) );
+            if ( pObjectCatalog )
+            {
+                pObjectCatalog->SetCancelHdl( LINK( this, BasicIDEShell, ObjectDialogCancelHdl ) );
+                BasicEntryDescriptor aDesc;
+                IDEBaseWindow* pCurWin = GetCurWindow();
+                if ( pCurWin )
+                    aDesc = pCurWin->CreateEntryDescriptor();
+                pObjectCatalog->SetCurrentEntry( aDesc );
+            }
         }
 
         // Die allerletzten Aenderungen...
@@ -500,126 +505,129 @@ void __EXPORT BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
     {
         if ( rHint.IsA( TYPE( SfxEventHint ) ) )
         {
-            if ( ( ((SfxEventHint&)rHint).GetEventId() == SFX_EVENT_CREATEDOC ) ||
-                 ( ((SfxEventHint&)rHint).GetEventId() == SFX_EVENT_OPENDOC ) )
+            switch ( ((SfxEventHint&)rHint).GetEventId() )
             {
-                UpdateWindows();
-            }
-
-            if ( ( ((SfxEventHint&)rHint).GetEventId() == SFX_EVENT_SAVEDOC ) ||
-                 ( ((SfxEventHint&)rHint).GetEventId() == SFX_EVENT_SAVEASDOC ) )
-            {
-                StoreAllWindowData();
-            }
-
-            // TODO: move code from SFX_HINT_DYING to SFX_EVENT_CLOSEDOC?
-            // (in SFX_HINT_DYING the SfxObjectShell is already destroyed)
-            /*
-            if ( ((SfxEventHint&)rHint).GetEventId() == SFX_EVENT_CLOSEDOC )
-            {
-                if ( rBC.IsA( TYPE( SfxObjectShell ) ) )
+                case SFX_EVENT_CREATEDOC:
+                case SFX_EVENT_OPENDOC:
                 {
-                    SfxObjectShell* pShell = (SfxObjectShell*)&rBC;
-                    BasicManager* pBasMgr = pShell->GetBasicManager();
+                    UpdateWindows();
                 }
-            }
-            */
-        }
-        if ( rHint.IsA( TYPE( SfxSimpleHint ) ) )
-        {
-            if ( ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DOCCHANGED )
-            {
-                // If a document is modified, there's no need for any action
-                // within the BasicIDE.
-                //
-                // If a document is reloaded, the old document is destroyed
-                // and a new document is loaded. The BasicIDE is first notified
-                // with a SFX_HINT_DYING and then with a SFX_EVENT_OPENDOC.
-                // The BasicIDE windows are destroyed after the SFX_HINT_DYING
-                // notification and new windows are created after the
-                // SFX_EVENT_OPENDOC notification.
-
-                //UpdateWindows();
-            }
-            else if ( ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_MODECHANGED )
-            {
-                // ReadOnly toggled...
-                if ( rBC.IsA( TYPE( SfxObjectShell ) ) )
+                break;
+                case SFX_EVENT_SAVEDOC:
+                case SFX_EVENT_SAVEASDOC:
                 {
-                    SfxObjectShell* pShell = (SfxObjectShell*)&rBC;
-                    BasicManager* pBasMgr = pShell->GetBasicManager();
-                    for ( ULONG nWin = aIDEWindowTable.Count(); nWin; )
+                    StoreAllWindowData();
+                }
+                break;
+                case SFX_EVENT_CLOSEDOC:
+                {
+                    if ( rBC.IsA( TYPE( SfxObjectShell ) ) )
                     {
-                        IDEBaseWindow* pWin = aIDEWindowTable.GetObject( --nWin );
-                        BasicManager* pM = BasicIDE::FindBasicManager( pWin->GetBasic() );
-                        if ( pM == pBasMgr )
-                            pWin->SetReadOnly( pShell->IsReadOnly() );
+                        bool bSetCurWindow = false;
+                        bool bSetCurLib = false;
+                        SfxObjectShell* pShell = (SfxObjectShell*)&rBC;
+                        Sequence< ::rtl::OUString > aLibNames = BasicIDE::GetLibraryNames( pShell );
+                        sal_Int32 nLibCount = aLibNames.getLength();
+                        const ::rtl::OUString* pLibNames = aLibNames.getConstArray();
+
+                        for ( sal_Int32 i = 0 ; i < nLibCount ; ++i )
+                        {
+                            String aLibName = pLibNames[ i ];
+                            if ( !aLibName.Len() )
+                                continue;
+
+                            // remove all windows which belong to this library
+                            for ( ULONG nWin = aIDEWindowTable.Count(); nWin; )
+                            {
+                                IDEBaseWindow* pWin = aIDEWindowTable.GetObject( --nWin );
+                                if ( pWin->GetShell() == pShell && pWin->GetLibName() == aLibName )
+                                {
+                                    if ( pWin->GetStatus() & (BASWIN_RUNNINGBASIC|BASWIN_INRESCHEDULE) )
+                                    {
+                                        pWin->AddStatus( BASWIN_TOBEKILLED );
+                                        pWin->Hide();
+                                        StarBASIC::Stop();
+                                        // there's no notify
+                                        pWin->BasicStopped();
+                                    }
+                                    else
+                                    {
+                                        pWin->StoreData();
+                                        if ( pWin == pCurWin )
+                                            bSetCurWindow = true;
+                                        RemoveWindow( pWin, TRUE, FALSE );
+                                    }
+                                }
+                            }
+
+                            // remove lib info
+                            BasicIDEData* pData = IDE_DLL()->GetExtraData();
+                            if ( pData )
+                                pData->GetLibInfos().RemoveInfo( LibInfoKey( pShell, aLibName ) );
+
+                            if ( pShell == m_pCurShell && aLibName == m_aCurLibName )
+                                bSetCurLib = true;
+                        }
+
+                        if ( bSetCurLib )
+                            SetCurLib( 0, String::CreateFromAscii( "Standard" ), true, false );
+                        else if ( bSetCurWindow )
+                            SetCurWindow( FindWindow(), TRUE );
+
+                        EndListening( rBC, TRUE );
                     }
                 }
+                break;
+            }
+        }
 
-            }
-            else if ( ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_TITLECHANGED )
+        if ( rHint.IsA( TYPE( SfxSimpleHint ) ) )
+        {
+            switch ( ((SfxSimpleHint&)rHint).GetId() )
             {
-                BasicIDE::GetBindings().Invalidate( SID_BASICIDE_LIBSELECTOR, TRUE, FALSE );
-                SetMDITitle();
-            }
-            else if ( ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
-            {
-                // Alle Fenster suchen, die auf einem Basic des Managers arbeiten,
-                // Daten sichern, Fenster zerstoeren
-                if ( rBC.IsA( TYPE( BasicManager ) ) )
+                case SFX_HINT_DOCCHANGED:
                 {
-                    BOOL bSetCurWindow = FALSE;
-                    BOOL bSetCurBasic = FALSE;
-                    BasicManager* pBasMgr = (BasicManager* )&rBC;
-                    USHORT nLibs = pBasMgr->GetLibCount();
-                    // Alle Fenster, die ein Object dieser Lib anzeigen, schliessen
-                    for ( USHORT nLib = 0; nLib < nLibs; nLib++ )
-                    {
-                        StarBASIC* pLib = pBasMgr->GetLib( nLib );
-                        if ( !pLib )
-                            continue;
+                    // If a document is modified, there's no need for any action
+                    // within the BasicIDE.
+                    //
+                    // If a document is reloaded, the old document is destroyed
+                    // and a new document is loaded. The BasicIDE is first notified
+                    // with a SFX_HINT_DYING and then with a SFX_EVENT_OPENDOC.
+                    // The BasicIDE windows are destroyed after the SFX_HINT_DYING
+                    // notification and new windows are created after the
+                    // SFX_EVENT_OPENDOC notification.
 
+                    //UpdateWindows();
+                }
+                break;
+                case SFX_HINT_MODECHANGED:
+                {
+                    // ReadOnly toggled...
+                    if ( rBC.IsA( TYPE( SfxObjectShell ) ) )
+                    {
+                        SfxObjectShell* pShell = (SfxObjectShell*)&rBC;
                         for ( ULONG nWin = aIDEWindowTable.Count(); nWin; )
                         {
                             IDEBaseWindow* pWin = aIDEWindowTable.GetObject( --nWin );
-                            if ( pWin->GetBasic() == pLib )
-                            {
-                                if ( pWin->GetStatus() & (BASWIN_RUNNINGBASIC|BASWIN_INRESCHEDULE) )
-                                {
-                                    pWin->AddStatus( BASWIN_TOBEKILLED );
-                                    pWin->Hide();
-                                    StarBASIC::Stop();
-                                    // Es kommt kein Notify...
-                                    pWin->BasicStopped();
-                                }
-                                else
-                                {
-                                    pWin->StoreData();
-                                    if ( pWin == pCurWin )
-                                        bSetCurWindow = TRUE;
-                                    RemoveWindow( pWin, TRUE, FALSE );
-                                }
-                            }
+                            if ( pWin->GetShell() == pShell )
+                                pWin->SetReadOnly( pShell->IsReadOnly() );
                         }
-                        if ( pLib == pCurBasic )
-                            bSetCurBasic = TRUE;
-                    }
-                    if ( bSetCurBasic )
-                        SetCurBasic( SFX_APP()->GetBasic(), TRUE );
-                    else if ( bSetCurWindow )
-                    {
-                        IDEBaseWindow* pWin = FindWindow( 0 );
-                        SetCurWindow( pWin, TRUE );
                     }
                 }
-                else if ( rBC.IsA( TYPE( StarBASIC ) ) )
+                break;
+                case SFX_HINT_TITLECHANGED:
                 {
-                    StarBASIC* pLib = (StarBASIC* )&rBC;
-                    IDE_DLL()->GetExtraData()->GetLibInfos().DestroyInfo( pLib );
+                    BasicIDE::GetBindings().Invalidate( SID_BASICIDE_LIBSELECTOR, TRUE, FALSE );
+                    SetMDITitle();
                 }
-                EndListening( rBC, TRUE /* Alle abmelden */ );
+                break;
+                case SFX_HINT_DYING:
+                {
+                    EndListening( rBC, TRUE /* Alle abmelden */ );
+                }
+                break;
             }
+
             if ( rHint.IsA( TYPE( SbxHint ) ) )
             {
                 SbxHint& rSbxHint = (SbxHint&)rHint;
@@ -662,7 +670,7 @@ void __EXPORT BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
                     {
                         if ( nHintId == SBX_HINT_BASICSTART )
                             pWin->BasicStarted();
-                         else
+                        else
                             pWin->BasicStopped();
                         pWin = aIDEWindowTable.Next();
                     }
@@ -690,18 +698,18 @@ void BasicIDEShell::CheckWindows()
         }
     }
     if ( bSetCurWindow )
-        SetCurWindow( FindWindow( 0 ), TRUE );
+        SetCurWindow( FindWindow(), TRUE );
 }
 
 
 
-void BasicIDEShell::RemoveWindows( StarBASIC* pBasic, BOOL bDestroy )
+void BasicIDEShell::RemoveWindows( SfxObjectShell* pShell, const String& rLibName, BOOL bDestroy )
 {
     BOOL bChangeCurWindow = pCurWin ? FALSE : TRUE;
     for ( ULONG nWin = 0; nWin < aIDEWindowTable.Count(); nWin++ )
     {
         IDEBaseWindow* pWin = aIDEWindowTable.GetObject( nWin );
-        if ( pWin->GetBasic() == pBasic )
+        if ( pWin->GetShell() == pShell && pWin->GetLibName() == rLibName )
         {
             if ( pWin == pCurWin )
                 bChangeCurWindow = TRUE;
@@ -711,7 +719,7 @@ void BasicIDEShell::RemoveWindows( StarBASIC* pBasic, BOOL bDestroy )
         }
     }
     if ( bChangeCurWindow )
-        SetCurWindow( FindWindow( 0 ), TRUE );
+        SetCurWindow( FindWindow(), TRUE );
 }
 
 
@@ -720,12 +728,12 @@ void BasicIDEShell::UpdateWindows()
 {
     // Alle Fenster, die nicht angezeigt werden duerfen, entfernen
     BOOL bChangeCurWindow = pCurWin ? FALSE : TRUE;
-    if ( pCurBasic )
+    if ( m_aCurLibName.Len() )
     {
         for ( ULONG nWin = 0; nWin < aIDEWindowTable.Count(); nWin++ )
         {
             IDEBaseWindow* pWin = aIDEWindowTable.GetObject( nWin );
-            if ( pWin->GetBasic() != pCurBasic )
+            if ( pWin->GetShell() != m_pCurShell || pWin->GetLibName() != m_aCurLibName )
             {
                 if ( pWin == pCurWin )
                     bChangeCurWindow = TRUE;
@@ -746,7 +754,7 @@ void BasicIDEShell::UpdateWindows()
     if ( bCreatingWindow )
         return;
 
-    SbModule* pNextActiveModule = NULL;
+    IDEBaseWindow* pNextActiveWindow = 0;
 
     // Alle anzuzeigenden Fenster anzeigen
     BasicManager* pBasicMgr = SFX_APP()->GetBasicManager();
@@ -769,71 +777,93 @@ void BasicIDEShell::UpdateWindows()
 
             for ( sal_Int32 i = 0 ; i < nLibCount ; i++ )
             {
-                // check, if library is password protected and not verified
-                BOOL bProtected = FALSE;
                 String aLibName = pLibNames[ i ];
                 ::rtl::OUString aOULibName( aLibName );
-                Reference< script::XLibraryContainer > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pDocShell ), UNO_QUERY );
-                if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
+
+                if ( !m_aCurLibName.Len() || ( pDocShell == m_pCurShell && aLibName == m_aCurLibName ) )
                 {
-                    Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
-                    if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
+                    // check, if library is password protected and not verified
+                    BOOL bProtected = FALSE;
+                    Reference< script::XLibraryContainer > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pDocShell ), UNO_QUERY );
+                    if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
                     {
-                        bProtected = TRUE;
+                        Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
+                        if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
+                        {
+                            bProtected = TRUE;
+                        }
                     }
-                }
 
-                if ( !bProtected )
-                {
-                    StarBASIC* pLib = pBasicMgr->GetLib( aLibName );
-
-                    if ( pLib && ( !pCurBasic || ( pLib == pCurBasic ) ) )
+                    if ( !bProtected )
                     {
-                        ImplStartListening( pLib );
-
-                        LibInfo* pLibInf =  IDE_DLL()->GetExtraData()->GetLibInfos().GetInfo( pLib );
+                        LibInfoItem* pLibInfoItem = 0;
+                        BasicIDEData* pData = IDE_DLL()->GetExtraData();
+                        if ( pData )
+                            pLibInfoItem = pData->GetLibInfos().GetInfo( LibInfoKey( pDocShell, aLibName ) );
 
                         // modules
-                        try
+                        if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
                         {
-                            Sequence< ::rtl::OUString > aModNames = BasicIDE::GetModuleNames( pDocShell, aLibName );
-                            sal_Int32 nModCount = aModNames.getLength();
-                            const ::rtl::OUString* pModNames = aModNames.getConstArray();
+                            StarBASIC* pLib = pBasicMgr->GetLib( aLibName );
+                            if ( pLib )
+                                ImplStartListening( pLib );
 
-                            for ( sal_Int32 j = 0 ; j < nModCount ; j++ )
+                            try
                             {
-                                String aModName = pModNames[ j ];
-                                if ( !FindBasWin( pLib, aModName, FALSE ) )
-                                    CreateBasWin( pLib, aModName );
+                                Sequence< ::rtl::OUString > aModNames = BasicIDE::GetModuleNames( pDocShell, aLibName );
+                                sal_Int32 nModCount = aModNames.getLength();
+                                const ::rtl::OUString* pModNames = aModNames.getConstArray();
 
-                                if ( pLibInf && !pNextActiveModule && ( aModName == pLibInf->aCurrentModule ) )
-                                    pNextActiveModule = pLib->FindModule( aModName );
+                                for ( sal_Int32 j = 0 ; j < nModCount ; j++ )
+                                {
+                                    String aModName = pModNames[ j ];
+                                    ModulWindow* pWin = FindBasWin( pDocShell, aLibName, aModName, FALSE );
+                                    if ( !pWin )
+                                        pWin = CreateBasWin( pDocShell, aLibName, aModName );
+                                    if ( !pNextActiveWindow && pLibInfoItem && pLibInfoItem->GetCurrentName() == aModName &&
+                                         pLibInfoItem->GetCurrentType() == BASICIDE_TYPE_MODULE )
+                                    {
+                                        pNextActiveWindow = (IDEBaseWindow*)pWin;
+                                    }
+                                }
                             }
-                        }
-                        catch ( container::NoSuchElementException& e )
-                        {
-                            ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-                            DBG_ERROR( aBStr.GetBuffer() );
+                            catch ( container::NoSuchElementException& e )
+                            {
+                                ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+                                DBG_ERROR( aBStr.GetBuffer() );
+                            }
                         }
 
                         // dialogs
-                        try
+                        Reference< script::XLibraryContainer > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pDocShell ), UNO_QUERY );
+                        if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) )
                         {
-                            Sequence< ::rtl::OUString > aDlgNames = BasicIDE::GetDialogNames( pDocShell, aLibName );
-                            sal_Int32 nDlgCount = aDlgNames.getLength();
-                            const ::rtl::OUString* pDlgNames = aDlgNames.getConstArray();
-
-                            for ( sal_Int32 j = 0 ; j < nDlgCount ; j++ )
+                            try
                             {
-                                String aDlgName = pDlgNames[ j ];
-                                if ( !FindDlgWin( pLib, aDlgName, FALSE ) ) // this find only looks for non-suspended windows;
-                                    CreateDlgWin( pLib, aDlgName );         // suspended windows are handled in CreateDlgWin
+                                Sequence< ::rtl::OUString > aDlgNames = BasicIDE::GetDialogNames( pDocShell, aLibName );
+                                sal_Int32 nDlgCount = aDlgNames.getLength();
+                                const ::rtl::OUString* pDlgNames = aDlgNames.getConstArray();
+
+                                for ( sal_Int32 j = 0 ; j < nDlgCount ; j++ )
+                                {
+                                    String aDlgName = pDlgNames[ j ];
+                                    // this find only looks for non-suspended windows;
+                                    // suspended windows are handled in CreateDlgWin
+                                    DialogWindow* pWin = FindDlgWin( pDocShell, aLibName, aDlgName, FALSE );
+                                    if ( !pWin )
+                                        pWin = CreateDlgWin( pDocShell, aLibName, aDlgName );
+                                    if ( !pNextActiveWindow && pLibInfoItem && pLibInfoItem->GetCurrentName() == aDlgName &&
+                                         pLibInfoItem->GetCurrentType() == BASICIDE_TYPE_DIALOG )
+                                    {
+                                        pNextActiveWindow = (IDEBaseWindow*)pWin;
+                                    }
+                                }
                             }
-                        }
-                        catch ( container::NoSuchElementException& e )
-                        {
-                            ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-                            DBG_ERROR( aBStr.GetBuffer() );
+                            catch ( container::NoSuchElementException& e )
+                            {
+                                ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+                                DBG_ERROR( aBStr.GetBuffer() );
+                            }
                         }
                     }
                 }
@@ -849,7 +879,11 @@ void BasicIDEShell::UpdateWindows()
     }
 
     if ( bChangeCurWindow )
-        SetCurWindow( FindWindow( pNextActiveModule ), TRUE );
+    {
+        if ( !pNextActiveWindow )
+            pNextActiveWindow = FindWindow();
+        SetCurWindow( pNextActiveWindow, TRUE );
+    }
 }
 
 void BasicIDEShell::RemoveWindow( IDEBaseWindow* pWindow, BOOL bDestroy, BOOL bAllowChangeCurWindow )
@@ -861,7 +895,7 @@ void BasicIDEShell::RemoveWindow( IDEBaseWindow* pWindow, BOOL bDestroy, BOOL bA
     if ( pWindow == pCurWin )
     {
         if ( bAllowChangeCurWindow )
-            SetCurWindow( FindWindow( 0 ), TRUE );
+            SetCurWindow( FindWindow(), TRUE );
         else
             SetCurWindow( NULL, FALSE );
     }
@@ -957,17 +991,19 @@ void BasicIDEShell::EnableScrollbars( BOOL bEnable )
     }
 }
 
-void BasicIDEShell::SetCurBasic( StarBASIC* pBasic, BOOL bUpdateWindows )
+void BasicIDEShell::SetCurLib( SfxObjectShell* pShell, String aLibName, bool bUpdateWindows, bool bCheck )
 {
-    pCurBasic = pBasic;
-    if ( bUpdateWindows )
-        UpdateWindows();
+    if ( !bCheck || ( pShell != m_pCurShell || aLibName != m_aCurLibName ) )
+    {
+        m_pCurShell = pShell;
+        m_aCurLibName = aLibName;
+        if ( bUpdateWindows )
+            UpdateWindows();
 
-    pTabBar->SetCurrentLib( pBasic );
-
-    SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-    if( pBindings )
-        pBindings->Invalidate( SID_BASICIDE_LIBSELECTOR );
+        SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+        if ( pBindings )
+            pBindings->Invalidate( SID_BASICIDE_LIBSELECTOR );
+    }
 }
 
 void BasicIDEShell::ImplStartListening( StarBASIC* pBasic )
