@@ -1,1 +1,2 @@
 RegistrationClassName: XSLTransformer
+Class-Path: xalan.jar xercesImp.jar xml-apis.jar
