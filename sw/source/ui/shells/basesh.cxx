@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:06:21 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:51:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1623,8 +1623,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                         USHORT nHtmlMode = ::GetHtmlMode(GetView().GetDocShell());
                         if( ( nWhich == FN_TOOL_ANKER_PAGE &&
                               ((HTMLMODE_ON & nHtmlMode) && (0 == (nHtmlMode & HTMLMODE_SOME_ABS_POS)))) ||
-                            ( nWhich == FN_TOOL_ANKER_FRAME && !rSh.IsFlyInFly() ) ||
-                            ( nWhich == FN_TOOL_ANKER_AT_CHAR && !rSh.IsFrmSelected()))
+                            ( nWhich == FN_TOOL_ANKER_FRAME && !rSh.IsFlyInFly() ) )
                             rSet.DisableItem(nWhich);
                         else
                             rSet.Put(SfxBoolItem(nWhich, bSet));
