@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: mhu $ $Date: 2002-04-12 15:52:47 $
+#   last change: $Author: tra $ $Date: 2002-11-14 10:46:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,12 +67,13 @@ TARGET=workben
 LIBTARGET=NO
 TARGETTYPE=CUI
 
+TESTAPP=testftmp
 #TESTAPP=abbreviatetest
 #TESTAPP=getlocaleinfotest
 #TESTAPP=salstattest
 #TESTAPP=saldyntest
 
-TESTAPP=t_alloc
+#TESTAPP=t_alloc
 #TESTAPP=t_cipher
 #TESTAPP=t_digest
 #TESTAPP=t_random
@@ -86,11 +87,26 @@ TESTAPP=t_alloc
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
+
+.IF "$(TESTAPP)" == "testftmp"
+
+    CFLAGS+=/Ob1
+    
+    OBJFILES=$(OBJ)$/testftmp.obj
+
+    APP1TARGET=	testftmp
+    APP1OBJS=$(OBJFILES)
+
+    APP1STDLIBS=kernel32.lib
+
+    APP1LIBS=$(LB)$/isal.lib
+
+    APP1DEPN=$(LB)$/isal.lib
+
+.ENDIF
 
 .IF "$(TESTAPP)" == "getlocaleinfotest"
 
