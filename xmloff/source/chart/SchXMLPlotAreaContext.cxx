@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-02 11:50:55 $
+ *  last change: $Author: bm $ $Date: 2001-05-04 15:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,7 +374,7 @@ void SchXMLPlotAreaContext::EndElement()
     }
 
     // resize data so that all series and data point properties can be set
-    mrImportHelper.ResizeChartData( mnSeries, mnMaxSeriesLength );
+    mrImportHelper.ResizeChartData( mnSeries + mnDomainOffset, mnMaxSeriesLength );
 
     // set autostyles for series and data points
     const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
