@@ -2,9 +2,9 @@
  *
  *  $RCSfile: common_gfx.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:56:33 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,8 +133,8 @@ PrinterGfx::Init (const JobData& rData)
     mpPageHeader    = NULL;
     mpPageBody      = NULL;
     mnDepth         = rData.m_nColorDepth;
-    mnPSLevel       = rData.m_nPSLevel ? rData.m_nPSLevel : rData.m_pParser->getLanguageLevel();
-    mbColor         = rData.m_nColorDevice ? ( rData.m_nColorDevice == -1 ? sal_False : sal_True ) : ( rData.m_pParser->isColorDevice() ? sal_True : sal_False );
+    mnPSLevel       = rData.m_nPSLevel ? rData.m_nPSLevel : (rData.m_pParser ? rData.m_pParser->getLanguageLevel() : 2 );
+    mbColor         = rData.m_nColorDevice ? ( rData.m_nColorDevice == -1 ? sal_False : sal_True ) : (( rData.m_pParser ?  (rData.m_pParser->isColorDevice() ? sal_True : sal_False ) : sal_True ) );
     int nRes = rData.m_aContext.getRenderResolution();
     mnDpi           = nRes;
     mfScaleX        = (double)72.0 / (double)mnDpi;
@@ -176,12 +176,13 @@ PrinterGfx::PrinterGfx() :
         mpPageBody (NULL),
         mnFontID (0),
         mnFallbackID (0),
-        maLineColor (0, 0xff, 0),
-        maFillColor (0xff,0,0),
-        maTextColor (0,0,0),
+        mnTextAngle (0),
         mbTextVertical (false),
         mrFontMgr (PrintFontManager::get()),
         mbCompressBmp (sal_True),
+        maFillColor (0xff,0,0),
+        maTextColor (0,0,0),
+        maLineColor (0, 0xff, 0),
         mpFontSubstitutes( NULL )
 {
     maVirtualStatus.mfLineWidth = 1.0;
@@ -491,7 +492,7 @@ PrinterGfx::DrawPolygon (sal_uInt32 nPoints, const Point* pPath)
 
     PSBinStartPath();
     PSBinMoveTo( pPath[0], aPoint, nColumn );
-    for( int n = 1; n < nPoints; n++ )
+    for( unsigned int n = 1; n < nPoints; n++ )
         PSBinLineTo( pPath[n], aPoint, nColumn );
     if( pPath[0] != pPath[nPoints-1] )
         PSBinLineTo( pPath[0], aPoint, nColumn );
@@ -533,14 +534,14 @@ PrinterGfx::DrawPolyPolygon (sal_uInt32 nPoly, const sal_uInt32* pSizes, const P
 
 
     // setup closed path
-    for( int i = 0; i < nPoly; i++ )
+    for( unsigned int i = 0; i < nPoly; i++ )
     {
         Point aPoint( 0, 0 );
         sal_Int32 nColumn( 0 );
 
         PSBinStartPath();
         PSBinMoveTo( pPaths[i][0], aPoint, nColumn );
-        for( int n = 1; n < pSizes[i]; n++ )
+        for( unsigned int n = 1; n < pSizes[i]; n++ )
             PSBinLineTo( pPaths[i][n], aPoint, nColumn );
         if( pPaths[i][0] != pPaths[i][pSizes[i]-1] )
                 PSBinLineTo( pPaths[i][0], aPoint, nColumn );
@@ -595,25 +596,25 @@ PrinterGfx::DrawPolyLineBezier (sal_uInt32 nPoints, const Point* pPath, const BY
         }
         else
         {
-            snprintf(pString, nBezString, "%i %i moveto\n", pPath[0].X(), pPath[0].Y());
+            snprintf(pString, nBezString, "%li %li moveto\n", pPath[0].X(), pPath[0].Y());
             WritePS(mpPageBody, pString);
         }
 
         // Handle the drawing of mixed lines mixed with curves
         // - a normal point followed by a normal point is a line
         // - a normal point followed by 2 control points and a normal point is a curve
-        for (int i=1; i<nPoints;)
+        for (unsigned int i=1; i<nPoints;)
         {
             if (pFlgAry[i+1] != POLY_CONTROL) //If the next point is a POLY_NORMAL, we're drawing a line
             {
                 if (i+1 >= nPoints) return; //Make sure we don't pass the end of the array
-                snprintf(pString, nBezString, "%i %i lineto\n", pPath[i].X(), pPath[i].Y());
+                snprintf(pString, nBezString, "%li %li lineto\n", pPath[i].X(), pPath[i].Y());
                 i++;
             }
             else //Otherwise we're drawing a spline
             {
                 if (i+3 >= nPoints) return; //Make sure we don't pass the end of the array
-                snprintf(pString, nBezString, "%i %i %i %i %i %i curveto\n",
+                snprintf(pString, nBezString, "%li %li %li %li %li %li curveto\n",
                         pPath[i+1].X(), pPath[i+1].Y(),
                         pPath[i+2].X(), pPath[i+2].Y(),
                         pPath[i+3].X(), pPath[i+3].Y());
@@ -658,13 +659,13 @@ PrinterGfx::DrawPolygonBezier (sal_uInt32 nPoints, const Point* pPath, const BYT
     if (!(nPoints > 1) || (pPath == NULL) || !(maFillColor.Is() || maLineColor.Is()))
         return;
 
-    snprintf(pString, nBezString, "%i %i moveto\n", pPath[0].X(), pPath[0].Y());
+    snprintf(pString, nBezString, "%li %li moveto\n", pPath[0].X(), pPath[0].Y());
     WritePS(mpPageBody, pString); //Move to the starting point for the PolyPoygon
-    for (int i=1; i < nPoints;)
+    for (unsigned int i=1; i < nPoints;)
     {
         if (pFlgAry[i] != POLY_CONTROL)
         {
-            snprintf(pString, nBezString, "%i %i lineto\n", pPath[i].X(), pPath[i].Y());
+            snprintf(pString, nBezString, "%li %li lineto\n", pPath[i].X(), pPath[i].Y());
             WritePS(mpPageBody, pString);
             i++;
         }
@@ -675,7 +676,7 @@ PrinterGfx::DrawPolygonBezier (sal_uInt32 nPoints, const Point* pPath, const BYT
             if ((pFlgAry[i] == POLY_CONTROL) && (pFlgAry[i+1] == POLY_CONTROL) &&
                     (pFlgAry[i+2] != POLY_CONTROL))
             {
-                snprintf(pString, nBezString, "%i %i %i %i %i %i curveto\n",
+                snprintf(pString, nBezString, "%li %li %li %li %li %li curveto\n",
                         pPath[i].X(), pPath[i].Y(),
                         pPath[i+1].X(), pPath[i+1].Y(),
                         pPath[i+2].X(), pPath[i+2].Y());
@@ -714,20 +715,20 @@ PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints,
         return;
 
 
-    for (int i=0; i<nPoly;i++)
+    for (unsigned int i=0; i<nPoly;i++)
     {
         sal_uInt32 nPoints = pPoints[i];
         // #112689# sanity check
         if( nPoints == 0 )
             continue;
 
-        snprintf(pString, nBezString, "%i %i moveto\n", pPtAry[i][0].X(), pPtAry[i][0].Y()); //Move to the starting point
+        snprintf(pString, nBezString, "%li %li moveto\n", pPtAry[i][0].X(), pPtAry[i][0].Y()); //Move to the starting point
         WritePS(mpPageBody, pString);
-        for (int j=1; j < nPoints;)
+        for (unsigned int j=1; j < nPoints;)
         {
             if (pFlgAry[i][j] != POLY_CONTROL)
             {
-                snprintf(pString, nBezString, "%i %i lineto\n", pPtAry[i][j].X(), pPtAry[i][j].Y());
+                snprintf(pString, nBezString, "%li %li lineto\n", pPtAry[i][j].X(), pPtAry[i][j].Y());
                 WritePS(mpPageBody, pString);
                 j++;
             }
@@ -737,7 +738,7 @@ PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints,
                     break; //Error: wrong sequence of contol/normal points somehow
                 if ((pFlgAry[i][j] == POLY_CONTROL) && (pFlgAry[i][j+1] == POLY_CONTROL) && (pFlgAry[i][j+2] != POLY_CONTROL))
                 {
-                    snprintf(pString, nBezString, "%i %i %i %i %i %i curveto\n",
+                    snprintf(pString, nBezString, "%li %li %li %li %li %li curveto\n",
                             pPtAry[i][j].X(), pPtAry[i][j].Y(),
                             pPtAry[i][j+1].X(), pPtAry[i][j+1].Y(),
                             pPtAry[i][j+2].X(), pPtAry[i][j+2].Y());
@@ -1042,7 +1043,7 @@ PrinterGfx::PSBinCurrentPath (sal_uInt32 nPoints, const Point* pPath)
 
     PSBinStartPath ();
     PSBinMoveTo (*pPath, aPoint, nColumn);
-    for (int i = 1; i < nPoints; i++)
+    for (unsigned int i = 1; i < nPoints; i++)
         PSBinLineTo (pPath[i], aPoint, nColumn);
     PSBinEndPath ();
 }
@@ -1307,10 +1308,8 @@ PrinterGfx::DrawEPS( const Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize
     {
         double fScaleX = (double)rBoundingBox.GetWidth()/(fRight-fLeft);
         double fScaleY = -(double)rBoundingBox.GetHeight()/(fTop-fBottom);
-        Point aTranslatePoint( rBoundingBox.Left()-fLeft*fScaleX,
-                               rBoundingBox.Bottom()+1-fBottom*fScaleY );
-        char buffer[128];
-
+        Point aTranslatePoint( (int)(rBoundingBox.Left()-fLeft*fScaleX),
+                               (int)(rBoundingBox.Bottom()+1-fBottom*fScaleY) );
         // prepare EPS
         WritePS( mpPageBody,
                  "/b4_Inc_state save def\n"
