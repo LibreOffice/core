@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-31 13:27:11 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:43:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,10 +403,11 @@ void SdPage::WriteData(SvStream& rOut) const
     UINT32 nUserCallCount = 0;
     UINT32 nCount = (UINT32)aPresObjList.Count();
     UINT32 nValidCount = nCount;
+    UINT32 nObj;
 
     // NULL-Pointer rauszaehlen. Eigentlich haben die nichts in der Liste
     // verloren, aber es gibt leider Kundenfiles, in denen so was vorkommt.
-    for (UINT32 nObj = 0; nObj < nCount; nObj++)
+    for ( nObj = 0; nObj < nCount; nObj++)
     {
         SdrObject* pObj = (SdrObject*)aPresObjList.GetObject(nObj);
         if (!pObj)
