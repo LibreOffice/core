@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-10 11:55:22 $
+ *  last change: $Author: fs $ $Date: 2001-08-15 14:55:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1334,6 +1334,26 @@ void SvxCharNamePage::EnableSearchMode()
 {
     m_pImpl->m_bInSearchMode = TRUE;
 }
+// -----------------------------------------------------------------------
+void SvxCharNamePage::DisableControls( USHORT nDisable )
+{
+    if ( DISABLE_LANGUAGE & nDisable )
+    {
+        if ( m_pWestFontLanguageFT ) m_pWestFontLanguageFT->Disable();
+        if ( m_pWestFontLanguageLB ) m_pWestFontLanguageLB->Disable();
+        if ( m_pEastFontLanguageFT ) m_pEastFontLanguageFT->Disable();
+        if ( m_pEastFontLanguageLB ) m_pEastFontLanguageLB->Disable();
+    }
+
+    if ( DISABLE_HIDE_LANGUAGE & nDisable )
+    {
+        if ( m_pWestFontLanguageFT ) m_pWestFontLanguageFT->Hide();
+        if ( m_pWestFontLanguageLB ) m_pWestFontLanguageLB->Hide();
+        if ( m_pEastFontLanguageFT ) m_pEastFontLanguageFT->Hide();
+        if ( m_pEastFontLanguageLB ) m_pEastFontLanguageLB->Hide();
+    }
+}
+
 // -----------------------------------------------------------------------
 void SvxCharNamePage::SetPreviewBackgroundToCharacter()
 {
