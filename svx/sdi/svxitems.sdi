@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.sdi,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 15:46:40 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:09:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,6 +436,12 @@ item INT16                  SdrTextFitToSizeTypeItem;  // enum
 item String                 SfxStringListItem;  // serialized into one concatenated string
 item double                 SvxDoubleItem;
 item String                 OfaPtrItem;  // serialized into one concatenated string
+item String                 SvxDashListItem;
+item String                 SvxLineEndListItem;
+item String                 SvxColorTableItem;
+item String                 SvxGradientListItem;
+item String                 SvxHatchListItem;
+item String                 SvxBitmapListItem;
 item String SfxLockBytesItem;
 item String SvxFontListItem;
 
@@ -693,8 +699,6 @@ item SvxCharRotate SvxCharRotateItem;
 
 item String                 SvxClipboardFmtItem;  // dummy
 item String                 SfxSetItem;  // dummy
-item String                 SvxDrawToolItem;
-item String                 SvxDrawAlignItem;
 item INT16                  SvxRotateModeItem;  // enum
 item INT16                  SvxOrientationItem;  // enum
 
