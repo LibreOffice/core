@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:18:51 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:34:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ dutch ] = "~Standaard";
         Text[ chinese_simplified ] = "±ê×¼(~D)";
         Text[ greek ] = "ĞñïåğéëïãŞ";
-        Text[ korean ] = "±âº»(~D)";
+        Text[ korean ] = "±âº»";
         Text[ turkish ] = "Standar~t";
         Text[ language_user1 ] = " ";
     };
@@ -263,7 +263,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ dutch ] = "Inspringing";
         Text[ chinese_simplified ] = "Ëõ½ø(~I)";
         Text[ greek ] = "Åóï÷Ş";
-        Text[ korean ] = "µé¿© ¾²±â";
+        Text[ korean ] = "µé¿©¾²±â";
         Text[ turkish ] = "Girinti";
         Text[ language_user1 ] = " ";
     };
@@ -539,7 +539,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ dutch ] = "~Invalshoek";
         Text[ chinese_simplified ] = "ÒıÓÃ±ß(~F)";
         Text[ greek ] = "¢êñï áíáöïñÜò";
-        Text[ korean ] = "ÂüÁ¶ °¢(~F)";
+        Text[ korean ] = "±âÁØ ¸ğ¼­¸®(~F)";
         Text[ turkish ] = "Referans ~kenarı";
         Text[ language_user1 ] = " ";
     };
@@ -770,7 +770,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ finnish ] = "Reunukset" ;
         Text [ danish ] = "Afstand til gitterlinjer" ;
         Text [ french ] = "Écart des lignes de la grille" ;
-        Text [ swedish ] = "Marginaler" ;
+        Text [ swedish ] = "Avstånd till gitterlinjer" ;
         Text [ dutch ] = "Afstand tot rasterlijnen" ;
         Text [ spanish ] = "Distancia a la cuadrícula" ;
         Text [ english_us ] = "Spacing to grid lines" ;
@@ -897,7 +897,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ french ] = "Extension de texte à partir du bord supérieur de la cellule" ;
         Text [ dutch ] = "Inhoud uitbreiden vanaf bovenkant cel." ;
         Text [ portuguese ] = "Expansão do texto a partir do canto superior da célula." ;
-        Text[ chinese_simplified ] = "ÎÄ×Ö´Óµ¥Ôª¸ñÉÏ±ßÔµÑÓÉì¡£";
+        Text[ chinese_simplified ] = "ÎÄ×Ö´Óµ¥Ôª¸ñÉÏ±ßÔµÀ©Õ¹¡£";
         Text[ russian ] = "Ğàñòÿæåíèå òåêñòà îò âåğõíåãî êàíòà ÿ÷åéêè.";
         Text[ polish ] = "Rozci¹gniêcie tekstu od górnej krawêdzi komórki.";
         Text[ japanese ] = "¾Ù‚Ìã‰‚ğŠî€‚ÉŒX‚¯‚é";
@@ -905,7 +905,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ chinese_traditional ] = "¤å¦r±qÀx¦s®æ¤WÃä½t©µ¦ù¡C";
         Text[ arabic ] = "ÊãÏíÏ ÇáäÕ ÇäØáÇŞÇğ ãä ÇáÍÇİÉ ÇáÚáíÇ ááÎáíÉ.";
         Text[ dutch ] = "Inhoud uitbreiden vanaf bovenkant cel.";
-        Text[ chinese_simplified ] = "ÎÄ×Ö´Óµ¥Ôª¸ñÉÏ±ßÔµÑÓÉì¡£";
+        Text[ chinese_simplified ] = "ÎÄ×Ö´Óµ¥Ôª¸ñÉÏ±ßÔµÀ©Õ¹¡£";
         Text[ greek ] = "ÅğéìŞêõíóç êåéìİíïõ áğü ğÜíù Üêñç êåëéïı.";
         Text[ korean ] = "¼¿ À­Å×µÎ¸®¿¡¼­ ºÎÅÍ ÅØ½ºÆ® È®Àå";
         Text[ turkish ] = "Hücre üst kenarından metin genişlemesi.";
@@ -923,7 +923,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ french ] = "Extension de texte uniquement à l'intérieur de la cellule." ;
         Text [ dutch ] = "Inhoud uitbreiden alleen binnen cel." ;
         Text [ portuguese ] = "Expansão do texto apenas dentro da célula." ;
-        Text[ chinese_simplified ] = "ÎÄ×ÖÖ»ÔÚµ¥Ôª¸ñÄÚÑÓÉì¡£";
+        Text[ chinese_simplified ] = "ÎÄ×ÖÖ»ÔÚµ¥Ôª¸ñÄÚÀ©Õ¹¡£";
         Text[ russian ] = "Ğàñòÿæåíèå òåêñòà òîëüêî âíóòğè ÿ÷åéêè.";
         Text[ polish ] = "Rozci¹gniêcie tekstu tylko wewn¹trz komórki.";
         Text[ japanese ] = "Ã·½Ä‚Ì‚İŒX‚¯‚é";
@@ -931,7 +931,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ chinese_traditional ] = "¤å¦r¥u¦bÀx¦s®æ¤º©µ¦ù¡C";
         Text[ arabic ] = "ÊãÏíÏ ÇáäÕ ÏÇÎá ÇáÎáíÉ İŞØ.";
         Text[ dutch ] = "Inhoud uitbreiden alleen binnen cel.";
-        Text[ chinese_simplified ] = "ÎÄ×ÖÖ»ÔÚµ¥Ôª¸ñÄÚÑÓÉì¡£";
+        Text[ chinese_simplified ] = "ÎÄ×ÖÖ»ÔÚµ¥Ôª¸ñÄÚÀ©Õ¹¡£";
         Text[ greek ] = "ÅğéìŞêõíóç êåéìİíïõ ìüíï óôï åóùôåñéêü ôïõ êåëéïı.";
         Text[ korean ] = "¼¿ ¾È¿¡¼­¸¸ ÅØ½ºÆ® È®Àå";
         Text[ turkish ] = "Yalnızca hücre içinde metin genişlemesi";
