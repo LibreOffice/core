@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:03:21 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 16:29:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,7 +462,14 @@ void __EXPORT ScTabViewShell::QueryObjAreaPixel( Rectangle& rRect ) const
     USHORT nCol = pViewData->GetPosX(WhichH(ePos));
     USHORT nRow = pViewData->GetPosY(WhichV(ePos));
     USHORT nTab = pViewData->GetTabNo();
+    BOOL bNegativePage = pDoc->IsNegativePage( nTab );
+
     Rectangle aLogicRect = pDoc->GetMMRect( nCol, nRow, nCol, nRow, nTab );
+    if ( bNegativePage )
+    {
+        // use right edge of aLogicRect, and aLogicSize
+        aLogicRect.Left() = aLogicRect.Right() - aLogicSize.Width() + 1;    // Right() is set below
+    }
     aLogicRect.SetSize( aLogicSize );
 
     pDoc->SnapVisArea( aLogicRect );
@@ -1575,7 +1582,9 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
             pDoc->SetVisibleTab(nVisTab);
         }
         SetTabNo( nVisTab );
-        GetViewData()->SetScreenPos( aVisArea.TopLeft() );      // richtige Stelle zeigen
+        BOOL bNegativePage = pDoc->IsNegativePage( nVisTab );
+        // show the right cells
+        GetViewData()->SetScreenPos( bNegativePage ? aVisArea.TopRight() : aVisArea.TopLeft() );
 
         if ( GetViewFrame()->ISA(SfxInPlaceFrame) )             // inplace
         {
