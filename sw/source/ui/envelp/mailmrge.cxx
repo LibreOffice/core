@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-06-15 12:55:49 $
+ *  last change: $Author: os $ $Date: 2001-07-06 12:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,9 @@ void SwXSelChgLstnr_Impl::selectionChanged( const EventObject& aEvent ) throw (R
     }
     sal_Bool bEnable = aSelection.getLength() > 0;
     rParent.aMarkedRB.Enable(bEnable);
-    if(rParent.aMarkedRB.IsChecked() && !bEnable)
+    if(bEnable)
+        rParent.aMarkedRB.Check();
+    else if(rParent.aMarkedRB.IsChecked())
     {
         rParent.aAllRB.Check();
         rParent.aSelection.realloc(0);
