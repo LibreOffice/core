@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:14:12 $
+ *  last change: $Author: af $ $Date: 2001-02-07 09:20:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,7 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
 {
     SVLook = TRUE ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedImage FI_MS_IMAGE
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
@@ -302,12 +302,12 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
     };
     FixedLine FL_MS_GENERAL_FIRST
     {
-        Pos = MAP_APPFONT ( 6 , 32 ) ;
+        Pos = MAP_APPFONT ( 6 , 36 ) ;
         Size = MAP_APPFONT ( 248 , 1 ) ;
     };
     FixedText FT_MS_TYPE
     {
-        Pos = MAP_APPFONT ( 6 , 39 ) ;
+        Pos = MAP_APPFONT ( 6 , 43 ) ;
         Size = MAP_APPFONT ( 51 , 10 ) ;
         Text = "Typ:" ;
         Text [ English ] = "Type:" ;
@@ -336,12 +336,12 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
     };
     FixedText FT_MS_SHOW_TYPE
     {
-        Pos = MAP_APPFONT ( 60 , 39 ) ;
+        Pos = MAP_APPFONT ( 60 , 43 ) ;
         Size = MAP_APPFONT ( 194 , 10 ) ;
     };
     FixedText FT_MS_PATH
     {
-        Pos = MAP_APPFONT ( 6 , 52 ) ;
+        Pos = MAP_APPFONT ( 6 , 57 ) ;
         Size = MAP_APPFONT ( 51 , 10 ) ;
         Text = "Ort:" ;
         Text [ English ] = "Path:" ;
@@ -370,12 +370,12 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
     };
     FixedText FT_MS_SHOW_PATH
     {
-        Pos = MAP_APPFONT ( 60 , 52 ) ;
+        Pos = MAP_APPFONT ( 60 , 57 ) ;
         Size = MAP_APPFONT ( 194 , 10 ) ;
     };
     FixedText FT_MS_CONTENT
     {
-        Pos = MAP_APPFONT ( 6 , 65 ) ;
+        Pos = MAP_APPFONT ( 6 , 71 ) ;
         Size = MAP_APPFONT ( 51 , 10 ) ;
         Text = "Inhalt:" ;
         Text [ English ] = "Content:" ;
@@ -404,17 +404,17 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
     };
     FixedText FT_MS_SHOW_CONTENT
     {
-        Pos = MAP_APPFONT ( 60 , 65 ) ;
+        Pos = MAP_APPFONT ( 60 , 71 ) ;
         Size = MAP_APPFONT ( 194 , 10 ) ;
     };
     FixedLine FL_MS_GENERAL_SECOND
     {
-        Pos = MAP_APPFONT ( 6 , 81 ) ;
+        Pos = MAP_APPFONT ( 6 , 91 ) ;
         Size = MAP_APPFONT ( 248 , 1 ) ;
     };
     FixedText FT_MS_CREATEDATE
     {
-        Pos = MAP_APPFONT ( 6 , 88 ) ;
+        Pos = MAP_APPFONT ( 6 , 98 ) ;
         Size = MAP_APPFONT ( 51 , 10 ) ;
         Text = "Erstellt am:" ;
         Text [ English ] = "Created:" ;
@@ -443,12 +443,12 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
     };
     FixedText FT_MS_SHOW_CREATEDATE
     {
-        Pos = MAP_APPFONT ( 60 , 88 ) ;
+        Pos = MAP_APPFONT ( 60 , 98  ) ;
         Size = MAP_APPFONT ( 194 , 10 ) ;
     };
     FixedText FT_MS_CHANGEDATE
     {
-        Pos = MAP_APPFONT ( 6 , 101 ) ;
+        Pos = MAP_APPFONT ( 6 , 112 ) ;
         Size = MAP_APPFONT ( 51 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Geändert am: : Geõndert am: */
         /* ### ACHTUNG: Neuer Text in Resource? Geändert am: : Geõndert am: */
@@ -479,7 +479,7 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
     };
     FixedText FT_MS_SHOW_CHANGEDATE
     {
-        Pos = MAP_APPFONT ( 60 , 101 ) ;
+        Pos = MAP_APPFONT ( 60 , 112 ) ;
         Size = MAP_APPFONT ( 194 , 10 ) ;
     };
 };
@@ -491,7 +491,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
     HelpId = HID_GALLERY_BROWSER ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedText FT_FILETYPE
     {
         Pos = MAP_APPFONT ( 6 , 8 ) ;
@@ -531,14 +531,14 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
     MultiListBox LBX_FOUND
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 23 ) ;
-        Size = MAP_APPFONT ( 172 , 106 ) ;
+        Pos = MAP_APPFONT ( 6 , 23  ) ;
+        Size = MAP_APPFONT ( 172 , 156 ) ;
         TabStop = TRUE ;
         SimpleMode = TRUE ;
     };
     PushButton BTN_SEARCH
     {
-        Pos = MAP_APPFONT ( 184 , 6 ) ;
+        Pos = MAP_APPFONT ( 184 , 6  ) ;
         Size = MAP_APPFONT ( 70 , 14 ) ;
         Text = "Dateien su~chen..." ;
         Text [ ENGLISH ] = "~Search files..." ;
@@ -567,7 +567,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
     };
     PushButton BTN_TAKE
     {
-        Pos = MAP_APPFONT ( 184 , 23 ) ;
+        Pos = MAP_APPFONT ( 184 , 24  ) ;
         Size = MAP_APPFONT ( 70 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Hinzufügen : ~Hinzuf³gen */
         /* ### ACHTUNG: Neuer Text in Resource? ~Hinzufügen : ~Hinzuf³gen */
@@ -598,7 +598,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
     };
     PushButton BTN_TAKEALL
     {
-        Pos = MAP_APPFONT ( 184 , 40 ) ;
+        Pos = MAP_APPFONT ( 184 , 42 ) ;
         Size = MAP_APPFONT ( 70 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Alle hinzufügen : ~Alle hinzuf³gen */
         /* ### ACHTUNG: Neuer Text in Resource? ~Alle hinzufügen : ~Alle hinzuf³gen */
@@ -629,7 +629,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
     };
     CheckBox CBX_PREVIEW
     {
-        Pos = MAP_APPFONT ( 184 , 57 ) ;
+        Pos = MAP_APPFONT ( 184 , 76  ) ;
         Size = MAP_APPFONT ( 70 , 12 ) ;
         Text = "V~orschau" ;
         Text [ ENGLISH ] = "Pr~eview" ;
@@ -660,8 +660,8 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
     Window WND_BRSPRV
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 184 , 72 ) ;
-        Size = MAP_APPFONT ( 70 , 57 ) ;
+        Pos = MAP_APPFONT ( 184 , 91 ) ;
+        Size = MAP_APPFONT ( 70 , 88 ) ;
     };
     PushButton BTN_MADDIN1
     {
