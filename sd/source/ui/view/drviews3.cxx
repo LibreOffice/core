@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-08 15:36:42 $
+ *  last change: $Author: cl $ $Date: 2002-08-29 14:25:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,6 +243,10 @@ void  SdDrawViewShell::ExecCtrl(SfxRequest& rReq)
                     rReq.Ignore ();
                     break;
                 }
+
+
+                if( GetDocSh() && (GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED))
+                    GetDocSh()->SetModified();
 
                 SwitchPage(nSelectedPage);
 
