@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xprintext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oisin $ $Date: 2001-01-19 15:17:06 $
+ *  last change: $Author: oisin $ $Date: 2001-02-08 13:59:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ void     ImplSalPrinterData::Init( const SalPrinterQueueInfo* pQueueInfo,
         XprtConnectStatus = FALSE;
             }
             else {
-                fprintf(stderr, "Connected to Xprint server.\n");
+                //fprintf(stderr, "Connected to Xprint server.\n");
         if( getenv( "SAL_SYNCHRONIZE" ) )
             XSynchronize( mpXDisplay, True );
 
@@ -192,9 +192,9 @@ void     ImplSalPrinterData::Init( const SalPrinterQueueInfo* pQueueInfo,
                 XPPrinterList pList = XpGetPrinterList (mpXDisplay, NULL, &nCount);
 
                 for ( int i = 0; i < nCount; i++ ) {
-                   fprintf (stderr, "Printer «%s»: «%s»\n",
-                pList[i].name ? pList[i].name : "(null)",
-                pList[i].desc ? pList[i].desc : "(null)" );
+                   //fprintf (stderr, "Printer «%s»: «%s»\n",
+                //pList[i].name ? pList[i].name : "(null)",
+                //pList[i].desc ? pList[i].desc : "(null)" );
                 if(pList[i].name)
                 if (printername == NULL || strcmp (pList[i].name, printername) == 0) {
                     mpPrinterName = strdup( pList[i].name );
@@ -473,8 +473,8 @@ SalPrinter::StartPage( ImplJobSetup* pJobSetup, BOOL bNewJobData )
     XRectangle     aArea;
     Status nState = XpGetPageDimensions( pDisplay, nContext,
             &nWidth, &nHeight, &aArea );
-    fprintf(stderr, "PageSize = %ix%i (%i,%i %ix%i)\n", nWidth, nHeight,
-        aArea.x,aArea.y, aArea.width, aArea.height );
+    //fprintf(stderr, "PageSize = %ix%i (%i,%i %ix%i)\n", nWidth, nHeight,
+    //  aArea.x,aArea.y, aArea.width, aArea.height );
     XResizeWindow( pDisplay, aDrawable, nWidth, nHeight );
     XpStartPage ( pDisplay, aDrawable );
 
