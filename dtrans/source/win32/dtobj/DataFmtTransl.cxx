@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataFmtTransl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-09 08:46:46 $
+ *  last change: $Author: tra $ $Date: 2001-03-09 15:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,7 @@ CFormatEtc SAL_CALL CDataFormatTranslator::getFormatEtcForClipformat( CLIPFORMAT
         break;
 
     default:
-        fetc.setTymed( TYMED_HGLOBAL | TYMED_ISTREAM );
+        fetc.setTymed( TYMED_HGLOBAL /*| TYMED_ISTREAM*/ );
     }
 
     return fetc;
