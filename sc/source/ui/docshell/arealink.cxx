@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arealink.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-25 16:42:50 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 13:27:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/fcontnr.hxx>
 #include <svx/linkmgr.hxx>
 #include <svtools/stritem.hxx>
 #include <vcl/msgbox.hxx>
@@ -270,7 +271,7 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
     String aNewUrl( ScGlobal::GetAbsDocName( rNewFile, pDocShell ) );
     BOOL bNewUrlName = (aNewUrl != aFileName);
 
-    const SfxFilter* pFilter = SFX_APP()->GetFilter( pDocShell->GetFactory(), rNewFilter );
+    const SfxFilter* pFilter = pDocShell->GetFactory().GetFilterContainer()->GetFilter4FilterName(rNewFilter);
     if (!pFilter)
         return FALSE;
 
