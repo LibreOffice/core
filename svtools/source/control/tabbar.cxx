@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabbar.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-20 09:30:08 $
+ *  last change: $Author: th $ $Date: 2001-06-29 15:37:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,8 +142,6 @@ public:
     TabBar*         GetParent() const { return (TabBar*)Window::GetParent(); }
 
     virtual long    PreNotify( NotifyEvent& rNEvt );
-    virtual BOOL    QueryDrop( const DropEvent& rDEvt );
-    virtual BOOL    Drop( const DropEvent& rEvt );
 };
 
 // =======================================================================
@@ -160,36 +158,6 @@ long ImplTabButton::PreNotify( NotifyEvent& rNEvt )
     }
 
     return PushButton::PreNotify( rNEvt );
-}
-
-// -----------------------------------------------------------------------
-
-BOOL ImplTabButton::QueryDrop( const DropEvent& rDEvt )
-{
-    TabBar* pParent = GetParent();
-    Point aPos = OutputToScreenPixel( rDEvt.GetPosPixel() );
-    aPos = pParent->ScreenToOutputPixel( aPos );
-    BYTE nWindowType = rDEvt.GetWindowType();
-    if ( rDEvt.IsLeaveWindow() )
-    {
-        Size aWinSize = pParent->GetSizePixel();
-        if ( ((aPos.X() >= 0) && (aPos.X() < aWinSize.Width())) &&
-             ((aPos.Y() >= 0) && (aPos.Y() < aWinSize.Height())) )
-            nWindowType = 0;
-    }
-    DropEvent aNewDEvt( aPos, rDEvt.GetData(), rDEvt.GetAction(), nWindowType );
-    return pParent->QueryDrop( aNewDEvt );
-}
-
-// -----------------------------------------------------------------------
-
-BOOL ImplTabButton::Drop( const DropEvent& rDEvt )
-{
-    TabBar* pParent = GetParent();
-    Point aPos = OutputToScreenPixel( rDEvt.GetPosPixel() );
-    aPos = pParent->ScreenToOutputPixel( aPos );
-    DropEvent aNewDEvt( aPos, rDEvt.GetData(), rDEvt.GetAction(), rDEvt.GetWindowType() );
-    return pParent->Drop( aNewDEvt );
 }
 
 // =======================================================================
@@ -213,8 +181,6 @@ public:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    Tracking( const TrackingEvent& rTEvt );
     virtual void    Paint( const Rectangle& rRect );
-    virtual BOOL    QueryDrop( const DropEvent& rDEvt );
-    virtual BOOL    Drop( const DropEvent& rEvt );
 };
 
 // -----------------------------------------------------------------------
@@ -292,36 +258,6 @@ void ImplTabSizer::Paint( const Rectangle& )
         aOutputSize.Width()--;
     }
     aDecoView.DrawButton( Rectangle( Point( nOffX, 0 ), aOutputSize ), BUTTON_DRAW_NOLIGHTBORDER );
-}
-
-// -----------------------------------------------------------------------
-
-BOOL ImplTabSizer::QueryDrop( const DropEvent& rDEvt )
-{
-    TabBar* pParent = GetParent();
-    Point aPos = OutputToScreenPixel( rDEvt.GetPosPixel() );
-    aPos = pParent->ScreenToOutputPixel( aPos );
-    BYTE nWindowType = rDEvt.GetWindowType();
-    if ( rDEvt.IsLeaveWindow() )
-    {
-        Size aWinSize = pParent->GetSizePixel();
-        if ( ((aPos.X() >= 0) && (aPos.X() < aWinSize.Width())) &&
-             ((aPos.Y() >= 0) && (aPos.Y() < aWinSize.Height())) )
-            nWindowType = 0;
-    }
-    DropEvent aNewDEvt( aPos, rDEvt.GetData(), rDEvt.GetAction(), nWindowType );
-    return pParent->QueryDrop( aNewDEvt );
-}
-
-// -----------------------------------------------------------------------
-
-BOOL ImplTabSizer::Drop( const DropEvent& rDEvt )
-{
-    TabBar* pParent = GetParent();
-    Point aPos = OutputToScreenPixel( rDEvt.GetPosPixel() );
-    aPos = pParent->ScreenToOutputPixel( aPos );
-    DropEvent aNewDEvt( aPos, rDEvt.GetData(), rDEvt.GetAction(), rDEvt.GetWindowType() );
-    return pParent->Drop( aNewDEvt );
 }
 
 // =======================================================================
@@ -483,9 +419,6 @@ void TabBar::ImplInit( WinBits nWinStyle )
 
     if ( nWinStyle & WB_3DTAB )
         mnOffY++;
-
-    if ( nWinStyle & WB_DRAG )
-        EnableDrop();
 
     ImplInitControls();
     ImplInitSettings( TRUE, TRUE );
@@ -724,9 +657,6 @@ void TabBar::ImplInitControls()
         if ( !mpSizer )
             mpSizer = new ImplTabSizer( this, mnWinStyle & (WB_DRAG | WB_3DLOOK) );
         mpSizer->Show();
-
-        if ( mnWinStyle & WB_DRAG )
-            mpSizer->EnableDrop();
     }
     else
     {
@@ -746,8 +676,6 @@ void TabBar::ImplInitControls()
             mpPrevBtn = new ImplTabButton( this, WB_REPEAT );
             mpPrevBtn->SetSymbol( SYMBOL_PREV );
             mpPrevBtn->SetClickHdl( aLink );
-            if ( mnWinStyle & WB_DRAG )
-                mpPrevBtn->EnableDrop();
         }
         mpPrevBtn->Show();
 
@@ -756,8 +684,6 @@ void TabBar::ImplInitControls()
             mpNextBtn = new ImplTabButton( this, WB_REPEAT );
             mpNextBtn->SetSymbol( SYMBOL_NEXT );
             mpNextBtn->SetClickHdl( aLink );
-            if ( mnWinStyle & WB_DRAG )
-                mpNextBtn->EnableDrop();
         }
         mpNextBtn->Show();
     }
@@ -782,8 +708,6 @@ void TabBar::ImplInitControls()
             mpFirstBtn = new ImplTabButton( this );
             mpFirstBtn->SetSymbol( SYMBOL_FIRST );
             mpFirstBtn->SetClickHdl( aLink );
-            if ( mnWinStyle & WB_DRAG )
-                mpFirstBtn->EnableDrop();
         }
         mpFirstBtn->Show();
 
@@ -792,8 +716,6 @@ void TabBar::ImplInitControls()
             mpLastBtn = new ImplTabButton( this );
             mpLastBtn->SetSymbol( SYMBOL_LAST );
             mpLastBtn->SetClickHdl( aLink );
-            if ( mnWinStyle & WB_DRAG )
-                mpLastBtn->EnableDrop();
         }
         mpLastBtn->Show();
     }
