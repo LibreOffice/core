@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:52:10 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:40:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,7 @@ Menu MN_CALC_POPUP
             Text [ italian ] = "~Somma" ;
             Text [ portuguese_brazilian ] = "~Somatório" ;
             Text [ portuguese ] = "~Soma" ;
-            Text [ finnish ] = "~Summa" ;
+            Text [ finnish ] = "Summa" ;
             Text [ danish ] = "Sum" ;
             Text [ french ] = "~Somme" ;
             Text [ swedish ] = "~Summa" ;
@@ -248,6 +248,7 @@ Menu MN_CALC_POPUP
             Text[ korean ] = "¹Ý¿Ã¸²";
             Text[ turkish ] = "Yuvarla";
             Text[ catalan ] = "R~edondear";
+            Text[ finnish ] = "Pyöristä";
         };
         MenuItem
         {
@@ -262,7 +263,7 @@ Menu MN_CALC_POPUP
             Text [ italian ] = "~Percentuale" ;
             Text [ portuguese_brazilian ] = "~Percentual" ;
             Text [ portuguese ] = "~Percentagem" ;
-            Text [ finnish ] = "~Prosentti" ;
+            Text [ finnish ] = "Prosenttia" ;
             Text [ danish ] = "Procent" ;
             Text [ french ] = "~Pourcentage" ;
             Text [ swedish ] = "~Procent" ;
@@ -292,7 +293,7 @@ Menu MN_CALC_POPUP
             Text [ italian ] = "~Radice" ;
             Text [ portuguese_brazilian ] = "Raiz ~Quadrada" ;
             Text [ portuguese ] = "Raíz ~quadrada" ;
-            Text [ finnish ] = "~Neliöjuuri" ;
+            Text [ finnish ] = "Neliöjuuri" ;
             Text [ danish ] = "Kvadratrod" ;
             Text [ french ] = "~Racine carrée" ;
             Text [ swedish ] = "~Kvadratrot" ;
@@ -323,7 +324,7 @@ Menu MN_CALC_POPUP
             Text [ italian ] = "Elevare a potenza" ;
             Text [ portuguese_brazilian ] = "Po~tência" ;
             Text [ portuguese ] = "Elevar a po~tência" ;
-            Text [ finnish ] = "Po~tenssi" ;
+            Text [ finnish ] = "Potenssi" ;
             Text [ danish ] = "Opløft i potens" ;
             Text [ french ] = "Pu~issance" ;
             Text [ swedish ] = "~Upphöja" ;
@@ -353,7 +354,7 @@ Menu MN_CALC_POPUP
             Text [ italian ] = "Operatori" ;
             Text [ portuguese_brazilian ] = "~Operadores" ;
             Text [ portuguese ] = "~Operadores" ;
-            Text [ finnish ] = "~Operaattorit" ;
+            Text [ finnish ] = "Operaattorit" ;
             Text [ danish ] = "Operatorer" ;
             Text [ french ] = "~Opérateurs" ;
             Text [ swedish ] = "~Operatorer" ;
@@ -374,7 +375,7 @@ Menu MN_CALC_POPUP
                         Text [ italian ] = "~Separatore elenco" ;
                         Text [ portuguese_brazilian ] = "Separador de Lis~ta" ;
                         Text [ portuguese ] = "Separador de lis~ta" ;
-                        Text [ finnish ] = "~Luettelon erotin" ;
+                        Text [ finnish ] = "Luetteloerotin" ;
                         Text [ danish ] = "Listeseparator" ;
                         Text [ french ] = "Séparateur de lis~te" ;
                         Text [ swedish ] = "List~avgränsare" ;
@@ -404,7 +405,7 @@ Menu MN_CALC_POPUP
                         Text [ italian ] = "~Uguale" ;
                         Text [ portuguese_brazilian ] = "~Igual" ;
                         Text [ portuguese ] = "~Igual" ;
-                        Text [ finnish ] = "~Yhtä suuri kuin" ;
+                        Text [ finnish ] = "yhtäsuuri" ;
                         Text [ danish ] = "Lig med" ;
                         Text [ french ] = "~Égal" ;
                         Text [ swedish ] = "~Lika med" ;
@@ -434,7 +435,7 @@ Menu MN_CALC_POPUP
                         Text [ italian ] = "Non uguale" ;
                         Text [ portuguese_brazilian ] = "~Não Igual" ;
                         Text [ portuguese ] = "~Desigual" ;
-                        Text [ finnish ] = "~Eri suuri kuin" ;
+                        Text [ finnish ] = "Ei yhtäsuuri" ;
                         Text [ danish ] = "Forskellig fra" ;
                         Text [ french ] = "D~ifférent" ;
                         Text [ swedish ] = "~Inte lika med" ;
@@ -464,7 +465,7 @@ Menu MN_CALC_POPUP
                         Text [ italian ] = "Minore o uguale" ;
                         Text [ portuguese_brazilian ] = "Me~nor ou Igual" ;
                         Text [ portuguese ] = "Me~nor ou igual" ;
-                        Text [ finnish ] = "P~ienempi tai yhtä kuin" ;
+                        Text [ finnish ] = "Pienempi tai yhtäsuuri kuin" ;
                         Text [ danish ] = "Mindre end eller lig med" ;
                         Text [ french ] = "I~nférieur ou égal à" ;
                         Text [ swedish ] = "Mi~ndre än eller lika med" ;
@@ -495,7 +496,7 @@ Menu MN_CALC_POPUP
                         Text [ italian ] = "~Maggiore uguale" ;
                         Text [ portuguese_brazilian ] = "~Maior ou Igual" ;
                         Text [ portuguese ] = "M~aior ou igual" ;
-                        Text [ finnish ] = "S~uurempi tai yhtä kuin" ;
+                        Text [ finnish ] = "Suurempi tai yhtäsuuri kuin" ;
                         Text [ danish ] = "Større end lig med" ;
                         Text [ french ] = "~Supérieur ou égal" ;
                         Text [ swedish ] = "St~örre än eller lika med" ;
@@ -525,7 +526,7 @@ Menu MN_CALC_POPUP
                         Text [ italian ] = "Minore" ;
                         Text [ portuguese_brazilian ] = "~Menos" ;
                         Text [ portuguese ] = "~Menor" ;
-                        Text [ finnish ] = "~Pienempi kuin" ;
+                        Text [ finnish ] = "Pienempi" ;
                         Text [ danish ] = "Mindre end" ;
                         Text [ french ] = "In~férieur" ;
                         Text [ swedish ] = "~Mindre än" ;
@@ -556,7 +557,7 @@ Menu MN_CALC_POPUP
                         Text [ italian ] = "Maggiore" ;
                         Text [ portuguese_brazilian ] = "M~aior" ;
                         Text [ portuguese ] = "M~aior" ;
-                        Text [ finnish ] = "~Suurempi kuin" ;
+                        Text [ finnish ] = "Suurempi" ;
                         Text [ danish ] = "Større end" ;
                         Text [ french ] = "S~upérieur" ;
                         Text [ swedish ] = "~Större än" ;
@@ -590,7 +591,7 @@ Menu MN_CALC_POPUP
                         Text [ italian ] = "Logica ~O" ;
                         Text [ portuguese_brazilian ] = "Ou lógico ~" ;
                         Text [ portuguese ] = "~OU lógico" ;
-                        Text [ finnish ] = "Looginen ~Or" ;
+                        Text [ finnish ] = "Boolen ehto Or (tai)" ;
                         Text [ danish ] = "Logisk ELLER" ;
                         Text [ french ] = "~OU logique" ;
                         Text [ swedish ] = "Logiskt ~Eller" ;
@@ -620,7 +621,7 @@ Menu MN_CALC_POPUP
                         Text [ italian ] = "Logica O esclusiva" ;
                         Text [ portuguese_brazilian ] = "Xou lógico" ;
                         Text [ portuguese ] = "OU lógico e~xclusivo" ;
-                        Text [ finnish ] = "Looginen ~Xor" ;
+                        Text [ finnish ] = "Boolen ehto Xor (xtai)" ;
                         Text [ danish ] = "Logisk eksklusiv ELLER" ;
                         Text [ french ] = "Ou logique e~xclusif" ;
                         Text [ swedish ] = "Logiskt E~xklusivt Eller" ;
@@ -650,7 +651,7 @@ Menu MN_CALC_POPUP
                         Text [ italian ] = "Logica ~E" ;
                         Text [ portuguese_brazilian ] = "E ~lógico" ;
                         Text [ portuguese ] = "~E lógico" ;
-                        Text [ finnish ] = "Looginen ~And" ;
+                        Text [ finnish ] = "Boolen ehto And (ja)" ;
                         Text [ danish ] = "Logisk OG" ;
                         Text [ french ] = "~ET logique" ;
                         Text [ swedish ] = "Logiskt ~Och" ;
@@ -680,7 +681,7 @@ Menu MN_CALC_POPUP
                         Text [ italian ] = "Logica Non" ;
                         Text [ portuguese_brazilian ] = "Não Lóg~ico" ;
                         Text [ portuguese ] = "~NÃO lógico" ;
-                        Text [ finnish ] = "Looginen ~Not" ;
+                        Text [ finnish ] = "Boolen ehto Not (ei)" ;
                         Text [ danish ] = "Logisk IKKE" ;
                         Text [ french ] = "NON log~ique" ;
                         Text [ swedish ] = "Logiskt I~nte" ;
@@ -725,7 +726,7 @@ Menu MN_CALC_POPUP
             Text [ italian ] = "Funzioni statistiche" ;
             Text [ portuguese_brazilian ] = "Funç~oes Estatísticas" ;
             Text [ portuguese ] = "Funções e~statísticas" ;
-            Text [ finnish ] = "~Tilastofunktiot" ;
+            Text [ finnish ] = "Tilastofunktiot" ;
             Text [ danish ] = "Statistiske funktioner" ;
             Text [ french ] = "Fonctions s~tatistiques" ;
             Text [ swedish ] = "S~tatistiska funktioner" ;
@@ -776,7 +777,7 @@ Menu MN_CALC_POPUP
                         Text [ italian ] = "Valore minimo" ;
                         Text [ portuguese_brazilian ] = "Mínimo" ;
                         Text [ portuguese ] = "Valor mí~nimo" ;
-                        Text [ finnish ] = "Vähintään" ;
+                        Text [ finnish ] = "Minimi" ;
                         Text [ danish ] = "Minimumværdi" ;
                         Text [ french ] = "~Minimum" ;
                         Text [ swedish ] = "M~inimum" ;
@@ -806,7 +807,7 @@ Menu MN_CALC_POPUP
                         Text [ italian ] = "Valore massimo" ;
                         Text [ portuguese_brazilian ] = "Máximo" ;
                         Text [ portuguese ] = "Valor má~ximo" ;
-                        Text [ finnish ] = "Suurin arvo" ;
+                        Text [ finnish ] = "Maksimi" ;
                         Text [ danish ] = "Maksimumværdi" ;
                         Text [ french ] = "Ma~ximum" ;
                         Text [ swedish ] = "M~aximum" ;
@@ -851,7 +852,7 @@ Menu MN_CALC_POPUP
             Text [ italian ] = "Funzioni" ;
             Text [ portuguese_brazilian ] = "~Funções" ;
             Text [ portuguese ] = "~Funções" ;
-            Text [ finnish ] = "~Funktiot" ;
+            Text [ finnish ] = "Toiminnot" ;
             Text [ danish ] = "Funktioner" ;
             Text [ french ] = "~Fonctions" ;
             Text [ swedish ] = "~Funktioner" ;
@@ -886,6 +887,7 @@ Menu MN_CALC_POPUP
                         Text[ korean ] = "»çÀÎ";
                         Text[ turkish ] = "Sinüs";
                         Text[ catalan ] = "~Seno";
+                        Text[ finnish ] = "Sini";
                     };
                     MenuItem
                     {
@@ -914,6 +916,7 @@ Menu MN_CALC_POPUP
                         Text[ korean ] = "ÄÚ»çÀÎ";
                         Text[ turkish ] = "Kosinüs";
                         Text[ catalan ] = "~Coseno";
+                        Text[ finnish ] = "Kosini";
                     };
                     MenuItem
                     {
@@ -942,6 +945,7 @@ Menu MN_CALC_POPUP
                         Text[ korean ] = "ÅºÁ¨Æ®";
                         Text[ turkish ] = "Tanjant";
                         Text[ catalan ] = "~Tangente";
+                        Text[ finnish ] = "Tangentti";
                     };
                     MenuItem
                     {
@@ -970,6 +974,7 @@ Menu MN_CALC_POPUP
                         Text[ korean ] = "¾ÆÅ©»çÀÎ";
                         Text[ turkish ] = "Arksinüs";
                         Text[ catalan ] = "Seno de ~arco";
+                        Text[ finnish ] = "Arkussini";
                     };
                     MenuItem
                     {
@@ -998,6 +1003,7 @@ Menu MN_CALC_POPUP
                         Text[ korean ] = "¾ÆÅ© ÄÚ»çÀÎ";
                         Text[ turkish ] = "Arkkosinüs";
                         Text[ catalan ] = "Coseno de a~rco";
+                        Text[ finnish ] = "Arkuskosini";
                     };
                     MenuItem
                     {
@@ -1026,6 +1032,7 @@ Menu MN_CALC_POPUP
                         Text[ korean ] = "¾ÆÅ© ÅºÁ¨Æ®";
                         Text[ turkish ] = "Arktanjant";
                         Text[ catalan ] = "~Arcotangente";
+                        Text[ finnish ] = "Arkustangentti";
                     };
                 };
             };
