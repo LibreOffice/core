@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:42:23 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 13:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4152,6 +4152,8 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName) throw( be
                 {
                     SfxItemSet aSet(pTblCrsr->GetDoc()->GetAttrPool(),
                         RES_CHRATR_BEGIN,       RES_FRMATR_END -1,
+                        RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
+                        RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
                         0L);
                     // erstmal die Attribute des Cursors
                     SwUnoTableCrsr* pCrsr = *pTblCrsr;
