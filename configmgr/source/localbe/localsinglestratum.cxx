@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localsinglestratum.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:36:40 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 10:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,14 +65,6 @@
 #include "localfilehelper.hxx"
 #endif
 
-#ifndef CONFIGMGR_LOCALBE_LOCALFILELAYER_HXX_
-#include "localfilelayer.hxx"
-#endif // CONFIGMGR_LOCALBE_LOCALFILELAYER_HXX_
-
-#ifndef _CONFIGMGR_OSLSTREAM_HXX_
-#include "oslstream.hxx"
-#endif // _CONFIGMGR_OSLSTREAM_HXX_
-
 #ifndef CONFIGMGR_API_FACTORY_HXX_
 #include "confapifactory.hxx"
 #endif // CONFIGMGR_API_FACTORY_HXX_
@@ -80,13 +72,6 @@
 #ifndef CONFIGMGR_SERVICEINFOHELPER_HXX_
 #include "serviceinfohelper.hxx"
 #endif // CONFIGMGR_SERVICEINFOHELPER_HXX_
-
-#ifndef CONFIGMGR_BOOTSTRAP_HXX_
-#include "bootstrap.hxx"
-#endif
-#ifndef _CONFIGMGR_FILEHELPER_HXX_
-#include "filehelper.hxx"
-#endif
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
@@ -99,170 +84,32 @@
 #include <com/sun/star/configuration/backend/InsufficientAccessRightsException.hpp>
 #endif
 
-#ifndef _OSL_FILE_HXX_
-#include <osl/file.hxx>
-#endif
-#ifndef _OSL_PROCESS_H_
-#include <osl/process.h>
-#endif
-#include <memory>
-
 namespace configmgr { namespace localbe {
 
 //==============================================================================
 
+static inline rtl::OUString getDataSubPath()
+{ return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/data")); }
+
+static inline rtl::OUString getLocalisedDataSubPath()
+{ return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/res")); }
 //------------------------------------------------------------------------------
 
-LocalSingleStratumBase::LocalSingleStratumBase(
-        const uno::Reference<uno::XComponentContext>& xContext)
-        : SingleBackendBase(mMutex), mFactory(xContext->getServiceManager(),uno::UNO_QUERY) {
-}
-//------------------------------------------------------------------------------
-
-LocalSingleStratumBase::~LocalSingleStratumBase(void) {}
-
-//------------------------------------------------------------------------------
-void SAL_CALL LocalSingleStratumBase::initialize(
-        const uno::Sequence<uno::Any>& aParameters)
-    throw (uno::RuntimeException, uno::Exception,
-           css::configuration::InvalidBootstrapFileException,
-           backend::CannotConnectException,
-           backend::BackendSetupException)
-{
-
-
-
-    if (aParameters.getLength() == 0) {
-        throw lang::IllegalArgumentException(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "No parameters provided to LocalSingleStratum")),
-                *this, 0) ;
-    }
-
-
-    for (sal_Int32 i = 0 ; i < aParameters.getLength() ; ++ i) {
-        if (aParameters [i] >>= mStrataDataUrl )
-        { break ; }
-
-    }
-
-    //OSL_TRACE ( " Url is %s " ,rtl::OUStringToOString(mStrataDataUrl, RTL_TEXTENCODING_ASCII_US).getStr());
-    //validate DefaultDataUrls
-    bool bOptional = checkOptionalArg(mStrataDataUrl);
-
-    // get modified base for special layer implementations (e.g. resources)
-    this->adjustBaseURL(mStrataDataUrl);
-
-    validateFileURL(mStrataDataUrl, *this);
-    //NormalizeURL
-    implEnsureAbsoluteURL(mStrataDataUrl);
-    normalizeURL(mStrataDataUrl,*this, true);
-
-    if(FileHelper::fileExists(mStrataDataUrl))
-    {
-        checkIfDirectory(mStrataDataUrl, *this);
-    }
-}
-
-//------------------------------------------------------------------------------
-
-void LocalSingleStratumBase::adjustBaseURL(rtl::OUString& )
+LocalSingleStratumBase::LocalSingleStratumBase(const uno::Reference<uno::XComponentContext>& xContext)
+: SingleStratumImplBase(xContext)
 {
 }
 //------------------------------------------------------------------------------
 
-sal_Bool LocalSingleStratumBase::isMoreRecent(const rtl::OUString& aFileUrl,
-                                              const rtl::OUString& aTimestamp) {
-    rtl::OUString layerUrl ;
-    rtl::OUString subLayerUrl ;
+LocalSingleStratumBase::~LocalSingleStratumBase() {}
 
-    getLayerDirectories(layerUrl, subLayerUrl) ;
-
-    return layerUrl.getLength() == 0 ||
-        BasicLocalFileLayer::getTimestamp(layerUrl + aFileUrl).compareTo( aTimestamp) != 0;
-}
 //------------------------------------------------------------------------------
-
-static const rtl::OUString kDataSuffix(RTL_CONSTASCII_USTRINGPARAM(".xcu")) ;
-static const rtl::OUString kDataSubPath(
-                                        RTL_CONSTASCII_USTRINGPARAM("/data")) ;
-static const rtl::OUString kLocalisedDataSubPath(
-                                        RTL_CONSTASCII_USTRINGPARAM("/res")) ;
-
-
 uno::Reference<backend::XLayer> SAL_CALL
     LocalSingleStratumBase::getLayer( const rtl::OUString& aComponent, const rtl::OUString& aTimestamp )
         throw (backend::BackendAccessException, lang::IllegalArgumentException,
                 uno::RuntimeException)
 {
-
-    if (aComponent.getLength() == 0){
-        throw lang::IllegalArgumentException(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "LocalStratum:getLayer - no component specified")),
-                *this, 0) ;
-    }
-    rtl::OUString const componentSubPath = componentToPath(aComponent) + kDataSuffix ;
-    if (!isMoreRecent(componentSubPath, aTimestamp)) { return NULL ; }
-
-    return createReadonlyFileLayer(componentSubPath);
-}
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-
-OUString SAL_CALL LocalSingleStratumBase::getOwnerEntity()
-    throw (uno::RuntimeException)
-{
-    return mStrataDataUrl ;
-}
-//------------------------------------------------------------------------------
-
-OUString SAL_CALL LocalSingleStratumBase::getAdminEntity()
-    throw (uno::RuntimeException)
-{
-    return OUString();
-}
-//------------------------------------------------------------------------------
-
-sal_Bool SAL_CALL LocalSingleStratumBase::supportsEntity( const OUString& aEntity )
-    throw (backend::BackendAccessException, uno::RuntimeException)
-{
-    if(mStrataDataUrl.getLength() == 0)
-    {
-        return false;
-    }
-    if (aEntity.getLength() == 0)
-    {
-      return false;
-    }
-    return isEqualEntity(mStrataDataUrl,aEntity);
-}
-//------------------------------------------------------------------------------
-
-sal_Bool SAL_CALL LocalSingleStratumBase::isEqualEntity(const OUString& aEntity, const OUString& aOtherEntity)
-    throw (backend::BackendAccessException, lang::IllegalArgumentException, uno::RuntimeException)
-{
-    if (aEntity.getLength() == 0)
-    {
-        rtl::OUString const sMsg(RTL_CONSTASCII_USTRINGPARAM(
-                "LocalSingleBackend - Invalid empty entity."));
-
-        throw lang::IllegalArgumentException(sMsg, *this, 1);
-    }
-    if (aOtherEntity.getLength() == 0)
-    {
-        rtl::OUString const sMsg(RTL_CONSTASCII_USTRINGPARAM(
-                "LocalSingleBackend - Invalid empty entity."));
-
-        throw lang::IllegalArgumentException(sMsg, *this, 2);
-    }
-    OUString aNormalizedEntity(aEntity);
-    normalizeURL(aNormalizedEntity,*this);
-
-    OUString aNormalizedOther(aOtherEntity);
-    normalizeURL(aNormalizedOther,*this);
-
-    return aNormalizedEntity == aNormalizedOther;
+    return LocalStratumBase::getLayer(aComponent,aTimestamp);
 }
 //------------------------------------------------------------------------------
 uno::Reference<backend::XUpdatableLayer> SAL_CALL
@@ -276,20 +123,8 @@ uno::Reference<backend::XUpdatableLayer> SAL_CALL
                         "LocalSingleStratum:getLayer - no component specified")),
                 *this, 0) ;
     }
-    rtl::OUString const componentSubPath = componentToPath(aComponent) + kDataSuffix ;
+    rtl::OUString const componentSubPath = componentToPath(aComponent) + getDataSuffix();
     return createUpdatableFileLayer( componentSubPath) ;
-}
-//------------------------------------------------------------------------------
-static
-void failReadonly(backend::XSingleLayerStratum * pContext,const rtl::OUString & aBaseUrl)
-{
-    rtl::OUStringBuffer aMessage;
-    aMessage.appendAscii("Configurations - ")
-            .appendAscii("Cannot get update access to layer: ")
-            .appendAscii("Local file-based stratum at ")
-            .append(aBaseUrl)
-            .appendAscii(" is readonly.");
-    throw lang::NoSupportException(aMessage.makeStringAndClear(),pContext);
 }
 //------------------------------------------------------------------------------
 uno::Reference<backend::XUpdatableLayer> SAL_CALL
@@ -297,7 +132,7 @@ uno::Reference<backend::XUpdatableLayer> SAL_CALL
         throw (backend::BackendAccessException, lang::IllegalArgumentException,
                 lang::NoSupportException, uno::RuntimeException)
 {
-    failReadonly(this,getBaseUrl());
+    failReadonly();
     return 0;
 }
 uno::Reference<backend::XUpdatableLayer> SAL_CALL
@@ -305,7 +140,7 @@ uno::Reference<backend::XUpdatableLayer> SAL_CALL
         throw (backend::BackendAccessException, lang::IllegalArgumentException,
                 lang::NoSupportException, uno::RuntimeException)
 {
-    failReadonly(this,getBaseUrl());
+    failReadonly();
     return 0;
 }
 //------------------------------------------------------------------------------
@@ -314,7 +149,7 @@ inline
 void impl_getLayerDataDirectory(rtl::OUString const & aLayerBaseUrl,
                                  rtl::OUString& aMainLayerUrl)
 {
-    aMainLayerUrl   = aLayerBaseUrl + kDataSubPath ;
+    aMainLayerUrl   = aLayerBaseUrl + getDataSubPath() ;
 }
 //------------------------------------------------------------------------------
 static
@@ -322,31 +157,31 @@ inline
 void impl_getLayerResDirectory(rtl::OUString const & aLayerBaseUrl,
                                  rtl::OUString& aSubLayerUrl)
 {
-    aSubLayerUrl    = aLayerBaseUrl + kLocalisedDataSubPath ;
+    aSubLayerUrl    = aLayerBaseUrl + getLocalisedDataSubPath() ;
 }
 //------------------------------------------------------------------------------
 
 void LocalSingleStratum::getLayerDirectories(rtl::OUString& aLayerUrl,
                                              rtl::OUString& aSubLayerUrl) const
 {
-   impl_getLayerDataDirectory(getBaseUrl(),aLayerUrl);
-   impl_getLayerResDirectory(getBaseUrl(),aSubLayerUrl);
+    impl_getLayerDataDirectory(getBaseUrl(),aLayerUrl);
+    impl_getLayerResDirectory(getBaseUrl(),aSubLayerUrl);
 }
 //------------------------------------------------------------------------------
 
 void LocalDataStratum::getLayerDirectories(rtl::OUString& aLayerUrl,
                                              rtl::OUString& aSubLayerUrl) const
 {
-   impl_getLayerDataDirectory(getBaseUrl(),aLayerUrl);
-   aSubLayerUrl = OUString();
+    impl_getLayerDataDirectory(getBaseUrl(),aLayerUrl);
+    aSubLayerUrl = OUString();
 }
 //------------------------------------------------------------------------------
 
 void LocalReadonlyStratum::getLayerDirectories(rtl::OUString& aLayerUrl,
                                              rtl::OUString& aSubLayerUrl) const
 {
-   impl_getLayerDataDirectory(getBaseUrl(),aLayerUrl);
-   aSubLayerUrl = OUString();
+    impl_getLayerDataDirectory(getBaseUrl(),aLayerUrl);
+    aSubLayerUrl = OUString();
 }
 //------------------------------------------------------------------------------
 
@@ -364,28 +199,6 @@ void LocalResourceStratum::getLayerDirectories(rtl::OUString& aLayerUrl,
    // impl_getLayerResDirectory(getBaseUrl(),aSubLayerUrl);
 }
 //------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-uno::Reference<backend::XLayer>
-    LocalSingleStratumBase::createReadonlyFileLayer(const rtl::OUString& aComponent)
-     throw (lang::IllegalArgumentException)
-{
-    rtl::OUString layerPath ;
-    rtl::OUString subLayerPath ;
-
-    getLayerDirectories(layerPath, subLayerPath) ;
-    return createReadonlyLocalFileLayer(mFactory, layerPath, aComponent, subLayerPath) ;
-}
-//------------------------------------------------------------------------------
-uno::Reference<backend::XUpdatableLayer>
-    LocalSingleStratumBase::createUpdatableFileLayer(const rtl::OUString& aComponent)
-         throw (lang::IllegalArgumentException)
-{
-    rtl::OUString layerPath ;
-    rtl::OUString subLayerPath ;
-
-    getLayerDirectories(layerPath, subLayerPath) ;
-    return createUpdatableLocalFileLayer(mFactory, layerPath, aComponent, subLayerPath) ;
-}
 //------------------------------------------------------------------------------
 
 static const sal_Char * const kLegacyStratumImplementation =
@@ -457,29 +270,6 @@ const ServiceImplementationInfo * LocalResourceStratum::getServiceInfoData() con
     return &kResourceStratumServiceInfo;
 }
 //------------------------------------------------------------------------------
-
-rtl::OUString SAL_CALL LocalSingleStratumBase::getImplementationName(void)
-    throw (uno::RuntimeException)
-{
-    return ServiceInfoHelper(getServiceInfoData()).getImplementationName() ;
-}
-//------------------------------------------------------------------------------
-
-sal_Bool SAL_CALL LocalSingleStratumBase::supportsService(
-                                        const rtl::OUString& aServiceName)
-    throw (uno::RuntimeException)
-{
-    return  ServiceInfoHelper(getServiceInfoData()).supportsService(aServiceName);
-}
-//------------------------------------------------------------------------------
-
-uno::Sequence<rtl::OUString>
-SAL_CALL LocalSingleStratumBase::getSupportedServiceNames(void)
-    throw (uno::RuntimeException)
-{
-    return ServiceInfoHelper(getServiceInfoData()).getSupportedServiceNames() ;
-}
-
 // ---------------------------------------------------------------------------------------
 
 } } // configmgr.localsinglestratum

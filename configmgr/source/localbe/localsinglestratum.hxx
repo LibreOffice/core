@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localsinglestratum.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:36:53 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 10:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,49 +59,22 @@
  *
  ************************************************************************/
 
-#ifndef CONFIGMGR_LOCALBE_LOCALSINGLEBACKEND_HXX_
-#define CONFIGMGR_LOCALBE_LOCALSINGLEBACKEND_HXX_
+#ifndef CONFIGMGR_LOCALBE_LOCALSINGLESTRATUM_HXX_
+#define CONFIGMGR_LOCALBE_LOCALSINGLESTRATUM_HXX_
 
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XSCHEMASUPPLIER_HPP_
+#ifndef CONFIGMGR_LOCALBE_LOCALSTRATUMBASE_HXX_
+#include "localstratumbase.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XSINGLELAYERSTRATUM_HPP_
 #include <com/sun/star/configuration/backend/XSingleLayerStratum.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XBACKENDENTITIES_HPP_
-#include <com/sun/star/configuration/backend/XBackendEntities.hpp>
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
-#include <com/sun/star/lang/XInitialization.hpp>
-#endif // _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
-#include <com/sun/star/uno/XComponentContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#endif // _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif // _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XBACKENDENTITIES_HPP_
-#include <com/sun/star/configuration/backend/XBackendEntities.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONFIGURATION_INVALIDBOOTSTRAPFILEEXCEPTION_HPP_
-#include <com/sun/star/configuration/InvalidBootstrapFileException.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_CANNOTCONNECTEXCEPTION_HPP_
-#include <com/sun/star/configuration/backend/CannotConnectException.hpp>
-#endif
-
-#ifndef _CPPUHELPER_COMPBASE5_HXX_
-#include <cppuhelper/compbase4.hxx>
-#endif // _CPPUHELPER_COMPBASE4_HXX_
 
 namespace configmgr
 {
-    struct ServiceImplementationInfo;
-
     namespace localbe
     {
 
@@ -110,149 +83,40 @@ namespace uno = css::uno ;
 namespace lang = css::lang ;
 namespace backend = css::configuration::backend ;
 
-typedef cppu::WeakComponentImplHelper4<backend::XSingleLayerStratum,
-                                       lang::XInitialization,
-                                       backend::XBackendEntities,
-                                       lang::XServiceInfo> SingleBackendBase ;
+typedef cppu::ImplInheritanceHelper1< LocalStratumBase,
+                                       backend::XSingleLayerStratum
+                                     > SingleStratumImplBase ;
 
 /**
   Implements the SingleLayerStratum service for local file access.
   */
-class LocalSingleStratumBase : public SingleBackendBase {
-    public :
-        /**
-          Service constructor from a service factory.
+class LocalSingleStratumBase : public SingleStratumImplBase
+{
+public :
+    /**
+      Service constructor from a service factory.
 
-          @param xContext   component context
-          */
-        LocalSingleStratumBase(const uno::Reference<uno::XComponentContext>& xContext) ;
+      @param xContext   component context
+      */
+    LocalSingleStratumBase(const uno::Reference<uno::XComponentContext>& xContext) ;
 
-        /** Destructor */
-        ~LocalSingleStratumBase(void) ;
-
-
-        // XInitialize
-        virtual void SAL_CALL
-            initialize( const uno::Sequence<uno::Any>& aParameters)
-                throw (uno::RuntimeException, uno::Exception,
-                       css::configuration::InvalidBootstrapFileException,
-                       backend::CannotConnectException,
-                       backend::BackendSetupException);
+    /** Destructor */
+    ~LocalSingleStratumBase() ;
 
 
-        // XBackendEntities
-        virtual rtl::OUString SAL_CALL
-            getOwnerEntity(  )
-                throw (uno::RuntimeException);
+    // XSingleLayerStratum
+    virtual uno::Reference<backend::XLayer> SAL_CALL
+        getLayer( const rtl::OUString& aLayerId, const rtl::OUString& aTimestamp )
+            throw (backend::BackendAccessException,
+                    lang::IllegalArgumentException,
+                    uno::RuntimeException) ;
 
-        virtual rtl::OUString SAL_CALL
-            getAdminEntity(  )
-                throw (uno::RuntimeException);
-
-        virtual sal_Bool SAL_CALL
-            supportsEntity( const rtl::OUString& aEntity )
-                throw (backend::BackendAccessException, uno::RuntimeException);
-
-        virtual sal_Bool SAL_CALL
-            isEqualEntity( const rtl::OUString& aEntity, const rtl::OUString& aOtherEntity )
-                throw (backend::BackendAccessException, lang::IllegalArgumentException, uno::RuntimeException);
-        // XServiceInfo
-        virtual rtl::OUString SAL_CALL
-            getImplementationName(  )
-                throw (uno::RuntimeException);
-
-        virtual sal_Bool SAL_CALL
-            supportsService( const rtl::OUString& aServiceName )
-                throw (uno::RuntimeException) ;
-
-        virtual uno::Sequence<rtl::OUString> SAL_CALL
-            getSupportedServiceNames(  )
-                throw (uno::RuntimeException) ;
-
-        // XSingleLayerStratum
-        virtual uno::Reference<backend::XLayer> SAL_CALL
-            getLayer( const rtl::OUString& aLayerId, const rtl::OUString& aTimestamp )
-                throw (backend::BackendAccessException,
-                        lang::IllegalArgumentException,
-                        uno::RuntimeException) ;
-
-        virtual uno::Reference<backend::XUpdatableLayer> SAL_CALL
-            getUpdatableLayer( const rtl::OUString& aLayerId )
-                throw (backend::BackendAccessException,
-                        lang::IllegalArgumentException,
-                        lang::NoSupportException,
-                        uno::RuntimeException) ;
-
-    protected:
-        rtl::OUString const & getBaseUrl() const
-        { return mStrataDataUrl; }
-
-    protected:
-        /// Parses and adjusts the passed base URL
-        virtual void adjustBaseURL(rtl::OUString& aBaseURL);
-
-        /**
-          Retrieves the appropriate layer and sublayers base directories.
-
-          @param aLayerUrl      layer base URL, filled on return
-          @param aSubLayerUrl   sublayer base URL, filled on return
-          */
-        virtual void getLayerDirectories(rtl::OUString& aLayerUrl,
-                                         rtl::OUString& aSubLayerUrl) const = 0;
-    private:
-        virtual const ServiceImplementationInfo * getServiceInfoData() const = 0;
-
-    private :
-        /** Service factory */
-        uno::Reference<lang::XMultiServiceFactory> mFactory ;
-        /** Mutex for resources protection */
-        osl::Mutex mMutex ;
-        /**
-          Base of the strata data.
-          */
-        rtl::OUString mStrataDataUrl ;
-
-
-        /**
-          Builds a LocalFileLayer object given a layer id.
-          Since the LocalFileLayer implements the various
-          interfaces a layer can be accessed as, a few methods
-          need one. This method handles the layer id mapping
-          and the existence or not of sublayers.
-
-          @param aLayerId   layer id
-          @return   local file layer
-          @throws com::sun::star::lang::IllegalArgumentException
-                  if the layer id is invalid.
-          */
-        uno::Reference<backend::XLayer> createReadonlyFileLayer(const rtl::OUString& aLayerId)
-            throw (lang::IllegalArgumentException) ;
-
-        /**
-          Builds a LocalFileLayer object given a layer id.
-          Since the LocalFileLayer implements the various
-          interfaces a layer can be accessed as, a few methods
-          need one. This method handles the layer id mapping
-          and the existence or not of sublayers.
-
-          @param aLayerId   layer id
-          @return   local file layer
-          @throws com::sun::star::lang::IllegalArgumentException
-                  if the layer id is invalid.
-          */
-        uno::Reference<backend::XUpdatableLayer> createUpdatableFileLayer(const rtl::OUString& aLayerId)
-            throw (lang::IllegalArgumentException) ;
-
-        /**
-          Tells if a file is more recent than a given date.
-          The date is formatted YYYYMMDDhhmmssZ.
-
-          @param aComponent     URL of the component to check
-          @param aTimestamp     timestamp to check against
-          @return   sal_True if the file is more recent, sal_False otherwise
-          */
-        sal_Bool isMoreRecent(const rtl::OUString& aComponent,
-                              const rtl::OUString& aTimestamp) ;
+    virtual uno::Reference<backend::XUpdatableLayer> SAL_CALL
+        getUpdatableLayer( const rtl::OUString& aLayerId )
+            throw (backend::BackendAccessException,
+                    lang::IllegalArgumentException,
+                    lang::NoSupportException,
+                    uno::RuntimeException) ;
 
 } ;
 
@@ -325,4 +189,4 @@ private:
 
 } } // configmgr.localbe
 
-#endif // CONFIGMGR_LOCALBE_LOCALSINGLESTRATUM_HXX_
+#endif
