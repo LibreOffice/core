@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 13:00:09 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,7 +351,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             {
                 if ( !aPropOpt.IsFontWork() )
                     aPropOpt.CreateTextProperties( rObj.mXPropSet, mpEscherEx->QueryTextID(
-                        rObj.GetShapeRef(), rObj.GetShapeId() ), sal_True );
+                        rObj.GetShapeRef(), rObj.GetShapeId() ), sal_True, sal_False );
             }
         }
         else if ( rObj.GetType().EqualsAscii( "drawing.Rectangle" ))
@@ -381,8 +381,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             if( rObj.ImplGetText() )
                 aPropOpt.CreateTextProperties( rObj.mXPropSet,
                     mpEscherEx->QueryTextID( rObj.GetShapeRef(),
-                        rObj.GetShapeId() ) );
-
+                        rObj.GetShapeId() ), sal_False, sal_False );
         }
         else if ( rObj.GetType().EqualsAscii( "drawing.Ellipse" ))
         {
@@ -478,7 +477,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             if ( rObj.ImplGetText() )
                 aPropOpt.CreateTextProperties( rObj.mXPropSet,
                     mpEscherEx->QueryTextID( rObj.GetShapeRef(),
-                        rObj.GetShapeId() ) );
+                        rObj.GetShapeId() ), sal_False, sal_False );
 
         }
         else if ( rObj.GetType().EqualsAscii( "drawing.Control" ))
@@ -675,8 +674,11 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             {
                 if( rObj.ImplGetText() )
                 {
+                    /* SJ #i34951#: because M. documents are not allowing GraphicObjects containing text, we
+                       have to create a simpe Rectangle with fill bitmap instead (while not allowing BitmapMode_Repeat).
+                    */
                     ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0xa00 );           // Flags: Connector | HasSpt
-                    if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ), sal_True ) )
+                    if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ), sal_True,  sal_True, sal_False ) )
                     {
                         aPropOpt.AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapNone );
                         aPropOpt.AddOpt( ESCHER_Prop_AnchorText, ESCHER_AnchorMiddle );
@@ -686,7 +688,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                         if ( rObj.ImplGetText() )
                             aPropOpt.CreateTextProperties( rObj.mXPropSet,
                                 mpEscherEx->QueryTextID( rObj.GetShapeRef(),
-                                    rObj.GetShapeId() ) );
+                                    rObj.GetShapeId() ), sal_False, sal_False );
                     }
                 }
                 else
