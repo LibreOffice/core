@@ -274,6 +274,8 @@ hedabu: ..\inc\sizeitem.hxx %_DEST%\inc%_EXT%\svx\sizeitem.hxx
 hedabu: ..\inc\sphere3d.hxx %_DEST%\inc%_EXT%\svx\sphere3d.hxx
 hedabu: ..\inc\spltitem.hxx %_DEST%\inc%_EXT%\svx\spltitem.hxx
 hedabu: ..\inc\hangulhanja.hxx %_DEST%\inc%_EXT%\svx\hangulhanja.hxx
+hedabu: ..\inc\SpellPortions.hxx %_DEST%\inc%_EXT%\svx\SpellPortions.hxx
+hedabu: ..\inc\SpellDialogChildWindow.hxx %_DEST%\inc%_EXT%\svx\SpellDialogChildWindow.hxx
 hedabu: ..\inc\splwrap.hxx %_DEST%\inc%_EXT%\svx\splwrap.hxx
 hedabu: ..\inc\srchdlg.hxx %_DEST%\inc%_EXT%\svx\srchdlg.hxx
 hedabu: ..\inc\srchitem.hxx %_DEST%\inc%_EXT%\svx\srchitem.hxx
