@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 09:36:23 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 #pragma hdrstop
 
 
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
+#endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
@@ -495,7 +498,7 @@ void SwXTextCursor::getTextFromPam(SwPaM& aCrsr, OUString& rBuffer)
     if(!aCrsr.HasMark())
         return;
     SvCacheStream aStream( 20480 );
-#ifdef __BIGENDIAN
+#ifdef OSL_BIGENDIAN
     aStream.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
 #else
     aStream.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
