@@ -2,9 +2,9 @@
  *
  *  $RCSfile: longcurr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:21:10 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:39:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,7 +390,7 @@ void LongCurrencyFormatter::ImplLoadRes( const ResId& rResId )
     ImpInit();
 
     ResMgr*     pMgr = Resource::GetResManager();
-    USHORT      nMask = pMgr->ReadShort();
+    ULONG       nMask = pMgr->ReadLong();
 
     if ( NUMERICFORMATTER_MIN & nMask )
         mnMin = pMgr->ReadLong();
@@ -677,7 +677,7 @@ void LongCurrencyField::ImplLoadRes( const ResId& rResId )
     SpinField::ImplLoadRes( rResId );
     LongCurrencyFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
 
-    USHORT nMask = ReadShortRes();
+    ULONG nMask = ReadLongRes();
     if ( CURRENCYFIELD_FIRST & nMask )
         mnFirst = ReadLongRes();
 
