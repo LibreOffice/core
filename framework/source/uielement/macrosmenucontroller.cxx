@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosmenucontroller.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 12:32:32 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:12:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,8 @@ void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPo
     String aDisplayName = RetrieveLabelFromCommand( aCommand );
     pPopupMenu->InsertItem( 2, aDisplayName );
     pPopupMenu->SetItemCommand( 2, aCommand );
+    //pPopupMenu->SetHelpId( 2, HID_SVX_BASIC_MACRO_ORGANIZER );
+    pPopupMenu->SetHelpId( 2, 40012 );
 
     // insert providers but not basic or java
     addScriptItems( pPopupMenu, 4);
@@ -399,6 +401,8 @@ void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, USHORT startIt
                     aDisplayName.Append( ellipsis );
                     pPopupMenu->InsertItem( itemId, aDisplayName );
                     pPopupMenu->SetItemCommand( itemId, aCommand );
+                    //pPopupMenu->SetHelpId( itemId, HID_SVX_COMMON_MACRO_ORGANIZER );
+                    pPopupMenu->SetHelpId( itemId, 40014 );
                     itemId++;
                     break;
                 }
