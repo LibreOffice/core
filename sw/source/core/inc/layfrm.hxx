@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layfrm.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:05:44 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:28:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,10 @@ class SwLayoutFrm: public SwFrm
     friend SwFrm* SaveCntnt( SwLayoutFrm *, SwFrm * );
     friend void   RestoreCntnt( SwFrm *, SwLayoutFrm *, SwFrm *pSibling, bool bGrow );
 
+#if OSL_DEBUG_LEVEL > 1
     //entfernt leere SwSectionFrms aus einer Kette
     friend SwFrm* SwClearDummies( SwFrm* pFrm );
+#endif
 
     void CopySubtree( const SwLayoutFrm *pDest );
 protected:
