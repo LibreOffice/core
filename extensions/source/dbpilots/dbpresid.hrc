@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbpresid.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:11:32 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:40:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,7 @@
 #define PB_ALLFIELDSRIGHT           4
 #define PB_FIELDLEFT                5
 #define PB_ALLFIELDSLEFT            6
+#define PB_FORMDATASOURCE           7
 
 //........................................................................
 // RadioButton
