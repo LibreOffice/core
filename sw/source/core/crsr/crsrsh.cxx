@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-24 07:51:49 $
+ *  last change: $Author: rt $ $Date: 2003-10-30 10:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,8 +140,8 @@
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
 #endif
-#ifndef _DRAWFONT_HXX
-#include <drawfont.hxx>
+#ifndef _SCRIPTINFO_HXX
+#include <scriptinfo.hxx>
 #endif
 #ifndef _SWGLOBDOCSH_HXX //autogen
 #include <globdoc.hxx>
