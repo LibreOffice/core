@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hdu $ $Date: 2002-02-15 17:00:52 $
+ *  last change: $Author: hr $ $Date: 2002-02-19 11:11:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include <X11/Xlib.h>
 #include <gcach_xpeer.hxx>
+#include <stdio.h>
 #include <stdlib.h>
 
 #include <dlfcn.h>
