@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typelib.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-01-09 12:47:56 $
+ *  last change: $Author: armin $ $Date: 2001-03-08 09:09:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #define CPPU_TRACE(x)
 #endif
 
-#include <stl/hash_map>
-#include <stl/list>
+#include <hash_map>
+#include <list>
 
 #include <stdarg.h>
 #include <stdlib.h>
