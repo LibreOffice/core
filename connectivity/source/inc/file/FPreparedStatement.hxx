@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 16:36:33 $
+ *  last change: $Author: oj $ $Date: 2001-12-03 12:11:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,12 +102,8 @@ namespace connectivity
             //====================================================================
             // Data attributes
             //====================================================================
-            ::std::vector<sal_Int32>                            m_aParameterIndexes; // maps the parameter index to column index
             ::rtl::OUString                                     m_aSql;
             OValueRow                                           m_aParameterRow;
-            ORefAssignValues                                    m_aAssignValues; // needed for insert,update and parameters
-                                                                    // to compare with the restrictions
-
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>   m_xMetaData;
 
             OResultSet*                                         m_pResultSet;
@@ -120,21 +116,13 @@ namespace connectivity
             void checkAndResizeParameters(sal_Int32 parameterIndex);
             void setParameter(sal_Int32 parameterIndex, const ORowSetValue& x);
 
-
-            void GetAssignValues();
-            void SetAssignValue(const String& aColumnName,
-                                   const String& aValue,
-                                   BOOL bSetNull = FALSE,
-                                   UINT32 nParameter=SQL_NO_PARAMETER);
             UINT32 AddParameter(connectivity::OSQLParseNode * pParameter,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xCol);
             void scanParameter(OSQLParseNode* pParseNode,::std::vector< OSQLParseNode*>& _rParaNodes);
             void describeColumn(OSQLParseNode* _pParameter,OSQLParseNode* _pNode,const OSQLTable& _xTable);
             void describeParameter();
 
-            void ParseAssignValues( const ::std::vector< String>& aColumnNameList,
-                                    connectivity::OSQLParseNode* pRow_Value_Constructor_Elem,xub_StrLen nIndex);
-
+            virtual void parseParamterElem(const String& _sColumnName,OSQLParseNode* pRow_Value_Constructor_Elem);
             virtual void initializeResultSet(OResultSet* _pResult);
         public:
             DECLARE_SERVICE_INFO();

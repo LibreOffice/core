@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 16:36:33 $
+ *  last change: $Author: oj $ $Date: 2001-12-03 12:11:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,7 @@ namespace connectivity
         {
         protected:
             ::std::vector<sal_Int32>                    m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
+            ::std::vector<sal_Int32>                    m_aParameterIndexes; // maps the parameter index to column index
             ::std::vector<sal_Int32>                    m_aOrderbyColumnNumber;
             ::std::vector<sal_Int16>                    m_aOrderbyAscending;
 
@@ -159,7 +160,8 @@ namespace connectivity
             OFileTable*                                 m_pTable;       // the current table
             OValueRow                                   m_aRow;
             OValueRow                                   m_aEvaluateRow; // contains all values of a row
-
+            ORefAssignValues                            m_aAssignValues; // needed for insert,update and parameters
+                                                                    // to compare with the restrictions
 
             ::rtl::OUString                             m_aCursorName;
             sal_Int32                                   m_nMaxFieldSize;
@@ -189,7 +191,15 @@ namespace connectivity
             sal_Int32 getPrecision ( sal_Int32 sqlType);
 
             void disposeResultSet();
+            void GetAssignValues();
+            void SetAssignValue(const String& aColumnName,
+                                   const String& aValue,
+                                   BOOL bSetNull = FALSE,
+                                   UINT32 nParameter=SQL_NO_PARAMETER);
+            void ParseAssignValues( const ::std::vector< String>& aColumnNameList,
+                                    connectivity::OSQLParseNode* pRow_Value_Constructor_Elem,xub_StrLen nIndex);
 
+            virtual void parseParamterElem(const String& _sColumnName,OSQLParseNode* pRow_Value_Constructor_Elem);
             // factory method for resultset's
             virtual OResultSet* createResultSet() = 0;
             // OPropertyArrayUsageHelper

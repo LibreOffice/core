@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 17:18:22 $
+ *  last change: $Author: oj $ $Date: 2001-12-03 12:11:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,8 +155,6 @@ void OPreparedStatement::construct(const ::rtl::OUString& sql)  throw(SQLExcepti
     describeParameter();
 
     OResultSet::setBoundedColumns(m_aEvaluateRow,m_xParamColumns,xNames,sal_False,m_xDBMetaData,m_aColMapping);
-
-    GetAssignValues();
 
     m_pResultSet = createResultSet();
     m_pResultSet->acquire();
@@ -455,299 +453,6 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const ORowSetVal
         (*m_aParameterRow)[parameterIndex] = x;
 }
 // -----------------------------------------------------------------------------
-void OPreparedStatement::GetAssignValues()
-{
-    if (m_pParseTree == NULL)
-    {
-        ::dbtools::throwFunctionSequenceException(*this);
-        return;
-    }
-
-    if (SQL_ISRULE(m_pParseTree,select_statement))
-        // Keine zu setzenden Werte bei SELECT
-        return;
-    else if (SQL_ISRULE(m_pParseTree,insert_statement))
-    {
-        // Row fuer die zu setzenden Werte anlegen (Referenz durch new)
-        if(m_aAssignValues.isValid())
-            m_aAssignValues->clear();
-        sal_Int32 nCount = Reference<XIndexAccess>(m_xColNames,UNO_QUERY)->getCount();
-        m_aAssignValues = new OAssignValues(nCount);
-        m_aParameterIndexes.resize(nCount+1,SQL_NO_PARAMETER);
-
-        // Liste der Columns-Namen, die in der column_commalist vorkommen (mit ; getrennt):
-        ::std::vector<String> aColumnNameList;
-
-        OSL_ENSURE(m_pParseTree->count() >= 4,"OResultSet: Fehler im Parse Tree");
-
-        OSQLParseNode * pOptColumnCommalist = m_pParseTree->getChild(3);
-        OSL_ENSURE(pOptColumnCommalist != NULL,"OResultSet: Fehler im Parse Tree");
-        OSL_ENSURE(SQL_ISRULE(pOptColumnCommalist,opt_column_commalist),"OResultSet: Fehler im Parse Tree");
-        if (pOptColumnCommalist->count() == 0)
-        {
-            const Sequence< ::rtl::OUString>& aNames = m_xColNames->getElementNames();
-            const ::rtl::OUString* pBegin = aNames.getConstArray();
-            aColumnNameList.insert(aColumnNameList.begin(),::std::vector<String>::const_iterator(pBegin),::std::vector<String>::const_iterator(pBegin + aNames.getLength()));
-        }
-        else
-        {
-            OSL_ENSURE(pOptColumnCommalist->count() == 3,"OResultSet: Fehler im Parse Tree");
-
-            OSQLParseNode * pColumnCommalist = pOptColumnCommalist->getChild(1);
-            OSL_ENSURE(pColumnCommalist != NULL,"OResultSet: Fehler im Parse Tree");
-            OSL_ENSURE(SQL_ISRULE(pColumnCommalist,column_commalist),"OResultSet: Fehler im Parse Tree");
-            OSL_ENSURE(pColumnCommalist->count() > 0,"OResultSet: Fehler im Parse Tree");
-
-            // Alle Columns in der column_commalist ...
-            for (sal_uInt32 i = 0; i < pColumnCommalist->count(); i++)
-            {
-                OSQLParseNode * pCol = pColumnCommalist->getChild(i);
-                OSL_ENSURE(pCol != NULL,"OResultSet: Fehler im Parse Tree");
-                aColumnNameList.push_back(pCol->getTokenValue());
-            }
-        }
-        if(!aColumnNameList.size())
-            throwFunctionSequenceException(*this);
-
-        // Werte ...
-        OSQLParseNode * pValuesOrQuerySpec = m_pParseTree->getChild(4);
-        OSL_ENSURE(pValuesOrQuerySpec != NULL,"OResultSet: pValuesOrQuerySpec darf nicht NULL sein!");
-        OSL_ENSURE(SQL_ISRULE(pValuesOrQuerySpec,values_or_query_spec),"OResultSet: ! SQL_ISRULE(pValuesOrQuerySpec,values_or_query_spec)");
-        OSL_ENSURE(pValuesOrQuerySpec->count() > 0,"OResultSet: pValuesOrQuerySpec->count() <= 0");
-
-        // nur "VALUES" ist erlaubt ...
-        if (! SQL_ISTOKEN(pValuesOrQuerySpec->getChild(0),VALUES))
-            throwFunctionSequenceException(*this);
-
-        OSL_ENSURE(pValuesOrQuerySpec->count() == 2,"OResultSet: pValuesOrQuerySpec->count() != 2");
-
-        // Liste von Werten
-        OSQLParseNode * pInsertAtomCommalist = pValuesOrQuerySpec->getChild(1);
-        OSL_ENSURE(pInsertAtomCommalist != NULL,"OResultSet: pInsertAtomCommalist darf nicht NULL sein!");
-        OSL_ENSURE(pInsertAtomCommalist->count() > 0,"OResultSet: pInsertAtomCommalist <= 0");
-
-        String aColumnName;
-        OSQLParseNode * pRow_Value_Const;
-        xub_StrLen nIndex=0;
-        for (sal_uInt32 i = 0; i < pInsertAtomCommalist->count(); i++)
-        {
-            pRow_Value_Const = pInsertAtomCommalist->getChild(i); // row_value_constructor
-            if(pRow_Value_Const->count() == 3)  // '(' row_value_const_list ')'
-            {
-                pRow_Value_Const = pRow_Value_Const->getChild(1); // row_value_const_list
-                OSL_ENSURE(pRow_Value_Const != NULL,"OResultSet: pRow_Value_Const darf nicht NULL sein!");
-                if(SQL_ISRULE(pRow_Value_Const,parameter))
-                {
-                    if(pRow_Value_Const->count() == aColumnNameList.size())
-                        ParseAssignValues(aColumnNameList,pRow_Value_Const,nIndex++); // kann nur ein Columnname vorhanden sein pro Schleife
-                    else
-                    {
-//                      aStatus.Set(SQL_STAT_ERROR,
-//                      String::CreateFromAscii("S1000"),
-//                      aStatus.CreateErrorMessage(String(SdbResId(STR_STAT_SYNTAX_ERROR))),
-//                      0, String() );
-                        throwFunctionSequenceException(*this);
-                    }
-                }
-                else
-                {
-                    if(pRow_Value_Const->count() == aColumnNameList.size())
-                    {
-                        for (sal_uInt32 j = 0; j < pRow_Value_Const->count(); ++j)
-                            ParseAssignValues(aColumnNameList,pRow_Value_Const->getChild(j),nIndex++);
-                    }
-                    else
-                    {
-//                      aStatus.Set(SQL_STAT_ERROR,
-//                      String::CreateFromAscii("S1000"),
-//                      aStatus.CreateErrorMessage(String(SdbResId(STR_STAT_SYNTAX_ERROR))),
-//                      0, String() );
-                        throwFunctionSequenceException(*this);
-                    }
-
-                }
-            }
-            else
-            {
-                //  aStatus.SetStatementTooComplex();
-                throwFunctionSequenceException(*this);
-            }
-        }
-    }
-    else if (SQL_ISRULE(m_pParseTree,update_statement_searched))
-    {
-        if(m_aAssignValues.isValid())
-            m_aAssignValues->clear();
-        sal_Int32 nCount = Reference<XIndexAccess>(m_xColNames,UNO_QUERY)->getCount();
-        m_aAssignValues = new OAssignValues(nCount);
-        m_aParameterIndexes.resize(nCount+1,SQL_NO_PARAMETER);
-
-        OSL_ENSURE(m_pParseTree->count() >= 4,"OResultSet: Fehler im Parse Tree");
-
-        OSQLParseNode * pAssignmentCommalist = m_pParseTree->getChild(3);
-        OSL_ENSURE(pAssignmentCommalist != NULL,"OResultSet: pAssignmentCommalist == NULL");
-        OSL_ENSURE(SQL_ISRULE(pAssignmentCommalist,assignment_commalist),"OResultSet: Fehler im Parse Tree");
-        OSL_ENSURE(pAssignmentCommalist->count() > 0,"OResultSet: pAssignmentCommalist->count() <= 0");
-
-        // Alle Zuweisungen (Kommaliste) bearbeiten ...
-        ::std::vector< String> aList(1);
-        for (sal_uInt32 i = 0; i < pAssignmentCommalist->count(); i++)
-        {
-            OSQLParseNode * pAssignment = pAssignmentCommalist->getChild(i);
-            OSL_ENSURE(pAssignment != NULL,"OResultSet: pAssignment == NULL");
-            OSL_ENSURE(SQL_ISRULE(pAssignment,assignment),"OResultSet: Fehler im Parse Tree");
-            OSL_ENSURE(pAssignment->count() == 3,"OResultSet: pAssignment->count() != 3");
-
-            OSQLParseNode * pCol = pAssignment->getChild(0);
-            OSL_ENSURE(pCol != NULL,"OResultSet: pCol == NULL");
-
-            OSQLParseNode * pComp = pAssignment->getChild(1);
-            OSL_ENSURE(pComp != NULL,"OResultSet: pComp == NULL");
-            OSL_ENSURE(pComp->getNodeType() == SQL_NODE_EQUAL,"OResultSet: pComp->getNodeType() != SQL_NODE_COMPARISON");
-            if (pComp->getTokenValue().toChar() != '=')
-            {
-                //  aStatus.SetInvalidStatement();
-                throwFunctionSequenceException(*this);
-            }
-
-            OSQLParseNode * pVal = pAssignment->getChild(2);
-            OSL_ENSURE(pVal != NULL,"OResultSet: pVal == NULL");
-            aList[0] = pCol->getTokenValue();
-            ParseAssignValues(aList,pVal,0);
-        }
-
-    }
-}
-// -------------------------------------------------------------------------
-void OPreparedStatement::ParseAssignValues(const ::std::vector< String>& aColumnNameList,OSQLParseNode* pRow_Value_Constructor_Elem,xub_StrLen nIndex)
-{
-    OSL_ENSURE(nIndex <= aColumnNameList.size(),"SdbFileCursor::ParseAssignValues: nIndex > aColumnNameList.GetTokenCount()");
-    String aColumnName(aColumnNameList[nIndex]);
-    OSL_ENSURE(aColumnName.Len() > 0,"OResultSet: Column-Name nicht gefunden");
-    OSL_ENSURE(pRow_Value_Constructor_Elem != NULL,"OResultSet: pRow_Value_Constructor_Elem darf nicht NULL sein!");
-
-    if (pRow_Value_Constructor_Elem->getNodeType() == SQL_NODE_STRING ||
-        pRow_Value_Constructor_Elem->getNodeType() == SQL_NODE_INTNUM ||
-        pRow_Value_Constructor_Elem->getNodeType() == SQL_NODE_APPROXNUM)
-    {
-        // Wert setzen:
-        SetAssignValue(aColumnName, pRow_Value_Constructor_Elem->getTokenValue());
-    }
-    else if (SQL_ISTOKEN(pRow_Value_Constructor_Elem,NULL))
-    {
-        // NULL setzen
-        SetAssignValue(aColumnName, String(), TRUE);
-    }
-    else if (SQL_ISRULE(pRow_Value_Constructor_Elem,parameter))
-    {
-        // Parameter hinzufuegen, Typ ... entsprechend der Column, der der Wert zugewiesen wird
-        Reference<XPropertySet> xCol;
-        m_xColNames->getByName(aColumnName) >>= xCol;
-        sal_Int32 nParameter = -1;
-        if(m_xParamColumns.isValid())
-        {
-            OSQLColumns::const_iterator aIter = find(m_xParamColumns->begin(),m_xParamColumns->end(),aColumnName,::comphelper::UStringMixEqual(m_pTable->isCaseSensitive()));
-            if(aIter != m_xParamColumns->end())
-                nParameter = m_xParamColumns->size() - (m_xParamColumns->end() - aIter) + 1;// +1 because the rows start at 1
-        }
-        if(nParameter == -1)
-            nParameter = AddParameter(pRow_Value_Constructor_Elem,xCol);
-        // Nr. des Parameters in der Variablen merken:
-        SetAssignValue(aColumnName, String(), TRUE, nParameter);
-    }
-    else
-    {
-        //  aStatus.SetStatementTooComplex();
-        throwFunctionSequenceException(*this);
-    }
-}
-//------------------------------------------------------------------
-void OPreparedStatement::SetAssignValue(const String& aColumnName,
-                                   const String& aValue,
-                                   BOOL bSetNull,
-                                   UINT32 nParameter)
-{
-    Reference<XPropertySet> xCol;
-    m_xColNames->getByName(aColumnName) >>= xCol;
-    sal_Int32 nId = Reference<XColumnLocate>(m_xColNames,UNO_QUERY)->findColumn(aColumnName);
-    // Kommt diese Column ueberhaupt in der Datei vor?
-
-    if (!xCol.is())
-    {
-        // Diese Column gibt es nicht!
-//      aStatus.Set(SQL_STAT_ERROR,
-//                  String::CreateFromAscii("S0022"),
-//                  aStatus.CreateErrorMessage(String(SdbResId(STR_STAT_COLUMN_NOT_FOUND))),
-//                  0, String() );
-        throwFunctionSequenceException(*this);
-    }
-
-    // Value an die Row mit den zuzuweisenden Werten binden:
-    //  const ODbVariantRef& xValue = (*aAssignValues)[pFileColumn->GetId()];
-
-    // Alles geprueft und wir haben den Namen der Column.
-    // Jetzt eine Value allozieren, den Wert setzen und die Value an die Row binden.
-    if (bSetNull)
-        (*m_aAssignValues)[nId].setNull();
-    else
-    {
-        switch (getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
-        {
-            // Kriterium je nach Typ als String oder double in die Variable packen ...
-            case DataType::CHAR:
-            case DataType::VARCHAR:
-                (*m_aAssignValues)[nId] = aValue;
-                // Zeichensatz ist bereits konvertiert, da ja das gesamte Statement konvertiert wurde
-                break;
-
-            case DataType::BIT:
-                {
-                    if (aValue.EqualsIgnoreCaseAscii("TRUE")  || aValue.GetChar(0) == '1')
-                        (*m_aAssignValues)[nId] = sal_True;
-                    else if (aValue.EqualsIgnoreCaseAscii("FALSE") || aValue.GetChar(0) == '0')
-                        (*m_aAssignValues)[nId] = sal_False;
-                    else
-                    {
-                        //  aStatus.Set(SQL_STAT_ERROR);    // nyi: genauer!
-                        throwFunctionSequenceException(*this);
-                    }
-                }
-                break;
-            case DataType::TINYINT:
-            case DataType::SMALLINT:
-            case DataType::INTEGER:
-            case DataType::DECIMAL:
-            case DataType::NUMERIC:
-            case DataType::REAL:
-            case DataType::DOUBLE:
-            case DataType::DATE:
-            case DataType::TIME:
-            case DataType::TIMESTAMP:
-            {
-                (*m_aAssignValues)[nId] = aValue; // .ToDouble
-//              try
-//              {
-//                  double n = xValue->toDouble();
-//                  xValue->setDouble(n);
-//              }
-//              catch ( ... )
-//              {
-//                  aStatus.SetDriverNotCapableError();
-//              }
-            }   break;
-            default:
-                throwFunctionSequenceException(*this);
-        }
-    }
-
-    // Parameter-Nr. merken (als User Data)
-    // SQL_NO_PARAMETER = kein Parameter.
-    m_aAssignValues->setParameterIndex(nId,nParameter);
-    if(nParameter != SQL_NO_PARAMETER)
-        m_aParameterIndexes[nParameter] = nId;
-}
-
-//------------------------------------------------------------------
 UINT32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Reference<XPropertySet>& _xCol)
 {
 
@@ -848,7 +553,6 @@ void OPreparedStatement::initializeResultSet(OResultSet* _pResult)
 
     m_pResultSet->setParameterColumns(m_xParamColumns);
     m_pResultSet->setParameterRow(m_aParameterRow);
-    m_pResultSet->setAssignValues(m_aAssignValues);
 
     // Parameter substituieren (AssignValues und Kriterien):
     if (!m_xParamColumns->empty())
@@ -878,6 +582,23 @@ void OPreparedStatement::initializeResultSet(OResultSet* _pResult)
 
 //  m_pEvaluationKeySet = m_pSQLAnalyzer->bindResultRow(m_aEvaluateRow);    // Werte im Code des Compilers setzen
 //  m_pResultSet->setEvaluationKeySet(m_pEvaluationKeySet);
+}
+// -----------------------------------------------------------------------------
+void OPreparedStatement::parseParamterElem(const String& _sColumnName,OSQLParseNode* pRow_Value_Constructor_Elem)
+{
+    Reference<XPropertySet> xCol;
+    m_xColNames->getByName(_sColumnName) >>= xCol;
+    sal_Int32 nParameter = -1;
+    if(m_xParamColumns.isValid())
+    {
+        OSQLColumns::const_iterator aIter = find(m_xParamColumns->begin(),m_xParamColumns->end(),_sColumnName,::comphelper::UStringMixEqual(m_pTable->isCaseSensitive()));
+        if(aIter != m_xParamColumns->end())
+            nParameter = m_xParamColumns->size() - (m_xParamColumns->end() - aIter) + 1;// +1 because the rows start at 1
+    }
+    if(nParameter == -1)
+        nParameter = AddParameter(pRow_Value_Constructor_Elem,xCol);
+    // Nr. des Parameters in der Variablen merken:
+    SetAssignValue(_sColumnName, String(), TRUE, nParameter);
 }
 // -----------------------------------------------------------------------------
 
