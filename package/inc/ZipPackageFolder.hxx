@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:36:50 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 19:20:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,19 +89,12 @@ class ZipOutputStream;
 struct ZipEntry;
 typedef void* rtlRandomPool;
 
-#if defined( MACOSX ) && ( __GNUC__ < 3 )
-class ZipPackageFolder : public ZipPackageEntry,
-                                                 public ::cppu::OWeakObject,
-                                                 public ::com::sun::star::container::XNameContainer,
-                                                 public ::com::sun::star::container::XEnumerationAccess
-#else
 class ZipPackageFolder : public cppu::ImplInheritanceHelper2
 <
     ZipPackageEntry,
     ::com::sun::star::container::XNameContainer,
     ::com::sun::star::container::XEnumerationAccess
 >
-#endif
 {
     static com::sun::star::uno::Sequence < sal_Int8 > aImplementationId;
 protected:
@@ -124,16 +117,6 @@ public:
     void  saveContents(rtl::OUString &rPath, std::vector < com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > > &rManList, ZipOutputStream & rZipOut, com::sun::star::uno::Sequence < sal_Int8 > &rEncryptionKey, rtlRandomPool & rRandomPool)
         throw(::com::sun::star::uno::RuntimeException);
     void  releaseUpwardRef();
-
-#if defined( MACOSX ) && ( __GNUC__ < 3 )
-    // XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
-        throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire(  )
-        throw();
-    virtual void SAL_CALL release(  )
-        throw();
-#endif
 
     // XNameContainer
     virtual void SAL_CALL insertByName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement )
