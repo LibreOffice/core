@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-01-24 03:36:57 $
+ *  last change: $Author: bmahbod $ $Date: 2001-02-08 00:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,14 @@ const unsigned short kByteMask = 0xFF;
 const unsigned short kOneByte  =  8;
 const unsigned short kTwoBytes = 16;
 
+const unsigned short kPixMapCmpSizeOneBit    =  1;
+const unsigned short kPixMapCmpSizeFourBits  =  4;
+const unsigned short kPixMapCmpSizeFiveBits  =  5;
+const unsigned short kPixMapCmpSizeEightBits =  8;
+
+const unsigned short kOneBit     =  1;
 const unsigned short kFiveBits   =  5;
+const unsigned short kEightBits  =  8;
 const unsigned short kTenBits    = 10;
 const unsigned short kElevenBits = 11;
 

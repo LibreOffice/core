@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-01-31 23:56:13 $
+ *  last change: $Author: bmahbod $ $Date: 2001-02-08 00:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,8 @@ SalGraphics* SalVirtualDevice::GetGraphics()
         maVirDevData.mbGraphics = InitVirtualDeviceGWorld( &maVirDevData );
     } // if
 
+    maVirDevData.mbGraphics = TRUE;
+
     return maVirDevData.mpGraphics;
 } // SalVirtualDevice::GetGraphics
 
@@ -241,7 +243,7 @@ BOOL SalVirtualDevice::SetSize( long nDX, long nDY )
 
     if ( maVirDevData.mpGraphics->maGraphicsData.mpCGrafPort != NULL )
     {
-        DisposePort( maVirDevData.mpGraphics->maGraphicsData.mpCGrafPort );
+        DisposeGWorld( maVirDevData.mpGraphics->maGraphicsData.mpCGrafPort );
 
         maVirDevData.mpGraphics->maGraphicsData.mpGWorld    = NULL;
         maVirDevData.mpGraphics->maGraphicsData.mpCGrafPort = NULL;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-02-02 04:47:42 $
+ *  last change: $Author: bmahbod $ $Date: 2001-02-08 00:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,112 +77,28 @@
 #include <salvd.hxx>
 #endif
 
-// =======================================================================
+// ==================================================================
 
-enum RGBColorType
-    {
-        eRedColor   = 0,
-        eGreenColor = 1,
-        eBlueColor  = 2
-    };
-
-typedef RGBColorType  RGBColorType;
-
-// =======================================================================
-
-// =======================================================================
-
-static BYTE GetBestColorIndex ( const CTabHandle     hCTable,
-                                const ColorSpecPtr   pColorSpec,
-                                const RGBColorType   eRGBColorType
-                              )
+static inline short GetMinColorCount( const short           nPixMapColorDepth,
+                                      const BitmapPalette&  rBitmapPalette
+                                    )
 {
-    BYTE             nBestColor       = 0;
-    short            nCTableSize      = 0;
-    short            nCTableIndex     = 0;
-    short            nBestCTableIndex = 0;
-    unsigned short   nNewDistance     = 0;
-    unsigned short   nMinDistance     = USHRT_MAX;
-    BOOL             bColorsMatch     = FALSE;
-    RGBColor         aFirstColor      = pColorSpec->rgb;
-    RGBColor         aNextColor;
+    short nBitmapPaletteCount    = rBitmapPalette.GetEntryCount();
+    short nBitmapPaletteMinCount = 0;
 
-    nCTableSize = (**hCTable).ctSize;
-
-    while ( ( nCTableIndex < nCTableSize ) && ( bColorsMatch == FALSE ) )
+    if ( nPixMapColorDepth < nBitmapPaletteCount )
     {
-        aNextColor = (**hCTable).ctTable[nCTableIndex].rgb;
+        nBitmapPaletteMinCount = nPixMapColorDepth;
+    } // if
+    else
+    {
+        nBitmapPaletteMinCount = nBitmapPaletteCount;
+    } // else
 
-        switch( eRGBColorType )
-        {
-            case eRedColor:
-                if ( aNextColor.red == aFirstColor.red )
-                {
-                    bColorsMatch = TRUE;
-                }
-                break;
-            case eGreenColor:
-                if ( aNextColor.green == aFirstColor.green )
-                {
-                    bColorsMatch = TRUE;
-                }
-                break;
-            case eBlueColor:
-                if ( aNextColor.blue == aFirstColor.blue )
-                {
-                    bColorsMatch = TRUE;
-                }
-                break;
-        } // switch
+    return nBitmapPaletteMinCount;
+} // GetMinColorCount
 
-        if ( bColorsMatch == TRUE )
-        {
-            nBestCTableIndex = nCTableIndex;
-        } // if
-        else
-        {
-            long nDeltaColor = 0;
-
-            switch( eRGBColorType )
-            {
-                case eRedColor:
-                    nDeltaColor = (long)aFirstColor.red - (long)aNextColor.red;
-                    break;
-                case eGreenColor:
-                    nDeltaColor = (long)aFirstColor.green - (long)aNextColor.green;
-                    break;
-                case eBlueColor:
-                    nDeltaColor = (long)aFirstColor.blue - (long)aNextColor.blue;
-                    break;
-            } // switch
-
-            if ( nDeltaColor < 0 )
-            {
-                nNewDistance = -nDeltaColor;
-            } // if
-            else
-            {
-                nNewDistance = nDeltaColor;
-            } // else
-
-            if ( nNewDistance < nMinDistance )
-            {
-                nMinDistance     = nNewDistance;
-                nBestCTableIndex = nCTableIndex;
-            } // if
-
-            nCTableIndex++;
-        } //else
-    } // while
-
-    fprintf( stderr, "<INFO> best color table index = %hd\n", nBestCTableIndex );
-
-    nBestColor = (BYTE)nBestCTableIndex;
-
-    return nBestColor;
-} // GetBestColorIndex
-
-// =======================================================================
+// ==================================================================
 
 // ==================================================================
 
@@ -435,27 +351,6 @@ static CTabHandle GetNewPixMapCTabCLUT( const short nPixMapBitDepth )
 
     return hPixMapCTab;
 } // GetNewPixMapCTabCLUT
-
-// ------------------------------------------------------------------
-
-static inline short GetMinColorCount( const short           nPixMapColorDepth,
-                                      const BitmapPalette&  rBitmapPalette
-                                    )
-{
-    short nBitmapPaletteCount    = rBitmapPalette.GetEntryCount();
-    short nBitmapPaletteMinCount = 0;
-
-    if ( nPixMapColorDepth < nBitmapPaletteCount )
-    {
-        nBitmapPaletteMinCount = nPixMapColorDepth;
-    } // if
-    else
-    {
-        nBitmapPaletteMinCount = nBitmapPaletteCount;
-    } // else
-
-    return nBitmapPaletteMinCount;
-} // GetMinColorCount
 
 // ------------------------------------------------------------------
 
@@ -765,8 +660,8 @@ static CTabHandle CopyPixMapCTabRGBDirect ( CTabHandle hPixMapCTab )
             HLock( (Handle)hPixMapCTab );
 
             hPixMapCTabCopy = (CTabHandle)NewHandleClear(   sizeof( ColorTable )
-                                                             - sizeof( CSpecArray )
-                                                           );
+                                                          - sizeof( CSpecArray )
+                                                        );
 
             if ( ( hPixMapCTabCopy != NULL ) && ( *hPixMapCTabCopy != NULL ) )
             {
@@ -908,7 +803,7 @@ static PixMapHandle MallocPixMap ( const Size           &rPixMapSize,
                                    const SalGraphics    *rSalGraphics
                                  )
 {
-    PixMapHandle hNewPixMap = GetGWorldPixMap( rSalGraphics->maGraphicsData.mpGWorld );
+    PixMapHandle hNewPixMap = GetPortPixMap( rSalGraphics->maGraphicsData.mpCGrafPort );
 
     if ( hNewPixMap == NULL )
     {
@@ -979,8 +874,8 @@ BOOL SalBitmap::Create( const Size&           rSize,
 
     if ( pSVData != NULL )
     {
-        long nHeight = rSize.Height();
-        long nWidth  = rSize.Width();
+        const long nHeight = rSize.Height();
+        const long nWidth  = rSize.Width();
 
         Destroy();
 
@@ -1019,12 +914,12 @@ BOOL SalBitmap::Create( const Size&           rSize,
 
                         bSalBitmapCreated = TRUE;
                     } // if
+
+                    // Release the SalGraphics so that others can get a
+                    // handle to it in future GetGraphics() calls
+
+                    ReleaseGraphics( pGraphics );
                 } // if
-
-                // Release the SalGraphics so that others can get a
-                // handle to it in future GetGraphics() calls
-
-                ReleaseGraphics( pGraphics );
             } // if
         } // if
     } // if
@@ -1045,26 +940,33 @@ BOOL SalBitmap::Create( const SalBitmap& rSalBmp,
                         SalGraphics*     pGraphics
                       )
 {
-    USHORT nBitCount = 0;
+    USHORT nSalBmpBitCount   = 0;
+    BOOL   bSalBitmapCreated = FALSE;
 
     if (    ( pGraphics                             != NULL )
          && ( pGraphics->maGraphicsData.mpCGrafPort != NULL )
        )
     {
-        mhPixMap = GetPortPixMap( pGraphics->maGraphicsData.mpCGrafPort );
+        mhPixMap = MallocPixMap( rSalBmp.GetSize(),
+                                 rSalBmp.GetBitCount(),
+                                 BitmapPalette(),
+                                 pGraphics
+                               );
 
-        if ( mhPixMap != NULL )
+        if ( ( mhPixMap != NULL ) && ( *mhPixMap != NULL ) )
         {
-            nBitCount = GetPixDepth( mhPixMap );
+            nSalBmpBitCount = GetPixDepth( mhPixMap );
         } // if
     } // if
 
-    if ( nBitCount == 0 )
+    if ( nSalBmpBitCount == 0 )
     {
-        nBitCount = rSalBmp.GetBitCount();
+        nSalBmpBitCount = rSalBmp.GetBitCount();
     } // if
 
-    return Create( rSalBmp, nBitCount );
+    bSalBitmapCreated = Create( rSalBmp, nSalBmpBitCount );
+
+    return  bSalBitmapCreated;
 } // SalBitmap::Create
 
 // ------------------------------------------------------------------
@@ -1146,142 +1048,129 @@ BitmapBuffer* SalBitmap::AcquireBuffer( BOOL bReadOnly )
 
     if ( mpVirDev != NULL )
     {
-        // Get the SalGraphics which contains the GWorld we will draw to
+        pBuffer = new BitmapBuffer();
 
-        SalGraphics *pGraphics = GetGraphics();
-
-        if (    ( pGraphics                             != NULL )
-             && ( pGraphics->maGraphicsData.mpCGrafPort != NULL )
+        if (    (   pBuffer != NULL )
+             && (  mhPixMap != NULL )
+             && ( *mhPixMap != NULL )
            )
         {
-            if ( mhPixMap != NULL )
+            GWorldFlags  nPixMapFlags = noErr;
+
+            nPixMapFlags = GetPixelsState( mhPixMap );
+
+            if ( nPixMapFlags == noErr )
             {
-                // Lock the GWorld so that the calling functions
-                // can write to this buffer
-
-                pGraphics->maGraphicsData.mnOSStatus
-                    = LockPortBits( pGraphics->maGraphicsData.mpCGrafPort );
-
-                if ( pGraphics->maGraphicsData.mnOSStatus == noErr )
+                if ( LockPixels( mhPixMap ) )
                 {
-                    pBuffer = new BitmapBuffer();
+                    const short nPixMapCmpCount = (**mhPixMap).cmpCount;
+                    const short nPixMapCmpSize  = (**mhPixMap).cmpSize;
 
-                    if ( pBuffer != NULL )
+                    pBuffer->mnFormat = BMP_FORMAT_TOP_DOWN;
+
+                    if( nPixMapCmpCount == 1 )
                     {
-                        pBuffer->mnFormat   = BMP_FORMAT_TOP_DOWN;
-                        pBuffer->mnBitCount = GetPixDepth( mhPixMap);
+                        // Indexed color mode
 
-                        switch ( pBuffer->mnBitCount )
+                        switch ( nPixMapCmpSize )
                         {
-                            case kBlackAndWhite:
+                            case ( kPixMapCmpSizeOneBit ):
                                 pBuffer->mnFormat |= BMP_FORMAT_1BIT_MSB_PAL;
                                 break;
-                            case kFourBitColor:
+                            case ( kPixMapCmpSizeFourBits ):
                                 pBuffer->mnFormat |= BMP_FORMAT_4BIT_MSN_PAL;
                                 break;
-                            case kEightBitColor:
+                            case ( kPixMapCmpSizeEightBits ):
                                 pBuffer->mnFormat |= BMP_FORMAT_8BIT_PAL;
-                                break;
-                            case kThousandsColor:
-                                pBuffer->mnFormat    |= BMP_FORMAT_16BIT_TC_MASK;
-                                pBuffer->maColorMask  = ColorMask( 0x7b00, 0x03e0, 0x001f);
-                                break;
-                            case kTrueColor:
-                                pBuffer->mnFormat |= BMP_FORMAT_32BIT_TC_ARGB;
                                 break;
                             default:
                                 break;
                         } // switch
+                    } // if
+                    else
+                    {
+                        // Direct color mode
 
-                        if ( BMP_SCANLINE_FORMAT( pBuffer->mnFormat ) )
+                        switch ( nPixMapCmpSize )
                         {
-                            GWorldFlags  nGWorldFlags = noErr;
+                            case ( kPixMapCmpSizeFiveBits ):
+                                pBuffer->mnFormat    |= BMP_FORMAT_16BIT_TC_MASK;
+                                pBuffer->maColorMask  = ColorMask( 0x00007c00, 0x000003e0, 0x0000001f );
+                                break;
+                            case ( kPixMapCmpSizeEightBits ):
+                                pBuffer->mnFormat    |= BMP_FORMAT_32BIT_TC_ARGB;
+                                pBuffer->maColorMask  = ColorMask( 0x00ff0000, 0x0000ff00, 0x000000ff );
+                                break;
+                            default:
+                                break;
+                        } // switch;
+                    } //else
 
-                            pBuffer->mnWidth  = mpVirDev->maVirDevData.mnWidth;
-                            pBuffer->mnHeight = mpVirDev->maVirDevData.mnHeight;
+                    if ( BMP_SCANLINE_FORMAT( pBuffer->mnFormat ) )
+                    {
+                        pBuffer->mnWidth        = mpVirDev->maVirDevData.mnWidth;
+                        pBuffer->mnHeight       = mpVirDev->maVirDevData.mnHeight;
+                        pBuffer->mnScanlineSize = GetPixRowBytes( mhPixMap );
+                        pBuffer->mpBits         = (BYTE *)GetPixBaseAddr( mhPixMap );
+                        pBuffer->mnBitCount     = GetPixDepth( mhPixMap);
 
-                            nGWorldFlags = GetPixelsState( mhPixMap );
+                        // If the pixel depth is <= 8, we need to map QD's
+                        // internal color table to the platform independent
+                        // BitmapPalette color table
 
-                            if ( nGWorldFlags == noErr )
+                        if ( pBuffer->mnBitCount <= kEightBitColor )
+                        {
+                            CTabHandle hCTab = (**mhPixMap).pmTable;
+
+                            if ( ( hCTab != NULL ) && ( *hCTab != NULL ) )
                             {
-                                LockPixels( mhPixMap );
+                                SInt8 nCTabFlags  = noErr;
 
-                                pBuffer->mnScanlineSize = GetPixRowBytes( mhPixMap );
-                                pBuffer->mpBits         = (BYTE *)GetPixBaseAddr( mhPixMap );
+                                nCTabFlags = HGetState( (Handle)hCTab );
 
-                                // If the pixel depth is <= 8, we need to map QD's
-                                // internal color table to the platform independent
-                                // BitmapPalette color table
-
-                                if ( pBuffer->mnBitCount <= 8 )
+                                if ( nCTabFlags == noErr )
                                 {
-                                    CTabHandle hCTab = (**mhPixMap).pmTable;
+                                    USHORT          nCTabSize      = 0;
+                                    USHORT          nCTabIndex     = 0;
+                                    BitmapPalette  &rBitmapPalette = pBuffer->maPalette;
 
-                                    if ( ( hCTab != NULL ) && ( *hCTab != NULL ) )
+                                    HLock( (Handle)hCTab );
+
+                                    // Map each color in the QuickDraw color
+                                    // table to a BitmapColor
+
+                                    nCTabSize = (**hCTab).ctSize + 1;
+
+                                    rBitmapPalette.SetEntryCount( nCTabSize );
+
+                                    for ( nCTabIndex = 0;
+                                          nCTabIndex < nCTabSize;
+                                          nCTabIndex++
+                                        )
                                     {
-                                        SInt8 nCTabFlags  = noErr;
+                                        BitmapColor     &rBitmapColor = rBitmapPalette[nCTabIndex];
+                                        const RGBColor   aRGBColor    = (**hCTab).ctTable[nCTabIndex].rgb;
+                                        const BYTE       nRedColor    = (BYTE)( aRGBColor.red   >> 8 );
+                                        const BYTE       nGreenColor  = (BYTE)( aRGBColor.green >> 8 );
+                                        const BYTE       nBlueColor   = (BYTE)( aRGBColor.blue  >> 8 );
 
-                                        nCTabFlags = HGetState( (Handle)hCTab );
+                                        rBitmapColor.SetRed   ( nRedColor   );
+                                        rBitmapColor.SetGreen ( nGreenColor );
+                                        rBitmapColor.SetBlue  ( nBlueColor  );
+                                    } // for
 
-                                        if ( nCTabFlags == noErr )
-                                        {
-                                            USHORT          nCTabCount     = 0;
-                                            USHORT          nCTabIndex     = 0;
-                                            BitmapPalette  &rBitmapPalette = pBuffer->maPalette;
-
-                                            HLock( (Handle)hCTab );
-
-                                            // Map each color in the QuickDraw color
-                                            // table to a BitmapColor
-
-                                            nCTabCount = (**hCTab).ctSize + 1;
-
-                                            rBitmapPalette.SetEntryCount( nCTabCount );
-
-                                            for ( nCTabIndex = 0;
-                                                  nCTabIndex < nCTabCount;
-                                                  nCTabIndex++
-                                                )
-                                            {
-                                                BitmapColor &rBitmapColor = rBitmapPalette[nCTabIndex];
-                                                ColorSpec    aColorSpec   = (**hCTab).ctTable[nCTabIndex];
-
-                                                rBitmapColor.SetRed   ( (BYTE)( aColorSpec.rgb.red   >> 8 ) );
-                                                rBitmapColor.SetGreen ( (BYTE)( aColorSpec.rgb.green >> 8 ) );
-                                                rBitmapColor.SetBlue  ( (BYTE)( aColorSpec.rgb.blue  >> 8 ) );
-                                            } // for
-
-                                            HSetState( (Handle)hCTab, nCTabFlags );
-                                        } // if
-                                    } // if
+                                    HSetState( (Handle)hCTab, nCTabFlags );
                                 } // if
-
-                                SetPixelsState( mhPixMap, nGWorldFlags );
                             } // if
                         } // if
-                        else
-                        {
-                            UnlockPortBits( pGraphics->maGraphicsData.mpCGrafPort );
-
-                            ReleaseGraphics( pGraphics );
-
-                            delete pBuffer;
-                        } // else
                     } // if
-
-                    if ( pGraphics != NULL )
+                    else
                     {
-                        UnlockPortBits( pGraphics->maGraphicsData.mpCGrafPort );
-                    } // if
+                        delete pBuffer;
+                    } // else
+
+                    SetPixelsState( mhPixMap, nPixMapFlags );
                 } // if
-            } // if
-
-            // Release the SalGraphics so that others can get a
-            // handle to it in future GetGraphics() calls
-
-            if ( pGraphics != NULL )
-            {
-                ReleaseGraphics( pGraphics );
             } // if
         } // if
     } // if
@@ -1305,7 +1194,7 @@ void SalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BOOL bReadOnly )
            )
         {
             // Release the SalGraphics so that others can get a
-            // handle to it in future GetGraphics() calls
+            // handle to it in future calls to GetGraphics()
 
             ReleaseGraphics( pGraphics );
 
@@ -1315,6 +1204,115 @@ void SalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BOOL bReadOnly )
 
     if ( pBuffer != NULL )
     {
+        if ( !bReadOnly )
+        {
+            if ( ( mhPixMap != NULL ) && (*mhPixMap != NULL ) )
+            {
+                GWorldFlags  nPixMapFlags = noErr;
+
+                nPixMapFlags = GetPixelsState( mhPixMap );
+
+                if ( nPixMapFlags == noErr )
+                {
+                    if ( LockPixels( mhPixMap ) )
+                    {
+                        if ( !!pBuffer->maPalette )
+                        {
+                            CTabHandle hCTab = (**mhPixMap).pmTable;
+
+                            if ( ( hCTab != NULL ) && ( *hCTab != NULL ) )
+                            {
+                                SInt8 nCTabFlags = noErr;
+
+                                nCTabFlags = HGetState( (Handle)hCTab );
+
+                                if ( nCTabFlags == noErr )
+                                {
+                                    const BitmapPalette  &rBitmapPalette = pBuffer->maPalette;
+                                    const short           nCTabSize      = (**hCTab).ctSize + 1;
+                                    const short           nCTabMinSize   = GetMinColorCount( nCTabSize, rBitmapPalette );
+                                    short                 nCTabIndex;
+
+                                    HLock( (Handle)hCTab );
+
+                                        for( nCTabIndex = 0;
+                                             nCTabIndex < nCTabMinSize;
+                                             nCTabIndex++
+                                           )
+                                        {
+                                            const BitmapColor &rBitmapColor      = rBitmapPalette[nCTabIndex];
+                                            const USHORT       nBitmapRedColor   = rBitmapColor.GetRed();
+                                            const USHORT       nBitmapGreenColor = rBitmapColor.GetGreen();
+                                            const USHORT       nBitmapBlueColor  = rBitmapColor.GetBlue();
+
+                                            (**hCTab).ctTable[nCTabIndex].value = nCTabIndex;
+
+                                            (**hCTab).ctTable[nCTabIndex].rgb.red
+                                                = (short)(( nBitmapRedColor << 8 ) | nBitmapRedColor);
+
+                                            (**hCTab).ctTable[nCTabIndex].rgb.green
+                                                = (short)(( nBitmapGreenColor << 8 ) | nBitmapGreenColor) ;
+
+                                            (**hCTab).ctTable[nCTabIndex].rgb.blue
+                                                = (short)(( nBitmapBlueColor << 8 ) | nBitmapBlueColor);
+                                        } // for
+
+                                    HSetState( (Handle)hCTab, nCTabFlags );
+                                } // if
+                            } // if
+                        } // if
+                        else
+                        {
+                            GDPtr pGDevice = NULL;
+
+                            pGDevice = *GetGDevice();
+
+                            if ( pGDevice != NULL )
+                            {
+                                PixMapPtr  pPixMap = *pGDevice->gdPMap;
+
+                                if ( pPixMap != NULL )
+                                {
+                                    CTabPtr  pCTable = *pPixMap->pmTable;
+
+                                    if ( pCTable != NULL )
+                                    {
+                                        ITabPtr  pITable = *pGDevice->gdITable;
+
+                                        if ( pITable != NULL )
+                                        {
+                                            // Is the inverse color table up-to-date?
+
+                                            if ( pITable->iTabSeed != pCTable->ctSeed )
+                                            {
+                                                // Update our inverse color table
+
+                                                MakeITable( pPixMap->pmTable,
+                                                            pGDevice->gdITable,
+                                                            pGDevice->gdResPref
+                                                          );
+
+                                                pGDevice = *GetGDevice();
+                                                pPixMap  = *pGDevice->gdPMap;
+                                            } // if
+                                        } // if
+
+                                        (**mhPixMap).pmTable = pPixMap->pmTable;
+                                    } // if
+                                    else
+                                    {
+                                        (**mhPixMap).pmTable = NULL;
+                                    } // else
+                                } // if
+                            } // if
+                        } // else
+
+                        SetPixelsState( mhPixMap, nPixMapFlags );
+                    } // if
+                }  //if
+            } // if
+        } // if
+
         delete pBuffer;
 
         pBuffer = NULL;

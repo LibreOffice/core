@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.48 $
- *  last change: $Author: bmahbod $ $Date: 2001-01-31 23:56:13 $
+ *  $Revision: 1.49 $
+ *  last change: $Author: bmahbod $ $Date: 2001-02-08 00:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,8 +96,7 @@ static inline unsigned long AbsoluteValue ( const long  nValue )
     return nAbsValue;
 } // AbsoluteValue
 
-
-// =======================================================================
+// -----------------------------------------------------------------------
 
 static inline BOOL Boolean2BOOL ( const Boolean bBooleanValue )
 {
@@ -114,7 +113,6 @@ static inline BOOL Boolean2BOOL ( const Boolean bBooleanValue )
 
     return nBOOLValue;
 } // AbsoluteValue
-
 
 // =======================================================================
 
@@ -401,8 +399,8 @@ static unsigned long  RGBDistance ( const RGBColor  *pRGBColor1,
     nDeltaBlue  = (long)pRGBColor2->blue  - (long)pRGBColor1->blue;
 
     nRGBDist =   AbsoluteValue(nDeltaRed)
-           + AbsoluteValue(nDeltaGreen)
-           + AbsoluteValue(nDeltaBlue);
+               + AbsoluteValue(nDeltaGreen)
+               + AbsoluteValue(nDeltaBlue);
 
     return nRGBDist;
 } // RGBDistance
@@ -452,7 +450,7 @@ static void GetBestSalColor ( const CTabPtr    pCTable,
 
         if ( bRGBColorsMatch == TRUE )
         {
-            *pBestSalColor= nCTableIndex;
+            *pBestSalColor = nCTableIndex;
         } // if
         else
         {
@@ -471,22 +469,65 @@ static void GetBestSalColor ( const CTabPtr    pCTable,
 
 // -----------------------------------------------------------------------
 
-static void GetCTableIndex ( const PixMapPtr   pPixMap,
-                             const RGBColor   *pRGBColor,
+static void GetCTableIndex ( const RGBColor   *pRGBColor,
                              SalColor         *rSalColor
                            )
 {
-    CTabPtr pCTable = NULL;
+    GDPtr pGDevice = NULL;
 
-    pCTable = *(*pPixMap).pmTable;
+    pGDevice = *GetGDevice();
 
-    if ( pCTable != NULL )
+    if ( pGDevice != NULL )
     {
-        GetBestSalColor( pCTable, pRGBColor, rSalColor );
+        PixMapPtr  pPixMap = *pGDevice->gdPMap;
 
-        if ( *rSalColor > pCTable->ctSize )
+        if ( pPixMap != NULL )
         {
-            *rSalColor = 255;
+            CTabPtr  pCTable = *pPixMap->pmTable;
+
+            if ( pCTable != NULL )
+            {
+                ITabPtr  pITable = *pGDevice->gdITable;
+
+                if ( pITable != NULL )
+                {
+                    // Is the inverse color table up-to-date?
+
+                    if ( pITable->iTabSeed != pCTable->ctSeed )
+                    {
+                        // Update our inverse color table
+
+                        MakeITable( pPixMap->pmTable,
+                                    pGDevice->gdITable,
+                                    pGDevice->gdResPref
+                                  );
+
+                        pGDevice = *GetGDevice();
+                        pITable  = *pGDevice->gdITable;
+                        pPixMap  = *pGDevice->gdPMap;
+                        pCTable  = *pPixMap->pmTable;
+                    } // if
+                } // if
+
+                // Now we proceed to find the closest match in our
+                // color table using  a basic 2-norm.  Note that,
+                // here we shall utilize a psuedo Euclidean norm.
+                // Where as in a standard Euclidean norm one sums up
+                // the square of the RGB color distances before
+                // proceeding to take the square root, in our case,
+                // we only measure the RGB color difference before
+                // summing up the totals.
+
+                if ( pCTable != NULL )
+                {
+                    GetBestSalColor( pCTable, pRGBColor, rSalColor );
+
+                    if ( *rSalColor > pCTable->ctSize )
+                    {
+                        *rSalColor = 255;
+                    } // if
+                } // if
+            } // if
         } // if
     } // if
 } // GetCTableIndex
@@ -502,7 +543,7 @@ static SalColor RGBColor2SALColor ( const RGBColor *pRGBColor )
     GDPtr      pGDevice  = NULL;
     SalColor   nSalColor = 0;
 
-    pGDevice = *GetGDevice ( );
+    pGDevice = *GetGDevice( );
 
     if ( pGDevice != NULL )
     {
@@ -518,7 +559,7 @@ static SalColor RGBColor2SALColor ( const RGBColor *pRGBColor )
             } // if
             else
             {
-                GetCTableIndex( pPixMap, pRGBColor, &nSalColor );
+                GetCTableIndex( pRGBColor, &nSalColor );
             } // else
         } // if
     } // if
@@ -1081,7 +1122,7 @@ SalGraphics::~SalGraphics()
 
     if ( maGraphicsData.mpCGrafPort != NULL )
     {
-        DisposePort( maGraphicsData.mpCGrafPort );
+        DisposeGWorld( maGraphicsData.mpCGrafPort );
 
         maGraphicsData.mpCGrafPort = NULL;
     } // if
