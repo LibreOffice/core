@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DispatchRecorder.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 11:52:31 $
+ *  last change:$Date: 2003-10-06 13:31:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 package mod._fwk;
 
+import com.sun.star.beans.PropertyValue;
 import java.io.PrintWriter;
 
 import lib.StatusException;
@@ -71,6 +72,7 @@ import util.SOfficeFactory;
 import util.SysUtils;
 
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.frame.DispatchStatement;
 import com.sun.star.frame.XDispatchRecorder;
 import com.sun.star.frame.XDispatchRecorderSupplier;
 import com.sun.star.frame.XFrame;
@@ -78,6 +80,10 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+import com.sun.star.util.URL;
+import util.utils;
 
 /**
 * Test for object that implements the following interfaces :
@@ -108,11 +114,11 @@ public class DispatchRecorder extends TestCase {
 
         XInterface oObj = null;
         XFrame xFrame = null;
+        XDispatchRecorder xDR = null;
 
         try {
             SOfficeFactory SOF = SOfficeFactory.getFactory((XMultiServiceFactory)Param.getMSF());
             oDoc = SOF.createTextDoc(null);
-
             try {
                 Thread.sleep(1000);
             }
@@ -123,17 +129,20 @@ public class DispatchRecorder extends TestCase {
 
             XPropertySet xFramePS = (XPropertySet) UnoRuntime.queryInterface
                 (XPropertySet.class, xFrame);
-            Object oDRS = xFramePS.getPropertyValue("DispatchRecorderSupplier");
             XDispatchRecorderSupplier xDRS = null;
-            if (oDRS == null) {
-                oDRS = ((XMultiServiceFactory)Param.getMSF()).createInstance(
+            xDRS = (XDispatchRecorderSupplier) AnyConverter.toObject(
+                             new Type(XDispatchRecorderSupplier.class),
+                          xFramePS.getPropertyValue("DispatchRecorderSupplier"));
+            if (xDRS == null) {
+
+                Object oDRS = ((XMultiServiceFactory)Param.getMSF()).createInstance(
                     "com.sun.star.comp.framework.DispatchRecorderSupplier");
                 xFramePS.setPropertyValue("DispatchRecorderSupplier", oDRS);
+                xDRS = (XDispatchRecorderSupplier)
+                    UnoRuntime.queryInterface(XDispatchRecorderSupplier.class,oDRS);
             }
-            xDRS = (XDispatchRecorderSupplier)
-                UnoRuntime.queryInterface(XDispatchRecorderSupplier.class,oDRS);
 
-            XDispatchRecorder xDR = xDRS.getDispatchRecorder();
+            xDR = xDRS.getDispatchRecorder();
             if (xDR != null) {
                 oObj = xDR;
             } else {
@@ -147,15 +156,49 @@ public class DispatchRecorder extends TestCase {
             throw new StatusException("Can't create component", e);
         }
 
+
+        // fill recorder with content. It's needed for XIndexReplace
+        URL dispURL = utils.parseURL((XMultiServiceFactory) Param.getMSF(), ".uno:InsertDateField");
+        PropertyValue prop = new PropertyValue();
+        prop.Name = "Text";
+        prop.Value = "XDispatchRecorder.recordDispatch()";
+        PropertyValue[] dispArgs = new PropertyValue[] {prop};
+        xDR.recordDispatch(dispURL, dispArgs);
+
+
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
-        tEnv.addObjRelation("XDispatchRecorder.Frame", xFrame);
+        // INSTANCEn : _XIndexReplace
+        log.println("adding INSTANCEn as obj relation to environment");
 
+        int THRCNT = Integer.parseInt((String) Param.get("THRCNT"));
+
+        URL instanceURL = null;
+        DispatchStatement instance = new DispatchStatement();
+        PropertyValue dispProp = new PropertyValue();
+
+        for (int n = 1; n < (THRCNT + 1); n++) {
+            log.println("adding INSTANCE" + n +
+                        " as obj relation to environment");
+            instanceURL = utils.parseURL((XMultiServiceFactory) Param.getMSF(), ".uno:InsertText");
+            dispProp.Name = "Text";
+            dispProp.Value = "Instance " + n;
+            dispArgs = new PropertyValue[] {dispProp};
+            instance.aCommand = instanceURL.Complete;
+            instance.aArgs = dispArgs;
+            instance.aTarget = "_top";
+            instance.nFlags = com.sun.star.frame.FrameSearchFlag.ALL;
+
+            tEnv.addObjRelation("INSTANCE" + n, instance);
+        }
+
+        tEnv.addObjRelation("XDispatchRecorder.Frame", xFrame);
+        log.println("Object created: TRUE");
         return tEnv;
     } // finish method getTestEnvironment
 
     protected void cleanup( TestParameters Param, PrintWriter log) {
-        oDoc.dispose();
+        //oDoc.dispose();
     }
 
 }
