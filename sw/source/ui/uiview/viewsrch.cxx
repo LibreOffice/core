@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsrch.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:13:00 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:02:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,7 +328,6 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
             }
             break;
             case SVX_SEARCHCMD_REPLACE:
-                pWrtShell->StartAllAction();
                 {
 
                     // 1) Selektion ersetzen (nicht. wenn nur Attribute ersetzt
@@ -367,7 +366,6 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
                     pSrchItem->SetCommand( nOldCmd );
                     rReq.SetReturnValue(SfxBoolItem(nSlot, bRet));
                 }
-                pWrtShell->EndAllAction();
                 break;
 
             case SVX_SEARCHCMD_REPLACE_ALL:
