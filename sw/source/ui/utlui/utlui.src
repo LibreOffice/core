@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 21:02:59 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 21:56:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text [ finnish ] = "Aloita jokainen virke isolla kirjaimella" ;
         Text [ danish ] = "Første bogstav i sætninger med stort" ;
         Text [ french ] = "Majuscule en début de phrase" ;
-        Text [ swedish ] = "Börja varje mening med en versal" ;
+        Text [ swedish ] = "Börja varje mening med stor bokstav" ;
         Text [ dutch ] = "Elke zin met een hoofdletter beginnen" ;
         Text [ spanish ] = "Iniciar cada frase con una letra mayúscula" ;
         Text [ english_us ] = "Capitalize first letter of sentences" ;
