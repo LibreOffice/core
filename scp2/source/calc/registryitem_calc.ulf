@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registryitem_calc.ulf,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:37:11 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 21:45:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,25 +60,25 @@
  ************************************************************************/
 
 [STR_REG_VAL_NEW]
-en-US = "~New"
-de = "~Neu"
+en-US = "&New"
+de = "&Neu"
 
 [STR_REG_VAL_SO60_SPREADSHEET]
-en-US = "%PRODUCTNAME %PRODUCTVERSION Spreadsheet"
-de = "%PRODUCTNAME %PRODUCTVERSION Tabelle"
+en-US = "%PRODUCTNAME %SXWFORMATVERSION Spreadsheet"
+de = "%PRODUCTNAME %SXWFORMATVERSION Tabelle"
 
 [STR_REG_VAL_SO51_SPREADSHEET_OOO]
 en-US = "StarOffice 5.0 Spreadsheet"
 de = "StarOffice 5.0 Tabelle"
 
 [STR_REG_VAL_SO60_CALC_TEMPLATE]
-en-US = "%PRODUCTNAME %PRODUCTVERSION Spreadsheet Template"
-de = "%PRODUCTNAME %PRODUCTVERSION Tabellendokumentvorlage"
+en-US = "%PRODUCTNAME %SXWFORMATVERSION Spreadsheet Template"
+de = "%PRODUCTNAME %SXWFORMATVERSION Tabellendokumentvorlage"
 
 [STR_REG_VAL_OO_CALC]
-en-US = "Open Office Spreadsheet"
-de = "Open Office Tabelle"
+en-US = "OpenDocument Spreadsheet"
+de = "OpenDocument Tabellendokument"
 
 [STR_REG_VAL_OO_CALC_TEMPLATE]
-en-US = "Open Office Spreadsheet Template"
-de = "Open Office Tabellendokumentvorlage"
+en-US = "OpenDocument Spreadsheet Template"
+de = "OpenDocument Tabellendokumentvorlage"
