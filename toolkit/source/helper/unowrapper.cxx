@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unowrapper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tbe $ $Date: 2002-07-03 12:47:21 $
+ *  last change: $Author: tbe $ $Date: 2002-07-10 18:28:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,10 +76,18 @@
 #include <toolkit/awt/vclxtopwindow.hxx>
 #include <toolkit/awt/vclxgraphics.hxx>
 
-// TODO: #include <toolkit/awt/vclxaccessiblemenu.hxx>
-//#include <toolkit/awt/vclxaccessiblecomponent.hxx>
+#ifndef _TOOLKIT_AWT_VCLXACCESSIBLEMENUBAR_HXX_
+#include <toolkit/awt/vclxaccessiblemenubar.hxx>
+#endif
+#ifndef _TOOLKIT_AWT_VCLXACCESSIBLEPOPUPMENU_HXX_
+#include <toolkit/awt/vclxaccessiblepopupmenu.hxx>
+#endif
 
 #include <vcl/svapp.hxx>
+
+#ifndef _SV_MENU_HXX
+#include <vcl/menu.hxx>
+#endif
 
 #include <tools/debug.hxx>
 
@@ -376,7 +384,19 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
 
 ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > UnoWrapper::CreateAccessible( Menu* pMenu, sal_Bool bIsMenuBar )
 {
-    // TODO
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
 
-    return ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >();
+    DBG_ASSERT( pMenu, "UnoWrapper::CreateAccessible: no menu!" );
+    if ( pMenu )
+    {
+        OAccessibleMenuBaseComponent* pComp;
+        if ( bIsMenuBar )
+            pComp = new VCLXAccessibleMenuBar( pMenu );
+        else
+            pComp = new VCLXAccessiblePopupMenu( pMenu );
+        pComp->SetStates();
+        xAcc = pComp;
+    }
+
+    return xAcc;
 }
