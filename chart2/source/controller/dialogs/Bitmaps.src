@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Bitmaps.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:24 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:27:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,28 +72,10 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         SfxStyleFamilyItem
         {
             StyleBitmap = Bitmap { File = "sco206.bmp" ; };
-            Text = "Grafikobjektvorlagen" ;
-            Text [ ENGLISH ] = "Graphic Objects Styles" ;
-            Text [ english_us ] = "Graphics Styles" ;
-            Text [ italian ] = "Modelli di oggetti grafici" ;
-            Text [ spanish ] = "Estilos de objeto gráfico" ;
-            Text [ french ] = "Styles d'objet graphique" ;
-            Text [ dutch ] = "Opmaakprofielen voor grafische objecten" ;
-            Text [ swedish ] = "Grafikobjektformatmallar" ;
-            Text [ danish ] = "Grafikobjekttypografier" ;
-            Text [ portuguese_brazilian ] = "Estilos de Figuras" ;
-            Text [ portuguese ] = "Modelos de objectos gráficos" ;
-            Text[ chinese_simplified ] = "å›¾å½¢å¯¹è±¡æ ·å¼";
-            Text[ russian ] = "Ñòèëè ãğàôè÷åñêèõ îáúåêòîâ";
-            Text[ polish ] = "Style grafiki";
-            Text[ japanese ] = "å›³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¹ã‚¿ã‚¤ãƒ«";
-            Text[ chinese_traditional ] = "åœ–å½¢ç‰©ä»¶æ¨£å¼";
-            Text[ arabic ] = "ÃäãÇØ ßÇÆäÇÊ ÕæÑÉ";
-            Text[ greek ] = "Óôõë áíôéêåéìİíùí ãñáöéêşí";
-            Text[ korean ] = "ê·¸ë¦¼ ìŠ¤íƒ€ì¼ ";
-            Text[ czech ] = "GrafickÃ© styly" ;
+            Text [ de ] = "Grafikobjektvorlagen" ;
+            Text [ en-US ] = "Graphics Styles" ;
             StyleFamily = SFX_STYLE_FAMILY_PARA ;
-            FilterList =
+            FilterList  =
             {
                 < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
                 < STR_STYLE_FILTER_USED ; SFXSTYLEBIT_USED ; > ;
