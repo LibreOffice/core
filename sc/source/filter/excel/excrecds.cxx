@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:35:31 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:15:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #include <svx/sizeitem.hxx>
 #include <svx/ulspitem.hxx>
 #include <svx/fhgtitem.hxx>
+#ifndef _SVX_ESCPITEM_HXX
+#include <svx/escpitem.hxx>
+#endif
 #include <svtools/intitem.hxx>
 #include <svtools/zforlist.hxx>
 #include <svtools/zformat.hxx>
@@ -136,6 +139,9 @@
 #endif
 #ifndef SC_XECONTENT_HXX
 #include "xecontent.hxx"
+#endif
+#ifndef SC_FTOOLS_HXX
+#include "ftools.hxx"
 #endif
 
 #include "xcl97rec.hxx"
@@ -976,12 +982,15 @@ ExcRichStr::ExcRichStr( ExcCell& rExcCell, String& rText, const ScPatternAttr* p
                         SfxItemSet  aItemSet( rEdEng.GetAttribs( aSel ) );
                         BOOL        bWasHLink = FALSE;
 
+                        const SfxPoolItem* pItem;
+                        // test if this contains a super/sub script
+                        const SvxEscapementItem& rEscapeItem = GETITEM( aItemSet, SvxEscapementItem, EE_CHAR_ESCAPEMENT );
+                        SvxEscapement eEscape = static_cast< SvxEscapement >(rEscapeItem.GetEnumValue());
+
                         // detect hyperlinks, export single hyperlink, create note if multiple hyperlinks,
                         // export hyperlink text in every case
                         if( aSel.nEndPos == (aSel.nStartPos + 1) )
                         {
-                            const SfxPoolItem*          pItem;
-
                             if( aItemSet.GetItemState( EE_FEATURE_FIELD, FALSE, &pItem ) == SFX_ITEM_ON )
                             {
                                 const SvxFieldData*     pField = ((const SvxFieldItem*) pItem)->GetField();
@@ -1029,7 +1038,10 @@ ExcRichStr::ExcRichStr( ExcCell& rExcCell, String& rText, const ScPatternAttr* p
                             aFont.SetUnderline( UNDERLINE_SINGLE );
                         }
 
-                        UINT16 nFontIndex = rFontList.Insert( aFont );
+                        SvxFont aSvxFont(aFont);
+                        aSvxFont.SetEscapement(eEscape);
+
+                        UINT16 nFontIndex = rFontList.Insert( aSvxFont );
 
                         if( nFontIndex > 255 && eBiff < Biff8 )
                             nFontIndex = 0;
@@ -1065,8 +1077,8 @@ ExcRichStr::ExcRichStr( ExcCell& rExcCell, String& rText, const ScPatternAttr* p
             rRoot.sAddNoteText += sURLList;
         }
 
-        // XF mit Umbruch auswaehlen?
-        rExcCell.SetXFId( rRoot.pER->GetXFBuffer().Insert( pAttr, nParCnt > 1 ) );
+        // XF select with paging?
+        rExcCell.SetXFId( rRoot.pER->GetXFBuffer().Insert( pAttr, nParCnt > 1, RemoveFontOfChar(0) ) );
     }
     else
     {
@@ -1081,6 +1093,24 @@ ExcRichStr::~ExcRichStr()
 {
 }
 
+sal_uInt16 ExcRichStr::RemoveFontOfChar(sal_uInt16 nCharIx)
+{
+    sal_uInt32 nEnd = (sal_uInt32) GetFormCount() * 2;
+    sal_uInt16 nFontIx = EXC_FONT_NOTFOUND;
+
+    for( sal_uInt32 nIndex = 0 ; nIndex < nEnd ; nIndex++ )
+    {
+        // The list is made up char index followed by a font index
+        if(nCharIx == aForms.GetValue( nIndex ) && !(nIndex % 2))
+        {
+            nFontIx = aForms.GetValue( nIndex + 1);
+            aForms.Remove(nIndex + 1);
+            aForms.Remove(nIndex);
+            break;
+        }
+    }
+    return nFontIx;
+}
 
 void ExcRichStr::Write( XclExpStream& rStrm )
 {
@@ -1363,6 +1393,7 @@ void ExcFormula::SaveDiff( XclExpStream& rStrm )
                 break;
 
             default:
+                fVal =  pFCell->GetValue();
                 rStrm << fVal;
                 break;
         }
