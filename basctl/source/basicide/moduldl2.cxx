@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: tbe $ $Date: 2002-04-25 14:56:47 $
+ *  last change: $Author: sb $ $Date: 2002-07-03 15:59:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,15 +239,7 @@ void __EXPORT BasicCheckBox::CheckButtonHdl()
 
 void BasicCheckBox::Init()
 {
-    BasicCheckBoxBitmaps theBmps;
-
-    pCheckButton = new SvLBoxButtonData;
-    pCheckButton->aBmps[SV_BMP_UNCHECKED]   = theBmps.GetUncheckedBmp();
-    pCheckButton->aBmps[SV_BMP_CHECKED]     = theBmps.GetCheckedBmp();
-    pCheckButton->aBmps[SV_BMP_HICHECKED]   = theBmps.GetHiCheckedBmp();
-    pCheckButton->aBmps[SV_BMP_HIUNCHECKED] = theBmps.GetHiUncheckedBmp();
-    pCheckButton->aBmps[SV_BMP_TRISTATE]    = theBmps.GetTriStateBmp();
-    pCheckButton->aBmps[SV_BMP_HITRISTATE]  = theBmps.GetHiTriStateBmp();
+    pCheckButton = new SvLBoxButtonData(this);
 
     if ( nMode == LIBMODE_CHOOSER )
         EnableCheckButton( pCheckButton );
@@ -474,21 +466,6 @@ BOOL __EXPORT BasicCheckBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNe
 
     return bValid;
 }
-
-//----------------------------------------------------------------------------
-
-BasicCheckBoxBitmaps::BasicCheckBoxBitmaps() :
-    Resource        ( ResId( RID_RES_CHECKBITMAPS ) ),
-    aUncheckedBmp   ( ResId( CHKBTN_UNCHECKED ) ),
-    aCheckedBmp     ( ResId( CHKBTN_CHECKED ) ),
-    aHiCheckedBmp   ( ResId( CHKBTN_HICHECKED ) ),
-    aHiUncheckedBmp ( ResId( CHKBTN_HIUNCHECKED ) ),
-    aTriStateBmp    ( ResId( CHKBTN_TRISTATE ) ),
-    aHiTriStateBmp  ( ResId( CHKBTN_HITRISTATE ) )
-{
-    FreeResource();
-}
-
 
 //----------------------------------------------------------------------------
 // NewObjectDialog
@@ -1434,16 +1411,20 @@ SvLBoxEntry* LibPage::ImpInsertLibEntry( const String& rLibName, ULONG nPos )
         }
     }
 
-    if ( bProtected )
-    {
-        Image aImg = Image( IDEResId( RID_IMG_LOCKED ) );
-        Size aSz = aImg.GetSizePixel();
-        aLibBox.SetDefaultExpandedEntryBmp( aImg );
-        aLibBox.SetDefaultCollapsedEntryBmp( aImg );
-    }
-
     SvLBoxEntry* pNewEntry = aLibBox.InsertEntry( rLibName, nPos );
     pNewEntry->SetUserData( new BasicLibUserData( pShell ) );
+
+    if (bProtected)
+    {
+        Image aImage(IDEResId(RID_IMG_LOCKED));
+        aLibBox.SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
+        aLibBox.SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
+        aImage = Image(IDEResId(RID_IMG_LOCKED_HC));
+        aLibBox.SetExpandedEntryBmp(pNewEntry, aImage,
+                                    BMP_COLOR_HIGHCONTRAST);
+        aLibBox.SetCollapsedEntryBmp(pNewEntry, aImage,
+                                     BMP_COLOR_HIGHCONTRAST);
+    }
 
     // check, if library is link
     if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryLink( aOULibName ) )
@@ -1474,13 +1455,6 @@ SvLBoxEntry* LibPage::ImpInsertLibEntry( const String& rLibName, ULONG nPos )
     */
 
     //aLibBox.CheckEntryPos( nLib, pBasicManager->IsLibLoaded( nLib ) );
-
-    if ( bProtected )
-    {
-        Image aImg; // Default zuruecksetzen
-        aLibBox.SetDefaultExpandedEntryBmp( aImg );
-        aLibBox.SetDefaultCollapsedEntryBmp( aImg );
-    }
 
     return pNewEntry;
 }
