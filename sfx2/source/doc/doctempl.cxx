@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2002-11-14 14:21:07 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:00:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1893,9 +1893,6 @@ SfxObjectShellRef EntryData_Impl::CreateObjectShell()
             }
             else if (pFilter)
             {
-                const SfxObjectFactory &rFactory =
-                    ((SfxFactoryFilterContainer*)pFilter->GetFilterContainer())
-                    ->GetFactory();
                 delete pMed;
                 mbDidConvert=FALSE;
                 mxStor = new SvStorage(
@@ -1906,8 +1903,7 @@ SfxObjectShellRef EntryData_Impl::CreateObjectShell()
                     mxStor->SetVersion( pFilter->GetVersion() );
                 if ( SVSTREAM_OK == mxStor->GetError() )
                 {
-                    mxObjShell = (SfxObjectShell *)
-                        rFactory.CreateObject(SFX_CREATE_MODE_ORGANIZER);
+                    mxObjShell = SfxObjectShell::CreateObject( pFilter->GetServiceName(), SFX_CREATE_MODE_ORGANIZER );
                     if ( mxObjShell.Is() )
                     {
                         mxObjShell->DoInitNew(0);
