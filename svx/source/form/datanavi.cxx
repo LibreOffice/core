@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datanavi.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:23:03 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 #include "datanavi.hxx"
+#include "fmservs.hxx"
 
 #ifndef _SVX_DATANAVI_HRC
 #include "datanavi.hrc"
@@ -84,9 +85,6 @@
 #include "fmshell.hxx"
 #endif
 
-#ifndef _SV_MSGBOX_HXX
-#include <vcl/msgbox.hxx>
-#endif
 #ifndef INCLUDED_SVTOOLS_MISCOPT_HXX
 #include <svtools/miscopt.hxx>
 #endif
@@ -133,6 +131,9 @@
 #ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
+#include <com/sun/star/frame/XFramesSupplier.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
@@ -148,6 +149,12 @@
 #ifndef _COM_SUN_STAR_XML_DOM_DOMEXCEPTIONTYPE_HPP_
 #include <com/sun/star/xml/dom/DOMExceptiontype.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FORM_BINDING_XVALUEBINDING_HPP_
+#include <com/sun/star/form/binding/XValueBinding.hpp>
+#endif
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#include <comphelper/processfactory.hxx>
+#endif
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -160,11 +167,14 @@ using namespace ::svx;
 namespace css = ::com::sun::star;
 
 #define CFGNAME_DATANAVIGATOR       DEFINE_CONST_UNICODE("DataNavigator")
+#define CFGNAME_SHOWDETAILS         DEFINE_CONST_UNICODE("ShowDetails")
 #define MSG_VARIABLE                DEFINE_CONST_UNICODE("%1")
 #define MODELNAME                   DEFINE_CONST_UNICODE("$MODELNAME")
 #define INSTANCENAME                DEFINE_CONST_UNICODE("$INSTANCENAME")
 #define ELEMENTNAME                 DEFINE_CONST_UNICODE("$ELEMENTNAME")
 #define ATTRIBUTENAME               DEFINE_CONST_UNICODE("$ATTRIBUTENAME")
+#define SUBMISSIONNAME              DEFINE_CONST_UNICODE("$SUBMISSIONNAME")
+#define BINDINGNAME                 DEFINE_CONST_UNICODE("$BINDINGNAME")
 
 //............................................................................
 namespace svxform
@@ -175,12 +185,13 @@ namespace svxform
     #define PN_INSTANCE_MODEL       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Instance" ) )
     #define PN_INSTANCE_ID          ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ID" ) )
     #define PN_INSTANCE_URL         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) )
+    #define PN_INSTANCE_URLONCE     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URLOnce" ) )
 
     // properties of binding
     #define PN_BINDING_ID           ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BindingID" ) )
     #define PN_BINDING_EXPR         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BindingExpression" ) )
     #define PN_BINDING_MODEL        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Model" ) )
-    #define PN_BINDING_NAMESPACES   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BindingNamespaces" ) )
+    #define PN_BINDING_NAMESPACES   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModelNamespaces" ) )
     #define PN_BINDING_MODELID      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModelID" ) )
     #define PN_READONLY_EXPR        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ReadonlyExpression" ) )
     #define PN_RELEVANT_EXPR        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RelevantExpression" ) )
@@ -266,12 +277,35 @@ namespace svxform
             // no drag without an entry
             return;
 
-        TransferableHelper* pTransferEntry = new OXFormsTransferable();
-        Reference< XTransferable > xEnsureDelete = pTransferEntry;
-        if ( pTransferEntry )
-        {
+        // GetServiceNameForNode() requires a datatype repository which
+        // will be automatically build if requested???
+        Reference< css::xforms::XModel > xModel( m_pXFormsPage->GetXFormsHelper(), UNO_QUERY );
+        Reference< css::xforms::XDataTypeRepository > xDataTypes =
+            xModel->getDataTypeRepository();
+        if(!xDataTypes.is())
+            return;
+
+        using namespace ::com::sun::star::uno;
+        typedef com::sun::star::form::binding::XValueBinding XValueBinding_t;
+
+        ItemNode *pItemNode = static_cast<ItemNode*>(pSelected->GetUserData());
+        OXFormsDescriptor desc;
+        desc.szName = GetEntryText(pSelected);
+        if(pItemNode->m_xNode.is()) {
+            // a valid node interface tells us that we need to create a control from a binding
+            desc.szServiceName = m_pXFormsPage->GetServiceNameForNode(pItemNode->m_xNode);
+            desc.xPropSet = m_pXFormsPage->GetBindingForNode(pItemNode->m_xNode);
+            DBG_ASSERT( desc.xPropSet.is(), "DataTreeListBox::StartDrag(): invalid node binding" );
+        }
+        else {
+            desc.szServiceName = FM_COMPONENT_COMMANDBUTTON;
+            desc.xPropSet = pItemNode->m_xPropSet;
+        }
+        OXFormsTransferable *pTransferable = new OXFormsTransferable(desc);
+        Reference< XTransferable > xEnsureDelete = pTransferable;
+        if(pTransferable) {
             EndSelection();
-            pTransferEntry->StartDrag( this, DND_ACTION_COPY );
+            pTransferable->StartDrag( this, DND_ACTION_COPY );
         }
     }
 
@@ -480,8 +514,9 @@ namespace svxform
         }
     }
     //------------------------------------------------------------------------
-    void XFormsPage::DoToolBoxAction( USHORT _nToolBoxID )
-    {
+    bool XFormsPage::DoToolBoxAction( USHORT _nToolBoxID ) {
+
+        bool bHandled = false;
         bool bIsDocModified = false;
         m_pNaviWin->DisableNotify( true );
 
@@ -489,6 +524,7 @@ namespace svxform
             || TBI_ITEM_ADD_ELEMENT == _nToolBoxID
             || TBI_ITEM_ADD_ATTRIBUTE == _nToolBoxID )
         {
+            bHandled = true;
             Reference< css::xforms::XModel > xModel( m_xUIHelper, UNO_QUERY );
             DBG_ASSERT( xModel.is(), "XFormsPage::DoToolBoxAction(): Action without model" );
             if ( DGTSubmission == m_eGroup )
@@ -523,6 +559,18 @@ namespace svxform
                 bool bIsElement = true;
                 if ( DGTInstance == m_eGroup )
                 {
+// #i36453# warning changing instance.  Removed for
+// upcoming 2.0 release because string change could not go through
+// translation anymore. Please re-enable in the next version.
+/*
+                    if ( m_sInstanceURL.Len() > 0 )
+                    {
+                        LinkedInstanceWarningBox aMsgBox( this );
+                        if ( aMsgBox.Execute() != RET_OK )
+                            return bHandled;
+                    }
+*/
+
                     DBG_ASSERT( pEntry, "XFormsPage::DoToolBoxAction(): no entry" );
                     ItemNode* pParentNode = static_cast< ItemNode* >( pEntry->GetUserData() );
                     DBG_ASSERT( pParentNode, "XFormsPage::DoToolBoxAction(): no parent node" );
@@ -670,6 +718,7 @@ namespace svxform
         }
         else if ( TBI_ITEM_EDIT == _nToolBoxID )
         {
+            bHandled = true;
             SvLBoxEntry* pEntry = m_aItemList.FirstSelected();
             if ( pEntry )
             {
@@ -678,6 +727,18 @@ namespace svxform
                 ItemNode* pNode = static_cast< ItemNode* >( pEntry->GetUserData() );
                 if ( DGTInstance == m_eGroup || DGTBinding == m_eGroup )
                 {
+// #i36453# warning changing instance.  Removed for
+// upcoming 2.0 release because string change could not go through
+// translation anymore. Please re-enable in the next version.
+/*
+                    if ( DGTInstance == m_eGroup && m_sInstanceURL.Len() > 0 )
+                    {
+                        LinkedInstanceWarningBox aMsgBox( this );
+                        if ( aMsgBox.Execute() != RET_OK )
+                            return bHandled;
+                    }
+*/
+
                     AddDataItemDialog aDlg( this, pNode, m_xUIHelper );
                     DataItemType eType = DITElement;
                     USHORT nResId = RID_STR_DATANAV_EDIT_ELEMENT;
@@ -755,12 +816,27 @@ namespace svxform
             }
         }
         else if ( TBI_ITEM_REMOVE == _nToolBoxID )
+        {
+            bHandled = true;
+// #i36453# warning changing instance.  Removed for
+// upcoming 2.0 release because string change could not go through
+// translation anymore. Please re-enable in the next version.
+/*
+            if ( DGTInstance == m_eGroup && m_sInstanceURL.Len() > 0 )
+            {
+                LinkedInstanceWarningBox aMsgBox( this );
+                if ( aMsgBox.Execute() != RET_OK )
+                    return bHandled;
+            }
+*/
             bIsDocModified = RemoveEntry();
+        }
 
         m_pNaviWin->DisableNotify( false );
         EnableMenuItems( NULL );
         if ( bIsDocModified )
             m_pNaviWin->SetDocModified();
+        return bHandled;
     }
 
     //------------------------------------------------------------------------
@@ -968,18 +1044,43 @@ namespace svxform
             else
             {
                 DBG_ASSERT( pNode->m_xPropSet.is(), "XFormsPage::RemoveEntry(): no propset" );
+                bool bSubmission = ( DGTSubmission == m_eGroup );
+                USHORT nResId = bSubmission ? RID_QRY_REMOVE_SUBMISSION : RID_QRY_REMOVE_BINDING;
+                rtl::OUString sProperty = bSubmission ? PN_SUBMISSION_ID : PN_BINDING_ID;
+                String sSearch = bSubmission ? SUBMISSIONNAME : BINDINGNAME;
+                rtl::OUString sName;
                 try
                 {
-                    if ( DGTSubmission == m_eGroup )
-                        xModel->getSubmissions()->remove( makeAny( pNode->m_xPropSet ) );
-                    else // then Binding Page
-                        xModel->getBindings()->remove( makeAny( pNode->m_xPropSet ) );
+                    pNode->m_xPropSet->getPropertyValue( sProperty ) >>= sName;
                 }
                 catch ( Exception& )
                 {
                     DBG_ERRORFILE( "XFormsPage::RemoveEntry(): exception caught" );
                 }
-                bRet = true;
+// #i36202 warning when deleting element/attribute.  Removed for
+// upcoming 2.0 release because string change could not go through
+// translation anymore. Please re-enable in the next version.
+/*
+                QueryBox aQBox( this, SVX_RES( nResId ) );
+                String sMessText = aQBox.GetMessText();
+                sMessText.SearchAndReplace( sSearch, String( sName ) );
+                aQBox.SetMessText( sMessText );
+                if ( aQBox.Execute() == RET_YES )
+*/
+                {
+                    try
+                    {
+                        if ( bSubmission )
+                            xModel->getSubmissions()->remove( makeAny( pNode->m_xPropSet ) );
+                        else // then Binding Page
+                            xModel->getBindings()->remove( makeAny( pNode->m_xPropSet ) );
+                        bRet = true;
+                    }
+                    catch ( Exception& )
+                    {
+                        DBG_ERRORFILE( "XFormsPage::RemoveEntry(): exception caught" );
+                    }
+                }
             }
 
             if ( bRet )
@@ -1001,7 +1102,7 @@ namespace svxform
             switch ( nCode )
             {
                 case KEY_DELETE:
-                    DoMenuAction( TBI_ITEM_REMOVE );
+                    nHandled = DoMenuAction( TBI_ITEM_REMOVE );
                     break;
             }
         }
@@ -1218,9 +1319,9 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    void XFormsPage::DoMenuAction( USHORT _nMenuID )
+    bool XFormsPage::DoMenuAction( USHORT _nMenuID )
     {
-        DoToolBoxAction( _nMenuID );
+        return DoToolBoxAction( _nMenuID );
     }
 
     //------------------------------------------------------------------------
@@ -1351,8 +1452,9 @@ namespace svxform
         m_a2Size = LogicToPixel( Size( 2, 2 ), MAP_APPFONT );
         m_a3Size = LogicToPixel( Size( 3, 3 ), MAP_APPFONT );
         Size aOutSz = GetOutputSizePixel();
-        m_nMinWidth = aOutSz.Width();
-        m_nMinHeight = aOutSz.Height();
+        Size aLogSize = PixelToLogic( aOutSz, MAP_APPFONT );
+        m_nMinWidth = aLogSize.Width();
+        m_nMinHeight = aLogSize.Height();
         m_nBorderHeight = 4*m_a3Size.Height() +
             m_aModelBtn.GetSizePixel().Height() + m_aInstanceBtn.GetSizePixel().Height();
 
@@ -1368,18 +1470,32 @@ namespace svxform
         m_aUpdateTimer.SetTimeout( 2000 );
         m_aUpdateTimer.SetTimeoutHdl( LINK( this, DataNavigatorWindow, UpdateHdl ) );
 
-        Menu* pMenu = m_aInstanceBtn.GetPopupMenu();
-        pMenu->SetItemBits( MID_SHOW_DETAILS, MIB_CHECKABLE );
-        pMenu->CheckItem( MID_SHOW_DETAILS, FALSE );
-
         // init tabcontrol
         m_aTabCtrl.Show();
         sal_Int32 nPageId = TID_INSTANCE;
         SvtViewOptions aViewOpt( E_TABDIALOG, CFGNAME_DATANAVIGATOR );
         if ( aViewOpt.Exists() )
+        {
             nPageId = aViewOpt.GetPageID();
+            aViewOpt.GetUserItem(CFGNAME_SHOWDETAILS) >>= m_bShowDetails;
+        }
+
+        Menu* pMenu = m_aInstanceBtn.GetPopupMenu();
+        pMenu->SetItemBits( MID_SHOW_DETAILS, MIB_CHECKABLE );
+        pMenu->CheckItem( MID_SHOW_DETAILS, m_bShowDetails );
+
         m_aTabCtrl.SetCurPageId( static_cast< USHORT >( nPageId ) );
         ActivatePageHdl( &m_aTabCtrl );
+
+        // get active frame
+        Reference < XFramesSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
+            DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
+        m_xFrame = xDesktop->getActiveFrame();
+        DBG_ASSERT( m_xFrame.is(), "DataNavigatorWindow::LoadModels(): no frame" );
+        // add frameaction listener
+        Reference< XFrameActionListener > xListener(
+            static_cast< XFrameActionListener* >( m_xDataListener.get() ), UNO_QUERY );
+        m_xFrame->addFrameActionListener( xListener );
 
         // load xforms models of the current document
         LoadModels();
@@ -1389,6 +1505,9 @@ namespace svxform
     {
         SvtViewOptions aViewOpt( E_TABDIALOG, CFGNAME_DATANAVIGATOR );
         aViewOpt.SetPageID( static_cast< sal_Int32 >( m_aTabCtrl.GetCurPageId() ) );
+        Any aAny;
+        aAny <<= m_bShowDetails;
+        aViewOpt.SetUserItem(CFGNAME_SHOWDETAILS,aAny);
 
         delete m_pInstPage;
         delete m_pSubmissionPage;
@@ -1397,21 +1516,11 @@ namespace svxform
         sal_Int32 i, nCount = m_aPageList.size();
         for ( i = 0; i < nCount; ++i )
             delete m_aPageList[i];
-        Reference< XContainerListener > xContainerListener(
-            static_cast< XContainerListener* >( m_xDataListener.get() ), UNO_QUERY );
-        nCount = m_aContainerList.size();
-        for ( i = 0; i < nCount; ++i )
-            m_aContainerList[i]->removeContainerListener( xContainerListener );
-        Reference< XEventListener > xEventListener(
-            static_cast< XEventListener* >( m_xDataListener.get() ), UNO_QUERY );
-        nCount = m_aEventTargetList.size();
-        for ( i = 0; i < nCount; ++i )
-        {
-            m_aEventTargetList[i]->removeEventListener( EVENTTYPE_CHARDATA, xEventListener, true );
-            m_aEventTargetList[i]->removeEventListener( EVENTTYPE_CHARDATA, xEventListener, false );
-            m_aEventTargetList[i]->removeEventListener( EVENTTYPE_ATTR, xEventListener, true );
-            m_aEventTargetList[i]->removeEventListener( EVENTTYPE_ATTR, xEventListener, false );
-        }
+        Reference< XFrameActionListener > xListener(
+            static_cast< XFrameActionListener* >( m_xDataListener.get() ), UNO_QUERY );
+        m_xFrame->removeFrameActionListener( xListener );
+        RemoveBroadcaster();
+        m_xDataListener.clear();
     }
 
     // -----------------------------------------------------------------------
@@ -1569,11 +1678,11 @@ namespace svxform
                         USHORT nInst = GetNewPageId();
                         ::rtl::OUString sName = aDlg.GetName();
                         ::rtl::OUString sURL = aDlg.GetURL();
-                        sal_Bool bOnlyOnce = !aDlg.IsLinkInstance();
+                        bool bLinkOnce = aDlg.IsLinkInstance();
                         try
                         {
                             Reference< css::xml::dom::XDocument > xNewInst =
-                                xUIHelper->newInstance( sName, sURL, bOnlyOnce );
+                                xUIHelper->newInstance( sName, sURL, !bLinkOnce );
                         }
                         catch ( Exception& )
                         {
@@ -1581,6 +1690,10 @@ namespace svxform
                         }
                         ModelSelectHdl( NULL );
                         m_aTabCtrl.SetCurPageId( nInst );
+                        XFormsPage* pPage = GetCurrentPage( nInst );
+                        pPage->SetInstanceName(sName);
+                        pPage->SetInstanceURL(sURL);
+                        pPage->SetLinkOnce(bLinkOnce);
                         ActivatePageHdl( &m_aTabCtrl );
                         bIsDocModified = true;
                     }
@@ -1595,19 +1708,27 @@ namespace svxform
                         AddInstanceDialog aDlg( this, true );
                         aDlg.SetName( pPage->GetInstanceName() );
                         aDlg.SetURL( pPage->GetInstanceURL() );
-                        aDlg.SetRenameMode();
+                        aDlg.SetLinkInstance( pPage->GetLinkOnce() );
                         String sOldName = aDlg.GetName();
                         if ( aDlg.Execute() == RET_OK )
                         {
                             String sNewName = aDlg.GetName();
+                            ::rtl::OUString sURL = aDlg.GetURL();
+                            bool bLinkOnce = aDlg.IsLinkInstance();
                             try
                             {
-                                xUIHelper->renameInstance( sOldName, sNewName );
+                                xUIHelper->renameInstance( sOldName,
+                                                           sNewName,
+                                                           sURL,
+                                                           !bLinkOnce );
                             }
                             catch ( Exception& )
                             {
                                 DBG_ERRORFILE( "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
                             }
+                            pPage->SetInstanceName(sNewName);
+                            pPage->SetInstanceURL(sURL);
+                            pPage->SetLinkOnce(bLinkOnce);
                             m_aTabCtrl.SetPageText( nId, sNewName );
                             bIsDocModified = true;
                         }
@@ -1786,8 +1907,8 @@ namespace svxform
     {
         if ( !m_xFrameModel.is() )
         {
-            SfxViewFrame* pFrm = SfxViewFrame::Current();
-            Reference< XController > xCtrl = pFrm->GetFrame()->GetController();
+            // get model of active frame
+            Reference< XController > xCtrl = m_xFrame->getController();
             if ( xCtrl.is() )
             {
                 try
@@ -1855,7 +1976,9 @@ namespace svxform
                 if ( nId >= TID_INSTANCE )
                     // instance page
                     nPagePos = m_aTabCtrl.GetPagePos( nId );
+                m_bIsNotifyDisabled = true;
                 String sText = pPage->SetModel( xFormsModel, nPagePos );
+                m_bIsNotifyDisabled = false;
                 if ( sText.Len() > 0 )
                     m_aTabCtrl.SetPageText( nId, sText );
             }
@@ -2029,10 +2152,24 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    void DataNavigatorWindow::NotifyChanges()
+    void DataNavigatorWindow::NotifyChanges( bool _bLoadAll )
     {
         if ( !m_bIsNotifyDisabled )
-            m_aUpdateTimer.Start();
+        {
+            if ( _bLoadAll )
+            {
+                // reset all members
+                RemoveBroadcaster();
+                m_xDataContainer.clear();
+                m_xFrameModel.clear();
+                m_aModelsBox.Clear();
+                m_nLastSelectedPos = LISTBOX_ENTRY_NOTFOUND;
+                // for a reload
+                LoadModels();
+            }
+            else
+                m_aUpdateTimer.Start();
+        }
     }
 
     //------------------------------------------------------------------------
@@ -2056,6 +2193,26 @@ namespace svxform
         m_aEventTargetList.push_back( xTarget );
     }
 
+    //------------------------------------------------------------------------
+    void DataNavigatorWindow::RemoveBroadcaster()
+    {
+        Reference< XContainerListener > xContainerListener(
+            static_cast< XContainerListener* >( m_xDataListener.get() ), UNO_QUERY );
+        sal_Int32 i, nCount = m_aContainerList.size();
+        for ( i = 0; i < nCount; ++i )
+            m_aContainerList[i]->removeContainerListener( xContainerListener );
+        Reference< XEventListener > xEventListener(
+            static_cast< XEventListener* >( m_xDataListener.get() ), UNO_QUERY );
+        nCount = m_aEventTargetList.size();
+        for ( i = 0; i < nCount; ++i )
+        {
+            m_aEventTargetList[i]->removeEventListener( EVENTTYPE_CHARDATA, xEventListener, true );
+            m_aEventTargetList[i]->removeEventListener( EVENTTYPE_CHARDATA, xEventListener, false );
+            m_aEventTargetList[i]->removeEventListener( EVENTTYPE_ATTR, xEventListener, true );
+            m_aEventTargetList[i]->removeEventListener( EVENTTYPE_ATTR, xEventListener, false );
+        }
+    }
+
     //========================================================================
     // class DataNavigator
     //========================================================================
@@ -2074,7 +2231,10 @@ namespace svxform
 
         SetHelpId( HID_DATA_NAVIGATOR_WIN );
         SetText( SVX_RES( RID_STR_DATANAVIGATOR ) );
-        SfxDockingWindow::SetFloatingSize( Size( 200, 400 ) );
+
+        Size aSize = m_aDataWin.GetOutputSizePixel();
+        Size aLogSize = PixelToLogic( aSize, MAP_APPFONT );
+        SfxDockingWindow::SetFloatingSize( aLogSize );
 
         m_aDataWin.Show();
     }
@@ -2259,6 +2419,11 @@ namespace svxform
                 }
             }
         }
+        if( m_xUIHelper.is()  &&  m_xBinding.is() )
+        {
+            // remove binding, if it does not convey 'useful' information
+            m_xUIHelper->removeBindingIfUseless( m_xBinding );
+        }
     }
 
     //------------------------------------------------------------------------
@@ -2312,9 +2477,7 @@ namespace svxform
             sPropName = PN_READONLY_EXPR;
         else if ( &m_aCalculateBtn == pBtn )
             sPropName = PN_CALCULATE_EXPR;
-        Reference< XPropertySet > xBind =
-            ( DITBinding == m_eItemType ) ? m_pItemNode->m_xPropSet : m_xBinding;
-        AddConditionDialog aDlg( this, sPropName, xBind );
+        AddConditionDialog aDlg( this, sPropName, m_xTempBinding );
         bool bIsDefBtn = ( &m_aDefaultBtn == pBtn );
         String sCondition;
         if ( bIsDefBtn )
@@ -2365,7 +2528,7 @@ namespace svxform
                 {
                     // don't set readonly properties
                     Property aProperty = xFromInfo->getPropertyByName( rName );
-                    if ( ( aProperty.Attributes && PropertyAttribute::READONLY ) == 0 )
+                    if ( ( aProperty.Attributes & PropertyAttribute::READONLY ) == 0 )
                         xTo->setPropertyValue(rName, xFrom->getPropertyValue( rName ));
                 }
                 // else: no property? then ignore.
@@ -2493,13 +2656,14 @@ namespace svxform
                         into the original binding.
                      */
 
-                    m_xBinding = m_xUIHelper->getBindingForNode( m_pItemNode->m_xNode, sal_True );
+                    Reference< css::xml::dom::XNode > xNode = m_pItemNode->m_xNode;
+                    m_xBinding = m_xUIHelper->getBindingForNode( xNode, sal_True );
                     if ( m_xBinding.is() )
                     {
                         Reference< css::xforms::XModel > xModel( m_xUIHelper, UNO_QUERY );
                         if ( xModel.is() )
                         {
-                            m_xTempBinding = xModel->cloneBinding( m_xBinding );
+                            m_xTempBinding = m_xUIHelper->cloneBindingAsGhost( m_xBinding );
                             Reference < XSet > xBindings = xModel->getBindings();
                             if ( xBindings.is() )
                                 xBindings->insert( makeAny( m_xTempBinding ) );
@@ -2526,7 +2690,7 @@ namespace svxform
                 {
                     try
                     {
-                        m_xTempBinding = xModel->cloneBinding( m_pItemNode->m_xPropSet );
+                        m_xTempBinding = m_xUIHelper->cloneBindingAsGhost( m_pItemNode->m_xPropSet );
                         Reference < XSet > xBindings = xModel->getBindings();
                         if ( xBindings.is() )
                             xBindings->insert( makeAny( m_xTempBinding ) );
@@ -2783,6 +2947,14 @@ namespace svxform
         }
         NamespaceItemDialog aDlg( this, xNameContnr );
         aDlg.Execute();
+        try
+        {
+            m_xBinding->setPropertyValue( PN_BINDING_NAMESPACES, makeAny( xNameContnr ) );
+        }
+        catch ( Exception& )
+        {
+            DBG_ERRORFILE( "AddDataItemDialog::EditHdl(): exception caught" );
+        }
         return 0;
     }
 
@@ -3110,6 +3282,9 @@ namespace svxform
     //------------------------------------------------------------------------
     AddSubmissionDialog::~AddSubmissionDialog()
     {
+        // #i38991# if we have added a binding, we need to remove it as well.
+        if( m_xTempBinding.is() && m_xUIHelper.is() )
+            m_xUIHelper->removeBindingIfUseless( m_xTempBinding );
     }
 
     //------------------------------------------------------------------------
@@ -3126,6 +3301,15 @@ namespace svxform
     //------------------------------------------------------------------------
     IMPL_LINK( AddSubmissionDialog, OKHdl, OKButton *, EMPTYARG )
     {
+        rtl::OUString sName(m_aNameED.GetText());
+        if(!sName.getLength()) {
+
+            ErrorBox aErrorBox(this,SVX_RES(RID_ERR_EMPTY_SUBMISSIONNAME));
+            aErrorBox.SetText( Application::GetDisplayName() );
+            aErrorBox.Execute();
+            return 0;
+        }
+
         if ( !m_xSubmission.is() )
         {
             DBG_ASSERT( !m_xNewSubmission.is(),
@@ -3183,6 +3367,8 @@ namespace svxform
         m_aMethodLB.InsertEntry( String( ResId( STR_METHOD_POST ) ) );
         m_aMethodLB.InsertEntry( String( ResId( STR_METHOD_PUT ) ) );
         m_aMethodLB.InsertEntry( String( ResId( STR_METHOD_GET ) ) );
+        m_aMethodLB.SelectEntryPos(0);
+
         // binding box
         Reference< css::xforms::XModel > xModel( m_xUIHelper, UNO_QUERY );
         if ( xModel.is() )
@@ -3222,6 +3408,18 @@ namespace svxform
             {
                 DBG_ERRORFILE( "AddSubmissionDialog::FillAllBoxes(): exception caught" );
             }
+        }
+
+        // #i36342# we need a temporary binding; create one if no existing binding
+        // is found
+        if( !m_xTempBinding.is() )
+        {
+            Reference<css::xforms::XModel> xModel( m_xUIHelper, UNO_QUERY_THROW );
+            m_xTempBinding = m_xUIHelper->getBindingForNode(
+                Reference<css::xml::dom::XNode>(
+                    xModel->getDefaultInstance()->getDocumentElement(),
+                    UNO_QUERY_THROW ),
+                sal_True );
         }
 
         // replace box
@@ -3359,7 +3557,23 @@ namespace svxform
         return 0;
     }
 
+    //========================================================================
+    // class LinkedInstanceWarningBox
+    //========================================================================
+
+    LinkedInstanceWarningBox::LinkedInstanceWarningBox( Window* pParent ) :
+
+        MessBox( pParent, SVX_RES( RID_QRY_LINK_WARNING ) )
+
+    {
+        SetText( Application::GetDisplayName() );
+        SetImage( QueryBox::GetStandardImage() );
+        AddButton( SVX_RESSTR( RID_STR_DATANAV_LINKWARN_BUTTON ), BUTTONID_OK, BUTTONDIALOG_DEFBUTTON );
+        AddButton( BUTTON_CANCEL, BUTTONID_CANCEL, BUTTONDIALOG_CANCELBUTTON );
+    }
+
 //............................................................................
 }   // namespace svxform
 //............................................................................
+
 
