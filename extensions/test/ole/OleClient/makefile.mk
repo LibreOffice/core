@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-22 09:58:17 $
+#   last change: $Author: obo $ $Date: 2004-03-17 13:15:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,7 +67,6 @@ TARGET=clientTest
 TARGETTYPE=CUI
 LIBTARGET=NO
 
-#USE_DEFFILE=	TRUE
 NO_BSYMBOLIC=	TRUE
 ENABLE_EXCEPTIONS=TRUE
 BOOTSTRAP_SERVICE=FALSE
@@ -80,20 +79,24 @@ BOOTSTRAP_SERVICE=FALSE
 
 # --- Files ---
 
-UNOUCRDEP=	$(SOLARBINDIR)$/types.rdb
-UNOUCRRDB=	$(SOLARBINDIR)$/types.rdb
+#UNOUCRDEP=	$(SOLARBINDIR)$/types.rdb $(BIN)$/oletest.rdb
+#UNOUCRRDB=	$(SOLARBINDIR)$/types.rdb $(BIN)$/oletest.rdb 
 
 
 UNOUCROUT=	$(OUT)$/inc
 INCPRE+=	$(OUT)$/inc -I$(ATL_INCLUDE)
 
 
-UNOTYPES=	com.sun.star.bridge.XBridgeSupplier2 \
-            com.sun.star.lang.XMultiServiceFactory \
-            com.sun.star.script.XInvocation			\
-            oletest.XCallback \
-            oletest.XSimple
-
+UNOTYPES= \
+    com.sun.star.lang.XMultiServiceFactory \
+    com.sun.star.script.XInvocation \
+    com.sun.star.bridge.XBridgeSupplier2 \
+    com.sun.star.bridge.oleautomation.Date \
+    com.sun.star.bridge.oleautomation.Decimal \
+    com.sun.star.bridge.oleautomation.Currency \
+    com.sun.star.bridge.oleautomation.SCode \
+    com.sun.star.bridge.oleautomation.NamedArgument \
+    com.sun.star.bridge.oleautomation.PropertyPutArgument
 
 
 .IF "$(depend)" != ""
@@ -101,31 +104,26 @@ UNOTYPES=	com.sun.star.bridge.XBridgeSupplier2 \
 .ENDIF # depend
 
 APP1TARGET=	$(TARGET)
-APP1OBJS=
-
-#$(OBJ)$/clientTest.obj \
-#			$(OBJ)$/axhost.obj
-
-LIBCMT=msvcrtd.lib
-
+APP1OBJS=  \
+    $(OBJ)$/clientTest.obj \
+    $(OBJ)$/axhost.obj \
+    $(OBJ)$/funcs.obj
 
 APP1STDLIBS= \
     $(SALLIB) \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
+    $(LIBCIMT) 	\
     user32.lib	\
+    $(COMPATH)$/atlmfc$/lib$/atls.lib \
     kernel32.lib \
     ole32.lib	\
     oleaut32.lib	\
     uuid.lib		\
-    comdlg32.lib	\
-    gdi32.lib
+    gdi32.lib	\
+    advapi32.lib    
 
 
-
-.IF "$(GUI)"=="WNT"
-APP1STDLIBS += $(LIBCIMT)
-.ENDIF
 
 APP1DEF=	$(MISC)\$(APP1TARGET).def
 
