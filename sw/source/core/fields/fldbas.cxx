@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldbas.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:25:00 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 13:52:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,13 @@ const String& SwFieldType::GetTypeStr(USHORT nTypeId)
         return *SwFieldType::pFldNames->GetObject( nTypeId );
     else
         return aEmptyStr;
+}
+
+SvStringsDtor* SwFieldType::GetFldNames()
+{
+    if( !SwFieldType::pFldNames )
+        SwFieldType::_GetFldName();
+    return SwFieldType::pFldNames;
 }
 
 /*---------------------------------------------------
