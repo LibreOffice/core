@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-09 09:50:37 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ class SmToolBoxWindow : public SfxFloatingWindow
 
 protected:
     ToolBox     aToolBoxCat;
+    FixedLine   aToolBoxCat_Delim;  // to visualy seperate the catalog part
     ToolBox    *pToolBoxCmd;
     ToolBox    *vToolBoxCategories[NUM_TBX_CATEGORIES];
     ImageList  *aImageLists [NUM_TBX_CATEGORIES + 1];   /* regular */
