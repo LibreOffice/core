@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_im.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cp $ $Date: 2001-05-29 14:09:44 $
+ *  last change: $Author: cp $ $Date: 2001-07-18 10:21:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,16 @@ SalI18N_InputMethod::SetLocale( const char* pLocale )
     }
 
     return mbUseable;
+}
+
+Bool
+SalI18N_InputMethod::PosixLocale()
+{
+    if (mbMultiLingual)
+        return False;
+    if (maMethod)
+        return IsPosixLocale (XLocaleOfIM (maMethod));
+    return False;
 }
 
 // ------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_im.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cp $ $Date: 2001-05-28 17:22:32 $
+ *  last change: $Author: cp $ $Date: 2001-07-18 10:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@ class SalI18N_InputMethod
 public:
 
     Bool        IsMultiLingual()        { return mbMultiLingual;    }
+    Bool        PosixLocale();
     Bool        UseMethod()             { return mbUseable; }
     XIM         GetMethod()             { return maMethod;  }
     void        HandleDestroyIM();

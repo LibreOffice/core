@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cp $ $Date: 2001-05-31 14:27:42 $
+ *  last change: $Author: cp $ $Date: 2001-07-18 10:21:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2001,20 +2001,20 @@ KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
 {
     KeySym nKeySym;
     memset( pPrintable, 0, *pLen );
+    *pStatusReturn = 0;
 
-    if ( (aInputContext == 0) || (pEvent->type == KeyRelease) )
+    if (   (aInputContext == 0)
+        || (pEvent->type == KeyRelease)
+        || (mpInputMethod != NULL && mpInputMethod->PosixLocale()) )
     {
-        XComposeStatus nStatus;
-        *pLen = XLookupString( pEvent, (char*)pPrintable, 1,
-                &nKeySym, &nStatus );
+        // XmbLookupString must not be called for KeyRelease events
+        // Cannot enter space in c locale problem #89616# #88978# btraq #4478197
+        *pLen = XLookupString( pEvent, (char*)pPrintable, 1, &nKeySym, NULL );
     }
     else
     {
-        *pStatusReturn = 0;
-        // not really sufficient for multibyte lookup: cannot handle more
-        // than one byte in sprintable, cannot handle conversion error
         *pLen = XmbLookupString( aInputContext,
-                      pEvent, (char*)pPrintable, *pLen - 1, &nKeySym, pStatusReturn );
+                        pEvent, (char*)pPrintable, *pLen - 1, &nKeySym, pStatusReturn );
 
         // Lookup the string again, now with appropriate size
         if ( *pStatusReturn == XBufferOverflow )
