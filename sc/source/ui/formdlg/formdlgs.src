@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formdlgs.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 20:48:14 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:51:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,7 +356,7 @@ TabPage RID_SCTAB_FUNCTION
         < "Статистические" ; Default ; > ;
         < "Таблица" ; Default ; > ;
         < "Текст" ; Default ; > ;
-        < "Надстройки" ; Default ; > ;
+        < "Add-In" ; Default ; > ;
     };
     StringList [ polish ] =
     {
@@ -384,7 +384,7 @@ TabPage RID_SCTAB_FUNCTION
         < "Џо•с" ; Default ; > ;
         < "_—ќ" ; Default ; > ;
         < "ђ”Љw" ; Default ; > ;
-        < "ПДШЇёЅ" ; Default ; > ;
+        < "ПДШёЅ" ; Default ; > ;
         < "“ќЊv" ; Default ; > ;
         < "•\\ЊvЋZ" ; Default ; > ;
         < "•¶Ћљ" ; Default ; > ;
@@ -909,7 +909,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ chinese_simplified ] = "ѕШХу(~X)";
         Text[ russian ] = "Матрица";
         Text[ polish ] = "Macierz";
-        Text[ japanese ] = "ПДШЇёЅ(~X)";
+        Text[ japanese ] = "ПДШёЅ(~X)";
         Text[ chinese_traditional ] = "Їx°}(~X)";
         Text[ arabic ] = "гХЭжЭЙ";
         Text[ greek ] = "МЮфсб";
@@ -1064,7 +1064,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text [ spanish ] = "AutoPiloto de funciones" ;
         Text [ english_us ] = "AutoPilot: Functions" ;
         Text[ chinese_simplified ] = "єЇКэЧФ¶ЇЦъАн";
-        Text[ russian ] = "Автопилот функции";
+        Text[ russian ] = "Автопилот функций";
         Text[ polish ] = "AutoPilot funkcji";
         Text[ japanese ] = "ЉЦђ”µ°ДКЯІЫЇД";
         Text[ chinese_traditional ] = "ЁзјЖ¦Ы°К§UІz";
@@ -1089,7 +1089,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text [ spanish ] = "AutoPiloto de funciones  - " ;
         Text [ english_us ] = "AutoPilot: Functions  -" ;
         Text[ chinese_simplified ] = "єЇКэЧФ¶ЇЦъАн  -";
-        Text[ russian ] = "Автопилот функции  -";
+        Text[ russian ] = "Автопилот функций  -";
         Text[ polish ] = "AutoPilot funkcji  -";
         Text[ japanese ] = "ЉЦђ”µ°ДКЯІЫЇД-";
         Text[ chinese_traditional ] = "ЁзјЖ¦Ы°К§UІz  -";
