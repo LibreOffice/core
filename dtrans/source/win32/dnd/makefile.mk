@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jl $ $Date: 2001-02-08 14:30:48 $
+#   last change: $Author: jl $ $Date: 2001-02-09 07:51:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,7 +88,7 @@ stoponerror=tr
 
 #DBG_CONSOLE_OUT: when IDropTarget or IDropSource are called we write to a console
 #DBG_CLIPBOARD_DATA: To provide DoDragDrop with an data object we call OleGetClipboard
-CFLAGS+= -DDBG_CONSOLE_OUT 
+#CFLAGS+= -DDBG_CONSOLE_OUT 
 
 SLOFILES=	$(OBJ)$/dndentry.obj	\
             $(OBJ)$/target.obj		\
