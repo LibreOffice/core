@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-18 13:42:33 $
+ *  last change: $Author: dv $ $Date: 2001-07-19 10:12:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,11 +189,12 @@ private:
     sal_Bool                mbResizeDisabled        : 1;
     sal_Bool                mbAutoResize            : 1;
     sal_Bool                mbContextMenuEnabled    : 1;
+    sal_Bool                mbEnableDelete          : 1;
 
     DECL_LINK( HeaderSelect_Impl, HeaderBar * );
     DECL_LINK( HeaderEndDrag_Impl, HeaderBar * );
 
-    void            DeleteEntry( SvLBoxEntry* pEntry );
+    void            DeleteEntries();
 
 public:
                     ViewTabListBox_Impl( Window* pParentWin,
@@ -212,6 +213,7 @@ public:
 
     HeaderBar*      GetHeaderBar() const { return mpHeaderBar; }
     void            EnableContextMenu( sal_Bool bEnable ) { mbContextMenuEnabled = bEnable; }
+    void            EnableDelete( sal_Bool bEnable ) { mbEnableDelete = bEnable; }
 };
 
 // class SvtFileView_Impl ---------------------------------------------
@@ -255,8 +257,9 @@ public:
                                             const OUString& rTitle );
 
     ULONG                   GetEntryPos( const OUString& rURL );
-    void                    EnableContextMenu( sal_Bool bEnable )
-                                    { mpView->EnableContextMenu( bEnable ); }
+
+    void                    EnableContextMenu( sal_Bool bEnable ) { mpView->EnableContextMenu( bEnable ); }
+    void                    EnableDelete( sal_Bool bEnable ) { mpView->EnableDelete( bEnable ); }
 
     void                    Resort_Impl( sal_Int16 nColumn, sal_Bool bAscending );
 };
@@ -335,7 +338,8 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
     mpParent        ( pParent ),
     mbResizeDisabled( sal_False ),
     mbAutoResize    ( sal_False ),
-    mbContextMenuEnabled ( sal_True )
+    mbContextMenuEnabled ( sal_True ),
+    mbEnableDelete  ( sal_True )
 
 {
     Size aBoxSize = pParentWin->GetSizePixel();
@@ -461,6 +465,11 @@ void ViewTabListBox_Impl::KeyInput( const KeyEvent& rKEvt )
 {
     if ( rKEvt.GetKeyCode().GetCode() == KEY_RETURN )
         GetDoubleClickHdl().Call( this );
+    else if ( ( rKEvt.GetKeyCode().GetCode() == KEY_DELETE ) &&
+              mbEnableDelete )
+    {
+        DeleteEntries();
+    }
     else
         SvHeaderTabListBox::KeyInput( rKEvt );
 }
@@ -483,7 +492,7 @@ void ViewTabListBox_Impl::Command( const CommandEvent& rCEvt )
             switch ( nId )
             {
                 case MID_FILEVIEW_DELETE :
-                    DeleteEntry( pEntry );
+                    DeleteEntries();
                     break;
                 case MID_FILEVIEW_RENAME :
                     EditEntry( pEntry );
@@ -505,27 +514,46 @@ void ViewTabListBox_Impl::ClearAll()
 }
 
 // -----------------------------------------------------------------------
-void ViewTabListBox_Impl::DeleteEntry( SvLBoxEntry* pEntry )
+void ViewTabListBox_Impl::DeleteEntries()
 {
-    DBG_ASSERT( pEntry, "Where has the entry gone?" );
-
+    svtools::QueryDeleteResult_Impl eResult = svtools::QUERYDELETE_YES;
+    SvLBoxEntry* pEntry = FirstSelected();
     String aURL;
-    if ( pEntry->GetUserData() )
-        aURL = ( (SvtContentEntry*)pEntry->GetUserData() )->maURL;
 
-    if ( ! aURL.Len() )
-        return;
-
-    INetURLObject aObj( aURL );
-
-    svtools::QueryDeleteDlg_Impl aDlg( NULL, aObj.GetName( INetURLObject::DECODE_WITH_CHARSET ) );
-
-    if ( aDlg.Execute() == RET_YES )
+    while ( pEntry && ( eResult != svtools::QUERYDELETE_CANCEL ) )
     {
-        if ( ::utl::UCBContentHelper::Kill( aURL ) )
+        SvLBoxEntry *pCurEntry = pEntry;
+        pEntry = NextSelected( pEntry );
+
+        if ( pCurEntry->GetUserData() )
+            aURL = ( (SvtContentEntry*)pCurEntry->GetUserData() )->maURL;
+
+        if ( !aURL.Len() )
+            return;
+
+        INetURLObject aObj( aURL );
+
+        if ( eResult != svtools::QUERYDELETE_ALL )
         {
-            RemoveSelection();
-            mpParent->EntryRemoved( aURL );
+            svtools::QueryDeleteDlg_Impl aDlg( NULL, aObj.GetName( INetURLObject::DECODE_WITH_CHARSET ) );
+
+            if ( GetSelectionCount() > 1 )
+                aDlg.EnableAllButton();
+
+            if ( aDlg.Execute() == RET_OK )
+                eResult = aDlg.GetResult();
+            else
+                eResult = svtools::QUERYDELETE_CANCEL;
+        }
+
+        if ( ( eResult == svtools::QUERYDELETE_ALL ) ||
+             ( eResult == svtools::QUERYDELETE_YES ) )
+        {
+            if ( ::utl::UCBContentHelper::Kill( aURL ) )
+            {
+                GetModel()->Remove( pCurEntry );
+                mpParent->EntryRemoved( aURL );
+            }
         }
     }
 }
@@ -948,6 +976,12 @@ void SvtFileView::EnableContextMenu( sal_Bool bEnable )
 }
 
 // -----------------------------------------------------------------------
+void SvtFileView::EnableDelete( sal_Bool bEnable )
+{
+    mpImp->EnableDelete( bEnable );
+}
+
+// -----------------------------------------------------------------------
 // -----------------------------------------------------------------------
 IMPL_LINK( SvtFileView, HeaderSelect_Impl, HeaderBar*, pBar )
 {
@@ -1140,6 +1174,9 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
         return;
 
     ::osl::MutexGuard aGuard( maMutex );
+
+    if ( maContent.size() == 0 )
+        return;
 
     sal_Bool bDelete;
 
@@ -1598,6 +1635,7 @@ QueryDeleteDlg_Impl::QueryDeleteDlg_Impl
     _aEntry     ( this, ResId( TXT_ENTRYNAME ) ),
     _aQueryMsg  ( this, ResId( TXT_QUERYMSG ) ),
     _aYesButton ( this, ResId( BTN_YES ) ),
+    _aAllButton ( this, ResId( BTN_ALL ) ),
     _aNoButton  ( this, ResId( BTN_NO ) ),
     _aCancelButton( this, ResId( BTN_CANCEL ) )
 
@@ -1607,6 +1645,7 @@ QueryDeleteDlg_Impl::QueryDeleteDlg_Impl
     // Handler
     Link aLink( STATIC_LINK( this, QueryDeleteDlg_Impl, ClickLink ) );
     _aYesButton.SetClickHdl( aLink );
+    _aAllButton.SetClickHdl( aLink );
     _aNoButton.SetClickHdl( aLink );
 
     // Anzeige der spezifizierten Texte
@@ -1628,9 +1667,15 @@ IMPL_STATIC_LINK( QueryDeleteDlg_Impl, ClickLink, PushButton*, pBtn )
 
 {
     if ( pBtn == &pThis->_aYesButton )
-        pThis->EndDialog( RET_YES );
-    else
-        pThis->EndDialog( RET_NO );
+        pThis->_eResult = QUERYDELETE_YES;
+    else if ( pBtn == &pThis->_aNoButton )
+        pThis->_eResult = QUERYDELETE_NO;
+    else if ( pBtn == &pThis->_aAllButton )
+        pThis->_eResult = QUERYDELETE_ALL;
+    else if ( pBtn == &pThis->_aCancelButton )
+        pThis->_eResult = QUERYDELETE_CANCEL;
+
+    pThis->EndDialog( RET_OK );
 
     return 0;
 }
