@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mba $ $Date: 2001-01-25 15:37:53 $
+ *  last change: $Author: mba $ $Date: 2001-02-09 11:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,6 @@ String SfxHelp_Impl::GetHelpModuleName( ULONG nHelpId )
             aModuleName = String::CreateFromAscii( pViewFrame->GetObjectShell()->GetFactory().GetShortName() );
     }
 
-
     // cut sub factoryname, if necessary
     xub_StrLen nPos = aModuleName.Search( '/' );
     if ( nPos != STRING_NOTFOUND )
@@ -197,52 +196,83 @@ BOOL SfxHelp_Impl::Start( ULONG nHelpId )
 
     // build up the help URL
     sal_Bool bNewWin = !( xFrame.is() );
-    String aHelpURL( String::CreateFromAscii("vnd.sun.star.help://") );
-    aHelpURL += aHelpModuleName;
-
-#if SUPD == 614
-    if ( 1 )
-#else
-    if ( !nHelpId || bNewWin )
-#endif
-    {
-        aHelpURL += String( DEFINE_CONST_UNICODE("/start") );
-    }
-    else
-    {
-        aHelpURL += '/';
-        aHelpURL += String::CreateFromInt32( nHelpId );
-    }
-
-    AppendConfigToken_Impl( aHelpURL, sal_True );
-
+    String aHelpURL;
     if ( aTicket.Len() )
     {
-        // if there is a ticket, we are inside a plugin, so a request including the URL must be posted
-//        if ( !xFrame.is() )
-            // must be created on dispatch
-//            nFlag |= FrameSearchFlag::CREATE;
-        // encode the help URL because it is a parameter of another URL
-        String aEncodedURL = INetURLObject::encode(
-            aHelpURL, INetURLObject::PART_MAILTO, '%', INetURLObject::ENCODE_ALL );
-        String aURL;
-        aURL = DEFINE_CONST_UNICODE("vnd.sun.star.cmd:help?");
-        aURL += DEFINE_CONST_UNICODE("HELP_Request_Mode=contextIndex&HELP_Session_Mode=context&HELP_Url=");
-        aURL += aEncodedURL;
-        aURL += '&';
-        aURL += DEFINE_CONST_UNICODE("HELP_ProgramID=");
-        aURL += GetHelpModuleName( nHelpId );
-        aURL += '&';
-        aURL += DEFINE_CONST_UNICODE("HELP_User=");
-        aURL += aUser;
-        aURL += '&';
-        aURL += DEFINE_CONST_UNICODE("HELP_Ticket=");
-        aURL += aTicket;
-        aHelpURL = aURL;
+        // if there is a ticket, we are inside a plugin, so a special Help URL must be sent
+        aHelpURL = DEFINE_CONST_UNICODE("vnd.sun.star.cmd:help?");
+        aHelpURL += DEFINE_CONST_UNICODE("HELP_Request_Mode=contextIndex&HELP_Session_Mode=context&HELP_CallMode=portal&HELP_Device=html");
+
+        if ( !nHelpId || bNewWin )
+        {
+            aHelpURL += DEFINE_CONST_UNICODE("&startId=go");
+        }
+        else
+        {
+            aHelpURL += DEFINE_CONST_UNICODE("&HELP_ContextID=-");
+            aHelpURL += String::CreateFromInt32( nHelpId );
+        }
+
+        aHelpURL += DEFINE_CONST_UNICODE("&HELP_ProgramID=");
+        aHelpURL += GetHelpModuleName( nHelpId );
+        aHelpURL += DEFINE_CONST_UNICODE("&HELP_User=");
+        aHelpURL += aUser;
+        aHelpURL += DEFINE_CONST_UNICODE("&HELP_Ticket=");
+        aHelpURL += aTicket;
+
+        Any aLocale = ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty( ::utl::ConfigManager::LOCALE );
+        ::rtl::OUString aLocaleStr;
+        if ( !( aLocale >>= aLocaleStr ) )
+            aLocaleStr = ::rtl::OUString( DEFINE_CONST_UNICODE("en") );
+        String aLanguage;
+        String aCountry;
+        sal_Int32 nSepPos = aLocaleStr.indexOf( '_' );
+        if ( nSepPos != -1 )
+        {
+            aLanguage = aLocaleStr.copy( 0, nSepPos );
+            aCountry = aLocaleStr.copy( nSepPos+1 );
+        }
+        else
+        {
+            nSepPos = aLocaleStr.indexOf( '-' );
+            if ( nSepPos != -1 )
+            {
+                aLanguage = aLocaleStr.copy( 0, nSepPos );
+                aCountry = aLocaleStr.copy( nSepPos+1 );
+            }
+            else
+            {
+                aLanguage = aLocaleStr;
+            }
+        }
+
+        aHelpURL += DEFINE_CONST_UNICODE("&HELP_Language=");
+        aHelpURL += aLanguage;
+        if ( aCountry.Len() )
+        {
+            aHelpURL += DEFINE_CONST_UNICODE("&HELP_Country=");
+            aHelpURL += aCountry;
+        }
+
         xFrame = Reference < XDispatchProvider > ( xActiveTask, UNO_QUERY );
     }
     else
     {
+        aHelpURL = String::CreateFromAscii("vnd.sun.star.help://");
+        aHelpURL += aHelpModuleName;
+
+        if ( !nHelpId || bNewWin )
+        {
+            aHelpURL += String( DEFINE_CONST_UNICODE("/start") );
+        }
+        else
+        {
+            aHelpURL += '/';
+            aHelpURL += String::CreateFromInt32( nHelpId );
+        }
+
+        AppendConfigToken_Impl( aHelpURL, sal_True );
+
         // otherwise the URL can be dispatched to the help frame
         if ( !xFrame.is() )
         {
