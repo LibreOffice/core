@@ -2,9 +2,9 @@
  *
  *  $RCSfile: closedispatcher.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:19:37 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:33:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,10 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
+#include <com/sun/star/frame/XStatusListener.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_FRAME_XNOTIFYINGDISPATCH_HPP_
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #endif
@@ -162,7 +166,8 @@ namespace framework{
     @threadsafe     yes
 *//*-*************************************************************************************************************/
 class CloseDispatcher : public css::lang::XTypeProvider
-                      , public css::frame::XNotifyingDispatch // => XDispatch
+                      , public css::frame::XNotifyingDispatch   // => XDispatch
+                      , public css::frame::XStatusListener      // => XEventListener
                         // baseclasses ... order is neccessary for right initialization!
                       , private ThreadHelpBase
                       , public  ::cppu::OWeakObject
@@ -235,6 +240,12 @@ class CloseDispatcher : public css::lang::XTypeProvider
                                                     const css::util::URL&                                     aURL      ) throw(css::uno::RuntimeException);
         virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener ,
                                                     const css::util::URL&                                     aURL      ) throw(css::uno::RuntimeException);
+
+        // XStatusListener
+        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& aState ) throw(css::uno::RuntimeException);
+
+        // XEventListener
+        virtual void SAL_CALL disposing( const css::lang::EventObject& aSource ) throw(css::uno::RuntimeException);
 
     //_____________________________________________
     // internal helper
