@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-17 10:24:33 $
+ *  last change: $Author: mt $ $Date: 2002-07-24 13:18:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1043,7 +1043,9 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
     {
         BOOL bVertical = IsVertical();
 
-        Rectangle aBulletArea( ImpCalcBulletArea( nPara, TRUE ) );
+        BOOL bRightToLeftPara = pEditEngine->IsRightToLeft( nPara );
+
+        Rectangle aBulletArea( ImpCalcBulletArea( nPara, TRUE, FALSE ) );
 
         Paragraph* pPara = pParaList->GetParagraph( nPara );
         const SvxNumberFormat* pFmt = ImplGetBullet( nPara );
@@ -1058,8 +1060,11 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
                 Point aTextPos;
                 if ( !bVertical )
                 {
-                    aTextPos.X() = rStartPos.X() + aBulletArea.Left();
                     aTextPos.Y() = rStartPos.Y() + aBulletArea.Bottom();
+                    if ( !bRightToLeftPara )
+                        aTextPos.X() = rStartPos.X() + aBulletArea.Left();
+                    else
+                        aTextPos.X() = rStartPos.X() + GetPaperSize().Width() - aBulletArea.Right();
                 }
                 else
                 {
@@ -1119,13 +1124,21 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
                         Size aTextSz;
                         aTextSz.Width() = pOutDev->GetTextWidth( aPageText );
                         aTextSz.Height() = pOutDev->GetTextHeight();
-                        long nBulletHeight = aBulletArea.GetHeight();
+                        long nBulletHeight = !bVertical ? aBulletArea.GetHeight() : aBulletArea.GetWidth();
                         if ( !bVertical )
                         {
-                            aTextPos.X() -= aTextSz.Width();
-                            aTextPos.X() -= aTextSz.Height() / 8;
                             aTextPos.Y() -= nBulletHeight / 2;
                             aTextPos.Y() += aTextSz.Height() / 2;
+                            if ( !bRightToLeftPara )
+                            {
+                                aTextPos.X() -= aTextSz.Width();
+                                aTextPos.X() -= aTextSz.Height() / 8;
+                            }
+                            else
+                            {
+                                aTextPos.X() += aTextSz.Width();
+                                aTextPos.X() += aTextSz.Height() / 8;
+                            }
                         }
                         else
                         {
@@ -1159,15 +1172,17 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
                         Point aBulletPos;
                         if ( !bVertical )
                         {
-                            aBulletPos.X() = rStartPos.X() + aBulletArea.Left();
                             aBulletPos.Y() = rStartPos.Y() + aBulletArea.Top();
+                            if ( !bRightToLeftPara )
+                                aBulletPos.X() = rStartPos.X() + aBulletArea.Left();
+                            else
+                                aBulletPos.X() = rStartPos.X() + GetPaperSize().Width() - aBulletArea.Right();
                         }
                         else
                         {
                             aBulletPos.X() = rStartPos.X() - aBulletArea.Bottom();
                             aBulletPos.Y() = rStartPos.Y() + aBulletArea.Left();
                         }
-
 
                         // MT: Remove CAST when KA made the Draw-Method const
                         ((GraphicObject*)pFmt->GetBrush()->GetGraphicObject())->Draw( pOutDev, aBulletPos, pPara->aBulSize );
@@ -1185,8 +1200,11 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
             Point aStartPos, aEndPos;
             if ( !bVertical )
             {
-                aStartPos.X() = rStartPos.X() + aBulletArea.Right();
                 aStartPos.Y() = rStartPos.Y() + aBulletArea.Bottom();
+                if ( !bRightToLeftPara )
+                    aStartPos.X() = rStartPos.X() + aBulletArea.Right();
+                else
+                    aStartPos.X() = rStartPos.X() + GetPaperSize().Width() - aBulletArea.Left();
                 aEndPos = aStartPos;
                 aEndPos.X() += nWidth;
             }
@@ -1788,7 +1806,7 @@ void Outliner::StyleSheetChanged( SfxStyleSheet* pStyle )
     }
 }
 
-Rectangle Outliner::ImpCalcBulletArea( USHORT nPara, BOOL bAdjust )
+Rectangle Outliner::ImpCalcBulletArea( USHORT nPara, BOOL bAdjust, BOOL bReturnPaperPos )
 {
     // Bullet-Bereich innerhalb des Absatzes...
     Rectangle aBulletArea;
@@ -1858,6 +1876,30 @@ Rectangle Outliner::ImpCalcBulletArea( USHORT nPara, BOOL bAdjust )
 
         aBulletArea = Rectangle( aTopLeft, aBulletSize );
     }
+    if ( bReturnPaperPos )
+    {
+        Size aBulletSize( aBulletArea.GetSize() );
+        Point aBulletDocPos( aBulletArea.TopLeft() );
+        aBulletDocPos.Y() += pEditEngine->GetDocPosTopLeft( nPara ).Y();
+        Point aBulletPos( aBulletDocPos );
+
+        if ( IsVertical() )
+        {
+            aBulletPos.Y() = aBulletDocPos.X();
+            aBulletPos.X() = GetPaperSize().Width() - aBulletDocPos.Y();
+            // Rotate:
+            aBulletPos.X() -= aBulletSize.Height();
+            Size aSz( aBulletSize );
+            aBulletSize.Width() = aSz.Height();
+            aBulletSize.Height() = aSz.Width();
+        }
+        else if ( pEditEngine->IsRightToLeft( nPara ) )
+        {
+            aBulletPos.X() = GetPaperSize().Width() - aBulletDocPos.X() - aBulletSize.Width();
+        }
+
+        aBulletArea = Rectangle( aBulletPos, aBulletSize );
+    }
     return aBulletArea;
 }
 
@@ -1900,10 +1942,7 @@ EBulletInfo Outliner::GetBulletInfo( USHORT nPara )
 
     if ( aInfo.bVisible )
     {
-        aInfo.aBounds = ImpCalcBulletArea( nPara, TRUE );
-        Point aParaXY = pEditEngine->GetDocPosTopLeft( nPara );
-        aInfo.aBounds.Top() += aParaXY.Y();
-        aInfo.aBounds.Bottom() += aParaXY.Y();
+        aInfo.aBounds = ImpCalcBulletArea( nPara, TRUE, TRUE );
     }
 
     return aInfo;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlvw.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-14 11:01:23 $
+ *  last change: $Author: mt $ $Date: 2002-07-24 13:18:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,6 @@ OutlinerView::OutlinerView( Outliner* pOut, Window* pWin )
     DBG_CTOR( OutlinerView, 0 );
 
     pOwner                      = pOut;
-    ePrevMouseTarget            = MouseDontKnow;
-//  bBeginDragAtMove            = FALSE;
     bDDCursorVisible            = FALSE;
     bInDragMode                 = FALSE;
     nDDScrollLRBorderWidthWin   = 0;
@@ -159,15 +157,6 @@ BOOL OutlinerView::PostKeyEvent( const KeyEvent& rKEvt )
     {
         if ( ImpCalcSelectedPages( FALSE ) && !pOwner->ImpCanDeleteSelectedPages( this ) )
             return TRUE;
-    }
-
-    // #80304# Enable vertical writing, we don't have an UI yet
-    if ( ( rKEvt.GetKeyCode().GetCode() == KEY_V ) && rKEvt.GetKeyCode().IsMod1() && rKEvt.GetKeyCode().IsMod2() )
-    {
-        pOwner->SetVertical( !pOwner->IsVertical() );
-        pEditView->SetVisArea( Rectangle( Point(), Size() ) );
-        GetWindow()->Invalidate();
-        return TRUE;
     }
 
     if ( eFunc != KEYFUNC_DONTKNOW )
@@ -315,109 +304,61 @@ BOOL OutlinerView::PostKeyEvent( const KeyEvent& rKEvt )
 }
 
 
-ULONG OutlinerView::ImpCheckMousePos(const Point& rPosPix,MouseTarget& reTarget)
+ULONG OutlinerView::ImpCheckMousePos(const Point& rPosPix, MouseTarget& reTarget)
 {
     DBG_CHKTHIS(OutlinerView,0);
     ULONG nPara = EE_PARA_NOT_FOUND;
 
-    Point aMousePosWin( rPosPix );
-    aMousePosWin = pEditView->GetWindow()->PixelToLogic( rPosPix );
-
+    Point aMousePosWin = pEditView->GetWindow()->PixelToLogic( rPosPix );
     if( !pEditView->GetOutputArea().IsInside( aMousePosWin ) )
+    {
         reTarget = MouseOutside;
+    }
     else
     {
         reTarget = MouseText;
 
-        // MT 04/00: ImpEditView::GetDocPos => An EditView anbieten!
-        Point aDocPos( aMousePosWin );
+        Point aPaperPos( aMousePosWin );
         Rectangle aOutArea = pEditView->GetOutputArea();
         Rectangle aVisArea = pEditView->GetVisArea();
-        aDocPos.Y() -= aOutArea.Top();
-        aDocPos.X() -= aOutArea.Left();
-        aDocPos.Y() += aVisArea.Top();
-        aDocPos.X() += aVisArea.Left();
-        // MT: Dieser Code ist doppelt (Outliner::IsTextPos() )
-        // => Mal eine Methode anbieten, jetzt muesste ich dafür aber branchen => spaeter
-        // Dann wird wahrscheinlich EditView::GetDocPosTopLeft ueberfluessig
-        // Bullet?
-        nPara = pOwner->pEditEngine->FindParagraph( aDocPos.Y() );
-        if ( ( nPara != EE_PARA_NOT_FOUND ) && pOwner->ImplHasBullet( (USHORT)nPara ) )
+        aPaperPos.X() -= aOutArea.Left();
+        aPaperPos.X() += aVisArea.Left();
+        aPaperPos.Y() -= aOutArea.Top();
+        aPaperPos.Y() += aVisArea.Top();
+
+        BOOL bBullet;
+        if ( pOwner->IsTextPos( aPaperPos, 0, &bBullet ) )
         {
-            Rectangle aBulArea = pOwner->ImpCalcBulletArea( (USHORT)nPara, TRUE );
-            Point aParaXY = pOwner->pEditEngine->GetDocPosTopLeft( (USHORT)nPara );
-            aBulArea.Top() += aParaXY.Y();
-            aBulArea.Bottom() += aParaXY.Y();
-            if ( aBulArea.IsInside( aDocPos ) )
+            if ( bBullet )
             {
                 reTarget = MouseBullet;
+            }
+            else
+            {
+                // Check for hyperlink
+                const SvxFieldItem* pFieldItem = pEditView->GetField( aMousePosWin );
+                if ( pFieldItem && pFieldItem->GetField() && pFieldItem->GetField()->ISA( SvxURLField ) )
+                    reTarget = MouseHypertext;
             }
         }
     }
     return nPara;
 }
 
-
-Pointer OutlinerView::ImpGetMousePointer( MouseTarget eTarget )
-{
-    DBG_CHKTHIS(OutlinerView,0);
-
-    switch(eTarget)
-    {
-        case MouseText:
-        {
-            if(GetOutliner() && GetOutliner()->IsVertical())
-                return Pointer(POINTER_TEXT_VERTICAL);
-            return Pointer(POINTER_TEXT);
-        }
-        case MouseBullet:
-        {
-            return Pointer(POINTER_MOVE);
-        }
-        case MouseNodeButton:
-        case MouseOutside:
-        {
-            return Pointer(POINTER_ARROW);
-        }
-        default:
-        {
-            DBG_ERROR( "ImpGetMousePointer - Unknown Target!" );
-            return Pointer(POINTER_ARROW);
-        }
-    }
-}
-
-
-void OutlinerView::ImpSetMousePointer( MouseTarget eTarget )
-{
-    DBG_CHKTHIS(OutlinerView,0);
-    if( eTarget == MouseOutside )
-        ePrevMouseTarget = MouseOutside;
-    else if ( eTarget != ePrevMouseTarget )
-    {
-        ePrevMouseTarget = eTarget;
-        pEditView->GetWindow()->SetPointer( ImpGetMousePointer( eTarget ) );
-    }
-}
-
-
 BOOL __EXPORT OutlinerView::MouseMove( const MouseEvent& rMEvt )
 {
     DBG_CHKTHIS(OutlinerView,0);
+
     if( ( pOwner->ImplGetOutlinerMode() == OUTLINERMODE_TEXTOBJECT ) || pEditView->GetEditEngine()->IsInSelectionMode())
         return pEditView->MouseMove( rMEvt );
 
-//  if ( bBeginDragAtMove )
-//      return TRUE;
-//  else
-    {
-        MouseTarget eTarget;
-        ImpCheckMousePos( rMEvt.GetPosPixel(), eTarget );
-        ImpSetMousePointer( eTarget );
-        if ( eTarget != MouseOutside )
-            return pEditView->MouseMove( rMEvt );
-    }
-    return FALSE;
+    Point aMousePosWin( pEditView->GetWindow()->PixelToLogic( rMEvt.GetPosPixel() ) );
+    if( !pEditView->GetOutputArea().IsInside( aMousePosWin ) )
+        return FALSE;
+
+    Pointer aPointer = GetPointer( rMEvt.GetPosPixel() );
+    pEditView->GetWindow()->SetPointer( aPointer );
+    return pEditView->MouseMove( rMEvt );
 }
 
 
@@ -427,12 +368,15 @@ BOOL __EXPORT OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
     if ( ( pOwner->ImplGetOutlinerMode() == OUTLINERMODE_TEXTOBJECT ) || pEditView->GetEditEngine()->IsInSelectionMode() )
         return pEditView->MouseButtonDown( rMEvt );
 
-    MouseTarget eTarget;
-    ULONG nPara = ImpCheckMousePos( rMEvt.GetPosPixel(), eTarget );
-    if ( eTarget == MouseOutside )
+    Point aMousePosWin( pEditView->GetWindow()->PixelToLogic( rMEvt.GetPosPixel() ) );
+    if( !pEditView->GetOutputArea().IsInside( aMousePosWin ) )
         return FALSE;
 
-    ImpSetMousePointer( eTarget );
+    Pointer aPointer = GetPointer( rMEvt.GetPosPixel() );
+    pEditView->GetWindow()->SetPointer( aPointer );
+
+    MouseTarget eTarget;
+    ULONG nPara = ImpCheckMousePos( rMEvt.GetPosPixel(), eTarget );
     if ( eTarget == MouseBullet )
     {
         Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
@@ -449,7 +393,6 @@ BOOL __EXPORT OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
         else if( rMEvt.GetClicks() == 2 && bHasChilds )
             ImpToggleExpand( pPara );
 
-//      bBeginDragAtMove = TRUE;
         aDDStartPosPix = rMEvt.GetPosPixel();
         aDDStartPosRef=pEditView->GetWindow()->PixelToLogic( aDDStartPosPix,pOwner->GetRefMapMode());
         return TRUE;
@@ -464,12 +407,13 @@ BOOL __EXPORT OutlinerView::MouseButtonUp( const MouseEvent& rMEvt )
     if ( ( pOwner->ImplGetOutlinerMode() == OUTLINERMODE_TEXTOBJECT ) || pEditView->GetEditEngine()->IsInSelectionMode() )
         return pEditView->MouseButtonUp( rMEvt );
 
-    MouseTarget eTarget;
-//  bBeginDragAtMove = FALSE;
-    ImpCheckMousePos( rMEvt.GetPosPixel(), eTarget );
-    if ( eTarget == MouseOutside )
+    Point aMousePosWin( pEditView->GetWindow()->PixelToLogic( rMEvt.GetPosPixel() ) );
+    if( !pEditView->GetOutputArea().IsInside( aMousePosWin ) )
         return FALSE;
-    ImpSetMousePointer( eTarget );
+
+    Pointer aPointer = GetPointer( rMEvt.GetPosPixel() );
+    pEditView->GetWindow()->SetPointer( aPointer );
+
     return pEditView->MouseButtonUp( rMEvt );
 }
 
@@ -1157,15 +1101,25 @@ void OutlinerView::SetStyleSheet( SfxStyleSheet* pStyle )
 Pointer OutlinerView::GetPointer( const Point& rPosPixel )
 {
     DBG_CHKTHIS(OutlinerView,0);
+
     MouseTarget eTarget;
     ImpCheckMousePos( rPosPixel, eTarget );
-    Pointer aPointer = ImpGetMousePointer( eTarget );
-    Point aPos = rPosPixel;
-    aPos = pEditView->GetWindow()->PixelToLogic( aPos );
-    const SvxFieldItem* pField = pEditView->GetField( aPos );
-    if ( pField && pField->GetField() && pField->GetField()->ISA( SvxURLField ) )
-        aPointer = Pointer( POINTER_REFHAND );
-    return aPointer;
+
+    PointerStyle ePointerStyle = POINTER_ARROW;
+    if ( eTarget == MouseText )
+    {
+        ePointerStyle = GetOutliner()->IsVertical() ? POINTER_TEXT_VERTICAL : POINTER_TEXT;
+    }
+    else if ( eTarget == MouseHypertext )
+    {
+        ePointerStyle = POINTER_REFHAND;
+    }
+    else if ( eTarget == MouseBullet )
+    {
+        ePointerStyle = POINTER_MOVE;
+    }
+
+    return Pointer( ePointerStyle );
 }
 
 

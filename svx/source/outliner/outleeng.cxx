@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outleeng.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2002-05-17 12:24:27 $
+ *  last change: $Author: mt $ $Date: 2002-07-24 13:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ Rectangle OutlinerEditEng::GetBulletArea( USHORT nPara )
     if ( nPara < pOwner->pParaList->GetParagraphCount() )
     {
         if ( pOwner->ImplHasBullet( nPara ) )
-            aBulletArea = pOwner->ImpCalcBulletArea( nPara, FALSE );
+            aBulletArea = pOwner->ImpCalcBulletArea( nPara, FALSE, FALSE );
     }
     return aBulletArea;
 }

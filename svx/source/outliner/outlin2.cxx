@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlin2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-31 09:39:42 $
+ *  last change: $Author: mt $ $Date: 2002-07-24 13:18:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -595,24 +595,27 @@ Point Outliner::GetDocPosTopLeft( ULONG nParagraph )
 
 BOOL Outliner::IsTextPos( const Point& rPaperPos, USHORT nBorder )
 {
+    return IsTextPos( rPaperPos, nBorder, NULL );
+}
+
+BOOL Outliner::IsTextPos( const Point& rPaperPos, USHORT nBorder, BOOL* pbBullet )
+{
     DBG_CHKTHIS(Outliner,0);
+    if ( pbBullet)
+        *pbBullet = FALSE;
     BOOL bTextPos = pEditEngine->IsTextPos( rPaperPos, nBorder );
     if ( !bTextPos )
     {
-        // MT: Dieser Code ist doppelt (OutlinerView::ImpCheckMousePos)
-        // => Mal eine Methode anbieten, jetzt muesste ich dafür aber branchen => spaeter
-        // Bullet?
         Point aDocPos = GetDocPos( rPaperPos );
         USHORT nPara = pEditEngine->FindParagraph( aDocPos.Y() );
         if ( ( nPara != EE_PARA_NOT_FOUND ) && ImplHasBullet( nPara ) )
         {
-            Rectangle aBulArea = ImpCalcBulletArea( nPara, TRUE );
-            Point aParaXY = pEditEngine->GetDocPosTopLeft( nPara );
-            aBulArea.Top() += aParaXY.Y();
-            aBulArea.Bottom() += aParaXY.Y();
-            if ( aBulArea.IsInside( aDocPos ) )
+            Rectangle aBulArea = ImpCalcBulletArea( nPara, TRUE, TRUE );
+            if ( aBulArea.IsInside( rPaperPos ) )
             {
                 bTextPos = TRUE;
+                if ( pbBullet)
+                    *pbBullet = TRUE;
             }
         }
     }
