@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hdu $ $Date: 2002-07-22 12:53:25 $
+ *  last change: $Author: vg $ $Date: 2002-07-22 16:44:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,10 @@
 #include <sallayout.hxx>
 #ifndef REMOTE_APPSERVER
 #include <svsys.h>
+#include <salgdi.hxx>
 #else
 #include <rmoutdev.hxx>
 #endif
-#include <salgdi.hxx>
 #include <osl/thread.h>
 
 #include "implncvt.hxx"
@@ -957,17 +957,14 @@ sal_Int32 PDFWriterImpl::emitEmbeddedFont( ImplFontData* pFont )
     sal_Int32 nStreamObject = 0;
     sal_Int32 nFontDescriptor = 0;
 
+#ifndef REMOTE_APPSERVER
+    // TODO: REMOTE_APPSERVER case
     FontSubsetInfo aInfo;
     sal_Int32 pWidths[256];
     const unsigned char* pFontData = NULL;
     long nFontLen = 0;
     sal_Int32 nLength1, nLength2;
-#ifndef REMOTE_APPSERVER
     if( pFontData = (const unsigned char*)m_pReferenceDevice->mpGraphics->GetEmbedFontData( pFont, pWidths, aInfo, &nFontLen ) )
-#else
-    // TODO: REMOTE_APPSERVER case
-    if( 0 )
-#endif
     {
         if( aInfo.m_nFontType != SAL_FONTSUBSETINFO_TYPE_TYPE1 )
             goto streamend;
@@ -1288,8 +1285,6 @@ sal_Int32 PDFWriterImpl::emitEmbeddedFont( ImplFontData* pFont )
     }
 
   streamend:
-
-#ifndef REMOTE_APPSERVER
     if( pFontData )
         m_pReferenceDevice->mpGraphics->FreeEmbedFontData( pFontData, nFontLen );
 #endif
@@ -1369,6 +1364,8 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding, sal_Unicode*
 
 sal_Int32 PDFWriterImpl::emitFontDescriptor( ImplFontData* pFont, FontSubsetInfo& rInfo, sal_Int32 nSubsetID, sal_Int32 nFontStream )
 {
+#ifndef REMOTE_APPSERVER
+// TODO: REMOTE_APPSERVER case
     OStringBuffer aLine( 1024 );
     // get font flags, see PDF reference 1.4 p. 358
     // possibly characters outside Adobe standard encoding
@@ -1433,6 +1430,9 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( ImplFontData* pFont, FontSubsetInfo
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 
     return nFontDescriptor;
+#else
+    return 0;
+#endif
 }
 
 sal_Int32 PDFWriterImpl::emitFonts()
@@ -1483,13 +1483,10 @@ sal_Int32 PDFWriterImpl::emitFonts()
                 nGlyphs++;
             }
             // TODO: when is osl_getTempFile available ?
-            FontSubsetInfo aSubsetInfo;
 #ifndef REMOTE_APPSERVER
+            // TODO: REMOTE_APPSERVER case
+            FontSubsetInfo aSubsetInfo;
             if( m_pReferenceDevice->mpGraphics->CreateFontSubset( aTmpName, it->first, pGlyphIDs, pEncoding, pWidths, nGlyphs, aSubsetInfo ) )
-#else
-                // TODO: REMOTE_APPSERVER case
-            if( 0 )
-#endif
             {
                 DBG_ASSERT( aSubsetInfo.m_nFontType == SAL_FONTSUBSETINFO_TYPE_TRUETYPE, "wrong font type in font subset" );
                 // create font stream
@@ -1565,6 +1562,7 @@ sal_Int32 PDFWriterImpl::emitFonts()
 
                 aFontIDToObject[ lit->m_nFontID ] = nFontObject;
             }
+#endif
             osl_removeFile( aTmpName.pData );
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hdu $ $Date: 2002-02-15 16:57:30 $
+ *  last change: $Author: vg $ $Date: 2002-07-22 16:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,9 @@
 #define EXTENDED_FONTSTRUCT_HXX
 
 #ifndef _XLIB_H_
+#include <prex.h>
 #include <X11/Xlib.h>
+#include <postx.h>
 #endif
 #ifndef _REF_HXX
 #include <tools/ref.hxx>
