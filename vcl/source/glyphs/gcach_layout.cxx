@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.10 $
- *  last change: $Author: hdu $ $Date: 2002-06-13 19:21:56 $
+ *  $Revision: 1.11 $
+ *  last change: $Author: hdu $ $Date: 2002-07-24 16:44:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ ServerFontLayout* ServerFontLayoutEngine::operator()( ServerFont* pFont,
                     nGlyphWidth = pGlyphBuffer[i-1].mnOrigWidth;
                     nDelta = (nDelta * nGlyphWidth + 2) / 4;
                     if( i == nGlyphCount )
-                        pGlyphBuffer[i].mnNewWidth += nDelta;
+                        pGlyphBuffer[i-1].mnNewWidth += nDelta;
                     nOffset += nDelta;
                 }
             }
