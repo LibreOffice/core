@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sta_list.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:39:52 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:06:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,8 +128,8 @@ ULONG StatementList::nWindowWaitOldHelpId = 0;
 ULONG StatementList::nWindowWaitOldUniqueId = 0;
 USHORT StatementList::nUseBindings = 0;
 
-USHORT StatementList::nSubMenuId1 = 0;  // Untermenüs bei PopupMenus
-USHORT StatementList::nSubMenuId2 = 0;  // erstmal 2-Stufig
+SmartId StatementList::aSubMenuId1 = SmartId(); // Untermenüs bei PopupMenus
+SmartId StatementList::aSubMenuId2 = SmartId(); // erstmal 2-Stufig
 SystemWindow *StatementList::pMenuWindow = NULL;
 TTProperties *StatementList::pTTProperties = NULL;
 
@@ -164,7 +164,7 @@ void StatementList::InitProfile()
 
 #if OSL_DEBUG_LEVEL > 1
         if ( pCurrentProfileStatement != NULL && pCurrentProfileStatement != this )
-            pRet->GenReturn( RET_ProfileInfo, 0, CUniString("InitProfile von anderem Statement gerufen ohne SendProfile\n") );
+            pRet->GenReturn( RET_ProfileInfo, SmartId(), CUniString("InitProfile von anderem Statement gerufen ohne SendProfile\n") );
 #endif
         pCurrentProfileStatement = this;
     }
@@ -180,18 +180,18 @@ void StatementList::SendProfile( String aText )
                 pProfiler->EndProfileInterval();
 
             if ( pProfiler->IsProfilingPerCommand() )
-                pRet->GenReturn( RET_ProfileInfo, 0, pProfiler->GetProfileLine( aText ) );
+                pRet->GenReturn( RET_ProfileInfo, SmartId(), pProfiler->GetProfileLine( aText ) );
 
             if ( pProfiler->IsPartitioning() )
-                pRet->GenReturn( RET_ProfileInfo, S_ProfileTime, pProfiler->GetPartitioningTime() );
+                pRet->GenReturn( RET_ProfileInfo, SmartId( S_ProfileTime ), pProfiler->GetPartitioningTime() );
         }
 
         if ( pProfiler->IsAutoProfiling() )
-            pRet->GenReturn( RET_ProfileInfo, 0, pProfiler->GetAutoProfiling() );
+            pRet->GenReturn( RET_ProfileInfo, SmartId(), pProfiler->GetAutoProfiling() );
 
 #if OSL_DEBUG_LEVEL > 1
         if ( pCurrentProfileStatement == NULL )
-            pRet->GenReturn( RET_ProfileInfo, 0, CUniString("SendProfile ohne InitProfile\n") );
+            pRet->GenReturn( RET_ProfileInfo, SmartId(), CUniString("SendProfile ohne InitProfile\n") );
 #endif
         pCurrentProfileStatement = NULL;
     }
@@ -392,8 +392,8 @@ BOOL SearchUID::IsWinOK( Window *pWin )
 {
 //  #97961# tabpages on non tabdialogs don't set the ID of the dialog and thus have to be acessible by themselves.
 //  it is unclear why these were excluded in the first place
-//  if ( pWin->GetUniqueOrHelpId() == nUId && ( pWin->GetType() != WINDOW_TABPAGE || pWin->GetWindow( WINDOW_REALPARENT )->GetType() != WINDOW_TABCONTROL ) )
-    if ( pWin->GetUniqueOrHelpId() == nUId )
+//  if ( pWin->GetUniqueOrHelpId() == aUId && ( pWin->GetType() != WINDOW_TABPAGE || pWin->GetWindow( WINDOW_REALPARENT )->GetType() != WINDOW_TABCONTROL ) )
+    if ( aUId.Equals( pWin->GetUniqueOrHelpId() ) )
     {
         if ( ( pWin->IsEnabled() || HasSearchFlag( SEARCH_FIND_DISABLED ) ) && pWin->IsVisible() )
             return TRUE;
@@ -407,10 +407,21 @@ BOOL SearchUID::IsWinOK( Window *pWin )
     else if ( pWin->GetType() == WINDOW_TOOLBOX )   // Buttons und Controls auf Toolboxen.
     {
         ToolBox *pTB = ((ToolBox*)pWin);
+        if ( aUId.Equals( pTB->GetHelpIdAsString() ) )
+        {
+            if ( ( pWin->IsEnabled() || HasSearchFlag( SEARCH_FIND_DISABLED ) ) && pWin->IsVisible() )
+                return TRUE;
+            else
+            {
+                if ( !pMaybeResult )
+                    pMaybeResult = pWin;
+                return FALSE;
+            }
+        }
         int i;
         for ( i = 0; i < pTB->GetItemCount() ; i++ )
         {
-            if ( nUId == pTB->GetHelpId(pTB->GetItemId( i )) )
+            if ( aUId.Equals( pTB->GetItemCommand(pTB->GetItemId( i )) ) || aUId.Equals( pTB->GetHelpId(pTB->GetItemId( i )) ) )
             {       // Die ID stimmt.
                 Window *pItemWin;
                 pItemWin = pTB->GetItemWindow( pTB->GetItemId( i ) );
@@ -457,9 +468,9 @@ BOOL SearchUID::IsWinOK( Window *pWin )
         return FALSE;
 }
 
-Window* StatementList::SearchTree( ULONG nUId ,BOOL bSearchButtonOnToolbox )
+Window* StatementList::SearchTree( SmartId aUId ,BOOL bSearchButtonOnToolbox )
 {
-    SearchUID aSearch(nUId,bSearchButtonOnToolbox);
+    SearchUID aSearch(aUId,bSearchButtonOnToolbox);
 
     Window *pResult = SearchAllWin( NULL, aSearch );
     if ( !pResult )
@@ -970,24 +981,24 @@ BOOL StatementList::CheckWindowWait()
 
 void StatementList::ReportError(String aMessage)
 {
-    ReportError ( ULONG(-1), aMessage );
+    ReportError ( SmartId(-1), aMessage );
 }
 
-void StatementList::ReportError(ULONG nUId, String aMessage)
+void StatementList::ReportError(SmartId aUId, String aMessage)
 {
-    pRet->GenError ( nUId, aMessage );
+    pRet->GenError ( aUId, aMessage );
     IsError = TRUE;
 }
 
-void StatementList::ReportError(ULONG nUId, String aMessage, ULONG nWhatever)
+void StatementList::ReportError(String aMessage, ULONG nWhatever)
 {
-    ReportError ( nUId, aMessage.AppendAscii(" ").Append(UniString::CreateFromInt32(nWhatever)));
+    ReportError ( aMessage.AppendAscii(" ").Append(UniString::CreateFromInt32(nWhatever)));
 }
 
-void StatementList::DirectLog(ULONG nUId, String aMessage)
+void StatementList::DirectLog( ULONG nType, String aMessage )
 {
     if ( pRet )
-        pRet->GenReturn( RET_DirectLoging, nUId, aMessage );
+        pRet->GenReturn( RET_DirectLoging, SmartId(nType), aMessage );
 }
 
 
