@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-14 10:54:11 $
+ *  last change: $Author: mib $ $Date: 2002-02-15 08:30:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleStatetype.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#endif
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
 #endif
@@ -137,7 +140,7 @@ void SwAccessibleContext::_Dispose()
     EventObject aEvent;
     Reference < XAccessibleContext > xThis( this );
     aEvent.Source = xThis;
-    aPropChangedListeners.disposeAndClear( aEvent );
+    aAccessibleEventListeners.disposeAndClear( aEvent );
     aFocusListeners.disposeAndClear( aEvent );
     DBG_MSG_CD( "dispose" )
 
@@ -149,11 +152,10 @@ void SwAccessibleContext::_Dispose()
 
 void SwAccessibleContext::_Moved()
 {
-    OUString sPropName( RTL_CONSTASCII_USTRINGPARAM( "AccessibleVisibleData" ) );
-    PropertyChangeEvent aEvent;
-    aEvent.PropertyName = sPropName;
+    AccessibleEventObject aEvent;
+    aEvent.EventId = AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT;
 
-    PropertyChanged( aEvent );
+    AccessibleEvent( aEvent );
     DBG_MSG( "AccessibleVisibleData" )
 }
 
@@ -174,13 +176,12 @@ sal_Bool SwAccessibleContext::ChildScrolledIn( const SwFrm *pFrm )
                 "Vis area of child is wrong. Did it exist already?" );
 
         // Send a child event
-        OUString sPropName( RTL_CONSTASCII_USTRINGPARAM( "AccessibleChild" ) );
-        PropertyChangeEvent aEvent;
-        aEvent.PropertyName = sPropName;
+        AccessibleEventObject aEvent;
+        aEvent.EventId = AccessibleEventId::ACCESSIBLE_CHILD_EVENT;
         Reference < XAccessible > xChild( xChildImpl.getBodyPtr() );
         aEvent.NewValue <<= xChild;
 
-        PropertyChanged( aEvent );
+        AccessibleEvent( aEvent );
         DBG_MSG_PARAM( "AccessibleChild (added)", xChildImpl.getBodyPtr() )
 
         xWeakChild = xChild;
@@ -236,12 +237,11 @@ sal_Bool SwAccessibleContext::ChildScrolledOut( const SwFrm *pFrm )
         xChild = pChildImpl;
     }
 
-    OUString sPropName( RTL_CONSTASCII_USTRINGPARAM( "AccessibleChild" ) );
-    PropertyChangeEvent aEvent;
-    aEvent.PropertyName = sPropName;
+    AccessibleEventObject aEvent;
+    aEvent.EventId = AccessibleEventId::ACCESSIBLE_CHILD_EVENT;
     aEvent.OldValue <<= xChild;
 
-    PropertyChanged( aEvent );
+    AccessibleEvent( aEvent );
     DBG_MSG_PARAM( "AccessibleChild (removed)", pChildImpl )
 
     pChildImpl->_Dispose();
@@ -280,12 +280,11 @@ void SwAccessibleContext::Dispose()
     {
         SwAccessibleContext *pAcc = (SwAccessibleContext *)xParent.get();
 
-        OUString sPropName( RTL_CONSTASCII_USTRINGPARAM( "AccessibleChild" ) );
-        PropertyChangeEvent aEvent;
-        aEvent.PropertyName = sPropName;
+        AccessibleEventObject aEvent;
+        aEvent.EventId = AccessibleEventId::ACCESSIBLE_CHILD_EVENT;
         Reference < XAccessibleContext > xThis( this );
         aEvent.OldValue <<= xThis;
-        pAcc->PropertyChanged( aEvent );
+        pAcc->AccessibleEvent( aEvent );
         DBG_MSG_THIS_PARAM( "AccessibleChild (removed)", pAcc, this )
     }
 
@@ -333,17 +332,18 @@ void SwAccessibleContext::ChildPosChanged( const SwFrm *pFrm,
 }
 
 
-void SwAccessibleContext::PropertyChanged( PropertyChangeEvent& rEvent )
+void SwAccessibleContext::AccessibleEvent( AccessibleEventObject& rEvent )
 {
     Reference < XAccessibleContext > xThis( this );
     rEvent.Source = xThis;
 
-    ::cppu::OInterfaceIteratorHelper aIter( aPropChangedListeners );
+    ::cppu::OInterfaceIteratorHelper aIter( aAccessibleEventListeners );
     while( aIter.hasMoreElements() )
     {
-        Reference < XPropertyChangeListener > xListener( aIter.next(),
+        Reference < XAccessibleEventListener > xListener( aIter.next(),
                                                          UNO_QUERY );
-        xListener->propertyChange( rEvent );
+        if( xListener.is() ) // TODO: test is unneccessary soon
+            xListener->notifyEvent( rEvent );
     }
 
 }
@@ -409,7 +409,7 @@ SwAccessibleContext::SwAccessibleContext( sal_Int16 nR,
                                           const Rectangle& rVisArea,
                                           const SwFrm *pF ) :
     SwAccessibleFrame( rVisArea, pF ),
-    aPropChangedListeners( aMutex ),
+    aAccessibleEventListeners( aMutex ),
     aFocusListeners( aMutex ),
     nRole( nR )
 {
@@ -422,7 +422,7 @@ SwAccessibleContext::SwAccessibleContext( const OUString& rName,
                                           const SwFrm *pF ) :
     SwAccessibleFrame( rVisArea, pF ),
     sName( rName ),
-    aPropChangedListeners( aMutex ),
+    aAccessibleEventListeners( aMutex ),
     aFocusListeners( aMutex ),
     nRole( nR )
 {
@@ -587,7 +587,7 @@ void SAL_CALL SwAccessibleContext::addPropertyChangeListener (
         throw (com::sun::star::uno::RuntimeException)
 {
     DBG_MSG( "property change listener added" )
-    aPropChangedListeners.addInterface( xListener );
+    aAccessibleEventListeners.addInterface( xListener );
 }
 
 void SAL_CALL SwAccessibleContext::removePropertyChangeListener (
@@ -595,7 +595,23 @@ void SAL_CALL SwAccessibleContext::removePropertyChangeListener (
         throw (com::sun::star::uno::RuntimeException)
 {
     DBG_MSG( "property change listener removed" )
-    aPropChangedListeners.removeInterface( xListener );
+    aAccessibleEventListeners.removeInterface( xListener );
+}
+
+void SAL_CALL SwAccessibleContext::addEventListener(
+            const Reference< XAccessibleEventListener >& xListener )
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    DBG_MSG( "accessible event listener added" )
+    aAccessibleEventListeners.addInterface( xListener );
+}
+
+void SAL_CALL SwAccessibleContext::removeEventListener(
+            const Reference< XAccessibleEventListener >& xListener )
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    DBG_MSG( "accessible event listener removed" )
+    aAccessibleEventListeners.removeInterface( xListener );
 }
 
 sal_Bool SAL_CALL SwAccessibleContext::contains(
@@ -849,16 +865,19 @@ void lcl_SwAccessibleContext_DbgMsg( SwAccessibleContext *pThisAcc,
           << ","
           << ByteString::CreateFromInt32( aVisArea.GetHeight() ).GetBuffer();
 
-    Rectangle aBounds( pThisAcc->GetBounds( pThisAcc->GetFrm() ) );
-    aStrm << ", BB: "
-          << ByteString::CreateFromInt32( aBounds.Left() ).GetBuffer()
-          << ","
-          << ByteString::CreateFromInt32( aBounds.Top() ).GetBuffer()
-          << ","
-          << ByteString::CreateFromInt32( aBounds.GetWidth() ).GetBuffer()
-          << ","
-          << ByteString::CreateFromInt32( aBounds.GetHeight() ).GetBuffer()
-          << ")\r\n";
+    if( pThisAcc->GetFrm() )
+    {
+        Rectangle aBounds( pThisAcc->GetBounds( pThisAcc->GetFrm() ) );
+        aStrm << ", BB: "
+              << ByteString::CreateFromInt32( aBounds.Left() ).GetBuffer()
+              << ","
+              << ByteString::CreateFromInt32( aBounds.Top() ).GetBuffer()
+              << ","
+              << ByteString::CreateFromInt32( aBounds.GetWidth() ).GetBuffer()
+              << ","
+              << ByteString::CreateFromInt32( aBounds.GetHeight() ).GetBuffer()
+              << ")\r\n";
+    }
 
     aStrm.Flush();
 }

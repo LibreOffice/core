@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-11 12:50:47 $
+ *  last change: $Author: mib $ $Date: 2002-02-15 08:30:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECOMPONENT_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessibleComponent.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEVENTBROADCASTER_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
+#endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ILLEGALACCESSIBLECOMPONENTSTATEEXCEPTION_HDL_
 #include <drafts/com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
 #endif
@@ -84,8 +87,8 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase5.hxx>
 #endif
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
@@ -94,17 +97,18 @@
 namespace utl { class AccessibleStateSetHelper; };
 
 class SwAccessibleContext :
-    public ::cppu::WeakImplHelper4<
+    public ::cppu::WeakImplHelper5<
                 ::drafts::com::sun::star::accessibility::XAccessible,
                 ::drafts::com::sun::star::accessibility::XAccessibleContext,
                 ::drafts::com::sun::star::accessibility::XAccessibleComponent,
+                ::drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster,
                 ::com::sun::star::lang::XServiceInfo
                 >,
     public SwAccessibleFrame
 {
     ::rtl::OUString sName;
     ::osl::Mutex aMutex;
-    ::cppu::OInterfaceContainerHelper aPropChangedListeners;
+    ::cppu::OInterfaceContainerHelper aAccessibleEventListeners;
     ::cppu::OInterfaceContainerHelper aFocusListeners;
 
     // The parent if it has been retrieved. This is always an
@@ -128,7 +132,7 @@ protected:
     // A child has been moved while setting the vis area
     virtual sal_Bool ChildScrolled( const SwFrm *pFrm );
 
-    void PropertyChanged( ::com::sun::star::beans::PropertyChangeEvent& rEvent );
+    void AccessibleEvent( ::drafts::com::sun::star::accessibility::AccessibleEventObject& rEvent );
 
     ::rtl::OUString GetResource( sal_uInt16 nResId,
                                  const ::rtl::OUString *pArg1 = 0,
@@ -232,7 +236,18 @@ public:
                 ::com::sun::star::beans::XPropertyChangeListener>& xListener)
         throw (com::sun::star::uno::RuntimeException);
 
-    //=====  XAccessibleComponent  ==============================================
+    //=====  XAccessibleEventBroadcaster  =====================================
+
+    virtual void SAL_CALL addEventListener(
+            const ::com::sun::star::uno::Reference<
+                ::drafts::com::sun::star::accessibility::XAccessibleEventListener >& xListener )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeEventListener(
+            const ::com::sun::star::uno::Reference<
+                ::drafts::com::sun::star::accessibility::XAccessibleEventListener >& xListener )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    //=====  XAccessibleComponent  ============================================
     virtual sal_Bool SAL_CALL contains(
             const ::com::sun::star::awt::Point& aPoint )
         throw (::com::sun::star::uno::RuntimeException);
