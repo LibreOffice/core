@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 18:01:30 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:23:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,12 @@ void ScDrawView::Construct()
         pLayer = rAdmin.GetLayerPerID(SC_LAYER_CONTROLS);
         if (pLayer)
             SetLayerLocked( pLayer->GetName(), bProt );
+        pLayer = rAdmin.GetLayerPerID(SC_LAYER_HIDDEN);
+        if (pLayer)
+        {
+            SetLayerLocked( pLayer->GetName(), bProt );
+            SetLayerVisible( pLayer->GetName(), sal_False);
+        }
 
         SetSwapAsynchron(TRUE);
     }
