@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsel.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2002-05-23 10:01:46 $
+ *  last change: $Author: lla $ $Date: 2002-07-18 07:49:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2062,6 +2062,43 @@ SvxFrameSelectorLine lcl_GetNextStep(
     }
    return eRetLine;
 }
+/* -----------------------------17.07.2002 15:33-by LLA-----------------------
+
+ ---------------------------------------------------------------------------*/
+void SvxFrameSelector::ToggleOneLine(SvxFrameLine &aCurLine)
+{
+    // PRE: an initialised SvxFrameLine as reference, we will change it!
+
+    if (aCurLine.GetState() == SVX_FRMLINESTATE_HIDE)
+    {
+        aCurLine.SetState(SVX_FRMLINESTATE_SHOW);
+    }
+    else if (aCurLine.GetState() == SVX_FRMLINESTATE_SHOW)
+    {
+        aCurLine.SetState(SVX_FRMLINESTATE_HIDE);
+    }
+    // No need to handle SVX_FRMLINESTATE_DONT_CARE
+    // else
+    // {
+    // }
+}
+
+void SvxFrameSelector::ToggleAllSelectedLines()
+{
+    SvxFrameSelectorLine eRet = SVX_FRMSELLINE_NONE;
+    if( pImpl->aTopLine.bIsSelected )    ToggleOneLine(pImpl->aTopLine);
+    if( pImpl->aLeftLine.bIsSelected )   ToggleOneLine(pImpl->aLeftLine);
+    if( pImpl->aRightLine.bIsSelected )  ToggleOneLine(pImpl->aRightLine);
+    if( pImpl->aBottomLine.bIsSelected ) ToggleOneLine(pImpl->aBottomLine);
+
+    // LLA: special extended?
+    if( SVX_FRMSELTYPE_TABLE == pImpl->eSel)
+    {
+        if( pImpl->aVerLine.bIsSelected ) ToggleOneLine(pImpl->aVerLine);
+        if( pImpl->aHorLine.bIsSelected ) ToggleOneLine(pImpl->aHorLine);
+    }
+}
+
 /* -----------------------------01.02.2002 13:50------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -2071,14 +2108,14 @@ void SvxFrameSelector::KeyInput( const KeyEvent& rKEvt )
     KeyCode aKeyCode = rKEvt.GetKeyCode();
     if ( !aKeyCode.GetModifier())
     {
-        SvxFrameSelectorLine eCurLine = GetFirstSelLineForKey_Impl();
         USHORT nCode = aKeyCode.GetCode();
         switch(nCode)
         {
             case KEY_SPACE:
                 //toggle current line type
-                LineClicked_Impl(GetLine(eCurLine), FALSE, FALSE);
-                SelectLine(eCurLine, TRUE);
+                // LineClicked_Impl(GetLine(eCurLine), FALSE, FALSE);
+                // SelectLine(eCurLine, TRUE);
+                ToggleAllSelectedLines();
                 ShowLines();
                 bHandled = sal_True;
             break;
@@ -2087,6 +2124,8 @@ void SvxFrameSelector::KeyInput( const KeyEvent& rKEvt )
             case KEY_LEFT :
             case KEY_RIGHT :
             {
+                SvxFrameSelectorLine eCurLine = GetFirstSelLineForKey_Impl();
+
                 BOOL bIsTable = SVX_FRMSELTYPE_TABLE == pImpl->eSel;
                 SvxFrameSelectorLine eFoundLine = lcl_GetNextStep(eCurLine, nCode, bIsTable);
                 if(eFoundLine != eCurLine)
