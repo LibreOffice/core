@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hro $ $Date: 2001-11-26 12:51:38 $
+ *  last change: $Author: hro $ $Date: 2001-11-26 15:46:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERMANAGER_HPP_
+#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_EXTENDEDFILEPICKERELEMENTIDS_HPP_
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #endif
@@ -101,6 +104,9 @@
 #endif
 #ifndef _FILEDLGHELPER_HXX
 #include <filedlghelper.hxx>
+#endif
+#ifndef _SFX_FCONTNR_HXX
+#include "fcontnr.hxx"
 #endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
@@ -250,35 +256,56 @@ void ShutdownIcon::FileOpen()
                 {
 
                     Reference < XFilePickerControlAccess > xPickerControls ( xPicker, UNO_QUERY );
+                    Reference < XFilterManager > xFilterManager ( xPicker, UNO_QUERY );
+
 
                     Sequence< OUString >        sFiles = xPicker->getFiles();
                     int                         nFiles = sFiles.getLength();
                     Sequence< PropertyValue >   aArgs( 3 );
+                    OUString                    aFilterName;
+
+                    if ( xFilterManager.is() )
+                        aFilterName = xFilterManager->getCurrentFilter();
 
                     if ( xPickerControls.is() )
                     {
 
-                        sal_Bool    bReadOnly = sal_False;
+                        // Set readonly flag
 
                         aArgs[0].Name  = OUString::createFromAscii( "ReadOnly" );
                         aArgs[0].Value = xPickerControls->getValue( ExtendedFilePickerElementIds::CHECKBOX_READONLY, 0 );
-                        aArgs[0].Value >>= bReadOnly;
 
-                        OUString    aFilterName;
+                        // Get version string
 
-                        aArgs[1].Name  = OUString::createFromAscii( "FilterName" );
-                        aArgs[1].Value = xPickerControls->getValue( CommonFilePickerElementIds::LISTBOX_FILTER, ControlActions::GET_SELECTED_ITEM );
-                        aArgs[1].Value >>= aFilterName;
-/*
-                        aArgs[2].Name  = OUString::createFromAscii( "Version" );
+                        aArgs[1].Name  = OUString::createFromAscii( "Version" );
 
                         sal_Int32   iVersion = -1;
                         sal_uInt16  uVersion = (sal_uInt16)-1;
 
                         xPickerControls->getValue( ExtendedFilePickerElementIds::LISTBOX_VERSION, ControlActions::GET_SELECTED_ITEM_INDEX ) >>= iVersion;
                         uVersion = (sal_uInt16)iVersion;
-                        aArgs[2].Value <<= uVersion;
- */
+                        aArgs[1].Value <<= uVersion;
+
+                        // Retrieve the current filter
+
+
+                        if ( !aFilterName.getLength() )
+                            xPickerControls->getValue( CommonFilePickerElementIds::LISTBOX_FILTER, ControlActions::GET_SELECTED_ITEM ) >>= aFilterName;
+
+                    }
+
+
+                    // Convert UI filter name to internal filter name
+
+                    if ( aFilterName.getLength() )
+                    {
+                        const SfxFilter* pFilter = SFX_APP()->GetFilterMatcher().GetFilter4UIName( aFilterName, 0, SFX_FILTER_NOTINFILEDLG );
+
+                        if ( pFilter )
+                            aFilterName = pFilter->GetName();
+
+                        aArgs[2].Name  = OUString::createFromAscii( "FilterName" );
+                        aArgs[2].Value <<= aFilterName;
                     }
 
                     if ( 1 == nFiles )
