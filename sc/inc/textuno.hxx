@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textuno.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-18 15:55:11 $
+ *  last change: $Author: nn $ $Date: 2001-02-15 18:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <svx/unotext.hxx>
 #endif
 
+#ifndef _SFXBRDCST_HXX
+#include <svtools/brdcst.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_TEXT_XTEXTFIELDSSUPPLIER_HPP_
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #endif
@@ -116,6 +120,7 @@ private:
     EditTextObject* pLeftText;
     EditTextObject* pCenterText;
     EditTextObject* pRightText;
+    SfxBroadcaster  aBC;
 
 public:
                             ScHeaderFooterContentObj();
@@ -128,6 +133,9 @@ public:
     const EditTextObject*   GetLeftEditObject() const   { return pLeftText; }
     const EditTextObject*   GetCenterEditObject() const { return pCenterText; }
     const EditTextObject*   GetRightEditObject() const  { return pRightText; }
+
+    void                    AddListener( SfxListener& rListener );
+    void                    RemoveListener( SfxListener& rListener );
 
     void                    UpdateText( USHORT nPart, EditEngine& rSource );
 

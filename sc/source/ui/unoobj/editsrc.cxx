@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsrc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-18 15:54:02 $
+ *  last change: $Author: nn $ $Date: 2001-02-15 18:07:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,23 +88,42 @@
 
 //------------------------------------------------------------------------
 
+TYPEINIT1( ScHeaderFooterChangedHint, SfxHint );
+
+ScHeaderFooterChangedHint::ScHeaderFooterChangedHint(USHORT nP) :
+    nPart( nP )
+{
+}
+
+ScHeaderFooterChangedHint::~ScHeaderFooterChangedHint()
+{
+}
+
+//------------------------------------------------------------------------
+
 ScHeaderFooterEditSource::ScHeaderFooterEditSource( ScHeaderFooterContentObj* pContent,
                                                         USHORT nP ) :
     pContentObj( pContent ),
     nPart( nP ),
     pEditEngine( NULL ),
-    pForwarder( NULL )
-
+    pForwarder( NULL ),
+    bDataValid( FALSE ),
+    bInUpdate( FALSE )
 {
-    if (pContentObj)                // pContentObj kann 0 sein bei getReflection-Krempel
-        pContentObj->acquire();     // darf nicht wegkommen
+    if (pContentObj)                // pContentObj can be 0 if constructed via getReflection
+    {
+        pContentObj->acquire();     // must not go away
 
-    //! bDataValid oder so...
+        pContentObj->AddListener( *this );
+    }
 }
 
 ScHeaderFooterEditSource::~ScHeaderFooterEditSource()
 {
     ScUnoGuard aGuard;      //  needed for EditEngine dtor
+
+    if (pContentObj)
+        pContentObj->RemoveListener( *this );
 
     delete pForwarder;
     delete pEditEngine;
@@ -148,6 +167,9 @@ SvxTextForwarder* ScHeaderFooterEditSource::GetTextForwarder()
         pForwarder = new SvxEditEngineForwarder(*pEditEngine);
     }
 
+    if (bDataValid)
+        return pForwarder;
+
     if (pContentObj)
     {
         const EditTextObject* pData;
@@ -162,18 +184,32 @@ SvxTextForwarder* ScHeaderFooterEditSource::GetTextForwarder()
             pEditEngine->SetText(*pData);
     }
 
+    bDataValid = TRUE;
     return pForwarder;
 }
 
 void ScHeaderFooterEditSource::UpdateData()
 {
     if ( pContentObj && pEditEngine )
+    {
+        bInUpdate = TRUE;   // don't reset bDataValid during UpdateText
+
         pContentObj->UpdateText( nPart, *pEditEngine );
+
+        bInUpdate = FALSE;
+    }
 }
 
 void ScHeaderFooterEditSource::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    //  spaeter...
+    if ( rHint.ISA( ScHeaderFooterChangedHint ) )
+    {
+        if ( ((const ScHeaderFooterChangedHint&)rHint).GetPart() == nPart )
+        {
+            if (!bInUpdate)             // not for own updates
+                bDataValid = FALSE;     // text has to be fetched again
+        }
+    }
 }
 
 //------------------------------------------------------------------------

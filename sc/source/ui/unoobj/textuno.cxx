@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textuno.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-18 19:55:17 $
+ *  last change: $Author: nn $ $Date: 2001-02-15 18:07:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,16 @@ ScHeaderFooterContentObj::~ScHeaderFooterContentObj()
     delete pRightText;
 }
 
+void ScHeaderFooterContentObj::AddListener( SfxListener& rListener )
+{
+    rListener.StartListening( aBC );
+}
+
+void ScHeaderFooterContentObj::RemoveListener( SfxListener& rListener )
+{
+    rListener.EndListening( aBC );
+}
+
 void ScHeaderFooterContentObj::UpdateText( USHORT nPart, EditEngine& rSource )
 {
     EditTextObject* pNew = rSource.CreateTextObject();
@@ -187,6 +197,8 @@ void ScHeaderFooterContentObj::UpdateText( USHORT nPart, EditEngine& rSource )
             pRightText = pNew;
             break;
     }
+
+    aBC.Broadcast( ScHeaderFooterChangedHint( nPart ) );
 }
 
 // XHeaderFooterContent

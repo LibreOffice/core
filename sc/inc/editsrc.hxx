@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsrc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-18 15:52:29 $
+ *  last change: $Author: nn $ $Date: 2001-02-15 18:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,19 @@ class ScDocShell;
 class ScHeaderFooterContentObj;
 
 
+class ScHeaderFooterChangedHint : public SfxHint
+{
+    USHORT nPart;
+
+public:
+                    TYPEINFO();
+                    ScHeaderFooterChangedHint(USHORT nP);
+                    ~ScHeaderFooterChangedHint();
+
+    USHORT          GetPart() const         { return nPart; }
+};
+
+
 class ScHeaderFooterEditSource : public SvxEditSource, public SfxListener
 {
 private:
@@ -90,6 +103,8 @@ private:
     USHORT                      nPart;
     ScEditEngineDefaulter*      pEditEngine;
     SvxEditEngineForwarder*     pForwarder;
+    BOOL                        bDataValid;
+    BOOL                        bInUpdate;
 
 public:
                                 ScHeaderFooterEditSource( ScHeaderFooterContentObj* pContent,
