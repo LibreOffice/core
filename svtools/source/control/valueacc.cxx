@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueacc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-05 15:28:18 $
+ *  last change: $Author: ka $ $Date: 2002-03-05 15:32:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -919,7 +919,8 @@ sal_Bool SAL_CALL ValueItemAcc::contains( const awt::Point& aPoint )
 uno::Reference< accessibility::XAccessible > SAL_CALL ValueItemAcc::getAccessibleAt( const awt::Point& aPoint )
     throw (uno::RuntimeException)
 {
-    return( uno::Reference< accessibility::XAccessible >() );
+    uno::Reference< accessibility::XAccessible > xRet;
+    return xRet;
 }
 
 // -----------------------------------------------------------------------------
