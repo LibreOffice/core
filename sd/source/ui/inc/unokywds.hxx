@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unokywds.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-14 16:23:34 $
+ *  last change: $Author: cl $ $Date: 2001-03-15 12:06:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@ SD_CONSTASCII_ACTION( sUNO_LayerName_measurelines,       "measurelines" );
 // SdXShape
 SD_CONSTASCII_ACTION( sUNO_shape_style, "Style" );
 SD_CONSTASCII_ACTION( sUNO_shape_layername, "LayerName" );
+SD_CONSTASCII_ACTION( sUNO_shape_zorder, "ZOrder" );
 
 // services
 SD_CONSTASCII_ACTION( sUNO_Service_StyleFamily, UNO_PREFIX "style.StyleFamily" );
