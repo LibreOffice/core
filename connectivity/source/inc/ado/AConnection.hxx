@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AConnection.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:35:59 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:11:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ namespace connectivity
         struct OExtendedTypeInfo
         {
             ::connectivity::OTypeInfo       aSimpleType;    // the general type info
+            DataTypeEnum                    eType;
 
             inline ::rtl::OUString getDBName() const { return aSimpleType.aTypeName; }
         };
