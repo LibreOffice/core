@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instbdlg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:39:27 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     Text[ japanese ] = "θ΅¨γ®ζΏε…¥";
     Text[ chinese_traditional ] = "ζ’ε…¥ε·¥δ½θ΅¨";
     Text[ arabic ] = "ΕΟΡΗΜ ΜΟζα";
-    Text[ greek ] = "Εισαγωγή πίνακα";
+    Text[ greek ] = "Εισαγωγή φύλλου";
     Text[ korean ] = "μ‹νΈ μ‚½μ…";
     Text[ turkish ] = "Tablo ekle";
     Text[ language_user1 ] = " ";
@@ -162,7 +162,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ japanese ] = "θ΅¨η¤ΊδΈ­γ®θ΅¨γ®ε‰γ«(~E)";
         Text[ chinese_traditional ] = "ε¨η›®ε‰η„ε·¥δ½θ΅¨δΉ‹ε‰(~E)";
         Text[ arabic ] = "ήΘα ΗαΜΟζα ΗαΝΗαν";
-        Text[ greek ] = "Πριν από τον ενεργό πίνακα";
+        Text[ greek ] = "Πριν από το ενεργό φύλλο";
         Text[ korean ] = "ν„μ¬ μ‹νΈ μ•μ—(~E)";
         Text[ turkish ] = "Aηύk tablonun ~φnόne";
         Text[ language_user1 ] = " ";
@@ -196,7 +196,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ japanese ] = "θ΅¨η¤ΊδΈ­γ®θ΅¨γ®εΎγ«(~A)";
         Text[ chinese_traditional ] = "ε¨η›®ε‰η„ε·¥δ½θ΅¨δΉ‹εΎ(~A)";
         Text[ arabic ] = "ΘΪΟ ΗαΜΟζα ΗαΝΗαν";
-        Text[ greek ] = "Μετά από τον ενεργό πίνακα";
+        Text[ greek ] = "Μετά από το ενεργό φύλλο";
         Text[ korean ] = "ν„μ¬ μ‹νΈ λ’¤μ—(~A)";
         Text[ turkish ] = "Aηύk tablonun ~arkasύna";
         Text[ language_user1 ] = " ";
@@ -229,7 +229,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ japanese ] = "θ΅¨";
         Text[ chinese_traditional ] = "ε·¥δ½θ΅¨";
         Text[ arabic ] = "ΜΟζα";
-        Text[ greek ] = "Πίνακας";
+        Text[ greek ] = "Φύλλο";
         Text[ korean ] = "μ‹νΈ";
         Text[ turkish ] = "Yaprak";
         Text[ language_user1 ] = " ";
@@ -367,7 +367,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ ENGLISH_US ] = "~From file" ;
         Text [ SPANISH ] = "~A partir de archivo" ;
         Text [ FRENCH ] = "~Crιation ΰ partir d'un fichier" ;
-        Text [ ITALIAN ] = "Creare da file" ;
+        Text [ ITALIAN ] = "Crea da file" ;
         Text [ DUTCH ] = "~Uit bestand vervaardigen" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "~Do arquivo" ;
         Text [ SWEDISH ] = "Sk~apa frεn fil" ;
@@ -476,6 +476,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     Text[ hindi ] = "Insert Sheet";
     Text[ slovak ] = "VloΕΎiΕ¥ list";
 };
+
 
 
 
