@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-15 11:46:06 $
+ *  last change: $Author: jp $ $Date: 2001-05-16 12:32:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -714,7 +714,6 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
     if ( ( nModifyFlag & MODIFY_LAYOUT ) == 0 )
         aLayoutBtn.Check( pSearchItem->GetPattern() );
     aSimilarityBox          .Check( pSearchItem->IsLevenshtein() );
-    aJapMatchFullHalfWidthCB.Check( pSearchItem->IsMatchFullHalfWidthForms() );
     aJapOptionsCB           .Check( pSearchItem->IsUseAsianOptions() );
     ApplyTransliterationFlags_Impl( pSearchItem->GetTransliterationFlags() );
 
@@ -1196,11 +1195,13 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
         pSearchItem->SetBackward( GetCheckBoxValue( aBackwardsBtn ) );
         pSearchItem->SetPattern( GetCheckBoxValue( aLayoutBtn ) );
         pSearchItem->SetSelection( GetCheckBoxValue( aSelectionBtn ) );
+
         pSearchItem->SetUseAsianOptions( GetCheckBoxValue( aJapOptionsCB ) );
-        //! and even if checkboxes are disabled...
-        pSearchItem->SetExact( aMatchCaseCB.IsChecked() );
-        pSearchItem->SetMatchFullHalfWidthForms( aJapMatchFullHalfWidthCB.IsChecked() );
-        pSearchItem->SetTransliterationFlags( GetTransliterationFlags() );
+        INT32 nFlags = GetTransliterationFlags();
+        if( !pSearchItem->IsUseAsianOptions())
+            nFlags &= (TransliterationModules_IGNORE_CASE |
+                       TransliterationModules_IGNORE_WIDTH );
+        pSearchItem->SetTransliterationFlags( nFlags );
 
         if ( !bWriter )
         {
@@ -1275,7 +1276,8 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
     {
         SfxItemSet aSet( SFX_APP()->GetPool() );
         pSearchItem->SetTransliterationFlags( GetTransliterationFlags() );
-        SvxJSearchOptionsDialog aDlg( this, aSet, RID_SVXPAGE_JSEARCH_OPTIONS, pSearchItem->GetTransliterationFlags() );
+        SvxJSearchOptionsDialog aDlg( this, aSet, RID_SVXPAGE_JSEARCH_OPTIONS,
+                                    pSearchItem->GetTransliterationFlags() );
         aDlg.Execute();
         INT32 nFlags = aDlg.GetTransliterationFlags();
          pSearchItem->SetTransliterationFlags( nFlags );
@@ -2118,11 +2120,13 @@ void SvxSearchDialog::SaveToModule_Impl()
     pSearchItem->SetBackward( GetCheckBoxValue( aBackwardsBtn ) );
     pSearchItem->SetPattern( GetCheckBoxValue( aLayoutBtn ) );
     pSearchItem->SetSelection( GetCheckBoxValue( aSelectionBtn ) );
+
     pSearchItem->SetUseAsianOptions( GetCheckBoxValue( aJapOptionsCB ) );
-    //! and even if checkboxes are disabled...
-    pSearchItem->SetExact( aMatchCaseCB.IsChecked() );
-    pSearchItem->SetMatchFullHalfWidthForms( aJapMatchFullHalfWidthCB.IsChecked() );
-    pSearchItem->SetTransliterationFlags( GetTransliterationFlags() );
+    INT32 nFlags = GetTransliterationFlags();
+    if( !pSearchItem->IsUseAsianOptions())
+        nFlags &= (TransliterationModules_IGNORE_CASE |
+                   TransliterationModules_IGNORE_WIDTH );
+    pSearchItem->SetTransliterationFlags( nFlags );
 
     if ( !bWriter )
     {
