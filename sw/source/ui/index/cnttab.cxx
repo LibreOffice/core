@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:50:40 $
+ *  last change: $Author: os $ $Date: 2001-02-26 14:06:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2562,9 +2562,9 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     aButtonPositions[4] = aTabPB.GetPosPixel();
 
     aRelToStylePos = aRelToStyleCB.GetPosPixel();
-    aRelToStyleIdxPos = aRelToStylePos;
+    aRelToStyleIdxPos = aCommaSeparatedCB.GetPosPixel();
     aRelToStyleIdxPos.Y() +=
-        2 * (aAlphaDelimCB.GetPosPixel().Y() - aRelToStyleIdxPos.Y());
+        (aRelToStyleIdxPos.Y() - aAlphaDelimCB.GetPosPixel().Y());
     aEditStylePB.Enable(sal_False);
 
     //fill the types in
@@ -2654,9 +2654,9 @@ void SwTOXEntryTabPage::Reset( const SfxItemSet& )
         }
         else
             aMainEntryStyleLB.SelectEntry(sNoCharStyle);
-        aRelToStyleCB.Check(pCurrentForm->IsRelTabPos());
         aAlphaDelimCB.Check(rDesc.GetIndexOptions()&TOI_ALPHA_DELIMITTER);
     }
+    aRelToStyleCB.Check(pCurrentForm->IsRelTabPos());
     aCommaSeparatedCB.Check(pCurrentForm->IsCommaSeparated());
 }
 /*-- 16.06.99 10:47:34---------------------------------------------------
