@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewobjectcontactofsdrmediaobj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-24 07:20:33 $
+ *  last change: $Author: rt $ $Date: 2004-11-03 16:03:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,9 +180,15 @@ void ViewObjectContactOfSdrMediaObj::PaintObject(DisplayInfo& rDisplayInfo)
 
 Window* ViewObjectContactOfSdrMediaObj::getWindow() const
 {
-    OutputDevice& rOutDev = static_cast< ObjectContactOfPageView& >( GetObjectContact() ).GetPageViewWindow().GetOutputDevice();
+    ObjectContactOfPageView* pOC = dynamic_cast< ObjectContactOfPageView* >( &GetObjectContact() );
 
-    return( ( rOutDev.GetOutDevType() == OUTDEV_WINDOW ) ? static_cast< Window* >( &rOutDev ) : NULL );
+    if( pOC)
+    {
+        OutputDevice& rOutDev = pOC->GetPageViewWindow().GetOutputDevice();
+        return( ( rOutDev.GetOutDevType() == OUTDEV_WINDOW ) ? static_cast< Window* >( &rOutDev ) : NULL );
+    }
+
+    return NULL;
 }
 
 // ------------------------------------------------------------------------------
