@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cx_c_sub.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-02 12:36:16 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,16 +184,8 @@ Context_ConstNumeric::ReadCharChain(CharacterSource & io_rText)
 void
 Context_UnblockMacro::ReadCharChain(CharacterSource & io_rText)
 {
-    char cNext = jumpToWhite(io_rText);
+    jumpToWhite(io_rText);
     SetNewToken(new Tok_UnblockMacro( io_rText.CutToken() + strlen("#unblock-") ));
 }
 
 }   // namespace cpp
-
-
-
-
-
-
-
-
