@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:07:32 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 12:00:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,8 +179,8 @@ void __EXPORT ScFormatShell::GetStyleState( SfxItemSet& rSet )
     SfxStyleSheetBase*      pStyleSheet = NULL;
 
     BOOL bProtected = FALSE;
-    USHORT nTabCount = pDoc->GetTableCount();
-    for (USHORT i=0; i<nTabCount; i++)
+    SCTAB nTabCount = pDoc->GetTableCount();
+    for (SCTAB i=0; i<nTabCount; i++)
         if (pDoc->IsTabProtected(i))                // ueberhaupt eine Tabelle geschuetzt?
             bProtected = TRUE;
 
@@ -215,7 +215,7 @@ void __EXPORT ScFormatShell::GetStyleState( SfxItemSet& rSet )
 
             case SID_STYLE_FAMILY4:     // Seitenvorlagen
             {
-                USHORT          nCurTab     = GetViewData()->GetTabNo();
+                SCTAB           nCurTab     = GetViewData()->GetTabNo();
                 String          aPageStyle  = pDoc->GetPageStyle( nCurTab );
                 SfxStyleSheet*  pStyleSheet = (SfxStyleSheet*)pStylePool->
                                     Find( aPageStyle, SFX_STYLE_FAMILY_PAGE );
@@ -279,7 +279,7 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
     SfxBindings&        rBindings   = pViewData->GetBindings();
     const SfxItemSet*   pArgs       = rReq.GetArgs();
     const USHORT        nSlotId     = rReq.GetSlot();
-    const USHORT        nCurTab     = GetViewData()->GetTabNo();
+    const SCTAB         nCurTab     = GetViewData()->GetTabNo();
     ScDocShell*         pDocSh      = GetViewData()->GetDocShell();
     ScTabViewShell*     pTabViewShell= GetViewData()->GetViewShell();
     ScDocument*         pDoc        = pDocSh->GetDocument();
@@ -456,8 +456,8 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         //      pAttrItem = GetSelectionPattern();
 
                         ScViewData* pViewData = GetViewData();
-                        USHORT      nCol = pViewData->GetCurX();
-                        USHORT      nRow = pViewData->GetCurY();
+                        SCCOL       nCol = pViewData->GetCurX();
+                        SCROW       nRow = pViewData->GetCurY();
                         pAttrItem = pDoc->GetPattern( nCol, nRow, nCurTab );
 
                         SfxItemSet aAttrSet = pAttrItem->GetItemSet();
@@ -617,7 +617,7 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         {
                             SfxStyleSheetBase*  pCurStyle = pStylePool->Find( rStrCurStyle, eFamily );
                             SfxItemSet          aAttrSet  = pCurStyle->GetItemSet();
-                            USHORT              nInTab;
+                            SCTAB               nInTab;
                             BOOL                bUsed = pDoc->IsPageStyleInUse( aStyleName, &nInTab );
 
                             // wenn bereits vorhanden, erstmal entfernen...
@@ -1907,13 +1907,13 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
     ScViewData* pViewData   = GetViewData();
     ScDocument* pDoc        = pViewData->GetDocument();
     ScMarkData& rMark       = pViewData->GetMarkData();
-    USHORT      nPosX       = pViewData->GetCurX();
-    USHORT      nPosY       = pViewData->GetCurY();
-    USHORT      nTab        = pViewData->GetTabNo();
+    SCCOL       nPosX       = pViewData->GetCurX();
+    SCROW       nPosY       = pViewData->GetCurY();
+    SCTAB       nTab        = pViewData->GetTabNo();
     USHORT      nMyId       = 0;
 
-    USHORT nTabCount = pDoc->GetTableCount();
-    USHORT nTabSelCount = rMark.GetSelectCount();
+    SCTAB nTabCount = pDoc->GetTableCount();
+    SCTAB nTabSelCount = rMark.GetSelectCount();
 
 
 
