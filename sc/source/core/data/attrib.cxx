@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrib.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:19:11 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -921,7 +921,7 @@ void ScTableListItem::SetTableList( const List& rList )
 
 
 // -----------------------------------------------------------------------
-//      ScPageHFItem - Daten der Kopf-/Fuﬂzeilen
+//      ScPageHFItem - Daten der Kopf-/Fusszeilen
 // -----------------------------------------------------------------------
 
 ScPageHFItem::ScPageHFItem( USHORT nWhich )
