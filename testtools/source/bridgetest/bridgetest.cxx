@@ -1,7 +1,7 @@
 /**************************************************************************
 #*
-#*    last change   $Author: rt $ $Date: 2004-07-23 14:47:25 $
-#*    $Revision: 1.12 $
+#*    last change   $Author: rt $ $Date: 2004-08-20 09:15:13 $
+#*    $Revision: 1.13 $
 #*
 #*    $Logfile: $
 #*
@@ -538,9 +538,9 @@ static sal_Bool performTest( const Reference<XBridgeTest > & xLBT )
         bRet &= check(
             xLBT->transportPolyBoolean(TestPolyStruct< sal_Bool >(true)).member,
             "transportPolyBoolean");
-        TestPolyStruct< sal_uInt64 > tps1(12345);
-        xLBT->transportPolyUnsignedHyper(tps1);
-        bRet &= check(tps1.member == 12345, "transportPolyUnsignedHyper");
+        TestPolyStruct< sal_Int64 > tps1(12345);
+        xLBT->transportPolyHyper(tps1);
+        bRet &= check(tps1.member == 12345, "transportPolyHyper");
         Sequence< Any > seq(2);
         seq[0] <<= static_cast< sal_uInt32 >(33);
         seq[1] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ABC"));
@@ -577,6 +577,9 @@ static sal_Bool performTest( const Reference<XBridgeTest > & xLBT )
             "getNullPolySequence");
         bRet &= check(
             xLBT->getNullPolyEnum().member == TestEnum_TEST, "getNullPolyEnum");
+        bRet &= check(
+            xLBT->getNullPolyBadEnum().member == TestBadEnum_M,
+            "getNullPolyBadEnum");
         bRet &= check(
             xLBT->getNullPolyStruct().member.member == 0, "getNullPolyStruct");
         bRet &= check(
