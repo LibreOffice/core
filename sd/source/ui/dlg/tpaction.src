@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:13:15 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,7 @@ TabPage TP_ANIMATION
         Text[ spanish ] = "Animaci�n";
         Text[ finnish ] = "Animaatio";
         Text[ italian ] = "Animazione";
-        Text[ danish ] = "Animation";
+        Text[ danish ] = "Tekstanimation";
         Text[ swedish ] = "Animation";
         Text[ polish ] = "Animacja";
         Text[ portuguese_brazilian ] = "Anima��o";
@@ -605,6 +605,8 @@ TabPage TP_ANIMATION
     Text[ hindi ] = "परस्पर सम्बन्ध का कार्य";
     Text[ slovak ] = "Interakcia";
 };
+
+
 
 
 
