@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-07 15:06:26 $
+ *  last change: $Author: ka $ $Date: 2001-08-15 10:54:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,13 +82,15 @@
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
+#ifndef _URLBMK_HXX //autogen
+#include <svtools/urlbmk.hxx>
+#endif
 #ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
 #endif
 #ifndef _SVX_FMSHELL_HXX
 #include <svx/fmshell.hxx>
 #endif
-
 #ifndef _SV_SCRBAR_HXX //autogen
 #include <vcl/scrbar.hxx>
 #endif
@@ -742,9 +744,24 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
             if( nFormat && aDataHelper.GetTransferable().is() )
             {
                 sal_Int8 nAction = DND_ACTION_COPY;
-                pDrView->InsertData( aDataHelper,
-                                     pWindow->PixelToLogic( Rectangle( Point(), pWindow->GetOutputSizePixel() ).Center() ),
-                                     nAction, FALSE, nFormat );
+
+                if( !pDrView->InsertData( aDataHelper,
+                                          pWindow->PixelToLogic( Rectangle( Point(), pWindow->GetOutputSizePixel() ).Center() ),
+                                          nAction, FALSE, nFormat ) )
+                {
+                    String          aEmptyStr;
+                    INetBookmark    aINetBookmark( aEmptyStr, aEmptyStr );
+
+                    if( ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) &&
+                          aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
+                        ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR ) &&
+                          aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, aINetBookmark ) ) ||
+                        ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ) &&
+                          aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
+                    {
+                        InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), aEmptyStr, NULL );
+                    }
+                }
             }
         }
         break;

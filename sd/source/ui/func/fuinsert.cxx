@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-03 14:43:08 $
+ *  last change: $Author: ka $ $Date: 2001-08-15 10:54:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,15 +260,15 @@ FuInsertClipboard::FuInsertClipboard(SdViewShell* pViewSh, SdWindow* pWin, SdVie
 
     pDlg->Insert( SOT_FORMATSTR_ID_EMBED_SOURCE, String() );
     pDlg->Insert( SOT_FORMATSTR_ID_LINK_SOURCE, String() );
-    pDlg->Insert( SOT_FORMATSTR_ID_DRAWING, ( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_DRAWING, aFlavor ), aFlavor.HumanPresentableName ) );
-    pDlg->Insert( SOT_FORMATSTR_ID_SVXB, ( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_SVXB, aFlavor ), aFlavor.HumanPresentableName ) );
-    pDlg->Insert( FORMAT_GDIMETAFILE, ( SotExchange::GetFormatDataFlavor( FORMAT_GDIMETAFILE, aFlavor ), aFlavor.HumanPresentableName ) );
-    pDlg->Insert( FORMAT_BITMAP, ( SotExchange::GetFormatDataFlavor( FORMAT_BITMAP, aFlavor ), aFlavor.HumanPresentableName ) );
-    pDlg->Insert( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, ( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aFlavor ), aFlavor.HumanPresentableName ) );
-    pDlg->Insert( FORMAT_STRING, ( SotExchange::GetFormatDataFlavor( FORMAT_STRING, aFlavor ), aFlavor.HumanPresentableName ) );
-    pDlg->Insert( SOT_FORMATSTR_ID_HTML, ( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_HTML, aFlavor ), aFlavor.HumanPresentableName ) );
-    pDlg->Insert( FORMAT_RTF, ( SotExchange::GetFormatDataFlavor( FORMAT_RTF, aFlavor ), aFlavor.HumanPresentableName ) );
-    pDlg->Insert( EditEngine::RegisterClipboardFormatName(), String() );
+    pDlg->Insert( SOT_FORMATSTR_ID_DRAWING, SvPasteObjectDialog::GetSotFormatUIName( SOT_FORMATSTR_ID_DRAWING ) );
+    pDlg->Insert( SOT_FORMATSTR_ID_SVXB, SvPasteObjectDialog::GetSotFormatUIName( SOT_FORMATSTR_ID_SVXB ) );
+    pDlg->Insert( FORMAT_GDIMETAFILE, SvPasteObjectDialog::GetSotFormatUIName( FORMAT_GDIMETAFILE ) );
+    pDlg->Insert( FORMAT_BITMAP, SvPasteObjectDialog::GetSotFormatUIName( FORMAT_BITMAP ) );
+    pDlg->Insert( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, SvPasteObjectDialog::GetSotFormatUIName( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) );
+    pDlg->Insert( FORMAT_STRING, SvPasteObjectDialog::GetSotFormatUIName( FORMAT_STRING ) );
+    pDlg->Insert( SOT_FORMATSTR_ID_HTML, SvPasteObjectDialog::GetSotFormatUIName( SOT_FORMATSTR_ID_HTML ) );
+    pDlg->Insert( FORMAT_RTF, SvPasteObjectDialog::GetSotFormatUIName( FORMAT_RTF ) );
+    pDlg->Insert( SOT_FORMATSTR_ID_EDITENGINE, SvPasteObjectDialog::GetSotFormatUIName( SOT_FORMATSTR_ID_EDITENGINE ) );
 
     const ULONG nFormatId = pDlg->Execute( pWindow, aDataHelper.GetTransferable() );
 

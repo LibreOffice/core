@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-09 14:53:33 $
+ *  last change: $Author: ka $ $Date: 2001-08-15 10:54:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,6 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
     BOOL                    bReturn = FALSE;
     BOOL                    bLink = ( ( nAction & DND_ACTION_LINK ) != 0 );
     BOOL                    bCopy = ( ( ( nAction & DND_ACTION_COPY ) != 0 ) || bLink );
-    ULONG                   nEditEngineFormat = EditEngine::RegisterClipboardFormatName();
     ULONG                   nPasteOptions = SDRINSERT_SETDEFLAYER;
 
     if( pViewSh->ISA( SdSlideViewShell ) || ( pViewSh && pViewSh->GetIPClient() && pViewSh->GetIPClient()->IsInPlaceActive() ) )
@@ -811,18 +810,18 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
             bReturn = SdrView::Paste( *xStm, EE_FORMAT_HTML, aDropPos, pPage, nPasteOptions );
         }
     }
-    else if( !bLink && ( CHECK_FORMAT_TRANS( FORMAT_RTF ) || CHECK_FORMAT_TRANS( nEditEngineFormat ) ) )
+    else if( !bLink && ( CHECK_FORMAT_TRANS( FORMAT_RTF ) || CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_EDITENGINE ) ) )
     {
         SotStorageStreamRef xStm;
 
         if( aDataHelper.GetSotStorageStream( nFormat ? nFormat : FORMAT_RTF, xStm ) ||
-            aDataHelper.GetSotStorageStream( nEditEngineFormat, xStm ) )
+            aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_EDITENGINE, xStm ) )
         {
             EETextFormat nFmt = EE_FORMAT_RTF;
 
             xStm->Seek( 0 );
 
-            if( CHECK_FORMAT_TRANS( nEditEngineFormat ) )
+            if( CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_EDITENGINE ) )
                 nFmt = EE_FORMAT_BIN;
 
             OutlinerView* pOLV = GetTextEditOutlinerView();

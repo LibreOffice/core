@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-24 09:52:35 $
+ *  last change: $Author: ka $ $Date: 2001-08-15 10:54:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,15 +72,15 @@
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XLINGUSERVICEMANAGER_HPP_
 #include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
 #endif
-
+#ifndef _PASTEDLG_HXX //autogen
+#include <so3/pastedlg.hxx>
+#endif
 #ifndef _SVX_FMGLOB_HXX
 #include <svx/fmglob.hxx>
 #endif
-
 #ifndef _E3D_GLOBL3D_HXX
 #include <svx/globl3d.hxx>
 #endif
-
 #ifndef _SVDOUNO_HXX
 #include <svx/svdouno.hxx>
 #endif
@@ -91,7 +91,6 @@
 #define ITEMID_FIELD    EE_FEATURE_FIELD
 #include <svx/flditem.hxx>
 #endif
-
 #ifndef _SVXIDS_HXX
 #include <svx/svxids.hrc>
 #endif
@@ -581,6 +580,7 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
                     SOT_FORMATSTR_ID_SVXB,
                     FORMAT_GDIMETAFILE,
                     FORMAT_BITMAP,
+                    SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK,
                     FORMAT_STRING,
                     SOT_FORMATSTR_ID_HTML,
                     FORMAT_RTF,
@@ -604,7 +604,7 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
                                 aName = aDesc.maTypeName;
                         }
                         else
-                            aName = ( SotExchange::GetFormatDataFlavor( nTestFormat, aFlavor ), aFlavor.HumanPresentableName );
+                            aName = SvPasteObjectDialog::GetSotFormatUIName( nTestFormat );
 
                         if( aName.Len() )
                             aItem.AddClipbrdFormat( nTestFormat, aName );
