@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingImportHelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-09 18:28:24 $
+ *  last change: $Author: sab $ $Date: 2001-02-12 12:25:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,7 +460,7 @@ void ScXMLChangeTrackingImportHelper::AddGenerated(ScMyCellInfo* pCellInfo, cons
     else if ((pCurrentAction->nActionType == SC_CAT_DELETE_COLS) ||
         (pCurrentAction->nActionType == SC_CAT_DELETE_ROWS))
     {
-        static_cast<ScMyMoveAction*>(pCurrentAction)->aGeneratedList.push_back(pGenerated);
+        static_cast<ScMyDelAction*>(pCurrentAction)->aGeneratedList.push_back(pGenerated);
     }
     else
         DBG_ERROR("try to insert a generated action to a wrong action");
@@ -636,7 +636,7 @@ void ScXMLChangeTrackingImportHelper::SetDeletionDependences(ScMyDelAction* pAct
             while (aItr != pAction->aGeneratedList.end())
             {
                 DBG_ASSERT((*aItr)->nID, "a not inserted generated action");
-                pDelAct->LoadCellContent((*aItr)->nID, pTrack);
+                pDelAct->SetDeletedInThis((*aItr)->nID, pTrack);
                 if (*aItr)
                     delete *aItr;
                 aItr = pAction->aGeneratedList.erase(aItr);
@@ -692,7 +692,7 @@ void ScXMLChangeTrackingImportHelper::SetMovementDependences(ScMyMoveAction* pAc
                 while (aItr != pAction->aGeneratedList.end())
                 {
                     DBG_ASSERT((*aItr)->nID, "a not inserted generated action");
-                    pMoveAct->LoadCellContent((*aItr)->nID, pTrack);
+                    pMoveAct->SetDeletedInThis((*aItr)->nID, pTrack);
                     if (*aItr)
                         delete *aItr;
                     aItr = pAction->aGeneratedList.erase(aItr);
@@ -796,7 +796,29 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(ScMyContentAction* pAction)
                     ScBaseCell* pCell = pDoc->GetCell(aAddress);
                     if (pCell)
                     {
-                        ScBaseCell* pNewCell = pCell->Clone(pDoc);
+                        ScBaseCell* pNewCell = NULL;
+                        if (pCell->GetCellType() != CELLTYPE_FORMULA)
+                            pNewCell = pCell->Clone(pDoc);
+                        else
+                        {
+                            sal_uInt8 nMatrixFlag = static_cast<ScFormulaCell*>(pCell)->GetMatrixFlag();
+                            String sFormula;
+                            static_cast<ScFormulaCell*>(pCell)->GetFormula(sFormula);
+                            rtl::OUString sOUFormula(sFormula);
+                            rtl::OUString sOUFormula2(sOUFormula.copy(2, sOUFormula.getLength() - 3));
+                            String sFormula2(sOUFormula2);
+                            pNewCell = new ScFormulaCell(pDoc, aAddress, sFormula2, nMatrixFlag);
+                            if (pNewCell)
+                            {
+                                if (nMatrixFlag == MM_FORMULA)
+                                {
+                                    sal_uInt16 nCols, nRows;
+                                    static_cast<ScFormulaCell*>(pCell)->GetMatColsRows(nCols, nRows);
+                                    static_cast<ScFormulaCell*>(pNewCell)->SetMatColsRows(nCols, nRows);
+                                }
+                                static_cast<ScFormulaCell*>(pNewCell)->SetInChangeTrack(sal_True);
+                            }
+                        }
                         pChangeActionContent->SetNewCell(pNewCell, pDoc);
                     }
                 }

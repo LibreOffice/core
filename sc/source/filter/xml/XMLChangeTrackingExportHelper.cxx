@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingExportHelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-09 18:28:24 $
+ *  last change: $Author: sab $ $Date: 2001-02-12 12:25:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,14 +222,22 @@ void ScChangeTrackingExportHelper::WriteDeleted(const ScChangeAction* pDeletedAc
     sal_uInt32 nActionNumber(pDeletedAction->GetActionNumber());
     if (pDeletedAction->GetType() == SC_CAT_CONTENT)
     {
-        DBG_ASSERT(!pChangeTrack->IsGenerated(nActionNumber), "a generated action found");
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_id, GetChangeID(nActionNumber));
-        SvXMLElementExport aElemPrev(rExport, XML_NAMESPACE_TABLE, sXML_cell_content_deletion, sal_True, sal_True);
-        if (static_cast<const ScChangeActionContent*>(pDeletedAction)->IsTopContent() && pDeletedAction->IsDeletedIn())
+        const ScChangeActionContent* pContentAction = static_cast<const ScChangeActionContent*>(pDeletedAction);
+        if (pContentAction)
         {
-            String sValue;
-            static_cast<const ScChangeActionContent*>(pDeletedAction)->GetNewString(sValue);
-             WriteCell(static_cast<const ScChangeActionContent*>(pDeletedAction)->GetNewCell(), sValue);
+            if (!pChangeTrack->IsGenerated(nActionNumber))
+            {
+                rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_id, GetChangeID(nActionNumber));
+                SvXMLElementExport aElemPrev(rExport, XML_NAMESPACE_TABLE, sXML_cell_content_deletion, sal_True, sal_True);
+                if (static_cast<const ScChangeActionContent*>(pDeletedAction)->IsTopContent() && pDeletedAction->IsDeletedIn())
+                {
+                    String sValue;
+                    pContentAction->GetNewString(sValue);
+                     WriteCell(pContentAction->GetNewCell(), sValue);
+                }
+            }
+            else
+                WriteGenerated(pContentAction);
         }
     }
     else
@@ -267,7 +275,7 @@ void ScChangeTrackingExportHelper::WriteDependings(ScChangeAction* pAction)
             WriteDeleted(pEntry->GetAction());
             pEntry = pEntry->GetNext();
         }
-        if (pAction->IsDeleteType())
+        /*if (pAction->IsDeleteType())
         {
             ScChangeActionDel* pDelAction = static_cast<ScChangeActionDel*> (pAction);
             if (pDelAction)
@@ -292,7 +300,7 @@ void ScChangeTrackingExportHelper::WriteDependings(ScChangeAction* pAction)
                     pCellEntry = pCellEntry->GetNext();
                 }
             }
-        }
+        }*/
     }
 }
 

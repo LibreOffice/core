@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTrackedChangesContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-09 18:28:24 $
+ *  last change: $Author: sab $ $Date: 2001-02-12 12:25:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -850,8 +850,9 @@ void ScXMLChangeCellContext::EndElement()
                         sal_True );
                 }
             }
-            GetScImport().GetTextImport()->ResetCursor();
             rOldCell = new ScEditCell(pEditTextObj->CreateTextObject(), GetScImport().GetDocument(), GetScImport().GetDocument()->GetEditPool());
+            GetScImport().GetTextImport()->ResetCursor();
+            delete pEditTextObj;
         }
         else
         {
