@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-01 13:49:08 $
+ *  last change: $Author: dvo $ $Date: 2002-05-29 13:18:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1125,7 +1125,7 @@ void SwXMLExport::ExportTable( const SwTableNode& rTblNd )
                                   sal_True, sal_True );
 
         // export DDE source (if this is a DDE table)
-        if ( IS_TYPE(SwDDETable, &rTbl) )
+        if ( rTbl.ISA(SwDDETable) )
         {
             // get DDE Field Type (contains the DDE connection)
             const SwDDEFieldType* pDDEFldType =
