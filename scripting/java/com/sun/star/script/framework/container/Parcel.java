@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Parcel.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 13:58:15 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 package com.sun.star.script.framework.container;
-
 import  com.sun.star.script.framework.log.*;
 import  com.sun.star.script.framework.io.*;
 import  com.sun.star.script.framework.browse.*;
@@ -82,7 +81,7 @@ import java.net.*;
 
 public class Parcel implements XNameContainer
 {
-    protected ParcelDescriptor parcel;
+    protected ParcelDescriptor m_descriptor;
     protected String name;
     protected ParcelContainer parent;
     protected XSimpleFileAccess m_xSFA;
@@ -95,7 +94,7 @@ public class Parcel implements XNameContainer
     public Parcel( ParcelContainer parent, ParcelDescriptor desc, String parcelName )
     {
         this.parent = parent;
-        this.parcel = desc;
+        this.m_descriptor = desc;
         this.name = parcelName;
     }
 
@@ -117,9 +116,9 @@ public class Parcel implements XNameContainer
         ScriptEntry script = null;
         try
         {
-            if ( parcel != null && hasElements() )
+            if ( m_descriptor != null && hasElements() )
             {
-                ScriptEntry[] scripts = parcel.getScriptEntries();
+                ScriptEntry[] scripts = m_descriptor.getScriptEntries();
                 if ( scripts.length != 0 )
                 {
                     for ( int index = 0; index < scripts.length; index++ )
@@ -151,9 +150,9 @@ public class Parcel implements XNameContainer
     public String[] getElementNames()
     {
         String[] results = new String[0];
-        if ( parcel != null )
+        if ( m_descriptor != null )
         {
-            ScriptEntry[] scripts = parcel.getScriptEntries();
+            ScriptEntry[] scripts = m_descriptor.getScriptEntries();
             results = new String[ scripts.length ];
             for ( int index = 0; index < scripts.length; index++ )
             {
@@ -192,34 +191,27 @@ public class Parcel implements XNameContainer
 
     public boolean hasElements()
     {
-        if ( parcel != null && parcel.getScriptEntries().length > 0 )
+        if ( m_descriptor != null && m_descriptor.getScriptEntries().length > 0 )
         {
             return true;
         }
         return false;
     }
 
-
-
-    public ParcelDescriptor getParcelDescriptor()
-    {
-       return parcel;
-    }
-
     public void replaceByName( String aName, java.lang.Object aElement ) throws com.sun.star.lang.IllegalArgumentException, com.sun.star.container.NoSuchElementException, com.sun.star.lang.WrappedTargetException
    {
        // TODO check type of aElement
        // if not ok, throw IllegalArgument
-       if ( parcel != null )
+       if ( m_descriptor != null )
        {
            try
            {
                ScriptEntry script = (ScriptEntry)getByName( aName );
                if ( script != null )
                {
-                   //parcel.removeScriptEntry( script );
+                   //m_descriptor.removeScriptEntry( script );
                    // TODO needs to create source file ( if there is one )
-                   //parcel.write();
+                   //m_descriptor.write();
                }
                else
                {
@@ -236,11 +228,10 @@ public class Parcel implements XNameContainer
 
        }
    }
+
     // create
     public void insertByName( String aName, java.lang.Object aElement ) throws com.sun.star.lang.IllegalArgumentException, ElementExistException, com.sun.star.lang.WrappedTargetException
     {
-        String pathToParcel = getPathToParcel();
-        String pathToParcelUrl = PathUtils.make_url( pathToParcel , "parcel-descriptor.xml" );
         // TODO check the type of aElement and throw#
         // if not appropriate
         try
@@ -253,48 +244,55 @@ public class Parcel implements XNameContainer
 
             if (  script.hasSource() )
             {
+                LogUtils.DEBUG("Inserting source: " + script.getSource());
                 if ( !script.writeSourceFile() )
                 {
                     throw new com.sun.star.lang.WrappedTargetException( "Failed to create source file " + script.getLanguageName() );
                 }
             }
-            parcel.addScriptEntry( script );
-
-            if ( m_xSFA.exists( pathToParcelUrl ) )
-            {
-                LogUtils.DEBUG("Parcel.insertByName() opening stream " + pathToParcelUrl );
-                writeParcelDesc( m_xSFA, pathToParcelUrl, parcel );
-            }
-            else
-            {
-                String error = new String( pathToParcelUrl + " does not exist " );
-                throw new  com.sun.star.lang.WrappedTargetException( error );
-            }
+            m_descriptor.addScriptEntry( script );
+            writeParcelDescriptor();
         }
         catch ( Exception e )
         {
-            LogUtils.DEBUG("Failed to write entry " + aName + " in " + pathToParcelUrl + " : " + e);
+            LogUtils.DEBUG("Failed to insert entry " + aName + ": " + e.getMessage());
             throw new com.sun.star.lang.WrappedTargetException( e.toString() );
         }
     }
 
 
-    private void writeParcelDesc( XSimpleFileAccess m_xSFA, String pathToParcelDesc, ParcelDescriptor pd ) throws com.sun.star.ucb.CommandAbortedException, com.sun.star.io.IOException, com.sun.star.uno.Exception, java.io.IOException
+    private void writeParcelDescriptor()
+        throws com.sun.star.ucb.CommandAbortedException,
+               com.sun.star.io.IOException,
+               com.sun.star.uno.Exception, java.io.IOException
     {
+        String pathToDescriptor = PathUtils.make_url(
+            getPathToParcel(),  ParcelDescriptor.PARCEL_DESCRIPTOR_NAME );
+
         XSimpleFileAccess2 xSFA2 = ( XSimpleFileAccess2 )
-        UnoRuntime.queryInterface( XSimpleFileAccess2.class, m_xSFA );
+            UnoRuntime.queryInterface( XSimpleFileAccess2.class, m_xSFA );
+
         if ( xSFA2 != null )
         {
-            LogUtils.DEBUG("writeParcelDesc2() Using XSIMPLEFILEACCESS2 " + pathToParcelDesc );
-            ByteArrayOutputStream bos = new ByteArrayOutputStream( 1024 );
-            pd.write( bos );
-            ByteArrayInputStream bis = new ByteArrayInputStream( bos.toByteArray() );
-            XInputStreamImpl xis = new XInputStreamImpl( bis );
-            xSFA2.writeFile( pathToParcelDesc, xis );
-            bos.close();
-            bis.close();
-        }
+            ByteArrayOutputStream bos = null;
+            ByteArrayInputStream bis = null;
+            XInputStreamImpl xis = null;
+            try
+            {
+                bos = new ByteArrayOutputStream( 1024 );
+                m_descriptor.write( bos );
+                bis = new ByteArrayInputStream( bos.toByteArray() );
 
+                xis = new XInputStreamImpl( bis );
+                xSFA2.writeFile( pathToDescriptor, xis );
+            }
+            finally
+            {
+                if (bos != null) bos.close();
+                if (bis != null) bis.close();
+                if (xis != null) xis.closeInput();
+            }
+        }
     }
 
     // delete
@@ -314,9 +312,8 @@ public class Parcel implements XNameContainer
                    }
                    LogUtils.DEBUG("** Parcel.removeByName have removed script source file " + Name );
                 }
-                parcel.removeScriptEntry( script );
-                String pathToParcelDesc = PathUtils.make_url( getPathToParcel(),  "parcel-descriptor.xml" );
-                writeParcelDesc(  m_xSFA, pathToParcelDesc, parcel );
+                m_descriptor.removeScriptEntry( script );
+                writeParcelDescriptor();
 
             }
             else
