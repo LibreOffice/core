@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: hdu $ $Date: 2002-10-29 13:17:34 $
+ *  last change: $Author: hdu $ $Date: 2002-11-06 17:00:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,13 +110,12 @@
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
 #endif
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
 #ifndef EXTENDED_FONTSTRUCT_HXX
 #include "xfont.hxx"
 #endif
-
-
-
-
 
 
 #include <tools/debug.hxx>
@@ -1601,8 +1600,37 @@ static void SetImplFontData( const psp::FastPrintFontInfo& aInfo, ImplFontData& 
 
 // ----------------------------------------------------------------------------
 
-void
-SalGraphics::GetDevFontList( ImplDevFontList *pList )
+ImplFontData* SalGraphics::AddTempDevFont( const String& rFileURL, const String& rFontName )
+{
+    // inform font manager
+    rtl::OUString aUSystemPath;
+    OSL_VERIFY( !osl::FileBase::getSystemPathFromFileURL( rFileURL, aUSystemPath ) );
+    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
+    OString aOFileName( OUStringToOString( aUSystemPath, aEncoding ) );
+    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
+    int nFontId = rMgr.addFontFile( aOFileName, 0 );
+    if( !nFontId )
+        return NULL;
+
+    // prepare font data
+    psp::FastPrintFontInfo aInfo;
+    rMgr.getFontFastInfo( nFontId, aInfo );
+    ImplFontData* pFontData = new ImplFontData;
+    SetImplFontData( aInfo, *pFontData );
+    pFontData->maName = rFontName;
+    pFontData->mnQuality += 5800;
+
+    // inform glyph cache
+    GlyphCache& rGC = GlyphCache::GetInstance();
+    rGC.AddFontFile( rMgr.getFontFileSysPath( nFontId ), 0, nFontId, pFontData );
+    pFontData->mpSysData = (void*)nFontId; // NOTE: don't do this at home
+
+    return pFontData;
+}
+
+// ----------------------------------------------------------------------------
+
+void SalGraphics::GetDevFontList( ImplDevFontList *pList )
 {
 #ifndef _USE_PRINT_EXTENSION_
     if (maGraphicsData.m_pJobData != NULL)
@@ -1679,8 +1707,6 @@ SalGraphics::GetDevFontList( ImplDevFontList *pList )
             pFontData->mbEmbeddable     = FALSE;
             pList->Add( pFontData );
         }
-
-        // store data to bootstrap an X fallback font
 
 #ifdef USE_BUILTIN_RASTERIZER
         aX11GlyphPeer.SetDisplay( maGraphicsData.GetXDisplay(),
@@ -1822,84 +1848,6 @@ InitializeWidthArray( long *pWidthArray, sal_Size nItems, int nValue = 0  )
         *pWidthArray = nValue;
 
     return nPrecision;
-}
-
-// ---------------------------------------------------------------------------
-
-static int
-GetCharWidth( ServerFont *pServerFont, int nChar, long* nWidth )
-{
-    if( pServerFont == NULL)
-        return 0;
-
-    int nGlyphIndex = pServerFont->GetGlyphIndex( nChar );
-
-    const GlyphMetric& rGM = pServerFont->GetGlyphMetric( nGlyphIndex );
-    *nWidth = rGM.GetCharWidth();
-
-    return nGlyphIndex;
-}
-
-long
-SalGraphics::GetCharWidth( USHORT nChar1, USHORT nChar2, long *pWidthAry )
-{
-#ifndef _USE_PRINT_EXTENSION_
-    if (maGraphicsData.m_pPrinterGfx != NULL)
-        return maGraphicsData.m_pPrinterGfx->GetCharWidth(nChar1, nChar2, pWidthAry);
-    else
-    {
-#endif
-        if( maGraphicsData.mpServerFont[0] != NULL )
-        {
-            for( int i = nChar1; i <= nChar2; ++i )
-            {
-                long nWidth;
-                if( ! ::GetCharWidth( maGraphicsData.mpServerFont[0], i, &nWidth ) )
-                    ::GetCharWidth( maGraphicsData.mpServerFont[0], '?', &nWidth );
-
-                pWidthAry[ i - nChar1 ] = nWidth;
-            }
-            return 1;
-        }
-
-        // return the precision of the calculated charwidth, e.g. 1000 = 3 digits
-        // defaulted to 1 for now
-        const long nPrecision = 1;
-        int nRequestedWidth = nChar2 - nChar1 + 1;
-        int nCharWidth;
-
-        // XXX sanity check, this may happen if no font at all is installed
-        // or no system font matches the requirements for the user interface
-        if ( maGraphicsData.mXFont[0] == NULL )
-            return InitializeWidthArray( pWidthAry, nRequestedWidth, 12 );
-
-        // the font should know it's metrics best
-        SalDisplay *pSalDisplay = maGraphicsData.GetDisplay();
-        nCharWidth = maGraphicsData.mXFont[0]->GetCharWidth( nChar1, nChar2, pWidthAry, maGraphicsData.mXFont[1] );
-
-        // XXX sanity check, this may happen if the font cannot be loaded/queried
-        // either because of a garbled fontpath or because of invalid fontfile
-        if ( nCharWidth != nRequestedWidth )
-            InitializeWidthArray( pWidthAry + nCharWidth,
-                                  nRequestedWidth - nCharWidth );
-
-        // handle internal scaling
-        const long nNumerator   = maGraphicsData.aScale_.GetNumerator();
-        const long nDenominator = maGraphicsData.aScale_.GetDenominator();
-        long *pPtr;
-        sal_Unicode nChar;
-        if ( nNumerator != 1 )
-            for( pPtr = pWidthAry, nChar = nChar1; nChar <= nChar2; nChar++, pPtr++)
-                *pPtr *= nNumerator;
-        if ( nDenominator != 1 )
-            for( pPtr = pWidthAry, nChar = nChar1; nChar <= nChar2; nChar++, pPtr++)
-                *pPtr = Divide( *pPtr, nDenominator );
-
-        return nPrecision;
-
-#ifndef _USE_PRINT_EXTENSION_
-    }
-#endif
 }
 
 // ---------------------------------------------------------------------------
