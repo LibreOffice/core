@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecontexthelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tbe $ $Date: 2002-11-22 13:52:03 $
+ *  last change: $Author: fs $ $Date: 2002-12-06 13:00:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,15 +71,16 @@
 #ifndef _CPPUHELPER_WEAKREF_HXX_
 #include <cppuhelper/weakref.hxx>
 #endif
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
-#endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#endif
+
+#ifndef COMPHELPER_ACCESSIBLE_EVENT_NOTIFIER
+#include <comphelper/accessibleeventnotifier.hxx>
 #endif
 
 //.........................................................................
@@ -103,23 +104,28 @@ namespace comphelper
         IMutex*                             m_pExternalLock;    // the optional additional external lock
 
         ::cppu::OInterfaceContainerHelper*  m_pEventListeners;
-        WeakReference< XAccessible >        m_aCreator;     // the XAccessible which created our XAccessibleContext
+        WeakReference< XAccessible >        m_aCreator;         // the XAccessible which created our XAccessibleContext
+
+        AccessibleEventNotifier::TClientId  m_nClientId;
 
     public:
-        ::cppu::OInterfaceContainerHelper*  getListenerContainer( sal_Bool _bCreate = sal_True );
-            // not const - will create if necessary
-
-        inline  Reference< XAccessible >    getCreator( ) const { return m_aCreator; }
+        inline  Reference< XAccessible >    getCreator( ) const                 { return m_aCreator; }
         inline  void                        setCreator( const Reference< XAccessible >& _rAcc );
 
         inline  IMutex*                     getExternalLock( )                  { return m_pExternalLock; }
         inline  void                        setExternalLock( IMutex* _pLock )   { m_pExternalLock = _pLock; }
+
+        inline  AccessibleEventNotifier::TClientId
+                                            getClientId() const                 { return m_nClientId; }
+        inline  void                        setClientId( const AccessibleEventNotifier::TClientId _nId )
+                                                                                { m_nClientId = _nId; }
 
     public:
         OContextHelper_Impl( OAccessibleContextHelper* _pAntiImpl )
             :m_pAntiImpl( _pAntiImpl )
             ,m_pExternalLock( NULL )
             ,m_pEventListeners( NULL )
+            ,m_nClientId( 0 )
         {
         }
     };
@@ -128,14 +134,6 @@ namespace comphelper
     inline  void OContextHelper_Impl::setCreator( const Reference< XAccessible >& _rAcc )
     {
         m_aCreator = _rAcc;
-    }
-
-    //---------------------------------------------------------------------
-    ::cppu::OInterfaceContainerHelper* OContextHelper_Impl::getListenerContainer( sal_Bool _bCreate )
-    {
-        if ( !m_pEventListeners && _bCreate )
-            m_pEventListeners = new ::cppu::OInterfaceContainerHelper( m_pAntiImpl->GetMutex( OAccessibleContextHelper::OAccessControl() ) );
-        return m_pEventListeners;
     }
 
     //=====================================================================
@@ -187,12 +185,11 @@ namespace comphelper
     void SAL_CALL OAccessibleContextHelper::disposing()
     {
         ::osl::ClearableMutexGuard aGuard( GetMutex() );
-        ::cppu::OInterfaceContainerHelper* pListeners = m_pImpl->getListenerContainer( sal_False );
-        if ( pListeners )
+
+        if ( m_pImpl->getClientId( ) )
         {
-            EventObject aDisposee( *this );
-            aGuard.clear();
-            pListeners->disposeAndClear( aDisposee );
+            AccessibleEventNotifier::revokeClientNotifyDisposing( m_pImpl->getClientId( ), *this );
+            m_pImpl->setClientId( 0 );
         }
     }
 
@@ -200,68 +197,54 @@ namespace comphelper
     void SAL_CALL OAccessibleContextHelper::addEventListener( const Reference< XAccessibleEventListener >& _rxListener ) throw (RuntimeException)
     {
         OContextEntryGuard aGuard( this );
+
         if ( _rxListener.is() )
-            m_pImpl->getListenerContainer()->addInterface( _rxListener );
+        {
+            if ( !m_pImpl->getClientId( ) )
+                m_pImpl->setClientId( AccessibleEventNotifier::registerClient( ) );
+
+            AccessibleEventNotifier::addEventListener( m_pImpl->getClientId( ), _rxListener );
+        }
     }
 
     //---------------------------------------------------------------------
     void SAL_CALL OAccessibleContextHelper::removeEventListener( const Reference< XAccessibleEventListener >& _rxListener ) throw (RuntimeException)
     {
         OContextEntryGuard aGuard( this );
+
         if ( _rxListener.is() )
-            m_pImpl->getListenerContainer()->removeInterface( _rxListener );
+        {
+            sal_Int32 nListenerCount = AccessibleEventNotifier::removeEventListener( m_pImpl->getClientId( ), _rxListener );
+            if ( !nListenerCount )
+            {
+                // no listeners anymore
+                // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
+                // and at least to us not firing any events anymore, in case somebody calls
+                // NotifyAccessibleEvent, again
+                AccessibleEventNotifier::revokeClient( m_pImpl->getClientId( ) );
+                m_pImpl->setClientId( 0 );
+            }
+        }
     }
 
     //---------------------------------------------------------------------
     void SAL_CALL OAccessibleContextHelper::NotifyAccessibleEvent( const sal_Int16 _nEventId,
         const Any& _rOldValue, const Any& _rNewValue )
     {
-        // copy our current listeners
-        ::cppu::OInterfaceContainerHelper*  pListeners = m_pImpl->getListenerContainer( sal_False );
-        Sequence< Reference< XInterface > > aListeners;
-        if ( pListeners )
-            aListeners = pListeners->getElements();
+        if ( !m_pImpl->getClientId( ) )
+            // if we don't have a client id for the notifier, then we don't have listeners, then
+            // we don't need to notify anything
+            return;
 
-        if ( aListeners.getLength() )
-        {
-            AccessibleEventObject aEvent;
-            aEvent.Source = *this;
-            OSL_ENSURE( aEvent.Source.is(), "OAccessibleContextHelper::NotifyAccessibleEvent: invalid creator!" );
-            aEvent.EventId = _nEventId;
-            aEvent.OldValue = _rOldValue;
-            aEvent.NewValue = _rNewValue;
+        // build an event object
+        AccessibleEventObject aEvent;
+        aEvent.Source = *this;
+        aEvent.EventId = _nEventId;
+        aEvent.OldValue = _rOldValue;
+        aEvent.NewValue = _rNewValue;
 
-            const Reference< XInterface >*  pLoop = aListeners.getConstArray();
-            const Reference< XInterface >*  pLoopEnd = pLoop + aListeners.getLength();
-
-            while ( pLoop != pLoopEnd )
-            {
-                try
-                {
-                    while ( pLoop != pLoopEnd )
-                    {
-                        XAccessibleEventListener* pListener = static_cast< XAccessibleEventListener* > (
-                            pLoop->get() );
-                        // note that this cast is valid:
-                        // We added the interface to our listener container, and at this time it was an
-                        // XAccessibleEventListener. As we did not query for XInterface, but instead used
-                        // the XInterface which is the base of XAccessibleEventListener, we can now safely
-                        // cast.
-
-                        if ( pListener )
-                            pListener->notifyEvent( aEvent );
-
-                        ++pLoop;
-                    }
-                }
-                catch( const Exception& e )
-                {
-                    e;  // make compiler happy
-                    // skip this listener and continue with the next one
-                    ++pLoop;
-                }
-            }
-        }
+        // let the notifier handle this event
+        AccessibleEventNotifier::addEvent( m_pImpl->getClientId( ), aEvent );
     }
 
     //---------------------------------------------------------------------
@@ -269,11 +252,16 @@ namespace comphelper
         const Any& _rOldValue, const Any& _rNewValue,
         AccessibleEventBuffer & _rBuffer )
     {
+        // TODO: this whole method (as well as the class AccessibleEventBuffer) should be removed
+        // The reasons why they have been introduces id that we needed to collect a set of events
+        // before notifying them alltogether (after releasing our mutex). With the other
+        // NotifyAccessibleEvent being asynchronous now, this should not be necessary anymore
+        // - clients could use the other version now.
+
         // copy our current listeners
-        ::cppu::OInterfaceContainerHelper*  pListeners = m_pImpl->getListenerContainer( sal_False );
         Sequence< Reference< XInterface > > aListeners;
-        if ( pListeners )
-            aListeners = pListeners->getElements();
+        if ( m_pImpl->getClientId( ) )
+            aListeners = AccessibleEventNotifier::getEventListeners( m_pImpl->getClientId( ) );
 
         if ( aListeners.getLength() )
         {
@@ -402,6 +390,9 @@ namespace comphelper
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2002/11/22 13:52:03  tbe
+ *  #105058# make NotifyAccessibleEvent virtual
+ *
  *  Revision 1.9  2002/08/14 12:00:00  obr
  *  #100201# removed state change event to DEFUNC
  *
