@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-19 09:29:22 $
+ *  last change: $Author: oj $ $Date: 2001-07-23 07:54:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1418,12 +1418,13 @@ void SAL_CALL ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow ) th
     if(isAfterLast() || isBeforeFirst())
         throw SQLException();
 
-    moveToBookmark((*(*_rUpdateRow))[0].makeAny());
+    Any aBookmark = (*(*_rUpdateRow))[0].makeAny();
+    moveToBookmark(aBookmark);
     m_pCacheSet->updateRow(*_rUpdateRow,*m_aMatrixIter,m_aUpdateTable);
     //  *(*m_aMatrixIter) = *(*_rUpdateRow);
     // refetch the whole row
     (*m_aMatrixIter) = NULL;
-    moveToBookmark((*(*_rUpdateRow))[0].makeAny());
+    moveToBookmark(aBookmark);
 
     //  moveToBookmark((*(*m_aInsertRow))[0].makeAny());
 //  if(m_pCacheSet->rowUpdated())
