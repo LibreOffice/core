@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofsdrobj.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:27:05 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,9 @@ namespace sdr
 
             // Does this ViewContact support animation?
             virtual sal_Bool SupportsAnimation() const;
+
+            // overload for acessing the SdrObject
+            virtual SdrObject* TryToGetSdrObject() const;
         };
     } // end of namespace contact
 } // end of namespace sdr
