@@ -2,9 +2,9 @@
  *
  *  $RCSfile: random.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mhu $ $Date: 2001-11-29 19:12:42 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:26:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifndef _RTL_RANDOM_H_
-#define _RTL_RANDOM_H_ "$Revision: 1.4 $"
+#define _RTL_RANDOM_H_ "$Revision: 1.5 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -120,7 +120,7 @@ void SAL_CALL rtl_random_destroyPool (
 rtlRandomError SAL_CALL rtl_random_addBytes (
     rtlRandomPool  Pool,
     const void    *Buffer,
-    sal_uInt32     Bytes
+    sal_Size       Bytes
 ) SAL_THROW_EXTERN_C();
 
 
@@ -133,7 +133,7 @@ rtlRandomError SAL_CALL rtl_random_addBytes (
 rtlRandomError SAL_CALL rtl_random_getBytes (
     rtlRandomPool  Pool,
     void          *Buffer,
-    sal_uInt32     Bytes
+    sal_Size       Bytes
 ) SAL_THROW_EXTERN_C();
 
 /*========================================================================
