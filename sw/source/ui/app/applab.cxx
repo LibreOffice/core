@@ -2,9 +2,9 @@
  *
  *  $RCSfile: applab.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-11-20 09:14:31 $
+ *  last change: $Author: os $ $Date: 2001-11-21 12:35:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,7 +422,10 @@ static sal_uInt16 nBCTitleNo = 0;
             aItem.SetValue((sal_Int8)pPrt->GetPaperBin());
             rFmt.SetAttr(aItem);
 
-            aDesc.SetLandscape(ORIENTATION_LANDSCAPE == pPrt->GetOrientation());
+            //determine orientation by calculating the width and height of the resulting page
+            const int nResultWidth = rItem.lHDist * (rItem.nCols - 1) + rItem.lWidth + rItem.lLeft;
+            const int nResultHeight = rItem.lVDist * (rItem.nRows - 1) + rItem.lHeight + rItem.lUpper;
+            aDesc.SetLandscape(nResultWidth > nResultHeight);
 
             pSh->ChgPageDesc( 0, aDesc );
 
