@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:41:21 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:26:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,9 @@
 #endif
 #ifndef DBACCESS_CORE_API_QUERYCOMPOSER_HXX
 #include "querycomposer.hxx"
+#endif
+#ifndef DBACCESS_SOURCE_CORE_INC_COMPOSERTOOLS_HXX
+#include "composertools.hxx"
 #endif
 
 using namespace dbaccess;
