@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mfe $ $Date: 2000-12-12 17:56:56 $
+ *  last change: $Author: hr $ $Date: 2000-12-12 18:09:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,8 +132,6 @@
 using namespace fileaccess;
 using namespace com::sun::star;
 using namespace com::sun::star::ucb;
-
-extern "C" void debug_ustring(rtl_uString*);
 
 shell::UnqPathData::UnqPathData()
     : properties( 0 ),
@@ -2474,8 +2472,6 @@ shell::remove( sal_Int32 CommandId,
                const rtl::OUString& aUnqPath,
                sal_Int32 IsWhat )
 {
-    fprintf(stderr,"Enter - shell::remove\n");
-
     sal_Int32 nMask = FileStatusMask_Type | FileStatusMask_FilePath;
     osl::DirectoryItem aItem;
     osl::FileStatus aStatus( nMask );
@@ -2507,9 +2503,6 @@ shell::remove( sal_Int32 CommandId,
         sal_Int32 recurse;
         rtl::OUString name;
 
-        fprintf(stderr,"shell::remove : create ");
-        debug_ustring(aUnqPath.pData);
-        fprintf(stderr,"RefCount == '%i'\n",aUnqPath.pData->refCount);
 //          osl::Directory aFolder( aUnqPath );
 
         oslDirectory pDir=0;
@@ -2519,8 +2512,6 @@ shell::remove( sal_Int32 CommandId,
 
         tErr = osl_openDirectory(aUnqPath.pData,&pDir);
 
-        fprintf(stderr,"shell::remove : open ");
-        debug_ustring(aUnqPath.pData);
 //        fprintf(stderr,"RefCount == '%i'\n",aUnqPath.pData->refCount);
 //      aFolder.open();
 
@@ -2589,7 +2580,6 @@ shell::remove( sal_Int32 CommandId,
             erasePersistentSet( aUnqPath );
         }
     }
-    fprintf(stderr,"Leave - shell::remove\n");
 }
 
 
