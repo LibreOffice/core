@@ -2,9 +2,9 @@
  *
  *  $RCSfile: langbox.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:09 $
+ *  last change: $Author: pb $ $Date: 2000-11-24 10:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,18 @@
 
 // include ---------------------------------------------------------------
 
+#ifndef _SHL_HXX
+#include <tools/shl.hxx>
+#endif
 #pragma hdrstop
 
 #include "langbox.hxx"
 #include "langtab.hxx"
+#include "dialmgr.hxx"
+#include "dialogs.hrc"
+#include "unolingu.hxx"
+
+using namespace ::com::sun::star::util;
 
 //========================================================================
 //  class SvxLanguageBox
@@ -83,35 +91,76 @@ USHORT TypeToPos_Impl( LanguageType eType, const ListBox& rLb )
 }
 
 //-----------------------------------------------------------------------
+/*!!! (pb) obsolete
+SvxLanguageBox::SvxLanguageBox( Window* pParent, WinBits nWinStyle ) :
 
-SvxLanguageBox::SvxLanguageBox( Window* pParent, WinBits nWinStyle )
-    : ListBox( pParent, nWinStyle )
+    ListBox( pParent, nWinStyle )
+
 {
-    pLangTable = new SvxLanguageTable;
+    m_pLangTable = new SvxLanguageTable;
+    aNotCheckedImage = Image( SVX_RES( RID_SVXIMG_NOTCHECKED ) );
+    aCheckedImage = Image( SVX_RES( RID_SVXIMG_CHECKED ) );
 }
-
+*/
 //------------------------------------------------------------------------
 
-SvxLanguageBox::SvxLanguageBox( Window* pParent, const ResId& rResId )
-    : ListBox( pParent, rResId )
+SvxLanguageBox::SvxLanguageBox( Window* pParent, const ResId& rResId, BOOL bCheck ) :
+
+    ListBox( pParent, rResId ),
+
+    m_bWithCheckmark( bCheck )
+
 {
-    pLangTable = new SvxLanguageTable;
+    m_pLangTable = new SvxLanguageTable;
+    m_aNotCheckedImage = Image( SVX_RES( RID_SVXIMG_NOTCHECKED ) );
+    m_aCheckedImage = Image( SVX_RES( RID_SVXIMG_CHECKED ) );
+
+    if ( m_bWithCheckmark )
+    {
+        const USHORT nCount = International::GetAvailableFormatCount();
+        for ( USHORT i = 0; i < nCount; i++ )
+        {
+            LanguageType eLngType = International::GetAvailableFormat( i );
+            if ( eLngType != LANGUAGE_SYSTEM )
+                InsertLanguage( eLngType );
+        }
+    }
 }
 
 //------------------------------------------------------------------------
 
 SvxLanguageBox::~SvxLanguageBox()
 {
-    delete pLangTable;
+    delete m_pLangTable;
 }
 
 //------------------------------------------------------------------------
 
-USHORT SvxLanguageBox::InsertLanguage( const LanguageType eLangType,
-                                       USHORT nPos )
+USHORT SvxLanguageBox::InsertLanguage( const LanguageType eLangType, USHORT nPos )
 {
-    String aStrEntry = pLangTable->GetString( eLangType );
-    USHORT nAt       = InsertEntry( aStrEntry, nPos );
+    String aStrEntry = m_pLangTable->GetString( eLangType );
+    USHORT nAt = 0;
+    if ( m_bWithCheckmark )
+    {
+        const USHORT nLanguageCount = SvxGetSelectableLanguages().getLength();
+        const Language* pLangList = SvxGetSelectableLanguages().getConstArray();
+        sal_Bool bFound = sal_False;
+        for ( USHORT i = 0; i < nLanguageCount; ++i )
+        {
+            if ( eLangType == pLangList[i] )
+            {
+                bFound = sal_True;
+                break;
+            }
+        }
+
+        if ( !bFound )
+            nAt = InsertEntry( aStrEntry, m_aNotCheckedImage, nPos );
+        else
+            nAt = InsertEntry( aStrEntry, m_aCheckedImage, nPos );
+    }
+    else
+        nAt = InsertEntry( aStrEntry, nPos );
 
     SetEntryData( nAt, (void*)(ULONG)eLangType );
     return nPos;
@@ -161,5 +210,4 @@ BOOL SvxLanguageBox::IsLanguageSelected( const LanguageType eLangType ) const
     else
         return FALSE;
 }
-
 
