@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-19 20:10:33 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -767,7 +767,7 @@ ModalDialog DLG_ORGANIZE
                     Text = "Als S~tandardvorlage setzen" ;
                     Text [ english_us ] = "Set As Default Template" ;
                     Text[ portuguese ] = "Set As Default Template";
-                    Text[ russian ] = "Set As Default Template";
+                    Text[ russian ] = "~Êàê ñòàíäàğòíûé øàáëîí";
                     Text[ greek ] = "Set As Default Template";
                     Text[ dutch ] = "Als s~tandaardsjabloon";
                     Text[ french ] = "Set As Default Template";
@@ -776,9 +776,9 @@ ModalDialog DLG_ORGANIZE
                     Text[ italian ] = "Set As Default Template";
                     Text[ danish ] = "Set As Default Template";
                     Text[ swedish ] = "Definiera som s~tandardmall";
-                    Text[ polish ] = "Set As Default Template";
+                    Text[ polish ] = "~OsadŸ jako szablon standardowy";
                     Text[ portuguese_brazilian ] = "Set As Default Template";
-                    Text[ japanese ] = "Set As Default Template";
+                    Text[ japanese ] = "•W€ÃİÌßÚ°Ä‚Æ‚µ‚Äİ’è";
                     Text[ korean ] = "Set As Default Template";
                     Text[ chinese_simplified ] = "Set As Default Template";
                     Text[ chinese_traditional ] = "Set As Default Template";
@@ -793,7 +793,7 @@ ModalDialog DLG_ORGANIZE
                     Text = "~Standardvorlage zurücksetzen" ;
                     Text [ english_us ] = "Reset Default Template" ;
                     Text[ portuguese ] = "Reset Default Template";
-                    Text[ russian ] = "Reset Default Template";
+                    Text[ russian ] = "~Âîññòàíîâëåíèå ñòàíäàğòíîãî øàáëîíà";
                     Text[ greek ] = "Reset Default Template";
                     Text[ dutch ] = "~Standaardsjabloon";
                     Text[ french ] = "Reset Default Template";
@@ -804,7 +804,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ swedish ] = "Återställ ~standardmall";
                     Text[ polish ] = "Reset Default Template";
                     Text[ portuguese_brazilian ] = "Reset Default Template";
-                    Text[ japanese ] = "Reset Default Template";
+                    Text[ japanese ] = "•W€ÃİÌßÚ°Ä‚ğŒ³‚É–ß‚·";
                     Text[ korean ] = "Reset Default Template";
                     Text[ chinese_simplified ] = "Reset Default Template";
                     Text[ chinese_traditional ] = "Reset Default Template";
@@ -878,6 +878,7 @@ ModalDialog DLG_ORGANIZE
     Text[ catalan ] = "Administrar plantillas";
 };
  // ********************************************************************** EOF
+
 
 
 
