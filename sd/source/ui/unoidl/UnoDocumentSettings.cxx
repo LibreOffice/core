@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoDocumentSettings.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-17 15:20:40 $
+ *  last change: $Author: cl $ $Date: 2002-04-04 10:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,13 @@
 #include <osl/mutex.hxx>
 #endif
 
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
 #include "drawdoc.hxx"
 #ifndef SVX_LIGHT
 #include "docshell.hxx"
@@ -155,6 +162,7 @@ using namespace ::comphelper;
 using namespace ::osl;
 using namespace ::rtl;
 using namespace ::cppu;
+using namespace ::vos;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -308,6 +316,8 @@ DocumentSettings::~DocumentSettings() throw()
 
 void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, const Any* pValues ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
     SdDrawDocument* pDoc = mpModel->GetDoc();
     SdDrawDocShell* pDocSh = mpModel->GetDocShell();
     if( NULL == pDoc || NULL == pDocSh )
@@ -825,6 +835,8 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
 
 void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, Any* pValue ) throw(UnknownPropertyException, WrappedTargetException )
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
     SdDrawDocument* pDoc = mpModel->GetDoc();
     SdDrawDocShell* pDocSh = mpModel->GetDocShell();
     if( NULL == pDoc || NULL == pDocSh )
