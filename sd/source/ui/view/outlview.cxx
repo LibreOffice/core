@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:55:36 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:21:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -568,8 +568,7 @@ IMPL_LINK( OutlineView, ParagraphInsertedHdl, ::Outliner *, pOutliner )
         AddUndo(new SdrUndoNewPage(*pPage));
 
         // der Standardseite eine Masterpage zuweisen
-        USHORT nPgNum = pExample->GetMasterPageNum(0);
-        pPage->InsertMasterPage(nPgNum);
+        pPage->TRG_SetMasterPage(pExample->TRG_GetMasterPage());
 
         // Seitengroesse setzen
         pPage->SetSize(pExample->GetSize());
@@ -607,8 +606,7 @@ IMPL_LINK( OutlineView, ParagraphInsertedHdl, ::Outliner *, pOutliner )
         AddUndo(new SdrUndoNewPage(*pNotesPage));
 
         // der Notizseite eine Masterpage zuweisen
-        nPgNum = pExample->GetMasterPageNum(0);
-        pNotesPage->InsertMasterPage(nPgNum);
+        pNotesPage->TRG_SetMasterPage(pExample->TRG_GetMasterPage());
 
         // Seitengroesse setzen, es muss bereits eine Seite vorhanden sein
         pNotesPage->SetSize(pExample->GetSize());
@@ -1146,14 +1144,14 @@ BOOL OutlineView::PrepareClose(BOOL bUI)
         for (USHORT nPage = 0; nPage < nPageCount; nPage++)
         {
             SdPage* pPage = pDoc->GetSdPage(nPage, PK_STANDARD);
-            SdPage* pMasterPage = (SdPage*) pPage->GetMasterPage(0);
+            SdPage& rMasterPage = (SdPage&)pPage->TRG_GetMasterPage();
 
             Point aPos;
             Rectangle aTitleRect ( aPos, pPage->GetSize() );
             Rectangle aLayoutRect ( aTitleRect );
 
-            SdrObject* pTitleObj = pMasterPage->GetPresObj(PRESOBJ_TITLE);
-            SdrObject* pLayoutObj = pMasterPage->GetPresObj(PRESOBJ_OUTLINE);
+            SdrObject* pTitleObj = rMasterPage.GetPresObj(PRESOBJ_TITLE);
+            SdrObject* pLayoutObj = rMasterPage.GetPresObj(PRESOBJ_OUTLINE);
 
             if (pTitleObj)
             {
@@ -1609,19 +1607,19 @@ BOOL OutlineView::GetAttributes( SfxItemSet& rTargetSet, BOOL bOnlyHardAttr ) co
 |*
 \************************************************************************/
 
-BOOL OutlineView::HasMarkedObj() const
-{
-    BOOL bResult = FALSE;
-    OutlinerView* pOlView = GetViewByWindow(
-                                pOutlineViewShell->GetActiveWindow());
-    DBG_ASSERT(pOlView, "keine OutlinerView gefunden");
-    List* pSelList = (List*)pOlView->CreateSelectionList();
-    if (pSelList->Count() > 0)
-        bResult = TRUE;
-
-    delete pSelList;
-    return bResult;
-}
+//BOOL OutlineView::HasMarkedObj_unused() const
+//{
+//  BOOL bResult = FALSE;
+//  OutlinerView* pOlView = GetViewByWindow(
+//                              pOutlineViewShell->GetActiveWindow());
+//  DBG_ASSERT(pOlView, "keine OutlinerView gefunden");
+//  List* pSelList = (List*)pOlView->CreateSelectionList();
+//  if (pSelList->Count() > 0)
+//      bResult = TRUE;
+//
+//  delete pSelList;
+//  return bResult;
+//}
 
 /*************************************************************************
 |*
