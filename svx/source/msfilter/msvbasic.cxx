@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msvbasic.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:05:07 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 14:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,15 @@
  *
  ************************************************************************/
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #include <string.h>     // memset(), ...
 #ifndef UNX
 #include <io.h>         // access()
+#endif
+
+#ifndef _RTL_TENCINFO_H
+#include <rtl/tencinfo.h>   //rtl_getTextEncodingFromWindowsCodePage
 #endif
 
 #ifndef _MSVBASIC_HXX
@@ -175,7 +178,7 @@ void VBA_Impl::Output( int nLen, const sal_uInt8*pData )
     string and WordBasic is not, so each overlarge module must be split
     */
     String sTemp((const sal_Char *)pData, (xub_StrLen)nLen,
-        eCharSet);
+        meCharSet);
     int nTmp = sTemp.GetTokenCount('\x0D');
     int nIndex = aVBAStrings.GetSize()-1;
     if (aVBAStrings.Get(nIndex)->Len() +
@@ -261,8 +264,8 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
     else if (!(memcmp(aProduct, aOfficeXPBE, sizeof(aProduct))))
     {
         xVBAProject->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+        mbMac = true;
         bIsUnicode = false;
-        eCharSet = RTL_TEXTENCODING_APPLE_ROMAN;
     }
     else if (!(memcmp(aProduct, aOffice2000LE, sizeof(aProduct))))
     {
@@ -272,8 +275,8 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
     else if (!(memcmp(aProduct, aOffice98BE, sizeof(aProduct))))
     {
         xVBAProject->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+        mbMac = true;
         bIsUnicode = false;
-        eCharSet = RTL_TEXTENCODING_APPLE_ROMAN;
     }
     else if (!(memcmp(aProduct, aOffice97LE, sizeof(aProduct))))
     {
@@ -291,6 +294,7 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
                 break;
             case 0xe:
                 xVBAProject->SetNumberFormatInt(NUMBERFORMAT_INT_BIGENDIAN);
+                mbMac = true;
                 bIsUnicode = false;
                 DBG_ASSERT(!this, "unrecognized VBA macro version, report to cmc. Guessing at 8bit big endian");
                 break;
@@ -302,7 +306,7 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
 
     sal_uInt32 nLidA;  //Language identifiers
     sal_uInt32 nLidB;
-    sal_uInt16 nUnknownA;
+    sal_uInt16 nCharSet;
     sal_uInt16 nLenA;
     sal_uInt32 nUnknownB;
     sal_uInt32 nUnknownC;
@@ -310,8 +314,15 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
     sal_uInt16 nLenC;
     sal_uInt16 nLenD;
 
-    *xVBAProject >> nLidA >> nLidB >> nUnknownA >> nLenA >> nUnknownB;
+    *xVBAProject >> nLidA >> nLidB >> nCharSet >> nLenA >> nUnknownB;
     *xVBAProject >> nUnknownC >> nLenB >> nLenC >> nLenD;
+
+    meCharSet = rtl_getTextEncodingFromWindowsCodePage(nCharSet);
+
+    DBG_ASSERT(meCharSet != RTL_TEXTENCODING_DONTKNOW,
+                "don't know what vba charset to use");
+    if (meCharSet == RTL_TEXTENCODING_DONTKNOW)
+        meCharSet = RTL_TEXTENCODING_MS_1252;
 
     if (nLenD != 0x02)
     {
@@ -406,7 +417,7 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
             sal_Size nWasRead = xVBAProject->Read( pByteData, nLen );
             if( nWasRead != nLen )
                 aByteStr.ReleaseBufferAccess();
-            pOffsets[i].sName += String( aByteStr, eCharSet);
+            pOffsets[i].sName += String( aByteStr, meCharSet);
         }
 
         *xVBAProject >> nLen;
@@ -502,21 +513,11 @@ const StringArray &VBA_Impl::Decompress(sal_uInt16 nIndex, int *pOverflow)
         if (bCommented)
         {
             String sTempStringa;
-            String sTempStringb;
-            if (eCharSet == RTL_TEXTENCODING_MS_1252)
-            {
-                sTempStringa = String( RTL_CONSTASCII_STRINGPARAM("\x0D\x0A"),
-                    eCharSet);
-                sTempStringb = String( RTL_CONSTASCII_STRINGPARAM("\x0D\x0A"),
-                    eCharSet);
-            }
+            if (mbMac)
+                sTempStringa = String(RTL_CONSTASCII_STRINGPARAM("\x0A"));
             else
-            {
-                sTempStringa = String( RTL_CONSTASCII_STRINGPARAM("\x0D"),
-                    eCharSet);
-                sTempStringb = String( RTL_CONSTASCII_STRINGPARAM("\x0D"),
-                    eCharSet);
-            }
+                sTempStringa = String(RTL_CONSTASCII_STRINGPARAM("\x0D\x0A"));
+            String sTempStringb(sTempStringa);
             sTempStringb+=sComment;
             for(ULONG i=0;i<aVBAStrings.GetSize();i++)
             {
@@ -625,3 +626,5 @@ int VBA_Impl::DecompressVBA( int nIndex, SvStorageStreamRef &xVBAStream )
         Output(nPos % nWINDOWLEN,aHistory);
     return(nPos);
 }
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
