@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-28 14:28:24 $
+ *  last change: $Author: ama $ $Date: 2000-11-28 14:30:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,7 +361,7 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
     pOrig->Pos( aCharPos );
     pOrig->SSize( aCharSize );
     sal_Bool bRet = sal_True;
-    sal_Bool bWidth = sal_True;//pCMS && pCMS->bRealWidth;
+    sal_Bool bWidth = pCMS && pCMS->bRealWidth;
     if( !pCurr->GetLen() && !pCurr->Width() )
     {
         if ( pCMS && pCMS->bRealHeight )
