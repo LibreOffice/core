@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartins.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:47 $
+ *  last change: $Author: os $ $Date: 2000-12-01 09:33:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,7 +241,7 @@ IMPL_LINK( SwInsertChartDlg, NextHdl, Button *, pBtn )
 
     if(!pChartDlg)
     {
-        pChartDlg = SchDLL::CreateAutoPilotDlg( this,   pChartData,
+        pChartDlg = SchDLL::CreateAutoPilotDlg( GetParent(),    pChartData,
                                      *pInItemSet, *pOutItemSet, TRUE);
     }
     else if(bUpdateChartData)
@@ -486,123 +486,6 @@ void __EXPORT AutoEdit::KeyInput( const KeyEvent& rEvt )
     if( nCode != KEY_SPACE )
         Edit::KeyInput( rEvt );
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.50  2000/09/18 16:06:07  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.49  2000/09/11 06:52:45  os
-    Get/Set/Has/ToggleChildWindow SfxApplication -> SfxViewFrame
-
-    Revision 1.48  2000/09/07 15:59:31  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.47  2000/04/26 14:59:03  os
-    GetName() returns const String&
-
-    Revision 1.46  2000/04/19 11:22:11  os
-    UNICODE
-
-    Revision 1.45  2000/03/09 21:54:45  jp
-    Changes: SchMemChart in new headerfile
-
-    Revision 1.44  2000/02/11 14:58:21  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.43  1999/02/09 13:31:16  JP
-    Task #61632#: Charts auch in complexen Tabellen zulassen
-
-
-      Rev 1.42   09 Feb 1999 14:31:16   JP
-   Task #61632#: Charts auch in complexen Tabellen zulassen
-
-      Rev 1.41   29 Oct 1998 11:35:34   JP
-   Bug #58509#: im ModifyHdl die FirstRow/-Col Buttons ggfs. disablen
-
-      Rev 1.40   28 Oct 1998 19:34:34   JP
-   Bug #58509#: Button FirstRow/-Col ggfs. disablen
-
-      Rev 1.39   16 Mar 1998 13:55:08   MA
-   #48288# ohne Data leben
-
-      Rev 1.38   29 Nov 1997 14:28:12   MA
-   includes
-
-      Rev 1.37   24 Nov 1997 15:52:20   MA
-   includes
-
-      Rev 1.36   09 Sep 1997 11:39:16   OS
-   define fuer .hxx
-
-      Rev 1.35   01 Sep 1997 13:17:26   OS
-   DLL-Umstellung
-
-      Rev 1.34   08 Aug 1997 17:37:36   OM
-   Headerfile-Umstellung
-
-      Rev 1.33   09 Jul 1997 17:39:18   HJS
-   includes
-
-      Rev 1.32   08 Apr 1997 10:32:30   MA
-   includes
-
-      Rev 1.31   07 Apr 1997 16:54:14   OS
-   FinishHdl: pChartData erst nach UpdateData umkopieren
-
-      Rev 1.30   24 Nov 1996 14:59:48   WP
-   SvGlobalNames beseitigt
-
-      Rev 1.29   11 Nov 1996 11:20:06   MA
-   ResMgr
-
-      Rev 1.28   05 Nov 1996 13:48:20   OS
-   im FinishHdl wird der ViewFrame 'getoppt'
-
-      Rev 1.27   24 Oct 1996 14:17:12   JP
-   AutoEdit:KeyInput aus AutoCorr.cxx hierher verschoben
-
-      Rev 1.26   24 Oct 1996 13:36:42   JP
-   String Umstellung: [] -> GetChar()
-
-      Rev 1.25   02 Oct 1996 19:06:08   MA
-   Umstellung Enable/Disable
-
-      Rev 1.24   28 Aug 1996 14:33:14   OS
-   includes
-
-      Rev 1.23   23 Aug 1996 14:37:14   OS
-   FinishHdl: nach dem Close keine Member benutzen
-
-      Rev 1.22   22 Aug 1996 12:40:44   OS
-   Close im FinishHdl vor dem Einfuegen des Charts rufen
-
-      Rev 1.21   20 Aug 1996 11:34:00   OS
-   Dialog nicht mit Show/Hide, sondern mit ShowChildWindow anzeigen/verstecken
-
-      Rev 1.20   29 Jul 1996 13:07:04   OS
-   doch wieder mit Close()
-
-      Rev 1.19   25 Jul 1996 15:36:12   OS
-   kein Close()
-
-      Rev 1.18   26 Jun 1996 15:25:20   OS
-   Aufruf von Dispatcher.Execute an 324 angepasst
-
-      Rev 1.17   11 Jun 1996 13:42:32   OS
-   alten Cursor nur zurueckholen, wenn Chart nicht eingefuegt wurde
-
-      Rev 1.16   10 Jun 1996 20:40:10   MA
-   fix: IsTblComplexForChart
-
-      Rev 1.15   06 Jun 1996 15:53:18   OS
-   keine Tabellenselektion in komplexen Tabellen
-
-      Rev 1.14   30 Apr 1996 16:29:44   MA
-   fix: ggf. ein Update beim Fertigstellen
-
-------------------------------------------------------------------------*/
 
 
 
