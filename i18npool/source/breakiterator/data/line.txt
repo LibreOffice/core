@@ -1,0 +1,144 @@
+# Copyright (c) 2002-2003  International Business Machines Corporation and
+# others. All Rights Reserved.
+#
+#  file:  line.txt
+#
+#         Line Breaking Rules
+#         Implement default line breaking as defined by Unicode TR 14.
+#
+
+
+#
+#  Character Classes defined by TR 14.
+#
+
+$AI = [:LineBreak =  Ambiguous:];
+$AL = [:LineBreak =  Alphabetic:];
+$BA = [:LineBreak =  Break_After:];
+$BB = [:LineBreak =  Break_Before:];
+$BK = [:LineBreak =  Mandatory_Break:];
+$B2 = [:LineBreak =  Break_Both:];
+$CB = [:LineBreak =  Contingent_Break:];
+$CL = [:LineBreak =  Close_Punctuation:];
+$CM = [:LineBreak =  Combining_Mark:];
+$CR = [:LineBreak =  Carriage_Return:];
+$EX = [:LineBreak =  Exclamation:];
+$GL = [:LineBreak =  Glue:];
+$HY = [:LineBreak =  Hyphen:];
+$ID = [:LineBreak =  Ideographic:];
+$IN = [:LineBreak =  Inseperable:];
+$IS = [:LineBreak =  Infix_Numeric:];
+$LF = [:LineBreak =  Line_Feed:];
+$NS = [:LineBreak =  Nonstarter:];
+$NU = [:LineBreak =  Numeric:];
+$OP = [:LineBreak =  Open_Punctuation:];
+$PO = [:LineBreak =  Postfix_Numeric:];
+$PR = [:LineBreak =  Prefix_Numeric:];
+$QU = [:LineBreak =  Quotation:];
+$SA = [:LineBreak =  Complex_Context:];
+$SG = [:LineBreak =  Surrogate:];
+$SP = [:LineBreak =  Space:];
+$SY = [:LineBreak =  Break_Symbols:];
+$XX = [:LineBreak =  Unknown:];
+$ZW = [:LineBreak =  ZWSpace:];
+
+
+#
+#  Character classes from TR 29.  Needed for finding characters.
+#
+#
+$Extend  = [:Grapheme_Extend = TRUE:];
+
+
+#
+#  Rule LB1.  By default, treat AI  (characters with ambiguous east Asian width) and
+#                               SA  (South East Asian: Thai, Lao, Khmer) as $AL  (Alphabetic)
+#
+$ALPlus = $AL | $AI | $SA;
+
+#
+#  Combining Marks.   X $CM*  behaves as if it were X.  Rule LB6.
+#
+$ALcm = $ALPlus $CM*;
+$IDcm = ($ID $CM* | $SP $CM+);
+$NUcm = $NU $Extend*;
+$HYcm = $HY $Extend*;
+$QUcm = $QU $Extend*;
+$POcm = $PO $Extend*;
+$OPcm = $OP $Extend*;
+$BAcm = $BA $Extend*;
+$BBcm = $BB $Extend*;
+$NScm = $NS $Extend*;
+$GLcm = $GL $Extend*;
+$B2cm = $B2 $Extend*;
+$INcm = $IN $Extend*;
+
+
+#  New Lines.  Always break after, never break before.
+#              Rule LB 3
+#
+#  Endings.    NewLine or Zero Width Space, or both.  Rules 4, 5
+#              Because we never break before these things, $Endings
+#              appears at the end of line break rule.
+#
+$NLF = $BK | $CR | $LF | $CR $LF;
+$Endings = $SP* $ZW* $NLF?;
+
+
+#
+#  Openings  Sequences that can precede Words, and that should not be separated from them.
+#            Rules LB 9, 10
+#
+$Openings = (($QUcm $SP*)? $OPcm $SP*)*;
+
+#
+#  Closings  Seqences that follow words, and that should not be separated from them,
+#            Rule LB 8, 11, 15
+$Closings =  ($SP*( ($CL ($SP* $NScm)?  |  $EX  | $IS ) $Extend*) | $BAcm | $HYcm  | $NScm)*;
+
+#
+#  Words.  Includes mixed Alpha-numerics.
+#          Rules 11a, 16, 17, 19, more or less.
+#
+$NumberInterior = $IDcm | ($NUcm | $ALcm | $IS $NUcm)+;  
+$Number         =  $PR? ($OPcm | $HYcm)? $NumberInterior $CL? $POcm?; # Fancy Number     18 
+$Word   = (($IDcm | ($ALcm | $NUcm | $EX | $HY | $IS | $SY | $PR)+) ($POcm? | $INcm?))  ;           # Alpha-numeric.   16, 17 
+$Dashes = (($B2cm $SP*)*);                                            # Dashes           11a   
+        
+        
+
+
+ 
+ 
+        
+$Word15 = ($BBcm* ($Word | $Number | $Dashes)? ($BAcm | $HYcm | $NScm)*) |  # Rule 15. Stuff sticks around words.
+          [^[:Cc:] $BK $CR $LF $ZW $SP $GL] $Extend*  |                 # Allow characters that don't meet the
+          [^$BK $CR $LF $ZW $SP $GL ];                                   #  more elaborate definitions for WORD
+                                                                    #  to be glued.
+        
+$GluedWord  = ($GLcm | $QUcm)? $Word15 (($GLcm | $QUcm) $Word15)*;  # "Glue" will stick anything below it together.
+                                                                    # Rules 13, 14
+
+#
+#  The actual rule, a combination of everything defined above.
+#
+$Openings $GluedWord  $Closings $Endings;
+# $GluedWord;
+
+
+
+
+
+#
+#  Reverse Rules.
+#
+#     Back up to a hard break or a space that will cause a boundary.
+#     Not all spaces cause line breaks.  $SpaceGlue represents a sequence
+#     containing a space that may inhibit a break from occuring.
+#
+
+$SpaceGlue  = ([$ZW $CL $IS $NS $OP]  ($Extend* $SP)) | (($Extend* $SP)+ $OP);
+$ClumpingChars = [^$SP $BK $CR $LF];
+
+!. . $ClumpingChars*  ($SpaceGlue $ClumpingChars*)* (. | $LF $CR);
+
