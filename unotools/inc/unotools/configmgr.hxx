@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-09-26 09:25:38 $
+ *  last change: $Author: mba $ $Date: 2000-11-10 12:36:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,9 @@ namespace utl
             {
                 INSTALLPATH,
                 LOCALE,
-                OFFICEINSTALL
+                OFFICEINSTALL,
+                USERINSTALLURL,
+                OFFICEINSTALLURL,
             };
             //direct readonly access to some special configuration elements
             static com::sun::star::uno::Any GetDirectConfigProperty(ConfigProperty eProp);

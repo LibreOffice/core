@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-10-13 13:58:29 $
+ *  last change: $Author: mba $ $Date: 2000-11-10 12:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,9 +273,13 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
     OUString sPath = C2U(cConfigBaseURL);
     switch(eProp)
     {
-        case INSTALLPATH:   sPath += C2U("UserProfile/Office"); break;
+        case INSTALLPATH:
+        case USERINSTALLURL:
+            sPath += C2U("UserProfile/Office"); break;
         case LOCALE:            sPath += C2U("UserProfile/International"); break;
-        case OFFICEINSTALL: sPath += C2U("Office.Common/Path"); break;
+        case OFFICEINSTALL:
+        case OFFICEINSTALLURL:
+            sPath += C2U("Office.Common/Path"); break;
     }
     Sequence< Any > aArgs(1);
     aArgs[0] <<= sPath;
@@ -298,6 +302,8 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
             case INSTALLPATH:   sProperty = C2U("InstallPath"); break;
             case LOCALE:        sProperty = C2U("Locale"); break;
             case OFFICEINSTALL: sProperty = C2U("OfficeInstall"); break;
+            case USERINSTALLURL:   sProperty = C2U("InstallURL"); break;
+            case OFFICEINSTALLURL: sProperty = C2U("OfficeInstallURL"); break;
         }
         try
         {
