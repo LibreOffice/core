@@ -3,9 +3,9 @@
  *
  *  $RCSfile: VCL.xcu,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 08:56:29 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:42:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,7 +456,10 @@
      </prop>
     </node>
     <node oor:name="ja" oor:op="replace">
-      <prop oor:name="CJK_HEADING" oor:type="xs:string" oor:op="replace">
+      <prop oor:name="CJK_TEXT" oor:type="xs:string" oor:op="replace">
+        <value>HG 明朝L Sun;HG MinchoL Sun;HG PゴシックB Sun;HG-PGothicB Sun;HG PゴシックB;HG-PGothicB;HG Mincho Light J;MS P 明朝;さざなみ明朝;TLP明朝;LX明朝;東風明朝;Kochi Mincho;Mincho;Serif</value>
+      </prop>
+       <prop oor:name="CJK_HEADING" oor:type="xs:string" oor:op="replace">
         <value>HG 明朝L Sun;HG 明朝L;HG Mincho Light J;MS P ゴシック;さざなみゴシック;TLPゴシック;LXゴシック;東風ゴシック;東風ゴシック;Gothic;MS 明朝;HG Mincho J;HG Mincho L;HG Mincho;Mincho;MS P 明朝;HG Mincho Light J;MS ゴシック;HG Gothic J;HG Gothic B;HG Gothic;Gothic;MS P ゴシック;Andale Sans UI</value>
       </prop>
       <prop oor:name="CJK_PRESENTATION" oor:type="xs:string" oor:op="replace">
@@ -466,15 +469,12 @@
         <value>Andale;Arial</value>
       </prop>
       <prop oor:name="CJK_SPREADSHEET" oor:type="xs:string" oor:op="replace">
-        <value>HG PゴシックB Sun;HG-PGothicB Sun;HG PゴシックB;HG-PGothicB;Andale Sans UI;MS P ゴシック;さざなみゴシック;TLPゴシック;LXゴシック;東風ゴシック;東風ゴシック;Kochi Gothic;HG Gothic J;HG Gothic B;HG Gothic;Gothic</value>
+        <value>HG PゴシックB Sun;HG-PGothicB Sun;HG PゴシックB;HG-PGothicB;MS P ゴシック;さざなみゴシック;TLPゴシック;LXゴシック;東風ゴシック;東風ゴシック;Andale Sans UI;Kochi Gothic;HG Gothic J;HG Gothic B;HG Gothic;Gothic</value>
       </prop>
       <prop oor:name="LATIN_SPREADSHEET" oor:type="xs:string" oor:op="replace">
-        <value>HG PゴシックB Sun;HG-PGothicB Sun;HG PゴシックB;HG-PGothicB;Andale Sans UI;MS P ゴシック;TLPゴシック;LXゴシック;東風ゴシック;Kochi Gothic;Gothic;MS Gothic;HG Gothic J;HG Gothic B;HG Gothic;Gothic;MS PGothic;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>HG PゴシックB Sun;HG-PGothicB Sun;HG PゴシックB;HG-PGothicB;Andale Sans UI;MS P ゴシック;TLPゴシック;LXゴシック;東風ゴシック;MS Gothic;HG Gothic J;HG Gothic B;HG Gothic;Kochi Gothic;MS PGothic;Gothic</value>
       </prop>
-      <prop oor:name="CJK_TEXT" oor:type="xs:string" oor:op="replace">
-        <value>HG PゴシックB Sun;HG-PGothicB Sun;HG PゴシックB;HG-PGothicB;HG Mincho Light J;MS P 明朝;さざなみ明朝;TLP明朝;LX明朝;東風明朝;Kochi Mincho;Mincho;Serif</value>
-      </prop>
-       <prop oor:name="UI_FIXED" oor:type="xs:string" oor:op="replace">
+      <prop oor:name="UI_FIXED" oor:type="xs:string" oor:op="replace">
         <value>HG ゴシックB Sun;HG-GothicB Sun;HG Mincho Light J;MS P ゴシック;さざなみゴシック;TLPゴシック;LXゴシック;東風ゴシック;東風ゴシック;Kochi Gothic;Gothic</value>
        </prop>
        <prop oor:name="FIXED" oor:type="xs:string" oor:op="replace">
