@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtvfldi.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-09-27 15:58:45 $
+ *  last change: $Author: dvo $ $Date: 2000-11-10 15:24:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,16 +330,17 @@ void XMLVarFieldImportContext::PrepareField(
         xPropertySet->setPropertyValue(sPropertyIsDisplayFormula, aAny);
     }
 
+    // delegate to value helper
+    aValueHelper.SetDefault(GetContent());
+    aValueHelper.PrepareField(xPropertySet);
+
+    // finally, set the curren presentation
     if (bSetPresentation)
     {
         Any aAny;
         aAny <<= GetContent();
         xPropertySet->setPropertyValue(sPropertyCurrentPresentation, aAny);
     }
-
-    // delegate to value helper
-    aValueHelper.SetDefault(GetContent());
-    aValueHelper.PrepareField(xPropertySet);
 }
 
 
@@ -529,10 +530,6 @@ void XMLVariableSetFieldImportContext::PrepareField(
     aAny <<= (IsStringValue()? SetVariableType::STRING : SetVariableType::VAR);
     xPropertySet->setPropertyValue(sPropertySubType, aAny);
 
-    // set presentation
-    aAny <<= GetContent();
-    xPropertySet->setPropertyValue(sPropertyCurrentPresentation, aAny);
-
     // the remainder is handled by super class
     XMLSetVarFieldImportContext::PrepareField(xPropertySet);
 }
@@ -682,10 +679,10 @@ XMLExpressionFieldImportContext::XMLExpressionFieldImportContext(
     sal_uInt16 nPrfx, const OUString& rLocalName) :
         XMLVarFieldImportContext(rImport, rHlp, sAPI_get_expression,
                                  nPrfx, rLocalName,
-                                 // formula, value&type, style, display formula
+                                 // formula, type, style, display formula
                                  sal_False, sal_True, sal_True,
                                  sal_False, sal_False, sal_True,
-                                 sal_True, sal_False, sal_True,
+                                 sal_True, sal_False, sal_False,
                                  sal_True),
         sPropertySubType(RTL_CONSTASCII_USTRINGPARAM(sAPI_sub_type))
 {
@@ -1354,6 +1351,14 @@ void XMLValueImportHelper::PrepareField(
         xPropertySet->setPropertyValue(sPropertyContent, aAny);
     }
 
+    // format/style
+    if (bSetStyle && bFormatOK)
+    {
+        Any aAny;
+        aAny <<= nFormatKey;
+        xPropertySet->setPropertyValue(sPropertyNumberFormat, aAny);
+    }
+
     // value: string or float
     if (bSetValue)
     {
@@ -1369,14 +1374,6 @@ void XMLValueImportHelper::PrepareField(
             aAny <<= fValue;
             xPropertySet->setPropertyValue(sPropertyValue, aAny);
         }
-    }
-
-    // format/style
-    if (bSetStyle && bFormatOK)
-    {
-        Any aAny;
-        aAny <<= nFormatKey;
-        xPropertySet->setPropertyValue(sPropertyNumberFormat, aAny);
     }
 }
 

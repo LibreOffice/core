@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-08 14:35:52 $
+ *  last change: $Author: dvo $ $Date: 2000-11-10 15:24:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,12 +442,12 @@ void XMLTextFieldImportContext::EndElement()
         Reference<XPropertySet> xPropSet;
         if (CreateField(xPropSet, sServicePrefix + GetServiceName()))
         {
+            // set field properties
+            PrepareField(xPropSet);
+
             // attach field to document
             Reference<XTextContent> xTextContent(xPropSet, UNO_QUERY);
             rTextImportHelper.InsertTextContent(xTextContent);
-
-            // set field properties
-            PrepareField(xPropSet);
 
             return;
         }
