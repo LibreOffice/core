@@ -13479,3 +13479,5 @@ _TI3?AVDisposedException@lang@star@sun@com@@
 ?GetEditCursor@TextEngine@@IAE?AVRectangle@@ABVTextPaM@@EE@Z
 ?IsRightToLeft@MultiLineEdit@@QBEEXZ
 ?SetRightToLeft@MultiLineEdit@@QAEXE@Z
+ReadJPEG
+WriteJPEG
