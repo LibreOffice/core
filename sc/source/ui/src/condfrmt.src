@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condfrmt.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:01:31 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:04:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 316 , 161 ) ;
-    Text = "Bedingte Formatierung" ;
-    Text [ ENGLISH ] = "Conditional format" ;
+    Text [ de ] = "Bedingte Formatierung" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     HelpId = HID_SCDLG_CONDFORMAT ;
@@ -75,37 +74,10 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
-        Text = "Bedingung ~1" ;
-        Text [ ENGLISH ] = "Condition ~1" ;
+        Text [ de ] = "Bedingung ~1" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "Condition ~1" ;
-        Text [ italian ] = "Condizione ~1" ;
-        Text [ spanish ] = "CondiciÛn 1" ;
-        Text [ french ] = "Condition ~1" ;
-        Text [ dutch ] = "Voorwaarde ~1" ;
-        Text [ swedish ] = "Villkor ~1" ;
-        Text [ danish ] = "Betingelse ~1" ;
-        Text [ portuguese_brazilian ] = "CondiÁ„o ~1" ;
-        Text [ portuguese ] = "CondiÁ„o ~1" ;
-        Text[ chinese_simplified ] = "Êù°‰ª∂ 1";
-        Text[ russian ] = "”ÒÎÓ‚ËÂ 1";
-        Text[ polish ] = "Warunek ~1";
-        Text[ japanese ] = "Êù°‰ª∂ 1";
-        Text[ chinese_traditional ] = "Ê¢ù‰ª∂ ~1";
-        Text[ arabic ] = "«·‘—ÿ 1";
-        Text[ greek ] = "”ıÌËﬁÍÁ ~1";
-        Text[ korean ] = "Ï°∞Í±¥ 1";
-        Text[ turkish ] = "Ko˛ul ~1";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "CondiciÛ 1";
-        Text[ finnish ] = "Ehto ~1";
-        Text[ thai ] = "‡πÄ‡∏á‡∏∑‡πà‡∏≠‡∏ô‡πÑ‡∏Ç 1";
-        Text[ czech ] = "Podm√≠nka 1";
-        Text[ hebrew ] = "Bedingung ~1";
-        Text[ hindi ] = "‡§∂‡§∞‡•ç‡§§ ~1";
-        Text[ slovak ] = "Podmienka ~1";
-        Text[ hungarian ] = "~1. felt√©tel";
-        Text[ slovenian ] = "Pogoj ~1";
+        Text [ en-US ] = "Condition ~1" ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_COND1_1
     {
@@ -114,156 +86,21 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Size = MAP_APPFONT ( 48 , 40 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList =
+        StringList [ de ] =
         {
             < "Zellwert ist" ; Default ; > ;
             < "Formel ist" ; Default ; > ;
         };
-        StringList [ ENGLISH ] =
-        {
-            < "Zellwert ist" ; Default ; > ;
-            < "Formel ist" ; Default ; > ;
-        };
-        stringlist [ portuguese ] =
-        {
-            < "Valor da cÈlula È" ; Default ; > ;
-            < "FÛrmula È" ; Default ; > ;
-        };
-        stringlist [ english_us ] =
+        StringList [ en-US ] =
         {
             < "Cell value is" ; Default ; > ;
             < "Formula is" ; Default ; > ;
         };
-        stringlist [ portuguese_brazilian ] =
-        {
-            < "O valor È" ; Default ; > ;
-            < "A formula È" ; Default ; > ;
-        };
-        stringlist [ swedish ] =
-        {
-            < "Cellv‰rdet ‰r" ; Default ; > ;
-            < "Formeln ‰r" ; Default ; > ;
-        };
-        stringlist [ danish ] =
-        {
-            < "CellevÊrdi er" ; Default ; > ;
-            < "Formlen er" ; Default ; > ;
-        };
-        stringlist [ italian ] =
-        {
-            < "Il valore della cella Ë" ; Default ; > ;
-            < "La formula Ë" ; Default ; > ;
-        };
-        stringlist [ spanish ] =
-        {
-            < "El valor de la celda es" ; Default ; > ;
-            < "La fÛrmula es" ; Default ; > ;
-        };
-        stringlist [ french ] =
-        {
-            < "Valeur est" ; Default ; > ;
-            < "Formule est" ; Default ; > ;
-        };
-        stringlist [ dutch ] =
-        {
-            < "Celwaarde is" ; Default ; > ;
-            < "Formule is" ; Default ; > ;
-        };
-    StringList [ chinese_simplified ] =
-    {
-            < "ÂçïÂÖÉÊ†ºÊï∞ÂÄºÊòØ" ; Default ; > ;
-        < "ÂÖ¨ÂºèÊòØ" ; Default ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "«Ì‡˜ÂÌËÂ ˇ˜ÂÈÍË" ; Default ; > ;
-        < "‘ÓÏÛÎ‡" ; Default ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "WartoúÊ komÛrki jest" ; Default ; > ;
-        < "Formu≥a jest" ; Default ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "„Çª„É´„ÅÆÂÄ§„Åå" ; Default ; > ;
-        < "Êï∞Âºè„Åå" ; Default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "ÂÑ≤Â≠òÊ†ºÊï∏ÂÄºÊòØ" ; Default ; > ;
-        < "ÂÖ¨ÂºèÊòØ" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "ﬁÌ„… «·Œ·Ì…" ; Default ; > ;
-        < "«·’Ì€…" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "« ÙÈÏﬁ ÙÔı ÍÂÎÈÔ˝ ÂﬂÌ·È" ; Default ; > ;
-        < "œ Ù˝ÔÚ ÂﬂÌ·È" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "ÏÖÄ Í∞íÏùÄ" ; Default ; > ;
-        < "ÏàòÏãù" ; Default ; > ;
-    };
-    StringList [ language_user1 ] =
+    StringList [ x-comment ] =
     {
             < " " ; Default ; > ;
         < " " ; Default ; > ;
         };
-    StringList [ turkish ] =
-    {
-            < "H¸cre deeri" ; Default ; > ;
-        < "Form¸l" ; Default ; > ;
-    };
-    StringList [ catalan ] =
-    {
-            < "El valor de la cel.la Ès" ; Default ; > ;
-        < "La fÛrmula Ès" ; Default ; > ;
-    };
-    StringList [ finnish ] =
-    {
-            < "Solun arvo:" ; Default ; > ;
-        < "Kaava on" ; Default ; > ;
-    };
-    StringList [ thai ] =
-    {
-         < "‡∏Ñ‡πà‡∏≤‡πÄ‡∏ã‡∏•‡∏•‡πå‡∏Ñ‡∏∑‡∏≠" ; Default ; > ;
-        < "‡∏™‡∏π‡∏ï‡∏£‡∏Ñ‡∏∑‡∏≠" ; Default ; > ;
-    };
-    StringList [ czech ] =
-    {
-         < "Hodnota bu≈àky" ; Default ; > ;
-        < "Vzorec" ; Default ; > ;
-    };
-    StringList [ hebrew ] =
-    {
-         < "Zellwert ist" ; Default ; > ;
-        < "Formel ist" ; Default ; > ;
-    };
-    StringList [ hindi ] =
-    {
-         < "‡§ï‡•ã‡§∑‡•ç‡§† ‡§ï‡§æ ‡§Æ‡•Ç‡§≤‡•ç‡§Ø" ; Default ; > ;
-        < "‡§∏‡•Ç‡§§‡•ç‡§∞" ; Default ; > ;
-    };
-    StringList [ slovak ] =
-    {
-         < "Hodnota bunky je" ; Default ; > ;
-        < "Vzorec je" ; Default ; > ;
-    };
-    StringList [ hungarian ] =
-    {
-         < "A cella √©rt√©ke" ; Default ; > ;
-        < "A k√©plet" ; Default ; > ;
-    };
-    StringList [ slovenian ] =
-    {
-         < "Vrednost celice je" ; Default ; > ;
-        < "Formula je" ; Default ; > ;
-    };
     };
     ListBox LB_COND1_2
     {
@@ -272,7 +109,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Size = MAP_APPFONT ( 62 , 88 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList =
+        StringList [ de ] =
         {
             < "gleich" ; Default ; > ;
             < "kleiner als" ; Default ; > ;
@@ -285,18 +122,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
             < "zwischen" ; Default ; > ;
             < "nicht zwischen" ; Default ; > ;
         };
-        stringlist [ portuguese ] =
-        {
-            < "igual" ; Default ; > ;
-            < "menor" ; Default ; > ;
-            < "maior" ; Default ; > ;
-            < "menor ou igual a" ; Default ; > ;
-            < "maior ou igual a" ; Default ; > ;
-            < "desigual" ; Default ; > ;
-            < "entre" ; Default ; > ;
-            < "n„o entre" ; Default ; > ;
-        };
-        stringlist [ english_us ] =
+        StringList [ en-US ] =
         {
             < "equal to" ; Default ; > ;
             < "less than" ; Default ; > ;
@@ -307,183 +133,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
             < "between" ; Default ; > ;
             < "not between" ; Default ; > ;
         };
-        stringlist [ portuguese_brazilian ] =
-        {
-            < "igual a" ; Default ; > ;
-            < "menor que" ; Default ; > ;
-            < "maior que" ; Default ; > ;
-            < "menor ou igual a" ; Default ; > ;
-            < "maior ou igual a" ; Default ; > ;
-            < "diferente" ; Default ; > ;
-            < "entre" ; Default ; > ;
-            < "n„o incluso em" ; Default ; > ;
-        };
-        stringlist [ swedish ] =
-        {
-            < "lika med" ; Default ; > ;
-            < "mindre ‰n" ; Default ; > ;
-            < "stˆrre ‰n" ; Default ; > ;
-            < "mindre ‰n eller lika med" ; Default ; > ;
-            < "stˆrre ‰n eller lika med" ; Default ; > ;
-            < "inte lika med" ; Default ; > ;
-            < "mellan" ; Default ; > ;
-            < "inte mellan" ; Default ; > ;
-        };
-        stringlist [ danish ] =
-        {
-            < "lig med" ; Default ; > ;
-            < "mindre end" ; Default ; > ;
-            < "st¯rre end" ; Default ; > ;
-            < "mindre end eller lig med" ; Default ; > ;
-            < "st¯rre end eller lig med" ; Default ; > ;
-            < "forskellig fra" ; Default ; > ;
-            < "mellem" ; Default ; > ;
-            < "ikke mellem" ; Default ; > ;
-        };
-        stringlist [ italian ] =
-        {
-            < "uguale" ; Default ; > ;
-            < "minore di" ; Default ; > ;
-            < "maggiore di" ; Default ; > ;
-            < "minore o uguale" ; Default ; > ;
-            < "maggiore o uguale" ; Default ; > ;
-            < "diverso" ; Default ; > ;
-            < "tra" ; Default ; > ;
-            < "non tra" ; Default ; > ;
-        };
-        stringlist [ spanish ] =
-        {
-            < "igual" ; Default ; > ;
-            < "menor que" ; Default ; > ;
-            < "mayor que" ; Default ; > ;
-            < "menor o igual" ; Default ; > ;
-            < "mayor o igual" ; Default ; > ;
-            < "distinta de" ; Default ; > ;
-            < "entre" ; Default ; > ;
-            < "no entre" ; Default ; > ;
-        };
-        stringlist [ french ] =
-        {
-            < "Ègale ‡" ; Default ; > ;
-            < "infÈrieure ‡" ; Default ; > ;
-            < "supÈrieure ‡" ; Default ; > ;
-            < "infÈrieure ou Ègale ‡" ; Default ; > ;
-            < "supÈrieure ou Ègale ‡" ; Default ; > ;
-            < "diffÈrent" ; Default ; > ;
-            < "comprise entre" ; Default ; > ;
-            < "non comprise entre" ; Default ; > ;
-        };
-        stringlist [ dutch ] =
-        {
-            < "gelijk aan" ; Default ; > ;
-            < "kleiner dan" ; Default ; > ;
-            < "groter dan" ; Default ; > ;
-            < "kleiner dan of gelijk aan" ; Default ; > ;
-            < "groter dan of gelijk aan" ; Default ; > ;
-            < "niet gelijk aan" ; Default ; > ;
-            < "tussen" ; Default ; > ;
-            < "niet tussen" ; Default ; > ;
-        };
-    StringList [ chinese_simplified ] =
-    {
-            < "Á≠â‰∫é" ; Default ; > ;
-        < "Â∞è‰∫é" ; Default ; > ;
-        < "Â§ß‰∫é" ; Default ; > ;
-        < "Â∞è‰∫éÊàñÁ≠â‰∫é" ; Default ; > ;
-        < "Â§ß‰∫éÊàñÁ≠â‰∫é" ; Default ; > ;
-        < "‰∏çÁ≠â‰∫é" ; Default ; > ;
-        < "Âú®‰πãÈó¥" ; Default ; > ;
-        < "‰∏çÂú®‰πãÈó¥" ; Default ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "‡‚ÌÓ" ; Default ; > ;
-        < "ÏÂÌ¸¯Â ˜ÂÏ" ; Default ; > ;
-        < "·ÓÎ¸¯Â ˜ÂÏ" ; Default ; > ;
-        < "ÏÂÌ¸¯Â ËÎË ‡‚ÌÓ" ; Default ; > ;
-        < "·ÓÎ¸¯Â ËÎË ‡‚ÌÓ" ; Default ; > ;
-        < "ÌÂ ‡‚ÌÓ" ; Default ; > ;
-        < "ÏÂÊ‰Û" ; Default ; > ;
-        < "‚ÌÂ" ; Default ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "rÛwna" ; Default ; > ;
-        < "mniejsza niø" ; Default ; > ;
-        < "wiÍksza niø" ; Default ; > ;
-        < "mniejsza lub rÛwna" ; Default ; > ;
-        < "wiÍksza lub rÛwna" ; Default ; > ;
-        < "nierÛwna" ; Default ; > ;
-        < "miÍdzy" ; Default ; > ;
-        < "nie miÍdzy" ; Default ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "Ê¨°„ÅÆÂÄ§„Å´Á≠â„Åó„ÅÑ" ; Default ; > ;
-        < "Ê¨°„ÅÆÂÄ§„Çà„ÇäÂ∞è„Åï„ÅÑ" ; Default ; > ;
-        < "Ê¨°„ÅÆÂÄ§„Çà„ÇäÂ§ß„Åç„ÅÑ" ; Default ; > ;
-        < "Ê¨°„ÅÆÂÄ§‰ª•‰∏ã" ; Default ; > ;
-        < "Ê¨°„ÅÆÂÄ§‰ª•‰∏ä" ; Default ; > ;
-        < "Ê¨°„ÅÆÂÄ§„Å´Á≠â„Åó„Åè„Å™„ÅÑ" ; Default ; > ;
-        < "Ê¨°„ÅÆÂÄ§„ÅÆÈñì" ; Default ; > ;
-        < "Ê¨°„ÅÆÂÄ§„ÅÆÈñì„Åß„Å™„ÅÑ" ; Default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "Á≠âÊñº" ; Default ; > ;
-        < "Â∞èÊñº" ; Default ; > ;
-        < "Â§ßÊñº" ; Default ; > ;
-        < "Â∞èÊñºÊàñÁ≠âÊñº" ; Default ; > ;
-        < "Â§ßÊñºÊàñÁ≠âÊñº" ; Default ; > ;
-        < "‰∏çÁ≠âÊñº" ; Default ; > ;
-        < "Âú®‰πãÈñì" ; Default ; > ;
-        < "‰∏çÂú®‰πãÈñì" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "Ì”«ÊÌ" ; Default ; > ;
-        < "√ﬁ· „‰" ; Default ; > ;
-        < "√ﬂ»— „‰" ; Default ; > ;
-        < "√’€— „‰ √Ê Ì”«ÊÌ" ; Default ; > ;
-        < "√ﬂ»— „‰ √Ê Ì”«ÊÌ" ; Default ; > ;
-        < "·« Ì”«ÊÌ" ; Default ; > ;
-        < "»Ì‰" ; Default ; > ;
-        < "·Ì”  »Ì‰" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "∫ÛÔÌ" ; Default ; > ;
-        < "ÏÈÍÒ¸ÙÂÒÔÚ ·¸" ; Default ; > ;
-        < "ÏÂ„·Î˝ÙÂÒÔÚ ·¸" ; Default ; > ;
-        < "ÏÈÍÒ¸ÙÂÒÔ ﬁ ﬂÛÔ ÏÂ" ; Default ; > ;
-        < "ÏÂ„·Î˝ÙÂÒÔ ﬁ ﬂÛÔ ÏÂ" ; Default ; > ;
-        < "ƒÈ‹ˆÔÒÔ" ; Default ; > ;
-        < "ÏÂÙ·Ó˝" ; Default ; > ;
-        < "¸˜È ÏÂÙ·Ó˝" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "ÏßÄÏ†ïÌïú Ï°∞Í±¥Í≥º Í∞ôÏùå" ; Default ; > ;
-        < "ÎØ∏Îßå" ; Default ; > ;
-        < "Ï¥àÍ≥º" ; Default ; > ;
-        < "Ïù¥Ìïò" ; Default ; > ;
-        < "Îã§Ïùå Í∞í Ïù¥ÏÉÅ" ; Default ; > ;
-        < "ÏßÄÏ†ïÌïú Ï°∞Í±¥Í≥º Îã§Î¶Ñ" ; Default ; > ;
-        < "Îã§Ïùå ÏÇ¨Ïù¥ÏûÑ" ; Default ; > ;
-        < "Îã§Ïùå Í∞í ÏÇ¨Ïù¥Ïóê ÏóÜÏùå" ; Default ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "e˛ittir" ; Default ; > ;
-        < "k¸Á¸kt¸r" ; Default ; > ;
-        < "b¸y¸kt¸r" ; Default ; > ;
-        < "k¸Á¸k ya da e˛ittir" ; Default ; > ;
-        < "b¸y¸k veya e˛it" ; Default ; > ;
-        < "e˛it deildir" ; Default ; > ;
-        < "˛u aral˝kta" ; Default ; > ;
-        < "˛u aral˝kta deil" ; Default ; > ;
-    };
-    StringList [ language_user1 ] =
+    StringList [ x-comment ] =
     {
             < " " ; Default ; > ;
         < " " ; Default ; > ;
@@ -493,91 +143,6 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         < " " ; Default ; > ;
         < " " ; Default ; > ;
         < " " ; Default ; > ;
-    };
-    StringList [ catalan ] =
-    {
-            < "igual a" ; Default ; > ;
-        < "mÈs petit que" ; Default ; > ;
-        < "mÈs gran que" ; Default ; > ;
-        < "mÈs petit o igual a" ; Default ; > ;
-        < "mÈs gran o igual a" ; Default ; > ;
-        < "no Ès igual a" ; Default ; > ;
-        < "entre" ; Default ; > ;
-        < "no est‡ entre" ; Default ; > ;
-    };
-    StringList [ finnish ] =
-    {
-            < "yht‰ suuri kuin" ; Default ; > ;
-        < "pienempi kuin" ; Default ; > ;
-        < "suurempi kuin" ; Default ; > ;
-        < "pienempi tai yht‰ suuri kuin" ; Default ; > ;
-        < "suurempi tai yht‰ suuri kuin" ; Default ; > ;
-        < "eri suuri kuin" ; Default ; > ;
-        < "v‰lill‰" ; Default ; > ;
-        < "ei v‰lilt‰" ; Default ; > ;
-    };
-    StringList [ thai ] =
-    {
-         < "‡πÄ‡∏ó‡πà‡∏≤‡∏Å‡∏±‡∏ö" ; Default ; > ;
-        < "‡∏ô‡πâ‡∏≠‡∏¢‡∏Å‡∏ß‡πà‡∏≤" ; Default ; > ;
-        < "‡∏°‡∏≤‡∏Å‡∏Å‡∏ß‡πà‡∏≤" ; Default ; > ;
-        < "‡∏ô‡πâ‡∏≠‡∏¢‡∏Å‡∏ß‡πà‡∏≤‡∏´‡∏£‡∏∑‡∏≠‡πÄ‡∏ó‡πà‡∏≤‡∏Å‡∏±‡∏ö" ; Default ; > ;
-        < "‡∏°‡∏≤‡∏Å‡∏Å‡∏ß‡πà‡∏≤‡∏´‡∏£‡∏∑‡∏≠‡πÄ‡∏ó‡πà‡∏≤‡∏Å‡∏±‡∏ö" ; Default ; > ;
-        < "‡πÑ‡∏°‡πà‡πÄ‡∏ó‡πà‡∏≤‡∏Å‡∏±‡∏ö" ; Default ; > ;
-        < "‡∏£‡∏∞‡∏´‡∏ß‡πà‡∏≤‡∏á" ; Default ; > ;
-        < "‡πÑ‡∏°‡πà‡∏≠‡∏¢‡∏π‡πà‡∏£‡∏∞‡∏´‡∏ß‡πà‡∏≤‡∏á" ; Default ; > ;
-    };
-    StringList [ czech ] =
-    {
-         < "se rovn√°" ; Default ; > ;
-        < "je men≈°√≠ ne≈æ" ; Default ; > ;
-        < "je vƒõt≈°√≠ ne≈æ" ; Default ; > ;
-        < "je men≈°√≠ nebo se rovn√°" ; Default ; > ;
-        < "je vƒõt≈°√≠ nebo se rovn√°" ; Default ; > ;
-        < "se nerovn√°" ; Default ; > ;
-        < "le≈æ√≠ mezi" ; Default ; > ;
-        < "nen√≠ mezi" ; Default ; > ;
-    };
-    StringList [ hebrew ] =
-    {
-         < "‚ÄÆ◊ë‚Ä¨" ; Default ; > ;
-        < "kleiner als" ; Default ; > ;
-        < "gr√∂√üer als" ; Default ; > ;
-        < "kleiner oder gleich" ; Default ; > ;
-        < "gr√∂√üer oder gleich" ; Default ; > ;
-        < "‚ÄÆ◊ú◊ê ◊ë‚Ä¨" ; Default ; > ;
-        < "‚ÄÆ◊ë◊ô◊ü‚Ä¨" ; Default ; > ;
-        < "nicht zwischen" ; Default ; > ;
-    };
-    StringList [ hindi ] =
-    {
-         < "‡§ï‡•á ‡§∏‡§Æ‡§æ‡§®" ; Default ; > ;
-        < "‡§∏‡•á ‡§ï‡§Æ" ; Default ; > ;
-        < "‡§∏‡•á ‡§Ö‡§ß‡§ø‡§ï" ; Default ; > ;
-        < "‡§∏‡•á ‡§ï‡§Æ ‡§Ö‡§•‡§µ‡§æ ‡§∏‡§Æ‡§æ‡§®" ; Default ; > ;
-        < "‡§∏‡•á ‡§Ö‡§ß‡§ø‡§ï ‡§Ö‡§•‡§µ‡§æ ‡§∏‡§Æ‡§æ‡§®" ; Default ; > ;
-        < "‡§ï‡•á ‡§∏‡§Æ‡§æ‡§® ‡§®‡§π‡•Ä‡§Ç" ; Default ; > ;
-        < "‡§¨‡•Ä‡§ö ‡§Æ‡•á‡§Ç" ; Default ; > ;
-        < "‡§¨‡•Ä‡§ö ‡§Æ‡•á‡§Ç ‡§®‡§π‡•Ä‡§Ç" ; Default ; > ;
-    };
-    StringList [ slovak ] =
-    {
-         < "sa rovn√°" ; Default ; > ;
-        < "je men≈°ie ako" ; Default ; > ;
-        < "je v√§ƒç≈°√≠ ako" ; Default ; > ;
-        < "je men≈°ie alebo sa rovn√°" ; Default ; > ;
-        < "je v√§ƒç≈°√≠ alebo sa rovn√°" ; Default ; > ;
-        < "nie je rovn√©" ; Default ; > ;
-        < "medzi" ; Default ; > ;
-        < "nie je medzi" ; Default ; > ;
-    };
-    StringList [ hungarian ] =
-    {
-         < "egyenl≈ë" ; Default ; > ;
-    };
-    StringList [ slovenian ] =
-    {
-         < "enako" ; Default ; > ;
     };
     };
     Edit EDT_COND1_1
@@ -589,76 +154,22 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     ImageButton RB_COND1_1
     {
-        QuickHelpText = "Verkleinern" ;
-        QuickHelpText [ ENGLISH ] = "Shrink" ;
+        QuickHelpText [ de ] = "Verkleinern" ;
         Pos = MAP_APPFONT ( 167 , 19 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
-        QuickHelpText [ english_us ] = "Shrink" ;
-        QuickHelpText [ portuguese_brazilian ] = "Reduzir" ;
-        QuickHelpText [ swedish ] = "Fˆrminska" ;
-        QuickHelpText [ danish ] = "Formindsk" ;
-        QuickHelpText [ italian ] = "Zoom indietro" ;
-        QuickHelpText [ spanish ] = "Reducir" ;
-        QuickHelpText [ french ] = "RÈduire" ;
-        QuickHelpText [ dutch ] = "Verkleinen" ;
-        QuickHelpText [ portuguese ] = "Afastar" ;
-        QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
-        QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "Á∏ÆÂ∞è";
-        QuickHelpText[ chinese_simplified ] = "Áº©Â∞è";
-        QuickHelpText[ chinese_traditional ] = "Á∏ÆÂ∞è";
-        QuickHelpText[ arabic ] = " ’€Ì—";
-        QuickHelpText[ greek ] = "”ÏﬂÍÒıÌÛÁ";
-        QuickHelpText[ korean ] = "Ï∂ïÏÜå";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Verkleinern";
-        QuickHelpText[ catalan ] = "Redueix";
-        QuickHelpText[ finnish ] = "Kutista";
-        QuickHelpText[ thai ] = "Shrink";
-        QuickHelpText[ czech ] = "Zmen≈°it";
-        QuickHelpText[ hebrew ] = "Verkleinern";
-        QuickHelpText[ hindi ] = "‡§∏‡§ø‡§ï‡•Å‡§°‡§®‡§æ";
-        QuickHelpText[ slovak ] = "Zmen≈°i≈•";
-        QuickHelpText[ hungarian ] = "Zsugor√≠t√°s";
-        QuickHelpText[ slovenian ] = "Skrƒçi";
+        QuickHelpText [ en-US ] = "Shrink" ;
+        QuickHelpText [ x-comment ] = " ";
+        QuickHelpText [ x-comment ] = " ";
     };
     FixedText FT_COND1_AND
     {
         Pos = MAP_APPFONT ( 181 , 21 ) ;
         Size = MAP_APPFONT ( 16 , 8 ) ;
         Center = TRUE ;
-        Text = "und" ;
-        Text [ ENGLISH ] = "and" ;
-        Text [ english_us ] = "and" ;
-        Text [ italian ] = "e" ;
-        Text [ spanish ] = "y" ;
-        Text [ french ] = "et" ;
-        Text [ dutch ] = "en" ;
-        Text [ swedish ] = "och" ;
-        Text [ danish ] = "og" ;
-        Text [ portuguese_brazilian ] = "e" ;
-        Text [ portuguese ] = "e" ;
-        Text[ chinese_simplified ] = "Âíå";
-        Text[ russian ] = "Ë";
-        Text[ polish ] = "i";
-        Text[ japanese ] = "„Å®";
-        Text[ chinese_traditional ] = "Âíå";
-        Text[ arabic ] = "Ê";
-        Text[ greek ] = "Í·È";
-        Text[ korean ] = "Î∞è";
-        Text[ turkish ] = "ve";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "i";
-        Text[ finnish ] = "ja";
-        Text[ thai ] = "‡πÅ‡∏•‡∏∞";
-        Text[ czech ] = "a";
-        Text[ hebrew ] = "‚ÄÆ◊ú◊ë◊ô◊ü‚Ä¨";
-        Text[ hindi ] = "‡§î‡§∞";
-        Text[ slovak ] = "a";
-        Text[ hungarian ] = "√©s";
-        Text[ slovenian ] = "in";
+        Text [ de ] = "und" ;
+        Text [ en-US ] = "and" ;
+        Text [ x-comment ] = " ";
     };
     Edit EDT_COND1_2
     {
@@ -669,76 +180,22 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     ImageButton RB_COND1_2
     {
-        QuickHelpText = "Verkleinern" ;
-        QuickHelpText [ ENGLISH ] = "Shrink" ;
+        QuickHelpText [ de ] = "Verkleinern" ;
         Pos = MAP_APPFONT ( 242 , 19 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
-        QuickHelpText [ english_us ] = "Shrink" ;
-        QuickHelpText [ portuguese_brazilian ] = "Reduzir" ;
-        QuickHelpText [ swedish ] = "Fˆrminska" ;
-        QuickHelpText [ danish ] = "Formindsk" ;
-        QuickHelpText [ italian ] = "Zoom indietro" ;
-        QuickHelpText [ spanish ] = "Reducir" ;
-        QuickHelpText [ french ] = "RÈduire" ;
-        QuickHelpText [ dutch ] = "Verkleinen" ;
-        QuickHelpText [ portuguese ] = "Afastar" ;
-        QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
-        QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "Á∏ÆÂ∞è";
-        QuickHelpText[ chinese_simplified ] = "Áº©Â∞è";
-        QuickHelpText[ chinese_traditional ] = "Á∏ÆÂ∞è";
-        QuickHelpText[ arabic ] = " ’€Ì—";
-        QuickHelpText[ greek ] = "”ÏﬂÍÒıÌÛÁ";
-        QuickHelpText[ korean ] = "Ï∂ïÏÜå";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Verkleinern";
-        QuickHelpText[ catalan ] = "Redueix";
-        QuickHelpText[ finnish ] = "Kutista";
-        QuickHelpText[ thai ] = "Shrink";
-        QuickHelpText[ czech ] = "Zmen≈°it";
-        QuickHelpText[ hebrew ] = "Verkleinern";
-        QuickHelpText[ hindi ] = "‡§∏‡§ø‡§ï‡•Å‡§°‡§®‡§æ";
-        QuickHelpText[ slovak ] = "Zmen≈°i≈•";
-        QuickHelpText[ hungarian ] = "Zsugor√≠t√°s";
-        QuickHelpText[ slovenian ] = "Skrƒçi";
+        QuickHelpText [ en-US ] = "Shrink" ;
+        QuickHelpText [ x-comment ] = " ";
+        QuickHelpText [ x-comment ] = " ";
     };
     FixedText FT_COND1_TEMPLATE
     {
         Pos = MAP_APPFONT ( 6 , 37 ) ;
         Size = MAP_APPFONT ( 46 , 8 ) ;
         Right = TRUE ;
-        Text = "~Zellvorlage" ;
-        Text [ ENGLISH ] = "~Cell style" ;
-        Text [ english_us ] = "~Cell Style" ;
-        Text [ italian ] = "Modello di cella" ;
-        Text [ spanish ] = "Estilo de celda" ;
-        Text [ french ] = "Style de ~cellule" ;
-        Text [ dutch ] = "~Celopmaakprofiel" ;
-        Text [ swedish ] = "~Cellformatmall" ;
-        Text [ danish ] = "~Celletypografi" ;
-        Text [ portuguese_brazilian ] = "~Estilo da CÈlula" ;
-        Text [ portuguese ] = "~Estilo da cÈlula" ;
-        Text[ chinese_simplified ] = "ÂçïÂÖÉÊ†ºÊ†∑Âºè(~C)";
-        Text[ russian ] = "—ÚËÎ¸ ˇ˜ÂÈÍË";
-        Text[ polish ] = "~Styl komÛrki";
-        Text[ japanese ] = "„Çª„É´„Çπ„Çø„Ç§„É´(~C)";
-        Text[ chinese_traditional ] = "ÂÑ≤Â≠òÊ†ºÊ®£Âºè(~C)";
-        Text[ arabic ] = "‰„ÿ Œ·Ì…";
-        Text[ greek ] = "”Ù~ıÎ ÍÂÎÈÔ˝";
-        Text[ korean ] = "ÏÖÄ Ïä§ÌÉÄÏùº(~C)";
-        Text[ turkish ] = "~H¸cre BiÁemi";
-        Text[ language_user1 ] = "; \"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
-        Text[ catalan ] = "Estil de la cel.la";
-        Text[ finnish ] = "Solun tyyli";
-        Text[ thai ] = "‡∏•‡∏±‡∏Å‡∏©‡∏ì‡∏∞‡πÄ‡∏ã‡∏•‡∏•‡πå";
-        Text[ czech ] = "Styl bu≈àky";
-        Text[ hebrew ] = "~Zellvorlage";
-        Text[ hindi ] = "~‡§ï‡•ã‡§∑‡•ç‡§† ‡§∂‡•à‡§≤‡•Ä";
-        Text[ slovak ] = "≈†t√Ωl ~bunky";
-        Text[ hungarian ] = "~Cellast√≠lus";
-        Text[ slovenian ] = "Slog ~celice";
+        Text [ de ] = "~Zellvorlage" ;
+        Text [ en-US ] = "~Cell Style" ;
+        Text [ x-comment ] = "; \"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
     };
     ListBox LB_COND1_TEMPLATE
     {
@@ -758,37 +215,10 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     {
         Pos = MAP_APPFONT ( 6 , 60 ) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
-        Text = "Bedingung ~2" ;
-        Text [ ENGLISH ] = "Condition ~2" ;
+        Text [ de ] = "Bedingung ~2" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "Condition ~2" ;
-        Text [ italian ] = "Condizione ~2" ;
-        Text [ spanish ] = "CondiciÛn 2" ;
-        Text [ french ] = "Condition ~2" ;
-        Text [ dutch ] = "Voorwaarde ~2" ;
-        Text [ swedish ] = "Villkor ~2" ;
-        Text [ danish ] = "Betingelse ~2" ;
-        Text [ portuguese_brazilian ] = "CondiÁ„o ~2" ;
-        Text [ portuguese ] = "CondiÁ„o ~2" ;
-        Text[ chinese_simplified ] = "Êù°‰ª∂ 2";
-        Text[ russian ] = "”ÒÎÓ‚ËÂ 2";
-        Text[ polish ] = "Warunek ~2";
-        Text[ japanese ] = "Êù°‰ª∂ 2";
-        Text[ chinese_traditional ] = "Ê¢ù‰ª∂ ~2";
-        Text[ arabic ] = "«·‘—ÿ 2";
-        Text[ greek ] = "”ıÌËﬁÍÁ ~2";
-        Text[ korean ] = "Ï°∞Í±¥ 2";
-        Text[ turkish ] = "Ko˛ul ~2";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "CondiciÛ 2";
-        Text[ finnish ] = "Ehto ~2";
-        Text[ thai ] = "‡πÄ‡∏á‡∏∑‡πà‡∏≠‡∏ô‡πÑ‡∏Ç 2";
-        Text[ czech ] = "Podm√≠nka 2";
-        Text[ hebrew ] = "Bedingung ~2";
-        Text[ hindi ] = "‡§∂‡§∞‡•ç‡§§ ~2";
-        Text[ slovak ] = "Podmienka ~2";
-        Text[ hungarian ] = "~2. felt√©tel";
-        Text[ slovenian ] = "Pogoj ~2";
+        Text [ en-US ] = "Condition ~2" ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_COND2_1
     {
@@ -797,156 +227,21 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Size = MAP_APPFONT ( 48 , 40 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList =
+        StringList [ de ] =
         {
             < "Zellwert ist" ; Default ; > ;
             < "Formel ist" ; Default ; > ;
         };
-        StringList [ ENGLISH ] =
-        {
-            < "Zellwert ist" ; Default ; > ;
-            < "Formel ist" ; Default ; > ;
-        };
-        stringlist [ portuguese ] =
-        {
-            < "Valor da cÈlula È" ; Default ; > ;
-            < "FÛrmula È" ; Default ; > ;
-        };
-        stringlist [ english_us ] =
+        StringList [ en-US ] =
         {
             < "Cell value is" ; Default ; > ;
             < "Formula is" ; Default ; > ;
         };
-        stringlist [ portuguese_brazilian ] =
-        {
-            < "O valor È" ; Default ; > ;
-            < "A formula È" ; Default ; > ;
-        };
-        stringlist [ swedish ] =
-        {
-            < "Cellv‰rdet ‰r" ; Default ; > ;
-            < "Formeln ‰r" ; Default ; > ;
-        };
-        stringlist [ danish ] =
-        {
-            < "CellevÊrdi er" ; Default ; > ;
-            < "Formlen er" ; Default ; > ;
-        };
-        stringlist [ italian ] =
-        {
-            < "Il valore della cella Ë" ; Default ; > ;
-            < "La formula Ë" ; Default ; > ;
-        };
-        stringlist [ spanish ] =
-        {
-            < "El valor de la celda es" ; Default ; > ;
-            < "La fÛrmula es" ; Default ; > ;
-        };
-        stringlist [ french ] =
-        {
-            < "Valeur est" ; Default ; > ;
-            < "Formule est" ; Default ; > ;
-        };
-        stringlist [ dutch ] =
-        {
-            < "Celwaarde is" ; Default ; > ;
-            < "Formule is" ; Default ; > ;
-        };
-    StringList [ chinese_simplified ] =
-    {
-            < "ÂçïÂÖÉÊ†ºÊï∞ÂÄºÊòØ" ; Default ; > ;
-        < "ÂÖ¨ÂºèÊòØ" ; Default ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "«Ì‡˜ÂÌËÂ ˇ˜ÂÈÍË" ; Default ; > ;
-        < "‘ÓÏÛÎ‡" ; Default ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "WartoúÊ komÛrki jest" ; Default ; > ;
-        < "Formu≥a jest" ; Default ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "„Çª„É´„ÅÆÂÄ§„Åå" ; Default ; > ;
-        < "Êï∞Âºè„Åå" ; Default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "ÂÑ≤Â≠òÊ†ºÊï∏ÂÄºÊòØ" ; Default ; > ;
-        < "ÂÖ¨ÂºèÊòØ" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "ﬁÌ„… «·Œ·Ì…" ; Default ; > ;
-        < "«·’Ì€…" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "« ÙÈÏﬁ ÙÔı ÍÂÎÈÔ˝ ÂﬂÌ·È" ; Default ; > ;
-        < "œ Ù˝ÔÚ ÂﬂÌ·È" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "ÏÖÄ Í∞íÏùÄ" ; Default ; > ;
-        < "ÏàòÏãù" ; Default ; > ;
-    };
-    StringList [ language_user1 ] =
+    StringList [ x-comment ] =
     {
             < " " ; Default ; > ;
         < " " ; Default ; > ;
         };
-    StringList [ turkish ] =
-    {
-            < "H¸cre deeri" ; Default ; > ;
-        < "Form¸l" ; Default ; > ;
-    };
-    StringList [ catalan ] =
-    {
-            < "El valor de la cel.la Ès" ; Default ; > ;
-        < "La fÛrmula Ès" ; Default ; > ;
-    };
-    StringList [ finnish ] =
-    {
-            < "Solun arvo:" ; Default ; > ;
-        < "Kaava on" ; Default ; > ;
-    };
-    StringList [ thai ] =
-    {
-         < "‡∏Ñ‡πà‡∏≤‡πÄ‡∏ã‡∏•‡∏•‡πå‡∏Ñ‡∏∑‡∏≠" ; Default ; > ;
-        < "‡∏™‡∏π‡∏ï‡∏£‡∏Ñ‡∏∑‡∏≠" ; Default ; > ;
-    };
-    StringList [ czech ] =
-    {
-         < "Hodnota bu≈àky" ; Default ; > ;
-        < "Vzorec" ; Default ; > ;
-    };
-    StringList [ hebrew ] =
-    {
-         < "Zellwert ist" ; Default ; > ;
-        < "Formel ist" ; Default ; > ;
-    };
-    StringList [ hindi ] =
-    {
-         < "‡§ï‡•ã‡§∑‡•ç‡§† ‡§ï‡§æ ‡§Æ‡•Ç‡§≤‡•ç‡§Ø" ; Default ; > ;
-        < "‡§∏‡•Ç‡§§‡•ç‡§∞" ; Default ; > ;
-    };
-    StringList [ slovak ] =
-    {
-         < "Hodnota bunky je" ; Default ; > ;
-        < "Vzorec je" ; Default ; > ;
-    };
-    StringList [ hungarian ] =
-    {
-         < "A cella √©rt√©ke" ; Default ; > ;
-        < "A k√©plet" ; Default ; > ;
-    };
-    StringList [ slovenian ] =
-    {
-         < "Vrednost celice je" ; Default ; > ;
-        < "Formula je" ; Default ; > ;
-    };
     };
     ListBox LB_COND2_2
     {
@@ -955,7 +250,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Size = MAP_APPFONT ( 62 , 88 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList =
+        StringList [ de ] =
         {
             < "gleich" ; Default ; > ;
             < "kleiner als" ; Default ; > ;
@@ -968,18 +263,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
             < "zwischen" ; Default ; > ;
             < "nicht zwischen" ; Default ; > ;
         };
-        stringlist [ portuguese ] =
-        {
-            < "igual" ; Default ; > ;
-            < "menor" ; Default ; > ;
-            < "maior" ; Default ; > ;
-            < "menor ou igual a" ; Default ; > ;
-            < "maior ou igual a" ; Default ; > ;
-            < "desigual" ; Default ; > ;
-            < "entre" ; Default ; > ;
-            < "n„o entre" ; Default ; > ;
-        };
-        stringlist [ english_us ] =
+        StringList [ en-US ] =
         {
             < "equal to" ; Default ; > ;
             < "less than" ; Default ; > ;
@@ -990,183 +274,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
             < "between" ; Default ; > ;
             < "not between" ; Default ; > ;
         };
-        stringlist [ portuguese_brazilian ] =
-        {
-            < "igual a" ; Default ; > ;
-            < "menor que" ; Default ; > ;
-            < "maior que" ; Default ; > ;
-            < "menor ou igual a" ; Default ; > ;
-            < "maior ou igual a" ; Default ; > ;
-            < "diferente" ; Default ; > ;
-            < "entre" ; Default ; > ;
-            < "n„o incluso em" ; Default ; > ;
-        };
-        stringlist [ swedish ] =
-        {
-            < "lika med" ; Default ; > ;
-            < "mindre ‰n" ; Default ; > ;
-            < "stˆrre ‰n" ; Default ; > ;
-            < "mindre ‰n eller lika med" ; Default ; > ;
-            < "stˆrre ‰n eller lika med" ; Default ; > ;
-            < "inte lika med" ; Default ; > ;
-            < "mellan" ; Default ; > ;
-            < "inte mellan" ; Default ; > ;
-        };
-        stringlist [ danish ] =
-        {
-            < "lig med" ; Default ; > ;
-            < "mindre end" ; Default ; > ;
-            < "st¯rre end" ; Default ; > ;
-            < "mindre end eller lig med" ; Default ; > ;
-            < "st¯rre end eller lig med" ; Default ; > ;
-            < "forskellig fra" ; Default ; > ;
-            < "mellem" ; Default ; > ;
-            < "ikke mellem" ; Default ; > ;
-        };
-        stringlist [ italian ] =
-        {
-            < "uguale" ; Default ; > ;
-            < "minore di" ; Default ; > ;
-            < "maggiore di" ; Default ; > ;
-            < "minore o uguale" ; Default ; > ;
-            < "maggiore o uguale" ; Default ; > ;
-            < "non uguale" ; Default ; > ;
-            < "tra" ; Default ; > ;
-            < "non tra" ; Default ; > ;
-        };
-        stringlist [ spanish ] =
-        {
-            < "igual" ; Default ; > ;
-            < "menor que" ; Default ; > ;
-            < "mayor que" ; Default ; > ;
-            < "menor o igual" ; Default ; > ;
-            < "mayor o igual" ; Default ; > ;
-            < "distinta de" ; Default ; > ;
-            < "entre" ; Default ; > ;
-            < "no entre" ; Default ; > ;
-        };
-        stringlist [ french ] =
-        {
-            < "Ègale ‡" ; Default ; > ;
-            < "infÈrieure ‡" ; Default ; > ;
-            < "supÈrieure ‡" ; Default ; > ;
-            < "infÈrieure ou Ègale ‡" ; Default ; > ;
-            < "supÈrieure ou Ègale ‡" ; Default ; > ;
-            < "diffÈrent" ; Default ; > ;
-            < "comprise entre" ; Default ; > ;
-            < "non comprise entre" ; Default ; > ;
-        };
-        stringlist [ dutch ] =
-        {
-            < "gelijk aan" ; Default ; > ;
-            < "kleiner dan" ; Default ; > ;
-            < "groter dan" ; Default ; > ;
-            < "kleiner dan of gelijk aan" ; Default ; > ;
-            < "groter dan of gelijk aan" ; Default ; > ;
-            < "niet gelijk aan" ; Default ; > ;
-            < "tussen" ; Default ; > ;
-            < "niet tussen" ; Default ; > ;
-        };
-    StringList [ chinese_simplified ] =
-    {
-            < "Á≠â‰∫é" ; Default ; > ;
-        < "Â∞è‰∫é" ; Default ; > ;
-        < "Â§ß‰∫é" ; Default ; > ;
-        < "Â∞è‰∫éÊàñÁ≠â‰∫é" ; Default ; > ;
-        < "Â§ß‰∫éÊàñÁ≠â‰∫é" ; Default ; > ;
-        < "‰∏çÁ≠â‰∫é" ; Default ; > ;
-        < "Âú®‰πãÈó¥" ; Default ; > ;
-        < "‰∏çÂú®‰πãÈó¥" ; Default ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "‡‚ÌÓ" ; Default ; > ;
-        < "ÏÂÌ¸¯Â ˜ÂÏ" ; Default ; > ;
-        < "·ÓÎ¸¯Â ˜ÂÏ" ; Default ; > ;
-        < "ÏÂÌ¸¯Â ËÎË ‡‚ÌÓ" ; Default ; > ;
-        < "·ÓÎ¸¯Â ËÎË ‡‚ÌÓ" ; Default ; > ;
-        < "ÌÂ ‡‚ÌÓ" ; Default ; > ;
-        < "ÏÂÊ‰Û" ; Default ; > ;
-        < "‚ÌÂ" ; Default ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "rÛwna" ; Default ; > ;
-        < "mniejsza niø" ; Default ; > ;
-        < "wiÍksza niø" ; Default ; > ;
-        < "mniejsza lub rÛwna" ; Default ; > ;
-        < "wiÍksza lub rÛwna" ; Default ; > ;
-        < "nierÛwna" ; Default ; > ;
-        < "miÍdzy" ; Default ; > ;
-        < "nie miÍdzy" ; Default ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "Ê¨°„ÅÆÂÄ§„Å´Á≠â„Åó„ÅÑ" ; Default ; > ;
-        < "Ê¨°„ÅÆÂÄ§„Çà„ÇäÂ∞è„Åï„ÅÑ" ; Default ; > ;
-        < "Ê¨°„ÅÆÂÄ§„Çà„ÇäÂ§ß„Åç„ÅÑ" ; Default ; > ;
-        < "Ê¨°„ÅÆÂÄ§‰ª•‰∏ã" ; Default ; > ;
-        < "Ê¨°„ÅÆÂÄ§‰ª•‰∏ä" ; Default ; > ;
-        < "Ê¨°„ÅÆÂÄ§„Å´Á≠â„Åó„Åè„Å™„ÅÑ" ; Default ; > ;
-        < "Ê¨°„ÅÆÂÄ§„ÅÆÈñì" ; Default ; > ;
-        < "Ê¨°„ÅÆÂÄ§„ÅÆÈñì„Åß„Å™„ÅÑ" ; Default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "Á≠âÊñº" ; Default ; > ;
-        < "Â∞èÊñº" ; Default ; > ;
-        < "Â§ßÊñº" ; Default ; > ;
-        < "Â∞èÊñºÊàñÁ≠âÊñº" ; Default ; > ;
-        < "Â§ßÊñºÊàñÁ≠âÊñº" ; Default ; > ;
-        < "‰∏çÁ≠âÊñº" ; Default ; > ;
-        < "Âú®‰πãÈñì" ; Default ; > ;
-        < "‰∏çÂú®‰πãÈñì" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "Ì”«ÊÌ" ; Default ; > ;
-        < "√ﬁ· „‰" ; Default ; > ;
-        < "√ﬂ»— „‰" ; Default ; > ;
-        < "√’€— „‰ √Ê Ì”«ÊÌ" ; Default ; > ;
-        < "√ﬂ»— „‰ √Ê Ì”«ÊÌ" ; Default ; > ;
-        < "·« Ì”«ÊÌ" ; Default ; > ;
-        < "»Ì‰" ; Default ; > ;
-        < "·Ì”  »Ì‰" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "∫ÛÔÌ" ; Default ; > ;
-        < "ÏÈÍÒ¸ÙÂÒÔÚ ·¸" ; Default ; > ;
-        < "ÏÂ„·Î˝ÙÂÒÔÚ ·¸" ; Default ; > ;
-        < "ÏÈÍÒ¸ÙÂÒÔ ﬁ ﬂÛÔ ÏÂ" ; Default ; > ;
-        < "ÏÂ„·Î˝ÙÂÒÔ ﬁ ﬂÛÔ ÏÂ" ; Default ; > ;
-        < "ƒÈ‹ˆÔÒÔ" ; Default ; > ;
-        < "ÏÂÙ·Ó˝" ; Default ; > ;
-        < "¸˜È ÏÂÙ·Ó˝" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "ÏßÄÏ†ïÌïú Ï°∞Í±¥Í≥º Í∞ôÏùå" ; Default ; > ;
-        < "ÎØ∏Îßå" ; Default ; > ;
-        < "Ï¥àÍ≥º" ; Default ; > ;
-        < "Ïù¥Ìïò" ; Default ; > ;
-        < "Îã§Ïùå Í∞í Ïù¥ÏÉÅ" ; Default ; > ;
-        < "ÏßÄÏ†ïÌïú Ï°∞Í±¥Í≥º Îã§Î¶Ñ" ; Default ; > ;
-        < "Îã§Ïùå ÎÇ†Ïßú ÏÇ¨Ïù¥" ; Default ; > ;
-        < "Îã§Ïùå Í∞í ÏÇ¨Ïù¥Ïóê ÏóÜÏùå" ; Default ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "e˛ittir" ; Default ; > ;
-        < "k¸Á¸kt¸r" ; Default ; > ;
-        < "b¸y¸kt¸r" ; Default ; > ;
-        < "k¸Á¸k ya da e˛ittir" ; Default ; > ;
-        < "b¸y¸k ve e˛it" ; Default ; > ;
-        < "e˛it deildir" ; Default ; > ;
-        < "˛u aral˝kta" ; Default ; > ;
-        < "˛u aral˝kta deil" ; Default ; > ;
-    };
-    StringList [ language_user1 ] =
+    StringList [ x-comment ] =
     {
             < " " ; Default ; > ;
         < " " ; Default ; > ;
@@ -1176,105 +284,6 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         < " " ; Default ; > ;
         < " " ; Default ; > ;
         < " " ; Default ; > ;
-    };
-    StringList [ catalan ] =
-    {
-            < "igual a" ; Default ; > ;
-        < "mÈs petit que" ; Default ; > ;
-        < "mÈs gran que" ; Default ; > ;
-        < "mÈs petit o igual a" ; Default ; > ;
-        < "mÈs gran o igual a" ; Default ; > ;
-        < "no Ès igual a" ; Default ; > ;
-        < "entre" ; Default ; > ;
-        < "no est‡ entre" ; Default ; > ;
-    };
-    StringList [ finnish ] =
-    {
-            < "yht‰ suuri kuin" ; Default ; > ;
-        < "pienempi kuin" ; Default ; > ;
-        < "suurempi kuin" ; Default ; > ;
-        < "pienempi tai yht‰ suuri kuin" ; Default ; > ;
-        < "suurempi tai yht‰ suuri kuin" ; Default ; > ;
-        < "eri suuri kuin" ; Default ; > ;
-        < "v‰lill‰" ; Default ; > ;
-        < "ei v‰lilt‰" ; Default ; > ;
-    };
-    StringList [ thai ] =
-    {
-         < "‡πÄ‡∏ó‡πà‡∏≤‡∏Å‡∏±‡∏ö" ; Default ; > ;
-        < "‡∏ô‡πâ‡∏≠‡∏¢‡∏Å‡∏ß‡πà‡∏≤" ; Default ; > ;
-        < "‡∏°‡∏≤‡∏Å‡∏Å‡∏ß‡πà‡∏≤" ; Default ; > ;
-        < "‡∏ô‡πâ‡∏≠‡∏¢‡∏Å‡∏ß‡πà‡∏≤‡∏´‡∏£‡∏∑‡∏≠‡πÄ‡∏ó‡πà‡∏≤‡∏Å‡∏±‡∏ö" ; Default ; > ;
-        < "‡∏°‡∏≤‡∏Å‡∏Å‡∏ß‡πà‡∏≤‡∏´‡∏£‡∏∑‡∏≠‡πÄ‡∏ó‡πà‡∏≤‡∏Å‡∏±‡∏ö" ; Default ; > ;
-        < "‡πÑ‡∏°‡πà‡πÄ‡∏ó‡πà‡∏≤‡∏Å‡∏±‡∏ö" ; Default ; > ;
-        < "‡∏£‡∏∞‡∏´‡∏ß‡πà‡∏≤‡∏á" ; Default ; > ;
-        < "‡πÑ‡∏°‡πà‡∏≠‡∏¢‡∏π‡πà‡∏£‡∏∞‡∏´‡∏ß‡πà‡∏≤‡∏á" ; Default ; > ;
-    };
-    StringList [ czech ] =
-    {
-         < "je roven" ; Default ; > ;
-        < "je men≈°√≠ ne≈æ" ; Default ; > ;
-        < "je vƒõt≈°√≠ ne≈æ" ; Default ; > ;
-        < "je men≈°√≠ nebo se rovn√°" ; Default ; > ;
-        < "je vƒõt≈°√≠ nebo se rovn√°" ; Default ; > ;
-        < "se nerovn√°" ; Default ; > ;
-        < "le≈æ√≠ mezi" ; Default ; > ;
-        < "nen√≠ mezi" ; Default ; > ;
-    };
-    StringList [ hebrew ] =
-    {
-         < "‚ÄÆ◊ë‚Ä¨" ; Default ; > ;
-        < "kleiner als" ; Default ; > ;
-        < "gr√∂√üer als" ; Default ; > ;
-        < "kleiner oder gleich" ; Default ; > ;
-        < "gr√∂√üer oder gleich" ; Default ; > ;
-        < "‚ÄÆ◊ú◊ê ◊ë‚Ä¨" ; Default ; > ;
-        < "‚ÄÆ◊ë◊ô◊ü‚Ä¨" ; Default ; > ;
-        < "nicht zwischen" ; Default ; > ;
-    };
-    StringList [ hindi ] =
-    {
-         < "‡§ï‡•á ‡§∏‡§Æ‡§æ‡§®" ; Default ; > ;
-        < "‡§∏‡•á ‡§ï‡§Æ" ; Default ; > ;
-        < "‡§∏‡•á ‡§Ö‡§ß‡§ø‡§ï" ; Default ; > ;
-        < "‡§∏‡•á ‡§ï‡§Æ ‡§Ö‡§•‡§µ‡§æ ‡§∏‡§Æ‡§æ‡§®" ; Default ; > ;
-        < "‡§∏‡•á ‡§Ö‡§ß‡§ø‡§ï ‡§Ö‡§•‡§µ‡§æ ‡§∏‡§Æ‡§æ‡§®" ; Default ; > ;
-        < "‡§ï‡•á ‡§∏‡§Æ‡§æ‡§® ‡§®‡§π‡•Ä‡§Ç" ; Default ; > ;
-        < "‡§¨‡•Ä‡§ö ‡§Æ‡•á‡§Ç" ; Default ; > ;
-        < "‡§¨‡•Ä‡§ö ‡§Æ‡•á‡§Ç ‡§®‡§π‡•Ä‡§Ç" ; Default ; > ;
-    };
-    StringList [ slovak ] =
-    {
-         < "sa rovn√°" ; Default ; > ;
-        < "je men≈°ie ako" ; Default ; > ;
-        < "je v√§ƒç≈°√≠ ako" ; Default ; > ;
-        < "je men≈°ie alebo sa rovn√°" ; Default ; > ;
-        < "je v√§ƒç≈°√≠ alebo sa rovn√°" ; Default ; > ;
-        < "nie je rovn√©" ; Default ; > ;
-        < "medzi" ; Default ; > ;
-        < "nie je medzi" ; Default ; > ;
-    };
-    StringList [ hungarian ] =
-    {
-         < "egyenl≈ë" ; Default ; > ;
-        < "kisebb mint" ; Default ; > ;
-        < "nagyobb mint" ; Default ; > ;
-        < "kisebb vagy egyenl≈ë" ; Default ; > ;
-        < "nagyobb vagy egyenl≈ë" ; Default ; > ;
-        < "nem egyenl≈ë" ; Default ; > ;
-        < "k√∂z√∂tt" ; Default ; > ;
-        < "nincs k√∂z√∂tte" ; Default ; > ;
-    };
-    StringList [ slovenian ] =
-    {
-         < "enako" ; Default ; > ;
-        < "manj≈°e kot" ; Default ; > ;
-        < "veƒçje kot" ; Default ; > ;
-        < "manj≈°e ali enako" ; Default ; > ;
-        < "veƒçje ali enako" ; Default ; > ;
-        < "ni enako" ; Default ; > ;
-        < "med" ; Default ; > ;
-        < "ni med" ; Default ; > ;
     };
     };
     Edit EDT_COND2_1
@@ -1286,76 +295,22 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     ImageButton RB_COND2_1
     {
-        QuickHelpText = "Verkleinern" ;
-        QuickHelpText [ ENGLISH ] = "Shrink" ;
+        QuickHelpText [ de ] = "Verkleinern" ;
         Pos = MAP_APPFONT ( 167 , 73 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
-        QuickHelpText [ english_us ] = "Shrink" ;
-        QuickHelpText [ portuguese_brazilian ] = "Reduzir" ;
-        QuickHelpText [ swedish ] = "Fˆrminska" ;
-        QuickHelpText [ danish ] = "Formindsk" ;
-        QuickHelpText [ italian ] = "Zoom indietro" ;
-        QuickHelpText [ spanish ] = "Reducir" ;
-        QuickHelpText [ french ] = "RÈduire" ;
-        QuickHelpText [ dutch ] = "Verkleinen" ;
-        QuickHelpText [ portuguese ] = "Afastar" ;
-    QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
-        QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "Á∏ÆÂ∞è";
-        QuickHelpText[ chinese_simplified ] = "Áº©Â∞è";
-        QuickHelpText[ chinese_traditional ] = "Á∏ÆÂ∞è";
-        QuickHelpText[ arabic ] = " ’€Ì—";
-        QuickHelpText[ greek ] = "”ÏﬂÍÒıÌÛÁ";
-        QuickHelpText[ korean ] = "Ï∂ïÏÜå";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Verkleinern";
-        QuickHelpText[ catalan ] = "Redueix";
-        QuickHelpText[ finnish ] = "Kutista";
-        QuickHelpText[ thai ] = "Shrink";
-        QuickHelpText[ czech ] = "Zmen≈°it";
-        QuickHelpText[ hebrew ] = "Verkleinern";
-        QuickHelpText[ hindi ] = "‡§∏‡§ø‡§ï‡•Å‡§°‡§®‡§æ";
-        QuickHelpText[ slovak ] = "Zmen≈°i≈•";
-        QuickHelpText[ hungarian ] = "Zsugor√≠t√°s";
-        QuickHelpText[ slovenian ] = "Skrƒçi";
+        QuickHelpText [ en-US ] = "Shrink" ;
+        QuickHelpText [ x-comment ] = " ";
+        QuickHelpText [ x-comment ] = " ";
     };
     FixedText FT_COND2_AND
     {
         Pos = MAP_APPFONT ( 181 , 75 ) ;
         Size = MAP_APPFONT ( 16 , 8 ) ;
         Center = TRUE ;
-        Text = "und" ;
-        Text [ ENGLISH ] = "and" ;
-        Text [ english_us ] = "and" ;
-        Text [ italian ] = "e" ;
-        Text [ spanish ] = "y" ;
-        Text [ french ] = "et" ;
-        Text [ dutch ] = "en" ;
-        Text [ swedish ] = "och" ;
-        Text [ danish ] = "og" ;
-        Text [ portuguese_brazilian ] = "e" ;
-        Text [ portuguese ] = "e" ;
-        Text[ chinese_simplified ] = "Âíå";
-        Text[ russian ] = "Ë";
-        Text[ polish ] = "i";
-        Text[ japanese ] = "„Å®";
-        Text[ chinese_traditional ] = "Âíå";
-        Text[ arabic ] = "Ê";
-        Text[ greek ] = "Í·È";
-        Text[ korean ] = "Î∞è";
-        Text[ turkish ] = "ve";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "i";
-        Text[ finnish ] = "ja";
-        Text[ thai ] = "‡πÅ‡∏•‡∏∞";
-        Text[ czech ] = "a";
-        Text[ hebrew ] = "‚ÄÆ◊ú◊ë◊ô◊ü‚Ä¨";
-        Text[ hindi ] = "‡§î‡§∞";
-        Text[ slovak ] = "a";
-        Text[ hungarian ] = "√©s";
-        Text[ slovenian ] = "in";
+        Text [ de ] = "und" ;
+        Text [ en-US ] = "and" ;
+        Text [ x-comment ] = " ";
     };
     Edit EDT_COND2_2
     {
@@ -1366,76 +321,22 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     ImageButton RB_COND2_2
     {
-        QuickHelpText = "Verkleinern" ;
-        QuickHelpText [ ENGLISH ] = "Shrink" ;
+        QuickHelpText [ de ] = "Verkleinern" ;
         Pos = MAP_APPFONT ( 242 , 73 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
-        QuickHelpText [ english_us ] = "Shrink" ;
-        QuickHelpText [ portuguese_brazilian ] = "Reduzir" ;
-        QuickHelpText [ swedish ] = "Fˆrminska" ;
-        QuickHelpText [ danish ] = "Formindsk" ;
-        QuickHelpText [ italian ] = "Zoom indietro" ;
-        QuickHelpText [ spanish ] = "Reducir" ;
-        QuickHelpText [ french ] = "RÈduire" ;
-        QuickHelpText [ dutch ] = "Verkleinen" ;
-        QuickHelpText [ portuguese ] = "Afastar" ;
-        QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
-        QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "Á∏ÆÂ∞è";
-        QuickHelpText[ chinese_simplified ] = "Áº©Â∞è";
-        QuickHelpText[ chinese_traditional ] = "Á∏ÆÂ∞è";
-        QuickHelpText[ arabic ] = " ’€Ì—";
-        QuickHelpText[ greek ] = "”ÏﬂÍÒıÌÛÁ";
-        QuickHelpText[ korean ] = "Ï∂ïÏÜå";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Verkleinern";
-        QuickHelpText[ catalan ] = "Redueix";
-        QuickHelpText[ finnish ] = "Kutista";
-        QuickHelpText[ thai ] = "Shrink";
-        QuickHelpText[ czech ] = "Zmen≈°it";
-        QuickHelpText[ hebrew ] = "Verkleinern";
-        QuickHelpText[ hindi ] = "‡§∏‡§ø‡§ï‡•Å‡§°‡§®‡§æ";
-        QuickHelpText[ slovak ] = "Zmen≈°i≈•";
-        QuickHelpText[ hungarian ] = "Zsugor√≠t√°s";
-        QuickHelpText[ slovenian ] = "Skrƒçi";
+        QuickHelpText [ en-US ] = "Shrink" ;
+        QuickHelpText [ x-comment ] = " ";
+        QuickHelpText [ x-comment ] = " ";
     };
     FixedText FT_COND2_TEMPLATE
     {
         Pos = MAP_APPFONT ( 6 , 91 ) ;
         Size = MAP_APPFONT ( 46 , 8 ) ;
         Right = TRUE ;
-        Text = "Z~ellvorlage" ;
-        Text [ ENGLISH ] = "C~ell style" ;
-        Text [ english_us ] = "C~ell Style" ;
-        Text [ italian ] = "Modello di cella" ;
-        Text [ spanish ] = "Estilo de celda" ;
-        Text [ french ] = "Style de c~ellule" ;
-        Text [ dutch ] = "C~elopmaakprofiel" ;
-        Text [ swedish ] = "C~ellformatmall" ;
-        Text [ danish ] = "C~elletypografi" ;
-        Text [ portuguese_brazilian ] = "~Estilo da CÈlula" ;
-        Text [ portuguese ] = "~Estilo da cÈlula" ;
-        Text[ chinese_simplified ] = "ÂçïÂÖÉÊ†ºÊ†∑Âºè(~E)";
-        Text[ russian ] = "—ÚËÎ¸ ˇ˜ÂÈÍË";
-        Text[ polish ] = "S~tyl komÛrki";
-        Text[ japanese ] = "„Çª„É´„Çπ„Çø„Ç§„É´(~E)";
-        Text[ chinese_traditional ] = "ÂÑ≤Â≠òÊ†ºÊ®£Âºè(~E)";
-        Text[ arabic ] = "‰„ÿ Œ·Ì…";
-        Text[ greek ] = "”ÙıÎ Í~ÂÎÈÔ˝";
-        Text[ korean ] = "ÏÖÄ Ïä§ÌÉÄÏùº(~E)";
-        Text[ turkish ] = "H¸cre BiÁemi";
-        Text[ language_user1 ] = "; \"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
-        Text[ catalan ] = "Estil de la cel.la";
-        Text[ finnish ] = "Solun tyyli";
-        Text[ thai ] = "‡∏•‡∏±‡∏Å‡∏©‡∏ì‡∏∞‡πÄ‡∏ã‡∏•‡∏•‡πå";
-        Text[ czech ] = "Styl bu≈àky";
-        Text[ hebrew ] = "Z~ellvorlage";
-        Text[ hindi ] = "‡§ï‡•ã~‡§∑‡•ç‡§† ‡§∂‡•à‡§≤‡•Ä";
-        Text[ slovak ] = "≈†t√Ωl bun~ky";
-        Text[ hungarian ] = "C~ellast√≠lus";
-        Text[ slovenian ] = "Slog c~elice";
+        Text [ de ] = "Z~ellvorlage" ;
+        Text [ en-US ] = "C~ell Style" ;
+        Text [ x-comment ] = "; \"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
     };
     ListBox LB_COND2_TEMPLATE
     {
@@ -1455,37 +356,10 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     {
         Pos = MAP_APPFONT ( 6 , 114 ) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
-        Text = "Bedingung ~3" ;
-        Text [ ENGLISH ] = "Condition ~3" ;
+        Text [ de ] = "Bedingung ~3" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "Condition ~3" ;
-        Text [ italian ] = "Condizione ~3" ;
-        Text [ spanish ] = "CondiciÛn 3" ;
-        Text [ french ] = "Condition ~3" ;
-        Text [ dutch ] = "Voorwaarde ~3" ;
-        Text [ swedish ] = "Villkor ~3" ;
-        Text [ danish ] = "Betingelse ~3" ;
-        Text [ portuguese_brazilian ] = "CondiÁ„o ~3" ;
-        Text [ portuguese ] = "CondiÁ„o ~3" ;
-        Text[ chinese_simplified ] = "Êù°‰ª∂ 3";
-        Text[ russian ] = "”ÒÎÓ‚ËÂ 3";
-        Text[ polish ] = "Warunek ~3";
-        Text[ japanese ] = "Êù°‰ª∂ 3";
-        Text[ chinese_traditional ] = "Ê¢ù‰ª∂ ~3";
-        Text[ arabic ] = "«·‘—ÿ 3";
-        Text[ greek ] = "”ıÌËﬁÍÁ ~3";
-        Text[ korean ] = "Ï°∞Í±¥ 3";
-        Text[ turkish ] = "Ko˛ul ~3";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "CondiciÛ 3";
-        Text[ finnish ] = "Ehto ~3";
-        Text[ thai ] = "‡πÄ‡∏á‡∏∑‡πà‡∏≠‡∏ô‡πÑ‡∏Ç 3";
-        Text[ czech ] = "Podm√≠nka 3";
-        Text[ hebrew ] = "Bedingung ~3";
-        Text[ hindi ] = "‡§∂‡§∞‡•ç‡§§ ~3";
-        Text[ slovak ] = "Podmienka ~3";
-        Text[ hungarian ] = "~3. felt√©tel";
-        Text[ slovenian ] = "Pogoj ~3";
+        Text [ en-US ] = "Condition ~3" ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_COND3_1
     {
@@ -1494,156 +368,21 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Size = MAP_APPFONT ( 48 , 40 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList =
+        StringList [ de ] =
         {
             < "Zellwert ist" ; Default ; > ;
             < "Formel ist" ; Default ; > ;
         };
-        StringList [ ENGLISH ] =
-        {
-            < "Zellwert ist" ; Default ; > ;
-            < "Formel ist" ; Default ; > ;
-        };
-        stringlist [ portuguese ] =
-        {
-            < "Valor da cÈlula È" ; Default ; > ;
-            < "FÛrmula È" ; Default ; > ;
-        };
-        stringlist [ english_us ] =
+        StringList [ en-US ] =
         {
             < "Cell value is" ; Default ; > ;
             < "Formula is" ; Default ; > ;
         };
-        stringlist [ portuguese_brazilian ] =
-        {
-            < "O valor È" ; Default ; > ;
-            < "A formula È" ; Default ; > ;
-        };
-        stringlist [ swedish ] =
-        {
-            < "Cellv‰rdet ‰r" ; Default ; > ;
-            < "Formeln ‰r" ; Default ; > ;
-        };
-        stringlist [ danish ] =
-        {
-            < "CellevÊrdi er" ; Default ; > ;
-            < "Formlen er" ; Default ; > ;
-        };
-        stringlist [ italian ] =
-        {
-            < "Il valore della cella Ë" ; Default ; > ;
-            < "La formula Ë" ; Default ; > ;
-        };
-        stringlist [ spanish ] =
-        {
-            < "El valor de la celda es" ; Default ; > ;
-            < "La fÛrmula es" ; Default ; > ;
-        };
-        stringlist [ french ] =
-        {
-            < "Valeur est" ; Default ; > ;
-            < "Formule est" ; Default ; > ;
-        };
-        stringlist [ dutch ] =
-        {
-            < "Celwaarde is" ; Default ; > ;
-            < "Formule is" ; Default ; > ;
-        };
-    StringList [ chinese_simplified ] =
-    {
-            < "ÂçïÂÖÉÊ†ºÊï∞ÂÄºÊòØ" ; Default ; > ;
-        < "ÂÖ¨ÂºèÊòØ" ; Default ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "«Ì‡˜ÂÌËÂ ˇ˜ÂÈÍË" ; Default ; > ;
-        < "‘ÓÏÛÎ‡" ; Default ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "WartoúÊ komÛrki jest" ; Default ; > ;
-        < "Formu≥a jest" ; Default ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "„Çª„É´„ÅÆÂÄ§„Åå" ; Default ; > ;
-        < "Êï∞Âºè„Åå" ; Default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "ÂÑ≤Â≠òÊ†ºÊï∏ÂÄºÊòØ" ; Default ; > ;
-        < "ÂÖ¨ÂºèÊòØ" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "ﬁÌ„… «·Œ·Ì…" ; Default ; > ;
-        < "«·’Ì€…" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "« ÙÈÏﬁ ÙÔı ÍÂÎÈÔ˝ ÂﬂÌ·È" ; Default ; > ;
-        < "œ Ù˝ÔÚ ÂﬂÌ·È" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "ÏÖÄ Í∞íÏùÄ" ; Default ; > ;
-        < "ÏàòÏãù" ; Default ; > ;
-    };
-    StringList [ language_user1 ] =
+    StringList [ x-comment ] =
     {
             < " " ; Default ; > ;
         < " " ; Default ; > ;
         };
-    StringList [ turkish ] =
-    {
-            < "H¸cre deeri" ; Default ; > ;
-        < "Form¸l" ; Default ; > ;
-    };
-    StringList [ catalan ] =
-    {
-            < "El valor de la cel.la Ès" ; Default ; > ;
-        < "La fÛrmula Ès" ; Default ; > ;
-    };
-    StringList [ finnish ] =
-    {
-            < "Solun arvo:" ; Default ; > ;
-        < "Kaava on" ; Default ; > ;
-    };
-    StringList [ thai ] =
-    {
-         < "‡∏Ñ‡πà‡∏≤‡πÄ‡∏ã‡∏•‡∏•‡πå‡∏Ñ‡∏∑‡∏≠" ; Default ; > ;
-        < "‡∏™‡∏π‡∏ï‡∏£‡∏Ñ‡∏∑‡∏≠" ; Default ; > ;
-    };
-    StringList [ czech ] =
-    {
-         < "Hodnota bu≈àky" ; Default ; > ;
-        < "Vzorec" ; Default ; > ;
-    };
-    StringList [ hebrew ] =
-    {
-         < "Zellwert ist" ; Default ; > ;
-        < "Formel ist" ; Default ; > ;
-    };
-    StringList [ hindi ] =
-    {
-         < "‡§ï‡•ã‡§∑‡•ç‡§† ‡§ï‡§æ ‡§Æ‡•Ç‡§≤‡•ç‡§Ø" ; Default ; > ;
-        < "‡§∏‡•Ç‡§§‡•ç‡§∞" ; Default ; > ;
-    };
-    StringList [ slovak ] =
-    {
-         < "Hodnota bunky je" ; Default ; > ;
-        < "Vzorec je" ; Default ; > ;
-    };
-    StringList [ hungarian ] =
-    {
-         < "A cella √©rt√©ke" ; Default ; > ;
-        < "A k√©plet" ; Default ; > ;
-    };
-    StringList [ slovenian ] =
-    {
-         < "Vrednost celice je" ; Default ; > ;
-        < "Formula je" ; Default ; > ;
-    };
     };
     ListBox LB_COND3_2
     {
@@ -1652,7 +391,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Size = MAP_APPFONT ( 62 , 88 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList =
+        StringList [ de ] =
         {
             < "gleich" ; Default ; > ;
             < "kleiner als" ; Default ; > ;
@@ -1665,18 +404,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
             < "zwischen" ; Default ; > ;
             < "nicht zwischen" ; Default ; > ;
         };
-        stringlist [ portuguese ] =
-        {
-            < "igual" ; Default ; > ;
-            < "menor" ; Default ; > ;
-            < "maior" ; Default ; > ;
-            < "menor ou igual a" ; Default ; > ;
-            < "maior ou igual a" ; Default ; > ;
-            < "desigual" ; Default ; > ;
-            < "entre" ; Default ; > ;
-            < "n„o entre" ; Default ; > ;
-        };
-        stringlist [ english_us ] =
+        StringList [ en-US ] =
         {
             < "equal to" ; Default ; > ;
             < "less than" ; Default ; > ;
@@ -1687,183 +415,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
             < "between" ; Default ; > ;
             < "not between" ; Default ; > ;
         };
-        stringlist [ portuguese_brazilian ] =
-        {
-            < "igual a" ; Default ; > ;
-            < "menor que" ; Default ; > ;
-            < "maior que" ; Default ; > ;
-            < "menor ou igual a" ; Default ; > ;
-            < "maior ou igual a" ; Default ; > ;
-            < "diferente" ; Default ; > ;
-            < "entre" ; Default ; > ;
-            < "n„o incluso em" ; Default ; > ;
-        };
-        stringlist [ swedish ] =
-        {
-            < "lika med" ; Default ; > ;
-            < "mindre ‰n" ; Default ; > ;
-            < "stˆrre ‰n" ; Default ; > ;
-            < "mindre ‰n eller lika med" ; Default ; > ;
-            < "stˆrre ‰n eller lika med" ; Default ; > ;
-            < "inte lika med" ; Default ; > ;
-            < "mellan" ; Default ; > ;
-            < "inte mellan" ; Default ; > ;
-        };
-        stringlist [ danish ] =
-        {
-            < "lig med" ; Default ; > ;
-            < "mindre end" ; Default ; > ;
-            < "st¯rre end" ; Default ; > ;
-            < "mindre end eller lig med" ; Default ; > ;
-            < "st¯rre end eller lig med" ; Default ; > ;
-            < "forskellig fra" ; Default ; > ;
-            < "mellem" ; Default ; > ;
-            < "ikke mellem" ; Default ; > ;
-        };
-        stringlist [ italian ] =
-        {
-            < "uguale" ; Default ; > ;
-            < "minore di" ; Default ; > ;
-            < "maggiore di" ; Default ; > ;
-            < "minore o uguale" ; Default ; > ;
-            < "maggiore o uguale" ; Default ; > ;
-            < "non uguale" ; Default ; > ;
-            < "tra" ; Default ; > ;
-            < "non tra" ; Default ; > ;
-        };
-        stringlist [ spanish ] =
-        {
-            < "igual" ; Default ; > ;
-            < "menor que" ; Default ; > ;
-            < "mayor que" ; Default ; > ;
-            < "menor o igual" ; Default ; > ;
-            < "mayor o igual" ; Default ; > ;
-            < "distinta de" ; Default ; > ;
-            < "entre" ; Default ; > ;
-            < "no entre" ; Default ; > ;
-        };
-        stringlist [ french ] =
-        {
-            < "Ègale ‡" ; Default ; > ;
-            < "infÈrieure ‡" ; Default ; > ;
-            < "supÈrieure ‡" ; Default ; > ;
-            < "infÈrieure ou Ègale ‡" ; Default ; > ;
-            < "supÈrieure ou Ègale ‡" ; Default ; > ;
-            < "diffÈrent" ; Default ; > ;
-            < "comprise entre" ; Default ; > ;
-            < "non comprise entre" ; Default ; > ;
-        };
-        stringlist [ dutch ] =
-        {
-            < "gelijk aan" ; Default ; > ;
-            < "kleiner dan" ; Default ; > ;
-            < "groter dan" ; Default ; > ;
-            < "kleiner dan of gelijk aan" ; Default ; > ;
-            < "groter dan of gelijk aan" ; Default ; > ;
-            < "niet gelijk aan" ; Default ; > ;
-            < "tussen" ; Default ; > ;
-            < "niet tussen" ; Default ; > ;
-        };
-    StringList [ chinese_simplified ] =
-    {
-            < "Á≠â‰∫é" ; Default ; > ;
-        < "Â∞è‰∫é" ; Default ; > ;
-        < "Â§ß‰∫é" ; Default ; > ;
-        < "Â∞è‰∫éÊàñÁ≠â‰∫é" ; Default ; > ;
-        < "Â§ß‰∫éÊàñÁ≠â‰∫é" ; Default ; > ;
-        < "‰∏çÁ≠â‰∫é" ; Default ; > ;
-        < "Âú®‰πãÈó¥" ; Default ; > ;
-        < "‰∏çÂú®‰πãÈó¥" ; Default ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "‡‚ÌÓ" ; Default ; > ;
-        < "ÏÂÌ¸¯Â ˜ÂÏ" ; Default ; > ;
-        < "·ÓÎ¸¯Â ˜ÂÏ" ; Default ; > ;
-        < "ÏÂÌ¸¯Â ËÎË ‡‚ÌÓ" ; Default ; > ;
-        < "·ÓÎ¸¯Â ËÎË ‡‚ÌÓ" ; Default ; > ;
-        < "ÌÂ ‡‚ÌÓ" ; Default ; > ;
-        < "ÏÂÊ‰Û" ; Default ; > ;
-        < "‚ÌÂ" ; Default ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "rÛwna" ; Default ; > ;
-        < "mniejsza niø" ; Default ; > ;
-        < "wiÍksza niø" ; Default ; > ;
-        < "mniejsza lub rÛwna" ; Default ; > ;
-        < "wiÍksza lub rÛwna" ; Default ; > ;
-        < "nierÛwna" ; Default ; > ;
-        < "miÍdzy" ; Default ; > ;
-        < "nie miÍdzy" ; Default ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "Ê¨°„ÅÆÂÄ§„Å´Á≠â„Åó„ÅÑ" ; Default ; > ;
-        < "Ê¨°„ÅÆÂÄ§„Çà„ÇäÂ∞è„Åï„ÅÑ" ; Default ; > ;
-        < "Ê¨°„ÅÆÂÄ§„Çà„ÇäÂ§ß„Åç„ÅÑ" ; Default ; > ;
-        < "Ê¨°„ÅÆÂÄ§‰ª•‰∏ã" ; Default ; > ;
-        < "Ê¨°„ÅÆÂÄ§‰ª•‰∏ä" ; Default ; > ;
-        < "Ê¨°„ÅÆÂÄ§„Å´Á≠â„Åó„Åè„Å™„ÅÑ" ; Default ; > ;
-        < "Ê¨°„ÅÆÂÄ§„ÅÆÈñì" ; Default ; > ;
-        < "Ê¨°„ÅÆÂÄ§„ÅÆÈñì„Åß„Å™„ÅÑ" ; Default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "Á≠âÊñº" ; Default ; > ;
-        < "Â∞èÊñº" ; Default ; > ;
-        < "Â§ßÊñº" ; Default ; > ;
-        < "Â∞èÊñºÊàñÁ≠âÊñº" ; Default ; > ;
-        < "Â§ßÊñºÊàñÁ≠âÊñº" ; Default ; > ;
-        < "‰∏çÁ≠âÊñº" ; Default ; > ;
-        < "Âú®‰πãÈñì" ; Default ; > ;
-        < "‰∏çÂú®‰πãÈñì" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "Ì”«ÊÌ" ; Default ; > ;
-        < "√ﬁ· „‰" ; Default ; > ;
-        < "√ﬂ»— „‰" ; Default ; > ;
-        < "√’€— „‰ √Ê Ì”«ÊÌ" ; Default ; > ;
-        < "√ﬂ»— „‰ √Ê Ì”«ÊÌ" ; Default ; > ;
-        < "·« Ì”«ÊÌ" ; Default ; > ;
-        < "»Ì‰" ; Default ; > ;
-        < "·Ì”  »Ì‰" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "∫ÛÔÌ" ; Default ; > ;
-        < "ÏÈÍÒ¸ÙÂÒÔÚ ·¸" ; Default ; > ;
-        < "ÏÂ„·Î˝ÙÂÒÔÚ ·¸" ; Default ; > ;
-        < "ÏÈÍÒ¸ÙÂÒÔ ﬁ ﬂÛÔ ÏÂ" ; Default ; > ;
-        < "ÏÂ„·Î˝ÙÂÒÔ ﬁ ﬂÛÔ ÏÂ" ; Default ; > ;
-        < "ƒÈ‹ˆÔÒÔ" ; Default ; > ;
-        < "ÏÂÙ·Ó˝" ; Default ; > ;
-        < "¸˜È ÏÂÙ·Ó˝" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "ÏßÄÏ†ïÌïú Ï°∞Í±¥Í≥º Í∞ôÏùå" ; Default ; > ;
-        < "ÎØ∏Îßå" ; Default ; > ;
-        < "Ï¥àÍ≥º" ; Default ; > ;
-        < "Ïù¥Ìïò" ; Default ; > ;
-        < "Îã§Ïùå Í∞í Ïù¥ÏÉÅ" ; Default ; > ;
-        < "ÏßÄÏ†ïÌïú Ï°∞Í±¥Í≥º Îã§Î¶Ñ" ; Default ; > ;
-        < "Îã§Ïùå ÎÇ†Ïßú ÏÇ¨Ïù¥" ; Default ; > ;
-        < "Îã§Ïùå Í∞í ÏÇ¨Ïù¥Ïóê ÏóÜÏùå" ; Default ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "e˛ittir" ; Default ; > ;
-        < "k¸Á¸kt¸r" ; Default ; > ;
-        < "b¸y¸kt¸r" ; Default ; > ;
-        < "k¸Á¸k ya da e˛ittir" ; Default ; > ;
-        < "b¸y¸k veya e˛it" ; Default ; > ;
-        < "e˛it deildir" ; Default ; > ;
-        < "˛u aral˝kta" ; Default ; > ;
-        < "˛u aral˝kta deil" ; Default ; > ;
-    };
-    StringList [ language_user1 ] =
+    StringList [ x-comment ] =
     {
             < " " ; Default ; > ;
         < " " ; Default ; > ;
@@ -1873,105 +425,6 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         < " " ; Default ; > ;
         < " " ; Default ; > ;
         < " " ; Default ; > ;
-    };
-    StringList [ catalan ] =
-    {
-            < "igual a" ; Default ; > ;
-        < "mÈs petit que" ; Default ; > ;
-        < "mÈs gran que" ; Default ; > ;
-        < "mÈs petit o igual a" ; Default ; > ;
-        < "mÈs gran o igual a" ; Default ; > ;
-        < "no Ès igual a" ; Default ; > ;
-        < "entre" ; Default ; > ;
-        < "no est‡ entre" ; Default ; > ;
-    };
-    StringList [ finnish ] =
-    {
-            < "yht‰ suuri kuin" ; Default ; > ;
-        < "pienempi kuin" ; Default ; > ;
-        < "suurempi kuin" ; Default ; > ;
-        < "pienempi tai yht‰ suuri kuin" ; Default ; > ;
-        < "suurempi tai yht‰ suuri kuin" ; Default ; > ;
-        < "eri suuri kuin" ; Default ; > ;
-        < "v‰lill‰" ; Default ; > ;
-        < "ei v‰lilt‰" ; Default ; > ;
-    };
-    StringList [ thai ] =
-    {
-         < "‡πÄ‡∏ó‡πà‡∏≤‡∏Å‡∏±‡∏ö" ; Default ; > ;
-        < "‡∏ô‡πâ‡∏≠‡∏¢‡∏Å‡∏ß‡πà‡∏≤" ; Default ; > ;
-        < "‡∏°‡∏≤‡∏Å‡∏Å‡∏ß‡πà‡∏≤" ; Default ; > ;
-        < "‡∏ô‡πâ‡∏≠‡∏¢‡∏Å‡∏ß‡πà‡∏≤‡∏´‡∏£‡∏∑‡∏≠‡πÄ‡∏ó‡πà‡∏≤‡∏Å‡∏±‡∏ö" ; Default ; > ;
-        < "‡∏°‡∏≤‡∏Å‡∏Å‡∏ß‡πà‡∏≤‡∏´‡∏£‡∏∑‡∏≠‡πÄ‡∏ó‡πà‡∏≤‡∏Å‡∏±‡∏ö" ; Default ; > ;
-        < "‡πÑ‡∏°‡πà‡πÄ‡∏ó‡πà‡∏≤‡∏Å‡∏±‡∏ö" ; Default ; > ;
-        < "‡∏£‡∏∞‡∏´‡∏ß‡πà‡∏≤‡∏á" ; Default ; > ;
-        < "‡πÑ‡∏°‡πà‡∏≠‡∏¢‡∏π‡πà‡∏£‡∏∞‡∏´‡∏ß‡πà‡∏≤‡∏á" ; Default ; > ;
-    };
-    StringList [ czech ] =
-    {
-         < "se rovn√°" ; Default ; > ;
-        < "je men≈°√≠ ne≈æ" ; Default ; > ;
-        < "je vƒõt≈°√≠ ne≈æ" ; Default ; > ;
-        < "je men≈°√≠ nebo se rovn√°" ; Default ; > ;
-        < "je vƒõt≈°√≠ nebo se rovn√°" ; Default ; > ;
-        < "se nerovn√°" ; Default ; > ;
-        < "le≈æ√≠ mezi" ; Default ; > ;
-        < "nen√≠ mezi" ; Default ; > ;
-    };
-    StringList [ hebrew ] =
-    {
-         < "‚ÄÆ◊ë‚Ä¨" ; Default ; > ;
-        < "kleiner als" ; Default ; > ;
-        < "gr√∂√üer als" ; Default ; > ;
-        < "kleiner oder gleich" ; Default ; > ;
-        < "gr√∂√üer oder gleich" ; Default ; > ;
-        < "‚ÄÆ◊ú◊ê ◊ë‚Ä¨" ; Default ; > ;
-        < "‚ÄÆ◊ë◊ô◊ü‚Ä¨" ; Default ; > ;
-        < "nicht zwischen" ; Default ; > ;
-    };
-    StringList [ hindi ] =
-    {
-         < "‡§ï‡•á ‡§∏‡§Æ‡§æ‡§®" ; Default ; > ;
-        < "‡§∏‡•á ‡§ï‡§Æ" ; Default ; > ;
-        < "‡§∏‡•á ‡§Ö‡§ß‡§ø‡§ï" ; Default ; > ;
-        < "‡§∏‡•á ‡§ï‡§Æ ‡§Ö‡§•‡§µ‡§æ ‡§∏‡§Æ‡§æ‡§®" ; Default ; > ;
-        < "‡§∏‡•á ‡§Ö‡§ß‡§ø‡§ï ‡§Ö‡§•‡§µ‡§æ ‡§∏‡§Æ‡§æ‡§®" ; Default ; > ;
-        < "‡§ï‡•á ‡§∏‡§Æ‡§æ‡§® ‡§®‡§π‡•Ä‡§Ç" ; Default ; > ;
-        < "‡§¨‡•Ä‡§ö ‡§Æ‡•á‡§Ç" ; Default ; > ;
-        < "‡§¨‡•Ä‡§ö ‡§Æ‡•á‡§Ç ‡§®‡§π‡•Ä‡§Ç" ; Default ; > ;
-    };
-    StringList [ slovak ] =
-    {
-         < "sa rovn√°" ; Default ; > ;
-        < "je men≈°ie ako" ; Default ; > ;
-        < "je v√§ƒç≈°√≠ ako" ; Default ; > ;
-        < "je men≈°ie alebo sa rovn√°" ; Default ; > ;
-        < "je v√§ƒç≈°√≠ alebo sa rovn√°" ; Default ; > ;
-        < "nie je rovn√©" ; Default ; > ;
-        < "medzi" ; Default ; > ;
-        < "nie je medzi" ; Default ; > ;
-    };
-    StringList [ hungarian ] =
-    {
-         < "egyenl≈ë" ; Default ; > ;
-        < "kisebb mint" ; Default ; > ;
-        < "nagyobb mint" ; Default ; > ;
-        < "kisebb vagy egyenl≈ë" ; Default ; > ;
-        < "nagyobb vagy egyenl≈ë" ; Default ; > ;
-        < "nem egyenl≈ë" ; Default ; > ;
-        < "k√∂z√∂tt" ; Default ; > ;
-        < "nincs k√∂z√∂tte" ; Default ; > ;
-    };
-    StringList [ slovenian ] =
-    {
-         < "enako" ; Default ; > ;
-        < "manj≈°e kot" ; Default ; > ;
-        < "veƒçje kot" ; Default ; > ;
-        < "manj≈°e ali enako" ; Default ; > ;
-        < "veƒçje ali enako" ; Default ; > ;
-        < "ni enako" ; Default ; > ;
-        < "med" ; Default ; > ;
-        < "ni med" ; Default ; > ;
     };
     };
     Edit EDT_COND3_1
@@ -1983,76 +436,22 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     ImageButton RB_COND3_1
     {
-        QuickHelpText = "Verkleinern" ;
-        QuickHelpText [ ENGLISH ] = "Shrink" ;
+        QuickHelpText [ de ] = "Verkleinern" ;
         Pos = MAP_APPFONT ( 167 , 127 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
-        QuickHelpText [ english_us ] = "Shrink" ;
-        QuickHelpText [ portuguese_brazilian ] = "Reduzir" ;
-        QuickHelpText [ swedish ] = "Fˆrminska" ;
-        QuickHelpText [ danish ] = "Formindsk" ;
-        QuickHelpText [ italian ] = "Zoom indietro" ;
-        QuickHelpText [ spanish ] = "Reducir" ;
-        QuickHelpText [ french ] = "RÈduire" ;
-        QuickHelpText [ dutch ] = "Verkleinen" ;
-        QuickHelpText [ portuguese ] = "Afastar" ;
-    QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
-        QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "Á∏ÆÂ∞è";
-        QuickHelpText[ chinese_simplified ] = "Áº©Â∞è";
-        QuickHelpText[ chinese_traditional ] = "Á∏ÆÂ∞è";
-        QuickHelpText[ arabic ] = " ’€Ì—";
-        QuickHelpText[ greek ] = "”ÏﬂÍÒıÌÛÁ";
-        QuickHelpText[ korean ] = "Ï∂ïÏÜå";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Verkleinern";
-        QuickHelpText[ catalan ] = "Redueix";
-        QuickHelpText[ finnish ] = "Kutista";
-        QuickHelpText[ thai ] = "Shrink";
-        QuickHelpText[ czech ] = "Zmen≈°it";
-        QuickHelpText[ hebrew ] = "Verkleinern";
-        QuickHelpText[ hindi ] = "‡§∏‡§ø‡§ï‡•Å‡§°‡§®‡§æ";
-        QuickHelpText[ slovak ] = "Zmen≈°i≈•";
-        QuickHelpText[ hungarian ] = "Zsugor√≠t√°s";
-        QuickHelpText[ slovenian ] = "Skrƒçi";
+        QuickHelpText [ en-US ] = "Shrink" ;
+        QuickHelpText [ x-comment ] = " ";
+        QuickHelpText [ x-comment ] = " ";
     };
     FixedText FT_COND3_AND
     {
         Pos = MAP_APPFONT ( 181 , 129 ) ;
         Size = MAP_APPFONT ( 16 , 8 ) ;
         Center = TRUE ;
-        Text = "und" ;
-        Text [ ENGLISH ] = "and" ;
-        Text [ english_us ] = "and" ;
-        Text [ italian ] = "e" ;
-        Text [ spanish ] = "y" ;
-        Text [ french ] = "et" ;
-        Text [ dutch ] = "en" ;
-        Text [ swedish ] = "och" ;
-        Text [ danish ] = "og" ;
-        Text [ portuguese_brazilian ] = "e" ;
-        Text [ portuguese ] = "e" ;
-        Text[ chinese_simplified ] = "Âíå";
-        Text[ russian ] = "Ë";
-        Text[ polish ] = "i";
-        Text[ japanese ] = "„Å®";
-        Text[ chinese_traditional ] = "Âíå";
-        Text[ arabic ] = "Ê";
-        Text[ greek ] = "Í·È";
-        Text[ korean ] = "Î∞è";
-        Text[ turkish ] = "ve";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "i";
-        Text[ finnish ] = "ja";
-        Text[ thai ] = "‡πÅ‡∏•‡∏∞";
-        Text[ czech ] = "a";
-        Text[ hebrew ] = "‚ÄÆ◊ú◊ë◊ô◊ü‚Ä¨";
-        Text[ hindi ] = "‡§î‡§∞";
-        Text[ slovak ] = "a";
-        Text[ hungarian ] = "√©s";
-        Text[ slovenian ] = "in";
+        Text [ de ] = "und" ;
+        Text [ en-US ] = "and" ;
+        Text [ x-comment ] = " ";
     };
     Edit EDT_COND3_2
     {
@@ -2063,76 +462,22 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     ImageButton RB_COND3_2
     {
-        QuickHelpText = "Verkleinern" ;
-        QuickHelpText [ ENGLISH ] = "Shrink" ;
+        QuickHelpText [ de ] = "Verkleinern" ;
         Pos = MAP_APPFONT ( 242 , 127 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
-        QuickHelpText [ english_us ] = "Shrink" ;
-        QuickHelpText [ portuguese_brazilian ] = "Reduzir" ;
-        QuickHelpText [ swedish ] = "Fˆrminska" ;
-        QuickHelpText [ danish ] = "Formindsk" ;
-        QuickHelpText [ italian ] = "Zoom indietro" ;
-        QuickHelpText [ spanish ] = "Reducir" ;
-        QuickHelpText [ french ] = "RÈduire" ;
-        QuickHelpText [ dutch ] = "Verkleinen" ;
-        QuickHelpText [ portuguese ] = "Afastar" ;
-    QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
-        QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "Á∏ÆÂ∞è";
-        QuickHelpText[ chinese_simplified ] = "Áº©Â∞è";
-        QuickHelpText[ chinese_traditional ] = "Á∏ÆÂ∞è";
-        QuickHelpText[ arabic ] = " ’€Ì—";
-        QuickHelpText[ greek ] = "”ÏﬂÍÒıÌÛÁ";
-        QuickHelpText[ korean ] = "Ï∂ïÏÜå";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Verkleinern";
-        QuickHelpText[ catalan ] = "Redueix";
-        QuickHelpText[ finnish ] = "Kutista";
-        QuickHelpText[ thai ] = "Shrink";
-        QuickHelpText[ czech ] = "Zmen≈°it";
-        QuickHelpText[ hebrew ] = "Verkleinern";
-        QuickHelpText[ hindi ] = "‡§∏‡§ø‡§ï‡•Å‡§°‡§®‡§æ";
-        QuickHelpText[ slovak ] = "Zmen≈°i≈•";
-        QuickHelpText[ hungarian ] = "Zsugor√≠t√°s";
-        QuickHelpText[ slovenian ] = "Skrƒçi";
+        QuickHelpText [ en-US ] = "Shrink" ;
+        QuickHelpText [ x-comment ] = " ";
+        QuickHelpText [ x-comment ] = " ";
     };
     FixedText FT_COND3_TEMPLATE
     {
         Pos = MAP_APPFONT ( 6 , 145 ) ;
         Size = MAP_APPFONT ( 46 , 8 ) ;
         Right = TRUE ;
-        Text = "Ze~llvorlage" ;
-        Text [ ENGLISH ] = "Ce~ll style" ;
-        Text [ english_us ] = "Ce~ll Style" ;
-        Text [ italian ] = "Modello di cella" ;
-        Text [ spanish ] = "Estilo de celda" ;
-        Text [ french ] = "Style de ce~llule" ;
-        Text [ dutch ] = "Ce~lopmaakprofiel" ;
-        Text [ swedish ] = "Ce~llformatmall" ;
-        Text [ danish ] = "Ce~lletypografi" ;
-        Text [ portuguese_brazilian ] = "E~stilo da CÈlula" ;
-        Text [ portuguese ] = "E~stilo da cÈlula" ;
-        Text[ chinese_simplified ] = "ÂçïÂÖÉÊ†ºÊ†∑Âºè(~L)";
-        Text[ russian ] = "—ÚËÎ¸ ˇ˜ÂÈÍË";
-        Text[ polish ] = "Sty~l komÛrki";
-        Text[ japanese ] = "„Çª„É´„Çπ„Çø„Ç§„É´(~L)";
-        Text[ chinese_traditional ] = "ÂÑ≤Â≠òÊ†ºÊ®£Âºè(~L)";
-        Text[ arabic ] = "‰„ÿ Œ·Ì…";
-        Text[ greek ] = "”ÙıÎ ÍÂ~ÎÈÔ˝";
-        Text[ korean ] = "ÏÖÄ Ïä§ÌÉÄÏùº(~L)";
-        Text[ turkish ] = "H¸cre BiÁemi";
-        Text[ language_user1 ] = "; \"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
-        Text[ catalan ] = "Estil de la cel.la";
-        Text[ finnish ] = "Solun tyyli";
-        Text[ thai ] = "‡∏•‡∏±‡∏Å‡∏©‡∏ì‡∏∞‡πÄ‡∏ã‡∏•‡∏•‡πå";
-        Text[ czech ] = "Styl bu≈àky";
-        Text[ hebrew ] = "Ze~llvorlage";
-        Text[ hindi ] = "‡§ï‡•ã~‡§∑‡•ç‡§† ‡§∂‡•à‡§≤‡•Ä";
-        Text[ slovak ] = "≈†t√Ω~l bunky";
-        Text[ hungarian ] = "Cell~ast√≠lus";
-        Text[ slovenian ] = "Slog ce~lice";
+        Text [ de ] = "Ze~llvorlage" ;
+        Text [ en-US ] = "Ce~ll Style" ;
+        Text [ x-comment ] = "; \"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
     };
     ListBox LB_COND3_TEMPLATE
     {
@@ -2162,34 +507,8 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    Text [ english_us ] = "Conditional Formatting" ;
-    Text [ italian ] = "Formattazione condizionata" ;
-    Text [ spanish ] = "Formateado condicional" ;
-    Text [ french ] = "Formatage conditionnel" ;
-    Text [ dutch ] = "Voorwaardelijke opmaak" ;
-    Text [ swedish ] = "Villkorlig formatering" ;
-    Text [ danish ] = "Betinget formatering" ;
-    Text [ portuguese_brazilian ] = "FormataÁ„o Condicional" ;
-    Text [ portuguese ] = "FomataÁ„o condicional" ;
-    Text[ chinese_simplified ] = "ÊúâÊù°‰ª∂ÁöÑÊ†ºÂºè";
-    Text[ russian ] = "”ÒÎÓ‚ÌÓÂ ÙÓÏ‡ÚËÓ‚‡ÌËÂ";
-    Text[ polish ] = "Formatowanie warunkowe";
-    Text[ japanese ] = "Êù°‰ª∂‰ªò„ÅçÊõ∏ÂºèË®≠ÂÆö";
-    Text[ chinese_traditional ] = "ÊúâÊ¢ù‰ª∂ÁöÑÊ†ºÂºè";
-    Text[ arabic ] = " ‰”Ìﬁ „‘—Êÿ";
-    Text[ greek ] = "ÃÔÒˆÔÔﬂÁÛÁ ı¸ ¸ÒÔıÚ";
-    Text[ korean ] = "Ï°∞Í±¥Î∂Ä ÏÑúÏãù";
-    Text[ turkish ] = "Ko˛ullu formatlama";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Formatatge condicional";
-    Text[ finnish ] = "Ehdollinen muotoilu";
-    Text[ thai ] = "‡∏à‡∏±‡∏î‡∏£‡∏π‡∏õ‡πÅ‡∏ö‡∏ö‡πÄ‡∏á‡∏∑‡πà‡∏≠‡∏ô‡πÑ‡∏Ç";
-    Text[ czech ] = "Podm√≠nƒõn√© form√°tov√°n√≠";
-    Text[ hebrew ] = "Bedingte Formatierung";
-    Text[ hindi ] = "‡§∂‡§∞‡•ç‡§§ ‡§ï‡•á ‡§Ö‡§®‡•ç‡§§‡§∞‡•ç‡§ó‡§§ ‡§∞‡§ö‡§®‡§æ";
-    Text[ slovak ] = "Podmienen√© form√°tovanie";
-    Text[ hungarian ] = "Felt√©teles form√°z√°s";
-    Text[ slovenian ] = "Pogojno oblikovanje";
+    Text [ en-US ] = "Conditional Formatting" ;
+    Text [ x-comment ] = " ";
 };
 
 
