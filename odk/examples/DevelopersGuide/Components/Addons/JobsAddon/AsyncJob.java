@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AsyncJob.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:11:10 $
+ *  last change: $Author: vg $ $Date: 2003-07-11 11:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -170,8 +170,6 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
             throw new com.sun.star.lang.IllegalArgumentException(sMessage);
         }
 
-        System.out.println("environment analyzed ...");
-
         // Analyze the set of shared config data.
         java.lang.String sAlias = null;
         if (lGenericConfig!=null)
@@ -316,6 +314,11 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
     private void showInfoNonModal( java.lang.String sTitle   ,
                                    java.lang.String sMessage )
     {
+        // Couldnt be implemented realy using the toolkit ...
+        // Because we need a parent anytime.
+        // And showing e.g. a java dialog can make some trouble
+        // inside office ... but we have no chance here.
+        javax.swing.JOptionPane.showMessageDialog(null, sMessage, sTitle, javax.swing.JOptionPane.INFORMATION_MESSAGE);
     }
 
     //___________________________________________
