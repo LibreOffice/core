@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-19 11:30:43 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:37:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1141,9 +1141,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
 #endif
     }
 
-    // AutoSave starten oder anhalten
-    UpdateAutoSave_Impl();
-
     // INet Session neu aufsetzen
     if ( bResetSession )
     {
@@ -1298,69 +1295,12 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
 
 //--------------------------------------------------------------------
 
-void SfxApplication::UpdateAutoSave_Impl()
-{
-    pImp->pAutoSaveTimer->Stop();
-
-    // AutoSave soll ab jetzt neu anlaufen
-    SvtSaveOptions aSaveOptions;
-    if ( aSaveOptions.IsAutoSave() )
-    {
-        pImp->pAutoSaveTimer->SetTimeout( aSaveOptions.GetAutoSaveTime() * 60000 );
-        pImp->pAutoSaveTimer->Start();
-    }
-}
-
-//--------------------------------------------------------------------
-
-
-Timer* SfxApplication::GetAutoSaveTimer_Impl()
-{
-    return pImp->pAutoSaveTimer;
-}
-
-//--------------------------------------------------------------------
-
-IMPL_LINK( SfxApplication, AutoSaveHdl_Impl, Timer*, pTimer )
-{
-    SvtSaveOptions aSaveOptions;
-    FASTBOOL bAutoSave = aSaveOptions.IsAutoSave() &&
-        !Application::IsUICaptured() && Application::GetLastInputInterval() > 300;
-    if ( bAutoSave )
-    {
-        SfxViewShell *pVSh = pViewFrame ? pViewFrame->GetViewShell() : 0;
-        bAutoSave = pVSh && pVSh->GetWindow() &&
-                    !pVSh->GetWindow()->IsMouseCaptured() ;
-    }
-
-    if ( bAutoSave )
-    {
-        SaveAll_Impl( aSaveOptions.IsAutoSavePrompt(), TRUE );
-        pImp->bAutoSaveNow = FALSE;
-        pImp->pAutoSaveTimer->SetTimeout( aSaveOptions.GetAutoSaveTime() * 60000 );
-        pImp->pAutoSaveTimer->Start();
-    }
-    else if ( aSaveOptions.IsAutoSave() )
-    {
-        // Wenn wir gelockt sind, dann in 5 Sekunden nochmal probieren
-        pImp->bAutoSaveNow = TRUE;
-        pImp->pAutoSaveTimer->SetTimeout( 5000 );
-        pImp->pAutoSaveTimer->Start();
-
-#ifndef PRODUCT
-        Sound::Beep();
-#endif
-    }
-
-    return 0;
-}
-
-//--------------------------------------------------------------------
-
 // alle Dokumente speichern
 
 BOOL SfxApplication::SaveAll_Impl(BOOL bPrompt, BOOL bAutoSave)
 {
+    bAutoSave = FALSE; // functionality moved to new AutoRecovery Service!
+
     BOOL bFunc = TRUE;
     short nRet;
 
@@ -1402,7 +1342,6 @@ BOOL SfxApplication::SaveAll_Impl(BOOL bPrompt, BOOL bAutoSave)
             }
         }
     }
-    pImp->aAutoSaveTime=Time();
 
     return bFunc;
 }
