@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dl $ $Date: 2001-07-06 10:06:43 $
+ *  last change: $Author: aw $ $Date: 2001-08-22 15:21:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,6 +306,13 @@ void SdrAttrObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
     if(pPool)
     {
         sal_uInt16 nSetID;
+
+        // #89025# if mpObjectItemSet is set and contains items, it is because of ForceDefaultAttr()
+        // and the items need to be deleted.
+        if(mpObjectItemSet && mpObjectItemSet->Count())
+            mpObjectItemSet->ClearItem(0);
+
+        // Do this initialization AFTER the above fix
         SfxItemSet aNewSet(GetItemSet());
 
         if(rHead.GetVersion() < 11)
@@ -1304,42 +1311,23 @@ BOOL SdrAttrObj::HasLine() const
 
 void SdrAttrObj::BurnInStyleSheetAttributes( BOOL bPseudoSheetsOnly )
 {
-    SfxItemPool* pPool = GetItemPool();
-    if ( pPool && mpStyleSheet )
+    // #89025# Added more performant implementation
+    if(mpStyleSheet)
     {
-        // Get StyleSheet attributes
-        SfxItemSet aSet(*pPool,
-            SDRATTR_START, SDRATTR_NOTPERSIST_FIRST-1,
-            SDRATTR_NOTPERSIST_LAST+1, SDRATTR_END,
-            EE_ITEMS_START,EE_ITEMS_END,
-            0,0);
+        const SfxItemSet& rSet = mpStyleSheet->GetItemSet();
+        SfxWhichIter aIter(rSet);
+        sal_uInt16 nWhich(aIter.FirstWhich());
+        const SfxPoolItem *pItem = NULL;
 
-        SfxWhichIter aIter( mpStyleSheet->GetItemSet() );
-        sal_uInt16 nWhich( aIter.FirstWhich() );
-        const SfxPoolItem* pItem = NULL;
+        ImpForceItemSet();
 
-        while( nWhich )
+        while(nWhich)
         {
-            if( SFX_ITEM_SET == mpStyleSheet->GetItemSet().GetItemState(nWhich, TRUE, &pItem) )
-                aSet.Put( *pItem->Clone() );
-
+            if(SFX_ITEM_SET == rSet.GetItemState(nWhich, TRUE, &pItem))
+                mpObjectItemSet->Put(*pItem);
             nWhich = aIter.NextWhich();
         }
-
-        SfxWhichIter aHardAttrIter( GetItemSet() );
-        nWhich = aHardAttrIter.FirstWhich();
-
-        while( nWhich )
-        {
-            if( SFX_ITEM_SET == GetItemSet().GetItemState(nWhich, FALSE, &pItem) )
-                aSet.Put( *pItem->Clone() );
-
-            nWhich = aHardAttrIter.NextWhich();
-        }
-
-        // Set StyleSheet attributes as hard attributes
-        SetItemSet( aSet );
-      }
+    }
 }
 
 
