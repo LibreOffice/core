@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Sequence.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-21 09:17:07 $
+ *  last change: $Author: dbo $ $Date: 2001-10-16 08:33:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,32 +126,32 @@ public:
 
     /** Default constructor: Creates an empty sequence.
     */
-    inline Sequence< E >() SAL_THROW( () );
+    inline Sequence() SAL_THROW( () );
     /** Copy constructor: Creates a copy of given sequence.
 
         @param rSeq another sequence of same type
     */
-    inline Sequence< E >( const Sequence< E > & rSeq ) SAL_THROW( () );
+    inline Sequence( const Sequence< E > & rSeq ) SAL_THROW( () );
     /** Constructor: Takes over ownership of given sequence.
 
         @param pSequence a sequence
         @param dummy SAL_NO_ACQUIRE to force obvious distinction to other constructors
     */
-    inline Sequence< E >( uno_Sequence * pSequence, __sal_NoAcquire ) SAL_THROW( () );
+    inline Sequence( uno_Sequence * pSequence, __sal_NoAcquire ) SAL_THROW( () );
     /** Constructor: Creates a copy of given elements.
 
         @param pElement an array of elements
         @param len length of array
     */
-    inline Sequence< E >( const E * pElements, sal_Int32 len ) SAL_THROW( () );
+    inline Sequence( const E * pElements, sal_Int32 len ) SAL_THROW( () );
     /** Constructor: Creates a default constructed sequence of given length.
 
         @param len initial sequence length
     */
-    inline Sequence< E >( sal_Int32 len ) SAL_THROW( () );
+    inline Sequence( sal_Int32 len ) SAL_THROW( () );
     /** Destructor: Releases sequence handle. Last handle will destruct elements and free memory.
     */
-    inline ~Sequence< E >() SAL_THROW( () );
+    inline ~Sequence() SAL_THROW( () );
 
     /** Assignment operator: Acquires given sequence handle and releases previously set handle.
 
