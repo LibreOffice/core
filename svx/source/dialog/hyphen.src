@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphen.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:34:15 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:14:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@ ModalDialog RID_SVXDLG_HYPHENATE
         TEXT[ czech ] = "Slovo";
         TEXT[ hebrew ] = "W~ort";
         TEXT[ hindi ] = "~शब्द";
+        TEXT[ slovak ] = "~Slovo";
     };
     PushButton BTN_HYPH_CONTINUE
     {
@@ -172,6 +173,7 @@ ModalDialog RID_SVXDLG_HYPHENATE
         Text[ czech ] = "Další";
         Text[ hebrew ] = "‮הבא‬";
         Text[ hindi ] = "~आगे";
+        Text[ slovak ] = "Ď~alší";
     };
     PushButton BTN_HYPH_DELETE
     {
@@ -206,6 +208,7 @@ ModalDialog RID_SVXDLG_HYPHENATE
         TEXT[ czech ] = "Odstranit";
         TEXT[ hebrew ] = "‮הסרה‬";
         TEXT[ hindi ] = "~हटाओ";
+        TEXT[ slovak ] = "Odst~rániť";
     };
     OKButton BTN_HYPH_CUT
     {
@@ -241,6 +244,7 @@ ModalDialog RID_SVXDLG_HYPHENATE
         TEXT[ czech ] = "Dělit slova";
         TEXT[ hebrew ] = "~Trennen";
         TEXT[ hindi ] = "~हाइफ़नेट्";
+        TEXT[ slovak ] = "~Deliť slová";
     };
     CancelButton BTN_HYPH_CANCEL
     {
@@ -269,8 +273,11 @@ ModalDialog RID_SVXDLG_HYPHENATE
     Text[ czech ] = "Dělení slov";
     Text[ hebrew ] = "‮שבירת מלים‬";
     Text[ hindi ] = "हाइफ़नेशन्";
+    Text[ slovak ] = "Delenie slov";
 };
  // ******************************************************************* EOF
+
+
 
 
 
