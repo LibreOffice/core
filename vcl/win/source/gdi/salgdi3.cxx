@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: th $ $Date: 2001-06-07 16:51:26 $
+ *  last change: $Author: th $ $Date: 2001-07-02 20:42:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -689,9 +689,55 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
 
 // -----------------------------------------------------------------------
 
+static HFONT ImplSelectFontW( HDC hDC, LOGFONTW& rLogFont, HFONT* pNewFont )
+{
+    HFONT hNewFont = CreateFontIndirectW( &rLogFont );
+    HFONT hOldFont = SelectFont( hDC, hNewFont );
+
+    TEXTMETRICW aWinMetric;
+    // Font doesn't work, try a replacement
+    if ( !GetTextMetricsW( hDC, &aWinMetric ) )
+    {
+        lstrcpyW( rLogFont.lfFaceName, L"Courier New" );
+        rLogFont.lfPitchAndFamily = FIXED_PITCH;
+        HFONT hNewFont2 = CreateFontIndirectW( &rLogFont );
+        SelectFont( hDC, hNewFont2 );
+        DeleteFont( hNewFont );
+    }
+
+    *pNewFont = hNewFont;
+    return hOldFont;
+}
+
+// -----------------------------------------------------------------------
+
+static HFONT ImplSelectFontA( HDC hDC, LOGFONTA& rLogFont, HFONT* pNewFont )
+{
+    HFONT hNewFont = CreateFontIndirectA( &rLogFont );
+    HFONT hOldFont = SelectFont( hDC, hNewFont );
+
+    TEXTMETRICA aWinMetric;
+    // Font doesn't work, try a replacement
+    if ( !GetTextMetricsA( hDC, &aWinMetric ) )
+    {
+        strcpy( rLogFont.lfFaceName, "Courier New" );
+        rLogFont.lfPitchAndFamily = FIXED_PITCH;
+        HFONT hNewFont2 = CreateFontIndirectA( &rLogFont );
+        SelectFont( hDC, hNewFont2 );
+        DeleteFont( hNewFont );
+    }
+
+    *pNewFont = hNewFont;
+    return hOldFont;
+}
+
+// -----------------------------------------------------------------------
+
 USHORT SalGraphics::SetFont( ImplFontSelectData* pFont )
 {
-    HFONT hNewFont;
+    HFONT hNewFont = 0;
+    HFONT hOldFont;
+
     if ( aSalShlData.mbWNT )
     {
         LOGFONTW aLogFont;
@@ -707,7 +753,7 @@ USHORT SalGraphics::SetFont( ImplFontSelectData* pFont )
              (ImplSalWICompareAscii( aLogFont.lfFaceName, "Courier" ) == 0) )
             lstrcpyW( aLogFont.lfFaceName, L"Courier New" );
 
-        hNewFont = CreateFontIndirectW( &aLogFont );
+        hOldFont = ImplSelectFontW( maGraphicsData.mhDC, aLogFont, &hNewFont );
     }
     else
     {
@@ -769,10 +815,8 @@ USHORT SalGraphics::SetFont( ImplFontSelectData* pFont )
              (stricmp( maGraphicsData.mpLogFont->lfFaceName, "Courier" ) == 0) )
             strcpy( maGraphicsData.mpLogFont->lfFaceName, "Courier New" );
 
-        hNewFont = CreateFontIndirectA( maGraphicsData.mpLogFont );
+        hOldFont = ImplSelectFontA( maGraphicsData.mhDC, *maGraphicsData.mpLogFont, &hNewFont );
     }
-
-    HFONT hOldFont = SelectFont( maGraphicsData.mhDC, hNewFont );
 
     // destory or save old font
     if ( maGraphicsData.mhFont )
@@ -854,68 +898,70 @@ void SalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
     if ( aSalShlData.mbWNT )
     {
         wchar_t aFaceName[LF_FACESIZE+60];
-        GetTextFaceW( maGraphicsData.mhDC, sizeof( aFaceName ) / sizeof( wchar_t ), aFaceName );
-        pMetric->maName = aFaceName;
+        if ( GetTextFaceW( maGraphicsData.mhDC, sizeof( aFaceName ) / sizeof( wchar_t ), aFaceName ) )
+            pMetric->maName = aFaceName;
 
         TEXTMETRICW aWinMetric;
-        GetTextMetricsW( maGraphicsData.mhDC, &aWinMetric );
-
-        pMetric->mnWidth            = aWinMetric.tmAveCharWidth;
-        pMetric->meFamily           = ImplFamilyToSal( aWinMetric.tmPitchAndFamily );;
-        pMetric->meCharSet          = ImplCharSetToSal( aWinMetric.tmCharSet );
-        pMetric->meWeight           = ImplWeightToSal( aWinMetric.tmWeight );
-        pMetric->mePitch            = ImplMetricPitchToSal( aWinMetric.tmPitchAndFamily );
-        if ( aWinMetric.tmItalic )
-            pMetric->meItalic = ITALIC_NORMAL;
-        else
-            pMetric->meItalic = ITALIC_NONE;
-        if ( aWinMetric.tmPitchAndFamily & (TMPF_VECTOR | TMPF_TRUETYPE) )
-            pMetric->meType = TYPE_SCALABLE;
-        else
+        if ( GetTextMetricsW( maGraphicsData.mhDC, &aWinMetric ) )
         {
-            pMetric->meType = TYPE_RASTER;
-            pMetric->mnOrientation = 0;
+            pMetric->mnWidth            = aWinMetric.tmAveCharWidth;
+            pMetric->meFamily           = ImplFamilyToSal( aWinMetric.tmPitchAndFamily );;
+            pMetric->meCharSet          = ImplCharSetToSal( aWinMetric.tmCharSet );
+            pMetric->meWeight           = ImplWeightToSal( aWinMetric.tmWeight );
+            pMetric->mePitch            = ImplMetricPitchToSal( aWinMetric.tmPitchAndFamily );
+            if ( aWinMetric.tmItalic )
+                pMetric->meItalic = ITALIC_NORMAL;
+            else
+                pMetric->meItalic = ITALIC_NONE;
+            if ( aWinMetric.tmPitchAndFamily & (TMPF_VECTOR | TMPF_TRUETYPE) )
+                pMetric->meType = TYPE_SCALABLE;
+            else
+            {
+                pMetric->meType = TYPE_RASTER;
+                pMetric->mnOrientation = 0;
+            }
+            pMetric->mbDevice           = (aWinMetric.tmPitchAndFamily & TMPF_DEVICE) != 0;
+            pMetric->mnAscent           = aWinMetric.tmAscent;
+            pMetric->mnDescent          = aWinMetric.tmDescent;
+            pMetric->mnLeading          = aWinMetric.tmInternalLeading;
+            pMetric->mnSlant            = 0;
+            pMetric->mnFirstChar        = aWinMetric.tmFirstChar;
+            pMetric->mnLastChar         = aWinMetric.tmLastChar;
         }
-        pMetric->mbDevice           = (aWinMetric.tmPitchAndFamily & TMPF_DEVICE) != 0;
-        pMetric->mnAscent           = aWinMetric.tmAscent;
-        pMetric->mnDescent          = aWinMetric.tmDescent;
-        pMetric->mnLeading          = aWinMetric.tmInternalLeading;
-        pMetric->mnSlant            = 0;
-        pMetric->mnFirstChar        = 0;
-        pMetric->mnLastChar         = 0xFF;
     }
     else
     {
         char aFaceName[LF_FACESIZE+60];
-        GetTextFaceA( maGraphicsData.mhDC, sizeof( aFaceName ), aFaceName );
-        pMetric->maName = ImplSalGetUniString( aFaceName );
+        if ( GetTextFaceA( maGraphicsData.mhDC, sizeof( aFaceName ), aFaceName ) )
+            pMetric->maName = ImplSalGetUniString( aFaceName );
 
         TEXTMETRICA aWinMetric;
-        GetTextMetricsA( maGraphicsData.mhDC, &aWinMetric );
-
-        pMetric->mnWidth            = aWinMetric.tmAveCharWidth;
-        pMetric->meFamily           = ImplFamilyToSal( aWinMetric.tmPitchAndFamily );;
-        pMetric->meCharSet          = ImplCharSetToSal( aWinMetric.tmCharSet );
-        pMetric->meWeight           = ImplWeightToSal( aWinMetric.tmWeight );
-        pMetric->mePitch            = ImplMetricPitchToSal( aWinMetric.tmPitchAndFamily );
-        if ( aWinMetric.tmItalic )
-            pMetric->meItalic = ITALIC_NORMAL;
-        else
-            pMetric->meItalic = ITALIC_NONE;
-        if ( aWinMetric.tmPitchAndFamily & (TMPF_VECTOR | TMPF_TRUETYPE) )
-            pMetric->meType = TYPE_SCALABLE;
-        else
+        if ( GetTextMetricsA( maGraphicsData.mhDC, &aWinMetric ) )
         {
-            pMetric->meType = TYPE_RASTER;
-            pMetric->mnOrientation = 0;
+            pMetric->mnWidth            = aWinMetric.tmAveCharWidth;
+            pMetric->meFamily           = ImplFamilyToSal( aWinMetric.tmPitchAndFamily );;
+            pMetric->meCharSet          = ImplCharSetToSal( aWinMetric.tmCharSet );
+            pMetric->meWeight           = ImplWeightToSal( aWinMetric.tmWeight );
+            pMetric->mePitch            = ImplMetricPitchToSal( aWinMetric.tmPitchAndFamily );
+            if ( aWinMetric.tmItalic )
+                pMetric->meItalic = ITALIC_NORMAL;
+            else
+                pMetric->meItalic = ITALIC_NONE;
+            if ( aWinMetric.tmPitchAndFamily & (TMPF_VECTOR | TMPF_TRUETYPE) )
+                pMetric->meType = TYPE_SCALABLE;
+            else
+            {
+                pMetric->meType = TYPE_RASTER;
+                pMetric->mnOrientation = 0;
+            }
+            pMetric->mbDevice           = (aWinMetric.tmPitchAndFamily & TMPF_DEVICE) != 0;
+            pMetric->mnAscent           = aWinMetric.tmAscent;
+            pMetric->mnDescent          = aWinMetric.tmDescent;
+            pMetric->mnLeading          = aWinMetric.tmInternalLeading;
+            pMetric->mnSlant            = 0;
+            pMetric->mnFirstChar        = aWinMetric.tmFirstChar;
+            pMetric->mnLastChar         = aWinMetric.tmLastChar;
         }
-        pMetric->mbDevice           = (aWinMetric.tmPitchAndFamily & TMPF_DEVICE) != 0;
-        pMetric->mnAscent           = aWinMetric.tmAscent;
-        pMetric->mnDescent          = aWinMetric.tmDescent;
-        pMetric->mnLeading          = aWinMetric.tmInternalLeading;
-        pMetric->mnSlant            = 0;
-        pMetric->mnFirstChar        = 0;
-        pMetric->mnLastChar         = 0xFF;
     }
 }
 
