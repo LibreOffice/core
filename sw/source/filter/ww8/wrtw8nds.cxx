@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 13:16:09 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:09:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,6 @@
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
-
-#pragma hdrstop
 
 #ifndef __SGI_STL_VECTOR
 #include <vector>
@@ -502,9 +500,9 @@ WW8_SwAttrIter::WW8_SwAttrIter(SwWW8Writer& rWr, const SwTxtNode& rTxtNd)
             sal_uInt16 nScript = mnScript;
             while (nPos < nLen)
             {
-                sal_uInt32 nEnd =
+                sal_Int32 nEnd =
                     pBreakIt->xBreak->endOfScript(rTxt, nPos, nScript);
-                if (nEnd == -1)
+                if (nEnd < 0)
                     break;
                 nPos = writer_cast<xub_StrLen>(nEnd);
                 maScripts.push_back(ScriptEntry(nPos, nScript));
@@ -1257,6 +1255,9 @@ void WW8_SwAttrIter::OutSwTOXMark(const SwTOXMark& rAttr, bool bStart)
             ((sTxt.APPEND_CONST_ASC( "\" \\l " ))
                 += String::CreateFromInt32( nLvl )) += ' ';
         }
+        break;
+    default:
+        ASSERT(!this, "Unhandled option for toc export");
         break;
     }
 
@@ -2339,13 +2340,15 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
                 else
                     nFlags = 0;             // no vert. merge
 
-                switch( rFmt.GetVertOrient().GetVertOrient() )
+                switch (rFmt.GetVertOrient().GetVertOrient())
                 {
                     case VERT_CENTER:
                         nFlags |= 0x080;
                         break;
                     case VERT_BOTTOM:
                         nFlags |= 0x100;
+                        break;
+                    default:
                         break;
                 }
                 SwWW8Writer::InsUInt16( aAt, nFlags );
@@ -2824,6 +2827,9 @@ void SwWW8Writer::OutRedline( const SwRedlineData& rRedline )
             InsUInt16( AddRedlineAuthor( rRedline.GetAuthor() ) );
             InsUInt32( SwWW8Writer::GetDTTM( rRedline.GetTimeStamp() ));
         }
+        break;
+    default:
+        ASSERT(!this, "Unhandled redline type for export");
         break;
     }
 
