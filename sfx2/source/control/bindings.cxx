@@ -2,8 +2,8 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.32 $
- *  last change: $Author: obo $ $Date: 2004-11-16 15:26:34 $
+ *  $Revision: 1.33 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:35:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #endif
 #include <svtools/intitem.hxx>
 #include <svtools/stritem.hxx>
+#include <svtools/visitem.hxx>
 
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -190,9 +191,10 @@ IMPL_LINK(SfxAsyncExec_Impl, TimerHdl, Timer*, pTimer)
 {
     aTimer.Stop();
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSeq(1);
-    aSeq[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Referer") );
-    aSeq[0].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("private:user") );
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSeq;
+    //::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSeq(1);
+    //aSeq[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Referer") );
+    //aSeq[0].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("private:user") );
     xDisp->dispatch( aCommand, aSeq );
 
     delete this;
@@ -2868,6 +2870,14 @@ sal_Bool SfxBindings::IsInUpdate() const
     if ( !bInUpdate && pImp->pSubBindings )
         bInUpdate = pImp->pSubBindings->IsInUpdate();
     return bInUpdate;
+}
+
+void SfxBindings::SetVisibleState( sal_uInt16 nId, sal_Bool bShow )
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  xDisp;
+    SfxStateCache *pCache = GetStateCache( nId );
+    if ( pCache )
+        pCache->SetVisibleState( bShow );
 }
 
 void SfxBindings::SetActiveFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & rFrame )
