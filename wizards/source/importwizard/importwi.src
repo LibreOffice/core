@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2002-09-17 13:01:58 $
+ *  last change: $Author: kz $ $Date: 2002-11-25 14:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,7 +396,7 @@ String sWelcometextLabel3
     Text[ greek ] = "ÅðéëÝîôå ôïõò ôýðïõò åããñÜöùí ðïõ èÝëåôå íá ìåôáôñÝøåôå:";
     Text[ dutch ] = "Kies de documenttypen die u wilt converteren:";
     Text[ french ] = "Sélectionnez les types de documents à convertir :";
-    Text[ spanish ] = "Seleccione los tipos de documento a convertir:";
+    Text[ spanish ] = "Seleccione los tipos de documento que convertir:";
     Text[ italian ] = "Selezionate il tipo di documento da convertire:";
     Text[ danish ] = "Vælg de dokumenttyper, der skal omdannes:";
     Text[ swedish ] = "Välj dokumenttyperna som ska konverteras:";
@@ -597,7 +597,7 @@ String sSearchInSubDir
     Text[ English_us ] = "Including subdirectories";
     Text[ french ] = "Sous-répertoires compris";
     Text[ italian ] = "incluse sottocartelle";
-    Text[ spanish ] = "incluidos subdirectorios";
+    Text[ spanish ] = "Subdirectorios incluidos ";
     Text[ portuguese ] = "incl. subdirectórios";
     Text[ dutch ] = "incl. subdirectory's";
     Text[ swedish ] = "inkl. underordnade kataloger";
@@ -980,7 +980,7 @@ String sFileExists
     Text[ English_us ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
     Text[ french ] = "Le fichier '<1>' existe déjà.<CR>Voulez-vous le remplacer ?";
     Text[ italian ] = "Il file '<1>' esiste già: <CR>Volete soprascriverlo?";
-    Text[ spanish ] = "Ya existe el archivo '<1>'. <CR>¿Desea sobrescribirlo?";
+    Text[ spanish ] = "El archivo '<1>' ya existe. <CR>¿Desea sobrescribirlo?";
     Text[ portuguese ] = "O ficheiro '<1>' já existe.<CR>Substituir?";
     Text[ dutch ] = "Bestand '<1>' bestaat reeds. <CR>Wilt u het overschrijven?";
     Text[ swedish ] = "Filen '<1>' finns redan.<CR>Vill du skriva över den?";
@@ -1042,7 +1042,7 @@ String sOverwriteallFiles
     Text[ greek ] = "Do you want to overwrite documents without query";
     Text[ dutch ] = "Do you want to overwrite documents without query";
     Text[ french ] = "Écraser les documents sans demande de confirmation ?";
-    Text[ spanish ] = "¿Desea sobrescribir documentos sin consulta?";
+    Text[ spanish ] = "¿Desea sobrescribir los documentos sin pregunta de confirmación?";
     Text[ finnish ] = "Do you want to overwrite documents without query";
     Text[ italian ] = "Volete soprascrivere i documenti senza domanda di controllo?";
     Text[ danish ] = "Do you want to overwrite documents without query";
@@ -1070,7 +1070,7 @@ String sreeditMacro
     Text[ greek ] = "Document macro has to be revised";
     Text[ dutch ] = "Document macro has to be revised";
     Text[ french ] = "Révision de la macro de document requise";
-    Text[ spanish ] = "Se debe revisar la macro de los documentos.";
+    Text[ spanish ] = "La macro de los documentos se debe revisar.";
     Text[ finnish ] = "Document macro has to be revised";
     Text[ italian ] = "La macro dei documenti dev'essere modificata";
     Text[ danish ] = "Document macro has to be revised";
@@ -1097,7 +1097,7 @@ String scouldNotsaveDocument
     Text[ greek ] = "Document '<1>' could not be saved";
     Text[ dutch ] = "Document '<1>' could not be saved";
     Text[ french ] = "Impossible d'enregistrer le document '<1>' !";
-    Text[ spanish ] = "El documento '<1>' no se pudo guardar";
+    Text[ spanish ] = "El documento '<1>' no se pudo guardar.";
     Text[ finnish ] = "Document '<1>' could not be saved";
     Text[ italian ] = "Non è stato possibile salvare il file '<1>'";
     Text[ danish ] = "Document '<1>' could not be saved";
@@ -1151,7 +1151,7 @@ String sConvertError1
     Text[ English_us ] = "Do you really want to terminate conversion at this point?";
     Text[ french ] = "Êtes-vous sûr de vouloir interrompre la conversion en cours ?";
     Text[ italian ] = "Interrompere veramente la conversione a questo punto ?";
-    Text[ spanish ] = "¿Desea realmente cancelar ahora la conversión?";
+    Text[ spanish ] = "¿Desea realmente interrumpir la conversión?";
     Text[ portuguese ] = "Cancelar realmente a conversão em curso?";
     Text[ dutch ] = "Wilt u het converteren hier werkelijk stoppen?";
     Text[ swedish ] = "Vill du verkligen avbryta konverteringen nu?";
@@ -1268,7 +1268,7 @@ String sPathDialogMessage
     Text[ English_us ] = "Select a directory";
     Text[ french ] = "Sélectionnez un répertoire";
     Text[ italian ] = "Scegliete una cartella";
-    Text[ spanish ] = "Elija un directorio";
+    Text[ spanish ] = "Seleccione un directorio";
     Text[ portuguese ] = "Seleccione um directório";
     Text[ dutch ] = "Selecteer een directory";
     Text[ swedish ] = "Välj ut en katalog";
@@ -1354,7 +1354,7 @@ String sProgressPage2
     Text[ greek ] = "Åýñåóç ôùí ó÷åôéêþí åããñÜöùí:";
     Text[ dutch ] = "De relevante documenten worden geselecteerd:";
     Text[ french ] = "Récupération des documents importants :";
-    Text[ spanish ] = "Recogida de los documentos relevantes:";
+    Text[ spanish ] = "Recuperación de documentos importantes:";
     Text[ italian ] = "Recupero dei documenti importanti:";
     Text[ danish ] = "Registrering af de relevante dokumenter:";
     Text[ swedish ] = "Samlar de relevanta dokumenten:";
@@ -1696,7 +1696,7 @@ String sXMLDocumentCheckbox_4_
     Text[ greek ] = "Êýñéá Ýããñáöá/Ôýðïé";
     Text[ dutch ] = "Masterdocumenten/formules";
     Text[ french ] = "Documents maîtres / formules";
-    Text[ spanish ] = "Documentos maestros/Fórmulas";
+    Text[ spanish ] = "Documentos maestros / fórmulas";
     Text[ italian ] = "Documenti master/formule";
     Text[ danish ] = "Hoveddokumenter/formler";
     Text[ swedish ] = "Samlingsdokument/formler";
@@ -1888,7 +1888,7 @@ String sLogfileHelpText
     Text[ greek ] = "A Logfile will be created within your Working Directory";
     Text[ dutch ] = "In uw werkdirectory wordt een logbestand aangelegd.";
     Text[ french ] = "Un fichier journal va être créé dans votre dossier de travail.";
-    Text[ spanish ] = "Se creará un archivo de operaciones en su directorio de trabajo.";
+    Text[ spanish ] = "Se creará un archivo log en el directorio de trabajo.";
     Text[ finnish ] = "Lokitiedosto luodaan työhakemistoon";
     Text[ italian ] = "Il programma crea un file di log nella vostra cartella di lavoro.";
     Text[ danish ] = "Der oprettes en logfil i arbejdsmappen";
@@ -1916,7 +1916,7 @@ String sshowLogfile
     Text[ greek ] = "Show Logfile";
     Text[ dutch ] = "Show Logfile";
     Text[ french ] = "Afficher le fichier journal";
-    Text[ spanish ] = "Mostrar logfile";
+    Text[ spanish ] = "Mostrar archivo log";
     Text[ finnish ] = "Show Logfile";
     Text[ italian ] = "Mostra file log";
     Text[ danish ] = "Show Logfile";
@@ -2180,7 +2180,7 @@ String sSumSODrawTemplates
     Text[ English_us ] = "All %PRODUCTNAME drawing and presentation templates contained in the following directory will be imported:";
     Text[ french ] = "Les modèles de dessin et de présentation %PRODUCTNAME contenus dans le répertoire suivant vont être importés :";
     Text[ italian ] = "Vengono importati tutti i modelli di disegni e presentazioni %PRODUCTNAME dalla cartella seguente:";
-    Text[ spanish ] = "Se importarán todas las plantillas de presentación y dibujo de %PRODUCTNAME desde el siguiente directorio:";
+    Text[ spanish ] = "Todas las plantillas de presentación y dibujo de %PRODUCTNAME se importarán desde el siguiente directorio:";
     Text[ portuguese ] = "Todos os modelos de desenhos e apresentações do %PRODUCTNAME serão importados do seguinte directório:";
     Text[ dutch ] = "Alle %PRODUCTNAME tekening- en presentatiesjablomen uit de volgende directory worden geïmporteerd:";
     Text[ swedish ] = "Alla %PRODUCTNAME tecknings- och presentationsmallar som finns i följande katalog importeras:";
@@ -2209,7 +2209,7 @@ String sSumSOGlobalDocuments
     Text[ English_us ] = "All %PRODUCTNAME master documents contained in the following directory will be imported:";
     Text[ french ] = "Les documents maîtres %PRODUCTNAME contenus dans le répertoire suivant vont être importés :";
     Text[ italian ] = "Vengono importati tutti i documenti master %PRODUCTNAME dalla cartella seguente:";
-    Text[ spanish ] = "Se importarán todos los documentos maestros de %PRODUCTNAME desde el siguiente directorio:";
+    Text[ spanish ] = "Se importarán todos los documentos maestros de %PRODUCTNAME contenidos en el siguiente directorio:";
     Text[ portuguese ] = "Todos os documentos-mestre do %PRODUCTNAME serão importados do seguinte directório:";
     Text[ dutch ] = "Alle %PRODUCTNAME masterdocumenten uit de volgende directory worden geïmporteerd:";
     Text[ swedish ] = "Alla %PRODUCTNAME samlingsdokument som finns i följande katalog importeras:";
@@ -2240,7 +2240,7 @@ String sSumMSTextDocuments
     Text[ English_us ] = "All Word documents contained in the following directory will be imported:";
     Text[ french ] = "Les documents Word contenus dans le répertoire suivant vont être importés :";
     Text[ italian ] = "Vengono importati tutti i documenti di Word dalla cartella seguente:";
-    Text[ spanish ] = "Se importarán todos los documentos Word del siguiente directorio:";
+    Text[ spanish ] = "Se importarán todos los documentos de Word contenidos en el siguiente directorio:";
     Text[ portuguese ] = "Todos os documentos Word serão importados do seguinte directório:";
     Text[ dutch ] = "Alle Word-documenten uit de volgende directory worden geïmporteerd:";
     Text[ swedish ] = "Alla Word-dokument som finns i följande katalog importeras:";
@@ -2270,7 +2270,7 @@ String sSumMSTableDocuments
     Text[ English_us ] = "All Excel documents contained in the following directory will be imported:";
     Text[ french ] = "Les documents Excel contenus dans le répertoire suivant vont être importés :";
     Text[ italian ] = "Vengono importati tutti i documenti di Excel dalla seguente cartella:";
-    Text[ spanish ] = "Se importarán todos los documentos Excel del siguiente directorio:";
+    Text[ spanish ] = "Se importarán todos los documentos de Excel del siguiente directorio:";
     Text[ portuguese ] = "Todos os doumentos Excel serão importados do seguinte directório:";
     Text[ dutch ] = "Alle Excel-documenten uit de volgende  directory worden geïmporteerd:";
     Text[ swedish ] = "Alla Excel-dokument som finns i följande katalog importeras:";
@@ -2300,7 +2300,7 @@ String sSumMSDrawDocuments
     Text[ English_us ] = "All PowerPoint documents contained in the following directory will be imported:";
     Text[ french ] = "Les documents PowerPoint contenus dans le répertoire suivant vont être importés :";
     Text[ italian ] = "Vengono importati tutti i documenti di PowerPoint dalla seguente cartella:";
-    Text[ spanish ] = "Se importarán todos los documentos PowerPoint del siguiente directorio:";
+    Text[ spanish ] = "Se importarán todos los documentos de PowerPoint del siguiente directorio:";
     Text[ portuguese ] = "Todos os documentos PowerPoint serão importados do seguinte directório:";
     Text[ dutch ] = "Alle PowerPoint-documenten uit de volgende  directory worden geïmporteerd:";
     Text[ swedish ] = "Alla PowerPoint-dokument som finns i följande katalog importeras:";
@@ -2330,7 +2330,7 @@ String sSumMSTextTemplates
     Text[ English_us ] = "All Word templates contained in the following directory will be imported:";
     Text[ french ] = "Les modèles Word contenus dans le répertoire suivant vont être importés :";
     Text[ italian ] = "Vengono importati tutti i modelli di Word dalla cartella seguente:";
-    Text[ spanish ] = "Se importarán todas las plantillas Word del siguiente directorio:";
+    Text[ spanish ] = "Se importarán todas las plantillas de Word del siguiente directorio:";
     Text[ portuguese ] = "Todos os modelos Word serão importados do seguinte directório:";
     Text[ dutch ] = "Alle Word-sjablonen uit de volgende directory worden geïmporteerd:";
     Text[ swedish ] = "Alla Word-mallar som finns i följande katalog importeras:";
@@ -2360,7 +2360,7 @@ String sSumMSTableTemplates
     Text[ English_us ] = "All Excel templates contained in the following directory will be imported:";
     Text[ french ] = "Les modèles Excel contenus dans le répertoire suivant vont être importés :";
     Text[ italian ] = "Vengono importati tutti i modelli di Excel dalla seguente cartella:";
-    Text[ spanish ] = "Se importarán todas las plantillas Excel del siguiente directorio:";
+    Text[ spanish ] = "Se importarán todas las plantillas de Excel del siguiente directorio:";
     Text[ portuguese ] = "Todos os modelos Excel serão importados do seguinte directório:";
     Text[ dutch ] = "Alle Excel-sjablonen uit de volgende  directory worden geïmporteerd:";
     Text[ swedish ] = "Alla Excel-mallar som finns i följande katalog importeras:";
@@ -2390,7 +2390,7 @@ String sSumMSDrawTemplates
     Text[ English_us ] = "All PowerPoint templates contained in the following directory will be imported:";
     Text[ french ] = "Les modèles PowerPoint contenus dans le répertoire suivant vont être importés :";
     Text[ italian ] = "Vengono importati tutti i modelli di PowerPoint dalla seguente cartella:";
-    Text[ spanish ] = "Se importarán todas las plantillas PowerPoint del siguiente directorio:";
+    Text[ spanish ] = "Se importarán todas las plantillas de PowerPoint del siguiente directorio:";
     Text[ portuguese ] = "Todos os modelos PowerPoint serão importados do seguinte directório:";
     Text[ dutch ] = "Alle PowerPoint-sjablonen uit de volgende directory worden geïmporteerd:";
     Text[ swedish ] = "Alla PowerPoint-mallar som finns i följande katalog importeras:";
