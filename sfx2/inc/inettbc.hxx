@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-09 15:13:04 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:27:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,6 @@ class SvtURLBox;
 class SfxURLToolBoxControl_Impl : public SfxToolBoxControl
 {
 private:
-    SfxStatusForwarder      aURLForwarder;
     SvtURLBox*              GetURLBox() const;
     void                    OpenURL( const String& rName, BOOL bNew ) const;
 
@@ -89,13 +88,10 @@ public:
 
                             SFX_DECL_TOOLBOX_CONTROL();
 
-                            SfxURLToolBoxControl_Impl( USHORT nId,
-                                                    ToolBox& rBox,
-                                                    SfxBindings& rBindings );
+                            SfxURLToolBoxControl_Impl( USHORT nSlotId, USHORT nId, ToolBox& rBox );
 
     virtual Window*         CreateItemWindow( Window* pParent );
-    virtual void            StateChanged( USHORT nSID, SfxItemState eState,
-                                  const SfxPoolItem* pState );
+    virtual void            StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
 };
 
 class SfxCancelToolBoxControl_Impl : public SfxToolBoxControl
@@ -104,15 +100,11 @@ public:
 
                             SFX_DECL_TOOLBOX_CONTROL();
 
-                            SfxCancelToolBoxControl_Impl(
-                                            USHORT nId,
-                                            ToolBox& rBox,
-                                            SfxBindings& rBindings );
+                            SfxCancelToolBoxControl_Impl( USHORT nSlotId, USHORT nId, ToolBox& rBox );
 
     virtual SfxPopupWindowType  GetPopupWindowType() const;
     virtual SfxPopupWindow*     CreatePopupWindow();
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
-                                              const SfxPoolItem* pState );
+    virtual void                StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
 };
 
 #endif
