@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hdu $ $Date: 2001-07-06 13:09:07 $
+ *  last change: $Author: th $ $Date: 2001-07-06 16:01:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,9 @@
 #endif
 #ifndef _SV_PRINT_HXX
 #include <print.hxx>
+#endif
+#ifndef _SV_EVENT_HXX
+#include <event.hxx>
 #endif
 #ifndef _SV_WINDOW_H
 #include <window.h>
@@ -1885,7 +1888,7 @@ static void ImplAddTokenFontNames( String& rName, const char* pFontNames )
 // -----------------------------------------------------------------------
 
 Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
-                                   BOOL nFlags, const OutputDevice* pOutDev )
+                                   ULONG nFlags, const OutputDevice* pOutDev )
 {
     Font            aFont;
     const char*     pSearch1 = NULL;
