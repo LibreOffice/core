@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:02:31 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 10:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -786,7 +786,12 @@ void SfxAppToolBoxControl_Impl::StateChanged
             Reference <com::sun::star::lang::XMultiServiceFactory> aXMultiServiceFactory(::comphelper::getProcessServiceFactory());
             ::framework::MenuConfiguration aConf( aXMultiServiceFactory );
             Reference<com::sun::star::frame::XFrame> aXFrame( GetBindings().GetDispatcher_Impl()->GetFrame()->GetFrame()->GetFrameInterface() );
-            pMenu = aConf.CreateBookmarkMenu( aXFrame, BOOKMARK_NEWMENU );
+            // This toolbox controller is used for two popup menus (new documents and wizards!). Create the correct
+            // popup menu according to the slot ID our controller has been initialized with.
+            if ( nId == SID_NEWDOCDIRECT )
+                pMenu = aConf.CreateBookmarkMenu( aXFrame, BOOKMARK_NEWMENU );
+            else
+                pMenu = aConf.CreateBookmarkMenu( aXFrame, BOOKMARK_WIZARDMENU );
         }
         GetToolBox().EnableItem( GetId(), eState != SFX_ITEM_DISABLED );
         SetImage(((const SfxStringItem*)pState)->GetValue());
@@ -909,7 +914,12 @@ IMPL_LINK( SfxAppToolBoxControl_Impl, Timeout, Timer *, pTimer )
         Reference <com::sun::star::lang::XMultiServiceFactory> aXMultiServiceFactory(::comphelper::getProcessServiceFactory());
         ::framework::MenuConfiguration aConf( aXMultiServiceFactory );
         Reference<com::sun::star::frame::XFrame> aXFrame( GetBindings().GetDispatcher_Impl()->GetFrame()->GetFrame()->GetFrameInterface() );
-        pMenu = aConf.CreateBookmarkMenu( aXFrame, BOOKMARK_NEWMENU );
+        // This toolbox controller is used for two popup menus (new documents and wizards!). Create the correct
+        // popup menu according to the slot ID our controller has been initialized with.
+        if ( nId == SID_NEWDOCDIRECT )
+            pMenu = aConf.CreateBookmarkMenu( aXFrame, BOOKMARK_NEWMENU );
+        else
+            pMenu = aConf.CreateBookmarkMenu( aXFrame, BOOKMARK_WIZARDMENU );
     }
 
     if( pMenu )
