@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 17:29:04 $
+ *  last change: $Author: dg $ $Date: 2000-11-10 22:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ namespace configmgr
 //-----------------------------------------------------------------------------
     struct ServiceInfo;
 
-    class ConfigurationProviderImpl2;
+    class OProviderImpl;
 //-----------------------------------------------------------------------------
     namespace configuration
     {
@@ -117,9 +117,9 @@ namespace configmgr
             typedef configuration::TemplateProvider TemplateProvider;
 
             Factory&                    m_rFactory;
-            ConfigurationProviderImpl2& m_rProviderImpl;
+            OProviderImpl&              m_rProviderImpl;
         public:
-            ApiProvider(Factory& rFactory, ConfigurationProviderImpl2& rProviderImpl )
+            ApiProvider(Factory& rFactory, OProviderImpl& rProviderImpl )
                 : m_rFactory(rFactory)
                 , m_rProviderImpl(rProviderImpl)
             {}
@@ -128,7 +128,7 @@ namespace configmgr
 
             UnoTypeConverter            getTypeConverter() const;
             Factory&                    getFactory()        { return m_rFactory; }
-            ConfigurationProviderImpl2& getProviderImpl()   { return m_rProviderImpl; }
+            OProviderImpl&              getProviderImpl()   { return m_rProviderImpl; }
             ISynchronizedData*          getSourceLock() const;
             TemplateProvider            getTemplateProvider() const;
         };

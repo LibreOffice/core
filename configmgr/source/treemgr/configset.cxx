@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 17:32:37 $
+ *  last change: $Author: dg $ $Date: 2000-11-10 22:45:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include "configset.hxx"
 
 #include "nodechange.hxx"
+#include "nodefactory.hxx"
 #include "nodechangeimpl.hxx"
 #include "treeimpl.hxx"
 #include "template.hxx"
@@ -233,7 +234,7 @@ Name SetElementInfo::getTemplatePackage() const
 }
 //-----------------------------------------------------------------------------
 
-AbsolutePath SetElementInfo::getTemplatePath() const
+RelativePath SetElementInfo::getTemplatePath() const
 {
     return m_aTemplate->getPath();
 }
@@ -317,6 +318,21 @@ ElementTree SetElementFactory::instantiateTemplate(TemplateHolder const& aTempla
     ElementTree aRet( new ElementTreeImpl( aTemplate, m_aProvider.getBodyPtr() ) );
 
     return aRet;
+}
+//-----------------------------------------------------------------------------
+
+ElementTree SetElementFactory::instantiateOnDefault(std::auto_ptr<INode> aTree, TemplateHolder const& aDummyTemplate)
+{
+//  OSL_ENSURE(m_aProvider.get().isValid(), "ERROR: Template Instance Factory has no template provider - cannot instantiate element");
+    OSL_ENSURE(aTree.get(), "ERROR: Tree is NULL - cannot instantiate element");
+    OSL_ENSURE(aDummyTemplate.isValid(), "ERROR: Template is NULL - cannot instantiate element");
+
+    if (!aTree.get()) return 0;
+
+    ElementTreeImpl* pNewTree = new ElementTreeImpl( NodeType::getDeferredChangeFactory(),*aTree, ~0u, aDummyTemplate );
+    pNewTree->takeNodeFrom(aTree);
+
+    return ElementTree( pNewTree );
 }
 //-----------------------------------------------------------------------------
 

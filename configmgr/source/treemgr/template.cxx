@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:35:59 $
+ *  last change: $Author: dg $ $Date: 2000-11-10 22:45:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,13 +188,12 @@ bool Template::isInstanceValue() const
 //-----------------------------------------------------------------------------
 
 /// get the path where the template is located
-AbsolutePath Template::getPath() const
+RelativePath Template::getPath() const
 {
     Path::Components aPath;
-    aPath.push_back(Name());
     aPath.push_back(m_aModule);
     aPath.push_back(m_aName);
-    return AbsolutePath( aPath  );
+    return RelativePath( aPath  );
 }
 //-----------------------------------------------------------------------------
 

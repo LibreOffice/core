@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:40:31 $
+ *  last change: $Author: dg $ $Date: 2000-11-10 22:41:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ namespace configmgr
             UnoType         getInstanceType() const { return m_aInstanceType; }
 
         /// get the path where the template is located
-            AbsolutePath    getPath() const;
+            RelativePath    getPath() const;
 
         /// get the local name of the template
             Name            getName() const { return m_aName; }

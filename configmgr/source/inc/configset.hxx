@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 17:32:36 $
+ *  last change: $Author: dg $ $Date: 2000-11-10 22:41:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ namespace configmgr
             UnoType  getElementType() const;
             Name     getTemplateName() const;
             Name     getTemplatePackage() const;
-            AbsolutePath getTemplatePath() const;
+            RelativePath getTemplatePath() const;
 
             static TemplateHolder extractElementInfo(Tree const& aTree, NodeRef const& aNode);
         };
@@ -185,6 +185,7 @@ namespace configmgr
             ~SetElementFactory();
 
             ElementTree instantiateTemplate(TemplateHolder const& aTemplate);
+            ElementTree instantiateOnDefault(std::auto_ptr<INode> aTree, TemplateHolder const& aDummyTemplate);
         };
 
 //-----------------------------------------------------------------------------

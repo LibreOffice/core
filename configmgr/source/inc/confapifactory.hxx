@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confapifactory.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 17:31:22 $
+ *  last change: $Author: dg $ $Date: 2000-11-10 22:41:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,9 +82,8 @@ namespace configmgr
     struct ServiceInfo;
 
     // instantiation
-    uno::Reference< uno::XInterface > SAL_CALL instantiateProvider(uno::Reference< lang::XMultiServiceFactory > const& rServiceManager );
-//  uno::Reference< uno::XInterface > SAL_CALL instantiateReadAccess(uno::Reference< lang::XMultiServiceFactory > const& rServiceManager );
-//  uno::Reference< uno::XInterface > SAL_CALL instantiateUpdateAccess(uno::Reference< lang::XMultiServiceFactory > const& rServiceManager );
+    uno::Reference< uno::XInterface > SAL_CALL instantiateConfigProvider(uno::Reference< lang::XMultiServiceFactory > const& rServiceManager );
+    uno::Reference< uno::XInterface > SAL_CALL instantiateAdminProvider(uno::Reference< lang::XMultiServiceFactory > const& rServiceManager );
 
     uno::Reference< uno::XInterface > SAL_CALL instantiateConfigRegistry(uno::Reference< lang::XMultiServiceFactory > const& rServiceManager );
 

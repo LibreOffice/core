@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configunoreg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 17:31:22 $
+ *  last change: $Author: dg $ $Date: 2000-11-10 22:45:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@
 #ifndef CONFIGMGR_API_PROVIDER2_HXX_
 #include "confprovider2.hxx"
 #endif
+#ifndef CONFIGMGR_API_ADMINPROVIDER_HXX_
+#include "adminprovider.hxx"
+#endif
+
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
@@ -278,7 +282,7 @@ namespace configmgr
             const Sequence< OUString > & rServiceNames
         )
     {
-        OSL_ENSHURE(0 == rComponentName.compareToAscii(ConfigurationProvider2::staticServiceInfo.implementationName),
+        OSL_ENSHURE(0 == rComponentName.compareToAscii(OConfigurationProvider::staticServiceInfo.implementationName),
             "configmgr::createProviderFactory : invalid argument !");
         return new OProviderFactory(rServiceManager, pCreateFunction);
     }
@@ -429,7 +433,8 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
     {
         Reference< XRegistryKey > xKey(reinterpret_cast<XRegistryKey*>(pRegistryKey));
 
-        RegisterService(configmgr::getConfigurationProviderServiceInfo(), xKey);
+        RegisterService(&configmgr::OConfigurationProvider::staticServiceInfo, xKey);
+        RegisterService(&configmgr::OAdminProvider::staticServiceInfo, xKey);
 
         RegisterService(configmgr::getConfigurationRegistryServiceInfo(), xKey);
 
@@ -459,9 +464,14 @@ extern "C" void* SAL_CALL component_getFactory(
         ProviderRequest aReq(pServiceManager,pImplementationName);
 
         aReq.CreateProvider(
-            &configmgr::ConfigurationProvider2::staticServiceInfo,
-            &configmgr::instantiateProvider,
+            &configmgr::OConfigurationProvider::staticServiceInfo,
+            &configmgr::instantiateConfigProvider,
             ::configmgr::createProviderFactory)
+        ||
+        aReq.CreateProvider(
+            &configmgr::OAdminProvider::staticServiceInfo,
+            &configmgr::instantiateAdminProvider,
+            ::cppu::createSingleFactory)
         ||
         aReq.CreateProvider(
             configmgr::getConfigurationRegistryServiceInfo(),

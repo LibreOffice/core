@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectregistry.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: dg $ $Date: 2000-11-10 22:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,8 @@ namespace configmgr
 {
     namespace configapi
     {
-//-----------------------------------------------------------------------------
+
+        class NodeElement;
 
         class ObjectRegistry : public vos::OReference
         {
