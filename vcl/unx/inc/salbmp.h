@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:11:15 $
+ *  last change: $Author: obo $ $Date: 2005-01-24 09:45:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,11 +134,11 @@ public:
                                             SalDisplay* pSalDisp, long nDepth,
                                               const SalTwoRect& rTwoRect ) const;
 #ifdef _USE_PRINT_EXTENSION_
-    SAL_DLLPRIVATE void    ImplDraw( SalDisplay *pDisplay, Drawable aDrawable, long nDrawableDepth,
-                                     const SalTwoRect& rTwoRect, const GC& rGC, bool bDstIsWindow ) const;
+    void    ImplDraw( SalDisplay *pDisplay, Drawable aDrawable, long nDrawableDepth,
+                          const SalTwoRect& rTwoRect, const GC& rGC, bool bDstIsWindow ) const;
 #else
-    SAL_DLLPRIVATE void    ImplDraw( Drawable aDrawable, long nDrawableDepth,
-                                     const SalTwoRect& rTwoRect, const GC& rGC, bool bDstIsWindow ) const;
+    void    ImplDraw( Drawable aDrawable, long nDrawableDepth,
+                          const SalTwoRect& rTwoRect, const GC& rGC, bool bDstIsWindow ) const;
 #endif
 
 public:
