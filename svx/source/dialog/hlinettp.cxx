@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlinettp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: iha $ $Date: 2002-12-03 13:34:17 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,16 +192,11 @@ void SvxHyperlinkInternetTp::FillDlgFields ( String& aStrURL )
     }
 
     // set URL-field
-    if ( aStrScheme != aEmptyStr )
-    {
-        // Show the scheme, #72740
-        if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
-            maCbbTarget.SetText( aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
-        else
-            maCbbTarget.SetText( aStrURL ); // #77696#
-    }
+    // Show the scheme, #72740
+    if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
+        maCbbTarget.SetText( aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
     else
-        maCbbTarget.SetText ( aEmptyStr );
+        maCbbTarget.SetText( aStrURL ); // #77696#
 
     SetScheme( aStrScheme );
 }
@@ -256,16 +251,6 @@ String SvxHyperlinkInternetTp::CreateAbsoluteURL() const
     {
         aURL.SetSmartProtocol( GetSmartProtocolFromButtons() );
         aURL.SetSmartURL(aStrURL);
-
-        if( aURL.GetProtocol() == INET_PROT_NOT_VALID
-            && aScheme.Len() == 0 )
-        {
-            //try wether this might be a relative link to the local fileystem
-            aURL.SetSmartURL( SvtPathOptions().GetWorkPath() );
-            if( !aURL.hasFinalSlash() )
-                aURL.setFinalSlash();
-            aURL.Append( aStrURL );
-        }
     }
 
     // username and password for ftp-url
@@ -274,8 +259,8 @@ String SvxHyperlinkInternetTp::CreateAbsoluteURL() const
 
     if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
         return aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
-
-    return aEmptyStr;
+    else //#105788# always create a URL even if it is not valid
+        return aStrURL;
 }
 
 /*************************************************************************
