@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-19 11:05:41 $
+#   last change: $Author: kz $ $Date: 2004-05-19 14:06:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -144,6 +144,8 @@ IDLFILES=\
     SingleSelectQueryComposer.idl \
     SQLFilterOperator.idl \
     XSingleSelectQueryAnalyzer.idl \
+    ColumnDescriptorControl.idl \
+    ColumnDescriptorControlModel.idl \
     XSQLQueryComposerFactory.idl
 
 # ------------------------------------------------------------------
