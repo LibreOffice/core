@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_attri.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:36 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:40:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,10 +67,10 @@
 // NOT FULLY DEFINED SERVICES
 #include <ary/idl/i_gate.hxx>
 #include <ary/idl/i_attribute.hxx>
-#include <ary/idl/i_property.hxx>
 #include <ary/idl/i_service.hxx>
 #include <ary/idl/ip_ce.hxx>
 #include <ary_i/codeinf2.hxx>
+#include <s2_luidl/pe_type2.hxx>
 #include <s2_luidl/pe_vari2.hxx>
 #include <s2_luidl/tk_keyw.hxx>
 #include <s2_luidl/tk_ident.hxx>
@@ -85,18 +85,19 @@ namespace uidl
 
 
 
-PE_Attribute::PE_Attribute( Ce_id &         i_rCurOwner,
-                            E_ParsedType    i_eCeType )
+PE_Attribute::PE_Attribute( const Ce_id & i_rCurOwner )
     :   eState(e_none),
         pCurOwner(&i_rCurOwner),
         pPE_Variable(0),
+        pPE_Exception(0),
+        pCurAttribute(0),
         nCurParsedType(0),
         sCurParsedName(),
-        bIsOptional(false),
-        aStereotypes(),
-        eCeType(i_eCeType)
+        bReadOnly(false),
+        bBound(false)
 {
     pPE_Variable    = new PE_Variable(nCurParsedType, sCurParsedName);
+    pPE_Exception   = new PE_Type(nCurParsedType);
 }
 
 void
@@ -106,6 +107,7 @@ PE_Attribute::EstablishContacts( UnoIDL_PE *                io_pParentPE,
 {
     UnoIDL_PE::EstablishContacts(io_pParentPE,io_rRepository,o_rResult);
     pPE_Variable->EstablishContacts(this,io_rRepository,o_rResult);
+    pPE_Exception->EstablishContacts(this,io_rRepository,o_rResult);
 }
 
 PE_Attribute::~PE_Attribute()
@@ -119,43 +121,63 @@ PE_Attribute::ProcessToken( const Token & i_rToken )
 }
 
 void
+PE_Attribute::Process_Identifier( const TokIdentifier & i_rToken )
+{
+    switch (eState)
+    {
+        case e_start:
+            SetResult(not_done, push_sure, pPE_Variable.Ptr());
+            eState = in_variable;
+            break;
+        case in_raise_std:
+            if (strcmp(i_rToken.Text(),"get") == 0)
+            {
+                SetResult(done, stay);
+                eState = in_get;
+            }
+            else if (strcmp(i_rToken.Text(),"set") == 0)
+            {
+                SetResult(done, stay);
+                eState = in_set;
+            }
+            else
+            {
+                SetResult(not_done, pop_failure);
+                eState = e_none;
+            }
+            break;
+        case in_get:
+        case in_set:
+            SetResult(not_done, push_sure, pPE_Exception.Ptr());
+            break;
+        default:
+            SetResult(not_done, pop_failure);
+    }   // end switch
+}
+
+void
 PE_Attribute::Process_Stereotype( const TokStereotype & i_rToken )
 {
+    if (eState != e_start)
+    {
+        SetResult(not_done, pop_failure);
+        eState = e_none;
+        return;
+    }
+
     switch (i_rToken.Id())
     {
-        case TokStereotype::ste_optional:
-            bIsOptional = true;
-            break;
         case TokStereotype::ste_readonly:
-            aStereotypes.Set_Flag(Stereotypes::readonly);
+            bReadOnly = true;
             break;
         case TokStereotype::ste_bound:
-            aStereotypes.Set_Flag(Stereotypes::bound);
+            bBound = true;
             break;
-        case TokStereotype::ste_constrained:
-            aStereotypes.Set_Flag(Stereotypes::constrained);
-            break;
-        case TokStereotype::ste_maybeambiguous:
-            aStereotypes.Set_Flag(Stereotypes::maybeambigious);
-            break;
-        case TokStereotype::ste_maybedefault:
-            aStereotypes.Set_Flag(Stereotypes::maybedefault);
-            break;
-        case TokStereotype::ste_maybevoid:
-            aStereotypes.Set_Flag(Stereotypes::maybevoid);
-            break;
-        case TokStereotype::ste_removable:
-            aStereotypes.Set_Flag(Stereotypes::removable);
-            break;
-        case TokStereotype::ste_transient:
-            aStereotypes.Set_Flag(Stereotypes::transient);
-            break;
-
         default:
             SetResult(not_done, pop_failure);
             eState = e_none;
             return;
-    }
+    }   // end switch
 
     SetResult(done, stay);
 }
@@ -163,22 +185,14 @@ PE_Attribute::Process_Stereotype( const TokStereotype & i_rToken )
 void
 PE_Attribute::Process_MetaType( const TokMetaType & i_rToken )
 {
-    if (eState == e_start)
+    if (eState != e_start OR i_rToken.Id() != TokMetaType::mt_attribute)
     {
-        if ( i_rToken.Id() == TokMetaType::mt_property
-                AND eCeType == parse_property
-             OR
-             i_rToken.Id() == TokMetaType::mt_attribute
-                AND eCeType == parse_attribute )
-        {
-            SetResult(done, stay);
-            eState = expect_variable;
-            return;
-        }
-    }   // endif (eState == e_start)
+        SetResult(not_done, pop_failure);
+        eState = e_none;
+        return;
+    }
 
-    SetResult(not_done, pop_failure);
-    eState = e_none;
+    SetResult(done, stay);
 }
 
 void
@@ -189,16 +203,39 @@ PE_Attribute::Process_Punctuation( const TokPunctuation & i_rToken )
         case e_start:
             SetResult(done, stay);
             break;
-        case expect_variable:
+        case expect_end:
+            switch(i_rToken.Id())
+            {
+                case TokPunctuation::Semicolon:
+                    SetResult(done, pop_success);
+                    eState = e_none;
+                    break;
+                case TokPunctuation::Comma:
+                    SetResult(not_done, pop_failure);
+                    Cerr() << "Autodoc does not support comma separated attributes, because those are discouraged by IDL policies." << Endl();
+                    break;
+                case TokPunctuation::CurledBracketOpen:
+                    SetResult(done, stay);
+                    eState = in_raise_std;
+                    break;
+                default:
+                    SetResult(not_done, pop_failure);
+            }   // end switch
+            break;
+        case in_raise_std:
+            SetResult(done, stay);
+            if (i_rToken.Id() == TokPunctuation::CurledBracketClose)
+            {
+                eState = expect_end;
+            }
+            break;
+        case in_get:
+        case in_set:
+            SetResult(done, stay);
             if (i_rToken.Id() == TokPunctuation::Semicolon)
             {
-                SetResult(done, pop_success);
-                eState = e_none;
+                eState = in_raise_std;
             }
-            else if (i_rToken.Id() == TokPunctuation::Comma)
-                SetResult(done, stay);
-            else
-                SetResult(not_done, pop_failure);
             break;
         default:
             csv_assert(false);
@@ -206,13 +243,26 @@ PE_Attribute::Process_Punctuation( const TokPunctuation & i_rToken )
 }
 
 void
+PE_Attribute::Process_Raises()
+{
+    if (eState == in_get OR eState == in_set)
+    {
+        SetResult(done, stay);
+    }
+    else
+        SetResult(not_done, pop_failure);
+}
+
+void
 PE_Attribute::Process_Default()
 {
-    if (eState == expect_variable)
+    if (eState == e_start)
     {
         SetResult(not_done, push_sure, pPE_Variable.Ptr());
         eState = in_variable;
     }
+    else if (eState == in_get OR eState == in_set)
+        SetResult(not_done, push_sure, pPE_Exception.Ptr());
     else
         SetResult(not_done, pop_failure);
 }
@@ -222,61 +272,49 @@ PE_Attribute::InitData()
 {
     eState = e_start;
 
+    pCurAttribute = 0;
     nCurParsedType = 0;
     sCurParsedName = "";
-
-    // bIsOptional and
-    // aStereotypes
-    //   may be preset by the PE_Service-(or PE_Interface-)parent
-    //   with PresetOptional() or
-    //   PresetStereotype()
-    //   - therefore it must not be set here!
+    bReadOnly = false;
+    bBound = false;
 }
 
 void
 PE_Attribute::TransferData()
 {
-    if (bIsOptional)
-    {
-        SetOptional();
-        bIsOptional = false;
-    }
-
-    ary::idl::CodeEntity *
-        pCe = 0;
-    csv_assert(pCurOwner->IsValid());
-    if (eCeType == parse_property)
-    {
-        pCe = &Gate().Ces().Store_Property( *pCurOwner,
-                                            sCurParsedName,
-                                            nCurParsedType,
-                                            aStereotypes );
-    }
-    else if (eCeType == parse_attribute)
-    {
-        pCe = &Gate().Ces().Store_Attribute( *pCurOwner,
-                                             sCurParsedName,
-                                             nCurParsedType,
-                                             aStereotypes.IsReadOnly() );
-    }
-    else
-    {
-        csv_assert(false);
-    }
-    csv_assert(pCe != 0);
-    PassDocuAt(*pCe);
-
-    nCurParsedType = 0;
-    sCurParsedName.clear();
-    aStereotypes = Stereotypes();
-
     eState = e_none;
 }
 
 void
 PE_Attribute::ReceiveData()
 {
-    eState = expect_variable;
+    switch (eState)
+    {
+        case in_variable:
+            csv_assert(pCurOwner->IsValid());
+            pCurAttribute = &Gate().Ces().Store_Attribute(
+                                                    *pCurOwner,
+                                                    sCurParsedName,
+                                                    nCurParsedType,
+                                                    bReadOnly,
+                                                    bBound );
+            PassDocuAt(*pCurAttribute);
+            nCurParsedType = 0;
+            eState = expect_end;
+            break;
+        case in_get:
+            csv_assert(pCurAttribute != 0);
+            pCurAttribute->Add_GetException(nCurParsedType);
+            nCurParsedType = 0;
+            break;
+        case in_set:
+            csv_assert(pCurAttribute != 0);
+            pCurAttribute->Add_SetException(nCurParsedType);
+            nCurParsedType = 0;
+            break;
+        default:
+            csv_assert(false);
+    }   // end switch
 }
 
 
@@ -289,4 +327,3 @@ PE_Attribute::MyPE()
 
 }   // namespace uidl
 }   // namespace csi
-
