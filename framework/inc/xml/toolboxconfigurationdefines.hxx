@@ -72,11 +72,12 @@
 #define ATTRIBUTE_STYLE_SYMBOLTEXT  "symboltext"
 #define ATTRIBUTE_STYLE_SYMBOLPLUSTEXT  "symbol+text"
 
-#define ATTRIBUTE_ITEMSTYLE_RADIO       "radio"
-#define ATTRIBUTE_ITEMSTYLE_AUTO        "auto"
-#define ATTRIBUTE_ITEMSTYLE_LEFT        "left"
-#define ATTRIBUTE_ITEMSTYLE_AUTOSIZE    "autosize"
-#define ATTRIBUTE_ITEMSTYLE_DROPDOWN    "dropdown"
-#define ATTRIBUTE_ITEMSTYLE_REPEAT      "repeat"
+#define ATTRIBUTE_ITEMSTYLE_RADIO           "radio"
+#define ATTRIBUTE_ITEMSTYLE_AUTO            "auto"
+#define ATTRIBUTE_ITEMSTYLE_LEFT            "left"
+#define ATTRIBUTE_ITEMSTYLE_AUTOSIZE        "autosize"
+#define ATTRIBUTE_ITEMSTYLE_DROPDOWN        "dropdown"
+#define ATTRIBUTE_ITEMSTYLE_REPEAT          "repeat"
+#define ATTRIBUTE_ITEMSTYLE_DROPDOWNONLY    "dropdownonly"
 
 #endif // __FRAMEWORK_XML_TOOLBOXCONFIGURATIONDEFINES_HXX_
