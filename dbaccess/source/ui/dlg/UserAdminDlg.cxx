@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdminDlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:13:36 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:10:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,9 +132,12 @@ namespace dbaui
     OUserAdminDlg::OUserAdminDlg(Window* _pParent
                                             , SfxItemSet* _pItems
                                             ,const Reference< XMultiServiceFactory >& _rxORB
-                                            ,const ::com::sun::star::uno::Any& _aDataSourceName)
+                                            ,const ::com::sun::star::uno::Any& _aDataSourceName
+                                            ,const Reference< XConnection >& _xConnection)
         :SfxTabDialog(_pParent, ModuleRes(DLG_DATABASE_USERADMIN), _pItems)
         ,m_pItemSet(_pItems)
+        ,m_xConnection(_xConnection)
+        ,m_bOwnConnection(!_xConnection.is())
     {
         m_pImpl = ::std::auto_ptr<ODbDataSourceAdministrationHelper>(new ODbDataSourceAdministrationHelper(_rxORB,_pParent,this));
         m_pImpl->setCurrentDataSourceName(_aDataSourceName);
@@ -155,11 +158,12 @@ namespace dbaui
     // -----------------------------------------------------------------------
     OUserAdminDlg::~OUserAdminDlg()
     {
-        try
-        {
-            ::comphelper::disposeComponent(m_xConnection);
-        }
-        catch(Exception){}
+        if ( m_bOwnConnection )
+            try
+            {
+                ::comphelper::disposeComponent(m_xConnection);
+            }
+            catch(Exception){}
 
         SetInputSet(NULL);
         DELETEZ(pExampleSet);
@@ -169,20 +173,25 @@ namespace dbaui
     {
         try
         {
-            Reference< XDataDefinitionSupplier > xDriver(getDriver(),UNO_QUERY);
-            sal_Bool bError = !xDriver.is();
-            if ( !bError )
+            Reference<XUsersSupplier> xUsersSup(m_xConnection,UNO_QUERY);
+            sal_Bool bError = sal_False;
+            if ( !xUsersSup.is() )
             {
-                m_xConnection = createConnection().first;
-                if ( m_xConnection.is() )
+                Reference< XDataDefinitionSupplier > xDriver(getDriver(),UNO_QUERY);
+                bError = !xDriver.is();
+                if ( !bError )
                 {
-                    // now set the tables supplier at the table control
-                    Reference< XTablesSupplier > xTablesSup = xDriver->getDataDefinitionByConnection(m_xConnection);
+                    m_xConnection = createConnection().first;
 
-                    Reference<XUsersSupplier> xUsersSup(xTablesSup,UNO_QUERY);
-                    bError = !xUsersSup.is();
+                    if ( !(bError = !m_xConnection.is()) )
+                    {
+                        // now set the tables supplier at the table control
+                        xUsersSup.set(xDriver->getDataDefinitionByConnection(m_xConnection),UNO_QUERY);
+                    }
                 }
             }
+            bError = ! ( xUsersSup.is() && xUsersSup->getUsers().is());
+
             if ( bError )
             {
                 String sError(ModuleRes(STR_USERADMIN_NOT_AVAILABLE));
@@ -227,7 +236,10 @@ namespace dbaui
     ::std::pair< Reference<XConnection>,sal_Bool> OUserAdminDlg::createConnection()
     {
         if ( !m_xConnection.is() )
+        {
             m_xConnection = m_pImpl->createConnection().first;
+            m_bOwnConnection = m_xConnection.is();
+        }
         return ::std::pair< Reference<XConnection>,sal_Bool> (m_xConnection,sal_False);
     }
     // -----------------------------------------------------------------------------
