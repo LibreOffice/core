@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msoleexp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 14:14:50 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:51:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,16 +74,31 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_XEmbedPersist_HPP_
+#include <com/sun/star/embed/XEmbedPersist.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
+#include <com/sun/star/embed/EmbedStates.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
+#include <com/sun/star/frame/XStorable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
+#include <com/sun/star/awt/Size.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
+#include <com/sun/star/embed/Aspects.hpp>
+#endif
 
 #ifndef _SO_CLSIDS_HXX
-#include <so3/clsids.hxx>
+#include <sot/clsids.hxx>
 #endif
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
 #endif
-#ifndef _SFX_INTERNO_HXX
-#include <sfx2/interno.hxx>
-#endif
+//#ifndef _SFX_INTERNO_HXX
+//#include <sfx2/interno.hxx>
+//#endif
 #ifndef _SFX_OBJFAC_HXX
 #include <sfx2/docfac.hxx>
 #endif
@@ -101,6 +116,14 @@
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
+#endif
+
+#include <unotools/streamwrap.hxx>
+#include <comphelper/storagehelper.hxx>
+#include <svtools/embedhlp.hxx>
+
+#ifndef _MSDFFIMP_HXX
+#include "msdffimp.hxx" // extern sichtbare Header-Datei
 #endif
 
 #include "msoleexp.hxx"
@@ -185,13 +208,17 @@ sal_Bool UseOldMSExport()
     return sal_False;
 }
 
-void SvxMSExportOLEObjects::ExportOLEObject( SvInPlaceObject& rObj,
-                                                SvStorage& rDestStg )
+void SvxMSExportOLEObjects::ExportOLEObject( const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject>& rObj, SotStorage& rDestStg )
+{
+    svt::EmbeddedObjectRef aObj( rObj, embed::Aspects::MSOLE_CONTENT );
+    ExportOLEObject( aObj, rDestStg );
+}
+
+void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvStorage& rDestStg )
 {
     SvGlobalName aOwnGlobalName;
+    SvGlobalName aObjName( rObj->getClassID() );
     const SfxFilter* pExpFilter = NULL;
-    SfxInPlaceObjectRef xSfxIPObj( &rObj );
-    if( xSfxIPObj.Is() && xSfxIPObj->GetObjectShell() )
     {
         static struct _ObjExpType {
             UINT32 nFlag;
@@ -223,6 +250,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( SvInPlaceObject& rObj,
                  SO3_SDRAW_CLASSID_60, SO3_SDRAW_CLASSID_50 }}, // ver 5.0, it is purpose to have double entrys here.
             { 0xffff,0 }
         };
+
         for( const _ObjExpType* pArr = aArr; !pExpFilter && ( pArr->nFlag != 0xffff ); ++pArr )
         {
             for ( int n = 0; n < 4; ++n )
@@ -231,14 +259,14 @@ void SvxMSExportOLEObjects::ExportOLEObject( SvInPlaceObject& rObj,
                 SvGlobalName aGlbNm( rId.n1, rId.n2, rId.n3,
                             rId.b8, rId.b9, rId.b10, rId.b11,
                             rId.b12, rId.b13, rId.b14, rId.b15 );
-                if( *xSfxIPObj->GetSvFactory() == aGlbNm )
+                if( aObjName == aGlbNm )
                 {
                     aOwnGlobalName = aGlbNm;
 
+                    // flags for checking if conversion is wanted at all (SaveOptions?!)
                     if( GetFlags() & pArr->nFlag )
                     {
-                        const SfxObjectFactory& rFact = xSfxIPObj->GetObjectShell()->GetFactory();
-                        pExpFilter = SfxFilterMatcher(String::CreateFromAscii(rFact.GetShortName())).GetFilter4FilterName(String::CreateFromAscii(pArr->pFilterNm));
+                        pExpFilter = SfxFilterMatcher().GetFilter4FilterName(String::CreateFromAscii(pArr->pFilterNm));
                         break;
                     }
                 }
@@ -248,16 +276,30 @@ void SvxMSExportOLEObjects::ExportOLEObject( SvInPlaceObject& rObj,
 
     if( pExpFilter )                        // use this filter for the export
     {
-        SfxMedium aMed( &rDestStg, FALSE );
-        aMed.SetFilter( pExpFilter );
-        xSfxIPObj->GetObjectShell()->ConvertTo( aMed );
+        if ( rObj->getCurrentState() == embed::EmbedStates::LOADED )
+            rObj->changeState( embed::EmbedStates::RUNNING );
+        //TODO/LATER: is stream instead of outputstream a better choice?!
+        //TODO/LATER: a "StoreTo" method at embedded object would be nice
+        uno::Sequence < beans::PropertyValue > aSeq(2);
+        SvStream* pStream = new SvMemoryStream;
+        aSeq[0].Name = ::rtl::OUString::createFromAscii( "OutputStream" );
+        ::uno::Reference < io::XOutputStream > xOut = new ::utl::OOutputStreamWrapper( *pStream );
+        aSeq[0].Value <<= xOut;
+        aSeq[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
+        aSeq[1].Value <<= ::rtl::OUString( pExpFilter->GetName() );
+        uno::Reference < frame::XStorable > xStor( rObj->getComponent(), uno::UNO_QUERY );
+        xStor->storeToURL( ::rtl::OUString::createFromAscii( "private:stream" ), aSeq );
+        SotStorageRef xOLEStor = new SotStorage( pStream, TRUE );
+        xOLEStor->CopyTo( &rDestStg );
+        rDestStg.Commit();
     }
     else if( aOwnGlobalName != SvGlobalName() )
     {
+        // own format, maybe SO6 format or lower
         SvGlobalName aEmbName = GetEmbeddedVersion( aOwnGlobalName );
         if ( aEmbName != SvGlobalName() && !UseOldMSExport() )
         {
-            // this is a StarOffice 6.1 embedded object
+            // this is a SO6 embedded object, save in old binary format
             rDestStg.SetVersion( SOFFICE_FILEFORMAT_31 );
             rDestStg.SetClass( aEmbName,
                                 SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE,
@@ -270,24 +312,34 @@ void SvxMSExportOLEObjects::ExportOLEObject( SvInPlaceObject& rObj,
             if( !xExtStm->GetError() )
             {
                 // write extent
-                Rectangle aVisArea = xSfxIPObj->GetVisArea( ASPECT_CONTENT );
-                sal_Int32 pRect[4];
-                pRect[0] = aVisArea.Left();
-                pRect[1] = aVisArea.Right();
-                pRect[2] = aVisArea.Top();
-                pRect[3] = aVisArea.Bottom();
-
-                sal_Int8 aWriteSet[16];
-                for ( int ind = 0; ind < 4; ind++ )
+                //TODO/MBA: check if writing a size is enough
+                if( rObj.GetObject().is() )
                 {
-                    sal_Int32 nVal = pRect[ind];
-                    for ( int nByte = 0; nByte < 4; nByte++ )
+                    awt::Size aSize = rObj->getVisualAreaSize( rObj.GetViewAspect() );
+                    //Rectangle aVisArea = xSfxIPObj->GetVisArea( ASPECT_CONTENT );
+                    sal_Int32 pRect[4];
+                    //pRect[0] = aVisArea.Left();
+                    //pRect[1] = aVisArea.Right();
+                    //pRect[2] = aVisArea.Top();
+                    //pRect[3] = aVisArea.Bottom();
+                    pRect[0] = 0;
+                    pRect[1] = aSize.Width;
+                    pRect[2] = 0;
+                    pRect[3] = aSize.Height;
+
+                    sal_Int8 aWriteSet[16];
+                    for ( int ind = 0; ind < 4; ind++ )
                     {
-                        aWriteSet[ind*4+nByte] = nVal % 0x100;
-                        nVal /= 0x100;
+                        sal_Int32 nVal = pRect[ind];
+                        for ( int nByte = 0; nByte < 4; nByte++ )
+                        {
+                            aWriteSet[ind*4+nByte] = (sal_Int8) nVal % 0x100;
+                            nVal /= 0x100;
+                        }
                     }
+
+                    bExtentSuccess = ( xExtStm->Write( aWriteSet, 16 ) == 16 );
                 }
-                bExtentSuccess = ( xExtStm->Write( aWriteSet, 16 ) == 16 );
             }
 
             if ( bExtentSuccess )
@@ -295,32 +347,50 @@ void SvxMSExportOLEObjects::ExportOLEObject( SvInPlaceObject& rObj,
                 SotStorageStreamRef xEmbStm = rDestStg.OpenSotStream(
                                                 String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "package_stream" ) ),
                                                 STREAM_STD_READWRITE );
-
                 if( !xEmbStm->GetError() )
                 {
-                    SvStorageRef xEmbStor = new SvStorage( sal_True, *xEmbStm );
-                    if( !xEmbStor->GetError() )
-                    {
-                        rObj.DoSaveAs( &xEmbStor );
-                        rObj.DoSaveCompleted();
-                        xEmbStor->Commit();
-                    }
+                    if ( rObj->getCurrentState() == embed::EmbedStates::LOADED )
+                        rObj->changeState( embed::EmbedStates::RUNNING );
+                    //TODO/LATER: is stream instead of outputstream a better choice?!
+                    //TODO/LATER: a "StoreTo" method at embedded object would be nice
+                    uno::Sequence < beans::PropertyValue > aSeq(1);
+                    aSeq[0].Name = ::rtl::OUString::createFromAscii( "OutputStream" );
+                    ::uno::Reference < io::XOutputStream > xOut = new ::utl::OOutputStreamWrapper( *xEmbStm );
+                    aSeq[0].Value <<= xOut;
+                    uno::Reference < frame::XStorable > xStor( rObj->getComponent(), uno::UNO_QUERY );
+                    xStor->storeToURL( ::rtl::OUString::createFromAscii( "private:stream" ), aSeq );
                 }
             }
         }
         else
         {
-            rDestStg.SetVersion( SOFFICE_FILEFORMAT_50 );
-            rObj.DoSaveAs( &rDestStg );
-            rObj.DoSaveCompleted();
+            DBG_ERROR("Own binary format inside own container document!");
         }
     }
     else
     {
+        // alien objects
+        //TODO/LATER: a "StoreTo" method at embedded object would be nice
         rDestStg.SetVersion( SOFFICE_FILEFORMAT_31 );
-        rObj.DoSaveAs( &rDestStg );
-        rObj.DoSaveCompleted();
+        uno::Reference < embed::XStorage > xStor = ::comphelper::OStorageHelper::GetTemporaryStorage();
+        uno::Reference < embed::XEmbedPersist > xPers( rObj.GetObject(), uno::UNO_QUERY );
+        if ( xPers.is() )
+        {
+            uno::Sequence < beans::PropertyValue > aEmptySeq;
+            ::rtl::OUString aTempName(::rtl::OUString::createFromAscii("bla"));
+            try
+            {
+                xPers->storeToEntry( xStor, aTempName, aEmptySeq, aEmptySeq );
+            }
+            catch ( uno::Exception& )
+            {}
+
+            SotStorageRef xOLEStor = SotStorage::OpenOLEStorage( xStor, aTempName, STREAM_STD_READ );
+            xOLEStor->CopyTo( &rDestStg );
+            rDestStg.Commit();
+        }
     }
+
     //We never need this stream: See #99809# and #i2179#
     rDestStg.Remove(CREATE_CONST_ASC(SVEXT_PERSIST_STREAM));
 }
