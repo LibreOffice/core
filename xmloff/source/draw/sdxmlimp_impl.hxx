@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp_impl.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-20 20:05:50 $
+ *  last change: $Author: cl $ $Date: 2001-03-27 22:02:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ enum SdXMLDocElemTokenMap
     XML_TOK_DOC_META,
     XML_TOK_DOC_BODY,
     XML_TOK_DOC_SCRIPT,
-    XML_TOK_DOC_VIEWSETTINGS,
+    XML_TOK_DOC_SETTINGS,
     XML_TOK_OFFICE_END = XML_TOK_UNKNOWN
 };
 
@@ -270,9 +270,10 @@ public:
 
     void SetProgress(sal_Int32 nProg);
 
+    virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);
+    virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps);
+
     // namespace office
-    SvXMLImportContext* CreateViewSettingsContext(const rtl::OUString& rLocalName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
     SvXMLImportContext* CreateMetaContext(const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
     SvXMLImportContext* CreateScriptContext( const ::rtl::OUString& rLocalName );

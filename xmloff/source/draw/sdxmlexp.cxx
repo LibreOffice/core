@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-20 20:05:50 $
+ *  last change: $Author: cl $ $Date: 2001-03-27 22:02:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1546,25 +1546,6 @@ void SdXMLExport::SetProgress(sal_Int32 nProg)
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::_ExportViewSettings()
-{
-    SvXMLElementExport aViewSettingsElem(*this, XML_NAMESPACE_DRAW, sXML_view_settings, sal_True, sal_True);
-
-    uno::Reference< beans::XPropertySet > xPropSet( GetModel(), uno::UNO_QUERY );
-    if( !xPropSet.is() )
-        return;
-
-    awt::Rectangle aVisArea;
-    xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "VisibleArea" ) ) ) >>= aVisArea;
-
-    sal_Int16 nMapUnit;
-    xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "MapUnit" ) ) ) >>= nMapUnit;
-
-    XMLVisAreaExport aVisAreaExport(*this, sXML_embedded_visible_area, aVisArea, nMapUnit );
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
 void SdXMLExport::_ExportContent()
 {
     // page export
@@ -2143,6 +2124,90 @@ void SdXMLExport::exportFormsElement( uno::Reference< drawing::XDrawPage > xDraw
         DBG_ASSERT( bRet, "OFormLayerXMLExport::seekPage failed!" );
     }
 }
+
+void SdXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
+{
+    rProps.realloc(4);
+    beans::PropertyValue* pProps = rProps.getArray();
+    if(pProps)
+    {
+        SvXMLElementExport aViewSettingsElem(*this, XML_NAMESPACE_DRAW, sXML_view_settings, sal_True, sal_True);
+
+        uno::Reference< beans::XPropertySet > xPropSet( GetModel(), uno::UNO_QUERY );
+        if( !xPropSet.is() )
+            return;
+
+        awt::Rectangle aVisArea;
+        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "VisibleArea" ) ) ) >>= aVisArea;
+/*
+        sal_Int16 nMapUnit;
+        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "MapUnit" ) ) ) >>= nMapUnit;
+*/
+
+        sal_uInt16 i = 0;
+        pProps[i].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_visible_area_top));
+        pProps[i++].Value <<= aVisArea.Y;
+        pProps[i].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_visible_area_left));
+        pProps[i++].Value <<= aVisArea.X;
+        pProps[i].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_visible_area_width));
+        pProps[i++].Value <<= aVisArea.Width;
+        pProps[i].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_visible_area_height));
+        pProps[i++].Value <<= aVisArea.Height;
+    }
+}
+
+static struct
+{
+    const char* mpPropertyName;
+    sal_Int32 mnPropertyName;
+}
+    ConfigurationProperties[] =
+{
+    { RTL_CONSTASCII_STRINGPARAM( "ColorTableURL" ) },
+    { RTL_CONSTASCII_STRINGPARAM( "DashTableURL" ) },
+    { RTL_CONSTASCII_STRINGPARAM( "LineEndTableURL" ) },
+    { RTL_CONSTASCII_STRINGPARAM( "HatchTableURL" ) },
+    { RTL_CONSTASCII_STRINGPARAM( "GradientTableURL" ) },
+    { RTL_CONSTASCII_STRINGPARAM( "BitmapTableURL" ) },
+    { NULL, 0 }
+};
+
+void SdXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& rProps)
+{
+    uno::Reference< lang::XMultiServiceFactory > xFac( GetModel(), uno::UNO_QUERY );
+    if( xFac.is() )
+    {
+        uno::Reference< beans::XPropertySet > xProps( xFac->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.Settings" ) ) ), uno::UNO_QUERY );
+        if( xProps.is() )
+        {
+            sal_Int32 nCount = 0;
+            while( ConfigurationProperties[nCount].mpPropertyName )
+                nCount++;
+
+            beans::PropertyValue* pProps = rProps.getArray();
+
+            rProps.realloc(nCount);
+            pProps = rProps.getArray();
+
+            for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
+            {
+                try
+                {
+                    pProps->Name = OUString( ConfigurationProperties[nIndex].mpPropertyName, ConfigurationProperties[nIndex].mnPropertyName, RTL_TEXTENCODING_ASCII_US );
+                    pProps->Value = xProps->getPropertyValue( pProps->Name );
+                    pProps->Handle = 0;
+                    pProps->State = beans::PropertyState_DIRECT_VALUE;
+                }
+                catch( uno::Exception& e )
+                {
+                    DBG_ERROR( "exception while exporting document settings!" );
+                }
+                pProps++;
+            }
+        }
+    }
+}
+
 //////////////////////////////////////////////////////////////////////////////
 
 uno::Sequence< OUString > SAL_CALL SdImpressXMLExport_getSupportedServiceNames() throw()
@@ -2253,6 +2318,42 @@ uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLExport_Meta_createInstance(c
 
 //////////////////////////////////////////////////////////////////////////////
 
+uno::Sequence< OUString > SAL_CALL SdImpressXMLExport_Settings_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Impress.XMLSettingsExporter" ) );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SdImpressXMLExport_Settings_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLExport.Impress.Settings" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLExport_Settings_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SdXMLExport( sal_False, EXPORT_SETTINGS );
+}
+
+uno::Sequence< OUString > SAL_CALL SdDrawXMLExport_Settings_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Draw.XMLSettingsExporter" ) );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SdDrawXMLExport_Settings_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLExport.Draw.Settings" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLExport_Settings_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SdXMLExport( sal_True, EXPORT_SETTINGS );
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
 uno::Sequence< OUString > SAL_CALL SdImpressXMLExport_Content_getSupportedServiceNames() throw()
 {
     const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Impress.XMLContentExporter" ) );
@@ -2267,7 +2368,7 @@ OUString SAL_CALL SdImpressXMLExport_Content_getImplementationName() throw()
 
 uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLExport_Content_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SdXMLExport( sal_False, EXPORT_SETTINGS|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS );
+    return (cppu::OWeakObject*)new SdXMLExport( sal_False, EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS );
 }
 
 uno::Sequence< OUString > SAL_CALL SdDrawXMLExport_Content_getSupportedServiceNames() throw()
@@ -2284,5 +2385,5 @@ OUString SAL_CALL SdDrawXMLExport_Content_getImplementationName() throw()
 
 uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLExport_Content_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SdXMLExport( sal_True, EXPORT_SETTINGS|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS );
+    return (cppu::OWeakObject*)new SdXMLExport( sal_True, EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS );
 }

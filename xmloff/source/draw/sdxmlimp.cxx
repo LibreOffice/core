@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-20 20:05:50 $
+ *  last change: $Author: cl $ $Date: 2001-03-27 22:02:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,8 @@
 #include "xmluconv.hxx"
 #endif
 
-#ifndef _SD_XMLVIEWSETTINGSCONTEXT_HXX
-#include "viewcontext.hxx"
+#ifndef _XMLOFF_DOCUMENTSETTINGSCONTEXT_HXX
+#include "DocumentSettingsContext.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
@@ -150,7 +150,7 @@ static __FAR_DATA SvXMLTokenMapEntry aDocElemTokenMap[] =
     { XML_NAMESPACE_OFFICE, sXML_meta,              XML_TOK_DOC_META            },
     { XML_NAMESPACE_OFFICE, sXML_script,            XML_TOK_DOC_SCRIPT          },
     { XML_NAMESPACE_OFFICE, sXML_body,              XML_TOK_DOC_BODY            },
-    { XML_NAMESPACE_DRAW,   sXML_view_settings,     XML_TOK_DOC_VIEWSETTINGS    },
+    { XML_NAMESPACE_OFFICE, sXML_settings,          XML_TOK_DOC_SETTINGS        },
     XML_TOKEN_MAP_END
 };
 
@@ -278,12 +278,11 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
     const SvXMLTokenMap& rTokenMap = GetSdImport().GetDocElemTokenMap();
     switch(rTokenMap.Get(nPrefix, rLocalName))
     {
-        case XML_TOK_DOC_VIEWSETTINGS:
+        case XML_TOK_DOC_SETTINGS:
         {
             if( GetImport().getImportFlags() & IMPORT_SETTINGS )
             {
-                // draw:view-settings inside office:document
-                pContext = GetSdImport().CreateViewSettingsContext(rLocalName, xAttrList);
+                pContext = new XMLDocumentSettingsContext(GetImport(), nPrefix, rLocalName, xAttrList );
             }
             break;
         }
@@ -438,7 +437,7 @@ OUString SAL_CALL SdImpressXMLImport_Content_getImplementationName() throw()
 
 uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLImport_Content_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SdXMLImport( sal_False, IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_SETTINGS|IMPORT_FONTDECLS );
+    return (cppu::OWeakObject*)new SdXMLImport( sal_False, IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_FONTDECLS );
 }
 
 uno::Sequence< OUString > SAL_CALL SdDrawXMLImport_Content_getSupportedServiceNames() throw()
@@ -455,7 +454,7 @@ OUString SAL_CALL SdDrawXMLImport_Content_getImplementationName() throw()
 
 uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLImport_Content_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SdXMLImport( sal_True, IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_SETTINGS|IMPORT_FONTDECLS );
+    return (cppu::OWeakObject*)new SdXMLImport( sal_True, IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_FONTDECLS );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -492,6 +491,42 @@ OUString SAL_CALL SdDrawXMLImport_Meta_getImplementationName() throw()
 uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLImport_Meta_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
     return (cppu::OWeakObject*)new SdXMLImport( sal_True, IMPORT_META );
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+uno::Sequence< OUString > SAL_CALL SdImpressXMLImport_Settings_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Impress.XMLSettingsImporter" ) );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SdImpressXMLImport_Settings_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLImport.Impress.Settings" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLImport_Settings_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SdXMLImport( sal_False, IMPORT_SETTINGS );
+}
+
+uno::Sequence< OUString > SAL_CALL SdDrawXMLImport_Settings_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Draw.XMLSettingsImporter" ) );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SdDrawXMLImport_Settings_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLImport.Draw.Settings" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLImport_Settings_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SdXMLImport( sal_True, IMPORT_SETTINGS );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -726,7 +761,8 @@ SvXMLImportContext *SdXMLImport::CreateContext(USHORT nPrefix,
         ( 0 == rLocalName.compareToAscii(sXML_document) ||
           0 == rLocalName.compareToAscii(sXML_document_meta) ||
           0 == rLocalName.compareToAscii(sXML_document_styles) ||
-          0 == rLocalName.compareToAscii(sXML_document_content) ))
+          0 == rLocalName.compareToAscii(sXML_document_content) ||
+          0 == rLocalName.compareToAscii(sXML_document_settings) ))
     {
          pContext = new SdXMLDocContext_Impl(*this, nPrefix, rLocalName, xAttrList);
     }
@@ -736,14 +772,6 @@ SvXMLImportContext *SdXMLImport::CreateContext(USHORT nPrefix,
     }
 
     return pContext;
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-SvXMLImportContext* SdXMLImport::CreateViewSettingsContext(const rtl::OUString& rLocalName,
-    const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList)
-{
-    return new SdXMLViewSettingsContext( *this, XML_NAMESPACE_DRAW, rLocalName, xAttrList );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -865,4 +893,78 @@ uno::Reference< drawing::XDrawPage > SdXMLImport::getDrawPageForId( sal_Int32 nI
 }
 
 //////////////////////////////////////////////////////////////////////////////
+
+void SdXMLImport::SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps)
+{
+    uno::Reference< beans::XPropertySet > xPropSet( GetModel(), uno::UNO_QUERY );
+    if( !xPropSet.is() )
+        return;
+
+    awt::Rectangle aVisArea( 0,0, 28000, 21000 );
+    sal_Int32 nCount = aViewProps.getLength();
+
+    const beans::PropertyValue* pValues = aViewProps.getConstArray();
+
+    while( nCount-- )
+    {
+        const OUString& rName = pValues->Name;
+        const uno::Any rValue = pValues->Value;
+
+        if( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_visible_area_top) ) )
+        {
+            rValue >>= aVisArea.Y;
+        }
+        else if( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_visible_area_left) ) )
+        {
+            rValue >>= aVisArea.X;
+        }
+        else if( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_visible_area_width) ) )
+        {
+            rValue >>= aVisArea.Width;
+        }
+        else if( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_visible_area_height) ) )
+        {
+            rValue >>= aVisArea.Height;
+        }
+
+        pValues++;
+    }
+
+    xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "VisibleArea" ) ), uno::makeAny( aVisArea )  );
+}
+
+void SdXMLImport::SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps)
+{
+    uno::Reference< lang::XMultiServiceFactory > xFac( GetModel(), uno::UNO_QUERY );
+    if( !xFac.is() )
+        return;
+
+    uno::Reference< beans::XPropertySet > xProps( xFac->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.Settings" ) ) ), uno::UNO_QUERY );
+    if( !xProps.is() )
+        return;
+
+    uno::Reference< beans::XPropertySetInfo > xInfo( xProps->getPropertySetInfo() );
+    if( !xInfo.is() )
+        return;
+
+    sal_Int32 nCount = aConfigProps.getLength();
+    const beans::PropertyValue* pValues = aConfigProps.getConstArray();
+
+    while( nCount-- )
+    {
+        try
+        {
+            if( xInfo->hasPropertyByName( pValues->Name ) )
+            {
+                xProps->setPropertyValue( pValues->Name, pValues->Value );
+            }
+        }
+        catch( uno::Exception& e )
+        {
+            DBG_ERROR( "SdXMLImport::SetConfigurationSettings: Exception!" );
+        }
+
+        pValues++;
+    }
+}
 

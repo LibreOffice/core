@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp_impl.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-20 20:05:50 $
+ *  last change: $Author: cl $ $Date: 2001-03-27 22:02:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,6 @@ class SdXMLExport : public SvXMLExport
     const rtl::OUString         msEndShape;
     const rtl::OUString         msPageLayoutNames;
 
-    virtual void _ExportViewSettings();
     virtual void _ExportStyles(BOOL bUsed);
     virtual void _ExportAutoStyles();
     virtual void _ExportMasterStyles();
@@ -187,6 +186,10 @@ class SdXMLExport : public SvXMLExport
 
     void exportFormsElement( com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > xDrawPage );
     void exportPresentationSettings();
+
+protected:
+    virtual void GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
+    virtual void GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
 
 public:
     SdXMLExport( sal_Bool bIsDraw, sal_uInt16 nExportFlags = EXPORT_ALL );
