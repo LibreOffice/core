@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 08:47:47 $
+ *  last change: $Author: kz $ $Date: 2002-05-03 08:38:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,6 +323,7 @@ ToolBox RID_BRW_QRY_TOOLBOX
             Text[ arabic ] = "�����";
             Text[ finnish ] = "Sulje";
             Text[ catalan ] = "Tanca";
+            Text[ thai ] = "ปิด";
         };
     };
 };
@@ -352,6 +353,7 @@ String RID_STR_LOADING_DATASOURCE
     Text[ turkish ] = "Verileri y�kle";
     Text[ finnish ] = "Lataa tiedot";
     Text[ catalan ] = "Carrega les dades";
+    Text[ thai ] = "โหลดข้อมูล";
 };
 
 QueryBox QUERY_BRW_SAVEMODIFIED
@@ -384,6 +386,7 @@ QueryBox QUERY_BRW_SAVEMODIFIED
     Message[ language_user1 ] = " ";
     Message[ finnish ] = "Nykyist� tietuetta on muutettu.\nHaluatko tallentaa muutokset?";
     Message[ catalan ] = "El registre actual ha canviat.\nVoleu desar els canvis?";
+    Message[ thai ] = "ระเบียนปัจจุบันได้มีการเปลี่ยนแปลง\nคุณต้องการบันทึกการเปลี่ยนแปลงหรือไม่?";
 };
 
 QueryBox QUERY_BRW_DELETE_ROWS
@@ -413,6 +416,7 @@ QueryBox QUERY_BRW_DELETE_ROWS
     Message[ language_user1 ] = " ";
     Message[ finnish ] = "Haluatko palauttaa poistaa valitut tiedot?";
     Message[ catalan ] = "Voleu suprimir les dades seleccionades?";
+    Message[ thai ] = "คุณต้องการลบข้อมูลที่เลือกหรือไม่?";
 };
 
 String RID_STR_DATABROWSER_FILTERED
@@ -442,6 +446,7 @@ String RID_STR_DATABROWSER_FILTERED
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "(suodatettu)";
     Text[ catalan ] = "(filtrat)";
+    Text[ thai ] = "(กรอง)";
 };
 
 String SBA_BROWSER_SETTING_ORDER
@@ -468,6 +473,7 @@ String SBA_BROWSER_SETTING_ORDER
     Text[ turkish ] = "S�ralama �l��tlerinin ayarlanmas�nda hata";
     Text[ finnish ] = "Virhe lajitteluj�rjestyksen m��rityksess�";
     Text[ catalan ] = "S'ha produ�t un error en definir els criteris d'ordenaci�";
+    Text[ thai ] = "ตั้งค่าเกณฑ์ในการเรียงลำดับผิดพลาด";
 };
 String SBA_BROWSER_SETTING_FILTER
 {
@@ -493,6 +499,7 @@ String SBA_BROWSER_SETTING_FILTER
     Text[ turkish ] = "Filtre �l��tlerinin ayarlanmas�nda hata";
     Text[ finnish ] = "Virhe suodatinehtojen m��rityksess�";
     Text[ catalan ] = "S'ha produ�t un error en definir els criteris de filtratge";
+    Text[ thai ] = "ตั้งค่าเกณฑ์ในการกรองผิดพลาด";
 };
 
 String RID_STR_CONNECTION_LOST
@@ -519,6 +526,7 @@ String RID_STR_CONNECTION_LOST
     Text[ turkish ] = "Ba�lant� koptu";
     Text[ finnish ] = "Yhteys menetetty";
     Text[ catalan ] = "S'ha perdut la connexi�";
+    Text[ thai ] = "การเชื่อมต่อขาดหาย";
 };
 
 Image QUERYFOLDER_TREE_ICON
@@ -593,6 +601,7 @@ String RID_STR_QUERIES_CONTAINER
     Text[ arabic ] = "���������";
     Text[ finnish ] = "Kyselyt";
     Text[ catalan ] = "Consultes";
+    Text[ thai ] = "แบบสอบถาม";
 };
 
 String RID_STR_TABLES_CONTAINER
@@ -619,6 +628,7 @@ String RID_STR_TABLES_CONTAINER
     Text[ arabic ] = "Tables";
     Text[ finnish ] = "Taulukot";
     Text[ catalan ] = "Taules";
+    Text[ thai ] = "ตาราง";
 };
 
 String RID_STR_BOOKMARKS_CONTAINER
@@ -645,6 +655,7 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ turkish ] = "Bookmarks";
     Text[ arabic ] = "Bookmarks";
     Text[ catalan ] = "Enlla�os";
+    Text[ thai ] = "ที่คั่น";
 };
 
 #define MID_ADMINISTRATE    \
@@ -672,7 +683,8 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ arabic ] = "����� ����� ��������..."; \
     Text[ finnish ] = "~Tietol�hteiden hallinta";   \
     Text[ catalan ] = "Administra les fonts de ~dades..."; \
-    Text[ catalan ] = "Administra les fonts de ~dades...";
+    Text[ catalan ] = "Administra les fonts de ~dades...";  \
+    Text[ thai ] = "จัดการแหล่ง~ข้อมูล...";
 
 #define MID_DIRECT_SQL  \
     Identifier = ID_DIRECT_SQL ;    \
@@ -698,7 +710,8 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ chinese_traditional ] = "SQL..."; \
     Text[ turkish ] = "SQL..."; \
     Text[ arabic ] = "SQL...";  \
-    Text[ catalan ] = "SQL...";
+    Text[ catalan ] = "SQL..."; \
+    Text[ thai ] = "SQL...";
 
 #define MID_CLOSECONN   \
     Identifier = ID_TREE_CLOSE_CONN ;   \
@@ -717,7 +730,7 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ swedish ] = "St�n~g f�rbindelse"; \
     Text[ polish ] = "~Roz��cz";    \
     Text[ portuguese_brazilian ] = "~close connection"; \
-    Text[ japanese ] = "接続を閉じる(~N)";    \
+    Text[ japanese ] = "接続を切断する(~N)"; \
     Text[ korean ] = "연결 종료(~N)";   \
     Text[ chinese_simplified ] = "结束连接(~N)";    \
     Text[ chinese_traditional ] = "結束連線(~N)";   \
@@ -725,7 +738,8 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ arabic ] = "��� �������"; \
     Text[ finnish ] = "Katkaise ~yhteys";   \
     Text[ catalan ] = "Desco~nnecta";           \
-    Text[ catalan ] = "Desco~nnecta";
+    Text[ catalan ] = "Desco~nnecta";   \
+    Text[ thai ] = "ไม่เ~ชื่อมต่อ";
 
 #define MID_REFRESHCONN \
     Identifier = ID_TREE_REBUILD_CONN ; \
@@ -752,7 +766,8 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ arabic ] = "����� �������";   \
     Text[ finnish ] = "~P�ivit� yhteys";    \
     Text[ catalan ] = "~Refresca la connexi�";  \
-    Text[ catalan ] = "~Refresca la connexi�";
+    Text[ catalan ] = "~Refresca la connexi�";  \
+    Text[ thai ] = "~ฟื้นฟูการเชื่อมต่อ";
 
 #define MITEMS_DEFAULT  \
     MenuItem    \
@@ -882,6 +897,7 @@ Menu MENU_BROWSER_QUERYCONTEXT
             Text[ arabic ] = "��� ���������";
             Text[ finnish ] = "K~opioi kysely";
             Text[ catalan ] = "C~opia la consulta";
+            Text[ thai ] = "~คัดลอกแบบสอบถาม";
         };
         MenuItem
         {
@@ -909,6 +925,7 @@ Menu MENU_BROWSER_QUERYCONTEXT
             Text[ turkish ] = "~Insert Query...";
             Text[ arabic ] = "~Insert Query...";
             Text[ catalan ] = "~Inserta una consulta...";
+            Text[ thai ] = "~วางแบบสอบถาม...";
         };
     };
 };
@@ -954,7 +971,8 @@ Menu MENU_BROWSER_TABLECONTEXT
             Text[ arabic ] = "��� ������";
             Text[ finnish ] = "K~opioi taulukko";
             Text[ catalan ] = "C~opia la taula";
-        };
+            Text[ thai ] = "~คัดลอกตาราง";
+            };
         MenuItem
         {
             Identifier = ID_TREE_TABLE_PASTE ;
@@ -981,6 +999,7 @@ Menu MENU_BROWSER_TABLECONTEXT
                 Text[ turkish ] = "~insert table";
                 Text[ arabic ] = "����� ����...";
                 Text[ catalan ] = "~Insereix la taula";
+                Text[ thai ] = "แ~ทรกตาราง";
             };
         MenuItem
         {
@@ -1012,7 +1031,8 @@ Menu MENU_BROWSER_TABLECONTEXT
             Text[ arabic ] = "����� ������";
             Text[ finnish ] = "~Suhteen rakenne";
             Text[ catalan ] = "Disseny de la rel~aci�";
-        };
+            Text[ thai ] = "ออกแบบความ~สัมพันธ์";
+            };
     };
 };
 Menu MENU_BROWSER_VIEWCONTEXT
@@ -1055,6 +1075,7 @@ Menu MENU_BROWSER_VIEWCONTEXT
                 Text[ turkish ] = "C~opy View";
                 Text[ arabic ] = "C~opy View";
                 Text[ catalan ] = "C~opia la vista";
+                Text[ thai ] = "~คัดลอกมุมมอง";
             };
         MenuItem
         {
@@ -1082,6 +1103,7 @@ Menu MENU_BROWSER_VIEWCONTEXT
                 Text[ turkish ] = "~Insert View";
                 Text[ arabic ] = "~Insert View";
                 Text[ catalan ] = "~Insereix la vista";
+                Text[ thai ] = "แ~ทรกมุมมอง";
             };
         MenuItem
         {
@@ -1113,6 +1135,7 @@ Menu MENU_BROWSER_VIEWCONTEXT
             Text[ arabic ] = "����� ������";
             Text[ finnish ] = "~Suhteen rakenne";
                 Text[ catalan ] = "Disseny de la rel~aci�";
+                Text[ thai ] = "ออกแบบความ~สัมพันธ์";
             };
     };
 };
@@ -1142,7 +1165,8 @@ String STR_TITLE_CONFIRM_DELETION
     Text[ arabic ] = "����� �����";
     Text[ finnish ] = "Vahvista poistaminen";
     Text[ catalan ] = "Confirmeu la supressi�";
-};
+    Text[ thai ] = "ยืนยันการลบ";
+    };
 
 String STR_QUERY_DELETE_QUERY
 {
@@ -1168,7 +1192,8 @@ String STR_QUERY_DELETE_QUERY
     Text[ arabic ] = "�� ���� ��� ��������� '$name$'?";
     Text[ finnish ] = "Haluatko poistaa kyselyn $name$?";
     Text[ catalan ] = "Voleu suprimir la consulta '$name$'?";
-};
+    Text[ thai ] = "คุณต้องการลบแบบสอบถาม '$name$'หรือไม่?";
+    };
 
 String STR_QUERY_DELETE_TABLE
 {
@@ -1194,7 +1219,8 @@ String STR_QUERY_DELETE_TABLE
     Text[ arabic ] = "�� ���� ��� ������ '%1'�";
     Text[ finnish ] = "Haluatko poistaa taulukon %1?";
     Text[ catalan ] = "Voleu eliminar la taula '%1'?";
-};
+    Text[ thai ] = "คุณต้องการลบตาราง '%1'หรือไม่?";
+    };
 
 QueryBox QUERY_BRW_DELETE_QUERY_CONFIRM
 {
@@ -1221,7 +1247,8 @@ QueryBox QUERY_BRW_DELETE_QUERY_CONFIRM
     Message[ arabic ] = "��� ��������� ����� ������. �� ���� ����";
     Message[ finnish ] = "Kysely on jo olemassa. Haluatko poistaa sen?";
     Message[ catalan ] = "La consulta ja existeix. Voleu suprimir-la?";
-};
+    Message[ thai ] = "มีแบบสอบถามอยู่แล้ว คุณต้องการลบมันหรือไม่?";
+    };
 
 QueryBox QUERY_CONNECTION_LOST
 {
@@ -1248,7 +1275,8 @@ QueryBox QUERY_CONNECTION_LOST
     Message[ arabic ] = "���� ������� ������ ��������. �� ���� ����� ������� ��� ����";
     Message[ finnish ] = "Tietokantayhteys katkesi. Haluatko muodostaa yhteyden uudelleen?";
     Message[ catalan ] = "S'ha perdut la connexi� amb la base de dades. Voleu tornar a connectar?";
-};
+    Message[ thai ] = "การเชื่อมต่อกับฐานข้อมูลขาดหาย คุณต้องการเชื่อมต่ออีกครั้งหรือไม่?";
+    };
 
 String STR_OPENTABLES_WARNINGS
 {
@@ -1274,7 +1302,8 @@ String STR_OPENTABLES_WARNINGS
     Text[ arabic ] = "���� �������.";
     Text[ finnish ] = "Varoituksia havaittu";
     Text[ catalan ] = "S'han trobat advertiments";
-};
+    Text[ thai ] = "พบคำเตือน";
+    };
 
 String STR_OPENTABLES_WARNINGS_DETAILS
 {
@@ -1300,7 +1329,8 @@ String STR_OPENTABLES_WARNINGS_DETAILS
     Text[ arabic ] = "�� ����� ������� �� ����� ����� �������� ����� ������ ������� �������.";
     Text[ finnish ] = "Tietokantayhteys palautti varoituksia taulukoita noudettaessa.";
     Text[ catalan ] = "La connexi� amb la base de dades ha generat advertiments en recuperar les taules";
-};
+    Text[ thai ] = "ขณะทำการค้นคืนตาราง, มีรายงานคำเตือนโดยการเชื่อมต่อกับฐานข้อมูล";
+    };
 
 String STR_CONNECTING_DATASOURCE
 {
@@ -1326,7 +1356,8 @@ String STR_CONNECTING_DATASOURCE
     Text[ arabic ] = "connecting to \"$name$\" ...";
     Text[ finnish ] = "Yhdistet��n kohteeseen $name$";
     Text[ catalan ] = "S'est� establint la connexi� amb \"$name$\" ...";
-};
+    Text[ thai ] = "กำลังเชื่อมต่อ \"$name$\" ...";
+    };
 
 String STR_LOADING_QUERY
 {
@@ -1352,7 +1383,8 @@ String STR_LOADING_QUERY
     Text[ arabic ] = "loading query $name$ ...";
     Text[ finnish ] = "Ladataan kysely $name$ ";
     Text[ catalan ] = "S'est� carregant la consulta $name$ ...";
-};
+    Text[ thai ] = "กำลังโหลดแบบสอบถาม $name$ ...";
+    };
 
 String STR_LOADING_TABLE
 {
@@ -1378,7 +1410,8 @@ String STR_LOADING_TABLE
     Text[ arabic ] = "loading table $name$ ...";
     Text[ finnish ] = "Ladataan taulukko $name$ ";
     Text[ catalan ] = "S'est� carregant la taula $name$ ...";
-};
+    Text[ thai ] = "กำลังโหลดตาราง $name$ ...";
+    };
 
 String STR_DSBROWSER_TITLE
 {
@@ -1404,7 +1437,8 @@ String STR_DSBROWSER_TITLE
         Text[ turkish ] = "Data source browser";
         Text[ arabic ] = "Data source browser";
         Text[ catalan ] = "Vista de font de dades";
-};
+    Text[ thai ] = "มุมมองแหล่งข้อมูล";
+    };
 
 String STR_NO_TABLE_FORMAT_INSIDE
 {
@@ -1430,7 +1464,8 @@ String STR_NO_TABLE_FORMAT_INSIDE
         Text[ turkish ] = "No table format found.";
         Text[ arabic ] = "No table format found.";
         Text[ catalan ] = "No s'ha trobat cap format de taula.";
-};
+    Text[ thai ] = "ไม่พบรูปแบบตาราง";
+    };
 
 String STR_COULDNOTCONNECT_DATASOURCE
 {
@@ -1456,6 +1491,7 @@ String STR_COULDNOTCONNECT_DATASOURCE
         Text[ turkish ] = "The connection to the data source \"$name$\" could not be established.";
         Text[ arabic ] = "The connection to the data source \"$name$\" could not be established.";
         Text[ catalan ] = "The connection to the data source \"$name$\" could not be established.";
+        Text[ thai ] = "The connection to the data source \"$name$\" could not be established.";
     };
 
 Menu RID_MENU_REFRESH_DATA
@@ -1493,6 +1529,7 @@ Menu RID_MENU_REFRESH_DATA
                 Text[ turkish ] = "reconstruct";
                 Text[ arabic ] = "reconstruct";
                 Text[ catalan ] = "reconstruct";
+                Text[ thai ] = "Rebuild";
             };
     };
 };
