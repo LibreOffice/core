@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-22 14:40:38 $
+ *  last change: $Author: pb $ $Date: 2000-09-25 11:22:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3316,9 +3316,6 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
                     rState.DisableItem(nSID);
             }
         }
-        else if ( nSID == SID_MAIL_CHILDWIN )
-//! (pb) temporary till the implementation is finished
-            rState.DisableItem(nSID);
         else if ( nSID == SID_HELP_PI )
 //! (pb) what about help?
             rState.DisableItem(nSID);
@@ -3463,8 +3460,7 @@ void SfxViewFrame::ToggleChildWindow(USHORT nId)
 BOOL SfxViewFrame::HasChildWindow( USHORT nId )
 {
     SfxWorkWindow* pWork = GetWorkWindow_Impl( nId );
-    if ( pWork )
-        return pWork->HasChildWindow_Impl(nId);
+    return pWork ? pWork->HasChildWindow_Impl(nId) : FALSE;
 }
 
 //--------------------------------------------------------------------
@@ -3472,8 +3468,7 @@ BOOL SfxViewFrame::HasChildWindow( USHORT nId )
 BOOL SfxViewFrame::KnowsChildWindow( USHORT nId )
 {
     SfxWorkWindow* pWork = GetWorkWindow_Impl( nId );
-    if ( pWork )
-        return pWork->KnowsChildWindow_Impl(nId);
+    return pWork ? pWork->KnowsChildWindow_Impl(nId) : FALSE;
 }
 
 //--------------------------------------------------------------------
@@ -3490,8 +3485,6 @@ void SfxViewFrame::ShowChildWindow( USHORT nId, BOOL bVisible )
 SfxChildWindow* SfxViewFrame::GetChildWindow(USHORT nId)
 {
     SfxWorkWindow* pWork = GetWorkWindow_Impl( nId );
-    if ( pWork )
-        return pWork->GetChildWindow_Impl(nId);
+    return pWork ? pWork->GetChildWindow_Impl(nId) : NULL;
 }
-
 
