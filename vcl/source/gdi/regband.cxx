@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regband.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:54:21 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:07:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ ImplRegionBand::ImplRegionBand( const ImplRegionBand& rRegionBand )
 
     // copy all elements of the list with separations
     ImplRegionBandSep* pNewSep;
-    ImplRegionBandSep* pPrevSep;
+    ImplRegionBandSep* pPrevSep = 0;
     ImplRegionBandSep* pSep = rRegionBand.mpFirstSep;
     while ( pSep )
     {
@@ -363,7 +363,7 @@ void ImplRegionBand::ScaleX( double fHorzScale )
 
 BOOL ImplRegionBand::OptimizeBand()
 {
-    ImplRegionBandSep* pPrevSep;
+    ImplRegionBandSep* pPrevSep = 0;
     ImplRegionBandSep* pSep = mpFirstSep;
     while ( pSep )
     {
@@ -421,7 +421,7 @@ void ImplRegionBand::Union( long nXLeft, long nXRight )
 
     // process real union
     ImplRegionBandSep* pNewSep;
-    ImplRegionBandSep* pPrevSep;
+    ImplRegionBandSep* pPrevSep = 0;
     ImplRegionBandSep* pSep = mpFirstSep;
     while ( pSep )
     {
@@ -538,7 +538,7 @@ void ImplRegionBand::Exclude( long nXLeft, long nXRight )
 
     // process real exclusion
     ImplRegionBandSep* pNewSep;
-    ImplRegionBandSep* pPrevSep;
+    ImplRegionBandSep* pPrevSep = 0;
     ImplRegionBandSep* pSep = mpFirstSep;
     while ( pSep  )
     {
@@ -622,7 +622,7 @@ void ImplRegionBand::XOr( long nXLeft, long nXRight )
 
     // process real xor
     ImplRegionBandSep* pNewSep;
-    ImplRegionBandSep* pPrevSep;
+    ImplRegionBandSep* pPrevSep = 0;
     ImplRegionBandSep* pSep = mpFirstSep;
     while ( pSep  )
     {
