@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hjs $ $Date: 2001-09-17 16:39:49 $
+#   last change: $Author: pl $ $Date: 2001-12-11 17:48:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,6 +83,11 @@ dummy:
     @echo "Nothing to build for Mac OS X"
  
 .ELSE		# "$(OS)"=="MACOSX"
+
+.IF "$(COM)$(CPU)" == "C50I" || "$(COM)$(CPU)" == "C52I"
+NOOPTFILES=\
+    $(SLO)$/X11_selection.obj
+.ENDIF
 
 SLOFILES=\
     $(SLO)$/X11_dndcontext.obj		\
