@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-08 13:26:29 $
+ *  last change: $Author: mib $ $Date: 2002-03-08 15:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,7 +383,18 @@ void SwAccessibleContext::FireAccessibleEvent( AccessibleEventObject& rEvent )
         Reference < XAccessibleEventListener > xListener( aIter.next(),
                                                          UNO_QUERY );
         if( xListener.is() ) // TODO: test is unneccessary soon
-            xListener->notifyEvent( rEvent );
+        {
+            try
+            {
+                xListener->notifyEvent( rEvent );
+            }
+            catch( ::com::sun::star::uno::RuntimeException )
+            {
+                ASSERT( !xListener.is(),
+                        "Some external app missed to remove its listener\nQA: It's a bug in that app, not in ours!" );
+                aIter.remove();
+            }
+        }
     }
 
 }
