@@ -2,9 +2,9 @@
  *
  *  $RCSfile: refupdat.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:26:13 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:39:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,8 @@
 
 //------------------------------------------------------------------------
 
-BOOL lcl_MoveStart( short& rRef, short nStart, short nDelta, short nMask )
+template< typename R, typename S, typename U >
+BOOL lcl_MoveStart( R& rRef, U nStart, S nDelta, U nMask )
 {
     BOOL bCut = FALSE;
     if ( rRef >= nStart )
@@ -97,7 +98,8 @@ BOOL lcl_MoveStart( short& rRef, short nStart, short nDelta, short nMask )
     return bCut;
 }
 
-BOOL lcl_MoveEnd( short& rRef, short nStart, short nDelta, short nMask )
+template< typename R, typename S, typename U >
+BOOL lcl_MoveEnd( R& rRef, U nStart, S nDelta, U nMask )
 {
     BOOL bCut = FALSE;
     if ( rRef >= nStart )
@@ -117,7 +119,8 @@ BOOL lcl_MoveEnd( short& rRef, short nStart, short nDelta, short nMask )
     return bCut;
 }
 
-BOOL lcl_MoveReorder( short& rRef, short nStart, short nEnd, short nDelta )
+template< typename R, typename S, typename U >
+BOOL lcl_MoveReorder( R& rRef, U nStart, U nEnd, S nDelta )
 {
     if ( rRef >= nStart && rRef <= nEnd )
     {
@@ -151,7 +154,8 @@ BOOL lcl_MoveReorder( short& rRef, short nStart, short nEnd, short nDelta )
     return FALSE;
 }
 
-BOOL lcl_MoveItCut( short& rRef, short nDelta, short nMask )
+template< typename R, typename S, typename U >
+BOOL lcl_MoveItCut( R& rRef, S nDelta, U nMask )
 {
     BOOL bCut = FALSE;
     rRef += nDelta;
@@ -168,7 +172,8 @@ BOOL lcl_MoveItCut( short& rRef, short nDelta, short nMask )
     return bCut;
 }
 
-void lcl_MoveItWrap( short& rRef, short nDelta, short nMask )
+template< typename R, typename S, typename U >
+void lcl_MoveItWrap( R& rRef, S nDelta, U nMask )
 {
     rRef += nDelta;
     if ( rRef < 0 )
@@ -177,15 +182,16 @@ void lcl_MoveItWrap( short& rRef, short nDelta, short nMask )
         rRef -= nMask+1;
 }
 
-BOOL lcl_MoveRefPart( short& rRef1Val, BOOL& rRef1Del,
-                      short& rRef2Val, BOOL& rRef2Del,
-                      short nStart, short nEnd, short nDelta, short nMask )
+template< typename R, typename S, typename U >
+BOOL lcl_MoveRefPart( R& rRef1Val, BOOL& rRef1Del,
+                      R& rRef2Val, BOOL& rRef2Del,
+                      U nStart, U nEnd, S nDelta, U nMask )
 {
     if ( nDelta )
     {
         BOOL bDel, bCut1, bCut2;
         bDel = bCut1 = bCut2 = FALSE;
-        short n;
+        S n;
         if ( nDelta < 0 )
         {
             n = nStart + nDelta;
@@ -224,10 +230,8 @@ BOOL lcl_MoveRefPart( short& rRef1Val, BOOL& rRef1Del,
         return FALSE;
 }
 
-#if OSL_DEBUG_LEVEL < 2
-inline
-#endif
-BOOL IsExpand( short n1, short n2, short nStart, short nD )
+template< typename R, typename S, typename U >
+BOOL IsExpand( R n1, R n2, U nStart, S nD )
 {   //! vor normalem Move...
     return
         nD > 0          // Insert
@@ -239,10 +243,8 @@ BOOL IsExpand( short n1, short n2, short nStart, short nD )
 }
 
 
-#if OSL_DEBUG_LEVEL < 2
-inline
-#endif
-void Expand( short& n1, short& n2, short nStart, short nD )
+template< typename R, typename S, typename U >
+void Expand( R& n1, R& n2, U nStart, S nD )
 {   //! nach normalem Move..., nur wenn IsExpand vorher TRUE war!
     //! erst das Ende
     if ( n2 + 1 == nStart )
@@ -289,20 +291,20 @@ BOOL lcl_MoveItCutBig( INT32& rRef, INT32 nDelta )
 
 
 ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
-                                        USHORT nCol1, USHORT nRow1, USHORT nTab1,
-                                        USHORT nCol2, USHORT nRow2, USHORT nTab2,
-                                        short nDx, short nDy, short nDz,
-                                        USHORT& theCol1, USHORT& theRow1, USHORT& theTab1,
-                                        USHORT& theCol2, USHORT& theRow2, USHORT& theTab2 )
+                                        SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                                        SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
+                                        SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
+                                        SCCOL& theCol1, SCROW& theRow1, SCTAB& theTab1,
+                                        SCCOL& theCol2, SCROW& theRow2, SCTAB& theTab2 )
 {
     ScRefUpdateRes eRet = UR_NOTHING;
 
-    USHORT oldCol1 = theCol1;
-    USHORT oldRow1 = theRow1;
-    USHORT oldTab1 = theTab1;
-    USHORT oldCol2 = theCol2;
-    USHORT oldRow2 = theRow2;
-    USHORT oldTab2 = theTab2;
+    SCCOL oldCol1 = theCol1;
+    SCROW oldRow1 = theRow1;
+    SCTAB oldTab1 = theTab1;
+    SCCOL oldCol2 = theCol2;
+    SCROW oldRow2 = theRow2;
+    SCTAB oldTab2 = theTab2;
 
     BOOL bCut1, bCut2;
 
@@ -313,8 +315,8 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eUpdateRefMo
                     (theTab1 >= nTab1) && (theTab2 <= nTab2) )
         {
             BOOL bExp = (bExpand && IsExpand( theCol1, theCol2, nCol1, nDx ));
-            bCut1 = lcl_MoveStart( (short&) theCol1, nCol1, nDx, MAXCOL );
-            bCut2 = lcl_MoveEnd( (short&) theCol2, nCol1, nDx, MAXCOL );
+            bCut1 = lcl_MoveStart( theCol1, nCol1, nDx, MAXCOL );
+            bCut2 = lcl_MoveEnd( theCol2, nCol1, nDx, MAXCOL );
             if ( theCol2 < theCol1 )
             {
                 eRet = UR_INVALID;
@@ -324,7 +326,7 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eUpdateRefMo
                 eRet = UR_UPDATED;
             if ( bExp )
             {
-                Expand( (short&) theCol1, (short&) theCol2, nCol1, nDx );
+                Expand( theCol1, theCol2, nCol1, nDx );
                 eRet = UR_UPDATED;
             }
         }
@@ -332,8 +334,8 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eUpdateRefMo
                     (theTab1 >= nTab1) && (theTab2 <= nTab2) )
         {
             BOOL bExp = (bExpand && IsExpand( theRow1, theRow2, nRow1, nDy ));
-            bCut1 = lcl_MoveStart( (short&) theRow1, nRow1, nDy, MAXROW );
-            bCut2 = lcl_MoveEnd( (short&) theRow2, nRow1, nDy, MAXROW );
+            bCut1 = lcl_MoveStart( theRow1, nRow1, nDy, MAXROW );
+            bCut2 = lcl_MoveEnd( theRow2, nRow1, nDy, MAXROW );
             if ( theRow2 < theRow1 )
             {
                 eRet = UR_INVALID;
@@ -343,18 +345,18 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eUpdateRefMo
                 eRet = UR_UPDATED;
             if ( bExp )
             {
-                Expand( (short&) theRow1, (short&) theRow2, nRow1, nDy );
+                Expand( theRow1, theRow2, nRow1, nDy );
                 eRet = UR_UPDATED;
             }
         }
         if ( nDz && (theCol1 >= nCol1) && (theCol2 <= nCol2) &&
                     (theRow1 >= nRow1) && (theRow2 <= nRow2) )
         {
-            short nMaxTab = pDoc->GetTableCount() - 1;
+            SCsTAB nMaxTab = pDoc->GetTableCount() - 1;
             nMaxTab += nDz;     // auf die neue Anzahl anpassen
             BOOL bExp = (bExpand && IsExpand( theTab1, theTab2, nTab1, nDz ));
-            bCut1 = lcl_MoveStart( (short&) theTab1, nTab1, nDz, nMaxTab );
-            bCut2 = lcl_MoveEnd( (short&) theTab2, nTab1, nDz, nMaxTab );
+            bCut1 = lcl_MoveStart( theTab1, nTab1, nDz, static_cast<SCTAB>(nMaxTab) );
+            bCut2 = lcl_MoveEnd( theTab2, nTab1, nDz, static_cast<SCTAB>(nMaxTab) );
             if ( theTab2 < theTab1 )
             {
                 eRet = UR_INVALID;
@@ -364,7 +366,7 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eUpdateRefMo
                 eRet = UR_UPDATED;
             if ( bExp )
             {
-                Expand( (short&) theTab1, (short&) theTab2, nTab1, nDz );
+                Expand( theTab1, theTab2, nTab1, nDz );
                 eRet = UR_UPDATED;
             }
         }
@@ -376,23 +378,23 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eUpdateRefMo
         {
             if ( nDx )
             {
-                bCut1 = lcl_MoveItCut( (short&) theCol1, nDx, MAXCOL );
-                bCut2 = lcl_MoveItCut( (short&) theCol2, nDx, MAXCOL );
+                bCut1 = lcl_MoveItCut( theCol1, nDx, MAXCOL );
+                bCut2 = lcl_MoveItCut( theCol2, nDx, MAXCOL );
                 if ( bCut1 || bCut2 )
                     eRet = UR_UPDATED;
             }
             if ( nDy )
             {
-                bCut1 = lcl_MoveItCut( (short&) theRow1, nDy, MAXROW );
-                bCut2 = lcl_MoveItCut( (short&) theRow2, nDy, MAXROW );
+                bCut1 = lcl_MoveItCut( theRow1, nDy, MAXROW );
+                bCut2 = lcl_MoveItCut( theRow2, nDy, MAXROW );
                 if ( bCut1 || bCut2 )
                     eRet = UR_UPDATED;
             }
             if ( nDz )
             {
-                short nMaxTab = (short) pDoc->GetTableCount() - 1;
-                bCut1 = lcl_MoveItCut( (short&) theTab1, nDz, nMaxTab );
-                bCut2 = lcl_MoveItCut( (short&) theTab2, nDz, nMaxTab );
+                SCsTAB nMaxTab = (SCsTAB) pDoc->GetTableCount() - 1;
+                bCut1 = lcl_MoveItCut( theTab1, nDz, static_cast<SCTAB>(nMaxTab) );
+                bCut2 = lcl_MoveItCut( theTab2, nDz, static_cast<SCTAB>(nMaxTab) );
                 if ( bCut1 || bCut2 )
                     eRet = UR_UPDATED;
             }
@@ -406,8 +408,8 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eUpdateRefMo
         if ( nDz && (theCol1 >= nCol1) && (theCol2 <= nCol2) &&
                     (theRow1 >= nRow1) && (theRow2 <= nRow2) )
         {
-            bCut1 = lcl_MoveReorder( (short&) theTab1, nTab1, nTab2, nDz );
-            bCut2 = lcl_MoveReorder( (short&) theTab2, nTab1, nTab2, nDz );
+            bCut1 = lcl_MoveReorder( theTab1, nTab1, nTab2, nDz );
+            bCut2 = lcl_MoveReorder( theTab2, nTab1, nTab2, nDz );
             if ( bCut1 || bCut2 )
                 eRet = UR_UPDATED;
         }
@@ -525,17 +527,17 @@ ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
 // vor dem Aufruf muessen die Abs-Refs aktualisiert werden!
 ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eMode,
                                     const ScAddress& rPos, const ScRange& r,
-                                    short nDx, short nDy, short nDz,
+                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
                                     ComplRefData& rRef )
 {
     ScRefUpdateRes eRet = UR_NOTHING;
 
-    short nCol1 = r.aStart.Col();
-    short nRow1 = r.aStart.Row();
-    short nTab1 = r.aStart.Tab();
-    short nCol2 = r.aEnd.Col();
-    short nRow2 = r.aEnd.Row();
-    short nTab2 = r.aEnd.Tab();
+    SCCOL nCol1 = r.aStart.Col();
+    SCROW nRow1 = r.aStart.Row();
+    SCTAB nTab1 = r.aStart.Tab();
+    SCCOL nCol2 = r.aEnd.Col();
+    SCROW nRow2 = r.aEnd.Row();
+    SCTAB nTab2 = r.aEnd.Tab();
 
     if( eMode == URM_INSDEL )
     {
@@ -545,12 +547,12 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eMode,
         BOOL bInDeleteUndo =
             ( pChangeTrack ? pChangeTrack->IsInDeleteUndo() : FALSE );
 
-        USHORT oldCol1 = rRef.Ref1.nCol;
-        USHORT oldRow1 = rRef.Ref1.nRow;
-        USHORT oldTab1 = rRef.Ref1.nTab;
-        USHORT oldCol2 = rRef.Ref2.nCol;
-        USHORT oldRow2 = rRef.Ref2.nRow;
-        USHORT oldTab2 = rRef.Ref2.nTab;
+        SCCOL oldCol1 = rRef.Ref1.nCol;
+        SCROW oldRow1 = rRef.Ref1.nRow;
+        SCTAB oldTab1 = rRef.Ref1.nTab;
+        SCCOL oldCol2 = rRef.Ref2.nCol;
+        SCROW oldRow2 = rRef.Ref2.nRow;
+        SCTAB oldTab2 = rRef.Ref2.nTab;
 
         BOOL bRef1ColDel = rRef.Ref1.IsColDeleted();
         BOOL bRef2ColDel = rRef.Ref2.IsColDeleted();
@@ -645,7 +647,7 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eMode,
         {
             BOOL bExp = (bExpand && !bInDeleteUndo && IsExpand( rRef.Ref1.nTab,
                 rRef.Ref2.nTab, nTab1, nDz ));
-            short nMaxTab = (short) pDoc->GetTableCount() - 1;
+            SCTAB nMaxTab = pDoc->GetTableCount() - 1;
             if ( lcl_MoveRefPart( rRef.Ref1.nTab, bRef1TabDel,
                                   rRef.Ref2.nTab, bRef2TabDel,
                                   nTab1, nTab2, nDz, nMaxTab ) )
@@ -721,17 +723,17 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eMode,
 
 // vor dem Aufruf muessen die Abs-Refs aktualisiert werden!
 ScRefUpdateRes ScRefUpdate::Move( ScDocument* pDoc, const ScAddress& rPos,
-                                  short nDx, short nDy, short nDz,
+                                  SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
                                   ComplRefData& rRef, BOOL bWrap, BOOL bAbsolute )
 {
     ScRefUpdateRes eRet = UR_NOTHING;
 
-    USHORT oldCol1 = rRef.Ref1.nCol;
-    USHORT oldRow1 = rRef.Ref1.nRow;
-    USHORT oldTab1 = rRef.Ref1.nTab;
-    USHORT oldCol2 = rRef.Ref2.nCol;
-    USHORT oldRow2 = rRef.Ref2.nRow;
-    USHORT oldTab2 = rRef.Ref2.nTab;
+    SCCOL oldCol1 = rRef.Ref1.nCol;
+    SCROW oldRow1 = rRef.Ref1.nRow;
+    SCTAB oldTab1 = rRef.Ref1.nTab;
+    SCCOL oldCol2 = rRef.Ref2.nCol;
+    SCROW oldRow2 = rRef.Ref2.nRow;
+    SCTAB oldTab2 = rRef.Ref2.nTab;
 
     BOOL bCut1, bCut2;
     if ( nDx )
@@ -740,16 +742,16 @@ ScRefUpdateRes ScRefUpdate::Move( ScDocument* pDoc, const ScAddress& rPos,
         if( bAbsolute || rRef.Ref1.IsColRel() )
         {
             if( bWrap )
-                lcl_MoveItWrap( (short&) rRef.Ref1.nCol, nDx, MAXCOL );
+                lcl_MoveItWrap( rRef.Ref1.nCol, nDx, MAXCOL );
             else
-                bCut1 = lcl_MoveItCut( (short&) rRef.Ref1.nCol, nDx, MAXCOL );
+                bCut1 = lcl_MoveItCut( rRef.Ref1.nCol, nDx, MAXCOL );
         }
         if( bAbsolute || rRef.Ref2.IsColRel() )
         {
             if( bWrap )
-                lcl_MoveItWrap( (short&) rRef.Ref2.nCol, nDx, MAXCOL );
+                lcl_MoveItWrap( rRef.Ref2.nCol, nDx, MAXCOL );
             else
-                bCut2 = lcl_MoveItCut( (short&) rRef.Ref2.nCol, nDx, MAXCOL );
+                bCut2 = lcl_MoveItCut( rRef.Ref2.nCol, nDx, MAXCOL );
         }
         if ( bCut1 || bCut2 )
             eRet = UR_UPDATED;
@@ -765,16 +767,16 @@ ScRefUpdateRes ScRefUpdate::Move( ScDocument* pDoc, const ScAddress& rPos,
         if( bAbsolute || rRef.Ref1.IsRowRel() )
         {
             if( bWrap )
-                lcl_MoveItWrap( (short&) rRef.Ref1.nRow, nDy, MAXROW );
+                lcl_MoveItWrap( rRef.Ref1.nRow, nDy, MAXROW );
             else
-                bCut1 = lcl_MoveItCut( (short&) rRef.Ref1.nRow, nDy, MAXROW );
+                bCut1 = lcl_MoveItCut( rRef.Ref1.nRow, nDy, MAXROW );
         }
         if( bAbsolute || rRef.Ref2.IsRowRel() )
         {
             if( bWrap )
-                lcl_MoveItWrap( (short&) rRef.Ref2.nRow, nDy, MAXROW );
+                lcl_MoveItWrap( rRef.Ref2.nRow, nDy, MAXROW );
             else
-                bCut2 = lcl_MoveItCut( (short&) rRef.Ref2.nRow, nDy, MAXROW );
+                bCut2 = lcl_MoveItCut( rRef.Ref2.nRow, nDy, MAXROW );
         }
         if ( bCut1 || bCut2 )
             eRet = UR_UPDATED;
@@ -787,21 +789,21 @@ ScRefUpdateRes ScRefUpdate::Move( ScDocument* pDoc, const ScAddress& rPos,
     if ( nDz )
     {
         bCut1 = bCut2 = FALSE;
-        short nMaxTab = (short) pDoc->GetTableCount() - 1;
+        SCsTAB nMaxTab = (SCsTAB) pDoc->GetTableCount() - 1;
         if( bAbsolute || rRef.Ref1.IsTabRel() )
         {
             if( bWrap )
-                lcl_MoveItWrap( (short&) rRef.Ref1.nTab, nDz, nMaxTab );
+                lcl_MoveItWrap( rRef.Ref1.nTab, nDz, static_cast<SCTAB>(nMaxTab) );
             else
-                bCut1 = lcl_MoveItCut( (short&) rRef.Ref1.nTab, nDz, nMaxTab );
+                bCut1 = lcl_MoveItCut( rRef.Ref1.nTab, nDz, static_cast<SCTAB>(nMaxTab) );
             rRef.Ref1.SetFlag3D( rPos.Tab() != rRef.Ref1.nTab );
         }
         if( bAbsolute || rRef.Ref2.IsTabRel() )
         {
             if( bWrap )
-                lcl_MoveItWrap( (short&) rRef.Ref2.nTab, nDz, nMaxTab );
+                lcl_MoveItWrap( rRef.Ref2.nTab, nDz, static_cast<SCTAB>(nMaxTab) );
             else
-                bCut2 = lcl_MoveItCut( (short&) rRef.Ref2.nTab, nDz, nMaxTab );
+                bCut2 = lcl_MoveItCut( rRef.Ref2.nTab, nDz, static_cast<SCTAB>(nMaxTab) );
             rRef.Ref2.SetFlag3D( rPos.Tab() != rRef.Ref2.nTab );
         }
         if ( bCut1 || bCut2 )
@@ -836,33 +838,33 @@ void ScRefUpdate::MoveRelWrap( ScDocument* pDoc, const ScAddress& rPos,
     if( rRef.Ref1.IsColRel() )
     {
         rRef.Ref1.nCol = rRef.Ref1.nRelCol + rPos.Col();
-        lcl_MoveItWrap( (short&) rRef.Ref1.nCol, 0, MAXCOL );
+        lcl_MoveItWrap( rRef.Ref1.nCol, static_cast<SCsCOL>(0), MAXCOL );
     }
     if( rRef.Ref2.IsColRel() )
     {
         rRef.Ref2.nCol = rRef.Ref2.nRelCol + rPos.Col();
-        lcl_MoveItWrap( (short&) rRef.Ref2.nCol, 0, MAXCOL );
+        lcl_MoveItWrap( rRef.Ref2.nCol, static_cast<SCsCOL>(0), MAXCOL );
     }
     if( rRef.Ref1.IsRowRel() )
     {
         rRef.Ref1.nRow = rRef.Ref1.nRelRow + rPos.Row();
-        lcl_MoveItWrap( (short&) rRef.Ref1.nRow, 0, MAXROW );
+        lcl_MoveItWrap( rRef.Ref1.nRow, static_cast<SCsROW>(0), MAXROW );
     }
     if( rRef.Ref2.IsRowRel() )
     {
         rRef.Ref2.nRow = rRef.Ref2.nRelRow + rPos.Row();
-        lcl_MoveItWrap( (short&) rRef.Ref2.nRow, 0, MAXROW );
+        lcl_MoveItWrap( rRef.Ref2.nRow, static_cast<SCsROW>(0), MAXROW );
     }
-    short nMaxTab = (short) pDoc->GetTableCount() - 1;
+    SCsTAB nMaxTab = (SCsTAB) pDoc->GetTableCount() - 1;
     if( rRef.Ref1.IsTabRel() )
     {
         rRef.Ref1.nTab = rRef.Ref1.nRelTab + rPos.Tab();
-        lcl_MoveItWrap( (short&) rRef.Ref1.nTab, 0, nMaxTab );
+        lcl_MoveItWrap( rRef.Ref1.nTab, static_cast<SCsTAB>(0), static_cast<SCTAB>(nMaxTab) );
     }
     if( rRef.Ref2.IsTabRel() )
     {
         rRef.Ref2.nTab = rRef.Ref2.nRelTab + rPos.Tab();
-        lcl_MoveItWrap( (short&) rRef.Ref2.nTab, 0, nMaxTab );
+        lcl_MoveItWrap( rRef.Ref2.nTab, static_cast<SCsTAB>(0), static_cast<SCTAB>(nMaxTab) );
     }
     rRef.PutInOrder();
     rRef.CalcRelFromAbs( rPos );
@@ -870,14 +872,14 @@ void ScRefUpdate::MoveRelWrap( ScDocument* pDoc, const ScAddress& rPos,
 
 //------------------------------------------------------------------
 
-void ScRefUpdate::DoTranspose( short& rCol, short& rRow, short& rTab,
+void ScRefUpdate::DoTranspose( SCsCOL& rCol, SCsROW& rRow, SCsTAB& rTab,
                         ScDocument* pDoc, const ScRange& rSource, const ScAddress& rDest )
 {
-    short nDz = ((short)rDest.Tab())-(short)rSource.aStart.Tab();
+    SCsTAB nDz = ((SCsTAB)rDest.Tab())-(SCsTAB)rSource.aStart.Tab();
     if (nDz)
     {
-        short nNewTab = rTab+nDz;
-        short nCount = pDoc->GetTableCount();
+        SCsTAB nNewTab = rTab+nDz;
+        SCsTAB nCount = pDoc->GetTableCount();
         while (nNewTab<0) nNewTab += nCount;
         while (nNewTab>=nCount) nNewTab -= nCount;
         rTab = nNewTab;
@@ -885,11 +887,13 @@ void ScRefUpdate::DoTranspose( short& rCol, short& rRow, short& rTab,
     DBG_ASSERT( rCol>=rSource.aStart.Col() && rRow>=rSource.aStart.Row(),
                 "UpdateTranspose: Pos. falsch" );
 
-    short nRelX = rCol - (short)rSource.aStart.Col();
-    short nRelY = rRow - (short)rSource.aStart.Row();
+    SCsCOL nRelX = rCol - (SCsCOL)rSource.aStart.Col();
+    SCsROW nRelY = rRow - (SCsROW)rSource.aStart.Row();
 
-    rCol = (short)rDest.Col() + nRelY;
-    rRow = (short)rDest.Row() + nRelX;
+    rCol = static_cast<SCsCOL>(static_cast<SCsCOLROW>(rDest.Col()) +
+            static_cast<SCsCOLROW>(nRelY));
+    rRow = static_cast<SCsROW>(static_cast<SCsCOLROW>(rDest.Row()) +
+            static_cast<SCsCOLROW>(nRelX));
 }
 
 // vor dem Aufruf muessen die Abs-Refs aktualisiert werden!
@@ -915,7 +919,7 @@ ScRefUpdateRes ScRefUpdate::UpdateTranspose( ScDocument* pDoc,
 //  kommt ohne Dokument aus
 
 // vor dem Aufruf muessen die Abs-Refs aktualisiert werden!
-ScRefUpdateRes ScRefUpdate::UpdateGrow( const ScRange& rArea, USHORT nGrowX, USHORT nGrowY,
+ScRefUpdateRes ScRefUpdate::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY,
                                         ComplRefData& rRef )
 {
     ScRefUpdateRes eRet = UR_NOTHING;
@@ -947,7 +951,7 @@ ScRefUpdateRes ScRefUpdate::UpdateGrow( const ScRange& rArea, USHORT nGrowX, USH
     return eRet;
 }
 
-ScRefUpdateRes ScRefUpdate::DoGrow( const ScRange& rArea, USHORT nGrowX, USHORT nGrowY,
+ScRefUpdateRes ScRefUpdate::DoGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY,
                                     ScRange& rRef )
 {
     //  wie UpdateGrow, nur mit Range statt RefData
