@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:35:54 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,11 @@
 #include <flyenum.hxx>
 #endif
 
+// OD 25.06.2003 #108784#
+#ifndef _SVDTYPES_HXX
+#include <svx/svdtypes.hxx>
+#endif
+
 #include <vector>
 
 class SwFlyFrm;
@@ -92,6 +97,7 @@ class SotDataObject;
 class SdrViewUserMarker;
 class SwFrmFmt;
 struct SwSortOptions;
+class SdrMarkList;
 
 enum FrmType
 {
@@ -211,7 +217,8 @@ class SwFEShell : public SwEditShell
 
     void Scroll( const Point &rPt );
 
-    void ChangeOpaque( BYTE nLayerId );
+    // OD 25.06.2003 #108784# - correct type of 1st parameter
+    void ChangeOpaque( SdrLayerID nLayerId );
 
     void GetStartEndCell( SwLayoutFrm *&prStart, SwLayoutFrm *&prEnd );
 
@@ -231,6 +238,10 @@ class SwFEShell : public SwEditShell
     BOOL CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                                 const Point& rInsPt, BOOL bIsMove,
                                 BOOL bSelectInsert );
+
+    // get list of marked SdrObjects;
+    // helper method for GetSelFrmType, IsSelContainsControl
+    const SdrMarkList* _GetMarkList() const;
 
 public:
     TYPEINFO();
@@ -294,6 +305,11 @@ public:
     // bei jeder Benutzung insbesondere das bStopAtFly bewusst genutzt wird.
     USHORT GetFrmType( const Point *pPt, BOOL bStopAtFly ) const;
     USHORT GetSelFrmType() const;               //Selektion (Drawing)
+
+    /** #108784# check whether selected frame contains a control;
+     * companion method to GetSelFrmType, used for preventing
+     * drag&drop of controls into header */
+    bool IsSelContainsControl() const;
 
     ObjCntType GetObjCntType( const Point &rPt, SdrObject *&rpObj ) const;
     ObjCntType GetObjCntTypeOfSelection( SdrObject** ppObj = 0 ) const;
@@ -495,7 +511,8 @@ public:
     void UnGroupSelection();    //Die Einzelobjekte sind Selektiert
                                 //Es koennen noch immer Gruppen dabei sein.
 
-    BOOL IsGroupAllowed() const;
+    // OD 27.06.2003 #108784# - change return type.
+    bool IsGroupAllowed() const;
 
     void MirrorSelection( BOOL bHorizontal );   //Bei FALSE Vertikal
 
