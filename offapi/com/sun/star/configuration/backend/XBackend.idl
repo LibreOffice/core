@@ -1,0 +1,240 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XBackend.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2003-04-17 14:17:37 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2002 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_configuration_backend_XBackend_idl__
+#define __com_sun_star_configuration_backend_XBackend_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_configuration_backend_XUpdateHandler_idl__
+#include <com/sun/star/configuration/backend/XUpdateHandler.idl>
+#endif
+
+#ifndef __com_sun_star_configuration_backend_XLayer_idl__
+#include <com/sun/star/configuration/backend/XLayer.idl>
+#endif
+
+#ifndef __com_sun_star_configuration_backend_XSchema_idl__
+#include <com/sun/star/configuration/backend/XSchema.idl>
+#endif
+
+#ifndef __com_sun_star_configuration_backend_BackendAccessException_idl__
+#include <com/sun/star/configuration/backend/BackendAccessException.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+#ifndef __com_sun_star_lang_NoSupportException_idl__
+#include <com/sun/star/lang/NoSupportException.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module configuration { module backend {
+
+//=============================================================================
+
+/**
+  Handles access to layered data stored in a repository.
+
+  <p> Data can be retrieved on behalf of one or more entities.</p>
+
+  <p> There is an implied owner entity associated to the object
+     when it is created. This entity should be used for normal data access.
+     For administrative operations data of other entities can be accessed.
+  </p>
+
+  @see com::sun::star::configuration::backend::XBackendEntities
+  @see com::sun::star::configuration::backend::XSchemaSupplier
+
+  @since #107954#
+*/
+interface XBackend : ::com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /**
+      retrieves the layers associated to the owner
+      entity for a component.
+
+      @param aComponent
+                component whose data will be accessed
+
+      @returns
+                a list of objects allowing access to the
+                component data for each layer associated to
+                the current entity
+
+      @throws   com::sun::star::lang::IllegalArgumentException
+                if the component identifier is invalid
+
+      @throws   com::sun::star::configuration::backend::BackendAccessException
+                if an error occurs while accessing the data.
+
+      @see com::sun::star::configuration::backend::XBackendEntities::getOwnerEntity()
+    */
+    sequence<XLayer> listOwnLayers([in] string aComponent)
+        raises (BackendAccessException,
+                com::sun::star::lang::IllegalArgumentException) ;
+
+    //-------------------------------------------------------------------------
+
+    /**
+      creates an update handler for the owner entity
+      layer for a component.
+
+      @param aComponent
+                component whose data will be updated
+
+      @returns
+                an object allowing manipulation of the
+                component data for the current entity
+
+      @throws   com::sun::star::lang::IllegalArgumentException
+                if the component identifier is invalid
+
+      @throws   com::sun::star::lang::NoSupportException
+                if updates are not supported for this backend
+
+      @throws   com::sun::star::configuration::backend::BackendAccessException
+                if an error occurs while accessing the data.
+
+      @see com::sun::star::configuration::backend::XBackendEntities::getOwnerEntity()
+    */
+    XUpdateHandler getOwnUpdateHandler([in] string aComponent)
+        raises (BackendAccessException,
+                com::sun::star::lang::NoSupportException,
+                com::sun::star::lang::IllegalArgumentException) ;
+
+    //-------------------------------------------------------------------------
+
+    /**
+      retrieves the layers associated to an entity for a component.
+
+      @param aComponent
+                component whose data will be accessed
+
+      @param aEntity
+                entity whose data will be accessed
+
+      @returns
+                a list of objects allowing access to the
+                component data for each layer associated
+                with the entity.
+
+      @throws   com::sun::star::lang::IllegalArgumentException
+                if the component identifier is invalid
+                or if the entity doesn't exist.
+
+      @throws   com::sun::star::configuration::backend::BackendAccessException
+                if an error occurs while accessing the data.
+
+      @see com::sun::star::configuration::backend::XBackendEntities::supportsEntity()
+    */
+    sequence<XLayer> listLayers([in] string aComponent,
+                                [in] string aEntity)
+        raises (BackendAccessException,
+                com::sun::star::lang::IllegalArgumentException) ;
+
+    //-------------------------------------------------------------------------
+
+    /**
+      creates an update handler on an entity's layer for a component.
+
+      @param aComponent
+                component whose data will be updated
+
+      @param aEntity
+                entity whose data will be updated
+
+      @returns
+                an object allowing manipulation of the
+                component data for the entity
+
+      @throws   com::sun::star::lang::IllegalArgumentException
+                if the component identifier is invalid
+                or if the entity doesn't exist.
+
+      @throws   com::sun::star::lang::NoSupportException
+                if updates are not supported for this backend
+
+      @throws   com::sun::star::configuration::backend::BackendAccessException
+                if an error occurs while accessing the data.
+
+      @see com::sun::star::configuration::backend::XBackendEntities::supportsEntity()
+    */
+    XUpdateHandler getUpdateHandler([in] string aComponent,
+                                    [in] string aEntity)
+        raises (BackendAccessException,
+                com::sun::star::lang::NoSupportException,
+                com::sun::star::lang::IllegalArgumentException) ;
+
+    //-------------------------------------------------------------------------
+} ;
+
+//=============================================================================
+
+} ; } ; } ; } ; } ;
+
+#endif
