@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:58:22 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:47:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,8 +246,14 @@ class XclObjComment : public XclObj
 {
 public:
                                 XclObjComment( const XclExpRoot& rRoot,
-                                    const ScAddress& rPos, const String& rStr, bool bVisible );
+                                    const Rectangle& rRect, const EditTextObject& rEditObj, SdrObject* pCaption, bool bVisible );
     virtual                     ~XclObjComment();
+
+    /** c'tor process for formatted text objects above .
+       @descr used to construct the MSODRAWING Escher object properties. */
+    void                        ProcessEscherObj( const XclExpRoot& rRoot,
+                                    const Rectangle& rRect, SdrObject* pCaption, bool bVisible );
+
 
     virtual void                Save( XclExpStream& rStrm );
 };
@@ -278,6 +284,7 @@ class XclTxo : public ExcRecord
 public:
                                 XclTxo( const String& rString, sal_uInt16 nFontIx = EXC_FONT_APP );
                                 XclTxo( const XclExpRoot& rRoot, const SdrTextObj& rEditObj );
+                                XclTxo( const XclExpRoot& rRoot, const EditTextObject& rEditObj, SdrObject* pCaption );
 
     inline void                 SetHorAlign( XclTxoHorAlign eHorAlign ) { meHorAlign = eHorAlign; }
     inline void                 SetVerAlign( XclTxoVerAlign eVerAlign ) { meVerAlign = eVerAlign; }
