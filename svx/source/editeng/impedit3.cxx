@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-12 10:31:20 $
+ *  last change: $Author: mt $ $Date: 2002-07-12 12:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1287,16 +1287,20 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
             {
                 if ( nPara || ( pLine->GetStartPortion() != 0 ) ) // Nicht die aller erste Zeile
                 {
-                    sal_uInt16 nTxtHeight = pLine->GetHeight();
-                    sal_uInt32 nH = nTxtHeight;
-                    nH *= rLSItem.GetPropLineSpace();
-                    nH /= 100;
-                    // Der Ascent muss um die Differenz angepasst werden:
-                    long nDiff = pLine->GetHeight() - nH;
-                    if ( nDiff > pLine->GetMaxAscent() )
-                        nDiff = pLine->GetMaxAscent();
-                    pLine->SetMaxAscent( (sal_uInt16)(pLine->GetMaxAscent() - nDiff) );
-                    pLine->SetHeight( (sal_uInt16)nH, nTxtHeight );
+                    // #100508# There are documents with PropLineSpace 0, why?
+                    if ( rLSItem.GetPropLineSpace() && ( rLSItem.GetPropLineSpace() != 100 ) )
+                    {
+                        sal_uInt16 nTxtHeight = pLine->GetHeight();
+                        sal_uInt32 nH = nTxtHeight;
+                        nH *= rLSItem.GetPropLineSpace();
+                        nH /= 100;
+                        // Der Ascent muss um die Differenz angepasst werden:
+                        long nDiff = pLine->GetHeight() - nH;
+                        if ( nDiff > pLine->GetMaxAscent() )
+                            nDiff = pLine->GetMaxAscent();
+                        pLine->SetMaxAscent( (sal_uInt16)(pLine->GetMaxAscent() - nDiff) );
+                        pLine->SetHeight( (sal_uInt16)nH, nTxtHeight );
+                    }
                 }
             }
         }
@@ -1622,16 +1626,20 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
             USHORT nPara = GetParaPortions().GetPos( pParaPortion );
             if ( nPara || ( pTmpLine->GetStartPortion() != 0 ) ) // Nicht die aller erste Zeile
             {
-                sal_uInt16 nTxtHeight = pTmpLine->GetHeight();
-                sal_uInt32 nH = nTxtHeight;
-                nH *= rLSItem.GetPropLineSpace();
-                nH /= 100;
-                // Der Ascent muss um die Differenz angepasst werden:
-                long nDiff = pTmpLine->GetHeight() - nH;
-                if ( nDiff > pTmpLine->GetMaxAscent() )
-                    nDiff = pTmpLine->GetMaxAscent();
-                pTmpLine->SetMaxAscent( (sal_uInt16)(pTmpLine->GetMaxAscent() - nDiff) );
-                pTmpLine->SetHeight( (sal_uInt16)nH, nTxtHeight );
+                // #100508# There are documents with PropLineSpace 0, why?
+                if ( rLSItem.GetPropLineSpace() && ( rLSItem.GetPropLineSpace() != 100 ) )
+                {
+                    sal_uInt16 nTxtHeight = pTmpLine->GetHeight();
+                    sal_uInt32 nH = nTxtHeight;
+                    nH *= rLSItem.GetPropLineSpace();
+                    nH /= 100;
+                    // Der Ascent muss um die Differenz angepasst werden:
+                    long nDiff = pTmpLine->GetHeight() - nH;
+                    if ( nDiff > pTmpLine->GetMaxAscent() )
+                        nDiff = pTmpLine->GetMaxAscent();
+                    pTmpLine->SetMaxAscent( (sal_uInt16)(pTmpLine->GetMaxAscent() - nDiff) );
+                    pTmpLine->SetHeight( (sal_uInt16)nH, nTxtHeight );
+                }
             }
         }
     }
