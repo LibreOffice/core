@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-09 18:03:53 $
+ *  last change: $Author: nn $ $Date: 2001-02-09 20:04:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,10 +523,47 @@ BOOL ScDocShell::SaveCalc( SvStorage* pStor )           // Calc 3, 4 or 5 file
     return bRet;
 }
 
+BOOL ScDocShell::LoadXML( SfxMedium* pMedium, SvStorage* pStor )
+{
+    // prevent unnecessary broadcasts and updates
+    ScDocShellModificator aModificator( *this );
+
+    aDocument.SetImportingXML( TRUE );
+
+    if ( pMedium )
+    {
+        SvStream* pInStream = pMedium->GetInStream();
+        if (pInStream)
+            pInStream->Seek( 0 );
+    }
+
+    ScXMLImportWrapper aImport( aDocument, pMedium, pStor );
+    BOOL bRet = aImport.Import();
+    UpdateLinks();
+    if ( bRet )
+    {
+        // don't prevent establishing of listeners anymore
+        aDocument.SetInsertingFromOtherDoc( FALSE );
+        aDocument.CompileXML();
+    }
+    aDocument.SetImportingXML( FALSE );
+
+    //! row heights...
+
+    return bRet;
+}
+
+BOOL ScDocShell::SaveXML( SfxMedium* pMedium, SvStorage* pStor )
+{
+    ScXMLImportWrapper aImport( aDocument, pMedium, pStor );
+    BOOL bRet = aImport.Export();
+    return bRet;
+}
+
 BOOL __EXPORT ScDocShell::Load( SvStorage* pStor )
 {
-    DBG_ASSERT( pStor, "Nanu... Load ohne Storage?" );
-    //  wait cursor is handled with progress bar
+    DBG_ASSERT( pStor, "Load without storage?" );
+    BOOL bXML = ( pStor->GetVersion() >= SOFFICE_FILEFORMAT_60 );
 
     //  only the latin script language is loaded
     //  -> initialize the others from options (before loading)
@@ -536,7 +573,22 @@ BOOL __EXPORT ScDocShell::Load( SvStorage* pStor )
 
     BOOL bRet = SfxInPlaceObject::Load( pStor );
     if( bRet )
-        bRet = LoadCalc( pStor );
+    {
+        if (bXML)
+        {
+            //  prepare a valid document for XML filter
+            //  (for ConvertFrom, InitNew is called before)
+            aDocument.MakeTable(0);
+            aDocument.GetStyleSheetPool()->CreateStandardStyles();
+            aDocument.UpdStlShtPtrsFrmNms();
+
+            bRet = LoadXML( NULL, pStor );
+            if ( bRet )
+                UpdateAllRowHeights();
+        }
+        else
+            bRet = LoadCalc( pStor );
+    }
 
     if (!bRet && !pStor->GetError())
         pStor->SetError( SVSTREAM_FILEFORMAT_ERROR );
@@ -693,25 +745,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
         }
         else if (aFltName.EqualsAscii(pFilterXML))
         {
-            // prevent unnecessary broadcasts and updates
-            ScDocShellModificator aModificator( *this );
-
-            aDocument.SetImportingXML( TRUE );
-            SvStream* pInStream = rMedium.GetInStream();
-            if (pInStream)
-                pInStream->Seek( 0 );
-
-            ScXMLImportWrapper aImport( aDocument, rMedium );
-            bRet = aImport.Import();
-            UpdateLinks();
-            if ( bRet )
-            {
-                // don't prevent establishing of listeners anymore
-                aDocument.SetInsertingFromOtherDoc( FALSE );
-                aDocument.CompileXML();
-            }
-            aDocument.SetImportingXML( FALSE );
-
+            bRet = LoadXML( &rMedium, NULL );
             bSetRowHeights = TRUE;  // row height update is disabled during XML import
         }
         else if (aFltName.EqualsAscii(pFilterSc10))
@@ -1263,6 +1297,10 @@ void __EXPORT ScDocShell::HandsOff()
 
 BOOL __EXPORT ScDocShell::Save()
 {
+    SvStorage* pStor = GetStorage();
+    DBG_ASSERT( pStor, "Save: no storage" );
+    BOOL bXML = ( pStor->GetVersion() >= SOFFICE_FILEFORMAT_60 );
+
     //  DoEnterHandler hier nicht (wegen AutoSave), ist im ExecuteSave
 
     ScChartListenerCollection* pCharts = aDocument.GetChartListenerCollection();
@@ -1274,19 +1312,27 @@ BOOL __EXPORT ScDocShell::Save()
         SvInPlaceObject::SetVisArea( Rectangle() );     // normal bearbeitet -> keine VisArea
 
     // #77577# save additionally XML in storage
-    if ( GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
-        AddXMLAsZipToTheStorage( *GetStorage() );
+    if ( GetCreateMode() != SFX_CREATE_MODE_EMBEDDED && !bXML )
+        AddXMLAsZipToTheStorage( *pStor );
 
     //  wait cursor is handled with progress bar
     BOOL bRet = SfxInPlaceObject::Save();
     if( bRet )
-        bRet = SaveCalc( GetStorage() );
+    {
+        if (bXML)
+            bRet = SaveXML( NULL, pStor );
+        else
+            bRet = SaveCalc( pStor );
+    }
     return bRet;
 }
 
 
 BOOL __EXPORT ScDocShell::SaveAs( SvStorage* pStor )
 {
+    DBG_ASSERT( pStor, "SaveAs without storage?" );
+    BOOL bXML = ( pStor->GetVersion() >= SOFFICE_FILEFORMAT_60 );
+
     //  DoEnterHandler hier nicht (wegen AutoSave), ist im ExecuteSave
 
     ScChartListenerCollection* pCharts = aDocument.GetChartListenerCollection();
@@ -1297,16 +1343,19 @@ BOOL __EXPORT ScDocShell::SaveAs( SvStorage* pStor )
     if (eShellMode == SFX_CREATE_MODE_STANDARD)
         SvInPlaceObject::SetVisArea( Rectangle() );     // normal bearbeitet -> keine VisArea
 
-    DBG_ASSERT( pStor, "Nanu... SaveAs ohne Storage?" );
-
     // #77577# save additionally XML in storage
-    if ( GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+    if ( GetCreateMode() != SFX_CREATE_MODE_EMBEDDED && !bXML )
         AddXMLAsZipToTheStorage( *pStor );
 
     //  wait cursor is handled with progress bar
     BOOL bRet = SfxInPlaceObject::SaveAs( pStor );
     if( bRet )
-        bRet = SaveCalc( pStor );
+    {
+        if (bXML)
+            bRet = SaveXML( NULL, pStor );
+        else
+            bRet = SaveCalc( pStor );
+    }
 
     return bRet;
 }
@@ -1595,8 +1644,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
     }
     else if (aFltName.EqualsAscii(pFilterXML))
     {
-        ScXMLImportWrapper aImport( aDocument, rMed );
-        bRet = aImport.Export();
+        bRet = SaveXML( &rMed, NULL );
     }
     else if (aFltName.EqualsAscii(pFilterExcel5) || aFltName.EqualsAscii(pFilterExcel95) ||
              aFltName.EqualsAscii(pFilterExcel97) || aFltName.EqualsAscii(pFilterEx5Temp) ||
