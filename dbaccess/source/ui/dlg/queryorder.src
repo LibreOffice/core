@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryorder.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:08:07 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ ModalDialog DLG_ORDERCRIT
     Text [ ENGLISH ] = "Sort Order" ;
     Text [ norwegian ] = "Sort Order" ;
     Text [ italian ] = "Ordine" ;
-    Text [ portuguese_brazilian ] = "CritÈrio de OrdenaÁ„o" ;
+    Text [ portuguese_brazilian ] = "Crit?rio de Ordena??o" ;
     Text [ portuguese ] = "Ordenar" ;
     Text [ finnish ] = "Lajitteluj‰rjestys" ;
     Text [ danish ] = "Sortering" ;
@@ -551,7 +551,7 @@ ModalDialog DLG_ORDERCRIT
         Center = TRUE ;
         Text[ chinese_simplified ] = "À≥–Ú";
         Text[ russian ] = "œÓˇ‰ÓÍ";
-        Text[ polish ] = "KolejnoúÊ";
+        Text[ polish ] = "Kolejno?Ê";
         Text[ japanese ] = "ï¿Ç◊ë÷Ç¶èáèò";
         Text[ chinese_traditional ] = "∂∂ß«";
         Text[ arabic ] = "«· — Ì»";
@@ -658,7 +658,7 @@ ModalDialog DLG_ORDERCRIT
         Text [ ENGLISH ] = "Direction" ;
         Text [ norwegian ] = "Retning" ;
         Text [ italian ] = "Sequenza" ;
-        Text [ portuguese_brazilian ] = "DireÁ„o" ;
+        Text [ portuguese_brazilian ] = "Dire??o" ;
         Text [ portuguese ] = "Ordem" ;
         Text [ finnish ] = "J‰rjestys" ;
         Text [ danish ] = "RÊkkef¯lge" ;
@@ -670,7 +670,7 @@ ModalDialog DLG_ORDERCRIT
         Center = TRUE ;
         Text[ chinese_simplified ] = "À≥–Ú";
         Text[ russian ] = "œÓˇ‰ÓÍ";
-        Text[ polish ] = "KolejnoúÊ";
+        Text[ polish ] = "Kolejno?Ê";
         Text[ japanese ] = "ï¿Ç◊ë÷Ç¶èáèò";
         Text[ chinese_traditional ] = "∂∂ß«";
         Text[ arabic ] = "«· — Ì»";
@@ -707,7 +707,7 @@ ModalDialog DLG_ORDERCRIT
         Text [ ENGLISH ] = "Sort order" ;
         Text [ norwegian ] = "Sort order" ;
         Text [ italian ] = "Ordine" ;
-        Text [ portuguese_brazilian ] = "Ordem de ordenaÁ„o" ;
+        Text [ portuguese_brazilian ] = "Ordem de ordena??o" ;
         Text [ portuguese ] = "Ordenar" ;
         Text [ finnish ] = "Lajitteluj‰rjestys" ;
         Text [ danish ] = "Sortering" ;
