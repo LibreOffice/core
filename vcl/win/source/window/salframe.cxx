@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ssa $ $Date: 2001-04-27 14:46:33 $
+ *  last change: $Author: th $ $Date: 2001-05-18 08:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1332,6 +1332,30 @@ static void ImplSalToTop( HWND hWnd, USHORT nFlags )
 {
     if ( nFlags & SAL_FRAME_TOTOP_FOREGROUNDTASK )
         SetForegroundWindow( hWnd );
+
+    if ( nFlags & SAL_FRAME_TOTOP_RESTOREWHENMIN )
+    {
+        HWND hIconicWnd = hWnd;
+        while ( hIconicWnd )
+        {
+            if ( IsIconic( hIconicWnd ) )
+            {
+                SalFrame* pFrame = GetWindowPtr( hIconicWnd );
+                if ( pFrame )
+                {
+                    if ( GetWindowPtr( hWnd )->maFrameData.mbRestoreMaximize )
+                        ShowWindow( hIconicWnd, SW_MAXIMIZE );
+                    else
+                        ShowWindow( hIconicWnd, SW_RESTORE );
+                }
+                else
+                    ShowWindow( hIconicWnd, SW_RESTORE );
+            }
+
+            hIconicWnd = ::GetParent( hIconicWnd );
+        }
+    }
+
     if ( !IsIconic( hWnd ) )
     {
         SetFocus( hWnd );
@@ -1341,16 +1365,6 @@ static void ImplSalToTop( HWND hWnd, USHORT nFlags )
         // wir diesen auch ganz richtig zu bekommen.
         if ( ::GetFocus() == hWnd )
             SetForegroundWindow( hWnd );
-    }
-    else
-    {
-        if ( nFlags & SAL_FRAME_TOTOP_RESTOREWHENMIN )
-        {
-            if ( GetWindowPtr( hWnd )->maFrameData.mbRestoreMaximize )
-                ShowWindow( hWnd, SW_MAXIMIZE );
-            else
-                ShowWindow( hWnd, SW_RESTORE );
-        }
     }
 }
 
