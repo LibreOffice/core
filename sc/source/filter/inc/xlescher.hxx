@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlescher.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-24 11:56:30 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:20:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ const sal_uInt16 EXC_OBJ_CMO_PICTURE        = 0x0008;
 const sal_uInt16 EXC_OBJ_CMO_POLYGON        = 0x0009;
 const sal_uInt16 EXC_OBJ_CMO_CHECKBOX       = 0x000B;
 const sal_uInt16 EXC_OBJ_CMO_OPTIONBUTTON   = 0x000C;
+const sal_uInt16 EXC_OBJ_CMO_EDIT           = 0x000D;
 const sal_uInt16 EXC_OBJ_CMO_LABEL          = 0x000E;
 const sal_uInt16 EXC_OBJ_CMO_DIALOG         = 0x000F;
 const sal_uInt16 EXC_OBJ_CMO_SPIN           = 0x0010;
