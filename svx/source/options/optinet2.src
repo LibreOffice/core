@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:45:40 $
+ *  last change: $Author: hjs $ $Date: 2001-05-12 06:34:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ turkish ] = "Ayarlar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Configuración";
-        Text[ finnish ] = "Einstellungen";
+        Text[ finnish ] = "Asetukset";
     };
     FixedText FT_PROXYMODE
     {
@@ -583,7 +583,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ turkish ] = "DNS sunucusu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Servidor DNS";
-        Text[ finnish ] = "DNS Server";
+        Text[ finnish ] = "DNS-palvelin";
     };
     RadioButton RB_DNS_AUTO
     {
@@ -611,7 +611,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ turkish ] = "Otomatik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Automático";
-        Text[ finnish ] = "~Automatisch";
+        Text[ finnish ] = "A~utomaattinen";
     };
     RadioButton RB_DNS_MANUAL
     {
@@ -639,7 +639,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ turkish ] = "Manüel";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Manual";
-        Text[ finnish ] = "~Manuell";
+        Text[ finnish ] = "~Manuaalinen";
     };
     PatternField ED_DNS
     {
@@ -676,7 +676,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ turkish ] = "Mail server";
         Text[ arabic ] = "ãÒæÏ ÇáÈÑíÏ";
         Text[ catalan ] = "Servidor de correo";
-        Text[ finnish ] = "Mail-Server";
+        Text[ finnish ] = "Postipalvelin";
     };
     FixedText FT_SEND
     {
@@ -704,7 +704,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ turkish ] = "Giden posta sunucusu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Correo s~aliente";
-        Text[ finnish ] = "~Nachrichtenversand";
+        Text[ finnish ] = "Lähtevät viestit";
     };
     Edit ED_SEND
     {
@@ -736,7 +736,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ turkish ] = "bu alan için geçerli bir değer değil. 0 ile 255 arasında bir değer girin.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "no es una entrada válida para este campo. Por favor escriba un valor entre 0 y 255.";
-        Text[ finnish ] = " ist kein gültiger Eintrag für dieses Feld. Bitte geben sie einen Wert zwischen 0 und 255 an.";
+        Text[ finnish ] = "ei ole kelvollinen merkintä tässä kentässä. Määritä arvo 0 - 255.";
     };
     String ST_MSG_255_1
     {
@@ -762,7 +762,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ turkish ] = "bu alan için geçerli bir değer değil. 1 ile 255 arasında bir değer girin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "no es una entrada válida para este campo. Por favor escriba un valor entre 1 y 255.";
-        Text[ finnish ] = " ist kein gültiger Eintrag für dieses Feld. Bitte geben sie einen Wert zwischen 1 und 255 an.";
+        Text[ finnish ] = "ei ole kelvollinen merkintä tässä kentässä. Määritä arvo 1 - 255.";
     };
     Text[ chinese_simplified ] = "´úÀí·şÎñÆ÷";
     Text[ russian ] = "Ïğîêñè";
@@ -837,7 +837,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ turkish ] = "Şurada ara:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Buscar en";
-        Text[ finnish ] = "Suchen in";
+        Text[ finnish ] = "Etsi kohteesta";
     };
     ListBox LB_SEARCH
     {
@@ -1400,7 +1400,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ portuguese_brazilian ] = "Do you want to accept the current modification?";
         Text[ japanese ] = "Œ»İ‚Ì•ÏX‚ğ“K—p‚µ‚Ü‚·‚©B";
         Text[ korean ] = "Do you want to accept the current modification?";
-        Text[ chinese_simplified ] = "Do you want to accept the current modification?";
+        Text[ chinese_simplified ] = "Òª²ÉÓÃµ±Ç°µÄ¸ü¸Ä£¿";
         Text[ chinese_traditional ] = "±z­n±Ä¥Î·í«eªºÅÜ§ó¡H";
         Text[ turkish ] = "Do you want to accept the current modification?";
         Text[ arabic ] = "Do you want to accept the current modification?";
@@ -1460,7 +1460,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ chinese_traditional ] = "°õ¦æ %PRODUCTNAME Basic ©R¥O½Zªº¦ì¸m";
         Text[ arabic ] = "ÊäİíĞ äÕæÕ ÈÑãÌíÉ %PRODUCTNAME Basic ãä";
         Text[ greek ] = "Åêôİëåóç ôùí äåóìşí åíİñãåéáò ôïõ %PRODUCTNAME Basic áğü";
-        Text[ korean ] = "StarBasic-½ºÅ©¸³Æ® ½ÇÇà";
+        Text[ korean ] = "%PRODUCTNAME Basic-½ºÅ©¸³Æ® ½ÇÇà";
         Text[ turkish ] = "%PRODUCTNAME Basic script'leri şuradan yürüt:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ejecutar Scripts de %PRODUCTNAME Basic desde";
@@ -1587,7 +1587,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ chinese_traditional ] = "%PRODUCTNAME Basic ©R¥O½Z";
         Text[ arabic ] = "%PRODUCTNAME Basic äÕ ÈÑãÌí";
         Text[ greek ] = "%PRODUCTNAME Basic Script";
-        Text[ korean ] = "StarBasic-½ºÅ©¸³Æ®";
+        Text[ korean ] = "%PRODUCTNAME Basic-½ºÅ©¸³Æ®";
         Text[ turkish ] = "%PRODUCTNAME Basic Script";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Script %PRODUCTNAME Basic";
@@ -1701,7 +1701,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ chinese_traditional ] = "µù·N¡GInternet ¶Ç»¼ªº %PRODUCTNAME Basic ©R¥O½Z¤£»İ¨Ï¥ÎªÌ»{µı´N·|¦Û°Ê°õ¦æ¡I";
         Text[ arabic ] = "ÊÍĞíÑ: ÓíÊã ÊäİíĞ äÕ ÈÑãÌí %PRODUCTNAME Basic ãä ÇáÅäÊÑäÊ ÈÏæä ÅÌÑÇÁ İÍÕ!";
         Text[ greek ] = "ĞÑÏÓÏ×Ç: Ïé äİóìåò åíåñãåéşí ôïõ %PRODUCTNAME Basic áğü ôï Internet èá åêôåëïıíôáé ÷ùñßò íá åëåã÷èïıí!";
-        Text[ korean ] = "ÁÖÀÇ: ÀÎÅÍ³İ¿¡¼­ÀÇ StarBasic-½ºÅ©¸³Æ®´Â È®ÀÎ¾øÀÌ ½ÇÇàµË´Ï´Ù!";
+        Text[ korean ] = "ÁÖÀÇ: ÀÎÅÍ³İÀ¸·ÎºÎÅÍÀÇ %PRODUCTNAME Basic-½ºÅ©¸³Æ®´Â °Ë»ç¾øÀÌ ½ÇÇàµË´Ï´Ù!";
         Text[ turkish ] = "Dikkat: İnternetten alınan %PRODUCTNAME Basic script'leri kontrol edilmeden yürütülecek!";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "ADVERTENCIA: ¡Los scripts de %PRODUCTNAME Basic en Internet son ejecutados sin consultar!";
@@ -1731,7 +1731,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ chinese_traditional ] = "¶È°õ¦æ²M³æ¤§¤¤ªº %PRODUCTNAME Basic ©R¥O½Z¡C";
         Text[ arabic ] = "ÓíÊã ÊäİíĞ äÕæÕ ÈÑãÌíÉ %PRODUCTNAME Basic ãä ÇáÏáÇÆá ÇáãæÌæÏÉ İí ÇáŞÇÆãÉ İŞØ.";
         Text[ greek ] = "Ïé äİóìåò åíåñãåéşí ôïõ %PRODUCTNAME Basic èá åêôåëïıíôáé ìüíï áğü ôïõò êáôáëüãïõò ğïõ ğåñéİ÷ïíôáé óôçí ëßóôá.";
-        Text[ korean ] = "StarBasic-½ºÅ©¸³Æ®´Â ¸ñ·ÏÀÇ µğ·ºÅä¸®¿¡¼­¸¸ ½ÇÇàµË´Ï´Ù.";
+        Text[ korean ] = "%PRODUCTNAME Basic-½ºÅ©¸³Æ®´Â ¸ñ·ÏÀÇ µğ·ºÅä¸®·ÎºÎÅÍ¸¸ ½ÇÇàµË´Ï´Ù.";
         Text[ turkish ] = "%PRODUCTNAME Basic script'leri yalnızca listedeki dizinlerden yürütülecek.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Los scripts %PRODUCTNAME Basic se ejecutarán sólo a partir de los directorios de la lista.";
@@ -1761,7 +1761,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ chinese_traditional ] = "¤£°õ¦æ %PRODUCTNAME Basic ©R¥O½Z¡C";
         Text[ arabic ] = "áä íÊã ÊäİíĞ äÕæÕ ÈÑãÌíÉ %PRODUCTNAME Basic.";
         Text[ greek ] = "Äåí èá åêôåëïıíôáé äİóìåò åíåñãåéşí ôïõ %PRODUCTNAME Basic.";
-        Text[ korean ] = "StarBasic-½ºÅ©¸³Æ®´Â ½ÇÇàµÇÁö ¾Ê½À´Ï´Ù.";
+        Text[ korean ] = "%PRODUCTNAME Basic-½ºÅ©¸³Æ®´Â ½ÇÇàµÇÁö ¾Ê½À´Ï´Ù.";
         Text[ turkish ] = "%PRODUCTNAME Basic script'leri yürütülmeyecek.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se ejecutan ningún script de %PRODUCTNAME Basic.";
@@ -1793,7 +1793,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ turkish ] = "Plug-In";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Plug-ins";
-        Text[ finnish ] = "PlugIns";
+        Text[ finnish ] = "Lisäosat";
     };
     CheckBox CB_EXECUTE_PLUGINS
     {
@@ -1821,7 +1821,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ turkish ] = "Etkinleştir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Va~lidar";
-        Text[ finnish ] = "F~reischalten";
+        Text[ finnish ] = "~Ota käyttöön";
     };
     Text[ chinese_simplified ] = "½Å±¾";
     Text[ russian ] = "Ñêğèïò";
