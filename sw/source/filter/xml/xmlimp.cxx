@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:27:07 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 11:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1021,6 +1021,8 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bPrinterIndependentLayout = false;
     bool bUseOldNumbering = false; // #111955#
     bool bAddExternalLeading = false;
+    // OD 2004-02-16 #106629#
+    bool bAddParaSpacingToTableCells = false;
     // DVO, OD 12.01.2004 #i11859#
     bool bUseFormerLineSpacing = false;
 
@@ -1049,6 +1051,9 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                     bPrinterIndependentLayout = true;
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("AddExternalLeading")) )
                     bAddExternalLeading = true;
+                // OD 2004-02-16 #106629#
+                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("AddParaSpacingToTableCells")) )
+                    bAddParaSpacingToTableCells = true;
                 // DVO, OD 12.01.2004 #i11859#
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UseFormerLineSpacing")) )
                     bUseFormerLineSpacing = true;
@@ -1100,6 +1105,13 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                        aAny );
     }
 
+
+    // OD 2004-02-16 #106629#
+    if( !bAddParaSpacingToTableCells )
+    {
+        xProps->setPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("AddParaSpacingToTableCells")), makeAny( false ) );
+    }
 
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();
