@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphf.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:59:32 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:05:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,11 +80,11 @@
 #include "tabvwsh.hxx"
 #include "viewdata.hxx"
 #include "document.hxx"
-#include "tphfedit.hxx"
+//CHINA001 #include "tphfedit.hxx"
 #include "hfedtdlg.hxx"
 #include "styledlg.hxx"
 #include "scresid.hxx"
-
+#include "scuitphfedit.hxx" //CHINA001
 #undef _TPHF_CXX
 
 
