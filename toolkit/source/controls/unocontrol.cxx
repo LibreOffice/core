@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 15:44:42 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:52:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,8 +347,11 @@ void UnoControl::updateFromModel()
     if( getPeer().is() )
     {
         Reference< XMultiPropertySet >  xPropSet( mxModel, UNO_QUERY );
-        Sequence< ::rtl::OUString> aNames = lcl_ImplGetPropertyNames( xPropSet );
-        xPropSet->firePropertiesChangeEvent( aNames, this );
+        if( xPropSet.is() )
+        {
+            Sequence< ::rtl::OUString> aNames = lcl_ImplGetPropertyNames( xPropSet );
+            xPropSet->firePropertiesChangeEvent( aNames, this );
+        }
     }
 }
 
