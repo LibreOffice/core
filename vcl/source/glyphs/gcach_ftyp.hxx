@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hdu $ $Date: 2001-03-08 11:40:53 $
+ *  last change: $Author: hdu $ $Date: 2001-03-14 16:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ friend GlyphCache;
 
     virtual void                InitGlyphData( int nGlyphIndex, GlyphData& ) const;
     virtual ULONG               GetKernPairs( ImplKernPairData** ) const;
-    bool                        ApplyGSUB( const char* );
+    bool                        ApplyGSUB( const ImplFontSelectData& );
 
 private:
     int                         mnWidth;
