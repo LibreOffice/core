@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-29 15:12:06 $
+ *  last change: $Author: mt $ $Date: 2001-04-11 13:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1024,7 +1024,7 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
         Paragraph* pPara = pParaList->GetParagraph( nPara );
         const SvxNumBulletItem& rNumBullet = (const SvxNumBulletItem&) pEditEngine->GetParaAttrib( nPara, EE_PARA_NUMBULLET );
         const SvxNumberFormat* pFmt = rNumBullet.GetNumRule()->Get( pPara->GetDepth() );
-        if ( pFmt )
+        if ( pFmt && ( pFmt->GetNumberingType() != SVX_NUM_NUMBER_NONE ) )
         {
             if( pFmt->GetNumberingType() != SVX_NUM_BITMAP )
             {
@@ -1557,6 +1557,14 @@ BOOL Outliner::ImplHasBullet( USHORT nPara ) const
         // Im Gliederungsmodus immer ein Bullet auf Ebene 0!
         bBullet = TRUE;
     }
+    else if ( bBullet )
+    {
+        USHORT nDepth = pParaList->GetParagraph( nPara )->GetDepth();
+        const SvxNumBulletItem& rNumBullet = (const SvxNumBulletItem&) pEditEngine->GetParaAttrib( nPara, EE_PARA_NUMBULLET );
+        const SvxNumberFormat* pFmt = rNumBullet.GetNumRule()->Get( nDepth );
+        if ( !pFmt || ( pFmt->GetNumberingType() == SVX_NUM_NUMBER_NONE ) )
+            bBullet = FALSE;
+    }
     return bBullet;
 }
 
@@ -1570,7 +1578,11 @@ Size Outliner::ImplGetBulletSize( USHORT nPara )
         const SvxNumberFormat* pFmt = rNumBullet.GetNumRule()->Get( pPara->GetDepth() );
         DBG_ASSERT( pFmt, "ImplGetBulletSize - no Bullet!" );
 
-        if( pFmt->GetNumberingType() != SVX_NUM_BITMAP )
+        if ( pFmt->GetNumberingType() == SVX_NUM_NUMBER_NONE )
+        {
+            pPara->aBulSize = Size( 0, 0 );
+        }
+        else if( pFmt->GetNumberingType() != SVX_NUM_BITMAP )
         {
             String aBulletText = ImplGetBulletText( nPara );
             OutputDevice* pRefDev = pEditEngine->GetRefDevice();
@@ -1725,7 +1737,7 @@ Rectangle Outliner::ImpCalcBulletArea( USHORT nPara, BOOL bAdjust )
                             + aInfos.nFirstLineTextHeight / 2
                             - aBulletSize.Height() / 2;
             // ggf. lieber auf der Baseline ausgeben...
-            if( ( pFmt->GetNumberingType() != SVX_NUM_BITMAP ) && ( pFmt->GetNumberingType() != SVX_NUM_CHAR_SPECIAL ) )
+            if( ( pFmt->GetNumberingType() != SVX_NUM_NUMBER_NONE ) && ( pFmt->GetNumberingType() != SVX_NUM_BITMAP ) && ( pFmt->GetNumberingType() != SVX_NUM_CHAR_SPECIAL ) )
             {
                 Font aBulletFont( ImpCalcBulletFont( nPara ) );
                 if ( aBulletFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL )
