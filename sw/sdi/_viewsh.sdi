@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _viewsh.sdi,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-10-11 09:53:20 $
+ *  last change: $Author: os $ $Date: 2002-02-27 09:12:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,19 @@ interface BaseTextEditView : View
         StateMethod = StateTabWin ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+    SID_ATTR_PARA_LRSPACE_VERTICAL // status()
+    [
+        ExecMethod = ExecTabWin ;
+        StateMethod = StateTabWin ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
     SID_RULER_BORDERS // status()
+    [
+        ExecMethod = ExecTabWin ;
+        StateMethod = StateTabWin ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_RULER_BORDERS_VERTICAL // status()
     [
         ExecMethod = ExecTabWin ;
         StateMethod = StateTabWin ;
@@ -433,7 +445,12 @@ interface BaseTextEditView : View
         StateMethod = StateTabWin ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-
+    SID_ATTR_TABSTOP_VERTICAL // status()
+    [
+        ExecMethod = ExecTabWin ;
+        StateMethod = StateTabWin ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
     // ab hier Export = FALSE;
     FID_SEARCH_ON // status()
     [
