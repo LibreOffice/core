@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfparse.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:35:19 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:05:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,19 +162,22 @@ inline void ScRTFParser::NextRow()
 }
 
 
-BOOL ScRTFParser::SeekTwips( USHORT nTwips, USHORT* pCol )
+BOOL ScRTFParser::SeekTwips( USHORT nTwips, SCCOL* pCol )
 {
-    if ( pColTwips->Seek_Entry( nTwips, pCol ) )
+    USHORT nPos;
+    BOOL bFound = pColTwips->Seek_Entry( nTwips, &nPos );
+    *pCol = static_cast<SCCOL>(nPos);
+    if ( bFound )
         return TRUE;
     USHORT nCount = pColTwips->Count();
     if ( !nCount )
         return FALSE;
-    USHORT nCol = *pCol;
+    SCCOL nCol = *pCol;
     // nCol ist Einfuegeposition, da liegt der Naechsthoehere (oder auch nicht)
-    if ( nCol < nCount && (((*pColTwips)[nCol] - SC_RTFTWIPTOL) <= nTwips) )
+    if ( nCol < static_cast<SCCOL>(nCount) && (((*pColTwips)[nCol] - SC_RTFTWIPTOL) <= nTwips) )
         return TRUE;
     // nicht kleiner als alles andere? dann mit Naechstniedrigerem vergleichen
-    else if ( nCol && (((*pColTwips)[nCol-1] + SC_RTFTWIPTOL) >= nTwips) )
+    else if ( nCol != 0 && (((*pColTwips)[nCol-1] + SC_RTFTWIPTOL) >= nTwips) )
     {
         (*pCol)--;
         return TRUE;
@@ -187,7 +190,7 @@ void ScRTFParser::ColAdjust()
 {
     if ( nStartAdjust != (ULONG)~0 )
     {
-        USHORT nCol = 0;
+        SCCOL nCol = 0;
         ScEEParseEntry* pE;
         pE = pList->Seek( nStartAdjust );
         while ( pE )
@@ -270,7 +273,7 @@ void ScRTFParser::NewCellRow( ImportInfo* pInfo )
         if ( nLastWidth
           && (pD = pDefaultList->Last()) && pD->nTwips != nLastWidth )
         {
-            USHORT n1, n2;
+            SCCOL n1, n2;
             if ( !( SeekTwips( nLastWidth, &n1 )
                 && SeekTwips( pD->nTwips, &n2 ) && n1 == n2) )
                 ColAdjust();
@@ -278,7 +281,7 @@ void ScRTFParser::NewCellRow( ImportInfo* pInfo )
         // TwipCols aufbauen, erst nach nLastWidth Vergleich!
         for ( pD = pDefaultList->First(); pD; pD = pDefaultList->Next() )
         {
-            USHORT n;
+            SCCOL n;
             if ( !SeekTwips( pD->nTwips, &n ) )
                 pColTwips->Insert( pD->nTwips );
         }
