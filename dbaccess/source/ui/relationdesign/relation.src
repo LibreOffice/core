@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:06:18 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,7 +353,7 @@ String STR_RELATIONDESIGN_NOT_AVAILABLE
     Text [ english_us ] = "The database does not support relations." ;
     Text[ portuguese ] = "A base de dados nγo tem suporte para relaηυes.";
     Text[ russian ] = "έςΰ αΰηΰ δΰννϋυ νε οξδδεπζθβΰες ρβÿηει.";
-    Text[ greek ] = "Η βάση δεδομένων δεν υποστηρίζει σχέσεις. Ο σχεδιασμός των σχέσεων θα τερματιστεί.";
+    Text[ greek ] = "Η βάση δεδομένων δεν υποστηρίζει σχέσεις!";
     Text[ dutch ] = "De database ondersteunt geen verbindingen! ";
     Text[ french ] = "La base de donnιes ne supporte pas les relations !";
     Text[ spanish ] = "La base de datos no apoya ninguna relaciσn.";
@@ -380,7 +380,7 @@ QueryBox RELATION_DESIGN_SAVEMODIFIED
     Message [ english_us ] = "The relation design has been changed.\nDo you want to save the changes?" ;
     Message[ portuguese ] = "O esboηo de relaηυes foi modificado.\nGuardar as modificaηυes?";
     Message[ russian ] = "Οπξεκς ρβÿηει θημενεν.\nΡξυπΰνθςό ύςθ θημενενθÿ?";
-    Message[ greek ] = "The relation design has been changed.\nDo you want to save the changes?";
+    Message[ greek ] = "Το σχέδιο της σχέσης τροποποιήθηκε.\nΘέλετε να αποθηκευτούν οι αλλαγές;";
     Message[ dutch ] = "Het ontwerp voor de verbinding werd gewijzigd.\nWilt u de wijzigingen opslaan?";
     Message[ french ] = "L'ιbauche de relation a ιtι modifiιe.\nVoulez-vous enregistrer les modifications ?";
     Message[ spanish ] = "El diseρo de relaciσn ha sido modificado\nΏDesea guardar las modificaciones?";
@@ -539,7 +539,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
             Text[ chinese_simplified ] = "±ΰΌ­(~E)";
             Text[ chinese_traditional ] = "½sΏθ(~E)";
             Text[ arabic ] = "~ΚΝΡνΡ";
-            Text[ greek ] = "~Επεξεργασία";
+            Text[ greek ] = "Ε~πεξεργασία";
             Text[ korean ] = "ΖνΑύ(~E)";
             Text[ turkish ] = "~Dόzenle";
             Text[ language_user1 ] = " ";
@@ -600,6 +600,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
     ITEM_HELP_MENU
     };
 };
+
 
 
 
