@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:25:49 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:24:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,7 +282,7 @@ String RID_STR_FONT
     Text [ spanish ] = "Juego de caracteres" ;
     Text [ french ] = "Jeu de caractères" ;
     Text [ dutch ] = "Tekenset" ;
-    Text[ chinese_simplified ] = "×ÖÌå";
+    Text[ chinese_simplified ] = "×Ö·û¼¯";
     Text[ russian ] = "Íàáîğ çíàêîâ";
     Text[ polish ] = "Zbiór znaków";
     Text[ japanese ] = "•¶š—ñ";
@@ -1063,7 +1063,7 @@ String RID_STR_NO_PROPERTIES
     Text [ spanish ] = "Ningún elemento de control seleccionado o selección mixta" ;
     Text [ french ] = "Aucun élément de contrôle marqué ou sélection mélangée" ;
     Text [ dutch ] = "Geen controle-element gemarkeerd of gemengde selectie" ;
-    Text[ chinese_simplified ] = "Ã»ÓĞÑ¡Ôñ¿ØÖÆ»òÊÇÒ»¸ö»ìºÏµÄÑ¡Ôñ";
+    Text[ chinese_simplified ] = "Ã»ÓĞÑ¡ÖĞ¿ØÖÆ»òÊÇÒ»¸ö»ìºÏµÄÑ¡ÖĞ";
     Text[ russian ] = "Íè îäèí ıëåìåíò óïğàâëåíèÿ íå âûäåëåí èëè ñìåøàííûé âûáîğ";
     Text[ polish ] = "Nie zaznaczono formantu lub mieszana selekcja";
     Text[ japanese ] = "ºİÄÛ°Ù—v‘f‚Ì‘I‘ğ‚È‚µA‚ ‚é‚¢‚Í¬‡‘I‘ğ";
@@ -4842,7 +4842,7 @@ String RID_STR_EVT_COMPONENTMOVED
 {
     Text = "Bewegen" ;
     Text [ English ] = "Component moved" ;
-    Text [ portuguese ] = "Mover" ;
+    Text [ portuguese ] = "Deslocar" ;
     Text [ english_us ] = "Move" ;
     Text [ portuguese_brazilian ] = "Bewegen" ;
     Text [ swedish ] = "Flytta" ;
@@ -6586,7 +6586,7 @@ String RID_STR_FILTER_NAVIGATOR
     Text[ japanese ] = "Ì¨ÙÀ ÅËŞ¹Ş°À";
     Text[ korean ] = "ÇÊÅÍ ³×ºñ°ÔÀÌÅÍ";
     Text[ chinese_simplified ] = "¹ıÂËÆ÷ÖúÊÖ";
-    Text[ chinese_traditional ] = "¹LÂo¾¹ÂQ¾É";
+    Text[ chinese_traditional ] = "Âà´«¾¹ÂQ¾É";
     Text[ arabic ] = "ãáÇÍ ÇáİáÊÑ";
     Text[ turkish ] = "Filtre navigatörü";
     Text[ language_user1 ] = " ";
@@ -7209,6 +7209,7 @@ Resource RID_RES_CONTROL_WIZARDS_ERROR_CONTEXTS
         Text[ finnish ] = "Automaattista ryhmäruudun ohjausta ei voitu käynnistää.";
     };
 };
+
 
 
 
