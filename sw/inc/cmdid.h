@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:57:52 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,10 +416,11 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_TOOL_ANKER_PARAGRAPH (FN_INSERT + 51)    /* Draw-Objekt am Absatz verankern */
 #define FN_TOOL_HIERARCHIE      (FN_INSERT + 52)    /* Hierarchie aendern */
 
-#define FN_QRY_MERGE            (FN_INSERT + 64)    /* Datensatz einfuegen (Serienbrief) */
+#define FN_MAILMERGE_WIZARD     (FN_INSERT + 64)    /* mail merge wizard */
 #define FN_QRY_OPEN_TABLE       (FN_INSERT + 65)    /* Datenbank oeffnen (Basic) */
 #define FN_TOOL_ANKER_FRAME     (FN_INSERT + 66)    /* Draw-Objekt am Rahmen verankern */
-
+#define FN_QRY_MERGE            (FN_INSERT + 67)    /* Datensatz einfuegen (Serienbrief) */
+#define FN_MAILMERGE_CHILDWINDOW (FN_INSERT + 68)    /* back-to-mail-merge-wizard child window*/
 #define FN_INSERT_SMA           (FN_INSERT + 69)    /* Einfuegen StarMath  */
 
 #define FN_QRY_GET_COLUMN_NAME  (FN_INSERT + 70)    /* Anzahl der Spalten (Basic) */
@@ -462,7 +463,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_QRY_GET_DBNAME_COUNT (FN_INSERT2 + 2)    /* Anzahl aller konfigurierten Datenabanknamen */
 #define FN_QRY_GET_TABLE_NAME   (FN_INSERT2 + 3)    /* Tabellenname einer Datenbank ermitteln */
 #define FN_QRY_GET_TABLE_COUNT  (FN_INSERT2 + 4)    /* Anzahl aller Tabellen einer Datenbank ermitteln */
-
+#define FN_MAILMERGE_SENDMAIL_CHILDWINDOW (FN_INSERT2 + 5)  /* child window provided by mailmerge */
 
 
 #define FN_SBA_BRW_UPDATE       (FN_INSERT2 + 7)    /* Datensaetze in Felder einfuegen */
@@ -1160,12 +1161,12 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_DROP_CHAR_STYLE_NAME         (FN_PARAM2+19) /* character style of drop caps - for recording */
 #define FN_PARAM_CHAIN_PREVIOUS         (FN_PARAM2+20) /* Name of frame to be added as chain successor */
 #define FN_PARAM_CHAIN_NEXT             (FN_PARAM2+21) /* Name of frame to be added as chain predecessor */
-
+#define FN_PARAM_DATABASE_PROPERTIES    (FN_PARAM2+22) /* transport a Sequence<PropertyValue> containing database properties*/
 // --> OD 2004-08-06 #i28749#
 // com::sun::star::text::Shape::TransformationInHoriL2R property
-#define FN_SHAPE_TRANSFORMATION_IN_HORI_L2R (FN_PARAM2+22)
+#define FN_SHAPE_TRANSFORMATION_IN_HORI_L2R (FN_PARAM2+23)
 // com::sun::star::text::Shape::PositionLayoutDir property
-#define FN_SHAPE_POSITION_LAYOUT_DIR    (FN_PARAM2+23)
+#define FN_SHAPE_POSITION_LAYOUT_DIR    (FN_PARAM2+24)
 // <--
 /*--------------------------------------------------------------------
     Bereich: Druckoptionen
