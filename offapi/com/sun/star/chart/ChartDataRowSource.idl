@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartDataRowSource.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:19 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:55:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
     chart, take their values from the row or the column in the underlying
     data source (<type>ChartDataArray</type>).
  */
-enum ChartDataRowSource
+published enum ChartDataRowSource
 {
     //-------------------------------------------------------------------------
 
