@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optasian.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:34:30 $
+ *  last change: $Author: os $ $Date: 2001-03-14 10:15:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,25 +153,25 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Pos = MAP_APPFONT ( 6, 30 ) ;
         Size = MAP_APPFONT ( 251 , 50 ) ;
         Text = "Zeichenabstand" ;
-        Text [ English ] = "Character< distance" ;
-        Text[ english_us ] = "Character< distance";
-        Text[ portuguese ] = "Character< distance";
+        Text [ English ] = "Character distance" ;
+        Text[ english_us ] = "Character distance";
+        Text[ portuguese ] = "Character distance";
         Text[ russian ] = "Ðàññòîÿíèå ìåæäó çíàêàìè";
         Text[ greek ] = "Áðüóôáóç ÷áñáêôÞñùí";
-        Text[ dutch ] = "Character< distance";
-        Text[ french ] = "Character< distance";
-        Text[ spanish ] = "Character< distance";
-        Text[ italian ] = "Character< distance";
-        Text[ danish ] = "Character< distance";
+        Text[ dutch ] = "Character distance";
+        Text[ french ] = "Character distance";
+        Text[ spanish ] = "Character distance";
+        Text[ italian ] = "Character distance";
+        Text[ danish ] = "Character distance";
         Text[ swedish ] = "Teckenavstånd";
-        Text[ polish ] = "Character< distance";
-        Text[ portuguese_brazilian ] = "Character< distance";
-        Text[ japanese ] = "Character< distance";
-        Text[ korean ] = "Character< distance";
-        Text[ chinese_simplified ] = "Character< distance";
+        Text[ polish ] = "Character distance";
+        Text[ portuguese_brazilian ] = "Character distance";
+        Text[ japanese ] = "Character distance";
+        Text[ korean ] = "Character distance";
+        Text[ chinese_simplified ] = "Character distance";
         Text[ chinese_traditional ] = "¦r¤¸¶¡¹j";
-        Text[ turkish ] = "Character< distance";
-        Text[ arabic ] = "Character< distance";
+        Text[ turkish ] = "Character distance";
+        Text[ arabic ] = "Character distance";
     };
     RadioButton RB_NO_COMP
     {
