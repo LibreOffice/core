@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-21 21:40:59 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 07:48:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1538,6 +1538,7 @@ String S_UNO_URL_EXECUTE_FAILED_NO_FRAME
     Text[ catalan ] = "No se pudo ejecutar Slot ID";
     Text[ finnish ] = "Paikkatunnusta ei voitu suorittaa";
 };
+
 
 
 
