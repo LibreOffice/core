@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kr $ $Date: 2001-06-21 11:14:28 $
+ *  last change: $Author: ssa $ $Date: 2001-07-06 14:34:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,7 +347,9 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
 
     pSVData->mpUserInfo = new UserOnPrintServer;
 
+#if SUPD < 638
     Application::EnterMultiThread( TRUE );
+#endif
 #endif
 
     if( pSVData->mpApp )
@@ -367,41 +369,21 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
     pSVData->maGDIData.mpScreenFontList   = new ImplDevFontList;
     pSVData->maGDIData.mpScreenFontCache  = new ImplFontCache( FALSE );
 
-    // OSL_ENSURE( 0 , "Office is waiting ....\n" );
+#if SUPD < 638
+    // 638: changed startup behaviour
+    // sfx will now wait for startup condition, not vcl
+    // RVP version checking is performed on client only now because
+    // client has not connected yet
     pSVData->mpStartUpCond->wait();
     delete pSVData->mpStartUpCond;
     pSVData->mpStartUpCond = NULL;
-
     // we have to acquire solar mutex before we do our first rvp call!
     pSVData->maAppData.mpSolarMutex->acquire();
 
     if( pSVData->mxClientFactory.is() )
     {
-/*
-        pSVData->mpRVPNormalSync = new RVPSync(
-            Reference< ::com::sun::star::portal::client::XRmSync >(
-                pSVData->mxClientFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "RVPSync_Normal.stardiv.de" ) ) ), UNO_QUERY ));
-
-        pSVData->mpRVPSoundSync = new RVPSync(
-            Reference< ::com::sun::star::portal::client::XRmSync >(
-                pSVData->mxClientFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "RVPSync_Sound.stardiv.de" ) ) ), UNO_QUERY ));
-
-        pSVData->mpAtoms = new ::utl::AtomClient(
-            Reference< ::com::sun::star::util::XAtomServer >(
-                pSVData->mxClientFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "ClientAtomServer.stardiv.de" ) ) ), UNO_QUERY ) );
-
-        Reference< XInterface > rX = pSVData->mxClientFactory->createInstance(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "OfficeStatus.stardiv.de" ) ) );
-
-        pSVData->mxStatus = Reference < ::com::sun::star::portal::client::XRmStatus > ( rX , UNO_QUERY );
-        CHECK_FOR_RVPSYNC_NORMAL()
-*/
         if ( pSVData->mnRemoteVersion != REMOTE_VCLVERSION )
-//      if( pSVData->mxStatus->GetRemoteVersion() != REMOTE_VCLVERSION )
         {
-//          CHECK_FOR_RVPSYNC_NORMAL()
-//          pSVData->mxStatus->ShowError(
-//              OUString( RTL_CONSTASCII_USTRINGPARAM("Wrong Office-Version")), 0 );
             CHECK_FOR_RVPSYNC_NORMAL();
             try
             {
@@ -418,10 +400,9 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
     {
         return sal_False;
     }
+#endif // SUPD < 638
 
     ImplInitRemotePrinterList();
-
-//  pSVData->maAppData.mpSolarMutex->acquire();
     }
 
 #endif
@@ -454,10 +435,6 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
     pSVData->maGDIData.mpGrfConverter       = new GraphicConverter;
 
     // Exception-Handler setzen
-#ifndef TF_SVDATA
-    // HACK: Hier SystemExchange initialisieren, damit Exception-Handler unter Windows funktioniert
-    CreateSystemExchange();
-#endif
     pExceptionHandler = new ImplVCLExceptionHandler();
 
     // Debug-Daten initialisieren
