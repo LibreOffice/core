@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoportenum.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:27 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:58:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -781,7 +781,7 @@ void SwXTextPortionEnumeration::CreatePortions()
         SwDoc* pDoc = pUnoCrsr->GetDoc();
         lcl_FillRedlineArray(*pDoc, *pUnoCrsr, aRedArr);
         lcl_FillBookmarkArray(*pDoc, *pUnoCrsr, aBkmArr );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         for(long i_debug = 0; i_debug <aBkmArr.Count(); i_debug++)
         {
             SwXBookmarkPortion_ImplPtr pPtr = aBkmArr.GetObject(i_debug);
