@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSlotManager.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 15:18:09 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:18:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,6 @@
 #include "view/SlsLayouter.hxx"
 #include "view/SlsViewOverlay.hxx"
 
-#include "PreviewWindow.hxx"
-#include "PreviewChildWindow.hxx"
 #include "Window.hxx"
 #include "fupoor.hxx"
 #include "fuzoom.hxx"
@@ -234,24 +232,6 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
             rRequest.Ignore ();
             break;
         }
-
-        case SID_PREVIEW_WIN:
-        {
-            bool bPreview = false;
-
-            if (rRequest.GetArgs())
-                bPreview = (static_cast<const SfxBoolItem&>(
-                    rRequest.GetArgs()->Get(SID_PREVIEW_WIN)).GetValue()
-                    != FALSE);
-            else
-                bPreview = ! rShell.GetViewFrame()->HasChildWindow(
-                    PreviewChildWindow::GetChildWindowId());
-
-            rShell.SetPreview (bPreview);
-            rShell.Cancel();
-            rRequest.Ignore ();
-        }
-        break;
 
         case SID_PRESENTATION_DLG:
             rShell.SetCurrentFunction (
@@ -475,11 +455,6 @@ void SlotManager::ExecCtrl (SfxRequest& rRequest)
             break;
         }
 
-        case SID_PREVIEW_QUALITY_COLOR:
-        case SID_PREVIEW_QUALITY_GRAYSCALE:
-        case SID_PREVIEW_QUALITY_BLACKWHITE:
-        case SID_PREVIEW_QUALITY_CONTRAST:
-
         case SID_MAIL_SCROLLBODY_PAGEDOWN:
         {
             rShell.ExecReq (rRequest);
@@ -597,34 +572,6 @@ void SlotManager::GetCtrlState (SfxItemSet& rSet)
                 (BOOL)(nQuality==3)));
     }
 
-    // #49150#: Qualitaet des Previewfensters aendern, falls vorhanden
-    if (rSet.GetItemState(SID_PREVIEW_QUALITY_COLOR)==SFX_ITEM_AVAILABLE
-        ||rSet.GetItemState(SID_PREVIEW_QUALITY_GRAYSCALE)==SFX_ITEM_AVAILABLE
-        ||rSet.GetItemState(SID_PREVIEW_QUALITY_BLACKWHITE)==SFX_ITEM_AVAILABLE
-        ||rSet.GetItemState(SID_PREVIEW_QUALITY_CONTRAST)==SFX_ITEM_AVAILABLE)
-    {
-        USHORT nId = PreviewChildWindow::GetChildWindowId();
-        if (rShell.GetViewFrame()->GetChildWindow(nId))
-        {
-            ULONG nMode = rShell.GetFrameView()->GetPreviewDrawMode();
-            rSet.Put (SfxBoolItem(SID_PREVIEW_QUALITY_COLOR,
-                    (BOOL)(nMode == PREVIEW_DRAWMODE_COLOR)));
-            rSet.Put (SfxBoolItem(SID_PREVIEW_QUALITY_GRAYSCALE,
-                    (BOOL)(nMode == PREVIEW_DRAWMODE_GRAYSCALE)));
-            rSet.Put( SfxBoolItem( SID_PREVIEW_QUALITY_BLACKWHITE,
-                    (BOOL)(nMode == PREVIEW_DRAWMODE_BLACKWHITE)));
-            rSet.Put( SfxBoolItem( SID_PREVIEW_QUALITY_CONTRAST,
-                    (BOOL)(nMode == PREVIEW_DRAWMODE_CONTRAST)));
-        }
-        else
-        {
-            rSet.DisableItem (SID_PREVIEW_QUALITY_COLOR);
-            rSet.DisableItem (SID_PREVIEW_QUALITY_GRAYSCALE);
-            rSet.DisableItem (SID_PREVIEW_QUALITY_BLACKWHITE);
-            rSet.DisableItem (SID_PREVIEW_QUALITY_CONTRAST);
-        }
-    }
-
     if (rSet.GetItemState(SID_MAIL_SCROLLBODY_PAGEDOWN) == SFX_ITEM_AVAILABLE)
     {
         rSet.Put (SfxBoolItem( SID_MAIL_SCROLLBODY_PAGEDOWN, TRUE));
@@ -641,23 +588,6 @@ void SlotManager::GetMenuState ( SfxItemSet& rSet)
     DrawDocShell* pDocShell
         = mrController.GetModel().GetDocument()->GetDocSh();
 
-/*
-    if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PRESENTATION ) )
-    {
-        SfxChildWindow* pPreviewChildWindow
-            = rShell.GetViewFrame()->GetChildWindow(
-            PreviewChildWindow::GetChildWindowId());
-        PreviewWindow*  pPreviewWin = static_cast<PreviewWindow*>(
-            pPreviewChildWindow ? pPreviewChildWindow->GetWindow() : NULL);
-        FuSlideShow*    pShow = pPreviewWin ? pPreviewWin->GetSlideShow() : NULL;
-
-        if ( (pShow && pShow->IsInputLocked())
-            || pDocShell->IsPreview())
-        {
-            rSet.DisableItem( SID_PRESENTATION );
-        }
-    }
-*/
     if (rShell.GetActualFunction())
     {
         USHORT nSId = rShell.GetActualFunction()->GetSlotID();
@@ -701,14 +631,6 @@ void SlotManager::GetMenuState ( SfxItemSet& rSet)
             rSet.DisableItem( SID_ZOOM_OUT );
         if( 100 >= pWindow->GetMaxZoom() || bUIActive )
             rSet.DisableItem( SID_SIZE_REAL );
-    }
-
-    // PreviewWindow
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_WIN ) )
-    {
-        USHORT nId = PreviewChildWindow::GetChildWindowId();
-        rSet.Put( SfxBoolItem( SID_PREVIEW_WIN,
-                rShell.GetViewFrame()->HasChildWindow( nId ) ) );
     }
 
     if (SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_EXPAND_PAGE))
