@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-20 17:16:51 $
+ *  last change: $Author: thb $ $Date: 2001-06-25 13:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3811,7 +3811,7 @@ String STR_EXPORT_HTML_NAME
 };
 String STR_EXPORT_HTML_FILTER
 {
-    Text = "*.htm;*.html" ;
+    Text = "*.html;*.htm" ;
 };
 String STR_EXPORT_IMP_GROUP
 {
@@ -4139,6 +4139,10 @@ String STR_EXPORT_DIALOG_TITLE
 String STR_EXPORT_MODULES_PATH
 {
     Text = "filter" ;
+};
+String STR_HTMLEXP_DEFAULT_EXTENSION
+{
+    Text = ".html";
 };
 String STR_UNDO_COPYOBJECTS
 {
