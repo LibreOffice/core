@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-11 18:58:08 $
+ *  last change: $Author: pl $ $Date: 2001-05-14 09:17:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2224,7 +2224,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
             rtl::OUString sCLSID;
             if (aAny >>= sCLSID)
             {
-                if ( sCLSID.equalsIgnoreCase(GetChartExport()->getChartCLSID()) )
+                if ( sCLSID.equalsIgnoreAsciiCase(GetChartExport()->getChartCLSID()) )
                 {
                     uno::Reference < container::XNamed > xNamed (xShape, uno::UNO_QUERY );
                     rtl::OUString sOUName ( xNamed->getName() );
