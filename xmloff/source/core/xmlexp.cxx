@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-29 15:53:47 $
+ *  last change: $Author: sab $ $Date: 2000-11-30 09:10:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,10 +109,6 @@
 
 #ifndef _XMLOFF_FAMILIES_HXX_
 #include "families.hxx"
-#endif
-
-#ifndef _XMLOFF_PROGRESSBARHELPER_HXX
-#include "ProgressBarHelper.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
@@ -239,7 +235,7 @@ SvXMLExport::SvXMLExport(
     xModel( rModel ),
     pNumExport(0L),
     xNumberFormatsSupplier (rModel, uno::UNO_QUERY),
-    pProgressBarHelper( new ProgressBarHelper(rModel, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "XML Export" ))))
+    pProgressBarHelper( NULL )
 {
     _InitCtor();
     if (xNumberFormatsSupplier.is())
