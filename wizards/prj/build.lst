@@ -1,4 +1,10 @@
 wz      wizards                                                 usr30073        -       none     NULL
 wz      wizards                                                 usr1            -       all     wz_mkout NULL
+wz      wizards\source\euro                                     nmake           -       all     wz_eurowiz NULL
+wz      wizards\source\formwizard                               nmake           -       all     wz_formwiz NULL
+wz      wizards\source\gimmicks                                 nmake           -       all     wz_gimmickswz NULL
 wz      wizards\source\importwizard                             nmake           -       all     wz_importwiz NULL
+wz      wizards\source\schedule                                 nmake           -       all     wz_schedulewiz NULL
+wz      wizards\source\template                                 nmake           -       all     wz_templatewiz NULL
+wz      wizards\source\tools                                    nmake           -       all     wz_toolswiz NULL
 wz      wizards\source\webwizard                                nmake           -       all     wz_webwizard NULL
