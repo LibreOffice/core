@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 10:57:01 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:45:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,6 +288,9 @@ public:
     ~SwOszControl();
     bool ChkOsz();
     static FASTBOOL IsInProgress( const SwFlyFrm *pFly );
+    // --> OD 2004-11-01 #i36347#
+    static bool IsLowerInProgress( const SwFlyFrm* _pFlyFrm );
+    // <--
 };
 const SwFlyFrm *SwOszControl::pStk1 = 0;
 const SwFlyFrm *SwOszControl::pStk2 = 0;
@@ -350,6 +353,24 @@ FASTBOOL SwOszControl::IsInProgress( const SwFlyFrm *pFly )
         return TRUE;
     return FALSE;
 }
+
+// --> OD 2004-11-01 #i36347#
+bool SwOszControl::IsLowerInProgress( const SwFlyFrm* _pFlyFrm )
+{
+    if ( SwOszControl::pStk1 && SwOszControl::pStk1->IsLowerOf( _pFlyFrm ) )
+        return true;
+    if ( SwOszControl::pStk2 && SwOszControl::pStk2->IsLowerOf( _pFlyFrm ) )
+        return true;
+    if ( SwOszControl::pStk3 && SwOszControl::pStk3->IsLowerOf( _pFlyFrm ) )
+        return true;
+    if ( SwOszControl::pStk4 && SwOszControl::pStk4->IsLowerOf( _pFlyFrm ) )
+        return true;
+    if ( SwOszControl::pStk5 && SwOszControl::pStk5->IsLowerOf( _pFlyFrm ) )
+        return true;
+
+    return false;
+}
+// <--
 
 bool SwOszControl::ChkOsz()
 {
@@ -463,6 +484,11 @@ void SwFlyAtCntFrm::MakeAll()
                 // the section first:
                 lcl_CalcUpperSection( *AnchorFrm() );
                 GetAnchorFrm()->Calc();
+                // --> OD 2004-10-11 #i26945# - additionally format anchor frame
+                // containing the anchor position - typically it's the same as
+                // the anchor frame.
+                GetAnchorFrmContainingAnchPos()->Calc();
+                // <--
             }
 
             const SwFrm* pFooter = GetAnchorFrm()->FindFooterOrHeader();
@@ -474,6 +500,12 @@ void SwFlyAtCntFrm::MakeAll()
             // 'straightforward positioning process' for the frame due to its
             // overlapping with a previous column.
             bool bConsiderWrapInfluenceDueToOverlapPrevCol( false );
+            // <--
+            // --> OD 2004-10-22 #i35911# - boolean, to apply temporarly the
+            // 'straightforward positioning process' for the frame due to fact
+            // that it causes the complete content of its layout environment
+            // to move forward.
+            bool bConsiderWrapInfluenceDueToEmptyEnvironment( false );
             // <--
             do {
                 SWRECTFN( this )
@@ -497,6 +529,24 @@ void SwFlyAtCntFrm::MakeAll()
                     // the section first:
                     lcl_CalcUpperSection( *AnchorFrm() );
                     GetAnchorFrm()->Calc();
+                    // --> OD 2004-10-11 #i26945# - additionally format anchor frame
+                    // containing the anchor position - typically it's the same as
+                    // the anchor frame.
+                    GetAnchorFrmContainingAnchPos()->Calc();
+                    // <--
+                    // --> OD 2004-10-22 #i35911#
+                    if ( GetAnchorFrm()->FindPageFrm()->GetPhyPageNum() >
+                                                GetPageFrm()->GetPhyPageNum() )
+                    {
+                        const SwFrm* pTmpFrm = GetVertPosOrientFrm()->Lower();
+                        if ( !pTmpFrm ||
+                             ( pTmpFrm->IsTxtFrm() &&
+                               static_cast<const SwTxtFrm*>(pTmpFrm)->IsUndersized() ) )
+                        {
+                            bConsiderWrapInfluenceDueToEmptyEnvironment = true;
+                        }
+                    }
+                    // <--
                 }
 
                 if ( aOldPos != (Frm().*fnRect->fnGetPos)() ||
@@ -518,11 +568,17 @@ void SwFlyAtCntFrm::MakeAll()
                       // --> OD 2004-08-25 #i3317#
                       !bConsiderWrapInfluenceDueToOverlapPrevCol &&
                       // <--
+                      // --> OD 2004-10-22 #i35991#
+                      !bConsiderWrapInfluenceDueToEmptyEnvironment &&
+                      // <--
                       GetFmt()->GetDoc()->IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) );
 
             // --> OD 2004-08-25 #i3317# - instead of attribute change apply
             // temporarly the 'straightforward positioning process'.
-            if ( bOsz || bConsiderWrapInfluenceDueToOverlapPrevCol )
+            if ( bOsz || bConsiderWrapInfluenceDueToOverlapPrevCol ||
+                 // --> OD 2004-10-22 #i35991#
+                 bConsiderWrapInfluenceDueToEmptyEnvironment )
+                 // <--
             {
                 SetTmpConsiderWrapInfluence( true );
                 SetRestartLayoutProcess( true );
@@ -545,6 +601,12 @@ bool SwFlyAtCntFrm::IsFormatPossible() const
            !SwOszControl::IsInProgress( this );
 }
 
+// --> OD 2004-11-01 #i36347#
+bool SwFlyAtCntFrm::IsLowerInProgress() const
+{
+    return SwOszControl::IsLowerInProgress( this );
+}
+// <--
 /*************************************************************************
 |*
 |*  FindAnchor() und Hilfsfunktionen.
@@ -1402,7 +1464,7 @@ void SwFlyAtCntFrm::RegisterAtCorrectPage()
 void SwFlyAtCntFrm::MakeObjPos()
 {
     // OD 02.10.2002 #102646#
-    // if fly frame position is valid, nothing is to do, Thus, return
+    // if fly frame position is valid, nothing is to do. Thus, return
     if ( bValidPos )
     {
         return;
@@ -1410,6 +1472,15 @@ void SwFlyAtCntFrm::MakeObjPos()
 
     // OD 2004-03-24 #i26791# - validate position flag here.
     bValidPos = TRUE;
+
+    // --> OD 2004-10-22 #i35911# - no calculation of new position, if
+    // anchored object is marked that it clears its environment and its
+    // environment is already cleared.
+    if ( ClearedEnvironment() && HasClearedEnvironment() )
+    {
+        return;
+    }
+    // <--
 
     // OD 29.10.2003 #113049# - use new class to position object
     objectpositioning::SwToCntntAnchoredObjectPosition
