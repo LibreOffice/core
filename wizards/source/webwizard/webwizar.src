@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webwizar.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 07:00:03 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 07:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,7 +357,7 @@ String WEBERROR + 1
     Text[ portuguese_brazilian ] = "No template for the page content could be found.";
     Text[ japanese ] = "Íß°¼Ş\\¬—p‚ÌÃİÌßÚ°Ä‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB";
     Text[ korean ] = "ÂÊ ±¸¼ºÀ» À§ÇÑ ¼­½ÄÆÄÀÏÀ» Ã£Áö ¸øÇß½À´Ï´Ù.";
-    Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½ÓÃÓÚÒ³ÃæÉèÖÃµÄÑùÊ½¡£";
+    Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½ÓÃÓÚÒ³Ãæ°æÊ½µÄÑùÊ½¡£";
     Text[ chinese_traditional ] = "¨S¦³§ä¨ì­¶­±ª©¦¡ªº¼Ë¦¡¡C";
     Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ŞÇáÈ áÅÚÏÇÏ ÇáÕİÍÉ.";
     Text[ turkish ] = "Sayfa yapısı için şablon bulunamadı.";
@@ -436,7 +436,7 @@ String WEBERROR + 4
     Text[ portuguese_brazilian ] = "An error occurred while reloading the template.";
     Text[ japanese ] = "ÃİÌßÚ°Ä‚ÌXV’†‚ÉA´×°‚ª”­¶‚µ‚Ü‚µ‚½B";
     Text[ korean ] = "¼­½ÄÆÄÀÏÀ» °»½Å½Ã¿¡ ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.";
-    Text[ chinese_simplified ] = "ÔÚ¸üĞÂÑùÊ½Ê±·¢ÉúÒ»¸ö´íÎó¡£";
+    Text[ chinese_simplified ] = "¸üĞÂÑùÊ½Ê±·¢ÉúÒ»¸ö´íÎó¡£";
     Text[ chinese_traditional ] = "¦b§ó·s¼Ë¦¡¤å¥ó®Éµo¥Í¤@­Ó¿ù»~¡C";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÍÏíË ÇáŞÇáÈ.";
     Text[ turkish ] = "Şablon güncellenirken bir hata oluştu.";
@@ -462,7 +462,7 @@ String WEBERROR + 5
     Text[ portuguese_brazilian ] = "An error occurred while applying the styles.";
     Text[ japanese ] = "‘®½À²Ù‚Ì“K—p’†‚ÉA´×°‚ª”­¶‚µ‚Ü‚µ‚½B";
     Text[ korean ] = "¼­½Ä À¯Çü Àû¿ë½Ã ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.";
-    Text[ chinese_simplified ] = "ÔÚÖ¸¶¨Ê¹ÓÃ¸ñÊ½ÑùÊ½Ê±·¢ÉúÒ»¸ö´íÎó¡£";
+    Text[ chinese_simplified ] = "Ö¸¶¨Ê¹ÓÃ¸ñÊ½ÑùÊ½Ê±·¢ÉúÒ»¸ö´íÎó¡£";
     Text[ chinese_traditional ] = "¦b³]©w³o­Ó®æ¦¡¼Ë¦¡®Éµo¥Í¤@­Ó¿ù»~¡C";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÚííä ÃäãÇØ ÇáÊäÓíŞ.";
     Text[ turkish ] = "Format şablonları uygulanırken bir hata oluştu.";
@@ -489,7 +489,7 @@ String WEBERROR + 6
     Text[ portuguese_brazilian ] = "An error occcurred while interpreting the document.";
     Text[ japanese ] = "ÄŞ·­ÒİÄ‚ÌŠm”F’†‚ÉA´×°‚ª”­¶‚µ‚Ü‚µ‚½B";
     Text[ korean ] = "¹®¼­ Æò°¡½Ã ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.";
-    Text[ chinese_simplified ] = "ÔÚ´¦ÀíÎÄµµÊ±·¢ÉúÒ»¸ö´íÎó¡£";
+    Text[ chinese_simplified ] = "´¦ÀíÎÄµµÊ±·¢ÉúÒ»¸ö´íÎó¡£";
     Text[ chinese_traditional ] = "¦b³B²z³o­Ó¤å¥ó®Éµo¥Í¤@­Ó¿ù»~¡C";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊŞííã ÇáãÓÊäÏÇÊ.";
     Text[ turkish ] = "Belgeler değerlendirilirken bir hata oluştu.";
@@ -515,7 +515,7 @@ String WEBERROR + 7
     Text[ portuguese_brazilian ] = "An error occurred during the AutoPilot processing.";
     Text[ japanese ] = "µ°ÄÊß²Û¯Ä‚ÌÀs’†‚ÉA´×°‚ª”­¶‚µ‚Ü‚µ‚½B";
     Text[ korean ] = "ÀÚµ¿ÆÄÀÏ·µ ¼öÇà½Ã ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.";
-    Text[ chinese_simplified ] = "ÔÚÖ´ĞĞ×Ô¶¯ÎÄ¼şÖúÀíÊ±·¢ÉúÒ»¸ö´íÎó¡£";
+    Text[ chinese_simplified ] = "Ö´ĞĞ×Ô¶¯ÎÄ¼şÖúÀíÊ±·¢ÉúÒ»¸ö´íÎó¡£";
     Text[ chinese_traditional ] = "¦b°õ¦æ¦Û°ÊÀÉ®×§U²z®Éµo¥Í¤@­Ó¿ù»~¡C";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊäİíĞ ÇáãÑÔÏ ÇáÂáí.";
     Text[ turkish ] = "OtoPilot çalıştırılırken bir hata oluştu.";
