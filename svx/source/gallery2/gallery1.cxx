@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery1.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-25 14:47:55 $
+ *  last change: $Author: kso $ $Date: 2000-10-31 10:11:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,7 +376,11 @@ void Gallery::ImplLoadSubDirs( const String& rBase, BOOL bReadOnly )
                 {
                     INetURLObject aThmFile;
 
+#if SUPD>611
+                    aThmFile.SetSmartURL( xContentAccess->queryContentIdentifierString() );
+#else
                     aThmFile.SetSmartURL( xContentAccess->queryContentIdentfierString() );
+#endif
 
                     if( aThmFile.GetExtension().CompareIgnoreCaseToAscii( "thm" ) == COMPARE_EQUAL )
                     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-25 14:49:26 $
+ *  last change: $Author: kso $ $Date: 2000-10-31 10:11:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1221,7 +1221,11 @@ BOOL GalleryTheme::InsertDataXChgData( SvDataObjectRef& rxData, ULONG nInsertPos
                                 {
                                     while( xResultSet->next() )
                                     {
+#if SUPD>611
+                                        aURL.SetSmartURL( xContentAccess->queryContentIdentifierString() );
+#else
                                         aURL.SetSmartURL( xContentAccess->queryContentIdentfierString() );
+#endif
                                         bRet = bRet || InsertURL( aURL, nInsertPos );
                                     }
                                 }

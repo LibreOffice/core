@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldocntp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pw $ $Date: 2000-10-10 12:33:08 $
+ *  last change: $Author: kso $ $Date: 2000-10-31 10:10:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,7 +249,11 @@ void SvxHyperlinkNewDocTp::FillDocumentList ()
             {
                 while ( xResultSet->next() )
                 {
+#if SUPD>611
+                    OUString aFileURL = xContentAccess->queryContentIdentifierString();
+#else
                     OUString aFileURL = xContentAccess->queryContentIdentfierString();
+#endif
                     INetURLObject aObj( aFileURL );
 
                     String aTitle;

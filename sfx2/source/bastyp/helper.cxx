@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-23 12:23:18 $
+ *  last change: $Author: kso $ $Date: 2000-10-31 10:09:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,7 +334,11 @@ Sequence < OUString > SfxContentHelper::GetFolderContents( const String& rFolder
             {
                 while ( xResultSet->next() )
                 {
+#if SUPD>611
+                    OUString aId = xContentAccess->queryContentIdentifierString();
+#else
                     OUString aId = xContentAccess->queryContentIdentfierString();
+#endif
                     OUString* pFile = new OUString( aId );
                     pFiles->Insert( pFile, LIST_APPEND );
                 }
@@ -454,7 +458,11 @@ Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const String
                     aRow += '\t';
                     AppendDateTime_Impl( aDT, aRow );
                     aRow += '\t';
+#if SUPD>611
+                    aRow += String( xContentAccess->queryContentIdentifierString() );
+#else
                     aRow += String( xContentAccess->queryContentIdentfierString() );
+#endif
                     aRow += '\t';
                     aRow += bFolder ? '1' : '0';
                     OUString* pRow = new OUString( aRow );
