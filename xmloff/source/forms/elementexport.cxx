@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-28 13:06:55 $
+ *  last change: $Author: fs $ $Date: 2001-03-29 12:19:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,20 +496,15 @@ namespace xmloff
             {   // property names
                 PROPERTY_STATE, PROPERTY_ENABLED, PROPERTY_DROPDOWN, PROPERTY_PRINTABLE, PROPERTY_READONLY, PROPERTY_DEFAULT_STATE, PROPERTY_TABSTOP
             };
-            static sal_Bool nBooleanPropertyAttrDefaults[] =
+            static sal_Bool nBooleanPropertyAttrFlags[] =
             {   // attribute defaults
-                sal_False, sal_False, sal_False, sal_True, sal_False, sal_False, sal_True
-            };
-            static sal_Bool nBooleanPropertySemantics[] =
-            {   // inverse semantic?
-                sal_False, sal_True, sal_False, sal_False, sal_False, sal_False, sal_False
+                BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_FALSE | BOOLATTR_INVERSE_SEMANTICS, BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_TRUE, BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_VOID
             };
         #ifdef DBG_UTIL
             sal_Int32 nIdCount = sizeof(nBooleanPropertyAttributeIds) / sizeof(nBooleanPropertyAttributeIds[0]);
             sal_Int32 nNameCount = sizeof(pBooleanPropertyNames) / sizeof(pBooleanPropertyNames[0]);
-            sal_Int32 nDefaultCount = sizeof(nBooleanPropertyAttrDefaults) / sizeof(nBooleanPropertyAttrDefaults[0]);
-            sal_Int32 nSemanticsCount = sizeof(nBooleanPropertySemantics) / sizeof(nBooleanPropertySemantics[0]);
-            OSL_ENSURE((nIdCount == nNameCount) && (nNameCount == nDefaultCount) && (nDefaultCount == nSemanticsCount),
+            sal_Int32 nFlagsCount = sizeof(nBooleanPropertyAttrFlags) / sizeof(nBooleanPropertyAttrFlags[0]);
+            OSL_ENSURE((nIdCount == nNameCount) && (nNameCount == nFlagsCount),
                 "OControlExport::exportCommonControlAttributes: somebody tampered with the maps (2)!");
         #endif
             for (i=0; i<sizeof(nBooleanPropertyAttributeIds)/sizeof(nBooleanPropertyAttributeIds[0]); ++i)
@@ -519,8 +514,7 @@ namespace xmloff
                         getCommonControlAttributeNamespace(nBooleanPropertyAttributeIds[i]),
                         getCommonControlAttributeName(nBooleanPropertyAttributeIds[i]),
                         pBooleanPropertyNames[i],
-                        nBooleanPropertyAttrDefaults[i],
-                        nBooleanPropertySemantics[i]);
+                        nBooleanPropertyAttrFlags[i]);
         #ifdef DBG_UTIL
                     //  reset the bit for later checking
                     m_nIncludeCommon = m_nIncludeCommon & ~nBooleanPropertyAttributeIds[i];
@@ -695,8 +689,7 @@ namespace xmloff
                 getDatabaseAttributeNamespace(DA_CONVERT_EMPTY),
                 getDatabaseAttributeName(DA_CONVERT_EMPTY),
                 PROPERTY_EMPTY_IS_NULL,
-                sal_False,      // the default
-                sal_False       // no inverse sematics
+                BOOLATTR_DEFAULT_FALSE
                 );
         #ifdef DBG_UTIL
             //  reset the bit for later checking
@@ -751,15 +744,10 @@ namespace xmloff
             {   // property names
                 PROPERTY_STRICTFORMAT, PROPERTY_MULTILINE, PROPERTY_AUTOCOMPLETE, PROPERTY_MULTISELECTION, PROPERTY_DEFAULTBUTTON, PROPERTY_TRISTATE
             };
-            static sal_Bool nBooleanPropertyAttrDefaults[] =
-            {   // attribute defaults
-                sal_False, sal_False, sal_False, sal_False, sal_False, sal_False
-            };
             sal_Int32 nIdCount = sizeof(nBooleanPropertyAttributeIds) / sizeof(nBooleanPropertyAttributeIds[0]);
         #ifdef DBG_UTIL
             sal_Int32 nNameCount = sizeof(pBooleanPropertyNames) / sizeof(pBooleanPropertyNames[0]);
-            sal_Int32 nDefaultCount = sizeof(nBooleanPropertyAttrDefaults) / sizeof(nBooleanPropertyAttrDefaults[0]);
-            OSL_ENSURE((nIdCount == nNameCount) && (nNameCount == nDefaultCount),
+            OSL_ENSURE((nIdCount == nNameCount),
                 "OControlExport::exportSpecialAttributes: somebody tampered with the maps (1)!");
         #endif
             for (i=0; i<nIdCount; ++i)
@@ -769,8 +757,8 @@ namespace xmloff
                         getSpecialAttributeNamespace(nBooleanPropertyAttributeIds[i]),
                         getSpecialAttributeName(nBooleanPropertyAttributeIds[i]),
                         pBooleanPropertyNames[i],
-                        nBooleanPropertyAttrDefaults[i],
-                        sal_False);     // no inverse semantics at all
+                        BOOLATTR_DEFAULT_FALSE  // all of the attributes are defaulted to "false"
+                    );
             #ifdef DBG_UTIL
                 //  reset the bit for later checking
                 m_nIncludeSpecial = m_nIncludeSpecial & ~nBooleanPropertyAttributeIds[i];
@@ -1391,15 +1379,15 @@ namespace xmloff
             {
                 PROPERTY_ALLOWDELETES, PROPERTY_ALLOWINSERTS, PROPERTY_ALLOWUPDATES, PROPERTY_APPLYFILTER, PROPERTY_ESCAPEPROCESSING, PROPERTY_IGNORERESULT
             };
-            static sal_Bool bBooleanPropertyAttrDefaults[] =
+            static sal_Int8 nBooleanPropertyAttrFlags[] =
             {
-                sal_True, sal_True, sal_True, sal_False, sal_True, sal_False
+                BOOLATTR_DEFAULT_TRUE, BOOLATTR_DEFAULT_TRUE, BOOLATTR_DEFAULT_TRUE, BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_TRUE, BOOLATTR_DEFAULT_FALSE
             };
             sal_Int32 nIdCount = sizeof(eBooleanPropertyIds) / sizeof(eBooleanPropertyIds[0]);
         #ifdef DBG_UTIL
             sal_Int32 nNameCount = sizeof(pBooleanPropertyNames) / sizeof(pBooleanPropertyNames[0]);
-            sal_Int32 nDefaultCount = sizeof(bBooleanPropertyAttrDefaults) / sizeof(bBooleanPropertyAttrDefaults[0]);
-            OSL_ENSURE((nIdCount == nNameCount) && (nNameCount == nDefaultCount),
+            sal_Int32 nFlagsCount = sizeof(nBooleanPropertyAttrFlags) / sizeof(nBooleanPropertyAttrFlags[0]);
+            OSL_ENSURE((nIdCount == nNameCount) && (nNameCount == nFlagsCount),
                 "OFormExport::exportAttributes: somebody tampered with the maps (2)!");
         #endif
             for (i=0; i<nIdCount; ++i)
@@ -1407,8 +1395,8 @@ namespace xmloff
                     getFormAttributeNamespace(eBooleanPropertyIds[i]),
                     getFormAttributeName(eBooleanPropertyIds[i]),
                     pBooleanPropertyNames[i],
-                    bBooleanPropertyAttrDefaults[i],
-                    sal_False);
+                    nBooleanPropertyAttrFlags[i]
+                );
         }
 
         // -------------------
@@ -1471,6 +1459,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2001/03/28 13:06:55  fs
+ *  #85427# corrected the default for NavigationBarMode
+ *
  *  Revision 1.12  2001/03/21 16:54:16  jl
  *  Replaced OSL_ENSHURE by OSL_ENSURE
  *
