@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-12 08:12:27 $
+ *  last change: $Author: tl $ $Date: 2001-03-19 16:00:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_SEARCHFLAGS_HPP_
 #include <com/sun/star/util/SearchFlags.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HPP_
+#include <com/sun/star/i18n/TransliterationModules.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
@@ -241,6 +244,7 @@
 #include "swslots.hxx"
 
 using namespace com::sun::star;
+using namespace com::sun::star::i18n;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::util;
 using namespace com::sun::star::uno;
@@ -878,7 +882,10 @@ USHORT SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
     //
     INT32 nSrchFlags = 0;
     if (!bCaseSensitive)
-        nSrchFlags |= SearchFlags::ALL_IGNORE_CASE;
+    {
+        //nSrchFlags |= SearchFlags::ALL_IGNORE_CASE;
+        nTransliterationFlags |= TransliterationModules_IGNORE_CASE;
+    }
     if ( bWordOnly)
         nSrchFlags |= SearchFlags::NORM_WORD_ONLY;
     if ( bLEV_Relaxed)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-12 08:17:20 $
+ *  last change: $Author: tl $ $Date: 2001-03-19 15:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_SEARCHFLAGS_HPP_
 #include <com/sun/star/util/SearchFlags.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HPP_
+#include <com/sun/star/i18n/TransliterationModules.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
@@ -176,6 +179,7 @@ static sal_uInt16 nKey1Pos = USHRT_MAX;
 static sal_uInt16 nKey2Pos = USHRT_MAX;
 
 using namespace com::sun::star;
+using namespace com::sun::star::i18n;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::util;
 using namespace ::rtl;
@@ -486,7 +490,10 @@ void lcl_SelectSameStrings(SwWrtShell& rSh, BOOL bWordOnly, BOOL bCaseSensitive)
     //
     INT32 nSrchFlags = 0;
     if (!bCaseSensitive)
-        nSrchFlags |= SearchFlags::ALL_IGNORE_CASE;
+    {
+        //nSrchFlags |= SearchFlags::ALL_IGNORE_CASE;
+        nTransliterationFlags |= TransliterationModules_IGNORE_CASE;
+    }
     if ( bWordOnly)
         nSrchFlags |= SearchFlags::NORM_WORD_ONLY;
     if ( bLEV_Relaxed)
@@ -1803,6 +1810,9 @@ void    SwAuthMarkModalDlg::Apply()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/03/12 08:17:20  tl
+    SearcParam => SearchOptions and implied changes
+
     Revision 1.5  2001/02/13 10:14:44  os
     #83826# String::CreateFromAscii added
 
