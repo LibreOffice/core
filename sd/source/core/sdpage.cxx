@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-08 11:40:25 $
+ *  last change: $Author: sj $ $Date: 2001-03-12 15:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1698,9 +1698,11 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit)
             pObj = GetPresObject(nObjKind[0], TRUE);
             InsertPresObj(pObj, nObjKind[0], TRUE, aRect0, bInit, aObjList);
             pObj = GetPresObject(nObjKind[0], TRUE);
-            pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
-            pObj->SetItem( SdrTextAutoGrowHeightItem(FALSE) );
-
+            if ( pObj )
+            {
+                pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
+                pObj->SetItem( SdrTextAutoGrowHeightItem(FALSE) );
+            }
             Size aLayoutSize ( GetSize() );
             aLayoutSize.Height() -= GetUppBorder() + GetLwrBorder();
             aSize.Height() = long ( aRect0.GetSize().Height() * 0.47 );
@@ -1711,10 +1713,12 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit)
             pObj = GetPresObject(nObjKind[1], TRUE);
             InsertPresObj(pObj, nObjKind[1], TRUE, aRect1, bInit, aObjList);
             pObj = GetPresObject(nObjKind[1], TRUE);
-            pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
-            pObj->SetItem( SdrTextAutoGrowHeightItem(FALSE) );
-            pObj->SetLogicRect( aRect1 );
-
+            if ( pObj )
+            {
+                pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
+                pObj->SetItem( SdrTextAutoGrowHeightItem(FALSE) );
+                pObj->SetLogicRect( aRect1 );
+            }
             aSize.Height() = aRect0.GetSize().Height();
             Point aPos( aTitleRect.TopLeft() );
             aPos.Y() += long ( aSize.Height() * 0.53 );
@@ -1736,9 +1740,11 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit)
             pObj = GetPresObject(nObjKind[0], TRUE);
             InsertPresObj(pObj, nObjKind[0], TRUE, aRect0, bInit, aObjList);
             pObj = GetPresObject(nObjKind[0], TRUE);
-            pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
-            pObj->SetItem( SdrTextAutoGrowHeightItem(FALSE) );
-
+            if ( pObj )
+            {
+                pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
+                pObj->SetItem( SdrTextAutoGrowHeightItem(FALSE) );
+            }
             Size aLayoutSize ( GetSize() );
             aLayoutSize.Height() -= GetUppBorder() + GetLwrBorder();
             aSize.Height() = aRect0.GetSize().Height();
@@ -1749,8 +1755,11 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit)
             pObj = GetPresObject(nObjKind[1], TRUE);
             InsertPresObj(pObj, nObjKind[1], TRUE, aRect1, bInit, aObjList);
             pObj = GetPresObject(nObjKind[1], TRUE);
-            pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
-            pObj->SetItem( SdrTextAutoGrowHeightItem(FALSE) );
+            if ( pObj )
+            {
+                pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
+                pObj->SetItem( SdrTextAutoGrowHeightItem(FALSE) );
+            }
         }
         break;
 
@@ -1764,8 +1773,11 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit)
             pObj = GetPresObject(nObjKind[1], TRUE);
             InsertPresObj(pObj, nObjKind[1], TRUE, aRect1, bInit, aObjList);
             pObj = GetPresObject(nObjKind[1], TRUE);
-            pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
-            pObj->SetItem( SdrTextAutoGrowHeightItem(FALSE) );
+            if ( pObj )
+            {
+                pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
+                pObj->SetItem( SdrTextAutoGrowHeightItem(FALSE) );
+            }
         }
         break;
 
@@ -1789,8 +1801,11 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit)
             pObj = GetPresObject(nObjKind[2], TRUE);
             InsertPresObj(pObj, nObjKind[2], TRUE, aRect2, bInit, aObjList);
             pObj = GetPresObject(nObjKind[2], TRUE);
-            pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
-            pObj->SetItem( SdrTextAutoGrowHeightItem(FALSE) );
+            if ( pObj )
+            {
+                pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
+                pObj->SetItem( SdrTextAutoGrowHeightItem(FALSE) );
+            }
         }
         break;
 
