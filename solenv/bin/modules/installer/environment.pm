@@ -2,9 +2,9 @@
 #
 #   $RCSfile: environment.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 18:15:28 $
+#   last change: $Author: rt $ $Date: 2004-07-06 14:56:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -132,6 +132,7 @@ sub set_global_environment_variables
     $installer::globals::compiler = $environment->{'OUTPATH'};
 
     if ( $ENV{'UPDMINOR'} ) { $installer::globals::minor = $ENV{'UPDMINOR'}; }
+    if ( $ENV{'LAST_MINOR'} ) { $installer::globals::lastminor = $ENV{'LAST_MINOR'}; }
 
     if ( $ENV{'PROEXT'} ) { $installer::globals::pro = 1; }
     if ( $ENV{'SOLAR_JAVA'} ) { $installer::globals::solarjava = 1; }
