@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-07 14:12:46 $
+ *  last change: $Author: ama $ $Date: 2001-11-13 14:20:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,16 @@ void SwFlyFreeFrm::NotifyBackground( SwPageFrm *pPage,
 
 void SwFlyFreeFrm::MakeAll()
 {
-    if ( !GetAnchor() || IsLocked() || IsColLocked() || !GetPage() )
+    if ( !GetAnchor() || IsLocked() || IsColLocked() )
+        return;
+    if( !GetPage() && GetAnchor() && GetAnchor()->IsInFly() )
+    {
+        SwFlyFrm* pFly = GetAnchor()->FindFlyFrm();
+        SwPageFrm *pPage = pFly ? pFly->FindPageFrm() : NULL;
+        if( pPage )
+            pPage->SwPageFrm::AppendFly( this );
+    }
+    if( !GetPage() )
         return;
 
     Lock(); //Der Vorhang faellt
@@ -553,20 +562,34 @@ void SwPageFrm::AppendFly( SwFlyFrm *pNew )
 
     //Flys die im Cntnt sitzen beachten wir nicht weiter.
     if ( pNew->IsFlyInCntFrm() )
-    {
         InvalidateFlyInCnt();
-        return;
+    else
+    {
+        InvalidateFlyCntnt();
+
+        if ( !pSortedObjs )
+            pSortedObjs = new SwSortDrawObjs();
+        if ( !pSortedObjs->Insert( pObj ) )
+            ASSERT( FALSE, "Fly nicht in Sorted eingetragen." );
+
+        ((SwFlyFreeFrm*)pNew)->SetPage( this );
+        pNew->InvalidatePage( this );
     }
-    InvalidateFlyCntnt();
 
-    if ( !pSortedObjs )
-        pSortedObjs = new SwSortDrawObjs();
-    if ( !pSortedObjs->Insert( pObj ) )
-        ASSERT( FALSE, "Fly nicht in Sorted eingetragen." );
-
-    ((SwFlyFreeFrm*)pNew)->SetPage( this );
-    pNew->InvalidatePage( this );
-
+    if( pNew->GetDrawObjs() )
+    {
+        SwDrawObjs &rObjs = *pNew->GetDrawObjs();
+        for ( USHORT i = 0; i < rObjs.Count(); ++i )
+        {
+            SdrObject *pO = rObjs[i];
+            if( pO->IsWriterFlyFrame() )
+            {
+                SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+                if( pFly->IsFlyFreeFrm() && !((SwFlyFreeFrm*)pFly)->GetPage() )
+                    SwPageFrm::AppendFly( pFly );
+            }
+        }
+    }
 
     //fix(3018): Kein pNew->Calc() oder sonstiges hier.
     //Code enfernt in flylay.cxx Rev 1.51

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-07 14:11:15 $
+ *  last change: $Author: ama $ $Date: 2001-11-13 14:20:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,9 +379,17 @@ FASTBOOL SwOszControl::ChkOsz()
 
 void SwFlyAtCntFrm::MakeAll()
 {
-    if ( !SwOszControl::IsInProgress( this ) && !IsLocked() && !IsColLocked() &&
-         GetPage() )
+    if ( !SwOszControl::IsInProgress( this ) && !IsLocked() && !IsColLocked() )
     {
+        if( !GetPage() && GetAnchor() && GetAnchor()->IsInFly() )
+        {
+            SwFlyFrm* pFly = GetAnchor()->FindFlyFrm();
+            SwPageFrm *pPage = pFly ? pFly->FindPageFrm() : NULL;
+            if( pPage )
+                pPage->SwPageFrm::AppendFly( this );
+        }
+        if( GetPage() )
+        {
         //Den Anker muessen wir zwischendurch natuerlich Formatieren, damit
         //Repaints usw. stimmen sollte er natuerlich trotzdem Invalid bleiben.
         //Jetzt Stufe 2: Damit Repaints stimmen muessen alle Frms wieder Invalidiert
@@ -393,42 +401,25 @@ void SwFlyAtCntFrm::MakeAll()
         //wohl fuer TxtFrms geeignet.
         //Jetzt Stufe 3: einfach ein globales Flag und schon flaggen sie sich
         //selbst.
-        bSetCompletePaintOnInvalidate = TRUE;
-        {
-            SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
-            const SwFmtFrmSize &rFrmSz = GetFmt()->GetFrmSize();
-            if( rFrmSz.GetHeightPercent() != 0xFF &&
-                rFrmSz.GetHeightPercent() >= 100 )
+            bSetCompletePaintOnInvalidate = TRUE;
             {
-                pFmt->LockModify();
-                SwFmtSurround aMain( pFmt->GetSurround() );
-                if ( aMain.GetSurround() == SURROUND_NONE )
+                SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
+                const SwFmtFrmSize &rFrmSz = GetFmt()->GetFrmSize();
+                if( rFrmSz.GetHeightPercent() != 0xFF &&
+                    rFrmSz.GetHeightPercent() >= 100 )
                 {
-                    aMain.SetSurround( SURROUND_THROUGHT );
-                    pFmt->SetAttr( aMain );
+                    pFmt->LockModify();
+                    SwFmtSurround aMain( pFmt->GetSurround() );
+                    if ( aMain.GetSurround() == SURROUND_NONE )
+                    {
+                        aMain.SetSurround( SURROUND_THROUGHT );
+                        pFmt->SetAttr( aMain );
+                    }
+                    pFmt->UnlockModify();
                 }
-                pFmt->UnlockModify();
             }
-        }
-        SwOszControl aOszCntrl( this );
+            SwOszControl aOszCntrl( this );
 
-        if( GetAnchor()->IsInSct() )
-        {
-            SwSectionFrm *pSct = GetAnchor()->FindSctFrm();
-            pSct->Calc();
-        }
-
-        GetAnchor()->Calc();
-        SwFrm* pFooter = GetAnchor()->FindFooterOrHeader();
-        if( pFooter && !pFooter->IsFooterFrm() )
-            pFooter = NULL;
-        FASTBOOL bOsz = FALSE;
-        FASTBOOL bExtra = Lower() && Lower()->IsColumnFrm();
-
-        do {
-            Point aOldPos( Frm().Pos() );
-            SwFlyFreeFrm::MakeAll();
-            BOOL bPosChg = aOldPos != Frm().Pos();
             if( GetAnchor()->IsInSct() )
             {
                 SwSectionFrm *pSct = GetAnchor()->FindSctFrm();
@@ -436,65 +427,76 @@ void SwFlyAtCntFrm::MakeAll()
             }
 
             GetAnchor()->Calc();
-            if ( aOldPos != Frm().Pos() || ( !GetValidPosFlag() &&
-                 ( pFooter || bPosChg ) ) )
-                bOsz = aOszCntrl.ChkOsz();
-            if( bExtra && Lower() && !Lower()->GetValidPosFlag() )
-            {  // Wenn ein mehrspaltiger Rahmen wg. Positionswechsel ungueltige
-                // Spalten hinterlaesst, so drehen wir lieber hier eine weitere
-                // Runde und formatieren unseren Inhalt via FormatWidthCols nochmal.
-                _InvalidateSize();
-                bExtra = FALSE; // Sicherhaltshalber gibt es nur eine Ehrenrunde.
-            }
-        } while ( !IsValid() && !bOsz );
+            SwFrm* pFooter = GetAnchor()->FindFooterOrHeader();
+            if( pFooter && !pFooter->IsFooterFrm() )
+                pFooter = NULL;
+            FASTBOOL bOsz = FALSE;
+            FASTBOOL bExtra = Lower() && Lower()->IsColumnFrm();
 
-        if ( bOsz )
-        {
-            SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
-            pFmt->LockModify();
-            SwFmtSurround aMain( pFmt->GetSurround() );
-            // Im Notfall setzen wir automatisch positionierte Rahmen mit
-            // Rekursion auf Durchlauf, das duerfte beruhigend wirken.
-            if( IsAutoPos() && aMain.GetSurround() != SURROUND_THROUGHT )
-            {
-                aMain.SetSurround( SURROUND_THROUGHT );
-                pFmt->SetAttr( aMain );
-            }
-            else
-            {
-                SwFmtVertOrient aOrient( pFmt->GetVertOrient() );
-                aOrient.SetVertOrient( VERT_TOP );
-                pFmt->SetAttr( aOrient );
-                //Wenn der Rahmen auf "Kein Umlauf" steht, versuchen wir es mal
-                //mit Seitenumlauf.
-                if ( aMain.GetSurround() == SURROUND_NONE )
+            do {
+                Point aOldPos( Frm().Pos() );
+                SwFlyFreeFrm::MakeAll();
+                BOOL bPosChg = aOldPos != Frm().Pos();
+                if( GetAnchor()->IsInSct() )
                 {
-                    aMain.SetSurround( SURROUND_PARALLEL );
+                    SwSectionFrm *pSct = GetAnchor()->FindSctFrm();
+                    pSct->Calc();
+                }
+
+                GetAnchor()->Calc();
+                if ( aOldPos != Frm().Pos() || ( !GetValidPosFlag() &&
+                    ( pFooter || bPosChg ) ) )
+                    bOsz = aOszCntrl.ChkOsz();
+                if( bExtra && Lower() && !Lower()->GetValidPosFlag() )
+                {  // Wenn ein mehrspaltiger Rahmen wg. Positionswechsel ungueltige
+                    // Spalten hinterlaesst, so drehen wir lieber hier eine weitere
+                    // Runde und formatieren unseren Inhalt via FormatWidthCols nochmal.
+                    _InvalidateSize();
+                    bExtra = FALSE; // Sicherhaltshalber gibt es nur eine Ehrenrunde.
+                }
+            } while ( !IsValid() && !bOsz );
+
+            if ( bOsz )
+            {
+                SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
+                pFmt->LockModify();
+                SwFmtSurround aMain( pFmt->GetSurround() );
+                // Im Notfall setzen wir automatisch positionierte Rahmen mit
+                // Rekursion auf Durchlauf, das duerfte beruhigend wirken.
+                if( IsAutoPos() && aMain.GetSurround() != SURROUND_THROUGHT )
+                {
+                    aMain.SetSurround( SURROUND_THROUGHT );
                     pFmt->SetAttr( aMain );
                 }
-            }
-            pFmt->UnlockModify();
+                else
+                {
+                    SwFmtVertOrient aOrient( pFmt->GetVertOrient() );
+                    aOrient.SetVertOrient( VERT_TOP );
+                    pFmt->SetAttr( aOrient );
+                    //Wenn der Rahmen auf "Kein Umlauf" steht, versuchen wir es mal
+                    //mit Seitenumlauf.
+                    if ( aMain.GetSurround() == SURROUND_NONE )
+                    {
+                        aMain.SetSurround( SURROUND_PARALLEL );
+                        pFmt->SetAttr( aMain );
+                    }
+                }
+                pFmt->UnlockModify();
 
-            _InvalidatePos();
-            SwFlyFreeFrm::MakeAll();
-            GetAnchor()->Calc();
-            if ( !GetValidPosFlag() )
-            {
+                _InvalidatePos();
                 SwFlyFreeFrm::MakeAll();
                 GetAnchor()->Calc();
+                if ( !GetValidPosFlag() )
+                {
+                    SwFlyFreeFrm::MakeAll();
+                    GetAnchor()->Calc();
+                }
+                //Osz auf jeden fall zum Stehen bringen.
+                bValidPos = bValidSize = bValidPrtArea = TRUE;
             }
-            //Osz auf jeden fall zum Stehen bringen.
-            bValidPos = bValidSize = bValidPrtArea = TRUE;
+            bSetCompletePaintOnInvalidate = FALSE;
         }
-        bSetCompletePaintOnInvalidate = FALSE;
     }
-
-/* MA 18. Apr. 94: Bei Spalten kann der Fly durchaus Y-Maessig ueber dem
- * Anker stehen!
-    ASSERT( Frm().Top() >= GetAnchor()->Frm().Top(),
-            "Achtung: Rahmen auf Hoehenflug." );
-*/
-
 }
 
 /*************************************************************************
