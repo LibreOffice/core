@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:22:35 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 08:45:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1427,12 +1427,24 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
                                         else
                                             pPrt->SetOrientation(ORIENTATION_PORTRAIT);
                                  }
+
                                  if (bSetPaperSz )
                                  {
-                                        Size aSize = pStPage->Frm().SSize();
-
-                                        // Let VCL decide which printer paper should be used for printing
-                                        pPrt->SetPaperSizeUser( aSize );
+                                    Size aSize = pStPage->Frm().SSize();
+                                    if ( bLandScp && bSetOrient )
+                                    {
+                                            // landscape is always interpreted as a rotation by 90 degrees !
+                                            // this leads to non WYSIWIG but at least it prints!
+                                            // #i21775#
+                                            long nWidth = aSize.Width();
+                                            aSize.Width() = aSize.Height();
+                                            aSize.Height() = nWidth;
+                                    }
+                                    Paper ePaper = SvxPaperInfo::GetSvPaper(aSize,MAP_TWIP,TRUE);
+                                    if ( PAPER_USER == ePaper )
+                                            pPrt->SetPaperSizeUser( aSize );
+                                    else
+                                            pPrt->SetPaper( ePaper );
                                  }
                             }
                         }
