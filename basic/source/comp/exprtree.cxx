@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exprtree.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 18:53:05 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:47:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,8 +242,15 @@ SbiExprNode* SbiExpression::Term()
     // ab hier sind keine Keywords zugelassen!
     if( pParser->IsKwd( eTok ) )
     {
-        pParser->Error( SbERR_SYNTAX );
-        bError = TRUE;
+        if( pParser->IsCompatible() && eTok == INPUT )
+        {
+            eTok = SYMBOL;
+        }
+        else
+        {
+            pParser->Error( SbERR_SYNTAX );
+            bError = TRUE;
+        }
     }
 
     if( DoParametersFollow( pParser, eCurExpr, eTok = eNextTok ) )
