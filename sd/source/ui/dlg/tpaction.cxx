@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:30:05 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:05:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,9 +119,6 @@
 #endif
 #ifndef _SVX_COLRITEM_HXX //autogen
 #include <svx/colritem.hxx>
-#endif
-#ifndef _SVDOOLE2_HXX //autogen
-#include <svx/svdoole2.hxx>
 #endif
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
@@ -240,21 +237,10 @@ SdTPAction::SdTPAction( Window* pWindow, const SfxItemSet& rInAttrs ) :
 
         aFtAction       ( this, SdResId( FT_ACTION ) ),
         aLbAction       ( this, SdResId( LB_ACTION ) ),
-        aFlEffect       ( this, SdResId( FL_EFFECT ) ),
-        aFtAnimation    ( this, SdResId( FT_ANIMATION ) ),
-        aLbEffect       ( this, SdResId( LB_EFFECT ) ),
-        aFtSpeed        ( this, SdResId( FT_SPEED ) ),
-        aRbtSlow        ( this, SdResId( RBT_SLOW ) ),
-        aRbtMedium      ( this, SdResId( RBT_MEDIUM ) ),
-        aRbtFast        ( this, SdResId( RBT_FAST ) ),
-        aTsbSound       ( this, SdResId( TSB_SOUND ) ),
-        aEdtSound       ( this, SdResId( EDT_SOUND ) ),
         aBtnSearch      ( this, SdResId( BTN_SEARCH ) ),
-        aTsbPlayFull    ( this, SdResId( TSB_PLAY_FULL ) ),
         aFtTree         ( this, SdResId( FT_TREE ) ),
         aLbTree         ( this, SdResId( LB_TREE ) ),
         aLbTreeDocument ( this, SdResId( LB_TREE_DOCUMENT ) ),
-        aLbOLEAction    ( this, SdResId( LB_OLE_ACTION ) ),
         aFlSeparator    ( this, SdResId( FL_SEPARATOR ) ),
         aEdtBookmark    ( this, SdResId( EDT_BOOKMARK ) ),
         aEdtDocument    ( this, SdResId( EDT_DOCUMENT ) ),
@@ -269,16 +255,30 @@ SdTPAction::SdTPAction( Window* pWindow, const SfxItemSet& rInAttrs ) :
 {
     FreeResource();
 
-    aTsbSound.SetClickHdl( LINK( this, SdTPAction, ClickSoundHdl ) );
-    aLbEffect.SetSelectHdl( LINK( this, SdTPAction, ChangeEffectHdl ) );
     aBtnSearch.SetClickHdl( LINK( this, SdTPAction, ClickSearchHdl ) );
     aBtnSeek.SetClickHdl( LINK( this, SdTPAction, ClickSearchHdl ) );
 
     // diese Page braucht ExchangeSupport
     SetExchangeSupport();
 
-    pCurrentEffects = new List;
     pCurrentActions = new List;
+    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_NONE, LIST_APPEND);
+    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_PREVPAGE, LIST_APPEND);
+    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_NEXTPAGE, LIST_APPEND);
+    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_FIRSTPAGE, LIST_APPEND);
+    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_LASTPAGE, LIST_APPEND);
+    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_BOOKMARK, LIST_APPEND);
+    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_DOCUMENT, LIST_APPEND);
+    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_PROGRAM, LIST_APPEND);
+    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_MACRO, LIST_APPEND);
+    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_STOPPRESENTATION, LIST_APPEND);
+
+    // Action-Listbox fuellen
+    for (ULONG nAction = 0; nAction < pCurrentActions->Count(); nAction++)
+    {
+        USHORT nRId = GetClickActionSdResId((presentation::ClickAction)(ULONG)pCurrentActions->GetObject(nAction));
+        aLbAction.InsertEntry( String( SdResId( nRId ) ) );
+    }
 
     aLbAction.SetSelectHdl( LINK( this, SdTPAction, ClickActionHdl ) );
     aLbTree.SetSelectHdl( LINK( this, SdTPAction, SelectTreeHdl ) );
@@ -288,13 +288,14 @@ SdTPAction::SdTPAction( Window* pWindow, const SfxItemSet& rInAttrs ) :
     // Controls enablen
     aFtAction.Show();
     aLbAction.Show();
+
+    ClickActionHdl( this );
 }
 
 // -----------------------------------------------------------------------
 
 SdTPAction::~SdTPAction()
 {
-    delete pCurrentEffects;
     delete pCurrentActions;
 }
 
@@ -321,186 +322,6 @@ void SdTPAction::SetView( const ::sd::View* pSdView )
 
 void SdTPAction::Construct()
 {
-    // OLE-Actionlistbox auffuellen
-    SdrOle2Obj* pOleObj = NULL;
-    SdrGrafObj* pGrafObj = NULL;
-    BOOL        bDisableAll = FALSE;
-    BOOL        bOLEAction = FALSE;
-
-    if ( pView->AreObjectsMarked() )
-    {
-        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-        SdrObject* pObj;
-
-        if (rMarkList.GetMarkCount() == 1)
-        {
-            SdrMark* pMark = rMarkList.GetMark(0);
-            pObj = pMark->GetObj();
-
-            UINT32 nInv = pObj->GetObjInventor();
-            UINT16 nSdrObjKind = pObj->GetObjIdentifier();
-
-            if (nInv == SdrInventor && nSdrObjKind == OBJ_OLE2)
-            {
-                pOleObj = (SdrOle2Obj*) pObj;
-            }
-            else if (nInv == SdrInventor && nSdrObjKind == OBJ_GRAF)
-            {
-                pGrafObj = (SdrGrafObj*) pObj;
-            }
-//          // VCXControl ?
-//          else if( pObj->IsA( TYPE( VCSbxDrawObject ) ) )
-//          {
-//              bDisableAll = TRUE;
-//          }
-        }
-    }
-    if( pGrafObj )
-    {
-        bOLEAction = TRUE;
-
-        aVerbVector.push_back( 0 );
-        aLbOLEAction.InsertEntry( MnemonicGenerator::EraseAllMnemonicChars( String( SdResId( STR_EDIT_OBJ ) ) ) );
-    }
-    else if( pOleObj )
-    {
-        uno::Reference < embed::XEmbeddedObject > xObj = pOleObj->GetObjRef();
-        if ( xObj.is() )
-        {
-            bOLEAction = TRUE;
-            uno::Sequence < embed::VerbDescriptor > aVerbs;
-            try
-            {
-                aVerbs = xObj->getSupportedVerbs();
-            }
-            catch ( embed::NeedsRunningStateException& )
-            {
-                xObj->changeState( embed::EmbedStates::RUNNING );
-                aVerbs = xObj->getSupportedVerbs();
-            }
-
-            for( sal_Int32 i=0; i<aVerbs.getLength(); i++ )
-            {
-                embed::VerbDescriptor aVerb = aVerbs[i];
-                if( aVerb.VerbAttributes & embed::VerbAttributes::MS_VERBATTR_ONCONTAINERMENU )
-                {
-                    String aTmp( aVerb.VerbName );
-                    aVerbVector.push_back( aVerb.VerbID );
-                    aLbOLEAction.InsertEntry( MnemonicGenerator::EraseAllMnemonicChars( aTmp ) );
-                }
-            }
-        }
-    }
-
-    // auf einer Masterpage ?
-    BOOL bOnMaster = FALSE;
-    if (pView->GetPageViewPvNum(0)->GetPage()->IsMasterPage())
-    {
-        bOnMaster = TRUE;
-    }
-
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_NONE, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_FADE_FROM_LEFT, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_FADE_FROM_UPPERLEFT, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_FADE_FROM_TOP, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_FADE_FROM_UPPERRIGHT, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_FADE_FROM_RIGHT, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_FADE_FROM_LOWERRIGHT, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_FADE_FROM_BOTTOM, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_FADE_FROM_LOWERLEFT, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_FADE_TO_CENTER, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_FADE_FROM_CENTER, LIST_APPEND);
-    //pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_FROM_LEFT, LIST_APPEND);
-    //pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_FROM_TOP, LIST_APPEND);
-    //pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_FROM_RIGHT, LIST_APPEND);
-    //pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_FROM_BOTTOM, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_VERTICAL_STRIPES, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_HORIZONTAL_STRIPES, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_VERTICAL_LINES, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_HORIZONTAL_LINES, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_VERTICAL_CHECKERBOARD, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_HORIZONTAL_CHECKERBOARD, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_CLOCKWISE, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_COUNTERCLOCKWISE, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_CLOSE_VERTICAL, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_CLOSE_HORIZONTAL, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_OPEN_VERTICAL, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_OPEN_HORIZONTAL, LIST_APPEND);
-    //pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_PATH
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_SPIRALIN_LEFT, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_SPIRALIN_RIGHT, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_SPIRALOUT_LEFT, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_SPIRALOUT_RIGHT, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_DISSOLVE, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_WAVYLINE_FROM_LEFT, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_WAVYLINE_FROM_TOP, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_WAVYLINE_FROM_RIGHT, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_WAVYLINE_FROM_BOTTOM, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_TO_LEFT, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_TO_UPPERLEFT, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_TO_TOP, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_TO_UPPERRIGHT, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_TO_RIGHT, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_TO_LOWERRIGHT, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_TO_BOTTOM, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_TO_LOWERLEFT, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_SHORT_TO_LEFT, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_SHORT_TO_UPPERLEFT, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_SHORT_TO_TOP, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_SHORT_TO_UPPERRIGHT, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_SHORT_TO_RIGHT, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_SHORT_TO_LOWERRIGHT, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_SHORT_TO_BOTTOM, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_SHORT_TO_LOWERLEFT, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_RANDOM, LIST_APPEND);
-
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_NONE, LIST_APPEND);
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_PREVPAGE, LIST_APPEND);
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_NEXTPAGE, LIST_APPEND);
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_FIRSTPAGE, LIST_APPEND);
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_LASTPAGE, LIST_APPEND);
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_BOOKMARK, LIST_APPEND);
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_DOCUMENT, LIST_APPEND);
-    if (!bOnMaster)
-        pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_INVISIBLE, LIST_APPEND);
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_SOUND, LIST_APPEND);
-    if (bOLEAction && aLbOLEAction.GetEntryCount())
-        pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_VERB, LIST_APPEND);
-    if (!bOnMaster)
-        pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_VANISH, LIST_APPEND);
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_PROGRAM, LIST_APPEND);
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_MACRO, LIST_APPEND);
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_STOPPRESENTATION, LIST_APPEND);
-
-    // Action-Listbox fuellen
-    for (ULONG nAction = 0; nAction < pCurrentActions->Count(); nAction++)
-    {
-        USHORT nRId = GetClickActionSdResId((presentation::ClickAction)(ULONG)pCurrentActions->
-                                                GetObject(nAction));
-        aLbAction.InsertEntry( String( SdResId( nRId ) ) );
-    }
-
-
-    // Effekte-Listbox fuellen
-    for (ULONG nEffect = 0; nEffect < pCurrentEffects->Count(); nEffect++)
-    {
-        presentation::AnimationEffect eEffect = (presentation::AnimationEffect)(ULONG)pCurrentEffects->
-                                            GetObject(nEffect);
-        USHORT nRId = GetAnimationEffectSdResId(eEffect);
-        aLbEffect.InsertEntry( String( SdResId( nRId ) ) );
-    }
-
-
-    if( bDisableAll )
-    {
-        aFtAction.Disable();
-        aLbAction.Disable();
-    }
-    else
-    {
-        ChangeEffectHdl( this );
-        ClickActionHdl( this );
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -526,9 +347,7 @@ BOOL SdTPAction::FillItemSet( SfxItemSet& rAttrs )
         rAttrs.InvalidateItem( ATTR_ACTION_FILENAME );
     else
     {
-        if( eCA == presentation::ClickAction_SOUND ||
-            eCA == presentation::ClickAction_VANISH ||
-            eCA == presentation::ClickAction_DOCUMENT ||
+        if( eCA == presentation::ClickAction_DOCUMENT ||
             eCA == presentation::ClickAction_PROGRAM )
             aFileName = ::URIHelper::SmartRelToAbs( aFileName, FALSE,
                                                     INetURLObject::WAS_ENCODED,
@@ -536,73 +355,6 @@ BOOL SdTPAction::FillItemSet( SfxItemSet& rAttrs )
 
         rAttrs.Put( SfxStringItem( ATTR_ACTION_FILENAME, aFileName ) );
         bModified = TRUE;
-    }
-
-    if( eCA == presentation::ClickAction_VANISH )
-    {
-        // Effekt
-        if( aLbEffect.GetSelectEntryCount() &&
-            aLbEffect.GetSavedValue() != aLbEffect.GetSelectEntryPos() )
-        {
-            rAttrs.Put( SfxAllEnumItem( ATTR_ACTION_EFFECT, GetActualAnimationEffect() ) );
-            bModified = TRUE;
-        }
-        else
-            rAttrs.InvalidateItem( ATTR_ACTION_EFFECT );
-
-        // Speed
-        if( aRbtSlow.IsChecked() && aRbtSlow.GetSavedValue() != TRUE )
-        {
-            rAttrs.Put( SfxAllEnumItem( ATTR_ACTION_EFFECTSPEED, (presentation::AnimationSpeed) presentation::AnimationSpeed_SLOW ) );
-            bModified = TRUE;
-        }
-        else if( aRbtMedium.IsChecked() && aRbtMedium.GetSavedValue() != TRUE )
-        {
-            rAttrs.Put( SfxAllEnumItem( ATTR_ACTION_EFFECTSPEED, (presentation::AnimationSpeed) presentation::AnimationSpeed_MEDIUM ) );
-            bModified = TRUE;
-        }
-        else if( aRbtFast.IsChecked() && aRbtFast.GetSavedValue() != TRUE )
-        {
-            rAttrs.Put( SfxAllEnumItem( ATTR_ACTION_EFFECTSPEED, (presentation::AnimationSpeed) presentation::AnimationSpeed_FAST ) );
-            bModified = TRUE;
-        }
-        else
-            rAttrs.InvalidateItem( ATTR_ACTION_EFFECTSPEED );
-
-        // Sound On
-        TriState eState = aTsbSound.GetState();
-        if( eState != aTsbSound.GetSavedValue() )
-        {
-            if( eState == STATE_DONTKNOW )
-                rAttrs.InvalidateItem( ATTR_ACTION_SOUNDON );
-            else if( eState == STATE_CHECK )
-            {
-                rAttrs.Put( SfxBoolItem( ATTR_ACTION_SOUNDON, TRUE ) );
-                bModified = TRUE;
-            }
-            else
-            {
-                rAttrs.Put( SfxBoolItem( ATTR_ACTION_SOUNDON, FALSE ) );
-                bModified = TRUE;
-            }
-        }
-        // vollstaendig abspielen
-        eState = aTsbPlayFull.GetState();
-        if( eState != aTsbPlayFull.GetSavedValue() )
-        {
-            if( eState == STATE_DONTKNOW )
-                rAttrs.InvalidateItem( ATTR_ACTION_PLAYFULL );
-            else if( eState == STATE_CHECK )
-            {
-                rAttrs.Put( SfxBoolItem( ATTR_ACTION_PLAYFULL, TRUE ) );
-                bModified = TRUE;
-            }
-            else
-            {
-                rAttrs.Put( SfxBoolItem( ATTR_ACTION_PLAYFULL, FALSE ) );
-                bModified = TRUE;
-            }
-        }
     }
 
     return( bModified );
@@ -625,70 +377,8 @@ void SdTPAction::Reset( const SfxItemSet& rAttrs )
     else
         aLbAction.SetNoSelection();
 
-    // aEdtSound
-    if( rAttrs.GetItemState( ATTR_ACTION_FILENAME ) != SFX_ITEM_DONTCARE )
-    {
-        aFileName = ( ( const SfxStringItem& ) rAttrs.
-                    Get( ATTR_ACTION_FILENAME ) ).GetValue();
-        SetEditText( aFileName );
-    }
-
-    // Effekt
-    if( rAttrs.GetItemState( ATTR_ACTION_EFFECT ) != SFX_ITEM_DONTCARE )
-    {
-        presentation::AnimationEffect eAE = (presentation::AnimationEffect) ( ( const SfxAllEnumItem& ) rAttrs.
-                    Get( ATTR_ACTION_EFFECT ) ).GetValue();
-        SetActualAnimationEffect( eAE );
-    }
-    else
-        aLbEffect.SetNoSelection();
-
-    // Speed
-    if( rAttrs.GetItemState( ATTR_ACTION_EFFECTSPEED ) != SFX_ITEM_DONTCARE )
-    {
-        presentation::AnimationSpeed eAS = (presentation::AnimationSpeed) ( ( const SfxAllEnumItem& ) rAttrs.
-                    Get( ATTR_ACTION_EFFECTSPEED ) ).GetValue();
-
-        if( eAS == presentation::AnimationSpeed_SLOW )
-            aRbtSlow.Check();
-        else if( eAS == presentation::AnimationSpeed_MEDIUM )
-            aRbtMedium.Check();
-        else if( eAS == presentation::AnimationSpeed_FAST )
-            aRbtFast.Check();
-    }
-
-    // Sound on
-    if( rAttrs.GetItemState( ATTR_ACTION_SOUNDON ) != SFX_ITEM_DONTCARE )
-    {
-        aTsbSound.EnableTriState( FALSE );
-        if( ( ( const SfxBoolItem& ) rAttrs.Get( ATTR_ACTION_SOUNDON ) ).GetValue() )
-            aTsbSound.SetState( STATE_CHECK );
-        else
-            aTsbSound.SetState( STATE_NOCHECK );
-    }
-    else
-        aTsbSound.SetState( STATE_DONTKNOW );
-
-    // vollstaendig abspielen
-    if( SFX_ITEM_DONTCARE != rAttrs.GetItemState( ATTR_ACTION_PLAYFULL ) )
-    {
-        aTsbPlayFull.EnableTriState( FALSE );
-        if( ( ( const SfxBoolItem& ) rAttrs.Get( ATTR_ACTION_PLAYFULL ) ).GetValue() )
-            aTsbPlayFull.SetState( STATE_CHECK );
-        else
-            aTsbPlayFull.SetState( STATE_NOCHECK );
-    }
-    else
-        aTsbPlayFull.SetState( STATE_DONTKNOW );
-
     switch( eCA )
     {
-        case presentation::ClickAction_VANISH:
-        {
-            ChangeEffectHdl( this );
-        }
-        break;
-
         case presentation::ClickAction_BOOKMARK:
         {
             if( !aLbTree.SelectEntry( aFileName ) )
@@ -709,13 +399,6 @@ void SdTPAction::Reset( const SfxItemSet& rAttrs )
     ClickActionHdl( this );
 
     aLbAction.SaveValue();
-    aLbEffect.SaveValue();
-    aRbtSlow.SaveValue();
-    aRbtMedium.SaveValue();
-    aRbtFast.SaveValue();
-    aEdtSound.SaveValue();
-    aTsbSound.SaveValue();
-    aTsbPlayFull.SaveValue();
 }
 
 // -----------------------------------------------------------------------
@@ -767,13 +450,10 @@ void SdTPAction::OpenFileDialog()
 {
     // Soundpreview nur fuer Interaktionen mit Sound
     presentation::ClickAction eCA = GetActualClickAction();
-    BOOL bSound = ( eCA == presentation::ClickAction_SOUND ||
-                    eCA == presentation::ClickAction_VANISH );
     BOOL bPage = ( eCA == presentation::ClickAction_BOOKMARK );
     BOOL bDocument = ( eCA == presentation::ClickAction_DOCUMENT ||
                        eCA == presentation::ClickAction_PROGRAM );
     BOOL bMacro = ( eCA == presentation::ClickAction_MACRO );
-    //BOOL bObject = ( eCA == presentation::ClickAction_VERB );
 
     if( bPage )
     {
@@ -784,22 +464,7 @@ void SdTPAction::OpenFileDialog()
     {
         String aFile( GetEditText() );
 
-        if( bSound )
-        {
-            SdOpenSoundFileDialog   aFileDialog;
-
-            if( !aFile.Len() )
-                aFile = SvtPathOptions().GetGraphicPath();
-
-            aFileDialog.SetPath( aFile );
-
-            if( aFileDialog.Execute() == ERRCODE_NONE )
-            {
-                aFile = aFileDialog.GetPath();
-                SetEditText( aFile );
-            }
-        }
-        else if (bMacro)
+        if (bMacro)
         {
             Window* pOldWin = Application::GetDefDialogParent();
             Application::SetDefDialogParent( this );
@@ -845,56 +510,6 @@ void SdTPAction::OpenFileDialog()
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SdTPAction, ChangeEffectHdl, void *, EMPTYARG )
-{
-    USHORT nPos = GetActualAnimationEffect();
-    if( nPos == presentation::AnimationEffect_NONE &&
-        aLbEffect.GetSelectEntryCount() > 0 )
-    {
-        aRbtSlow.Disable();
-        aRbtMedium.Disable();
-        aRbtFast.Disable();
-    }
-    else
-    {
-        aRbtSlow.Enable();
-        aRbtMedium.Enable();
-        aRbtFast.Enable();
-
-        // Damit wenigstens ein Radiobutton gechecked wird:
-        if( !aRbtSlow.IsChecked() &&
-            !aRbtMedium.IsChecked() &&
-            !aRbtFast.IsChecked() )
-        {
-            aRbtSlow.Check();
-        }
-    }
-
-    return( 0L );
-}
-
-//------------------------------------------------------------------------
-
-IMPL_LINK( SdTPAction, ClickSoundHdl, void *, EMPTYARG )
-{
-    if( aTsbSound.GetState() == STATE_NOCHECK)
-    {
-        aEdtSound.Disable();
-        aBtnSearch.Disable();
-        aTsbPlayFull.Disable();
-    }
-    else
-    {
-        aEdtSound.Enable();
-        aBtnSearch.Enable();
-        aTsbPlayFull.Enable();
-    }
-
-    return( 0L );
-}
-
-//------------------------------------------------------------------------
-
 IMPL_LINK( SdTPAction, ClickSearchHdl, void *, EMPTYARG )
 {
     OpenFileDialog();
@@ -918,23 +533,12 @@ IMPL_LINK( SdTPAction, ClickActionHdl, void *, EMPTYARG )
         case presentation::ClickAction_FIRSTPAGE:
         case presentation::ClickAction_LASTPAGE:
         case presentation::ClickAction_STOPPRESENTATION:
+        default:
             aFtTree.Hide();
             aLbTree.Hide();
             aLbTreeDocument.Hide();
-            aLbOLEAction.Hide();
-
-            aFlEffect.Hide();
-            aFtAnimation.Hide();
-            aLbEffect.Hide();
-            aFtSpeed.Hide();
-            aRbtSlow.Hide();
-            aRbtMedium.Hide();
-            aRbtFast.Hide();
-            aTsbPlayFull.Hide();
-            aTsbSound.Hide();
 
             aFlSeparator.Hide();
-            aEdtSound.Hide();
             aEdtBookmark.Hide();
             aEdtDocument.Hide();
             aEdtProgram.Hide();
@@ -943,39 +547,20 @@ IMPL_LINK( SdTPAction, ClickActionHdl, void *, EMPTYARG )
             aBtnSeek.Hide();
             break;
 
-        case presentation::ClickAction_SOUND:
         case presentation::ClickAction_PROGRAM:
         case presentation::ClickAction_MACRO:
             aFtTree.Hide();
             aLbTree.Hide();
             aLbTreeDocument.Hide();
-            aLbOLEAction.Hide();
-
-            aFlEffect.Hide();
-            aFtAnimation.Hide();
-            aLbEffect.Hide();
-            aFtSpeed.Hide();
-            aRbtSlow.Hide();
-            aRbtMedium.Hide();
-            aRbtFast.Hide();
-            aTsbPlayFull.Hide();
-            aTsbSound.Hide();
 
             aEdtDocument.Hide();
 
             if( eCA == presentation::ClickAction_MACRO )
             {
-                aEdtSound.Hide();
                 aEdtProgram.Hide();
             }
             else if( eCA == presentation::ClickAction_PROGRAM )
             {
-                aEdtSound.Hide();
-                aEdtMacro.Hide();
-            }
-            else if( eCA == presentation::ClickAction_SOUND )
-            {
-                aEdtProgram.Hide();
                 aEdtMacro.Hide();
             }
 
@@ -985,63 +570,15 @@ IMPL_LINK( SdTPAction, ClickActionHdl, void *, EMPTYARG )
 
         case presentation::ClickAction_DOCUMENT:
             aLbTree.Hide();
-            aLbOLEAction.Hide();
-
-            aFlEffect.Hide();
-            aFtAnimation.Hide();
-            aLbEffect.Hide();
-            aFtSpeed.Hide();
-            aRbtSlow.Hide();
-            aRbtMedium.Hide();
-            aRbtFast.Hide();
-            aTsbPlayFull.Hide();
-            aEdtSound.Hide();
-            aTsbSound.Hide();
 
             aEdtProgram.Hide();
             aEdtMacro.Hide();
             aEdtBookmark.Hide();
-            aBtnSeek.Hide();
-            break;
-
-        case presentation::ClickAction_VERB:
-            aLbTree.Hide();
-            aLbTreeDocument.Hide();
-
-            aFlEffect.Hide();
-            aFtAnimation.Hide();
-            aLbEffect.Hide();
-            aFtSpeed.Hide();
-            aRbtSlow.Hide();
-            aRbtMedium.Hide();
-            aRbtFast.Hide();
-            aTsbPlayFull.Hide();
-            aEdtSound.Hide();
-            aTsbSound.Hide();
-
-            aFlSeparator.Hide();
-            aEdtBookmark.Hide();
-            aEdtDocument.Hide();
-            aEdtProgram.Hide();
-            aEdtMacro.Hide();
-            aBtnSearch.Hide();
             aBtnSeek.Hide();
             break;
 
         case presentation::ClickAction_BOOKMARK:
             aLbTreeDocument.Hide();
-            aLbOLEAction.Hide();
-
-            aFlEffect.Hide();
-            aFtAnimation.Hide();
-            aLbEffect.Hide();
-            aFtSpeed.Hide();
-            aRbtSlow.Hide();
-            aRbtMedium.Hide();
-            aRbtFast.Hide();
-            aTsbPlayFull.Hide();
-            aEdtSound.Hide();
-            aTsbSound.Hide();
 
             aEdtDocument.Hide();
             aEdtProgram.Hide();
@@ -1053,7 +590,6 @@ IMPL_LINK( SdTPAction, ClickActionHdl, void *, EMPTYARG )
             aFtTree.Hide();
             aLbTree.Hide();
             aLbTreeDocument.Hide();
-            aLbOLEAction.Hide();
 
             aFlSeparator.Hide();
             aEdtBookmark.Hide();
@@ -1075,15 +611,6 @@ IMPL_LINK( SdTPAction, ClickActionHdl, void *, EMPTYARG )
         case presentation::ClickAction_LASTPAGE:
         case presentation::ClickAction_STOPPRESENTATION:
             // none
-            break;
-
-        case presentation::ClickAction_SOUND:
-            aFlSeparator.Show();
-            aEdtSound.Show();
-            aEdtSound.Enable();
-            aBtnSearch.Show();
-            aBtnSearch.Enable();
-            aFlSeparator.SetText( String( SdResId( STR_EFFECTDLG_SOUND ) ) );
             break;
 
         case presentation::ClickAction_PROGRAM:
@@ -1118,13 +645,6 @@ IMPL_LINK( SdTPAction, ClickActionHdl, void *, EMPTYARG )
             CheckFileHdl( NULL );
             break;
 
-        case presentation::ClickAction_VERB:
-            aFtTree.Show();
-            aLbOLEAction.Show();
-
-            aFtTree.SetText( String( SdResId( STR_EFFECTDLG_ACTION ) ) );
-            break;
-
         case presentation::ClickAction_BOOKMARK:
             UpdateTree();
 
@@ -1137,24 +657,6 @@ IMPL_LINK( SdTPAction, ClickActionHdl, void *, EMPTYARG )
 
             aFtTree.SetText( String( SdResId( STR_EFFECTDLG_JUMP ) ) );
             aFlSeparator.SetText( String( SdResId( STR_EFFECTDLG_PAGE_OBJECT ) ) );
-            break;
-
-        case presentation::ClickAction_VANISH:
-            aFlEffect.Show();
-            aFtAnimation.Show();
-            aLbEffect.Show();
-            aFtSpeed.Show();
-            aRbtSlow.Show();
-            aRbtMedium.Show();
-            aRbtFast.Show();
-            aTsbPlayFull.Show();
-            aEdtSound.Show();
-            aTsbSound.Show();
-
-            aBtnSearch.Show();
-
-            ClickSoundHdl( NULL );
-            ChangeEffectHdl( NULL );
             break;
     }
 
@@ -1243,27 +745,6 @@ void SdTPAction::SetActualClickAction( presentation::ClickAction eCA )
 
 //------------------------------------------------------------------------
 
-presentation::AnimationEffect SdTPAction::GetActualAnimationEffect()
-{
-    presentation::AnimationEffect eAE = presentation::AnimationEffect_NONE;
-
-    USHORT nPos = aLbEffect.GetSelectEntryPos();
-    if (nPos != LISTBOX_ENTRY_NOTFOUND)
-        eAE = (presentation::AnimationEffect)(ULONG)pCurrentEffects->GetObject((ULONG)nPos);
-    return( eAE );
-}
-
-//------------------------------------------------------------------------
-
-void SdTPAction::SetActualAnimationEffect( presentation::AnimationEffect eAE )
-{
-    USHORT nPos = (USHORT)pCurrentEffects->GetPos((void*)(ULONG)eAE);
-    DBG_ASSERT(nPos != LIST_ENTRY_NOTFOUND, "unbekannter Effekt");
-    aLbEffect.SelectEntryPos(nPos);
-}
-
-//------------------------------------------------------------------------
-
 void SdTPAction::SetEditText( String const & rStr )
 {
     presentation::ClickAction   eCA = GetActualClickAction();
@@ -1276,9 +757,6 @@ void SdTPAction::SetEditText( String const & rStr )
             if( rStr.GetTokenCount( DOCUMENT_TOKEN ) == 2 )
                 aText = rStr.GetToken( 0, DOCUMENT_TOKEN );
 
-            // fallthrough intended
-        case presentation::ClickAction_SOUND:
-        case presentation::ClickAction_VANISH:
         case presentation::ClickAction_PROGRAM:
             INetURLObject aURL( aText );
 
@@ -1293,18 +771,6 @@ void SdTPAction::SetEditText( String const & rStr )
     // set the string to the corresponding control
     switch( eCA )
     {
-        case presentation::ClickAction_SOUND:
-        case presentation::ClickAction_VANISH:
-            aEdtSound.SetText( aText );
-            break;
-        case presentation::ClickAction_VERB:
-        {
-            ::std::vector< long >::iterator aFound( ::std::find( aVerbVector.begin(), aVerbVector.end(), rStr.ToInt32() ) );
-
-            if( aFound != aVerbVector.end() )
-                aLbOLEAction.SelectEntryPos( static_cast< short >( aFound - aVerbVector.begin() ) );
-        }
-        break;
         case presentation::ClickAction_PROGRAM:
             aEdtProgram.SetText( aText );
             break;
@@ -1360,21 +826,6 @@ String SdTPAction::GetEditText( BOOL bFullDocDestination )
 
     switch( eCA )
     {
-        case presentation::ClickAction_SOUND:
-        case presentation::ClickAction_VANISH:
-            aStr =  aEdtSound.GetText();
-            break;
-
-        case presentation::ClickAction_VERB:
-        {
-            const USHORT nPos = aLbOLEAction.GetSelectEntryPos();
-
-            if( nPos < aVerbVector.size() )
-                aStr = UniString::CreateFromInt32( aVerbVector[ nPos ] );
-
-            return( aStr );
-        }
-
         case presentation::ClickAction_DOCUMENT:
             aStr = aEdtDocument.GetText();
             break;
@@ -1433,93 +884,9 @@ USHORT SdTPAction::GetClickActionSdResId( presentation::ClickAction eCA )
         case presentation::ClickAction_DOCUMENT:         return STR_CLICK_ACTION_DOCUMENT;
         case presentation::ClickAction_PROGRAM:          return STR_CLICK_ACTION_PROGRAM;
         case presentation::ClickAction_MACRO:            return STR_CLICK_ACTION_MACRO;
-        case presentation::ClickAction_INVISIBLE:        return STR_CLICK_ACTION_INVISIBLE;
-        case presentation::ClickAction_SOUND:            return STR_CLICK_ACTION_SOUND;
-        case presentation::ClickAction_VERB:             return STR_CLICK_ACTION_VERB;
-        case presentation::ClickAction_VANISH:           return STR_CLICK_ACTION_VANISH;
         case presentation::ClickAction_STOPPRESENTATION: return STR_CLICK_ACTION_STOPPRESENTATION;
         default: DBG_ERROR( "Keine StringResource fuer ClickAction vorhanden!" );
     }
     return( 0 );
 }
-
-//------------------------------------------------------------------------
-
-USHORT SdTPAction::GetAnimationEffectSdResId( presentation::AnimationEffect eAE )
-{
-    switch( eAE )
-    {
-        case presentation::AnimationEffect_NONE:                    return STR_EFFECT_NONE;
-        case presentation::AnimationEffect_FADE_FROM_LEFT:          return STR_EFFECT_FADE_FROM_L;
-        case presentation::AnimationEffect_FADE_FROM_UPPERLEFT:     return STR_EFFECT_FADE_FROM_UL;
-        case presentation::AnimationEffect_FADE_FROM_TOP:           return STR_EFFECT_FADE_FROM_T;
-        case presentation::AnimationEffect_FADE_FROM_UPPERRIGHT:    return STR_EFFECT_FADE_FROM_UR;
-        case presentation::AnimationEffect_FADE_FROM_RIGHT:         return STR_EFFECT_FADE_FROM_R;
-        case presentation::AnimationEffect_FADE_FROM_LOWERRIGHT:    return STR_EFFECT_FADE_FROM_LR;
-        case presentation::AnimationEffect_FADE_FROM_BOTTOM:        return STR_EFFECT_FADE_FROM_B;
-        case presentation::AnimationEffect_FADE_FROM_LOWERLEFT:     return STR_EFFECT_FADE_FROM_LL;
-        case presentation::AnimationEffect_MOVE_FROM_LEFT:          return 0;
-        case presentation::AnimationEffect_MOVE_FROM_UPPERLEFT:     return 0;
-        case presentation::AnimationEffect_MOVE_FROM_TOP:           return 0;
-        case presentation::AnimationEffect_MOVE_FROM_UPPERRIGHT:    return 0;
-        case presentation::AnimationEffect_MOVE_FROM_RIGHT:         return 0;
-        case presentation::AnimationEffect_MOVE_FROM_LOWERRIGHT:    return 0;
-        case presentation::AnimationEffect_MOVE_FROM_BOTTOM:        return 0;
-        case presentation::AnimationEffect_MOVE_FROM_LOWERLEFT:     return 0;
-        case presentation::AnimationEffect_FADE_TO_CENTER:          return STR_EFFECT_FADE_TO_CENTER;
-        case presentation::AnimationEffect_FADE_FROM_CENTER:        return STR_EFFECT_FADE_FROM_CENTER;
-        case presentation::AnimationEffect_VERTICAL_STRIPES:        return STR_EFFECT_VERTICAL_STRIPES;
-        case presentation::AnimationEffect_HORIZONTAL_STRIPES:      return STR_EFFECT_HORIZONTAL_STRIPES;
-        case presentation::AnimationEffect_VERTICAL_LINES:          return STR_EFFECT_VERTICAL_LINES;
-        case presentation::AnimationEffect_HORIZONTAL_LINES:        return STR_EFFECT_HORIZONTAL_LINES;
-        case presentation::AnimationEffect_VERTICAL_CHECKERBOARD:   return STR_EFFECT_VERTICAL_CHECKERBOARD;
-        case presentation::AnimationEffect_HORIZONTAL_CHECKERBOARD: return STR_EFFECT_HORIZONTAL_CHECKERBOARD;
-        case presentation::AnimationEffect_CLOCKWISE:               return STR_EFFECT_CLOCKWISE;
-        case presentation::AnimationEffect_COUNTERCLOCKWISE:        return STR_EFFECT_COUNTERCLOCKWISE;
-        case presentation::AnimationEffect_CLOSE_VERTICAL:          return STR_EFFECT_CLOSE_VERTICAL;
-        case presentation::AnimationEffect_CLOSE_HORIZONTAL:        return STR_EFFECT_CLOSE_HORIZONTAL;
-        case presentation::AnimationEffect_OPEN_VERTICAL:           return STR_EFFECT_OPEN_VERTICAL;
-        case presentation::AnimationEffect_OPEN_HORIZONTAL:         return STR_EFFECT_OPEN_HORIZONTAL;
-        case presentation::AnimationEffect_PATH:                    return 0;
-        case presentation::AnimationEffect_MOVE_TO_LEFT:            return STR_EFFECT_MOVE_TO_L;
-        case presentation::AnimationEffect_MOVE_TO_UPPERLEFT:       return STR_EFFECT_MOVE_TO_UL;
-        case presentation::AnimationEffect_MOVE_TO_TOP:             return STR_EFFECT_MOVE_TO_T;
-        case presentation::AnimationEffect_MOVE_TO_UPPERRIGHT:      return STR_EFFECT_MOVE_TO_UR;
-        case presentation::AnimationEffect_MOVE_TO_RIGHT:           return STR_EFFECT_MOVE_TO_R;
-        case presentation::AnimationEffect_MOVE_TO_LOWERRIGHT:      return STR_EFFECT_MOVE_TO_LR;
-        case presentation::AnimationEffect_MOVE_TO_BOTTOM:          return STR_EFFECT_MOVE_TO_B;
-        case presentation::AnimationEffect_MOVE_TO_LOWERLEFT:       return STR_EFFECT_MOVE_TO_LL;
-        case presentation::AnimationEffect_MOVE_SHORT_TO_LEFT:      return STR_EFFECT_MOVE_S_TO_L;
-        case presentation::AnimationEffect_MOVE_SHORT_TO_UPPERLEFT: return STR_EFFECT_MOVE_S_TO_UL;
-        case presentation::AnimationEffect_MOVE_SHORT_TO_TOP:       return STR_EFFECT_MOVE_S_TO_T;
-        case presentation::AnimationEffect_MOVE_SHORT_TO_UPPERRIGHT:return STR_EFFECT_MOVE_S_TO_UR;
-        case presentation::AnimationEffect_MOVE_SHORT_TO_RIGHT:     return STR_EFFECT_MOVE_S_TO_R;
-        case presentation::AnimationEffect_MOVE_SHORT_TO_LOWERRIGHT:return STR_EFFECT_MOVE_S_TO_LR;
-        case presentation::AnimationEffect_MOVE_SHORT_TO_BOTTOM:    return STR_EFFECT_MOVE_S_TO_B;
-        case presentation::AnimationEffect_MOVE_SHORT_TO_LOWERLEFT: return STR_EFFECT_MOVE_S_TO_LL;
-        case presentation::AnimationEffect_SPIRALIN_LEFT:           return STR_EFFECT_SPIRALIN_L;
-        case presentation::AnimationEffect_SPIRALIN_RIGHT:          return STR_EFFECT_SPIRALIN_R;
-        case presentation::AnimationEffect_SPIRALOUT_LEFT:          return STR_EFFECT_SPIRALOUT_L;
-        case presentation::AnimationEffect_SPIRALOUT_RIGHT:         return STR_EFFECT_SPIRALOUT_R;
-        case presentation::AnimationEffect_DISSOLVE:                return STR_EFFECT_DISSOLVE;
-        case presentation::AnimationEffect_WAVYLINE_FROM_LEFT:      return STR_EFFECT_WAVYLINE_FROM_L;
-        case presentation::AnimationEffect_WAVYLINE_FROM_RIGHT:     return STR_EFFECT_WAVYLINE_FROM_R;
-        case presentation::AnimationEffect_WAVYLINE_FROM_TOP:       return STR_EFFECT_WAVYLINE_FROM_T;
-        case presentation::AnimationEffect_WAVYLINE_FROM_BOTTOM:    return STR_EFFECT_WAVYLINE_FROM_B;
-        case presentation::AnimationEffect_RANDOM:                  return STR_EFFECT_RANDOM;
-        case presentation::AnimationEffect_LASER_FROM_LEFT:         return 0;
-        case presentation::AnimationEffect_LASER_FROM_TOP:          return 0;
-        case presentation::AnimationEffect_LASER_FROM_RIGHT:        return 0;
-        case presentation::AnimationEffect_LASER_FROM_BOTTOM:       return 0;
-        case presentation::AnimationEffect_LASER_FROM_UPPERLEFT:    return 0;
-        case presentation::AnimationEffect_LASER_FROM_UPPERRIGHT:   return 0;
-        case presentation::AnimationEffect_LASER_FROM_LOWERLEFT:    return 0;
-        case presentation::AnimationEffect_LASER_FROM_LOWERRIGHT:   return 0;
-
-        default:
-            DBG_ERROR( "Keine StringResource fuer AnimationEffect vorhanden!" );
-    }
-    return( 0 );
-}
-
 
