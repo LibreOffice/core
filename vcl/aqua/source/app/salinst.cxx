@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pluby $ $Date: 2001-01-03 21:29:22 $
+ *  last change: $Author: pluby $ $Date: 2001-01-04 22:11:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,8 +330,11 @@ SalVirtualDevice* SalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
 {
     SalVirtualDevice *pVirDev = new SalVirtualDevice;
 
-    // Cache values for when SalVirtualDevice::GetGraphics() is invoked
-    pVirDev->maVirDevData.mnBitCount = nBitCount;
+    // Cache values for when SalVirtualDevice::GetGraphics() is invoked.
+    // Note that we force the GWorld to a 32 bit pixel depth so that the
+    // QuickDraw routines can smooth out images when copying the GWorld's
+    // pixels to a window.
+    pVirDev->maVirDevData.mnBitCount = 32;
     pVirDev->maVirDevData.mnWidth = nDX;
     pVirDev->maVirDevData.mnHeight = nDY;
 
