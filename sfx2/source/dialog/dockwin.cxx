@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-30 13:53:59 $
+ *  last change: $Author: mba $ $Date: 2001-12-07 17:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -721,6 +721,13 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
     {
         bFloatMode = !bFloatMode;
         SetFloatingMode( bFloatMode );
+        if ( bFloatMode )
+        {
+            if ( pImp->aWinState.Len() )
+                GetFloatingWindow()->SetWindowState( pImp->aWinState );
+            else
+                GetFloatingWindow()->SetOutputSizePixel( GetFloatingSize() );
+        }
     }
 
     // check if window allows floating mode at all
