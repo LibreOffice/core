@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hjs $ $Date: 2003-09-25 10:49:15 $
+ *  last change: $Author: rt $ $Date: 2003-10-30 10:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -948,7 +948,7 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
 
                 const Size aBorder = pSh->GetOut()->PixelToLogic( pSh->GetBrowseBorder() );
                 long nWidth = nWidthArea - 2 * ( IsVertical() ?
-                                           aBorder.Width() : aBorder.Height() );
+                                           aBorder.Height() : aBorder.Width() );
                 nWidth -= (Prt().*fnRect->fnGetLeft)();
                 nWidth -= rAttrs.CalcRightLine();
                 nWidth = Max( nMinWidth, nWidth );
