@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsc.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-17 16:27:43 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:47:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "DrawViewShell.hxx"
+
 #ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
 #endif
@@ -112,16 +114,27 @@
 #include "strings.hrc"
 #include "helpids.h"
 #include "misc.hxx"
-#include "sdwindow.hxx"
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
 #include "imapinfo.hxx"
+#ifndef SD_FU_TEMPLATE_HXX
 #include "futempl.hxx"
+#endif
+#ifndef SD_FU_SELECTION_HXX
 #include "fusel.hxx"
+#endif
 #include "sdresid.hxx"
-#include "drviewsh.hxx"
 #include "drawdoc.hxx"
-#include "docshell.hxx"
+#include "DrawDocShell.hxx"
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
-#include "brkdlg.hxx"
+#endif
+#ifndef SD_BREAK_DLG_HXX
+#include "BreakDlg.hxx"
+#endif
+
+namespace sd {
 
 #define MIN_ACTIONS_FOR_DIALOG  5000    // bei mehr als 1600 Metaobjekten
                                         // wird beim Aufbrechen ein Dialog
@@ -132,7 +145,7 @@
 |*
 \************************************************************************/
 
-void SdDrawViewShell::FuTemp03(SfxRequest& rReq)
+void DrawViewShell::FuTemp03(SfxRequest& rReq)
 {
     USHORT nSId = rReq.GetSlot();
     switch( nSId )
@@ -182,7 +195,7 @@ void SdDrawViewShell::FuTemp03(SfxRequest& rReq)
                 pDlg->SetEditHelpId( HID_SD_NAMEDIALOG_OBJECT );
 
                 pDlg->SetText( aTitle );
-                pDlg->SetCheckNameHdl( LINK( this, SdDrawViewShell, NameObjectHdl ) );
+                pDlg->SetCheckNameHdl( LINK( this, DrawViewShell, NameObjectHdl ) );
 
                 if( pDlg->Execute() == RET_OK )
                 {
@@ -440,7 +453,7 @@ void SdDrawViewShell::FuTemp03(SfxRequest& rReq)
                 else
                 {
                     // mit Dialog aufbrechen
-                    SdBreakDlg aDlg( pWindow, pDrView, GetDocSh(), nCount, nAnz );
+                    BreakDlg aDlg( pWindow, pDrView, GetDocSh(), nCount, nAnz );
                     aDlg.Execute();
                 }
             }
@@ -621,7 +634,7 @@ void SdDrawViewShell::FuTemp03(SfxRequest& rReq)
                     break;
                 }
 
-                SfxAllItemSet aSet(pDoc->GetPool());
+                SfxAllItemSet aSet(GetDoc()->GetPool());
 
                 SfxStringItem aStyleNameItem( SID_STYLE_EDIT, pStyleSheet->GetName() );
                 aSet.Put(aStyleNameItem);
@@ -634,7 +647,7 @@ void SdDrawViewShell::FuTemp03(SfxRequest& rReq)
 
             if( rReq.GetArgs() )
             {
-                pFuActual = new FuTemplate( this, pWindow, pDrView, pDoc, rReq );
+                pFuActual = new FuTemplate( this, pWindow, pDrView, GetDoc(), rReq );
                 if( rReq.GetSlot() == SID_STYLE_APPLY )
                     GetViewFrame()->GetBindings().Invalidate( SID_STYLE_APPLY );
                 Cancel();
@@ -695,7 +708,7 @@ void SdDrawViewShell::FuTemp03(SfxRequest& rReq)
 |*
 \************************************************************************/
 
-USHORT SdDrawViewShell::GetIdBySubId( USHORT nSId )
+USHORT DrawViewShell::GetIdBySubId( USHORT nSId )
 {
     USHORT nMappedSId = 0;
     switch( nSId )
@@ -895,7 +908,7 @@ USHORT SdDrawViewShell::GetIdBySubId( USHORT nSId )
 |*
 \************************************************************************/
 
-void SdDrawViewShell::MapSlot( USHORT nSId )
+void DrawViewShell::MapSlot( USHORT nSId )
 {
     USHORT nMappedSId = GetIdBySubId( nSId );
 
@@ -912,7 +925,7 @@ void SdDrawViewShell::MapSlot( USHORT nSId )
 |*
 \************************************************************************/
 
-void SdDrawViewShell::UpdateToolboxImages( SfxItemSet &rSet, BOOL bPermanent )
+void DrawViewShell::UpdateToolboxImages( SfxItemSet &rSet, BOOL bPermanent )
 {
     if( !bPermanent )
     {
@@ -943,7 +956,7 @@ void SdDrawViewShell::UpdateToolboxImages( SfxItemSet &rSet, BOOL bPermanent )
 |*
 \************************************************************************/
 
-USHORT SdDrawViewShell::GetMappedSlot( USHORT nSId )
+USHORT DrawViewShell::GetMappedSlot( USHORT nSId )
 {
     USHORT nSlot = 0;
     USHORT nId = GetArrayId( nSId );
@@ -966,7 +979,7 @@ USHORT SdDrawViewShell::GetMappedSlot( USHORT nSId )
 |*
 \************************************************************************/
 
-USHORT SdDrawViewShell::GetArrayId( USHORT nSId )
+USHORT DrawViewShell::GetArrayId( USHORT nSId )
 {
     for( int i = 0; i < SLOTARRAY_COUNT; i += 2 )
     {
@@ -984,7 +997,7 @@ USHORT SdDrawViewShell::GetArrayId( USHORT nSId )
 |*
 \************************************************************************/
 
-void SdDrawViewShell::UpdateIMapDlg( SdrObject* pObj )
+void DrawViewShell::UpdateIMapDlg( SdrObject* pObj )
 {
     if( ( pObj->ISA( SdrGrafObj ) || pObj->ISA( SdrOle2Obj ) ) && !pDrView->IsTextEdit() &&
          GetViewFrame()->HasChildWindow( SvxIMapDlgChildWindow::GetChildWindowId() ) )
@@ -992,13 +1005,13 @@ void SdDrawViewShell::UpdateIMapDlg( SdrObject* pObj )
         Graphic     aGraphic;
         ImageMap*   pIMap = NULL;
         TargetList* pTargetList = NULL;
-        SdIMapInfo* pIMapInfo = pDoc->GetIMapInfo( pObj );
+        SdIMapInfo* pIMapInfo = GetDoc()->GetIMapInfo( pObj );
 
         // Grafik vom Objekt besorgen
         if ( pObj->ISA( SdrGrafObj ) )
             aGraphic = ( (SdrGrafObj*) pObj )->GetGraphic();
         else
-            aGraphic = pDoc->GetGraphicFromOle2Obj( (const SdrOle2Obj*) pObj );
+            aGraphic = GetDoc()->GetGraphicFromOle2Obj( (const SdrOle2Obj*) pObj );
 
         if ( pIMapInfo )
         {
@@ -1026,12 +1039,14 @@ void SdDrawViewShell::UpdateIMapDlg( SdrObject* pObj )
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( SdDrawViewShell, NameObjectHdl, SvxNameDialog*, pDialog )
+IMPL_LINK( DrawViewShell, NameObjectHdl, SvxNameDialog*, pDialog )
 {
     String aName;
 
     if( pDialog )
         pDialog->GetName( aName );
 
-    return( ( !aName.Len() || ( pDoc && !pDoc->GetObj( aName ) ) ) ? 1 : 0 );
+    return( ( !aName.Len() || ( GetDoc() && !GetDoc()->GetObj( aName ) ) ) ? 1 : 0 );
 }
+
+} // end of namespace sd
