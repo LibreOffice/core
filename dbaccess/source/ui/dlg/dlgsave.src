@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:28:18 $
+ *  last change: $Author: kz $ $Date: 2001-06-15 21:53:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,4 +435,5 @@ ModalDialog DLG_SAVE_AS
     Text[ catalan ] = "Guardar como";
     Text[ finnish ] = "Tallenna nimellä";
 };
+
 
