@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-13 09:00:06 $
+ *  last change: $Author: sab $ $Date: 2002-03-14 15:37:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef SC_UNOGUARD_HXX
 #include "unoguard.hxx"
 #endif
+#ifndef SC_HINTS_HXX
+#include "hints.hxx"
+#endif
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX
 #include <unotools/accessiblestatesethelper.hxx>
@@ -88,6 +91,9 @@
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETABLEMODELCHANGETYPE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
 #endif
 
 #ifndef _RTL_UUID_H_
@@ -118,16 +124,18 @@ ScAccessibleSpreadsheet::ScAccessibleSpreadsheet(
     mpViewShell(pViewShell),
     mpMarkedRanges(NULL),
     mpSortedMarkedCells(NULL),
+    maVisCells(GetVisCells(GetVisArea(pViewShell, eSplitPos))),
     meSplitPos(eSplitPos),
     mbHasSelection(sal_False)
 {
     if (pViewShell)
     {
+        pViewShell->AddAccessibilityObject(*this);
+
         maActiveCell = pViewShell->GetViewData()->GetCurPos();
-        mpViewShell->AddAccessibilityObject(*this);
-        mbHasSelection = mpViewShell->GetViewData()->GetMarkData().GetTableSelect(maActiveCell.Tab()) &&
-                    (mpViewShell->GetViewData()->GetMarkData().IsMarked() ||
-                    mpViewShell->GetViewData()->GetMarkData().IsMultiMarked());
+        mbHasSelection = pViewShell->GetViewData()->GetMarkData().GetTableSelect(maActiveCell.Tab()) &&
+                    (pViewShell->GetViewData()->GetMarkData().IsMarked() ||
+                    pViewShell->GetViewData()->GetMarkData().IsMultiMarked());
     }
 }
 
@@ -179,16 +187,18 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                         DELETEZ(mpSortedMarkedCells);
                     AccessibleEventObject aEvent;
                     aEvent.EventId = AccessibleEventId::ACCESSIBLE_SELECTION_EVENT;
+                    aEvent.Source = uno::Reference< XAccessible >(this);
 
                     mbHasSelection = bNewMarked;
 
                     CommitChange(aEvent);
                 }
 
-                if (aNewCell != maActiveCell)
+                if ((aNewCell != maActiveCell) && (aNewCell.Tab() == maActiveCell.Tab()))
                 {
                     AccessibleEventObject aEvent;
                     aEvent.EventId = AccessibleEventId::ACCESSIBLE_ACTIVE_DESCENDANT_EVENT;
+                    aEvent.Source = uno::Reference< XAccessible >(this);
                     aEvent.OldValue <<= getAccessibleCellAt(maActiveCell.Row(), maActiveCell.Col());
                     aEvent.NewValue <<= getAccessibleCellAt(aNewCell.Row(), aNewCell.Col());
 
@@ -196,6 +206,61 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
 
                     CommitChange(aEvent);
                 }
+            }
+        }
+        else if ((rRef.GetId() == SC_HINT_DATACHANGED))
+        {
+            if (!mbDelIns)
+                CommitTableModelChange(maRange.aStart.Row(), maRange.aStart.Col(), maRange.aEnd.Row(), maRange.aEnd.Col(), AccessibleTableModelChangeType::UPDATE);
+            else
+                mbDelIns = sal_False;
+        }
+        else if (rRef.GetId() == SC_HINT_ACC_VISAREACHANGED)
+        {
+            if (mpViewShell)
+            {
+                Rectangle aNewVisCells(GetVisCells(GetVisArea(mpViewShell, meSplitPos)));
+
+                Rectangle aNewPos(aNewVisCells);
+
+                if (aNewVisCells.IsOver(maVisCells))
+                    aNewPos.Union(maVisCells);
+                else
+                    CommitTableModelChange(maVisCells.Top(), maVisCells.Left(), maVisCells.Bottom(), maVisCells.Right(), AccessibleTableModelChangeType::UPDATE);
+
+                maVisCells = aNewVisCells;
+
+                CommitTableModelChange(aNewPos.Top(), aNewPos.Left(), aNewPos.Bottom(), aNewPos.Right(), AccessibleTableModelChangeType::UPDATE);
+            }
+        }
+        else if (rRef.GetId() == SFX_HINT_DYING)
+        {
+            // it seems the Broadcaster is dying, since the view is dying
+            SetDefunc();
+        }
+    }
+    else if (rHint.ISA( ScUpdateRefHint ))
+    {
+        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
+        if (rRef.GetMode() == URM_INSDEL)
+        {
+            if (((rRef.GetRange().aStart.Col() == maRange.aStart.Col()) &&
+                (rRef.GetRange().aEnd.Col() == maRange.aEnd.Col())) ||
+                ((rRef.GetRange().aStart.Row() == maRange.aStart.Row()) &&
+                (rRef.GetRange().aEnd.Row() == maRange.aEnd.Row())))
+            {
+                // ignore next SC_HINT_DATACHANGED notification
+                mbDelIns = sal_True;
+
+                sal_Int16 nId(0);
+                if ((rRef.GetDx() < 0) || (rRef.GetDy() < 0))
+                    nId = AccessibleTableModelChangeType::DELETE;
+                else if ((rRef.GetDx() > 0) || (rRef.GetDy() > 0))
+                    nId = AccessibleTableModelChangeType::INSERT;
+                else
+                    DBG_ERROR("is it a deletion or a insertion?");
+
+                CommitTableModelChange(rRef.GetRange().aStart.Row(), rRef.GetRange().aStart.Col(), rRef.GetRange().aEnd.Row(), rRef.GetRange().aEnd.Col(), nId);
             }
         }
     }
@@ -317,8 +382,8 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleAt(
     if (mpViewShell)
     {
         sal_Int16 nX, nY;
-        if (mpViewShell->GetViewData()->GetPosFromPixel( rPoint.X, rPoint.Y, meSplitPos, nX, nY))
-            xAccessible = getAccessibleCellAt(nY, nX);
+        mpViewShell->GetViewData()->GetPosFromPixel( rPoint.X, rPoint.Y, meSplitPos, nX, nY);
+        xAccessible = getAccessibleCellAt(nY, nX);
     }
     return xAccessible;
 }
@@ -619,8 +684,37 @@ sal_Bool ScAccessibleSpreadsheet::IsCompleteSheetSelected()
 ScDocument* ScAccessibleSpreadsheet::GetDocument(ScTabViewShell* pViewShell)
 {
     ScDocument* pDoc = NULL;
-    if (pViewShell && pViewShell->GetViewData())
+    if (pViewShell)
         pDoc = pViewShell->GetViewData()->GetDocument();
     return pDoc;
 }
 
+Rectangle ScAccessibleSpreadsheet::GetVisArea(ScTabViewShell* pViewShell, ScSplitPos eSplitPos)
+{
+    Rectangle aVisArea;
+    if (pViewShell)
+    {
+        Window* pWindow = pViewShell->GetWindowByPos(eSplitPos);
+        if (pWindow)
+        {
+            aVisArea.SetPos(pViewShell->GetViewData()->GetPixPos(eSplitPos));
+            aVisArea.SetSize(pWindow->GetSizePixel());
+        }
+    }
+    return aVisArea;
+}
+
+Rectangle ScAccessibleSpreadsheet::GetVisCells(const Rectangle& rVisArea)
+{
+    if (mpViewShell)
+    {
+        sal_Int16 nStartX, nStartY, nEndX, nEndY;
+
+        mpViewShell->GetViewData()->GetPosFromPixel( 1, 1, meSplitPos, nStartX, nStartY);
+        mpViewShell->GetViewData()->GetPosFromPixel( rVisArea.GetWidth(), rVisArea.GetHeight(), meSplitPos, nEndX, nEndY);
+
+        return Rectangle(nStartX, nStartY, nEndX, nEndY);
+    }
+    else
+        return Rectangle();
+}

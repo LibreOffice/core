@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-12 09:45:02 $
+ *  last change: $Author: sab $ $Date: 2002-03-14 15:37:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,12 @@
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETABLEMODELCHANGE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleTableModelChange.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
 
 #ifndef _RTL_UUID_H_
@@ -474,3 +480,19 @@ uno::Sequence<sal_Int8> SAL_CALL
     return aId;
 }
 
+void ScAccessibleTableBase::CommitTableModelChange(sal_Int32 nStartRow, sal_Int32 nStartCol, sal_Int32 nEndRow, sal_Int32 nEndCol, sal_uInt16 nId)
+{
+    AccessibleTableModelChange aModelChange;
+    aModelChange.FirstRow = nStartRow;
+    aModelChange.FirstColumn = nStartCol;
+    aModelChange.LastRow = nEndRow;
+    aModelChange.LastColumn = nEndCol;
+    aModelChange.Type = nId;
+
+    AccessibleEventObject aEvent;
+    aEvent.EventId = AccessibleEventId::ACCESSIBLE_TABLE_MODEL_CHANGED;
+    aEvent.Source = uno::Reference< XAccessible >(this);
+    aEvent.NewValue <<= aModelChange;
+
+    CommitChange(aEvent);
+}
