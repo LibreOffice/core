@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 07:49:21 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,9 @@
 #define XML_LINE_TOP 2
 #define XML_LINE_BOTTOM 3
 
+#define XML_LINE_TLBR 0
+#define XML_LINE_BLTR 1
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -166,6 +169,10 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
     XMLPropertyState* pNewBorders[4] = { NULL, NULL, NULL, NULL };
     XMLPropertyState* pAllBorderWidthProperty = NULL;
     XMLPropertyState* pBorderWidths[4] = { NULL, NULL, NULL, NULL };
+
+    XMLPropertyState* pDiagBorders[2] = { 0 };
+    XMLPropertyState* pDiagBorderWidths[2] = { 0 };
+
     ::std::vector< XMLPropertyState >::iterator property = rProperties.begin();
     sal_uInt16 i;
 
@@ -176,21 +183,25 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
             sal_Int16 nContextID = getPropertySetMapper()->GetEntryContextId(property->mnIndex);
             switch (nContextID)
             {
-                case CTF_SC_ALLPADDING                  : pAllPaddingProperty = property; break;
-                case CTF_SC_LEFTPADDING                 : pPadding[XML_LINE_LEFT] = property; break;
-                case CTF_SC_RIGHTPADDING                : pPadding[XML_LINE_RIGHT] = property; break;
-                case CTF_SC_TOPPADDING                  : pPadding[XML_LINE_TOP] = property; break;
-                case CTF_SC_BOTTOMPADDING               : pPadding[XML_LINE_BOTTOM] = property; break;
-                case CTF_SC_ALLBORDER                   : pAllBorderProperty = property; break;
-                case CTF_SC_LEFTBORDER                  : pBorders[XML_LINE_LEFT] = property; break;
-                case CTF_SC_RIGHTBORDER                 : pBorders[XML_LINE_RIGHT] = property; break;
-                case CTF_SC_TOPBORDER                   : pBorders[XML_LINE_TOP] = property; break;
-                case CTF_SC_BOTTOMBORDER                : pBorders[XML_LINE_BOTTOM] = property; break;
-                case CTF_SC_ALLBORDERWIDTH              : pAllBorderWidthProperty = property; break;
-                case CTF_SC_LEFTBORDERWIDTH             : pBorderWidths[XML_LINE_LEFT] = property; break;
-                case CTF_SC_RIGHTBORDERWIDTH            : pBorderWidths[XML_LINE_RIGHT] = property; break;
-                case CTF_SC_TOPBORDERWIDTH              : pBorderWidths[XML_LINE_TOP] = property; break;
-                case CTF_SC_BOTTOMBORDERWIDTH           : pBorderWidths[XML_LINE_BOTTOM] = property; break;
+                case CTF_SC_ALLPADDING                  : pAllPaddingProperty = &*property; break;
+                case CTF_SC_LEFTPADDING                 : pPadding[XML_LINE_LEFT] = &*property; break;
+                case CTF_SC_RIGHTPADDING                : pPadding[XML_LINE_RIGHT] = &*property; break;
+                case CTF_SC_TOPPADDING                  : pPadding[XML_LINE_TOP] = &*property; break;
+                case CTF_SC_BOTTOMPADDING               : pPadding[XML_LINE_BOTTOM] = &*property; break;
+                case CTF_SC_ALLBORDER                   : pAllBorderProperty = &*property; break;
+                case CTF_SC_LEFTBORDER                  : pBorders[XML_LINE_LEFT] = &*property; break;
+                case CTF_SC_RIGHTBORDER                 : pBorders[XML_LINE_RIGHT] = &*property; break;
+                case CTF_SC_TOPBORDER                   : pBorders[XML_LINE_TOP] = &*property; break;
+                case CTF_SC_BOTTOMBORDER                : pBorders[XML_LINE_BOTTOM] = &*property; break;
+                case CTF_SC_ALLBORDERWIDTH              : pAllBorderWidthProperty = &*property; break;
+                case CTF_SC_LEFTBORDERWIDTH             : pBorderWidths[XML_LINE_LEFT] = &*property; break;
+                case CTF_SC_RIGHTBORDERWIDTH            : pBorderWidths[XML_LINE_RIGHT] = &*property; break;
+                case CTF_SC_TOPBORDERWIDTH              : pBorderWidths[XML_LINE_TOP] = &*property; break;
+                case CTF_SC_BOTTOMBORDERWIDTH           : pBorderWidths[XML_LINE_BOTTOM] = &*property; break;
+                case CTF_SC_DIAGONALTLBR                : pDiagBorders[XML_LINE_TLBR] = &*property; break;
+                case CTF_SC_DIAGONALBLTR                : pDiagBorders[XML_LINE_BLTR] = &*property; break;
+                case CTF_SC_DIAGONALTLBRWIDTH           : pDiagBorderWidths[XML_LINE_TLBR] = &*property; break;
+                case CTF_SC_DIAGONALBLTRWIDTH           : pDiagBorderWidths[XML_LINE_BLTR] = &*property; break;
             }
         }
     }
@@ -222,6 +233,23 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
             }
         }
     }
+
+    for( i = 0; i < 2; ++i )
+    {
+        if( pDiagBorders[i] && pDiagBorderWidths[i] )
+        {
+            table::BorderLine aBorderLine;
+            pDiagBorders[i]->maValue >>= aBorderLine;
+            table::BorderLine aBorderLineWidth;
+            pDiagBorderWidths[i]->maValue >>= aBorderLineWidth;
+            aBorderLine.OuterLineWidth = aBorderLineWidth.OuterLineWidth;
+            aBorderLine.InnerLineWidth = aBorderLineWidth.InnerLineWidth;
+            aBorderLine.LineDistance = aBorderLineWidth.LineDistance;
+            pDiagBorders[i]->maValue <<= aBorderLine;
+            pDiagBorderWidths[i]->mnIndex = -1;
+        }
+    }
+
     for (i = 0; i < 4; i++)
     {
         if (pNewPadding[i])
