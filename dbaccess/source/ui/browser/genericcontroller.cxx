@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:47:54 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:33:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,8 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
     ,m_bCurrentlyModified(sal_False)
     ,m_bFrameUiActive(sal_False)
     ,m_pView(NULL)
+    ,m_bPreview(sal_False)
+    ,m_bReadOnly(sal_False)
 #if OSL_DEBUG_LEVEL >= 2
     ,m_bDescribingSupportedFeatures( false )
 #endif
@@ -264,32 +266,43 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
     Reference< XFrame > xFrame;
 
     PropertyValue aValue;
-    const Any* pBegin   = aArguments.getConstArray();
-    const Any* pEnd     = pBegin + aArguments.getLength();
+    const Any* pIter    = aArguments.getConstArray();
+    const Any* pEnd     = pIter + aArguments.getLength();
 
-    for ( ; pBegin != pEnd; ++pBegin )
+    for ( ; pIter != pEnd; ++pIter )
     {
-        if ( ( *pBegin >>= aValue ) && ( 0 == aValue.Name.compareToAscii( "Frame" ) ) )
+        if ( ( *pIter >>= aValue ) && ( 0 == aValue.Name.compareToAscii( "Frame" ) ) )
         {
-            if((aValue.Value >>= xFrame) && xFrame.is())
-            {
-                xParent = xFrame->getContainerWindow();
-                VCLXWindow* pParentComponent = VCLXWindow::GetImplementation(xParent);
-                Window* pParentWin = pParentComponent ? pParentComponent->GetWindow() : NULL;
-                if (!pParentWin)
-                {
-                    throw Exception(::rtl::OUString::createFromAscii("Parent window is null"),*this);
-                }
-
-                Construct( pParentWin );
-                break; // no more needed here
-            }
-            else
-            {
-                OSL_ENSURE(0,"OGenericUnoController::initialize: Frame is null!");
-            }
+            aValue.Value >>= xFrame;
+        }
+        else if ( ( *pIter >>= aValue ) && ( 0 == aValue.Name.compareToAscii( "ReadOnly" ) ) )
+        {
+            aValue.Value >>= m_bReadOnly;
+        }
+        else if ( ( *pIter >>= aValue ) && ( 0 == aValue.Name.compareToAscii( "Preview" ) ) )
+        {
+            aValue.Value >>= m_bPreview;
         }
     }
+    if ( xFrame.is() )
+    {
+        xParent = xFrame->getContainerWindow();
+        VCLXWindow* pParentComponent = VCLXWindow::GetImplementation(xParent);
+        Window* pParentWin = pParentComponent ? pParentComponent->GetWindow() : NULL;
+        if (!pParentWin)
+        {
+            throw Exception(::rtl::OUString::createFromAscii("Parent window is null"),*this);
+        }
+
+        Construct( pParentWin );
+    }
+    else
+    {
+        OSL_ENSURE(0,"OGenericUnoController::initialize: Frame is null!");
+    }
+    ODataView* pView = getView();
+    if ( (m_bReadOnly || m_bPreview) && pView )
+        pView->EnableInput(FALSE);
     impl_initialize(aArguments);
     if ( xFrame.is() )
         xFrame->setComponent(getComponentWindow(), this);
