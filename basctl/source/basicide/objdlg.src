@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 00:13:33 $
+ *  last change: $Author: tbe $ $Date: 2001-09-26 09:34:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,8 +154,8 @@ FloatingWindow RID_BASICIDE_OBJCAT
             IdList =
             {
                 TBITEM_SHOW ;
-                TBITEM_PROPS ;
-                TBITEM_HELP ;
+                //TBITEM_PROPS ;
+                //TBITEM_HELP ;
             };
         };
         ItemList =
@@ -188,6 +188,7 @@ FloatingWindow RID_BASICIDE_OBJCAT
                 Text[ turkish ] = "Görüntüle";
                 Text[ catalan ] = "Mostrar";
             };
+            /*
             ToolBoxItem
             {
                 Identifier = TBITEM_PROPS ;
@@ -242,6 +243,7 @@ FloatingWindow RID_BASICIDE_OBJCAT
                 Text[ catalan ] = "Ayuda";
                 Text[ finnish ] = "Ohje";
             };
+            */
         };
     };
     FixedText RID_FT_MACRODESCR
