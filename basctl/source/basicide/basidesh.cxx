@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-14 10:51:53 $
+ *  last change: $Author: tbe $ $Date: 2002-04-29 15:10:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,6 +384,29 @@ IMPL_LINK( BasicIDEShell, TabBarHdl, TabBar *, pCurTabBar )
     ((BasicIDETabBar*)pCurTabBar)->SetCurrentLib( pWin->GetBasic() );
 
     return 0;
+}
+
+
+
+BOOL BasicIDEShell::NextPage( BOOL bPrev )
+{
+    BOOL bRet = FALSE;
+    USHORT nPos = pTabBar->GetPagePos( pTabBar->GetCurPageId() );
+
+    if ( bPrev )
+        --nPos;
+    else
+        ++nPos;
+
+    if ( nPos >= 0 && nPos < pTabBar->GetPageCount() )
+    {
+        IDEBaseWindow* pWin = aIDEWindowTable.Get( pTabBar->GetPageId( nPos ) );
+        SetCurWindow( pWin, TRUE );
+        pTabBar->SetCurrentLib( pWin->GetBasic() );
+        bRet = TRUE;
+    }
+
+    return bRet;
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastypes.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-22 16:59:54 $
+ *  last change: $Author: tbe $ $Date: 2002-04-29 15:14:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,38 @@ void __EXPORT IDEBaseWindow::ExecuteCommand( SfxRequest& rReq )
 void __EXPORT IDEBaseWindow::GetState( SfxItemSet& )
 {
     DBG_CHKTHIS( IDEBaseWindow, 0 );
+}
+
+
+long IDEBaseWindow::Notify( NotifyEvent& rNEvt )
+{
+    long nDone = 0;
+
+    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    {
+        KeyEvent aKEvt = *rNEvt.GetKeyEvent();
+        KeyCode aCode = aKEvt.GetKeyCode();
+        USHORT nCode = aCode.GetCode();
+
+        switch ( nCode )
+        {
+            case KEY_PAGEUP:
+            case KEY_PAGEDOWN:
+            {
+                if ( aCode.IsMod1() )
+                {
+                    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+                    if ( pIDEShell )
+                        pIDEShell->NextPage( nCode == KEY_PAGEUP );
+
+                    nDone = 1;
+                }
+            }
+            break;
+        }
+    }
+
+    return nDone ? nDone : Window::Notify( rNEvt );
 }
 
 
