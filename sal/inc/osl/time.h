@@ -2,9 +2,9 @@
  *
  *  $RCSfile: time.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-27 15:46:50 $
+ *  last change: $Author: jl $ $Date: 2001-03-13 14:46:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,39 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/****************************************************************************/
+/* TimeValue                                                                */
+/****************************************************************************/
+
+/* The TimeValue was included from osl/types.h. Since types.h is going to be
+    removed, the TimeValue declaration is now in this header. To prevent migration
+    problems TimeValue is still in osl/types.h for the time being. As soon as
+    osl/types has been removed the #ifndef _TIMEVALUE can be removed in this file
+*/
+#ifndef _TIMEVALUE
+#define _TIMEVALUE
+
+#ifdef SAL_W32
+#   pragma pack(push, 8)
+#elif defined(SAL_OS2)
+#   pragma pack(1)
+#endif
+
+/* Time since Jan-01-1970 */
+
+typedef struct {
+    sal_uInt32 Seconds;
+    sal_uInt32 Nanosec;
+} TimeValue;
+
+#ifdef SAL_W32
+#   pragma pack(pop)
+#elif defined(SAL_OS2)
+#   pragma pack()
+#endif
+
+#endif /* define _TIMEVALUE */
 
 /****************************************************************************/
 /* oslDateTime */
