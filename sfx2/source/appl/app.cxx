@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-18 10:05:25 $
+ *  last change: $Author: mba $ $Date: 2001-06-19 16:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,7 @@
 #include <tools/isolang.hxx>
 #endif
 #include <basic/basmgr.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <appuno.hxx>
 #include "sfxhelp.hxx"
@@ -585,6 +586,36 @@ void SfxApplication::HandleAppEvent( const ApplicationEvent& rAppEvent )
                         &aPrinterName, &aSilent, 0L );
                 pFrame->GetFrame()->DoClose();
             }
+        }
+    }
+    else if ( rAppEvent.GetEvent() == "APPEAR" )
+    {
+        if( !pAppData_Impl->bInvisible )
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTasksSupplier >
+                    xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+                    ::com::sun::star::uno::UNO_QUERY );
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTask > xTask = xDesktop->getActiveTask();
+            if ( !xTask.is() )
+            {
+                ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > xList = xDesktop->getTasks()->createEnumeration();
+                if( xList->hasMoreElements() )
+                    xList->nextElement() >>= xTask;
+                else
+                    pAppData_Impl->bInvisible = TRUE;
+            }
+
+            if ( xTask.is() )
+            {
+                Window* pWindow = VCLUnoHelper::GetWindow( xTask->getContainerWindow() );
+                pWindow->ToTop();
+            }
+        }
+
+        if( pAppData_Impl->bInvisible )
+        {
+            pAppData_Impl->bInvisible = FALSE;
+            OpenClients();
         }
     }
 }
