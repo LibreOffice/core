@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-30 17:28:25 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 16:02:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,6 +317,10 @@ public:
     static std::vector<ByteString> GetForcedLanguages();
 
     static void SetLanguages( std::vector<ByteString> val );
+    static void RemoveUTF8ByteOrderMarker( ByteString &rString );
+    static bool hasUTF8ByteOrderMarker( const ByteString &rString );
+    static void RemoveUTF8ByteOrderMarkerFromFile( const ByteString &rFilename );
+    static bool fileHasUTF8ByteOrderMarker( const ByteString &rString );
     static USHORT GetLangIndex( USHORT nLangId );
     static CharSet GetCharSet( USHORT nLangId );
     static USHORT GetLangByIsoLang( const ByteString &rIsoLang );
