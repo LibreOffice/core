@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fehelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:23:01 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 11:56:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,60 +101,27 @@ typedef ::std::list< FeDeclarator* > FeDeclList;
 class FeInheritanceHeader
 {
 public:
-    FeInheritanceHeader(NodeType nodeType, ::rtl::OString* pName, StringList* pInherits);
+    FeInheritanceHeader(NodeType nodeType, ::rtl::OString* pName, ::rtl::OString* pInherits);
 
     virtual ~FeInheritanceHeader()
     {
         if ( m_pName )
             delete m_pName;
-        if ( m_pInherits )
-            delete m_pInherits;
      }
 
-    void setNodeType(NodeType nodeType)
-        { m_nodeType = nodeType; }
     NodeType getNodeType()
         { return m_nodeType; }
-    void setName(::rtl::OString* pName)
-        { m_pName = pName; }
     ::rtl::OString* getName()
         { return m_pName; }
-    void setInheritsAsStringList(StringList* pInherits)
-        { initializeInherits(pInherits); }
-    void setInherits(DeclList* pInherits)
-        { m_pInherits = pInherits; }
-    DeclList* getInherits()
+    AstDeclaration* getInherits()
         { return m_pInherits; }
-    sal_uInt32 nInherits()
-        {
-            if ( m_pInherits )
-                return m_pInherits->size();
-            else
-                return 0;
-        }
-protected:
-    virtual sal_Bool initializeInherits(StringList* pinherits);
+
+private:
+    void initializeInherits(::rtl::OString* pinherits);
 
     NodeType        m_nodeType;
     ::rtl::OString* m_pName;
-    DeclList*       m_pInherits;
-};
-
-class FeInterfaceHeader : public FeInheritanceHeader
-{
-public:
-    FeInterfaceHeader( ::rtl::OString* pName, StringList* pInherits)
-        : FeInheritanceHeader(NT_interface, pName, pInherits)
-    {}
-    FeInterfaceHeader(NodeType nodeType, ::rtl::OString* pName, StringList* pInherits)
-        : FeInheritanceHeader(nodeType, pName, pInherits)
-    {}
-
-    virtual ~FeInterfaceHeader()
-    {}
-
-protected:
-    virtual sal_Bool initializeInherits(StringList* pinherits);
+    AstDeclaration* m_pInherits;
 };
 
 #endif // _IDLC_FEHELPER_HXX_
