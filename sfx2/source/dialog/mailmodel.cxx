@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dv $ $Date: 2001-05-16 10:05:45 $
+ *  last change: $Author: dv $ $Date: 2001-05-18 15:49:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@
 #include "docfac.hxx"
 #include "fcontnr.hxx"
 #include "objshimp.hxx"
+#include "sfxtypes.hxx"
 
 #include "sfxsids.hrc"
 
@@ -109,6 +110,7 @@
 #include <vcl/svapp.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/eitem.hxx>
+#include <svtools/useroptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/content.hxx>
 #include <tools/urlobj.hxx>
@@ -125,13 +127,13 @@ using namespace ::com::sun::star::util;
 using namespace ::rtl;
 
 // --------------------------------------------------------------
-#define SEND_MAIL_COMMAND   "cmd.officeMail=1"
+#define SEND_MAIL_COMMAND   "?cmd2.officeMail=1"
 #define SEND_MAIL_FROM      "MESSAGE_FROM="
 #define SEND_MAIL_TO        "MESSAGE_TO="
 #define SEND_MAIL_CC        "MESSAGE_CC="
 #define SEND_MAIL_BCC       "MESSAGE_BCC="
 #define SEND_MAIL_SUBJECT   "MESSAGE_SUBJECT="
-#define SEND_MAIL_FILEURL   "selectedURL="
+#define SEND_MAIL_FILEURL   "file_1="
 #define SEND_MAIL_SEP       '&'
 
 // class AddressList_Impl ------------------------------------------------
@@ -327,16 +329,7 @@ sal_Bool SfxMailModel_Impl::Send()
 
         if ( xPlugin.is() )
         {
-            OUString aURL, aHostName, aPrefix;
-            USHORT   nPort;
-
-            xPlugin->getHttpServerURL( aHostName, nPort, aPrefix );
-
-            aURL = aHostName;
-            aURL += aPrefix;
-
-            INetURLObject aObj( aURL, INET_PROT_HTTP );
-            aObj.SetPort( nPort );
+            OUString aURL = aFileName;
 
             // Create the parameter
             ULONG i, nCount;
@@ -344,9 +337,12 @@ sal_Bool SfxMailModel_Impl::Send()
             OUString aParam( RTL_CONSTASCII_USTRINGPARAM( SEND_MAIL_COMMAND ) );
             aParam += aSep;
 
-            aParam += OUString( RTL_CONSTASCII_USTRINGPARAM( SEND_MAIL_FROM ) );
-            aParam += maFromAddress;
-            aParam += aSep;
+            if ( maFromAddress.Len() || CreateFromAddress_Impl( maFromAddress ) )
+            {
+                aParam += OUString( RTL_CONSTASCII_USTRINGPARAM( SEND_MAIL_FROM ) );
+                aParam += maFromAddress;
+                aParam += aSep;
+            }
 
             nCount = mpToList ? mpToList->Count() : 0;
             for ( i = 0; i < nCount; ++i )
@@ -372,18 +368,20 @@ sal_Bool SfxMailModel_Impl::Send()
                 aParam += aSep;
             }
 
-            aParam += OUString( RTL_CONSTASCII_USTRINGPARAM( SEND_MAIL_SUBJECT ) );
-            aParam += maSubject;
-            aParam += aSep;
+            if ( maSubject.Len() )
+            {
+                aParam += OUString( RTL_CONSTASCII_USTRINGPARAM( SEND_MAIL_SUBJECT ) );
+                aParam += maSubject;
+                aParam += aSep;
+            }
 
             aParam += OUString( RTL_CONSTASCII_USTRINGPARAM( SEND_MAIL_FILEURL ) );
             aParam += aFileName;
             aParam += aSep;
 
-            aObj.SetParam( aParam, INetURLObject::ENCODE_ALL );
-
             // now we dispatch the new created URL so the document will be send.
-            aURL = aObj.GetMainURL( INetURLObject::NO_DECODE );
+
+            aURL += aParam;
 
             URL aTargetURL;
             aTargetURL.Complete = aURL;
@@ -519,5 +517,67 @@ sal_Bool SfxMailModel_Impl::Send()
     }
 
     return bSend;
+}
+
+// functions -------------------------------------------------------------
+
+BOOL CreateFromAddress_Impl( String& rFrom )
+
+/*  [Beschreibung]
+
+    Diese Funktion versucht mit Hilfe des IniManagers eine From-Adresse
+    zu erzeugen. daf"ur werden die Felder 'Vorname', 'Name' und 'EMail'
+    aus der Applikations-Ini-Datei ausgelesen. Sollten diese Felder
+    nicht gesetzt sein, wird FALSE zur"uckgegeben.
+
+    [R"uckgabewert]
+
+    TRUE:   Adresse konnte erzeugt werden.
+    FALSE:  Adresse konnte nicht erzeugt werden.
+*/
+
+{
+#if SUPD<613//MUSTINI
+    SfxIniManager* pIni = SFX_INIMANAGER();
+    String aName = pIni->Get( SFX_KEY_USER_NAME );
+    String aFirstName = pIni->Get( SFX_KEY_USER_FIRSTNAME );
+#else
+    SvtUserOptions aUserCFG;
+    String aName        = aUserCFG.GetLastName  ();
+    String aFirstName   = aUserCFG.GetFirstName ();
+#endif
+    if ( aFirstName.Len() || aName.Len() )
+    {
+        if ( aFirstName.Len() )
+        {
+            rFrom = TRIM( aFirstName );
+
+            if ( aName.Len() )
+                rFrom += ' ';
+        }
+        rFrom += TRIM( aName );
+        // unerlaubte Zeichen entfernen
+        rFrom.EraseAllChars( '<' );
+        rFrom.EraseAllChars( '>' );
+        rFrom.EraseAllChars( '@' );
+    }
+#if SUPD<613//MUSTINI
+    String aEmailName = pIni->GetAddressToken( ADDRESS_EMAIL );
+#else
+    String aEmailName = aUserCFG.GetEmail();
+#endif
+    // unerlaubte Zeichen entfernen
+    aEmailName.EraseAllChars( '<' );
+    aEmailName.EraseAllChars( '>' );
+
+    if ( aEmailName.Len() )
+    {
+        if ( rFrom.Len() )
+            rFrom += ' ';
+        ( ( rFrom += '<' ) += TRIM( aEmailName ) ) += '>';
+    }
+    else
+        rFrom.Erase();
+    return ( rFrom.Len() > 0 );
 }
 
