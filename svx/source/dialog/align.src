@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 11:49:13 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
             < "Zentriert" ; ALIGNDLG_HORALIGN_CENTER ; > ;
             < "Rechts" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
             < "Block" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
+            < "Ausgefüllt" ; ALIGNDLG_HORALIGN_FILL ; > ;
         };
         StringList [ en-US ] =
         {
@@ -114,6 +115,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
             < "Center" ; ALIGNDLG_HORALIGN_CENTER ; > ;
             < "Right" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
             < "Justified" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
+            < "Filled" ; ALIGNDLG_HORALIGN_FILL ; > ;
         };
     };
     FixedText FT_INDENT
@@ -168,47 +170,47 @@ TabPage RID_SVXPAGE_ALIGNMENT
     {
         Pos = MAP_APPFONT ( 6 , 43 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Schreibrichtung" ;
-        Text [ en-US ] = "Text direction" ;
+        Text [ de ] = "Textorientierung" ;
+        Text [ en-US ] = "Text orientation" ;
     };
-    ImageButton BTN_TXTSTACKED
+    TriStateBox BTN_TXTSTACKED
     {
-        Pos = MAP_APPFONT ( 12 , 54 ) ;
-        Size = MAP_APPFONT ( 12 , 43 ) ;
+        Pos = MAP_APPFONT ( 133 , 54 ) ;
+        Size = MAP_APPFONT ( 115 , 10 ) ;
         TabStop = TRUE ;
-        ButtonImage = Image
-        {
-            ImageBitmap = Bitmap { File = "txtstk.bmp" ; };
-            MASKCOLOR ;
-        };
+        Text [ de ] = "~Senkrecht gestapelt";
+        Text[ en-US ] = "Ve~rtically stacked";
     };
     Control CTR_DIAL
     {
         HelpId = HID_ALIGNMENT_CTR_DIAL ;
-        Pos = MAP_APPFONT ( 30 , 54 ) ;
+        Pos = MAP_APPFONT ( 12 , 60 ) ;
         Size = MAP_APPFONT ( 42 , 43 ) ;
         Text = "ABCD" ;
     };
     FixedText FT_DEGREES
     {
-        Pos = MAP_APPFONT ( 78 , 59 ) ;
-        Size = MAP_APPFONT ( 34 , 8 ) ;
+        Pos = MAP_APPFONT ( 72 , 54 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
         Text [ de ] = "~Winkel" ;
         Text [ en-US ] = "De~grees";
     };
     NumericField NF_DEGREES
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 78 , 70 ) ;
-        Size = MAP_APPFONT ( 34 , 12 ) ;
+        Pos = MAP_APPFONT ( 72 , 65 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 359 ;
+        SpinSize = 5 ;
         StrictFormat = TRUE ;
     };
     FixedText FT_BORDER_LOCK
     {
-        Pos = MAP_APPFONT ( 118 , 59 ) ;
+        Pos = MAP_APPFONT ( 72 , 83 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
         Text [ de ] = "Bezugs~kante" ;
         Text [ en-US ] = "Re~ference edge" ;
@@ -216,141 +218,56 @@ TabPage RID_SVXPAGE_ALIGNMENT
     Control CTR_BORDER_LOCK
     {
         HelpId = HID_ALIGNMENT_CTR_BORDER_LOCK ;
-        Hide = TRUE ;
-        Pos = MAP_APPFONT ( 118 , 70 ) ;
+        Pos = MAP_APPFONT ( 72 , 94 ) ;
         Size = MAP_APPFONT ( 50 , 15 ) ;
         TabStop = TRUE ;
     };
     TriStateBox BTN_ASIAN_VERTICAL
     {
-        Pos = MAP_APPFONT ( 78 , 89 ) ;
-        Size = MAP_APPFONT ( 176 , 10 ) ;
+        Pos = MAP_APPFONT ( 143 , 68 ) ;
+        Size = MAP_APPFONT ( 105 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Asiatischen, vertikalen Layoutmodus benutzen" ;
-        Text [ en-US ] = "Use ~Asian vertical layout mode" ;
-    };
-    FixedLine FL_SPACE
-    {
-        Pos = MAP_APPFONT ( 6 , 103 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Abstand zu Gitterlinien" ;
-        Text [ en-US ] = "Spacing to grid lines" ;
-    };
-    FixedText FT_LEFTSPACE
-    {
-        Pos = MAP_APPFONT ( 12 , 116 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text [ de ] = "L~inks" ;
-        Text [ en-US ] = "Lef~t" ;
-    };
-    MetricField ED_LEFTSPACE
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 54 , 114 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        SpinSize = 1 ;
-        DecimalDigits = 1 ;
-        Maximum = 100 ;
-        Last = 100 ;
-        Unit = FUNIT_MM ;
-    };
-    FixedText FT_RIGHTSPACE
-    {
-        Pos = MAP_APPFONT ( 12 , 132 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text [ de ] = "Recht~s" ;
-        Text [ en-US ] = "Right" ;
-    };
-    MetricField ED_RIGHTSPACE
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 54 , 130 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        SpinSize = 1 ;
-        DecimalDigits = 1 ;
-        Maximum = 100 ;
-        Last = 100 ;
-        Unit = FUNIT_MM ;
-    };
-    FixedText FT_TOPSPACE
-    {
-        Pos = MAP_APPFONT ( 118 , 116 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text [ de ] = "Obe~n" ;
-        Text [ en-US ] = "To~p" ;
-    };
-    MetricField ED_TOPSPACE
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 160 , 114 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        SpinSize = 1 ;
-        DecimalDigits = 1 ;
-        Maximum = 100 ;
-        Last = 100 ;
-        Unit = FUNIT_MM ;
-    };
-    FixedText FT_BOTTOMSPACE
-    {
-        Pos = MAP_APPFONT ( 118 , 132 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text [ de ] = "Unt~en" ;
-        Text [ en-US ] = "Botto~m" ;
-    };
-    MetricField ED_BOTTOMSPACE
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 160 , 130 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        SpinSize = 1 ;
-        DecimalDigits = 1 ;
-        Maximum = 100 ;
-        Last = 100 ;
-        Unit = FUNIT_MM ;
+        Text [ de ] = "Asiatischer ~Layoutmodus" ;
+        Text [ en-US ] = "Asian layout ~mode" ;
     };
     FixedLine FL_WRAP
     {
-        Pos = MAP_APPFONT ( 6 , 148 ) ;
+        Pos = MAP_APPFONT ( 6 , 115 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ de ] = "Eigenschaften" ;
         Text [ en-US ] = "Properties" ;
     };
     TriStateBox BTN_WRAP
     {
-        Pos = MAP_APPFONT ( 12 , 159 ) ;
-        Size = MAP_APPFONT ( 114 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 126 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
         Text [ de ] = "Automatischer Zeilenumbru~ch" ;
-        Text [ en-US ] = "Automatic ~line break" ;
+        Text [ en-US ] = "~Wrap text automatically" ;
     };
     TriStateBox BTN_HYPH
     {
-        Pos = MAP_APPFONT ( 130 , 159 ) ;
-        Size = MAP_APPFONT ( 118 , 10 ) ;
+        Pos = MAP_APPFONT ( 22 , 139 ) ;
+        Size = MAP_APPFONT ( 226 , 10 ) ;
         Text [ de ] = "Silben~trennung aktiv" ;
-        Text [ en-US ] = "Hyphenation active";
+        Text [ en-US ] = "Hyphenation ~active";
+    };
+    TriStateBox BTN_SHRINK
+    {
+        Pos = MAP_APPFONT( 12, 152 );
+        Size = MAP_APPFONT( 236, 10 );
+        Text [ de ] = "~An Zellgröße anpassen";
+        Text [ en-US ] = "~Shrink to fit cell size";
     };
     FixedText FT_TEXTFLOW
     {
-        Pos = MAP_APPFONT( 12 , 173 );
+        Pos = MAP_APPFONT( 12 , 170 );
         Size = MAP_APPFONT( 64 , 8 );
-        Text [ de ] = "Te~xtfluss";
-        Text [ en-US ] = "Te~xt flow";
+        Text [ de ] = "Te~xtrichtung";
+        Text [ en-US ] = "Te~xt direction";
     };
     ListBox LB_FRAMEDIR
     {
-        Pos = MAP_APPFONT( 78 , 171 );
+        Pos = MAP_APPFONT( 78 , 168 );
         Size = MAP_APPFONT( 170 , 50 );
         Border = TRUE;
         DropDown = TRUE;
