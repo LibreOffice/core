@@ -1057,6 +1057,9 @@ sub PopulateScriptList( lang as String, loc as String )
 		scriptLocationURI = document.getURL()
 	elseif ( loc = &quot;Filesystem&quot; ) then
 		REM populate the list from the filesysScripts list
+		if(lang = &quot;Java&quot; ) then
+			exit sub
+		endif
 		length = UBOUND( filesysScripts() )
 		if(length = -1) then
 			exit sub
