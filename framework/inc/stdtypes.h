@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtypes.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:19:28 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:01:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,12 @@ class OUStringList : public ::std::vector< ::rtl::OUString >
             insert( begin(), sElement );
         }
 
+        // search for given element
+        iterator find( const ::rtl::OUString& sElement )
+        {
+            return ::std::find(begin(), end(), sElement);
+        }
+
         // the only way to free used memory realy!
         void free()
         {
@@ -160,6 +166,14 @@ class BaseHash : public ::std::hash_map< ::rtl::OUString                    ,
             BaseHash().swap( *this );
         }
 };
+
+//_________________________________________________________________________________________________________________
+
+/**
+    Basic OUString hash.
+    Key and values are OUStrings.
+*/
+typedef BaseHash< ::rtl::OUString > OUStringHash;
 
 //_________________________________________________________________________________________________________________
 
