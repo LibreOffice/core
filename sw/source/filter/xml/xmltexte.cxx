@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-26 11:22:48 $
+ *  last change: $Author: mib $ $Date: 2001-02-09 13:15:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #endif
 #ifndef _UNOFRAME_HXX
 #include <unoframe.hxx>
+#endif
+#ifndef _NDGRF_HXX
+#include <ndgrf.hxx>
 #endif
 
 #ifndef _XMLEXP_HXX
@@ -247,6 +250,12 @@ void SwXMLTextParagraphExport::getTextEmbeddedObjectProperties(
 
     rURL = sEmbeddedObjectProtocol;
     rURL += rOLEObj.GetName();
-    const SvInPlaceObjectRef& rOLERef = rOLEObj.GetOleRef();
-    rClassId = rOLERef->GetClassName().GetHexName();
+    SvInfoObject *pInfo =
+        pOLENd->GetDoc()->GetPersist()->Find( rOLEObj.GetName() );
+    if( pInfo )
+    {
+        SvGlobalName aClassName( pInfo->GetClassName() );
+        if( !SvFactory::IsIntern( aClassName ) )
+            rClassId = aClassName.GetHexName();
+    }
 }

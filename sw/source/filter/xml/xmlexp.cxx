@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-24 16:50:58 $
+ *  last change: $Author: mib $ $Date: 2001-02-09 13:15:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,8 @@ sal_uInt32 SwXMLExport::exportDoc( const sal_Char *pClass )
         }
     }
 
-    MapUnit eUnit = (MapUnit)SW_MOD()->GetMetric( pDoc->IsHTMLMode() );
+    MapUnit eUnit =
+        SvXMLUnitConverter::GetMapUnit( SW_MOD()->GetMetric(pDoc->IsHTMLMode()) );
     if( GetMM100UnitConverter().getXMLMeasureUnit() != eUnit )
     {
         GetMM100UnitConverter().setXMLMeasureUnit( eUnit );

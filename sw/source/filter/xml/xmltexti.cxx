@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-26 11:22:48 $
+ *  last change: $Author: mib $ $Date: 2001-02-09 13:15:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #ifndef _SW3IO_HXX
 #include <sw3io.hxx>
 #endif
+#ifndef _FMTFSIZE_HXX
+#include <fmtfsize.hxx>
+#endif
 
 #ifndef _XMLIMP_HXX
 #include "xmlimp.hxx"
@@ -157,7 +160,8 @@ sal_Bool SwXMLTextImportHelper::IsInHeaderFooter() const
 Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
            SvXMLImport& rImport,
         const OUString& rHRef,
-        const OUString& rClassId )
+        const OUString& rClassId,
+        sal_Int32 nWidth, sal_Int32 nHeight )
 {
     Reference < XPropertySet > xPropSet;
 
@@ -178,8 +182,19 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     ASSERT( pTxtCrsr, "SwXTextCursor missing" );
     SwDoc *pDoc = pTxtCrsr->GetDoc();
 
+    SfxItemSet aItemSet( pDoc->GetAttrPool(), RES_FRM_SIZE, RES_FRM_SIZE );
+    if( nWidth > 0 && nHeight > 0 )
+    {
+        nWidth = MM100_TO_TWIP( nWidth );
+        if( nWidth < MINFLY )
+            nWidth = MINFLY;
+        nHeight = MM100_TO_TWIP( nHeight );
+        if( nHeight < MINFLY )
+            nHeight = MINFLY;
+        aItemSet.Put( SwFmtFrmSize( ATT_FIX_SIZE, nWidth, nHeight ) );
+    }
     SwFrmFmt *pFrmFmt = pDoc->InsertOLE( *pTxtCrsr->GetPaM(),
-                                                       aObjName );
+                                         aObjName, &aItemSet );
     xPropSet = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
     return xPropSet;
 }
