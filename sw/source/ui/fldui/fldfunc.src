@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldfunc.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:07:22 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:46:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ TabPage TP_FLD_FUNC
         Text[ chinese_traditional ] = "Ãş«¬(~T)";
         Text[ arabic ] = "äæÚ ÇáÍŞá";
         Text[ greek ] = "~Ôığïò ğåäßïõ";
-        Text[ korean ] = "À¯Çü";
+        Text[ korean ] = "À¯Çü(~T)";
         Text[ turkish ] = "~Alan tipi";
         Text[ language_user1 ] = " ";
     };
@@ -134,7 +134,7 @@ TabPage TP_FLD_FUNC
         Text[ chinese_traditional ] = "¿ï¾Ü(~E)";
         Text[ arabic ] = "ÇáÊÍÏíÏ";
         Text[ greek ] = "~ÅğéëïãŞ";
-        Text[ korean ] = "¼±ÅÃ";
+        Text[ korean ] = "¼±ÅÃ(~E)";
         Text[ turkish ] = "~Seçim";
         Text[ language_user1 ] = " ";
     };
@@ -171,7 +171,7 @@ TabPage TP_FLD_FUNC
         Text[ chinese_traditional ] = "®æ¦¡(~O)";
         Text[ arabic ] = "ÇáÊäÓíŞ";
         Text[ greek ] = "Ì~ïñöŞ";
-        Text[ korean ] = "¼­½Ä";
+        Text[ korean ] = "¼­½Ä(~O)";
         Text[ turkish ] = "F~ormat";
         Text[ language_user1 ] = " ";
     };
@@ -205,7 +205,7 @@ TabPage TP_FLD_FUNC
         Text[ chinese_traditional ] = "¦WºÙ(~M)";
         Text[ arabic ] = "ÇáÇÓã";
         Text[ greek ] = "¼íïìá";
-        Text[ korean ] = "ÀÌ¸§";
+        Text[ korean ] = "ÀÌ¸§(~M)";
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
     };
@@ -242,7 +242,7 @@ TabPage TP_FLD_FUNC
         Text[ chinese_traditional ] = "¼Æ­È(~V)";
         Text[ arabic ] = "ÇáŞíãÉ";
         Text[ greek ] = "ÔéìŞ";
-        Text[ korean ] = "°ª";
+        Text[ korean ] = "°ª(~V)";
         Text[ turkish ] = "D~eğer";
         Text[ language_user1 ] = " ";
     };
@@ -350,11 +350,11 @@ TabPage TP_FLD_FUNC
         Text[ chinese_simplified ] = "ºê(~M)...";
         Text[ russian ] = "Ìàêğîñ...";
         Text[ polish ] = "Makro...";
-        Text[ japanese ] = "Ï¸Û(~C)...";
-        Text[ chinese_traditional ] = "¥¨¶°(~C)...";
+        Text[ japanese ] = "Ï¸Û(~M)...";
+        Text[ chinese_traditional ] = "¥¨¶°(~M)...";
         Text[ arabic ] = "ãÇßÑæ...";
         Text[ greek ] = "ÌáêñïåíôïëŞ...";
-        Text[ korean ] = "¸ÅÅ©·Î...";
+        Text[ korean ] = "¸ÅÅ©·Î(~M)...";
         Text[ turkish ] = "M~akro...";
         Text[ language_user1 ] = " ";
     };
