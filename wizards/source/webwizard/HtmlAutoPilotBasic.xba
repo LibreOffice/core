@@ -50,7 +50,7 @@ Dim RetValue
 On Local Error Goto GlobalErrorHandler
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
-	oBaseDocument = StarDesktop.LoadComponentFromURL(&quot;private:factory/swriter/web&quot;, &quot;_blank&quot;, 0, NoArgs())
+	oBaseDocument = StarDesktop.LoadComponentFromURL(&quot;private:factory/swriter/web&quot;, &quot;_default&quot;, 0, NoArgs())
 	oViewSettings = oBaseDocument.CurrentController.ViewSettings
 	oViewCursor = oBaseDocument.GetCurrentController.ViewCursor
 	CurWebPageIndex = -1
