@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_info.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-18 17:17:59 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ JNI_type_info::JNI_type_info(
     {
         OUStringBuffer buf( 128 );
         buf.appendAscii(
-            RTL_CONSTASCII_STRINGPARAM("cannot make type incomplete: ") );
+            RTL_CONSTASCII_STRINGPARAM("cannot make type complete: ") );
         buf.append( OUString::unacquired( &m_td.get()->pTypeName ) );
         buf.append( jni.get_stack_trace() );
         throw BridgeRuntimeError( buf.makeStringAndClear() );
