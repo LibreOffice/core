@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:35:42 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:56:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1275,7 +1275,7 @@ USHORT SvImpLBox::AdjustScrollBars( Size& rSize )
     nVisibleCount = aOSize.Height() / nEntryHeight;
 
     // muessen wir eine vertikale Scrollbar einblenden?
-    if( bVerSBar || nTotalCount > nVisibleCount - 1 )
+    if( bVerSBar || nTotalCount > nVisibleCount )
     {
         nResult = 1;
         nFlags |= F_HOR_SBARSIZE_WITH_VBAR;
@@ -1298,7 +1298,7 @@ USHORT SvImpLBox::AdjustScrollBars( Size& rSize )
         nVisibleCount =  (aOSize.Height() - nHorSBarHeight) / nEntryHeight;
         // eventuell brauchen wir jetzt doch eine vertikale ScrollBar
         if( !(nResult & 0x0001) &&
-            ((nTotalCount > nVisibleCount - 1) || bVerSBar) )
+            ((nTotalCount > nVisibleCount) || bVerSBar) )
         {
             nResult = 3;
             nFlags |= F_VER_SBARSIZE_WITH_HBAR;
