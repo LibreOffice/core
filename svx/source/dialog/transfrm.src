@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 13:36:20 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:44:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1290,7 +1290,7 @@ TabPage RID_SVXPAGE_ANGLE
         CustomUnitText [ portuguese ] = "Graus" ;
         CustomUnitText[ chinese_simplified ] = "¶È";
         CustomUnitText[ russian ] = "Ãðàäóñ";
-        CustomUnitText[ polish ] = "Stopieñ";
+        CustomUnitText[ polish ] = "stopni(e)";
         CustomUnitText[ japanese ] = "“x";
         CustomUnitText[ chinese_traditional ] = "«×";
         CustomUnitText[ arabic ] = "ÏÑÌÉ";
