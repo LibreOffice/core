@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserview.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-19 14:08:31 $
+ *  last change: $Author: fs $ $Date: 2001-05-30 13:44:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,6 @@ namespace pcr
     //========================================================================
     class OPropertyBrowserView : public Window
     {
-//      friend class OPropertyBrowserController;
-
         OPropertyBrowserController*     m_pActiveController;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xObject;
@@ -99,6 +97,7 @@ namespace pcr
 
     protected:
         virtual void Resize();
+        virtual void GetFocus();
 
     public:
         OPropertyBrowserView(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&    _xORB,
@@ -140,6 +139,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/02/19 14:08:31  fs
+ *  #84041# infrastructure for activating pages from outside
+ *
  *  Revision 1.1  2001/01/12 11:26:24  fs
  *  initial checkin - outsourced the form property browser
  *
