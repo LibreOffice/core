@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datefunc.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-31 21:48:08 $
+ *  last change: $Author: kz $ $Date: 2001-11-02 21:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1052,7 +1052,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ finnish ] = "WEEKS";
         Text[ italian ] = "SETTIMANE";
         Text[ danish ] = "WEEKS";
-        Text[ swedish ] = "VECKOR";
+        Text[ swedish ] = "ANTALVECKOR";
         Text[ polish ] = "TYGODNIE";
         Text[ portuguese_brazilian ] = "WEEKS";
         Text[ japanese ] = "WEEKS";
@@ -1078,7 +1078,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ finnish ] = "MONTHS";
         Text[ italian ] = "MESI";
         Text[ danish ] = "MONTHS";
-        Text[ swedish ] = "MÅNADER";
+        Text[ swedish ] = "ANTALMÅNADER";
         Text[ polish ] = "MIESI¥CE";
         Text[ portuguese_brazilian ] = "MONTHS";
         Text[ japanese ] = "MONTHS";
@@ -1316,6 +1316,7 @@ Resource RID_DATE_DEFFUNCTION_NAMES
         };
     };
 };
+
 
 
 
