@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-14 18:30:44 $
+ *  last change: $Author: sab $ $Date: 2000-11-16 18:05:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,12 @@
 #ifndef _XMLSTYLI_HXX
 #define _XMLSTYLI_HXX
 
-#include <rtl/ustring>
-#include <vector>
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
+#ifndef __SGI_STL_VECTOR
+#include <stl/vector>
+#endif
 #ifndef _XMLOFF_XMLIMP_HXX
 #include <xmloff/xmlimp.hxx>
 #endif
