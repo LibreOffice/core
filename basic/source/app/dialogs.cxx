@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:09 $
+ *  last change: $Author: hjs $ $Date: 2000-11-06 12:09:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
+
+#include <string>
+#include <algorithm>
 
 HACK( #define protected public )
 #define protected public        // Kleine Schweinerei um an FreeResource ranzukommen
@@ -831,8 +834,8 @@ void DisplayHidDlg::Resize()
 
         // Minimalgröße
         Size aSize( GetOutputSizePixel() );
-        aSize.Width() = max( aSize.Width(), aOKClose.GetSizePixel().Width() * 3 );
-        aSize.Height() = max( aSize.Height(), aOKClose.GetSizePixel().Height() * 8 );
+        aSize.Width() = std::max( aSize.Width(), (long)(aOKClose.GetSizePixel().Width() * 3 ));
+        aSize.Height() = std::max( aSize.Height(), (long)(aOKClose.GetSizePixel().Height() * 8 ));
         SetOutputSizePixel( aSize );
 
         // Standardabstand

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printer.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:09 $
+ *  last change: $Author: hjs $ $Date: 2000-11-06 12:09:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _BASIC_TTRESHLP_HXX
 #include "ttstrhlp.hxx"
 #endif
+
+#include <string>
+#include <algorithm>
 
 #include "app.hxx"
 #include "printer.hxx"
@@ -147,7 +150,7 @@ void BasicPrinter::Print( const String& rFile, const String& rText, BasicFrame *
     while( nDone < rText.Len() )
     {
         if( nLine >= nLines ) Header();
-        xub_StrLen nLineEnd = min( rText.Search( '\n', nDone ), rText.Search( '\r', nDone ) );
+        xub_StrLen nLineEnd = std::min( rText.Search( '\n', nDone ), rText.Search( '\r', nDone ) );
         DrawText( Point( 0, nLine * nYoff ), rText, nDone, nLineEnd-nDone-1 );
         nDone = nLineEnd;
         if( nDone <= rText.Len() && rText.GetChar(nDone) == '\r' ) nDone++;
