@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-07 05:45:13 $
+ *  last change: $Author: oj $ $Date: 2002-07-11 08:54:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,16 +252,31 @@ void OAddTableDlg::UpdateTableList(BOOL bViewsAllowed)
     Sequence< ::rtl::OUString> sTables,sViews;
     if (xTables.is())
         sTables = xTables->getElementNames();
-    if(bViewsAllowed)
+
+    xViewSupp = Reference< XViewsSupplier >(xTableSupp, UNO_QUERY);
+    if (xViewSupp.is())
     {
-        xViewSupp = Reference< XViewsSupplier >(xTableSupp, UNO_QUERY);
-        if (xViewSupp.is())
-        {
-            xViews = xViewSupp->getViews();
-            if (xViews.is())
-                sViews = xViews->getElementNames();
-        }
+        xViews = xViewSupp->getViews();
+        if (xViews.is())
+            sViews = xViews->getElementNames();
+    }
+    // if no views are allowed remove the views also out the table name filter
+    if ( !bViewsAllowed )
+    {
+        const ::rtl::OUString* pTableBegin  = sTables.getConstArray();
+        const ::rtl::OUString* pTableEnd    = pTableBegin + sTables.getLength();
+        ::std::vector< ::rtl::OUString > aTables(pTableBegin,pTableEnd);
+
+        const ::rtl::OUString* pViewBegin = sViews.getConstArray();
+        const ::rtl::OUString* pViewEnd   = pViewBegin + sViews.getLength();
+        ::comphelper::TStringMixEqualFunctor aEqualFunctor;
+        for(;pViewBegin != pViewEnd;++pViewBegin)
+            aTables.erase(::std::remove_if(aTables.begin(),aTables.end(),::std::not1(::std::bind2nd(aEqualFunctor,*pViewBegin))));
+        sTables = Sequence< ::rtl::OUString>(aTables.begin(),aTables.size());
+        sViews = Sequence< ::rtl::OUString>();
     }
 
     aTableList.UpdateTableList(Reference< XConnection>(xTableSupp,UNO_QUERY)->getMetaData(),sTables,sViews);
 }
+// -----------------------------------------------------------------------------
+
