@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:21:10 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:00:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ ModalDialog DLG_MACROQUERY
     Text [ english_us ] = "Execute Macro" ;
     Text [ french ] = "Exécuter la macro" ;
     TEXT[ italian ] = "Esegui macro";
-    TEXT[ portuguese_brazilian ] = "Makro ausführen";
+    TEXT[ portuguese_brazilian ] = "Makro ausf?ren";
     TEXT[ portuguese ] = "Executar macro";
     TEXT[ danish ] = "Udfør makro";
     TEXT[ swedish ] = "Utför makro";
@@ -153,7 +153,7 @@ ModalDialog DLG_MACROQUERY
         Text = "Es wurde ein Ereignis ausgelöst, auf das ein Makro konfiguriert wurde. Möchten Sie dieses Makro ausführen?" ;
         Text [ English ] = "Es wurde ein Ereignis ausgelöst, auf das ein Makro konfiguriert wurde. Möchten Sie dieses Makro ausführen?" ;
         Text [ english_us ] = "An event to which a macro is configured has been started.  Do you want to execute the macro?" ;
-        Text [ portuguese_brazilian ] = "Es wurde ein Ereignis ausgelöst, auf das ein Makro konfiguriert wurde. Möchten Sie dieses Makro ausführen?" ;
+        Text [ portuguese_brazilian ] = "Es wurde ein Ereignis ausgel?t, auf das ein Makro konfiguriert wurde. M?hten Sie dieses Makro ausf?ren?" ;
         Text [ swedish ] = "En händelse utlöstes för vilket ett makro konfigurerades. Skall detta makro utföras?" ;
         Text [ danish ] = "Der blev udløst en handling, som en makro er konfigureret til. Vil du udføre denne makro?" ;
         Text [ italian ] = "È stato attivato un evento che è stato configurato su una macro. Esguire la macro?" ;
@@ -184,7 +184,7 @@ ModalDialog DLG_MACROQUERY
         Text [ ENGLISH ] = " Für dieses Dokument nicht mehr warnen" ;
         Text [ portuguese ] = "Não avisar mais para este documento" ;
         Text [ english_us ] = "Do not warn again for this document" ;
-        Text [ portuguese_brazilian ] = "Für dieses Dokument nicht mehr warnen" ;
+        Text [ portuguese_brazilian ] = "F? dieses Dokument nicht mehr warnen" ;
         Text [ swedish ] = "Varna inte mer för det här dokumentet" ;
         Text [ danish ] = "Advar ikke igen for dette dokument" ;
         Text [ italian ] = "Non avvertire più per il documento corrente" ;
@@ -214,7 +214,7 @@ ModalDialog DLG_MACROQUERY
         Text [ ENGLISH ] = "Execute" ;
         Text [ portuguese ] = "Executar" ;
         Text [ english_us ] = "Execute" ;
-        Text [ portuguese_brazilian ] = "Ausführen" ;
+        Text [ portuguese_brazilian ] = "Ausf?ren" ;
         Text [ swedish ] = "Utför" ;
         Text [ danish ] = "Udfør" ;
         Text [ italian ] = "Esegui" ;
@@ -243,7 +243,7 @@ ModalDialog DLG_MACROQUERY
         Text = "Nicht Ausführen" ;
         Text [ ENGLISH ] = "Don't execute" ;
         Text [ english_us ] = "Don't execute" ;
-        Text [ portuguese_brazilian ] = "Nicht Ausführen" ;
+        Text [ portuguese_brazilian ] = "Nicht Ausf?ren" ;
         Text [ swedish ] = "Utför inte" ;
         Text [ danish ] = "Udfør ikke" ;
         Text [ italian ] = "Non eseguire" ;
