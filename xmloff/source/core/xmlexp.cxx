@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-23 06:56:35 $
+ *  last change: $Author: dvo $ $Date: 2001-03-28 10:28:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,9 @@
 #ifndef _XMLOFF_XMLFONTAUTOSTYLEPOOL_HXX
 #include "XMLFontAutoStylePool"
 #endif
+#ifndef _XMLOFF_XMLIMAGEMAPEXPORT_HXX_
+#include "XMLImageMapExport.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HPP_
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
@@ -256,6 +259,7 @@ SvXMLExport::SvXMLExport( MapUnit eDfltUnit, const sal_Char * pClass, sal_uInt16
     pNumExport(0L),
     pProgressBarHelper( NULL ),
     pEventExport( NULL ),
+    pImageMapExport( NULL ),
     bSaveLinkedSections(sal_True),
     mnExportFlags( nExportFlags )
 {
@@ -279,6 +283,7 @@ SvXMLExport::SvXMLExport(
     pNumExport(0L),
     pProgressBarHelper( NULL ),
     pEventExport( NULL ),
+    pImageMapExport( NULL ),
     bSaveLinkedSections(sal_True),
     mnExportFlags( EXPORT_ALL )
 {
@@ -308,6 +313,7 @@ SvXMLExport::SvXMLExport(
     xNumberFormatsSupplier (rModel, uno::UNO_QUERY),
     pProgressBarHelper( NULL ),
     pEventExport( NULL ),
+    pImageMapExport( NULL ),
     bSaveLinkedSections(sal_True),
     mnExportFlags( EXPORT_ALL )
 {
@@ -339,6 +345,7 @@ SvXMLExport::SvXMLExport(
     xNumberFormatsSupplier (rModel, uno::UNO_QUERY),
     pProgressBarHelper( NULL ),
     pEventExport( NULL ),
+    pImageMapExport( NULL ),
     bSaveLinkedSections(sal_True),
     mnExportFlags( EXPORT_ALL )
 {
@@ -350,6 +357,7 @@ SvXMLExport::SvXMLExport(
 
 SvXMLExport::~SvXMLExport()
 {
+    delete pImageMapExport;
     delete pEventExport;
     delete pNumExport;
     delete pNamespaceMap;
@@ -1060,6 +1068,17 @@ XMLEventExport& SvXMLExport::GetEventExport()
     }
 
     return *pEventExport;
+}
+
+XMLImageMapExport& SvXMLExport::GetImageMapExport()
+{
+    // image map export, create on-demand
+    if( NULL == pImageMapExport )
+    {
+        pImageMapExport = new XMLImageMapExport(*this);
+    }
+
+    return *pImageMapExport;
 }
 
 // XUnoTunnel & co

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-22 12:41:50 $
+ *  last change: $Author: dvo $ $Date: 2001-03-28 10:28:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,7 @@ SvXMLImport::SvXMLImport( sal_uInt16 nImportFlags ) throw () :
     pNumImport( NULL ),
     pProgressBarHelper( NULL ),
     pEventImportHelper( NULL ),
+    pImageMapImportHelper( NULL ),
     mnImportFlags( nImportFlags )
 {
     _InitCtor();
@@ -244,6 +245,7 @@ SvXMLImport::SvXMLImport( const Reference< XModel > & rModel ) throw () :
     xNumberFormatsSupplier (rModel, uno::UNO_QUERY),
     pProgressBarHelper( NULL ),
     pEventImportHelper( NULL ),
+    pImageMapImportHelper( NULL ),
     mnImportFlags( IMPORT_ALL )
 {
     _InitCtor();
@@ -261,6 +263,7 @@ SvXMLImport::SvXMLImport( const Reference< XModel > & rModel,
     xNumberFormatsSupplier (rModel, uno::UNO_QUERY),
     pProgressBarHelper( NULL ),
     pEventImportHelper( NULL ),
+    pImageMapImportHelper( NULL ),
     mnImportFlags( IMPORT_ALL )
 {
     _InitCtor();
@@ -272,6 +275,7 @@ SvXMLImport::~SvXMLImport() throw ()
     delete pUnitConv;
     delete pContexts;
     delete pEventImportHelper;
+    delete pImageMapImportHelper;
     if (pNumImport)
         delete pNumImport;
     if (pProgressBarHelper)
