@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zcodec.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:10 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:25:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,11 @@
 #include "stream.hxx"
 #endif
 #ifndef _ZLIB_H
+#ifdef SYSTEM_ZLIB
+#include "zlib.h"
+#else
 #include "zlib/zlib.h"
+#endif
 #endif
 #ifndef _ZCODEC_HXX
 #include "zcodec.hxx"

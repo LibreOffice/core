@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:03:10 $
+#   last change: $Author: vg $ $Date: 2003-12-17 19:25:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,9 @@ TARGET=zcodec
 
 # --- Files --------------------------------------------------------
 
+.IF "$(SYSTEM_ZLIB)" == "YES"
+CFLAGS+=-DSYSTEM_ZLIB
+.ENDIF
 SLOFILES=	$(SLO)$/zcodec.obj
 
 # --- Targets ------------------------------------------------------
