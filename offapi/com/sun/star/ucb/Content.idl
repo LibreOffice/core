@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Content.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 16:03:51 $
+ *  last change: $Author: sb $ $Date: 2001-01-18 14:27:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,8 +328,11 @@ service Content
         // for this scenario, because it is not directly supported by the IMAP
         // protocol. On the other hand, moving a message from one folder to
         // another folder on the same IMAP server should work, because it can
-        // be implemeted efficiently. Source and target folder may be the same
-        // when doing a move operation.
+        // be implemeted efficiently. If an implementation is not able to
+        // handle a given source URL, it should indicate this by issuing a
+        // <type>com::sun::star::ucb::InteractiveBadTransferURLException</type>
+        // interaction request. Source and target folder may be the same when
+        // doing a move operation.
         //
         // Transfers without the transfer command are done as follows:
         //
