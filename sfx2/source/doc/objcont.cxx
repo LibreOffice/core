@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:32 $
+ *  last change: $Author: mba $ $Date: 2000-09-25 11:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ FASTBOOL SfxObjectShell::SaveWindows_Impl( SvStorage &rStor ) const
 
             // assemble ini-data
             String aWinData;
-            aWinData += pFrame->GetCurViewId();
+            aWinData += String::CreateFromInt32( pFrame->GetCurViewId() );
             aWinData += cToken;
 /*
             if ( !pWin || pWin->IsMaximized() )
