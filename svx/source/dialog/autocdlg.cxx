@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autocdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:46:30 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:26:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,17 +59,13 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include "ofapch.hxx"
+#ifdef SVX_DLLIMPLEMENTATION
+#undef SVX_DLLIMPLEMENTATION
 #endif
 
-#pragma hdrstop
-
-#ifndef PRECOMPILED
 #define _SVSTDARR_STRINGSISORTDTOR
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
-#endif
 
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
