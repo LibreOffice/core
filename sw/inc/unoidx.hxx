@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2002-06-24 11:24:22 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:26:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,11 +129,13 @@ class SwXDocumentIndex : public cppu::WeakImplHelper5
     SwXIndexTokenAccess_Impl*   GetTokenAccess() const {return pTokenAccess;}
     void                        SetTokenAccess(SwXIndexTokenAccess_Impl* pSet)
                                         {pTokenAccess = pSet;}
+protected:
+    virtual ~SwXDocumentIndex();
 public:
     SwXDocumentIndex(const SwTOXBaseSection* = 0, SwDoc* = 0);
     //Descriptor-Ctor
     SwXDocumentIndex(TOXTypes eToxType, SwDoc& rDoc);
-    virtual ~SwXDocumentIndex();
+
 
     TYPEINFO();
 
@@ -209,12 +211,14 @@ class SwXDocumentIndexMark : public cppu::WeakImplHelper4
     String                      sUserIndexName;
 
     void                InitMap(TOXTypes eToxType);
+protected:
+    virtual ~SwXDocumentIndexMark();
 public:
     SwXDocumentIndexMark(TOXTypes eToxType);
     SwXDocumentIndexMark(const SwTOXType* pType,
                         const SwTOXMark* pMark,
                         SwDoc* pDc);
-    virtual ~SwXDocumentIndexMark();
+
 
     TYPEINFO();
 
@@ -268,9 +272,11 @@ public:
 class SwXDocumentIndexes : public SwCollectionBaseClass,
     public SwUnoCollection
 {
+protected:
+    virtual ~SwXDocumentIndexes();
 public:
     SwXDocumentIndexes(SwDoc* pDoc);
-    virtual ~SwXDocumentIndexes();
+
 
 //  SMART_UNO_DECLARATION( SwXDocumentIndexes, UsrObject );
 
@@ -313,9 +319,11 @@ class SwXIndexStyleAccess_Impl : public cppu::WeakImplHelper2
 {
     SwXDocumentIndex&   rParent;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XDocumentIndex >  xParent;
+protected:
+    virtual ~SwXIndexStyleAccess_Impl();
 public:
     SwXIndexStyleAccess_Impl(SwXDocumentIndex& rParentIdx);
-    virtual ~SwXIndexStyleAccess_Impl();
+
 
     //XIndexReplace
     virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const ::com::sun::star::uno::Any& Element ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
@@ -347,9 +355,11 @@ class SwXIndexTokenAccess_Impl : public cppu::WeakImplHelper2
     SwXDocumentIndex&   rParent;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XDocumentIndex >  xParent;
     sal_Int32               nCount;
+protected:
+    virtual ~SwXIndexTokenAccess_Impl();
 public:
     SwXIndexTokenAccess_Impl(SwXDocumentIndex& rParentIdx);
-    virtual ~SwXIndexTokenAccess_Impl();
+
 
 
     //XIndexReplace
