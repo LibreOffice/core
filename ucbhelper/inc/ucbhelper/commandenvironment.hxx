@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commandenvironment.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:36 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #ifndef _UCBHELPER_MACROS_HXX
 #include <ucbhelper/macros.hxx>
 #endif
+#ifndef INCLUDED_UCBHELPERDLLAPI_H
+#include "ucbhelper/ucbhelperdllapi.h"
+#endif
 
 namespace ucb
 {
@@ -88,15 +91,15 @@ struct CommandEnvironment_Impl;
   * com::sun::star::ucb::XCommandEnvironement. Instances of this class can
   * be used to supply environments to commands executed by UCB contents.
   */
-class CommandEnvironment : public cppu::OWeakObject,
+class UCBHELPER_DLLPUBLIC CommandEnvironment : public cppu::OWeakObject,
                            public com::sun::star::lang::XTypeProvider,
                            public com::sun::star::ucb::XCommandEnvironment
 {
     CommandEnvironment_Impl* m_pImpl;
 
 private:
-    CommandEnvironment( const CommandEnvironment& );                // n.i.
-    CommandEnvironment& operator=( const CommandEnvironment& );     // n.i.
+    UCBHELPER_DLLPRIVATE CommandEnvironment( const CommandEnvironment& );               // n.i.
+    UCBHELPER_DLLPRIVATE CommandEnvironment& operator=( const CommandEnvironment& );    // n.i.
 
 public:
     /**
