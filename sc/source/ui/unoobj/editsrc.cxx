@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsrc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: thb $ $Date: 2002-02-25 16:34:58 $
+ *  last change: $Author: sab $ $Date: 2002-03-01 08:34:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #include "hints.hxx"
 #include "patattr.hxx"
 #include "unoguard.hxx"
+#ifndef _SC_ACCESSIBLETEXT_HXX
+#include "AccessibleText.hxx"
+#endif
 
 //------------------------------------------------------------------------
 
@@ -339,5 +342,51 @@ SvxTextForwarder* ScSimpleEditSource::GetTextForwarder()
 void ScSimpleEditSource::UpdateData()
 {
     //  nothing
+}
+
+//------------------------------------------------------------------------
+
+ScAccessibilityEditSource::ScAccessibilityEditSource( ::std::auto_ptr < ScAccessibleCellTextData > pAccessibleCellTextData )
+    : mpAccessibleCellTextData(pAccessibleCellTextData)
+{
+}
+
+ScAccessibilityEditSource::~ScAccessibilityEditSource()
+{
+}
+
+SvxEditSource* ScAccessibilityEditSource::Clone() const
+{
+    return new ScAccessibilityEditSource(mpAccessibleCellTextData);
+}
+
+SvxTextForwarder* ScAccessibilityEditSource::GetTextForwarder()
+{
+    return mpAccessibleCellTextData->GetTextForwarder();
+}
+
+SvxViewForwarder* ScAccessibilityEditSource::GetViewForwarder()
+{
+    return mpAccessibleCellTextData->GetViewForwarder();
+}
+
+SvxEditViewForwarder* ScAccessibilityEditSource::GetEditViewForwarder( sal_Bool bCreate )
+{
+    return mpAccessibleCellTextData->GetEditViewForwarder(bCreate);
+}
+
+void ScAccessibilityEditSource::UpdateData()
+{
+    mpAccessibleCellTextData->UpdateData();
+}
+
+void ScAccessibilityEditSource::SetDoUpdateData(sal_Bool bValue)
+{
+    mpAccessibleCellTextData->SetDoUpdate(bValue);
+}
+
+sal_Bool ScAccessibilityEditSource::IsDirty() const
+{
+    return mpAccessibleCellTextData->IsDirty();
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsrc.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2002-02-25 16:34:30 $
+ *  last change: $Author: sab $ $Date: 2002-03-01 08:34:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,8 @@
 #include <svtools/lstner.hxx>
 #endif
 
+#include <memory>
+
 class ScEditEngineDefaulter;
 class SvxEditEngineForwarder;
 
@@ -81,6 +83,7 @@ class ScDocShell;
 class ScHeaderFooterContentObj;
 class ScCellTextData;
 class ScHeaderFooterTextData;
+class ScAccessibleCellTextData;
 
 
 class ScHeaderFooterChangedHint : public SfxHint
@@ -209,6 +212,24 @@ public:
 
 };
 
+class ScAccessibilityEditSource : public SvxEditSource
+{
+private:
+    ::std::auto_ptr < ScAccessibleCellTextData > mpAccessibleCellTextData;
+
+public:
+                        ScAccessibilityEditSource( ::std::auto_ptr < ScAccessibleCellTextData > pAccessibleCellTextData );
+    virtual             ~ScAccessibilityEditSource();
+
+    virtual SvxEditSource*      Clone() const ;
+    virtual SvxTextForwarder*   GetTextForwarder();
+    virtual SvxViewForwarder*   GetViewForwarder();
+    virtual SvxEditViewForwarder*   GetEditViewForwarder( sal_Bool bCreate = sal_False );
+    virtual void                UpdateData();
+
+    void                        SetDoUpdateData(sal_Bool bValue);
+    sal_Bool                    IsDirty() const;
+};
 
 #endif
 
