@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-01 10:58:55 $
+ *  last change: $Author: ka $ $Date: 2001-02-21 13:04:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -990,7 +990,8 @@ IMPL_LINK( SdTPAction, CheckFileHdl, void *, EMPTYARG )
             DBG_ASSERT( pStorage, "Kein Storage!" );
 
             if( pStorage->IsStream( pStarDrawDoc ) ||
-                pStorage->IsStream( pStarDrawDoc3 ) )
+                pStorage->IsStream( pStarDrawDoc3 ) ||
+                pStorage->IsStream( pStarDrawXMLContent ) )
             {
                 SdDrawDocument* pBookmarkDoc = pDoc->OpenBookmarkDoc( aFile );
 
