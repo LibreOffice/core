@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolingu.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 09:40:58 $
+ *  last change: $Author: tl $ $Date: 2001-03-22 08:31:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,9 @@ public:
         ::com::sun::star::linguistic2::XDictionaryList > GetDictionaryList();
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >         GetLinguPropertySet();
+
+    static ::com::sun::star::uno::Reference<
+        ::com::sun::star::linguistic2::XLinguServiceManager > GetLngSvcMgr();
 
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionary1 >   GetStandardDic();

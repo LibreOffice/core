@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolingu.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2000-12-15 10:19:05 $
+ *  last change: $Author: tl $ $Date: 2001-03-22 08:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,6 +227,21 @@ static Reference< XLinguServiceManager > GetLngSvcMgr_Impl()
                     "com.sun.star.linguistic2.LinguServiceManager" ) ) ), UNO_QUERY ) ;
     }
     return xRes;
+}
+
+
+Reference< XLinguServiceManager > LinguMgr::GetLngSvcMgr()
+{
+    if (bExiting)
+        return 0;
+
+    if (!pExitLstnr)
+        pExitLstnr = new LinguMgrExitLstnr;
+
+    if (!xLngSvcMgr.is())
+        xLngSvcMgr = GetLngSvcMgr_Impl();
+
+    return xLngSvcMgr;
 }
 
 
