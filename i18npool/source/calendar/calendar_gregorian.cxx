@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_gregorian.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: khong $ $Date: 2002-10-10 18:22:21 $
+ *  last change: $Author: khong $ $Date: 2002-10-22 03:44:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,10 +335,10 @@ Calendar_gregorian::isValid() throw(RuntimeException)
 // NatNum4                                                              NatNum9/9/11/11
 
 static sal_Int16 SAL_CALL NatNumForCalendar(const com::sun::star::lang::Locale& aLocale,
-        sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode )
+        sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode, sal_Int16 value )
 {
-    sal_Bool isShort = nCalendarDisplayCode == CalendarDisplayCode::SHORT_YEAR ||
-        nCalendarDisplayCode == CalendarDisplayCode::LONG_YEAR ||
+    sal_Bool isShort = (nCalendarDisplayCode == CalendarDisplayCode::SHORT_YEAR ||
+        nCalendarDisplayCode == CalendarDisplayCode::LONG_YEAR) && value >= 100 ||
         nCalendarDisplayCode == CalendarDisplayCode::SHORT_QUARTER ||
         nCalendarDisplayCode == CalendarDisplayCode::LONG_QUARTER;
     sal_Bool isChinese = aLocale.Language.equalsAscii("zh");
@@ -424,20 +424,24 @@ Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 
         sal_Char aStr[10];
         switch( nCalendarDisplayCode ) {
             case CalendarDisplayCode::SHORT_MONTH:
-                value += 1;     // month is zero based
-                // fall thru
-            case CalendarDisplayCode::SHORT_DAY:
-            case CalendarDisplayCode::LONG_YEAR:
-                sprintf(aStr, "%d", value);
+                // month is zero based
+                sprintf(aStr, "%d", value + 1);
                 break;
             case CalendarDisplayCode::LONG_MONTH:
-                value += 1;     // month is zero based
-                sprintf(aStr, "%02d", value);
+                // month is zero based
+                sprintf(aStr, "%02d", value + 1);
                 break;
             case CalendarDisplayCode::SHORT_YEAR:
-                // take last 2 digits
-                value %= 100;
-                // fall through
+        if (value >= 100)
+            // take last 2 digits
+            sprintf(aStr, "%02d", value % 100);
+        else
+            sprintf(aStr, "%d", value);
+                break;
+            case CalendarDisplayCode::SHORT_DAY:
+                sprintf(aStr, "%d", value);
+                break;
+            case CalendarDisplayCode::LONG_YEAR:
             case CalendarDisplayCode::LONG_DAY:
                 sprintf(aStr, "%02d", value);
                 break;
@@ -469,7 +473,7 @@ Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 
         aOUStr = OUString::createFromAscii(aStr);
     }
     if (nNativeNumberMode > 0) {
-        sal_Int16 nNatNum = NatNumForCalendar(aLocale, nCalendarDisplayCode, nNativeNumberMode);
+        sal_Int16 nNatNum = NatNumForCalendar(aLocale, nCalendarDisplayCode, nNativeNumberMode, value);
         if (nNatNum > 0)
             return aNatNum.getNativeNumberString(aOUStr, aLocale, nNatNum);
     }
