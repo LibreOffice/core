@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-06 15:56:29 $
+ *  last change: $Author: tbe $ $Date: 2001-07-23 10:55:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,6 +535,9 @@ BOOL ModulWindow::SaveBasicSource()
 
     Reference< XFilePickerControlAccess > xFPControl(xFP, UNO_QUERY);
     xFPControl->enableControl(ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, sal_False);
+    Any aValue;
+    aValue <<= (sal_Bool) sal_True;
+    xFPControl->setValue(ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue);
 
     if ( aCurPath.Len() )
         xFP->setDisplayDirectory ( aCurPath );
