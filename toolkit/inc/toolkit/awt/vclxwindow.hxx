@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 15:12:24 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:04:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
 #define _TOOLKIT_AWT_VCLXWINDOW_HXX_
 
+#ifndef TOOLKIT_DLLAPI_H
+#include <toolkit/dllapi.h>
+#endif
 
 #ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
@@ -125,7 +128,7 @@ struct SystemParentData;
 //  class VCLXWINDOW
 //  ----------------------------------------------------
 
-class VCLXWindow :  public ::com::sun::star::awt::XWindow2,
+class TOOLKIT_DLLPUBLIC VCLXWindow :    public ::com::sun::star::awt::XWindow2,
                     public ::com::sun::star::awt::XVclWindowPeer,
                     public ::com::sun::star::awt::XLayoutConstrains,
                     public ::com::sun::star::awt::XView,
