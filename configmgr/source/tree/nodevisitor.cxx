@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodevisitor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 08:27:42 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:37:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,12 +100,12 @@ typedef NodeVisitor::Result Result;
     struct NodeVisitor::Dispatcher
     {
         NodeVisitor& m_target;
-        Accessor     m_accessor;
+        Accessor const & m_accessor;
         Result       m_result;
 
-        Dispatcher(NodeVisitor& _rTarget, Accessor const& _aAccessor)
+        Dispatcher(NodeVisitor& _rTarget, Accessor const * _pAccessor)
         : m_target(_rTarget)
-        , m_accessor(_aAccessor)
+        , m_accessor(*_pAccessor)
         , m_result(NodeVisitor::CONTINUE)
         {}
 
@@ -119,12 +119,12 @@ typedef NodeVisitor::Result Result;
     struct SetVisitor::Dispatcher
     {
         SetVisitor&  m_target;
-        Accessor     m_accessor;
+        Accessor const & m_accessor;
         Result       m_result;
 
-        Dispatcher(SetVisitor& _rTarget, Accessor const& _aAccessor)
+        Dispatcher(SetVisitor& _rTarget, Accessor const * _pAccessor)
         : m_target(_rTarget)
-        , m_accessor(_aAccessor)
+        , m_accessor(*_pAccessor)
         , m_result(NodeVisitor::CONTINUE)
         {}
 
@@ -154,7 +154,7 @@ typedef NodeVisitor::Result Result;
 
         default:
             OSL_ENSURE(false,"NodeVisitor: invalid node type detected"); // invalid node
-            return m_target.handle( NodeAccess(m_accessor, &_aNode) );
+            return m_target.handle( NodeAccessRef(&m_accessor, &_aNode) );
         }
     }
     // -------------------------------------------------------------------------
@@ -202,9 +202,9 @@ typedef NodeVisitor::Result Result;
     // -------------------------------------------------------------------------
 // -------------------------------------------------------------------------
 
-Result NodeVisitor::visitNode(NodeAccess const& _aNode)
+Result NodeVisitor::visitNode(NodeAccessRef const& _aNode)
 {
-    Dispatcher aDispatcher(*this, _aNode.accessor());
+    Dispatcher aDispatcher(*this, &_aNode.accessor());
 
     aDispatcher.applyToNode(_aNode.data());
 
@@ -214,7 +214,7 @@ Result NodeVisitor::visitNode(NodeAccess const& _aNode)
 
 Result SetVisitor::visitTree(TreeAccessor const& _aNode)
 {
-    Dispatcher aDispatcher(*this, _aNode.accessor());
+    Dispatcher aDispatcher(*this, &_aNode.accessor());
 
     aDispatcher.applyToTree(_aNode.data());
 
@@ -224,7 +224,7 @@ Result SetVisitor::visitTree(TreeAccessor const& _aNode)
 
 Result NodeVisitor::visitChildren(GroupNodeAccess const& _aNode)
 {
-    Dispatcher aDispatcher(*this, _aNode.accessor());
+    Dispatcher aDispatcher(*this, &_aNode.accessor());
 
     aDispatcher.applyToChildren(_aNode.data());
 
@@ -234,7 +234,7 @@ Result NodeVisitor::visitChildren(GroupNodeAccess const& _aNode)
 
 Result SetVisitor::visitElements(SetNodeAccess const& _aNode)
 {
-    Dispatcher aDispatcher(*this, _aNode.accessor());
+    Dispatcher aDispatcher(*this, &_aNode.accessor());
 
     aDispatcher.applyToElements(_aNode.data());
 
@@ -242,7 +242,7 @@ Result SetVisitor::visitElements(SetNodeAccess const& _aNode)
 }
 // -------------------------------------------------------------------------
 
-Result NodeVisitor::handle(NodeAccess const& _aNode)
+Result NodeVisitor::handle(NodeAccessRef const& _aNode)
 {
     return CONTINUE;
 }
@@ -250,19 +250,19 @@ Result NodeVisitor::handle(NodeAccess const& _aNode)
 
 Result NodeVisitor::handle(ValueNodeAccess const& _aNode)
 {
-    return handle(static_cast<NodeAccess>(_aNode));
+    return handle(static_cast<NodeAccessRef>(_aNode));
 }
 // -------------------------------------------------------------------------
 
 Result NodeVisitor::handle(GroupNodeAccess const& _aNode)
 {
-    return handle(static_cast<NodeAccess>(_aNode));
+    return handle(static_cast<NodeAccessRef>(_aNode));
 }
 // -------------------------------------------------------------------------
 
 Result NodeVisitor::handle(SetNodeAccess const& _aNode)
 {
-    return handle(static_cast<NodeAccess>(_aNode));
+    return handle(static_cast<NodeAccessRef>(_aNode));
 }
 // -------------------------------------------------------------------------
 
