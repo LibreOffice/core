@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-14 21:12:00 $
+ *  last change: $Author: kz $ $Date: 2002-01-25 21:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ String STR_COULDNOTCREATE_DRIVERMANAGER
     Text[ spanish ] = "No se pudo establecer una conexi�n al administrador de controladores SDBC (#servicename#).";
     Text[ italian ] = "Non � possibile stabilire il collegamento al driver SDBC Manager (#servicename#).";
     Text[ danish ] = "Det var ikke muligt at oprette en forbindelse til SDBC driver manageren (#servicename#).";
-    Text[ swedish ] = "Det gick inte att uppr�tta en f�rbindelse till SDBC-drivrutinsmanagern (#servicename#).";
+    Text[ swedish ] = "Det gick inte att ansluta till SDBC-drivrutinshanteraren (#servicename#).";
     Text[ polish ] = "Brak po��czenia z mened�erem sterownika SDCB (#servicename#).";
     Text[ portuguese_brazilian ] = "The connection to the SDBC driver manager (#servicename#) could not be established.";
     Text[ japanese ] = "SDBC ドライバマネジャー(#servicename#)へ接続できませんでした。";
@@ -351,6 +351,9 @@ String STR_ALL_TABLES_AND_VIEWS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.22  2002/01/14 21:12:00  kz
+ *  Merge SRC641: 01/14/02 - 22:07:08
+ *
  *  Revision 1.21  2001/12/14 16:42:23  obo
  *  Merge SRC641: 14.12.01 - 17:41:28
  *
