@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mmi $ $Date: 2004-07-14 10:44:22 $
+#   last change: $Author: mt $ $Date: 2004-07-14 11:05:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -177,7 +177,11 @@ SHL4STDLIBS=\
 .IF "$(GUI)"=="WNT"
 SHL4STDLIBS+= "xmlsec.lib" "xsec_xmlsec.lib"
 .ELSE
+<<<<<<< makefile.mk
+SHL4STDLIBS+= "-lxmlsec" "-lxsec_xmlsec"
+=======
 SHL4STDLIBS+= "-lxmlsec" "-lxsec_xmlsec" 
+>>>>>>> 1.2
 .ENDIF
                 
         

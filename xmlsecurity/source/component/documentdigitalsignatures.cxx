@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdigitalsignatures.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:24 $
+ *  last change: $Author: mt $ $Date: 2004-07-14 11:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
 #include <com/sun/star/embed/XStorage.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
+
 
 
 using namespace ::com::sun::star;
@@ -77,28 +81,99 @@ DocumentDigitalSignatures::DocumentDigitalSignatures( const com::sun::star::uno:
     mxMSF = rxMSF;
 }
 
-
-sal_Bool DocumentDigitalSignatures::SignDocumentContent( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rxStorage, const ::rtl::OUString& rStorageName, const ::rtl::OUString& rTokenName ) throw (::com::sun::star::uno::RuntimeException)
+sal_Bool DocumentDigitalSignatures::SignDocumentContent( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rxStorage ) throw (::com::sun::star::uno::RuntimeException)
 {
-    DigitalSignaturesDialog aSignaturesDialog( NULL, mxMSF, SignatureModeDocumentContent );
+    return ImplViewSignatures( rxStorage, SignatureModeDocumentContent, false );
+}
 
-    bool bInit = aSignaturesDialog.Init( rTokenName );
+::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignaturesInformation > DocumentDigitalSignatures::VerifyDocumentContentSignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rxStorage ) throw (::com::sun::star::uno::RuntimeException)
+{
+    return ImplVerifySignatures( rxStorage, SignatureModeDocumentContent );
+}
 
+void DocumentDigitalSignatures::ShowDocumentContentSignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rxStorage ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ImplViewSignatures( rxStorage, SignatureModeDocumentContent, true );
+}
+
+sal_Bool DocumentDigitalSignatures::SignScriptingContent( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rxStorage ) throw (::com::sun::star::uno::RuntimeException)
+{
+    return ImplViewSignatures( rxStorage, SignatureModeMacros, false );
+}
+
+::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignaturesInformation > DocumentDigitalSignatures::VerifyScriptingContentSignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rxStorage ) throw (::com::sun::star::uno::RuntimeException)
+{
+    return ImplVerifySignatures( rxStorage, SignatureModeMacros );
+}
+
+void DocumentDigitalSignatures::ShowScriptingContentSignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rxStorage ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ImplViewSignatures( rxStorage, SignatureModeMacros, true );
+}
+
+sal_Bool DocumentDigitalSignatures::SignPackage( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rxStorage ) throw (::com::sun::star::uno::RuntimeException)
+{
+    return ImplViewSignatures( rxStorage, SignatureModePackage, false );
+}
+
+::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignaturesInformation > DocumentDigitalSignatures::VerifyPackageSignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rxStorage ) throw (::com::sun::star::uno::RuntimeException)
+{
+    return ImplVerifySignatures( rxStorage, SignatureModePackage );
+}
+
+void DocumentDigitalSignatures::ShowPackageSignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rxStorage ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ImplViewSignatures( rxStorage, SignatureModePackage, true );
+}
+
+sal_Bool DocumentDigitalSignatures::ImplViewSignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rxStorage, DocumentSignatureMode eMode, bool bReadOnly ) throw (::com::sun::star::uno::RuntimeException)
+{
+    DigitalSignaturesDialog aSignaturesDialog( NULL, mxMSF, eMode, bReadOnly );
+
+    bool bInit = aSignaturesDialog.Init( rtl::OUString() );
     DBG_ASSERT( bInit, "Error initializing security context!" );
     if ( bInit )
     {
         aSignaturesDialog.SetStorage( rxStorage );
-        aSignaturesDialog.SetSignatureFileName( rStorageName );
         aSignaturesDialog.Execute();
     }
 
-    return 0;
+    return aSignaturesDialog.SignaturesChanged();
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignaturesInformation > DocumentDigitalSignatures::VerifyDocumentContentSignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& Storage, const ::rtl::OUString& StorageName, const ::rtl::OUString& rTokenName ) throw (::com::sun::star::uno::RuntimeException)
+com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignaturesInformation > DocumentDigitalSignatures::ImplVerifySignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rxStorage, DocumentSignatureMode eMode ) throw (::com::sun::star::uno::RuntimeException)
 {
+    std::vector< rtl::OUString > aElementsToBeVerified = DocumentSignatureHelper::CreateElementList( rxStorage, ::rtl::OUString(), eMode );
+
+    XMLSignatureHelper aSignatureHelper( mxMSF );
+    aSignatureHelper.Init( rtl::OUString() );
+    aSignatureHelper.SetStorage( rxStorage );
+
+    aSignatureHelper.StartMission();
+
+    SignatureStreamHelper aStreamHelper = DocumentSignatureHelper::OpenSignatureStream( rxStorage, embed::ElementModes::READ, eMode );
+    if ( aStreamHelper.xSignatureStream.is() )
+    {
+        uno::Reference< io::XInputStream > xInputStream( aStreamHelper.xSignatureStream, uno::UNO_QUERY );
+        bool bVerifyOK = aSignatureHelper.ReadAndVerifySignature( xInputStream );
+
+        if ( bVerifyOK )
+        {
+            // SignatureInformations aInformations = aSignatureHelper.GetSignatureInformations();
+            // ...
+        }
+    }
+
+    aStreamHelper.Clear();
+
+    aSignatureHelper.EndMission();
+
+    // MT: LATER...
+    //  = aHelper.GetSignatureInformations();
+
     ::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignaturesInformation > aInfos;
     return aInfos;
+
 }
 
 rtl::OUString DocumentDigitalSignatures::GetImplementationName() throw (uno::RuntimeException)
@@ -106,7 +181,7 @@ rtl::OUString DocumentDigitalSignatures::GetImplementationName() throw (uno::Run
     return rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) );
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL DocumentDigitalSignatures::GetSupportedServiceNames() throw (cssu::RuntimeException)
+uno::Sequence< rtl::OUString > DocumentDigitalSignatures::GetSupportedServiceNames() throw (cssu::RuntimeException)
 {
     uno::Sequence < rtl::OUString > aRet(1);
     rtl::OUString* pArray = aRet.getArray();
@@ -115,9 +190,8 @@ uno::Sequence< rtl::OUString > SAL_CALL DocumentDigitalSignatures::GetSupportedS
 }
 
 
-com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL DocumentDigitalSignatures_CreateInstance(
+com::sun::star::uno::Reference< com::sun::star::uno::XInterface > DocumentDigitalSignatures_CreateInstance(
     const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rSMgr) throw ( com::sun::star::uno::Exception )
 {
     return (cppu::OWeakObject*) new DocumentDigitalSignatures( rSMgr );
 }
-

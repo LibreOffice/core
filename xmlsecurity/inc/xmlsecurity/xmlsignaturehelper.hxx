@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignaturehelper.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:20 $
+ *  last change: $Author: mt $ $Date: 2004-07-14 11:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ public:
 
                 // Argument for the Link is a uno::Reference< xml::sax::XAttributeList >*
                 // Return 1 to verify, 0 to skip.
-                // Default will verify all.
+                // Default handler will verify all.
     void        SetStartVerifySignatureHdl( const Link& rLink );
 
                 // Get the security environment
@@ -199,9 +199,9 @@ public:
     void        SetDateTime( sal_Int32 nSecurityId, const rtl::OUString& ouDate, const rtl::OUString& ouTime);
 
     void        AddForSigning( sal_Int32 securityId, const rtl::OUString& uri, const rtl::OUString& objectURL, sal_Bool bBinary );
-    bool        CreateAndWriteSignatue( const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& xDocumentHandler );
-    bool        CreateAndWriteSignatue( const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xOutputStream );
-    bool        ReadAndVerifySignatue( const com::sun::star::uno::Reference< com::sun::star::io::XInputStream >& xInputStream );
+    bool        CreateAndWriteSignature( const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& xDocumentHandler );
+    bool        CreateAndWriteSignature( const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xOutputStream );
+    bool        ReadAndVerifySignature( const com::sun::star::uno::Reference< com::sun::star::io::XInputStream >& xInputStream );
 
     // MT: ??? I think only for adding/removing, not for new signatures...
     // MM: Yes, but if you want to insert a new signature into an existing signature file, those function

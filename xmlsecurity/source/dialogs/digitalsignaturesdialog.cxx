@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-13 11:02:46 $
+ *  last change: $Author: mt $ $Date: 2004-07-14 11:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ using namespace ::com::sun::star::security;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star;
 
-DigitalSignaturesDialog::DigitalSignaturesDialog( Window* pParent, uno::Reference< lang::XMultiServiceFactory >& rxMSF, DocumentSignatureMode eMode )
+DigitalSignaturesDialog::DigitalSignaturesDialog( Window* pParent, uno::Reference< lang::XMultiServiceFactory >& rxMSF, DocumentSignatureMode eMode, sal_Bool bReadOnly )
     :ModalDialog        ( pParent, XMLSEC_RES( RID_XMLSECDLG_DIGSIG ) )
     ,maSignatureHelper  ( rxMSF )
     ,meSignatureMode    ( eMode )
@@ -112,6 +112,7 @@ DigitalSignaturesDialog::DigitalSignaturesDialog( Window* pParent, uno::Referenc
 
     FreeResource();
     mbVerifySignatures = true;
+    mbSignaturesChanged = false;
 
     maSignaturesLB.SetSelectHdl( LINK( this, DigitalSignaturesDialog, SignatureHighlightHdl ) );
     maSignaturesLB.SetDoubleClickHdl( LINK( this, DigitalSignaturesDialog, SignatureSelectHdl ) );
@@ -120,6 +121,8 @@ DigitalSignaturesDialog::DigitalSignaturesDialog( Window* pParent, uno::Referenc
     maViewBtn.Disable();
 
     maAddBtn.SetClickHdl( LINK( this, DigitalSignaturesDialog, AddButtonHdl ) );
+    if ( bReadOnly )
+        maAddBtn.Disable();
 
     maRemoveBtn.SetClickHdl( LINK( this, DigitalSignaturesDialog, RemoveButtonHdl ) );
     maRemoveBtn.Disable();
@@ -176,9 +179,11 @@ short DigitalSignaturesDialog::Execute()
 
 IMPL_LINK( DigitalSignaturesDialog, SignatureHighlightHdl, void*, EMPTYARG )
 {
-    bool    bSel = maSignaturesLB.FirstSelected() != 0;
+    bool bSel = maSignaturesLB.FirstSelected() ? true : false;
     maViewBtn.Enable( bSel );
-    maRemoveBtn.Enable( bSel );
+    if ( maAddBtn.IsEnabled() ) // not read only
+        maRemoveBtn.Enable( bSel );
+
     return 0;
 }
 
@@ -212,7 +217,7 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
             uno::Reference< ::com::sun::star::security::XCertificate > xCert = aChooser.GetSelectedCertificate();
             maSignatureHelper.SetX509Certificate( nSecurityId, xCert->getIssuerName(), bigIntegerToNumericString( xCert->getSerialNumber() ) );
 
-            std::vector< rtl::OUString > aElements = CreateElementList( mxStore, rtl::OUString(), meSignatureMode );
+            std::vector< rtl::OUString > aElements = DocumentSignatureHelper::CreateElementList( mxStore, rtl::OUString(), meSignatureMode );
 
             ::rtl::OUString aXMLExt( RTL_CONSTASCII_USTRINGPARAM( "XML" ) );
             sal_Int32 nElements = aElements.size();
@@ -229,7 +234,7 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
                 maSignatureHelper.AddForSigning( nSecurityId, aElements[n], aElements[n], bBinaryMode );
             }
 
-            SignatureStreamHelper aStreamHelper = OpenSignatureStream( mxStore, embed::ElementModes::WRITE|embed::ElementModes::TRUNCATE, meSignatureMode );
+            SignatureStreamHelper aStreamHelper = DocumentSignatureHelper::OpenSignatureStream( mxStore, embed::ElementModes::WRITE|embed::ElementModes::TRUNCATE, meSignatureMode );
             uno::Reference< io::XOutputStream > xOutputStream( aStreamHelper.xSignatureStream, uno::UNO_QUERY );
             uno::Reference< com::sun::star::xml::sax::XDocumentHandler> xDocumentHandler = maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
 
@@ -239,28 +244,31 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
                 maSignatureHelper.ExportSignature( xDocumentHandler, aCurrentSignatureInformations[n]);
 
             // Create a new one...
-            bool bDone = maSignatureHelper.CreateAndWriteSignatue( xDocumentHandler );
+            bool bDone = maSignatureHelper.CreateAndWriteSignature( xDocumentHandler );
 
             // That's it...
             maSignatureHelper.CloseDocumentHandler( xDocumentHandler);
-
-            uno::Reference< embed::XTransactedObject > xTrans( aStreamHelper.xSignatureStorage, uno::UNO_QUERY );
-            xTrans->commit();
-
-            uno::Reference< embed::XTransactedObject > xTrans2( mxStore, uno::UNO_QUERY );
-            xTrans2->commit();
-
-            aStreamHelper.Dispose();
 
             maSignatureHelper.EndMission();
 
             if ( bDone )
             {
+                uno::Reference< embed::XTransactedObject > xTrans( aStreamHelper.xSignatureStorage, uno::UNO_QUERY );
+                xTrans->commit();
+
+                uno::Reference< embed::XTransactedObject > xTrans2( mxStore, uno::UNO_QUERY );
+                xTrans2->commit();
+
+                aStreamHelper.Clear();
+
+                mbSignaturesChanged = true;
+
                 // Can't simply remember current information, need parsing for getting full information :(
                 ImplGetSignatureInformations();
                 ImplFillSignaturesBox();
             }
 
+            aStreamHelper.Clear();
         }
     }
     catch (NoPasswordException&)
@@ -278,7 +286,7 @@ IMPL_LINK( DigitalSignaturesDialog, RemoveButtonHdl, Button*, EMPTYARG )
         aCurrentSignatureInformations.erase( aCurrentSignatureInformations.begin()+nSelected );
 
         // Export all other signatures...
-        SignatureStreamHelper aStreamHelper = OpenSignatureStream( mxStore, embed::ElementModes::WRITE|embed::ElementModes::TRUNCATE, meSignatureMode );
+        SignatureStreamHelper aStreamHelper = DocumentSignatureHelper::OpenSignatureStream( mxStore, embed::ElementModes::WRITE|embed::ElementModes::TRUNCATE, meSignatureMode );
         uno::Reference< io::XOutputStream > xOutputStream( aStreamHelper.xSignatureStream, uno::UNO_QUERY );
         uno::Reference< com::sun::star::xml::sax::XDocumentHandler> xDocumentHandler = maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
 
@@ -294,7 +302,9 @@ IMPL_LINK( DigitalSignaturesDialog, RemoveButtonHdl, Button*, EMPTYARG )
         uno::Reference< embed::XTransactedObject > xTrans2( mxStore, uno::UNO_QUERY );
         xTrans2->commit();
 
-        aStreamHelper.Dispose();
+        mbSignaturesChanged = true;
+
+        aStreamHelper.Clear();
 
         ImplFillSignaturesBox();
     }
@@ -358,17 +368,17 @@ void DigitalSignaturesDialog::ImplGetSignatureInformations()
 
     maSignatureHelper.StartMission();
 
-    SignatureStreamHelper aStreamHelper = OpenSignatureStream( mxStore, embed::ElementModes::READ, meSignatureMode );
+    SignatureStreamHelper aStreamHelper = DocumentSignatureHelper::OpenSignatureStream( mxStore, embed::ElementModes::READ, meSignatureMode );
     if ( aStreamHelper.xSignatureStream.is() )
     {
         uno::Reference< io::XInputStream > xInputStream( aStreamHelper.xSignatureStream, uno::UNO_QUERY );
-        bool bVerifyOK = maSignatureHelper.ReadAndVerifySignatue( xInputStream );
+        bool bVerifyOK = maSignatureHelper.ReadAndVerifySignature( xInputStream );
 
         if ( bVerifyOK )
             aCurrentSignatureInformations = maSignatureHelper.GetSignatureInformations();
     }
 
-    aStreamHelper.Dispose();
+    aStreamHelper.Clear();
 
     maSignatureHelper.EndMission();
 
@@ -392,158 +402,5 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
         uno::Reference<com::sun::star::xml::crypto::XSecurityEnvironment> xSecEnv = maSignatureHelper.GetSecurityEnvironment();
         CertificateViewer aViewer( this, xSecEnv, xCert );
         aViewer.Execute();
-    }
-}
-
-void ImplFillElementList( std::vector< rtl::OUString >& rList, uno::Reference < embed::XStorage >& rxStore, const ::rtl::OUString rRootStorageName, bool bRecursive )
-{
-    ::rtl::OUString aMetaInfName( RTL_CONSTASCII_USTRINGPARAM( "META-INF" ) );
-    ::rtl::OUString aSep( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
-
-    uno::Reference < container::XNameAccess > xElements( rxStore, uno::UNO_QUERY );
-    uno::Sequence< ::rtl::OUString > aElements = xElements->getElementNames();
-    sal_Int32 nElements = aElements.getLength();
-    const ::rtl::OUString* pNames = aElements.getConstArray();
-    for ( sal_Int32 n = 0; n < nElements; n++ )
-    {
-        if ( pNames[n] != aMetaInfName )
-        {
-            if ( rxStore->isStreamElement( pNames[n] ) )
-            {
-                ::rtl::OUString aFullName( rRootStorageName + pNames[n] );
-                rList.push_back( aFullName );
-            }
-            else if ( bRecursive && rxStore->isStorageElement( pNames[n] ) )
-            {
-                uno::Reference < embed::XStorage > xSubStore = rxStore->openStorageElement( pNames[n], embed::ElementModes::READ );
-                rtl::OUString aFullRootName( rRootStorageName + pNames[n] + aSep );
-                ImplFillElementList( rList, rxStore, aFullRootName, bRecursive );
-            }
-        }
-    }
-}
-
-std::vector< rtl::OUString > DigitalSignaturesDialog::CreateElementList( uno::Reference < embed::XStorage >& rxStore, const ::rtl::OUString rRootStorageName, DocumentSignatureMode eMode )
-{
-    std::vector< rtl::OUString > aElements;
-    ::rtl::OUString aSep( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
-
-
-    switch ( eMode )
-    {
-        case SignatureModeDocumentContent:
-        {
-            // 1) Main content
-            ImplFillElementList( aElements, rxStore, ::rtl::OUString(), false );
-
-            // 2) Pictures...
-            rtl::OUString aSubStorageName( rtl::OUString::createFromAscii( "Pictures" ) );
-            try
-            {
-                uno::Reference < embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, embed::ElementModes::READ );
-                ImplFillElementList( aElements, xSubStore, aSubStorageName+aSep, true );
-            }
-            catch( com::sun::star::io::IOException& )
-            {
-                ; // Doesn't have to exist...
-            }
-        }
-        break;
-        case SignatureModeMacros:
-        {
-            // 1) Macros
-            rtl::OUString aSubStorageName( rtl::OUString::createFromAscii( "Basic" ) );
-            try
-            {
-                uno::Reference < embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, embed::ElementModes::READ );
-                ImplFillElementList( aElements, xSubStore, aSubStorageName+aSep, true );
-            }
-            catch( com::sun::star::io::IOException& )
-            {
-                ; // Doesn't have to exist...
-            }
-
-            // 2) Dialogs
-            aSubStorageName = rtl::OUString::createFromAscii( "Dialogs") ;
-            try
-            {
-                uno::Reference < embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, embed::ElementModes::READ );
-                ImplFillElementList( aElements, xSubStore, aSubStorageName+aSep, true );
-            }
-            catch( com::sun::star::io::IOException& )
-            {
-                ; // Doesn't have to exist...
-            }
-        }
-        break;
-        case SignatureModePackage:
-        {
-            // Everything except META-INF
-            ImplFillElementList( aElements, rxStore, ::rtl::OUString(), true );
-        }
-        break;
-    }
-
-    return aElements;
-}
-
-SignatureStreamHelper DigitalSignaturesDialog::OpenSignatureStream( uno::Reference < embed::XStorage >& rxStore, sal_Int32 nOpenMode, DocumentSignatureMode eDocSigMode )
-{
-    sal_Int32 nSubStorageOpenMode = embed::ElementModes::READ;
-    if ( nOpenMode & embed::ElementModes::WRITE )
-        nSubStorageOpenMode = embed::ElementModes::WRITE;
-
-    SignatureStreamHelper aHelper;
-
-    try
-    {
-        ::rtl::OUString aSIGStoreName( RTL_CONSTASCII_USTRINGPARAM( "META-INF" ) );
-        aHelper.xSignatureStorage = rxStore->openStorageElement( aSIGStoreName, nSubStorageOpenMode );
-        if ( aHelper.xSignatureStorage.is() )
-        {
-            ::rtl::OUString aSIGStreamName;
-            if ( eDocSigMode == SignatureModeDocumentContent )
-                aSIGStreamName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentSignatures.xml" ) );
-            else if ( eDocSigMode == SignatureModeMacros )
-                aSIGStreamName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MacroSignatures.xml" ) );
-            else
-                aSIGStreamName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PackageSignatures.xml" ) );
-
-            aHelper.xSignatureStream = aHelper.xSignatureStorage->openStreamElement( aSIGStreamName, nOpenMode );
-        }
-    }
-    catch( com::sun::star::io::IOException& )
-    {
-        // Doesn't have to exist...
-        DBG_ASSERT( nOpenMode == embed::ElementModes::READ, "Error creating signature stream..." );
-    }
-
-    return aHelper;
-}
-
-void SignatureStreamHelper::Dispose()
-{
-    if ( xSignatureStorage.is() )
-    {
-        try
-        {
-            uno::Reference< lang::XComponent > xComp( xSignatureStorage, uno::UNO_QUERY );
-            xComp->dispose();
-        }
-        catch ( lang::DisposedException )
-        {
-        }
-    }
-
-    if ( xSignatureStream.is() )
-    {
-        try
-        {
-            uno::Reference< lang::XComponent > xComp( xSignatureStream, uno::UNO_QUERY );
-            xComp->dispose();
-        }
-        catch ( lang::DisposedException )
-        {
-        }
     }
 }

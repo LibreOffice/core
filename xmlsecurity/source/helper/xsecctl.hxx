@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xsecctl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:22 $
+ *  last change: $Author: mt $ $Date: 2004-07-14 11:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,7 +510,7 @@ public:
         const rtl::OUString& ouDate,
         const rtl::OUString& ouTime);
 
-    bool WriteSignatue(
+    bool WriteSignature(
         const com::sun::star::uno::Reference<
             com::sun::star::xml::sax::XDocumentHandler >& xDocumentHandler );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdigitalsignatures.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:24 $
+ *  last change: $Author: mt $ $Date: 2004-07-14 11:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include <cppuhelper/implbase1.hxx>
 
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
+#include <xmlsecurity/documentsignaturehelper.hxx>
 
 
 class DocumentDigitalSignatures : public cppu::WeakImplHelper1
@@ -75,6 +76,9 @@ class DocumentDigitalSignatures : public cppu::WeakImplHelper1
 private:
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > mxMSF;
 
+    sal_Bool ImplViewSignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rxStorage, DocumentSignatureMode eMode, bool bReadOnly ) throw (::com::sun::star::uno::RuntimeException);
+    com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignaturesInformation > ImplVerifySignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rxStorage, DocumentSignatureMode eMode ) throw (::com::sun::star::uno::RuntimeException);
+
 public:
     DocumentDigitalSignatures( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory> rxMSF );
 
@@ -83,8 +87,15 @@ public:
     static ::com::sun::star::uno::Sequence < ::rtl::OUString > GetSupportedServiceNames() throw (com::sun::star::uno::RuntimeException);
 
     // XDocumentDigitalSignatures
-    virtual sal_Bool SAL_CALL SignDocumentContent( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& Storage, const ::rtl::OUString& StorageName, const ::rtl::OUString& rTokenName ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignaturesInformation > SAL_CALL VerifyDocumentContentSignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& Storage, const ::rtl::OUString& StorageName, const ::rtl::OUString& rTokenName ) throw (::com::sun::star::uno::RuntimeException);
+    sal_Bool SAL_CALL SignDocumentContent( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rxStorage ) throw (::com::sun::star::uno::RuntimeException);
+    com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignaturesInformation > SAL_CALL VerifyDocumentContentSignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rxStorage ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL ShowDocumentContentSignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& Storage ) throw (::com::sun::star::uno::RuntimeException);
+    sal_Bool SAL_CALL SignScriptingContent( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rxStorage ) throw (::com::sun::star::uno::RuntimeException);
+    com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignaturesInformation > SAL_CALL VerifyScriptingContentSignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rxStorage ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL ShowScriptingContentSignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& Storage ) throw (::com::sun::star::uno::RuntimeException);
+    sal_Bool SAL_CALL SignPackage( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rxStorage ) throw (::com::sun::star::uno::RuntimeException);
+    com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignaturesInformation > SAL_CALL VerifyPackageSignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rxStorage ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL ShowPackageSignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& Storage ) throw (::com::sun::star::uno::RuntimeException);
 
 };
 

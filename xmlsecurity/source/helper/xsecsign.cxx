@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xsecsign.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:22 $
+ *  last change: $Author: mt $ $Date: 2004-07-14 11:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,7 +319,7 @@ void XSecController::setDateTime(
     }
 }
 
-bool XSecController::WriteSignatue(
+bool XSecController::WriteSignature(
     const cssu::Reference<cssxs::XDocumentHandler>& xDocumentHandler )
 {
     bool rc = false;

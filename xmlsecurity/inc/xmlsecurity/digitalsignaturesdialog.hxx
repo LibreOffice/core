@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-13 11:01:59 $
+ *  last change: $Author: mt $ $Date: 2004-07-14 11:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include <vcl/button.hxx>
 #include <svx/simptabl.hxx>
 
+#include <xmlsecurity/documentsignaturehelper.hxx>
 #include <xmlsecurity/xmlsignaturehelper.hxx>
 
 #ifndef _STLP_VECTOR
@@ -89,16 +90,6 @@ namespace cssu = com::sun::star::uno;
 
 class HeaderBar;
 
-enum DocumentSignatureMode { SignatureModeDocumentContent, SignatureModeMacros, SignatureModePackage };
-
-struct SignatureStreamHelper
-{
-    cssu::Reference < css::embed::XStorage >    xSignatureStorage;
-    cssu::Reference < css::io::XStream >        xSignatureStream;
-
-    void Dispose();
-};
-
 class DigitalSignaturesDialog : public ModalDialog
 {
 private:
@@ -108,6 +99,7 @@ private:
     css::uno::Reference < css::embed::XStorage > mxStore;
     SignatureInformations   aCurrentSignatureInformations;
     bool                    mbVerifySignatures;
+    bool                    mbSignaturesChanged;
     DocumentSignatureMode   meSignatureMode;
 
     // HACK, until sig in storage works
@@ -139,7 +131,7 @@ private:
     void                ImplShowSignaturesDetails();
 
 public:
-    DigitalSignaturesDialog( Window* pParent, cssu::Reference< css::lang::XMultiServiceFactory >& rxMSF, DocumentSignatureMode eMode );
+    DigitalSignaturesDialog( Window* pParent, cssu::Reference< css::lang::XMultiServiceFactory >& rxMSF, DocumentSignatureMode eMode, sal_Bool bReadOnly );
     ~DigitalSignaturesDialog();
 
             // Initialize the dialog and the security environment, returns TRUE on success
@@ -151,11 +143,11 @@ public:
             // HACK: Set a signature file name, use this until sig in storage works!
     void    SetSignatureFileName( const rtl::OUString& rName ) { maSigFileName = rName; }
 
-            // Execute the dialog...
-    short   Execute();
+                // Execute the dialog...
+    short       Execute();
 
-    static SignatureStreamHelper OpenSignatureStream( css::uno::Reference < css::embed::XStorage >& rxStore, sal_Int32 nOpenMode, DocumentSignatureMode eDocSigMode );
-    static std::vector< rtl::OUString > CreateElementList( css::uno::Reference < css::embed::XStorage >& rxStore, const ::rtl::OUString rRootStorageName, DocumentSignatureMode eMode );
+                // Did signatures change?
+    sal_Bool    SignaturesChanged() const { return mbSignaturesChanged; }
 };
 
 #endif // _XMLSECURITY_DIGITALSIGNATURESDIALOG_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignaturehelper.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:22 $
+ *  last change: $Author: mt $ $Date: 2004-07-14 11:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ void XMLSignatureHelper::ExportSignature(
     mpXSecController->exportSignature(xDocumentHandler, signatureInfo);
 }
 
-bool XMLSignatureHelper::CreateAndWriteSignatue( const uno::Reference< xml::sax::XDocumentHandler >& xDocumentHandler )
+bool XMLSignatureHelper::CreateAndWriteSignature( const uno::Reference< xml::sax::XDocumentHandler >& xDocumentHandler )
 {
     mbError = false;
 
@@ -250,7 +250,7 @@ bool XMLSignatureHelper::CreateAndWriteSignatue( const uno::Reference< xml::sax:
     /*
      * write signatures
      */
-    if ( !mpXSecController->WriteSignatue( xDocumentHandler ) )
+    if ( !mpXSecController->WriteSignature( xDocumentHandler ) )
     {
         mbError = true;
     }
@@ -263,19 +263,19 @@ bool XMLSignatureHelper::CreateAndWriteSignatue( const uno::Reference< xml::sax:
     return !mbError;
 }
 
-bool XMLSignatureHelper::CreateAndWriteSignatue( const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xOutputStream )
+bool XMLSignatureHelper::CreateAndWriteSignature( const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xOutputStream )
 {
     uno::Reference<xml::sax::XDocumentHandler> xDocHandler
         = CreateDocumentHandlerWithHeader(xOutputStream);
 
-    bool rc = CreateAndWriteSignatue( xDocHandler );
+    bool rc = CreateAndWriteSignature( xDocHandler );
 
     CloseDocumentHandler(xDocHandler);
 
     return rc;
 }
 
-bool XMLSignatureHelper::ReadAndVerifySignatue( const com::sun::star::uno::Reference< com::sun::star::io::XInputStream >& xInputStream )
+bool XMLSignatureHelper::ReadAndVerifySignature( const com::sun::star::uno::Reference< com::sun::star::io::XInputStream >& xInputStream )
 {
     mbError = false;
 
