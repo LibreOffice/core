@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sd_SdUnoOutlineView.xba,v $ 
 '*
-'*  $Revision: 1.4 $ 
+'*  $Revision: 1.5 $ 
 '*
-'*  last change:$Date: 2003-03-06 14:41:28 $ 
+'*  last change:$Date: 2003-03-06 14:41:56 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -102,7 +102,6 @@ Sub CreateObj()
 '*************************************************************************
 On Error Goto ErrHndl
     Dim bOK As Boolean
-    Dim o
     
     bOK = true
 
