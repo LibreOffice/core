@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbregister.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:36:53 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:14:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,7 +468,7 @@ String DbRegistrationOptionsPage::getFileLocation(const String& _sLocation)
             aNewObj.removeFinalSlash();
 
             // then the new path also an URL else system path
-            String sNewLocation = bURL ? String(aFiles[0]) : aNewObj.getFSysPath( INetURLObject::FSYS_DETECT );
+            String sNewLocation = bURL ? rtl::OUString(aFiles[0]) : aNewObj.getFSysPath( INetURLObject::FSYS_DETECT );
 
             if (
 #ifdef UNX
