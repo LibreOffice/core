@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: tra $ $Date: 2001-03-02 06:57:10 $
+#   last change: $Author: tra $ $Date: 2001-05-11 10:31:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,6 @@ PRJ=..$/..
 PRJNAME=dtrans
 TARGET=mcnttype
 ENABLE_EXCEPTIONS=TRUE
-LIBTARGET=NO
 COMP1TYPELIST=$(TARGET)
 COMPRDB=$(SOLARBINDIR)$/applicat.rdb
 USE_BOUNDCHK=
@@ -86,23 +85,6 @@ stoponerror=tr
 SLOFILES=$(SLO)$/mctfentry.obj \
          $(SLO)$/mcnttfactory.obj \
          $(SLO)$/mcnttype.obj
-
-SHL1TARGET=$(TARGET)
-
-SHL1STDLIBS= \
-        $(SALLIB)	\
-        $(CPPULIB) 	\
-        $(CPPUHELPERLIB)
-
-SHL1IMPLIB=i$(SHL1TARGET) 
-
-#--- comment -----------------
-
-SHL1OBJS=		$(SLOFILES)
-SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME=		$(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
 
 # --- Targets ------------------------------------------------------
 

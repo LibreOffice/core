@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.1 $
 #
-#   last change: $Author: tra $ $Date: 2001-05-11 10:32:06 $
+#   last change: $Author: tra $ $Date: 2001-05-11 10:34:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,35 +60,123 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..
+PRJ=..
 
 PRJNAME=dtrans
-TARGET=sysdtrans
-ENABLE_EXCEPTIONS=TRUE
-COMP1TYPELIST=$(TARGET)
-COMPRDB=$(SOLARBINDIR)$/applicat.rdb
-USE_BOUNDCHK=
-
-.IF "$(USE_BOUNDCHK)"=="TR"
-bndchk=tr
-stoponerror=tr
-.ENDIF
+TARGET=dtrans
+TARGET1=mcnttype
+TARGET2=ftransl
+TARGET3=sysdtrans
+TARGET4=dnd
+USE_LDUMP2=TRUE
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
 
-# ------------------------------------------------------------------
 
-.INCLUDE : ..$/..$/cppumaker.mk
+# --- mcnttype dynlib ----------------------------------------------
 
-CFLAGS+=/GR -DUNICODE -D_UNICODE
+SHL1TARGET=$(TARGET1)
 
-SLOFILES=$(SLO)$/WinClipboard.obj \
-         $(SLO)$/WinClipbImpl.obj \
-         $(SLO)$/wcbentry.obj
+SHL1LIBS=$(SLB)$/mcnttype.lib
+
+SHL1STDLIBS= \
+        $(SALLIB)	\
+        $(CPPULIB) 	\
+        $(CPPUHELPERLIB)
+
+SHL1IMPLIB=i$(SHL1TARGET) 
+
+#--- comment -----------------
+
+SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=		$(SHL1TARGET)
+DEF1EXPORTFILE=	exports.dxp
 
 
-# --- Targets ------------------------------------------------------
+.IF "$(GUI)"!="WIN"
 
-.INCLUDE :	target.mk
+# --- ftransl dll ---
+
+SHL2TARGET=$(TARGET2)
+
+SHL2LIBS=$(SLB)$/ftransl.lib\
+         $(SLB)$/dtutils.lib
+
+SHL2STDLIBS= \
+        $(SALLIB)	\
+        $(CPPULIB) 	\
+        $(CPPUHELPERLIB)\
+        ole32.lib\
+        gdi32.lib
+
+SHL2TARGET=$(TARGET2)
+SHL2IMPLIB=i$(SHL2TARGET) 
+
+SHL2DEF=		$(MISC)$/$(SHL2TARGET).def
+DEF2NAME=		$(SHL2TARGET)
+DEF2EXPORTFILE=	exports.dxp
+
+
+# --- sysdtrans dll ---
+
+SHL3TARGET=$(TARGET3)
+
+SHL3LIBS=$(SLB)$/sysdtrans.lib\
+         $(SLB)$/dtutils.lib\
+         $(SLB)$/dtobjfact.lib\
+         $(SLB)$/mtaolecb.lib\
+         $(SOLARLIBDIR)$/user9x.lib
+
+SHL3STDLIBS= \
+        $(SALLIB)	\
+        $(CPPULIB) 	\
+        $(CPPUHELPERLIB)\
+        ole32.lib\
+        comsupp.lib\
+        oleaut32.lib\
+        gdi32.lib
+        
+SHL3TARGET=$(TARGET3)
+SHL3IMPLIB=i$(SHL3TARGET) 
+
+SHL3DEF=		$(MISC)$/$(SHL3TARGET).def
+DEF3NAME=		$(SHL3TARGET)
+DEF3EXPORTFILE=	exports.dxp
+
+
+# --- dnd dll ---
+
+
+SHL4TARGET=$(TARGET4)
+
+SHL4STDLIBS= \
+        $(SALLIB)	\
+        $(CPPULIB) 	\
+        $(CPPUHELPERLIB) \
+        ole32.lib\
+        comsupp.lib\
+        oleaut32.lib\
+        gdi32.lib
+
+SHL4DEPN=
+SHL4IMPLIB=i$(SHL4TARGET) 
+
+SHL4LIBS=	\
+            $(SLB)$/dnd.lib\
+            $(SLB)$/dtobjfact.lib\
+            $(SLB)$/dtutils.lib\
+            $(SOLARLIBDIR)$/user9x.lib
+
+SHL4OBJS=		$(SLOFILES)
+SHL4DEF=		$(MISC)$/$(SHL4TARGET).def
+
+DEF4NAME=		$(SHL4TARGET)
+DEF4EXPORTFILE=	exports.dxp
+
+.ENDIF
+
+
+.INCLUDE :  target.mk
+

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: tra $ $Date: 2001-03-16 09:02:00 $
+#   last change: $Author: tra $ $Date: 2001-05-11 10:33:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,11 +61,9 @@
 #*************************************************************************
 
 PRJ=..$/..$/..
-
 PRJNAME=dtrans
 TARGET=ftransl
 ENABLE_EXCEPTIONS=TRUE
-LIBTARGET=NO
 COMP1TYPELIST=$(TARGET)
 COMPRDB=$(SOLARBINDIR)$/applicat.rdb
 USE_BOUNDCHK=
@@ -85,23 +83,6 @@ stoponerror=tr
 
 SLOFILES=$(SLO)$/ftranslentry.obj \
          $(SLO)$/ftransl.obj
-
-SHL1OBJS=$(SLOFILES)\
-         $(SLO)$/ImplHelper.obj
-
-SHL1STDLIBS= \
-        $(SALLIB)	\
-        $(CPPULIB) 	\
-        $(CPPUHELPERLIB)\
-        ole32.lib\
-        gdi32.lib
-
-SHL1TARGET=$(TARGET)
-SHL1IMPLIB=i$(SHL1TARGET) 
-
-SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
-DEF1NAME=		$(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
 
 # --- Targets ------------------------------------------------------
 

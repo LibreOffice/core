@@ -4,7 +4,7 @@
     <module-name>   sysdtrans   </module-name>
     <component-description>
         <author> Tino Rachui </author>
-        <name>  com.sun.star.comp.datatransfer.clipboard </name>
+        <name>  com.sun.star.comp.datatransfer.SystemClipboard </name>
         <description>
     The win32 implementation of the datatransfer service.
 </description>
@@ -19,6 +19,8 @@
         <type>   com.sun.star.datatransfer.clipboard.XClipboardOwner</type>
         <type>   com.sun.star.datatransfer.clipboard.XClipboardListener</type>
         <type>   com.sun.star.datatransfer.clipboard.XClipboardNotifier</type>
+        <type>   com.sun.star.datatransfer.clipboard.XFlushableClipboard</type>
+        <type>   com.sun.star.datatransfer.clipboard.RenderingCapabilities</type>
         <type>   com.sun.star.datatransfer.XTransferDataAccess      </type>
         <type>   com.sun.star.lang.XComponent                       </type>
         <type>   com.sun.star.lang.XMultiServiceFactory             </type>

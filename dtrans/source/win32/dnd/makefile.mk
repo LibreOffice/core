@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: tra $ $Date: 2001-03-08 12:38:59 $
+#   last change: $Author: tra $ $Date: 2001-05-11 10:32:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,9 +64,7 @@ PRJ=..$/..$/..
 
 PRJNAME=dtrans
 TARGET=dnd
-# sysdtrans
 ENABLE_EXCEPTIONS=TRUE
-LIBTARGET=NO
 COMP1TYPELIST=$(TARGET)
 COMPRDB=$(SOLARBINDIR)$/applicat.rdb
 USE_BOUNDCHK=
@@ -100,38 +98,6 @@ SLOFILES=	$(SLO)$/dndentry.obj	\
             $(SLO)$/targetdragcontext.obj	\
             $(SLO)$/sourcecontext.obj
 
-
-
-
-#$(SLO)$/mimehlp.obj
-
-SHL1TARGET=$(TARGET)
-
-SHL1STDLIBS= \
-        $(SALLIB)	\
-        $(CPPULIB) 	\
-        $(CPPUHELPERLIB) \
-        ole32.lib\
-        comsupp.lib\
-        oleaut32.lib\
-        gdi32.lib
-
-SHL1DEPN=
-SHL1IMPLIB=i$(SHL1TARGET) 
-
-#--- comment -----------------
-# for src614 
-
-SHL1LIBS=	\
-            $(SLB)$/dtobjfact.lib\
-            $(SLB)$/dtutils.lib\
-            $(SOLARLIBDIR)$/user9x.lib\
-
-SHL1OBJS=		$(SLOFILES)
-SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME=		$(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
 
 # --- Targets ------------------------------------------------------
 
