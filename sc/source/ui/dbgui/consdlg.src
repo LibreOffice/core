@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-27 07:50:51 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 14:26:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -674,7 +674,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ chinese_traditional ] = "Äæ¼ĞÃD(~H)";
         Text[ arabic ] = "ÑÄæÓ ÇáÃÚãÏÉ";
         Text[ greek ] = "Êåöáëßäåò óôçëşí";
-        Text[ korean ] = "¿­ ¸Ó¸´±Û(~O)";
+        Text[ korean ] = "¿­ ¸Ó¸®±Û(~O)";
         Text[ turkish ] = "S~ütun başlıkları";
         Text[ language_user1 ] = " ";
     };
