@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OutlineView.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:10:07 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:12:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,14 @@ public:
         ::Window* pWindow,
         OutlineViewShell* pOutlineViewSh);
     ~OutlineView (void);
+
+    /** This method is called by the view shell that owns the view to tell
+        the view that it can safely connect to the application.
+        This method must not be called before the view shell is on the shell
+        stack.
+    */
+    void ConnectToApplication (void);
+    void DisconnectFromApplication (void);
 
     TYPEINFO();
 
