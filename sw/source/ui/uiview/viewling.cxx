@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewling.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:28:16 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:18:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,10 +408,10 @@ void SwView::StartTextConversion(
 
 void SwView::SpellStart( SvxSpellArea eWhich,
         sal_Bool bStartDone, sal_Bool bEndDone,
-        SwHHCWrapper *pConvWrapper )
+        SwConversionArgs *pConvArgs )
 {
     Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
-    sal_Bool bIsWrapReverse = (!pConvWrapper && xProp.is()) ?
+    sal_Bool bIsWrapReverse = (!pConvArgs && xProp.is()) ?
             *(sal_Bool*)xProp->getPropertyValue( C2U(UPN_IS_WRAP_REVERSE) ).getValue() : sal_False;
 
     SwDocPositions eStart = DOCPOS_START;
@@ -462,7 +462,7 @@ void SwView::SpellStart( SvxSpellArea eWhich,
         default:
             ASSERT( !this, "SpellStart with unknown Area" );
     }
-    pWrtShell->SpellStart( eStart, eEnde, eCurr, pConvWrapper );
+    pWrtShell->SpellStart( eStart, eEnde, eCurr, pConvArgs );
 }
 
 /*--------------------------------------------------------------------
@@ -535,9 +535,9 @@ IMPL_LINK( SwView, SpellError, void *, nLang )
  --------------------------------------------------------------------*/
 
 
-void SwView::SpellEnd( SwHHCWrapper *pConvWrapper )
+void SwView::SpellEnd( SwConversionArgs *pConvArgs )
 {
-    pWrtShell->SpellEnd( pConvWrapper );
+    pWrtShell->SpellEnd( pConvArgs );
     if( pWrtShell->IsExtMode() )
         pWrtShell->SetMark();
 }
