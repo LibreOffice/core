@@ -442,7 +442,7 @@
         <language>c++</language>
         <status value="final"/>
         <supported-service>com.sun.star.form.control.ImageButton</supported-service>
-        <supported-service>com.sun.star.awt.UnoControlImageButton</supported-service>
+        <supported-service>com.sun.star.awt.UnoControlImageControl</supported-service>
         <service-dependency>com.sun.star.util.URLTransformer</service-dependency>
         <service-dependency>com.sun.star.awt.Pointer</service-dependency>
     </component-description>
