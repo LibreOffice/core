@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap4.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-06 18:55:30 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:29:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-#define _SV_BITMAP_CXX
 
 #include <stdlib.h>
 #include <vos/macros.hxx>
@@ -88,8 +87,7 @@
 
 BOOL Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, const Link* pProgress )
 {
-    const USHORT    nBitCount = GetBitCount();
-    BOOL            bRet = FALSE;
+    BOOL bRet = FALSE;
 
     switch( eFilter )
     {
