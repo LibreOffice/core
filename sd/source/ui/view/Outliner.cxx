@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Outliner.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 11:02:37 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 16:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,7 @@ Outliner::Outliner( SdDrawDocument* pDoc, USHORT nMode )
     mbDirectionIsForward(true),
     mbRestrictSearchToSelection(false),
     mpObj(NULL),
+    mpFirstObj(NULL),
     mpTextObj(NULL),
     mpParaObj(NULL),
     mpSearchItem(NULL)
@@ -483,7 +484,7 @@ void Outliner::EndSpelling (void)
     ClearModifyFlag();
 
     // When spell checking then restore the start position.
-    if (meMode == SPELL)
+    if (meMode==SPELL || meMode==HANGUL_HANJA_CONVERSION)
         RestoreStartPosition ();
 
     mpViewShell = NULL;
@@ -980,10 +981,18 @@ void Outliner::ProvideNextTextObject (void)
                 PutTextIntoOutliner ();
 
                 if (mpViewShell != NULL)
-                    if (meMode == SEARCH)
-                        PrepareSearchAndReplace ();
-                    else
-                        PrepareSpellCheck ();
+                    switch (meMode)
+                    {
+                        case SEARCH:
+                            PrepareSearchAndReplace ();
+                            break;
+                        case SPELL:
+                            PrepareSpellCheck ();
+                            break;
+                        case HANGUL_HANJA_CONVERSION:
+                            PrepareHangulHanjaConversion();
+                            break;
+                    }
             }
         }
         else
@@ -1012,7 +1021,7 @@ void Outliner::EndOfSearch (void)
         }
         // Ask the user whether to wrap arround and continue the search or
         // to terminate.
-        else if (ShowWrapArroundDialog ())
+        else if (meMode==HANGUL_HANJA_CONVERSION || ShowWrapArroundDialog ())
         {
             mbMatchMayExist = false;
             maObjectIterator = ::sd::outliner::OutlinerContainer(this).begin();
@@ -1232,6 +1241,7 @@ void Outliner::SetViewMode (PageKind ePageKind)
 
         // Save edit mode so that it can be restored when switching the view
         // shell again.
+        pDrawViewShell = static_cast<DrawViewShell*>(mpViewShell);
         meOriginalEditMode = pDrawViewShell->GetEditMode();
     }
 }
@@ -1459,5 +1469,142 @@ void Outliner::HandleChangedSelection (void)
             mbRestrictSearchToSelection = false;
     }
 }
+
+
+
+
+void Outliner::StartTextConversion( INT16 nLanguage )
+{
+    BOOL bMultiDoc = mpViewShell->ISA(DrawViewShell);
+
+    meMode = HANGUL_HANJA_CONVERSION;
+    mbDirectionIsForward = true;
+    mpSearchItem = NULL;
+    mnConversionLanguage = nLanguage;
+
+    BeginConversion();
+
+    if (mpOutlineView != NULL)
+        mpOutlineView->StartTextConversion( nLanguage, bMultiDoc );
+
+    EndConversion();
+}
+
+
+
+
+/** Prepare to do a hangul hanja conversion on the current text object. This
+    includes putting it into edit mode.
+*/
+void Outliner::PrepareHangulHanjaConversion (void)
+{
+    if( HasConvertibleTextPortion( mnConversionLanguage ) )
+    {
+        mbStringFound = TRUE;
+        mbMatchMayExist = TRUE;
+
+        EnterEditMode ();
+
+        mpDrawDocument->GetDocSh()->SetWaitCursor( FALSE );
+        // Start seach at the right end of the current object's text
+        // depending on the search direction.
+//      mpOutlineView->SetSelection (GetSearchStartPosition ());
+    }
+}
+
+
+
+
+void Outliner::BeginConversion (void)
+{
+    SetRefDevice( SD_MOD()->GetRefDevice( *mpDrawDocument->GetDocSh() ) );
+
+    ViewShellBase* pBase = PTR_CAST(ViewShellBase, SfxViewShell::Current());
+    if (pBase != NULL)
+        SetViewShell (pBase->GetSubShellManager().GetMainSubShell());
+
+    if (mpViewShell != NULL)
+    {
+        mbStringFound = FALSE;
+
+        // Supposed that we are not located at the very beginning/end of the
+        // document then there may be a match in the document prior/after
+        // the current position.
+        mbMatchMayExist = TRUE;
+
+        maObjectIterator = ::sd::outliner::Iterator();
+        maSearchStartPosition = ::sd::outliner::Iterator();
+        RememberStartPosition();
+
+        if ( mpViewShell->ISA(DrawViewShell) )
+        {
+            // Create a new outline view to do the search on.
+            mpOutlineView = new OutlinerView( this, mpWindow );
+            mbOwnOutlineView = true;
+            ULONG nStat = mpOutlineView->GetControlWord();
+            nStat &= ~EV_CNTRL_AUTOSCROLL;
+            mpOutlineView->SetControlWord(nStat);
+            InsertView( mpOutlineView );
+            SetUpdateMode(FALSE);
+            mpOutlineView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
+            SetPaperSize( Size(1, 1) );
+            SetText( String(), GetParagraph( 0 ) );
+
+            meOriginalEditMode = ((DrawViewShell*) mpViewShell)->GetEditMode();
+        }
+        else if ( mpViewShell->ISA(OutlineViewShell) )
+        {
+            mpOutlineView = GetView(0);
+            mbOwnOutlineView = false;
+        }
+        // else do nothing.
+
+        HandleChangedSelection ();
+    }
+    ClearModifyFlag();
+}
+
+
+
+
+void Outliner::EndConversion()
+{
+    EndSpelling();
+}
+
+
+
+
+sal_Bool Outliner::ConvertNextDocument()
+{
+    if( mpViewShell && mpViewShell->ISA(OutlineViewShell) )
+        return false;
+
+    mpDrawDocument->GetDocSh()->SetWaitCursor( TRUE );
+
+    Initialize ( true );
+
+    mpWindow = mpViewShell->GetActiveWindow();
+    mpOutlineView->SetWindow(mpWindow);
+    ProvideNextTextObject ();
+
+    mpDrawDocument->GetDocSh()->SetWaitCursor( FALSE );
+    ClearModifyFlag();
+
+    // for hangul hanja conversion we automaticly wrap around one
+    // time and stop at the start shape
+    if( mpFirstObj )
+    {
+        if( mpFirstObj == mpObj )
+            return false;
+    }
+    else
+    {
+        mpFirstObj = mpObj;
+    }
+
+    return !mbEndOfSearch;
+}
+
 
 } // end of namespace sd
