@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cmc $ $Date: 2001-08-03 16:00:48 $
+ *  last change: $Author: cmc $ $Date: 2001-08-23 12:43:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -728,9 +728,9 @@ static SvxExtNumType GetNumTypeFromName( const String& rStr, BOOL bAllowPageDesc
     SvxExtNumType eTyp = bAllowPageDesc ? SVX_NUM_PAGEDESC : SVX_NUM_ARABIC;
     if( rStr.EqualsIgnoreCaseAscii( "Arabi", 0, 5 ) )  // Arabisch, Arabic
         eTyp = SVX_NUM_ARABIC;
-    else if( rStr.EqualsIgnoreCaseAscii( "misch", 2, 5 ) )  // r"omisch
+    else if( rStr.EqualsAscii( "misch", 2, 5 ) )    // r"omisch
         eTyp = SVX_NUM_ROMAN_LOWER;
-    else if( rStr.EqualsIgnoreCaseAscii( "MISCH", 2, 5 ) )  // R"OMISCH
+    else if( rStr.EqualsAscii( "MISCH", 2, 5 ) )    // R"OMISCH
         eTyp = SVX_NUM_ROMAN_UPPER;
     else if( rStr.EqualsIgnoreCaseAscii( "alphabeti", 0, 9 ) )// alphabetisch, alphabetic
         eTyp =  ( rStr.GetChar( 0 ) == 'A' )
@@ -2819,9 +2819,34 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                         pBase->SetCreate( eCreateFrom );
                     break;
                 case TOX_ILLUSTRATIONS:
-                    if( !eCreateFrom )
-                        eCreateFrom = TOX_SEQUENCE;
-                    pBase->SetCreate( eCreateFrom );
+                    {
+                        if( !eCreateFrom )
+                            eCreateFrom = TOX_SEQUENCE;
+                        pBase->SetCreate( eCreateFrom );
+
+                        /*
+                        #91214#
+                        We don't know until here if we are an illustration
+                        or not, and so have being used a TOX_CONTENT so far
+                        which has 10 levels, while TOX has only two, this
+                        level is set only in the constructor of SwForm, so
+                        create a new one and copy over anything that could
+                        be set in the old one
+                        */
+                        SwForm aOldForm( pBase->GetTOXForm() );
+                        SwForm aForm( eType );
+                        USHORT nEnd = aForm.GetFormMax()-1;
+
+                        for(USHORT nLevel = 1; nLevel <= nEnd; ++nLevel)
+                        {
+                            aForm.SetPattern( nLevel,
+                                aOldForm.GetPattern(nLevel));
+                            aForm.SetTemplate( nLevel,
+                                aOldForm.GetTemplate(nLevel));
+                        }
+
+                        pBase->SetTOXForm( aForm );
+                    }
                     break;
             }
         }
@@ -2905,7 +2930,6 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* pF, String& rStr )
                 {
                     ConvertFFileName( sURL, aReadParam.GetResult() );
                     //#82900# Need the more sophisticated url converter. cmc
-                    //sURL = INetURLObject::RelToAbs( sURL );
                     sURL = URIHelper::SmartRelToAbs( sURL );
                 }
                 break;
@@ -2941,16 +2965,31 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* pF, String& rStr )
             ( sURL += INET_MARK_TOKEN ) += sMark;
 
         const xub_StrLen nLen = sDef.Len();
-        if(    4 < nLen
+        long nBegin = 0;
+        if( 4 < nLen
             && 0x13 == sDef.GetChar( 0 )
             && 0x14 == sDef.GetChar( nLen-3 )
             && 0x01 == sDef.GetChar( nLen-2 )
             && 0x15 == sDef.GetChar( nLen-1 ) )
         {
+            //if theres an embedded link which results
+            //in a graphic, make the result of that
+            //field into a linked graphic
+            nBegin = pF->nSRes+pF->nLRes-2;
+        }
+        else if (1 == nLen && 0x01 == sDef.GetChar( 0 ))
+        {
+            //if the result text is a graphic on its own
+            //then do the graphic into linked graphic
+            //trick
+            nBegin = pF->nSRes;
+        }
 
+        if (nBegin)
+        {
             WW8ReaderSave aSave( this );        // rettet Flags u.ae. u. setzt sie zurueck
             bNeverCallProcessSpecial = TRUE;
-            ReadText( pF->nSRes+pF->nLRes-2, 1, pPlcxMan->GetManType() );
+            ReadText( nBegin, 1, pPlcxMan->GetManType() );
             aSave.Restore( this );
 
             if( pFmtOfJustInsertedGraphicOrOLE )
@@ -3165,12 +3204,15 @@ void SwWW8ImplReader::Read_Invisible( USHORT, const BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.24 2001-08-03 16:00:48 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.25 2001-08-23 12:43:31 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.24  2001/08/03 16:00:48  cmc
+      #90250# ruby field can be seperated by ; as well as ,
+
       Revision 1.23  2001/07/31 15:57:48  jp
       Bug #90441#: change GetUIName to FillUIName or use GetUIName in the correct way
 
