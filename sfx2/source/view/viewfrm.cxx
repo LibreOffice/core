@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:58 $
+ *  last change: $Author: mba $ $Date: 2000-11-16 16:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,8 @@
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
+
+#include <unotools/localfilehelper.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/ucb/XContent.hpp>
@@ -473,7 +475,9 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             if( pSh  )
             {
                 SfxMedium* pMed = pSh->GetMedium();
-                INetURLObject aPhysObj( pMed->GetPhysicalName(), INET_PROT_FILE );
+                String aTemp;
+                utl::LocalFileHelper::ConvertPhysicalNameToURL( pMed->GetPhysicalName(), aTemp );
+                INetURLObject aPhysObj( aTemp );
                 SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(),
                                  pVersionItem, SfxInt16Item, SID_VERSION, sal_False );
 
@@ -658,8 +662,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     GetFrame()->GetDescriptor()->GetFrameSet() )
                         pDesc = GetFrame()->GetDescriptor()->Clone();
 
-                sal_Bool bHandsOff =
-                    pMedium->GetURLObject().GetProtocol() == INET_PROT_FILE;
+                sal_Bool bHandsOff = pMedium->GetURLObject().GetProtocol() == INET_PROT_FILE;
 
                 // Files schliessen, damit wir Reloaden koennen.
                 if( bHandsOff )

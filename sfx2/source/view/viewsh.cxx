@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:58 $
+ *  last change: $Author: mba $ $Date: 2000-11-16 16:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,11 +546,7 @@ void SfxViewShell::Activate( BOOL bMDI )
             INetURLObject::SetBaseURL( pSh->GetBaseURL() );
         else
         {
-#if SUPD<613//MUSTINI
-            INetURLObject aObject( SFX_INIMANAGER()->Get( SFX_KEY_WORK_PATH ), INET_PROT_FILE );
-#else
-            INetURLObject aObject( SvtPathOptions().GetWorkPath(), INET_PROT_FILE );
-#endif
+            INetURLObject aObject( SvtPathOptions().GetWorkPath() );
             aObject.setFinalSlash();
             INetURLObject::SetBaseURL( aObject.GetMainURL() );
         }

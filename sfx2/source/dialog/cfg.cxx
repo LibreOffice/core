@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:46 $
+ *  last change: $Author: mba $ $Date: 2000-11-16 16:08:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1347,11 +1347,7 @@ String SfxConfigDialog::FileDialog_Impl( Window *pParent, WinBits nBits, const S
     aFileDlg.AddFilter( String(SfxResId(STR_FILTERNAME_CFG)),DEFINE_CONST_UNICODE("*.cfg") );
 #endif
     aFileDlg.AddFilter( String(SfxResId(STR_FILTERNAME_ALL) ), DEFINE_CONST_UNICODE(FILEDIALOG_FILTER_ALL) );
-#if SUPD<613//MUSTINI
-    INetURLObject aFilePath( SFX_INIMANAGER()->Get( SFX_KEY_USERCONFIG_PATH ), INET_PROT_FILE );
-#else
-    INetURLObject aFilePath( SvtPathOptions().GetUserConfigPath(), INET_PROT_FILE );
-#endif
+    INetURLObject aFilePath( SvtPathOptions().GetUserConfigPath() );
     aFilePath.setFinalSlash();
     String aCfgName = aFilePath.PathToFileName();
 #ifndef MAC

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basedlgs.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:46 $
+ *  last change: $Author: mba $ $Date: 2000-11-16 16:08:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,8 +116,7 @@ void SetDialogData_Impl(SfxViewFrame *pFrame, Window *pDlg,
 {
     // Konfiguration in Ini-Manager abspeichern
 #if SUPD<613//MUSTINI
-    SfxIniManager *pIniMgr =
-        pFrame ? pFrame->GetIniManager() : SFX_APP()->GetAppIniManager();
+    SfxIniManager *pIniMgr = SFX_APP()->GetAppIniManager();
     String aDlgData( pIniMgr->GetString( pDlg->GetPosPixel(), Size() ) );
     if( rExtraData.Len() )
     {
@@ -142,8 +141,7 @@ String GetDialogData_Impl( SfxViewFrame *pFrame, Window *pDlg, sal_uInt16 nId)
     String aRetString;
     // Konfiguration vorhanden?
 #if SUPD<613//MUSTINI
-    SfxIniManager *pIniMgr =
-        pFrame ? pFrame->GetIniManager() : SFX_APP()->GetAppIniManager();
+    SfxIniManager *pIniMgr = SFX_APP()->GetAppIniManager();
     String aDlgData( pIniMgr->Get( SFX_KEY_DIALOG, nId ) );
     if ( aDlgData.Len() > 0 )
     {

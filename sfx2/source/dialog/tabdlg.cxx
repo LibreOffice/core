@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:46 $
+ *  last change: $Author: mba $ $Date: 2000-11-16 16:08:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -670,8 +670,7 @@ void SfxTabDialog::Start_Impl()
     // Konfiguration vorhanden?
 #if SUPD<613//MUSTINI
     SfxApplication *pSfxApp = SFX_APP();
-    SfxIniManager* pIniMgr =
-        pFrame ? pFrame->GetIniManager() : pSfxApp->GetAppIniManager();
+    SfxIniManager* pIniMgr = pSfxApp->GetAppIniManager();
     String aDlgData( pIniMgr->Get( SFX_KEY_DIALOG, nResId ) );
 
     if ( aDlgData.Len() > 0 )
@@ -813,8 +812,7 @@ void SfxTabDialog::RemoveTabPage( USHORT nId )
             if ( aPageData.Len() )
             {
 #if SUPD<613//MUSTINI
-                SfxIniManager* pIniMgr =
-                    pFrame ? pFrame->GetIniManager() : SFX_APP()->GetAppIniManager();
+                SfxIniManager* pIniMgr = SFX_APP()->GetAppIniManager();
                 pIniMgr->Set( aPageData, SFX_KEY_PAGE, pDataObject->nId);
 #endif
             }
@@ -1248,8 +1246,7 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
     const USHORT nId = pTabCtrl->GetCurPageId();
     SfxApplication *pSfxApp = SFX_APP();
 #if SUPD<613//MUSTINI
-    SfxIniManager* pIniMgr =
-            pFrame ? pFrame->GetIniManager() : pSfxApp->GetAppIniManager();
+    SfxIniManager* pIniMgr = pSfxApp->GetAppIniManager();
     if ( BOOL( pIniMgr->Get( SFX_GROUP_USER, DEFINE_CONST_UNICODE("HelpAuthor") ).ToInt32() ) )
     {
         String aText( DEFINE_CONST_UNICODE("slot:") );
@@ -1338,8 +1335,7 @@ IMPL_LINK( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl )
     USHORT nId = pTabCtrl->GetCurPageId();
     SfxApplication *pSfxApp = SFX_APP();
 #if SUPD<613//MUSTINI
-    SfxIniManager* pIniMgr =
-            pFrame ? pFrame->GetIniManager() : pSfxApp->GetAppIniManager();
+    SfxIniManager* pIniMgr = pSfxApp->GetAppIniManager();
     if ( BOOL( pIniMgr->Get( SFX_GROUP_USER, DEFINE_CONST_UNICODE("HelpAuthor") ).ToInt32() ) )
         GetpApp()->HideStatusText();
 #endif

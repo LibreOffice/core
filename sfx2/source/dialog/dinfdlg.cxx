@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:46 $
+ *  last change: $Author: mba $ $Date: 2000-11-16 16:08:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,11 +354,7 @@ IMPL_LINK( SfxDocumentPage, DeleteHdl, PushButton*, EMPTYARG )
 {
     SfxStamp aCreated;
     if ( bEnableUseUserData && aUseUserDataCB.IsChecked() )
-#if SUPD<613//MUSTINI
-        aCreated.SetName( SFX_INIMANAGER()->GetUserFullName() );
-#else
-        aCreated.SetName( SvtUserOptions().GetFullName() );
-#endif
+    aCreated.SetName( SvtUserOptions().GetFullName() );
     aCreateValFt.SetText( ConvertDateTime_Impl( aCreated ) );
     XubString aEmpty;
     aChangeValFt.SetText( aEmpty );
@@ -438,11 +434,7 @@ BOOL SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
             SfxDocumentInfo aInfo( pInfoItem->GetDocInfo() );
             SfxStamp aCreated;
             if ( bEnableUseUserData && aUseUserDataCB.IsChecked() )
-#if SUPD<613//MUSTINI
-                aCreated.SetName( SFX_INIMANAGER()->GetUserFullName() );
-#else
                 aCreated.SetName( SvtUserOptions().GetFullName() );
-#endif
             aInfo.SetCreated( aCreated );
             SfxStamp aInvalid( TIMESTAMP_INVALID_DATETIME );
             aInfo.SetChanged( aInvalid );
@@ -538,8 +530,13 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
         aSizeText = CreateSizeText( SfxContentHelper::GetSize( aURL.PathToFileName() ) );
     aShowSizeFT.SetText( aSizeText );
     String aDescription( SfxResId( STR_SFX_NEWOFFICEDOC ) );
+
     if ( aURL.GetLastName().Len() )
-        aDescription = SfxExplorerFile::GetDescription( rMainURL );
+    {
+        DBG_ERROR("Not implemented!" );
+//        aDescription = SfxExplorerFile::GetDescription( rMainURL );
+    }
+
     aShowTypeFT.SetText( aDescription );
 
     // Bestimmung des Ortes
