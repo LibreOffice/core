@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonInputStream.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-09-12 10:03:35 $
+ *  last change: $Author: kso $ $Date: 2001-10-01 14:55:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,10 +208,10 @@ void SAL_CALL NeonInputStream::seek( sal_Int64 location )
     if ( location < 0 )
         throw ::com::sun::star::lang::IllegalArgumentException();
 
-    if ( location < mLen )
+    if ( location <= mLen )
         mPos = location;
     else
-        mPos = mLen;
+        throw ::com::sun::star::lang::IllegalArgumentException();
 }
 
 // -------------------------------------------------------------------
