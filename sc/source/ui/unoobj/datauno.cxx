@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datauno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-21 13:59:04 $
+ *  last change: $Author: nn $ $Date: 2000-12-21 19:31:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,13 +96,21 @@ using namespace com::sun::star;
 
 const SfxItemPropertyMap* lcl_GetSubTotalPropertyMap()
 {
+    // some old property names are for 5.2 compatibility
+
     static SfxItemPropertyMap aSubTotalPropertyMap_Impl[] =
     {
+        {MAP_CHAR_LEN(SC_UNONAME_BINDFMT),  0,  &getBooleanCppuType(),       0},
         {MAP_CHAR_LEN(SC_UNONAME_CASE),     0,  &getBooleanCppuType(),       0},
+        {MAP_CHAR_LEN(SC_UNONAME_ENUSLIST), 0,  &getBooleanCppuType(),       0},
         {MAP_CHAR_LEN(SC_UNONAME_FORMATS),  0,  &getBooleanCppuType(),       0},
         {MAP_CHAR_LEN(SC_UNONAME_INSBRK),   0,  &getBooleanCppuType(),       0},
+        {MAP_CHAR_LEN(SC_UNONAME_ISCASE),   0,  &getBooleanCppuType(),       0},
+        {MAP_CHAR_LEN(SC_UNONAME_MAXFLD),   0,  &getCppuType((sal_Int32*)0), beans::PropertyAttribute::READONLY},
+        {MAP_CHAR_LEN(SC_UNONAME_SORTASC),  0,  &getBooleanCppuType(),       0},
         {MAP_CHAR_LEN(SC_UNONAME_ULIST),    0,  &getBooleanCppuType(),       0},
         {MAP_CHAR_LEN(SC_UNONAME_UINDEX),   0,  &getCppuType((sal_Int32*)0), 0},
+        {MAP_CHAR_LEN(SC_UNONAME_USINDEX),  0,  &getCppuType((sal_Int32*)0), 0},
         {0,0,0,0}
     };
     return aSubTotalPropertyMap_Impl;
@@ -714,19 +722,31 @@ void SAL_CALL ScSubTotalDescriptorBase::setPropertyValue(
 
     String aString = aPropertyName;
 
-    if (aString.EqualsAscii( SC_UNONAME_CASE ))
+    // some old property names are for 5.2 compatibility
+
+    if (aString.EqualsAscii( SC_UNONAME_CASE ) || aString.EqualsAscii( SC_UNONAME_ISCASE ))
         aParam.bCaseSens = ScUnoHelpFunctions::GetBoolFromAny( aValue );
-    else if (aString.EqualsAscii( SC_UNONAME_FORMATS ))
+    else if (aString.EqualsAscii( SC_UNONAME_FORMATS ) || aString.EqualsAscii( SC_UNONAME_BINDFMT ))
         aParam.bIncludePattern = ScUnoHelpFunctions::GetBoolFromAny( aValue );
+    else if (aString.EqualsAscii( SC_UNONAME_SORTASC ))
+        aParam.bAscending = ScUnoHelpFunctions::GetBoolFromAny( aValue );
     else if (aString.EqualsAscii( SC_UNONAME_INSBRK ))
         aParam.bPagebreak = ScUnoHelpFunctions::GetBoolFromAny( aValue );
-    else if (aString.EqualsAscii( SC_UNONAME_ULIST ))
+    else if (aString.EqualsAscii( SC_UNONAME_ULIST ) || aString.EqualsAscii( SC_UNONAME_ENUSLIST ))
         aParam.bUserDef = ScUnoHelpFunctions::GetBoolFromAny( aValue );
-    else if (aString.EqualsAscii( SC_UNONAME_UINDEX ))
+    else if (aString.EqualsAscii( SC_UNONAME_UINDEX ) || aString.EqualsAscii( SC_UNONAME_USINDEX ))
     {
         sal_Int32 nVal;
         if ( aValue >>= nVal )
             aParam.nUserIndex = (USHORT)nVal;
+    }
+    else if (aString.EqualsAscii( SC_UNONAME_MAXFLD ))
+    {
+        sal_Int32 nVal;
+        if ( (aValue >>= nVal) && nVal > MAXSUBTOTAL )
+        {
+            throw lang::IllegalArgumentException();
+        }
     }
 
     PutData(aParam);
@@ -743,16 +763,22 @@ uno::Any SAL_CALL ScSubTotalDescriptorBase::getPropertyValue( const rtl::OUStrin
     String aString = aPropertyName;
     uno::Any aRet;
 
-    if (aString.EqualsAscii( SC_UNONAME_CASE ))
+    // some old property names are for 5.2 compatibility
+
+    if (aString.EqualsAscii( SC_UNONAME_CASE ) || aString.EqualsAscii( SC_UNONAME_ISCASE ))
         ScUnoHelpFunctions::SetBoolInAny( aRet, aParam.bCaseSens );
-    else if (aString.EqualsAscii( SC_UNONAME_FORMATS ))
+    else if (aString.EqualsAscii( SC_UNONAME_FORMATS ) || aString.EqualsAscii( SC_UNONAME_BINDFMT ))
         ScUnoHelpFunctions::SetBoolInAny( aRet, aParam.bIncludePattern );
+    else if (aString.EqualsAscii( SC_UNONAME_SORTASC ))
+        ScUnoHelpFunctions::SetBoolInAny( aRet, aParam.bAscending );
     else if (aString.EqualsAscii( SC_UNONAME_INSBRK ))
         ScUnoHelpFunctions::SetBoolInAny( aRet, aParam.bPagebreak );
-    else if (aString.EqualsAscii( SC_UNONAME_ULIST ))
+    else if (aString.EqualsAscii( SC_UNONAME_ULIST ) || aString.EqualsAscii( SC_UNONAME_ENUSLIST ))
         ScUnoHelpFunctions::SetBoolInAny( aRet, aParam.bUserDef );
-    else if (aString.EqualsAscii( SC_UNONAME_UINDEX ))
+    else if (aString.EqualsAscii( SC_UNONAME_UINDEX ) || aString.EqualsAscii( SC_UNONAME_USINDEX ))
         aRet <<= (sal_Int32) aParam.nUserIndex;
+    else if (aString.EqualsAscii( SC_UNONAME_MAXFLD ))
+        aRet <<= (sal_Int32) MAXSUBTOTAL;
 
     return aRet;
 }
