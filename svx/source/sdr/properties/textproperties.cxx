@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textproperties.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:20:05 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:52:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,8 +147,8 @@ namespace sdr
             return *(new SfxItemSet(rPool,
 
                 // range from SdrAttrObj
-                SDRATTR_START, SDRATTRSET_SHADOW,
-                SDRATTRSET_OUTLINER, SDRATTRSET_MISC,
+                SDRATTR_START, SDRATTR_SHADOW_LAST,
+                SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
                 SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
 
                 // range from SdrTextObj
@@ -407,20 +407,20 @@ namespace sdr
             }
         }
 
-        void TextProperties::PreProcessSave()
-        {
-            // call parent
-            AttributeProperties::PreProcessSave();
-
-            // Prepare OutlinerParaObjects for storing
-            SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
-            OutlinerParaObject* pParaObj = rObj.GetOutlinerParaObject();
-
-            if(pParaObj && rObj.GetModel())
-            {
-                pParaObj->PrepareStore((SfxStyleSheetPool*)rObj.GetModel()->GetStyleSheetPool());
-            }
-        }
+//BFS01     void TextProperties::PreProcessSave()
+//BFS01     {
+//BFS01         // call parent
+//BFS01         AttributeProperties::PreProcessSave();
+//BFS01
+//BFS01         // Prepare OutlinerParaObjects for storing
+//BFS01         SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
+//BFS01         OutlinerParaObject* pParaObj = rObj.GetOutlinerParaObject();
+//BFS01
+//BFS01         if(pParaObj && rObj.GetModel())
+//BFS01         {
+//BFS01             pParaObj->PrepareStore((SfxStyleSheetPool*)rObj.GetModel()->GetStyleSheetPool());
+//BFS01         }
+//BFS01     }
 
         void TextProperties::ForceDefaultAttributes()
         {
