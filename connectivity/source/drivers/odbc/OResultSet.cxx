@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-05 11:04:50 $
+ *  last change: $Author: oj $ $Date: 2001-07-19 09:37:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1721,6 +1721,8 @@ void OResultSet::fillRow(sal_Int32 _nToColumn)
                 break;
         }
         pColumn->setTypeKind(nDataType);
+        if(wasNull())
+            pColumn->setNull();
     }
     m_nLastColumnPos = _nToColumn;
     m_bFetchData = sal_True;
