@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.146 $
+#   $Revision: 1.147 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 12:27:42 $
+#   last change: $Author: rt $ $Date: 2004-09-20 13:39:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -310,7 +310,7 @@ DEPIDLFILES:=$(foreach,i,$(IDLFILES) $(!null,$(shell $(FIND) . -name $i -print) 
 
 .IF "$(L10N_framework)"==""
 .IF "$(JARFILES)"!=""
-NEWCLASS:=$(foreach,i,$(JARFILES) $(null,$(shell -+ls -1 $(JARDIR) | $(GREP) $i) $(SOLARBINDIR)$/$i $(JARDIR)$/$i))
+NEWCLASS:=$(foreach,i,$(JARFILES) $(null,$(shell -+ls -1 $(JARDIR) | $(GREP) "^$i") $(SOLARBINDIR)$/$i $(JARDIR)$/$i))
 .ENDIF			# "$(JARFILES)"!=""
 .IF "$(EXTRAJARFILES)"!=""
 .IF "$(LOCAL_SOLENV)"!=""
