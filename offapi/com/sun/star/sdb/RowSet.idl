@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:04 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:55:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,9 +252,20 @@ service RowSet
 
     /** is the type of the command.
         @see com::sun::star::sdb::CommandType
-        @see com::sun::star::sdb::CommandType
      */
     [property] long CommandType;
+
+    // note: the EscapeProcessing is not really optional, but we needed to declare it this way because
+    // the service was already frozen
+    /** specifies if the <member>Command</member> should be analyzed on the client side before sending it
+        to the database server.
+
+        <p>The default value of this property is <TRUE/>. By switching it to <FALSE/>, you can pass
+        backend-specific SQL statements, which are not standard SQL, to your database.</p>
+
+        <p>This property is evaluated if and only if <member>CommandType</member> equals <member>CommandType::COMMAND</member>.</p>
+    */
+    [optional, property] boolean EscapeProcessing;
 
 
     /** is the command which is currently used.
