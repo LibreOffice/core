@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:29:25 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:41:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -982,7 +982,7 @@ ModalDialog RID_PADIALOG
     PushButton RID_PA_BTN_FONTS
     {
         Pos = MAP_APPFONT( 80, 150 );
-        Size = MAP_APPFONT( 50, 12 );
+        Size = MAP_APPFONT( 70, 12 );
         Text = "S~chriften...";
         Text [english] = "~Fonts...";
         Text[ english_us ] = "Fon~ts...";
