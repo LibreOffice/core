@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2001-02-23 14:06:24 $
+#   last change: $Author: hr $ $Date: 2001-02-26 11:43:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -132,7 +132,14 @@ APP1STDLIBS+=-lC
 
 .IF "$(OS)$(CPU)"=="SOLARISS"
 $(SLO)$/interlck.obj: asm/interlck_sparc.s
-        as -q -o $(SLO)$/interlck.o asm/interlck_sparc.s ; touch $(SLO)$/interlck.obj
+        /usr/ccs/bin/as -q -K PIC -o $(SLO)$/interlck.o asm/interlck_sparc.s ; touch $(SLO)$/interlck.obj
 $(OBJ)$/interlck.obj: asm/interlck_sparc.s
-        as -q -o $(OBJ)$/interlck.o asm/interlck_sparc.s ; touch $(OBJ)$/interlck.obj
+        /usr/ccs/bin/as -q -o $(OBJ)$/interlck.o asm/interlck_sparc.s ; touch $(OBJ)$/interlck.obj
+.ENDIF
+
+.IF "$(OS)$(CPU)"=="SOLARISI"
+$(SLO)$/interlck.obj: asm/interlck_x86.s
+        /usr/ccs/bin/as -q -K PIC -o $(SLO)$/interlck.o asm/interlck_x86.s ; touch $(SLO)$/interlck.obj
+$(OBJ)$/interlck.obj: asm/interlck_x86.s
+        /usr/ccs/bin/as -q -o $(OBJ)$/interlck.o asm/interlck_x86.s ; touch $(OBJ)$/interlck.obj
 .ENDIF
