@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 16:03:35 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 09:50:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1993,7 +1993,7 @@ Reference< ::com::sun::star::container::XNameAccess> getTableFields(const Refere
 //------------------------------------------------------------------------------
 Reference< ::com::sun::star::sdbc::XDataSource> getDataSource(const ::rtl::OUString& _rsTitleOrPath)
 {
-    DBG_ASSERT(_rsTitleOrPath.len(), "::getDataSource : invalid arg !");
+    DBG_ASSERT(_rsTitleOrPath.getLength(), "::getDataSource : invalid arg !");
 
     Reference< ::com::sun::star::sdbc::XDataSource>  xReturn;
 

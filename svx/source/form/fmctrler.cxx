@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 15:53:22 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 09:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3156,7 +3156,7 @@ FmXFormController::interceptedQueryDispatch(sal_uInt16 _nId, const ::com::sun::s
         else
         {
             // translate the ::com::sun::star::util::URL : the new ::com::sun::star::util::URL is the old one with a mark : the "path" to our model within it's hierarchy
-            DBG_ASSERT(aURL.Mark.len() == 0, "FmXFormController::interceptedQueryDispatch : the ::com::sun::star::util::URL shouldn't have a mark !");
+            DBG_ASSERT(aURL.Mark.getLength() == 0, "FmXFormController::interceptedQueryDispatch : the ::com::sun::star::util::URL shouldn't have a mark !");
             ::rtl::OUString sNewMark;
             ::rtl::OUString sCurrentPath;
             // collect the relative indicies of my model, it's parent, it's parent's parent ..., separate them with a '\'
