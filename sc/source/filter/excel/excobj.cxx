@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: gt $ $Date: 2001-03-30 13:32:51 $
+ *  last change: $Author: dr $ $Date: 2001-06-06 12:36:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1044,7 +1044,6 @@ void ExcEscherOle::CreateSdrOle( Biff8MSDffManager& rDffMan, UINT32 nOLEImpFlgs 
         {
             SvStorageRef        xSrc = pExcRoot->pRootStorage;
             SvStorageRef        xDst( pExcRoot->pDoc->GetDocumentShell()->GetStorage() );
-            UINT32              nOLEImpFlgs = 0;
 
             SdrOle2Obj*     pRet = SvxMSDffManager::CreateSdrOLEFromStorage(
                     aStorageName, xSrc, xDst, aGraph, *pAnchor, NULL, nOLEImpFlgs );
