@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: os $ $Date: 2001-06-26 14:35:16 $
+ *  last change: $Author: os $ $Date: 2001-06-29 08:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,6 +388,7 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
     aData.nCommandType = CommandType::TABLE;
     Reference<XResultSet>  xResSet;
     Sequence<Any> aSelection;
+    Sequence<sal_Int32> aDlgSelection;
     Reference< XConnection> xConnection;
     const PropertyValue* pValues = rProperties.getConstArray();
     for(sal_Int32 nPos = 0; nPos < rProperties.getLength(); nPos++)
@@ -399,7 +400,11 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
         else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCursor)))
             pValues[nPos].Value >>= xResSet;
         else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cSelection)))
+        {
+            //both types are possible here
             pValues[nPos].Value >>= aSelection;
+            pValues[nPos].Value >>= aDlgSelection;
+        }
         else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCommandType)))
             pValues[nPos].Value >>= aData.nCommandType;
         else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cActiveConnection)))
@@ -409,14 +414,13 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
     {
         return FALSE;
     }
-    Sequence<sal_Int32> aDlgSelection(aSelection.getLength());
     if(aSelection.getLength())
     {
+        aDlgSelection.realloc(aSelection.getLength());
         sal_Int32* pDlgSelection = aDlgSelection.getArray();
         const Any* pGridSelection = aSelection.getConstArray();
         for(sal_Int32 nSel = 0; nSel < aSelection.getLength(); nSel++)
             pGridSelection[nSel] >>= pDlgSelection[nSel];
-
     }
     pMergeData = new SwDSParam(aData, xResSet, aDlgSelection);
     SwDSParam*  pTemp = FindDSData(aData, FALSE);
@@ -1029,52 +1033,48 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
 
                 do
                 {
-                    {
+                    if(UIUNDO_DELETE_INVISIBLECNTNT == rSh.GetUndoIds())
+                        rSh.Undo();
+                    rSh.ViewShell::UpdateFlds();
 
-                        if(UIUNDO_DELETE_INVISIBLECNTNT == rSh.GetUndoIds())
-                            rSh.Undo();
-                        rSh.ViewShell::UpdateFlds();
+                    // alle versteckten Felder/Bereiche entfernen
+                    rSh.RemoveInvisibleContent();
 
-                        // alle versteckten Felder/Bereiche entfernen
-                        rSh.RemoveInvisibleContent();
+                    SfxFrameItem aFrame( SID_DOCFRAME, pVItem->GetFrame() );
+                    SwDBFormatData aDBFormat;
+                    sAddress = GetDBField( xColumnProp, aDBFormat);
+                    if (!sAddress.Len())
+                        sAddress = '_';
 
-                        SfxFrameItem aFrame( SID_DOCFRAME, pVItem->GetFrame() );
-                        SwDBFormatData aDBFormat;
-                        sAddress = GetDBField( xColumnProp, aDBFormat);
-                        if (!sAddress.Len())
-                            sAddress = '_';
+                    String sStat(sTempStat);
+                    sStat += ' ';
+                    sStat += String::CreateFromInt32( nDocNo++ );
+                    aPrtMonDlg.aPrintInfo.SetText(sStat);
+                    aPrtMonDlg.aPrinter.SetText( sAddress );
 
-                        String sStat(sTempStat);
-                        sStat += ' ';
-                        sStat += String::CreateFromInt32( nDocNo++ );
-                        aPrtMonDlg.aPrintInfo.SetText(sStat);
-                        aPrtMonDlg.aPrinter.SetText( sAddress );
+                    // Rechenzeit fuer EMail-Monitor:
+                    for (USHORT i = 0; i < 25; i++)
+                        Application::Reschedule();
 
-                        // Rechenzeit fuer EMail-Monitor:
-                        for (USHORT i = 0; i < 25; i++)
-                            Application::Reschedule();
+                    sAddress.Insert(String::CreateFromAscii("mailto:"), 0);
+                    SfxStringItem aRecipient( SID_MAIL_RECIPIENT, sAddress );
 
-                        sAddress.Insert(String::CreateFromAscii("mailto:"), 0);
-                        SfxStringItem aRecipient( SID_MAIL_RECIPIENT, sAddress );
+                    const SfxPoolItem* pRet = pSfxDispatcher->Execute(
+                                SID_MAIL_SENDDOC,
+                                SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD,
+                                &aRecipient, &aSubject, &aAttach, &aAttached,
+                                &aText, &aTextFormats, &aFrame,
+                                0L );
+                    //this must be done here because pRet may be destroyed in Reschedule (DeleteOnIdle)
+                    BOOL bBreak = pRet && !( (SfxBoolItem*)pRet )->GetValue();
 
-                        const SfxPoolItem* pRet = pSfxDispatcher->Execute(
-                                    SID_MAIL_SENDDOC,
-                                    SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD,
-                                    &aRecipient, &aSubject, &aAttach, &aAttached,
-                                    &aText, &aTextFormats, &aFrame,
-                                    0L );
-                        //this must be done here because pRet may be destroyed in Reschedule (DeleteOnIdle)
-                        BOOL bBreak = pRet && !( (SfxBoolItem*)pRet )->GetValue();
+                    // Rechenzeit fuer EMail-Monitor:
+                    for (i = 0; i < 25; i++)
+                        Application::Reschedule();
 
-                        // Rechenzeit fuer EMail-Monitor:
-                        for (i = 0; i < 25; i++)
-                            Application::Reschedule();
-
-                        if ( bBreak )
-                            break; // das Verschicken wurde unterbrochen
-
-                    }
-                } while( !bCancel && bSynchronizedDoc ? ExistsNextRecord() : ToNextMergeRecord());
+                    if ( bBreak )
+                        break; // das Verschicken wurde unterbrochen
+                } while( !bCancel && (bSynchronizedDoc ? ExistsNextRecord() : ToNextMergeRecord()));
                 pDoc->SetNewDBMgr( pOldDBMgr );
                 pView->GetDocShell()->OwnerLock( FALSE );
 
