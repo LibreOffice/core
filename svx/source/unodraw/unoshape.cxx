@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-13 08:56:39 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2870,10 +2870,12 @@ beans::PropertyState SAL_CALL SvxShape::_getPropertyState( const OUString& Prope
         {
             switch( pMap->nWID )
             {
+            // the following items are disabled by changing the
+            // fill style or the line style. so there is no need
+            // to export items without names which should be empty
             case XATTR_FILLBITMAP:
             case XATTR_FILLGRADIENT:
             case XATTR_FILLHATCH:
-            case XATTR_FILLFLOATTRANSPARENCE:
             case XATTR_LINEDASH:
                 {
                     NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((USHORT)pMap->nWID);
@@ -2885,8 +2887,11 @@ beans::PropertyState SAL_CALL SvxShape::_getPropertyState( const OUString& Prope
             // #i36115#
             // If e.g. the LineStart is on NONE and thus the string has length 0, it still
             // may be a hard attribute covering the set LineStart of the parent (Style).
+            // #i37644#
+            // same is for fill float transparency
             case XATTR_LINEEND:
             case XATTR_LINESTART:
+            case XATTR_FILLFLOATTRANSPARENCE:
                 {
                     NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((USHORT)pMap->nWID);
                     if( ( pItem == NULL ) )
