@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-26 11:14:37 $
+ *  last change: $Author: cl $ $Date: 2002-07-24 12:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -827,19 +827,27 @@ void SdView::onAccessibilityOptionsChanged()
             USHORT nOutputSlot, nPreviewSlot;
 
             SvtAccessibilityOptions& aAccOptions = getAccessibilityOptions();
-            if( rStyleSettings.GetHighContrastMode() && aAccOptions.GetIsForDrawings() )
-            {
-                nOutputSlot = SID_OUTPUT_QUALITY_CONTRAST;
-                nPreviewSlot = SID_PREVIEW_QUALITY_CONTRAST;
-            }
-            else
-            {
-                nOutputSlot = SID_OUTPUT_QUALITY_COLOR;
-                nPreviewSlot = SID_PREVIEW_QUALITY_COLOR;
-            }
 
             if( pViewSh->GetViewFrame() && pViewSh->GetViewFrame()->GetDispatcher() )
             {
+                if( rStyleSettings.GetHighContrastMode() && aAccOptions.GetIsForDrawings() )
+                {
+                    nOutputSlot = SID_OUTPUT_QUALITY_CONTRAST;
+                }
+                else
+                {
+                    nOutputSlot = SID_OUTPUT_QUALITY_COLOR;
+                }
+
+                if( rStyleSettings.GetHighContrastMode() && aAccOptions.GetIsForPagePreviews() )
+                {
+                    nPreviewSlot = SID_PREVIEW_QUALITY_CONTRAST;
+                }
+                else
+                {
+                    nPreviewSlot = SID_PREVIEW_QUALITY_COLOR;
+                }
+
                 pViewSh->GetViewFrame()->GetDispatcher()->Execute( nOutputSlot, SFX_CALLMODE_ASYNCHRON );
                 pViewSh->GetViewFrame()->GetDispatcher()->Execute( nPreviewSlot, SFX_CALLMODE_ASYNCHRON );
             }
