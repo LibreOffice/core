@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeactions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-30 08:31:49 $
+ *  last change: $Author: jb $ $Date: 2000-12-20 12:14:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,64 @@
 //..........................................................................
 namespace configmgr
 {
+
+//==========================================================================
+//= OIdPropagator
+//==========================================================================
+
+void OIdPropagator::propagateIdToChildren(ISubtree& rTree)
+{
+    if (rTree.hasId())
+    {
+        OIdPropagator aAction(rTree.getId());
+        aAction.applyToChildren(rTree);
+    }
+}
+//--------------------------------------------------------------------------
+
+void OIdPropagator::propagateIdToTree(OUString const& aId, ISubtree& rTree)
+{
+    OSL_ENSURE(!rTree.hasId(), "OIdPropagator::propagateIdToTree: Tree already has an Id, propagating may not work");
+    rTree.setId(aId);
+    propagateIdToChildren(rTree);
+}
+//--------------------------------------------------------------------------
+
+void OIdPropagator::handle(ValueNode& _rValueNode)
+{ /* not interested in value nodes */ }
+//--------------------------------------------------------------------------
+
+void OIdPropagator::handle(ISubtree& _rSubtree)
+{
+    if (!_rSubtree.hasId())
+    {
+        _rSubtree.setId(sId);
+        applyToChildren(_rSubtree);
+    }
+}
+
+//==========================================================================
+//= OIdRemover
+//==========================================================================
+
+void OIdRemover::removeIds(INode& rNode)
+{
+    OIdRemover().applyToNode(rNode);
+}
+//--------------------------------------------------------------------------
+
+void OIdRemover::handle(ValueNode& _rValueNode)
+{ /* not interested in value nodes */ }
+//--------------------------------------------------------------------------
+
+void OIdRemover::handle(ISubtree& _rSubtree)
+{
+    if (_rSubtree.hasId())
+    {
+        _rSubtree.setId(OUString());
+        applyToChildren(_rSubtree);
+    }
+}
 
 //==========================================================================
 //= OChangeActionCounter
@@ -355,11 +413,17 @@ void OCreateSubtreeAction::handle(AddNode& _rChange)
                 if (aOldNode.get() == NULL)
                     aLog.push_back(OString("TreeUpdate: can't recover node being replaced (for AddNode)"));
 #endif
+                if (aOldNode.get() != NULL)
+                {
+                    OIdRemover::removeIds(*aOldNode);
+                }
 
                 aAddNode.takeReplacedNode( aOldNode );
             }
 
             m_pCurrentSubtree->addChild(aAddNode.releaseAddedNode());
+
+            OIdPropagator::propagateIdToChildren(*m_pCurrentSubtree);
         }
 #ifdef DBUG
         else
@@ -376,6 +440,10 @@ void OCreateSubtreeAction::handle(AddNode& _rChange)
             std::auto_ptr<INode> aOldNode = m_pCurrentSubtree->removeChild(aRemoveNode.getNodeName());
 
             sal_Bool bOk = (NULL != aOldNode.get());
+            if (bOk)
+            {
+                OIdRemover::removeIds(*aOldNode);
+            }
             aRemoveNode.takeRemovedNode( aOldNode );
 
 #ifdef DBUG

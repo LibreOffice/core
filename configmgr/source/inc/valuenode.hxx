@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuenode.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dg $ $Date: 2000-12-01 13:31:52 $
+ *  last change: $Author: jb $ $Date: 2000-12-20 12:14:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,13 @@ namespace configmgr
     protected:
         ISubtree():m_nLevel(0){}
 
+        ISubtree(ISubtree const& other)
+        :INode(other)
+        ,m_nLevel(other.m_nLevel)
+        ,m_sTemplateName(other.m_sTemplateName)
+        ,m_sId() // do not copy ID while cloning !
+        {}
+
     public:
         // subtree does current not support attributes in the right way
         // ISubtree(const configuration::Attributes& _rAttrs) : INode(_rAttrs), m_nLevel(0) {}
@@ -164,6 +171,7 @@ namespace configmgr
             ,m_nLevel(0)
             ,m_sTemplateName(_rTemplate){}
 
+        bool            hasId() const           { return m_sId.getLength() != 0; }
         ::rtl::OUString getId() const           { return m_sId; }
         void            setId(const ::rtl::OUString& _rId)  { m_sId = _rId; }
 

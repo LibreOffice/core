@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeactions.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-30 09:01:47 $
+ *  last change: $Author: jb $ $Date: 2000-12-20 12:14:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,37 @@
 namespace configmgr
 {
 //..........................................................................
+//==========================================================================
+//= OIdPropagator
+//==========================================================================
+/** propagates a node id to a subtree and its descendants
+*/
+class OIdPropagator : private NodeModification
+{
+    ::rtl::OUString sId;
+
+    OIdPropagator(const ::rtl::OUString& _rId) : sId(_rId) { }
+    virtual void handle(ValueNode& _rValueNode);
+    virtual void handle(ISubtree& _rSubtree);
+
+public:
+    static void propagateIdToChildren(ISubtree& rTree);
+    static void propagateIdToTree( ::rtl::OUString const& aId, ISubtree& rTree);
+};
+
+//==========================================================================
+//= OIdRemover
+//==========================================================================
+/** propagates a node id to a subtree and its descendants
+*/
+class OIdRemover : private NodeModification
+{
+    virtual void handle(ValueNode& _rValueNode);
+    virtual void handle(ISubtree& _rSubtree);
+
+public:
+    static void removeIds(INode& rNode);
+};
 
 //==========================================================================
 //= OChangeActionCounter
