@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:08:35 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 12:07:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,7 +345,7 @@ Size __EXPORT ScTabViewShell::GetOptimalSizePixel() const
 {
     Size aOptSize;
 
-    USHORT              nCurTab     = GetViewData()->GetTabNo();
+    SCTAB               nCurTab     = GetViewData()->GetTabNo();
     ScDocument*         pDoc        = GetViewData()->GetDocument();
     ScStyleSheetPool*   pStylePool  = pDoc->GetStyleSheetPool();
     SfxStyleSheetBase*  pStyleSheet = pStylePool->Find(
@@ -464,9 +464,9 @@ void __EXPORT ScTabViewShell::QueryObjAreaPixel( Rectangle& rRect ) const
     const ScViewData* pViewData = GetViewData();
     ScDocument* pDoc = pViewData->GetDocument();
     ScSplitPos ePos = pViewData->GetActivePart();
-    USHORT nCol = pViewData->GetPosX(WhichH(ePos));
-    USHORT nRow = pViewData->GetPosY(WhichV(ePos));
-    USHORT nTab = pViewData->GetTabNo();
+    SCCOL nCol = pViewData->GetPosX(WhichH(ePos));
+    SCROW nRow = pViewData->GetPosY(WhichV(ePos));
+    SCTAB nTab = pViewData->GetTabNo();
     BOOL bNegativePage = pDoc->IsNegativePage( nTab );
 
     Rectangle aLogicRect = pDoc->GetMMRect( nCol, nRow, nCol, nRow, nTab );
@@ -491,8 +491,8 @@ void __EXPORT ScTabViewShell::QueryObjAreaPixel( Rectangle& rRect ) const
     Window* pWin = ((ScTabViewShell*)this)->GetActiveWin();
 
     Point aTest( aSize.Width(), aSize.Height() );
-    short nPosX;
-    short nPosY;
+    SCsCOL nPosX;
+    SCsROW nPosY;
     pViewData->GetPosFromPixel( aTest.X(), aTest.Y(), ePos, nPosX, nPosY );
     BOOL bLeft;
     BOOL bTop;
@@ -501,7 +501,7 @@ void __EXPORT ScTabViewShell::QueryObjAreaPixel( Rectangle& rRect ) const
         ++nPosX;
     if (!bTop)
         ++nPosY;
-    aTest = pViewData->GetScrPos( (USHORT)nPosX, (USHORT)nPosY, ePos, TRUE );
+    aTest = pViewData->GetScrPos( (SCCOL)nPosX, (SCROW)nPosY, ePos, TRUE );
 
     rRect.SetSize(Size(aTest.X(),aTest.Y()));
 #endif
@@ -1102,11 +1102,10 @@ PrintDialog* __EXPORT ScTabViewShell::CreatePrintDialog( Window *pParent )
 
     String          aStrRange;
     PrintDialog*    pDlg        = new PrintDialog( pParent);
-    USHORT          i;
-    USHORT          nTabCount   = pDoc->GetTableCount();
+    SCTAB           nTabCount   = pDoc->GetTableCount();
     long            nDocPageMax = 0;
 
-    for ( i=0; i<nTabCount; i++ )
+    for ( SCTAB i=0; i<nTabCount; i++ )
     {
         ScPrintFunc aPrintFunc( pDocShell, pPrinter, i );
         nDocPageMax += aPrintFunc.GetTotalPages();
@@ -1199,10 +1198,10 @@ USHORT __EXPORT ScTabViewShell::Print( SfxProgress& rProgress,
     BOOL bAllTabs = aOptions.GetAllSheets();
 
     uno::Sequence<sal_Int32> aSheets;
-    USHORT nTabCount = pDocShell->GetDocument()->GetTableCount();
+    SCTAB nTabCount = pDocShell->GetDocument()->GetTableCount();
     USHORT nPrinted = 0;
     const ScMarkData& rMarkData = GetViewData()->GetMarkData();
-    for ( USHORT nTab=0; nTab<nTabCount; nTab++ )
+    for ( SCTAB nTab=0; nTab<nTabCount; nTab++ )
         if ( bAllTabs || rMarkData.GetTableSelect(nTab) )
         {
             aSheets.realloc( nPrinted + 1 );
@@ -1618,7 +1617,7 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
     {
         Rectangle aVisArea = ((SfxInPlaceObject*)pDocSh)->GetVisArea();
 
-        USHORT nVisTab = pDoc->GetVisibleTab();
+        SCTAB nVisTab = pDoc->GetVisibleTab();
         if (!pDoc->HasTable(nVisTab))
         {
             nVisTab = 0;
@@ -1691,8 +1690,8 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
             // append additional sheets (not for OLE object)
             if ( pDocSh->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
             {
-                USHORT nInitTabCount = 3;                           //! konfigurierbar !!!
-                for (USHORT i=1; i<nInitTabCount; i++)
+                SCTAB nInitTabCount = 3;                            //! konfigurierbar !!!
+                for (SCTAB i=1; i<nInitTabCount; i++)
                     pDoc->MakeTable(i);
             }
 
@@ -1713,8 +1712,8 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
              pDocSh->IsUpdateEnabled() )  // #105575#; update only in the first creation of the ViewShell
         {
             BOOL bLink = FALSE;                                 // Links updaten
-            USHORT nTabCount = pDoc->GetTableCount();
-            for (USHORT i=0; i<nTabCount && !bLink; i++)
+            SCTAB nTabCount = pDoc->GetTableCount();
+            for (SCTAB i=0; i<nTabCount && !bLink; i++)
                 if (pDoc->IsLinked(i))
                     bLink = TRUE;
             if (!bLink)
@@ -1892,7 +1891,7 @@ void ScTabViewShell::FillFieldData( ScHeaderFieldData& rData )
 {
     ScDocShell* pDocShell = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocShell->GetDocument();
-    USHORT nTab = GetViewData()->GetTabNo();
+    SCTAB nTab = GetViewData()->GetTabNo();
     pDoc->GetName( nTab, rData.aTabName );
 
     rData.aTitle        = pDocShell->GetTitle();
@@ -1923,7 +1922,7 @@ void ScTabViewShell::ResetChartArea()
     bChartAreaValid = FALSE;
 }
 
-BOOL ScTabViewShell::GetChartArea( ScRangeListRef& rSource, Rectangle& rDest, USHORT& rTab ) const
+BOOL ScTabViewShell::GetChartArea( ScRangeListRef& rSource, Rectangle& rDest, SCTAB& rTab ) const
 {
     rSource = aChartSource;
     rDest   = aChartPos;
