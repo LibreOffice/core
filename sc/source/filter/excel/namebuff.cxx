@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namebuff.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2001-02-20 15:19:02 $
+ *  last change: $Author: gt $ $Date: 2001-03-14 12:00:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,6 +481,18 @@ BOOL ExtSheetBuffer::GetLink( const UINT16 nExcIndex, String& rAppl, String& rDo
         rDoc = pRet->aTab;
         return TRUE;
     }
+    else
+        return FALSE;
+}
+
+
+BOOL ExtSheetBuffer::IsExternal( UINT16 nExcIndex ) const
+{
+    DBG_ASSERT( nExcIndex > 0, "*ExtSheetBuffer::IsExternal(): Index muss >0 sein!" );
+    Cont*   pRet = ( Cont * ) List::GetObject( nExcIndex - 1 );
+
+    if( pRet )
+        return !pRet->bSWB;
     else
         return FALSE;
 }

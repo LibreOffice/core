@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namebuff.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2001-02-20 15:23:42 $
+ *  last change: $Author: gt $ $Date: 2001-03-14 12:02:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,6 +378,7 @@ public:
     BOOL            GetScTabIndex( UINT16 nExcSheetIndex, UINT16& rIn_LastTab_Out_ScIndex );
     BOOL            IsLink( const UINT16 nExcSheetIndex ) const;
     BOOL            GetLink( const UINT16 nExcSheetIndex, String &rAppl, String &rDoc ) const;
+    BOOL            IsExternal( UINT16 nExcSheetIndex ) const;
 
     void            Reset( void );
 };

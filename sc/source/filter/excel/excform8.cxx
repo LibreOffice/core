@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-26 06:56:28 $
+ *  last change: $Author: gt $ $Date: 2001-03-14 12:00:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -743,7 +743,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
             case 0x39: // Name or External Name                 [    275]
                 aIn >> nINT16 >> nUINT16;
                 aIn.Ignore( 2 );
-                if( nINT16 >= 0 )
+                if( nINT16 == 0 || ( nINT16 > 0 && pExcRoot->pExtSheetBuff->IsExternal( UINT16( nINT16 ) ) ) )
                 {
                     const ExtName*  pExtName;
                     pExtName = pExcRoot->pExtNameBuff->GetName( nUINT16 );
