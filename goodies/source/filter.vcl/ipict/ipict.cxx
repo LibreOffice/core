@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ipict.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:07:12 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:33:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -628,6 +628,8 @@ void PictReader::DrawingMethod(PictDrawingMethod eMethod)
             pVirDev->SetFont(aActFont);
             pVirDev->SetRasterOp(ROP_OVERPAINT);
             break;
+        default:
+            break;  // -Wall undefined not handled...
     }
     eActMethod=eMethod;
 }
@@ -1959,8 +1961,9 @@ extern "C" BOOL GraphicImport( SvStream& rIStm, Graphic & rGraphic,
 }
 
 //================== ein bischen Muell fuer Windows ==========================
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #ifdef WIN
 
