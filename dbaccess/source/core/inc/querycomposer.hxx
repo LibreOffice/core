@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 12:42:23 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 12:42:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,29 @@ namespace com { namespace sun { namespace star { namespace util {
 
 namespace dbaccess
 {
+    struct FilterCreator : public ::std::unary_function< ::rtl::OUString, void>
+    {
+        ::rtl::OUString m_sFilter;
+
+        FilterCreator(){}
+
+        void operator() (const ::rtl::OUString& lhs)
+        {
+            append(lhs);
+        }
+
+        void append(const ::rtl::OUString& lhs)
+        {
+            if ( lhs.getLength() )
+            {
+                if ( m_sFilter.getLength() )
+                    m_sFilter += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" AND "));
+                m_sFilter += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("( ")) + lhs;
+                m_sFilter += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" )"));
+            }
+        }
+    };
+
     typedef ::cppu::ImplHelper5<    ::com::sun::star::sdb::XSQLQueryComposer,
                                     ::com::sun::star::sdb::XParametersSupplier,
                                     ::com::sun::star::sdbcx::XTablesSupplier,
@@ -129,8 +152,14 @@ namespace dbaccess
                             public OSubComponent,
                             public OQueryComposer_BASE
     {
+        ::std::vector< ::rtl::OUString>                                                      m_aFilters;
+        ::std::vector< ::rtl::OUString>                                                      m_aOrders;
+        ::rtl::OUString m_sOrgFilter;
+        ::rtl::OUString m_sOrgOrder;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer> m_xAnalyzer;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer> m_xAnalyzerHelper;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer> m_xComposer;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer> m_xComposerHelper;
 
     protected:
         virtual ~OQueryComposer();
