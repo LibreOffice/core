@@ -442,7 +442,9 @@ struct filepointer *getfile(file)
         fatalerr("cannot allocate mem\n");
     size_backup = st.st_size;
     if ((st.st_size = read(fd, content->f_base, size_backup)) < 0)
-        fatalerr("failed to read %s\n", file);
+        if ( st.st_mode & S_IFREG )
+            fatalerr("failed to read %s\n", file);
+
     close(fd);
     content->f_len = st.st_size+1;
     content->f_p = content->f_base;
