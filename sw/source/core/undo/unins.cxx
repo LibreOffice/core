@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unins.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:39:02 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:25:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -954,6 +954,9 @@ void SwUndoInsertLabel::Redo( SwUndoIter& rIter )
                 pSdrObj->SetLayer( nLayerId );
                 if( pSdrObj->GetLayer() == rDoc.GetHellId() )
                     pSdrObj->SetLayer( rDoc.GetHeavenId() );
+                // OD 02.07.2003 #108784#
+                else if( pSdrObj->GetLayer() == rDoc.GetInvisibleHellId() )
+                    pSdrObj->SetLayer( rDoc.GetInvisibleHeavenId() );
             }
         }
     }
