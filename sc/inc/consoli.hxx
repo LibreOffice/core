@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consoli.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:48 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
 #endif
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
 
 class ScDocument;
 
@@ -72,9 +75,9 @@ class ScDocument;
 
 struct ScReferenceEntry             // ohne Constructor !
 {
-    USHORT  nCol;
-    USHORT  nRow;
-    USHORT  nTab;
+    SCCOL   nCol;
+    SCROW   nRow;
+    SCTAB   nTab;
 };
 
 
@@ -83,19 +86,19 @@ struct ScReferenceEntry             // ohne Constructor !
 class ScReferenceList           // ohne Constructor !
 {
 private:
-    USHORT              nCount;
-    USHORT              nFullSize;          // inkl. Fuell-Eintraege
+    SCSIZE              nCount;
+    SCSIZE              nFullSize;          // inkl. Fuell-Eintraege
     ScReferenceEntry*   pData;
 
 public:
     void                    Init()                      { nCount=0; nFullSize=0; pData=NULL; }
     void                    Clear()                     { delete[] pData; }
 
-    USHORT                  GetCount()                  { return nCount; }
-    const ScReferenceEntry& GetEntry( USHORT nPos )     { return pData[nPos]; }
-    void                    SetFullSize( USHORT nNew )  { nFullSize = nNew; }
+    SCSIZE                  GetCount()                  { return nCount; }
+    const ScReferenceEntry& GetEntry( SCSIZE nPos )     { return pData[nPos]; }
+    void                    SetFullSize( SCSIZE nNew )  { nFullSize = nNew; }
 
-    void                    AddEntry( USHORT nCol, USHORT nRow, USHORT nTab );
+    void                    AddEntry( SCCOL nCol, SCROW nRow, SCTAB nTab );
 };
 
 // -----------------------------------------------------------------------
@@ -123,8 +126,8 @@ private:
     BOOL                bColByName;
     BOOL                bRowByName;
     BOOL                bSubTitles;
-    USHORT              nColCount;
-    USHORT              nRowCount;
+    SCSIZE              nColCount;
+    SCSIZE              nRowCount;
     BOOL**              ppUsed;
     double**            ppSum;
     double**            ppCount;
@@ -132,10 +135,10 @@ private:
     ScReferenceList**   ppRefs;
     String**            ppColHeaders;
     String**            ppRowHeaders;
-    USHORT              nDataCount;
-    USHORT              nTitleCount;
+    SCSIZE              nDataCount;
+    SCSIZE              nTitleCount;
     String**            ppTitles;
-    USHORT**            ppTitlePos;
+    SCSIZE**            ppTitlePos;
     BOOL                bCornerUsed;
     String              aCornerText;        // nur bei bColByName && bRowByName
 
@@ -143,24 +146,24 @@ public:
                 ScConsData();
                 ~ScConsData();
 
-    void        SetSize( USHORT nCols, USHORT nRows );
+    void        SetSize( SCCOL nCols, SCROW nRows );
     void        SetFlags( ScSubTotalFunc eFunc, BOOL bColName, BOOL bRowName, BOOL bRef );
 
     void        InitData(BOOL bDelete=TRUE);
     void        DeleteData();
 
-    void        AddFields( ScDocument* pSrcDoc, USHORT nTab,
-                            USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2 );
+    void        AddFields( ScDocument* pSrcDoc, SCTAB nTab,
+                            SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
     void        DoneFields();
 
-    void        AddData( ScDocument* pSrcDoc, USHORT nTab,
-                            USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2 );
+    void        AddData( ScDocument* pSrcDoc, SCTAB nTab,
+                            SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
     void        AddName( const String& rName );
 
-    void        OutputToDocument( ScDocument* pDestDoc, USHORT nCol, USHORT nRow, USHORT nTab );
+    void        OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow, SCTAB nTab );
 
-    void        GetSize( USHORT& rCols, USHORT& rRows ) const;
-    USHORT      GetInsertCount() const;
+    void        GetSize( SCCOL& rCols, SCROW& rRows ) const;
+    SCROW       GetInsertCount() const;
 };
 
 
