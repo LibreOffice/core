@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-25 16:02:23 $
+ *  last change: $Author: dvo $ $Date: 2002-05-29 10:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,7 +486,24 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                             {
                                 eRedlineMode = (SwRedlineMode)
                                     (eRedlineMode | REDLINE_IGNOREDELETE_REDLINES);
-                                DeleteAndJoin( *pNewRedl );
+
+                                // #98863# DeleteAndJoin does not yield the
+                                // desired result if there is no paragraph to
+                                // join with, i.e. at the end of the document.
+                                // For this case, we completely delete the
+                                // paragraphs (if, of course, we also start on
+                                // a paragraph boundary).
+                                if( (pStt->nContent == 0) &&
+                                    pEnd->nNode.GetNode().IsEndNode() )
+                                {
+                                    pEnd->nNode--;
+                                    pEnd->nContent.Assign(
+                                        pEnd->nNode.GetNode().GetTxtNode(), 0);
+                                    DelFullPara( *pNewRedl );
+                                }
+                                else
+                                    DeleteAndJoin( *pNewRedl );
+
                                 bCompress = TRUE;
                             }
                             delete pNewRedl, pNewRedl = 0;
