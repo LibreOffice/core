@@ -3,9 +3,9 @@
  *
  *  $RCSfile: JavaVMCreationFailureException.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:56:38 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:07:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ module com { module sun { module star { module java {
     library is corrupted, so that the symbols for JNI_GetDefaultVMInitArgs
     or JNI_CreateJavaVM cannot be found, etc.
 
-    @since OOo1.1.2
+    @since OOo 1.1.2
  */
 published exception JavaVMCreationFailureException: JavaInitializationException
 {
