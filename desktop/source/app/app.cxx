@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: cd $ $Date: 2001-10-09 12:11:28 $
+ *  last change: $Author: mba $ $Date: 2001-10-11 12:19:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -951,7 +951,7 @@ USHORT Desktop::Exception(USHORT nError)
                     if ( xStor.is() )
                     {
                         // get the media descriptor and retrieve filter name and password
-                        ::rtl::OUString aOrigPassword, aOrigFilterName;
+                        ::rtl::OUString aOrigPassword, aOrigFilterName, aTitle;
                         Sequence < PropertyValue > aArgs( xModel->getArgs() );
                         sal_Int32 nProps = aArgs.getLength();
                         for ( sal_Int32 nProp = 0; nProp<nProps; nProp++ )
@@ -961,6 +961,8 @@ USHORT Desktop::Exception(USHORT nError)
                                 rProp.Value >>= aOrigFilterName;
                             if( rProp.Name == OUString(RTL_CONSTASCII_USTRINGPARAM("Password")) )
                                 rProp.Value >>= aOrigPassword;
+                            if( rProp.Name == OUString(RTL_CONSTASCII_USTRINGPARAM("Title")) )
+                                rProp.Value >>= aTitle;
                         }
 
                         // save document as tempfile in backup directory
@@ -971,7 +973,7 @@ USHORT Desktop::Exception(USHORT nError)
                         {
                             ::utl::TempFile aTempFile( &aSavePath );
                             aSaveURL = aTempFile.GetURL();
-                            aOldName = aOrigURL;
+                            aOldName = INetURLObject( aOrigURL ).GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
                         }
                         else
                         {
@@ -979,7 +981,7 @@ USHORT Desktop::Exception(USHORT nError)
                             String aExt( DEFINE_CONST_UNICODE( ".sav" ) );
                             ::utl::TempFile aTempFile( DEFINE_CONST_UNICODE( "exc" ), &aExt, &aSavePath );
                             aSaveURL = aTempFile.GetURL();
-                            // aOldName = Title;
+                            aOldName = aTitle;
                         }
 
                         if ( aOrigPassword.getLength() )
@@ -1412,7 +1414,7 @@ void Desktop::OpenClients()
     {
         // crash recovery
         sal_Bool bUserCancel = sal_False;
-        ::rtl::OUString sURL;
+        ::rtl::OUString sName;
         ::rtl::OUString sFilter;
         ::rtl::OUString sTempName;
 
@@ -1433,16 +1435,18 @@ void Desktop::OpenClients()
         while(  !aInternalOptions.IsRecoveryListEmpty() && !bUserCancel )
         {
             // Read and delete top recovery item from list
-            aInternalOptions.PopRecoveryItem( sURL, sFilter, sTempName );
+            aInternalOptions.PopRecoveryItem( sName, sFilter, sTempName );
 
-            INetURLObject aURL( sURL );
+            INetURLObject aURL( sName );
 
             sal_Bool bIsURL = aURL.GetProtocol() != INET_PROT_NOT_VALID;
-            String sRealFileName( sURL );
             String sTempFileName( sTempName );
+            String sRealFileName;
+            if ( bIsURL )
+                sRealFileName = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
             String aMsg( DesktopResId( STR_RECOVER_QUERY ) );
-            aMsg.SearchAndReplaceAscii( "$1", sRealFileName );
+            aMsg.SearchAndReplaceAscii( "$1", sName );
             MessBox aBox( NULL, WB_YES_NO_CANCEL | WB_DEF_YES | WB_3DLOOK, String( DesktopResId( STR_RECOVER_TITLE ) ), aMsg );
             switch( aBox.Execute() )
             {
@@ -1489,7 +1493,7 @@ void Desktop::OpenClients()
                     // delete recovery list and all files
                     while( aInternalOptions.IsRecoveryListEmpty() == sal_False )
                     {
-                        aInternalOptions.PopRecoveryItem( sURL, sFilter, sTempName );
+                        aInternalOptions.PopRecoveryItem( sName, sFilter, sTempName );
                         ::utl::UCBContentHelper::Kill( sTempName );
                     }
 
