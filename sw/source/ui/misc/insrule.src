@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insrule.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:59:59 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,8 @@ ModalDialog DLG_INSERT_RULER
         Text[ hebrew ] = "‮מבחר‬";
         Text[ hindi ] = "चुनाव";
         Text[ slovak ] = "Výber";
+        Text[ hungarian ] = "Vonaltípus";
+        Text[ slovenian ] = "Izbor";
     };
     Control VS_EXAMPLE
     {
@@ -140,7 +142,7 @@ ModalDialog DLG_INSERT_RULER
         Text [ english_us ] = "Plain" ;
         Text [ portuguese_brazilian ] = "Pleno" ;
         Text [ swedish ] = "Enkel" ;
-        Text [ danish ] = "Enkelt" ;
+        Text [ danish ] = "Simpel" ;
         Text [ italian ] = "Semplice" ;
         Text [ spanish ] = "Sencilla" ;
         Text [ french ] = "Simple" ;
@@ -162,11 +164,13 @@ ModalDialog DLG_INSERT_RULER
         Text[ hebrew ] = "Einfach";
         Text[ hindi ] = "खाली";
         Text[ slovak ] = "Jednoduché";
+        Text[ hungarian ] = "Egyszerű";
+        Text[ slovenian ] = "Navadno";
     };
     Text [ english_us ] = "Insert Horizontal Ruler" ;
     Text [ portuguese_brazilian ] = "Inserir R�gua Horizontal" ;
     Text [ swedish ] = "Infoga horisontell linje" ;
-    Text [ danish ] = "Inds�t vandret linje" ;
+    Text [ danish ] = "Inds�t vandret lineal" ;
     Text [ italian ] = "Inserisci linea orizzontale" ;
     Text [ spanish ] = "Insertar l�nea horizontal" ;
     Text [ french ] = "Insertion de ligne horizontale" ;
@@ -189,7 +193,10 @@ ModalDialog DLG_INSERT_RULER
     Text[ hebrew ] = "‮הוספת סרגל אופקי‬";
     Text[ hindi ] = "समतल रूलर जोड़ो";
     Text[ slovak ] = "Vložiť vodorovné pravítko";
+    Text[ hungarian ] = "Vízszintes vonal beszúrása";
+    Text[ slovenian ] = "Vstavi vodoravno ravnilo";
 };
+
 
 
 
