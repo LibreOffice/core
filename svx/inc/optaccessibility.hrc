@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optaccessibility.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 09:26:42 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 #define COL0                    6
 #define COL1                    (COL0+6)
 #define COL2                    (COL1+10)
-#define COL3                    (COL1+(CB_WIDTH/2))
+#define COL3                    (COL1+(CB_WIDTH * 2/3))
 #define COL4                    (COL3+EDIT_WIDTH+RSC_SP_CTRL_DESC_X)
 
 #define UNIT_WIDTH              (CB_WIDTH-COL4)
