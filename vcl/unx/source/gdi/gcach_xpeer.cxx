@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 17:09:56 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,12 +126,6 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
     if( !XQueryExtension( mpDisplay, "RENDER", &nDummy, &nDummy, &nDummy ) )
         return;
 
-    // #93033# disable XRENDER for now if XINERAMA is present
-    // TODO: enable it once an XRENDER version is happy with xinerama
-    // on all chipsets
-    if( XQueryExtension( mpDisplay, "XINERAMA", &nDummy, &nDummy, &nDummy ) )
-        return;
-
     // we don't know if we are running on a system with xrender library
     // we don't want to install system libraries ourselves
     // => load them dynamically when they are there
@@ -240,6 +234,11 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
     if( (nMaxDepth < 15) && (nRenderVersion <= 0x02) )
         mbUsingXRender = false;
 
+    // #93033# disable XRENDER for old RENDER versions if XINERAMA is present
+    if( (nRenderVersion < 0x02)
+    &&  XQueryExtension( mpDisplay, "XINERAMA", &nDummy, &nDummy, &nDummy ) )
+        mbUsingXRender = false;
+
     if( (nEnvAntiAlias & 2) != 0 )
         mbUsingXRender = false;
 }
@@ -300,8 +299,13 @@ void X11GlyphPeer::RemovingGlyph( ServerFont& rServerFont, GlyphData& rGlyphData
                 GlyphSet aGlyphSet = GetGlyphSet( rServerFont );
                 Glyph nGlyphId = GetGlyphId( rServerFont, nGlyphIndex );
                 // XRenderFreeGlyphs not implemented yet for version<=0.2
+                // #108209# disabled because of crash potential,
+                // the glyph leak is not too bad because they will
+                // be cleaned up when the glyphset is released
+#if 0   // TODO: reenable when it works without problems
                 if( nRenderVersion >= 0x05 )
                     (*pXRenderFreeGlyphs)( mpDisplay, aGlyphSet, &nGlyphId, 1 );
+#endif
                 mnBytesUsed -= nHeight * ((nWidth + 3) & ~3);
             }
             break;
