@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:12:59 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:36:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ class ZipOutputStream;
 struct ZipEntry;
 typedef void* rtlRandomPool;
 
-#ifdef MACOSX
+#if defined( MACOSX ) && ( __GNUC__ < 3 )
 class ZipPackageFolder : public ZipPackageEntry,
                                                  public ::cppu::OWeakObject,
                                                  public ::com::sun::star::container::XNameContainer,
@@ -125,7 +125,7 @@ public:
         throw(::com::sun::star::uno::RuntimeException);
     void  releaseUpwardRef();
 
-#ifdef MACOSX
+#if defined( MACOSX ) && ( __GNUC__ < 3 )
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
         throw(::com::sun::star::uno::RuntimeException);
