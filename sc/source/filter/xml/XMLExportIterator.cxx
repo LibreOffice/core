@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 14:42:39 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:09:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ void ScMyShapesContainer::AddNewShape( const ScMyShape& aShape )
 
 sal_Bool ScMyShapesContainer::GetFirstAddress( table::CellAddress& rCellAddress )
 {
-    sal_Int16 nTable = rCellAddress.Sheet;
+    sal_Int32 nTable = rCellAddress.Sheet;
     if( !aShapeList.empty() )
     {
         ScUnoConversion::FillApiAddress( rCellAddress, aShapeList.begin()->aAddress );
@@ -241,7 +241,7 @@ void ScMyMergedRangesContainer::AddRange(const table::CellRangeAddress aMergedRa
 
 sal_Bool ScMyMergedRangesContainer::GetFirstAddress( table::CellAddress& rCellAddress )
 {
-    sal_Int16 nTable = rCellAddress.Sheet;
+    sal_Int32 nTable = rCellAddress.Sheet;
     if( !aRangeList.empty() )
     {
         ScUnoConversion::FillApiStartAddress( rCellAddress, aRangeList.begin()->aCellRange );
@@ -313,7 +313,7 @@ ScMyAreaLinksContainer::~ScMyAreaLinksContainer()
 
 sal_Bool ScMyAreaLinksContainer::GetFirstAddress( table::CellAddress& rCellAddress )
 {
-    sal_Int16 nTable = rCellAddress.Sheet;
+    sal_Int32 nTable = rCellAddress.Sheet;
     if( !aAreaLinkList.empty() )
     {
         ScUnoConversion::FillApiStartAddress( rCellAddress, aAreaLinkList.begin()->aDestRange );
@@ -384,7 +384,7 @@ void ScMyEmptyDatabaseRangesContainer::AddNewEmptyDatabaseRange(const table::Cel
 
 sal_Bool ScMyEmptyDatabaseRangesContainer::GetFirstAddress( table::CellAddress& rCellAddress )
 {
-    sal_Int16 nTable = rCellAddress.Sheet;
+    sal_Int32 nTable = rCellAddress.Sheet;
     if( !aDatabaseList.empty() )
     {
         ScUnoConversion::FillApiStartAddress( rCellAddress, *(aDatabaseList.begin()) );
@@ -396,7 +396,7 @@ sal_Bool ScMyEmptyDatabaseRangesContainer::GetFirstAddress( table::CellAddress& 
 void ScMyEmptyDatabaseRangesContainer::SetCellData( ScMyCell& rMyCell )
 {
     rMyCell.bHasEmptyDatabase = sal_False;
-    sal_Int16 nTable = rMyCell.aCellAddress.Sheet;
+    sal_Int32 nTable = rMyCell.aCellAddress.Sheet;
     ScMyEmptyDatabaseRangeList::iterator aItr = aDatabaseList.begin();
     if( aItr != aDatabaseList.end() )
     {
@@ -439,7 +439,7 @@ ScMyDetectiveObjContainer::~ScMyDetectiveObjContainer()
 {
 }
 
-void ScMyDetectiveObjContainer::AddObject( ScDetectiveObjType eObjType, const sal_uInt16 nSheet,
+void ScMyDetectiveObjContainer::AddObject( ScDetectiveObjType eObjType, const SCTAB nSheet,
                                             const ScAddress& rPosition, const ScRange& rSourceRange,
                                             sal_Bool bHasError )
 {
@@ -472,7 +472,7 @@ void ScMyDetectiveObjContainer::AddObject( ScDetectiveObjType eObjType, const sa
 
 sal_Bool ScMyDetectiveObjContainer::GetFirstAddress( table::CellAddress& rCellAddress )
 {
-    sal_Int16 nTable = rCellAddress.Sheet;
+    sal_Int32 nTable = rCellAddress.Sheet;
     if( !aDetectiveObjList.empty() )
     {
         rCellAddress = aDetectiveObjList.begin()->aPosition;
@@ -530,7 +530,7 @@ void ScMyDetectiveOpContainer::AddOperation( ScDetOpType eOpType, const ScAddres
 
 sal_Bool ScMyDetectiveOpContainer::GetFirstAddress( table::CellAddress& rCellAddress )
 {
-    sal_Int16 nTable = rCellAddress.Sheet;
+    sal_Int32 nTable = rCellAddress.Sheet;
     if( !aDetectiveOpList.empty() )
     {
         rCellAddress = aDetectiveOpList.begin()->aPosition;
@@ -604,7 +604,7 @@ ScMyNotEmptyCellsIterator::ScMyNotEmptyCellsIterator(ScXMLExport& rTempXMLExport
     pEmptyDatabaseRanges(NULL),
     pDetectiveObj(NULL),
     pDetectiveOp(NULL),
-    nCurrentTable(-1)
+    nCurrentTable(SCTAB_MAX)
 {
 }
 
@@ -629,7 +629,7 @@ void ScMyNotEmptyCellsIterator::Clear()
     pEmptyDatabaseRanges = NULL;
     pDetectiveObj = NULL;
     pDetectiveOp = NULL;
-    nCurrentTable = -1;
+    nCurrentTable = SCTAB_MAX;
 }
 
 void ScMyNotEmptyCellsIterator::UpdateAddress( table::CellAddress& rAddress )
@@ -693,20 +693,20 @@ void ScMyNotEmptyCellsIterator::HasAnnotation(ScMyCell& aCell)
         aCell.xCell = xCellRange->getCellByPosition(aCell.aCellAddress.Column, aCell.aCellAddress.Row);
 }
 
-void ScMyNotEmptyCellsIterator::SetCurrentTable(const sal_Int32 nTable,
+void ScMyNotEmptyCellsIterator::SetCurrentTable(const SCTAB nTable,
     uno::Reference<sheet::XSpreadsheet>& rxTable)
 {
     DBG_ASSERT(aAnnotations.empty(), "not all Annotations saved");
     aLastAddress.Row = 0;
     aLastAddress.Column = 0;
-    aLastAddress.Sheet = static_cast<sal_Int16>(nTable);
+    aLastAddress.Sheet = nTable;
     if (nCurrentTable != nTable)
     {
-        nCurrentTable = static_cast<sal_Int16>(nTable);
+        nCurrentTable = nTable;
         if (pCellItr)
             delete pCellItr;
         pCellItr = new ScHorizontalCellIterator(rExport.GetDocument(), nCurrentTable, 0, 0,
-            static_cast<USHORT>(rExport.GetSharedData()->GetLastColumn(nCurrentTable)), static_cast<USHORT>(rExport.GetSharedData()->GetLastRow(nCurrentTable)));
+            static_cast<SCCOL>(rExport.GetSharedData()->GetLastColumn(nCurrentTable)), static_cast<SCROW>(rExport.GetSharedData()->GetLastRow(nCurrentTable)));
         xTable = rxTable;
         xCellRange = uno::Reference<table::XCellRange>(xTable, uno::UNO_QUERY);
         uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery (xTable, uno::UNO_QUERY);
