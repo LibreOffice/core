@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stbctrls.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:15 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:44:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ String RID_SVXSTR_INSERT_TEXT
     Text [ English ] = "INSRT" ;
     Text [ norwegian ] = "SETT INN INSRT" ;
     Text [ italian ] = "INS" ;
-    Text [ portuguese_brazilian ] = "INSERIR" ;
+    Text [ portuguese_brazilian ] = "INSER" ;
     Text [ portuguese ] = "INSER" ;
     Text [ finnish ] = "LIS" ;
     Text [ danish ] = "IND" ;
@@ -95,6 +95,9 @@ String RID_SVXSTR_INSERT_TEXT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "INSRT";
     Text[ thai ] = "แทรก";
+    Text[ czech ] = "INSERT";
+    Text[ hebrew ] = "‮INSRT‬";
+    Text[ hindi ] = "INSRT";
 };
 String RID_SVXSTR_OVERWRITE_TEXT
 {
@@ -114,7 +117,7 @@ String RID_SVXSTR_OVERWRITE_TEXT
     Text [ english_us ] = "OVER" ;
     Text[ chinese_simplified ] = "改写";
     Text[ russian ] = "���";
-    Text[ polish ] = "KASUJ";
+    Text[ polish ] = "ZAST";
     Text[ japanese ] = "上書き";
     Text[ chinese_traditional ] = "覆寫";
     Text[ arabic ] = "���";
@@ -126,6 +129,9 @@ String RID_SVXSTR_OVERWRITE_TEXT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "OVER";
     Text[ thai ] = "เขียนทับ";
+    Text[ czech ] = "OVER";
+    Text[ hebrew ] = "‮OVER‬";
+    Text[ hindi ] = "OVER";
 };
 String RID_SVXSTR_SELMODE_STD
 {
@@ -134,7 +140,7 @@ String RID_SVXSTR_SELMODE_STD
     TEXT [ English ] = "STD" ;
     Text [ portuguese ] = "PAD" ;
     Text [ english_us ] = "STD" ;
-    Text [ portuguese_brazilian ] = "STD" ;
+    Text [ portuguese_brazilian ] = "PAD" ;
     Text [ swedish ] = "STD" ;
     Text [ danish ] = "STD" ;
     Text [ italian ] = "STD" ;
@@ -151,11 +157,14 @@ String RID_SVXSTR_SELMODE_STD
     Text[ chinese_simplified ] = "标准";
     Text[ greek ] = "�����";
     Text[ korean ] = "표준";
-    Text[ turkish ] = "STD";
+    Text[ turkish ] = "STD ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "STD";
     Text[ finnish ] = "NOR";
     Text[ thai ] = "มาตรฐาน";
+    Text[ czech ] = "STD";
+    Text[ hebrew ] = "‮STD‬";
+    Text[ hindi ] = "STD";
 };
 String RID_SVXSTR_SELMODE_ER
 {
@@ -187,6 +196,9 @@ String RID_SVXSTR_SELMODE_ER
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "EXT";
     TEXT[ thai ] = "ส่วนขยาย";
+    TEXT[ czech ] = "EXT";
+    TEXT[ hebrew ] = "‮EXT‬";
+    TEXT[ hindi ] = "EXT";
 };
 String RID_SVXSTR_SELMODE_ERG
 {
@@ -195,7 +207,7 @@ String RID_SVXSTR_SELMODE_ERG
     TEXT [ English ] = "ADD" ;
     TEXT [ norwegian ] = "LEGG TIL" ;
     TEXT [ italian ] = "AGG" ;
-    TEXT [ portuguese_brazilian ] = "ACR" ;
+    TEXT [ portuguese_brazilian ] = "ADIC" ;
     TEXT [ portuguese ] = "ADI" ;
     TEXT [ finnish ] = "LIS" ;
     TEXT [ danish ] = "TLF" ;
@@ -218,6 +230,9 @@ String RID_SVXSTR_SELMODE_ERG
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "ADD";
     TEXT[ thai ] = "เพิ่ม";
+    TEXT[ czech ] = "ADD";
+    TEXT[ hebrew ] = "‮ADD‬";
+    TEXT[ hindi ] = "ADD";
 };
  // PopupMenu -------------------------------------------------------------
 Menu RID_SVXMNU_ZOOM
@@ -262,7 +277,7 @@ Menu RID_SVXMNU_ZOOM
             Text [ English ] = "Optimal" ;
             text [ english_us ] = "Optimal" ;
             Text [ portuguese ] = "Optimizar" ;
-            Text [ portuguese_brazilian ] = "Optimal" ;
+            Text [ portuguese_brazilian ] = "Otimizado" ;
             Text [ swedish ] = "Optimal" ;
             Text [ danish ] = "Optimal" ;
             Text [ italian ] = "Ottimale" ;
@@ -284,6 +299,9 @@ Menu RID_SVXMNU_ZOOM
             Text[ catalan ] = "�ptim";
             Text[ finnish ] = "Optimaalinen";
             Text[ thai ] = "เหมาะที่สุด";
+            Text[ czech ] = "Optimální";
+            Text[ hebrew ] = "‮אופטימלי‬";
+            Text[ hindi ] = "योग्य";
         };
         MenuItem
         {
@@ -293,7 +311,7 @@ Menu RID_SVXMNU_ZOOM
             Text [ ENGLISH ] = "Page width" ;
             Text [ norwegian ] = "Sidebredde" ;
             Text [ italian ] = "Larghezza pagina" ;
-            Text [ portuguese_brazilian ] = "Largura de p?gina" ;
+            Text [ portuguese_brazilian ] = "Largura da P�gina" ;
             Text [ portuguese ] = "Larg. de p�gina" ;
             Text [ finnish ] = "Sivun leveys" ;
             Text [ danish ] = "Sidebredde" ;
@@ -316,6 +334,9 @@ Menu RID_SVXMNU_ZOOM
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Ample de p�gina";
             Text[ thai ] = "ความกว้างของหน้า";
+            Text[ czech ] = "Šířka stránky";
+            Text[ hebrew ] = "‮רוחב הדף‬";
+            Text[ hindi ] = "पृष्ठ चौड़ाई";
         };
         MenuItem
         {
@@ -325,7 +346,7 @@ Menu RID_SVXMNU_ZOOM
             Text [ ENGLISH ] = "Whole page" ;
             Text [ norwegian ] = "Hele siden" ;
             Text [ italian ] = "Pagina intera" ;
-            Text [ portuguese_brazilian ] = "P?gina inteira" ;
+            Text [ portuguese_brazilian ] = "P�gina Inteira" ;
             Text [ portuguese ] = "P�gina inteira" ;
             Text [ finnish ] = "Koko sivu" ;
             Text [ danish ] = "Hele siden" ;
@@ -348,6 +369,9 @@ Menu RID_SVXMNU_ZOOM
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Tota la p�gina";
             Text[ thai ] = "ทั้งหน้า";
+            Text[ czech ] = "Celá stránka";
+            Text[ hebrew ] = "‮דף שלם‬";
+            Text[ hindi ] = "सम्पूर्ण पृष्ठ";
         };
     };
 };
@@ -369,11 +393,11 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text [ dutch ] = "Gemiddelde" ;
             Text [ swedish ] = "Medelv�rde" ;
             Text [ danish ] = "Middel" ;
-            Text [ portuguese_brazilian ] = "Mittelwert" ;
+            Text [ portuguese_brazilian ] = "M�dia" ;
             Text [ portuguese ] = "M�dia" ;
             Text[ chinese_simplified ] = "平均值";
             Text[ russian ] = "������� ��������";
-            Text[ polish ] = "�rednia warto��";
+            Text[ polish ] = "�rednia";
             Text[ japanese ] = "平均値";
             Text[ chinese_traditional ] = "平均值";
             Text[ arabic ] = "������";
@@ -386,6 +410,9 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ catalan ] = "Mitjana";
             Text[ finnish ] = "Keskiarvo";
             Text[ thai ] = "เฉลี่ย";
+            Text[ czech ] = "Průměr";
+            Text[ hebrew ] = "‮ממוצא‬";
+            Text[ hindi ] = "माध्य";
         };
         MenuItem
         {
@@ -401,7 +428,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text [ swedish ] = "AntalV" ;
             Text [ danish ] = "T�lv" ;
             Text [ portuguese ] = "Contar" ;
-            Text [ portuguese_brazilian ] = "Anzahl2" ;
+            Text [ portuguese_brazilian ] = "ContagemA" ;
             Text[ chinese_simplified ] = "数目2";
             Text[ russian ] = "����������2";
             Text[ polish ] = "ILO��2";
@@ -417,6 +444,9 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ catalan ] = "QuantitatA";
             Text[ finnish ] = "LaskeA";
             Text[ thai ] = "นับA";
+            Text[ czech ] = "PočetA";
+            Text[ hebrew ] = "‮מונה ב'‬";
+            Text[ hindi ] = "गिनतीA";
         };
         MenuItem
         {
@@ -432,7 +462,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text [ swedish ] = "Antal" ;
             Text [ danish ] = "T�l" ;
             Text [ portuguese ] = "Quantidade" ;
-            Text [ portuguese_brazilian ] = "Anzahl" ;
+            Text [ portuguese_brazilian ] = "Contagem" ;
             Text[ chinese_simplified ] = "数目";
             Text[ russian ] = "����������";
             Text[ polish ] = "Liczba";
@@ -448,6 +478,9 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ catalan ] = "Quantitat";
             Text[ finnish ] = "Lukum��r�";
             Text[ thai ] = "นับ";
+            Text[ czech ] = "Počet";
+            Text[ hebrew ] = "‮מונה‬";
+            Text[ hindi ] = "गिनती";
         };
         MenuItem
         {
@@ -463,7 +496,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text [ swedish ] = "Maximum" ;
             Text [ danish ] = "Maksimum" ;
             Text [ portuguese ] = "M�ximo" ;
-            Text [ portuguese_brazilian ] = "Maximum" ;
+            Text [ portuguese_brazilian ] = "M�ximo" ;
             Text[ chinese_simplified ] = "最大";
             Text[ russian ] = "��������";
             Text[ polish ] = "Maksimum";
@@ -479,6 +512,9 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ catalan ] = "M�xim";
             Text[ finnish ] = "Maksimi";
             Text[ thai ] = "มากที่สุด";
+            Text[ czech ] = "Maximum";
+            Text[ hebrew ] = "‮מירבי‬";
+            Text[ hindi ] = "अधिकतम";
         };
         MenuItem
         {
@@ -494,7 +530,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text [ swedish ] = "Minimum" ;
             Text [ danish ] = "Minimum" ;
             Text [ portuguese ] = "M�nimo" ;
-            Text [ portuguese_brazilian ] = "Minimum" ;
+            Text [ portuguese_brazilian ] = "M�nimo" ;
             Text[ chinese_simplified ] = "最小";
             Text[ russian ] = "�������";
             Text[ polish ] = "Minimum";
@@ -510,6 +546,9 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ catalan ] = "M�nim";
             Text[ finnish ] = "Minimi";
             Text[ thai ] = "น้อยที่สุด";
+            Text[ czech ] = "Minimum";
+            Text[ hebrew ] = "‮מזערי‬";
+            Text[ hindi ] = "न्यूनतम";
         };
         MenuItem
         {
@@ -525,7 +564,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text [ swedish ] = "Summa" ;
             Text [ danish ] = "Sum" ;
             Text [ portuguese ] = "Soma" ;
-            Text [ portuguese_brazilian ] = "Summe" ;
+            Text [ portuguese_brazilian ] = "Soma" ;
             Text[ chinese_simplified ] = "总计";
             Text[ russian ] = "�����";
             Text[ polish ] = "Suma";
@@ -541,6 +580,9 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ catalan ] = "Suma";
             Text[ finnish ] = "Summa";
             Text[ thai ] = "ผลรวม";
+            Text[ czech ] = "Součet";
+            Text[ hebrew ] = "‮סכום‬";
+            Text[ hindi ] = "कुलजोड";
         };
         MenuItem
         {
@@ -556,7 +598,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text [ swedish ] = "Ingen" ;
             Text [ danish ] = "Ingen" ;
             Text [ portuguese ] = "Nenhuma" ;
-            Text [ portuguese_brazilian ] = "Keine" ;
+            Text [ portuguese_brazilian ] = "Nenhum" ;
             Text[ chinese_simplified ] = "无";
             Text[ russian ] = "���";
             Text[ polish ] = "Brak";
@@ -572,6 +614,9 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ catalan ] = "Cap";
             Text[ finnish ] = "Ei mit��n";
             Text[ thai ] = "ไม่มี";
+            Text[ czech ] = "Nic";
+            Text[ hebrew ] = "‮ללא‬";
+            Text[ hindi ] = "कोई नहीं";
         };
     };
 };
@@ -602,6 +647,19 @@ Image RID_SVXBMP_SIZE
         Blue = 0xFFFF ;
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
