@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 12:31:09 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:05:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #include <com/sun/star/embed/EmbedMisc.hpp>
@@ -1905,6 +1904,9 @@ BOOL SwFEShell::ImpEndCreate()
         // <--
 
         SwDrawContact *pContact = new SwDrawContact( pFmt, &rSdrObj );
+        // --> OD 2004-11-22 #i35635#
+        pContact->MoveObjToVisibleLayer( &rSdrObj );
+        // <--
         if( bCharBound )
         {
             ASSERT( aAnch.GetAnchorId() == FLY_IN_CNTNT, "wrong AnchorType" );
@@ -2704,6 +2706,9 @@ void SwFEShell::CheckUnboundObjects()
             SwDrawContact *pContact = new SwDrawContact(
                                             (SwDrawFrmFmt*)pFmt, pObj );
 
+            // --> OD 2004-11-22 #i35635#
+            pContact->MoveObjToVisibleLayer( pObj );
+            // <--
             pContact->ConnectToLayout();
 
             EndAllAction();
