@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.47 $
+#   $Revision: 1.48 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-14 13:47:54 $
+#   last change: $Author: as $ $Date: 2001-08-20 13:00:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,12 +63,14 @@ PRJ=..
 
 PRJNAME=			framework
 TARGET=				framework
+
 USE_DEFFILE=		TRUE
 ENABLE_EXCEPTIONS=	TRUE
 NO_BSYMBOLIC=		TRUE
-COMP1TYPELIST=		fwk
-COMP2TYPELIST=		fwl
-COMP3TYPELIST=		lgd
+
+COMP3TYPELIST=		fwl
+COMP4TYPELIST=		fwk
+COMP5TYPELIST=		lgd
 
 # --- Settings -----------------------------------------------------
 
@@ -77,74 +79,160 @@ COMP3TYPELIST=		lgd
 LINKFLAGS+=/SEGMENTS:1024 /PACKD:32768
 .ENDIF
 
-# --- import library ----------------------------------------------------
+# --- export library for sfx2 -------------------------------------------------
 
 LIB1TARGET=		$(SLB)$/fweobj.lib
 
-LIB1OBJFILES=	$(SLO)$/menuconfiguration.obj				\
-                $(SLO)$/attributelist.obj					\
-                $(SLO)$/imageproducer.obj					\
-                $(SLO)$/menudocumenthandler.obj				\
+LIB1OBJFILES=	$(SLO)$/attributelist.obj					\
                 $(SLO)$/bmkmenu.obj							\
-                $(SLO)$/saxnamespacefilter.obj				\
-                $(SLO)$/xmlnamespaces.obj					\
-                $(SLO)$/toolboxconfiguration.obj			\
-                $(SLO)$/toolboxdocumenthandler.obj			\
+                $(SLO)$/eventsconfiguration.obj				\
+                $(SLO)$/eventsdocumenthandler.obj			\
+                $(SLO)$/imageproducer.obj					\
                 $(SLO)$/lockhelper.obj						\
-                $(SLO)$/toolboxlayoutdocumenthandler.obj	\
+                $(SLO)$/menuconfiguration.obj				\
+                $(SLO)$/menudocumenthandler.obj				\
+                $(SLO)$/saxnamespacefilter.obj				\
                 $(SLO)$/statusbarconfiguration.obj			\
                 $(SLO)$/statusbardocumenthandler.obj		\
-                $(SLO)$/eventsconfiguration.obj				\
-                $(SLO)$/eventsdocumenthandler.obj
+                $(SLO)$/toolboxconfiguration.obj			\
+                $(SLO)$/toolboxdocumenthandler.obj			\
+                $(SLO)$/toolboxlayoutdocumenthandler.obj	\
+                $(SLO)$/xmlnamespaces.obj
 
+# --- internal import -------------------------------------------------
+
+LIB2TARGET=		$(SLB)$/fwiobj.lib
+
+LIB2OBJFILES=	$(SLO)$/wildcard.obj						\
+                $(SLO)$/lockhelper.obj						\
+                $(SLO)$/filtercache.obj						\
+                $(SLO)$/filtercachedata.obj
+
+# --- export classes library ---------------------------------------------------
+
+SHL1TARGET=		fwe$(UPD)$(DLLPOSTFIX)
+
+SHL1IMPLIB=		ifwe
+
+SHL1LIBS= 		$(LIB1TARGET)
+
+SHL1STDLIBS=	$(VCLLIB)							\
+                $(CPPULIB)							\
+                $(CPPUHELPERLIB)					\
+                $(VOSLIB)							\
+                $(SALLIB)							\
+                $(SVLIB)							\
+                $(SVLLIB)							\
+                $(TOOLSLIB)							\
+                $(COMPHELPERLIB)					\
+                $(UNOTOOLSLIB)
+
+SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
+
+DEF1NAME=		$(SHL1TARGET)
+
+DEFLIB1NAME=	fweobj
+DEF1DEPN=		$(MISC)$/$(SHL1TARGET).flt
+
+# --- import classes library ---------------------------------------------------
+
+SHL2TARGET=		fwi$(UPD)$(DLLPOSTFIX)
+
+SHL2IMPLIB=		ifwi
+
+SHL2LIBS= 		$(LIB2TARGET)
+
+SHL2STDLIBS=	$(CPPULIB)							\
+                $(CPPUHELPERLIB)					\
+                $(VOSLIB)							\
+                $(SALLIB)							\
+                $(TOOLSLIB)							\
+                $(UNOTOOLSLIB)
+
+SHL2DEF=		$(MISC)$/$(SHL2TARGET).def
+
+DEF2NAME=		$(SHL2TARGET)
+
+DEFLIB2NAME=	fwiobj
+DEF2DEPN=		$(MISC)$/$(SHL2TARGET).flt
+
+# --- light services library ----------------------------------------------------
+
+SHL3TARGET=		fwl$(UPD)$(DLLPOSTFIX)
+
+SHL3IMPLIB=		ifwl
+
+SHL3OBJS=		$(SLO)$/argumentanalyzer.obj		\
+                $(SLO)$/contenthandlerfactory.obj	\
+                $(SLO)$/converter.obj				\
+                $(SLO)$/filterfactory.obj			\
+                $(SLO)$/frameloaderfactory.obj		\
+                $(SLO)$/mediatypedetectionhelper.obj\
+                $(SLO)$/registertemp.obj			\
+                $(SLO)$/typedetection.obj			\
+                $(SLO)$/lockhelper.obj
+
+SHL3STDLIBS=	$(CPPULIB)							\
+                $(CPPUHELPERLIB)					\
+                $(COMPHELPERLIB)					\
+                $(UNOTOOLSLIB)						\
+                $(TOOLSLIB) 						\
+                $(VOSLIB)							\
+                $(SVLLIB)							\
+                $(SALLIB)							\
+                $(FWILIB)
+
+SHL3DEF=		$(MISC)$/$(SHL3TARGET).def
+SHL3DEPN=		$(SHL2IMPLIBN) $(SHL2TARGETN)
+
+DEF3NAME=		$(SHL3TARGET)
+
+DEF3EXPORTFILE=	exports.dxp
 
 # --- services library ----------------------------------------------------
 
-SHL1TARGET=		fwk$(UPD)$(DLLPOSTFIX)
+SHL4TARGET=		fwk$(UPD)$(DLLPOSTFIX)
 
-SHL1IMPLIB=		ifwk$(UPD)$(DLLPOSTFIX)
+SHL4IMPLIB=		ifwk
 
-SHL1OBJS=		$(SLO)$/registerservices.obj		\
-                $(SLO)$/frame.obj					\
-                $(SLO)$/task.obj					\
-                $(SLO)$/pluginframe.obj				\
-                $(SLO)$/desktop.obj					\
-                $(SLO)$/documentproperties.obj		\
-                $(SLO)$/urltransformer.obj			\
-                $(SLO)$/framecontainer.obj			\
-                $(SLO)$/taskcreator.obj		  		\
-                $(SLO)$/targetfinder.obj		  	\
-                $(SLO)$/argumentanalyzer.obj		\
-                $(SLO)$/converter.obj				\
-                $(SLO)$/wildcard.obj				\
+SHL4OBJS=       $(SLO)$/argumentanalyzer.obj		\
                 $(SLO)$/asyncquit.obj				\
-                $(SLO)$/oframes.obj					\
-                $(SLO)$/opluginframedispatcher.obj	\
-                $(SLO)$/statusindicatorfactory.obj	\
-                $(SLO)$/ocomponentaccess.obj		\
-                $(SLO)$/otasksaccess.obj			\
-                $(SLO)$/statusindicator.obj			\
-                $(SLO)$/otasksenumeration.obj		\
-                $(SLO)$/ocomponentenumeration.obj	\
-                $(SLO)$/interceptionhelper.obj		\
-                $(SLO)$/dispatchprovider.obj		\
                 $(SLO)$/basedispatcher.obj			\
                 $(SLO)$/blankdispatcher.obj			\
+                $(SLO)$/converter.obj				\
                 $(SLO)$/createdispatcher.obj		\
-                $(SLO)$/selfdispatcher.obj			\
-                $(SLO)$/menudispatcher.obj			\
-                $(SLO)$/mailtodispatcher.obj		\
-                $(SLO)$/helpagentdispatcher.obj		\
-                 $(SLO)$/timerhelper.obj				\
-                $(SLO)$/menumanager.obj				\
-                $(SLO)$/xmldocproperties.obj		\
-                $(SLO)$/fltdlg.obj                  \
+                $(SLO)$/desktop.obj					\
+                $(SLO)$/dispatchprovider.obj		\
+                $(SLO)$/documentproperties.obj		\
                 $(SLO)$/droptargetlistener.obj		\
+                $(SLO)$/fltdlg.obj                  \
+                $(SLO)$/frame.obj					\
+                $(SLO)$/framecontainer.obj			\
+                $(SLO)$/helpagentdispatcher.obj		\
+                $(SLO)$/interceptionhelper.obj		\
+                $(SLO)$/mailtodispatcher.obj		\
+                $(SLO)$/menudispatcher.obj			\
+                $(SLO)$/menumanager.obj				\
+                $(SLO)$/ocomponentaccess.obj		\
+                $(SLO)$/ocomponentenumeration.obj	\
+                $(SLO)$/oframes.obj					\
+                $(SLO)$/opluginframedispatcher.obj	\
+                $(SLO)$/otasksaccess.obj			\
+                $(SLO)$/otasksenumeration.obj		\
+                $(SLO)$/pluginframe.obj				\
+                $(SLO)$/registerservices.obj		\
+                $(SLO)$/selfdispatcher.obj			\
                 $(SLO)$/soundhandler.obj			\
-                $(SLO)$/filtercache.obj				\
-                $(SLO)$/filtercachedata.obj
+                $(SLO)$/statusindicator.obj			\
+                $(SLO)$/statusindicatorfactory.obj	\
+                $(SLO)$/targetfinder.obj		  	\
+                $(SLO)$/task.obj					\
+                $(SLO)$/taskcreator.obj		  		\
+                 $(SLO)$/timerhelper.obj				\
+                $(SLO)$/urltransformer.obj			\
+                $(SLO)$/xmldocproperties.obj
 
-SHL1STDLIBS=	$(CPPULIB)							\
+SHL4STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
                 $(VOSLIB)							\
                 $(SALLIB)							\
@@ -156,100 +244,41 @@ SHL1STDLIBS=	$(CPPULIB)							\
                 $(UCBHELPERLIB)						\
                 $(UNOTOOLSLIB)						\
                 $(FWELIB)							\
+                $(FWILIB)							\
                 $(SVLLIB)							\
                 $(SOTLIB)
 
-SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
-SHL1DEPN=		$(SHL4IMPLIBN) $(SHL4TARGETN)
+SHL4DEF=		$(MISC)$/$(SHL4TARGET).def
+SHL4DEPN=		$(SHL1IMPLIBN) $(SHL1TARGETN) $(SHL2IMPLIBN) $(SHL2TARGETN)
 
-DEF1NAME=		$(SHL1TARGET)
+DEF4NAME=		$(SHL4TARGET)
 
-DEF1EXPORTFILE=	exports.dxp
-
-# --- light services library ----------------------------------------------------
-
-SHL2TARGET=		fwl$(UPD)$(DLLPOSTFIX)
-
-SHL2IMPLIB=		ifwl$(UPD)$(DLLPOSTFIX)
-
-SHL2OBJS=		$(SLO)$/registertemp.obj			\
-                $(SLO)$/mediatypedetectionhelper.obj\
-                $(SLO)$/frameloaderfactory.obj		\
-                $(SLO)$/contenthandlerfactory.obj	\
-                $(SLO)$/filterfactory.obj			\
-                $(SLO)$/typedetection.obj			\
-                $(SLO)$/filtercachedata.obj			\
-                $(SLO)$/filtercache.obj				\
-                $(SLO)$/argumentanalyzer.obj		\
-                $(SLO)$/converter.obj				\
-                $(SLO)$/wildcard.obj				\
-                $(SLO)$/lockhelper.obj
-
-SHL2STDLIBS=	$(CPPULIB)							\
-                $(CPPUHELPERLIB)					\
-                $(COMPHELPERLIB)					\
-                $(UNOTOOLSLIB)						\
-                $(TOOLSLIB) 						\
-                $(VOSLIB)							\
-                $(SVLLIB)							\
-                $(SALLIB)
-
-SHL2DEF=		$(MISC)$/$(SHL2TARGET).def
-
-DEF2NAME=		$(SHL2TARGET)
-
-DEF2EXPORTFILE=	exports.dxp
+DEF4EXPORTFILE=	exports.dxp
 
 # --- login service library ----------------------------------------------------
 
-SHL3TARGET=		lgd$(UPD)$(DLLPOSTFIX)
+SHL5TARGET=		lgd$(UPD)$(DLLPOSTFIX)
 
-SHL3IMPLIB=		ilgd$(UPD)$(DLLPOSTFIX)
+SHL5IMPLIB=		ilgd
 
-SHL3OBJS=		$(SLO)$/registerlogindialog.obj		\
+SHL5OBJS=		$(SLO)$/registerlogindialog.obj		\
                  $(SLO)$/logindialog.obj				\
                 $(SLO)$/lockhelper.obj
 
-SHL3STDLIBS=	$(CPPULIB)							\
+SHL5STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
                 $(VOSLIB)							\
                 $(SALLIB)							\
                 $(SVLIB)							\
                 $(TOOLSLIB)
 
-SHL3DEF=		$(MISC)$/$(SHL3TARGET).def
+SHL5DEF=		$(MISC)$/$(SHL5TARGET).def
 
-DEF3NAME=		$(SHL3TARGET)
+DEF5NAME=		$(SHL5TARGET)
 
-DEF3EXPORTFILE=	exports.dxp
+DEF5EXPORTFILE=	exports.dxp
 
-# --- export classes library ---------------------------------------------------
-
-SHL4TARGET=		fwe$(UPD)$(DLLPOSTFIX)
-
-SHL4IMPLIB=		ifwe
-
-SHL4LIBS= 		$(LIB1TARGET)
-
-SHL4STDLIBS=	$(VCLLIB)							\
-                $(CPPULIB)							\
-                $(CPPUHELPERLIB)					\
-                $(VOSLIB)							\
-                $(SALLIB)							\
-                $(SVLIB)							\
-                $(SVLLIB)							\
-                $(TOOLSLIB)							\
-                $(COMPHELPERLIB)					\
-                $(UNOTOOLSLIB)
-
-SHL4DEF=		$(MISC)$/$(SHL4TARGET).def
-
-DEF4NAME=		$(SHL4TARGET)
-
-DEFLIB4NAME=	fweobj
-DEF4DEPN=		$(MISC)$/$(SHL4TARGET).flt
-
-# --- login applikation --------------------------------------------------------
+# --- login applikation -------------------------------------------------------
 
 APP1TARGET= 	login
 
@@ -274,42 +303,11 @@ APP1DEPN=		$(SLO)$/servicemanager.obj
 APP1DEF=		$(MISC)$/login.def
 .ENDIF
 
-# --- framework applikation --------------------------------------------------------
-# --- not build yet!        --------------------------------------------------------
-
-#APP2TARGET= 	framework
-#
-#APP2OBJS=		$(SLO)$/framework.obj
-#
-#APP2LIBS=		$(SLB)$/fwk_classes.lib				\
-#				$(SLB)$/fwk_helper.lib				\
-#				$(SLB)$/fwk_services.lib
-#
-#APP2STDLIBS=	$(CPPULIB)							\
-#				$(CPPUHELPERLIB)					\
-#				$(OSLLIB)							\
-#				$(SALLIB)							\
-#				$(VOSLIB)							\
-#				$(TOOLSLIB) 						\
-#				$(SVTOOLLIB)						\
-#				$(SVLLIB)							\
-#				$(TKLIB)							\
-#				$(COMPHELPERLIB)					\
-#				$(SOTLIB)							\
-#				$(SVLIB)
-#
-#APP2DEPN=		$(SLB)$/fwk_helper.lib				\
-#				$(SLB)$/fwk_classes.lib
-#
-#.IF "$(GUI)"=="WIN" || "$(GUI)"=="OS2"
-#APP2DEF=		$(MISC)$/framework.def
-#.ENDIF
-
-# --- Targets ------------------------------------------------------
+# --- Targets -----------------------------------------------------------------
 
 .INCLUDE :	target.mk
 
-$(MISC)$/$(SHL4TARGET).flt: makefile.mk
+$(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo ------------------------------
     @echo Making: $@
     @echo _Impl>$@
@@ -318,3 +316,15 @@ $(MISC)$/$(SHL4TARGET).flt: makefile.mk
     @echo _TI2>>$@
     @echo LIBMAIN>>$@
     @echo LibMain>>$@
+
+$(MISC)$/$(SHL2TARGET).flt: makefile.mk
+    @echo ------------------------------
+    @echo Making: $@
+    @echo _Impl>$@
+    @echo WEP>>$@
+    @echo m_pLoader>$@
+    @echo _TI2>>$@
+    @echo _TI3>>$@
+    @echo LIBMAIN>>$@
+    @echo LibMain>>$@
+    @echo _STL::pair>>$@
