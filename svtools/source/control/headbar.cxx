@@ -2,9 +2,9 @@
  *
  *  $RCSfile: headbar.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2002-09-13 12:35:49 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 15:48:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,8 @@
 #include <vcl/image.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
 
 // =======================================================================
@@ -1676,7 +1676,7 @@ Size HeaderBar::CalcWindowSizePixel() const
     return aSize;
 }
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > HeaderBar::CreateAccessible()
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > HeaderBar::CreateAccessible()
 {
     if ( !mxAccessible.is() )
     {
@@ -1690,7 +1690,7 @@ Size HeaderBar::CalcWindowSizePixel() const
     return mxAccessible;
 }
 
-void HeaderBar::SetAccessible( ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > _xAccessible )
+void HeaderBar::SetAccessible( ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > _xAccessible )
 {
     mxAccessible = _xAccessible;
 }
