@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiservices.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-25 13:00:10 $
+ *  last change: $Author: oj $ $Date: 2000-10-26 14:54:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,10 @@ using namespace ::com::sun::star::registry;
 // registry functions
 extern "C" void SAL_CALL createRegistryInfo_ODatabaseAdministrationDialog();
 extern "C" void SAL_CALL createRegistryInfo_OSQLMessageDialog();
+extern "C" void SAL_CALL createRegistryInfo_OBrowser();
+extern "C" void SAL_CALL createRegistryInfo_OFormGridView();
+extern "C" void SAL_CALL createRegistryInfo_DBContentLoader();
+extern "C" void SAL_CALL writeDBLoaderInfo(void* pRegistryKey);
 extern "C" void SAL_CALL createRegistryInfo_OInteractionHandler();
 
 //***************************************************************************************
@@ -91,6 +95,9 @@ extern "C" void SAL_CALL createRegistryInfo()
     {
         createRegistryInfo_ODatabaseAdministrationDialog();
         createRegistryInfo_OSQLMessageDialog();
+        createRegistryInfo_OBrowser();
+        createRegistryInfo_OFormGridView();
+        createRegistryInfo_DBContentLoader();
         createRegistryInfo_OInteractionHandler();
         bInit = sal_True;
     }
@@ -116,6 +123,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
     if (pRegistryKey)
     try
     {
+        writeDBLoaderInfo(pRegistryKey);
         return OModuleRegistration::writeComponentInfos(
             static_cast<XMultiServiceFactory*>(pServiceManager),
             static_cast<XRegistryKey*>(pRegistryKey));
