@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitools.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-20 13:03:17 $
+ *  last change: $Author: avy $ $Date: 2001-08-21 16:35:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,7 @@ protected:
 
 //--------------------------------------------------------------------------
 #define DECLARE_IMPLEMENTATION_ID( )    \
-    virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException)  \
 
 //--------------------------------------------------------------------------
 #define DECLARE_GETTYPES( ) \
@@ -323,7 +323,7 @@ protected:
 #define DECLARE_PROPERTYCONTAINER_DEFAULTS( )   \
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException); \
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper(); \
-    virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
+    virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const
 
 //----------------------------------------------------------------------------------
 #define IMPLEMENT_PROPERTYCONTAINER_DEFAULTS( classname )   \
