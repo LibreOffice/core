@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-19 07:07:47 $
+ *  last change: $Author: sab $ $Date: 2000-10-19 14:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1673,8 +1673,6 @@ SvXMLExport( rFileName, rHandler, xTempModel, GetFieldUnit() ),
         pRowStylesPropertySetMapper, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX)));
     GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_TABLE, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME)),
         pTableStylesPropertySetMapper, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX)));
-
-    AddPageMasterFamily();
 }
 
 
@@ -2141,6 +2139,7 @@ void ScXMLExport::ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 
                     OpenRow(nSheet, nStartRow + nRows, nMaxRows);
                     nRows += nMaxRows;
                 }
+                aCellStyles.GetFormatRanges(0, GetLastColumn(nSheet), nStartRow + nRows, nSheet, aRowFormatRanges);
                 WriteRowContent();
                 CloseRow(nStartRow + nRows - 1);
             }
@@ -2686,6 +2685,8 @@ void ScXMLExport::_ExportAutoStyles()
                     }
                 }
             }
+            GetPageExport()->collectAutoStyles(sal_True);
+
             const UniReference< XMLPropertySetMapper > aColumnStylesMapperRef = pColumnStylesPropertySetMapper;
             ScXMLExportPropertyMapper* aColumnStylesExpPropMapper = new ScXMLExportPropertyMapper(aColumnStylesMapperRef);
             GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_COLUMN,
