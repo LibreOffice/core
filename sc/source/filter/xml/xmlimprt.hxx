@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 07:12:54 $
+ *  last change: $Author: sab $ $Date: 2001-02-22 07:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -647,11 +647,13 @@ struct ScMyImportValidation
 };
 
 typedef std::vector<ScMyImportValidation>           ScMyImportValidations;
+typedef std::list<SvXMLImportContext*>              ScMyViewContextList;
 
 class ScXMLImport: public SvXMLImport
 {
     ScDocument*             pDoc;
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
+    ScMyViewContextList                 aViewContextList;
 
 //  SvXMLAutoStylePoolP     *pScAutoStylePool;
     UniReference < XMLPropertyHandlerFactory >  xScPropHdlFactory;
@@ -893,6 +895,7 @@ public:
     sal_Bool GetRemoveLastChar() { return bRemoveLastChar; }
 
     ScXMLChangeTrackingImportHelper* GetChangeTrackingImportHelper();
+    void AddViewContext(SvXMLImportContext* pContext) { aViewContextList.push_back(pContext); }
 };
 
 #endif
