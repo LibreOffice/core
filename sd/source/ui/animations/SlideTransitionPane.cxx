@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideTransitionPane.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:56:28 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:32:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@
 #endif
 
 #include <algorithm>
+#include <memory>
 
 
 using namespace ::com::sun::star;
@@ -515,6 +516,13 @@ SlideTransitionPane::SlideTransitionPane(
 {
     // use no resource ids from here on
     FreeResource();
+
+    // use bold font for group headings (same font for all fixed lines):
+    Font font( maFL_APPLY_TRANSITION.GetFont() );
+    font.SetWeight( WEIGHT_BOLD );
+    maFL_APPLY_TRANSITION.SetFont( font );
+    maFL_MODIFY_TRANSITION.SetFont( font );
+    maFL_ADVANCE_SLIDE.SetFont( font );
 
     if( pDoc )
         mxModel.set( pDoc->getUnoModel(), uno::UNO_QUERY );
@@ -1103,12 +1111,11 @@ void SlideTransitionPane::playCurrentEffect()
         DrawView* pView = pViewShell->GetDrawView();
 
         pViewShell->SetSlideShow( 0 );
-        Slideshow* pSlideshow = new Slideshow( pViewShell, pView, pViewShell->GetDoc() );
-        pViewShell->SetSlideShow( pSlideshow );
-
+        std::auto_ptr<Slideshow> pSlideshow(
+            new Slideshow( pViewShell, pView, pViewShell->GetDoc() ) );
         Reference< ::com::sun::star::animations::XAnimationNode > xNode;
-        pSlideshow->startPreview( mxView->getCurrentPage(), xNode );
-
+        if (pSlideshow->startPreview( mxView->getCurrentPage(), xNode ))
+            pViewShell->SetSlideShow( pSlideshow.release() );
     }
 }
 
