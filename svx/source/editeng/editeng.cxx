@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: mt $ $Date: 2002-10-10 12:16:37 $
+ *  last change: $Author: mt $ $Date: 2002-11-04 13:44:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1724,7 +1724,7 @@ Point EditEngine::GetDocPosTopLeft( sal_uInt16 nParagraph )
         // Falls jemand mit einer leeren Engine ein GetLineHeight() macht.
         DBG_ASSERT( pImpEditEngine->IsFormatted() || !pImpEditEngine->IsFormatting(), "GetDocPosTopLeft: Doc not formatted - unable to format!" );
         if ( !pImpEditEngine->IsFormatted() )
-            pImpEditEngine->FormatDoc();
+            pImpEditEngine->FormatAndUpdate();
         if ( pPPortion->GetLines().Count() )
         {
             // So richtiger, falls grosses Bullet.
