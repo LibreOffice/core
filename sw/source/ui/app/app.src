@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: cd $ $Date: 2002-07-31 07:44:18 $
+ *  last change: $Author: iha $ $Date: 2002-08-02 13:48:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3335,16 +3335,11 @@ String STR_REDLINE_UNKNOWN_AUTHOR
     Text[ thai ] = "‡πÑ‡∏°‡πà‡∏£‡∏π‡πâ‡∏à‡∏±‡∏Å";
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+WarningBox MSG_DISABLE_UNDO_QUESTION
+{
+    BUTTONS = WB_YES_NO_CANCEL;
+    DEFBUTTON = WB_DEF_YES ;
+    Message = "Diese Aktion lˆscht die Liste der Arbeitsschritte, die r¸ckg‰ngig gemacht werden kˆnnen. Bisher gemachte ƒnderungen am Dokument bleiben erhalten, kˆnnen jedoch nicht mehr r¸ckg‰ngig gemacht werden. Wollen Sie mit der Formatierung fortfahren?";
+    Message [ English ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
+    Message [ english_us ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
+};

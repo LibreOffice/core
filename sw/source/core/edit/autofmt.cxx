@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2002-06-03 12:35:54 $
+ *  last change: $Author: iha $ $Date: 2002-08-02 13:52:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,6 +270,9 @@ class SwAutoFormat
     BOOL bEmptyLine : 1;
     BOOL bMoreLines : 1;
 
+    static BOOL  m_bAskForCancelUndoWhileBufferOverflow;
+    static short m_nActionWhileAutoformatUndoBufferOverflow;
+
 
     // ------------- private methods -----------------------------
     void _GetCharClass( LanguageType eLang );
@@ -369,6 +372,9 @@ public:
         delete pCharClass;
     }
 };
+
+BOOL  SwAutoFormat::m_bAskForCancelUndoWhileBufferOverflow     = TRUE;
+short SwAutoFormat::m_nActionWhileAutoformatUndoBufferOverflow = RET_YES;
 
 const sal_Unicode* StrChr( const sal_Unicode* pSrc, sal_Unicode c )
 {
@@ -2299,9 +2305,23 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
         {
             DBG_ASSERT( bUndoState, "undo overflow without undo?" );
 
-            // TODO: ask user
-            short nResult = RET_YES;
-            DBG_ASSERT( (nResult == RET_YES) || (nResult == RET_CANCEL),
+            //ask user
+            short nResult = m_nActionWhileAutoformatUndoBufferOverflow; // TODO: #102007# read the last decision of the user from configuration
+            if(m_bAskForCancelUndoWhileBufferOverflow) // #102007# TODO: read the last decision of the user from configuration
+            {
+                Window* pParent = pEditShell?pEditShell->GetWin():NULL;
+                WarningBox aWarning( pParent,SW_RES(MSG_DISABLE_UNDO_QUESTION));
+                aWarning.SetDefaultCheckBoxText();
+                USHORT nDefaultButton = nResult==RET_YES?BUTTONID_YES:(nResult==RET_NO?BUTTONID_NO:BUTTONID_CANCEL);
+                aWarning.SetFocusButton(nDefaultButton);
+                nResult     = aWarning.Execute();
+                m_bAskForCancelUndoWhileBufferOverflow = !aWarning.GetCheckBoxState();
+                m_nActionWhileAutoformatUndoBufferOverflow = nResult;
+                // TODO: #102007# store m_bAskForCancelUndoWhileBufferOverflow in configuration
+                // TODO: #102007# store m_nActionWhileAutoformatUndoBufferOverflow in configuration
+            }
+
+            DBG_ASSERT( (nResult == RET_YES) || (nResult == RET_CANCEL) || (nResult == RET_NO),
                         "unexpected result" );
 
             if( nResult == RET_YES )
@@ -2310,10 +2330,17 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                 pDoc->DoUndo( sal_False );
                 pDoc->DelAllUndoObj();
             }
+            else if( nResult == RET_NO )
+            {
+                //stop autoformatting and keep changes
+                eStat = IS_ENDE;
+            }
             else if( nResult == RET_CANCEL )
             {
-                // cancel autoformatting
+                //cancel autoformatting and undo changes
                 eStat = IS_ENDE;
+
+                // TODO: #102004# undo changes
             }
         }
 
