@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtdlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 22:06:53 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:40:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ russian ] = "Ïîğÿäîê ñîğòèğîâêè ïîëüçîâàòåëÿ";
         Text[ polish ] = "~Kolejnoœæ sortowania okreœl. przez u¿ytkownika";
         Text[ japanese ] = "‡˜‚Ìw’è(~C)";
-        Text[ chinese_traditional ] = "¦Û­q±Æ§Ç³W«h(~C)";
+        Text[ chinese_traditional ] = "¨Ï¥ÎªÌ¦Û­q±Æ§Ç³W«h(~C)";
         Text[ arabic ] = "ÊÑÊíÈ ÇáİÑÒ ÊÈÚÇğ áÊÚÑíİ ÇáãÓÊÎÏã";
         Text[ greek ] = "ÓåéñÜ ôáîéíüìçóçò ïñéæüìåíç áğü ôïí ÷ñŞóôç";
         Text[ korean ] = "»ç¿ëÀÚ°¡ Á¤ÀÇÇÑ  Á¤·Ä ¼ø¼­(~U)";
@@ -340,7 +340,7 @@ TabPage RID_SUBTBASE
         Text[ russian ] = "Ãğóïïèğîâàòü ïî";
         Text[ polish ] = "Grupuj wed³ug";
         Text[ japanese ] = "¸ŞÙ°Ìß‚ÌŠî€(~G)";
-        Text[ chinese_traditional ] = "¸s²Õ«ö·Ó(~G)";
+        Text[ chinese_traditional ] = "¨Ì¸s²Õ(~G)";
         Text[ arabic ] = "ÊÌãíÚ ÍÓÈ";
         Text[ greek ] = "Ïìáäïğïßçóç êáôÜ";
         Text[ korean ] = "¿¡ÀÇÇÑ ±×·ì(~G)";
