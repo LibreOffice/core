@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cuitabline.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:24:08 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:17:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,11 @@ private:
     SvxXLinePreview     aCtlPreview;
     FixedLine           aFLSeparator;
 
+    // #116827#
+    FixedLine           maFLEdgeStyle;
+    FixedText           maFTEdgeStyle;
+    LineEndLB           maLBEdgeStyle;
+
     //#58425# Symbole auf einer Linie (z.B. StarChart) ->
     BOOL                bNewSize;
     Graphic             aAutoSymbolGraphic;
@@ -235,6 +240,9 @@ private:
     DECL_LINK( ChangeEndHdl_Impl, void * );
     DECL_LINK( ChangePreviewHdl_Impl, void * );
     DECL_LINK( ChangeTransparentHdl_Impl, void * );
+
+    // #116827#
+    DECL_LINK( ChangeEdgeStyleHdl_Impl, void * );
 
     BOOL FillXLSet_Impl();
 #endif
