@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: mav $ $Date: 2002-09-19 10:46:05 $
+ *  last change: $Author: cd $ $Date: 2002-09-20 07:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,13 +189,15 @@ using namespace ::com::sun::star::task;
 class PDFExportFileDialog : public sfx2::FileDialogHelper
 {
     public:
-        PDFExportFileDialog( const short nDialogType, sal_uInt32 nFlags ) :
-            sfx2::FileDialogHelper( nDialogType, nFlags ), m_bInitialized( sal_False ) {}
+        PDFExportFileDialog( const short nDialogType, sal_uInt32 nFlags, sal_Bool bNoOptionsDlg ) :
+            sfx2::FileDialogHelper( nDialogType, nFlags ), m_bInitialized( sal_False ), m_bNoOptionsDlg( bNoOptionsDlg )
+        {}
 
         virtual void SAL_CALL DirectoryChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent );
 
     private:
         sal_Bool    m_bInitialized;
+        sal_Bool    m_bNoOptionsDlg;
 };
 
 void SAL_CALL PDFExportFileDialog::DirectoryChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent )
@@ -209,9 +211,16 @@ void SAL_CALL PDFExportFileDialog::DirectoryChanged( const ::com::sun::star::ui:
         Reference< ::com::sun::star::ui::dialogs::XFilePicker > xFilePicker = GetFilePicker();
         Reference< ::com::sun::star::ui::dialogs::XFilePickerControlAccess > xControlAccess =
             Reference< ::com::sun::star::ui::dialogs::XFilePickerControlAccess >( xFilePicker, UNO_QUERY );
+
         if ( xControlAccess.is() )
         {
-            String aExportButtonStr = String( SfxResId( STR_EXPORTWITHCFGBUTTON ));
+            String aExportButtonStr;
+
+            if ( m_bNoOptionsDlg )
+                aExportButtonStr = String( SfxResId( STR_EXPORTBUTTON ));
+            else
+                aExportButtonStr = String( SfxResId( STR_EXPORTWITHCFGBUTTON ));
+
             ::rtl::OUString aStrExport = aExportButtonStr;
             xControlAccess->setLabel( ::com::sun::star::ui::dialogs::CommonFilePickerElementIds::PUSHBUTTON_OK, aStrExport );
         }
@@ -496,7 +505,7 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
             if ( bIsPDFExport )
             {
                 // Create file dialog for PDF export
-                pFileDlg = new PDFExportFileDialog( aDialogMode, aDialogFlags );
+                pFileDlg = new PDFExportFileDialog( aDialogMode, aDialogFlags, ( pRequest->GetSlot() == SID_DIRECTEXPORTDOCASPDF ) );
                 String aFilterExtension = pFilt->GetWildcard()();
                 String aFilterUIName = pFilt->GetUIName();
                 pFileDlg->AddFilter( aFilterUIName, aFilterExtension );
