@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:43:13 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:11:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,13 +439,80 @@ FASTBOOL SwCrsrShell::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
 
     SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
     BOOL bSkipHidden = !GetViewOptions()->IsShowHiddenChar();
-    FASTBOOL bRet = pCurCrsr->LeftRight( bLeft, nCnt, nMode, bVisualAllowed, bSkipHidden,
-                                         !IsOverwriteCrsr() );
+
+    // #i27615# Handle cursor in front of label.
+    FASTBOOL bRet = FALSE;
+    if (! bLeft && pCurCrsr->IsInFrontOfLabel())
+    {
+        pCurCrsr->SetInFrontOfLabel(FALSE);
+
+        bRet = TRUE;
+    }
+    else
+        bRet = pCurCrsr->LeftRight( bLeft, nCnt, nMode, bVisualAllowed,
+                                    bSkipHidden,
+                                    !IsOverwriteCrsr() );
+
     if( bRet )
+    {
         UpdateCrsr();
+    }
     return bRet;
 }
 
+// -> #i27615#
+void SwCrsrShell::SetMarkedNumLevel(const String & sNumRule, BYTE nLevel)
+{
+    if (sNumRule != sMarkedNumRule || nLevel != nMarkedNumLevel)
+    {
+        StartAction();
+
+        if (sMarkedNumRule.Len() > 0)
+            pDoc->SetMarkedNumLevel(sMarkedNumRule, nMarkedNumLevel, FALSE);
+
+        if (sNumRule.Len() > 0)
+        {
+            pDoc->SetMarkedNumLevel(sNumRule, nLevel, TRUE);
+        }
+
+        sMarkedNumRule = sNumRule;
+        nMarkedNumLevel = nLevel;
+
+        EndAction();
+    }
+}
+
+void SwCrsrShell::UpdateMarkedNumLevel()
+{
+    SwTxtNode * pTxtNd =
+        pCurCrsr->GetPoint()->nNode.GetNode().GetTxtNode();
+
+    if (pTxtNd && ! pCurCrsr->HasMark()) // #i27615#
+    {
+        if (! pTxtNd->IsNumbered())
+        {
+            pCurCrsr->SetInFrontOfLabel(FALSE);
+
+            SetMarkedNumLevel(String(), 0);
+        }
+        else if (pCurCrsr->IsInFrontOfLabel())
+        {
+            SwNumRule * pNumRule = pTxtNd->GetNumRule();
+
+            if (pNumRule)
+            {
+                const SwNodeNum * pNdNum = pTxtNd->GetNum();
+                SetMarkedNumLevel(pNumRule->GetName(),
+                                  pNdNum->GetRealLevel());
+            }
+        }
+        else
+        {
+            SetMarkedNumLevel(String(), 0);
+        }
+    }
+}
+// <- #i27615#
 
 FASTBOOL SwCrsrShell::UpDown( BOOL bUp, USHORT nCnt )
 {
@@ -482,7 +549,9 @@ FASTBOOL SwCrsrShell::LRMargin( BOOL bLeft, BOOL bAPI)
     SwShellCrsr* pTmpCrsr = bTableMode ? pTblCrsr : pCurCrsr;
     FASTBOOL bRet = pTmpCrsr->LeftRightMargin( bLeft, bAPI );
     if( bRet )
+    {
         UpdateCrsr();
+    }
     return bRet;
 }
 
@@ -608,12 +677,14 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, BOOL bOnlyText )
     SwCrsrMoveState aTmpState( IsTableMode() ? MV_TBLSEL :
                                     bOnlyText ?  MV_SETONLYTEXT : MV_NONE );
     aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
+    aTmpState.bInFrontOfLabel = TRUE; // #i27615#
 
     int bRet = CRSR_POSOLD |
                 ( GetLayout()->GetCrsrOfst( &aPos, aPt, &aTmpState )
                     ? 0 : CRSR_POSCHG );
 
     pCrsr->SetCrsrBidiLevel( aTmpState.nCursorBidiLevel );
+    pCrsr->SetInFrontOfLabel( aTmpState.bInFrontOfLabel ); // #i27615#
 
     if( MV_RIGHTMARGIN == aTmpState.eState )
         eMvState = MV_RIGHTMARGIN;
@@ -1482,6 +1553,15 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
             aTmpState.bRealHeight = TRUE;
             aTmpState.bRealWidth = IsOverwriteCrsr();
             aTmpState.nCursorBidiLevel = pCurCrsr->GetCrsrBidiLevel();
+
+            // #i27615#
+            if (pCurCrsr->IsInFrontOfLabel())
+            {
+                SwSpecialPos aSpecialPos;
+                aSpecialPos.nExtendRange = SP_EXTEND_RANGE_BEFORE;
+                aTmpState.pSpecialPos = &aSpecialPos;
+            }
+
             if( !pFrm->GetCharRect( aCharRect, *pCurCrsr->GetPoint(), &aTmpState ) )
             {
                 Point& rPt = pCurCrsr->GetPtPos();
@@ -1592,6 +1672,8 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
     }
 
 #endif
+
+    UpdateMarkedNumLevel(); // #i27615#
 
     if( bSVCrsrVis )
         pVisCrsr->Show();           // wieder anzeigen
@@ -2100,6 +2182,9 @@ FASTBOOL SwCrsrShell::SetVisCrsr( const Point &rPt )
     aTmpState.bRealHeight = TRUE;
 
     FASTBOOL bRet = GetLayout()->GetCrsrOfst( &aPos, aPt /*, &aTmpState*/ );
+
+    pCurCrsr->SetInFrontOfLabel(FALSE); // #i27615#
+
     // nur in TextNodes anzeigen !!
     SwTxtNode* pTxtNd = aPos.nNode.GetNode().GetTxtNode();
     if( !pTxtNd )
@@ -2115,7 +2200,6 @@ FASTBOOL SwCrsrShell::SetVisCrsr( const Point &rPt )
     if ( Imp()->IsIdleAction() )
         pFrm->PrepareCrsr();
     SwRect aTmp( aCharRect );
-
 
     pFrm->GetCharRect( aCharRect, aPos, &aTmpState );
 //  ALIGNRECT( aCharRect );
@@ -2393,6 +2477,8 @@ SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pWin )
 //  UpdateCrsr( 0 );
     // OD 11.02.2003 #100556#
     mbMacroExecAllowed = rShell.IsMacroExecAllowed();
+
+    nMarkedNumLevel = 0; // #i27615#
 }
 
 
