@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-22 17:03:20 $
+ *  last change: $Author: aw $ $Date: 2001-02-26 10:26:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,13 +215,13 @@ void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(Vector2D& rTRScale, doub
         // write transformation, but WITHOUT scale which is exported as size above
         SdXMLImExTransform2D aTransform;
 
-        aTransform.AddSkewX(fTRShear);
+        aTransform.AddSkewX(atan(fTRShear));
         aTransform.AddRotate(fTRRotate);
         aTransform.AddTranslate(rTRTranslate);
 
         // does transformation need to be exported?
         if(aTransform.NeedsAction())
-            rExport.AddAttribute(XML_NAMESPACE_SVG, sXML_transform, aTransform.GetExportString(rExport.GetMM100UnitConverter()));
+            rExport.AddAttribute(XML_NAMESPACE_DRAW, sXML_transform, aTransform.GetExportString(rExport.GetMM100UnitConverter()));
     }
     else
     {
@@ -772,11 +772,11 @@ void XMLShapeExport::ImpExportEllipseShape(
             rExport.AddAttribute(XML_NAMESPACE_DRAW, sXML_kind, sStringBuffer.makeStringAndClear() );
 
             // export start angle
-            SvXMLUnitConverter::convertNumber( sStringBuffer, dStartAngle );
+            SvXMLUnitConverter::convertDouble( sStringBuffer, dStartAngle );
             rExport.AddAttribute(XML_NAMESPACE_DRAW, sXML_start_angle, sStringBuffer.makeStringAndClear() );
 
             // export end angle
-            SvXMLUnitConverter::convertNumber( sStringBuffer, dEndAngle );
+            SvXMLUnitConverter::convertDouble( sStringBuffer, dEndAngle );
             rExport.AddAttribute(XML_NAMESPACE_DRAW, sXML_end_angle, sStringBuffer.makeStringAndClear() );
         }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-22 17:06:04 $
+ *  last change: $Author: aw $ $Date: 2001-02-26 10:26:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,6 +464,10 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUStr
         {
             maLayerName = rValue;
         }
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_transform)) )
+        {
+            mnTransform.SetString(rValue, GetImport().GetMM100UnitConverter());
+        }
     }
     else if( XML_NAMESPACE_PRESENTATION == nPrefix )
     {
@@ -502,10 +506,6 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUStr
         else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_height)) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(maSize.Height, rValue);
-        }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_transform)) )
-        {
-            mnTransform.SetString(rValue, GetImport().GetMM100UnitConverter());
         }
     }
 }
@@ -748,14 +748,14 @@ void SdXMLEllipseShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl
         if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_start_angle)) )
         {
             double dStartAngle;
-            if( SvXMLUnitConverter::convertNumber( dStartAngle, rValue ) )
+            if( SvXMLUnitConverter::convertDouble( dStartAngle, rValue ) )
                 mnStartAngle = (sal_Int32)(dStartAngle * 100.0);
             return;
         }
         if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_end_angle)) )
         {
             double dEndAngle;
-            if( SvXMLUnitConverter::convertNumber( dEndAngle, rValue ) )
+            if( SvXMLUnitConverter::convertDouble( dEndAngle, rValue ) )
                 mnEndAngle = (sal_Int32)(dEndAngle * 100.0);
             return;
         }
