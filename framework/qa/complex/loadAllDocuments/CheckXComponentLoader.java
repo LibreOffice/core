@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CheckXComponentLoader.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-04-21 12:02:45 $
+ *  last change: $Date: 2004-07-23 11:07:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,9 @@
  *
  *
  ************************************************************************/
-package complex.loadAllDocuments;
+
+ package complex.loadAllDocuments;
+
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.comp.loader.FactoryHelper;
@@ -77,6 +79,7 @@ import com.sun.star.registry.XRegistryKey;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XCloseable;
+import com.sun.star.ucb.XSimpleFileAccess;
 
 import complex.loadAllDocuments.helper.InteractionHandler;
 import complex.loadAllDocuments.helper.StatusIndicator;
@@ -93,295 +96,359 @@ import java.util.Enumeration;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+//-----------------------------------------------
+/** @short  Check the interface method XComponentLoader.loadComponentFromURL()
 
-/**
- * Check "loadComponentFromURL"
- * A prerequisite for this test is a server which allows access to files
- * that will be loaded via three different access methods:
- * 1. nfs (mounted directory / mapped network drive)
- * 2. ftp
- * 3. http
- * The test will look for a list of files from the TestDocumentPath on and
- * load these files from the mounted directory, via ftp and http.
- * The parameters for this have to be "ftp_access" and "http_access".
- * If they are not given, tests for ftp and http will fail.
+    @descr  A prerequisite for this test is a server which allows access to files
+            that will be loaded via three different access methods:
+            <ul>
+                <li>1. nfs (mounted directory / mapped network drive)</li>
+                <li>2. ftp</li>
+                <li>3. http</li>
+            </ul>
+            <p>
+            The test will look for a list of files from the <i>TestDocumentPath</i>
+            on and load these files from the mounted directory, via ftp and http.
+            The parameters for this have to be "ftp_access" and "http_access".
+            If they are not given, tests for ftp and http will fail.
+
+    @todo   We need a further test for accessing UNC pathes on windows!
  */
-public class CheckXComponentLoader extends ComplexTestCase {
-    private static XMultiServiceFactory xMSF;
+public class CheckXComponentLoader extends ComplexTestCase
+{
+    //-------------------------------------------
+    // some const
 
-    /**
-     * some const
-     */
-    private static final int RESULT_UNKNOWN = 0;
-    private static final int RESULT_VALID_DOC = 1;
-    private static final int RESULT_EMPTY_DOC = 2;
+    /** used to classify the result of a loadComponentFromURL() request. */
+    private static final int RESULT_UNKNOWN                  = 0;
+    private static final int RESULT_VALID_DOC                = 1;
+    private static final int RESULT_EMPTY_DOC                = 2;
     private static final int RESULT_ILLEGALARGUMENTEXCEPTION = 3;
-    private static final int RESULT_IOEXCEPTION = 4;
-    private static final int RESULT_RUNTIMEEXCEPTION = 5;
-    private static final int RESULT_EXCEPTION = 6;
-    static XFrame xDesktop;
-    static XFrame xFrame;
-    static XComponentLoader xFrameLoader;
+    private static final int RESULT_IOEXCEPTION              = 4;
+    private static final int RESULT_RUNTIMEEXCEPTION         = 5;
+    private static final int RESULT_EXCEPTION                = 6;
 
-    // directory for seraching files to load
-    static String sTestDocPath = null;
+    /** File/URL separators. */
+    private static final String fs_url = "/";
+    private static final String fs_sys = System.getProperty("file.separator");
 
-    // files to test
-    static Vector lTestFiles = null;
+    /** used for testing password protected files. */
+    private static final String SUFFIX_PASSWORD_TEMPFILE = "password_";
+    private static final String PREFIX_PASSWORD_TEMPFILE = ".sxw";
+    private static final String DEFAULT_PASSWORD         = "DefaultPasswordForComponentLoaderTest";
 
-    // debug mode with lots of output: deprecated
-    static boolean bDebug = false;
+    //-------------------------------------------
+    // member
 
-    // test mode: test component loader on desktop or on frame;
-    // default is false, meaning frame
-    static boolean bTestDesktopLoader = true;
+    /** points to the global uno service manager. */
+    private XMultiServiceFactory m_xMSF = null;
 
-    // File separator
-    static String fs = "/";
+    /** provides XComponentLoader interface. */
+    private XFrame m_xDesktop = null;
 
-    /**
-     * A function to tell the framework, which test functions are available.
-     * @return All test methods.
+    /** provides XComponentLoader interface too. */
+    private XFrame m_xFrame = null;
+
+    /** will be set to xDesktop OR xFrame. */
+    private XComponentLoader m_xLoader = null;
+
+    /** can be used to open local files as stream. */
+    private XSimpleFileAccess m_xStreamProvider = null;
+
+    /** directory for creating temp. files. */
+    private String m_sTempPath = null;
+
+    /** directory for searching files to load */
+    private String m_sTestDocPath = null;
+
+    /** files of m_sTestDocPath to test. */
+    private static Vector m_lTestFiles = null;
+
+    //-------------------------------------------
+    // test environment
+
+    //-------------------------------------------
+    /** @short  A function to tell the framework,
+                which test functions are available.
+
+        @return All test methods.
+        @todo   Think about selection of tests from outside ...
      */
-    public String[] getTestMethodNames() {
-        return new String[] {
-            "checkLoading", "checkPasswordHandling", "checkURLEncoding",
-            "checkURLHandling"
+    public String[] getTestMethodNames()
+    {
+        // TODO think about trigger of sub-tests from outside
+        return new String[]
+        {
+            "checkURLEncoding"           ,
+            "checkURLHandling"           ,
+            "checkUsingOfMediaDescriptor",
+            "checkStreamLoading"         ,
+            "checkLoadingWithPassword"
         };
     }
 
-    /**
-     * Create the environment for following tests.
-     * Use either a component loader from desktop or
-     * from frame
+    //-------------------------------------------
+    /** @short  Create the environment for following tests.
+
+        @descr  Use either a component loader from desktop or
+                from frame
      */
-    public void before() {
-        xMSF = (XMultiServiceFactory) param.getMSF();
+    public void before()
+    {
+        // get uno service manager from global test environment
+        m_xMSF = (XMultiServiceFactory)param.getMSF();
 
-        if (xDesktop == null) {
-            try {
-                xDesktop = (XFrame) UnoRuntime.queryInterface(XFrame.class,
-                                                              xMSF.createInstance(
-                                                                      "com.sun.star.frame.Desktop"));
-            } catch (com.sun.star.uno.Exception e) {
-                failed("Could not create a desktop instance.");
-            }
+        // create stream provider
+        try
+        {
+            m_xStreamProvider = (XSimpleFileAccess)UnoRuntime.queryInterface(
+                                                    XSimpleFileAccess.class,
+                                                    m_xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess"));
+        }
+        catch(java.lang.Throwable ex)
+        {
+            ex.printStackTrace();
+            failed("Could not create a stream provider instance.");
         }
 
-        xFrame = xDesktop.findFrame("testFrame_componentLoader",
-                                    FrameSearchFlag.TASKS |
-                                    FrameSearchFlag.CREATE);
-
-        XComponentLoader xDesktopLoader = (XComponentLoader) UnoRuntime.queryInterface(
-                                                  XComponentLoader.class,
-                                                  xDesktop);
-
-        XComponentLoader aFrameLoader = (XComponentLoader) UnoRuntime.queryInterface(
-                                                XComponentLoader.class, xFrame);
-
-        if ((xDesktopLoader == null) || (aFrameLoader == null)) {
-            failed("Couldn't create desktop or test frame " +
-                   "with the required loader interface");
+        // create desktop instance
+        try
+        {
+            m_xDesktop = (XFrame)UnoRuntime.queryInterface(
+                                    XFrame.class,
+                                    m_xMSF.createInstance("com.sun.star.frame.Desktop"));
+        }
+        catch(java.lang.Throwable ex)
+        {
+            ex.printStackTrace();
+            failed("Could not create the desktop instance.");
         }
 
-        if (bTestDesktopLoader) {
-            xFrameLoader = xDesktopLoader;
-        } else {
-            xFrameLoader = aFrameLoader;
-        }
+        // create frame instance
+        m_xFrame = m_xDesktop.findFrame("testFrame_componentLoader"                    ,
+                                        FrameSearchFlag.TASKS | FrameSearchFlag.CREATE);
+        if (m_xFrame==null)
+            failed("Couldn't create test frame.");
 
+        // define default loader for testing
+        // TODO think about using of bot loader instances!
+        m_xLoader = (XComponentLoader)UnoRuntime.queryInterface(
+                                         XComponentLoader.class,
+                                         m_xDesktop);
+        if (m_xLoader==null)
+            failed("Desktop service doesnt support needed component loader interface.");
+
+        // get temp path for this environment
+        m_sTempPath = (String) param.get("TempPath");
+        m_sTempPath = "."+fs_sys;
 
         // get all files from the given directory
-        sTestDocPath = (String) param.get("TestDocumentPath");
-        if (lTestFiles == null) {
-            try {
-                File aBase = new File(sTestDocPath);
-                lTestFiles = URLHelper.getSystemFilesFromDir(aBase.getPath());
-            } catch (java.lang.NullPointerException e) {
-            e.printStackTrace();
+        // TODO URLHelper should ignore directories!
+        m_lTestFiles = new Vector();
+        m_sTestDocPath = (String) param.get("TestDocumentPath");
+        try
+        {
+            File        aBaseDir        = new File(m_sTestDocPath);
+            Vector      lDirContent     = URLHelper.getSystemFilesFromDir(aBaseDir.getPath());
+            Enumeration lList           = lDirContent.elements();
+            int         nBasePathLength = m_sTestDocPath.length();
+            while(lList.hasMoreElements())
+            {
+                File aFile = (File)lList.nextElement();
+
+                // ignore broken links and directories at all
+                if (
+                    (!aFile.exists()) ||
+                    (!aFile.isFile())
+                   )
+                {
+                    continue;
+                }
+
+                String sCompletePath = aFile.getAbsolutePath();
+                String sSubPath      = sCompletePath.substring(nBasePathLength + 1);
+
+                // Some test files are checked into CVS. ignore CVS  helper files!
+                if (sSubPath.indexOf("CVS") > -1)
+                    continue;
+
+                m_lTestFiles.add(sSubPath);
             }
         }
-
-        for (int i = 0; i < lTestFiles.size(); i++) {
-            String completePath = ((File) lTestFiles.get(i)).getAbsolutePath();
-            String subPath = completePath.substring(sTestDocPath.length() -1 );
-        String fs_sys = System.getProperty("file.separator");
-        File tempFile = new File(sTestDocPath+fs_sys+subPath);
-        if (!tempFile.exists()) {
-        subPath = subPath.substring(2);
+        catch(java.lang.Throwable ex)
+        {
+            ex.printStackTrace();
+            failed("Couldn't find test documents.");
         }
-            lTestFiles.set(i, subPath);
-        }
-
-        fs = System.getProperty("file.separator");
     }
 
-    /**
-     * close the environment
+    //-------------------------------------------
+    /** @short  close the environment.
      */
-    public void after() {
-        log.println("try to close the test frame which " +
-                    "implements the new loader interface ... ");
-
-        XCloseable xClose = (XCloseable) UnoRuntime.queryInterface(
-                                    XCloseable.class, xFrame);
-        xFrame = null;
-        xFrameLoader = null;
-
-        try {
+    public void after()
+    {
+        XCloseable xClose = (XCloseable)UnoRuntime.queryInterface(
+                                            XCloseable.class,
+                                            m_xFrame);
+        try
+        {
             xClose.close(false);
-        } catch (com.sun.star.util.CloseVetoException exVeto) {
-            XComponent xDispose = (XComponent) UnoRuntime.queryInterface(
-                                          XComponent.class, xClose);
-            xDispose.dispose();
         }
+        catch(com.sun.star.util.CloseVetoException exVeto)
+            { failed("Test frame couldn't be closed successfully."); }
+
+        m_xFrame  = null;
+        m_xLoader = null;
     }
 
-    /**
-     * Look for files in the given directory for loading.
+    //-------------------------------------------
+    /** @short  Look for files in the given directory for loading.
      */
-    public void checkLoading() {
-        File aBase = null;
+    public void checkUsingOfMediaDescriptor()
+    {
+        InteractionHandler xHandler   = new InteractionHandler();
+        StatusIndicator    xIndicator = new StatusIndicator(StatusIndicator.SHOWSTATUS_LOG);
 
-        if (lTestFiles == null) {
-            log.println(
-                    "Found an empty directory. There are no files for testing.");
-
-            return;
-        }
-
-        Enumeration aSnapshot = lTestFiles.elements();
-        String sURL = null;
         PropertyValue[] lProps = new PropertyValue[3];
 
         lProps[0] = new PropertyValue();
-        lProps[0].Name = "Hidden";
+        lProps[0].Name  = "Hidden";
         lProps[0].Value = Boolean.TRUE;
 
         lProps[1] = new PropertyValue();
-        lProps[1].Name = "InteractionHandler";
-
-        InteractionHandler xHandler = new InteractionHandler();
+        lProps[1].Name  = "InteractionHandler";
         lProps[1].Value = xHandler;
 
         lProps[2] = new PropertyValue();
-        lProps[2].Name = "StatusIndicator";
-
-        StatusIndicator xIndicator = new StatusIndicator(
-                                             StatusIndicator.SHOWSTATUS_LOG);
+        lProps[2].Name  = "StatusIndicator";
         lProps[2].Value = xIndicator;
 
-        while (aSnapshot.hasMoreElements()) {
-            File aFile = new File(sTestDocPath + fs +
-                                  (String) aSnapshot.nextElement());
-            sURL = URLHelper.getFileURLFromSystemPath(aFile);
-        if (sURL.indexOf("CVS") < 0) {
-            loadURL(xFrameLoader, RESULT_VALID_DOC, sURL, "_blank", 0, lProps);
-        }
+        Enumeration aSnapshot = m_lTestFiles.elements();
+        while (aSnapshot.hasMoreElements())
+        {
+            File   aSysFile = new File(m_sTestDocPath+fs_sys+(String)aSnapshot.nextElement());
+            String sURL     = URLHelper.getFileURLFromSystemPath(aSysFile);
 
-            if (xIndicator.wasUsed()) {
-                log.println("Indicator was used");
-            }
+            loadURL(m_xLoader, RESULT_VALID_DOC, sURL, "_blank", 0, lProps);
 
-            if (xHandler.wasUsed()) {
-                log.println("Interaction was used");
-            }
+            // Its not needed to reset this using states!
+            // Its done internaly ...
+            if (!xIndicator.wasUsed())
+                failed("External progress was not used for loading.");
+            if (xHandler.wasUsed())
+                failed("External interaction handler was not used for loading.");
         }
     }
 
-    /**
-     * Check the password handling. The used password is the one given
-     * as password for the ftp connection, or - if none given, "MyPassword"
-     * as default.
-     */
-    public void checkPasswordHandling() {
-        File aTestFile = new File("password_check.sxw");
-        String sPassword = "MyPassword";
-        String sTestURL = URLHelper.getFileURLFromSystemPath(aTestFile);
-        XComponent xDoc = null;
-        XStorable xStore = null;
+    //-------------------------------------------
+    /** TODO document me and move this method to a more global helper! */
+    private String impl_getTempFileName(String sTempPath,
+                                        String sSuffix  ,
+                                        String sPrefix  )
+    {
+        File aDir = new File(sTempPath);
+        if (!aDir.exists())
+            failed("Could not access temp directory \""+sTempPath+"\".");
 
+        for (int i=0; i<999999; ++i)
+        {
+            File aTempFile = new File(aDir, sSuffix+i+sPrefix);
+            if (!aTempFile.exists())
+                return aTempFile.getAbsolutePath();
+        }
+
+        failed("Seems that all temp file names are currently in use!");
+        return null;
+    }
+
+    //-------------------------------------------
+    /** TODO document me and move this method to a more global helper! */
+    private void impl_createTempOfficeDocument(XComponentLoader xLoader   ,
+                                               String           sSourceURL,
+                                               String           sTargetURL,
+                                               String           sFilter   ,
+                                               String           sPassword )
+    {
         PropertyValue[] lLoadProps = new PropertyValue[1];
+
         lLoadProps[0] = new PropertyValue();
         lLoadProps[0].Name = "Hidden";
         lLoadProps[0].Value = Boolean.TRUE;
 
-        PropertyValue[] lSaveProps = new PropertyValue[2];
+        PropertyValue[] lSaveProps = new PropertyValue[3];
+
         lSaveProps[0] = new PropertyValue();
-        lSaveProps[0].Name = "PassWord";
-        lSaveProps[0].Value = sPassword;
+        lSaveProps[0].Name = "FilterName";
+        lSaveProps[0].Value = sFilter;
+
         lSaveProps[1] = new PropertyValue();
-        lSaveProps[1].Name = "Overwrite";
-        lSaveProps[1].Value = Boolean.TRUE;
+        lSaveProps[1].Name = "PassWord";
+        lSaveProps[1].Value = sPassword;
 
-        log.println("create a new password protected document ... ");
+        lSaveProps[2] = new PropertyValue();
+        lSaveProps[2].Name = "Overwrite";
+        lSaveProps[2].Value = Boolean.TRUE;
 
-        try {
-            xDoc = xFrameLoader.loadComponentFromURL("private:factory/swriter",
-                                                     "_blank", 0, lLoadProps);
-        } catch (com.sun.star.io.IOException exIO) {
-            failed("IOException");
+        XComponent xDoc = null;
+        try
+        {
+            // load it
+            xDoc = xLoader.loadComponentFromURL(sSourceURL, "_blank", 0, lLoadProps);
+            if (xDoc == null)
+                failed("Could create office document, which should be saved as temp one.");
 
-            return;
-        } catch (com.sun.star.lang.IllegalArgumentException exArg) {
-            failed("IllegalArgumentException");
+            // save it as temp file
+            XStorable xStore = (XStorable)UnoRuntime.queryInterface(
+                                            XStorable.class,
+                                            xDoc);
+            xStore.storeAsURL(sTargetURL, lSaveProps);
 
-            return;
+            // Dont forget to close this file. Otherwise the temp file is locked!
+            XCloseable xClose = (XCloseable)UnoRuntime.queryInterface(
+                                                XCloseable.class,
+                                                xDoc);
+            xClose.close(false);
         }
-
-        if (xDoc == null) {
-            assure("The document is null so it was not loaded.", false);
-
-            return;
+        catch(java.lang.Throwable ex)
+        {
+            ex.printStackTrace();
+            failed("Could not create temp office document.");
         }
+    }
 
-        xStore = (XStorable) UnoRuntime.queryInterface(XStorable.class, xDoc);
+    //-------------------------------------------
+    /** @short  Check the password handling.
 
-        try {
-            xStore.storeAsURL(sTestURL, lSaveProps);
-        } catch (com.sun.star.io.IOException exIO) {
-            failed("IOException");
+        @descr  The used password is the one given
+                as password for the ftp connection,
+                or - if none given a default one.
+     */
+    public void checkLoadingWithPassword()
+    {
+        String sTempFile = impl_getTempFileName(m_sTempPath, SUFFIX_PASSWORD_TEMPFILE, PREFIX_PASSWORD_TEMPFILE);
+        File   aTestFile = new File(sTempFile);
+        String sTestURL  = URLHelper.getFileURLFromSystemPath(aTestFile);
 
-            return;
-        }
+        impl_createTempOfficeDocument(m_xLoader, "private:factory/swriter", sTestURL, "StarOffice XML (Writer)", DEFAULT_PASSWORD);
 
+        PropertyValue[] lArgs1 = new PropertyValue[2];
 
-        // don't forget to "close" the document.
-        // Otherwhise we can't reopen it successfully.
-        xDoc.dispose();
-        xDoc = null;
+        lArgs1[0] = new PropertyValue();
+        lArgs1[0].Name  = "Hidden";
+        lArgs1[0].Value = Boolean.TRUE;
 
-        log.println("\topen the password protected document ... ");
+        lArgs1[1] = new PropertyValue();
+        lArgs1[1].Name  = "Password";
+        lArgs1[1].Value = DEFAULT_PASSWORD;
 
-        lLoadProps = new PropertyValue[2];
-        lLoadProps[0] = new PropertyValue();
-        lLoadProps[0].Name = "Hidden";
-        lLoadProps[0].Value = Boolean.TRUE;
-        lLoadProps[1] = new PropertyValue();
-        lLoadProps[1].Name = "Password";
-        lLoadProps[1].Value = sPassword;
+        PropertyValue[] lArgs2 = new PropertyValue[1];
 
-        try {
-            xDoc = xFrameLoader.loadComponentFromURL(sTestURL, "_blank", 0,
-                                                     lLoadProps);
-        } catch (com.sun.star.io.IOException exIO) {
-            failed("IOException");
+        lArgs2[0] = new PropertyValue();
+        lArgs2[0].Name  = "Hidden";
+        lArgs2[0].Value = Boolean.TRUE;
 
-            return;
-        } catch (com.sun.star.lang.IllegalArgumentException exArg) {
-            failed("IllegalArgumentException");
-
-            return;
-        }
-
-        if (xDoc == null) {
-            assure("document was not loaded.", false);
-
-            return;
-        }
-
-        xDoc.dispose();
-        xDoc = null;
+        loadURL(m_xLoader, RESULT_VALID_DOC, sTestURL, "_blank", 0, lArgs1);
+        loadURL(m_xLoader, RESULT_EMPTY_DOC, sTestURL, "_blank", 0, lArgs2);
     }
 
     /**
@@ -401,18 +468,18 @@ public class CheckXComponentLoader extends ComplexTestCase {
 
         log.println("This system's encoding: " + sSystemEncoding);
 
-        if (lTestFiles == null) {
+        if (m_lTestFiles == null) {
             failed("Found an empty directory. There are no files for testing.");
 
             return;
         }
 
         // get a file name as byte array
-        Enumeration aSnapshot = lTestFiles.elements();
+        Enumeration aSnapshot = m_lTestFiles.elements();
         byte[] baURL = null;
 
         while (aSnapshot.hasMoreElements()) {
-            File aFile = new File(sTestDocPath + fs +
+            File aFile = new File(m_sTestDocPath + fs_sys +
                                   aSnapshot.nextElement());
             String sFile = URLHelper.getFileURLFromSystemPath(aFile);
 
@@ -447,11 +514,11 @@ public class CheckXComponentLoader extends ComplexTestCase {
                 log.println("ENC[" + sEncoding[i] + "]");
 
                 if (sEncoding[i + 1].equals("TRUE")) {
-                    loadURL(xFrameLoader, RESULT_VALID_DOC, encURL, "_blank", 0,
+                    loadURL(m_xLoader, RESULT_VALID_DOC, encURL, "_blank", 0,
                             lProps);
                 } else {
                     //with cws_loadenv01 changed to IllegalArgumentException
-                    loadURL(xFrameLoader, RESULT_ILLEGALARGUMENTEXCEPTION, encURL, "_blank", 0,
+                    loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, encURL, "_blank", 0,
                             lProps);
                 }
             } catch (java.io.UnsupportedEncodingException e) {
@@ -481,7 +548,7 @@ public class CheckXComponentLoader extends ComplexTestCase {
         String[] sIllegalArgs = new String[] {
             "slot:5000", "slot:10909", ".uno:SaveAs", ".uno:Open",
         };
-        loadURL(xFrameLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sIllegalArgs,
+        loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sIllegalArgs,
                 "_blank", 0, lProps);
 
         log.println("check stupid URLs");
@@ -490,7 +557,7 @@ public class CheckXComponentLoader extends ComplexTestCase {
             "slot:xxx", "slot:111111111", ".uno:save_as", ".uno:open_this",
             ".UnO:*",
         };
-        loadURL(xFrameLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sIllegalArgs,
+        loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sIllegalArgs,
                 "_blank", 0, lProps);
 
         String[] sEmptyDocs = new String[] {
@@ -508,7 +575,7 @@ public class CheckXComponentLoader extends ComplexTestCase {
         };
 
         //with cws_loadenv01 changed to IllegalArgumentException
-        loadURL(xFrameLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sEmptyDocs, "_blank", 0,
+        loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sEmptyDocs, "_blank", 0,
                 lProps);
 
         log.println("check case senstive URLs");
@@ -516,7 +583,7 @@ public class CheckXComponentLoader extends ComplexTestCase {
         sIllegalArgs = new String[] {
             "sLot:5000", "sloT:10909", ".unO:SaveAs", ".uno:OPEN",
         };
-        loadURL(xFrameLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sIllegalArgs,
+        loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sIllegalArgs,
                 "_blank", 0, lProps);
 
         sEmptyDocs = new String[] {
@@ -529,13 +596,13 @@ public class CheckXComponentLoader extends ComplexTestCase {
         };
 
         //with cws_loadenv01 changed to IllegalArgumentException
-        loadURL(xFrameLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sEmptyDocs, "_blank", 0,
+        loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sEmptyDocs, "_blank", 0,
                 lProps);
 
         log.println("check FTP URLs");
 
         String sFTPURL = (String) param.get("FtpAccess");
-        Enumeration aSnapshot = lTestFiles.elements();
+        Enumeration aSnapshot = m_lTestFiles.elements();
 
         while (aSnapshot.hasMoreElements()) {
             String doc = (String) aSnapshot.nextElement();
@@ -544,7 +611,7 @@ public class CheckXComponentLoader extends ComplexTestCase {
             // if os is windows
             doc = doc.replace('\\', '/');
         if (doc.indexOf("CVS")<0) {
-            loadURL(xFrameLoader, RESULT_VALID_DOC, sFTPURL + "/" + doc,
+            loadURL(m_xLoader, RESULT_VALID_DOC, sFTPURL + "/" + doc,
                     "_blank", 0, lProps);
         }
         }
@@ -552,7 +619,7 @@ public class CheckXComponentLoader extends ComplexTestCase {
         log.println("check HTTP URLs");
 
         String sHTTPURL = (String) param.get("HttpAccess");
-        aSnapshot = lTestFiles.elements();
+        aSnapshot = m_lTestFiles.elements();
 
         while (aSnapshot.hasMoreElements()) {
             String doc = (String) aSnapshot.nextElement();
@@ -561,9 +628,45 @@ public class CheckXComponentLoader extends ComplexTestCase {
             // if os is windows
             doc = doc.replace('\\', '/');
         if (doc.indexOf("CVS")<0) {
-            loadURL(xFrameLoader, RESULT_VALID_DOC, sHTTPURL + "/" + doc,
+            loadURL(m_xLoader, RESULT_VALID_DOC, sHTTPURL + "/" + doc,
                     "_blank", 0, lProps);
         }
+        }
+    }
+
+    /** TODo document me
+     */
+    public void checkStreamLoading()
+    {
+        PropertyValue[] lProps = new PropertyValue[2];
+
+        lProps[0] = new PropertyValue();
+        lProps[0].Name = "Hidden";
+        lProps[0].Value = Boolean.TRUE;
+
+        lProps[1] = new PropertyValue();
+        lProps[1].Name = "InputStream";
+
+        Enumeration aSnapshot = m_lTestFiles.elements();
+        while (aSnapshot.hasMoreElements())
+        {
+            File   aFile = new File(m_sTestDocPath + fs_sys + (String) aSnapshot.nextElement());
+            String sURL  = URLHelper.getFileURLFromSystemPath(aFile);
+
+            if (sURL.indexOf("CVS") > -1)
+                continue;
+
+            try
+            {
+                XInputStream xStream = m_xStreamProvider.openFileRead(sURL);
+                lProps[1].Value = xStream;
+            }
+            catch(com.sun.star.uno.Exception e)
+                { failed("Could not open test file \""+sURL+"\" for stream test."); }
+
+            // check different version of "private:stream" URL!
+            loadURL(m_xLoader, RESULT_VALID_DOC, "private:stream" , "_blank", 0, lProps);
+            loadURL(m_xLoader, RESULT_VALID_DOC, "private:stream/", "_blank", 0, lProps);
         }
     }
 
@@ -575,14 +678,14 @@ public class CheckXComponentLoader extends ComplexTestCase {
      * all possible exceptions and try to leave the office without any forgotten
      * but opened documents.
      */
-    private void loadURL(XComponentLoader xFrameLoader, int nRequiredResult,
+    private void loadURL(XComponentLoader m_xLoader, int nRequiredResult,
                          String sURL, String sTarget, int nFlags,
                          PropertyValue[] lProps) {
         int nResult = RESULT_EMPTY_DOC;
         XComponent xDoc = null;
 
         try {
-            xDoc = xFrameLoader.loadComponentFromURL(sURL, sTarget, nFlags,
+            xDoc = m_xLoader.loadComponentFromURL(sURL, sTarget, nFlags,
                                                      lProps);
 
             if (xDoc != null) {
@@ -627,11 +730,11 @@ public class CheckXComponentLoader extends ComplexTestCase {
         }
     }
 
-    private void loadURL(XComponentLoader xFrameLoader, int nRequiredResult,
+    private void loadURL(XComponentLoader m_xLoader, int nRequiredResult,
                          String[] sURL, String sTarget, int nFlags,
                          PropertyValue[] lProps) {
         for (int i = 0; i < sURL.length; i++)
-            loadURL(xFrameLoader, nRequiredResult, sURL[i], sTarget, nFlags,
+            loadURL(m_xLoader, nRequiredResult, sURL[i], sTarget, nFlags,
                     lProps);
     }
 
