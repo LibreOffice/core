@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-21 17:44:27 $
+ *  last change: $Author: cl $ $Date: 2000-11-22 20:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,6 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-// Achtung: Der erste Parameter MUSS sortiert vorliegen !!!
 SfxItemPropertyMap* ImplGetSvxShapePropertyMap()
 {
     static SfxItemPropertyMap aShapePropertyMap_Impl[] =
@@ -96,7 +95,6 @@ SfxItemPropertyMap* ImplGetSvxShapePropertyMap()
 
 SfxItemPropertyMap* ImplGetSvxConnectorPropertyMap()
 {
-    // Achtung: Der erste Parameter MUSS sortiert vorliegen !!!
     static SfxItemPropertyMap aConnectorPropertyMap_Impl[] =
     {
         SPECIAL_CONNECTOR_PROPERTIES
@@ -117,7 +115,6 @@ SfxItemPropertyMap* ImplGetSvxConnectorPropertyMap()
 
 SfxItemPropertyMap* ImplGetSvxDimensioningPropertyMap()
 {
-    // Achtung: Der erste Parameter MUSS sortiert vorliegen !!!
     static SfxItemPropertyMap aDimensioningPropertyMap_Impl[] =
     {
         SPECIAL_DIMENSIONING_PROPERTIES
@@ -138,7 +135,6 @@ SfxItemPropertyMap* ImplGetSvxDimensioningPropertyMap()
 
 SfxItemPropertyMap* ImplGetSvxCirclePropertyMap()
 {
-    // Achtung: Der erste Parameter MUSS sortiert vorliegen !!!
     static SfxItemPropertyMap aCirclePropertyMap_Impl[] =
     {
         SPECIAL_CIRCLE_PROPERTIES
@@ -160,7 +156,6 @@ SfxItemPropertyMap* ImplGetSvxCirclePropertyMap()
 
 SfxItemPropertyMap* ImplGetSvxPolyPolygonPropertyMap()
 {
-    // Achtung: Der erste Parameter MUSS sortiert vorliegen !!!
     static SfxItemPropertyMap aPolyPolygonPropertyMap_Impl[] =
     {
         SPECIAL_POLYGON_PROPERTIES
@@ -182,7 +177,6 @@ SfxItemPropertyMap* ImplGetSvxPolyPolygonPropertyMap()
 
 SfxItemPropertyMap* ImplGetSvxPolyPolygonBezierPropertyMap()
 {
-    // Achtung: Der erste Parameter MUSS sortiert vorliegen !!!
     static SfxItemPropertyMap aPolyPolygonBezierPropertyMap_Impl[] =
     {
         SPECIAL_POLYGON_PROPERTIES
@@ -204,7 +198,6 @@ SfxItemPropertyMap* ImplGetSvxPolyPolygonBezierPropertyMap()
 
 SfxItemPropertyMap* ImplGetSvxGraphicObjectPropertyMap()
 {
-    // Achtung: Der erste Parameter MUSS sortiert vorliegen !!!
     static SfxItemPropertyMap aGraphicObjectPropertyMap_Impl[] =
     {
         SPECIAL_GRAPHOBJ_PROPERTIES
@@ -224,7 +217,6 @@ SfxItemPropertyMap* ImplGetSvxGraphicObjectPropertyMap()
 
 SfxItemPropertyMap* ImplGetSvx3DSceneObjectPropertyMap()
 {
-    // Achtung: Der erste Parameter MUSS sortiert vorliegen !!!
     static SfxItemPropertyMap a3DSceneObjectPropertyMap_Impl[] =
     {
         SPECIAL_3DSCENEOBJECT_PROPERTIES
@@ -243,7 +235,6 @@ SfxItemPropertyMap* ImplGetSvx3DSceneObjectPropertyMap()
 
 SfxItemPropertyMap* ImplGetSvx3DCubeObjectPropertyMap()
 {
-    // Achtung: Der erste Parameter MUSS sortiert vorliegen !!!
     static SfxItemPropertyMap a3DCubeObjectPropertyMap_Impl[] =
     {
         SPECIAL_3DCUBEOBJECT_PROPERTIES
@@ -263,7 +254,6 @@ SfxItemPropertyMap* ImplGetSvx3DCubeObjectPropertyMap()
 
 SfxItemPropertyMap* ImplGetSvx3DSphereObjectPropertyMap()
 {
-    // Achtung: Der erste Parameter MUSS sortiert vorliegen !!!
     static SfxItemPropertyMap a3DSphereObjectPropertyMap_Impl[] =
     {
         SPECIAL_3DSPHEREOBJECT_PROPERTIES
@@ -282,7 +272,6 @@ SfxItemPropertyMap* ImplGetSvx3DSphereObjectPropertyMap()
 
 SfxItemPropertyMap* ImplGetSvx3DLatheObjectPropertyMap()
 {
-    // Achtung: Der erste Parameter MUSS sortiert vorliegen !!!
     static SfxItemPropertyMap a3DLatheObjectPropertyMap_Impl[] =
     {
         SPECIAL_3DLATHEOBJECT_PROPERTIES
@@ -303,7 +292,6 @@ SfxItemPropertyMap* ImplGetSvx3DLatheObjectPropertyMap()
 
 SfxItemPropertyMap* ImplGetSvx3DExtrudeObjectPropertyMap()
 {
-    // Achtung: Der erste Parameter MUSS sortiert vorliegen !!!
     static SfxItemPropertyMap a3DExtrudeObjectPropertyMap_Impl[] =
     {
         SPECIAL_3DEXTRUDEOBJECT_PROPERTIES
@@ -324,7 +312,6 @@ SfxItemPropertyMap* ImplGetSvx3DExtrudeObjectPropertyMap()
 
 SfxItemPropertyMap* ImplGetSvx3DPolygonObjectPropertyMap()
 {
-    // Achtung: Der erste Parameter MUSS sortiert vorliegen !!!
     static SfxItemPropertyMap a3DPolygonObjectPropertyMap_Impl[] =
     {
         SPECIAL_3DPOLYGONOBJECT_PROPERTIES
@@ -344,7 +331,6 @@ SfxItemPropertyMap* ImplGetSvx3DPolygonObjectPropertyMap()
 
 SfxItemPropertyMap* ImplGetSvxAllPropertyMap()
 {
-    // Achtung: Der erste Parameter MUSS sortiert vorliegen !!!
     static SfxItemPropertyMap aAllPropertyMap_Impl[] =
     {
         SHADOW_PROPERTIES
@@ -380,11 +366,11 @@ SfxItemPropertyMap* ImplGetSvxAllPropertyMap()
 
 SfxItemPropertyMap* ImplGetSvxGroupPropertyMap()
 {
-    // Achtung: Der erste Parameter MUSS sortiert vorliegen !!!
     static SfxItemPropertyMap aGroupPropertyMap_Impl[] =
     {
         SVX_UNOEDIT_PARA_PROPERTIES,
         SVX_UNOEDIT_CHAR_PROPERTIES,
+        SVX_UNOEDIT_NUMBERING_PROPERTIE,
         SHADOW_PROPERTIES
         LINE_PROPERTIES
         LINE_PROPERTIES_START_END
@@ -412,7 +398,6 @@ SfxItemPropertyMap* ImplGetSvxGroupPropertyMap()
 
 SfxItemPropertyMap* ImplGetSvxOle2PropertyMap()
 {
-    // Achtung: Der erste Parameter MUSS sortiert vorliegen !!!
     static SfxItemPropertyMap aOle2PropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_LAYERID),  SDRATTR_LAYERID             , &::getCppuType((const sal_Int16*)0),      ::com::sun::star::beans::PropertyAttribute::READONLY,   0},
