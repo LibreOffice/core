@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffld.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-29 16:41:45 $
+ *  last change: $Author: mmaher $ $Date: 2002-12-02 17:26:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #endif
 #ifndef _RTFTOKEN_H
 #include <svtools/rtftoken.h>
+#endif
+#ifndef _ZFORLIST_HXX
+#include <svtools/zforlist.hxx>
 #endif
 #ifndef _SVX_FONTITEM_HXX //autogen
 #include <svx/fontitem.hxx>
@@ -162,6 +165,7 @@ enum RTF_FLD_TYPES {
     RTFFLD_PAGE,
     RTFFLD_NUMPAGES,
     RTFFLD_DATE,
+    RTFFLD_TIME,
     RTFFLD_DATA,
     RTFFLD_MERGEFLD,
     RTFFLD_HYPERLINK,
@@ -179,6 +183,7 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
     sal_Char __READONLY_DATA sPAGE[]=       "\4page";
     sal_Char __READONLY_DATA sNUMPAGES[]=   "\x8numpages";
     sal_Char __READONLY_DATA sDATE[]=       "\4date";
+    sal_Char __READONLY_DATA sTIME[]=       "\4time";
     sal_Char __READONLY_DATA sDATA[]=       "\4data";
     sal_Char __READONLY_DATA sMERGEFLD[]=   "\10mergefield";
     sal_Char __READONLY_DATA sIMPORT2[]=    "\16includepicture";
@@ -198,6 +203,7 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
             {RTFFLD_PAGE,        sPAGE},
             {RTFFLD_NUMPAGES,    sNUMPAGES},
             {RTFFLD_DATE,        sDATE},
+            {RTFFLD_TIME,        sTIME},
             {RTFFLD_DATA,        sDATA},
             {RTFFLD_MERGEFLD,    sMERGEFLD},
             {RTFFLD_IMPORT,      sIMPORT2},
@@ -541,6 +547,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
         }
         break;
     case RTFFLD_DATE:
+    case RTFFLD_TIME:
         {
             if( STRING_NOTFOUND == ( nPos = aSaveStr.SearchAscii( "\\@" )) )
             {
@@ -569,12 +576,12 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
 
                 if( STRING_NOTFOUND != nTPos )
                 {
-                    pFldType = pDoc->GetSysFldType( RES_DATETIMEFLD );
+                    ULONG nFormat = 0;
+                    SvNumberFormatter* pFormatter = pDoc->GetNumberFormatter();
+                    nFormat = pFormatter->GetFormatIndex(
+                        NF_TIME_START, LANGUAGE_SYSTEM );
+                     pFldType = pDoc->GetSysFldType( RES_DATETIMEFLD );
                     pTFld = new SwDateTimeField( (SwDateTimeFieldType*)pFldType, TIMEFLD );
-                    ((SwDateTimeField*)pTFld)->ChangeFormat(
-                                'H' == aSaveStr.GetChar( nTPos )
-                                        ? TF_SSMM_24
-                                        : TF_SSMM_12);
                 }
 
                 if( STRING_NOTFOUND != nDPos )      // Datum ?
@@ -649,6 +656,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
             SkipGroup();        // ueberlese den Rest
         }
         break;
+
     case RTFFLD_DATA:
         {
             // Datenbank-FileName: nur der Filename interressiert
