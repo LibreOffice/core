@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-24 09:17:46 $
+ *  last change: $Author: mt $ $Date: 2001-06-12 08:11:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -586,7 +586,7 @@ void Menu::Activate()
 
 void Menu::Deactivate()
 {
-    for ( USHORT n = pItemList->Count(); n; )
+    for ( USHORT n = (USHORT)pItemList->Count(); n; )
     {
         MenuItemData* pData = pItemList->GetDataFromPos( --n );
         if ( pData->bIsTemporary )
@@ -2223,12 +2223,22 @@ void MenuFloatingWindow::ImplHighlightItem( const MouseEvent& rMEvt, BOOL bMBDow
                     if ( bMBDown )
                     {
                         if ( n != nHighlightedItem )
+                        {
                             ChangeHighlightItem( (USHORT)n, FALSE );
+                        }
 
+                        BOOL bAllowNewPopup = TRUE;
                         if ( pActivePopup )
+                        {
+                            MenuItemData* pData = pMenu->pItemList->GetDataFromPos( n );
+                            bAllowNewPopup = pData && ( pData->pSubMenu != pActivePopup );
                             KillActivePopup();
-                        else if ( bPopupArea )
+                        }
+
+                        if ( bPopupArea && bAllowNewPopup )
+                        {
                             HighlightChanged( NULL );
+                        }
                     }
                     else
                     {
@@ -2493,7 +2503,7 @@ void MenuFloatingWindow::MouseButtonDown( const MouseEvent& rMEvt )
     if ( pActivePopup && pActivePopup->ImplGetWindow() && !pActivePopup->ImplGetFloatingWindow()->pActivePopup )
         pActivePopup->ImplGetFloatingWindow()->ToTop();
 
-    if ( !ImplIsMouseFollow() )
+//  if ( !ImplIsMouseFollow() ) // Issuezilla#591
     {
         ImplHighlightItem( rMEvt, TRUE );
     }
@@ -3094,7 +3104,7 @@ void MenuBarWindow::MouseButtonDown( const MouseEvent& rMEvt )
     USHORT nEntry = ImplFindEntry( rMEvt.GetPosPixel() );
     if ( ( nEntry != ITEMPOS_INVALID ) && ( nEntry != nHighlightedItem ) )
     {
-        ChangeHighlightItem( nEntry, ImplIsMouseFollow() ? FALSE : TRUE );
+        ChangeHighlightItem( nEntry, /* ImplIsMouseFollow() ? FALSE : */ TRUE ); // Issuezilla#591
     }
     else
     {
