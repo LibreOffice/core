@@ -2,9 +2,9 @@
  *
  *  $RCSfile: camera3d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-17 07:04:30 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,22 +304,22 @@ void Camera3D::RotateAroundLookAt(double fHAngle, double fVAngle)
 |*
 \************************************************************************/
 
-void Camera3D::WriteData31(SvStream& rOut) const
-{
-#ifndef SVX_LIGHT
-    Viewport3D::WriteData(rOut);
-
-    rOut << aResetPos;
-    rOut << aResetLookAt;
-    rOut << fResetFocalLength;
-    rOut << fResetBankAngle;
-    rOut << aPosition;
-    rOut << aLookAt;
-    rOut << fFocalLength;
-    rOut << fBankAngle;
-    rOut << BOOL(bAutoAdjustProjection);
-#endif
-}
+//BFS01void Camera3D::WriteData31(SvStream& rOut) const
+//BFS01{
+//BFS01#ifndef SVX_LIGHT
+//BFS01 Viewport3D::WriteData(rOut);
+//BFS01
+//BFS01 rOut << aResetPos;
+//BFS01 rOut << aResetLookAt;
+//BFS01 rOut << fResetFocalLength;
+//BFS01 rOut << fResetBankAngle;
+//BFS01 rOut << aPosition;
+//BFS01 rOut << aLookAt;
+//BFS01 rOut << fFocalLength;
+//BFS01 rOut << fBankAngle;
+//BFS01 rOut << BOOL(bAutoAdjustProjection);
+//BFS01#endif
+//BFS01}
 
 /*************************************************************************
 |*
@@ -329,73 +329,33 @@ void Camera3D::WriteData31(SvStream& rOut) const
 |*
 \************************************************************************/
 
-void Camera3D::WriteData(SvStream& rOut) const
-{
-#ifndef SVX_LIGHT
-
-    if (rOut.GetVersion() < 3560)  // FG: Ab der Release 356 wurde das Fileformat geaendert
-    {                              //     Falls das Format der Version 31 geschrieben werden soll
-        WriteData31(rOut);         //     muss am Stream die Version der 3.1 gesetzt sein.
-        return;                    //     Im Prinzip kann man auf diese Art auch Zwischenversionen
-    }                              //     erzeugen.
-
-    SdrDownCompat aCompat(rOut, STREAM_WRITE);
-#ifdef DBG_UTIL
-    aCompat.SetID("Camera3D");
-#endif
-    Viewport3D::WriteData(rOut);
-
-    rOut << aResetPos;              // Alles Vektoren 3*double
-    rOut << aResetLookAt;
-    rOut << fResetFocalLength;
-    rOut << fResetBankAngle;
-    rOut << aPosition;
-    rOut << aLookAt;
-    rOut << fFocalLength;
-    rOut << fBankAngle;
-    rOut << BOOL(bAutoAdjustProjection);
-#endif
-}
-
-/*************************************************************************
-|*
-|* Stream-In-Operator fuer Camera3D
-|*
-\************************************************************************/
-
-void Camera3D::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-{
-    if ( rIn.GetError() != SVSTREAM_OK )
-        return;
-
-    if ((rHead.GetVersion() < 13) || (rIn.GetVersion() < 3560))
-    {
-        ReadData31(rIn);
-        return;
-    }
-
-    SdrDownCompat aCompat(rIn, STREAM_READ);
-#ifdef DBG_UTIL
-    aCompat.SetID("Camera3D");
-#endif
-
-    Viewport3D::ReadData(rHead, rIn);
-
-    BOOL bTmp;
-
-    rIn >> aResetPos;
-    rIn >> aResetLookAt;
-    rIn >> fResetFocalLength;
-    rIn >> fResetBankAngle;
-    rIn >> aPosition;
-    rIn >> aLookAt;
-    rIn >> fFocalLength;
-    rIn >> fBankAngle;
-    rIn >> bTmp; bAutoAdjustProjection = bTmp;
-
-    SetVPD(0);
-    SetPosAndLookAt(aPosition, aLookAt);
-}
+//BFS01void Camera3D::WriteData(SvStream& rOut) const
+//BFS01{
+//BFS01#ifndef SVX_LIGHT
+//BFS01
+//BFS01 if (rOut.GetVersion() < 3560)  // FG: Ab der Release 356 wurde das Fileformat geaendert
+//BFS01 {                              //     Falls das Format der Version 31 geschrieben werden soll
+//BFS01     WriteData31(rOut);         //     muss am Stream die Version der 3.1 gesetzt sein.
+//BFS01     return;                    //     Im Prinzip kann man auf diese Art auch Zwischenversionen
+//BFS01 }                              //     erzeugen.
+//BFS01
+//BFS01 SdrDownCompat aCompat(rOut, STREAM_WRITE);
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("Camera3D");
+//BFS01#endif
+//BFS01 Viewport3D::WriteData(rOut);
+//BFS01
+//BFS01 rOut << aResetPos;              // Alles Vektoren 3*double
+//BFS01 rOut << aResetLookAt;
+//BFS01 rOut << fResetFocalLength;
+//BFS01 rOut << fResetBankAngle;
+//BFS01 rOut << aPosition;
+//BFS01 rOut << aLookAt;
+//BFS01 rOut << fFocalLength;
+//BFS01 rOut << fBankAngle;
+//BFS01 rOut << BOOL(bAutoAdjustProjection);
+//BFS01#endif
+//BFS01}
 
 /*************************************************************************
 |*
@@ -403,28 +363,68 @@ void Camera3D::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
 |*
 \************************************************************************/
 
-void Camera3D::ReadData31(SvStream& rIn)
-{
-    if ( rIn.GetError() != SVSTREAM_OK )
-        return;
+//BFS01void Camera3D::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
+//BFS01{
+//BFS01 if ( rIn.GetError() != SVSTREAM_OK )
+//BFS01     return;
+//BFS01
+//BFS01 if ((rHead.GetVersion() < 13) || (rIn.GetVersion() < 3560))
+//BFS01 {
+//BFS01     ReadData31(rIn);
+//BFS01     return;
+//BFS01 }
+//BFS01
+//BFS01 SdrDownCompat aCompat(rIn, STREAM_READ);
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("Camera3D");
+//BFS01#endif
+//BFS01
+//BFS01 Viewport3D::ReadData(rHead, rIn);
+//BFS01
+//BFS01 BOOL bTmp;
+//BFS01
+//BFS01 rIn >> aResetPos;
+//BFS01 rIn >> aResetLookAt;
+//BFS01 rIn >> fResetFocalLength;
+//BFS01 rIn >> fResetBankAngle;
+//BFS01 rIn >> aPosition;
+//BFS01 rIn >> aLookAt;
+//BFS01 rIn >> fFocalLength;
+//BFS01 rIn >> fBankAngle;
+//BFS01 rIn >> bTmp; bAutoAdjustProjection = bTmp;
+//BFS01
+//BFS01 SetVPD(0);
+//BFS01 SetPosAndLookAt(aPosition, aLookAt);
+//BFS01}
 
-    Viewport3D::ReadData31 (rIn);
+/*************************************************************************
+|*
+|* Stream-In-Operator fuer Camera3D
+|*
+\************************************************************************/
 
-    BOOL bTmp;
-
-    rIn >> aResetPos;
-    rIn >> aResetLookAt;
-    rIn >> fResetFocalLength;
-    rIn >> fResetBankAngle;
-    rIn >> aPosition;
-    rIn >> aLookAt;
-    rIn >> fFocalLength;
-    rIn >> fBankAngle;
-    rIn >> bTmp; bAutoAdjustProjection = bTmp;
-
-    SetVPD(0);
-    SetPosAndLookAt(aPosition, aLookAt);
-}
+//BFS01void Camera3D::ReadData31(SvStream& rIn)
+//BFS01{
+//BFS01 if ( rIn.GetError() != SVSTREAM_OK )
+//BFS01     return;
+//BFS01
+//BFS01 Viewport3D::ReadData31 (rIn);
+//BFS01
+//BFS01 BOOL bTmp;
+//BFS01
+//BFS01 rIn >> aResetPos;
+//BFS01 rIn >> aResetLookAt;
+//BFS01 rIn >> fResetFocalLength;
+//BFS01 rIn >> fResetBankAngle;
+//BFS01 rIn >> aPosition;
+//BFS01 rIn >> aLookAt;
+//BFS01 rIn >> fFocalLength;
+//BFS01 rIn >> fBankAngle;
+//BFS01 rIn >> bTmp; bAutoAdjustProjection = bTmp;
+//BFS01
+//BFS01 SetVPD(0);
+//BFS01 SetPosAndLookAt(aPosition, aLookAt);
+//BFS01}
 
 /*************************************************************************
 |*
@@ -432,11 +432,11 @@ void Camera3D::ReadData31(SvStream& rIn)
 |*
 \************************************************************************/
 
-SvStream& operator<<(SvStream& rOStream, const Camera3D& rCam)
-{
-    rCam.WriteData31(rOStream);
-    return rOStream;
-}
+//BFS01SvStream& operator<<(SvStream& rOStream, const Camera3D& rCam)
+//BFS01{
+//BFS01 rCam.WriteData31(rOStream);
+//BFS01 return rOStream;
+//BFS01}
 
 /*************************************************************************
 |*
@@ -444,11 +444,11 @@ SvStream& operator<<(SvStream& rOStream, const Camera3D& rCam)
 |*
 \************************************************************************/
 
-SvStream& operator>>(SvStream& rIStream, Camera3D& rCam)
-{
-    rCam.ReadData31(rIStream);
-    return rIStream;
-}
+//BFS01SvStream& operator>>(SvStream& rIStream, Camera3D& rCam)
+//BFS01{
+//BFS01 rCam.ReadData31(rIStream);
+//BFS01 return rIStream;
+//BFS01}
 
 
 /*************************************************************************
@@ -465,4 +465,4 @@ void Camera3D::SetFocalLengthWithCorrect(double fLen)
     fFocalLength = fLen;
 }
 
-
+// eof
