@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 17:59:08 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 15:11:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ enum ScXMLContentValidationAttrTokens
     XML_TOK_CONTENT_VALIDATION_CONDITION,
     XML_TOK_CONTENT_VALIDATION_BASE_CELL_ADDRESS,
     XML_TOK_CONTENT_VALIDATION_ALLOW_EMPTY_CELL,
-    XML_TOK_CONTENT_VALIDATION_SHOW_LIST
+    XML_TOK_CONTENT_VALIDATION_DISPLAY_LIST
 };
 
 enum ScXMLContentValidationMessageElemTokens
