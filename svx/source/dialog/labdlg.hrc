@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labdlg.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:09 $
+ *  last change: $Author: cl $ $Date: 2002-07-19 11:13:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,11 @@
 #define BMP_CAPTTYPE_2          2
 #define BMP_CAPTTYPE_3          3
 #define BMP_CAPTTYPE_4          4
+
+#define BMP_CAPTTYPE_1_H        5
+#define BMP_CAPTTYPE_2_H        6
+#define BMP_CAPTTYPE_3_H        7
+#define BMP_CAPTTYPE_4_H        8
 
 #define SHOW_HORZ               1
 #define SHOW_VERT               2

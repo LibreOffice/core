@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2002-04-29 21:36:16 $
+ *  last change: $Author: cl $ $Date: 2002-07-19 11:13:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -924,6 +924,22 @@ TabPage RID_SVXPAGE_CAPTION
     Bitmap BMP_CAPTTYPE_4
     {
         File = "legtyp4.bmp" ;
+    };
+    Bitmap BMP_CAPTTYPE_1_H
+    {
+        File = "legtyp1_hc.bmp" ;
+    };
+    Bitmap BMP_CAPTTYPE_2_H
+    {
+        File = "legtyp2_hc.bmp" ;
+    };
+    Bitmap BMP_CAPTTYPE_3_H
+    {
+        File = "legtyp3_hc.bmp" ;
+    };
+    Bitmap BMP_CAPTTYPE_4_H
+    {
+        File = "legtyp4_hc.bmp" ;
     };
     Text[ chinese_simplified ] = "е›ѕдѕ‹";
     Text[ russian ] = "Легенда";

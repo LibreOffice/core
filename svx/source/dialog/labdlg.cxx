@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2002-03-27 08:49:05 $
+ *  last change: $Author: cl $ $Date: 2002-07-19 11:13:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,35 +161,43 @@ SvxCaptionTabPage::SvxCaptionTabPage(Window* pParent, const SfxItemSet& rInAttrs
             aLB_ANSATZ.GetPosPixel().Y() )
         );
 
+    sal_uInt16 nBitmap;
+    for( nBitmap = 0; nBitmap < CAPTYPE_BITMAPS_COUNT; nBitmap++ )
+    {
+        mpBmpCapTypes[nBitmap] = new Image(Bitmap(ResId(BMP_CAPTTYPE_1 + nBitmap)));
+        mpBmpCapTypesH[nBitmap] = new Image(Bitmap(ResId(BMP_CAPTTYPE_1_H + nBitmap)));
+    }
+
     //------------ValueSet installieren--------------------------
     aCT_CAPTTYPE.SetStyle( aCT_CAPTTYPE.GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER | WB_NAMEFIELD );
     aCT_CAPTTYPE.SetColCount(5);//XXX
     aCT_CAPTTYPE.SetLineCount(1);
     aCT_CAPTTYPE.SetSelectHdl(LINK( this, SvxCaptionTabPage, SelectCaptTypeHdl_Impl));
 
-    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_1,
-                        Bitmap(ResId(BMP_CAPTTYPE_1)),
-                        String(ResId(STR_CAPTTYPE_1)));
+    Image aImage;
+    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_1, aImage, String(ResId(STR_CAPTTYPE_1)));
+    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_2, aImage, String(ResId(STR_CAPTTYPE_2)));
+    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_3, aImage, String(ResId(STR_CAPTTYPE_3)));
 
-    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_2,
-                        Bitmap(ResId(BMP_CAPTTYPE_2)),
-                        String(ResId(STR_CAPTTYPE_2)));
-
-    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_3,
-                        Bitmap(ResId(BMP_CAPTTYPE_3)),
-                        String(ResId(STR_CAPTTYPE_3)));
-
-/*--------------NYI----------------------------------------------
-    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_4,
-                        Bitmap(ResId(BMP_CAPTTYPE_4)),
-                        String(ResId(STR_CAPTTYPE_4)));
-*/
+    FillValueSet();
 
     aLB_ANSATZ.SetSelectHdl(LINK(this,SvxCaptionTabPage,AnsatzSelectHdl_Impl));
     aLB_ANSATZ_REL.SetSelectHdl(LINK(this,SvxCaptionTabPage,AnsatzRelSelectHdl_Impl));
     aCB_LAENGE.SetClickHdl(LINK(this,SvxCaptionTabPage,LineOptHdl_Impl));
 
     FreeResource();
+}
+
+// -----------------------------------------------------------------------
+
+SvxCaptionTabPage::~SvxCaptionTabPage()
+{
+    sal_uInt16 nBitmap;
+    for( nBitmap = 0; nBitmap < CAPTYPE_BITMAPS_COUNT; nBitmap++ )
+    {
+        delete mpBmpCapTypes[nBitmap];
+        delete mpBmpCapTypesH[nBitmap];
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -580,6 +588,28 @@ void SvxCaptionTabPage::SetupType_Impl( USHORT nType )
         LineOptHdl_Impl( &aCB_LAENGE );
         break;
     }
+}
+
+// -----------------------------------------------------------------------
+
+void SvxCaptionTabPage::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    SfxTabPage::DataChanged( rDCEvt );
+
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+            FillValueSet();
+}
+
+// -----------------------------------------------------------------------
+
+void SvxCaptionTabPage::FillValueSet()
+{
+    bool bHighContrast = (bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0);
+
+    Image** ppBitmaps = bHighContrast ? mpBmpCapTypesH : mpBmpCapTypes;
+    aCT_CAPTTYPE.SetItemImage(BMP_CAPTTYPE_1, *(ppBitmaps[0]) );
+    aCT_CAPTTYPE.SetItemImage(BMP_CAPTTYPE_2, *(ppBitmaps[1]) );
+    aCT_CAPTTYPE.SetItemImage(BMP_CAPTTYPE_3, *(ppBitmaps[2]) );
 }
 
 //========================================================================
