@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultcolumn.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-15 13:04:23 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:04:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,7 @@ void OResultColumn::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
                 break;
         }
     }
-    catch (SQLException& e)
+    catch (SQLException& )
     {
         // default handling if we caught an exception
         switch (nHandle)
