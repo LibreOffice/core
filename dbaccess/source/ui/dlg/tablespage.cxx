@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablespage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-31 17:45:21 $
+ *  last change: $Author: oj $ $Date: 2001-11-16 15:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -849,11 +849,11 @@ namespace dbaui
             return;
 
         // collect the names of the expanded extries
-        EntryPredicateCheck aExpandedCheck = SvListView::IsExpanded;
+        EntryPredicateCheck aExpandedCheck =&SvListView::IsExpanded;
         collectEntryPaths(pMySettings->aExpandedEntries, aExpandedCheck);
 
         // collect the names of the selected extries
-        EntryPredicateCheck aSelectedCheck = SvListView::IsSelected;
+        EntryPredicateCheck aSelectedCheck = &SvListView::IsSelected;
         collectEntryPaths(pMySettings->aSelectedEntries, aSelectedCheck);
 
         SvLBoxEntry* pCurEntry = m_aTablesList.GetCurEntry();
@@ -1416,6 +1416,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/10/31 17:45:21  hr
+ *  #92924#: cast
+ *
  *  Revision 1.9  2001/10/26 14:06:22  oj
  *  #93784# do not ask for catalog when supported
  *
