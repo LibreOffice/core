@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtattr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:48:52 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:47:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -528,7 +528,8 @@ SET_LINESPACE:
                     RES_PARATR_ADJUST, RES_PARATR_ADJUST );
             GetShell().GetAttr(aAdjustSet);
             BOOL bChgAdjust = FALSE;
-            if (aAdjustSet.GetItemState(RES_PARATR_ADJUST, FALSE)  >= SFX_ITEM_DEFAULT)
+            SfxItemState eAdjustState = aAdjustSet.GetItemState(RES_PARATR_ADJUST, FALSE);
+            if(eAdjustState  >= SFX_ITEM_DEFAULT)
             {
                 int eAdjust = (int)(( const SvxAdjustItem& )
                         aAdjustSet.Get(RES_PARATR_ADJUST)).GetAdjust();
@@ -536,6 +537,8 @@ SET_LINESPACE:
                 bChgAdjust = (SVX_ADJUST_LEFT  == eAdjust  &&  SID_ATTR_PARA_RIGHT_TO_LEFT == nSlot) ||
                              (SVX_ADJUST_RIGHT == eAdjust  &&  SID_ATTR_PARA_LEFT_TO_RIGHT == nSlot);
             }
+            else
+                bChgAdjust = TRUE;
 
             SvxFrameDirection eFrmDirection =
                     (SID_ATTR_PARA_LEFT_TO_RIGHT == nSlot) ?
@@ -546,7 +549,10 @@ SET_LINESPACE:
             {
                 SvxAdjust eAdjust = (SID_ATTR_PARA_LEFT_TO_RIGHT == nSlot) ?
                         SVX_ADJUST_LEFT : SVX_ADJUST_RIGHT;
-                aSet.Put( SvxAdjustItem( eAdjust, RES_PARATR_ADJUST ) );
+                SvxAdjustItem aAdjust( eAdjust, RES_PARATR_ADJUST );
+                aSet.Put( aAdjust );
+                aAdjust.SetWhich(SID_ATTR_PARA_ADJUST);
+                GetView().GetViewFrame()->GetBindings().SetState( aAdjust );
             }
         }
         break;
@@ -888,5 +894,6 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
 
     rSet.Put(aCoreSet,FALSE);
 }
+
 
 
