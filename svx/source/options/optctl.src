@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optctl.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:23:40 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:45:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ italian ] = "Controllo sequenza";
         Text[ swedish ] = "Sekvenskontroll";
         Text[ polish ] = "Sequence checking";
-        Text[ portuguese_brazilian ] = "Sequence checking";
+        Text[ portuguese_brazilian ] = "Controle de seq��ncia";
         Text[ japanese ] = "シーケンスチェック";
         Text[ korean ] = "순서 검사";
         Text[ turkish ] = "Ard�ll�k kontrol�";
@@ -117,9 +117,9 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ italian ] = "Applica controllo se~quenza";
         Text[ swedish ] = "Anv�nd sekvenskontroll";
         Text[ polish ] = "Use se~quence checking";
-        Text[ portuguese_brazilian ] = "Use se~quence checking";
+        Text[ portuguese_brazilian ] = "Usar o controle de seq��ncia";
         Text[ japanese ] = "シーケンスチェックを使用(~Q)";
-        Text[ korean ] = "순서 검사 사용";
+        Text[ korean ] = "순서 검사 사용(~Q)";
         Text[ turkish ] = "Ard�ll�k kontrol�n� kullan";
         Text[ thai ] = "Use se~quence checking";
         Text[ greek ] = "Use se~quence checking";
@@ -127,7 +127,7 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ french ] = "Appliquer le contr�le de s�quence";
         Text[ finnish ] = "Use se~quence checking";
         Text[ danish ] = "Use se~quence checking";
-        Text[ chinese_simplified ] = "使用顺序检查";
+        Text[ chinese_simplified ] = "使用顺序检查(~Q)";
         Text[ chinese_traditional ] = "使用順序檢查(~q)";
         Text[ arabic ] = "Use se~quence checking";
         Text[ catalan ] = "Use se~quence checking";
@@ -148,7 +148,7 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ italian ] = "Controllo cursore";
         Text[ swedish ] = "Mark�rkontroll";
         Text[ polish ] = "Cursor control";
-        Text[ portuguese_brazilian ] = "Cursor control";
+        Text[ portuguese_brazilian ] = "Controle do cursor";
         Text[ japanese ] = "カーソル制御";
         Text[ korean ] = "커서 제어";
         Text[ turkish ] = "�mle� kontrol�";
@@ -179,7 +179,7 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ italian ] = "Movimento";
         Text[ swedish ] = "R�relse";
         Text[ polish ] = "Movement";
-        Text[ portuguese_brazilian ] = "Movement";
+        Text[ portuguese_brazilian ] = "Movimento";
         Text[ japanese ] = "移動";
         Text[ korean ] = "움직임";
         Text[ turkish ] = "Hareket";
@@ -210,9 +210,9 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ italian ] = "Lo~gico";
         Text[ swedish ] = "Lo~gisk";
         Text[ polish ] = "Lo~gical";
-        Text[ portuguese_brazilian ] = "Lo~gical";
+        Text[ portuguese_brazilian ] = "L�gico";
         Text[ japanese ] = "論理(~G)";
-        Text[ korean ] = "논리적";
+        Text[ korean ] = "논리적(~G)";
         Text[ turkish ] = "~Mant�ksal";
         Text[ thai ] = "Lo~gical";
         Text[ greek ] = "Lo~gical";
@@ -220,7 +220,7 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ french ] = "Logique";
         Text[ finnish ] = "Lo~gical";
         Text[ danish ] = "Lo~gical";
-        Text[ chinese_simplified ] = "逻辑的";
+        Text[ chinese_simplified ] = "逻辑的(~G)";
         Text[ chinese_traditional ] = "邏輯(~G)";
         Text[ arabic ] = "Lo~gical";
         Text[ catalan ] = "Lo~gical";
@@ -241,9 +241,9 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ italian ] = "~Visivo";
         Text[ swedish ] = "~Visuell";
         Text[ polish ] = "~Visual";
-        Text[ portuguese_brazilian ] = "~Visual";
+        Text[ portuguese_brazilian ] = "Visual";
         Text[ japanese ] = "ビジュアル(~V)";
-        Text[ korean ] = "시각적";
+        Text[ korean ] = "시각적(~V)";
         Text[ turkish ] = "~G�rsel";
         Text[ thai ] = "~Visual";
         Text[ greek ] = "~Visual";
@@ -251,7 +251,7 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ french ] = "Visuel";
         Text[ finnish ] = "~Visual";
         Text[ danish ] = "~Visual";
-        Text[ chinese_simplified ] = "视觉的";
+        Text[ chinese_simplified ] = "视觉的(~V)";
         Text[ chinese_traditional ] = "視覺(~V)";
         Text[ arabic ] = "~Visual";
         Text[ catalan ] = "~Visual";
@@ -303,9 +303,9 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ italian ] = "~Numerali (solo nel testo)";
         Text[ swedish ] = "~Siffror";
         Text[ polish ] = "~Numerals (in text only)";
-        Text[ portuguese_brazilian ] = "~Numerals (in text only)";
-        Text[ japanese ] = "数値(テキストのみ)(~N) ";
-        Text[ korean ] = "숫자(텍스트에서만)";
+        Text[ portuguese_brazilian ] = "N�mera��o (somente no texto)";
+        Text[ japanese ] = "数値(テキストのみ) (~N)";
+        Text[ korean ] = "숫자(텍스트에서만)(~N)";
         Text[ turkish ] = "~Say�lar";
         Text[ thai ] = "~Numerals (in text only)";
         Text[ greek ] = "~Numerals (in text only)";
@@ -342,9 +342,9 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         };
     StringList [ language_user1 ] =
     {
-         < "; Arabisch" ; > ;
-        < "; Hindi" ; > ;
-        < "; System" ; > ;
+         < "; ; Arabisch" ; > ;
+        < "; ; Hindi" ; > ;
+        < "; ; System" ; > ;
     };
     StringList [ portuguese ] =
     {
@@ -384,8 +384,8 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
     };
     StringList [ portuguese_brazilian ] =
     {
-         < "??rabe" ; > ;
-        < "H�ngaro" ; > ;
+         < "Ar�bicos" ; > ;
+        < "Hindi" ; > ;
         < "Sistema" ; > ;
     };
     StringList [ japanese ] =
@@ -497,7 +497,7 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
     Text[ italian ] = "Disposizione testo complesso";
     Text[ swedish ] = "Komplex textlayout";
     Text[ polish ] = "Complex Text Layout";
-    Text[ portuguese_brazilian ] = "Complex Text Layout";
+    Text[ portuguese_brazilian ] = "Texto de layout complexo (TLC)";
     Text[ japanese ] = "複合文字言語";
     Text[ korean ] = "CTL(Complex Text Layout)";
     Text[ turkish ] = "Karma��k Metin Yerle�imi";
@@ -516,6 +516,7 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
     Text[ hindi ] = "Complex Text Layout";
     Text[ slovak ] = "Komplexné rozloženie textu";
 };
+
 
 
 
