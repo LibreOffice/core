@@ -19,11 +19,11 @@
  <toolbar:toolbaritem xlink:href=".uno:AlignBlock" toolbar:helpid="helpid:26374" toolbar:text="" toolbar:style="radio auto" />
  <toolbar:toolbaritem xlink:href=".uno:ToggleMergeCells" toolbar:helpid="helpid:26581" toolbar:text="" />
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight" toolbar:helpid="helpid:10950" toolbar:text="" toolbar:style="radio" toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft" toolbar:helpid="helpid:10951" toolbar:text="" toolbar:style="radio" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight" toolbar:helpid="helpid:10950" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft" toolbar:helpid="helpid:10951" toolbar:text="" toolbar:style="radio" />
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:TextdirectionLeftToRight" toolbar:helpid="helpid:10907" toolbar:text="" toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:TextdirectionTopToBottom" toolbar:helpid="helpid:10908" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:TextdirectionLeftToRight" toolbar:helpid="helpid:10907" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:TextdirectionTopToBottom" toolbar:helpid="helpid:10908" toolbar:text="" />
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:AlignTop" toolbar:helpid="helpid:26375" toolbar:text="" toolbar:style="radio auto" toolbar:visible="false" />
  <toolbar:toolbaritem xlink:href=".uno:AlignVCenter" toolbar:helpid="helpid:26377" toolbar:text="" toolbar:style="radio auto" toolbar:visible="false" />
