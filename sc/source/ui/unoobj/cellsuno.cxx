@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: er $ $Date: 2001-08-02 14:47:49 $
+ *  last change: $Author: nn $ $Date: 2001-08-23 17:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5758,6 +5758,11 @@ void SAL_CALL ScCellObj::insertTextContent( const uno::Reference<text::XTextRang
             aSelection.nEndPara = aSelection.nStartPara;
             aSelection.nEndPos = aSelection.nStartPos + 1;
             pCellField->InitDoc( pDocSh, aCellPos, aSelection );
+
+            //  #91431# for bAbsorb=FALSE, the new selection must be behind the inserted content
+            //  (the xml filter relies on this)
+            if (!bAbsorb)
+                aSelection.nStartPos = aSelection.nEndPos;
 
             pTextRange->SetSelection( aSelection );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textuno.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-31 17:57:55 $
+ *  last change: $Author: nn $ $Date: 2001-08-23 17:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -548,6 +548,11 @@ void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
             aSelection.nEndPara = aSelection.nStartPara;
             aSelection.nEndPos = aSelection.nStartPos + 1;
             pHeaderField->InitDoc( &aTextData.GetContentObj(), aTextData.GetPart(), aSelection );
+
+            //  #91431# for bAbsorb=FALSE, the new selection must be behind the inserted content
+            //  (the xml filter relies on this)
+            if (!bAbsorb)
+                aSelection.nStartPos = aSelection.nEndPos;
 
             pTextRange->SetSelection( aSelection );
 
