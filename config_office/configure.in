@@ -643,7 +643,7 @@ dnl ***************************************
 dnl testing for X libraries and includes...
 dnl ***************************************
 if test "$_os" != "WINNT" -a "$_os" != "Darwin"; then
-   AC_PATH_X
+   AC_PATH_XTRA
    dnl The variables $x_libraries and $x_includes are set.
    if test -z "$x_libraries"; then
       AC_MSG_ERROR([No X libraries found]) # Exit
@@ -651,12 +651,8 @@ if test "$_os" != "WINNT" -a "$_os" != "Darwin"; then
    if test -z "$x_includes"; then
       AC_MSG_ERROR([No X includes found]) # Exit
    fi
-   AC_MSG_CHECKING([X Development Libraries])
-   if test -f "$x_libraries/libX11.a"; then
-      AC_MSG_RESULT([checked])
-   else
-      AC_MSG_ERROR([X Development libraries not found])
-   fi
+   LDFLAGS=$X_LIBS
+   AC_CHECK_LIB(X11, XOpenDisplay, , [AC_MSG_ERROR([X Development libraries not found])])
 else
    x_includes="no_x_includes"
    x_libraries="no_x_libraries"
