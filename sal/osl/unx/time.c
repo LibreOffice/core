@@ -2,9 +2,9 @@
  *
  *  $RCSfile: time.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-27 15:49:07 $
+ *  last change: $Author: pluby $ $Date: 2001-03-08 22:27:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,6 @@
 
 #include <osl/diagnose.h>
 #include <osl/time.h>
-#include <sys/timeb.h>
 
 
 sal_Bool SAL_CALL osl_getSystemTime(TimeValue* TimeValue)
@@ -252,23 +251,24 @@ sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( TimeValue* pLocalTimeVal, Time
 
 
 
-static struct timeb startTime;
+static struct timeval startTime;
+static struct timezone timeZone;
 static sal_Bool bGlobalTimer = sal_False;
 
 sal_uInt32 SAL_CALL osl_getGlobalTimer()
 {
-  struct timeb currentTime;
+  struct timeval currentTime;
   sal_uInt32 nSeconds;
 
   if ( bGlobalTimer == sal_False )
   {
-      ftime( &startTime );
+      gettimeofday( &startTime, &timeZone );
       bGlobalTimer=sal_True;
   }
 
-  ftime( &currentTime );
+  gettimeofday( &currentTime, &timeZone );
 
-  nSeconds = (sal_uInt32)( currentTime.time - startTime.time );
+  nSeconds = (sal_uInt32)( currentTime.tv_sec - startTime.tv_sec );
 
-  return ( nSeconds * 1000 ) + (long)( currentTime.millitm - startTime.millitm );
+  return ( nSeconds * 1000 ) + (long)( currentTime.tv_usec - startTime.tv_usec);
 }
