@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-08 10:36:14 $
+ *  last change: $Author: mt $ $Date: 2001-11-27 09:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -728,6 +728,7 @@ long ListBox::PreNotify( NotifyEvent& rNEvt )
 
 void ListBox::Select()
 {
+    ImplCallEventListeners( VCLEVENT_LISTBOX_SELECT );
     maSelectHdl.Call( this );
 }
 
@@ -735,6 +736,7 @@ void ListBox::Select()
 
 void ListBox::DoubleClick()
 {
+    ImplCallEventListeners( VCLEVENT_LISTBOX_DOUBLECLICK );
     maDoubleClickHdl.Call( this );
 }
 

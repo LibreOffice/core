@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-08 16:05:45 $
+ *  last change: $Author: mt $ $Date: 2001-11-27 09:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,15 @@ Button::Button( Window* pParent, const ResId& rResId ) :
 
 void Button::Click()
 {
-    maClickHdl.Call( this );
+    ImplDelData aDelData;
+    ImplAddDel( &aDelData );
+    ImplCallEventListeners( VCLEVENT_BUTTON_CLICK );
+    if ( !aDelData.IsDelete() )
+    {
+        maClickHdl.Call( this );
+        if ( !aDelData.IsDelete() )
+            ImplRemoveDel( &aDelData );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1100,6 +1108,7 @@ void PushButton::DataChanged( const DataChangedEvent& rDCEvt )
 
 void PushButton::Toggle()
 {
+    ImplCallEventListeners( VCLEVENT_PUSHBUTTON_TOGGLE );
     maToggleHdl.Call( this );
 }
 
@@ -1272,11 +1281,8 @@ OKButton::OKButton( Window* pParent, const ResId& rResId ) :
 
 void OKButton::Click()
 {
-    ImplDelData aDelData;
-    ImplAddDel( &aDelData );
-
     // Ist kein Link gesetzt, dann schliesse Parent
-    if ( !GetClickHdl() || GetComponentInterface( FALSE ).is() )
+    if ( !GetClickHdl() )
     {
         Window* pParent = GetParent();
         if ( pParent->IsSystemWindow() )
@@ -1299,10 +1305,8 @@ void OKButton::Click()
             }
         }
     }
-
-    if ( !aDelData.IsDelete() )
+    else
     {
-        ImplRemoveDel( &aDelData );
         PushButton::Click();
     }
 }
@@ -1343,11 +1347,8 @@ CancelButton::CancelButton( Window* pParent, const ResId& rResId ) :
 
 void CancelButton::Click()
 {
-    ImplDelData aDelData;
-    ImplAddDel( &aDelData );
-
     // Ist kein Link gesetzt, dann schliesse Parent
-    if ( !GetClickHdl() || GetComponentInterface( FALSE ).is() )
+    if ( !GetClickHdl() )
     {
         Window* pParent = GetParent();
         if ( pParent->IsSystemWindow() )
@@ -1370,10 +1371,8 @@ void CancelButton::Click()
             }
         }
     }
-
-    if ( !aDelData.IsDelete() )
+    else
     {
-        ImplRemoveDel( &aDelData );
         PushButton::Click();
     }
 }
@@ -1415,7 +1414,7 @@ HelpButton::HelpButton( Window* pParent, const ResId& rResId ) :
 void HelpButton::Click()
 {
     // Ist kein Link gesetzt, loese Hilfe aus
-    if ( !GetClickHdl() || GetComponentInterface( FALSE ).is() )
+    if ( !GetClickHdl() )
     {
         Window* pFocusWin = Application::GetFocusWindow();
         if ( !pFocusWin )
@@ -1424,7 +1423,6 @@ void HelpButton::Click()
         HelpEvent aEvt( pFocusWin->GetPointerPosPixel(), HELPMODE_CONTEXT );
         pFocusWin->RequestHelp( aEvt );
     }
-
     PushButton::Click();
 }
 
@@ -2180,6 +2178,7 @@ void RadioButton::DataChanged( const DataChangedEvent& rDCEvt )
 
 void RadioButton::Toggle()
 {
+    ImplCallEventListeners( VCLEVENT_RADIOBUTTON_TOGGLE );
     maToggleHdl.Call( this );
 }
 
@@ -2911,6 +2910,7 @@ void CheckBox::DataChanged( const DataChangedEvent& rDCEvt )
 
 void CheckBox::Toggle()
 {
+    ImplCallEventListeners( VCLEVENT_CHECKBOX_TOGGLE );
     maToggleHdl.Call( this );
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-24 14:24:40 $
+ *  last change: $Author: mt $ $Date: 2001-11-27 09:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,6 +519,7 @@ IMPL_LINK( ComboBox, ImplDoubleClickHdl, void*, EMPTYARG )
 
 void ComboBox::Select()
 {
+    ImplCallEventListeners( VCLEVENT_COMBOBOX_SELECT );
     maSelectHdl.Call( this );
 }
 
@@ -526,6 +527,7 @@ void ComboBox::Select()
 
 void ComboBox::DoubleClick()
 {
+    ImplCallEventListeners( VCLEVENT_COMBOBOX_DOUBLECLICK );
     maDoubleClickHdl.Call( this );
 }
 

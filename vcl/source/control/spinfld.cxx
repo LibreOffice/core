@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spinfld.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-06 16:33:59 $
+ *  last change: $Author: mt $ $Date: 2001-11-27 09:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,6 +262,7 @@ SpinField::~SpinField()
 
 void SpinField::Up()
 {
+    ImplCallEventListeners( VCLEVENT_SPINFIELD_UP );
     maUpHdlLink.Call( this );
 }
 
@@ -269,6 +270,7 @@ void SpinField::Up()
 
 void SpinField::Down()
 {
+    ImplCallEventListeners( VCLEVENT_SPINFIELD_DOWN );
     maDownHdlLink.Call( this );
 }
 
@@ -276,6 +278,7 @@ void SpinField::Down()
 
 void SpinField::First()
 {
+    ImplCallEventListeners( VCLEVENT_SPINFIELD_FIRST );
     maFirstHdlLink.Call( this );
 }
 
@@ -283,6 +286,7 @@ void SpinField::First()
 
 void SpinField::Last()
 {
+    ImplCallEventListeners( VCLEVENT_SPINFIELD_LAST );
     maLastHdlLink.Call( this );
 }
 

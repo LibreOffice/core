@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-27 09:45:10 $
+ *  last change: $Author: mt $ $Date: 2001-11-27 09:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,9 @@ long Control::Notify( NotifyEvent& rNEvt )
             mbHasFocus = TRUE;
             ImplDelData aDelData;
             ImplAddDel( &aDelData );
+            ImplCallEventListeners( VCLEVENT_CONTROL_GETFOCUS );
+            if ( aDelData.IsDelete() )
+                return TRUE;
             maGetFocusHdl.Call( this );
             if ( aDelData.IsDelete() )
                 return TRUE;
@@ -159,6 +162,9 @@ long Control::Notify( NotifyEvent& rNEvt )
                 mbHasFocus = FALSE;
                 ImplDelData aDelData;
                 ImplAddDel( &aDelData );
+                ImplCallEventListeners( VCLEVENT_CONTROL_LOSEFOCUS );
+                if ( aDelData.IsDelete() )
+                    return TRUE;
                 maLoseFocusHdl.Call( this );
                 if ( aDelData.IsDelete() )
                     return TRUE;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scrbar.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-25 12:40:17 $
+ *  last change: $Author: mt $ $Date: 2001-11-27 09:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -982,6 +982,7 @@ void ScrollBar::DataChanged( const DataChangedEvent& rDCEvt )
 
 void ScrollBar::Scroll()
 {
+    ImplCallEventListeners( VCLEVENT_SCROLLBAR_SCROLL );
     maScrollHdl.Call( this );
 }
 
@@ -989,6 +990,7 @@ void ScrollBar::Scroll()
 
 void ScrollBar::EndScroll()
 {
+    ImplCallEventListeners( VCLEVENT_SCROLLBAR_ENDSCROLL );
     maEndScrollHdl.Call( this );
 }
 

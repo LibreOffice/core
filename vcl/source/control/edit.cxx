@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-23 12:38:57 $
+ *  last change: $Author: mt $ $Date: 2001-11-27 09:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1898,6 +1898,7 @@ void Edit::Modify()
         if ( mpUpdateDataTimer )
             mpUpdateDataTimer->Start();
 
+        ImplCallEventListeners( VCLEVENT_EDIT_MODIFY );
         maModifyHdl.Call( this );
     }
 }
