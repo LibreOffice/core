@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 07:54:22 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 10:37:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -673,9 +673,19 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
     long nCjkHeight = TwipsToHMM(nCjkTHeight);
     long nCtlHeight = TwipsToHMM(nCtlTHeight);
 
-    //  Items in Edit-Set stecken
+    //  put items into EditEngine ItemSet
 
-    rEditSet.Put( aColorItem );
+    if ( aColorItem.GetValue().GetColor() == COL_AUTO )
+    {
+        //  #108979# When cell attributes are converted to EditEngine paragraph attributes,
+        //  don't create a hard item for automatic color, because that would be converted
+        //  to black when the item's Store method is used in CreateTransferable/WriteBin.
+        //  COL_AUTO is the EditEngine's pool default, so ClearItem will result in automatic
+        //  color, too, without having to store the item.
+        rEditSet.ClearItem( EE_CHAR_COLOR );
+    }
+    else
+        rEditSet.Put( aColorItem );
     rEditSet.Put( aFontItem );
     rEditSet.Put( aCjkFontItem );
     rEditSet.Put( aCtlFontItem );
