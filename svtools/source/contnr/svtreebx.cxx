@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:13:02 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 10:14:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1401,7 +1401,37 @@ void SvTreeListBox::EditEntry( SvLBoxEntry* pEntry )
         pEntry = GetCurEntry();
     if( pEntry )
     {
-        SvLBoxString* pItem = (SvLBoxString* )pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING);
+        long nClickX = pImp->aEditClickPos.X();
+        bool bIsMouseTriggered = nClickX >= 0;
+
+        SvLBoxString* pItem = NULL;
+        USHORT nCount = pEntry->ItemCount();
+        for( USHORT i = 0 ; i < nCount ; i++ )
+        {
+            SvLBoxItem* pTmpItem = pEntry->GetItem( i );
+            if( pTmpItem->IsA() != SV_ITEM_ID_LBOXSTRING )
+                continue;
+
+            SvLBoxTab* pTab = GetTab( pEntry, pTmpItem );
+            long nTabPos = pTab->GetPos();
+            long nNextTabPos = -1;
+            if( i < nCount - 1 )
+            {
+                SvLBoxItem* pNextItem = pEntry->GetItem( i + 1 );
+                SvLBoxTab* pNextTab = GetTab( pEntry, pNextItem );
+                nNextTabPos = pNextTab->GetPos();
+            }
+
+            if( pTab && pTab->IsEditable() )
+            {
+                if( !bIsMouseTriggered || (nClickX > nTabPos && (nNextTabPos == -1 || nClickX < nNextTabPos ) ) )
+                {
+                    pItem = static_cast<SvLBoxString*>( pTmpItem );
+                    break;
+                }
+            }
+        }
+
         Selection aSel( SELECTION_MIN, SELECTION_MAX );
         if( pItem && EditingEntry( pEntry, aSel ) )
         {
