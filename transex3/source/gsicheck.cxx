@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gsicheck.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gh $ $Date: 2001-12-05 11:12:31 $
+ *  last change: $Author: ihi $ $Date: 2002-09-11 10:02:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,16 +96,16 @@ DECLARE_LIST( GSIBlock_Impl, GSILine * );
 class GSIBlock : public GSIBlock_Impl
 {
 private:
-    GSILine *pGermanLine;
+    GSILine *pSourceLine;
     void PrintList( ParserMessageList &rList, ByteString aPrefix, GSILine *pLine );
     BOOL bPrintContext;
     BOOL bInternal;
 
 public:
-    GSIBlock( BOOL PbPrintContext, BOOL bInt ) : pGermanLine( NULL ), bPrintContext( PbPrintContext ), bInternal( bInt ) {};
+    GSIBlock( BOOL PbPrintContext, BOOL bInt ) : pSourceLine( NULL ), bPrintContext( PbPrintContext ), bInternal( bInt ) {};
     ~GSIBlock();
     void PrintError( ByteString aMsg, ByteString aPrefix, ByteString aContext, ULONG nLine, ByteString aUniqueId = ByteString() );
-    void InsertLine( const ByteString &rLine, ULONG nLine );
+    void InsertLine( const ByteString &rLine, ULONG nLine , const int sourceLang);
     BOOL CheckSyntax( ULONG nLine );
 
     void WriteError( SvStream &aErrOut );
@@ -136,14 +136,14 @@ GSILine::GSILine( const ByteString &rLine, ULONG nLine )
 GSIBlock::~GSIBlock()
 /*****************************************************************************/
 {
-    delete pGermanLine;
+    delete pSourceLine;
 
     for ( ULONG i = 0; i < Count(); i++ )
         delete ( GetObject( i ));
 }
 
 /*****************************************************************************/
-void GSIBlock::InsertLine( const ByteString &rLine, ULONG nLine )
+void GSIBlock::InsertLine( const ByteString &rLine, ULONG nLine , const int sourceLang)
 /*****************************************************************************/
 {
     GSILine *pLine = new GSILine( rLine, nLine );
@@ -153,13 +153,13 @@ void GSIBlock::InsertLine( const ByteString &rLine, ULONG nLine )
 
     if ( sTmp.GetTokenCount( '\t' ) < 5 )
     {
-        PrintError( "Unable to determin languge and/or state", "Line format", rLine.Copy( 0,100 ), nLine );
+        PrintError( "Unable to determin language and/or state", "Line format", rLine.Copy( 0,100 ), nLine );
         pLine->NotOK();
     }
 
     USHORT nLangId = sTmp.GetToken( 2, '\t' ).ToInt32();
-    if ( nLangId == 49 )
-        pGermanLine = pLine;
+    if ( nLangId == sourceLang )
+        pSourceLine = pLine;
     else {
         ULONG nPos = 0;
 
@@ -222,18 +222,18 @@ BOOL GSIBlock::CheckSyntax( ULONG nLine )
 {
     static LingTest aTester;
 
-    if ( !pGermanLine )
+    if ( !pSourceLine )
     {
-        PrintError( "No German reference defined!", "File format", "", nLine );
+        PrintError( "No source languages reference defined!", "File format", "", nLine );
         aTester.ReferenceOK( "" );
     }
     else
     {
-        if ( !aTester.ReferenceOK( *pGermanLine ) )
+        if ( !aTester.ReferenceOK( *pSourceLine ) )
         {
             if ( bInternal )
-                PrintList( aTester.GetReferenceErrors(), "ReferenceString", pGermanLine );
-            pGermanLine->NotOK();
+                PrintList( aTester.GetReferenceErrors(), "ReferenceString", pSourceLine );
+            pSourceLine->NotOK();
         }
     }
 
@@ -256,7 +256,7 @@ BOOL GSIBlock::CheckSyntax( ULONG nLine )
 void GSIBlock::WriteError( SvStream &aErrOut )
 {
     BOOL bHasError = FALSE;
-    BOOL bCopyAll = ( !pGermanLine || !pGermanLine->IsOK() ) && bInternal;
+    BOOL bCopyAll = ( !pSourceLine || !pSourceLine->IsOK() ) && bInternal;
     ULONG i;
     for ( i = 0; i < Count(); i++ )
     {
@@ -267,13 +267,13 @@ void GSIBlock::WriteError( SvStream &aErrOut )
         }
     }
 
-    if ( pGermanLine && ( bHasError || ( !pGermanLine->IsOK() && bInternal ) ) )
-        aErrOut.WriteLine( *pGermanLine );
+    if ( pSourceLine && ( bHasError || ( !pSourceLine->IsOK() && bInternal ) ) )
+        aErrOut.WriteLine( *pSourceLine );
 }
 
 void GSIBlock::WriteCorrect( SvStream &aOkOut )
 {
-    if ( !pGermanLine )
+    if ( !pSourceLine )
         return;
 
     BOOL bHasOK = FALSE;
@@ -287,8 +287,8 @@ void GSIBlock::WriteCorrect( SvStream &aOkOut )
         }
     }
 
-    if ( pGermanLine && bHasOK )
-        aOkOut.WriteLine( *pGermanLine );
+    if ( pSourceLine && bHasOK )
+        aOkOut.WriteLine( *pSourceLine );
 }
 
 /*****************************************************************************/
@@ -309,12 +309,13 @@ void Help()
     fprintf( stdout, "\n" );
     fprintf( stdout, "gsicheck checks the syntax of tags in GSI-Files (Gutschmitt-Interface)\n" );
     fprintf( stdout, "\n" );
-    fprintf( stdout, "Syntax: gsicheck [ -c ] [ -we ] [ -wc ] filename\n" );
+    fprintf( stdout, "Syntax: gsicheck [ -c ] [ -we ] [ -wc ] [ -i ] [ -l ISO-code ] filename\n" );
     fprintf( stdout, "\n" );
     fprintf( stdout, "-c    Add context to error message (Print the line containing the error)\n" );
     fprintf( stdout, "-we   Write GSI-File containing all errors\n" );
     fprintf( stdout, "-wc   Write GSI-File containing all correct parts\n" );
     fprintf( stdout, "-i    Check records marked 'int' rather than marked 'ext' or similar\n" );
+    fprintf( stdout, "-l    Numerical 2 digits ISO-code of the source language. Default = 49 \n" );
        fprintf( stdout, "\n" );
 }
 
@@ -352,6 +353,7 @@ int _cdecl main( int argc, char *argv[] )
     BOOL bInternal = FALSE;
     BOOL bWriteError = FALSE;
     BOOL bWriteCorrect = FALSE;
+    int  sourceLang=49;
     ByteString aFilename;
     for ( USHORT i = 1 ; i < argc ; i++ )
     {
@@ -376,6 +378,7 @@ int _cdecl main( int argc, char *argv[] )
                     break;
                 case 'i':bInternal = TRUE;
                     break;
+                case 'l': sourceLang=( *(argv[ i ]+3)-48 )*10 + ( *(argv[ i ]+4)-48 );i++;break;
                 default:
                     fprintf( stderr, "\nERROR: Unknown Switch %s!\n\n", argv[ i ] );
                     bError = TRUE;
@@ -383,11 +386,11 @@ int _cdecl main( int argc, char *argv[] )
         }
         else
         {
-            if ( !aFilename.Len() )
+            if  ( !aFilename.Len())
                 aFilename = ByteString( argv[ i ] );
             else
             {
-                fprintf( stderr, "\nERROR: Only one filename may be specified!\n\n", argv[ i ] );
+                fprintf( stderr, "\nERROR: Only one filename may be specified!\n\n", argv[ i ]);
                 bError = TRUE;
             }
         }
@@ -481,7 +484,7 @@ int _cdecl main( int argc, char *argv[] )
                     aOldId = aId;
                 }
 
-                pBlock->InsertLine( sGSILine, nLine );
+                pBlock->InsertLine( sGSILine, nLine , sourceLang);
             }
         }
     }
