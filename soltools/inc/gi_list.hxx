@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gi_list.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2001-06-11 16:05:17 $
+ *  last change: $Author: np $ $Date: 2001-06-12 13:18:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ class List_GenericInfo
         bool                operator==( const const_iterator & ) const;
         bool                operator!=( const const_iterator & ) const;
 
+                            const_iterator();
                             const_iterator( const DynamicList< GenericInfo >::const_iterator & );
       private: DynamicList< GenericInfo >::const_iterator it;
     };
@@ -100,6 +101,7 @@ class List_GenericInfo
         bool                operator==( const iterator & ) const;
         bool                operator!=( const iterator & ) const;
 
+                            iterator();
                             iterator( const DynamicList< GenericInfo >::iterator & );
       private: DynamicList< GenericInfo >::iterator it;
     };
@@ -185,6 +187,10 @@ const_iterator::operator!=( const const_iterator & i_rIter ) const
     { return it != i_rIter.it; }
 
 inline List_GenericInfo::
+const_iterator::const_iterator()
+    :   it(0) { }
+
+inline List_GenericInfo::
 const_iterator::const_iterator( const DynamicList< GenericInfo >::const_iterator & i_rDynListIter )
     :   it(i_rDynListIter) { }
 
@@ -208,6 +214,10 @@ inline bool
 List_GenericInfo::
 iterator::operator!=( const iterator & i_rIter ) const
     { return it != i_rIter.it; }
+
+inline List_GenericInfo::
+iterator::iterator()
+    :   it(0) { }
 
 inline List_GenericInfo::
 iterator::iterator( const DynamicList< GenericInfo >::iterator & i_rDynListIter )
