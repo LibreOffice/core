@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-16 15:21:01 $
+ *  last change: $Author: sab $ $Date: 2001-05-17 14:09:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,16 +76,17 @@ namespace xmloff { namespace token {
     {
         sal_Int32 nLength;
         const sal_Char* pChar;
+        ::rtl::OUString* pOUString;
     };
 
 
 
 
-#define TOKEN( s ) { sizeof(s)-1, s }
+#define TOKEN( s ) { sizeof(s)-1, s, NULL }
 
-    const struct XMLTokenEntry aTokenList[] =
+    struct XMLTokenEntry aTokenList[] =
     {
-        { 0, NULL },                            // XML_TOKEN_START
+        { 0, NULL, NULL },                            // XML_TOKEN_START
 
         // common XML
         TOKEN( "CDATA" ),            // XML_CDATA
@@ -1980,7 +1981,7 @@ namespace xmloff { namespace token {
         TOKEN( "zoom-type" ),                  // XML_ZOOM_TYPE
         TOKEN( "zoom-value" ),                 // XML_ZOOM_VALUE
 
-        { 0, NULL }                            // XML_TOKEN_END
+        { 0, NULL, NULL }                      // XML_TOKEN_END
     };
 
 
@@ -1988,9 +1989,11 @@ namespace xmloff { namespace token {
     // get OUString representation of token
     const OUString& GetXMLToken( enum XMLTokenEnum eToken )
     {
-        const struct XMLTokenEntry* pToken = &aTokenList[(sal_uInt16)eToken];
-        return *( new OUString( pToken->pChar, pToken->nLength,
-                                RTL_TEXTENCODING_ASCII_US ) );
+        XMLTokenEntry* pToken = &aTokenList[(sal_uInt16)eToken];
+        if (!pToken->pOUString)
+            pToken->pOUString = new OUString( pToken->pChar, pToken->nLength,
+                                RTL_TEXTENCODING_ASCII_US );
+        return *pToken->pOUString;
     }
 
     // does rString represent eToken?
@@ -1998,8 +2001,25 @@ namespace xmloff { namespace token {
         const OUString& rString,
         enum XMLTokenEnum eToken )
     {
-        const struct XMLTokenEntry* pToken = &aTokenList[(sal_uInt16)eToken];
+        const XMLTokenEntry* pToken = &aTokenList[(sal_uInt16)eToken];
         return rString.equalsAsciiL( pToken->pChar, pToken->nLength );
+    }
+
+    // gives all allocated memory for OUString* back
+    void ResetTokens()
+    {
+        sal_uInt16 i(1);
+        XMLTokenEntry* pToken = &aTokenList[i];
+        while (pToken->pChar)
+        {
+            if (pToken->pOUString)
+            {
+                delete pToken->pOUString;
+                pToken->pOUString = NULL;
+            }
+            i++;
+            pToken = &aTokenList[i];
+        }
     }
 
 
