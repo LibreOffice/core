@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txenctab.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: er $ $Date: 2000-12-20 11:28:08 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 // include ---------------------------------------------------------------
 
 #ifndef _RESARY_HXX //autogen
-#include <vcl/resary.hxx>
+#include <tools/resary.hxx>
 #endif
 #ifndef _RTL_TEXTENC_H
 #include <rtl/textenc.h>
