@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fumeasur.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:35 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:05:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,9 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
+
+#include "fumeasur.hxx"
 
 #include <svx/measure.hxx>
 #ifndef _SV_MSGBOX_HXX //autogen
@@ -70,11 +71,15 @@
 #include <sfx2/request.hxx>
 #endif
 
-#include "fumeasur.hxx"
-#include "sdview.hxx"
-#include "viewshel.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
 #include "drawdoc.hxx"
 
+namespace sd {
 
 TYPEINIT1( FuMeasureDlg, FuPoor );
 
@@ -84,9 +89,13 @@ TYPEINIT1( FuMeasureDlg, FuPoor );
 |*
 \************************************************************************/
 
-FuMeasureDlg::FuMeasureDlg(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                    SdDrawDocument* pDoc, SfxRequest& rReq)
-       : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+FuMeasureDlg::FuMeasureDlg (
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq)
+    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
     SfxItemSet aNewAttr( pDoc->GetPool() );
     pView->GetAttributes( aNewAttr );
@@ -120,3 +129,4 @@ FuMeasureDlg::FuMeasureDlg(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 }
 
 
+} // end of namespace sd
