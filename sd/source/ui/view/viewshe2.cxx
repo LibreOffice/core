@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:35:40 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:05:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1027,9 +1027,7 @@ BOOL ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
         Rectangle aRect = pObj->GetLogicRect();
         Size aDrawSize = aRect.GetSize();
 
-        // TODO/LEAN: getMapUnit still needs running state
-        svt::EmbeddedObjectRef::TryRunningState( pObj->GetObjRef() );
-
+        // TODO/LEAN: getMapUnit may switch object to running state
         awt::Size aSz = pObj->GetObjRef()->getVisualAreaSize( pSdClient->GetAspect() );
         Size aObjAreaSize( aSz.Width, aSz.Height );
 
