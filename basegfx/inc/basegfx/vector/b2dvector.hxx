@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dvector.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:36:55 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:37:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,38 +66,18 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #endif
 
+#ifndef _BGFX_VECTOR_B2IVECTOR_HXX
+#include <basegfx/vector/b2ivector.hxx>
+#endif
+
+#ifndef _BGFX_VECTOR_B2ENUMS_HXX
+#include <basegfx/vector/b2enums.hxx>
+#endif
+
 namespace basegfx
 {
     // predeclaration
     class B2DHomMatrix;
-
-    /** Descriptor for the mathematical orientations of two 2D Vectors
-    */
-    enum B2VectorOrientation
-    {
-        /// mathematically positive oriented
-        ORIENTATION_POSITIVE = 0,
-
-        /// mathematically negative oriented
-        ORIENTATION_NEGATIVE,
-
-        /// mathematically neutral, thus parallel
-        ORIENTATION_NEUTRAL
-    };
-
-    /** Descriptor for the mathematical continuity of two 2D Vectors
-    */
-    enum B2VectorContinuity
-    {
-        /// none
-        CONTINUITY_NONE = 0,
-
-        /// mathematically negative oriented
-        CONTINUITY_C1,
-
-        /// mathematically neutral, thus parallel
-        CONTINUITY_C2
-    };
 
     /** Base Point class with two double values
 
@@ -138,6 +118,15 @@ namespace basegfx
             The 2D Vector which will be copied.
         */
         B2DVector(const B2DVector& rVec)
+        :   B2DTuple(rVec)
+        {}
+
+        /** Create a copy of a 2D Vector
+
+            @param rVec
+            The 2D Vector which will be copied.
+        */
+        B2DVector(const ::basegfx::B2IVector& rVec)
         :   B2DTuple(rVec)
         {}
 
