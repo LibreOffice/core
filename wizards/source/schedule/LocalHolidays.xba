@@ -84,6 +84,7 @@ Dim lDate&amp;, VierterAdvent&amp;
 	CalInsertBankholiday(DateSerial(YearInt, 3, 28), &quot;Dr. Ingrid&quot;, cHolidayType_Half)
 	CalInsertBankholiday(DateSerial(YearInt, 4, 16), &quot;Dr. Margrete&quot;, cHolidayType_Half)
 	CalInsertBankholiday(DateSerial(YearInt, 4, 16), &quot;Palmesøndag&quot;, cHolidayType_Half)
+	&apos; &quot;Befreiungstag&quot;
 	CalInsertBankholiday(DateSerial(YearInt, 5, 5), &quot;Befrielsesdag&quot;, cHolidayType_Half)
 	CalInsertBankholiday(DateSerial(YearInt, 5, 26), &quot;Krpr. Frederik&quot;, cHolidayType_Half)
 	CalInsertBankholiday(DateSerial(YearInt, 6, 7), &quot;Pr. Joachim&quot;, cHolidayType_Half)
@@ -95,6 +96,7 @@ Dim lDate&amp;, VierterAdvent&amp;
 	CalInsertBankholiday(DateSerial(YearInt, 10, 24), &quot;FN-dag&quot;, cHolidayType_Half)
 	CalInsertBankholiday(DateSerial(YearInt, 11, 11), &quot;Morten Bisp&quot;, cHolidayType_Half)
 	&apos; all half (Memorial Days)
+	&apos;&quot;Adventsfeiertage
 	VierterAdvent = DateSerial(YearInt, 12, 24)
 	While (Weekday(VierterAdvent) &lt;&gt; 1)
 		vierterAdvent = vierterAdvent - 1
@@ -195,7 +197,7 @@ Sub FindWholeYearHolidays_PL (ByVal YearInt as Integer)
 	CalInsertBankholiday(DateSerial(YearInt, 1, 1), &quot;Nowy Rok&quot;, cHolidayType_Full)
 	&apos; &quot;Hl. 3 Könige&quot;
 	CalInsertBankholiday(DateSerial(YearInt, 1, 6), &quot;Trzech Króli&quot;, cHolidayType_Half)
-	&apos; &quot;Womens&apos; day&quot;
+	&apos; &quot;Frauentag&quot;
 	CalInsertBankholiday(DateSerial(YearInt, 3, 8), &quot;Dzieñ Kobiet&quot;, cHolidayType_Half)
 	OsternDate = CalEasterTable(YearInt)
 	CalInsertBankholiday(OsternDate-2, &quot;Wielki Pi¹tek&quot;, cHolidayType_Full)
@@ -211,7 +213,7 @@ Sub FindWholeYearHolidays_PL (ByVal YearInt as Integer)
 	CalInsertBankholiday(DateSerial(YearInt, 5, 1), &quot;Œwiêto pracy&quot;, cHolidayType_Full)
 	&apos; Memorial day of constitution
 	CalInsertBankholiday(DateSerial(YearInt, 5, 3), &quot;Dzieñ konstytucji 3-go maja&quot;, cHolidayType_Full)
-	&apos; &quot;Childrens&apos; day&quot;
+	&apos; &quot;Kindertag&quot;
 	CalInsertBankholiday(DateSerial(YearInt, 6, 1), &quot;Dzieñ Dziecka&quot;, cHolidayType_Half)
 	&apos; &quot;Maria Himmelfahrt&quot;
 	CalInsertBankholiday(DateSerial(YearInt, 8, 15), &quot;Matki Boskiej Zielnej&quot;, cHolidayType_Half)
@@ -232,26 +234,25 @@ End Sub
 Sub FindWholeYearHolidays_RU (ByVal YearInt as Integer)
 Dim lDate&amp;
 	&apos; New Year
-	CalInsertBankholiday(DateSerial(YearInt, 1, 1), &quot;Íîâûé ãîä&quot;, cHolidayType_Full)
-	CalInsertBankholiday(DateSerial(YearInt, 1, 2), &quot;Íîâûé ãîä&quot;, cHolidayType_Full)
+	CalInsertBankholiday(DateSerial(YearInt, 1, 1), &quot;Новый Год&quot;, cHolidayType_Full)
+	CalInsertBankholiday(DateSerial(YearInt, 1, 2), &quot;Новый Год&quot;, cHolidayType_Full)
 	&apos; Russian Christmas&quot;
-	CalInsertBankholiday(DateSerial(YearInt, 1, 7), &quot;Ðîæäåñòâî&quot;, cHolidayType_Full)
+	CalInsertBankholiday(DateSerial(YearInt, 1, 7), &quot;Рождество&quot;, cHolidayType_Full)
+	&apos;Day of Defender of Motherland
+	CalInsertBankholiday(DateSerial(YearInt, 2, 23), &quot;День Защитника Отечества&quot;, cHolidayType_Full)
 	&apos; Woman Day
-	CalInsertBankholiday(DateSerial(YearInt, 3, 8), &quot;Ìåæäóíàðîäíûé æåíñêèé äåíü Ïðàçäíèê âåñíû è òðóäà &quot;, cHolidayType_Full)
-	&apos;	Easter, get it with look-up table
-	lDate = CalEasterTable(YearInt) + 7
-	CalInsertBankholiday(lDate, &quot;Ïàñõà&quot;, cHolidayType_Full)
-	&apos; First of May
-	CalInsertBankholiday(DateSerial(YearInt, 5, 1), &quot;Ïðàçäíèê âåñíû è òðóäà &quot;, cHolidayType_Full)
-	CalInsertBankholiday(DateSerial(YearInt, 5, 2), &quot;Ïðàçäíèê âåñíû è òðóäà&quot;, cHolidayType_Full)
+	CalInsertBankholiday(DateSerial(YearInt, 3, 8), &quot;Международный Женский День&quot;, cHolidayType_Full)
+	&apos; Spring and labor holiday
+	CalInsertBankholiday(DateSerial(YearInt, 5, 1), &quot;Праздник Весны и Труда&quot;, cHolidayType_Full)
+	CalInsertBankholiday(DateSerial(YearInt, 5, 2), &quot;Праздник Весны и Труда&quot;, cHolidayType_Full)
 	&apos; Victory of the second World War
-	CalInsertBankholiday(DateSerial(YearInt, 5, 9), &quot;Äåíü Ïîáåäû&quot;, cHolidayType_Full)
-	&apos; End of Soviet Union
-	CalInsertBankholiday(DateSerial(YearInt, 6, 12), &quot;Äåíü íåçàâèñèìîñòè&quot;, cHolidayType_Full)
-	&apos; Peace Day
-	CalInsertBankholiday(DateSerial(YearInt, 11, 7), &quot;Äåíü ñîãëàñèÿ è ïðèìèðåíèÿÄåíü ñîãëàñèÿ è ïðèìèðåíèÿ&quot;, cHolidayType_Full)
+	CalInsertBankholiday(DateSerial(YearInt, 5, 9), &quot;День Победы&quot;, cHolidayType_Full)
+	&apos; Independence Day
+	CalInsertBankholiday(DateSerial(YearInt, 6, 12), &quot;День Независимости&quot;, cHolidayType_Full)
+	&apos; Day of Accord and Conciliation
+	CalInsertBankholiday(DateSerial(YearInt, 11, 7), &quot;День Согласия и Примирения&quot;, cHolidayType_Full)
 	&apos; Constitution Day
-	CalInsertBankholiday(DateSerial(YearInt, 12, 12), &quot;Äåíü êîíñòèòóöèè&quot;, cHolidayType_Full)
+	CalInsertBankholiday(DateSerial(YearInt, 12, 12), &quot;День Конституции&quot;, cHolidayType_Full)
 End Sub
 
 
@@ -325,7 +326,7 @@ Dim lElectDate as Long
 	CalInsertBankholiday(GetMonthDate(YearInt, 7, 1, 21), &quot;Parents&apos; Day&quot;, cHolidayType_Half)
 	CalInsertBankholiday(GetMonthDate(YearInt, 8, 1, 0), &quot;Friendship Day&quot;, cHolidayType_Half)
 
-	&apos; 1st Monday in Sep : Labor Day, Full
+	&apos;	1st Monday in Sep : Labor Day, Full
 	CalInsertBankholiday(GetMonthDate(YearInt, 9, 2, 0), &quot;Labor Day&quot;, cHolidayType_Full)
 	&apos; Sunday after Labor Day Grandparents&apos; Day
 	CalInsertBankholiday(GetMonthDate(YearInt, 9, 2, 0)+6, &quot;Grandparents&apos; Day&quot;, cHolidayType_Half)
@@ -403,7 +404,7 @@ End Function
 Sub FindWholeYearHolidays_CN(YearInt as Integer)
 	CalculateChineseNewYear(YearInt)
 	CalInsertBankholiday(DateSerial(YearInt, 1, 1), &quot;元旦&quot;, cHolidayType_Full)			&apos; New Year
-	CalInsertBankholiday(DateSerial(YearInt, 3, 8), &quot;妇女节&quot;, cHolidayType_Half)           &apos; Women&apos;s Day
+	CalInsertBankholiday(DateSerial(YearInt, 3, 8), &quot;妇女节&quot;, cHolidayType_Half)                       &apos; Women&apos;s Day
 	CalInsertBankholiday(DateSerial(YearInt, 4, 5), &quot;清明节&quot;, cHolidayType_Half)			&apos; Day of the deads
 	CalInsertBankholiday(DateSerial(YearInt, 5, 1), &quot;劳动节&quot;, cHolidayType_Full)			&apos; International Labour Day
 	CalInsertBankholiday(DateSerial(YearInt, 6, 1), &quot;儿童节&quot;, cHolidayType_Half)			&apos; Children&apos;s Day
