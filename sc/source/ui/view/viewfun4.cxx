@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 16:13:51 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 13:41:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ BOOL bPasteIsDrop = FALSE;
 
 //==================================================================
 
-void ScViewFunc::PasteRTF( USHORT nStartCol, USHORT nStartRow,
+void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
                                 const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::datatransfer::XTransferable >& rxTransferable )
 {
@@ -135,7 +135,7 @@ void ScViewFunc::PasteRTF( USHORT nStartCol, USHORT nStartRow,
 
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
         ScDocument* pDoc = pDocSh->GetDocument();
-        USHORT nTab = GetViewData()->GetTabNo();
+        SCTAB nTab = GetViewData()->GetTabNo();
         const BOOL bRecord (pDoc->IsUndoEnabled());
 
         const ScPatternAttr* pPattern = pDoc->GetPattern( nStartCol, nStartRow, nTab );
@@ -157,7 +157,7 @@ void ScViewFunc::PasteRTF( USHORT nStartCol, USHORT nStartRow,
         ULONG nParCnt = pEngine->GetParagraphCount();
         if (nParCnt)
         {
-            USHORT nEndRow = nStartRow + (USHORT) nParCnt - 1;
+            SCROW nEndRow = nStartRow + static_cast<SCROW>(nParCnt) - 1;
             if (nEndRow > MAXROW)
                 nEndRow = MAXROW;
 
@@ -168,7 +168,7 @@ void ScViewFunc::PasteRTF( USHORT nStartCol, USHORT nStartRow,
                 pDoc->CopyToDocument( nStartCol,nStartRow,nTab, nStartCol,nEndRow,nTab, IDF_ALL, FALSE, pUndoDoc );
             }
 
-            USHORT nRow = nStartRow;
+            SCROW nRow = nStartRow;
             for( USHORT n = 0; n < nParCnt; n++ )
             {
                 EditTextObject* pObject = pEngine->CreateTextObject( n );
@@ -221,7 +221,9 @@ void ScViewFunc::PasteRTF( USHORT nStartCol, USHORT nStartRow,
 //  Thesaurus - Undo ok
 void ScViewFunc::DoThesaurus( BOOL bRecord )
 {
-    USHORT nCol, nRow, nTab;
+    SCCOL nCol;
+    SCROW nRow;
+    SCTAB nTab;
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
     ScMarkData& rMark = GetViewData()->GetMarkData();
@@ -379,7 +381,9 @@ void ScViewFunc::DoHangulHanjaConversion( BOOL bRecord )
 
 void ScViewFunc::DoSheetConversion( ScConversionType eConvType, BOOL bRecord )
 {
-    USHORT nCol, nRow, nTab;
+    SCCOL nCol;
+    SCROW nRow;
+    SCTAB nTab;
     ScViewData& rViewData = *GetViewData();
     ScDocShell* pDocSh = rViewData.GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
@@ -429,8 +433,8 @@ void ScViewFunc::DoSheetConversion( ScConversionType eConvType, BOOL bRecord )
 
         if ( rMark.GetSelectCount() > 1 )
         {
-            USHORT nTabCount = pDoc->GetTableCount();
-            for (USHORT i=0; i<nTabCount; i++)
+            SCTAB nTabCount = pDoc->GetTableCount();
+            for (SCTAB i=0; i<nTabCount; i++)
                 if ( rMark.GetTableSelect(i) && i != nTab )
                 {
                     pUndoDoc->AddUndoTab( i, i );
@@ -486,8 +490,8 @@ void ScViewFunc::DoSheetConversion( ScConversionType eConvType, BOOL bRecord )
     {
         if (bRecord)
         {
-            USHORT nNewCol = rViewData.GetCurX();
-            USHORT nNewRow = rViewData.GetCurY();
+            SCCOL nNewCol = rViewData.GetCurX();
+            SCROW nNewRow = rViewData.GetCurY();
             rViewData.GetDocShell()->GetUndoManager()->AddUndoAction(
                 new ScUndoConversion(
                         rViewData.GetDocShell(), rMark,
@@ -580,8 +584,8 @@ BOOL ScViewFunc::PasteFile( const Point& rPos, const String& rFile, BOOL bLink )
         Rectangle aRect( rPos, Size(0,0) );
         ScRange aRange = GetViewData()->GetDocument()->
                             GetRange( GetViewData()->GetTabNo(), aRect );
-        USHORT nPosX = aRange.aStart.Col();
-        USHORT nPosY = aRange.aStart.Row();
+        SCCOL nPosX = aRange.aStart.Col();
+        SCROW nPosY = aRange.aStart.Row();
 
         InsertBookmark( aStrURL, aStrURL, nPosX, nPosY );
         return TRUE;
@@ -608,7 +612,7 @@ BOOL ScViewFunc::PasteFile( const Point& rPos, const String& rFile, BOOL bLink )
 BOOL ScViewFunc::PasteBookmark( ULONG nFormatId,
                                 const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::datatransfer::XTransferable >& rxTransferable,
-                                USHORT nPosX, USHORT nPosY )
+                                SCCOL nPosX, SCROW nPosY )
 {
     INetBookmark aBookmark;
     TransferableDataHelper aDataHelper( rxTransferable );
@@ -620,7 +624,7 @@ BOOL ScViewFunc::PasteBookmark( ULONG nFormatId,
 }
 
 void ScViewFunc::InsertBookmark( const String& rDescription, const String& rURL,
-                                    USHORT nPosX, USHORT nPosY, const String* pTarget,
+                                    SCCOL nPosX, SCROW nPosY, const String* pTarget,
                                     BOOL bTryReplace )
 {
     ScViewData* pViewData = GetViewData();
@@ -640,7 +644,7 @@ void ScViewFunc::InsertBookmark( const String& rDescription, const String& rURL,
     //  in nicht editierte Zelle einfuegen
 
     ScDocument* pDoc = GetViewData()->GetDocument();
-    USHORT nTab = GetViewData()->GetTabNo();
+    SCTAB nTab = GetViewData()->GetTabNo();
     ScAddress aCellPos( nPosX, nPosY, nTab );
     ScBaseCell* pCell = pDoc->GetCell( aCellPos );
     EditEngine aEngine( pDoc->GetEnginePool() );
