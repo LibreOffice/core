@@ -1,0 +1,12 @@
+    <node oor:name="calc8_template" oor:op="replace">
+        <prop oor:name="DetectService"><value>com.sun.star.comp.calc.FormatDetector</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>ots</value></prop>
+        <prop oor:name="MediaType"/>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>calc8_template</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">Calc 8 Template</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"><value>Calc 8</value></prop>
+    </node>
