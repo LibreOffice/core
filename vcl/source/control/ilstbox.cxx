@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-24 16:54:31 $
+ *  last change: $Author: mt $ $Date: 2001-04-25 11:28:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -769,13 +769,25 @@ void ImplListBoxWindow::MouseButtonDown( const MouseEvent& rMEvt )
 
 void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
 {
-    if ( ( ( !mbMulti && mbMouseMoveSelect ) || mbStackMode ) && mpEntryList->GetEntryCount() && !rMEvt.IsLeaveWindow() )
+    if ( rMEvt.IsLeaveWindow() )
+    {
+        if ( mbStackMode && IsMouseMoveSelect() )
+        {
+            Size aSz = GetOutputSizePixel();
+//          if ( ( rMEvt.GetPosPixel().X() < 0 ) || ( rMEvt.GetPosPixel().X() > aSz.Width() ) )
+            if ( rMEvt.GetPosPixel().Y() < 0 )
+            {
+                DeselectAll();
+            }
+        }
+    }
+    else if ( ( ( !mbMulti && IsMouseMoveSelect() ) || mbStackMode ) && mpEntryList->GetEntryCount() && !rMEvt.IsLeaveWindow() )
     {
         Point aPoint;
         Rectangle aRect( aPoint, GetOutputSizePixel() );
         if( aRect.IsInside( rMEvt.GetPosPixel() ) )
         {
-//          if ( mbMouseMoveSelect )
+            if ( IsMouseMoveSelect() )
             {
                 USHORT nSelect = (USHORT) ( ( rMEvt.GetPosPixel().Y() + mnBorder ) / mnMaxHeight ) + (USHORT) mnTop;
                 nSelect = Min( nSelect, (USHORT) ( mnTop + mnMaxVisibleEntries ) );
@@ -899,7 +911,7 @@ BOOL ImplListBoxWindow::SelectEntries( USHORT nSelect, LB_EVENT_TYPE eLET, BOOL 
             // Space fuer Selektionswechsel
             if( !bShift && ( ( eLET == LET_KEYSPACE ) || ( eLET == LET_MBDOWN ) ) )
             {
-                BOOL bSelect = !mpEntryList->IsEntryPosSelected( nSelect );
+                BOOL bSelect = ( mbStackMode && IsMouseMoveSelect() ) ? TRUE : !mpEntryList->IsEntryPosSelected( nSelect );
                 if ( mbStackMode )
                 {
                     USHORT n;
@@ -930,7 +942,7 @@ BOOL ImplListBoxWindow::SelectEntries( USHORT nSelect, LB_EVENT_TYPE eLET, BOOL 
                 bFocusChanged = TRUE;
 
                 USHORT nAnchor = mpEntryList->GetSelectionAnchor();
-                if( ( nAnchor == LISTBOX_ENTRY_NOTFOUND ) && ( mpEntryList->GetSelectEntryCount() ) )
+                if( ( nAnchor == LISTBOX_ENTRY_NOTFOUND ) && ( mpEntryList->GetSelectEntryCount() || mbStackMode ) )
                 {
                     nAnchor = mbStackMode ? 0 : mpEntryList->GetSelectEntryPos( mpEntryList->GetSelectEntryCount() - 1 );
                 }
