@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ipcd.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-08 14:59:11 $
+ *  last change: $Author: sj $ $Date: 2001-05-28 17:45:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,6 @@
 #include <svtools/fltcall.hxx>
 #include <svtools/solar.hrc>
 #include <svtools/FilterConfigItem.hxx>
-#include "strings.hrc"
-#include "dlgipcd.hrc"
-#include "dlgipcd.hxx"
 
 //============================ PCDReader ==================================
 
@@ -161,7 +158,7 @@ BOOL PCDReader::ReadPCD( SvStream & rPCD, Graphic & rGraphic,
         sal_Int32 nResolution = pConfigItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Resolution" ) ), 2 );
         if ( nResolution == 1 )
             eResolution = PCDRES_BASE4;
-        else if ( nResolution == 2 )
+        else if ( nResolution == 0 )
             eResolution = PCDRES_BASE16;
     }
     // Groesse und Position (Position in PCD-Datei) des Bildes bestimmen:
@@ -438,29 +435,6 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
 {
     PCDReader aPCDReader;
     return aPCDReader.ReadPCD( rStream, rGraphic, pCallback, pCallerData, pConfigItem );
-}
-
-//================== GraphicDialog - die exportierte Funktion ================
-
-extern "C" BOOL SAL_CALL DoImportDialog( FltCallDialogParameter& rPara )
-{
-    BOOL    bRet = FALSE;
-
-    if ( rPara.pWindow )
-    {
-        ByteString  aResMgrName( "icd" );
-        ResMgr* pResMgr;
-
-        aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
-        pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetAppInternational(). GetLanguage() );
-
-        rPara.pResMgr = pResMgr;
-        bRet = ( DlgIPCD( rPara ).Execute() == RET_OK );
-
-        delete pResMgr;
-    }
-
-    return bRet;
 }
 
 //============================= fuer Windows ==================================

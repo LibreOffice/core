@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: sj $ $Date: 2001-03-08 14:59:19 $
+#   last change: $Author: sj $ $Date: 2001-05-28 17:46:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,6 @@ PRJ=..$/..$/..
 
 PRJNAME=goodies
 TARGET=ipcd
-TARGET2=icd
 DEPTARGET=vipcd
 
 PROJECTPCH4DLL=TRUE
@@ -86,17 +85,9 @@ PROJECTPCHSOURCE=eeng_pch
 CDEFS+= -DEDITDEBUG
 .ENDIF
 
-SRCFILES =	dlgipcd.src
-
-SLOFILES =  $(SLO)$/ipcd.obj		\
-            $(SLO)$/dlgipcd.obj
+SLOFILES =  $(SLO)$/ipcd.obj
 
 # ==========================================================================
-
-RESLIB1NAME=$(TARGET2)
-RESLIB1SRSFILES=\
-             $(SRS)$/$(TARGET).srs
-
 
 SHL1TARGET=     icd$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB=     ipcd
@@ -134,16 +125,13 @@ $(MISC)$/$(SHL1TARGET).def:\
     @echo EXPORTS                                                   >>$@
 .IF "$(COM)"=="ICC"
     @echo    GraphicImport                                         	>>$@
-    @echo    DoImportDialog                                        	>>$@
 .ELSE
     @echo    _GraphicImport                                         >>$@
-    @echo    _DoImportDialog                                        >>$@
 .ENDIF
 .ELSE
     @echo option DESCRIPTION 'StarView Filter DLL'                   >$@
     @echo name $(BIN)$/$(SHL1TARGET)    			                    >>$@
     @echo    GraphicImport_  >>temp.def
-    @echo    DoImportDialog_ >>temp.def
     @gawk -f s:\util\exp.awk temp.def                               >>$@
     @del temp.def
 .ENDIF
@@ -159,7 +147,6 @@ $(MISC)$/$(SHL1TARGET).def: makefile.mk $(MISC)$/$(SHL1TARGET).flt
         @echo DATA                READ WRITE NONSHARED >>$@
         @echo EXPORTS                                  >>$@
         @echo     GraphicImport                        >>$@
-        @echo     DoImportDialog                       >>$@
 
 .ENDIF
 
