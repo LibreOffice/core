@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 08:07:36 $
+ *  last change: $Author: oj $ $Date: 2001-09-18 11:24:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1443,7 +1443,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                     xProp->setPropertyValue(PROPERTY_RESULTSETTYPE,makeAny(ResultSetType::SCROLL_SENSITIVE));
 
                 }
-                catch(SQLException&)
+                catch(Exception&)
                 {
                     // this exception doesn't matter here because when we catch an exception
                     // than the driver doesn't support this feature
