@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-12 12:57:30 $
+ *  last change: $Author: fme $ $Date: 2001-04-18 12:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -557,18 +557,23 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         // if we are still in the first row of
                         // our 2 line multiportion, we use the FirstMulti flag
                         // to indicate this
-                        if ( pCurr == &((SwMultiPortion*)pPor)->GetRoot() )
+                        if ( ((SwMultiPortion*)pPor)->IsDouble() &&
+                              pCurr == &((SwMultiPortion*)pPor)->GetRoot() )
                         {
                             GetInfo().SetFirstMulti( sal_True );
+
                             // we want to treat a double line portion like a
                             // single line portion, if there is no text in the
                             // second line
-                            if ( ( !pCurr->GetNext() ||
-                                   !pCurr->GetNext()->GetLen() ) &&
-                                 ((SwMultiPortion*)pPor)->IsDouble() )
+                            if ( !pCurr->GetNext() ||
+                                 !pCurr->GetNext()->GetLen() )
                                 GetInfo().SetMulti( sal_False );
                         }
+                        // ruby portions are treated like single line portions
+                        else if( ((SwMultiPortion*)pPor)->IsRuby() )
+                            GetInfo().SetMulti( sal_False );
 
+                        // calculate cursor values
                         if( ((SwMultiPortion*)pPor)->HasRotation() )
                         {
                             long nTmp = pOrig->Width();
@@ -1138,8 +1143,10 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
             // to add a value to nTmpY for not staying in this line
             // note: these flags are only set, if this function is called during
             // up/down cursor travelling
-            if ( ((SwTxtSizeInfo*)pInf)->IsMulti() &&
-                 ((SwTxtSizeInfo*)pInf)->IsFirstMulti() )
+            // we also want to skip the first line, if we are inside ruby
+            if ( ( ((SwTxtSizeInfo*)pInf)->IsMulti() &&
+                   ((SwTxtSizeInfo*)pInf)->IsFirstMulti() ) ||
+                   ((SwMultiPortion*)pPor)->IsRuby() )
                 nTmpY += ((SwMultiPortion*)pPor)->Height();
 
             SwTxtCursorSave aSave( (SwTxtCursor*)this, (SwMultiPortion*)pPor,
