@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgegif.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 15:34:19 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ ModalDialog DLG_EXPORT_GIF
         Text[ chinese_simplified ] = "»ζΝΌ¶ΤΟσ";
         Text[ greek ] = "Αντικείμενα σχεδίασης";
         Text[ korean ] = "±ΧΈ®±β °³ΓΌ";
-        Text[ turkish ] = "Ηizimler";
+        Text[ turkish ] = "Ηizim nesneleri";
         Text[ language_user1 ] = " ";
     };
     CheckBox CBX_TRANSLUCENT
