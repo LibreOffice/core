@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: os $ $Date: 2002-10-07 14:11:16 $
+ *  last change: $Author: pb $ $Date: 2002-11-07 08:30:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ const char* cAccessSrvc = "com.sun.star.configuration.ConfigurationUpdateAccess"
 static ::rtl::OUString aBrandName;
 static ::rtl::OUString aProductVersion;
 static ::rtl::OUString aProductExtension;
+static ::rtl::OUString aXMLFileFormatVersion;
 
 //-----------------------------------------------------------------------------
 struct ConfigItemListEntry_Impl
@@ -404,18 +405,29 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         return aRet;
     }
 
+    if ( eProp == PRODUCTXMLFILEFORMATVERSION && aXMLFileFormatVersion.getLength() )
+    {
+        aRet <<= aXMLFileFormatVersion;
+        return aRet;
+    }
+
     OUString sPath = C2U(cConfigBaseURL);
     switch(eProp)
     {
         case INSTALLPATH:
-        case USERINSTALLURL:    sPath += C2U("Setup/Office"); break;
-        case LOCALE:            sPath += C2U("Setup/L10N"); break;
+        case USERINSTALLURL:                sPath += C2U("Setup/Office"); break;
+
+        case LOCALE:                        sPath += C2U("Setup/L10N"); break;
+
         case PRODUCTNAME:
         case PRODUCTVERSION:
-        case PRODUCTEXTENSION:  sPath += C2U("Setup/Product"); break;
+        case PRODUCTEXTENSION:
+        case PRODUCTXMLFILEFORMATVERSION:   sPath += C2U("Setup/Product"); break;
+
         case OFFICEINSTALL:
-        case OFFICEINSTALLURL:  sPath += C2U("Office.Common/Path/Current"); break;
-        case DEFAULTCURRENCY:   sPath += C2U("Setup/L10N"); break;
+        case OFFICEINSTALLURL:              sPath += C2U("Office.Common/Path/Current"); break;
+
+        case DEFAULTCURRENCY:               sPath += C2U("Setup/L10N"); break;
     }
     Sequence< Any > aArgs(1);
     aArgs[0] <<= sPath;
@@ -437,15 +449,16 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         OUString sProperty;
         switch(eProp)
         {
-            case USERINSTALLURL:    sProperty = C2U("ooSetupInstallURL"); break;
-            case INSTALLPATH:       sProperty = C2U("ooSetupInstallPath"); break;
-            case LOCALE:            sProperty = C2U("ooLocale"); break;
-            case PRODUCTNAME:       sProperty = C2U("ooName"); break;
-            case PRODUCTVERSION:    sProperty = C2U("ooSetupVersion"); break;
-            case PRODUCTEXTENSION:  sProperty = C2U("ooSetupExtension"); break;
-            case OFFICEINSTALL:     sProperty = C2U("OfficeInstall"); break;
-            case OFFICEINSTALLURL:  sProperty = C2U("OfficeInstallURL"); break;
-            case DEFAULTCURRENCY:   sProperty += C2U("ooSetupCurrency"); break;
+            case USERINSTALLURL:                sProperty = C2U("ooSetupInstallURL"); break;
+            case INSTALLPATH:                   sProperty = C2U("ooSetupInstallPath"); break;
+            case LOCALE:                        sProperty = C2U("ooLocale"); break;
+            case PRODUCTNAME:                   sProperty = C2U("ooName"); break;
+            case PRODUCTVERSION:                sProperty = C2U("ooSetupVersion"); break;
+            case PRODUCTEXTENSION:              sProperty = C2U("ooSetupExtension"); break;
+            case PRODUCTXMLFILEFORMATVERSION:   sProperty = C2U("ooXMLFileFormatVersion"); break;
+            case OFFICEINSTALL:                 sProperty = C2U("OfficeInstall"); break;
+            case OFFICEINSTALLURL:              sProperty = C2U("OfficeInstallURL"); break;
+            case DEFAULTCURRENCY:               sProperty = C2U("ooSetupCurrency"); break;
         }
         try
         {
@@ -466,6 +479,9 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
 
     if ( eProp == PRODUCTNAME )
         aRet >>= aBrandName;
+
+    if ( eProp == PRODUCTXMLFILEFORMATVERSION )
+        aRet >>= aXMLFileFormatVersion;
 
     if ( eProp == PRODUCTVERSION )
         aRet >>= aProductVersion;
