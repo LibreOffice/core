@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-06 14:36:18 $
+ *  last change: $Author: nn $ $Date: 2001-05-10 20:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,6 +300,13 @@ double ScModelObj::GetOutputFactor() const
     if (pDocShell)
         return pDocShell->GetOutputFactor();
     return 1.0;
+}
+
+BOOL ScModelObj::AdjustRowHeight( USHORT nStartRow, USHORT nEndRow, USHORT nTab )
+{
+    if (pDocShell)
+        return pDocShell->AdjustRowHeight( nStartRow, nEndRow, nTab );
+    return FALSE;
 }
 
 uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-05 15:44:54 $
+ *  last change: $Author: nn $ $Date: 2001-05-10 20:51:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,8 @@ public:
     SvEmbeddedObject*       GetEmbeddedObject() const;
     BOOL                    IsEmbedded() const;
     double                  GetOutputFactor() const;
+
+    BOOL                    AdjustRowHeight( USHORT nStartRow, USHORT nEndRow, USHORT nTab );
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
                                 const ::com::sun::star::uno::Type & rType )
