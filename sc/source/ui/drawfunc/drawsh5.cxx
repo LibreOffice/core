@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh5.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-21 11:11:10 $
+ *  last change: $Author: ka $ $Date: 2001-09-06 12:52:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,7 +374,8 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             break;
 
         case SID_PASTE:
-            pView->PasteClipboard( pWin );          // Fenster fuer Position
+            DBG_ERROR( "SdrView::PasteClipboard not supported anymore" );
+            // pView->PasteClipboard( pWin );
             break;
 
         case SID_SELECTALL:
