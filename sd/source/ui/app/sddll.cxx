@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-16 15:53:39 $
+ *  last change: $Author: af $ $Date: 2002-02-06 09:15:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@
 #include "sdobjfac.hxx"
 #include "cfgids.hxx"
 
+#include "SdShapeTypes.hxx"
+#include <svx/SvxShapeTypes.hxx>
 
 /*************************************************************************
 |*
@@ -109,6 +111,10 @@ void SdDLL::Init()
         SdDrawDocShell::Factory().RegisterMenuBar( SdResId( RID_DRAW_DEFAULTMENU ) );
         SdDrawDocShell::Factory().RegisterPluginMenuBar( SdResId( RID_DRAW_PORTALMENU ) );
         SdDrawDocShell::Factory().RegisterAccel( SdResId( RID_DRAW_DEFAULTACCEL ) );
+
+        // Register the Impress shape types in order to make the shapes
+        // accessible.
+        accessibility::RegisterImpressShapeTypes ();
     }
 
     if (SvtModuleOptions().IsDraw())
