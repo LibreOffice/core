@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:45:00 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 10:22:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -701,30 +701,47 @@ BOOL FmFormView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
 {
     BOOL bDone = FALSE;
     const KeyCode& rKeyCode = rKEvt.GetKeyCode();
-    if (    IsDesignMode()
-        &&  pWin
-        &&  !rKeyCode.IsShift()
-        &&  !rKeyCode.IsMod1()
-        &&  !rKeyCode.IsMod2()
-        &&  rKeyCode.GetCode() == KEY_RETURN )
+    if  (   IsDesignMode()
+        &&  rKeyCode.GetCode() == KEY_RETURN
+        )
     {
-        FmFormObj* pObj = getMarkedGrid();
-        if ( pObj )
+        // RETURN alone enters grid controls, for keyboard accessibility
+        if  (   pWin
+            &&  !rKeyCode.IsShift()
+            &&  !rKeyCode.IsMod1()
+            &&  !rKeyCode.IsMod2()
+            )
         {
-            Reference< ::com::sun::star::awt::XWindow> xWindow(pObj->GetUnoControl( pWin ),UNO_QUERY);
-            if ( xWindow.is() )
+            FmFormObj* pObj = getMarkedGrid();
+            if ( pObj )
             {
-                pImpl->m_pMarkedGrid = pObj;
-                pImpl->m_xWindow = xWindow;
-                // add as listener to get notified when ESC will be pressed inside the grid
-                pImpl->m_xWindow->addFocusListener(pImpl);
-                SetMoveOutside(TRUE);
-                RefreshAllIAOManagers();
-                xWindow->setFocus();
-                bDone = TRUE;
+                Reference< ::com::sun::star::awt::XWindow> xWindow(pObj->GetUnoControl( pWin ),UNO_QUERY);
+                if ( xWindow.is() )
+                {
+                    pImpl->m_pMarkedGrid = pObj;
+                    pImpl->m_xWindow = xWindow;
+                    // add as listener to get notified when ESC will be pressed inside the grid
+                    pImpl->m_xWindow->addFocusListener(pImpl);
+                    SetMoveOutside(TRUE);
+                    RefreshAllIAOManagers();
+                    xWindow->setFocus();
+                    bDone = TRUE;
+                }
             }
         }
+        // Alt-RETURN alone enters shows the properties of the selection
+        if  (   pFormShell
+            &&  pFormShell->GetImpl()
+            &&  !rKeyCode.IsShift()
+            &&  !rKeyCode.IsMod1()
+            &&   rKeyCode.IsMod2()
+            )
+        {
+            pFormShell->GetImpl()->handleShowPropertiesRequest();
+        }
+
     }
+
     if ( !bDone )
         bDone = E3dView::KeyInput(rKEvt,pWin);
     return bDone;
@@ -739,6 +756,22 @@ sal_Bool FmFormView::checkUnMarkAll(const Reference< XInterface >& _xSource)
 
     return bRet;
 }
+
+// -----------------------------------------------------------------------------
+BOOL FmFormView::MouseButtonDown( const MouseEvent& _rMEvt, Window* _pWin )
+{
+    BOOL bReturn = E3dView::MouseButtonDown( _rMEvt, _pWin );
+
+    if ( pFormShell && pFormShell->GetImpl() )
+    {
+        SdrViewEvent aViewEvent;
+        PickAnything( _rMEvt, SDRMOUSEBUTTONDOWN, aViewEvent );
+        pFormShell->GetImpl()->handleMouseButtonDown( aViewEvent );
+    }
+
+    return bReturn;
+}
+
 // -----------------------------------------------------------------------------
 FmFormObj* FmFormView::getMarkedGrid() const
 {
