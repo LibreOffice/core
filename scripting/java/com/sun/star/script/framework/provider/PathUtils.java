@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PathUtils.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-10-09 14:37:47 $
+ *  last change: $Author: rt $ $Date: 2004-01-05 12:54:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,8 @@ import com.sun.star.script.framework.log.LogUtils;
 import com.sun.star.util.XMacroExpander;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.AnyConverter;
+import com.sun.star.frame.XModel;
+
 public class PathUtils {
 
     public static String FILE_URL_PREFIX;
@@ -105,19 +107,48 @@ public class PathUtils {
         return path;
     }
 
-    public static InputStream getScriptFileStream( String pathURL, XComponentContext ctxt ) throws MalformedURLException, IOException
+    public static InputStream getScriptFileStream( String pathURL ) throws MalformedURLException, IOException
     {
-        URL url = createScriptURL( pathURL, ctxt );
+        URL url = createScriptURL( pathURL );
         return url.openStream();
     }
 
-    public static URL createScriptURL( String pathURL, XComponentContext ctxt ) throws MalformedURLException
+    public static URL createScriptURL( String url ) throws MalformedURLException
+    {
+        XModel model=null;
+        if ( url.indexOf( XStorageStreamHandler.XSTORAGESCHEME ) == 0 )
+        {
+            String modelUrl = url.substring(( XStorageStreamHandler.XSTORAGESCHEME + "://").length());
+            int indexOfScriptsDir = modelUrl.lastIndexOf( "Scripts" );
+            if ( indexOfScriptsDir > -1 )
+            {
+                modelUrl = modelUrl.substring( 0, indexOfScriptsDir - 1 );
+            }
+            model = com.sun.star.script.framework.provider.ScriptProvider.frameWorkRegistry.getModelForURL( modelUrl );
+        }
+        URL result = null;
+        if ( model != null )
+        {
+            result = createScriptURL( url, model );
+        }
+        else
+        {
+            result = new URL( url );
+        }
+        return result;
+
+    }
+
+    private static URL createScriptURL(String pathURL, XModel xModel)
+        throws MalformedURLException
     {
         URL url = null;
-        if ( pathURL.startsWith( UCBStreamHandler.UCBSCHEME ) )
+
+        //if ( pathURL.startsWith( UCBStreamHandler.UCBSCHEME ) )
+        if ( pathURL.startsWith( XStorageStreamHandler.XSTORAGESCHEME ) )
         {
-            URLStreamHandler handler = new UCBStreamHandler( ctxt );
-            pathURL += UCBStreamHandler.separator;
+            URLStreamHandler handler = new XStorageStreamHandler(xModel);
+            pathURL += XStorageStreamHandler.separator;
             url  = new URL(null, pathURL, handler);
         }
         else
@@ -257,33 +288,6 @@ public class PathUtils {
             returnPath += "/";
         }
         return returnPath;
-    }
-    public static String toScriptLocation(XComponentContext ctxt, String path) {
-        String sharePath = getSharePath(ctxt);
-        String userPath = getUserPath(ctxt);
-
-        LogUtils.DEBUG("toScriptLocation, path: " + path);
-        LogUtils.DEBUG("toScriptLocation, share path: " + sharePath);
-        LogUtils.DEBUG("toScriptLocation, user path: " + userPath);
-
-        try {
-            path = URLDecoder.decode(path, "UTF-8");
-        }
-        catch (java.io.UnsupportedEncodingException ignore) {
-            // ignore
-        }
-
-        if (m_windows) {
-            path = replaceWindowsPathSeparators(path);
-        }
-
-        if (path.indexOf(sharePath) != -1) {
-            return "share";
-        }
-        else if (path.indexOf(userPath) != -1) {
-            return "user";
-        }
-        return path;
     }
 
     private static String getOfficeURL(XComponentContext ctxt, String name) {
