@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pb $ $Date: 2002-08-13 07:25:04 $
+ *  last change: $Author: gt $ $Date: 2002-08-13 07:31:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,8 +215,6 @@ void SvTreeListBox::InitAcc()
     DBG_CHKTHIS(SvTreeListBox,0);
 #ifdef OS2
     aInpEditAcc.InsertItem( 1, KeyCode(KEY_F9,KEY_SHIFT) );
-#else
-    aInpEditAcc.InsertItem( 1, KeyCode(KEY_RETURN,KEY_MOD2) );
 #endif
     aInpEditAcc.SetActivateHdl( LINK( this, SvTreeListBox, InpEdActivateHdl) );
 }
@@ -826,22 +824,10 @@ void SvTreeListBox::KeyInput( const KeyEvent& rKEvt )
     }
 #endif
 
-    if( IsInplaceEditingEnabled() &&
-         nCode == KEY_RETURN &&
-         rKEvt.GetKeyCode().IsMod2() )
-    {
-        SvLBoxEntry* pEntry = GetCurEntry();
-        if( pEntry )
-            EditEntry( pEntry );
-        nImpFlags &= ~SVLBOX_IS_TRAVELSELECT;
-    }
-    else
-    {
-        BOOL bKeyUsed = pImp->KeyInput( rKEvt );
-        nImpFlags &= ~SVLBOX_IS_TRAVELSELECT;
-        if( !bKeyUsed )
-            SvLBox::KeyInput( rKEvt );
-    }
+    nImpFlags &= ~SVLBOX_IS_TRAVELSELECT;
+
+    if( !pImp->KeyInput( rKEvt ) )
+        SvLBox::KeyInput( rKEvt );
 }
 
 void SvTreeListBox::RequestingChilds( SvLBoxEntry* pParent )
