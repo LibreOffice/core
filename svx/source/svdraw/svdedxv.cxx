@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:01:58 $
+ *  last change: $Author: rt $ $Date: 2003-10-27 13:27:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,10 +464,16 @@ Color SdrObjEditView::ImpGetTextEditBackgroundColor() const
             aPvOfs += ((SdrTextObj*)pTextEditObj)->GetTextEditOffset();
 
             const SdrPage* pPg=pTextEditPV->GetPage();
-            Rectangle aSnapRect( pTextEditObj->GetSnapRect() );
-            aSnapRect.Move(aPvOfs.X(), aPvOfs.Y());
 
-            return CalcBackgroundColor( aSnapRect, pTextEditPV->GetVisibleLayers(), *pPg );
+            // #112690#
+            // Test existance of the page before using CalcBackgroundColor
+            if(pPg)
+            {
+                Rectangle aSnapRect( pTextEditObj->GetSnapRect() );
+                aSnapRect.Move(aPvOfs.X(), aPvOfs.Y());
+
+                return CalcBackgroundColor( aSnapRect, pTextEditPV->GetVisibleLayers(), *pPg );
+            }
         }
     }
 
