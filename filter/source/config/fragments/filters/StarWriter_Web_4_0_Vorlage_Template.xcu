@@ -1,4 +1,4 @@
-    <node oor:name="StarWriter/Web 4.0 Vorlage/Template" oor:op="replace">
+    <node oor:name="StarWriter/Web 4.0 Vorlage/Template" oor:op="replace" oor:finalized="true" oor:mandatory="true">
         <prop oor:name="FileFormatVersion"><value>3580</value></prop>
         <prop oor:name="Type"><value>writer_web_StarWriterWeb_40_VorlageTemplate</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.text.WebDocument</value></prop>
@@ -13,16 +13,16 @@
             <value xml:lang="es">StarWriter/Web 4.0 - Plantilla</value>
             <value xml:lang="tr">StarWriter/Web 4.0 Taslağı</value>
             <value xml:lang="ru">StarWriter/Web 4.0 Шаблон</value>
-            <value xml:lang="th">แม่แบบ StarWriter/Web 4.0 </value>
+            <value xml:lang="th">�?ม่�?บบ StarWriter/Web 4.0 </value>
             <value xml:lang="x-comment">StarWriter/Web 4.0 Vorlage</value>
             <value xml:lang="ca">Plantilla de l</value>
-            <value xml:lang="el">StarWriter/Web 4.0 Πρότυπο</value>
-            <value xml:lang="zh-CN">StarWriter/Web 4.0 样式</value>
+            <value xml:lang="el">StarWriter/Web 4.0 Π�?ότυπο</value>
+            <value xml:lang="zh-CN">StarWriter/Web 4.0 样�?</value>
             <value xml:lang="pt">StarWriter/Web 4.0 Modelo</value>
             <value xml:lang="cs">Šablona StarWriter/Web 4.0</value>
             <value xml:lang="fr">StarWriter/Web 4.0 Modèle</value>
             <value xml:lang="ar">StarWriter/Web 4.0 قالب</value>
-            <value xml:lang="zh-TW">StarWriter/Web 4.0 樣式</value>
+            <value xml:lang="zh-TW">StarWriter/Web 4.0 樣�?</value>
             <value xml:lang="sl">StarWriter/Web 4.0 Predloga</value>
             <value xml:lang="fi">StarWriter/Web 4.0 -mallipohja</value>
             <value xml:lang="hi-IN">StarWriter/Web 4.0 Template</value>
@@ -32,7 +32,7 @@
             <value xml:lang="sv">StarWriter/Web 4.0 mall</value>
             <value xml:lang="da">StarWriter/Web 4.0-skabelon</value>
             <value xml:lang="de">StarWriter/Web 4.0 Vorlage</value>
-            <value xml:lang="ko">StarWriter/Web 4.0 서식 파일</value>
+            <value xml:lang="ko">StarWriter/Web 4.0 서�? 파�?�</value>
             <value xml:lang="nl">StarWriter/Web 4.0 Sjabloon</value>
             <value xml:lang="pt-BR">Modelo do StarWriter/Web 4.0 </value>
             <value xml:lang="it">StarWriter/Web 4.0 Modello</value>
