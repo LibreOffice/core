@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtsh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-28 16:53:33 $
+ *  last change: $Author: jp $ $Date: 2001-10-15 07:30:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #include <hintids.hxx>
 #endif
 
+#ifndef _SFXSLSTITM_HXX
+#include <svtools/slstitm.hxx>
+#endif
 #ifndef _OFF_APP_HXX
 #include <offmgr/app.hxx>
 #endif
@@ -594,9 +597,51 @@ void SwDrawTextShell::StateUndo(SfxItemSet &rSet)
     SfxViewFrame *pSfxViewFrame = GetView().GetViewFrame();
     SfxWhichIter aIter(rSet);
     USHORT nWhich = aIter.FirstWhich();
-    while(nWhich)
+    while( nWhich )
     {
-        pSfxViewFrame->GetSlotState(nWhich, pSfxViewFrame->GetInterface(), &rSet );
+        switch ( nWhich )
+        {
+        case SID_GETUNDOSTRINGS:
+        case SID_GETREDOSTRINGS:
+            {
+                SfxUndoManager* pUndoMgr = GetUndoManager();
+                if( pUndoMgr )
+                {
+                    UniString (SfxUndoManager:: *fnGetComment)( USHORT ) const;
+
+                    sal_uInt16 nCount;
+                    if( SID_GETUNDOSTRINGS == nWhich )
+                    {
+                        nCount = pUndoMgr->GetUndoActionCount();
+                        fnGetComment = &SfxUndoManager::GetUndoActionComment;
+                    }
+                    else
+                    {
+                        nCount = pUndoMgr->GetRedoActionCount();
+                        fnGetComment = &SfxUndoManager::GetRedoActionComment;
+                    }
+                    if( nCount )
+                    {
+                        String sList;
+                        for( sal_uInt16 n = 0; n < nCount; ++n )
+                            ( sList += (pUndoMgr->*fnGetComment)( n ) )
+                                    += '\n';
+
+                        SfxStringListItem aItem( nWhich );
+                        aItem.SetString( sList );
+                        rSet.Put( aItem );
+                    }
+                }
+                else
+                    rSet.DisableItem( nWhich );
+            }
+            break;
+
+        default:
+            pSfxViewFrame->GetSlotState( nWhich,
+                                    pSfxViewFrame->GetInterface(), &rSet );
+        }
+
         nWhich = aIter.NextWhich();
     }
 }

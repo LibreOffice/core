@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtsh.sdi,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 07:01:35 $
+ *  last change: $Author: jp $ $Date: 2001-10-15 07:29:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,15 @@ interface TextDrawText : Selection
     SID_REPEAT // api:
     [
         ExecMethod = ExecUndo ;
+        StateMethod = StateUndo ;
+    ]
+    SID_GETUNDOSTRINGS
+    [
+        StateMethod = StateUndo ;
+    ]
+
+    SID_GETREDOSTRINGS
+    [
         StateMethod = StateUndo ;
     ]
 
