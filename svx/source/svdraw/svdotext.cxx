@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 13:04:15 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:22:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,9 @@ SdrTextObj::SdrTextObj():
 
     // #108784#
     maTextEditOffset = Point(0, 0);
+
+    // #i25616#
+    mbSupportTextIndentingOnLineWidthChange = sal_True;
 }
 
 SdrTextObj::SdrTextObj(const Rectangle& rNewRect):
@@ -244,6 +247,9 @@ SdrTextObj::SdrTextObj(const Rectangle& rNewRect):
 
     // #108784#
     maTextEditOffset = Point(0, 0);
+
+    // #i25616#
+    mbSupportTextIndentingOnLineWidthChange = sal_True;
 }
 
 SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind):
@@ -271,6 +277,9 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind):
 
     // #108784#
     maTextEditOffset = Point(0, 0);
+
+    // #i25616#
+    mbSupportTextIndentingOnLineWidthChange = sal_True;
 }
 
 SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect):
@@ -300,6 +309,9 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect):
 
     // #108784#
     maTextEditOffset = Point(0, 0);
+
+    // #i25616#
+    mbSupportTextIndentingOnLineWidthChange = sal_True;
 }
 
 SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStream& rInput, USHORT eFormat):
@@ -331,6 +343,9 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStr
 
     // #108784#
     maTextEditOffset = Point(0, 0);
+
+    // #i25616#
+    mbSupportTextIndentingOnLineWidthChange = sal_True;
 }
 
 SdrTextObj::~SdrTextObj()
