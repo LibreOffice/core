@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 11:18:59 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:28:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,6 +443,7 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory Directory, oslDirect
     /* convert file name to unicode */
     rtl_string2UString( &ustrFileName, pEntry->d_name, strlen( pEntry->d_name ),
         osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
+    OSL_ASSERT(ustrFileName != 0);
 
     osl_systemPathMakeAbsolutePath(pDirImpl->ustrPath, ustrFileName, &ustrFilePath);
 
@@ -1454,6 +1455,7 @@ static oslFileError osl_psz_getVolumeInformation (
             rtl_str_getLength(__OSL_STATFS_TYPENAME(sfs)),
             osl_getThreadTextEncoding(),
             OUSTRING_TO_OSTRING_CVTFLAGS);
+        OSL_ASSERT(pInfo->ustrFileSystemName != 0);
 
         pInfo->uValidFields |= osl_VolumeInfo_Mask_FileSystemName;
     }
@@ -2068,6 +2070,7 @@ static rtl_uString* oslMakeUStrFromPsz(const sal_Char* pszStr, rtl_uString** ust
         rtl_str_getLength( pszStr ),
         osl_getThreadTextEncoding(),
         OUSTRING_TO_OSTRING_CVTFLAGS );
+    OSL_ASSERT(*ustrValid != 0);
 
     return *ustrValid;
 }
