@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxmsbas.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 08:47:59 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:42:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,12 +153,11 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
 //this method is removed in the Unicode-Version
 //      rDocSh.GetSbxObject();
 
-        Reference< XLibraryContainer > xLibContainer = rDocSh.GetBasicContainer();
-        BasicManager *pBasicMan = rDocSh.GetBasicManager();
+        Reference<XLibraryContainer> xLibContainer = rDocSh.GetBasicContainer();
         DBG_ASSERT( xLibContainer.is(), "No BasicContainer!" );
 
         UINT16 nStreamCount = aVBA.GetNoStreams();
-        Reference< XNameContainer > xLib;
+        Reference<XNameContainer> xLib;
         if( xLibContainer.is() && nStreamCount )
         {
             String aLibName( String::CreateFromAscii(
