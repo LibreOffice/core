@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Connection.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:12:33 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:51:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ namespace connectivity
         DECLARE_SERVICE_INFO();
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         java_sql_Connection(const java_sql_Driver* _pDriver);
-        void construct( const ::rtl::OUString& url,
+        sal_Bool construct( const ::rtl::OUString& url,
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info);
 
         inline  sal_Bool isIgnoreDriverPrivilegesEnabled() const { return   m_bIgnoreDriverPrivileges;}
