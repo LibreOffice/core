@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2002-12-13 13:27:30 $
+#   last change: $Author: hjs $ $Date: 2003-08-18 15:15:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -110,6 +110,11 @@ SLOFILES=\
             $(SLO)$/stacktrace.obj		\
             $(SLO)$/keysymnames.obj		\
             $(SLO)$/wmadaptor.obj
+
+.IF "$(WITH_LIBSN)"=="YES"
+CDEFS+=-DHAVE_LIBSN
+CFLAGS+=$(LIBSN_CFLAGS)
+.ENDIF
 
 .IF "$(OS)$(CPU)" == "SOLARISS"
 .IF "$(COM)"!="GCC"
