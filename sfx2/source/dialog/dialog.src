@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:53:51 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ String STR_RESET
     TEXT[ czech ] = "Obnovit";
     TEXT[ hebrew ] = "‮אתחול‬";
     TEXT[ hindi ] = "~रिसेट्ट";
+    TEXT[ slovak ] = "Obno~viť";
 };
 String STR_APPLY
 {
@@ -148,6 +149,7 @@ String STR_APPLY
     Text[ czech ] = "Použít";
     Text[ hebrew ] = "‮יישום‬";
     Text[ hindi ] = "लागू करो";
+    Text[ slovak ] = "Použiť";
 };
 String STR_INTERNET
 {
@@ -178,6 +180,7 @@ String STR_INTERNET
     Text[ czech ] = "(Internet)";
     Text[ hebrew ] = "‮(אינטרנט)‬";
     Text[ hindi ] = "(इन्टरनेट्)";
+    Text[ slovak ] = "(Internet)";
 };
 String STR_BASEFMT
 {
@@ -209,6 +212,7 @@ String STR_BASEFMT
     Text[ czech ] = "Základní formát";
     Text[ hebrew ] = "‮צורת יסוד‬";
     Text[ hindi ] = "आधार रचना";
+    Text[ slovak ] = "Základný formát";
 };
 CheckBox CB_USE_PASSWD
 {
@@ -241,6 +245,7 @@ CheckBox CB_USE_PASSWD
     Text[ czech ] = "Heslo";
     Text[ hebrew ] = "‮סיסמה‬";
     Text[ hindi ] = "कू~टशब्द";
+    Text[ slovak ] = "~Heslo";
 };
 CheckBox CB_READ_ONLY
 {
@@ -273,6 +278,7 @@ CheckBox CB_READ_ONLY
     Text[ czech ] = "Pouze ke čtení";
     Text[ hebrew ] = "‮קריאה בלבד‬";
     Text[ hindi ] = "~केवल-पढने केलिए";
+    Text[ slovak ] = "Iba na čí~tanie";
 };
 PushButton CB_FILE
 {
@@ -304,6 +310,7 @@ PushButton CB_FILE
     Text[ czech ] = "Souborový systém";
     Text[ hebrew ] = "‮מערכת קבצים‬";
     Text[ hindi ] = "~फाइल सिस्टम";
+    Text[ slovak ] = "Sú~borový systém";
 };
 PushButton CB_URL
 {
@@ -335,6 +342,7 @@ PushButton CB_URL
     Text[ czech ] = "Internet";
     Text[ hebrew ] = "‮אינטרנט‬";
     Text[ hindi ] = "इन्टर~नेट्";
+    Text[ slovak ] = "Int~ernet";
 };
 PushButton BTN_MANAGER
 {
@@ -367,6 +375,7 @@ PushButton BTN_MANAGER
     Text[ czech ] = "Správce...";
     Text[ hebrew ] = "‮מנהל...‬";
     Text[ hindi ] = "~प्रबन्धक...";
+    Text[ slovak ] = "Správ~ca...";
 };
 PushButton BTN_STANDARD
 {
@@ -399,6 +408,7 @@ PushButton BTN_STANDARD
     Text[ czech ] = "Domů";
     Text[ hebrew ] = "‮בית‬";
     Text[ hindi ] = "~मुख्यपृष्ठ";
+    Text[ slovak ] = "~Domov";
 };
 String STR_PATH_NOT_FOUND1
 {
@@ -430,6 +440,7 @@ String STR_PATH_NOT_FOUND1
     Text[ czech ] = "Adresář '";
     Text[ hebrew ] = "‮הספריה '‬";
     Text[ hindi ] = "डैरक्टरी '";
+    Text[ slovak ] = "Adresár '";
 };
 String STR_PATH_NOT_FOUND2
 {
@@ -461,6 +472,7 @@ String STR_PATH_NOT_FOUND2
     Text[ czech ] = "' neexistuje.";
     Text[ hebrew ] = "‮' אינה קיימת‬";
     Text[ hindi ] = "' अस्तित्व में नहीं है ।";
+    Text[ slovak ] = "' neexistuje.";
 };
 InfoBox MSG_ERROR_PASSWD
 {
@@ -494,6 +506,7 @@ InfoBox MSG_ERROR_PASSWD
     MESSAGE[ czech ] = "Neplatné heslo.";
     MESSAGE[ hebrew ] = "‮סיסמה שגויה‬";
     MESSAGE[ hindi ] = "अमान्य कूटशब्द ।";
+    MESSAGE[ slovak ] = "Neplatné heslo.";
 };
 String STR_FILEDLG_INSERT
 {
@@ -525,6 +538,7 @@ String STR_FILEDLG_INSERT
     Text[ czech ] = "Vložit soubor";
     Text[ hebrew ] = "‮הכנסת קובץ‬";
     Text[ hindi ] = "फाइल जोड़ो";
+    Text[ slovak ] = "Vložiť súbor";
 };
 String STR_TABPAGE_MANAGESTYLES
 {
@@ -556,6 +570,7 @@ String STR_TABPAGE_MANAGESTYLES
     Text[ czech ] = "Organizátor";
     Text[ hebrew ] = "‮סדרן‬";
     Text[ hindi ] = "व्यवस्थापक";
+    Text[ slovak ] = "Organizátor";
 };
 InfoBox MSG_TABPAGE_INVALIDNAME
 {
@@ -589,6 +604,7 @@ InfoBox MSG_TABPAGE_INVALIDNAME
     Message[ czech ] = "Název se již používá.";
     Message[ hebrew ] = "‮השם כבר בשימוש.‬";
     Message[ hindi ] = "इस नाम पहिले से ही उपयोग में है ।";
+    Message[ slovak ] = "Tento názov sa už používa.";
 };
 InfoBox MSG_TABPAGE_INVALIDSTYLE
 {
@@ -622,6 +638,7 @@ InfoBox MSG_TABPAGE_INVALIDSTYLE
     Message[ czech ] = "Tento styl neexistuje";
     Message[ hebrew ] = "‮הסגנון לא קיים.‬";
     Message[ hindi ] = "इस शैली अस्तित्व में नहीं है ।";
+    Message[ slovak ] = "Tento štýl neexistuje.";
 };
 InfoBox MSG_TABPAGE_INVALIDPARENT
 {
@@ -655,6 +672,7 @@ InfoBox MSG_TABPAGE_INVALIDPARENT
     Message[ czech ] = "Tato šablona nemůže být použita jako šablona základní;\nmohlo by dojít ke vzniku rekurzivních odkazů.";
     Message[ hebrew ] = "‮לא ניתן להשתמש בתבנית זו כתבנית יסוד מבלי לגרום להפניה רקורסיבית.‬";
     Message[ hindi ] = "नमूने को आधार नमूने की तरह उपयोग नहीं कर सकते है ;\n रिकर्सिव रेफ़रेन्स होने का संभव है ।";
+    Message[ slovak ] = "Táto šablóna nemôže byť použitá ako šablóna základná;\nmohlo by dôjsť ku vzniku rekurzívnych odkazov.";
 };
 InfoBox MSG_POOL_STYLE_NAME
 {
@@ -686,6 +704,7 @@ InfoBox MSG_POOL_STYLE_NAME
     MESSAGE[ czech ] = "Název už existuje jako výchozí styl.\nZadejte prosím jiný název.";
     MESSAGE[ hebrew ] = "‮שם זה נמצא כבר בשימוש סגנון ברירת מחדל.\nנא לבחור שם אחר.‬";
     MESSAGE[ hindi ] = "नाम पहिले से ही अनुपस्थिति शैली की तरह अस्तित्व में है ।\nकृपया कोई दूसरा नाम चुनिए ।";
+    MESSAGE[ slovak ] = "Názov už existuje ako východzí štýl.\nZadajte prosím iný názov.";
 };
 QueryBox MSG_OVERWRITE_STYLE
 {
@@ -719,6 +738,7 @@ QueryBox MSG_OVERWRITE_STYLE
     Message[ czech ] = "Styl již existuje. Přepsat?";
     Message[ hebrew ] = "‮הסגנון כבר קיים. האם להחליפו?‬";
     Message[ hindi ] = "शैली पहिले से ही अस्तित्व में है । ओवररइट् करना है?";
+    Message[ slovak ] = "Štýl už existuje. Prepísať?";
 };
 String STR_DELETE_STYLE
 {
@@ -749,6 +769,7 @@ String STR_DELETE_STYLE
     Text[ czech ] = "Opravdu chcete smazat styl $1?";
     Text[ hebrew ] = "‮האם אכן למחוק סגנון $1?‬";
     Text[ hindi ] = "आप $1 शैली को सचमुच में मिटाना चाहते है?";
+    Text[ slovak ] = "Naozaj chcete zmazať štýl $1?";
 };
 String STR_DELETE_STYLE_USED
 {
@@ -779,6 +800,7 @@ String STR_DELETE_STYLE_USED
     Text[ czech ] = "Právě odmazáváte použitý styl!\n";
     Text[ hebrew ] = "‮פעולה זו מוחקת סגנון שייושם!\n‬";
     Text[ hindi ] = "आप लागू किया हुआ शैली को मिटा रहे है!\n";
+    Text[ slovak ] = "Práve mažete použitý štýl!\n";
 };
 Image BMP_COLLAPSED
 {
@@ -846,6 +868,7 @@ Menu MN_CONTEXT_TEMPLDLG
             Text[ czech ] = "Nový...";
             Text[ hebrew ] = "‮חדש...‬";
             Text[ hindi ] = "नया...";
+            Text[ slovak ] = "Nový...";
         };
         MenuItem
         {
@@ -879,6 +902,7 @@ Menu MN_CONTEXT_TEMPLDLG
             Text[ czech ] = "Upravit...";
             Text[ hebrew ] = "‮שינוי...‬";
             Text[ hindi ] = "सुधारो...";
+            Text[ slovak ] = "Upraviť...";
         };
         MenuItem
         {
@@ -912,6 +936,7 @@ Menu MN_CONTEXT_TEMPLDLG
             Text[ czech ] = "Smazat...";
             Text[ hebrew ] = "‮מחיקה...‬";
             Text[ hindi ] = "मिटाओ...";
+            Text[ slovak ] = "Zmazať...";
         };
     };
 };
@@ -945,6 +970,7 @@ String STR_BASICMACROS
     TEXT[ czech ] = "Makra BASIC";
     TEXT[ hebrew ] = "‮מאקרואיים של בייסיק‬";
     TEXT[ hindi ] = "BASIC मॉक्रोस";
+    TEXT[ slovak ] = "Makrá BASIC";
 };
 InfoBox MSG_LAYOUT_NOT_LOADING
 {
@@ -978,6 +1004,7 @@ InfoBox MSG_LAYOUT_NOT_LOADING
     MESSAGE[ czech ] = "Načítá se soubor bez rozvržení.";
     MESSAGE[ hebrew ] = "‮טעינת מסמך ללא פריסה‬";
     MESSAGE[ hindi ] = "अभिन्यास के बिना लेखपत्र को लोड़ किया जा रहा है ।";
+    MESSAGE[ slovak ] = "Načítava sa súbor bez layoutu.";
 };
 Accelerator ACC_LAYOUT_NOT_LOADING
 {
@@ -1024,6 +1051,7 @@ ErrorBox MSG_ERR_CANT_EDIT_OLD_FORMAT
     Message[ czech ] = "Není možné upravovat informace o dokumentu\n pro dokumenty v tomto formátu.";
     Message[ hebrew ] = "‮לא ניתן לערוך פרטי מסמך עבור מסמכים\nבצורת קובץ זו.‬";
     Message[ hindi ] = "इस फाइल रचना में \nलेखपत्रों का लेखपत्र सूचना को संपादन नहीं कर सकते है ।";
+    Message[ slovak ] = "Nie je možné upravovať informácie o dokumente\n pre dokumenty v tomto formáte.";
 };
  //------------------------------------------------------------------------
 ErrorBox MSG_ERR_CANT_EDIT_OPEN_DOCS
@@ -1055,6 +1083,7 @@ ErrorBox MSG_ERR_CANT_EDIT_OPEN_DOCS
     Message[ czech ] = "Informace o dokumentu\n právě editovaných dokumentů nemůže být ve Správci dokumentů změněno.";
     Message[ hebrew ] = "‮לא ניתן לערוך את פרטי המסמך של מסמכים שנמצאים בעריכה באמצעות מנהל המסמכים.‬";
     Message[ hindi ] = "अभी संपादन किया हुआ लेखपत्रों का लेखपत्र सूचना \n को लेखपत्र प्रबन्धक के भीतर सुधार नहीं कर सकते है।";
+    Message[ slovak ] = "Informácia o dokumente\n práve editovaných dokumentov nemôže byť v Správcovi dokumentov zmenená.";
 };
 ModalDialog RID_URLOPEN
 {
@@ -1111,6 +1140,7 @@ ModalDialog RID_URLOPEN
     Text[ czech ] = "Zadat URL";
     Text[ hebrew ] = "‮הקלדת URL‬";
     Text[ hindi ] = "URL प्रविष्ट करो";
+    Text[ slovak ] = "Zadať URL";
 };
 Menu RID_AUTOHIDE
 {
@@ -1147,6 +1177,7 @@ Menu RID_AUTOHIDE
             Text[ czech ] = "Skrýt";
             Text[ hebrew ] = "‮הסתרה‬";
             Text[ hindi ] = "छिपाओ";
+            Text[ slovak ] = "Skryť";
         };
     };
 };
@@ -1179,6 +1210,7 @@ String RID_AUTOHIDE
     Text[ czech ] = "Neschovávat";
     Text[ hebrew ] = "‮אין להסתיר‬";
     Text[ hindi ] = "मत छिपाओ";
+    Text[ slovak ] = "Neschovávať";
 };
 String SID_NAVIGATOR
 {
@@ -1209,6 +1241,7 @@ String SID_NAVIGATOR
     Text[ czech ] = "Navigátor";
     Text[ hebrew ] = "‮נווט‬";
     Text[ hindi ] = "नाविगेटर";
+    Text[ slovak ] = "Navigátor";
 };
 String STR_BASICNAME
 {
@@ -1246,9 +1279,12 @@ ErrorBox MSG_ERROR_WRONG_CONFIRM
     MESSAGE[ czech ] = "Neplatné potvrzení hesla";
     MESSAGE[ hebrew ] = "‮שגיאה באישור הסיסמה‬";
     MESSAGE[ hindi ] = "दोषयुक्त कूटशब्द प्रमाणीकरण";
+    MESSAGE[ slovak ] = "Neplatné potvrdenie hesla";
 };
 
 // ******************************************************************* EOF
+
+
 
 
 
