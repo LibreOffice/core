@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formstrings.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:54 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 09:06:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,11 +206,27 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_PUSHBUTTONTYPE,         "PushButtonType");
     PCR_CONSTASCII_STRING( PROPERTY_EFFECTIVE_VALUE,        "EffectiveValue");
 
+    PCR_CONSTASCII_STRING( PROPERTY_BOUND_CELL,             "BoundCell");
+    PCR_CONSTASCII_STRING( PROPERTY_LIST_CELL_RANGE,        "CellRange");
+
+    PCR_CONSTASCII_STRING( PROPERTY_ADDRESS,                "Address");
+    PCR_CONSTASCII_STRING( PROPERTY_REFERENCE_SHEET,        "ReferenceSheet");
+    PCR_CONSTASCII_STRING( PROPERTY_UI_REPRESENTATION,      "UserInterfaceRepresentation");
+
+    // "virtual" properties (not to be used with real property sets)
+    PCR_CONSTASCII_STRING( PROPERTY_CELL_EXCHANGE_TYPE,     "ExchangeSelectionIndex");
+
     // services
     PCR_CONSTASCII_STRING( SERVICE_COMPONENT_GROUPBOX,      "com.sun.star.form.component.GroupBox");
     PCR_CONSTASCII_STRING( SERVICE_COMPONENT_FIXEDTEXT,     "com.sun.star.form.component.FixedText");
     PCR_CONSTASCII_STRING( SERVICE_COMPONENT_FORMATTEDFIELD,"com.sun.star.form.component.FormattedField");
     PCR_CONSTASCII_STRING( SERVICE_DATABASE_CONTEXT,        "com.sun.star.sdb.DatabaseContext");
+    PCR_CONSTASCII_STRING( SERVICE_SPREADSHEET_DOCUMENT,    "com.sun.star.sheet.SpreadsheetDocument");
+    PCR_CONSTASCII_STRING( SERVICE_SHEET_CELL_BINDING,      "drafts.com.sun.star.table.CellValueBinding");
+    PCR_CONSTASCII_STRING( SERVICE_SHEET_CELL_INT_BINDING,  "drafts.com.sun.star.table.ListPositionCellBinding");
+    PCR_CONSTASCII_STRING( SERVICE_SHEET_CELLRANGE_LISTSOURCE, "drafts.com.sun.star.table.CellRangeListSource");
+    PCR_CONSTASCII_STRING( SERVICE_ADDRESS_CONVERSION,      "com.sun.star.table.CellAddressConversion");
+    PCR_CONSTASCII_STRING( SERVICE_RANGEADDRESS_CONVERSION, "com.sun.star.table.CellRangeAddressConversion");
 
 //............................................................................
 } // namespace pcr
