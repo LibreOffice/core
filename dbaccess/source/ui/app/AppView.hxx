@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppView.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:01:44 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:46:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,6 @@
 #ifndef _COM_SUN_STAR_UCB_XCONTENT_HPP_
 #include <com/sun/star/ucb/XContent.hpp>
 #endif
-#ifndef _SV_STATUS_HXX
-#include <vcl/status.hxx>
-#endif
 #ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
 #endif
@@ -142,7 +139,6 @@ namespace dbaui
             NONE
         };
     private:
-        StatusBar                           m_aStatusBar;
         ::com::sun::star::lang::Locale      m_aLocale;
         ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XController>
@@ -366,8 +362,6 @@ namespace dbaui
                             sal_Bool _bTable);
 
         SvLBoxEntry* getEntry( const Point& _aPosPixel ) const;
-
-        void setStatusInformations(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xDatasource);
 
         /** disable the controls
             @param  _bDisable
