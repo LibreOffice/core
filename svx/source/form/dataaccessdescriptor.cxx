@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dataaccessdescriptor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-18 10:42:37 $
+ *  last change: $Author: fs $ $Date: 2001-04-20 16:14:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ namespace svx
     //====================================================================
 #define CONST_CHAR( propname ) propname, sizeof(propname) - 1
 
+#ifndef SVX_LIGHT
     //====================================================================
     //= ODADescriptorImpl
     //====================================================================
@@ -406,42 +407,71 @@ namespace svx
         // don't need to rebuild next time
         m_bSetOutOfDate = sal_True;
     }
+#endif
 
     //====================================================================
     //= ODataAccessDescriptor
     //====================================================================
     //--------------------------------------------------------------------
     ODataAccessDescriptor::ODataAccessDescriptor()
+#ifndef SVX_LIGHT
         :m_pImpl(new ODADescriptorImpl)
+#else
+        :m_pImpl(NULL)
+#endif
     {
     }
 
     //--------------------------------------------------------------------
     ODataAccessDescriptor::ODataAccessDescriptor( const ODataAccessDescriptor& _rSource )
+#ifndef SVX_LIGHT
         :m_pImpl(new ODADescriptorImpl(*_rSource.m_pImpl))
+#else
+        :m_pImpl(NULL)
+#endif
     {
     }
 
     //--------------------------------------------------------------------
     const ODataAccessDescriptor& ODataAccessDescriptor::operator=(const ODataAccessDescriptor& _rSource)
     {
+#ifndef SVX_LIGHT
         delete m_pImpl;
         m_pImpl = new ODADescriptorImpl(*_rSource.m_pImpl);
+#else
+        OSL_ENSURE(sal_False, "ODataAccessDescriptor::operator=: not available in the SVX_LIGHT version!");
+#endif
         return *this;
     }
 
     //--------------------------------------------------------------------
     ODataAccessDescriptor::ODataAccessDescriptor( const Reference< XPropertySet >& _rValues )
+#ifndef SVX_LIGHT
         :m_pImpl(new ODADescriptorImpl)
+#else
+        :m_pImpl(NULL)
+#endif
     {
+#ifndef SVX_LIGHT
         m_pImpl->buildFrom(_rValues);
+#else
+        OSL_ENSURE(sal_False, "ODataAccessDescriptor::ODataAccessDescriptor: not available in the SVX_LIGHT version!");
+#endif
     }
 
     //--------------------------------------------------------------------
     ODataAccessDescriptor::ODataAccessDescriptor( const Sequence< PropertyValue >& _rValues )
+#ifndef SVX_LIGHT
         :m_pImpl(new ODADescriptorImpl)
+#else
+        :m_pImpl(NULL)
+#endif
     {
+#ifndef SVX_LIGHT
         m_pImpl->buildFrom(_rValues);
+#else
+        OSL_ENSURE(sal_False, "ODataAccessDescriptor::ODataAccessDescriptor: not available in the SVX_LIGHT version!");
+#endif
     }
 
     //--------------------------------------------------------------------
@@ -453,26 +483,35 @@ namespace svx
     //--------------------------------------------------------------------
     void ODataAccessDescriptor::clear()
     {
+#ifndef SVX_LIGHT
         m_pImpl->m_aValues.clear();
+#endif
     }
 
     //--------------------------------------------------------------------
     void ODataAccessDescriptor::erase(DataAccessDescriptorProperty _eWhich)
     {
+#ifndef SVX_LIGHT
         OSL_ENSURE(has(_eWhich), "ODataAccessDescriptor::erase: invalid call!");
         if (has(_eWhich))
             m_pImpl->m_aValues.erase(_eWhich);
+#endif
     }
 
     //--------------------------------------------------------------------
     sal_Bool ODataAccessDescriptor::has(DataAccessDescriptorProperty _eWhich) const
     {
+#ifndef SVX_LIGHT
         return m_pImpl->m_aValues.find(_eWhich) != m_pImpl->m_aValues.end();
+#else
+        return sal_False;
+#endif
     }
 
     //--------------------------------------------------------------------
     const Any& ODataAccessDescriptor::operator [] ( DataAccessDescriptorProperty _eWhich ) const
     {
+#ifndef SVX_LIGHT
         if (!has(_eWhich))
         {
             OSL_ENSURE(sal_False, "ODataAccessDescriptor::operator[]: invalid acessor!");
@@ -481,27 +520,44 @@ namespace svx
         }
 
         return m_pImpl->m_aValues[_eWhich];
+#else
+        static const Any aDummy;
+        return aDummy;
+#endif
     }
 
     //--------------------------------------------------------------------
     Any& ODataAccessDescriptor::operator[] ( DataAccessDescriptorProperty _eWhich )
     {
+#ifndef SVX_LIGHT
         m_pImpl->invalidateExternRepresentations();
         return m_pImpl->m_aValues[_eWhich];
+#else
+        static const Any aDummy;
+        return aDummy;
+#endif
     }
 
     //--------------------------------------------------------------------
     Sequence< PropertyValue > ODataAccessDescriptor::createPropertyValueSequence()
     {
+#ifndef SVX_LIGHT
         m_pImpl->updateSequence();
         return m_pImpl->m_aAsSequence;
+#else
+        return Sequence< PropertyValue >();
+#endif
     }
 
     //--------------------------------------------------------------------
     Reference< XPropertySet > ODataAccessDescriptor::createPropertySet()
     {
+#ifndef SVX_LIGHT
         m_pImpl->updateSet();
         return m_pImpl->m_xAsSet;
+#else
+        return Reference< XPropertySet >();
+#endif
     }
 
 //........................................................................
@@ -511,6 +567,9 @@ namespace svx
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/04/18 10:42:37  fs
+ *  added operator=
+ *
  *  Revision 1.1  2001/04/11 12:37:54  fs
  *  initial checkin - encapsulating descriptors of data access related transferable objects
  *
