@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcedtw.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:07 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,7 @@ void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                     else
                     {
                         //was war das denn?
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                         DBG_ERROR("Token nicht erkannt!")
                         DBG_ERROR(ByteString(sToken, gsl_getSystemTextEncoding()).GetBuffer())
 #endif
