@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: hjs $ $Date: 2001-02-26 12:26:07 $
+#   last change: $Author: hjs $ $Date: 2001-02-27 13:41:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2212,7 +2212,7 @@ $(LOCALDOCDBTARGET) : $(URDDOCFILES)
 .ENDIF
 
 .IF "$(UNOIDLDBTARGET)"!=""
-$(UNOIDLDBTARGET) : $(UNOIDLDBFILES)
+$(UNOIDLDBTARGET) : $(UNOIDLDBFILES) $(UNOIDLDBREGS)
     +-$(RM) $@
     +regmerge $@ / @$(mktmp $(UNOIDLDBFILES) $(UNOIDLDBREGS))
 .IF "$(LOCALREGDB)"!=""
@@ -2221,7 +2221,7 @@ $(UNOIDLDBTARGET) : $(UNOIDLDBFILES)
 .ENDIF			# "$(UNOIDLDBTARGET)"!=""
 
 .IF "$(UNOIDLDBDOCTARGET)"!=""
-$(UNOIDLDBDOCTARGET) : $(UNOIDLDBDOCFILES)
+$(UNOIDLDBDOCTARGET) : $(UNOIDLDBDOCFILES) $(UNOIDLDBDOCREGS)
     +-$(RM) $@
     +regmerge $@ / @$(mktmp $(UNOIDLDBDOCFILES) $(UNOIDLDBDOCREGS))
 .IF "$(LOCALREGDB)"!=""
@@ -2445,14 +2445,18 @@ $(MISC)$/$(TARGET)genjava.mk: 	$(IDLFILES)
 .IF "$(URD)"!=""
 
 $(URDTARGET) : $(DEPIDLFILES)
+.IF "$(MAXPROCESS)"<="1"
         +$(UNOIDL) @$(mktmp -Wb,c $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Burd -OH$(OUT)$/ucr$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))
+.ENDIF			# "$(MAXPROCESS)"<="1"
         @+echo > $@
 
 .IF "$(URDDOC)"!=""
 
 $(URDDOCTARGET) : $(DEPIDLFILES)
         @+-mkdir $(OUT)$/ucrdoc >& $(NULLDEV)
+.IF "$(MAXPROCESS)"<="1"
         +$(UNOIDL) @$(mktmp $(UNOIDLDEFS) $(TF_PACKAGES_DEF) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Burd -OH$(OUT)$/ucrdoc$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))
+.ENDIF			# "$(MAXPROCESS)"<="1"
         @+echo > $@
 .ENDIF			# "$(URDDOC)"!=""
 .ENDIF			# "$(URD)"!=""
@@ -2563,12 +2567,12 @@ $(PROJECTPCHTARGET) : $(PROJECTPCHSOURCE).cxx
 
 $(NOOPTTARGET):
     @+echo --- NOOPTFILES ---
-    @dmake $(MFLAGS) nopt=true $(NOOPTFILES) NOOPT_FLAG=TRUE $(CALLMACROS)
+    @dmake $(MFLAGS) nopt=true $(PROJECTPCHTARGET:s/.pc/.xc/) $(NOOPTFILES) NOOPT_FLAG=TRUE $(CALLMACROS)
     @+echo --- NOOPTFILES OVER ---
 
 $(NOOPTFILES):
     @+echo --- NOOPT ---
-    @dmake $(MFLAGS) nopt=true NOOPT_FLAG=TRUE $(CALLMACROS) $@
+    @dmake $(MFLAGS) nopt=true NOOPT_FLAG=TRUE $(CALLMACROS) $(PROJECTPCHTARGET:s/.pc/.xc/) $@
     @+echo --- NOOPT OVER ---
 .ENDIF
 .ENDIF
@@ -2585,12 +2589,12 @@ $(NOOPTFILES):
 
 $(EXCEPTIONSTARGET):
     @+echo --- EXCEPTIONSFILES ---
-    @dmake $(MFLAGS) ENABLE_EXCEPTIONS=true $(EXCEPTIONSFILES) EXCEPTIONS_FLAG=TRUE $(CALLMACROS)
+    @dmake $(MFLAGS) ENABLE_EXCEPTIONS=true $(PROJECTPCHTARGET:s/.pc/.xc/) $(EXCEPTIONSFILES) EXCEPTIONS_FLAG=TRUE $(CALLMACROS)
     @+echo --- EXCEPTIONSFILES OVER ---
 
 $(EXCEPTIONSFILES):
     @+echo --- EXCEPTIONS ---
-    @dmake $(MFLAGS) ENABLE_EXCEPTIONS=true EXCEPTIONS_FLAG=TRUE $(CALLMACROS) $@
+    @dmake $(MFLAGS) ENABLE_EXCEPTIONS=true EXCEPTIONS_FLAG=TRUE $(CALLMACROS) $(PROJECTPCHTARGET:s/.pc/.xc/) $@
     @+echo --- EXCEPTIONS OVER ---
 
 
@@ -2608,12 +2612,12 @@ $(EXCEPTIONSFILES):
 
 $(EXCEPTIONSNOOPTTARGET):
     @+echo --- EXCEPTIONSNOOPTFILES ---
-    @dmake $(MFLAGS) ENABLE_EXCEPTIONS=true $(EXCEPTIONSNOOPTFILES) EXCEPTIONSNOOPT_FLAG=TRUE nopt=true $(CALLMACROS)
+    @dmake $(MFLAGS) ENABLE_EXCEPTIONS=true $(PROJECTPCHTARGET:s/.pc/.xc/) $(EXCEPTIONSNOOPTFILES) EXCEPTIONSNOOPT_FLAG=TRUE nopt=true $(CALLMACROS)
     @+echo --- EXCEPTIONSNOOPTFILES OVER ---
 
 $(EXCEPTIONSNOOPTFILES):
     @+echo --- EXCEPTIONSNOOPT ---
-    @dmake $(MFLAGS) ENABLE_EXCEPTIONS=true EXCEPTIONSNOOPT_FLAG=TRUE nopt=true $(CALLMACROS) $@
+    @dmake $(MFLAGS) ENABLE_EXCEPTIONS=true EXCEPTIONSNOOPT_FLAG=TRUE nopt=true $(CALLMACROS) $(PROJECTPCHTARGET:s/.pc/.xc/) $@
     @+echo --- EXCEPTIONSNOOPT OVER ---
 
 
