@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:51:41 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,9 +168,6 @@
 #endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-#ifndef _EMBOBJ_HXX
-#include <so3/embobj.hxx>
 #endif
 #ifndef _COM_SUN_STAR_SHEET_XNAMEDRANGES_HPP_
 #include <com/sun/star/sheet/XNamedRanges.hpp>
@@ -1982,7 +1979,7 @@ void ScXMLImport::SetViewSettings(const uno::Sequence<beans::PropertyValue>& aVi
             ScModelObj* pDocObj = ScModelObj::getImplementation( GetModel() );
             if (pDocObj)
             {
-                SvEmbeddedObject* pEmbeddedObj = pDocObj->GetEmbeddedObject();
+                SfxObjectShell* pEmbeddedObj = pDocObj->GetEmbeddedObject();
                 if (pEmbeddedObj)
                 {
                     Rectangle aRect;
