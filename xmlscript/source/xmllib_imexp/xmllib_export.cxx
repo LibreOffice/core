@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmllib_export.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2001-07-02 12:02:12 $
+ *  last change: $Author: ab $ $Date: 2001-10-23 15:25:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,9 @@ SAL_CALL exportLibraryContainer(
 
         pLibElement->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_LIBRARY_PREFIX ":readonly") ),
                                     rLib.bReadOnly ? aTrueStr : aFalseStr );
+
+        pLibElement->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_LIBRARY_PREFIX ":passwordprotected") ),
+                                    rLib.bPasswordProtected ? aTrueStr : aFalseStr );
 
         sal_Int32 nElementCount = rLib.aElementNames.getLength();
         if( nElementCount )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmllib_import.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2001-07-02 12:02:12 $
+ *  last change: $Author: ab $ $Date: 2001-10-23 15:30:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,6 +250,7 @@ Reference< xml::XImportContext > LibrariesElement::createChildContext(
             XMLNS_XLINK_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("href") ) );
         getBoolAttr( &aDesc.bLink, OUString( RTL_CONSTASCII_USTRINGPARAM("link") ), xAttributes );
         getBoolAttr( &aDesc.bReadOnly, OUString( RTL_CONSTASCII_USTRINGPARAM("readonly") ), xAttributes );
+        getBoolAttr( &aDesc.bPasswordProtected, OUString( RTL_CONSTASCII_USTRINGPARAM("passwordprotected") ), xAttributes );
 
         mLibDescriptors.push_back( aDesc );
         return new LibraryElement( rLocalName, xAttributes, this, _pImport );
