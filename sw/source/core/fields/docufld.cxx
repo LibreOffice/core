@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-15 15:48:27 $
+ *  last change: $Author: os $ $Date: 2000-11-17 14:36:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1199,7 +1199,7 @@ BOOL SwDocInfoField::QueryValue( uno::Any& rAny, const String& rProperty ) const
     {
         rAny  <<= (sal_Int32)GetFormat();
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_DATETIME))
+    else if(rProperty.EqualsAscii(UNO_NAME_DATE_TIME_VALUE))
     {
         Double fVal = GetValue();
         rAny.setValue(&fVal, ::getCppuType(&fVal));
