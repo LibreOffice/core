@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-18 12:29:18 $
+ *  last change: $Author: oj $ $Date: 2001-07-05 10:12:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,6 @@ protected:
 //========================================================================
 class OFilterItemExchange : public OLocalExchange
 {
-    SvDataTypeList          m_aDataTypeList;
     vector<FmFilterItem*>   m_aDraggedEntries;
     FmFormItem*             m_pFormItem;        // ensure that we drop on the same form
 
