@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInstanceInspector.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:56:14 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 13:14:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,44 +38,29 @@
  *
  *************************************************************************/
 
-#ifndef __org_OpenOffice_XInstanceInspector_idl__
-#define __org_OpenOffice_XInstanceInspector_idl__
+#ifndef __org_openoffice_XInstanceInspector_idl__
+#define __org_openoffice_XInstanceInspector_idl__
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
 
- module org {  module OpenOffice {
+module org {  module openoffice {
 
-//=============================================================================
 
 interface XInstanceInspector: com::sun::star::uno::XInterface
 {
-        /*
-         * For a given instance this method displays all services, interfaces,
-         * methods, attributes, and contents in a tree. All dependend
-         * instances are also inspected and displayed, so the user could browse
-         * the tree. If you press the key "F1", the API-documentation from
-         * www.openoffice.org for the current instance will be displayed in a
-         * new window.
-         */
+    /*
+     * For a given instance this method displays all services, interfaces,
+     * methods, attributes, and contents in a tree. All dependend
+     * instances are also inspected and displayed, so the user could browse
+     * the tree. If you press the key "F1", the API-documentation from
+     * www.openoffice.org for the current instance will be displayed in a
+     * new window.
+     */
     void inspect( [in] any aInstance );
 };
 
-//=============================================================================
 
 }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.72.1  2003/06/24 11:12:47  jsc
-    #110313# insert source license header
-
-    Revision 1.1  2001/08/16 12:37:24  bnolte
-    Added example Inspector.
-
-
-
-=============================================================================*/
 #endif
