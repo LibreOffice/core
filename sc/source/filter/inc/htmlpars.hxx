@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlpars.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-06 09:26:03 $
+ *  last change: $Author: dr $ $Date: 2001-04-06 12:08:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,7 @@ public:
     void                        SetDocCoord( USHORT nCol, USHORT nRow );
 
     void                        RecalcSize();
+    void                        SetCellBorders( ScDocument* pDoc, const ScAddress& rFirstPos );
 };
 
 inline void ScHTMLTableData::SetCellCoord( USHORT nCol, USHORT nRow )
@@ -253,6 +254,7 @@ public:
     void                        RecalcSizes();
 
     void                        Recalc();
+    void                        SetCellBorders( ScDocument* pDoc, const ScAddress& rFirstPos );
 };
 
 //------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlimp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-05 10:54:57 $
+ *  last change: $Author: dr $ $Date: 2001-04-06 12:09:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include <svx/paperinf.hxx>
 #include <svx/sizeitem.hxx>
 #include <svx/ulspitem.hxx>
+#include <svx/boxitem.hxx>
 #include <vcl/svapp.hxx>
 
 #include "htmlimp.hxx"
@@ -84,6 +85,7 @@
 #include "stlsheet.hxx"
 #include "compiler.hxx"
 #include "rangenam.hxx"
+#include "attrib.hxx"
 
 
 //------------------------------------------------------------------------
@@ -149,13 +151,48 @@ void ScHTMLImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
 {
     ScEEImport::WriteToDocument( bSizeColsRows, nOutputFactor );
 
-    // create ranges for HTML tables
     const ScHTMLParser* pParser = GetParser();
     ScHTMLTableDataTable* pHTMLTables = pParser->GetHTMLTables();
     if( !pHTMLTables )
         return;
 
-    ScRange aRange;
+    // set cell borders for HTML table cells
+    pHTMLTables->SetCellBorders( pDoc, aRange.aStart );
+
+    // correct cell borders for merged cells
+    for ( ScEEParseEntry* pEntry = pParser->First(); pEntry; pEntry = pParser->Next() )
+    {
+        if( (pEntry->nColOverlap > 1) || (pEntry->nRowOverlap > 1) )
+        {
+            USHORT nTab = aRange.aStart.Tab();
+            const ScMergeAttr* pItem = (ScMergeAttr*) pDoc->GetAttr( pEntry->nCol, pEntry->nRow, nTab, ATTR_MERGE );
+            if( pItem->IsMerged() )
+            {
+                USHORT nColMerge = pItem->GetColMerge();
+                USHORT nRowMerge = pItem->GetRowMerge();
+
+                const SvxBoxItem* pToItem = (const SvxBoxItem*)
+                    pDoc->GetAttr( pEntry->nCol, pEntry->nRow, nTab, ATTR_BORDER );
+                SvxBoxItem aNewItem( *pToItem );
+                if( nColMerge > 1 )
+                {
+                    const SvxBoxItem* pFromItem = (const SvxBoxItem*)
+                        pDoc->GetAttr( pEntry->nCol + nColMerge - 1, pEntry->nRow, nTab, ATTR_BORDER );
+                    aNewItem.SetLine( pFromItem->GetLine( BOX_LINE_RIGHT ), BOX_LINE_RIGHT );
+                }
+                if( nRowMerge > 1 )
+                {
+                    const SvxBoxItem* pFromItem = (const SvxBoxItem*)
+                        pDoc->GetAttr( pEntry->nCol, pEntry->nRow + nRowMerge - 1, nTab, ATTR_BORDER );
+                    aNewItem.SetLine( pFromItem->GetLine( BOX_LINE_BOTTOM ), BOX_LINE_BOTTOM );
+                }
+                pDoc->ApplyAttr( pEntry->nCol, pEntry->nRow, nTab, aNewItem );
+            }
+        }
+    }
+
+    // create ranges for HTML tables
+    ScRange aNewRange;
     ComplRefData aRefData;
     ScTokenArray aTokArray;
     ScRangeData* pRangeData;
@@ -166,8 +203,8 @@ void ScHTMLImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
     ULONG nTab = 0;
     while( pTable = pHTMLTables->GetTable( ++nTab ) )
     {
-        pTable->GetRange( aRange );
-        aRefData.InitRange( aRange );
+        pTable->GetRange( aNewRange );
+        aRefData.InitRange( aNewRange );
         aTokArray.Clear();
         aTokArray.AddDoubleReference( aRefData );
 

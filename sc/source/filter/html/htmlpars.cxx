@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlpars.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-06 09:25:46 $
+ *  last change: $Author: dr $ $Date: 2001-04-06 12:09:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@
 #include <svx/udlnitem.hxx>
 #endif
 #include <svx/wghtitem.hxx>
+#include <svx/boxitem.hxx>
 #include <sfx2/docinf.hxx>
 #include <sfx2/frmhtml.hxx>
 #include <sfx2/objsh.hxx>
@@ -248,6 +249,47 @@ void ScHTMLTableData::RecalcSize()
         pTable->SetDocCoord( CalcDocCol( pTable->GetFirstCol() ), CalcDocRow( pTable->GetFirstRow() ) );
 }
 
+void ScHTMLTableData::SetCellBorders( ScDocument* pDoc, const ScAddress& rFirstPos )
+{
+    const USHORT nOuterLine = DEF_LINE_WIDTH_2;
+    const USHORT nInnerLine = DEF_LINE_WIDTH_0;
+    SvxBorderLine aOuterLine, aInnerLine;
+    aOuterLine.SetColor( Color( COL_BLACK ) );
+    aOuterLine.SetOutWidth( nOuterLine );
+    aInnerLine.SetColor( Color( COL_BLACK ) );
+    aInnerLine.SetOutWidth( nInnerLine );
+    SvxBoxItem aBorderItem;
+
+    for( USHORT nCol = nFirstCol; nCol <= nLastCol; nCol++ )
+    {
+        SvxBorderLine* pLeftLine = (nCol == nFirstCol) ? &aOuterLine : &aInnerLine;
+        SvxBorderLine* pRightLine = (nCol == nLastCol) ? &aOuterLine : &aInnerLine;
+        USHORT nCellCol1 = CalcDocCol( nCol ) + rFirstPos.Col();
+        USHORT nCellCol2 = nCellCol1 + GetCount( aColCount, nCol ) - 1;
+        for( USHORT nRow = nFirstRow; nRow <= nLastRow; nRow++ )
+        {
+            SvxBorderLine* pTopLine = (nRow == nFirstRow) ? &aOuterLine : &aInnerLine;
+            SvxBorderLine* pBottomLine = (nRow == nLastRow) ? &aOuterLine : &aInnerLine;
+            USHORT nCellRow1 = CalcDocRow( nRow ) + rFirstPos.Row();
+            USHORT nCellRow2 = nCellRow1 + GetCount( aRowCount, nRow ) - 1;
+            for( USHORT nCellCol = nCellCol1; nCellCol <= nCellCol2; nCellCol++ )
+            {
+                aBorderItem.SetLine( (nCellCol == nCellCol1) ? pLeftLine : NULL, BOX_LINE_LEFT );
+                aBorderItem.SetLine( (nCellCol == nCellCol2) ? pRightLine : NULL, BOX_LINE_RIGHT );
+                for( USHORT nCellRow = nCellRow1; nCellRow <= nCellRow2; nCellRow++ )
+                {
+                    aBorderItem.SetLine( (nCellRow == nCellRow1) ? pTopLine : NULL, BOX_LINE_TOP );
+                    aBorderItem.SetLine( (nCellRow == nCellRow2) ? pBottomLine : NULL, BOX_LINE_BOTTOM );
+                    pDoc->ApplyAttr( nCellCol, nCellRow, rFirstPos.Tab(), aBorderItem );
+                }
+            }
+        }
+    }
+
+    if( pNestedTables )
+        pNestedTables->SetCellBorders( pDoc, rFirstPos );
+}
+
 
 
 ScHTMLTableDataTable::ScHTMLTableDataTable() :
@@ -384,6 +426,13 @@ void ScHTMLTableDataTable::Recalc()
         pTable->SetDocCoord( pTable->GetFirstCol(), nDocRow );
         nRowDiff += (pTable->GetSize( tdRow ) + pTable->GetFirstRow() - pTable->GetLastRow() - 1);
     }
+}
+
+void ScHTMLTableDataTable::SetCellBorders( ScDocument* pDoc, const ScAddress& rFirstPos )
+{
+    DBG_ASSERT( pDoc, "ScHTMLTableDataTable::SetCellBorders - no document" );
+    for( ScHTMLTableData* pTable = GetFirst(); pTable; pTable = GetNext() )
+        pTable->SetCellBorders( pDoc, rFirstPos );
 }
 
 //------------------------------------------------------------------------
