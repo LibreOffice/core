@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:09:32 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:07:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1871,10 +1871,12 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
                 but I can set some normal numbering, and that overrides outline
                 numbering, and then I can say when I come to say that I want no
                 number on the normal numbering rule, that should all work out
+
+                #115901#
+                No special outline number in textnode any more
                 */
                 if (pTxtNode->GetOutlineNum())
                 {
-                    pTxtNode->UpdateOutlineNum(SwNodeNum(NO_NUM));
                     ASSERT(mpChosenOutlineNumRule, "that doesn't make sense!");
                     if (mpChosenOutlineNumRule)
                     {
@@ -1882,6 +1884,8 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
                             SwNumRuleItem(mpChosenOutlineNumRule->GetName()));
                         pTxtNode->UpdateNum(SwNodeNum(NO_NUM));
                     }
+                    else
+                        pTxtNode->UpdateNum(SwNodeNum(NO_NUM));
                 }
 
                 //#94672#
