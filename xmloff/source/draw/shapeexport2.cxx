@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: bm $ $Date: 2001-07-02 13:24:00 $
+ *  last change: $Author: aw $ $Date: 2001-07-24 15:53:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,6 +556,18 @@ void XMLShapeExport::ImpExportGroupShape( const uno::Reference< drawing::XShape 
 
         ImpExportEvents( xShape );
         ImpExportGluePoints( xShape );
+
+        // #89764# if export of position is supressed for group shape,
+        // positions of contained objects should be written relative to
+        // the upper left edge of the group.
+        awt::Point aUpperLeft;
+
+        if(!(nFeatures & SEF_EXPORT_POSITION))
+        {
+            nFeatures |= SEF_EXPORT_POSITION;
+            aUpperLeft = xShape->getPosition();
+            pRefPoint = &aUpperLeft;
+        }
 
         // write members
         exportShapes( xShapes, nFeatures, pRefPoint );

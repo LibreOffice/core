@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport3.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
+ *  last change: $Author: aw $ $Date: 2001-07-24 15:53:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,18 @@ void XMLShapeExport::ImpExport3DSceneShape( const uno::Reference< drawing::XShap
 
             // write 3DSceneLights
             export3DLamps( xPropSet );
+
+            // #89764# if export of position is supressed for group shape,
+            // positions of contained objects should be written relative to
+            // the upper left edge of the group.
+            awt::Point aUpperLeft;
+
+            if(!(nFeatures & SEF_EXPORT_POSITION))
+            {
+                nFeatures |= SEF_EXPORT_POSITION;
+                aUpperLeft = xShape->getPosition();
+                pRefPoint = &aUpperLeft;
+            }
 
             // write members
             exportShapes( xShapes, nFeatures, pRefPoint );
