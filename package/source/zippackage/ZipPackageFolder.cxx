@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-02 14:43:24 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 21:12:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,7 +384,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                 continue;
             }
 
-
+            sal_Bool bTransportOwnEncrStreamAsRaw = sal_False;
             Reference < XSeekable > xSeek ( xStream, UNO_QUERY );
             try
             {
@@ -408,7 +408,17 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                     // check if it's one of our own streams, if it is then we know that
                     // each time we ask for it we'll get a new stream that will be
                     // at position zero...otherwise, assert and skip this stream...
-                    if ( !pStream->IsPackageMember() )
+                    if ( pStream->IsPackageMember() )
+                    {
+                        // if the password has been changed than the stream should not be package member any more
+                        if ( pStream->IsEncrypted() && pStream->IsToBeEncrypted() )
+                        {
+                            // Should be handled close to the raw stream handling
+                            pTempEntry->nMethod = STORED;
+                            bTransportOwnEncrStreamAsRaw = sal_True;
+                        }
+                    }
+                    else
                     {
                         VOS_ENSURE( 0, "The package component requires that every stream either be FROM a package or it must support XSeekable!" );
                         continue;
@@ -422,7 +432,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                 continue;
             }
 
-            if ( bToBeEncrypted || bRawStream )
+            if ( bToBeEncrypted || bRawStream || bTransportOwnEncrStreamAsRaw )
             {
                 if ( bToBeEncrypted )
                 {
@@ -462,7 +472,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                 pValue[5].Name = sSizeProperty;
                 pValue[5].Value <<= bRawStream ? pStream->GetMagicalHackSize() : pTempEntry->nSize;
 
-                if ( bRawStream )
+                if ( bRawStream || bTransportOwnEncrStreamAsRaw )
                 {
                     pValue[6].Name = sDigestProperty;
                     pValue[6].Value <<= pStream->getDigest();
@@ -471,7 +481,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
             // If the entry is already stored in the zip file in the format we
             // want for this write...copy it raw
-            if ( bRawStream ||
+            if ( bRawStream || bTransportOwnEncrStreamAsRaw ||
                 ( pStream->IsPackageMember()          && !bToBeEncrypted &&
                 ( pStream->aEntry.nMethod == DEFLATED &&  bToBeCompressed ) ||
                 ( pStream->aEntry.nMethod == STORED   && !bToBeCompressed ) ) )
