@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Store.xcs,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:37:43 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:09:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
 				<desc xml:lang="th">Specifies a property value.</desc>
 				<desc xml:lang="hi-IN">Specifies a property value.</desc>
 				<desc xml:lang="x-comment">; Specifies a property value.</desc>
+				<desc xml:lang="sk">Specifies a property value.</desc>
 			</info>
 			<prop oor:name="Handle" oor:type="xs:int">
 				<info>
@@ -121,6 +122,7 @@
 					<desc xml:lang="th">Specifies the numeric property identifier.</desc>
 					<desc xml:lang="hi-IN">Specifies the numeric property identifier.</desc>
 					<desc xml:lang="x-comment">; Specifies the numeric property identifier.</desc>
+					<desc xml:lang="sk">Specifies the numeric property identifier.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Attributes" oor:type="xs:int">
@@ -150,6 +152,7 @@
 					<desc xml:lang="th">Specifies property attributes.</desc>
 					<desc xml:lang="hi-IN">Specifies property attributes.</desc>
 					<desc xml:lang="x-comment">; Specifies property attributes.</desc>
+					<desc xml:lang="sk">Specifies property attributes.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Value" oor:type="oor:any">
@@ -179,6 +182,7 @@
 					<desc xml:lang="th">Specifies the Property value.</desc>
 					<desc xml:lang="hi-IN">Specifies the Property value.</desc>
 					<desc xml:lang="x-comment">; Specifies the Property value.</desc>
+					<desc xml:lang="sk">Specifies the Property value.</desc>
 				</info>
 			</prop>
 			<prop oor:name="State" oor:type="xs:int">
@@ -208,6 +212,7 @@
 					<desc xml:lang="th">Specifies the property state.</desc>
 					<desc xml:lang="hi-IN">Specifies the property state.</desc>
 					<desc xml:lang="x-comment">; Specifies the property state.</desc>
+					<desc xml:lang="sk">Specifies the property state.</desc>
 				</info>
 			</prop>
 		</group>
@@ -238,6 +243,7 @@
 				<desc xml:lang="th">Specifies a set of property values.</desc>
 				<desc xml:lang="hi-IN">Specifies a set of property values.</desc>
 				<desc xml:lang="x-comment">; Specifies a set of property values.</desc>
+				<desc xml:lang="sk">Specifies a set of property values.</desc>
 			</info>
 			<set oor:name="Values" oor:node-type="PropertyValue">
 				<info>
@@ -266,6 +272,7 @@
 					<desc xml:lang="th">Specifies a set of property values.</desc>
 					<desc xml:lang="hi-IN">Specifies a set of property values.</desc>
 					<desc xml:lang="x-comment">; Specifies a set of property values.</desc>
+					<desc xml:lang="sk">Specifies a set of property values.</desc>
 				</info>
 			</set>
 		</group>
@@ -298,10 +305,15 @@
 				<desc xml:lang="th">Specifies the root entry for stored content properties.</desc>
 				<desc xml:lang="hi-IN">Specifies the root entry for stored content properties.</desc>
 				<desc xml:lang="x-comment">; Specifies the root entry for stored content properties.</desc>
+				<desc xml:lang="sk">Specifies the root entry for stored content properties.</desc>
 			</info>
 		</set>
 	</component>
 </oor:component-schema>
+
+
+
+
 
 
 
