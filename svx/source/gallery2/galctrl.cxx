@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galctrl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:49:00 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:56:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,8 @@
 #include "galtheme.hxx"
 #include "galmisc.hxx"
 #include "galctrl.hxx"
+#include "AccessibleStringWrap.hxx"
+#include "svxfont.hxx"
 
 // -----------
 // - Defines -
@@ -516,6 +518,7 @@ BOOL GalleryListView::SeekRow( long nRow )
     mnCurRow = nRow;
     return TRUE;
 }
+
 // -----------------------------------------------------------------------------
 
 String GalleryListView::GetCellText(long _nRow, USHORT nColumnId) const
@@ -536,6 +539,41 @@ String GalleryListView::GetCellText(long _nRow, USHORT nColumnId) const
 
     return sRet;;
 }
+
+// -----------------------------------------------------------------------------
+
+Rectangle GalleryListView::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnId,sal_Int32 nIndex)
+{
+    DBG_ASSERT(_nColumnId >= 0 && _nColumnId <= USHRT_MAX, "GalleryListView::GetFieldCharacterBounds: _nColumnId overflow");
+    Rectangle aRect;
+    if ( SeekRow(_nRow) )
+    {
+        SvxFont aFont( GetFont() );
+        AccessibleStringWrap aStringWrap( *this, aFont, GetCellText(_nRow, static_cast<USHORT>(_nColumnId)) );
+
+        // get the bounds inside the string
+        aStringWrap.GetCharacterBounds(nIndex, aRect);
+
+        // offset to
+    }
+    return aRect;
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Int32 GalleryListView::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnId,const Point& _rPoint)
+{
+    DBG_ASSERT(_nColumnId >= 0 && _nColumnId <= USHRT_MAX, "GalleryListView::GetFieldIndexAtPoint: _nColumnId overflow");
+    sal_Int32 nRet = -1;
+    if ( SeekRow(_nRow) )
+    {
+        SvxFont aFont( GetFont() );
+        AccessibleStringWrap aStringWrap( *this, aFont, GetCellText(_nRow, static_cast<USHORT>(_nColumnId)) );
+        nRet = aStringWrap.GetIndexAtPoint(_rPoint);
+    }
+    return nRet;
+}
+
 // ------------------------------------------------------------------------
 
 void GalleryListView::PaintField( OutputDevice& rDev, const Rectangle& rRect, USHORT nColumnId ) const
