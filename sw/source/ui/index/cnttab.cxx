@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2001-06-27 13:48:13 $
+ *  last change: $Author: fs $ $Date: 2001-06-29 08:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,8 +273,8 @@ using namespace ::rtl;
 #define C2S(cChar) UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(cChar))
 #define C2U(cChar) OUString::createFromAscii(cChar)
 
-#ifndef _SVX_DBBROWSE_HXX
-#include <svx/dbbrowse.hxx>
+#ifndef _SVTOOLS_EDITBROWSEBOX_HXX_
+#include <svtools/editbrowsebox.hxx>
 #endif
 
 static const sal_Unicode aDeliStart = '['; //fuer die form
@@ -366,10 +366,11 @@ typedef AutoMarkEntry* AutoMarkEntryPtr;
 SV_DECL_PTRARR_DEL(AutoMarkEntryArr, AutoMarkEntryPtr, 0, 4);
 SV_IMPL_PTRARR(AutoMarkEntryArr, AutoMarkEntryPtr);
 
-class SwEntryBrowseBox : public DbBrowseBox
+typedef ::svt::EditBrowseBox SwEntryBrowseBox_Base;
+class SwEntryBrowseBox : public SwEntryBrowseBox_Base
 {
-    Edit            aCellEdit;
-    DbCheckBoxCtrl  aCellCheckBox;
+    Edit                    aCellEdit;
+    ::svt::CheckBoxControl  aCellCheckBox;
 
     String  sSearch;
     String  sAlternative;
@@ -383,8 +384,8 @@ class SwEntryBrowseBox : public DbBrowseBox
 
     AutoMarkEntryArr    aEntryArr;
 
-    DbCellControllerRef xController;
-    DbCellControllerRef xCheckController;
+    ::svt::CellControllerRef    xController;
+    ::svt::CellControllerRef    xCheckController;
 
     long    nCurrentRow;
     sal_Bool    bModified;
@@ -396,9 +397,9 @@ protected:
     virtual sal_Bool                SeekRow( long nRow );
 //  virtual void                PaintField( OutputDevice& rDev, const awt::Rectangle& rRect,
 //                                          sal_uInt16 nColumnId ) const;
-    virtual void                PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId) const;
-    virtual void                InitController(DbCellControllerRef& rController, long nRow, sal_uInt16 nCol);
-    virtual DbCellController*   GetController(long nRow, sal_uInt16 nCol);
+    virtual void                    PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId) const;
+    virtual void                    InitController(::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol);
+    virtual ::svt::CellController*  GetController(long nRow, sal_uInt16 nCol);
     virtual sal_Bool                SaveModified();
 
 public:
@@ -4529,7 +4530,7 @@ IMPL_LINK(SwTOXStylesTabPage, ModifyHdl, void*, EMPTYARG)
 
 SwEntryBrowseBox::SwEntryBrowseBox(Window* pParent, const ResId& rId,
                                                        BrowserMode nMode ) :
-            DbBrowseBox( pParent, rId, nMode,
+            SwEntryBrowseBox_Base( pParent, rId, nMode,
                            BROWSER_KEEPSELECTION |
                            BROWSER_COLUMNSELECTION |
                            BROWSER_MULTISELECTION |
@@ -4553,8 +4554,8 @@ SwEntryBrowseBox::SwEntryBrowseBox(Window* pParent, const ResId& rId,
 {
     FreeResource();
     aCellCheckBox.GetBox().EnableTriState(sal_False);
-    xController = new DbEditCellController(&aCellEdit);
-    xCheckController = new DbCheckBoxCellController(&aCellCheckBox);
+    xController = new ::svt::EditCellController(&aCellEdit);
+    xCheckController = new ::svt::CheckBoxCellController(&aCellCheckBox);
 
     //////////////////////////////////////////////////////////////////////
     // HACK: BrowseBox invalidiert nicht ihre Childs, wie es eigentlich sein sollte.
@@ -4629,7 +4630,7 @@ void    SwEntryBrowseBox::PaintCell(OutputDevice& rDev,
 /* -----------------------------19.01.00 14:51--------------------------------
 
  ---------------------------------------------------------------------------*/
-DbCellController* SwEntryBrowseBox::GetController(long nRow, sal_uInt16 nCol)
+::svt::CellController* SwEntryBrowseBox::GetController(long nRow, sal_uInt16 nCol)
 {
     return nCol < ITEM_CASE ? xController : xCheckController;
 }
@@ -4644,16 +4645,16 @@ sal_Bool SwEntryBrowseBox::SaveModified()
 
     String sNew;
     sal_Bool bVal = sal_False;
-    DbCellController* pController = 0;
+    ::svt::CellController* pController = 0;
     if(nCol < ITEM_CASE)
     {
         pController = xController;
-        sNew = ((DbEditCellController*)pController)->GetEditWindow().GetText();
+        sNew = ((::svt::EditCellController*)pController)->GetEditWindow().GetText();
     }
     else
     {
         pController = xCheckController;
-        bVal = ((DbCheckBoxCellController*)pController)->GetCheckBox().IsChecked();
+        bVal = ((::svt::CheckBoxCellController*)pController)->GetCheckBox().IsChecked();
     }
     AutoMarkEntry* pEntry = nRow >= aEntryArr.Count() ? new AutoMarkEntry
                                                       : aEntryArr[nRow];
@@ -4683,20 +4684,20 @@ sal_Bool SwEntryBrowseBox::SaveModified()
 
  ---------------------------------------------------------------------------*/
 void    SwEntryBrowseBox::InitController(
-                DbCellControllerRef& rController, long nRow, sal_uInt16 nCol)
+                ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol)
 {
     const String& rTxt = GetCellText( nRow, nCol );
     if(nCol < ITEM_CASE)
     {
         rController = xController;
-        DbCellController* pController = xController;
-        ((DbEditCellController*)pController)->GetEditWindow().SetText( rTxt );
+        ::svt::CellController* pController = xController;
+        ((::svt::EditCellController*)pController)->GetEditWindow().SetText( rTxt );
     }
     else
     {
         rController = xCheckController;
-        DbCellController* pController = xCheckController;
-        ((DbCheckBoxCellController*)pController)->GetCheckBox().Check(
+        ::svt::CellController* pController = xCheckController;
+        ((::svt::CheckBoxCellController*)pController)->GetCheckBox().Check(
                                                             rTxt == sYes );
      }
 }
@@ -4762,7 +4763,7 @@ void    SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
 {
     //check if the current controller is modified
     sal_uInt16 nCol = GetCurColumnId();
-    DbCellController* pController;
+    ::svt::CellController* pController;
     if(nCol < ITEM_CASE)
         pController = xController;
     else
@@ -4808,7 +4809,7 @@ sal_Bool SwEntryBrowseBox::IsModified()const
 
     //check if the current controller is modified
     sal_uInt16 nCol = GetCurColumnId();
-    DbCellController* pController;
+    ::svt::CellController* pController;
     if(nCol < ITEM_CASE)
         pController = xController;
     else
