@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2003-07-09 10:15:44 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:00:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,8 @@ DEPTARGET=veps
 CDEFS+= -DEDITDEBUG
 .ENDIF
 
-SRCFILES =	dlgeps.src \
+SRS1NAME=$(TARGET)
+SRC1FILES =	dlgeps.src \
             epsstr.src
 
 SLOFILES =	$(SLO)$/eps.obj \
