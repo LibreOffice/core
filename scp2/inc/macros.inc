@@ -1,6 +1,5 @@
 #ifndef MACROS_INC
 #define MACROS_INC
-
 /* =====================================================
  * global helper macros
  * =====================================================*/
@@ -23,10 +22,6 @@
 #define CONCAT8( x, y, z, a, b, c, u, v)        DOCONCAT8(x,y,z,a,b,c,u,v)
 #define DOCONCAT9( x, y, z, a, b, c, u, v, w)   x##y##z##a##b##c##u##v##w
 #define CONCAT9( x, y, z, a, b, c, u, v, w)     DOCONCAT9(x,y,z,a,b,c,u,v,w)
-
-#define ICU_MAJOR 2
-#define ICU_MINOR 6
-#define ICU_MICRO 0
 
 #define CURL_MAJOR 3
 #define CURL_MINOR 0
