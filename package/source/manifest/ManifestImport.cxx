@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestImport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-05 19:23:48 $
+ *  last change: $Author: mtg $ $Date: 2001-10-02 22:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ ManifestImport::ManifestImport( vector < Sequence < PropertyValue > > & rNewManV
 , sWhiteSpace                   ( RTL_CONSTASCII_USTRINGPARAM ( " " ) )
 , sBlowfish                     ( RTL_CONSTASCII_USTRINGPARAM ( "Blowfish CFB" ) )
 , sPBKDF2                       ( RTL_CONSTASCII_USTRINGPARAM ( "PBKDF2" ) )
-, sMD5                          ( RTL_CONSTASCII_USTRINGPARAM ( "MD5" ) )
+, sChecksumType                 ( RTL_CONSTASCII_USTRINGPARAM ( CHECKSUM_TYPE ) )
 {
 }
 ManifestImport::~ManifestImport (void )
@@ -153,7 +153,7 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
             // to store the initialisation vector, salt and iteration count used
             aStack.push (e_EncryptionData );
             OUString aString = xAttribs->getValueByName ( sChecksumTypeAttribute );
-            if (aString == sMD5 && !bIgnoreEncryptData)
+            if (aString == sChecksumType && !bIgnoreEncryptData)
             {
                 aString = xAttribs->getValueByName ( sChecksumAttribute );
                 Sequence < sal_uInt8 > aDecodeBuffer;
