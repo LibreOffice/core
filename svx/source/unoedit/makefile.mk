@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: thb $ $Date: 2002-05-17 17:37:42 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:39:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,26 +68,10 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-CXXFILES =				\
-        UnoForbiddenCharsTable.cxx \
-        unoedsrc.cxx	\
-        unoedhlp.cxx	\
-        unopracc.cxx	\
-        unoedprx.cxx	\
-        unoviwed.cxx	\
-        unoviwou.cxx	\
-        unofored.cxx	\
-        unoforou.cxx	\
-        unotext.cxx		\
-        unotext2.cxx	\
-        unofield.cxx	
 
 SVXLIGHTOBJFILES=\
         $(OBJ)$/UnoForbiddenCharsTable.obj \
