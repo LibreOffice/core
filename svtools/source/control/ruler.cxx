@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-09-14 13:41:19 $
+ *  last change: $Author: os $ $Date: 2001-12-12 10:00:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -932,6 +932,8 @@ void Ruler::ImplDrawIndents( long nMin, long nMax, long nVirTop, long nVirBottom
         {
             if(nIndentStyle == RULER_INDENT_BORDER)
             {
+                const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+                maVirDev.SetLineColor( rStyleSettings.GetShadowColor() );
                 ImplVDrawLine( n, nVirTop, n, nVirBottom );
             }
             else if ( nIndentStyle == RULER_INDENT_BOTTOM )
@@ -951,7 +953,8 @@ void Ruler::ImplDrawIndents( long nMin, long nMax, long nVirTop, long nVirBottom
                 aPoly.SetPoint( Point( n+nIndentWidth2, nVirTop+3 ), 4 );
             }
 
-            ImplDrawIndent( aPoly, nStyle );
+            if(RULER_INDENT_BORDER != nIndentStyle)
+                ImplDrawIndent( aPoly, nStyle );
         }
     }
 }
