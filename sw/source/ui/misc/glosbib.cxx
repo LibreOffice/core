@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosbib.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-15 14:43:07 $
+ *  last change: $Author: os $ $Date: 2001-03-08 15:39:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,9 +220,11 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
     const USHORT nCount = pHdl->GetGroupCnt();
     for(i = 0; i < nCount; ++i)
     {
-        GlosBibUserData* pData = new GlosBibUserData;
         String sTitle;
         String sGroup = pHdl->GetGroupName(i, &sTitle);
+        if(!sGroup.Len())
+            continue;
+        GlosBibUserData* pData = new GlosBibUserData;
         pData->sGroupName = sGroup;
         pData->sGroupTitle = sTitle;
         String sTemp(sTitle);
@@ -677,6 +679,9 @@ void    SwGlossaryGroupTLB::Clear()
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2000/11/15 14:43:07  hr
+      #65293#: SFX_SEARCHPATH_DELIMITER -> SVT_SEARCHPATH_DELIMITER
+
       Revision 1.4  2000/11/13 10:54:33  jp
       remove IniManager
 

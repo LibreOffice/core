@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 14:38:21 $
+ *  last change: $Author: os $ $Date: 2001-03-08 15:39:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -867,6 +867,8 @@ void SwGlossaryDlg::Init()
     {
         String sTitle;
         String sGroupName(pGlossaryHdl->GetGroupName(nId, &sTitle));
+        if(!sGroupName.Len())
+            continue;
         if(!sTitle.Len())
             sTitle = sGroupName.GetToken( 0, GLOS_DELIM );
         SvLBoxEntry* pEntry = aCategoryBox.InsertEntry( sTitle );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloshdl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-02 17:46:27 $
+ *  last change: $Author: os $ $Date: 2001-03-08 15:38:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,7 +275,7 @@ String SwGlossaryHdl::GetGroupName( USHORT nId, String* pTitle )
     if(pTitle)
     {
         SwTextBlocks* pGroup = rStatGlossaries.GetGroupDoc(sRet, FALSE);
-        if(pGroup)
+        if(pGroup && !pGroup->GetError())
         {
             *pTitle = pGroup->GetName();
             if(!pTitle->Len())
@@ -285,7 +285,8 @@ String SwGlossaryHdl::GetGroupName( USHORT nId, String* pTitle )
             }
             rStatGlossaries.PutGroupDoc( pGroup );
         }
-
+        else
+            sRet.Erase();
     }
     return sRet;
 }
@@ -1006,6 +1007,9 @@ String SwGlossaryHdl::GetValidShortCut( const String& rLong,
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2001/02/02 17:46:27  jp
+    use new clipboard
+
     Revision 1.2  2000/10/17 15:15:44  os
     Change: SfxMedium Ctor
 
