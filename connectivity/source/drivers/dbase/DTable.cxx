@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:13:10 $
+ *  last change: $Author: oj $ $Date: 2001-05-28 13:03:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,8 +132,14 @@
 #ifndef _UNOTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
 #endif
+#ifndef _UNOTOOLS_UCBHELPER_HXX
+#include <unotools/ucbhelper.hxx>
+#endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
+#endif
+#ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
+#include "connectivity/PColumn.hxx"
 #endif
 
 using namespace ::comphelper;
@@ -367,7 +373,8 @@ void ODbaseTable::construct()
             if (m_pMemoStream)
                 ReadMemoHeader();
         }
-        fillColumns();
+        if(!m_aColumns.isValid() || !m_aColumns->size())
+            fillColumns();
 
         m_pFileStream->Seek(STREAM_SEEK_TO_END);
         UINT32 nFileSize = m_pFileStream->Tell();
@@ -853,13 +860,18 @@ BOOL ODbaseTable::CreateImpl()
         {
             //  aStatus.SetError(ERRCODE_IO_ALREADYEXISTS,MEMO,aFile.GetFull());
             aURL.setExtension(aExt);      // kill dbf file
-            Content aMemoContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
-            aMemoContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),bool2any( sal_True ) );
-
-            ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii("[StarOffice Base dbase] The memo file '");
-            sMessage += aName;
-            sMessage += ::rtl::OUString::createFromAscii(" already exists.");
-            throwGenericSQLException(sMessage, static_cast<XNamed*>(this));
+            try
+            {
+                Content aMemoContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
+                aMemoContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),bool2any( sal_True ) );
+            }
+            catch(const Exception&)
+            {
+                ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii("[StarOffice Base dbase] The memo file '");
+                sMessage += aName;
+                sMessage += ::rtl::OUString::createFromAscii(" already exists.");
+                throwGenericSQLException(sMessage, static_cast<XNamed*>(this));
+            }
         }
         if (!CreateMemoFile(aURL))
         {
@@ -1110,15 +1122,14 @@ BOOL ODbaseTable::DropImpl()
     INetURLObject aURL;
     aURL.SetURL(getEntry());
 
-    Content aContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
-    aContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),
-                                 makeAny( sal_Bool( sal_True ) ) );
+    if(!::utl::UCBContentHelper::Kill(aURL.GetURLNoPass()))
+        return sal_False;
 
     if (HasMemoFields())
     {
         aURL.setExtension(String::CreateFromAscii("dbt"));
-        Content aMemoContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
-        aMemoContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),bool2any( sal_True ) );
+        if(!::utl::UCBContentHelper::Kill(aURL.GetURLNoPass()))
+            return sal_False;
     }
 
     // jetzt noch die Indices loeschen
@@ -1136,8 +1147,8 @@ BOOL ODbaseTable::DropImpl()
     }
     //  aFile.SetBase(m_Name);
     aURL.setExtension(String::CreateFromAscii("inf"));
-    Content aInfContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
-    aInfContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),bool2any( sal_True ) );
+    if(!::utl::UCBContentHelper::Kill(aURL.GetURLNoPass()))
+        return sal_False;
     return TRUE;
 }
 //------------------------------------------------------------------
@@ -1622,9 +1633,17 @@ void ODbaseTable::alterColumn(sal_Int32 index,
     sal_Int32 i=0;
     for(;i < index;++i)
     {
-        Reference<XDataDescriptorFactory> xColumn;
-        m_pColumns->getByIndex(index) >>= xColumn;
-        Reference<XPropertySet> xCpy = xColumn->createDataDescriptor();
+        Reference<XPropertySet> xProp;
+        m_pColumns->getByIndex(i) >>= xProp;
+        Reference<XDataDescriptorFactory> xColumn(xProp,UNO_QUERY);
+        Reference<XPropertySet> xCpy;
+        if(xColumn.is())
+            xCpy = xColumn->createDataDescriptor();
+        else
+        {
+            xCpy = new OColumn(getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
+            ::comphelper::copyProperties(xProp,xCpy);
+        }
         xAppend->appendByDescriptor(xCpy);
     }
     ++i; // now insert our new column
@@ -1632,9 +1651,17 @@ void ODbaseTable::alterColumn(sal_Int32 index,
 
     for(;i < m_pColumns->getCount();++i)
     {
-        Reference<XDataDescriptorFactory> xColumn;
-        m_pColumns->getByIndex(index) >>= xColumn;
-        Reference<XPropertySet> xCpy = xColumn->createDataDescriptor();
+        Reference<XPropertySet> xProp;
+        m_pColumns->getByIndex(i) >>= xProp;
+        Reference<XDataDescriptorFactory> xColumn(xProp,UNO_QUERY);
+        Reference<XPropertySet> xCpy;
+        if(xColumn.is())
+            xCpy = xColumn->createDataDescriptor();
+        else
+        {
+            xCpy = new OColumn(getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
+            ::comphelper::copyProperties(xProp,xCpy);
+        }
         xAppend->appendByDescriptor(xCpy);
     }
 
@@ -1685,6 +1712,8 @@ void SAL_CALL ODbaseTable::rename( const ::rtl::OUString& newName ) throw(::com:
 
     try
     {
+        String sOldName = aURL.GetURLNoPass();
+        //  ::utl::UCBContentHelper::MoveTo(sOldName,sNewName);
         Content aContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
         aContent.setPropertyValue( rtl::OUString::createFromAscii( "Title" ),makeAny( ::rtl::OUString(sNewName) ) );
     }
@@ -1701,7 +1730,7 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
     String sTempName = createTempFile();
 
     ODbaseTable* pNewTable = new ODbaseTable(static_cast<ODbaseConnection*>(m_pConnection));
-    Reference<XPropertySet> xHoldTable = pNewTable;
+    pNewTable->acquire();
     pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(::rtl::OUString(sTempName)));
     {
         Reference<XAppend> xAppend(pNewTable->getColumns(),UNO_QUERY);
@@ -1709,9 +1738,18 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
         // copy the structure
         for(sal_Int32 i=0;i < m_pColumns->getCount();++i)
         {
-            Reference<XDataDescriptorFactory> xColumn;
-            m_pColumns->getByIndex(i) >>= xColumn;
-            Reference<XPropertySet> xCpy = xColumn->createDataDescriptor();
+            Reference<XPropertySet> xProp;
+            m_pColumns->getByIndex(i) >>= xProp;
+            Reference<XDataDescriptorFactory> xColumn(xProp,UNO_QUERY);
+            Reference<XPropertySet> xCpy;
+            if(xColumn.is())
+                xCpy = xColumn->createDataDescriptor();
+            else
+            {
+                xCpy = new OColumn(getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
+                ::comphelper::copyProperties(xProp,xCpy);
+            }
+
             xAppend->appendByDescriptor(xCpy);
         }
         xAppend->appendByDescriptor(_xNewColumn);
@@ -1728,8 +1766,9 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
     DropImpl();
     pNewTable->rename(m_Name);
     // release the temp file
-    pNewTable = NULL;
-    ::comphelper::disposeComponent(xHoldTable);
+    pNewTable->release();
+
+
     FileClose();
     construct();
 }
