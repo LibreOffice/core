@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdraw.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:53:04 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:07:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -578,7 +578,7 @@ sal_Bool SwView::BeginTextEdit( SdrObject* pObj, SdrPageView* pPV,
     // set in each case, thus it will be correct for all objects
     ((SdrTextObj*)pToBeActivated)->SetTextEditOffset(aNewTextEditOffset);
 
-    sal_Bool bRet = pSdrView->BegTextEdit( pToBeActivated, pPV, pWin, TRUE, pOutliner );
+    sal_Bool bRet = pSdrView->BegTextEdit( pToBeActivated, pPV, pWin, TRUE, pOutliner, 0, FALSE, FALSE, FALSE );
 
     // #i7672#
     // Since BegTextEdit actually creates the OutlinerView and thus also
