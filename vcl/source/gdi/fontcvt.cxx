@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcvt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hdu $ $Date: 2001-07-18 13:08:14 $
+ *  last change: $Author: th $ $Date: 2001-08-03 16:33:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ static const sal_Unicode aStarMathTab[224] =
 {
     // F020
         0x0020,    0x0021,    0x0022,    0x0023,
-        0xE080,    0x0025,    0x0024,    0x221e,
+        0xE080,    0x0025,    0x0026,    0x221e,
         0x0028,    0x0029,    0x002a,    0x002b,
         0x002c,    0x002d,    0x002e,    0x002f,
     // F030
@@ -161,7 +161,7 @@ static const sal_Unicode aStarMathTab[224] =
         0x003c,    0x003d,    0x003e,    0x00bf,
     // F040
         0x2260,    0xE083,    0x2212,    0x2217,
-        0x00d7,    0x2219,    0x00f7,    0x00b1,
+        0x00d7,    0x22c5,    0x00f7,    0x00b1,
         0x2213,    0x2295,    0x2296,    0x2297,
         0x2298,    0x2299,    0x222a,    0x2229,
     // F050
@@ -187,7 +187,7 @@ static const sal_Unicode aStarMathTab[224] =
     // F090
         0xE091,    0xE092,    0xE093,    0xE094,
         0xE095,    0xE096,    0xE097,    0xE098,
-        0xE099,    0xE09a,    0xE09b,    0xE09c,
+        0x02d9,    0x00a8,    0xE09b,    0x02da,
         0x2227,    0x2228,    0x220b,    0x2205,
     // F0A0
         0x007b,    0x007d,    0xe09e,    0xe09f,
@@ -195,8 +195,8 @@ static const sal_Unicode aStarMathTab[224] =
         0xE0a0,    0x22be,    0xE0a1,    0x2259,
         0x2254,    0x2255,    0x21b3,    0x2197,
     // F0B0
-        0x2198,    0x2245,    0xE0a2,    0xE0a3,
-        0xE0a4,    0xE0a5,    0xE0a6,    0x22a4,
+        0x2198,    0x2245,    0x301a,    0x301b,
+        0x2373,    0xE0a5,    0xE0a6,    0x22a4,
         0x2112,    0x2130,    0x2131,         0,
         0xE0a7,    0xE0a8,    0xE0a9,    0xE0aa,
     // F0C0
@@ -213,323 +213,317 @@ static const sal_Unicode aStarMathTab[224] =
         0xe0c6,    0xe0c7,    0xe0c8,    0xe0c9,
         0xe0ca,    0xe0cb,    0xe0cc,    0xe0cd,
         0xe0ce,    0xe0cf,    0xe0d0,    0xe0d1,
-        0xe0d2,    0xe0d3,    0xe0d4,    0xe0d5,
+        0x03f1,    0xe0d3,    0xe0d4,    0xe0d5,
     // F0F0
-        0x2113,     0xe0d6,   0xe0d7,    0xe0d8,
-        0x210a,     0xe0d9,   0x210f,    0xe0da,
+        0x2113,     0xe0d6,   0x2107,    0x2127,
+        0x210a,     0xe0d9,   0x210f,    0x019b,
         0xe0db,     0xe0dc,   0xe0dd,    0x2115,
         0x2124,     0x211a,   0x211d,    0x2102
 };
 
 // -----------------------------------------------------------------------
 
-/*
 static const sal_Unicode aWingDingsTab[224] =
 {
-//TODO:
     // F020
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0x0020,    0xe400,    0xe401,    0xe402,
+        0xe403,    0xe404,    0xe405,    0xe406,
+        0xe407,    0xe408,    0xe409,    0xe40a,
+        0xe40b,    0xe40c,    0xe40d,    0xe40e,
     // F030
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe40f,    0xe410,    0xe411,    0xe412,
+        0xe413,    0xe414,    0xe415,    0xe416,
+        0xe417,    0xe418,    0xe419,    0xe41a,
+        0xe41b,    0xe41c,    0x2707,    0xe41d,
     // F040
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe41e,    0xe41f,    0xe420,    0xe421,
+        0x261c,    0xe423,    0x261d,    0x261f,
+        0x261f,    0xe424,    0xe425,    0xe426,
+        0xe427,    0xe428,    0xe429,    0xe42a,
     // F050
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe42b,    0xe42c,    0x263c,    0xe42d,
+        0xe42e,    0xe42f,    0xe430,    0xe431,
+        0xe432,    0xe433,    0x262a,    0x262f,
+        0x0950,    0xe434,    0x2648,    0x2649,
     // F060
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0x264a,    0x264b,    0x264c,    0x264d,
+        0x264e,    0x264f,    0x2650,    0x2651,
+        0x2652,    0x2653,    0xe435,    0xe436,
+        0xe437,    0xe438,    0xe439,    0xe43a,
     // F070
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe43b,    0xe43c,    0xe43d,    0xe43e,
+        0xe43f,    0xe440,    0xe441,    0xe442,
+        0xe443,    0x2353,    0x2318,    0xe444,
+        0xe445,    0xe446,    0xe447,         0,
     // F080
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe448,    0xe449,    0xe44a,    0xe44b,
+        0xe44c,    0xe44d,    0xe44e,    0xe44f,
+        0xe450,    0xe451,    0xe452,    0xe453,
+        0xe454,    0xe455,    0xe456,    0xe457,
     // F090
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe458,    0xe459,    0xe45a,    0xe45b,
+        0xe45c,    0xe45d,    0xe45e,    0xe45f,
+        0xe460,    0xe461,    0xe462,    0xe463,
+        0xe464,    0xe465,    0xe466,    0xe467,
     // F0a0
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe468,    0xe469,    0xe46a,    0xe46b,
+        0xe46c,    0xe46d,    0xe46e,    0xe46f,
+        0xe470,    0xe471,    0xe472,    0xe473,
+        0xe474,    0xe475,    0xe476,    0xe477,
     // F0b0
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe478,    0xe479,    0xe47a,    0xe47b,
+        0xe47c,    0xe47d,    0xe47e,    0xe47f,
+        0xe480,    0xe481,    0xe482,    0xe483,
+        0xe484,    0xe485,    0xe486,    0xe487,
     // F0c0
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe488,    0xe489,    0xe48a,    0xe48b,
+        0xe48c,    0xe48d,    0xe48e,    0xe48f,
+        0xe490,    0xe491,    0xe492,    0xe493,
+        0xe494,    0xe495,    0xe496,    0xe497,
     // F0d0
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe498,    0xe499,    0xe49a,    0xe49b,
+        0xe49c,    0x232b,    0x2326,    0xe49d,
+        0xe49e,    0xe49f,    0xe4a0,    0xe4a1,
+        0xe4a2,    0xe4a3,    0xe4a4,    0xe4a5,
     // F0e0
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe4a6,    0xe4a7,    0xe4a8,    0xe4a9,
+        0xe4aa,    0xe4ab,    0xe4ac,    0xe4ad,
+        0xe4ae,    0xe4af,    0xe4b0,    0xe4b1,
+        0xe4b2,    0xe4b3,    0xe4b4,    0xe4b5,
     // F0f0
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe4b6,    0xe4b7,    0xe4b8,    0xe4b9,
+        0xe4ba,    0xe4bb,    0xe4bc,    0xe4bd,
+        0xe4ce,    0xe4cf,    0xe4c0,    0xe4c1,
+        0xe4c2,    0xe4c3,    0xe4c4,    0xe4c5
 };
 
 // -----------------------------------------------------------------------
 
 static const sal_Unicode aWingDings2Tab[224] =
 {
-//TODO:
     // F020
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0x0020,    0xe500,    0xe501,    0xe502,
+        0xe503,    0xe504,    0xe505,    0xe506,
+        0xe507,    0xe508,    0xe509,    0xe50a,
+        0xe50b,    0xe50c,    0xe50d,    0xe50e,
     // F030
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe50f,    0xe510,    0xe511,    0xe512,
+        0xe513,    0xe514,    0xe515,    0xe516,
+        0xe517,    0xe518,    0xe519,    0xe51a,
+        0xe51b,    0xe51c,    0xe51d,    0xe51e,
     // F040
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe51f,    0xe520,    0xe521,    0xe522,
+        0xe523,    0xe524,    0xe525,    0xe526,
+        0xe527,    0xe528,    0xe529,    0xe52a,
+        0xe52b,    0xe52c,    0xe52d,    0xe52e,
     // F050
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe52f,    0xe530,    0xe531,    0xe532,
+        0xe533,    0xe534,    0xe535,    0xe536,
+        0xe537,    0xe538,    0xe539,    0xe53a,
+        0xe53b,    0xe53c,    0xe53d,    0xe53e,
     // F060
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe53f,    0xe540,    0xe541,    0xe542,
+        0xe543,    0xe544,    0xe545,    0xe546,
+        0xe547,    0xe548,    0xe549,    0xe54a,
+        0xe54b,    0xe54c,    0xe54d,    0xe54e,
     // F070
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe54e,    0xe54f,    0xe550,    0xe551,
+        0xe552,    0xe553,    0xe554,    0xe555,
+        0xe556,    0xe557,    0xe558,    0xe559,
+        0xe55a,    0xe55b,    0xe55c,         0,
     // F080
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0x2609,    0x25cb,    0x263d,    0x263e,
+        0xe55d,    0xe55e,    0xe55f,    0xe560,
+        0xe561,    0xe562,    0xe563,    0xe564,
+        0xe565,    0xe566,    0xe567,    0xe568,
     // F090
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe569,    0xe56a,    0xe56b,    0xe56c,
+        0xe56d,    0xe56e,    0xe56f,    0xe570,
+        0xe571,    0xe572,    0xe573,    0xe574,
+        0xe575,    0xe576,    0xe577,    0xe578,
     // F0a0
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe579,    0xe57a,    0xe57b,    0xe56c,
+        0xe57d,    0xe57e,    0xe57f,    0xe570,
+        0xe581,    0xe582,    0xe583,    0xe574,
+        0xe585,    0xe586,    0xe587,    0xe588,
     // F0b0
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe589,    0xe58a,    0xe58b,    0xe58c,
+        0xe58d,    0xe58e,    0xe58f,    0xe590,
+        0xe591,    0xe592,    0xe593,    0xe594,
+        0xe595,    0xe596,    0xe597,    0xe598,
     // F0c0
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe599,    0xe59a,    0xe59b,    0xe59c,
+        0xe59d,    0xe59e,    0xe59f,    0xe5a0,
+        0xe5a1,    0xe5a2,    0xe5a3,    0xe5a4,
+        0xe5a5,    0xe5a6,    0xe5a7,    0xe5a8,
     // F0d0
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe5a9,    0xe5aa,    0xe5ab,    0xe5ac,
+        0xe5ad,    0xe5ae,    0xe5af,    0xe5b0,
+        0xe5b1,    0xe5b2,    0xe5b3,    0xe5b4,
+        0xe5b5,    0xe5b6,    0xe5b7,    0xe5b8,
     // F0e0
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe5b9,    0xe5ba,    0xe5bb,    0xe5bc,
+        0xe5bd,    0xe5be,    0xe5bf,    0xe5b0,
+        0xe5c1,    0xe5c2,    0xe5c3,    0xe5c4,
+        0xe5c5,    0xe5c6,    0xe5c7,    0xe5c8,
     // F0f0
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe5c9,    0xe5ca,    0xe5cb,    0xe5cc,
+        0xe5cd,    0xe5ce,    0xe5cf,    0xe5d0,
+        0x203b,    0x2042,         0,         0,
+             0,         0,         0,         0
 };
 
 // -----------------------------------------------------------------------
 
 static const sal_Unicode aWingDings3Tab[224] =
 {
-//TODO:
     // F020
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0x0020,    0xe600,    0xe601,    0xe602,
+        0xe603,    0x2196,    0xe604,    0x2199,
+        0xe605,    0xe606,    0xe607,    0xe608,
+        0xe609,    0xe60a,    0xe60b,    0x21de,
     // F030
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0x21df,    0xe60c,    0xe60d,    0xe60e,
+        0x21e2,    0x21e1,    0x21e3,    0x21af,
+        0x21b5,    0xe60f,    0xe610,    0xe611,
+        0xe612,    0xe613,    0xe614,    0xe615,
     // F040
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe616,    0xe617,    0xe618,    0xe619,
+        0x21c4,    0x21c5,    0xe61a,    0xe61b,
+        0x21c7,    0x21c9,    0x21c8,    0x21ca,
+        0x21b6,    0x21b7,    0xe61c,    0xe61d,
     // F050
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0x21bb,    0x21ba,    0xe61e,    0x2324,
+        0x2303,    0x2325,    0x2334,    0xe61f,
+        0x21ea,    0xe620,    0xe621,    0xe622,
+        0xe623,    0xe624,    0xe625,    0xe626,
     // F060
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe627,    0xe628,    0xe629,    0xe62a,
+        0xe62b,    0xe62c,    0xe62d,    0xe62e,
+        0xe62f,    0xe630,    0xe631,    0xe632,
+        0xe633,    0xe634,    0xe635,    0xe636,
     // F070
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe637,    0xe638,    0x25b3,    0x25bd,
+        0x25c0,    0x25b6,    0x25c1,    0x25b7,
+        0x25e3,    0xe639,    0x25e4,    0x25e5,
+        0x25c2,    0x25b8,    0xe63a,         0,
     // F080
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe63b,    0xe63c,    0xe63d,    0xe63e,
+        0xe63f,    0xe640,    0xe641,    0xe642,
+        0xe643,    0xe644,    0xe645,    0xe646,
+        0xe647,    0xe648,    0xe649,    0xe64a,
     // F090
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe64b,    0xe64c,    0xe64d,    0xe64e,
+        0xe64f,    0xe650,    0xe651,    0xe652,
+        0xe653,    0xe654,    0xe655,    0xe656,
+        0xe657,    0xe658,    0xe659,    0xe65a,
     // F0a0
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe65b,    0xe65c,    0xe65d,    0xe65e,
+        0xe65f,    0xe660,    0xe661,    0xe662,
+        0xe663,    0xe664,    0xe665,    0xe666,
+        0xe667,    0xe668,    0xe669,    0xe66a,
     // F0b0
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe66b,    0xe66c,    0xe66d,    0xe66e,
+        0xe66f,    0xe670,    0xe671,    0xe672,
+        0xe673,    0xe674,    0xe675,    0xe676,
+        0xe677,    0xe678,    0xe679,    0xe67a,
     // F0c0
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe67b,    0xe67c,    0xe67d,    0xe67e,
+        0xe67f,    0xe680,    0xe681,    0xe682,
+        0xe683,    0xe684,    0xe685,    0xe686,
+        0xe687,    0xe688,    0xe689,    0xe68a,
     // F0d0
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe68b,    0xe68c,    0xe68d,    0xe68e,
+        0xe68f,    0xe690,    0xe691,    0xe692,
+        0xe693,    0xe694,    0xe695,    0xe696,
+        0xe697,    0xe698,    0xe699,    0xe69a,
     // F0e0
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe69b,    0xe69c,    0xe69d,    0xe69e,
+        0xe69f,    0xe6a0,    0xe6a1,    0xe6a2,
+        0xe6a3,    0xe6a4,    0xe6a5,    0xe6a6,
+        0xe6a7,    0xe6a8,    0xe6a9,    0xe6aa,
     // F0f0
+        0xe6ab,         0,         0,         0,
              0,         0,         0,         0,
              0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+             0,         0,         0,         0
 };
 
 // -----------------------------------------------------------------------
 
 static const sal_Unicode aWebDingsTab[224] =
 {
-//TODO:
     // F020
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0x0020,    0xe300,    0xe301,    0xe302,
+        0xe303,    0xe304,    0xe305,    0xe306,
+        0xe307,    0xe308,    0xe309,    0xe30a,
+        0xe30b,    0xe30c,    0xe30d,    0xe30e,
     // F030
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe30f,    0xe310,    0xe311,    0xe312,
+        0xe313,    0xe314,    0xe315,    0xe316,
+        0xe317,    0xe318,    0xe319,    0xe31a,
+        0xe31b,    0xe31c,    0xe31d,    0xe31e,
     // F040
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe31f,    0xe320,    0xe321,    0xe322,
+        0xe323,    0xe324,    0xe325,    0xe326,
+        0xe327,    0xe328,    0xe329,    0xe32a,
+        0xe32b,    0xe32c,    0xe32d,    0xe32e,
     // F050
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe32f,    0xe330,    0xe331,    0xe332,
+        0xe333,    0xe334,    0xe335,    0xe336,
+        0xe337,    0xe338,    0xe339,    0xe33a,
+        0xe33b,    0xe33c,    0xe33d,    0xe33e,
     // F060
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe33f,    0xe340,    0xe341,    0xe342,
+        0xe343,    0xe344,    0xe345,    0xe346,
+        0xe347,    0xe348,    0xe349,    0xe34a,
+        0xe34b,    0xe34c,    0xe34d,    0xe34e,
     // F070
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe34f,    0xe350,    0xe351,    0xe352,
+        0xe353,    0xe354,    0xe355,    0xe356,
+        0xe357,    0xe358,    0xe359,    0xe35a,
+        0xe35b,    0xe35c,    0xe35d,         0,
     // F080
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe35e,    0xe35f,    0xe360,    0xe361,
+        0xe362,    0xe363,    0xe364,    0xe365,
+        0xe366,    0xe367,    0xe368,    0xe369,
+        0xe36a,    0xe36b,    0xe36c,    0xe36d,
     // F090
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe36e,    0xe36f,    0xe370,    0xe371,
+        0xe372,    0xe373,    0xe374,    0xe375,
+        0xe376,    0xe377,    0xe378,    0xe379,
+        0xe37a,    0xe37b,    0xe37c,    0xe37d,
     // F0a0
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe37e,    0xe37f,    0xe380,    0xe381,
+        0xe382,    0xe383,    0xe384,    0xe385,
+        0xe386,    0xe387,    0xe388,    0xe389,
+        0xe38a,    0xe38b,    0xe38c,    0xe38d,
     // F0b0
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe38e,    0xe38f,    0xe390,    0xe391,
+        0xe392,    0xe393,    0xe394,    0xe395,
+        0xe396,    0xe397,    0xe398,    0xe399,
+        0xe39a,    0xe39b,    0xe39c,    0xe39d,
     // F0c0
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe39e,    0xe39f,    0xe3a0,    0xe3a1,
+        0xe3a2,    0xe3a3,    0xe3a4,    0xe3a5,
+        0xe3a6,    0xe3a7,    0xe3a8,    0xe3a9,
+        0xe3aa,    0xe3ab,    0xe3ac,    0xe3ad,
     // F0d0
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe3ae,    0xe3af,    0xe3b0,    0xe3b1,
+        0xe3b2,    0xe3b3,    0xe3b4,    0xe3b5,
+        0xe3b6,    0xe3b7,    0xe3b8,    0xe3b9,
+        0xe3ba,    0xe3bb,    0xe3bc,    0xe3bd,
     // F0e0
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe3be,    0xe3bf,    0xe3c0,    0xe3c1,
+        0xe3c2,    0xe3c3,    0xe3c4,    0xe3c5,
+        0xe3c6,    0xe3c7,    0xe3c8,    0xe3c9,
+        0xe3ca,    0xe3cb,    0xe3cd,    0xe3ce,
     // F0f0
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
-             0,         0,         0,         0,
+        0xe3cf,    0xe3d0,    0xe3d1,    0xe3d2,
+        0xe3d3,    0xe3d4,    0xe3d5,    0xe3d6,
+        0xe3d7,    0xe3d8,    0xe3d9,    0xe3da,
+        0xe3db,    0xe3dc,    0xe3dd,    0xe3de
 };
-*/
 
 // -----------------------------------------------------------------------
 
@@ -538,7 +532,7 @@ static const sal_Unicode aAdobeSymbolTab[224] =
 //TODO:
     // F020
         0x0020,    0xe100,    0xe101,    0xe102,
-        0xe103,    0xe104,    0x0026,    0xe105,
+        0xe103,    0xe104,    0xe16a,    0xe105,
         0xe106,    0xe107,    0xe108,    0xe109,
         0xe10a,    0xe10b,    0xe10c,    0xe10d,
     // F030
@@ -1030,28 +1024,28 @@ struct RecodeTable { const char* pOrgName; ImplCvtChar aCvt;};
 
 static RecodeTable aRecodeTable[] =
 {
-    {"starbats",        {aStarBatsTab,  "StarSymbol", NULL}},
-    {"starmath",        {aStarMathTab,  "StarSymbol", NULL}},
+    // the first two entries must be StarMath and StarBats; do not reorder!
+    {"starbats",        {aStarBatsTab,  "starsymbol", NULL}},
+    {"starmath",        {aStarMathTab,  "starsymbol", NULL}},
 
-    {"symbol",          {aAdobeSymbolTab,"StarSymbol", NULL}},
-    {"standardsymbols", {aAdobeSymbolTab,"StarSymbol", NULL}},
-    {"standardsymbolsl",{aAdobeSymbolTab,"StarSymbol", NULL}},
+    {"symbol",          {aAdobeSymbolTab, "starsymbol", NULL}},
+    {"standardsymbols", {aAdobeSymbolTab, "starsymbol", NULL}},
+    {"standardsymbolsl",{aAdobeSymbolTab, "starsymbol", NULL}},
 
-    {"monotypesorts",   {aMonotypeSortsTab,"StarSymbol", NULL}},
-    {"zapfdingbats",    {aMonotypeSortsTab,"StarSymbol", NULL}},  //ZapfDingbats=MonotypeSorts-X?
-    {"itczapfdingbats", {aMonotypeSortsTab,"StarSymbol", NULL}},
-    {"dingbats",        {aMonotypeSortsTab,"StarSymbol", NULL}},
-//  {"zapfchancery",    {aMonotypeSortsTab,"StarSymbol", NULL}},
-//  {"monotypesorts2",  {aMonotypeSorts2Tab,"StarSymbol", NULL}}
+    {"monotypesorts",   {aMonotypeSortsTab, "starsymbol", NULL}},
+//  {"monotypesorts2",  {aMonotypeSorts2Tab, "starsymbol", NULL}}
+    {"zapfdingbats",    {aMonotypeSortsTab, "starsymbol", NULL}},  //ZapfDingbats=MonotypeSorts-X?
+    {"itczapfdingbats", {aMonotypeSortsTab, "starsymbol", NULL}},
+    {"dingbats",        {aMonotypeSortsTab, "starsymbol", NULL}},
 
-//  {"wingdings",       {aWingDingsTab, "StarSymbol", NULL}},
-//  {"wingdings2",      {aWingDings2Tab,"StarSymbol", NULL}},
-//  {"wingdings3",      {aWingDings3Tab,"StarSymbol", NULL}},
-//  {"webdings",        {aWebDings2Tab, "StarSymbol", NULL}},
+    {"webdings",        {aWebDingsTab,   "starsymbol", NULL}},
+    {"wingdings",       {aWingDingsTab,  "starsymbol", NULL}},
+    {"wingdings2",      {aWingDings2Tab, "starsymbol", NULL}},
+    {"wingdings3",      {aWingDings3Tab, "starsymbol", NULL}},
 };
 
-static ImplCvtChar aImplStarSymbolCvt = { NULL, "StarBats", ImplStarSymbolToStarBats };
-static ImplCvtChar aImplDingBatsCvt   = { aMonotypeSortsTab, "StarSymbol", NULL };
+static ImplCvtChar aImplStarSymbolCvt = { NULL, "starbats", ImplStarSymbolToStarBats };
+static ImplCvtChar aImplDingBatsCvt   = { aMonotypeSortsTab, "starsymbol", NULL };
 
 // -----------------------------------------------------------------------
 
