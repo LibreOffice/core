@@ -1,0 +1,143 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ExtendedTypeDetection.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: as $ $Date: 2002-09-09 11:33:56 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_document_ExtendedTypeDetection_idl__
+#define __com_sun_star_document_ExtendedTypeDetection_idl__
+
+#ifndef __com_sun_star_document_XExtendedFilterDetection_idl__
+#include <com/sun/star/document/XExtendedFilterDetection.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module document {
+
+//=============================================================================
+/** describes a class of service which will be used for deep <type>TypeDetection</type>
+    in a generic way
+
+    <p>
+    Due to the registered types, flat <type>TypeDetection</type> is already possible, i.e.
+    the assignment of types (e.g. to a URL) only on the basis of configuration data.
+    If, however, you imagine special cases (e.g. modifying the file extension of a
+    Writer file from .sdw to .doc), it quickly becomes clear that you cannot always
+    get a correct result with flat detection. To be certain to get correct results,
+    you need deep detection, i.e. the file itself has to be examined.
+    And that is exactly the function of DetectServices. They get all the information
+    collected so far on a document and then decide which type to assign it to.
+    In the new modular model, such a detector is meant as UNO service which registers
+    itself in the office and is requested by the generic type detection if necessary.
+    <br>
+    Therefore you need two pieces of information:
+    <ul>
+        <li>
+        The <strong>ServiceName</strong> - This must be a valid UNO service name.
+        It is also an entry in the corresponding configuration list.
+        <br>
+        Example: "com.company.devision.DetectService"
+        <br>
+        Note that this realy means the implementation name of the service.
+        Because it's not possible otherwise to distinguish between more then one
+        registered detect services in same office installation! But it's possible for
+        the generic type detection to create an uno service by his implementation name too.
+        </li>
+        <li>
+        A list of <strong>Types</strong> able to be recognized by this service -
+        You can also implement and register detectors for groups of types.
+        </li>
+    </ul>
+    See service <type>TypeDetection</type> and his configuration for further informations.
+    </p>
+
+    @see TypeDetection
+ */
+service ExtendedTypeDetection
+{
+    //-------------------------------------------------------------------------
+    /** makes the deep detection
+
+        <p>
+        Generic type detection searchs for a registered DetectService for an
+        already flat detected type. If any could be found it will be created and
+        used by calling methods of this interface. It gets a <type>MediaDescriptor</type>
+        which contains information about the document which should be detected and must return
+        <ul>
+            <li>an internal type name for detected format</li>
+            <li>or <NULL/> if format is unknown nor supported.</li>
+        </ul>
+        May be that given descriptor already includes the opened document stream as parameter
+        <member>MediaDescriptor::InputStream</member>. Then this one should be used everytime.
+        If it's not included in descriptor the value of <member>MediaDescriptor::URL</member>
+        must be used to open requested ressource by this service.
+        <br>
+        Note: The stream should be added to the descriptor if it wasn't a part of them before.
+        So further steps on the whole detection process can use it and will perform her work.
+        It's further not allowed to hold a reference to this stream any longer. Only copies
+        will be valid then. Otherwise nobody can close this stream then.
+        </p>
+     */
+    interface XExtendedFilterDetection;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
