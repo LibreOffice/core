@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 20:37:53 $
+ *  last change: $Author: os $ $Date: 2002-08-29 07:37:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@
 #define MIN_BUTTON_WIDTH 12
 #define MIN_BUTTON_HEIGHT 12
 #define MIN_BUTTON_SIZE MAP_APPFONT( MIN_BUTTON_WIDTH, MIN_BUTTON_HEIGHT );
-#define MASKCOLOR MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
 DockingWindow FLT_WIN_ANIMATION
 {
     HelpID = SID_ANIMATION_OBJECTS ;
@@ -863,7 +862,7 @@ DockingWindow FLT_WIN_ANIMATION
             {
                 File = "get1obj.bmp" ;
             };
-            MASKCOLOR
+            MaskColor = IMAGE_MASK_STDCOLOR;
         };
         TabStop = TRUE ;
         /* ### ACHTUNG: Neuer Text in Resource? Objekt übernehmen : Objekt ³bernehmen */
@@ -901,7 +900,7 @@ DockingWindow FLT_WIN_ANIMATION
             {
                 File = "getallob.bmp" ;
             };
-            MASKCOLOR
+            MaskColor = IMAGE_MASK_STDCOLOR;
         };
         TabStop = TRUE ;
         /* ### ACHTUNG: Neuer Text in Resource? Objekte einzeln übernehmen : Objekte einzeln ³bernehmen */
@@ -939,7 +938,7 @@ DockingWindow FLT_WIN_ANIMATION
             {
                 File = "del1bmp.bmp" ;
             };
-            MASKCOLOR
+            MaskColor = IMAGE_MASK_STDCOLOR;
         };
         TabStop = TRUE ;
         /* ### ACHTUNG: Neuer Text in Resource? Aktuelles Bild löschen : Aktuelles Bild l÷schen */
@@ -977,7 +976,7 @@ DockingWindow FLT_WIN_ANIMATION
             {
                 File = "delall.bmp" ;
             };
-            MASKCOLOR
+            MaskColor = IMAGE_MASK_STDCOLOR;
         };
         TabStop = TRUE ;
         /* ### ACHTUNG: Neuer Text in Resource? Alle Bilder löschen : Alle Bilder l÷schen */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-21 13:26:40 $
+ *  last change: $Author: os $ $Date: 2002-08-29 07:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 // - Defines -
 // -----------
 
-#define IMAGE_MASK_STDCOLOR Color{ Red = 0xc000; Green = 0xc000; Blue = 0xc000; }
-#define IMAGE_MASK_STDCOLOR_HC Color{ Red = 0xff00; Green = 0x0000; Blue = 0xff00; }
+#define IMAGE_MASK_STDCOLOR Color{ Red = 0xff00; Green = 0x0000; Blue = 0xff00; }
+#define IMAGE_MASK_STDCOLOR_HC IMAGE_MASK_STDCOLOR
 #define IMAGE_STDBTN_COLOR_HC COL_LIGHTMAGENTA
 
 #define RID_TIME_BUTTON           RID_APP_START
