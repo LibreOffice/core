@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formtoolbars.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:23:55 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:09:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #include "fmdocumentclassification.hxx"
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
 
 #include <tools/solar.h>
@@ -87,7 +87,7 @@ namespace svxform
     {
     private:
         DocumentType    m_eDocumentType;
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::frame::XLayoutManager >
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >
                         m_xLayouter;
 
     public:
