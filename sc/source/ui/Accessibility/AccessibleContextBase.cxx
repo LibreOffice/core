@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:42 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:10:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,14 +67,14 @@
 #include "unoguard.hxx"
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYCHANGEEVENT_HPP_
@@ -117,7 +117,7 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
@@ -237,7 +237,7 @@ uno::Reference< XAccessibleContext> SAL_CALL
 
 //=====  XAccessibleComponent  ================================================
 
-sal_Bool SAL_CALL ScAccessibleContextBase::contains(const awt::Point& rPoint )
+sal_Bool SAL_CALL ScAccessibleContextBase::containsPoint(const awt::Point& rPoint )
         throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
@@ -245,7 +245,7 @@ sal_Bool SAL_CALL ScAccessibleContextBase::contains(const awt::Point& rPoint )
     return Rectangle (Point(), GetBoundingBox().GetSize()).IsInside(VCLPoint(rPoint));
 }
 
-uno::Reference< XAccessible > SAL_CALL ScAccessibleContextBase::getAccessibleAt(
+uno::Reference< XAccessible > SAL_CALL ScAccessibleContextBase::getAccessibleAtPoint(
         const awt::Point& rPoint )
         throw (uno::RuntimeException)
 {
@@ -408,7 +408,7 @@ sal_Int16 SAL_CALL
         if (msDescription != sDescription)
         {
             AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::ACCESSIBLE_DESCRIPTION_EVENT;
+            aEvent.EventId = AccessibleEventId::DESCRIPTION_CHANGED;
             aEvent.Source = uno::Reference< XAccessible >(this);
             aEvent.OldValue <<= msDescription;
             aEvent.NewValue <<= sDescription;
@@ -435,7 +435,7 @@ OUString SAL_CALL
         if (msName != sName)
         {
             AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::ACCESSIBLE_NAME_EVENT;
+            aEvent.EventId = AccessibleEventId::NAME_CHANGED;
             aEvent.Source = uno::Reference< XAccessible >(this);
             aEvent.OldValue <<= msName;
             aEvent.NewValue <<= sName;
@@ -576,8 +576,8 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
     OUString* pServiceNames = aServiceNames.getArray();
     if (pServiceNames)
     {
-        pServiceNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM ("drafts.com.sun.star.accessibility.Accessible"));
-        pServiceNames[1] = OUString(RTL_CONSTASCII_USTRINGPARAM ("drafts.com.sun.star.accessibility.AccessibleContext"));
+        pServiceNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.accessibility.Accessible"));
+        pServiceNames[1] = OUString(RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.accessibility.AccessibleContext"));
     }
 
     return aServiceNames;
@@ -633,7 +633,7 @@ void ScAccessibleContextBase::CommitChange(const AccessibleEventObject& rEvent) 
 void ScAccessibleContextBase::ChangeName()
 {
     AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::ACCESSIBLE_NAME_EVENT;
+    aEvent.EventId = AccessibleEventId::NAME_CHANGED;
     aEvent.Source = uno::Reference< XAccessible >(const_cast<ScAccessibleContextBase*>(this));
     aEvent.OldValue <<= msName;
 
@@ -648,7 +648,7 @@ void ScAccessibleContextBase::ChangeName()
 void ScAccessibleContextBase::CommitDefunc() const
 {
     AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::ACCESSIBLE_STATE_EVENT;
+    aEvent.EventId = AccessibleEventId::STATE_CHANGED;
     aEvent.Source = uno::Reference< XAccessible >(const_cast<ScAccessibleContextBase*>(this));
     aEvent.NewValue <<= AccessibleStateType::DEFUNC;
 
@@ -658,7 +658,7 @@ void ScAccessibleContextBase::CommitDefunc() const
 void ScAccessibleContextBase::CommitFocusGained() const
 {
     AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::ACCESSIBLE_STATE_EVENT;
+    aEvent.EventId = AccessibleEventId::STATE_CHANGED;
     aEvent.Source = uno::Reference< XAccessible >(const_cast<ScAccessibleContextBase*>(this));
     aEvent.NewValue <<= AccessibleStateType::FOCUSED;
 
@@ -670,7 +670,7 @@ void ScAccessibleContextBase::CommitFocusGained() const
 void ScAccessibleContextBase::CommitFocusLost() const
 {
     AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::ACCESSIBLE_STATE_EVENT;
+    aEvent.EventId = AccessibleEventId::STATE_CHANGED;
     aEvent.Source = uno::Reference< XAccessible >(const_cast<ScAccessibleContextBase*>(this));
     aEvent.OldValue <<= AccessibleStateType::FOCUSED;
 
