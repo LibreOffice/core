@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresslistdialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 15:25:10 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:34:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,15 +299,15 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
     Size aSz(m_aListHB.GetOutputSizePixel());
     m_aListHB.InsertItem( ITEMID_NAME, m_sName,
                             aSz.Width()/2,
-                            HIB_LEFT | HIB_VCENTER /*| HIB_CLICKABLE | HIB_UPARROW */);
+                            HIB_LEFT | HIB_VCENTER | HIB_FIXED | HIB_FIXEDPOS/*| HIB_CLICKABLE | HIB_UPARROW */);
     m_aListHB.InsertItem( ITEMID_TABLE, m_sTable,
                             aSz.Width()/2,
-                            HIB_LEFT | HIB_VCENTER /*| HIB_CLICKABLE | HIB_UPARROW */);
+                            HIB_LEFT | HIB_VCENTER | HIB_FIXED | HIB_FIXEDPOS /*| HIB_CLICKABLE | HIB_UPARROW */);
     m_aListHB.SetHelpId(HID_MM_ADDRESSLIST_HB );
     m_aListHB.Show();
 
     m_aListLB.SetHelpId(HID_MM_ADDRESSLIST_TLB);
-    static long nTabs[] = {3, 0, aSz.Width()/2, aSz.Width() };
+    static long nTabs[] = {2, 0, aSz.Width()/2 };
     m_aListLB.SetWindowBits( WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP );
     m_aListLB.SetSelectionMode( SINGLE_SELECTION );
     m_aListLB.SetTabs(&nTabs[0], MAP_PIXEL);
@@ -365,6 +365,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
     m_aOK.Enable(m_aListLB.GetEntryCount()>0 && bEnableOK);
     m_aEditPB.Enable(bEnableEdit);
     m_aListLB.SetSelectHdl(LINK(this, SwAddressListDialog, ListBoxSelectHdl_Impl));
+    TableSelectHdl_Impl(NULL);
 }
 /*-- 07.04.2004 16:35:43---------------------------------------------------
 
