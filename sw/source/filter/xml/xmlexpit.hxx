@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexpit.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-26 12:02:46 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:07:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@ public:
     void exportXML( SvXMLExport& rExport,
                     const SfxItemSet& rSet,
                     const SvXMLUnitConverter& rUnitConverter,
+                    ::xmloff::token::XMLTokenEnum ePropToken,
                     sal_uInt16 nFlags = 0 ) const;
 
     /** this method is called for every item that has the
