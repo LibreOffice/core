@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-11 15:03:50 $
+ *  last change: $Author: ka $ $Date: 2000-12-14 14:47:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1337,7 +1337,7 @@ void SdOptionsPrint::GetPropNameArray( const char**& ppNames, ULONG& rCount ) co
         // bWarningOrientation
         "Page/Booklet",
         "Page/BookletFront",
-        "Page/BookletFront",
+        "Page/BookletBack",
         // bCutPage
         "Other/FromPrinterSetup",
         "Other/Quality",
@@ -1356,7 +1356,7 @@ void SdOptionsPrint::GetPropNameArray( const char**& ppNames, ULONG& rCount ) co
         // bWarningOrientation
         "Page/Booklet",
         "Page/BookletFront",
-        "Page/BookletFront",
+        "Page/BookletBack",
         // bCutPage
         "Other/FromPrinterSetup",
         "Other/Quality",
@@ -1382,18 +1382,18 @@ void SdOptionsPrint::GetPropNameArray( const char**& ppNames, ULONG& rCount ) co
 
 BOOL SdOptionsPrint::ReadData( const Any* pValues )
 {
-    if( pValues[0].hasValue() ) SetDraw( *(sal_Bool*) pValues[ 0 ].getValue() );
-    if( pValues[1].hasValue() ) SetDate( *(sal_Bool*) pValues[ 1 ].getValue() );
-    if( pValues[2].hasValue() ) SetTime( *(sal_Bool*) pValues[ 2 ].getValue() );
-    if( pValues[3].hasValue() ) SetPagename( *(sal_Bool*) pValues[ 3 ].getValue() );
-    if( pValues[4].hasValue() ) SetHiddenPages( *(sal_Bool*) pValues[ 4 ].getValue() );
-    if( pValues[5].hasValue() ) SetPagesize( *(sal_Bool*) pValues[ 5 ].getValue() );
-    if( pValues[6].hasValue() ) SetPagetile( *(sal_Bool*) pValues[ 6 ].getValue() );
-    if( pValues[7].hasValue() ) SetBooklet( *(sal_Bool*) pValues[ 7 ].getValue() );
-    if( pValues[8].hasValue() ) SetFrontPage( *(sal_Bool*) pValues[ 8 ].getValue() );
-    if( pValues[9].hasValue() ) SetBackPage( *(sal_Bool*) pValues[ 9 ].getValue() );
-    if( pValues[10].hasValue() ) SetPaperbin( *(sal_Bool*) pValues[ 10 ].getValue() );
-    if( pValues[11].hasValue() ) SetOutputQuality( (UINT16) *(sal_Int32*) pValues[ 11 ].getValue() );
+    if( pValues[0].hasValue() ) SetDate( *(sal_Bool*) pValues[ 0 ].getValue() );
+    if( pValues[1].hasValue() ) SetTime( *(sal_Bool*) pValues[ 1 ].getValue() );
+    if( pValues[2].hasValue() ) SetPagename( *(sal_Bool*) pValues[ 2 ].getValue() );
+    if( pValues[3].hasValue() ) SetHiddenPages( *(sal_Bool*) pValues[ 3 ].getValue() );
+    if( pValues[4].hasValue() ) SetPagesize( *(sal_Bool*) pValues[ 4 ].getValue() );
+    if( pValues[5].hasValue() ) SetPagetile( *(sal_Bool*) pValues[ 5 ].getValue() );
+    if( pValues[6].hasValue() ) SetBooklet( *(sal_Bool*) pValues[ 6 ].getValue() );
+    if( pValues[7].hasValue() ) SetFrontPage( *(sal_Bool*) pValues[ 7 ].getValue() );
+    if( pValues[8].hasValue() ) SetBackPage( *(sal_Bool*) pValues[ 8 ].getValue() );
+    if( pValues[9].hasValue() ) SetPaperbin( *(sal_Bool*) pValues[ 9 ].getValue() );
+    if( pValues[10].hasValue() ) SetOutputQuality( (UINT16) *(sal_Int32*) pValues[ 10 ].getValue() );
+    if( pValues[11].hasValue() ) SetDraw( *(sal_Bool*) pValues[ 11 ].getValue() );
 
     // just for impress
     if( GetConfigId() == SDCFG_IMPRESS )
@@ -1410,18 +1410,18 @@ BOOL SdOptionsPrint::ReadData( const Any* pValues )
 
 BOOL SdOptionsPrint::WriteData( Any* pValues ) const
 {
-    pValues[ 0 ] <<= IsDraw();
-    pValues[ 1 ] <<= IsDate();
-    pValues[ 2 ] <<= IsTime();
-    pValues[ 3 ] <<= IsPagename();
-    pValues[ 4 ] <<= IsHiddenPages();
-    pValues[ 5 ] <<= IsPagesize();
-    pValues[ 6 ] <<= IsPagetile();
-    pValues[ 7 ] <<= IsBooklet();
-    pValues[ 8 ] <<= IsFrontPage();
-    pValues[ 9 ] <<= IsBackPage();
-    pValues[ 10 ] <<= IsPaperbin();
-    pValues[ 11 ] <<= (sal_Int32) GetOutputQuality();
+    pValues[ 0 ] <<= IsDate();
+    pValues[ 1 ] <<= IsTime();
+    pValues[ 2 ] <<= IsPagename();
+    pValues[ 3 ] <<= IsHiddenPages();
+    pValues[ 4 ] <<= IsPagesize();
+    pValues[ 5 ] <<= IsPagetile();
+    pValues[ 6 ] <<= IsBooklet();
+    pValues[ 7 ] <<= IsFrontPage();
+    pValues[ 8 ] <<= IsBackPage();
+    pValues[ 9 ] <<= IsPaperbin();
+    pValues[ 10 ] <<= (sal_Int32) GetOutputQuality();
+    pValues[ 11 ] <<= IsDraw();
 
     // just for impress
     if( GetConfigId() == SDCFG_IMPRESS )
