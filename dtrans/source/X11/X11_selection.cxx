@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-16 14:37:50 $
+ *  last change: $Author: pl $ $Date: 2001-02-20 10:08:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1303,10 +1303,10 @@ void SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
             fprintf( stderr, "received XdndPosition on 0x%x (%d, %d)\n", aTarget, m_nLastX, m_nLastY );
 #endif
             DropTargetDragEnterEvent aEvent;
-            aEvent.Source = static_cast< XDropTarget* >(it->second.m_pTarget);
-            aEvent.Context = new DropTargetDragContext( m_aCurrentDropWindow, m_nDropTimestamp, *this );
-            aEvent.Location.X = m_nLastX;
-            aEvent.Location.Y = m_nLastY;
+            aEvent.Source       = static_cast< XDropTarget* >(it->second.m_pTarget);
+            aEvent.Context      = new DropTargetDragContext( m_aCurrentDropWindow, m_nDropTimestamp, *this );
+            aEvent.LocationX    = m_nLastX;
+            aEvent.LocationY    = m_nLastY;
             if( m_nCurrentProtocolVersion < 2 )
                 aEvent.DropAction = DNDConstants::ACTION_COPY;
             else if( rMessage.data.l[4] == m_nXdndActionCopy )
@@ -1358,14 +1358,14 @@ void SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
             fprintf( stderr, "received XdndDrop on 0x%x (%d, %d)\n", aTarget, m_nLastX, m_nLastY );
 #endif
             DropTargetDropEvent aEvent;
-            aEvent.Source = static_cast< XDropTarget* >(it->second.m_pTarget);
-            aEvent.Context = new DropTargetDropContext( m_aCurrentDropWindow, m_nDropTimestamp, *this );
-            aEvent.Location.X = m_nLastX;
-            aEvent.Location.Y = m_nLastY;
-            aEvent.DropAction = m_nLastDropAction;
+            aEvent.Source       = static_cast< XDropTarget* >(it->second.m_pTarget);
+            aEvent.Context      = new DropTargetDropContext( m_aCurrentDropWindow, m_nDropTimestamp, *this );
+            aEvent.LocationX    = m_nLastX;
+            aEvent.LocationY    = m_nLastY;
+            aEvent.DropAction   = m_nLastDropAction;
             // there is nothing corresponding to source supported actions
             // every source can do link, copy and move
-            aEvent.SourceActions = m_nLastDropAction;
+            aEvent.SourceActions= m_nLastDropAction;
             aEvent.Transferable = m_xDropTransferable;
 
             it->second->drop( aEvent );
@@ -1522,8 +1522,8 @@ void SelectionManager::sendDropPosition( bool bForce, Time eventTime )
             DropTargetDragEvent dtde;
             dtde.Source         = static_cast< OWeakObject* >(it->second.m_pTarget );
             dtde.Context        = new DropTargetDragContext( m_aCurrentDropWindow, m_nDropTimestamp, *this );
-            dtde.Location.X     = x;
-            dtde.Location.Y     = y;
+            dtde.LocationX      = x;
+            dtde.LocationY      = y;
             dtde.DropAction     = m_nUserDragAction;
             dtde.SourceActions  = m_nSourceActions;
             it->second->dragOver( dtde );
@@ -1749,8 +1749,8 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
                     DropTargetDropEvent dtde;
                     dtde.Source         = static_cast< OWeakObject* >(it->second.m_pTarget );
                     dtde.Context        = new DropTargetDropContext( m_aCurrentDropWindow, m_nDropTimestamp, *this );
-                    dtde.Location.X     = x;
-                    dtde.Location.Y     = y;
+                    dtde.LocationX      = x;
+                    dtde.LocationY      = y;
                     dtde.DropAction     = m_nUserDragAction;
                     dtde.SourceActions  = m_nSourceActions;
                     dtde.Transferable   = m_xDragSourceTransferable;
@@ -2064,8 +2064,8 @@ void SelectionManager::updateDragWindow( int nX, int nY, Window aRoot )
                 DropTargetDragEnterEvent dtde;
                 dtde.Source                 = static_cast< OWeakObject* >( it->second.m_pTarget );
                 dtde.Context                = new DropTargetDragContext( m_aCurrentDropWindow, m_nDropTimestamp, *this );
-                dtde.Location.X             = nWinX;
-                dtde.Location.Y             = nWinY;
+                dtde.LocationX              = nWinX;
+                dtde.LocationY              = nWinY;
                 dtde.DropAction             = m_nUserDragAction;
                 dtde.SupportedDataFlavors   = m_xDragSourceTransferable->getTransferDataFlavors();
                 it->second.m_pTarget->dragEnter( dtde );
