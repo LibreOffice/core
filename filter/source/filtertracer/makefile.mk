@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 17:57:46 $
+#   last change: $Author: hr $ $Date: 2003-03-25 17:57:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,11 +62,10 @@
 
 PRJ=..$/..
 PRJNAME=filter
-TARGET=flash
+TARGET=filtertracer
 
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
-GEN_HID=TRUE
 
 # --- Settings ----------------------------------
 
@@ -74,62 +73,36 @@ GEN_HID=TRUE
 
 # --- Types -------------------------------------
 
-UNOTYPES=\
-    com.sun.star.uno.RuntimeException							\
-    com.sun.star.uno.TypeClass									\
-    com.sun.star.uno.XInterface									\
-    com.sun.star.uno.XWeak										\
-    com.sun.star.registry.XRegistryKey							\
-    com.sun.star.io.XInputStream								\
-    com.sun.star.io.XOutputStream								\
-    com.sun.star.lang.XComponent								\
-    com.sun.star.lang.XInitialization							\
-    com.sun.star.lang.XMultiServiceFactory						\
-    com.sun.star.lang.XSingleServiceFactory						\
-    com.sun.star.lang.XServiceInfo								\
-    com.sun.star.loader.XImplementationLoader					\
-    com.sun.star.registry.XImplementationRegistration			\
-    com.sun.star.registry.XRegistryKey							\
-    com.sun.star.registry.XSimpleRegistry						\
-    com.sun.star.document.XFilter								\
-    com.sun.star.document.XExporter								\
-    com.sun.star.drawing.XDrawPagesSupplier						\
-    com.sun.star.container.XIndexAccess
+UNOTYPES=	com.sun.star.uno.XWeak						\
+            com.sun.star.uno.XNamingService				\
+            com.sun.star.uno.XComponentContext			\
+            com.sun.star.uno.XAggregation				\
+            com.sun.star.lang.XServiceInfo				\
+            com.sun.star.lang.XSingleServiceFactory		\
+            com.sun.star.lang.XMultiServiceFactory		\
+            com.sun.star.lang.XSingleComponentFactory	\
+            com.sun.star.lang.XTypeProvider				\
+            com.sun.star.lang.XInitialization			\
+            com.sun.star.registry.XSimpleRegistry		\
+            com.sun.star.util.logging.XLogger			\
+            com.sun.star.util.logging.LogLevel			\
+            com.sun.star.util.XTextSearch				\
+            com.sun.star.util.SearchResult
+
+
 # --- Files -------------------------------------
-
-SRCFILES =	impswfdialog.src				
-
-SLOFILES=	$(SLO)$/swffilter.obj								\
-            $(SLO)$/swfwriter.obj								\
-            $(SLO)$/swfwriter1.obj								\
-            $(SLO)$/swfwriter2.obj								\
-            $(SLO)$/swfuno.obj									\
-            $(SLO)$/swfexporter.obj							\
-            $(SLO)$/swfdialog.obj							\
-            $(SLO)$/impswfdialog.obj
+        
+SLOFILES=	$(SLO)$/filtertracer.obj					\
+            $(SLO)$/filtertraceruno.obj
 
 # --- Library -----------------------------------
 
-RESLIB1NAME=$(TARGET)
-RESLIB1SRSFILES= $(SRS)$/$(TARGET).srs
-
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
-    
-SHL1STDLIBS=\
-    $(GOODIESLIB) \
-    $(SVTOOLLIB) \
-    $(CPPULIB)			\
-    $(CPPUHELPERLIB)	\
-    $(COMPHELPERLIB)	\
-    $(VOSLIB)			\
-    $(SALLIB)			\
-    $(TOOLSLIB)			\
-    $(VCLLIB)			\
-    $(UNOTOOLSLIB)			\
-    $(ONELIB)			\
-    $(ZLIB3RDLIB)
-
-#	$(SVLLIB)			\
+SHL1STDLIBS=$(CPPULIB)			\
+            $(CPPUHELPERLIB)	\
+            $(SALLIB)			\
+            $(TOOLSLIB)			\
+            $(UNOTOOLSLIB)
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(SHL1TARGET)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfwriter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-21 14:58:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 17:57:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ Writer::Writer( sal_Int32 nTWIPWidthOutput, sal_Int32 nTWIPHeightOutput, sal_Int
     // define an invisible button with the size of a page
     Rectangle aRect( 0, 0, mnDocWidth * mnDocXScale, mnDocHeight * mnDocYScale );
     Polygon aPoly( aRect );
-    FillStyle aFill( Color(COL_WHITE) );
+    FillStyle aFill = FillStyle( Color(COL_WHITE) );
     mnWhiteBackgroundShapeId = defineShape( aPoly, aFill );
 
     Matrix3D m;

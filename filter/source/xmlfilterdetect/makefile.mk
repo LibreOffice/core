@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 17:57:46 $
+#   last change: $Author: hr $ $Date: 2003-03-25 17:57:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,86 +59,46 @@
 #
 #
 #*************************************************************************
-
 PRJ=..$/..
-PRJNAME=filter
-TARGET=flash
 
-ENABLE_EXCEPTIONS=TRUE
-USE_DEFFILE=TRUE
-GEN_HID=TRUE
+PRJNAME=			filter
+TARGET=				fl_xmlfilterdetect
+USE_DEFFILE=		TRUE
+NO_BSYMBOLIC=		TRUE
+ENABLE_EXCEPTIONS=	TRUE
+BOOTSTRAP_SERVICE=	FALSE
 
-# --- Settings ----------------------------------
+# --- Settings -----------------------------------------------------
 
-.INCLUDE :  	settings.mk
+.INCLUDE :  		svpre.mk
+.INCLUDE :  		settings.mk
+.INCLUDE :  		sv.mk
+# --- defines ------------------------------------------------------
 
-# --- Types -------------------------------------
+CDEFS+=-DCOMPMOD_NAMESPACE=framework
 
-UNOTYPES=\
-    com.sun.star.uno.RuntimeException							\
-    com.sun.star.uno.TypeClass									\
-    com.sun.star.uno.XInterface									\
-    com.sun.star.uno.XWeak										\
-    com.sun.star.registry.XRegistryKey							\
-    com.sun.star.io.XInputStream								\
-    com.sun.star.io.XOutputStream								\
-    com.sun.star.lang.XComponent								\
-    com.sun.star.lang.XInitialization							\
-    com.sun.star.lang.XMultiServiceFactory						\
-    com.sun.star.lang.XSingleServiceFactory						\
-    com.sun.star.lang.XServiceInfo								\
-    com.sun.star.loader.XImplementationLoader					\
-    com.sun.star.registry.XImplementationRegistration			\
-    com.sun.star.registry.XRegistryKey							\
-    com.sun.star.registry.XSimpleRegistry						\
-    com.sun.star.document.XFilter								\
-    com.sun.star.document.XExporter								\
-    com.sun.star.drawing.XDrawPagesSupplier						\
-    com.sun.star.container.XIndexAccess
-# --- Files -------------------------------------
+# --- Targets ------------------------------------------------------
+SHL1TARGET=		xmlfd$(UPD)$(DLLPOSTFIX)
 
-SRCFILES =	impswfdialog.src				
+SHL1IMPLIB=		i$(SHL1TARGET)
+                
+SHL1OBJS=		$(SLO)$/fdcomp.obj		\
+                $(SLO)$/filterdetect.obj	
+                
 
-SLOFILES=	$(SLO)$/swffilter.obj								\
-            $(SLO)$/swfwriter.obj								\
-            $(SLO)$/swfwriter1.obj								\
-            $(SLO)$/swfwriter2.obj								\
-            $(SLO)$/swfuno.obj									\
-            $(SLO)$/swfexporter.obj							\
-            $(SLO)$/swfdialog.obj							\
-            $(SLO)$/impswfdialog.obj
+                
+SHL1STDLIBS=	$(CPPULIB)			\
+                $(CPPUHELPERLIB)	\
+                $(COMPHELPERLIB)	\
+                $(SALLIB)	\
+                $(UCBHELPERLIB)	
+                
 
-# --- Library -----------------------------------
+SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 
-RESLIB1NAME=$(TARGET)
-RESLIB1SRSFILES= $(SRS)$/$(TARGET).srs
 
-SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
-    
-SHL1STDLIBS=\
-    $(GOODIESLIB) \
-    $(SVTOOLLIB) \
-    $(CPPULIB)			\
-    $(CPPUHELPERLIB)	\
-    $(COMPHELPERLIB)	\
-    $(VOSLIB)			\
-    $(SALLIB)			\
-    $(TOOLSLIB)			\
-    $(VCLLIB)			\
-    $(UNOTOOLSLIB)			\
-    $(ONELIB)			\
-    $(ZLIB3RDLIB)
+DEF1NAME=		$(SHL1TARGET)
 
-#	$(SVLLIB)			\
+DEF1EXPORTFILE=	exports.dxp
 
-SHL1DEPN=
-SHL1IMPLIB=	i$(SHL1TARGET)
-SHL1LIBS=	$(SLB)$/$(TARGET).lib
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME=$(SHL1TARGET)
-DEF1EXPORTFILE=exports.dxp
-
-# --- Targets ----------------------------------
-
-.INCLUDE : target.mk
+.INCLUDE :			target.mk

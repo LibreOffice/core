@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgexport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-21 06:03:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 17:57:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,6 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
                 if( xDocHandler.is() )
                 {
                     mbPresentation = Reference< XPresentationSupplier >( mxSrcDoc, UNO_QUERY ).is();
-                    mbMultiPage = ( xDrawPages->getCount() > 1 );
                     mpObjects = new ObjectMap;
                     mpSVGExport = new SVGExport( xDocHandler );
 
@@ -200,7 +199,6 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
                     delete mpSVGExport, mpSVGExport = NULL;
                     delete mpSVGFontExport, mpSVGFontExport = NULL;
                     delete mpObjects, mpObjects = NULL;
-                    mbMultiPage = sal_False;
                     mbPresentation = sal_False;
                 }
             }
@@ -259,11 +257,13 @@ sal_Bool SVGFilter::implExportDocumemt( const Reference< XDrawPages >& rxMasterP
                 OUString                                aAttr;
                 sal_Int32                               nDocWidth = 0, nDocHeight = 0;
                 sal_Int32                               nVisible = -1, nVisibleMaster = -1;
+                const sal_Bool                          bMultiPage = ( rxDrawPages->getCount() > 1 );
 
                 xPagePropSet->getPropertyValue( B2UCONST( "Width" ) ) >>= nDocWidth;
                 xPagePropSet->getPropertyValue( B2UCONST( "Height" ) ) >>= nDocHeight;
 
-                xExtDocHandler->unknown( SVG_DTD_STRING );
+                if( xExtDocHandler.is() )
+                    xExtDocHandler->unknown( SVG_DTD_STRING );
 
 #ifdef _SVG_WRITE_EXTENTS
                 aAttr = OUString::valueOf( nDocWidth * 0.01 );
@@ -284,28 +284,64 @@ sal_Bool SVGFilter::implExportDocumemt( const Reference< XDrawPages >& rxMasterP
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "preserveAspectRatio", B2UCONST( "xMidYMid" ) );
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "fill-rule", B2UCONST( "evenodd" ) );
 
-                if( mbMultiPage )
+                if( bMultiPage )
                 {
                     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:ooo", B2UCONST( "http://xml.openoffice.org/svg/export" ) );
                     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "onclick", B2UCONST( "onClick(evt)" ) );
                     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "onkeypress", B2UCONST( "onKeyPress(evt)" ) );
-                    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "onload", B2UCONST( "onLoad()" ) );
                 }
 
                 mpSVGDoc = new SvXMLElementExport( *mpSVGExport, XML_NAMESPACE_NONE, "svg", TRUE, TRUE );
+
+                for( sal_Int32 i = 0, nCount = rxDrawPages->getCount(); ( i < nCount ) && ( -1 == nVisible ); ++i )
+                {
+                    Reference< XDrawPage > xDrawPage;
+                    rxDrawPages->getByIndex( i ) >>= xDrawPage;
+
+                    if( xDrawPage.is() )
+                    {
+                        Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY );
+
+                        if( xPropSet.is() )
+                        {
+                            sal_Bool bVisible;
+
+                            if( !mbPresentation || ( ( xPropSet->getPropertyValue( B2UCONST( "Visible" ) ) >>= bVisible ) && bVisible ) )
+                            {
+                                Reference< XMasterPageTarget > xMasterTarget( xDrawPage, UNO_QUERY );
+
+                                if( xMasterTarget.is() )
+                                {
+                                    Reference< XDrawPage > xMasterPage( xMasterTarget->getMasterPage() );
+
+                                    nVisible = i;
+
+                                    for( sal_Int32 nMaster = 0, nMasterCount = rxMasterPages->getCount(); ( nMaster < nMasterCount ) && ( -1 == nVisibleMaster ); ++nMaster )
+                                    {
+                                        Reference< XDrawPage > xMasterTestPage;
+                                        rxMasterPages->getByIndex( nMaster ) >>= xMasterTestPage;
+
+                                        if( xMasterTestPage == xMasterPage )
+                                            nVisibleMaster = nMaster;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
 
 #ifdef _SVG_EMBED_FONTS
                 mpSVGFontExport->EmbedFonts();
 #endif
 
-                if( mbMultiPage )
+                if( bMultiPage )
                 {
                     implGenerateMetaData( rxMasterPages, rxDrawPages );
                     implGenerateScript( rxMasterPages, rxDrawPages );
                 }
 
-                implExportPages( rxMasterPages, sal_True );
-                implExportPages( rxDrawPages, sal_False );
+                implExportPages( rxMasterPages, nVisibleMaster, sal_True );
+                implExportPages( rxDrawPages, nVisible, sal_False );
 
                 delete mpSVGDoc, mpSVGDoc = NULL;
                 bRet = sal_True;
@@ -338,9 +374,8 @@ sal_Bool SVGFilter::implGenerateMetaData( const Reference< XDrawPages >& rxMaste
                 Reference< XDrawPage >          xDrawPage( rxDrawPages->getByIndex( i ), UNO_QUERY );
                 Reference< XMasterPageTarget >  xMasterPageTarget( xDrawPage, UNO_QUERY );
                 Reference< XDrawPage >          xMasterPage( xMasterPageTarget->getMasterPage(), UNO_QUERY );
-                sal_Bool                        bMasterBackgroundVisible = sal_True;
-                sal_Bool                        bMasterObjectsVisible = sal_True;
-                OUString                        aVisibility;
+                sal_Bool                        bMasterVisible = sal_True;
+                OUString                        aMasterVisibility;
 
                 aSlideId += OUString::valueOf( i );
 
@@ -349,29 +384,18 @@ sal_Bool SVGFilter::implGenerateMetaData( const Reference< XDrawPages >& rxMaste
                     Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY );
 
                     if( xPropSet.is() )
-                    {
-                        xPropSet->getPropertyValue( B2UCONST( "IsBackgroundVisible" ) )  >>= bMasterBackgroundVisible;
-                        xPropSet->getPropertyValue( B2UCONST( "IsBackgroundObjectsVisible" ) )  >>= bMasterObjectsVisible;
-                    }
+                        xPropSet->getPropertyValue( B2UCONST( "Background" ) )  >>= bMasterVisible;
                 }
+
+                if( bMasterVisible )
+                    aMasterVisibility = B2UCONST( "visible" );
+                else
+                    aMasterVisibility = B2UCONST( "hidden" );
 
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", aSlideId );
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "slide", implGetValidIDFromInterface( xDrawPage ) );
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "master", implGetValidIDFromInterface( xMasterPage ) );
-
-                if( bMasterBackgroundVisible )
-                    aVisibility = B2UCONST( "visible" );
-                else
-                    aVisibility = B2UCONST( "hidden" );
-
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "master-background-visibility", aVisibility );
-
-                if( bMasterObjectsVisible )
-                    aVisibility = B2UCONST( "visible" );
-                else
-                    aVisibility = B2UCONST( "hidden" );
-
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "master-objects-visibility", aVisibility );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "master-visibility", aMasterVisibility );
 
                 {
                     SvXMLElementExport aExp( *mpSVGExport, XML_NAMESPACE_NONE, "ooo:slideInfo", TRUE, TRUE );
@@ -397,9 +421,11 @@ sal_Bool SVGFilter::implGenerateScript( const Reference< XDrawPages >& rxMasterP
         SvXMLElementExport                      aExp( *mpSVGExport, XML_NAMESPACE_NONE, "script", TRUE, TRUE );
         Reference< XExtendedDocumentHandler >   xExtDocHandler( mpSVGExport->GetDocHandler(), UNO_QUERY );
 
-        xExtDocHandler->unknown( OUString::createFromAscii( aSVGScript1 ) );
-        xExtDocHandler->unknown( OUString::createFromAscii( aSVGScript2 ) );
-        xExtDocHandler->unknown( OUString::createFromAscii( aSVGScript3 ) );
+        if( xExtDocHandler.is() )
+        {
+            xExtDocHandler->unknown( OUString::createFromAscii( aSVGScript1 ) );
+            xExtDocHandler->unknown( OUString::createFromAscii( aSVGScript2 ) );
+        }
     }
 
     return sal_True;
@@ -407,15 +433,16 @@ sal_Bool SVGFilter::implGenerateScript( const Reference< XDrawPages >& rxMasterP
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SVGFilter::implExportPages( const Reference< XDrawPages >& rxPages, sal_Bool bMaster )
+sal_Bool SVGFilter::implExportPages( const Reference< XDrawPages >& rxMasterPages,
+                                     sal_Int32 nVisiblePage, sal_Bool bMaster )
 {
     sal_Bool bRet = sal_False;
 
-    for( sal_Int32 i = 0, nCount = rxPages->getCount(); i < nCount; ++i )
+    for( sal_Int32 i = 0, nCount = rxMasterPages->getCount(); i < nCount; ++i )
     {
         Reference< XDrawPage > xDrawPage;
 
-        rxPages->getByIndex( i ) >>= xDrawPage;
+        rxMasterPages->getByIndex( i ) >>= xDrawPage;
 
         if( xDrawPage.is() )
         {
@@ -423,71 +450,44 @@ sal_Bool SVGFilter::implExportPages( const Reference< XDrawPages >& rxPages, sal
 
             if( xShapes.is() )
             {
-                Reference< XExtendedDocumentHandler >   xExtDocHandler( mpSVGExport->GetDocHandler(), UNO_QUERY );
-                const OUString                          aPageId( implGetValidIDFromInterface( xShapes ) );
-                OUString                                aAttr;
+                OUString aAttr;
 
-                if( !mbMultiPage  )
+                if( i == nVisiblePage )
                     aAttr = B2UCONST( "visible" );
                 else
                     aAttr = B2UCONST( "hidden" );
 
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "visibility", aAttr );
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", aPageId );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", implGetValidIDFromInterface( xShapes ) );
 
                 {
                     SvXMLElementExport  aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", TRUE, TRUE );
                     const Point         aNullPt;
 
                     {
-                        SvXMLElementExport  aExp( *mpSVGExport, XML_NAMESPACE_NONE, "desc", TRUE, TRUE );
-                        OUString            aDesc;
+                        Reference< XExtendedDocumentHandler > xExtDocHandler( mpSVGExport->GetDocHandler(), UNO_QUERY );
 
-                        if( bMaster )
-                            aDesc = B2UCONST( "Master slide" );
-                        else
-                            aDesc = B2UCONST( "Slide" );
+                        if( xExtDocHandler.is() )
+                        {
+                            SvXMLElementExport  aExp( *mpSVGExport, XML_NAMESPACE_NONE, "desc", TRUE, TRUE );
+                            OUString            aDesc;
 
-                        xExtDocHandler->unknown( aDesc );
+                            if( bMaster )
+                                aDesc = B2UCONST( "Master slide" );
+                            else
+                                aDesc = B2UCONST( "Slide" );
+
+                            xExtDocHandler->unknown( aDesc );
+                        }
                     }
 
                     if( bMaster )
                     {
-                        // master slide background
-                        OUString aMasterBackgroundId( aPageId );
-                        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", aMasterBackgroundId += B2UCONST( "_background" ) );
-                        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "visibility", aAttr );
-
-                        {
-                            SvXMLElementExport  aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", TRUE, TRUE );
-                            const GDIMetaFile&  rMtf = (*mpObjects)[ xDrawPage ].GetRepresentation();
-
-                            {
-                                SvXMLElementExport  aExpDesc( *mpSVGExport, XML_NAMESPACE_NONE, "desc", TRUE, TRUE );
-                                xExtDocHandler->unknown( B2UCONST( "Master slide background" ) );
-                            }
-
-                            mpSVGWriter->WriteMetaFile( aNullPt, rMtf.GetPrefSize(), rMtf, SVGWRITER_WRITE_FILL );
-                        }
-
-                        // master slide objects
-                        OUString aMasterObjectsId( aPageId );
-                        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", aMasterObjectsId += B2UCONST( "_objects" ) );
-                        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "visibility", aAttr );
-
-                        {
-                            SvXMLElementExport  aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", TRUE, TRUE );
-
-                            {
-                                SvXMLElementExport  aExpDesc( *mpSVGExport, XML_NAMESPACE_NONE, "desc", TRUE, TRUE );
-                                xExtDocHandler->unknown( B2UCONST( "Master slide objects" ) );
-                            }
-
-                            bRet = implExportShapes( xShapes ) || bRet;
-                        }
+                        const GDIMetaFile& rMtf = (*mpObjects)[ xDrawPage ].GetRepresentation();
+                        mpSVGWriter->WriteMetaFile( aNullPt, rMtf.GetPrefSize(), rMtf, SVGWRITER_WRITE_FILL );
                     }
-                    else
-                        bRet = implExportShapes( xShapes ) || bRet;
+
+                    bRet = implExportShapes( xShapes ) || bRet;
                 }
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2002-09-17 12:58:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 17:57:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,24 @@
 #include "impdialog.hxx"
 #include "impdialog.hrc"
 
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
+#include <com/sun/star/uno/Sequence.h>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
+#include <com/sun/star/text/XTextRange.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
+#include <com/sun/star/container/XIndexAccess.hpp>
+#endif
+
 // ----------------
 // - ImpPDFDialog -
 // ----------------
 
+using namespace ::com::sun::star;
+
 ImpPDFDialog::ImpPDFDialog( Window* pParent, ResMgr& rResMgr, Sequence< PropertyValue >& rFilterData, const Any& rSelection ) :
-    ModalDialog( pParent, ResId( DLG_PDFEXPORT, &rResMgr ) ),
+    ModalDialog( pParent, ResId( RID_PDF_EXPORT_DLG, &rResMgr ) ),
     maBtnOK( this, ResId( BT_OK ) ),
     maBtnCancel( this, ResId( BT_CANCEL ) ),
     maBtnHelp( this, ResId( BT_HELP ) ),
@@ -90,7 +102,26 @@ ImpPDFDialog::ImpPDFDialog( Window* pParent, ResMgr& rResMgr, Sequence< Property
 
     maRbAll.Check();
     TogglePagesHdl( NULL );
-    maRbSelection.Enable( maSelection.hasValue() );
+
+    sal_Bool bHasSelection = maSelection.hasValue();
+    if ( bHasSelection )
+    {
+        // even if nothing is selected in writer the selection is not empty
+        Reference< container::XIndexAccess > xIndexAccess;
+        if ( maSelection >>= xIndexAccess )
+        {
+            sal_Int32 nLen = xIndexAccess->getCount();
+            if ( !nLen )
+                bHasSelection = sal_False;
+            else if ( nLen == 1 )
+            {
+                Reference< text::XTextRange > xTextRange( xIndexAccess->getByIndex( 0 ), UNO_QUERY );
+                if ( xTextRange.is() && ( xTextRange->getString().getLength() == 0 ) )
+                    bHasSelection = sal_False;
+            }
+        }
+    }
+    maRbSelection.Enable( bHasSelection );
 
     switch( nCompressMode )
     {

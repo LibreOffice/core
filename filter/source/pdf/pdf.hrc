@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: impdialog.hrc,v $
+ *  $RCSfile: pdf.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 17:57:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 17:57:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,17 +59,5 @@
  *
  ************************************************************************/
 
-#include <filter.hrc>
+#define PDF_PROGRESS_BAR    260
 
-#define FL_PAGES            1
-#define RB_ALL              2
-#define RB_RANGE            3
-#define RB_SELECTION        4
-#define ED_PAGES            5
-#define BT_OK               6
-#define BT_CANCEL           7
-#define BT_HELP             8
-#define FL_COMPRESSION      9
-#define RB_SCREEN           10
-#define RB_PRINT            11
-#define RB_PRESS            12

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: gh $ $Date: 2002-12-11 09:36:00 $
+#   last change: $Author: hr $ $Date: 2003-03-25 17:57:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,8 @@ USE_DEFFILE=TRUE
 
 # --- Files -------------------------------------
 
-SRCFILES =	impdialog.src				
+SRCFILES =	impdialog.src				\
+            pdf.src
 
 SLOFILES=	$(SLO)$/pdfuno.obj			\
             $(SLO)$/pdfdialog.obj		\

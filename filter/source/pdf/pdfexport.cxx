@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2002-12-03 11:04:14 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 17:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,7 @@
  *
  *
  ************************************************************************/
-
+#include "pdf.hrc"
 #include "pdfexport.hxx"
 #include <tools/urlobj.hxx>
 #include <tools/fract.hxx>
@@ -75,8 +75,10 @@
 #include <vcl/bmpacc.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <unotools/localfilehelper.hxx>
+#include <unotools/processfactory.hxx>
 #include <svtools/FilterConfigItem.hxx>
 #include <svtools/filter.hxx>
+#include <svtools/solar.hrc>
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -92,6 +94,15 @@
 #endif
 #ifndef _COM_SUN_STAR_VIEW_XRENDERABLE_HPP_
 #include <com/sun/star/view/XRenderable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORSUPPLIER_HPP_
+#include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
+#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #endif
 
 using namespace ::rtl;
@@ -203,8 +214,38 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                             aSel = MultiSelection( aPageRange );
                             aSel.SetTotalRange( aRange );
                         }
-
-                        for( sal_Int32 nSel = aSel.FirstSelected(); nSel != SFX_ENDOFSELECTION; nSel = aSel.NextSelected() )
+                        Reference< task::XStatusIndicator > xStatusIndicator;
+                        if ( mxSrcDoc.is() )
+                        {
+                            Reference< frame::XModel > xModel( mxSrcDoc, UNO_QUERY );
+                            if ( xModel.is() )
+                            {
+                                Reference< frame::XController > xController( xModel->getCurrentController());
+                                if( xController.is() )
+                                {
+                                    Reference< frame::XFrame > xFrame( xController->getFrame());
+                                    if( xFrame.is() )
+                                    {
+                                        Reference< task::XStatusIndicatorFactory > xFactory( xFrame, UNO_QUERY );
+                                        if( xFactory.is() )
+                                        {
+                                            ByteString aResMgrName( "pdffilter" );
+                                            aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
+                                            ResMgr* pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILanguage() );
+                                            if ( pResMgr )
+                                            {
+                                                xStatusIndicator = xFactory->createStatusIndicator();
+                                                xStatusIndicator->start( String( ResId( PDF_PROGRESS_BAR, pResMgr ) ), aSel.GetSelectCount() );
+                                                delete pResMgr;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        sal_Int32 nSel, nProgressValue;
+                        for( nSel = aSel.FirstSelected(), nProgressValue = 0; nSel != SFX_ENDOFSELECTION;
+                                nSel = aSel.NextSelected(), nProgressValue++ )
                         {
                             Sequence< PropertyValue >   aRenderer( xRenderable->getRenderer( nSel - 1, aSelection, aRenderOptions ) );
                             awt::Size                   aPageSize;
@@ -240,7 +281,11 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 
                                 pOut->Pop();
                             }
+                            if ( xStatusIndicator.is() )
+                                xStatusIndicator->setValue( nProgressValue );
                         }
+                        if ( xStatusIndicator.is() )
+                            xStatusIndicator->end();
                     }
                     catch( UnknownPropertyException )
                     {
@@ -602,7 +647,7 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, const GDIMetaFile& rMt
             case( META_TEXTRECT_ACTION ):
             {
                 const MetaTextRectAction* pA = (const MetaTextRectAction*) pAction;
-                DBG_ERROR( "MetaTextRectAction not supported yet" );
+                rWriter.DrawText( pA->GetRect(), String( pA->GetText() ), pA->GetStyle() );
             }
             break;
 

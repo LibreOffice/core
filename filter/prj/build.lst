@@ -1,10 +1,12 @@
 fl	filter	:	svtools unotools goodies xmloff svx NULL
 fl	filter									usr1	-	all	fl_mkout			NULL
 fl	filter\prj								get		-	all	fl_prj				NULL
-fl	filter\source\jars				nmake	-	all	fl_javafilter_binaries	NULL
+fl	filter\source\jars						nmake	-	all	fl_javafilter_binaries	NULL
 fl	filter\source\xmlfilteradaptor			nmake	-	all	fl_xmlfilteradaptor	NULL
+fl	filter\source\xmlfilterdetect			nmake	-	all	fl_xmlfilterdetect	NULL
 fl	filter\source\msfilter\powerpoint		nmake	-	all	fl_powerpoint		NULL
 fl	filter\source\pdf						nmake	-	all	fl_pdf				NULL
 fl	filter\source\svg						nmake	-	all	fl_svg				NULL
 fl	filter\source\placeware					nmake	-	all	fl_placeware		NULL
 fl	filter\source\flash						nmake	-	all	fl_flash			NULL
+fl	filter\source\filtertracer				nmake	-	all fl_filtertracer		NULL
