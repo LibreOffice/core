@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileOpenDlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tra $ $Date: 2002-07-03 11:42:37 $
+ *  last change: $Author: hro $ $Date: 2002-08-14 15:51:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,6 @@
 #ifndef _FILEOPENDLG_HXX_
 #include "FileOpenDlg.hxx"
 #endif
-
-#include <systools/win32/comdlg9x.h>
-#include <systools/win32/user9x.h>
 
 //------------------------------------------------------------------------
 // constants

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PreviewCtrl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-06-28 11:13:03 $
+ *  last change: $Author: hro $ $Date: 2002-08-14 15:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,6 @@
 #endif
 
 #include <comdef.h>
-
-#include <systools/win32/user9x.h>
-#include <systools/win32/kernel9x.h>
 
 #include <memory>
 
