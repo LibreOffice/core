@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cmc $ $Date: 2001-05-21 15:45:50 $
+ *  last change: $Author: fme $ $Date: 2001-08-16 09:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -504,9 +504,6 @@ void SwWW8WrGrf::Write1Grf1( SvStream& rStrm, const SwGrfNode* pGrfNd,
             }
             break;
         case GRAPHIC_GDIMETAFILE :      // GDI ( =SV ) Metafile
-#ifndef VCL
-        case GRAPHIC_WINMETAFILE :      // WinMetafile
-#endif
                 aMeta = rGrf.GetGDIMetaFile();
                 break;
         default : return;
@@ -656,11 +653,14 @@ void SwWW8WrGrf::Write()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8gr.cxx,v 1.5 2001-05-21 15:45:50 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8gr.cxx,v 1.6 2001-08-16 09:27:07 fme Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2001/05/21 15:45:50  cmc
+      ##897## #87014# #75277# Better inline (FLY_IN_CNTNT) graphics and ole2 object exporting (sideeffects add ole2 support to WW6 export)
+
       Revision 1.4  2001/03/14 10:22:09  jp
       Bug #75804#: W95 export - set graphics/ole-objects in tables always as character
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:39 $
+ *  last change: $Author: fme $ $Date: 2001-08-16 09:32:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,8 @@
 #ifndef _ENVLOP_HXX
 #define _ENVLOP_HXX
 
-#ifdef VCL
 #ifndef _SV_MEDIT_HXX
 #include <svtools/svmedit.hxx>
-#endif
 #endif
 
 #ifndef _SFXTABDLG_HXX //autogen

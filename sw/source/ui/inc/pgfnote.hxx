@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pgfnote.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ma $ $Date: 2001-03-21 17:39:23 $
+ *  last change: $Author: fme $ $Date: 2001-08-16 09:32:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,12 +77,8 @@
 #include <vcl/group.hxx>
 #endif
 
-#ifdef VCL
 #ifndef _CTRLBOX_HXX
 #include <svtools/ctrlbox.hxx>
-#endif
-#else
-#include "linbox.hxx"
 #endif
 
 /*--------------------------------------------------------------------

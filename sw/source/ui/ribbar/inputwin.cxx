@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 09:18:10 $
+ *  last change: $Author: fme $ $Date: 2001-08-16 09:34:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,12 +361,7 @@ void __EXPORT SwInputWindow::Click( )
         {
             Point aBL = GetItemRect( FN_FORMULA_CALC ).BottomLeft();
             Point aPt(aBL.X(), aBL.Y());
-#ifdef VCL
             aPopMenu.Execute( this, aPt );
-#else
-            aPt = OutputToScreenPixel( aPt );
-            aPopMenu.Execute( aPt );
-#endif
         }
         break;
         case FN_FORMULA_CANCEL:
@@ -711,6 +706,9 @@ SfxChildWinInfo __EXPORT SwInputChild::GetInfo() const
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2001/06/11 09:18:10  mba
+    #87722#: no global access for ImageManager
+
     Revision 1.2  2001/06/08 13:47:32  os
     #84832# #84836# use connection parameter in drag and drop, form letter, merge field and insert db as text
 

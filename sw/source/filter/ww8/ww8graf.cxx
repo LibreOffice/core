@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cmc $ $Date: 2001-08-03 15:39:16 $
+ *  last change: $Author: fme $ $Date: 2001-08-16 09:27:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,11 +316,7 @@ using namespace ::rtl;
     }
 #endif
     if( nWC[3] & 0x1 ){                             // Spezialfarbe: Grau
-#ifdef VCL
         register BYTE u = (BYTE)( (ULONG)( 200 - nWC[0] ) * 256 / 200 );
-#else
-        register USHORT u = (USHORT)( (ULONG)( 200 - nWC[0] ) * 65535L / 200 );
-#endif
         return Color( u, u, u );
     }
                     // User-Color
@@ -451,21 +447,12 @@ static void SetFill( SfxItemSet& rSet, WW8_DP_FILL& rFill )
         }else{                                      // Brush -> Farbmischung
             Color aB( WW8TransCol( rFill.dlpcBg ) );
             Color aF( WW8TransCol( rFill.dlpcFg ) );
-#ifdef VCL
             aB.SetRed( (BYTE)( ( (ULONG)aF.GetRed() * nPatA[nPat]
                         + (ULONG)aB.GetRed() * ( 100 - nPatA[nPat] ) ) / 100 ) );
             aB.SetGreen( (BYTE)( ( (ULONG)aF.GetGreen() * nPatA[nPat]
                         + (ULONG)aB.GetGreen() * ( 100 - nPatA[nPat] ) ) / 100 ) );
             aB.SetBlue( (BYTE)( ( (ULONG)aF.GetBlue() * nPatA[nPat]
                         + (ULONG)aB.GetBlue() * ( 100 - nPatA[nPat] ) ) / 100 ) );
-#else
-            aB.SetRed( (USHORT)( ( (ULONG)aF.GetRed() * nPatA[nPat]
-                        + (ULONG)aB.GetRed() * ( 100 - nPatA[nPat] ) ) / 100 ) );
-            aB.SetGreen( (USHORT)( ( (ULONG)aF.GetGreen() * nPatA[nPat]
-                        + (ULONG)aB.GetGreen() * ( 100 - nPatA[nPat] ) ) / 100 ) );
-            aB.SetBlue( (USHORT)( ( (ULONG)aF.GetBlue() * nPatA[nPat]
-                        + (ULONG)aB.GetBlue() * ( 100 - nPatA[nPat] ) ) / 100 ) );
-#endif
             rSet.Put( XFillColorItem( aEmptyStr, aB ) );
         }
     }
@@ -2976,11 +2963,14 @@ void SwWW8ImplReader::EmbeddedFlyFrameSizeLock(SwNodeIndex &rStart,
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.30 2001-08-03 15:39:16 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.31 2001-08-16 09:27:08 fme Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.30  2001/08/03 15:39:16  cmc
+      #90098# Drawing objects in headers must be anchored to page as a hackaround for lack of true drawing in header support
+
       Revision 1.29  2001/07/31 18:38:30  jp
       Bug #90443#: don't call GetSlotId with our filter items
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prcntfld.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-03-15 10:44:53 $
+ *  last change: $Author: fme $ $Date: 2001-08-16 09:35:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,11 +124,7 @@ void PercentField::ShowPercent(BOOL bPercent)
         nOldMin = GetMin();
         nOldMax = GetMax();
         nOldSpinSize = GetSpinSize();
-#ifndef VCL
-        nOldBaseValue = nBaseValue;
-#else
         nOldBaseValue = GetBaseValue();
-#endif
         SetUnit(FUNIT_CUSTOM);
         SetDecimalDigits( 0 );
 
@@ -139,11 +135,7 @@ void PercentField::ShowPercent(BOOL bPercent)
         MetricField::SetMin(Max(1L, nPercent));
         MetricField::SetMax(100);
         SetSpinSize(5);
-#ifndef VCL
-        nBaseValue = 0;
-#else
         MetricField::SetBaseValue(0);
-#endif
         if (nOldValue != nLastValue)
         {
             nAktWidth = ConvertValue(nOldValue, 0, nOldDigits, eOldUnit, FUNIT_TWIP);
@@ -167,11 +159,7 @@ void PercentField::ShowPercent(BOOL bPercent)
         MetricField::SetMin(nOldMin);
         MetricField::SetMax(nOldMax);
         SetSpinSize(nOldSpinSize);
-#ifndef VCL
-        nBaseValue = nOldBaseValue;
-#else
         MetricField::SetBaseValue(nOldBaseValue);
-#endif
 
         if (nOldPercent != nLastPercent)
         {
@@ -415,6 +403,9 @@ long PercentField::Convert(long nValue, FieldUnit eInUnit, FieldUnit eOutUnit)
       Source Code Control System - History
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2001/03/15 10:44:53  os
+      change: MetricFormatter::SetVaolue now virtual
+
       Revision 1.1.1.1  2000/09/18 17:14:50  hr
       initial import
 

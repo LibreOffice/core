@@ -2,9 +2,9 @@
  *
  *  $RCSfile: actctrl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:38 $
+ *  last change: $Author: fme $ $Date: 2001-08-16 09:32:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,11 +75,7 @@ class NumEditAction: public NumericField
 
 protected:
     virtual void Action();
-#ifdef VCL
     virtual long    Notify( NotifyEvent& rNEvt );
-#else
-    virtual long    ParentNotify( NotifyEvent& rNEvt );
-#endif
 public:
     NumEditAction( Window* pParent, const ResId& rResId ) :
                                 NumericField(pParent, rResId) {}

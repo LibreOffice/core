@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inpdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:20:44 $
+ *  last change: $Author: fme $ $Date: 2001-08-16 09:32:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,14 +65,8 @@
 #include <svx/stddlg.hxx>
 #endif
 
-#ifndef VCL
-#ifndef _EDIT_HXX //autogen
-#include <vcl/edit.hxx>
-#endif
-#else
 #ifndef _SV_SVMEDIT_HXX //autogen
 #include <svtools/svmedit.hxx>
-#endif
 #endif
 #ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
