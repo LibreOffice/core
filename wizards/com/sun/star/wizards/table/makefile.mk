@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: pjunck $ $Date: 2004-10-27 13:39:28 $
+#   last change: $Author: vg $ $Date: 2005-02-21 14:02:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,6 @@
 #
 #
 #*************************************************************************
-
 PRJ		= ..$/..$/..$/..$/..
 PRJNAME = wizards
 TARGET  = table
