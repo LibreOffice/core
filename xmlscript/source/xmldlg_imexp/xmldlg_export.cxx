@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:35:16 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 14:19:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,11 +71,15 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontWidth.hpp>
+#include <com/sun/star/awt/ImagePosition.hpp>
+#include <com/sun/star/awt/LineEndFormat.hpp>
 #include <com/sun/star/awt/PushButtonType.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
 
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
+
+#include <com/sun/star/style/VerticalAlignment.hpp>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -772,6 +776,34 @@ void ElementDescriptor::readAlignAttr( OUString const & rPropName, OUString cons
     }
 }
 //__________________________________________________________________________________________________
+void ElementDescriptor::readVerticalAlignAttr( OUString const & rPropName, OUString const & rAttrName )
+{
+    if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
+    {
+        Any a( _xProps->getPropertyValue( rPropName ) );
+        if (a.getValueTypeClass() == TypeClass_ENUM && a.getValueType() == ::getCppuType( (style::VerticalAlignment*)0 ))
+        {
+            style::VerticalAlignment eAlign;
+            a >>= eAlign;
+            switch (eAlign)
+            {
+            case style::VerticalAlignment_TOP:
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("top") ) );
+                break;
+            case style::VerticalAlignment_MIDDLE:
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("center") ) );
+                break;
+            case style::VerticalAlignment_BOTTOM:
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("bottom") ) );
+                break;
+            default:
+                OSL_ENSURE( 0, "### illegal vertical alignment value!" );
+                break;
+            }
+        }
+    }
+}
+//__________________________________________________________________________________________________
 void ElementDescriptor::readImageAlignAttr( OUString const & rPropName, OUString const & rAttrName )
 {
     if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
@@ -795,6 +827,62 @@ void ElementDescriptor::readImageAlignAttr( OUString const & rPropName, OUString
                 break;
             default:
                 OSL_ENSURE( 0, "### illegal image alignment value!" );
+                break;
+            }
+        }
+    }
+}
+//__________________________________________________________________________________________________
+void ElementDescriptor::readImagePositionAttr( OUString const & rPropName, OUString const & rAttrName )
+{
+    if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
+    {
+        Any a( _xProps->getPropertyValue( rPropName ) );
+        if (a.getValueTypeClass() == TypeClass_SHORT)
+        {
+            switch (*(sal_Int16 const *)a.getValue())
+            {
+            case awt::ImagePosition::LeftTop:
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("left-top") ) );
+                break;
+            case awt::ImagePosition::LeftCenter:
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("left-center") ) );
+                break;
+            case awt::ImagePosition::LeftBottom:
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("left-bottom") ) );
+                break;
+            case awt::ImagePosition::RightTop:
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("right-top") ) );
+                break;
+            case awt::ImagePosition::RightCenter:
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("right-center") ) );
+                break;
+            case awt::ImagePosition::RightBottom:
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("right-bottom") ) );
+                break;
+            case awt::ImagePosition::AboveLeft:
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("top-left") ) );
+                break;
+            case awt::ImagePosition::AboveCenter:
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("top-center") ) );
+                break;
+            case awt::ImagePosition::AboveRight:
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("top-right") ) );
+                break;
+            case awt::ImagePosition::BelowLeft:
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("bottom-left") ) );
+                break;
+            case awt::ImagePosition::BelowCenter:
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("bottom-center") ) );
+                break;
+            case awt::ImagePosition::BelowRight:
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("bottom-right") ) );
+                break;
+            case awt::ImagePosition::Centered:
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("center") ) );
+                break;
+            default:
+                OSL_ENSURE( 0, "### illegal image position value!" );
                 break;
             }
         }
@@ -847,6 +935,32 @@ void ElementDescriptor::readOrientationAttr( OUString const & rPropName, OUStrin
                 break;
             default:
                 OSL_ENSURE( 0, "### illegal orientation value!" );
+                break;
+            }
+        }
+    }
+}
+//__________________________________________________________________________________________________
+void ElementDescriptor::readLineEndFormatAttr( OUString const & rPropName, OUString const & rAttrName )
+{
+    if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
+    {
+        Any a( _xProps->getPropertyValue( rPropName ) );
+        if (a.getValueTypeClass() == TypeClass_SHORT)
+        {
+            switch (*(sal_Int16 const *)a.getValue())
+            {
+            case awt::LineEndFormat::CARRIAGE_RETURN:
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("carriage-return") ) );
+                break;
+            case awt::LineEndFormat::LINE_FEED:
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("line-feed") ) );
+                break;
+            case awt::LineEndFormat::CARRIAGE_RETURN_LINE_FEED:
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("carriage-return-line-feed") ) );
+                break;
+            default:
+                OSL_ENSURE( 0, "### illegal line end format value!" );
                 break;
             }
         }
