@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-07 13:23:33 $
+ *  last change: $Author: th $ $Date: 2001-03-08 16:53:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,17 +182,52 @@ using namespace ::rtl;
 static void ImplRotatePos( long nOriginX, long nOriginY, long& rX, long& rY,
                            short nOrientation )
 {
-    double nRealOrientation = nOrientation*F_PI1800;
-    double nCos = cos( nRealOrientation );
-    double nSin = sin( nRealOrientation );
+    if ( (nOrientation >= 0) && !(nOrientation % 900) )
+    {
+        if ( (nOrientation >= 3600) )
+            nOrientation %= 3600;
 
-    // Translation...
-    long nX = rX-nOriginX;
-    long nY = rY-nOriginY;
+        if ( nOrientation )
+        {
+            rX -= nOriginX;
+            rY -= nOriginY;
 
-    // Rotation...
-    rX = ((long)   ( nCos*nX + nSin*nY )) + nOriginX;
-    rY = ((long) - ( nSin*nX - nCos*nY )) + nOriginY;
+            if ( nOrientation == 900 )
+            {
+                long nTemp = rX;
+                rX = rY;
+                rY = -nTemp;
+            }
+            else if ( nOrientation == 1800 )
+            {
+                rX = -rX;
+                rY = -rY;
+            }
+            else /* ( nOrientation == 2700 ) */
+            {
+                long nTemp = rX;
+                rX = -rY;
+                rY = nTemp;
+            }
+
+            rX += nOriginX;
+            rY += nOriginY;
+        }
+    }
+    else
+    {
+        double nRealOrientation = nOrientation*F_PI1800;
+        double nCos = cos( nRealOrientation );
+        double nSin = sin( nRealOrientation );
+
+        // Translation...
+        long nX = rX-nOriginX;
+        long nY = rY-nOriginY;
+
+        // Rotation...
+        rX =  ((long)(nCos*nX + nSin*nY)) + nOriginX;
+        rY = -((long)(nSin*nX - nCos*nY)) + nOriginY;
+    }
 }
 
 // =======================================================================
@@ -1562,8 +1597,16 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
     FontWeight eWeight          = rFont.GetWeight();
     FontItalic eItalic          = rFont.GetItalic();
     FontPitch ePitch            = rFont.GetPitch();
-    short nOrientation          = (short)(rFont.GetOrientation() % 3600);
+    short nOrientation          = rFont.GetOrientation();
     BOOL bVertical              = rFont.IsVertical();
+
+    // Make Orientation positiv and between 0 and 2700
+    if ( nOrientation )
+    {
+        while ( nOrientation < 0 )
+            nOrientation += 3600;
+        nOrientation %= 3600;
+    }
 
     // Groesse anpassen
     if ( nHeight < 0 )
@@ -2603,31 +2646,17 @@ int OutputDevice::ImplNewFont()
     }
     else if ( eAlign == ALIGN_TOP )
     {
+        mnTextOffX = 0;
+        mnTextOffY = pFontEntry->maMetric.mnAscent+mnEmphasisAscent;
         if ( pFontEntry->mnOrientation )
-        {
-            mnTextOffX = 0;
-            mnTextOffY = pFontEntry->maMetric.mnAscent+mnEmphasisAscent;
             ImplRotatePos( 0, 0, mnTextOffX, mnTextOffY, pFontEntry->mnOrientation );
-        }
-        else
-        {
-            mnTextOffX = 0;
-            mnTextOffY = pFontEntry->maMetric.mnAscent+mnEmphasisAscent;
-        }
     }
     else // eAlign == ALIGN_BOTTOM
     {
+        mnTextOffX = 0;
+        mnTextOffY = -pFontEntry->maMetric.mnDescent+mnEmphasisDescent;
         if ( pFontEntry->mnOrientation )
-        {
-            mnTextOffX = 0;
-            mnTextOffY = -pFontEntry->maMetric.mnDescent+mnEmphasisDescent;
             ImplRotatePos( 0, 0, mnTextOffX, mnTextOffY, pFontEntry->mnOrientation );
-        }
-        else
-        {
-            mnTextOffX = 0;
-            mnTextOffY = -pFontEntry->maMetric.mnDescent+mnEmphasisDescent;
-        }
     }
 
     mbTextLines     = ((maFont.GetUnderline() != UNDERLINE_NONE) && (maFont.GetUnderline() != UNDERLINE_DONTKNOW)) ||
@@ -2936,16 +2965,45 @@ long OutputDevice::ImplGetTextWidth( const xub_Unicode* pStr, xub_StrLen nLen,
 void OutputDevice::ImplDrawTextRect( long nBaseX, long nBaseY,
                                      long nX, long nY, long nWidth, long nHeight )
 {
-    if ( mpFontEntry->mnOrientation )
+    short nOrientation = mpFontEntry->mnOrientation;
+    if ( nOrientation )
     {
-        if ( !(mpFontEntry->mnOrientation % 900) )
+        // Rotate rect without rounding problems for 90 degree rotations
+        if ( !(nOrientation % 900) )
         {
-            long nX2 = nX+nWidth;
-            long nY2 = nY+nHeight;
-            ImplRotatePos( nBaseX, nBaseY, nX, nY, mpFontEntry->mnOrientation );
-            ImplRotatePos( nBaseX, nBaseY, nX2, nY2, mpFontEntry->mnOrientation );
-            nWidth = nX2-nX;
-            nHeight = nY2-nY;
+            nX -= nBaseX;
+            nY -= nBaseY;
+
+            if ( nOrientation == 900 )
+            {
+                long nTemp = nX;
+                nX = nY;
+                nY = -nTemp;
+                nTemp = nWidth;
+                nWidth = nHeight;
+                nHeight = nTemp;
+                nY -= nHeight;
+            }
+            else if ( nOrientation == 1800 )
+            {
+                nX = -nX;
+                nY = -nY;
+                nX -= nWidth;
+                nY -= nHeight;
+            }
+            else /* ( nOrientation == 2700 ) */
+            {
+                long nTemp = nX;
+                nX = -nY;
+                nY = nTemp;
+                nTemp = nWidth;
+                nWidth = nHeight;
+                nHeight = nTemp;
+                nX -= nWidth;
+            }
+
+            nX += nBaseX;
+            nY += nBaseY;
         }
         else
         {
