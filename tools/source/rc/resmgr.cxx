@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:13:01 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:26:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -612,44 +612,48 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, USHORT nId,
 //    ImpContent * pFind = (ImpContent *)
 //        bsearch( (void *)((ULONG(nRT) << 16) | nId), pContent, nEntries,
 //                sizeof( ImpContent ), Search );
-    if( nRT == RSC_STRING && bEqual2Content && ((pFind != pEnd) && (pFind->nTypeAndId == nValue)) )
+    if( pFind && (pFind != pEnd) && (pFind->nTypeAndId == nValue) )
     {
-        // String Optimierung
-        if( !pStringBlock )
+        if( nRT == RSC_STRING && bEqual2Content )
         {
-            // Anfang der Strings suchen
-            ImpContent * pFirst = pFind;
-            ImpContent * pLast = pFirst;
-            while( pFirst > pContent && ((pFirst -1)->nTypeAndId >> 16) == RSC_STRING )
-                --pFirst;
-            while( pLast < pEnd && (pLast->nTypeAndId >> 16) == RSC_STRING )
-                ++pLast;
-            nOffCorrection = pFirst->nOffset;
-            UINT32 nSize;
-            --pLast;
-            pStm->Seek( pLast->nOffset );
-            RSHEADER_TYPE aHdr;
-            pStm->Read( &aHdr, sizeof( aHdr ) );
-            nSize = pLast->nOffset + aHdr.GetGlobOff() - nOffCorrection;
-            pStringBlock = (BYTE*)SvMemAlloc( nSize );
-            pStm->Seek( pFirst->nOffset );
-            pStm->Read( pStringBlock, nSize );
+            // String Optimierung
+            if( !pStringBlock )
+            {
+                // Anfang der Strings suchen
+                ImpContent * pFirst = pFind;
+                ImpContent * pLast = pFirst;
+                while( pFirst > pContent && ((pFirst -1)->nTypeAndId >> 16) == RSC_STRING )
+                    --pFirst;
+                while( pLast < pEnd && (pLast->nTypeAndId >> 16) == RSC_STRING )
+                    ++pLast;
+                nOffCorrection = pFirst->nOffset;
+                UINT32 nSize;
+                --pLast;
+                pStm->Seek( pLast->nOffset );
+                RSHEADER_TYPE aHdr;
+                pStm->Read( &aHdr, sizeof( aHdr ) );
+                nSize = pLast->nOffset + aHdr.GetGlobOff() - nOffCorrection;
+                pStringBlock = (BYTE*)SvMemAlloc( nSize );
+                pStm->Seek( pFirst->nOffset );
+                pStm->Read( pStringBlock, nSize );
+            }
+            *pResHandle = pStringBlock;
+            return (BYTE*)pStringBlock + pFind->nOffset - nOffCorrection;
+        } // if( nRT == RSC_STRING && bEqual2Content )
+        else
+        {
+            *pResHandle = 0;
+            RSHEADER_TYPE aHeader;
+            pStm->Seek( pFind->nOffset );
+            pStm->Read( &aHeader, sizeof( RSHEADER_TYPE ) );
+            void * pRes = ::operator new( aHeader.GetGlobOff() );
+            memcpy( pRes, &aHeader, sizeof( RSHEADER_TYPE ) );
+            pStm->Read( (BYTE*)pRes + sizeof( RSHEADER_TYPE ),
+                        aHeader.GetGlobOff() - sizeof( RSHEADER_TYPE ) );
+            return pRes;
         }
-        *pResHandle = pStringBlock;
-        return (BYTE*)pStringBlock + pFind->nOffset - nOffCorrection;
-    }
+    } // if( pFind && (pFind != pEnd) && (pFind->nTypeAndId == nValue) )
     *pResHandle = 0;
-    if( pFind )
-    {
-        RSHEADER_TYPE aHeader;
-        pStm->Seek( pFind->nOffset );
-        pStm->Read( &aHeader, sizeof( RSHEADER_TYPE ) );
-        void * pRes = ::operator new( aHeader.GetGlobOff() );
-        memcpy( pRes, &aHeader, sizeof( RSHEADER_TYPE ) );
-        pStm->Read( (BYTE*)pRes + sizeof( RSHEADER_TYPE ),
-                    aHeader.GetGlobOff() - sizeof( RSHEADER_TYPE ) );
-        return pRes;
-    }
     //Resource holen
     return NULL;
 }
