@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdatebuilder.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:16:39 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:35:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,6 +238,7 @@ bool LayerUpdateBuilder::finishProperty()
 {
     OSL_PRECOND(m_pCurrentProp, "LayerUpdateBuilder: Illegal state for property operation");
     if (!m_pCurrentProp) return false;
+    m_pCurrentProp->finishValue();
 
     OSL_ASSERT(m_pCurrentNode == m_pCurrentProp->getParent());
 
