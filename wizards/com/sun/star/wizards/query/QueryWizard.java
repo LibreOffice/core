@@ -2,9 +2,9 @@
 *
 *  $RCSfile: QueryWizard.java,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: vg $ $Date: 2005-02-21 13:58:23 $
+*  last change: $Author: vg $ $Date: 2005-03-08 15:40:00 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -248,7 +248,7 @@ public class QueryWizard extends WizardDialog {
             if (CurDBMetaData.xDBMetaData.supportsGroupBy()) {
                 CurGroupFieldSelection = new FieldSelection(this, SOGROUPSELECTIONPAGE, 95, 27, 210, 150, reslblFields, this.reslblGroupBy, 40915, false);
                 CurGroupFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
-                CurGroupFilterComponent = new FilterComponent(this, xMSF, SOGROUPFILTERPAGE, 97, 27, 209, 3, CurDBMetaData, 40925);
+                CurGroupFilterComponent = new FilterComponent(this, xMSF, SOGROUPFILTERPAGE, 97, 27, 209, 3, CurDBMetaData, 40923);
             }
             CurTitlesComponent = new TitlesComponent(this, SOTITLESPAGE, 97, 37, 207, 7, reslblFieldHeader, reslblAliasHeader, 40940);
             CurFinalizer = new Finalizer(this, CurDBMetaData);
