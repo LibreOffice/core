@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-25 15:37:41 $
+ *  last change: $Author: obo $ $Date: 2001-06-29 02:40:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: nn $ $Date: 2001-06-25 15:37:41 $ $Revision: 1.20 $
+ // $Author: obo $ $Date: 2001-06-29 02:40:31 $ $Revision: 1.21 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -167,7 +167,7 @@ String SCSTR_QHELP_INPUTWND
     Text [ portuguese ] = "Linha de entrada" ;
     Text [ finnish ] = "Syöttörivi" ;
     Text [ danish ] = "Inputlinje" ;
-    Text [ french ] = "Ligne de saisie" ;
+    Text [ french ] = "Champ de saisie" ;
     Text [ swedish ] = "Inmatningsrad" ;
     Text [ dutch ] = "Invoerregel" ;
     Text [ spanish ] = "Línea de entrada" ;
@@ -252,7 +252,7 @@ String SCSTR_QHELP_BTNCANCEL
     Text [ portuguese ] = "Cancelar" ;
     Text [ finnish ] = "Peruuta" ;
     Text [ danish ] = "Forkast" ;
-    Text [ french ] = "Ignorer" ;
+    Text [ french ] = "Rejeter" ;
     Text [ swedish ] = "Avslå" ;
     Text [ dutch ] = "Verwerpen" ;
     Text [ spanish ] = "Rechazar" ;
@@ -1762,6 +1762,7 @@ ImageList RID_OFFICEIMAGELIST_LC
     MaskColor = STD_MASKCOLOR ;
     OFFICE_IDLIST
 };
+
 
 
 
