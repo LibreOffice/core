@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 12:08:35 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 16:08:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,7 +419,7 @@ BOOL SvxInternalLink::Connect( so3::SvBaseLink* pLink )
             INET_PROT_HTTP != aURL.GetProtocol() )
         {
             SfxStringItem aName( SID_FILE_NAME, sTopic );
-            SfxBoolItem aMinimized(SID_MINIMIZEWINS, TRUE);
+            SfxBoolItem aMinimized(SID_MINIMIZED, TRUE);
             SfxStringItem aTarget( SID_TARGETNAME, String::CreateFromAscii("_blank") );
             SfxStringItem aReferer( SID_REFERER, sReferer );
 
