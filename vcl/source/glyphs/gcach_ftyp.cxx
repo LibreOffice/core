@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.96 $
- *  last change: $Author: vg $ $Date: 2003-07-02 14:31:59 $
+ *  $Revision: 1.97 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 12:51:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,9 +97,8 @@
 // TODO: move file mapping stuff to OSL
 #if defined(UNX)
     #if !defined(MACOSX) && !defined(HPUX)
+        // PORTERS: dlfcn is used for code dependend on FT version
         #include <dlfcn.h>
-    #else
-        // PORTERS: dlfcn is used below to determine FT version
     #endif
     #include <unistd.h>
     #include <fcntl.h>
@@ -121,7 +120,13 @@
 // -----------------------------------------------------------------------
 
 static FT_Library aLibFT = 0;
+
+// #110607# enable linking with old FT versions
 static int nFTVERSION = 0;
+static FT_Error (*pFTNewSize)(FT_Face,FT_Size*);
+static FT_Error (*pFTActivateSize)(FT_Size);
+static FT_Error (*pFTDoneSize)(FT_Size);
+static bool bEnableSizeFT = false;
 
 struct EqStr{ bool operator()(const char* a, const char* b) const { return !strcmp(a,b); } };
 typedef ::std::hash_map<const char*,FtFontFile*,::std::hash<const char*>, EqStr> FontFileList;
@@ -187,15 +192,15 @@ bool FtFontFile::Map()
             mmap( NULL, mnFileSize, PROT_READ, MAP_SHARED, nFile, 0 );
         close( nFile );
 #elif defined(WIN32)
-        void* pFileDesc = CreateFile( pFileName, GENERIC_READ, FILE_SHARE_READ,
+        void* pFileDesc = ::CreateFile( pFileName, GENERIC_READ, FILE_SHARE_READ,
                         NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0 );
         if( pFileDesc == INVALID_HANDLE_VALUE)
             return false;
 
-        mnFileSize = GetFileSize( pFileDesc, NULL );
+        mnFileSize = ::GetFileSize( pFileDesc, NULL );
         HANDLE aHandle = ::CreateFileMapping( pFileDesc, NULL, PAGE_READONLY, 0, mnFileSize, "TTF" );
         mpFileMap = (const unsigned char*)::MapViewOfFile( aHandle, FILE_MAP_READ, 0, 0, mnFileSize );
-        CloseHandle( pFileDesc );
+        ::CloseHandle( pFileDesc );
 #else
         FILE* pFile = fopen( pFileName, "rb" );
         if( !pFile )
@@ -295,8 +300,11 @@ FtFontInfo::FtFontInfo( const ImplFontData& rFontData,
 
 FT_FaceRec_* FtFontInfo::GetFaceFT()
 {
-    if( !maFaceFT && mpFontFile->Map() )
+    // get faceFT once/multiple depending on SizeFT availability
+    if( (mnRefCount++ <= 0) || !bEnableSizeFT )
     {
+        if( !mpFontFile->Map() )
+            return NULL;
         FT_Error rc = FT_New_Memory_Face( aLibFT,
             (FT_Byte*)mpFontFile->GetBuffer(),
             mpFontFile->GetFileSize(), mnFaceNum, &maFaceFT );
@@ -304,17 +312,17 @@ FT_FaceRec_* FtFontInfo::GetFaceFT()
             maFaceFT = NULL;
     }
 
-    ++mnRefCount;
     return maFaceFT;
 }
 
 // -----------------------------------------------------------------------
 
-void FtFontInfo::ReleaseFaceFT()
+void FtFontInfo::ReleaseFaceFT( FT_FaceRec_* pFaceFT )
 {
-    if( --mnRefCount <= 0 )
+    // release last/each depending on SizeFT availability
+    if( (--mnRefCount <= 0) || !bEnableSizeFT )
     {
-        FT_Done_Face( maFaceFT );
+        FT_Done_Face( pFaceFT );
         maFaceFT = NULL;
         mpFontFile->Unmap();
     }
@@ -371,28 +379,35 @@ FreetypeManager::FreetypeManager()
 {
     FT_Error rcFT = FT_Init_FreeType( &aLibFT );
 
-#ifdef RTLD_DEFAULT
+#ifdef RTLD_DEFAULT // true if a good dlfcn.h header was included
     // Get version of freetype library to enable workarounds.
     // Freetype <= 2.0.9 does not have FT_Library_Version().
     // Using dl_sym() instead of osl_getSymbol() because latter
-    // doesn't work for oslModule=NULL
-    void (*pft_library_version)(FT_Library library,
+    // isn't designed to work with oslModule=NULL
+    void (*pFTLibraryVersion)(FT_Library library,
         FT_Int *amajor, FT_Int *aminor, FT_Int *apatch);
-    pft_library_version = (void (*)(FT_Library library,
-        FT_Int *amajor, FT_Int *aminor, FT_Int *apatch)) dlsym (RTLD_DEFAULT, "FT_Library_Version");
+    pFTLibraryVersion = (void (*)(FT_Library library,
+        FT_Int *amajor, FT_Int *aminor, FT_Int *apatch)) dlsym( RTLD_DEFAULT, "FT_Library_Version" );
 
-    if (pft_library_version != NULL)
-    {
-        // XXX disable embedded bitmaps for Freetype-2.1.3 unless explicitly requested
-        // below because it crashes StarOffice on RH9
-        FT_Int nMajor = 0, nMinor = 0, nPatch = 0;
-        pft_library_version( aLibFT, &nMajor, &nMinor, &nPatch );
-        nFTVERSION = nMajor * 1000 + nMinor * 100 + nPatch;
-        if( nFTVERSION == 2103 )
-            nPrioEmbedded = 0;
-    }
+    pFTNewSize      = (FT_Error(*)(FT_Face,FT_Size*)) dlsym( RTLD_DEFAULT, "FT_New_Size" );
+    pFTActivateSize = (FT_Error(*)(FT_Size)) dlsym( RTLD_DEFAULT, "FT_Activate_Size" );
+    pFTDoneSize     = (FT_Error(*)(FT_Size)) dlsym( RTLD_DEFAULT, "FT_Done_Size" );
+
+    bEnableSizeFT = (pFTNewSize!=NULL) && (pFTActivateSize!=NULL) && (pFTDoneSize!=NULL);
+
+    FT_Int nMajor = 0, nMinor = 0, nPatch = 0;
+    if( pFTLibraryVersion )
+        pFTLibraryVersion( aLibFT, &nMajor, &nMinor, &nPatch );
+    nFTVERSION = nMajor * 1000 + nMinor * 100 + nPatch;
+
+    // disable embedded bitmaps for Freetype-2.1.3 unless explicitly
+    // requested by env var below because it crashes StarOffice on RH9
+    // TODO: investigate
+    if( nFTVERSION == 2103 )
+        nPrioEmbedded = 0;
+
 #else // RTLD_DEFAULT
-    // assume systems without dlsym use supplied library
+    // assume systems where dlsym is not possible use supplied library
     nFTVERSION = FTVERSION;
 #endif
 
@@ -574,15 +589,15 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
     maRecodeConverter( NULL ),
     mpLayoutEngine( NULL )
 {
-    maFaceFT = pFI->GetFaceFT();
-    if( !maFaceFT )
-        return;
-
 #ifdef HDU_DEBUG
     fprintf( stderr, "FTSF::FTSF(\"%s\", h=%d, w=%d, cs=%d)\n",
         pFI->GetFontFileName()->getStr(), rFSD.mnHeight, rFSD.mnWidth,
         pFI->GetFontData().meCharSet );
 #endif
+
+    maFaceFT = pFI->GetFaceFT();
+    if( !maFaceFT )
+        return;
 
     FT_Encoding eEncoding = ft_encoding_unicode;
     if( mpFontInfo->GetFontData().meCharSet == RTL_TEXTENCODING_SYMBOL )
@@ -654,8 +669,11 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
             maRecodeConverter = rtl_createUnicodeToTextConverter( eRecodeFrom );
     }
 
-    rc = FT_New_Size( maFaceFT, &maSizeFT );
-    rc = FT_Activate_Size( maSizeFT );
+    if( bEnableSizeFT )
+    {
+        pFTNewSize( maFaceFT, &maSizeFT );
+        pFTActivateSize( maSizeFT );
+    }
 
     mnWidth = rFSD.mnWidth;
     if( !mnWidth )
@@ -699,9 +717,9 @@ FreetypeServerFont::~FreetypeServerFont()
         rtl_destroyUnicodeToTextConverter( maRecodeConverter );
 
     if( maSizeFT )
-        FT_Done_Size( maSizeFT );
+        pFTDoneSize( maSizeFT );
 
-    mpFontInfo->ReleaseFaceFT();
+    mpFontInfo->ReleaseFaceFT( maFaceFT );
 }
 
  // -----------------------------------------------------------------------
@@ -715,7 +733,8 @@ int FreetypeServerFont::GetEmUnits() const
 
 void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
 {
-    FT_Activate_Size( maSizeFT );
+    if( maSizeFT )
+        pFTActivateSize( maSizeFT );
 
     rFactor = 0x100;
 
@@ -979,7 +998,8 @@ int FreetypeServerFont::GetGlyphIndex( sal_Unicode aChar ) const
 
 void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
 {
-    FT_Activate_Size( maSizeFT );
+    if( maSizeFT )
+        pFTActivateSize( maSizeFT );
 
     int nGlyphFlags;
     SplitGlyphFlags( *this, nGlyphIndex, nGlyphFlags );
@@ -1058,7 +1078,8 @@ bool FreetypeServerFont::GetAntialiasAdvice( void ) const
 
 bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap ) const
 {
-    FT_Activate_Size( maSizeFT );
+    if( maSizeFT )
+        pFTActivateSize( maSizeFT );
 
     int nGlyphFlags;
     SplitGlyphFlags( *this, nGlyphIndex, nGlyphFlags );
@@ -1152,7 +1173,8 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
 
 bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap ) const
 {
-    FT_Activate_Size( maSizeFT );
+    if( maSizeFT )
+        pFTActivateSize( maSizeFT );
 
     int nGlyphFlags;
     SplitGlyphFlags( *this, nGlyphIndex, nGlyphFlags );
@@ -1382,7 +1404,8 @@ ULONG FreetypeServerFont::GetFontCodeRanges( sal_uInt32* pCodes ) const
 
 int FreetypeServerFont::GetGlyphKernValue( int nGlyphLeft, int nGlyphRight ) const
 {
-    FT_Activate_Size( maSizeFT );
+    if( maSizeFT )
+        pFTActivateSize( maSizeFT );
 
     FT_Vector aKernVal;
     FT_Error rcFT = FT_Get_Kerning( maFaceFT, nGlyphLeft, nGlyphRight,
@@ -1395,7 +1418,8 @@ int FreetypeServerFont::GetGlyphKernValue( int nGlyphLeft, int nGlyphRight ) con
 
 ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
 {
-    FT_Activate_Size( maSizeFT );
+    if( maSizeFT )
+        pFTActivateSize( maSizeFT );
 
     *ppKernPairs = NULL;
     if( !FT_HAS_KERNING( maFaceFT ) || !FT_IS_SFNT( maFaceFT ) )
