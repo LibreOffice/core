@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insfnote.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:11:32 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:59:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,6 +361,8 @@ ModalDialog DLG_INS_FOOTNOTE
     Text[ hindi ] = "पृष्ठ के नीचे की टीका जोड़ो";
     Text[ slovak ] = "Vložiť poznámku pod čiarou";
 };
+
+
 
 
 
