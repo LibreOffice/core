@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 14:33:41 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:28:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,11 @@
  *
  *
  ************************************************************************/
+
+#ifdef SVX_DLLIMPLEMENTATION
+#undef SVX_DLLIMPLEMENTATION
+#endif
+
 // include ---------------------------------------------------------------
 
 #ifndef _UNO_LINGU_HXX
