@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyActionsOASIS.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:10:17 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 14:58:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,11 @@ XMLTransformerActionInit aGraphicPropertyOASISAttrActionTable[] =
     { XML_NAMESPACE_STYLE, XML_MIRROR, XML_ATACTION_DRAW_MIRROR_OASIS, 0 },
     { XML_NAMESPACE_DRAW, XML_GAMMA, XML_ATACTION_GAMMA_OASIS, 0 },
 
+    { XML_NAMESPACE_STYLE, XML_FLOW_WITH_TEXT, XML_ATACTION_REMOVE,
+        NO_PARAMS },
+    { XML_NAMESPACE_DRAW, XML_WRAP_INFLUENCE_ON_POSITION, XML_ATACTION_REMOVE,
+        NO_PARAMS },
+
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
@@ -434,7 +439,7 @@ XMLTransformerActionInit aParagraphPropertyOASISAttrActionTable[] =
     { XML_NAMESPACE_STYLE, XML_SHADOW, XML_ATACTION_INS2INCHS,
           NO_PARAMS },
     { XML_NAMESPACE_FO, XML_KEEP_WITH_NEXT, XML_OPTACTION_KEEP_WITH_NEXT,
-          NO_PARAMS }, /* generated entry */
+          NO_PARAMS },
     { XML_NAMESPACE_FO, XML_KEEP_TOGETHER, XML_OPTACTION_KEEP_TOGETHER,
         NO_PARAMS },
     { XML_NAMESPACE_STYLE, XML_WRITING_MODE, XML_OPTACTION_DRAW_WRITING_MODE, 0 },
@@ -462,6 +467,8 @@ XMLTransformerActionInit aTablePropertyOASISAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_FO, XML_MARGIN_BOTTOM, XML_ATACTION_IN2INCH,
           NO_PARAMS }, /* generated entry */
+    { XML_NAMESPACE_FO, XML_KEEP_WITH_NEXT, XML_OPTACTION_KEEP_WITH_NEXT,
+          NO_PARAMS },
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
