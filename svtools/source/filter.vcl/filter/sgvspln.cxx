@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sgvspln.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:28:13 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:17:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,6 +513,7 @@ USHORT NaturalSpline(USHORT n, double* x, double* y,
     USHORT  error;
 
     if (n<2) return 1;
+    // FIXME -Wall Margcond is unsigned therefore can never be < zero.
     if (MargCond<0 || MargCond>3) return 2;
     a=new double[n+1];
     h=new double[n+1];
@@ -699,10 +700,11 @@ USHORT ParaSpline(USHORT n, double* x, double* y, BYTE MargCond,
     USHORT Error,Marg;
     USHORT i;
     double deltX,deltY,delt,
-           alphX,alphY,
-           betX,betY;
+           alphX = 0,alphY = 0,
+           betX = 0,betY = 0;
 
     if (n<2) return 1;
+    // FIXME -Wall Margcond is unsigned therefore can never be < zero.
     if (MargCond<0 || MargCond>4) return 2; // ungltige Randbedingung
     if (CondT==FALSE) {
         T[0]=0.0;
@@ -820,8 +822,10 @@ BOOL CalcSpline(Polygon& rPoly, BOOL Periodic, USHORT& n,
     dy=new double[n+1];
     T =new double[n+1];
 
-    Marg01=0.0; Marg02=0.0;
-    MargN1=0.0; MargN2=0.0;
+    Marg01=0.0;
+    Marg02=0.0;
+    MargN1=0.0;
+    MargN2=0.0;
     if (n>0) n--; // n Korregieren (Anzahl der Teilpolynome)
 
     BOOL bRet = FALSE;
