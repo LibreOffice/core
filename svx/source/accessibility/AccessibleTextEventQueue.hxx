@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextEventQueue.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2002-12-12 12:36:51 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:55:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _SVX_ACCESSIBLE_TEXT_EVENT_QUEUE_HXX
-#define _SVX_ACCESSIBLE_TEXT_EVENT_QUEUE_HXX
+#ifndef _SVX_TEXT_CHANGED_QUEUE_HXX
+#define _SVX_TEXT_CHANGED_QUEUE_HXX
 
 #include <memory>
 #include <list>
@@ -138,4 +138,4 @@ namespace accessibility
 
 } // end of namespace accessibility
 
-#endif /* _SVX_ACCESSIBLE_TEXT_EVENT_QUEUE_HXX */
+#endif /* _SVX_TEXT_CHANGED_QUEUE_HXX */
