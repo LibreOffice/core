@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsel.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:02:55 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ Resource RID_SVXSTR_BORDER_CONTROL
 {
     StringArray ARR_TEXTS
     {
-        ItemList =
+        ItemList [ de ] =
         {
             < "Umrandungseinstellung" ; 0; > ;       //SVX_FRMSELLINE_NONE
             < "Linke Umrandungslinie" ; 1; > ;       //SVX_FRMSELLINE_LEFT,
@@ -77,17 +77,7 @@ Resource RID_SVXSTR_BORDER_CONTROL
             < "Horizontale Umrandungslinie" ; 5; > ;       //SVX_FRMSELLINE_HOR,
             < "Vertikale Umrandungslinie" ; 6; > ;       //SVX_FRMSELLINE_VER
         };
-        ItemList [English]=
-        {
-            < "Border control" ; 0; > ;       //SVX_FRMSELLINE_NONE
-            < "Left border line" ; 1; > ;       //SVX_FRMSELLINE_LEFT,
-            < "Right border line" ; 2; > ;       //SVX_FRMSELLINE_RIGHT,
-            < "Top border line" ; 3; > ;       //SVX_FRMSELLINE_TOP,
-            < "Bottom border line" ; 4; > ;       //SVX_FRMSELLINE_BOTTOM,
-            < "Horizontal border line within table" ; 5; > ;       //SVX_FRMSELLINE_HOR,
-            < "Vertical  border line within table" ; 6; > ;       //SVX_FRMSELLINE_VER
-        };
-    ItemList [ language_user1 ] =
+    ItemList [ x-comment ] =
     {
          < "; Umrandungseinstellung" ; 0; > ;
         < "; Linke Umrandungslinie" ; 1; > ;
@@ -97,7 +87,7 @@ Resource RID_SVXSTR_BORDER_CONTROL
         < "; Horizontale Umrandungslinie" ; 5; > ;
         < "; Vertikale Umrandungslinie" ; 6; > ;
     };
-    ItemList [ english_us ] =
+    ItemList [ en-US ] =
     {
          < "Border setting" ; 0; > ;
         < "Left border line" ; 1; > ;
@@ -106,271 +96,11 @@ Resource RID_SVXSTR_BORDER_CONTROL
         < "Bottom border line" ; 4; > ;
         < "Horizontal border line" ; 5; > ;
         < "Vertical border line" ; 6; > ;
-    };
-    ItemList [ portuguese ] =
-    {
-         < "Border setting" ; 0; > ;
-        < "Left border line" ; 1; > ;
-        < "Right border line" ; 2; > ;
-        < "Top border line" ; 3; > ;
-        < "Bottom border line" ; 4; > ;
-        < "Horizontal border line" ; 5; > ;
-        < "Vertical border line" ; 6; > ;
-    };
-    ItemList [ russian ] =
-    {
-         < "Border setting" ; 0; > ;
-        < "Left border line" ; 1; > ;
-        < "Right border line" ; 2; > ;
-        < "Top border line" ; 3; > ;
-        < "Bottom border line" ; 4; > ;
-        < "Horizontal border line" ; 5; > ;
-        < "Vertical border line" ; 6; > ;
-    };
-    ItemList [ greek ] =
-    {
-         < "Ñõèìßóåéò ðåñéãñÜììáôïò" ; 0; > ;
-        < "ÁñéóôåñÞ ãñáììÞ ðåñéãñÜììáôïò" ; 1; > ;
-        < "ÄåîéÜ ãñáììÞ ðåñéãñÜììáôïò" ; 2; > ;
-        < "ÐÜíù ãñáììÞ ðåñéãñÜììáôïò" ; 3; > ;
-        < "ÊÜôù ãñáììÞ ðåñéãñÜììáôïò" ; 4; > ;
-        < "Ïñéæüíôéá ãñáììÞ ðåñéãñÜììáôïò" ; 5; > ;
-        < "Êáôáêüñõöç ãñáììÞ ðåñéãñÜììáôïò" ; 6; > ;
-    };
-    ItemList [ dutch ] =
-    {
-         < "Border setting" ; 0; > ;
-        < "Left border line" ; 1; > ;
-        < "Right border line" ; 2; > ;
-        < "Top border line" ; 3; > ;
-        < "Bottom border line" ; 4; > ;
-        < "Horizontal border line" ; 5; > ;
-        < "Vertical border line" ; 6; > ;
-    };
-    ItemList [ french ] =
-    {
-         < "Paramétrage de la bordure" ; 0; > ;
-        < "Ligne de bordure gauche" ; 1; > ;
-        < "Ligne de bordure droite" ; 2; > ;
-        < "Ligne de bordure supérieure" ; 3; > ;
-        < "Ligne de bordure inférieure" ; 4; > ;
-        < "Ligne de bordure horizontale" ; 5; > ;
-        < "Ligne de bordure verticale" ; 6; > ;
-    };
-    ItemList [ spanish ] =
-    {
-         < "Configuración del borde" ; 0; > ;
-        < "Borde izquierdo" ; 1; > ;
-        < "Borde derecho" ; 2; > ;
-        < "Borde superior" ; 3; > ;
-        < "Borde inferior" ; 4; > ;
-        < "Borde horizontal" ; 5; > ;
-        < "Borde vertical" ; 6; > ;
-    };
-    ItemList [ finnish ] =
-    {
-         < "Border setting" ; 0; > ;
-        < "Left border line" ; 1; > ;
-        < "Right border line" ; 2; > ;
-        < "Top border line" ; 3; > ;
-        < "Bottom border line" ; 4; > ;
-        < "Horizontal border line" ; 5; > ;
-        < "Vertical border line" ; 6; > ;
-    };
-    ItemList [ italian ] =
-    {
-         < "Impostazione bordo" ; 0; > ;
-        < "Bordo sinistro" ; 1; > ;
-        < "Bordo destro" ; 2; > ;
-        < "Bordo superiore" ; 3; > ;
-        < "Bordo inferiore" ; 4; > ;
-        < "Bordo orizzontale" ; 5; > ;
-        < "Bordo verticale" ; 6; > ;
-    };
-    ItemList [ danish ] =
-    {
-         < "Kantindstilling" ; 0; > ;
-        < "Venstre kantlinje" ; 1; > ;
-        < "Højre kantlinje" ; 2; > ;
-        < "Topkantlinje" ; 3; > ;
-        < "Bundkantlinje" ; 4; > ;
-        < "Vandret kantlinje" ; 5; > ;
-        < "Lodret kantlinje" ; 6; > ;
-    };
-    ItemList [ swedish ] =
-    {
-         < "Inställning av inramning" ; 0; > ;
-        < "Vänster inramningslinje" ; 1; > ;
-        < "Höger inramningslinje" ; 2; > ;
-        < "Övre inramningslinje" ; 3; > ;
-        < "Undre inramningslinje" ; 4; > ;
-        < "Horisontell inramningslinje" ; 5; > ;
-        < "Vertikal inramningslinje" ; 6; > ;
-    };
-    ItemList [ polish ] =
-    {
-         < "Border setting" ; 0; > ;
-        < "Left border line" ; 1; > ;
-        < "Right border line" ; 2; > ;
-        < "Top border line" ; 3; > ;
-        < "Bottom border line" ; 4; > ;
-        < "Horizontal border line" ; 5; > ;
-        < "Vertical border line" ; 6; > ;
-    };
-    ItemList [ portuguese_brazilian ] =
-    {
-         < "Configurações das bordas" ; 0; > ;
-        < "Linha de borda esquerda" ; 1; > ;
-        < "Linha de borda direita" ; 2; > ;
-        < "Linha de borda superior" ; 3; > ;
-        < "Linha de borda inferior" ; 4; > ;
-        < "Linha de borda horizontal" ; 5; > ;
-        < "Linha de borda vertical" ; 6; > ;
-    };
-    ItemList [ japanese ] =
-    {
-         < "å¤–æž ã®è¨­å®š" ; 0; > ;
-        < "å¤–æž å·¦å´ã®ç·š" ; 1; > ;
-        < "å¤–æž å³å´ã®ç·š" ; 2; > ;
-        < "å¤–æž ä¸Šæ–¹ã®ç·š" ; 3; > ;
-        < "å¤–æž ä¸‹æ–¹ã®ç·š" ; 4; > ;
-        < "å¤–æž æ¨ªã®ç·š" ; 5; > ;
-        < "å¤–æž ç¸¦ã®ç·š" ; 6; > ;
-    };
-    ItemList [ korean ] =
-    {
-         < "í…Œë‘ë¦¬ ì„¤ì •" ; 0; > ;
-        < "ì™¼ìª½ í…Œë‘ë¦¬" ; 1; > ;
-        < "ì˜¤ë¥¸ìª½ í…Œë‘ë¦¬" ; 2; > ;
-        < "ìœ„ìª½ í…Œë‘ë¦¬" ; 3; > ;
-        < "ì•„ëž˜ìª½ í…Œë‘ë¦¬" ; 4; > ;
-        < "ìˆ˜í‰ í…Œë‘ë¦¬" ; 5; > ;
-        < "ìˆ˜ì§ í…Œë‘ë¦¬" ; 6; > ;
-    };
-    ItemList [ chinese_simplified ] =
-    {
-         < "è¾¹æ¡†çš„è®¾å®š" ; 0; > ;
-        < "å·¦è¾¹æ¡†çº¿" ; 1; > ;
-        < "å³è¾¹æ¡†çº¿" ; 2; > ;
-        < "ä¸Šè¾¹æ¡†çº¿" ; 3; > ;
-        < "ä¸‹è¾¹æ¡†çº¿" ; 4; > ;
-        < "æ°´å¹³è¾¹æ¡†çº¿" ; 5; > ;
-        < "åž‚ç›´è¾¹æ¡†çº¿" ; 6; > ;
-    };
-    ItemList [ chinese_traditional ] =
-    {
-         < "é‚Šæ¡†çš„è¨­å®š" ; 0; > ;
-        < "å·¦é‚Šæ¡†ç·š" ; 1; > ;
-        < "å³é‚Šæ¡†ç·š" ; 2; > ;
-        < "ä¸Šé‚Šæ¡†ç·š" ; 3; > ;
-        < "ä¸‹é‚Šæ¡†ç·š" ; 4; > ;
-        < "æ°´å¹³é‚Šæ¡†ç·š" ; 5; > ;
-        < "åž‚ç›´é‚Šæ¡†ç·š" ; 6; > ;
-    };
-    ItemList [ turkish ] =
-    {
-         < "Kenarlýk ayarlarý" ; 0; > ;
-        < "Sol kenar çizgisi" ; 1; > ;
-        < "Sað kenarlýk çizgisi" ; 2; > ;
-        < "Üst Kenarlýk Çizgisi" ; 3; > ;
-        < "Alt kenarlýk çizgisi" ; 4; > ;
-        < "Yatay kenarlýk çizgisi" ; 5; > ;
-        < "Dikey kenarlýk çizgisi" ; 6; > ;
-    };
-    ItemList [ arabic ] =
-    {
-         < "Border setting" ; 0; > ;
-        < "Left border line" ; 1; > ;
-        < "Right border line" ; 2; > ;
-        < "Top border line" ; 3; > ;
-        < "Bottom border line" ; 4; > ;
-        < "Horizontal border line" ; 5; > ;
-        < "Vertical border line" ; 6; > ;
-    };
-    ItemList [ catalan ] =
-    {
-         < "Border setting" ; 0; > ;
-        < "Left border line" ; 1; > ;
-        < "Right border line" ; 2; > ;
-        < "Top border line" ; 3; > ;
-        < "Bottom border line" ; 4; > ;
-        < "Horizontal border line" ; 5; > ;
-        < "Vertical border line" ; 6; > ;
-    };
-    ItemList [ thai ] =
-    {
-         < "Border setting" ; 0; > ;
-        < "Left border line" ; 1; > ;
-        < "Right border line" ; 2; > ;
-        < "Top border line" ; 3; > ;
-        < "Bottom border line" ; 4; > ;
-        < "Horizontal border line" ; 5; > ;
-        < "Vertical border line" ; 6; > ;
-    };
-    ItemList [ czech ] =
-    {
-         < "NastavenÃ­ okrajÅ¯" ; 0; > ;
-        < "ÄŒÃ¡ra levÃ©ho okraje" ; 1; > ;
-        < "ÄŒÃ¡ra pravÃ©ho okraje" ; 2; > ;
-        < "ÄŒÃ¡ra hornÃ­ho okraje" ; 3; > ;
-        < "ÄŒÃ¡ra dolnÃ­ho okraje" ; 4; > ;
-        < "ÄŒÃ¡ra vodorovnÃ©ho okraje" ; 5; > ;
-        < "ÄŒÃ¡ra svislÃ©ho okraje" ; 6; > ;
-    };
-    ItemList [ hebrew ] =
-    {
-         < "â€®×§×‘×™×¢×ª ×’×‘×•×œâ€¬" ; 0; > ;
-        < "â€®×§×• ×’×‘×•×œ ×©×ž××œ×™â€¬" ; 1; > ;
-        < "â€®×§×• ×’×‘×•×œ ×™×ž× ×™â€¬" ; 2; > ;
-        < "â€®×§×• ×’×‘×•×œ ×¢×œ×™×•×Ÿâ€¬" ; 3; > ;
-        < "â€®×§×• ×’×‘×•×œ ×ª×—×ª×•×Ÿâ€¬" ; 4; > ;
-        < "â€®×§×• ×’×‘×•×œ ××•×¤×§×™â€¬" ; 5; > ;
-        < "â€®×§×• ×’×‘×•×œ ×× ×›×™â€¬" ; 6; > ;
-    };
-    ItemList [ hindi ] =
-    {
-         < "Border setting" ; 0; > ;
-        < "Left border line" ; 1; > ;
-        < "Right border line" ; 2; > ;
-        < "Top border line" ; 3; > ;
-        < "Bottom border line" ; 4; > ;
-        < "Horizontal border line" ; 5; > ;
-        < "Vertical border line" ; 6; > ;
-    };
-    ItemList [ slovak ] =
-    {
-         < "Nastavenia okrajov" ; 0; > ;
-        < "Ä½avÃ¡ ohraniÄujÃºca Äiara" ; 1; > ;
-        < "PravÃ¡ ohraniÄujÃºca Äiara" ; 2; > ;
-        < "HornÃ¡ ohraniÄujÃºca Äiara" ; 3; > ;
-        < "DolnÃ¡ ohraniÄujÃºca Äiara" ; 4; > ;
-        < "VodorovnÃ¡ ohraniÄujÃºca Äiara" ; 5; > ;
-        < "ZvislÃ¡ ohraniÄujÃºca Äiara" ; 6; > ;
-    };
-    ItemList [ hungarian ] =
-    {
-         < "SzegÃ©ly beÃ¡llÃ­tÃ¡sa" ; 0; > ;
-        < "Bal oldali szegÃ©ly" ; 1; > ;
-        < "Jobb oldali szegÃ©ly" ; 2; > ;
-        < "FelsÅ‘ szegÃ©ly" ; 3; > ;
-        < "AlsÃ³ szegÃ©ly" ; 4; > ;
-        < "VÃ­zszintes szegÃ©ly" ; 5; > ;
-        < "FÃ¼ggÅ‘leges szegÃ©ly" ; 6; > ;
-    };
-    ItemList [ slovenian ] =
-    {
-         < "Nastavitev obrob" ; 0; > ;
-        < "Leva Ärta obrobe" ; 1; > ;
-        < "Desna Ärta obrobe" ; 2; > ;
-        < "Zgornja Ärta obrobe" ; 3; > ;
-        < "Spodnja Ärta obrobe" ; 4; > ;
-        < "Vodoravna Ärta obrobe" ; 5; > ;
-        < "NavpiÄna Ärta obrobe" ; 6; > ;
     };
     };
     StringArray ARR_DESCRIPTIONS
     {
-        ItemList =
+        ItemList [ de ]=
         {
             < "Umrandungseinstellung" ; 0; > ;       //SVX_FRMSELLINE_NONE
             < "Linke Umrandungslinie" ; 1; > ;       //SVX_FRMSELLINE_LEFT,
@@ -380,17 +110,7 @@ Resource RID_SVXSTR_BORDER_CONTROL
             < "Horizontale Umrandungslinie" ; 5; > ;       //SVX_FRMSELLINE_HOR,
             < "Vertikale Umrandungslinie" ; 6; > ;       //SVX_FRMSELLINE_VER
         };
-        ItemList [English]=
-        {
-            < "Border control" ; 0; > ;       //SVX_FRMSELLINE_NONE
-            < "Left border line" ; 1; > ;       //SVX_FRMSELLINE_LEFT,
-            < "Right border line" ; 2; > ;       //SVX_FRMSELLINE_RIGHT,
-            < "Top border line" ; 3; > ;       //SVX_FRMSELLINE_TOP,
-            < "Bottom border line" ; 4; > ;       //SVX_FRMSELLINE_BOTTOM,
-            < "Horizontal border line within table" ; 5; > ;       //SVX_FRMSELLINE_HOR,
-            < "Vertical border line within table" ; 6; > ;       //SVX_FRMSELLINE_VER
-        };
-    ItemList [ language_user1 ] =
+    ItemList [ x-comment ] =
     {
          < "; Umrandungseinstellung" ; 0; > ;
         < "; Linke Umrandungslinie" ; 1; > ;
@@ -400,7 +120,7 @@ Resource RID_SVXSTR_BORDER_CONTROL
         < "; Horizontale Umrandungslinie" ; 5; > ;
         < "; Vertikale Umrandungslinie" ; 6; > ;
     };
-    ItemList [ english_us ] =
+    ItemList [ en-US ] =
     {
          < "Border setting" ; 0; > ;
         < "Left border line" ; 1; > ;
@@ -409,266 +129,6 @@ Resource RID_SVXSTR_BORDER_CONTROL
         < "Bottom border line" ; 4; > ;
         < "Horizontal border line" ; 5; > ;
         < "Vertical border line" ; 6; > ;
-    };
-    ItemList [ portuguese ] =
-    {
-         < "Border setting" ; 0; > ;
-        < "Left border line" ; 1; > ;
-        < "Right border line" ; 2; > ;
-        < "Top border line" ; 3; > ;
-        < "Bottom border line" ; 4; > ;
-        < "Horizontal border line" ; 5; > ;
-        < "Vertical border line" ; 6; > ;
-    };
-    ItemList [ russian ] =
-    {
-         < "Border setting" ; 0; > ;
-        < "Left border line" ; 1; > ;
-        < "Right border line" ; 2; > ;
-        < "Top border line" ; 3; > ;
-        < "Bottom border line" ; 4; > ;
-        < "Horizontal border line" ; 5; > ;
-        < "Vertical border line" ; 6; > ;
-    };
-    ItemList [ greek ] =
-    {
-         < "Ñõèìßóåéò ðåñéãñÜììáôïò" ; 0; > ;
-        < "ÁñéóôåñÞ ãñáììÞ ðåñéãñÜììáôïò" ; 1; > ;
-        < "ÄåîéÜ ãñáììÞ ðåñéãñÜììáôïò" ; 2; > ;
-        < "ÐÜíù ãñáììÞ ðåñéãñÜììáôïò" ; 3; > ;
-        < "ÊÜôù ãñáììÞ ðåñéãñÜììáôïò" ; 4; > ;
-        < "Ïñéæüíôéá ãñáììÞ ðåñéãñÜììáôïò" ; 5; > ;
-        < "Êáôáêüñõöç ãñáììÞ ðåñéãñÜììáôïò" ; 6; > ;
-    };
-    ItemList [ dutch ] =
-    {
-         < "Border setting" ; 0; > ;
-        < "Left border line" ; 1; > ;
-        < "Right border line" ; 2; > ;
-        < "Top border line" ; 3; > ;
-        < "Bottom border line" ; 4; > ;
-        < "Horizontal border line" ; 5; > ;
-        < "Vertical border line" ; 6; > ;
-    };
-    ItemList [ french ] =
-    {
-         < "Paramétrage de la bordure" ; 0; > ;
-        < "Ligne de bordure gauche" ; 1; > ;
-        < "Ligne de bordure droite" ; 2; > ;
-        < "Ligne de bordure supérieure" ; 3; > ;
-        < "Ligne de bordure inférieure" ; 4; > ;
-        < "Ligne de bordure horizontale" ; 5; > ;
-        < "Ligne de bordure verticale" ; 6; > ;
-    };
-    ItemList [ spanish ] =
-    {
-         < "Configuración del borde" ; 0; > ;
-        < "Borde izquierdo" ; 1; > ;
-        < "Borde derecho" ; 2; > ;
-        < "Borde superior" ; 3; > ;
-        < "Borde inferior" ; 4; > ;
-        < "Borde horizontal" ; 5; > ;
-        < "Borde vertical" ; 6; > ;
-    };
-    ItemList [ finnish ] =
-    {
-         < "Border setting" ; 0; > ;
-        < "Left border line" ; 1; > ;
-        < "Right border line" ; 2; > ;
-        < "Top border line" ; 3; > ;
-        < "Bottom border line" ; 4; > ;
-        < "Horizontal border line" ; 5; > ;
-        < "Vertical border line" ; 6; > ;
-    };
-    ItemList [ italian ] =
-    {
-         < "Impostazioni bordo" ; 0; > ;
-        < "Bordo sinistro" ; 1; > ;
-        < "Bordo destro" ; 2; > ;
-        < "Bordo superiore" ; 3; > ;
-        < "Bordo inferiore" ; 4; > ;
-        < "Bordo orizzontale" ; 5; > ;
-        < "Bordo verticale" ; 6; > ;
-    };
-    ItemList [ danish ] =
-    {
-         < "Kantindstilling" ; 0; > ;
-        < "Venstre kantlinje" ; 1; > ;
-        < "Højre kantlinje" ; 2; > ;
-        < "Topkantlinje" ; 3; > ;
-        < "Bundkantlinje" ; 4; > ;
-        < "Vandret kantlinje" ; 5; > ;
-        < "Lodret kantlinje" ; 6; > ;
-    };
-    ItemList [ swedish ] =
-    {
-         < "Inställning av inramning" ; 0; > ;
-        < "Vänster inramningslinje" ; 1; > ;
-        < "Höger inramningslinje" ; 2; > ;
-        < "Övre inramningslinje" ; 3; > ;
-        < "Undre inramningslinje" ; 4; > ;
-        < "Horisontell inramningslinje" ; 5; > ;
-        < "Vertikal inramningslinje" ; 6; > ;
-    };
-    ItemList [ polish ] =
-    {
-         < "Border setting" ; 0; > ;
-        < "Left border line" ; 1; > ;
-        < "Right border line" ; 2; > ;
-        < "Top border line" ; 3; > ;
-        < "Bottom border line" ; 4; > ;
-        < "Horizontal border line" ; 5; > ;
-        < "Vertical border line" ; 6; > ;
-    };
-    ItemList [ portuguese_brazilian ] =
-    {
-         < "Configurações das bordas" ; 0; > ;
-        < "Linha de borda esquerda" ; 1; > ;
-        < "Linha de borda direita" ; 2; > ;
-        < "Linha de borda superior" ; 3; > ;
-        < "Linha de borda inferior" ; 4; > ;
-        < "Linha de borda horizontal" ; 5; > ;
-        < "Linha de borda vertical" ; 6; > ;
-    };
-    ItemList [ japanese ] =
-    {
-         < "å¤–æž ã®è¨­å®š" ; 0; > ;
-        < "å¤–æž å·¦å´ã®ç·š" ; 1; > ;
-        < "å¤–æž å³å´ã®ç·š" ; 2; > ;
-        < "å¤–æž ä¸Šæ–¹ã®ç·š" ; 3; > ;
-        < "å¤–æž ä¸‹æ–¹ã®ç·š" ; 4; > ;
-        < "å¤–æž æ¨ªã®ç·š" ; 5; > ;
-        < "å¤–æž ç¸¦ã®ç·š" ; 6; > ;
-    };
-    ItemList [ korean ] =
-    {
-         < "í…Œë‘ë¦¬ ì„¤ì •" ; 0; > ;
-        < "ì™¼ìª½ í…Œë‘ë¦¬" ; 1; > ;
-        < "ì˜¤ë¥¸ìª½ í…Œë‘ë¦¬" ; 2; > ;
-        < "ìœ„ìª½ í…Œë‘ë¦¬" ; 3; > ;
-        < "ì•„ëž˜ìª½ í…Œë‘ë¦¬" ; 4; > ;
-        < "ìˆ˜í‰ í…Œë‘ë¦¬" ; 5; > ;
-        < "ìˆ˜ì§ í…Œë‘ë¦¬ì„ " ; 6; > ;
-    };
-    ItemList [ chinese_simplified ] =
-    {
-         < "è¾¹æ¡†çš„è®¾å®š" ; 0; > ;
-        < "å·¦è¾¹æ¡†çº¿" ; 1; > ;
-        < "å³è¾¹æ¡†çº¿" ; 2; > ;
-        < "ä¸Šè¾¹æ¡†çº¿" ; 3; > ;
-        < "ä¸‹è¾¹æ¡†çº¿" ; 4; > ;
-        < "æ°´å¹³è¾¹æ¡†çº¿" ; 5; > ;
-        < "åž‚ç›´è¾¹æ¡†çº¿" ; 6; > ;
-    };
-    ItemList [ chinese_traditional ] =
-    {
-         < "é‚Šæ¡†çš„è¨­å®š" ; 0; > ;
-        < "å·¦é‚Šæ¡†ç·š" ; 1; > ;
-        < "å³é‚Šæ¡†ç·š" ; 2; > ;
-        < "ä¸Šé‚Šæ¡†ç·š" ; 3; > ;
-        < "ä¸‹é‚Šæ¡†ç·š" ; 4; > ;
-        < "æ°´å¹³é‚Šæ¡†ç·š" ; 5; > ;
-        < "åž‚ç›´é‚Šæ¡†ç·š" ; 6; > ;
-    };
-    ItemList [ turkish ] =
-    {
-         < "Sýnýr ayarlarý" ; 0; > ;
-        < "Sol kenarlýk çizgisi" ; 1; > ;
-        < "Sað kenarlýk çizgisi" ; 2; > ;
-        < "Üst kenarlýk çizgisi" ; 3; > ;
-        < "Alt kenarlýk çizgisi" ; 4; > ;
-        < "Yatay kenarlýk çizgisi" ; 5; > ;
-        < "Dikey kenarlýk çizgisi" ; 6; > ;
-    };
-    ItemList [ arabic ] =
-    {
-         < "Border setting" ; 0; > ;
-        < "Left border line" ; 1; > ;
-        < "Right border line" ; 2; > ;
-        < "Top border line" ; 3; > ;
-        < "Bottom border line" ; 4; > ;
-        < "Horizontal border line" ; 5; > ;
-        < "Vertical border line" ; 6; > ;
-    };
-    ItemList [ catalan ] =
-    {
-         < "Border setting" ; 0; > ;
-        < "Left border line" ; 1; > ;
-        < "Right border line" ; 2; > ;
-        < "Top border line" ; 3; > ;
-        < "Bottom border line" ; 4; > ;
-        < "Horizontal border line" ; 5; > ;
-        < "Vertical border line" ; 6; > ;
-    };
-    ItemList [ thai ] =
-    {
-         < "Border setting" ; 0; > ;
-        < "Left border line" ; 1; > ;
-        < "Right border line" ; 2; > ;
-        < "Top border line" ; 3; > ;
-        < "Bottom border line" ; 4; > ;
-        < "Horizontal border line" ; 5; > ;
-        < "Vertical border line" ; 6; > ;
-    };
-    ItemList [ czech ] =
-    {
-         < "NastavenÃ­ okrajÅ¯" ; 0; > ;
-        < "ÄŒÃ¡ra levÃ©ho okraje" ; 1; > ;
-        < "ÄŒÃ¡ra pravÃ©ho okraje" ; 2; > ;
-        < "ÄŒÃ¡ra hornÃ­ho okraje" ; 3; > ;
-        < "ÄŒÃ¡ra dolnÃ­ho okraje" ; 4; > ;
-        < "ÄŒÃ¡ra vodorovnÃ©ho okraje" ; 5; > ;
-        < "ÄŒÃ¡ra svislÃ©ho okraje" ; 6; > ;
-    };
-    ItemList [ hebrew ] =
-    {
-         < "â€®×§×‘×™×¢×ª ×’×‘×•×œâ€¬" ; 0; > ;
-        < "â€®×§×• ×’×‘×•×œ ×©×ž××œ×™â€¬" ; 1; > ;
-        < "â€®×§×• ×’×‘×•×œ ×™×ž× ×™â€¬" ; 2; > ;
-        < "â€®×§×• ×’×‘×•×œ ×¢×œ×™×•×Ÿâ€¬" ; 3; > ;
-        < "â€®×§×• ×’×‘×•×œ ×ª×—×ª×•×Ÿâ€¬" ; 4; > ;
-        < "â€®×§×• ×’×‘×•×œ ××•×¤×§×™â€¬" ; 5; > ;
-        < "â€®×§×• ×’×‘×•×œ ×× ×›×™â€¬" ; 6; > ;
-    };
-    ItemList [ hindi ] =
-    {
-         < "Border setting" ; 0; > ;
-        < "Left border line" ; 1; > ;
-        < "Right border line" ; 2; > ;
-        < "Top border line" ; 3; > ;
-        < "Bottom border line" ; 4; > ;
-        < "Horizontal border line" ; 5; > ;
-        < "Vertical border line" ; 6; > ;
-    };
-    ItemList [ slovak ] =
-    {
-         < "Nastavenia okrajov" ; 0; > ;
-        < "Ä½avÃ¡ ohraniÄujÃºca Äiara" ; 1; > ;
-        < "PravÃ¡ ohraniÄujÃºca Äiara" ; 2; > ;
-        < "HornÃ¡ ohraniÄujÃºca Äiara" ; 3; > ;
-        < "DolnÃ¡ ohraniÄujÃºca Äiara" ; 4; > ;
-        < "VodorovnÃ¡ ohraniÄujÃºca Äiara" ; 5; > ;
-        < "ZvislÃ¡ ohraniÄujÃºca Äiara" ; 6; > ;
-    };
-    ItemList [ hungarian ] =
-    {
-         < "SzegÃ©ly beÃ¡llÃ­tÃ¡sa" ; 0; > ;
-        < "Bal oldali szegÃ©ly" ; 1; > ;
-        < "Jobb oldali szegÃ©ly" ; 2; > ;
-        < "FelsÅ‘ szegÃ©ly" ; 3; > ;
-        < "AlsÃ³ szegÃ©ly" ; 4; > ;
-        < "VÃ­zszintes szegÃ©ly" ; 5; > ;
-        < "FÃ¼ggÅ‘leges szegÃ©ly" ; 6; > ;
-    };
-    ItemList [ slovenian ] =
-    {
-         < "Nastavitev obrobe" ; 0; > ;
-        < "Leva Ärta obrobe" ; 1; > ;
-        < "Desna Ärta obrobe" ; 2; > ;
-        < "Zgornja Ärta obrobe" ; 3; > ;
-        < "Spodnja Ärta obrobe" ; 4; > ;
-        < "Vodoravna Ärta obrobe" ; 5; > ;
-        < "NavpiÄna Ärta obrobe" ; 6; > ;
     };
     };
 };
