@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-01 20:37:33 $
+ *  last change: $Author: pl $ $Date: 2001-11-02 12:30:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -907,22 +907,26 @@ void WMAdaptor::setWMName( SalFrame* pFrame, const String& rWMName ) const
                                XStdICCTextStyle,
                                &aProp );
 
+    unsigned char* pData    = aProp.nitems ? aProp.value : (unsigned char*)aTitle.GetBuffer();
+    Atom nType              = aProp.nitems ? aProp.encoding : XA_STRING;
+    int nFormat             = aProp.nitems ? aProp.format : 8;
+    int nBytes              = aProp.nitems ? aProp.nitems : aTitle.Len();
     XChangeProperty( m_pDisplay,
                      pFrame->maFrameData.GetShellWindow(),
                      XA_WM_NAME,
-                     aProp.encoding,
-                     aProp.format,
+                     nType,
+                     nFormat,
                      PropModeReplace,
-                     aProp.value,
-                     aProp.nitems );
+                     pData,
+                     nBytes );
     XChangeProperty( m_pDisplay,
                      pFrame->maFrameData.GetShellWindow(),
                      XA_WM_ICON_NAME,
-                     aProp.encoding,
-                     aProp.format,
+                     nType,
+                     nFormat,
                      PropModeReplace,
-                     aProp.value,
-                     aProp.nitems );
+                     pData,
+                     nBytes );
     XChangeProperty( m_pDisplay,
                      pFrame->maFrameData.GetShellWindow(),
                      m_aWMAtoms[ WM_LOCALE_NAME ],
