@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 17:03:20 $
+#   last change: $Author: kz $ $Date: 2003-12-11 11:58:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,7 +88,9 @@ SLOFILES=   \
             $(SLO)$/unocontrolmodel.obj 			\
             $(SLO)$/unocontrols.obj					\
             $(SLO)$/formattedcontrol.obj\
-            $(SLO)$/dialogcontrol.obj
+            $(SLO)$/dialogcontrol.obj \
+            $(SLO)$/tkscrollbar.obj \
+            $(SLO)$/tkspinbutton.obj
 
 # --- Targets ------------------------------------------------------
 
